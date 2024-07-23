@@ -23,32 +23,32 @@ msgstr "Email"
 msgid "No encoder found for encoding \\''{0}\\''."
 msgstr "Nici un encoder găsit pentru codificarea \\'' {0} \\''."
 
-#. tagged in WebMail
 msgid "Re:"
 msgstr "Re:"
 
 msgid "Fwd:"
 msgstr "Fwd:"
 
-#. MailDir-like
 msgid "Drafts"
 msgstr "Ciorne"
 
-#. MailDir-like
 msgid "Sent"
 msgstr "Trimis"
 
-#. MailDir-like
 msgid "Trash"
 msgstr "Gunoi"
 
-#. MailDir-like
 msgid "Bulk Mail"
 msgstr "E-Mail În Vrac "
 
-#. untranslated, translate on use
 msgid "Inbox"
 msgstr "Căsuță"
+
+msgid "View message as HTML"
+msgstr ""
+
+msgid "View message as plain text"
+msgstr ""
 
 msgid "unknown"
 msgstr "necunoscut"
@@ -164,7 +164,6 @@ msgstr "Nu sa găsit nici o codificare la {0}"
 msgid "Attachment not found."
 msgstr "Atașamentul nu a fost găsit."
 
-#. error if we get here
 msgid "Message not found."
 msgstr "Mesajul nu a fost găsit."
 
@@ -289,7 +288,6 @@ msgstr "Subiect"
 msgid "Add Attachment"
 msgstr "Adaugă Anexă"
 
-#. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 msgid "Add attachment"
 msgstr "Adaugă Anexă"
 
@@ -363,6 +361,9 @@ msgstr "Dimensiune"
 msgid "Mark for deletion"
 msgstr "Marcați pentru ștergere"
 
+msgid "Message contains HTML"
+msgstr ""
+
 msgid "Message is new"
 msgstr "Mesajul e nou."
 
@@ -372,7 +373,6 @@ msgstr "Mesajul e spam."
 msgid "Message body not downloaded"
 msgstr "Corpul mesajului nu a fost descărcat"
 
-#. TODO ngettext
 msgid "Really delete the marked messages?"
 msgstr "Sigur ștergeți mesajele marcate?"
 
@@ -430,6 +430,9 @@ msgstr "Înapoi la Dosar"
 msgid "Move to Folder"
 msgstr "Mută dosarul"
 
+msgid "View message in new tab"
+msgstr ""
+
 msgid "Folder Page Size"
 msgstr "Dimensiunea Paginii Dosarului"
 
@@ -442,7 +445,6 @@ msgstr "Configurație avansată"
 msgid "Save Configuration"
 msgstr "Salvează Configurația"
 
-#. this appears in the UI so translate
 msgid "No response from server"
 msgstr "Nici un răspuns de la server"
 
@@ -458,6 +460,5 @@ msgstr "Conectare eșuată"
 msgid "Server refused connection"
 msgstr "Server refuzat conexiune"
 
-#. TODO which recipient?
 msgid "Mail rejected"
 msgstr "Corespondență respinsă"

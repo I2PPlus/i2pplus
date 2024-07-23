@@ -22,32 +22,32 @@ msgstr "Correo electrónico "
 msgid "No encoder found for encoding \\''{0}\\''."
 msgstr "No se ha encontrado codificador para la codificación \\''{0}''\\."
 
-#. tagged in WebMail
 msgid "Re:"
 msgstr "Resp:"
 
 msgid "Fwd:"
 msgstr "Reenv:"
 
-#. MailDir-like
 msgid "Drafts"
 msgstr "Borradores"
 
-#. MailDir-like
 msgid "Sent"
 msgstr "Enviado"
 
-#. MailDir-like
 msgid "Trash"
 msgstr "Papelera"
 
-#. MailDir-like
 msgid "Bulk Mail"
 msgstr "Correo masivo"
 
-#. untranslated, translate on use
 msgid "Inbox"
 msgstr "Bandeja de entrada"
+
+msgid "View message as HTML"
+msgstr ""
+
+msgid "View message as plain text"
+msgstr ""
 
 msgid "unknown"
 msgstr "desconocido"
@@ -163,7 +163,6 @@ msgstr "No se ha encontrado codificación para {0}"
 msgid "Attachment not found."
 msgstr "Adjunto no encontrado."
 
-#. error if we get here
 msgid "Message not found."
 msgstr "Mensaje no encontrado."
 
@@ -286,7 +285,6 @@ msgstr "Asunto"
 msgid "Add Attachment"
 msgstr "Añadir adjunto"
 
-#. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 msgid "Add attachment"
 msgstr "Añadir adjunto"
 
@@ -359,6 +357,9 @@ msgstr "Tamaño"
 msgid "Mark for deletion"
 msgstr "Marcar para borrado"
 
+msgid "Message contains HTML"
+msgstr ""
+
 msgid "Message is new"
 msgstr "El mensaje es nuevo"
 
@@ -368,7 +369,6 @@ msgstr "El mensaje es spam"
 msgid "Message body not downloaded"
 msgstr "cuerpo del mensaje no descargado"
 
-#. TODO ngettext
 msgid "Really delete the marked messages?"
 msgstr "¿Realmente deseas borrar los mensajes marcados?"
 
@@ -426,6 +426,9 @@ msgstr "Volver a la carpeta"
 msgid "Move to Folder"
 msgstr "Mover a la carpeta"
 
+msgid "View message in new tab"
+msgstr ""
+
 msgid "Folder Page Size"
 msgstr "Tamaño de página de la carpeta"
 
@@ -438,7 +441,6 @@ msgstr "Configuración avanzada"
 msgid "Save Configuration"
 msgstr "Guardar configuración"
 
-#. this appears in the UI so translate
 msgid "No response from server"
 msgstr "No hay respuesta del servidor"
 
@@ -454,6 +456,5 @@ msgstr "Fallo al iniciar sesión"
 msgid "Server refused connection"
 msgstr "El servidor rechazó la conexión"
 
-#. TODO which recipient?
 msgid "Mail rejected"
 msgstr "Correo rechazado"

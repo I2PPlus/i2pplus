@@ -60,6 +60,5 @@ msgstr "Lokale bestemming afgesloten"
 msgid "Connection was reset"
 msgstr "Verbinding gereset"
 
-#. Translate this one here, can't do it later
 msgid "Failure code"
 msgstr "Foutcode"

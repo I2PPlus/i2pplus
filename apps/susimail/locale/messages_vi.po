@@ -21,32 +21,32 @@ msgstr "Địa chỉ e-mail"
 msgid "No encoder found for encoding \\''{0}\\''."
 msgstr "Không tìm bộ mã hóa cho bộ \\\"{0}\\\"."
 
-#. tagged in WebMail
 msgid "Re:"
 msgstr "Re:"
 
 msgid "Fwd:"
 msgstr "Chuyển hướng:"
 
-#. MailDir-like
 msgid "Drafts"
 msgstr "Nháp"
 
-#. MailDir-like
 msgid "Sent"
 msgstr "Hộp thư đi"
 
-#. MailDir-like
 msgid "Trash"
 msgstr "Thùng rác"
 
-#. MailDir-like
 msgid "Bulk Mail"
 msgstr "Thư hàng loạt"
 
-#. untranslated, translate on use
 msgid "Inbox"
 msgstr "Hộp thư đến"
+
+msgid "View message as HTML"
+msgstr ""
+
+msgid "View message as plain text"
+msgstr ""
 
 msgid "unknown"
 msgstr "không biết"
@@ -162,7 +162,6 @@ msgstr "Không tìm thấy bộ mã cho {0}"
 msgid "Attachment not found."
 msgstr "Không tìm thấy tệp đính kèm."
 
-#. error if we get here
 msgid "Message not found."
 msgstr "Không tìm thấy tin nhắn."
 
@@ -283,7 +282,6 @@ msgstr "Chủ đề"
 msgid "Add Attachment"
 msgstr "Thêm Đính Kèm"
 
-#. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 msgid "Add attachment"
 msgstr "Thêm bản đính kèm"
 
@@ -355,6 +353,9 @@ msgstr "Kích thước"
 msgid "Mark for deletion"
 msgstr "Đánh dấu để xóa"
 
+msgid "Message contains HTML"
+msgstr ""
+
 msgid "Message is new"
 msgstr "Tin nhắn mới"
 
@@ -364,7 +365,6 @@ msgstr "Tin nhắn là thư rác"
 msgid "Message body not downloaded"
 msgstr "Nội dung thư chưa được tải xuống"
 
-#. TODO ngettext
 msgid "Really delete the marked messages?"
 msgstr "Thực sự xóa các thư đánh dấu?"
 
@@ -422,6 +422,9 @@ msgstr "Trở lại thư mục"
 msgid "Move to Folder"
 msgstr "Di chuyển đến thư mục"
 
+msgid "View message in new tab"
+msgstr ""
+
 msgid "Folder Page Size"
 msgstr "Kích thước trang thư mục"
 
@@ -434,7 +437,6 @@ msgstr "Thiết lập nâng cao"
 msgid "Save Configuration"
 msgstr "Lưu cấu hình"
 
-#. this appears in the UI so translate
 msgid "No response from server"
 msgstr "Không có phản hồi từ máy chủ"
 
@@ -450,6 +452,5 @@ msgstr "Đăng nhập thất bại"
 msgid "Server refused connection"
 msgstr "Máy chủ từ chối kết nối"
 
-#. TODO which recipient?
 msgid "Mail rejected"
 msgstr "Thư bị từ chối"

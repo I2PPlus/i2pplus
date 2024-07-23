@@ -45,13 +45,9 @@ msgstr "Nếu sự cố vẫn tiếp diễn, hãy xác minh rằng bạn đã b�
 msgid "Configuration reloaded for all tunnels"
 msgstr "Nạp lại cấu hình cho mọi đường hầm"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Starting tunnel"
 msgstr "Bắt đầu đường hầm"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Stopping tunnel"
 msgstr "Ngưng đường hầm"
 
@@ -542,7 +538,6 @@ msgstr "Đặt tên người dùng cần thiết để truy cập dịch vụ n�
 msgid "Password"
 msgstr "Mật khẩu"
 
-#. && editBean.isAdvanced()
 msgid "Set password required to access this service"
 msgstr "Đặt mật khẩu cần thiết để truy cập dịch vụ này"
 
@@ -999,6 +994,9 @@ msgstr "Khởi động lại tất cả"
 
 msgid "I2P Server Tunnels"
 msgstr "Đường hầm máy chủ I2P"
+
+msgid "Helper"
+msgstr ""
 
 msgid "Type"
 msgstr "Loại"

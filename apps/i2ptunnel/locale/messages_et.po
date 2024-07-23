@@ -12,24 +12,6 @@ msgstr ""
 msgid "internal"
 msgstr "sisemine"
 
-#, java-format
-msgid "{0} inbound tunnel"
-msgid_plural "{0} sisenevatunnelit"
-msgstr[0] "{0} sisenevatunnel"
-msgstr[1] "{0} sisenevatunnelit"
-
-#, java-format
-msgid "{0} outbound tunnel"
-msgid_plural "{0} väljatunnelit"
-msgstr[0] "{0} väljatunnel"
-msgstr[1] "{0} väljatunnelit"
-
-#, java-format
-msgid "{0} inbound, {0} outbound tunnel"
-msgid_plural "{0} sisenevatunnelit, {0} väljatunnelit"
-msgstr[0] "{0} sisenevatunnel, {0} väljatunnel"
-msgstr[1] "{0} sisenevatunnelit, {0} väljatunnelit"
-
 msgid "lower bandwidth and reliability"
 msgstr "madalam bändlaius ja usaldusväärsus"
 
@@ -48,13 +30,9 @@ msgstr "Kui probleem jätkub, kontrollige, et teie brauseris on küpsised lubatu
 msgid "Configuration reloaded for all tunnels"
 msgstr "Kõigile tunnelitele uuesti laetud seaded"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Starting tunnel"
 msgstr "Tunnel käivitatakse"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Stopping tunnel"
 msgstr "Tunnel peatatakse"
 
@@ -547,7 +525,6 @@ msgstr "Seadista kasutajanimi, mida vaja on selle teenuse kasutamiseks"
 msgid "Password"
 msgstr "Parool"
 
-#. && editBean.isAdvanced()
 msgid "Set password required to access this service"
 msgstr "Seadista parool, mida vaja on selle teenuse kasutamiseks"
 
@@ -1008,8 +985,14 @@ msgstr "I2P Serveri Tunneld"
 msgid "Helper"
 msgstr "Abi"
 
+msgid "Type"
+msgstr ""
+
 msgid "Points at"
 msgstr "Näitab"
+
+msgid "Preview"
+msgstr ""
 
 msgid "Status"
 msgstr "Olek"
@@ -1073,6 +1056,9 @@ msgstr "Krüpteerimine"
 
 msgid "New server tunnel"
 msgstr "Uus serveri tunnel"
+
+msgid "Standard"
+msgstr ""
 
 msgid "Create"
 msgstr "Loo"
@@ -1248,6 +1234,12 @@ msgstr "Test HTTPS server läbi I2P"
 
 msgid "Server"
 msgstr "Server"
+
+msgid "SSL Activation"
+msgstr ""
+
+msgid "I2P webserver (eepsite)"
+msgstr ""
 
 msgid "Disable SSL"
 msgstr "Keela SSL"
@@ -1427,8 +1419,8 @@ msgstr "Tõenäoliselt soovid vaid lubada 127.0.0.1"
 msgid "The I2P router can automatically start this tunnel for you when the router is started."
 msgstr "I2P rutiin saab automaatselt selle tunneli käivitada rutiini käivitamisel."
 
-msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occasionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
-msgstr "See võib olla kasulik sageli kasutatavatele tunnelitele (eriti serveri tunnelitele), kuid tunnelite jaoks, mida kasutatakse ainult vahelikult, tähendab see, et I2P rutiin loob ja hooldab vajaliku kõrgemal olevaid tunneli."
+msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occassionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
+msgstr ""
 
 msgid "The wizard has now collected enough information to create your tunnel."
 msgstr "Juurdejuhendaja on nüüd kogunud piisavalt teavet, et luua sinu tunnel."
@@ -1492,3 +1484,6 @@ msgstr "Edasiminek järgmisele lehele"
 
 msgid "Next"
 msgstr "Järgmine"
+
+#~ msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occasionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
+#~ msgstr "See võib olla kasulik sageli kasutatavatele tunnelitele (eriti serveri tunnelitele), kuid tunnelite jaoks, mida kasutatakse ainult vahelikult, tähendab see, et I2P rutiin loob ja hooldab vajaliku kõrgemal olevaid tunneli."

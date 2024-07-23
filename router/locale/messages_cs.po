@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
 
-#. * IPv4 OK, IPv6 OK or disabled or no address
 msgid "OK"
 msgstr "OK"
 
@@ -28,22 +27,18 @@ msgstr "IPv4: Firewalled; "
 msgid "IPv4: Disabled; IPv6: OK"
 msgstr "IPv4: Zakázáno, IPv6: OK"
 
-#. * IPv4 symmetric NAT (not source NAT)
 msgid "IPv4: Symmetric NAT; IPv6: OK"
 msgstr "IPv4: Symetrický NAT; IPv6: OK"
 
-#. * IPv4 symmetric NAT, IPv6 firewalled or disabled or no address
 msgid "Symmetric NAT"
 msgstr "Symetrický NAT"
 
-#. * IPv4 symmetric NAT (not source NAT)
 msgid "IPv4: Symmetric NAT; IPv6: Testing"
 msgstr "IPv4: Symetrický NAT; IPv6: Testování"
 
 msgid "IPv4: Firewalled; IPv6: Testing"
 msgstr "IPv4: Firewalled; IPv6: Testování"
 
-#. * IPv4 firewalled, IPv6 firewalled or disabled or no address
 msgid "Firewalled"
 msgstr "Firewalled"
 
@@ -65,12 +60,6 @@ msgstr "Konflikt přístavu"
 msgid "Testing"
 msgstr "Testování"
 
-#. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
-#. NPE, too early
-#. if (_context.router().getRouterInfo().getBandwidthTier().equals("K"))
-#. setTunnelStatus("Not expecting tunnel requests: Advertised bandwidth too low");
-#. else
-#. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
 msgid "Starting up"
 msgstr "Spouštění"
 
@@ -80,11 +69,9 @@ msgstr "Odmítání všech požadavků na tunel:<br>"
 msgid "Hidden Mode"
 msgstr "Skrytý režim"
 
-#. }
 msgid "Declining tunnel requests:<br>"
 msgstr "Odmítání požadavků na tunel:<br>"
 
-#. }
 msgid "High message delay"
 msgstr "Velké zpoždění zprávy"
 
@@ -109,21 +96,12 @@ msgstr "Vysoký počet požadavků"
 msgid "Rejecting most tunnel requests:<br>"
 msgstr "Odmítnutí většiny požadavků na tunel:<br>"
 
-#. hard to do {0} from here
-#. setTunnelStatus("Accepting " + (100-(int)(100.0*probReject)) + "% of tunnels");
 msgid "Accepting most tunnel requests"
 msgstr "Přijímání většiny požadavků na tunel"
 
 msgid "Accepting tunnel requests"
 msgstr "Přijímání požadavků na tunel"
 
-#. .067KBps
-#. * also limited to 90% - see below
-#. always leave at least 4KBps free when allowing
-#. private static final String LIMIT_STR = _x("Declining tunnel requests" + ":<br>" + "Bandwidth limit");
-#. hard to do {0} from here
-#. setTunnelStatus("Rejecting " + ((int)(100.0*probReject)) + "% of tunnels: Bandwidth limit");
-#. setTunnelStatus(_x("Declining most tunnel requests" + ":<br>" + "Bandwidth limit"));
 msgid "Declining requests: Bandwidth limit"
 msgstr "Odmítající požadavky: Limit šířky pásma"
 
@@ -145,7 +123,6 @@ msgstr "Odstranění požadavků na tunel: Velké zpoždění úlohy"
 msgid "Dropping tunnel requests:<br>High CPU load"
 msgstr "Odstranění požadavků na tunel:<br>Vysoká zátěž CPU"
 
-#. don't even bother, since we are so overloaded locally
 msgid "Dropping tunnel requests: Overloaded"
 msgstr "Odstranění požadavků na tunel: Přetíženo"
 

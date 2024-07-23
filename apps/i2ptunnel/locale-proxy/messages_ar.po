@@ -310,11 +310,9 @@ msgstr "سيتم حفظ هذا العنوان في دفتر عناوين جها�
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
 msgstr "إذا كنت تريد متابعة المواقع التي أضفتها يدويًا، أضفها إلى دفتر العناوين الرئيسي أو الخاص بدلاً من ذلك."
 
-#. FIXME wasn't escaped
 msgid "Save & continue"
 msgstr "حفظ"
 
-#. only blockfile supports multiple books
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
 msgstr "احفظ {0} في دفتر العناوين الرئيسي وتابع إلى موقع الويب"

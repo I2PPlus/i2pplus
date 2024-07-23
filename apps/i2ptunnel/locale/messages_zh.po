@@ -45,13 +45,9 @@ msgstr "如果问题持续，请确认您的浏览器支持Cookie。"
 msgid "Configuration reloaded for all tunnels"
 msgstr "所有隧道都已根据当前配置重启"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Starting tunnel"
 msgstr "正在启动隧道"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Stopping tunnel"
 msgstr "正在关闭隧道"
 
@@ -542,7 +538,6 @@ msgstr "设定访问此服务所需的用户名"
 msgid "Password"
 msgstr "密码"
 
-#. && editBean.isAdvanced()
 msgid "Set password required to access this service"
 msgstr "设定访问此服务所需的密码"
 
@@ -999,6 +994,9 @@ msgstr "全部重启"
 
 msgid "I2P Server Tunnels"
 msgstr "服务端隧道"
+
+msgid "Helper"
+msgstr ""
 
 msgid "Type"
 msgstr "类型"

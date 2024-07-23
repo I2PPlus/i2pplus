@@ -310,11 +310,9 @@ msgstr "Αυτή η διεύθυνση θα αποθηκευτεί στο βιβ
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
 msgstr "Εάν θέλετε να παρακολουθείτε τις τοποθεσίες που έχετε προσθέσει με μη αυτόματο τρόπο, προσθέστε τις στον κύριο ή τον ιδιωτικό σας βιβλίο διευθύνσεων."
 
-#. FIXME wasn't escaped
 msgid "Save & continue"
 msgstr "Αποθήκευση"
 
-#. only blockfile supports multiple books
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
 msgstr "Αποθήκευση {0} στο Master Addressbook και συνεχίστε στον ιστότοπο"

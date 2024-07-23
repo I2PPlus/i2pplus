@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#. * IPv4 OK, IPv6 OK or disabled or no address
 msgid "OK"
 msgstr "OK"
 
@@ -28,22 +27,18 @@ msgstr "IPv4: 방화벽있음; IPv6: OK"
 msgid "IPv4: Disabled; IPv6: OK"
 msgstr "IPv4: 비활성화; IPv6: OK"
 
-#. * IPv4 symmetric NAT (not source NAT)
 msgid "IPv4: Symmetric NAT; IPv6: OK"
 msgstr "IPv4: 대칭 NAT; IPv6: OK"
 
-#. * IPv4 symmetric NAT, IPv6 firewalled or disabled or no address
 msgid "Symmetric NAT"
 msgstr "대칭 NAT"
 
-#. * IPv4 symmetric NAT (not source NAT)
 msgid "IPv4: Symmetric NAT; IPv6: Testing"
 msgstr "IPv4: 대칭 NAT; IPv6: Testing"
 
 msgid "IPv4: Firewalled; IPv6: Testing"
 msgstr "IPv4: 방화벽있음; IPv6: Testing"
 
-#. * IPv4 firewalled, IPv6 firewalled or disabled or no address
 msgid "Firewalled"
 msgstr "방화벽있음"
 
@@ -65,12 +60,6 @@ msgstr "포트 충돌"
 msgid "Testing"
 msgstr "시험중"
 
-#. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
-#. NPE, too early
-#. if (_context.router().getRouterInfo().getBandwidthTier().equals("K"))
-#. setTunnelStatus("Not expecting tunnel requests: Advertised bandwidth too low");
-#. else
-#. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
 msgid "Starting up"
 msgstr "시작"
 
@@ -80,11 +69,9 @@ msgstr "모든 터널 요청 거부:<br>"
 msgid "Hidden Mode"
 msgstr "숨김 모드"
 
-#. }
 msgid "Declining tunnel requests:<br>"
 msgstr "터널 요청 거부:<br>"
 
-#. }
 msgid "High message delay"
 msgstr "높은 메시지 지연"
 
@@ -109,21 +96,12 @@ msgstr "요청 수가 많습니다"
 msgid "Rejecting most tunnel requests:<br>"
 msgstr "대부분의 터널 요청 거부:<br>"
 
-#. hard to do {0} from here
-#. setTunnelStatus("Accepting " + (100-(int)(100.0*probReject)) + "% of tunnels");
 msgid "Accepting most tunnel requests"
 msgstr "대부분의 터널 요청 수락"
 
 msgid "Accepting tunnel requests"
 msgstr "터널 요청 수락"
 
-#. .067KBps
-#. * also limited to 90% - see below
-#. always leave at least 4KBps free when allowing
-#. private static final String LIMIT_STR = _x("Declining tunnel requests" + ":<br>" + "Bandwidth limit");
-#. hard to do {0} from here
-#. setTunnelStatus("Rejecting " + ((int)(100.0*probReject)) + "% of tunnels: Bandwidth limit");
-#. setTunnelStatus(_x("Declining most tunnel requests" + ":<br>" + "Bandwidth limit"));
 msgid "Declining requests: Bandwidth limit"
 msgstr "요청 거부: 대역폭 제한"
 
@@ -145,7 +123,6 @@ msgstr "터널 요청 버리는중: 높은 일감 랙"
 msgid "Dropping tunnel requests:<br>High CPU load"
 msgstr "터널 요청 삭제:<br>CPU 부하가 높음"
 
-#. don't even bother, since we are so overloaded locally
 msgid "Dropping tunnel requests: Overloaded"
 msgstr "터널 요청 버리는중: 오버로드됨"
 

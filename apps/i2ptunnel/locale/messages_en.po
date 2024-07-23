@@ -48,13 +48,9 @@ msgstr ""
 msgid "Configuration reloaded for all tunnels"
 msgstr ""
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Starting tunnel"
 msgstr ""
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Stopping tunnel"
 msgstr ""
 
@@ -547,7 +543,6 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#. && editBean.isAdvanced()
 msgid "Set password required to access this service"
 msgstr ""
 

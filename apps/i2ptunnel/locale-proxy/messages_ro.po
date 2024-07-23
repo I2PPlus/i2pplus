@@ -310,11 +310,9 @@ msgstr "Această adresă va fi salvată în agenda de adrese a routerului, unde 
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
 msgstr "Dacă doriți să urmăriți site-urile pe care le-ați adăugat manual, adăugați în agenda dvs. principală sau privată."
 
-#. FIXME wasn't escaped
 msgid "Save & continue"
 msgstr "Salvați și continuați"
 
-#. only blockfile supports multiple books
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
 msgstr "Salvați {0} în agenda principală și continuați pe site"

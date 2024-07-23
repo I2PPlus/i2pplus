@@ -22,32 +22,32 @@ msgstr "E-posta"
 msgid "No encoder found for encoding \\''{0}\\''."
 msgstr "\\''{0}\\'' kodlaması için kullanılacak bir kodlayıcı bulunamadı."
 
-#. tagged in WebMail
 msgid "Re:"
 msgstr "Ynt:"
 
 msgid "Fwd:"
 msgstr "İlt:"
 
-#. MailDir-like
 msgid "Drafts"
 msgstr "Taslaklar"
 
-#. MailDir-like
 msgid "Sent"
 msgstr "Gönderildi"
 
-#. MailDir-like
 msgid "Trash"
 msgstr "Çöp"
 
-#. MailDir-like
 msgid "Bulk Mail"
 msgstr "Toplu E-posta"
 
-#. untranslated, translate on use
 msgid "Inbox"
 msgstr "Gelen Kutusu"
+
+msgid "View message as HTML"
+msgstr ""
+
+msgid "View message as plain text"
+msgstr ""
 
 msgid "unknown"
 msgstr "bilinmiyor"
@@ -163,7 +163,6 @@ msgstr "{0} için kodlama bulunamadı"
 msgid "Attachment not found."
 msgstr "Ek bulunamadı."
 
-#. error if we get here
 msgid "Message not found."
 msgstr "İleti bulunamadı."
 
@@ -286,7 +285,6 @@ msgstr "Konu"
 msgid "Add Attachment"
 msgstr "Ek Ekle"
 
-#. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 msgid "Add attachment"
 msgstr "Ek Ekle"
 
@@ -359,6 +357,9 @@ msgstr "Boyut"
 msgid "Mark for deletion"
 msgstr "Silinmek üzere işaretleyin"
 
+msgid "Message contains HTML"
+msgstr ""
+
 msgid "Message is new"
 msgstr "İleti yeni"
 
@@ -368,7 +369,6 @@ msgstr "İleti spam"
 msgid "Message body not downloaded"
 msgstr "Mesaj gövdesi indirilmedi"
 
-#. TODO ngettext
 msgid "Really delete the marked messages?"
 msgstr "Seçilmiş iletileri gerçekten silmek istiyor musunuz?"
 
@@ -426,6 +426,9 @@ msgstr "Klasöre Geri Dön"
 msgid "Move to Folder"
 msgstr "Klasöre Taşı"
 
+msgid "View message in new tab"
+msgstr ""
+
 msgid "Folder Page Size"
 msgstr "Klasör Sayfa Boyutu"
 
@@ -438,7 +441,6 @@ msgstr "Gelişmiş Yapılandırma"
 msgid "Save Configuration"
 msgstr "Yapılandırmayı Kaydet"
 
-#. this appears in the UI so translate
 msgid "No response from server"
 msgstr "Sunucudan bir yanıt alınamadı"
 
@@ -454,6 +456,5 @@ msgstr "Oturum açılamadı"
 msgid "Server refused connection"
 msgstr "Sunucu bağlantıyı reddetti"
 
-#. TODO which recipient?
 msgid "Mail rejected"
 msgstr "Posta reddedildi"

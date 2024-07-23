@@ -310,11 +310,9 @@ msgstr "این آدرس در دفترچه آدرس روتر شما ذخیره م
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
 msgstr "اگر می‌خواهید سایت‌هایی را که به صورت دستی اضافه کرده‌اید پیگیری کنید، به جای آن به دفترچه آدرس اصلی یا خصوصی خود اضافه کنید."
 
-#. FIXME wasn't escaped
 msgid "Save & continue"
 msgstr "ذخیره و ادامه"
 
-#. only blockfile supports multiple books
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
 msgstr "{0} را در دفترچه آدرس اصلی ذخیره کنید و به وب سایت ادامه دهید"

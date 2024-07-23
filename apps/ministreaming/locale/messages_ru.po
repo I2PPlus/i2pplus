@@ -60,6 +60,5 @@ msgstr "Адрес локального отправителя отключен"
 msgid "Connection was reset"
 msgstr "Соединение сброшено"
 
-#. Translate this one here, can't do it later
 msgid "Failure code"
 msgstr "Код ошибки"

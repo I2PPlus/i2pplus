@@ -310,11 +310,9 @@ msgstr "Tämä osoite tallennetaan reitittimen osoitekirjaan, johon on tallennet
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
 msgstr "Jos haluat seurata manuaalisesti lisäämiäsi sivustoja, lisää sen sijaan pää- tai yksityinen osoitekirjaasi."
 
-#. FIXME wasn't escaped
 msgid "Save & continue"
 msgstr "Tallenna"
 
-#. only blockfile supports multiple books
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
 msgstr "Tallenna {0} hallitsemaan osoitekirjaa ja jatka verkkosivustolle"

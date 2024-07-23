@@ -115,19 +115,16 @@ msgstr "Ungültiger Hostname \"{0}\""
 msgid "Please enter a host name and destination"
 msgstr "Bitte geben Sie einen Hostnamen und ein Ziel ein!"
 
-#. clear search when deleting
 msgid "Delete Entry"
 msgstr "Eintrag löschen"
 
 msgid "Delete Selected"
 msgstr "Ausgewähltes löschen"
 
-#. parameter is a host name
 #, java-format
 msgid "Destination {0} deleted."
 msgstr "Ziel {0} gelöscht"
 
-#. parameter will always be >= 2
 #, java-format
 msgid "1 destination deleted."
 msgid_plural "{0} destinations deleted."
@@ -226,15 +223,6 @@ msgstr "Import aus Datei fehlgeschlagen"
 msgid "Subscriptions saved."
 msgstr "Abonnementquellen gespeichert"
 
-#. ******
-#. String nonce = System.getProperty("addressbook.nonce");
-#. if (nonce != null) {
-#. // Yes this is a hack.
-#. // No it doesn't work on a text-mode browser.
-#. // Fetching from the addressbook servlet
-#. // with the correct parameters will kick off a
-#. // config reload and fetch.
-#. ******
 msgid "Update"
 msgstr "Aktualisieren"
 

@@ -22,30 +22,24 @@ msgstr ""
 msgid "No encoder found for encoding \\''{0}\\''."
 msgstr ""
 
-#. tagged in WebMail
 msgid "Re:"
 msgstr ""
 
 msgid "Fwd:"
 msgstr ""
 
-#. MailDir-like
 msgid "Drafts"
 msgstr ""
 
-#. MailDir-like
 msgid "Sent"
 msgstr ""
 
-#. MailDir-like
 msgid "Trash"
 msgstr ""
 
-#. MailDir-like
 msgid "Bulk Mail"
 msgstr ""
 
-#. untranslated, translate on use
 msgid "Inbox"
 msgstr ""
 
@@ -169,7 +163,6 @@ msgstr ""
 msgid "Attachment not found."
 msgstr ""
 
-#. error if we get here
 msgid "Message not found."
 msgstr ""
 
@@ -292,7 +285,6 @@ msgstr ""
 msgid "Add Attachment"
 msgstr ""
 
-#. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 msgid "Add attachment"
 msgstr ""
 
@@ -377,7 +369,6 @@ msgstr ""
 msgid "Message body not downloaded"
 msgstr ""
 
-#. TODO ngettext
 msgid "Really delete the marked messages?"
 msgstr ""
 
@@ -450,7 +441,6 @@ msgstr ""
 msgid "Save Configuration"
 msgstr ""
 
-#. this appears in the UI so translate
 msgid "No response from server"
 msgstr ""
 
@@ -466,6 +456,5 @@ msgstr ""
 msgid "Server refused connection"
 msgstr ""
 
-#. TODO which recipient?
 msgid "Mail rejected"
 msgstr ""

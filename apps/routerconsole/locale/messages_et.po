@@ -49,7 +49,6 @@ msgid_plural "Acquired only {0} router infos from reseed hosts"
 msgstr[0] "Omandatud ainult 1 ruuteri teave reseed hostsilt"
 msgstr[1] "Omandatud ainult {0} ruuter Infos reseed hostsist"
 
-#. remove dupe error msgs
 #, java-format
 msgid "{0}Reseed{1} failed:"
 msgstr "{0}Uuestivaatamine{1} ebaõnnestus:"
@@ -76,9 +75,6 @@ msgstr "Hangiti {0} ruuteriteavet uuesti esitatavatelt hostidelt"
 msgid "Acquired {0} router infos from reseed hosts ({1} errors)"
 msgstr "Hangitud {0} ruuteriteavet uuesti esitatavatelt hostidelt ({1} viga)"
 
-#. NOTE TO TRANSLATORS - each of these phrases is a description for a statistic
-#. to be displayed on /stats.jsp and in the graphs on /graphs.jsp.
-#. Please keep relatively short so it will fit on the graphs.
 msgid "Message receive rate (B/s)"
 msgstr "sõnumi vastuvõtmise kiirus (B/s)"
 
@@ -130,14 +126,12 @@ msgstr "tunneli ehitamise keskmine edu %"
 msgid "unknown"
 msgstr "tundmatu"
 
-#. 1
 msgid "Floodfill"
 msgstr "Üleujutus"
 
 msgid "Show all routers with this capability in the NetDb"
 msgstr "kuvage NetDb-s kõik selle võimalusega ruuterid"
 
-#. This used to be "no common transports" but it is almost always no transports at all
 msgid "No transports (hidden or starting up?)"
 msgstr "Pole transpordi protokolle (peidus või alles käivitun?)"
 
@@ -226,9 +220,6 @@ msgstr "UPnP teatab suurimaks allavoolu kiiruseks {0} bitti/sek"
 msgid "UPnP reports the maximum upstream bit rate is {0}bits/sec"
 msgstr "UPnP teatav suurimaks ülesvoolu kiiruseks {0} bitti/sek"
 
-#. {0} is TCP or UDP
-#. {1,number,#####} prevents 12345 from being output as 12,345 in the English locale.
-#. If you want the digit separator in your locale, translate as {1}.
 #, java-format
 msgid "{0} port {1,number,#####} was successfully forwarded by UPnP."
 msgstr "{0} porti {1,number,#####} suunati edukalt UPnP abil."
@@ -298,7 +289,6 @@ msgstr "Ei suutnud kopeerida asukohta {0}"
 msgid "Requires Java version {0} but installed Java version is {1}"
 msgstr "Nõuab Java versiooni {0}, kuid installitud Java versioon on {1}"
 
-#. set status before thread to ensure UI feedback
 msgid "Updating"
 msgstr "Uuendan"
 
@@ -319,7 +309,6 @@ msgstr "esmalt peate värskendama versioonile {0}"
 msgid "Checking for update of plugin {0}"
 msgstr "Otsin uuendusi pluginale {0}"
 
-#. set status before thread to ensure UI feedback
 msgid "Contacting plugin update server"
 msgstr "ühenduse võtmine pistikprogrammi värskendusserveriga"
 
@@ -349,7 +338,6 @@ msgstr "Plugin alla laetud"
 msgid "Cannot create plugin directory {0}"
 msgstr "Ei suuda luua plugina kataloogi {0}"
 
-#. updateStatus("<b>" + "Plugin contains an invalid key" + ' ' + pubkey + ' ' + signer + "</b>");
 #, java-format
 msgid "Plugin from {0} contains an invalid key"
 msgstr "Plugin allikast {0} sisaldab kehtetut võtit"
@@ -358,7 +346,6 @@ msgstr "Plugin allikast {0} sisaldab kehtetut võtit"
 msgid "Plugin signature verification of {0} failed"
 msgstr "Plugina {0} allkirja kontroll kukkus läbi"
 
-#. don't display signer, we're really checking the key not the signer name
 msgid "Plugin not installed - signer is untrusted"
 msgstr "Plugin ei ole paigaldatud - allkirjastaja ei ole usaldusväärne"
 
@@ -494,7 +481,6 @@ msgstr "Lülitu viisakalt välja"
 msgid "Graceful shutdown initiated"
 msgstr "Viisakas väljalülitus alustatud"
 
-#. Normal browsers send value, IE sends button label
 msgid "Shutdown immediately"
 msgstr "Lülitu kohe välja"
 
@@ -580,19 +566,15 @@ msgstr "installitud I2P-süsteemi teenus"
 msgid "Warning: unable to install the service"
 msgstr "Hoiatus: teenuse paigaldumine ebaõnnestus"
 
-#. addFormNotice(_t("Service installed"));
 msgid "Enabled I2P+ service autostart at system startup"
 msgstr "Lubatud I2P-teenuse automaatkäivitus süsteemi käivitamisel"
 
-#. addFormError(_t("Warning: unable to install the service") + " - " + ioe.getLocalizedMessage());
 msgid "Warning: could not set the I2P+ service to autostart"
 msgstr "Hoiatus: I2P-teenust ei saanud automaatseks käivitamiseks seadistada"
 
-#. addFormNotice(_t("Service removed"));
 msgid "Disabled I2P+ Service autostart at system startup"
 msgstr "Keelatud I2P-teenuse automaatkäivitus süsteemi käivitamisel"
 
-#. addFormError(_t("Warning: unable to remove the service") + " - " + ioe.getLocalizedMessage());
 msgid "Warning: could not set the I2P+ service to manual start"
 msgstr "Hoiatus: I2P-teenust ei saanud käsitsi käivitada"
 
@@ -800,14 +782,12 @@ msgstr "Sertifikaate kasutatakse võrgus töötavate krüptitud teenuste autenti
 msgid "Local SSL Certificates"
 msgstr "Kohalikud SSL-sertifikaadid"
 
-#. console
 msgid "Router Console"
 msgstr "Ruuteri konsool"
 
 msgid "Location"
 msgstr "Asukoht"
 
-#. I2CP
 msgid "I2CP"
 msgstr "I2CP"
 
@@ -823,14 +803,9 @@ msgstr "Veebileht"
 msgid "Local Router Family Certificate"
 msgstr "kohaliku ruuteri perekonna sertifikaat"
 
-#. hide family name in css as it's already displayed above
 msgid "Family"
 msgstr "Perekond"
 
-#. } else {
-#. _out.write("<p>");
-#. _out.write(_t("none"));
-#. _out.write("</p>\n");
 msgid "Console"
 msgstr "konsool"
 
@@ -881,7 +856,6 @@ msgstr "Peatati plugin {0}"
 msgid "Stopped webapp {0}"
 msgstr "peatatud veebirakendus {0}"
 
-#. label (IE)
 msgid "Start"
 msgstr "Käivita"
 
@@ -966,7 +940,6 @@ msgstr "lisatud kasutaja {0}"
 msgid "Interface configuration saved"
 msgstr "liidese konfiguratsioon on salvestatud"
 
-#. "<th data-sortable data-sort-method=number>" + _t("Speed") + "</th>" +
 msgid "Edit"
 msgstr "Muuda"
 
@@ -1009,7 +982,6 @@ msgstr "E-post"
 msgid "Plugin"
 msgstr "Plugin"
 
-#. hide caps as already in the header
 msgid "Version"
 msgstr "Versioon"
 
@@ -1190,8 +1162,6 @@ msgstr "Vali lisamiseks klass"
 msgid "All classes in {0}"
 msgstr "Kõik klassid: {0}"
 
-#. stat groups for stats.jsp
-#. See StatsGenerator for groups mapped to a display name
 msgid "Bandwidth"
 msgstr "Ribalaius"
 
@@ -1318,8 +1288,6 @@ msgstr "Võimaldatakse UDP"
 msgid "Requiring SSU introducers"
 msgstr "Nõuan SSU puhul tutvustajaid"
 
-#. if (_context.hasWrapper()) {
-#. Wow this dumps all conns immediately and really isn't nice
 msgid "Performing a soft restart"
 msgstr "pehme taaskäivitamine"
 
@@ -1410,7 +1378,6 @@ msgstr "Külvi kohe uuesti"
 msgid "Reseeding is already in progress"
 msgstr "Ruuterite kontaktide hange juba toimub"
 
-#. skip the nonce checking in ReseedHandler
 msgid "Starting reseed process"
 msgstr "Alustan ruuterite kontaktide hanget"
 
@@ -1450,8 +1417,6 @@ msgstr "lähtestage URL-i loend"
 msgid "URL list reset successfully"
 msgstr "URL-i loendi lähtestamine õnnestus"
 
-#. ctx.router().shutdown(Router.EXIT_HARD); // never returns
-#. give the UI time to respond
 msgid "Cancel shutdown"
 msgstr "Tühista välja lülitumine"
 
@@ -1461,8 +1426,6 @@ msgstr "Tühista uuesti käivitumine"
 msgid "Restart immediately"
 msgstr "Käivitu kohe uuesti"
 
-#. ctx.router().shutdown(Router.EXIT_HARD_RESTART); // never returns
-#. give the UI time to respond
 msgid "Restart"
 msgstr "Käivitu uuesti"
 
@@ -1550,8 +1513,6 @@ msgstr "liigutatud"
 msgid "Saved order of sections."
 msgstr "Sektsioonide järjekord on salvestatud."
 
-#. the count isn't really correct anyway, since we don't check for actual changes
-#. addFormNotice("Updated settings for " + updated + " pools.");
 msgid "Updated settings for all pools."
 msgstr "Kõigi tunneligruppide seaded uuendatud."
 
@@ -1561,7 +1522,6 @@ msgstr "Võrgu avastamise tunnelite häälestus edukalt salvestatud."
 msgid "Error saving the configuration (applied but not saved) - please see the error logs."
 msgstr "Viga häälestuse salvestamisel (kehtestatud, mitte salvestatud) - palun vaata vealogi."
 
-#. * dummies for translation
 #, java-format
 msgid "{0} hop"
 msgid_plural "{0} hops"
@@ -1796,7 +1756,6 @@ msgstr "Üksikasjad"
 msgid "Combined bandwidth graph"
 msgstr "Kombineeritud ribalaiuse graafik"
 
-#. e.g. "statname for 60m"
 #, java-format
 msgid "{0} for {1}"
 msgstr "{0} for {1}"
@@ -2006,7 +1965,6 @@ msgstr "Ribalaiuse Häälestus"
 msgid "I2P Bandwidth Configuration"
 msgstr "I2P ribalaiuse häälestus"
 
-#. FIXME wasn't escaped
 msgid "Configure UI"
 msgstr "kasutajaliidese seadistamine"
 
@@ -2043,7 +2001,6 @@ msgstr "hiljutised muudatused"
 msgid "Bug tracker"
 msgstr "veajälgija"
 
-#. I2P specific
 msgid "I2P Bug Reports"
 msgstr "I2P veateated"
 
@@ -2077,7 +2034,6 @@ msgstr "Javadocs"
 msgid "I2P Network Statistics"
 msgstr "I2P Võrgustatistika"
 
-#. software repositories + filesharing
 msgid "Transient server-encrypted filesharing and pastebin"
 msgstr "ajutine serveriga krüptitud failide jagamine ja pastebin"
 
@@ -2096,13 +2052,9 @@ msgstr "I2P+ Kodu"
 msgid "BitTorrent tracker"
 msgstr "BitTorrenti jälgija"
 
-#. "git.i2p" + S + _x("Community Git hosting") + S + "http://git.i2p/explore/repos" + S + I + "eepsites/git.svg" + S +
-#. torrent trackers
 msgid "Postman's Tracker"
 msgstr "Postimehe jälitaja"
 
-#. _x("Chudo") + S + _x("No login BitTorrent tracker") + S + "http://torrents.chudo.i2p/" + S + I + "magnet.svg" + S +
-#. domain name registration + uptime trackers
 msgid "List of active eepsites and uptime monitor"
 msgstr "aktiivsete eepsite ja tööaja monitori loend"
 
@@ -2112,9 +2064,6 @@ msgstr "I2P domeeninime registreerimine"
 msgid "zzz Domain Registry"
 msgstr "zzz domeeninime registreerimine"
 
-#. "Identiguy" + S + _x("List of active eepsites and uptime monitor") + S + "http://identiguy.i2p/" + S + I + "servermonitor.svg" + S +
-#. "scanner.linuxfarm" + S + _x("List of active eepsites and uptime monitor") + S + "http://scanner.linuxfarm.i2p/" + S + I + "eepsites/servermonitor.svg" + S +
-#. forums + social
 msgid "I2P Forum"
 msgstr "I2P foorum"
 
@@ -2136,14 +2085,6 @@ msgstr "Võrkudevaheline mikroblogimine"
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Redditi alternatiivne privaatsusele keskendunud kasutajaliides"
 
-#. "StackOverflow" + S + _x("Developer question &amp; answer forums") + S + "http://stackoverflow.i2p/" + S + I + "eepsites/stackoverflow.svg" + S +
-#. "dread.i2p" + S + _x("Darknet forums") + S + "http://dread.i2p/d/i2p/?sort=new" + S + I + "eepsites/dread.svg" + S +
-#. _x("Dev Forum") + S + _x("Development forum") + S + "http://zzz.i2p/" + S + I + "eepsites/forum.svg" + S +
-#. "libreddit.i2p" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://libreddit.i2p/" + S + I + "libreddit.svg" + S +
-#. "zeronet.i2p" + S + _x("Zeronet I2P Gateway") + S + "http://zeronet.i2p/" + S + I + "zeronet.svg" + S +
-#. _x("Dancing Elephants") + S + _x("Rocksolid forums for the darknets") + S + "http://def3.i2p/" + S + I + "eepsites/forum.svg" + S +
-#. "query.i2p" + S + _x("The StackOverflow of I2P") + S + "http://query.i2p/" + S + I + "eepsites/forum.svg" + S +
-#. hosting + other services
 msgid "Base64 Image Encoder"
 msgstr "Base64 pildi kodeerija"
 
@@ -2189,9 +2130,6 @@ msgstr "Youtube alternatiivne kasutajaliides"
 msgid "Provider of privacy respecting web hosting and VPN services"
 msgstr "privaatsuse pakkuja, mis austab veebimajutust ja VPN-teenuseid"
 
-#. "tinypng.i2p" + S + _x("Image optimizer") + S + "http://tinypng.i2p/" + S + I + "tinypng.png" + S +
-#. _x("Deep Web Radio") + S + _x("Streaming radio service") + S + "http://deepwebradio.i2p/" + S + I + "radio.svg" + S +
-#. search engines
 msgid "Tor-focused Search Engine"
 msgstr "Torile keskendunud otsingumootor"
 
@@ -2213,13 +2151,6 @@ msgstr "privaatsusele keskendunud Clearneti otsingumootor"
 msgid "I2P Web Search Engine"
 msgstr "I2P veebiotsingumootor"
 
-#. "I2PSearch" + S +_x("I2P Web Search Engine") + S + "http://i2psearch.i2p/" + S + I + "search.svg" + S +
-#. "Legwork" + S +_x("I2P Web Search Engine") + S + "http://legwork.i2p/" + S + I + "search.svg" + S +
-#. "LibreY" + S +_x("Clearnet Search Engine") + S + "http://librey.i2p/" + S + I + "search.svg" + S +
-#. "raklet.i2p" + S +_x("Tor-focused Search Engine") + S + "http://raklet.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
-#. "Ransack" + S +_x("I2P-based Metasearch Engine") + S + "http://ransack.i2p/" + S + I + "search.svg" + S +
-#. "shmoogle.i2p" + S +_x("I2P Web Search Engine") + S + "http://shmoogle.i2p/" + S + I + "search.svg" + S +
-#. wikis & reference
 msgid "Enabling the free transmission of data in the public interest"
 msgstr "Andmete tasuta edastamise võimaldamine avalikes huvides"
 
@@ -2280,15 +2211,6 @@ msgstr "Maailma atlas, sealhulgas geograafia faktid ja lipud"
 msgid "WorldAtlas"
 msgstr "Maailma Atlas"
 
-#. "cssportal.i2p" + S + _x("CSS design reference") + S + "http://cssportal.i2p/" + S + I + "help.svg" + S +
-#. "ebooks.i2p" + S + _x("Huge collection of books &amp; magazines &amp; comics") + S + "http://ebooks.i2p/" + S + I + "eepsites/books.svg" + S +
-#. "legalcases.i2p" + S + _x("Publicly available texts of court decisions all over the world") + S + "http://legalcases.i2p/" + S + I + "eepsites/books.svg" + S +
-#. _x("imperial.i2p") + S + _x("Extensive repository of DRM-free ebooks") + S + "http://imperial.i2p/" + S + I + "eepsites/books.svg" + S +
-#. "jalibrary.i2p" + S + _x("Books &amp; courses &amp; art") + S + "http://jalibrary.i2p/" + S + I + "eepsites/books.svg" + S +
-#. "nexus.i2p" + S + _x("Searchable science library") + S + "http://nexus.i2p/" + S + I + "nexus.svg" + S +
-#. "tome.i2p" + S + _x("Collection of books &amp; other reading material") + S + "http://tome.i2p/" + S + I + "eepsites/books.svg" + S +
-#. _x("UrbanDictionary") + S + _x("Crowd-sourced slang dictionary") + S + "http://urbandictionary.i2p/" + S + I + "eepsites/urbandictionary.svg" + S +
-#. news + blogs
 msgid "Technology News &amp; more..."
 msgstr "Tehnoloogiauudised ja palju muud..."
 
@@ -2659,7 +2581,6 @@ msgstr "ootan"
 msgid "Scheduled jobs"
 msgstr "Plaanilised tööd"
 
-#. translators: {0} is a job name, {1} is a time, e.g. 6 min
 #, java-format
 msgid "{0} starts in {1}"
 msgstr "{0} algab {1} pärast"
@@ -2703,40 +2624,27 @@ msgstr "Faili ei leitud"
 msgid "No log messages"
 msgstr "Logis pole sõnumeid"
 
-#. 0  -
 msgid "Local Router"
 msgstr "kohalik ruuter"
 
-#. 1  - r=.
 msgid "Router Lookup"
 msgstr "ruuteri otsing"
 
-#. 2  -
-#. 3  - f=2
 msgid "All Routers"
 msgstr "Kõik ruuterid"
 
-#. 4  - f=1 (debug)
-#. 5  - l=1
-#. 6  - l=2 (debug)
-#. only show for our own id
 msgid "LeaseSets"
 msgstr "Lüüsikirjegrupid"
 
-#. 7  - l=3
 msgid "Advanced Lookup"
 msgstr "Täpsem otsing"
 
-#. 8  - f=4
 msgid "LeaseSet Lookup"
 msgstr "Leaseset -otsimine"
 
-#. 9  -
-#. 10 - f=5
 msgid "All Routers (Client NetDb)"
 msgstr "Kõik ruuterid (Client NetDb)"
 
-#. 11 - f=6 (debug)
 msgid "Sybil Analysis"
 msgstr "Sybil -analüüs"
 
@@ -2902,20 +2810,6 @@ msgstr "Vaata profiili"
 msgid "Profile"
 msgstr "profiil"
 
-#.
-#. PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(h);
-#. if (prof != null && prof.getIsExpandedDB()) {
-#. buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(h.toBase64()).append("\" title=\"")
-#. .append(_t("View profile")).append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>");
-#. }
-#.
-#.
-#. PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(h);
-#. if (prof != null && prof.getIsExpandedDB()) {
-#. buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(h.toBase64()).append("\" title=\"").append(_t("View profile"))
-#. .append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>");
-#. }
-#.
 msgid "Configure peer"
 msgstr "kaaslaste konfigureerimine"
 
@@ -2925,7 +2819,6 @@ msgstr "mälukasutus"
 msgid "Hidden"
 msgstr "Peidetud"
 
-#. shouldn't happen
 msgid "Published"
 msgstr "Avaldatud"
 
@@ -2962,7 +2855,6 @@ msgstr "Kuva NetDb-s kõik selle pordiga ruuterid"
 msgid "Capabilities"
 msgstr "Võimalused"
 
-#. hide version as already in the header
 msgid "Core version"
 msgstr "Põhiversioon"
 
@@ -3109,8 +3001,6 @@ msgstr "kaaslaste võimalused"
 msgid "Dir"
 msgstr "Suund"
 
-#. "<th class=lookup title=\"").append(_t("Lookup address via gwhois.org")).append("\">").append(_t("Whois")).append("</th>" +
-#. buf.append("<th class=lookup title=\"").append(_t("Lookup address via gwhois.org")).append("\">").append(_t("Whois")).append("</th>");
 msgid "Direction/Introduction"
 msgstr "Suund/Tutvustamine"
 
@@ -3258,7 +3148,6 @@ msgid_plural "{0} fails"
 msgstr[0] "{0} ebaõnnestub"
 msgstr[1] "{0} ebaõnnestub"
 
-#. 2
 msgid "Banned"
 msgstr "Bännitud"
 
@@ -3379,9 +3268,6 @@ msgstr "Kiirus"
 msgid "Low Latency"
 msgstr "madal latentsusaeg"
 
-#. .append("<th title=\"").append(_t("Time taken for peer test")).append("\">")
-#. .append(_t("Test Avg (ms)")).append("</th>")
-#. .append("<th>").append(_t("Capacity")).append("</th>")
 msgid "Tunnels peer has agreed to participate in"
 msgstr "Tunneli eakaaslane on nõustunud osalema"
 
@@ -3394,8 +3280,6 @@ msgstr "Tunneli eakaaslane on keeldunud osalemast"
 msgid "Rejected"
 msgstr "tagasi lükatud"
 
-#. .append("<th>").append(_t("Integration")).append("</th>")
-#. .append("<th>").append(_t("First Heard About")).append("</th>")
 msgid "Last Heard From"
 msgstr "Viimati kuuldud temalt"
 
@@ -3408,14 +3292,12 @@ msgstr "Kättesaadamatud"
 msgid "OK"
 msgstr "OK"
 
-#. hide if < 10%
 msgid "Test Fails"
 msgstr "Testis läbikukkuvad"
 
 msgid "Fast, High Capacity"
 msgstr "Kiired, Kõrge mahuga"
 
-#. 0
 msgid "High Capacity"
 msgstr "Kõrge mahuga"
 
@@ -3497,7 +3379,6 @@ msgstr "Viimane läbikukkunud salvestus"
 msgid "Capabilities in the NetDb, not used to determine profiles"
 msgstr "NetDb võimalused, mida profiilide määramiseks ei kasutata"
 
-#. capabilities
 msgid "caps"
 msgstr "võimekused"
 
@@ -3566,7 +3447,6 @@ msgstr "mitmest uuest ruuterist nad meile hiljuti rääkinud on?"
 msgid "All"
 msgstr "Kõik"
 
-#. 3
 msgid "Session Bans"
 msgstr "Seansi keelud"
 
@@ -3600,7 +3480,6 @@ msgstr "Maksimum, sündmusi perioodi kohta"
 msgid "Lifetime average events per period"
 msgstr "Tööea keskmine, sündmusi perioodi kohta"
 
-#. Display the strict average
 msgid "Lifetime average frequency"
 msgstr "Tööea keskmine sagedus"
 
@@ -3647,7 +3526,6 @@ msgstr "Graafiku sündmuste arv"
 msgid "Export Data as XML"
 msgstr "Ekspordi andmed XML-vormingus"
 
-#. Display the strict average
 msgid "Lifetime average value"
 msgstr "Ruuteri tööea keskmine väärtus"
 
@@ -4104,8 +3982,6 @@ msgstr "Lisa/eemalda/muuda &amp; juhi oma kliendi- ja serveritunneleid"
 msgid "How many local service tunnels we're running"
 msgstr "kui palju kohalikke teenindustunneleid me kasutame"
 
-#. older names for pre-0.7.4 installs
-#. hardcoded in i2psnark
 msgid "I2PSnark"
 msgstr "I2PSnark"
 
@@ -4167,10 +4043,6 @@ msgstr "Värskendatakse pärast taaskäivitamist"
 msgid "Signed development update available"
 msgstr "Allkirjastatud arendusvärskendus on saadaval"
 
-#. Note to translators: parameter is a router version, e.g. "0.9.19-16"
-#. <br> is optional, to help the browser make the lines even in the button
-#. If the translation is shorter than the English, you should probably not include <br>
-#. .append(_t("Download Signed<br>Development Update<br>{0}", getDevSU3UpdateVersion()))
 msgid "Download I2P Update"
 msgstr "Laadige alla I2P värskendus"
 
@@ -4243,13 +4115,6 @@ msgstr "Sama perekond"
 msgid "IP close to us"
 msgstr "IP meile lähedal"
 
-#. *
-#. "<li><a href=\"netdb?f=3&amp;m=4\">" + _t("Same IP") + "</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=5\">" + _t("Same IPv4") + " /24</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=6\">" + _t("Same IPv4") + " /16</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=17\">"+ _t("Same IPv6") + " /64</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=18\">" + _t("Same IPv6") + " /48</a></li>\n" +
-#. *
 msgid "Pair distance"
 msgstr "paariskaugus"
 
@@ -4322,16 +4187,12 @@ msgstr "Tuntud üleujutused"
 msgid "Average closest floodfill distance"
 msgstr "Keskmine lähim üleujutuse täituvus"
 
-#. "<b>").append(_t("Routing Data")).append(":</b> \"").append(DataHelper.getUTF8(_context.routerKeyGenerator().getModData()))
 msgid "Routing Data"
 msgstr "Marsruutimisandmed"
 
-#. .append("\"<br>\n<b>").append(_t("Last Changed")).append(":</b> ").append(DataHelper.formatTime(_context.routerKeyGenerator().getLastChanged())).append("<br>\n" +
-#. "<b>").append(_t("Next Routing Data")).append(":</b> \"").append(DataHelper.getUTF8(_context.routerKeyGenerator().getNextModData()))
 msgid "Rotates in"
 msgstr "Pöörleb sisse"
 
-#. Distance to our router analysis
 msgid "Closest Floodfills to Our Routing Key (Where we Store our RI)"
 msgstr "meie marsruudivõtmele lähimad üleujutused (kus me oma RI-d säilitame)"
 
@@ -4374,7 +4235,6 @@ msgstr "üleujutuse keskmine kaugus on"
 msgid "Closest Floodfill Pairs by Hash"
 msgstr "Lähimad Floodfill Pairs by Hash"
 
-#. sorted;
 msgid "Hash Distance"
 msgstr "Räsi kaugus"
 
@@ -4596,7 +4456,6 @@ msgstr "Tunneli nimi"
 msgid "Data Out"
 msgstr "Andmed väljas"
 
-#. Saved in CSSHelper, assume success
 msgid "Console language saved."
 msgstr "konsooli keel on salvestatud."
 
@@ -4606,7 +4465,6 @@ msgstr "Ribalaiuse test on edukalt lõpule viidud"
 msgid "Bandwidth test failed"
 msgstr "Ribalaiuse test ebaõnnestus"
 
-#. didn't run at all?
 msgid "Bandwidth test did not complete"
 msgstr "Ribalaiuse testi ei lõpetatud"
 
@@ -4629,7 +4487,6 @@ msgstr "bitti sekundis"
 msgid "{0}Bytes per month maximum"
 msgstr "{0}maksimaalselt baite kuus"
 
-#. wars for ConfigClientsHelper
 msgid "addressbook"
 msgstr "addressbook"
 
@@ -4648,9 +4505,6 @@ msgstr "susidns"
 msgid "routerconsole"
 msgstr "routerconsole"
 
-#. clients, taken from clients.config, for ConfigClientsHelper
-#. note that if the wording changes in clients.config, we have to
-#. keep the old string here as well for existing installs
 msgid "Web console"
 msgstr "Veebikonsool"
 
@@ -4678,10 +4532,6 @@ msgstr "I2P ruuteri konsool"
 msgid "Open Router Console in web browser at startup"
 msgstr "Ava ruuteri konsool brauseris ruuteri käivitumisel"
 
-#. tunnel nicknames, taken from i2ptunnel.config so they will display
-#. nicely under 'local destinations' in the summary bar
-#. note that if the wording changes in i2ptunnel.config, we have to
-#. keep the old string here as well for existing installs
 msgid "shared clients"
 msgstr "ühised klienditunnelid"
 
@@ -4718,14 +4568,12 @@ msgstr "isiklik I2P veebiserver (eepsite)"
 msgid "HTTP Proxy"
 msgstr "HTTP proxy"
 
-#. hardcoded in iMule?
 msgid "iMule"
 msgstr "iMule"
 
 msgid "Official I2P Source Repository"
 msgstr "ametlik I2P-allikate hoidla"
 
-#. standard themes for ConfigUIHelper
 msgid "dark"
 msgstr "tume"
 
@@ -4747,8 +4595,6 @@ msgstr "krüpteerimine"
 msgid "Stream"
 msgstr "voog"
 
-#. parameters in transport addresses (netdb.jsp)
-#. may or may not be worth translating
 msgid "host"
 msgstr "host"
 
@@ -5501,7 +5347,6 @@ msgstr "Võrgu avastamise tunnelite seaded talletuvad failis router.config."
 msgid "Client tunnel changes are temporary and are not saved."
 msgstr "Klienditunnelite seaded on ajutised ja ei salvestu."
 
-#. if (pm.isRegistered(net.i2p.util.PortMapper.SVC_I2PTUNNEL)) {
 msgid "The default settings are optimized for general usage and normally don't need to be changed."
 msgstr "Vaikesätted on optimeeritud üldiseks kasutamiseks ja tavaliselt ei pea neid muutma."
 
@@ -7469,6 +7314,12 @@ msgstr "vaadake teavet ruuteri ja töökeskkonna kohta"
 
 msgid "Statistics"
 msgstr "Statistika"
+
+msgid "Current console and webapp translation report"
+msgstr "Hetkel oleva konsooli ja veebirakenduse tõlkeraport"
+
+msgid "Translation Status"
+msgstr "Tõlkimis olek"
 
 msgid "View active tunnels"
 msgstr "kuvage aktiivsed tunnelid"

@@ -212,12 +212,10 @@ msgstr "오류: 토렌트를 추가할 수 없습니다: {0}"
 msgid "Torrent already running: {0}"
 msgstr "이미 작동중입니다: {0}"
 
-#. catch this here so we don't try do delete it below
 #, java-format
 msgid "Cannot open \"{0}\""
 msgstr "\"{0}\" - 열 수 없습니다."
 
-#. TODO - if the existing one is a magnet, delete it and add the metainfo instead?
 #, java-format
 msgid "Torrent with this info hash is already running: {0}"
 msgstr "해당 정보해시를 가진 토렌트가 이미 작동중입니다: {0}"
@@ -312,13 +310,6 @@ msgstr "제한값은 {0}B 입니다"
 msgid "Torrent \"{0}\" has no data!"
 msgstr "토렌트 \"{0}\"에 데이터가 없습니다!"
 
-#.
-#. System.out.println("torrent info: " + info.toString());
-#. List<Long> lengths = info.getLengths();
-#. if (lengths != null)
-#. for (int i = 0; i < lengths.size(); i++)
-#. System.out.println("File " + i + " is " + lengths.get(i) + " long.");
-#.
 #, java-format
 msgid "Torrents larger than {0}B are not supported yet \"{1}\"!"
 msgstr "{0}B 보다 큰 토렌트는 아직 지원되지 않습니다. \"{1}\"!"
@@ -377,8 +368,6 @@ msgstr "다운로드 완료: {0}"
 msgid "I2PSnark"
 msgstr "I2PSnark"
 
-#. addMessage(_t("Metainfo received for {0}", snark.getName()));
-#. addMessageNoEscape(_t("Starting torrent: {0}", linkify(snark)).replace("Magnet ", ""));
 #, java-format
 msgid "Starting torrent: {0}"
 msgstr "토렌트 시작: {0}"
@@ -659,7 +648,6 @@ msgstr "인"
 msgid "out"
 msgstr "아웃"
 
-#. Only truncate if it's an actual dest
 msgid "Our destination (identity) for this session"
 msgstr "이 세션의 목적지(ID)"
 
@@ -721,7 +709,6 @@ msgstr "마지막 페이지"
 msgid "Cannot add torrent {0} inside another torrent: {1}"
 msgstr "{1} 안의 {0} 토렌트를 추가할 수 없음"
 
-#. TODO
 #, java-format
 msgid "Download from non-I2P location {0} is not supported"
 msgstr "I2P가 아닌 위치 {0}에서의 다운로드는 지원되지 않습니다"
@@ -730,7 +717,6 @@ msgstr "I2P가 아닌 위치 {0}에서의 다운로드는 지원되지 않습니
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
 msgstr "잘못된 URL: \"{0}\" 또는 \"{1}\"로 시작해야 합니다."
 
-#. no file or URL specified
 msgid "Enter URL or select torrent file"
 msgstr "URL을 입력하거나 토렌트 파일을 선택하세요"
 
@@ -990,7 +976,6 @@ msgstr "데이터를 저장할 디렉토리를 입력하세요 (기본값 {0})"
 msgid "Create Torrent"
 msgstr "토렌트 만들기"
 
-#. buf.append("From file: <input type=file name=\"newFile\" size=50 value=\"" + newFile + "\" /><br>\n");
 msgid "Data to seed"
 msgstr "시딩할 데이터"
 
@@ -1070,7 +1055,6 @@ msgstr "페이지당 표시할 최대 토렌트 수"
 msgid "torrents"
 msgstr "토렌트"
 
-#. If we get to here, we have the language settings
 msgid "Language"
 msgstr "언어"
 
@@ -1273,7 +1257,6 @@ msgstr "마그넷 추가 불가: 버전 2 마그넷 링크는 지원되지 않�
 msgid "Invalid magnet URL {0}"
 msgstr "잘못된 마그넷 URL {0}"
 
-#. * dummies for translation
 #, java-format
 msgid "1 hop"
 msgid_plural "{0} hops"
@@ -1368,7 +1351,6 @@ msgstr "상위 디렉토리로 이동"
 msgid "Audio Playlist"
 msgstr "오디오 재생 목록"
 
-#. status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Not found"), _t("Torrent not found?").replace("?", ""));
 msgid "Not found"
 msgstr "찾을 수 없음"
 
@@ -1378,7 +1360,6 @@ msgstr "토렌트 발견안됨"
 msgid "File not found in torrent?"
 msgstr "토렌트에 파일 없음"
 
-#. status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Unrecognized"), _t("File not found in torrent?").replace("?", ""));
 msgid "Unrecognized"
 msgstr "인식되지 않음"
 
@@ -1403,17 +1384,6 @@ msgstr "이 파일을 다운로드하지 마세요"
 msgid "Skip"
 msgstr "스킵"
 
-#. TODO: fixup so works with ajax refresh
-#. "<span class=script>");
-#. if (!inOrder) {
-#. buf.append("<a class=control id=setallhigh href=#>")
-#. .append(toImg("clock_red")).append(_t("Set all high")).append("</a>\n");
-#. }
-#. buf.append("<a class=control id=setallnorm href=#>")
-#. .append(toImg("clock")).append(_t("Set all normal")).append("</a>\n")
-#. .append("<a class=control id=setallskip href=#>")
-#. .append(toImg("block")).append(_t("Skip all")).append("</a></span>\n");
-#.
 msgid "Save priorities"
 msgstr "우선순위 저장"
 
@@ -1482,7 +1452,6 @@ msgstr "편집하려면 Torrent를 중지해야 합니다"
 msgid "Save Changes"
 msgstr "변경 사항 저장"
 
-#. shouldn't happen
 msgid "Torrent must be stopped"
 msgstr "토렌트를 중지해야 합니다"
 

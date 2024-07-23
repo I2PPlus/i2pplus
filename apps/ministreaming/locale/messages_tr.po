@@ -60,6 +60,5 @@ msgstr "Yerel hedef kapandı"
 msgid "Connection was reset"
 msgstr "Bağlantı sıfırlandı"
 
-#. Translate this one here, can't do it later
 msgid "Failure code"
 msgstr "Hata kodu"

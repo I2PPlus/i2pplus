@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#. * IPv4 OK, IPv6 OK or disabled or no address
 msgid "OK"
 msgstr "موافق"
 
@@ -28,22 +27,18 @@ msgstr "IPv4: جدار الحماية؛ IPv6: حسنًا"
 msgid "IPv4: Disabled; IPv6: OK"
 msgstr "IPv4: معطل؛ IPv6: حسنًا"
 
-#. * IPv4 symmetric NAT (not source NAT)
 msgid "IPv4: Symmetric NAT; IPv6: OK"
 msgstr "IPv4: NAT المتماثل؛ IPv6: حسنًا"
 
-#. * IPv4 symmetric NAT, IPv6 firewalled or disabled or no address
 msgid "Symmetric NAT"
 msgstr "نات متماثل"
 
-#. * IPv4 symmetric NAT (not source NAT)
 msgid "IPv4: Symmetric NAT; IPv6: Testing"
 msgstr "IPv4: NAT المتماثل؛ IPv6: الاختبار"
 
 msgid "IPv4: Firewalled; IPv6: Testing"
 msgstr "IPv4: جدار الحماية؛ IPv6: الاختبار"
 
-#. * IPv4 firewalled, IPv6 firewalled or disabled or no address
 msgid "Firewalled"
 msgstr "ممنوع من الجدار الناري"
 
@@ -65,12 +60,6 @@ msgstr "صراع الميناء"
 msgid "Testing"
 msgstr "جاري التجريب"
 
-#. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
-#. NPE, too early
-#. if (_context.router().getRouterInfo().getBandwidthTier().equals("K"))
-#. setTunnelStatus("Not expecting tunnel requests: Advertised bandwidth too low");
-#. else
-#. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
 msgid "Starting up"
 msgstr "البدء"
 
@@ -80,11 +69,9 @@ msgstr "رفض كافة طلبات الأنفاق:<br>"
 msgid "Hidden Mode"
 msgstr "الوضع المخفي"
 
-#. }
 msgid "Declining tunnel requests:<br>"
 msgstr "رفض طلبات النفق:<br>"
 
-#. }
 msgid "High message delay"
 msgstr "تأخير الرسالة العالية"
 
@@ -109,21 +96,12 @@ msgstr "عدد كبير من الطلبات"
 msgid "Rejecting most tunnel requests:<br>"
 msgstr "رفض معظم طلبات الأنفاق:<br>"
 
-#. hard to do {0} from here
-#. setTunnelStatus("Accepting " + (100-(int)(100.0*probReject)) + "% of tunnels");
 msgid "Accepting most tunnel requests"
 msgstr "قبول معظم طلبات الأنفاق"
 
 msgid "Accepting tunnel requests"
 msgstr "قبول طلبات النفق"
 
-#. .067KBps
-#. * also limited to 90% - see below
-#. always leave at least 4KBps free when allowing
-#. private static final String LIMIT_STR = _x("Declining tunnel requests" + ":<br>" + "Bandwidth limit");
-#. hard to do {0} from here
-#. setTunnelStatus("Rejecting " + ((int)(100.0*probReject)) + "% of tunnels: Bandwidth limit");
-#. setTunnelStatus(_x("Declining most tunnel requests" + ":<br>" + "Bandwidth limit"));
 msgid "Declining requests: Bandwidth limit"
 msgstr "رفض الطلبات: حد النطاق الترددي"
 
@@ -145,7 +123,6 @@ msgstr "إسقاط طلبات النفق: تأخر كبير في العمل"
 msgid "Dropping tunnel requests:<br>High CPU load"
 msgstr "إسقاط طلبات النفق:<br>تحميل عالي لوحدة المعالجة المركزية"
 
-#. don't even bother, since we are so overloaded locally
 msgid "Dropping tunnel requests: Overloaded"
 msgstr "تجاوز النفق: ازدحام"
 

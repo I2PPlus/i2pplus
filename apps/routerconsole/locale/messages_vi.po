@@ -46,7 +46,6 @@ msgid "Acquired only 1 router info from reseed hosts"
 msgid_plural "Acquired only {0} router infos from reseed hosts"
 msgstr[0] "Chỉ có được {0} bộ định tuyến từ máy chủ Reseed"
 
-#. remove dupe error msgs
 #, java-format
 msgid "{0}Reseed{1} failed:"
 msgstr "{0}Gắn lại{1} không thành công:"
@@ -73,9 +72,6 @@ msgstr "Đã nhận được thông tin bộ định tuyến {0} từ máy chủ
 msgid "Acquired {0} router infos from reseed hosts ({1} errors)"
 msgstr "Có được {0} thông tin bộ định tuyến từ các máy chủ reseed ({1} lỗi)"
 
-#. NOTE TO TRANSLATORS - each of these phrases is a description for a statistic
-#. to be displayed on /stats.jsp and in the graphs on /graphs.jsp.
-#. Please keep relatively short so it will fit on the graphs.
 msgid "Message receive rate (B/s)"
 msgstr "Tốc độ nhận tin nhắn (B/s)"
 
@@ -127,14 +123,12 @@ msgstr "Tỷ lệ xây dựng đường hầm trung bình thành công"
 msgid "unknown"
 msgstr "không biết"
 
-#. 1
 msgid "Floodfill"
 msgstr "Floodfill"
 
 msgid "Show all routers with this capability in the NetDb"
 msgstr "Hiển thị tất cả các bộ định tuyến với khả năng này trong NetDb"
 
-#. This used to be "no common transports" but it is almost always no transports at all
 msgid "No transports (hidden or starting up?)"
 msgstr "Không có truyền tải (bị ẩn hoặc đang khởi động?)"
 
@@ -223,9 +217,6 @@ msgstr "UPnP gửi báo cáo về tỉ lệ bit tối đa của luồng dữ li�
 msgid "UPnP reports the maximum upstream bit rate is {0}bits/sec"
 msgstr "UPnP gửi báo cáo về tỉ lệ bit tối đa của luồng dữ liệu phía trên là {0}bits/giây"
 
-#. {0} is TCP or UDP
-#. {1,number,#####} prevents 12345 from being output as 12,345 in the English locale.
-#. If you want the digit separator in your locale, translate as {1}.
 #, java-format
 msgid "{0} port {1,number,#####} was successfully forwarded by UPnP."
 msgstr "{0} cổng {1,number,#####} đã được chuyển tiếp thành công bằng UPnP."
@@ -295,7 +286,6 @@ msgstr "Xảy ra lỗi khi sao chép sang {0}"
 msgid "Requires Java version {0} but installed Java version is {1}"
 msgstr "Yêu cầu phiên bản Java {0} nhưng phiên bản Java đã cài đặt là {1}"
 
-#. set status before thread to ensure UI feedback
 msgid "Updating"
 msgstr "Đang cập nhật"
 
@@ -316,7 +306,6 @@ msgstr "Trước tiên bạn phải cập nhật lên phiên bản {0}"
 msgid "Checking for update of plugin {0}"
 msgstr "Kiểm tra cập nhật dành cho tiện ích {0}"
 
-#. set status before thread to ensure UI feedback
 msgid "Contacting plugin update server"
 msgstr "Liên hệ với máy chủ cập nhật plugin"
 
@@ -346,7 +335,6 @@ msgstr "Đã tải về tiện ích"
 msgid "Cannot create plugin directory {0}"
 msgstr "Không thể tạo thư mục dành cho tiện ích {0}"
 
-#. updateStatus("<b>" + "Plugin contains an invalid key" + ' ' + pubkey + ' ' + signer + "</b>");
 #, java-format
 msgid "Plugin from {0} contains an invalid key"
 msgstr "Tiện ích từ phía {0} chứa một khóa dữ liệu không hợp lệ"
@@ -355,7 +343,6 @@ msgstr "Tiện ích từ phía {0} chứa một khóa dữ liệu không hợp l
 msgid "Plugin signature verification of {0} failed"
 msgstr "Chữ ký xác nhạn của tiện ích từ {0} gặp lỗi"
 
-#. don't display signer, we're really checking the key not the signer name
 msgid "Plugin not installed - signer is untrusted"
 msgstr "Plugin chưa được cài đặt - Trình ký không được tin tưởng"
 
@@ -491,7 +478,6 @@ msgstr "Tắt máy một cách duyên dáng"
 msgid "Graceful shutdown initiated"
 msgstr "Bắt đầu tắt máy một cách duyên dáng"
 
-#. Normal browsers send value, IE sends button label
 msgid "Shutdown immediately"
 msgstr "Tắt máy ngay lập tức"
 
@@ -577,19 +563,15 @@ msgstr "Dịch vụ hệ thống I2P đã cài đặt"
 msgid "Warning: unable to install the service"
 msgstr "Cảnh báo: không thể cài đặt dịch vụ"
 
-#. addFormNotice(_t("Service installed"));
 msgid "Enabled I2P+ service autostart at system startup"
 msgstr "Đã bật tự động khởi động dịch vụ I2P khi khởi động hệ thống"
 
-#. addFormError(_t("Warning: unable to install the service") + " - " + ioe.getLocalizedMessage());
 msgid "Warning: could not set the I2P+ service to autostart"
 msgstr "Cảnh báo: không thể đặt dịch vụ I2P ở chế độ tự khởi động"
 
-#. addFormNotice(_t("Service removed"));
 msgid "Disabled I2P+ Service autostart at system startup"
 msgstr "Tự động khởi động dịch vụ I2P bị vô hiệu hóa khi khởi động hệ thống"
 
-#. addFormError(_t("Warning: unable to remove the service") + " - " + ioe.getLocalizedMessage());
 msgid "Warning: could not set the I2P+ service to manual start"
 msgstr "Cảnh báo: không thể đặt dịch vụ I2P ở chế độ khởi động thủ công"
 
@@ -796,14 +778,12 @@ msgstr "Giấy chứng nhận được sử dụng để xác thực các dịch
 msgid "Local SSL Certificates"
 msgstr "Chứng chỉ SSL cục bộ"
 
-#. console
 msgid "Router Console"
 msgstr "Bảng điều khiển bộ định tuyến"
 
 msgid "Location"
 msgstr "Vị trí"
 
-#. I2CP
 msgid "I2CP"
 msgstr "I2CP"
 
@@ -819,14 +799,9 @@ msgstr "Trang web"
 msgid "Local Router Family Certificate"
 msgstr "Chứng chỉ dòng bộ định tuyến cục bộ"
 
-#. hide family name in css as it's already displayed above
 msgid "Family"
 msgstr "Gia đình"
 
-#. } else {
-#. _out.write("<p>");
-#. _out.write(_t("none"));
-#. _out.write("</p>\n");
 msgid "Console"
 msgstr "Bảng điều khiển"
 
@@ -877,7 +852,6 @@ msgstr "Đã dừng plugin {0}"
 msgid "Stopped webapp {0}"
 msgstr "Ứng dụng web đã dừng {0}"
 
-#. label (IE)
 msgid "Start"
 msgstr "Bắt đầu"
 
@@ -962,7 +936,6 @@ msgstr "Người dùng đã thêm {0}"
 msgid "Interface configuration saved"
 msgstr "Đã lưu cấu hình giao diện"
 
-#. "<th data-sortable data-sort-method=number>" + _t("Speed") + "</th>" +
 msgid "Edit"
 msgstr "Chỉnh sửa"
 
@@ -1005,7 +978,6 @@ msgstr "Thư điện tử"
 msgid "Plugin"
 msgstr "Plugin"
 
-#. hide caps as already in the header
 msgid "Version"
 msgstr "Phiên bản"
 
@@ -1186,8 +1158,6 @@ msgstr "Chọn lớp cần thêm"
 msgid "All classes in {0}"
 msgstr "Tất cả các lớp trong {0}"
 
-#. stat groups for stats.jsp
-#. See StatsGenerator for groups mapped to a display name
 msgid "Bandwidth"
 msgstr "Băng thông"
 
@@ -1314,8 +1284,6 @@ msgstr "Kích hoạt UDP"
 msgid "Requiring SSU introducers"
 msgstr "Yêu cầu người giới thiệu SSU"
 
-#. if (_context.hasWrapper()) {
-#. Wow this dumps all conns immediately and really isn't nice
 msgid "Performing a soft restart"
 msgstr "Thực hiện khởi động lại mềm"
 
@@ -1406,7 +1374,6 @@ msgstr "Gieo lại ngay bây giờ"
 msgid "Reseeding is already in progress"
 msgstr "Đang tiến hành gieo hạt lại"
 
-#. skip the nonce checking in ReseedHandler
 msgid "Starting reseed process"
 msgstr "Bắt đầu quá trình gieo hạt"
 
@@ -1445,8 +1412,6 @@ msgstr "Đặt lại danh sách URL"
 msgid "URL list reset successfully"
 msgstr "Đặt lại danh sách URL thành công"
 
-#. ctx.router().shutdown(Router.EXIT_HARD); // never returns
-#. give the UI time to respond
 msgid "Cancel shutdown"
 msgstr "Hủy tắt máy"
 
@@ -1456,8 +1421,6 @@ msgstr "Hủy khởi động lại"
 msgid "Restart immediately"
 msgstr "Khởi động lại ngay lập tức"
 
-#. ctx.router().shutdown(Router.EXIT_HARD_RESTART); // never returns
-#. give the UI time to respond
 msgid "Restart"
 msgstr "Khởi động lại"
 
@@ -1543,8 +1506,6 @@ msgstr "Đã di chuyển"
 msgid "Saved order of sections."
 msgstr "Đã lưu thứ tự các phần."
 
-#. the count isn't really correct anyway, since we don't check for actual changes
-#. addFormNotice("Updated settings for " + updated + " pools.");
 msgid "Updated settings for all pools."
 msgstr "Cập nhật cài đặt cho tất cả các nhóm."
 
@@ -1554,7 +1515,6 @@ msgstr "Cấu hình đường hầm thăm dò đã được lưu thành công."
 msgid "Error saving the configuration (applied but not saved) - please see the error logs."
 msgstr "Lỗi khi lưu cấu hình (đã áp dụng nhưng chưa được lưu) - vui lòng xem nhật ký lỗi."
 
-#. * dummies for translation
 #, java-format
 msgid "{0} hop"
 msgid_plural "{0} hops"
@@ -1787,7 +1747,6 @@ msgstr "Chi Tiết"
 msgid "Combined bandwidth graph"
 msgstr "Biểu đồ băng thông kết hợp"
 
-#. e.g. "statname for 60m"
 #, java-format
 msgid "{0} for {1}"
 msgstr "{0} cho {1}"
@@ -1997,7 +1956,6 @@ msgstr "Cấu hình băng thông"
 msgid "I2P Bandwidth Configuration"
 msgstr "Cấu hình băng thông I2P"
 
-#. FIXME wasn't escaped
 msgid "Configure UI"
 msgstr "Cấu hình giao diện người dùng"
 
@@ -2034,7 +1992,6 @@ msgstr "Những thay đổi gần đây"
 msgid "Bug tracker"
 msgstr "Trình theo dõi lỗi"
 
-#. I2P specific
 msgid "I2P Bug Reports"
 msgstr "Báo cáo lỗi I2P"
 
@@ -2068,7 +2025,6 @@ msgstr "Javadocs"
 msgid "I2P Network Statistics"
 msgstr "Thống kê mạng I2P"
 
-#. software repositories + filesharing
 msgid "Transient server-encrypted filesharing and pastebin"
 msgstr "Chia sẻ tệp và Pastebin được mã hóa tạm thời trên máy chủ"
 
@@ -2087,13 +2043,9 @@ msgstr "Trang chủ của I2P"
 msgid "BitTorrent tracker"
 msgstr "Trình theo dõi BitTorrent"
 
-#. "git.i2p" + S + _x("Community Git hosting") + S + "http://git.i2p/explore/repos" + S + I + "eepsites/git.svg" + S +
-#. torrent trackers
 msgid "Postman's Tracker"
 msgstr "Người theo dõi người đưa thư"
 
-#. _x("Chudo") + S + _x("No login BitTorrent tracker") + S + "http://torrents.chudo.i2p/" + S + I + "magnet.svg" + S +
-#. domain name registration + uptime trackers
 msgid "List of active eepsites and uptime monitor"
 msgstr "Danh sách các eepsite đang hoạt động và theo dõi thời gian hoạt động"
 
@@ -2103,9 +2055,6 @@ msgstr "Đăng ký tên miền I2P"
 msgid "zzz Domain Registry"
 msgstr "Đăng ký tên miền zzz"
 
-#. "Identiguy" + S + _x("List of active eepsites and uptime monitor") + S + "http://identiguy.i2p/" + S + I + "servermonitor.svg" + S +
-#. "scanner.linuxfarm" + S + _x("List of active eepsites and uptime monitor") + S + "http://scanner.linuxfarm.i2p/" + S + I + "eepsites/servermonitor.svg" + S +
-#. forums + social
 msgid "I2P Forum"
 msgstr "Diễn đàn I2P"
 
@@ -2127,14 +2076,6 @@ msgstr "Vi blog xuyên mạng"
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Giao diện người dùng thay thế tập trung vào quyền riêng tư dành cho Reddit"
 
-#. "StackOverflow" + S + _x("Developer question &amp; answer forums") + S + "http://stackoverflow.i2p/" + S + I + "eepsites/stackoverflow.svg" + S +
-#. "dread.i2p" + S + _x("Darknet forums") + S + "http://dread.i2p/d/i2p/?sort=new" + S + I + "eepsites/dread.svg" + S +
-#. _x("Dev Forum") + S + _x("Development forum") + S + "http://zzz.i2p/" + S + I + "eepsites/forum.svg" + S +
-#. "libreddit.i2p" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://libreddit.i2p/" + S + I + "libreddit.svg" + S +
-#. "zeronet.i2p" + S + _x("Zeronet I2P Gateway") + S + "http://zeronet.i2p/" + S + I + "zeronet.svg" + S +
-#. _x("Dancing Elephants") + S + _x("Rocksolid forums for the darknets") + S + "http://def3.i2p/" + S + I + "eepsites/forum.svg" + S +
-#. "query.i2p" + S + _x("The StackOverflow of I2P") + S + "http://query.i2p/" + S + I + "eepsites/forum.svg" + S +
-#. hosting + other services
 msgid "Base64 Image Encoder"
 msgstr "Bộ mã hóa hình ảnh Base64"
 
@@ -2180,9 +2121,6 @@ msgstr "Giao diện người dùng thay thế cho Youtube"
 msgid "Provider of privacy respecting web hosting and VPN services"
 msgstr "Nhà cung cấp dịch vụ lưu trữ web và dịch vụ VPN tôn trọng quyền riêng tư"
 
-#. "tinypng.i2p" + S + _x("Image optimizer") + S + "http://tinypng.i2p/" + S + I + "tinypng.png" + S +
-#. _x("Deep Web Radio") + S + _x("Streaming radio service") + S + "http://deepwebradio.i2p/" + S + I + "radio.svg" + S +
-#. search engines
 msgid "Tor-focused Search Engine"
 msgstr "Công cụ tìm kiếm tập trung vào Tor"
 
@@ -2204,13 +2142,6 @@ msgstr "Công cụ tìm kiếm Clearnet tập trung vào quyền riêng tư"
 msgid "I2P Web Search Engine"
 msgstr "Công cụ tìm kiếm web I2P"
 
-#. "I2PSearch" + S +_x("I2P Web Search Engine") + S + "http://i2psearch.i2p/" + S + I + "search.svg" + S +
-#. "Legwork" + S +_x("I2P Web Search Engine") + S + "http://legwork.i2p/" + S + I + "search.svg" + S +
-#. "LibreY" + S +_x("Clearnet Search Engine") + S + "http://librey.i2p/" + S + I + "search.svg" + S +
-#. "raklet.i2p" + S +_x("Tor-focused Search Engine") + S + "http://raklet.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
-#. "Ransack" + S +_x("I2P-based Metasearch Engine") + S + "http://ransack.i2p/" + S + I + "search.svg" + S +
-#. "shmoogle.i2p" + S +_x("I2P Web Search Engine") + S + "http://shmoogle.i2p/" + S + I + "search.svg" + S +
-#. wikis & reference
 msgid "Enabling the free transmission of data in the public interest"
 msgstr "Cho phép truyền dữ liệu miễn phí vì lợi ích công cộng"
 
@@ -2271,15 +2202,6 @@ msgstr "Bản đồ thế giới bao gồm thông tin địa lý"
 msgid "WorldAtlas"
 msgstr "Atlas thế giới"
 
-#. "cssportal.i2p" + S + _x("CSS design reference") + S + "http://cssportal.i2p/" + S + I + "help.svg" + S +
-#. "ebooks.i2p" + S + _x("Huge collection of books &amp; magazines &amp; comics") + S + "http://ebooks.i2p/" + S + I + "eepsites/books.svg" + S +
-#. "legalcases.i2p" + S + _x("Publicly available texts of court decisions all over the world") + S + "http://legalcases.i2p/" + S + I + "eepsites/books.svg" + S +
-#. _x("imperial.i2p") + S + _x("Extensive repository of DRM-free ebooks") + S + "http://imperial.i2p/" + S + I + "eepsites/books.svg" + S +
-#. "jalibrary.i2p" + S + _x("Books &amp; courses &amp; art") + S + "http://jalibrary.i2p/" + S + I + "eepsites/books.svg" + S +
-#. "nexus.i2p" + S + _x("Searchable science library") + S + "http://nexus.i2p/" + S + I + "nexus.svg" + S +
-#. "tome.i2p" + S + _x("Collection of books &amp; other reading material") + S + "http://tome.i2p/" + S + I + "eepsites/books.svg" + S +
-#. _x("UrbanDictionary") + S + _x("Crowd-sourced slang dictionary") + S + "http://urbandictionary.i2p/" + S + I + "eepsites/urbandictionary.svg" + S +
-#. news + blogs
 msgid "Technology News &amp; more..."
 msgstr "Tin tức công nghệ và nhiều hơn nữa..."
 
@@ -2650,7 +2572,6 @@ msgstr "chờ đợi"
 msgid "Scheduled jobs"
 msgstr "Những công việc đã được lên lịch"
 
-#. translators: {0} is a job name, {1} is a time, e.g. 6 min
 #, java-format
 msgid "{0} starts in {1}"
 msgstr "{0} bắt đầu sau {1}"
@@ -2694,40 +2615,27 @@ msgstr "Không tìm thấy tập tin"
 msgid "No log messages"
 msgstr "Không có thông điệp tường trình"
 
-#. 0  -
 msgid "Local Router"
 msgstr "Bộ định tuyến cục bộ"
 
-#. 1  - r=.
 msgid "Router Lookup"
 msgstr "Tra cứu bộ định tuyến"
 
-#. 2  -
-#. 3  - f=2
 msgid "All Routers"
 msgstr "Tất cả các bộ định tuyến"
 
-#. 4  - f=1 (debug)
-#. 5  - l=1
-#. 6  - l=2 (debug)
-#. only show for our own id
 msgid "LeaseSets"
 msgstr "Bộ hợp đồng thuê"
 
-#. 7  - l=3
 msgid "Advanced Lookup"
 msgstr "Tra cứu nâng cao"
 
-#. 8  - f=4
 msgid "LeaseSet Lookup"
 msgstr "Tra cứu bộ hợp đồng thuê"
 
-#. 9  -
-#. 10 - f=5
 msgid "All Routers (Client NetDb)"
 msgstr "Tất cả các bộ định tuyến (Client NetDb)"
 
-#. 11 - f=6 (debug)
 msgid "Sybil Analysis"
 msgstr "Phân tích âm tiết"
 
@@ -2893,20 +2801,6 @@ msgstr "Xem hồ sơ"
 msgid "Profile"
 msgstr "Hồ sơ"
 
-#.
-#. PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(h);
-#. if (prof != null && prof.getIsExpandedDB()) {
-#. buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(h.toBase64()).append("\" title=\"")
-#. .append(_t("View profile")).append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>");
-#. }
-#.
-#.
-#. PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(h);
-#. if (prof != null && prof.getIsExpandedDB()) {
-#. buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(h.toBase64()).append("\" title=\"").append(_t("View profile"))
-#. .append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>");
-#. }
-#.
 msgid "Configure peer"
 msgstr "Cấu hình ngang hàng"
 
@@ -2916,7 +2810,6 @@ msgstr "Sử dụng bộ nhớ"
 msgid "Hidden"
 msgstr "Dấu"
 
-#. shouldn't happen
 msgid "Published"
 msgstr "Đã xuất bản"
 
@@ -2953,7 +2846,6 @@ msgstr "Hiển thị tất cả các bộ định tuyến có cổng này trong 
 msgid "Capabilities"
 msgstr "Khả năng"
 
-#. hide version as already in the header
 msgid "Core version"
 msgstr "Phiên bản cốt lõi"
 
@@ -3100,8 +2992,6 @@ msgstr "Khả năng ngang hàng"
 msgid "Dir"
 msgstr "Thư mục"
 
-#. "<th class=lookup title=\"").append(_t("Lookup address via gwhois.org")).append("\">").append(_t("Whois")).append("</th>" +
-#. buf.append("<th class=lookup title=\"").append(_t("Lookup address via gwhois.org")).append("\">").append(_t("Whois")).append("</th>");
 msgid "Direction/Introduction"
 msgstr "Hướng/Giới thiệu"
 
@@ -3247,7 +3137,6 @@ msgid "{0} fail"
 msgid_plural "{0} fails"
 msgstr[0] "{0} không thành công"
 
-#. 2
 msgid "Banned"
 msgstr "Bị Cấm"
 
@@ -3365,9 +3254,6 @@ msgstr "Tốc độ"
 msgid "Low Latency"
 msgstr "Độ trễ thấp"
 
-#. .append("<th title=\"").append(_t("Time taken for peer test")).append("\">")
-#. .append(_t("Test Avg (ms)")).append("</th>")
-#. .append("<th>").append(_t("Capacity")).append("</th>")
 msgid "Tunnels peer has agreed to participate in"
 msgstr "Các đường hầm đồng đẳng đã đồng ý tham gia"
 
@@ -3380,8 +3266,6 @@ msgstr "Đồng đẳng đường hầm đã từ chối tham gia"
 msgid "Rejected"
 msgstr "Bị từ chối"
 
-#. .append("<th>").append(_t("Integration")).append("</th>")
-#. .append("<th>").append(_t("First Heard About")).append("</th>")
 msgid "Last Heard From"
 msgstr "Tin nhắn cuối cùng từ"
 
@@ -3394,14 +3278,12 @@ msgstr "Không thể truy cập"
 msgid "OK"
 msgstr "OK"
 
-#. hide if < 10%
 msgid "Test Fails"
 msgstr "Kiểm tra không thành"
 
 msgid "Fast, High Capacity"
 msgstr "Nhanh, Dung lượng cao"
 
-#. 0
 msgid "High Capacity"
 msgstr "Công suất cao"
 
@@ -3480,7 +3362,6 @@ msgstr "Cửa hàng xấu cuối cùng"
 msgid "Capabilities in the NetDb, not used to determine profiles"
 msgstr "Khả năng trong NetDb, không được sử dụng để xác định hồ sơ"
 
-#. capabilities
 msgid "caps"
 msgstr "Caps"
 
@@ -3549,7 +3430,6 @@ msgstr "gần đây họ đã nói với chúng ta về bao nhiêu đồng nghi�
 msgid "All"
 msgstr "Tất cả"
 
-#. 3
 msgid "Session Bans"
 msgstr "Cấm phiên"
 
@@ -3583,7 +3463,6 @@ msgstr "Số sự kiện cao nhất mỗi kỳ"
 msgid "Lifetime average events per period"
 msgstr "Số sự kiện trung bình trong suốt cuộc đời mỗi giai đoạn"
 
-#. Display the strict average
 msgid "Lifetime average frequency"
 msgstr "Tần số trung bình trọn đời"
 
@@ -3629,7 +3508,6 @@ msgstr "Số sự kiện đồ thị"
 msgid "Export Data as XML"
 msgstr "Xuất dữ liệu dưới dạng XML"
 
-#. Display the strict average
 msgid "Lifetime average value"
 msgstr "Giá trị trung bình trọn đời"
 
@@ -4085,8 +3963,6 @@ msgstr "Thêm/xóa/chỉnh sửa"
 msgid "How many local service tunnels we're running"
 msgstr "Chúng tôi đang chạy bao nhiêu đường hầm dịch vụ địa phương"
 
-#. older names for pre-0.7.4 installs
-#. hardcoded in i2psnark
 msgid "I2PSnark"
 msgstr "I2PSnark"
 
@@ -4148,10 +4024,6 @@ msgstr "Cập nhật sau khi khởi động lại"
 msgid "Signed development update available"
 msgstr "Cập nhật phát triển đã ký có sẵn"
 
-#. Note to translators: parameter is a router version, e.g. "0.9.19-16"
-#. <br> is optional, to help the browser make the lines even in the button
-#. If the translation is shorter than the English, you should probably not include <br>
-#. .append(_t("Download Signed<br>Development Update<br>{0}", getDevSU3UpdateVersion()))
 msgid "Download I2P Update"
 msgstr "Tải xuống bản cập nhật I2P"
 
@@ -4224,13 +4096,6 @@ msgstr "Cùng một gia đình"
 msgid "IP close to us"
 msgstr "IP gần chúng ta"
 
-#. *
-#. "<li><a href=\"netdb?f=3&amp;m=4\">" + _t("Same IP") + "</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=5\">" + _t("Same IPv4") + " /24</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=6\">" + _t("Same IPv4") + " /16</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=17\">"+ _t("Same IPv6") + " /64</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=18\">" + _t("Same IPv6") + " /48</a></li>\n" +
-#. *
 msgid "Pair distance"
 msgstr "Khoảng cách cặp"
 
@@ -4303,16 +4168,12 @@ msgstr "Lũ lụt đã biết"
 msgid "Average closest floodfill distance"
 msgstr "Khoảng cách lấp lũ trung bình gần nhất"
 
-#. "<b>").append(_t("Routing Data")).append(":</b> \"").append(DataHelper.getUTF8(_context.routerKeyGenerator().getModData()))
 msgid "Routing Data"
 msgstr "Dữ liệu định tuyến"
 
-#. .append("\"<br>\n<b>").append(_t("Last Changed")).append(":</b> ").append(DataHelper.formatTime(_context.routerKeyGenerator().getLastChanged())).append("<br>\n" +
-#. "<b>").append(_t("Next Routing Data")).append(":</b> \"").append(DataHelper.getUTF8(_context.routerKeyGenerator().getNextModData()))
 msgid "Rotates in"
 msgstr "Xoay trong"
 
-#. Distance to our router analysis
 msgid "Closest Floodfills to Our Routing Key (Where we Store our RI)"
 msgstr "Lỗi lấp đầy gần nhất với Khóa định tuyến của chúng tôi (Nơi chúng tôi lưu trữ RI)"
 
@@ -4355,7 +4216,6 @@ msgstr "Khoảng cách lấp lũ trung bình là"
 msgid "Closest Floodfill Pairs by Hash"
 msgstr "Cặp Floodfill gần nhất theo Hash"
 
-#. sorted;
 msgid "Hash Distance"
 msgstr "Khoảng cách băm"
 
@@ -4577,7 +4437,6 @@ msgstr "Tên đường hầm"
 msgid "Data Out"
 msgstr "Dữ liệu ra"
 
-#. Saved in CSSHelper, assume success
 msgid "Console language saved."
 msgstr "Đã lưu ngôn ngữ bảng điều khiển."
 
@@ -4587,7 +4446,6 @@ msgstr "Kiểm tra băng thông hoàn tất thành công"
 msgid "Bandwidth test failed"
 msgstr "Kiểm tra băng thông không thành công"
 
-#. didn't run at all?
 msgid "Bandwidth test did not complete"
 msgstr "Kiểm tra băng thông chưa hoàn thành"
 
@@ -4610,7 +4468,6 @@ msgstr "bit/giây"
 msgid "{0}Bytes per month maximum"
 msgstr "{0}Tối đa byte mỗi tháng"
 
-#. wars for ConfigClientsHelper
 msgid "addressbook"
 msgstr "Sổ địa chỉ"
 
@@ -4629,9 +4486,6 @@ msgstr "susidns"
 msgid "routerconsole"
 msgstr "bảng điều khiển bộ định tuyến"
 
-#. clients, taken from clients.config, for ConfigClientsHelper
-#. note that if the wording changes in clients.config, we have to
-#. keep the old string here as well for existing installs
 msgid "Web console"
 msgstr "Bảng điều khiển web"
 
@@ -4659,10 +4513,6 @@ msgstr "Bảng điều khiển bộ định tuyến I2P"
 msgid "Open Router Console in web browser at startup"
 msgstr "Mở Bảng điều khiển Bộ định tuyến trong trình duyệt web khi khởi động"
 
-#. tunnel nicknames, taken from i2ptunnel.config so they will display
-#. nicely under 'local destinations' in the summary bar
-#. note that if the wording changes in i2ptunnel.config, we have to
-#. keep the old string here as well for existing installs
 msgid "shared clients"
 msgstr "khách hàng chia sẻ"
 
@@ -4699,14 +4549,12 @@ msgstr "Máy chủ web I2P cá nhân (eepsite)"
 msgid "HTTP Proxy"
 msgstr "Proxy HTTP"
 
-#. hardcoded in iMule?
 msgid "iMule"
 msgstr "iMule"
 
 msgid "Official I2P Source Repository"
 msgstr "Kho lưu trữ nguồn I2P chính thức"
 
-#. standard themes for ConfigUIHelper
 msgid "dark"
 msgstr "tối"
 
@@ -4728,8 +4576,6 @@ msgstr "Mã hóa"
 msgid "Stream"
 msgstr "Luồng"
 
-#. parameters in transport addresses (netdb.jsp)
-#. may or may not be worth translating
 msgid "host"
 msgstr "chủ nhà"
 
@@ -5482,7 +5328,6 @@ msgstr "Những thay đổi cài đặt đường hầm thám hiểm được l�
 msgid "Client tunnel changes are temporary and are not saved."
 msgstr "Những thay đổi đường hầm khách hàng là tạm thời và không được lưu trữ."
 
-#. if (pm.isRegistered(net.i2p.util.PortMapper.SVC_I2PTUNNEL)) {
 msgid "The default settings are optimized for general usage and normally don't need to be changed."
 msgstr "Cài đặt mặc định được tối ưu hóa cho việc sử dụng chung và thường không cần phải thay đổi."
 

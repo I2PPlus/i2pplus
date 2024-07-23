@@ -24,30 +24,24 @@ msgstr "E-pošta"
 msgid "No encoder found for encoding \\''{0}\\''."
 msgstr "Noben kodiralec ni bil najden za kodiranje \\''{0}\\''."
 
-#. tagged in WebMail
 msgid "Re:"
 msgstr "Po:"
 
 msgid "Fwd:"
 msgstr "Naprej:"
 
-#. MailDir-like
 msgid "Drafts"
 msgstr "Osnovi"
 
-#. MailDir-like
 msgid "Sent"
 msgstr "Poslano"
 
-#. MailDir-like
 msgid "Trash"
 msgstr "Kos"
 
-#. MailDir-like
 msgid "Bulk Mail"
 msgstr "Množična pošta"
 
-#. untranslated, translate on use
 msgid "Inbox"
 msgstr "Vhodna pošta"
 
@@ -171,7 +165,6 @@ msgstr "Ni najdenega kodiranja za {0}"
 msgid "Attachment not found."
 msgstr "Priložilo ni bilo najdeno."
 
-#. error if we get here
 msgid "Message not found."
 msgstr "Sporočilo ni bilo najdeno."
 
@@ -298,7 +291,6 @@ msgstr "Naslov"
 msgid "Add Attachment"
 msgstr "Dodaj priložilo"
 
-#. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 msgid "Add attachment"
 msgstr "Dodaj priložilo"
 
@@ -385,7 +377,6 @@ msgstr "Sporočilo je spam"
 msgid "Message body not downloaded"
 msgstr "Telo sporočila ni bilo preneseno"
 
-#. TODO ngettext
 msgid "Really delete the marked messages?"
 msgstr "Res želite izbrisati označena sporočila?"
 
@@ -458,7 +449,6 @@ msgstr "Napredna konfiguracija"
 msgid "Save Configuration"
 msgstr "Shrani konfiguracijo"
 
-#. this appears in the UI so translate
 msgid "No response from server"
 msgstr "Brez odgovora strežnika"
 
@@ -474,6 +464,5 @@ msgstr "Prijava je spodletela"
 msgid "Server refused connection"
 msgstr "Strežnik je zavrnal povezavo"
 
-#. TODO which recipient?
 msgid "Mail rejected"
 msgstr "Pošta je bila zavrnjena"

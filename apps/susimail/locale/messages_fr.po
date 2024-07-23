@@ -22,32 +22,32 @@ msgstr "Adresse courriel"
 msgid "No encoder found for encoding \\''{0}\\''."
 msgstr "Aucun encodeur n’a été trouvé pour encoder « {0} »."
 
-#. tagged in WebMail
 msgid "Re:"
 msgstr "Réf. :"
 
 msgid "Fwd:"
 msgstr "Trf. :"
 
-#. MailDir-like
 msgid "Drafts"
 msgstr "Brouillons"
 
-#. MailDir-like
 msgid "Sent"
 msgstr "Envoyé"
 
-#. MailDir-like
 msgid "Trash"
 msgstr "Corbeille"
 
-#. MailDir-like
 msgid "Bulk Mail"
 msgstr "Courriel de masse"
 
-#. untranslated, translate on use
 msgid "Inbox"
 msgstr "Boîte de réception"
+
+msgid "View message as HTML"
+msgstr ""
+
+msgid "View message as plain text"
+msgstr ""
 
 msgid "unknown"
 msgstr "inconnu"
@@ -163,7 +163,6 @@ msgstr "Aucun encodage n’a été trouvé pour {0}"
 msgid "Attachment not found."
 msgstr "Le fichier joint est introuvable."
 
-#. error if we get here
 msgid "Message not found."
 msgstr "Le message est introuvable."
 
@@ -286,7 +285,6 @@ msgstr "Objet"
 msgid "Add Attachment"
 msgstr "Ajouter un fichier joint"
 
-#. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 msgid "Add attachment"
 msgstr "Ajouter un fichier joint"
 
@@ -359,6 +357,9 @@ msgstr "Taille"
 msgid "Mark for deletion"
 msgstr "Marquer pour suppression"
 
+msgid "Message contains HTML"
+msgstr ""
+
 msgid "Message is new"
 msgstr "Le message est nouveau"
 
@@ -368,7 +369,6 @@ msgstr "Le message est un pourriel"
 msgid "Message body not downloaded"
 msgstr "L’ID du message est invalide"
 
-#. TODO ngettext
 msgid "Really delete the marked messages?"
 msgstr "Voulez-vous vraiment supprimer les messages sélectionnés ?"
 
@@ -426,6 +426,9 @@ msgstr "Retour au dossier"
 msgid "Move to Folder"
 msgstr "Déplacer vers le dossier"
 
+msgid "View message in new tab"
+msgstr ""
+
 msgid "Folder Page Size"
 msgstr "Taille de la page du dossier"
 
@@ -438,7 +441,6 @@ msgstr "Configuration avancée"
 msgid "Save Configuration"
 msgstr "Enregistrer la configuration"
 
-#. this appears in the UI so translate
 msgid "No response from server"
 msgstr "Aucune réponse du serveur"
 
@@ -454,6 +456,5 @@ msgstr "Échec de connexion"
 msgid "Server refused connection"
 msgstr "Le serveur a refusé la connexion"
 
-#. TODO which recipient?
 msgid "Mail rejected"
 msgstr "Le courriel a été refusé"

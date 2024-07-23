@@ -60,6 +60,5 @@ msgstr "خاموش شدن مقصد محلی"
 msgid "Connection was reset"
 msgstr "اتصال دوباره تنظیم شد"
 
-#. Translate this one here, can't do it later
 msgid "Failure code"
 msgstr "کد خطا"

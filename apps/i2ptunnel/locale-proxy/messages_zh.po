@@ -310,11 +310,9 @@ msgstr "本地址会被存储在您的路由器地址簿，您订阅的地址所
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
 msgstr "如果您希望追踪您手动添加的站点，请将其加入私有地址簿或主要地址簿。"
 
-#. FIXME wasn't escaped
 msgid "Save & continue"
 msgstr "保存并继续"
 
-#. only blockfile supports multiple books
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
 msgstr "保存 {0} 到主要地址簿并继续访问网站"

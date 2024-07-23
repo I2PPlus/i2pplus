@@ -3,324 +3,251 @@
 #
 msgid ""
 msgstr ""
-"Last-Translator: \n"
-"Language-Team: \n"
 "Language: az\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.1\n"
 
-#. type: TH
 #, no-wrap
 msgid "EEPGET"
 msgstr "EEPGET"
 
-#. type: TH
 #, no-wrap
 msgid "January 26, 2017"
 msgstr "26 Yanvar, 2017"
 
-#. type: TH
 #, no-wrap
 msgid "I2P"
 msgstr "I2P"
 
-#. type: SH
 #, no-wrap
 msgid "NAME"
 msgstr "AD"
 
-#. type: Plain text
 msgid "Eepget - I2P downloader"
 msgstr "Eepget - I2P endirici"
 
-#. type: SH
 #, no-wrap
 msgid "SYNOPSIS"
 msgstr "SYNOPSIS"
 
-#. type: Plain text
 msgid "B<eepget> [I<options>]I<URL>"
 msgstr "B<eepget> [I<options>]I<URL>"
 
-#. type: SH
 #, no-wrap
 msgid "DESCRIPTION"
 msgstr "AÇIQLAMA"
 
-#. type: Plain text
 msgid "Download a file non-interactively via HTTP. Transfers through both I2P and the regular Internet are supported."
 msgstr "HTTP vasitəsilə qeyri-interaktiv faylı endirin. Həm I2P, həm də adi İnternet vasitəsilə köçürmələr dəstəklənir."
 
-#. type: Plain text
 msgid "Eepget is able to cope with slow or unstable network connections; if a download is not successful because of a network problem, it will keep retrying until the whole file has been retrieved (if the -n option is set).  If supported by the remote server, eepget will instruct the server to continue the download from the point of interruption."
 msgstr "Eepget yavaş və ya qeyri-sabit şəbəkə əlaqələrinin öhdəsindən gələ bilir; Şəbəkə probleminə görə yükləmə müvəffəqiyyətsiz olarsa, o, bütün fayl əldə edilənə qədər (-n seçimi qurulubsa) yenidən cəhd etməyə davam edəcək. Uzaq server tərəfindən dəstəklənirsə, eepget serverə yükləməni kəsilmə nöqtəsindən davam etdirməyi əmr edəcək."
 
-#. type: SH
 #, no-wrap
 msgid "OPTIONS"
 msgstr "OPSİYONLAR"
 
-#. type: Plain text
 msgid "B<-c>"
 msgstr "B<-c>"
 
-#. type: TP
 #, no-wrap
 msgid "Clearnet. Do not use a proxy. Same as B<-p> :0 ."
 msgstr "Clearnet. Proksi istifadə etməyin. B<-p> ilə eyni :0 ."
 
-#. type: Plain text
 msgid "B<-e> etag"
 msgstr "B<-e> etag"
 
-#. type: TP
 #, no-wrap
 msgid "Sets the etag value in the request headers."
 msgstr "Sorğu başlıqlarında etag dəyərini təyin edir."
 
-#. type: Plain text
 msgid "B<-h> name=value"
 msgstr "B<-h> ad=dəyər"
 
-#. type: TP
 #, no-wrap
 msgid "Adds an arbitrary request header with the given name and value."
 msgstr "Verilmiş ad və dəyəri olan ixtiyari sorğu başlığını əlavə edir."
 
-#. type: Plain text
 msgid "B<-l> lineLen"
 msgstr "B<-l> lineLen"
 
-#. type: TP
 #, no-wrap
 msgid "Controls the progress display. B<\\ lineLen > is the length of one progress line in characters. The default is 40."
 msgstr "Tərəqqi ekranına nəzarət edir. B<\\ lineLen > simvollarla bir irəliləyiş xəttinin uzunluğudur. Standart 40-dır."
 
-#. type: Plain text
 msgid "B<-m> markSize"
 msgstr "B<-m> işarəsi Ölçü"
 
-#. type: TP
 #, no-wrap
 msgid "Controls the progress display. B<\\ markSize > is the number of bytes one '#' character represents. The default is 1024."
 msgstr "Tərəqqi ekranına nəzarət edir. B<\\ markSize > bir '#' simvolunun təmsil etdiyi baytların sayıdır. Defolt 1024-dür."
 
-#. type: Plain text
 msgid "B<-n> retries"
 msgstr "B<-n> yenidən cəhd edir"
 
-#. type: TP
 #, no-wrap
 msgid "Specify the number of times to retry downloading if the download isn't successful. If this option is not specified, eepget will not retry."
 msgstr "Yükləmə uğursuz olarsa, yenidən yükləməyə cəhd etməyin sayını göstərin. Bu seçim göstərilməyibsə, eepget yenidən cəhd etməyəcək."
 
-#. type: Plain text
 msgid "B<-o> file"
 msgstr "B<-o> faylı"
 
-#. type: TP
 #, no-wrap
 msgid "Sets the output file to write to. If this option is not given, the output filename will be determined by the URL."
 msgstr "Yazmaq üçün çıxış faylını təyin edir. Bu seçim verilməzsə, çıxış faylının adı URL ilə müəyyən ediləcək."
 
-#. type: Plain text
 msgid "B<-p> proxy_host[:port]"
 msgstr "B<-p> proxy_host[:port]"
 
-#. type: TP
 #, no-wrap
 msgid "Specify an I2P proxy server (eeproxy) to use. If the port is not specified, eepget will use 4444. If this option is not specified, eepget will use 127.0.0.1:4444. Specify B<-c> or B<-p> :0 to disable the eeproxy."
 msgstr "İstifadə etmək üçün I2P proksi serverini (eproxy) təyin edin. Port göstərilməyibsə, eepget 4444-dən istifadə edəcək. Bu seçim göstərilməyibsə, eepget 127.0.0.1:4444-dən istifadə edəcək. Eproksini söndürmək üçün B<-c> və ya B<-p> :0 təyin edin."
 
-#. type: Plain text
 msgid "B<-t> seconds"
 msgstr "B<-t> saniyə"
 
-#. type: TP
 #, no-wrap
 msgid "Sets the inactivity timeout. The default is 60 seconds."
 msgstr "Hərəkətsizlik vaxt aşımını təyin edir. "
 
-#. type: Plain text
 msgid "B<-u> username"
 msgstr "B<-u> istifadəçi adı"
 
-#. type: TP
 #, no-wrap
 msgid "Sets the username for proxy authorization, if required."
 msgstr "Lazım gələrsə, proksi icazəsi üçün istifadəçi adını təyin edir."
 
-#. type: Plain text
 msgid "B<-x> password"
 msgstr "B<-x> parol"
 
-#. type: TP
 #, no-wrap
 msgid "Sets the password for proxy authorization, if required. If a username is specified but not a password, EepGet will prompt for the password."
 msgstr "Lazım gələrsə, proxy avtorizasiyası üçün parol təyin edir. Əgər istifadəçi adı göstərilibsə, lakin parol deyilsə, EepGet parolu tələb edəcək."
 
-#. type: SH
 #, no-wrap
 msgid "EXIT STATUS"
 msgstr "ÇIXIŞ STATUS"
 
-#. type: Plain text
 msgid "B<eepget> exits with status zero upon successful transfer and non-zero if there were problems with the download."
 msgstr "B<eepget> müvəffəqiyyətli köçürmə zamanı sıfır statusu ilə və endirmə ilə bağlı problemlər olduqda sıfırdan fərqli olaraq çıxır."
 
-#. type: SH
 #, no-wrap
 msgid "REPORTING BUGS"
 msgstr "XATLAR HESABATI"
 
-#. type: Plain text
 msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker E<.UE .>"
 msgstr "Lütfən, E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> I2P Bug Tracker E<.UE .>-də bilet daxil edin."
 
-#. type: SH
 #, no-wrap
 msgid "SEE ALSO"
 msgstr "HƏMÇİNƏ BAX"
 
-#. type: Plain text
 msgid "B<i2prouter>(1)  B<curl>(1)  B<wget>(1)"
 msgstr "B<i2prouter>(1) B<curl>(1) B<wget>(1)"
 
-#. type: TH
 #, no-wrap
 msgid "I2PROUTER"
 msgstr "I2 PROUTER"
 
-#. type: Plain text
 msgid "i2prouter - start and stop the I2P router"
 msgstr "i2prouter - I2P marşrutlaşdırıcısını işə salın və dayandırın"
 
-#. type: Plain text
 msgid "B<i2prouter> {I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
 msgstr "B<i2prouter>{I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
 
-#. type: Plain text
 msgid "Control the I2P service."
 msgstr "I2P xidmətinə nəzarət edin."
 
-#. type: IP
 #, no-wrap
 msgid "B<console>"
 msgstr "B<console>"
 
-#. type: Plain text
 msgid "Runs I2P as a console application under the current user."
 msgstr "Cari istifadəçi altında I2P-ni konsol tətbiqi kimi işlədir."
 
-#. type: IP
 #, no-wrap
 msgid "B<start>"
 msgstr "B<start>"
 
-#. type: Plain text
 msgid "Starts the I2P service."
 msgstr "I2P xidmətini işə salır."
 
-#. type: IP
 #, no-wrap
 msgid "B<stop>"
 msgstr "B<stop>"
 
-#. type: Plain text
 msgid "Stops the I2P service."
 msgstr "I2P xidmətini dayandırır."
 
-#. type: IP
 #, no-wrap
 msgid "B<restart>"
 msgstr "B<restart>"
 
-#. type: Plain text
 msgid "Stops the I2P service and then starts it."
 msgstr "I2P xidmətini dayandırır və sonra işə salır."
 
-#. type: IP
 #, no-wrap
 msgid "B<condrestart>"
 msgstr "B<condrestart>"
 
-#. type: Plain text
 msgid "Restart the I2P service only if it is already running."
 msgstr "I2P xidmətini yalnız artıq işləyirsə yenidən başladın."
 
-#. type: IP
 #, no-wrap
 msgid "B<graceful>"
 msgstr "B<graceful>"
 
-#. type: Plain text
 msgid "Stop I2P gracefully (may take up to 11 minutes)"
 msgstr "I2P-ni zərif şəkildə dayandırın (11 dəqiqə çəkə bilər)"
 
-#. type: IP
 #, no-wrap
 msgid "B<install>"
 msgstr "B<install>"
 
-#. type: Plain text
 msgid "Install initscript to start I2P automatically when the system boots."
 msgstr "Sistem işə salındıqda I2P-ni avtomatik işə salmaq üçün initscript-i quraşdırın."
 
-#. type: IP
 #, no-wrap
 msgid "B<remove>"
 msgstr "B<remove>"
 
-#. type: Plain text
 msgid "Uninstall initscript that was installed with B<install>"
 msgstr "B<install> ilə quraşdırılmış initscript-i silin"
 
-#. type: IP
 #, no-wrap
 msgid "B<status>"
 msgstr "B<status>"
 
-#. type: Plain text
 msgid "Prints whether the I2P service is running."
 msgstr "I2P xidmətinin işlək olub-olmadığını çap edir."
 
-#. type: IP
 #, no-wrap
 msgid "B<dump>"
 msgstr "B<dump>"
 
-#. type: Plain text
 msgid "Dumps the current threads into B<wrapper.log>."
 msgstr "Cari mövzuları B<wrapper.log>-a köçürür."
 
-#. type: Plain text
 msgid "B<i2prouter-nowrapper>(1)"
 msgstr "B<i2prouter-nowrapper>(1)"
 
-#. type: TH
 #, no-wrap
 msgid "I2PROUTER-NOWRAPPER"
 msgstr "I2PROUTER-NOWRAPPER"
 
-#. type: Plain text
 msgid "i2prouter-nowrapper - start the I2P router"
 msgstr "i2prouter-nowrapper - I2P marşrutlaşdırıcısını işə salın"
 
-#. type: Plain text
 msgid "B<i2prouter-nowrapper>"
 msgstr "B<i2prouter-nowrapper>"
 
-#. type: Plain text
 msgid "Start the I2P router, without the service wrapper.  This means the router will not restart if it crashes.  Also, it will use the default memory size, which may not be enough for I2P."
 msgstr "I2P marşrutlaşdırıcısını xidmət paketi olmadan işə salın. Bu o deməkdir ki, xəta baş verərsə, marşrutlaşdırıcı yenidən başlamayacaq. Həmçinin, o, I2P üçün kifayət etməyən standart yaddaş ölçüsündən istifadə edəcək."
 
-#. type: Plain text
 msgid "You should really use the B<i2prouter>(1)  script instead.  There are no options.  To stop the router, use your browser to access E<.UR http://localhost:7657/> the router console E<.UE .>"
 msgstr "Bunun əvəzinə həqiqətən B<i2prouter>(1) skriptindən istifadə etməlisiniz. Seçimlər yoxdur. Routeri dayandırmaq üçün E<.UR http://localhost:7657/> marşrutlaşdırıcı konsoluna E<.UE .> daxil olmaq üçün brauzerinizdən istifadə edin."
 
-#. type: Plain text
 msgid "B<i2prouter>(1)"
 msgstr "B<i2prouter>(1)"

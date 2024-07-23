@@ -7,52 +7,32 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#. Type: boolean
-#. Kirjeldus
 msgid "Should the I2P router be started at boot?"
 msgstr "Peaksi I2P rutter käivitama käivitamisel?"
 
-#. Type: boolean
-#. Kirjeldus
 msgid "The I2P router can be run as a daemon that starts automatically when your computer boots up. This is the recommended configuration."
 msgstr "I2P rutter saab käivitada deamonina, mis käivitub automaatselt, kui arvuti käivitub. See on soovitatav konfiguratsioon."
 
-#. Type: string
-#. Kirjeldus
 msgid "I2P daemon user:"
 msgstr "I2P deamon kasutaja:"
 
-#. Type: string
-#. Kirjeldus
 msgid "By default I2P is configured to run under the account i2psvc when running as a daemon. To use an existing I2P profile you may enter a different account name here. For example, if your previous I2P installation is at /home/user/i2p, you may enter 'user' here."
 msgstr "Vaikimisi on I2P seadistatud nii, et see töötab deamonina kontol i2psvc. Kasutades olevat I2P profiili, võite siia sisestada teise kontoni nime. Näiteks, kui teie varem I2P installatsioon on asukohas /home/kasutaja/i2p, võite siia sisestada 'kasutaja'."
 
-#. Type: string
-#. Kirjeldus
 msgid "Very important: If a user other than the default of 'i2psvc' is entered here, the chosen username MUST already exist."
 msgstr "Väga oluline: Kui siia sisestatakse kasutaja muu kui vaikimisi 'i2psvc', peab valitud kasutajanimi PEAB juba olemas olema."
 
-#. Type: string
-#. Kirjeldus
 msgid "Memory that can be allocated to I2P:"
 msgstr "Mälu, mida saab alaka I2P:"
 
-#. Type: string
-#. Kirjeldus
 msgid "By default, I2P will only be allowed to use up to 128MB of RAM."
 msgstr "Vaikimisi saab I2P kasutada vaid kuni 128MB RAM."
 
-#. Type: string
-#. Kirjeldus
 msgid "High bandwidth routers, as well as routers with a lot of active torrents / plugins, may need to have this value increased."
 msgstr "Suure bändlaaju rutterid ning rutterid, kus on palju aktiivseid torrente / plahvatusid, võivad vajada seda väärtust suurendada."
 
-#. Type: boolean
-#. Kirjeldus
 msgid "Should the I2P daemon be confined with AppArmor?"
 msgstr "Peaksa I2P deamon olla piiratud AppArmoriga?"
 
-#. Type: boolean
-#. Kirjeldus
 msgid "With this option enabled I2P will be sandboxed with AppArmor, restricting which files and directories may be accessed by I2P."
 msgstr "Sel valikuga sisse lülitatud on I2P AppArmoriga piiratud, piirates nii, millised failid ja kataloogid võivad olla I2P poolt ligipääsetavad."

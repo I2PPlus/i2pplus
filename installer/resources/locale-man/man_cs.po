@@ -9,315 +9,245 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#. type: TH
 #, no-wrap
 msgid "EEPGET"
 msgstr "EEPGET"
 
-#. type: TH
 #, no-wrap
 msgid "January 26, 2017"
 msgstr "26. ledna 2017"
 
-#. type: TH
 #, no-wrap
 msgid "I2P"
 msgstr "I2P"
 
-#. type: SH
 #, no-wrap
 msgid "NAME"
 msgstr "NÁZEV"
 
-#. type: Plain text
 msgid "Eepget - I2P downloader"
 msgstr "Eepget - stahování pro I2P"
 
-#. type: SH
 #, no-wrap
 msgid "SYNOPSIS"
 msgstr "SYNTÉZA"
 
-#. type: Plain text
 msgid "B<eepget> [I<options>]I<URL>"
 msgstr "B<eepget> [I<volby>]I<URL>"
 
-#. type: SH
 #, no-wrap
 msgid "DESCRIPTION"
 msgstr "POPIS"
 
-#. type: Plain text
 msgid "Download a file non-interactively via HTTP. Transfers through both I2P and the regular Internet are supported."
 msgstr "Stáhněte soubor interaktivně přes HTTP. Podporuje se přenosy jak přes I2P tak i normální internet."
 
-#. type: Plain text
 msgid "Eepget is able to cope with slow or unstable network connections; if a download is not successful because of a network problem, it will keep retrying until the whole file has been retrieved (if the -n option is set).  If supported by the remote server, eepget will instruct the server to continue the download from the point of interruption."
 msgstr "Eepget dokáže zvládnout pomalé nebo nestabilní sítě; pokud je stahování neúspěšné kvůli problému sítě, budou se opakovat pokusy o stahování dokud nebude soubor kompletně stažen (pokud je nastavena volba -n). Pokud je podporováno vzdáleným serverem, eepget instruuje server k pokračování stahování od bodu přerušení."
 
-#. type: SH
 #, no-wrap
 msgid "OPTIONS"
 msgstr "MOŽNOSTI"
 
-#. type: Plain text
 msgid "B<-c>"
 msgstr "B<-c>"
 
-#. type: TP
 #, no-wrap
 msgid "Clearnet. Do not use a proxy. Same as B<-p> :0 ."
 msgstr "Clearnet. Nepoužívejte proxy. Stejné jako B<-p> :0 ."
 
-#. type: Plain text
 msgid "B<-e> etag"
 msgstr "B<-e> etag"
 
-#. type: TP
 #, no-wrap
 msgid "Sets the etag value in the request headers."
 msgstr "Nastavuje hodnotu etag v hlavičkách požadavku."
 
-#. type: Plain text
 msgid "B<-h> name=value"
 msgstr "B<-h> name=value"
 
-#. type: TP
 #, no-wrap
 msgid "Adds an arbitrary request header with the given name and value."
 msgstr "Přidá libovolnou hlavičku požadavku s daným názvem a hodnotou."
 
-#. type: Plain text
 msgid "B<-l> lineLen"
 msgstr "B<-l> lineLen"
 
-#. type: TP
 #, no-wrap
 msgid "Controls the progress display. B<\\ lineLen > is the length of one progress line in characters. The default is 40."
 msgstr "Ovládá zobrazování průběhu. B<\\ lineLen > je délka jedné řádku průběhu v znacích. Výchozí hodnota je 40."
 
-#. type: Plain text
 msgid "B<-m> markSize"
 msgstr "B<-m> markSize"
 
-#. type: TP
 #, no-wrap
 msgid "Controls the progress display. B<\\ markSize > is the number of bytes one '#' character represents. The default is 1024."
 msgstr "Ovládá zobrazování průběhu. B<\\ markSize > je počet bajtů, které reprezentuje jeden znak '#'. Výchozí hodnota je 1024."
 
-#. type: Plain text
 msgid "B<-n> retries"
 msgstr "B<-n> pokusy"
 
-#. type: TP
 #, no-wrap
 msgid "Specify the number of times to retry downloading if the download isn't successful. If this option is not specified, eepget will not retry."
 msgstr "Určete počet pokusů o stahování pokud stahování nebylo úspěšné. Pokud není nastavena tato volba, eepget se nebude pokoušet znovu."
 
-#. type: Plain text
 msgid "B<-o> file"
 msgstr "B<-o> soubor"
 
-#. type: TP
 #, no-wrap
 msgid "Sets the output file to write to. If this option is not given, the output filename will be determined by the URL."
 msgstr "Nastavuje výstupní soubor pro zápis. Pokud není tato volba zadána, název výstupního souboru bude určen URL."
 
-#. type: Plain text
 msgid "B<-p> proxy_host[:port]"
 msgstr "B<-p> proxy_host[:port]"
 
-#. type: TP
 #, no-wrap
 msgid "Specify an I2P proxy server (eeproxy) to use. If the port is not specified, eepget will use 4444. If this option is not specified, eepget will use 127.0.0.1:4444. Specify B<-c> or B<-p> :0 to disable the eeproxy."
 msgstr "Určete server proxy I2P (eeproxy) k použití. Pokud není uveden port, eepget použije 4444. Pokud není tato volba určena, eepget použije 127.0.0.1:4444. Určete B<-c> nebo B<-p> :0 pro deaktivaci eeproxy."
 
-#. type: Plain text
 msgid "B<-t> seconds"
 msgstr "B<-t> sekundy"
 
-#. type: TP
 #, no-wrap
 msgid "Sets the inactivity timeout. The default is 60 seconds."
 msgstr "Nastavuje časové limit pro nečinnost. Výchozí hodnota je 60 sekund."
 
-#. type: Plain text
 msgid "B<-u> username"
 msgstr "B<-u> uživatelské jméno"
 
-#. type: TP
 #, no-wrap
 msgid "Sets the username for proxy authorization, if required."
 msgstr "Nastavuje uživatelské jméno pro autorizaci proxy, pokud je to potřeba."
 
-#. type: Plain text
 msgid "B<-x> password"
 msgstr "B<-x> heslo"
 
-#. type: TP
 #, no-wrap
 msgid "Sets the password for proxy authorization, if required. If a username is specified but not a password, EepGet will prompt for the password."
 msgstr "Nastavuje heslo pro autorizaci proxy, pokud je to potřeba. Pokud je specifikováno uživatelské jméno ale neheslo, EepGet vás bude vyzývat k zadání hesla."
 
-#. type: SH
 #, no-wrap
 msgid "EXIT STATUS"
 msgstr "KÓD UKONČENÍ"
 
-#. type: Plain text
 msgid "B<eepget> exits with status zero upon successful transfer and non-zero if there were problems with the download."
 msgstr "B<eepget> ukončuje se kódem nulového stavu při úspěšném přenosu a nenulovým kódem pokud došlo k problémům při stahování."
 
-#. type: SH
 #, no-wrap
 msgid "REPORTING BUGS"
 msgstr "HLÁŠENÍ CHYB"
 
-#. type: Plain text
 msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues/> the I2P Bug Tracker  E<.UE .>"
 msgstr "Prosím vytvořte lístek na E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues/> sledovač chyb I2P  E<.UE .>"
 
-#. type: SH
 #, no-wrap
 msgid "SEE ALSO"
 msgstr "PODLÉTĚJTE TAKÉ"
 
-#. type: Plain text
 msgid "B<i2prouter>(1)  B<curl>(1)  B<wget>(1)"
 msgstr "B<i2prouter>(1)  B<curl>(1)  B<wget>(1)"
 
-#. type: TH
 #, no-wrap
 msgid "I2PROUTER"
 msgstr "I2PROUTER"
 
-#. type: Plain text
 msgid "i2prouter - start and stop the I2P router"
 msgstr "i2prouter - spustit a zastavit routér I2P"
 
-#. type: Plain text
 msgid "B<i2prouter> {I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
 msgstr "B<i2prouter> {I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
 
-#. type: Plain text
 msgid "Control the I2P service."
 msgstr "Ovládání služby I2P."
 
-#. type: IP
 #, no-wrap
 msgid "B<console>"
 msgstr "B<console>"
 
-#. type: Plain text
 msgid "Runs I2P as a console application under the current user."
 msgstr "Spouští I2P jako aplikaci pro konzoli pod aktuálním uživatelem."
 
-#. type: IP
 #, no-wrap
 msgid "B<start>"
 msgstr "B<start>"
 
-#. type: Plain text
 msgid "Starts the I2P service."
 msgstr "Spouští službu I2P."
 
-#. type: IP
 #, no-wrap
 msgid "B<stop>"
 msgstr "B<stop>"
 
-#. type: Plain text
 msgid "Stops the I2P service."
 msgstr "Zastavuje službu I2P."
 
-#. type: IP
 #, no-wrap
 msgid "B<restart>"
 msgstr "B<restart>"
 
-#. type: Plain text
 msgid "Stops the I2P service and then starts it."
 msgstr "Zastavuje službu I2P a poté ji spouští."
 
-#. type: IP
 #, no-wrap
 msgid "B<condrestart>"
 msgstr "B<condrestart>"
 
-#. type: Plain text
 msgid "Restart the I2P service only if it is already running."
 msgstr "Restartujte službu I2P pouze pokud již běží."
 
-#. type: IP
 #, no-wrap
 msgid "B<graceful>"
 msgstr "B<graceful>"
 
-#. type: Plain text
 msgid "Stop I2P gracefully (may take up to 11 minutes)"
 msgstr "Ukončete I2P elegantně (může trvat až 11 minut)"
 
-#. type: IP
 #, no-wrap
 msgid "B<install>"
 msgstr "B<install>"
 
-#. type: Plain text
 msgid "Install initscript to start I2P automatically when the system boots."
 msgstr "Instalovat skript pro inicializaci, aby se I2P automaticky spouštěl při spuštění systému."
 
-#. type: IP
 #, no-wrap
 msgid "B<remove>"
 msgstr "B<remove>"
 
-#. type: Plain text
 msgid "Uninstall initscript that was installed with B<install>"
 msgstr "Odinstalovat inicializační skript, který byl nainstalován pomocí B<install>"
 
-#. type: IP
 #, no-wrap
 msgid "B<status>"
 msgstr "B<status>"
 
-#. type: Plain text
 msgid "Prints whether the I2P service is running."
 msgstr "Vypíše, jestli služba I2P běží."
 
-#. type: IP
 #, no-wrap
 msgid "B<dump>"
 msgstr "B<dump>"
 
-#. type: Plain text
 msgid "Dumps the current threads into B<wrapper.log>."
 msgstr "Vypíše aktuální vlákna do B<wrapper.log>."
 
-#. type: Plain text
 msgid "B<i2prouter-nowrapper>(1)"
 msgstr "B<i2prouter-nowrapper>(1)"
 
-#. type: TH
 #, no-wrap
 msgid "I2PROUTER-NOWRAPPER"
 msgstr "I2PROUTER-NOWRAPPER"
 
-#. type: Plain text
 msgid "i2prouter-nowrapper - start the I2P router"
 msgstr "i2prouter-nowrapper - spustit routér I2P"
 
-#. type: Plain text
 msgid "B<i2prouter-nowrapper>"
 msgstr "B<i2prouter-nowrapper>"
 
-#. type: Plain text
 msgid "Start the I2P router, without the service wrapper.  This means the router will not restart if it crashes.  Also, it will use the default memory size, which may not be enough for I2P."
 msgstr "Spustit routér I2P bez obalu služby. To znamená, že routér se nepřespustí pokud selže. Také bude používán výchozí velikost paměti, což může být nedostatečné pro I2P."
 
-#. type: Plain text
 msgid "You should really use the B<i2prouter>(1)  script instead.  There are no options.  To stop the router, use your browser to access E<.UR http://localhost:7657/> the router console E<.UE .>"
 msgstr "Měli byste skutečně používat skript B<i2prouter>(1)  místo toho. Neexistují žádné možnosti. Chcete-li zastavit routér, použijte prohlížeč k přístupu k konzoli routéru na adrese E<.UR http://localhost:7657/> E<.UE .>"
 
-#. type: Plain text
 msgid "B<i2prouter>(1)"
 msgstr "B<i2prouter>(1)"

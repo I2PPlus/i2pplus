@@ -212,12 +212,10 @@ msgstr "Napaka: Torrent {0} ni mogoče dodati"
 msgid "Torrent already running: {0}"
 msgstr "Torrent že v teku: {0}"
 
-#. catch this here so we don't try do delete it below
 #, java-format
 msgid "Cannot open \"{0}\""
 msgstr "Datoteke \"{0}\" ni mogoče odpreti"
 
-#. TODO - if the existing one is a magnet, delete it and add the metainfo instead?
 #, java-format
 msgid "Torrent with this info hash is already running: {0}"
 msgstr "Torrent s tem informacijskim hash-om že deluje: {0}"
@@ -312,13 +310,6 @@ msgstr "Omejitev je {0}B"
 msgid "Torrent \"{0}\" has no data!"
 msgstr "Torrent \"{0}\" ni vsebinjenih podatkov!"
 
-#.
-#. System.out.println("torrent info: " + info.toString());
-#. List lengths = info.getLengths();
-#. if (lengths != null)
-#. for (int i = 0; i < lengths.size(); i++)
-#. System.out.println("File " + i + " is " + lengths.get(i) + " long.");
-#.
 #, java-format
 msgid "Torrents larger than {0}B are not supported yet \"{1}\"!"
 msgstr "Torrenti večji od {0}B trenutno še niso podprti \"{1}\"!"
@@ -336,8 +327,8 @@ msgid "Torrent removed: \"{0}\""
 msgstr "Torrent odstranjen: \"{0}\""
 
 #, java-format
-msgid "Adding torrents in {0}…"
-msgstr "Dodajanje torrentov v {0}…"
+msgid "Adding torrents in {0}&hellip;"
+msgstr ""
 
 msgid "Connecting to I2P"
 msgstr "Povezovanje z I2P"
@@ -377,8 +368,6 @@ msgstr "Prenos končan: {0}"
 msgid "I2PSnark"
 msgstr "I2PSnark"
 
-#. addMessage(_t("Metainfo received for {0}", snark.getName()));
-#. addMessageNoEscape(_t("Starting torrent: {0}", linkify(snark)).replace("Magnet ", ""));
 #, java-format
 msgid "Starting torrent: {0}"
 msgstr "Zagon torrenta: {0}"
@@ -483,8 +472,8 @@ msgstr "Osveži stran"
 msgid "Forum"
 msgstr "Foruma"
 
-msgid "Torrent & filesharing forum"
-msgstr "Foruma za torrente & deljenje datotek"
+msgid "Torrent &amp; filesharing forum"
+msgstr ""
 
 msgid "BTDigg"
 msgstr "BTDigg"
@@ -668,7 +657,6 @@ msgstr "v"
 msgid "out"
 msgstr "iz"
 
-#. Only truncate if it's an actual dest
 msgid "Our destination (identity) for this session"
 msgstr "Naslov (identiteta) za to sejo"
 
@@ -730,7 +718,6 @@ msgstr "Zadnja stran"
 msgid "Cannot add torrent {0} inside another torrent: {1}"
 msgstr "Torrent {0} ni mogoče dodati v drug torrent: {1}"
 
-#. TODO
 #, java-format
 msgid "Download from non-I2P location {0} is not supported"
 msgstr "Prenos iz lokacije, ki ni I2P {0}, ni podprt"
@@ -739,7 +726,6 @@ msgstr "Prenos iz lokacije, ki ni I2P {0}, ni podprt"
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
 msgstr "Neveljavna URL: Morajo začeti z \"{0}\" ali \"{1}\""
 
-#. no file or URL specified
 msgid "Enter URL or select torrent file"
 msgstr "Vnesite URL ali izberite datoteko torrenta"
 
@@ -1084,7 +1070,6 @@ msgstr "Maksimalna število torrentov, ki se prikažejo na strani"
 msgid "torrents"
 msgstr "torrenti"
 
-#. If we get to here, we have the language settings
 msgid "Language"
 msgstr "Jezik"
 
@@ -1124,8 +1109,8 @@ msgstr "Ohranjaj Dodaj/Ustvari"
 msgid "Display the 'Add' and 'Create' sections on all torrent listing pages when in multipage mode"
 msgstr "Prikaži sekcije 'Dodaj' in 'Ustvari' na vseh straneh zoznamov torrentov, ko je vključen način z več strani"
 
-msgid "Comments & Ratings"
-msgstr "Komentarji & ocene"
+msgid "Comments &amp; Ratings"
+msgstr ""
 
 msgid "Enable Ratings"
 msgstr "Omogoči ocene"
@@ -1287,7 +1272,6 @@ msgstr "Magnet ni mogoče dodati: Magnet povezave različice 2 niso podprte"
 msgid "Invalid magnet URL {0}"
 msgstr "Neveljavna magnet URL {0}"
 
-#. * dummies for translation
 #, java-format
 msgid "1 hop"
 msgid_plural "{0} hops"
@@ -1388,7 +1372,6 @@ msgstr "Nadaljevanje do višje mape"
 msgid "Audio Playlist"
 msgstr "Seznam reprodukcije zvoka"
 
-#. status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Not found"), _t("Torrent not found?").replace("?", ""));
 msgid "Not found"
 msgstr "Ni najdeno"
 
@@ -1398,7 +1381,6 @@ msgstr "Torrent ni najden?"
 msgid "File not found in torrent?"
 msgstr "Datoteke ni mogoče najeti v torrentu?"
 
-#. status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Unrecognized"), _t("File not found in torrent?").replace("?", ""));
 msgid "Unrecognized"
 msgstr "Neznan"
 
@@ -1423,17 +1405,6 @@ msgstr "Datoteko ne prenesi"
 msgid "Skip"
 msgstr "Preskoči"
 
-#. TODO: fixup so works with ajax refresh
-#. "");
-#. if (!inOrder) {
-#. buf.append("")
-#. .append(toImg("clock_red")).append(_t("Set all high")).append("\n");
-#. }
-#. buf.append("")
-#. .append(toImg("clock")).append(_t("Set all normal")).append("\n")
-#. .append("")
-#. .append(toImg("block")).append(_t("Skip all")).append("\n");
-#.
 msgid "Save priorities"
 msgstr "Shrani prioritete"
 
@@ -1448,14 +1419,6 @@ msgstr "Za ocenjevanje ali komentiranje je potrebno ime avtorja"
 
 msgid "Your author name for published comments and ratings"
 msgstr "Vaše ime avtorja za objavljene komentarje in ocene"
-
-#, java-format
-msgid "1 star"
-msgid_plural "{0} zvezdice"
-msgstr[0] "{0} zvezdica"
-msgstr[1] "{0} zvezdic"
-msgstr[2] "{0} zvezdic"
-msgstr[3] "{0} zvezdic"
 
 msgid "No rating"
 msgstr "Brez ocene"
@@ -1505,6 +1468,15 @@ msgstr "Torrent mora biti ustavljen, da ga lahko uredite"
 msgid "Save Changes"
 msgstr "Shrani spremembe"
 
-#. shouldn't happen
 msgid "Torrent must be stopped"
 msgstr "Torrent mora biti ustavljen"
+
+#, java-format
+#~ msgid "Adding torrents in {0}…"
+#~ msgstr "Dodajanje torrentov v {0}…"
+
+#~ msgid "Torrent & filesharing forum"
+#~ msgstr "Foruma za torrente & deljenje datotek"
+
+#~ msgid "Comments & Ratings"
+#~ msgstr "Komentarji & ocene"

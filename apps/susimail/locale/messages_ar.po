@@ -26,32 +26,32 @@ msgstr "البريد الإلكتروني."
 msgid "No encoder found for encoding \\''{0}\\''."
 msgstr "لم يتم العثور على برنامج تشفير للتشفير \\''{0}\\''."
 
-#. tagged in WebMail
 msgid "Re:"
 msgstr "Re:"
 
 msgid "Fwd:"
 msgstr "Fwd:"
 
-#. MailDir-like
 msgid "Drafts"
 msgstr "المسودات"
 
-#. MailDir-like
 msgid "Sent"
 msgstr "أُرسِل"
 
-#. MailDir-like
 msgid "Trash"
 msgstr "سلة القمامة"
 
-#. MailDir-like
 msgid "Bulk Mail"
 msgstr "البريد بالجملة"
 
-#. untranslated, translate on use
 msgid "Inbox"
 msgstr "البريد الوارد"
+
+msgid "View message as HTML"
+msgstr ""
+
+msgid "View message as plain text"
+msgstr ""
 
 msgid "unknown"
 msgstr "غير معروف"
@@ -167,7 +167,6 @@ msgstr "لم يتم العثور على تشفير {0}"
 msgid "Attachment not found."
 msgstr "لم يتم العثور على المرفق."
 
-#. error if we get here
 msgid "Message not found."
 msgstr "الرسالة غير موجودة."
 
@@ -298,7 +297,6 @@ msgstr "عنوان"
 msgid "Add Attachment"
 msgstr "إضافة مرفق"
 
-#. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 msgid "Add attachment"
 msgstr "إضافة مرفق"
 
@@ -375,6 +373,9 @@ msgstr "الحجم"
 msgid "Mark for deletion"
 msgstr "اختر للحذف"
 
+msgid "Message contains HTML"
+msgstr ""
+
 msgid "Message is new"
 msgstr "الرسالة جديدة"
 
@@ -384,7 +385,6 @@ msgstr "الرسالة غير مرغوب فيها"
 msgid "Message body not downloaded"
 msgstr "نص الرسالة لم يتم تحميله"
 
-#. TODO ngettext
 msgid "Really delete the marked messages?"
 msgstr "هل تريد حذف الرسائل المحددة حقًا؟"
 
@@ -442,6 +442,9 @@ msgstr "العودة إلى المجلد"
 msgid "Move to Folder"
 msgstr "انتقل إلى المجلد"
 
+msgid "View message in new tab"
+msgstr ""
+
 msgid "Folder Page Size"
 msgstr "حجم صفحة المجلد"
 
@@ -454,7 +457,6 @@ msgstr "التهيئة المتقدمة"
 msgid "Save Configuration"
 msgstr "حفظ التهيئة"
 
-#. this appears in the UI so translate
 msgid "No response from server"
 msgstr "لا استجابة من الخادم"
 
@@ -470,6 +472,5 @@ msgstr "فشل تسجيل الدخول"
 msgid "Server refused connection"
 msgstr "الخادم يرفض الاتصال"
 
-#. TODO which recipient?
 msgid "Mail rejected"
 msgstr "البريد مرفوض"

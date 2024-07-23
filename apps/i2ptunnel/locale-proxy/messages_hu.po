@@ -310,11 +310,9 @@ msgstr "Ezt a címet a rendszer elmenti az útválasztó címjegyzékébe, ahol 
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
 msgstr "Ha nyomon szeretné követni a manuálisan hozzáadott webhelyeket, adja hozzá a fő vagy a privát címjegyzékhez."
 
-#. FIXME wasn't escaped
 msgid "Save & continue"
 msgstr "Mentés"
 
-#. only blockfile supports multiple books
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
 msgstr "Mentse el a(z) {0} címet a fő címjegyzékbe, és lépjen tovább a webhelyre"

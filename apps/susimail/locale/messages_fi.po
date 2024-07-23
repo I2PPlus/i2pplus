@@ -22,32 +22,32 @@ msgstr "Sähköposti"
 msgid "No encoder found for encoding \\''{0}\\''."
 msgstr "Koodausohjelman löytäminen kohteen ”{0}” koodausta varten epäonnistui."
 
-#. tagged in WebMail
 msgid "Re:"
 msgstr "Vast:"
 
 msgid "Fwd:"
 msgstr "Edelleenläh:"
 
-#. MailDir-like
 msgid "Drafts"
 msgstr "Luonnokset"
 
-#. MailDir-like
 msgid "Sent"
 msgstr "Lähetetty"
 
-#. MailDir-like
 msgid "Trash"
 msgstr "Roskakori"
 
-#. MailDir-like
 msgid "Bulk Mail"
 msgstr "Joukkoposti"
 
-#. untranslated, translate on use
 msgid "Inbox"
 msgstr "Tulevat"
+
+msgid "View message as HTML"
+msgstr ""
+
+msgid "View message as plain text"
+msgstr ""
 
 msgid "unknown"
 msgstr "tuntematon"
@@ -163,7 +163,6 @@ msgstr "{0}lle ei löytynyt sopivaa koodausta"
 msgid "Attachment not found."
 msgstr "Liitettä ei löytynyt."
 
-#. error if we get here
 msgid "Message not found."
 msgstr "Viestiä ei löydetty."
 
@@ -286,7 +285,6 @@ msgstr "Aihe"
 msgid "Add Attachment"
 msgstr "Lisää liite"
 
-#. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 msgid "Add attachment"
 msgstr "Lisää liite"
 
@@ -359,6 +357,9 @@ msgstr "Koko"
 msgid "Mark for deletion"
 msgstr "Merkitse poistettavaksi"
 
+msgid "Message contains HTML"
+msgstr ""
+
 msgid "Message is new"
 msgstr "Viesti on uusi"
 
@@ -368,7 +369,6 @@ msgstr "Viesti on roskapostia"
 msgid "Message body not downloaded"
 msgstr "Viestin runkoa ei ladattu"
 
-#. TODO ngettext
 msgid "Really delete the marked messages?"
 msgstr "Poistetaanko merkityt viestit oikeasti?"
 
@@ -426,6 +426,9 @@ msgstr "Takaisin kansioon"
 msgid "Move to Folder"
 msgstr "Siirrä kansioon"
 
+msgid "View message in new tab"
+msgstr ""
+
 msgid "Folder Page Size"
 msgstr "Kansiosivukoko"
 
@@ -438,7 +441,6 @@ msgstr "Lisäasetukset"
 msgid "Save Configuration"
 msgstr "Tallenna asetukset"
 
-#. this appears in the UI so translate
 msgid "No response from server"
 msgstr "Palvelin ei vastaa"
 
@@ -454,6 +456,5 @@ msgstr "Sisäänkirjautuminen epäonnistui"
 msgid "Server refused connection"
 msgstr "Palvelin torjui yhteyden"
 
-#. TODO which recipient?
 msgid "Mail rejected"
 msgstr "Posti torjuttu"

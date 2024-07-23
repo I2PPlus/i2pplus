@@ -212,12 +212,10 @@ msgstr "خطا: تورنت اضافه نشد: {0}"
 msgid "Torrent already running: {0}"
 msgstr "تورنت در حال اجراست: {0}"
 
-#. catch this here so we don't try do delete it below
 #, java-format
 msgid "Cannot open \"{0}\""
 msgstr "عدم توانایی در باز کردن \"{0}\""
 
-#. TODO - if the existing one is a magnet, delete it and add the metainfo instead?
 #, java-format
 msgid "Torrent with this info hash is already running: {0}"
 msgstr "تورنت با این هش اطلاعات در حال اجرا است: {0}"
@@ -312,13 +310,6 @@ msgstr "محدودیت {0}B است"
 msgid "Torrent \"{0}\" has no data!"
 msgstr "تورنت \"{0}\" داده ای ندارد!"
 
-#.
-#. System.out.println("torrent info: " + info.toString());
-#. List<Long> lengths = info.getLengths();
-#. if (lengths != null)
-#. for (int i = 0; i < lengths.size(); i++)
-#. System.out.println("File " + i + " is " + lengths.get(i) + " long.");
-#.
 #, java-format
 msgid "Torrents larger than {0}B are not supported yet \"{1}\"!"
 msgstr "تورنت های بزرگتر از {0}B هنوز \"{1}\" پشتیبانی نمی شوند!"
@@ -377,8 +368,6 @@ msgstr "دانلود پایان یافت: {0}"
 msgid "I2PSnark"
 msgstr "I2PSnark"
 
-#. addMessage(_t("Metainfo received for {0}", snark.getName()));
-#. addMessageNoEscape(_t("Starting torrent: {0}", linkify(snark)).replace("Magnet ", ""));
 #, java-format
 msgid "Starting torrent: {0}"
 msgstr "شروع تورنت: {0}"
@@ -662,7 +651,6 @@ msgstr "در"
 msgid "out"
 msgstr "خارج"
 
-#. Only truncate if it's an actual dest
 msgid "Our destination (identity) for this session"
 msgstr "مقصد (هویت) ما برای این جلسه"
 
@@ -724,7 +712,6 @@ msgstr "آخرین صفحه"
 msgid "Cannot add torrent {0} inside another torrent: {1}"
 msgstr "نمی توان تورنت {0} را در داخل تورنت دیگری اضافه کرد: {1}"
 
-#. TODO
 #, java-format
 msgid "Download from non-I2P location {0} is not supported"
 msgstr "دانلود از مکان غیر I2P {0} پشتیبانی نمی شود"
@@ -733,7 +720,6 @@ msgstr "دانلود از مکان غیر I2P {0} پشتیبانی نمی شود
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
 msgstr "URL نامعتبر: باید با \"{0}\" یا \"{1}\" شروع شود"
 
-#. no file or URL specified
 msgid "Enter URL or select torrent file"
 msgstr "URL را وارد کنید یا فایل تورنت را انتخاب کنید"
 
@@ -995,7 +981,6 @@ msgstr "دایرکتوری را برای ذخیره داده ها در آن وا
 msgid "Create Torrent"
 msgstr "ایجاد تورنت"
 
-#. buf.append("From file: <input type=file name=\"newFile\" size=50 value=\"" + newFile + "\" /><br>\n");
 msgid "Data to seed"
 msgstr "داده به دانه"
 
@@ -1075,7 +1060,6 @@ msgstr "حداکثر تعداد تورنت برای نمایش در هر صفح�
 msgid "torrents"
 msgstr "تورنت ها"
 
-#. If we get to here, we have the language settings
 msgid "Language"
 msgstr "زبان"
 
@@ -1278,7 +1262,6 @@ msgstr "نمیتوان مغناطیس را اضافه کرد: لینک های م
 msgid "Invalid magnet URL {0}"
 msgstr "URL آهنربایی نامعتبر {0}"
 
-#. * dummies for translation
 #, java-format
 msgid "1 hop"
 msgid_plural "{0} hops"
@@ -1375,7 +1358,6 @@ msgstr "دایرکتوری تا سطح بالاتر"
 msgid "Audio Playlist"
 msgstr "لیست پخش صوتی"
 
-#. status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Not found"), _t("Torrent not found?").replace("?", ""));
 msgid "Not found"
 msgstr "یافت نشد"
 
@@ -1385,7 +1367,6 @@ msgstr "تورنت پیدا نشد؟"
 msgid "File not found in torrent?"
 msgstr "فایل در تورنت یافت نشد؟"
 
-#. status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Unrecognized"), _t("File not found in torrent?").replace("?", ""));
 msgid "Unrecognized"
 msgstr "ناشناخته"
 
@@ -1410,17 +1391,6 @@ msgstr "این فایل را دانلود نکن"
 msgid "Skip"
 msgstr "پرش"
 
-#. TODO: fixup so works with ajax refresh
-#. "<span class=script>");
-#. if (!inOrder) {
-#. buf.append("<a class=control id=setallhigh href=#>")
-#. .append(toImg("clock_red")).append(_t("Set all high")).append("</a>\n");
-#. }
-#. buf.append("<a class=control id=setallnorm href=#>")
-#. .append(toImg("clock")).append(_t("Set all normal")).append("</a>\n")
-#. .append("<a class=control id=setallskip href=#>")
-#. .append(toImg("block")).append(_t("Skip all")).append("</a></span>\n");
-#.
 msgid "Save priorities"
 msgstr "ذخیره سازی اولویت ها"
 
@@ -1490,7 +1460,6 @@ msgstr "برای ویرایش باید تورنت متوقف شود"
 msgid "Save Changes"
 msgstr "ذخیره تغییرات"
 
-#. shouldn't happen
 msgid "Torrent must be stopped"
 msgstr "تورنت باید متوقف شود"
 

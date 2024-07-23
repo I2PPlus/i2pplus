@@ -45,13 +45,9 @@ msgstr "問題が解決しない場合は、ブラウザで Cookie が有効に�
 msgid "Configuration reloaded for all tunnels"
 msgstr "すべてのトンネルの設定が再読込されました"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Starting tunnel"
 msgstr "トンネルを開始中"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Stopping tunnel"
 msgstr "トンネルを停止中"
 
@@ -542,7 +538,6 @@ msgstr "このサービスにアクセスするために必要なユーザー名
 msgid "Password"
 msgstr "パスワード"
 
-#. && editBean.isAdvanced()
 msgid "Set password required to access this service"
 msgstr "このサービスにアクセスするために必要なパスワードを設定してください"
 
@@ -999,6 +994,9 @@ msgstr "全て再起動"
 
 msgid "I2P Server Tunnels"
 msgstr "I2P サーバー トンネル"
+
+msgid "Helper"
+msgstr ""
 
 msgid "Type"
 msgstr "タイプ"

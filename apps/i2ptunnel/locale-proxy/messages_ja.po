@@ -310,11 +310,9 @@ msgstr "このアドレスは、サブスクリプションベースのアドレ
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
 msgstr "手動で追加したサイトを追跡したい場合は、代わりにマスター アドレス帳またはプライベート アドレス帳に追加してください。"
 
-#. FIXME wasn't escaped
 msgid "Save & continue"
 msgstr "保存と続行"
 
-#. only blockfile supports multiple books
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
 msgstr "{0} をマスター アドレス帳に保存し、Web サイトに進みます"

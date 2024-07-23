@@ -21,32 +21,32 @@ msgstr "メール"
 msgid "No encoder found for encoding \\''{0}\\''."
 msgstr " \\''{0}\\'' のエンコード用のエンコーダーが見つかりませんでした。"
 
-#. tagged in WebMail
 msgid "Re:"
 msgstr "Re:"
 
 msgid "Fwd:"
 msgstr "Fwd:"
 
-#. MailDir-like
 msgid "Drafts"
 msgstr "下書き"
 
-#. MailDir-like
 msgid "Sent"
 msgstr "送信済み"
 
-#. MailDir-like
 msgid "Trash"
 msgstr "ごみ箱"
 
-#. MailDir-like
 msgid "Bulk Mail"
 msgstr "バルクメール"
 
-#. untranslated, translate on use
 msgid "Inbox"
 msgstr "受信ボックス"
+
+msgid "View message as HTML"
+msgstr ""
+
+msgid "View message as plain text"
+msgstr ""
 
 msgid "unknown"
 msgstr "不明"
@@ -162,7 +162,6 @@ msgstr "{0} にエンコーディングが見つかりませんでした。"
 msgid "Attachment not found."
 msgstr "添付ファイルが見つかりません。"
 
-#. error if we get here
 msgid "Message not found."
 msgstr "メッセージが見つかりません。"
 
@@ -283,7 +282,6 @@ msgstr "件名"
 msgid "Add Attachment"
 msgstr "ファイルを添付する"
 
-#. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 msgid "Add attachment"
 msgstr "ファイルを添付する"
 
@@ -355,6 +353,9 @@ msgstr "サイズ"
 msgid "Mark for deletion"
 msgstr "削除にマーク"
 
+msgid "Message contains HTML"
+msgstr ""
+
 msgid "Message is new"
 msgstr "新着メールです"
 
@@ -364,7 +365,6 @@ msgstr "迷惑メールです"
 msgid "Message body not downloaded"
 msgstr "メッセージ本文がダウンロードされていません"
 
-#. TODO ngettext
 msgid "Really delete the marked messages?"
 msgstr "本当にマークされたメッセージを削除しますか？"
 
@@ -422,6 +422,9 @@ msgstr "フォルダーに戻る"
 msgid "Move to Folder"
 msgstr "フォルダへ移動"
 
+msgid "View message in new tab"
+msgstr ""
+
 msgid "Folder Page Size"
 msgstr "フォルダーのページサイズ"
 
@@ -434,7 +437,6 @@ msgstr "高度な設定"
 msgid "Save Configuration"
 msgstr "設定を保存する"
 
-#. this appears in the UI so translate
 msgid "No response from server"
 msgstr "サーバーからの応答がありません"
 
@@ -450,6 +452,5 @@ msgstr "ログインに失敗しました。"
 msgid "Server refused connection"
 msgstr "サーバーに接続が拒否されました。"
 
-#. TODO which recipient?
 msgid "Mail rejected"
 msgstr "メールが拒否されました"

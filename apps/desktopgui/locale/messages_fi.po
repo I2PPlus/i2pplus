@@ -49,11 +49,9 @@ msgstr "Sammuta {0} kuluttua..."
 msgid "Shutdown imminent"
 msgstr "Sammutus välittömästi"
 
-#. status translations are in the console bundle
 msgid "Network"
 msgstr "Verkko"
 
-#. Windows typically has tooltips; Linux (at least Ubuntu) doesn't
 msgid "I2P: Right-click for menu"
 msgstr "I2P: Valikko hiiren kakkosnapilla"
 

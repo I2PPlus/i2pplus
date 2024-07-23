@@ -45,13 +45,9 @@ msgstr "Jika masalah berlanjut, periksa jika anda telah mengaktifkan cookies di 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Konfigurasi dimuat ulang untuk semua tunnel"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Starting tunnel"
 msgstr "Memulai tunnel"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Stopping tunnel"
 msgstr "Menghentikan tunnel"
 
@@ -542,7 +538,6 @@ msgstr "Atur username yang diperlukan untuk mengakses layanan ini"
 msgid "Password"
 msgstr "Password "
 
-#. && editBean.isAdvanced()
 msgid "Set password required to access this service"
 msgstr "Atur password yang diperlukan untuk mengakses layanan ini"
 
@@ -999,6 +994,9 @@ msgstr "Restart semua"
 
 msgid "I2P Server Tunnels"
 msgstr "Terowongan Server I2P"
+
+msgid "Helper"
+msgstr ""
 
 msgid "Type"
 msgstr "Tipe"

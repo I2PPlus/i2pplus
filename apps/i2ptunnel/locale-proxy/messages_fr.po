@@ -310,11 +310,9 @@ msgstr "Cette adresse sera enregistrée dans le carnet d'adresses de votre route
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
 msgstr "Si vous souhaitez garder une trace des sites que vous avez ajoutés manuellement, ajoutez-les plutôt à votre carnet d'adresses principal ou privé."
 
-#. FIXME wasn't escaped
 msgid "Save & continue"
 msgstr "Enregistrer et continuer"
 
-#. only blockfile supports multiple books
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
 msgstr "Enregistrez {0} dans le carnet d'adresses principal et continuez vers le site Web"

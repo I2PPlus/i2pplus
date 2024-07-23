@@ -21,32 +21,32 @@ msgstr "Email"
 msgid "No encoder found for encoding \\''{0}\\''."
 msgstr "인코딩 \\''{0}\\''에 맞는 인코더가 없습니다"
 
-#. tagged in WebMail
 msgid "Re:"
 msgstr "답장:"
 
 msgid "Fwd:"
 msgstr "전달:"
 
-#. MailDir-like
 msgid "Drafts"
 msgstr "Drafts"
 
-#. MailDir-like
 msgid "Sent"
 msgstr "보낸 이메일"
 
-#. MailDir-like
 msgid "Trash"
 msgstr "Trash"
 
-#. MailDir-like
 msgid "Bulk Mail"
 msgstr "대량 메일"
 
-#. untranslated, translate on use
 msgid "Inbox"
 msgstr "Inbox"
+
+msgid "View message as HTML"
+msgstr ""
+
+msgid "View message as plain text"
+msgstr ""
 
 msgid "unknown"
 msgstr "알수없는"
@@ -162,7 +162,6 @@ msgstr "{0} 인코딩 없음"
 msgid "Attachment not found."
 msgstr "첨부파일 없음."
 
-#. error if we get here
 msgid "Message not found."
 msgstr "메세지 없음."
 
@@ -283,7 +282,6 @@ msgstr "제목"
 msgid "Add Attachment"
 msgstr "첨부파일 추가"
 
-#. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 msgid "Add attachment"
 msgstr "첨부파일 추가"
 
@@ -355,6 +353,9 @@ msgstr "큭"
 msgid "Mark for deletion"
 msgstr "삭제표시"
 
+msgid "Message contains HTML"
+msgstr ""
+
 msgid "Message is new"
 msgstr "새로운 메세지"
 
@@ -364,7 +365,6 @@ msgstr "스팸 메세지"
 msgid "Message body not downloaded"
 msgstr "메시지 본문이 다운로드되지 않았습니다."
 
-#. TODO ngettext
 msgid "Really delete the marked messages?"
 msgstr "해당 메세지들을 삭제합니까?"
 
@@ -422,6 +422,9 @@ msgstr "폴더로 돌아가기"
 msgid "Move to Folder"
 msgstr "폴더로 이동"
 
+msgid "View message in new tab"
+msgstr ""
+
 msgid "Folder Page Size"
 msgstr "폴더 페이지 크기"
 
@@ -434,7 +437,6 @@ msgstr "고급 설정"
 msgid "Save Configuration"
 msgstr "설정 저장"
 
-#. this appears in the UI so translate
 msgid "No response from server"
 msgstr "서버 응답 없음"
 
@@ -450,6 +452,5 @@ msgstr "로그인 실패"
 msgid "Server refused connection"
 msgstr "서버가 연결을 거부함"
 
-#. TODO which recipient?
 msgid "Mail rejected"
 msgstr "메일 반송됨"

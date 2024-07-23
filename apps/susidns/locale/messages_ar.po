@@ -131,19 +131,16 @@ msgstr "اسم المضيف غير صالح \"{0}\"."
 msgid "Please enter a host name and destination"
 msgstr "قم بادخال اسم المضيف والوجهة"
 
-#. clear search when deleting
 msgid "Delete Entry"
 msgstr "حذف العنصر"
 
 msgid "Delete Selected"
 msgstr "حذف"
 
-#. parameter is a host name
 #, java-format
 msgid "Destination {0} deleted."
 msgstr "وجهة {0} محذوفة."
 
-#. parameter will always be >= 2
 #, java-format
 msgid "1 destination deleted."
 msgid_plural "{0} destinations deleted."
@@ -254,15 +251,6 @@ msgstr "فشل الاستيراد من الملف"
 msgid "Subscriptions saved."
 msgstr "تم حفظ الاشتراك."
 
-#. ******
-#. String nonce = System.getProperty("addressbook.nonce");
-#. if (nonce != null) {
-#. // Yes this is a hack.
-#. // No it doesn't work on a text-mode browser.
-#. // Fetching from the addressbook servlet
-#. // with the correct parameters will kick off a
-#. // config reload and fetch.
-#. ******
 msgid "Update"
 msgstr "تحديث"
 

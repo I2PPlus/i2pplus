@@ -138,8 +138,11 @@ msgstr "Zahtevaj Java ničelne kopije vlakna, če deluje."
 msgid "Please edit i2prouter and set the variable RUN_AS_USER"
 msgstr "Prosimo, da uredite i2prouter in nastavite spremenljivko RUN_AS_USER"
 
-msgid "Running I2P as the root user is not recommended."
-msgstr "Delovanje I2P kot root uporabnik ni priporočljivo."
+msgid "Running I2P as the root user is *not* recommended."
+msgstr ""
 
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
 msgstr "Če želite delati kot root, uredite i2prouter in nastavite ALLOW_ROOT=true."
+
+#~ msgid "Running I2P as the root user is not recommended."
+#~ msgstr "Delovanje I2P kot root uporabnik ni priporočljivo."

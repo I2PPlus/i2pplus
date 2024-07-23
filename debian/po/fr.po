@@ -9,52 +9,32 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#. Type: boolean
-#. Description
 msgid "Should the I2P router be started at boot?"
 msgstr "Le routeur I2P devrait-il être lancé lors du démarrage ?"
 
-#. Type: boolean
-#. Description
 msgid "The I2P router can be run as a daemon that starts automatically when your computer boots up. This is the recommended configuration."
 msgstr "Le routeur I2P peut être exécuté comme un démon qui se lance automatiquement quand l’ordinateur démarre. C’est la configuration recommandée."
 
-#. Type: string
-#. Description
 msgid "I2P daemon user:"
 msgstr "Utilisateur du démon I2P :"
 
-#. Type: string
-#. Description
 msgid "By default I2P is configured to run under the account i2psvc when running as a daemon. To use an **existing** I2P profile you may enter a different account name here. For example, if your previous I2P installation is at /home/user/i2p, you may enter 'user' here."
 msgstr "Par défaut, I2P est configuré pour fonctionner avec le compte i2psvc quand il fonctionne comme démon. Pour utiliser un profil d’I2P **existant**, vous pouvez saisir ici un nom de compte différent. Par exemple, si votre installation précédente d’I2P se trouve dans /home/user/i2p, vous pouvez saisir l’utilisateur ici."
 
-#. Type: string
-#. Description
 msgid "Very important: If a user other than the default of 'i2psvc' is entered here, the chosen username *MUST* already exist."
 msgstr "Très important : si un utilisateur autre que le compte « i2psvc » par défaut est saisi ici, le nom d’utilisateur choisi *DOIT* déjà exister."
 
-#. Type: string
-#. Description
 msgid "Memory that can be allocated to I2P:"
 msgstr "Mémoire qui peut être allouée à I2P :"
 
-#. Type: string
-#. Description
 msgid "By default, I2P will only be allowed to use up to 128MB of RAM."
 msgstr "Par défaut, I2P ne sera autorisé à utiliser que jusqu’à 128 Mo de mémoire vive."
 
-#. Type: string
-#. Description
 msgid "High bandwidth routers, as well as routers with a lot of active torrents / plugins, may need to have this value increased."
 msgstr "Cette valeur pourrait être augmentée pour les routeurs à haut débit, ainsi que les routeurs ayant beaucoup de torrents ou de greffons actifs."
 
-#. Type: boolean
-#. Description
 msgid "Should the I2P daemon be confined with AppArmor?"
 msgstr "Le démon I2P devrait-il être confiné avec AppArmor ?"
 
-#. Type: boolean
-#. Description
 msgid "With this option enabled I2P will be sandboxed with AppArmor, restricting which files and directories may be accessed by I2P."
 msgstr "Si cette option est activée, I2P sera exécuté dans un bac à sable avec AppArmor, restreignant l’accès par I2P à des fichiers et répertoires particuliers."

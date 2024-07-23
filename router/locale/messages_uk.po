@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 
-#. * IPv4 OK, IPv6 OK or disabled or no address
 msgid "OK"
 msgstr "OK"
 
@@ -28,22 +27,18 @@ msgstr "IPv4: За фаєрволом; IPv6: OK"
 msgid "IPv4: Disabled; IPv6: OK"
 msgstr "IPv4: Вимкнено; IPv6: OK"
 
-#. * IPv4 symmetric NAT (not source NAT)
 msgid "IPv4: Symmetric NAT; IPv6: OK"
 msgstr "IPv4: Симетричний NAT; IPv6: ОК"
 
-#. * IPv4 symmetric NAT, IPv6 firewalled or disabled or no address
 msgid "Symmetric NAT"
 msgstr "Симетричний NAT"
 
-#. * IPv4 symmetric NAT (not source NAT)
 msgid "IPv4: Symmetric NAT; IPv6: Testing"
 msgstr "IPv4: Симетричний NAT; IPv6: Тестування"
 
 msgid "IPv4: Firewalled; IPv6: Testing"
 msgstr "IPv4: За фаєрволом; IPv6: Тестування"
 
-#. * IPv4 firewalled, IPv6 firewalled or disabled or no address
 msgid "Firewalled"
 msgstr "За фаєрволом"
 
@@ -65,12 +60,6 @@ msgstr "Конфліктний порт"
 msgid "Testing"
 msgstr "Тестування"
 
-#. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
-#. NPE, too early
-#. if (_context.router().getRouterInfo().getBandwidthTier().equals("K"))
-#. setTunnelStatus("Not expecting tunnel requests: Advertised bandwidth too low");
-#. else
-#. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
 msgid "Starting up"
 msgstr "Запуск"
 
@@ -80,11 +69,9 @@ msgstr "Відхилення всіх запитів на тунель:<br>"
 msgid "Hidden Mode"
 msgstr "Прихований режим"
 
-#. }
 msgid "Declining tunnel requests:<br>"
 msgstr "Відхилення запитів на тунель:<br>"
 
-#. }
 msgid "High message delay"
 msgstr "Велика затримка повідомлення"
 
@@ -109,21 +96,12 @@ msgstr "Велика кількість запитів"
 msgid "Rejecting most tunnel requests:<br>"
 msgstr "Відхилення більшості запитів на тунель:<br>"
 
-#. hard to do {0} from here
-#. setTunnelStatus("Accepting " + (100-(int)(100.0*probReject)) + "% of tunnels");
 msgid "Accepting most tunnel requests"
 msgstr "Прийняття більшості запитів на тунель"
 
 msgid "Accepting tunnel requests"
 msgstr "Прийняття запитів на тунель"
 
-#. .067KBps
-#. * also limited to 90% - see below
-#. always leave at least 4KBps free when allowing
-#. private static final String LIMIT_STR = _x("Declining tunnel requests" + ":<br>" + "Bandwidth limit");
-#. hard to do {0} from here
-#. setTunnelStatus("Rejecting " + ((int)(100.0*probReject)) + "% of tunnels: Bandwidth limit");
-#. setTunnelStatus(_x("Declining most tunnel requests" + ":<br>" + "Bandwidth limit"));
 msgid "Declining requests: Bandwidth limit"
 msgstr "Відхилення запитів: обмеження пропускної здатності"
 
@@ -145,7 +123,6 @@ msgstr "Відхиляю запити на тунелі: велике відст
 msgid "Dropping tunnel requests:<br>High CPU load"
 msgstr "Відкидання запитів на тунель:<br>Високе навантаження на ЦП"
 
-#. don't even bother, since we are so overloaded locally
 msgid "Dropping tunnel requests: Overloaded"
 msgstr "Відхиляю запити на тунелі: перевантажено"
 

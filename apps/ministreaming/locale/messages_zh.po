@@ -60,6 +60,5 @@ msgstr "本地目标关机"
 msgid "Connection was reset"
 msgstr "连接被重置"
 
-#. Translate this one here, can't do it later
 msgid "Failure code"
 msgstr "失败代码"

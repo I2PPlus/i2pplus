@@ -24,32 +24,32 @@ msgstr "Email"
 msgid "No encoder found for encoding \\''{0}\\''."
 msgstr "Nie znaleziono kodeka dla kodowania \\''{0} \\''."
 
-#. tagged in WebMail
 msgid "Re:"
 msgstr "Re:"
 
 msgid "Fwd:"
 msgstr "Fwd:"
 
-#. MailDir-like
 msgid "Drafts"
 msgstr "Drafts"
 
-#. MailDir-like
 msgid "Sent"
 msgstr "Wysłane"
 
-#. MailDir-like
 msgid "Trash"
 msgstr "Trash"
 
-#. MailDir-like
 msgid "Bulk Mail"
 msgstr "Połączona skrzynka"
 
-#. untranslated, translate on use
 msgid "Inbox"
 msgstr "Inbox"
+
+msgid "View message as HTML"
+msgstr ""
+
+msgid "View message as plain text"
+msgstr ""
 
 msgid "unknown"
 msgstr "nieznany"
@@ -165,7 +165,6 @@ msgstr "Nie znaleziono kodowania dla {0}"
 msgid "Attachment not found."
 msgstr "Nie znaleziono załącznika"
 
-#. error if we get here
 msgid "Message not found."
 msgstr "Nie znaleziono wiadomości."
 
@@ -292,7 +291,6 @@ msgstr "Temat"
 msgid "Add Attachment"
 msgstr "Dodaj załącznik"
 
-#. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 msgid "Add attachment"
 msgstr "Dodaj załącznik"
 
@@ -367,6 +365,9 @@ msgstr "Rozmiar"
 msgid "Mark for deletion"
 msgstr "Zaznacz do usunięcia"
 
+msgid "Message contains HTML"
+msgstr ""
+
 msgid "Message is new"
 msgstr "Wiadomość jest nowa"
 
@@ -376,7 +377,6 @@ msgstr "Wiadomość jest spamem"
 msgid "Message body not downloaded"
 msgstr "Treść wiadomości nie została pobrana"
 
-#. TODO ngettext
 msgid "Really delete the marked messages?"
 msgstr "Czy na pewno usunąć zaznaczone wiadomości?"
 
@@ -434,6 +434,9 @@ msgstr "Powrót do folderu"
 msgid "Move to Folder"
 msgstr "Przenieś do katalogu"
 
+msgid "View message in new tab"
+msgstr ""
+
 msgid "Folder Page Size"
 msgstr "Rozmiar strony folderu"
 
@@ -446,7 +449,6 @@ msgstr "Ustawienia zaawansowane"
 msgid "Save Configuration"
 msgstr "Zapisz ustawienia"
 
-#. this appears in the UI so translate
 msgid "No response from server"
 msgstr "Brak odpowiedzi z serwera"
 
@@ -462,6 +464,5 @@ msgstr "Nieudane logowanie"
 msgid "Server refused connection"
 msgstr "Serwer odmówił połączenia"
 
-#. TODO which recipient?
 msgid "Mail rejected"
 msgstr "List odrzucony"

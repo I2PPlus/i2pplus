@@ -48,13 +48,9 @@ msgstr "Εάν το πρόβλημα παραμένει, ελέγξτε αν έ�
 msgid "Configuration reloaded for all tunnels"
 msgstr "Η διαμόρφωση μεταφόρτωση για όλους τους διαδρόμους"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Starting tunnel"
 msgstr "Έναρξη διαδρόμου"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Stopping tunnel"
 msgstr "Σταμάτημα διαδρόμου"
 
@@ -547,7 +543,6 @@ msgstr "Ορίστε το όνομα χρήστη που απαιτείται γ
 msgid "Password"
 msgstr "Κωδικός"
 
-#. && editBean.isAdvanced()
 msgid "Set password required to access this service"
 msgstr "Ορίστε τον κωδικό που απαιτείται για να προσχωρήσετε σε αυτή την υπηρεσία"
 
@@ -635,17 +630,20 @@ msgstr "Ρυθμίζεται HTTPS"
 msgid "SSL Wizard"
 msgstr "Φοιτητής SSL"
 
+msgid "Note: In order to enable QR code generation or registration authentication, configure the Website Hostname field (for websites) or the Name field (everything else) above with an .i2p suffixed hostname e.g. mynewserver.i2p"
+msgstr ""
+
 msgid "Absolute path to Private Key File (will be created if it does not exist)"
 msgstr "Απόλυτη διεύθυνση στο αρχείο Ιδιωτικής Κλειδιάς (θα δημιουργηθεί αν δεν υπάρχει)"
-
-msgid "Absolute path for new key (will be created)"
-msgstr "Απόλυτη διεύθυνση για το νέο κλειδί (θα δημιουργηθεί)"
 
 msgid "Alternate private key file"
 msgstr "Εναλλακτικό αρχείο ιδιωτικής κλειδιάς"
 
 msgid "Alternate local destination"
 msgstr "Εναλλακτικό τοπικό προορισμός"
+
+msgid "Absolute path for new key (will be created)"
+msgstr "Απόλυτη διεύθυνση για το νέο κλειδί (θα δημιουργηθεί)"
 
 msgid "Read Only: Alternate Local Destination"
 msgstr "Μόνο Διαβασμός: Εναλλακτικός Τοπικός Προορισμός"
@@ -1005,8 +1003,14 @@ msgstr "Διαδρόμοι Διακομιστή I2P"
 msgid "Helper"
 msgstr "Βοηθός"
 
+msgid "Type"
+msgstr ""
+
 msgid "Points at"
 msgstr "Δείχνει προς"
+
+msgid "Preview"
+msgstr ""
 
 msgid "Status"
 msgstr "Κατάσταση"
@@ -1124,6 +1128,9 @@ msgstr "Το τοπικός προορισμός δεν είναι διαθέσ�
 
 msgid "To enable registration verification, edit tunnel and set name (or website name) to a valid host name ending in '.i2p'"
 msgstr "Για να ενεργοποιήσετε την επιβεβαίωση εγγραφής, επεξεργαστείτε τον διάδρομο και ρυθμίστε το όνομα (ή το όνομα ιστοσελίδας) σε ένα έγκυρο όνομα διακομιστή που τελειώνει με '.i2p'"
+
+msgid "To enable registration verification, edit tunnel and set name to a valid host name ending in '.i2p'"
+msgstr ""
 
 msgid "Destination signing key is not available. Start the tunnel."
 msgstr "Ο κλειδίς υπογραφής προορισμού δεν είναι διαθέσιμος. Αρχίστε τον διάδρομο."
@@ -1390,6 +1397,9 @@ msgstr "Επιλογή τύπου διαδρόμου"
 
 msgid "Choose a name and description for your tunnel."
 msgstr "Επιλέξτε ένα όνομα και μια περιγραφή για τον διάδρομο σας."
+
+msgid "These can be anything you want - they are just for ease of identifying the tunnel in the routerconsole."
+msgstr ""
 
 msgid "If you know of any outproxies for this type of tunnel (either HTTP or SOCKS), fill them in below."
 msgstr "Αν γνωρίζετε οποιαδήποτε outproxies για αυτό το είδος διαδρόμου (είτε HTTP είτε SOCKS), συμπληρώστε τα παρακάτω."

@@ -49,11 +49,9 @@ msgstr "Stänger av om {0}"
 msgid "Shutdown imminent"
 msgstr "Stängning nära"
 
-#. status translations are in the console bundle
 msgid "Network"
 msgstr "Nätverk"
 
-#. Windows typically has tooltips; Linux (at least Ubuntu) doesn't
 msgid "I2P: Right-click for menu"
 msgstr "I2P: Högerklicka för meny"
 

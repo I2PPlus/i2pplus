@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#. * IPv4 OK, IPv6 OK or disabled or no address
 msgid "OK"
 msgstr "正常"
 
@@ -28,22 +27,18 @@ msgstr "IPv4: 受到防火墙限制; IPv6: 正常"
 msgid "IPv4: Disabled; IPv6: OK"
 msgstr "IPv4: 已禁用; IPv6: 正常"
 
-#. * IPv4 symmetric NAT (not source NAT)
 msgid "IPv4: Symmetric NAT; IPv6: OK"
 msgstr "IPv4: 对称 NAT; IPv6: 正常"
 
-#. * IPv4 symmetric NAT, IPv6 firewalled or disabled or no address
 msgid "Symmetric NAT"
 msgstr "对称 NAT"
 
-#. * IPv4 symmetric NAT (not source NAT)
 msgid "IPv4: Symmetric NAT; IPv6: Testing"
 msgstr "IPv4: 对称 NAT; IPv6: 测试中"
 
 msgid "IPv4: Firewalled; IPv6: Testing"
 msgstr "IPv4: 受到防火墙限制; IPv6: 测试中"
 
-#. * IPv4 firewalled, IPv6 firewalled or disabled or no address
 msgid "Firewalled"
 msgstr "受到防火墙限制"
 
@@ -65,12 +60,6 @@ msgstr "端口冲突"
 msgid "Testing"
 msgstr "测试中"
 
-#. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
-#. NPE, too early
-#. if (_context.router().getRouterInfo().getBandwidthTier().equals("K"))
-#. setTunnelStatus("Not expecting tunnel requests: Advertised bandwidth too low");
-#. else
-#. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
 msgid "Starting up"
 msgstr "启动"
 
@@ -80,11 +69,9 @@ msgstr "拒绝所有隧道请求：<br>"
 msgid "Hidden Mode"
 msgstr "隐藏模式"
 
-#. }
 msgid "Declining tunnel requests:<br>"
 msgstr "拒绝隧道请求：<br>"
 
-#. }
 msgid "High message delay"
 msgstr "高消息延迟"
 
@@ -109,21 +96,12 @@ msgstr "请求数量较多"
 msgid "Rejecting most tunnel requests:<br>"
 msgstr "拒绝大多数隧道请求：<br>"
 
-#. hard to do {0} from here
-#. setTunnelStatus("Accepting " + (100-(int)(100.0*probReject)) + "% of tunnels");
 msgid "Accepting most tunnel requests"
 msgstr "接受大多数隧道请求"
 
 msgid "Accepting tunnel requests"
 msgstr "接受隧道请求"
 
-#. .067KBps
-#. * also limited to 90% - see below
-#. always leave at least 4KBps free when allowing
-#. private static final String LIMIT_STR = _x("Declining tunnel requests" + ":<br>" + "Bandwidth limit");
-#. hard to do {0} from here
-#. setTunnelStatus("Rejecting " + ((int)(100.0*probReject)) + "% of tunnels: Bandwidth limit");
-#. setTunnelStatus(_x("Declining most tunnel requests" + ":<br>" + "Bandwidth limit"));
 msgid "Declining requests: Bandwidth limit"
 msgstr "拒绝请求：带宽限制"
 
@@ -145,7 +123,6 @@ msgstr "忽略共享隧道请求：高作业延迟"
 msgid "Dropping tunnel requests:<br>High CPU load"
 msgstr "删除隧道请求：<br>CPU 负载过高"
 
-#. don't even bother, since we are so overloaded locally
 msgid "Dropping tunnel requests: Overloaded"
 msgstr "忽略共享隧道请求：路由过载"
 

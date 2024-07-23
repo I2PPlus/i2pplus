@@ -48,13 +48,9 @@ msgstr "Ha a probléma fennáll, ellenőrizd, hogy a sütik engedélyezve vannak
 msgid "Configuration reloaded for all tunnels"
 msgstr "Az összes alagútra vonatkozó beállítás újratöltve"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Starting tunnel"
 msgstr "Alagút indítása"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Stopping tunnel"
 msgstr "Alagút leállítása"
 
@@ -547,7 +543,6 @@ msgstr "A szolgáltatás eléréséhez szükséges felhasználónév beállítá
 msgid "Password"
 msgstr "Jelszó"
 
-#. && editBean.isAdvanced()
 msgid "Set password required to access this service"
 msgstr "Állítsa be a szolgáltatás eléréséhez szükséges jelszót"
 
@@ -1004,6 +999,9 @@ msgstr "Mindet Újraindít"
 
 msgid "I2P Server Tunnels"
 msgstr "I2P szerveralagutak"
+
+msgid "Helper"
+msgstr ""
 
 msgid "Type"
 msgstr "Típus"

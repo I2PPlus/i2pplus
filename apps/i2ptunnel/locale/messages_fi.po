@@ -48,13 +48,9 @@ msgstr "Jos pulma jatkuu, vahvista, että evästeet ovar käytössä selaimessas
 msgid "Configuration reloaded for all tunnels"
 msgstr "Asetukset ladattu uudelleen kaikille tunneleille"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Starting tunnel"
 msgstr "Käynnistetään tunneli"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Stopping tunnel"
 msgstr "Pysäytetään tunneli"
 
@@ -547,7 +543,6 @@ msgstr "Aseta tämän palvelun käyttämiseen vaadittava käyttäjätunnus"
 msgid "Password"
 msgstr "Salasana"
 
-#. && editBean.isAdvanced()
 msgid "Set password required to access this service"
 msgstr "Aseta tämän palvelun käyttämiseen vaadittava salasana"
 
@@ -1004,6 +999,9 @@ msgstr "Käynnistä kaikki uudelleen"
 
 msgid "I2P Server Tunnels"
 msgstr "I2P-palvelintunnelit"
+
+msgid "Helper"
+msgstr ""
 
 msgid "Type"
 msgstr "Tyyppi"

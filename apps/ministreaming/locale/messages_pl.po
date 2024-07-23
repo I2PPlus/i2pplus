@@ -60,6 +60,5 @@ msgstr "Lokalny adres przeznaczenia wyłączony"
 msgid "Connection was reset"
 msgstr "Połączenie zostało zresetowane"
 
-#. Translate this one here, can't do it later
 msgid "Failure code"
 msgstr "Kod niepowodzenia"

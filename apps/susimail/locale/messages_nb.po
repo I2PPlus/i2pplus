@@ -22,32 +22,32 @@ msgstr "E-post"
 msgid "No encoder found for encoding \\''{0}\\''."
 msgstr "Ingen koder funnet for koding av \\''{0}\\''."
 
-#. tagged in WebMail
 msgid "Re:"
 msgstr "Re:"
 
 msgid "Fwd:"
 msgstr "Fwd:"
 
-#. MailDir-like
 msgid "Drafts"
 msgstr "Utkast"
 
-#. MailDir-like
 msgid "Sent"
 msgstr "Sendt"
 
-#. MailDir-like
 msgid "Trash"
 msgstr "Slettede elementer"
 
-#. MailDir-like
 msgid "Bulk Mail"
 msgstr "Massepost"
 
-#. untranslated, translate on use
 msgid "Inbox"
 msgstr "Innboks"
+
+msgid "View message as HTML"
+msgstr ""
+
+msgid "View message as plain text"
+msgstr ""
 
 msgid "unknown"
 msgstr "ukjent"
@@ -163,7 +163,6 @@ msgstr "Ingen koding funnet for {0}"
 msgid "Attachment not found."
 msgstr "Vedlegg ikke funnet."
 
-#. error if we get here
 msgid "Message not found."
 msgstr "Meldingen ble ikke funnet."
 
@@ -286,7 +285,6 @@ msgstr "Emnetittel"
 msgid "Add Attachment"
 msgstr "Legg til vedlegg"
 
-#. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 msgid "Add attachment"
 msgstr "Legg til vedlegg"
 
@@ -359,6 +357,9 @@ msgstr "Størrelse"
 msgid "Mark for deletion"
 msgstr "Marker for sletting"
 
+msgid "Message contains HTML"
+msgstr ""
+
 msgid "Message is new"
 msgstr "Message er ny"
 
@@ -368,7 +369,6 @@ msgstr "Meldingen er spam"
 msgid "Message body not downloaded"
 msgstr "Meldingstekst ikke lastet ned"
 
-#. TODO ngettext
 msgid "Really delete the marked messages?"
 msgstr "Vil du virkelig slette de merkede meldingene?"
 
@@ -426,6 +426,9 @@ msgstr "Tilbake til mappen"
 msgid "Move to Folder"
 msgstr "Flytt til mappe"
 
+msgid "View message in new tab"
+msgstr ""
+
 msgid "Folder Page Size"
 msgstr "Mappesidestørrelse"
 
@@ -438,7 +441,6 @@ msgstr "Avansert oppsett"
 msgid "Save Configuration"
 msgstr "Lagre konfigurasjon"
 
-#. this appears in the UI so translate
 msgid "No response from server"
 msgstr "Ingen svar fra server"
 
@@ -454,6 +456,5 @@ msgstr "Pålogging mislyktes"
 msgid "Server refused connection"
 msgstr "Server nektet tilkobling"
 
-#. TODO which recipient?
 msgid "Mail rejected"
 msgstr "Mail avvist"

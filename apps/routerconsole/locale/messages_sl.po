@@ -37,6 +37,14 @@ msgid "Initiating Reseed"
 msgstr "Začetek ponovnega semenjenja"
 
 #, java-format
+msgid "Acquired {0} router info from reseed hosts"
+msgid_plural "Acquired {0} router infos from reseed hosts"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#, java-format
 msgid "Acquired only 1 router info from reseed hosts"
 msgid_plural "Acquired only {0} router infos from reseed hosts"
 msgstr[0] "Pridobljena je le {0} informacija o usmerjevalniku od gostiteljev ponovnega zalaganja"
@@ -44,7 +52,6 @@ msgstr[1] "Pridobljene so le {0} informacije o usmerjevalniku od gostiteljev pon
 msgstr[2] "Pridobljene so le {0} informacije o usmerjevalniku od gostiteljev ponovnega zalaganja"
 msgstr[3] "Pridobljene so le {0} informacije o usmerjevalniku od gostiteljev ponovnega zalaganja"
 
-#. remove dupe error msgs
 #, java-format
 msgid "{0}Reseed{1} failed:"
 msgstr "{0}Ponovno semenjenje{1} je spodletelo:"
@@ -71,9 +78,6 @@ msgstr "Prizobljenih je {0} informacij o usmerjevalnikih od gostiteljev ponovneg
 msgid "Acquired {0} router infos from reseed hosts ({1} errors)"
 msgstr "Prizobljenih je {0} informacij o usmerjevalnikih od gostiteljev ponovnega semenjenja ({1} napak)"
 
-#. NOTE TO TRANSLATORS - each of these phrases is a description for a statistic
-#. to be displayed on /stats.jsp and in the graphs on /graphs.jsp.
-#. Please keep relatively short so it will fit on the graphs.
 msgid "Message receive rate (B/s)"
 msgstr "Hitrost prejema sporočil (B/s)"
 
@@ -125,14 +129,12 @@ msgstr "Povprečen uspeh izgradnje tunela (%)"
 msgid "unknown"
 msgstr "neznano"
 
-#. 1
 msgid "Floodfill"
 msgstr "Zalivni"
 
 msgid "Show all routers with this capability in the NetDb"
 msgstr "Pokaži vse usmerjevalnike z to zmogljivostjo v mrežni bazi"
 
-#. This used to be "no common transports" but it is almost always no transports at all
 msgid "No transports (hidden or starting up?)"
 msgstr "Brez prevoznikov (skriti ali se zagonja?)"
 
@@ -221,16 +223,13 @@ msgstr "UPnP poroča, da je maksimalna dolazna stopnja bitov {0}bitov/sek."
 msgid "UPnP reports the maximum upstream bit rate is {0}bits/sec"
 msgstr "UPnP poroča, da je maksimalna gorazna stopnja bitov {0}bitov/sek."
 
-#. {0} je TCP ali UDP
-#. {1,number,#####} prepreči, da se 12345 izpise kot 12,345 v angleškem lokaliziranem okolju.
-#. Če želite ločilo števil v svojem lokaliziranem okolju, prevedite kot {1}.
 #, java-format
-msgid "{0} vrata {1,number,#####} je uspešno usmerjeno z UPnP."
-msgstr "{0} vrata {1,number,#####} je bila uspešno usmerjena z UPnP."
+msgid "{0} port {1,number,#####} was successfully forwarded by UPnP."
+msgstr "{0} vratilo {1,number,#####} je uspešno preusmerjeno prek UPnP."
 
 #, java-format
-msgid "{0} vrata {1,number,#####} ni bila usmerjena z UPnP."
-msgstr "{0} vrata {1,number,#####} ni bila usmerjena z UPnP."
+msgid "{0} port {1,number,#####} was not forwarded by UPnP."
+msgstr "{0} vratilo {1,number,#####} ni bilo preusmerjeno prek UPnP."
 
 msgid "Router"
 msgstr "Usmerjevalnik"
@@ -293,7 +292,6 @@ msgstr "Kopiranje v {0} je spodletelo"
 msgid "Requires Java version {0} but installed Java version is {1}"
 msgstr "Potrebuje različico Java {0}, vendar je nameščena različica Java {1}"
 
-#. set status before thread to ensure UI feedback
 msgid "Updating"
 msgstr "Posodabljanje"
 
@@ -314,7 +312,6 @@ msgstr "Prvi morate posodobiti na različico {0}"
 msgid "Checking for update of plugin {0}"
 msgstr "Preverjanje posodobitve vstavka {0}"
 
-#. set status before thread to ensure UI feedback
 msgid "Contacting plugin update server"
 msgstr "Kontaktiranje strežnika za posodabljanje vstavka"
 
@@ -344,7 +341,6 @@ msgstr "Vstavek je prenesen"
 msgid "Cannot create plugin directory {0}"
 msgstr "Imenika vstavka {0} ne more biti ustvarjena"
 
-#. updateStatus("<b>" + "Plugin contains an invalid key" + ' ' + pubkey + ' ' + signer + "</b>");
 #, java-format
 msgid "Plugin from {0} contains an invalid key"
 msgstr "Vstavek iz {0} vsebuje neveljavno ključ"
@@ -353,7 +349,6 @@ msgstr "Vstavek iz {0} vsebuje neveljavno ključ"
 msgid "Plugin signature verification of {0} failed"
 msgstr "Preverjanje podpisa vstavka {0} je spodletelo"
 
-#. don't display signer, we're really checking the key not the signer name
 msgid "Plugin not installed - signer is untrusted"
 msgstr "Vstavek ni nameščen - podpisalec ni zaupan"
 
@@ -489,7 +484,6 @@ msgstr "Zapri hkratno"
 msgid "Graceful shutdown initiated"
 msgstr "Začetek hkratnega zapiranja"
 
-#. Normal browsers send value, IE sends button label
 msgid "Shutdown immediately"
 msgstr "Zapri takoj"
 
@@ -575,19 +569,15 @@ msgstr "Nameščena je storitev sistema I2P+"
 msgid "Warning: unable to install the service"
 msgstr "Opozorilo: namestitev storitve ni mogoča"
 
-#. addFormNotice(_t("Service installed"));
 msgid "Enabled I2P+ service autostart at system startup"
 msgstr "Omogočena je samodejna zagon storitve I2P+ pri zagonu sistema"
 
-#. addFormError(_t("Warning: unable to install the service") + " - " + ioe.getLocalizedMessage());
 msgid "Warning: could not set the I2P+ service to autostart"
 msgstr "Opozorilo: ni mogoče nastaviti storitve I2P+ na samodejni zagon"
 
-#. addFormNotice(_t("Service removed"));
 msgid "Disabled I2P+ Service autostart at system startup"
 msgstr "Onemogočena je samodejna zagon storitve I2P+ pri zagonu sistema"
 
-#. addFormError(_t("Warning: unable to remove the service") + " - " + ioe.getLocalizedMessage());
 msgid "Warning: could not set the I2P+ service to manual start"
 msgstr "Opozorilo: ni mogoče nastaviti storitve I2P+ na ročni zagon"
 
@@ -797,14 +787,12 @@ msgstr "Certifikati se uporabljajo za overitev šifriranih storitev, ki delajo v
 msgid "Local SSL Certificates"
 msgstr "Lokalni SSL certifikati"
 
-#. console
 msgid "Router Console"
 msgstr "Konzola usmerjevalnika"
 
 msgid "Location"
 msgstr "Lokacija"
 
-#. I2CP
 msgid "I2CP"
 msgstr "I2CP"
 
@@ -820,14 +808,9 @@ msgstr "Spletna stran"
 msgid "Local Router Family Certificate"
 msgstr "Lokalni certifikat družine usmerjevalnika"
 
-#. hide family name in css as it's already displayed above
 msgid "Family"
 msgstr "Družina"
 
-#. } else {
-#. _out.write("<p>");
-#. _out.write(_t("none"));
-#. _out.write("</p>\n");
 msgid "Console"
 msgstr "Konzola"
 
@@ -878,7 +861,6 @@ msgstr "Ustavljen vstavek {0}"
 msgid "Stopped webapp {0}"
 msgstr "Ustavljena WebApp {0}"
 
-#. label (IE)
 msgid "Start"
 msgstr "Začni"
 
@@ -963,7 +945,6 @@ msgstr "Dodan uporabnik {0}"
 msgid "Interface configuration saved"
 msgstr "Konfiguracija vmesnika je shranjena"
 
-#. "<th data-sortable data-sort-method=number>" + _t("Speed") + "</th>" +
 msgid "Edit"
 msgstr "Uredi"
 
@@ -1006,7 +987,6 @@ msgstr "E-pošta"
 msgid "Plugin"
 msgstr "Vstavek"
 
-#. hide caps as already in the header
 msgid "Version"
 msgstr "Različica"
 
@@ -1187,8 +1167,6 @@ msgstr "Izberite razred za dodajanje"
 msgid "All classes in {0}"
 msgstr "Vsi razredi v {0}"
 
-#. stat groups for stats.jsp
-#. See StatsGenerator for groups mapped to a display name
 msgid "Bandwidth"
 msgstr "Širina pasma"
 
@@ -1315,8 +1293,6 @@ msgstr "Omogočanje UDP"
 msgid "Requiring SSU introducers"
 msgstr "Zahteva SSU predstavljence"
 
-#. if (_context.hasWrapper()) {
-#. Wow this dumps all conns immediately and really isn't nice
 msgid "Performing a soft restart"
 msgstr "Izvajanje mehkega ponovnega zagona"
 
@@ -1407,7 +1383,6 @@ msgstr "Ponovno semenjenje zdaj"
 msgid "Reseeding is already in progress"
 msgstr "Ponovno semenjenje je že v teku"
 
-#. skip the nonce checking in ReseedHandler
 msgid "Starting reseed process"
 msgstr "Začetek procesa ponovnega semenjenja"
 
@@ -1435,14 +1410,20 @@ msgstr "Datoteka ni določena. Prosimo, izberite veljavno .zip ali .su3 datoteko
 msgid "Reseed from file failed"
 msgstr "Ponovno semenjenje iz datoteke je spodletelo"
 
+#, java-format
+msgid "Reseed successful, loaded {0} router info from file."
+msgid_plural "Reseed successful, loaded {0} router infos from file."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
 msgid "Reset URL list"
 msgstr "Ponastavi seznam URL-jev"
 
 msgid "URL list reset successfully"
 msgstr "Seznam URL-jev je uspešno ponastavljen."
 
-#. ctx.router().shutdown(Router.EXIT_HARD); // never returns
-#. give the UI time to respond
 msgid "Cancel shutdown"
 msgstr "Prekliči zapiranje"
 
@@ -1452,8 +1433,6 @@ msgstr "Prekliči ponovni zagon"
 msgid "Restart immediately"
 msgstr "Ponovni zagon takoj"
 
-#. ctx.router().shutdown(Router.EXIT_HARD_RESTART); // never returns
-#. give the UI time to respond
 msgid "Restart"
 msgstr "Ponovni zagon"
 
@@ -1545,8 +1524,6 @@ msgstr "Premik"
 msgid "Saved order of sections."
 msgstr "Shrani vrstni red sekcij."
 
-#. the count isn't really correct anyway, since we don't check for actual changes
-#. addFormNotice("Updated settings for " + updated + " pools.");
 msgid "Updated settings for all pools."
 msgstr "Nastavitve za vse bazene so posodobljene."
 
@@ -1556,7 +1533,6 @@ msgstr "Nastavitve raziskovalnih tuneljev so uspešno shranjene."
 msgid "Error saving the configuration (applied but not saved) - please see the error logs."
 msgstr "Napaka pri shranjevanju konfiguracije (nastavljene, vendar ne shranjene) - glejte dnevnike napak."
 
-#. * dummies for translation
 #, java-format
 msgid "{0} hop"
 msgid_plural "{0} hops"
@@ -1795,7 +1771,6 @@ msgstr "Podrobnosti"
 msgid "Combined bandwidth graph"
 msgstr "Zlago grafa širine pasma"
 
-#. e.g. "statname for 60m"
 #, java-format
 msgid "{0} for {1}"
 msgstr "{0} za {1}"
@@ -2005,7 +1980,6 @@ msgstr "Nastavi širino pasma"
 msgid "I2P Bandwidth Configuration"
 msgstr "Nastavitve širine pasma I2P"
 
-#. FIXME wasn't escaped
 msgid "Configure UI"
 msgstr "Nastavi UI"
 
@@ -2042,7 +2016,6 @@ msgstr "Nedavne spremembe"
 msgid "Bug tracker"
 msgstr "Prašiček za sledenje napakam"
 
-#. I2P specific
 msgid "I2P Bug Reports"
 msgstr "Poročila o napakah I2P"
 
@@ -2076,7 +2049,6 @@ msgstr "Javadocs"
 msgid "I2P Network Statistics"
 msgstr "Statistika omrežja I2P"
 
-#. software repositories + filesharing
 msgid "Transient server-encrypted filesharing and pastebin"
 msgstr "Prehodno strežniško šifriranje deljenja datotek in pastebin"
 
@@ -2095,13 +2067,9 @@ msgstr "Domeček I2P+"
 msgid "BitTorrent tracker"
 msgstr "BitTorrent sledilnik"
 
-#. "git.i2p" + S + _x("Community Git hosting") + S + "http://git.i2p/explore/repos" + S + I + "eepsites/git.svg" + S +
-#. torrent trackers
 msgid "Postman's Tracker"
 msgstr "Sledilnik poštnega delavca"
 
-#. _x("Chudo") + S + _x("No login BitTorrent tracker") + S + "http://torrents.chudo.i2p/" + S + I + "magnet.svg" + S +
-#. domain name registration + uptime trackers
 msgid "List of active eepsites and uptime monitor"
 msgstr "Seznam aktivnih eepsitev in nadzornik delovanja"
 
@@ -2111,9 +2079,6 @@ msgstr "Registracija domenskih imen I2P"
 msgid "zzz Domain Registry"
 msgstr "Registratura domene zzz"
 
-#. "Identiguy" + S + _x("List of active eepsites and uptime monitor") + S + "http://identiguy.i2p/" + S + I + "servermonitor.svg" + S +
-#. "scanner.linuxfarm" + S + _x("List of active eepsites and uptime monitor") + S + "http://scanner.linuxfarm.i2p/" + S + I + "eepsites/servermonitor.svg" + S +
-#. forums + social
 msgid "I2P Forum"
 msgstr "Forum I2P"
 
@@ -2135,14 +2100,6 @@ msgstr "Presežni mikroblogging, forumi in wiki"
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Alternativni frontalni del Reddit, usmerjen na zasebnost"
 
-#. "StackOverflow" + S + _x("Developer question &amp; answer forums") + S + "http://stackoverflow.i2p/" + S + I + "eepsites/stackoverflow.svg" + S +
-#. "dread.i2p" + S + _x("Darknet forums") + S + "http://dread.i2p/d/i2p/?sort=new" + S + I + "eepsites/dread.svg" + S +
-#. _x("Dev Forum") + S + _x("Development forum") + S + "http://zzz.i2p/" + S + I + "eepsites/forum.svg" + S +
-#. "libreddit.i2p" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://libreddit.i2p/" + S + I + "libreddit.svg" + S +
-#. "zeronet.i2p" + S + _x("Zeronet I2P Gateway") + S + "http://zeronet.i2p/" + S + I + "zeronet.svg" + S +
-#. _x("Dancing Elephants") + S + _x("Rocksolid forums for the darknets") + S + "http://def3.i2p/" + S + I + "eepsites/forum.svg" + S +
-#. "query.i2p" + S + _x("The StackOverflow of I2P") + S + "http://query.i2p/" + S + I + "eepsites/forum.svg" + S +
-#. hosting + other services
 msgid "Base64 Image Encoder"
 msgstr "Kodač slike Base64"
 
@@ -2188,9 +2145,6 @@ msgstr "Alternativni frontalni del za Youtube"
 msgid "Provider of privacy respecting web hosting and VPN services"
 msgstr "Davatelj storitev za gostiteljstvo spletne strani in storitev VPN, ki spoštuje zasebnost"
 
-#. "tinypng.i2p" + S + _x("Image optimizer") + S + "http://tinypng.i2p/" + S + I + "tinypng.png" + S +
-#. _x("Deep Web Radio") + S + _x("Streaming radio service") + S + "http://deepwebradio.i2p/" + S + I + "radio.svg" + S +
-#. search engines
 msgid "Tor-focused Search Engine"
 msgstr "Iskalnik usmerjen na Tor"
 
@@ -2212,13 +2166,6 @@ msgstr "Iskalnik Clearnet usmerjen na zasebnost"
 msgid "I2P Web Search Engine"
 msgstr "Iskalnik spleta I2P"
 
-#. "I2PSearch" + S +_x("I2P Web Search Engine") + S + "http://i2psearch.i2p/" + S + I + "search.svg" + S +
-#. "Legwork" + S +_x("I2P Web Search Engine") + S + "http://legwork.i2p/" + S + I + "search.svg" + S +
-#. "LibreY" + S +_x("Clearnet Search Engine") + S + "http://librey.i2p/" + S + I + "search.svg" + S +
-#. "raklet.i2p" + S +_x("Tor-focused Search Engine") + S + "http://raklet.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
-#. "Ransack" + S +_x("I2P-based Metasearch Engine") + S + "http://ransack.i2p/" + S + I + "search.svg" + S +
-#. "shmoogle.i2p" + S +_x("I2P Web Search Engine") + S + "http://shmoogle.i2p/" + S + I + "search.svg" + S +
-#. wikis & reference
 msgid "Enabling the free transmission of data in the public interest"
 msgstr "Omogočanje svobodnega prenašanja podatkov v javnem interesu"
 
@@ -2279,15 +2226,6 @@ msgstr "Svetovni atlas, ki vključuje dejstva o geografiji in zastave"
 msgid "WorldAtlas"
 msgstr "Svetovni atlas"
 
-#. "cssportal.i2p" + S + _x("CSS design reference") + S + "http://cssportal.i2p/" + S + I + "help.svg" + S +
-#. "ebooks.i2p" + S + _x("Huge collection of books &amp; magazines &amp; comics") + S + "http://ebooks.i2p/" + S + I + "eepsites/books.svg" + S +
-#. "legalcases.i2p" + S + _x("Publicly available texts of court decisions all over the world") + S + "http://legalcases.i2p/" + S + I + "eepsites/books.svg" + S +
-#. _x("imperial.i2p") + S + _x("Extensive repository of DRM-free ebooks") + S + "http://imperial.i2p/" + S + I + "eepsites/books.svg" + S +
-#. "jalibrary.i2p" + S + _x("Books &amp; courses &amp; art") + S + "http://jalibrary.i2p/" + S + I + "eepsites/books.svg" + S +
-#. "nexus.i2p" + S + _x("Searchable science library") + S + "http://nexus.i2p/" + S + I + "nexus.svg" + S +
-#. "tome.i2p" + S + _x("Collection of books &amp; other reading material") + S + "http://tome.i2p/" + S + I + "eepsites/books.svg" + S +
-#. _x("UrbanDictionary") + S + _x("Crowd-sourced slang dictionary") + S + "http://urbandictionary.i2p/" + S + I + "eepsites/urbandictionary.svg" + S +
-#. news + blogs
 msgid "Technology News &amp; more..."
 msgstr "Vest o tehnologiji in več..."
 
@@ -2658,7 +2596,6 @@ msgstr "počakaj"
 msgid "Scheduled jobs"
 msgstr "Razporejene posluge"
 
-#. translators: {0} is a job name, {1} is a time, e.g. 6 min
 #, java-format
 msgid "{0} starts in {1}"
 msgstr "{0} začne v {1}"
@@ -2702,40 +2639,27 @@ msgstr "Datoteka ni najdena"
 msgid "No log messages"
 msgstr "Brez sporočil loga"
 
-#. 0  -
 msgid "Local Router"
 msgstr "Lokalni usmerjevalnik"
 
-#. 1  - r=.
 msgid "Router Lookup"
 msgstr "Iskanje usmerjevalnika"
 
-#. 2  -
-#. 3  - f=2
 msgid "All Routers"
 msgstr "Vsi usmerjevalniki"
 
-#. 4  - f=1 (debug)
-#. 5  - l=1
-#. 6  - l=2 (debug)
-#. only show for our own id
 msgid "LeaseSets"
 msgstr "LeaseSets"
 
-#. 7  - l=3
 msgid "Advanced Lookup"
 msgstr "Napredno iskanje"
 
-#. 8  - f=4
 msgid "LeaseSet Lookup"
 msgstr "Iskanje LeaseSet"
 
-#. 9  -
-#. 10 - f=5
 msgid "All Routers (Client NetDb)"
 msgstr "Vsi usmerjevalniki (Klien NetDb)"
 
-#. 11 - f=6 (debug)
 msgid "Sybil Analysis"
 msgstr "Analiza Sybil"
 
@@ -2901,20 +2825,6 @@ msgstr "Oglej profil"
 msgid "Profile"
 msgstr "Profil"
 
-#.
-#. PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(h);
-#. if (prof != null && prof.getIsExpandedDB()) {
-#. buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(h.toBase64()).append("\" title=\"")
-#. .append(_t("View profile")).append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>");
-#. }
-#.
-#.
-#. PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(h);
-#. if (prof != null && prof.getIsExpandedDB()) {
-#. buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(h.toBase64()).append("\" title=\"").append(_t("View profile"))
-#. .append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>");
-#. }
-#.
 msgid "Configure peer"
 msgstr "Nastavi parterja"
 
@@ -2924,7 +2834,6 @@ msgstr "Uporaba pomnilnika"
 msgid "Hidden"
 msgstr "Skrito"
 
-#. shouldn't happen
 msgid "Published"
 msgstr "Objavljeno"
 
@@ -2961,7 +2870,6 @@ msgstr "Prikaži vse usmerjevalnike z tem vratom v NetDb"
 msgid "Capabilities"
 msgstr "Zmožnosti"
 
-#. hide version as already in the header
 msgid "Core version"
 msgstr "Različica središča"
 
@@ -3108,8 +3016,6 @@ msgstr "Zmožnosti partnerja"
 msgid "Dir"
 msgstr "Dir"
 
-#. "<th class=lookup title=\"").append(_t("Lookup address via gwhois.org")).append("\">").append(_t("Whois")).append("</th>" +
-#. buf.append("<th class=lookup title=\"").append(_t("Lookup address via gwhois.org")).append("\">").append(_t("Whois")).append("</th>");
 msgid "Direction/Introduction"
 msgstr "Smer/Vstop"
 
@@ -3261,7 +3167,6 @@ msgstr[1] "{0} neuspeha"
 msgstr[2] "{0} neuspehi"
 msgstr[3] "{0} neuspehi"
 
-#. 2
 msgid "Banned"
 msgstr "Prepovedano"
 
@@ -3388,9 +3293,6 @@ msgstr "Hitrost"
 msgid "Low Latency"
 msgstr "Nizka zavzeta"
 
-#. .append("<th title=\"").append(_t("Time taken for peer test")).append("\">")
-#. .append(_t("Test Avg (ms)")).append("</th>")
-#. .append("<th>").append(_t("Capacity")).append("</th>")
 msgid "Tunnels peer has agreed to participate in"
 msgstr "Tuneli, v katerih se je parter strinjal sodelovati"
 
@@ -3403,8 +3305,6 @@ msgstr "Tuneli, v katerih je parter zavrnil sodelovanje"
 msgid "Rejected"
 msgstr "Zavrnjeno"
 
-#. .append("<th>").append(_t("Integration")).append("</th>")
-#. .append("<th>").append(_t("First Heard About")).append("</th>")
 msgid "Last Heard From"
 msgstr "Zadnjič slišan od"
 
@@ -3417,14 +3317,12 @@ msgstr "Ne dosegljivo"
 msgid "OK"
 msgstr "V redu"
 
-#. hide if < 10%
 msgid "Test Fails"
 msgstr "Test ne uspe"
 
 msgid "Fast, High Capacity"
 msgstr "Hitro, visoka kapaciteta"
 
-#. 0
 msgid "High Capacity"
 msgstr "Visoka kapaciteta"
 
@@ -3512,7 +3410,6 @@ msgstr "Zadnje slabo shranjevanje"
 msgid "Capabilities in the NetDb, not used to determine profiles"
 msgstr "Možnosti v NetDb, ki se ne uporabljajo za določanje profila"
 
-#. capabilities
 msgid "caps"
 msgstr "možnosti"
 
@@ -3581,7 +3478,6 @@ msgstr "koliko novih parterjev so nam naročili v zadnjem času?"
 msgid "All"
 msgstr "Vse"
 
-#. 3
 msgid "Session Bans"
 msgstr "Prepovedi sejansa"
 
@@ -3615,7 +3511,6 @@ msgstr "Najvišji dogodki na obdobje"
 msgid "Lifetime average events per period"
 msgstr "Povprečni dogodki v življenjskem ciklu na obdobje"
 
-#. Display the strict average
 msgid "Lifetime average frequency"
 msgstr "Povprečna frekvenca v življenjskem ciklu"
 
@@ -3664,7 +3559,6 @@ msgstr "Število dogodkov grafa"
 msgid "Export Data as XML"
 msgstr "Izvozi podatke kot XML"
 
-#. Display the strict average
 msgid "Lifetime average value"
 msgstr "Povprečna vrednost življenjskega cikla"
 
@@ -4123,8 +4017,6 @@ msgstr "Dodaj/odstrani/uredi &amp; nadzoruj svoje klientove in strežniške tune
 msgid "How many local service tunnels we're running"
 msgstr "Koliko lokalnih tuneljev storitve, ki jih izvajamo"
 
-#. older names for pre-0.7.4 installs
-#. hardcoded in i2psnark
 msgid "I2PSnark"
 msgstr "I2PSnark"
 
@@ -4186,10 +4078,6 @@ msgstr "Posodabljanje po ponovnem zagonu"
 msgid "Signed development update available"
 msgstr "Na voljo je podpisana posodobitev razvoja"
 
-#. Note to translators: parameter is a router version, e.g. "0.9.19-16"
-#. <br> is optional, to help the browser make the lines even in the button
-#. If the translation is shorter than the English, you should probably not include <br>
-#. .append(_t("Download Signed<br>Development Update<br>{0}", getDevSU3UpdateVersion()))
 msgid "Download I2P Update"
 msgstr "Prenesi posodobitev I2P"
 
@@ -4262,13 +4150,6 @@ msgstr "Iški družina"
 msgid "IP close to us"
 msgstr "IP blizu nas"
 
-#. *
-#. "<li><a href=\"netdb?f=3&amp;m=4\">" + _t("Same IP") + "</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=5\">" + _t("Same IPv4") + " /24</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=6\">" + _t("Same IPv4") + " /16</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=17\">"+ _t("Same IPv6") + " /64</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=18\">" + _t("Same IPv6") + " /48</a></li>\n" +
-#. *
 msgid "Pair distance"
 msgstr "Razdalja par"
 
@@ -4341,16 +4222,12 @@ msgstr "Znane zalivne"
 msgid "Average closest floodfill distance"
 msgstr "Povprečna najbližja razdalja do zalivnega"
 
-#. "<b>").append(_t("Routing Data")).append(":</b> \"").append(DataHelper.getUTF8(_context.routerKeyGenerator().getModData()))
 msgid "Routing Data"
 msgstr "Podatki o usmerjanju"
 
-#. .append("\"<br>\n<b>").append(_t("Last Changed")).append(":</b> ").append(DataHelper.formatTime(_context.routerKeyGenerator().getLastChanged())).append("<br>\n" +
-#. "<b>").append(_t("Next Routing Data")).append(":</b> \"").append(DataHelper.getUTF8(_context.routerKeyGenerator().getNextModData()))
 msgid "Rotates in"
 msgstr "Vrte se v"
 
-#. Distance to our router analysis
 msgid "Closest Floodfills to Our Routing Key (Where we Store our RI)"
 msgstr "Najblizje zalivne do našega ključa za usmerjanje (kjer shranjujemo naš RI)"
 
@@ -4393,7 +4270,6 @@ msgstr "Povprečna razdalja do zalivne je"
 msgid "Closest Floodfill Pairs by Hash"
 msgstr "Najblizje parjal zalivnih glede na dije"
 
-#. sorted;
 msgid "Hash Distance"
 msgstr "Razdalja dija"
 
@@ -4615,7 +4491,6 @@ msgstr "Ime tunela"
 msgid "Data Out"
 msgstr "Podatki iz"
 
-#. Saved in CSSHelper, assume success
 msgid "Console language saved."
 msgstr "Jezik konzole je shranjen."
 
@@ -4625,7 +4500,6 @@ msgstr "Test širine pasma je uspešno zaključen"
 msgid "Bandwidth test failed"
 msgstr "Test širine pasma je spodletel"
 
-#. didn't run at all?
 msgid "Bandwidth test did not complete"
 msgstr "Test širine pasma ni bil dokončan"
 
@@ -4648,7 +4522,6 @@ msgstr "biti na sekundo"
 msgid "{0}Bytes per month maximum"
 msgstr "{0}Bajtov na mesec največ"
 
-#. wars for ConfigClientsHelper
 msgid "addressbook"
 msgstr "imenik"
 
@@ -4667,9 +4540,6 @@ msgstr "susidns"
 msgid "routerconsole"
 msgstr "routerconsole"
 
-#. clients, taken from clients.config, for ConfigClientsHelper
-#. note that if the wording changes in clients.config, we have to
-#. keep the old string here as well for existing installs
 msgid "Web console"
 msgstr "Spletna konzola"
 
@@ -4697,10 +4567,6 @@ msgstr "Konzola usmerjevalnika I2P+"
 msgid "Open Router Console in web browser at startup"
 msgstr "Odpri konzolo usmerjevalnika v spletnem brskalniku pri zagonu"
 
-#. tunnel nicknames, taken from i2ptunnel.config so they will display
-#. nicely under 'local destinations' in the summary bar
-#. note that if the wording changes in i2ptunnel.config, we have to
-#. keep the old string here as well for existing installs
 msgid "shared clients"
 msgstr "deleni klienti"
 
@@ -4737,14 +4603,12 @@ msgstr "Osebni spletni strežnik I2P (eepsite)"
 msgid "HTTP Proxy"
 msgstr "HTTP posredniški strežnik"
 
-#. hardcoded in iMule?
 msgid "iMule"
 msgstr "iMule"
 
 msgid "Official I2P Source Repository"
 msgstr "Uradno repozitorij virov I2P"
 
-#. standard themes for ConfigUIHelper
 msgid "dark"
 msgstr "temno"
 
@@ -4766,8 +4630,6 @@ msgstr "Šifriranje"
 msgid "Stream"
 msgstr "Tok"
 
-#. parameters in transport addresses (netdb.jsp)
-#. may or may not be worth translating
 msgid "host"
 msgstr "gostitelj"
 
@@ -5520,7 +5382,6 @@ msgstr "Spremembe nastavitev raziskovalnega tunela so shranjene v datoteki route
 msgid "Client tunnel changes are temporary and are not saved."
 msgstr "Spremembe klientovih tuneljev so prehodne in niso shranjene."
 
-#. if (pm.isRegistered(net.i2p.util.PortMapper.SVC_I2PTUNNEL)) {
 msgid "The default settings are optimized for general usage and normally don't need to be changed."
 msgstr "Privzete nastavitve so optimizirane za splošno uporabo in običajno ne zahtevajo sprememb."
 
@@ -5839,6 +5700,12 @@ msgstr "Ko je nastavljeno na true, deluje I2P brez omrežne povezanosti, kar je 
 
 msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
 msgstr "Ta nastavitev, ko je omogočena, vnesi naključen pong zamik do 50ms za vse ping-omogočene strežnike gostiteljene s strani usmerjevalnika. Privzeto je onemogočeno. [Ponovni zagon zahtoven]"
+
+msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
+msgstr "Ta nastavitev, ko je omogočena, spremeni maksimalno naključno zamudo pong odgovora za strežnike, ki podpirajo ping, če je tudi omogočena i2p.streaming.enablePongDelay. Če ni jasno določeno, se uporabi privzeto vrednost 50 ms."
+
+msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
+msgstr "Ta nastavitev (v milisekundah) določa, koliko časa paket lahko ostane v CoDel vrsti preden ga izbrišemo. Privzeto je 1000 ms. [Potrebna ponovna zagona]"
 
 msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
 msgstr "Ta nastavitev določa maksimalno število sporočil v izhodnem redu preden je označen kot poln. [Privzeto je 768]"
@@ -6299,8 +6166,8 @@ msgstr "Povezava <a href=https://en.wikipedia.org/wiki/Base32 class='sitelink ex
 msgid "B33"
 msgstr "B33"
 
-msgid "An address containing an encrypted LeaseSet is informally referred to as a b33 address, an extension of a base32 address with the host's public key and signature type encoded into the address instead of a lookup hash. This address type is required for blinded Leasesets. More information: <a href=https://geti2p.net/spec/b32encrypted class='sitelink external' target=_blank rel=noreferrer>Specifikacija B33</a>"
-msgstr "Naslov, ki vsebuje šifrirani LeaseSet, se nenavadno omenja kot naslov b33, razširitev naslova base32 z javnim ključem gostitelja in vrsto podpisa kodirani v naslov namesto iskalnega hash-a. Ta vrsta naslova je zahtevana za zamučene LeaseSet-e. Več informacij: <a href=https://geti2p.net/spec/b32encrypted class='sitelink external' target=_blank rel=noreferrer>Specifikacija B33</a>"
+msgid "An address containing an encrypted LeaseSet is informally referred to as a b33 address, an extension of a base32 address with the host's public key and signature type encoded into the address instead of a lookup hash. This address type is required for blinded Leasesets. More information: <a href=https://geti2p.net/spec/b32encrypted class='sitelink external' target=_blank rel=noreferrer>B33 Specification</a>"
+msgstr ""
 
 msgid "BOB"
 msgstr "BOB"
@@ -7750,6 +7617,17 @@ msgstr "Naslednje"
 
 msgid "Finished"
 msgstr "Končano"
+
+#, java-format
+#~ msgid "{0} vrata {1,number,#####} je uspešno usmerjeno z UPnP."
+#~ msgstr "{0} vrata {1,number,#####} je bila uspešno usmerjena z UPnP."
+
+#, java-format
+#~ msgid "{0} vrata {1,number,#####} ni bila usmerjena z UPnP."
+#~ msgstr "{0} vrata {1,number,#####} ni bila usmerjena z UPnP."
+
+#~ msgid "An address containing an encrypted LeaseSet is informally referred to as a b33 address, an extension of a base32 address with the host's public key and signature type encoded into the address instead of a lookup hash. This address type is required for blinded Leasesets. More information: <a href=https://geti2p.net/spec/b32encrypted class='sitelink external' target=_blank rel=noreferrer>Specifikacija B33</a>"
+#~ msgstr "Naslov, ki vsebuje šifrirani LeaseSet, se nenavadno omenja kot naslov b33, razširitev naslova base32 z javnim ključem gostitelja in vrsto podpisa kodirani v naslov namesto iskalnega hash-a. Ta vrsta naslova je zahtevana za zamučene LeaseSet-e. Več informacij: <a href=https://geti2p.net/spec/b32encrypted class='sitelink external' target=_blank rel=noreferrer>Specifikacija B33</a>"
 
 #~ msgid "When set to true, this setting enables plugin installation on the <a href=/configplugins>Plugin Configuration page</a>. [Enabled by default]"
 #~ msgstr "Če je nastavljeno na true, ta nastavitev omogoča namestitev vstavka na strani <a href=/configplugins>Nastavitve vstavka</a>. [Omogočeno privzeto]"

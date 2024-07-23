@@ -60,6 +60,5 @@ msgstr "Tujuan lokal dimatikan"
 msgid "Connection was reset"
 msgstr "Sambungan terputus lalu tersambung kembali"
 
-#. Translate this one here, can't do it later
 msgid "Failure code"
 msgstr "Kode kegagalan"

@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 
-#. * IPv4 OK, IPv6 OK or disabled or no address
 msgid "OK"
 msgstr "OK"
 
@@ -28,22 +27,18 @@ msgstr "IPv4: Za zaporą; IPv6: OK"
 msgid "IPv4: Disabled; IPv6: OK"
 msgstr "IPv4: Wyłączone; IPv6: OK"
 
-#. * IPv4 symmetric NAT (not source NAT)
 msgid "IPv4: Symmetric NAT; IPv6: OK"
 msgstr "IPv4: Symetryczny NAT; IPv6: OK"
 
-#. * IPv4 symmetric NAT, IPv6 firewalled or disabled or no address
 msgid "Symmetric NAT"
 msgstr "Symetryczny NAT"
 
-#. * IPv4 symmetric NAT (not source NAT)
 msgid "IPv4: Symmetric NAT; IPv6: Testing"
 msgstr "IPv4: Symetryczny NAT; IPv6: Testuję"
 
 msgid "IPv4: Firewalled; IPv6: Testing"
 msgstr "IPv4: Za zaporą; IPv6: Testuję"
 
-#. * IPv4 firewalled, IPv6 firewalled or disabled or no address
 msgid "Firewalled"
 msgstr "Za zaporą"
 
@@ -65,12 +60,6 @@ msgstr "Konflikt portów"
 msgid "Testing"
 msgstr "Testuję"
 
-#. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
-#. NPE, too early
-#. if (_context.router().getRouterInfo().getBandwidthTier().equals("K"))
-#. setTunnelStatus("Not expecting tunnel requests: Advertised bandwidth too low");
-#. else
-#. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
 msgid "Starting up"
 msgstr "Uruchamianie"
 
@@ -80,11 +69,9 @@ msgstr "Odrzucanie wszystkich żądań tuneli:<br>"
 msgid "Hidden Mode"
 msgstr "Tryb ukryty"
 
-#. }
 msgid "Declining tunnel requests:<br>"
 msgstr "Odrzucane żądania tunelu:<br>"
 
-#. }
 msgid "High message delay"
 msgstr "Duże opóźnienie wiadomości"
 
@@ -109,21 +96,12 @@ msgstr "Duża liczba żądań"
 msgid "Rejecting most tunnel requests:<br>"
 msgstr "Odrzucanie większości żądań tuneli:<br>"
 
-#. hard to do {0} from here
-#. setTunnelStatus("Accepting " + (100-(int)(100.0*probReject)) + "% of tunnels");
 msgid "Accepting most tunnel requests"
 msgstr "Akceptowanie większości żądań tuneli"
 
 msgid "Accepting tunnel requests"
 msgstr "Akceptowanie żądań tunelu"
 
-#. .067KBps
-#. * also limited to 90% - see below
-#. always leave at least 4KBps free when allowing
-#. private static final String LIMIT_STR = _x("Declining tunnel requests" + ":<br>" + "Bandwidth limit");
-#. hard to do {0} from here
-#. setTunnelStatus("Rejecting " + ((int)(100.0*probReject)) + "% of tunnels: Bandwidth limit");
-#. setTunnelStatus(_x("Declining most tunnel requests" + ":<br>" + "Bandwidth limit"));
 msgid "Declining requests: Bandwidth limit"
 msgstr "Odrzucające żądania: Limit przepustowości"
 
@@ -145,7 +123,6 @@ msgstr "Odrzucanie żądań o tunele: Wysokie opóźnienie zadań"
 msgid "Dropping tunnel requests:<br>High CPU load"
 msgstr "Porzucanie żądań tunelu:<br>Wysokie obciążenie procesora"
 
-#. don't even bother, since we are so overloaded locally
 msgid "Dropping tunnel requests: Overloaded"
 msgstr "Odrzucanie żądań o tunele: Przeładowanie"
 

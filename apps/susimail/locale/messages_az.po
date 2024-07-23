@@ -22,32 +22,32 @@ msgstr "Email"
 msgid "No encoder found for encoding \\''{0}\\''."
 msgstr "Kodlaşdırma üçün heç bir kodlayıcı tapılmadı \\''{0}\\''."
 
-#. tagged in WebMail
 msgid "Re:"
 msgstr "Re:"
 
 msgid "Fwd:"
 msgstr "Fwd:"
 
-#. MailDir-like
 msgid "Drafts"
 msgstr "Layihələr"
 
-#. MailDir-like
 msgid "Sent"
 msgstr "Göndər"
 
-#. MailDir-like
 msgid "Trash"
 msgstr "Sil"
 
-#. MailDir-like
 msgid "Bulk Mail"
 msgstr "Qrup Email-i"
 
-#. untranslated, translate on use
 msgid "Inbox"
 msgstr "Daxil olanlar"
+
+msgid "View message as HTML"
+msgstr ""
+
+msgid "View message as plain text"
+msgstr ""
 
 msgid "unknown"
 msgstr "Tanınmayan"
@@ -163,7 +163,6 @@ msgstr "{0} üçün kodlama tapılmadı"
 msgid "Attachment not found."
 msgstr "Qoşma tapılmadı."
 
-#. error if we get here
 msgid "Message not found."
 msgstr "İsmarış tapılmadı."
 
@@ -286,7 +285,6 @@ msgstr "Mövzu"
 msgid "Add Attachment"
 msgstr "Qoşmanı əlavə et"
 
-#. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 msgid "Add attachment"
 msgstr "Qoşma əlavə edin"
 
@@ -359,6 +357,9 @@ msgstr "Ölçü"
 msgid "Mark for deletion"
 msgstr "Silinmə üçün işarələ"
 
+msgid "Message contains HTML"
+msgstr ""
+
 msgid "Message is new"
 msgstr "İsmarış yenidir"
 
@@ -368,7 +369,6 @@ msgstr "İsmarış spamdır"
 msgid "Message body not downloaded"
 msgstr "Mesajın mətni endirilmədi"
 
-#. TODO ngettext
 msgid "Really delete the marked messages?"
 msgstr "İşarələnmiş ismarışlar həqiqətən də silinsinmi?"
 
@@ -426,6 +426,9 @@ msgstr "Qovluğa qayıt"
 msgid "Move to Folder"
 msgstr "Qovluğa köçür"
 
+msgid "View message in new tab"
+msgstr ""
+
 msgid "Folder Page Size"
 msgstr "Qovluq səhifə ölçüsü"
 
@@ -438,7 +441,6 @@ msgstr "Yüksək quraşdırma"
 msgid "Save Configuration"
 msgstr "Quraşdırmanı saxla"
 
-#. this appears in the UI so translate
 msgid "No response from server"
 msgstr "Serverdən cavab yoxdur"
 
@@ -454,6 +456,5 @@ msgstr "Giriş alınmadı"
 msgid "Server refused connection"
 msgstr "Server qoşulmaqdan imtina etdi "
 
-#. TODO which recipient?
 msgid "Mail rejected"
 msgstr "Email qəbul edilmədi"

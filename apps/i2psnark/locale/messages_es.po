@@ -212,12 +212,10 @@ msgstr "Error: No se pudo agregar torrent: {0}"
 msgid "Torrent already running: {0}"
 msgstr "Torrent ya en marcha: {0}"
 
-#. catch this here so we don't try do delete it below
 #, java-format
 msgid "Cannot open \"{0}\""
 msgstr "No se pudo abrir \"{0}\""
 
-#. TODO - if the existing one is a magnet, delete it and add the metainfo instead?
 #, java-format
 msgid "Torrent with this info hash is already running: {0}"
 msgstr "El torrent con este hash de información ya se está ejecutando: {0}Ya hay un torrent con esta información de hash (identificador criptográfico): {0}."
@@ -312,13 +310,6 @@ msgstr "El límite es de \"{0}\"Bytes"
 msgid "Torrent \"{0}\" has no data!"
 msgstr "¡El torrent \"{0}\" no tiene datos!"
 
-#.
-#. System.out.println("torrent info: " + info.toString());
-#. List<Long> lengths = info.getLengths();
-#. if (lengths != null)
-#. for (int i = 0; i < lengths.size(); i++)
-#. System.out.println("File " + i + " is " + lengths.get(i) + " long.");
-#.
 #, java-format
 msgid "Torrents larger than {0}B are not supported yet \"{1}\"!"
 msgstr "¡Los torrents más grandes que {0}B no están soportados aún \"{1}\"!"
@@ -377,8 +368,6 @@ msgstr "Descarga finalizada: \"{0}\""
 msgid "I2PSnark"
 msgstr "I2PSnark"
 
-#. addMessage(_t("Metainfo received for {0}", snark.getName()));
-#. addMessageNoEscape(_t("Starting torrent: {0}", linkify(snark)).replace("Magnet ", ""));
 #, java-format
 msgid "Starting torrent: {0}"
 msgstr "Iniciando torrent: {0}"
@@ -662,7 +651,6 @@ msgstr "en"
 msgid "out"
 msgstr "fuera"
 
-#. Only truncate if it's an actual dest
 msgid "Our destination (identity) for this session"
 msgstr "Nuestro destino I2P (identidad) para esta sesión"
 
@@ -724,7 +712,6 @@ msgstr "Última página"
 msgid "Cannot add torrent {0} inside another torrent: {1}"
 msgstr "No puede añadir un torrent {0} dentro de otro torrent: {1}"
 
-#. TODO
 #, java-format
 msgid "Download from non-I2P location {0} is not supported"
 msgstr "No se admite la descarga desde una ubicación que no sea I2P {0}"
@@ -733,7 +720,6 @@ msgstr "No se admite la descarga desde una ubicación que no sea I2P {0}"
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
 msgstr "URL no válida: debe comenzar con \"{0}\" o \"{1}\""
 
-#. no file or URL specified
 msgid "Enter URL or select torrent file"
 msgstr "Ingrese la URL o seleccione el archivo torrent"
 
@@ -995,7 +981,6 @@ msgstr "Introduzca el directorio en el que guardar los datos (por defecto {0})"
 msgid "Create Torrent"
 msgstr "Crear un torrent"
 
-#. buf.append("From file: <input type=file name=\"newFile\" size=50 value=\"" + newFile + "\" /><br>\n");
 msgid "Data to seed"
 msgstr "Datos a sembrar ('seed')"
 
@@ -1075,7 +1060,6 @@ msgstr "Número máximo de torrents a mostrar por página"
 msgid "torrents"
 msgstr "torrents"
 
-#. If we get to here, we have the language settings
 msgid "Language"
 msgstr "Idioma"
 
@@ -1278,7 +1262,6 @@ msgstr "No se puede agregar magnet: Los enlaces de magnet de versión 2 no son c
 msgid "Invalid magnet URL {0}"
 msgstr "URL de magnet no válida: {0}"
 
-#. * dummies for translation
 #, java-format
 msgid "1 hop"
 msgid_plural "{0} hops"
@@ -1375,7 +1358,6 @@ msgstr "Subir a la carpeta del siguiente nivel"
 msgid "Audio Playlist"
 msgstr "Lista de reproducción de audio"
 
-#. status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Not found"), _t("Torrent not found?").replace("?", ""));
 msgid "Not found"
 msgstr "No encontrado"
 
@@ -1385,7 +1367,6 @@ msgstr "¿No se encotró el fichero torrent?"
 msgid "File not found in torrent?"
 msgstr "¿No se encontró el fichero en el torrent?"
 
-#. status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Unrecognized"), _t("File not found in torrent?").replace("?", ""));
 msgid "Unrecognized"
 msgstr "No reconocido"
 
@@ -1410,17 +1391,6 @@ msgstr "No descargar este fichero"
 msgid "Skip"
 msgstr "Saltar"
 
-#. TODO: fixup so works with ajax refresh
-#. "<span class=script>");
-#. if (!inOrder) {
-#. buf.append("<a class=control id=setallhigh href=#>")
-#. .append(toImg("clock_red")).append(_t("Set all high")).append("</a>\n");
-#. }
-#. buf.append("<a class=control id=setallnorm href=#>")
-#. .append(toImg("clock")).append(_t("Set all normal")).append("</a>\n")
-#. .append("<a class=control id=setallskip href=#>")
-#. .append(toImg("block")).append(_t("Skip all")).append("</a></span>\n");
-#.
 msgid "Save priorities"
 msgstr "Guardar prioridades"
 
@@ -1490,7 +1460,6 @@ msgstr "Se debe detener el torrent para poder editar"
 msgid "Save Changes"
 msgstr "Guardar cambios"
 
-#. shouldn't happen
 msgid "Torrent must be stopped"
 msgstr "Se debe detener el torrent"
 

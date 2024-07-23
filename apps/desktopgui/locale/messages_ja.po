@@ -49,11 +49,9 @@ msgstr "{0} でシャットダウン"
 msgid "Shutdown imminent"
 msgstr "即時シャットダウン"
 
-#. status translations are in the console bundle
 msgid "Network"
 msgstr "ネットワーク"
 
-#. Windows typically has tooltips; Linux (at least Ubuntu) doesn't
 msgid "I2P: Right-click for menu"
 msgstr "I2P: 右クリックでメニュー"
 

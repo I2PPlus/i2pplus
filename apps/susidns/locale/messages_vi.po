@@ -111,19 +111,16 @@ msgstr "Tên máy chủ không hợp lệ \"{0}\"."
 msgid "Please enter a host name and destination"
 msgstr "Xin điền vào tên máy chủ và địa chỉ đến"
 
-#. clear search when deleting
 msgid "Delete Entry"
 msgstr "Xóa mục nhập"
 
 msgid "Delete Selected"
 msgstr "Xóa lựa chọn"
 
-#. parameter is a host name
 #, java-format
 msgid "Destination {0} deleted."
 msgstr "Địa chỉ {0} được xóa."
 
-#. parameter will always be >= 2
 #, java-format
 msgid "1 destination deleted."
 msgid_plural "{0} destinations deleted."
@@ -219,15 +216,6 @@ msgstr "Nhập từ tệp không thành công"
 msgid "Subscriptions saved."
 msgstr "Đã lưu đăng ký."
 
-#. ******
-#. String nonce = System.getProperty("addressbook.nonce");
-#. if (nonce != null) {
-#. // Yes this is a hack.
-#. // No it doesn't work on a text-mode browser.
-#. // Fetching from the addressbook servlet
-#. // with the correct parameters will kick off a
-#. // config reload and fetch.
-#. ******
 msgid "Update"
 msgstr "Cập nhật"
 

@@ -60,13 +60,9 @@ msgstr "إذا استمرت المشكلة، فتأكد من تمكين ملفا
 msgid "Configuration reloaded for all tunnels"
 msgstr "تم اعادة تحميل تغيرات الاعدادات"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Starting tunnel"
 msgstr "ابدأ النفق"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Stopping tunnel"
 msgstr "توقيف النفق"
 
@@ -567,7 +563,6 @@ msgstr "قم بتعيين اسم المستخدم المطلوب للوصول إ
 msgid "Password"
 msgstr "كلمة السر"
 
-#. && editBean.isAdvanced()
 msgid "Set password required to access this service"
 msgstr "قم بتعيين كلمة المرور المطلوبة للوصول إلى هذه الخدمة"
 
@@ -1024,6 +1019,9 @@ msgstr "أعد تشغيل الجمبع"
 
 msgid "I2P Server Tunnels"
 msgstr "أنفاق خادم I2P"
+
+msgid "Helper"
+msgstr ""
 
 msgid "Type"
 msgstr "نوع"

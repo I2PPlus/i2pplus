@@ -48,7 +48,6 @@ msgid_plural "Acquired only {0} router infos from reseed hosts"
 msgstr[0] "Habe nur 1 Router-Info von Reseed-Hosts erhalten"
 msgstr[1] "Nur {0} Router-Informationen von Reseed-Hosts erhalten"
 
-#. remove dupe error msgs
 #, java-format
 msgid "{0}Reseed{1} failed:"
 msgstr "{0}Reseed{1} fehlgeschlagen:"
@@ -75,9 +74,6 @@ msgstr "{0} Router-Informationen von Reseed-Hosts erhalten"
 msgid "Acquired {0} router infos from reseed hosts ({1} errors)"
 msgstr "{0} Router-Informationen von Reseed-Hosts erhalten ({1} Fehler)"
 
-#. NOTE TO TRANSLATORS - each of these phrases is a description for a statistic
-#. to be displayed on /stats.jsp and in the graphs on /graphs.jsp.
-#. Please keep relatively short so it will fit on the graphs.
 msgid "Message receive rate (B/s)"
 msgstr "Nachrichtenempfangsrate (B/s)"
 
@@ -129,14 +125,12 @@ msgstr "Durchschnittlicher Tunnelbauerfolg %"
 msgid "unknown"
 msgstr "unbekannt"
 
-#. 1
 msgid "Floodfill"
 msgstr "Floodfill"
 
 msgid "Show all routers with this capability in the NetDb"
 msgstr "Alle Router mit dieser Funktion in der NetDb anzeigen"
 
-#. This used to be "no common transports" but it is almost always no transports at all
 msgid "No transports (hidden or starting up?)"
 msgstr "Keine Transporte (Versteckter Modus oder Start?)"
 
@@ -225,9 +219,6 @@ msgstr "UPnP meldet eine maximale Downstream-Bitrate von {0} bits/s"
 msgid "UPnP reports the maximum upstream bit rate is {0}bits/sec"
 msgstr "UPnP meldet eine maximale Upstream-Bitrate von {0} bits/s"
 
-#. {0} is TCP or UDP
-#. {1,number,#####} prevents 12345 from being output as 12,345 in the English locale.
-#. If you want the digit separator in your locale, translate as {1}.
 #, java-format
 msgid "{0} port {1,number,#####} was successfully forwarded by UPnP."
 msgstr "{0} Port {1,number,#####} wurde erfolgreich durch UPnP weitergeleitet."
@@ -297,7 +288,6 @@ msgstr "Kopieren nach {0} fehlgeschlagen"
 msgid "Requires Java version {0} but installed Java version is {1}"
 msgstr "Benötigt Java Version {0}, Sie haben aber Java Version {1} installiert"
 
-#. set status before thread to ensure UI feedback
 msgid "Updating"
 msgstr "Aktualisiere"
 
@@ -318,7 +308,6 @@ msgstr "Sie müssen zuerst auf Version {0} upgraden."
 msgid "Checking for update of plugin {0}"
 msgstr "Auf Aktualisierungen des Zusatzprogramms {0} prüfen"
 
-#. set status before thread to ensure UI feedback
 msgid "Contacting plugin update server"
 msgstr "Plugin-Update-Server kontaktieren"
 
@@ -348,7 +337,6 @@ msgstr "Zusatzprogramm heruntergeladen"
 msgid "Cannot create plugin directory {0}"
 msgstr "Kann kein Verzeichnis für das Zusatzprogramm {0} anlegen"
 
-#. updateStatus("<b>" + "Plugin contains an invalid key" + ' ' + pubkey + ' ' + signer + "</b>");
 #, java-format
 msgid "Plugin from {0} contains an invalid key"
 msgstr "Zusatzprogramm von {0} enthält einen ungültigen Schlüssel"
@@ -357,7 +345,6 @@ msgstr "Zusatzprogramm von {0} enthält einen ungültigen Schlüssel"
 msgid "Plugin signature verification of {0} failed"
 msgstr "Überprüfung der Signatur des Zusatzprogramms {0} ist fehlgeschlagen"
 
-#. don't display signer, we're really checking the key not the signer name
 msgid "Plugin not installed - signer is untrusted"
 msgstr "Zusatzprogramm nicht installiert - dem Signierer wird nicht vetraut"
 
@@ -493,7 +480,6 @@ msgstr "Kontrolliert ausschalten"
 msgid "Graceful shutdown initiated"
 msgstr "Kontrolliertes Ausschalten eingeleitet"
 
-#. Normal browsers send value, IE sends button label
 msgid "Shutdown immediately"
 msgstr "Beende I2P sofort"
 
@@ -579,19 +565,15 @@ msgstr "Installierter I2P-Systemdienst"
 msgid "Warning: unable to install the service"
 msgstr "Warnung: Service konnte nicht installiert werden"
 
-#. addFormNotice(_t("Service installed"));
 msgid "Enabled I2P+ service autostart at system startup"
 msgstr "Autostart des I2P-Dienstes beim Systemstart aktiviert"
 
-#. addFormError(_t("Warning: unable to install the service") + " - " + ioe.getLocalizedMessage());
 msgid "Warning: could not set the I2P+ service to autostart"
 msgstr "Warnung: Der I2P-Dienst konnte nicht auf Autostart eingestellt werden"
 
-#. addFormNotice(_t("Service removed"));
 msgid "Disabled I2P+ Service autostart at system startup"
 msgstr "Autostart des I2P-Dienstes beim Systemstart deaktiviert"
 
-#. addFormError(_t("Warning: unable to remove the service") + " - " + ioe.getLocalizedMessage());
 msgid "Warning: could not set the I2P+ service to manual start"
 msgstr "Warnung: Der I2P-Dienst konnte nicht auf manuellen Start eingestellt werden"
 
@@ -799,14 +781,12 @@ msgstr "Zertifikate werden verwendet, um verschlüsselte Dienste zu authentifizi
 msgid "Local SSL Certificates"
 msgstr "Lokale SSL Zertifikate"
 
-#. console
 msgid "Router Console"
 msgstr "I2P-Routerkonsole"
 
 msgid "Location"
 msgstr "Standort"
 
-#. I2CP
 msgid "I2CP"
 msgstr "I2CP"
 
@@ -822,14 +802,9 @@ msgstr "Webseite"
 msgid "Local Router Family Certificate"
 msgstr "Lokales Routerfamilien Zertifikat"
 
-#. hide family name in css as it's already displayed above
 msgid "Family"
 msgstr "Familie"
 
-#. } else {
-#. _out.write("<p>");
-#. _out.write(_t("none"));
-#. _out.write("</p>\n");
 msgid "Console"
 msgstr "Konsole"
 
@@ -880,7 +855,6 @@ msgstr "Zusatzprogramm {0} angehalten"
 msgid "Stopped webapp {0}"
 msgstr "Beendete WebApplikation {0}"
 
-#. label (IE)
 msgid "Start"
 msgstr "Starten"
 
@@ -965,7 +939,6 @@ msgstr "Benutzer {0} hinzugefügt"
 msgid "Interface configuration saved"
 msgstr "Schnittstellenkonfiguration gespeichert"
 
-#. "<th data-sortable data-sort-method=number>" + _t("Speed") + "</th>" +
 msgid "Edit"
 msgstr "Bearbeiten"
 
@@ -1008,7 +981,6 @@ msgstr "E-Mail"
 msgid "Plugin"
 msgstr "Zusatzprogramm"
 
-#. hide caps as already in the header
 msgid "Version"
 msgstr "Version"
 
@@ -1189,8 +1161,6 @@ msgstr "Klasse auswählen"
 msgid "All classes in {0}"
 msgstr "Alle Klassen in {0}"
 
-#. stat groups for stats.jsp
-#. See StatsGenerator for groups mapped to a display name
 msgid "Bandwidth"
 msgstr "Bandbreite"
 
@@ -1317,8 +1287,6 @@ msgstr "UDP aktivieren"
 msgid "Requiring SSU introducers"
 msgstr "Benötige SSU-Hilfsrouter"
 
-#. if (_context.hasWrapper()) {
-#. Wow this dumps all conns immediately and really isn't nice
 msgid "Performing a soft restart"
 msgstr "Durchführen eines Soft-Neustarts"
 
@@ -1409,7 +1377,6 @@ msgstr "Jetzt neu aussäen"
 msgid "Reseeding is already in progress"
 msgstr "Reseed läuft bereits"
 
-#. skip the nonce checking in ReseedHandler
 msgid "Starting reseed process"
 msgstr "Beginne den Reseed"
 
@@ -1449,8 +1416,6 @@ msgstr "URL Liste zurücksetzen"
 msgid "URL list reset successfully"
 msgstr "URL Liste erfolgreich zurückgesetzt"
 
-#. ctx.router().shutdown(Router.EXIT_HARD); // never returns
-#. give the UI time to respond
 msgid "Cancel shutdown"
 msgstr "Beende I2P doch nicht"
 
@@ -1460,8 +1425,6 @@ msgstr "Starte I2P doch nicht neu"
 msgid "Restart immediately"
 msgstr "Sofortiger Neustart"
 
-#. ctx.router().shutdown(Router.EXIT_HARD_RESTART); // never returns
-#. give the UI time to respond
 msgid "Restart"
 msgstr "Neustart"
 
@@ -1549,8 +1512,6 @@ msgstr "verschoben"
 msgid "Saved order of sections."
 msgstr "Reihenfolge der Abschnitte gespeichert"
 
-#. the count isn't really correct anyway, since we don't check for actual changes
-#. addFormNotice("Updated settings for " + updated + " pools.");
 msgid "Updated settings for all pools."
 msgstr "Einstellungen für alle Gruppen aktualisiert"
 
@@ -1560,7 +1521,6 @@ msgstr "Erkundungstunnelkonfiguration erfolgreich gespeichert"
 msgid "Error saving the configuration (applied but not saved) - please see the error logs."
 msgstr "Fehler beim Speichern der Konfiguration (angewendet, aber nicht gespeichert)- Bitte schauen Sie in die Fehlerprotokolle!"
 
-#. * dummies for translation
 #, java-format
 msgid "{0} hop"
 msgid_plural "{0} hops"
@@ -1795,7 +1755,6 @@ msgstr "Details"
 msgid "Combined bandwidth graph"
 msgstr "Graph der kombinierten Bandbreite"
 
-#. e.g. "statname for 60m"
 #, java-format
 msgid "{0} for {1}"
 msgstr "{0} für {1}"
@@ -2005,7 +1964,6 @@ msgstr "Konfiguriere Bandbreite"
 msgid "I2P Bandwidth Configuration"
 msgstr "I2P-Bandbreitenkonfiguration"
 
-#. FIXME wasn't escaped
 msgid "Configure UI"
 msgstr "Benutzeroberfläche konfigurieren"
 
@@ -2042,7 +2000,6 @@ msgstr "Letzte Änderungen"
 msgid "Bug tracker"
 msgstr "Bug-Tracker"
 
-#. I2P specific
 msgid "I2P Bug Reports"
 msgstr "I2P Fehlerberichte"
 
@@ -2076,7 +2033,6 @@ msgstr "Javadocs"
 msgid "I2P Network Statistics"
 msgstr "I2P-Netzwerkstatistik"
 
-#. software repositories + filesharing
 msgid "Transient server-encrypted filesharing and pastebin"
 msgstr "Transiente, serververschlüsselte Dateifreigabe und Pastebin"
 
@@ -2095,13 +2051,9 @@ msgstr "Heimat von I2P"
 msgid "BitTorrent tracker"
 msgstr "BitTorrent-Tracker"
 
-#. "git.i2p" + S + _x("Community Git hosting") + S + "http://git.i2p/explore/repos" + S + I + "eepsites/git.svg" + S +
-#. torrent trackers
 msgid "Postman's Tracker"
 msgstr "Tracker des Postboten"
 
-#. _x("Chudo") + S + _x("No login BitTorrent tracker") + S + "http://torrents.chudo.i2p/" + S + I + "magnet.svg" + S +
-#. domain name registration + uptime trackers
 msgid "List of active eepsites and uptime monitor"
 msgstr "Liste der aktiven Eepsites und Verfügbarkeitsüberwachung"
 
@@ -2111,9 +2063,6 @@ msgstr "I2P-Domänennamenregistrierung"
 msgid "zzz Domain Registry"
 msgstr "zzz Domain-Registrierung"
 
-#. "Identiguy" + S + _x("List of active eepsites and uptime monitor") + S + "http://identiguy.i2p/" + S + I + "servermonitor.svg" + S +
-#. "scanner.linuxfarm" + S + _x("List of active eepsites and uptime monitor") + S + "http://scanner.linuxfarm.i2p/" + S + I + "eepsites/servermonitor.svg" + S +
-#. forums + social
 msgid "I2P Forum"
 msgstr "I2P Forum"
 
@@ -2135,14 +2084,6 @@ msgstr "Netzwerkübergreifendes Mikroblogging"
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Alternatives datenschutzorientiertes Frontend für Reddit"
 
-#. "StackOverflow" + S + _x("Developer question &amp; answer forums") + S + "http://stackoverflow.i2p/" + S + I + "eepsites/stackoverflow.svg" + S +
-#. "dread.i2p" + S + _x("Darknet forums") + S + "http://dread.i2p/d/i2p/?sort=new" + S + I + "eepsites/dread.svg" + S +
-#. _x("Dev Forum") + S + _x("Development forum") + S + "http://zzz.i2p/" + S + I + "eepsites/forum.svg" + S +
-#. "libreddit.i2p" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://libreddit.i2p/" + S + I + "libreddit.svg" + S +
-#. "zeronet.i2p" + S + _x("Zeronet I2P Gateway") + S + "http://zeronet.i2p/" + S + I + "zeronet.svg" + S +
-#. _x("Dancing Elephants") + S + _x("Rocksolid forums for the darknets") + S + "http://def3.i2p/" + S + I + "eepsites/forum.svg" + S +
-#. "query.i2p" + S + _x("The StackOverflow of I2P") + S + "http://query.i2p/" + S + I + "eepsites/forum.svg" + S +
-#. hosting + other services
 msgid "Base64 Image Encoder"
 msgstr "Base64-Bildkodierer"
 
@@ -2188,9 +2129,6 @@ msgstr "Alternatives Frontend für Youtube"
 msgid "Provider of privacy respecting web hosting and VPN services"
 msgstr "Anbieter von Datenschutz in Bezug auf Webhosting- und VPN-Dienste"
 
-#. "tinypng.i2p" + S + _x("Image optimizer") + S + "http://tinypng.i2p/" + S + I + "tinypng.png" + S +
-#. _x("Deep Web Radio") + S + _x("Streaming radio service") + S + "http://deepwebradio.i2p/" + S + I + "radio.svg" + S +
-#. search engines
 msgid "Tor-focused Search Engine"
 msgstr "Tor-fokussierte Suchmaschine"
 
@@ -2212,13 +2150,6 @@ msgstr "Datenschutzorientierte Clearnet-Suchmaschine"
 msgid "I2P Web Search Engine"
 msgstr "I2P-Websuchmaschine"
 
-#. "I2PSearch" + S +_x("I2P Web Search Engine") + S + "http://i2psearch.i2p/" + S + I + "search.svg" + S +
-#. "Legwork" + S +_x("I2P Web Search Engine") + S + "http://legwork.i2p/" + S + I + "search.svg" + S +
-#. "LibreY" + S +_x("Clearnet Search Engine") + S + "http://librey.i2p/" + S + I + "search.svg" + S +
-#. "raklet.i2p" + S +_x("Tor-focused Search Engine") + S + "http://raklet.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
-#. "Ransack" + S +_x("I2P-based Metasearch Engine") + S + "http://ransack.i2p/" + S + I + "search.svg" + S +
-#. "shmoogle.i2p" + S +_x("I2P Web Search Engine") + S + "http://shmoogle.i2p/" + S + I + "search.svg" + S +
-#. wikis & reference
 msgid "Enabling the free transmission of data in the public interest"
 msgstr "Ermöglichung der kostenlosen Übermittlung von Daten im öffentlichen Interesse"
 
@@ -2279,15 +2210,6 @@ msgstr "Weltatlas mit geografischen Fakten"
 msgid "WorldAtlas"
 msgstr "Weltatlas"
 
-#. "cssportal.i2p" + S + _x("CSS design reference") + S + "http://cssportal.i2p/" + S + I + "help.svg" + S +
-#. "ebooks.i2p" + S + _x("Huge collection of books &amp; magazines &amp; comics") + S + "http://ebooks.i2p/" + S + I + "eepsites/books.svg" + S +
-#. "legalcases.i2p" + S + _x("Publicly available texts of court decisions all over the world") + S + "http://legalcases.i2p/" + S + I + "eepsites/books.svg" + S +
-#. _x("imperial.i2p") + S + _x("Extensive repository of DRM-free ebooks") + S + "http://imperial.i2p/" + S + I + "eepsites/books.svg" + S +
-#. "jalibrary.i2p" + S + _x("Books &amp; courses &amp; art") + S + "http://jalibrary.i2p/" + S + I + "eepsites/books.svg" + S +
-#. "nexus.i2p" + S + _x("Searchable science library") + S + "http://nexus.i2p/" + S + I + "nexus.svg" + S +
-#. "tome.i2p" + S + _x("Collection of books &amp; other reading material") + S + "http://tome.i2p/" + S + I + "eepsites/books.svg" + S +
-#. _x("UrbanDictionary") + S + _x("Crowd-sourced slang dictionary") + S + "http://urbandictionary.i2p/" + S + I + "eepsites/urbandictionary.svg" + S +
-#. news + blogs
 msgid "Technology News &amp; more..."
 msgstr "Technologie-News &amp; mehr..."
 
@@ -2658,7 +2580,6 @@ msgstr "warten"
 msgid "Scheduled jobs"
 msgstr "Scheduled Jobs"
 
-#. translators: {0} is a job name, {1} is a time, e.g. 6 min
 #, java-format
 msgid "{0} starts in {1}"
 msgstr "{0} beginnt in {1}"
@@ -2702,40 +2623,27 @@ msgstr "Datei nicht gefunden"
 msgid "No log messages"
 msgstr "keine Ereignisse"
 
-#. 0  -
 msgid "Local Router"
 msgstr "Lokaler Router"
 
-#. 1  - r=.
 msgid "Router Lookup"
 msgstr "Routersuche"
 
-#. 2  -
-#. 3  - f=2
 msgid "All Routers"
 msgstr "Alle Router"
 
-#. 4  - f=1 (debug)
-#. 5  - l=1
-#. 6  - l=2 (debug)
-#. only show for our own id
 msgid "LeaseSets"
 msgstr "LeaseSets"
 
-#. 7  - l=3
 msgid "Advanced Lookup"
 msgstr "Erweiterte Suche"
 
-#. 8  - f=4
 msgid "LeaseSet Lookup"
 msgstr "LeaseSet-Suche"
 
-#. 9  -
-#. 10 - f=5
 msgid "All Routers (Client NetDb)"
 msgstr "Alle Router (Client NetDb)"
 
-#. 11 - f=6 (debug)
 msgid "Sybil Analysis"
 msgstr "Sybil-Analyse"
 
@@ -2901,20 +2809,6 @@ msgstr "Profil anzeigen"
 msgid "Profile"
 msgstr "Profil"
 
-#.
-#. PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(h);
-#. if (prof != null && prof.getIsExpandedDB()) {
-#. buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(h.toBase64()).append("\" title=\"")
-#. .append(_t("View profile")).append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>");
-#. }
-#.
-#.
-#. PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(h);
-#. if (prof != null && prof.getIsExpandedDB()) {
-#. buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(h.toBase64()).append("\" title=\"").append(_t("View profile"))
-#. .append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>");
-#. }
-#.
 msgid "Configure peer"
 msgstr "Teilnehmer editieren"
 
@@ -2924,7 +2818,6 @@ msgstr "Speichernutzung"
 msgid "Hidden"
 msgstr "Versteckt"
 
-#. shouldn't happen
 msgid "Published"
 msgstr "Veröffentlicht"
 
@@ -2961,7 +2854,6 @@ msgstr "Alle Router mit diesem Port in der NetDb anzeigen"
 msgid "Capabilities"
 msgstr "Fähigkeiten"
 
-#. hide version as already in the header
 msgid "Core version"
 msgstr "Kernversion"
 
@@ -3108,8 +3000,6 @@ msgstr "Peer-Fähigkeiten"
 msgid "Dir"
 msgstr "Richtung"
 
-#. "<th class=lookup title=\"").append(_t("Lookup address via gwhois.org")).append("\">").append(_t("Whois")).append("</th>" +
-#. buf.append("<th class=lookup title=\"").append(_t("Lookup address via gwhois.org")).append("\">").append(_t("Whois")).append("</th>");
 msgid "Direction/Introduction"
 msgstr "Richtung/Bekanntmachung"
 
@@ -3257,7 +3147,6 @@ msgid_plural "{0} fails"
 msgstr[0] "{0} Fehler"
 msgstr[1] "{0} Fehler"
 
-#. 2
 msgid "Banned"
 msgstr "Gesperrt"
 
@@ -3378,9 +3267,6 @@ msgstr "Geschwindigkeit"
 msgid "Low Latency"
 msgstr "Geringe Latenz"
 
-#. .append("<th title=\"").append(_t("Time taken for peer test")).append("\">")
-#. .append(_t("Test Avg (ms)")).append("</th>")
-#. .append("<th>").append(_t("Capacity")).append("</th>")
 msgid "Tunnels peer has agreed to participate in"
 msgstr "Der Tunnel-Peer hat der Teilnahme zugestimmt"
 
@@ -3393,8 +3279,6 @@ msgstr "Tunnels-Peer hat sich geweigert, daran teilzunehmen"
 msgid "Rejected"
 msgstr "Abgelehnt"
 
-#. .append("<th>").append(_t("Integration")).append("</th>")
-#. .append("<th>").append(_t("First Heard About")).append("</th>")
 msgid "Last Heard From"
 msgstr "Letzte Nachricht empfangen"
 
@@ -3407,14 +3291,12 @@ msgstr "Unerreichbar"
 msgid "OK"
 msgstr "OK"
 
-#. hide if < 10%
 msgid "Test Fails"
 msgstr "Test fehlgeschlagen"
 
 msgid "Fast, High Capacity"
 msgstr "schnell, hohe Kapazität"
 
-#. 0
 msgid "High Capacity"
 msgstr "hohe Kapazität"
 
@@ -3496,7 +3378,6 @@ msgstr "Letztes fehlgeschlagene Speichern"
 msgid "Capabilities in the NetDb, not used to determine profiles"
 msgstr "Funktionen in der NetDb, werden nicht zur Profilermittlung verwendet"
 
-#. capabilities
 msgid "caps"
 msgstr "Kategorien"
 
@@ -3565,7 +3446,6 @@ msgstr "Wie viele neue Kontakte hat dieser Teilnehmer uns kürzlich mitgeteilt?"
 msgid "All"
 msgstr "Alle"
 
-#. 3
 msgid "Session Bans"
 msgstr "Sitzungsverbote"
 
@@ -3599,7 +3479,6 @@ msgstr "höchste Anzahl an Ereignissen je Zeitintervall"
 msgid "Lifetime average events per period"
 msgstr "Anzahl an Ereignissen je Zeitintervall über die Lebenszeit gemittelt"
 
-#. Display the strict average
 msgid "Lifetime average frequency"
 msgstr "durchschnittliche Häufigkeit über Lebenszeit"
 
@@ -3646,7 +3525,6 @@ msgstr "Ereignisse graphisch darstellen"
 msgid "Export Data as XML"
 msgstr "Daten als XML exportieren"
 
-#. Display the strict average
 msgid "Lifetime average value"
 msgstr "Durchschnitt über Lebenszeit"
 
@@ -4103,8 +3981,6 @@ msgstr "Client- und Server-Tunnel hinzufügen, löschen oder bearbeiten"
 msgid "How many local service tunnels we're running"
 msgstr "Wie viele lokale Servicetunnel wir betreiben"
 
-#. older names for pre-0.7.4 installs
-#. hardcoded in i2psnark
 msgid "I2PSnark"
 msgstr "I2PSnark"
 
@@ -4166,10 +4042,6 @@ msgstr "Aktualisierung nach Neustart"
 msgid "Signed development update available"
 msgstr "Signiertes Entwicklungsupdate verfügbar"
 
-#. Note to translators: parameter is a router version, e.g. "0.9.19-16"
-#. <br> is optional, to help the browser make the lines even in the button
-#. If the translation is shorter than the English, you should probably not include <br>
-#. .append(_t("Download Signed<br>Development Update<br>{0}", getDevSU3UpdateVersion()))
 msgid "Download I2P Update"
 msgstr "I2P-Update herunterladen"
 
@@ -4242,13 +4114,6 @@ msgstr "Dieselbe Familie"
 msgid "IP close to us"
 msgstr "IP in unserer Nähe"
 
-#. *
-#. "<li><a href=\"netdb?f=3&amp;m=4\">" + _t("Same IP") + "</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=5\">" + _t("Same IPv4") + " /24</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=6\">" + _t("Same IPv4") + " /16</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=17\">"+ _t("Same IPv6") + " /64</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=18\">" + _t("Same IPv6") + " /48</a></li>\n" +
-#. *
 msgid "Pair distance"
 msgstr "Paarabstand"
 
@@ -4321,16 +4186,12 @@ msgstr "Bekannte Überschwemmungen"
 msgid "Average closest floodfill distance"
 msgstr "Durchschnittlicher Abstand zur nächsten Überflutung"
 
-#. "<b>").append(_t("Routing Data")).append(":</b> \"").append(DataHelper.getUTF8(_context.routerKeyGenerator().getModData()))
 msgid "Routing Data"
 msgstr "Routing-Daten"
 
-#. .append("\"<br>\n<b>").append(_t("Last Changed")).append(":</b> ").append(DataHelper.formatTime(_context.routerKeyGenerator().getLastChanged())).append("<br>\n" +
-#. "<b>").append(_t("Next Routing Data")).append(":</b> \"").append(DataHelper.getUTF8(_context.routerKeyGenerator().getNextModData()))
 msgid "Rotates in"
 msgstr "Eindrehen"
 
-#. Distance to our router analysis
 msgid "Closest Floodfills to Our Routing Key (Where we Store our RI)"
 msgstr "Am nächsten an unserem Routing-Schlüssel gelegene Floodfills (wo wir unsere RI speichern)"
 
@@ -4373,7 +4234,6 @@ msgstr "Die durchschnittliche Überschwemmungsentfernung beträgt"
 msgid "Closest Floodfill Pairs by Hash"
 msgstr "Nächste Floodfill-Paare nach Hash"
 
-#. sorted;
 msgid "Hash Distance"
 msgstr "Hash-Distanz"
 
@@ -4595,7 +4455,6 @@ msgstr "Tunnelname"
 msgid "Data Out"
 msgstr "Datenausgang"
 
-#. Saved in CSSHelper, assume success
 msgid "Console language saved."
 msgstr "Konsolensprache gespeichert."
 
@@ -4605,7 +4464,6 @@ msgstr "Bandbreitentest erfolgreich abgeschlossen"
 msgid "Bandwidth test failed"
 msgstr "Bandbreitentest fehlgeschlagen"
 
-#. didn't run at all?
 msgid "Bandwidth test did not complete"
 msgstr "Bandbreitentest wurde nicht abgeschlossen"
 
@@ -4628,7 +4486,6 @@ msgstr "Bits pro Sekunde"
 msgid "{0}Bytes per month maximum"
 msgstr "Maximum {0} Bytes im Monat"
 
-#. wars for ConfigClientsHelper
 msgid "addressbook"
 msgstr "Adressbuch"
 
@@ -4647,9 +4504,6 @@ msgstr "SusiDNS"
 msgid "routerconsole"
 msgstr "Routerkonsole"
 
-#. clients, taken from clients.config, for ConfigClientsHelper
-#. note that if the wording changes in clients.config, we have to
-#. keep the old string here as well for existing installs
 msgid "Web console"
 msgstr "Webkonsole"
 
@@ -4677,10 +4531,6 @@ msgstr "I2P+ Router-Konsole"
 msgid "Open Router Console in web browser at startup"
 msgstr "nach dem Starten die Routerkonsole im Browser anzeigen"
 
-#. tunnel nicknames, taken from i2ptunnel.config so they will display
-#. nicely under 'local destinations' in the summary bar
-#. note that if the wording changes in i2ptunnel.config, we have to
-#. keep the old string here as well for existing installs
 msgid "shared clients"
 msgstr "mehrere Clients"
 
@@ -4717,14 +4567,12 @@ msgstr "Persönlicher I2P-Webserver (eepsite)"
 msgid "HTTP Proxy"
 msgstr "HTTP-Proxy"
 
-#. hardcoded in iMule?
 msgid "iMule"
 msgstr "iMule"
 
 msgid "Official I2P Source Repository"
 msgstr "Offizielles I2P-Quellen-Repository"
 
-#. standard themes for ConfigUIHelper
 msgid "dark"
 msgstr "dunkel"
 
@@ -4746,8 +4594,6 @@ msgstr "Verschlüsselung"
 msgid "Stream"
 msgstr "Strom"
 
-#. parameters in transport addresses (netdb.jsp)
-#. may or may not be worth translating
 msgid "host"
 msgstr "Host"
 
@@ -5500,7 +5346,6 @@ msgstr "Einstellungen der Erkundungstunnel sind in der Datei router.config gespe
 msgid "Client tunnel changes are temporary and are not saved."
 msgstr "Änderungen an den Client-Tunneln sind nur temporär und werden nicht gespeichert."
 
-#. if (pm.isRegistered(net.i2p.util.PortMapper.SVC_I2PTUNNEL)) {
 msgid "The default settings are optimized for general usage and normally don't need to be changed."
 msgstr "Die Standard-Einstellungen sind für eine generelle Nutzung optimiert und müssen normalerweise nicht geändert werden."
 
@@ -7468,6 +7313,12 @@ msgstr "Informationen zum Router und zur laufenden Umgebung anzeigen"
 
 msgid "Statistics"
 msgstr "Statistik"
+
+msgid "Current console and webapp translation report"
+msgstr "Aktueller Bericht zur Übersetzung der Konsole und Webanwendung"
+
+msgid "Translation Status"
+msgstr "Übersetzungsstatus"
 
 msgid "View active tunnels"
 msgstr "Aktive Tunnel anzeigen"

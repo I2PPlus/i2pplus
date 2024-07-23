@@ -212,12 +212,10 @@ msgstr "Eroare: Nu s-a putut adăuga torrent: {0}"
 msgid "Torrent already running: {0}"
 msgstr "Torrentul deja rulează: {0}"
 
-#. catch this here so we don't try do delete it below
 #, java-format
 msgid "Cannot open \"{0}\""
 msgstr "Nu se poate deschide \"{0}\"."
 
-#. TODO - if the existing one is a magnet, delete it and add the metainfo instead?
 #, java-format
 msgid "Torrent with this info hash is already running: {0}"
 msgstr "Torrentul cu informațiile acestui hash rulează deja: {0}"
@@ -312,13 +310,6 @@ msgstr "Limita este de {0} B"
 msgid "Torrent \"{0}\" has no data!"
 msgstr "Torrentul \"{0}\" nu conține date!"
 
-#.
-#. System.out.println("torrent info: " + info.toString());
-#. List<Long> lengths = info.getLengths();
-#. if (lengths != null)
-#. for (int i = 0; i < lengths.size(); i++)
-#. System.out.println("File " + i + " is " + lengths.get(i) + " long.");
-#.
 #, java-format
 msgid "Torrents larger than {0}B are not supported yet \"{1}\"!"
 msgstr "Torrentele mai mari de {0}B nu sunt suportate \"{1}\"!"
@@ -377,8 +368,6 @@ msgstr "Descărcare terminată: {0}"
 msgid "I2PSnark"
 msgstr "I2PSnark"
 
-#. addMessage(_t("Metainfo received for {0}", snark.getName()));
-#. addMessageNoEscape(_t("Starting torrent: {0}", linkify(snark)).replace("Magnet ", ""));
 #, java-format
 msgid "Starting torrent: {0}"
 msgstr "Se pornește torrent: {0}"
@@ -665,7 +654,6 @@ msgstr "în"
 msgid "out"
 msgstr "afară"
 
-#. Only truncate if it's an actual dest
 msgid "Our destination (identity) for this session"
 msgstr "Destinația (identitatea) noastră pentru această sesiune"
 
@@ -727,7 +715,6 @@ msgstr "Ultima pagină"
 msgid "Cannot add torrent {0} inside another torrent: {1}"
 msgstr "Nu se poate adăuga torrentul {0} în interiorul altui torrent: {1}"
 
-#. TODO
 #, java-format
 msgid "Download from non-I2P location {0} is not supported"
 msgstr "Descărcarea din locația non-I2P {0} nu este acceptată"
@@ -736,7 +723,6 @@ msgstr "Descărcarea din locația non-I2P {0} nu este acceptată"
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
 msgstr "Adresă URL nevalidă: trebuie să înceapă cu \"{0}\" sau \"{1}\""
 
-#. no file or URL specified
 msgid "Enter URL or select torrent file"
 msgstr "Introduceți adresa URL sau selectați fișierul torrent"
 
@@ -1000,7 +986,6 @@ msgstr "Introdu directorul în care să se salveze datele (default {0})"
 msgid "Create Torrent"
 msgstr "Creează un torrent"
 
-#. buf.append("From file: <input type=file name=\"newFile\" size=50 value=\"" + newFile + "\" /><br>\n");
 msgid "Data to seed"
 msgstr "Date pentru seedare"
 
@@ -1080,7 +1065,6 @@ msgstr "Numărul maxim de torenți de afișat pe pagină"
 msgid "torrents"
 msgstr "torrente"
 
-#. If we get to here, we have the language settings
 msgid "Language"
 msgstr "Limbă"
 
@@ -1283,7 +1267,6 @@ msgstr "Nu se poate adăuga magnet: Linkurile magnet V2 nu sunt susținute"
 msgid "Invalid magnet URL {0}"
 msgstr "URL-ul magnet invalid {0}"
 
-#. * dummies for translation
 #, java-format
 msgid "1 hop"
 msgid_plural "{0} hops"
@@ -1382,7 +1365,6 @@ msgstr "Spre dosarul de nivel superior"
 msgid "Audio Playlist"
 msgstr "Playlist audio"
 
-#. status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Not found"), _t("Torrent not found?").replace("?", ""));
 msgid "Not found"
 msgstr "Nu a fost găsit"
 
@@ -1392,7 +1374,6 @@ msgstr "Torrentul nu a fost găsit?"
 msgid "File not found in torrent?"
 msgstr "Fișierul nu a fost găsit în torrent?"
 
-#. status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Unrecognized"), _t("File not found in torrent?").replace("?", ""));
 msgid "Unrecognized"
 msgstr "Nerecunoscut"
 
@@ -1417,17 +1398,6 @@ msgstr "Nu descărcați acest fișier"
 msgid "Skip"
 msgstr "Omitere"
 
-#. TODO: fixup so works with ajax refresh
-#. "<span class=script>");
-#. if (!inOrder) {
-#. buf.append("<a class=control id=setallhigh href=#>")
-#. .append(toImg("clock_red")).append(_t("Set all high")).append("</a>\n");
-#. }
-#. buf.append("<a class=control id=setallnorm href=#>")
-#. .append(toImg("clock")).append(_t("Set all normal")).append("</a>\n")
-#. .append("<a class=control id=setallskip href=#>")
-#. .append(toImg("block")).append(_t("Skip all")).append("</a></span>\n");
-#.
 msgid "Save priorities"
 msgstr "Salvați priorități"
 
@@ -1498,7 +1468,6 @@ msgstr "Torentul trebuie oprit pentru a putea edita"
 msgid "Save Changes"
 msgstr "Salvați modificările"
 
-#. shouldn't happen
 msgid "Torrent must be stopped"
 msgstr "Torentul trebuie oprit"
 

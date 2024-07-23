@@ -23,32 +23,32 @@ msgstr "E-mail"
 msgid "No encoder found for encoding \\''{0}\\''."
 msgstr "Nebyl nalezen žádný enkodér pro kódování \\''{0}\\''."
 
-#. tagged in WebMail
 msgid "Re:"
 msgstr "Odpovědět:"
 
 msgid "Fwd:"
 msgstr "Přeposlat:"
 
-#. MailDir-like
 msgid "Drafts"
 msgstr "Koncepty"
 
-#. MailDir-like
 msgid "Sent"
 msgstr "Odesláno"
 
-#. MailDir-like
 msgid "Trash"
 msgstr "Koš"
 
-#. MailDir-like
 msgid "Bulk Mail"
 msgstr "Hromadná pošta"
 
-#. untranslated, translate on use
 msgid "Inbox"
 msgstr "Doručené"
+
+msgid "View message as HTML"
+msgstr ""
+
+msgid "View message as plain text"
+msgstr ""
 
 msgid "unknown"
 msgstr "neznámý"
@@ -164,7 +164,6 @@ msgstr "Nebylo nalezeno kódování pro {0}"
 msgid "Attachment not found."
 msgstr "Příloha nenalezena"
 
-#. error if we get here
 msgid "Message not found."
 msgstr "E-mail nenalezen."
 
@@ -289,7 +288,6 @@ msgstr "Předmět"
 msgid "Add Attachment"
 msgstr "Přidat přílohu"
 
-#. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 msgid "Add attachment"
 msgstr "Přidat přílohu"
 
@@ -363,6 +361,9 @@ msgstr "Velikost"
 msgid "Mark for deletion"
 msgstr "Označit pro smazání"
 
+msgid "Message contains HTML"
+msgstr ""
+
 msgid "Message is new"
 msgstr "Zpráva je nová"
 
@@ -372,7 +373,6 @@ msgstr "Zpráva je spam"
 msgid "Message body not downloaded"
 msgstr "Tělo zprávy nebylo staženo"
 
-#. TODO ngettext
 msgid "Really delete the marked messages?"
 msgstr "Opravdu vymazat označené zprávy?"
 
@@ -430,6 +430,9 @@ msgstr "Zpět do složky"
 msgid "Move to Folder"
 msgstr "Přesunout do složky"
 
+msgid "View message in new tab"
+msgstr ""
+
 msgid "Folder Page Size"
 msgstr "Velikost stránky složky"
 
@@ -442,7 +445,6 @@ msgstr "Pokročilá konfigurace"
 msgid "Save Configuration"
 msgstr "Uložit konfiguraci"
 
-#. this appears in the UI so translate
 msgid "No response from server"
 msgstr "Žádná odpověď od serveru"
 
@@ -458,6 +460,5 @@ msgstr "Přihlášení bylo neúspěšné"
 msgid "Server refused connection"
 msgstr "Server odmítá připojení"
 
-#. TODO which recipient?
 msgid "Mail rejected"
 msgstr "Email byl odmítnut"

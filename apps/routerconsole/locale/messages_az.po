@@ -48,7 +48,6 @@ msgid_plural "Acquired only {0} router infos from reseed hosts"
 msgstr[0] "Reseed Hostlarından yalnız 1 router məlumatı əldə etdi"
 msgstr[1] "Resed Hostlarından yalnız {0} Router Infos əldə edildi"
 
-#. remove dupe error msgs
 #, java-format
 msgid "{0}Reseed{1} failed:"
 msgstr "{0}Yenidən baxılma{1} alınmadı:"
@@ -75,9 +74,6 @@ msgstr "Reseed hostlarından {0} ruter infosu əldə edilib"
 msgid "Acquired {0} router infos from reseed hosts ({1} errors)"
 msgstr "Reseed hostlarından {0} ruter infosu əldə edilib ({1} səhvlər)"
 
-#. NOTE TO TRANSLATORS - each of these phrases is a description for a statistic
-#. to be displayed on /stats.jsp and in the graphs on /graphs.jsp.
-#. Please keep relatively short so it will fit on the graphs.
 msgid "Message receive rate (B/s)"
 msgstr "Mesajın qəbul dərəcəsi (B/s)"
 
@@ -129,14 +125,12 @@ msgstr "Orta tunel qurma uğuru %"
 msgid "unknown"
 msgstr "tanınmayan"
 
-#. 1
 msgid "Floodfill"
 msgstr "Floodfill"
 
 msgid "Show all routers with this capability in the NetDb"
 msgstr "Bütün marşrutlaşdırıcıları netdbdə bu qabiliyyətə göstərin"
 
-#. This used to be "no common transports" but it is almost always no transports at all
 msgid "No transports (hidden or starting up?)"
 msgstr "Nəqliyyat yoxdur (gizli və ya başlamaq?)"
 
@@ -225,9 +219,6 @@ msgstr "UPnP maksimal aşağı axın həddinin {0}bit/san olduğunu bildirir"
 msgid "UPnP reports the maximum upstream bit rate is {0}bits/sec"
 msgstr "UPnP maksimum yuxarı axın bit dərəcəsinin {0}bit/san olduğunu bildirir"
 
-#. {0} is TCP or UDP
-#. {1,number,#####} prevents 12345 from being output as 12,345 in the English locale.
-#. If you want the digit separator in your locale, translate as {1}.
 #, java-format
 msgid "{0} port {1,number,#####} was successfully forwarded by UPnP."
 msgstr "{0} port {1,number,#####} UPNP tərəfindən uğurla göndərildi."
@@ -297,7 +288,6 @@ msgstr "{0} -ə kopyalamaq alınmadı"
 msgid "Requires Java version {0} but installed Java version is {1}"
 msgstr "Java versiyasını tələb edir {0}, lakin quraşdırılmış Java versiyası {1}"
 
-#. set status before thread to ensure UI feedback
 msgid "Updating"
 msgstr "Yenilənir"
 
@@ -318,7 +308,6 @@ msgstr "İlk öncə {0} versiyasını yeniləməlisiniz"
 msgid "Checking for update of plugin {0}"
 msgstr "Qoşmanın yenilənməsi yoxlanılır {0}"
 
-#. set status before thread to ensure UI feedback
 msgid "Contacting plugin update server"
 msgstr "Qoşma yeniləmə serveri ilə əlaqə saxlamaq"
 
@@ -348,7 +337,6 @@ msgstr "Qoşma endirildi"
 msgid "Cannot create plugin directory {0}"
 msgstr "Qoşma kataloqu yaradıla bilmir {0}"
 
-#. updateStatus("<b>" + "Plugin contains an invalid key" + ' ' + pubkey + ' ' + signer + "</b>");
 #, java-format
 msgid "Plugin from {0} contains an invalid key"
 msgstr "{0} -dən gələn əlavədə etibarsız açar var"
@@ -357,7 +345,6 @@ msgstr "{0} -dən gələn əlavədə etibarsız açar var"
 msgid "Plugin signature verification of {0} failed"
 msgstr "{0} plugin imzasının təsdiqi alınmadı"
 
-#. don't display signer, we're really checking the key not the signer name
 msgid "Plugin not installed - signer is untrusted"
 msgstr "Qoşma quraşdırılmayıb - imzalayan etibarsızdır"
 
@@ -493,7 +480,6 @@ msgstr "Kəsmə zərif"
 msgid "Graceful shutdown initiated"
 msgstr "Zərif sönmə başladı"
 
-#. Normal browsers send value, IE sends button label
 msgid "Shutdown immediately"
 msgstr "Dərhal"
 
@@ -579,19 +565,15 @@ msgstr "Quraşdırılmış I2P  sistemi xidməti"
 msgid "Warning: unable to install the service"
 msgstr "Xəbərdarlıq: xidməti quraşdırmaq mümkün deyil"
 
-#. addFormNotice(_t("Service installed"));
 msgid "Enabled I2P+ service autostart at system startup"
 msgstr "Sistem başlanğıcında I2P  xidmətinin avtostartını aktivləşdirdi"
 
-#. addFormError(_t("Warning: unable to install the service") + " - " + ioe.getLocalizedMessage());
 msgid "Warning: could not set the I2P+ service to autostart"
 msgstr "Xəbərdarlıq: I2P  xidmətini avtomatik başlatmaq üçün təyin etmək mümkün olmadı"
 
-#. addFormNotice(_t("Service removed"));
 msgid "Disabled I2P+ Service autostart at system startup"
 msgstr "Sistem başlanğıcında əlil I2P  Service avtostartı"
 
-#. addFormError(_t("Warning: unable to remove the service") + " - " + ioe.getLocalizedMessage());
 msgid "Warning: could not set the I2P+ service to manual start"
 msgstr "Xəbərdarlıq: I2P  xidmətini manual başlama üçün təyin etmək mümkün olmadı"
 
@@ -799,14 +781,12 @@ msgstr "Sertifikatlar şəbəkədə işləyən şifrələnmiş xidmətlərin ide
 msgid "Local SSL Certificates"
 msgstr "Yerli SSL Sertifikatları"
 
-#. console
 msgid "Router Console"
 msgstr "Ruter Konsolu"
 
 msgid "Location"
 msgstr "Mövqe"
 
-#. I2CP
 msgid "I2CP"
 msgstr "I2CP"
 
@@ -822,14 +802,9 @@ msgstr "Veb səhifə"
 msgid "Local Router Family Certificate"
 msgstr "Yerli Router Ailə Sertifikatı"
 
-#. hide family name in css as it's already displayed above
 msgid "Family"
 msgstr "Ailə"
 
-#. } else {
-#. _out.write("<p>");
-#. _out.write(_t("none"));
-#. _out.write("</p>\n");
 msgid "Console"
 msgstr "Konsol"
 
@@ -880,7 +855,6 @@ msgstr "Dayandırılmış qoşma {0}"
 msgid "Stopped webapp {0}"
 msgstr "Dayandırılmış veb-tətbiq {0}"
 
-#. label (IE)
 msgid "Start"
 msgstr "Başla"
 
@@ -965,7 +939,6 @@ msgstr "İstifadəçi əlavə edildi {0}"
 msgid "Interface configuration saved"
 msgstr "İnterfeys konfiqurasiyası yaddaşda saxlanıldı"
 
-#. "<th data-sortable data-sort-method=number>" + _t("Speed") + "</th>" +
 msgid "Edit"
 msgstr "Dəyiş"
 
@@ -1008,7 +981,6 @@ msgstr "Email"
 msgid "Plugin"
 msgstr "Plugin"
 
-#. hide caps as already in the header
 msgid "Version"
 msgstr "Versiya"
 
@@ -1189,8 +1161,6 @@ msgstr "Əlavə etmək üçün sinif seçin"
 msgid "All classes in {0}"
 msgstr "{0} üzrə bütün siniflər"
 
-#. stat groups for stats.jsp
-#. See StatsGenerator for groups mapped to a display name
 msgid "Bandwidth"
 msgstr "Ötürmə qabiliyyəti"
 
@@ -1317,8 +1287,6 @@ msgstr "UDP-nin aktivləşdirilməsi"
 msgid "Requiring SSU introducers"
 msgstr "SSU introduktorları tələb olunur"
 
-#. if (_context.hasWrapper()) {
-#. Wow this dumps all conns immediately and really isn't nice
 msgid "Performing a soft restart"
 msgstr "Yumşaq yenidən başladın həyata keçirilir"
 
@@ -1409,7 +1377,6 @@ msgstr "İndi yenidən oxuyun"
 msgid "Reseeding is already in progress"
 msgstr "Yenidən əkmə artıq davam edir"
 
-#. skip the nonce checking in ReseedHandler
 msgid "Starting reseed process"
 msgstr "Yenidən əkmə prosesi başlayır"
 
@@ -1449,8 +1416,6 @@ msgstr "URL siyahısını sıfırlayın"
 msgid "URL list reset successfully"
 msgstr "URL siyahısı uğurla sıfırlandı"
 
-#. ctx.router().shutdown(Router.EXIT_HARD); // never returns
-#. give the UI time to respond
 msgid "Cancel shutdown"
 msgstr "Bağlanmağı ləğv edin"
 
@@ -1460,8 +1425,6 @@ msgstr "Yenidən başlamanı ləğv edin"
 msgid "Restart immediately"
 msgstr "Dərhal yenidən başladın"
 
-#. ctx.router().shutdown(Router.EXIT_HARD_RESTART); // never returns
-#. give the UI time to respond
 msgid "Restart"
 msgstr "Yenidən başla"
 
@@ -1549,8 +1512,6 @@ msgstr "köçürüldü"
 msgid "Saved order of sections."
 msgstr "Bölmələrin saxlanmış sırası."
 
-#. the count isn't really correct anyway, since we don't check for actual changes
-#. addFormNotice("Updated settings for " + updated + " pools.");
 msgid "Updated settings for all pools."
 msgstr "Bütün hovuzlar üçün yenilənmiş parametrlər."
 
@@ -1560,7 +1521,6 @@ msgstr "Kəşfiyyat tunelinin konfiqurasiyası uğurla yadda saxlanıldı."
 msgid "Error saving the configuration (applied but not saved) - please see the error logs."
 msgstr "Konfiqurasiyanın saxlanmasında xəta (tətbiq edilib, lakin saxlanmayıb) - xəta qeydlərinə baxın."
 
-#. * dummies for translation
 #, java-format
 msgid "{0} hop"
 msgid_plural "{0} hops"
@@ -1795,7 +1755,6 @@ msgstr "Detallar"
 msgid "Combined bandwidth graph"
 msgstr "Birləşdirilmiş bant genişliyi qrafiki"
 
-#. e.g. "statname for 60m"
 #, java-format
 msgid "{0} for {1}"
 msgstr "{0} {1} üçün"
@@ -2005,7 +1964,6 @@ msgstr "Bant genişliyini konfiqurasiya edin"
 msgid "I2P Bandwidth Configuration"
 msgstr "I2P Bant Genişliyi Konfiqurasiyası"
 
-#. FIXME wasn't escaped
 msgid "Configure UI"
 msgstr "UI konfiqurasiyası"
 
@@ -2042,7 +2000,6 @@ msgstr "Son dəyişikliklər"
 msgid "Bug tracker"
 msgstr "Xəta indikatoru"
 
-#. I2P specific
 msgid "I2P Bug Reports"
 msgstr "I2P Baq Hesabatları"
 
@@ -2076,7 +2033,6 @@ msgstr "Javadocs"
 msgid "I2P Network Statistics"
 msgstr "I2P Network Statistics"
 
-#. software repositories + filesharing
 msgid "Transient server-encrypted filesharing and pastebin"
 msgstr "Transient server-şifrlənmiş fayl paylaşımı və pastebin"
 
@@ -2095,13 +2051,9 @@ msgstr "I2P-nin evi"
 msgid "BitTorrent tracker"
 msgstr "BitTorrent izləyicisi"
 
-#. "git.i2p" + S + _x("Community Git hosting") + S + "http://git.i2p/explore/repos" + S + I + "eepsites/git.svg" + S +
-#. torrent trackers
 msgid "Postman's Tracker"
 msgstr "Poçtalyonun izləyicisi"
 
-#. _x("Chudo") + S + _x("No login BitTorrent tracker") + S + "http://torrents.chudo.i2p/" + S + I + "magnet.svg" + S +
-#. domain name registration + uptime trackers
 msgid "List of active eepsites and uptime monitor"
 msgstr "Aktiv eepsites və iş vaxtı monitorunun siyahısı"
 
@@ -2111,9 +2063,6 @@ msgstr "I2P Domen Adının Qeydiyyatı"
 msgid "zzz Domain Registry"
 msgstr "zzz Domain Qeydiyyatı"
 
-#. "Identiguy" + S + _x("List of active eepsites and uptime monitor") + S + "http://identiguy.i2p/" + S + I + "servermonitor.svg" + S +
-#. "scanner.linuxfarm" + S + _x("List of active eepsites and uptime monitor") + S + "http://scanner.linuxfarm.i2p/" + S + I + "eepsites/servermonitor.svg" + S +
-#. forums + social
 msgid "I2P Forum"
 msgstr "I2P Forumu"
 
@@ -2135,14 +2084,6 @@ msgstr "Şəbəkələr arası mikro-bloq"
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Reddit üçün alternativ məxfiliyə yönəlmiş ön hissə"
 
-#. "StackOverflow" + S + _x("Developer question &amp; answer forums") + S + "http://stackoverflow.i2p/" + S + I + "eepsites/stackoverflow.svg" + S +
-#. "dread.i2p" + S + _x("Darknet forums") + S + "http://dread.i2p/d/i2p/?sort=new" + S + I + "eepsites/dread.svg" + S +
-#. _x("Dev Forum") + S + _x("Development forum") + S + "http://zzz.i2p/" + S + I + "eepsites/forum.svg" + S +
-#. "libreddit.i2p" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://libreddit.i2p/" + S + I + "libreddit.svg" + S +
-#. "zeronet.i2p" + S + _x("Zeronet I2P Gateway") + S + "http://zeronet.i2p/" + S + I + "zeronet.svg" + S +
-#. _x("Dancing Elephants") + S + _x("Rocksolid forums for the darknets") + S + "http://def3.i2p/" + S + I + "eepsites/forum.svg" + S +
-#. "query.i2p" + S + _x("The StackOverflow of I2P") + S + "http://query.i2p/" + S + I + "eepsites/forum.svg" + S +
-#. hosting + other services
 msgid "Base64 Image Encoder"
 msgstr "Base64 Şəkil Kodlayıcısı"
 
@@ -2188,9 +2129,6 @@ msgstr "Youtube üçün alternativ cəbhə"
 msgid "Provider of privacy respecting web hosting and VPN services"
 msgstr "Veb hostinq və VPN xidmətləri ilə bağlı məxfilik təminatçısı"
 
-#. "tinypng.i2p" + S + _x("Image optimizer") + S + "http://tinypng.i2p/" + S + I + "tinypng.png" + S +
-#. _x("Deep Web Radio") + S + _x("Streaming radio service") + S + "http://deepwebradio.i2p/" + S + I + "radio.svg" + S +
-#. search engines
 msgid "Tor-focused Search Engine"
 msgstr "Tor mərkəzli Axtarış Motoru"
 
@@ -2212,13 +2150,6 @@ msgstr "Məxfiliyə yönəlmiş Clearnet Axtarış Mühərriki"
 msgid "I2P Web Search Engine"
 msgstr "I2P Veb Axtarış Mühərriki"
 
-#. "I2PSearch" + S +_x("I2P Web Search Engine") + S + "http://i2psearch.i2p/" + S + I + "search.svg" + S +
-#. "Legwork" + S +_x("I2P Web Search Engine") + S + "http://legwork.i2p/" + S + I + "search.svg" + S +
-#. "LibreY" + S +_x("Clearnet Search Engine") + S + "http://librey.i2p/" + S + I + "search.svg" + S +
-#. "raklet.i2p" + S +_x("Tor-focused Search Engine") + S + "http://raklet.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
-#. "Ransack" + S +_x("I2P-based Metasearch Engine") + S + "http://ransack.i2p/" + S + I + "search.svg" + S +
-#. "shmoogle.i2p" + S +_x("I2P Web Search Engine") + S + "http://shmoogle.i2p/" + S + I + "search.svg" + S +
-#. wikis & reference
 msgid "Enabling the free transmission of data in the public interest"
 msgstr "İctimai maraqlar üçün məlumatların pulsuz ötürülməsinə imkan yaratmaq"
 
@@ -2279,15 +2210,6 @@ msgstr "Coğrafiya faktları daxil olmaqla dünya atlası"
 msgid "WorldAtlas"
 msgstr "Dünya Atlası"
 
-#. "cssportal.i2p" + S + _x("CSS design reference") + S + "http://cssportal.i2p/" + S + I + "help.svg" + S +
-#. "ebooks.i2p" + S + _x("Huge collection of books &amp; magazines &amp; comics") + S + "http://ebooks.i2p/" + S + I + "eepsites/books.svg" + S +
-#. "legalcases.i2p" + S + _x("Publicly available texts of court decisions all over the world") + S + "http://legalcases.i2p/" + S + I + "eepsites/books.svg" + S +
-#. _x("imperial.i2p") + S + _x("Extensive repository of DRM-free ebooks") + S + "http://imperial.i2p/" + S + I + "eepsites/books.svg" + S +
-#. "jalibrary.i2p" + S + _x("Books &amp; courses &amp; art") + S + "http://jalibrary.i2p/" + S + I + "eepsites/books.svg" + S +
-#. "nexus.i2p" + S + _x("Searchable science library") + S + "http://nexus.i2p/" + S + I + "nexus.svg" + S +
-#. "tome.i2p" + S + _x("Collection of books &amp; other reading material") + S + "http://tome.i2p/" + S + I + "eepsites/books.svg" + S +
-#. _x("UrbanDictionary") + S + _x("Crowd-sourced slang dictionary") + S + "http://urbandictionary.i2p/" + S + I + "eepsites/urbandictionary.svg" + S +
-#. news + blogs
 msgid "Technology News &amp; more..."
 msgstr "Texnologiya xəbərləri və daha çox..."
 
@@ -2658,7 +2580,6 @@ msgstr "gözləyirəm"
 msgid "Scheduled jobs"
 msgstr "Planlaşdırılan işlər"
 
-#. translators: {0} is a job name, {1} is a time, e.g. 6 min
 #, java-format
 msgid "{0} starts in {1}"
 msgstr "{0} {1} ilə başlayır"
@@ -2702,40 +2623,27 @@ msgstr "Fayl tapılmadı"
 msgid "No log messages"
 msgstr "Giriş mesajları yoxdur"
 
-#. 0  -
 msgid "Local Router"
 msgstr "Yerli Router"
 
-#. 1  - r=.
 msgid "Router Lookup"
 msgstr "Router Axtarışı"
 
-#. 2  -
-#. 3  - f=2
 msgid "All Routers"
 msgstr "Bütün marşrutlaşdırıcılar"
 
-#. 4  - f=1 (debug)
-#. 5  - l=1
-#. 6  - l=2 (debug)
-#. only show for our own id
 msgid "LeaseSets"
 msgstr "LeaseSets"
 
-#. 7  - l=3
 msgid "Advanced Lookup"
 msgstr "Qabaqcıl Axtarış"
 
-#. 8  - f=4
 msgid "LeaseSet Lookup"
 msgstr "LeaseSet Axtarışı"
 
-#. 9  -
-#. 10 - f=5
 msgid "All Routers (Client NetDb)"
 msgstr "Bütün marşrutlaşdırıcılar (Client NetDb)"
 
-#. 11 - f=6 (debug)
 msgid "Sybil Analysis"
 msgstr "Sibil təhlili"
 
@@ -2901,20 +2809,6 @@ msgstr "Profilə baxın"
 msgid "Profile"
 msgstr "Profil"
 
-#.
-#. PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(h);
-#. if (prof != null && prof.getIsExpandedDB()) {
-#. buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(h.toBase64()).append("\" title=\"")
-#. .append(_t("View profile")).append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>");
-#. }
-#.
-#.
-#. PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(h);
-#. if (prof != null && prof.getIsExpandedDB()) {
-#. buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(h.toBase64()).append("\" title=\"").append(_t("View profile"))
-#. .append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>");
-#. }
-#.
 msgid "Configure peer"
 msgstr "Peer-i konfiqurasiya edin"
 
@@ -2924,7 +2818,6 @@ msgstr "Yaddaş istifadəsi"
 msgid "Hidden"
 msgstr "Gizli"
 
-#. shouldn't happen
 msgid "Published"
 msgstr "Nəşr edilmişdir"
 
@@ -2961,7 +2854,6 @@ msgstr "NetDb-də bu portu olan bütün marşrutlaşdırıcıları göstərin"
 msgid "Capabilities"
 msgstr "Bacarıqlar"
 
-#. hide version as already in the header
 msgid "Core version"
 msgstr "Əsas versiya"
 
@@ -3108,8 +3000,6 @@ msgstr "Həmyaşıdların imkanları"
 msgid "Dir"
 msgstr "İstiqamət"
 
-#. "<th class=lookup title=\"").append(_t("Lookup address via gwhois.org")).append("\">").append(_t("Whois")).append("</th>" +
-#. buf.append("<th class=lookup title=\"").append(_t("Lookup address via gwhois.org")).append("\">").append(_t("Whois")).append("</th>");
 msgid "Direction/Introduction"
 msgstr "İstiqamət/Giriş"
 
@@ -3257,7 +3147,6 @@ msgid_plural "{0} fails"
 msgstr[0] "{0} uğursuz"
 msgstr[1] "{0} uğursuz olur"
 
-#. 2
 msgid "Banned"
 msgstr "Qadağan olunmuş"
 
@@ -3378,9 +3267,6 @@ msgstr "Sürət"
 msgid "Low Latency"
 msgstr "Aşağı gecikmə"
 
-#. .append("<th title=\"").append(_t("Time taken for peer test")).append("\">")
-#. .append(_t("Test Avg (ms)")).append("</th>")
-#. .append("<th>").append(_t("Capacity")).append("</th>")
 msgid "Tunnels peer has agreed to participate in"
 msgstr "Tunel həmkarı iştirak etməyi qəbul etdi"
 
@@ -3393,8 +3279,6 @@ msgstr "Tunel həmkarı iştirak etməkdən imtina etdi"
 msgid "Rejected"
 msgstr "Rədd edildi"
 
-#. .append("<th>").append(_t("Integration")).append("</th>")
-#. .append("<th>").append(_t("First Heard About")).append("</th>")
 msgid "Last Heard From"
 msgstr "Son eşitmə"
 
@@ -3407,14 +3291,12 @@ msgstr "Əlçatmaz"
 msgid "OK"
 msgstr "OK"
 
-#. hide if < 10%
 msgid "Test Fails"
 msgstr "Test uğursuz oldu"
 
 msgid "Fast, High Capacity"
 msgstr "Sürətli, Yüksək Tutumlu"
 
-#. 0
 msgid "High Capacity"
 msgstr "Yüksək tutumlu"
 
@@ -3496,7 +3378,6 @@ msgstr "Son Pis Mağaza"
 msgid "Capabilities in the NetDb, not used to determine profiles"
 msgstr "NetDb-də profilləri müəyyən etmək üçün istifadə edilməyən imkanlar"
 
-#. capabilities
 msgid "caps"
 msgstr "qapaqlar"
 
@@ -3565,7 +3446,6 @@ msgstr "son vaxtlar bizə neçə yeni həmyaşıdları haqqında danışdılar?"
 msgid "All"
 msgstr "Hamısı"
 
-#. 3
 msgid "Session Bans"
 msgstr "Sessiya qadağaları"
 
@@ -3599,7 +3479,6 @@ msgstr "Dövr üzrə ən yüksək hadisələr"
 msgid "Lifetime average events per period"
 msgstr "Hər dövr üçün ömür boyu orta hadisələr"
 
-#. Display the strict average
 msgid "Lifetime average frequency"
 msgstr "Ömür boyu orta tezlik"
 
@@ -3646,7 +3525,6 @@ msgstr "Qrafik hadisələrin sayı"
 msgid "Export Data as XML"
 msgstr "Məlumatları XML kimi ixrac edin"
 
-#. Display the strict average
 msgid "Lifetime average value"
 msgstr "Ömür boyu orta dəyər"
 
@@ -4103,8 +3981,6 @@ msgstr "Müştəri və server tunellərinizi əlavə et / silmək / redaktə etm
 msgid "How many local service tunnels we're running"
 msgstr "Neçə yerli xidmət tunelini çalışırıq"
 
-#. older names for pre-0.7.4 installs
-#. hardcoded in i2psnark
 msgid "I2PSnark"
 msgstr "I2PSnark"
 
@@ -4166,10 +4042,6 @@ msgstr "Yenidən başladıqdan sonra yenilənmə"
 msgid "Signed development update available"
 msgstr "İmzalı inkişaf yeniləməsi mövcuddur"
 
-#. Note to translators: parameter is a router version, e.g. "0.9.19-16"
-#. <br> is optional, to help the browser make the lines even in the button
-#. If the translation is shorter than the English, you should probably not include <br>
-#. .append(_t("Download Signed<br>Development Update<br>{0}", getDevSU3UpdateVersion()))
 msgid "Download I2P Update"
 msgstr "I2P Yeniləmə Download"
 
@@ -4242,13 +4114,6 @@ msgstr "Eyni ailə"
 msgid "IP close to us"
 msgstr "Bizə yaxın IP"
 
-#. *
-#. "<li><a href=\"netdb?f=3&amp;m=4\">" + _t("Same IP") + "</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=5\">" + _t("Same IPv4") + " /24</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=6\">" + _t("Same IPv4") + " /16</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=17\">"+ _t("Same IPv6") + " /64</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=18\">" + _t("Same IPv6") + " /48</a></li>\n" +
-#. *
 msgid "Pair distance"
 msgstr "Cütləşmə məsafəsi"
 
@@ -4321,16 +4186,12 @@ msgstr "Tanınmış daşqınlar"
 msgid "Average closest floodfill distance"
 msgstr "Orta ən yaxın daşqın məsafəsi"
 
-#. "<b>").append(_t("Routing Data")).append(":</b> \"").append(DataHelper.getUTF8(_context.routerKeyGenerator().getModData()))
 msgid "Routing Data"
 msgstr "Məlumatların"
 
-#. .append("\"<br>\n<b>").append(_t("Last Changed")).append(":</b> ").append(DataHelper.formatTime(_context.routerKeyGenerator().getLastChanged())).append("<br>\n" +
-#. "<b>").append(_t("Next Routing Data")).append(":</b> \"").append(DataHelper.getUTF8(_context.routerKeyGenerator().getNextModData()))
 msgid "Rotates in"
 msgstr "İçəri dönür"
 
-#. Distance to our router analysis
 msgid "Closest Floodfills to Our Routing Key (Where we Store our RI)"
 msgstr "Yönləndirmə Açarımıza ən yaxın daşqın sahələri (RİQ-imizi saxladığımız yer)"
 
@@ -4373,7 +4234,6 @@ msgstr "Orta Daşqın Məsafəsi"
 msgid "Closest Floodfill Pairs by Hash"
 msgstr "Hash tərəfindən Ən Yaxın Daşqın Cütlükləri"
 
-#. sorted;
 msgid "Hash Distance"
 msgstr "Hash məsafəsi"
 
@@ -4595,7 +4455,6 @@ msgstr "Tunel adı"
 msgid "Data Out"
 msgstr "Məlumat göndərildi"
 
-#. Saved in CSSHelper, assume success
 msgid "Console language saved."
 msgstr "Konsol dili saxlandı."
 
@@ -4605,7 +4464,6 @@ msgstr "Bant genişliyi testi uğurla tamamlandı"
 msgid "Bandwidth test failed"
 msgstr "Bant genişliyi sınağı alınmadı"
 
-#. didn't run at all?
 msgid "Bandwidth test did not complete"
 msgstr "Bant genişliyi testi tamamlanmadı"
 
@@ -4628,7 +4486,6 @@ msgstr "saniyədə bit"
 msgid "{0}Bytes per month maximum"
 msgstr "{0}Ayda maksimum bayt"
 
-#. wars for ConfigClientsHelper
 msgid "addressbook"
 msgstr "ünvan kitabçası"
 
@@ -4647,9 +4504,6 @@ msgstr "susidns"
 msgid "routerconsole"
 msgstr "marşrutlaşdırıcı konsol"
 
-#. clients, taken from clients.config, for ConfigClientsHelper
-#. note that if the wording changes in clients.config, we have to
-#. keep the old string here as well for existing installs
 msgid "Web console"
 msgstr "Veb konsolu"
 
@@ -4677,10 +4531,6 @@ msgstr "I2P Router Konsolu"
 msgid "Open Router Console in web browser at startup"
 msgstr "Başlanğıcda veb brauzerdə Router Konsolunu açın"
 
-#. tunnel nicknames, taken from i2ptunnel.config so they will display
-#. nicely under 'local destinations' in the summary bar
-#. note that if the wording changes in i2ptunnel.config, we have to
-#. keep the old string here as well for existing installs
 msgid "shared clients"
 msgstr "ortaq müştərilər"
 
@@ -4717,14 +4567,12 @@ msgstr "Şəxsi I2P Vebserver (eepsite)"
 msgid "HTTP Proxy"
 msgstr "HTTP Proksi"
 
-#. hardcoded in iMule?
 msgid "iMule"
 msgstr "iMule"
 
 msgid "Official I2P Source Repository"
 msgstr "Rəsmi I2P Mənbə Repository"
 
-#. standard themes for ConfigUIHelper
 msgid "dark"
 msgstr "qaranlıq"
 
@@ -4746,8 +4594,6 @@ msgstr "Şifrələmə"
 msgid "Stream"
 msgstr "Axın"
 
-#. parameters in transport addresses (netdb.jsp)
-#. may or may not be worth translating
 msgid "host"
 msgstr "ev sahibi"
 
@@ -5500,7 +5346,6 @@ msgstr "Kəşfiyyat tunelinin parametrlərində dəyişikliklər router.config f
 msgid "Client tunnel changes are temporary and are not saved."
 msgstr "Müştəri tunel dəyişiklikləri müvəqqətidir və yadda saxlanmır."
 
-#. if (pm.isRegistered(net.i2p.util.PortMapper.SVC_I2PTUNNEL)) {
 msgid "The default settings are optimized for general usage and normally don't need to be changed."
 msgstr "Defolt parametrlər ümumi istifadə üçün optimallaşdırılıb və adətən dəyişdirilməyə ehtiyac yoxdur."
 
@@ -7468,6 +7313,12 @@ msgstr "Router və işləyən mühit haqqında məlumatlara baxın"
 
 msgid "Statistics"
 msgstr "Statistika"
+
+msgid "Current console and webapp translation report"
+msgstr "Mövcud konsol və veb-applikasiya tərcümə rəyti"
+
+msgid "Translation Status"
+msgstr "Tərcümə halı"
 
 msgid "View active tunnels"
 msgstr "Aktiv tunellərə baxın"

@@ -313,11 +313,9 @@ msgstr "Esta dirección se guardará en la libreta de direcciones de su enrutado
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
 msgstr "Si desea realizar un seguimiento de los sitios que ha agregado manualmente, agréguelos a su libreta de direcciones maestra o privada."
 
-#. FIXME wasn't escaped
 msgid "Save & continue"
 msgstr "Guardar y continuar"
 
-#. only blockfile supports multiple books
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
 msgstr "Guardar {0} en la libreta de direcciones maestra y continuar al sitio web"

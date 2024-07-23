@@ -60,6 +60,5 @@ msgstr "Helyi célállomás leállt"
 msgid "Connection was reset"
 msgstr "A kapcsolat megszakadt"
 
-#. Translate this one here, can't do it later
 msgid "Failure code"
 msgstr "Hiba kód"

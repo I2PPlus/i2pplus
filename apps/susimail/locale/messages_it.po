@@ -22,32 +22,32 @@ msgstr "Email"
 msgid "No encoder found for encoding \\''{0}\\''."
 msgstr "Nessun codificatore trovato per la codifica \\\"{0}\\\"."
 
-#. tagged in WebMail
 msgid "Re:"
 msgstr "Re:"
 
 msgid "Fwd:"
 msgstr "Fwd:"
 
-#. MailDir-like
 msgid "Drafts"
 msgstr "Bozze"
 
-#. MailDir-like
 msgid "Sent"
 msgstr "Inviato"
 
-#. MailDir-like
 msgid "Trash"
 msgstr "Cestino"
 
-#. MailDir-like
 msgid "Bulk Mail"
 msgstr "Posta in massa"
 
-#. untranslated, translate on use
 msgid "Inbox"
 msgstr "Posta in arrivo"
+
+msgid "View message as HTML"
+msgstr ""
+
+msgid "View message as plain text"
+msgstr ""
 
 msgid "unknown"
 msgstr "sconosciuto"
@@ -163,7 +163,6 @@ msgstr "Nessuna codifica trovata per {0}"
 msgid "Attachment not found."
 msgstr "Impossibile trovare l'allegato."
 
-#. error if we get here
 msgid "Message not found."
 msgstr "Messaggio non trovato."
 
@@ -286,7 +285,6 @@ msgstr "Oggetto"
 msgid "Add Attachment"
 msgstr "Aggiungi allegato"
 
-#. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 msgid "Add attachment"
 msgstr "Aggiungi allegato"
 
@@ -359,6 +357,9 @@ msgstr "Dimensione"
 msgid "Mark for deletion"
 msgstr "Marca per la rimozione"
 
+msgid "Message contains HTML"
+msgstr ""
+
 msgid "Message is new"
 msgstr "Il messaggio è nuovo"
 
@@ -368,7 +369,6 @@ msgstr "Il messaggio è spam"
 msgid "Message body not downloaded"
 msgstr "Corpo del messaggio non scaricato"
 
-#. TODO ngettext
 msgid "Really delete the marked messages?"
 msgstr "Eliminare veramente i messaggi selezionati?"
 
@@ -426,6 +426,9 @@ msgstr "Torna alla Cartella"
 msgid "Move to Folder"
 msgstr "Sposta nella cartella"
 
+msgid "View message in new tab"
+msgstr ""
+
 msgid "Folder Page Size"
 msgstr "Dimensioni della pagina della cartella"
 
@@ -438,7 +441,6 @@ msgstr "Configurazione avanzata"
 msgid "Save Configuration"
 msgstr "Salva configurazione"
 
-#. this appears in the UI so translate
 msgid "No response from server"
 msgstr "Nessuna risposta dal server"
 
@@ -454,6 +456,5 @@ msgstr "Autenticazione fallita"
 msgid "Server refused connection"
 msgstr "Il server ha rifiutato la connessione"
 
-#. TODO which recipient?
 msgid "Mail rejected"
 msgstr "La mail è stata respinta"

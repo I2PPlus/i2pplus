@@ -22,30 +22,24 @@ msgstr "E-post"
 msgid "No encoder found for encoding \\''{0}\\''."
 msgstr "Süsteem ei leidnud kodeerija koodi \\''{0}\\'' jaoks."
 
-#. tagged in WebMail
 msgid "Re:"
 msgstr "Vt:"
 
 msgid "Fwd:"
 msgstr "Edastatud:"
 
-#. MailDir-like
 msgid "Drafts"
 msgstr "Klapploendid"
 
-#. MailDir-like
 msgid "Sent"
 msgstr "Saadetud"
 
-#. MailDir-like
 msgid "Trash"
 msgstr "Prügikorv"
 
-#. MailDir-like
 msgid "Bulk Mail"
 msgstr "Massimailing"
 
-#. untranslated, translate on use
 msgid "Inbox"
 msgstr "Saadud"
 
@@ -169,7 +163,6 @@ msgstr "Ei leitud kodeerimist {0} jaoks"
 msgid "Attachment not found."
 msgstr "Allikast ei leitud."
 
-#. error if we get here
 msgid "Message not found."
 msgstr "Sõnumit ei leitud."
 
@@ -292,7 +285,6 @@ msgstr "Teema"
 msgid "Add Attachment"
 msgstr "Lisa allikas"
 
-#. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 msgid "Add attachment"
 msgstr "Lisa allikas"
 
@@ -377,7 +369,6 @@ msgstr "Sõnum on rämpspost"
 msgid "Message body not downloaded"
 msgstr "Sõnumi tekst ei ole alla laetud"
 
-#. TODO ngettext
 msgid "Really delete the marked messages?"
 msgstr "Kustutan ma tegelikult märgitud sõnumid?"
 
@@ -450,7 +441,6 @@ msgstr "Täiendavad seadistused"
 msgid "Save Configuration"
 msgstr "Salvesta seadistused"
 
-#. this appears in the UI so translate
 msgid "No response from server"
 msgstr "Serverilt ei saanud vastust"
 
@@ -466,6 +456,5 @@ msgstr "Sisselogimine ebaõnnestus"
 msgid "Server refused connection"
 msgstr "Server keeldas ühenduse"
 
-#. TODO which recipient?
 msgid "Mail rejected"
 msgstr "E-post tagasi lükatud"

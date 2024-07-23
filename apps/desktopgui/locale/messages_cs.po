@@ -49,11 +49,9 @@ msgstr "Vypnutí v {0}"
 msgid "Shutdown imminent"
 msgstr "Vypnutí bezprostřední"
 
-#. status translations are in the console bundle
 msgid "Network"
 msgstr "Síť"
 
-#. Windows typically has tooltips; Linux (at least Ubuntu) doesn't
 msgid "I2P: Right-click for menu"
 msgstr "I2P: Klepněte pravým tlačítkem myši na nabídku"
 

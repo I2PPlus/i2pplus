@@ -49,11 +49,9 @@ msgstr "Mematikan I2P dalam {0}"
 msgid "Shutdown imminent"
 msgstr "I2P sedang dalam proses dimatikan"
 
-#. status translations are in the console bundle
 msgid "Network"
 msgstr "Jaringan"
 
-#. Windows typically has tooltips; Linux (at least Ubuntu) doesn't
 msgid "I2P: Right-click for menu"
 msgstr "I2P: klik kanan untuk menampilkan menu"
 

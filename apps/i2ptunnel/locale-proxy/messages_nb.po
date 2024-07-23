@@ -310,11 +310,9 @@ msgstr "Denne adressen vil bli lagret i ruterens adressebok der de abonnementsba
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
 msgstr "Hvis du ønsker å holde styr på nettsteder du har lagt til manuelt, legg til i Master eller Private adresseboken i stedet."
 
-#. FIXME wasn't escaped
 msgid "Save & continue"
 msgstr "Lagre"
 
-#. only blockfile supports multiple books
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
 msgstr "Lagre {0} i hovedadresseboken og fortsett til nettstedet"

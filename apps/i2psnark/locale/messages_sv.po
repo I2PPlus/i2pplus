@@ -212,12 +212,10 @@ msgstr "Fel: Kunde inte lägga till torrent: {0}"
 msgid "Torrent already running: {0}"
 msgstr "Torrent redan igång: {0}"
 
-#. catch this here so we don't try do delete it below
 #, java-format
 msgid "Cannot open \"{0}\""
 msgstr "Kan inte öppna \"{0}\""
 
-#. TODO - if the existing one is a magnet, delete it and add the metainfo instead?
 #, java-format
 msgid "Torrent with this info hash is already running: {0}"
 msgstr "Torrent med denna infohash körs redan: {0}"
@@ -312,13 +310,6 @@ msgstr "Gränsen är {0}B"
 msgid "Torrent \"{0}\" has no data!"
 msgstr "Torrent \"{0}\" har ingen data!"
 
-#.
-#. System.out.println("torrent info: " + info.toString());
-#. List<Long> lengths = info.getLengths();
-#. if (lengths != null)
-#. for (int i = 0; i < lengths.size(); i++)
-#. System.out.println("File " + i + " is " + lengths.get(i) + " long.");
-#.
 #, java-format
 msgid "Torrents larger than {0}B are not supported yet \"{1}\"!"
 msgstr "Torrenter större än {0}B stöds inte än \"{1}\"!"
@@ -377,8 +368,6 @@ msgstr "Hämtning klar: {0}"
 msgid "I2PSnark"
 msgstr "I2PSnark"
 
-#. addMessage(_t("Metainfo received for {0}", snark.getName()));
-#. addMessageNoEscape(_t("Starting torrent: {0}", linkify(snark)).replace("Magnet ", ""));
 #, java-format
 msgid "Starting torrent: {0}"
 msgstr "Starta torrent: {0}"
@@ -662,7 +651,6 @@ msgstr "tum"
 msgid "out"
 msgstr "ut"
 
-#. Only truncate if it's an actual dest
 msgid "Our destination (identity) for this session"
 msgstr "Vår destination (identitet) för denna session"
 
@@ -724,7 +712,6 @@ msgstr "Sista sidan"
 msgid "Cannot add torrent {0} inside another torrent: {1}"
 msgstr "Kan inte lägga till torrent{0} inuti annan torrent:{1}"
 
-#. TODO
 #, java-format
 msgid "Download from non-I2P location {0} is not supported"
 msgstr "Nedladdning från icke-I2P-plats {0} stöds inte"
@@ -733,7 +720,6 @@ msgstr "Nedladdning från icke-I2P-plats {0} stöds inte"
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
 msgstr "Ogiltig webbadress: Måste börja med \"{0}\" eller \"{1}\""
 
-#. no file or URL specified
 msgid "Enter URL or select torrent file"
 msgstr "Ange URL eller välj torrentfil"
 
@@ -995,7 +981,6 @@ msgstr "Ange katalogen att spara datan i (förval {0})"
 msgid "Create Torrent"
 msgstr "Skapa torrent"
 
-#. buf.append("From file: <input type=file name=\"newFile\" size=50 value=\"" + newFile + "\" /><br>\n");
 msgid "Data to seed"
 msgstr "Data att ladda upp"
 
@@ -1075,7 +1060,6 @@ msgstr "Maximalt antal torrenter som ska visas per sida"
 msgid "torrents"
 msgstr "torrenter"
 
-#. If we get to here, we have the language settings
 msgid "Language"
 msgstr "Språk"
 
@@ -1278,7 +1262,6 @@ msgstr "Kan inte lägga till magnetlänk: Stöd för magnetlänkar version 2 sak
 msgid "Invalid magnet URL {0}"
 msgstr "Ogiltig magnet-adress {0}"
 
-#. * dummies for translation
 #, java-format
 msgid "1 hop"
 msgid_plural "{0} hops"
@@ -1375,7 +1358,6 @@ msgstr "Upp till högre mappnivå"
 msgid "Audio Playlist"
 msgstr "Ljudspellista"
 
-#. status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Not found"), _t("Torrent not found?").replace("?", ""));
 msgid "Not found"
 msgstr "Finns ej"
 
@@ -1385,7 +1367,6 @@ msgstr "Torrenten hittades inte?"
 msgid "File not found in torrent?"
 msgstr "Filen hittades inte i torrent?"
 
-#. status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Unrecognized"), _t("File not found in torrent?").replace("?", ""));
 msgid "Unrecognized"
 msgstr "Okänd"
 
@@ -1410,17 +1391,6 @@ msgstr "Hämta inte den här filen"
 msgid "Skip"
 msgstr "Hoppa över"
 
-#. TODO: fixup so works with ajax refresh
-#. "<span class=script>");
-#. if (!inOrder) {
-#. buf.append("<a class=control id=setallhigh href=#>")
-#. .append(toImg("clock_red")).append(_t("Set all high")).append("</a>\n");
-#. }
-#. buf.append("<a class=control id=setallnorm href=#>")
-#. .append(toImg("clock")).append(_t("Set all normal")).append("</a>\n")
-#. .append("<a class=control id=setallskip href=#>")
-#. .append(toImg("block")).append(_t("Skip all")).append("</a></span>\n");
-#.
 msgid "Save priorities"
 msgstr "Spara prioriteter"
 
@@ -1490,7 +1460,6 @@ msgstr "Torrent måste stoppas för att kunna redigera"
 msgid "Save Changes"
 msgstr "Spara ändringar"
 
-#. shouldn't happen
 msgid "Torrent must be stopped"
 msgstr "Torrent måste stoppas"
 

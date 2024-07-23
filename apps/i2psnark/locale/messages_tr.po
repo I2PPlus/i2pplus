@@ -212,12 +212,10 @@ msgstr "Hata: Torrent eklenemedi: {0}"
 msgid "Torrent already running: {0}"
 msgstr "Torrent zaten çalışıyor: {0}"
 
-#. catch this here so we don't try do delete it below
 #, java-format
 msgid "Cannot open \"{0}\""
 msgstr "\"{0}\" açılamadı"
 
-#. TODO - if the existing one is a magnet, delete it and add the metainfo instead?
 #, java-format
 msgid "Torrent with this info hash is already running: {0}"
 msgstr "Bu bilgi karmasını kullanan bir torrent zaten çalışıyor: {0}"
@@ -312,13 +310,6 @@ msgstr "Sınır {0}B"
 msgid "Torrent \"{0}\" has no data!"
 msgstr "\"{0}\" torrentinde herhangi bir veri yok!"
 
-#.
-#. System.out.println("torrent info: " + info.toString());
-#. List<Long> lengths = info.getLengths();
-#. if (lengths != null)
-#. for (int i = 0; i < lengths.size(); i++)
-#. System.out.println("File " + i + " is " + lengths.get(i) + " long.");
-#.
 #, java-format
 msgid "Torrents larger than {0}B are not supported yet \"{1}\"!"
 msgstr "{0}B boyutundan büyük torrentler henüz desteklenmiyor \"{1}\"!"
@@ -377,8 +368,6 @@ msgstr "İndirme tamamlandı: {0}"
 msgid "I2PSnark"
 msgstr "I2PSnark"
 
-#. addMessage(_t("Metainfo received for {0}", snark.getName()));
-#. addMessageNoEscape(_t("Starting torrent: {0}", linkify(snark)).replace("Magnet ", ""));
 #, java-format
 msgid "Starting torrent: {0}"
 msgstr "Torrent başlatılıyor: {0}"
@@ -662,7 +651,6 @@ msgstr "içinde"
 msgid "out"
 msgstr "dışarı"
 
-#. Only truncate if it's an actual dest
 msgid "Our destination (identity) for this session"
 msgstr "Bu oturum için hedef (kimlik)"
 
@@ -724,7 +712,6 @@ msgstr "Son sayfa"
 msgid "Cannot add torrent {0} inside another torrent: {1}"
 msgstr "{0} torrenti başka bir torrent içine eklenemez: {1}"
 
-#. TODO
 #, java-format
 msgid "Download from non-I2P location {0} is not supported"
 msgstr "I2P olmayan bir konumdan {0} indirme desteklenmiyor"
@@ -733,7 +720,6 @@ msgstr "I2P olmayan bir konumdan {0} indirme desteklenmiyor"
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
 msgstr "Geçersiz URL: \"{0}\" veya \"{1}\" ile başlamalıdır"
 
-#. no file or URL specified
 msgid "Enter URL or select torrent file"
 msgstr "URL'yi girin veya torrent dosyasını seçin"
 
@@ -995,7 +981,6 @@ msgstr "Verilerin kaydedileceği klasörü yazın (varsayılan {0})"
 msgid "Create Torrent"
 msgstr "Torrent Oluştur"
 
-#. buf.append("From file: <input type=file name=\"newFile\" size=50 value=\"" + newFile + "\" /><br>\n");
 msgid "Data to seed"
 msgstr "Tohumlanacak veri"
 
@@ -1075,7 +1060,6 @@ msgstr "Bir sayfada görüntülenecek en fazla torrent sayısı"
 msgid "torrents"
 msgstr "torrentler"
 
-#. If we get to here, we have the language settings
 msgid "Language"
 msgstr "Dil"
 
@@ -1278,7 +1262,6 @@ msgstr "Magnet ekleyemem: Versiyon 2 magnet bağlantıları desteklenmiyor"
 msgid "Invalid magnet URL {0}"
 msgstr "{0} Magnet adresi geçersiz"
 
-#. * dummies for translation
 #, java-format
 msgid "1 hop"
 msgid_plural "{0} hops"
@@ -1375,7 +1358,6 @@ msgstr "Bir üst klasöre geç"
 msgid "Audio Playlist"
 msgstr "Ses Oynatma Listesi"
 
-#. status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Not found"), _t("Torrent not found?").replace("?", ""));
 msgid "Not found"
 msgstr "Bulunamadı"
 
@@ -1385,7 +1367,6 @@ msgstr "Torrent bulunamadı?"
 msgid "File not found in torrent?"
 msgstr "Dosya torrent içinde bulunamadı?"
 
-#. status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Unrecognized"), _t("File not found in torrent?").replace("?", ""));
 msgid "Unrecognized"
 msgstr "Tanınmıyor"
 
@@ -1410,17 +1391,6 @@ msgstr "Bu dosyayı indirme"
 msgid "Skip"
 msgstr "Atla"
 
-#. TODO: fixup so works with ajax refresh
-#. "<span class=script>");
-#. if (!inOrder) {
-#. buf.append("<a class=control id=setallhigh href=#>")
-#. .append(toImg("clock_red")).append(_t("Set all high")).append("</a>\n");
-#. }
-#. buf.append("<a class=control id=setallnorm href=#>")
-#. .append(toImg("clock")).append(_t("Set all normal")).append("</a>\n")
-#. .append("<a class=control id=setallskip href=#>")
-#. .append(toImg("block")).append(_t("Skip all")).append("</a></span>\n");
-#.
 msgid "Save priorities"
 msgstr "Öncelikleri kaydet"
 
@@ -1490,7 +1460,6 @@ msgstr "Düzenlemek için Torrent'in durdurulması gerekiyor"
 msgid "Save Changes"
 msgstr "Değişiklikleri Kaydet"
 
-#. shouldn't happen
 msgid "Torrent must be stopped"
 msgstr "Torrent durdurulmalı"
 

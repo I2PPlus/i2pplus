@@ -310,11 +310,9 @@ msgstr "Bu ünvan sizin abunament bazası ünvanləriniz saxlanıldığı ruter 
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
 msgstr "Manuel olaraq əlavə etdiyiniz saytları izləmək istəyirsinizsə, onları Master və ya Private ünvan defterinə əlavə edin."
 
-#. FIXME wasn't escaped
 msgid "Save & continue"
 msgstr "Saxla və davam et"
 
-#. only blockfile supports multiple books
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
 msgstr "{0}-i Master ünvan defterinə saxlamaq və saytın səhifəsinə davam etmək"

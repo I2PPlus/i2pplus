@@ -46,7 +46,6 @@ msgid "Acquired only 1 router info from reseed hosts"
 msgid_plural "Acquired only {0} router infos from reseed hosts"
 msgstr[0] "Reseed 호스트에서 {0} Router Infos 만 취득했습니다"
 
-#. remove dupe error msgs
 #, java-format
 msgid "{0}Reseed{1} failed:"
 msgstr "{0}재시드{1} 실패:"
@@ -73,9 +72,6 @@ msgstr "리시드 호스트로부터 {0} 라우터 정보를 획득했습니다"
 msgid "Acquired {0} router infos from reseed hosts ({1} errors)"
 msgstr "리시드 호스트에서 {0} 라우터 정보를 획득했습니다({1} 오류)."
 
-#. NOTE TO TRANSLATORS - each of these phrases is a description for a statistic
-#. to be displayed on /stats.jsp and in the graphs on /graphs.jsp.
-#. Please keep relatively short so it will fit on the graphs.
 msgid "Message receive rate (B/s)"
 msgstr "메시지 수신 속도(B/s)"
 
@@ -127,14 +123,12 @@ msgstr "평균 터널 빌드 성공 %"
 msgid "unknown"
 msgstr "알수없는"
 
-#. 1
 msgid "Floodfill"
 msgstr "홍수 노드"
 
 msgid "Show all routers with this capability in the NetDb"
 msgstr "NETDB 에이 기능을 갖춘 모든 라우터를 표시하십시오"
 
-#. This used to be "no common transports" but it is almost always no transports at all
 msgid "No transports (hidden or starting up?)"
 msgstr "트랜스포트 없음 (숨겨졌거나 시작중일 수 있습니다)"
 
@@ -223,9 +217,6 @@ msgstr "UPnP가 최대 다운스트림 비트레이트가 {0}bits/초 라고 보
 msgid "UPnP reports the maximum upstream bit rate is {0}bits/sec"
 msgstr "UPnP가 최대 업스트림 비트레이트가 {0}bits/초 라고 보고합니다"
 
-#. {0} is TCP or UDP
-#. {1,number,#####} prevents 12345 from being output as 12,345 in the English locale.
-#. If you want the digit separator in your locale, translate as {1}.
 #, java-format
 msgid "{0} port {1,number,#####} was successfully forwarded by UPnP."
 msgstr "{0} 포트 {1,number,#####} 가 UPnP에 의해 성공적으로 포워딩 되었습니다."
@@ -295,7 +286,6 @@ msgstr "{0}으로 복사 실패"
 msgid "Requires Java version {0} but installed Java version is {1}"
 msgstr "자바 버전 {0}이 필요합니다. 설치된 자바 버전은 {1}입니다."
 
-#. set status before thread to ensure UI feedback
 msgid "Updating"
 msgstr "업데이트중"
 
@@ -316,7 +306,6 @@ msgstr "먼저 {0} 버전으로 업데이트 해야합니다"
 msgid "Checking for update of plugin {0}"
 msgstr "{0} 플러그인 업데이트를 확인하세요"
 
-#. set status before thread to ensure UI feedback
 msgid "Contacting plugin update server"
 msgstr "플러그인 업데이트 서버에 연락 중"
 
@@ -346,7 +335,6 @@ msgstr "플러그인 다운로드됨"
 msgid "Cannot create plugin directory {0}"
 msgstr "플러그인 디렉토리 {0}를 생성할 수 없습니다"
 
-#. updateStatus("<b>" + "Plugin contains an invalid key" + ' ' + pubkey + ' ' + signer + "</b>");
 #, java-format
 msgid "Plugin from {0} contains an invalid key"
 msgstr "{0}의 플러그인이 잘못된 키를 포함하고 있습니다"
@@ -355,7 +343,6 @@ msgstr "{0}의 플러그인이 잘못된 키를 포함하고 있습니다"
 msgid "Plugin signature verification of {0} failed"
 msgstr "{0}의 플러그인 서명 확인이 실패했습니다"
 
-#. don't display signer, we're really checking the key not the signer name
 msgid "Plugin not installed - signer is untrusted"
 msgstr "플러그인 설치안됨 - 신뢰되지 않는 서명자"
 
@@ -491,7 +478,6 @@ msgstr "안전 종료"
 msgid "Graceful shutdown initiated"
 msgstr "안전 종료 착수중"
 
-#. Normal browsers send value, IE sends button label
 msgid "Shutdown immediately"
 msgstr "즉시 종료"
 
@@ -577,19 +563,15 @@ msgstr "설치된 I2P+ 시스템 서비스"
 msgid "Warning: unable to install the service"
 msgstr "경고: 서비스를 설치할 수 없음"
 
-#. addFormNotice(_t("Service installed"));
 msgid "Enabled I2P+ service autostart at system startup"
 msgstr "시스템 시작 시 I2P 서비스 자동 시작 활성화"
 
-#. addFormError(_t("Warning: unable to install the service") + " - " + ioe.getLocalizedMessage());
 msgid "Warning: could not set the I2P+ service to autostart"
 msgstr "경고: I2P 서비스를 자동 시작으로 설정할 수 없습니다."
 
-#. addFormNotice(_t("Service removed"));
 msgid "Disabled I2P+ Service autostart at system startup"
 msgstr "시스템 시작 시 I2P+ 서비스 자동 시작을 비활성화했습니다."
 
-#. addFormError(_t("Warning: unable to remove the service") + " - " + ioe.getLocalizedMessage());
 msgid "Warning: could not set the I2P+ service to manual start"
 msgstr "경고: I2P+ 서비스를 수동 시작으로 설정할 수 없습니다"
 
@@ -796,14 +778,12 @@ msgstr "인증서는 네트워크에서 실행되는 암호화된 서비스의 �
 msgid "Local SSL Certificates"
 msgstr "로컬 SSL 증명서"
 
-#. console
 msgid "Router Console"
 msgstr "라우터 콘솔"
 
 msgid "Location"
 msgstr "위치"
 
-#. I2CP
 msgid "I2CP"
 msgstr "I2CP"
 
@@ -819,14 +799,9 @@ msgstr "웹사이트"
 msgid "Local Router Family Certificate"
 msgstr "로컬 라우터 패밀리 증명서"
 
-#. hide family name in css as it's already displayed above
 msgid "Family"
 msgstr "패밀리"
 
-#. } else {
-#. _out.write("<p>");
-#. _out.write(_t("none"));
-#. _out.write("</p>\n");
 msgid "Console"
 msgstr "콘솔"
 
@@ -877,7 +852,6 @@ msgstr "플러그인 {0}을 정지함"
 msgid "Stopped webapp {0}"
 msgstr "웹앱 {0}을 정지함"
 
-#. label (IE)
 msgid "Start"
 msgstr "시작"
 
@@ -962,7 +936,6 @@ msgstr "사용자 {0} 추가함"
 msgid "Interface configuration saved"
 msgstr "인터페이스 설정 저장함"
 
-#. "<th data-sortable data-sort-method=number>" + _t("Speed") + "</th>" +
 msgid "Edit"
 msgstr "편집"
 
@@ -1005,7 +978,6 @@ msgstr "이메일"
 msgid "Plugin"
 msgstr "플러그인"
 
-#. hide caps as already in the header
 msgid "Version"
 msgstr "버전"
 
@@ -1186,8 +1158,6 @@ msgstr "추가할 클래스 선택"
 msgid "All classes in {0}"
 msgstr "{0}의 모든 클래스"
 
-#. stat groups for stats.jsp
-#. See StatsGenerator for groups mapped to a display name
 msgid "Bandwidth"
 msgstr "대역폭"
 
@@ -1314,8 +1284,6 @@ msgstr "UDP 활성화"
 msgid "Requiring SSU introducers"
 msgstr "SSU 소개자가 필요합니다"
 
-#. if (_context.hasWrapper()) {
-#. Wow this dumps all conns immediately and really isn't nice
 msgid "Performing a soft restart"
 msgstr "소프트 재시작 수행"
 
@@ -1406,7 +1374,6 @@ msgstr "지금 Reseed"
 msgid "Reseeding is already in progress"
 msgstr "이미 재시드 중입니다"
 
-#. skip the nonce checking in ReseedHandler
 msgid "Starting reseed process"
 msgstr "재시드 프로세스 시작중"
 
@@ -1445,8 +1412,6 @@ msgstr "URL 리스트 재설정"
 msgid "URL list reset successfully"
 msgstr "URL 리스트 리셋 성공"
 
-#. ctx.router().shutdown(Router.EXIT_HARD); // never returns
-#. give the UI time to respond
 msgid "Cancel shutdown"
 msgstr "종료 취소"
 
@@ -1456,8 +1421,6 @@ msgstr "재시작 취소"
 msgid "Restart immediately"
 msgstr "바로 재시작"
 
-#. ctx.router().shutdown(Router.EXIT_HARD_RESTART); // never returns
-#. give the UI time to respond
 msgid "Restart"
 msgstr "재시작"
 
@@ -1543,8 +1506,6 @@ msgstr "옮겨짐"
 msgid "Saved order of sections."
 msgstr "섹션 순서 저장됨."
 
-#. the count isn't really correct anyway, since we don't check for actual changes
-#. addFormNotice("Updated settings for " + updated + " pools.");
 msgid "Updated settings for all pools."
 msgstr "모든 풀의 설정 저장됨."
 
@@ -1554,7 +1515,6 @@ msgstr "예비 터널 설정이 성공적으로 저장됬습니다."
 msgid "Error saving the configuration (applied but not saved) - please see the error logs."
 msgstr "설정 저장 오류 (적용됬으나 저장되지 않음) - 오류 로그를 확인하세요."
 
-#. * dummies for translation
 #, java-format
 msgid "{0} hop"
 msgid_plural "{0} hops"
@@ -1787,7 +1747,6 @@ msgstr "세부사항"
 msgid "Combined bandwidth graph"
 msgstr "합쳐진 대역폭 그래프"
 
-#. e.g. "statname for 60m"
 #, java-format
 msgid "{0} for {1}"
 msgstr "{1} 중 {0}"
@@ -1997,7 +1956,6 @@ msgstr "대역폭 설정"
 msgid "I2P Bandwidth Configuration"
 msgstr "i2P 대역폭 설정"
 
-#. FIXME wasn't escaped
 msgid "Configure UI"
 msgstr "사용자 인터페이스를 구성합니다"
 
@@ -2034,7 +1992,6 @@ msgstr "최근 변경 사항"
 msgid "Bug tracker"
 msgstr "버그 트래커"
 
-#. I2P specific
 msgid "I2P Bug Reports"
 msgstr "I2P 버그 보고서"
 
@@ -2068,7 +2025,6 @@ msgstr "Javadocs"
 msgid "I2P Network Statistics"
 msgstr "I2P 네트워크 통계"
 
-#. software repositories + filesharing
 msgid "Transient server-encrypted filesharing and pastebin"
 msgstr "임시 서버 암호화 파일 공유 및 페이스트빈"
 
@@ -2087,13 +2043,9 @@ msgstr "I2P의 본고장"
 msgid "BitTorrent tracker"
 msgstr "비트토렌트 트래커"
 
-#. "git.i2p" + S + _x("Community Git hosting") + S + "http://git.i2p/explore/repos" + S + I + "eepsites/git.svg" + S +
-#. torrent trackers
 msgid "Postman's Tracker"
 msgstr "우편배달부 추적기"
 
-#. _x("Chudo") + S + _x("No login BitTorrent tracker") + S + "http://torrents.chudo.i2p/" + S + I + "magnet.svg" + S +
-#. domain name registration + uptime trackers
 msgid "List of active eepsites and uptime monitor"
 msgstr "활성 eepsites 및 가동 시간 모니터 목록"
 
@@ -2103,9 +2055,6 @@ msgstr "I2P 도메인 이름 등록"
 msgid "zzz Domain Registry"
 msgstr "zzz 도메인 레지스트리"
 
-#. "Identiguy" + S + _x("List of active eepsites and uptime monitor") + S + "http://identiguy.i2p/" + S + I + "servermonitor.svg" + S +
-#. "scanner.linuxfarm" + S + _x("List of active eepsites and uptime monitor") + S + "http://scanner.linuxfarm.i2p/" + S + I + "eepsites/servermonitor.svg" + S +
-#. forums + social
 msgid "I2P Forum"
 msgstr "I2P 포럼"
 
@@ -2127,14 +2076,6 @@ msgstr "교차 네트워크 마이크로 블로깅"
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Reddit의 대체 개인 정보 중심 프론트 엔드"
 
-#. "StackOverflow" + S + _x("Developer question &amp; answer forums") + S + "http://stackoverflow.i2p/" + S + I + "eepsites/stackoverflow.svg" + S +
-#. "dread.i2p" + S + _x("Darknet forums") + S + "http://dread.i2p/d/i2p/?sort=new" + S + I + "eepsites/dread.svg" + S +
-#. _x("Dev Forum") + S + _x("Development forum") + S + "http://zzz.i2p/" + S + I + "eepsites/forum.svg" + S +
-#. "libreddit.i2p" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://libreddit.i2p/" + S + I + "libreddit.svg" + S +
-#. "zeronet.i2p" + S + _x("Zeronet I2P Gateway") + S + "http://zeronet.i2p/" + S + I + "zeronet.svg" + S +
-#. _x("Dancing Elephants") + S + _x("Rocksolid forums for the darknets") + S + "http://def3.i2p/" + S + I + "eepsites/forum.svg" + S +
-#. "query.i2p" + S + _x("The StackOverflow of I2P") + S + "http://query.i2p/" + S + I + "eepsites/forum.svg" + S +
-#. hosting + other services
 msgid "Base64 Image Encoder"
 msgstr "Base64 이미지 인코더"
 
@@ -2180,9 +2121,6 @@ msgstr "YouTube의 대체 프런트엔드"
 msgid "Provider of privacy respecting web hosting and VPN services"
 msgstr "웹 호스팅 및 VPN 서비스와 관련한 개인 정보 보호 제공자"
 
-#. "tinypng.i2p" + S + _x("Image optimizer") + S + "http://tinypng.i2p/" + S + I + "tinypng.png" + S +
-#. _x("Deep Web Radio") + S + _x("Streaming radio service") + S + "http://deepwebradio.i2p/" + S + I + "radio.svg" + S +
-#. search engines
 msgid "Tor-focused Search Engine"
 msgstr "Tor 중심 검색 엔진"
 
@@ -2204,13 +2142,6 @@ msgstr "개인정보 보호에 초점을 맞춘 Clearnet 검색 엔진"
 msgid "I2P Web Search Engine"
 msgstr "I2P 웹 검색 엔진"
 
-#. "I2PSearch" + S +_x("I2P Web Search Engine") + S + "http://i2psearch.i2p/" + S + I + "search.svg" + S +
-#. "Legwork" + S +_x("I2P Web Search Engine") + S + "http://legwork.i2p/" + S + I + "search.svg" + S +
-#. "LibreY" + S +_x("Clearnet Search Engine") + S + "http://librey.i2p/" + S + I + "search.svg" + S +
-#. "raklet.i2p" + S +_x("Tor-focused Search Engine") + S + "http://raklet.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
-#. "Ransack" + S +_x("I2P-based Metasearch Engine") + S + "http://ransack.i2p/" + S + I + "search.svg" + S +
-#. "shmoogle.i2p" + S +_x("I2P Web Search Engine") + S + "http://shmoogle.i2p/" + S + I + "search.svg" + S +
-#. wikis & reference
 msgid "Enabling the free transmission of data in the public interest"
 msgstr "공익에서 데이터의 자유 전송 가능"
 
@@ -2271,15 +2202,6 @@ msgstr "지리적 사실과 깃발을 포함한 세계 아틀라스"
 msgid "WorldAtlas"
 msgstr "세계 아틀라스"
 
-#. "cssportal.i2p" + S + _x("CSS design reference") + S + "http://cssportal.i2p/" + S + I + "help.svg" + S +
-#. "ebooks.i2p" + S + _x("Huge collection of books &amp; magazines &amp; comics") + S + "http://ebooks.i2p/" + S + I + "eepsites/books.svg" + S +
-#. "legalcases.i2p" + S + _x("Publicly available texts of court decisions all over the world") + S + "http://legalcases.i2p/" + S + I + "eepsites/books.svg" + S +
-#. _x("imperial.i2p") + S + _x("Extensive repository of DRM-free ebooks") + S + "http://imperial.i2p/" + S + I + "eepsites/books.svg" + S +
-#. "jalibrary.i2p" + S + _x("Books &amp; courses &amp; art") + S + "http://jalibrary.i2p/" + S + I + "eepsites/books.svg" + S +
-#. "nexus.i2p" + S + _x("Searchable science library") + S + "http://nexus.i2p/" + S + I + "nexus.svg" + S +
-#. "tome.i2p" + S + _x("Collection of books &amp; other reading material") + S + "http://tome.i2p/" + S + I + "eepsites/books.svg" + S +
-#. _x("UrbanDictionary") + S + _x("Crowd-sourced slang dictionary") + S + "http://urbandictionary.i2p/" + S + I + "eepsites/urbandictionary.svg" + S +
-#. news + blogs
 msgid "Technology News &amp; more..."
 msgstr "기술 뉴스 등..."
 
@@ -2650,7 +2572,6 @@ msgstr "대기 중"
 msgid "Scheduled jobs"
 msgstr "예약된 일감"
 
-#. translators: {0} is a job name, {1} is a time, e.g. 6 min
 #, java-format
 msgid "{0} starts in {1}"
 msgstr "{0}은(는) {1}에 시작됩니다."
@@ -2694,40 +2615,27 @@ msgstr "파일 발견되지 않음"
 msgid "No log messages"
 msgstr "로그 메세지 없음"
 
-#. 0  -
 msgid "Local Router"
 msgstr "로컬 라우터"
 
-#. 1  - r=.
 msgid "Router Lookup"
 msgstr "라우터 검색"
 
-#. 2  -
-#. 3  - f=2
 msgid "All Routers"
 msgstr "모든 라우터"
 
-#. 4  - f=1 (debug)
-#. 5  - l=1
-#. 6  - l=2 (debug)
-#. only show for our own id
 msgid "LeaseSets"
 msgstr "리즈셋"
 
-#. 7  - l=3
 msgid "Advanced Lookup"
 msgstr "고급 조회"
 
-#. 8  - f=4
 msgid "LeaseSet Lookup"
 msgstr "임대세트 조회"
 
-#. 9  -
-#. 10 - f=5
 msgid "All Routers (Client NetDb)"
 msgstr "모든 라우터(클라이언트 NetDb)"
 
-#. 11 - f=6 (debug)
 msgid "Sybil Analysis"
 msgstr "시빌 분석"
 
@@ -2893,20 +2801,6 @@ msgstr "프로필 보기"
 msgid "Profile"
 msgstr "프로필"
 
-#.
-#. PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(h);
-#. if (prof != null && prof.getIsExpandedDB()) {
-#. buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(h.toBase64()).append("\" title=\"")
-#. .append(_t("View profile")).append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>");
-#. }
-#.
-#.
-#. PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(h);
-#. if (prof != null && prof.getIsExpandedDB()) {
-#. buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(h.toBase64()).append("\" title=\"").append(_t("View profile"))
-#. .append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>");
-#. }
-#.
 msgid "Configure peer"
 msgstr "피어 구성"
 
@@ -2916,7 +2810,6 @@ msgstr "메모리 사용량"
 msgid "Hidden"
 msgstr "숨겨짐"
 
-#. shouldn't happen
 msgid "Published"
 msgstr "게시됨"
 
@@ -2953,7 +2846,6 @@ msgstr "NetDb에서 이 포트가 있는 모든 라우터를 표시합니다."
 msgid "Capabilities"
 msgstr "능력"
 
-#. hide version as already in the header
 msgid "Core version"
 msgstr "코어 버전"
 
@@ -3100,8 +2992,6 @@ msgstr "동료 능력"
 msgid "Dir"
 msgstr "디렉토리"
 
-#. "<th class=lookup title=\"").append(_t("Lookup address via gwhois.org")).append("\">").append(_t("Whois")).append("</th>" +
-#. buf.append("<th class=lookup title=\"").append(_t("Lookup address via gwhois.org")).append("\">").append(_t("Whois")).append("</th>");
 msgid "Direction/Introduction"
 msgstr "방향/소개"
 
@@ -3247,7 +3137,6 @@ msgid "{0} fail"
 msgid_plural "{0} fails"
 msgstr[0] "{0} 실패"
 
-#. 2
 msgid "Banned"
 msgstr "차단됨"
 
@@ -3365,9 +3254,6 @@ msgstr "속도"
 msgid "Low Latency"
 msgstr "낮은 대기 시간"
 
-#. .append("<th title=\"").append(_t("Time taken for peer test")).append("\">")
-#. .append(_t("Test Avg (ms)")).append("</th>")
-#. .append("<th>").append(_t("Capacity")).append("</th>")
 msgid "Tunnels peer has agreed to participate in"
 msgstr "터널 피어는 참여하기로 동의했다"
 
@@ -3380,8 +3266,6 @@ msgstr "터널 피어는 참여를 거부했습니다"
 msgid "Rejected"
 msgstr "거부"
 
-#. .append("<th>").append(_t("Integration")).append("</th>")
-#. .append("<th>").append(_t("First Heard About")).append("</th>")
 msgid "Last Heard From"
 msgstr "마지막으로 들은 곳:"
 
@@ -3394,14 +3278,12 @@ msgstr "접근불가능"
 msgid "OK"
 msgstr "OK"
 
-#. hide if < 10%
 msgid "Test Fails"
 msgstr "테스트 실패"
 
 msgid "Fast, High Capacity"
 msgstr "빠르고, 높은 수용력"
 
-#. 0
 msgid "High Capacity"
 msgstr "높은 수용력"
 
@@ -3480,7 +3362,6 @@ msgstr "마지막 나쁜 저장"
 msgid "Capabilities in the NetDb, not used to determine profiles"
 msgstr "프로필을 결정하는 데 사용되지 않는 NetDb의 기능"
 
-#. capabilities
 msgid "caps"
 msgstr "대문자"
 
@@ -3549,7 +3430,6 @@ msgstr "얼마나 많은 피어와 최근 통신했습니까?"
 msgid "All"
 msgstr "모두"
 
-#. 3
 msgid "Session Bans"
 msgstr "세션 금지"
 
@@ -3583,7 +3463,6 @@ msgstr "기간 당 가장 높은 이벤트"
 msgid "Lifetime average events per period"
 msgstr "기간 당 전체 평균 이벤트"
 
-#. Display the strict average
 msgid "Lifetime average frequency"
 msgstr "전체 평균 빈도"
 
@@ -3629,7 +3508,6 @@ msgstr "그래프 이벤트 횟수"
 msgid "Export Data as XML"
 msgstr "데이터를 XML로 내보내기"
 
-#. Display the strict average
 msgid "Lifetime average value"
 msgstr "전기간 평균 값"
 
@@ -4085,8 +3963,6 @@ msgstr "클라이언트 및 서버 터널을 추가·삭제·편집·조작"
 msgid "How many local service tunnels we're running"
 msgstr "우리가 실행 중인 로컬 서비스 터널 수"
 
-#. older names for pre-0.7.4 installs
-#. hardcoded in i2psnark
 msgid "I2PSnark"
 msgstr "I2PSnark"
 
@@ -4148,10 +4024,6 @@ msgstr "다시 시작한 후 업데이트 중"
 msgid "Signed development update available"
 msgstr "서명된 개발 업데이트 사용 가능"
 
-#. Note to translators: parameter is a router version, e.g. "0.9.19-16"
-#. <br> is optional, to help the browser make the lines even in the button
-#. If the translation is shorter than the English, you should probably not include <br>
-#. .append(_t("Download Signed<br>Development Update<br>{0}", getDevSU3UpdateVersion()))
 msgid "Download I2P Update"
 msgstr "I2P 업데이트 다운로드"
 
@@ -4224,13 +4096,6 @@ msgstr "같은 가족"
 msgid "IP close to us"
 msgstr "IP 우리 가까이에"
 
-#. *
-#. "<li><a href=\"netdb?f=3&amp;m=4\">" + _t("Same IP") + "</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=5\">" + _t("Same IPv4") + " /24</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=6\">" + _t("Same IPv4") + " /16</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=17\">"+ _t("Same IPv6") + " /64</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=18\">" + _t("Same IPv6") + " /48</a></li>\n" +
-#. *
 msgid "Pair distance"
 msgstr "쌍 거리"
 
@@ -4303,16 +4168,12 @@ msgstr "알려진 홍수"
 msgid "Average closest floodfill distance"
 msgstr "평균 가장 가까운 홍수 거리"
 
-#. "<b>").append(_t("Routing Data")).append(":</b> \"").append(DataHelper.getUTF8(_context.routerKeyGenerator().getModData()))
 msgid "Routing Data"
 msgstr "라우팅 데이터"
 
-#. .append("\"<br>\n<b>").append(_t("Last Changed")).append(":</b> ").append(DataHelper.formatTime(_context.routerKeyGenerator().getLastChanged())).append("<br>\n" +
-#. "<b>").append(_t("Next Routing Data")).append(":</b> \"").append(DataHelper.getUTF8(_context.routerKeyGenerator().getNextModData()))
 msgid "Rotates in"
 msgstr "회전"
 
-#. Distance to our router analysis
 msgid "Closest Floodfills to Our Routing Key (Where we Store our RI)"
 msgstr "라우팅 키에 가장 가까운 플러드필(RI를 저장하는 위치)"
 
@@ -4355,7 +4216,6 @@ msgstr "평균 홍수 거리는"
 msgid "Closest Floodfill Pairs by Hash"
 msgstr "해시별 가장 가까운 플러드필 쌍"
 
-#. sorted;
 msgid "Hash Distance"
 msgstr "해시 거리"
 
@@ -4577,7 +4437,6 @@ msgstr "터널 이름"
 msgid "Data Out"
 msgstr "데이터 출력"
 
-#. Saved in CSSHelper, assume success
 msgid "Console language saved."
 msgstr "콘솔 언어가 저장되었습니다."
 
@@ -4587,7 +4446,6 @@ msgstr "대역폭 테스트가 성공적으로 완료되었습니다."
 msgid "Bandwidth test failed"
 msgstr "대역폭 테스트 실패"
 
-#. didn't run at all?
 msgid "Bandwidth test did not complete"
 msgstr "대역폭 테스트가 완료되지 않았습니다."
 
@@ -4610,7 +4468,6 @@ msgstr "초당 bits"
 msgid "{0}Bytes per month maximum"
 msgstr "{0}월별 최대 바이트"
 
-#. wars for ConfigClientsHelper
 msgid "addressbook"
 msgstr "주소록"
 
@@ -4629,9 +4486,6 @@ msgstr "스시DNS"
 msgid "routerconsole"
 msgstr "라우터콘솔"
 
-#. clients, taken from clients.config, for ConfigClientsHelper
-#. note that if the wording changes in clients.config, we have to
-#. keep the old string here as well for existing installs
 msgid "Web console"
 msgstr "웹 콘솔"
 
@@ -4659,10 +4513,6 @@ msgstr "I2P+ 라우터 콘솔"
 msgid "Open Router Console in web browser at startup"
 msgstr "시작때 브라우저에서 라우터 콘솔 열기"
 
-#. tunnel nicknames, taken from i2ptunnel.config so they will display
-#. nicely under 'local destinations' in the summary bar
-#. note that if the wording changes in i2ptunnel.config, we have to
-#. keep the old string here as well for existing installs
 msgid "shared clients"
 msgstr "공유 클라이언트"
 
@@ -4699,14 +4549,12 @@ msgstr "I2P 웹서버 (eepSite)"
 msgid "HTTP Proxy"
 msgstr "HTTP 프록시"
 
-#. hardcoded in iMule?
 msgid "iMule"
 msgstr "iMule"
 
 msgid "Official I2P Source Repository"
 msgstr "공식 I2P 소스 저장소"
 
-#. standard themes for ConfigUIHelper
 msgid "dark"
 msgstr "어두운"
 
@@ -4728,8 +4576,6 @@ msgstr "암호화"
 msgid "Stream"
 msgstr "스트림"
 
-#. parameters in transport addresses (netdb.jsp)
-#. may or may not be worth translating
 msgid "host"
 msgstr "호스트"
 
@@ -5482,7 +5328,6 @@ msgstr "예비 터널 세팅 변경사항이 router.config 파일에 저장됬�
 msgid "Client tunnel changes are temporary and are not saved."
 msgstr "클라이언트 터널 변경사항이 임시적으로 변경됨. 저장되지 않았습니다."
 
-#. if (pm.isRegistered(net.i2p.util.PortMapper.SVC_I2PTUNNEL)) {
 msgid "The default settings are optimized for general usage and normally don't need to be changed."
 msgstr "기본 설정은 일반 사용을 위해 최적화되어 있으며 보통 변경할 필요가 없습니다."
 
@@ -7452,10 +7297,10 @@ msgid "Statistics"
 msgstr "통계"
 
 msgid "Current console and webapp translation report"
-msgstr ""
+msgstr "현재 콘솔 및 웹 애플리케이션 번역 보고서"
 
 msgid "Translation Status"
-msgstr ""
+msgstr "번역 상태"
 
 msgid "View active tunnels"
 msgstr "활성 터널을 봅니다"

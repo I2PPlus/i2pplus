@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#. * IPv4 OK, IPv6 OK or disabled or no address
 msgid "OK"
 msgstr ""
 
@@ -28,22 +27,18 @@ msgstr ""
 msgid "IPv4: Disabled; IPv6: OK"
 msgstr ""
 
-#. * IPv4 symmetric NAT (not source NAT)
 msgid "IPv4: Symmetric NAT; IPv6: OK"
 msgstr ""
 
-#. * IPv4 symmetric NAT, IPv6 firewalled or disabled or no address
 msgid "Symmetric NAT"
 msgstr ""
 
-#. * IPv4 symmetric NAT (not source NAT)
 msgid "IPv4: Symmetric NAT; IPv6: Testing"
 msgstr ""
 
 msgid "IPv4: Firewalled; IPv6: Testing"
 msgstr ""
 
-#. * IPv4 firewalled, IPv6 firewalled or disabled or no address
 msgid "Firewalled"
 msgstr ""
 
@@ -101,17 +96,12 @@ msgstr ""
 msgid "Rejecting most tunnel requests:<br>"
 msgstr ""
 
-#. hard to do {0} from here
 msgid "Accepting most tunnel requests"
 msgstr ""
 
 msgid "Accepting tunnel requests"
 msgstr ""
 
-#. .067KBps
-#. * also limited to 90% - see below
-#. always leave at least 4KBps free when allowing
-#. private static final String LIMIT_STR = _x("Declining tunnel requests" + ":<br>" + "Bandwidth limit");
 msgid "Declining requests: Bandwidth limit"
 msgstr ""
 
@@ -133,7 +123,6 @@ msgstr ""
 msgid "Dropping tunnel requests:<br>High CPU load"
 msgstr ""
 
-#. don't even bother, since we are so overloaded locally
 msgid "Dropping tunnel requests: Overloaded"
 msgstr ""
 

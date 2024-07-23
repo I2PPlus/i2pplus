@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#. * IPv4 OK, IPv6 OK or disabled or no address
 msgid "OK"
 msgstr "Correct"
 
@@ -28,22 +27,18 @@ msgstr "IPv4 : derrière un pare-feu ; IPv6 : correct"
 msgid "IPv4: Disabled; IPv6: OK"
 msgstr "IPv4 : désactivé ; IPv6 : correct"
 
-#. * IPv4 symmetric NAT (not source NAT)
 msgid "IPv4: Symmetric NAT; IPv6: OK"
 msgstr "IPv4 : traduction d’adresses réseau symétrique ; IPv6 : correct"
 
-#. * IPv4 symmetric NAT, IPv6 firewalled or disabled or no address
 msgid "Symmetric NAT"
 msgstr "Traduction d’adresses réseau symétrique"
 
-#. * IPv4 symmetric NAT (not source NAT)
 msgid "IPv4: Symmetric NAT; IPv6: Testing"
 msgstr "IPv4 : traduction d’adresses réseau symétrique ; IPv6 : en test"
 
 msgid "IPv4: Firewalled; IPv6: Testing"
 msgstr "IPv4 : derrière un pare-feu ; IPv6 : en test"
 
-#. * IPv4 firewalled, IPv6 firewalled or disabled or no address
 msgid "Firewalled"
 msgstr "Derrière un pare-feu"
 
@@ -65,12 +60,6 @@ msgstr "Conflit de ports"
 msgid "Testing"
 msgstr "En test"
 
-#. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
-#. NPE, too early
-#. if (_context.router().getRouterInfo().getBandwidthTier().equals("K"))
-#. setTunnelStatus("Not expecting tunnel requests: Advertised bandwidth too low");
-#. else
-#. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
 msgid "Starting up"
 msgstr "Démarrage"
 
@@ -80,11 +69,9 @@ msgstr "Refus de toutes les demandes de tunnel :<br>"
 msgid "Hidden Mode"
 msgstr "Mode caché"
 
-#. }
 msgid "Declining tunnel requests:<br>"
 msgstr "Refus des demandes de tunnel :<br>"
 
-#. }
 msgid "High message delay"
 msgstr "Délai de message élevé"
 
@@ -109,21 +96,12 @@ msgstr "Nombre élevé de demandes"
 msgid "Rejecting most tunnel requests:<br>"
 msgstr "Rejet de la plupart des demandes de tunnel :<br>"
 
-#. hard to do {0} from here
-#. setTunnelStatus("Accepting " + (100-(int)(100.0*probReject)) + "% of tunnels");
 msgid "Accepting most tunnel requests"
 msgstr "Accepter la plupart des demandes de tunnel"
 
 msgid "Accepting tunnel requests"
 msgstr "Accepter les demandes de tunnel"
 
-#. .067KBps
-#. * also limited to 90% - see below
-#. always leave at least 4KBps free when allowing
-#. private static final String LIMIT_STR = _x("Declining tunnel requests" + ":<br>" + "Bandwidth limit");
-#. hard to do {0} from here
-#. setTunnelStatus("Rejecting " + ((int)(100.0*probReject)) + "% of tunnels: Bandwidth limit");
-#. setTunnelStatus(_x("Declining most tunnel requests" + ":<br>" + "Bandwidth limit"));
 msgid "Declining requests: Bandwidth limit"
 msgstr "Demandes refusées : limite de bande passante"
 
@@ -145,7 +123,6 @@ msgstr "Abandon des requêtes des tunnels : décalage important des travaux"
 msgid "Dropping tunnel requests:<br>High CPU load"
 msgstr "Abandon des requêtes de tunnel :<br>Charge CPU élevée"
 
-#. don't even bother, since we are so overloaded locally
 msgid "Dropping tunnel requests: Overloaded"
 msgstr "Abandon des requêtes des tunnels : surchargé"
 

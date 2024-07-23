@@ -9,315 +9,245 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#. type: TH
 #, no-wrap
 msgid "EEPGET"
 msgstr "EEPGET"
 
-#. type: TH
 #, no-wrap
 msgid "January 26, 2017"
 msgstr "26 de janeiro de 2017"
 
-#. type: TH
 #, no-wrap
 msgid "I2P"
 msgstr "I2P"
 
-#. type: SH
 #, no-wrap
 msgid "NAME"
 msgstr "NOME"
 
-#. type: Plain text
 msgid "Eepget - I2P downloader"
 msgstr "Eepget - I2P Transferidor"
 
-#. type: SH
 #, no-wrap
 msgid "SYNOPSIS"
 msgstr "SINOPSE"
 
-#. type: Plain text
 msgid "B<eepget> [I<options>]I<URL>"
 msgstr "B<eepget> [I<options>]I<URL>"
 
-#. type: SH
 #, no-wrap
 msgid "DESCRIPTION"
 msgstr "DESCRIÇÃO"
 
-#. type: Plain text
 msgid "Download a file non-interactively via HTTP. Transfers through both I2P and the regular Internet are supported."
 msgstr "Downloadar um arquivo de forma não interativa via HTTP. São suportadas transferências através do I2P e da Internet regular."
 
-#. type: Plain text
 msgid "Eepget is able to cope with slow or unstable network connections; if a download is not successful because of a network problem, it will keep retrying until the whole file has been retrieved (if the -n option is set).  If supported by the remote server, eepget will instruct the server to continue the download from the point of interruption."
 msgstr "O eepget é capaz de lidar com conexões de rede lentas ou instáveis; se um download não for bem-sucedido devido a um problema de rede, ele continuará tentando até que o arquivo inteiro seja obtido (se a opção -n estiver definida). Se suportado pelo servidor remoto, o eepget instruirá o servidor a continuar o download a partir do ponto de interrupção."
 
-#. type: SH
 #, no-wrap
 msgid "OPTIONS"
 msgstr "OPÇÕES"
 
-#. type: Plain text
 msgid "B<-c>"
 msgstr "B<-c>"
 
-#. type: TP
 #, no-wrap
 msgid "Clearnet. Do not use a proxy. Same as B<-p> :0 ."
 msgstr "Clearnet. Não utilize um proxy. O mesmo que B<-p> :0 ."
 
-#. type: Plain text
 msgid "B<-e> etag"
 msgstr "B<-e> etag"
 
-#. type: TP
 #, no-wrap
 msgid "Sets the etag value in the request headers."
 msgstr "Define o valor etag nos cabeçalhos da requisição."
 
-#. type: Plain text
 msgid "B<-h> name=value"
 msgstr "B<-h> name=value"
 
-#. type: TP
 #, no-wrap
 msgid "Adds an arbitrary request header with the given name and value."
 msgstr "Adiciona um cabeçalho de solicitação arbitrário com o nome e valor fornecidos."
 
-#. type: Plain text
 msgid "B<-l> lineLen"
 msgstr "B<-l> lineLen"
 
-#. type: TP
 #, no-wrap
 msgid "Controls the progress display. B<\\ lineLen > is the length of one progress line in characters. The default is 40."
 msgstr "Controla a exibição do progresso. B<\\ lineLen > é o comprimento de uma linha de progresso em caracteres. O padrão é 40."
 
-#. type: Plain text
 msgid "B<-m> markSize"
 msgstr "B<-m> markSize"
 
-#. type: TP
 #, no-wrap
 msgid "Controls the progress display. B<\\ markSize > is the number of bytes one '#' character represents. The default is 1024."
 msgstr "Controla a exibição do progresso. B<\\ markSize > é o número de bytes que um caractere '#' representa. O padrão é 1024."
 
-#. type: Plain text
 msgid "B<-n> retries"
 msgstr "B<-n> retries"
 
-#. type: TP
 #, no-wrap
 msgid "Specify the number of times to retry downloading if the download isn't successful. If this option is not specified, eepget will not retry."
 msgstr "Especifique o número de tentativas para baixar novamente se o download não for bem-sucedido. Se esta opção não for especificada, o eepget não fará novamente a tentativa."
 
-#. type: Plain text
 msgid "B<-o> file"
 msgstr "B<-o> file"
 
-#. type: TP
 #, no-wrap
 msgid "Sets the output file to write to. If this option is not given, the output filename will be determined by the URL."
 msgstr "Define o arquivo de saída para escrever. Se essa opção não for especificada, o nome do arquivo de saída será determinado pela URL."
 
-#. type: Plain text
 msgid "B<-p> proxy_host[:port]"
 msgstr "B<-p> proxy_host[:port]"
 
-#. type: TP
 #, no-wrap
 msgid "Specify an I2P proxy server (eeproxy) to use. If the port is not specified, eepget will use 4444. If this option is not specified, eepget will use 127.0.0.1:4444. Specify B<-c> or B<-p> :0 to disable the eeproxy."
 msgstr "Especifique um servidor proxy I2P (eeproxy) a ser usado. Se a porta não for especificada, o eepget usará a porta 4444. Se esta opção não for especificada, o eepget usará 127.0.0.1:4444. Especifique B<-c> ou B<-p> :0 para desativar o eeproxy."
 
-#. type: Plain text
 msgid "B<-t> seconds"
 msgstr "B<-t> segundos"
 
-#. type: TP
 #, no-wrap
 msgid "Sets the inactivity timeout. The default is 60 seconds."
 msgstr "Define o tempo limite de inatividade. O padrão é de 60 segundos."
 
-#. type: Plain text
 msgid "B<-u> username"
 msgstr "B<-u> nome de utilizador"
 
-#. type: TP
 #, no-wrap
 msgid "Sets the username for proxy authorization, if required."
 msgstr "Define o nome de usuário para autorização de proxy, se necessário."
 
-#. type: Plain text
 msgid "B<-x> password"
 msgstr "B<-x> palavra-passe"
 
-#. type: TP
 #, no-wrap
 msgid "Sets the password for proxy authorization, if required. If a username is specified but not a password, EepGet will prompt for the password."
 msgstr "Define a senha para autorização de proxy, se necessário. Se um nome de usuário for especificado, mas não uma senha, o EepGet solicitará a senha."
 
-#. type: SH
 #, no-wrap
 msgid "EXIT STATUS"
 msgstr "ESTADO DE SAÍDA"
 
-#. type: Plain text
 msgid "B<eepget> exits with status zero upon successful transfer and non-zero if there were problems with the download."
 msgstr "B<eepget> sai com status zero após transferência bem-sucedida e diferente de zero se houver problemas com o download."
 
-#. type: SH
 #, no-wrap
 msgid "REPORTING BUGS"
 msgstr "COMUNICAR ERROS"
 
-#. type: Plain text
 msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker E<.UE .>"
 msgstr "Por favor, insira um bilhete em E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> o Rastreador de Bugs do I2P E<.UE>."
 
-#. type: SH
 #, no-wrap
 msgid "SEE ALSO"
 msgstr "CONSULTAR TAMBÉM"
 
-#. type: Plain text
 msgid "B<i2prouter>(1)  B<curl>(1)  B<wget>(1)"
 msgstr "B<i2prouter>(1)  B<curl>(1)  B<wget>(1)"
 
-#. type: TH
 #, no-wrap
 msgid "I2PROUTER"
 msgstr "I2PROUTER"
 
-#. type: Plain text
 msgid "i2prouter - start and stop the I2P router"
 msgstr "i2prouter - iniciar e parar o roteador I2P"
 
-#. type: Plain text
 msgid "B<i2prouter> {I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
 msgstr "B<i2prouter> {I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
 
-#. type: Plain text
 msgid "Control the I2P service."
 msgstr "Controlar o serviço de I2P."
 
-#. type: IP
 #, no-wrap
 msgid "B<console>"
 msgstr "B<console>"
 
-#. type: Plain text
 msgid "Runs I2P as a console application under the current user."
 msgstr "Executa o I2P como um aplicativo de console sob o usuário atual."
 
-#. type: IP
 #, no-wrap
 msgid "B<start>"
 msgstr "B<start>"
 
-#. type: Plain text
 msgid "Starts the I2P service."
 msgstr "Inicia o serviço de I2P."
 
-#. type: IP
 #, no-wrap
 msgid "B<stop>"
 msgstr "B<stop>"
 
-#. type: Plain text
 msgid "Stops the I2P service."
 msgstr "Para o serviço de I2P."
 
-#. type: IP
 #, no-wrap
 msgid "B<restart>"
 msgstr "B<restart>"
 
-#. type: Plain text
 msgid "Stops the I2P service and then starts it."
 msgstr "Para o serviço I2P e depois inicia-lo."
 
-#. type: IP
 #, no-wrap
 msgid "B<condrestart>"
 msgstr "B<condrestart>"
 
-#. type: Plain text
 msgid "Restart the I2P service only if it is already running."
 msgstr "Reinicie o serviço I2P apenas se ele já estiver em execução."
 
-#. type: IP
 #, no-wrap
 msgid "B<graceful>"
 msgstr "B<graceful>"
 
-#. type: Plain text
 msgid "Stop I2P gracefully (may take up to 11 minutes)"
 msgstr "Parar o I2P de forma segura (pode levar até 11 minutos)"
 
-#. type: IP
 #, no-wrap
 msgid "B<install>"
 msgstr "B<install>"
 
-#. type: Plain text
 msgid "Install initscript to start I2P automatically when the system boots."
 msgstr "Instalar o script inicial para iniciar o I2P automaticamente quando o sistema é iniciado."
 
-#. type: IP
 #, no-wrap
 msgid "B<remove>"
 msgstr "B<remove>"
 
-#. type: Plain text
 msgid "Uninstall initscript that was installed with B<install>"
 msgstr "Desinstalar o initscript que foi instalado com B<install>"
 
-#. type: IP
 #, no-wrap
 msgid "B<status>"
 msgstr "B<status>"
 
-#. type: Plain text
 msgid "Prints whether the I2P service is running."
 msgstr "Imprime se o serviço I2P está em execução."
 
-#. type: IP
 #, no-wrap
 msgid "B<dump>"
 msgstr "B<dump>"
 
-#. type: Plain text
 msgid "Dumps the current threads into B<wrapper.log>."
 msgstr "Despeja as threads atuais em B<wrapper.log>."
 
-#. type: Plain text
 msgid "B<i2prouter-nowrapper>(1)"
 msgstr "B<i2prouter-nowrapper>(1)"
 
-#. type: TH
 #, no-wrap
 msgid "I2PROUTER-NOWRAPPER"
 msgstr "I2PROUTER-NOWRAPPER"
 
-#. type: Plain text
 msgid "i2prouter-nowrapper - start the I2P router"
 msgstr "i2prouter-nowrapper - iniciar o roteador I2P"
 
-#. type: Plain text
 msgid "B<i2prouter-nowrapper>"
 msgstr "B<i2prouter-nowrapper>"
 
-#. type: Plain text
 msgid "Start the I2P router, without the service wrapper.  This means the router will not restart if it crashes.  Also, it will use the default memory size, which may not be enough for I2P."
 msgstr "Inicie o roteador I2P sem o invólucro de serviço. Isso significa que o roteador não será reiniciado em caso de falha. Além disso, ele usará o tamanho padrão da memória, que pode não ser suficiente para o I2P."
 
-#. type: Plain text
 msgid "You should really use the B<i2prouter>(1)  script instead.  There are no options.  To stop the router, use your browser to access E<.UR http://localhost:7657/> the router console E<.UE .>"
 msgstr "Você deve realmente usar o script B<i2prouter>(1) em vez disso. Não há opções. Para parar o roteador, use seu navegador para acessar E<.UR http://localhost:7657/> a console do roteador E<.UE .>"
 
-#. type: Plain text
 msgid "B<i2prouter>(1)"
 msgstr "B<i2prouter>(1)"

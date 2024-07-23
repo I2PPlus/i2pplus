@@ -48,13 +48,9 @@ msgstr "Sorun sürerse, web tarayıcınızda çerezlerin etkinleştirilmiş oldu
 msgid "Configuration reloaded for all tunnels"
 msgstr "Tüm tüneller için yapılandırma yeniden yüklendi"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Starting tunnel"
 msgstr "Tünel başlatılıyor"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Stopping tunnel"
 msgstr "Tünel durduruluyor"
 
@@ -547,7 +543,6 @@ msgstr "Bu hizmete erişmek için gerekli kullanıcı adını yazın"
 msgid "Password"
 msgstr "Parola"
 
-#. && editBean.isAdvanced()
 msgid "Set password required to access this service"
 msgstr "Bu hizmete erişmek için gerekli parolayı yazın"
 
@@ -1004,6 +999,9 @@ msgstr "Tümünü Yeniden Başlat"
 
 msgid "I2P Server Tunnels"
 msgstr "I2P Sunucu Tünelleri"
+
+msgid "Helper"
+msgstr ""
 
 msgid "Type"
 msgstr "Tür"

@@ -212,12 +212,10 @@ msgstr "Viga: Torrenti lisamine ebaõnnestus: {0}"
 msgid "Torrent already running: {0}"
 msgstr "Torrent juba töötab: {0}"
 
-#. catch this here so we don't try do delete it below
 #, java-format
 msgid "Cannot open \"{0}\""
 msgstr "\"{0}\" ei avane"
 
-#. TODO - if the existing one is a magnet, delete it and add the metainfo instead?
 #, java-format
 msgid "Torrent with this info hash is already running: {0}"
 msgstr "Torrent sellega infoteguga töötab juba: {0}"
@@ -312,13 +310,6 @@ msgstr "Piir on {0}B"
 msgid "Torrent \"{0}\" has no data!"
 msgstr "Torrenti \"{0}\" andmed puuduvad!"
 
-#.
-#. System.out.println("torrent info: " + info.toString());
-#. List<Long> lengths = info.getLengths();
-#. if (lengths != null)
-#. for (int i = 0; i < lengths.size(); i++)
-#. System.out.println("File " + i + " is " + lengths.get(i) + " long.");
-#.
 #, java-format
 msgid "Torrents larger than {0}B are not supported yet \"{1}\"!"
 msgstr "Suuremad torrentid kui {0}B pole veel toetatud \"{1}\"!"
@@ -377,8 +368,6 @@ msgstr "Allalaadimine lõpetatud: {0}"
 msgid "I2PSnark"
 msgstr "I2PSnark"
 
-#. addMessage(_t("Metainfo received for {0}", snark.getName()));
-#. addMessageNoEscape(_t("Starting torrent: {0}", linkify(snark)).replace("Magnet ", ""));
 #, java-format
 msgid "Starting torrent: {0}"
 msgstr "Torrenti käivitamine: {0}"
@@ -662,7 +651,6 @@ msgstr "sisenev"
 msgid "out"
 msgstr "väljas"
 
-#. Only truncate if it's an actual dest
 msgid "Our destination (identity) for this session"
 msgstr "Meie sihtkoht (identiteet) selles sessios"
 
@@ -724,7 +712,6 @@ msgstr "Viimane leht"
 msgid "Cannot add torrent {0} inside another torrent: {1}"
 msgstr "Torrentit {0} ei saa lisada teise torrenti sees: {1}"
 
-#. TODO
 #, java-format
 msgid "Download from non-I2P location {0} is not supported"
 msgstr "Allalaadimine asukohast {0}, mis ei ole I2P, ei ole toetatud"
@@ -733,7 +720,6 @@ msgstr "Allalaadimine asukohast {0}, mis ei ole I2P, ei ole toetatud"
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
 msgstr "Vigane URL: Peab algama \"{0}\" või \"{1}\""
 
-#. no file or URL specified
 msgid "Enter URL or select torrent file"
 msgstr "Sisesta URL või vali torrenti fail"
 
@@ -995,7 +981,6 @@ msgstr "Sisesta kataloog, kus salvestada andmed (vaikimisi {0})"
 msgid "Create Torrent"
 msgstr "Loo Torrent"
 
-#. buf.append("From file: <input type=file name=\"newFile\" size=50 value=\"" + newFile + "\" /><br>\n");
 msgid "Data to seed"
 msgstr "Seemeandmed"
 
@@ -1075,7 +1060,6 @@ msgstr "Maksimaalne torrentide arv lehel"
 msgid "torrents"
 msgstr "torrentid"
 
-#. If we get to here, we have the language settings
 msgid "Language"
 msgstr "Keel"
 
@@ -1278,7 +1262,6 @@ msgstr "Magnet'i lisamine ei ole võimalik: Versiooni 2 magnet linke ei toeta"
 msgid "Invalid magnet URL {0}"
 msgstr "Vigane magnet URL {0}"
 
-#. * dummies for translation
 #, java-format
 msgid "1 hop"
 msgid_plural "{0} hops"
@@ -1375,7 +1358,6 @@ msgstr "Kõrgema taseme kataloogi"
 msgid "Audio Playlist"
 msgstr "Heliplaad"
 
-#. status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Not found"), _t("Torrent not found?").replace("?", ""));
 msgid "Not found"
 msgstr "Ei leitud"
 
@@ -1385,7 +1367,6 @@ msgstr "Torrentit ei leitud?"
 msgid "File not found in torrent?"
 msgstr "Failit ei leitud torrentis?"
 
-#. status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Unrecognized"), _t("File not found in torrent?").replace("?", ""));
 msgid "Unrecognized"
 msgstr "Tuvastamata"
 
@@ -1410,17 +1391,6 @@ msgstr "Ära allalaadi seda faili"
 msgid "Skip"
 msgstr "Välista"
 
-#. TODO: fixup so works with ajax refresh
-#. "<span class=script>");
-#. if (!inOrder) {
-#. buf.append("<a class=control id=setallhigh href=#>")
-#. .append(toImg("clock_red")).append(_t("Set all high")).append("</a>\n");
-#. }
-#. buf.append("<a class=control id=setallnorm href=#>")
-#. .append(toImg("clock")).append(_t("Set all normal")).append("</a>\n")
-#. .append("<a class=control id=setallskip href=#>")
-#. .append(toImg("block")).append(_t("Skip all")).append("</a></span>\n");
-#.
 msgid "Save priorities"
 msgstr "Salvesta prioriteedid"
 
@@ -1490,6 +1460,5 @@ msgstr "Torrent peab olema peatatud muutmiseks"
 msgid "Save Changes"
 msgstr "Salvesta muudatused"
 
-#. shouldn't happen
 msgid "Torrent must be stopped"
 msgstr "Torrent peab olema peatatud"

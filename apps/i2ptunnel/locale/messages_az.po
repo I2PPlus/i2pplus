@@ -48,13 +48,9 @@ msgstr "Sorğun davam edirsə, brauzerinizdə çerezlərin aktiv olduğunu yoxla
 msgid "Configuration reloaded for all tunnels"
 msgstr "Bütün tünəllər üçün konfigurasiya yenidən yükləndi"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Starting tunnel"
 msgstr "Tünəl başlamaqdadır"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Stopping tunnel"
 msgstr "Tünəlin dayandırılması"
 
@@ -364,12 +360,6 @@ msgstr "2 hüpf tünəli (orta anonimlik)"
 msgid "3 hop tunnel (high anonymity)"
 msgstr "3 hüpf tünəli (yüksək anonimlik)"
 
-#, java-format
-msgid "{0} hop tunnel"
-msgid_plural "{0} hüpf tünəllər"
-msgstr[0] "{0} hüpf tünəli"
-msgstr[1] "{0} hüpf tünəllər"
-
 msgid "Number of Tunnels in Group"
 msgstr "Qrupdakı tünəllərin sayı"
 
@@ -417,12 +407,6 @@ msgstr "hüpf fərq"
 
 msgid "Number of Reserve Tunnels"
 msgstr "Yedek Tünəllərin Sayı"
-
-#, java-format
-msgid "{0} backup tunnel"
-msgid_plural "{0} yedek tünəllər"
-msgstr[0] "{0} yedek tünəli"
-msgstr[1] "{0} yedek tünəllər"
 
 msgid "no redundancy, no added resource usage"
 msgstr "redondans yoxdur, əlavə resurs istifadəsi yoxdur"
@@ -547,7 +531,6 @@ msgstr "Bu xidməti istifadə etmək üçün tələb olunan istifadəçi adını
 msgid "Password"
 msgstr "Şifrə"
 
-#. && editBean.isAdvanced()
 msgid "Set password required to access this service"
 msgstr "Bu xidməti istifadə etmək üçün tələb olunan şifrəni təyin edin"
 
@@ -574,6 +557,15 @@ msgstr "Atış URL siyahısı"
 
 msgid "List of helper URLs providing jump links when a host is not found in your addressbook"
 msgstr "Ünvan kitabınızda mənzil tapılmadığında atış bağlantıları təqdim edən köməkçi URL siyahısı"
+
+msgid "Custom options"
+msgstr ""
+
+msgid "Advanced tunnel, streaming, and I2CP options"
+msgstr ""
+
+msgid "New Server Configuration"
+msgstr ""
 
 msgid "Hostname"
 msgstr "Ünvan adı"

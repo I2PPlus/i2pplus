@@ -21,32 +21,32 @@ msgstr "电子邮箱"
 msgid "No encoder found for encoding \\''{0}\\''."
 msgstr "没有找到可用编码器处理编码\\ '' {0} \\ ''。"
 
-#. tagged in WebMail
 msgid "Re:"
 msgstr "回复:"
 
 msgid "Fwd:"
 msgstr "转发:"
 
-#. MailDir-like
 msgid "Drafts"
 msgstr "草稿箱"
 
-#. MailDir-like
 msgid "Sent"
 msgstr "已发送"
 
-#. MailDir-like
 msgid "Trash"
 msgstr "垃圾箱"
 
-#. MailDir-like
 msgid "Bulk Mail"
 msgstr "垃圾邮件"
 
-#. untranslated, translate on use
 msgid "Inbox"
 msgstr "收件箱"
+
+msgid "View message as HTML"
+msgstr ""
+
+msgid "View message as plain text"
+msgstr ""
 
 msgid "unknown"
 msgstr "未知"
@@ -162,7 +162,6 @@ msgstr "{0}的编码检测失败。"
 msgid "Attachment not found."
 msgstr "找不到附件."
 
-#. error if we get here
 msgid "Message not found."
 msgstr "未找到消息。"
 
@@ -283,7 +282,6 @@ msgstr "主题"
 msgid "Add Attachment"
 msgstr "添加附件"
 
-#. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 msgid "Add attachment"
 msgstr "添加附件"
 
@@ -355,6 +353,9 @@ msgstr "大小"
 msgid "Mark for deletion"
 msgstr "标记为删除"
 
+msgid "Message contains HTML"
+msgstr ""
+
 msgid "Message is new"
 msgstr "是新邮件"
 
@@ -364,7 +365,6 @@ msgstr "邮件是垃圾邮件"
 msgid "Message body not downloaded"
 msgstr "消息ID无效"
 
-#. TODO ngettext
 msgid "Really delete the marked messages?"
 msgstr "真要删除标记的邮件？"
 
@@ -422,6 +422,9 @@ msgstr "返回到文件夹"
 msgid "Move to Folder"
 msgstr "移动到文件夹"
 
+msgid "View message in new tab"
+msgstr ""
+
 msgid "Folder Page Size"
 msgstr "文件夹页面大小"
 
@@ -434,7 +437,6 @@ msgstr "高级配置"
 msgid "Save Configuration"
 msgstr "保存配置"
 
-#. this appears in the UI so translate
 msgid "No response from server"
 msgstr "服务器没有响应"
 
@@ -450,6 +452,5 @@ msgstr "登录失败"
 msgid "Server refused connection"
 msgstr "服务器拒绝连接"
 
-#. TODO which recipient?
 msgid "Mail rejected"
 msgstr "邮件被拒绝"

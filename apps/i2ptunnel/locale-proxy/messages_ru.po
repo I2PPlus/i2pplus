@@ -310,11 +310,9 @@ msgstr "Этот адрес будет сохранен в адресной кн
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
 msgstr "Если вы хотите отслеживать сайты, добавленные вручную, добавьте их в свою основную или частную адресную книгу."
 
-#. FIXME wasn't escaped
 msgid "Save & continue"
 msgstr "Сохранить и продолжить"
 
-#. only blockfile supports multiple books
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
 msgstr "Сохранить {0} в основной адресной книге и перейти на веб-сайт"

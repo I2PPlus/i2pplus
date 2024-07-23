@@ -310,11 +310,9 @@ msgstr "To naslov bo shranjen v zbirko naslovov s prijavno obveznim sistemom."
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
 msgstr "Če želite beležiti spletišča, ki ste jih dodali sami, dodajte jih v zbirko Master ali Private namesto v Upravljalčev naslovnik."
 
-#. FIXME wasn't escaped
 msgid "Save & continue"
 msgstr "Shrani & nadaljuj"
 
-#. only blockfile supports multiple books
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
 msgstr "Shrani {0} v zbirko Master in nadaljuj z obiskom spletišča"

@@ -22,32 +22,32 @@ msgstr "Email"
 msgid "No encoder found for encoding \\''{0}\\''."
 msgstr "Nincs kódoló a következőhöz: \\''{0}\\''."
 
-#. tagged in WebMail
 msgid "Re:"
 msgstr "Re:"
 
 msgid "Fwd:"
 msgstr "Fwd:"
 
-#. MailDir-like
 msgid "Drafts"
 msgstr "Piszkozatok"
 
-#. MailDir-like
 msgid "Sent"
 msgstr "Elküldve"
 
-#. MailDir-like
 msgid "Trash"
 msgstr "Törölt Elemek"
 
-#. MailDir-like
 msgid "Bulk Mail"
 msgstr "Tömeges küldemény"
 
-#. untranslated, translate on use
 msgid "Inbox"
 msgstr "Bejövő Üzenetek"
+
+msgid "View message as HTML"
+msgstr ""
+
+msgid "View message as plain text"
+msgstr ""
 
 msgid "unknown"
 msgstr "ismeretlen"
@@ -163,7 +163,6 @@ msgstr "Nem található kódoló a következőhöz: {0}"
 msgid "Attachment not found."
 msgstr "A melléklet nem található."
 
-#. error if we get here
 msgid "Message not found."
 msgstr "Az üzenet nem található."
 
@@ -286,7 +285,6 @@ msgstr "Tárgy"
 msgid "Add Attachment"
 msgstr "Melléklet hozzáadása"
 
-#. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 msgid "Add attachment"
 msgstr "Melléklet hozzáadása"
 
@@ -359,6 +357,9 @@ msgstr "Méret"
 msgid "Mark for deletion"
 msgstr "Törlésre kijelöl"
 
+msgid "Message contains HTML"
+msgstr ""
+
 msgid "Message is new"
 msgstr "Az üzenet új"
 
@@ -368,7 +369,6 @@ msgstr "Az üzenet spam"
 msgid "Message body not downloaded"
 msgstr "Az üzenet törzse nem lett letöltve"
 
-#. TODO ngettext
 msgid "Really delete the marked messages?"
 msgstr "A kijelölt üzenetek tényleg törlésre kerüljenek?"
 
@@ -426,6 +426,9 @@ msgstr "Visszatérés Mappához"
 msgid "Move to Folder"
 msgstr "Ugrás a mappába"
 
+msgid "View message in new tab"
+msgstr ""
+
 msgid "Folder Page Size"
 msgstr "Mappa oldalmérete"
 
@@ -438,7 +441,6 @@ msgstr "Speciális Konfiguráció"
 msgid "Save Configuration"
 msgstr "Konfiguráció mentése"
 
-#. this appears in the UI so translate
 msgid "No response from server"
 msgstr "Nincs válasz a szervertől"
 
@@ -454,6 +456,5 @@ msgstr "Bejelentkezés sikertelen"
 msgid "Server refused connection"
 msgstr "A szerver megtagadta a csatlakozást"
 
-#. TODO which recipient?
 msgid "Mail rejected"
 msgstr "Levél elutasítva"

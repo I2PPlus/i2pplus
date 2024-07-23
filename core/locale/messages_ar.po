@@ -9,14 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#. NOTE TO TRANSLATORS: Feel free to translate all these as you see fit, there are several options...
-#. spaces or not, '.' or not, plural or not. Try not to make it too long, it is used in
-#. a lot of tables.
-#. milliseconds
-#. Note to translators, may be negative or zero, 2999 maximum.
-#. {0,number,####} prevents 1234 from being output as 1,234 in the English locale.
-#. If you want the digit separator in your locale, translate as {0}.
-#. alternates: msec, msecs
 #, java-format
 msgid "{0,number,####} ms"
 msgid_plural "{0,number,####} ms"
@@ -27,8 +19,6 @@ msgstr[3] "{0,number,####} ميليسكوند"
 msgstr[4] "{0,number,####} ميليسكوندين"
 msgstr[5] "{0,number,####} ميليسكوند"
 
-#. seconds
-#. alternates: secs, sec. 'seconds' is probably too long.
 #, java-format
 msgid "{0} sec"
 msgid_plural "{0} sec"
@@ -39,8 +29,6 @@ msgstr[3] "{0} ثوان"
 msgstr[4] "{0} ثوان"
 msgstr[5] "{0} ثوان"
 
-#. minutes
-#. alternates: mins, min. 'minutes' is probably too long.
 #, java-format
 msgid "{0} min"
 msgid_plural "{0} min"
@@ -51,8 +39,6 @@ msgstr[3] "{0} دقائق"
 msgstr[4] "{0} دقائق"
 msgstr[5] "{0} دقائق"
 
-#. hours
-#. alternates: hrs, hr., hrs.
 #, java-format
 msgid "{0} hour"
 msgid_plural "{0} hours"
@@ -63,7 +49,6 @@ msgstr[3] "{0} ساعات"
 msgstr[4] "{0} ساعات"
 msgstr[5] "{0} ساعات"
 
-#. days
 #, java-format
 msgid "{0} day"
 msgid_plural "{0} days"
@@ -74,7 +59,6 @@ msgstr[3] "{0} أيام"
 msgstr[4] "{0} أيام"
 msgstr[5] "{0} أيام"
 
-#. years
 #, java-format
 msgid "{0} year"
 msgid_plural "{0} years"
@@ -108,7 +92,6 @@ msgstr[3] "{0,number,####} ميكرو ثوانٍ"
 msgstr[4] "{0,number,####} ميكرو ثوانٍ"
 msgstr[5] "{0,number,####} ميكرو ثوانٍ"
 
-#. just for tagging
 msgid "CRIT"
 msgstr "كريت"
 

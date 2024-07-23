@@ -45,13 +45,9 @@ msgstr "문제가 지속되면 브라우저의 쿠키가 활성화되어 있는�
 msgid "Configuration reloaded for all tunnels"
 msgstr "모든 터널에 설정 다시 로드함"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Starting tunnel"
 msgstr "터널 시작중"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Stopping tunnel"
 msgstr "터널 중지중"
 
@@ -542,7 +538,6 @@ msgstr "이 서비스에 액세스하려면 필요한 사용자 이름 설정"
 msgid "Password"
 msgstr "비밀번호"
 
-#. && editBean.isAdvanced()
 msgid "Set password required to access this service"
 msgstr "이 서비스에 액세스하려면 필요한 비밀번호 설정"
 

@@ -49,11 +49,9 @@ msgstr "Fermeture dans {0}"
 msgid "Shutdown imminent"
 msgstr "La fermeture est imminente"
 
-#. status translations are in the console bundle
 msgid "Network"
 msgstr "Réseau"
 
-#. Windows typically has tooltips; Linux (at least Ubuntu) doesn't
 msgid "I2P: Right-click for menu"
 msgstr "I2P : clic droit pour obtenir le menu"
 

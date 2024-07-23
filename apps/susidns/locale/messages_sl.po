@@ -58,7 +58,6 @@ msgstr[1] "Iskanje po <span class=active>"
 msgstr[2] "Iskanje po <span class=active>"
 msgstr[3] "Iskanje po <span class=active>"
 
-
 #, java-format
 msgid "Filtered list contains 1 entry."
 msgid_plural "Filtered list contains {0} entries."
@@ -124,19 +123,16 @@ msgstr "Neveljavno ime gostitelja \"{0}\"."
 msgid "Please enter a host name and destination"
 msgstr "Prosim, vnesite ime gostitelja in destinacijo"
 
-#. clear search when deleting
 msgid "Delete Entry"
 msgstr "Izbriši vnos"
 
 msgid "Delete Selected"
 msgstr "Izbriši izbrane"
 
-#. parameter is a host name
 #, java-format
 msgid "Destination {0} deleted."
 msgstr "Destinacija {0} izbrisana."
 
-#. parameter will always be >= 2
 #, java-format
 msgid "1 destination deleted."
 msgid_plural "{0} destinations deleted."
@@ -241,15 +237,6 @@ msgstr "Uvoz iz datoteke je spodletel"
 msgid "Subscriptions saved."
 msgstr "Prijave shranjene."
 
-#. ******
-#. String nonce = System.getProperty("addressbook.nonce");
-#. if (nonce != null) {
-#. // Yes this is a hack.
-#. // No it doesn't work on a text-mode browser.
-#. // Fetching from the addressbook servlet
-#. // with the correct parameters will kick off a
-#. // config reload and fetch.
-#. ******
 msgid "Update"
 msgstr "Posodobi"
 

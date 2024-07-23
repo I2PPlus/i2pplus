@@ -48,13 +48,9 @@ msgstr "Hvis problemet fortsætter, skal du kontrollere, at du har aktiveret coo
 msgid "Configuration reloaded for all tunnels"
 msgstr "Konfiguration er genindlæst for alle tunneler"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Starting tunnel"
 msgstr "Starter tunnel"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Stopping tunnel"
 msgstr "Stopper tunnel"
 
@@ -547,7 +543,6 @@ msgstr "Indstil brugernavn påkrævet for at få adgang til denne tjeneste"
 msgid "Password"
 msgstr "Adgangskode"
 
-#. && editBean.isAdvanced()
 msgid "Set password required to access this service"
 msgstr "Indstil adgangskode påkrævet for at få adgang til denne tjeneste"
 
@@ -1004,6 +999,9 @@ msgstr "Genstart alle"
 
 msgid "I2P Server Tunnels"
 msgstr "I2P-servertunneler"
+
+msgid "Helper"
+msgstr ""
 
 msgid "Type"
 msgstr "Type"

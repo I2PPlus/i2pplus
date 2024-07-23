@@ -212,12 +212,10 @@ msgstr "错误：无法添加种子{0}"
 msgid "Torrent already running: {0}"
 msgstr "种子已启动:{0}"
 
-#. catch this here so we don't try do delete it below
 #, java-format
 msgid "Cannot open \"{0}\""
 msgstr "无法打开 \"{0}\""
 
-#. TODO - if the existing one is a magnet, delete it and add the metainfo instead?
 #, java-format
 msgid "Torrent with this info hash is already running: {0}"
 msgstr "具有相同Hash链接的种子已在下载中:{0}"
@@ -312,13 +310,6 @@ msgstr "限额为 {0}B"
 msgid "Torrent \"{0}\" has no data!"
 msgstr "种子 \"{0}\" 中无数据!"
 
-#.
-#. System.out.println("torrent info: " + info.toString());
-#. List<Long> lengths = info.getLengths();
-#. if (lengths != null)
-#. for (int i = 0; i < lengths.size(); i++)
-#. System.out.println("File " + i + " is " + lengths.get(i) + " long.");
-#.
 #, java-format
 msgid "Torrents larger than {0}B are not supported yet \"{1}\"!"
 msgstr "目前不支持大于 {0}B 的种子 \"{1}\"!"
@@ -377,8 +368,6 @@ msgstr "下载已完成: {0}"
 msgid "I2PSnark"
 msgstr "I2PSnark"
 
-#. addMessage(_t("Metainfo received for {0}", snark.getName()));
-#. addMessageNoEscape(_t("Starting torrent: {0}", linkify(snark)).replace("Magnet ", ""));
 #, java-format
 msgid "Starting torrent: {0}"
 msgstr "正在启动种子{0}"
@@ -659,7 +648,6 @@ msgstr "在"
 msgid "out"
 msgstr "出"
 
-#. Only truncate if it's an actual dest
 msgid "Our destination (identity) for this session"
 msgstr "这个会话中我们的目标（身份）"
 
@@ -721,7 +709,6 @@ msgstr "最后一页"
 msgid "Cannot add torrent {0} inside another torrent: {1}"
 msgstr "无法添加内含另一个种子的种子 {0}：{1}"
 
-#. TODO
 #, java-format
 msgid "Download from non-I2P location {0} is not supported"
 msgstr "不支持从非I2P地点{0}下载"
@@ -730,7 +717,6 @@ msgstr "不支持从非I2P地点{0}下载"
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
 msgstr "无效链接 - 链接必须以“{0}”或“{1}”开头"
 
-#. no file or URL specified
 msgid "Enter URL or select torrent file"
 msgstr "输入 URL 或选择 torrent 文件"
 
@@ -990,7 +976,6 @@ msgstr "请输入保存数据的目录（默认 {0}）"
 msgid "Create Torrent"
 msgstr "创建种子"
 
-#. buf.append("From file: <input type=file name=\"newFile\" size=50 value=\"" + newFile + "\" /><br>\n");
 msgid "Data to seed"
 msgstr "做种数据"
 
@@ -1070,7 +1055,6 @@ msgstr "每页显示的最多种子数"
 msgid "torrents"
 msgstr "种子"
 
-#. If we get to here, we have the language settings
 msgid "Language"
 msgstr "语言"
 
@@ -1273,7 +1257,6 @@ msgstr "无法添加磁链：不支持版本2的磁链链接"
 msgid "Invalid magnet URL {0}"
 msgstr "磁性链接 {0} 无效"
 
-#. * dummies for translation
 #, java-format
 msgid "1 hop"
 msgid_plural "{0} hops"
@@ -1368,7 +1351,6 @@ msgstr "上一层文件夹"
 msgid "Audio Playlist"
 msgstr "音频播放列表"
 
-#. status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Not found"), _t("Torrent not found?").replace("?", ""));
 msgid "Not found"
 msgstr "找不到资源"
 
@@ -1378,7 +1360,6 @@ msgstr "种子未找到"
 msgid "File not found in torrent?"
 msgstr "种子中没有发现文件？"
 
-#. status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Unrecognized"), _t("File not found in torrent?").replace("?", ""));
 msgid "Unrecognized"
 msgstr "未认识到的"
 
@@ -1403,17 +1384,6 @@ msgstr "不要下载这个文件"
 msgid "Skip"
 msgstr "跳过"
 
-#. TODO: fixup so works with ajax refresh
-#. "<span class=script>");
-#. if (!inOrder) {
-#. buf.append("<a class=control id=setallhigh href=#>")
-#. .append(toImg("clock_red")).append(_t("Set all high")).append("</a>\n");
-#. }
-#. buf.append("<a class=control id=setallnorm href=#>")
-#. .append(toImg("clock")).append(_t("Set all normal")).append("</a>\n")
-#. .append("<a class=control id=setallskip href=#>")
-#. .append(toImg("block")).append(_t("Skip all")).append("</a></span>\n");
-#.
 msgid "Save priorities"
 msgstr "保存优先级"
 
@@ -1482,7 +1452,6 @@ msgstr "为了编辑，Torrent必须停止"
 msgid "Save Changes"
 msgstr "保存更改"
 
-#. shouldn't happen
 msgid "Torrent must be stopped"
 msgstr "必须停止洪流"
 

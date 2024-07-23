@@ -13,6 +13,22 @@ msgid "internal"
 msgstr "notranji"
 
 #, java-format
+msgid "{0} inbound tunnel"
+msgid_plural "{0} inbound tunnels"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#, java-format
+msgid "{0} outbound tunnel"
+msgid_plural "{0} outbound tunnels"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#, java-format
 msgid "{0} inbound, {0} outbound tunnel"
 msgid_plural "{0} inbound, {0} outbound tunnels"
 msgstr[0] "{0} notranji, {0} izhodni tunelj"
@@ -38,13 +54,9 @@ msgstr "Če težava obstaja, preverite, ali imate omogočene piškotke v brskaln
 msgid "Configuration reloaded for all tunnels"
 msgstr "Nastavitve ponovno naložene za vse tunelje"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Starting tunnel"
 msgstr "Zagon tunelja"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Stopping tunnel"
 msgstr "Ustavitev tunelja"
 
@@ -354,6 +366,14 @@ msgstr "2 skoka tunelj (srednja anonimnost)"
 msgid "3 hop tunnel (high anonymity)"
 msgstr "3 skoka tunelj (visoka anonimnost)"
 
+#, java-format
+msgid "{0} hop tunnel"
+msgid_plural "{0} hop tunnel"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
 msgid "Number of Tunnels in Group"
 msgstr "Število tuneljev v skupini"
 
@@ -401,6 +421,14 @@ msgstr "skok razlika"
 
 msgid "Number of Reserve Tunnels"
 msgstr "Število rezervnih tuneljev"
+
+#, java-format
+msgid "{0} backup tunnel"
+msgid_plural "{0} backup tunnels"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 msgid "no redundancy, no added resource usage"
 msgstr "brez presežka, brez dodatnega uporabe vir"
@@ -525,7 +553,6 @@ msgstr "Nastavi uporabniško ime, potrebno za dostop do tega servisa"
 msgid "Password"
 msgstr "Geslo"
 
-#. && editBean.isAdvanced()
 msgid "Set password required to access this service"
 msgstr "Nastavi geslo, potrebno za dostop do tega servisa"
 

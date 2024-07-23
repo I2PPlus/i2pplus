@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#. * IPv4 OK, IPv6 OK or disabled or no address
 msgid "OK"
 msgstr "OK"
 
@@ -28,22 +27,18 @@ msgstr "IPv4: Firewalled; IPv6: OK"
 msgid "IPv4: Disabled; IPv6: OK"
 msgstr "IPv4: bị vô hiệu hóa; IPv6: OK"
 
-#. * IPv4 symmetric NAT (not source NAT)
 msgid "IPv4: Symmetric NAT; IPv6: OK"
 msgstr "IPv4: NAT đối xứng; IPv6: OK"
 
-#. * IPv4 symmetric NAT, IPv6 firewalled or disabled or no address
 msgid "Symmetric NAT"
 msgstr "NAT đối xứng"
 
-#. * IPv4 symmetric NAT (not source NAT)
 msgid "IPv4: Symmetric NAT; IPv6: Testing"
 msgstr "IPv4: NAT đối xứng; IPv6: Kiểm tra"
 
 msgid "IPv4: Firewalled; IPv6: Testing"
 msgstr "IPv4: Firewalled; IPv6: Kiểm tra"
 
-#. * IPv4 firewalled, IPv6 firewalled or disabled or no address
 msgid "Firewalled"
 msgstr "Tường lửa"
 
@@ -65,12 +60,6 @@ msgstr "Xung đột cổng"
 msgid "Testing"
 msgstr "Kiểm tra"
 
-#. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
-#. NPE, too early
-#. if (_context.router().getRouterInfo().getBandwidthTier().equals("K"))
-#. setTunnelStatus("Not expecting tunnel requests: Advertised bandwidth too low");
-#. else
-#. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
 msgid "Starting up"
 msgstr "Khởi động"
 
@@ -80,11 +69,9 @@ msgstr "Từ chối tất cả các yêu cầu đường hầm:<br>"
 msgid "Hidden Mode"
 msgstr "Chế độ ẩn"
 
-#. }
 msgid "Declining tunnel requests:<br>"
 msgstr "Yêu cầu đường hầm giảm:<br>"
 
-#. }
 msgid "High message delay"
 msgstr "Độ trễ tin nhắn cao"
 
@@ -109,21 +96,12 @@ msgstr "Số lượng yêu cầu cao"
 msgid "Rejecting most tunnel requests:<br>"
 msgstr "Từ chối hầu hết các yêu cầu đường hầm:<br>"
 
-#. hard to do {0} from here
-#. setTunnelStatus("Accepting " + (100-(int)(100.0*probReject)) + "% of tunnels");
 msgid "Accepting most tunnel requests"
 msgstr "Chấp nhận hầu hết các yêu cầu đường hầm"
 
 msgid "Accepting tunnel requests"
 msgstr "Chấp nhận yêu cầu đường hầm"
 
-#. .067KBps
-#. * also limited to 90% - see below
-#. always leave at least 4KBps free when allowing
-#. private static final String LIMIT_STR = _x("Declining tunnel requests" + ":<br>" + "Bandwidth limit");
-#. hard to do {0} from here
-#. setTunnelStatus("Rejecting " + ((int)(100.0*probReject)) + "% of tunnels: Bandwidth limit");
-#. setTunnelStatus(_x("Declining most tunnel requests" + ":<br>" + "Bandwidth limit"));
 msgid "Declining requests: Bandwidth limit"
 msgstr "Từ chối yêu cầu: Giới hạn băng thông"
 
@@ -145,7 +123,6 @@ msgstr "Bỏ yêu cầu đường hầm: Độ trễ công việc cao"
 msgid "Dropping tunnel requests:<br>High CPU load"
 msgstr "Loại bỏ yêu cầu đường hầm:<br>Tải CPU cao"
 
-#. don't even bother, since we are so overloaded locally
 msgid "Dropping tunnel requests: Overloaded"
 msgstr "Bỏ yêu cầu đường ống riêng: Quá tải"
 

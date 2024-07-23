@@ -49,11 +49,9 @@ msgstr "توقف في مدة {0}"
 msgid "Shutdown imminent"
 msgstr "إغلاق وشيك"
 
-#. status translations are in the console bundle
 msgid "Network"
 msgstr "الشبكة"
 
-#. Windows typically has tooltips; Linux (at least Ubuntu) doesn't
 msgid "I2P: Right-click for menu"
 msgstr "I2P: أنقر بالزر الأيمن للقائمة"
 

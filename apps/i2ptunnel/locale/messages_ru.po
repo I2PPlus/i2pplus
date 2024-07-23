@@ -51,13 +51,9 @@ msgstr "Если проблема сохраняется, проверьте, ч
 msgid "Configuration reloaded for all tunnels"
 msgstr "Конфигурация для всех туннелей перечитана"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Starting tunnel"
 msgstr "Запуск туннеля"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Stopping tunnel"
 msgstr "Остановка туннеля"
 
@@ -552,7 +548,6 @@ msgstr "Установить имя пользователя для доступ
 msgid "Password"
 msgstr "Пароль"
 
-#. && editBean.isAdvanced()
 msgid "Set password required to access this service"
 msgstr "Установить пароль для доступа к сервису"
 
@@ -1009,6 +1004,9 @@ msgstr "Перезапустить все"
 
 msgid "I2P Server Tunnels"
 msgstr "Туннели I2P-серверов"
+
+msgid "Helper"
+msgstr ""
 
 msgid "Type"
 msgstr "Тип"

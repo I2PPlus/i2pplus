@@ -310,11 +310,9 @@ msgstr "This address will be saved to your Router addressbook where your subscri
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
 msgstr "Jika Anda ingin melacak situs yang telah Anda tambahkan secara manual, tambahkan ke buku alamat master atau pribadi Anda sebagai gantinya."
 
-#. FIXME wasn't escaped
 msgid "Save & continue"
 msgstr "Simpan & lanjutkan"
 
-#. only blockfile supports multiple books
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
 msgstr "Simpan {0} ke Master Addresbook dan lanjutkan ke situs web"

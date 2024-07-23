@@ -46,7 +46,6 @@ msgid "Acquired only 1 router info from reseed hosts"
 msgid_plural "Acquired only {0} router infos from reseed hosts"
 msgstr[0] "只从播种路由中获得了{0} 个路由器信息"
 
-#. remove dupe error msgs
 #, java-format
 msgid "{0}Reseed{1} failed:"
 msgstr "{0}补种{1} 失败:"
@@ -73,9 +72,6 @@ msgstr "从播种路由获得{0}路由器信息"
 msgid "Acquired {0} router infos from reseed hosts ({1} errors)"
 msgstr "从补种服务器获得{0}个路由器信息（{1}个错误）。"
 
-#. NOTE TO TRANSLATORS - each of these phrases is a description for a statistic
-#. to be displayed on /stats.jsp and in the graphs on /graphs.jsp.
-#. Please keep relatively short so it will fit on the graphs.
 msgid "Message receive rate (B/s)"
 msgstr "低级别接收速率（B/s）"
 
@@ -127,14 +123,12 @@ msgstr "平均隧道建立成功百分比"
 msgid "unknown"
 msgstr "未知"
 
-#. 1
 msgid "Floodfill"
 msgstr "参与洪泛"
 
 msgid "Show all routers with this capability in the NetDb"
 msgstr "在NetDb中显示所有具有此功能的路由器"
 
-#. This used to be "no common transports" but it is almost always no transports at all
 msgid "No transports (hidden or starting up?)"
 msgstr "无数据传输（隐身模式或者正在启动？）"
 
@@ -223,9 +217,6 @@ msgstr "UPnP 报告的最大下行比特率为 {0} 字节/秒"
 msgid "UPnP reports the maximum upstream bit rate is {0}bits/sec"
 msgstr "UPnP 报告的最大上行比特率为 {0} 字节/秒"
 
-#. {0} is TCP or UDP
-#. {1,number,#####} prevents 12345 from being output as 12,345 in the English locale.
-#. If you want the digit separator in your locale, translate as {1}.
 #, java-format
 msgid "{0} port {1,number,#####} was successfully forwarded by UPnP."
 msgstr "{0} 端口 {1,number,#####} 已经通过 UPnP 成功转发。"
@@ -295,7 +286,6 @@ msgstr "无法复制到 {0}"
 msgid "Requires Java version {0} but installed Java version is {1}"
 msgstr "需要版本为 {0} 的 Java，但你安装的版本是 {1}"
 
-#. set status before thread to ensure UI feedback
 msgid "Updating"
 msgstr "正在更新"
 
@@ -316,7 +306,6 @@ msgstr "你必须先更新到版本 {0}"
 msgid "Checking for update of plugin {0}"
 msgstr "正在为插件 {0} 检查更新"
 
-#. set status before thread to ensure UI feedback
 msgid "Contacting plugin update server"
 msgstr "联系插件更新服务器"
 
@@ -346,7 +335,6 @@ msgstr "插件下载完成"
 msgid "Cannot create plugin directory {0}"
 msgstr "无法创建插件文件夹 {0}"
 
-#. updateStatus("<b>" + "Plugin contains an invalid key" + ' ' + pubkey + ' ' + signer + "</b>");
 #, java-format
 msgid "Plugin from {0} contains an invalid key"
 msgstr "由 {0} 获取的插件签名密钥无效"
@@ -355,7 +343,6 @@ msgstr "由 {0} 获取的插件签名密钥无效"
 msgid "Plugin signature verification of {0} failed"
 msgstr "插件 {0} 的签名验证失败"
 
-#. don't display signer, we're really checking the key not the signer name
 msgid "Plugin not installed - signer is untrusted"
 msgstr "插件未被安装 - 签名者不可信"
 
@@ -491,7 +478,6 @@ msgstr "平滑关闭"
 msgid "Graceful shutdown initiated"
 msgstr "已开始平滑关闭"
 
-#. Normal browsers send value, IE sends button label
 msgid "Shutdown immediately"
 msgstr "立刻关闭"
 
@@ -577,19 +563,15 @@ msgstr "安装 I2P+系统服务"
 msgid "Warning: unable to install the service"
 msgstr "警告：无法安装服务"
 
-#. addFormNotice(_t("Service installed"));
 msgid "Enabled I2P+ service autostart at system startup"
 msgstr "I2P+服务将随开机启动"
 
-#. addFormError(_t("Warning: unable to install the service") + " - " + ioe.getLocalizedMessage());
 msgid "Warning: could not set the I2P+ service to autostart"
 msgstr "警告：无法将I2P+服务设置为自动启动"
 
-#. addFormNotice(_t("Service removed"));
 msgid "Disabled I2P+ Service autostart at system startup"
 msgstr "I2P+服务将不随开机启动"
 
-#. addFormError(_t("Warning: unable to remove the service") + " - " + ioe.getLocalizedMessage());
 msgid "Warning: could not set the I2P+ service to manual start"
 msgstr "警告：无法将I2P+服务设置为手动启动"
 
@@ -796,14 +778,12 @@ msgstr "证书用于对网络上运行的加密服务进行身份验证，为托
 msgid "Local SSL Certificates"
 msgstr "本地 SSL 证书"
 
-#. console
 msgid "Router Console"
 msgstr "路由控制台"
 
 msgid "Location"
 msgstr "服务器位置"
 
-#. I2CP
 msgid "I2CP"
 msgstr "I2CP"
 
@@ -819,14 +799,9 @@ msgstr "网站"
 msgid "Local Router Family Certificate"
 msgstr "本地路由器家族证书"
 
-#. hide family name in css as it's already displayed above
 msgid "Family"
 msgstr "路由器家族"
 
-#. } else {
-#. _out.write("<p>");
-#. _out.write(_t("none"));
-#. _out.write("</p>\n");
 msgid "Console"
 msgstr "控制台"
 
@@ -877,7 +852,6 @@ msgstr "插件 {0} 已停用"
 msgid "Stopped webapp {0}"
 msgstr "停止 webapp {0}"
 
-#. label (IE)
 msgid "Start"
 msgstr "启动"
 
@@ -962,7 +936,6 @@ msgstr "已添加用户 {0}"
 msgid "Interface configuration saved"
 msgstr "接口配置保存成功"
 
-#. "<th data-sortable data-sort-method=number>" + _t("Speed") + "</th>" +
 msgid "Edit"
 msgstr "编辑"
 
@@ -1005,7 +978,6 @@ msgstr "电子邮件"
 msgid "Plugin"
 msgstr "插件"
 
-#. hide caps as already in the header
 msgid "Version"
 msgstr "版本"
 
@@ -1186,8 +1158,6 @@ msgstr "选择要添加的类"
 msgid "All classes in {0}"
 msgstr "所有事件于 {0}"
 
-#. stat groups for stats.jsp
-#. See StatsGenerator for groups mapped to a display name
 msgid "Bandwidth"
 msgstr "带宽"
 
@@ -1314,8 +1284,6 @@ msgstr "正在启用 UDP"
 msgid "Requiring SSU introducers"
 msgstr "需要 SSU 中介"
 
-#. if (_context.hasWrapper()) {
-#. Wow this dumps all conns immediately and really isn't nice
 msgid "Performing a soft restart"
 msgstr "进行平滑重启"
 
@@ -1406,7 +1374,6 @@ msgstr "立刻补种"
 msgid "Reseeding is already in progress"
 msgstr "正在进行补种"
 
-#. skip the nonce checking in ReseedHandler
 msgid "Starting reseed process"
 msgstr "正在开始补种过程"
 
@@ -1445,8 +1412,6 @@ msgstr "重置 URL 列表"
 msgid "URL list reset successfully"
 msgstr "URL 列表重置成功"
 
-#. ctx.router().shutdown(Router.EXIT_HARD); // never returns
-#. give the UI time to respond
 msgid "Cancel shutdown"
 msgstr "取消关闭"
 
@@ -1456,8 +1421,6 @@ msgstr "取消重启"
 msgid "Restart immediately"
 msgstr "立刻重启"
 
-#. ctx.router().shutdown(Router.EXIT_HARD_RESTART); // never returns
-#. give the UI time to respond
 msgid "Restart"
 msgstr "重启"
 
@@ -1543,8 +1506,6 @@ msgstr "已移动"
 msgid "Saved order of sections."
 msgstr "已保存的各部分顺序。"
 
-#. the count isn't really correct anyway, since we don't check for actual changes
-#. addFormNotice("Updated settings for " + updated + " pools.");
 msgid "Updated settings for all pools."
 msgstr "所有隧道池设置更新完毕。"
 
@@ -1554,7 +1515,6 @@ msgstr "探索隧道设置保存成功。"
 msgid "Error saving the configuration (applied but not saved) - please see the error logs."
 msgstr "配置保存出错（已应用但未保存） - 参见错误日志。"
 
-#. * dummies for translation
 #, java-format
 msgid "{0} hop"
 msgid_plural "{0} hops"
@@ -1787,7 +1747,6 @@ msgstr "详情"
 msgid "Combined bandwidth graph"
 msgstr "复合带宽图"
 
-#. e.g. "statname for 60m"
 #, java-format
 msgid "{0} for {1}"
 msgstr "过去 {1} 统计 {0}"
@@ -1997,7 +1956,6 @@ msgstr "配置带宽"
 msgid "I2P Bandwidth Configuration"
 msgstr "I2P 带宽设置"
 
-#. FIXME wasn't escaped
 msgid "Configure UI"
 msgstr "界面设置"
 
@@ -2034,7 +1992,6 @@ msgstr "最近的变化"
 msgid "Bug tracker"
 msgstr "错误跟踪器"
 
-#. I2P specific
 msgid "I2P Bug Reports"
 msgstr "I2P 错误报告"
 
@@ -2068,7 +2025,6 @@ msgstr "I2P+ API文档"
 msgid "I2P Network Statistics"
 msgstr "I2P Network Statistics"
 
-#. software repositories + filesharing
 msgid "Transient server-encrypted filesharing and pastebin"
 msgstr "临时服务器加密的文件共享和粘贴绑定"
 
@@ -2087,13 +2043,9 @@ msgstr "I2P 主页"
 msgid "BitTorrent tracker"
 msgstr "BT tracker"
 
-#. "git.i2p" + S + _x("Community Git hosting") + S + "http://git.i2p/explore/repos" + S + I + "eepsites/git.svg" + S +
-#. torrent trackers
 msgid "Postman's Tracker"
 msgstr "Postman's BT Tracker"
 
-#. _x("Chudo") + S + _x("No login BitTorrent tracker") + S + "http://torrents.chudo.i2p/" + S + I + "magnet.svg" + S +
-#. domain name registration + uptime trackers
 msgid "List of active eepsites and uptime monitor"
 msgstr "活跃的eepsite列表和正常运行时间监控"
 
@@ -2103,9 +2055,6 @@ msgstr "注册一个简单好记的.i2p域名"
 msgid "zzz Domain Registry"
 msgstr "zzz 域名注册处"
 
-#. "Identiguy" + S + _x("List of active eepsites and uptime monitor") + S + "http://identiguy.i2p/" + S + I + "servermonitor.svg" + S +
-#. "scanner.linuxfarm" + S + _x("List of active eepsites and uptime monitor") + S + "http://scanner.linuxfarm.i2p/" + S + I + "eepsites/servermonitor.svg" + S +
-#. forums + social
 msgid "I2P Forum"
 msgstr "I2P 论坛"
 
@@ -2127,14 +2076,6 @@ msgstr "跨网络微博和论坛和维基"
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Reddit的另类隐私前端"
 
-#. "StackOverflow" + S + _x("Developer question &amp; answer forums") + S + "http://stackoverflow.i2p/" + S + I + "eepsites/stackoverflow.svg" + S +
-#. "dread.i2p" + S + _x("Darknet forums") + S + "http://dread.i2p/d/i2p/?sort=new" + S + I + "eepsites/dread.svg" + S +
-#. _x("Dev Forum") + S + _x("Development forum") + S + "http://zzz.i2p/" + S + I + "eepsites/forum.svg" + S +
-#. "libreddit.i2p" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://libreddit.i2p/" + S + I + "libreddit.svg" + S +
-#. "zeronet.i2p" + S + _x("Zeronet I2P Gateway") + S + "http://zeronet.i2p/" + S + I + "zeronet.svg" + S +
-#. _x("Dancing Elephants") + S + _x("Rocksolid forums for the darknets") + S + "http://def3.i2p/" + S + I + "eepsites/forum.svg" + S +
-#. "query.i2p" + S + _x("The StackOverflow of I2P") + S + "http://query.i2p/" + S + I + "eepsites/forum.svg" + S +
-#. hosting + other services
 msgid "Base64 Image Encoder"
 msgstr "BASE64图像编码器"
 
@@ -2180,9 +2121,6 @@ msgstr "Youtube 的替代前端"
 msgid "Provider of privacy respecting web hosting and VPN services"
 msgstr "尊重隐私的网络托管和VPN服务提供商"
 
-#. "tinypng.i2p" + S + _x("Image optimizer") + S + "http://tinypng.i2p/" + S + I + "tinypng.png" + S +
-#. _x("Deep Web Radio") + S + _x("Streaming radio service") + S + "http://deepwebradio.i2p/" + S + I + "radio.svg" + S +
-#. search engines
 msgid "Tor-focused Search Engine"
 msgstr "以.Onion网站为中心的搜索引擎"
 
@@ -2204,13 +2142,6 @@ msgstr "注重隐私的表网搜索引擎"
 msgid "I2P Web Search Engine"
 msgstr "I2P搜索引擎"
 
-#. "I2PSearch" + S +_x("I2P Web Search Engine") + S + "http://i2psearch.i2p/" + S + I + "search.svg" + S +
-#. "Legwork" + S +_x("I2P Web Search Engine") + S + "http://legwork.i2p/" + S + I + "search.svg" + S +
-#. "LibreY" + S +_x("Clearnet Search Engine") + S + "http://librey.i2p/" + S + I + "search.svg" + S +
-#. "raklet.i2p" + S +_x("Tor-focused Search Engine") + S + "http://raklet.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
-#. "Ransack" + S +_x("I2P-based Metasearch Engine") + S + "http://ransack.i2p/" + S + I + "search.svg" + S +
-#. "shmoogle.i2p" + S +_x("I2P Web Search Engine") + S + "http://shmoogle.i2p/" + S + I + "search.svg" + S +
-#. wikis & reference
 msgid "Enabling the free transmission of data in the public interest"
 msgstr "为了公共利益而实现数据的自由传输"
 
@@ -2271,15 +2202,6 @@ msgstr "世界地图集，包括地理知识和 和国旗"
 msgid "WorldAtlas"
 msgstr "世界地图集"
 
-#. "cssportal.i2p" + S + _x("CSS design reference") + S + "http://cssportal.i2p/" + S + I + "help.svg" + S +
-#. "ebooks.i2p" + S + _x("Huge collection of books &amp; magazines &amp; comics") + S + "http://ebooks.i2p/" + S + I + "eepsites/books.svg" + S +
-#. "legalcases.i2p" + S + _x("Publicly available texts of court decisions all over the world") + S + "http://legalcases.i2p/" + S + I + "eepsites/books.svg" + S +
-#. _x("imperial.i2p") + S + _x("Extensive repository of DRM-free ebooks") + S + "http://imperial.i2p/" + S + I + "eepsites/books.svg" + S +
-#. "jalibrary.i2p" + S + _x("Books &amp; courses &amp; art") + S + "http://jalibrary.i2p/" + S + I + "eepsites/books.svg" + S +
-#. "nexus.i2p" + S + _x("Searchable science library") + S + "http://nexus.i2p/" + S + I + "nexus.svg" + S +
-#. "tome.i2p" + S + _x("Collection of books &amp; other reading material") + S + "http://tome.i2p/" + S + I + "eepsites/books.svg" + S +
-#. _x("UrbanDictionary") + S + _x("Crowd-sourced slang dictionary") + S + "http://urbandictionary.i2p/" + S + I + "eepsites/urbandictionary.svg" + S +
-#. news + blogs
 msgid "Technology News &amp; more..."
 msgstr "技术新闻和 和更多..."
 
@@ -2650,7 +2572,6 @@ msgstr "已就绪/等待中的任务"
 msgid "Scheduled jobs"
 msgstr "预定的任务"
 
-#. translators: {0} is a job name, {1} is a time, e.g. 6 min
 #, java-format
 msgid "{0} starts in {1}"
 msgstr "{0}开始于{1}"
@@ -2694,40 +2615,27 @@ msgstr "文件未找到"
 msgid "No log messages"
 msgstr "无日志消息"
 
-#. 0  -
 msgid "Local Router"
 msgstr "本地路由"
 
-#. 1  - r=.
 msgid "Router Lookup"
 msgstr "路由查询"
 
-#. 2  -
-#. 3  - f=2
 msgid "All Routers"
 msgstr "全部路由"
 
-#. 4  - f=1 (debug)
-#. 5  - l=1
-#. 6  - l=2 (debug)
-#. only show for our own id
 msgid "LeaseSets"
 msgstr "租约集"
 
-#. 7  - l=3
 msgid "Advanced Lookup"
 msgstr "高级查询"
 
-#. 8  - f=4
 msgid "LeaseSet Lookup"
 msgstr "租赁查找"
 
-#. 9  -
-#. 10 - f=5
 msgid "All Routers (Client NetDb)"
 msgstr "所有路由器（客户端NETDB）"
 
-#. 11 - f=6 (debug)
 msgid "Sybil Analysis"
 msgstr "Sybil分析"
 
@@ -2893,20 +2801,6 @@ msgstr "对等节点摘要"
 msgid "Profile"
 msgstr "配置文件"
 
-#.
-#. PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(h);
-#. if (prof != null && prof.getIsExpandedDB()) {
-#. buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(h.toBase64()).append("\" title=\"")
-#. .append(_t("View profile")).append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>");
-#. }
-#.
-#.
-#. PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(h);
-#. if (prof != null && prof.getIsExpandedDB()) {
-#. buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(h.toBase64()).append("\" title=\"").append(_t("View profile"))
-#. .append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>");
-#. }
-#.
 msgid "Configure peer"
 msgstr "配置对等节点"
 
@@ -2916,7 +2810,6 @@ msgstr "内存占用"
 msgid "Hidden"
 msgstr "隐身"
 
-#. shouldn't happen
 msgid "Published"
 msgstr "发布"
 
@@ -2953,7 +2846,6 @@ msgstr "显示NetDb中具有此端口的所有路由器"
 msgid "Capabilities"
 msgstr "功能"
 
-#. hide version as already in the header
 msgid "Core version"
 msgstr "版本"
 
@@ -3100,8 +2992,6 @@ msgstr "同行功能"
 msgid "Dir"
 msgstr "类别"
 
-#. "<th class=lookup title=\"").append(_t("Lookup address via gwhois.org")).append("\">").append(_t("Whois")).append("</th>" +
-#. buf.append("<th class=lookup title=\"").append(_t("Lookup address via gwhois.org")).append("\">").append(_t("Whois")).append("</th>");
 msgid "Direction/Introduction"
 msgstr "按方向"
 
@@ -3247,7 +3137,6 @@ msgid "{0} fail"
 msgid_plural "{0} fails"
 msgstr[0] "失败 {0} 次"
 
-#. 2
 msgid "Banned"
 msgstr "已封禁"
 
@@ -3365,9 +3254,6 @@ msgstr "速度"
 msgid "Low Latency"
 msgstr "低延迟"
 
-#. .append("<th title=\"").append(_t("Time taken for peer test")).append("\">")
-#. .append(_t("Test Avg (ms)")).append("</th>")
-#. .append("<th>").append(_t("Capacity")).append("</th>")
 msgid "Tunnels peer has agreed to participate in"
 msgstr "同意参与的tunnels对等点"
 
@@ -3380,8 +3266,6 @@ msgstr "拒绝参与的tunnels对等点"
 msgid "Rejected"
 msgstr "拒绝"
 
-#. .append("<th>").append(_t("Integration")).append("</th>")
-#. .append("<th>").append(_t("First Heard About")).append("</th>")
 msgid "Last Heard From"
 msgstr "上次连接"
 
@@ -3394,14 +3278,12 @@ msgstr "不可达"
 msgid "OK"
 msgstr "正常"
 
-#. hide if < 10%
 msgid "Test Fails"
 msgstr "测试失败"
 
 msgid "Fast, High Capacity"
 msgstr "快速，高容量"
 
-#. 0
 msgid "High Capacity"
 msgstr "高容量"
 
@@ -3480,7 +3362,6 @@ msgstr "上次保存失败"
 msgid "Capabilities in the NetDb, not used to determine profiles"
 msgstr "节点数据库中的容量与描述信息无关"
 
-#. capabilities
 msgid "caps"
 msgstr "容量"
 
@@ -3549,7 +3430,6 @@ msgstr "最近获知了多少新节点？"
 msgid "All"
 msgstr "全部"
 
-#. 3
 msgid "Session Bans"
 msgstr "会话禁止"
 
@@ -3583,7 +3463,6 @@ msgstr "每周期事件峰值"
 msgid "Lifetime average events per period"
 msgstr "全程每周期事件均值"
 
-#. Display the strict average
 msgid "Lifetime average frequency"
 msgstr "全程平均频率"
 
@@ -3629,7 +3508,6 @@ msgstr "图表事件计数"
 msgid "Export Data as XML"
 msgstr "将数据导出为XML"
 
-#. Display the strict average
 msgid "Lifetime average value"
 msgstr "全程均值"
 
@@ -4085,8 +3963,6 @@ msgstr "添加、删除、编辑或控制客户端隧道和服务器隧道"
 msgid "How many local service tunnels we're running"
 msgstr "我们正在运行多少个本地服务隧道"
 
-#. older names for pre-0.7.4 installs
-#. hardcoded in i2psnark
 msgid "I2PSnark"
 msgstr "I2PSnark"
 
@@ -4148,10 +4024,6 @@ msgstr "更新并重启"
 msgid "Signed development update available"
 msgstr "已签署的开发更新已就绪"
 
-#. Note to translators: parameter is a router version, e.g. "0.9.19-16"
-#. <br> is optional, to help the browser make the lines even in the button
-#. If the translation is shorter than the English, you should probably not include <br>
-#. .append(_t("Download Signed<br>Development Update<br>{0}", getDevSU3UpdateVersion()))
 msgid "Download I2P Update"
 msgstr "有更新可用，正在尝试下载"
 
@@ -4224,13 +4096,6 @@ msgstr "同一路由器家族"
 msgid "IP close to us"
 msgstr "离我们很近的路由器IP"
 
-#. *
-#. "<li><a href=\"netdb?f=3&amp;m=4\">" + _t("Same IP") + "</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=5\">" + _t("Same IPv4") + " /24</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=6\">" + _t("Same IPv4") + " /16</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=17\">"+ _t("Same IPv6") + " /64</a></li>\n" +
-#. "<li><a href=\"netdb?f=3&amp;m=18\">" + _t("Same IPv6") + " /48</a></li>\n" +
-#. *
 msgid "Pair distance"
 msgstr "配对距离"
 
@@ -4303,16 +4168,12 @@ msgstr "已知的播种节点"
 msgid "Average closest floodfill distance"
 msgstr "平均最近洪泛节点距离"
 
-#. "<b>").append(_t("Routing Data")).append(":</b> \"").append(DataHelper.getUTF8(_context.routerKeyGenerator().getModData()))
 msgid "Routing Data"
 msgstr "路由数据"
 
-#. .append("\"<br>\n<b>").append(_t("Last Changed")).append(":</b> ").append(DataHelper.formatTime(_context.routerKeyGenerator().getLastChanged())).append("<br>\n" +
-#. "<b>").append(_t("Next Routing Data")).append(":</b> \"").append(DataHelper.getUTF8(_context.routerKeyGenerator().getNextModData()))
 msgid "Rotates in"
 msgstr "旋转"
 
-#. Distance to our router analysis
 msgid "Closest Floodfills to Our Routing Key (Where we Store our RI)"
 msgstr "最接近路由密钥的洪泛节点（我们存储 RI 的位置）"
 
@@ -4355,7 +4216,6 @@ msgstr "平均洪泛节点距离为"
 msgid "Closest Floodfill Pairs by Hash"
 msgstr "按散列值排列的最近洪泛节点"
 
-#. sorted;
 msgid "Hash Distance"
 msgstr "散列距离"
 
@@ -4577,7 +4437,6 @@ msgstr "隧道名称"
 msgid "Data Out"
 msgstr "数据输出"
 
-#. Saved in CSSHelper, assume success
 msgid "Console language saved."
 msgstr "控制台语言已保存."
 
@@ -4587,7 +4446,6 @@ msgstr "成功完成带宽测试"
 msgid "Bandwidth test failed"
 msgstr "带宽测试失败"
 
-#. didn't run at all?
 msgid "Bandwidth test did not complete"
 msgstr "带宽测试未完成"
 
@@ -4610,7 +4468,6 @@ msgstr "比特每秒"
 msgid "{0}Bytes per month maximum"
 msgstr "每月最多 {0} 字节"
 
-#. wars for ConfigClientsHelper
 msgid "addressbook"
 msgstr "地址簿"
 
@@ -4629,9 +4486,6 @@ msgstr "susidns"
 msgid "routerconsole"
 msgstr "路由控制台"
 
-#. clients, taken from clients.config, for ConfigClientsHelper
-#. note that if the wording changes in clients.config, we have to
-#. keep the old string here as well for existing installs
 msgid "Web console"
 msgstr "网络控制台"
 
@@ -4659,10 +4513,6 @@ msgstr "I2P+ 路由控制台"
 msgid "Open Router Console in web browser at startup"
 msgstr "路由启动时打开网页版路由控制台"
 
-#. tunnel nicknames, taken from i2ptunnel.config so they will display
-#. nicely under 'local destinations' in the summary bar
-#. note that if the wording changes in i2ptunnel.config, we have to
-#. keep the old string here as well for existing installs
 msgid "shared clients"
 msgstr "共享隧道客户端"
 
@@ -4699,14 +4549,12 @@ msgstr "个人I2P网站（匿名网站）"
 msgid "HTTP Proxy"
 msgstr "HTTP 代理"
 
-#. hardcoded in iMule?
 msgid "iMule"
 msgstr "iMule"
 
 msgid "Official I2P Source Repository"
 msgstr "官方 I2P 源码库"
 
-#. standard themes for ConfigUIHelper
 msgid "dark"
 msgstr "暗色调"
 
@@ -4728,8 +4576,6 @@ msgstr "加密"
 msgid "Stream"
 msgstr "流"
 
-#. parameters in transport addresses (netdb.jsp)
-#. may or may not be worth translating
 msgid "host"
 msgstr "主机"
 
@@ -5482,7 +5328,6 @@ msgstr "对探测隧道设置的更改将存入 router.config 文件中。"
 msgid "Client tunnel changes are temporary and are not saved."
 msgstr "对客户端隧道的修改是临时的，将不予保存。"
 
-#. if (pm.isRegistered(net.i2p.util.PortMapper.SVC_I2PTUNNEL)) {
 msgid "The default settings are optimized for general usage and normally don't need to be changed."
 msgstr "默认设置针对常规用法进行了优化，通常不需要更改。"
 

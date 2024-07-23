@@ -22,32 +22,32 @@ msgstr "Email"
 msgid "No encoder found for encoding \\''{0}\\''."
 msgstr "Δεν βρέθηκε κωδικοποιητής για την κωδικοποίηση \\''{0}\\''."
 
-#. tagged in WebMail
 msgid "Re:"
 msgstr "Re:"
 
 msgid "Fwd:"
 msgstr "Fwd:"
 
-#. MailDir-like
 msgid "Drafts"
 msgstr "Σχέδια"
 
-#. MailDir-like
 msgid "Sent"
 msgstr "Αποστολή"
 
-#. MailDir-like
 msgid "Trash"
 msgstr "Κάδος Απορριμάτων"
 
-#. MailDir-like
 msgid "Bulk Mail"
 msgstr "Μαζική αλληλογραφία"
 
-#. untranslated, translate on use
 msgid "Inbox"
 msgstr "Εισερχόμενα"
+
+msgid "View message as HTML"
+msgstr ""
+
+msgid "View message as plain text"
+msgstr ""
 
 msgid "unknown"
 msgstr "άγνωστο"
@@ -163,7 +163,6 @@ msgstr "Δεν βρέθηκε κωδικοποίηση για {0}"
 msgid "Attachment not found."
 msgstr "Το συνημμένο δεν βρέθηκε."
 
-#. error if we get here
 msgid "Message not found."
 msgstr "Δε βρέθηκε το μήνυμα."
 
@@ -286,7 +285,6 @@ msgstr "Θέμα"
 msgid "Add Attachment"
 msgstr "Προσθήκη Συνημμένου"
 
-#. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 msgid "Add attachment"
 msgstr "Προσθήκη συνημμένου"
 
@@ -359,6 +357,9 @@ msgstr "Μέγεθος"
 msgid "Mark for deletion"
 msgstr "Επιλογή προς διαγραφή"
 
+msgid "Message contains HTML"
+msgstr ""
+
 msgid "Message is new"
 msgstr "Το μήνυμα είναι νέο"
 
@@ -368,7 +369,6 @@ msgstr "Το μήνυμα είναι ανεπιθύμητο"
 msgid "Message body not downloaded"
 msgstr "Δεν έγινε λήψη του σώματος του μηνύματος"
 
-#. TODO ngettext
 msgid "Really delete the marked messages?"
 msgstr "Αλήθεια να διαγραφούν τα επισημασμένα μηνύματα;"
 
@@ -426,6 +426,9 @@ msgstr "Πίσω στο Φάκελο"
 msgid "Move to Folder"
 msgstr "Μετακίνηση στο φάκελο"
 
+msgid "View message in new tab"
+msgstr ""
+
 msgid "Folder Page Size"
 msgstr "Μέγεθος σελίδας φακέλου"
 
@@ -438,7 +441,6 @@ msgstr "Προηγμένη διαμόρφωση"
 msgid "Save Configuration"
 msgstr "Αποθήκευση διαμόρφωσης"
 
-#. this appears in the UI so translate
 msgid "No response from server"
 msgstr "Καμία απάντηση από τον διακομιστή"
 
@@ -454,6 +456,5 @@ msgstr "Η σύνδεση απέτυχε"
 msgid "Server refused connection"
 msgstr "Ο διακομιστής απέρριψε τη σύνδεση"
 
-#. TODO which recipient?
 msgid "Mail rejected"
 msgstr "Η αλληλογραφία απορρίφθηκε"

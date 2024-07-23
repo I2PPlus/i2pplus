@@ -212,12 +212,10 @@ msgstr "Помилка: Не вдалося додати торрент: {0}"
 msgid "Torrent already running: {0}"
 msgstr "Торрент вже запущений: {0}"
 
-#. catch this here so we don't try do delete it below
 #, java-format
 msgid "Cannot open \"{0}\""
 msgstr "Неможливо відкрити \"{0}\""
 
-#. TODO - if the existing one is a magnet, delete it and add the metainfo instead?
 #, java-format
 msgid "Torrent with this info hash is already running: {0}"
 msgstr "Торрент із цим хешем інформації вже запущено: {0}"
@@ -312,13 +310,6 @@ msgstr "Ліміт: {0}Б"
 msgid "Torrent \"{0}\" has no data!"
 msgstr "Торрент \"{0}\" не має даних!"
 
-#.
-#. System.out.println("torrent info: " + info.toString());
-#. List<Long> lengths = info.getLengths();
-#. if (lengths != null)
-#. for (int i = 0; i < lengths.size(); i++)
-#. System.out.println("File " + i + " is " + lengths.get(i) + " long.");
-#.
 #, java-format
 msgid "Torrents larger than {0}B are not supported yet \"{1}\"!"
 msgstr "Торренти, розмір яких перевищує {0}B, ще не підтримуються \"{1}\"!"
@@ -377,8 +368,6 @@ msgstr "Завантаження завершено: {0}"
 msgid "I2PSnark"
 msgstr "I2PSnark"
 
-#. addMessage(_t("Metainfo received for {0}", snark.getName()));
-#. addMessageNoEscape(_t("Starting torrent: {0}", linkify(snark)).replace("Magnet ", ""));
 #, java-format
 msgid "Starting torrent: {0}"
 msgstr "Запуск торрента: {0}"
@@ -665,7 +654,6 @@ msgstr "в"
 msgid "out"
 msgstr "вихід"
 
-#. Only truncate if it's an actual dest
 msgid "Our destination (identity) for this session"
 msgstr "Наше призначення (ідентифікатор) для цього сеансу"
 
@@ -727,7 +715,6 @@ msgstr "Остання сторінка"
 msgid "Cannot add torrent {0} inside another torrent: {1}"
 msgstr "Неможливо додати торрент {0} всередині іншого торренту: {1}"
 
-#. TODO
 #, java-format
 msgid "Download from non-I2P location {0} is not supported"
 msgstr "Завантаження з не-I2P розташування {0} не підтримується"
@@ -736,7 +723,6 @@ msgstr "Завантаження з не-I2P розташування {0} не �
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
 msgstr "Недійсна URL-адреса: Має починатися з \"{0}\" або \"{1}\""
 
-#. no file or URL specified
 msgid "Enter URL or select torrent file"
 msgstr "Введіть URL-адресу або виберіть торрент-файл"
 
@@ -1000,7 +986,6 @@ msgstr "Введіть каталог для збереження даних (з
 msgid "Create Torrent"
 msgstr "Створити торрент"
 
-#. buf.append("From file: <input type=file name=\"newFile\" size=50 value=\"" + newFile + "\" /><br>\n");
 msgid "Data to seed"
 msgstr "Дані для роздачі"
 
@@ -1080,7 +1065,6 @@ msgstr "Максимальна кількість торрентів для ві
 msgid "torrents"
 msgstr "торрентів"
 
-#. If we get to here, we have the language settings
 msgid "Language"
 msgstr "Мова"
 
@@ -1283,7 +1267,6 @@ msgstr "Неможливо додати магнет-посилання: під�
 msgid "Invalid magnet URL {0}"
 msgstr "Недійсна URL-адреса магніту {0}"
 
-#. * dummies for translation
 #, java-format
 msgid "1 hop"
 msgid_plural "{0} hops"
@@ -1382,7 +1365,6 @@ msgstr "На рівень вище"
 msgid "Audio Playlist"
 msgstr "Список відтворення аудіо"
 
-#. status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Not found"), _t("Torrent not found?").replace("?", ""));
 msgid "Not found"
 msgstr "Не знайдено"
 
@@ -1392,7 +1374,6 @@ msgstr "Торрент не знайдено?"
 msgid "File not found in torrent?"
 msgstr "Файл не знайдено у торренті?"
 
-#. status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Unrecognized"), _t("File not found in torrent?").replace("?", ""));
 msgid "Unrecognized"
 msgstr "Невизнаний"
 
@@ -1417,17 +1398,6 @@ msgstr "Не завантажувати цей файл"
 msgid "Skip"
 msgstr "Пропустити"
 
-#. TODO: fixup so works with ajax refresh
-#. "<span class=script>");
-#. if (!inOrder) {
-#. buf.append("<a class=control id=setallhigh href=#>")
-#. .append(toImg("clock_red")).append(_t("Set all high")).append("</a>\n");
-#. }
-#. buf.append("<a class=control id=setallnorm href=#>")
-#. .append(toImg("clock")).append(_t("Set all normal")).append("</a>\n")
-#. .append("<a class=control id=setallskip href=#>")
-#. .append(toImg("block")).append(_t("Skip all")).append("</a></span>\n");
-#.
 msgid "Save priorities"
 msgstr "Зберегти пріоритети"
 
@@ -1498,7 +1468,6 @@ msgstr "Торрент потрібно зупинити, щоб редагув�
 msgid "Save Changes"
 msgstr "Зберегти зміни"
 
-#. shouldn't happen
 msgid "Torrent must be stopped"
 msgstr "Торрент потрібно зупинити"
 

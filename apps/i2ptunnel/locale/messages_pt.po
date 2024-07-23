@@ -48,13 +48,9 @@ msgstr "Se o problema persistir, verifique se os cookies estão ativados no seu 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Configuração recarregada em todos os túneis"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Starting tunnel"
 msgstr "Iniciar túnel"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Stopping tunnel"
 msgstr "Parar túnel"
 
@@ -547,7 +543,6 @@ msgstr "Definir nome de usuário necessário para acessar este serviço"
 msgid "Password"
 msgstr "Palavra-passe"
 
-#. && editBean.isAdvanced()
 msgid "Set password required to access this service"
 msgstr "Definir senha necessária para acessar este serviço"
 
@@ -1004,6 +999,9 @@ msgstr "Reiniciar Todos"
 
 msgid "I2P Server Tunnels"
 msgstr "Túneis de servidor I2P"
+
+msgid "Helper"
+msgstr ""
 
 msgid "Type"
 msgstr "Tipo"

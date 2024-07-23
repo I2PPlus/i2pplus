@@ -49,11 +49,9 @@ msgstr "{0} içinde kapat"
 msgid "Shutdown imminent"
 msgstr "Kapatılmak üzere"
 
-#. status translations are in the console bundle
 msgid "Network"
 msgstr "Ağ"
 
-#. Windows typically has tooltips; Linux (at least Ubuntu) doesn't
 msgid "I2P: Right-click for menu"
 msgstr "I2P: Menüde sağ tık"
 

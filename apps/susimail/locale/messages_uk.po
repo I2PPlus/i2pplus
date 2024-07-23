@@ -23,32 +23,32 @@ msgstr "Пошта"
 msgid "No encoder found for encoding \\''{0}\\''."
 msgstr "Не знайдено кодировщик для кодування \\''{0}\\''."
 
-#. tagged in WebMail
 msgid "Re:"
 msgstr "Re:"
 
 msgid "Fwd:"
 msgstr "Fwd:"
 
-#. MailDir-like
 msgid "Drafts"
 msgstr "чернетки"
 
-#. MailDir-like
 msgid "Sent"
 msgstr "Відправлені"
 
-#. MailDir-like
 msgid "Trash"
 msgstr "Кошик"
 
-#. MailDir-like
 msgid "Bulk Mail"
 msgstr "Об'ємна пошта"
 
-#. untranslated, translate on use
 msgid "Inbox"
 msgstr "Вхідні"
+
+msgid "View message as HTML"
+msgstr ""
+
+msgid "View message as plain text"
+msgstr ""
 
 msgid "unknown"
 msgstr "Невідомий"
@@ -164,7 +164,6 @@ msgstr "Не знайдено кодировщика для {0}"
 msgid "Attachment not found."
 msgstr "Прикріплені файли не знайдені."
 
-#. error if we get here
 msgid "Message not found."
 msgstr "Повідомлення не знайдено."
 
@@ -289,7 +288,6 @@ msgstr "Тема"
 msgid "Add Attachment"
 msgstr "Прикріпити файли"
 
-#. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 msgid "Add attachment"
 msgstr "Додайте вкладення"
 
@@ -363,6 +361,9 @@ msgstr "Розмір"
 msgid "Mark for deletion"
 msgstr "Позначити для видалення"
 
+msgid "Message contains HTML"
+msgstr ""
+
 msgid "Message is new"
 msgstr "Нове повідомлення"
 
@@ -372,7 +373,6 @@ msgstr "Повідомлення є спамом"
 msgid "Message body not downloaded"
 msgstr "Тіло повідомлення не завантажено"
 
-#. TODO ngettext
 msgid "Really delete the marked messages?"
 msgstr "Ви дійсно хочете видалити позначені повідомлення?"
 
@@ -430,6 +430,9 @@ msgstr "Назад в Папку"
 msgid "Move to Folder"
 msgstr "Перемістити до папки"
 
+msgid "View message in new tab"
+msgstr ""
+
 msgid "Folder Page Size"
 msgstr "Кількість листів на сторінці"
 
@@ -442,7 +445,6 @@ msgstr "Розширена конфігурація"
 msgid "Save Configuration"
 msgstr "Зберегти конфігурацію"
 
-#. this appears in the UI so translate
 msgid "No response from server"
 msgstr "Немає відповіді від сервера"
 
@@ -458,6 +460,5 @@ msgstr "Помилка входу"
 msgid "Server refused connection"
 msgstr "Сервер відмовився встановлювати з'єднання"
 
-#. TODO which recipient?
 msgid "Mail rejected"
 msgstr "Лист відхилений"

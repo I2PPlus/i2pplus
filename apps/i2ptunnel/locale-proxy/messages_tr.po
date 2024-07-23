@@ -310,11 +310,9 @@ msgstr "Bu adres, aboneliğe dayalı adreslerinizin saklandığı Yönlendirici 
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
 msgstr "Manuel olarak eklediğiniz siteleri takip etmek istiyorsanız, bunun yerine Ana veya Özel adres defterinize ekleyin."
 
-#. FIXME wasn't escaped
 msgid "Save & continue"
 msgstr "Kaydedip devam et"
 
-#. only blockfile supports multiple books
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
 msgstr "{0} adresini ana adres defterine kaydet ve web sitesine devam et"

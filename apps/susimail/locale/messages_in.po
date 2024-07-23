@@ -21,32 +21,32 @@ msgstr "Email"
 msgid "No encoder found for encoding \\''{0}\\''."
 msgstr "Tidak ada encoder yang ditemukan untuk mengencoding \\\"{0}\\\"."
 
-#. tagged in WebMail
 msgid "Re:"
 msgstr "Re:"
 
 msgid "Fwd:"
 msgstr "Fwd:"
 
-#. MailDir-like
 msgid "Drafts"
 msgstr "Draft"
 
-#. MailDir-like
 msgid "Sent"
 msgstr "Terkirim"
 
-#. MailDir-like
 msgid "Trash"
 msgstr "Sampah"
 
-#. MailDir-like
 msgid "Bulk Mail"
 msgstr "Bulk Mail"
 
-#. untranslated, translate on use
 msgid "Inbox"
 msgstr "Kotak masuk"
+
+msgid "View message as HTML"
+msgstr ""
+
+msgid "View message as plain text"
+msgstr ""
 
 msgid "unknown"
 msgstr "tidak diketahui"
@@ -162,7 +162,6 @@ msgstr "Tidak ada Encoding yang ditemukan untuk {0}"
 msgid "Attachment not found."
 msgstr "Lampiran tidak dietmukan."
 
-#. error if we get here
 msgid "Message not found."
 msgstr "Pesan tidak ditemukan."
 
@@ -283,7 +282,6 @@ msgstr "Subyek"
 msgid "Add Attachment"
 msgstr "Tambahkan Lampiran"
 
-#. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 msgid "Add attachment"
 msgstr "Tambahkan Lampiran"
 
@@ -355,6 +353,9 @@ msgstr "Ukuran"
 msgid "Mark for deletion"
 msgstr "Tandai untuk dihapus"
 
+msgid "Message contains HTML"
+msgstr ""
+
 msgid "Message is new"
 msgstr "Pesan ini baru"
 
@@ -364,7 +365,6 @@ msgstr "Pesan ini spam"
 msgid "Message body not downloaded"
 msgstr "Isi pesan tidak diunduh"
 
-#. TODO ngettext
 msgid "Really delete the marked messages?"
 msgstr "Benar ingin menghapus pesan yang ditandai?"
 
@@ -422,6 +422,9 @@ msgstr "Kembali ke Folder"
 msgid "Move to Folder"
 msgstr "Ubah ke Folder"
 
+msgid "View message in new tab"
+msgstr ""
+
 msgid "Folder Page Size"
 msgstr "Ukuran Laman Folder"
 
@@ -434,7 +437,6 @@ msgstr "Konfigurasi Lanjutan"
 msgid "Save Configuration"
 msgstr "Simpan Konfigurasi"
 
-#. this appears in the UI so translate
 msgid "No response from server"
 msgstr "Tidak ada respon dari server"
 
@@ -450,6 +452,5 @@ msgstr "Gagal masuk"
 msgid "Server refused connection"
 msgstr "Server menolak sambungan"
 
-#. TODO which recipient?
 msgid "Mail rejected"
 msgstr "Surat ditolak"

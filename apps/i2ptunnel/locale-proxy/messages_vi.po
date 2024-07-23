@@ -310,11 +310,9 @@ msgstr "Địa chỉ này sẽ được lưu vào sổ địa chỉ Bộ định
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
 msgstr "Nếu bạn muốn theo dõi các trang web bạn đã thêm theo cách thủ công, thay vào đó hãy thêm vào sổ địa chỉ Chính hoặc Riêng."
 
-#. FIXME wasn't escaped
 msgid "Save & continue"
 msgstr "Lưu"
 
-#. only blockfile supports multiple books
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
 msgstr "Lưu {0} vào sổ địa chỉ chính và tiếp tục trang web"

@@ -310,11 +310,9 @@ msgstr "Este endereço será salvo no catálogo de endereços do seu roteador, o
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
 msgstr "Se você quiser acompanhar os sites adicionados manualmente, adicione-os ao seu catálogo de endereços mestre ou privado."
 
-#. FIXME wasn't escaped
 msgid "Save & continue"
 msgstr "Salvar"
 
-#. only blockfile supports multiple books
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
 msgstr "Salvar {0} para dominar o livro de endereços e continuar no site"

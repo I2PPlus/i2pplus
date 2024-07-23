@@ -310,11 +310,9 @@ msgstr "See aadress salvestatakse sinu Rooteri aadressiraamatusse, kus säilitad
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
 msgstr "Kui soovid hoida meeles manuaalselt lisatud veebisaitide üle, siis lisa neid oma Master või Private aadressiraamatusse."
 
-#. FIXME wasn't escaped
 msgid "Save & continue"
 msgstr "Salvesta & jätka"
 
-#. only blockfile supports multiple books
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
 msgstr "Salvesta {0} master aadressiraamatusse ja jätka veebisaidi külastamisega"

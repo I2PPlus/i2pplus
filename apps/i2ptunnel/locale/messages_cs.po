@@ -51,13 +51,9 @@ msgstr "Pokud problém přetrvává, ověřte, zda máte ve svém prohlížeči 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Nastavení pro všechny tunely bylo opětovně nahráno"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Starting tunnel"
 msgstr "Startuji tunel"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Stopping tunnel"
 msgstr "Zastavuji tunel"
 
@@ -552,7 +548,6 @@ msgstr "Nastavte uživatelské jméno požadované pro přístup k této služb�
 msgid "Password"
 msgstr "Heslo"
 
-#. && editBean.isAdvanced()
 msgid "Set password required to access this service"
 msgstr "Nastavte heslo požadované pro přístup k této službě"
 
@@ -1009,6 +1004,9 @@ msgstr "Spustit vše znovu (restartovat)"
 
 msgid "I2P Server Tunnels"
 msgstr "I2P serverové tunely"
+
+msgid "Helper"
+msgstr ""
 
 msgid "Type"
 msgstr "Typ"

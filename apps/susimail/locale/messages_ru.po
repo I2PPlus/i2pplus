@@ -24,32 +24,32 @@ msgstr "Электронная почта"
 msgid "No encoder found for encoding \\''{0}\\''."
 msgstr "Для кодировки \\''{0}\\'' не найден кодек."
 
-#. tagged in WebMail
 msgid "Re:"
 msgstr "Re:"
 
 msgid "Fwd:"
 msgstr "Fwd:"
 
-#. MailDir-like
 msgid "Drafts"
 msgstr "Черновики"
 
-#. MailDir-like
 msgid "Sent"
 msgstr "Отправленные"
 
-#. MailDir-like
 msgid "Trash"
 msgstr "Корзина"
 
-#. MailDir-like
 msgid "Bulk Mail"
 msgstr "Необработанная почта"
 
-#. untranslated, translate on use
 msgid "Inbox"
 msgstr "Входящие"
+
+msgid "View message as HTML"
+msgstr ""
+
+msgid "View message as plain text"
+msgstr ""
 
 msgid "unknown"
 msgstr "неизвестно"
@@ -165,7 +165,6 @@ msgstr "Не найдена кодировка для {0}"
 msgid "Attachment not found."
 msgstr "Вложение не найдено."
 
-#. error if we get here
 msgid "Message not found."
 msgstr "Сообщение не найдено."
 
@@ -292,7 +291,6 @@ msgstr "Тема"
 msgid "Add Attachment"
 msgstr "Прикрепить файл"
 
-#. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 msgid "Add attachment"
 msgstr "Добавить вложение"
 
@@ -367,6 +365,9 @@ msgstr "Размер"
 msgid "Mark for deletion"
 msgstr "Пометить для удаления"
 
+msgid "Message contains HTML"
+msgstr ""
+
 msgid "Message is new"
 msgstr "Новое письмо"
 
@@ -376,7 +377,6 @@ msgstr "Письмо является спамом"
 msgid "Message body not downloaded"
 msgstr "Тело сообщения не загружено"
 
-#. TODO ngettext
 msgid "Really delete the marked messages?"
 msgstr "Действительно удалить отмеченые сообщения?"
 
@@ -434,6 +434,9 @@ msgstr "Вернуться к папке"
 msgid "Move to Folder"
 msgstr "Переместить в папку"
 
+msgid "View message in new tab"
+msgstr ""
+
 msgid "Folder Page Size"
 msgstr "Количество писем на странице"
 
@@ -446,7 +449,6 @@ msgstr "Расширенная конфигурация"
 msgid "Save Configuration"
 msgstr "Сохранить конфигурацию"
 
-#. this appears in the UI so translate
 msgid "No response from server"
 msgstr "Нет ответа от сервера"
 
@@ -462,6 +464,5 @@ msgstr "Ошибка входа"
 msgid "Server refused connection"
 msgstr "Сервер отказал в подключении"
 
-#. TODO which recipient?
 msgid "Mail rejected"
 msgstr "Письмо отклонено"

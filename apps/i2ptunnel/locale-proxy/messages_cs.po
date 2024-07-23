@@ -310,11 +310,9 @@ msgstr "Tato adresa bude uložena do vašeho adresáře směrovače, kde jsou ul
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
 msgstr "Pokud chcete mít přehled o stránkách, které jste přidali ručně, přidejte je do hlavního nebo soukromého adresáře."
 
-#. FIXME wasn't escaped
 msgid "Save & continue"
 msgstr "Uložit"
 
-#. only blockfile supports multiple books
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
 msgstr "Uložte {0} do hlavního adresáře a pokračujte na web"

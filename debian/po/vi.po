@@ -8,61 +8,42 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 . Type: boolean
-#. Description
 #: ../i2p.templates:2001
 msgid "Should the I2P router be started at boot?"
 msgstr "Router I2P có nên được khởi động khi khởi động không?"
 
-#. Type: boolean
-#. Description
 #: ../i2p.templates:2001
 msgid "The I2P router can be run as a daemon that starts automatically when your computer boots up. This is the recommended configuration."
 msgstr "Router I2P có thể chạy như một daemon bắt đầu tự động khi máy tính của bạn khởi động. Đây là cấu hình được khuyến nghị."
 
-#. Type: string
-#. Description
 #: ../i2p.templates:3001
 msgid "I2P daemon user:"
 msgstr "Người dùng daemon I2P:"
 
-#. Type: string
-#. Description
 #: ../i2p.templates:3001
 msgid "By default I2P is configured to run under the account i2psvc when running as a daemon. To use an existing I2P profile you may enter a different account name here. For example, if your previous I2P installation is at /home/user/i2p, you may enter 'user' here."
 msgstr "Mặc định, I2P được cấu hình để chạy dưới tài khoản i2psvc khi chạy dưới dạng daemon. Để sử dụng hồ sơ I2P hiện tại, bạn có thể nhập tên tài khoản khác ở đây. Ví dụ, nếu cài đặt I2P trước đó của bạn nằm ở /home/user/i2p, bạn có thể nhập 'user' ở đây."
 
-#. Type: string
-#. Description
 #: ../i2p.templates:3001
 msgid "Very important: If a user other than the default of 'i2psvc' is entered here, the chosen username MUST already exist."
 msgstr "Rất quan trọng: Nếu người dùng khác ngoài mặc định 'i2psvc' được nhập vào đây, tên người dùng đã chọn PHẢI đã tồn tại."
 
-#. Type: string
-#. Description
 #: ../i2p.templates:4001
 msgid "Memory that can be allocated to I2P:"
 msgstr "Bộ nhớ có thể được cấp cho I2P:"
 
-#. Type: string
-#. Description
 #: ../i2p.templates:4001
 msgid "By default, I2P will only be allowed to use up to 128MB of RAM."
 msgstr "Mặc định, I2P chỉ được phép sử dụng đến 128MB RAM."
 
-#. Type: string
-#. Description
 #: ../i2p.templates:4001
 msgid "High bandwidth routers, as well as routers with a lot of active torrents / plugins, may need to have this value increased."
 msgstr "Các router băng thông cao cũng như các router với nhiều torrent / plugin hoạt động có thể cần tăng giá trị này."
 
-#. Type: boolean
-#. Description
 #: ../i2p.templates:5001
 msgid "Should the I2P daemon be confined with AppArmor?"
 msgstr "Daemon I2P có nên bị giới hạn với AppArmor không?"
 
-#. Type: boolean
-#. Description
 #: ../i2p.templates:5001
 msgid "With this option enabled I2P will be sandboxed with AppArmor, restricting which files and directories may be accessed by I2P."
 msgstr "Với tùy chọn này được bật, I2P sẽ được cát với AppArmor, hạn chế các tệp và thư mục nào có thể được truy cập bởi I2P."

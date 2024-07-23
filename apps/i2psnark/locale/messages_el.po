@@ -212,12 +212,10 @@ msgstr "Σφάλμα: Δεν ήταν δυνατή η προσθήκη torrent: 
 msgid "Torrent already running: {0}"
 msgstr "Το torrent εκτελείται ήδη: {0}"
 
-#. catch this here so we don't try do delete it below
 #, java-format
 msgid "Cannot open \"{0}\""
 msgstr "Δεν είναι δυνατό το άνοιγμα του \"{0}\""
 
-#. TODO - if the existing one is a magnet, delete it and add the metainfo instead?
 #, java-format
 msgid "Torrent with this info hash is already running: {0}"
 msgstr "Το torrent με αυτόν τον κατακερματισμό πληροφοριών εκτελείται ήδη: {0}"
@@ -312,13 +310,6 @@ msgstr "Το όριο είναι {0}B"
 msgid "Torrent \"{0}\" has no data!"
 msgstr "Το Torrent \"{0}\" δεν έχει δεδομένα!"
 
-#.
-#. System.out.println("torrent info: " + info.toString());
-#. List<Long> lengths = info.getLengths();
-#. if (lengths != null)
-#. for (int i = 0; i < lengths.size(); i++)
-#. System.out.println("File " + i + " is " + lengths.get(i) + " long.");
-#.
 #, java-format
 msgid "Torrents larger than {0}B are not supported yet \"{1}\"!"
 msgstr "Τα torrent μεγαλύτερα από {0}B δεν υποστηρίζονται ακόμη \"{1}\"!"
@@ -377,8 +368,6 @@ msgstr "Η λήψη ολοκληρώθηκε: {0}"
 msgid "I2PSnark"
 msgstr "I2PSnark"
 
-#. addMessage(_t("Metainfo received for {0}", snark.getName()));
-#. addMessageNoEscape(_t("Starting torrent: {0}", linkify(snark)).replace("Magnet ", ""));
 #, java-format
 msgid "Starting torrent: {0}"
 msgstr "Έναρξη torrent: {0}"
@@ -662,7 +651,6 @@ msgstr "σε"
 msgid "out"
 msgstr "έξω"
 
-#. Only truncate if it's an actual dest
 msgid "Our destination (identity) for this session"
 msgstr "Ο προορισμός μας (ταυτότητα) για αυτήν την περίοδο σύνδεσης"
 
@@ -724,7 +712,6 @@ msgstr "Τελευταία σελίδα"
 msgid "Cannot add torrent {0} inside another torrent: {1}"
 msgstr "Δεν είναι δυνατή η προσθήκη torrent {0} μέσα σε άλλο torrent: {1}"
 
-#. TODO
 #, java-format
 msgid "Download from non-I2P location {0} is not supported"
 msgstr "Η λήψη από τοποθεσία που δεν ανήκει στο I2P {0} δεν υποστηρίζεται"
@@ -733,7 +720,6 @@ msgstr "Η λήψη από τοποθεσία που δεν ανήκει στο 
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
 msgstr "Μη έγκυρη διεύθυνση URL: Πρέπει να ξεκινά με \"{0}\" ή \"{1}\""
 
-#. no file or URL specified
 msgid "Enter URL or select torrent file"
 msgstr "Εισαγάγετε τη διεύθυνση URL ή επιλέξτε αρχείο torrent"
 
@@ -995,7 +981,6 @@ msgstr "Εισαγάγετε τον κατάλογο στον οποίο θα α
 msgid "Create Torrent"
 msgstr "Δημιουργία Torrent"
 
-#. buf.append("From file: <input type=file name=\"newFile\" size=50 value=\"" + newFile + "\" /><br>\n");
 msgid "Data to seed"
 msgstr "Δεδομένα για σπόρους"
 
@@ -1075,7 +1060,6 @@ msgstr "Μέγιστος αριθμός torrent για εμφάνιση ανά �
 msgid "torrents"
 msgstr "torrents"
 
-#. If we get to here, we have the language settings
 msgid "Language"
 msgstr "Γλώσσα"
 
@@ -1278,7 +1262,6 @@ msgstr "Δεν μπορώ να προσθέσω magnet: Οι συνδέσεις 
 msgid "Invalid magnet URL {0}"
 msgstr "Μη έγκυρη διεύθυνση URL μαγνήτη {0}"
 
-#. * dummies for translation
 #, java-format
 msgid "1 hop"
 msgid_plural "{0} hops"
@@ -1375,7 +1358,6 @@ msgstr "Κατάλογος μέχρι υψηλότερου επιπέδου"
 msgid "Audio Playlist"
 msgstr "Λίστα αναπαραγωγής ήχου"
 
-#. status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Not found"), _t("Torrent not found?").replace("?", ""));
 msgid "Not found"
 msgstr "Δεν βρέθηκε"
 
@@ -1385,7 +1367,6 @@ msgstr "Το torrent δεν βρέθηκε;"
 msgid "File not found in torrent?"
 msgstr "Δεν βρέθηκε το αρχείο σε torrent;"
 
-#. status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Unrecognized"), _t("File not found in torrent?").replace("?", ""));
 msgid "Unrecognized"
 msgstr "Μη αναγνωρισμένη"
 
@@ -1410,17 +1391,6 @@ msgstr "Μην κάνετε λήψη αυτού του αρχείου"
 msgid "Skip"
 msgstr "Παράλειψη"
 
-#. TODO: fixup so works with ajax refresh
-#. "<span class=script>");
-#. if (!inOrder) {
-#. buf.append("<a class=control id=setallhigh href=#>")
-#. .append(toImg("clock_red")).append(_t("Set all high")).append("</a>\n");
-#. }
-#. buf.append("<a class=control id=setallnorm href=#>")
-#. .append(toImg("clock")).append(_t("Set all normal")).append("</a>\n")
-#. .append("<a class=control id=setallskip href=#>")
-#. .append(toImg("block")).append(_t("Skip all")).append("</a></span>\n");
-#.
 msgid "Save priorities"
 msgstr "Αποθήκευση προτεραιοτήτων"
 
@@ -1490,7 +1460,6 @@ msgstr "Το torrent πρέπει να σταματήσει για να γίνε
 msgid "Save Changes"
 msgstr "Αποθήκευση αλλαγών"
 
-#. shouldn't happen
 msgid "Torrent must be stopped"
 msgstr "Το torrent πρέπει να σταματήσει"
 

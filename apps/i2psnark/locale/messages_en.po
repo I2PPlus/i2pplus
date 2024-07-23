@@ -212,12 +212,10 @@ msgstr ""
 msgid "Torrent already running: {0}"
 msgstr ""
 
-#. catch this here so we don't try do delete it below
 #, java-format
 msgid "Cannot open \"{0}\""
 msgstr ""
 
-#. TODO - if the existing one is a magnet, delete it and add the metainfo instead?
 #, java-format
 msgid "Torrent with this info hash is already running: {0}"
 msgstr ""
@@ -312,13 +310,6 @@ msgstr ""
 msgid "Torrent \"{0}\" has no data!"
 msgstr ""
 
-#.
-#. System.out.println("torrent info: " + info.toString());
-#. List<Long> lengths = info.getLengths();
-#. if (lengths != null)
-#. for (int i = 0; i < lengths.size(); i++)
-#. System.out.println("File " + i + " is " + lengths.get(i) + " long.");
-#.
 #, java-format
 msgid "Torrents larger than {0}B are not supported yet \"{1}\"!"
 msgstr ""
@@ -377,8 +368,6 @@ msgstr ""
 msgid "I2PSnark"
 msgstr ""
 
-#. addMessage(_t("Metainfo received for {0}", snark.getName()));
-#. addMessageNoEscape(_t("Starting torrent: {0}", linkify(snark)).replace("Magnet ", ""));
 #, java-format
 msgid "Starting torrent: {0}"
 msgstr ""
@@ -662,7 +651,6 @@ msgstr ""
 msgid "out"
 msgstr ""
 
-#. Only truncate if it's an actual dest
 msgid "Our destination (identity) for this session"
 msgstr ""
 
@@ -724,7 +712,6 @@ msgstr ""
 msgid "Cannot add torrent {0} inside another torrent: {1}"
 msgstr ""
 
-#. TODO
 #, java-format
 msgid "Download from non-I2P location {0} is not supported"
 msgstr ""
@@ -733,7 +720,6 @@ msgstr ""
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
 msgstr ""
 
-#. no file or URL specified
 msgid "Enter URL or select torrent file"
 msgstr ""
 
@@ -995,7 +981,6 @@ msgstr ""
 msgid "Create Torrent"
 msgstr ""
 
-#. buf.append("From file: <input type=file name=\"newFile\" size=50 value=\"" + newFile + "\" /><br>\n");
 msgid "Data to seed"
 msgstr ""
 
@@ -1075,7 +1060,6 @@ msgstr ""
 msgid "torrents"
 msgstr ""
 
-#. If we get to here, we have the language settings
 msgid "Language"
 msgstr ""
 
@@ -1278,7 +1262,6 @@ msgstr ""
 msgid "Invalid magnet URL {0}"
 msgstr ""
 
-#. * dummies for translation
 #, java-format
 msgid "1 hop"
 msgid_plural "{0} hops"
@@ -1375,7 +1358,6 @@ msgstr ""
 msgid "Audio Playlist"
 msgstr ""
 
-#. status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Not found"), _t("Torrent not found?").replace("?", ""));
 msgid "Not found"
 msgstr ""
 
@@ -1385,7 +1367,6 @@ msgstr ""
 msgid "File not found in torrent?"
 msgstr ""
 
-#. status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Unrecognized"), _t("File not found in torrent?").replace("?", ""));
 msgid "Unrecognized"
 msgstr ""
 
@@ -1410,17 +1391,6 @@ msgstr ""
 msgid "Skip"
 msgstr ""
 
-#. TODO: fixup so works with ajax refresh
-#. "<span class=script>");
-#. if (!inOrder) {
-#. buf.append("<a class=control id=setallhigh href=#>")
-#. .append(toImg("clock_red")).append(_t("Set all high")).append("</a>\n");
-#. }
-#. buf.append("<a class=control id=setallnorm href=#>")
-#. .append(toImg("clock")).append(_t("Set all normal")).append("</a>\n")
-#. .append("<a class=control id=setallskip href=#>")
-#. .append(toImg("block")).append(_t("Skip all")).append("</a></span>\n");
-#.
 msgid "Save priorities"
 msgstr ""
 
@@ -1490,6 +1460,5 @@ msgstr ""
 msgid "Save Changes"
 msgstr ""
 
-#. shouldn't happen
 msgid "Torrent must be stopped"
 msgstr ""

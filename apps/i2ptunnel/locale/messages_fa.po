@@ -48,13 +48,9 @@ msgstr "اگر مشکل ادامه داشت، بررسی کنید که کوکی 
 msgid "Configuration reloaded for all tunnels"
 msgstr "پیکربندی برای تمامی تونل ها مجددا بارگذاری شد"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Starting tunnel"
 msgstr "شروع تونل"
 
-#. and give them something to look at in any case
-#. FIXME name will be HTML escaped twice
 msgid "Stopping tunnel"
 msgstr "توقف تونل"
 
@@ -547,7 +543,6 @@ msgstr "نام کاربری مورد نیاز برای دسترسی به این 
 msgid "Password"
 msgstr "رمز عبور"
 
-#. && editBean.isAdvanced()
 msgid "Set password required to access this service"
 msgstr "رمز عبور مورد نیاز برای دسترسی به این سرویس را تنظیم کنید"
 
@@ -1004,6 +999,9 @@ msgstr "راه اندازی مجدد همه"
 
 msgid "I2P Server Tunnels"
 msgstr "تونل های سرور I2P"
+
+msgid "Helper"
+msgstr ""
 
 msgid "Type"
 msgstr "نوغ"

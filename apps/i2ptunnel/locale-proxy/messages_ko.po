@@ -310,11 +310,9 @@ msgstr "이 주소는 귀하의 가입 기반 주소가 저장되어 있는 라�
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
 msgstr "수동으로 추가한 사이트를 추적하려면 대신 마스터 또는 개인 주소록에 추가하세요."
 
-#. FIXME wasn't escaped
 msgid "Save & continue"
 msgstr "저장"
 
-#. only blockfile supports multiple books
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
 msgstr "주소록을 마스터하고 웹 사이트를 계속하기 위해 {0}을 저장하십시오"
