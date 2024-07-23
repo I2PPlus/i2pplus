@@ -710,7 +710,7 @@ msgstr "Ultima pagina"
 
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
-msgstr "Impossibile aggiungere torrent {0} all'interno di un altro torrent: {1}"
+msgstr "Impossibile aggiungere torrent {0} allʼinterno di un altro torrent: {1}"
 
 #, java-format
 msgid "Download from non-I2P location {0} is not supported"
@@ -986,7 +986,7 @@ msgstr "Dati da mandare in seed"
 
 #, java-format
 msgid "File or directory to seed (full path or within the directory {0} )"
-msgstr ""
+msgstr "File o directory da seminare (percorso completo o allʼinterno della directory {0})"
 
 msgid "Create torrent"
 msgstr "Crea torrent"
@@ -1462,29 +1462,3 @@ msgstr "Salva modifiche"
 
 msgid "Torrent must be stopped"
 msgstr "Il torrent deve essere fermato"
-
-#, java-format
-#~ msgid "File or directory to seed (full path or within the directory {0})"
-#~ msgstr "File o directory a seed (percorso completo o all'interno della directory {0})"
-
-#, java-format
-#~ msgid "Downloading from {0} of {1} peers in swarm"
-#~ msgstr "Download in corso da {0} di {1} peer nello sciame"
-
-#, java-format
-#~ msgid "Connected to {0} peer"
-#~ msgid_plural "Connected to {0} peers"
-#~ msgstr[0] "Connesso a {0} peer"
-#~ msgstr[1] "Connesso a {0} peer"
-
-#~ msgid "Unknown"
-#~ msgstr "Sconosciuto"
-
-#~ msgid "inactive"
-#~ msgstr "inattivo"
-
-#~ msgid "Enable viewing and posting comments for this torrent"
-#~ msgstr "Abilita la visualizzazione e la pubblicazione di commenti per questo torrent"
-
-#~ msgid "Save Preference"
-#~ msgstr "Salva preferenza"

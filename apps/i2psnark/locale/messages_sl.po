@@ -328,7 +328,7 @@ msgstr "Torrent odstranjen: \"{0}\""
 
 #, java-format
 msgid "Adding torrents in {0}&hellip;"
-msgstr ""
+msgstr "Dodajanje torrentov v {0}…"
 
 msgid "Connecting to I2P"
 msgstr "Povezovanje z I2P"
@@ -473,7 +473,7 @@ msgid "Forum"
 msgstr "Foruma"
 
 msgid "Torrent &amp; filesharing forum"
-msgstr ""
+msgstr "Forum za deljenje datotek s pomočjo torrentov"
 
 msgid "BTDigg"
 msgstr "BTDigg"
@@ -1110,7 +1110,7 @@ msgid "Display the 'Add' and 'Create' sections on all torrent listing pages when
 msgstr "Prikaži sekcije 'Dodaj' in 'Ustvari' na vseh straneh zoznamov torrentov, ko je vključen način z več strani"
 
 msgid "Comments &amp; Ratings"
-msgstr ""
+msgstr "Komentarji in ocene"
 
 msgid "Enable Ratings"
 msgstr "Omogoči ocene"
@@ -1470,13 +1470,3 @@ msgstr "Shrani spremembe"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent mora biti ustavljen"
-
-#, java-format
-#~ msgid "Adding torrents in {0}…"
-#~ msgstr "Dodajanje torrentov v {0}…"
-
-#~ msgid "Torrent & filesharing forum"
-#~ msgstr "Foruma za torrente & deljenje datotek"
-
-#~ msgid "Comments & Ratings"
-#~ msgstr "Komentarji & ocene"
