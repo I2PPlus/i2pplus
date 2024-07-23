@@ -165,7 +165,7 @@ msgid "Configuration reloaded."
 msgstr "Configurazione ricaricata."
 
 msgid "New domain"
-msgstr ""
+msgstr "Nuovo dominio"
 
 msgid "Subscription log reloaded."
 msgstr "Registro delle sottoscrizioni ricaricato."

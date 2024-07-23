@@ -165,7 +165,7 @@ msgid "Configuration reloaded."
 msgstr "Kokoonpano ladattu uudelleen."
 
 msgid "New domain"
-msgstr ""
+msgstr "Uusi domeeni"
 
 msgid "Subscription log reloaded."
 msgstr "Tilausloki ladattu uudelleen."

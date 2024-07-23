@@ -160,7 +160,7 @@ msgid "Configuration reloaded."
 msgstr "설정 다시 불러옴"
 
 msgid "New domain"
-msgstr ""
+msgstr "새 도메인"
 
 msgid "Subscription log reloaded."
 msgstr "구독 로그가 다시 로드되었습니다."

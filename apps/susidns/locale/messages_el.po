@@ -165,7 +165,7 @@ msgid "Configuration reloaded."
 msgstr "Παράμετροι επαναφορτώθηκαν."
 
 msgid "New domain"
-msgstr ""
+msgstr "Νέο τομέας"
 
 msgid "Subscription log reloaded."
 msgstr "Το αρχείο καταγραφής συνδρομής φορτώθηκε ξανά."

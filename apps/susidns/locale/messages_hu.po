@@ -165,7 +165,7 @@ msgid "Configuration reloaded."
 msgstr "Beálltások újratöltve."
 
 msgid "New domain"
-msgstr ""
+msgstr "Új tartomány"
 
 msgid "Subscription log reloaded."
 msgstr "Előfizetési napló újratöltve."

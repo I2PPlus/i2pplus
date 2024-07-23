@@ -160,7 +160,7 @@ msgid "Configuration reloaded."
 msgstr "Cấu hình được nạp lại."
 
 msgid "New domain"
-msgstr ""
+msgstr "Địa chỉ miền mới"
 
 msgid "Subscription log reloaded."
 msgstr "Nhật ký đăng ký được tải lại."

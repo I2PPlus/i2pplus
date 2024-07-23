@@ -160,7 +160,7 @@ msgid "Configuration reloaded."
 msgstr "Konfigurasi dimuat ulang"
 
 msgid "New domain"
-msgstr ""
+msgstr "Domain baru"
 
 msgid "Subscription log reloaded."
 msgstr "Log langganan dimuat ulang."

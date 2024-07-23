@@ -165,7 +165,7 @@ msgid "Configuration reloaded."
 msgstr "Yapılandırma yeniden yüklendi"
 
 msgid "New domain"
-msgstr ""
+msgstr "Yeni etki alanı"
 
 msgid "Subscription log reloaded."
 msgstr "Abonelik günlüğü yeniden yüklendi."

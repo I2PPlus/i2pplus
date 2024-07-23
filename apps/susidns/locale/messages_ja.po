@@ -160,7 +160,7 @@ msgid "Configuration reloaded."
 msgstr "設定が再読込されました。"
 
 msgid "New domain"
-msgstr ""
+msgstr "新しいドメイン"
 
 msgid "Subscription log reloaded."
 msgstr "サブスクリプション ログがリロードされました。"

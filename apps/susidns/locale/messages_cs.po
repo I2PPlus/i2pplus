@@ -170,7 +170,7 @@ msgid "Configuration reloaded."
 msgstr "Konfigurace znovu načtena."
 
 msgid "New domain"
-msgstr ""
+msgstr "Nová doména"
 
 msgid "Subscription log reloaded."
 msgstr "Znovu načten protokol předplatného."

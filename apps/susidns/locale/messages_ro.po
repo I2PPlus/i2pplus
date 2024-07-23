@@ -170,7 +170,7 @@ msgid "Configuration reloaded."
 msgstr "Configurare reîncărcată."
 
 msgid "New domain"
-msgstr ""
+msgstr "Nouă domeniu"
 
 msgid "Subscription log reloaded."
 msgstr "Jurnalul de abonament a fost reîncărcat."

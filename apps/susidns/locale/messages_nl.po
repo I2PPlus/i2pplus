@@ -165,7 +165,7 @@ msgid "Configuration reloaded."
 msgstr "Configuratie herladen."
 
 msgid "New domain"
-msgstr ""
+msgstr "Nieuwe domeinnaam"
 
 msgid "Subscription log reloaded."
 msgstr "Abonnementlogboek opnieuw geladen."

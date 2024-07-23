@@ -185,7 +185,7 @@ msgid "Configuration reloaded."
 msgstr "اعادة تحميل الاعدادات"
 
 msgid "New domain"
-msgstr ""
+msgstr "نطاق جديد"
 
 msgid "Subscription log reloaded."
 msgstr "إعادة تحميل سجل الاشتراك."

@@ -479,10 +479,10 @@ msgid "It regularly updates your hosts.txt file from distributed sources or \"su
 msgstr "Den oppdaterer regelbundet din hosts.txt-fil fra distribuerte kilder eller \"abonnementer\"."
 
 msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
-msgstr ""
+msgstr "Subscribing to additional sites is easy, just add them to your <a href=subscriptions>subscriptions</a> file."
 
 msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
-msgstr ""
+msgstr "For mer informasjon om navngiving i I2P, se <a href=http://i2p-projekt.i2p/naming.html target=_blank>oversikten."
 
 msgid "How does the addressbook application work?"
 msgstr "Hva gjør adressebok-applikasjonen?"

@@ -165,7 +165,7 @@ msgid "Configuration reloaded."
 msgstr "Inställningar omladdade."
 
 msgid "New domain"
-msgstr ""
+msgstr "Ny domän"
 
 msgid "Subscription log reloaded."
 msgstr "Prenumerationslogg laddad om."

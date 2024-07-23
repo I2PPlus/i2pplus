@@ -165,7 +165,7 @@ msgid "Configuration reloaded."
 msgstr "پیکربندی مجددا بارگذاری شد."
 
 msgid "New domain"
-msgstr ""
+msgstr "دامنه جدید"
 
 msgid "Subscription log reloaded."
 msgstr "گزارش اشتراک بارگیری مجدد شد."

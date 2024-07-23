@@ -170,7 +170,7 @@ msgid "Configuration reloaded."
 msgstr "Настройки перезагружены."
 
 msgid "New domain"
-msgstr ""
+msgstr "Новый домен"
 
 msgid "Subscription log reloaded."
 msgstr "Журнал подписки перезагружен."
