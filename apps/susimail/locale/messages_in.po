@@ -43,27 +43,27 @@ msgid "Inbox"
 msgstr "Kotak masuk"
 
 msgid "View message as HTML"
-msgstr ""
+msgstr "Lihat pesan sebagai HTML"
 
 msgid "View message as plain text"
-msgstr ""
+msgstr "Lihat pesan sebagai teks biasa"
 
 msgid "unknown"
 msgstr "tidak diketahui"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr ""
+msgstr "Untuk melindungi privasi Anda, SusiMail memblokir Javascript dan konten jarak jauh yang terkandung dalam pesan HTML ini."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
-msgstr ""
+msgstr "Aktifkan Javascript untuk tampilan yang lebih baik dan fitur tambahan."
 
 #, java-format
 msgid "Tracking images removed from message: {0}"
-msgstr ""
+msgstr "Gambar pelacakan dihapus dari pesan: {0}"
 
 #, java-format
 msgid "Blocked images not displayed: {0}"
-msgstr ""
+msgstr "Gambar diblokir tidak ditampilkan: {0}"
 
 #, java-format
 msgid "Charset \\''{0}\\'' not supported."
@@ -94,7 +94,7 @@ msgid "Need username for authentication."
 msgstr "Diperlukan nama pengguna untuk mengotentikasi."
 
 msgid "Do not include @mail.i2p in the username"
-msgstr ""
+msgstr "Jangan termasuk @mail.i2p dalam nama pengguna"
 
 msgid "Need password for authentication."
 msgstr "Diperlukan kata sandi untuk mengontentikasi."
@@ -227,7 +227,7 @@ msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
 
 msgid "Removed tracking image placeholder"
-msgstr ""
+msgstr "Menghapus tempat penempatan gambar pelacakan"
 
 msgid "no subject"
 msgstr "tidak ada subyek"
@@ -354,7 +354,7 @@ msgid "Mark for deletion"
 msgstr "Tandai untuk dihapus"
 
 msgid "Message contains HTML"
-msgstr ""
+msgstr "Pesan mengandung HTML"
 
 msgid "Message is new"
 msgstr "Pesan ini baru"
@@ -423,7 +423,7 @@ msgid "Move to Folder"
 msgstr "Ubah ke Folder"
 
 msgid "View message in new tab"
-msgstr ""
+msgstr "Lihat pesan di tab baru"
 
 msgid "Folder Page Size"
 msgstr "Ukuran Laman Folder"

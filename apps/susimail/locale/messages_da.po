@@ -44,27 +44,27 @@ msgid "Inbox"
 msgstr "Indbakke"
 
 msgid "View message as HTML"
-msgstr ""
+msgstr "Vis besked som HTML"
 
 msgid "View message as plain text"
-msgstr ""
+msgstr "Vis besked som ren tekst"
 
 msgid "unknown"
 msgstr "ukendt"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr ""
+msgstr "For at beskytte din privatliv, blokerer SusiMail JavaScript og ethvert fjernindhold indeholdt i denne HTML-besked."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
-msgstr ""
+msgstr "Aktivér JavaScript til forbedret visning og ekstra funktioner."
 
 #, java-format
 msgid "Tracking images removed from message: {0}"
-msgstr ""
+msgstr "Sporing af billeder fjernet fra besked: {0}"
 
 #, java-format
 msgid "Blocked images not displayed: {0}"
-msgstr ""
+msgstr "Blokerede billeder ikke vist: {0}"
 
 #, java-format
 msgid "Charset \\''{0}\\'' not supported."
@@ -95,7 +95,7 @@ msgid "Need username for authentication."
 msgstr "Behøver brugernavn til godkendelse."
 
 msgid "Do not include @mail.i2p in the username"
-msgstr ""
+msgstr "Ikke inkludere @mail.i2p i brugernavnet"
 
 msgid "Need password for authentication."
 msgstr "Behøver adgangskode til godkendelse."
@@ -230,7 +230,7 @@ msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
 
 msgid "Removed tracking image placeholder"
-msgstr ""
+msgstr "Fjernet pladsholder for sporing af billede"
 
 msgid "no subject"
 msgstr "intet emne"
@@ -358,7 +358,7 @@ msgid "Mark for deletion"
 msgstr "Marker for sletning"
 
 msgid "Message contains HTML"
-msgstr ""
+msgstr "Besked indeholder HTML"
 
 msgid "Message is new"
 msgstr "Besked er ny"
@@ -427,7 +427,7 @@ msgid "Move to Folder"
 msgstr "Flyt til mappe"
 
 msgid "View message in new tab"
-msgstr ""
+msgstr "Vis besked i nyt faneblad"
 
 msgid "Folder Page Size"
 msgstr "Mappe Sidestørrelse"

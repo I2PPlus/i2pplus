@@ -43,27 +43,27 @@ msgid "Inbox"
 msgstr "收件箱"
 
 msgid "View message as HTML"
-msgstr ""
+msgstr "以HTML格式查看消息"
 
 msgid "View message as plain text"
-msgstr ""
+msgstr "以纯文本格式查看消息"
 
 msgid "unknown"
 msgstr "未知"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr ""
+msgstr "为了保护您的隐私，SusiMail正在阻止此HTML消息中的JavaScript和任何远程内容。"
 
 msgid "Enable Javascript for enhanced presentation and additional features."
-msgstr ""
+msgstr "启用JavaScript以获得增强的展示效果和额外功能。"
 
 #, java-format
 msgid "Tracking images removed from message: {0}"
-msgstr ""
+msgstr "已从消息中移除跟踪图片：{0}"
 
 #, java-format
 msgid "Blocked images not displayed: {0}"
-msgstr ""
+msgstr "未显示被阻止的图片：{0}"
 
 #, java-format
 msgid "Charset \\''{0}\\'' not supported."
@@ -94,7 +94,7 @@ msgid "Need username for authentication."
 msgstr "需要认证用的用户名。"
 
 msgid "Do not include @mail.i2p in the username"
-msgstr ""
+msgstr "用户名中不要包含@mail.i2p"
 
 msgid "Need password for authentication."
 msgstr "需要认证用的密码。"
@@ -227,7 +227,7 @@ msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} 网络邮件客户端版权归Susi 2004-2005所有"
 
 msgid "Removed tracking image placeholder"
-msgstr ""
+msgstr "已移除跟踪图片占位符"
 
 msgid "no subject"
 msgstr "没有主题"
@@ -354,7 +354,7 @@ msgid "Mark for deletion"
 msgstr "标记为删除"
 
 msgid "Message contains HTML"
-msgstr ""
+msgstr "消息包含HTML"
 
 msgid "Message is new"
 msgstr "是新邮件"
@@ -423,7 +423,7 @@ msgid "Move to Folder"
 msgstr "移动到文件夹"
 
 msgid "View message in new tab"
-msgstr ""
+msgstr "在新标签页中查看消息"
 
 msgid "Folder Page Size"
 msgstr "文件夹页面大小"

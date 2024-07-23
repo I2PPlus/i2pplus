@@ -44,27 +44,27 @@ msgid "Inbox"
 msgstr "Caixa de Entrada"
 
 msgid "View message as HTML"
-msgstr ""
+msgstr "Ver mensagem como HTML"
 
 msgid "View message as plain text"
-msgstr ""
+msgstr "Ver mensagem como texto simples"
 
 msgid "unknown"
 msgstr "desconhecido"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr ""
+msgstr "Para proteger sua privacidade, o SusiMail está bloqueando o JavaScript e qualquer conteúdo remoto contido nesta mensagem HTML."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
-msgstr ""
+msgstr "Habilitar JavaScript para uma apresentação melhorada e recursos adicionais."
 
 #, java-format
 msgid "Tracking images removed from message: {0}"
-msgstr ""
+msgstr "Imagens de rastreamento removidas da mensagem: {0}"
 
 #, java-format
 msgid "Blocked images not displayed: {0}"
-msgstr ""
+msgstr "Imagens bloqueadas não exibidas: {0}"
 
 #, java-format
 msgid "Charset \\''{0}\\'' not supported."
@@ -95,7 +95,7 @@ msgid "Need username for authentication."
 msgstr "Necessário nome de usuário para autenticação."
 
 msgid "Do not include @mail.i2p in the username"
-msgstr ""
+msgstr "Não inclua @mail.i2p no nome de usuário"
 
 msgid "Need password for authentication."
 msgstr "Palavra-passe necessária para autenticação."
@@ -230,7 +230,7 @@ msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
 
 msgid "Removed tracking image placeholder"
-msgstr ""
+msgstr "Removido o marcador de posição da imagem de rastreamento"
 
 msgid "no subject"
 msgstr "sem assunto"
@@ -358,7 +358,7 @@ msgid "Mark for deletion"
 msgstr "Marcar para excluir"
 
 msgid "Message contains HTML"
-msgstr ""
+msgstr "A mensagem contém HTML"
 
 msgid "Message is new"
 msgstr "A mensagem é nova"
@@ -427,7 +427,7 @@ msgid "Move to Folder"
 msgstr "Mover para pasta"
 
 msgid "View message in new tab"
-msgstr ""
+msgstr "Ver mensagem em nova guia"
 
 msgid "Folder Page Size"
 msgstr "Tamanho da página da pasta"

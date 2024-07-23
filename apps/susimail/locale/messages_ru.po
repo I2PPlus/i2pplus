@@ -46,27 +46,27 @@ msgid "Inbox"
 msgstr "Входящие"
 
 msgid "View message as HTML"
-msgstr ""
+msgstr "Просмотреть сообщение как HTML"
 
 msgid "View message as plain text"
-msgstr ""
+msgstr "Просмотреть сообщение как обычный текст"
 
 msgid "unknown"
 msgstr "неизвестно"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr ""
+msgstr "Для защиты вашей приватности SusiMail блокирует JavaScript и любое удалённое содержимое, содержащееся в этом HTML-сообщении."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
-msgstr ""
+msgstr "Включите JavaScript для улучшенного отображения и дополнительных функций."
 
 #, java-format
 msgid "Tracking images removed from message: {0}"
-msgstr ""
+msgstr "Из сообщения удалены изображения с отслеживанием: {0}"
 
 #, java-format
 msgid "Blocked images not displayed: {0}"
-msgstr ""
+msgstr "Блокированные изображения не отображаются: {0}"
 
 #, java-format
 msgid "Charset \\''{0}\\'' not supported."
@@ -97,7 +97,7 @@ msgid "Need username for authentication."
 msgstr "Требуется имя пользователя для аутентификации."
 
 msgid "Do not include @mail.i2p in the username"
-msgstr ""
+msgstr "Не включайте @mail.i2p в имя пользователя"
 
 msgid "Need password for authentication."
 msgstr "Требуется пароль для аутентификации."
@@ -236,7 +236,7 @@ msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
 
 msgid "Removed tracking image placeholder"
-msgstr ""
+msgstr "Удален временный элемент для изображения с отслеживанием"
 
 msgid "no subject"
 msgstr "без темы"
@@ -366,7 +366,7 @@ msgid "Mark for deletion"
 msgstr "Пометить для удаления"
 
 msgid "Message contains HTML"
-msgstr ""
+msgstr "Сообщение содержит HTML"
 
 msgid "Message is new"
 msgstr "Новое письмо"
@@ -435,7 +435,7 @@ msgid "Move to Folder"
 msgstr "Переместить в папку"
 
 msgid "View message in new tab"
-msgstr ""
+msgstr "Просмотреть сообщение в новой вкладке"
 
 msgid "Folder Page Size"
 msgstr "Количество писем на странице"

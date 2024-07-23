@@ -44,27 +44,27 @@ msgid "Inbox"
 msgstr "Postvak IN"
 
 msgid "View message as HTML"
-msgstr ""
+msgstr "Bericht weergeven als HTML"
 
 msgid "View message as plain text"
-msgstr ""
+msgstr "Bericht weergeven als platte tekst"
 
 msgid "unknown"
 msgstr "onbekend"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr ""
+msgstr "Om je privacy te beschermen, blokkeert SusiMail JavaScript en elk extern gecontroleerd content dat in deze HTML-boodschap zit."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
-msgstr ""
+msgstr "Schakel JavaScript in voor een verbeterde weergave en extra functies."
 
 #, java-format
 msgid "Tracking images removed from message: {0}"
-msgstr ""
+msgstr "Volgsjablonen uit bericht verwijderd: {0}"
 
 #, java-format
 msgid "Blocked images not displayed: {0}"
-msgstr ""
+msgstr "Geblokkeerde afbeeldingen worden niet weergegeven: {0}"
 
 #, java-format
 msgid "Charset \\''{0}\\'' not supported."
@@ -95,7 +95,7 @@ msgid "Need username for authentication."
 msgstr "Gebruikersnaam nodig voor authenticatie."
 
 msgid "Do not include @mail.i2p in the username"
-msgstr ""
+msgstr "Voeg geen @mail.i2p toe aan de gebruikersnaam"
 
 msgid "Need password for authentication."
 msgstr "Wachtwoord nodig voor authenticatie."
@@ -230,7 +230,7 @@ msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
 
 msgid "Removed tracking image placeholder"
-msgstr ""
+msgstr "Plaatshouders voor volgsjablonen verwijderd"
 
 msgid "no subject"
 msgstr "geen onderwerp"
@@ -358,7 +358,7 @@ msgid "Mark for deletion"
 msgstr "Markeren voor verwijdering"
 
 msgid "Message contains HTML"
-msgstr ""
+msgstr "Bericht bevat HTML"
 
 msgid "Message is new"
 msgstr "Bericht is nieuw"
@@ -427,7 +427,7 @@ msgid "Move to Folder"
 msgstr "Verplaats naar map"
 
 msgid "View message in new tab"
-msgstr ""
+msgstr "Bericht bekijken in nieuw tabblad"
 
 msgid "Folder Page Size"
 msgstr "Mappaginagrootte"

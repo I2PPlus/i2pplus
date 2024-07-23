@@ -44,27 +44,27 @@ msgid "Inbox"
 msgstr "Tulevat"
 
 msgid "View message as HTML"
-msgstr ""
+msgstr "Näytä viesti HTML-muodossa"
 
 msgid "View message as plain text"
-msgstr ""
+msgstr "Näytä viesti tekstimuodossa"
 
 msgid "unknown"
 msgstr "tuntematon"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr ""
+msgstr "Suojellaksesi yksityisyyttäsi, SusiMail estää JavaScriptin ja tässä HTML-viestissä olevan kaiken etäsisällön."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
-msgstr ""
+msgstr "Ota JavaScript käyttöön parantamaan esitystä ja lisäämään ominaisuuksia."
 
 #, java-format
 msgid "Tracking images removed from message: {0}"
-msgstr ""
+msgstr "Seuranta-kuvia poistettu viestistä: {0}"
 
 #, java-format
 msgid "Blocked images not displayed: {0}"
-msgstr ""
+msgstr "Estetyt kuvat eivät näy: {0}"
 
 #, java-format
 msgid "Charset \\''{0}\\'' not supported."
@@ -95,7 +95,7 @@ msgid "Need username for authentication."
 msgstr "Kirjautumiseen tarvitaan käyttäjätunnus."
 
 msgid "Do not include @mail.i2p in the username"
-msgstr ""
+msgstr "Älä sisällytä @mail.i2p käyttäjätunnukseen"
 
 msgid "Need password for authentication."
 msgstr "Kirjautumiseen tarvitaan salasana."
@@ -230,7 +230,7 @@ msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
 
 msgid "Removed tracking image placeholder"
-msgstr ""
+msgstr "Seuranta-kuvan paikkaaja poistettu"
 
 msgid "no subject"
 msgstr "ei aihetta"
@@ -358,7 +358,7 @@ msgid "Mark for deletion"
 msgstr "Merkitse poistettavaksi"
 
 msgid "Message contains HTML"
-msgstr ""
+msgstr "Viesti sisältää HTML"
 
 msgid "Message is new"
 msgstr "Viesti on uusi"
@@ -427,7 +427,7 @@ msgid "Move to Folder"
 msgstr "Siirrä kansioon"
 
 msgid "View message in new tab"
-msgstr ""
+msgstr "Näytä viesti uudessa välilehdessä"
 
 msgid "Folder Page Size"
 msgstr "Kansiosivukoko"

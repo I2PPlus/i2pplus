@@ -44,27 +44,27 @@ msgid "Inbox"
 msgstr "Εισερχόμενα"
 
 msgid "View message as HTML"
-msgstr ""
+msgstr "Προβολή μηνύματος σε HTML"
 
 msgid "View message as plain text"
-msgstr ""
+msgstr "Προβολή μηνύματος ως καθαρό κείμενο"
 
 msgid "unknown"
 msgstr "άγνωστο"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr ""
+msgstr "Για να προστατέψουμε την ιδιωτική σας ζωή, το SusiMail αποκλείει το JavaScript και οποιοδήποτε απομακρυσμένο περιεχόμενο περιλαμβάνεται σε αυτήν την ένταξη HTML."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
-msgstr ""
+msgstr "Ενεργοποιήστε το JavaScript για βελτιωμένη παρουσίαση και επιπλέον λειτουργίες."
 
 #, java-format
 msgid "Tracking images removed from message: {0}"
-msgstr ""
+msgstr "Καταργήθηκαν οι εικόνες παρακολούθησης από το μήνυμα: {0}"
 
 #, java-format
 msgid "Blocked images not displayed: {0}"
-msgstr ""
+msgstr "Μη εμφανιζόμενες αποκλεισμένες εικόνες: {0}"
 
 #, java-format
 msgid "Charset \\''{0}\\'' not supported."
@@ -95,7 +95,7 @@ msgid "Need username for authentication."
 msgstr "Χρειάζεται όνομα χρήστη για έλεγχο ταυτότητας."
 
 msgid "Do not include @mail.i2p in the username"
-msgstr ""
+msgstr "Μην περιλαμβάνετε @mail.i2p στο όνομα χρήστη"
 
 msgid "Need password for authentication."
 msgstr "Χρειάζεστε κωδικό πρόσβασης για έλεγχο ταυτότητας."
@@ -230,7 +230,7 @@ msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
 
 msgid "Removed tracking image placeholder"
-msgstr ""
+msgstr "Αφαιρέθηκε το κεντρικό στοιχείο εικόνας παρακολούθησης"
 
 msgid "no subject"
 msgstr "κανένα θέμα"
@@ -358,7 +358,7 @@ msgid "Mark for deletion"
 msgstr "Επιλογή προς διαγραφή"
 
 msgid "Message contains HTML"
-msgstr ""
+msgstr "Το μήνυμα περιλαμβάνει HTML"
 
 msgid "Message is new"
 msgstr "Το μήνυμα είναι νέο"
@@ -427,7 +427,7 @@ msgid "Move to Folder"
 msgstr "Μετακίνηση στο φάκελο"
 
 msgid "View message in new tab"
-msgstr ""
+msgstr "Προβολή μηνύματος σε νέα καρτέλα"
 
 msgid "Folder Page Size"
 msgstr "Μέγεθος σελίδας φακέλου"

@@ -44,27 +44,27 @@ msgid "Inbox"
 msgstr "Gelen Kutusu"
 
 msgid "View message as HTML"
-msgstr ""
+msgstr "Mesajı HTML olarak görüntüle"
 
 msgid "View message as plain text"
-msgstr ""
+msgstr "Mesajı düz metin olarak görüntüle"
 
 msgid "unknown"
 msgstr "bilinmiyor"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr ""
+msgstr "Gizliliğinizi korumak amacıyla, SusiMail bu HTML mesajındaki JavaScript'i ve içerdiği tüm uzak içerikleri engelliyor."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
-msgstr ""
+msgstr "Daha iyi sunum ve ek özellikler için JavaScript'i etkinleştirin."
 
 #, java-format
 msgid "Tracking images removed from message: {0}"
-msgstr ""
+msgstr "Mesajtan izleme görselleri kaldırıldı: {0}"
 
 #, java-format
 msgid "Blocked images not displayed: {0}"
-msgstr ""
+msgstr "Engelli görseller gösterilmedi: {0}"
 
 #, java-format
 msgid "Charset \\''{0}\\'' not supported."
@@ -95,7 +95,7 @@ msgid "Need username for authentication."
 msgstr "Kimlik doğrulaması için kullanıcı adı gereklidir."
 
 msgid "Do not include @mail.i2p in the username"
-msgstr ""
+msgstr "Kullanıcı adına @mail.i2p dahil etmeyin"
 
 msgid "Need password for authentication."
 msgstr "Kimlik doğrulaması için parola gereklidir."
@@ -230,7 +230,7 @@ msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
 
 msgid "Removed tracking image placeholder"
-msgstr ""
+msgstr "İzleme görseli yer tutucusu kaldırıldı"
 
 msgid "no subject"
 msgstr "konu yok"
@@ -358,7 +358,7 @@ msgid "Mark for deletion"
 msgstr "Silinmek üzere işaretleyin"
 
 msgid "Message contains HTML"
-msgstr ""
+msgstr "Mesaj HTML içeriyor"
 
 msgid "Message is new"
 msgstr "İleti yeni"
@@ -427,7 +427,7 @@ msgid "Move to Folder"
 msgstr "Klasöre Taşı"
 
 msgid "View message in new tab"
-msgstr ""
+msgstr "Mesajı yeni sekmede görüntüle"
 
 msgid "Folder Page Size"
 msgstr "Klasör Sayfa Boyutu"

@@ -44,27 +44,27 @@ msgid "Inbox"
 msgstr "Posta in arrivo"
 
 msgid "View message as HTML"
-msgstr ""
+msgstr "Visualizza il messaggio come HTML"
 
 msgid "View message as plain text"
-msgstr ""
+msgstr "Visualizza il messaggio come testo semplice"
 
 msgid "unknown"
 msgstr "sconosciuto"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr ""
+msgstr "Per proteggere la tua privacy, SusiMail sta bloccando JavaScript e qualsiasi contenuto remoto incluso in questo messaggio HTML."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
-msgstr ""
+msgstr "Abilita JavaScript per una migliore presentazione e funzionalità aggiuntive."
 
 #, java-format
 msgid "Tracking images removed from message: {0}"
-msgstr ""
+msgstr "Immagini di tracciamento rimosse dal messaggio: {0}"
 
 #, java-format
 msgid "Blocked images not displayed: {0}"
-msgstr ""
+msgstr "Immagini bloccate non visualizzate: {0}"
 
 #, java-format
 msgid "Charset \\''{0}\\'' not supported."
@@ -95,7 +95,7 @@ msgid "Need username for authentication."
 msgstr "È necessario il nome dell'utente per l'autenticazione."
 
 msgid "Do not include @mail.i2p in the username"
-msgstr ""
+msgstr "Non includere @mail.i2p nel nome utente"
 
 msgid "Need password for authentication."
 msgstr "È necessaria la password per l'autenticazione."
@@ -230,7 +230,7 @@ msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
 
 msgid "Removed tracking image placeholder"
-msgstr ""
+msgstr "Rimosso il segnaposto dell'immagine di tracciamento"
 
 msgid "no subject"
 msgstr "nessun oggetto"
@@ -358,7 +358,7 @@ msgid "Mark for deletion"
 msgstr "Marca per la rimozione"
 
 msgid "Message contains HTML"
-msgstr ""
+msgstr "Il messaggio contiene HTML"
 
 msgid "Message is new"
 msgstr "Il messaggio è nuovo"
@@ -427,7 +427,7 @@ msgid "Move to Folder"
 msgstr "Sposta nella cartella"
 
 msgid "View message in new tab"
-msgstr ""
+msgstr "Visualizza il messaggio in una nuova scheda"
 
 msgid "Folder Page Size"
 msgstr "Dimensioni della pagina della cartella"

@@ -20,13 +20,13 @@ msgstr "Adresse courriel"
 
 #, java-format
 msgid "No encoder found for encoding \\''{0}\\''."
-msgstr "Aucun encodeur n’a été trouvé pour encoder « {0} »."
+msgstr "Aucun encodeur n’a été trouvé pour encoder «{0}»."
 
 msgid "Re:"
-msgstr "Réf. :"
+msgstr "Réf.:"
 
 msgid "Fwd:"
-msgstr "Trf. :"
+msgstr "Trf.:"
 
 msgid "Drafts"
 msgstr "Brouillons"
@@ -44,31 +44,31 @@ msgid "Inbox"
 msgstr "Boîte de réception"
 
 msgid "View message as HTML"
-msgstr ""
+msgstr "Afficher le message en HTML"
 
 msgid "View message as plain text"
-msgstr ""
+msgstr "Afficher le message sous forme de texte brut"
 
 msgid "unknown"
 msgstr "inconnu"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr ""
+msgstr "Afin de protéger votre vie privée, SusiMail bloque le JavaScript et tout contenu distant contenu dans ce message HTML."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
-msgstr ""
+msgstr "Activez JavaScript pour une meilleure présentation et des fonctionnalités supplémentaires."
 
 #, java-format
 msgid "Tracking images removed from message: {0}"
-msgstr ""
+msgstr "Images de suivi retirées du message : {0}"
 
 #, java-format
 msgid "Blocked images not displayed: {0}"
-msgstr ""
+msgstr "Images bloquées non affichées : {0}"
 
 #, java-format
 msgid "Charset \\''{0}\\'' not supported."
-msgstr "Le jeu de caractères « {0} » n’est pas pris en charge."
+msgstr "Le jeu de caractères «{0}» n’est pas pris en charge."
 
 #, java-format
 msgid "Part ({0}) not shown, because of {1}"
@@ -95,7 +95,7 @@ msgid "Need username for authentication."
 msgstr "Un nom d’utilisateur est exigé pour l’authentification."
 
 msgid "Do not include @mail.i2p in the username"
-msgstr ""
+msgstr "Ne incluez pas @mail.i2p dans le nom d'utilisateur"
 
 msgid "Need password for authentication."
 msgstr "Un mot de passe est exigé pour l’authentification."
@@ -230,7 +230,7 @@ msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
 
 msgid "Removed tracking image placeholder"
-msgstr ""
+msgstr "Placeholder de l'image de suivi supprimé"
 
 msgid "no subject"
 msgstr "aucun objet"
@@ -240,7 +240,7 @@ msgstr "Aucune adresse d’expéditeur valide n’a été trouvée."
 
 #, java-format
 msgid "Found no valid address in \\''{0}\\''."
-msgstr "Aucune adresse valide n’a été trouvée dans « {0} »."
+msgstr "Aucune adresse valide n’a été trouvée dans «{0}»."
 
 msgid "No recipients found."
 msgstr "Aucun destinataire n’a été trouvé."
@@ -358,7 +358,7 @@ msgid "Mark for deletion"
 msgstr "Marquer pour suppression"
 
 msgid "Message contains HTML"
-msgstr ""
+msgstr "Le message contient de l'HTML"
 
 msgid "Message is new"
 msgstr "Le message est nouveau"
@@ -427,7 +427,7 @@ msgid "Move to Folder"
 msgstr "Déplacer vers le dossier"
 
 msgid "View message in new tab"
-msgstr ""
+msgstr "Afficher le message dans un nouvel onglet"
 
 msgid "Folder Page Size"
 msgstr "Taille de la page du dossier"

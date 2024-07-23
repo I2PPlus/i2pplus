@@ -43,27 +43,27 @@ msgid "Inbox"
 msgstr "受信ボックス"
 
 msgid "View message as HTML"
-msgstr ""
+msgstr "HTMLとしてメッセージを表示"
 
 msgid "View message as plain text"
-msgstr ""
+msgstr "プレーンテキストとしてメッセージを表示"
 
 msgid "unknown"
 msgstr "不明"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr ""
+msgstr "プライバシーの保護のために、SusiMailはこのHTMLメッセージに含まれるJavaScriptとすべてのリモートコンテンツをブロックしています。"
 
 msgid "Enable Javascript for enhanced presentation and additional features."
-msgstr ""
+msgstr "より良い表示と追加機能のためにJavaScriptを有効化してください。"
 
 #, java-format
 msgid "Tracking images removed from message: {0}"
-msgstr ""
+msgstr "メッセージから追跡画像が削除されました: {0}"
 
 #, java-format
 msgid "Blocked images not displayed: {0}"
-msgstr ""
+msgstr "ブロックされた画像は表示されません: {0}"
 
 #, java-format
 msgid "Charset \\''{0}\\'' not supported."
@@ -94,7 +94,7 @@ msgid "Need username for authentication."
 msgstr "認証にはユーザー名が必要です。"
 
 msgid "Do not include @mail.i2p in the username"
-msgstr ""
+msgstr "ユーザー名には@mail.i2pを含めないでください"
 
 msgid "Need password for authentication."
 msgstr "認証にはパスワードが必要です。"
@@ -227,7 +227,7 @@ msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
 
 msgid "Removed tracking image placeholder"
-msgstr ""
+msgstr "追跡画像のプレースホルダーを削除しました"
 
 msgid "no subject"
 msgstr "無題"
@@ -354,7 +354,7 @@ msgid "Mark for deletion"
 msgstr "削除にマーク"
 
 msgid "Message contains HTML"
-msgstr ""
+msgstr "メッセージにHTMLが含まれています"
 
 msgid "Message is new"
 msgstr "新着メールです"
@@ -423,7 +423,7 @@ msgid "Move to Folder"
 msgstr "フォルダへ移動"
 
 msgid "View message in new tab"
-msgstr ""
+msgstr "新しいタブでメッセージを表示"
 
 msgid "Folder Page Size"
 msgstr "フォルダーのページサイズ"

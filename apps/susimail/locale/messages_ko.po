@@ -43,27 +43,27 @@ msgid "Inbox"
 msgstr "Inbox"
 
 msgid "View message as HTML"
-msgstr ""
+msgstr "HTML로 메시지 보기"
 
 msgid "View message as plain text"
-msgstr ""
+msgstr "순수 텍스트로 메시지 보기"
 
 msgid "unknown"
 msgstr "알수없는"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr ""
+msgstr "개인 정보 보호를 위해 SusiMail은 이 HTML 메시지에 포함된 JavaScript와 모든 원격 콘텐츠를 차단합니다."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
-msgstr ""
+msgstr "강화된 화면 표시 및 추가 기능을 위해 JavaScript를 활성화하세요."
 
 #, java-format
 msgid "Tracking images removed from message: {0}"
-msgstr ""
+msgstr "메시지에서 추적 이미지 제거: {0}"
 
 #, java-format
 msgid "Blocked images not displayed: {0}"
-msgstr ""
+msgstr "차단된 이미지는 표시되지 않습니다: {0}"
 
 #, java-format
 msgid "Charset \\''{0}\\'' not supported."
@@ -94,7 +94,7 @@ msgid "Need username for authentication."
 msgstr "인증을 위해 유저이름이 필요합니다."
 
 msgid "Do not include @mail.i2p in the username"
-msgstr ""
+msgstr "사용자 이름에 @mail.i2p를 포함하지 마세요"
 
 msgid "Need password for authentication."
 msgstr "인증을 위해 패스워드가 필요합니다."
@@ -227,7 +227,7 @@ msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
 
 msgid "Removed tracking image placeholder"
-msgstr ""
+msgstr "추적 이미지 플레이스홀더 제거"
 
 msgid "no subject"
 msgstr "제목 없음"
@@ -354,7 +354,7 @@ msgid "Mark for deletion"
 msgstr "삭제표시"
 
 msgid "Message contains HTML"
-msgstr ""
+msgstr "메시지에는 HTML이 포함되어 있습니다"
 
 msgid "Message is new"
 msgstr "새로운 메세지"
@@ -423,7 +423,7 @@ msgid "Move to Folder"
 msgstr "폴더로 이동"
 
 msgid "View message in new tab"
-msgstr ""
+msgstr "새 탭에서 메시지 보기"
 
 msgid "Folder Page Size"
 msgstr "폴더 페이지 크기"

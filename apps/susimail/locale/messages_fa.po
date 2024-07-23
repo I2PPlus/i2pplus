@@ -44,27 +44,27 @@ msgid "Inbox"
 msgstr "اینباکس"
 
 msgid "View message as HTML"
-msgstr ""
+msgstr "پیام را به عنوان HTML مشاهده کنید"
 
 msgid "View message as plain text"
-msgstr ""
+msgstr "پیام را به عنوان متن ساده مشاهده کنید"
 
 msgid "unknown"
 msgstr "ناشناخته"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr ""
+msgstr "برای حفاظت از حریم خصوصی شما، SusiMail جاوا اسکریپت و هر محتوای دوری که در این پیام HTML وجود دارد را блک می‌کند."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
-msgstr ""
+msgstr "برای افزایش کیفیت نمایش و اضافه کردن ویژگی‌های بیشتر، جاوا اسکریپت را فعال کنید."
 
 #, java-format
 msgid "Tracking images removed from message: {0}"
-msgstr ""
+msgstr "تصاویر ردیابی از پیام حذف شدند: {0}"
 
 #, java-format
 msgid "Blocked images not displayed: {0}"
-msgstr ""
+msgstr "تصاویر مسدود نمایش داده نشدند: {0}"
 
 #, java-format
 msgid "Charset \\''{0}\\'' not supported."
@@ -95,7 +95,7 @@ msgid "Need username for authentication."
 msgstr "نیاز به نام کاربر برای احراز هویت."
 
 msgid "Do not include @mail.i2p in the username"
-msgstr ""
+msgstr "نام کاربری خود را بدون @mail.i2p وارد نکنید"
 
 msgid "Need password for authentication."
 msgstr "نیاز به گذرواژه برای احراز هویت."
@@ -230,7 +230,7 @@ msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
 
 msgid "Removed tracking image placeholder"
-msgstr ""
+msgstr "جایگزین تصویر ردیابی حذف شد"
 
 msgid "no subject"
 msgstr "بدون موضوع"
@@ -358,7 +358,7 @@ msgid "Mark for deletion"
 msgstr "علامت دهی برای حذف"
 
 msgid "Message contains HTML"
-msgstr ""
+msgstr "پیام شامل HTML است"
 
 msgid "Message is new"
 msgstr "پیام جدید می باشد"
@@ -427,7 +427,7 @@ msgid "Move to Folder"
 msgstr "انتقال به پوشه"
 
 msgid "View message in new tab"
-msgstr ""
+msgstr "پیام را در صفحه جدید مشاهده کنید"
 
 msgid "Folder Page Size"
 msgstr "اندازه صفحه پوشه"

@@ -43,27 +43,27 @@ msgid "Inbox"
 msgstr "Hộp thư đến"
 
 msgid "View message as HTML"
-msgstr ""
+msgstr "Xem thông điệp dưới dạng HTML"
 
 msgid "View message as plain text"
-msgstr ""
+msgstr "Xem thông điệp dưới dạng văn bản đơn giản"
 
 msgid "unknown"
 msgstr "không biết"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr ""
+msgstr "Để bảo vệ quyền riêng tư của bạn, SusiMail đang chặn JavaScript và bất kỳ nội dung từ xa nào trong thông điệp HTML này."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
-msgstr ""
+msgstr "Bật JavaScript để tăng cường trình chiếu và thêm tính năng."
 
 #, java-format
 msgid "Tracking images removed from message: {0}"
-msgstr ""
+msgstr "Hình ảnh theo dõi đã bị loại bỏ khỏi thông điệp: {0}"
 
 #, java-format
 msgid "Blocked images not displayed: {0}"
-msgstr ""
+msgstr "Hình ảnh bị chặn không được hiển thị: {0}"
 
 #, java-format
 msgid "Charset \\''{0}\\'' not supported."
@@ -94,7 +94,7 @@ msgid "Need username for authentication."
 msgstr "Cần tên người dùng để xác thực."
 
 msgid "Do not include @mail.i2p in the username"
-msgstr ""
+msgstr "Không bao gồm @mail.i2p trong tên người dùng"
 
 msgid "Need password for authentication."
 msgstr "Cần mật khẩu để xác thực."
@@ -227,7 +227,7 @@ msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
 
 msgid "Removed tracking image placeholder"
-msgstr ""
+msgstr "Đã xóa phần giữ chỗ cho hình ảnh theo dõi"
 
 msgid "no subject"
 msgstr "không chủ đề"
@@ -354,7 +354,7 @@ msgid "Mark for deletion"
 msgstr "Đánh dấu để xóa"
 
 msgid "Message contains HTML"
-msgstr ""
+msgstr "Thông điệp chứa HTML"
 
 msgid "Message is new"
 msgstr "Tin nhắn mới"
@@ -423,7 +423,7 @@ msgid "Move to Folder"
 msgstr "Di chuyển đến thư mục"
 
 msgid "View message in new tab"
-msgstr ""
+msgstr "Xem thông điệp trong tab mới"
 
 msgid "Folder Page Size"
 msgstr "Kích thước trang thư mục"
