@@ -760,7 +760,7 @@ msgid "Mayotte"
 msgstr "Μαγιότ"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Άγνωστος"
 
 msgid "South Africa"
 msgstr "Νότια Αφρική"
