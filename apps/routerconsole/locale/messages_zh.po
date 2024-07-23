@@ -756,7 +756,7 @@ msgid "Now"
 msgstr "现在"
 
 msgid "Router restarted"
-msgstr ""
+msgstr "路由器已重启"
 
 msgid "none"
 msgstr "无"
@@ -1793,7 +1793,7 @@ msgid "{0} for {1}"
 msgstr "过去 {1} 统计 {0}"
 
 msgid "Nothing to display - no stat specified!"
-msgstr ""
+msgstr "无内容显示 - 未指定统计信息！"
 
 #, java-format
 msgid "ending {0} ago"
@@ -1839,10 +1839,10 @@ msgid "plot events"
 msgstr "事件数量"
 
 msgid "Hide Legend"
-msgstr ""
+msgstr "隐藏图例"
 
 msgid "Show Legend"
-msgstr ""
+msgstr "显示图例"
 
 msgid "Configure Graph Display"
 msgstr "图表显示设置"
@@ -2187,7 +2187,7 @@ msgid "Tor-focused Search Engine"
 msgstr "以.Onion网站为中心的搜索引擎"
 
 msgid "Pinterest Image Search Engine"
-msgstr ""
+msgstr "Pinterest 图像搜索引擎"
 
 msgid "Clearnet BitTorrent DHT search engine"
 msgstr "表网种子搜索引擎"
@@ -2558,13 +2558,13 @@ msgid "Congestion Cap"
 msgstr "拥堵旗"
 
 msgid "Moderate"
-msgstr ""
+msgstr "中等"
 
 msgid "Severe"
-msgstr ""
+msgstr "严重"
 
 msgid "No transit tunnels"
-msgstr ""
+msgstr "没有中继隧道"
 
 msgid "Available CPU Cores"
 msgstr "可用的CPU核心"
@@ -2686,7 +2686,7 @@ msgid "File location"
 msgstr "文件位置"
 
 msgid "Refresh interval (seconds)"
-msgstr ""
+msgstr "刷新间隔（秒）"
 
 msgid "File not found"
 msgstr "文件未找到"
@@ -2732,7 +2732,7 @@ msgid "Sybil Analysis"
 msgstr "Sybil分析"
 
 msgid "Router Map"
-msgstr ""
+msgstr "路由器地图"
 
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "绝对不要向任何人泄露您的路由身份，因为它在网络数据库中独一无二的联系到您的 IP 地址。"
@@ -2866,7 +2866,7 @@ msgid "Transports"
 msgstr "传输"
 
 msgid "Unknown"
-msgstr ""
+msgstr "未知"
 
 msgid "Initializing"
 msgstr "初始化"
@@ -3862,7 +3862,7 @@ msgid "Memory"
 msgstr "内存"
 
 msgid "Floodfill enabled"
-msgstr ""
+msgstr "启用泛洪填充"
 
 msgid "See more information on the wiki"
 msgstr "在 wiki 查看更多信息"
@@ -4027,10 +4027,10 @@ msgid "Router or network performance is impeding the building of transit tunnels
 msgstr "路由器或网络性能阻碍了参与隧道的建设"
 
 msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr ""
+msgstr "路由器当前承载着配置的最大中继隧道数量"
 
 msgid "Router is currently using the configured maximum share bandwidth"
-msgstr ""
+msgstr "路由器当前使用的是配置的最大共享带宽"
 
 msgid "Router is ready to build participating tunnels"
 msgstr "路由器已准备好参与构建中继隧道"
@@ -4091,13 +4091,13 @@ msgid "I2PSnark"
 msgstr "I2PSnark"
 
 msgid "Messenger"
-msgstr ""
+msgstr "信使"
 
 msgid "i2pchat"
-msgstr ""
+msgstr "i2pchat"
 
 msgid "I2PChat"
-msgstr ""
+msgstr "I2PChat"
 
 msgid "Server"
 msgstr "服务"
@@ -4213,7 +4213,7 @@ msgid "Review current bans"
 msgstr "查看目前的封禁状态"
 
 msgid "Delete Sybil Blocklist"
-msgstr ""
+msgstr "删除Sybil黑名单"
 
 msgid "Floodfill Summary"
 msgstr "洪泛摘要"
@@ -5635,7 +5635,7 @@ msgid "Event Log"
 msgstr "事件日志"
 
 msgid "graph"
-msgstr ""
+msgstr "图表"
 
 msgid "Performance Graph"
 msgstr "性能统计图"
@@ -5773,10 +5773,10 @@ msgid "When set to true, the router will change its identity and UDP port when t
 msgstr "设置为 true 时，路由器将在路由器重新启动时更改其标识和 UDP 端口，然后从 router.config 中删除密钥以防止进一步更改。[默认值为假]"
 
 msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr ""
+msgstr "设置为false时，路由器将不会限制来自其他路由器的隧道构建请求，使用时应谨慎。[默认为true，需要重启]"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr ""
+msgstr "当设置为false时，路由器将不会阻止来自运行旧版本的较慢或不可达路由器的隧道构建请求。[默认为true，需要重启]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "配置后，这将为允许路由器同时构建的隧道数设置硬限制。默认情况下，路由器使用平均构建时间和当前出站带宽来确定最佳构建速率。[需要重新启动]"
@@ -5887,7 +5887,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "此设置设置为 true 时，将在边栏的“拥塞”部分显示“对等测试平均值”读数，该读数的计算方法是将成功的对等测试平均值和失败的测试所花费的平均超额时间相加。平均值可以用作确定最佳<code>路由器.peerTestTimeout</code> 值的指南。[默认值为假]"
 
 msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr ""
+msgstr "此设置允许为路由器控制台页面的页面标题设置自定义文本前缀，当你在浏览器标签上打开了多个控制台并希望有一种简单的方法来区分它们时，这可能非常有用。"
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "此设置设置为 true 时，将在站点地图上显示“<i>感兴趣的网站</i>< href=/sitemap>。</a>[默认值为假]"
@@ -7325,7 +7325,7 @@ msgid "Configure router logging options"
 msgstr "配置路由器日志选项"
 
 msgid "Filter Router log output"
-msgstr ""
+msgstr "过滤路由器日志输出"
 
 msgid "Service (Wrapper) Logs"
 msgstr "服务（封装）日志"
@@ -7334,10 +7334,10 @@ msgid "network database"
 msgstr "网络数据库"
 
 msgid "network database router map"
-msgstr ""
+msgstr "网络数据库路由器映射"
 
 msgid "Network Database Router Map"
-msgstr ""
+msgstr "网络数据库路由器地图"
 
 msgid "News"
 msgstr "新闻"
@@ -7452,10 +7452,10 @@ msgid "Statistics"
 msgstr "统计数据"
 
 msgid "Current console and webapp translation report"
-msgstr ""
+msgstr "当前控制台和Web应用翻译报告"
 
 msgid "Translation Status"
-msgstr ""
+msgstr "翻译状态"
 
 msgid "View active tunnels"
 msgstr "查看活动隧道"
@@ -7578,10 +7578,10 @@ msgid "Local Tunnels"
 msgstr "本地隧道"
 
 msgid "Toggle Tunnel Ids"
-msgstr ""
+msgstr "切换隧道ID"
 
 msgid "Toggle Tunnels"
-msgstr ""
+msgstr "切换隧道"
 
 msgid "Peer Profile"
 msgstr "对等节点摘要"

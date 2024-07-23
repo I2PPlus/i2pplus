@@ -762,7 +762,7 @@ msgid "Now"
 msgstr "Тепер"
 
 msgid "Router restarted"
-msgstr ""
+msgstr "Роутер перезапущений"
 
 msgid "none"
 msgstr "немає"
@@ -1809,7 +1809,7 @@ msgid "{0} for {1}"
 msgstr "{0} для {1}"
 
 msgid "Nothing to display - no stat specified!"
-msgstr ""
+msgstr "Нічого не відображається - статистика не вказана!"
 
 #, java-format
 msgid "ending {0} ago"
@@ -1855,10 +1855,10 @@ msgid "plot events"
 msgstr "сюжетні події"
 
 msgid "Hide Legend"
-msgstr ""
+msgstr "Приховати легенду"
 
 msgid "Show Legend"
-msgstr ""
+msgstr "Показати легенду"
 
 msgid "Configure Graph Display"
 msgstr "Налаштування відображення графіка"
@@ -2203,7 +2203,7 @@ msgid "Tor-focused Search Engine"
 msgstr "Пошукова система, орієнтована на Tor"
 
 msgid "Pinterest Image Search Engine"
-msgstr ""
+msgstr "Пошуковик зображень Pinterest"
 
 msgid "Clearnet BitTorrent DHT search engine"
 msgstr "Пошукова система Clearnet BitTorrent DHT"
@@ -2574,13 +2574,13 @@ msgid "Congestion Cap"
 msgstr "Заторна кришка"
 
 msgid "Moderate"
-msgstr ""
+msgstr "Середній"
 
 msgid "Severe"
-msgstr ""
+msgstr "Серйозний"
 
 msgid "No transit tunnels"
-msgstr ""
+msgstr "Відсутні транзитні тунелі"
 
 msgid "Available CPU Cores"
 msgstr "Доступні ядра ЦП"
@@ -2702,7 +2702,7 @@ msgid "File location"
 msgstr "Місцезнаходження файлу"
 
 msgid "Refresh interval (seconds)"
-msgstr ""
+msgstr "Інтервал оновлення (секунди)"
 
 msgid "File not found"
 msgstr "Файл не знайдено"
@@ -2748,7 +2748,7 @@ msgid "Sybil Analysis"
 msgstr "Аналіз Сибіл"
 
 msgid "Router Map"
-msgstr ""
+msgstr "Мапа роутера"
 
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "Ніколи нікому не повідомляйте про свій маршрутизатор, оскільки він однозначно пов’язаний із вашою IP-адресою в базі даних мережі."
@@ -2882,7 +2882,7 @@ msgid "Transports"
 msgstr "Транспорти"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Невідомо"
 
 msgid "Initializing"
 msgstr "Ініціалізація"
@@ -3898,7 +3898,7 @@ msgid "Memory"
 msgstr "Пам'ять"
 
 msgid "Floodfill enabled"
-msgstr ""
+msgstr "Floodfill увімкнено"
 
 msgid "See more information on the wiki"
 msgstr "Див. більше інформації на вікі"
@@ -4063,10 +4063,10 @@ msgid "Router or network performance is impeding the building of transit tunnels
 msgstr "Продуктивність маршрутизатора або мережі перешкоджає створенню тунелів-учасників"
 
 msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr ""
+msgstr "Роутер в даний час обслуговує максимально налаштоване число транзитних тунелів"
 
 msgid "Router is currently using the configured maximum share bandwidth"
-msgstr ""
+msgstr "Роутер використовує максимально налаштований обсяг спільного каналу"
 
 msgid "Router is ready to build participating tunnels"
 msgstr "Маршрутизатор готовий будувати тунелі-учасники"
@@ -4127,13 +4127,13 @@ msgid "I2PSnark"
 msgstr "I2PSnark"
 
 msgid "Messenger"
-msgstr ""
+msgstr "Месенджер"
 
 msgid "i2pchat"
-msgstr ""
+msgstr "i2pchat"
 
 msgid "I2PChat"
-msgstr ""
+msgstr "I2PChat"
 
 msgid "Server"
 msgstr "Сервер"
@@ -4249,7 +4249,7 @@ msgid "Review current bans"
 msgstr "Перегляньте поточні заборони"
 
 msgid "Delete Sybil Blocklist"
-msgstr ""
+msgstr "Видалити блок-лист Sybil"
 
 msgid "Floodfill Summary"
 msgstr "Підсумок Floodfill"
@@ -5671,7 +5671,7 @@ msgid "Event Log"
 msgstr "Журнал подій"
 
 msgid "graph"
-msgstr ""
+msgstr "графік"
 
 msgid "Performance Graph"
 msgstr "Графік продуктивності"
@@ -5809,10 +5809,10 @@ msgid "When set to true, the router will change its identity and UDP port when t
 msgstr "Коли встановлено true, роутер змінить свою ідентичність і UDP-порт при перезапуску роутера, а потім видалить ключ з router.config, щоб запобігти подальшим змінам. [За замовчуванням false]"
 
 msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr ""
+msgstr "Якщо встановлено на хибну, роутер не буде обмежувати запити на побудову тунелів від інших роутерів і слід використовувати з обережністю. [За замовчуванням - істина, потрібно перезапустити]"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr ""
+msgstr "Якщо встановлено на хибну, роутер не заблокує запити на побудову тунелів від повільніших або недоступних роутерів з старшими версіями. [За замовчуванням - істина, потрібно перезапустити]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "Коли налаштовано, це встановлює жорстку межу для кількості тунелів, які роутер має право будувати одночасно. За замовчуванням роутер використовує середній час будівництва і поточну вихідну пропускну здатність для визначення оптимальної швидкості побудови. [Потрібний перезапуск]"
@@ -5923,7 +5923,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Це налаштування, коли встановлено true, буде відображати посилання <i>Цікаві сайти</i> на сторінці <a href=/sitemap>карти сайту</a>. [За замовчуванням false]"
 
 msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr ""
+msgstr "Ця настройка дозволяє встановити власний префікс тексту для заголовка сторінки на сторінках консолі роутера, що може бути корисним, коли у вас відкрито декілька консолей на вкладках браузера, і ви хочете простий спосіб розрізнити їх."
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Це налаштування дозволяє сконфігурувати альтернативні сервери NTP, необхідні для забезпечення точного часу роботи роутера. [За замовчуванням 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
@@ -6614,7 +6614,7 @@ msgstr "Сторінка налаштувань перенасіння"
 
 #, java-format
 msgid "To use a proxy to reseed, configure the proxy type, hostname, and port on the {0}."
-msgstr "Щоб використовувати проксі для перенасіння, налаштуйте тип проксі, ім'я хоста та порт на сторінці {0}."
+msgstr "Щоб використовувати проксі для перенасіння, налаштуйте тип проксі, ім’я хоста та порт на сторінці {0}."
 
 msgid "If you are running the Tor Browser, you may use its Tor instance by configuring I2P to use: <i>Proxy type:</i> <code>SOCKS 5</code> <i>Host:</i> <code>127.0.0.1</code> <i>Port:</i> <code>9150</code>."
 msgstr "Якщо ви використовуєте Tor Browser, ви можете використати його екземпляр Tor, налаштувавши I2P: <i>Тип проксі:</i> <code>SOCKS 5</code> <i>Хост:</i> <code>127.0.0.1</code> <i>Порт:</i> <code>9150</code>."
@@ -7361,7 +7361,7 @@ msgid "Configure router logging options"
 msgstr "Налаштувати параметри журналювання маршрутизатора"
 
 msgid "Filter Router log output"
-msgstr ""
+msgstr "Фільтрувати вивід журналу роутера"
 
 msgid "Service (Wrapper) Logs"
 msgstr "Журнали служби (обгортка)."
@@ -7370,10 +7370,10 @@ msgid "network database"
 msgstr "база даних мережі"
 
 msgid "network database router map"
-msgstr ""
+msgstr "Мапа роутерів бази даних мережі"
 
 msgid "Network Database Router Map"
-msgstr ""
+msgstr "Мережева база даних мап роутерів"
 
 msgid "News"
 msgstr "Новини"
@@ -7488,10 +7488,10 @@ msgid "Statistics"
 msgstr "Статистика"
 
 msgid "Current console and webapp translation report"
-msgstr ""
+msgstr "Поточний звіт про переклад консолі та веб-додатку"
 
 msgid "Translation Status"
-msgstr ""
+msgstr "Статус перекладу"
 
 msgid "View active tunnels"
 msgstr "Перегляд активних тунелів"
@@ -7614,10 +7614,10 @@ msgid "Local Tunnels"
 msgstr "Місцеві тунелі"
 
 msgid "Toggle Tunnel Ids"
-msgstr ""
+msgstr "Перемикання ID тунелів"
 
 msgid "Toggle Tunnels"
-msgstr ""
+msgstr "Перемикання Тунелів"
 
 msgid "Peer Profile"
 msgstr "Профіль однолітка"

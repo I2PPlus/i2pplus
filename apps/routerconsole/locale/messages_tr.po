@@ -759,7 +759,7 @@ msgid "Now"
 msgstr "Şimdi"
 
 msgid "Router restarted"
-msgstr ""
+msgstr "Router yeniden başlatıldı"
 
 msgid "none"
 msgstr "yok"
@@ -1801,7 +1801,7 @@ msgid "{0} for {1}"
 msgstr "{1} için {0}"
 
 msgid "Nothing to display - no stat specified!"
-msgstr ""
+msgstr "Gösterilecek içerik yok - belirli bir istatistik bulunmamaktadır!"
 
 #, java-format
 msgid "ending {0} ago"
@@ -1847,10 +1847,10 @@ msgid "plot events"
 msgstr "olaylar çizilsin"
 
 msgid "Hide Legend"
-msgstr ""
+msgstr "Egendeki Gizle"
 
 msgid "Show Legend"
-msgstr ""
+msgstr "Egendeki Göster"
 
 msgid "Configure Graph Display"
 msgstr "Çizelge Görünümü Yapılandırması"
@@ -2195,7 +2195,7 @@ msgid "Tor-focused Search Engine"
 msgstr "Tor Odaklı Arama Motoru"
 
 msgid "Pinterest Image Search Engine"
-msgstr ""
+msgstr "Pinterest Görsel Arama Motoru"
 
 msgid "Clearnet BitTorrent DHT search engine"
 msgstr "Clearnet BitTorrent DHT arama motoru"
@@ -2566,13 +2566,13 @@ msgid "Congestion Cap"
 msgstr "Tıkanıklık Sınırı"
 
 msgid "Moderate"
-msgstr ""
+msgstr "Orta Seviye"
 
 msgid "Severe"
-msgstr ""
+msgstr "Siddetli"
 
 msgid "No transit tunnels"
-msgstr ""
+msgstr "Geçiş tüneli yok"
 
 msgid "Available CPU Cores"
 msgstr "Mevcut CPU Çekirdekleri"
@@ -2694,7 +2694,7 @@ msgid "File location"
 msgstr "Dosya konumu"
 
 msgid "Refresh interval (seconds)"
-msgstr ""
+msgstr "Yenileme aralığı (saniye)"
 
 msgid "File not found"
 msgstr "Dosya bulunamadı"
@@ -2740,7 +2740,7 @@ msgid "Sybil Analysis"
 msgstr "Sybil Analizi"
 
 msgid "Router Map"
-msgstr ""
+msgstr "Router Haritası"
 
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "Ağ veritabanında yöneltici kimliği ile IP adresi ilişkilendirilmiş olduğundan, yöneltici kimliğiniz asla kimseyle paylaşmayın."
@@ -2874,7 +2874,7 @@ msgid "Transports"
 msgstr "Aktarımlar"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Bilinmiyor"
 
 msgid "Initializing"
 msgstr "Başlatılıyor"
@@ -2893,7 +2893,7 @@ msgstr "Bu sürüme sahip tüm yönlendiricileri NetDb'de göster"
 
 #, java-format
 msgid "Show all members of the {0} family in NetDb"
-msgstr "NetDb'de {0} ailesinin tüm üyelerini göster"
+msgstr "NetDb’de {0} ailesinin tüm üyelerini göster"
 
 msgid "View profile"
 msgstr "Profili görüntüle"
@@ -3880,7 +3880,7 @@ msgid "Memory"
 msgstr "Bellek"
 
 msgid "Floodfill enabled"
-msgstr ""
+msgstr "Floodfill etkinleştirildi"
 
 msgid "See more information on the wiki"
 msgstr "Wiki üzerinden ayrıntılı bilgi alın"
@@ -4045,10 +4045,10 @@ msgid "Router or network performance is impeding the building of transit tunnels
 msgstr "Yönlendirici veya ağ performansı, katılımcı tünellerin inşasını engelliyor"
 
 msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr ""
+msgstr "Router şu anda yapılandırılmış maksimum geçiş tüneli sayısını barındırmaktadır"
 
 msgid "Router is currently using the configured maximum share bandwidth"
-msgstr ""
+msgstr "Router şu anda yapılandırılmış maksimum paylaşım bant genişliğini kullanmaktadır"
 
 msgid "Router is ready to build participating tunnels"
 msgstr "Yönlendirici katılımcı tüneller oluşturmaya hazır"
@@ -4109,13 +4109,13 @@ msgid "I2PSnark"
 msgstr "I2PSnark"
 
 msgid "Messenger"
-msgstr ""
+msgstr "Messenger"
 
 msgid "i2pchat"
-msgstr ""
+msgstr "i2pchat"
 
 msgid "I2PChat"
-msgstr ""
+msgstr "I2PChat"
 
 msgid "Server"
 msgstr "Sunucu"
@@ -4231,7 +4231,7 @@ msgid "Review current bans"
 msgstr "Mevcut yasakları gözden geçirin"
 
 msgid "Delete Sybil Blocklist"
-msgstr ""
+msgstr "Sybil Engelleme Listesini Sil"
 
 msgid "Floodfill Summary"
 msgstr "Taşkın Özeti"
@@ -4823,7 +4823,7 @@ msgstr "Kapak trafiği oluşturarak anonimliğinizi artırır ve ağa yardımcı
 
 #, java-format
 msgid "You have configured I2P to share {0} KBps {1}."
-msgstr "I2P'yi paylaşmak için {0} KB/s {1} şeklinde yapılandırdınız."
+msgstr "I2P’yi paylaşmak için {0} KB/s {1} şeklinde yapılandırdınız."
 
 msgid "The higher the share bandwidth the more you improve your anonymity and help the network."
 msgstr "Daha yüksek bant genişliğinin paylaşılması isimsiz kalma şansınızı arttırır ve ağa yardımcı olur."
@@ -5653,7 +5653,7 @@ msgid "Event Log"
 msgstr "Olay Günlüğü"
 
 msgid "graph"
-msgstr ""
+msgstr "grafik"
 
 msgid "Performance Graph"
 msgstr "Performans Çizelgesi"
@@ -5791,10 +5791,10 @@ msgid "When set to true, the router will change its identity and UDP port when t
 msgstr "True olarak ayarlandığında, router yeniden başladığında kimliğini ve UDP bağlantı noktasını değiştirir ve ardından daha fazla değişikliği önlemek için anahtarı router.config'den siler. [Varsayılan olarak, false]"
 
 msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr ""
+msgstr "False olarak ayarlandığında, router diğer routrarın tünel oluşturma isteklerini yavaşlatmayacak ve dikkatlice kullanılması gereken bir durumdur. [Varsayılan değeri true, yeniden başlatma gereklidir]"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr ""
+msgstr "False olarak ayarlandığında, router daha yavaş veya erişilemez olan eski versiyonlu routrarın tünel oluşturma isteklerini engellemez. [Varsayılan değeri true, yeniden başlatma gereklidir]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "Yapılandırıldığında, router'ın aynı anda inşa etmesine izin verilen tünel sayısı için sert bir sınırlama belirler. Varsayılan olarak, router, optimum inşa oranını belirlemek için ortalama inşa süresini ve mevcut çıkış bant genişliğini kullanır. [Yeniden başlatma gereklidir]"
@@ -5905,7 +5905,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Bu ayar, true olarak ayarlandığında, <a href=/sitemap>site haritasında</a> <i>İlgili Siteler</i> bağlantılarını gösterecektir. [Varsayılan değer false]"
 
 msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr ""
+msgstr "Bu ayar, birden fazla konsolun açık olduğu tarayıcı sekme üzerindeki router konsol sayfalarının sayfa başlığına özel bir metin önekinin ayarlanması için izin verir ve bunları kolayca ayırt etmek istediğinizde faydalıdır."
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Bu ayar, yönlendiricinizin doğru saat dilimini korumasını sağlamak için gereken alternatif NTP sunucularının yapılandırılmasını sağlar. [Varsayılan değer 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
@@ -6616,7 +6616,7 @@ msgstr "Eğer I2P yöneten ve güvendiğiniz birisini tanıyorsanız, onlardan s
 
 #, java-format
 msgid "If you know and trust somebody that publishes reseed files, ask them for the URL. Then, click the <i>Reseed from URL</i> button on the {0} to reseed using the URL you received."
-msgstr "Eğer reseed dosyalarını yayınlayan ve güvendiğiniz birisini tanıyorsanız, URL'yi onlardan isteyin. Ardından, {0} üzerinde size ulaşan URL'yi kullanarak <i>URL'den tohumlama</i> düğmesini tıklayarak tohumlama yapın."
+msgstr "Eğer reseed dosyalarını yayınlayan ve güvendiğiniz birisini tanıyorsanız, URL’yi onlardan isteyin. Ardından, {0} üzerinde size ulaşan URL’yi kullanarak <i>URL'den tohumlama</i> düğmesini tıklayarak tohumlama yapın."
 
 msgid "How do I reseed manually?"
 msgstr "Manuel olarak nasıl tohumlama yapabilirim?"
@@ -6629,7 +6629,7 @@ msgstr "Bilinen eşlerin sayısı 50'nin altına düştüğünde, I2P otomatik o
 
 #, java-format
 msgid "In the event that you suspect the request is being blocked, you can configure I2P to use a proxy to reseed. Go to the {0} and configure the proxy type, hostname, and port."
-msgstr "İstek engellendiğinden şüphelenildiğinde, I2P'nin tohumlama yapmak için bir proxy kullanmasını yapılandırabilirsiniz. {0}'a gidin ve proxy türünü, ana bilgisayar adını ve port numarasını yapılandırın."
+msgstr "İstek engellendiğinden şüphelenildiğinde, I2P’nin tohumlama yapmak için bir proxy kullanmasını yapılandırabilirsiniz. {0}’a gidin ve proxy türünü, ana bilgisayar adını ve port numarasını yapılandırın."
 
 msgid "If you are stuck behind an ISP firewall or filter, you can use the following manual method (non-automated technical solution) to join the I2P network."
 msgstr "Eğer bir İSP güvenlik duvarı veya filtresi arkasında kaldıysanız, I2P ağına katılmak için aşağıdaki manuel yöntemi (otomatik olmayan teknik çözüm) kullanabilirsiniz."
@@ -7343,7 +7343,7 @@ msgid "Configure router logging options"
 msgstr "Yöneltici günlüğü yapılandırması"
 
 msgid "Filter Router log output"
-msgstr ""
+msgstr "Router günlük çıktısını filtrele"
 
 msgid "Service (Wrapper) Logs"
 msgstr "Hizmet (Kapsayıcı) Günlükleri"
@@ -7352,10 +7352,10 @@ msgid "network database"
 msgstr "ağ veritabanı"
 
 msgid "network database router map"
-msgstr ""
+msgstr "ağ veritabanı router haritası"
 
 msgid "Network Database Router Map"
-msgstr ""
+msgstr "Ağ Veritabanı Router Haritası"
 
 msgid "News"
 msgstr "Haberler"
@@ -7470,10 +7470,10 @@ msgid "Statistics"
 msgstr "İstatistikler"
 
 msgid "Current console and webapp translation report"
-msgstr ""
+msgstr "Mevcut konsol ve web uygulaması çevirisi raporu"
 
 msgid "Translation Status"
-msgstr ""
+msgstr "Çeviri Durumu"
 
 msgid "View active tunnels"
 msgstr "Aktif tünelleri görüntüle"
@@ -7596,10 +7596,10 @@ msgid "Local Tunnels"
 msgstr "Yerel Tüneller"
 
 msgid "Toggle Tunnel Ids"
-msgstr ""
+msgstr "Tunnel İD'lerini Değiştir"
 
 msgid "Toggle Tunnels"
-msgstr ""
+msgstr "Tünelleri Değiştir"
 
 msgid "Peer Profile"
 msgstr "Eş Profili"

@@ -195,7 +195,7 @@ msgid "Found Device"
 msgstr "Hittade enhet"
 
 msgid "Subdevice"
-msgstr "Subenhet "
+msgstr "Subenhet"
 
 #, java-format
 msgid "To disable this device, add {0} to advanced configuration and restart."
@@ -408,11 +408,11 @@ msgstr "Insticksmodulsuppdatering kräver installerad insticksmodulsversion {0} 
 
 #, java-format
 msgid "Plugin requires Jetty version {0} or higher"
-msgstr "Insticksmodueln kräver Jetty version {0} eller högre "
+msgstr "Insticksmodueln kräver Jetty version {0} eller högre"
 
 #, java-format
 msgid "Plugin requires Jetty version {0} or lower"
-msgstr "Insticksmodulen kräver Jetty version {0} eller lägre "
+msgstr "Insticksmodulen kräver Jetty version {0} eller lägre"
 
 #, java-format
 msgid "Plugin requires Java version {0} or lower"
@@ -453,7 +453,7 @@ msgid "Failed to download plugin from {0}"
 msgstr "Misslyckades med att hämta insticksmodul från {0}"
 
 msgid "Unable to connect to update server "
-msgstr "Det går inte att ansluta till uppdateringsservern"
+msgstr "Det går inte att ansluta till uppdateringsservern "
 
 #, java-format
 msgid "Update server {0} not found in address book"
@@ -722,7 +722,7 @@ msgid "Show all news"
 msgstr "Visa alla nyheter"
 
 msgid "Checking for plugin updates"
-msgstr "Sök efter uppdateringar för insticksmodul "
+msgstr "Sök efter uppdateringar för insticksmodul"
 
 msgid "Plugin update check failed"
 msgstr "Test av insticksmodulsuppdatering misslyckades"
@@ -759,7 +759,7 @@ msgid "Now"
 msgstr "Nu"
 
 msgid "Router restarted"
-msgstr ""
+msgstr "Routern startades om"
 
 msgid "none"
 msgstr "inga"
@@ -1076,7 +1076,7 @@ msgid "Added"
 msgstr "Tillagd"
 
 msgid "Removed"
-msgstr "Borttagen "
+msgstr "Borttagen"
 
 msgid "Add key"
 msgstr "La till nyckel"
@@ -1195,7 +1195,7 @@ msgid "Bandwidth"
 msgstr "Bandbredd"
 
 msgid "Home Page"
-msgstr "Startsida "
+msgstr "Startsida"
 
 msgid "Network"
 msgstr "Nätverk"
@@ -1327,7 +1327,7 @@ msgstr "ogiltig adress"
 
 #, java-format
 msgid "The hostname or IP {0} is not publicly routable"
-msgstr "Värdnamnet eller IP {0} är inte publikt routningsbart "
+msgstr "Värdnamnet eller IP {0} är inte publikt routningsbart"
 
 msgid "Updating bandwidth share percentage"
 msgstr "Uppdaterar bandbreddsprocent för delning"
@@ -1386,7 +1386,7 @@ msgid "Unsupported"
 msgstr "Stöds inte"
 
 msgid "IPs Banned Until Restart"
-msgstr "IP blockerade tills omstart "
+msgstr "IP blockerade tills omstart"
 
 msgid "IPv4 Addresses"
 msgstr "IPv4 adresser"
@@ -1420,7 +1420,7 @@ msgid "Reseed from URL"
 msgstr "Återdistribuering från webbadress"
 
 msgid "No URL specified. Please supply a valid reseed URL."
-msgstr "Ingen URL angiven. "
+msgstr "Inga URL angivna. Ange en giltig reseed-URL."
 
 msgid "Reseed in progress, check summary bar for status"
 msgstr "Återsådd pågår, kontrollera översiktsfältet för status"
@@ -1432,7 +1432,7 @@ msgid "Reseed from file"
 msgstr "Återdistribuering från fil"
 
 msgid "No file specified. Please select a valid .zip or .su3 file to reseed from."
-msgstr "Ingen fil specificerad. "
+msgstr "Inga filer specificerade. Välj en giltig .zip- eller .su3-fil för att reseeda från."
 
 msgid "Reseed from file failed"
 msgstr "Återdistribuering från fil misslyckades"
@@ -1514,7 +1514,7 @@ msgid "Refresh disabled"
 msgstr "Uppdatering inaktiverad"
 
 msgid "Refresh interval changed"
-msgstr "Uppdateringsintervall ändrat "
+msgstr "Uppdateringsintervall ändrat"
 
 msgid "Refresh interval must be a number"
 msgstr "Uppdateringsintervallet måste vara siffror"
@@ -1535,7 +1535,7 @@ msgid "Minimal summary bar default restored."
 msgstr "Minimal översiktsfältets standard återställd."
 
 msgid "Order must be an integer"
-msgstr "Ordningen måste vara ett heltal "
+msgstr "Ordningen måste vara ett heltal"
 
 msgid "No section selected"
 msgstr "Ingen sektion vald"
@@ -1547,7 +1547,7 @@ msgid "Moved"
 msgstr "Flyttad"
 
 msgid "Saved order of sections."
-msgstr "Sparar ordningen på valen "
+msgstr "Sparar ordningen på valen."
 
 #. the count isn't really correct anyway, since we don't check for actual changes
 #. addFormNotice("Updated settings for " + updated + " pools.");
@@ -1801,7 +1801,7 @@ msgid "{0} for {1}"
 msgstr "{0} för {1}"
 
 msgid "Nothing to display - no stat specified!"
-msgstr ""
+msgstr "Inget att visa - ingen statistik angiven!"
 
 #, java-format
 msgid "ending {0} ago"
@@ -1817,7 +1817,7 @@ msgid "Smaller"
 msgstr "Mindre"
 
 msgid "Taller"
-msgstr "Längre "
+msgstr "Längre"
 
 msgid "Shorter"
 msgstr "Kortare"
@@ -1847,10 +1847,10 @@ msgid "plot events"
 msgstr "diagramhändelser"
 
 msgid "Hide Legend"
-msgstr ""
+msgstr "Dölj legend"
 
 msgid "Show Legend"
-msgstr ""
+msgstr "Visa legend"
 
 msgid "Configure Graph Display"
 msgstr "Konfigurera diagramvisning"
@@ -2003,7 +2003,7 @@ msgid "Configure Bandwidth"
 msgstr "Konfigurera bandbredd"
 
 msgid "I2P Bandwidth Configuration"
-msgstr "I2P-bandbreddsinställningar "
+msgstr "I2P-bandbreddsinställningar"
 
 #. FIXME wasn't escaped
 msgid "Configure UI"
@@ -2195,7 +2195,7 @@ msgid "Tor-focused Search Engine"
 msgstr "Tor-fokuserad sökmotor"
 
 msgid "Pinterest Image Search Engine"
-msgstr ""
+msgstr "Pinterest Bildsökmotor"
 
 msgid "Clearnet BitTorrent DHT search engine"
 msgstr "Clearnet BitTorrent DHT sökmotor"
@@ -2566,13 +2566,13 @@ msgid "Congestion Cap"
 msgstr "Trängseltak"
 
 msgid "Moderate"
-msgstr ""
+msgstr "Måttlig"
 
 msgid "Severe"
-msgstr ""
+msgstr "Allvarlig"
 
 msgid "No transit tunnels"
-msgstr ""
+msgstr "Inga transittunnlar"
 
 msgid "Available CPU Cores"
 msgstr "Tillgängliga CPU-kärnor"
@@ -2694,7 +2694,7 @@ msgid "File location"
 msgstr "Filposition"
 
 msgid "Refresh interval (seconds)"
-msgstr ""
+msgstr "Uppdateringsintervall (sekunder)"
 
 msgid "File not found"
 msgstr "Fil inte funnen"
@@ -2740,7 +2740,7 @@ msgid "Sybil Analysis"
 msgstr "Sybilanalys"
 
 msgid "Router Map"
-msgstr ""
+msgstr "Routernyktert"
 
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "Avslöja aldrig din routeridentitet för någon, eftersom den är unikt länkad till din IP-adress i nätverksdatabasen."
@@ -2874,7 +2874,7 @@ msgid "Transports"
 msgstr "Transporter"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Okänd"
 
 msgid "Initializing"
 msgstr "Initiering"
@@ -3548,7 +3548,7 @@ msgid "latency"
 msgstr "latens"
 
 msgid "Is the peer responding to tests in a timely fashion? To configure the timeout value: <code>router.peerTestTimeout={n}</code> (value is milliseconds, default 1000ms)"
-msgstr "Reagerar kamraten på tester i tid? "
+msgstr "Svarar parten på tester i rätt tid? För att konfigurera timeout-värdet: <code>router.peerTestTimeout={n}</code> (värde i millisekunder, standard 1000ms)"
 
 msgid "capacity"
 msgstr "kapacitet"
@@ -3702,7 +3702,7 @@ msgid "Service Tunnels"
 msgstr "Servicetunnlar"
 
 msgid "News &amp; Updates"
-msgstr "Nyheter &amp; uppdateringar "
+msgstr "Nyheter &amp; uppdateringar"
 
 msgid "Advanced Links"
 msgstr "Avancerade länkar"
@@ -3859,7 +3859,7 @@ msgstr "Granska möjliga sybils i nätverksdatabasen"
 
 #, java-format
 msgid "Your Local Identity [{0}] is your unique I2P router identity, similar to an IP address but tailored to I2P. "
-msgstr "Din lokala identitet [{0}] är din unika I2P-routeridentitet, liknar en IP-adress men skräddarsydd för I2P."
+msgstr "Din lokala identitet [{0}] är din unika I2P-routeridentitet, liknar en IP-adress men skräddarsydd för I2P. "
 
 msgid "Never disclose this to anyone, as it can reveal your real world IP."
 msgstr "Avslöja aldrig detta för någon, eftersom det kan avslöja din riktiga IP-adress."
@@ -3868,7 +3868,7 @@ msgid "How long we've been running for this session"
 msgstr "Hur länge vi har kört för denna session"
 
 msgid "The version of the I2P software we are running"
-msgstr "Den version av I2P vi kör "
+msgstr "Den version av I2P vi kör"
 
 msgid "Difference between network-synced time and local time"
 msgstr "Skillnaden mellan nätverkssynkroniserad tid och lokal tid"
@@ -3880,7 +3880,7 @@ msgid "Memory"
 msgstr "Minne"
 
 msgid "Floodfill enabled"
-msgstr ""
+msgstr "Floodfill aktiverad"
 
 msgid "See more information on the wiki"
 msgstr "Se mer information på wikin"
@@ -3889,7 +3889,7 @@ msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Varning: ECDSA inte tillgänglig. Uppdatera Java eller OS"
 
 msgid "Configure I2P Updates"
-msgstr "Konfigurera I2P-uppdateringar "
+msgstr "Konfigurera I2P-uppdateringar"
 
 msgid "Total peers in NetDb"
 msgstr "Totalt peers i NetDb"
@@ -3898,7 +3898,7 @@ msgid "Peers we've been talking to in the last few minutes/last hour"
 msgstr "Noder vi har pratat med de senaste minuterna/timmen"
 
 msgid "The number of peers available for building client tunnels"
-msgstr "Antal noder tillgängliga för att bygga nodtunnlar "
+msgstr "Antal noder tillgängliga för att bygga nodtunnlar"
 
 msgid "The number of peers available for building exploratory tunnels"
 msgstr "Antal noder tillgängliga för att bygga undersökande tunnlar"
@@ -4015,7 +4015,7 @@ msgid "Average delay before scheduled jobs are run"
 msgstr "Genomsnittlig fördröjning innan schemalagda jobb körs"
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
-msgstr "Indikerar hur snabbt utåtgåendemeddelanden till andra I2P-routers sänds "
+msgstr "Indikerar hur snabbt utåtgåendemeddelanden till andra I2P-routers sänds"
 
 msgid "Average time to test a peer (successful / total)"
 msgstr "Genomsnittlig tid för att testa en kamrat (framgångsrik / totalt)"
@@ -4045,10 +4045,10 @@ msgid "Router or network performance is impeding the building of transit tunnels
 msgstr "Router- eller nätverksprestanda hindrar byggandet av deltagande tunnlar"
 
 msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr ""
+msgstr "Routern värd för det konfigurerade maxantalet transittunnlar för närvarande"
 
 msgid "Router is currently using the configured maximum share bandwidth"
-msgstr ""
+msgstr "Routern använder för närvarande det konfigurerade maxbandbreddsdelen"
 
 msgid "Router is ready to build participating tunnels"
 msgstr "Router är redo att bygga deltagande tunnlar"
@@ -4109,13 +4109,13 @@ msgid "I2PSnark"
 msgstr "I2PSnark"
 
 msgid "Messenger"
-msgstr ""
+msgstr "Messenger"
 
 msgid "i2pchat"
-msgstr ""
+msgstr "i2pchat"
 
 msgid "I2PChat"
-msgstr ""
+msgstr "I2PChat"
 
 msgid "Server"
 msgstr "Server"
@@ -4231,7 +4231,7 @@ msgid "Review current bans"
 msgstr "Granska nuvarande förbud"
 
 msgid "Delete Sybil Blocklist"
-msgstr ""
+msgstr "Ta bort Sybil-blocklistan"
 
 msgid "Floodfill Summary"
 msgstr "Sammanfattning av översvämning"
@@ -4455,7 +4455,7 @@ msgstr "Sista butiken lyckad"
 msgid "Last store failed"
 msgstr "Sista butiken misslyckades"
 
-msgid "Distance to "
+msgid "Distance to"
 msgstr "Avstånd till"
 
 msgid "Distance for"
@@ -4767,7 +4767,7 @@ msgid "Certificates"
 msgstr "Certifikat"
 
 msgid "configure bandwidth"
-msgstr "konfigurera bandbredd "
+msgstr "konfigurera bandbredd"
 
 msgid "Bandwidth Allocation"
 msgstr "Bandbreddstilldelning"
@@ -4816,10 +4816,10 @@ msgid "I2P requires at least 12KBps to enable sharing. "
 msgstr "I2P kräver åtminstone 12KBps att aktivera delning. "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
-msgstr "Snälla slå på delning (deltagande i andras tunnlar) genom att konfigurera mer bandbredd."
+msgstr "Snälla slå på delning (deltagande i andras tunnlar) genom att konfigurera mer bandbredd. "
 
 msgid "It improves your anonymity by creating cover traffic, and helps the network. "
-msgstr "Det förbättrar din anonymitet genom att skapa täckningstrafik och hjälper nätverket."
+msgstr "Det förbättrar din anonymitet genom att skapa täckningstrafik och hjälper nätverket. "
 
 #, java-format
 msgid "You have configured I2P to share {0} KBps {1}."
@@ -5091,7 +5091,7 @@ msgid "GZIP Compression"
 msgstr "GZIP-komprimering"
 
 msgid "Default log level"
-msgstr "Standard loggningsnivå  "
+msgstr "Standard loggningsnivå"
 
 msgid "(DEBUG and INFO are not recommended defaults, as they will drastically slow down your router)"
 msgstr "(FELSÖK och INFO rekommenderas inte som standard, eftersom de  drastiskt kommer att sakta ner din router)"
@@ -5154,7 +5154,7 @@ msgid "Enable UPnP to open firewall ports"
 msgstr "Aktivera UPnP för att öppna brandväggsportar"
 
 msgid "This mode enhances anonymity by preventing correlation between public IP address changes and your router identity. Both your router identity and UDP port will be changed."
-msgstr "Det här läget förbättrar anonymiteten genom att förhindra korrelation mellan offentliga IP-adressändringar och din routeridentitet. "
+msgstr "Det här läget förbättrar anonymiteten genom att förhindra korrelation mellan offentliga IP-adressändringar och din routeridentitet."
 
 msgid "Laptop mode"
 msgstr "Läge för bärbar dator"
@@ -5326,7 +5326,7 @@ msgid "Use SSL only"
 msgstr "Använd enbart SSL"
 
 msgid "Use non-SSL only"
-msgstr "Använd enbart icke-SSL "
+msgstr "Använd enbart icke-SSL"
 
 msgid "Use Proxy for HTTPS Reseed Hosts"
 msgstr "Använd proxy för HTTPS Reseed-värdar"
@@ -5344,7 +5344,7 @@ msgid "SOCKS 5"
 msgstr "SOCKS 5"
 
 msgid "This option will use I2P's HTTP outproxy to reseed, or the Orchid plugin if configured. Note: this option will not work when you have 0 known peers."
-msgstr "Det här alternativet kommer att använda I2P:s HTTP-outproxy för att återinställa, eller Orchid-plugin om den är konfigurerad. "
+msgstr "Det här alternativet kommer att använda I2P:s HTTP-utgång för återanslutning, eller Orchid-plugin om den är konfigurerad. Observera att det inte fungerar om du har 0 kända peerar."
 
 msgid "I2P Outproxy"
 msgstr "I2P Outproxy"
@@ -5444,7 +5444,7 @@ msgid "config sidebar"
 msgstr "konfigurera sidofältet"
 
 msgid "Refresh Interval"
-msgstr "Uppdateringsintervall "
+msgstr "Uppdateringsintervall"
 
 msgid "seconds"
 msgstr "sekunder"
@@ -5613,7 +5613,7 @@ msgid "Your browser does not support iFrames."
 msgstr "Din webbläsare stödjer inte iFrames."
 
 msgid "Click here to continue."
-msgstr "Klicka för att fortsätta "
+msgstr "Klicka för att fortsätta."
 
 msgid "Internal Error"
 msgstr "Internt fel"
@@ -5653,7 +5653,7 @@ msgid "Event Log"
 msgstr "Händelselogg"
 
 msgid "graph"
-msgstr ""
+msgstr "graf"
 
 msgid "Performance Graph"
 msgstr "Prestandadiagram"
@@ -5791,10 +5791,10 @@ msgid "When set to true, the router will change its identity and UDP port when t
 msgstr "När inställningen är satt till true kommer routern att ändra sin identitet och UDP-port när routern startas om och sedan radera nyckeln från router.config för att förhindra ytterligare ändringar. [Standard är false]"
 
 msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr ""
+msgstr "När inställt på falskt kommer routern inte att begränsa tunnelbyggnadsförfrågningar från andra routrar och bör användas med försiktighet. [Standard är sant, omstart krävs]"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr ""
+msgstr "När inställt på falskt kommer routern inte att blockera tunnelbyggnadsförfrågningar från långsammare eller otillgängliga routrar med äldre versioner. [Standard är sant, omstart krävs]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "När konfigurerad, sätter detta en hård begränsning för antalet tunnlar som routern får bygga samtidigt. Som standard använder routern genomsnittlig byggtid och nuvarande utgående bandbredd för att bestämma den optimala bygghastigheten. [Omstart krävs]"
@@ -5905,7 +5905,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Denna inställning, när den är inställd på true, visar länkar för <i>Sidor av intresse</i> på <a href=/sitemap>kartsidan</a>. [Standardvärdet är false]"
 
 msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr ""
+msgstr "Denna inställning tillåter en anpassad textprefix för sidotiteln på routerkonsolssidor, vilket kan vara användbart när du har flera konsoler öppna i webbläsartabbar och vill ha ett enkelt sätt att skilja dem åt."
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Denna inställning tillåter konfiguration av alternativa NTP-servrar som krävs för att se till att din router behåller korrekt klocktid. [Standardvärden är 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
@@ -5959,7 +5959,7 @@ msgid "Multiple firewall/routers in the internet connection path"
 msgstr "Flera brandväggar/routrar i Internet-anslutningens väg"
 
 msgid "UPnP device change, reset, or address change"
-msgstr "UPnP-enhet ändrades, återställ eller ändra adress "
+msgstr "UPnP-enhet ändrades, återställ eller ändra adress"
 
 msgid "UPnP may be enabled or disabled on the Network Configuration page, but a change requires a router restart to take effect."
 msgstr "UPnP kan aktiveras eller inaktiveras på nätverkskonfigurationssidan, men en ändring kräver en omstart av routern för att träda i kraft."
@@ -7343,7 +7343,7 @@ msgid "Configure router logging options"
 msgstr "Konfigurera routerloggningsalternativ"
 
 msgid "Filter Router log output"
-msgstr ""
+msgstr "Filtrera Routerns loggutdata"
 
 msgid "Service (Wrapper) Logs"
 msgstr "Service (Wrapper) loggar"
@@ -7352,10 +7352,10 @@ msgid "network database"
 msgstr "nätverksdatabasen"
 
 msgid "network database router map"
-msgstr ""
+msgstr "nätverksdatabasrouternyktert"
 
 msgid "Network Database Router Map"
-msgstr ""
+msgstr "Nätverksdatabasens Routernyktert"
 
 msgid "News"
 msgstr "Nyheter"
@@ -7470,10 +7470,10 @@ msgid "Statistics"
 msgstr "Statistik"
 
 msgid "Current console and webapp translation report"
-msgstr ""
+msgstr "Aktuell rapport över konsol- och webbtjänstöversättning"
 
 msgid "Translation Status"
-msgstr ""
+msgstr "Översättningsstatus"
 
 msgid "View active tunnels"
 msgstr "Visa aktiva tunnlar"
@@ -7596,10 +7596,10 @@ msgid "Local Tunnels"
 msgstr "Lokala tunnlar"
 
 msgid "Toggle Tunnel Ids"
-msgstr ""
+msgstr "Växla Tunnel-ID:er"
 
 msgid "Toggle Tunnels"
-msgstr ""
+msgstr "Växla Tunnlar"
 
 msgid "Peer Profile"
 msgstr "Nodprofil"

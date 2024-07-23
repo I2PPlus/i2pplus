@@ -756,7 +756,7 @@ msgid "Now"
 msgstr "Bây giờ"
 
 msgid "Router restarted"
-msgstr ""
+msgstr "Router đã khởi động lại"
 
 msgid "none"
 msgstr "không có"
@@ -1839,10 +1839,10 @@ msgid "plot events"
 msgstr "các sự kiện cốt truyện"
 
 msgid "Hide Legend"
-msgstr ""
+msgstr "Ẩn Légende"
 
 msgid "Show Legend"
-msgstr ""
+msgstr "Hiện Légende"
 
 msgid "Configure Graph Display"
 msgstr "Định cấu hình hiển thị đồ thị"
@@ -2187,7 +2187,7 @@ msgid "Tor-focused Search Engine"
 msgstr "Công cụ tìm kiếm tập trung vào Tor"
 
 msgid "Pinterest Image Search Engine"
-msgstr ""
+msgstr "Máy tìm hình ảnh Pinterest"
 
 msgid "Clearnet BitTorrent DHT search engine"
 msgstr "Công cụ tìm kiếm Clearnet BitTorrent DHT"
@@ -2558,13 +2558,13 @@ msgid "Congestion Cap"
 msgstr "Mũ tắc nghẽn"
 
 msgid "Moderate"
-msgstr ""
+msgstr "Thường"
 
 msgid "Severe"
-msgstr ""
+msgstr "Nguy kịch"
 
 msgid "No transit tunnels"
-msgstr ""
+msgstr "Không có đường đào thông qua"
 
 msgid "Available CPU Cores"
 msgstr "Lõi CPU có sẵn"
@@ -2686,7 +2686,7 @@ msgid "File location"
 msgstr "Vị trí tệp"
 
 msgid "Refresh interval (seconds)"
-msgstr ""
+msgstr "Khoảng thời gian làm mới (giây)"
 
 msgid "File not found"
 msgstr "Không tìm thấy tập tin"
@@ -2732,7 +2732,7 @@ msgid "Sybil Analysis"
 msgstr "Phân tích âm tiết"
 
 msgid "Router Map"
-msgstr ""
+msgstr "Bản đồ Router"
 
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "Không bao giờ tiết lộ danh tính bộ định tuyến của bạn cho bất kỳ ai vì nó được liên kết duy nhất với địa chỉ IP của bạn trong cơ sở dữ liệu mạng."
@@ -2866,7 +2866,7 @@ msgid "Transports"
 msgstr "Giao thông"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Không rõ"
 
 msgid "Initializing"
 msgstr "Đang khởi tạo"
@@ -3862,7 +3862,7 @@ msgid "Memory"
 msgstr "Bộ nhớ"
 
 msgid "Floodfill enabled"
-msgstr ""
+msgstr "Floodfill được kích hoạt"
 
 msgid "See more information on the wiki"
 msgstr "Xem thêm thông tin trên wiki"
@@ -5635,7 +5635,7 @@ msgid "Event Log"
 msgstr "Nhật ký sự kiện"
 
 msgid "graph"
-msgstr ""
+msgstr "Biểu đồ"
 
 msgid "Performance Graph"
 msgstr "Biểu đồ hiệu suất"
@@ -7325,7 +7325,7 @@ msgid "Configure router logging options"
 msgstr "Cấu hình tùy chọn ghi nhật ký bộ định tuyến"
 
 msgid "Filter Router log output"
-msgstr ""
+msgstr "Lọc kết quả nhật ký Router"
 
 msgid "Service (Wrapper) Logs"
 msgstr "Nhật ký dịch vụ (Trình bao bọc)"
@@ -7334,10 +7334,10 @@ msgid "network database"
 msgstr "cơ sở dữ liệu mạng"
 
 msgid "network database router map"
-msgstr ""
+msgstr "Bản đồ router cơ sở dữ liệu mạng"
 
 msgid "Network Database Router Map"
-msgstr ""
+msgstr "Bản đồ Router Cơ sở dữ liệu mạng"
 
 msgid "News"
 msgstr "Tin tức"
@@ -7452,10 +7452,10 @@ msgid "Statistics"
 msgstr "Số liệu thống kê"
 
 msgid "Current console and webapp translation report"
-msgstr ""
+msgstr "Báo cáo dịch ngôn ngữ của trình điều khiển hiện tại và ứng dụng web"
 
 msgid "Translation Status"
-msgstr ""
+msgstr "Trạng thái dịch"
 
 msgid "View active tunnels"
 msgstr "Xem các đường hầm đang hoạt động"
@@ -7578,10 +7578,10 @@ msgid "Local Tunnels"
 msgstr "Đường hầm địa phương"
 
 msgid "Toggle Tunnel Ids"
-msgstr ""
+msgstr "Bật/Tắt ID đường đào"
 
 msgid "Toggle Tunnels"
-msgstr ""
+msgstr "Bật/Tắt Đường đào"
 
 msgid "Peer Profile"
 msgstr "Hồ sơ ngang hàng"
