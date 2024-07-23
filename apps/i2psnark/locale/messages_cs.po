@@ -351,7 +351,7 @@ msgstr "I2p+ I2PSnark samostatná verze {0} spuštěna"
 
 #, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
-msgstr ""
+msgstr "Omezení šířky pásma za nahrávání je {0} KB/s s maximálním počtem současných súparů {1}."
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"

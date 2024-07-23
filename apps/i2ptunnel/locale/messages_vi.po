@@ -996,7 +996,7 @@ msgid "I2P Server Tunnels"
 msgstr "Đường hầm máy chủ I2P"
 
 msgid "Helper"
-msgstr ""
+msgstr "Trợ lý"
 
 msgid "Type"
 msgstr "Loại"

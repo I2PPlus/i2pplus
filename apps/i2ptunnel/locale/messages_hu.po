@@ -1001,7 +1001,7 @@ msgid "I2P Server Tunnels"
 msgstr "I2P szerveralagutak"
 
 msgid "Helper"
-msgstr ""
+msgstr "Segítő"
 
 msgid "Type"
 msgstr "Típus"

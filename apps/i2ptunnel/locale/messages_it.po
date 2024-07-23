@@ -1001,7 +1001,7 @@ msgid "I2P Server Tunnels"
 msgstr "Tunnel server I2P"
 
 msgid "Helper"
-msgstr ""
+msgstr "Aiuto"
 
 msgid "Type"
 msgstr "Tipo"
@@ -1150,7 +1150,7 @@ msgstr "Stringhe di autenticazione avanzata"
 
 #, java-format
 msgid "Authentication for removing host {0}"
-msgstr ""
+msgstr "Autenticazione per rimuovere lʼhost {0}"
 
 msgid "Authentication for changing name"
 msgstr "Autenticazione per modifica nome"

@@ -986,13 +986,13 @@ msgid "Helper"
 msgstr "Abi"
 
 msgid "Type"
-msgstr ""
+msgstr "Tüüp"
 
 msgid "Points at"
 msgstr "Näitab"
 
 msgid "Preview"
-msgstr ""
+msgstr "Eelvaade"
 
 msgid "Status"
 msgstr "Olek"
@@ -1058,7 +1058,7 @@ msgid "New server tunnel"
 msgstr "Uus serveri tunnel"
 
 msgid "Standard"
-msgstr ""
+msgstr "Standardne"
 
 msgid "Create"
 msgstr "Loo"
@@ -1236,10 +1236,10 @@ msgid "Server"
 msgstr "Server"
 
 msgid "SSL Activation"
-msgstr ""
+msgstr "SSL käivitamine"
 
 msgid "I2P webserver (eepsite)"
-msgstr ""
+msgstr "I2P veebiserver (eepsite)"
 
 msgid "Disable SSL"
 msgstr "Keela SSL"
@@ -1420,7 +1420,7 @@ msgid "The I2P router can automatically start this tunnel for you when the route
 msgstr "I2P rutiin saab automaatselt selle tunneli käivitada rutiini käivitamisel."
 
 msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occassionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
-msgstr ""
+msgstr "See võib olla kasulik tihti kasutatavate tunnelite (eriti serveritunnelite) jaoks, kuid haruldaste kasutusega tunnelite puhul tähendaks see, et I2P marsruuter loob ja hoitakse tarbetuid tuneleid."
 
 msgid "The wizard has now collected enough information to create your tunnel."
 msgstr "Juurdejuhendaja on nüüd kogunud piisavalt teavet, et luua sinu tunnel."

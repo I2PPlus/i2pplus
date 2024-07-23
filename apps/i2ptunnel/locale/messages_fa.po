@@ -1001,7 +1001,7 @@ msgid "I2P Server Tunnels"
 msgstr "تونل های سرور I2P"
 
 msgid "Helper"
-msgstr ""
+msgstr "کمک‌کننده"
 
 msgid "Type"
 msgstr "نوغ"

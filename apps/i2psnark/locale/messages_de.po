@@ -1238,7 +1238,7 @@ msgid "Ends With"
 msgstr "Endet mit"
 
 msgid "Enabled by Default"
-msgstr ""
+msgstr "Standardmäßig aktiviert"
 
 msgid "Add"
 msgstr "Hinzufügen"

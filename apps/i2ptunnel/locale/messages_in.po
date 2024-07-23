@@ -996,7 +996,7 @@ msgid "I2P Server Tunnels"
 msgstr "Terowongan Server I2P"
 
 msgid "Helper"
-msgstr ""
+msgstr "Pembantu"
 
 msgid "Type"
 msgstr "Tipe"

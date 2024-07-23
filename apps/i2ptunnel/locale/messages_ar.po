@@ -1021,7 +1021,7 @@ msgid "I2P Server Tunnels"
 msgstr "أنفاق خادم I2P"
 
 msgid "Helper"
-msgstr ""
+msgstr "مساعد"
 
 msgid "Type"
 msgstr "نوع"

@@ -39,10 +39,10 @@ msgstr "Začetek ponovnega semenjenja"
 #, java-format
 msgid "Acquired {0} router info from reseed hosts"
 msgid_plural "Acquired {0} router infos from reseed hosts"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Obdržali smo {0} informacijo o zaganjalniku iz ponovnega zasijanja"
+msgstr[1] "Obdržali smo {0} informacijo o zaganjalniku iz ponovnega zasijanja"
+msgstr[2] "Obdržali smo {0} informacij o zaganjalnikih iz ponovnega zasijanja"
+msgstr[3] "Obdržali smo {0} informacij o zaganjalnikih iz ponovnega zasijanja"
 
 #, java-format
 msgid "Acquired only 1 router info from reseed hosts"
@@ -1413,10 +1413,10 @@ msgstr "Ponovno semenjenje iz datoteke je spodletelo"
 #, java-format
 msgid "Reseed successful, loaded {0} router info from file."
 msgid_plural "Reseed successful, loaded {0} router infos from file."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Obdržali smo {0} informacijo o zaganjalniku iz ponovnega zasijanja"
+msgstr[1] "Obdržali smo {0} informacijo o zaganjalniku iz ponovnega zasijanja"
+msgstr[2] "Obdržali smo {0} informacij o zaganjalnikih iz ponovnega zasijanja"
+msgstr[3] "Obdržali smo {0} informacij o zaganjalnikih iz ponovnega zasijanja"
 
 msgid "Reset URL list"
 msgstr "Ponastavi seznam URL-jev"
@@ -6167,7 +6167,7 @@ msgid "B33"
 msgstr "B33"
 
 msgid "An address containing an encrypted LeaseSet is informally referred to as a b33 address, an extension of a base32 address with the host's public key and signature type encoded into the address instead of a lookup hash. This address type is required for blinded Leasesets. More information: <a href=https://geti2p.net/spec/b32encrypted class='sitelink external' target=_blank rel=noreferrer>B33 Specification</a>"
-msgstr ""
+msgstr "Naslov, ki vsebuje šifriran LeaseSet, se neformalno imenuje b33 naslov, kar je razširitev base32 naslova, kjer je v naslov vgrajen gostiteljev javni ključ ter vrsta podpisa namesto preverjanja z iskalnim hashem. Ta vrsta naslovov je obvezna za slepe LeaseSet-e. Za več informacij glejte: <br><a rel=\"noopener noreferrer\" class=\"sitelink external\" href=https://geti2p.net/spec/b32encrypted target=_blank>Specifikacijo B33</a>"
 
 msgid "BOB"
 msgstr "BOB"

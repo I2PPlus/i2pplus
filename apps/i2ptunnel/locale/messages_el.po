@@ -631,7 +631,7 @@ msgid "SSL Wizard"
 msgstr "Φοιτητής SSL"
 
 msgid "Note: In order to enable QR code generation or registration authentication, configure the Website Hostname field (for websites) or the Name field (everything else) above with an .i2p suffixed hostname e.g. mynewserver.i2p"
-msgstr ""
+msgstr "Σημείωση: Για να ενεργοποιήσετε τη δημιουργία κωδικού QR ή την αυθεντικότητα εγγραφής, ρυθμίστε το πεδίο Ονομασία Ιστοσελίδας (για ιστότοπους) ή το πεδίο Όνομα (για όλα τα υπόλοιπα) παραπάνω με έναν υποδομούμενο ονομαστικό τελείων .i2p, όπως mynewserver.i2p."
 
 msgid "Absolute path to Private Key File (will be created if it does not exist)"
 msgstr "Απόλυτη διεύθυνση στο αρχείο Ιδιωτικής Κλειδιάς (θα δημιουργηθεί αν δεν υπάρχει)"
@@ -1004,13 +1004,13 @@ msgid "Helper"
 msgstr "Βοηθός"
 
 msgid "Type"
-msgstr ""
+msgstr "Τύπος"
 
 msgid "Points at"
 msgstr "Δείχνει προς"
 
 msgid "Preview"
-msgstr ""
+msgstr "Προεπισκόπηση"
 
 msgid "Status"
 msgstr "Κατάσταση"
@@ -1130,7 +1130,7 @@ msgid "To enable registration verification, edit tunnel and set name (or website
 msgstr "Για να ενεργοποιήσετε την επιβεβαίωση εγγραφής, επεξεργαστείτε τον διάδρομο και ρυθμίστε το όνομα (ή το όνομα ιστοσελίδας) σε ένα έγκυρο όνομα διακομιστή που τελειώνει με '.i2p'"
 
 msgid "To enable registration verification, edit tunnel and set name to a valid host name ending in '.i2p'"
-msgstr ""
+msgstr "Για να ενεργοποιήσετε την επαλήθευση εγγραφής, επεξεργαστείτε τον τούνελ και ορίστε το όνομα σε ένα έγκυρο ονομαστικό που τελειώνει με .i2p"
 
 msgid "Destination signing key is not available. Start the tunnel."
 msgstr "Ο κλειδίς υπογραφής προορισμού δεν είναι διαθέσιμος. Αρχίστε τον διάδρομο."
@@ -1399,7 +1399,7 @@ msgid "Choose a name and description for your tunnel."
 msgstr "Επιλέξτε ένα όνομα και μια περιγραφή για τον διάδρομο σας."
 
 msgid "These can be anything you want - they are just for ease of identifying the tunnel in the routerconsole."
-msgstr ""
+msgstr "Μπορούν να είναι οτιδήποτε επιθυμείτε - χρησιμεύουν απλώς για να διευκολύνουν την ταυτοποίηση του τούνελ στην κονσόλα του διασύνδεσης."
 
 msgid "If you know of any outproxies for this type of tunnel (either HTTP or SOCKS), fill them in below."
 msgstr "Αν γνωρίζετε οποιαδήποτε outproxies για αυτό το είδος διαδρόμου (είτε HTTP είτε SOCKS), συμπληρώστε τα παρακάτω."

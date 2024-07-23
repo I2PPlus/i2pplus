@@ -1006,7 +1006,7 @@ msgid "I2P Server Tunnels"
 msgstr "Туннели I2P-серверов"
 
 msgid "Helper"
-msgstr ""
+msgstr "Помощник"
 
 msgid "Type"
 msgstr "Тип"

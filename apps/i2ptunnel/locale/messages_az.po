@@ -559,13 +559,13 @@ msgid "List of helper URLs providing jump links when a host is not found in your
 msgstr "Ünvan kitabınızda mənzil tapılmadığında atış bağlantıları təqdim edən köməkçi URL siyahısı"
 
 msgid "Custom options"
-msgstr ""
+msgstr "Özünəməlilər"
 
 msgid "Advanced tunnel, streaming, and I2CP options"
-msgstr ""
+msgstr "İncəsənətli tunellər, akış və I2CP seçimləri"
 
 msgid "New Server Configuration"
-msgstr ""
+msgstr "Yeni server təyinatı"
 
 msgid "Hostname"
 msgstr "Ünvan adı"
