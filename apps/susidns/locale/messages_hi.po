@@ -1,0 +1,595 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+#
+msgid ""
+msgstr ""
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
+
+#, java-format
+msgid "Host name \"{0}\" contains illegal character {1}"
+msgstr "होस्ट नाम \"{0}\" में अवैध वर्ण {1} है"
+
+#, java-format
+msgid "Host name cannot start with \"{0}\""
+msgstr "होस्ट नाम \"{0}\" के साथ शुरू नहीं हो सकता"
+
+#, java-format
+msgid "Host name cannot end with \"{0}\""
+msgstr "होस्ट नाम \"{0}\" के साथ समाप्त नहीं हो सकता"
+
+#, java-format
+msgid "Host name cannot contain \"{0}\""
+msgstr "होस्ट नाम में \"{0}\" शामिल नहीं हो सकता"
+
+#, java-format
+msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
+msgstr "होस्ट नाम \"{0}\" को ASCII में परिवर्तित करने की आवश्यकता है, लेकिन परिवर्तन के लिए लाइब्रेरी इस JVM में उपलब्ध नहीं है"
+
+msgid "None"
+msgstr "कोई"
+
+msgid "Hashcash"
+msgstr "Hashcash"
+
+msgid "Hidden"
+msgstr "छिपा"
+
+msgid "Signed"
+msgstr "अनुमानित"
+
+msgid "Key"
+msgstr "कुंजी"
+
+#, java-format
+msgid "Type {0}"
+msgstr "तरह {0}"
+
+msgid "DSA 1024 bit"
+msgstr "DSA 1024 बिट"
+
+msgid "Search for "
+msgid_plural "Search for "
+msgstr[0] "खोजें "
+msgstr[1] "खोजें "
+
+#, java-format
+msgid "Filtered list contains 1 entry."
+msgid_plural "Filtered list contains {0} entries."
+msgstr[0] "स्क्रीन की सूची में {0} प्रविष्टि है।"
+msgstr[1] "स्क्रीन की सूची में {0} प्रविष्टियाँ हैं।"
+
+#, java-format
+msgid "One result for: "
+msgid_plural "{0} results for: "
+msgstr[0] "{0} एक परिणाम है: "
+msgstr[1] "{0} परिणाम हैं: "
+
+#, java-format
+msgid "1 entry"
+msgid_plural "{0} entries"
+msgstr[0] "{0} प्रविष्टि"
+msgstr[1] "{0} प्रविष्टियाँ"
+
+msgid "Add"
+msgstr "जोड़ें"
+
+msgid "Replace"
+msgstr "बदलें"
+
+#, java-format
+msgid "Host name {0} is already in address book, unchanged."
+msgstr "होस्ट नाम {0} पहले से ही पत्रिका में है, अपरिवर्तित।"
+
+#, java-format
+msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
+msgstr "होस्ट नाम {0} पहले से ही पत्रिका में है, एक अलग गंतव्य के साथ। \"बदलें\" क्लिक करें जांचने के लिए।"
+
+msgid "Unable to resolve Base 32 address"
+msgstr "बेस 32 पता हल्ने में असमर्थ"
+
+msgid "Destination added for {0}."
+msgstr "{0} के लिए गंतव्य जोड़ा गया है।"
+
+#, java-format
+msgid "Destination changed for {0}."
+msgstr "{0} के लिए गंतव्य बदल दिया गया है।"
+
+msgid "Warning - host name does not end with \".i2p\""
+msgstr "चेतावनी - होस्ट नाम \".i2p\" से समाप्त नहीं होता है"
+
+msgid "Invalid Base 32 host name."
+msgstr "अमान्य बेस 32 होस्ट नाम।"
+
+msgid "Invalid Base 64 destination."
+msgstr "अमान्य बेस 64 गंतव्य।"
+
+#, java-format
+msgid "Invalid host name \"{0}\"."
+msgstr "अमान्य होस्ट नाम \"{0}\"।"
+
+msgid "Please enter a host name and destination"
+msgstr "कृपया एक होस्ट नाम और गंतव्य दर्ज करें"
+
+msgid "Delete Entry"
+msgstr "प्रविष्टि हटाएं"
+
+msgid "Delete Selected"
+msgstr "चुनी गई हटाएं"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "गंतव्य {0} हटा दिया गया।"
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "{0} गंतव्य हटा दिया गया।"
+msgstr[1] "{0} गंतव्य हटे गए।"
+
+msgid "No entries selected to delete."
+msgstr "हटाने के लिए कोई प्रविष्टि चुनी नहीं गई।"
+
+msgid "Add Alternate"
+msgstr "विकल्प जोड़ें"
+
+msgid "Address book saved."
+msgstr "पत्रिका सहेजा गया।"
+
+msgid "Browse away from this addressbook and return to see update."
+msgstr "इस पत्रिका से दौरा करें और अपडेट देखने के लिए वापस आएं।"
+
+msgid "ERROR: Could not write addressbook file."
+msgstr "त्रुटि: पत्रिका फ़ाइल लिखने में असमर्थ।"
+
+msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
+msgstr "अमान्य फॉर्म प्रस्तुति, शायद क्योंकि आपने अपने ब्राउज़र में \"वापस\" या \"रीलोड\" बटन का उपयोग किया। कृपया फिर से प्रस्तुत करें।"
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "अगर समस्या जारी रहती है, तो सुनिश्चित करें कि आपके ब्राउज़र में कुकीज़ सक्षम हैं।"
+
+msgid "Save"
+msgstr "सहेजें"
+
+msgid "Configuration saved."
+msgstr "निर्माण सहेजा गया।"
+
+msgid "Reload"
+msgstr "पुनः लोड करें"
+
+msgid "Configuration reloaded."
+msgstr "निर्माण पुनः लोड किया गया।"
+
+msgid "New domain"
+msgstr "नया डोमेन"
+
+msgid "Subscription log reloaded."
+msgstr "सब्सक्रिप्शन लॉग पुनः लोड किया गया।"
+
+#, java-format
+msgid "{0} address book in {1} database"
+msgstr "{0} पत्रिका {1} डेटाबेस में"
+
+#, java-format
+msgid "Host name {0} is not in the address book."
+msgstr "होस्ट नाम {0} पत्रिका में नहीं है।"
+
+msgid "Manually added via SusiDNS"
+msgstr "SusiDNS के माध्यम से हस्ताक्षरित जोड़ा गया"
+
+#, java-format
+msgid "Failed to add Destination for {0} to naming service {1}"
+msgstr "{0} के लिए गंतव्य को नामिंग सेवा {1} में जोड़ने में विफलता"
+
+#, java-format
+msgid "Failed to delete Destination for {0} from naming service {1}"
+msgstr "{0} के लिए गंतव्य को नामिंग सेवा {1} से हटाने में विफलता"
+
+msgid "Save Notes"
+msgstr "नोट्स सहेजें"
+
+msgid "You must enter a file"
+msgstr "आपको एक फ़ाइल दर्ज करना होगा"
+
+msgid "No entries found in file"
+msgstr "फ़ाइल में कोई प्रविष्टि नहीं मिली"
+
+#, java-format
+msgid "Imported from file {0}"
+msgstr "{0} फ़ाइल से आयात किया"
+
+msgid "Imported from file"
+msgstr "फ़ाइल से आयात किया"
+
+#, java-format
+msgid "Loaded {0} entry from file"
+msgid_plural "Loaded {0} entries from file"
+msgstr[0] "{0} प्रविष्टि फ़ाइल से लोड की गई"
+msgstr[1] "{0} प्रविष्टियाँ फ़ाइल से लोड की गईं"
+
+#, java-format
+msgid "Skipped {0} duplicate entry from file"
+msgid_plural "Skipped {0} duplicate entries from file"
+msgstr[0] "{0} दुप्लिकेट प्रविष्टि फ़ाइल से कूद गई"
+msgstr[1] "{0} दुप्लिकेट प्रविष्टियाँ फ़ाइल से कूद गईं"
+
+msgid "Import from file failed"
+msgstr "फ़ाइल से आयात विफल हो गया"
+
+msgid "Subscriptions saved."
+msgstr "सब्सक्रिप्शन सहेजे गए।"
+
+msgid "Update"
+msgstr "अपडेट"
+
+msgid "Attempting to update addressbook from subscription sources..."
+msgstr "सब्सक्रिप्शन स्रोतों से पत्रिका अपडेट करने की कोशिश की जा रही है..."
+
+msgid "Cannot update subscriptions: HTTP proxy is not running!"
+msgstr "सब्सक्रिप्शन अपडेट नहीं किया जा सकता: HTTP प्रोक्सी चल नहीं रहा है!"
+
+msgid "Subscriptions reloaded."
+msgstr "सब्सक्रिप्शन पुनः लोड किए गए।"
+
+msgid "Import"
+msgstr "आयात"
+
+msgid "address book"
+msgstr "पत्रिका"
+
+msgid "Router"
+msgstr "राउटर"
+
+msgid "Master"
+msgstr "मास्टर"
+
+msgid "Private"
+msgstr "निजी"
+
+msgid "Published"
+msgstr "प्रकाशित"
+
+msgid "Subscriptions"
+msgstr "सब्सक्रिप्शन"
+
+msgid "Configuration"
+msgstr "निर्माण"
+
+msgid "Help"
+msgstr "मदद"
+
+msgid "Book"
+msgstr "पुस्तक"
+
+msgid "No entries"
+msgstr "कोई प्रविष्टि नहीं"
+
+msgid "Export in hosts.txt format"
+msgstr "hosts.txt प्रारूप में निर्यात करें"
+
+msgid "Export results in hosts.txt format"
+msgstr "hosts.txt प्रारूप में परिणाम निर्यात करें"
+
+msgid "Export book in hosts.txt format"
+msgstr "hosts.txt प्रारूप में पत्रिका निर्यात करें"
+
+msgid "Search"
+msgstr "खोज"
+
+msgid "other"
+msgstr "अन्य"
+
+msgid "clear filter"
+msgstr "फ़िल्टर साफ़ करें"
+
+msgid "Info"
+msgstr "जानकारी"
+
+msgid "Hostname"
+msgstr "होस्टनाम"
+
+msgid "Link (b32)"
+msgstr "लिंक (b32)"
+
+msgid "Destination"
+msgstr "गंतव्य"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "पत्रिका से हटाने के लिए होस्ट चुनें"
+
+msgid "More information on this entry"
+msgstr "इस प्रविष्टि के बारे में अधिक जानकारी"
+
+msgid "Base 32 address"
+msgstr "बेस 32 पता"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr "पत्रिका में जोड़ने की विकल्प के साथ होस्ट पता साझा करने के लिए सहायक लिंक"
+
+msgid "Mark for deletion"
+msgstr "हटाने के लिए चिह्नित करें"
+
+msgid "Cancel"
+msgstr "रद्द करें"
+
+msgid "Add new destination"
+msgstr "नया गंतव्य जोड़ें"
+
+msgid "e.g. newdomain.i2p"
+msgstr "उदाहरण के लिए newdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64 या B32"
+
+msgid "Full destination or b32 address"
+msgstr "पूर्ण गंतव्य या b32 पता"
+
+msgid "Import from hosts.txt file"
+msgstr "hosts.txt फ़ाइल से आयात करें"
+
+msgid "Select file"
+msgstr "फ़ाइल चुनें"
+
+msgid "configuration"
+msgstr "निर्माण"
+
+msgid "File location"
+msgstr "फ़ाइल स्थान"
+
+msgid "Hints"
+msgstr "सुझाव"
+
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "यहाँ फ़ाइल और डायरेक्टरी पथ पत्रिका के कार्यालय डायरेक्टरी के सापेक्ष होते हैं, जो सामान्यतया ~/.i2p/addressbook/ (Linux) या %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows) होता है।"
+
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "यदि आप एक पत्रिका में लाइनों को हस्ताक्षरित जोड़ना चाहते हैं, तो उन्हें निजी या मास्टर पत्रिकाओं में जोड़ें।"
+
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "राउटर पत्रिका और प्रकाशित पत्रिका पत्रिका अनुप्रयोग द्वारा अपडेट की जाती हैं।"
+
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "जब आप अपनी पत्रिका प्रकाशित करते हैं, तो मास्टर और राउटर पत्रिकाओं से सभी गंतव्य वहाँ दिखाई देते हैं।"
+
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "निजी गंतव्यों के लिए निजी पत्रिका का उपयोग करें, ये प्रकाशित नहीं होते।"
+
+msgid "Options"
+msgstr "विकल्प"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "सब्सक्रिप्शन URLs की सूची रखने वाला फ़ाइल (बदलने की जरूरत नहीं)"
+
+msgid "Update interval in hours"
+msgstr "अपडेट अंतराल (घंटे में)"
+
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "आपका सार्वजनिक hosts.txt फ़ाइल (अपने वेबसर्वर दस्तावेज़ जड़ के भीतर मार्ग चुनें)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "आपका hosts.txt (बदलने की जरूरत नहीं)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "आपकी व्यक्तिगत पत्रिका, ये होस्ट प्रकाशित होंगे"
+
+msgid "Your private addressbook, it is never published"
+msgstr "आपकी निजी पत्रिका, यह कभी प्रकाशित नहीं होती"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "आपके eepProxy के लिए पोर्ट (बदलने की जरूरत नहीं)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "आपके eepProxy के लिए होस्टनाम (बदलने की जरूरत नहीं)"
+
+msgid "Whether to update the published addressbook"
+msgstr "प्रकाशित पत्रिका अपडेट करने का चयन"
+
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "एकत्रित सब्सक्रिप्शन URLs से एटैग्स हेडर रखने वाला फ़ाइल (बदलने की जरूरत नहीं)"
+
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "एकत्रित प्रत्येक सब्सक्रिप्शन URL के लिए संशोधन समय戳 रखने वाला फ़ाइल (बदलने की जरूरत नहीं)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "गतिविधि को लॉग करने के लिए फ़ाइल (चाहे तो /dev/null में बदलें)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr "उपयोग करने के लिए ओवरराइड थीम का नाम (डिफ़ॉल्ट के रूप में कंसोल-चुने गए थीम का होता है)"
+
+msgid "addressbook"
+msgstr "पत्रिका"
+
+msgid "Details"
+msgstr "विवरण"
+
+msgid "Address Helper"
+msgstr "पता सहायक"
+
+msgid "link"
+msgstr "लिंक"
+
+msgid "Encoded Name"
+msgstr "कोड किया गया नाम"
+
+msgid "Base 32 Address"
+msgstr "बेस 32 पता"
+
+msgid "Base 64 Hash"
+msgstr "बेस 64 हैश"
+
+msgid "Public Key"
+msgstr "जनता की कुंजी"
+
+msgid "ElGamal 2048 bit"
+msgstr "ElGamal 2048 बिट"
+
+msgid "Signing Key"
+msgstr "साइनिंग कुंजी"
+
+msgid "Certificate"
+msgstr "सर्टिफिकेट"
+
+msgid "Validated"
+msgstr "मान्यता प्राप्त"
+
+msgid "no"
+msgstr "नहीं"
+
+msgid "yes"
+msgstr "हाँ"
+
+msgid "Source"
+msgstr "स्रोत"
+
+msgid "Added Date"
+msgstr "जोड़ा गया तारीख"
+
+msgid "Last Modified"
+msgstr "अंतिम बदलाव"
+
+msgid "Notes"
+msgstr "नोट्स"
+
+msgid "Add notes about domain"
+msgstr "डोमेन के बारे में नोट्स जोड़ें"
+
+msgid "Visual Identification for"
+msgstr "दृश्य पहचान के लिए"
+
+msgid "Create your own identification images"
+msgstr "अपने खुद के पहचान छवियों को बनाएं"
+
+msgid "Launch Image Generator"
+msgstr "इमेज जनरेटर लॉन्च करें"
+
+msgid "Introduction"
+msgstr "परिचय"
+
+msgid "What is the addressbook?"
+msgstr "पत्रिका क्या है?"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "पत्रिका अनुप्रयोग आपकी I2P स्थापना का हिस्सा है।"
+
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "यह नियमित रूप से वितरित स्रोतों या \"सब्सक्रिप्शन\" से आपकी hosts.txt फ़ाइल को अपडेट करता है।"
+
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions file."
+msgstr "तिरिक्त साइटों की सदस्यता लेना आसान है, बस उन्हें अपनी <a href=\"subscriptions\">सब्सक्रिप्शन फ़ाइल में जोड़ें।"
+
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview."
+msgstr "I2P में नामकरण के बारे में अधिक जानकारी के लिए, <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>समीक्षा को देखें।"
+
+msgid "How does the addressbook application work?"
+msgstr "पत्रिका अनुप्रयोग कैसे कार्य करता है?"
+
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "पत्रिका अनुप्रयोग नियमित रूप से आपकी सब्सक्रिप्शन की मांग करता है और उनकी सामग्री को अपनी \"राउटर\" पत्रिका में मिलाता है।"
+
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "फिर यह अपनी \"मास्टर\" पत्रिका को राउटर पत्रिका में भी मिलाता है।"
+
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "यदि सेट किया गया हो, तो राउटर पत्रिका अब \"प्रकाशित\" पत्रिका में लिखी जाती है, जो यदि आप एक eepsite चला रहे होते हैं तो सार्वजनिक रूप से उपलब्ध होगी।"
+
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "राउटर एक निजी पत्रिका भी उपयोग करता है, जो मिलाया नहीं जाता या प्रकाशित नहीं होता है।"
+
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "निजी पत्रिका में घोस्ट आपके द्वारा पहुँचे जा सकते हैं, लेकिन उनके पते कभी अन्यों के साथ वितरित नहीं होते।"
+
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "निजी पत्रिका आपकी अन्य पत्रिकाओं में मेजबानों के अलियास के लिए भी उपयोग की जा सकती है।"
+
+msgid "subscription log"
+msgstr "सब्सक्रिप्शन लॉग"
+
+msgid "Subscription Log"
+msgstr "सब्सक्रिप्शन लॉग"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "सबसे हाल का (बुरे डोमेन को छोड़कर)"
+
+msgid "subscriptions"
+msgstr "सब्सक्रिप्शन"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "सब्सक्रिप्शन फ़ाइल में i2p URL की सूची होती है।"
+
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "पत्रिका अनुप्रयोग नियमित रूप से इस सूची की जांच करता है नए eepsites की।"
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "उन URL का संदर्भ प्रकाशित hosts.txt फ़ाइलों को देता है।"
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "FAQ में एक सूची के लिए देखें जो सब्सक्रिप्शन URL की है।"
+
+msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
+msgstr "यदि SusiDNS को आपकी राउटर पत्रिका प्रकाशित करने के लिए सेट किया गया है, तो प्रविष्टियाँ आपकी प्रकाशित पत्रिका में दिखाई देंगी और साझा करने के लिए hosts.txt फ़ाइल में सहेजी जाएंगी।"
+
+msgid "Published Addressbook"
+msgstr "प्रकाशित पत्रिका"
+
+msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
+msgstr "SusiDNS को आपकी राउटर पत्रिका को आपकी प्रकाशित पत्रिका में डालने के लिए सेट करने के लिए, सेटिंग पृष्ठ पर 'should_publish=true' रखें।"
+
+msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
+msgstr "सब्सक्रिप्शन से प्राप्त सभी मेजबानों को इस पत्रिका में दिखाई देगा, इसके अलावा जो कोई भी आप मानवीय रूप से यहाँ या अपनी मास्टर पत्रिका में जोड़ते हैं।"
+
+msgid "Router Addressbook"
+msgstr "राउटर पत्रिका"
+
+msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
+msgstr "आप यहाँ मानवीय रूप से जोड़े हुए मेजबान अभी भी प्रकाशित नहीं होंगे। आप यहाँ अन्य पत्रिकाओं में मेजबानों के अलियास भी जोड़ सकते हैं।"
+
+msgid "Private Addressbook"
+msgstr "निजी पत्रिका"
+
+msgid "Local Records"
+msgstr "स्थानीय रिकॉर्ड"
+
+msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
+msgstr "I2P अनुप्रयोग (HTTP प्रोक्सी सहित) आपकी स्थानीय पत्रिकाओं में मेजबानों का उपयोग करके .i2p होस्टनाम को हल करते हैं।"
+
+msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
+msgstr "अतिरिक्त सब्सक्रिप्शन राउटर मदद पेज के FAQ खंड में पाए जाएंगे।"
+
+msgid "Hosts sourced from your subscriptions are added to your Router address book, and are automatically synced (by default every 12 hours)."
+msgstr "सब्सक्रिप्शन से प्राप्त मेजबानों को आपकी राउटर पत्रिका में जोड़ा जाता है और यह अपने आप सिंक किया जाता है (डिफ़ॉल्ट रूप से हर 12 घंटे में)।"
+
+msgid "Configure Subscriptions"
+msgstr "सब्सक्रिप्शन कॉन्फ़िगर करें"
+
+msgid "If you manually add hosts here, they will be included your Published address book (if configured)."
+msgstr "यदि आप यहाँ मानवीय रूप से मेजबान जोड़ते हैं, तो वे आपकी प्रकाशित पत्रिका में शामिल होंगे (अगर सेट किया गया हो)।"
+
+msgid "Master Addressbook"
+msgstr "मास्टर पत्रिका"
+
+msgid "Searchable by"
+msgstr "खोज सकते हैं"
+
+msgid "I2P applications"
+msgstr "I2P अनुप्रयोग"
+
+msgid "The Master, Router and Private address books collectively serve as the DNS authority for I2P applications."
+msgstr "मास्टर, राउटर और निजी पत्रिकाएं साझा करके I2P अनुप्रयोगों के लिए DNS प्राधिकरण के रूप में कार्य करती हैं।"
+
+msgid "Optional,"
+msgstr "वैकल्पिक,"
+
+msgid "for websites"
+msgstr "वेबसाइटों के लिए"
+
+msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
+msgstr "यदि आप SusiDNS को अपनी राउटर पत्रिका प्रकाशित करने के लिए सेट करते हैं, तो यह एक hosts.txt फ़ाइल निर्यात करेगा जो सभी मेजबानों को सामग्री करेगी (डिफ़ॉल्ट रूप से आपके eepsite के रूट में)।"
+
+msgid "Addresses manually added to your Master address book will merge with your Router address book."
+msgstr "मास्टर पत्रिका में मानवीय रूप से जोड़े गए पते आपकी राउटर पत्रिका में मिलेंगे।"
+
+msgid "Hosts you receive from your subscriptions will merge with your Router address book."
+msgstr "सब्सक्रिप्शन से आपको मिले मेजबान आपकी राउटर पत्रिका में मिलेंगे।"

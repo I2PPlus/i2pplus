@@ -1,0 +1,62 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+#
+msgid ""
+msgstr ""
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
+
+msgid "Start I2P"
+msgstr "I2P शुरू करें"
+
+msgid "I2P is starting!"
+msgstr "I2P शुरू हो रहा है!"
+
+msgid "Starting"
+msgstr "शुरू कर रहा है"
+
+msgid "Launch I2P Browser"
+msgstr "I2P ब्राउज़र लॉन्च करें"
+
+msgid "Configure I2P System Tray"
+msgstr "I2P सिस्टम ट्रे कोfig करें"
+
+msgid "Disable system tray"
+msgstr "सिस्टम ट्रे को अक्षम करें"
+
+msgid "Restart I2P"
+msgstr "I2P पुनः शुरू करें"
+
+msgid "Stop I2P"
+msgstr "I2P बंद करें"
+
+msgid "Restart I2P Immediately"
+msgstr "I2P तुरंत पुनः शुरू करें"
+
+msgid "Stop I2P Immediately"
+msgstr "I2P तुरंत बंद करें"
+
+msgid "Cancel I2P Shutdown"
+msgstr "I2P बंद होने को रद्द करें"
+
+#, java-format
+msgid "Shutdown in {0}"
+msgstr "{0} में बंद होने की तैयारी"
+
+msgid "Shutdown imminent"
+msgstr "बंद होने की तत्कालीन घटना"
+
+msgid "Network"
+msgstr "नेटवर्क"
+
+msgid "I2P: Right-click for menu"
+msgstr "I2P: मेनू के लिए दाईं माउस क्लिक करें"
+
+msgid "Enable notifications"
+msgstr "अधिसूचनाएँ सक्षम करें"
+
+msgid "Disable notifications"
+msgstr "अधिसूचनाएँ अक्षम करें"

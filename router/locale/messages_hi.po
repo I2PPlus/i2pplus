@@ -1,0 +1,145 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+#
+msgid ""
+msgstr ""
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
+
+msgid "OK"
+msgstr "ठीक है"
+
+msgid "IPv4: OK; IPv6: Testing"
+msgstr "IPv4: ठीक है; IPv6: परीक्षण"
+
+msgid "IPv4: OK; IPv6: Firewalled"
+msgstr "IPv4: ठीक है; IPv6: फायरवॉल किया गया"
+
+msgid "IPv4: Testing; IPv6: OK"
+msgstr "IPv4: परीक्षण; IPv6: ठीक है"
+
+msgid "IPv4: Firewalled; IPv6: OK"
+msgstr "IPv4: फायरवॉल किया गया; IPv6: ठीक है"
+
+msgid "IPv4: Disabled; IPv6: OK"
+msgstr "IPv4: अक्षम; IPv6: ठीक है"
+
+msgid "IPv4: Symmetric NAT; IPv6: OK"
+msgstr "IPv4: सिमेट्रिक NAT; IPv6: ठीक है"
+
+msgid "Symmetric NAT"
+msgstr "सिमेट्रिक NAT"
+
+msgid "IPv4: Symmetric NAT; IPv6: Testing"
+msgstr "IPv4: सिमेट्रिक NAT; IPv6: परीक्षण"
+
+msgid "IPv4: Firewalled; IPv6: Testing"
+msgstr "IPv4: फायरवॉल किया गया; IPv6: परीक्षण"
+
+msgid "Firewalled"
+msgstr "फायरवॉल किया गया"
+
+msgid "IPv4: Testing; IPv6: Firewalled"
+msgstr "IPv4: परीक्षण; IPv6: फायरवॉल किया गया"
+
+msgid "IPv4: Disabled; IPv6: Testing"
+msgstr "IPv4: अक्षम; IPv6: परीक्षण"
+
+msgid "IPv4: Disabled; IPv6: Firewalled"
+msgstr "IPv4: अक्षम; IPv6: फायरवॉल किया गया"
+
+msgid "Disconnected"
+msgstr "अनुपस्थित"
+
+msgid "Port Conflict"
+msgstr "पोर्ट संघर्ष"
+
+msgid "Testing"
+msgstr "परीक्षण"
+
+msgid "Starting up"
+msgstr "शुरू हो रहा है"
+
+msgid "Declining all tunnel requests:<br>"
+msgstr "सभी टंनल अनुरोध अस्वीकार कर रहा है:<br>"
+
+msgid "Hidden Mode"
+msgstr "छिपा हुआ मोड"
+
+msgid "Declining tunnel requests:<br>"
+msgstr "टंनल अनुरोध अस्वीकार कर रहा है:<br>"
+
+msgid "High message delay"
+msgstr "उच्च संदेश देरी"
+
+msgid "Declining requests: "
+msgstr "अनुरोध अस्वीकार कर रहा है: "
+
+msgid "Limit reached"
+msgstr "सीमा पहुँच गई"
+
+msgid "Participation disabled"
+msgstr "भागीदारी अक्षम की गई"
+
+msgid "High system load"
+msgstr "उच्च सिस्टम लोड"
+
+msgid "Rejecting all tunnel requests:<br>"
+msgstr "सभी टंनल अनुरोधों को अस्वीकार कर रहा है:<br>"
+
+msgid "High number of requests"
+msgstr "उच्च अनुरोधों की संख्या"
+
+msgid "Rejecting most tunnel requests:<br>"
+msgstr "धिकांश टंनल अनुरोधों को अस्वीकार कर रहा है:<br>"
+
+msgid "Accepting most tunnel requests"
+msgstr "अधिकांश टंनल अनुरोधों को स्वीकार कर रहा है"
+
+msgid "Accepting tunnel requests"
+msgstr "टंनल अनुरोधों को स्वीकार कर रहा है"
+
+msgid "Declining requests: Bandwidth limit"
+msgstr "अनुरोध अस्वीकार कर रहा है: बैंडविड्थ सीमा"
+
+msgid "Declining requests"
+msgstr "अनुरोध अस्वीकार कर रहा है"
+
+msgid "Shutting down"
+msgstr "बंद कर रहा है"
+
+msgid "Declining tunnel requests"
+msgstr "टंनल अनुरोध अस्वीकार कर रहा है"
+
+msgid "Dropping tunnel requests: Too slow"
+msgstr "टंनल अनुरोध छोड़ रहा है: बहुत धीमा"
+
+msgid "Dropping tunnel requests: High job lag"
+msgstr "टंनल अनुरोध छोड़ रहा है: उच्च कार्य देरी"
+
+msgid "Dropping tunnel requests:<br>High CPU load"
+msgstr "टंनल अनुरोधों को छोड़ रहा है:<br>उच्च CPU लोड"
+
+msgid "Dropping tunnel requests: Overloaded"
+msgstr "टंनल अनुरोधों को छोड़ रहा है: अधिक भारी"
+
+msgid "Declining requests:"
+msgstr "अनुरोध अस्वीकार कर रहा है:"
+
+msgid "Request overload"
+msgstr "अनुरोध की अत्यधिकता"
+
+msgid "Connection limit reached"
+msgstr "कनेक्शन की सीमा पार हो चुकी है"
+
+msgid "Dropping Tunnel Requests: High load"
+msgstr "टंनल अनुरोधों को छोड़ रहा है: उच्च लोड"
+
+msgid "Dropping tunnel requests: High load"
+msgstr "टंनल अनुरोधों को छोड़ रहा है: उच्च लोड"
+
+msgid "Dropping tunnel requests: Queue time"
+msgstr "टंनल अनुरोधों को छोड़ रहा है: क्यू समय"

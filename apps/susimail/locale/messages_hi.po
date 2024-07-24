@@ -1,0 +1,460 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+#
+msgid ""
+msgstr ""
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
+
+#, java-format
+msgid "{0} new message"
+msgid_plural "{0} new messages"
+msgstr[0] "{0} नया संदेश"
+msgstr[1] "{0} नए संदेश"
+
+msgid "Email"
+msgstr "ईमेल"
+
+#, java-format
+msgid "No encoder found for encoding \\''{0}\\''."
+msgstr "\\''{0}\\'' कोडिंग के लिए कोई कोडर नहीं मिला।"
+
+msgid "Re:"
+msgstr "वापस:"
+
+msgid "Fwd:"
+msgstr "फॉरवर्ड:"
+
+msgid "Drafts"
+msgstr "ड्राफ्ट"
+
+msgid "Sent"
+msgstr "भेजा"
+
+msgid "Trash"
+msgstr "कचरा"
+
+msgid "Bulk Mail"
+msgstr "बल पत्र"
+
+msgid "Inbox"
+msgstr "इनबॉक्स"
+
+msgid "View message as HTML"
+msgstr "संदेश को HTML के रूप में देखें"
+
+msgid "View message as plain text"
+msgstr "संदेश को साधारण पाठ के रूप में देखें"
+
+msgid "unknown"
+msgstr "अज्ञात"
+
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
+msgstr "आपकी गोपनीयता की सुरक्षा के लिए, SusiMail इस HTML संदेश में शामिल JavaScript और किसी भी दूरस्थ सामग्री को ब्लॉक कर रहा है."
+
+msgid "Enable Javascript for enhanced presentation and additional features."
+msgstr "विस्तारित प्रस्तुति और अतिरिक्त सुविधाओं के लिए JavaScript को सक्षम करें."
+
+#, java-format
+msgid "Tracking images removed from message: {0}"
+msgstr "ट्रैकिंग छवियों को संदेश से हटा दिया: {0}"
+
+#, java-format
+msgid "Blocked images not displayed: {0}"
+msgstr "ब्लॉक की गई छवियां नहीं दिखाई देती: {0}"
+
+#, java-format
+msgid "Charset \\''{0}\\'' not supported."
+msgstr "चारसेट  \\''{0}\\'' समर्थित नहीं है."
+
+#, java-format
+msgid "Part ({0}) not shown, because of {1}"
+msgstr "भाग ({0}) नहीं दिखाया गया है, {1} के कारण."
+
+msgid "Reloading the page may fix the error."
+msgstr "पृष्ठ फिर से लोड करने से त्रुटि सुधार सकती है."
+
+msgid "File"
+msgstr "फ़ाइल"
+
+#, java-format
+msgid "Download attachment {0}"
+msgstr "संलग्नक {0} डाउनलोड करें"
+
+msgid "File is packed into a zipfile for security reasons."
+msgstr "सुरक्षा के कारण फ़ाइल एक zip फ़ाइल में पैक की गई है."
+
+#, java-format
+msgid "Attachment ({0})."
+msgstr "संलग्नक ({0})."
+
+msgid "Need username for authentication."
+msgstr "पासवर्ड की आवश्यकता है क्योंकि उपयोगकर्ता नाम आवश्यक है."
+
+msgid "Do not include @mail.i2p in the username"
+msgstr "उपयोगकर्ता नाम में @mail.i2p शामिल न करें."
+
+msgid "Need password for authentication."
+msgstr "पासवर्ड की आवश्यकता है क्योंकि पासवर्ड की आवश्यकता है."
+
+msgid "Need hostname for connect."
+msgstr "कनेक्ट के लिए होस्टनेम की आवश्यकता है."
+
+msgid "Need port number for pop3 connect."
+msgstr "पीओपी3 कनेक्ट के लिए पोर्ट नंबर की आवश्यकता है."
+
+msgid "POP3 port number is not in range 0..65535."
+msgstr "POP3 पोर्ट नंबर 0..65535 के विस्तार में नहीं है."
+
+msgid "POP3 port number is invalid."
+msgstr "POP3 पोर्ट नंबर अमान्य है."
+
+msgid "Need port number for smtp connect."
+msgstr "एसएमटीपी कनेक्ट के लिए पोर्ट नंबर की आवश्यकता है."
+
+msgid "SMTP port number is not in range 0..65535."
+msgstr "SMTP पोर्ट नंबर 0..65535 के विस्तार में नहीं है."
+
+msgid "SMTP port number is invalid."
+msgstr "SMTP पोर्ट नंबर अमान्य है."
+
+msgid "Cannot connect"
+msgstr "कनेक्ट नहीं हो सका"
+
+msgid "Error connecting to server"
+msgstr "सर्वर से कनेक्ट करने में समस्या आयी"
+
+msgid "Draft saved."
+msgstr "प्रारूप सहेजा गया."
+
+msgid "Unable to save mail."
+msgstr "मेल सहेजने में असमर्थ."
+
+#, java-format
+msgid "On {0} {1} wrote:"
+msgstr "{0} को {1} ने लिखा:"
+
+#, java-format
+msgid "Error reading uploaded file: {0}"
+msgstr "अपलोड किया गया फ़ाइल पढ़ने में त्रुटि: {0}"
+
+msgid "begin forwarded mail"
+msgstr "अग्रेषित मेल शुरू"
+
+msgid "end forwarded mail"
+msgstr "अग्रेषित मेल समाप्त"
+
+msgid "Could not fetch mail body."
+msgstr "मेल शरीर नहीं प्राप्त कर सका."
+
+msgid "Message id not valid."
+msgstr "संदेश आईडी वैध नहीं है."
+
+msgid "Internal error, lost connection."
+msgstr "आंतरिक त्रुटि, कनेक्शन खो गया."
+
+#, java-format
+msgid "No Encoding found for {0}"
+msgstr "{0} के लिए कोई एनकोडिंग नहीं मिली."
+
+msgid "Attachment not found."
+msgstr "संलग्नक नहीं मिला."
+
+msgid "Message not found."
+msgstr "संदेश नहीं मिला."
+
+#, java-format
+msgid "1 message deleted."
+msgid_plural "{0} messages deleted."
+msgstr[0] "{0} संदेश हटाया गया।"
+msgstr[1] "{0} संदेश हटाए गए।"
+
+msgid "No messages marked for deletion."
+msgstr "हटाने के लिए कोई संदेश चिह्नित नहीं किया गया है."
+
+#, java-format
+msgid "Host unchanged. Edit configation file {0} to change host."
+msgstr "होस्ट अपरिवर्तित. होस्ट बदलने के लिए कॉन्फ़िगेशन फ़ाइल {0} को संपादित करें."
+
+msgid "Configuration saved"
+msgstr "संरचना सहेजी गई"
+
+msgid "Invalid pagesize number, resetting to default value."
+msgstr "अमान्य पेज साइज़ संख्या, डिफ़ॉल्ट मान के लिए रीसेट कर रहा है."
+
+msgid "Login"
+msgstr "लॉगिन"
+
+msgid "Loading messages, please wait..."
+msgstr "संदेश लोड हो रहे हैं, कृपया प्रतीक्षा करें..."
+
+#, java-format
+msgid "1 message"
+msgid_plural "{0} messages"
+msgstr[0] "{0} संदेश"
+msgstr[1] "{0} संदेश"
+
+msgid "No messages"
+msgstr "कोई संदेश नहीं"
+
+msgid "Show Message"
+msgstr "संदेश दिखाएं"
+
+msgid "New Message"
+msgstr "नया संदेश"
+
+msgid "Configuration"
+msgstr "संरचना"
+
+msgid "I2PMail"
+msgstr "I2PMail"
+
+msgid "No new messages"
+msgstr "कोई नया संदेश नहीं"
+
+msgid "Checking for new messages on server"
+msgstr "सर्वर पर नए संदेश की जाँच कर रहा है"
+
+msgid "Refresh the page for updates"
+msgstr "अपडेट के लिए पृष्ठ ताजा करें"
+
+#, java-format
+msgid "{0} is an I2P-exclusive service provided by {1}."
+msgstr "{0} {1} द्वारा प्रदान की जाने वाली I2P-अनुकूल सेवा है."
+
+#, java-format
+msgid "{0} webmail client &copy Susi 2004-2005."
+msgstr "{0} वेबमेल क्लाइंट &copy Susi 2004-2005."
+
+msgid "Removed tracking image placeholder"
+msgstr "ट्रैकिंग छवि के स्थानीयकरण को हटा दिया"
+
+msgid "no subject"
+msgstr "कोई विषय नहीं"
+
+msgid "Found no valid sender address."
+msgstr "वैध भेजने वाले पते को नहीं मिला."
+
+#, java-format
+msgid "Found no valid address in \\''{0}\\''."
+msgstr "\\''{0}\\'' में कोई वैध पता नहीं मिला."
+
+msgid "No recipients found."
+msgstr "कोई प्राप्तकर्ता नहीं मिला."
+
+#, java-format
+msgid "Email is too large, max is {0}"
+msgstr "ईमेल बहुत बड़ा है, मैक्सिमम {0} है"
+
+msgid "Sending mail."
+msgstr "ईमेल भेज रहा है।"
+
+msgid "Error sending mail"
+msgstr "ईमेल भेजने में त्रुटि"
+
+msgid "Mail sent."
+msgstr "ईमेल भेज दिया गया।"
+
+msgid "Send"
+msgstr "भेजें"
+
+msgid "Save as Draft"
+msgstr "ड्राफ्ट के रूप में सहेजें"
+
+msgid "Cancel"
+msgstr "रद्द करें"
+
+msgid "From"
+msgstr "से"
+
+msgid "To"
+msgstr "को"
+
+msgid "Cc"
+msgstr "Cc"
+
+msgid "Bcc"
+msgstr "Bcc"
+
+msgid "Subject"
+msgstr "विषय"
+
+msgid "Add Attachment"
+msgstr "संलग्नक जोड़ें"
+
+msgid "Add attachment"
+msgstr "संलग्नक जोड़ें"
+
+msgid "Attachments"
+msgstr "संलग्नक"
+
+msgid "Delete selected attachments"
+msgstr "चुने हुए संलग्नक हटाएं"
+
+msgid "I2PMail Login"
+msgstr "I2PMail लॉगिन"
+
+msgid "User"
+msgstr "उपयोगकर्ता"
+
+msgid "Username"
+msgstr "उपयोगकर्ता नाम"
+
+msgid "Password"
+msgstr "पासवर्ड"
+
+msgid "Toggle password visibility"
+msgstr "पासवर्ड दृश्यता को इकट्ठा/छिपाएं"
+
+msgid "Host"
+msgstr "मेजबान"
+
+msgid "POP3 Port"
+msgstr "POP3 पोर्ट"
+
+msgid "SMTP Port"
+msgstr "SMTP पोर्ट"
+
+msgid "Read Mail Offline"
+msgstr "ऑフलाइन में ईमेल पढ़ें"
+
+msgid "Settings"
+msgstr "सेटिंग्स"
+
+msgid "Learn about I2PMail"
+msgstr "I2PMail के बारे में जानें"
+
+msgid "Create Account"
+msgstr "अकाउंट बनाएं"
+
+msgid "New"
+msgstr "नया"
+
+msgid "Check Mail"
+msgstr "ईमेल जाँचें"
+
+msgid "Refresh Page"
+msgstr "पृष्ठ ताजा करें"
+
+#, java-format
+msgid "1 Message"
+msgid_plural "{0} Messages"
+msgstr[0] "{0} संदेश"
+msgstr[1] "{0} संदेश"
+
+msgid "Logout"
+msgstr "लॉगआ웃"
+
+msgid "Date"
+msgstr "तारीख"
+
+msgid "Size"
+msgstr "कार"
+
+msgid "Mark for deletion"
+msgstr "हटाने के लिए चिह्नित करें"
+
+msgid "Message contains HTML"
+msgstr "संदेश में HTML है"
+
+msgid "Message is new"
+msgstr "संदेश नया है"
+
+msgid "Message is spam"
+msgstr "संदेश स्पैम है"
+
+msgid "Message body not downloaded"
+msgstr "संदेश का शरीर डाउनलोड नहीं किया गया"
+
+msgid "Really delete the marked messages?"
+msgstr "चिह्नित संदेशों को वास्तव में हटाना?"
+
+msgid "Yes, really delete them!"
+msgstr "हाँ, वास्तव में उन्हें हटाओ!"
+
+msgid "Delete Selected"
+msgstr "चुनिंदा हटाएं"
+
+msgid "Mark All"
+msgstr "सभी को चिह्नित करें"
+
+msgid "Clear All"
+msgstr "सभी को साफ करें"
+
+msgid "Change to Folder"
+msgstr "फ़ोल्डर में बदलें"
+
+msgid "First"
+msgstr "पहला"
+
+msgid "Previous"
+msgstr "पिछला"
+
+msgid "Next"
+msgstr "अगला"
+
+msgid "Last"
+msgstr "अंतिम"
+
+msgid "Really delete this message?"
+msgstr "वास्तव में इस संदेश को हटाना?"
+
+msgid "Yes, really delete it!"
+msgstr "हाँ, वास्तव में इसे हटाओ!"
+
+msgid "Reply"
+msgstr "जवाब दें"
+
+msgid "Reply All"
+msgstr "सभी को जवाब दें"
+
+msgid "Forward"
+msgstr "गे बढ़ाएं"
+
+msgid "Save As"
+msgstr "अलग के रूप में सहेजें"
+
+msgid "Delete"
+msgstr "हटाएं"
+
+msgid "Back to Folder"
+msgstr "फ़ोल्डर में वापस"
+
+msgid "Move to Folder"
+msgstr "फ़ोल्डर में चलाएं"
+
+msgid "View message in new tab"
+msgstr "नई टैब में संदेश देखें"
+
+msgid "Folder Page Size"
+msgstr "फ़ोल्डर पेज का आकार"
+
+msgid "Set"
+msgstr "सेट करें"
+
+msgid "Advanced Configuration"
+msgstr "विस्तृत संरचना"
+
+msgid "Save Configuration"
+msgstr "संरचना सहेजें"
+
+msgid "No response from server"
+msgstr "सर्वर से कोई प्रतिक्रिया नहीं"
+
+msgid "Mail server login failed, wrong username or password."
+msgstr "मेल सर्वर लॉगिन विफल, गलत उपयोगकर्ता नाम या पासवर्ड।"
+
+msgid "Logout and then login again with the correct username and password."
+msgstr "लॉगआ웃 करें और फिर सही उपयोगकर्ता नाम और पासवर्ड के साथ फिर से लॉगिन करें।"
+
+msgid "Login failed"
+msgstr "लॉगिन विफल"
+
+msgid "Server refused connection"
+msgstr "सर्वर कनेक्शन को अस्वीकार कर दिया"
+
+msgid "Mail rejected"
+msgstr "मेल अस्वीकृत किया गया"

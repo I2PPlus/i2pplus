@@ -1,0 +1,64 @@
+# I2P
+# Copyright (C) 2014 The I2P Project
+#
+msgid ""
+msgstr ""
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
+
+msgid "Message timeout"
+msgstr "संदेश की समय सीमा समाप्त हो गई"
+
+msgid "Failed delivery to local destination"
+msgstr "स्थानीय गंतव्य तक विफलता पहुंच"
+
+msgid "Local router failure"
+msgstr "स्थानीय राउटर की असफलता"
+
+msgid "Local network failure"
+msgstr "स्थानीय नेटवर्क की असफलता"
+
+msgid "Session closed"
+msgstr "सेसियन बंद की गई"
+
+msgid "Invalid message"
+msgstr "अमान्य संदेश"
+
+msgid "Invalid message options"
+msgstr "अमान्य संदेश विकल्प"
+
+msgid "Buffer overflow"
+msgstr "बफ़र ओवरफ़्ो"
+
+msgid "Message expired"
+msgstr "संदेश की समय सीमा समाप्त हो गई"
+
+msgid "Local lease set invalid"
+msgstr "स्थानीय लीज सेट अमान्य"
+
+msgid "No local tunnels"
+msgstr "कोई स्थानीय टनल नहीं"
+
+msgid "Unsupported encryption options"
+msgstr "समर्थन नहीं किए जाने वाले एन्क्रिप्शन विकल्प"
+
+msgid "Invalid destination"
+msgstr "अमान्य गंतव्य"
+
+msgid "Destination lease set expired"
+msgstr "गंतव्य लीज सेट की समय सीमा समाप्त हो गई"
+
+msgid "Destination lease set not found"
+msgstr "गंतव्य लीज सेट नहीं मिला"
+
+msgid "Local destination shutdown"
+msgstr "स्थानीय गंतव्य की संपादन बंद कर दी गई"
+
+msgid "Connection was reset"
+msgstr "सम्पर्क किया गया"
+
+msgid "Failure code"
+msgstr "असफलता कोड"
