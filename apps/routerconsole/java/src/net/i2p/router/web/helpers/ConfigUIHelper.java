@@ -26,18 +26,15 @@ public class ConfigUIHelper extends HelperBase {
         boolean useSoraFont = _context.getBooleanProperty(CSSHelper.PROP_ENABLE_SORA_FONT);
         Set<String> themes = themeSet();
         for (String theme : themes) {
-            buf.append("<label for=\"").append(theme).append("\"><div class=themechoice style=display:inline-block;text-align:center>" +
-                       "<input type=radio class=optbox name=theme ");
+            buf.append("<label for=\"").append(theme).append("\"><div class=themechoice style=display:inline-block;text-align:center>")
+               .append("<input type=radio class=optbox name=theme ");
             if (theme.equals(current))
                 buf.append(CHECKED);
-            buf.append("value=\"").append(theme).append("\" id=\"").append(theme).append("\">" +
-                       "<img height=48 width=48 alt=\"\" src=\"/themes/console/").append(theme).append("/images/thumbnail.png\">" +
-                       "<br>" +
-                       "<div class=themelabel>" + _t(theme) + "</div>" +
-                       "</div></label>\n");
+            buf.append("value=\"").append(theme).append("\" id=\"").append(theme).append("\">")
+               .append("<img height=48 width=48 alt=\"\" src=\"/themes/console/").append(theme).append("/images/thumbnail.png\"><br>")
+               .append("<div class=themelabel>").append(_t(theme)).append("</div></div></label>\n");
         }
-        buf.append("</div><div id=themeoptions>" +
-                   "<label><input type=checkbox class=\"optbox slider\" name=\"universalTheming\" ");
+        buf.append("</div><div id=themeoptions><label><input type=checkbox class=\"optbox slider\" name=\"universalTheming\" ");
         if (universalTheming)
             buf.append(CHECKED);
         buf.append("value=1>")
@@ -130,6 +127,7 @@ public class ConfigUIHelper extends HelperBase {
         { "fi", "fi", "Finnish Suomi", null },
         { "fr", "fr", "Français", null },
         { "el", "gr", "Greek Ελληνικά", null },
+        { "hi", "in", "Hindi", null },
         { "hu", "hu", "Hungarian Magyar", null },
         { "in", "id", "Indonesian", null },
         { "it", "it", "Italiano", null },

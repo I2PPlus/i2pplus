@@ -54,8 +54,8 @@ public class TranslationStatus {
 
     // Java lang codes, see notes below
     private static final String[] LANGS = { "ar", "az", "cs", "da", "de", "el", "es", "et", "fa", "fi", "fr",
-                                            "hu", "in", "it", "ja", "ko", "nb", "nl", "pl", "pt", "ro", "ru",
-                                            "sl", "sv", "tr", "uk", "vi", "zh" };
+                                            "hi", "hu", "in", "it", "ja", "ko", "nb", "nl", "pl", "pt", "ro",
+                                            "ru", "sl", "sv", "tr", "uk", "vi", "zh" };
 /**
     private static final String[] LANGS = { "ar", "az", "bg", "ca", "cs", "da", "de", "el", "es", "es_AR",
                                             "et", "fa", "fi", "fr", "gl", "hi", "hr", "hu", "in", "it", "iw",
@@ -364,13 +364,11 @@ public class TranslationStatus {
             boolean incomplete = tot < max;
             String row = incomplete ? "<tr class=incomplete>" : "<tr class=complete>";
             if (_html) {
-                //buf.append(String.format(Locale.US, "<tr><td>%s %s<td>%s<td>%4d<td>%4d<td>%4d<td>%5.1f%%\n", dlang, country, lang, tx, same, tot, 100f * (tx + same) / max));
                 buf.append(String.format(Locale.US, "%s<td>%s %s %s</td><td>%s</td><td>%4d</td>" +
                                                     "<td><span class=percentBarOuter title=\"%5.1f%%\">" +
                                                     "<span class=percentBarInner style=\"width:%5.1f%%\"></span></span></td></tr>\n",
                                                     row, flag, dlang, country, lang, tot, 100f * tot / max, 100f * tot / max));
             } else {
-                //buf.append(String.format("%s\t%4d\t%4d\t%4d\t%5.1f%%\t%s %s\n", lang, tx, same, tot, 100f * (tx + same) / max, dlang, country));
                 buf.append(String.format("%s\t%4d\t%5.1f%%\t%s %s\n", lang, tot, 100f * tot / max, dlang, country));
             }
         }
