@@ -472,7 +472,7 @@ msgstr "पेज ताज़ा करें"
 msgid "Forum"
 msgstr "फ़ॉरम"
 
-msgid "Torrent & filesharing forum"
+msgid "Torrent &amp; filesharing forum"
 msgstr "टॉरेंट और फ़ाइल शेयरिंग फ़ॉरम"
 
 msgid "BTDigg"
