@@ -12,6 +12,24 @@ msgstr ""
 msgid "internal"
 msgstr "sisemine"
 
+#, java-format
+msgid "{0} inbound tunnel"
+msgid_plural "{0} inbound tunnels"
+msgstr[0] "{0} sissetulev tunnel"
+msgstr[1] "{0} sissetulevad tunnelid"
+
+#, java-format
+msgid "{0} outbound tunnel"
+msgid_plural "{0} outbound tunnels"
+msgstr[0] "{0} väljaminev tunnel"
+msgstr[1] "{0} väljaminevad tunnelid"
+
+#, java-format
+msgid "{0} inbound, {0} outbound tunnel"
+msgid_plural "{0} inbound, {0} outbound tunnels"
+msgstr[0] "{0} sissetulev, {0} väljaminev tunnel"
+msgstr[1] "{0} sissetulevaid, {0} väljaminevaid tuneleid"
+
 msgid "lower bandwidth and reliability"
 msgstr "madalam bändlaius ja usaldusväärsus"
 

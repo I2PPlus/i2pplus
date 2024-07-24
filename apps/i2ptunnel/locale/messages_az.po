@@ -360,6 +360,12 @@ msgstr "2 hüpf tünəli (orta anonimlik)"
 msgid "3 hop tunnel (high anonymity)"
 msgstr "3 hüpf tünəli (yüksək anonimlik)"
 
+#, java-format
+msgid "{0} hop tunnel"
+msgid_plural "{0} hop tunnel"
+msgstr[0] "{0} hop tüneli"
+msgstr[1] "{0} hop tüneli"
+
 msgid "Number of Tunnels in Group"
 msgstr "Qrupdakı tünəllərin sayı"
 
@@ -407,6 +413,12 @@ msgstr "hüpf fərq"
 
 msgid "Number of Reserve Tunnels"
 msgstr "Yedek Tünəllərin Sayı"
+
+#, java-format
+msgid "{0} backup tunnel"
+msgid_plural "{0} backup tunnels"
+msgstr[0] "{0} yedek tünel"
+msgstr[1] "{0} yedek tünnellər"
 
 msgid "no redundancy, no added resource usage"
 msgstr "redondans yoxdur, əlavə resurs istifadəsi yoxdur"

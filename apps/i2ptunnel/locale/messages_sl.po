@@ -366,14 +366,6 @@ msgstr "2 skoka tunelj (srednja anonimnost)"
 msgid "3 hop tunnel (high anonymity)"
 msgstr "3 skoka tunelj (visoka anonimnost)"
 
-#, java-format
-msgid "{0} hop tunnel"
-msgid_plural "{0} skokov tunel"
-msgstr[0] "{0}-skokov tunel"
-msgstr[1] "{0}-skokov tunel"
-msgstr[2] "{0}-skokov tunel"
-msgstr[3] "{0}-skokov tunel"
-
 msgid "Number of Tunnels in Group"
 msgstr "Število tuneljev v skupini"
 
@@ -421,14 +413,6 @@ msgstr "skok razlika"
 
 msgid "Number of Reserve Tunnels"
 msgstr "Število rezervnih tuneljev"
-
-#, java-format
-msgid "{0} backup tunnel"
-msgid_plural "{0} rezervnih tunelov"
-msgstr[0] "{0} rezervnih tunelov"
-msgstr[1] "{0} rezervni tunel"
-msgstr[2] "{0} rezervnih tunelov"
-msgstr[3] "{0} rezervnih tunelov"
 
 msgid "no redundancy, no added resource usage"
 msgstr "brez presežka, brez dodatnega uporabe vir"

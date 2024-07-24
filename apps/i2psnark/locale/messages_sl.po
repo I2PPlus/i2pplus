@@ -1420,6 +1420,14 @@ msgstr "Za ocenjevanje ali komentiranje je potrebno ime avtorja"
 msgid "Your author name for published comments and ratings"
 msgstr "Vaše ime avtorja za objavljene komentarje in ocene"
 
+#, java-format
+msgid "1 star"
+msgid_plural "{0} stars"
+msgstr[0] "{0} zvezdica"
+msgstr[1] "{0} zvezdice"
+msgstr[2] "{0} zvezdic"
+msgstr[3] "{0} zvezdic"
+
 msgid "No rating"
 msgstr "Brez ocene"
 
