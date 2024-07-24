@@ -313,6 +313,7 @@ public class TranslationStatus {
             classTitle = "tx_dtg";
             location = "apps/desktopgui/locale";
         }
+        String gitlab = "<a href=http://git.skank.i2p/i2pplus/I2P.Plus/src/branch/master/" + location + " target=_blank>" + location + "</a>";
         if (!_html) {
             buf.append("\n\nTranslations for " + clz + " (" + max + " strings, " + buns.size() + " translations)\n");
             buf.append("Code\t  TX\t   %TX\tLanguage\n");
@@ -322,7 +323,7 @@ public class TranslationStatus {
                .append("<tr class=\"tx_header ").append(classTitle).append("\">")
                .append("<th colspan=2>").append(clz).append(" (").append(max).append(" strings, ")
                .append(buns.size()).append(" translations)</th>")
-               .append("<th colspan=2 class=tx_location><span>").append(location).append("</span></th></tr>\n")
+               .append("<th colspan=2 class=tx_location><span>").append(gitlab).append("</span></th></tr>\n")
                .append("<tr><th>Language</th><th>Language Code</th><th>Translated</th><th>% Translated</th></tr>\n")
                .append("</thead>\n<tbody>\n");
         }
