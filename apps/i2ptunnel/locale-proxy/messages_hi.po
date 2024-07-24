@@ -1,0 +1,423 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+#
+msgid ""
+msgstr ""
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
+
+msgid "Warning: Invalid Request URI"
+msgstr "अहत्यार: अवैध अनुरोध URI"
+
+msgid "Router Console"
+msgstr "राउटर कंसोल"
+
+msgid "I2P Router Console"
+msgstr "I2P राउटर कंसोल"
+
+msgid "Addressbook"
+msgstr "पता बुक"
+
+msgid "Configuration"
+msgstr "सेटिंग"
+
+msgid "Help"
+msgstr "मदद"
+
+msgid "The request URI is invalid, and probably contains illegal characters."
+msgstr "अनुरोध URI अवैध है और शायद अवैध वर्णों का सामना कर रहा है।"
+
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr "यदि आपने एक लिंक को क्लिक किया है, तो URI के अंत में देखें कि क्या ब्राउज़र गलती से किसी वर्ण को जोड़ा है।"
+
+msgid "Connection Reset"
+msgstr "कनेक्शन रीसेट"
+
+msgid "The connection to the website was reset while the page was loading."
+msgstr "पेज लोड हो रहे समय वेबसाइट के साथ कनेक्शन रीसेट हो गया।"
+
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "वेबसाइट अस्थायी रूप से अस्पष्ट हो सकती है, बहुत व्यस्त हो सकती है, या यह आपके एक्सेस को ब्लॉक कर दिया हो सकता है।"
+
+#, java-format
+msgid "You may want to {0}retry{1}."
+msgstr "आप फिर से {0} प्रयास करना चाहेंगे {1}."
+
+#, java-format
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
+msgstr "अगर आप इस पृष्ठ खोले रखते हैं, तो यह अनुपयोगी कनेक्शन की कोशिश के बाद हर {0} सेकंड में स्वचालित रूप से वेबसाइट के साथ पुनः कनेक्ट करने की कोशिश करेगा।"
+
+msgid "Could not find the following destination:"
+msgstr "निम्नलिखित गंतव्य को नहीं मिला:"
+
+msgid "Warning: Non-HTTP Protocol"
+msgstr "अहत्यार: गैर-HTTP प्रोटोकॉल"
+
+msgid "The request uses a bad protocol."
+msgstr "अनुरोध एक खराब प्रोटोकॉल का उपयोग करता है।"
+
+msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
+msgstr "I2P HTTP प्रोक्सी केवल HTTP और HTTPS अनुरोधों का समर्थन करता है।"
+
+msgid "Other protocols such as FTP are not allowed."
+msgstr "FTP जैसे अन्य प्रोटोकॉल अनुमति नहीं हैं।"
+
+msgid "Warning: No Outproxy Configured"
+msgstr "अहत्यार: कोई आउटप्रॉक्सी सेट नहीं की गई"
+
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr "आपका अनुरोध I2P के बाहरी एक साइट के लिए था, लेकिन आपके पास कोई HTTP आउटप्रॉक्सी सेट नहीं है।"
+
+msgid "Please configure an outproxy in I2PTunnel."
+msgstr "कृपया I2PTunnel में एक आउटप्रॉक्सी कोfig करें।"
+
+msgid "Error: Request Denied"
+msgstr "त्रुटि: अनुरोध अस्वीकृत"
+
+msgid "Error: Cannot Access Router Console via I2P Proxy"
+msgstr "त्रुटि: I2P प्रोक्सी के माध्यम से राउटर कंसोल पहुँच नहीं सकती"
+
+msgid "Your browser is misconfigured."
+msgstr "आपका ब्राउज़र गलती से सेट किया गया है।"
+
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
+msgstr "राउटर कंसोल, localhost, या स्थानीय LAN गंतव्यों के लिए प्रोक्सी का उपयोग न करें।"
+
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "आपको 127.0.0.1 (या आप जिस पते पर I2P कंसोल पहुँच रहे हैं) को I2P के HTTP प्रोक्सी के माध्यम से राजमार्ग से रोकने की आवश्यकता है, आमतौर पर ब्राउज़र के प्रोक्सी सेटिंग सेक्शन में पता को छोड़कर।"
+
+msgid "Website Unknown"
+msgstr "वेबसाइट अज्ञात"
+
+msgid "Website Not Found in Addressbook"
+msgstr "पता बुक में वेबसाइट नहीं मिली"
+
+msgid "The website was not found in your router's addressbook."
+msgstr "वेबसाइट आपके राउटर के पता बुक में नहीं मिली।"
+
+msgid "Check the link or find a Base 32 or Base 64 address."
+msgstr "लिंक की जाँच करें या एक Base 32 या Base 64 पता ढूँढ़ें।"
+
+#, java-format
+msgid "If you have the Base 64 address, {0}add it to your addressbook{1}."
+msgstr "यदि आपके पास Base 64 पता है, तो इसे {0}अपने पता बुक में जोड़ें{1}।"
+
+msgid "Otherwise, find a Base 32 or address helper link, or use a jump service link below."
+msgstr "अन्यथा, Base 32 या पता सहायक लिंक ढूँढ़ें, या नीचे दिए गए जंप सर्विस लिंक का उपयोग करें।"
+
+#, java-format
+msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
+msgstr "यह पृष्ठ अक्सर देख रहे हैं? {0}FAQ{1} को देखें {2}अपने पता बुक में कुछ सदस्यताओं{3} जोड़ने के लिए मदद के लिए।"
+
+msgid "Website Unreachable"
+msgstr "वेबसाइट पहुँच नहीं पा रही"
+
+msgid "The website was not reachable, because its lease set was not found."
+msgstr "वेबसाइट पहुँच नहीं पा रही है, क्योंकि उसका लीज सेट नहीं मिला।"
+
+msgid "The website is probably down, but there could also be network congestion."
+msgstr "वेबसाइट संभवतः नीचे हो सकती है, लेकिन यहाँ नेटवर्क की भीड़ हो सकती है।"
+
+msgid "Outproxy Not Found"
+msgstr "आउटप्रॉक्सी नहीं मिली"
+
+msgid "The HTTP Outproxy was not found."
+msgstr "HTTP आउटप्रॉक्सी नहीं मिली।"
+
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "यह ऑनलाइन नहीं है, नेटवर्क में भीड़ है, या आपका राउटर पीयर्स के साथ अभी तक अच्छी तरह से एकीकृत नहीं है।"
+
+#, java-format
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "आप फिर से {0} प्रयास करना चाहेंगे {1}, क्योंकि यह आपके {2}यहाँ{3} परिभाषित टूल के संचालन से यादृच्छिक रूप से एक आउटप्रॉक्सी को नवीनीकृत करेगा (अगर आपने एक से अधिक कोfig किया है)।"
+
+#, java-format
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr "अगर आप अभी भी समस्या का सामना करते हैं, तो आपको अपनी आउटप्रॉक्सी सूची को संपादित करना चाहिए {0}यहाँ{1}।"
+
+msgid "Warning: Request Denied"
+msgstr "अहत्यार: अनुरोध अस्वीकृत"
+
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr "यह पता दुर्बल दिखने लगा है। कृपया सुनिश्चित करें कि आपने एक मान्य पता प्रदान किया है!"
+
+msgid "You attempted to connect to a non-I2P website or location."
+msgstr "आपने I2P के बाहरी एक वेबसाइट या स्थान के साथ कनेक्ट करने की कोशिश की।"
+
+msgid "Outproxy Unreachable"
+msgstr "आउटप्रॉक्सी पहुँच नहीं पा रही"
+
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "HTTP आउटप्रॉक्सी पहुँच नहीं पा रही है, क्योंकि यह एन्क्रिप्शन विकल्प का उपयोग करती है जो आपके I2P या जावा संस्करण द्वारा समर्थित नहीं है।"
+
+msgid "Could not connect to the following destination:"
+msgstr "निम्नलिखित गंतव्य के साथ कनेक्शन नहीं किया जा सका:"
+
+msgid "Proxy Authorization Required"
+msgstr "प्रोक्सी अनुमति आवश्यक"
+
+msgid "I2P HTTP Proxy Authorization Required"
+msgstr "I2P HTTP प्रोक्सी अनुमति आवश्यक"
+
+msgid "This proxy is configured to require a username and password for access."
+msgstr "यह प्रोक्सी एक उपयोगकर्ता नाम और पासवर्ड की आवश्यकता के साथ पहुँच के लिए कन्फ़िगर की गई है।"
+
+#, java-format
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "कृपया अपने उपयोगकर्ता नाम और पासवर्ड दर्ज करें, या अपनी {0}राउटर सेटिंग{1} या {2}I2PTunnel सेटिंग{3} की जाँच करें।"
+
+#, java-format
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "अनुमति को अक्षम करने के लिए, सेटिंग {0}i2ptunnel.proxy.auth=basic{1} को हटाएं, फिर HTTP प्रोक्सी टनल को रोकें और पुनः शुरू करें।"
+
+msgid "Warning: Invalid Destination"
+msgstr "अहत्यार: अवैध गंतव्य"
+
+msgid "The website destination specified was not valid, or was otherwise unreachable."
+msgstr "स्पष्ट किया गया वेबसाइट गंतव्य मान्य नहीं था, या अन्यथा पहुँच से बाहर था।"
+
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr "शायद आपने गलत Base 64 स्ट्रिंग पेस्ट की हो या आप जारी कर रहे लिंक खराब हो।"
+
+msgid "The I2P host could also be offline."
+msgstr "I2P होस्ट भी ऑनलाइन नहीं हो सकता है।"
+
+msgid "The connection to the proxy was reset."
+msgstr "प्रोक्सी के साथ कनेक्शन रीसेट हो गया।"
+
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "प्रोक्सी स्थानिक रूप से अस्थायी रूप से उपलब्ध नहीं हो सकता है, बहुत व्यस्त हो सकता है, या यह आपकी पहुँच ब्लॉक कर दी हो सकती है।"
+
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr "HTTP आउटप्रॉक्सी पहुँच नहीं पा रही है, क्योंकि उसका लीज सेट नहीं मिला।"
+
+msgid "The outproxy is probably down, but there could also be network congestion."
+msgstr "आउटप्रॉक्सी संभवतः नीचे हो सकती है, लेकिन यहाँ नेटवर्क की भीड़ हो सकती है।"
+
+msgid "Warning: Authorization Required"
+msgstr "अहत्यार: अनुमति आवश्यक"
+
+msgid "The website was not reachable."
+msgstr "वेबसाइट पहुँच नहीं पा रही।"
+
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "वेबसाइट ऑनलाइन नहीं है, शायद नेटवर्क में भीड़ है, या आपका राउटर पीयर्स के साथ अभी तक अच्छी तरह संगठित नहीं है।"
+
+msgid "Warning: Destination Key Conflict"
+msgstr "अहत्यार: गंतव्य कुंजी का संघर्ष"
+
+msgid "The address helper link you followed specifies a different destination key than the entry in your address book."
+msgstr "आपने पालन किया हुआ पता सहायक लिंक आपके पता बुक के प्रविष्टि से अलग गंतव्य कुंजी स्थापित करता है।"
+
+msgid "Someone could be trying to impersonate another website, or people have given two websites identical names."
+msgstr "किसी को दूसरी वेबसाइट की पहचान करने की कोशिश कर सकता है, या लोगों ने दो वेबसाइटों को समान नाम दिया है।"
+
+msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
+msgstr "संघर्ष सुलझाने के लिए तब तक निर्णय लें कि आप किस कुंजी पर भरोसा करते हैं, फिर से से पता सहायक लिंक को अनदेखा करें, या अपने पता बुक से मेजबान प्रविष्टि हटा दें और पता सहायक लिंक को फिर से क्लिक करें।"
+
+msgid "The Base32 address is invalid."
+msgstr "Base32 पता अमान्य है।"
+
+msgid "Warning: Bad Address Helper"
+msgstr "अहत्यार: खराब पता सहायक"
+
+#, java-format
+msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgstr "URL में प्रदान की गई सहायक कुंजी ({0}i2paddresshelper={1}) समाधान नहीं की जा सकती है।"
+
+msgid "It seems to be garbage data, or a mistyped Base 32 address."
+msgstr "यह कचरा डेटा लग सकता है, या गलत टाइप किया गया Base 32 पता।"
+
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr "अपनी URL की जाँच करें और प्रयास करें कि सहायक कुंजी को एक मान्य Base 32 होस्टनेम या Base 64 कुंजी के रूप में सुधारें।"
+
+msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "वेबसाइट पहुँच नहीं पा रही है, क्योंकि यह एन्क्रिप्शन विकल्प का उपयोग करती है जो आपके I2P या जावा संस्करण द्वारा समर्थित नहीं है।"
+
+msgid "Information: New Host Name"
+msgstr "जानकारी: नया मेजबान नाम"
+
+msgid "Information: New Host Name with Address Helper"
+msgstr "जानकारी: पता सहायक के साथ नया मेजबान नाम"
+
+msgid "The address helper link you followed is for a new host name that is not in your address book."
+msgstr "आपने पालन किया हुआ पता सहायक लिंक एक नए मेजबान नाम के लिए है जो आपके पता बुक में नहीं है।"
+
+msgid "You may save this host name to your local address book."
+msgstr "आप इस मेजबान नाम को अपने स्थानीय पता बुक में सहेज सकते हैं।"
+
+msgid "If you save it to your address book, you will not see this message again."
+msgstr "अगर आप इसे अपने पता बुक में सहेजते हैं, तो आप इस संदेश को फिर से नहीं देखेंगे।"
+
+msgid "If you do not save it, the host name will be forgotten after the next router restart."
+msgstr "अगर आप इसे नहीं सहेजते हैं, तो मेजबान नाम अगली राउटर रीस्टार्ट के बाद भूल जाएगा।"
+
+msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
+msgstr "यदि आप इस मेजबान की यात्रा नहीं करना चाहते हैं, तो अपने ब्राउज़र में \"वापस\" बटन पर क्लिक करें।"
+
+msgid "This seems to be a bad destination:"
+msgstr "यह एक खराब गंतव्य दिखने लगा है:"
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "i2paddresshelper ऐसे गंतव्य के साथ आपकी मदद नहीं कर सकता!"
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here."
+msgstr "अपने पता बुक में गंतव्य को देखने के लिए, <a href=\"{0}\">यहाँ क्लिक करें। संघर्षपूर्ण पता सहायक गंतव्य को देखने के लिए, <a href=\"{1}\">यहाँ क्लिक करें।"
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "{0} के लिए गंतव्य पता बुक में"
+
+msgid "Conflicting address helper destination"
+msgstr "संघर्षपूर्ण पता सहायक गंतव्य"
+
+msgid "Corrupt Base32 address"
+msgstr "भ्रष्ट Base32 पता"
+
+msgid "Destination LeaseSet not found"
+msgstr "गंतव्य LeaseSet नहीं मिला"
+
+msgid "Host"
+msgstr "मेजबान"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Destination"
+msgstr "गंतव्य"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "{0} पर जाने के लिए बिना सहेजे"
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "आप इस साइट पर ब्राउज़ कर सकते हैं बिना इसे पता बुक में सहेजे। पता आपके I2P राउटर को रीस्टार्ट करने तक याद रहेगा।"
+
+msgid "Continue without saving"
+msgstr "बिना सहेजे जारी रखें"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "{0} को राउटर पता बुक में सहेजें और वेबसाइट पर जाएं"
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "यह पता आपके सब्सक्रिप्शन-आधारित पते को संग्रहित करने वाले राउटर पता बुक में सहेजा जाएगा।"
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "यदि आप खुद जोड़े हुए साइटों की निगरानी करना चाहते हैं, तो अपने मास्टर या निजी पता बुक में जोड़ें।"
+
+msgid "Save & continue"
+msgstr "सहेजें & जारी रखें"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "{0} को मास्टर पता बुक में सहेजें और वेबसाइट पर जाएं"
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "यह पता आपके मास्टर पता बुक में सहेजा जाएगा। यदि आप चाहते हैं कि कुछ पते मुख्य राउटर पता बुक से अलग रखें, लेकिन उन्हें प्रकाशित करने में कोई समस्या न हो, तो इस оп्शन को चुनें।"
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "{0} को निजी पता बुक में सहेजें और वेबसाइट पर जाएं"
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "यह पता आपके निजी पता बुक में सहेजा जाएगा, जिससे सुनिश्चित होगा कि यह कभी प्रकाशित नहीं होगा।"
+
+msgid "Base32 address requires lookup password"
+msgstr "Base32 पता लुकअप पासवर्ड की आवश्यकता है"
+
+msgid "Base32 address requires encryption key"
+msgstr "Base32 पता एन्क्रिप्शन कुंजी की आवश्यकता है"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "Base32 पता एन्क्रिप्शन कुंजी और लुकअप पासवर्ड की आवश्यकता है"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "Base32 पता डिक्रिप्शन विफलता, एन्क्रिप्शन कुंजी की जाँच करें"
+
+msgid "Generate"
+msgstr "तैयार करें"
+
+msgid "Encryption key"
+msgstr "एन्क्रिप्शन कुंजी"
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "आपको या तो सर्वर ऑपरेटर द्वारा प्रदान किया गया PSK एन्क्रिप्शन कुंजी दर्ज करना होगा, या एक DH एन्क्रिप्शन कुंजी तैयार करें और उसे सर्वर ऑपरेटर को भेजें।"
+
+msgid "Ask the server operator for help."
+msgstr "सहायता के लिए सर्वर ऑपरेटर से पूछें।"
+
+msgid "Enter PSK encryption key"
+msgstr "PSK एन्क्रिप्शन कुंजी दर्ज करें"
+
+msgid "Generate new DH encryption key"
+msgstr "नया DH एन्क्रिप्शन कुंजी तैयार करें"
+
+msgid "Lookup password"
+msgstr "लुकअप पासवर्ड"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "आपको सर्वर ऑपरेटर द्वारा प्रदान किया गया पासवर्ड दर्ज करना होगा।"
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "{0} से पता सहायक के माध्यम से जोड़ा गया"
+
+msgid "Added via address helper"
+msgstr "पता सहायक के माध्यम से जोड़ा गया"
+
+msgid "Missing lookup password"
+msgstr "लुकअप पासवर्ड की कमी"
+
+msgid "Missing private key"
+msgstr "निजी कुंजी की कमी"
+
+msgid "Invalid private key"
+msgstr "अमान्य निजी कुंजी"
+
+msgid "Your new encryption key"
+msgstr "आपकी नई एन्क्रिप्शन कुंजी"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "कुंजी की प्रति नकल बनाएं और इसे सर्वर ऑपरेटर को भेजें।"
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "जब आपको अनुमति दी जाएगी, तब आप वेबसाइट पर आगे बढ़ सकते हैं।"
+
+msgid "Go back and fix the error"
+msgstr "वापस जाएं और त्रुटि ठीक करें"
+
+msgid "router"
+msgstr "राउटर"
+
+msgid "master"
+msgstr "मास्टर"
+
+msgid "private"
+msgstr "निजी"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "{0} पर रीडायरेक्ट कर रहा है"
+
+msgid "Redirection in progress"
+msgstr "रीडायरेक्शन प्रगति में"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "{0} को {1} पता बुक में सहेजा गया है, अब रीडायरेक्ट हो रहा है।"
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "{0} को {1} पता बुक में सहेजने में विफल हुए, अब रीडायरेक्ट हो रहा है।"
+
+msgid "Click here if you are not redirected automatically."
+msgstr "अगर आपको स्वचालित रूप से रीडायरेक्ट नहीं किया जाता है, तो यहाँ क्लिक करें।"
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "{0} के लिए प्रमाणीकरण सहेजा गया है, अब रीडायरेक्ट हो रहा है।"
