@@ -1967,7 +1967,7 @@ msgstr "I2P-kaistanleveysmääritys"
 msgid "Configure UI"
 msgstr "Määritä käyttöliittymä"
 
-msgid "Select console theme & language & set optional console password"
+msgid "Select console theme &amp; language &amp; set optional console password"
 msgstr "Valitse konsolin teema"
 
 msgid "Customize Sidebar"

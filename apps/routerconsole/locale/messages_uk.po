@@ -1975,7 +1975,7 @@ msgstr "Конфігурація пропускної здатності I2P"
 msgid "Configure UI"
 msgstr "Налаштування інтерфейсу користувача"
 
-msgid "Select console theme & language & set optional console password"
+msgid "Select console theme &amp; language &amp; set optional console password"
 msgstr "Виберіть тему консолі"
 
 msgid "Customize Sidebar"

@@ -1959,7 +1959,7 @@ msgstr "Cấu hình băng thông I2P"
 msgid "Configure UI"
 msgstr "Cấu hình giao diện người dùng"
 
-msgid "Select console theme & language & set optional console password"
+msgid "Select console theme &amp; language &amp; set optional console password"
 msgstr "Chọn Chủ đề và ngôn ngữ bảng điều khiển và đặt mật khẩu bảng điều khiển tùy chọn"
 
 msgid "Customize Sidebar"

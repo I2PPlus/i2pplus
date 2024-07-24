@@ -1959,7 +1959,7 @@ msgstr "I2P 带宽设置"
 msgid "Configure UI"
 msgstr "界面设置"
 
-msgid "Select console theme & language & set optional console password"
+msgid "Select console theme &amp; language &amp; set optional console password"
 msgstr "选择主机主题和语言并设置可选的主机密码"
 
 msgid "Customize Sidebar"

@@ -1975,7 +1975,7 @@ msgstr "Konfiguracja przepustowości I2P"
 msgid "Configure UI"
 msgstr "Skonfiguruj interfejs użytkownika"
 
-msgid "Select console theme & language & set optional console password"
+msgid "Select console theme &amp; language &amp; set optional console password"
 msgstr "Wybierz motyw konsoli"
 
 msgid "Customize Sidebar"

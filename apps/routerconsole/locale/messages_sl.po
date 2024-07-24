@@ -1983,7 +1983,7 @@ msgstr "Nastavitve širine pasma I2P"
 msgid "Configure UI"
 msgstr "Nastavi UI"
 
-msgid "Select console theme & language & set optional console password"
+msgid "Select console theme &amp; language &amp; set optional console password"
 msgstr "Izberite temo konzole, jezik in nastavite nepovzetno geslo konzole"
 
 msgid "Customize Sidebar"

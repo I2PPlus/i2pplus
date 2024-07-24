@@ -1959,7 +1959,7 @@ msgstr "I2P 帯域幅設定"
 msgid "Configure UI"
 msgstr "UIの設定"
 
-msgid "Select console theme & language & set optional console password"
+msgid "Select console theme &amp; language &amp; set optional console password"
 msgstr "コンソールテーマを選択"
 
 msgid "Customize Sidebar"

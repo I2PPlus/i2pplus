@@ -1968,7 +1968,7 @@ msgstr "Configurazione Larghezza di Banda I2P"
 msgid "Configure UI"
 msgstr "Configura l'interfaccia utente"
 
-msgid "Select console theme & language & set optional console password"
+msgid "Select console theme &amp; language &amp; set optional console password"
 msgstr "Seleziona tema, lingua e imposta una password opzionale per la console"
 
 msgid "Customize Sidebar"

@@ -1999,7 +1999,7 @@ msgstr "تكوين عرض النطاق الترددي I2P"
 msgid "Configure UI"
 msgstr "تكوين واجهة المستخدم"
 
-msgid "Select console theme & language & set optional console password"
+msgid "Select console theme &amp; language &amp; set optional console password"
 msgstr "حدد موضوع وحدة التحكم"
 
 msgid "Customize Sidebar"

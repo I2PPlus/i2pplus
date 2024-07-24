@@ -1975,7 +1975,7 @@ msgstr "Настройка полосы пропускания для I2P"
 msgid "Configure UI"
 msgstr "Настройка пользовательского интерфейса"
 
-msgid "Select console theme & language & set optional console password"
+msgid "Select console theme &amp; language &amp; set optional console password"
 msgstr "Выберите тему консоли"
 
 msgid "Customize Sidebar"

@@ -1967,7 +1967,7 @@ msgstr "I2P Båndbredde Konfiguration"
 msgid "Configure UI"
 msgstr "Konfigurer brugergrænsefladen"
 
-msgid "Select console theme & language & set optional console password"
+msgid "Select console theme &amp; language &amp; set optional console password"
 msgstr "Vælg konsoltema"
 
 msgid "Customize Sidebar"

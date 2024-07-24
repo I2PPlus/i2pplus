@@ -1967,7 +1967,7 @@ msgstr "Configuração de velocidade da internet banda larga"
 msgid "Configure UI"
 msgstr "Configurar IU"
 
-msgid "Select console theme & language & set optional console password"
+msgid "Select console theme &amp; language &amp; set optional console password"
 msgstr "Selecione o tema do console"
 
 msgid "Customize Sidebar"

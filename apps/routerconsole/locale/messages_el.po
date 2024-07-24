@@ -1967,7 +1967,7 @@ msgstr "Ρύθμιση εύρους ζώνης του I2P"
 msgid "Configure UI"
 msgstr "Διαμόρφωση διεπαφής χρήστη"
 
-msgid "Select console theme & language & set optional console password"
+msgid "Select console theme &amp; language &amp; set optional console password"
 msgstr "Επιλέξτε θέμα κονσόλας"
 
 msgid "Customize Sidebar"

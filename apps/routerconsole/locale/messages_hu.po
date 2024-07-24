@@ -1967,7 +1967,7 @@ msgstr "I2P Sávszélességének Beállítása"
 msgid "Configure UI"
 msgstr "UI konfigurálása"
 
-msgid "Select console theme & language & set optional console password"
+msgid "Select console theme &amp; language &amp; set optional console password"
 msgstr "Válassza ki a konzol téma és nyelvet és állítsa be az opcionális konzol jelszót"
 
 msgid "Customize Sidebar"

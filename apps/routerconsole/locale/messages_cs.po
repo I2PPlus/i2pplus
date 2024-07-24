@@ -1975,7 +1975,7 @@ msgstr "Konfigurace šířky pásma I2P"
 msgid "Configure UI"
 msgstr "Konfigurace uživatelského rozhraní"
 
-msgid "Select console theme & language & set optional console password"
+msgid "Select console theme &amp; language &amp; set optional console password"
 msgstr "Vyberte téma konzoly a jazyk a nastavte volitelné heslo konzoly"
 
 msgid "Customize Sidebar"

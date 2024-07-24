@@ -1959,7 +1959,7 @@ msgstr "i2P 대역폭 설정"
 msgid "Configure UI"
 msgstr "사용자 인터페이스를 구성합니다"
 
-msgid "Select console theme & language & set optional console password"
+msgid "Select console theme &amp; language &amp; set optional console password"
 msgstr "콘솔 테마 및 언어 및 설정 선택 콘솔 비밀번호 선택"
 
 msgid "Customize Sidebar"

@@ -1959,7 +1959,7 @@ msgstr "Konfigurasi Bandwidth i2p"
 msgid "Configure UI"
 msgstr "Konfigurasikan UI"
 
-msgid "Select console theme & language & set optional console password"
+msgid "Select console theme &amp; language &amp; set optional console password"
 msgstr "Pilih tema konsol"
 
 msgid "Customize Sidebar"

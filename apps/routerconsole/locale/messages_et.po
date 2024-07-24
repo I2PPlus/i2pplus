@@ -1968,7 +1968,7 @@ msgstr "I2P ribalaiuse häälestus"
 msgid "Configure UI"
 msgstr "kasutajaliidese seadistamine"
 
-msgid "Select console theme & language & set optional console password"
+msgid "Select console theme &amp; language &amp; set optional console password"
 msgstr "valige konsooli teema"
 
 msgid "Customize Sidebar"

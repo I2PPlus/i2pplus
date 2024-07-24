@@ -1967,7 +1967,7 @@ msgstr "I2P Bant Genişliyi Konfiqurasiyası"
 msgid "Configure UI"
 msgstr "UI konfiqurasiyası"
 
-msgid "Select console theme & language & set optional console password"
+msgid "Select console theme &amp; language &amp; set optional console password"
 msgstr "Konsol mövzusunu seçin"
 
 msgid "Customize Sidebar"

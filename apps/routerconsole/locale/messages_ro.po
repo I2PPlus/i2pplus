@@ -1975,7 +1975,7 @@ msgstr "Configurația lățimii de bandă I2P"
 msgid "Configure UI"
 msgstr "Configurați UI"
 
-msgid "Select console theme & language & set optional console password"
+msgid "Select console theme &amp; language &amp; set optional console password"
 msgstr "Selectați tema consolei"
 
 msgid "Customize Sidebar"

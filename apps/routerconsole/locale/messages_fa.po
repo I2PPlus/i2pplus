@@ -1967,7 +1967,7 @@ msgstr "پیکربندی پهنای باند I2P"
 msgid "Configure UI"
 msgstr "UI را پیکربندی کنید"
 
-msgid "Select console theme & language & set optional console password"
+msgid "Select console theme &amp; language &amp; set optional console password"
 msgstr "تم کنسول را انتخاب کنید"
 
 msgid "Customize Sidebar"
