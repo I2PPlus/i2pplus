@@ -39,6 +39,7 @@ public class ConfigUIHelper {
         { "fi", "fi", "Finnish Suomi", null },
         { "fr", "fr", "Français", null },
         { "el", "gr", "Greek Ελληνικά", null },
+        { "hi", "in", "Hindi", null },
         { "hu", "hu", "Hungarian Magyar", null },
         { "in", "id", "Indonesian", null },
         { "it", "it", "Italiano", null },
