@@ -1515,13 +1515,13 @@
 
   <target name="copyflags">
     <copy todir="pkg-temp/eepsite/docroot/help/lib/">
-      <fileset dir="apps/routerconsole/resources/icons/flags_svg" includes="az.svg cn.svg cz.svg de.svg es.svg ee.svg fr.svg gk.svg hu.svg id.svg in.svg ir.svg it.svg jp.svg kr.svg nl.svg pl.svg pt.svg ro.svg ru.svg se.svg tr.svg us.svg lang_ar.svg ua.svg vn.svg" />
+      <fileset dir="apps/routerconsole/resources/icons/flags_svg" includes="az.svg cn.svg cz.svg de.svg dk.svg es.svg ee.svg fi.svg fr.svg gk.svg hu.svg id.svg in.svg ir.svg it.svg jp.svg kr.svg no.svg nl.svg pl.svg pt.svg ro.svg ru.svg se.svg si.svg tr.svg us.svg lang_ar.svg ua.svg vn.svg" />
     </copy>
   </target>
 
   <target name="copyflags-unlesspkg" unless="${with-famfamfam-flag-png}">
     <copy todir="pkg-temp/eepsite/docroot/help/lib/">
-      <fileset dir="apps/routerconsole/resources/icons/flags_svg" includes="az.svg cn.svg cz.svg de.svg es.svg ee.svg fr.svg gk.svg hu.svg id.svg in.svg ir.svg it.svg jp.svg kr.svg nl.svg pl.svg pt.svg ro.svg ru.svg se.svg tr.svg us.svg lang_ar.svg ua.svg vn.svg" />
+      <fileset dir="apps/routerconsole/resources/icons/flags_svg" includes="az.svg cn.svg cz.svg de.svg dk.svg es.svg ee.svg fi.svg fr.svg gk.svg hu.svg id.svg in.svg ir.svg it.svg jp.svg kr.svg nl.svg no.svg pl.svg pt.svg ro.svg ru.svg se.svg si.svg tr.svg us.svg lang_ar.svg ua.svg vn.svg" />
     </copy>
     <copy todir="pkg-temp/docs/icons/flags">
       <!-- base flags/ dir only. flags16x11/ and flags48x48/ dirs already copied by prepConsoleDocs target -->
