@@ -1,3 +1,18 @@
+2024-07-25 dr|z3d
+ * Translations: Complete coverage for all translations, new Hindi translation,
+   translate remaining untranslated eepsite help pages to abridged help with
+   links to corresponding console help pages
+
+2024-07-25 zzz
+ * I2PTunnel: Additional fixes for invalid entries in filter file (Gitlab #483)
+ * Installer: Fix some izpack5 translated languages
+ * rrd4j: More optimizations for graph generation
+ * Util: Add new processors for CPUID
+
+2024-07-24 dr|z3d
+ * Console: Add links to git.skank sourcetree for compiled resources on
+   translation status page
+
 2024-07-19 2.6.0+ (API 0.9.63) released
 
 2024-07-19 dr|z3d
