@@ -1,0 +1,145 @@
+# I2P
+# Copyright (C) 2012 The I2P Project
+#
+msgid ""
+msgstr ""
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
+
+msgid "Failed to load the wrapper"
+msgstr "वेपर लोड करने में विफल हुआ"
+
+#, sh-format
+msgid "$APP_LONG_NAME is already running."
+msgstr "$APP_LONG_NAME पहले से ही चल रहा है।"
+
+#, sh-format
+msgid "Running $APP_LONG_NAME"
+msgstr "$APP_LONG_NAME चल रहा है"
+
+#, sh-format
+msgid "Waiting for $APP_LONG_NAME"
+msgstr "$APP_LONG_NAME का इंतजार कर रहे हैं"
+
+#, sh-format
+msgid "WARNING: $APP_LONG_NAME may have failed to start."
+msgstr "अहत्यारी: $APP_LONG_NAME शुरू होने में विफल हो सकता है।"
+
+msgid "Must be root to perform this action."
+msgstr "इस क्रिया को पूरा करने के लिए आपको रूट होना होगा।"
+
+#, sh-format
+msgid "Starting $APP_LONG_NAME"
+msgstr "$APP_LONG_NAME शुरू कर रहे हैं"
+
+#, sh-format
+msgid "Stopping $APP_LONG_NAME"
+msgstr "$APP_LONG_NAME बंद कर रहे हैं"
+
+#, sh-format
+msgid "$APP_LONG_NAME was not running."
+msgstr "$APP_LONG_NAME चल नहीं रहा था।"
+
+#, sh-format
+msgid "Unable to stop $APP_LONG_NAME."
+msgstr "$APP_LONG_NAME को रोकने में असमर्थ।"
+
+#, sh-format
+msgid "Waiting for $APP_LONG_NAME to exit"
+msgstr "$APP_LONG_NAME को बंद करने का इंतजार कर रहे हैं"
+
+#, sh-format
+msgid "Failed to stop $APP_LONG_NAME."
+msgstr "$APP_LONG_NAME को रोकने में विफल हुए।"
+
+#, sh-format
+msgid "Stopped $APP_LONG_NAME."
+msgstr "$APP_LONG_NAME बंद कर दिया।"
+
+#, sh-format
+msgid "Stopping $APP_LONG_NAME gracefully"
+msgstr "$APP_LONG_NAME को अच्छी तरह से बंद कर रहे हैं"
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr "$APP_LONG_NAME चल नहीं रहा है।"
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr "$APP_LONG_NAME चल रहा है: PID:$pid"
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
+msgstr "$APP_LONG_NAME चल रहा है: PID:$pid, वेपर:$STATUS, जावा:$JAVASTATUS"
+
+#, sh-format
+msgid "The $APP_LONG_NAME daemon is already installed."
+msgstr "$APP_LONG_NAME डीमॉन पहले से ही स्थापित है।"
+
+#, sh-format
+msgid "Installing the $APP_LONG_NAME daemon"
+msgstr "$APP_LONG_NAME डीमॉन को स्थापित कर रहे हैं"
+
+#, sh-format
+msgid "Install not currently supported for $DIST_OS"
+msgstr "$DIST_OS के लिए स्थापना वर्तमान में समर्थन नहीं है"
+
+#, sh-format
+msgid "Removing $APP_LONG_NAME daemon"
+msgstr "$APP_LONG_NAME डीमॉन को हटा रहे हैं"
+
+#, sh-format
+msgid "The $APP_LONG_NAME daemon is not currently installed."
+msgstr "$APP_LONG_NAME डीमॉन को वर्तमान में स्थापित नहीं किया गया है।"
+
+#, sh-format
+msgid "Remove not currently supported for $DIST_OS"
+msgstr "$DIST_OS के लिए हटाना वर्तमान में समर्थन नहीं है"
+
+msgid "Commands:"
+msgstr "आदेश:"
+
+msgid "Launch in the current console."
+msgstr "वर्तमान कंसोल में लॉन्च करें।"
+
+msgid "Start in the background as a daemon process."
+msgstr "डीमॉन प्रक्रिया के रूप में पृष्ठभूमि में शुरू करें।"
+
+msgid "Stop if running as a daemon or in another console."
+msgstr "अगर डीमॉन के रूप में या अन्य कंसोल में चल रहा हो, तो रोकें।"
+
+msgid "Stop gracefully, may take up to 11 minutes or more."
+msgstr "अच्छी तरह से बंद करें, 11 मिनट या अधिक समय ले सकता है।"
+
+msgid "Restart gracefully, may take up to 11 minutes or more."
+msgstr "अच्छी तरह से पुनः शुरू करें, 11 मिनट या अधिक समय ले सकता है।"
+
+msgid "Stop if running and then start."
+msgstr "अगर चल रहा हो तो रोकें और फिर शुरू करें।"
+
+msgid "Restart only if already running."
+msgstr "अगर पहले से ही चल रहा हो, तब ही पुनः शुरू करें।"
+
+msgid "Query the current status."
+msgstr "वर्तमान स्थिति की पूछताछ करें।"
+
+msgid "Install to start automatically when system boots."
+msgstr "सिस्टम बूट करने पर स्वचालित रूप से शुरू होने के लिए स्थापित करें।"
+
+msgid "Uninstall."
+msgstr "अनस्थापित करें।"
+
+msgid "Request a Java thread dump if running."
+msgstr "अगर चल रहा हो तो जावा थ्रेड डंप की मांग करें।"
+
+msgid "Please edit i2prouter and set the variable RUN_AS_USER"
+msgstr "कृपया i2prouter को संपादित करें और चर RUN_AS_USER को सेट करें"
+
+msgid "Running I2P as the root user is *not* recommended."
+msgstr "I2P को रूट उपयोगकर्ता के रूप में चलाना *सिफारिश नहीं है।"
+
+msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
+msgstr "अभी भी रूट के रूप में चलाने के लिए, i2prouter को संपादित करें और ALLOW_ROOT=true सेट करें।"
