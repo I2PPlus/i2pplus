@@ -144,7 +144,7 @@ public class RrdGraph implements RrdGraphConstants {
                 mapper = new Mapper(this);
                 if (showLegend) {placeLegends();}
                 createImageWorker();
-                if (drawBackground) {drawBackground();}
+                drawBackground();
                 drawData();
                 drawRulesAndSpans();
                 if (!graphOnly) {

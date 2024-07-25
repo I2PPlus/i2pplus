@@ -176,22 +176,17 @@ class SummaryRenderer {
                 def.setColor(ElementsNames.frame, TRANSPARENT);
             // Override defaults (dark themes)
             } else if (theme.equals("midnight")) {
-                def.setColor(ElementsNames.font,    FONT_COLOR_MIDNIGHT);
-                def.setColor(ElementsNames.xaxis,   AXIS_COLOR_MIDNIGHT);
-                def.setColor(ElementsNames.yaxis,   AXIS_COLOR_MIDNIGHT);
+                def.setColor(ElementsNames.font, FONT_COLOR_MIDNIGHT);
+                def.setColor(ElementsNames.xaxis, AXIS_COLOR_MIDNIGHT);
+                def.setColor(ElementsNames.yaxis, AXIS_COLOR_MIDNIGHT);
             } else if (theme.equals("dark")) {
-                def.setColor(ElementsNames.font,    FONT_COLOR_DARK);
-                def.setColor(ElementsNames.xaxis,   AXIS_COLOR_DARK);
-                def.setColor(ElementsNames.yaxis,   AXIS_COLOR_DARK);
+                def.setColor(ElementsNames.font, FONT_COLOR_DARK);
+                def.setColor(ElementsNames.xaxis, AXIS_COLOR_DARK);
+                def.setColor(ElementsNames.yaxis, AXIS_COLOR_DARK);
             }
             if (theme.equals("midnight") || theme.equals("dark")) {
-                if (hideLegend) {
-                    def.setColor(ElementsNames.back,   TRANSPARENT);
-                    def.setColor(ElementsNames.canvas, TRANSPARENT);
-                } else {
-                    def.setColor(ElementsNames.back,   BACK_COLOR_DARK);
-                    def.setColor(ElementsNames.canvas, TRANSPARENT);
-                }
+                    def.setColor(ElementsNames.back, BACK_COLOR_DARK);
+                    def.setColor(ElementsNames.canvas,TRANSPARENT);
             } else {
                 def.setColor(ElementsNames.back,   BACK_COLOR);
             }
@@ -199,22 +194,22 @@ class SummaryRenderer {
                 def.setColor(ElementsNames.shadea, TRANSPARENT);
                 def.setColor(ElementsNames.shadeb, TRANSPARENT);
                 if (theme.equals("dark")) {
-                  def.setColor(ElementsNames.grid,   GRID_COLOR_DARK2);
-                  def.setColor(ElementsNames.mgrid,  MGRID_COLOR_DARK);
+                  def.setColor(ElementsNames.grid, GRID_COLOR_DARK2);
+                  def.setColor(ElementsNames.mgrid, MGRID_COLOR_DARK);
                 } else if (theme.equals("midnight")) {
                     def.setColor(ElementsNames.grid, GRID_COLOR_MIDNIGHT);
                     def.setColor(ElementsNames.mgrid, MGRID_COLOR_MIDNIGHT);
                 }
-                def.setColor(ElementsNames.frame,  FRAME_COLOR_DARK);
-                def.setColor(ElementsNames.arrow,  ARROW_COLOR_DARK);
+                def.setColor(ElementsNames.frame, FRAME_COLOR_DARK);
+                def.setColor(ElementsNames.arrow, ARROW_COLOR_DARK);
             } else {
                 // Override defaults (light themes)
                 def.setColor(ElementsNames.shadea, SHADEA_COLOR);
                 def.setColor(ElementsNames.shadeb, SHADEB_COLOR);
-                def.setColor(ElementsNames.grid,   GRID_COLOR);
-                def.setColor(ElementsNames.mgrid,  MGRID_COLOR);
-                def.setColor(ElementsNames.font,   FONT_COLOR);
-                def.setColor(ElementsNames.frame,  FRAME_COLOR);
+                def.setColor(ElementsNames.grid, GRID_COLOR);
+                def.setColor(ElementsNames.mgrid, MGRID_COLOR);
+                def.setColor(ElementsNames.font, FONT_COLOR);
+                def.setColor(ElementsNames.frame, FRAME_COLOR);
             }
 
             if (width < 400 || height < 200 || periodCount < 120) {
@@ -246,15 +241,10 @@ class SummaryRenderer {
 
             /* CJK support */
             if ("zh".equals(Messages.getLanguage(_context))) {
-                if (fontlist.contains("Noto Sans SC")) {
-                    DEFAULT_TITLE_FONT_NAME = "Noto Sans SC";
-                } else if (fontlist.contains("Noto Sans CJK SC")) {
-                    DEFAULT_TITLE_FONT_NAME = "Noto Sans CJK SC";
-                } else if (fontlist.contains("Source Han Sans SC")) {
-                    DEFAULT_TITLE_FONT_NAME = "Source Han Sans SC";
-                } else {
-                    DEFAULT_TITLE_FONT_NAME = "Dialog";
-                }
+                if (fontlist.contains("Noto Sans SC")) {DEFAULT_TITLE_FONT_NAME = "Noto Sans SC";}
+                else if (fontlist.contains("Noto Sans CJK SC")) {DEFAULT_TITLE_FONT_NAME = "Noto Sans CJK SC";}
+                else if (fontlist.contains("Source Han Sans SC")) {DEFAULT_TITLE_FONT_NAME = "Source Han Sans SC";}
+                else {DEFAULT_TITLE_FONT_NAME = "Dialog";}
                 if (fontlist.contains("Noto Sans Mono SC")) {
                     DEFAULT_FONT_NAME = "Noto Sans Mono SC";
                     DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono SC";
@@ -266,15 +256,10 @@ class SummaryRenderer {
                     DEFAULT_LEGEND_FONT_NAME = "Monospaced";
                 }
             } else if ("jp".equals(Messages.getLanguage(_context))) {
-                if (fontlist.contains("Noto Sans JP")) {
-                    DEFAULT_TITLE_FONT_NAME = "Noto Sans JP";
-                } else if (fontlist.contains("Noto Sans CJK JP")) {
-                    DEFAULT_TITLE_FONT_NAME = "Noto Sans CJK JP";
-                } else if (fontlist.contains("Source Han Sans JP")) {
-                    DEFAULT_TITLE_FONT_NAME = "Source Han Sans JP";
-                } else {
-                    DEFAULT_TITLE_FONT_NAME = "Dialog";
-                }
+                if (fontlist.contains("Noto Sans JP")) {DEFAULT_TITLE_FONT_NAME = "Noto Sans JP";}
+                else if (fontlist.contains("Noto Sans CJK JP")) {DEFAULT_TITLE_FONT_NAME = "Noto Sans CJK JP";}
+                else if (fontlist.contains("Source Han Sans JP")) {DEFAULT_TITLE_FONT_NAME = "Source Han Sans JP";}
+                else {DEFAULT_TITLE_FONT_NAME = "Dialog";}
                 if (fontlist.contains("Noto Sans Mono JP")) {
                     DEFAULT_FONT_NAME = "Noto Sans Mono JP";
                     DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono JP";
@@ -286,15 +271,10 @@ class SummaryRenderer {
                     DEFAULT_LEGEND_FONT_NAME = "Monospaced";
                 }
             } else if ("ko".equals(Messages.getLanguage(_context))) {
-                if (fontlist.contains("Noto Sans KO")) {
-                    DEFAULT_TITLE_FONT_NAME = "Noto Sans KO";
-                } else if (fontlist.contains("Noto Sans CJK KO")) {
-                    DEFAULT_TITLE_FONT_NAME = "Noto Sans CJK KO";
-                } else if (fontlist.contains("Source Han Sans KO")) {
-                    DEFAULT_TITLE_FONT_NAME = "Source Han Sans KO";
-                } else {
-                    DEFAULT_TITLE_FONT_NAME = "Dialog";
-                }
+                if (fontlist.contains("Noto Sans KO")) {DEFAULT_TITLE_FONT_NAME = "Noto Sans KO";}
+                else if (fontlist.contains("Noto Sans CJK KO")) {DEFAULT_TITLE_FONT_NAME = "Noto Sans CJK KO";}
+                else if (fontlist.contains("Source Han Sans KO")) {DEFAULT_TITLE_FONT_NAME = "Source Han Sans KO";}
+                else {DEFAULT_TITLE_FONT_NAME = "Dialog";}
                 if (fontlist.contains("Noto Sans Mono KO")) {
                     DEFAULT_FONT_NAME = "Noto Sans Mono KO";
                     DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono KO";
