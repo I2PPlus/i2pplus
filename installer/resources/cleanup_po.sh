@@ -75,7 +75,10 @@ while IFS= read -r po_file; do
     "
 
     if [ $remove_comments -eq 1 ]; then
-        sed_commands="$sed_commands; /^#\\./d"
+        sed_commands="$sed_commands;
+            /^#~.*$/d;
+            /^#,*$/d;
+            /^#\\./d"
     fi
 
     # Apply sed commands to the file
