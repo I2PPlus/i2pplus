@@ -265,8 +265,8 @@ msgid "i2paddresshelper cannot help you with a destination like that!"
 msgstr "i2paddresshelper ऐसे गंतव्य के साथ आपकी मदद नहीं कर सकता!"
 
 #, java-format
-msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here."
-msgstr "अपने पता बुक में गंतव्य को देखने के लिए, <a href=\"{0}\">यहाँ क्लिक करें। संघर्षपूर्ण पता सहायक गंतव्य को देखने के लिए, <a href=\"{1}\">यहाँ क्लिक करें।"
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "अपने पता बुक में गंतव्य को देखने के लिए, <a href=\"{0}\">यहाँ क्लिक करें। संघर्षपूर्ण पता सहायक गंतव्य को देखने के लिए, <a href=\"{1}\">यहाँ क्लिक करें</a>।"
 
 #, java-format
 msgid "Destination for {0} in addressbook"

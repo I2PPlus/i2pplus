@@ -51,10 +51,10 @@ msgstr "तरह {0}"
 msgid "DSA 1024 bit"
 msgstr "DSA 1024 बिट"
 
-msgid "Search for "
-msgid_plural "Search for "
-msgstr[0] "खोजें "
-msgstr[1] "खोजें "
+msgid "Search for <span class=active>"
+msgid_plural "Search for <span class=active>"
+msgstr[0] "खोजें <span class=active>"
+msgstr[1] "खोजें <span class=active>"
 
 #, java-format
 msgid "Filtered list contains 1 entry."
@@ -63,10 +63,10 @@ msgstr[0] "स्क्रीन की सूची में {0} प्रव�
 msgstr[1] "स्क्रीन की सूची में {0} प्रविष्टियाँ हैं।"
 
 #, java-format
-msgid "One result for: "
-msgid_plural "{0} results for: "
-msgstr[0] "{0} एक परिणाम है: "
-msgstr[1] "{0} परिणाम हैं: "
+msgid "One result for: <span class=active>"
+msgid_plural "{0} results for: <span class=active>"
+msgstr[0] "{0} एक परिणाम है: <span class=active>"
+msgstr[1] "{0} परिणाम हैं: <span class=active>"
 
 #, java-format
 msgid "1 entry"
@@ -91,6 +91,7 @@ msgstr "होस्ट नाम {0} पहले से ही पत्रि
 msgid "Unable to resolve Base 32 address"
 msgstr "बेस 32 पता हल्ने में असमर्थ"
 
+#, java-format
 msgid "Destination added for {0}."
 msgstr "{0} के लिए गंतव्य जोड़ा गया है।"
 
@@ -477,11 +478,11 @@ msgstr "पत्रिका अनुप्रयोग आपकी I2P स�
 msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
 msgstr "यह नियमित रूप से वितरित स्रोतों या \"सब्सक्रिप्शन\" से आपकी hosts.txt फ़ाइल को अपडेट करता है।"
 
-msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions file."
-msgstr "तिरिक्त साइटों की सदस्यता लेना आसान है, बस उन्हें अपनी <a href=\"subscriptions\">सब्सक्रिप्शन फ़ाइल में जोड़ें।"
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "तिरिक्त साइटों की सदस्यता लेना आसान है, बस उन्हें अपनी <a href=\"subscriptions\">सब्सक्रिप्शन फ़ाइल में जोड़ें</a>।"
 
-msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview."
-msgstr "I2P में नामकरण के बारे में अधिक जानकारी के लिए, <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>समीक्षा को देखें।"
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "I2P में नामकरण के बारे में अधिक जानकारी के लिए, <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>समीक्षा को देखें</a>।"
 
 msgid "How does the addressbook application work?"
 msgstr "पत्रिका अनुप्रयोग कैसे कार्य करता है?"
