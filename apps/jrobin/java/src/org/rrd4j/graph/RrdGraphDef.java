@@ -29,9 +29,6 @@ import org.rrd4j.data.DataProcessor;
 import org.rrd4j.data.IPlottable;
 import org.rrd4j.data.Variable;
 
-//import eu.bengreen.data.utility.LargestTriangleThreeBuckets;
-//import eu.bengreen.data.utility.LargestTriangleThreeBucketsTime;
-//import org.rrd4j.data.CubicSplineInterpolator;
 
 /**
  * <p>Class which should be used to define new Rrd4j graph. Once constructed and populated with data
