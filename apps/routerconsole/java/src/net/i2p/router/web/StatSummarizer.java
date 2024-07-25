@@ -98,7 +98,6 @@ public class StatSummarizer implements Runnable, ClientApp {
         if (isPersistent) {
             String spec = _context.getProperty("stat.summaries", DEFAULT_DATABASES);
             String[] rates = DataHelper.split(spec, ",");
-//            syncThreads = Math.min(rates.length / 2, 4);
             syncThreads = Math.min(rates.length, SystemVersion.isSlow() ? 4 : Math.max(SystemVersion.getCores(), 6));
             // delete files for unconfigured rates
             Set<String> configured = new HashSet<String>(rates.length);
@@ -285,7 +284,6 @@ public class StatSummarizer implements Runnable, ClientApp {
             _listeners.add(lsnr);
         else
             _log.error("Failed to add RRD for rate " + r.getRateStat().getName() + '.' + r.getPeriod());
-        //System.out.println("Start listening for " + r.getRateStat().getName() + ": " + r.getPeriod());
     }
 
     public boolean renderPng(Rate rate, OutputStream out) throws IOException {
