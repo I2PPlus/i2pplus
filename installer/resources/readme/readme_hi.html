@@ -1,0 +1,69 @@
+<div lang="hi">
+
+<ul class="links">
+
+<li><b>शुरुआत करना</b><br>
+यदि आपने हाल ही में I2P+ शुरू किया है, तो <i>एक्टिव पीयर</i> की संख्या साइडबार पर दिखाई देने वाली अगले कुछ मिनटों में बढ़नी शुरू कर देगी, और आपको <i>स्थानीय गंतव्य</i> के रूप में <i>शेयर्ड क्लाइंट्स</i> का भी सूचीबद्ध करने की उम्मीद है <i>सर्विस टनल</i> सेक्शन में, और यदि I2P कैसे कॉन्फ़िगर किया गया है तो अन्य क्लाइंट और सर्वर भी। ये <i>स्थानीय गंतव्य</i> विभिन्न <a class="consolelink" title="सामान्य रूप से प्रयोग किए जाने वाले पोर्ट की सूची" href="/help/faq#portfaq">पोर्ट</a> पर सेवाओं के लिए कनेक्शन प्रदान करते हैं I2P नेटवर्क के, जिससे BitTorrent, ईमेल, वेब प्रोक्सी और अन्य सेवाओं को संचालित करने की अनुमति मिलती है। आपका <a class="consolelink" href="/netdb">नेटवर्क डेटाबेस</a> नेटवर्क पर सभी स्थानीय जाने माने पीयर्स को दर्शाता है। आप मौजूदा <a class="consolelink" href="/peers">पीयर कनेक्शन</a> की जांच कर सकते हैं, <a class="consolelink" href="/profiles?f=1">पीयर प्रदर्शन प्रोफ़ाइल</a> की समीक्षा कर सकते हैं, और सक्रिय <a class="consolelink" href="/tunnels">टनल</a> और उनकी स्थिति को देख सकते हैं।</li>
+
+<li><b>नेटवर्क इंटीग्रेशन</b><br>
+जब आप पहली बार I2P+ शुरू करते हैं, तो यह आपको नेटवर्क में बूटस्ट्रैप करने (समर्पित करने) में कुछ मिनट ले सकता है और अतिरिक्त पीयर खोजने के लिए, जो आपकी समर्पित करने की क्षमता को अधिक बनाए रखने के लिए, इसलिए कृपया सहनशील रहें। एक बार जब ग्रीन स्टार आपके <i>स्थानीय गंतव्य</i> के बगल में <i>सेवा टनल</i> पर दिखाई देते हैं, तो आपके पास I2P के साथ करने के लिए एक संग्रहण है, और नीचे हम आपको कुछ ऐसे चीज़ों के बारे में परिचय देंगे।</li>
+
+<li><b>नेटवर्क स्थिति</b><br>
+जब I2P+ को समय मिल जाता है आपकी नेटवर्क कनेक्टिविटी की परीक्षण करने के लिए, साइडबार पर नेटवर्क स्थिति इंडिकेटर "OK" दिखाने की संभावना है। यदि स्थिति "फायरवॉल्ड" दिखाती है, तो I2P+ अभी भी कार्यरत होगा हालांकि नेटवर्क प्रदर्शन अपकमिंग होगा, और आपकी क्षमता नेटवर्क को बैंडविड्थ प्रदान करने की प्रतिबंधित होगी। अधिकांश प्रदर्शन के लिए, कृपया अपने फ़ायरवॉल और आपके आईएसपी प्रदान किए गए रॉटर पर <a class="consolelink" href="/confignet#udpconfig">exteranal I2P+ पोर्ट</a> को खोलने की विचार करें। स्थिति संदेशों के बारे में अधिक जानकारी <a class="consolelink" href="/help/ui#reachabilityhelp">उपयोगकर्ता इंटरफ़ेस मदद पृष्ठ</a> पर उपलब्ध है।</li>
+
+<li><b>एड्रेसबुक सब्सक्रिप्शन</b><br>
+I2P+ के लिए .i2p डोमेन नामों को स्वचालित रूप से सुलझाने के लिए, यह मुख्य रूप से जाने गए मेजबानों के लिए DNS परिवर्तन प्रदान करने वाली सेवाओं के लिए सब्सक्रिप्शन पर निर्भर करता है। यदि आपने I2P के बजाय I2P+ को स्थापित किया है, तो आपके पास पहले से ही पर्याप्त <a class="consolelink" href="/susidns/subscriptions">एड्रेसबुक सब्सक्रिप्शन</a> की सेटिंग की होगी; स्थापना के बाद, आपका <a class="consolelink" href="/dns">एड्रेसबुक</a> नेटवर्क पर सक्रिय सेवाओं के लिए डोमेन नामों को स्वचालित रूप से भर देगा। यदि आपने I2P से अपग्रेड किया है, तो <a class="consolelink" href="/help/faq#addressbooksubs">एड्रेसबुक सब्सक्रिप्शन खंड</a> में जांचें <a class="consolelink" href="/help/faq">FAQ</a> में अतिरिक्त सब्सक्रिप्शन जोड़ने के लिए मदद के लिए।
+</li>
+
+<li><b>ब्राउज़र सेटिंग</b><br>
+नेटवर्क पर वेबसाइटों को ब्राउज़ करने के लिए, आपको अपने ब्राउज़र को सेट करने की आवश्यकता होगी <a class="consolelink" href="/help/configuration#browserconfig">ब्राउज़र के लिए HTTP प्रोक्सी</a> को पोर्ट 4444 पर सेट किया गया है, जो एक <i>ऑउटप्रॉक्सी</i> प्रदान करता है जिससे स्पष्टनेट साइटों को अनामता से ब्राउज़ किया जा सकता है। <a class="consolelink" href="/help/configuration#browserconfig">सेटिंग पृष्ठ</a> में प्रदान की गई फ़ायरफ़ॉक्स के लिए एक मिनी-गाइड, या नीचे दिए गए लिंक पर बहु-ब्राउज़र सेटअप गाइड के लिए संदर्भ करें। एक बार जब आपने अपने ब्राउज़र और एड्रेसबुक सब्सक्रिप्शन की सेटिंग की, <a href="http://notbob.i2p/" target="_blank" rel="noopener noreferrer">notbob.i2p</a> नेटवर्क पर सामग्री खोजने के लिए एक महान साइट है।
+</li>
+
+</ul>
+
+<h3>नेटवर्क पर सेवाएं I2P</h3>
+
+<ul class="links twocol">
+
+<li><b>अदृश्य इंटरनेट &amp; सार्वजनिक वेब ब्राउज़िंग</b><br>
+I2P पर आप I2P-में स्थित वेबसाइटों ("ईपीसाइट्स") या साफ़नेट साइटों को सार्वजनिक रूप से अनामता से ब्राउज़ कर सकते हैं I2P के अंतरिक्ष में बनाए गए वेब प्रोक्सी (ऑउटप्रॉक्सी) के माध्यम से। <a rel="noopener noreferrer" class="sitelink external" href="https://geti2p.net/en/about/browser-config" target="_blank">अपने ब्राउज़र को</a> <code>127.0.0.1 port 4444</code> पर HTTP प्रोक्सी के रूप में सेट करें, फिर एक गुप्त सेवा वेबसाइट या सामान्य, अनक्रिप्टेड <code>http://</code> पता पर ब्राउज़ करें। साफ़नेट इंटरनेट के लिए ऑउटप्रॉक्सी एक्सेस को बदलने या रद्द करने के लिए, <code>false.i2p</code> या <code>purokishi.i2p</code> के लिए ऑउटप्रॉक्सी प्रविष्टि को हटाएं या संशोधित करें <i>ऑउटप्रॉक्सी</i> खंड में <a class="consolelink" rel="noreferrer" href="/i2ptunnel/edit?tunnel=0">Editar पेज</a> <a class="consolelink" href="/i2ptunnelmgr">Tunnel Manager</a> में HTTP प्रोक्सी क्लाइंट टनल के।</li>
+
+<li><b>अनामता से ईमेल</b><br>
+पोस्टमैन की I2P-आधारित ईमेल प्रणाली को या किसी मानक ईमेल क्लाइंट के माध्यम से एक्सेस किया जा सकता है। एक ईमेल गेटवे के माध्यम से आपके <code>@mail.i2p</code> पता को सामान्य इंटरनेट पताओं से प्राप्त किया जा सकता है; आपका <code>@i2pmail.org</code> भी पहुंच सकता है। एक खाता के लिए, <a rel="noopener noreferrer" class="sitelink" href="http://hq.postman.i2p/" target="_blank">hq.postman.i2p</a> पर जाएं।</li>
+
+<li><b>अनामता से फ़ाइल ट्रांस्फर</b><br>
+I2PSnark I2P में एकीकृत है, जो अनामता और क्रिप्टोग्राफिक बिटटॉरेंट ट्रांसफर प्रदान करता है। विकल्प के रूप में, <a rel="noopener noreferrer" class="sitelink external" href="https://wiki.biglybt.com/w/I2P" target="_blank">BiglyBT</a> (Azureus/Vuze का उत्तराधिकारी) है, जो इ2प पर टॉरेंटिंग का समर्थन करने वाला एक बिटटॉरेंट क्लाइंट है, और <a rel="noopener noreferrer" class="sitelink external" href="https://github.com/majestrate/XD" target="_blank">XD</a>, जो एक I2P-केवल बिटटॉरेंट क्लाइंट है जो गो में लिखी गई है। अतिरिक्त सेवाओं में ब्राउज़र-आधारित फ़ाइल होस्टिंग शामिल हैं, जैसे <a rel="noopener noreferrer" class="sitelink" href="http://cake.i2p/" target="_blank">cake.i2p</a> और <a rel="noopener noreferrer" class="sitelink" href="http://fs.i2p/" target="_blank">fs.i2p</a>।</li>
+
+<li><b>अनामता से चैट</b><br>
+आपको अपने IRC क्लाइंट (जैसे <a rel="noopener noreferrer" class="sitelink external" href="https://hexchat.github.io/" target="_blank">HexChat</a>) शुरू करने की आवश्यकता होगी और <code>127.0.0.1 port 6668</code> पर <a class="chatlink">सर्वर</a> को जोड़ने के लिए; आपको अपने IRC क्लाइंट में प्रोक्सी को सेट करने की आवश्यकता नहीं है; I2P आपको एक स्थानीय IRC टनल (आपके IRC क्लाइंट में एक IRC सर्वर या दूरस्थ मेज के रूप में निर्दिष्ट किया गया) प्रदान करता है। जब आप वहां होंगे, <code>#saltr</code>, और <code>#i2p-dev</code> केवल कुछ उपलब्ध चैनल हैं जिनमें आप शामिल हो सकते हैं। एक इ2प-आधारित अनामता से इंस्टैंट मैसेजिंग एप्लीकेशन, <a rel="noopener noreferrer" class="sitelink external" href="https://vituperative.github.io/i2pchat/" target="_blank">Github</a> पर उपलब्ध है।</li>
+
+<li><b>अनामता से सुरक्षित वेब होस्टिंग</b><br>
+I2P में एक वेबसर्वर होता है जो आपको नेटवर्क पर अपनी खुद की वेबसाइट को होस्ट करने की अनुमति देता है: <a rel="noopener noreferrer" class="sitelink external" href="https://www.eclipse.org/jetty/" target="_blank">Jetty</a> का एक इंस्टेंस जो <a rel="noopener noreferrer" class="consolelink" href="http://127.0.0.1:7658/" target="_blank">http://127.0.0.1:7658/</a> पर सुनिश्चित करता है। प्री-कन्फ़िग किए गए <a rel="noreferrer" class="consolelink" href="/i2ptunnelmgr">I2P Webserver Tunnel</a> शुरू करने के बाद, आपकी साइट दूसरों के लिए देखी जा सकती है (लेकिन खोजी नहीं)। अपनी साइट की सेटिंग करने और एक .i2p डोमेन पंजीकृत करने की निर्देशन प्रदान करने के लिए <a class="consolelink" href="http://127.0.0.1:7658/help/webhosting" target="_blank" rel="noopener noreferrer">मदद के खंड</a> में जाएं।</li>
+
+<li id=plugins><b>I2P के लिए प्लगइन्स</b><br> कृपया <a href="http://stats.i2p/i2p/plugins/" class=sitelink target=_blank rel=noreferrer>zzz के प्लगइन्स पेज</a> पर जाकर कई प्लगइन्स के सीधे डाउनलोड लिंक प्राप्त करें। यदि आप एक विकासकर्ता हैं, तो प्लगइन्स लिखने के लिए एक भाषा-अवसरबद्ध <a href="http://i2p-projekt.i2p/plugins.html" class=sitelink target=_blank rel=noreferrer>फ्रेमवर्क</a> प्रदान किया गया है।</li> 
+
+</ul>
+
+<h3 id=trouble>विकासकर्ताओं और योगदाताओं के लिए जानकारी</h3>
+
+<ul class=links>
+
+<li><b>बग रिपोर्टिंग</b><br>
+एक बग रिपोर्ट करने के लिए, कृपया <a href="http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues" class=sitelink target=_blank rel=noreferrer>git.idk.i2p</a> पर टिकट फाइल करें। विकास संबंधी चर्चा के लिए, कृपया <a href="http://zzz.i2p/" class=sitelink target=_blank rel=noreferrer>zzz के विकास फोरम</a> या I2P के IRC नेटवर्क में <a href="irc://127.0.0.1:6668/i2p-dev" class=chatlink>विकास चैनल</a> (#i2p-dev) देखें।</li>
+
+<li><b>I2P पर विकास</b><br> यदि आप एक विकासकर्ता हैं, तो आप अपने स्वयं के <a href="http://i2p-projekt.i2p/applications.html" class=sitelink target=_blank rel=noreferrer>I2P एप्लिकेशन</a> लिखना चाहते हैं या अपने एप्लिकेशन की सुरक्षा में सुधार करके I2P नेटवर्क का लाभ उठाएं। दोनों <a href="https://wikipedia.org/wiki/User_Datagram_Protocol" class="sitelink external" target=_blank rel=noreferrer>UDP</a> और <a href="https://wikipedia.org/wiki/Transmission_Control_Protocol" class="sitelink external" target=_blank rel=noreferrer>TCP</a> प्रोटोकॉल्स प्रोवाइड किए गए हैं, और <a href="http://i2p-projekt.i2p/streaming.html" class=sitelink target=_blank rel=noreferrer>रियलटाइम स्ट्रीमिंग</a> भी संभव है। हम आपको I2P लाइब्रेरीज़ में पूर्ण पहुंच प्रदान करते हैं, जिसमें <a href="http://javadoc.skank.i2p/" class=sitelink target=_blank rel=noreferrer>जावा एपीआई</a> शामिल है, और I2P कोर लाइब्रेरीज़ Apache Maven रेपोजिटरी में host किए गए हैं। विकासकर्ता I2P पर ब्राउज़ कर सकते हैं <a href="https://github.com/i2p/i2p.i2p" class="sitelink external" target=_blank rel=noreferrer>गिटहब</a> (I2P) या <a href="https://gitlab.com/i2pplus/I2P.Plus" class="sitelink external" target=_blank rel=noreferrer>गिटलेब</a> (I2P+), और निरंतर स्थिति की निगरानी कर सकते हैं <a href="https://travis-ci.org/i2p/i2p.i2p" class="sitelink external" target=_blank rel=noreferrer>ट्रैविस</a> निरंतर स्थिति प्लेटफॉर्म (I2P) या गिटलेब (I2P+) में। एक <a href="https://wikipedia.org/wiki/Java_SDK" class="sitelink external" target=_blank rel=noreferrer>जावा एसडीक्यू</a> और <a href="http://ant.apache.org/" class="sitelink external" target=_blank rel=noreferrer>अपाचे एंट</a> स्रोत से बनाने के लिए आवश्यक है।
+</li>
+
+</ul>
+
+<ul class="links twocol">
+
+<li><b>भागीदारी में शामिल हों!</b><br>
+I2P का विकास और रखरखाव सबसे ज्यादा समुदाय के सदस्यों द्वारा असंबद्ध और स्वयंसेवकीय भागीदारी के माध्यम से होता है। आप कैसे भाग ले सकते हैं, इसकी अधिक जानकारी <a rel="noopener noreferrer" class="sitelink" href="http://i2p-projekt.i2p/getinvolved.html" target="_blank">स्वयंसेवकों की पृष्ठ</a> पर आधिकारिक वेबसाइट पर उपलब्ध है।</li>
+
+<li><b>I2P+</b><br>
+I2P+ के बारे में अधिक जानकारी के लिए, <a rel="noopener noreferrer" class="sitelink" href="http://skank.i2p/" target="_blank">skank.i2p</a> या <a rel="noopener noreferrer" class="sitelink external" href="https://i2pplus.github.io/" target="_blank">i2pplus.github.io</a> पर जाएँ, या I2P IRC नेटवर्क पर <a class="chatlink">#saltR</a> चैनल में शामिल हों। I2P+ के लिए पैच अच्छे होंगे; कृपया <a rel="noopener noreferrer" class="sitelink external" href="https://gitlab.com/i2pplus/I2P.Plus/" target="_blank">Gitlab</a> में पुल रिक्वेस्ट जमा करें।</li>
+
+</ul>
+
+</div>
