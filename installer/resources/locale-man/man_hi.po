@@ -1,0 +1,253 @@
+# I2P
+# Copyright (C) 2017 The I2P Project
+# This file is distributed under the same license as the routerconsole package.
+msgid ""
+msgstr ""
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
+
+#, no-wrap
+msgid "EEPGET"
+msgstr "EEPGET"
+
+#, no-wrap
+msgid "January 26, 2017"
+msgstr "जनवरी 26, 2017"
+
+#, no-wrap
+msgid "I2P"
+msgstr "I2P"
+
+#, no-wrap
+msgid "NAME"
+msgstr "नाम"
+
+msgid "Eepget - I2P downloader"
+msgstr "Eepget - I2P डाउनलोडर"
+
+#, no-wrap
+msgid "SYNOPSIS"
+msgstr "समझाये"
+
+msgid "B<eepget> [I<options>]I<URL>"
+msgstr "B<eepget> [I<options>]I<URL>"
+
+#, no-wrap
+msgid "DESCRIPTION"
+msgstr "संक्षिप्त विवरण"
+
+msgid "Download a file non-interactively via HTTP. Transfers through both I2P and the regular Internet are supported."
+msgstr "निरंतर रूप से हीटपी के माध्यम से फ़ाइल डाउनलोड करें। दोनों आई२पी और नियमित इंटरनेट के माध्यम से ट्रांसफर समर्थित है。"
+
+msgid "Eepget is able to cope with slow or unstable network connections; if a download is not successful because of a network problem, it will keep retrying until the whole file has been retrieved (if the -n option is set).  If supported by the remote server, eepget will instruct the server to continue the download from the point of interruption."
+msgstr "ईप्गेट慢 或 不稳定的网络连接 पर काबू पा सकता है; यदि नेटवर्क समस्या के कारण डाउनलोड सफल नहीं हो पाता है, तो यह até कोशिश करता रहेगा जब तक फ़ाइल पूरी तरह से प्राप्त नहीं हो जाती (如果 -n विकल्प निर्धारित है)। यदि दूरस्थ सर्वर समर्थन देता है, ईप्गेट सर्वर को मध्यावकाश से डाउनलोड जारी रखने का निर्देश देगा。"
+
+#, no-wrap
+msgid "OPTIONS"
+msgstr "विकल्प"
+
+msgid "B<-c>"
+msgstr "B<-c>"
+
+#, no-wrap
+msgid "Clearnet. Do not use a proxy. Same as B<-p> :0 ."
+msgstr "क्लियरनेट. प्रॉक्सी का उपयोग न करें. B<-p> :0 के समान है."
+
+msgid "B<-e> etag"
+msgstr "B<-e> etag"
+
+#, no-wrap
+msgid "Sets the etag value in the request headers."
+msgstr "रिक्वेस्ट हेडरों में एटैग की मूल्य सेट करता है."
+
+msgid "B<-h> name=value"
+msgstr "B<-h> name=value"
+
+#, no-wrap
+msgid "Adds an arbitrary request header with the given name and value."
+msgstr "दिए गए नाम और मूल्य के साथ एक अराजक रिक्वेस्ट हेडर जोड़ता है."
+
+msgid "B<-l> lineLen"
+msgstr "B<-l> lineLen"
+
+#, no-wrap
+msgid "Controls the progress display. B<\\ lineLen > is the length of one progress line in characters. The default is 40."
+msgstr "प्रगति प्रदर्शन को नियंत्रित करता है. B<\\ lineLen > एक प्रगति लाइन के चरित्रों की लंबाई है. डिफ़ॉल्ट 40 है."
+
+msgid "B<-m> markSize"
+msgstr "B<-m> markSize"
+
+#, no-wrap
+msgid "Controls the progress display. B<\\ markSize > is the number of bytes one '#' character represents. The default is 1024."
+msgstr "प्रगति प्रदर्शन को नियंत्रित करता है. B<\\ markSize > एक '#' चरित्र को प्रतिनिधित्व करने वाला बाइट्स का संख्या है. डिफ़ॉल्ट 1024 है."
+
+msgid "B<-n> retries"
+msgstr "B<-n> retries"
+
+#, no-wrap
+msgid "Specify the number of times to retry downloading if the download isn't successful. If this option is not specified, eepget will not retry."
+msgstr "डाउनलोड सफल नहीं हुआ तो पुन: डाउनलोड करने के लिए प्रयासों की संख्या निर्दिष्ट करें. यदि यह विकल्प निर्दिष्ट नहीं किया गया है, तो eepget पुन: प्रयास नहीं करेगा."
+
+msgid "B<-o> file"
+msgstr "B<-o> file"
+
+#, no-wrap
+msgid "Sets the output file to write to. If this option is not given, the output filename will be determined by the URL."
+msgstr "लिखने के लिए आउटपुट फ़ाइल सेट करता है. यदि यह विकल्प दिया नहीं गया है, तो आउटपुट फ़ाइलनाम URL द्वारा निर्धारित होगा."
+
+msgid "B<-p> proxy_host[:port]"
+msgstr "B<-p> proxy_host[:port]"
+
+#, no-wrap
+msgid "Specify an I2P proxy server (eeproxy) to use. If the port is not specified, eepget will use 4444. If this option is not specified, eepget will use 127.0.0.1:4444. Specify B<-c> or B<-p> :0 to disable the eeproxy."
+msgstr "प्रयोग करने के लिए I2P प्रॉक्सी सर्वर (eeproxy) निर्दिष्ट करें. यदि पोर्ट निर्दिष्ट नहीं किया गया है, तो eepget 4444 का उपयोग करेगा. यदि यह विकल्प निर्दिष्ट नहीं किया गया है, तो eepget 127.0.0.1:4444 का उपयोग करेगा. B<-c> या B<-p> :0 को निर्दिष्ट करके eeproxy को अक्षम करें."
+
+msgid "B<-t> seconds"
+msgstr "B<-t> seconds"
+
+#, no-wrap
+msgid "Sets the inactivity timeout. The default is 60 seconds."
+msgstr "अनुपयोगिता टाइमआउट सेट करता है. डिफ़ॉल्ट 60 सेकंड है."
+
+msgid "B<-u> username"
+msgstr "B<-u> उपयोगकर्ता-नाम"
+
+#, no-wrap
+msgid "Sets the username for proxy authorization, if required."
+msgstr "प्रॉक्सी प्रमाणीकरण के लिए उपयोगकर्ता नाम सेट करता है, यदि आवश्यक हो."
+
+msgid "B<-x> password"
+msgstr "B<-x> पासवर्ड"
+
+#, no-wrap
+msgid "Sets the password for proxy authorization, if required. If a username is specified but not a password, EepGet will prompt for the password."
+msgstr "प्रॉक्सी प्रमाणीकरण के लिए पासवर्ड सेट करना आवश्यक हो सकता है. यदि उपयोगकर्ता नाम निर्दिष्ट किया गया हो परंतु पासवर्ड नहीं, तो EepGet पासवर्ड के लिए प्रॉम्प्ट करेगा."
+
+#, no-wrap
+msgid "EXIT STATUS"
+msgstr "बाहर आना स्टेटस"
+
+msgid "B<eepget> exits with status zero upon successful transfer and non-zero if there were problems with the download."
+msgstr "सफल स्थानांतरण पर B<eepget> स्टेटस शून्य से बाहर आता है और डाउनलोड में समस्याओं के कारण अंक से बाहर आता है."
+
+#, no-wrap
+msgid "REPORTING BUGS"
+msgstr "बग रिपोर्टिंग"
+
+msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues/> the I2P Bug Tracker  E<.UE .>"
+msgstr "कृपया I2P बग ट्रैकयर E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues/> पर टिकट दर्ज करें E<.UE .>"
+
+#, no-wrap
+msgid "SEE ALSO"
+msgstr "देखें भी"
+
+msgid "B<i2prouter>(1)  B<curl>(1)  B<wget>(1)"
+msgstr "B<i2prouter>(1)  B<curl>(1)  B<wget>(1)"
+
+#, no-wrap
+msgid "I2PROUTER"
+msgstr "I2PROUTER"
+
+msgid "i2prouter - start and stop the I2P router"
+msgstr "आई2पी राउटर को स्टार्ट और स्टॉप करें"
+
+msgid "B<i2prouter> {I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
+msgstr "B<i2prouter> {I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
+
+msgid "Control the I2P service."
+msgstr "आई2पी सेवा को नियंत्रित करें"
+
+#, no-wrap
+msgid "B<console>"
+msgstr "B<console>"
+
+msgid "Runs I2P as a console application under the current user."
+msgstr "वर्तमान उपयोगकर्ता के लिए आई2पी को कंसोल एप्लिकेशन के रूप में चलाएं"
+
+#, no-wrap
+msgid "B<start>"
+msgstr "B<start>"
+
+msgid "Starts the I2P service."
+msgstr "आई2पी सेवा को स्टार्ट करें"
+
+#, no-wrap
+msgid "B<stop>"
+msgstr "B<stop>"
+
+msgid "Stops the I2P service."
+msgstr "आई2पी सेवा को स्टॉप करें"
+
+#, no-wrap
+msgid "B<restart>"
+msgstr "B<restart>"
+
+msgid "Stops the I2P service and then starts it."
+msgstr "आई2पी सेवा को स्टॉप करें और फिर स्टार्ट करें"
+
+#, no-wrap
+msgid "B<condrestart>"
+msgstr "B<condrestart>"
+
+msgid "Restart the I2P service only if it is already running."
+msgstr "यदि आई2पी सेवा पहले से ही चल रही है, तो उसे पुनः स्टार्ट करें"
+
+#, no-wrap
+msgid "B<graceful>"
+msgstr "B<graceful>"
+
+msgid "Stop I2P gracefully (may take up to 11 minutes)"
+msgstr "आई2पी को शांतिपूर्वक स्टॉप करें (यह 11 मिनट तक ले सकता है)"
+
+#, no-wrap
+msgid "B<install>"
+msgstr "B<install>"
+
+msgid "Install initscript to start I2P automatically when the system boots."
+msgstr "सिस्टम बूट होने पर आई2पी को स्वचालित रूप से स्टार्ट करने के लिए इनिटस्क्रिप्ट इंस्टॉल करें"
+
+#, no-wrap
+msgid "B<remove>"
+msgstr "B<remove>"
+
+msgid "Uninstall initscript that was installed with B<install>"
+msgstr "B<install> के साथ इंस्टॉल किए गए इनिटस्क्रिप्ट को अनइंस्टॉल करें"
+
+#, no-wrap
+msgid "B<status>"
+msgstr "B<status>"
+
+msgid "Prints whether the I2P service is running."
+msgstr "आई2पी सेवा चल रही है या नहीं, प्रिंट करें"
+
+#, no-wrap
+msgid "B<dump>"
+msgstr "B<dump>"
+
+msgid "Dumps the current threads into B<wrapper.log>."
+msgstr "वर्तमान थ्रेड्स को B<wrapper.log> में डंप करें"
+
+msgid "B<i2prouter-nowrapper>(1)"
+msgstr "B<i2prouter-nowrapper>(1)"
+
+#, no-wrap
+msgid "I2PROUTER-NOWRAPPER"
+msgstr "I2PROUTER-NOWRAPPER"
+
+msgid "i2prouter-nowrapper - start the I2P router"
+msgstr "आई2पी राउटर को स्टार्ट करें"
+
+msgid "B<i2prouter-nowrapper>"
+msgstr "B<i2prouter-nowrapper>"
+
+msgid "Start the I2P router, without the service wrapper.  This means the router will not restart if it crashes.  Also, it will use the default memory size, which may not be enough for I2P."
+msgstr "सर्विस वरप्पर के बिना आई2पी राउटर को स्टार्ट करें. इसका मतलब है कि राउटर क्रैश होने पर पुनः स्टार्ट नहीं होगा. साथ ही, यह आई2पी के लिए पर्याप्त नहीं हो सकता है, डिफ़ॉल्ट मेमोरी साइज़ का उपयोग करेगा."
+
+msgid "You should really use the B<i2prouter>(1)  script instead.  There are no options.  To stop the router, use your browser to access E<.UR http://localhost:7657/> the router console E<.UE .>"
+msgstr "आप वास्तव में B(1) स्क्रिप्ट का उपयोग करना चाहिए. कोई विकल्प नहीं है. राउटर को स्टॉप करने के लिए, ब्राउज़र का उपयोग करके राउटर कंसोल E<.UR http://localhost:7657/> को 액ैस करें E<.UE>."
+
+msgid "B<i2prouter>(1)"
+msgstr "B<i2prouter>(1)"
