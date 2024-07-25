@@ -126,6 +126,10 @@ public class RrdGraph implements RrdGraphConstants {
 
     private void createGraph() throws IOException {
         boolean lazy = lazyCheck();
+        boolean showLegend = !gdef.onlyGraph && !gdef.noLegend;
+        boolean drawBackground = gdef.backgroundImage != null || gdef.canvasImage != null;
+        boolean graphOnly = gdef.onlyGraph;
+        boolean drawOverlay = gdef.overlayImage != null;
         if (!lazy || gdef.printStatementCount() != 0) {
             fetchData();
             resolveTextElements();
@@ -138,17 +142,19 @@ public class RrdGraph implements RrdGraphConstants {
                 removeOutOfRangeRules();
                 removeOutOfRangeSpans();
                 mapper = new Mapper(this);
-                placeLegends();
+                if (showLegend) {placeLegends();}
                 createImageWorker();
-                drawBackground();
+                if (drawBackground) {drawBackground();}
                 drawData();
-                drawGrid();
-                drawAxis();
-                drawText();
-                drawLegend();
                 drawRulesAndSpans();
+                if (!graphOnly) {
+                    drawGrid();
+                    drawAxis();
+                    drawText();
+                    if (showLegend) {drawLegend();}
+                }
                 gator();
-                drawOverlay();
+                if (drawOverlay) {drawOverlay();}
                 saveImage();
             }
         }
@@ -211,7 +217,6 @@ public class RrdGraph implements RrdGraphConstants {
             int x = (int) (im.xgif - 2 - worker.getFontAscent(font));
             int y = 4;
             worker.transform(x, y, Math.PI / 2);
-//            worker.drawString(signature, 0, 0, font, Color.LIGHT_GRAY);
             worker.drawString(signature, 0, 0, font, new Color(128, 128, 128, 128));
             worker.reset();
             worker.setTextAntiAliasing(false);
@@ -517,9 +522,9 @@ public class RrdGraph implements RrdGraphConstants {
                     im.maxval = scaled_max;
                 }
                 else if (gdef.altAutoscale || (gdef.altAutoscaleMin && gdef.altAutoscaleMax)) {
-                    /* measure the amplitude of the function. Make sure that
-                            graph boundaries are slightly higher then max/min vals
-                            so we can see amplitude on the graph */
+                    /** measure the amplitude of the function. Make sure that graph boundaries
+                        are slightly higher then max/min vals so we can see amplitude on the graph
+                     */
                     double delt, fact;
 
                     delt = im.maxval - im.minval;
@@ -534,15 +539,15 @@ public class RrdGraph implements RrdGraphConstants {
                 }
                 else if (gdef.altAutoscaleMin) {
                     /* measure the amplitude of the function. Make sure that
-                            graph boundaries are slightly lower than min vals
-                            so we can see amplitude on the graph */
+                       graph boundaries are slightly lower than min vals
+                       so we can see amplitude on the graph */
                     adj = (im.maxval - im.minval) * 0.1;
                     im.minval -= adj;
                 }
                 else if (gdef.altAutoscaleMax) {
                     /* measure the amplitude of the function. Make sure that
-                            graph boundaries are slightly higher than max vals
-                            so we can see amplitude on the graph */
+                       graph boundaries are slightly higher than max vals
+                       so we can see amplitude on the graph */
                     adj = (im.maxval - im.minval) * 0.1;
                     im.maxval += adj;
                 }
