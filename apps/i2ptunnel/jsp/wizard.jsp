@@ -517,7 +517,7 @@
 <td>
 <p>
 <%=intl._t("The I2P router can automatically start this tunnel for you when the router is started.")%>
-<%=intl._t("This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occassionally it would mean that the I2P router is creating and maintaining unnecessary tunnels.")%>
+<%=intl._t("This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occasionally it would mean that the I2P router is creating and maintaining unnecessary tunnels.")%>
 </p>
 </td>
 </tr>
