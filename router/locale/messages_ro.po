@@ -113,16 +113,16 @@ msgstr "Închidere"
 msgid "Declining tunnel requests"
 msgstr "Declinul cererilor de tunel"
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr "Arunc cererile tunelului: Prea lent"
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr "Arunc cererile de tunel: Decalaj job-uri ridicat"
 
-msgid "Dropping tunnel requests:<br>High CPU load"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr "Renunțarea solicitărilor de tunel:<br>Încărcare mare a procesorului"
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "Arunc cererile tunelului: Supraîncărcat"
 
 msgid "Declining requests:"
@@ -134,8 +134,8 @@ msgstr "Solicitare supraîncărcare"
 msgid "Connection limit reached"
 msgstr "Limita de conectare a fost atinsă"
 
-msgid "Dropping tunnel requests: High load"
+msgid "Dropping Tunnel Requests: High load"
 msgstr "Arunc cererile de tunel: Încărcătura mare"
 
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Arunc cererile de tunel: Timp așteptare"

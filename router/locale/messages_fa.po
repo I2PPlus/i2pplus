@@ -113,16 +113,16 @@ msgstr "خاموش شدن"
 msgid "Declining tunnel requests"
 msgstr "رد درخواست های تونل"
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr "درخواست های تونل انداختن: خیلی کند است"
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr "درخواست های حذف تونل: تاخیر شغلی زیاد"
 
-msgid "Dropping tunnel requests:<br>High CPU load"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr "حذف درخواست های تونل:<br>بار بالای CPU"
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "درخواست های تونل انداختن: بیش از حد بارگذاری شده است"
 
 msgid "Declining requests:"
@@ -134,8 +134,8 @@ msgstr "درخواست اضافه بار"
 msgid "Connection limit reached"
 msgstr "محدودیت اتصال رسیده است"
 
-msgid "Dropping tunnel requests: High load"
+msgid "Dropping Tunnel Requests: High load"
 msgstr "درخواست های تونل انداختن: بار زیاد"
 
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr "درخواست های تونل انداختن: زمان صف"

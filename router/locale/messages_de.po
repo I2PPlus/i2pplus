@@ -113,16 +113,16 @@ msgstr "Herunterfahren"
 msgid "Declining tunnel requests"
 msgstr "Tunnelanfragen gehen zurück"
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr "Ignoriere Tunnelanfragen: zu langsam"
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr "Tunnelanforderungen werden verworfen: Hohe Aufgabenverzögerung"
 
-msgid "Dropping tunnel requests:<br>High CPU load"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr "Tunnelanfragen werden gelöscht:<br>Hohe CPU-Auslastung"
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "Ignoriere Tunnelanfragen: überlastet"
 
 msgid "Declining requests:"
@@ -134,8 +134,8 @@ msgstr "Anforderungsüberlastung"
 msgid "Connection limit reached"
 msgstr "Verbindungslimit erreicht"
 
-msgid "Dropping tunnel requests: High load"
+msgid "Dropping Tunnel Requests: High load"
 msgstr "Ignoriere Tunnelanfragen: Hohe Last"
 
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Ignoriere Tunnelanfragen: zu lange Warteschlange"

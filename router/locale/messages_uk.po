@@ -113,16 +113,16 @@ msgstr "Вимкнення"
 msgid "Declining tunnel requests"
 msgstr "Відхилення запитів на тунель"
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr "Відхиляю запити на тунелі: занадто повільна обробка запитів"
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr "Відхиляю запити на тунелі: велике відставання обробки запитів"
 
-msgid "Dropping tunnel requests:<br>High CPU load"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr "Відкидання запитів на тунель:<br>Високе навантаження на ЦП"
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "Відхиляю запити на тунелі: перевантажено"
 
 msgid "Declining requests:"
@@ -134,8 +134,8 @@ msgstr "Перевантаження запиту"
 msgid "Connection limit reached"
 msgstr "Досягнуто ліміту підключення"
 
-msgid "Dropping tunnel requests: High load"
+msgid "Dropping Tunnel Requests: High load"
 msgstr "Відхиляю запити на тунелі: високе навантаження"
 
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Відхиляю запити на тунелі: завеликий час у черзі"

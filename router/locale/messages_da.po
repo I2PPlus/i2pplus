@@ -113,16 +113,16 @@ msgstr "Lukker ned"
 msgid "Declining tunnel requests"
 msgstr "Faldende tunnelanmodninger"
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr "Dropper tunnelforespørgsler: For langsom"
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr "Dropper tunnelforespørgsler: høj job lag"
 
-msgid "Dropping tunnel requests:<br>High CPU load"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr "Slipning af tunnelanmodninger:<br>Høj CPU-belastning"
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "Dropper tunnelforespørgsler: Overbelastede"
 
 msgid "Declining requests:"
@@ -134,8 +134,8 @@ msgstr "Anmod om overbelastning"
 msgid "Connection limit reached"
 msgstr "Forbindelsesgrænse nået"
 
-msgid "Dropping tunnel requests: High load"
+msgid "Dropping Tunnel Requests: High load"
 msgstr "Dropper tunnelforespørgsler: Høj belastning"
 
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Dropper tunnelforespørgsler: Kø tid"

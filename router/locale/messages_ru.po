@@ -113,16 +113,16 @@ msgstr "Выключение"
 msgid "Declining tunnel requests"
 msgstr "Отклонение запросов на туннель"
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr "Игнорируем запросы туннелей: время выполнения превысило ожидаемое"
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr "Игнорируем запросы туннелей: большая задержка задач"
 
-msgid "Dropping tunnel requests:<br>High CPU load"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr "Отбрасывание туннельных запросов:<br>Высокая загрузка ЦП"
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "Игнорируем запросы туннелей: слишком высокая нагрузка"
 
 msgid "Declining requests:"
@@ -134,8 +134,8 @@ msgstr "Перегрузка запроса"
 msgid "Connection limit reached"
 msgstr "Достигнут лимит подключений"
 
-msgid "Dropping tunnel requests: High load"
+msgid "Dropping Tunnel Requests: High load"
 msgstr "Игнорируем запросы туннелей: высокая нагрузка"
 
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Отбрасывание туннельных запросов: время в очередиОтбрасывание туннельных запросов: время в очередиИгнорируем запросы туннелей: слишком большое время пребывания в очереди"

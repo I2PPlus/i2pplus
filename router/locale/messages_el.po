@@ -12,43 +12,43 @@ msgid "OK"
 msgstr "ΟΚ"
 
 msgid "IPv4: OK; IPv6: Testing"
-msgstr "IPv4: ΟΚ; "
+msgstr "IPv4: OK; IPv6: Testing"
 
 msgid "IPv4: OK; IPv6: Firewalled"
-msgstr "IPv4: ΟΚ; "
+msgstr "IPv4: OK; IPv6: Firewalled"
 
 msgid "IPv4: Testing; IPv6: OK"
-msgstr "IPv4: Δοκιμή; "
+msgstr "IPv4: Testing; IPv6: OK"
 
 msgid "IPv4: Firewalled; IPv6: OK"
-msgstr "IPv4: Τείχος προστασίας; "
+msgstr "IPv4: Firewalled; IPv6: OK"
 
 msgid "IPv4: Disabled; IPv6: OK"
-msgstr "IPv4: Απενεργοποιημένο; "
+msgstr "IPv4: Disabled; IPv6: OK"
 
 msgid "IPv4: Symmetric NAT; IPv6: OK"
-msgstr "IPv4: Συμμετρικό NAT; "
+msgstr "IPv4: Symmetric NAT; IPv6: OK"
 
 msgid "Symmetric NAT"
 msgstr "Συμμετρικό NAT"
 
 msgid "IPv4: Symmetric NAT; IPv6: Testing"
-msgstr "IPv4: Συμμετρικό NAT; "
+msgstr "IPv4: Symmetric NAT; IPv6: Testing"
 
 msgid "IPv4: Firewalled; IPv6: Testing"
-msgstr "IPv4: Τείχος προστασίας. "
+msgstr "IPv4: Τείχος προστασίας."
 
 msgid "Firewalled"
 msgstr "Τείχος προστασίας"
 
 msgid "IPv4: Testing; IPv6: Firewalled"
-msgstr "IPv4: Δοκιμή; "
+msgstr "IPv4: Testing; IPv6: Firewalled"
 
 msgid "IPv4: Disabled; IPv6: Testing"
-msgstr "IPv4: Απενεργοποιημένο; "
+msgstr "IPv4: Disabled; IPv6: Testing"
 
 msgid "IPv4: Disabled; IPv6: Firewalled"
-msgstr "IPv4: Απενεργοποιημένο; "
+msgstr "IPv4: Disabled; IPv6: Firewalled"
 
 msgid "Disconnected"
 msgstr "Αποσυνδεδεμένος"
@@ -75,7 +75,7 @@ msgid "High message delay"
 msgstr "Υψηλή καθυστέρηση μηνύματος"
 
 msgid "Declining requests: "
-msgstr "Απόρριψη αιτημάτων:"
+msgstr "Απόρριψη αιτημάτων: "
 
 msgid "Limit reached"
 msgstr "Έχει φτάσει το όριο"
@@ -113,16 +113,16 @@ msgstr "Κλείσιμο"
 msgid "Declining tunnel requests"
 msgstr "Απόρριψη αιτημάτων για τούνελ"
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr "Απόρριψη αιτημάτων για τούνελ: Καθυστέρηση"
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr "Αιτήματα απόρριψης σήραγγας: Υψηλή καθυστέρηση εργασίας"
 
-msgid "Dropping tunnel requests:<br>High CPU load"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr "Αιτήματα απόρριψης σήραγγας:<br>Υψηλό φορτίο CPU"
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "Απόρριψη αιτημάτων για τούνελ: Υπερφόρτωση"
 
 msgid "Declining requests:"
@@ -134,8 +134,8 @@ msgstr "Αίτημα υπερφόρτωσης"
 msgid "Connection limit reached"
 msgstr "Συμπληρώθηκε το όριο σύνδεσης"
 
-msgid "Dropping tunnel requests: High load"
+msgid "Dropping Tunnel Requests: High load"
 msgstr "Απόρριψη αιτημάτων για τούνελ: Υψηλό φορτίο"
 
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Απόρριψη αιτημάτων για τούνελ: Χρόνος ουράς αναμονής"

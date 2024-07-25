@@ -113,16 +113,16 @@ msgstr "Zapiranje"
 msgid "Declining tunnel requests"
 msgstr "Zavračanje zahtevkov za tunel"
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr "Spuščanje prošenj predorov: Preveč počasno"
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr "Spuščanje prošenj predorov: Visoki odzivni čas dela"
 
-msgid "Dropping tunnel requests:<br>High CPU load"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr "Opuščanje zahtev tunela:<br>Visoka obremenitev procesorja"
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "Spuščanje prošenj predorov: Preobremenjeno"
 
 msgid "Declining requests:"
@@ -134,8 +134,8 @@ msgstr "Preobremenitev zahteve"
 msgid "Connection limit reached"
 msgstr "Omejitev povezave je dosežena"
 
-msgid "Dropping tunnel requests: High load"
+msgid "Dropping Tunnel Requests: High load"
 msgstr "Spuščanje prošenj predorov: Visoko breme"
 
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Spuščanje prošenj predorov: Čas čakalnega reda"

@@ -113,16 +113,16 @@ msgstr "Söndürür"
 msgid "Declining tunnel requests"
 msgstr "Tunel sorğularının rədd edilməsi"
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr "Tunel sorğularının atılması: Çox yavaş"
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr "Tunel sorğularının atılması: Yüksək iş gecikməsi"
 
-msgid "Dropping tunnel requests:<br>High CPU load"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr "Tunel sorğularının ləğvi:<br>Yüksək CPU yükü"
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "Tunel sorğularının atılması: Həddindən artıq yüklənib"
 
 msgid "Declining requests:"
@@ -134,8 +134,8 @@ msgstr "Həddindən artıq yükləmə tələbi"
 msgid "Connection limit reached"
 msgstr "Bağlantı limitinə çatdı"
 
-msgid "Dropping tunnel requests: High load"
+msgid "Dropping Tunnel Requests: High load"
 msgstr "Tunel tələblərini buraxma: Yüksək yük"
 
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Tunel sorğularının atılması: Növbə vaxtı"

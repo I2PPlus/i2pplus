@@ -113,16 +113,16 @@ msgstr "Väljalülitamine"
 msgid "Declining tunnel requests"
 msgstr "Tunnelitaotluste vähenemine"
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr "Eiran tunneliosaluse palveid: Liiga aeglane"
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr "Tunnelitaotluste tühistamine: suur tööviivitus"
 
-msgid "Dropping tunnel requests:<br>High CPU load"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr "Dropping tunneli taotlused:<br>suur protsessori koormus"
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "Eiran tunneliosaluse palveid: Ülekoormus"
 
 msgid "Declining requests:"
@@ -134,8 +134,8 @@ msgstr "Taotle ülekoormust"
 msgid "Connection limit reached"
 msgstr "Ühenduse limiit on täis"
 
-msgid "Dropping tunnel requests: High load"
+msgid "Dropping Tunnel Requests: High load"
 msgstr "Eiran tunneliosaluse palveid: Kõrge koormus"
 
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Eiran tunneliosaluse palveid: Pikk järjekord"

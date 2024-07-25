@@ -113,16 +113,16 @@ msgstr "关闭"
 msgid "Declining tunnel requests"
 msgstr "拒绝隧道请求"
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr "忽略共享隧道请求：速度太慢"
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr "忽略共享隧道请求：高作业延迟"
 
-msgid "Dropping tunnel requests:<br>High CPU load"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr "删除隧道请求：<br>CPU 负载过高"
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "忽略共享隧道请求：路由过载"
 
 msgid "Declining requests:"
@@ -134,8 +134,8 @@ msgstr "请求过载"
 msgid "Connection limit reached"
 msgstr "达到连接限制"
 
-msgid "Dropping tunnel requests: High load"
+msgid "Dropping Tunnel Requests: High load"
 msgstr "忽略共享隧道请求：高负载"
 
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr "忽略共享隧道请求：队列积压"

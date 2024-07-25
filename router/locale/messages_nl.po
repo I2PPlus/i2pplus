@@ -113,16 +113,16 @@ msgstr "Afsluiten"
 msgid "Declining tunnel requests"
 msgstr "Weigerende tunnelaanvragen"
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr "Negeer tunnel aanvragen: Te traag"
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr "Negeer tunnel aanvragen: Hoge werk vertraging"
 
-msgid "Dropping tunnel requests:<br>High CPU load"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr "Laat tunnelverzoeken vallen:<br>Hoge CPU-belasting"
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "Negeer tunnel aanvragen: Overladen"
 
 msgid "Declining requests:"
@@ -134,8 +134,8 @@ msgstr "Verzoek overbelasting"
 msgid "Connection limit reached"
 msgstr "Verbindingslimiet bereikt"
 
-msgid "Dropping tunnel requests: High load"
+msgid "Dropping Tunnel Requests: High load"
 msgstr "Negeer tunnel aanvragen: Hoge load"
 
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Negeer tunnel aanvragen: Wachttijd"

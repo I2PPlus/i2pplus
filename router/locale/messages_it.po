@@ -113,16 +113,16 @@ msgstr "Spegnimento"
 msgid "Declining tunnel requests"
 msgstr "Richieste tunnel in calo"
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr "Abbandono delle richieste tunnel: Troppo lento"
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr "Eliminazione delle richieste del tunnel: ritardo del processo elevato"
 
-msgid "Dropping tunnel requests:<br>High CPU load"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr "Richieste tunnel abbandonate:<br>Carico elevato della CPU"
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "Abbandono delle richieste tunnel: Carico troppo elevato"
 
 msgid "Declining requests:"
@@ -134,8 +134,8 @@ msgstr "Richiesta di sovraccarico"
 msgid "Connection limit reached"
 msgstr "Limite di connessione raggiunto"
 
-msgid "Dropping tunnel requests: High load"
+msgid "Dropping Tunnel Requests: High load"
 msgstr "Abbandono delle richieste tunnel: Carico elevato"
 
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Abbandono delle richieste tunnel: Tempo della coda scaduto"

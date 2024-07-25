@@ -113,16 +113,16 @@ msgstr "Mematikan"
 msgid "Declining tunnel requests"
 msgstr "Menolak permintaan terowongan"
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr "Menolak permintaan tunnel: terlalu lambat"
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr "Menolak permintaan tunnel: job lag tinggi"
 
-msgid "Dropping tunnel requests:<br>High CPU load"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr "Menghilangkan permintaan terowongan:<br>Beban CPU tinggi"
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "Menolak permintaan terowongan: overload"
 
 msgid "Declining requests:"
@@ -134,8 +134,8 @@ msgstr "Permintaan berlebihan"
 msgid "Connection limit reached"
 msgstr "Batas koneksi tercapai"
 
-msgid "Dropping tunnel requests: High load"
+msgid "Dropping Tunnel Requests: High load"
 msgstr "Menolak permintaan tunnel: beban tinggi"
 
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Menolak permintaan tunnel: waktu antrian"

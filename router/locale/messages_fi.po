@@ -113,16 +113,16 @@ msgstr "Sammutus"
 msgid "Declining tunnel requests"
 msgstr "Vähenevät tunnelipyynnöt"
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr "Torjutaan käytäväpyyntöjä: Liian hidas"
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr "Tunnelipyyntöjen pudottaminen: Suuri työn viive"
 
-msgid "Dropping tunnel requests:<br>High CPU load"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr "Tunnelipyyntöjen pudottaminen:<br>Suuri suorittimen kuormitus"
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "Torjutaan käytäväpyyntöjä: Ylikuormaa"
 
 msgid "Declining requests:"
@@ -134,8 +134,8 @@ msgstr "Pyydä ylikuormitusta"
 msgid "Connection limit reached"
 msgstr "Yhteysraja saavutettu"
 
-msgid "Dropping tunnel requests: High load"
+msgid "Dropping Tunnel Requests: High load"
 msgstr "Pudotetaan käytäväpyyntöjä: Raskas kuorma"
 
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Pudotetaan käytäväpyyntöjä: Jonotusaika"

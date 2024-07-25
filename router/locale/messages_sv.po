@@ -113,16 +113,16 @@ msgstr "Stänger av"
 msgid "Declining tunnel requests"
 msgstr "Sjunkande tunnelförfrågningar"
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr "Släpper tunnelförfrågningar: För långsam"
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr "Släpper tunnelförfrågningar: Hög jobbeftersläpning"
 
-msgid "Dropping tunnel requests:<br>High CPU load"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr "Tappning av tunnelförfrågningar:<br>Hög CPU-belastning"
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "Släpper tunnelförfrågningar: Överlastad"
 
 msgid "Declining requests:"
@@ -134,8 +134,8 @@ msgstr "Begär överbelastning"
 msgid "Connection limit reached"
 msgstr "Anslutningsgräns nådd"
 
-msgid "Dropping tunnel requests: High load"
+msgid "Dropping Tunnel Requests: High load"
 msgstr "Släpper tunnelförfrågningar: Hög belastning"
 
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Släpper tunnelförfrågningar: Kötid"

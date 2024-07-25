@@ -113,16 +113,16 @@ msgstr "Apagar"
 msgid "Declining tunnel requests"
 msgstr "Solicitudes de túnel rechazadas"
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr "Desechando  solicitudes de túnel: Demasiado lento"
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr "Desechando solicitudes de túnel: Alto retraso de trabajo"
 
-msgid "Dropping tunnel requests:<br>High CPU load"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr "Eliminación de solicitudes de túnel:<br>Alta carga de CPU"
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "Desechando solicitudes de túnel: Sobrecargado"
 
 msgid "Declining requests:"
@@ -134,8 +134,8 @@ msgstr "Sobrecarga de solicitudes"
 msgid "Connection limit reached"
 msgstr "Límite de conexión alcanzado"
 
-msgid "Dropping tunnel requests: High load"
+msgid "Dropping Tunnel Requests: High load"
 msgstr "Desechando solicitudes de túnel: Carga elevada"
 
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Desechando solicitudes de túnel: Tiempo en cola"

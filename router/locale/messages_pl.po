@@ -113,16 +113,16 @@ msgstr "Zamykanie"
 msgid "Declining tunnel requests"
 msgstr "Odrzucane żądania tuneli"
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr "Odrzucanie żądań o tunele: Za wolno"
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr "Odrzucanie żądań o tunele: Wysokie opóźnienie zadań"
 
-msgid "Dropping tunnel requests:<br>High CPU load"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr "Porzucanie żądań tunelu:<br>Wysokie obciążenie procesora"
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "Odrzucanie żądań o tunele: Przeładowanie"
 
 msgid "Declining requests:"
@@ -134,8 +134,8 @@ msgstr "Przeciążenie żądania"
 msgid "Connection limit reached"
 msgstr "Osiągnięto limit połączeń"
 
-msgid "Dropping tunnel requests: High load"
+msgid "Dropping Tunnel Requests: High load"
 msgstr "Odrzucanie żądań o tunele: Wysokie obciążenie"
 
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Odrzucanie żądań o tunele: Czas kolejki"

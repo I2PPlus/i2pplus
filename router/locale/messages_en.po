@@ -137,8 +137,5 @@ msgstr ""
 msgid "Dropping Tunnel Requests: High load"
 msgstr ""
 
-msgid "Dropping tunnel requests: High load"
-msgstr ""
-
 msgid "Dropping tunnel requests: Queue time"
 msgstr ""

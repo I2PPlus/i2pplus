@@ -113,16 +113,16 @@ msgstr "Leállítás"
 msgid "Declining tunnel requests"
 msgstr "Csökkenő alagútkérések"
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr "Alagút kérések elvetése: túl lassú"
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr "Alagútkérések elvetése: Magas munkakésés"
 
-msgid "Dropping tunnel requests:<br>High CPU load"
-msgstr "Dropping Tunnel requests:<br>Magas CPU-terhelés"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
+msgstr "Dropping Tunnel Requests:<br>Magas CPU-terhelés"
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "Alagút kérések elvetése: túlterhelt"
 
 msgid "Declining requests:"
@@ -134,8 +134,8 @@ msgstr "Túlterhelés kérése"
 msgid "Connection limit reached"
 msgstr "Elérte a csatlakozási korlátot"
 
-msgid "Dropping tunnel requests: High load"
+msgid "Dropping Tunnel Requests: High load"
 msgstr "Alagút kérések elvetése: Magas töltöttség"
 
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Alagút kérések elvetése: Sorba állítási idő"

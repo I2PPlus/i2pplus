@@ -113,16 +113,16 @@ msgstr "बंद कर रहा है"
 msgid "Declining tunnel requests"
 msgstr "टंनल अनुरोध अस्वीकार कर रहा है"
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr "टंनल अनुरोध छोड़ रहा है: बहुत धीमा"
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr "टंनल अनुरोध छोड़ रहा है: उच्च कार्य देरी"
 
-msgid "Dropping tunnel requests:<br>High CPU load"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr "टंनल अनुरोधों को छोड़ रहा है:<br>उच्च CPU लोड"
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "टंनल अनुरोधों को छोड़ रहा है: अधिक भारी"
 
 msgid "Declining requests:"
@@ -137,8 +137,5 @@ msgstr "कनेक्शन की सीमा पार हो चुकी 
 msgid "Dropping Tunnel Requests: High load"
 msgstr "टंनल अनुरोधों को छोड़ रहा है: उच्च लोड"
 
-msgid "Dropping tunnel requests: High load"
-msgstr "टंनल अनुरोधों को छोड़ रहा है: उच्च लोड"
-
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr "टंनल अनुरोधों को छोड़ रहा है: क्यू समय"

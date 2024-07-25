@@ -113,16 +113,16 @@ msgstr "종료 중"
 msgid "Declining tunnel requests"
 msgstr "터널 요청 거부"
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr "터널 요청 버리는중: 너무 느림"
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr "터널 요청 버리는중: 높은 일감 랙"
 
-msgid "Dropping tunnel requests:<br>High CPU load"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr "터널 요청 삭제:<br>CPU 부하가 높음"
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "터널 요청 버리는중: 오버로드됨"
 
 msgid "Declining requests:"
@@ -134,8 +134,8 @@ msgstr "오버로드 요청"
 msgid "Connection limit reached"
 msgstr "연결 제한에 도달했습니다"
 
-msgid "Dropping tunnel requests: High load"
-msgstr "터널 요청 버리는중: 높은 로드량"
+msgid "Dropping Tunnel Requests: High load"
+msgstr "\"터널 요청 버리는중: 높은 로드량"
 
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr "터널 요청 버리는중: 대기시간"

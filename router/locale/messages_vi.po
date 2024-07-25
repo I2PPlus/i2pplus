@@ -113,16 +113,16 @@ msgstr "Tắt máy"
 msgid "Declining tunnel requests"
 msgstr "Yêu cầu đường hầm giảm"
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr "Bỏ yêu cầu đường ống riêng: Quá chậm"
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr "Bỏ yêu cầu đường hầm: Độ trễ công việc cao"
 
-msgid "Dropping tunnel requests:<br>High CPU load"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr "Loại bỏ yêu cầu đường hầm:<br>Tải CPU cao"
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "Bỏ yêu cầu đường ống riêng: Quá tải"
 
 msgid "Declining requests:"
@@ -134,8 +134,8 @@ msgstr "Yêu cầu quá tải"
 msgid "Connection limit reached"
 msgstr "Đã đạt đến giới hạn kết nối"
 
-msgid "Dropping tunnel requests: High load"
+msgid "Dropping Tunnel Requests: High load"
 msgstr "Bỏ yêu cầu đường ống riêng: Độ tải quá cao"
 
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Bỏ yêu cầu đường ống riêng: Hàng đợi thời gian"

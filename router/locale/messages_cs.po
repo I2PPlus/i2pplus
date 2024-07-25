@@ -21,7 +21,7 @@ msgid "IPv4: Testing; IPv6: OK"
 msgstr "IPv4: Testování, IPv6: OK"
 
 msgid "IPv4: Firewalled; IPv6: OK"
-msgstr "IPv4: Firewalled; "
+msgstr "IPv4: Firewalled; IPv6 OK"
 
 msgid "IPv4: Disabled; IPv6: OK"
 msgstr "IPv4: Zakázáno, IPv6: OK"
@@ -113,16 +113,16 @@ msgstr "Vypínání"
 msgid "Declining tunnel requests"
 msgstr "Odmítání požadavků na tunel"
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr "Odstranění požadavků na tunel: Příliš pomalé"
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr "Odstranění požadavků na tunel: Velké zpoždění úlohy"
 
-msgid "Dropping tunnel requests:<br>High CPU load"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr "Odstranění požadavků na tunel:<br>Vysoká zátěž CPU"
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "Odstranění požadavků na tunel: Přetíženo"
 
 msgid "Declining requests:"
@@ -134,8 +134,8 @@ msgstr "Požadavek na přetížení"
 msgid "Connection limit reached"
 msgstr "Bylo dosaženo limitu připojení"
 
-msgid "Dropping tunnel requests: High load"
+msgid "Dropping Tunnel Requests: High load"
 msgstr "Odstranění požadavků na tunel: Vysoká zátěž"
 
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Odstranění požadavků na tunel: Doba fronty"

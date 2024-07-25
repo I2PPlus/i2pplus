@@ -113,16 +113,16 @@ msgstr "シャットダウン"
 msgid "Declining tunnel requests"
 msgstr "トンネルリクエストの拒否"
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr "トンネル要求をドロップ: 遅すぎます"
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr "トンネルリクエストを中断: 高いジョブラグ"
 
-msgid "Dropping tunnel requests:<br>High CPU load"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr "トンネルリクエストのドロップ:<br>高い CPU 負荷"
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "トンネル要求ドロップ: 過負荷"
 
 msgid "Declining requests:"
@@ -134,8 +134,8 @@ msgstr "リクエストのオーバーロード"
 msgid "Connection limit reached"
 msgstr "接続制限に達しました"
 
-msgid "Dropping tunnel requests: High load"
+msgid "Dropping Tunnel Requests: High load"
 msgstr "トンネル要求をドロップ: 高い負荷"
 
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr "トンネル要求をドロップ: キュー時間"

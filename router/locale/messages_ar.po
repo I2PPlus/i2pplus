@@ -134,7 +134,7 @@ msgstr "طلب الزائد"
 msgid "Connection limit reached"
 msgstr "تم الوصول إلى حد الاتصال"
 
-msgid "Dropping tunnel requests: High load"
+msgid "Dropping Tunnel Requests: High load"
 msgstr "تجاوز النفق: ازدحام كبير"
 
 msgid "Dropping tunnel requests: Queue time"

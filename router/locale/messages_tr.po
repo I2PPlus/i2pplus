@@ -113,16 +113,16 @@ msgstr "Kapatılıyor"
 msgid "Declining tunnel requests"
 msgstr "Tünel isteklerinin reddedilmesi"
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr "Tünel istekleri geri çevriliyor: Çok yavaş"
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr "Tünel istekleri geri çevriliyor: Yüksek görev gecikmesi"
 
-msgid "Dropping tunnel requests:<br>High CPU load"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr "Tünel istekleri bırakılıyor:<br>Yüksek CPU yükü"
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "Tünel istekleri geri çevriliyor: Aşırı yüklenme"
 
 msgid "Declining requests:"
@@ -134,8 +134,8 @@ msgstr "Aşırı yükleme isteği"
 msgid "Connection limit reached"
 msgstr "Bağlantı limitine ulaşıldı"
 
-msgid "Dropping tunnel requests: High load"
+msgid "Dropping Tunnel Requests: High load"
 msgstr "Tünel istekleri geri çevriliyor: Yüksek yüklenme"
 
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Tünel istekleri geri çevriliyor: Kuyruk süresi"
