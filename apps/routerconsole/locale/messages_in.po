@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: id\n"
@@ -7563,78 +7562,3 @@ msgstr "Selanjutnya"
 
 msgid "Finished"
 msgstr "Selesai"
-
-#~ msgid "BenarNews"
-#~ msgstr "BenarNews"
-
-#~ msgid "Clear and accurate news for the Far East"
-#~ msgstr "Berita yang jelas dan akurat untuk Timur Jauh"
-
-#~ msgid "NakedSecurity"
-#~ msgstr "NakedSecurity"
-
-#~ msgid "Security news and research blog"
-#~ msgstr "Berita keamanan dan blog penelitian"
-
-#~ msgid "RadioFreeAsia"
-#~ msgstr "RadioFreeAsia"
-
-#~ msgid "Reliable journalism for countries under censorship"
-#~ msgstr "Jurnalisme yang andal untuk negara-negara yang berada di bawah sensor"
-
-#~ msgid "unpublished"
-#~ msgstr "tidak diterbitkan"
-
-#~ msgid "Same IP"
-#~ msgstr "IP yang sama"
-
-#~ msgid "Same IPv4"
-#~ msgstr "IPv4 yang sama"
-
-#~ msgid "Same IPv6"
-#~ msgstr "IPv6 yang sama"
-
-#~ msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-#~ msgstr "Pengaturan ini, ketika diatur menjadi true, akan mengaktifkan mode HiDPI untuk grafik pada halaman <a href=/graphs>grafik</a>. Setelah diaktifkan, Anda mungkin perlu memuat ulang halaman untuk melihat pengaturan diterapkan, dan tampilan grafik mungkin membutuhkan beberapa siklus muat ulang untuk stabilisasi. Perlu dicatat bahwa Javascript harus diaktifkan di browser Anda. [Eksperimental]"
-
-#~ msgid "tunnel summary"
-#~ msgstr "ringkasan tunnel"
-
-#~ msgid "Tunnel Summary"
-#~ msgstr "Ringkasan Terowongan"
-
-#~ msgid "Community Git hosting"
-#~ msgstr "Hosting Komunitas Git"
-
-#~ msgid "base64-image.i2p"
-#~ msgstr "base64-image.i2p"
-
-#~ msgid "imageproxy.i2p"
-#~ msgstr "imageproxy.i2p"
-
-#~ msgid "radio.r4sas.i2p"
-#~ msgstr "radio.r4sas.i2p"
-
-#~ msgid "DigitalJournal"
-#~ msgstr "DigitalJournal"
-
-#~ msgid "Global news & media platform"
-#~ msgstr "Platform berita dan media global"
-
-#~ msgid "Business &amp; Financial News"
-#~ msgstr "Berita Bisnis dan Keuangan"
-
-#~ msgid "MetaCritic"
-#~ msgstr "MetaCritic"
-
-#~ msgid "Movie + TV + Music + Game reviews"
-#~ msgstr "Ulasan Film + TV + Musik + Game"
-
-#~ msgid "All you need to know about everything that matters"
-#~ msgstr "Semua yang perlu Anda ketahui tentang segala hal yang penting"
-
-#~ msgid "TheWeek"
-#~ msgstr "Minggu Ini"
-
-#~ msgid "First Heard About"
-#~ msgstr "Pertama Kali Mendengar Tentangnya"

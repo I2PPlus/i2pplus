@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: vi\n"
@@ -1432,7 +1431,7 @@ msgstr "Rất có thể bạn sẽ chỉ muốn cho phép 127.0.0.1"
 msgid "The I2P router can automatically start this tunnel for you when the router is started."
 msgstr "Bộ định tuyến I2P có thể tự động khởi động đường hầm này cho bạn khi bộ định tuyến được khởi động."
 
-msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occassionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
+msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occasionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
 msgstr "Điều này có thể hữu ích cho các đường hầm được sử dụng thường xuyên (đặc biệt là các đường hầm máy chủ), nhưng đối với các đường hầm chỉ được sử dụng không thường xuyên, điều đó có nghĩa là bộ định tuyến I2P đang tạo và duy trì các đường hầm không cần thiết."
 
 msgid "The wizard has now collected enough information to create your tunnel."

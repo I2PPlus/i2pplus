@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: vi\n"
@@ -1454,24 +1453,3 @@ msgstr "Lưu thay đổi"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent phải dừng lại"
-
-#, java-format
-#~ msgid "Downloading from {0} of {1} peers in swarm"
-#~ msgstr "Đang tải xuống từ {0} trong số {1} đồng nghiệp trong bầy đàn"
-
-#, java-format
-#~ msgid "Connected to {0} peer"
-#~ msgid_plural "Connected to {0} peers"
-#~ msgstr[0] "Kết nối với {0} ngang hàng"
-
-#~ msgid "Unknown"
-#~ msgstr "Không rõ"
-
-#~ msgid "inactive"
-#~ msgstr "không hoạt động"
-
-#~ msgid "Enable viewing and posting comments for this torrent"
-#~ msgstr "Cho phép xem và đăng bình luận cho torrent này"
-
-#~ msgid "Save Preference"
-#~ msgstr "Lưu ưu tiên"

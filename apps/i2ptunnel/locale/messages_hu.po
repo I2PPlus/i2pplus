@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: hu\n"
@@ -1437,7 +1436,7 @@ msgstr "Legvalószínűbb, hogy csak aa 127.0.0.1-et szeretnéd engedélyezni"
 msgid "The I2P router can automatically start this tunnel for you when the router is started."
 msgstr "Az I2P útválasztó automatikusan elindíthatja ezt az alagutat az útválasztó indításakor.Az I2P router képes ezt az alagutat automatikusan elindítani a router indulásakor."
 
-msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occassionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
+msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occasionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
 msgstr "Ez hasznos lehet gyakorta használt alagutak esetén (ez különösen szerver alagutakra vonatkozik), de azon alagutak számára, melyek csak alkalomszerűen használsz ez azt jelentené, hogy az I2P router felesleges alagutakat hoz létre és tart fenn."
 
 msgid "The wizard has now collected enough information to create your tunnel."

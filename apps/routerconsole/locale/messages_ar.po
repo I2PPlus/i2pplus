@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: ar\n"
@@ -7653,78 +7652,3 @@ msgstr "التالي"
 
 msgid "Finished"
 msgstr "منتهي"
-
-#~ msgid "BenarNews"
-#~ msgstr "BenarNews"
-
-#~ msgid "Clear and accurate news for the Far East"
-#~ msgstr "أخبار واضحة ودقيقة لمنطقة الشرق الأقصى"
-
-#~ msgid "NakedSecurity"
-#~ msgstr "الأمن العاري"
-
-#~ msgid "Security news and research blog"
-#~ msgstr "مدونة الأخبار والأبحاث الأمنية"
-
-#~ msgid "RadioFreeAsia"
-#~ msgstr "راديو فري آسيا"
-
-#~ msgid "Reliable journalism for countries under censorship"
-#~ msgstr "صحافة موثوقة للدول الخاضعة للرقابة"
-
-#~ msgid "unpublished"
-#~ msgstr "غير منشورة"
-
-#~ msgid "Same IP"
-#~ msgstr "نفس IP"
-
-#~ msgid "Same IPv4"
-#~ msgstr "نفس IPv4"
-
-#~ msgid "Same IPv6"
-#~ msgstr "نفس IPv6"
-
-#~ msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-#~ msgstr "هذا الإعداد عند تهيئته على صحيح، سيمكّن وضع HiDPI للرسوم البيانية على صفحة <a href=/graphs>الرسوم البيانية</a>. بمجرد التمكين، قد تحتاج إلى تحديث الصفحة لرؤية الإعدادات المطبّقة، وعرض الرسوم البيانية قد يستقر بعد بضع دورات تحديث. ملاحظة أنه يجب تمكين JavaScript في متصفحك. [تجريبي]"
-
-#~ msgid "tunnel summary"
-#~ msgstr "فهرس الأنفاق"
-
-#~ msgid "Tunnel Summary"
-#~ msgstr "ملخص النفق"
-
-#~ msgid "Community Git hosting"
-#~ msgstr "استضافة مجتمع جيت"
-
-#~ msgid "base64-image.i2p"
-#~ msgstr "base64-image.i2p"
-
-#~ msgid "imageproxy.i2p"
-#~ msgstr "imageproxy.i2p"
-
-#~ msgid "radio.r4sas.i2p"
-#~ msgstr "radio.r4sas.i2p"
-
-#~ msgid "DigitalJournal"
-#~ msgstr "DigitalJournal"
-
-#~ msgid "Global news &amp; media platform"
-#~ msgstr "منصة الأخبار والإعلام العالمية"
-
-#~ msgid "Business &amp; Financial News"
-#~ msgstr "الأخبار التجارية والمالية"
-
-#~ msgid "MetaCritic"
-#~ msgstr "ميتاكريتيك"
-
-#~ msgid "Movie + TV + Music + Game reviews"
-#~ msgstr "مراجعات الأفلام والتلفزيون والموسيقى والألعاب"
-
-#~ msgid "All you need to know about everything that matters"
-#~ msgstr "كل ما تريد معرفته عن كل ما يهم"
-
-#~ msgid "TheWeek"
-#~ msgstr "الأسبوع"
-
-#~ msgid "First Heard About"
-#~ msgstr "سمعت لأول مرة عن"

@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: el\n"
@@ -7581,78 +7580,3 @@ msgstr "Επόμενο"
 
 msgid "Finished"
 msgstr "Τελειωμέν"
-
-#~ msgid "BenarNews"
-#~ msgstr "BenarNews"
-
-#~ msgid "Clear and accurate news for the Far East"
-#~ msgstr "Σαφείς και ακριβείς ειδήσεις για την Άπω Ανατολή"
-
-#~ msgid "NakedSecurity"
-#~ msgstr "Γυμνή Ασφάλεια"
-
-#~ msgid "Security news and research blog"
-#~ msgstr "Ειδήσεις ασφαλείας και ερευνητικό ιστολόγιο"
-
-#~ msgid "RadioFreeAsia"
-#~ msgstr "RadioFreeAsia"
-
-#~ msgid "Reliable journalism for countries under censorship"
-#~ msgstr "Αξιόπιστη δημοσιογραφία για χώρες υπό λογοκρισία"
-
-#~ msgid "unpublished"
-#~ msgstr "αδημοσίευτο"
-
-#~ msgid "Same IP"
-#~ msgstr "Ίδια IP"
-
-#~ msgid "Same IPv4"
-#~ msgstr "Ίδιο IPv4"
-
-#~ msgid "Same IPv6"
-#~ msgstr "Ίδιο IPv6"
-
-#~ msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-#~ msgstr "Αυτή η ρύθμιση, όταν είναι ενεργοποιημένη, θα ενεργοποιήσει τη λειτουργία HiDPI για τα διαγράμματα στη σελίδα <a href=/graphs>της σελίδας διαγραμμάτων</a>. Μόλις ενεργοποιηθεί, μπορεί να χρειαστεί να ανανεώσετε τη σελίδα για να δείτε τις ρυθμίσεις που εφαρμόζονται, και η εμφάνιση του γραφήματος μπορεί να χρειαστεί μερικές ανανεώσεις για να σταθεροποιηθεί. Σημειώστε ότι θα πρέπει να είναι ενεργοποιημένη η Javascript στον περιηγητή σας. [Πειραματικό]"
-
-#~ msgid "tunnel summary"
-#~ msgstr "περίληψη των τούνελ"
-
-#~ msgid "Tunnel Summary"
-#~ msgstr "Σύνοψη σήραγγας"
-
-#~ msgid "Community Git hosting"
-#~ msgstr "Community Git Φιλοξενία"
-
-#~ msgid "base64-image.i2p"
-#~ msgstr "base64-image.i2p"
-
-#~ msgid "imageproxy.i2p"
-#~ msgstr "imageproxy.i2p"
-
-#~ msgid "radio.r4sas.i2p"
-#~ msgstr "radio.r4sas.i2p"
-
-#~ msgid "DigitalJournal"
-#~ msgstr "DigitalJournal"
-
-#~ msgid "Global news &amp; media platform"
-#~ msgstr "Παγκόσμια πλατφόρμα ειδήσεων και μέσων ενημέρωσης"
-
-#~ msgid "Business &amp; Financial News"
-#~ msgstr "Επιχειρηματικές και Οικονομικές Ειδήσεις"
-
-#~ msgid "MetaCritic"
-#~ msgstr "MetaCritic"
-
-#~ msgid "Movie + TV + Music + Game reviews"
-#~ msgstr "Κριτικές για Μουσικό Παιχνίδι Ταινιών Τηλεόρασης"
-
-#~ msgid "All you need to know about everything that matters"
-#~ msgstr "Όλα όσα χρειάζεται να ξέρετε για όλα όσα έχουν σημασία"
-
-#~ msgid "TheWeek"
-#~ msgstr "The Week"
-
-#~ msgid "First Heard About"
-#~ msgstr "Ακούστηκε για πρώτη φορά"

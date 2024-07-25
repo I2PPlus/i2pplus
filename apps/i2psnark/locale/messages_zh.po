@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: zh_CN\n"
@@ -1454,24 +1453,3 @@ msgstr "保存更改"
 
 msgid "Torrent must be stopped"
 msgstr "必须停止洪流"
-
-#, java-format
-#~ msgid "Downloading from {0} of {1} peers in swarm"
-#~ msgstr "从{0}个用户（总计{1}个）中下载"
-
-#, java-format
-#~ msgid "Connected to {0} peer"
-#~ msgid_plural "Connected to {0} peers"
-#~ msgstr[0] "连接到{0}个用户"
-
-#~ msgid "Unknown"
-#~ msgstr "未知"
-
-#~ msgid "inactive"
-#~ msgstr "不活跃"
-
-#~ msgid "Enable viewing and posting comments for this torrent"
-#~ msgstr "为这个种子启用评分功能"
-
-#~ msgid "Save Preference"
-#~ msgstr "保存偏好设置"

@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: et_EE\n"
@@ -7582,81 +7581,3 @@ msgstr "Järgmine"
 
 msgid "Finished"
 msgstr "Lõppenud"
-
-#~ msgid "BenarNews"
-#~ msgstr "BenarNews"
-
-#~ msgid "Clear and accurate news for the Far East"
-#~ msgstr "Selged ja täpsed uudised Kaug-Ida jaoks"
-
-#~ msgid "NakedSecurity"
-#~ msgstr "Alasti Turvalisus"
-
-#~ msgid "Security news and research blog"
-#~ msgstr "Turvauudiste ja -uuringute ajaveeb"
-
-#~ msgid "RadioFreeAsia"
-#~ msgstr "RadioFreeAsia"
-
-#~ msgid "Reliable journalism for countries under censorship"
-#~ msgstr "Usaldusväärne ajakirjandus tsensuuri all olevate riikide jaoks"
-
-#~ msgid "unpublished"
-#~ msgstr "avaldamata"
-
-#~ msgid "Same IP"
-#~ msgstr "Sama IP"
-
-#~ msgid "Same IPv4"
-#~ msgstr "Sama IPv4"
-
-#~ msgid "Same IPv6"
-#~ msgstr "Sama IPv6"
-
-#~ msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-#~ msgstr "Selle seadistuse tähistamine tõele lülitab graafikutele aadressil <a href=/graphs>graafikute leht</a> HiDPI režiimi. Aktiveerimise korral võib olla vajalik leht uuesti laadida, et näha seadistusi ja graafika kuvamine võib mõne värskendustsükli jooksul stabiliseeruda. Pange tähele, et teie brauseris peaks Javascript olema lubatud. [Katseline]"
-
-#~ msgid "tunnel summary"
-#~ msgstr "tunnelite kokkuvõte"
-
-#~ msgid "Tunnel Summary"
-#~ msgstr "Tunneli kokkuvõte"
-
-#~ msgid "Community Git hosting"
-#~ msgstr "Community Giti hostimine"
-
-#~ msgid "base64-image.i2p"
-#~ msgstr "base64-image.i2p"
-
-#~ msgid "imageproxy.i2p"
-#~ msgstr "imageproxy.i2p"
-
-#~ msgid "radio.r4sas.i2p"
-#~ msgstr "radio.r4sas.i2p"
-
-#~ msgid "DigitalJournal"
-#~ msgstr "Digital Journal"
-
-#~ msgid "Global news &amp; media platform"
-#~ msgstr "Globaalsed uudised ja meediaplatvorm"
-
-#~ msgid "Business &amp; Financial News"
-#~ msgstr "Äri- ja finantsuudised"
-
-#~ msgid "MetaCritic"
-#~ msgstr "MetaCritic"
-
-#~ msgid "Movie + TV + Music + Game reviews"
-#~ msgstr "Filmi-TV muusikamängude ülevaated"
-
-#~ msgid "All you need to know about everything that matters"
-#~ msgstr "Kõik, mida pead teadma kõige olulise kohta"
-
-#~ msgid "TheWeek"
-#~ msgstr "Nädal"
-
-#~ msgid "First Heard About"
-#~ msgstr "Esmakordselt kuulnud"
-
-#~ msgid "XChat-laadse kliendiga saate luua uue võrgu serveri <code>127.0.0.1/6668</code> (ärge unustage märkida <i>Proxy-serveri möödu</i>, kui teil on konfigureeritud puhverserver) või saate ühendust luua käsu <code>/server 127.0.0.1 6668</code> abil. Erinevate IRC-i klientide süntaks võib erineda."
-#~ msgstr "XChat-laadse kliendi kasutajad saavad luua uue võrgu serveriga <code>127.0.0.1/6668</code> (ärge unustage märkida <i>Proxy-serveri möödu</i>, kui teil on konfigureeritud puhverserver) või saate ühendust luua käsu <code>/server 127.0.0.1 6668</code> abil. Erinevate IRC-i klientide süntaks võib erineda."

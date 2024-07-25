@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: tr_TR\n"
@@ -1462,25 +1461,3 @@ msgstr "Değişiklikleri Kaydet"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent durdurulmalı"
-
-#, java-format
-#~ msgid "Downloading from {0} of {1} peers in swarm"
-#~ msgstr "Sürüdeki {0} / {1} eşten indiriliyor"
-
-#, java-format
-#~ msgid "Connected to {0} peer"
-#~ msgid_plural "Connected to {0} peers"
-#~ msgstr[0] "{0} eş ile bağlantı kuruldu"
-#~ msgstr[1] "{0} eş ile bağlantı kuruldu"
-
-#~ msgid "Unknown"
-#~ msgstr "Bilinmiyor"
-
-#~ msgid "inactive"
-#~ msgstr "etkin değil"
-
-#~ msgid "Enable viewing and posting comments for this torrent"
-#~ msgstr "Bu torrent için yorumlar görüntülenip eklenebilsin"
-
-#~ msgid "Save Preference"
-#~ msgstr "Ayarları Kaydet"

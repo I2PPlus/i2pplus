@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: ko\n"
@@ -1454,24 +1453,3 @@ msgstr "변경 사항 저장"
 
 msgid "Torrent must be stopped"
 msgstr "토렌트를 중지해야 합니다"
-
-#, java-format
-#~ msgid "Downloading from {0} of {1} peers in swarm"
-#~ msgstr "Swarm의 {1} 피어 중 {0}에서 다운로드 중"
-
-#, java-format
-#~ msgid "Connected to {0} peer"
-#~ msgid_plural "Connected to {0} peers"
-#~ msgstr[0] "{0} 피어에 연결되었습니다"
-
-#~ msgid "Unknown"
-#~ msgstr "알수없는"
-
-#~ msgid "inactive"
-#~ msgstr "비활성"
-
-#~ msgid "Enable viewing and posting comments for this torrent"
-#~ msgstr "이 토렌트에 대한 댓글 보기 및 게시 활성화"
-
-#~ msgid "Save Preference"
-#~ msgstr "기본 설정 저장"

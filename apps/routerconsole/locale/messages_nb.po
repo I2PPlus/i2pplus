@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: nb\n"
@@ -7581,78 +7580,3 @@ msgstr "Neste"
 
 msgid "Finished"
 msgstr "Sluttført"
-
-#~ msgid "BenarNews"
-#~ msgstr "BenarNews"
-
-#~ msgid "Clear and accurate news for the Far East"
-#~ msgstr "Tydelige og nøyaktige nyheter for Fjernøsten"
-
-#~ msgid "NakedSecurity"
-#~ msgstr "Nakensikkerhet"
-
-#~ msgid "Security news and research blog"
-#~ msgstr "Sikkerhetsnyheter og forskningsblogg"
-
-#~ msgid "RadioFreeAsia"
-#~ msgstr "RadioFreeAsia"
-
-#~ msgid "Reliable journalism for countries under censorship"
-#~ msgstr "Pålitelig journalistikk for land under sensur"
-
-#~ msgid "unpublished"
-#~ msgstr "upublisert"
-
-#~ msgid "Same IP"
-#~ msgstr "Samme IP"
-
-#~ msgid "Same IPv4"
-#~ msgstr "Samme IPv4"
-
-#~ msgid "Same IPv6"
-#~ msgstr "Samme IPv6"
-
-#~ msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-#~ msgstr "Denne innstillingen, når den er satt til true, vil aktivere HiDPI-modus for grafene på <a href=/graphs>grafsiden</a>. Når dette er aktivert, må du kanskje oppdatere siden for å se de anvendte innstillingene, og grafvisningen kan ta noen få oppdateringsomganger for å stabilisere seg. Merk at JavaScript bør være aktivert i nettleseren din. [Eksperimentell]"
-
-#~ msgid "tunnel summary"
-#~ msgstr "tunnelsammendrag"
-
-#~ msgid "Tunnel Summary"
-#~ msgstr "Tunnelsammendrag"
-
-#~ msgid "Community Git hosting"
-#~ msgstr "Community Git-hosting"
-
-#~ msgid "base64-image.i2p"
-#~ msgstr "base64-image.i2p"
-
-#~ msgid "imageproxy.i2p"
-#~ msgstr "imageproxy.i2p"
-
-#~ msgid "radio.r4sas.i2p"
-#~ msgstr "radio.r4sas.i2p"
-
-#~ msgid "DigitalJournal"
-#~ msgstr "DigitalJournal"
-
-#~ msgid "Global news &amp; media platform"
-#~ msgstr "Globale nyheter og medieplattformen"
-
-#~ msgid "Business &amp; Financial News"
-#~ msgstr "Forretnings- og økonomiske nyheter"
-
-#~ msgid "MetaCritic"
-#~ msgstr "Metakritiker"
-
-#~ msgid "Movie + TV + Music + Game reviews"
-#~ msgstr "Film-TV Musikkspillanmeldelser"
-
-#~ msgid "All you need to know about everything that matters"
-#~ msgstr "Alt du trenger å vite om alt som betyr noe"
-
-#~ msgid "TheWeek"
-#~ msgstr "Uken"
-
-#~ msgid "First Heard About"
-#~ msgstr "Først hørt om"

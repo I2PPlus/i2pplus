@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2012 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: ja\n"

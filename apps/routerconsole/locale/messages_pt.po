@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: pt\n"
@@ -7581,84 +7580,3 @@ msgstr "Seguinte"
 
 msgid "Finished"
 msgstr "Terminada"
-
-#~ msgid "BenarNews"
-#~ msgstr "BenarNews"
-
-#~ msgid "Clear and accurate news for the Far East"
-#~ msgstr "Notícias claras e precisas para o Extremo Oriente"
-
-#~ msgid "NakedSecurity"
-#~ msgstr "Nu Segurança"
-
-#~ msgid "Security news and research blog"
-#~ msgstr "Blog de notícias e pesquisas sobre segurança"
-
-#~ msgid "RadioFreeAsia"
-#~ msgstr "RadioFreeÁsia"
-
-#~ msgid "Reliable journalism for countries under censorship"
-#~ msgstr "Jornalismo confiável para países sob censura"
-
-#~ msgid "unpublished"
-#~ msgstr "não publicado"
-
-#~ msgid "Same IP"
-#~ msgstr "Mesmo IP"
-
-#~ msgid "Same IPv4"
-#~ msgstr "Mesmo IPv4"
-
-#~ msgid "Same IPv6"
-#~ msgstr "Mesmo IPv6"
-
-#~ msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-#~ msgstr "Esta configuração, quando ativada, habilitará o modo HiDPI para os gráficos na <a href=/graphs>página de gráficos</a>. Após a ativação, você pode precisar atualizar a página para ver as configurações aplicadas, e a exibição do gráfico pode levar alguns ciclos de atualização para se estabilizar. Observe que o Javascript deve estar habilitado em seu navegador. [Experimental]"
-
-#~ msgid "tunnel summary"
-#~ msgstr "resumo sobre túneis"
-
-#~ msgid "Tunnel Summary"
-#~ msgstr "Resumo do Túnel"
-
-#~ msgid "Community Git hosting"
-#~ msgstr "Hospedagem comunitária Git"
-
-#~ msgid "base64-image.i2p"
-#~ msgstr "base64-image.i2p"
-
-#~ msgid "imageproxy.i2p"
-#~ msgstr "imageproxy.i2p"
-
-#~ msgid "radio.r4sas.i2p"
-#~ msgstr "radio.r4sas.i2p"
-
-#~ msgid "DigitalJournal"
-#~ msgstr "Diário Digital"
-
-#~ msgid "Global news &amp; media platform"
-#~ msgstr "Plataforma de notícias e mídia global"
-
-#~ msgid "Business &amp; Financial News"
-#~ msgstr "Notícias comerciais e financeiras"
-
-#~ msgid "MetaCritic"
-#~ msgstr "MetaCrítico"
-
-#~ msgid "Movie + TV + Music + Game reviews"
-#~ msgstr "Críticas de jogos musicais para filmes e TV"
-
-#~ msgid "All you need to know about everything that matters"
-#~ msgstr "Tudo o que você precisa saber sobre tudo o que importa"
-
-#~ msgid "TheWeek"
-#~ msgstr "TheWeek"
-
-#~ msgid "First Heard About"
-#~ msgstr "Ouvi falar pela primeira vez"
-
-#~ msgid "Outbound UDP from the <a href=/confignet#udpconfig>porta aleatória</a> observada na página de Configuração da Rede para portas UDP remotas arbitrarias, permitindo respostas."
-#~ msgstr "UDP de saída da <a href=/confignet#udpconfig>porta aleatória</a> observada na página de Configuração da Rede para portas UDP remotas arbitrárias, permitindo respostas."
-
-#~ msgid "TCP de saída de portas altas aleatórias para portas TCP remotas arbitrárias."
-#~ msgstr "TCP de saída de portas altas aleatórias para portas TCP remotas arbitrárias."

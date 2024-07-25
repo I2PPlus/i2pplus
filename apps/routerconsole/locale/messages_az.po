@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: az\n"
@@ -7581,81 +7580,3 @@ msgstr "Növbəti"
 
 msgid "Finished"
 msgstr "Bitdi"
-
-#~ msgid "BenarNews"
-#~ msgstr "BenarNews"
-
-#~ msgid "Clear and accurate news for the Far East"
-#~ msgstr "Uzaq Şərq üçün aydın və dəqiq xəbərlər"
-
-#~ msgid "NakedSecurity"
-#~ msgstr "Çılpaq Təhlükəsizlik"
-
-#~ msgid "Security news and research blog"
-#~ msgstr "Təhlükəsizlik xəbərləri və araşdırma bloqu"
-
-#~ msgid "RadioFreeAsia"
-#~ msgstr "RadioFreeAsia"
-
-#~ msgid "Reliable journalism for countries under censorship"
-#~ msgstr "Senzura altında olan ölkələr üçün etibarlı jurnalistika"
-
-#~ msgid "unpublished"
-#~ msgstr "nəşr olunmayıb"
-
-#~ msgid "Same IP"
-#~ msgstr "Eyni IP"
-
-#~ msgid "Same IPv4"
-#~ msgstr "Eyni IPv4"
-
-#~ msgid "Same IPv6"
-#~ msgstr "Eyni IPv6"
-
-#~ msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-#~ msgstr "Bu parametr doğru təyin edildikdə, qrafiklər <a href=/graphs>səhifəsindəki</a> qrafiklər üçün HiDPI rejimini aktivləşdirəcək. Aktiv olduqdan sonra tətbiq olunan parametrləri görmək üçün səhifəni yeniləməli ola bilərsiniz və qrafik displeyi sabitləşdirmək üçün bir neçə yeniləmə dövrü çəkə bilər. Nəzərə alın ki, Javascript brauzerinizdə aktiv olmalıdır. [Eksperimental]"
-
-#~ msgid "tunnel summary"
-#~ msgstr "tunelin xülasəsi"
-
-#~ msgid "Tunnel Summary"
-#~ msgstr "Tunel xülasəsi"
-
-#~ msgid "Community Git hosting"
-#~ msgstr "İcma Git hostinqi"
-
-#~ msgid "base64-image.i2p"
-#~ msgstr "base64-image.i2p"
-
-#~ msgid "imageproxy.i2p"
-#~ msgstr "imageproxy.i2p"
-
-#~ msgid "radio.r4sas.i2p"
-#~ msgstr "radio.r4sas.i2p"
-
-#~ msgid "DigitalJournal"
-#~ msgstr "DigitalJournal"
-
-#~ msgid "Global news &amp; media platform"
-#~ msgstr "Qlobal Xəbərlər və Media Platforması"
-
-#~ msgid "Business &amp; Financial News"
-#~ msgstr "Biznes və maliyyə xəbərləri"
-
-#~ msgid "MetaCritic"
-#~ msgstr "MetaCritic"
-
-#~ msgid "Movie + TV + Music + Game reviews"
-#~ msgstr "Movie TV Music Game icmalları"
-
-#~ msgid "All you need to know about everything that matters"
-#~ msgstr "Vacib olan hər şey haqqında bilməli olduğunuz hər şey"
-
-#~ msgid "TheWeek"
-#~ msgstr "TheWeek"
-
-#~ msgid "First Heard About"
-#~ msgstr "İlk eşitdim"
-
-#~ msgid "A Java I2P plugin implementation of a BitTorrent Open Tracker. Available from http://stats.i2p/i2p/plugins. Source code is available on github."
-#~ msgstr "BitTorrent Açık İzleyici'nin Java I2P eklenti uyarlamasıdır. http://stats.i2p/i2p/plugins adresinden temin edilebilir. Kaynak kodu github'da mevcuttur."

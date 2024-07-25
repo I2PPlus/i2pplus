@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: nl\n"
@@ -7581,87 +7580,3 @@ msgstr "Volgende"
 
 msgid "Finished"
 msgstr "Klaar"
-
-#~ msgid "BenarNews"
-#~ msgstr "BenarNieuws"
-
-#~ msgid "Clear and accurate news for the Far East"
-#~ msgstr "Duidelijk en accuraat nieuws voor het Verre Oosten"
-
-#~ msgid "NakedSecurity"
-#~ msgstr "Naakte beveiliging"
-
-#~ msgid "Security news and research blog"
-#~ msgstr "Beveiligingsnieuws en onderzoeksblog"
-
-#~ msgid "RadioFreeAsia"
-#~ msgstr "RadioVrijAzië"
-
-#~ msgid "Reliable journalism for countries under censorship"
-#~ msgstr "Betrouwbare journalistiek voor landen onder censuur"
-
-#~ msgid "unpublished"
-#~ msgstr "ongepubliceerd"
-
-#~ msgid "Same IP"
-#~ msgstr "Hetzelfde IP-adres"
-
-#~ msgid "Same IPv4"
-#~ msgstr "Dezelfde IPv4"
-
-#~ msgid "Same IPv6"
-#~ msgstr "Dezelfde IPv6"
-
-#~ msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-#~ msgstr "Deze instelling, wanneer ingesteld op true, schakelt HiDPI-modus in voor de grafieken op <a href=/graphs>de grafiekenpagina</a>. Nadat dit is ingeschakeld, moet je mogelijk de pagina verversen om de toegepaste instellingen te zien, en de grafische weergave kan enkele vernieuwingscycli nodig hebben om te stabiliseren. Let op: Javascript moet ingeschakeld zijn in je browser. [Experimenteel]"
-
-#~ msgid "tunnel summary"
-#~ msgstr "tunnel samenvatting"
-
-#~ msgid "Tunnel Summary"
-#~ msgstr "Tunnelsamenvatting"
-
-#~ msgid "Community Git hosting"
-#~ msgstr "Community Git-hosting"
-
-#~ msgid "base64-image.i2p"
-#~ msgstr "base64-image.i2p"
-
-#~ msgid "imageproxy.i2p"
-#~ msgstr "imageproxy.i2p"
-
-#~ msgid "radio.r4sas.i2p"
-#~ msgstr "radio.r4sas.i2p"
-
-#~ msgid "DigitalJournal"
-#~ msgstr "DigitalJournal"
-
-#~ msgid "Global news &amp; media platform"
-#~ msgstr "Wereldwijd nieuws- en mediaplatform"
-
-#~ msgid "Business &amp; Financial News"
-#~ msgstr "Zakelijk en financieel nieuws"
-
-#~ msgid "MetaCritic"
-#~ msgstr "MetaCriticus"
-
-#~ msgid "Movie + TV + Music + Game reviews"
-#~ msgstr "Film TV Muziek Game recensies"
-
-#~ msgid "All you need to know about everything that matters"
-#~ msgstr "Alles wat u moet weten over alles wat er toe doet"
-
-#~ msgid "TheWeek"
-#~ msgstr "De Week"
-
-#~ msgid "First Heard About"
-#~ msgstr "Voor het eerst gehoord"
-
-#~ msgid "I2P+ functioneert het beste wanneer je de snelheid van je netwerkverbinding nauwkeurig kunt weergeven in het <a href=/config>bandbreedte configuratie gedeelte</a>. Standaard is I2P+ geconfigureerd met enkele vrij conservatieve waarden die niet geschikt zijn voor veel gebruiksscenario's, dus neem alsjeblieft de tijd om deze instellingen te bekijken en waar nodig te corrigeren. Hoe meer bandbreedte je toewijst, <i>specifiek</i> upstream bandbreedte, hoe meer je zult profiteren van het netwerk."
-#~ msgstr "I2P+ functioneert het beste wanneer je de snelheid van je netwerkverbinding nauwkeurig kunt weergeven in het <a href=/config>bandbreedte configuratie gedeelte</a>. Standaard is I2P+ geconfigureerd met enkele vrij conservatieve waarden die niet geschikt zijn voor veel gebruiksscenario's, dus neem alsjeblieft de tijd om deze instellingen te bekijken en waar nodig te corrigeren. Hoe meer bandbreedte je toewijst, <i>specifiek</i> upstream bandbreedte, hoe meer je zult profiteren van het netwerk."
-
-#~ msgid "In de webbrowser die u voor I2P-gebruik heeft geconfigureerd, gaat u naar de naam van uw website (<i>gekozenhostname</i>.i2p) en u zou terug moeten keren naar deze pagina."
-#~ msgstr "Ga in de webbrowser die u heeft geconfigureerd voor I2P-gebruik naar de naam van uw website (<i>gekozenhostname</i>.i2p) en u zou terug moeten keren naar deze pagina."
-
-#~ msgid "Voordat u de wereld vertelt over uw nieuwe website, moet u wat inhoud toevoegen. Ga naar de rootdirectory van de server <a href=#rootdir>hierboven vermeld</a> en vervang de doorverwijspagina <i>index.html</i> door uw eigen inhoud. Als u een sjabloon nodig heeft voor een basiswebsite, voel u dan vrij om <a href=http://127.0.0.1:7658/help/pagetemplate.html>deze pagina</a> aan te passen. Als u na het bewerken van de inhoud terugkeert naar deze pagina, probeer dan de webcache van uw browser te wissen."
-#~ msgstr "Voordat u de wereld vertelt over uw nieuwe website, moet u wat inhoud toevoegen. Ga naar de rootdirectory van de server <a href=#rootdir>hierboven vermeld</a> en vervang de doorverwijspagina <i>index.html</i> door uw eigen inhoud. Als u een sjabloon nodig heeft voor een basiswebsite, voel u dan vrij om <a href=http://127.0.0.1:7658/help/pagetemplate.html>deze pagina</a> aan te passen. Als u na het bewerken van de inhoud terugkeert naar deze pagina, probeer dan de webcache van uw browser te wissen."

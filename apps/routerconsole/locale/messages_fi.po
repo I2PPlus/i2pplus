@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: fi\n"
@@ -7581,78 +7580,3 @@ msgstr "Seuraava"
 
 msgid "Finished"
 msgstr "Valmistunut"
-
-#~ msgid "BenarNews"
-#~ msgstr "BenarNews"
-
-#~ msgid "Clear and accurate news for the Far East"
-#~ msgstr "Selkeitä ja tarkkoja uutisia Kaukoidästä"
-
-#~ msgid "NakedSecurity"
-#~ msgstr "NakedSecurity"
-
-#~ msgid "Security news and research blog"
-#~ msgstr "Turvallisuusuutiset ja tutkimusblogi"
-
-#~ msgid "RadioFreeAsia"
-#~ msgstr "RadioFreeAsia"
-
-#~ msgid "Reliable journalism for countries under censorship"
-#~ msgstr "Luotettavaa journalismia sensuroiduille maille"
-
-#~ msgid "unpublished"
-#~ msgstr "julkaisematon"
-
-#~ msgid "Same IP"
-#~ msgstr "Sama IP"
-
-#~ msgid "Same IPv4"
-#~ msgstr "Sama IPv4"
-
-#~ msgid "Same IPv6"
-#~ msgstr "Sama IPv6"
-
-#~ msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-#~ msgstr "Tämä asetus käynnistää HiDPI-tilan, kun se on asetettuna todeksi <a href=/graphs>graafien sivulla</a>. Kun tämä asetus on käytössä, sinun täytyy ehkä päivittää sivu, jotta asetukset päivittyvät, ja graafien näyttö saattaa vakautua vasta muutaman päivityssyklin jälkeen. Huomaa, että selaimessasi tulee olla JavaScript-käytössä. [Kokeellinen]"
-
-#~ msgid "tunnel summary"
-#~ msgstr "yhteenveto käytävistä"
-
-#~ msgid "Tunnel Summary"
-#~ msgstr "Tunnelin yhteenveto"
-
-#~ msgid "Community Git hosting"
-#~ msgstr "Community Git -isännöinti"
-
-#~ msgid "base64-image.i2p"
-#~ msgstr "base64-image.i2p"
-
-#~ msgid "imageproxy.i2p"
-#~ msgstr "imageproxy.i2p"
-
-#~ msgid "radio.r4sas.i2p"
-#~ msgstr "radio.r4sas.i2p"
-
-#~ msgid "DigitalJournal"
-#~ msgstr "DigitalJournal"
-
-#~ msgid "Global news &amp; media platform"
-#~ msgstr "Globaalit uutiset ja mediaalusta"
-
-#~ msgid "Business &amp; Financial News"
-#~ msgstr "Liiketoiminta- ja taloudelliset uutiset"
-
-#~ msgid "MetaCritic"
-#~ msgstr "MetaCritic"
-
-#~ msgid "Movie + TV + Music + Game reviews"
-#~ msgstr "Elokuva-TV-musiikkipeliarvostelut"
-
-#~ msgid "All you need to know about everything that matters"
-#~ msgstr "Kaikki mitä sinun tarvitsee tietää kaikesta, mikä on tärkeää"
-
-#~ msgid "TheWeek"
-#~ msgstr "TheWeek"
-
-#~ msgid "First Heard About"
-#~ msgstr "Ensimmäistä kertaa kuultu"

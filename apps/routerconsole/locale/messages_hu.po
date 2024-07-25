@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: hu\n"
@@ -7581,87 +7580,3 @@ msgstr "Következő"
 
 msgid "Finished"
 msgstr "Befejeződött"
-
-#~ msgid "BenarNews"
-#~ msgstr "BenarNews"
-
-#~ msgid "Clear and accurate news for the Far East"
-#~ msgstr "Világos és pontos hírek a Távol-Keletről"
-
-#~ msgid "NakedSecurity"
-#~ msgstr "NakedSecurity"
-
-#~ msgid "Security news and research blog"
-#~ msgstr "Biztonsági hírek és kutatási blog"
-
-#~ msgid "RadioFreeAsia"
-#~ msgstr "RadioFreeAsia"
-
-#~ msgid "Reliable journalism for countries under censorship"
-#~ msgstr "Megbízható újságírás a cenzúra alatt álló országok számára"
-
-#~ msgid "unpublished"
-#~ msgstr "nem publikált"
-
-#~ msgid "Same IP"
-#~ msgstr "Azonos IP"
-
-#~ msgid "Same IPv4"
-#~ msgstr "Azonos IPv4"
-
-#~ msgid "Same IPv6"
-#~ msgstr "Azonos IPv6"
-
-#~ msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-#~ msgstr "Ez a beállítás, ha igazra van állítva, lehetővé teszi a HiDPI módot a grafikonokon a <a href=/graphs>a grafikonok oldalon</a>. Miután engedélyezve lett, lehet, hogy frissíteni kell az oldalt, hogy lássa a beállításokat, és a grafikonok megjelenítése stabilizáláshoz néhány frissítési ciklusra lehet szükség. Fontos, hogy a böngészőben engedélyezve legyen a JavaScript. [Eksperimentális]"
-
-#~ msgid "tunnel summary"
-#~ msgstr "alagút összegzés"
-
-#~ msgid "Tunnel Summary"
-#~ msgstr "Alagút összefoglalása"
-
-#~ msgid "Community Git hosting"
-#~ msgstr "Közösségi Git Hosting"
-
-#~ msgid "base64-image.i2p"
-#~ msgstr "base64-image.i2p"
-
-#~ msgid "imageproxy.i2p"
-#~ msgstr "imageproxy.i2p"
-
-#~ msgid "radio.r4sas.i2p"
-#~ msgstr "radio.r4sas.i2p"
-
-#~ msgid "DigitalJournal"
-#~ msgstr "DigitalJournal"
-
-#~ msgid "Global news &amp; media platform"
-#~ msgstr "Globális hír- és médiaplatform"
-
-#~ msgid "Business &amp; Financial News"
-#~ msgstr "Üzleti és pénzügyi hírek"
-
-#~ msgid "MetaCritic"
-#~ msgstr "MetaCritic"
-
-#~ msgid "Movie + TV + Music + Game reviews"
-#~ msgstr "Movie TV zenei játékok véleménye"
-
-#~ msgid "All you need to know about everything that matters"
-#~ msgstr "Minden, amit tudnod kell mindenről, ami számít"
-
-#~ msgid "TheWeek"
-#~ msgstr "TheWeek"
-
-#~ msgid "First Heard About"
-#~ msgstr "Először hallottam róla"
-
-#~ msgid "Inbound UDP a <a href=/confignet#udpconfig>porton</a> jegyzett távoli Hálózati Konfigurációs oldalról tetszőleges helyről (opcionális, de ajánlott)."
-#~ msgstr "Bejövő UDP <a href=/confignet#udpconfig>port</a> a Hálózati Konfigurációs oldalról tetszőleges helyről (opcionális, de ajánlott)."
-
-#~ msgid "Inbound TCP a <a href=/confignet#externaltcp>portján</a> jegyzett távoli Hálózati Konfigurációs oldalról tetszőleges helyről (opcionális, de ajánlott). A <a href=/confignet#tcpconfig>bejövő TCP</a> letiltható a Hálózati Konfigurációs oldalon."
-#~ msgstr "Bejövő TCP a <a href=/confignet#externaltcp>porton</a> jegyzett távoli Hálózati Konfigurációs oldalról tetszőleges helyről (opcionális, de ajánlott). A <a href=/confignet#tcpconfig>bejövő TCP</a> letiltható a Hálózati Konfigurációs oldalon."
-
-#~ msgid "Outbound UDP port 123, válaszok lehetővé tétele: ez szükséges az I2P belső időszinkronizálásához (a SNTP-n keresztül - véletlenszerű SNTP gazda lekérdezése a <code>pool.ntp.org</code> vagy <a href=/help/advancedsettings#ntpserverconfig>egy másik általad meghatározott kiszolgáló</a>)."
-#~ msgstr "Kimenő UDP 123-as porton, válaszok lehetővé tétele: ez szükséges az I2P belső időszinkronizálásához (az SNTP lekérdezése - véletlenszerű SNTP kiszolgáló a <code>pool.ntp.org</code> vagy <a href=/help/advancedsettings#ntpserverconfig>egy másik általad meghatározott</a>)."

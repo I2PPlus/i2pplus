@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: sv_SE\n"
@@ -7581,81 +7580,3 @@ msgstr "Nästa"
 
 msgid "Finished"
 msgstr "Avslutad"
-
-#~ msgid "Distance to"
-#~ msgstr "Avstånd till"
-
-#~ msgid "BenarNews"
-#~ msgstr "BenarNews"
-
-#~ msgid "Clear and accurate news for the Far East"
-#~ msgstr "Klara och korrekta nyheter för Fjärran Östern"
-
-#~ msgid "NakedSecurity"
-#~ msgstr "Nakensäkerhet"
-
-#~ msgid "Security news and research blog"
-#~ msgstr "Säkerhetsnyheter och forskningsblogg"
-
-#~ msgid "RadioFreeAsia"
-#~ msgstr "RadioFreeAsia"
-
-#~ msgid "Reliable journalism for countries under censorship"
-#~ msgstr "Pålitlig journalistik för länder under censur"
-
-#~ msgid "unpublished"
-#~ msgstr "opublicerad"
-
-#~ msgid "Same IP"
-#~ msgstr "Samma IP"
-
-#~ msgid "Same IPv4"
-#~ msgstr "Samma IPv4"
-
-#~ msgid "Same IPv6"
-#~ msgstr "Samma IPv6"
-
-#~ msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-#~ msgstr "Denna inställning, när den är inställd på true, aktiverar HiDPI-läge för graferna på <a href=/graphs>graflänken</a>. När det är aktiverat kan det hända att du behöver uppdatera sidan för att se inställningarna och grafdisplayen kan ta ett par uppdateringscykler för att stabilisera sig. Observera att JavaScript ska vara aktiverat i din webbläsare. [Experimentell]"
-
-#~ msgid "tunnel summary"
-#~ msgstr "tunnelsammandrag"
-
-#~ msgid "Tunnel Summary"
-#~ msgstr "Tunnelsammanfattning"
-
-#~ msgid "Community Git hosting"
-#~ msgstr "Community Git-värd"
-
-#~ msgid "base64-image.i2p"
-#~ msgstr "base64-image.i2p"
-
-#~ msgid "imageproxy.i2p"
-#~ msgstr "imageproxy.i2p"
-
-#~ msgid "radio.r4sas.i2p"
-#~ msgstr "radio.r4sas.i2p"
-
-#~ msgid "DigitalJournal"
-#~ msgstr "DigitalJournal"
-
-#~ msgid "Global news &amp; media platform"
-#~ msgstr "Globala nyheter"
-
-#~ msgid "Business &amp; Financial News"
-#~ msgstr "Affärs- och finansnyheter"
-
-#~ msgid "MetaCritic"
-#~ msgstr "MetaCritic"
-
-#~ msgid "Movie + TV + Music + Game reviews"
-#~ msgstr "Film-TV Musik Spelrecensioner"
-
-#~ msgid "All you need to know about everything that matters"
-#~ msgstr "Allt du behöver veta om allt som betyder något"
-
-#~ msgid "TheWeek"
-#~ msgstr "Veckan"
-
-#~ msgid "First Heard About"
-#~ msgstr "Hördes om först"

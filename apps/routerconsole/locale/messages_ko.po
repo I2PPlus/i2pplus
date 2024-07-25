@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: ko\n"
@@ -7563,78 +7562,3 @@ msgstr "다음"
 
 msgid "Finished"
 msgstr "완료됨"
-
-#~ msgid "BenarNews"
-#~ msgstr "베나르 뉴스"
-
-#~ msgid "Clear and accurate news for the Far East"
-#~ msgstr "극동지역에 대한 명확하고 정확한 소식"
-
-#~ msgid "NakedSecurity"
-#~ msgstr "네이키드 시큐리티"
-
-#~ msgid "Security news and research blog"
-#~ msgstr "보안 뉴스 및 연구 블로그"
-
-#~ msgid "RadioFreeAsia"
-#~ msgstr "자유아시아라디오"
-
-#~ msgid "Reliable journalism for countries under censorship"
-#~ msgstr "검열중인 국가를위한 신뢰할 수있는 저널리즘"
-
-#~ msgid "unpublished"
-#~ msgstr "미공개"
-
-#~ msgid "Same IP"
-#~ msgstr "동일 IP"
-
-#~ msgid "Same IPv4"
-#~ msgstr "동일한 IPv4"
-
-#~ msgid "Same IPv6"
-#~ msgstr "동일한 IPv6"
-
-#~ msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-#~ msgstr "이 설정을 true로 설정할 경우 <a href=/graphs>그래프 페이지</a>에 대한 HiDPI 모드가 활성화됩니다. 활성화된 후 설정이 적용되는 것을 보려면 페이지를 새로 고칠 필요가 있으며, 그래프 표시는 안정화되기까지 몇 차례의 새로 고침이 필요할 수 있습니다. 또한, 브라우저에서 Javascript가 활성화되어 있어야 합니다. [실험적 기능]"
-
-#~ msgid "tunnel summary"
-#~ msgstr "터널 요약"
-
-#~ msgid "Tunnel Summary"
-#~ msgstr "터널 요약"
-
-#~ msgid "Community Git hosting"
-#~ msgstr "커뮤니티 git 호스팅"
-
-#~ msgid "base64-image.i2p"
-#~ msgstr "base64-image.i2p"
-
-#~ msgid "imageproxy.i2p"
-#~ msgstr "imageproxy.i2p"
-
-#~ msgid "radio.r4sas.i2p"
-#~ msgstr "radio.r4sas.i2p"
-
-#~ msgid "DigitalJournal"
-#~ msgstr "디지털저널"
-
-#~ msgid "Global news &amp; media platform"
-#~ msgstr "글로벌 뉴스 및 미디어 플랫폼"
-
-#~ msgid "Business &amp; Financial News"
-#~ msgstr "비즈니스 및 재무 뉴스"
-
-#~ msgid "MetaCritic"
-#~ msgstr "MetaCritic"
-
-#~ msgid "Movie + TV + Music + Game reviews"
-#~ msgstr "영화 + TV + 음악 + 게임 리뷰"
-
-#~ msgid "All you need to know about everything that matters"
-#~ msgstr "중요한 모든 것에 대해 알아야 할 모든 것"
-
-#~ msgid "TheWeek"
-#~ msgstr "그 주"
-
-#~ msgid "First Heard About"
-#~ msgstr "처음 듣는 이야기"

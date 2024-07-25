@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: fa\n"
@@ -7581,78 +7580,3 @@ msgstr "بعدی"
 
 msgid "Finished"
 msgstr "به پایان رسیده"
-
-#~ msgid "BenarNews"
-#~ msgstr "بنار نیوز"
-
-#~ msgid "Clear and accurate news for the Far East"
-#~ msgstr "اخبار واضح و دقیق برای خاور دور"
-
-#~ msgid "NakedSecurity"
-#~ msgstr "امنیت برهنه"
-
-#~ msgid "Security news and research blog"
-#~ msgstr "وبلاگ خبری و تحقیقاتی امنیتی"
-
-#~ msgid "RadioFreeAsia"
-#~ msgstr "RadioFreeAsia"
-
-#~ msgid "Reliable journalism for countries under censorship"
-#~ msgstr "روزنامه نگاری قابل اعتماد برای کشورهای تحت سانسور"
-
-#~ msgid "unpublished"
-#~ msgstr "منتشر نشده"
-
-#~ msgid "Same IP"
-#~ msgstr "همان IP"
-
-#~ msgid "Same IPv4"
-#~ msgstr "همان IPv4"
-
-#~ msgid "Same IPv6"
-#~ msgstr "همان IPv6"
-
-#~ msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-#~ msgstr "این تنظیم، وقتی روی true تنظیم شود، حالت HiDPI را برای نمودارهای <a href=/graphs>صفحه نمودارها</a> فعال می کند. "
-
-#~ msgid "tunnel summary"
-#~ msgstr "خلاصه تونل"
-
-#~ msgid "Tunnel Summary"
-#~ msgstr "خلاصه تونل"
-
-#~ msgid "Community Git hosting"
-#~ msgstr "میزبانی انجمن گیت"
-
-#~ msgid "base64-image.i2p"
-#~ msgstr "base64-image.i2p"
-
-#~ msgid "imageproxy.i2p"
-#~ msgstr "imageproxy.i2p"
-
-#~ msgid "radio.r4sas.i2p"
-#~ msgstr "radio.r4sas.i2p"
-
-#~ msgid "DigitalJournal"
-#~ msgstr "ژورنال دیجیتال"
-
-#~ msgid "Global news &amp; media platform"
-#~ msgstr "اخبار جهانی"
-
-#~ msgid "Business &amp; Financial News"
-#~ msgstr "اخبار تجاری و مالی"
-
-#~ msgid "MetaCritic"
-#~ msgstr "متاکریتیک"
-
-#~ msgid "Movie + TV + Music + Game reviews"
-#~ msgstr "نقد و بررسی بازی های موسیقی تلویزیون فیلم"
-
-#~ msgid "All you need to know about everything that matters"
-#~ msgstr "همه آنچه که باید در مورد هر چیزی که مهم است بدانید"
-
-#~ msgid "TheWeek"
-#~ msgstr "هفته"
-
-#~ msgid "First Heard About"
-#~ msgstr "برای اولین بار در مورد آن شنیده شد"

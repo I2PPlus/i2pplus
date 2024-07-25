@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: el\n"
@@ -1462,25 +1461,3 @@ msgstr "Αποθήκευση αλλαγών"
 
 msgid "Torrent must be stopped"
 msgstr "Το torrent πρέπει να σταματήσει"
-
-#, java-format
-#~ msgid "Downloading from {0} of {1} peers in swarm"
-#~ msgstr "Λήψη από {0} από {1} ομότιμους στο σμήνος"
-
-#, java-format
-#~ msgid "Connected to {0} peer"
-#~ msgid_plural "Connected to {0} peers"
-#~ msgstr[0] "Συνδεδεμένο με {0} peer"
-#~ msgstr[1] "Συνδεδεμένο με τους συνομηλίκους {0}"
-
-#~ msgid "Unknown"
-#~ msgstr "Άγνωστο"
-
-#~ msgid "inactive"
-#~ msgstr "ανενεργός"
-
-#~ msgid "Enable viewing and posting comments for this torrent"
-#~ msgstr "Ενεργοποιήστε την προβολή και τη δημοσίευση σχολίων για αυτό το torrent"
-
-#~ msgid "Save Preference"
-#~ msgstr "Αποθήκευση Προτίμησης"

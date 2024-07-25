@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: fa\n"
@@ -1437,7 +1436,7 @@ msgstr "شما به احتمال زیاد می خواهید فقط به 127.0.0.
 msgid "The I2P router can automatically start this tunnel for you when the router is started."
 msgstr "روتر I2P می تواند به طور خودکار این تونل را در هنگام راه اندازی روتر برای شما راه اندازی کند."
 
-msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occassionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
+msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occasionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
 msgstr "این می تواند برای تونل های پر استفاده (مخصوصا تونل های سرور) مفید باشد، اما برای تونل هایی که فقط گهگاهی استفاده می شوند به این معنی است که روتر I2P در حال ایجاد و نگهداری تونل های غیر ضروری است."
 
 msgid "The wizard has now collected enough information to create your tunnel."

@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: es\n"
@@ -7581,78 +7580,3 @@ msgstr "Siguiente"
 
 msgid "Finished"
 msgstr "Terminado"
-
-#~ msgid "BenarNews"
-#~ msgstr "BenarNews"
-
-#~ msgid "Clear and accurate news for the Far East"
-#~ msgstr "Noticias claras y precisas para el Lejano Oriente"
-
-#~ msgid "NakedSecurity"
-#~ msgstr "Seguridad Desnuda"
-
-#~ msgid "Security news and research blog"
-#~ msgstr "Blog de investigación y noticias de seguridad"
-
-#~ msgid "RadioFreeAsia"
-#~ msgstr "RadioFreeAsia"
-
-#~ msgid "Reliable journalism for countries under censorship"
-#~ msgstr "Periodismo confiable para países bajo censura"
-
-#~ msgid "unpublished"
-#~ msgstr "inédito"
-
-#~ msgid "Same IP"
-#~ msgstr "Misma IP"
-
-#~ msgid "Same IPv4"
-#~ msgstr "Misma IPv4"
-
-#~ msgid "Same IPv6"
-#~ msgstr "Misma IPv6"
-
-#~ msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-#~ msgstr "Esta configuración, cuando se establece en true, habilitará el modo HiDPI para los gráficos en <a href=/graphs>la página de gráficos</a>. Una vez habilitado, es posible que necesite actualizar la página para ver los ajustes aplicados, y la visualización de gráficos puede tardar un par de ciclos de actualización en estabilizarse. Tenga en cuenta que Javascript debe estar habilitado en su navegador. [Experimental]"
-
-#~ msgid "tunnel summary"
-#~ msgstr "compendio de túneles"
-
-#~ msgid "Tunnel Summary"
-#~ msgstr "Lista de túneles"
-
-#~ msgid "Community Git hosting"
-#~ msgstr "Alojamiento comunitario de Git"
-
-#~ msgid "base64-image.i2p"
-#~ msgstr "base64-imagen.i2p"
-
-#~ msgid "imageproxy.i2p"
-#~ msgstr "imageproxy.i2p"
-
-#~ msgid "radio.r4sas.i2p"
-#~ msgstr "radio.r4sas.i2p"
-
-#~ msgid "DigitalJournal"
-#~ msgstr "Diario Digital"
-
-#~ msgid "Global news &amp; media platform"
-#~ msgstr "Plataforma global de noticias y medios"
-
-#~ msgid "Business &amp; Financial News"
-#~ msgstr "Noticias comerciales y financieras"
-
-#~ msgid "MetaCritic"
-#~ msgstr "Metacrítico"
-
-#~ msgid "Movie + TV + Music + Game reviews"
-#~ msgstr "Película + TV + Música + reseñas de juegos"
-
-#~ msgid "All you need to know about everything that matters"
-#~ msgstr "Todo lo que necesitas saber sobre todo lo que importa"
-
-#~ msgid "TheWeek"
-#~ msgstr "La Semana"
-
-#~ msgid "First Heard About"
-#~ msgstr "Escuché por primera vez sobre"

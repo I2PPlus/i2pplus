@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "MIME-Version: 1.0\n"
@@ -1461,9 +1460,3 @@ msgstr "Dəyişiklikləri Saxla"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent dayandırılmalıdır"
-
-#~ msgid "Enable viewing and posting comments for this torrent"
-#~ msgstr "Bu torrent üçün şərh baxmaq və göndərmək aktivləşdir"
-
-#~ msgid "Save Preference"
-#~ msgstr "Tərcüməni saxla"

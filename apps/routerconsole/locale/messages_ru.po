@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: ru_RU\n"
@@ -7599,78 +7598,3 @@ msgstr "Далее"
 
 msgid "Finished"
 msgstr "Завершено"
-
-#~ msgid "BenarNews"
-#~ msgstr "БенарНовости"
-
-#~ msgid "Clear and accurate news for the Far East"
-#~ msgstr "Четкие и точные новости для Дальнего Востока"
-
-#~ msgid "NakedSecurity"
-#~ msgstr "Голая Безопасность"
-
-#~ msgid "Security news and research blog"
-#~ msgstr "Блог новостей и исследований в области безопасности"
-
-#~ msgid "RadioFreeAsia"
-#~ msgstr "РадиоСвободная Азия"
-
-#~ msgid "Reliable journalism for countries under censorship"
-#~ msgstr "Надежная журналистика для стран подвергающихся цензуре"
-
-#~ msgid "unpublished"
-#~ msgstr "неопубликовано"
-
-#~ msgid "Same IP"
-#~ msgstr "Тот же IP -адрес"
-
-#~ msgid "Same IPv4"
-#~ msgstr "Тот же IPv4"
-
-#~ msgid "Same IPv6"
-#~ msgstr "Тот же IPv6"
-
-#~ msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-#~ msgstr "Этот параметр, при установке в значение true, активирует режим HiDPI для графиков на странице графиков. После активации вам может потребоваться обновить страницу, чтобы увидеть примененные настройки, и для стабилизации отображения графиков может потребоваться несколько циклов обновления. Обратите внимание, что в вашем браузере должен быть включен Javascript. [Экспериментальная функция]"
-
-#~ msgid "tunnel summary"
-#~ msgstr "обзор туннелей"
-
-#~ msgid "Tunnel Summary"
-#~ msgstr "Обзор туннеля"
-
-#~ msgid "Community Git hosting"
-#~ msgstr "Хостинг сообщества Git"
-
-#~ msgid "base64-image.i2p"
-#~ msgstr "base64-image.i2p"
-
-#~ msgid "imageproxy.i2p"
-#~ msgstr "imageproxy.i2p"
-
-#~ msgid "radio.r4sas.i2p"
-#~ msgstr "radio.r4sas.i2p"
-
-#~ msgid "DigitalJournal"
-#~ msgstr "Цифровой журнал"
-
-#~ msgid "Global news &amp; media platform"
-#~ msgstr "Глобальная новостная и медиа-платформа"
-
-#~ msgid "Business &amp; Financial News"
-#~ msgstr "Деловые и финансовые новости"
-
-#~ msgid "MetaCritic"
-#~ msgstr "Метакритик"
-
-#~ msgid "Movie + TV + Music + Game reviews"
-#~ msgstr "Обзоры музыкальных игр для кино и телевидения"
-
-#~ msgid "All you need to know about everything that matters"
-#~ msgstr "Все, что вам нужно знать обо всем, что важно"
-
-#~ msgid "TheWeek"
-#~ msgstr "TheWeek"
-
-#~ msgid "First Heard About"
-#~ msgstr "Впервые услышал о"

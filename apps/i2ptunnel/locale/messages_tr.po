@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: tr_TR\n"
@@ -1437,7 +1436,7 @@ msgstr "Büyük olasılıkla yalnız 127.0.0.1 adresine izin vermek isteyeceksin
 msgid "The I2P router can automatically start this tunnel for you when the router is started."
 msgstr "I2P yönlendirici, yönlendirici başlatıldığında bu tüneli sizin için otomatik olarak başlatabilir.Bu tünel I2P yönelticisi başlatıldığında otomatik olarak başlatılabilir."
 
-msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occassionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
+msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occasionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
 msgstr "Bu, sık kullanılan tüneller (özellikle sunucu tünelleri) için yararlı olabilir, ancak yalnızca ara sıra kullanılan tüneller için bu, I2P yönlendiricisinin gereksiz tüneller oluşturduğu ve bakımını yaptığı anlamına gelir.Bu özellik sık kullanılan tüneller için (özellikle sunucu tünelleri) kullanışlıdır. Arada bir kullanılan tüneller için I2P yönelticisinin gereksiz tüneller oluşturmasına ve gözetmesine neden olur."
 
 msgid "The wizard has now collected enough information to create your tunnel."

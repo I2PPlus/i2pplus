@@ -1,6 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-#
 msgid ""
 msgstr ""
 "Language: sv_SE\n"

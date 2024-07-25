@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: ar\n"
@@ -1494,29 +1493,3 @@ msgstr "حفظ التغييرات"
 
 msgid "Torrent must be stopped"
 msgstr "يجب إيقاف السيل"
-
-#, java-format
-#~ msgid "Downloading from {0} of {1} peers in swarm"
-#~ msgstr "التنزيل من {0} من {1} أقران في السرب"
-
-#, java-format
-#~ msgid "Connected to {0} peer"
-#~ msgid_plural "Connected to {0} peers"
-#~ msgstr[0] "متصل بـ {0} نظير"
-#~ msgstr[1] "متصل بـ {0} نظير"
-#~ msgstr[2] "متصل بـ {0} نظير"
-#~ msgstr[3] "متصل بـ {0} نظير"
-#~ msgstr[4] "متصل بـ {0} نظير"
-#~ msgstr[5] "متصل بـ {0} نظير"
-
-#~ msgid "Unknown"
-#~ msgstr "غير معروف"
-
-#~ msgid "inactive"
-#~ msgstr "غير نشط"
-
-#~ msgid "Enable viewing and posting comments for this torrent"
-#~ msgstr "تمكين عرض ونشر التعليقات لهذا السيل"
-
-#~ msgid "Save Preference"
-#~ msgstr "حفظ التفضيلات"

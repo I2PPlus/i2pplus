@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: id\n"
@@ -1454,24 +1453,3 @@ msgstr "Simpan Perubahan"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent harus dihentikan"
-
-#, java-format
-#~ msgid "Downloading from {0} of {1} peers in swarm"
-#~ msgstr "Men-download dari {0} dari peer {1} di dalam swarm"
-
-#, java-format
-#~ msgid "Connected to {0} peer"
-#~ msgid_plural "Connected to {0} peers"
-#~ msgstr[0] "Terhubung ke {0} peer"
-
-#~ msgid "Unknown"
-#~ msgstr "Tidak diketahui"
-
-#~ msgid "inactive"
-#~ msgstr "tidak aktif"
-
-#~ msgid "Enable viewing and posting comments for this torrent"
-#~ msgstr "Aktifkan melihat dan memberikan komentar untuk torrent ini"
-
-#~ msgid "Save Preference"
-#~ msgstr "Simpan preferensi"

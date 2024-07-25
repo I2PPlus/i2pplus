@@ -1,5 +1,4 @@
 # I2P+ Debian package
-#
 msgid ""
 msgstr ""
 "Language: vi\n"

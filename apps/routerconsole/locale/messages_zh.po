@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: zh_CN\n"
@@ -7563,81 +7562,3 @@ msgstr "下一步"
 
 msgid "Finished"
 msgstr "完成"
-
-#~ msgid "BenarNews"
-#~ msgstr "BenarNews"
-
-#~ msgid "Clear and accurate news for the Far East"
-#~ msgstr "远东明确而准确的新闻"
-
-#~ msgid "NakedSecurity"
-#~ msgstr "NakedSecurity"
-
-#~ msgid "Security news and research blog"
-#~ msgstr "安全新闻和研究博客"
-
-#~ msgid "RadioFreeAsia"
-#~ msgstr "无线电亚洲"
-
-#~ msgid "Reliable journalism for countries under censorship"
-#~ msgstr "在审查制度下对国家的可靠新闻业"
-
-#~ msgid "unpublished"
-#~ msgstr "未公开"
-
-#~ msgid "Same IP"
-#~ msgstr "和我们IP一样的路由器"
-
-#~ msgid "Same IPv4"
-#~ msgstr "相同的IPv4"
-
-#~ msgid "Same IPv6"
-#~ msgstr "相同的IPv6"
-
-#~ msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-#~ msgstr "此设置（以分钟为单位）允许您手动配置启动后在检查 NetDb 中的 RouterInfos 的有效性之前要等待的时间，在此之后，只有有效的路由器才会被接受包含。进行验证时，将从 NetDb 中删除过期的 RouterInfos 和只能通过 SSU 访问的无响应对等节点。[默认值为 60 分钟]注意： 此设置与较旧的路由器（默认情况下早于 0.9.29）无关，只要尝试使用 NetDb 存储，就会从 NetDb 中删除并禁止使用路由器会话。"
-
-#~ msgid "tunnel summary"
-#~ msgstr "隧道概况"
-
-#~ msgid "Tunnel Summary"
-#~ msgstr "隧道摘要"
-
-#~ msgid "Community Git hosting"
-#~ msgstr "社区托管的 Git"
-
-#~ msgid "base64-image.i2p"
-#~ msgstr "base64-image.i2p"
-
-#~ msgid "imageproxy.i2p"
-#~ msgstr "imageproxy.i2p"
-
-#~ msgid "radio.r4sas.i2p"
-#~ msgstr "R4SAS广播台"
-
-#~ msgid "DigitalJournal"
-#~ msgstr "DigitalJournal"
-
-#~ msgid "Global news &amp; media platform"
-#~ msgstr "全球新闻和媒体平台"
-
-#~ msgid "Business &amp; Financial News"
-#~ msgstr "商业和金融新闻"
-
-#~ msgid "MetaCritic"
-#~ msgstr "MetaCritic"
-
-#~ msgid "Movie + TV + Music + Game reviews"
-#~ msgstr "电影 + 电视 + 音乐 + 游戏评论"
-
-#~ msgid "All you need to know about everything that matters"
-#~ msgstr "你需要知道的所有重要信息"
-
-#~ msgid "TheWeek"
-#~ msgstr "TheWeek"
-
-#~ msgid "First Heard About"
-#~ msgstr "第一次听说"
-
-#~ msgid "unnel Filtering"
-#~ msgstr "隧道过滤"

@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: da\n"
@@ -7581,81 +7580,3 @@ msgstr "Næste"
 
 msgid "Finished"
 msgstr "Færdig"
-
-#~ msgid "BenarNews"
-#~ msgstr "BenarNews"
-
-#~ msgid "Clear and accurate news for the Far East"
-#~ msgstr "Tydelige og præcise nyheder for Fjernøsten"
-
-#~ msgid "NakedSecurity"
-#~ msgstr "NøgenSikkerhed"
-
-#~ msgid "Security news and research blog"
-#~ msgstr "Sikkerhedsnyheder og forskningsblog"
-
-#~ msgid "RadioFreeAsia"
-#~ msgstr "RadioFreeAsia"
-
-#~ msgid "Reliable journalism for countries under censorship"
-#~ msgstr "Pålidelig journalistik for lande under censur"
-
-#~ msgid "unpublished"
-#~ msgstr "upubliceret"
-
-#~ msgid "Same IP"
-#~ msgstr "Samme IP"
-
-#~ msgid "Same IPv4"
-#~ msgstr "Samme IPv4"
-
-#~ msgid "Same IPv6"
-#~ msgstr "Samme IPv6"
-
-#~ msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-#~ msgstr "Denne indstilling, når den er indstillet på sand, aktiverer HiDPI-tilstand for graferne på <a href=/graphs>graferne side</a>. Når den er aktiveret, skal du muligvis opdatere siden for at se de anvendte indstillinger, og grafvisningen kan tage et par opdateringscykler at stabilisere. Bemærk, at JavaScript skal være aktiveret i din browser. [Eksperimentel]"
-
-#~ msgid "tunnel summary"
-#~ msgstr "tunnel opsummering "
-
-#~ msgid "Tunnel Summary"
-#~ msgstr "Tunneloversigt"
-
-#~ msgid "Community Git hosting"
-#~ msgstr "Community Git-hosting"
-
-#~ msgid "base64-image.i2p"
-#~ msgstr "base64-image.i2p"
-
-#~ msgid "imageproxy.i2p"
-#~ msgstr "imageproxy.i2p"
-
-#~ msgid "radio.r4sas.i2p"
-#~ msgstr "radio.r4sas.i2p"
-
-#~ msgid "DigitalJournal"
-#~ msgstr "DigitalJournal"
-
-#~ msgid "Global news &amp; media platform"
-#~ msgstr "Global nyheds- og medieplatform"
-
-#~ msgid "Business &amp; Financial News"
-#~ msgstr "Forretnings- og økonomiske nyheder"
-
-#~ msgid "MetaCritic"
-#~ msgstr "MetaCritic"
-
-#~ msgid "Movie + TV + Music + Game reviews"
-#~ msgstr "Film TV Musik Spil anmeldelser"
-
-#~ msgid "All you need to know about everything that matters"
-#~ msgstr "Alt hvad du behøver at vide om alt, hvad der betyder noget"
-
-#~ msgid "TheWeek"
-#~ msgstr "Ugen"
-
-#~ msgid "First Heard About"
-#~ msgstr "Først hørt om"
-
-#~ msgid "A Java I2P plugin implementation of a BitTorrent Open Tracker. Available from http://stats.i2p/i2p/plugins. Source code is available on github."
-#~ msgstr "En Java I2P plugin-implementering af et BitTorrent Open Tracker. Tilgængelig fra http://stats.i2p/i2p/plugins. Kildekoden er tilgængelig på github."

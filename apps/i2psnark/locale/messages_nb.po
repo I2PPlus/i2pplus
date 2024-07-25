@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: nb\n"
@@ -1462,25 +1461,3 @@ msgstr "Lagre endringer"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent må stoppes"
-
-#, java-format
-#~ msgid "Downloading from {0} of {1} peers in swarm"
-#~ msgstr "Nedlasting fra {0} av {1} jevnaldrende i sverm"
-
-#, java-format
-#~ msgid "Connected to {0} peer"
-#~ msgid_plural "Connected to {0} peers"
-#~ msgstr[0] "Koblet til {0} peer"
-#~ msgstr[1] "Koblet til {0} jevnaldrende"
-
-#~ msgid "Unknown"
-#~ msgstr "Ukjent"
-
-#~ msgid "inactive"
-#~ msgstr "inaktiv"
-
-#~ msgid "Enable viewing and posting comments for this torrent"
-#~ msgstr "Aktiver visning og legg ut kommentarer for denne torrenten"
-
-#~ msgid "Save Preference"
-#~ msgstr "Lagre preferanse"

@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: ru_RU\n"
@@ -1442,7 +1441,7 @@ msgstr "Скорее всего здесь нужно разрешить тол�
 msgid "The I2P router can automatically start this tunnel for you when the router is started."
 msgstr "Маршрутизатор I2P может автоматически запустить этот туннель при запуске."
 
-msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occassionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
+msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occasionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
 msgstr "Это может быть полезно для часто используемых туннелей (особенно серверных туннелей), но для туннелей, которые используются только иногда, это будет означать что маршрутизатор I2P создаёт и поддерживает лишние туннели."
 
 msgid "The wizard has now collected enough information to create your tunnel."

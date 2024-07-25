@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: cs\n"
@@ -7605,78 +7604,3 @@ msgstr "Další"
 
 msgid "Finished"
 msgstr "Hotové"
-
-#~ msgid "BenarNews"
-#~ msgstr "BenarNews"
-
-#~ msgid "Clear and accurate news for the Far East"
-#~ msgstr "Jasné a přesné zprávy pro Dálný východ"
-
-#~ msgid "NakedSecurity"
-#~ msgstr "Nahá bezpečnost"
-
-#~ msgid "Security news and research blog"
-#~ msgstr "Blog s bezpečnostními zprávami a výzkumem"
-
-#~ msgid "RadioFreeAsia"
-#~ msgstr "RadioFreeAsia"
-
-#~ msgid "Reliable journalism for countries under censorship"
-#~ msgstr "Spolehlivá žurnalistika pro země pod cenzurou"
-
-#~ msgid "unpublished"
-#~ msgstr "nepublikováno"
-
-#~ msgid "Same IP"
-#~ msgstr "Stejná IP"
-
-#~ msgid "Same IPv4"
-#~ msgstr "Stejný IPv4"
-
-#~ msgid "Same IPv6"
-#~ msgstr "Stejný IPv6"
-
-#~ msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-#~ msgstr "Toto nastavení, když je nastaveno na true, umožní režim HiDPI pro grafy na <a href=/graphs>stránce s grafy</a>. Po povolení možná budete muset stránku znovu načíst, aby se nastavení projevilo, a zobrazování grafu může trvat až několik cyklů obnovení, než se ustálí. Všimněte si, že ve vašem prohlížeči by měl být povolený Javascript. [Experimentální]"
-
-#~ msgid "tunnel summary"
-#~ msgstr "shrnutí tunelu"
-
-#~ msgid "Tunnel Summary"
-#~ msgstr "Shrnutí tunelu"
-
-#~ msgid "Community Git hosting"
-#~ msgstr "Hosting Komunity Git"
-
-#~ msgid "base64-image.i2p"
-#~ msgstr "base64-image.i2p"
-
-#~ msgid "imageproxy.i2p"
-#~ msgstr "imageproxy.i2p"
-
-#~ msgid "radio.r4sas.i2p"
-#~ msgstr "radio.r4sas.i2p"
-
-#~ msgid "DigitalJournal"
-#~ msgstr "DigitalJournal"
-
-#~ msgid "Global news &amp; media platform"
-#~ msgstr "Globální zpravodajská a mediální platforma"
-
-#~ msgid "Business &amp; Financial News"
-#~ msgstr "Obchodní a finanční zprávy"
-
-#~ msgid "MetaCritic"
-#~ msgstr "MetaCritic"
-
-#~ msgid "Movie + TV + Music + Game reviews"
-#~ msgstr "Film TV Music Game Recenze"
-
-#~ msgid "All you need to know about everything that matters"
-#~ msgstr "Vše, co potřebujete vědět o všem, na čem záleží"
-
-#~ msgid "TheWeek"
-#~ msgstr "Týden"
-
-#~ msgid "First Heard About"
-#~ msgstr "Poprvé slyšet o"

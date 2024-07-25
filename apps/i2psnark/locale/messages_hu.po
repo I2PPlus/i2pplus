@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: hu\n"
@@ -1462,25 +1461,3 @@ msgstr "Módosítások mentése"
 
 msgid "Torrent must be stopped"
 msgstr "A torrentet le kell állítani"
-
-#, java-format
-#~ msgid "Downloading from {0} of {1} peers in swarm"
-#~ msgstr "Letöltés {0}/{1} rajban lévő társtól"
-
-#, java-format
-#~ msgid "Connected to {0} peer"
-#~ msgid_plural "Connected to {0} peers"
-#~ msgstr[0] "Csatlakozva a(z) {0} társhoz"
-#~ msgstr[1] "Csatlakozva {0} társhoz"
-
-#~ msgid "Unknown"
-#~ msgstr "Ismeretlen"
-
-#~ msgid "inactive"
-#~ msgstr "inaktív"
-
-#~ msgid "Enable viewing and posting comments for this torrent"
-#~ msgstr "Engedélyezze a megtekintést és a megjegyzések közzétételét ehhez a torrenthez"
-
-#~ msgid "Save Preference"
-#~ msgstr "Mentse a beállításokat"

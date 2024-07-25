@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: fi\n"
@@ -1462,25 +1461,3 @@ msgstr "Tallenna muutokset"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent on pysäytettävä"
-
-#, java-format
-#~ msgid "Downloading from {0} of {1} peers in swarm"
-#~ msgstr "Ladataan {0}/{1} parvessa"
-
-#, java-format
-#~ msgid "Connected to {0} peer"
-#~ msgid_plural "Connected to {0} peers"
-#~ msgstr[0] "Kytketty {0} vertaisarviointiin"
-#~ msgstr[1] "Kytketty {0} ikätovereihin"
-
-#~ msgid "Unknown"
-#~ msgstr "Tuntematon"
-
-#~ msgid "inactive"
-#~ msgstr "ei aktiivinen"
-
-#~ msgid "Enable viewing and posting comments for this torrent"
-#~ msgstr "Salli tämän torrentin katselu ja kommenttien lähettäminen"
-
-#~ msgid "Save Preference"
-#~ msgstr "Tallenna asetus"

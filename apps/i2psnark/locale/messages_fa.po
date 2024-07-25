@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: fa\n"
@@ -1462,25 +1461,3 @@ msgstr "ذخیره تغییرات"
 
 msgid "Torrent must be stopped"
 msgstr "تورنت باید متوقف شود"
-
-#, java-format
-#~ msgid "Downloading from {0} of {1} peers in swarm"
-#~ msgstr "دانلود از {0} از {1} همتایان در گروه"
-
-#, java-format
-#~ msgid "Connected to {0} peer"
-#~ msgid_plural "Connected to {0} peers"
-#~ msgstr[0] "متصل به {0} همکار"
-#~ msgstr[1] "متصل به {0} همسالان"
-
-#~ msgid "Unknown"
-#~ msgstr "ناشناس"
-
-#~ msgid "inactive"
-#~ msgstr "غیرفعال"
-
-#~ msgid "Enable viewing and posting comments for this torrent"
-#~ msgstr "مشاهده و ارسال نظرات برای این تورنت را فعال کنید"
-
-#~ msgid "Save Preference"
-#~ msgstr "ذخیره سازی ترجیحات"

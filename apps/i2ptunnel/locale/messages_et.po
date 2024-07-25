@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: et\n"
@@ -1437,7 +1436,7 @@ msgstr "Tõenäoliselt soovid vaid lubada 127.0.0.1"
 msgid "The I2P router can automatically start this tunnel for you when the router is started."
 msgstr "I2P rutiin saab automaatselt selle tunneli käivitada rutiini käivitamisel."
 
-msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occassionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
+msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occasionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
 msgstr "See võib olla kasulik tihti kasutatavate tunnelite (eriti serveritunnelite) jaoks, kuid haruldaste kasutusega tunnelite puhul tähendaks see, et I2P marsruuter loob ja hoitakse tarbetuid tuneleid."
 
 msgid "The wizard has now collected enough information to create your tunnel."
@@ -1502,6 +1501,3 @@ msgstr "Edasiminek järgmisele lehele"
 
 msgid "Next"
 msgstr "Järgmine"
-
-#~ msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occasionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
-#~ msgstr "See võib olla kasulik sageli kasutatavatele tunnelitele (eriti serveri tunnelitele), kuid tunnelite jaoks, mida kasutatakse ainult vahelikult, tähendab see, et I2P rutiin loob ja hooldab vajaliku kõrgemal olevaid tunneli."

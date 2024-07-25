@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: ja\n"
@@ -1454,24 +1453,3 @@ msgstr "変更を保存"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent を停止する必要があります"
-
-#, java-format
-#~ msgid "Downloading from {0} of {1} peers in swarm"
-#~ msgstr "群内の {1} ピア中 {0} からダウンロード中"
-
-#, java-format
-#~ msgid "Connected to {0} peer"
-#~ msgid_plural "Connected to {0} peers"
-#~ msgstr[0] "{0}ピアに接続"
-
-#~ msgid "Unknown"
-#~ msgstr "不明"
-
-#~ msgid "inactive"
-#~ msgstr "非アクティブ"
-
-#~ msgid "Enable viewing and posting comments for this torrent"
-#~ msgstr "この torrent の表示とコメントの投稿を有効にする"
-
-#~ msgid "Save Preference"
-#~ msgstr "保存設定"

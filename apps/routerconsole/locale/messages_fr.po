@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: fr\n"
@@ -7581,72 +7580,3 @@ msgstr "Suivant"
 
 msgid "Finished"
 msgstr "Terminé"
-
-#~ msgid "BenarNews"
-#~ msgstr "BenarActualités"
-
-#~ msgid "Clear and accurate news for the Far East"
-#~ msgstr "Des nouvelles claires et précises pour l’Extrême-Orient"
-
-#~ msgid "NakedSecurity"
-#~ msgstr "NuSécurité"
-
-#~ msgid "Security news and research blog"
-#~ msgstr "Blog d'actualités et de recherche sur la sécurité"
-
-#~ msgid "RadioFreeAsia"
-#~ msgstr "RadioFreeAsie"
-
-#~ msgid "Reliable journalism for countries under censorship"
-#~ msgstr "Un journalisme fiable pour les pays sous censure"
-
-#~ msgid "unpublished"
-#~ msgstr "inédit"
-
-#~ msgid "Same IP"
-#~ msgstr "Même IP"
-
-#~ msgid "Same IPv4"
-#~ msgstr "Même IPv4"
-
-#~ msgid "Same IPv6"
-#~ msgstr "Même IPv6"
-
-#~ msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-#~ msgstr "Ce paramètre, lorsqu'il est défini sur true, activera le mode HiDPI pour les graphiques sur la <a href=/graphs>page des graphiques</a>. Une fois activé, vous devrez peut-être actualiser la page pour voir les paramètres appliqués, et l'affichage des graphiques peut prendre quelques cycles d'actualisation pour se stabiliser. Notez que JavaScript doit être activé dans votre navigateur. [Expérimental]"
-
-#~ msgid "tunnel summary"
-#~ msgstr "résumé des tunnels"
-
-#~ msgid "Tunnel Summary"
-#~ msgstr "Résumé du tunnel"
-
-#~ msgid "Community Git hosting"
-#~ msgstr "hébergement communautaire Git"
-
-#~ msgid "base64-image.i2p"
-#~ msgstr "base64-image.i2p"
-
-#~ msgid "imageproxy.i2p"
-#~ msgstr "imageproxy.i2p"
-
-#~ msgid "radio.r4sas.i2p"
-#~ msgstr "radio.r4sas.i2p"
-
-#~ msgid "DigitalJournal"
-#~ msgstr "Journal numérique"
-
-#~ msgid "Global news &amp; media platform"
-#~ msgstr "Plateforme de nouvelles et de médias mondiales"
-
-#~ msgid "Business &amp; Financial News"
-#~ msgstr "Actualités commerciales et financières"
-
-#~ msgid "All you need to know about everything that matters"
-#~ msgstr "Tout ce que vous devez savoir sur tout ce qui compte"
-
-#~ msgid "TheWeek"
-#~ msgstr "La Semaine"
-
-#~ msgid "First Heard About"
-#~ msgstr "Entendu parler pour la première fois"

@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: ja\n"
@@ -7563,78 +7562,3 @@ msgstr "次へ"
 
 msgid "Finished"
 msgstr "完了"
-
-#~ msgid "BenarNews"
-#~ msgstr "ベナーニュース"
-
-#~ msgid "Clear and accurate news for the Far East"
-#~ msgstr "極東向けの明確で正確なニュース"
-
-#~ msgid "NakedSecurity"
-#~ msgstr "裸のセキュリティ"
-
-#~ msgid "Security news and research blog"
-#~ msgstr "セキュリティニュースおよびリサーチブログ"
-
-#~ msgid "RadioFreeAsia"
-#~ msgstr "ラジオフリーアジア"
-
-#~ msgid "Reliable journalism for countries under censorship"
-#~ msgstr "検閲を受けている国の信頼できるジャーナリズム"
-
-#~ msgid "unpublished"
-#~ msgstr "未公開"
-
-#~ msgid "Same IP"
-#~ msgstr "同じIP"
-
-#~ msgid "Same IPv4"
-#~ msgstr "同じIPv4"
-
-#~ msgid "Same IPv6"
-#~ msgstr "同じIPv6"
-
-#~ msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-#~ msgstr "この設定をtrueにすると、<a href=/graphs>グラフページ</a>のグラフでHiDPIモードが有効になります。有効にすると、設定が適用されるまでページをリフレッシュする必要があり、グラフの表示には安定するまでの数回のリフレッシュサイクルが必要になる場合があります。JavaScriptがブラウザで有効になっていることに注意してください。[実験的]"
-
-#~ msgid "tunnel summary"
-#~ msgstr "トンネルの概要"
-
-#~ msgid "Tunnel Summary"
-#~ msgstr "トンネルの概要"
-
-#~ msgid "Community Git hosting"
-#~ msgstr "コミュニティGitホスティング"
-
-#~ msgid "base64-image.i2p"
-#~ msgstr "base64-image.i2p"
-
-#~ msgid "imageproxy.i2p"
-#~ msgstr "イメージプロキシ.i2p"
-
-#~ msgid "radio.r4sas.i2p"
-#~ msgstr "radio.r4sas.i2p"
-
-#~ msgid "DigitalJournal"
-#~ msgstr "デジタルジャーナル"
-
-#~ msgid "Global news &amp; media platform"
-#~ msgstr "グローバルニュースおよびメディアプラットフォーム"
-
-#~ msgid "Business &amp; Financial News"
-#~ msgstr "ビジネスと金融のニュース"
-
-#~ msgid "MetaCritic"
-#~ msgstr "メタリティック"
-
-#~ msgid "Movie + TV + Music + Game reviews"
-#~ msgstr "映画 + TV +音楽 +ゲームのレビュー"
-
-#~ msgid "All you need to know about everything that matters"
-#~ msgstr "重要なことすべてについて知る必要があるすべて"
-
-#~ msgid "TheWeek"
-#~ msgstr "1週間"
-
-#~ msgid "First Heard About"
-#~ msgstr "初めて聞いた話"

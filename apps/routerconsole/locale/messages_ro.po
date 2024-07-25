@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: ro\n"
@@ -7599,78 +7598,3 @@ msgstr "Următorul"
 
 msgid "Finished"
 msgstr "Finalizat"
-
-#~ msgid "BenarNews"
-#~ msgstr "BenarNews"
-
-#~ msgid "Clear and accurate news for the Far East"
-#~ msgstr "Știri clare și precise pentru Orientul Îndepărtat"
-
-#~ msgid "NakedSecurity"
-#~ msgstr "NakedSecurity"
-
-#~ msgid "Security news and research blog"
-#~ msgstr "Blog de știri și cercetări de securitate"
-
-#~ msgid "RadioFreeAsia"
-#~ msgstr "RadioFreeAsia"
-
-#~ msgid "Reliable journalism for countries under censorship"
-#~ msgstr "Jurnalism de încredere pentru țările aflate sub cenzură"
-
-#~ msgid "unpublished"
-#~ msgstr "nepublicat"
-
-#~ msgid "Same IP"
-#~ msgstr "Același IP"
-
-#~ msgid "Same IPv4"
-#~ msgstr "Același IPv4"
-
-#~ msgid "Same IPv6"
-#~ msgstr "Același IPv6"
-
-#~ msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-#~ msgstr "Această setare, când este setată la adevărat, va activa modul HiDPI pentru graficele de pe <a href=/graphs>pagina cu grafice</a>. După activare, este posibil să trebuie să reîmprospătați pagina pentru a vedea modificările aplicate, iar afișarea graficului poate dura câteva cicluri de reîmprospătare pentru a se stabiliza. Notați că Javascript trebuie să fie activat în browser-ul dvs. [Experimental]"
-
-#~ msgid "tunnel summary"
-#~ msgstr "sumar tunel"
-
-#~ msgid "Tunnel Summary"
-#~ msgstr "Rezumatul tunelului"
-
-#~ msgid "Community Git hosting"
-#~ msgstr "Găzduire Git comunitară"
-
-#~ msgid "base64-image.i2p"
-#~ msgstr "base64-image.i2p"
-
-#~ msgid "imageproxy.i2p"
-#~ msgstr "imageproxy.i2p"
-
-#~ msgid "radio.r4sas.i2p"
-#~ msgstr "radio.r4sas.i2p"
-
-#~ msgid "DigitalJournal"
-#~ msgstr "Jurnal digital"
-
-#~ msgid "Global news &amp; media platform"
-#~ msgstr "Platforma globală de știri și media"
-
-#~ msgid "Business &amp; Financial News"
-#~ msgstr "Știri de afaceri și financiare"
-
-#~ msgid "MetaCritic"
-#~ msgstr "MetaCritic"
-
-#~ msgid "Movie + TV + Music + Game reviews"
-#~ msgstr "Recenzii despre jocurile muzicale de film TV"
-
-#~ msgid "All you need to know about everything that matters"
-#~ msgstr "Tot ce trebuie să știi despre tot ce contează"
-
-#~ msgid "TheWeek"
-#~ msgstr "TheWeek"
-
-#~ msgid "First Heard About"
-#~ msgstr "Am auzit prima dată despre"

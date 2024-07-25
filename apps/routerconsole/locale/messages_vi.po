@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: vi\n"
@@ -7563,78 +7562,3 @@ msgstr "Kế tiếp"
 
 msgid "Finished"
 msgstr "Đã kết thúc"
-
-#~ msgid "BenarNews"
-#~ msgstr "Tin tức Benar"
-
-#~ msgid "Clear and accurate news for the Far East"
-#~ msgstr "Tin tức rõ ràng và chính xác về Viễn Đông"
-
-#~ msgid "NakedSecurity"
-#~ msgstr "Bảo mật khỏa thân"
-
-#~ msgid "Security news and research blog"
-#~ msgstr "Blog nghiên cứu và tin tức an ninh"
-
-#~ msgid "RadioFreeAsia"
-#~ msgstr "RadioFreeAsia"
-
-#~ msgid "Reliable journalism for countries under censorship"
-#~ msgstr "Báo chí đáng tin cậy cho các quốc gia dưới sự kiểm duyệt"
-
-#~ msgid "unpublished"
-#~ msgstr "chưa được công bố"
-
-#~ msgid "Same IP"
-#~ msgstr "Cùng IP"
-
-#~ msgid "Same IPv4"
-#~ msgstr "Cùng một IPv4"
-
-#~ msgid "Same IPv6"
-#~ msgstr "Cùng một IPv6"
-
-#~ msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-#~ msgstr "Cài đặt này, khi được đặt thành True, sẽ kích hoạt chế độ HiDPI cho các biểu đồ trên trang <a href=/graphs>biểu đồ</a>. Sau khi kích hoạt, bạn có thể cần làm mới trang để thấy các cài đặt được áp dụng, và hiển thị biểu đồ có thể mất một vài chu kỳ làm mới để ổn định. Lưu ý rằng JavaScript nên được kích hoạt trong trình duyệt của bạn. [Thử nghiệm]"
-
-#~ msgid "tunnel summary"
-#~ msgstr "tóm tắt đường hầm"
-
-#~ msgid "Tunnel Summary"
-#~ msgstr "Tóm tắt đường hầm"
-
-#~ msgid "Community Git hosting"
-#~ msgstr "Lưu trữ Git cộng đồng"
-
-#~ msgid "base64-image.i2p"
-#~ msgstr "base64-image.i2p"
-
-#~ msgid "imageproxy.i2p"
-#~ msgstr "imageproxy.i2p"
-
-#~ msgid "radio.r4sas.i2p"
-#~ msgstr "radio.r4sas.i2p"
-
-#~ msgid "DigitalJournal"
-#~ msgstr "Nhật ký kỹ thuật số"
-
-#~ msgid "Global news &amp; media platform"
-#~ msgstr "Tin tức toàn cầu"
-
-#~ msgid "Business &amp; Financial News"
-#~ msgstr "Kinh doanh"
-
-#~ msgid "MetaCritic"
-#~ msgstr "MetaCritic"
-
-#~ msgid "Movie + TV + Music + Game reviews"
-#~ msgstr "Phim truyền hình Đánh giá trò chơi âm nhạc"
-
-#~ msgid "All you need to know about everything that matters"
-#~ msgstr "Tất cả những gì bạn cần biết về mọi thứ quan trọng"
-
-#~ msgid "TheWeek"
-#~ msgstr "Tuần"
-
-#~ msgid "First Heard About"
-#~ msgstr "Lần đầu nghe nói đến"

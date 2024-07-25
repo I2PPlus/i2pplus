@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: nb\n"
@@ -1437,7 +1436,7 @@ msgstr "Du vil mest sannsynlig ønske å bare gi tilgang til 127.0.0.1"
 msgid "The I2P router can automatically start this tunnel for you when the router is started."
 msgstr "I2P-ruteren kan automatisk starte denne tunnelen for deg når ruteren startes.I2P-ruteren kan automatisk starte denne tunnelen for deg når ruteren er i gang."
 
-msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occassionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
+msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occasionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
 msgstr "Dette kan være nyttig for ofte brukte tunneler (spesielt servertunneler), men for tunneler som bare brukes av og til vil det bety at I2P-ruteren lager og vedlikeholder unødvendige tunneler.Dette kan være nyttig for ofte brukte tunneler (spesielt tjenertunneler), men for tunneler som bare brukes innimellom vil det bety at I2P-ruteren skaper og opprettholder unødvendige tunneler."
 
 msgid "The wizard has now collected enough information to create your tunnel."

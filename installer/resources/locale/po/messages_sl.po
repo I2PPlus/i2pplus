@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2012 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: sl\n"
@@ -143,6 +142,3 @@ msgstr ""
 
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
 msgstr "Če želite delati kot root, uredite i2prouter in nastavite ALLOW_ROOT=true."
-
-#~ msgid "Running I2P as the root user is not recommended."
-#~ msgstr "Delovanje I2P kot root uporabnik ni priporočljivo."

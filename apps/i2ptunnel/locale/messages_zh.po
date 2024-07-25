@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: zh_CN\n"
@@ -1432,7 +1431,7 @@ msgstr "通常用户只允许127.0.0.1"
 msgid "The I2P router can automatically start this tunnel for you when the router is started."
 msgstr "I2P 路由可以在启动时自动为您启动此隧道。"
 
-msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occassionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
+msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occasionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
 msgstr "这适用于经常使用的隧道(尤其是服务端隧道)，但如果隧道仅偶尔使用，会不必要地占用I2P的资源。"
 
 msgid "The wizard has now collected enough information to create your tunnel."

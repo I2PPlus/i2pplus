@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: hi\n"
@@ -327,7 +326,7 @@ msgid "Torrent removed: \"{0}\""
 msgstr "टॉरेंट हटाया: {0}"
 
 #, java-format
-msgid "Adding torrents in {0}…"
+msgid "Adding torrents in {0}&hellip;"
 msgstr "{0} में टॉरेंट जोड़ रहे हैं…"
 
 msgid "Connecting to I2P"

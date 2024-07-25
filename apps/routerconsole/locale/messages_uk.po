@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: uk_UA\n"
@@ -7599,81 +7598,3 @@ msgstr "Наступна"
 
 msgid "Finished"
 msgstr "Готово"
-
-#~ msgid "BenarNews"
-#~ msgstr "BenarNews"
-
-#~ msgid "Clear and accurate news for the Far East"
-#~ msgstr "Чіткі та точні новини для Далекого Сходу"
-
-#~ msgid "NakedSecurity"
-#~ msgstr "NakedSecurity"
-
-#~ msgid "Security news and research blog"
-#~ msgstr "Блог про новини безпеки та дослідження"
-
-#~ msgid "RadioFreeAsia"
-#~ msgstr "RadioFreeAsia"
-
-#~ msgid "Reliable journalism for countries under censorship"
-#~ msgstr "Надійна журналістика для країн із цензурою"
-
-#~ msgid "unpublished"
-#~ msgstr "неопублікований"
-
-#~ msgid "Same IP"
-#~ msgstr "Той самий IP"
-
-#~ msgid "Same IPv4"
-#~ msgstr "Той самий IPv4"
-
-#~ msgid "Same IPv6"
-#~ msgstr "Той самий IPv6"
-
-#~ msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-#~ msgstr "Це налаштування, коли встановлено true, увімкне режим HiDPI для графіків на сторінці <a href=/graphs>графіків</a>. Після увімкнення може знадобитися оновлення сторінки для застосування налаштувань, а відображення графіків може потребувати кількох циклів оновлення для стабілізації. Зауважте, що в браузері має бути увімкнений JavaScript. [Експериментальний]"
-
-#~ msgid "tunnel summary"
-#~ msgstr "резюме тунелю"
-
-#~ msgid "Tunnel Summary"
-#~ msgstr "Підсумок тунелю"
-
-#~ msgid "Community Git hosting"
-#~ msgstr "Хостинг спільноти Git"
-
-#~ msgid "base64-image.i2p"
-#~ msgstr "base64-image.i2p"
-
-#~ msgid "imageproxy.i2p"
-#~ msgstr "imageproxy.i2p"
-
-#~ msgid "radio.r4sas.i2p"
-#~ msgstr "radio.r4sas.i2p"
-
-#~ msgid "DigitalJournal"
-#~ msgstr "DigitalJournal"
-
-#~ msgid "Global news &amp; media platform"
-#~ msgstr "Глобальні новини та медіа -платформа"
-
-#~ msgid "Business &amp; Financial News"
-#~ msgstr "Ділові та фінансові новини"
-
-#~ msgid "MetaCritic"
-#~ msgstr "MetaCritic"
-
-#~ msgid "Movie + TV + Music + Game reviews"
-#~ msgstr "Огляди фільмів + телебачення + музики + ігор"
-
-#~ msgid "All you need to know about everything that matters"
-#~ msgstr "Усе, що вам потрібно знати про все, що має значення"
-
-#~ msgid "TheWeek"
-#~ msgstr "Тиждень"
-
-#~ msgid "First Heard About"
-#~ msgstr "Вперше почуто"
-
-#~ msgid "Khaine (BitTorrent client)"
-#~ msgstr "Khaine (клієнт BitTorrent)"

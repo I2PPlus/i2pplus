@@ -1,6 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-#
 msgid ""
 msgstr ""
 "Language: pl\n"
@@ -7599,81 +7598,3 @@ msgstr "Dalej"
 
 msgid "Finished"
 msgstr "Koniec"
-
-#~ msgid "BenarNews"
-#~ msgstr "BenarNews"
-
-#~ msgid "Clear and accurate news for the Far East"
-#~ msgstr "Jasne i dokładne wiadomości z Dalekiego Wschodu"
-
-#~ msgid "NakedSecurity"
-#~ msgstr "Nagie Bezpieczeństwo"
-
-#~ msgid "Security news and research blog"
-#~ msgstr "Blog z wiadomościami i badaniami dotyczącymi bezpieczeństwa"
-
-#~ msgid "RadioFreeAsia"
-#~ msgstr "RadioFreeAsia"
-
-#~ msgid "Reliable journalism for countries under censorship"
-#~ msgstr "Rzetelne dziennikarstwo dla krajów objętych cenzurą"
-
-#~ msgid "unpublished"
-#~ msgstr "niepublikowane"
-
-#~ msgid "Same IP"
-#~ msgstr "Ten sam adres IP"
-
-#~ msgid "Same IPv4"
-#~ msgstr "Ten sam IPv4"
-
-#~ msgid "Same IPv6"
-#~ msgstr "Ten sam IPv6"
-
-#~ msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-#~ msgstr "To ustawienie, kiedy jest ustawione na true, włączy tryb HiDPI dla wykresów na stronie <a href=/graphs>strona wykresów</a>. Po włączeniu możliwe, że będzie konieczne odświeżenie strony, aby zobaczyć zastosowane ustawienia, a wyświetlanie wykresu może wymagać kilku cykli odświeżania, aby ustabilizować. Pamiętaj, że włączona powinna być obsługa JavaScript w przeglądarce. [Eksperymentalne]"
-
-#~ msgid "tunnel summary"
-#~ msgstr "podsumowanie tunelu"
-
-#~ msgid "Tunnel Summary"
-#~ msgstr "Podsumowanie tunelu"
-
-#~ msgid "Community Git hosting"
-#~ msgstr "Hosting społecznościowy Git"
-
-#~ msgid "base64-image.i2p"
-#~ msgstr "base64-image.i2p"
-
-#~ msgid "imageproxy.i2p"
-#~ msgstr "imageproxy.i2p"
-
-#~ msgid "radio.r4sas.i2p"
-#~ msgstr "radio.r4sas.i2p"
-
-#~ msgid "DigitalJournal"
-#~ msgstr "Dziennik cyfrowy"
-
-#~ msgid "Global news &amp; media platform"
-#~ msgstr "Globalna platforma wiadomości i mediów"
-
-#~ msgid "Business &amp; Financial News"
-#~ msgstr "Wiadomości biznesowe i finansowe"
-
-#~ msgid "MetaCritic"
-#~ msgstr "MetaCritic"
-
-#~ msgid "Movie + TV + Music + Game reviews"
-#~ msgstr "Recenzje gier muzycznych z filmów i telewizji"
-
-#~ msgid "All you need to know about everything that matters"
-#~ msgstr "Wszystko, co musisz wiedzieć o wszystkim, co się liczy"
-
-#~ msgid "TheWeek"
-#~ msgstr "Tydzień"
-
-#~ msgid "First Heard About"
-#~ msgstr "Pierwszy raz o tym usłyszałem"
-
-#~ msgid "Zaporna ogniowa i powódź"
-#~ msgstr "Zaporna ogniowa i przyczynź"
