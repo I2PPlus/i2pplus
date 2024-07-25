@@ -538,6 +538,7 @@ public class TranslationStatus {
         else if (langCode.equals("sq")) {countryCode = "al";}
         else if (langCode.equals("sv")) {countryCode = "se";}
         else if (langCode.equals("uk")) {countryCode = "ua";}
+        else if (langCode.equals("vi")) {countryCode = "vn";}
         else if (langCode.equals("zh")) {countryCode = "cn";}
         else if (!langCode.isEmpty()) {countryCode = langCode.toLowerCase();}
         return countryCode;
