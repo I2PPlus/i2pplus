@@ -482,15 +482,30 @@ h3 {
   break-inside: avoid;
 }
 
-@media screen and (max-width: 1200px) {
+/* responsive layout */
+
+@media (max-width: 1200px) {
   .date {
     top: calc(50% - 8px);
   }
 }
 
-/* responsive layout */
+@media (max-width: 950px) {
+  h2:first-of-type,p:first-of-type {
+    margin-right: 85px;
+  }
 
-@media screen and (min-width: 1000px) {
+  h1:first-of-type {
+    margin-top: 40px;
+    transform: translateY(-16px);
+  }
+
+  .langbar {
+    width: 78px;
+  }
+}
+
+@media (min-width: 1000px) {
   body {
     margin: 36px 40px;
     font-size: 11pt;
@@ -500,7 +515,7 @@ h3 {
   }
 }
 
-@media screen and (min-width: 1280px) {
+@media (min-width: 1280px) {
   body {
     margin: 3% 8%;
     font-size: 12pt;
@@ -535,7 +550,7 @@ h3 {
   }
 }
 
-@media screen and (min-width: 1600px) {
+@media (min-width: 1600px) {
   body {
     margin: 3% 15%;
   }
