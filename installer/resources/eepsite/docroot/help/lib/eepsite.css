@@ -25,9 +25,10 @@ body {
   background-attachment: fixed;
 }
 
-::-moz-selection, ::selection {
-  color: #fff;
-  background: #665050;
+::selection {
+  color: #000;
+  background: #dd0;
+  text-shadow: none;
 }
 
 body, h1, h2, h3, h4, p, ul, ol, li, dl, dt, dd, td, th, address, blockquote {
@@ -144,13 +145,12 @@ pre {
 }
 
 ul {
+  margin: 15px auto 20px;
   padding-top: 10px;
   padding-bottom: 10px;
-  margin: 10px 10px 20px;
+  width: calc(100% - 66px);
   list-style-type: square;
-  border: 1px solid #222020;
-  border-radius: 3px;
-  box-shadow: inset 0 0 0 1px #777070, inset 0 0 0 2px rgba(16,8,8,.7), 0 0 1px 1px rgba(16,8,8,.1);
+  box-shadow: 0 0 0 1px #0006, 0 0 0 3px #735c48, 0 0 0 4px #000, inset 0 0 0 1px #777070;
   background: linear-gradient(135deg, rgba(64,60,60,.6) 60%, rgba(68,64,64,.6));
 }
 
@@ -180,7 +180,7 @@ hr {
 
 .langbar {
   margin: -6px -31px 0 0;
-  padding: 5px 6px 4px;
+  padding: 5px 6px 4px 7px;
   width: auto;
   position: relative;
   float: right;
@@ -223,22 +223,23 @@ hr {
 }
 
 .langbar img {
-  margin: 3px 1px 0;
-  padding: 2px;
+  margin: 3px 2px 0;
   width: 20px;
   height: auto;
   opacity: .85;
   transform: scale(0);
   filter: opacity(0);
+  border-radius: 2px;
+  box-shadow:0 0 0 1px #0006;
   animation: ease fade-in .3s 3s forwards, zoom-in .3s 3s forwards;
+  transition: ease all .2s;
+  will-change: transform;
 }
 
 .langbar img:hover, .langbar a:focus img {
-  border-radius: 2px;
-  box-shadow: 0 0 0 1px #222;
-  background: #666;
   opacity: 1 !important;
   transform: scale(1.25) !important;
+  transition: ease all .2s;
 }
 
 .langbar a:active img {
@@ -266,7 +267,6 @@ hr {
   margin: 20px 10px;
   padding: 25px;
   border: 1px solid #730;
-  border-radius: 2px;
   box-shadow: inset 0 0 0 1px #111, inset 0 0 0 2px #444040, 0 0 1px 1px rgba(16,8,8,.3);
   background: repeating-linear-gradient(to bottom, rgba(0,0,0,.7) 2px, rgba(0,0,0,.3) 4px), linear-gradient(to bottom, #776a6a, #443a3a);
   background-size: 100% 4px, 100%;
@@ -275,6 +275,7 @@ hr {
 
 .idea, .warn {
   padding-left: 72px;
+  border-width: 3px;
   background: var(--idea) no-repeat 16px center / 48px,
               repeating-linear-gradient(to bottom, rgba(0,0,0,.7) 2px, rgba(0,0,0,.3) 4px),
               linear-gradient(to bottom, #776a6a, #443a3a);
@@ -282,6 +283,7 @@ hr {
 }
 
 .warn {
+  margin-top: 30px;
   padding-left: 86px;
   border: 1px solid #900;
   box-shadow: inset 0 0 0 2px #900, inset 0 0 0 3px #000, 0 0 1px 1px rgba(16,8,8,.3);
@@ -307,9 +309,13 @@ code {
   font-weight: 600;
   color: #ccb;
   text-shadow: 1px 1px 1px #000;
-  border-radius: 1px;
-  box-shadow: 0 0 0 1px rgba(16,8,8,.6);
-  background: linear-gradient(to bottom, rgba(64,48,48,.7), rgba(48,32,32,.7));
+  box-shadow: 0 0 0 1px #0006;
+  background: #32513266;
+  user-select: all;
+}
+
+code:hover {
+  background: #325132;
 }
 
 .wrapper {
@@ -526,9 +532,6 @@ h3 {
   }
   #navbar a {
     margin: 0 0 -1px;
-  }
-  .notify {
-    margin-top: 30px;
   }
 }
 
