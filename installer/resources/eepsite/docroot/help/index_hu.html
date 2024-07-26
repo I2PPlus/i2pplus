@@ -45,139 +45,25 @@
 
 <h1>I2P Anoním Webszerver</h1>
 
-<h2>Útmutató a Névtelen I2P Webszerver beállításához</h2>
+<p>További információk az I2P-ben, hogy melyik mappa és hova kell hozzáadni a webhelyhez, kérjük, kattintson az alábbi linkekre:</p>
 
-<p>Ez a te anoním I2P webszervered (hagyományosan <i>eepsite</i>).
-A saját tartalmad felszolgálásához egyszerűen szerkeszd a webszerver gyökérkönyvtárában található fájlokat és az oldal nyilvános lesz amint követed az alábbi utasításokat.</p>
+<ul id="consoleLinks">
+<li class="sitelink"><a href="http://127.0.0.1:7657/help/newusers" rel="noopener noreferrer" target="_blank">Felhasználói útmutatók</a></li>
+<li class="sitelink"><a href="http://127.0.0.1:7657/help/webhostingI2P" rel="noopener noreferrer" target="_blank">Webhely létrehozás I2P-ben</a></li>
+</ul>
 
-<p id="dir">A webszerver gyökérkönyvtára az egyik alábbi helyen található meg, az operációs rendszeredtől függően:</p>
-
-<div class="wrapper">
-<table id="rootdir">
-<tr><td><img src="data:image/svg+xml,%3Csvg fill='%23ffffe0' height='64' width='64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m29.4 5.4v24.5c0 .3.24.53.53.53h33.6c.3 0 .53-.24.53-.53v-29.38c0-.15-.07-.3-.18-.4-.12-.1-.27-.14-.42-.12l-33.6 4.9c-.26.04-.45.26-.45.52zm-3.67 53.4c.13 0 .25-.05.34-.13a.53.53 0 0 0 .18-.39v-24.15c0-.3-.24-.53-.53-.53h-25.18c-.14 0-.27.05-.37.15s-.15.23-.15.37v20.7a.52.52 0 0 0 .45.52l25.25 3.45zm-25.18-28.35h25.18c.3 0 .53-.24.53-.53v-23.9c0-.15-.07-.3-.18-.4-.1-.1-.26-.14-.42-.12l-25.2 3.43c-.26.04-.45.26-.45.52l.02 20.48c0 .3.24.53.53.53zm62.97 33.6c.13 0 .25-.05.34-.13.12-.1.18-.24.18-.4l.01-29.4c0-.14-.05-.27-.15-.37s-.23-.15-.37-.15h-33.6c-.3 0-.53.24-.53.53v24.67c0 .26.2.48.45.52l33.6 4.72h.07z'/%3E%3C/svg%3E" alt="Windows" title="Windows"></td><td><code>%APPDATA%\I2P\eepsite\docroot\</code></td></tr>
-<tr><td><img src="data:image/svg+xml,%3Csvg height='64' width='64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m18.9 62.77a14.43 14.43 0 0 1 -3.31-3.07c-1.03-1.23-1.97-2.53-2.84-3.87-2.04-3-3.64-6.25-4.74-9.7-1.34-4-1.98-7.84-1.98-11.6 0-4.18.9-7.84 2.67-10.9 1.3-2.4 3.25-4.4 5.6-5.82a14.92 14.92 0 0 1 7.57-2.24c.93 0 1.95.13 3 .4.77.2 1.7.56 2.85 1l2.53 1c.85.32 1.57.45 2.13.45.43 0 1.04-.13 1.72-.35.4-.13 1.12-.37 2.16-.83l2.5-.93c1-.3 1.94-.56 2.8-.7 1.04-.16 2.07-.2 3.06-.13 1.9.13 3.62.53 5.17 1.12 2.72 1.1 4.9 2.8 6.55 5.22a13.11 13.11 0 0 0 -1.93 1.47c-1.3 1.15-2.4 2.5-3.28 4-1.15 2.05-1.73 4.37-1.72 6.72.04 2.9.77 5.42 2.24 7.62 1.03 1.6 2.4 2.97 4.1 4.1.83.56 1.55.95 2.24 1.2-.32 1-.67 1.97-1.08 2.93-.92 2.15-2.03 4.2-3.33 6.16-1.15 1.68-2.06 2.93-2.75 3.76-1.07 1.28-2.1 2.24-3.14 2.92a7 7 0 0 1 -3.87 1.16c-.93.04-1.87-.08-2.76-.34a26.03 26.03 0 0 1 -2.28-.86c-.78-.36-1.6-.66-2.4-.9-1-.27-2.05-.4-3.1-.4-1.07 0-2.1.13-3.1.4-.83.23-1.63.52-2.42.87-1.12.47-1.85.77-2.28.9-.87.25-1.75.4-2.64.46-1.4 0-2.68-.4-3.96-1.2zm18.27-49.2c-1.8.9-3.53 1.3-5.26 1.16-.27-1.72 0-3.5.72-5.43.64-1.65 1.5-3.14 2.66-4.48 1.23-1.38 2.7-2.53 4.35-3.35 1.76-.91 3.44-1.39 5.04-1.47.2 1.8 0 3.6-.67 5.52-.6 1.7-1.5 3.28-2.67 4.7-1.16 1.4-2.6 2.53-4.23 3.36z' fill='%23ffffe0'/%3E%3C/svg%3E" alt="Apple OS X" title="Apple OS X"></td><td><code>/Users/(user)/Library/Application Support/i2p</code></td></tr>
-<tr><td><img src="data:image/svg+xml,%3Csvg height='64' width='64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m32.7 0c-2.37 0-4.8.74-6.67 2.03-3.84 2.65-3.33 8.42-3 12.23l.1 1.44c.22 3.74.02 5.7-.24 6.3-4.93 6.85-8.06 9.4-9.65 21.3-.38.27-.94.8-1.4 1.8-.57 1.22-1.73 1.87-4.14 2.33-1.1.23-1.87.7-2.26 1.38-.58 1-.27 2.27.02 3.14.42 1.27.16 2.07-.32 3.53l-.37 1.14c-.2.66-.13 1.26.22 1.8.9 1.4 3.56 1.88 6.3 2.2 1.63.2 3.4.85 5.14 1.48 1.7.6 3.44 1.25 5.03 1.45a5.74 5.74 0 0 0 .71.04c2.4 0 3.48-1.6 3.82-2.24.86-.18 3.84-.74 6.9-.82 3.06-.1 6.02.52 6.86.7.26.5.96 1.65 2.06 2.25.6.33 1.46.52 2.33.52.92 0 2.7-.22 4.08-1.7s4.87-3.36 7.4-4.73l1.56-.85c1.43-.8 2.2-1.92 2.14-3.1-.06-.98-.7-1.84-1.7-2.24-1.87-.77-2.68-1.8-2.6-3.3.08-1.78-.93-3.08-1.4-3.6.28-1.1 1.13-4.92 0-8.24-1.22-3.55-4.94-8.98-8.78-14.3-1.57-2.2-1.64-4.57-1.73-7.33-.08-2.63-.17-5.6-1.64-8.92-1.57-3.62-4.77-5.69-8.77-5.69zm1.84 8.6c1.2 0 2.28.87 2.75 1.95.65 1.38.55 3.1-.33 4.36-.36.38-1.12.12-1.1-.42.02-.42.2-.83.12-1.27-.05-.7-.46-1.48-1.2-1.67-.6-.14-1.2.27-1.45.8-.26.48-.3 1.04-.26 1.56-.08.43-.6.66-.98.46-.42-.12-.56-.6-.62-.97-.32-1.5.15-3.25 1.4-4.22.48-.36 1.07-.58 1.67-.58zm-7.78.4c.9-.01 1.66.62 2.08 1.36.6 1.02.78 2.26.54 3.4-.2.44-.73.68-1.2.6-.4-.1-.67-.5-.63-.9-.06-.64-.37-1.33-1-1.6-.34-.1-.7.15-.8.46-.14.33-.43.64-.8.63-.54.02-1-.57-.82-1.1.17-1.03.7-2.08 1.64-2.6.3-.15.63-.25.97-.24zm3.5 6.54c2.06.35 3.72 1.2 5.07 2.42l-5 3.33-3.97-2.75c.75-1.18 1.73-2.33 3.9-3zm6.74 3.62c.25-.01.48.15.63.34 1.05 1.92 2 3.9 2.88 5.9 1.92 4.8 4.5 9.6 4.4 14.9-.17 1.53.4 3.62-1.6 4.15-1.98.05-1.7 2-1.77 3.5-.12 1.7.43 3.75-1.2 4.92-2.6 2.93-6.6 4.1-10.42 4.1-1.92.2-4.2-.14-5.3-1.95-1.13-1.54 1.46-3.2.28-4.78-1.55-1.58-3.5-2.7-5.12-4.22-2.1-1.52-2.5-4.35-2.1-6.75.65-6.13 5.3-11.32 7.1-16.4 1.2-3.72 2.94-.2 4.77.34 1.6 1 4.48-3.3 7.45-4.08zm-21.48 25.62c1.28.15 1.9 1.58 2.63 2.74a54.73 54.73 0 0 1 .92 1.52l1.9 3.14c.64 1 1.26 1.9 1.6 2.24.4.44.93 1.06 1.34 1.8.4.75.73 1.64.52 2.6-.78 3.2-3.47 2.94-6.25 1.9-1.23-.43-2.46-.95-3.3-1.3l-.25-.1c-.77-.33-2.32-.6-3.8-.84-.6-.1-1.3-.2-1.92-.34-.3-.06-.6-.12-.84-.2-.25-.07-.42-.07-.73-.34a.79.79 0 0 1 -.11-1.06c.43-.6.5-1.6.4-2.8s-.36-2.46-.1-3.64c.2-1.73 3.18-.95 4.94-2.44.85-.74 1.13-2.18 2.48-2.87a1.96 1.96 0 0 1 .59-.01zm28.3 1.15c.3-.02.57.14.7.38.2.7.42 1.47.7 2.15.34 1.08 1.27 1.5 2.3 1.38 1.38-.2 2.6-.9 3.7-1.92.87-.8 1.73-.7 1.94.35-.02.98-.06 1.5.4 2.36.37.94 1.33 1.36 2.15 1.8 1.52.5 1.6 1.64.96 2.1-1.82 1.18-3.85 2.02-5.7 3.14-1.2.6-2.1 1.63-3.12 2.5-1 .75-2.17 1.65-3.5 1.44-1.5-.3-2.25-1.93-2.27-3.33.05-1.6.55-3.17.78-4.77.34-1.77.3-3.6.13-5.37-.1-.77-.23-2.08.8-2.22z' fill='%23ffffe0'/%3E%3C/svg%3E" alt="Linux" title="Linux"></td><td>Hagyományos telepítés: <code>~/.i2p/eepsite/docroot/</code><br>
-Csomag telepítése, szolgáltatásként futtatva: <code>/var/lib/i2p/i2p-config/eepsite/docroot/</code></td></tr>
+<div class="wrapper"> <table id="rootdir">
+<tbody>
+<tr><th colspan="2">I2P Web szerver gyökérkönyvtár (docroot) helye</th></tr>
+<tr><td id="windows"></td><td><code>%APPDATA%\I2P\eepsite\docroot\</code></td></tr>
+<tr><td id="apple"></td><td><code>/Users/(username)/Library/Application Support/i2p</code></td></tr>
+<tr><td id="linux"></td><td>Standard Java telepítés ➜ <code>~/.i2p/eepsite/docroot/</code><br> Kódoló adatbázis telepítés ➜ <code>/var/lib/i2p/i2p-config/eepsite/docroot/</code></td></tr>
+</tbody>
 </table>
 </div>
 
-<p>Az I2P hálózatban a rejtett szolgáltatásokra egy ".b32.i2p" végű Base32 címmel utalunk, vagy egy Célállomással, egy hosszú Base64 lánccal.
-A Base32 cím használható címként, míg hozzá nem társítasz egy nevet a következő utasításokat követve.
-A Célállomás hasonló egy IP címhez, és a <a href="http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3">Rejtett Szolgáltatás Konfigurációs oldalán</a> látszik.</p>
+<p class="notify idea">A webhely felhőbe való feltöltéséhez először a legtöbb szükséges információt fel kell tölteni az új könyvtárba, és az <code>index.html</code> fájl tartalmát kell cserélni. Az alap szkenneroldal szükséges adatait a <a href="pagetemplate.html">pagetemplate.html</a> fájlból kell megfelelően átalakítani. Miután a frissítést befejeztük, visszatérhetünk erre az oldalra, és újra megpróbálhatjuk a böngésző gyorsítótárának törlését.</p> 
 
-<p>Az alábbi utasítások részletezik, miként lehet egy "enoldalam.i2p"-hez hasonló nevet társítani a weboldaladhoz, hogy mások is hozzáférjenek.
-Az oldal helyileg elérhető a <a href="http://127.0.0.1:7658/">http://127.0.0.1:7658/</a> címen.</p>
-
-<h2>Hogyan állítsd be és hirdesd a rejtett szolgáltatásod</h2>
-
-<p>A webszervered alapértelmezetten fut, de mások nem férhetnek hozzá, míg el nem indítod a rejtett szolgáltatás alagutat.
-Miután elindítod az I2P Webszerver alagutad, mások nehezen találhatják meg
-Kizárólag a hosszú Célállomással vagy a rövidebb Base32 címmel érhető el, mely a Célállomás egy hash-e.
-Elmondhatod másoknak a Célállomást vagy a Base32 címet (.b32.i2p), de szerencsére az I2P rendelkezik egy címjegyzékkel és jónéhány könnyű lehetőséggel, melyekkel tájékoztathatod az embereket a weboldaladról.
-Itt találhatók részletes útmutatók.</p>
-
-<ul>
-<li>Válassz egy nevet a weboldaladnak (<i>valami</i>.i2p), kizárólag kis betűkkel.
-Először ellenőrizd a saját I2P router-ed <a href="http://127.0.0.1:7657/susidns/addressbook?book=router&amp;filter=none">címjegyzékét</a> hogy megnézd, a név már foglalt-e.
-Írd be a weboldalad új nevét a <a href="http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3">Rejtett Szolgáltatás Konfigurációs oldalon</a> a "Weboldal neve" mezőbe.
-Ez felülírja az alapértelemezett "valami.i2p"-t.
-Ha szeretnéd, hogy az I2P Webszerver alagút automatikusan induljon az I2P-vel együtt, pipáld be az "Automatikus Indítás" négyzetet.
-A weboldalad mostmár mindig az I2P router-rel együtt indul.
-Ne felejts a "Mentés" gombra nyomni.</li>
-<li>Nyomd meg a webszerver alagutad indító gombját a <a href="http://127.0.0.1:7657/i2ptunnel/">fő Rejtett Szolgáltatás Kezelő oldalon</a>.
-Mostmár a "Helyi Alagutak" alatt kell látnod az <a href="http://127.0.0.1:7657/">I2P Router Konzol oldal</a> bal oldalán
-A weboldalad mostmár fut.</li>
-<li>Jelöld ki és másold ki az egész Helyi célállomást a <a href="http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3">Rejtett Szolgáltatás Konfigurációs oldalon</a>.
-Biztosan másold ki az egészet! 500 karakternél hosszabb!</li>
-<li>Írd be a nevet és illeszd be a célállomást a <a href="http://127.0.0.1:7657/susidns/addressbook?book=router&amp;filter=none">címjegyzékedbe</a>.
-Kattints a "Hozzáadás" gombra az új elem mentéséhez.</li>
-<li>A böngésződbe írd be a weboldalad nevét (<i>valami</i>.i2p), és az oldalon kell találd magad.
-Remélhetőleg sikerült!</li>
-<li>Mielőtt elkezdenéd híresztelni a weboldalad, valamilyen tartalmat is hozzá kellene adnod.
-Menyj a szervered gyökérkönyvátrába - <a href="#dir">feljebb feltüntetve</a> -, és cseréld ki az index.html átirányító oldalt a saját tartalmadra.</li>
-</ul>
-<p>Mappa listázások engedélyezettek, egy linkeket listázó oldal nélkül is szolgálhatsz fel fájlokat egy almappából.
-A mappa megjelenése változtatható egy <a href="lib/jetty-dir.css">jetty-dir.css</a> mappánként való szolgáltatásával.
-A <a href="lib/">lib almappa</a> is egy ilyet mutat be.
-A <a href="lib/resources">resources almappa</a> az alap megjelenést mutatja be.
-Ha egy mintára lenne szükség egy alap oldalhoz, bátran használd <a href="pagetemplate.html">ezt az oldalt</a>és a <a href="lib/">kapcsolódó tartalmat</a>.</p>
-
-<p>Ha erre az oldalra kerültél miután szerkeszetted a tartalmat, próbáld üríteni a böngésződ gyorsítótárát:</p>
-
-<ul>
-<li>
-<b>Firefox:</b> Preferenciák ➜ Haladó ➜ Hálózat ➜ Gyorsítótárazott Web Tartalom ➜ Ürítés most</li>
-<li>
-<b>Chrome/Chromium:</b> Settings ➜ Advanced Settings ➜ Privacy ➜ Clear browsing data</li>
-<li>
-<b>Opera:</b> Settings ➜ Privacy ➜ Clear browsing data</li>
-</ul>
-<h2>Regisztráld a saját I2P domain-ed</h2>
-
-<p>Now it is time to add your website to an I2P address book hosted by a site such as <a href="http://stats.i2p/" target=_blank>stats.i2p</a> or <a href="http://reg.i2p/" target=_blank>reg.i2p</a>.
-You must enter your website name and Destination (or Registration Authentication string) on one or more of these sites.</p>
-<p>Some registration sites require the Destination.
-If so, highlight and copy the entire Local destination on the <a href="http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3">Hidden Service Configuration page</a>.
-Make sure you copy the whole thing, it is over 500 characters.</p>
-<p>Some registration sites, including <a href="http://stats.i2p/i2p/addkey.html" target=_blank>stats.i2p</a>, require the Registration Authentication string.
-It is found on the <a href="http://127.0.0.1:7657/i2ptunnel/register?tunnel=3">Registration Authentication page</a> linked from the <a href="http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3">Hidden Service configuration page</a>.
-Copy the entire authentication string and paste it on the registration page.
-Make sure you copy the whole thing, it is over 500 characters.
-Describe your site briefly if the site requests this information.
-If your site is a HTTP service, leave the checkbox selected; if not, unselect it.</p>
-<p>For all registration sites, read through the Terms of Service carefully.
-Click the "Submit" button.
-Verify the submission was successful.
-Since many routers periodically get address book updates from these sites, within several hours others will be able to find your website by simply entering your hostname in their browser.</p>
-
-<h2>Adding Addressbook Subscriptions</h2>
-
-<p>Speaking of address book updates, this would be a good time to add some more addressbooks to your own subscription list.
-Go to your <a href="http://127.0.0.1:7657/susidns/subscriptions">Subscriptions Configuration page</a> and add one or more for an automatically updated list of new hosts:</p>
-
-<ul>
-<li>
-<code>http://stats.i2p/cgi-bin/newhosts.txt</code> ➜ <a href="http://stats.i2p/cgi-bin/newhosts.txt" target=_blank>stats.i2p</a></li>
-<li>
-<code>http://notbob.i2p/hosts.txt</code> ➜ <a href="http://notbob.i2p/hosts.txt" target=_blank>notbob.i2p</a></li>
-</ul>
-<p>If you are in a hurry and can't wait a few hours, you can tell people to use a "jump" address helper redirection service.
-This will work within a few minutes of your registering your hostname on the same site.
-Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>something</i>.i2p</code> into your browser.
-Once it is working, you can tell others to use it.</p>
-
-<p>Some people check website lists such as <a href=http://identiguy.i2p/ target=_blank>Identiguy's eepsite status list</a> or <a href="http://no.i2p/browse/" target=_blank>no.i2p's active host list</a> for new eepsites, so your site may start getting some traffic.
-There are plenty of other ways to tell people. Here are a few ideas:</p>
-
-<ul>
-<li>Post a message on the <a href=http://i2pforum.i2p/ target=_blank>I2P forum</a> telling everyone about your new I2P website!</li>
-<li>Tell people about it on the #i2p or #i2p-chat channels on IRC.</li>
-<li>Put it on the <a href="http://wiki.i2p-projekt.i2p/wiki/index.php/Eepsite/Services" target=_blank>I2P Wiki Eepsite Index</a>
-</li>
-</ul>
-<p>Note that some sites recommend pasting in that really long destination.
-You can if you want, but if you have successfully registered your hostname on a registration service, tested it using a jump service, and waited 24 hours for the address book update to propagate to others, that shouldn't be necessary.</p>
-
-<h3>Using an alternative webserver</h3>
-
-<p>To configure an alternative webserver for use on I2P, you can either use the existing webserver tunnel and <a href="http://127.0.0.1:7657/configclients">disable the default webserver</a> from running, or create a new HTTP Server tunnel in the <a href="http://127.0.0.1:7657/i2ptunnelmgr">Tunnel Manager</a>. Ensure that the webserver's <i>listening port</i> is also configured in the Tunnel Manager settings. For example, if your webserver is listening by default on address 127.0.0.1 port 80, you'd also need to ensure that the <i>Target port</i> in the Tunnel Manager settings page for the service is also configured to port 80.</p>
-
-<p>To preserve anonymity, make sure that the webserver is not publicly available outside of the I2P network, which is normally achieved by configuring the webserver to listen on localhost (127.0.0.1) rather than all interfaces (0.0.0.0).</p>
-
-<p>Be aware that a poorly configured webserver or web appplication can leak information such as your real IP address or server details that may reduce your anonymity or assist a hacker. If using an alternative platform, be sure to secure it before putting it online. If in doubt, consult online guides about web server and web application hardening, for example:
-
-<ul id="guides">
-<li><a href="https://geekflare.com/apache-web-server-hardening-security/" target=_blank class="sitelink external">Apache Web Server Security Guide</a></li>
-<li><a href="https://geekflare.com/nginx-webserver-security-hardening-guide/" target=_blank class="sitelink external">Nginx Web Server Security Guide</a></li>
-<li><a href="https://www.wordfence.com/learn/how-to-harden-wordpress-sites/" target=_blank class="sitelink external">How to Harden Your WordPress Site</a></li>
-</ul>
-
-<p class="notify warn"><b>Note:</b> On some Apache installations, the <a href="https://httpd.apache.org/docs/2.4/mod/mod_status.html" target=_blank class="sitelink external">mod_status</a> and <a href="https://httpd.apache.org/docs/2.4/mod/mod_info.html" target=_blank class="sitelink external">mod_info</a> modules are enabled by default. It is important to disable these, or otherwise protect access to the urls, to avoid compromising the anonymity and security of your server.</p>
-
-<hr>
-
-<div class="notify idea">This page, the project website and the router console need translations!
-Please help the project grow by <a href="http://i2p-projekt.i2p/getinvolved.html" target=_blank> getting involved</a> or <a href="http://i2p-projekt.i2p/en/get-involved/guides/new-translators" target=_blank>translating</a>.</div>
 </div>
 </body>
 </html>
