@@ -1,28 +1,24 @@
+<!DOCTYPE HTML>
 <html>
-<!--
-#
-# If you have a 'split' directory installation, with configuration
-# files in ~/.i2p (Linux), %LOCALAPPDATA%\I2P (Windows),
-# or /Users/(user)/Library/Application Support/i2p (Mac), be sure to
-# edit the file in the configuration directory, NOT the install directory.
-# When running as a Linux daemon, the configuration directory is /var/lib/i2p
-# and the install directory is /usr/share/i2p .
-# When running as a Windows service, the configuration directory is \ProgramData\i2p
-# and the install directory is \Program Files\i2p .
-#
--->
 <head>
-<!--
-  *  Remove the following three lines to stop redirecting to the help page.
-  *  If it continues to redirect:
-  *    1) Make sure you edited the correct file (see above)
-  *    2) Clear your browser's cache.
- -->
-<meta http-equiv="refresh" content="1;url=/help/" />
-<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="refresh" content="30;url=/help/">
 <meta http-equiv="cache-control" content="no-cache">
+<meta charset="utf-8">
 <title>I2P Anonymous Webserver</title>
+<link rel="stylesheet" href="/help/lib/eepsite.css">
+<style>
+html,body{min-height:100%}
+body{animation:fade-in .15s ease .3s both}
+#splash{margin:30vh auto 0;width:600px;height:40%;position:absolute;top:0;left:0;bottom:0;right:0;border:0;box-shadow:none}
+#splash img{margin:25px auto}
+#splash img:hover{transform:scale(1.15);filter:drop-shadow(0 0 5px #f304)}
+#splash img:active{transform:scale(.9)}
+#splash td,#splash tr{border:0;box-shadow:none;background:none}
+#splash td{text-align:center;box-shadow:0 0 0 1px #111, 0 0 0 4px #fdd94b, 0 0 0 5px #000, 0 8px 8px #0005,0 0 3px inset #0004;background:linear-gradient(to bottom,#0000, #0002),repeating-linear-gradient(to bottom,#0001 2px, #fff1 4px),#684e31}
+</style>
 </head>
-<body>
+<body><body style="display:none;pointer-events:none">
+<table id="splash"><tr><td><a href="/help"><img src="/help/lib/bike.webp" height=160></a></td></tr></table>
 </body>
+<style>body{display:block!important;pointer-events:auto!important}</style>
 </html>

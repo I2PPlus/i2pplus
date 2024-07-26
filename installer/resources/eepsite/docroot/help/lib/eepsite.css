@@ -23,6 +23,7 @@ body {
   background: repeating-linear-gradient(to bottom, #111 2px, #333 4px) #222;
   background-size: 100% 4px;
   background-attachment: fixed;
+  animation: fade-in .2s ease .5s both;
 }
 
 ::selection {
