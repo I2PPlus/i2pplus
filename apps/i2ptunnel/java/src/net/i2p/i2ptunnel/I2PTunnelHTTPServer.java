@@ -466,7 +466,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             boolean keepalive = getBooleanOption(OPT_KEEPALIVE, DEFAULT_KEEPALIVE);
 
             do {
-
                 if (requestCount > 0) {
                     if (_log.shouldDebug()) {_log.debug("[HTTPServer] KeepAlive, awaiting request [#" + requestCount + "]");}
                 }
@@ -560,6 +559,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 String hostname = null;
                 boolean isValidRequest = true;
                 List<String> host = headers.get("Host");
+
+                if (peerB32.length() != 60) {
+                    _log.warn("[HTTPServer] Invalid B32 (expected 60 characters, got " + peerB32.length() + ") -> Denying request to [" + hostname + "]" +
+                    "\n* Client: " + peerB32);
+                    isValidRequest = false;
+                }
 
                 if (host != null) {
                     hostname = host.get(0);
