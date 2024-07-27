@@ -2776,7 +2776,8 @@ public final class SVGGraphics2D extends Graphics2D {
                            .replace(" style=\"stroke:rgb(200,200,0)\" class=\"dash\"", " class=\"dash major\"")
                            .replace("fill:rgb(0,0,0);fill-opacity:0\"", "opacity:0\"")
                            .replace("style=\"fill:rgb(0,0,0);fill-opacity:.75\"", "class=\"bg\"")
-                           .replace("style=\"stroke:rgb(244,244,190);stroke-opacity:.78\"", "class=\"axis\"");
+                           .replace("style=\"stroke:rgb(244,244,190);stroke-opacity:.78\"", "class=\"axis\"")
+                           .replace("stroke:#f4f4be;stroke-opacity:.2", "stroke:#f4f4be40");
         } else if (svgOut.indexOf("201,206,255") != -1) { // midnight
             svgOut = svgOut.replace(".axis{", ".axis{stroke:#a6b3e8;")
                            .replace("</style>", "#path2{stroke-width:2;stroke:#5af2f2aa;fill:none}</style>")
