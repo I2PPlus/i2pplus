@@ -2692,11 +2692,13 @@ public final class SVGGraphics2D extends Graphics2D {
         defs.append("<link xmlns=\"http://www.w3.org/1999/xhtml\" rel=\"stylesheet\" type=\"text/css\" href=\"/themes/fonts/FiraCode.css\"/>");
         defs.append("<style>text{font-weight:600;text-rendering:optimizeLegibility;white-space:pre}")
             .append("line,path,rect{shape-rendering:crispEdges;vector-effect:non-scaling-stroke}")
+            .append("line,rect,text{clip-path:url(#clip-2)}")
             .append(".axis{stroke-width:2;stroke-linecap:round}")
             .append(".bold,.sans.s12 text,.sans.s13 text,.sans.s14 text{font-weight:700}")
             .append(".dash{stroke-opacity:.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,1}")
             .append(".line{stroke-opacity:.2;stroke-linecap:square}")
             .append(".mono{font-family:FiraCode,monospace;font-weight:500}")
+            .append(".restart{stroke:#dc1030}")
             .append(".sans{font-family:Open Sans,Segoe UI,Noto Sans,sans-serif}")
             .append(".s10{font-size:10px}")
             .append(".s11{font-size:11px}")
@@ -2746,6 +2748,8 @@ public final class SVGGraphics2D extends Graphics2D {
             .replace("fill:none;fill:none", "fill:none")
             .replace(" style=\"stroke:rgb(0,0,0);stroke-opacity:0\"", "")
             .replace(";stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,1\"", "\" class=\"dash\"")
+            .replace("style=\"stroke:rgb(220,16,48);fill:none\"", "class=\"restart\"")
+            .replace(" clip-path=\"url(#clip-2)\"", "")
             .replace(" L ", "L");
         if (svgOut.indexOf("80,80,80") != -1) { // light/classic
             svgOut = svgOut.replace(".axis{", ".axis{stroke:#33333f;")
