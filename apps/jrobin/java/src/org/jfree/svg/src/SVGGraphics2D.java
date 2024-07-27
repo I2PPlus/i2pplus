@@ -2660,11 +2660,11 @@ public final class SVGGraphics2D extends Graphics2D {
             .append(".s13{font-size:13px}")
             .append(".s14{font-size:14px}");
         if (this.sb.indexOf("rgb(0,72,8)") != -1) { // dark
-            defs.append(".major{stroke:#f4f4be40}")
-                .append(".minor{stroke:#c8c80030}");
+            defs.append(".major{stroke:#f4f4be30}")
+                .append(".minor{stroke:#c8c80028}");
         } else if (this.sb.indexOf("201,206,255") != -1) { // midnight
-            defs.append(".major{stroke:#d260bf40}")
-                .append(".minor{stroke:#c9ceff30}")
+            defs.append(".major{stroke:#d260bf30}")
+                .append(".minor{stroke:#c9ceff28}")
                 .append("#graph{stroke:#1a81ffbb}");
         }
         defs.append("</style></defs>");
@@ -2727,7 +2727,7 @@ public final class SVGGraphics2D extends Graphics2D {
                            .replace("fill:rgb(0,0,0);fill-opacity:0\"", "opacity:0\"")
                            .replace("style=\"fill:rgb(0,0,0);fill-opacity:.75\"", "class=\"bg\"")
                            .replace("style=\"stroke:rgb(244,244,190);stroke-opacity:.78\"", "class=\"axis\"")
-                           .replace("stroke:#f4f4be;stroke-opacity:.2", "stroke:#f4f4be40");
+                           .replace("stroke:#f4f4be;stroke-opacity:.2", "stroke:#f4f4be30");
         } else if (svgOut.indexOf("201,206,255") != -1) { // midnight
             svgOut = svgOut.replace(".axis{", ".axis{stroke:#a6b3e8;")
                            .replace("</style>", "#path2{stroke-width:2;stroke:#5af2f2aa;fill:none}</style>")
