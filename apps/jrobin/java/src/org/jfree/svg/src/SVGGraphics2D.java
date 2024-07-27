@@ -2788,6 +2788,10 @@ public final class SVGGraphics2D extends Graphics2D {
             svgOut = svgOut.replace(" style=\"font-family:sans-serif;font-size:14px\"", " class=\"sans s14\"");
             svgOut = svgOut.replace("</text></g><g class=\"sans s11\"><text", "</text><text");
         }
+        svgOut = svgOut.replace("</text></g><g class=\"mono s10\">", "</text>")
+                       .replace("</text></g><g class=\"mono s11\" clip-path=\"url(#clip-2)\"><text", "</text><text")
+                       .replace("</text></g><g class=\"sans s11\" clip-path=\"url(#clip-2)\"><text", "</text><text")
+                       .replace("</text></g><g class=\"sans s12\" clip-path=\"url(#clip-2)\"><text", "</text><text");
         return svgOut;
     }
 
