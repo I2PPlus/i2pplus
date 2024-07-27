@@ -2694,6 +2694,7 @@ public final class SVGGraphics2D extends Graphics2D {
             .append("line,path,rect{shape-rendering:crispEdges;vector-effect:non-scaling-stroke}")
             .append("line,rect,text{clip-path:url(#clip-2)}")
             .append(".axis{stroke-width:2;stroke-linecap:round}")
+            .append(".bg{fill:#000b}")
             .append(".bold,.sans.s12 text,.sans.s13 text,.sans.s14 text{font-weight:700}")
             .append(".dash{stroke-opacity:.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,1}")
             .append(".line{stroke-opacity:.2;stroke-linecap:square}")
@@ -2770,7 +2771,8 @@ public final class SVGGraphics2D extends Graphics2D {
                            .replace(" clip-path=\"url(#clip-1)\"", "")
                            .replace(" style=\"stroke:rgb(244,244,190);stroke-opacity:.12\" class=\"dash\"", " class=\"dash minor\"")
                            .replace(" style=\"stroke:rgb(200,200,0)\" class=\"dash\"", " class=\"dash major\"")
-                           .replace("fill:rgb(0,0,0);fill-opacity:0\"", "opacity:0\"");
+                           .replace("fill:rgb(0,0,0);fill-opacity:0\"", "opacity:0\"")
+                           .replace("style=\"fill:rgb(0,0,0);fill-opacity:.75\"", "class=\"bg\"");
         } else if (svgOut.indexOf("201,206,255") != -1) { // midnight
             svgOut = svgOut.replace(".axis{", ".axis{stroke:#a6b3e8;")
                            .replace("</style>", "#path2{stroke-width:2;stroke:#5af2f2aa;fill:none}</style>")
@@ -2792,10 +2794,13 @@ public final class SVGGraphics2D extends Graphics2D {
             svgOut = svgOut.replace(" style=\"font-family:sans-serif;font-size:14px\"", " class=\"sans s14\"");
             svgOut = svgOut.replace("</text></g><g class=\"sans s11\"><text", "</text><text");
         }
-        svgOut = svgOut.replace("</text></g><g class=\"mono s10\">", "</text>")
-                       .replace("</text></g><g class=\"mono s11\" clip-path=\"url(#clip-2)\"><text", "</text><text")
+        svgOut = svgOut.replace("</text></g><g class=\"mono s11\" clip-path=\"url(#clip-2)\"><text", "</text><text")
                        .replace("</text></g><g class=\"sans s11\" clip-path=\"url(#clip-2)\"><text", "</text><text")
-                       .replace("</text></g><g class=\"sans s12\" clip-path=\"url(#clip-2)\"><text", "</text><text");
+                       .replace("</text></g><g class=\"sans s12\" clip-path=\"url(#clip-2)\"><text", "</text><text")
+                       .replace("</text></g><g class=\"mono s10\"><text", "</text><text")
+                       .replace("</text></g><g class=\"mono s11\"><text", "</text><text")
+                       .replace("</text></g><g class=\"sans s11\"><text", "</text><text")
+                       .replace("</text></g><g class=\"sans s12\"><text", "</text><text");
         return svgOut;
     }
 
