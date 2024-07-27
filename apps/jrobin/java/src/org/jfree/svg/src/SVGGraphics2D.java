@@ -227,16 +227,14 @@ public final class SVGGraphics2D extends Graphics2D {
      * generating the SVG file, all the linear gradient paints used must be
      * defined in the defs element.
      */
-    private Map<LinearGradientPaintKey, String> linearGradientPaints
-            = new HashMap<>();
+    private Map<LinearGradientPaintKey, String> linearGradientPaints = new HashMap<>();
 
     /**
      * A map of all the radial gradients used, and the corresponding id.  When
      * generating the SVG file, all the radial gradient paints used must be
      * defined in the defs element.
      */
-    private Map<RadialGradientPaintKey, String> radialGradientPaints
-            = new HashMap<>();
+    private Map<RadialGradientPaintKey, String> radialGradientPaints = new HashMap<>();
 
     /**
      * A list of the registered clip regions.  These will be written to the
@@ -1018,20 +1016,15 @@ public final class SVGGraphics2D extends Graphics2D {
                 for (final Object obj: hintValueMap.entrySet()) {
                    final Entry e = (Entry) obj;
                    final Object key = e.getKey();
-                   if ("id".equals(key) || "ref".equals(key)) {
-                      continue;
-                   }
-                   if (otherKeysAndValues == null) {
-                      otherKeysAndValues = new ArrayList<>();
-                   }
+                   if ("id".equals(key) || "ref".equals(key)) {continue;}
+                   if (otherKeysAndValues == null) {otherKeysAndValues = new ArrayList<>();}
                    otherKeysAndValues.add(e);
                 }
             }
             this.sb.append("<g");
             if (groupId != null) {
                 if (this.elementIDs.contains(groupId)) {
-                    throw new IllegalArgumentException("The group id ("
-                            + groupId + ") is not unique.");
+                    throw new IllegalArgumentException("The group id (" + groupId + ") is not unique.");
                 } else {
                     this.sb.append(" id=\"").append(groupId).append("\"");
                     this.elementIDs.add(groupId);
@@ -1043,18 +1036,15 @@ public final class SVGGraphics2D extends Graphics2D {
             }
             if (otherKeysAndValues != null) {
                for (final Entry e: otherKeysAndValues) {
-                    this.sb.append(" ").append(e.getKey()).append("=\"");
-                    this.sb.append(SVGUtils.escapeForXML(String.valueOf(
-                            e.getValue()))).append("\"");
+                    this.sb.append(" ").append(e.getKey()).append("=\"")
+                           .append(SVGUtils.escapeForXML(String.valueOf(e.getValue()))).append("\"");
                }
             }
             this.sb.append(">");
         } else if (SVGHints.isEndGroupKey(hintKey)) {
             this.sb.append("</g>\n");
         } else if (SVGHints.isElementTitleKey(hintKey) && (hintValue != null)) {
-            this.sb.append("<title>");
-            this.sb.append(SVGUtils.escapeForXML(String.valueOf(hintValue)));
-            this.sb.append("</title>");
+            this.sb.append("<title>").append(SVGUtils.escapeForXML(String.valueOf(hintValue))).append("</title>");
         } else {
             this.hints.put(hintKey, hintValue);
         }
@@ -1107,8 +1097,7 @@ public final class SVGGraphics2D extends Graphics2D {
         if (elementID != null) {
             this.hints.put(SVGHints.KEY_ELEMENT_ID, null); // clear it
             if (this.elementIDs.contains(elementID)) {
-                throw new IllegalStateException("The element id "
-                        + elementID + " is already used.");
+                throw new IllegalStateException("The element id " + elementID + " is already used.");
             } else {
                 this.elementIDs.add(elementID);
             }
@@ -1145,14 +1134,13 @@ public final class SVGGraphics2D extends Graphics2D {
                 !strokeStyle().contains("stroke-width:0.1;")) {
                 this.sb.append("<line ");
                 appendOptionalElementIDFromHint(this.sb);
-                this.sb.append("x1=\"").append(x1).append("\" y1=\"").append(y1);
-                this.sb.append("\" x2=\"").append(x2).append("\" y2=\"").append(y2);
-                this.sb.append("\" style=\"").append(strokeStyle()).append("\" ");
+                this.sb.append("x1=\"").append(x1).append("\" y1=\"").append(y1)
+                       .append("\" x2=\"").append(x2).append("\" y2=\"").append(y2)
+                       .append("\" style=\"").append(strokeStyle()).append("\" ");
                 if (!this.transform.isIdentity()) {
                    this.sb.append("transform=\"").append(getSVGTransform(this.transform)).append("\" ");
                 }
-                this.sb.append(getClipPathRef());
-                this.sb.append("/>");
+                this.sb.append(getClipPathRef()).append("/>");
             }
         } else if (s instanceof Rectangle2D) {
             Rectangle2D r = (Rectangle2D) s;
@@ -1177,12 +1165,12 @@ public final class SVGGraphics2D extends Graphics2D {
             this.sb.append("<ellipse ");
             appendOptionalElementIDFromHint(this.sb);
             this.sb.append("cx=\"").append(geomDP(e.getCenterX()))
-                    .append("\" cy=\"").append(geomDP(e.getCenterY()))
-                    .append("\" rx=\"").append(geomDP(e.getWidth() / 2.0))
-                    .append("\" ry=\"").append(geomDP(e.getHeight() / 2.0))
-                    .append("\" ")
-                    .append("style=\"").append(strokeStyle())
-                    .append("fill:none").append("\" ");
+                   .append("\" cy=\"").append(geomDP(e.getCenterY()))
+                   .append("\" rx=\"").append(geomDP(e.getWidth() / 2.0))
+                   .append("\" ry=\"").append(geomDP(e.getHeight() / 2.0))
+                   .append("\" ")
+                   .append("style=\"").append(strokeStyle())
+                   .append("fill:none").append("\" ");
             if (!this.transform.isIdentity()) {
                 this.sb.append("transform=\"").append(getSVGTransform(this.transform)).append("\" ");
             }
@@ -1196,10 +1184,8 @@ public final class SVGGraphics2D extends Graphics2D {
             if (!this.transform.isIdentity()) {
                 this.sb.append("transform=\"").append(getSVGTransform(this.transform)).append("\" ");
             }
-            this.sb.append(getClipPathRef());
-            this.sb.append(">");
-            this.sb.append("<path ").append(getSVGPathData(path)).append("/>");
-            this.sb.append("</g>");
+            this.sb.append(getClipPathRef()).append(">").append("<path ").append(getSVGPathData(path))
+                   .append("/>").append("</g>");
         } else {
             draw(new GeneralPath(s)); // handled as a Path2D next time through
         }
@@ -1231,8 +1217,7 @@ public final class SVGGraphics2D extends Graphics2D {
             if (!this.transform.isIdentity()) {
                 this.sb.append("transform=\"").append(getSVGTransform(this.transform)).append("\" ");
             }
-            this.sb.append(getClipPathRef());
-            this.sb.append("/>");
+            this.sb.append(getClipPathRef()).append("/>");
         } else if (s instanceof Ellipse2D) {
             Ellipse2D e = (Ellipse2D) s;
             this.sb.append("<ellipse ");
@@ -1244,8 +1229,7 @@ public final class SVGGraphics2D extends Graphics2D {
                    .append("\" ");
             this.sb.append("style=\"").append(getSVGFillStyle()).append("\" ");
             if (!this.transform.isIdentity()) {
-                this.sb.append("transform=\"").append(getSVGTransform(
-                this.transform)).append("\" ");
+                this.sb.append("transform=\"").append(getSVGTransform(this.transform)).append("\" ");
             }
             this.sb.append(getClipPathRef());
             this.sb.append("/>");
@@ -1253,16 +1237,12 @@ public final class SVGGraphics2D extends Graphics2D {
             Path2D path = (Path2D) s;
             this.sb.append("<g ");
             appendOptionalElementIDFromHint(this.sb);
-            this.sb.append("style=\"").append(getSVGFillStyle());
-            this.sb.append(";stroke:none").append("\" ");
+            this.sb.append("style=\"").append(getSVGFillStyle()).append(";stroke:none").append("\" ");
             if (!this.transform.isIdentity()) {
-                this.sb.append("transform=\"").append(getSVGTransform(
-                this.transform)).append("\" ");
+                this.sb.append("transform=\"").append(getSVGTransform(this.transform)).append("\" ");
             }
-            this.sb.append(getClipPathRef());
-            this.sb.append(">");
-            this.sb.append("<path ").append(getSVGPathData(path)).append("/>");
-            this.sb.append("</g>");
+            this.sb.append(getClipPathRef()).append(">").append("<path ").append(getSVGPathData(path))
+                   .append("/>").append("</g>");
         }  else {
             fill(new GeneralPath(s));  // handled as a Path2D next time through
         }
@@ -1288,21 +1268,18 @@ public final class SVGGraphics2D extends Graphics2D {
             switch (type) {
             case (PathIterator.SEG_MOVETO):
                 if (first) {
-                    b.append("M").append((int)coords[0]).append(" ")
-                     .append((int)coords[1]);
+                    b.append("M").append((int)coords[0]).append(" ").append((int)coords[1]);
                     prevX = coords[0];
                     prevY = coords[1];
                     first = false;
                 } else {
-                    b.append("m").append((int)(coords[0] - prevX)).append(" ")
-                     .append((int)(coords[1] - prevY));
+                    b.append("m").append((int)(coords[0] - prevX)).append(" ").append((int)(coords[1] - prevY));
                     prevX = coords[0];
                     prevY = coords[1];
                 }
                 break;
             case (PathIterator.SEG_LINETO):
-                b.append("l").append((int)(coords[0] - prevX)).append(" ")
-                 .append((int)(coords[1] - prevY));
+                b.append("l").append((int)(coords[0] - prevX)).append(" ").append((int)(coords[1] - prevY));
                 prevX = coords[0];
                 prevY = coords[1];
                 break;
@@ -1326,8 +1303,7 @@ public final class SVGGraphics2D extends Graphics2D {
                 break;
             case (PathIterator.SEG_CLOSE):
                 if (!first) {
-                    b.append("L").append((int)coords[0])
-                     .append(" ").append((int)coords[1]);
+                    b.append("L").append((int)coords[0]).append(" ").append((int)coords[1]);
                 }
                 b.append("Z");
                 break;
@@ -1366,9 +1342,9 @@ public final class SVGGraphics2D extends Graphics2D {
         String result = "black;";
         if (this.paint instanceof Color) {
             return rgbColorStr((Color) this.paint);
-        } else if (this.paint instanceof GradientPaint
-                || this.paint instanceof LinearGradientPaint
-                || this.paint instanceof RadialGradientPaint) {
+        } else if (this.paint instanceof GradientPaint ||
+                   this.paint instanceof LinearGradientPaint ||
+                   this.paint instanceof RadialGradientPaint) {
             return "url(#" + this.gradientPaintRef + ")";
         }
         return result;
@@ -1477,12 +1453,10 @@ public final class SVGGraphics2D extends Graphics2D {
         }
         if (this.checkStrokeControlHint) {
             Object hint = getRenderingHint(RenderingHints.KEY_STROKE_CONTROL);
-            if (RenderingHints.VALUE_STROKE_NORMALIZE.equals(hint)
-                    && !this.shapeRendering.equals("crispEdges")) {
+            if (RenderingHints.VALUE_STROKE_NORMALIZE.equals(hint) && !this.shapeRendering.equals("crispEdges")) {
                 b.append("shape-rendering:crispEdges;");
             }
-            if (RenderingHints.VALUE_STROKE_PURE.equals(hint)
-                    && !this.shapeRendering.equals("geometricPrecision")) {
+            if (RenderingHints.VALUE_STROKE_PURE.equals(hint) && !this.shapeRendering.equals("geometricPrecision")) {
                 b.append("shape-rendering:geometricPrecision;");
             }
         }
@@ -1626,12 +1600,9 @@ public final class SVGGraphics2D extends Graphics2D {
     @Override
     public FontMetrics getFontMetrics(Font f) {
         if (this.fmImage == null) {
-            this.fmImage = new BufferedImage(10, 10,
-                    BufferedImage.TYPE_INT_RGB);
+            this.fmImage = new BufferedImage(10, 10, BufferedImage.TYPE_INT_RGB);
             this.fmImageG2D = this.fmImage.createGraphics();
-            this.fmImageG2D.setRenderingHint(
-                    RenderingHints.KEY_FRACTIONALMETRICS,
-                    RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+            this.fmImageG2D.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
         }
         return this.fmImageG2D.getFontMetrics(f);
     }
@@ -1689,10 +1660,10 @@ public final class SVGGraphics2D extends Graphics2D {
                    .append(" ").append(getClipPathRef()).append(">")
                    .append("<text x=\"").append(geomDP(x)).append("\" y=\"").append(geomDP(y)).append("\">")
                    .append(SVGUtils.escapeForXML(str)
-                                   .replace("Min:", "<tspan class=\"bold\">Min:</tspan>")
-                                   .replace("Avg:", "<tspan class=\"bold\">Avg:</tspan>")
-                                   .replace("Max:", "<tspan class=\"bold\">Max:</tspan>")
-                                   .replace("Now:", "<tspan class=\"bold\">Now:</tspan>"));
+                   .replace("Min:", "<tspan class=\"bold\">Min:</tspan>")
+                   .replace("Avg:", "<tspan class=\"bold\">Avg:</tspan>")
+                   .replace("Max:", "<tspan class=\"bold\">Max:</tspan>")
+                   .replace("Now:", "<tspan class=\"bold\">Now:</tspan>"));
             this.sb.append("</text>").append("</g>");
         } else {
             AttributedString as = new AttributedString(str, this.font.getAttributes());
@@ -1890,8 +1861,7 @@ public final class SVGGraphics2D extends Graphics2D {
     public boolean hit(Rectangle rect, Shape s, boolean onStroke) {
         Shape ts;
         if (onStroke) {
-            ts = this.transform.createTransformedShape(
-                    this.stroke.createStrokedShape(s));
+            ts = this.transform.createTransformedShape(this.stroke.createStrokedShape(s));
         } else {
             ts = this.transform.createTransformedShape(s);
         }
@@ -2001,12 +1971,12 @@ public final class SVGGraphics2D extends Graphics2D {
 
     private String getSVGTransform(AffineTransform t) {
         StringBuilder b = new StringBuilder("matrix(");
-        b.append(transformDP(t.getScaleX())).append(",");
-        b.append(transformDP(t.getShearY())).append(",");
-        b.append(transformDP(t.getShearX())).append(",");
-        b.append(transformDP(t.getScaleY())).append(",");
-        b.append(transformDP(t.getTranslateX())).append(",");
-        b.append(transformDP(t.getTranslateY())).append(")");
+        b.append(transformDP(t.getScaleX())).append(",")
+         .append(transformDP(t.getShearY())).append(",")
+         .append(transformDP(t.getShearX())).append(",")
+         .append(transformDP(t.getScaleY())).append(",")
+         .append(transformDP(t.getTranslateX())).append(",")
+         .append(transformDP(t.getTranslateY())).append(")");
         return b.toString();
     }
 
@@ -2145,8 +2115,7 @@ public final class SVGGraphics2D extends Graphics2D {
      * @see #fillRoundRect(int, int, int, int, int, int)
      */
     @Override
-    public void drawRoundRect(int x, int y, int width, int height,
-            int arcWidth, int arcHeight) {
+    public void drawRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
         setRoundRect(x, y, width, height, arcWidth, arcHeight);
         draw(this.roundRect);
     }
@@ -2164,8 +2133,7 @@ public final class SVGGraphics2D extends Graphics2D {
      * @see #drawRoundRect(int, int, int, int, int, int)
      */
     @Override
-    public void fillRoundRect(int x, int y, int width, int height,
-            int arcWidth, int arcHeight) {
+    public void fillRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
         setRoundRect(x, y, width, height, arcWidth, arcHeight);
         fill(this.roundRect);
     }
@@ -2219,8 +2187,7 @@ public final class SVGGraphics2D extends Graphics2D {
      * @see #fillArc(int, int, int, int, int, int)
      */
     @Override
-    public void drawArc(int x, int y, int width, int height, int startAngle,
-            int arcAngle) {
+    public void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
         setArc(x, y, width, height, startAngle, arcAngle);
         draw(this.arc);
     }
@@ -2241,8 +2208,7 @@ public final class SVGGraphics2D extends Graphics2D {
      * @see #drawArc(int, int, int, int, int, int)
      */
     @Override
-    public void fillArc(int x, int y, int width, int height, int startAngle,
-            int arcAngle) {
+    public void fillArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
         setArc(x, y, width, height, startAngle, arcAngle);
         fill(this.arc);
     }
@@ -2257,8 +2223,7 @@ public final class SVGGraphics2D extends Graphics2D {
      */
     @Override
     public void drawPolyline(int[] xPoints, int[] yPoints, int nPoints) {
-        GeneralPath p = GraphicsUtils.createPolygon(xPoints, yPoints, nPoints,
-                false);
+        GeneralPath p = GraphicsUtils.createPolygon(xPoints, yPoints, nPoints, false);
         draw(p);
     }
 
@@ -2273,8 +2238,7 @@ public final class SVGGraphics2D extends Graphics2D {
      * @see #fillPolygon(int[], int[], int)      */
     @Override
     public void drawPolygon(int[] xPoints, int[] yPoints, int nPoints) {
-        GeneralPath p = GraphicsUtils.createPolygon(xPoints, yPoints, nPoints,
-                true);
+        GeneralPath p = GraphicsUtils.createPolygon(xPoints, yPoints, nPoints, true);
         draw(p);
     }
 
@@ -2289,8 +2253,7 @@ public final class SVGGraphics2D extends Graphics2D {
      */
     @Override
     public void fillPolygon(int[] xPoints, int[] yPoints, int nPoints) {
-        GeneralPath p = GraphicsUtils.createPolygon(xPoints, yPoints, nPoints,
-                true);
+        GeneralPath p = GraphicsUtils.createPolygon(xPoints, yPoints, nPoints, true);
         fill(p);
     }
 
@@ -2307,8 +2270,7 @@ public final class SVGGraphics2D extends Graphics2D {
         if (img instanceof RenderedImage) {
             ri = (RenderedImage) img;
         } else {
-            BufferedImage bi = new BufferedImage(img.getWidth(null),
-                    img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+            BufferedImage bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2 = bi.createGraphics();
             g2.drawImage(img, 0, 0, null);
             ri = bi;
@@ -2364,51 +2326,39 @@ public final class SVGGraphics2D extends Graphics2D {
      * @return {@code true} if there is no more drawing to be done.
      */
     @Override
-    public boolean drawImage(Image img, int x, int y, int w, int h,
-            ImageObserver observer) {
-
-        if (img == null) {
-            return true;
-        }
+    public boolean drawImage(Image img, int x, int y, int w, int h, ImageObserver observer) {
+        if (img == null) {return true;}
         // the rendering hints control whether the image is embedded or
         // referenced...
         Object hint = getRenderingHint(SVGHints.KEY_IMAGE_HANDLING);
         if (SVGHints.VALUE_IMAGE_HANDLING_EMBED.equals(hint)) {
             this.sb.append("<image ");
             appendOptionalElementIDFromHint(this.sb);
-            this.sb.append("preserveAspectRatio=\"none\" ");
-            this.sb.append("href=\"data:image/png;base64,");
-            this.sb.append(Base64.getEncoder().encodeToString(getPNGBytes(img)));
-            this.sb.append("\" ");
-            this.sb.append(getClipPathRef()).append(" ");
+            this.sb.append("preserveAspectRatio=\"none\" ").append("href=\"data:image/png;base64,")
+                   .append(Base64.getEncoder().encodeToString(getPNGBytes(img))).append("\" ")
+                   .append(getClipPathRef()).append(" ");
             if (!this.transform.isIdentity()) {
                 this.sb.append("transform=\"").append(getSVGTransform(this.transform)).append("\" ");
             }
-            this.sb.append("x=\"").append(geomDP(x)).append("\" y=\"").append(geomDP(y)).append("\" ");
-            this.sb.append("width=\"").append(geomDP(w)).append("\" height=\"").append(geomDP(h)).append("\"/>\n");
+            this.sb.append("x=\"").append(geomDP(x)).append("\" y=\"").append(geomDP(y)).append("\" ")
+                   .append("width=\"").append(geomDP(w)).append("\" height=\"").append(geomDP(h)).append("\"/>\n");
             return true;
         } else { // here for SVGHints.VALUE_IMAGE_HANDLING_REFERENCE
             int count = this.imageElements.size();
             String href = (String) this.hints.get(SVGHints.KEY_IMAGE_HREF);
-            if (href == null) {
-                href = this.filePrefix + count + this.fileSuffix;
-            } else {
-                // KEY_IMAGE_HREF value is for a single use...
-                this.hints.put(SVGHints.KEY_IMAGE_HREF, null);
-            }
+            if (href == null) {href = this.filePrefix + count + this.fileSuffix;}
+            else {this.hints.put(SVGHints.KEY_IMAGE_HREF, null);} // KEY_IMAGE_HREF value is for a single use...
             ImageElement imageElement = new ImageElement(href, img);
             this.imageElements.add(imageElement);
             // write an SVG element for the img
             this.sb.append("<image ");
             appendOptionalElementIDFromHint(this.sb);
-            this.sb.append("href=\"");
-            this.sb.append(href).append("\" ");
-            this.sb.append(getClipPathRef()).append(" ");
+            this.sb.append("href=\"").append(href).append("\" ").append(getClipPathRef()).append(" ");
             if (!this.transform.isIdentity()) {
                 this.sb.append("transform=\"").append(getSVGTransform(this.transform)).append("\" ");
             }
-            this.sb.append("x=\"").append(geomDP(x)).append("\" y=\"").append(geomDP(y)).append("\" ");
-            this.sb.append("width=\"").append(geomDP(w)).append("\" height=\"").append(geomDP(h)).append("\"/>\n");
+            this.sb.append("x=\"").append(geomDP(x)).append("\" y=\"").append(geomDP(y)).append("\" ")
+                   .append("width=\"").append(geomDP(w)).append("\" height=\"").append(geomDP(h)).append("\"/>\n");
             return true;
         }
     }
@@ -2661,9 +2611,10 @@ public final class SVGGraphics2D extends Graphics2D {
         if (includeDimensions) {
             svg.append("width=\"").append(this.width).append(unitStr)
                .append("\" height=\"").append(this.height).append(unitStr)
-               .append("\" ");
-            // let's put the viewBox here
-            svg.append("viewBox=\"0 0 ").append(this.width).append(" ").append(this.height).append("\"");
+               .append("\" ")
+               .append("viewBox=\"0 0 ") // let's put the viewBox here
+               .append(this.width).append(" ")
+               .append(this.height).append("\"");
         }
         svg.append(">");
 
@@ -2671,8 +2622,7 @@ public final class SVGGraphics2D extends Graphics2D {
         for (int i = 0; i < this.clipPaths.size(); i++) {
             if (i != 1) { // no clipPath for entire graph
                 StringBuilder b = new StringBuilder("<clipPath id=\"").append(CLIP_KEY_PREFIX).append(i).append("\">");
-                b.append("<path ").append(this.clipPaths.get(i)).append("/>");
-                b.append("</clipPath>");
+                b.append("<path ").append(this.clipPaths.get(i)).append("/>").append("</clipPath>");
                 defs.append(b.toString());
             }
         }
@@ -2710,11 +2660,11 @@ public final class SVGGraphics2D extends Graphics2D {
             .append(".s13{font-size:13px}")
             .append(".s14{font-size:14px}");
         if (this.sb.indexOf("rgb(0,72,8)") != -1) { // dark
-            defs.append(".major{stroke:#f4f4beaa}")
-                .append(".minor{stroke:#c8c80099}");
+            defs.append(".major{stroke:#f4f4be40}")
+                .append(".minor{stroke:#c8c80030}");
         } else if (this.sb.indexOf("201,206,255") != -1) { // midnight
-            defs.append(".major{stroke:#d260bfcc}")
-                .append(".minor{stroke:#c9ceff99}")
+            defs.append(".major{stroke:#d260bf40}")
+                .append(".minor{stroke:#c9ceff30}")
                 .append("#graph{stroke:#1a81ffbb}");
         }
         defs.append("</style></defs>");
@@ -2863,11 +2813,11 @@ public final class SVGGraphics2D extends Graphics2D {
         StringBuilder b = new StringBuilder("<linearGradient id=\"").append(id).append("\" ");
         Point2D p1 = paint.getPoint1();
         Point2D p2 = paint.getPoint2();
-        b.append("x1=\"").append(geomDP(p1.getX())).append("\" ");
-        b.append("y1=\"").append(geomDP(p1.getY())).append("\" ");
-        b.append("x2=\"").append(geomDP(p2.getX())).append("\" ");
-        b.append("y2=\"").append(geomDP(p2.getY())).append("\" ");
-        b.append("gradientUnits=\"userSpaceOnUse\">");
+        b.append("x1=\"").append(geomDP(p1.getX())).append("\" ")
+         .append("y1=\"").append(geomDP(p1.getY())).append("\" ")
+         .append("x2=\"").append(geomDP(p2.getX())).append("\" ")
+         .append("y2=\"").append(geomDP(p2.getY())).append("\" ")
+         .append("gradientUnits=\"userSpaceOnUse\">");
         Color c1 = paint.getColor1();
         b.append("<stop offset=\"0%\" stop-color=\"").append(rgbColorStr(c1)).append("\"");
         if (c1.getAlpha() < 255) {
@@ -2935,19 +2885,19 @@ public final class SVGGraphics2D extends Graphics2D {
         Point2D center = rgp.getCenterPoint();
         Point2D focus = rgp.getFocusPoint();
         float radius = rgp.getRadius();
-        b.append("cx=\"").append(geomDP(center.getX())).append("\" ");
-        b.append("cy=\"").append(geomDP(center.getY())).append("\" ");
-        b.append("r=\"").append(geomDP(radius)).append("\" ");
-        b.append("fx=\"").append(geomDP(focus.getX())).append("\" ");
-        b.append("fy=\"").append(geomDP(focus.getY())).append("\">");
+        b.append("cx=\"").append(geomDP(center.getX())).append("\" ")
+         .append("cy=\"").append(geomDP(center.getY())).append("\" ")
+         .append("r=\"").append(geomDP(radius)).append("\" ")
+         .append("fx=\"").append(geomDP(focus.getX())).append("\" ")
+         .append("fy=\"").append(geomDP(focus.getY())).append("\">");
 
         Color[] colors = rgp.getColors();
         float[] fractions = rgp.getFractions();
         for (int i = 0; i < colors.length; i++) {
             Color c = colors[i];
             float f = fractions[i];
-            b.append("<stop offset=\"").append(geomDP(f * 100)).append("%\" ");
-            b.append("stop-color=\"").append(rgbColorStr(c)).append("\"");
+            b.append("<stop offset=\"").append(geomDP(f * 100)).append("%\" ")
+             .append("stop-color=\"").append(rgbColorStr(c)).append("\"");
             if (c.getAlpha() < 255) {
                 double alphaPercent = c.getAlpha() / 255.0;
                 b.append(" stop-opacity=\"").append(transformDP(alphaPercent)).append("\"");
