@@ -2655,6 +2655,9 @@ public final class SVGGraphics2D extends Graphics2D {
         StringBuilder svg = new StringBuilder("<svg ");
         String unitStr = this.units != null ? this.units.toString() : "";
         svg.append("xmlns=\"http://www.w3.org/2000/svg\" ");
+        boolean isLarge = false;
+        if (this.width >= 600 && this.height >= 200) {isLarge = true;}
+        int axisStrokeWidth = isLarge ? 2 : 1;
         if (includeDimensions) {
             svg.append("width=\"").append(this.width).append(unitStr)
                .append("\" height=\"").append(this.height).append(unitStr)
@@ -2693,7 +2696,7 @@ public final class SVGGraphics2D extends Graphics2D {
         defs.append("<style>text{font-weight:600;text-rendering:optimizeLegibility;white-space:pre}")
             .append("line,path,rect{shape-rendering:crispEdges;vector-effect:non-scaling-stroke}")
             .append("line,rect,text{clip-path:url(#clip-2)}")
-            .append(".axis{stroke-width:2;stroke-linecap:round}")
+            .append(".axis{stroke-width:").append(axisStrokeWidth).append(";stroke-linecap:round}")
             .append(".bg{fill:#000b}")
             .append(".bold,.sans.s12 text,.sans.s13 text,.sans.s14 text{font-weight:700}")
             .append(".dash{stroke-opacity:.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,1}")
@@ -2761,7 +2764,7 @@ public final class SVGGraphics2D extends Graphics2D {
                            .replace("fill:rgb(51,51,63);", "");
 
         } else if (svgOut.indexOf("244,244,190") != -1) { // dark
-            svgOut = svgOut.replace(".axis{", ".axis{stroke:#eea;")
+            svgOut = svgOut.replace(".axis{", ".axis{stroke:#beca95;")
                            .replace(".dash{", ".dash{stroke:#f4f4be;")
                            .replace(".line{", ".line{stroke:#f4f4be;")
                            .replace("text{", "text{fill:#f4f4be;")
@@ -2772,7 +2775,8 @@ public final class SVGGraphics2D extends Graphics2D {
                            .replace(" style=\"stroke:rgb(244,244,190);stroke-opacity:.12\" class=\"dash\"", " class=\"dash minor\"")
                            .replace(" style=\"stroke:rgb(200,200,0)\" class=\"dash\"", " class=\"dash major\"")
                            .replace("fill:rgb(0,0,0);fill-opacity:0\"", "opacity:0\"")
-                           .replace("style=\"fill:rgb(0,0,0);fill-opacity:.75\"", "class=\"bg\"");
+                           .replace("style=\"fill:rgb(0,0,0);fill-opacity:.75\"", "class=\"bg\"")
+                           .replace("style=\"stroke:rgb(244,244,190);stroke-opacity:.78\"", "class=\"axis\"");
         } else if (svgOut.indexOf("201,206,255") != -1) { // midnight
             svgOut = svgOut.replace(".axis{", ".axis{stroke:#a6b3e8;")
                            .replace("</style>", "#path2{stroke-width:2;stroke:#5af2f2aa;fill:none}</style>")
