@@ -107,7 +107,7 @@
     <echo message=" signed-updater200WithJavadoc                 Signed Updater (pack200) + javadocs &#10140; ./i2pupdate.su3" />
     <echo message=" signed-updater200withJetty                   Signed Updater (pack200) + Jetty" />
     <echo message=" updateTorBlocklist                           Update Tor blocklist -> installer/resources/blocklist_tor.txt" />
-    <echo message=" translationReport                            Generate translation status report" />
+    <!-- <echo message=" translationReport                            Generate in-console translation status report" /> -->
     <!-- <echo message="  debianrepo                                   Build a Debian repository (reprepro required)" /> -->
     <!-- <echo message="  syndie                                       Generate a standalone syndie install" /> -->
   </target>
@@ -324,11 +324,10 @@
   <target name="dist" depends="pkg, javadoc" />
   <target name="dist200" depends="pkg200, javadoc" />
   <target name="build" depends="build2">
-    <!-- so we don't build standalone for the updater -->
-    <!-- This builds apps/i2psnark/java/i2psnark-standalone.zip,
-          -   which we don't distribute anywhere...
-        <ant dir="apps/i2psnark/java/" target="standalone" />
-        -->
+    <!-- so we don't build standalone for the updater
+         This builds apps/i2psnark/java/i2psnark-standalone.zip
+         <ant dir="apps/i2psnark/java/" target="standalone" />
+    -->
   </target>
   <target name="build2" depends="builddep, jar, buildWEB, bundleTranslationReport" />
   <target name="buildSmall" depends="builddepSmall, jarSmall, buildWEB" />
@@ -699,10 +698,7 @@
 
   <!-- end launch4j targets -->
 
-  <!--
-          the files are now copied to the build directory
-          in the build* targets
-     -->
+  <!-- the files are now copied to the build directory in the build* targets -->
   <target name="jar" depends="jarSmall" />
   <target name="jarSmall" depends="builddepSmall" />
 
