@@ -9,7 +9,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "Should the I2P router be started at boot?"
-msgstr "Έναρξη λειτουργίας του δρομολογητή I2P κατά την εκκίνηση;"
+msgstr "Όπως θέλετε να ξεκινηθεί ο δρομολογητής I2P κατά την εκκίνηση?"
 
 msgid "The I2P router can be run as a daemon that starts automatically when your computer boots up. This is the recommended configuration."
 msgstr "Ο δρομολογητής I2P μπορει να εκκινήσει ως υπηρεσίας κατά την εκκίνηση του υπολογιστή σας. Αυτή είναι η προτεινόμενη ρύθμιση."

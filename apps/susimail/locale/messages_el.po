@@ -369,7 +369,7 @@ msgid "Message body not downloaded"
 msgstr "Δεν έγινε λήψη του σώματος του μηνύματος"
 
 msgid "Really delete the marked messages?"
-msgstr "Αλήθεια να διαγραφούν τα επισημασμένα μηνύματα;"
+msgstr "Αλήθεια να διαγραφούν τα επισημασμένα μηνύματα?"
 
 msgid "Yes, really delete them!"
 msgstr "Ναι, διέγραψέ τα!"
@@ -399,7 +399,7 @@ msgid "Last"
 msgstr "Τελευταίο"
 
 msgid "Really delete this message?"
-msgstr "Αλήθεια να διαγραφεί αυτό το μήνυμα;"
+msgstr "Αλήθεια να διαγραφεί αυτό το μήνυμα?"
 
 msgid "Yes, really delete it!"
 msgstr "Ναι, όντως διεγραψέ το!"

@@ -469,7 +469,7 @@ msgid "Introduction"
 msgstr "Εισαγωγή"
 
 msgid "What is the addressbook?"
-msgstr "Τι είναι το βιβλίο διευθύνσεων;"
+msgstr "Τι είναι το βιβλίο διευθύνσεων?"
 
 msgid "The addressbook application is part of your I2P installation."
 msgstr "Η εφαρμογή βιβλίου διευθύνσεων είναι μέρος της εγκατάστασης I2P."
@@ -484,7 +484,7 @@ msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i
 msgstr "Για περισσότερες πληροφορίες σχετικά με την ονομασία στο I2P, ανατρέξτε στην <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>την επισκόπηση</a>."
 
 msgid "How does the addressbook application work?"
-msgstr "Πώς λειτουργεί η εφαρμογή βιβλίου διευθύνσεων;"
+msgstr "Πώς λειτουργεί η εφαρμογή βιβλίου διευθύνσεων?"
 
 msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
 msgstr "Η εφαρμογή βιβλίου διευθύνσεων ελέγχει τακτικά τις συνδρομές σας και συγχωνεύει το περιεχόμενό τους στο βιβλίο διευθύνσεών σας \"router\"."

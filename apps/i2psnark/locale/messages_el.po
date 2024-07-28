@@ -406,7 +406,7 @@ msgstr "Σφάλμα κατά τον έλεγχο του torrent {0}"
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "Δεν υπάρχουν έγκυροι trackers για το {0} - ενεργοποίηση opentrackers ή DHT;"
+msgstr "Δεν υπάρχουν έγκυροι trackers για το {0} - ενεργοποίηση opentrackers ή DHT?"
 
 msgid "Updating"
 msgstr "Γίνεται ενημέρωση"
@@ -450,11 +450,11 @@ msgstr "Ανώνυμος πελάτης BitTorrent"
 
 #, java-format
 msgid "Are you sure you want to delete the file \\''{0}\\'' (downloaded data will not be deleted) ?"
-msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε το αρχείο \\''{0}\\'' (τα δεδομένα που έχουν ληφθεί δεν θα διαγραφούν) ;"
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε το αρχείο \\''{0}\\'' (τα δεδομένα που έχουν ληφθεί δεν θα διαγραφούν) ?"
 
 #, java-format
 msgid "Are you sure you want to delete the torrent \\''{0}\\'' and all downloaded data?"
-msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε το torrent \\''{0}\\'' και όλα τα ληφθέντα δεδομένα;"
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε το torrent \\''{0}\\'' και όλα τα ληφθέντα δεδομένα?"
 
 msgid "I2PSnark has stopped"
 msgstr "Το I2PSnark έχει σταματήσει"
@@ -1361,10 +1361,10 @@ msgid "Not found"
 msgstr "Δεν βρέθηκε"
 
 msgid "Torrent not found?"
-msgstr "Το torrent δεν βρέθηκε;"
+msgstr "Το torrent δεν βρέθηκε"
 
 msgid "File not found in torrent?"
-msgstr "Δεν βρέθηκε το αρχείο σε torrent;"
+msgstr "Δεν βρέθηκε το αρχείο σε torrent"
 
 msgid "Unrecognized"
 msgstr "Μη αναγνωρισμένη"

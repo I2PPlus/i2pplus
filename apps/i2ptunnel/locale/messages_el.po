@@ -120,7 +120,7 @@ msgid "Edit Server Tunnel"
 msgstr "Επεξεργασία Διαδρόμου Διακομιστή"
 
 msgid "Are you sure you want to delete?"
-msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε;"
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε?"
 
 msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
 msgstr "Ο διάδρομος και όλοι οι άλλοι κοινοί διαδρόμοι πελάτη πρέπει να σταματήσουν για να αλλάξετε αυτή τη διαμόρφωση"
