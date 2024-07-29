@@ -1657,8 +1657,9 @@ public final class SVGGraphics2D extends Graphics2D {
                 this.sb.append("transform=\"").append(getSVGTransform(this.transform)).append("\"");
             }
             this.sb.append("style=\"").append(getSVGFontStyle()).append("\"")
-                   .append(" ").append(getClipPathRef()).append(">")
-                   .append("<text x=\"").append(geomDP(x)).append("\" y=\"").append(geomDP(y)).append("\">")
+                   .append(" ").append(getClipPathRef()).append(">").append("<text ");
+            if (str.endsWith("UTC")) {this.sb.append("id=\"date\" ");}
+            this.sb.append("x=\"").append(geomDP(x)).append("\" y=\"").append(geomDP(y)).append("\">")
                    .append(SVGUtils.escapeForXML(str)
                    .replace("Min:", "<tspan class=\"bold\">Min:</tspan>")
                    .replace("Avg:", "<tspan class=\"bold\">Avg:</tspan>")
@@ -2658,7 +2659,8 @@ public final class SVGGraphics2D extends Graphics2D {
             .append(".s11{font-size:11px}")
             .append(".s12{font-size:12px}")
             .append(".s13{font-size:13px}")
-            .append(".s14{font-size:14px}");
+            .append(".s14{font-size:14px}")
+            .append("#date{font-style:italic}")
         if (this.sb.indexOf("rgb(0,72,8)") != -1) { // dark
             defs.append(".major{stroke:#f4f4be30}")
                 .append(".minor{stroke:#c8c80028}");
