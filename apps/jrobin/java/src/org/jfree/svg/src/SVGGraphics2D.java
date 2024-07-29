@@ -2660,7 +2660,7 @@ public final class SVGGraphics2D extends Graphics2D {
             .append(".s12{font-size:12px}")
             .append(".s13{font-size:13px}")
             .append(".s14{font-size:14px}")
-            .append("#date{font-style:italic}")
+            .append("#date{font-style:italic}");
         if (this.sb.indexOf("rgb(0,72,8)") != -1) { // dark
             defs.append(".major{stroke:#f4f4be30}")
                 .append(".minor{stroke:#c8c80028}");
