@@ -521,6 +521,9 @@ input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_
 #configs tr:nth-last-child(2) td{padding:10px 8px 0;text-align:right}
 #configs td label b:hover,#torrentOrderControl b:hover{color:#3e4d6f;box-shadow:0 0 0 1px #bbf;opacity:1}
 #createSection #trackerselect{margin:5px 5px 0 5px;width:100%;width:calc(100% - 150px);border-collapse:separate;border:var(--border);border-radius:2px}
+#hopVariance label+label{margin-left:12px}
+#hopVariance .optbox{margin-right:4px}
+#i2cpOptions{display:block;column-span:all}
 #trackerconfig input{margin:3px}
 #trackerconfig input.accept{margin-left:5px;margin-right:2px}
 #trackerconfig .add,#trackerconfig .accept{float:right}

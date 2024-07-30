@@ -543,15 +543,6 @@ td.commentAuthor .commentAuthorName{margin-left:2px;padding:0 5px 0 22px;width:1
 #configs td label:hover b,#torrentOrderControl b:hover{color:var(--ink)}
 #configs select[disabled]{margin-left:4px}
 #torrentOrderControl b{line-height:1}
-
-/* tooltip */
-#bwHelp{margin-left:-170px;padding:15px 15px 15px 55px;width:320px;display:block;visibility:hidden;border-radius:3px;position:absolute;left:0;bottom:125%;z-index:999;text-align:center;white-space:normal;font-size:10pt;font-weight:700;background:#aaf url(/i2psnark/.res/icons/favicon.svg) no-repeat 10px center/28px;opacity:0;filter:drop-shadow(0 0 1px #11f);will-change:transform}
-#bwhelp::after{margin-left:-10px;position:absolute;top:100%;left:calc(50% - 14px);border-width:10px;border-style:solid;border-color:#aaf #0000 #0000 #0000;content:""}
-#bwHoverHelp:hover #bwHelp,#bwHoverHelp:active #bwHelp{visibility:visible;color:#fff;text-align:center;opacity:1;transition:ease opacity .05s}
-#bwHoverHelp{position:relative;display:inline-block}
-#bwHoverHelp img{width:16px;height:16px}
-#bwHoverHelp:hover+#bwHelp{display:block;position:fixed;float:left;top:48px;left:0;z-index:9999;background:#313;border-bottom:5px solid #212;border-top:5px solid #212;box-shadow:0 1px 3px #101;padding:20px;width:100%;white-space:nowrap;text-align:center;font-size:12pt}
-
 #configs td,#configs td:first-child{padding:0;padding-right:0}
 #configs tr:nth-last-child(2) td{padding:11px 0 0;text-align:right}
 #configs th{padding:4px 8px;background:linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%);filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
@@ -566,6 +557,17 @@ input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_
 .iframed #embed{display:none}
 .iframed #fullscreen{display:inline-block}
 #snarkLang{margin-right:5px;padding:3px 8px;display:inline-block;vertical-align:middle;line-height:1.6;color:#fff;text-align:center;font-weight:700;text-shadow:1px 1px 1px #557;border-radius:4px;background:#aaf}
+#hopVariance label+label{margin-left:12px}
+#hopVariance .optbox{margin-right:4px}
+#i2cpOptions{display:block;column-span:all}
+
+/* tooltip */
+#bwHelp{margin-left:-170px;padding:15px 15px 15px 55px;width:320px;display:block;visibility:hidden;border-radius:3px;position:absolute;left:0;bottom:125%;z-index:999;text-align:center;white-space:normal;font-size:10pt;font-weight:700;background:#aaf url(/i2psnark/.res/icons/favicon.svg) no-repeat 10px center/28px;opacity:0;filter:drop-shadow(0 0 1px #11f);will-change:transform}
+#bwhelp::after{margin-left:-10px;position:absolute;top:100%;left:calc(50% - 14px);border-width:10px;border-style:solid;border-color:#aaf #0000 #0000 #0000;content:""}
+#bwHoverHelp:hover #bwHelp,#bwHoverHelp:active #bwHelp{visibility:visible;color:#fff;text-align:center;opacity:1;transition:ease opacity .05s}
+#bwHoverHelp{position:relative;display:inline-block}
+#bwHoverHelp img{width:16px;height:16px}
+#bwHoverHelp:hover+#bwHelp{display:block;position:fixed;float:left;top:48px;left:0;z-index:9999;background:#313;border-bottom:5px solid #212;border-top:5px solid #212;box-shadow:0 1px 3px #101;padding:20px;width:100%;white-space:nowrap;text-align:center;font-size:12pt}
 
 /* language overrides */
 .lang_fr .optionlist,.lang_hu .optionlist,.lang_in .optionlist,.lang_it .optionlist,.lang_sk .optionlist,.lang_nl .optionlist,.lang_pl .optionlist,.lang_pt .optionlist,.lang_ro .optionlist,.lang_sv .optionlist,.lang_tr .optionlist,.lang_uk .optionlist{columns:500px auto;column-gap:5px}

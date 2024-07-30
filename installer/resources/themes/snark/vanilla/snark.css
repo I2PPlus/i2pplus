@@ -643,6 +643,9 @@ input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_
 #configs a[href^="/config"]{display:inline-block;vertical-align:middle}
 #embed,#fullscreen{margin:0 -3px -1px 0;padding:0 5px;float:right;font-size:8pt;color:#cf0f00;box-shadow:0 0 0 1px #afa399;background:var(--th)}
 #fullscreen{display:none}
+#hopVariance label+label{margin-left:12px}
+#hopVariance .optbox{margin-right:4px}
+#i2cpOptions{display:block;column-span:all}
 .iframed #embed{display:none}
 .iframed #fullscreen{display:inline-block}
 

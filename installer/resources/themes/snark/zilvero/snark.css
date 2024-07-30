@@ -613,6 +613,11 @@ input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-b
 .tab_label{display:inline-block;transform:translateY(1px)}
 .trackerAnnounce,.trackerHome{width:220px}
 .trackerName{width:140px}
+#hopVariance label+label{margin-left:12px}
+#hopVariance .optbox{margin-right:4px}
+#hopVariance label+label{margin-left:12px}
+#hopVariance .optbox{margin-right:4px}
+#i2cpOptions{display:block;column-span:all}
 #trackerconfig{margin-top:11px}
 #trackerconfig a{max-width:220px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #trackerconfig input[type=submit]{margin-top:6px;margin-bottom:6px}

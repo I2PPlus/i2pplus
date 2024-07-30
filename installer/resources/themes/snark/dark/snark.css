@@ -648,6 +648,9 @@ input.trackerhome,input.trackerannounce{width:210px}
 #configs td label b:hover,#torrentOrderControl b:hover{color:#bb7;opacity:1;transition:ease all .3s}
 #filecheck{margin:5px 0;padding-left:22px;display:inline-block;background:var(--progressbar) no-repeat left center}
 #filecheck a{margin-left:8px;display:inline-block}
+#hopVariance label+label{margin-left:12px}
+#hopVariance .optbox{margin-right:4px}
+#i2cpOptions{display:block;column-span:all}
 #snarkLang{margin:0 3px;padding:7px 10px;display:inline-block;vertical-align:middle;color:#ff7;font-weight:700;text-align:center;text-shadow:0 1px 1px #557;border-radius:4px;background:#030}
 #torrentOrderControl b{line-height:1}
 #trackers .snarkConfig .configTitle::before,.configPanel .configTitle::before{margin-right:3px;width:18px;height:18px;display:inline-block;vertical-align:middle;background:var(--configure) no-repeat scroll left calc(50% - 1px)/16px;opacity:.8;content:""}
