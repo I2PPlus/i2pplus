@@ -551,6 +551,9 @@ a.controld img{display:none}
 #hopVariance label+label{margin-left:12px}
 #hopVariance .optbox{margin-right:4px}
 #i2cpOptions{display:block;column-span:all}
+#hopVariance .optbox+span{width:22px;height:22px;display:inline-block;font-size:0;vertical-align:middle;background:var(--inbound) no-repeat center center/22px}
+#hopVariance .optbox:not(:checked)+span{filter:saturate(0)}
+#hopVariance #varyOutbound+span {background:var(--outbound) no-repeat center center/22px}
 
 /* action buttons */
 .tAction input[type=submit]{margin:0 2px;padding:12px;min-width:0;min-height:0;float:none;vertical-align:middle;font-size:0;border:1px solid #000;border-radius:2px;box-shadow:inset 0 0 0 1px #414,inset 0 0 2px 0 #717;background-position:center center;opacity:.85;cursor:pointer;transition:box-shadow ease .03s;will-change:transform}
