@@ -87,6 +87,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     private boolean _enableRatings, _enableComments;
     private String _commentsName;
     private boolean _areFilesPublic;
+    private boolean _varyInboundHops;
+    private boolean _varyOutboundHops;
     private List<String> _openTrackers;
     private DHT _dht;
     private long _startedTime;
@@ -103,13 +105,16 @@ public class I2PSnarkUtil implements DisconnectListener {
     public static final boolean DEFAULT_ENABLE_LIGHTBOX = true;
     public static final boolean DEFAULT_ENABLE_ADDCREATE = false;
     public static final boolean DEFAULT_USE_OPENTRACKERS = true;
+    public static final boolean DEFAULT_VARY_INBOUND_HOPS = false;
+    public static final boolean DEFAULT_VARY_OUTBOUND_HOPS = false;
 //    public static final int MAX_CONNECTIONS = 24; // per torrent
     public static final int MAX_CONNECTIONS = 300; // per torrent
     public static final String PROP_MAX_BW = "i2cp.outboundBytesPerSecond";
     public static final boolean DEFAULT_USE_DHT = true;
     public static final String EEPGET_USER_AGENT = "I2PSnark";
     private static final List<String> HIDDEN_I2CP_OPTS = Arrays.asList(new String[] {
-        PROP_MAX_BW, "inbound.length", "outbound.length", "inbound.quantity", "outbound.quantity"
+        PROP_MAX_BW, "inbound.length", "outbound.length", "inbound.quantity", "outbound.quantity",
+        "inbound.lengthVariance", "oubound.lengthVariance",
     });
 
     public I2PSnarkUtil(I2PAppContext ctx) {
@@ -141,6 +146,8 @@ public class I2PSnarkUtil implements DisconnectListener {
         _enableLightbox = DEFAULT_ENABLE_LIGHTBOX;
         _enableAddCreate = DEFAULT_ENABLE_ADDCREATE;
         _enableRatings = _enableComments = true;
+        _varyInboundHops = DEFAULT_VARY_INBOUND_HOPS;
+        _varyOutboundHops = DEFAULT_VARY_OUTBOUND_HOPS;
         _commentsName = "";
         // This is used for both announce replies and .torrent file downloads,
         // so it must be available even if not connected to I2CP.
@@ -150,28 +157,8 @@ public class I2PSnarkUtil implements DisconnectListener {
         _tmpDir.mkdirs();
     }
 
-    /**
-     * Specify what HTTP proxy tracker requests should go through (specify a null
-     * host for no proxying)
-     *
-     */
-/*****
-    public void setProxy(String host, int port) {
-        if ( (host != null) && (port > 0) ) {
-            _shouldProxy = true;
-            _proxyHost = host;
-            _proxyPort = port;
-        } else {
-            _shouldProxy = false;
-            _proxyHost = null;
-            _proxyPort = -1;
-        }
-        _configured = true;
-    }
-******/
-
     /** @since 0.9.1 */
-    public I2PAppContext getContext() { return _context; }
+    public I2PAppContext getContext() {return _context;}
 
     /**
      *  @param i2cpHost may be null for no change
@@ -199,9 +186,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         setMaxUpBW(_maxUpBW);
     }
 
-    public void setMaxUploaders(int limit) {
-        _maxUploaders = limit;
-    }
+    public void setMaxUploaders(int limit) {_maxUploaders = limit;}
 
     /**
      *  This updates ALL the session options (not just the bw) and tells the router
@@ -224,51 +209,51 @@ public class I2PSnarkUtil implements DisconnectListener {
         }
     }
 
-    public void setMaxConnections(int limit) {
-        _maxConnections = limit;
-    }
+    public void setMaxConnections(int limit) {_maxConnections = limit;}
 
-    public void setStartupDelay(int minutes) {
-    _startupDelay = minutes;
-    }
+    public void setStartupDelay(int minutes) {_startupDelay = minutes;}
 
-    public String getI2CPHost() { return _i2cpHost; }
-    public int getI2CPPort() { return _i2cpPort; }
+    public String getI2CPHost() {return _i2cpHost;}
+    public int getI2CPPort() {return _i2cpPort;}
 
     /**
      *  @return a copy
      */
     public Map<String, String> getI2CPOptions() {
-        synchronized(_opts) {
-            return new HashMap<String, String>(_opts);
-        }
+        synchronized(_opts) {return new HashMap<String, String>(_opts);}
     }
 
-    public String getEepProxyHost() { return _proxyHost; }
-    public int getEepProxyPort() { return _proxyPort; }
-    public boolean getEepProxySet() { return _shouldProxy; }
-    public int getMaxUploaders() { return _maxUploaders; }
+    public String getEepProxyHost() {return _proxyHost;}
+    public int getEepProxyPort() {return _proxyPort;}
+    public boolean getEepProxySet() {return _shouldProxy;}
+    public int getMaxUploaders() {return _maxUploaders;}
 
     /**
      *  @return KBps
      */
-    public int getMaxUpBW() { return _maxUpBW; }
-    public int getMaxConnections() { return _maxConnections; }
-    public int getStartupDelay() { return _startupDelay; }
+    public int getMaxUpBW() {return _maxUpBW;}
+    public int getMaxConnections() {return _maxConnections;}
+    public int getStartupDelay() {return _startupDelay;}
 
     /** @since 0.8.9 */
-    public boolean getFilesPublic() { return _areFilesPublic; }
+    public boolean getFilesPublic() {return _areFilesPublic;}
 
     /** @since 0.8.9 */
-    public void setFilesPublic(boolean yes) { _areFilesPublic = yes; }
+    public void setFilesPublic(boolean yes) {_areFilesPublic = yes;}
 
     /** @since 0.9.1 */
-    public File getTempDir() { return _tmpDir; }
+    public File getTempDir() {return _tmpDir;}
 
     /** @since 0.9.58 */
-    public int getMaxFilesPerTorrent() { return _maxFilesPerTorrent; }
+    public int getMaxFilesPerTorrent() {return _maxFilesPerTorrent;}
     /** @since 0.9.58 */
-    public void setMaxFilesPerTorrent(int max) { _maxFilesPerTorrent = Math.max(max, 1); }
+    public void setMaxFilesPerTorrent(int max) {_maxFilesPerTorrent = Math.max(max, 1);}
+
+    /** @since 0.9.64+ */
+    public boolean getVaryInboundHops() {return _varyInboundHops;}
+    public boolean getVaryOutboundHops() {return _varyOutboundHops;}
+    public void setVaryInboundHops(boolean yes) {_varyInboundHops = yes;}
+    public void setVaryOutboundHops(boolean yes) {_varyOutboundHops = yes;}
 
     /**
      * Connect to the router, if we aren't already
@@ -277,98 +262,54 @@ public class I2PSnarkUtil implements DisconnectListener {
         if (_manager == null) {
             _connecting = true;
             // try to find why reconnecting after stop
-            if (_log.shouldDebug())
-                _log.debug("Connecting to I2P...", new Exception("I did it"));
-//                _log.debug("Connecting to I2P...");
+            if (_log.shouldDebug()) {_log.debug("Connecting to I2P...", new Exception("I did it"));}
             Properties opts = _context.getProperties();
-            synchronized(_opts) {
-                opts.putAll(_opts);
-            }
+            synchronized(_opts) {opts.putAll(_opts);}
             // override preference and start with two tunnels. IdleChecker will ramp up/down as necessary
             String sin = opts.getProperty("inbound.quantity");
+            String sout = opts.getProperty("outbound.quantity");
             if (sin != null) {
                 int in;
-                try {
-                   in = Integer.parseInt(sin);
-                } catch (NumberFormatException nfe) {
-                   in = 3;
-                }
-                if (in > 2)
-                    opts.setProperty("inbound.quantity", "2");
+                try {in = Integer.parseInt(sin);}
+                catch (NumberFormatException nfe) {in = 3;}
+                if (in > 2) {opts.setProperty("inbound.quantity", "2");}
             }
-            String sout = opts.getProperty("outbound.quantity");
             if (sout != null) {
                 int out;
-                try {
-                   out = Integer.parseInt(sout);
-                } catch (NumberFormatException nfe) {
-                   out = 3;
-                }
-                if (out > 2)
-                    opts.setProperty("outbound.quantity", "2");
+                try {out = Integer.parseInt(sout);}
+                catch (NumberFormatException nfe) {out = 3;}
+                if (out > 2) {opts.setProperty("outbound.quantity", "2");}
             }
-            if (opts.containsKey("inbound.backupQuantity"))
-                opts.setProperty("inbound.backupQuantity", "0");
-            if (opts.containsKey("outbound.backupQuantity"))
-                opts.setProperty("outbound.backupQuantity", "0");
-
-            if (opts.getProperty("inbound.nickname") == null)
-                opts.setProperty("inbound.nickname", _baseName.replace("i2psnark", "I2PSnark"));
-            if (opts.getProperty("outbound.nickname") == null)
-                opts.setProperty("outbound.nickname", _baseName.replace("i2psnark", "I2PSnark"));
-//            if (opts.getProperty("outbound.priority") == null)
-//                opts.setProperty("outbound.priority", "-10");
-            // Don't do this for now, it is set in I2PSocketEepGet for announces,
-            // we don't need fast handshake for peer connections.
-            //if (opts.getProperty("i2p.streaming.connectDelay") == null)
-            //    opts.setProperty("i2p.streaming.connectDelay", "500");
-            if (opts.getProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT) == null)
-                opts.setProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT, "300000"); // 5 minutes
-            if (opts.getProperty("i2p.streaming.inactivityTimeout") == null)
-//                opts.setProperty("i2p.streaming.inactivityTimeout", "240000");
-                opts.setProperty("i2p.streaming.inactivityTimeout", "180000"); // 3 minute idle time before disconnect
-            if (opts.getProperty("i2p.streaming.inactivityAction") == null)
-                opts.setProperty("i2p.streaming.inactivityAction", "1"); // 1 == disconnect, 2 == ping
-            if (opts.getProperty("i2p.streaming.initialWindowSize") == null)
-                opts.setProperty("i2p.streaming.initialWindowSize", "1");
-            if (opts.getProperty("i2p.streaming.slowStartGrowthRateFactor") == null)
-                opts.setProperty("i2p.streaming.slowStartGrowthRateFactor", "1");
-            //if (opts.getProperty("i2p.streaming.writeTimeout") == null)
-            //    opts.setProperty("i2p.streaming.writeTimeout", "90000");
-            //if (opts.getProperty("i2p.streaming.readTimeout") == null)
-            //    opts.setProperty("i2p.streaming.readTimeout", "120000");
-            if (opts.getProperty("i2p.streaming.maxConnsPerMinute") == null)
-//                opts.setProperty("i2p.streaming.maxConnsPerMinute", "2"); // per peer max incoming connections
-                opts.setProperty("i2p.streaming.maxConnsPerMinute", "6");
-            if (opts.getProperty("i2p.streaming.maxTotalConnsPerMinute") == null)
-//                opts.setProperty("i2p.streaming.maxTotalConnsPerMinute", "8");
-                opts.setProperty("i2p.streaming.maxTotalConnsPerMinute", "128"); // total incoming connections
-            if (opts.getProperty("i2p.streaming.maxConnsPerHour") == null)
-//                opts.setProperty("i2p.streaming.maxConnsPerHour", "20");
-                opts.setProperty("i2p.streaming.maxConnsPerHour", "60");
-            if (opts.getProperty("i2p.streaming.enforceProtocol") == null)
-                opts.setProperty("i2p.streaming.enforceProtocol", "true");
-            if (opts.getProperty("i2p.streaming.disableRejectLogging") == null)
-                opts.setProperty("i2p.streaming.disableRejectLogging", "false");
-            if (opts.getProperty("i2p.streaming.answerPings") == null)
-                opts.setProperty("i2p.streaming.answerPings", "false");
-            if (opts.getProperty(I2PClient.PROP_SIGTYPE) == null)
-                opts.setProperty(I2PClient.PROP_SIGTYPE, "EdDSA_SHA512_Ed25519");
-            if (opts.getProperty("i2cp.leaseSetEncType") == null)
-                opts.setProperty("i2cp.leaseSetEncType", "4");
-            // assume compressed content
-            if (opts.getProperty(I2PClient.PROP_GZIP) == null)
-                opts.setProperty(I2PClient.PROP_GZIP, "false");
+            if (opts.containsKey("inbound.backupQuantity")) {opts.setProperty("inbound.backupQuantity", "0");}
+            if (opts.containsKey("outbound.backupQuantity")) {opts.setProperty("outbound.backupQuantity", "0");}
+            if (opts.getProperty("inbound.nickname") == null) {opts.setProperty("inbound.nickname", _baseName.replace("i2psnark", "I2PSnark"));}
+            if (opts.getProperty("outbound.nickname") == null) {opts.setProperty("outbound.nickname", _baseName.replace("i2psnark", "I2PSnark"));}
+            if (opts.getProperty("inbound.lengthVariance") == null || !getVaryInboundHops()) {opts.setProperty("inbound.lengthVariance", "0");}
+            else if (getVaryInboundHops()) {opts.setProperty("inbound.lengthVariance", "1");}
+            if (opts.getProperty("outbound.lengthVariance") == null || !getVaryInboundHops()) {opts.setProperty("outbound.lengthVariance", "0");}
+            else if (getVaryOutboundHops()) {opts.setProperty("outbound.lengthVariance", "1");}
+            if (opts.getProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT) == null) {opts.setProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT, "300000");} // 5 minutes
+            if (opts.getProperty("i2p.streaming.inactivityTimeout") == null) {opts.setProperty("i2p.streaming.inactivityTimeout", "180000");} // 3 minute idle time before disconnect
+            if (opts.getProperty("i2p.streaming.inactivityAction") == null) {opts.setProperty("i2p.streaming.inactivityAction", "1");} // 1 == disconnect, 2 == ping
+            if (opts.getProperty("i2p.streaming.initialWindowSize") == null) {opts.setProperty("i2p.streaming.initialWindowSize", "1");}
+            if (opts.getProperty("i2p.streaming.slowStartGrowthRateFactor") == null) {opts.setProperty("i2p.streaming.slowStartGrowthRateFactor", "1");}
+            if (opts.getProperty("i2p.streaming.maxConnsPerMinute") == null) {opts.setProperty("i2p.streaming.maxConnsPerMinute", "16");} // per peer max incoming connections
+            if (opts.getProperty("i2p.streaming.maxTotalConnsPerMinute") == null) {opts.setProperty("i2p.streaming.maxTotalConnsPerMinute", "1024");} // total incoming connections
+            if (opts.getProperty("i2p.streaming.maxConnsPerHour") == null) {opts.setProperty("i2p.streaming.maxConnsPerHour", "256");} // per peer max incoming connections
+            if (opts.getProperty("i2p.streaming.enforceProtocol") == null) {opts.setProperty("i2p.streaming.enforceProtocol", "true");}
+            if (opts.getProperty("i2p.streaming.disableRejectLogging") == null) {opts.setProperty("i2p.streaming.disableRejectLogging", "false");}
+            if (opts.getProperty("i2p.streaming.answerPings") == null) {opts.setProperty("i2p.streaming.answerPings", "false");}
+            if (opts.getProperty(I2PClient.PROP_SIGTYPE) == null) {opts.setProperty(I2PClient.PROP_SIGTYPE, "EdDSA_SHA512_Ed25519");}
+            if (opts.getProperty("i2cp.leaseSetEncType") == null) {opts.setProperty("i2cp.leaseSetEncType", "4");}
+            if (opts.getProperty(I2PClient.PROP_GZIP) == null) {opts.setProperty(I2PClient.PROP_GZIP, "false");} // assume compressed content
             _manager = I2PSocketManagerFactory.createManager(_i2cpHost, _i2cpPort, opts);
             if (_manager != null) {
                 _startedTime = _context.clock().now();
-                if (_discon != null)
-                    _manager.addDisconnectListener(this);
+                if (_discon != null) {_manager.addDisconnectListener(this);}
             }
             _connecting = false;
         }
-        if (_shouldUseDHT && _manager != null && _dht == null)
-            _dht = new KRPC(_context, _baseName, _manager.getSession());
+        if (_shouldUseDHT && _manager != null && _dht == null) {_dht = new KRPC(_context, _baseName, _manager.getSession());}
         return (_manager != null);
     }
 
@@ -385,29 +326,26 @@ public class I2PSnarkUtil implements DisconnectListener {
                 _dht = null;
             }
         }
-        if (_discon != null)
-            _discon.sessionDisconnected();
+        if (_discon != null) {_discon.sessionDisconnected();}
     }
 
     /**
      * @return null if disabled or not started
      * @since 0.8.4
      */
-    public DHT getDHT() { return _dht; }
+    public DHT getDHT() {return _dht;}
 
-    public boolean connected() { return _manager != null; }
+    public boolean connected() {return _manager != null;}
 
     /** @since 0.9.1 */
-    public boolean isConnecting() { return _manager == null && _connecting; }
+    public boolean isConnecting() {return _manager == null && _connecting;}
 
     /**
      *  For FetchAndAdd
      *  @return null if not connected
      *  @since 0.9.1
      */
-    public I2PSocketManager getSocketManager() {
-        return _manager;
-    }
+    public I2PSocketManager getSocketManager() {return _manager;}
 
     /**
      * Destroy the destination itself
@@ -423,8 +361,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         _manager = null;
         _banlist.clear();
         if (mgr != null) {
-            if (_log.shouldDebug())
-                _log.debug("Disconnecting from I2P...", new Exception("I did it"));
+            if (_log.shouldDebug()) {_log.debug("Disconnecting from I2P...", new Exception("I did it"));}
             mgr.destroySocketManager();
         }
         // this will delete a .torrent file d/l in progress so don't do that...
@@ -439,33 +376,25 @@ public class I2PSnarkUtil implements DisconnectListener {
      * @return 0 if not connected
      * @since 0.9.30
      */
-    public long getStartedTime() {
-        return _startedTime;
-    }
+    public long getStartedTime() {return _startedTime;}
 
     /** connect to the given destination */
     I2PSocket connect(PeerID peer) throws IOException {
         I2PSocketManager mgr = _manager;
-        if (mgr == null)
-            throw new IOException("No socket manager");
+        if (mgr == null) {throw new IOException("No socket manager");}
         Destination addr = peer.getAddress();
-        if (addr == null)
-            throw new IOException("Null address");
-        if (addr.equals(getMyDestination()))
-            throw new IOException("Attempt to connect to myself");
+        if (addr == null) {throw new IOException("Null address");}
+        if (addr.equals(getMyDestination())) {throw new IOException("Attempt to connect to myself");}
         Hash dest = addr.calculateHash();
-        if (_banlist.contains(dest))
-            throw new IOException("Not trying to contact banlisted peer [" + dest.toBase64().substring(0,6) + "]");
+        if (_banlist.contains(dest)) {throw new IOException("Not trying to contact banlisted peer [" + dest.toBase64().substring(0,6) + "]");}
         try {
             // TODO opts.setPort(xxx); connect(addr, opts)
             // DHT moved above 6881 in 0.9.9
             I2PSocket rv = _manager.connect(addr);
-            if (rv != null)
-                _banlist.remove(dest);
+            if (rv != null) {_banlist.remove(dest);}
             return rv;
         } catch (I2PException ie) {
             _banlist.add(dest);
-//            _context.simpleTimer2().addEvent(new Unbanlist(dest), 10*60*1000);
             _context.simpleTimer2().addEvent(new Unbanlist(dest), 15*60*1000);
             IOException ioe = new IOException("Unable to reach peer [" + peer + "]");
             ioe.initCause(ie);
@@ -475,25 +404,25 @@ public class I2PSnarkUtil implements DisconnectListener {
 
     private class Unbanlist implements SimpleTimer.TimedEvent {
         private Hash _dest;
-        public Unbanlist(Hash dest) { _dest = dest; }
-        public void timeReached() { _banlist.remove(_dest); }
+        public Unbanlist(Hash dest) {_dest = dest;}
+        public void timeReached() {_banlist.remove(_dest);}
     }
 
     /**
      * Fetch the given URL, returning the file it is stored in, or null on error.
      * No retries.
      */
-    public File get(String url) { return get(url, true, 0); }
+    public File get(String url) {return get(url, true, 0);}
 
     /**
      * @param rewrite if true, convert http://KEY.i2p/foo/announce to http://i2p/KEY/foo/announce
      */
-    public File get(String url, boolean rewrite) { return get(url, rewrite, 0); }
+    public File get(String url, boolean rewrite) {return get(url, rewrite, 0);}
 
     /**
      * @param retries if &gt; 0, set timeout to a few seconds
      */
-    public File get(String url, int retries) { return get(url, true, retries); }
+    public File get(String url, int retries) {return get(url, true, retries);}
 
     /**
      * @param retries if &gt; 0, set timeout to a few seconds
@@ -513,23 +442,19 @@ public class I2PSnarkUtil implements DisconnectListener {
         }
         out.deleteOnExit();
         String fetchURL = url;
-        if (rewrite)
-            fetchURL = rewriteAnnounce(url);
+        if (rewrite) {fetchURL = rewriteAnnounce(url);}
         //_log.debug("Rewritten url [" + fetchURL + "]");
         //EepGet get = new EepGet(_context, _shouldProxy, _proxyHost, _proxyPort, retries, out.getAbsolutePath(), fetchURL);
         // Use our tunnel for announces and .torrent fetches too! Make sure we're connected first...
         int timeout;
         if (retries < 0) {
-            if (!connected())
-                return null;
+            if (!connected()) {return null;}
             timeout = EEPGET_CONNECT_TIMEOUT_SHORT;
-//            retries = 0;
             retries = 10;
         } else {
             timeout = EEPGET_CONNECT_TIMEOUT;
             if (!connected()) {
-                if (!connect())
-                    return null;
+                if (!connect()) {return null;}
             }
         }
         EepGet get = new I2PSocketEepGet(_context, _manager, retries, out.getAbsolutePath(), fetchURL);
@@ -563,22 +488,18 @@ public class I2PSnarkUtil implements DisconnectListener {
      * @since 0.9.4
      */
     public byte[] get(String url, boolean rewrite, int retries, int initialSize, int maxSize) {
-        if (_log.shouldDebug())
-            _log.debug("Fetching [" + url + "] to memory");
+        if (_log.shouldDebug()) {_log.debug("Fetching [" + url + "] to memory");}
         String fetchURL = url;
-        if (rewrite)
-            fetchURL = rewriteAnnounce(url);
+        if (rewrite) {fetchURL = rewriteAnnounce(url);}
         int timeout;
         if (retries < 0) {
-            if (!connected())
-                return null;
+            if (!connected()) {return null;}
             timeout = EEPGET_CONNECT_TIMEOUT_SHORT;
             retries = 0;
         } else {
             timeout = EEPGET_CONNECT_TIMEOUT;
             if (!connected()) {
-                if (!connect())
-                    return null;
+                if (!connect()) {return null;}
             }
         }
         ByteArrayOutputStream out = new ByteArrayOutputStream(initialSize);
@@ -605,10 +526,8 @@ public class I2PSnarkUtil implements DisconnectListener {
 
     public I2PServerSocket getServerSocket() {
         I2PSocketManager mgr = _manager;
-        if (mgr != null)
-            return mgr.getServerSocket();
-        else
-            return null;
+        if (mgr != null) {return mgr.getServerSocket();}
+        else {return null;}
     }
 
     /**
@@ -616,8 +535,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      */
     public String getOurIPString() {
         Destination dest = getMyDestination();
-        if (dest != null)
-            return dest.toBase64();
+        if (dest != null) {return dest.toBase64();}
         return "unknown";
     }
 
@@ -626,31 +544,22 @@ public class I2PSnarkUtil implements DisconnectListener {
      *  @since 0.8.4
      */
     Destination getMyDestination() {
-        if (_manager == null)
-            return null;
+        if (_manager == null) {return null;}
         I2PSession sess = _manager.getSession();
-        if (sess != null)
-            return sess.getMyDestination();
+        if (sess != null) {return sess.getMyDestination();}
         return null;
     }
 
     /** Base64 only - static (no naming service) */
     static Destination getDestinationFromBase64(String ip) {
-        if (ip == null) return null;
+        if (ip == null) {return null;}
         if (ip.endsWith(".i2p")) {
-            if (ip.length() < 520)
-                    return null;
-            try {
-                return new Destination(ip.substring(0, ip.length()-4)); // sans .i2p
-            } catch (DataFormatException dfe) {
-                return null;
-            }
+            if (ip.length() < 520) {return null;}
+            try {return new Destination(ip.substring(0, ip.length()-4));} // sans .i2p
+            catch (DataFormatException dfe) {return null;}
         } else {
-            try {
-                return new Destination(ip);
-            } catch (DataFormatException dfe) {
-                return null;
-            }
+            try {return new Destination(ip);}
+            catch (DataFormatException dfe) {return null;}
         }
     }
 
@@ -660,7 +569,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     Destination getDestination(String ip) {
         if (ip == null) return null;
         if (ip.endsWith(".i2p")) {
-            if (ip.length() < 520) {   // key + ".i2p"
+            if (ip.length() < 520) {  // key + ".i2p"
                 if (_manager != null && ip.length() == BASE32_HASH_LENGTH + 8 && ip.endsWith(".b32.i2p")) {
                     // Use existing I2PSession for b32 lookups if we have it
                     // This is much more efficient than using the naming service
@@ -672,39 +581,27 @@ public class I2PSnarkUtil implements DisconnectListener {
                             Hash h = Hash.create(b);
                             if (_log.shouldDebug())
                                 _log.debug("Using existing session for lookup of [" + ip + "]");
-                            try {
-                                return sess.lookupDest(h, 15*1000);
-                            } catch (I2PSessionException ise) {
-                            }
+                            try {return sess.lookupDest(h, 15*1000);}
+                            catch (I2PSessionException ise) {}
                         }
                     }
                 }
-                if (_log.shouldDebug())
-                    _log.debug("Using naming service for lookup of [" + ip + "]");
+                if (_log.shouldDebug()) {_log.debug("Using naming service for lookup of [" + ip + "]");}
                 return _context.namingService().lookup(ip);
             }
-            if (_log.shouldDebug())
-                _log.debug("Creating Destination for [" + ip + "]");
-            try {
-                return new Destination(ip.substring(0, ip.length()-4)); // sans .i2p
-            } catch (DataFormatException dfe) {
-                return null;
-            }
+            if (_log.shouldDebug()) {_log.debug("Creating Destination for [" + ip + "]");}
+            try {return new Destination(ip.substring(0, ip.length()-4));} // sans .i2p
+            catch (DataFormatException dfe) {return null;}
         } else {
-            if (_log.shouldDebug())
-                _log.debug("Creating Destination for [" + ip + "]");
-            try {
-                return new Destination(ip);
-            } catch (DataFormatException dfe) {
-                return null;
-            }
+            if (_log.shouldDebug()) {_log.debug("Creating Destination for [" + ip + "]");}
+            try {return new Destination(ip);}
+            catch (DataFormatException dfe) {return null;}
         }
     }
 
     public String lookup(String name) {
         Destination dest = getDestination(name);
-    if (dest == null)
-            return null;
+        if (dest == null) {return null;}
         return dest.toBase64();
     }
 
@@ -715,8 +612,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     String rewriteAnnounce(String origAnnounce) {
         int destStart = "http://".length();
         int destEnd = origAnnounce.indexOf(".i2p");
-        if (destEnd < destStart + 516)
-            return origAnnounce;
+        if (destEnd < destStart + 516) {return origAnnounce;}
         int pathStart = origAnnounce.indexOf('/', destEnd);
         String rv = "http://i2p/" + origAnnounce.substring(destStart, destEnd) + origAnnounce.substring(pathStart);
         //_log.debug("Rewriting [" + origAnnounce + "] as [" + rv + "]");
@@ -732,8 +628,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      *  @return non-null, possibly unmodifiable, empty if disabled
      */
     public List<String> getOpenTrackers() {
-        if (!shouldUseOpenTrackers())
-            return Collections.emptyList();
+        if (!shouldUseOpenTrackers()) {return Collections.emptyList();}
         return _openTrackers;
     }
 
@@ -747,9 +642,7 @@ public class I2PSnarkUtil implements DisconnectListener {
            URI u = new URI(url);
            String host = u.getHost();
            return host != null && SnarkManager.KNOWN_OPENTRACKERS.contains(host);
-        } catch (URISyntaxException use) {
-           return false;
-        }
+        } catch (URISyntaxException use) {return false;}
     }
 
     /**
@@ -863,6 +756,26 @@ public class I2PSnarkUtil implements DisconnectListener {
         _enableAddCreate = yes;
     }
 
+    /** @since 0.9.64+ */
+    public boolean enableVaryInboundHops() {
+        return _varyInboundHops;
+    }
+
+    /** @since 0.9.64+ */
+    public boolean enableVaryOutboundHops() {
+        return _varyOutboundHops;
+    }
+
+    /** @since 0.9.64+ */
+    public void setEnableVaryInboundHops(boolean yes) {
+        _varyInboundHops = yes;
+    }
+
+    /** @since 0.9.64+ */
+    public void setEnableVaryOutboundHops(boolean yes) {
+        _varyOutboundHops = yes;
+    }
+
     /**
      *  Like DataHelper.toHexString but ensures no loss of leading zero bytes
      *  @since 0.8.4
@@ -938,7 +851,7 @@ public class I2PSnarkUtil implements DisconnectListener {
                 props.setProperty(key, val);
             }
         } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
+            if (in != null) try {in.close();} catch (IOException ioe) {}
         }
     }
 
@@ -991,7 +904,7 @@ public class I2PSnarkUtil implements DisconnectListener {
                 throw new IOException("Failed rename from " + tmpFile + " to " + file);
         } finally {
             if (out != null) out.close();
-            if (fos != null) try { fos.close(); } catch (IOException e) {}
+            if (fos != null) try {fos.close();} catch (IOException e) {}
         }
         if (ioe != null)
             throw ioe;

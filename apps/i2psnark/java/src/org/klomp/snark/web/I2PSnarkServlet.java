@@ -1983,10 +1983,12 @@ public class I2PSnarkServlet extends BasicServlet {
             boolean showStatusFilter = req.getParameter("showStatusFilter") != null;
             boolean enableLightbox = req.getParameter("enableLightbox") != null;
             boolean enableAddCreate = req.getParameter("enableAddCreate") != null;
-            _manager.updateConfig(dataDir, filesPublic, autoStart, smartSort, refreshDel, startupDel, pageSize,
-                                  seedPct, eepHost, eepPort, i2cpHost, i2cpPort, i2cpOpts,
-                                  upLimit, upBW, downBW, useOpenTrackers, useDHT, theme,
-                                  lang, ratings, comments, commentsName, collapsePanels, showStatusFilter, enableLightbox, enableAddCreate);
+            boolean enableVaryInboundHops = req.getParameter("varyInbound") != null;
+            boolean enableVaryOutboundHops = req.getParameter("varyOutbound") != null;
+            _manager.updateConfig(dataDir, filesPublic, autoStart, smartSort, refreshDel, startupDel, pageSize, seedPct, eepHost, eepPort,
+                                  i2cpHost, i2cpPort, i2cpOpts, upLimit, upBW, downBW, useOpenTrackers, useDHT, theme, lang, ratings, comments,
+                                  commentsName, collapsePanels, showStatusFilter, enableLightbox, enableAddCreate, enableVaryInboundHops,
+                                  enableVaryOutboundHops);
             // update servlet
             try {
                 setResourceBase(_manager.getDataDir());
@@ -2101,16 +2103,11 @@ public class I2PSnarkServlet extends BasicServlet {
                         String[] filters = req.getParameterValues("filters");
                         List<TorrentCreateFilter> filterList = new ArrayList<TorrentCreateFilter>();
                         Map<String, TorrentCreateFilter> torrentCreateFilters = _manager.getTorrentCreateFilterMap();
-
-                        if (filters == null) {
-                            filters = new String[0];
-                        }
-
+                        if (filters == null) {filters = new String[0];}
                         for (int i = 0; i < filters.length; i++) {
                             TorrentCreateFilter filter = torrentCreateFilters.get(filters[i]);
                             filterList.add(filter);
                         }
-
                         Storage s = new Storage(_manager.util(), baseFile, announceURL, announceList, null, isPrivate, null, filterList);
                         s.close(); // close the files... maybe need a way to pass this Storage to addTorrent rather than starting over
                         MetaInfo info = s.getMetaInfo();
@@ -2118,15 +2115,12 @@ public class I2PSnarkServlet extends BasicServlet {
                         // FIXME is the storage going to stay around thanks to the info reference?
                         // now add it, but don't automatically start it
                         boolean ok = _manager.addTorrent(info, s.getBitField(), torrentFile.getAbsolutePath(), baseFile, true);
-                        if (!ok)
-                            return;
+                        if (!ok) {return;}
                         List<String> filesExcluded = s.getExcludedFiles(_manager.getDataDir());
                         if (_log.shouldInfo() && filesExcluded.size() > 0) {
                             String msg = filesExcluded.size() + " excluded from \"" + baseFile.getName() + "\" due to filter rules [" + String.join(", ", filesExcluded) + "]";
                             _log.info("[I2PSnark] " + msg);
-                            if (!_context.isRouterContext()) {
-                                System.out.println(" • " + msg);
-                            }
+                            if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                         }
                         if (filesExcluded.size() > 5) {
                             _manager.addMessage(filesExcluded.size() + _t(" files or folders were excluded from \"{0}\" due to filter rules.", baseFile.getName()));
@@ -3352,7 +3346,6 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean autoStart = _manager.shouldAutoStart();
         boolean smartSort = _manager.isSmartSortEnabled();
         boolean useOpenTrackers = _manager.util().shouldUseOpenTrackers();
-        //String openTrackers = _manager.util().getOpenTrackerString();
         boolean useDHT = _manager.util().shouldUseDHT();
         boolean useRatings = _manager.util().ratingsEnabled();
         boolean useComments = _manager.util().commentsEnabled();
@@ -3360,11 +3353,13 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean showStatusFilter = _manager.util().showStatusFilter();
         boolean enableLightbox = _manager.util().enableLightbox();
         boolean enableAddCreate = _manager.util().enableAddCreate();
+        boolean noCollapse = noCollapsePanels(req);
+        boolean varyInbound = _manager.util().enableVaryInboundHops();
+        boolean varyOutbound = _manager.util().enableVaryOutboundHops();
+        //String openTrackers = _manager.util().getOpenTrackerString();
         //int seedPct = 0;
 
-        boolean noCollapse = noCollapsePanels(req);
-
-// configuration
+/* configuration */
 
         StringBuilder buf = new StringBuilder(16*1024);
         buf.append("<form action=\"").append(_contextPath).append("/configure\" method=POST>")
@@ -3375,7 +3370,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("</span><hr>\n")
            .append("<table border=0 id=configs>\n");
 
-// user interface
+/* user interface */
 
         buf.append("<tr><th class=suboption>")
            .append(_t("User Interface"));
@@ -3477,7 +3472,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<span class=configOption><label for=\"smartSort\"><b>")
            .append(_t("Smart torrent sorting"))
            .append("</b> </label><input type=checkbox class=\"optbox slider\" ")
-           .append("name=smartSort id=smartSort value=true ")
+           .append("name=smartSort id=smartSort ")
            .append((smartSort ? "checked " : ""))
            .append("title=\"")
            .append(_t("Ignore words such as 'a' and 'the' when sorting"))
@@ -3485,7 +3480,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<span class=configOption><label for=\"collapsePanels\"><b>")
            .append(_t("Collapsible panels"))
            .append("</b> </label><input type=checkbox class=\"optbox slider\" ")
-           .append("name=collapsePanels id=collapsePanels value=true ")
+           .append("name=collapsePanels id=collapsePanels ")
            .append((collapsePanels ? "checked " : ""))
            .append("title=\"");
         if (noCollapse) {
@@ -3500,7 +3495,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<span class=configOption><label for=\"showStatusFilter\"><b>")
            .append(_t("Torrent filter bar"))
            .append("</b> </label><input type=checkbox class=\"optbox slider\" ")
-           .append("name=showStatusFilter id=showStatusFilter value=true ")
+           .append("name=showStatusFilter id=showStatusFilter ")
            .append((showStatusFilter ? "checked " : ""))
            .append("title=\"")
            .append(_t("Show filter bar above torrents for selective display based on status"))
@@ -3509,7 +3504,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<span class=configOption><label for=\"enableLightbox\"><b>")
            .append(_t("Enable lightbox"))
            .append("</b> </label><input type=checkbox class=\"optbox slider\" ")
-           .append("name=enableLightbox id=enableLightbox value=true ")
+           .append("name=enableLightbox id=enableLightbox ")
            .append((enableLightbox ? "checked " : ""))
            .append("title=\"")
            .append(_t("Use a lightbox to display images when thumbnails are clicked"))
@@ -3518,28 +3513,28 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<span class=configOption><label for=\"enableAddCreate\"><b>")
            .append(_t("Persist Add/Create"))
            .append("</b> </label><input type=checkbox class=\"optbox slider\" ")
-           .append("name=enableAddCreate id=enableAddCreate value=true ")
+           .append("name=enableAddCreate id=enableAddCreate ")
            .append((enableAddCreate ? "checked " : ""))
            .append("title=\"")
            .append(_t("Display the 'Add' and 'Create' sections on all torrent listing pages when in multipage mode"))
            .append("\"></span><br>\n")
            .append("</div>\n</td></tr>\n");
 
-// comments/ratings
+/* comments/ratings */
 
         buf.append("<tr><th class=suboption>")
            .append(_t("Comments &amp; Ratings"))
            .append("</th></tr>\n<tr><td>\n<div class=optionlist>\n")
            .append("<span class=configOption><label for=\"ratings\"><b>")
            .append(_t("Enable Ratings"))
-           .append("</b></label> <input type=checkbox class=\"optbox slider\" name=ratings id=ratings value=true ")
+           .append("</b></label> <input type=checkbox class=\"optbox slider\" name=ratings id=ratings ")
            .append(useRatings ? "checked " : "")
            .append("title=\"")
            .append(_t("Show ratings on torrent pages"))
            .append("\" ></span><br>\n")
            .append("<span class=configOption><label for=\"comments\"><b>")
            .append(_t("Enable Comments"))
-           .append("</b></label> <input type=checkbox class=\"optbox slider\" name=comments id=comments value=true ")
+           .append("</b></label> <input type=checkbox class=\"optbox slider\" name=comments id=comments ")
            .append(useComments ? "checked " : "")
            .append("title=\"")
            .append(_t("Show comments on torrent pages"))
@@ -3552,7 +3547,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("\" ></label></span>\n")
            .append("</div>\n</td></tr>\n");
 
-// torrent options
+/* torrent options */
 
         buf.append("<tr><th class=suboption>")
            .append(_t("Torrent Options"))
@@ -3586,21 +3581,21 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("</label></span><br>\n")
            .append("<span class=configOption><label for=\"useOpenTrackers\"><b>")
            .append(_t("Use open trackers also").replace(" also", ""))
-           .append("</b></label> <input type=checkbox class=\"optbox slider\" name=useOpenTrackers id=useOpenTrackers value=true ")
+           .append("</b></label> <input type=checkbox class=\"optbox slider\" name=useOpenTrackers id=useOpenTrackers ")
            .append(useOpenTrackers ? "checked " : "")
            .append("title=\"")
            .append(_t("Announce torrents to open trackers as well as trackers listed in the torrent file"))
            .append("\"></span><br>\n")
            .append("<span class=configOption><label for=\"useDHT\"><b>")
            .append(_t("Enable DHT"))
-           .append("</b></label> <input type=checkbox class=\"optbox slider\" name=useDHT id=useDHT value=true ")
+           .append("</b></label> <input type=checkbox class=\"optbox slider\" name=useDHT id=useDHT ")
            .append(useDHT ? "checked " : "")
            .append("title=\"")
            .append(_t("Use DHT to find additional peers"))
            .append("\"></span><br>\n")
            .append("<span class=configOption><label for=\"autoStart\"><b>")
            .append(_t("Auto start torrents"))
-           .append("</b> </label><input type=checkbox class=\"optbox slider\" name=autoStart id=autoStart value=true ")
+           .append("</b> </label><input type=checkbox class=\"optbox slider\" name=autoStart id=autoStart ")
            .append(autoStart ? "checked " : "")
            .append("title=\"")
            .append(_t("Automatically start torrents when added and restart torrents when I2PSnark starts"))
@@ -3618,7 +3613,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         buf.append("\n</div>\n</td></tr>\n");
 
-// data storage
+/* data storage */
 
         buf.append("<tr><th class=suboption>")
            .append(_t("Data Storage"))
@@ -3630,7 +3625,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("\" value=\"").append(DataHelper.escapeHTML(dataDir)).append("\" spellcheck=false></label></span><br>\n")
            .append("<span class=configOption><label for=\"filesPublic\"><b>")
            .append(_t("Files readable by all"))
-           .append("</b> </label><input type=checkbox class=\"optbox slider\" name=filesPublic id=filesPublic value=true ")
+           .append("</b> </label><input type=checkbox class=\"optbox slider\" name=filesPublic id=filesPublic ")
            .append(filesPublic ? "checked " : "").append("title=\"")
            .append(_t("Set file permissions to allow other local users to access the downloaded files"))
            .append("\" ></span>\n")
@@ -3641,7 +3636,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("\" value=\"" + _manager.getMaxFilesPerTorrent() + "\" spellcheck=false disabled></label></span><br>\n")
            .append("</div></td></tr>\n");
 
-// i2cp/tunnel configuration
+/* i2cp/tunnel configuration */
 
         buf.append("<tr><th class=suboption>")
            .append(_t("Tunnel Configuration"))
@@ -3662,7 +3657,17 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(renderOptions(1, 16, SnarkManager.DEFAULT_TUNNEL_QUANTITY, options.remove("outbound.quantity"), "outbound.quantity", TUNNEL))
            .append("&nbsp;")
            .append(renderOptions(0, 6, 3, options.remove("outbound.length"), "outbound.length", HOP))
-           .append("</span><br>\n");
+           .append("</span><br>\n")
+           .append("<span class=configOption id=hopVariance><b>")
+           .append(_t("Hop Variance"))
+           .append("</b> \n")
+           .append("<label title=\"").append(_t("Add 0 or 1 additional hops randomly to Inbound tunnels")).append("\">")
+           .append("<input type=checkbox class=\"optbox slider\" name=varyInbound id=varyInbound ")
+           .append(varyInbound ? "checked " : "").append("> <span>").append(_t("Inbound")).append("</span></label>")
+           .append("<label title=\"").append(_t("Add 0 or 1 additional hops randomly to Outbound tunnels")).append("\">")
+           .append("<input type=checkbox class=\"optbox slider\" name=varyOutbound id=varyOutbound ")
+           .append(varyInbound ? "checked " : "").append("> <span>").append(_t("Outbound")).append("</span></label>")
+           .append("</span><br>");
 
         if (!_context.isRouterContext()) {
             buf.append("<span class=configOption><label><b>")
@@ -3684,14 +3689,14 @@ public class I2PSnarkServlet extends BasicServlet {
             String val = e.getValue();
             opts.append(key).append('=').append(val).append(' ');
         }
-        buf.append("<span class=configOption><label><b>")
+        buf.append("<span class=configOption id=i2cpOptions><label><b>")
            .append(_t("I2CP options"))
            .append("</b> <input type=text name=i2cpOpts value=\"")
            .append(opts.toString()).append("\" size=60></label></span>\n")
            .append("</div>\n</td></tr>\n")
            .append("<tr class=spacer><td></td></tr>\n");  // spacer
 
-// save config
+/* save config */
 
         buf.append("<tr><td><input type=submit class=accept value=\"")
            .append(_t("Save configuration"))
@@ -3769,21 +3774,15 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<div class=configPanel id=trackers><div class=snarkConfig>\n");
         writeHiddenInputs(buf, req, "Save2");
         buf.append("<span class=configTitle>").append(_t("Trackers")).append("</span><hr>\n")
-           .append("<table id=trackerconfig><tr><th title=\"")
-           .append(_t("Select trackers for removal from I2PSnark's known list"))
-           .append("\"></th><th>")
-           .append(_t("Name"))
-           .append("</th><th>")
-           .append(_t("Website URL"))
-           .append("</th><th>")
-           .append(_t("Standard"))
-           .append("</th><th>")
-           .append(_t("Open"))
-           .append("</th><th>")
-           .append(_t("Private"))
-           .append("</th><th>")
-           .append(_t("Announce URL"))
-           .append("</th></tr>\n");
+           .append("<table id=trackerconfig>\n<tr>")
+           .append("<th title=\"").append(_t("Select trackers for removal from I2PSnark's known list")).append("\"></th>")
+           .append("<th>").append(_t("Name")).append("</th>")
+           .append("<th>").append(_t("Website URL")).append("</th>")
+           .append("<th>").append(_t("Standard")).append("</th>")
+           .append("<th>").append(_t("Open")).append("</th>")
+           .append("<th>").append(_t("Private")).append("</th>")
+           .append("<th>").append(_t("Announce URL")).append("</th>")
+           .append("</tr>\n");
         List<String> openTrackers = _manager.util().getOpenTrackers();
         List<String> privateTrackers = _manager.getPrivateTrackers();
         for (Tracker t : _manager.getSortedTrackers()) {

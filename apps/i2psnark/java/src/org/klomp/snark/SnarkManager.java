@@ -181,9 +181,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private static final String PROP_COMMENTS_NAME = "i2psnark.commentsName";
     /** @since 0.9.58 */
     public static final String PROP_MAX_FILES_PER_TORRENT = "i2psnark.maxFilesPerTorrent";
-
     /** @since 0.9.61+ */
     public static final String PROP_MAX_MESSAGES = "i2psnark.maxLogMessages";
+    /** @since 0.9.64+ */
+    public static final String PROP_VARY_INBOUND_HOPS = "i2psnark.varyInboundHops";
+    public static final String PROP_VARY_OUTBOUND_HOPS = "i2psnark.varyOutboundHops";
 
     public static final int MIN_UP_BW = 30;
     public static final int MIN_DOWN_BW = 2 * MIN_UP_BW;
@@ -583,13 +585,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     *  @return default true
+     *  @return default false
      *  @since 0.9.23
      */
     public boolean isSmartSortEnabled() {
         String val = _config.getProperty(PROP_SMART_SORT);
-        if (val == null)
-            return false;
+        if (val == null) {return false;}
         return Boolean.parseBoolean(val);
     }
 
@@ -599,8 +600,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public boolean isCollapsePanelsEnabled() {
         String val = _config.getProperty(PROP_COLLAPSE_PANELS);
-        if (val == null)
-            return I2PSnarkUtil.DEFAULT_COLLAPSE_PANELS;
+        if (val == null) {return I2PSnarkUtil.DEFAULT_COLLAPSE_PANELS;}
         return Boolean.parseBoolean(val);
     }
 
@@ -610,8 +610,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public boolean isShowStatusFilter() {
         String val = _config.getProperty(PROP_SHOW_STATUSFILTER);
-        if (val == null)
-            return I2PSnarkUtil.DEFAULT_SHOW_STATUSFILTER;
+        if (val == null) {return I2PSnarkUtil.DEFAULT_SHOW_STATUSFILTER;}
         return Boolean.parseBoolean(val);
     }
 
@@ -621,50 +620,53 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public boolean isEnableLightbox() {
         String val = _config.getProperty(PROP_ENABLE_LIGHTBOX);
-        if (val == null)
-            return I2PSnarkUtil.DEFAULT_ENABLE_LIGHTBOX;
+        if (val == null) {return I2PSnarkUtil.DEFAULT_ENABLE_LIGHTBOX;}
         return Boolean.parseBoolean(val);
     }
 
-/****
-    public String linkPrefix() {
-        return _config.getProperty(PROP_LINK_PREFIX, DEFAULT_LINK_PREFIX + getDataDir().getAbsolutePath() + File.separatorChar);
+    /**
+     *  @return default false
+     *  @since 0.9.64+
+     */
+    public boolean isVaryInboundHops() {
+        String val = _config.getProperty(PROP_VARY_INBOUND_HOPS);
+        if (val == null) {return I2PSnarkUtil.DEFAULT_VARY_INBOUND_HOPS;}
+        return Boolean.parseBoolean(val);
     }
-****/
+
+    /**
+     *  @return default false
+     *  @since 0.9.64+
+     */
+    public boolean isVaryOutboundHops() {
+        String val = _config.getProperty(PROP_VARY_OUTBOUND_HOPS);
+        if (val == null) {return I2PSnarkUtil.DEFAULT_VARY_OUTBOUND_HOPS;}
+        return Boolean.parseBoolean(val);
+    }
 
     /**
      *  @return -1 for never
      *  @since 0.8.9
      */
     public int getRefreshDelaySeconds() {
-        try {
-            return Integer.parseInt(_config.getProperty(PROP_REFRESH_DELAY));
-        } catch (NumberFormatException nfe) {
-            return DEFAULT_REFRESH_DELAY_SECS;
-        }
+        try {return Integer.parseInt(_config.getProperty(PROP_REFRESH_DELAY));}
+        catch (NumberFormatException nfe) {return DEFAULT_REFRESH_DELAY_SECS;}
     }
-
 
     /**
      *  @since 0.9.46 (I2P+)
      */
     public int getMaxFilesPerTorrent() {
-        try {
-            return Integer.parseInt(_config.getProperty(PROP_MAX_FILES_PER_TORRENT));
-        } catch (NumberFormatException nfe) {
-            return DEFAULT_MAX_FILES_PER_TORRENT;
-        }
+        try {return Integer.parseInt(_config.getProperty(PROP_MAX_FILES_PER_TORRENT));}
+        catch (NumberFormatException nfe) {return DEFAULT_MAX_FILES_PER_TORRENT;}
     }
 
     /**
      *  @since 0.9.61+ (I2P+)
      */
     public int getMaxLogMessages() {
-        try {
-            return Integer.parseInt(_config.getProperty(PROP_MAX_MESSAGES));
-        } catch (NumberFormatException nfe) {
-            return DEFAULT_MAX_MESSAGES;
-        }
+        try {return Integer.parseInt(_config.getProperty(PROP_MAX_MESSAGES));}
+        catch (NumberFormatException nfe) {return DEFAULT_MAX_MESSAGES;}
     }
 
     /**
@@ -672,35 +674,24 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      *  @since 0.9.6
      */
     public int getPageSize() {
-        try {
-            return Integer.parseInt(_config.getProperty(PROP_PAGE_SIZE));
-        } catch (NumberFormatException nfe) {
-            return DEFAULT_PAGE_SIZE;
-        }
+        try {return Integer.parseInt(_config.getProperty(PROP_PAGE_SIZE));}
+        catch (NumberFormatException nfe) {return DEFAULT_PAGE_SIZE;}
     }
 
     private int getStartupDelayMinutes() {
-        if (!_context.isRouterContext())
-            return 0;
-        try {
-            return Integer.parseInt(_config.getProperty(PROP_STARTUP_DELAY));
-        } catch (NumberFormatException nfe) {
-            return DEFAULT_STARTUP_DELAY;
-        }
+        if (!_context.isRouterContext()) {return 0;}
+        try {return Integer.parseInt(_config.getProperty(PROP_STARTUP_DELAY));}
+        catch (NumberFormatException nfe) {return DEFAULT_STARTUP_DELAY;}
     }
 
     public File getDataDir() {
         String dir = _config.getProperty(PROP_DIR, _contextName);
         File f;
-        if (areFilesPublic())
-            f = new File(dir);
-        else
-            f = new SecureDirectory(dir);
+        if (areFilesPublic()) {f = new File(dir);}
+        else {f = new SecureDirectory(dir);}
         if (!f.isAbsolute()) {
-            if (areFilesPublic())
-                f = new File(_context.getAppDir(), dir);
-            else
-                f = new SecureDirectory(_context.getAppDir(), dir);
+            if (areFilesPublic()) {f = new File(_context.getAppDir(), dir);}
+            else {f = new SecureDirectory(_context.getAppDir(), dir);}
         }
         return f;
     }
@@ -709,9 +700,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * For RPC
      * @since 0.9.30
      */
-    public File getConfigDir() {
-        return _configDir;
-    }
+    public File getConfigDir() {return _configDir;}
 
     /**
      *  Migrate the old flat config file to the new config dir
@@ -792,37 +781,31 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         for (Map.Entry<String, Properties> e : configs.entrySet()) {
             String b64 = e.getKey();
             Properties props = e.getValue();
-            if (props.isEmpty())
-                continue;
+            if (props.isEmpty()) {continue;}
             b64 = b64.replace('$', '=');
             byte[] ih = Base64.decode(b64);
-            if (ih == null || ih.length != 20)
-                continue;
+            if (ih == null || ih.length != 20) {continue;}
             File cfg = configFile(dir, ih);
             if (!cfg.exists()) {
                 File subdir = cfg.getParentFile();
-                if (!subdir.exists())
-                    subdir.mkdirs();
-                try {
-                    DataHelper.storeProps(props, cfg);
-                } catch (IOException ioe) {
-                    _log.error("Error storing I2PSnark config " + cfg, ioe);
-                }
+                if (!subdir.exists()) {subdir.mkdirs();}
+                try {DataHelper.storeProps(props, cfg);}
+                catch (IOException ioe) {_log.error("Error storing I2PSnark config " + cfg, ioe);}
             }
         }
         // now store in new location, minus the zmeta entries
         File newFile = new File(dir, CONFIG_FILE);
         Properties newProps = new OrderedProperties();
         newProps.putAll(oldProps);
-        try {
-            DataHelper.storeProps(newProps, newFile);
-        } catch (IOException ioe) {
+        try {DataHelper.storeProps(newProps, newFile);}
+        catch (IOException ioe) {
             _log.error("Error storing I2PSnark config " + newFile, ioe);
             return dir;
         }
         oldFile.delete();
-        if (_log.shouldWarn())
+        if (_log.shouldWarn()) {
             _log.warn("Legacy I2PSnark configuration file migrated from " + oldFile + " to " + dir);
+        }
         return dir;
     }
 
@@ -845,9 +828,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         Properties rv = new OrderedProperties();
         File conf = configFile(_configDir, ih);
         synchronized(_configLock) {  // one lock for all
-            try {
-                I2PSnarkUtil.loadProps(rv, conf);
-            } catch (IOException ioe) {}
+            try {I2PSnarkUtil.loadProps(rv, conf);}
+            catch (IOException ioe) {}
         }
         return rv;
     }
@@ -884,11 +866,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public CommentSet getSavedComments(Snark snark) {
         File com = commentFile(_configDir, snark.getInfoHash());
         if (com.exists()) {
-            try {
-                return new CommentSet(com);
-            } catch (IOException ioe) {
-                if (_log.shouldWarn())
+            try {return new CommentSet(com);}
+            catch (IOException ioe) {
+                if (_log.shouldWarn()) {
                     _log.warn("Comment load error", ioe);
+                }
             }
         }
         return null;
@@ -903,11 +885,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public void locked_saveComments(Snark snark, CommentSet comments) {
         File com = commentFile(_configDir, snark.getInfoHash());
-        try {
-            comments.save(com);
-        } catch (IOException ioe) {
-            if (_log.shouldWarn())
-                _log.warn("Comment save error", ioe);
+        try {comments.save(com);}
+        catch (IOException ioe) {
+            if (_log.shouldWarn()) {_log.warn("Comment save error", ioe);}
         }
     }
 
@@ -918,17 +898,16 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     private static SHA1Hash configFileToInfoHash(File file) {
         String name = file.getName();
-        if (name.length() != 40 + CONFIG_FILE_SUFFIX.length() || !name.endsWith(CONFIG_FILE_SUFFIX))
+        if (name.length() != 40 + CONFIG_FILE_SUFFIX.length() || !name.endsWith(CONFIG_FILE_SUFFIX)) {
             return null;
+        }
         String hex = name.substring(0, 40);
         byte[] ih = new byte[20];
         try {
             for (int i = 0; i < 20; i++) {
                 ih[i] = (byte) (Integer.parseInt(hex.substring(i*2, (i*2) + 2), 16) & 0xff);
             }
-        } catch (NumberFormatException nfe) {
-           return null;
-        }
+        } catch (NumberFormatException nfe) {return null;}
         return new SHA1Hash(ih);
     }
 
@@ -941,65 +920,38 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /** null to set initial defaults */
     private void locked_loadConfig(String filename) {
-        if (_config == null)
-            _config = new OrderedProperties();
+        if (_config == null) {_config = new OrderedProperties();}
         if (filename != null) {
             File cfg = new File(filename);
-            if (!cfg.isAbsolute())
-                cfg = new File(_context.getConfigDir(), filename);
+            if (!cfg.isAbsolute()) {cfg = new File(_context.getConfigDir(), filename);}
             _configDir = migrateConfig(cfg);
             _configFile = new File(_configDir, CONFIG_FILE);
             if (_configFile.exists()) {
-                try {
-                    DataHelper.loadProps(_config, _configFile);
-                } catch (IOException ioe) {
-                   _log.error("Error loading I2PSnark config " + _configFile, ioe);
-                }
+                try {DataHelper.loadProps(_config, _configFile);}
+                catch (IOException ioe) {_log.error("Error loading I2PSnark config " + _configFile, ioe);}
             }
         }
         // now add sane defaults
-        if (!_config.containsKey(PROP_I2CP_HOST))
-            _config.setProperty(PROP_I2CP_HOST, "127.0.0.1");
-        if (!_config.containsKey(PROP_I2CP_PORT))
-            _config.setProperty(PROP_I2CP_PORT, Integer.toString(I2PClient.DEFAULT_LISTEN_PORT));
-        if (!_config.containsKey(PROP_I2CP_OPTS))
+        if (!_config.containsKey(PROP_I2CP_HOST)) {_config.setProperty(PROP_I2CP_HOST, "127.0.0.1");}
+        if (!_config.containsKey(PROP_I2CP_PORT)) {_config.setProperty(PROP_I2CP_PORT, Integer.toString(I2PClient.DEFAULT_LISTEN_PORT));}
+        if (!_config.containsKey(PROP_I2CP_OPTS)) {
             _config.setProperty(PROP_I2CP_OPTS, "inbound.length=3 outbound.length=3" +
                                                 " inbound.quantity=" + DEFAULT_TUNNEL_QUANTITY +
                                                 " outbound.quantity=" + DEFAULT_TUNNEL_QUANTITY);
-        //if (!_config.containsKey(PROP_EEP_HOST))
-        //    _config.setProperty(PROP_EEP_HOST, "127.0.0.1");
-        //if (!_config.containsKey(PROP_EEP_PORT))
-        //    _config.setProperty(PROP_EEP_PORT, "4444");
-        if (!_config.containsKey(PROP_UPLOADERS_TOTAL))
-            _config.setProperty(PROP_UPLOADERS_TOTAL, "" + Snark.MAX_TOTAL_UPLOADERS);
-        if (!_config.containsKey(PROP_DIR))
-            _config.setProperty(PROP_DIR, _contextName);
-        if (!_config.containsKey(PROP_AUTO_START))
-            _config.setProperty(PROP_AUTO_START, Boolean.toString(DEFAULT_AUTO_START));
-        if (!_config.containsKey(PROP_REFRESH_DELAY))
-            _config.setProperty(PROP_REFRESH_DELAY, Integer.toString(DEFAULT_REFRESH_DELAY_SECS));
-        if (!_config.containsKey(PROP_STARTUP_DELAY))
-            _config.setProperty(PROP_STARTUP_DELAY, Integer.toString(DEFAULT_STARTUP_DELAY));
-        if (!_config.containsKey(PROP_PAGE_SIZE))
-            _config.setProperty(PROP_PAGE_SIZE, Integer.toString(DEFAULT_PAGE_SIZE));
-        if (!_config.containsKey(PROP_THEME))
-            _config.setProperty(PROP_THEME, DEFAULT_THEME);
-        // no, so we can switch default to true later
-        //if (!_config.containsKey(PROP_USE_DHT))
-        //    _config.setProperty(PROP_USE_DHT, Boolean.toString(I2PSnarkUtil.DEFAULT_USE_DHT));
-        if (!_config.containsKey(PROP_RATINGS))
-            _config.setProperty(PROP_RATINGS, "true");
-        if (!_config.containsKey(PROP_COMMENTS))
-            _config.setProperty(PROP_COMMENTS, "true");
-        if (!_config.containsKey(PROP_COMMENTS_NAME))
-            _config.setProperty(PROP_COMMENTS_NAME, "");
-        if (!_config.containsKey(PROP_COLLAPSE_PANELS))
-            _config.setProperty(PROP_COLLAPSE_PANELS,
-                                Boolean.toString(I2PSnarkUtil.DEFAULT_COLLAPSE_PANELS));
-        if (!_config.containsKey(PROP_SHOW_STATUSFILTER))
-            _config.setProperty(PROP_SHOW_STATUSFILTER, "false");
-        if (!_config.containsKey(PROP_ENABLE_LIGHTBOX))
-            _config.setProperty(PROP_ENABLE_LIGHTBOX, "true");
+        }
+        if (!_config.containsKey(PROP_UPLOADERS_TOTAL)) {_config.setProperty(PROP_UPLOADERS_TOTAL, "" + Snark.MAX_TOTAL_UPLOADERS);}
+        if (!_config.containsKey(PROP_DIR)) {_config.setProperty(PROP_DIR, _contextName);}
+        if (!_config.containsKey(PROP_AUTO_START)) {_config.setProperty(PROP_AUTO_START, Boolean.toString(DEFAULT_AUTO_START));}
+        if (!_config.containsKey(PROP_REFRESH_DELAY)) {_config.setProperty(PROP_REFRESH_DELAY, Integer.toString(DEFAULT_REFRESH_DELAY_SECS));}
+        if (!_config.containsKey(PROP_STARTUP_DELAY)) {_config.setProperty(PROP_STARTUP_DELAY, Integer.toString(DEFAULT_STARTUP_DELAY));}
+        if (!_config.containsKey(PROP_PAGE_SIZE)) {_config.setProperty(PROP_PAGE_SIZE, Integer.toString(DEFAULT_PAGE_SIZE));}
+        if (!_config.containsKey(PROP_THEME)) {_config.setProperty(PROP_THEME, DEFAULT_THEME);}
+        if (!_config.containsKey(PROP_RATINGS)) {_config.setProperty(PROP_RATINGS, "true");}
+        if (!_config.containsKey(PROP_COMMENTS)) {_config.setProperty(PROP_COMMENTS, "true");}
+        if (!_config.containsKey(PROP_COMMENTS_NAME)) {_config.setProperty(PROP_COMMENTS_NAME, "");}
+        if (!_config.containsKey(PROP_COLLAPSE_PANELS)) {_config.setProperty(PROP_COLLAPSE_PANELS, Boolean.toString(I2PSnarkUtil.DEFAULT_COLLAPSE_PANELS));}
+        if (!_config.containsKey(PROP_SHOW_STATUSFILTER)) {_config.setProperty(PROP_SHOW_STATUSFILTER, "false");}
+        if (!_config.containsKey(PROP_ENABLE_LIGHTBOX)) {_config.setProperty(PROP_ENABLE_LIGHTBOX, "true");}
         updateConfig();
     }
 
@@ -1030,15 +982,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
             if (!themeExists) {
                 // Since the default is not "light", explicitly check if universal theme is "classic"
-                if (theme.equals("classic"))
-                    theme = "light";
-                else
-                    theme = DEFAULT_THEME;
+                if (theme.equals("classic")) {theme = "light";}
+                else {theme = DEFAULT_THEME;}
                 _config.setProperty(PROP_THEME, DEFAULT_THEME);
             }
-        } else {
-            theme = _config.getProperty(PROP_THEME, DEFAULT_THEME);
-        }
+        } else {theme = _config.getProperty(PROP_THEME, DEFAULT_THEME);}
         return theme;
     }
 
@@ -1056,14 +1004,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 List<String> th = new ArrayList<String>(dirnames.length);
                 for (int i = 0; i < dirnames.length; i++) {
                     String name = dirnames[i].getName();
-                    if (name.equals("images"))
-                        continue;
+                    if (name.equals("images")) {continue;}
                     th.add(name);
                 }
                 themes = th.toArray(new String[th.size()]);
-            } else {
-                themes = new String[0];
-            }
+            } else {themes = new String[0];}
         } else {
             themes = new String[] { "classic", "dark", "light", "midnight", "ubergine", "vanilla", "zilvero" };
         }
@@ -1079,8 +1024,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     private boolean getBWLimit() {
             int[] limits = BWLimits.getBWLimits(_util.getI2CPHost(), _util.getI2CPPort());
-            if (limits == null)
-                return false;
+            if (limits == null) {return false;}
         int up = limits[1];
         if (up > 0) {
             int maxup = getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW);
@@ -1106,20 +1050,13 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             while (tok.hasMoreTokens()) {
                 String pair = tok.nextToken();
                 int split = pair.indexOf('=');
-                if (split > 0)
-                    i2cpOpts.put(pair.substring(0, split), pair.substring(split+1));
+                if (split > 0) {i2cpOpts.put(pair.substring(0, split), pair.substring(split+1));}
             }
         }
         _util.setI2CPConfig(i2cpHost, i2cpPort, i2cpOpts);
         String msg = _t("Configuring I2PSnark with I2CP options") + ": " + i2cpOpts;
-        if (_log.shouldInfo())
-            _log.info(msg);
+        if (_log.shouldInfo()) {_log.info(msg);}
 
-        //I2PSnarkUtil.instance().setI2CPConfig("66.111.51.110", 7654, new Properties());
-        //String eepHost = _config.getProperty(PROP_EEP_HOST);
-        //int eepPort = getInt(PROP_EEP_PORT, 4444);
-        //if (eepHost != null)
-        //    _util.setProxy(eepHost, eepPort);
         _util.setMaxUploaders(getInt(PROP_UPLOADERS_TOTAL, Snark.MAX_TOTAL_UPLOADERS));
         _util.setMaxUpBW(getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW));
         _util.setMaxFilesPerTorrent(getInt(PROP_MAX_FILES_PER_TORRENT, DEFAULT_MAX_FILES_PER_TORRENT));
@@ -1137,6 +1074,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         _util.setCollapsePanels(Boolean.parseBoolean(_config.getProperty(PROP_COLLAPSE_PANELS, Boolean.toString(I2PSnarkUtil.DEFAULT_COLLAPSE_PANELS))));
         _util.setShowStatusFilter(Boolean.parseBoolean(_config.getProperty(PROP_SHOW_STATUSFILTER, Boolean.toString(I2PSnarkUtil.DEFAULT_SHOW_STATUSFILTER))));
         _util.setEnableLightbox(Boolean.parseBoolean(_config.getProperty(PROP_ENABLE_LIGHTBOX, Boolean.toString(I2PSnarkUtil.DEFAULT_ENABLE_LIGHTBOX))));
+        _util.setEnableLightbox(Boolean.parseBoolean(_config.getProperty(PROP_ENABLE_LIGHTBOX, Boolean.toString(I2PSnarkUtil.DEFAULT_ENABLE_LIGHTBOX))));
+        _util.setVaryInboundHops(Boolean.parseBoolean(_config.getProperty(PROP_VARY_INBOUND_HOPS, Boolean.toString(I2PSnarkUtil.DEFAULT_VARY_INBOUND_HOPS))));
+        _util.setVaryOutboundHops(Boolean.parseBoolean(_config.getProperty(PROP_VARY_OUTBOUND_HOPS, Boolean.toString(I2PSnarkUtil.DEFAULT_VARY_OUTBOUND_HOPS))));
         File dd = getDataDir();
 
         if (dd.isDirectory()) {
@@ -1159,11 +1099,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private int getInt(String prop, int defaultVal) {
         String p = _config.getProperty(prop);
         try {
-            if ( (p != null) && (p.trim().length() > 0) )
+            if ((p != null) && (p.trim().length() > 0)) {
                 return  Integer.parseInt(p.trim());
-        } catch (NumberFormatException nfe) {
-            // ignore
-        }
+            }
+        } catch (NumberFormatException nfe) {} // ignore
         return defaultVal;
     }
 
@@ -1171,42 +1110,28 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      *  all params may be null or need trimming
      */
     public void updateConfig(String dataDir, boolean filesPublic, boolean autoStart, boolean smartSort, String refreshDelay,
-                             String startDelay, String pageSize, String seedPct, String eepHost,
-                             String eepPort, String i2cpHost, String i2cpPort, String i2cpOpts,
-                             String upLimit, String upBW, String downBW, boolean useOpenTrackers, boolean useDHT, String theme,
-                             String lang, boolean enableRatings, boolean enableComments, String commentName,
-                             boolean collapsePanels, boolean showStatusFilter, boolean enableLightbox, boolean enableAddCreate) {
+                             String startDelay, String pageSize, String seedPct, String eepHost, String eepPort, String i2cpHost,
+                             String i2cpPort, String i2cpOpts, String upLimit, String upBW, String downBW, boolean useOpenTrackers,
+                             boolean useDHT, String theme, String lang, boolean enableRatings, boolean enableComments, String commentName,
+                             boolean collapsePanels, boolean showStatusFilter, boolean enableLightbox, boolean enableAddCreate,
+                             boolean enableVaryInboundHops, boolean enableVaryOutboundHops) {
         synchronized(_configLock) {
-            locked_updateConfig(dataDir, filesPublic, autoStart, smartSort, refreshDelay,
-                                startDelay, pageSize, seedPct, eepHost,
-                                eepPort, i2cpHost, i2cpPort, i2cpOpts,
-                                upLimit, upBW, downBW, useOpenTrackers, useDHT, theme,
-                                lang, enableRatings, enableComments, commentName, collapsePanels, showStatusFilter, enableLightbox, enableAddCreate);
+            locked_updateConfig(dataDir, filesPublic, autoStart, smartSort, refreshDelay, startDelay, pageSize, seedPct, eepHost, eepPort,
+                                i2cpHost, i2cpPort, i2cpOpts, upLimit, upBW, downBW, useOpenTrackers, useDHT, theme, lang, enableRatings,
+                                enableComments, commentName, collapsePanels, showStatusFilter, enableLightbox, enableAddCreate,
+                                enableVaryInboundHops, enableVaryOutboundHops);
         }
     }
 
     private void locked_updateConfig(String dataDir, boolean filesPublic, boolean autoStart, boolean smartSort, String refreshDelay,
-                             String startDelay, String pageSize, String seedPct, String eepHost,
-                             String eepPort, String i2cpHost, String i2cpPort, String i2cpOpts,
-                             String upLimit, String upBW, String downBW, boolean useOpenTrackers, boolean useDHT, String theme,
-                             String lang, boolean enableRatings, boolean enableComments, String commentName,
-                             boolean collapsePanels, boolean showStatusFilter, boolean enableLightbox, boolean enableAddCreate) {
+                             String startDelay, String pageSize, String seedPct, String eepHost, String eepPort, String i2cpHost,
+                             String i2cpPort, String i2cpOpts, String upLimit, String upBW, String downBW, boolean useOpenTrackers,
+                             boolean useDHT, String theme, String lang, boolean enableRatings, boolean enableComments, String commentName,
+                             boolean collapsePanels, boolean showStatusFilter, boolean enableLightbox, boolean enableAddCreate,
+                             boolean enableVaryInboundHops, boolean enableVaryOutboundHops) {
         boolean changed = false;
         boolean interruptMonitor = false;
-        //if (eepHost != null) {
-        //    // unused, we use socket eepget
-        //    int port = _util.getEepProxyPort();
-        //    try { port = Integer.parseInt(eepPort); } catch (NumberFormatException nfe) {}
-        //    String host = _util.getEepProxyHost();
-        //    if ( (eepHost.trim().length() > 0) && (port > 0) &&
-        //         ((!host.equals(eepHost) || (port != _util.getEepProxyPort()) )) ) {
-        //        _util.setProxy(eepHost, port);
-        //        changed = true;
-        //        _config.setProperty(PROP_EEP_HOST, eepHost);
-        //        _config.setProperty(PROP_EEP_PORT, eepPort+"");
-        //        addMessage("EepProxy location changed to " + eepHost + ":" + port);
-        //    }
-        //}
+
         if (upLimit != null) {
             int limit = _util.getMaxUploaders();
             try { limit = Integer.parseInt(upLimit.trim()); } catch (NumberFormatException nfe) {}
@@ -1217,13 +1142,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     _config.setProperty(PROP_UPLOADERS_TOTAL, Integer.toString(limit));
                     String msg = _t("Total uploaders limit changed to {0}", limit);
                     addMessage(msg);
-                    if (!_context.isRouterContext())
-                        System.out.println(" • " + msg);
+                    if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                 } else {
                     String msg = _t("Minimum total uploaders limit is {0}", Snark.MIN_TOTAL_UPLOADERS);
                     addMessage(msg);
-                    if (!_context.isRouterContext())
-                        System.out.println(" • " + msg);
+                    if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                 }
             }
         }
@@ -1238,21 +1161,19 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     _config.setProperty(PROP_UPBW_MAX, Integer.toString(limit));
                     String msg = _t("Up BW limit changed to {0}KBps", limit);
                     addMessage(msg);
-                    if (!_context.isRouterContext())
-                        System.out.println(" • " + msg);
+                    if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                 } else {
                     String msg = _t("Minimum up bandwidth limit is {0}KBps", MIN_UP_BW);
                     addMessage(msg);
-                    if (!_context.isRouterContext())
-                        System.out.println(" • " + msg);
+                    if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                 }
             }
         }
         if (downBW != null) {
             int limit = (int) (_bwManager.getDownBWLimit() / 1024);
-            try { limit = Integer.parseInt(downBW.trim()); } catch (NumberFormatException nfe) {}
-            if ( limit != _bwManager.getDownBWLimit()) {
-                if ( limit >= MIN_DOWN_BW ) {
+            try {limit = Integer.parseInt(downBW.trim());} catch (NumberFormatException nfe) {}
+            if (limit != _bwManager.getDownBWLimit()) {
+                if (limit >= MIN_DOWN_BW) {
                     _bwManager.setDownBWLimit(limit * 1000L);
                     changed = true;
                     _config.setProperty(PROP_DOWNBW_MAX, Integer.toString(limit));
@@ -1272,8 +1193,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                _config.setProperty(PROP_STARTUP_DELAY, Integer.toString(minutes));
                String msg = _t("Startup delay changed to {0}", DataHelper.formatDuration2(minutes * (60L * 1000)));
                addMessageNoEscape(msg);
-               if (!_context.isRouterContext())
-                   System.out.println(" • " + msg);
+               if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
            }
        }
 
@@ -1286,13 +1206,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                    if (secs >= 0) {
                        String msg = _t("Refresh time changed to {0}", DataHelper.formatDuration2(secs * 1000));
                        addMessageNoEscape(msg);
-                       if (!_context.isRouterContext())
-                           System.out.println(" • " + msg.replace("&nbsp;", " "));
+                       if (!_context.isRouterContext()) {System.out.println(" • " + msg.replace("&nbsp;", " "));}
                    } else {
                        String msg = _t("Refresh disabled");
                        addMessage(msg);
-                       if (!_context.isRouterContext())
-                           System.out.println(" • " + msg);
+                       if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                    }
                }
            } catch (NumberFormatException nfe) {}
@@ -1301,10 +1219,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
        if (pageSize != null) {
            try {
                int size = Integer.parseInt(pageSize.trim());
-               if (size <= 0)
-                   size = 999999;
-               else if (size < 5)
-                   size = 5;
+               if (size <= 0) {size = 999999;}
+               else if (size < 5) {size = 5;}
                if (size != getPageSize()) {
                    changed = true;
                    pageSize = Integer.toString(size);
@@ -1321,13 +1237,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
            if (filesPublic) {
                String msg = _t("New files will be publicly readable");
                addMessage(msg);
-               if (!_context.isRouterContext())
-                   System.out.println(" • " + msg);
+               if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
            } else {
                String msg = _t("New files will not be publicly readable");
                addMessage(msg);
-               if (!_context.isRouterContext())
-                   System.out.println(" • " + msg);
+               if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
            }
            changed = true;
        }
@@ -1344,44 +1258,37 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                if (false) {
                    String msg = _t("Data directory does not exist") + ": " + dataDir;
                    addMessage(msg);
-                   if (!_context.isRouterContext())
-                       System.out.println(" • " + msg);
+                   if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                }
                String msg = _t("Data directory cannot be created") + ": " + dataDir;
                addMessage(msg);
-               if (!_context.isRouterContext())
-                   System.out.println(" • " + msg);
+               if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
            } else if (!dd.isDirectory()) {
                String msg = _t("Not a directory") + ": " + dataDir;
                addMessage(msg);
-               if (!_context.isRouterContext())
-                   System.out.println(" • " + msg);
+               if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
            } else if (!dd.canRead()) {
                String msg = _t("Unreadable") + ": " + dataDir;
                addMessage(msg);
-               if (!_context.isRouterContext())
-                   System.out.println(" • " + msg);
+               if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
            } else {
                if (!dd.canWrite()) {
                    String msg = _t("No write permissions for data directory") + ": " + dataDir;
                    addMessage(msg);
-                   if (!_context.isRouterContext())
-                       System.out.println(" • " + msg);
+                   if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                }
                changed = true;
                interruptMonitor = true;
                 synchronized (_snarks) {
                     for (Snark snark : _snarks.values()) {
                         // leave magnets alone, remove everything else
-                        if (snark.getMetaInfo() != null)
-                             stopTorrent(snark, true);
+                        if (snark.getMetaInfo() != null) {stopTorrent(snark, true);}
                     }
                     _config.setProperty(PROP_DIR, dataDir);
                }
                String msg = _t("Data directory changed to {0}", dataDir);
                addMessage(msg);
-               if (!_context.isRouterContext())
-                   System.out.println(" • " + msg);
+               if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
            }
         }
 
@@ -1409,10 +1316,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
         }
 
-
         // Start of I2CP stuff.
         // i2cpHost will generally be null since it is hidden from the form if in router context.
-
         int oldI2CPPort = _util.getI2CPPort();
         String oldI2CPHost = _util.getI2CPHost();
         int port = oldI2CPPort;
@@ -1426,8 +1331,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         while (tok.hasMoreTokens()) {
             String pair = tok.nextToken();
             int split = pair.indexOf('=');
-            if (split > 0)
-                opts.put(pair.substring(0, split), pair.substring(split+1));
+            if (split > 0) {opts.put(pair.substring(0, split), pair.substring(split+1));}
         }
         Map<String, String> oldOpts = new HashMap<String, String>();
         String oldI2CPOpts = _config.getProperty(PROP_I2CP_OPTS);
@@ -1436,8 +1340,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         while (tok.hasMoreTokens()) {
             String pair = tok.nextToken();
             int split = pair.indexOf('=');
-            if (split > 0)
-                oldOpts.put(pair.substring(0, split), pair.substring(split+1));
+            if (split > 0) {oldOpts.put(pair.substring(0, split), pair.substring(split+1));}
         }
 
         boolean reconnect = i2cpHost != null && i2cpHost.trim().length() > 0 && port > 0 &&
@@ -1452,8 +1355,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     }
                 }
             }
-            if (_log.shouldDebug())
+            if (_log.shouldDebug()) {
                 _log.debug("i2cp host [" + i2cpHost + "] i2cp port " + port + " opts [" + opts + "] oldOpts [" + oldOpts + "]");
+            }
             if (snarksActive) {
                 Properties p = new Properties();
                 p.putAll(opts);
@@ -1463,15 +1367,13 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 _bwManager.setUpBWLimit(max * 1000);
                 String msg = _t("I2CP and tunnel changes will take effect after stopping all torrents");
                 addMessage(msg);
-                if (!_context.isRouterContext())
-                    System.out.println(" • " + msg);
+                if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
             } else if (!reconnect) {
                 // The usual case, the other two are if not in router context
                 _config.setProperty(PROP_I2CP_OPTS, i2cpOpts.trim());
                 String msg = _t("I2CP options changed to {0}", i2cpOpts);
                 addMessage(msg);
-                if (!_context.isRouterContext())
-                    System.out.println(" • " + msg);
+                if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                 _util.setI2CPConfig(oldI2CPHost, oldI2CPPort, opts);
             } else {
                 // Won't happen, I2CP host/port, are hidden in the GUI if in router context
@@ -1479,40 +1381,31 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     _util.disconnect();
                     String msg = _t("Disconnecting old I2CP destination");
                     addMessage(msg);
-                    if (!_context.isRouterContext()) {
-                        System.out.println(" • " + msg);
-                    }
+                    if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                 }
                 String msg = _t("I2CP settings changed to {0}", i2cpHost + ':' + port + ' ' + i2cpOpts);
                 addMessage(msg);
-                if (!_context.isRouterContext())
-                    System.out.println(" • " + msg);
+                if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                 _util.setI2CPConfig(i2cpHost, port, opts);
-                    int max = getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW);
-                    _util.setMaxUpBW(max);
-                    _bwManager.setUpBWLimit(max * 1000);
+                int max = getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW);
+                _util.setMaxUpBW(max);
+                _bwManager.setUpBWLimit(max * 1000);
                 boolean ok = _util.connect();
                 if (!ok) {
                     msg = _t("Unable to connect with the new settings, reverting to the old I2CP settings");
                     addMessage(msg);
-                    if (!_context.isRouterContext()) {
-                        System.out.println(" • " + msg);
-                    }
+                    if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                     _util.setI2CPConfig(oldI2CPHost, oldI2CPPort, oldOpts);
                     ok = _util.connect();
                     if (!ok) {
                         msg = _t("Unable to reconnect with the old settings!");
                         addMessage(msg);
-                        if (!_context.isRouterContext()) {
-                            System.out.println(" • " + msg);
-                        }
+                        if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                     }
                 } else {
                     msg = _t("Reconnected on the new I2CP destination");
                     addMessage(msg);
-                    if (!_context.isRouterContext()) {
-                        System.out.println(" • " + msg);
-                    }
+                    if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                     _config.setProperty(PROP_I2CP_HOST, i2cpHost.trim());
                     _config.setProperty(PROP_I2CP_PORT, "" + port);
                     _config.setProperty(PROP_I2CP_OPTS, i2cpOpts.trim());
@@ -1521,9 +1414,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         if (snark.restartAcceptor()) {
                             msg = _t("I2CP listener restarted for \"{0}\"", snark.getBaseName());
                             addMessage(msg);
-                            if (!_context.isRouterContext()) {
-                                System.out.println(" • " + msg);
-                            }
+                            if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                             // this is the common ConnectionAcceptor, so we only need to do it once
                             break;
                         }
@@ -1535,19 +1426,15 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
         if (shouldAutoStart() != autoStart) {
             _config.setProperty(PROP_AUTO_START, Boolean.toString(autoStart));
-            if (autoStart)
-                addMessage(_t("Enabled autostart"));
-            else
-                addMessage(_t("Disabled autostart"));
+            if (autoStart) {addMessage(_t("Enabled autostart"));}
+            else {addMessage(_t("Disabled autostart"));}
             changed = true;
         }
 
         if (isSmartSortEnabled() != smartSort) {
             _config.setProperty(PROP_SMART_SORT, Boolean.toString(smartSort));
-            if (smartSort)
-                addMessage(_t("Enabled smart sort") + ".");
-            else
-                addMessage(_t("Disabled smart sort") + ".");
+            if (smartSort) {addMessage(_t("Enabled smart sort") + ".");}
+            else {addMessage(_t("Disabled smart sort") + ".");}
             changed = true;
         }
 
@@ -1557,15 +1444,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             if (useOpenTrackers) {
                 msg = _t("Enabled open trackers - torrent restart required to take effect.");
                 addMessage(msg);
-                if (!_context.isRouterContext()) {
-                    System.out.println(" • " + msg);
-                }
+                if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
             } else {
                 msg = _t("Disabled open trackers - torrent restart required to take effect.");
                 addMessage(msg);
-                if (!_context.isRouterContext()) {
-                    System.out.println(" • " + msg);
-                }
+                if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
             }
             _util.setUseOpenTrackers(useOpenTrackers);
             changed = true;
@@ -1573,16 +1456,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
         if (_util.shouldUseDHT() != useDHT) {
             _config.setProperty(PROP_USE_DHT, Boolean.toString(useDHT));
-            if (useDHT)
-                addMessage(_t("Enabled DHT."));
-            else
-                addMessage(_t("Disabled DHT."));
+            if (useDHT) {addMessage(_t("Enabled DHT."));}
+            else {addMessage(_t("Disabled DHT."));}
             if (_util.connected()) {
             String msg = _t("DHT change requires tunnel shutdown and reopen") + ".";
                 addMessage(msg);
-                if (!_context.isRouterContext()) {
-                    System.out.println(" • " + msg);
-                }
+                if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
             }
             _util.setUseDHT(useDHT);
             changed = true;
@@ -1590,29 +1469,25 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
         if (_util.ratingsEnabled() != enableRatings) {
             _config.setProperty(PROP_RATINGS, Boolean.toString(enableRatings));
-            if (enableRatings)
-                addMessage(_t("Enabled Ratings."));
-            else
-                addMessage(_t("Disabled Ratings."));
+            if (enableRatings) {addMessage(_t("Enabled Ratings."));}
+            else {addMessage(_t("Disabled Ratings."));}
             _util.setRatingsEnabled(enableRatings);
             changed = true;
         }
 
         if (_util.commentsEnabled() != enableComments) {
             _config.setProperty(PROP_COMMENTS, Boolean.toString(enableComments));
-            if (enableComments)
-                addMessage(_t("Enabled Comments."));
-            else
-                addMessage(_t("Disabled Comments."));
+            if (enableComments) {addMessage(_t("Enabled Comments."));}
+            else {addMessage(_t("Disabled Comments."));}
             _util.setCommentsEnabled(enableComments);
             changed = true;
         }
-        if (commentName == null) {
-            commentName = "";
-        } else {
+        if (commentName == null) {commentName = "";}
+        else {
             commentName = commentName.trim().replaceAll("[\n\r<>#;]", "");
-            if (commentName.length() > Comment.MAX_NAME_LEN)
+            if (commentName.length() > Comment.MAX_NAME_LEN) {
                 commentName = commentName.substring(0, Comment.MAX_NAME_LEN);
+            }
         }
         if (!_util.getCommentsName().equals(commentName)) {
             _config.setProperty(PROP_COMMENTS_NAME, commentName);
@@ -1631,10 +1506,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
         if (_util.collapsePanels() != collapsePanels) {
             _config.setProperty(PROP_COLLAPSE_PANELS, Boolean.toString(collapsePanels));
-            if (collapsePanels)
-                addMessage(_t("Collapsible panels enabled."));
-            else
-                addMessage(_t("Collapsible panels disabled."));
+            if (collapsePanels) {addMessage(_t("Collapsible panels enabled."));}
+            else {addMessage(_t("Collapsible panels disabled."));}
             _util.setCollapsePanels(collapsePanels);
             changed = true;
         }
@@ -1642,16 +1515,14 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (_util.showStatusFilter() != showStatusFilter) {
             _config.setProperty(PROP_SHOW_STATUSFILTER, Boolean.toString(showStatusFilter));
             if (getRefreshDelaySeconds() > 0) {
-                if (showStatusFilter)
-                    addMessage(_t("Torrent filter bar enabled."));
-                else
-                    addMessage(_t("Torrent filter bar disabled."));
+                if (showStatusFilter) {addMessage(_t("Torrent filter bar enabled."));}
+                else {addMessage(_t("Torrent filter bar disabled."));}
                 _util.setShowStatusFilter(showStatusFilter);
                 changed = true;
             }// else if (showStatusFilter) {
              //   addMessage(_t("Cannot enable filter bar when torrent refresh is disabled."));
              //   changed = false;
-            //}
+             //}
         }
 
         if (_util.enableLightbox() != enableLightbox) {
@@ -1666,22 +1537,36 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
         if (_util.enableAddCreate() != enableAddCreate) {
             _config.setProperty(PROP_ENABLE_ADDCREATE, Boolean.toString(enableAddCreate));
-            if (enableAddCreate)
+            if (enableAddCreate) {
                 addMessage(_t("Add and Create sections enabled on all torrent listing pages."));
-            else
+            } else {
                 addMessage(_t("Add and Create sections to display only on first page of multipage torrent listing pages."));
+            }
             _util.setEnableAddCreate(enableAddCreate);
+            changed = true;
+        }
+
+        if (_util.enableVaryInboundHops() != enableVaryInboundHops) {
+            _config.setProperty(PROP_VARY_INBOUND_HOPS, Boolean.toString(enableVaryInboundHops));
+            if (enableVaryInboundHops) {addMessage(_t("Enabled +0/1 tunnel hop randomization on Inbound tunnels"));}
+            else {addMessage(_t("Disabled tunnel hop randomization on Inbound tunnels"));}
+            _util.setEnableVaryInboundHops(enableVaryInboundHops);
+            changed = true;
+        }
+
+        if (_util.enableVaryOutboundHops() != enableVaryOutboundHops) {
+            _config.setProperty(PROP_VARY_OUTBOUND_HOPS, Boolean.toString(enableVaryOutboundHops));
+            if (enableVaryInboundHops) {addMessage(_t("Enabled +0/1 tunnel hop randomization on Outbound tunnels"));}
+            else {addMessage(_t("Disabled tunnel hop randomization on Outbound tunnels"));}
+            _util.setEnableVaryOutboundHops(enableVaryOutboundHops);
             changed = true;
         }
 
         if (changed) {
             saveConfig();
-            if (interruptMonitor)
-                // Data dir changed. this will stop and remove all old torrents, and add the new ones
-                _monitor.interrupt();
-        } else {
-            addMessage(_t("Configuration unchanged."));
-        }
+            // Data dir changed. This will stop and remove all old torrents, and add the new ones
+            if (interruptMonitor) {_monitor.interrupt();}
+        } else {addMessage(_t("Configuration unchanged."));}
     }
 
     /**
