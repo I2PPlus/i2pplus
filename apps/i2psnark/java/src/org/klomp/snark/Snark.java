@@ -22,17 +22,17 @@ package org.klomp.snark;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
+import java.io.IOException;
 import java.util.Collections;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import net.i2p.I2PAppContext;
 import net.i2p.client.streaming.I2PServerSocket;
 import net.i2p.data.Destination;
+import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFile;
 
@@ -977,6 +977,10 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             storage.clearChanged(); // this saved the status, so reset the variables
             savedUploaded = getUploaded();
         }
+        // Avoid redundant "gotPiece" call when all pieces are checked
+        if (!checking && completeListener != null && !allChecked) {
+            completeListener.gotPiece(this);
+        }
     }
 
     public void storageCompleted(Storage storage) {
@@ -1028,7 +1032,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             if (!c.halted())
                 totalUploaders += c.getInterestedUploaders();
         }
-        int limit = _util.getMaxUploaders();
+        int limit = Math.max(MIN_TOTAL_UPLOADERS, Math.min(MAX_TOTAL_UPLOADERS, _util.getMaxUploaders()));
         if (_log.shouldDebug())
             if (totalUploaders > 1)
                 _log.debug("Currently uploading to: " + totalUploaders + " peers (Limit: " + limit + ")");
