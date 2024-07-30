@@ -114,7 +114,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     public static final String EEPGET_USER_AGENT = "I2PSnark";
     private static final List<String> HIDDEN_I2CP_OPTS = Arrays.asList(new String[] {
         PROP_MAX_BW, "inbound.length", "outbound.length", "inbound.quantity", "outbound.quantity",
-        "inbound.lengthVariance", "oubound.lengthVariance",
+        //"inbound.lengthVariance", "oubound.lengthVariance",
     });
 
     public I2PSnarkUtil(I2PAppContext ctx) {
@@ -167,17 +167,14 @@ public class I2PSnarkUtil implements DisconnectListener {
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     public void setI2CPConfig(String i2cpHost, int i2cpPort, Map opts) {
-        if (i2cpHost != null)
-            _i2cpHost = i2cpHost;
-        if (i2cpPort > 0)
-            _i2cpPort = i2cpPort;
+        if (i2cpHost != null) {_i2cpHost = i2cpHost;}
+        if (i2cpPort > 0) {_i2cpPort = i2cpPort;}
         if (opts != null) {
             synchronized(_opts) {
                 // removed options...
                 for (Iterator<String> iter = _opts.keySet().iterator(); iter.hasNext(); ) {
                     String k = iter.next();
-                    if (!HIDDEN_I2CP_OPTS.contains(k) && !opts.containsKey(k))
-                        iter.remove();
+                    if (!HIDDEN_I2CP_OPTS.contains(k) && !opts.containsKey(k)) {iter.remove();}
                 }
             _opts.putAll(opts);
             }

@@ -3681,18 +3681,31 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         options.remove(I2PSnarkUtil.PROP_MAX_BW);
-        // was accidentally in the I2CP options prior to 0.8.9 so it will be in old config files
-        options.remove(SnarkManager.PROP_OPENTRACKERS);
-        StringBuilder opts = new StringBuilder(64);
+        options.remove(SnarkManager.PROP_OPENTRACKERS); // was accidentally in the I2CP options prior to 0.8.9 so it will be in old config files
+        StringBuilder opts = new StringBuilder(256);
         for (Map.Entry<String, String> e : options.entrySet()) {
             String key = e.getKey();
             String val = e.getValue();
             opts.append(key).append('=').append(val).append(' ');
         }
+        String ibkey = "inbound.lengthVariance=1 ";
+        String obkey = "outbound.lengthVariance=1 ";
+        boolean containsIbk = opts.indexOf(ibkey) != -1;
+        boolean containsObk = opts.indexOf(obkey) != -1;
+        if (varyInbound) {
+            if (!containsIbk) {opts.append(ibkey);}
+        } else {
+            if (containsIbk) {opts.delete(opts.indexOf(ibkey), opts.indexOf(ibkey) + ibkey.length());}
+        }
+        if (varyOutbound) {
+            if (!containsObk) {opts.append(obkey);}
+        } else {
+            if (containsObk) {opts.delete(opts.indexOf(obkey), opts.indexOf(obkey) + obkey.length());}
+        }
         buf.append("<span class=configOption id=i2cpOptions><label><b>")
            .append(_t("I2CP options"))
            .append("</b> <input type=text name=i2cpOpts value=\"")
-           .append(opts.toString()).append("\" size=60></label></span>\n")
+           .append(opts.toString().trim()).append("\" size=60></label></span>\n")
            .append("</div>\n</td></tr>\n")
            .append("<tr class=spacer><td></td></tr>\n");  // spacer
 

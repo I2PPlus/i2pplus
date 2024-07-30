@@ -1322,7 +1322,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         String oldI2CPHost = _util.getI2CPHost();
         int port = oldI2CPPort;
         if (i2cpPort != null) {
-            try { port = Integer.parseInt(i2cpPort); } catch (NumberFormatException nfe) {}
+            try {port = Integer.parseInt(i2cpPort);} catch (NumberFormatException nfe) {}
         }
 
         Map<String, String> opts = new HashMap<String, String>();
@@ -1527,21 +1527,16 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
         if (_util.enableLightbox() != enableLightbox) {
             _config.setProperty(PROP_ENABLE_LIGHTBOX, Boolean.toString(enableLightbox));
-            if (enableLightbox)
-                addMessage(_t("Lightbox enabled for image thumbnails."));
-            else
-                addMessage(_t("Lightbox disabled for image thumbnails."));
+            if (enableLightbox) {addMessage(_t("Lightbox enabled for image thumbnails."));}
+            else {addMessage(_t("Lightbox disabled for image thumbnails."));}
             _util.setEnableLightbox(enableLightbox);
             changed = true;
         }
 
         if (_util.enableAddCreate() != enableAddCreate) {
             _config.setProperty(PROP_ENABLE_ADDCREATE, Boolean.toString(enableAddCreate));
-            if (enableAddCreate) {
-                addMessage(_t("Add and Create sections enabled on all torrent listing pages."));
-            } else {
-                addMessage(_t("Add and Create sections to display only on first page of multipage torrent listing pages."));
-            }
+            if (enableAddCreate) {addMessage(_t("Add and Create sections enabled on all torrent listing pages."));}
+            else {addMessage(_t("Add and Create sections to display only on first page of multipage torrent listing pages."));}
             _util.setEnableAddCreate(enableAddCreate);
             changed = true;
         }
