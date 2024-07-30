@@ -1557,6 +1557,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             changed = true;
         }
 
+        if (_util.enableVaryInboundHops() != enableVaryInboundHops || _util.enableVaryOutboundHops() != enableVaryOutboundHops) {
+            addMessage(_t("You may need to save the configuration again without further option changes to fully enable/disable; " +
+                          "in some instances a restart of I2PSnark or your router may be required."));
+        }
+
         if (changed) {
             saveConfig();
             // Data dir changed. This will stop and remove all old torrents, and add the new ones
