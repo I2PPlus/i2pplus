@@ -1,4 +1,9 @@
 2024-07-25 dr|z3d
+ * I2PSnark:
+   - Add UI options for +0/1 inbound/outbound tunnel hop variance
+   - Increase maximum permitted peer/total connections per min/hour
+
+2024-07-25 dr|z3d
  * Translations: Complete coverage for all translations, new Hindi translation,
    translate remaining untranslated eepsite help pages to abridged help with
    links to corresponding console help pages
