@@ -92,12 +92,10 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @throws RuntimeException via fatal()
      * @throws RouterException  via fatalRouter()
      */
-    public Snark(I2PSnarkUtil util, String torrent, String ip, int user_port,
-            StorageListener slistener, CoordinatorListener clistener,
-            CompleteListener complistener, PeerCoordinatorSet peerCoordinatorSet,
-            ConnectionAcceptor connectionAcceptor, String rootDir) {
-        this(util, torrent, ip, user_port, slistener, clistener, complistener,
-                peerCoordinatorSet, connectionAcceptor, rootDir, null);
+    public Snark(I2PSnarkUtil util, String torrent, String ip, int user_port, StorageListener slistener,
+                 CoordinatorListener clistener, CompleteListener complistener, PeerCoordinatorSet peerCoordinatorSet,
+                 ConnectionAcceptor connectionAcceptor, String rootDir) {
+        this(util, torrent, ip, user_port, slistener, clistener, complistener, peerCoordinatorSet, connectionAcceptor, rootDir, null);
     }
 
     /**
@@ -110,61 +108,46 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @throws RouterException  via fatalRouter()
      * @since 0.9.11
      */
-    public Snark(I2PSnarkUtil util, String torrent, String ip, int user_port,
-            StorageListener slistener, CoordinatorListener clistener,
-            CompleteListener complistener, PeerCoordinatorSet peerCoordinatorSet,
-            ConnectionAcceptor connectionAcceptor, String rootDir, File baseFile) {
-        if (slistener == null)
-            slistener = this;
-
+    public Snark(I2PSnarkUtil util, String torrent, String ip, int user_port, StorageListener slistener,
+                 CoordinatorListener clistener, CompleteListener complistener, PeerCoordinatorSet peerCoordinatorSet,
+                 ConnectionAcceptor connectionAcceptor, String rootDir, File baseFile) {
+        if (slistener == null) {slistener = this;}
         completeListener = complistener;
         _util = util;
         _log = util.getContext().logManager().getLog(Snark.class);
         _peerCoordinatorSet = peerCoordinatorSet;
         acceptor = connectionAcceptor;
-
         this.torrent = torrent;
         this.rootDataDir = new File(rootDir);
-
         stopped = true;
         activity = "Network setup";
-
         id = generateID();
-        if (_log.shouldInfo())
-            _log.info("Our PeerID for this session is: " + PeerID.idencode(id));
-
+        if (_log.shouldInfo()) {_log.info("Our PeerID for this session is: " + PeerID.idencode(id));}
         // Figure out what the torrent argument represents.
         File f = null;
         InputStream in = null;
         byte[] x_infoHash = null;
         try {
             f = new File(torrent);
-            if (f.exists())
-                in = new FileInputStream(f);
-            else {
-                throw new IOException("not found");
-            }
+            if (f.exists()) {in = new FileInputStream(f);}
+            else {throw new IOException("not found");}
             meta = new MetaInfo(in);
             x_infoHash = meta.getInfoHash();
         } catch (IOException ioe) {
             // OK, so it wasn't a torrent metainfo file.
-            if (f != null && f.exists())
-                if (ip == null)
-                    fatal("'" + torrent + "' exists,"
-                            + " but is not a valid torrent metainfo file."
-                            + System.getProperty("line.separator"), ioe);
-                else
-                    fatal("I2PSnark does not support creating and tracking a torrent at the moment");
-            else
-                fatal("Cannot open '" + torrent + "'", ioe);
+            if (f != null && f.exists()) {
+                if (ip == null) {
+                    fatal("'" + torrent + "' exists, but is not a valid torrent metainfo file." +
+                          System.getProperty("line.separator"), ioe);
+                } else {fatal("I2PSnark does not support creating and tracking a torrent at the moment");}
+            } else {fatal("Cannot open '" + torrent + "'", ioe);}
         } catch (OutOfMemoryError oom) {
             fatalRouter("ERROR - Out of memory, cannot create torrent " + torrent + ": " + oom.getMessage(), oom);
         } finally {
-            if (in != null)
-                try {
-                    in.close();
-                } catch (IOException ioe) {
-                }
+            if (in != null) {
+                try {in.close();}
+                catch (IOException ioe) {}
+            }
         }
 
         infoHash = x_infoHash; // final
@@ -180,29 +163,21 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
                         && completeListener.getSavedPreserveNamesSetting(this);
                 if (baseFile == null) {
                     String base = meta.getName();
-                    if (!shouldPreserve)
-                        base = Storage.filterName(base);
-                    if (_util.getFilesPublic())
-                        baseFile = new File(rootDataDir, base);
-                    else
-                        baseFile = new SecureFile(rootDataDir, base);
+                    if (!shouldPreserve) {base = Storage.filterName(base);}
+                    if (_util.getFilesPublic()) {baseFile = new File(rootDataDir, base);}
+                    else {baseFile = new SecureFile(rootDataDir, base);}
                 }
                 storage = new Storage(_util, baseFile, meta, slistener, shouldPreserve);
                 if (completeListener != null) {
                     storage.check(completeListener.getSavedTorrentTime(this),
                             completeListener.getSavedTorrentBitField(this));
-                } else {
-                    storage.check();
-                }
+                } else {storage.check();}
                 // have to figure out when to reopen
                 // if (!start)
                 // storage.close();
             } catch (IOException ioe) {
-                try {
-                    storage.close();
-                } catch (IOException ioee) {
-                    ioee.printStackTrace();
-                }
+                try {storage.close();}
+                catch (IOException ioee) {ioee.printStackTrace();}
                 fatal("Could not check or create files for " + getBaseInfo(), ioe);
             }
         }
@@ -220,8 +195,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
          */
 
         savedUploaded = (completeListener != null) ? completeListener.getSavedUploaded(this) : 0;
-        if (completeListener != null)
-            _comments = completeListener.getSavedComments(this);
+        if (completeListener != null) {_comments = completeListener.getSavedComments(this);}
     }
 
     /**
@@ -235,9 +209,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @since 0.8.4, removed in 0.9.36, restored in 0.9.45 with boolean param now
      *        ignored
      */
-    protected Snark(I2PSnarkUtil util, String torrent, byte[] ih, String trackerURL,
-            CompleteListener complistener, PeerCoordinatorSet peerCoordinatorSet,
-            ConnectionAcceptor connectionAcceptor, boolean ignored, String rootDir) {
+    protected Snark(I2PSnarkUtil util, String torrent, byte[] ih, String trackerURL, CompleteListener complistener,
+                    PeerCoordinatorSet peerCoordinatorSet, ConnectionAcceptor connectionAcceptor, boolean ignored, String rootDir) {
         this(util, torrent, ih, trackerURL, complistener, peerCoordinatorSet, connectionAcceptor, rootDir);
     }
 
@@ -253,9 +226,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @throws RouterException  via fatalRouter()
      * @since 0.8.4
      */
-    public Snark(I2PSnarkUtil util, String torrent, byte[] ih, String trackerURL,
-            CompleteListener complistener, PeerCoordinatorSet peerCoordinatorSet,
-            ConnectionAcceptor connectionAcceptor, String rootDir) {
+    public Snark(I2PSnarkUtil util, String torrent, byte[] ih, String trackerURL, CompleteListener complistener,
+                 PeerCoordinatorSet peerCoordinatorSet, ConnectionAcceptor connectionAcceptor, String rootDir) {
         completeListener = complistener;
         _util = util;
         _log = util.getContext().logManager().getLog(Snark.class);
@@ -275,16 +247,6 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     private static byte[] generateID() {
-        // Taking Three as the subject to reason about--
-        // A convenient number to state--
-        // We add Seven, and Ten, and then multiply out
-        // By One Thousand diminished by Eight.
-        //
-        // The result we proceed to divide, as you see,
-        // By Nine Hundred and Ninety Two:
-        // Then subtract Seventeen, and the answer must be
-        // Exactly and perfectly true.
-
         // Create a new ID and fill it with something random. First nine
         // zeros bytes, then three bytes filled with snark and then
         // eight random bytes.
@@ -293,12 +255,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         rv[9] = snark;
         rv[10] = snark;
         rv[11] = snark;
-        try {
-            I2PAppContext.getGlobalContext().random().nextBytes(rv, 12, 8);
-        } catch (IllegalStateException ise) {
-            // random is shut down
-            throw new RouterException("Router shutdown", ise);
-        }
+        try {I2PAppContext.getGlobalContext().random().nextBytes(rv, 12, 8);}
+        catch (IllegalStateException ise) {throw new RouterException("Router shutdown", ise);} // random is shut down
         return rv;
     }
 
@@ -310,15 +268,12 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @throws RouterException  via fatalRouter()
      */
     public synchronized void startTorrent() {
-        if (!stopped)
-            return;
+        if (!stopped) {return;}
         starting = true;
         try {
             x_startTorrent();
             _startedTime = _util.getContext().clock().now();
-        } finally {
-            starting = false;
-        }
+        } finally {starting = false;}
     }
 
     private void x_startTorrent() {
@@ -351,14 +306,11 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             } else {
                 acceptor = new ConnectionAcceptor(_util, new PeerAcceptor(coordinator)); // single torrent
             }
-            // TODO pass saved closest DHT nodes to the tracker? or direct to the
-            // coordinator?
+            // TODO pass saved closest DHT nodes to the tracker? or direct to the coordinator?
             trackerclient = new TrackerClient(_util, meta, additionalTrackerURL, coordinator, this);
         }
         // ensure acceptor is running when in multitorrent
-        if (_peerCoordinatorSet != null && acceptor != null) {
-            acceptor.startAccepting();
-        }
+        if (_peerCoordinatorSet != null && acceptor != null) {acceptor.startAccepting();}
 
         stopped = false;
         if (coordinator.halted()) {
@@ -366,34 +318,24 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             if (_peerCoordinatorSet != null)
                 _peerCoordinatorSet.add(coordinator);
         }
-        if (!trackerclient.started()) {
-            trackerclient.start();
-        } else if (trackerclient.halted()) {
+        if (!trackerclient.started()) {trackerclient.start();}
+        else if (trackerclient.halted()) {
             if (storage != null) {
-                try {
-                    storage.reopen();
-                } catch (IOException ioe) {
-                    try {
-                        storage.close();
-                    } catch (IOException ioee) {
-                        ioee.printStackTrace();
-                    }
+                try {storage.reopen();}
+                catch (IOException ioe) {
+                    try {storage.close();}
+                    catch (IOException ioee) {ioee.printStackTrace();}
                     fatal("Could not open file for " + getBaseInfo(), ioe);
                 }
             }
             trackerclient.start();
-        } else {
-            if (_log.shouldInfo())
-                _log.info("NOT starting TrackerClient???");
-        }
+        } else if (_log.shouldDebug()) {_log.debug("NOT starting TrackerClient???");}
     }
 
     /**
      * Stop contacting the tracker and talking with peers
      */
-    public void stopTorrent() {
-        stopTorrent(false);
-    }
+    public void stopTorrent() {stopTorrent(false);}
 
     /**
      * Stop contacting the tracker and talking with peers
@@ -418,8 +360,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             // TODO: Cache the config-in-mem to compare vs config-on-disk
             // (needed for auto-save to not double-save in some cases)
             long nowUploaded = getUploaded();
-            // If autoStart is enabled, always save the config, so we know
-            // whether to start it up next time
+            // If autoStart is enabled, always save the config, so we know whether to start it up next time
             boolean changed = storage.isChanged() || nowUploaded != savedUploaded ||
                     (completeListener != null && completeListener.shouldAutoStart());
             try {
@@ -430,8 +371,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
                 ioe.printStackTrace();
             }
             savedUploaded = nowUploaded;
-            // SnarkManager.stopAllTorrents() will save comments at shutdown even if never
-            // started...
+            // SnarkManager.stopAllTorrents() will save comments at shutdown even if never started...
             if (completeListener != null) {
                 if (changed)
                     completeListener.updateStatus(this);
@@ -1021,23 +961,22 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * Maintain a configurable total uploader cap
      * coordinatorListener
      */
-    final static int MIN_TOTAL_UPLOADERS = 4;
+    final static int MIN_TOTAL_UPLOADERS = 10;
     final static int MAX_TOTAL_UPLOADERS = 50;
 
     public boolean overUploadLimit(int uploaders) {
-        if (_peerCoordinatorSet == null || uploaders <= 0)
-            return false;
+        int maxUploaders = _util.getMaxUploaders();
+        if (maxUploaders < MIN_TOTAL_UPLOADERS) {maxUploaders = MIN_TOTAL_UPLOADERS;}
+        if (_peerCoordinatorSet == null || uploaders <= 0) {return false;}
         int totalUploaders = 0;
         for (PeerCoordinator c : _peerCoordinatorSet) {
-            if (!c.halted())
-                totalUploaders += c.getInterestedUploaders();
+            if (!c.halted()) {totalUploaders += c.getInterestedUploaders();}
         }
-        int limit = Math.max(MIN_TOTAL_UPLOADERS, Math.min(MAX_TOTAL_UPLOADERS, _util.getMaxUploaders()));
-        if (_log.shouldDebug())
-            if (totalUploaders > 1)
-                _log.debug("Currently uploading to: " + totalUploaders + " peers (Limit: " + limit + ")");
-            else
-                _log.debug("Currently uploading to: " + totalUploaders + " peer (Limit: " + limit + ")");
+        int limit = Math.max(MIN_TOTAL_UPLOADERS, maxUploaders);
+        if (_log.shouldDebug()) {
+        _log.debug("Currently uploading to: " + totalUploaders + " peer" +
+                   (totalUploaders != 1 ? "s" : "") + " (Limit: " + limit + ")");
+        }
         return totalUploaders > limit;
     }
 
