@@ -279,7 +279,7 @@ public class I2PSnarkUtil implements DisconnectListener {
             if (opts.getProperty("outbound.nickname") == null) {opts.setProperty("outbound.nickname", _baseName.replace("i2psnark", "I2PSnark"));}
             if (opts.getProperty("inbound.lengthVariance") == null || !getVaryInboundHops()) {opts.setProperty("inbound.lengthVariance", "0");}
             else if (getVaryInboundHops()) {opts.setProperty("inbound.lengthVariance", "1");}
-            if (opts.getProperty("outbound.lengthVariance") == null || !getVaryInboundHops()) {opts.setProperty("outbound.lengthVariance", "0");}
+            if (opts.getProperty("outbound.lengthVariance") == null || !getVaryOutboundHops()) {opts.setProperty("outbound.lengthVariance", "0");}
             else if (getVaryOutboundHops()) {opts.setProperty("outbound.lengthVariance", "1");}
             if (opts.getProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT) == null) {opts.setProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT, "300000");} // 5 minutes
             if (opts.getProperty("i2p.streaming.inactivityTimeout") == null) {opts.setProperty("i2p.streaming.inactivityTimeout", "180000");} // 3 minute idle time before disconnect
