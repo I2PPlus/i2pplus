@@ -499,8 +499,12 @@ code{padding:0 2px;font:8.5pt 700 var(--monospaced);color:#7166ff}
 #createSection #trackerselect td:nth-child(n+2){text-align:center}
 form:last-child>.configPanel{margin-bottom:-1px}
 #createTorrentFilters{display:table-row}
+#hopVariance label{display:inline-block;vertical-align:middle}
 #hopVariance label+label{margin-left:12px}
 #hopVariance .optbox{margin-right:4px}
+#hopVariance .optbox+span{width:22px;height:22px;display:inline-block;font-size:0;vertical-align:middle;background:var(--inbound) no-repeat center center/22px}
+#hopVariance #varyOutbound+span {background:var(--outbound) no-repeat center center/22px}
+#hopVariance .optbox:not(:checked)+span{filter:saturate(0)}
 #i2cpOptions{display:block;column-span:all}
 .createFilterToggle{margin:0 4px 4px 0;padding:2px 8px;display:inline-block;display:flex;flex-grow:.01;justify-content:center;position:relative;vertical-align:middle;text-align:center;font-size:95%;font-style:italic;border:var(--border_soft)}
 .createFilterToggle.starts_with{border-left-width:5px}
