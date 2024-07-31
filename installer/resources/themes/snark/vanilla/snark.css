@@ -643,8 +643,12 @@ input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_
 #configs a[href^="/config"]{display:inline-block;vertical-align:middle}
 #embed,#fullscreen{margin:0 -3px -1px 0;padding:0 5px;float:right;font-size:8pt;color:#cf0f00;box-shadow:0 0 0 1px #afa399;background:var(--th)}
 #fullscreen{display:none}
+#hopVariance label{vertical-align:text-bottom}
 #hopVariance label+label{margin-left:12px}
 #hopVariance .optbox{margin-right:4px}
+#hopVariance .optbox+span{width:22px;height:22px;display:inline-block;font-size:0;vertical-align:middle;background:var(--inbound) no-repeat center center/22px}
+#hopVariance #varyOutbound+span {background:var(--outbound) no-repeat center center/22px}
+#hopVariance .optbox:not(:checked)+span{filter:saturate(0)}
 #i2cpOptions{display:block;column-span:all}
 .iframed #embed{display:none}
 .iframed #fullscreen{display:inline-block}

@@ -650,6 +650,9 @@ input.trackerhome,input.trackerannounce{width:210px}
 #filecheck a{margin-left:8px;display:inline-block}
 #hopVariance label+label{margin-left:12px}
 #hopVariance .optbox{margin-right:4px}
+#hopVariance .optbox+span{width:22px;height:22px;display:inline-block;font-size:0;vertical-align:middle;background:var(--inbound) no-repeat center center/22px}
+#hopVariance #varyOutbound+span {background:var(--outbound) no-repeat center center/22px}
+#hopVariance .optbox:not(:checked)+span{filter:saturate(0)}
 #i2cpOptions{display:block;column-span:all}
 #snarkLang{margin:0 3px;padding:7px 10px;display:inline-block;vertical-align:middle;color:#ff7;font-weight:700;text-align:center;text-shadow:0 1px 1px #557;border-radius:4px;background:#030}
 #torrentOrderControl b{line-height:1}
