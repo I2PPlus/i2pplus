@@ -13,9 +13,9 @@
 --snarkGraph:url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true");
 --tabIcon:linear-gradient(180deg,#000 50%,#040 50%);
 --tr:linear-gradient(180deg,rgba(0,24,0,.5),rgba(0,8,0,.5));
---tr_snark:linear-gradient(90deg,#373 1px,#0000 1px),linear-gradient(180deg,rgba(0,24,0,.5),rgba(0,8,0,.5));
---tr_snark_odd:linear-gradient(90deg,#5a5 1px,#0000 1px),linear-gradient(180deg,rgba(0,24,0,.5),rgba(0,8,0,.5));
---tr_snark_hover:linear-gradient(90deg,var(--hover) 1px,#0000 1px),#030;
+--tr_snark:linear-gradient(90deg,#373 2px,#0000 2px),linear-gradient(180deg,rgba(0,24,0,.5),rgba(0,8,0,.5));
+--tr_snark_odd:linear-gradient(90deg,#5a5 2px,#0000 2px),linear-gradient(180deg,rgba(0,24,0,.5),rgba(0,8,0,.5));
+--tr_snark_hover:linear-gradient(90deg,var(--hover) 2px,#0000 2px),#030;
 }
 
 html,body{background:#000}
@@ -222,7 +222,7 @@ th.peerCount a img{margin-left:-5px}
 .downloading.active:hover td#torrents .tAction{background:linear-gradient(to left,#3c3,#3c3 2px,#030 2px)}
 .downloading.active td#torrents .tAction{background:linear-gradient(to left,#3c3,#3c3 2px,#0000 2px)}
 .idle::after,.choked::after{width:8px;height:8px;display:inline-block;border-radius:50%;background:#373;content:""}
-.inactivity{margin-left:15px;height:4px;min-width:5px;max-width:400px;display:inline-block;border-radius:3px;box-shadow:0 0 0 1px #010;background:repeating-linear-gradient(90deg,#0000,#0000 15px,rgba(0,0,0,.6) 15px,rgba(0,0,0,.6) 16px,#0000 16px),linear-gradient(180deg,rgba(255,255,255,.3) 50%,rgba(0,0,0,.3) 50%),linear-gradient(90deg,#770 60px,#900)}
+.inactivity{margin-left:12px;height:6px;min-width:5px;max-width:400px;display:inline-block;vertical-align:middle;border-radius:5px;box-shadow:0 0 0 1px #010,0 0 0 1px #fff3 inset;background:repeating-linear-gradient(90deg,#0000,#0000 15px,rgba(0,0,0,.6) 15px,rgba(0,0,0,.6) 16px,#0000 16px),linear-gradient(180deg,rgba(255,255,255,.3) 50%,rgba(0,0,0,.3) 50%),linear-gradient(90deg,#770 60px,#900)}
 .inactivity[style="width:0px"],.inactivity[style="width:1px"],.inactivity[style="width:2px"],.inactivity[style="width:3px"],.inactivity[style="width:4px"],.inactivity[style="width:5px"]{display:none}
 .noneLoaded i{padding:15px 10px;display:inline-block;font-size:115%}
 .magnet:not(hidden),.trackerLink:not(hidden){padding:4px;width:1%;text-align:center}
@@ -282,7 +282,6 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 #snarkTbody #pagenavbottom,#snarkTbody #pagenavbottom:hover,#snarkTbody #pagenavbottom:hover td{background:var(--tr)}
 #torrents{margin:-1px 0 12px;border-bottom:var(--border)}
 .iframed #torrents{margin-bottom:11px}
-#torrents tr:not(#pagenavbottom):hover td,.dirInfo tr:hover,#trackerselect tr:nth-child(n+2):hover,#trackerconfig tr:nth-child(n+2):hover,.peerinfo:hover td,.peerinfo:hover+.debuginfo{border-top:1px solid #001b00;border-bottom:1px solid #001b00}
 #torrents tr:hover td,.dirInfo tr:hover,#trackerselect tr:nth-child(n+2):hover,#trackerconfig tr:nth-child(n+2):hover,#fileFilter tr:nth-last-child(n+5):not(:first-child):hover{background:#030}
 #torrents #snarkTbody tr:not(.peerinfo):not(#pagenavbottom):hover .status{background:var(--tr_snark_hover)}
 #torrents thead{box-shadow:none}
@@ -390,8 +389,7 @@ tr:hover .barText{opacity:1}
 .peerclient{margin:3px 0;padding:1px;border-radius:1px;background:#000;box-shadow:0 0 0 1px #020;contain:paint}
 .peerclient,.peerinfo code,.clientid{display:inline-block;vertical-align:middle;line-height:1.2}
 .peerinfo code{margin:0;padding:2px 9px 2px 5px;font-size:85%;color:#bb0;border-radius:4px 0 0 4px;background:none}
-.clientid{margin-left:-8px;padding:3px 2px 3px 4px;width:57px;display:inline-block;overflow:hidden;white-space:nowrap;vertical-align:middle;text-overflow:ellipsis;font-size:85%;text-align:center;background:var(--badge)}
-.clientVersion{display:none}
+.clientid{margin-left:-8px;padding:3px 2px 3px 4px;width:60px;display:inline-block;overflow:hidden;white-space:nowrap;vertical-align:middle;text-overflow:ellipsis;font-size:85%;text-align:center;background:var(--badge)}
 .peerinfo td>*{vertical-align:middle}
 .peerdata{padding-left:0}
 #torrents .peerinfo .rxd{text-align:center}
