@@ -181,14 +181,6 @@ public class I2PSnarkUtil implements DisconnectListener {
         }
         // this updates the session options and tells the router
         setMaxUpBW(_maxUpBW);
-        if (_manager != null) {
-            I2PSession sess = _manager.getSession();
-            if (sess != null) {
-                Properties newProps = new Properties();
-                synchronized(_opts) {newProps.putAll(_opts);}
-                sess.updateOptions(newProps);
-            }
-        }
     }
 
     public void setMaxUploaders(int limit) {_maxUploaders = limit;}
@@ -254,6 +246,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     public boolean getVaryInboundHops() {return _varyInboundHops;}
     /** @since 0.9.64+ */
     public boolean getVaryOutboundHops() {return _varyOutboundHops;}
+
     /** @since 0.9.64+ */
     public void setVaryInboundHops(boolean yes) {
         _varyInboundHops = yes;
@@ -265,6 +258,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         Properties opts = _context.getProperties();
         opts.putAll(_opts);
     }
+
     /** @since 0.9.64+ */
     public void setVaryOutboundHops(boolean yes) {
         _varyOutboundHops = yes;
