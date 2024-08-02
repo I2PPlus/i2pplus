@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.i2p.util.SystemVersion;
 
 import gnu.getopt.Getopt;
 

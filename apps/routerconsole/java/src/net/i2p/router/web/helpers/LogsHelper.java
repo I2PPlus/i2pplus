@@ -6,15 +6,12 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.Comparator;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.jar.Attributes;
 
-import net.i2p.I2PAppContext;
 import net.i2p.crypto.SigType;
 import net.i2p.data.DataHelper;
 import net.i2p.router.web.ConfigServiceHandler;
@@ -24,7 +21,6 @@ import net.i2p.router.web.RouterConsoleRunner;
 import net.i2p.util.Translate;
 import net.i2p.util.UIMessages;
 
-import java.util.Collections;
 import java.util.regex.*;
 
 public class LogsHelper extends HelperBase {

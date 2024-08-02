@@ -26,7 +26,6 @@ import net.i2p.router.web.WebAppStarter;
 import net.i2p.util.Addresses;
 import net.i2p.util.SystemVersion;
 
-import net.i2p.router.web.CSSHelper;
 
 public class ConfigClientsHelper extends HelperBase {
     private String _edit;

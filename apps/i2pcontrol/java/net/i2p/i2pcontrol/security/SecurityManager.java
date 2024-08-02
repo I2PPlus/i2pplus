@@ -27,12 +27,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import net.i2p.i2pcontrol.servlets.configuration.ConfigurationManager;
 
-import javax.net.SocketFactory;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
 import java.security.KeyStore;
-import java.security.cert.CertificateEncodingException;
-import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Iterator;
 

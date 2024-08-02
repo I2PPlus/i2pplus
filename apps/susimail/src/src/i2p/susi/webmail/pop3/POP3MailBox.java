@@ -28,7 +28,6 @@ import i2p.susi.webmail.NewMailListener;
 import i2p.susi.webmail.WebMail;
 import i2p.susi.util.Config;
 import i2p.susi.util.Buffer;
-import i2p.susi.util.ReadBuffer;
 import i2p.susi.util.MemoryBuffer;
 
 import java.io.OutputStream;
@@ -40,7 +39,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 import net.i2p.I2PAppContext;

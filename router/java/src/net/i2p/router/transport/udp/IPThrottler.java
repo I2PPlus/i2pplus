@@ -3,7 +3,6 @@ package net.i2p.router.transport.udp;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
-import net.i2p.util.SipHash;
 
 /**
  * Count IPs

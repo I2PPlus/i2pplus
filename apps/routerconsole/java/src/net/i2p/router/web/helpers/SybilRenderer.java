@@ -18,10 +18,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 import net.i2p.data.DataHelper;
-import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.router.RouterAddress;
@@ -29,7 +27,6 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.data.router.RouterKeyGenerator;
 import net.i2p.kademlia.XORComparator;
 import net.i2p.router.RouterContext;
-import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.crypto.FamilyKeyCrypto;
 import net.i2p.router.peermanager.DBHistory;
 import net.i2p.router.peermanager.PeerProfile;
@@ -42,14 +39,9 @@ import net.i2p.router.tunnel.pool.TunnelPool;
 import net.i2p.router.util.HashDistance;
 import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.Messages;
-import net.i2p.stat.Rate;
-import net.i2p.stat.RateAverages;
-import net.i2p.stat.RateStat;
 import net.i2p.util.ConvertToHash;
 import net.i2p.util.Log;
-import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
-import net.i2p.util.VersionComparator;
 
 /**
  *  For debugging only.

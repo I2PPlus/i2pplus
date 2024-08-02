@@ -2,7 +2,6 @@ package net.i2p.router.crypto.ratchet;
 
 import java.util.List;
 
-import net.i2p.data.SessionKey;
 
 /**
  *  Simple object with outbound tag, key, and nonce,

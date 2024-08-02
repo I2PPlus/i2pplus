@@ -3,18 +3,14 @@ package net.i2p.router.web;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Stroke;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
-import javax.imageio.ImageIO;
 import javax.imageio.stream.ImageOutputStream;
-import javax.imageio.stream.MemoryCacheImageOutputStream;
 
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
@@ -24,7 +20,6 @@ import static net.i2p.router.web.GraphConstants.*;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
-import org.rrd4j.ConsolFun;
 import org.rrd4j.core.RrdException;
 import org.rrd4j.data.Variable;
 import org.rrd4j.graph.ElementsNames;
@@ -32,15 +27,12 @@ import org.rrd4j.graph.RrdGraph;
 import org.rrd4j.graph.RrdGraphDef;
 import org.rrd4j.graph.SVGImageWorker;
 
-import eu.bengreen.data.utility.LargestTriangleThreeBuckets;
 import eu.bengreen.data.utility.LargestTriangleThreeBucketsTime;
 
-import net.i2p.router.web.helpers.GraphHelper;
 
 
 // enumerate system fonts
 import java.awt.GraphicsEnvironment;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

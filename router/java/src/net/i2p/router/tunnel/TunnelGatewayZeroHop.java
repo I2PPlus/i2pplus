@@ -8,7 +8,6 @@ import net.i2p.data.i2np.TunnelGatewayMessage;
 import net.i2p.data.i2np.UnknownI2NPMessage;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
-import net.i2p.util.Log;
 
 /**
  * Serve as the gatekeeper for a tunnel with no hops, either inbound or outbound.

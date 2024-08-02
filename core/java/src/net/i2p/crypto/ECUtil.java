@@ -1,7 +1,6 @@
 package net.i2p.crypto;
 
 import java.math.BigInteger;
-import java.security.spec.ECField;
 import java.security.spec.ECFieldFp;
 import java.security.spec.ECPoint;
 import java.security.spec.EllipticCurve;

@@ -28,7 +28,6 @@ import net.i2p.data.i2cp.SetDateMessage;
 import net.i2p.internal.InternalClientManager;
 import net.i2p.internal.QueuedI2CPMessageReader;
 import net.i2p.util.I2PSSLSocketFactory;
-import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
 import net.i2p.util.SystemVersion;
 

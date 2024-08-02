@@ -24,7 +24,6 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.app.RouterApp;
 import net.i2p.util.I2PSSLSocketFactory;
 import net.i2p.util.Log;
-import net.i2p.util.PortMapper;
 
 import net.i2p.i2pcontrol.security.KeyStoreProvider;
 import net.i2p.i2pcontrol.security.SecurityManager;
@@ -43,9 +42,6 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.UnknownHostException;
-import java.security.KeyStore;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.StringTokenizer;

@@ -2,10 +2,7 @@ package net.i2p.router.transport;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.FIFOBandwidthLimiter.Request;
 import net.i2p.util.Log;

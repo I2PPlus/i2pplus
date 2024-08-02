@@ -10,7 +10,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import net.i2p.I2PAppContext;
 
-import net.i2p.util.SystemVersion;
 
 /**
  * Simple event scheduler - toss an event on the queue and it gets fired at the

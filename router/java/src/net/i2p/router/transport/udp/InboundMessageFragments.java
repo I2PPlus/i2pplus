@@ -1,9 +1,6 @@
 package net.i2p.router.transport.udp;
 
-import java.util.Map;
 
-import net.i2p.data.DataFormatException;
-import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
 import net.i2p.router.util.DecayingBloomFilter;
 import net.i2p.router.util.DecayingHashSet;

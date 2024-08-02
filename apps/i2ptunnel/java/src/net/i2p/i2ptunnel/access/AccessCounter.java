@@ -2,7 +2,6 @@ package net.i2p.i2ptunnel.access;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Counts connection attempts and decides if specified thresholds have been

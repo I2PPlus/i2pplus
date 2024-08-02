@@ -6,12 +6,9 @@ package net.i2p.crypto;
  */
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.PublicKey;
-import java.security.cert.CertificateFactory;
 import java.security.cert.CRLException;
 import java.security.cert.X509Certificate;
 

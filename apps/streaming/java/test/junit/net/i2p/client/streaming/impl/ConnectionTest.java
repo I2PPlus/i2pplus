@@ -4,7 +4,6 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
 import net.i2p.util.SimpleTimer2;
 

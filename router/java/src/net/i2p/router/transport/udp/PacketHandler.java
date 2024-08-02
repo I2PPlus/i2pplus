@@ -1,21 +1,10 @@
 package net.i2p.router.transport.udp;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 
-import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.util.CoDelBlockingQueue;
-import net.i2p.data.DataFormatException;
-import net.i2p.data.DataHelper;
-import net.i2p.data.SessionKey;
-import net.i2p.util.Addresses;
 import net.i2p.util.I2PThread;
-import net.i2p.util.LHMCache;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 

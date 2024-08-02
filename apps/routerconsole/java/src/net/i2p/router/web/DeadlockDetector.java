@@ -11,7 +11,6 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.util.EventLog;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
-import net.i2p.util.SystemVersion;
 
 /**
  *  Periodic check

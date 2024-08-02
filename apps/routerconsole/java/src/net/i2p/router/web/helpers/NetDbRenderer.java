@@ -8,19 +8,16 @@ package net.i2p.router.web.helpers;
  *
  */
 
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 import java.math.BigInteger;         // debug
-import java.net.InetAddress;
 import java.text.Collator;
 import java.text.DecimalFormat;      // debug
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -45,17 +42,12 @@ import net.i2p.data.router.RouterKeyGenerator;
 import net.i2p.router.crypto.FamilyKeyCrypto;
 import net.i2p.router.JobImpl;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
-import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseSegmentor;
-import net.i2p.router.networkdb.kademlia.SegmentedNetworkDatabaseFacade;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.CommSystemFacadeImpl;
-import net.i2p.router.transport.GeoIP;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.util.HashDistance;   // debug
-import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.Messages;
-import net.i2p.router.web.WebAppStarter;
 import net.i2p.util.Addresses;
 import net.i2p.util.ConvertToHash;
 import net.i2p.util.Log;

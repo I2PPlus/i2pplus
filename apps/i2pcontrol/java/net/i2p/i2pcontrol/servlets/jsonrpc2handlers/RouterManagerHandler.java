@@ -13,7 +13,6 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.networkdb.reseed.ReseedChecker;
 import net.i2p.update.UpdateManager;
 import net.i2p.update.UpdateType;
-import net.i2p.util.Log;
 
 import org.tanukisoftware.wrapper.WrapperManager;
 

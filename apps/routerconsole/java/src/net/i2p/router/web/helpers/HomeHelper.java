@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import net.i2p.CoreVersion;
 import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
 import net.i2p.router.web.App;
@@ -16,7 +15,6 @@ import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.Messages;
 import net.i2p.router.web.NavHelper;
 import net.i2p.router.web.PluginStarter;
-import net.i2p.router.web.WebAppStarter;
 import net.i2p.util.PortMapper;
 
 import net.i2p.router.web.CSSHelper;

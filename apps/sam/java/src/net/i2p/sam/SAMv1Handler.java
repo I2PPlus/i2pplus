@@ -31,7 +31,6 @@ import net.i2p.data.Base64;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
-import net.i2p.util.Log;
 
 /**
  * Class able to handle a SAM version 1 client connections.

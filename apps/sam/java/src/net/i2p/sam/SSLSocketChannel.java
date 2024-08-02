@@ -1,7 +1,6 @@
 package net.i2p.sam;
 
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketAddress;
 /* requires Java 7 */

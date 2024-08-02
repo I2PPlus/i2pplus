@@ -13,18 +13,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-import net.i2p.crypto.SigType;
-import net.i2p.data.Certificate;
 import net.i2p.data.DataFormatException;
-import net.i2p.data.DataHelper;
-import net.i2p.data.PrivateKey;
-import net.i2p.data.PublicKey;
-import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
-import net.i2p.data.SigningPrivateKey;
-import net.i2p.data.SigningPublicKey;
 import net.i2p.router.JobImpl;
-import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.startup.LoadRouterInfoJob.KeyData;
 import net.i2p.util.Log;

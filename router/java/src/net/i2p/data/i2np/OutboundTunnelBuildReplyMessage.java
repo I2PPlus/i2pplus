@@ -1,12 +1,7 @@
 package net.i2p.data.i2np;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.Properties;
 
 import net.i2p.I2PAppContext;
-import net.i2p.data.DataFormatException;
-import net.i2p.data.DataHelper;
 
 /**
  * Sent from the OBEP to the tunnel creator via an inbound tunnel.

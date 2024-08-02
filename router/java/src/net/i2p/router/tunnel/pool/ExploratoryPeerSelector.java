@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
@@ -14,7 +13,6 @@ import net.i2p.router.util.MaskedIPSet;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.util.ArraySet;
-import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**

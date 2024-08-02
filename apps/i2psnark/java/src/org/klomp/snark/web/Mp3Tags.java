@@ -6,7 +6,6 @@ import com.mpatric.mp3agic.ID3v1;
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.Mp3File;
 
-import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 
 

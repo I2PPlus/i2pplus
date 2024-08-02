@@ -5,7 +5,6 @@ import java.io.StringWriter;
 
 import net.i2p.router.web.HelperBase;
 
-import net.i2p.router.RouterContext;
 
 public class TransitSummaryHelper extends HelperBase {
     public TransitSummaryHelper() {}

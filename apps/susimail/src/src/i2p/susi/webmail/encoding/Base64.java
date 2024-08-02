@@ -24,7 +24,6 @@
 package i2p.susi.webmail.encoding;
 
 import i2p.susi.util.Buffer;
-import i2p.susi.util.MemoryBuffer;
 import i2p.susi.util.StringBuilderWriter;
 
 import java.io.ByteArrayInputStream;

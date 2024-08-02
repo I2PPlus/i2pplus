@@ -10,7 +10,6 @@ import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.net.ssl.SSLException;

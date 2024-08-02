@@ -14,7 +14,6 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;

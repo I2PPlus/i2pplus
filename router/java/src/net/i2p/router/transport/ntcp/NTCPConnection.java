@@ -11,7 +11,6 @@ import java.nio.channels.SocketChannel;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
@@ -45,14 +44,11 @@ import net.i2p.router.transport.FIFOBandwidthLimiter;
 import net.i2p.router.transport.FIFOBandwidthLimiter.Request;
 import net.i2p.router.transport.ntcp.NTCP2Payload.Block;
 import net.i2p.router.util.PriBlockingQueue;
-import net.i2p.router.util.CoDelPriorityBlockingQueue;
 import net.i2p.util.ByteCache;
 import net.i2p.util.ConcurrentHashSet;
-import net.i2p.util.HexDump;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
-import net.i2p.util.VersionComparator;
 
 /**
  * Coordinate the connection to a single peer.

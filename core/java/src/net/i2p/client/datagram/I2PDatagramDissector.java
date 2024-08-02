@@ -11,7 +11,6 @@ package net.i2p.client.datagram;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-import net.i2p.I2PAppContext;
 import net.i2p.crypto.DSAEngine;
 import net.i2p.crypto.SHA256Generator;
 import net.i2p.crypto.SigType;
@@ -20,7 +19,6 @@ import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.data.Signature;
 import net.i2p.data.SigningPublicKey;
-import net.i2p.util.Log;
 
 /**
  * Class for dissecting I2P repliable datagrams, checking the authenticity of

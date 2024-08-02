@@ -1,6 +1,5 @@
 package net.i2p.router.web.helpers;
 
-import java.io.File;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;

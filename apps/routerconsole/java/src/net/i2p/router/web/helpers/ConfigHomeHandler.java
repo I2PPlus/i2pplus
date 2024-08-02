@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import net.i2p.data.DataHelper;
 import net.i2p.router.web.App;
 import net.i2p.router.web.FormHandler;
 

@@ -13,7 +13,6 @@ import java.nio.channels.SocketChannel;
 import java.util.Properties;
 
 import net.i2p.data.DataFormatException;
-import net.i2p.util.Log;
 
 /**
  * Class able to handle a SAM version 2 client connection.

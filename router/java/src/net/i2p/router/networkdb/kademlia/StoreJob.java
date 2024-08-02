@@ -18,11 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SigType;
-import net.i2p.data.Base64;
-import net.i2p.data.Certificate;
 import net.i2p.data.DatabaseEntry;
-import net.i2p.data.DataFormatException;
-import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.Lease;
 import net.i2p.data.LeaseSet;

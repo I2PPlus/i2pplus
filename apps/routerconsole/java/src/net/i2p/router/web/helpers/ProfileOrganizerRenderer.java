@@ -3,7 +3,6 @@ package net.i2p.router.web.helpers;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
-import java.net.InetAddress;
 import java.text.DecimalFormat;
 import java.util.Comparator;
 import java.util.Set;
@@ -18,7 +17,6 @@ import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.CommSystemFacadeImpl;
-import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.Messages;
 import static net.i2p.router.web.helpers.TunnelRenderer.range;
 

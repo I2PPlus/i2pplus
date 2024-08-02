@@ -3,12 +3,9 @@ package net.i2p.router.tunnel.pool;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SessionKeyManager;
-import net.i2p.data.DataFormatException;
-import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.PublicKey;
 import net.i2p.data.TunnelId;

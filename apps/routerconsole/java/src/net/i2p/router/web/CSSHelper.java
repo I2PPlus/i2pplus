@@ -9,7 +9,6 @@ import net.i2p.servlet.util.ServletUtil;
 import net.i2p.util.RandomSource;
 import net.i2p.util.SystemVersion;
 
-import org.cybergarage.http.HTTPRequest;
 
 /**
  * Copied and modded from I2PTunnel IndexBean (GPL)

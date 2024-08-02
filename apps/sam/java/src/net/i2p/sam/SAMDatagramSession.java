@@ -19,7 +19,6 @@ import net.i2p.client.datagram.I2PDatagramMaker;
 import net.i2p.client.datagram.I2PInvalidDatagramException;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.Destination;
-import net.i2p.util.Log;
 
 /**
  * SAM DATAGRAM session class.

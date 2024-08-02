@@ -23,19 +23,15 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.i2p.I2PAppContext;
 import net.i2p.app.ClientAppManager;
 import net.i2p.app.ClientAppState;
 import static net.i2p.app.ClientAppState.*;
 import net.i2p.router.RouterContext;
 import net.i2p.router.app.RouterApp;
-import net.i2p.util.I2PSSLSocketFactory;
 import net.i2p.util.Log;
-import net.i2p.util.PortMapper;
 
 import org.json.simple.Jsoner;
 import org.json.simple.DeserializationException;

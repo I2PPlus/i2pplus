@@ -29,7 +29,6 @@ package net.i2p.router.time;
  *
  */
 import java.io.IOException;
-import java.io.InterruptedIOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -43,7 +42,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
-import net.i2p.util.Addresses;
 import net.i2p.util.DNSOverHTTPS;
 import net.i2p.util.HexDump;
 import net.i2p.util.Log;

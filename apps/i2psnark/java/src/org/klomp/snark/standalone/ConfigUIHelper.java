@@ -1,6 +1,5 @@
 package org.klomp.snark.standalone;
 
-import java.util.Locale;
 
 import net.i2p.I2PAppContext;
 import net.i2p.util.Translate;

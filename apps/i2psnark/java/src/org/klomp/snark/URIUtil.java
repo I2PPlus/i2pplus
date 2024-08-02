@@ -18,9 +18,6 @@
 
 package org.klomp.snark;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URLEncoder;
 
 import net.i2p.data.DataHelper;
 

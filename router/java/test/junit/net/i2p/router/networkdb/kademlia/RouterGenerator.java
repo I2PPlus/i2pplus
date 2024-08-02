@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.math.BigInteger;
 import java.util.HashSet;
-import java.util.Properties;
 import java.util.Set;
 
 import net.i2p.crypto.KeyGenerator;

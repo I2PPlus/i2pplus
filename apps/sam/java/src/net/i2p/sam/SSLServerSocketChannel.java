@@ -5,7 +5,6 @@ import java.net.ServerSocket;
 import java.net.SocketAddress;
 /* requires Java 7 */
 import java.net.SocketOption;
-import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.spi.SelectorProvider;

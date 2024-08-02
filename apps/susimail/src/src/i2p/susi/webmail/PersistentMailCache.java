@@ -1,15 +1,9 @@
 package i2p.susi.webmail;
 
-import i2p.susi.webmail.Messages;
 import i2p.susi.util.Buffer;
-import i2p.susi.util.FileBuffer;
 import i2p.susi.util.FixCRLFOutputStream;
 import i2p.susi.util.GzipFileBuffer;
-import i2p.susi.util.ReadBuffer;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -19,12 +13,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 import net.i2p.I2PAppContext;
 import net.i2p.data.Base64;
@@ -35,7 +26,6 @@ import net.i2p.util.Log;
 import net.i2p.util.PasswordManager;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFile;
-import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
 
 

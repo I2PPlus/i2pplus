@@ -15,7 +15,6 @@ import java.util.Properties;
 import net.i2p.client.I2PSession;
 import net.i2p.client.I2PSessionException;
 import net.i2p.data.DataFormatException;
-import net.i2p.util.Log;
 
 /**
  * SAM RAW session class.

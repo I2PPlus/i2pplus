@@ -4,7 +4,6 @@ import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
 import net.i2p.client.I2PSessionMuxedListener;
 import net.i2p.client.datagram.I2PDatagramDissector;
-import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 
 /**

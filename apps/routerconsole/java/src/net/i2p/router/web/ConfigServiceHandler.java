@@ -14,7 +14,6 @@ import net.i2p.apps.systray.UrlLauncher;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.startup.ClientAppConfig;
-import net.i2p.util.PortMapper;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 

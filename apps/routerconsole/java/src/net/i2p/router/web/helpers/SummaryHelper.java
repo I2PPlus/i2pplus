@@ -30,7 +30,6 @@ import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.DeadlockDetector;
 import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.NewsHelper;
-import net.i2p.router.web.WebAppStarter;
 import net.i2p.servlet.util.ServletUtil;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
@@ -39,8 +38,6 @@ import net.i2p.util.SystemVersion;
 
 import net.i2p.router.web.ConfigUpdateHandler;
 
-import java.lang.management.ManagementFactory;
-import com.sun.management.OperatingSystemMXBean;
 
 /**
  * Simple helper to query the appropriate router for data necessary to render

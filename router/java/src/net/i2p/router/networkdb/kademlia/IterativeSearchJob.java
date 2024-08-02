@@ -11,7 +11,6 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.i2p.crypto.EncType;
-import net.i2p.crypto.SigType;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
@@ -36,9 +35,7 @@ import net.i2p.util.NativeBigInteger;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
-import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.Router;
-import net.i2p.router.peermanager.PeerProfile;
 
 /**
  * A traditional Kademlia search that continues to search

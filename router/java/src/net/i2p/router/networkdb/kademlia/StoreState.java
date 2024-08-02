@@ -1,6 +1,5 @@
 package net.i2p.router.networkdb.kademlia;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;

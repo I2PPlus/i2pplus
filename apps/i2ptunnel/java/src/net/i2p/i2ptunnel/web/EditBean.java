@@ -9,18 +9,13 @@ package net.i2p.i2ptunnel.web;
  */
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
-import net.i2p.I2PException;
 import net.i2p.client.I2PClient;
 import net.i2p.crypto.SigType;
-import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
-import net.i2p.data.Destination;
 import net.i2p.data.PrivateKeyFile;
-import net.i2p.data.Signature;
 import net.i2p.data.SigningPrivateKey;
 import net.i2p.i2ptunnel.TunnelController;
 import net.i2p.i2ptunnel.TunnelControllerGroup;

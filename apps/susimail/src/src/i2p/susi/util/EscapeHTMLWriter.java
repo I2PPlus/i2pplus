@@ -4,7 +4,6 @@ import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
 
-import net.i2p.data.DataHelper;
 
 /**
  * Escape HTML on the fly.

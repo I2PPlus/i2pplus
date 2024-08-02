@@ -47,7 +47,6 @@ import net.i2p.data.SigningPublicKey;
 import net.i2p.data.SimpleDataStructure;
 import net.i2p.data.i2cp.I2CPMessage;
 import net.i2p.data.i2cp.RequestLeaseSetMessage;
-import net.i2p.util.Log;
 
 /**
  * Handle I2CP RequestLeaseSetMessage from the router by granting all leases,

@@ -1,16 +1,12 @@
 package net.i2p.crypto.elgamal;
 
-import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
-import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
-import java.util.Arrays;
 
 import net.i2p.crypto.SHA256Generator;
 import net.i2p.crypto.SigUtil;

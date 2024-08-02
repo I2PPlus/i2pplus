@@ -32,9 +32,7 @@ import net.i2p.router.transport.TransportUtil;
 import net.i2p.util.Addresses;
 import net.i2p.util.Log;
 import net.i2p.util.HexDump;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
-import net.i2p.util.VersionComparator;
 
 /**
  *  Entry points are runTest() to start a new test as Alice,

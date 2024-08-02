@@ -13,7 +13,6 @@ import net.i2p.app.ClientAppManager;
 import net.i2p.app.ClientAppState;
 import net.i2p.app.NavService;
 
-import net.i2p.router.web.CSSHelper;
 
 public class NavHelper implements NavService, ClientApp {
     // both indexed by standard (untranslated) app name

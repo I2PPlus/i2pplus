@@ -1,6 +1,5 @@
 package i2p.susi.util;
 
-import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 

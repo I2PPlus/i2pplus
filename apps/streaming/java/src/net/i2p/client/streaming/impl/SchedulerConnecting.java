@@ -1,7 +1,6 @@
 package net.i2p.client.streaming.impl;
 
 import net.i2p.I2PAppContext;
-import net.i2p.util.Log;
 
 /**
  * <p>Scheduler used once we've sent our SYN but it hasn't been ACKed yet.

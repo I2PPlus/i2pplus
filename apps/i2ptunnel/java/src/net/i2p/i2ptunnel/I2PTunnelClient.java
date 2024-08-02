@@ -16,7 +16,6 @@ import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketAddress;
 import net.i2p.data.Destination;
 import net.i2p.util.EventDispatcher;
-import net.i2p.util.Log;
 import net.i2p.util.PortMapper;
 
 public class I2PTunnelClient extends I2PTunnelClientBase {

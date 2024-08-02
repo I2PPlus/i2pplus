@@ -35,7 +35,6 @@ import java.io.OutputStream;
 import java.util.Locale;
 
 import net.i2p.data.DataHelper;
-import net.i2p.util.Log;
 
 /**
  *  Ref:

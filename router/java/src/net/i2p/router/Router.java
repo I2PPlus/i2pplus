@@ -10,7 +10,6 @@ package net.i2p.router;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -31,10 +30,8 @@ import freenet.support.CPUInformation.UnknownCPUException;
 import gnu.getopt.Getopt;
 
 import net.i2p.client.impl.I2PSessionImpl;
-import net.i2p.CoreVersion;
 import net.i2p.crypto.SigUtil;
 import net.i2p.data.Base64;
-import net.i2p.data.Certificate;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
@@ -45,7 +42,6 @@ import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.data.SigningPrivateKey;
 import net.i2p.data.SigningPublicKey;
-import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.crypto.FamilyKeyCrypto;
 import net.i2p.router.message.GarlicMessageHandler;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
@@ -78,7 +74,6 @@ import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SimpleByteCache;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
-import net.i2p.util.VersionComparator;
 
 
 /**

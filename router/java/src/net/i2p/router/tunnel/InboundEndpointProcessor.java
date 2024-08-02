@@ -4,7 +4,6 @@ import net.i2p.data.Hash;
 import net.i2p.router.ProfileManager;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleByteCache;
 
 /**
  * Receive the inbound tunnel message, removing all of the layers

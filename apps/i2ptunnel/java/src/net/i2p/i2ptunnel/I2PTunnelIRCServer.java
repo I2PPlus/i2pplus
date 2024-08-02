@@ -18,7 +18,6 @@ import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.data.Base32;
 import net.i2p.util.EventDispatcher;
-import net.i2p.util.Log;
 
 /**
  * Simple extension to the I2PTunnelServer that filters the registration

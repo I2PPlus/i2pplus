@@ -11,7 +11,6 @@ package net.i2p.data.router;
 import static org.junit.Assert.*;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Properties;
 
 import org.junit.Test;
 

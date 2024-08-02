@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Queue;
-import java.util.TimeZone;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import net.i2p.data.DataHelper;

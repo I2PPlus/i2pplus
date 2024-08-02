@@ -8,12 +8,9 @@ import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.southernstorm.noise.protocol.ChaChaPolyCipherState;
-import com.southernstorm.noise.protocol.CipherState;
-import com.southernstorm.noise.protocol.CipherStatePair;
 import com.southernstorm.noise.protocol.HandshakeState;
 
 import net.i2p.crypto.HKDF;

@@ -3,13 +3,7 @@ package net.i2p.router.transport.udp;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.util.Arrays;
-import java.util.Queue;
-import java.util.concurrent.LinkedBlockingQueue;
 
-import net.i2p.crypto.HMACGenerator;
-import net.i2p.data.Base64;
-import net.i2p.data.DataHelper;
-import net.i2p.data.SessionKey;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.FIFOBandwidthLimiter;
 import net.i2p.router.util.CDPQEntry;

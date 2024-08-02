@@ -20,7 +20,6 @@ import net.i2p.i2ptunnel.irc.IrcInboundFilter;
 import net.i2p.i2ptunnel.irc.IrcOutboundFilter;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.I2PAppThread;
-import net.i2p.util.Log;
 import net.i2p.util.PortMapper;
 
 /**

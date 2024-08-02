@@ -15,7 +15,6 @@ import net.i2p.crypto.eddsa.*;
 import net.i2p.crypto.eddsa.spec.*;
 import org.hamcrest.core.*;
 import org.junit.*;
-import org.junit.rules.ExpectedException;
 
 import java.math.BigInteger;
 import java.util.Arrays;

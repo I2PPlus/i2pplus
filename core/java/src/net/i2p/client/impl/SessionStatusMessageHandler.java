@@ -13,7 +13,6 @@ import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSessionException;
 import net.i2p.data.i2cp.I2CPMessage;
 import net.i2p.data.i2cp.SessionStatusMessage;
-import net.i2p.util.Log;
 
 /**
  * Handle I2CP SessionStatusMessagese from the router, updating the session as

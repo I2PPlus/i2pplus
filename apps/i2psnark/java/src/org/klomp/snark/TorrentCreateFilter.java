@@ -4,7 +4,6 @@
  */
 package org.klomp.snark;
 
-import java.io.Serializable;
 
 /**
  * A structure for torrent creation filters

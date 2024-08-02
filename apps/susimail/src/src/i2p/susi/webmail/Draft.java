@@ -8,9 +8,6 @@ import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 
 import i2p.susi.util.Buffer;
-import i2p.susi.webmail.encoding.Encoding;
-import i2p.susi.webmail.encoding.EncodingException;
-import i2p.susi.webmail.encoding.EncodingFactory;
 
 /**
  * Holds a draft message and reference to attachments, if any

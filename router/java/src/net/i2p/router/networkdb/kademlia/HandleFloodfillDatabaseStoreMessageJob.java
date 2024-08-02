@@ -9,12 +9,10 @@ package net.i2p.router.networkdb.kademlia;
  */
 
 import java.util.Collection;
-import java.util.Date;
 
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
-import net.i2p.data.Lease;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.LeaseSet2;
 import net.i2p.data.TunnelId;
@@ -32,7 +30,6 @@ import net.i2p.router.OutNetMessage;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
-import net.i2p.router.message.OutboundCache;
 import net.i2p.router.message.SendMessageDirectJob;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;

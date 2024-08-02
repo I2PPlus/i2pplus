@@ -14,7 +14,6 @@ import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
 import net.i2p.util.FileSuffixFilter;
 import net.i2p.util.FileUtil;
-import net.i2p.util.Log;
 import net.i2p.util.ObjectCounterUnsafe;
 import net.i2p.util.OrderedProperties;
 import net.i2p.util.SecureDirectory;

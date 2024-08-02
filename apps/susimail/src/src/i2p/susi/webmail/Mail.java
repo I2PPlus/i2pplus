@@ -24,23 +24,17 @@
 package i2p.susi.webmail;
 
 import i2p.susi.util.Buffer;
-import i2p.susi.util.Config;
 import i2p.susi.util.CountingInputStream;
 import i2p.susi.util.EOFOnMatchInputStream;
 import i2p.susi.util.FileBuffer;
 import i2p.susi.util.MemoryBuffer;
-import i2p.susi.webmail.MailPart;
 import i2p.susi.webmail.encoding.Encoding;
 import i2p.susi.webmail.encoding.EncodingFactory;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;

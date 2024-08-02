@@ -10,7 +10,6 @@ import java.util.TreeMap;
 import java.util.List;
 import java.util.Map;
 
-import net.i2p.CoreVersion;
 import net.i2p.app.ClientAppManager;
 import net.i2p.crypto.SigType;
 import net.i2p.data.DataHelper;

@@ -51,9 +51,7 @@ import net.i2p.util.SystemVersion;
 
 
 // main()
-import net.i2p.data.DataHelper;
 import net.i2p.data.Signature;
-import net.i2p.util.Clock;
 import net.i2p.util.RandomSource;
 
 /** Define a way of generating asymmetrical key pairs as well as symmetrical keys

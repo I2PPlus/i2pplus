@@ -35,7 +35,6 @@ import net.metanotion.io.block.BlockFile;
 import net.metanotion.util.skiplist.SkipList;
 import net.metanotion.util.skiplist.SkipSpan;
 
-import net.i2p.util.Log;
 
 /**
  * On-disk format:

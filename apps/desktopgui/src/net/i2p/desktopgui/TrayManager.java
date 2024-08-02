@@ -14,7 +14,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
 import java.net.URL;
 
 import java.awt.MenuItem;
@@ -28,7 +27,6 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 import net.i2p.I2PAppContext;
-import net.i2p.apps.systray.UrlLauncher;
 import net.i2p.desktopgui.i18n.DesktopguiTranslator;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;

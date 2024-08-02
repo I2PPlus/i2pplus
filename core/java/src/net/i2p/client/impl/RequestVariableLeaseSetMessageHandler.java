@@ -20,7 +20,6 @@ import net.i2p.data.MetaLease;
 import net.i2p.data.MetaLeaseSet;
 import net.i2p.data.i2cp.I2CPMessage;
 import net.i2p.data.i2cp.RequestVariableLeaseSetMessage;
-import net.i2p.util.Log;
 
 /**
  * Handle I2CP RequestVariableLeaseSetMessage from the router by granting all leases,

@@ -30,8 +30,6 @@ import java.util.AbstractCollection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import net.i2p.I2PAppContext;
-import net.i2p.util.Log;
 
 /**
  * Extend java.util.AbstractCollection to create a collection that can be

@@ -13,8 +13,6 @@ import net.i2p.crypto.elgamal.impl.ElGamalPrivateKeyImpl;
 import net.i2p.crypto.elgamal.impl.ElGamalPublicKeyImpl;
 import net.i2p.crypto.elgamal.spec.ElGamalGenParameterSpec;
 import net.i2p.crypto.elgamal.spec.ElGamalParameterSpec;
-import net.i2p.crypto.elgamal.spec.ElGamalPrivateKeySpec;
-import net.i2p.crypto.elgamal.spec.ElGamalPublicKeySpec;
 import net.i2p.data.PrivateKey;
 import net.i2p.data.PublicKey;
 import net.i2p.data.SimpleDataStructure;

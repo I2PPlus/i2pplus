@@ -1,13 +1,11 @@
 package net.i2p.router.web.helpers;
 
-import java.util.List;
 
 import net.i2p.crypto.Blinding;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SigType;
 import net.i2p.data.Base64;
 import net.i2p.data.BlindData;
-import net.i2p.data.DataFormatException;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.data.PrivateKey;

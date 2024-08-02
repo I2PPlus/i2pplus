@@ -8,7 +8,6 @@ import net.i2p.data.Hash;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.web.FormHandler;
-import net.i2p.util.Log;
 
 /**
  * Handler to deal with form submissions from the tunnel config form and act

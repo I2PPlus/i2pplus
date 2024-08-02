@@ -5,18 +5,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.EncType;
-import net.i2p.crypto.SigUtil;
-import net.i2p.crypto.KeyPair;
 import net.i2p.crypto.eddsa.math.bigint.BigIntegerLittleEndianEncoding;
 import net.i2p.crypto.eddsa.math.Curve;
 import net.i2p.crypto.eddsa.math.Field;
 import net.i2p.crypto.eddsa.spec.EdDSANamedCurveSpec;
 import net.i2p.crypto.eddsa.spec.EdDSANamedCurveTable;
-import net.i2p.data.DataHelper;
-import net.i2p.data.PrivateKey;
 import net.i2p.data.PublicKey;
 //import net.i2p.router.transport.crypto.X25519KeyFactory;
-import net.i2p.util.HexDump;
 import net.i2p.util.NativeBigInteger;
 
 /**

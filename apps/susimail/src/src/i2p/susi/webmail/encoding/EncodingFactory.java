@@ -23,17 +23,12 @@
  */
 package i2p.susi.webmail.encoding;
 
-import i2p.susi.util.Config;
-import i2p.susi.util.Buffer;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import net.i2p.I2PAppContext;
-import net.i2p.data.DataHelper;
-import net.i2p.util.HexDump;
 import net.i2p.util.Log;
 
 /**

@@ -10,9 +10,7 @@ import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
-import javax.crypto.spec.DHParameterSpec;
 
-import static net.i2p.crypto.CryptoConstants.I2P_ELGAMAL_2048_SPEC;
 import net.i2p.crypto.elgamal.impl.ElGamalPrivateKeyImpl;
 import net.i2p.crypto.elgamal.impl.ElGamalPrivateKeyImpl;
 import net.i2p.crypto.elgamal.impl.ElGamalPublicKeyImpl;

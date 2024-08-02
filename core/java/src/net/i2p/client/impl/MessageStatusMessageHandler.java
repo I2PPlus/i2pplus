@@ -14,7 +14,6 @@ import net.i2p.client.I2PSessionException;
 import net.i2p.data.i2cp.I2CPMessage;
 import net.i2p.data.i2cp.MessageStatusMessage;
 import net.i2p.data.i2cp.ReceiveMessageBeginMessage;
-import net.i2p.util.Log;
 
 /**
  * Handle I2CP MessageStatusMessages from the router.  This currently only takes

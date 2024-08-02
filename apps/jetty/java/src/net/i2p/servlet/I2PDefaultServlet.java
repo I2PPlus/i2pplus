@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.text.Collator;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
@@ -47,9 +46,7 @@ import net.i2p.data.DataHelper;
 
 import org.eclipse.jetty.servlet.ErrorPageErrorHandler;
 
-import org.eclipse.jetty.security.LoginService;
 
-import java.lang.Class;
 
 /**
  *  Extends DefaultServlet to set locale for the displayed time of directory listings,

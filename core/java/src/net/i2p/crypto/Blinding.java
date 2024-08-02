@@ -14,7 +14,6 @@ import net.i2p.crypto.eddsa.EdDSAPublicKey;
 import net.i2p.data.Base32;
 import net.i2p.data.BlindData;
 import net.i2p.data.DataHelper;
-import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.data.SigningPrivateKey;
 import net.i2p.data.SigningPublicKey;

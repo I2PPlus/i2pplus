@@ -3,9 +3,7 @@ package net.i2p.servlet.filters;
 import java.io.IOException;
 import java.io.File;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.net.URI;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 

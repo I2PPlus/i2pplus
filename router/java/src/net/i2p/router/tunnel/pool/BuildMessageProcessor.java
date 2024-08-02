@@ -4,7 +4,6 @@ import java.io.File;
 
 import net.i2p.crypto.ChaCha20;
 import net.i2p.crypto.EncType;
-import net.i2p.data.Base64;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
@@ -16,9 +15,7 @@ import net.i2p.data.i2np.ShortEncryptedBuildRecord;
 import net.i2p.data.i2np.ShortTunnelBuildMessage;
 import net.i2p.data.i2np.TunnelBuildMessage;
 import net.i2p.router.RouterContext;
-import net.i2p.router.RouterThrottleImpl;
 import net.i2p.router.util.DecayingBloomFilter;
-import net.i2p.router.util.DecayingHashSet;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 

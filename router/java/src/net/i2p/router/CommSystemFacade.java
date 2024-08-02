@@ -11,8 +11,6 @@ package net.i2p.router;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Collections;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;

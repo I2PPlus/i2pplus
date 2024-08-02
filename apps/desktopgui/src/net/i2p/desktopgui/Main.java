@@ -18,7 +18,6 @@ import net.i2p.app.ClientAppManager;
 import net.i2p.app.ClientAppState;
 import static net.i2p.app.ClientAppState.*;
 import net.i2p.app.NotificationService;
-import net.i2p.desktopgui.router.RouterManager;
 import net.i2p.router.RouterContext;
 import net.i2p.router.app.RouterApp;
 import net.i2p.util.Log;

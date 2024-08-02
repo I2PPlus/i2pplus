@@ -5,8 +5,6 @@ import java.security.spec.InvalidParameterSpecException;
 import java.util.Locale;
 
 import static net.i2p.crypto.x25519.spec.X25519Spec.X25519_SPEC;
-import net.i2p.data.Hash;
-import net.i2p.data.SimpleDataStructure;
 
 /**
  * Defines the properties for various encryption types

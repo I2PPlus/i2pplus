@@ -8,9 +8,7 @@ package net.i2p.data.i2np;
  *
  */
 
-import java.io.IOException;
 
-import net.i2p.data.DataStructure;
 
 /**
  * Base interface for all I2NP messages

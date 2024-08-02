@@ -8,7 +8,6 @@ import java.util.Set;
 
 import net.i2p.crypto.SigType;
 import net.i2p.data.DatabaseEntry;
-import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.TunnelId;
@@ -27,8 +26,6 @@ import net.i2p.router.RouterContext;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.util.ConcurrentHashSet;
-import net.i2p.util.Log;
-import net.i2p.util.RandomSource;
 import net.i2p.util.SystemVersion;
 
 import net.i2p.router.CommSystemFacade.Status;

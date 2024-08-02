@@ -1,18 +1,13 @@
 package net.i2p.router.networkdb.kademlia;
 
-import java.util.Collections;
 import java.util.List;
 
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.DatabaseStoreMessage;
-import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.JobImpl;
 import net.i2p.router.OutNetMessage;
-import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
-import net.i2p.stat.Rate;
-import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 
 /**

@@ -4,34 +4,26 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.SocketAddress;
-import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import com.southernstorm.noise.protocol.ChaChaPolyCipherState;
 import com.southernstorm.noise.protocol.CipherState;
 import com.southernstorm.noise.protocol.HandshakeState;
 
-import net.i2p.crypto.ChaCha20;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.data.SessionKey;
-import net.i2p.data.router.RouterAddress;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
-import net.i2p.router.transport.TransportUtil;
 import net.i2p.router.transport.udp.PacketBuilder.Fragment;
 import net.i2p.router.transport.udp.SSU2Payload.Block;
 import static net.i2p.router.transport.udp.SSU2Util.*;
-import net.i2p.util.Addresses;
-import net.i2p.util.HexDump;
 import net.i2p.util.Log;
 
 /**

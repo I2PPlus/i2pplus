@@ -3,17 +3,14 @@ package org.rrd4j.graph;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontFormatException;
 import java.awt.Stroke;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Properties;
-import java.util.function.Function;
 
 /**
  * Class to represent various constants used for graphing. No methods are specified.

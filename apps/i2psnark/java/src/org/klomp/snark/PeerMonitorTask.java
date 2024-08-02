@@ -20,9 +20,7 @@
 
 package org.klomp.snark;
 
-import java.util.Iterator;
 
-import net.i2p.data.DataHelper;
 
 /**
  * TimerTask that monitors the peers and total up/download speeds.

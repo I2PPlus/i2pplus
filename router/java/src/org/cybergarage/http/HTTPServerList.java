@@ -21,7 +21,6 @@ import java.net.InetAddress;
 import java.util.Set;
 import java.util.Vector;
 
-import org.cybergarage.net.HostInterface;
 import org.cybergarage.upnp.Device;
 
 import net.i2p.router.transport.UPnP;

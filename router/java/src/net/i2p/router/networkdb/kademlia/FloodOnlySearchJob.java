@@ -1,20 +1,13 @@
 package net.i2p.router.networkdb.kademlia;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 
 import net.i2p.data.Hash;
-import net.i2p.data.i2np.DatabaseLookupMessage;
-import net.i2p.kademlia.KBucketSet;
 import net.i2p.router.Job;
 import net.i2p.router.MessageSelector;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.ReplyJob;
 import net.i2p.router.RouterContext;
-import net.i2p.router.TunnelInfo;
-import net.i2p.util.Log;
 
 /**
  * Uunused directly, replaced by IterativeSearchJob, but still extended by

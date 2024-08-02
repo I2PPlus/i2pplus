@@ -5,7 +5,6 @@ import net.i2p.data.i2np.DatabaseLookupMessage;
 import net.i2p.router.RouterContext;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.TunnelInfo;
-import net.i2p.util.Log;
 
 /**
  * Ask a single peer for a single key.

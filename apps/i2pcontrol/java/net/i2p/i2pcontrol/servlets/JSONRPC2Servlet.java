@@ -25,7 +25,6 @@ import net.i2p.util.Log;
 import net.i2p.util.PortMapper;
 
 import net.i2p.i2pcontrol.I2PControlVersion;
-import net.i2p.i2pcontrol.security.KeyStoreProvider;
 import net.i2p.i2pcontrol.security.SecurityManager;
 import net.i2p.i2pcontrol.servlets.jsonrpc2handlers.*;
 import net.i2p.i2pcontrol.servlets.configuration.ConfigurationManager;

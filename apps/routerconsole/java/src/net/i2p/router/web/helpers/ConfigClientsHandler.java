@@ -39,7 +39,6 @@ import net.i2p.util.PortMapper;
 
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 
-import net.i2p.router.web.CSSHelper;
 
 /**
  *  Saves changes to clients.config or webapps.config

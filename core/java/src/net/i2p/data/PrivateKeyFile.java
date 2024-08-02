@@ -14,7 +14,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.EnumSet;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 

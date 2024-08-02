@@ -2,7 +2,6 @@ package net.i2p.router.util;
 
 import net.i2p.I2PAppContext;
 import net.i2p.util.ConcurrentHashSet;
-import net.i2p.util.Log;
 
 
 /**

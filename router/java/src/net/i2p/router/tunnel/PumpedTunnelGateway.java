@@ -10,7 +10,6 @@ import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.util.CoDelBlockingQueue;
 import net.i2p.router.util.CoDelPriorityBlockingQueue;
-import net.i2p.util.Log;
 
 import net.i2p.util.SystemVersion;
 

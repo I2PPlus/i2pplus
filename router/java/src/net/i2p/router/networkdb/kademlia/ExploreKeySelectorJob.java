@@ -9,12 +9,9 @@ package net.i2p.router.networkdb.kademlia;
  */
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 
 import net.i2p.data.Hash;
-import net.i2p.kademlia.KBucket;
-import net.i2p.kademlia.KBucketSet;
 import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;

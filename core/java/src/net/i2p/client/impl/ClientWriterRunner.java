@@ -8,13 +8,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSessionException;
 import net.i2p.data.i2cp.I2CPMessage;
 import net.i2p.data.i2cp.I2CPMessageException;
 import net.i2p.internal.PoisonI2CPMessage;
 import net.i2p.util.I2PAppThread;
-import net.i2p.util.Log;
 
 import net.i2p.util.SystemVersion;
 

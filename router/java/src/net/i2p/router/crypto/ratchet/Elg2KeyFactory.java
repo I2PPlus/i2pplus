@@ -5,8 +5,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.KeyFactory;
 import net.i2p.crypto.KeyPair;
-import net.i2p.data.PrivateKey;
-import net.i2p.data.PublicKey;
 import net.i2p.router.RouterContext;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;

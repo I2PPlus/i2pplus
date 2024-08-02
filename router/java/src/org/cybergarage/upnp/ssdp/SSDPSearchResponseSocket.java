@@ -20,7 +20,6 @@
 package org.cybergarage.upnp.ssdp;
 
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 
 import org.cybergarage.upnp.*;
 

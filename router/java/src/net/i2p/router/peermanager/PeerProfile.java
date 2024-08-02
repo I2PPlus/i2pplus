@@ -1,7 +1,5 @@
 package net.i2p.router.peermanager;
 
-import java.io.File;
-import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,7 +10,6 @@ import net.i2p.router.RouterContext;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 
-import net.i2p.data.router.RouterInfo;
 
 /**
  * Copied from http://www.i2p2.i2p/how_peerselection.html

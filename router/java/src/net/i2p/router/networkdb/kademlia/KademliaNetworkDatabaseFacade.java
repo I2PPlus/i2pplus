@@ -8,20 +8,16 @@ package net.i2p.router.networkdb.kademlia;
  *
  */
 
-import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -39,14 +35,11 @@ import net.i2p.data.KeyCertificate;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.LeaseSet2;
 import net.i2p.data.SigningPublicKey;
-import net.i2p.data.i2np.DatabaseLookupMessage;
-import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.kademlia.KBucketSet;
 import net.i2p.kademlia.RejectTrimmer;
-import net.i2p.kademlia.SelectionCollector;
 import net.i2p.router.Banlist;
 import net.i2p.router.Job;
 import net.i2p.router.NetworkDatabaseFacade;

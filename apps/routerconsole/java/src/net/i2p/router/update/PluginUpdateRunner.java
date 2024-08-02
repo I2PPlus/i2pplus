@@ -3,7 +3,6 @@ package net.i2p.router.update;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.lang.IllegalArgumentException;
 import java.net.URI;
 import java.util.List;
 import java.util.Locale;

@@ -18,8 +18,6 @@ import java.util.Properties;
 
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
-import net.i2p.app.ClientApp;
-import net.i2p.app.ClientAppManager;
 import net.i2p.app.Outproxy;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketOptions;
@@ -27,7 +25,6 @@ import net.i2p.data.DataFormatException;
 import net.i2p.data.Destination;
 import static net.i2p.socks.SOCKS4Constants.*;
 import net.i2p.util.HexDump;
-import net.i2p.util.Log;
 import net.i2p.socks.SOCKSException;
 
 /*

@@ -1,6 +1,5 @@
 package com.maxmind.geoip;
 
-import java.io.IOException;
 
 /**
  * Signals that there was an issue reading from the database file due to

@@ -11,7 +11,6 @@ import net.i2p.data.Hash;
 import net.i2p.util.Clock;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
-import net.i2p.util.SystemVersion;
 
 /**
  * Count how often something happens with a particular peer and all peers.

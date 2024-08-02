@@ -9,7 +9,6 @@ package net.i2p.sam;
  */
 
 import java.io.ByteArrayInputStream;
-import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;

@@ -9,7 +9,6 @@ package net.i2p.router.client;
  */
 
 import net.i2p.data.LeaseSet;
-import net.i2p.data.PrivateKey;
 import net.i2p.router.Job;
 
 /**

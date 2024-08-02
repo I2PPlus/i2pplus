@@ -9,14 +9,12 @@ package net.i2p.util;
  *
  */
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import net.i2p.I2PAppContext;
-import net.i2p.data.DataHelper;
 
 /**
  * Render a log record according to the log manager's settings

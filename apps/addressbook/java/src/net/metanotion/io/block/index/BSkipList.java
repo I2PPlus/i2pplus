@@ -36,7 +36,6 @@ import net.metanotion.io.Serializer;
 import net.metanotion.io.block.BlockFile;
 import net.metanotion.util.skiplist.*;
 
-import net.i2p.util.Log;
 
 /**
  * On-disk format:

@@ -8,7 +8,6 @@ package net.i2p.router.message;
  *
  */
 
-import java.util.Date;
 
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SessionKeyManager;

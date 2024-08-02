@@ -1,11 +1,8 @@
 package net.i2p.router;
 
-import java.io.IOException;
-import java.io.Writer;
 
 import net.i2p.data.DataFormatException;
 import net.i2p.data.Hash;
-import net.i2p.data.LeaseSet;
 import net.i2p.data.SessionKey;
 import net.i2p.util.KeyRing;
 

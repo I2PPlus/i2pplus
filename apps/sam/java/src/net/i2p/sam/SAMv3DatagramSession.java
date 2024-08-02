@@ -6,7 +6,6 @@
 package net.i2p.sam;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.SocketAddress ;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
@@ -17,7 +16,6 @@ import net.i2p.client.I2PSessionException;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
-import net.i2p.util.Log;
 
 
 class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDatagramReceiver {

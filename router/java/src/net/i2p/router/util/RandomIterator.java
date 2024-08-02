@@ -6,7 +6,6 @@ package net.i2p.router.util;
  * No license, free to use
  */
 
-import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Iterator;

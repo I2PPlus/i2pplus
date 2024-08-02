@@ -25,7 +25,6 @@ import java.util.Properties;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLSocket;
 
 import net.i2p.I2PAppContext;

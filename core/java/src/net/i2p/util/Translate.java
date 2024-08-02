@@ -12,7 +12,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import gnu.gettext.GettextResource;
 
 import net.i2p.I2PAppContext;
-import net.i2p.util.ConcurrentHashSet;
 
 /**
  * Translate strings efficiently.

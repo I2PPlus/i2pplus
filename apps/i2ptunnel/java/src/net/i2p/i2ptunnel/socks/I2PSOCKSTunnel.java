@@ -18,7 +18,6 @@ import java.util.StringTokenizer;
 
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketOptions;
-import net.i2p.data.Destination;
 import net.i2p.i2ptunnel.I2PTunnel;
 import net.i2p.i2ptunnel.I2PTunnelClientBase;
 import net.i2p.i2ptunnel.I2PTunnelRunner;
@@ -26,7 +25,6 @@ import net.i2p.i2ptunnel.Logging;
 import net.i2p.i2ptunnel.TunnelController;
 import net.i2p.socks.SOCKSException;
 import net.i2p.util.EventDispatcher;
-import net.i2p.util.Log;
 
 public class I2PSOCKSTunnel extends I2PTunnelClientBase {
 

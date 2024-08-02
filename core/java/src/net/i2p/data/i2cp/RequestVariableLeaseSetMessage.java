@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.i2p.data.DataFormatException;
-import net.i2p.data.DataHelper;
 import net.i2p.data.Lease;
 import net.i2p.util.ByteArrayStream;
 import net.i2p.util.VersionComparator;

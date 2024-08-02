@@ -27,9 +27,6 @@ import java.util.Set;
 
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.DSAEngine;
-import net.i2p.crypto.SHA1;
-import net.i2p.crypto.SHA1Hash;
-import net.i2p.crypto.SHA256Generator;
 import net.i2p.crypto.SigType;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.DataFormatException;
@@ -42,7 +39,6 @@ import net.i2p.router.Router;
 import net.i2p.util.Clock;
 import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
-import net.i2p.util.SystemVersion;
 
 /**
  * Defines the data that a router either publishes to the global routing table or

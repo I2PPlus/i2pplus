@@ -6,7 +6,6 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Job;
 import net.i2p.router.RouterContext;
 import net.i2p.router.OutNetMessage;
-import net.i2p.util.Log;
 
 /**
  * Ask a connected peer for his RI.

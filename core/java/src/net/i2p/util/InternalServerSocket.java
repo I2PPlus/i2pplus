@@ -2,7 +2,6 @@ package net.i2p.util;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
-import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.io.Writer;
 import java.net.InetAddress;

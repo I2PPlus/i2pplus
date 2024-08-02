@@ -19,7 +19,6 @@ import net.i2p.i2ptunnel.Logging;
 import net.i2p.socks.SOCKSException;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.I2PAppThread;
-import net.i2p.util.Log;
 
 /*
  * Pipe SOCKS IRC connections through I2PTunnelIRCClient filtering,

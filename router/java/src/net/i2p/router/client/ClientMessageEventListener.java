@@ -58,7 +58,6 @@ import net.i2p.router.LeaseSetKeys;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 import net.i2p.util.PasswordManager;
-import net.i2p.util.RandomSource;
 
 /**
  * Receive events from the client and handle them accordingly (updating the runner when

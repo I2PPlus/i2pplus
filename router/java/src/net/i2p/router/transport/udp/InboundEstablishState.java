@@ -1,19 +1,11 @@
 package net.i2p.router.transport.udp;
 
-import java.io.ByteArrayInputStream;
 import java.net.InetSocketAddress;
-import java.io.IOException;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import net.i2p.crypto.SigType;
-import net.i2p.data.Base64;
-import net.i2p.data.ByteArray;
-import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
-import net.i2p.data.Hash;
 import net.i2p.data.router.RouterIdentity;
-import net.i2p.data.Signature;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Addresses;

@@ -16,7 +16,6 @@ import net.i2p.data.LeaseSet;
 import net.i2p.data.LeaseSet2;
 import net.i2p.router.Job;
 import net.i2p.router.RouterContext;
-import net.i2p.util.Log;
 
 /**
  *  This extends StoreJob to fire off a FloodfillVerifyStoreJob after success.

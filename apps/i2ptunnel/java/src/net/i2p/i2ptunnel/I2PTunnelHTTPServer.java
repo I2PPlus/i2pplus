@@ -10,12 +10,9 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetAddress;
-import java.net.Inet4Address;
-import java.net.Inet6Address;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -28,22 +25,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.GZIPOutputStream;
 
 import java.net.InetAddress;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.UnknownHostException;
 
 import javax.net.ssl.SSLException;
 
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketException;
 import net.i2p.I2PAppContext;
-import net.i2p.data.Base32;
-import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
-import net.i2p.util.ByteCache;
 import net.i2p.util.EventDispatcher;
-import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 
 /** blocklist **/
@@ -53,7 +43,6 @@ import java.io.InputStreamReader;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.nio.file.Files;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

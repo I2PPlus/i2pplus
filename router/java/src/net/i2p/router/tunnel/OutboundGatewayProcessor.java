@@ -2,11 +2,8 @@ package net.i2p.router.tunnel;
 
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.AESEngine;
-import net.i2p.data.Base64;
 import net.i2p.data.SessionKey;
 import static net.i2p.router.tunnel.HopProcessor.IV_LENGTH;
-import net.i2p.util.Log;
-import net.i2p.util.SimpleByteCache;
 
 /**
  * Turn the preprocessed tunnel data into something that can be delivered to the

@@ -31,12 +31,9 @@ package org.cybergarage.upnp.ssdp;
 
 import java.net.DatagramPacket;
 import java.net.MulticastSocket;
-import java.net.Inet4Address;
-import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
-import java.util.Enumeration;
 import java.io.IOException;
 
 import org.cybergarage.http.HTTPRequest;

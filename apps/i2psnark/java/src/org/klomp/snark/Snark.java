@@ -27,8 +27,6 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.List;
-import java.util.Properties;
-import java.util.StringTokenizer;
 
 import net.i2p.client.streaming.I2PServerSocket;
 import net.i2p.data.Destination;

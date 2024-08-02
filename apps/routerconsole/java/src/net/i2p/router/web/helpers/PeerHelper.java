@@ -12,15 +12,10 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
-import net.i2p.router.peermanager.PeerProfile;
-import net.i2p.router.peermanager.ProfileOrganizer;
-import net.i2p.data.router.RouterAddress;
-import net.i2p.data.router.RouterInfo;
 import net.i2p.router.transport.Transport;
 import net.i2p.router.transport.TransportManager;
 import net.i2p.router.transport.TransportUtil;
@@ -32,7 +27,6 @@ import net.i2p.router.web.HelperBase;
 import static net.i2p.router.web.helpers.UDPSorters.*;
 import net.i2p.util.Addresses;
 import net.i2p.util.AddressType;
-import net.i2p.util.SystemVersion;
 
 
 public class PeerHelper extends HelperBase {

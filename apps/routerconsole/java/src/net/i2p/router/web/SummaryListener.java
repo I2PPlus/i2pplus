@@ -21,7 +21,6 @@ import org.rrd4j.core.RrdDb;
 import org.rrd4j.core.RrdDef;
 import org.rrd4j.core.RrdException;
 import org.rrd4j.core.RrdMemoryBackendFactory;
-import org.rrd4j.core.RrdNioBackendFactory;
 import org.rrd4j.core.Sample;
 
 /**

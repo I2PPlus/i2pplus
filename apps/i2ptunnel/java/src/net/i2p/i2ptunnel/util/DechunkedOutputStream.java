@@ -1,7 +1,6 @@
 package net.i2p.i2ptunnel.util;
 
 import java.io.EOFException;
-import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 

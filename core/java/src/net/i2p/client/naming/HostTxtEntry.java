@@ -17,12 +17,6 @@ import net.i2p.data.SigningPrivateKey;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.util.OrderedProperties;
 // for testing only
-import java.io.File;
-import java.io.OutputStreamWriter;
-import java.util.Arrays;
-import net.i2p.data.Base32;
-import net.i2p.data.PrivateKeyFile;
-import net.i2p.util.RandomSource;
 
 
 /**

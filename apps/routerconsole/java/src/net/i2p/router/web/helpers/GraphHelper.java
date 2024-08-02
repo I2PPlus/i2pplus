@@ -1,9 +1,7 @@
 package net.i2p.router.web.helpers;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -19,7 +17,6 @@ import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.StatSummarizer;
 import net.i2p.router.web.SummaryListener;
 import net.i2p.stat.Rate;
-import net.i2p.util.SystemVersion;
 
 
 /**

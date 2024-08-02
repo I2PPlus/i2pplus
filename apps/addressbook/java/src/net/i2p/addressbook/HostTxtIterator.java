@@ -28,12 +28,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
 import net.i2p.client.naming.HostTxtEntry;
-import net.i2p.data.DataHelper;
 
 /**
  *  A class to iterate through a hosts.txt or config file without

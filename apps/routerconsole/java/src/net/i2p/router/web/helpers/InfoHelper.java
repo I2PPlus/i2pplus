@@ -7,19 +7,15 @@ import java.io.Writer;
 import java.util.Date;
 import java.util.SortedMap;
 
-import net.i2p.CoreVersion;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 
-import net.i2p.router.RouterContext;
-import net.i2p.router.RouterVersion;
 import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.router.transport.Transport;
 import net.i2p.router.transport.udp.UDPTransport;
 import net.i2p.router.web.HelperBase;
-import net.i2p.router.web.helpers.ConfigAdvancedHelper;
 import net.i2p.util.SystemVersion;
 
 public class InfoHelper extends HelperBase {

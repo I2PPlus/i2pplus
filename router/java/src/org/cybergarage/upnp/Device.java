@@ -138,7 +138,6 @@ import org.cybergarage.upnp.ssdp.SSDPSearchResponseSocket;
 import org.cybergarage.upnp.ssdp.SSDPSearchSocketList;
 import org.cybergarage.upnp.xml.DeviceData;
 import org.cybergarage.util.Debug;
-import org.cybergarage.util.FileUtil;
 import org.cybergarage.util.Mutex;
 import org.cybergarage.util.TimerUtil;
 import org.cybergarage.xml.Node;

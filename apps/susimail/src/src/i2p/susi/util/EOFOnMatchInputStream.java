@@ -3,7 +3,6 @@ package i2p.susi.util;
 import java.io.PushbackInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 
 import net.i2p.data.DataHelper;
 

@@ -10,12 +10,10 @@ package net.i2p.router.crypto;
  */
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import java.util.Base64;
 
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.AESEngine;

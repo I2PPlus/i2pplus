@@ -2,23 +2,17 @@ package net.i2p.client.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
-import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
 import net.i2p.client.I2PSessionException;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
-import net.i2p.data.PrivateKey;
-import net.i2p.data.SigningPrivateKey;
 import net.i2p.data.i2cp.CreateLeaseSetMessage;
 import net.i2p.data.i2cp.CreateSessionMessage;
 import net.i2p.data.i2cp.I2CPMessage;
-import net.i2p.data.i2cp.SessionId;
 import net.i2p.util.I2PAppThread;
 
 /**

@@ -8,8 +8,6 @@ package net.i2p.router.transport;
  *
  */
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;

@@ -3,9 +3,7 @@ package net.i2p.crypto;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.ProviderException;
 import java.security.MessageDigest;
@@ -17,19 +15,13 @@ import java.security.cert.X509CRL;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
 
-import javax.crypto.interfaces.DHPublicKey;
-import javax.crypto.spec.DHParameterSpec;
-import javax.crypto.spec.DHPublicKeySpec;
 import javax.security.auth.x500.X500Principal;
 
 import static net.i2p.crypto.SigUtil.intToASN1;
@@ -43,8 +35,6 @@ import net.i2p.util.Addresses;
 import net.i2p.util.ByteArrayStream;
 import net.i2p.util.HexDump;
 import net.i2p.util.RandomSource;
-import net.i2p.util.SecureFileOutputStream;
-import net.i2p.util.SystemVersion;
 
 /**
  *  Generate keys and a selfsigned certificate, suitable for

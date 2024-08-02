@@ -10,7 +10,6 @@ import java.net.SocketTimeoutException;
 import java.security.GeneralSecurityException;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;

@@ -17,14 +17,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import net.i2p.CoreVersion;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.KeyPair;
 import net.i2p.crypto.SigType;
 import net.i2p.data.Base64;
 import net.i2p.data.Certificate;
 import net.i2p.data.DataFormatException;
-import net.i2p.data.DataHelper;
 import net.i2p.data.KeyCertificate;
 import net.i2p.data.PrivateKey;
 import net.i2p.data.PrivateKeyFile;
@@ -41,8 +39,6 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.util.EventLog;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFileOutputStream;
-import net.i2p.util.SystemVersion;
-import net.i2p.util.VersionComparator;
 
 /**
  *  Warning - misnamed. This creates a new RouterIdentity, i.e.

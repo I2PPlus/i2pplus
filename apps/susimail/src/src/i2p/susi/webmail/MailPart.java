@@ -29,7 +29,6 @@ import i2p.susi.util.DummyOutputStream;
 import i2p.susi.util.EOFOnMatchInputStream;
 import i2p.susi.util.FilenameUtil;
 import i2p.susi.util.LimitInputStream;
-import i2p.susi.util.ReadBuffer;
 import i2p.susi.util.ReadCounter;
 import i2p.susi.util.OutputStreamBuffer;
 import i2p.susi.util.MemoryBuffer;

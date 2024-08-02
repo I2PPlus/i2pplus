@@ -18,7 +18,6 @@ import net.i2p.crypto.KeyStoreUtil;
 import net.i2p.crypto.SigType;
 import net.i2p.crypto.SigUtil;
 import net.i2p.data.Base64;
-import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Signature;
 import net.i2p.data.SigningPrivateKey;

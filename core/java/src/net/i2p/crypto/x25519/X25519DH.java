@@ -3,7 +3,6 @@ package net.i2p.crypto.x25519;
 import com.southernstorm.noise.crypto.x25519.Curve25519;
 
 import net.i2p.crypto.EncType;
-import net.i2p.data.DataHelper;
 import net.i2p.data.PrivateKey;
 import net.i2p.data.PublicKey;
 import net.i2p.data.SessionKey;

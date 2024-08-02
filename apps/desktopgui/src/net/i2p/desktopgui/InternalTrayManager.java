@@ -18,7 +18,6 @@ import net.i2p.data.DataHelper;
 import net.i2p.desktopgui.router.RouterManager;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
-import net.i2p.util.PortMapper;
 import net.i2p.util.Translate;
 
 /**

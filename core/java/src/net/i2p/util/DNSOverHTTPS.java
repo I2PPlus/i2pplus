@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -24,13 +23,11 @@ import org.minidns.record.A;
 import org.minidns.record.AAAA;
 import org.minidns.record.CNAME;
 import org.minidns.record.Data;
-import org.minidns.record.Record;
 import org.minidns.record.Record.TYPE;
 
 import net.i2p.I2PAppContext;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
-import net.i2p.util.Addresses;
 
 /**
  *  Simple implemetation of DNS over HTTPS.

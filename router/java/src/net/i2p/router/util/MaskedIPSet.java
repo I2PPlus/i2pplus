@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.i2p.data.DatabaseEntry;
-import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;

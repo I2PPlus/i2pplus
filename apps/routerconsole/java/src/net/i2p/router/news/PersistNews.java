@@ -1,12 +1,10 @@
 package net.i2p.router.news;
 
-import java.io.BufferedInputStream;
 import java.util.Collections;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -23,7 +21,6 @@ import net.i2p.util.FileSuffixFilter;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFileOutputStream;
 
-import org.cybergarage.util.Debug;
 import org.cybergarage.xml.Node;
 import org.cybergarage.xml.ParserException;
 

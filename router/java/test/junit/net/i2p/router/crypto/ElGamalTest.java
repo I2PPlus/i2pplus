@@ -26,7 +26,6 @@ import net.i2p.data.PrivateKey;
 import net.i2p.data.PublicKey;
 import net.i2p.data.SessionKey;
 import net.i2p.data.SessionTag;
-import net.i2p.router.crypto.ElGamalAESEngine;
 import net.i2p.util.RandomSource;
 
 public class ElGamalTest extends TestCase{

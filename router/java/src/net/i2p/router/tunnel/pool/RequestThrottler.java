@@ -3,11 +3,8 @@ package net.i2p.router.tunnel.pool;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
-import net.i2p.router.NetworkDatabaseFacade;
-import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
-import net.i2p.router.transport.CommSystemFacadeImpl;
 
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;

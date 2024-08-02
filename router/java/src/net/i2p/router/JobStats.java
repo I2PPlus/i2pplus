@@ -2,7 +2,6 @@ package net.i2p.router;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import net.i2p.data.DataHelper;
 
 /**
  *  Glorified struct to contain basic job stats.

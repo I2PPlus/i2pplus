@@ -7,7 +7,6 @@ import net.i2p.data.i2cp.I2CPMessage;
 import net.i2p.data.i2cp.I2CPMessageException;
 import net.i2p.internal.PoisonI2CPMessage;
 import net.i2p.router.RouterContext;
-import net.i2p.util.Log;
 
 /**
  * Async writer class so that if a client app hangs, they wont take down the

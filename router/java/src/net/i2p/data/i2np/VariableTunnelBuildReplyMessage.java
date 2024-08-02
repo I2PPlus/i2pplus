@@ -1,7 +1,6 @@
 package net.i2p.data.i2np;
 
 import net.i2p.I2PAppContext;
-import net.i2p.data.DataHelper;
 
 /**
  * Transmitted from the new outbound endpoint to the creator through a

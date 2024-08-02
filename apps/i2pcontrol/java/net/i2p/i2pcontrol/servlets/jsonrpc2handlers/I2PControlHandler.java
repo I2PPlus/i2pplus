@@ -7,14 +7,10 @@ import com.thetransactioncompany.jsonrpc2.server.MessageContext;
 import com.thetransactioncompany.jsonrpc2.server.RequestHandler;
 
 import net.i2p.I2PAppContext;
-import net.i2p.i2pcontrol.I2PControlController;
 import net.i2p.i2pcontrol.security.SecurityManager;
-import net.i2p.i2pcontrol.servlets.configuration.ConfigurationManager;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 

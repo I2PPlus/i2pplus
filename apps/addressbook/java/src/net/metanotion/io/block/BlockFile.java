@@ -34,10 +34,8 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 import net.metanotion.io.RAIFile;
 import net.metanotion.io.RandomAccessInterface;
