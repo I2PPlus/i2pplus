@@ -12,7 +12,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.text.Collator;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,12 +21,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.regex.Pattern;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -46,14 +43,12 @@ import net.i2p.data.Hash;
 import net.i2p.servlet.RequestWrapper;
 import net.i2p.servlet.util.ServletUtil;
 import net.i2p.util.FileUtil;
-import net.i2p.util.Log;
 import net.i2p.util.SecureFile;
 import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 import net.i2p.util.UIMessages;
 
-import org.klomp.snark.BandwidthListener;
 import org.klomp.snark.I2PSnarkUtil;
 import org.klomp.snark.MagnetURI;
 import org.klomp.snark.MetaInfo;
@@ -3659,14 +3654,14 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(renderOptions(0, 6, 3, options.remove("outbound.length"), "outbound.length", HOP))
            .append("</span><br>\n")
            .append("<span class=configOption id=hopVariance><b>")
-           .append(_t("Hop Variance"))
+           .append(_t("Vary Tunnel Length"))
            .append("</b> \n")
            .append("<label title=\"").append(_t("Add 0 or 1 additional hops randomly to Inbound tunnels")).append("\">")
            .append("<input type=checkbox class=\"optbox slider\" name=varyInbound id=varyInbound ")
            .append(varyInbound ? "checked " : "").append("> <span>").append(_t("Inbound")).append("</span></label>")
            .append("<label title=\"").append(_t("Add 0 or 1 additional hops randomly to Outbound tunnels")).append("\">")
            .append("<input type=checkbox class=\"optbox slider\" name=varyOutbound id=varyOutbound ")
-           .append(varyInbound ? "checked " : "").append("> <span>").append(_t("Outbound")).append("</span></label>")
+           .append(varyOutbound ? "checked " : "").append("> <span>").append(_t("Outbound")).append("</span></label>")
            .append("</span><br>");
 
         if (!_context.isRouterContext()) {
@@ -3693,14 +3688,26 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean containsIbk = opts.indexOf(ibkey) != -1;
         boolean containsObk = opts.indexOf(obkey) != -1;
         if (varyInbound) {
-            if (!containsIbk) {opts.append(ibkey);}
-        } else {
-            if (containsIbk) {opts.delete(opts.indexOf(ibkey), opts.indexOf(ibkey) + ibkey.length());}
+            if (!containsIbk) {
+                opts.append(ibkey);
+                _manager.util().setVaryInboundHops(true);
+            }
+        } else if (!varyInbound) {
+            if (containsIbk) {
+                opts.delete(opts.indexOf(ibkey), opts.indexOf(ibkey) + ibkey.length());
+                _manager.util().setVaryInboundHops(false);
+            }
         }
         if (varyOutbound) {
-            if (!containsObk) {opts.append(obkey);}
-        } else {
-            if (containsObk) {opts.delete(opts.indexOf(obkey), opts.indexOf(obkey) + obkey.length());}
+            if (!containsObk) {
+                opts.append(obkey);
+                _manager.util().setVaryOutboundHops(true);
+            }
+        } else if (!varyOutbound) {
+            if (containsObk) {
+                opts.delete(opts.indexOf(obkey), opts.indexOf(obkey) + obkey.length());
+                _manager.util().setVaryOutboundHops(false);
+            }
         }
         buf.append("<span class=configOption id=i2cpOptions><label><b>")
            .append(_t("I2CP options"))

@@ -165,6 +165,10 @@ public class I2PSnarkUtil implements DisconnectListener {
     public void setI2CPConfig(String i2cpHost, int i2cpPort, Map opts) {
         if (i2cpHost != null) {_i2cpHost = i2cpHost;}
         if (i2cpPort > 0) {_i2cpPort = i2cpPort;}
+        if (getVaryInboundHops()) {_opts.put("inbound.tunnelVariance", "1");}
+        else {_opts.put("inbound.tunnelVariance", "0");}
+        if (getVaryOutboundHops()) {_opts.put("outbound.tunnelVariance", "1");}
+        else {_opts.put("outbound.tunnelVariance", "0");}
         if (opts != null) {
             synchronized(_opts) {
                 // removed options...
@@ -177,6 +181,14 @@ public class I2PSnarkUtil implements DisconnectListener {
         }
         // this updates the session options and tells the router
         setMaxUpBW(_maxUpBW);
+        if (_manager != null) {
+            I2PSession sess = _manager.getSession();
+            if (sess != null) {
+                Properties newProps = new Properties();
+                synchronized(_opts) {newProps.putAll(_opts);}
+                sess.updateOptions(newProps);
+            }
+        }
     }
 
     public void setMaxUploaders(int limit) {_maxUploaders = limit;}
@@ -187,16 +199,12 @@ public class I2PSnarkUtil implements DisconnectListener {
      */
     public void setMaxUpBW(int limit) {
         _maxUpBW = limit;
-        synchronized(_opts) {
-        _opts.put(PROP_MAX_BW, Integer.toString(limit * (1024 * 6 / 5)));   // add a little for overhead
-        }
+        synchronized(_opts) {_opts.put(PROP_MAX_BW, Integer.toString(limit * (1024 * 6 / 5)));} // add a little for overhead
         if (_manager != null) {
             I2PSession sess = _manager.getSession();
             if (sess != null) {
                 Properties newProps = new Properties();
-                synchronized(_opts) {
-                newProps.putAll(_opts);
-                }
+                synchronized(_opts) {newProps.putAll(_opts);}
                 sess.updateOptions(newProps);
             }
         }
@@ -244,9 +252,30 @@ public class I2PSnarkUtil implements DisconnectListener {
 
     /** @since 0.9.64+ */
     public boolean getVaryInboundHops() {return _varyInboundHops;}
+    /** @since 0.9.64+ */
     public boolean getVaryOutboundHops() {return _varyOutboundHops;}
-    public void setVaryInboundHops(boolean yes) {_varyInboundHops = yes;}
-    public void setVaryOutboundHops(boolean yes) {_varyOutboundHops = yes;}
+    /** @since 0.9.64+ */
+    public void setVaryInboundHops(boolean yes) {
+        _varyInboundHops = yes;
+        synchronized(_opts) {
+           _opts.remove("inbound.lengthVariance");
+            if (_varyInboundHops) {_opts.put("inbound.lengthVariance", "1");}
+            else {_opts.put("inbound.lengthVariance", "0");}
+        }
+        Properties opts = _context.getProperties();
+        opts.putAll(_opts);
+    }
+    /** @since 0.9.64+ */
+    public void setVaryOutboundHops(boolean yes) {
+        _varyOutboundHops = yes;
+        synchronized(_opts) {
+           _opts.remove("outbound.lengthVariance");
+            if (_varyOutboundHops) {_opts.put("outbound.lengthVariance", "1");}
+            else {_opts.put("outbound.lengthVariance", "0");}
+        }
+        Properties opts = _context.getProperties();
+        opts.putAll(_opts);
+    }
 
     /**
      * Connect to the router, if we aren't already

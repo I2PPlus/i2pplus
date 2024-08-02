@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -1184,6 +1183,22 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
         }
 
+        if (_util.enableVaryInboundHops() != enableVaryInboundHops) {
+            _config.setProperty(PROP_VARY_INBOUND_HOPS, Boolean.toString(enableVaryInboundHops));
+            if (enableVaryInboundHops) {addMessage(_t("Enabled +0/1 tunnel hop randomization on Inbound tunnels"));}
+            else {addMessage(_t("Disabled tunnel hop randomization on Inbound tunnels"));}
+            _util.setEnableVaryInboundHops(enableVaryInboundHops);
+            changed = true;
+        }
+
+        if (_util.enableVaryOutboundHops() != enableVaryOutboundHops) {
+            _config.setProperty(PROP_VARY_OUTBOUND_HOPS, Boolean.toString(enableVaryOutboundHops));
+            if (enableVaryOutboundHops) {addMessage(_t("Enabled +0/1 tunnel hop randomization on Outbound tunnels"));}
+            else {addMessage(_t("Disabled tunnel hop randomization on Outbound tunnels"));}
+            _util.setEnableVaryOutboundHops(enableVaryOutboundHops);
+            changed = true;
+        }
+
        if (startDelay != null && _context.isRouterContext()) {
            int minutes = _util.getStartupDelay();
            try { minutes = Integer.parseInt(startDelay.trim()); } catch (NumberFormatException nfe) {}
@@ -1365,6 +1380,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 int max = getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW);
                 _util.setMaxUpBW(max);
                 _bwManager.setUpBWLimit(max * 1000);
+                _util.setVaryInboundHops(enableVaryInboundHops);
+                _util.setVaryOutboundHops(enableVaryOutboundHops);
                 String msg = _t("I2CP and tunnel changes will take effect after stopping all torrents");
                 addMessage(msg);
                 if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
@@ -1539,27 +1556,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             else {addMessage(_t("Add and Create sections to display only on first page of multipage torrent listing pages."));}
             _util.setEnableAddCreate(enableAddCreate);
             changed = true;
-        }
-
-        if (_util.enableVaryInboundHops() != enableVaryInboundHops) {
-            _config.setProperty(PROP_VARY_INBOUND_HOPS, Boolean.toString(enableVaryInboundHops));
-            if (enableVaryInboundHops) {addMessage(_t("Enabled +0/1 tunnel hop randomization on Inbound tunnels"));}
-            else {addMessage(_t("Disabled tunnel hop randomization on Inbound tunnels"));}
-            _util.setEnableVaryInboundHops(enableVaryInboundHops);
-            changed = true;
-        }
-
-        if (_util.enableVaryOutboundHops() != enableVaryOutboundHops) {
-            _config.setProperty(PROP_VARY_OUTBOUND_HOPS, Boolean.toString(enableVaryOutboundHops));
-            if (enableVaryInboundHops) {addMessage(_t("Enabled +0/1 tunnel hop randomization on Outbound tunnels"));}
-            else {addMessage(_t("Disabled tunnel hop randomization on Outbound tunnels"));}
-            _util.setEnableVaryOutboundHops(enableVaryOutboundHops);
-            changed = true;
-        }
-
-        if (_util.enableVaryInboundHops() != enableVaryInboundHops || _util.enableVaryOutboundHops() != enableVaryOutboundHops) {
-            addMessage(_t("You may need to save the configuration again without further option changes to fully enable/disable; " +
-                          "in some instances a restart of I2PSnark or your router may be required."));
         }
 
         if (changed) {
