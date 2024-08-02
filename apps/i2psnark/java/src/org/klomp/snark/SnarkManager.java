@@ -1377,11 +1377,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 Properties p = new Properties();
                 p.putAll(opts);
                 _util.setI2CPConfig(i2cpHost, port, p);
+                _util.setVaryInboundHops(enableVaryInboundHops);
+                _util.setVaryOutboundHops(enableVaryOutboundHops);
                 int max = getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW);
                 _util.setMaxUpBW(max);
                 _bwManager.setUpBWLimit(max * 1000);
-                _util.setVaryInboundHops(enableVaryInboundHops);
-                _util.setVaryOutboundHops(enableVaryOutboundHops);
                 String msg = _t("I2CP and tunnel changes will take effect after stopping all torrents");
                 addMessage(msg);
                 if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
