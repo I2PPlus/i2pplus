@@ -636,7 +636,7 @@ input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-b
 #trackers #trackerconfig th:last-child,#trackers #trackerconfig td:last-child:not([colspan]){padding-left:2.5%;text-align:left}
 #trackerconfig td:first-child{text-align:center}
 #trackerconfig td:nth-child(4),#trackerconfig td:nth-child(5),#trackerconfig td:nth-child(6),.knownTracker td:first-child{text-align:center}
-#addtracker td{padding-top:10px;padding-bottom:8px;border-top:var(--border);background:#fff}
+#trackerconfig #addtracker td{padding-top:6px;padding-bottom:6px;border-top:var(--border);background:#fff}
 #addtracker td:first-child b,#fileFilter td:first-child b{width:22px;height:22px;display:inline-block;vertical-align:middle;font-size:0;background:var(--add) no-repeat center center/22px;mix-blend-mode:luminosity}
 #addFileFilter td input[type=text],#addtracker td input[type=text]{margin-left:0}
 #addtracker:hover td:first-child b,#addtracker:focus-within td:first-child b,#addFileFilter:hover td:first-child b,#addFileFilter:focus-within td:first-child b{mix-blend-mode:normal}
@@ -645,8 +645,9 @@ input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-b
 #configs,#trackerconfig{margin:0 10px;width:calc(100% - 20px)}
 #configs .accept{margin-right:0}
 #configs a[href^="/config"]{font-size:0}
-#configs a[href^="/config"],#configs .numeric[name="upBW"]{margin-left:8px}
+#configs a[href^="/config"],#configs .numeric[name="upBW"]{margin-left:2px}
 #configs a[href^="/config"]::after{width:16px;height:16px;display:inline-block;vertical-align:middle;background:var(--config) no-repeat center center/16px;content:""}
+#configs a[href^="/config"]:hover::after{background-image:var(--config_hover)}
 #configs input{margin-left:0}
 #configs .optionList{margin:4px 8px}
 #configs .spacer{display:none}
@@ -654,13 +655,13 @@ input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-b
 #configs .suboption::before{width:22px;height:16px;display:inline-block;vertical-align:middle;background:url(/i2psnark/.res/icons/nopeers.svg) no-repeat left center/auto 16px;opacity:.8;content:""}
 #configs .suboption a{margin-top:2px;font-size:80%;vertical-align:middle;letter-spacing:0;text-transform:none}
 #configs td:first-child{padding-right:10px;text-align:left}
-#configs tr:nth-last-child(2) td{padding:8px 0 11px;border-top:var(--border)}
+#configs tr:nth-last-child(2) td{padding:8px 0 12px;border-top:var(--border)}
 #snarkLang{margin-right:4px;padding:4px 8px;font-weight:700;border-radius:1px;background:#ddd}
 #trackers td{padding:6px 4px 4px;border-top:var(--border);border-bottom:var(--border)}
 #trackers .info_tracker{vertical-align:text-bottom}
 #trackers .knownTracker td,#trackers #addtracker td,#trackers #trackerconfig td[colspan="7"]{border-bottom:0}
 #trackers #trackerconfig{margin-top:0}
-#trackers #trackerconfig td[colspan="7"]{padding:5px 3px 5px 0}
+#trackers #trackerconfig td[colspan="7"]{padding:4px 3px 4px 0}
 
 /* create torrent file filters */
 form[action^="/i2psnark/configure"]{display:block}
@@ -682,12 +683,12 @@ form[action^="/i2psnark/configure"]{display:block}
 #fileFilter th:first-child{width:28px;background:var(--nuke) no-repeat center center/14px,var(--th)}
 #fileFilter th:nth-child(n+4),#fileFilter td:nth-child(n+4){text-align:center}
 #fileFilter th:last-child,#fileFilter td:last-child{width:1%;text-align:center}
-#fileFilter th,#fileFilter td{padding:6px 4px 4px;border-top:var(--border)}
+#fileFilter th,#fileFilter td{padding:6px 4px;border-top:var(--border)}
 #fileFilter th:first-child,#fileFilter td:first-child{border-left:var(--border)}
 #fileFilter th:last-child,#fileFilter td:last-child{border-right:var(--border)}
 #fileFilter tr:not(:last-child).spacer td{padding:4px 0;font-size:0;border-bottom:var(--border)}
 #fileFilter tr:last-child, #fileFilter tr.spacer{display:none}
-#fileFilter tr:nth-last-child(2),#fileFilter tr:nth-last-child(2) td{padding:5px 0;border-left:0;border-right:0;box-shadow:none;background:none}
+#fileFilter tr:nth-last-child(2),#fileFilter tr:nth-last-child(2) td{padding:4px 0;border-left:0;border-right:0;box-shadow:none;background:none}
 #fileFilter input[type=submit]{margin:6px}
 #fileFilter input.accept[type=submit]{margin:6px 0 6px 3px}
 #fileFilter input.delete[type=submit]{margin:6px 3px 6px 0}
