@@ -106,11 +106,12 @@
     <echo message=" signed-updater200WithJavadocAndJetty         Signed Updater (pack200) + javadocs + Jetty &#10140; ./i2pupdate.su3" />
     <echo message=" signed-updater200WithJavadoc                 Signed Updater (pack200) + javadocs &#10140; ./i2pupdate.su3" />
     <echo message=" signed-updater200withJetty                   Signed Updater (pack200) + Jetty" />
-    <echo message=" updateTorBlocklist                           Update Tor blocklist -> installer/resources/blocklist_tor.txt" />
+    <echo message=" updateTorBlocklist                           Update Tor blocklist &#10140; installer/resources/blocklist_tor.txt" />
     <!-- <echo message=" translationReport                            Generate in-console translation status report" /> -->
     <!-- <echo message="  debianrepo                                   Build a Debian repository (reprepro required)" /> -->
     <!-- <echo message="  syndie                                       Generate a standalone syndie install" /> -->
   </target>
+
   <target name="debianhowto">
     <echo message="To build debian packages, you must make sure that you have" />
     <echo message="the necessary build-dependencies installed." />
