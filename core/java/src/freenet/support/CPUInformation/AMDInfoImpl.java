@@ -8,8 +8,7 @@ package freenet.support.CPUInformation;
  *
  *  @since 0.8.7
  */
-class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo
-{
+class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
     private static boolean isK6Compatible;
     private static boolean isK6_2_Compatible;
     private static boolean isK6_3_Compatible;
@@ -25,60 +24,44 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo
     private static boolean isExcavatorCompatible;
     private static boolean isZenCompatible;
     private static boolean isZen2Compatible;
-
-
-    public boolean IsK6Compatible(){ return isK6Compatible; }
-
-    public boolean IsK6_2_Compatible(){ return isK6_2_Compatible; }
-
-    public boolean IsK6_3_Compatible(){ return isK6_3_Compatible; }
-
-    public boolean IsGeodeCompatible(){ return isGeodeCompatible; }
-
-    public boolean IsAthlonCompatible(){ return isAthlonCompatible; }
-
-    public boolean IsAthlon64Compatible(){ return isAthlon64Compatible; }
-
-    public boolean IsK10Compatible(){ return isK10Compatible; }
-
-    public boolean IsBobcatCompatible(){ return isBobcatCompatible; }
-
-    public boolean IsJaguarCompatible(){ return isJaguarCompatible; }
-
-    public boolean IsBulldozerCompatible(){ return isBulldozerCompatible; }
-
-    public boolean IsPiledriverCompatible(){ return isPiledriverCompatible; }
-
-    public boolean IsSteamrollerCompatible(){ return isSteamrollerCompatible; }
-
-    public boolean IsExcavatorCompatible(){ return isExcavatorCompatible; }
+    public boolean IsK6Compatible() {return isK6Compatible;}
+    public boolean IsK6_2_Compatible() {return isK6_2_Compatible;}
+    public boolean IsK6_3_Compatible() {return isK6_3_Compatible;}
+    public boolean IsGeodeCompatible() {return isGeodeCompatible;}
+    public boolean IsAthlonCompatible() {return isAthlonCompatible;}
+    public boolean IsAthlon64Compatible() {return isAthlon64Compatible;}
+    public boolean IsK10Compatible() {return isK10Compatible;}
+    public boolean IsBobcatCompatible() {return isBobcatCompatible;}
+    public boolean IsJaguarCompatible() {return isJaguarCompatible;}
+    public boolean IsBulldozerCompatible() {return isBulldozerCompatible;}
+    public boolean IsPiledriverCompatible() {return isPiledriverCompatible;}
+    public boolean IsSteamrollerCompatible() {return isSteamrollerCompatible;}
+    public boolean IsExcavatorCompatible() {return isExcavatorCompatible;}
 
     /**
      * @return true if the CPU present in the machine is at least a Zen family CPU
      * @since 0.9.48
      */
-    public boolean IsZenCompatible() { return isZenCompatible; }
+    public boolean IsZenCompatible() {return isZenCompatible;}
 
     /**
      * @return true if the CPU present in the machine is at least a Zen2 family CPU
      * @since 0.9.48
      */
-    public boolean IsZen2Compatible() { return isZen2Compatible; }
+    public boolean IsZen2Compatible() {return isZen2Compatible;}
 
 
-    public String getCPUModelString() throws UnknownCPUException
-    {
+    public String getCPUModelString() throws UnknownCPUException {
         String smodel = identifyCPU();
-        if (smodel != null)
-            return smodel;
-        throw new UnknownCPUException("Unknown AMD CPU; Family="+CPUID.getCPUFamily() + '/' + CPUID.getCPUExtendedFamily()+
+        if (smodel != null) {return smodel;}
+        throw new UnknownCPUException("Unknown AMD CPU; Family="+CPUID.getCPUFamily() + '/' + CPUID.getCPUExtendedFamily() +
                                       ", Model="+CPUID.getCPUModel() + '/' + CPUID.getCPUExtendedModel());
     }
 
     private String identifyCPU()
     {
         // http://en.wikipedia.org/wiki/Cpuid
-    	// #include "llvm/Support/Host.h", http://llvm.org/docs/doxygen/html/Host_8cpp_source.html
+        // #include "llvm/Support/Host.h", http://llvm.org/docs/doxygen/html/Host_8cpp_source.html
         String modelString = null;
         int family = CPUID.getCPUFamily();
         int model = CPUID.getCPUModel();
@@ -88,7 +71,7 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo
         }
 
         switch (family) {
-        //i486 class (Am486, 5x86)
+          // i486 class (Am486, 5x86)
           case 4: {
             switch (model) {
                 case 3:
@@ -116,8 +99,8 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo
           }
           break;
 
-        //i586 class (K5/K6/K6-2/K6-III)
-        // ref: http://support.amd.com/TechDocs/20734.pdf
+          // i586 class (K5/K6/K6-2/K6-III)
+          // ref: http://support.amd.com/TechDocs/20734.pdf
           case 5: {
             isK6Compatible = true;
             switch (model) {
@@ -163,8 +146,8 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo
           }
           break;
 
-        //i686 class (Athlon/Athlon XP/Duron/K7 Sempron)
-        // ref: http://support.amd.com/TechDocs/20734.pdf
+          // i686 class (Athlon/Athlon XP/Duron/K7 Sempron)
+          // ref: http://support.amd.com/TechDocs/20734.pdf
           case 6: {
             isK6Compatible = true;
             isK6_2_Compatible = true;
@@ -203,8 +186,8 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo
           }
           break;
 
-        //AMD64 class (A64/Opteron/A64 X2/K8 Sempron/Turion/Second-Generation Opteron/Athlon Neo)
-        // ref: http://support.amd.com/TechDocs/33610.PDF
+          // AMD64 class (A64/Opteron/A64 X2/K8 Sempron/Turion/Second-Generation Opteron/Athlon Neo)
+          // ref: http://support.amd.com/TechDocs/33610.PDF
           case 15: {
             isK6Compatible = true;
             isK6_2_Compatible = true;
@@ -335,7 +318,7 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo
           }
           break;
 
-        //Stars (Phenom II/Athlon II/Third-Generation Opteron/Opteron 4100 & 6100/Sempron 1xx)
+          // Stars (Phenom II/Athlon II/Third-Generation Opteron/Opteron 4100 & 6100/Sempron 1xx)
           case 16: {
             isK6Compatible = true;
             isK6_2_Compatible = true;
@@ -354,10 +337,10 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo
                     modelString = "Athlon II X2/X3/X4 (Regor/Rana/Propus AM3, 45 nm)";
                     break;
                 case 6:
-                    modelString = "Mobile Athlon II/Turion II/Phenom II/Sempron/V-series (Regor/Caspian/Champlain, 45 nm)";
+                    modelString = "Mobile Athlon II / Turion II / Phenom II / Sempron/V-series (Regor/Caspian/Champlain, 45 nm)";
                     break;
                 case 8:
-                    modelString = "Six-Core Opteron/Opteron 4100 series (Istanbul/Lisbon, 45 nm)";
+                    modelString = "Six-Core Opteron / Opteron 4100 series (Istanbul/Lisbon, 45 nm)";
                     break;
                 case 9:
                     modelString = "Opteron 6100 series (Magny-Cours G34, 45 nm)";
@@ -372,7 +355,7 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo
           }
           break;
 
-        //K8 mobile+HT3 (Turion X2/Athlon X2/Sempron)
+          // K8 mobile+HT3 (Turion X2/Athlon X2/Sempron)
           case 17: {
             isK6Compatible = true;
             isK6_2_Compatible = true;
@@ -381,20 +364,20 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo
             isAthlon64Compatible = true;
             switch (model) {
                 case 3:
-                    modelString = "AMD Turion X2/Athlon X2/Sempron (Lion/Sable, 65 nm)";
+                    modelString = "AMD Turion X2 / Athlon X2 / Sempron (Lion/Sable, 65 nm)";
                     break;
                 default:
-                    modelString = "AMD Athlon/Turion/Sempron model " + model;
+                    modelString = "AMD Athlon / Turion / Sempron model " + model;
                     break;
             }
           }
           break;
 
-        // APUs
-        // http://en.wikipedia.org/wiki/List_of_AMD_Accelerated_Processing_Unit_microprocessors
-        // 1st gen Llano high perf / Brazos low power
-        // 2nd gen Trinity high perf / Brazos 2 low power
-        // 3rd gen Kaveri high perf / Kabini/Temash low power
+          // APUs
+          // http://en.wikipedia.org/wiki/List_of_AMD_Accelerated_Processing_Unit_microprocessors
+          // 1st gen Llano high perf / Brazos low power
+          // 2nd gen Trinity high perf / Brazos 2 low power
+          // 3rd gen Kaveri high perf / Kabini/Temash low power
           case 18: {
             isK6Compatible = true;
             isK6_2_Compatible = true;
@@ -405,7 +388,7 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo
           }
           break;
 
-        //Bobcat
+          // Bobcat
           case 20: {
             isK6Compatible = true;
             isK6_2_Compatible = true;
@@ -426,7 +409,7 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo
           }
           break;
 
-        //Bulldozer
+          // Bulldozer
           case 21: {
             isK6Compatible = true;
             isK6_2_Compatible = true;
@@ -435,28 +418,28 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo
             isAthlon64Compatible = true;
             isBulldozerCompatible = true;
             if (!this.hasAVX()) {
-            	modelString = "Bulldozer";
-            	break;
+              modelString = "Bulldozer";
+              break;
             }
-	        if (model >= 0x50 && model <= 0x5F) {
-	        	isPiledriverCompatible = true;
-	        	isSteamrollerCompatible = true;
-	        	isExcavatorCompatible = true;
-	            modelString = "Excavator";
-	        } else if (model >= 0x30 && model <= 0x3F) {
-	        	isPiledriverCompatible = true;
-	        	isSteamrollerCompatible = true;
-	            modelString = "Steamroller";
-	        } else if ((model >= 0x10 && model <= 0x1F) || hasTBM()) {
-	        	isPiledriverCompatible = true;
-	        	modelString = "Piledriver";
-	        } else {
-	        	modelString = "Bulldozer";
-	        }
+          if (model >= 0x50 && model <= 0x5F) {
+            isPiledriverCompatible = true;
+            isSteamrollerCompatible = true;
+            isExcavatorCompatible = true;
+              modelString = "Excavator";
+          } else if (model >= 0x30 && model <= 0x3F) {
+            isPiledriverCompatible = true;
+            isSteamrollerCompatible = true;
+              modelString = "Steamroller";
+          } else if ((model >= 0x10 && model <= 0x1F) || hasTBM()) {
+            isPiledriverCompatible = true;
+            modelString = "Piledriver";
+          } else {
+            modelString = "Bulldozer";
+          }
           }
           break;
 
-        //Jaguar
+          //  Jaguar
           case 22: {
             isK6Compatible = true;
             isK6_2_Compatible = true;
@@ -469,8 +452,8 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo
           }
           break;
 
-        // Zen / Zen+ / Zen2 / Zen3 / Zen4 / Ryzen 3/5/7/9/Threadripper / EPYC
-        // untested
+          // Zen / Zen+ / Zen2 / Zen3 / Zen4 / Ryzen 3/5/7/9/Threadripper / EPYC
+          // untested
           case 23:
           case 25: {
             // Quote wikipedia:
@@ -497,17 +480,31 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo
             // and zen2 is actually a little slower than zen.
             isZen2Compatible = family == 25;
             if (isZen2Compatible)
-               modelString = "Ryzen/Epyc Zen 3 model " + model;
+               modelString = "Ryzen / Epyc Zen 3 model " + model;
             else if (model == 1)
                modelString = "Ryzen 7";
+            else if (model == 17)
+               modelString = "Ryzen 2000 APU series";
+            else if (model == 24)
+               modelString = "Ryzen Zen+ 3000 APU series";
+            else if (model == 32)
+               modelString = "Ryzen 3000 APU series";
+            else if (model == 49)
+               modelString = "Ryzen Threadripper 3000 series / Epyc 7002 series";
+            else if (model == 96)
+               modelString = "Ryzen 4000 APU series";
+            else if (model == 104)
+               modelString = "Ryzen 5000 APU series";
+            else if (model == 113)
+               modelString = "Ryzen 3000 series";
             else
-               modelString = "Ryzen/Epyc model " + model;
+               modelString = "Ryzen / Epyc model " + model;
           }
           break;
 
-        // Hygon Dhyana
-        // http://lkml.iu.edu/hypermail/linux/kernel/1806.1/00730.html
-        // untested
+          // Hygon Dhyana
+          // http://lkml.iu.edu/hypermail/linux/kernel/1806.1/00730.html
+          // untested
           case 24: {
             isK6Compatible = true;
             isK6_2_Compatible = true;
