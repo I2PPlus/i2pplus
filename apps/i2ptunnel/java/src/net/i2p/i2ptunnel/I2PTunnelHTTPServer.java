@@ -89,6 +89,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private static final String PROXY_CONN_HEADER = "proxy-connection";
     private static final String PRIORITY_HEADER = "Priority";
     private static final String SEC_GPC_HEADER = "Sec-GPC";
+    private static final String X_FORWARDED_HEADER = "X-Forwarded-For";
+    private static final String X_REAL_IP_HEADER = "X-Real-Ip";
 
     /** MUST ALL BE LOWER CASE */
     private static final String[] CLIENT_SKIPHEADERS = {
@@ -97,7 +99,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         DEST32_HEADER.toLowerCase(Locale.US),
         PRIORITY_HEADER.toLowerCase(Locale.US),
         PROXY_CONN_HEADER,
-        SEC_GPC_HEADER.toLowerCase(Locale.US)
+        SEC_GPC_HEADER.toLowerCase(Locale.US),
+        X_FORWARDED_HEADER.toLowerCase(Locale.US),
+        X_REAL_IP_HEADER.toLowerCase(Locale.US)
     };
 
     /** server response headers to remove */
