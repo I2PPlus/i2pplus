@@ -401,16 +401,16 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(_t("Are you sure you want to delete the file \\''{0}\\'' (downloaded data will not be deleted) ?")).append("\";\n")
                .append("  const deleteMessage2 = \"")
                .append(_t("Are you sure you want to delete the torrent \\''{0}\\'' and all downloaded data?")).append("\";\n")
-               .append("  const snarkPageSize = " + pageSize + ";\n")
-               .append("  const snarkRefreshDelay = " + delay + ";\n")
-               .append("  const totalSnarks = " + _manager.listTorrentFiles().size() + ";\n")
+               .append("  const snarkPageSize = ").append(pageSize).append(";\n")
+               .append("  const snarkRefreshDelay = ").append(delay).append(";\n")
+               .append("  const totalSnarks = ").append(_manager.listTorrentFiles().size()).append(";\n")
                .append("  window.snarkPageSize = snarkPageSize;\n")
                .append("  window.snarkRefreshDelay = snarkRefreshDelay;\n")
                .append("  window.totalSnarks = totalSnarks;\n</script>\n")
-               .append("<script nonce=" + cspNonce + " type=module>\n")
+               .append("<script nonce=").append(cspNonce).append(" type=module>\n")
                .append("  import {initSnarkRefresh} from \"").append(resourcePath).append("js/refreshTorrents.js").append("\";\n")
                .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n")
-               .append("<script nonce=" + cspNonce + " type=module src=" + resourcePath + "js/onVisible.js></script>\n")
+               .append("<script nonce=").append(cspNonce).append(" type=module src=").append(resourcePath).append("js/onVisible.js></script>\n")
                .append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath).append("js/delete.js?")
                .append(CoreVersion.VERSION).append("\"></script>\n");
             if (delay > 0) {
@@ -3658,10 +3658,10 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("</b> \n")
            .append("<label title=\"").append(_t("Add 0 or 1 additional hops randomly to Inbound tunnels")).append("\">")
            .append("<input type=checkbox class=\"optbox slider\" name=varyInbound id=varyInbound ")
-           .append(varyInbound ? "checked " : "").append("> <span>").append(_t("Inbound")).append("</span></label>")
+           .append(varyInbound ? "checked " : "").append(" disabled> <span>").append(_t("Inbound")).append("</span></label>")
            .append("<label title=\"").append(_t("Add 0 or 1 additional hops randomly to Outbound tunnels")).append("\">")
            .append("<input type=checkbox class=\"optbox slider\" name=varyOutbound id=varyOutbound ")
-           .append(varyOutbound ? "checked " : "").append("> <span>").append(_t("Outbound")).append("</span></label>")
+           .append(varyOutbound ? "checked " : "").append(" disabled> <span>").append(_t("Outbound")).append("</span></label>")
            .append("</span><br>");
 
         if (!_context.isRouterContext()) {
@@ -3752,12 +3752,12 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("<td><input type=checkbox class=optbox name=\"delete_").append(f.name).append("\"></td>")
                .append("<td>").append(f.name).append("</td>")
                .append("<td>").append(f.filterPattern).append("</td>")
-               .append("<td>").append("<label class=filterStartsWith><input type=radio class=optbox value=\"starts_with\" name=\"filterType_").append(nameUnderscore).append("\"")
-               .append(filterType.equals("starts_with") ? " checked" : "").append("></label></td>")
-               .append("<td>").append("<label class=filterContains><input type=radio class=optbox value=\"contains\" name=\"filterType_").append(nameUnderscore).append("\"")
-               .append(filterType.equals("contains") ? " checked" : "").append("></label></td>")
-               .append("<td>").append("<label class=filterEndsWith><input type=radio class=optbox value=\"ends_with\" name=\"filterType_").append(nameUnderscore).append("\"")
-               .append(filterType.equals("ends_with") ? " checked" : "").append("></label></td>")
+               .append("<td>").append("<label class=filterStartsWith><input type=radio class=optbox value=\"starts_with\" name=\"filterType_")
+               .append(nameUnderscore).append("\"").append(filterType.equals("starts_with") ? " checked" : "").append("></label></td>")
+               .append("<td>").append("<label class=filterContains><input type=radio class=optbox value=\"contains\" name=\"filterType_")
+               .append(nameUnderscore).append("\"").append(filterType.equals("contains") ? " checked" : "").append("></label></td>")
+               .append("<td>").append("<label class=filterEndsWith><input type=radio class=optbox value=\"ends_with\" name=\"filterType_")
+               .append(nameUnderscore).append("\"").append(filterType.equals("ends_with") ? " checked" : "").append("></label></td>")
                .append("<td><input type=checkbox class=optbox name=\"defaultEnabled_").append(f.name).append("\"");
             if (f.isDefault) {
                 buf.append(" checked=checked");
