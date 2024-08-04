@@ -787,11 +787,12 @@ input:checked+.toggleview:active .tab_label::after{box-shadow:0 0 0 2px rgb(153,
 .createFilterToggle.starts_with{border-left-width:5px}
 .createFilterToggle.contains{border-left-width:5px;border-right-width:5px}
 .createFilterToggle.ends_with{border-right-width:5px}
-.createFilterToggle:hover{color:var(--hover);border-color:var(--hover)}
+.createFilterToggle:hover{color:var(--hover);border-color:var(--hover);background:#000}
 #createTorrentFilters{display:table-row}
 #contentFilter{width:calc(100% - 200px);margin:3px 0 0 3px}
 #contentFilter input[type=checkbox]{display:none}
-#contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:2px 8px 4px 22px;font-weight:600;font-style:normal;text-shadow:1px 1px 1px #0008;box-shadow:var(--highlight),2px 2px 2px #0008 inset;background:var(--delete_hover) no-repeat 8px center/10px,var(--glow_bottom_hover),var(--badge_active);background-blend-mode:hard-light,normal}
+#contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 8px 3px 22px;font-weight:600;font-style:normal;text-shadow:1px 1px 1px #0008;box-shadow:var(--highlight),2px 2px 2px #0008 inset;background:var(--delete_hover) no-repeat 8px center/10px,var(--glow_bottom_hover),var(--badge_active);background-blend-mode:hard-light,normal}
+#contentFilter input[type=checkbox]:checked+.createFilterToggle:hover{background-color:#000}
 #fileFilter{width:calc(100% - 2px);margin:0 auto;display:block}
 #fileFilter th,#fileFilter td{text-align:left}
 #fileFilter th{white-space:nowrap;border-bottom:0;padding-top:7px;padding-bottom:7px}
