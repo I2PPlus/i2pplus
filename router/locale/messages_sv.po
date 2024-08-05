@@ -68,7 +68,7 @@ msgstr "Avslå alla tunnelförfrågningar:<br>"
 msgid "Hidden Mode"
 msgstr "Doldt läge"
 
-msgid "Declining tunnel requests:<br>"
+msgid "Declining Tunnel Requests:<br>"
 msgstr "Avslående tunnelförfrågningar:<br>"
 
 msgid "High message delay"
@@ -110,7 +110,7 @@ msgstr "Avvisande förfrågningar"
 msgid "Shutting down"
 msgstr "Stänger av"
 
-msgid "Declining tunnel requests"
+msgid "Declining Tunnel Requests"
 msgstr "Sjunkande tunnelförfrågningar"
 
 msgid "Dropping Tunnel Requests: Too slow"

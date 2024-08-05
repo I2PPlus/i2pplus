@@ -68,7 +68,7 @@ msgstr "Bütün tunel sorğuları rədd edilir:<br>"
 msgid "Hidden Mode"
 msgstr "Gizli rejim"
 
-msgid "Declining tunnel requests:<br>"
+msgid "Declining Tunnel Requests:<br>"
 msgstr "Tunel sorğuları rədd edilir:<br>"
 
 msgid "High message delay"
@@ -110,7 +110,7 @@ msgstr "Tələblərin rədd edilməsi"
 msgid "Shutting down"
 msgstr "Söndürür"
 
-msgid "Declining tunnel requests"
+msgid "Declining Tunnel Requests"
 msgstr "Tunel sorğularının rədd edilməsi"
 
 msgid "Dropping Tunnel Requests: Too slow"

@@ -68,7 +68,7 @@ msgstr "Απόρριψη όλων των αιτημάτων σήραγγας:<br
 msgid "Hidden Mode"
 msgstr "Κρυφή λειτουργία"
 
-msgid "Declining tunnel requests:<br>"
+msgid "Declining Tunnel Requests:<br>"
 msgstr "Απόρριψη αιτημάτων για σήραγγα:<br>"
 
 msgid "High message delay"
@@ -110,7 +110,7 @@ msgstr "Απόρριψη αιτημάτων"
 msgid "Shutting down"
 msgstr "Κλείσιμο"
 
-msgid "Declining tunnel requests"
+msgid "Declining Tunnel Requests"
 msgstr "Απόρριψη αιτημάτων για τούνελ"
 
 msgid "Dropping Tunnel Requests: Too slow"

@@ -68,7 +68,7 @@ msgstr "رد کردن همه درخواست‌های تونل:<br>"
 msgid "Hidden Mode"
 msgstr "حالت پنهان"
 
-msgid "Declining tunnel requests:<br>"
+msgid "Declining Tunnel Requests:<br>"
 msgstr "رد درخواست تونل:<br>"
 
 msgid "High message delay"
@@ -110,7 +110,7 @@ msgstr "رد درخواست ها"
 msgid "Shutting down"
 msgstr "خاموش شدن"
 
-msgid "Declining tunnel requests"
+msgid "Declining Tunnel Requests"
 msgstr "رد درخواست های تونل"
 
 msgid "Dropping Tunnel Requests: Too slow"

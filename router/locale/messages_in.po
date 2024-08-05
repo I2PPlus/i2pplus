@@ -68,7 +68,7 @@ msgstr "Menolak semua permintaan terowongan:<br>"
 msgid "Hidden Mode"
 msgstr "Modus Tersembunyi"
 
-msgid "Declining tunnel requests:<br>"
+msgid "Declining Tunnel Requests:<br>"
 msgstr "Menolak permintaan terowongan:<br>"
 
 msgid "High message delay"
@@ -110,7 +110,7 @@ msgstr "Menolak permintaan"
 msgid "Shutting down"
 msgstr "Mematikan"
 
-msgid "Declining tunnel requests"
+msgid "Declining Tunnel Requests"
 msgstr "Menolak permintaan terowongan"
 
 msgid "Dropping Tunnel Requests: Too slow"

@@ -68,7 +68,7 @@ msgstr "모든 터널 요청 거부:<br>"
 msgid "Hidden Mode"
 msgstr "숨김 모드"
 
-msgid "Declining tunnel requests:<br>"
+msgid "Declining Tunnel Requests:<br>"
 msgstr "터널 요청 거부:<br>"
 
 msgid "High message delay"
@@ -110,7 +110,7 @@ msgstr "요청 거절"
 msgid "Shutting down"
 msgstr "종료 중"
 
-msgid "Declining tunnel requests"
+msgid "Declining Tunnel Requests"
 msgstr "터널 요청 거부"
 
 msgid "Dropping Tunnel Requests: Too slow"

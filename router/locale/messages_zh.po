@@ -68,7 +68,7 @@ msgstr "拒绝所有隧道请求：<br>"
 msgid "Hidden Mode"
 msgstr "隐藏模式"
 
-msgid "Declining tunnel requests:<br>"
+msgid "Declining Tunnel Requests:<br>"
 msgstr "拒绝隧道请求：<br>"
 
 msgid "High message delay"
@@ -110,7 +110,7 @@ msgstr "拒绝请求"
 msgid "Shutting down"
 msgstr "关闭"
 
-msgid "Declining tunnel requests"
+msgid "Declining Tunnel Requests"
 msgstr "拒绝隧道请求"
 
 msgid "Dropping Tunnel Requests: Too slow"

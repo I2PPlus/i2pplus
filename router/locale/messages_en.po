@@ -68,7 +68,7 @@ msgstr ""
 msgid "Hidden Mode"
 msgstr ""
 
-msgid "Declining tunnel requests:<br>"
+msgid "Declining Tunnel Requests:<br>"
 msgstr ""
 
 msgid "High message delay"
@@ -110,19 +110,19 @@ msgstr ""
 msgid "Shutting down"
 msgstr ""
 
-msgid "Declining tunnel requests"
+msgid "Declining Tunnel Requests"
 msgstr ""
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr ""
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr ""
 
-msgid "Dropping tunnel requests:<br>High CPU load"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr ""
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr ""
 
 msgid "Declining requests:"
@@ -137,5 +137,5 @@ msgstr ""
 msgid "Dropping Tunnel Requests: High load"
 msgstr ""
 
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr ""

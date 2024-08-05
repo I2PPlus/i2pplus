@@ -68,7 +68,7 @@ msgstr "Từ chối tất cả các yêu cầu đường hầm:<br>"
 msgid "Hidden Mode"
 msgstr "Chế độ ẩn"
 
-msgid "Declining tunnel requests:<br>"
+msgid "Declining Tunnel Requests:<br>"
 msgstr "Yêu cầu đường hầm giảm:<br>"
 
 msgid "High message delay"
@@ -110,7 +110,7 @@ msgstr "Yêu cầu từ chối"
 msgid "Shutting down"
 msgstr "Tắt máy"
 
-msgid "Declining tunnel requests"
+msgid "Declining Tunnel Requests"
 msgstr "Yêu cầu đường hầm giảm"
 
 msgid "Dropping Tunnel Requests: Too slow"

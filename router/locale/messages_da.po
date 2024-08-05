@@ -68,7 +68,7 @@ msgstr "Afvisning af alle tunnelanmodninger:<br>"
 msgid "Hidden Mode"
 msgstr "Skjult tilstand"
 
-msgid "Declining tunnel requests:<br>"
+msgid "Declining Tunnel Requests:<br>"
 msgstr "Afvisende tunnelanmodninger:<br>"
 
 msgid "High message delay"
@@ -110,7 +110,7 @@ msgstr "Afvisende anmodninger"
 msgid "Shutting down"
 msgstr "Lukker ned"
 
-msgid "Declining tunnel requests"
+msgid "Declining Tunnel Requests"
 msgstr "Faldende tunnelanmodninger"
 
 msgid "Dropping Tunnel Requests: Too slow"

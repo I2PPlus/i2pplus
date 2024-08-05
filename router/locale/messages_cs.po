@@ -68,7 +68,7 @@ msgstr "Odmítání všech požadavků na tunel:<br>"
 msgid "Hidden Mode"
 msgstr "Skrytý režim"
 
-msgid "Declining tunnel requests:<br>"
+msgid "Declining Tunnel Requests:<br>"
 msgstr "Odmítání požadavků na tunel:<br>"
 
 msgid "High message delay"
@@ -110,7 +110,7 @@ msgstr "Odmítání požadavků"
 msgid "Shutting down"
 msgstr "Vypínání"
 
-msgid "Declining tunnel requests"
+msgid "Declining Tunnel Requests"
 msgstr "Odmítání požadavků na tunel"
 
 msgid "Dropping Tunnel Requests: Too slow"

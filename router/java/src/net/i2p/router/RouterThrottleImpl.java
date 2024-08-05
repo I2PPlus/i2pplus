@@ -186,7 +186,7 @@ public class RouterThrottleImpl implements RouterThrottle {
                 } else if (_log.shouldWarn()) {
                     _log.warn("Refusing Tunnel Request -> Message processing congestion");
                 }
-                setTunnelStatus("[rejecting/overload]" + _x("Declining tunnel requests" + ":<br>" + _x("High message delay")));
+                setTunnelStatus("[rejecting/overload]" + _x("Declining Tunnel Requests" + ":<br>" + _x("High message delay")));
                 return TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
             }
         }
@@ -205,7 +205,7 @@ public class RouterThrottleImpl implements RouterThrottle {
                     _log.warn("Refusing Tunnel Request -> Disabled by configuration");
                 }
                 _context.statManager().addRateData("router.throttleTunnelMaxExceeded", numTunnels);
-                setTunnelStatus("[disabled]" + _x("Declining tunnel requests" + ":<br>" + _x("Participation disabled")));
+                setTunnelStatus("[disabled]" + _x("Declining Tunnel Requests" + ":<br>" + _x("Participation disabled")));
             }
             return TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
         }
@@ -357,7 +357,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     static final int DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE = 40; // .067KBps
     /** also limited to 90% - see below */
     private static final int MIN_AVAILABLE_BPS = 4*1024; // always leave at least 4KBps free when allowing
-    //private static final String LIMIT_STR = _x("Declining tunnel requests" + ":<br>" + "Bandwidth limit");
+    //private static final String LIMIT_STR = _x("Declining Tunnel Requests" + ":<br>" + "Bandwidth limit");
     private static final String LIMIT_STR = _x("Declining requests" + ": " + "Bandwidth limit");
 
     /**
@@ -528,7 +528,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         if (maxTunnels > 0 && !_context.router().isHidden() && ri != null && !ri.getBandwidthTier().equals("K")) {
             setTunnelStatus("[accepting]" + _x("Accepting tunnel requests"));
         } else {
-            setTunnelStatus("[rejecting/disabled]" + _x("Declining tunnel requests"));
+            setTunnelStatus("[rejecting/disabled]" + _x("Declining Tunnel Requests"));
         }
     }
 

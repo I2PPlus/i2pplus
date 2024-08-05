@@ -962,7 +962,7 @@ class BuildHandler implements Runnable {
             pDrop = (float)Math.pow(pDrop, 16);
             if (_context.random().nextFloat() < pDrop) { // || (proactiveDrops > MAX_PROACTIVE_DROPS) ) ) {
                 _context.statManager().addRateData("tunnel.rejectOverloaded", recvDelay);
-                _context.throttle().setTunnelStatus("[rejecting/overload]" + _x("Declining tunnel requests" + ":<br>" + _x("Request overload")));
+                _context.throttle().setTunnelStatus("[rejecting/overload]" + _x("Declining Tunnel Requests" + ":<br>" + _x("Request overload")));
                 //if (true || (proactiveDrops < MAX_PROACTIVE_DROPS*2))
                     response = TunnelHistory.TUNNEL_REJECT_TRANSIENT_OVERLOAD;
                 //else
@@ -993,7 +993,7 @@ class BuildHandler implements Runnable {
                     ((isInGW && ! _context.commSystem().haveInboundCapacity(87)) ||
                      (isOutEnd && ! _context.commSystem().haveOutboundCapacity(87)))) {
                         _context.statManager().addRateData("tunnel.rejectConnLimits", 1);
-                        _context.throttle().setTunnelStatus("[rejecting/max]" + _x("Declining tunnel requests" + ":<br>" + _x("Connection limit reached")));
+                        _context.throttle().setTunnelStatus("[rejecting/max]" + _x("Declining Tunnel Requests" + ":<br>" + _x("Connection limit reached")));
                         response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
                 }
             }

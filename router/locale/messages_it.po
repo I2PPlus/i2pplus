@@ -68,7 +68,7 @@ msgstr "Rifiuto di tutte le richieste di tunnel:<br>"
 msgid "Hidden Mode"
 msgstr "Modalità nascosta"
 
-msgid "Declining tunnel requests:<br>"
+msgid "Declining Tunnel Requests:<br>"
 msgstr "Richieste tunnel in declino:<br>"
 
 msgid "High message delay"
@@ -110,7 +110,7 @@ msgstr "Richieste rifiutate"
 msgid "Shutting down"
 msgstr "Spegnimento"
 
-msgid "Declining tunnel requests"
+msgid "Declining Tunnel Requests"
 msgstr "Richieste tunnel in calo"
 
 msgid "Dropping Tunnel Requests: Too slow"

@@ -68,7 +68,7 @@ msgstr "Kaikkien tunnelipyyntöjen hylkääminen:<br>"
 msgid "Hidden Mode"
 msgstr "Piilotettu tila"
 
-msgid "Declining tunnel requests:<br>"
+msgid "Declining Tunnel Requests:<br>"
 msgstr "Hylkäävät tunnelipyynnöt:<br>"
 
 msgid "High message delay"
@@ -110,7 +110,7 @@ msgstr "Hylkäävät pyynnöt"
 msgid "Shutting down"
 msgstr "Sammutus"
 
-msgid "Declining tunnel requests"
+msgid "Declining Tunnel Requests"
 msgstr "Vähenevät tunnelipyynnöt"
 
 msgid "Dropping Tunnel Requests: Too slow"

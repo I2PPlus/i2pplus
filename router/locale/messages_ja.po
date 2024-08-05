@@ -68,7 +68,7 @@ msgstr "すべてのトンネル リクエストを拒否します:<br>"
 msgid "Hidden Mode"
 msgstr "隠しモード"
 
-msgid "Declining tunnel requests:<br>"
+msgid "Declining Tunnel Requests:<br>"
 msgstr "トンネルリクエストの拒否:<br>"
 
 msgid "High message delay"
@@ -110,7 +110,7 @@ msgstr "リクエストの拒否"
 msgid "Shutting down"
 msgstr "シャットダウン"
 
-msgid "Declining tunnel requests"
+msgid "Declining Tunnel Requests"
 msgstr "トンネルリクエストの拒否"
 
 msgid "Dropping Tunnel Requests: Too slow"

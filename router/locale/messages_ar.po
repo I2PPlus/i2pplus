@@ -68,7 +68,7 @@ msgstr "رفض كافة طلبات الأنفاق:<br>"
 msgid "Hidden Mode"
 msgstr "الوضع المخفي"
 
-msgid "Declining tunnel requests:<br>"
+msgid "Declining Tunnel Requests:<br>"
 msgstr "رفض طلبات النفق:<br>"
 
 msgid "High message delay"
@@ -110,19 +110,19 @@ msgstr "رفض الطلبات"
 msgid "Shutting down"
 msgstr "الاغلاق"
 
-msgid "Declining tunnel requests"
+msgid "Declining Tunnel Requests"
 msgstr "رفض طلبات الأنفاق"
 
-msgid "Dropping tunnel requests: Too slow"
+msgid "Dropping Tunnel Requests: Too slow"
 msgstr "تجاوز النفق: بطيئ جدا"
 
-msgid "Dropping tunnel requests: High job lag"
+msgid "Dropping Tunnel Requests: High job lag"
 msgstr "إسقاط طلبات النفق: تأخر كبير في العمل"
 
-msgid "Dropping tunnel requests:<br>High CPU load"
+msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr "إسقاط طلبات النفق:<br>تحميل عالي لوحدة المعالجة المركزية"
 
-msgid "Dropping tunnel requests: Overloaded"
+msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "تجاوز النفق: ازدحام"
 
 msgid "Declining requests:"
@@ -137,5 +137,5 @@ msgstr "تم الوصول إلى حد الاتصال"
 msgid "Dropping Tunnel Requests: High load"
 msgstr "تجاوز النفق: ازدحام كبير"
 
-msgid "Dropping tunnel requests: Queue time"
+msgid "Dropping Tunnel Requests: Queue time"
 msgstr "تجاوز النفق: وقت الانتظار"

@@ -68,7 +68,7 @@ msgstr "सभी टंनल अनुरोध अस्वीकार क�
 msgid "Hidden Mode"
 msgstr "छिपा हुआ मोड"
 
-msgid "Declining tunnel requests:<br>"
+msgid "Declining Tunnel Requests:<br>"
 msgstr "टंनल अनुरोध अस्वीकार कर रहा है:<br>"
 
 msgid "High message delay"
@@ -110,7 +110,7 @@ msgstr "अनुरोध अस्वीकार कर रहा है"
 msgid "Shutting down"
 msgstr "बंद कर रहा है"
 
-msgid "Declining tunnel requests"
+msgid "Declining Tunnel Requests"
 msgstr "टंनल अनुरोध अस्वीकार कर रहा है"
 
 msgid "Dropping Tunnel Requests: Too slow"

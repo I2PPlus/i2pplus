@@ -68,7 +68,7 @@ msgstr "Kõigi tunnelitaotluste tagasilükkamine:<br>"
 msgid "Hidden Mode"
 msgstr "Varjatud režiim"
 
-msgid "Declining tunnel requests:<br>"
+msgid "Declining Tunnel Requests:<br>"
 msgstr "Tunnelitaotluste vähenemine:<br>"
 
 msgid "High message delay"
@@ -110,7 +110,7 @@ msgstr "Taotluste tagasilükkamine"
 msgid "Shutting down"
 msgstr "Väljalülitamine"
 
-msgid "Declining tunnel requests"
+msgid "Declining Tunnel Requests"
 msgstr "Tunnelitaotluste vähenemine"
 
 msgid "Dropping Tunnel Requests: Too slow"

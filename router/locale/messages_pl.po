@@ -68,7 +68,7 @@ msgstr "Odrzucanie wszystkich żądań tuneli:<br>"
 msgid "Hidden Mode"
 msgstr "Tryb ukryty"
 
-msgid "Declining tunnel requests:<br>"
+msgid "Declining Tunnel Requests:<br>"
 msgstr "Odrzucane żądania tunelu:<br>"
 
 msgid "High message delay"
@@ -110,7 +110,7 @@ msgstr "Odrzucanie żądań"
 msgid "Shutting down"
 msgstr "Zamykanie"
 
-msgid "Declining tunnel requests"
+msgid "Declining Tunnel Requests"
 msgstr "Odrzucane żądania tuneli"
 
 msgid "Dropping Tunnel Requests: Too slow"

@@ -68,7 +68,7 @@ msgstr "Az összes alagútkérelem elutasítása:<br>"
 msgid "Hidden Mode"
 msgstr "Rejtett mód"
 
-msgid "Declining tunnel requests:<br>"
+msgid "Declining Tunnel Requests:<br>"
 msgstr "Csökkenő alagútkérések:<br>"
 
 msgid "High message delay"
@@ -110,7 +110,7 @@ msgstr "Elutasító kérelmek"
 msgid "Shutting down"
 msgstr "Leállítás"
 
-msgid "Declining tunnel requests"
+msgid "Declining Tunnel Requests"
 msgstr "Csökkenő alagútkérések"
 
 msgid "Dropping Tunnel Requests: Too slow"

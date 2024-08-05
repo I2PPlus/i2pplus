@@ -68,7 +68,7 @@ msgstr "Отклонение всех запросов на туннелиров
 msgid "Hidden Mode"
 msgstr "Скрытый режим"
 
-msgid "Declining tunnel requests:<br>"
+msgid "Declining Tunnel Requests:<br>"
 msgstr "Отклоняемые запросы на туннелирование:<br>"
 
 msgid "High message delay"
@@ -110,7 +110,7 @@ msgstr "Отклоняемые запросы"
 msgid "Shutting down"
 msgstr "Выключение"
 
-msgid "Declining tunnel requests"
+msgid "Declining Tunnel Requests"
 msgstr "Отклонение запросов на туннель"
 
 msgid "Dropping Tunnel Requests: Too slow"

@@ -68,7 +68,7 @@ msgstr "Zavračanje vseh zahtev za tunel:<br>"
 msgid "Hidden Mode"
 msgstr "Skriti način"
 
-msgid "Declining tunnel requests:<br>"
+msgid "Declining Tunnel Requests:<br>"
 msgstr "Zavračanje zahtevkov za tunel:<br>"
 
 msgid "High message delay"
@@ -110,7 +110,7 @@ msgstr "Zavračanje zahtev"
 msgid "Shutting down"
 msgstr "Zapiranje"
 
-msgid "Declining tunnel requests"
+msgid "Declining Tunnel Requests"
 msgstr "Zavračanje zahtevkov za tunel"
 
 msgid "Dropping Tunnel Requests: Too slow"
