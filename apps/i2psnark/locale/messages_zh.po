@@ -48,6 +48,18 @@ msgstr "上传带宽限制改为 {0} KB/s"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "最小上传带宽限制为 {0} KB/s"
 
+msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
+msgstr "已在入站隧道上启用了+0/1隧道跳随机化"
+
+msgid "Disabled tunnel hop randomization on Inbound tunnels"
+msgstr "已在入站隧道上禁用了隧道跳随机化"
+
+msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
+msgstr "已在出站隧道上启用了+0/1隧道跳随机化"
+
+msgid "Disabled tunnel hop randomization on Outbound tunnels"
+msgstr "已在出站隧道上禁用了隧道跳随机化"
+
 #, java-format
 msgid "Startup delay changed to {0}"
 msgstr "下载前的延迟已更新为{0}"
@@ -1197,6 +1209,21 @@ msgstr "入站设置"
 
 msgid "Outbound Settings"
 msgstr "出站设置"
+
+msgid "Vary Tunnel Length"
+msgstr "改变隧道长度"
+
+msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
+msgstr "向入站隧道随机添加0或1个额外的跳"
+
+msgid "Inbound"
+msgstr "入站"
+
+msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
+msgstr "向出站隧道随机添加0或1个额外的跳"
+
+msgid "Outbound"
+msgstr "出站"
 
 msgid "I2CP host"
 msgstr "I2CP主机"

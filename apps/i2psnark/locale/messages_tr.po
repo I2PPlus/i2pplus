@@ -48,6 +48,18 @@ msgstr "Üst bant genişliği sınırı {0}KBps olarak değiştirildi"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "En düşük bant genişliği sınırı {0}KBps"
 
+msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
+msgstr "Gelen tünel kanalları üzerinde +0/1 tünel atlama rastgeleleştirme etkinleştirildi"
+
+msgid "Disabled tunnel hop randomization on Inbound tunnels"
+msgstr "Gelen tünel kanalları üzerinde tünel atlama rastgeleleştirme devre dışı bırakıldı"
+
+msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
+msgstr "Giden tünel kanalları üzerinde +0/1 tünel atlama rastgeleleştirme etkinleştirildi"
+
+msgid "Disabled tunnel hop randomization on Outbound tunnels"
+msgstr "Giden tünel kanalları üzerinde tünel atlama rastgeleleştirme devre dışı bırakıldı"
+
 #, java-format
 msgid "Startup delay changed to {0}"
 msgstr "Başlangıç gecikmesi {0} olarak değiştirildi"
@@ -1202,6 +1214,21 @@ msgstr "Geliş Ayarları"
 
 msgid "Outbound Settings"
 msgstr "Gidiş Ayarları"
+
+msgid "Vary Tunnel Length"
+msgstr "Tünel Uzunluğunu Değiştir"
+
+msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
+msgstr "Gelen tünel kanallarına rastgele 0 veya 1 ekstra atlama ekle"
+
+msgid "Inbound"
+msgstr "Gelen"
+
+msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
+msgstr "Giden tünel kanallarına rastgele 0 veya 1 ekstra atlama ekle"
+
+msgid "Outbound"
+msgstr "Giden"
 
 msgid "I2CP host"
 msgstr "I2CP sunucusu"

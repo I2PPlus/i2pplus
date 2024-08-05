@@ -48,6 +48,18 @@ msgstr "Το ανώτατο όριο BW άλλαξε σε {0}KBps"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Το ελάχιστο ανώτατο όριο εύρους ζώνης είναι {0}KBps"
 
+msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
+msgstr "Ενεργοποίηση της τυχαίας διάλεξης +0/1 στροφών στους εισερχόμενους τούνελ"
+
+msgid "Disabled tunnel hop randomization on Inbound tunnels"
+msgstr "Απενεργοποίηση της τυχαίας διάλεξης στροφών στους εισερχόμενους τούνελ"
+
+msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
+msgstr "Ενεργοποίηση της τυχαίας διάλεξης +0/1 στροφών στους εξερχόμενους τούνελ"
+
+msgid "Disabled tunnel hop randomization on Outbound tunnels"
+msgstr "Απενεργοποίηση της τυχαίας διάλεξης στροφών στους εξερχόμενους τούνελ"
+
 #, java-format
 msgid "Startup delay changed to {0}"
 msgstr "Η καθυστέρηση εκκίνησης άλλαξε σε {0}"
@@ -1202,6 +1214,21 @@ msgstr "Ρυθμίσεις εισερχόμενων"
 
 msgid "Outbound Settings"
 msgstr "Ρυθμίσεις εξόδου"
+
+msgid "Vary Tunnel Length"
+msgstr "Αλλαγή μήκους του τούνελ"
+
+msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
+msgstr "Προσθέστε 0 ή 1 πρόσθετες τυχαίες στροφές στους εισερχόμενους τούνελ"
+
+msgid "Inbound"
+msgstr "Εισερχόμενος"
+
+msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
+msgstr "Προσθέστε 0 ή 1 πρόσθετες τυχαίες στροφές στους εξερχόμενους τούνελ"
+
+msgid "Outbound"
+msgstr "Εξερχόμενος"
 
 msgid "I2CP host"
 msgstr "Κεντρικός υπολογιστής I2CP"

@@ -48,6 +48,18 @@ msgstr "Horní BW limit změněn na {0}KBps"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Nejmenší horní limit přenosové rychlist je {0}KBps"
 
+msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
+msgstr "Povoleno náhodné přeskočení +0/1 na příchozích tunelích"
+
+msgid "Disabled tunnel hop randomization on Inbound tunnels"
+msgstr "Zakázáno náhodné přeskočení tunelu na příchozích tunelích"
+
+msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
+msgstr "Povoleno náhodné přeskočení +0/1 na odchozích tunelích"
+
+msgid "Disabled tunnel hop randomization on Outbound tunnels"
+msgstr "Zakázáno náhodné přeskočení tunelu na odchozích tunelích"
+
 #, java-format
 msgid "Startup delay changed to {0}"
 msgstr "Prodleva při startu změněna na {0}"
@@ -1207,6 +1219,21 @@ msgstr "Příchozí nastavení"
 
 msgid "Outbound Settings"
 msgstr "Odchozí nastavení"
+
+msgid "Vary Tunnel Length"
+msgstr "Měnit délkou tunelu"
+
+msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
+msgstr "Náhodně přidejte 0 nebo 1 další skoky k příchozím tunelům"
+
+msgid "Inbound"
+msgstr "Příchozí"
+
+msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
+msgstr "Náhodně přidejte 0 nebo 1 další skoky k odchozím tunelům"
+
+msgid "Outbound"
+msgstr "Odchozí"
 
 msgid "I2CP host"
 msgstr "Hostitel I2CP"

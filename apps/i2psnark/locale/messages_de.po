@@ -48,6 +48,18 @@ msgstr "Hochladebandbreitenbegrenzung geändert auf {0}kbyte/s"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Minimale Hochladebandbreitenbegrenzung ist {0} kbyte/s"
 
+msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
+msgstr "Zufällige +0/1 Tunnel-Hops auf eingehenden Tunneln aktiviert"
+
+msgid "Disabled tunnel hop randomization on Inbound tunnels"
+msgstr "Zufällige Tunnel-Hops auf eingehenden Tunneln deaktiviert"
+
+msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
+msgstr "Zufällige +0/1 Tunnel-Hops auf ausgehenden Tunneln aktiviert"
+
+msgid "Disabled tunnel hop randomization on Outbound tunnels"
+msgstr "Zufällige Tunnel-Hops auf ausgehenden Tunneln deaktiviert"
+
 #, java-format
 msgid "Startup delay changed to {0}"
 msgstr "Startverzögerung geändert auf {0}"
@@ -1202,6 +1214,21 @@ msgstr "Einstellungen eingehend"
 
 msgid "Outbound Settings"
 msgstr "Einstellungen ausgehend"
+
+msgid "Vary Tunnel Length"
+msgstr "Variiere Tunnel-Länge"
+
+msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
+msgstr "Füge zufällig 0 oder 1 zusätzliche Hops zu eingehenden Tunneln hinzu"
+
+msgid "Inbound"
+msgstr "Eingehend"
+
+msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
+msgstr "Füge zufällig 0 oder 1 zusätzliche Hops zu ausgehenden Tunneln hinzu"
+
+msgid "Outbound"
+msgstr "Ausgehend"
 
 msgid "I2CP host"
 msgstr "I2CP-Host"

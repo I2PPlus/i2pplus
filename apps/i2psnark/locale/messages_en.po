@@ -48,6 +48,18 @@ msgstr ""
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr ""
 
+msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
+msgstr ""
+
+msgid "Disabled tunnel hop randomization on Inbound tunnels"
+msgstr ""
+
+msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
+msgstr ""
+
+msgid "Disabled tunnel hop randomization on Outbound tunnels"
+msgstr ""
+
 #, java-format
 msgid "Startup delay changed to {0}"
 msgstr ""
@@ -1201,6 +1213,21 @@ msgid "Inbound Settings"
 msgstr ""
 
 msgid "Outbound Settings"
+msgstr ""
+
+msgid "Vary Tunnel Length"
+msgstr ""
+
+msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
+msgstr ""
+
+msgid "Inbound"
+msgstr ""
+
+msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
+msgstr ""
+
+msgid "Outbound"
 msgstr ""
 
 msgid "I2CP host"

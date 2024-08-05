@@ -47,6 +47,18 @@ msgstr "Yükləmə BW limiti {0}KBps olaraq dəyişdirildi"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Yükləmə band genişliyinin minimum limiti {0}KBpsdir"
 
+msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
+msgstr "Giriş kanallarında +0/1 tüneldə atış rəndomlaşdırması aktivləşdirildi"
+
+msgid "Disabled tunnel hop randomization on Inbound tunnels"
+msgstr "Giriş kanallarında tüneldə atış rəndomlaşdırması deaktivləşdirildi"
+
+msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
+msgstr "Çıxış kanallarında +0/1 tüneldə atış rəndomlaşdırması aktivləşdirildi"
+
+msgid "Disabled tunnel hop randomization on Outbound tunnels"
+msgstr "Çıxış kanallarında tüneldə atış rəndomlaşdırması deaktivləşdirildi"
+
 #, java-format
 msgid "Startup delay changed to {0}"
 msgstr "Başlama gecikməsi {0} olaraq dəyişdirildi"
@@ -1201,6 +1213,21 @@ msgstr "Giriş Ayarları"
 
 msgid "Outbound Settings"
 msgstr "Çıxış Ayarları"
+
+msgid "Vary Tunnel Length"
+msgstr "Tünəl uzunluğunun dəyişdirilməsi"
+
+msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
+msgstr "Giriş kanallarına rəndom olaraq 0 və ya 1 əlavə atış əlavə edin"
+
+msgid "Inbound"
+msgstr "Giriş"
+
+msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
+msgstr "Çıxış kanallarına rəndom olaraq 0 və ya 1 əlavə atış əlavə edin"
+
+msgid "Outbound"
+msgstr "Çıxış"
 
 msgid "I2CP host"
 msgstr "I2CP xostu"

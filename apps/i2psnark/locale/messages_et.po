@@ -48,6 +48,18 @@ msgstr "Üleslaadimise BW piir vahetatud {0}KBps"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Üleslaadimise bändivõrgu piiri minimaalne väärtus on {0}KBps"
 
+msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
+msgstr "+0/1 tunnelihüppe juhuslik kättesaadavus sissetulevates tunnelites on lubatud"
+
+msgid "Disabled tunnel hop randomization on Inbound tunnels"
+msgstr "Tunnelihüpiste juhuslik kättesaadavus sissetulevates tunnelites on keelatud"
+
+msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
+msgstr "+0/1 tunnelihüppe juhuslik kättesaadavus väljaminevatel tunnelitel on lubatud"
+
+msgid "Disabled tunnel hop randomization on Outbound tunnels"
+msgstr "Tunnelihüpiste juhuslik kättesaadavus väljaminevatel tunnelitel on keelatud"
+
 #, java-format
 msgid "Startup delay changed to {0}"
 msgstr "Alguses viivitus vahetatud {0}ks"
@@ -1202,6 +1214,21 @@ msgstr "Sisenevate seadistused"
 
 msgid "Outbound Settings"
 msgstr "Väljaminevate seadistused"
+
+msgid "Vary Tunnel Length"
+msgstr "Muuda tunneli pikkust"
+
+msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
+msgstr "Lisa 0 või 1 juhuslikult lisahüpik sissetulevatele tunnelitele"
+
+msgid "Inbound"
+msgstr "Sissetulev"
+
+msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
+msgstr "Lisa 0 või 1 juhuslikult lisahüpik väljaminevatel tunnelitel"
+
+msgid "Outbound"
+msgstr "Väljaminev"
 
 msgid "I2CP host"
 msgstr "I2CP host"

@@ -48,6 +48,18 @@ msgstr "Giới hạn băng thông lên đổi thành {0}KBps"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Tối thiểu băng thông lên là {0}KBps"
 
+msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
+msgstr "Ngẫu nhiên hóa nhảy đường hầm +0/1 đã được kích hoạt trên các đường hầm đến"
+
+msgid "Disabled tunnel hop randomization on Inbound tunnels"
+msgstr "Ngẫu nhiên hóa nhảy đường hầm đã bị vô hiệu hóa trên các đường hầm đến"
+
+msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
+msgstr "Ngẫu nhiên hóa nhảy đường hầm +0/1 đã được kích hoạt trên các đường hầm đi ra"
+
+msgid "Disabled tunnel hop randomization on Outbound tunnels"
+msgstr "Ngẫu nhiên hóa nhảy đường hầm đã bị vô hiệu hóa trên các đường hầm đi ra"
+
 #, java-format
 msgid "Startup delay changed to {0}"
 msgstr "Độ trễ khởi động được thay đổi thành {0}"
@@ -1197,6 +1209,21 @@ msgstr "Cài đặt gửi đến"
 
 msgid "Outbound Settings"
 msgstr "Cài đặt gửi đi"
+
+msgid "Vary Tunnel Length"
+msgstr "Thay đổi chiều dài đường hầm"
+
+msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
+msgstr "Thêm 0 hoặc 1 nhảy bổ sung ngẫu nhiên vào đường hầm đến"
+
+msgid "Inbound"
+msgstr "Đến"
+
+msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
+msgstr "Thêm 0 hoặc 1 nhảy bổ sung ngẫu nhiên vào đường hầm đi ra"
+
+msgid "Outbound"
+msgstr "Đi ra"
 
 msgid "I2CP host"
 msgstr "Máy chủ I2CP"

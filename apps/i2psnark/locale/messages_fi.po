@@ -48,6 +48,18 @@ msgstr "BW:n yläraja muutettu arvoon {0}KBpsKaistanleveyden enimmäisraja palve
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Kaistanleveyden vähimmäisraja on {0}KBpsKaistanleveyden vähimmäisraja palvelimelle kopioinnissa on {0} kilotavua sekunnissa"
 
+msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
+msgstr "+0/1 tunnelin huppaaminen satunnaisesti otettu käyttöön sisäntulevissa tunnelissa"
+
+msgid "Disabled tunnel hop randomization on Inbound tunnels"
+msgstr "Tunnelin huppaaminen satunnaisesti poistettu käytöstä sisäntulevissa tunnelissa"
+
+msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
+msgstr "+0/1 tunnelin huppaaminen satunnaisesti otettu käyttöön ulostulevissa tunnelissa"
+
+msgid "Disabled tunnel hop randomization on Outbound tunnels"
+msgstr "Tunnelin huppaaminen satunnaisesti poistettu käytöstä ulostulevissa tunnelissa"
+
 #, java-format
 msgid "Startup delay changed to {0}"
 msgstr "Käynnistysviive vaihdettu arvoon {0}"
@@ -1202,6 +1214,21 @@ msgstr "Saapuvien asetukset"
 
 msgid "Outbound Settings"
 msgstr "Lähtevät asetukset"
+
+msgid "Vary Tunnel Length"
+msgstr "Muuta tunnelin pituutta"
+
+msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
+msgstr "Lisää 0 tai 1 lisähyppy satunnaisesti sisäntuleviin tunneliin"
+
+msgid "Inbound"
+msgstr "Sisäänkäynti"
+
+msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
+msgstr "Lisää 0 tai 1 lisähyppy satunnaisesti ulostuleviin tunneliin"
+
+msgid "Outbound"
+msgstr "Uloskäynti"
 
 msgid "I2CP host"
 msgstr "I2CP -palvelin"

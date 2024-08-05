@@ -48,6 +48,18 @@ msgstr "Batas Upload BW berubah menjadi {0} KBps"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Batas bandwidth upload minimum adalah {0} KBps"
 
+msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
+msgstr "Randomisasi lompatan terowongan +0/1 diaktifkan pada terowongan masuk"
+
+msgid "Disabled tunnel hop randomization on Inbound tunnels"
+msgstr "Randomisasi lompatan terowongan dinonaktifkan pada terowongan masuk"
+
+msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
+msgstr "Randomisasi lompatan terowongan +0/1 diaktifkan pada terowongan keluar"
+
+msgid "Disabled tunnel hop randomization on Outbound tunnels"
+msgstr "Randomisasi lompatan terowongan dinonaktifkan pada terowongan keluar"
+
 #, java-format
 msgid "Startup delay changed to {0}"
 msgstr "Startup delay berubah menjadi {0}"
@@ -1197,6 +1209,21 @@ msgstr "Setting inbound"
 
 msgid "Outbound Settings"
 msgstr "Setting outbound"
+
+msgid "Vary Tunnel Length"
+msgstr "Berubah Panjang Terowongan"
+
+msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
+msgstr "Tambahkan 0 atau 1 lompatan tambahan secara acak ke terowongan masuk"
+
+msgid "Inbound"
+msgstr "Masuk"
+
+msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
+msgstr "Tambahkan 0 atau 1 lompatan tambahan secara acak ke terowongan keluar"
+
+msgid "Outbound"
+msgstr "Keluar"
 
 msgid "I2CP host"
 msgstr "Host I2CP"

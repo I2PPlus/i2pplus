@@ -47,6 +47,18 @@ msgstr "La limite de bande passante en amont a été changée à {0} ko/s"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "La limite de bande passante minimale en amont est de {0} ko/s"
 
+msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
+msgstr "Activation de la randomisation +0/1 des sauts de tunnel sur les tunnels entrants"
+
+msgid "Disabled tunnel hop randomization on Inbound tunnels"
+msgstr "Désactivation de la randomisation des sauts de tunnel sur les tunnels entrants"
+
+msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
+msgstr "Activation de la randomisation +0/1 des sauts de tunnel sur les tunnels sortants"
+
+msgid "Disabled tunnel hop randomization on Outbound tunnels"
+msgstr "Désactivation de la randomisation des sauts de tunnel sur les tunnels sortants"
+
 #, java-format
 msgid "Startup delay changed to {0}"
 msgstr "Le retard de démarrage a été changé à {0}"
@@ -1201,6 +1213,21 @@ msgstr "Paramètres des connexions entrantes"
 
 msgid "Outbound Settings"
 msgstr "Paramètres des connexions sortantes"
+
+msgid "Vary Tunnel Length"
+msgstr "Varier la longueur du tunnel"
+
+msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
+msgstr "Ajouter 0 ou 1 saut supplémentaire aléatoirement aux tunnels entrants"
+
+msgid "Inbound"
+msgstr "Entrant"
+
+msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
+msgstr "Ajouter 0 ou 1 saut supplémentaire aléatoirement aux tunnels sortants"
+
+msgid "Outbound"
+msgstr "Sortant"
 
 msgid "I2CP host"
 msgstr "Hôte I2CP"

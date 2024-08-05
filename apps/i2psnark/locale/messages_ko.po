@@ -48,6 +48,18 @@ msgstr "최대 속도가 {0}KBps로 변경되었습니다"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "최소 속도는 {0}KBps입니다"
 
+msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
+msgstr "입간 터널에서 +0/1 터널 점프 무작위화가 활성화되었습니다."
+
+msgid "Disabled tunnel hop randomization on Inbound tunnels"
+msgstr "입간 터널에서 터널 점프 무작위화가 비활성화되었습니다."
+
+msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
+msgstr "출간 터널에서 +0/1 터널 점프 무작위화가 활성화되었습니다."
+
+msgid "Disabled tunnel hop randomization on Outbound tunnels"
+msgstr "출간 터널에서 터널 점프 무작위화가 비활성화되었습니다."
+
 #, java-format
 msgid "Startup delay changed to {0}"
 msgstr "시작 딜레이가 {0}으로 설정되었습니다."
@@ -1197,6 +1209,21 @@ msgstr "수신  세팅"
 
 msgid "Outbound Settings"
 msgstr "송신 세팅"
+
+msgid "Vary Tunnel Length"
+msgstr "터널 길이 변경"
+
+msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
+msgstr "입간 터널에 무작위로 0 또는 1 추가 점프를 추가합니다."
+
+msgid "Inbound"
+msgstr "입간"
+
+msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
+msgstr "출간 터널에 무작위로 0 또는 1 추가 점프를 추가합니다."
+
+msgid "Outbound"
+msgstr "출간"
 
 msgid "I2CP host"
 msgstr "I2CP host"

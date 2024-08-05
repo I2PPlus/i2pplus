@@ -48,6 +48,18 @@ msgstr "حد BW بالا به {0}KBps تغییر کرد"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "حداقل محدودیت پهنای باند {0}KBps است"
 
+msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
+msgstr "رندومیزاسیون برد و برگشت +0/1 تونل روی تونل‌های ورودی فعال شد"
+
+msgid "Disabled tunnel hop randomization on Inbound tunnels"
+msgstr "رندومیزاسیون برد و برگشت تونل روی تونل‌های ورودی غیرفعال شد"
+
+msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
+msgstr "رندومیزاسیون برد و برگشت +0/1 تونل روی تونل‌های خروجی فعال شد"
+
+msgid "Disabled tunnel hop randomization on Outbound tunnels"
+msgstr "رندومیزاسیون برد و برگشت تونل روی تونل‌های خروجی غیرفعال شد"
+
 #, java-format
 msgid "Startup delay changed to {0}"
 msgstr "تأخیر راه‌اندازی به {0} تغییر کرد"
@@ -1202,6 +1214,21 @@ msgstr "تنظیمات ورودی"
 
 msgid "Outbound Settings"
 msgstr "تنظیمات خروجی"
+
+msgid "Vary Tunnel Length"
+msgstr "تغییر طول تونل"
+
+msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
+msgstr "به صورت تصادفی 0 یا 1 برد و برگشت اضافی به تونل‌های ورودی اضافه کنید"
+
+msgid "Inbound"
+msgstr "ورودی"
+
+msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
+msgstr "به صورت تصادفی 0 یا 1 برد و برگشت اضافی به تونل‌های خروجی اضافه کنید"
+
+msgid "Outbound"
+msgstr "خروجی"
 
 msgid "I2CP host"
 msgstr "میزبان I2CP"

@@ -48,6 +48,18 @@ msgstr "Omejitev zgornjega BW spremenjena na {0}KBps"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Minimalna omejitev zgornjega prenosnega širinevja je {0}KBps"
 
+msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
+msgstr "Naključna razporeditev +0/1 skoka po tunelu je omogočena na vhodnih tunelah"
+
+msgid "Disabled tunnel hop randomization on Inbound tunnels"
+msgstr "Naključna razporeditev skoka po tunelu je onemogočena na vhodnih tunelah"
+
+msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
+msgstr "Naključna razporeditev +0/1 skoka po tunelu je omogočena na izhodnih tunelah"
+
+msgid "Disabled tunnel hop randomization on Outbound tunnels"
+msgstr "Naključna razporeditev skoka po tunelu je onemogočena na izhodnih tunelah"
+
 #, java-format
 msgid "Startup delay changed to {0}"
 msgstr "Zamik pri zagonu spremenjen na {0}"
@@ -1212,6 +1224,21 @@ msgstr "Nastavitve vhodov"
 
 msgid "Outbound Settings"
 msgstr "Nastavitve izhodov"
+
+msgid "Vary Tunnel Length"
+msgstr "Spremeni dolžino tunela"
+
+msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
+msgstr "Naključno dodaj 0 ali 1 dodaten skok na vhodne tunele"
+
+msgid "Inbound"
+msgstr "Vhodni"
+
+msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
+msgstr "Naključno dodaj 0 ali 1 dodaten skok na izhodne tunele"
+
+msgid "Outbound"
+msgstr "Izhodni"
 
 msgid "I2CP host"
 msgstr "Gostitelj I2CP"

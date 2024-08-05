@@ -48,6 +48,18 @@ msgstr "アップロード帯域制限は{0}Kbpsに変更されました"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "最低アップロード帯域は{0}KBpsです"
 
+msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
+msgstr "インバウンドトンネルで+0/1トンネルホップのランダム化が有効になりました"
+
+msgid "Disabled tunnel hop randomization on Inbound tunnels"
+msgstr "インバウンドトンネルでのトンネルホップのランダム化が無効になりました"
+
+msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
+msgstr "アウトバウンドトンネルで+0/1トンネルホップのランダム化が有効になりました"
+
+msgid "Disabled tunnel hop randomization on Outbound tunnels"
+msgstr "アウトバウンドトンネルでのトンネルホップのランダム化が無効になりました"
+
 #, java-format
 msgid "Startup delay changed to {0}"
 msgstr "起動延滞時間は{0}に変更されました"
@@ -1197,6 +1209,21 @@ msgstr "受信設定"
 
 msgid "Outbound Settings"
 msgstr "アウトバウンド設定"
+
+msgid "Vary Tunnel Length"
+msgstr "トンネルの長さを変更する"
+
+msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
+msgstr "インバウンドトンネルにランダムに0または1の追加ホップを追加します"
+
+msgid "Inbound"
+msgstr "インバウンド"
+
+msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
+msgstr "アウトバウンドトンネルにランダムに0または1の追加ホップを追加します"
+
+msgid "Outbound"
+msgstr "アウトバウンド"
 
 msgid "I2CP host"
 msgstr "I2CPホスト"

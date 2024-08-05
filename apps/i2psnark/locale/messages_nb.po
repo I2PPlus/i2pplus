@@ -48,6 +48,18 @@ msgstr "Opp-båndbredde endret til {0}KBps"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Minimum opp-båndbredde er {0}KBps"
 
+msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
+msgstr "Aktiverte +0/1 tilfeldig tunnelhop på innbøydende tunnler"
+
+msgid "Disabled tunnel hop randomization on Inbound tunnels"
+msgstr "Deaktiverte tilfeldig tunnelhop på innbøydende tunnler"
+
+msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
+msgstr "Aktiverte +0/1 tilfeldig tunnelhop på utbøydende tunnler"
+
+msgid "Disabled tunnel hop randomization on Outbound tunnels"
+msgstr "Deaktiverte tilfeldig tunnelhop på utbøydende tunnler"
+
 #, java-format
 msgid "Startup delay changed to {0}"
 msgstr "Oppstartsforsinkelse endret til {0}"
@@ -1202,6 +1214,21 @@ msgstr "Inngående innstillinger"
 
 msgid "Outbound Settings"
 msgstr "Utgående innstillinger"
+
+msgid "Vary Tunnel Length"
+msgstr "Endre lengden på tunnelen"
+
+msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
+msgstr "Legg til 0 eller 1 tilfeldig ekstra hop til innbøydende tunnler"
+
+msgid "Inbound"
+msgstr "Innbøydende"
+
+msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
+msgstr "Legg til 0 eller 1 tilfeldig ekstra hop til utbøydende tunnler"
+
+msgid "Outbound"
+msgstr "Utbøydende"
 
 msgid "I2CP host"
 msgstr "I2CP-vert"

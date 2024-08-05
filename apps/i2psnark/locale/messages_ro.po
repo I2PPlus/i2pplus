@@ -48,6 +48,18 @@ msgstr "Limita de incărcare BW schimbată la {0} Kbps"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Limita de lățime de bandă minima la incărcarea este {0} Kbps"
 
+msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
+msgstr "Randomizarea sarelor de tunel +0/1 a fost activată pe tunelurile de intrare"
+
+msgid "Disabled tunnel hop randomization on Inbound tunnels"
+msgstr "Randomizarea sarelor de tunel a fost dezactivată pe tunelurile de intrare"
+
+msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
+msgstr "Randomizarea sarelor de tunel +0/1 a fost activată pe tunelurile de ieșire"
+
+msgid "Disabled tunnel hop randomization on Outbound tunnels"
+msgstr "Randomizarea sarelor de tunel a fost dezactivată pe tunelurile de ieșire"
+
 #, java-format
 msgid "Startup delay changed to {0}"
 msgstr "Pornire întarziată schimbată la {0}"
@@ -1207,6 +1219,21 @@ msgstr "Setări de intrare"
 
 msgid "Outbound Settings"
 msgstr "Setări de ieșire"
+
+msgid "Vary Tunnel Length"
+msgstr "Variază lungimea tunelului"
+
+msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
+msgstr "Adaugă 0 sau 1 sare suplimentare în mod aleatoriu la tunelurile de intrare"
+
+msgid "Inbound"
+msgstr "Intrare"
+
+msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
+msgstr "Adaugă 0 sau 1 sare suplimentare în mod aleatoriu la tunelurile de ieșire"
+
+msgid "Outbound"
+msgstr "Ieșire"
 
 msgid "I2CP host"
 msgstr "Gazdă I2CP"
