@@ -22,9 +22,7 @@ import net.i2p.util.Log;
  */
 class RepublishLeaseSetJob extends JobImpl {
     private final Log _log;
-//    public final static long REPUBLISH_LEASESET_TIMEOUT = 60*1000;
-    public final static long REPUBLISH_LEASESET_TIMEOUT = 2*60*1000;
-//    private final static int RETRY_DELAY = 20*1000;
+    public final static long REPUBLISH_LEASESET_TIMEOUT = 3*60*1000;
     private final static int RETRY_DELAY = 15*1000;
     private final Hash _dest;
     private final KademliaNetworkDatabaseFacade _facade;
@@ -60,7 +58,7 @@ class RepublishLeaseSetJob extends JobImpl {
                     }
                 } else {
                     if (_log.shouldWarn())
-                        _log.warn("Client [" + _dest.toBase32().substring(0,6) + "] is local, but no valid LeaseSet found; being rebuilt?");
+                        _log.warn("Client [" + _dest.toBase32().substring(0,6) + "] is local, but no valid LeaseSet found -> Being rebuilt?");
                 }
                 return;
             } else {
