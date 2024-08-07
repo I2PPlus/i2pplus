@@ -429,7 +429,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         // selected theme inserted here
         buf.append(HEADER_A).append(_themePath).append(HEADER_B).append("\n");
-        buf.append(HEADER_A).append(themePath).append(HEADER_I).append("\n"); // load css image assets
+        buf.append(HEADER_A).append(_themePath).append(HEADER_I).append("\n"); // load css image assets
         String slash = String.valueOf(java.io.File.separatorChar);
         String themeBase = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() + slash + "docs" + slash + "themes" +
                            slash + "snark" + slash + _manager.getTheme() + slash;
