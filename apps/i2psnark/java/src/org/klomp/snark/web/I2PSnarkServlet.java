@@ -428,8 +428,8 @@ public class I2PSnarkServlet extends BasicServlet {
         //buf.append("<link rel=stylesheet href=\"" + _contextPath + WARBASE + "custom-alert.css\">\n");
 
         // selected theme inserted here
-        buf.append(HEADER_A + _themePath + HEADER_B + "\n");
-        buf.append(HEADER_A + _themePath + HEADER_I + "\n"); // load css image assets
+        buf.append(HEADER_A).append(_themePath).append(HEADER_B).append("\n");
+        buf.append(HEADER_A).append(themePath).append(HEADER_I).append("\n"); // load css image assets
         String slash = String.valueOf(java.io.File.separatorChar);
         String themeBase = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() + slash + "docs" + slash + "themes" +
                            slash + "snark" + slash + _manager.getTheme() + slash;
@@ -442,21 +442,22 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("center center,left bottom,center center;background-blend-mode:multiply,overlay,luminosity,normal}</style>\n");
         }
         if (!isStandalone() && override.exists()) {
-            buf.append(HEADER_A + _themePath + HEADER_Z + "\n"); // optional override.css for version-persistent user edits
+            buf.append(HEADER_A).append(_themePath).append(HEADER_Z).append("\n"); // optional override.css for version-persistent user edits
         }
 
         // larger fonts for cjk translations
         String lang = (Translate.getLanguage(_manager.util().getContext()));
         long now = _context.clock().now();
         if (lang.equals("zh") || lang.equals("ja") || lang.equals("ko"))
-            buf.append(HEADER_A + _themePath + HEADER_D + "\n");
+            buf.append(HEADER_A).append(_themePath).append(HEADER_D).append("\n");
 
         //  ...and inject CSS to display panels uncollapsed
         if (noCollapse || !collapsePanels) {
-            buf.append(HEADER_A + _themePath + HEADER_C + "\n");
+            buf.append(HEADER_A).append(_themePath).append(HEADER_C).append("\n");
         }
         // add placeholders filterbar, toggleLog, toggleLinks css
-        buf.append("<style id=cssfilter></style>\n").append("<style id=toggleLogCss></style>\n").append("<style id=toggleLinks></style>\n");
+        buf.append("<style id=cssfilter></style>\n").append("<style id=toggleLogCss></style>\n")
+           .append("<style id=toggleLinks></style>\n");
         if (!isStandalone() && delay <= 0) {
             buf.append("<style id=graphcss>:root{--snarkGraph:url('/viewstat.jsp")
                .append("?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160")
