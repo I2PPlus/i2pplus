@@ -1,3 +1,8 @@
+2024-08-08 dr|z3d
+ * I2PSnark:
+   - Enable Vary Tunnel Length options in UI with javascript
+   - Fixup custom font handling for standalone
+
 2024-07-25 dr|z3d
  * I2PSnark:
    - Add UI options for +0/1 inbound/outbound tunnel hop variance
