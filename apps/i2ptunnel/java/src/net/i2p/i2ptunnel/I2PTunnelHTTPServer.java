@@ -100,7 +100,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         PRIORITY_HEADER.toLowerCase(Locale.US),
         PROXY_CONN_HEADER,
         SEC_GPC_HEADER.toLowerCase(Locale.US),
-        X_FORWARDED_HEADER.toLowerCase(Locale.US),
+        //X_FORWARDED_HEADER.toLowerCase(Locale.US),
         X_REAL_IP_HEADER.toLowerCase(Locale.US)
     };
 
@@ -551,12 +551,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                  */
                 String hostname = null;
                 boolean isValidRequest = true;
+                boolean isPossibleExploit = false;
                 List<String> host = headers.get("Host");
 
                 if (peerB32.length() != 60) {
                     _log.warn("[HTTPServer] Invalid B32 (expected 60 characters, got " + peerB32.length() + ") -> Denying request to [" + hostname + "]" +
                     "\n* Client: " + peerB32);
                     isValidRequest = false;
+                    isPossibleExploit = false;
                 }
 
                 if (host != null) {
@@ -575,6 +577,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                             }
                             logBlockedDestination(peerB32);
                             isValidRequest = false;
+                            isPossibleExploit = true;
                         } else if (address.isAnyLocalAddress()) { // check for 0.0.0.0 response (DNS blocking)
                             if (_log.shouldWarn()) {
                                 _log.warn("[HTTPServer] DNS server appears to be blocking requests to " + hostname +
@@ -582,11 +585,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                             }
                             sendError(socket, ERR_FORBIDDEN);
                             isValidRequest = false;
+                            isPossibleExploit = true;
                         } else {
                             if (_log.shouldInfo() && !hostname.equals(address.getHostAddress())) {
                                 _log.info("[HTTPServer] Hostname " + hostname + " validated" +
                                           " -> Resolves to: " + address.getHostAddress());
                             }
+                            isPossibleExploit = false;
                         }
                     } else {
                         if (_log.shouldWarn()) {
@@ -595,6 +600,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         }
                         sendError(socket, ERR_NOT_FOUND);
                         isValidRequest = false;
+                        isPossibleExploit = false;
+                    }
+                    if (isPossibleExploit) {
+                        logBlockedDestination(peerB32);
+                        if (_log.shouldWarn()) {
+                            _log.warn("[HTTPServer] Client attempted to access private address " + hostname +
+                                      " -> Sending Error 403 and adding to blocklist \n* Client: " + peerB32);
+                        }
                     }
                     if (!isValidRequest && socket != null) {
                         try {socket.close();}
