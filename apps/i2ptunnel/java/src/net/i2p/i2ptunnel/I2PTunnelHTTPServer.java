@@ -579,13 +579,19 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                             isValidRequest = false;
                             isPossibleExploit = true;
                         } else if (address.isAnyLocalAddress()) { // check for 0.0.0.0 response (DNS blocking)
-                            if (_log.shouldWarn()) {
-                                _log.warn("[HTTPServer] DNS server appears to be blocking requests to " + hostname +
-                                          " -> Sending Error 403 \n* Client: " + peerB32);
+                            if (!hostname.equals("::") || !hostname.equals("0.0.0.0")) {
+                                if (_log.shouldWarn()) {
+                                    _log.warn("[HTTPServer] DNS server appears to be blocking requests to " + hostname +
+                                              " -> Sending Error 403 \n* Client: " + peerB32);
+                                }
+                                sendError(socket, ERR_FORBIDDEN);
+                                isValidRequest = false;
+                                isPossibleExploit = false;
+                            } else {
+                                sendError(socket, ERR_FORBIDDEN);
+                                isValidRequest = false;
+                                isPossibleExploit = true;
                             }
-                            sendError(socket, ERR_FORBIDDEN);
-                            isValidRequest = false;
-                            isPossibleExploit = true;
                         } else {
                             if (_log.shouldInfo() && !hostname.equals(address.getHostAddress())) {
                                 _log.info("[HTTPServer] Hostname " + hostname + " validated" +
@@ -605,7 +611,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     if (isPossibleExploit) {
                         logBlockedDestination(peerB32);
                         if (_log.shouldWarn()) {
-                            _log.warn("[HTTPServer] Client attempted to access private address " + hostname +
+                            _log.warn("[HTTPServer] Client attempted to access private or wildcard address " + hostname +
                                       " -> Sending Error 403 and adding to blocklist \n* Client: " + peerB32);
                         }
                     }
