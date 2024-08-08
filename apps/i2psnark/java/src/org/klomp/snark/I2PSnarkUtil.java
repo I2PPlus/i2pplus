@@ -250,6 +250,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /** @since 0.9.64+ */
     public void setVaryInboundHops(boolean yes) {
         _varyInboundHops = yes;
+/**
         synchronized(_opts) {
            _opts.remove("inbound.lengthVariance");
             if (_varyInboundHops) {_opts.put("inbound.lengthVariance", "1");}
@@ -257,11 +258,13 @@ public class I2PSnarkUtil implements DisconnectListener {
         }
         Properties opts = _context.getProperties();
         opts.putAll(_opts);
+**/
     }
 
     /** @since 0.9.64+ */
     public void setVaryOutboundHops(boolean yes) {
         _varyOutboundHops = yes;
+/**
         synchronized(_opts) {
            _opts.remove("outbound.lengthVariance");
             if (_varyOutboundHops) {_opts.put("outbound.lengthVariance", "1");}
@@ -269,6 +272,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         }
         Properties opts = _context.getProperties();
         opts.putAll(_opts);
+**/
     }
 
     /**

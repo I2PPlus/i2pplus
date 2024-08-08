@@ -186,7 +186,7 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     public boolean useSoraFont() {
-        return _context.getBooleanProperty(RC_PROP_ENABLE_SORA_FONT);
+        return _context.getBooleanProperty(RC_PROP_ENABLE_SORA_FONT) || !_context.isRouterContext();
     }
 
     /**
@@ -362,11 +362,16 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("<link rel=preload href=/themes/fonts/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>\n")
                .append("<link rel=preload href=/themes/fonts/Sora/Sora-Italic.woff2 as=font type=font/woff2 crossorigin>\n")
                .append("<link rel=stylesheet href=/themes/fonts/Sora.css>\n");
-        } else {
+        } else if (!isStandalone()) {
             buf.append("<link rel=preload href=/themes/fonts/DroidSans.css as=style>\n")
                .append("<link rel=preload href=/themes/fonts/DroidSans/DroidSans.woff2 as=font type=font/woff2 crossorigin>\n")
                .append("<link rel=preload href=/themes/fonts/DroidSans/DroidSans-Bold.woff2 as=font type=font/woff2 crossorigin>\n")
                .append("<link rel=stylesheet href=/themes/fonts/DroidSans.css>\n");
+        } else {
+            buf.append("<link rel=preload href=/i2psnark/.res/themes/fonts/Sora.css as=style>\n")
+               .append("<link rel=preload href=/i2psnark/.res/themes/fonts/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>\n")
+               .append("<link rel=preload href=/i2psnark/.res/themes/fonts/Sora/Sora-Italic.woff2 as=font type=font/woff2 crossorigin>\n")
+               .append("<link rel=stylesheet href=/i2psnark/.res/themes/fonts/Sora.css>\n");
         }
         buf.append("<link rel=preload href=\"").append(_themePath).append("snark.css?").append(CoreVersion.VERSION).append("\" as=style>\n")
            .append("<link rel=preload href=\"").append(_themePath).append("images/images.css?").append(CoreVersion.VERSION).append("\" as=style>\n")
@@ -3639,6 +3644,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("</th></tr>\n<tr><td>\n<div class=optionlist>\n");
 
         Map<String, String> options = new TreeMap<String, String>(_manager.util().getI2CPOptions());
+        String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
 
         buf.append("<span class=configOption><b>")
            .append(_t("Inbound Settings"))
@@ -3659,11 +3665,13 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("</b> \n")
            .append("<label title=\"").append(_t("Add 0 or 1 additional hops randomly to Inbound tunnels")).append("\">")
            .append("<input type=checkbox class=\"optbox slider\" name=varyInbound id=varyInbound ")
-           .append(varyInbound ? "checked " : "").append(" disabled> <span>").append(_t("Inbound")).append("</span></label>")
+           .append(varyInbound ? "checked " : "").append("> <span>").append(_t("Inbound")).append("</span></label>")
            .append("<label title=\"").append(_t("Add 0 or 1 additional hops randomly to Outbound tunnels")).append("\">")
            .append("<input type=checkbox class=\"optbox slider\" name=varyOutbound id=varyOutbound ")
-           .append(varyOutbound ? "checked " : "").append(" disabled> <span>").append(_t("Outbound")).append("</span></label>")
-           .append("</span><br>");
+           .append(varyOutbound ? "checked " : "").append("> <span>").append(_t("Outbound")).append("</span></label>")
+           .append("</span><br>\n")
+           .append("<script src=\"" + resourcePath + "js/toggleVaryTunnelLength.js?" + CoreVersion.VERSION + "\"></script>\n")
+           .append("<noscript><style>#hopVariance .optbox.slider{pointer-events:none!important;opacity:.4!important}</style></noscript>\n");
 
         if (!_context.isRouterContext()) {
             buf.append("<span class=configOption><label><b>")
@@ -3712,7 +3720,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         buf.append("<span class=configOption id=i2cpOptions><label><b>")
            .append(_t("I2CP options"))
-           .append("</b> <input type=text name=i2cpOpts value=\"")
+           .append("</b> <input type=text id=i2cpOpts name=i2cpOpts value=\"")
            .append(opts.toString().trim()).append("\" size=60></label></span>\n")
            .append("</div>\n</td></tr>\n")
            .append("<tr class=spacer><td></td></tr>\n");  // spacer
