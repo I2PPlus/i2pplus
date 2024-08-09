@@ -978,7 +978,7 @@ body,#torrents td,.snarkAddInfo,th,td,code,textarea,input,input[type=submit],inp
 #torrentInfo td{padding-top:6px;padding-bottom:6px}
 #torrents td{padding-top:3px;padding-bottom:3px}
 #torrents th.status,#torrents td.status{padding-left:5px}
-#torrents .peerinfo td.status{background-position:12px center;background-size:20px}
+#torrents .peerinfo td.status,#torrents .peerinfo:hover td.status{background-position:12px center,left center!important;;background-repeat:no-repeat!important;background-size:20px!important}
 #totals{word-spacing:2px}
 }
 
