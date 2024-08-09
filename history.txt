@@ -1,3 +1,10 @@
+2024-08-09 zzz
+ * I2PSnark:
+   - Reduce minimum banwdith, reduce max connections if low bandwidth
+   - Normailze strings when searching (Gitlab #488)
+ * Tunnels: Do not select ElG routers for tunnels
+ * Util: Reduce number of PRNG output buffers
+
 2024-08-08 dr|z3d
  * I2PSnark:
    - Enable Vary Tunnel Length options in UI with javascript
