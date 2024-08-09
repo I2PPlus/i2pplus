@@ -1388,7 +1388,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             } else if (!reconnect) {
                 // The usual case, the other two are if not in router context
                 _config.setProperty(PROP_I2CP_OPTS, i2cpOpts.trim());
-                String msg = _t("I2CP options changed to {0}", i2cpOpts);
+                String msg = _t("I2CP options changed to: {0}", i2cpOpts);
                 addMessage(msg);
                 if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                 _util.setI2CPConfig(oldI2CPHost, oldI2CPPort, opts);
@@ -1400,7 +1400,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     addMessage(msg);
                     if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                 }
-                String msg = _t("I2CP settings changed to {0}", i2cpHost + ':' + port + ' ' + i2cpOpts);
+                String msg = _t("I2CP options changed to: {0}", i2cpHost + ':' + port + ' ' + i2cpOpts);
                 addMessage(msg);
                 if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                 _util.setI2CPConfig(i2cpHost, port, opts);
