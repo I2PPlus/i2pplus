@@ -359,6 +359,12 @@ msgstr "2 हॉप टनल (मध्यम अनामत)"
 msgid "3 hop tunnel (high anonymity)"
 msgstr "3 हॉप टनल (उच्च अनामत)"
 
+#, java-format
+msgid "{0} hop tunnel"
+msgid_plural "{0} hop tunnel"
+msgstr[0] "{0} हॉप ट्वील"
+msgstr[1] "{0} हॉप ट्वील"
+
 msgid "Number of Tunnels in Group"
 msgstr "टनल की संख्या ग्रुप में"
 
