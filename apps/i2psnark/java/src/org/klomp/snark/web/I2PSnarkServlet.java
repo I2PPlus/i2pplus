@@ -13,6 +13,7 @@ import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
+import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1357,7 +1358,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (searchList == null) {
                     searchList = new ArrayList<String>(4);
                 }
-                searchList.add(term.toLowerCase(Locale.US));
+                searchList.add(Normalizer.normalize(term.toLowerCase(Locale.US), Normalizer.Form.NFKD));
             }
         }
         if (searchList == null || searchList.isEmpty()) {
@@ -1365,7 +1366,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         List<Snark> matches = new ArrayList<Snark>(32);
         for (Snark snark : snarks) {
-            String lcname = snark.getBaseName().toLowerCase(Locale.US);
+            String lcname = Normalizer.normalize(snark.getBaseName().toLowerCase(Locale.US), Normalizer.Form.NFKD);
             // search for any term (OR)
             for (int j = 0; j < searchList.size(); j++) {
                 String term = searchList.get(j);
