@@ -1298,6 +1298,7 @@ th{font-size:9pt;background:#101}
 .debugConnection{margin:2px 4px;padding:1px 3px;display:inline-block;font-weight:700;color:#fff;border-radius:2px;box-shadow:0 0 0 1px #101;background:#003000}
 .iframed #pagenavtop{margin:2px 0 -1px}
 .iframed #torrentDisplay~#pagenavtop{margin:2px 0 1px}
+.peerSeed img{width:18px;height:18px}
 .percentDownloaded{pointer-events:none}
 .snarkNav{font-size:10.5pt}
 .snarkNav:first-child,.snarkNav[href="/i2psnark/"]:last-child{padding-left:29px;background-position:8px center}

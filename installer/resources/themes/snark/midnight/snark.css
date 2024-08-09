@@ -917,9 +917,8 @@ input[name="nofilter_dataDir"]{width:350px;max-width:350px}
 input.trackerhome,input.trackerannounce,.knownTracker a,#trackerselect a{max-width:130px}
 td,th,td a,input{font-size:9pt}
 tfoot .rxd,tfoot .rateDown{font-size:0}
-.iframed #pagenavcontrols{transform:translateX(44px)}
+.page,#navbar{min-width:600px}
 .snarkNav:first-child{padding-left:26px}
-#torrentInfo a{word-break:break-all}
 .tName a,.snarkFileName a{word-break:break-all}
 .tName{max-width:260px}
 .txd,.rateUp,.debuginfo{display:none}
@@ -929,31 +928,33 @@ tfoot .rxd,tfoot .rateDown{font-size:0}
 #commentInfo td:first-child,#userComments td:first-child{min-width:0;width:140px}
 #configs td b,#torrentOrderControl b{min-width:150px;max-width:150px}
 #configs td:first-child{min-width:150px}
-#navbar,.page{min-width:600px}
 #pagenavcontrols{transform:translateX(52px)}
+.iframed #pagenavcontrols{transform:translateX(44px)}
+#torrentInfo a{word-break:break-all}
 #torrents td[colspan="10"]{white-space:normal}
 #torrents td:first-child img{max-height:20px}
 #torrents td:nth-child(2){white-space:nowrap}
 }
 
 @media (max-width:900px){
-#torrentDisplay .filter{padding-top:2px;min-width:0}
 #ourDest{display:none}
+#torrentDisplay .filter{padding-top:2px;min-width:0}
 }
 
 @media (min-width:1200px){
 a,th,thead th,tfoot th,td,select,select option,.snarkAddInfo,.snarkFileName,code,textarea,input[name="nofilter_dataDir"]{font-size:9pt}
 .configPanel .configTitle,.snarkNav{font-size:11pt}
-.iframed #pagenavcontrols{transform:translateX(46px)}
+.knownTracker a,.trackerhome,.trackerannounce{width:300px;max-width:300px}
 .percentDownloaded{pointer-events:none}
+.peerSeed img{width:18px;height:18px}
 .snarkNav{font-size:10.5pt}
 .toggleview,#tab_config{min-width:340px}
-#trackerconfig input.trackername{max-width:180px;width:180px}
-#trackerconfig th:last-child,#trackerconfig td:last-child{padding-left:50px}
-.trackerhome,.trackerannounce,.knownTracker a{width:300px;max-width:300px}
 #closelog img,#expand img,#shrink img{margin-top:-2px;width:13px}
 #pagenavcontrols{transform:translateX(52px)}
+.iframed #pagenavcontrols{transform:translateX(46px)}
 #torrentDisplay .filter{min-width:100px}
+#trackerconfig input.trackername{max-width:180px;width:180px}
+#trackerconfig th:last-child,#trackerconfig td:last-child{padding-left:50px}
 }
 
 @media (min-width:1500px){

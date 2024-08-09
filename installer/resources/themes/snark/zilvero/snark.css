@@ -762,6 +762,10 @@ tr:hover td.trackerLink,tr:hover td.details,tr:hover td.tName,tr:hover td.rxd,tr
 #torrents .tName a{max-width:250px}
 }
 
+@media (min-width:1100px) {
+.peerSeed img{width:18px;height:18px}
+}
+
 @media (min-width:1500px){
 body,td,th:not(.suboption),span,table a,input[type=submit],input[type=text],textarea{font-size:9.5pt}
 label b,.configOption b{font-size:9pt}

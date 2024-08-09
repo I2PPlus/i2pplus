@@ -907,6 +907,7 @@ th a img{max-height:16px}
 
 @media (min-width:1100px){
 body,th,td,table a,input,input[type=text],input.r,input[name="nofilter_dataDir"],select,textarea,.snarkAddInfo{font-size:9pt}
+.peerSeed img{width:18px;height:18px}
 .snarkNav{font-size:11pt}
 .snarkNav{padding-left:25px}
 .percentDownloaded{pointer-events:none;/* hide tooltip */}

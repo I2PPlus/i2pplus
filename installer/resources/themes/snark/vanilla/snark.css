@@ -1030,7 +1030,8 @@ thead a img,thead img{max-height:21px}
 .peerCount b .left,.peerCount b .right{margin:0 1px;padding:2px 3px 1px;min-width:38px;display:inline-block;text-align:center;color:#eee;border-radius:1px;box-shadow:0 0 0 1px #0004,1px 1px 1px 1px #0003 inset;background:linear-gradient(180deg,rgba(128,128,180,.2),rgba(192,192,220,.2))}
 .peerCount b .left{margin-right:0}
 .peerCount b .right{margin-left:0}
-.percentDownloaded{pointer-events:none;}
+.percentDownloaded{pointer-events:none}
+.peerSeed img{width:18px;height:18px}
 .rowOdd td,.rowEven td{padding-top:4px;padding-bottom:4px}
 .snarkNav{padding:4px 8px 4px 26px;background-size:16px,100%,100%;background-position:8px center,center center,center center}
 .status::after{min-height:20px;vertical-align:middle}
