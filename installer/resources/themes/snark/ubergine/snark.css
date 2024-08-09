@@ -876,9 +876,9 @@ html:not(.iframed) #torrentDisplay #stopped{border-radius:0 3px 3px 0}
 .filter:not(.enabled) .badge,.filter:not(.enabled) #filtercount{display:none!important}
 
 /* peerid + client */
-.clientid{margin-left:-3px;padding:5px;max-width:52px;min-width:52px;display:inline-block;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;font-size:80%;color:rgba(240,240,240,.8);text-shadow:0 1px 1px #101;-webkit-text-stroke:1px rgba(192,192,192,.3);border-radius:0 3px 3px 0;background:var(--badge)}
-.peerclient,.peerclient code,.clientid{display:inline-block;vertical-align:middle;line-height:1}
-.peerclient{padding:1px;position:relative;border:var(--border_hard);border-radius:4px;background:#515;contain:paint;}
+.clientid,.peerclient,.peerclient code{display:inline-block;vertical-align:middle;line-height:1}
+.clientid{margin-left:-3px;padding:5px;width:52px;display:inline-block;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;font-size:80%;color:rgba(240,240,240,.8);text-shadow:0 1px 1px #101;-webkit-text-stroke:1px rgba(192,192,192,.3);border-radius:0 3px 3px 0;background:var(--badge)}
+.peerclient{padding:1px;position:relative;border:var(--border_hard);border-radius:4px;background:#515;contain:paint}
 .peerclient code{margin:0;padding:2px 3px 2px 5px;border-radius:4px 0 0 4px}
 .peerdata{padding-left:0}
 .peerinfo td[colspan="4"],.debuginfo td[colspan="10"]{padding-left:0;line-height:1.2}
@@ -1127,6 +1127,7 @@ td.peerCount:empty::after{display:none}
 #navbar a.nav_tracker{padding-left:24px;background-position:7px center}
 #navbar{margin-bottom:6px;width:calc(100% - 22px);min-width:600px;transition:ease width .5s .5s}
 #tab_config{margin-top:4px}
+.iframed #tab_config{margin-top:0}
 #totals{margin-left:4px;white-space:nowrap}
 #trackerselect td{font-size:9pt}
 .magnet,.trackerLink,#torrents #snarkHead th.torrentLink{width:0!important;padding:0!important}
@@ -1208,7 +1209,7 @@ td.peerCount a,td.peerCount a:hover,td.peerCount a:active,.peerCount span{color:
 td.peerCount{padding-left:4px}
 th a img{max-height:16px}
 th.peerCount img{display:none}
-.clientid{margin-top:1px;padding-top:3px;padding-bottom:3px}
+.clientid{width:44px;padding:4px}
 .commentRating img{width:14px;height:14px}
 .configPanel .configTitle{font-size:9.5pt;font-variant:normal;text-transform:uppercase}
 .configPanel .configTitle{min-width:340px}
@@ -1218,6 +1219,8 @@ th.peerCount img{display:none}
 .status img{height:17px}
 .status{padding-left:3px;max-width:24px}
 .page,#navbar{min-width:650px}
+.peerclient{margin-left:4px}
+.peerclient code{padding:0 3px 0 5px}
 .peerCount{padding:0}
 .peerinfo td:first-child{background-position:8px center}
 .barComplete{line-height:1.05;min-width:78px}
@@ -1298,7 +1301,7 @@ th{font-size:9pt;background:#101}
 .debugConnection{margin:2px 4px;padding:1px 3px;display:inline-block;font-weight:700;color:#fff;border-radius:2px;box-shadow:0 0 0 1px #101;background:#003000}
 .iframed #pagenavtop{margin:2px 0 -1px}
 .iframed #torrentDisplay~#pagenavtop{margin:2px 0 1px}
-.peerSeed img{width:18px;height:18px}
+.peerSeed img{margin-top:2px;width:18px;height:18px}
 .percentDownloaded{pointer-events:none}
 .snarkNav{font-size:10.5pt}
 .snarkNav:first-child,.snarkNav[href="/i2psnark/"]:last-child{padding-left:29px;background-position:8px center}
