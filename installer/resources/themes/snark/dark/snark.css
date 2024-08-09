@@ -974,6 +974,7 @@ tr:hover .peerCount a,tr:hover .peerCount a:hover,tr:hover .peerCount a:focus,tr
 @media (min-width:1100px){
 body,#torrents td,.snarkAddInfo,th,td,code,textarea,input,input[type=submit],input[type=reset],select,button,a{font-size:9pt}
 .dirInfo td,#torrents .peerinfo td{padding-top:4px;padding-bottom:4px}
+.peerSeed img{width:18px;height:18px}
 #configs td:first-child{min-width:220px}
 #torrentInfo td{padding-top:6px;padding-bottom:6px}
 #torrents td{padding-top:3px;padding-bottom:3px}
