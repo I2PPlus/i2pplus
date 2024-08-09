@@ -104,14 +104,10 @@ msgid "I2CP and tunnel changes will take effect after stopping all torrents"
 msgstr ""
 
 #, java-format
-msgid "I2CP options changed to {0}"
+msgid "I2CP options changed to: {0}"
 msgstr ""
 
 msgid "Disconnecting old I2CP destination"
-msgstr ""
-
-#, java-format
-msgid "I2CP settings changed to {0}"
 msgstr ""
 
 msgid "Unable to connect with the new settings, reverting to the old I2CP settings"

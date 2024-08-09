@@ -104,15 +104,11 @@ msgid "I2CP and tunnel changes will take effect after stopping all torrents"
 msgstr "I2CP- en tunnelwijzigingen worden van kracht nadat alle torrents zijn gestoptI2CP en tunnel wijzigingen hebben pas effect na het stoppen van alle torrents"
 
 #, java-format
-msgid "I2CP options changed to {0}"
+msgid "I2CP options changed to: {0}"
 msgstr "I2CP-opties gewijzigd naar {0}"
 
 msgid "Disconnecting old I2CP destination"
 msgstr "Oude I2CP destination wordt afgesloten"
-
-#, java-format
-msgid "I2CP settings changed to {0}"
-msgstr "I2CP instellingen gewijzigd in {0}"
 
 msgid "Unable to connect with the new settings, reverting to the old I2CP settings"
 msgstr "Kan geen verbinding maken met de nieuwe instellingen en keert terug naar de oude I2CP-instellingenKan geen connectie maken met de nieuwe instellingen, we keren terug naar oude I2CP instellingen"
@@ -1488,3 +1484,5 @@ msgstr "Wijzigingen opslaan"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent moet worden gestopt"
+
+#, java-format

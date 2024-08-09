@@ -104,15 +104,11 @@ msgid "I2CP and tunnel changes will take effect after stopping all torrents"
 msgstr "I2CP与隧道设置的变化在所有种子停止后才能生效"
 
 #, java-format
-msgid "I2CP options changed to {0}"
+msgid "I2CP options changed to: {0}"
 msgstr "I2CP 选项改为 {0}"
 
 msgid "Disconnecting old I2CP destination"
 msgstr "正在断开旧的I2CP目标"
-
-#, java-format
-msgid "I2CP settings changed to {0}"
-msgstr "I2CP设置改为{0}"
 
 msgid "Unable to connect with the new settings, reverting to the old I2CP settings"
 msgstr "无法通过新设置连接，恢复I2CP的旧设置"
@@ -1480,3 +1476,5 @@ msgstr "保存更改"
 
 msgid "Torrent must be stopped"
 msgstr "必须停止洪流"
+
+#, java-format

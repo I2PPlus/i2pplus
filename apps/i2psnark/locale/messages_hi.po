@@ -104,15 +104,11 @@ msgid "I2CP and tunnel changes will take effect after stopping all torrents"
 msgstr "I2CP और ट्यूनल की परिवर्तन अभी सभी टॉरेंट को रोकने के बाद प्रभावी होंगे"
 
 #, java-format
-msgid "I2CP options changed to {0}"
+msgid "I2CP options changed to: {0}"
 msgstr "I2CP विकल्प {0} पर बदल दिए गए"
 
 msgid "Disconnecting old I2CP destination"
 msgstr "पुराने I2CP गंतव्य से डिस्कनेक्ट कर रहे हैं"
-
-#, java-format
-msgid "I2CP settings changed to {0}"
-msgstr "I2CP सेटिंगें {0} पर बदल दी गईं"
 
 msgid "Unable to connect with the new settings, reverting to the old I2CP settings"
 msgstr "नए सेटिंग के साथ कनेक्शन नहीं सकता, पुरानी I2CP सेटिंग वापस ले रहा है"
@@ -1488,3 +1484,5 @@ msgstr "बदलाव सहेजें"
 
 msgid "Torrent must be stopped"
 msgstr "टॉरेंट को रोकना होगा"
+
+#, java-format

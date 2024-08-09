@@ -104,15 +104,11 @@ msgid "I2CP and tunnel changes will take effect after stopping all torrents"
 msgstr "I2CP와 터널 변경사항은 모든 토렌트가 재시작된 이후 적용됩니다"
 
 #, java-format
-msgid "I2CP options changed to {0}"
+msgid "I2CP options changed to: {0}"
 msgstr "I2CP 옵션이 {0}으로 변경되었습니다."
 
 msgid "Disconnecting old I2CP destination"
 msgstr "오래된 i2CP 목적지와의 연결을 끊는 중입니다"
-
-#, java-format
-msgid "I2CP settings changed to {0}"
-msgstr "I2P 세팅이 {0}으로 변경되었습니다."
 
 msgid "Unable to connect with the new settings, reverting to the old I2CP settings"
 msgstr "새 세팅값으로는 연결할 수 없습니다. 전 I2CP 세팅으로 되돌립니다"
@@ -1480,3 +1476,5 @@ msgstr "변경 사항 저장"
 
 msgid "Torrent must be stopped"
 msgstr "토렌트를 중지해야 합니다"
+
+#, java-format
