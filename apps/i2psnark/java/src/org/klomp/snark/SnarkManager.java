@@ -186,7 +186,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public static final String PROP_VARY_INBOUND_HOPS = "i2psnark.varyInboundHops";
     public static final String PROP_VARY_OUTBOUND_HOPS = "i2psnark.varyOutboundHops";
 
-    public static final int MIN_UP_BW = 30;
+    public static final int MIN_UP_BW = 5;
     public static final int MIN_DOWN_BW = 2 * MIN_UP_BW;
     public static final int DEFAULT_MAX_UP_BW = 1024;
     private static final int DEFAULT_MAX_DOWN_BW = 1024;
