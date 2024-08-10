@@ -156,22 +156,14 @@ public class RouterContext extends I2PAppContext {
      * Set more PRNG buffers, as the default is now small for the I2PAppContext.
      *
      */
+
     private static final Properties filterProps(Properties envProps) {
-        if (envProps == null)
-            envProps = new Properties();
-        if (envProps.getProperty("time.disabled") == null)
-            envProps.setProperty("time.disabled", "false");
-        if (envProps.getProperty("prng.buffers") == null) {
-            // How many of these 256 KB buffers do we need?
-            // One clue: prng.bufferFillTime is ~10ms on my system,
-            // and prng.bufferFillTime event count is ~30 per minute,
-            // or about 2 seconds per buffer - so about 200x faster
-            // to fill than to drain - so we don't need too many
-            long maxMemory = SystemVersion.getMaxMemory();
-            long maxBuffs = (SystemVersion.isAndroid() || SystemVersion.isARM()) ? 3 : 5;
-            long buffs = Math.min(maxBuffs, Math.max(2, maxMemory / (21 * 1024 * 1024)));
-            envProps.setProperty("prng.buffers", Long.toString(buffs));
-        }
+        if (envProps == null) {envProps = new Properties();}
+        envProps.computeIfAbsent("time.disabled", key -> "false");
+        envProps.computeIfAbsent("prng.buffers", key -> {
+            long maxBuffs = (SystemVersion.isAndroid() || SystemVersion.isARM()) ? 4 : 10;
+            return Long.toString(maxBuffs / 2);
+        });
         return envProps;
     }
 
