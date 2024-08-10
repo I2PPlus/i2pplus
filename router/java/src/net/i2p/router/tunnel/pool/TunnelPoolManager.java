@@ -257,9 +257,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     public TunnelInfo getTunnelInfo(TunnelId id) {
         TunnelInfo info = null;
         for (TunnelPool pool : _clientInboundPools.values()) {
-                info = pool.getTunnel(id);
-                if (info != null)
-                    return info;
+            info = pool.getTunnel(id);
+            if (info != null)
+                return info;
         }
         info = _inboundExploratory.getTunnel(id);
         if (info != null) return info;
@@ -270,12 +270,12 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /** @return number of inbound exploratory tunnels */
     public int getFreeTunnelCount() {
-            return _inboundExploratory.size();
+        return _inboundExploratory.size();
     }
 
     /** @return number of outbound exploratory tunnels */
     public int getOutboundTunnelCount() {
-            return _outboundExploratory.size();
+        return _outboundExploratory.size();
     }
 
     public int getInboundClientTunnelCount() {
@@ -642,6 +642,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         out.add(_outboundExploratory);
     }
 
+    /**
+     *  Poke the build executor to build more tunnels.
+     */
     void tunnelFailed() { _executor.repoll(); }
 
     BuildExecutor getExecutor() { return _executor; }
