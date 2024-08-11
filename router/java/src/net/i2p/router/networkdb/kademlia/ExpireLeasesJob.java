@@ -29,8 +29,6 @@ import net.i2p.util.Log;
 class ExpireLeasesJob extends JobImpl {
     private final Log _log;
     private final KademliaNetworkDatabaseFacade _facade;
-
-//    private final static long RERUN_DELAY_MS = 1*60*1000;
     private final static long RERUN_DELAY_MS = 30*1000;
 
     public ExpireLeasesJob(RouterContext ctx, KademliaNetworkDatabaseFacade facade) {
@@ -52,8 +50,6 @@ class ExpireLeasesJob extends JobImpl {
             _log.info(buf.toString());
             for (Hash key : toExpire) {
                 _facade.fail(key);
-                //_log.info("Lease " + key + " is expiring, so lets look for it again", new Exception("Expire and search"));
-                //_facade.lookupLeaseSet(key, null, null, RERUN_DELAY_MS);
             }
             if (_log.shouldLog(Log.INFO)) {
                 _log.info("[DbId: " + _facade + "] Known LeaseSets: " + _facade.getKnownLeaseSets() + "; Leases to expire: " + toExpire);
@@ -69,20 +65,21 @@ class ExpireLeasesJob extends JobImpl {
      *
      */
     private List<Hash> selectKeysToExpire() {
+        RouterContext ctx = getContext();
         List<Hash> toExpire = new ArrayList<Hash>(128);
         for (Map.Entry<Hash, DatabaseEntry> entry : _facade.getDataStore().getMapEntries()) {
             DatabaseEntry obj = entry.getValue();
             if (obj.isLeaseSet()) {
                 LeaseSet ls = (LeaseSet)obj;
-                if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR))
-                    toExpire.add(entry.getKey());
-                else if (_log.shouldDebug())
-                    if (ls.getDestination() != null)
-                        _log.debug("Lease [" + ls.getDestination().calculateHash().toBase64().substring(0,6) + "] is current - not expiring");
-                    else
-                        _log.debug("Not expiring current but unidentified Lease (no destination)");
+                if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
+                    Hash h = entry.getKey();
+                    toExpire.add(h);
+                    if (ctx.clientManager().isLocal(h))
+                        _log.logAlways(Log.WARN, "Expired LOCAL leaseset [" + h.toBase32().substring(0,8) + "]");
+                }
             }
         }
         return toExpire;
     }
+
 }

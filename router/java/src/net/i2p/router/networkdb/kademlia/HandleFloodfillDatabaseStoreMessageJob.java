@@ -138,10 +138,10 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                      */
                     if (getContext().netDbSegmentor().clientNetDB(ls.getHash()).equals(_facade)) {
                         getContext().statManager().addRateData("netDb.storeLocalLeaseSetToLocalClient", 1, 0);
-                    dontBlamePeer = true;
-                    throw new IllegalArgumentException("Peer attempted to store LOCAL LeaseSet [" +
-                                                       key.toBase32().substring(0,6) + "]" +
-                                                       "(DbId: " + _facade + ")");
+                        dontBlamePeer = true;
+                        throw new IllegalArgumentException("Peer attempted to store LOCAL LeaseSet [" +
+                                                           key.toBase32().substring(0,6) + "]" +
+                                                           "(DbId: " + _facade + ")");
                     }
                 }
                 //boolean oldrar = ls.getReceivedAsReply();
@@ -151,24 +151,8 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 //if (_log.shouldInfo())
                 //    _log.info("oldrap? " + oldrap + " oldrar? " + oldrar + " newrap? " + rap);
                 LeaseSet match = _facade.store(key, ls);
-                if (match == null) {
+                if (match == null || KademliaNetworkDatabaseFacade.isNewer(ls, match)) {
                     wasNew = true;
-                } else if (match.getEarliestLeaseDate() < ls.getEarliestLeaseDate()) {
-                    wasNew = true;
-                    // If it is in our keyspace and we are talking to it
-                    //if (match.getReceivedAsPublished())
-                    //    ls.setReceivedAsPublished(true);
-                } else if (type != DatabaseEntry.KEY_TYPE_LEASESET &&
-                           match.getType() != DatabaseEntry.KEY_TYPE_LEASESET) {
-                    LeaseSet2 ls2 = (LeaseSet2) ls;
-                    LeaseSet2 match2 = (LeaseSet2) match;
-                    if (match2.getPublished() < ls2.getPublished()) {
-                        wasNew = true;
-                        //if (match.getReceivedAsPublished())
-                        //    ls.setReceivedAsPublished(true);
-                    } else {
-                        wasNew = false;
-                    }
                 } else {
                     wasNew = false;
                     /**

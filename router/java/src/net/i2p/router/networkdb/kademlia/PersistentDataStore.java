@@ -176,11 +176,27 @@ public class PersistentDataStore extends TransientDataStore {
         return rv;
     }
 
-    /** How many files to write every 10 minutes. Doesn't make sense to limit it,
+    /*
+     *  Unconditionally store, bypass all newer/older checks.
+     *  Persists for RI only.
+     *
+     *  @param persist if false, call super only, don't access disk
+     *  @return success
+     *  @param key non-null
+     *  @param data non-null
+     *  @since 0.9.64
+     */
+    @Override
+    public boolean forcePut(Hash key, DatabaseEntry data) {
+        boolean rv = super.forcePut(key, data);
+        if (rv && data.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)
+            _writer.queue(key, data);
+        return rv;
+    }
+
+    /** How many files to write every 5 minutes. Doesn't make sense to limit it,
      *  they just back up in the queue hogging memory.
      */
-//    private static final int WRITE_LIMIT = 5000;
-//    private static final long WRITE_DELAY = 10*60*1000;
     private static final int WRITE_LIMIT = 6000;
     private static final long WRITE_DELAY = 5*60*1000;
 
@@ -465,7 +481,8 @@ public class PersistentDataStore extends TransientDataStore {
             if (fos != null) try { fos.close(); } catch (IOException ioe) {}
         }
     }
-    private long getPublishDate(DatabaseEntry data) {
+
+    private static long getPublishDate(DatabaseEntry data) {
         return data.getDate();
     }
 
