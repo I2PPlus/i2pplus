@@ -6,6 +6,8 @@
 
 # I2P+
 
+[English](README.md) | [Ридми-русский](README-ru.md) | 中文版文档在[这里](README-zh.md) | [हिन्दी](README-hi.md)
+
 これはI2PのJava実装のソフトフォークのソースコードです。
 
 最新リリース：https://i2pplus.github.io/

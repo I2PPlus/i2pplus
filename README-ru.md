@@ -6,6 +6,8 @@
 
 # I2P+
 
+[English](README.md) | [読んでください](README-ja.md) | 中文版文档在[这里](README-zh.md) | [हिन्दी](README-hi.md)
+
 Это исходный код альтернативной реализации I2P на Java
 
 Последний релиз: https://i2pplus.github.io/
