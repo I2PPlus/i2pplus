@@ -23,11 +23,12 @@ import net.i2p.util.Log;
 class RepublishLeaseSetJob extends JobImpl {
     private final Log _log;
     public final static long REPUBLISH_LEASESET_TIMEOUT = 3*60*1000;
-    private final static int RETRY_DELAY = 15*1000;
+    private final static int RETRY_DELAY = 10*1000;
     private final Hash _dest;
     private final KademliaNetworkDatabaseFacade _facade;
     /** this is actually last attempted publish */
     private long _lastPublished;
+    private int failCount = 0;
 
     public RepublishLeaseSetJob(RouterContext ctx, KademliaNetworkDatabaseFacade facade, Hash destHash) {
         super(ctx);
@@ -46,7 +47,7 @@ class RepublishLeaseSetJob extends JobImpl {
             if (getContext().clientManager().isLocal(_dest)) {
                 LeaseSet ls = _facade.lookupLeaseSetLocally(_dest);
                 if (ls != null) {
-                    if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR*2)) {
+                    if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
                         if (_log.shouldWarn())
                             _log.warn("Not publishing expired LOCAL LeaseSet [" + _dest.toBase32().substring(0,8) + "]", new Exception("Publish expired LOCAL lease?"));
                     } else {
@@ -58,12 +59,12 @@ class RepublishLeaseSetJob extends JobImpl {
                     }
                 } else {
                     if (_log.shouldWarn())
-                        _log.warn("Client [" + _dest.toBase32().substring(0,8) + "] is local, but no valid LeaseSet found -> Being rebuilt?");
+                        _log.warn("Client [" + _dest.toBase32().substring(0,8) + "] is LOCAL, but no valid LeaseSet found -> Being rebuilt?");
                 }
                 return;
             } else {
                 if (_log.shouldInfo())
-                    _log.info("Client [" + _dest.toBase32().substring(0,8) + "] is no longer local -> Not republishing LeaseSet");
+                    _log.info("Client [" + _dest.toBase32().substring(0,8) + "] is no longer LOCAL -> Not republishing LeaseSet");
             }
             _facade.stopPublishing(_dest);
         } catch (RuntimeException re) {
@@ -75,8 +76,11 @@ class RepublishLeaseSetJob extends JobImpl {
     }
 
     void requeueRepublish() {
-        if (_log.shouldWarn())
-            _log.warn("Failed to publish LeaseSet for [" + _dest.toBase32().substring(0,8) + "]");
+        failCount++;
+        String count = failCount > 1 ? " (Attempt: " + failCount + ")" : "";
+        if (_log.shouldWarn()) {
+            _log.warn("Failed to publish LeaseSet for [" + _dest.toBase32().substring(0,8) + "] -> Retrying in 10s" + count);
+        }
         getContext().jobQueue().removeJob(this);
         requeue(RETRY_DELAY);
     }
