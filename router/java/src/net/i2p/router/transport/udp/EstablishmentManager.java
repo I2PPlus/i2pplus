@@ -403,196 +403,182 @@ class EstablishmentManager {
         boolean rejected = false;
         int queueCount = 0;
 
-            state = _outboundStates.get(to);
-            if (state == null) {
-                state = _outboundByHash.get(toHash);
-                if (state != null && _log.shouldInfo())
-                    _log.info("[SSU2] Found by hash: " + state);
-            }
-            if (state == null) {
-                if (queueIfMaxExceeded && _outboundStates.size() >= getMaxConcurrentEstablish()) {
-                    if (_queuedOutbound.size() >= MAX_QUEUED_OUTBOUND && !_queuedOutbound.containsKey(to)) {
-                        rejected = true;
-                    } else {
-                        List<OutNetMessage> newQueued = new ArrayList<OutNetMessage>(MAX_QUEUED_PER_PEER);
-                        List<OutNetMessage> queued = _queuedOutbound.putIfAbsent(to, newQueued);
-                        if (queued == null) {
-                            queued = newQueued;
+        state = _outboundStates.get(to);
+        if (state == null) {
+            state = _outboundByHash.get(toHash);
+            if (state != null && _log.shouldInfo())
+                _log.info("[SSU2] Found by hash: " + state);
+        }
+        if (state == null) {
+            if (queueIfMaxExceeded && _outboundStates.size() >= getMaxConcurrentEstablish()) {
+                if (_queuedOutbound.size() >= MAX_QUEUED_OUTBOUND && !_queuedOutbound.containsKey(to)) {
+                    rejected = true;
+                } else {
+                    List<OutNetMessage> newQueued = new ArrayList<OutNetMessage>(MAX_QUEUED_PER_PEER);
+                    List<OutNetMessage> queued = _queuedOutbound.putIfAbsent(to, newQueued);
+                    if (queued == null) {
+                        queued = newQueued;
+                        if (_log.shouldWarn()) {
+                            _log.warn("[SSU2] Queueing OutboundEstablish to " + to + ", increase " + PROP_MAX_CONCURRENT_ESTABLISH);
+                        }
+                    }
+                    // this used to be inside a synchronized (_outboundStates) block,
+                    // but that's now a CHM, so protect the ArrayList
+                    // There are still races possible but this should prevent AIOOBE and NPE
+                    synchronized (queued) {
+                        queueCount = queued.size();
+                        if (queueCount < MAX_QUEUED_PER_PEER) {
+                            queued.add(msg);
+                            // increment for the stat below
+                            queueCount++;
+                        } else {
+                            rejected = true;
+                        }
+                        deferred = _queuedOutbound.size();
+                    }
+                }
+            } else {
+                // must have a valid session key
+                byte[] keyBytes;
+                int version = _transport.getSSUVersion(ra);
+                if (isIndirect && version == 2 && ra.getTransportStyle().equals("SSU")) {
+                    boolean v2intros = false;
+                    int count = addr.getIntroducerCount();
+                    for (int i = 0; i < count; i++) {
+                        Hash h = addr.getIntroducerHash(i);
+                        long exp = addr.getIntroducerExpiration(i);
+                        if (h != null && (exp > now || exp == 0)) {
+                            v2intros = true;
+                            break;
+                        }
+                        if (!v2intros) {
+                            _transport.markUnreachable(toHash);
+                            _transport.failed(msg, "No v2 Introducers");
+                            return;
+                        }
+                    }
+                }
+                if (version == 2) {
+                    int mtu = addr.getMTU();
+                    boolean isIPv6 = TransportUtil.isIPv6(ra);
+                    int ourMTU = _transport.getMTU(isIPv6);
+                    if ((mtu > 0 && mtu < PeerState2.MIN_MTU) ||
+                        (ourMTU > 0 && ourMTU < PeerState2.MIN_MTU)) {
+                        _transport.markUnreachable(toHash);
+                        _transport.failed(msg, "MTU too small");
+                        //_context.banlist().banlistRouter(toHash, " <b>➜</b> Invalid MTU", null, null, now + 8*60*1000);
+                        if (toHash != null) {
+                            if (!isBanned) {
+                                _context.banlist().banlistRouter(toHash, " <b>➜</b> Invalid MTU", null, null, now + 8*60*1000);
+                                if (_log.shouldWarn()) {
+                                    _log.warn("[SSU2] Banning [" + truncHash + "] for 8h -> Invalid MTU");
+                                }
+                            }
+                        } else if (ipAddress != "") {
                             if (_log.shouldWarn()) {
-                                _log.warn("[SSU2] Queueing OutboundEstablish to " + to + ", increase " + PROP_MAX_CONCURRENT_ESTABLISH);
+                                _log.warn("[SSU2] Router has invalid MTU (too small): " + ipAddress + ":" + maybePort);
                             }
                         }
-                        // this used to be inside a synchronized (_outboundStates) block,
-                        // but that's now a CHM, so protect the ArrayList
-                        // There are still races possible but this should prevent AIOOBE and NPE
-                        synchronized (queued) {
-                            queueCount = queued.size();
-                            if (queueCount < MAX_QUEUED_PER_PEER) {
-                                queued.add(msg);
-                                // increment for the stat below
-                                queueCount++;
-                            } else {
-                                rejected = true;
+                        return;
+                    }
+                }
+                if (version == 1) {keyBytes = null;}
+                else {
+                    String siv = ra.getOption("i");
+                    if (siv != null) {keyBytes = Base64.decode(siv);}
+                    else {keyBytes = null;}
+                }
+                if (keyBytes == null) {
+                    _transport.markUnreachable(toHash);
+                    _transport.failed(msg, "Peer has no key, cannot establish connection -> Marking unreachable");
+                    if (toHash != null) {
+                        if (!isBanned) {
+                            _context.banlist().banlistRouter(toHash, " <b>➜</b> No Introduction key", null, null, now + 4*60*1000);
+                            if (_log.shouldWarn()) {
+                                _log.warn("[SSU2] Banning [" + truncHash + "] for 4h -> No Introduction key");
                             }
-                            deferred = _queuedOutbound.size();
                         }
+                    } else if (ipAddress != "") {
+                        if (_log.shouldWarn()) {
+                                _log.warn("[SSU2] Received no Introduction key from: " + ipAddress + ":" + maybePort);
+                        }
+                    }
+                    return;
+                }
+                SessionKey sessionKey;
+                try {
+                    sessionKey = new SessionKey(keyBytes);
+                } catch (IllegalArgumentException iae) {
+                    _transport.markUnreachable(toHash);
+                    _transport.failed(msg, "Peer has BAD key, cannot establish connection -> Marking unreachable");
+                    if (toHash != null) {
+                        if (!isBanned) {
+                            _context.banlist().banlistRouter(toHash, " <b>➜</b> Bad Introduction key", null, null, now + 8*60*1000);
+                            if (_log.shouldWarn()) {
+                                _log.warn("[SSU2] Banning [" + truncHash + "] for 8h -> Bad Introduction key");
+                            }
+                        }
+                    } else if (ipAddress != "") {
+                        if (_log.shouldWarn()) {
+                            _log.warn("[SSU2] Received Bad Introduction key from: " + ipAddress + ":" + maybePort);
+                        }
+                    }
+                    return;
+                }
+                if (version == 2) {
+                    boolean requestIntroduction = !isIndirect && _transport.introducersMaybeRequired(TransportUtil.isIPv6(ra));
+                    try {
+                        state = new OutboundEstablishState2(_context, _transport, maybeTo, to,
+                                                            toIdentity, requestIntroduction, sessionKey, ra, addr);
+                    } catch (IllegalArgumentException iae) {
+                        if (_log.shouldWarn()) {_log.warn("[SSU2] OES2 error: " + toRouterInfo, iae);}
+                        _transport.markUnreachable(toHash);
+                        _transport.failed(msg, iae.getMessage());
+                        return;
                     }
                 } else {
-                    // must have a valid session key
-                    byte[] keyBytes;
-                    int version = _transport.getSSUVersion(ra);
-                    if (isIndirect && version == 2 && ra.getTransportStyle().equals("SSU")) {
-                        boolean v2intros = false;
-                        int count = addr.getIntroducerCount();
-                        for (int i = 0; i < count; i++) {
-                            Hash h = addr.getIntroducerHash(i);
-                            long exp = addr.getIntroducerExpiration(i);
-                            if (h != null && (exp > now || exp == 0)) {
-                                v2intros = true;
-                                break;
-                            }
-                            if (!v2intros) {
-                                _transport.markUnreachable(toHash);
-                                _transport.failed(msg, "No v2 Introducers");
-                                return;
-                            }
-                        }
-                    }
-                    if (version == 2) {
-                        int mtu = addr.getMTU();
-                        boolean isIPv6 = TransportUtil.isIPv6(ra);
-                        int ourMTU = _transport.getMTU(isIPv6);
-                        if ((mtu > 0 && mtu < PeerState2.MIN_MTU) ||
-                            (ourMTU > 0 && ourMTU < PeerState2.MIN_MTU)) {
-                            _transport.markUnreachable(toHash);
-                            _transport.failed(msg, "MTU too small");
-                            //_context.banlist().banlistRouter(toHash, " <b>➜</b> Invalid MTU", null, null, now + 8*60*1000);
-                            if (toHash != null) {
-                                if (!isBanned) {
-                                    _context.banlist().banlistRouter(toHash, " <b>➜</b> Invalid MTU", null, null, now + 8*60*1000);
-                                    if (_log.shouldWarn()) {
-                                        _log.warn("[SSU2] Banning [" + truncHash + "] for 8h -> Invalid MTU");
-                                    }
-                                }
-                            } else if (ipAddress != "") {
-                                if (_log.shouldWarn()) {
-                                    _log.warn("[SSU2] Router has invalid MTU (too small): " + ipAddress + ":" + maybePort);
-                                }
-                            }
-                            return;
-                        }
-                    }
-                    if (version == 1) {
-                        keyBytes = null;
-                    } else {
-                        String siv = ra.getOption("i");
-                        if (siv != null)
-                            keyBytes = Base64.decode(siv);
-                        else
-                            keyBytes = null;
-                    }
-                    if (keyBytes == null) {
-//                        if (_log.shouldWarn())
-//                            _log.warn("[SSU2] No Introduction key\n" + toRouterInfo);
-                        _transport.markUnreachable(toHash);
-                        _transport.failed(msg, "Peer has no key, cannot establish connection -> Marking unreachable");
-                        if (toHash != null) {
-                            if (!isBanned) {
-                                _context.banlist().banlistRouter(toHash, " <b>➜</b> No Introduction key", null, null, now + 4*60*1000);
-                                if (_log.shouldWarn()) {
-                                    _log.warn("[SSU2] Banning [" + truncHash + "] for 4h -> No Introduction key");
-                                }
-                            }
-                        } else if (ipAddress != "") {
-                            if (_log.shouldWarn()) {
-                                _log.warn("[SSU2] Received no Introduction key from: " + ipAddress + ":" + maybePort);
-                            }
-                        }
-                        return;
-                    }
-                    SessionKey sessionKey;
-                    try {
-                        sessionKey = new SessionKey(keyBytes);
-                    } catch (IllegalArgumentException iae) {
-                        _transport.markUnreachable(toHash);
-                        _transport.failed(msg, "Peer has BAD key, cannot establish connection -> Marking unreachable");
-                        if (toHash != null) {
-                            if (!isBanned) {
-                                _context.banlist().banlistRouter(toHash, " <b>➜</b> Bad Introduction key", null, null, now + 8*60*1000);
-                                if (_log.shouldWarn()) {
-                                    _log.warn("[SSU2] Banning [" + truncHash + "] for 8h -> Bad Introduction key");
-                                }
-                            }
-                        } else if (ipAddress != "") {
-                            if (_log.shouldWarn()) {
-                                _log.warn("[SSU2] Received Bad Introduction key from: " + ipAddress + ":" + maybePort);
-                            }
-                        }
-                        return;
-                    }
-                    if (version == 2) {
-                        boolean requestIntroduction = !isIndirect &&
-                                                      _transport.introducersMaybeRequired(TransportUtil.isIPv6(ra));
-                        try {
-                            state = new OutboundEstablishState2(_context, _transport, maybeTo, to,
-                                                               toIdentity, requestIntroduction, sessionKey, ra, addr);
-                        } catch (IllegalArgumentException iae) {
-                            if (_log.shouldWarn())
-                                _log.warn("[SSU2] OES2 error: " + toRouterInfo, iae);
-                            _transport.markUnreachable(toHash);
-                            _transport.failed(msg, iae.getMessage());
-                            return;
-                        }
-                    } else {
-                        // shouldn't happen
-                        _transport.failed(msg, "OB to bad addr? " + ra);
-                        return;
-                    }
-                    OutboundEstablishState oldState = _outboundStates.putIfAbsent(to, state);
-                    boolean isNew = oldState == null;
-                    if (isNew) {
-                        if (isIndirect && maybeTo != null)
-                            _outboundByClaimedAddress.put(maybeTo, state);
-                        if (_log.shouldDebug())
-                            _log.debug("[SSU2] Adding new Outbound connection to: " + state);
-                    } else {
-                        // whoops, somebody beat us to it, throw out the state we just created
-                        state = oldState;
-                    }
+                    // shouldn't happen
+                    _transport.failed(msg, "OB to bad addr? " + ra);
+                    return;
+                }
+                OutboundEstablishState oldState = _outboundStates.putIfAbsent(to, state);
+                boolean isNew = oldState == null;
+                if (isNew) {
+                    if (isIndirect && maybeTo != null) {_outboundByClaimedAddress.put(maybeTo, state);}
+                    if (_log.shouldDebug()) {_log.debug("[SSU2] Adding new Outbound connection to: " + state);}
+                } else {
+                    // whoops, somebody beat us to it, throw out the state we just created
+                    state = oldState;
                 }
             }
-            if (state != null) {
-                state.addMessage(msg);
-                List<OutNetMessage> queued = _queuedOutbound.remove(to);
-                if (queued != null) {
-                    // see comments above
-                    synchronized (queued) {
-                        for (OutNetMessage m : queued) {
-                            state.addMessage(m);
-                        }
-                    }
+        }
+        if (state != null) {
+            state.addMessage(msg);
+            List<OutNetMessage> queued = _queuedOutbound.remove(to);
+            if (queued != null) {
+                // see comments above
+                synchronized (queued) {
+                    for (OutNetMessage m : queued) {state.addMessage(m);}
                 }
             }
+        }
 
-            if (rejected) {
-                if (_log.shouldWarn())
-                    _log.warn("[SSU2] Too many pending connections, rejecting OutboundEstablish to " + to);
-                _transport.failed(msg, "Too many pending outbound connections");
-                _context.statManager().addRateData("udp.establishRejected", deferred);
-                return;
-            }
-            if (queueCount >= MAX_QUEUED_PER_PEER) {
-                _transport.failed(msg, "Too many pending messages for the given peer");
-                _context.statManager().addRateData("udp.establishOverflow", queueCount, deferred);
-                return;
-            }
+        if (rejected) {
+            if (_log.shouldWarn())
+                _log.warn("[SSU2] Too many pending connections, rejecting OutboundEstablish to " + to);
+            _transport.failed(msg, "Too many pending outbound connections");
+            _context.statManager().addRateData("udp.establishRejected", deferred);
+            return;
+        }
+        if (queueCount >= MAX_QUEUED_PER_PEER) {
+            _transport.failed(msg, "Too many pending messages for the given peer");
+            _context.statManager().addRateData("udp.establishOverflow", queueCount, deferred);
+            return;
+        }
 
-            if (deferred > 0) {
-                msg.timestamp("Too many deferred establishers");
-            } else if (state != null) {
-                msg.timestamp("Establish state already waiting");
-            }
-            notifyActivity();
+        if (deferred > 0) {msg.timestamp("Too many deferred establishers");}
+        else if (state != null) {msg.timestamp("Establish state already waiting");}
+        notifyActivity();
     }
 
     /**
