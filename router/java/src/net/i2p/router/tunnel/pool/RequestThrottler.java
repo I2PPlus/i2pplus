@@ -86,9 +86,9 @@ class RequestThrottler {
                           "CPU is under sustained high load");
         }
 
-        if (isFF && (isUnreachable || isLowShare)) {
+        if (isFF && (isUnreachable || isLowShare) && enableThrottle) {
             if (_log.shouldWarn())
-                _log.warn("Dropping all connections from [" + h.toBase64().substring(0,6) + "] -> Floodfill / " + v);
+                _log.warn("Dropping all connections from [" + h.toBase64().substring(0,6) + "] -> Unreachable or slow Floodfill / " + v);
             context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
         }
 
@@ -120,7 +120,8 @@ class RequestThrottler {
                 context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             }
         }
-        if (rv && count == 2 * limit) {
+
+        if (rv && count == 2 * limit && enableThrottle) {
             context.banlist().banlistRouter(h, "Excessive tunnel requests", null, null, context.clock().now() + 30*60*1000);
             // drop after any accepted tunnels have expired
             context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
