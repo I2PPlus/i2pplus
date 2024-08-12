@@ -356,8 +356,7 @@ public class PersistentDataStore extends TransientDataStore {
         }
         bw = ri.getBandwidthTier();
         for (RouterAddress ra : ri.getAddresses()) {
-            if (ra.getTransportStyle().equals("SSU") ||
-                ra.getTransportStyle().equals("SSU2")) {
+            if (ra.getTransportStyle().contains("SSU")) {
                     noSSU = false;
                     break;
             }
@@ -739,8 +738,7 @@ public class PersistentDataStore extends TransientDataStore {
                             hasIP = true;
                         }
                         for (RouterAddress ra : ri.getAddresses()) {
-                            if (ra.getTransportStyle().equals("SSU") ||
-                                ra.getTransportStyle().equals("SSU2")) {
+                            if (ra.getTransportStyle().contains("SSU")) {
                                 noSSU = false;
                                 break;
                             }

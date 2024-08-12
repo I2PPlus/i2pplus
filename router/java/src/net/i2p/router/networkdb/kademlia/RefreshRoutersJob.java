@@ -148,7 +148,7 @@ class RefreshRoutersJob extends JobImpl {
                 }
                 if (ri != null) {
                     for (RouterAddress ra : ri.getAddresses()) {
-                        if (ra.getTransportStyle().equals("SSU") || ra.getTransportStyle().equals("SSU2")) {
+                        if (ra.getTransportStyle().contains("SSU")) {
                             noSSU = false;
                             break;
                         }

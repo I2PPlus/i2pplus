@@ -970,13 +970,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             boolean isFF = false;
             boolean noCountry = true;
             String country = "unknown";
-            if (caps.contains("F")) {
-                isFF = true;
-            }
+            if (caps.contains("F")) {isFF = true;}
             boolean noSSU = true;
             for (RouterAddress ra : ri.getAddresses()) {
-                if (ra.getTransportStyle().equals("SSU") ||
-                    ra.getTransportStyle().equals("SSU2")) {
+                if (ra.getTransportStyle().contains("SSU")) {
                     noSSU = false;
                     break;
                 }
@@ -1524,8 +1521,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             h = routerInfo.getIdentity().getHash();
             if (caps.contains("F")) {isFF = true;}
             for (RouterAddress ra : routerInfo.getAddresses()) {
-                if (ra.getTransportStyle().equals("SSU") ||
-                    ra.getTransportStyle().equals("SSU2")) {
+                if (ra.getTransportStyle().contains("SSU")) {
                     noSSU = false;
                     break;
                 }

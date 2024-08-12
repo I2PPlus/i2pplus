@@ -249,8 +249,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     long uptime = getContext().router().getUptime();
                     boolean notFrom = !key.equals(_fromHash);
                     for (RouterAddress ra : ri.getAddresses()) {
-                        if (ra.getTransportStyle().equals("SSU") ||
-                            ra.getTransportStyle().equals("SSU2")) {
+                        if (ra.getTransportStyle().equals("SSU")) {
                             noSSU = false;
                             break;
                         }

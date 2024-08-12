@@ -733,8 +733,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 isFF = true;
             }
             for (RouterAddress ra : info.getAddresses()) {
-                if (ra.getTransportStyle().equals("SSU") ||
-                    ra.getTransportStyle().equals("SSU2")) {
+                if (ra.getTransportStyle().contains("SSU")) {
                     noSSU = false;
                     break;
                 }

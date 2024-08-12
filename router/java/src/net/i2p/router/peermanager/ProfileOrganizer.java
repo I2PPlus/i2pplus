@@ -234,8 +234,7 @@ public class ProfileOrganizer {
             reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
             isFF = cap.contains("f");
             for (RouterAddress ra : peerInfo.getAddresses()) {
-                if (ra.getTransportStyle().equals("SSU") ||
-                    ra.getTransportStyle().equals("SSU2"))
+                if (ra.getTransportStyle().contains("SSU"))
                     noSSU = false;
                     break;
             }
@@ -325,8 +324,7 @@ public class ProfileOrganizer {
                 isFF = cap.contains("f");
             }
             for (RouterAddress ra : peerInfo.getAddresses()) {
-                if (ra.getTransportStyle().equals("SSU") ||
-                    ra.getTransportStyle().equals("SSU2"))
+                if (ra.getTransportStyle().contains("SSU"))
                     noSSU = false;
                     break;
             }
