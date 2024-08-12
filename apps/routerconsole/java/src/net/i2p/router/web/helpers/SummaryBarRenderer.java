@@ -485,8 +485,6 @@ class SummaryBarRenderer {
             .append("\">")
             .append(nbsp(tx))
             .append("</a>\n");
-            //.append("<a class=sb_icon target=_top href=/help/ title=\"").append(tx)
-            //.append("\" hidden><span><img src=/themes/console/images/helplink.svg></span></a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("Info");
@@ -496,8 +494,6 @@ class SummaryBarRenderer {
             .append("\">")
             .append(nbsp(tx))
             .append("</a>\n");
-            //.append("<a class=sb_icon target=_top href=/info title=\"").append(tx)
-            //.append("\" hidden><span><img src=/themes/console/images/info.svg></span></a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("Jobs");
