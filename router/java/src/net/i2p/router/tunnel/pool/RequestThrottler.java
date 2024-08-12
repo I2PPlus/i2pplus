@@ -53,8 +53,7 @@ class RequestThrottler {
         boolean isUnreachable = ri != null && ri.getCapabilities().indexOf(Router.CAPABILITY_REACHABLE) < 0;
         boolean isLowShare = ri != null && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                              ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                             ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0 ||
-                             ri.getCapabilities().indexOf(Router.CAPABILITY_BW128) >= 0);
+                             ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0);
         boolean isFast = ri != null && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW256) >= 0 ||
                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW512) >= 0 ||
                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0);
@@ -82,15 +81,17 @@ class RequestThrottler {
 
         if (SystemVersion.getCPULoad() > 95 && SystemVersion.getCPULoadAvg() > 95) {
             if (_log.shouldWarn())
-                _log.warn("Rejecting tunnel request from Router [" + h.toBase64().substring(0,6) + "] -> " +
+                _log.warn("Rejecting Tunnel Request from Router [" + h.toBase64().substring(0,6) + "] -> " +
                           "CPU is under sustained high load");
         }
 
+/**
         if (isFF && (isUnreachable || isLowShare) && enableThrottle) {
             if (_log.shouldWarn())
                 _log.warn("Dropping all connections from [" + h.toBase64().substring(0,6) + "] -> Unreachable or slow Floodfill / " + v);
             context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
         }
+**/
 
         if (isLTier && isUnreachable && isOld) {
             if (_log.shouldWarn() && !context.banlist().isBanlisted(h)) {
