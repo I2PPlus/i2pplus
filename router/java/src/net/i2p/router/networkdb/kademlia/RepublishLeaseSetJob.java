@@ -23,7 +23,7 @@ import net.i2p.util.Log;
 class RepublishLeaseSetJob extends JobImpl {
     private final Log _log;
     public final static long REPUBLISH_LEASESET_TIMEOUT = 3*60*1000;
-    private final static int RETRY_DELAY = 10*1000;
+    private final static int RETRY_DELAY = 5*1000;
     private final Hash _dest;
     private final KademliaNetworkDatabaseFacade _facade;
     /** this is actually last attempted publish */
@@ -40,8 +40,7 @@ class RepublishLeaseSetJob extends JobImpl {
     public String getName() { return "Republish Local LeaseSet"; }
 
     public void runJob() {
-        if (!getContext().clientManager().shouldPublishLeaseSet(_dest))
-            return;
+        if (!getContext().clientManager().shouldPublishLeaseSet(_dest)) {return;}
 
         try {
             if (getContext().clientManager().isLocal(_dest)) {
@@ -79,7 +78,7 @@ class RepublishLeaseSetJob extends JobImpl {
         failCount++;
         String count = failCount > 1 ? " (Attempt: " + failCount + ")" : "";
         if (_log.shouldWarn()) {
-            _log.warn("Failed to publish LeaseSet for [" + _dest.toBase32().substring(0,8) + "] -> Retrying in 10s" + count);
+            _log.warn("Failed to publish LeaseSet for [" + _dest.toBase32().substring(0,8) + "] -> Retrying in 5s" + count);
         }
         getContext().jobQueue().removeJob(this);
         requeue(RETRY_DELAY);
