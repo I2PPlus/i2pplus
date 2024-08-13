@@ -819,16 +819,13 @@ public class SummaryHelper extends HelperBase {
                 buf.append("</td><td><b><a href=\"/tunnels#").append(h.toBase64().substring(0,4));
                 buf.append("\" target=_top title=\"").append(_t("Show tunnels")).append("\">");
                 // Increase permitted max length of tunnel name & handle overflow with css
-                if (name.length() <= 32)
-                    buf.append(DataHelper.escapeHTML(name));
-                else
-                    buf.append(DataHelper.escapeHTML(ServletUtil.truncate(name, 29))).append("&hellip;");
+                if (name.length() <= 32) {buf.append(DataHelper.escapeHTML(name));}
+                else {buf.append(DataHelper.escapeHTML(ServletUtil.truncate(name, 29))).append("&hellip;");}
                 buf.append("</a></b></td>\n");
                 LeaseSet ls = _context.clientNetDb(client.calculateHash()).lookupLeaseSetLocally(h);
                 if (ls != null && _context.tunnelManager().getOutboundClientTunnelCount(h) > 0) {
                     long timeToExpire = ls.getEarliestLeaseDate() - _context.clock().now();
                     if ((timeToExpire < 0) || !ls.isCurrent(0)) {
-                    //if (timeToExpire < 0) {
                         // red light
                         buf.append("<td class=tunnelRebuilding><img src=/themes/console/images/local_down.svg alt=\"")
                            .append(_t("Rebuilding")).append("&hellip;\" title=\"").append(_t("Leases expired")).append(" ")
