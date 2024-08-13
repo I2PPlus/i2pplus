@@ -33,7 +33,7 @@ class LookupBanHammer {
      * @param id null if for direct lookups
      */
     boolean shouldBan(Hash key, TunnelId id) {
-        return this.counter.increment(new ReplyTunnel(key, id)) > MAX_LOOKUPS;
+        return this.counter.increment(new ReplyTunnel(key, id)) > MAX_LOOKUPS*2;
     }
 
     private class Cleaner implements SimpleTimer.TimedEvent {
