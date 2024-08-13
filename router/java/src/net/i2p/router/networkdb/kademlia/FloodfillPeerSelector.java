@@ -297,44 +297,10 @@ class FloodfillPeerSelector extends PeerSelector {
                 badff.add(entry);
                 if (_log.shouldDebug())
                     _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router has SSU transport disabled");
-/**
-                _context.banlist().banlistRouter(key, " <b>➜</b> Floodfill with SSU disabled", null, null, now + 4*60*60*1000);
-                if (shouldDisconnect) {
-                    _context.commSystem().forceDisconnect(entry);
-                    if (_log.shouldWarn())
-                        _log.warn("Banning for 4h and immediately disconnecting from Floodfill [" + entry.toBase64().substring(0,6) + "] " +
-                                  "-> No SSU transport enabled");
-                } else if (_log.shouldWarn()) {
-                    _log.warn("Temp banning Floodfill [" + entry.toBase64().substring(0,6) + "] for 4h -> No SSU transport enabled");
-                }
-            } else if (info != null && noCountry && uptime > 60*1000) {
-                badff.add(entry);
-                if (_log.shouldDebug())
-                    _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Address not resolvable via GeoIP");
-/**
-                _context.banlist().banlistRouter(entry, " <b>➜</b> Floodfill without GeoIP resolvable address", null, null, now + 4*60*60*1000);
-                if (shouldDisconnect) {
-                    _context.commSystem().forceDisconnect(entry);
-                    if (_log.shouldWarn())
-                        _log.warn("Banning for 4h and immediately disconnecting from Floodfill [" + entry.toBase64().substring(0,6) + "] " +
-                                  "-> No GeoIP resolvable address");
-                } else {
-                    if (_log.shouldWarn())
-                        _log.warn("Temp banning Floodfill [" + entry.toBase64().substring(0,6) + "] for 4h -> No GeoIP resolvable address");
-                }
-**/
             } else if (info != null && isUnreachable) {
                 badff.add(entry);
                 if (_log.shouldDebug())
                     _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router is unreachable");
-/**
-                _context.banlist().banlistRouter(entry, " <b>➜</b> Floodfill is unreachable / firewalled", null, null, now + 4*60*60*1000);
-                if (shouldDisconnect) {
-                    _context.commSystem().mayDisconnect(entry);
-                }
-                if (_log.shouldWarn())
-                    _log.warn("Temp banning Floodfill [" + entry.toBase64().substring(0,6) + "] for 4h -> Unreachable/firewalled");
-**/
             } else if (sameIP) {
                 badff.add(entry);
                 if (_log.shouldDebug())
@@ -356,7 +322,7 @@ class FloodfillPeerSelector extends PeerSelector {
                     _context.banlist().banlistRouter(entry, " <b>➜</b> L tier Floodfill", null, null, now + 4*60*60*1000);
                     _context.commSystem().forceDisconnect(entry);
                     if (_log.shouldWarn()) {
-                        _log.warn("Banning for 4h and immediately disconnecting from Floodfill [" + entry.toBase64().substring(0,6) + "] -> L tier");
+                        _log.warn("Banning for 4h and disconnecting from Floodfill [" + entry.toBase64().substring(0,6) + "] -> L tier");
                     }
                 }
             } else {
@@ -429,11 +395,7 @@ class FloodfillPeerSelector extends PeerSelector {
                 buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
             }
         }
-/*
-        if (_log.shouldInfo())
-            _log.info("Floodfill sort: Good: " + rv + "; OK: " + okff + "; Bad: " + badff);
-            _log.info(buf.toString());
-*/
+
         // Put the ok floodfills after the good floodfills
         for (int i = 0; found < howMany && i < okff.size(); i++) {
             rv.add(okff.get(i));

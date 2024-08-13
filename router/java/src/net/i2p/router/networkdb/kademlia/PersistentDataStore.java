@@ -410,13 +410,13 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Router is spoofing our IP address");
                         if (_log.shouldWarn())
-                            _log.warn("Banning and immediately disconnecting from [" + key.toBase64().substring(0,6) + "] for 72h -> Router is spoofing our IP address!");
+                            _log.warn("Banning and disconnecting from [" + key.toBase64().substring(0,6) + "] for 72h -> Router is spoofing our IP address!");
                         _context.banlist().banlistRouter(key, " <b>➜</b> Spoofed IP address (ours)", null, null, _context.clock().now() + 72*60*60*1000);
                         _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
                         dbFile.delete();
                     } else if (isInvalidVersion) {
                         if (_log.shouldWarn() && !isBanned)
-                            _log.warn("Banning for 24h and immediately disconnecting from Router [" + key.toBase64().substring(0,6) + "]" +
+                            _log.warn("Banning for 24h and disconnecting from Router [" + key.toBase64().substring(0,6) + "]" +
                                       " -> Invalid version " + version + " / " + bw + (unreachable ? "U" : ""));
                         _context.banlist().banlistRouter(key, " <b>➜</b> Invalid Router version (" + version + " / " + bw +
                                                          (unreachable ? "U" : reachable ? "R" : "") + ")", null,
@@ -427,7 +427,7 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> LU and older than " + CURRENT_VERSION);
                         if (_log.shouldWarn())
-                            _log.warn("Banning and immediately disconnecting from [" + key.toBase64().substring(0,6) + "] for 8h -> LU and older than current version");
+                            _log.warn("Banning and disconnecting from [" + key.toBase64().substring(0,6) + "] for 8h -> LU and older than current version");
                         _context.banlist().banlistRouter(key, " <b>➜</b> LU and older than 0.9.59", null, null, _context.clock().now() + 8*60*60*1000);
                         _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
                         dbFile.delete();

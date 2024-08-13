@@ -331,7 +331,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                                              null, null, _context.clock().now() + 4*60*60*1000);
             _context.commSystem().forceDisconnect(h);
             if (_log.shouldWarn() && !isBanned)
-                _log.warn("Banning for 4h and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
+                _log.warn("Banning for 4h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
                           " -> Invalid SSU address");
             if (ri.verifySignature()) {_context.blocklist().add(_aliceIP);}
             throw new RIException(mismatchMessage + ri, REASON_BANNED);
@@ -352,7 +352,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                                              null, _context.clock().now() + 4*60*60*1000);
             if (ri.verifySignature()) {_context.blocklist().add(_aliceIP);}
             if (_log.shouldWarn() && !isBanned)
-                _log.warn("Banning for 4h and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
+                _log.warn("Banning for 4h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
                           " -> " + version + " / " + bw + (!reachable ? "U" : ""));
             _context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             throw new RIException("Old and slow: " + h, REASON_BANNED);

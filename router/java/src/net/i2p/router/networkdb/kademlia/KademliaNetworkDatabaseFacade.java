@@ -950,7 +950,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             boolean isHidden = _context.router().isHidden() || _context.getBooleanProperty("router.hiddenMode");
             String v = ri.getVersion();
             String MIN_VERSION = "0.9.61";
-            String CURRENT_VERSION = "0.9.62";
+            String CURRENT_VERSION = "0.9.63";
             long uptime = _context.router().getUptime();
             boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
             boolean isOlderThanCurrent = VersionComparator.comp(v, CURRENT_VERSION) < 0;
@@ -962,7 +962,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0) &&
                                      isOld && (uptime > 15*60*1000 ||
 //                                     _context.netDbSegmentor().getKnownRouters() > 1500) && !isUs;
-                                     _context.netDb().getKnownRouters() > 1500) && !isUs;
+                                     _context.netDb().getKnownRouters() > 2000) && !isUs;
             boolean isLTier =  ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0;
             boolean isUnreachable = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
@@ -987,13 +987,13 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             if (!isUs && isLTier && isUnreachable && isOlderThanCurrent) {
                 if (!_context.banlist().isBanlisted(key)) {
                     if (_log.shouldInfo()) {
-                        _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> LU and older than 0.9.61");
+                        _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> LU and older than 0.9.63");
                     }
                     if (_log.shouldWarn() && !_context.banlist().isBanlisted(key)) {
                         _log.warn("Banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
-                                  " [" + key.toBase64().substring(0,6) + "] for 4h -> LU and older than 0.9.61");
+                                  " [" + key.toBase64().substring(0,6) + "] for 4h -> LU and older than 0.9.63");
                     }
-                    _context.banlist().banlistRouter(key, " <b>➜</b> LU and older than 0.9.61", null, null, _context.clock().now() + 4*60*60*1000);
+                    _context.banlist().banlistRouter(key, " <b>➜</b> LU and older than 0.9.63", null, null, _context.clock().now() + 4*60*60*1000);
                     _ds.remove(key);
                     _kb.remove(key);
                 }
@@ -1606,10 +1606,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             if (!isBanned) {
                 if (_log.shouldWarn() && !_context.banlist().isBanlisted(h)) {
                     _log.warn("Banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
-                              " [" + routerId + "] for 4h -> LU and older than 0.9.61");
+                              " [" + routerId + "] for 4h -> LU and older than 0.9.63");
                 }
             }
-            _context.banlist().banlistRouter(h, " <b>➜</b> LU and older than 0.9.61", null, null, _context.clock().now() + 4*60*60*1000);
+            _context.banlist().banlistRouter(h, " <b>➜</b> LU and older than 0.9.63", null, null, _context.clock().now() + 4*60*60*1000);
         }
         if (minVersionAllowed != null) {
             if (VersionComparator.comp(v, minVersionAllowed) < 0) {

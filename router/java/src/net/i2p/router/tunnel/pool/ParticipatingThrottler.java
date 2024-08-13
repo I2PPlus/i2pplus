@@ -46,7 +46,7 @@ class ParticipatingThrottler {
     private static final int MAX_LIMIT = (isSlow ? 100 : isHexaCore ? 500 : 400) / LIFETIME_PORTION;
     private static final int PERCENT_LIMIT = 12 / LIFETIME_PORTION;
     private static final long CLEAN_TIME = 11 * 60 * 1000 / LIFETIME_PORTION;
-    private static final String MIN_VERSION = "0.9.61";
+    private static final String MIN_VERSION = "0.9.63";
 
     public enum Result { ACCEPT, REJECT, DROP }
 
@@ -77,9 +77,7 @@ class ParticipatingThrottler {
         byte[] padding = ri != null ? ri.getIdentity().getPadding() : null;
         boolean isCompressible = padding != null && padding.length >= 64 && DataHelper.eq(padding, 0, padding, 32, 32);
         int numTunnels = context.tunnelManager().getParticipatingCount();
-
         int limit = calculateLimit(numTunnels, isUnreachable, isLowShare, isFast);
-
         int count = counter.increment(h);
         Result rv;
         int bantime = 30 * 60 * 1000;
@@ -113,7 +111,7 @@ class ParticipatingThrottler {
     }
 
     private void handleNoVersion(boolean shouldDisconnect, Hash h, boolean isBanned, String caps, int bantime) {
-        if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h), 3 * 1000);}
+        if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h), 60 * 1000);}
         if (!isBanned && _log.shouldWarn()) {
             _log.warn("Banning Router [" + h.toBase64().substring(0, 6) + "] for " + (bantime / 60000) + "m -> No router version in RouterInfo");
         }
@@ -122,7 +120,7 @@ class ParticipatingThrottler {
 
     private boolean checkVersionAndCompressibility(String version, boolean isCompressible, boolean shouldDisconnect, Hash h, boolean isBanned, String caps) {
         if (VersionComparator.comp(version, "0.9.57") < 0 && isCompressible) {
-            if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h), 3 * 1000);}
+            if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h), 60 * 1000);}
             if (!isBanned && _log.shouldWarn()) {
                 _log.warn("Banning Router [" + h.toBase64().substring(0, 6) + "] for 4h -> Compressible RouterInfo / " + version);
             }
@@ -149,7 +147,7 @@ class ParticipatingThrottler {
 
     private boolean checkUnreachableAndOld(String version, boolean isUnreachable, boolean shouldBlockOldRouters, Hash h, boolean shouldDisconnect, boolean isBanned, String caps) {
         if (VersionComparator.comp(version, MIN_VERSION) < 0 && isUnreachable && shouldBlockOldRouters) {
-            if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h), 3 * 1000);}
+            if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h), 60 * 1000);}
             if (_log.shouldWarn()) {
                 _log.warn("Ignoring Tunnel Request from Router [" + h.toBase64().substring(0, 6) + "] -> " + version + (caps.isEmpty() ? "" : " / " + caps));
             }
