@@ -62,12 +62,11 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  4 as of 0.9.2; 3 as of 0.9.9
      */
     public static final int MAX_TO_FLOOD = SystemVersion.isSlow() ? 4 : 8;
-
     private static final int FLOOD_PRIORITY = OutNetMessage.PRIORITY_NETDB_FLOOD;
-    private static final int FLOOD_TIMEOUT = 60*1000;
+    private static final int FLOOD_TIMEOUT = 2*60*1000;
     static final long NEXT_RKEY_RI_ADVANCE_TIME = 45*60*1000;
     private static final long NEXT_RKEY_LS_ADVANCE_TIME = 10*60*1000;
-    private static final int NEXT_FLOOD_QTY = SystemVersion.isSlow() ? 2 : 4;
+    private static final int NEXT_FLOOD_QTY = MAX_TO_FLOOD / 2;
     private static final int MAX_LAG_BEFORE_SKIP_SEARCH = SystemVersion.isSlow() ? 600 : 300;
 
     /**
@@ -371,28 +370,19 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  @since 0.9.39
      */
     private boolean shouldFloodTo(Hash key, int type, SigType lsSigType, Hash peer, RouterInfo target) {
-       if ( (target == null) || (_context.banlist().isBanlisted(peer)) )
-           return false;
+       if ((target == null) || (_context.banlist().isBanlisted(peer))) {return false;}
        // Don't flood an RI back to itself
        // Not necessary, a ff will do its own flooding (reply token == 0)
        // But other implementations may not...
-       if (type == DatabaseEntry.KEY_TYPE_ROUTERINFO && peer.equals(key))
-           return false;
-       if (peer.equals(_context.routerHash()))
-           return false;
-       // min version checks
-/*
-       if (type != DatabaseEntry.KEY_TYPE_ROUTERINFO && type != DatabaseEntry.KEY_TYPE_LEASESET &&
-           !StoreJob.shouldStoreLS2To(target))
-           return false;
-*/
+       if (type == DatabaseEntry.KEY_TYPE_ROUTERINFO && peer.equals(key)) {return false;}
+       if (peer.equals(_context.routerHash())) {return false;}
        if ((type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2 ||
-            lsSigType == SigType.RedDSA_SHA512_Ed25519) &&
-           !StoreJob.shouldStoreEncLS2To(target))
+           lsSigType == SigType.RedDSA_SHA512_Ed25519) &&
+           !StoreJob.shouldStoreEncLS2To(target)) {
            return false;
-       if (!StoreJob.shouldStoreTo(target))
-           return false;
-        return true;
+       }
+       if (!StoreJob.shouldStoreTo(target)) {return false;}
+           return true;
     }
 
     /** note in the profile that the store failed */
