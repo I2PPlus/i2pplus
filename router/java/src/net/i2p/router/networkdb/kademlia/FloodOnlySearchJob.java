@@ -101,7 +101,7 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
         long time = System.currentTimeMillis() - _created;
         if (_log.shouldInfo()) {
              int timeRemaining = (int)(_expiration - getContext().clock().now());
-            _log.info("[Job " + getJobId() + "] Floodfill search for " + _key + " failed with " + timeRemaining + " remaining after " + time);
+            _log.info("Floodfill search for " + _key + " failed with " + timeRemaining + " remaining after " + time);
         }
         synchronized(_unheardFrom) {
             for (Hash h : _unheardFrom)
@@ -123,7 +123,7 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
             super.success();
         }
         if (_log.shouldInfo())
-            _log.info("[Job " + getJobId() + "] Floodfill search for " + _key + " successful");
+            _log.info("Floodfill search for " + _key + " successful");
         /**
          *   Sadly, we don't know which of the two replied, unless the first one sent a DSRM
          *   before the second one sent the answer, which isn't that likely.

@@ -511,7 +511,8 @@ public class TunnelDispatcher implements Service {
     }
 
     /** High for now, just to prevent long-lived-message attacks */
-    private static final long MAX_FUTURE_EXPIRATION = 3*60*1000 + Router.CLOCK_FUDGE_FACTOR;
+//    private static final long MAX_FUTURE_EXPIRATION = 3*60*1000 + Router.CLOCK_FUDGE_FACTOR;
+    private static final long MAX_FUTURE_EXPIRATION = 4*60*1000 + Router.CLOCK_FUDGE_FACTOR;
 
     /**
      * We are the inbound tunnel gateway, so encrypt it as necessary and forward

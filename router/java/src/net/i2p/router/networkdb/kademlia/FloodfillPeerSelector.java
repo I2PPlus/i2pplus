@@ -35,8 +35,8 @@ import net.i2p.stat.RateStat;
  *  selecting floodfills closest to a given key for
  *  searches and stores.
  *
- *  Warning - most methods taking a key as an argument require the
- *            routing key, not the original key.
+ *  Warning - most methods taking a key as an argument require the routing key,
+ *  not the original key.
  *
  */
 class FloodfillPeerSelector extends PeerSelector {
@@ -265,113 +265,108 @@ class FloodfillPeerSelector extends PeerSelector {
         List<Hash> badff = new ArrayList<Hash>(limit);
         for (int i = 0; found < howMany && i < limit; i++) {
             Hash entry = sorted.get(i);
-            if (entry == null || uptime < 45*1000)
-                break;  // shouldn't happen
-            // put anybody in the same /16 at the end
+            if (entry == null || uptime < 45*1000) {break;} // shouldn't happen
             RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(entry);
-            MaskedIPSet entryIPs = new MaskedIPSet(_context, entry, info, 2);
+            MaskedIPSet entryIPs = new MaskedIPSet(_context, entry, info, 2); // put anybody in the same /16 at the end
             boolean sameIP = false;
             boolean noSSU = true;
             boolean noCountry = true;
+            boolean isUnreachable = true;
             String country = "unknown";
             String caps = null;
             if (info != null) {
                 caps = DataHelper.stripHTML(info.getCapabilities());
-            }
-            boolean isUnreachable = caps != null && !caps.contains("R");
-            for (String ip : entryIPs) {
-                if (!maskedIPs.add(ip))
-                    sameIP = true;
-            }
-            country = _context.commSystem().getCountry(key);
-            if (country != null && country != "unknown") {
-                noCountry = false;
-            }
-            if (info != null) {
+                isUnreachable = caps != null && !caps.contains("R");
+                for (String ip : entryIPs) {
+                    if (!maskedIPs.add(ip)) {sameIP = true;}
+                }
+                country = _context.commSystem().getCountry(key);
+                if (country != null && country != "unknown") {noCountry = false;}
                 for (RouterAddress ra : info.getAddresses()) {
                     if (ra.getTransportStyle().contains("SSU")) {noSSU = false;}
                     break;
                 }
-            }
-            if (info != null && noSSU) {
-                badff.add(entry);
-                if (_log.shouldDebug())
-                    _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router has SSU transport disabled");
-            } else if (info != null && isUnreachable) {
-                badff.add(entry);
-                if (_log.shouldDebug())
-                    _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router is unreachable");
-            } else if (sameIP) {
-                badff.add(entry);
-                if (_log.shouldDebug())
-                    _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Same /16, family, or port");
-            } else if (info != null && now - info.getPublished() > 3*60*60*1000) {
-                badff.add(entry);
-                if (_log.shouldDebug())
-                    _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: RouterInfo published over 3 hours ago");
-            } else if (info != null && _context.commSystem().isInStrictCountry(info)) {
-                badff.add(entry);
-                if (_log.shouldDebug())
-                    _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router located in strict country");
-            } else if (info != null && (info.getBandwidthTier().equals("L") || info.getBandwidthTier().equals("M") ||
-                       info.getBandwidthTier().equals("N"))) {
-                badff.add(entry);
-                if (_log.shouldDebug())
-                    _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router is slow (L, M or N tier)");
-                if (info.getBandwidthTier().equals("L")) {
-                    _context.banlist().banlistRouter(entry, " <b>➜</b> L tier Floodfill", null, null, now + 4*60*60*1000);
-                    _context.commSystem().forceDisconnect(entry);
-                    if (_log.shouldWarn()) {
-                        _log.warn("Banning for 4h and disconnecting from Floodfill [" + entry.toBase64().substring(0,6) + "] -> L tier");
+
+/**                if (noSSU) {
+                    badff.add(entry);
+                    if (_log.shouldDebug())
+                        _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router has SSU transport disabled");
+**/
+                if (isUnreachable) {
+                    badff.add(entry);
+                    if (_log.shouldDebug())
+                        _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router is unreachable");
+                } else if (sameIP) {
+                    badff.add(entry);
+                    if (_log.shouldDebug())
+                        _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Same /16, family, or port");
+                } else if (info != null && now - info.getPublished() > 3*60*60*1000) {
+                    badff.add(entry);
+                    if (_log.shouldDebug())
+                        _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: RouterInfo published over 3 hours ago");
+                } else if (info != null && _context.commSystem().isInStrictCountry(info)) {
+                    badff.add(entry);
+                    if (_log.shouldDebug())
+                        _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router located in strict country");
+                } else if (info.getBandwidthTier().equals("L") || info.getBandwidthTier().equals("M")) {
+                    badff.add(entry);
+                    if (_log.shouldDebug())
+                        _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router is slow (L or M tier)");
+                    if (info.getBandwidthTier().equals("L")) {
+                        _context.banlist().banlistRouter(entry, " <b>➜</b> L tier Floodfill", null, null, now + 4*60*60*1000);
+                        _context.commSystem().forceDisconnect(entry);
+                        if (_log.shouldWarn()) {
+                            _log.warn("Banning for 4h and disconnecting from Floodfill [" + entry.toBase64().substring(0,6) + "] -> L tier");
+                        }
                     }
-                }
-            } else {
-                PeerProfile prof = _context.profileOrganizer().getProfile(entry);
-                double maxGoodRespTime = MAX_GOOD_RESP_TIME;
-                RateStat ttst = _context.statManager().getRate("tunnel.testSuccessTime");
-                if (ttst != null) {
-                    Rate tunnelTestTime = ttst.getRate(10*60*1000);
-                    if (tunnelTestTime != null && tunnelTestTime.getAverageValue() > 500)
-                        maxGoodRespTime = 2 * tunnelTestTime.getAverageValue();
-                }
-                if (prof != null) {
-                    if (enforceHeard && prof.getFirstHeardAbout() > now - HEARD_AGE) {
-                        if (_log.shouldDebug())
-                            _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router is too new (less than 90m old)");
-                        badff.add(entry);
-                    } else if (prof.getDBHistory() != null) {
-                        if (prof.getDbResponseTime().getRate(60*60*1000L).getAvgOrLifetimeAvg() < maxGoodRespTime
-                            && prof.getDBHistory().getLastStoreFailed() < now - NO_FAIL_STORE_GOOD
-                            && prof.getDBHistory().getLastLookupFailed() < now - NO_FAIL_LOOKUP_GOOD
-                            && prof.getDBHistory().getFailedLookupRate().getRate(60*60*1000).getAverageValue() < maxFailRate) {
-                            // good
+                } else {
+                    PeerProfile prof = _context.profileOrganizer().getProfile(entry);
+                    double maxGoodRespTime = MAX_GOOD_RESP_TIME;
+                    RateStat ttst = _context.statManager().getRate("tunnel.testSuccessTime");
+                    if (ttst != null) {
+                        Rate tunnelTestTime = ttst.getRate(10*60*1000);
+                        if (tunnelTestTime != null && tunnelTestTime.getAverageValue() > 500)
+                            maxGoodRespTime = 2 * tunnelTestTime.getAverageValue();
+                    }
+                    if (prof != null) {
+                        if (enforceHeard && prof.getFirstHeardAbout() > now - HEARD_AGE) {
                             if (_log.shouldDebug())
-                                _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Good");
-                            rv.add(entry);
-                            found++;
-                        } else if (prof.getDBHistory().getLastStoreFailed() <= prof.getDBHistory().getLastStoreSuccessful()
-                                   || prof.getDBHistory().getLastLookupFailed() <= prof.getDBHistory().getLastLookupSuccessful()
-                                   || (prof.getDBHistory().getLastStoreFailed() < now - NO_FAIL_STORE_OK
-                                       && prof.getDBHistory().getLastLookupFailed() < now - NO_FAIL_LOOKUP_OK)) {
-                            if (_log.shouldDebug())
-                                _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> OK");
-                            okff.add(entry);
+                                _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router is too new (less than 45m old)");
+                            badff.add(entry);
+                        } else if (prof.getDBHistory() != null) {
+                            if (prof.getDbResponseTime().getRate(60*60*1000L).getAvgOrLifetimeAvg() < maxGoodRespTime
+                                && prof.getDBHistory().getLastStoreFailed() < now - NO_FAIL_STORE_GOOD
+                                && prof.getDBHistory().getLastLookupFailed() < now - NO_FAIL_LOOKUP_GOOD
+                                && prof.getDBHistory().getFailedLookupRate().getRate(60*60*1000).getAverageValue() < maxFailRate) {
+                                // good
+                                if (_log.shouldDebug())
+                                    _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Good");
+                                rv.add(entry);
+                                found++;
+                            } else if (prof.getDBHistory().getLastStoreFailed() <= prof.getDBHistory().getLastStoreSuccessful()
+                                       || prof.getDBHistory().getLastLookupFailed() <= prof.getDBHistory().getLastLookupSuccessful()
+                                       || (prof.getDBHistory().getLastStoreFailed() < now - NO_FAIL_STORE_OK
+                                           && prof.getDBHistory().getLastLookupFailed() < now - NO_FAIL_LOOKUP_OK)) {
+                                if (_log.shouldDebug())
+                                    _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> OK");
+                                okff.add(entry);
+                            } else {
+                                if (_log.shouldDebug())
+                                    _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Poor profile history for this router");
+                                badff.add(entry);
+                            }
                         } else {
+                            // no DBHistory
                             if (_log.shouldDebug())
-                                _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Poor profile history for this router");
+                                _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Profile contains no history");
                             badff.add(entry);
                         }
                     } else {
-                        // no DBHistory
+                        // no profile
                         if (_log.shouldDebug())
-                            _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Profile contains no history");
+                            _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: We have no profile for this router");
                         badff.add(entry);
                     }
-                } else {
-                    // no profile
-                    if (_log.shouldDebug())
-                        _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: We have no profile for this router");
-                    badff.add(entry);
                 }
             }
         }
@@ -500,10 +495,10 @@ class FloodfillPeerSelector extends PeerSelector {
                 } else {
                     PeerProfile prof = _context.profileOrganizer().getProfile(entry);
 //                    if (prof != null && now - prof.getLastSendFailed() < 30*60*1000) {
-                    if (prof != null && now - prof.getLastSendFailed() < 15*60*1000) {
+                    if (prof != null && now - prof.getLastSendFailed() < 5*60*1000) {
                         badff.add(entry);
                         if (_log.shouldDebug())
-                            _log.debug("Floodfill sort: Skipping [" + entry.toBase64().substring(0,6) + "] -> Poor send success rate for the last 15m");
+                            _log.debug("Floodfill sort: Skipping [" + entry.toBase64().substring(0,6) + "] -> Poor send success rate for the last 5m");
                     } else if (preferConnected && !_context.commSystem().isEstablished(entry)) {
                         unconnectedff.add(entry);
                         if (_log.shouldDebug())

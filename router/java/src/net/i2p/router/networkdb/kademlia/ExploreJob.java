@@ -166,12 +166,12 @@ class ExploreJob extends SearchJob {
                 if (sess != null) {
                     if (sess.tag != null) {
                         if (_log.shouldInfo())
-                            _log.info("[Job " + getJobId() + "] Requesting AES reply from [" + ident.calculateHash().toBase64().substring(0,6) +
+                            _log.info("Requesting AES reply from [" + ident.calculateHash().toBase64().substring(0,6) +
                                       "] \n* Session Key: " + sess.key + "\n* Tag: " + sess.tag);
                         msg.setReplySession(sess.key, sess.tag);
                     } else {
                         if (_log.shouldInfo())
-                            _log.info("[Job " + getJobId() + "] Requesting AEAD reply from [" + ident.calculateHash().toBase64().substring(0,6) +
+                            _log.info("Requesting AEAD reply from [" + ident.calculateHash().toBase64().substring(0,6) +
                                       "] \n* Session Key: " + sess.key + "\n* Tag: " + sess.rtag);
                         msg.setReplySession(sess.key, sess.rtag);
                     }
@@ -184,7 +184,7 @@ class ExploreJob extends SearchJob {
             // may be null
             outMsg = MessageWrapper.wrap(ctx, msg, peer);
             if (_log.shouldDebug())
-                _log.debug("[Job " + getJobId() + "] Encrypted Exploratory DbLookupMessage for [" +
+                _log.debug("Encrypted Exploratory DbLookupMessage for [" +
                            getState().getTarget().toBase64().substring(0,6) + "] sent to [" +
                            ident.calculateHash().toBase64().substring(0,6) + "]");
         } else {
@@ -203,31 +203,31 @@ class ExploreJob extends SearchJob {
         int cpuLoadAvg = SystemVersion.getCPULoadAvg();
         if (exploreBredth == null && getContext().netDb().getKnownRouters() < 1500 && !isSlow && !isSingleCore && cpuLoad < 95 && cpuLoadAvg < 95) {
             if (_log.shouldInfo())
-                _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max " + EXPLORE_BREDTH * 3 + " concurrent (less than 1000 known peers)");
+                _log.info("Initiating Exploratory Search -> Max " + EXPLORE_BREDTH * 3 + " concurrent (less than 1000 known peers)");
             return EXPLORE_BREDTH * 3;
         } else if ((exploreBredth == null && getContext().netDb().getKnownRouters() > 3500) || (cpuLoad > 90 && cpuLoadAvg > 90) || (isSlow || isSingleCore)) {
             if (_log.shouldInfo())
                 if (cpuLoad > 80 || cpuLoadAvg > 80 || isSlow || isSingleCore)
-                    _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max 1 concurrent (High CPU load or device is low spec)");
+                    _log.info("Initiating Exploratory Search -> Max 1 concurrent (High CPU load or device is low spec)");
                 else
-                    _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max 1 concurrent (over 3000 known peers)");
+                    _log.info("Initiating Exploratory Search -> Max 1 concurrent (over 3000 known peers)");
             return 1;
         } else if (exploreBredth == null && !isSlow && !isSingleCore && cpuLoad < 95 && cpuLoadAvg < 95) {
             if (_log.shouldInfo())
-                _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max " + EXPLORE_BREDTH * 2 + " concurrent (less than 3000 known peers)");
+                _log.info("Initiating Exploratory Search -> Max " + EXPLORE_BREDTH * 2 + " concurrent (less than 3000 known peers)");
             return EXPLORE_BREDTH * 2;
 //        } else if (getContext().netDbSegmentor().getKnownRouters() < 1500) {
         } else if (getContext().netDb().getKnownRouters() < 1500) {
             if (_log.shouldInfo())
-                _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max " + Math.min(EXPLORE_BREDTH + 1, 2) + " concurrent (less than 1000 known peers)");
+                _log.info("Initiating Exploratory Search -> Max " + Math.min(EXPLORE_BREDTH + 1, 2) + " concurrent (less than 1000 known peers)");
             return Math.min(EXPLORE_BREDTH + 1, 2);
         } else if (exploreBredth != null) {
             if (_log.shouldInfo())
-                _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max " + exploreBredth + " concurrent (custom configuration)");
+                _log.info("Initiating Exploratory Search -> Max " + exploreBredth + " concurrent (custom configuration)");
             return Integer.valueOf(exploreBredth);
         } else {
             if (_log.shouldInfo())
-                _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max " + EXPLORE_BREDTH + " concurrent");
+                _log.info("Initiating Exploratory Search -> Max " + EXPLORE_BREDTH + " concurrent");
             return EXPLORE_BREDTH;
         }
     }
@@ -243,11 +243,11 @@ class ExploreJob extends SearchJob {
         // we'll do the simplest thing that could possibly work.
         if (_log.shouldInfo()) {
             if (numNewPeers == 1)
-                _log.info("[Job " + getJobId() + "] Found " + numNewPeers + " new peer via Exploratory Search");
+                _log.info("Found " + numNewPeers + " new peer via Exploratory Search");
             else if (numNewPeers > 1)
-                _log.info("[Job " + getJobId() + "] Found " + numNewPeers + " new peers via Exploratory Search");
+                _log.info("Found " + numNewPeers + " new peers via Exploratory Search");
             else
-                _log.info("[Job " + getJobId() + "] Found no new peers via Exploratory Search");
+                _log.info("Found no new peers via Exploratory Search");
         }
         _facade.setLastExploreNewDate(getContext().clock().now());
     }

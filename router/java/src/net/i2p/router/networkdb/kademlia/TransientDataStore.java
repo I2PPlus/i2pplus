@@ -36,20 +36,17 @@ class TransientDataStore implements DataStore {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
         _data = new ConcurrentHashMap<Hash, DatabaseEntry>(1024);
-        if (_log.shouldInfo())
-            _log.info("Transient DataStore initialized");
+        if (_log.shouldInfo()) {_log.info("Transient DataStore initialized");}
     }
 
-    public boolean isInitialized() { return true; }
+    public boolean isInitialized() {return true;}
 
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
     public boolean enableReverseLookups() {
         return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);
     }
 
-    public void stop() {
-        _data.clear();
-    }
+    public void stop() {_data.clear();}
 
     public void rescan() {}
 
@@ -57,9 +54,7 @@ class TransientDataStore implements DataStore {
      *  @return total size (RI and LS)
      *  @since 0.8.8
      */
-    public int size() {
-        return _data.size();
-    }
+    public int size() {return _data.size();}
 
     /**
      *  @return Unmodifiable view, not a copy
@@ -92,10 +87,8 @@ class TransientDataStore implements DataStore {
     }
 
     public DatabaseEntry get(Hash key) {
-        if (key != null)
-            return _data.get(key);
-        else
-            return null;
+        if (key != null) {return _data.get(key);}
+        else {return null;}
     }
 
     public boolean isKnown(Hash key) {
@@ -105,8 +98,7 @@ class TransientDataStore implements DataStore {
     public int countLeaseSets() {
         int count = 0;
         for (DatabaseEntry d : _data.values()) {
-            if (d.isLeaseSet())
-                count++;
+            if (d.isLeaseSet()) {count++;}
         }
         return count;
     }
@@ -123,13 +115,14 @@ class TransientDataStore implements DataStore {
      *  @return success
      */
     public boolean put(Hash key, DatabaseEntry data) {
+        int type = data.getType();
+        boolean isRI = type == DatabaseEntry.KEY_TYPE_ROUTERINFO;
         if (data == null) return false;
         if (_log.shouldDebug())
-            _log.debug("Storing key [" + key.toBase64().substring(0,6) + "]");
+            _log.debug("Storing key [" + (isRI ? key.toBase64().substring(0,6) : key.toBase32().substring(0,8)) + "]");
         DatabaseEntry old = _data.putIfAbsent(key, data);
         boolean rv = false;
-        int type = data.getType();
-        if (type == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
+        if (isRI) {
             // Don't do this here so we don't reset it at router startup;
             // the StoreMessageJob calls this
             //_context.profileManager().heardAbout(key);
@@ -138,14 +131,7 @@ class TransientDataStore implements DataStore {
             String caps = ri.getCapabilities();
             if (old != null) {
                 RouterInfo ori = (RouterInfo)old;
-                if (ri.getPublished() < ori.getPublished()) {
-//                    if (_log.shouldInfo())
-//                        _log.info("Almost clobbered a RouterInfo! [" + key.toBase64().substring(0,6) + "]\n* Old: " + new Date(ori.getPublished()) +
-//                                  "\n* New: " + new Date(ri.getPublished()));
-                } else if (ri.getPublished() == ori.getPublished()) {
-//                    if (_log.shouldInfo())
-//                        _log.info("Duplicate RouterInfo [" + key.toBase64().substring(0,6) + "] - not updating");
-                } else {
+                if (ri.getPublished() > ori.getPublished()) {
                     if (_log.shouldInfo())
                         _log.info("Updated RouterInfo [" + key.toBase64().substring(0,6) + "] -> " + v + " / " + caps +
                                   "\n* Old: " + new Date(ori.getPublished()) + "\n* New: " + new Date(ri.getPublished()));
@@ -182,14 +168,14 @@ class TransientDataStore implements DataStore {
 
                 if (newDate < oldDate) {
                     if (_log.shouldDebug())
-                        _log.debug("Almost clobbered a LeaseSet! [" + key.toBase64().substring(0,6) + "]\n* Old: " + new Date(ols.getEarliestLeaseDate()) +
+                        _log.debug("Almost clobbered a LeaseSet! [" + key.toBase32().substring(0,8) + "]\n* Old: " + new Date(ols.getEarliestLeaseDate()) +
                                   "\n* New: " + new Date(ls.getEarliestLeaseDate()));
                 } else if (newDate == oldDate) {
                     if (_log.shouldDebug())
                         _log.debug("Duplicate RouterInfo [" + key.toBase64().substring(0,6) + "] - not updating");
                 } else {
                     if (_log.shouldDebug()) {
-                        _log.debug("Updated LeaseSet [" + key.toBase64().substring(0,6) + "]\n* Old: " + new Date(ols.getEarliestLeaseDate()) +
+                        _log.debug("Updated LeaseSet [" + key.toBase32().substring(0,8) + "]\n* Old: " + new Date(ols.getEarliestLeaseDate()) +
                                   "\n* New: " + new Date(newDate) + ']');
                         if (_log.shouldDebug())
                             _log.debug("ReceivedAsPublished? [" + ls.getReceivedAsPublished() + "] ReceivedAsReply? [" + ls.getReceivedAsReply() + "]");
@@ -199,7 +185,7 @@ class TransientDataStore implements DataStore {
                 }
             } else {
                 if (_log.shouldInfo()) {
-                    _log.info("New LeaseSet [" + key.toBase64().substring(0,6) + "]\n* Expires: " + new Date(ls.getEarliestLeaseDate()));
+                    _log.info("New LeaseSet [" + key.toBase32().substring(0,8) + "]\n* Expires: " + new Date(ls.getEarliestLeaseDate()));
                     if (_log.shouldDebug())
                         _log.debug("ReceivedAsPublished? [" + ls.getReceivedAsPublished() + "] ReceivedAsReply? [" + ls.getReceivedAsReply() + "]");
                 }
@@ -230,7 +216,7 @@ class TransientDataStore implements DataStore {
         for (Map.Entry<Hash, DatabaseEntry> e : _data.entrySet()) {
             Hash key = e.getKey();
             DatabaseEntry dp = e.getValue();
-            buf.append("\n* Key:   ").append(key.toString()).append("\n* Content: ").append(dp.toString());
+            buf.append("\n* Key: ").append(key.toString()).append("\n* Content: ").append(dp.toString());
         }
         buf.append("\n");
         return buf.toString();
@@ -244,9 +230,6 @@ class TransientDataStore implements DataStore {
     }
 
     public DatabaseEntry remove(Hash key) {
-// logged elsewhere
-//        if (_log.shouldDebug())
-//            _log.debug("Deleting RouterInfo [" + key.toBase64().substring(0,6) + "] from disk");
         return _data.remove(key);
     }
 }

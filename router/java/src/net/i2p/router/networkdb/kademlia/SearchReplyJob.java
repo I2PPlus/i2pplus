@@ -52,7 +52,7 @@ class SearchReplyJob extends JobImpl {
         for (int i = 0; i < count; i++) {processPeer(i);}
 
         if (count == 0 && _log.shouldDebug())
-            _log.debug("[Job " + getJobId() + "] DbSearchReply received with no routers referenced");
+            _log.debug("DbSearchReply received with no routers referenced");
 
         // either they didn't tell us anything new or we have verified
         // (or failed to verify) all of them.  we're done
@@ -95,7 +95,7 @@ class SearchReplyJob extends JobImpl {
 
             if (_searchJob.wasAttempted(peer)) {_duplicatePeers++;}
             if (_log.shouldDebug())
-                _log.debug("[Job " + getJobId() + "] DbSearchReply received on search, referencing Router [" + peer.toBase64().substring(0,6) +
+                _log.debug("DbSearchReply received on search, referencing Router [" + peer.toBase64().substring(0,6) +
                            "] - Already known? " + (info != null));
             if (shouldAdd) {
                 if (_searchJob.add(peer)) {_newPeers++;}

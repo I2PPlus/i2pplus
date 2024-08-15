@@ -235,7 +235,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                                     !isHidden && getContext().netDb().getKnownRouters() > 1000;
             if (uninteresting) {
                 if (_log.shouldInfo())
-                    _log.info("[Job " + getJobId() + "] Skipping search for uninteresting Router [" + _key.toBase64().substring(0,6) + "]");
+                    _log.info("Skipping search for uninteresting Router [" + _key.toBase64().substring(0,6) + "]");
                 return;
             }
         }
@@ -308,7 +308,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         Job onTimeout = new FloodOnlyLookupTimeoutJob(getContext(), this);
         _out = getContext().messageRegistry().registerPending(replySelector, onReply, onTimeout);
         if (_log.shouldInfo())
-            _log.info("[Job " + getJobId() + "] New IterativeSearch for " + (_isLease ? "LeaseSet" : "Router") +
+            _log.info("New IterativeSearch for " + (_isLease ? "LeaseSet" : "Router") +
                       " [" + _key.toBase64().substring(0,6) + "]" +
                       "\n* Querying: "  + DataHelper.toString(_toTry).substring(0,6) + "]" +
                       "; Routing key: [" + _rkey.toBase64().substring(0,6) + "]" +
@@ -373,7 +373,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                             break;
                         }
                         if (_log.shouldInfo())
-                            _log.info("[Job " + getJobId() + "] Skipping query: Router [" +  h.toBase64().substring(0,6) + "] too close to others");
+                            _log.info("Skipping query: Router [" +  h.toBase64().substring(0,6) + "] too close to others");
                         _skippedPeers.add(h);
                         // go around again
                     }
@@ -406,7 +406,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                 if (!StoreJob.shouldStoreTo(ri)) {
                     failed(peer, false);
                     if (_log.shouldDebug())
-                        _log.debug("[Job " + getJobId() + "] Not sending query to old Router [" + ri.toBase64().substring(0,6) + "]");
+                        _log.debug("Not sending query to old Router [" + ri.toBase64().substring(0,6) + "]");
                     return;
                 }
             }
@@ -530,7 +530,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                     tries = _unheardFrom.size() + _failedPeers.size();
                 }
                 if (_key != null && peer != null) {
-                    _log.debug("[Job " + getJobId() + "] IterativeSearch for " + (_isLease ? "LeaseSet " : "Router ") +
+                    _log.debug("IterativeSearch for " + (_isLease ? "LeaseSet " : "Router ") +
                               " [" + _key.toBase64().substring(0,6) + "] (attempt " + tries + ")" +
                               "\n* Querying: [" + peer.toBase64().substring(0,6) + "]" +
                               "; Direct? " + isDirect + "; Reply via client tunnel? " + isClientReplyTunnel);
@@ -581,12 +581,12 @@ public class IterativeSearchJob extends FloodSearchJob {
                     if (sess != null) {
                         if (sess.tag != null) {
                             if (_log.shouldDebug())
-                                _log.debug("[Job " + getJobId() + "] Requesting AES reply from [" + peer.toBase64().substring(0,6) + "]"
+                                _log.debug("Requesting AES reply from [" + peer.toBase64().substring(0,6) + "]"
                                 + "\n* Session key: [" + sess.key.toBase64().substring(0,6) + "] Tag: [" + sess.tag.toString() + "]");
                             dlm.setReplySession(sess.key, sess.tag);
                         } else {
                             if (_log.shouldDebug())
-                                _log.debug("[Job " + getJobId() + "] Requesting AEAD reply from [" + peer.toBase64().substring(0,6) + "]"
+                                _log.debug("Requesting AEAD reply from [" + peer.toBase64().substring(0,6) + "]"
                                 + "\n* Session key: [" + sess.key.toBase64().substring(0,6) + "] Tag: [" + sess.rtag.toString() + "]");
                             dlm.setReplySession(sess.key, sess.rtag);
                         }
@@ -601,11 +601,11 @@ public class IterativeSearchJob extends FloodSearchJob {
                     // a response may have come in.
                     if (_dead) {
                         if (_log.shouldDebug())
-                            _log.debug("[Job " + getJobId() + "] Aborting send - finished while wrapping message to [" + peer.toBase64().substring(0,6) + "]");
+                            _log.debug("Aborting send - finished while wrapping message to [" + peer.toBase64().substring(0,6) + "]");
                         return;
                     }
                     if (_log.shouldDebug())
-                        _log.debug("[Job " + getJobId() + "] Encrypted DbLookupMsg for [" + _key.toBase64().substring(0,6) +
+                        _log.debug("Encrypted DbLookupMsg for [" + _key.toBase64().substring(0,6) +
                                    "] sent to [" + peer.toBase64().substring(0,6) + "]");
                 }
             }
@@ -658,16 +658,16 @@ public class IterativeSearchJob extends FloodSearchJob {
                 getContext().profileManager().dbLookupFailed(peer);
                 if (_log.shouldInfo()) {
                     if (peer != null)
-                        _log.info("[Job " + getJobId() + "] IterativeSearch for Router [" + peer.toBase64().substring(0,6) + "] timed out");
+                        _log.info("IterativeSearch for Router [" + peer.toBase64().substring(0,6) + "] timed out");
                     else
-                        _log.info("[Job " + getJobId() + "] IterativeSearch for Router [unknown] timed out");
+                        _log.info("IterativeSearch for Router [unknown] timed out");
                 }
             } else {
                 if (_log.shouldInfo()) {
                     if (peer != null)
-                        _log.info("[Job " + getJobId() + "] IterativeSearch for Router [" + peer.toBase64().substring(0,6) + "] failed");
+                        _log.info("IterativeSearch for Router [" + peer.toBase64().substring(0,6) + "] failed");
                     else
-                        _log.info("[Job " + getJobId() + "] IterativeSearch for Router [unknown] failed");
+                        _log.info("IterativeSearch for Router [unknown] failed");
                 }
             }
         }
@@ -685,13 +685,13 @@ public class IterativeSearchJob extends FloodSearchJob {
             return;
         if (getContext().banlist().isBanlistedForever(peer)) {
             if (_log.shouldInfo())
-                _log.info("[Job " + getJobId() + "] Banlisted peer from DbSearchReplyMsg [" + peer.toBase64().substring(0,6) + "]");
+                _log.info("Banlisted peer from DbSearchReplyMsg [" + peer.toBase64().substring(0,6) + "]");
             return;
         }
         RouterInfo ri = getContext().netDb().lookupRouterInfoLocally(peer);
         if (ri != null && !FloodfillNetworkDatabaseFacade.isFloodfill(ri)) {
             if (_log.shouldInfo())
-                _log.info("[Job " + getJobId() + "] Non-Floodfill peer from DbSearchReplyMsg [" + peer.toBase64().substring(0,6) + "]");
+                _log.info("Non-Floodfill peer from DbSearchReplyMsg [" + peer.toBase64().substring(0,6) + "]");
             return;
         }
         synchronized (this) {
@@ -703,7 +703,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                 return;  // already in the list
         }
         if (_log.shouldInfo())
-            _log.info("[Job " + getJobId() + "] New Router [" + peer.toBase64().substring(0,6) + "] from DbSearchReplyMsg - Known? " + (ri != null));
+            _log.info("New Router [" + peer.toBase64().substring(0,6) + "] from DbSearchReplyMsg - Known? " + (ri != null));
         retry();
     }
 
@@ -770,7 +770,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         long time = System.currentTimeMillis() - _created;
         if (_log.shouldInfo()) {
             long timeRemaining = _expiration - getContext().clock().now();
-            _log.info("[Job " + getJobId() + "] IterativeSearch for "  + (_isLease ? "LeaseSet " : "Router") + " [" + _key.toBase64().substring(0,6) + "] failed" +
+            _log.info("IterativeSearch for "  + (_isLease ? "LeaseSet " : "Router") + " [" + _key.toBase64().substring(0,6) + "] failed" +
                       "\n* Peers queried: " + tries + "; Time taken: " + time + "ms (" + timeRemaining + "ms remaining)");
         }
         if (tries > 0) {
@@ -811,7 +811,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         }
         long time = System.currentTimeMillis() - _created;
         if (_log.shouldInfo())
-            _log.info("[Job " + getJobId() + "] IterativeSearch for " + (_isLease ? "LeaseSet " : "Router") +
+            _log.info("IterativeSearch for " + (_isLease ? "LeaseSet " : "Router") +
                       " [" + _key.toBase64().substring(0,6) + "] succeeded" +
                       "\n* Peers queried: " + tries + "; Time taken: " + time + "ms");
         getContext().statManager().addRateData("netDb.successTime", time);

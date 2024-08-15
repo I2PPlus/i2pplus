@@ -248,12 +248,13 @@ public class ProfileOrganizer {
                     _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> K, L, M, N or Unreachable");
                 return null;
             }
+/**
             if (isFF && noSSU) {
                 if (_log.shouldInfo())
                     _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Floodfill with SSU disabled");
                 return null;
             }
-
+**/
             if (VersionComparator.comp(version, "0.9.60") < 0) {
                 if (_log.shouldInfo())
                     _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Older than 0.9.60");
@@ -280,7 +281,7 @@ public class ProfileOrganizer {
             int minHighCap = _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS);
             int minFast = _context.getProperty(PROP_MINIMUM_FAST_PEERS, DEFAULT_MINIMUM_FAST_PEERS);
             if (peerInfo != null && cap != null && reachable && (!bw.equals("K") ||
-                !bw.equals("L") || !bw.equals("M") || !bw.equals("N"))) {
+                !bw.equals("L") || !bw.equals("M"))) {
                 if (_thresholdCapacityValue <= rv.getCapacityValue() && isSelectable(peer) &&
                     countHighCapacityPeers() < getMaximumHighCapPeers())
                     _highCapacityPeers.put(peer, rv);
@@ -330,74 +331,70 @@ public class ProfileOrganizer {
             }
         }
 
-        boolean isSlow = (cap != null && !cap.equals("")) && bw.equals("K") ||
-                          bw.equals("L") || bw.equals("M") || bw.equals("N") || !reachable;
+        boolean isSlow = (cap != null && !cap.equals("")) && bw.equals("K") || bw.equals("L") || bw.equals("M") || !reachable;
 
         if (peer != null && peer.equals(_us)) {
-            if (_log.shouldDebug())
-                _log.debug("Added our own profile to Profile Manager");
+            if (_log.shouldDebug()) {_log.debug("Added our own profile to Profile Manager");}
             return null;
         } else if (peer != null && isSlow) {
-            if (_log.shouldInfo())
-                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> K, L, M, N or Unreachable");
+            if (_log.shouldInfo()) {_log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> K, L, M or Unreachable");}
             return null;
+/**
         } else if (peer != null && isFF && noSSU) {
             if (_log.shouldInfo())
                 _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Floodfill with SSU disabled");
             return null;
-        } else if (peer != null && VersionComparator.comp(version, "0.9.60") < 0) {
-            if (_log.shouldInfo())
-                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Older than 0.9.60");
+**/
+        } else if (peer != null && VersionComparator.comp(version, "0.9.60") < 0 && !isFF) {
+            if (_log.shouldInfo()) {_log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Older than 0.9.60");}
            return null;
         } else {
-            if (_log.shouldInfo())
-                _log.info("New profile created for [" + peer.toBase64().substring(0,6) + "]");
-        }
-
-        PeerProfile old = getProfile(peer);
-        profile.coalesceStats();
-        if (!getWriteLock()) {return old;}
-        try {
-            //if (prof != null) {
-            // Don't do this, as it may substantially exceed
-            // the high cap and fast limits in-between reorganizations.
-            // just add to the not-failing tier, and maybe the high cap tier,
-            // it will get promoted in the next reorganization
-            // if appropriate. This lessens high-cap churn.
-            // The downside is that new peers don't become high cap until the next reorg
-            // if we are at our limit.
-            //locked_placeProfile(profile);
-            _notFailingPeers.put(peer, profile);
-            if (old == null)
-                _notFailingPeersList.add(peer);
-            // Add to high cap only if we have room. Don't add to Fast; wait for reorg.
-            if (prof != null && (isSlow || (isFF && noSSU) || (isFF && !reachable))) {
-                prof.setCapacityBonus(-30);
-                _highCapacityPeers.remove(peer, profile);
-                if (_log.shouldInfo()) {
-                    if (isFF && !reachable)
-                        _log.info("[" + peer.toBase64().substring(0,6) + "] evicted from high cap group -> Unreachable/firewalled Floodfill");
-                    else if (isFF && noSSU)
-                        _log.info("[" + peer.toBase64().substring(0,6) + "] evicted from high cap group -> Floodfill with SSU disabled ");
-                    else if (isSlow)
-                        _log.info("[" + peer.toBase64().substring(0,6) + "] evicted from high cap group -> K, L, M, N or Unreachable");
+            if (_log.shouldInfo()) {_log.info("New profile created for [" + peer.toBase64().substring(0,6) + "]");}
+            PeerProfile old = getProfile(peer);
+            profile.coalesceStats();
+            if (!getWriteLock()) {return old;}
+            try {
+                //if (prof != null) {
+                // Don't do this, as it may substantially exceed
+                // the high cap and fast limits in-between reorganizations.
+                // just add to the not-failing tier, and maybe the high cap tier,
+                // it will get promoted in the next reorganization
+                // if appropriate. This lessens high-cap churn.
+                // The downside is that new peers don't become high cap until the next reorg
+                // if we are at our limit.
+                //locked_placeProfile(profile);
+                _notFailingPeers.put(peer, profile);
+                if (old == null) {_notFailingPeersList.add(peer);}
+                // Add to high cap only if we have room. Don't add to Fast; wait for reorg.
+                if (prof != null && (isSlow || (isFF && !reachable))) {
+                    prof.setCapacityBonus(-30);
+                    _highCapacityPeers.remove(peer, profile);
+                    if (_log.shouldInfo()) {
+                        if (isFF && !reachable)
+                            _log.info("[" + peer.toBase64().substring(0,6) + "] evicted from high cap group -> Unreachable/firewalled Floodfill");
+    /**
+                        else if (isFF && noSSU)
+                            _log.info("[" + peer.toBase64().substring(0,6) + "] evicted from high cap group -> Floodfill with SSU disabled ");
+    **/
+                        else if (isSlow)
+                            _log.info("[" + peer.toBase64().substring(0,6) + "] evicted from high cap group -> K, L, M or Unreachable");
+                    }
                 }
-            }
-            if (_thresholdCapacityValue <= profile.getCapacityValue() && isSelectable(peer) &&
-                _highCapacityPeers.size() < getMaximumHighCapPeers()) {
-                    if (peerInfo != null && cap != null && reachable && !isSlow && !(isFF && noSSU))
-                        _highCapacityPeers.put(peer, profile);
-            }
-            _strictCapacityOrder.add(profile);
-        } finally { releaseWriteLock(); }
-        return old;
+                if (_thresholdCapacityValue <= profile.getCapacityValue() && isSelectable(peer) &&
+                    _highCapacityPeers.size() < getMaximumHighCapPeers()) {
+                        if (peerInfo != null && cap != null && reachable && !isSlow)
+                            _highCapacityPeers.put(peer, profile);
+                }
+                _strictCapacityOrder.add(profile);
+            } finally {releaseWriteLock();}
+            return old;
+        }
     }
 
     private int count(Map<Hash, PeerProfile> m) {
         getReadLock();
-        try {
-            return m.size();
-        } finally { releaseReadLock(); }
+        try {return m.size();}
+        finally {releaseReadLock();}
     }
 
     public int countFastPeers() { return count(_fastPeers); }
@@ -465,8 +462,7 @@ public class ProfileOrganizer {
 
     /** @since 0.8.8 */
     void clearProfiles() {
-        if (!getWriteLock())
-            return;
+        if (!getWriteLock()) {return;}
         try {
             _fastPeers.clear();
             _highCapacityPeers.clear();
@@ -474,7 +470,7 @@ public class ProfileOrganizer {
             _notFailingPeersList.clear();
             _wellIntegratedPeers.clear();
             _strictCapacityOrder.clear();
-        } finally { releaseWriteLock(); }
+        } finally {releaseWriteLock();}
     }
 
     /**
@@ -495,7 +491,7 @@ public class ProfileOrganizer {
         if (profile != null && profile.getIsExpandedDB()) {
             RateStat invalidReplyRateStat = profile.getDBHistory().getInvalidReplyRate();
             Rate invalidReplyRate = invalidReplyRateStat.getRate(60*60*1000l);
-            RateStat failedLookupRateStat = profile.getDBHistory(). getFailedLookupRate();
+            RateStat failedLookupRateStat = profile.getDBHistory().getFailedLookupRate();
             Rate failedLookupRate = failedLookupRateStat.getRate(60*60*1000l);
             if (invalidReplyRate.getCurrentTotalValue() > MAX_BAD_REPLIES_PER_HOUR ||
                 invalidReplyRate.getLastTotalValue() > MAX_BAD_REPLIES_PER_HOUR ||

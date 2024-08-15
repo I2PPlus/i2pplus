@@ -60,7 +60,7 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
 
         I2NPMessage message = _message;
         if (_log.shouldInfo())
-            _log.info("[Job " + getJobId() + "] Reply from [" + _peer.toBase64().substring(0,6)
+            _log.info("Reply from [" + _peer.toBase64().substring(0,6)
                       + "] with " + message.getClass().getSimpleName().replace("Database", "Db").replace("Message", "Msg"));
 
         long howLong = System.currentTimeMillis() - _sentOn;

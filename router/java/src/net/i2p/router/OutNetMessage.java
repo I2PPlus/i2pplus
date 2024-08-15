@@ -75,7 +75,8 @@ public class OutNetMessage implements CDPQEntry {
     public static final int PRIORITY_BUILD_REPLY = 300;
     public static final int PRIORITY_NETDB_REPLY = 300;
     public static final int PRIORITY_HIS_NETDB_STORE = 200;
-    public static final int PRIORITY_NETDB_FLOOD = 200;
+//    public static final int PRIORITY_NETDB_FLOOD = 200;
+    public static final int PRIORITY_NETDB_FLOOD = 300;
     public static final int PRIORITY_PARTICIPATING = 200;
     public static final int PRIORITY_MY_NETDB_STORE_LOW = 150;
     public static final int PRIORITY_NETDB_EXPLORE = PRIORITY_LOWEST;

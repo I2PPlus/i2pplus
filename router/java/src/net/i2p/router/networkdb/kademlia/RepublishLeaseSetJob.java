@@ -22,7 +22,7 @@ import net.i2p.util.Log;
  */
 class RepublishLeaseSetJob extends JobImpl {
     private final Log _log;
-    public final static long REPUBLISH_LEASESET_TIMEOUT = 3*60*1000;
+    public final static long REPUBLISH_LEASESET_TIMEOUT = 5*60*1000;
     private final static int RETRY_DELAY = 5*1000;
     private final Hash _dest;
     private final KademliaNetworkDatabaseFacade _facade;
@@ -51,7 +51,7 @@ class RepublishLeaseSetJob extends JobImpl {
                             _log.warn("Not publishing expired LOCAL LeaseSet [" + _dest.toBase32().substring(0,8) + "]", new Exception("Publish expired LOCAL lease?"));
                     } else {
                         if (_log.shouldInfo())
-                            _log.info("[Job " + getJobId() + "] Publishing LeaseSet for " + _dest.toBase32());
+                            _log.info("Publishing LeaseSet for " + _dest.toBase32());
                         getContext().statManager().addRateData("netDb.republishLeaseSetCount", 1);
                         _facade.sendStore(_dest, ls, null, new OnRepublishFailure(ls), REPUBLISH_LEASESET_TIMEOUT, null);
                         _lastPublished = getContext().clock().now();
@@ -78,7 +78,7 @@ class RepublishLeaseSetJob extends JobImpl {
         failCount++;
         String count = failCount > 1 ? " (Attempt: " + failCount + ")" : "";
         if (_log.shouldWarn()) {
-            _log.warn("Failed to publish LeaseSet for [" + _dest.toBase32().substring(0,8) + "] -> Retrying in 5s" + count);
+            _log.warn("Failed to publish LeaseSet for [" + _dest.toBase32().substring(0,8) + "] -> Retrying..." + count);
         }
         getContext().jobQueue().removeJob(this);
         requeue(RETRY_DELAY);
@@ -107,8 +107,8 @@ class RepublishLeaseSetJob extends JobImpl {
             if (ls != null && ls.getEarliestLeaseDate() == _ls.getEarliestLeaseDate()) {
                 requeueRepublish();
             } else {
-                if (_log.shouldWarn())
-                    _log.warn("Not requeueing failed publication of LeaseSet [" +
+                if (_log.shouldInfo())
+                    _log.info("Not requeueing failed publication of LeaseSet [" +
                               _ls.getDestination().toBase32().substring(0,8) + "] -> Newer LeaseSet exists");
             }
         }

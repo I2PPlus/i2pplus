@@ -51,9 +51,9 @@ class FloodfillVerifyStoreJob extends JobImpl {
     private static final int START_DELAY = 18*1000;
     private static final int START_DELAY_RAND = 9*1000;
 //    private static final int VERIFY_TIMEOUT = 20*1000;
-    private static final int VERIFY_TIMEOUT = 15*1000;
+    private static final int VERIFY_TIMEOUT = 30*1000;
 //    private static final int MAX_PEERS_TO_TRY = 4;
-    private static final int MAX_PEERS_TO_TRY = 16;
+    private static final int MAX_PEERS_TO_TRY = 8;
     private static final int IP_CLOSE_BYTES = 3;
     private static final long[] RATES = { 60*1000, 60*60*1000l, 24*60*60*1000l };
 
@@ -205,12 +205,12 @@ class FloodfillVerifyStoreJob extends JobImpl {
             }
             if (sess.tag != null) {
                 if (_log.shouldInfo())
-                _log.info("[Job " + getJobId() + "] Requesting AES reply from [" + _target.toBase64().substring(0,6) +
+                _log.info("Requesting AES reply from [" + _target.toBase64().substring(0,6) +
                           "]\n* Session key: " + sess.key + "\n* Tag: " + sess.tag);
                 lookup.setReplySession(sess.key, sess.tag);
             } else {
                 if (_log.shouldInfo())
-                _log.info("[Job " + getJobId() + "] Requesting AEAD reply from [" + _target.toBase64().substring(0,6) +
+                _log.info("Requesting AEAD reply from [" + _target.toBase64().substring(0,6) +
                           "]\n* Session key: " + sess.key + "\n* Tag: " + sess.rtag);
                 lookup.setReplySession(sess.key, sess.rtag);
             }
@@ -274,8 +274,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
         if (keyCert != null) {
             while (true) {
                 List<Hash> peers = sel.selectFloodfillParticipants(rkey, 1, _ignore, _facade.getKBuckets());
-                if (peers.isEmpty())
-                    break;
+                if (peers.isEmpty()) {break;}
                 Hash peer = peers.get(0);
                 RouterInfo ri = getContext().netDb().lookupRouterInfoLocally(peer);
                 //if (ri != null && StoreJob.supportsCert(ri, keyCert)) {
@@ -288,12 +287,12 @@ class FloodfillVerifyStoreJob extends JobImpl {
                         return peer;
                     } else {
                         if (_log.shouldInfo())
-                            _log.info("[Job " + getJobId() + "] Skipping Floodfill Verify for Router [" +
+                            _log.info("Skipping Floodfill Verify for Router [" +
                                       peer.toBase64().substring(0,6) + "] - too close to the store");
                     }
                 } else {
                     if (_log.shouldInfo())
-                        _log.info("[Job " + getJobId() + "] Skipping Floodfill Verify for Router [" +
+                        _log.info("Skipping Floodfill Verify for Router [" +
                                   peer.toBase64().substring(0,6) + "] - too old");
                 }
                 _ignore.add(peer);
@@ -365,7 +364,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 DatabaseEntry entry = dsm.getEntry();
                 if (!entry.verifySignature()) {
                     if (_log.shouldWarn())
-                        _log.warn("[JobId " + getJobId() + "] Sent bad data for Floodfill Verify: " + _target);
+                        _log.warn("Sent bad data for Floodfill Verify: " + _target);
                     pm.dbLookupFailed(_target);
                     ctx.banlist().banlistRouterForever(_target, "Sent bad NetDb data");
                     ctx.statManager().addRateData("netDb.floodfillVerifyFail", delay);
@@ -389,24 +388,23 @@ class FloodfillVerifyStoreJob extends JobImpl {
                         pm.dbStoreSuccessful(_sentTo);
                     ctx.statManager().addRateData("netDb.floodfillVerifyOK", delay);
                     if (_log.shouldInfo())
-                        _log.info("[Job " + getJobId() + "] Floodfill Verify succeeded for [" + _key.toBase64().substring(0,6) + "]");
+                        _log.info("Floodfill Verify succeeded for [" + _key.toBase32().substring(0,8) + "]");
                     if (_isRouterInfo)
                         _facade.routerInfoPublishSuccessful();
                     return;
                 }
                 if (_log.shouldWarn()) {
-                    _log.warn("Floodfill Verify failed (older) for [" + _key.toBase64().substring(0,6) + "]");
+                    _log.warn("Floodfill Verify failed (older) for [" + _key.toBase32().substring(0,8) + "]");
                 if (_log.shouldInfo())
-                    _log.info("[Job " + getJobId() + "] Received older data \n* " + dsm.getEntry());
+                    _log.info("Received older data \n* " + dsm.getEntry());
                 }
             } else if (type == DatabaseSearchReplyMessage.MESSAGE_TYPE) {
                 DatabaseSearchReplyMessage dsrm = (DatabaseSearchReplyMessage) _message;
                 // assume 0 old, all new, 0 invalid, 0 dup
-                pm.dbLookupReply(_target,  0,
-                                dsrm.getNumReplies(), 0, 0, delay);
+                pm.dbLookupReply(_target, 0, dsrm.getNumReplies(), 0, 0, delay);
                 // The peer we asked did not have the key, so _sentTo failed to flood it
                 if (_log.shouldWarn())
-                    _log.warn("Floodfill Verify failed (DbSearchReplyMsg) for [" + _key.toBase64().substring(0,6) + "]" +
+                    _log.warn("Floodfill Verify failed (DbSearchReplyMsg) for [" + _key.toBase32().substring(0,8) + "]" +
                               " [DbId: " + _facade + "]");
                 // only for RI... LS too dangerous?
                 if (_isRouterInfo) {
@@ -460,7 +458,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
             }
             if (newDate > _published) {
                 if (_log.shouldInfo())
-                    _log.info("[Job " + getJobId() + "] Floodfill Verify failed, but new NetDbStore already happened for [" +
+                    _log.info("Floodfill Verify failed, but new NetDbStore already happened for [" +
                               _key.toString().substring(0,6) + "]");
                 return;
             }

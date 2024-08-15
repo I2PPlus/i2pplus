@@ -38,7 +38,7 @@ class FloodfillStoreJob extends StoreJob {
     }
 
     /**
-     * @param toSkip set of peer hashes of people we dont want to send the data to (e.g. we
+     * @param toSkip set of peer hashes of people we don't want to send the data to (e.g. we
      *               already know they have it).  This can be null.
      */
     public FloodfillStoreJob(RouterContext context, FloodfillNetworkDatabaseFacade facade, Hash key, DatabaseEntry data,
@@ -108,7 +108,7 @@ class FloodfillStoreJob extends StoreJob {
                                                    published, type,
                                                    sentTo, _state.getAttempted(), _facade);
             if (shouldLog)
-                _log.info("[Job " + getJobId() + "] Succeeded sending key [" + key.toBase64().substring(0,6) +
+                _log.info("Succeeded sending key [" + key.toBase64().substring(0,6) +
                           "] - queueing VerifyFloodfillStore Job [" + fvsj.getJobId() + "]");
             ctx.jobQueue().addJob(fvsj);
     }

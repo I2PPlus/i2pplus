@@ -3,12 +3,13 @@ package net.i2p.router.tunnel.pool;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
@@ -24,7 +25,6 @@ import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounterUnsafe;
 import net.i2p.util.SimpleTimer;
-
 import net.i2p.util.SystemVersion;
 
 /**
@@ -48,23 +48,16 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     private static final String PROP_DISABLE_TUNNEL_TESTING = "router.disableTunnelTesting";
 
-//    private static final int MIN_KBPS_TWO_HANDLERS = 512;
     private static final int MIN_KBPS_TWO_HANDLERS = 64;
-//    private static final int MIN_KBPS_THREE_HANDLERS = 1024;
     private static final int MIN_KBPS_THREE_HANDLERS = 512;
     private static final double MAX_SHARE_RATIO = 100000d;
 
     public TunnelPoolManager(RouterContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(TunnelPoolManager.class);
-
-//        _clientInboundPools = new ConcurrentHashMap<Hash, TunnelPool>(4);
-//        _clientOutboundPools = new ConcurrentHashMap<Hash, TunnelPool>(4);
         _clientInboundPools = new ConcurrentHashMap<Hash, TunnelPool>(32);
         _clientOutboundPools = new ConcurrentHashMap<Hash, TunnelPool>(32);
-
         _clientPeerSelector = new ClientPeerSelector(ctx);
-
         ExploratoryPeerSelector selector = new ExploratoryPeerSelector(_context);
         TunnelPoolSettings inboundSettings = new TunnelPoolSettings(true);
         _inboundExploratory = new TunnelPool(_context, this, inboundSettings, selector);
@@ -678,7 +671,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         return tunnelCount;
     }
 
-//    private static final int DEFAULT_MAX_PCT_TUNNELS = 33;
     private static final int DEFAULT_MAX_PCT_TUNNELS = 10;
     /**
      *  For reliability reasons, don't allow a peer in more than x% of
@@ -699,17 +691,21 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         ObjectCounterUnsafe<Hash> lc = new ObjectCounterUnsafe<Hash>();
         int tunnelCount = countTunnelsPerPeer(lc);
         Set<Hash> rv = new HashSet<Hash>();
-        if (tunnelCount >= 4 && _context.router().getUptime() > 10*60*1000) {
-            int max = _context.getProperty("router.maxTunnelPercentage", DEFAULT_MAX_PCT_TUNNELS);
+        int rnd = _context.random().nextInt(6);
+        int max;
+        if (tunnelCount >= 4 && _context.router().getUptime() > 3 * 60 * 1000) {
+            max = _context.getProperty("router.maxTunnelPercentage", DEFAULT_MAX_PCT_TUNNELS) - rnd;
+            max = Math.max(max, 1);
             for (Hash h : lc.objects()) {
-                 if (lc.count(h) > 0 && (lc.count(h) + 1) * 100 / (tunnelCount + 1) > max)
-                     rv.add(h);
+                if (lc.count(h) > 0 && (lc.count(h) + 1) * 100 / (tunnelCount + 1) > max) {
+                    rv.add(h);
+                }
             }
         }
         return rv;
     }
 
-    /** for TunnelRenderer in router console */
+        /** for TunnelRenderer in router console */
     public Map<Hash, TunnelPool> getInboundClientPools() {
             return new HashMap<Hash, TunnelPool>(_clientInboundPools);
     }

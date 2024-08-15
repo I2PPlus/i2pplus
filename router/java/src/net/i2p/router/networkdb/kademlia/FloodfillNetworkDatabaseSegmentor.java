@@ -21,7 +21,7 @@ import net.i2p.util.Log;
  *  - Main NetDB: This is the netDb we use if or when we become a floodfill, and for
  *  direct interaction with other routers on the network, such as when we are communicating
  *  with a floodfill.
- * 
+ *
  * It is possible that it may be advantageous some day to have other netDb's for specific use
  * cases, but that is not the purpose of this class at this time.
  *
@@ -84,7 +84,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
     */
     public synchronized void shutdown() {
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("shutdown called from FNDS, shutting down main and multihome db");
+            _log.debug("Shutdown called from FNDS, shutting down main and multihome db");
         _mainDbid.shutdown();
     }
 
@@ -96,7 +96,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
      */
     public synchronized void startup() {
             if (_log.shouldLog(Log.DEBUG))
-            _log.debug("startup called from FNDS, starting up main and multihome db");
+            _log.debug("Startup called from FNDS, starting up main and multihome db");
         _mainDbid.startup();
     }
 
@@ -122,7 +122,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
     @Override
     public NetworkDatabaseFacade clientNetDB(Hash id) {
         if (_log.shouldDebug())
-            _log.debug("looked up clientNetDB: " + id);
+            _log.debug("Looked up ClientNetDB: " + id);
         if (id != null){
             NetworkDatabaseFacade fndf = getSubNetDB(id);
             if (fndf != null)

@@ -229,7 +229,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 overallExpiration = Math.max(overallExpiration, _start + minTimeout);
                 overallExpiration = Math.min(overallExpiration, _start + OVERALL_TIMEOUT_MS_MAX);
                 if (_log.shouldInfo())
-                    _log.info("[Job " + getJobId() + "] Message Expiration: " + (overallExpiration - _start) + "ms");
+                    _log.info("Message Expiration: " + (overallExpiration - _start) + "ms");
             } else {
                 if (_log.shouldWarn())
                     _log.warn("Message expired before we got to it");
@@ -307,7 +307,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 }
                 if (shouldFetch) {
                     if (_log.shouldInfo())
-                        _log.info("[Job " + getJobId() + "] RAP LeaseSet, initiating search: " + _leaseSet.getHash().toBase32());
+                        _log.info("RAP LeaseSet, initiating search: " + _leaseSet.getHash().toBase32());
                     LookupLeaseSetFailedJob failed = new LookupLeaseSetFailedJob(getContext());
                     getContext().clientNetDb(_from.calculateHash()).lookupLeaseSetRemotely(_leaseSet.getHash(), success, failed,
                                                                 LS_LOOKUP_TIMEOUT, _from.calculateHash());
@@ -317,7 +317,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 return;
             }
             if (_log.shouldDebug())
-                _log.debug("[Job " + getJobId() + "] Send Outbound client message - LeaseSet for " + _toString + " found locally");
+                _log.debug("Send Outbound client message - LeaseSet for " + _toString + " found locally");
             if (!_leaseSet.isCurrent(Router.CLOCK_FUDGE_FACTOR / 4)) {
                 // If it's about to expire, refetch in the background, we'll
                 // probably need it again. This will prevent stalls later.
@@ -330,7 +330,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 if (shouldFetch) {
                     if (_log.shouldInfo()) {
                         long exp = now - _leaseSet.getLatestLeaseDate();
-                        _log.info("[Job " + getJobId() + "] LeaseSet expired " + DataHelper.formatDuration(exp) +
+                        _log.info("LeaseSet expired " + DataHelper.formatDuration(exp) +
                                   " ago, initiating search for: " + _leaseSet.getHash().toBase32());
                     }
                     getContext().clientNetDb(_from.calculateHash()).lookupLeaseSetRemotely(_leaseSet.getHash(), _from.calculateHash());
@@ -340,7 +340,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         } else {
             _leaseSetLookupBegin = getContext().clock().now();
             if (_log.shouldDebug())
-                _log.debug("[Job " + getJobId() + "] Send Outbound client message - initiating LeaseSet Lookup job " +
+                _log.debug("Send Outbound client message - initiating LeaseSet Lookup job " +
                            _toString + " from client " + _from.calculateHash().toBase32());
             LookupLeaseSetFailedJob failed = new LookupLeaseSetFailedJob(getContext());
             Hash key = _to.calculateHash();
@@ -366,15 +366,15 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 if (ls != null) {
                     if (ls.getDate() >= newLS.getDate()) {
                             if (_log.shouldInfo())
-                                _log.info("[Job " + getJobId() + "] LeaseSet already ACKed - NOT sending reply LeaseSet to " + _toString);
+                                _log.info("LeaseSet already ACKed - NOT sending reply LeaseSet to " + _toString);
                             return null;
                     } else {
                         if (_log.shouldInfo())
-                            _log.info("[Job " + getJobId() + "] Expired from cache - sending reply LeaseSet to " + _toString);
+                            _log.info("Expired from cache - sending reply LeaseSet to " + _toString);
                     }
                 } else {
                     if (_log.shouldInfo())
-                        _log.info("[Job " + getJobId() + "] Not ACKed - sending reply LeaseSet to " + _toString);
+                        _log.info("Not ACKed - sending reply LeaseSet to " + _toString);
                 }
             }
 
@@ -484,7 +484,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                     if (_lease.getTunnelId().equals(lease.getTunnelId()) &&
                         _lease.getGateway().equals(lease.getGateway())) {
                         if (_log.shouldInfo())
-                            _log.info("[Job " + getJobId() + "] Lease for " + _toString + " found in cache");
+                            _log.info("Lease for " + _toString + " found in cache");
                         return 0;
                     }
                 }
@@ -492,7 +492,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             // remove only if still equal to _lease (concurrent)
             _cache.leaseCache.remove(_hashPair, _lease);
             if (_log.shouldInfo())
-                _log.info("[Job " + getJobId() + "] Lease for " + _toString + " expired from cache");
+                _log.info("Lease for " + _toString + " expired from cache");
         }
 
         // get the possible leases
@@ -517,7 +517,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
         if (leases.isEmpty()) {
             if (_log.shouldInfo())
-                _log.info("[Job " + getJobId() + "] No Leases found from " + _leaseSet);
+                _log.info("No Leases found from " + _leaseSet);
             return MessageStatusMessage.STATUS_SEND_FAILURE_BAD_LEASESET;
         }
 
@@ -537,7 +537,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                     id++;
                 orderedLeases.put(new Long(id), lease);
                 if (_log.shouldDebug())
-                    _log.debug("[Job " + getJobId() + "] Ranking lease we haven't sent it down as " + id);
+                    _log.debug("Ranking lease we haven't sent it down as " + id);
             }
 
             _lease = (Lease)orderedLeases.get(orderedLeases.firstKey());
@@ -570,7 +570,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         }
         _cache.leaseCache.put(_hashPair, _lease);
         if (_log.shouldInfo())
-            _log.info("[Job " + getJobId() + "] Added to cache - Lease for " + _toString);
+            _log.info("Added to cache - Lease for " + _toString);
         _wantACK = true;
         return 0;
     }
@@ -728,7 +728,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         }
 
         //if (_log.shouldDebug())
-        //    _log.debug("[Job " + getJobId() + "] send() - token expected " + token + " to " + _toString);
+        //    _log.debug("send() - token expected " + token + " to " + _toString);
 
         SendSuccessJob onReply;
         SendTimeoutJob onFail;
@@ -757,7 +757,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         }
 
         if (_log.shouldDebug())
-            _log.debug("[Job " + getJobId() + "] Sending message out on [TunnelID " + _outTunnel.getSendTunnelId(0) + "]\n* Target: "
+            _log.debug("Sending message out on [TunnelID " + _outTunnel.getSendTunnelId(0) + "]\n* Target: "
                            + _toString + " at [TunnelID "
                            + _lease.getTunnelId() + "] on Gateway ["
                            + _lease.getGateway().toBase64().substring(0,6) + "]");
@@ -1061,7 +1061,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
 
         //if (_log.shouldDebug())
-        //    _log.debug("[Job " + getJobId() + "] Built payload clove with id " + clove.getId());
+        //    _log.debug("Built payload clove with id " + clove.getId());
         return clove;
     }
 
@@ -1145,11 +1145,11 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                     if (_deliveredLS.getDate() > oldls.getDate()) {
                         _cache.leaseSetCache.put(_hashPair, _deliveredLS);
                          if (_log.shouldInfo())
-                             _log.info("[Job " + getJobId() + "] Added to cache - got reply LeaseSet from " + _toString);
+                             _log.info("Added to cache - got reply LeaseSet from " + _toString);
                     }
                 } else {
                     if (_log.shouldInfo())
-                         _log.info("[Job " + getJobId() + "] Added to cache - got reply LeaseSet from " + _toString);
+                         _log.info("Added to cache - got reply LeaseSet from " + _toString);
                 }
             }
             // do we leak tags here?
