@@ -115,13 +115,12 @@ public class ProfileOrganizer {
         _strictCapacityOrder = new TreeSet<PeerProfile>(_comp);
         _persistenceHelper = new ProfilePersistenceHelper(_context);
 
-        _context.statManager().createRequiredRateStat("peer.profileSortTime", "Time to sort peers (ms)", "Peers", RATES);
         _context.statManager().createRateStat("peer.profileCoalesceTime", "Time to coalesce peer stats (ms)", "Peers", RATES);
-        _context.statManager().createRateStat("peer.profileThresholdTime", "Time to determine tier thresholds (ms)", "Peers", RATES);
         _context.statManager().createRateStat("peer.profilePlaceTime", "Time to sort peers into tiers (ms)", "Peers", RATES);
         _context.statManager().createRateStat("peer.profileReorgTime", "Time to reorganize peers (ms)", "Peers", RATES);
-        // used in DBHistory
-        _context.statManager().createRequiredRateStat("peer.failedLookupRate", "NetDb Lookup failure rate", "Peers", RATES);
+        _context.statManager().createRateStat("peer.profileThresholdTime", "Time to determine tier thresholds (ms)", "Peers", RATES);
+        _context.statManager().createRequiredRateStat("peer.failedLookupRate", "NetDb Lookup failure rate", "Peers", RATES); // used in DBHistory
+        _context.statManager().createRequiredRateStat("peer.profileSortTime", "Time to sort peers (ms)", "Peers", RATES);
     }
 
     private void getReadLock() {
@@ -178,14 +177,12 @@ public class ProfileOrganizer {
      */
     public PeerProfile getProfile(Hash peer) {
         if (peer != null && peer.equals(_us)) {
-            if (_log.shouldDebug())
-                _log.debug("Retrieved our own profile for the Profile Manager");
+            if (_log.shouldDebug()) {_log.debug("Retrieved our own profile for the Profile Manager");}
             return null;
         }
         getReadLock();
-        try {
-            return locked_getProfile(peer);
-        } finally { releaseReadLock(); }
+        try {return locked_getProfile(peer);}
+        finally { releaseReadLock(); }
     }
 
     /**
@@ -195,14 +192,12 @@ public class ProfileOrganizer {
      */
     public PeerProfile getProfileNonblocking(Hash peer) {
         if (peer != null && peer.equals(_us)) {
-            if (_log.shouldDebug())
-                _log.debug("Retrieved our own profile for the Profile Manager");
+            if (_log.shouldDebug()) {_log.debug("Retrieved our own profile for the Profile Manager");}
             return null;
         }
         if (tryReadLock()) {
-            try {
-                return locked_getProfile(peer);
-            } finally { releaseReadLock(); }
+            try {return locked_getProfile(peer);}
+            finally { releaseReadLock(); }
         }
         return null;
     }
@@ -215,12 +210,12 @@ public class ProfileOrganizer {
      */
     PeerProfile getOrCreateProfileNonblocking(Hash peer) {
         if (peer != null && peer.equals(_us)) {
-            if (_log.shouldDebug())
-                _log.debug("Retrieved our own profile for the Profile Manager");
+            if (_log.shouldDebug()) {_log.debug("Retrieved our own profile for the Profile Manager");}
             return null;
         }
 
         RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(peer);
+        PeerProfile prof = getProfile(peer);
         String bw = null;
         String cap = null;
         String version = "0.8";
@@ -238,14 +233,10 @@ public class ProfileOrganizer {
                     noSSU = false;
                     break;
             }
-        }
-        PeerProfile prof = getProfile(peer);
-
-        if (peerInfo != null) {
             if (cap != null && (!reachable || (bw != null &&
-                (bw.equals("K") || bw.equals("L") || bw.equals("M") || bw.equals("N"))))) {
+                (bw.equals("K") || bw.equals("L") || bw.equals("M"))))) {
                 if (_log.shouldInfo())
-                    _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> K, L, M, N or Unreachable");
+                    _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> K, L, M or Unreachable");
                 return null;
             }
 /**
@@ -280,20 +271,15 @@ public class ProfileOrganizer {
             // Add to high cap only if we have room. Don't add to Fast; wait for reorg.
             int minHighCap = _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS);
             int minFast = _context.getProperty(PROP_MINIMUM_FAST_PEERS, DEFAULT_MINIMUM_FAST_PEERS);
-            if (peerInfo != null && cap != null && reachable && (!bw.equals("K") ||
-                !bw.equals("L") || !bw.equals("M"))) {
-                if (_thresholdCapacityValue <= rv.getCapacityValue() && isSelectable(peer) &&
-                    countHighCapacityPeers() < getMaximumHighCapPeers())
+            if (peerInfo != null && cap != null && reachable && (!bw.equals("K") || !bw.equals("L") || !bw.equals("M"))) {
+                if (_thresholdCapacityValue <= rv.getCapacityValue() && isSelectable(peer) && countHighCapacityPeers() < getMaximumHighCapPeers()) {
                     _highCapacityPeers.put(peer, rv);
-                if (countFastPeers() < minFast)
-                    _fastPeers.put(peer, rv);
+                }
+                if (countFastPeers() < minFast) {_fastPeers.put(peer, rv);}
                 _strictCapacityOrder.add(rv);
-                if (countHighCapacityPeers() < minHighCap)
-                    _highCapacityPeers.put(peer, rv);
-            } else if (_highCapacityPeers.remove(peer) != null) {
-                _highCapacityPeers.remove(peer, rv);
-            }
-        } finally { releaseWriteLock(); }
+                if (countHighCapacityPeers() < minHighCap) {_highCapacityPeers.put(peer, rv);}
+            } else if (_highCapacityPeers.remove(peer) != null) {_highCapacityPeers.remove(peer, rv);}
+        } finally {releaseWriteLock();}
         return rv;
     }
 
@@ -474,11 +460,11 @@ public class ProfileOrganizer {
     }
 
     /**
-     * if a peer sends us more than 30 replies/hr in a searchReply that we cannot
+     * if a peer sends us more than 60 replies/hr in a searchReply that we cannot
      * fetch, stop listening to them.
      *
      */
-    private final static int MAX_BAD_REPLIES_PER_HOUR = 30;
+    private final static int MAX_BAD_REPLIES_PER_HOUR = 60;
 
     /**
      * Does the given peer send us bad replies - either invalid store messages
