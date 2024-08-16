@@ -36,7 +36,7 @@ class TransientDataStore implements DataStore {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
         _data = new ConcurrentHashMap<Hash, DatabaseEntry>(1024);
-        if (_log.shouldInfo()) {_log.info("Transient DataStore initialized");}
+        if (_log.shouldDebug()) {_log.debug("Transient DataStore initialized");}
     }
 
     public boolean isInitialized() {return true;}
