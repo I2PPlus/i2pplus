@@ -36,7 +36,7 @@ class TransientDataStore implements DataStore {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
         _data = new ConcurrentHashMap<Hash, DatabaseEntry>(1024);
-        if (_log.shouldDebug()) {_log.debug("Transient DataStore initialized");}
+        //if (_log.shouldDebug()) {_log.debug("Transient DataStore initialized");}
     }
 
     public boolean isInitialized() {return true;}
@@ -172,7 +172,7 @@ class TransientDataStore implements DataStore {
                                   "\n* New: " + new Date(ls.getEarliestLeaseDate()));
                 } else if (newDate == oldDate) {
                     if (_log.shouldDebug())
-                        _log.debug("Duplicate RouterInfo [" + key.toBase64().substring(0,6) + "] - not updating");
+                        _log.debug("Duplicate LeaseSet [" + key.toBase32().substring(0,8) + "] -> Not updating");
                 } else {
                     if (_log.shouldDebug()) {
                         _log.debug("Updated LeaseSet [" + key.toBase32().substring(0,8) + "]\n* Old: " + new Date(ols.getEarliestLeaseDate()) +

@@ -476,7 +476,8 @@ class FloodfillVerifyStoreJob extends JobImpl {
             //    getContext().profileManager().dbStoreFailed(_sentTo);
             getContext().statManager().addRateData("netDb.floodfillVerifyTimeout", getContext().clock().now() - _sendTime);
             if (_log.shouldWarn())
-                _log.warn("Floodfill Verify timed out for key [" + _key.toBase32().substring(0,8) + "]");
+                _log.warn("Floodfill Verify timed out for key [" + _key.toBase32().substring(0,8) + "] -> " +
+                          "Ignoring [" + _target.toBase64().substring(0,6) + "] and selecting a new peer...");
             if (_attempted < MAX_PEERS_TO_TRY) {
                 // Don't resend, simply rerun FVSJ.this inline and
                 // chose somebody besides _target for verification
