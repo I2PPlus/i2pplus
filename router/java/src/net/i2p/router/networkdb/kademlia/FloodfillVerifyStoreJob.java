@@ -352,8 +352,9 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 DatabaseStoreMessage dsm = (DatabaseStoreMessage)_message;
                 DatabaseEntry entry = dsm.getEntry();
                 if (!entry.verifySignature()) {
-                    if (_log.shouldWarn()) {_log.warn("Banning Router [" + _target.toBase64().substring(0,6) +
-                                            "] for duration of session -> Sent us BAD data (spoofed?)"}
+                    if (_log.shouldWarn()) {
+                        _log.warn("Banning Router [" + _target.toBase64().substring(0,6) +
+                                  "] for duration of session -> Sent us BAD data (spoofed?)");}
                     pm.dbLookupFailed(_target);
                     ctx.banlist().banlistRouterForever(_target, "Sent bad NetDb data");
                     ctx.statManager().addRateData("netDb.floodfillVerifyFail", delay);
