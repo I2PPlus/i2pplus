@@ -834,14 +834,14 @@ abstract class StoreJob extends JobImpl {
             long howLong = _state.confirmed(hash);
 
             if (_log.shouldInfo())
-                _log.info("[Job " + StoreJob.this.getJobId() + "] Store of [" + _state.getTarget().toBase64().substring(0,6)
-                          + "] to [" + hash.toBase64().substring(0,6) + "] successful after " + howLong + "ms");
+                _log.info("Store of key [" + _state.getTarget().toBase32().substring(0,8) + "] to [" +
+                          hash.toBase64().substring(0,6) + "] successful after " + howLong + "ms");
             getContext().profileManager().dbStoreSent(hash, howLong);
             getContext().statManager().addRateData("netDb.ackTime", howLong, howLong);
 
             if ( (_sendThrough != null) && (_msgSize > 0) ) {
                 if (_log.shouldDebug())
-                    _log.debug("[Job " + StoreJob.this.getJobId() + "] Sent a " + _msgSize + " byte netDb message through: " + _sendThrough + " after " + howLong + "ms");
+                    _log.debug("Sent a " + _msgSize + " byte NetDb message through: " + _sendThrough + " after " + howLong + "ms");
                 for (int i = 0; i < _sendThrough.getLength(); i++)
                     getContext().profileManager().tunnelDataPushed(_sendThrough.getPeer(i), howLong, _msgSize);
                 _sendThrough.incrementVerifiedBytesTransferred(_msgSize);
@@ -883,7 +883,7 @@ abstract class StoreJob extends JobImpl {
                 return;
             Hash hash = _peer.getIdentity().getHash();
             if (_log.shouldInfo())
-                _log.info("[Job " + StoreJob.this.getJobId() + "] Testing Peer [" + hash.toBase64().substring(0,6)
+                _log.info("Testing Peer [" + hash.toBase64().substring(0,6)
                           + "]\n* Timed out sending key [" + _state.getTarget().toBase64().substring(0,6) + "]");
 
             MessageWrapper.WrappedMessage wm = _state.getPendingMessage(hash);

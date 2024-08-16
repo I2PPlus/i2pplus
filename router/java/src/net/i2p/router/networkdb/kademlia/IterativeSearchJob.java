@@ -373,7 +373,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                             break;
                         }
                         if (_log.shouldInfo())
-                            _log.info("Skipping query: Router [" +  h.toBase64().substring(0,6) + "] too close to others");
+                            _log.info("Skipping query: Router [" +  h.toBase64().substring(0,6) + "] is too close to others");
                         _skippedPeers.add(h);
                         // go around again
                     }

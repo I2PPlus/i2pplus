@@ -994,7 +994,7 @@ class ClientConnectionRunner {
                     sp.rerequestTimer = timer;
                     timer.schedule(1000);
                     if (_log.shouldDebug())
-                        _log.debug("No current LeaseSet and no Outbound tunnels, waiting 1 sec for [" + h.toBase64().substring(0,6) + "]");
+                        _log.debug("No current LeaseSet and no Outbound tunnels, waiting 1 sec for key [" + h.toBase32().substring(0,8) + "]");
                     return;
                 } else {
                     // so the timer won't fire off with an older LS request

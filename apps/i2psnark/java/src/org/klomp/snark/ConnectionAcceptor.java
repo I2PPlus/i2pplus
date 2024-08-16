@@ -188,15 +188,15 @@ class ConnectionAcceptor implements Runnable
                 if (socket.getLocalPort() == 80) {
                      _badCounter.increment(h);
                     if (_log.shouldWarn())
-                        _log.error("Dropping incoming HTTP from [" + h.toBase64().substring(0,6) + "]");
+                        _log.error("Dropping incoming HTTP connection from client [" + h.toBase32().substring(0,8) + "]");
                     try { socket.close(); } catch (IOException ioe) {}
                     continue;
                 }
                 int bad = _badCounter.count(h);
                 if (bad >= MAX_BAD) {
                     if (_log.shouldWarn())
-                        _log.warn("Rejecting incoming connection from [" + h.toBase64().substring(0,6) +
-                                  "] after " + bad + " failures (max is " + MAX_BAD + ")");
+                        _log.warn("Rejecting incoming connection from client [" + h.toBase32().substring(0,8) +
+                                  "] after " + bad + " failures (Max is " + MAX_BAD + ")");
                     try { socket.close(); } catch (IOException ioe) {}
                     continue;
                 }

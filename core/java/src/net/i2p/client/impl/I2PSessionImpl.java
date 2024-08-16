@@ -1724,7 +1724,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         try {
             if (_routerSupportsHostLookup) {
                 if (_log.shouldInfo())
-                    _log.info("Sending HostLookup for [" + h.toBase64().substring(0,6) + "]");
+                    _log.info("Sending HostLookup for [" + h.toBase32().substring(0,8) + "]");
                 SessionId id = _sessionId;
                 if (id == null)
                     id = DUMMY_SESSION;

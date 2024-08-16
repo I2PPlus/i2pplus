@@ -44,13 +44,9 @@ class ExpireLeasesJob extends JobImpl {
         if (!toExpire.isEmpty()) {
             StringBuilder buf = new StringBuilder(16);
             buf.append("Leases to expire: ");
-            for (Hash h : toExpire) {
-                buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
-            }
+            for (Hash h : toExpire) {buf.append("[").append(h.toBase32().substring(0,8)).append("]"); buf.append(" ");}
             _log.info(buf.toString());
-            for (Hash key : toExpire) {
-                _facade.fail(key);
-            }
+            for (Hash key : toExpire) {_facade.fail(key);}
             if (_log.shouldLog(Log.INFO)) {
                 _log.info("[DbId: " + _facade + "] Known LeaseSets: " + _facade.getKnownLeaseSets() + "; Leases to expire: " + toExpire);
             }
