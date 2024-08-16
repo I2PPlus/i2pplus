@@ -471,7 +471,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                 isClientReplyTunnel = false;
                 isDirect = true;
                 if (_facade.isClientDb() && _log.shouldLog(Log.WARN))
-                    _log.warn("[JobId: " + getJobId() + "] Warning! Direct search selected in a client NetDb context!" +
+                    _log.warn("Warning! Direct search selected in a client NetDb context!" +
                               "\n* DbId: " + _facade);
                 ctx.statManager().addRateData("netDb.RILookupDirect", 1);
             } else {
@@ -613,7 +613,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                 outMsg = dlm;
             if (isDirect) {
                 if (_facade.isClientDb() && _log.shouldLog(Log.WARN))
-                    _log.warn("[JobId: " + getJobId() + "] Warning! Sending direct search message in a client netDb context! " +
+                    _log.warn("Warning! Sending direct search message in a client netDb context! " +
                               "\n* DbId: " + _facade + outMsg);
                 OutNetMessage m = new OutNetMessage(ctx, outMsg, outMsg.getMessageExpiration(),
                                                     OutNetMessage.PRIORITY_MY_NETDB_LOOKUP, ri);
