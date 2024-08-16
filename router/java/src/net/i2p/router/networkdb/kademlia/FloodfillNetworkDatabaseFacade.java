@@ -65,13 +65,14 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  4 as of 0.9.2; 3 as of 0.9.9
      */
 
-    public static final int MAX_TO_FLOOD = SystemVersion.isSlow() ? 5 : 10;
+    public static final int MAX_TO_FLOOD = SystemVersion.isSlow() ? 2 : 4;
     private static final int FLOOD_PRIORITY = OutNetMessage.PRIORITY_NETDB_FLOOD;
     private static final int FLOOD_TIMEOUT = 60*1000;
     static final long NEXT_RKEY_RI_ADVANCE_TIME = 45*60*1000;
     private static final long NEXT_RKEY_LS_ADVANCE_TIME = 10*60*1000;
-    private static final int NEXT_FLOOD_QTY = MAX_TO_FLOOD - 2;
+    private static final int NEXT_FLOOD_QTY = MAX_TO_FLOOD - 1;
     private static final int MAX_LAG_BEFORE_SKIP_SEARCH = SystemVersion.isSlow() ? 600 : 300;
+    private static final int PUBLISH_JOB_DELAY = 15*1000;
 
 /**
     public static final int MAX_TO_FLOOD = 3;
@@ -80,7 +81,6 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     static final long NEXT_RKEY_RI_ADVANCE_TIME = 45*60*1000;
     private static final long NEXT_RKEY_LS_ADVANCE_TIME = 10*60*1000;
     private static final int NEXT_FLOOD_QTY = 2;
-    private static final int MAX_LAG_BEFORE_SKIP_SEARCH = SystemVersion.isSlow() ? 600 : 300;
 **/
 
     /**
@@ -201,18 +201,16 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         super.publish(localRouterInfo);
         // wait until we've read in the RI's so we can find the closest floodfill
         if (!isInitialized()) {
-            if (_log.shouldWarn())
-                _log.warn("Attempted to publish our RouterInfo before NetDb initialized, will retry shortly...");
+            if (_log.shouldInfo()) {_log.info("Attempted to publish our RouterInfo before NetDb initialized, will retry shortly...");}
             return;
         }
         // no use sending if we have no addresses
         // (unless maybe we used to have addresses? not worth it
-        if (localRouterInfo.getAddresses().isEmpty())
-            return;
+        if (localRouterInfo.getAddresses().isEmpty()) {return;}
         _log.info("Publishing our RouterInfo...");
-        // Don't delay, helps IB tunnel builds
-        //if (_context.router().getUptime() > PUBLISH_JOB_DELAY)
+        if (_context.router().getUptime() > PUBLISH_JOB_DELAY) {
             sendStore(localRouterInfo.getIdentity().calculateHash(), localRouterInfo, null, null, PUBLISH_TIMEOUT, null);
+        }
     }
 
     /**
