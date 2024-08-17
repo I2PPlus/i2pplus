@@ -79,6 +79,8 @@ public final class ECIESAEADEngine {
     private static final String INFO_0 = "SessionReplyTags";
     private static final String INFO_6 = "AttachPayloadKDF";
 
+    private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l };
+
     /**
      *  Caller MUST call startup() to get threaded generation.
      *  Will still work without, will just generate inline.
@@ -92,21 +94,16 @@ public final class ECIESAEADEngine {
         _hkdf = new HKDF(ctx);
         _edhThread = new Elg2KeyFactory(ctx);
 
-        _context.statManager().createFrequencyStat("crypto.eciesAEAD.encryptNewSession",
-                                                   "how frequently we encrypt to a new ECIES/AEAD+SessionTag session?",
-                                                   "Encryption", new long[] { 60*1000, 60*60*1000l});
-        _context.statManager().createFrequencyStat("crypto.eciesAEAD.encryptExistingSession",
-                                                   "how frequently we encrypt to an existing ECIES/AEAD+SessionTag session?",
-                                                   "Encryption", new long[] { 60*1000, 60*60*1000l});
-        _context.statManager().createFrequencyStat("crypto.eciesAEAD.decryptNewSession",
-                                                   "how frequently we decrypt with a new ECIES/AEAD+SessionTag session?",
-                                                   "Encryption", new long[] { 60*1000, 60*60*1000l});
-        _context.statManager().createFrequencyStat("crypto.eciesAEAD.decryptExistingSession",
-                                                   "how frequently we decrypt with an existing ECIES/AEAD+SessionTag session?",
-                                                   "Encryption", new long[] { 60*1000, 60*60*1000l});
-        _context.statManager().createFrequencyStat("crypto.eciesAEAD.decryptFailed",
-                                                   "how frequently we fail to decrypt with ECIES/AEAD+SessionTag?",
-                                                   "Encryption", new long[] { 60*1000, 60*60*1000l});
+        _context.statManager().createFrequencyStat("crypto.eciesAEAD.encryptNewSession", "How often we encrypt to new ECIES/AEAD+SessionTag session",
+                                                   "Encryption", RATES);
+        _context.statManager().createFrequencyStat("crypto.eciesAEAD.encryptExistingSession", "How often we encrypt to existing ECIES/AEAD+SessionTag session",
+                                                   "Encryption", RATES);
+        _context.statManager().createFrequencyStat("crypto.eciesAEAD.decryptNewSession", "How often we decrypt with new ECIES/AEAD+SessionTag session",
+                                                   "Encryption", RATES);
+        _context.statManager().createFrequencyStat("crypto.eciesAEAD.decryptExistingSession", "How often we decrypt with existing ECIES/AEAD+SessionTag session",
+                                                   "Encryption", RATES);
+        _context.statManager().createFrequencyStat("crypto.eciesAEAD.decryptFailed", "How often we fail to decrypt with ECIES/AEAD+SessionTag",
+                                                   "Encryption", RATES);
     }
 
     /**
