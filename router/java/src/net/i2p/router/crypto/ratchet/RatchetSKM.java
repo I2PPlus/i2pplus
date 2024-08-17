@@ -992,9 +992,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             if (isInbound) {
                 // We are Bob
                 // This is an INBOUND NS, we make an OUTBOUND tagset for the NSR
-                RatchetTagSet tagset = new RatchetTagSet(_hkdf, state,
-                                                         rk, tk,
-                                                         _established);
+                RatchetTagSet tagset = new RatchetTagSet(_hkdf, state, rk, tk, _established);
                 _tagSet = tagset;
                 _state = null;
                 if (_log.shouldDebug())
@@ -1002,10 +1000,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             } else {
                 // We are Alice
                 // This is an OUTBOUND NS, we make an INBOUND tagset for the NSR
-                RatchetTagSet tagset = new RatchetTagSet(_hkdf, RatchetSKM.this, state,
-                                                         rk, tk,
-                                                         _established,
-                                                         MIN_RCV_WINDOW_NSR, MAX_RCV_WINDOW_NSR);
+                RatchetTagSet tagset = new RatchetTagSet(_hkdf, RatchetSKM.this, state, rk, tk, _established, MIN_RCV_WINDOW_NSR, MAX_RCV_WINDOW_NSR);
                 // store the state so we can find the right session when we receive the NSR
                 _state = state;
                 if (_log.shouldDebug())
