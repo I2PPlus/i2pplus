@@ -81,8 +81,8 @@ function start() {
           }
         }
       } else if (routerlogs) {
-        routerlogsTr = routerlogs.querySelector("tr:nth-child(2)");
-        routerlogsTrResponse = xhrlogs.responseXML.querySelector("#routerlogs tr:nth-child(2)");
+        const routerlogsTr = routerlogs.querySelector("tr:nth-child(2)");
+        const routerlogsTrResponse = xhrlogs.responseXML.querySelector("#routerlogs tr:nth-child(2)");
         if (routerlogsTr && routerlogsTrResponse && routerlogsTr !== routerlogsTrResponse) {
           routerlogsTr.innerHTML = routerlogsTrResponse.innerHTML;
         }
