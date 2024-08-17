@@ -775,11 +775,13 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                     _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Banlisted");
                 } else if (uninteresting) {
                     _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Uninteresting");
+/**
                 } else if (isBadFF) {
                     _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Floodfill with SSU disabled");
                     new DropLookupFailedJob(_context, peer, info);
-//                } else if (getKBucketSetSize() > MAX_DB_BEFORE_SKIPPING_SEARCH) {
-//                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> KBucket is full");
+                } else if (getKBucketSetSize() > MAX_DB_BEFORE_SKIPPING_SEARCH) {
+                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> KBucket is full");
+**/
                 } else {
                     _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> High Job Lag");
                 }

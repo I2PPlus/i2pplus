@@ -435,10 +435,12 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Unreachable");
                         dbFile.delete();
+/**
                     } else if (isBadFF) {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Floodfill with SSU disabled");
                         dbFile.delete();
+**/
                     } else if (isSlow) {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> K, L, M or N tier");
@@ -760,7 +762,6 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldWarn())
                             _log.warn("Banning: [" + truncHash + "] for 4h -> No IP address");
                             _context.banlist().banlistRouter(_key, " <b>➜</b> No IP address", null, null, now + 4*60*60*1000);
-*/
                     } else if (isBadFF) {
                         corrupt = true;
                         if (_log.shouldInfo())
@@ -768,6 +769,7 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldWarn())
                             _log.warn("Banning: [" + truncHash + "] for 8h -> Floodfill with SSU disabled");
                             _context.banlist().banlistRouter(_key, " <b>➜</b> Floodfill with SSU disabled", null, null, now + 8*60*60*1000);
+*/
                     } else if (!h.equals(_key)) {
                         // prevent injection from reseeding
                         // this is checked in KNDF.validate() but catch it sooner and log as error.

@@ -289,7 +289,6 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                             _log.warn("Dropping unsolicited NetDbStore of " + cap + (isFF ? " Floodfill" : " Router") +
                                       " [" + key.toBase64().substring(0,6) + "] and banning for 15m -> Address not resolvable via GeoIP");
                         }
-**/
                     } else if ((isFF && noSSU) || (isFF && isUnreachable)) {
                         shouldStore = false;
                         wasNew = false;
@@ -312,6 +311,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                 _log.warn("Dropping unsolicited NetDbStore of " + cap + " Floodfill [" + key.toBase64().substring(0,6) +
                                           "] and banning for 4h -> Unreachable");
                         }
+**/
                     } else if (prevNetDb == null) { // actually new
                         if (isUnreachable && isOld) {
                             shouldStore = false;
