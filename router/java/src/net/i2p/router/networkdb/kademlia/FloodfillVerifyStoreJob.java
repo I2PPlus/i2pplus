@@ -378,13 +378,13 @@ class FloodfillVerifyStoreJob extends JobImpl {
                         pm.dbStoreSuccessful(_sentTo);
                     ctx.statManager().addRateData("netDb.floodfillVerifyOK", delay);
                     if (_log.shouldInfo())
-                        _log.info("Floodfill Verify succeeded for [" + _key.toBase32().substring(0,8) + "]");
+                        _log.info("Floodfill Verify succeeded for key [" + _key.toBase32().substring(0,8) + "]");
                     if (_isRouterInfo)
                         _facade.routerInfoPublishSuccessful();
                     return;
                 }
                 if (_log.shouldWarn()) {
-                    _log.warn("Floodfill Verify failed for [" + _key.toBase32().substring(0,8) + "] -> Key was stale");
+                    _log.warn("Floodfill Verify failed for key [" + _key.toBase32().substring(0,8) + "] -> Key was stale");
                 }
                 if (_log.shouldInfo()) {
                     _log.info("Received older data \n* " + dsm.getEntry());
@@ -395,7 +395,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 pm.dbLookupReply(_target, 0, dsrm.getNumReplies(), 0, 0, delay);
                 // The peer we asked did not have the key, so _sentTo failed to flood it
                 if (_log.shouldWarn())
-                    _log.warn("Floodfill Verify failed for [" + _key.toBase32().substring(0,8) + "] -> " +
+                    _log.warn("Floodfill Verify failed for key [" + _key.toBase32().substring(0,8) + "] -> " +
                               "Queried peer [" + _target.toBase64().substring(0,6) + "] didn't have the key");
                 // only for RI... LS too dangerous?
                 if (_isRouterInfo) {
