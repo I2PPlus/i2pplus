@@ -544,8 +544,9 @@ td.subHeaderPriority{padding:0 1px;font-size:7.5pt;font-weight:700;background-im
 .ParentDir img{padding-left:3px}
 .priorityIndicator{margin-right:5px;display:none}
 .snarkFileSize{padding-right:10px;white-space:nowrap}
-.magnetlink,#torrentInfo .infohash{margin:0 2px 0 3px;padding:4px 5px 4px 3px;vertical-align:middle;border-radius:1px;box-shadow:var(--outline);background:var(--badge)}
-.magnetlink:hover,.magnetlink:focus{box-shadow:var(--outline),inset 0 0 0 1px rgba(255,96,0,.5)}
+.magnetlink,#torrentInfo .infohash,#torrentInfo .torrentlink{margin:0 2px 0 3px;padding:4px 5px 4px 3px;vertical-align:middle;border-radius:1px;box-shadow:var(--outline);background:var(--badge)}
+#torrentInfo .torrentlink{margin-right:-2px}
+.magnetlink:hover,.magnetlink:focus,#torrentInfo .torrentlink:hover,#torrentInfo .torrentlink:focus{box-shadow:var(--outline),inset 0 0 0 1px rgba(255,96,0,.5)}
 .torrentlink img:hover,.magnetlink img:hover{filter:none}
 th.torrentlink{text-align:left}
 #torrentInfo{border-bottom:var(--border);background:url(/themes/console/dark/images/camotile2.png) repeat scroll center bottom #010}
