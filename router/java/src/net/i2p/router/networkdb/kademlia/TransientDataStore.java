@@ -118,8 +118,9 @@ class TransientDataStore implements DataStore {
         int type = data.getType();
         boolean isRI = type == DatabaseEntry.KEY_TYPE_ROUTERINFO;
         if (data == null) return false;
-        if (_log.shouldDebug())
+        if (_log.shouldDebug()) {
             _log.debug("Storing key [" + (isRI ? key.toBase64().substring(0,6) : key.toBase32().substring(0,8)) + "]");
+        }
         DatabaseEntry old = _data.putIfAbsent(key, data);
         boolean rv = false;
         if (isRI) {
@@ -133,14 +134,14 @@ class TransientDataStore implements DataStore {
                 RouterInfo ori = (RouterInfo)old;
                 if (ri.getPublished() > ori.getPublished()) {
                     if (_log.shouldInfo())
-                        _log.info("Updated RouterInfo [" + key.toBase64().substring(0,6) + "] -> " + v + " / " + caps +
+                        _log.info("Received updated RouterInfo [" + key.toBase64().substring(0,6) + "] -> " + v + " / " + caps +
                                   "\n* Old: " + new Date(ori.getPublished()) + "\n* New: " + new Date(ri.getPublished()));
                     _data.put(key, data);
                     rv = true;
                 }
             } else {
                 if (_log.shouldInfo())
-                    _log.info("New RouterInfo [" + key.toBase64().substring(0,6) + "] -> " + v + " / " + caps +
+                    _log.info("Received new RouterInfo [" + key.toBase64().substring(0,6) + "] -> " + v + " / " + caps +
                               "\n* Published: " + new Date(ri.getPublished()));
                 rv = true;
                 long uptime = _context.router().getUptime();
@@ -152,6 +153,7 @@ class TransientDataStore implements DataStore {
             }
         } else if (DatabaseEntry.isLeaseSet(type)) {
             LeaseSet ls = (LeaseSet)data;
+            String receivedAs = ls.getReceivedAsPublished() ? "(As published)" : ls.getReceivedAsReply() ? "(As reply)" : "";
             if (old != null) {
                 LeaseSet ols = (LeaseSet)old;
                 long oldDate, newDate;
@@ -167,27 +169,28 @@ class TransientDataStore implements DataStore {
                 }
 
                 if (newDate < oldDate) {
-                    if (_log.shouldDebug())
-                        _log.debug("Almost clobbered a LeaseSet! [" + key.toBase32().substring(0,8) + "]\n* Old: " + new Date(ols.getEarliestLeaseDate()) +
-                                  "\n* New: " + new Date(ls.getEarliestLeaseDate()));
-                } else if (newDate == oldDate) {
-                    if (_log.shouldDebug())
-                        _log.debug("Duplicate LeaseSet [" + key.toBase32().substring(0,8) + "] -> Not updating");
-                } else {
                     if (_log.shouldDebug()) {
-                        _log.debug("Updated LeaseSet [" + key.toBase32().substring(0,8) + "]\n* Old: " + new Date(ols.getEarliestLeaseDate()) +
-                                  "\n* New: " + new Date(newDate) + ']');
-                        if (_log.shouldDebug())
-                            _log.debug("ReceivedAsPublished? [" + ls.getReceivedAsPublished() + "] ReceivedAsReply? [" + ls.getReceivedAsReply() + "]");
+                        _log.debug("Almost clobbered a LeaseSet! [" + key.toBase32().substring(0,8) +
+                                   "]\n* Old: " + new Date(ols.getEarliestLeaseDate()) +
+                                   "\n* New: " + new Date(ls.getEarliestLeaseDate()));
+                    }
+                } else if (newDate == oldDate) {
+                    if (_log.shouldDebug()) {
+                        _log.debug("Received duplicate LeaseSet [" + key.toBase32().substring(0,8) + "] -> Not updating");
+                    }
+                } else {
+                    if (_log.shouldInfo()) {
+                        _log.info("Received updated LeaseSet [" + key.toBase32().substring(0,8) + "] " + receivedAs +
+                                   "\n* Old: " + new Date(ols.getEarliestLeaseDate()) +
+                                   "\n* New: " + new Date(newDate));
                     }
                     _data.put(key, data);
                     rv = true;
                 }
             } else {
                 if (_log.shouldInfo()) {
-                    _log.info("New LeaseSet [" + key.toBase32().substring(0,8) + "]\n* Expires: " + new Date(ls.getEarliestLeaseDate()));
-                    if (_log.shouldDebug())
-                        _log.debug("ReceivedAsPublished? [" + ls.getReceivedAsPublished() + "] ReceivedAsReply? [" + ls.getReceivedAsReply() + "]");
+                    _log.info("Received new LeaseSet [" + key.toBase32().substring(0,8) + "] " + receivedAs +
+                              "\n* Expires: " + new Date(ls.getEarliestLeaseDate()));
                 }
                 rv = true;
             }

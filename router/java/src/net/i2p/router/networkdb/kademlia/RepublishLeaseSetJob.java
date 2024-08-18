@@ -47,28 +47,30 @@ class RepublishLeaseSetJob extends JobImpl {
                 LeaseSet ls = _facade.lookupLeaseSetLocally(_dest);
                 if (ls != null) {
                     if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
-                        if (_log.shouldWarn())
-                            _log.warn("Not publishing expired LOCAL LeaseSet [" + _dest.toBase32().substring(0,8) + "]", new Exception("Publish expired LOCAL lease?"));
+                        if (_log.shouldWarn()) {
+                            _log.warn("Not publishing expired LOCAL LeaseSet [" + _dest.toBase32().substring(0,8) + "]",
+                                      new Exception("Publish expired LOCAL lease?"));
+                        }
                     } else {
-                        if (_log.shouldInfo())
-                            _log.info("Publishing LeaseSet for " + _dest.toBase32());
+                        if (_log.shouldInfo()) {_log.info("Publishing LeaseSet for " + _dest.toBase32());}
                         getContext().statManager().addRateData("netDb.republishLeaseSetCount", 1);
                         _facade.sendStore(_dest, ls, null, new OnRepublishFailure(ls), REPUBLISH_LEASESET_TIMEOUT, null);
                         _lastPublished = getContext().clock().now();
                     }
                 } else {
-                    if (_log.shouldWarn())
+                    if (_log.shouldWarn()) {
                         _log.warn("Client [" + _dest.toBase32().substring(0,8) + "] is LOCAL, but no valid LeaseSet found -> Being rebuilt?");
+                    }
                 }
                 return;
             } else {
-                if (_log.shouldInfo())
+                if (_log.shouldInfo()) {
                     _log.info("Client [" + _dest.toBase32().substring(0,8) + "] is no longer LOCAL -> Not republishing LeaseSet");
+                }
             }
             _facade.stopPublishing(_dest);
         } catch (RuntimeException re) {
-            if (_log.shouldError())
-                _log.error("Uncaught error republishing the LeaseSet", re);
+            if (_log.shouldError()) {_log.error("Uncaught error republishing the LeaseSet", re);}
             _facade.stopPublishing(_dest);
             throw re;
         }
@@ -87,9 +89,7 @@ class RepublishLeaseSetJob extends JobImpl {
     /**
      * @return last attempted publish time, or 0 if never
      */
-    public long lastPublished() {
-        return _lastPublished;
-    }
+    public long lastPublished() {return _lastPublished;}
 
     /** requeue */
     private class OnRepublishFailure extends JobImpl {
@@ -104,12 +104,12 @@ class RepublishLeaseSetJob extends JobImpl {
 
         public void runJob() {
             LeaseSet ls = _facade.lookupLeaseSetLocally(_ls.getHash());
-            if (ls != null && ls.getEarliestLeaseDate() == _ls.getEarliestLeaseDate()) {
-                requeueRepublish();
-            } else {
-                if (_log.shouldInfo())
+            if (ls != null && ls.getEarliestLeaseDate() == _ls.getEarliestLeaseDate()) {requeueRepublish();}
+            else {
+                if (_log.shouldInfo()) {
                     _log.info("Not requeueing failed publication of LeaseSet [" +
                               _ls.getDestination().toBase32().substring(0,8) + "] -> Newer LeaseSet exists");
+                }
             }
         }
     }

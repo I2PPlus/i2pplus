@@ -48,10 +48,10 @@ class FloodfillStoreJob extends StoreJob {
     }
 
     @Override
-    protected int getParallelization() { return 1; }
+    protected int getParallelization() {return 1;}
 
     @Override
-    protected int getRedundancy() { return 1; }
+    protected int getRedundancy() {return 1;}
 
     /**
      * Send was totally successful
@@ -64,14 +64,16 @@ class FloodfillStoreJob extends StoreJob {
         final Hash key = _state.getTarget();
 
             if (_facade.isVerifyInProgress(key)) {
-                if (shouldLog)
+                if (shouldLog) {
                     _log.info("Skipping verify, one already in progress for: [" + key.toBase64().substring(0,6) + "]");
+                }
                 return;
             }
             RouterContext ctx = getContext();
             if (ctx.router().gracefulShutdownInProgress()) {
-                if (shouldLog)
+                if (shouldLog) {
                     _log.info("Skipping verify of [" + key.toBase64().substring(0,6) + "] - shutdown in progress...");
+                }
                 return;
             }
             // Get the time stamp from the data we sent, so the Verify job can make sure that
@@ -81,8 +83,7 @@ class FloodfillStoreJob extends StoreJob {
             final boolean isRouterInfo = type == DatabaseEntry.KEY_TYPE_ROUTERINFO;
             // default false since 0.9.7.1
             // verify for a while after startup until we've vetted the floodfills
-            if (isRouterInfo && !ctx.getBooleanProperty(PROP_RI_VERIFY) &&
-                ctx.router().getUptime() > RI_VERIFY_STARTUP_TIME) {
+            if (isRouterInfo && !ctx.getBooleanProperty(PROP_RI_VERIFY) && ctx.router().getUptime() > RI_VERIFY_STARTUP_TIME) {
                 _facade.routerInfoPublishSuccessful();
                 return;
             }
@@ -92,24 +93,18 @@ class FloodfillStoreJob extends StoreJob {
             if (isls2) {
                 LeaseSet2 ls2 = (LeaseSet2) data;
                 published = ls2.getPublished();
-            } else {
-                published = data.getDate();
-            }
+            } else {published = data.getDate();}
             // we should always have exactly one successful entry
             Hash sentTo = _state.getSuccessful();
             Hash client;
             if (type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
-                // get the real client hash
-                client = ((LeaseSet)data).getDestination().calculateHash();
-            } else {
-                client = key;
-            }
-            Job fvsj = new FloodfillVerifyStoreJob(ctx, key, client,
-                                                   published, type,
-                                                   sentTo, _state.getAttempted(), _facade);
-            if (shouldLog)
+                client = ((LeaseSet)data).getDestination().calculateHash(); // get the real client hash
+            } else {client = key;}
+            Job fvsj = new FloodfillVerifyStoreJob(ctx, key, client, published, type, sentTo, _state.getAttempted(), _facade);
+            if (shouldLog) {
                 _log.info("Succeeded sending key [" + key.toBase64().substring(0,6) +
                           "] - queueing VerifyFloodfillStore Job [" + fvsj.getJobId() + "]");
+            }
             ctx.jobQueue().addJob(fvsj);
     }
 

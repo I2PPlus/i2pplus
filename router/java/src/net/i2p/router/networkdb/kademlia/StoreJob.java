@@ -57,11 +57,8 @@ abstract class StoreJob extends JobImpl {
     private final PeerSelector _peerSelector;
     private final ConnectChecker _connectChecker;
     private final int _connectMask;
-
-//    private final static int PARALLELIZATION = 4; // how many sent at a time
-//    private final static int REDUNDANCY = 4; // we want the data sent to 4 peers
-    private final static int PARALLELIZATION = 5; // how many sent at a time
-    private final static int REDUNDANCY = 15; // we want the data sent to 4 peers
+    private final static int PARALLELIZATION = 4; // how many sent at a time
+    private final static int REDUNDANCY = 4; // we want the data sent to 4 peers
     private final static int STORE_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_STORE;
 
     /**
@@ -94,27 +91,18 @@ abstract class StoreJob extends JobImpl {
         } else {
             _connectChecker = new ConnectChecker(context);
             RouterInfo us = context.router().getRouterInfo();
-            if (us != null)
-                _connectMask = _connectChecker.getOutboundMask(us);
-            else
-                _connectMask = ConnectChecker.ANY_V4;
+            if (us != null) {_connectMask = _connectChecker.getOutboundMask(us);}
+            else {_connectMask = ConnectChecker.ANY_V4;}
         }
-        if (_log.shouldDebug())
+        if (_log.shouldDebug()) {
             _log.debug("[DbId: " + _facade + "] New store job for \n" + data, new Exception("I did it"));
+        }
     }
 
-    public String getName() { return "Process Kademlia NetDb Store";}
-
-    public void runJob() {
-        sendNext();
-    }
-
-    private boolean isExpired() {
-        return getContext().clock().now() >= _expiration;
-    }
-
-//    private static final int MAX_PEERS_SENT = 10;
-    private static final int MAX_PEERS_SENT = REDUNDANCY;
+    public String getName() {return "Process Kademlia NetDb Store";}
+    public void runJob() {sendNext();}
+    private boolean isExpired() {return getContext().clock().now() >= _expiration;}
+    private static final int MAX_PEERS_SENT = 10;
 
     /**
      * send the key to the next batch of peers
@@ -123,32 +111,28 @@ abstract class StoreJob extends JobImpl {
      */
     private void sendNext() {
         if (_state.completed()) {
-            if (_log.shouldInfo())
-                _log.info("Already completed submission of key to floodfills");
+            if (_log.shouldInfo()) {_log.info("Already completed submission of key to floodfills");}
             return;
         }
         if (isExpired()) {
             _state.complete(true);
-//            if (_log.shouldInfo())
-//                _log.info("Send key expired (timeout: " + (_timeoutMs / 1000) + "s)");
+            if (_log.shouldInfo()) {_log.info("Send key expired (Timeout: " + (_timeoutMs / 1000) + "s)");}
             fail();
         } else if (_state.getAttemptedCount() > MAX_PEERS_SENT) {
             _state.complete(true);
-            if (_log.shouldInfo())
-                _log.info("Key sent to maximum number of peers (" + MAX_PEERS_SENT + ")");
+            if (_log.shouldInfo()) {_log.info("Key sent to maximum number of peers (" + MAX_PEERS_SENT + ")");}
             fail();
         } else {
-            //if (_log.shouldInfo())
-            //    _log.info("Sending: " + _state);
+            if (_log.shouldDebug()) {_log.debug("Sending: " + _state);}
             continueSending();
         }
     }
 
     /** overridden in FSJ */
-    protected int getParallelization() { return PARALLELIZATION; }
+    protected int getParallelization() {return PARALLELIZATION;}
 
     /** overridden in FSJ */
-    protected int getRedundancy() { return REDUNDANCY; }
+    protected int getRedundancy() {return REDUNDANCY;}
 
     /**
      * Send a series of searches to the next available peers as selected by
@@ -166,8 +150,7 @@ abstract class StoreJob extends JobImpl {
                 _log.debug("Too many store messages pending");
             return;
         }
-        if (toCheck > getParallelization())
-            toCheck = getParallelization();
+        if (toCheck > getParallelization()) {toCheck = getParallelization();}
 
         // We are going to send the RouterInfo directly, rather than through a lease,
         // so select a floodfill peer we are already connected to.
@@ -175,10 +158,6 @@ abstract class StoreJob extends JobImpl {
         // the network to scale.
         // Perhaps the ultimate solution is to send RouterInfos through a lease also.
         List<Hash> closestHashes;
-        //if (_state.getData() instanceof RouterInfo)
-        //    closestHashes = getMostReliableRouters(_state.getTarget(), toCheck, _state.getAttempted());
-        //else
-        //    closestHashes = getClosestRouters(_state.getTarget(), toCheck, _state.getAttempted());
         closestHashes = getClosestFloodfillRouters(_state.getTarget(), toCheck, _state.getAttempted());
         if ( (closestHashes == null) || (closestHashes.isEmpty()) ) {
             if (_state.getPendingCount() <= 0) {
@@ -205,68 +184,33 @@ abstract class StoreJob extends JobImpl {
                     ds = ((FloodfillNetworkDatabaseFacade) getContext().netDb()).getDataStore().get(peer);
                 else
                     ds = _facade.getDataStore().get(peer);
-                if ( (ds == null) || !(ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) ) {
-                    if (_log.shouldInfo())
+                if ((ds == null) || !(ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)) {
+                    if (_log.shouldInfo()) {
                         _log.info("[DbId: " + _facade + "] Error selecting closest hash that wasn't a Router! [" + peer.toBase64().substring(0,6) + "]: " + ds);
+                    }
                     _state.addSkipped(peer);
                     skipped++;
                 } else if (!shouldStoreTo((RouterInfo)ds)) {
-                    if (_log.shouldInfo())
-                        _log.info("Skipping old router [" + peer.toBase64().substring(0,6) + "]");
+                    if (_log.shouldInfo()) {
+                        _log.info("Skipping ld router [" + peer.toBase64().substring(0,6) + "]");
+                    }
                     _state.addSkipped(peer);
                     skipped++;
-                } else if ((type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2 ||
-                            lsSigType == SigType.RedDSA_SHA512_Ed25519) &&
-                           !shouldStoreEncLS2To((RouterInfo)ds)) {
-                    if (_log.shouldInfo())
+                } else if ((type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2 || lsSigType == SigType.RedDSA_SHA512_Ed25519) && !shouldStoreEncLS2To((RouterInfo)ds)) {
+                    if (_log.shouldInfo()) {
                         _log.info("Skipping router that doesn't support encrypted LS2/RedDSA [" + peer.toBase64().substring(0,6) + "]");
+                    }
                     _state.addSkipped(peer);
                     skipped++;
-/*
-                // same as shouldStoreTo() now
-                } else if (isls2 &&
-                           !shouldStoreLS2To((RouterInfo)ds)) {
-                    if (_log.shouldInfo())
-                        _log.info("Skipping router that doesn't support LS2 " + peer);
-                    _state.addSkipped(peer);
-                    skipped++;
-*/
                 } else {
                     int peerTimeout = _facade.getPeerTimeout(peer);
-
-                    //PeerProfile prof = getContext().profileOrganizer().getProfile(peer);
-                    //if (prof != null && prof.getIsExpandedDB()) {
-                    //    RateStat failing = prof.getDBHistory().getFailedLookupRate();
-                    //    Rate failed = failing.getRate(60*60*1000);
-                    //}
-
-                    //long failedCount = failed.getCurrentEventCount()+failed.getLastEventCount();
-                    //if (failedCount > 10) {
-                    //    _state.addSkipped(peer);
-                    //    continue;
-                    //}
-                    //
-                    //if (failed.getCurrentEventCount() + failed.getLastEventCount() > avg) {
-                    //    _state.addSkipped(peer);
-                    //}
-
-                    // we don't want to filter out peers based on our local banlist, as that opens an avenue for
-                    // manipulation (since a peer can get us to banlist them, and that
-                    // in turn would let them assume that a netDb store received didn't come from us)
-                    //if (getContext().banlist().isBanlisted(((RouterInfo)ds).getIdentity().calculateHash())) {
-                    //    _state.addSkipped(peer);
-                    //} else {
-                    //
-                    // ERR: see hidden mode comments in HandleDatabaseLookupMessageJob
-                    // // Do not store to hidden nodes
-                    // if (!((RouterInfo)ds).isHidden()) {
-                       if (_log.shouldInfo())
-                           _log.info("[DbId: " + _facade + "] Sending key [" + _state.getTarget().toBase64().substring(0,6) +
-                                     "] (attempt " + (_state.getAttemptedCount() + 1) + ")\n* To: " + closestHashes);
-                        _state.addPending(peer);
-                        sendStore((RouterInfo)ds, peerTimeout);
-                        queued++;
-                    //}
+                    if (_log.shouldInfo()) {
+                       _log.info("[DbId: " + _facade + "] Sending key [" + _state.getTarget().toBase64().substring(0,6) +
+                                 "] (attempt " + (_state.getAttemptedCount() + 1) + ")\n* To: " + closestHashes);
+                    }
+                    _state.addPending(peer);
+                    sendStore((RouterInfo)ds, peerTimeout);
+                    queued++;
                 }
             }
             if (queued == 0 && _state.getPendingCount() <= 0) {
@@ -277,36 +221,6 @@ abstract class StoreJob extends JobImpl {
             }
         }
     }
-
-    /**
-     * Set of Hash structures for routers we want to send the data to next.  This is the
-     * 'interesting' part of the algorithm.  DBStore isn't usually as time sensitive as
-     * it is reliability sensitive, so lets delegate it off to the PeerSelector via
-     * selectNearestExplicit, which is currently O(n*log(n))
-     *
-     * @return ordered list of Hash objects
-     */
-/*****
-    private List<Hash> getClosestRouters(Hash key, int numClosest, Set<Hash> alreadyChecked) {
-        Hash rkey = getContext().routingKeyGenerator().getRoutingKey(key);
-        //if (_log.shouldDebug())
-        //    _log.debug("Current routing key for " + key + ": " + rkey);
-
-        KBucketSet ks = _facade.getKBuckets();
-        if (ks == null) return new ArrayList();
-        return _peerSelector.selectNearestExplicit(rkey, numClosest, alreadyChecked, ks);
-    }
-*****/
-
-    /** used for routerinfo stores, prefers those already connected */
-/*****
-    private List<Hash> getMostReliableRouters(Hash key, int numClosest, Set<Hash> alreadyChecked) {
-        Hash rkey = getContext().routingKeyGenerator().getRoutingKey(key);
-        KBucketSet ks = _facade.getKBuckets();
-        if (ks == null) return new ArrayList();
-        return _peerSelector.selectMostReliablePeers(rkey, numClosest, alreadyChecked, ks);
-    }
-*****/
 
     private List<Hash> getClosestFloodfillRouters(Hash key, int numClosest, Set<Hash> alreadyChecked) {
         Hash rkey = getContext().routingKeyGenerator().getRoutingKey(key);
@@ -338,8 +252,7 @@ abstract class StoreJob extends JobImpl {
         DatabaseStoreMessage msg = new DatabaseStoreMessage(getContext());
         int type = _state.getData().getType();
         if (type == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
-            if (responseTime > MAX_DIRECT_EXPIRATION)
-                responseTime = MAX_DIRECT_EXPIRATION;
+            if (responseTime > MAX_DIRECT_EXPIRATION) {responseTime = MAX_DIRECT_EXPIRATION;}
         } else if (!DatabaseEntry.isLeaseSet(type)) {
             throw new IllegalArgumentException("Storing an unknown data type! " + _state.getData());
         }
@@ -903,13 +816,8 @@ abstract class StoreJob extends JobImpl {
      * Send was totally successful
      */
     protected void succeed() {
-// Message is superfluous, reported via store job msg
-//        if (_log.shouldInfo()) {
-//            _log.info("Succeeded sending key [" + _state.getTarget().toBase64().substring(0,6) + "]");
-        if (_log.shouldDebug())
-            _log.debug("State of successful send " + _state);
-        if (_onSuccess != null)
-            getContext().jobQueue().addJob(_onSuccess);
+        if (_log.shouldDebug()) {_log.debug("State of successful send " + _state);}
+        if (_onSuccess != null) {getContext().jobQueue().addJob(_onSuccess);}
         _state.complete(true);
         getContext().statManager().addRateData("netDb.storePeers", _state.getAttemptedCount());
     }
@@ -920,12 +828,9 @@ abstract class StoreJob extends JobImpl {
     protected void fail() {
         if (_log.shouldInfo()) {
             _log.info("Failed test sending key [" + _state.getTarget().toBase64().substring(0,6) + "]" +
-            " (timeout: " + (_timeoutMs / 1000) + "s)");
-            if (_log.shouldDebug())
-            _log.debug("State of failed send: " + _state); //, new Exception("Who failed me?"));
+            " (Timeout: " + (_timeoutMs / 1000) + "s)" + (_log.shouldDebug() ? "\n* State of failed send: " + _state : ""));
         }
-        if (_onFailure != null)
-            getContext().jobQueue().addJob(_onFailure);
+        if (_onFailure != null) {getContext().jobQueue().addJob(_onFailure);}
         _state.complete(true);
         getContext().statManager().addRateData("netDb.storeFailedPeers", _state.getAttemptedCount());
     }

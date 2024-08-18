@@ -59,7 +59,7 @@ class ParticipatingThrottler {
 
     /** increments before checking */
     Result shouldThrottle(Hash h) {
-        RouterInfo ri = context.netDb().lookupRouterInfoLocally(h);
+        RouterInfo ri = (RouterInfo) context.netDb().lookupLocallyWithoutValidation(h);
         Hash us = context.routerHash();
         String caps = ri != null ? ri.getCapabilities() : "";
         boolean isUs = ri != null && us.equals(ri.getIdentity().getHash());
@@ -85,9 +85,9 @@ class ParticipatingThrottler {
         boolean shouldDisconnect = context.getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
         boolean shouldBlockOldRouters = context.getProperty(PROP_BLOCK_OLD_ROUTERS, DEFAULT_BLOCK_OLD_ROUTERS);
         boolean isBanned = context.banlist().isBanlisted(h);
-        String version = getRouterVersion(ri);
+        String version = ri != null ? ri.getVersion() : "";
 
-        if (version.equals("0.0.0")) {
+        if (version.equals("0")) {
             handleNoVersion(shouldDisconnect, h, isBanned, caps, bantime);
             return Result.DROP;
         }
@@ -124,8 +124,7 @@ class ParticipatingThrottler {
             if (!isBanned && _log.shouldWarn()) {
                 _log.warn("Banning Router [" + h.toBase64().substring(0, 6) + "] for 4h -> Compressible RouterInfo / " + version);
             }
-            context.banlist().banlistRouter(h, " <b>➜</b> Compressible RouterInfo & older than 0.9.57",
-                                            null, null, context.clock().now() + 16 * 60 * 60 * 1000);
+            context.banlist().banlistRouter(h, " <b>➜</b> Compressible RouterInfo & older than 0.9.57", null, null, context.clock().now() + 16 * 60 * 60 * 1000);
             return true;
         }
         return false;

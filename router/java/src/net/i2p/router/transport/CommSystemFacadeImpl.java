@@ -497,9 +497,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  @since 0.9.41
      */
     @Override
-    public void initGeoIP() {
-        startGeoIP();
-    }
+    public void initGeoIP() {startGeoIP();}
 
     /* We hope the routerinfos are read in and things have settled down by now, but it's not required to be so */
     private static final int START_DELAY = SystemVersion.isSlow() ? 60*1000 : 5*1000;
@@ -528,7 +526,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         public void timeReached() {
             long uptime = _context.router().getUptime();
             for (Hash h : _context.netDb().getAllRouters()) {
-                RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
+                //RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
+                RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(h);
                 if (ri == null) {continue;}
                 byte[] ip = getIP(ri);
                 if (ip == null) {continue;}

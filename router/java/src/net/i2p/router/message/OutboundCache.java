@@ -19,13 +19,15 @@ import net.i2p.util.SimpleTimer;
  * This is the place where we make I2P go fast.
  *
  * We have five static caches.
- * - The LeaseSet cache is used to decide whether to bundle our own leaseset,
- *   which minimizes overhead.
+ *
+ * - The LeaseSet cache is used to decide whether to bundle our own leaseset, which minimizes overhead.
+ *
  * - The Lease cache is used to persistently send to the same lease for the destination,
  *   which keeps the streaming lib happy by minimizing out-of-order delivery.
+ *
  * - The Tunnel and BackloggedTunnel caches are used to persistently use the same outbound tunnel
- *   for the same destination,
- *   which keeps the streaming lib happy by minimizing out-of-order delivery.
+ *   for the same destination, which keeps the streaming lib happy by minimizing out-of-order delivery.
+ *
  * - The last reply requested cache ensures that a reply is requested every so often,
  *   so that failed tunnels are recognized.
  *
@@ -36,8 +38,7 @@ public class OutboundCache {
     /**
      * Use the same outbound tunnel as we did for the same destination previously,
      * if possible, to keep the streaming lib happy
-     * Use two caches - although a cache of a list of tunnels per dest might be
-     * more elegant.
+     * Use two caches - although a cache of a list of tunnels per dest might be more elegant.
      * Key the caches on the source+dest pair.
      *
      * NOT concurrent.
@@ -106,8 +107,7 @@ public class OutboundCache {
 
     private final RouterContext _context;
 
-//    private static final int CLEAN_INTERVAL = 5*60*1000;
-    private static final int CLEAN_INTERVAL = 90*1000;
+    private static final int CLEAN_INTERVAL = 5*60*1000;
 
     public OutboundCache(RouterContext ctx) {
         _context = ctx;
@@ -126,13 +126,10 @@ public class OutboundCache {
             dh = d;
         }
 
-        public int hashCode() {
-            return sh.hashCode() ^ dh.hashCode();
-        }
+        public int hashCode() {return sh.hashCode() ^ dh.hashCode();}
 
         public boolean equals(Object o) {
-            if (o == null || !(o instanceof HashPair))
-                return false;
+            if (o == null || !(o instanceof HashPair)) {return false;}
             HashPair hp = (HashPair) o;
             return sh.equals(hp.sh) && dh.equals(hp.dh);
         }
@@ -150,21 +147,14 @@ public class OutboundCache {
      * @param outTunnel may be null
      */
     void clearCaches(HashPair hashPair, Lease lease, TunnelInfo inTunnel, TunnelInfo outTunnel) {
-        if (inTunnel != null) {   // if we wanted an ack, we sent our lease too
-                leaseSetCache.remove(hashPair);
-        }
-        if (lease != null) {
-            // remove only if still equal to lease (concurrent)
-            leaseCache.remove(hashPair, lease);
-        }
+        if (inTunnel != null) {leaseSetCache.remove(hashPair);} // if we wanted an ack, we sent our lease too
+        if (lease != null) {leaseCache.remove(hashPair, lease);} // remove only if still equal to lease (concurrent)
         if (outTunnel != null) {
             synchronized(tunnelCache) {
                 TunnelInfo t = backloggedTunnelCache.get(hashPair);
-                if (t != null && t.equals(outTunnel))
-                    backloggedTunnelCache.remove(hashPair);
+                if (t != null && t.equals(outTunnel)) {backloggedTunnelCache.remove(hashPair);}
                 t = tunnelCache.get(hashPair);
-                if (t != null && t.equals(outTunnel))
-                    tunnelCache.remove(hashPair);
+                if (t != null && t.equals(outTunnel)) {tunnelCache.remove(hashPair);}
             }
         }
     }
@@ -187,10 +177,9 @@ public class OutboundCache {
      */
     private static void cleanLeaseSetCache(RouterContext ctx, Map<HashPair, LeaseSet> tc) {
         long now = ctx.clock().now();
-        for (Iterator<LeaseSet> iter = tc.values().iterator(); iter.hasNext(); ) {
+        for (Iterator<LeaseSet> iter = tc.values().iterator(); iter.hasNext();) {
             LeaseSet l = iter.next();
-            if (l.getEarliestLeaseDate() < now)
-                iter.remove();
+            if (l.getEarliestLeaseDate() < now) {iter.remove();}
         }
     }
 
@@ -198,10 +187,9 @@ public class OutboundCache {
      * Clean out old leases
      */
     private static void cleanLeaseCache(Map<HashPair, Lease> tc) {
-        for (Iterator<Lease> iter = tc.values().iterator(); iter.hasNext(); ) {
+        for (Iterator<Lease> iter = tc.values().iterator(); iter.hasNext();) {
             Lease l = iter.next();
-            if (l.isExpired(Router.CLOCK_FUDGE_FACTOR))
-                iter.remove();
+            if (l.isExpired(Router.CLOCK_FUDGE_FACTOR)) {iter.remove();}
         }
     }
 
@@ -210,13 +198,12 @@ public class OutboundCache {
      * Caller must synchronize on tc.
      */
     private static void cleanTunnelCache(RouterContext ctx, Map<HashPair, TunnelInfo> tc) {
-        for (Iterator<Map.Entry<HashPair, TunnelInfo>> iter = tc.entrySet().iterator(); iter.hasNext(); ) {
+        for (Iterator<Map.Entry<HashPair, TunnelInfo>> iter = tc.entrySet().iterator(); iter.hasNext();) {
             Map.Entry<HashPair, TunnelInfo> entry = iter.next();
             HashPair k = entry.getKey();
             TunnelInfo tunnel = entry.getValue();
             // This is a little sneaky, but get the _from back out of the "opaque" hash key
-            if (!ctx.tunnelManager().isValidTunnel(k.sh, tunnel))
-                iter.remove();
+            if (!ctx.tunnelManager().isValidTunnel(k.sh, tunnel)) {iter.remove();}
         }
     }
 
@@ -225,10 +212,9 @@ public class OutboundCache {
      */
     private static void cleanReplyCache(RouterContext ctx, Map<HashPair, Long> tc) {
         long now = ctx.clock().now();
-        for (Iterator<Long> iter = tc.values().iterator(); iter.hasNext(); ) {
+        for (Iterator<Long> iter = tc.values().iterator(); iter.hasNext();) {
             Long l = iter.next();
-            if (l.longValue() < now - CLEAN_INTERVAL)
-                iter.remove();
+            if (l.longValue() < now - CLEAN_INTERVAL) {iter.remove();}
         }
     }
 

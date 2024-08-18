@@ -224,17 +224,20 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *        unused if we are ff and ds is an RI
      */
 
+    private int concurrent = 1;
+
     @Override
     void sendStore(Hash key, DatabaseEntry ds, Job onSuccess, Job onFailure, long sendTimeout, Set<Hash> toIgnore) {
         // If we are a part of the floodfill netDb, don't send out our own leaseSets as part
         // of the flooding - instead, send them to 3 random floodfill peers so they can flood 'em out.
-        Set<Hash> floodfillParticipants = selectFloodfillParticipants(toIgnore, getKBuckets());
+        Set<Hash> floodfillParticipants = selectFloodfillParticipants(toIgnore, getKBuckets(), concurrent);
         if (floodfillEnabled() && (ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)) {flood(ds);}
         else {
             for (Hash peer : floodfillParticipants) {
                 if (onSuccess != null) {_context.jobQueue().addJob(onSuccess);}
                 else {_context.jobQueue().addJob(new FloodfillStoreJob(_context, this, key, ds, onSuccess, onFailure, sendTimeout, toIgnore));}
                 if (onFailure != null) {
+                    concurrent = 2;
                     if (_log.shouldWarn()) {
                         _log.warn("Flood of key [" + key.toBase32().substring(0,8) + "] to [" + peer.toBase64().substring(0,6) + "] failed");
                     }
@@ -243,20 +246,21 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
     }
 
-    private Set<Hash> selectFloodfillParticipants(Set<Hash> toIgnore, KBucketSet<Hash> kbuckets) {
+    private Set<Hash> selectFloodfillParticipants(Set<Hash> toIgnore, KBucketSet<Hash> kbuckets, int concurrent) {
         Set<Hash> set = _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL);
-        List<Hash> rv = new ArrayList<Hash>(set.size());
+        List<Hash> rv = new ArrayList<>(set.size());
         for (Hash h : set) {
             RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
             String caps = ri != null ? ri.getCapabilities() : "";
             boolean isUnreachable = ri != null && caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
             if ((toIgnore != null && toIgnore.contains(h)) || _context.banlist().isBanlisted(h) || isUnreachable ||
-                _context.banlist().isBanlistedForever(h) || _context.profileOrganizer().peerSendsBadReplies(h))
+                _context.banlist().isBanlistedForever(h) || _context.profileOrganizer().peerSendsBadReplies(h)) {
                 continue;
+            }
             rv.add(h);
         }
         Collections.shuffle(rv);
-        Set<Hash> floodfillParticipants = new HashSet<>(rv.subList(0, Math.min(3, rv.size())));
+        Set<Hash> floodfillParticipants = new HashSet<>(rv.subList(0, Math.min(1, concurrent)));
         return floodfillParticipants;
     }
 
