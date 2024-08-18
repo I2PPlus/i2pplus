@@ -275,14 +275,14 @@ class FloodfillVerifyStoreJob extends JobImpl {
                         _ipSet.addAll(peerIPs);
                         return peer;
                     } else {
-                        if (_log.shouldInfo())
-                            _log.info("Skipping Floodfill Verify for Router [" +
-                                      peer.toBase64().substring(0,6) + "] -> Too close to the store");
+                        if (_log.shouldInfo()) {
+                            _log.info("Skipping Floodfill Verify for Router [" + peer.toBase64().substring(0,6) + "] -> Too close to the store");
+                        }
                     }
                 } else {
-                    if (_log.shouldInfo())
-                        _log.info("Skipping Floodfill Verify for Router [" +
-                                  peer.toBase64().substring(0,6) + "] -> Too old");
+                    if (_log.shouldInfo()) {
+                        _log.info("Skipping Floodfill Verify for Router [" + peer.toBase64().substring(0,6) + "] -> Too old");
+                    }
                 }
                 _ignore.add(peer);
             }
@@ -292,8 +292,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 return peers.get(0);
         }
 
-        if (_log.shouldWarn())
-            _log.warn("No other peers to verify floodfill with, using the one we sent to");
+        if (_log.shouldWarn()) {_log.warn("No other peers to verify floodfill with, using the one we sent to");}
         return _sentTo;
     }
 

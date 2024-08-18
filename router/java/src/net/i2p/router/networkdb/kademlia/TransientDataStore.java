@@ -153,7 +153,7 @@ class TransientDataStore implements DataStore {
             }
         } else if (DatabaseEntry.isLeaseSet(type)) {
             LeaseSet ls = (LeaseSet)data;
-            String receivedAs = ls.getReceivedAsPublished() ? "(As published)" : ls.getReceivedAsReply() ? "(As reply)" : "";
+            String receivedAs = ls.getReceivedAsPublished() ? " -> Published via peer" : ls.getReceivedAsReply() ? " -> In response to query" : "";
             if (old != null) {
                 LeaseSet ols = (LeaseSet)old;
                 long oldDate, newDate;
@@ -180,7 +180,7 @@ class TransientDataStore implements DataStore {
                     }
                 } else {
                     if (_log.shouldInfo()) {
-                        _log.info("Received updated LeaseSet [" + key.toBase32().substring(0,8) + "] " + receivedAs +
+                        _log.info("Received updated LeaseSet [" + key.toBase32().substring(0,8) + "]" + receivedAs +
                                    "\n* Old: " + new Date(ols.getEarliestLeaseDate()) +
                                    "\n* New: " + new Date(newDate));
                     }
@@ -189,7 +189,7 @@ class TransientDataStore implements DataStore {
                 }
             } else {
                 if (_log.shouldInfo()) {
-                    _log.info("Received new LeaseSet [" + key.toBase32().substring(0,8) + "] " + receivedAs +
+                    _log.info("Received new LeaseSet [" + key.toBase32().substring(0,8) + "]" + receivedAs +
                               "\n* Expires: " + new Date(ls.getEarliestLeaseDate()));
                 }
                 rv = true;
