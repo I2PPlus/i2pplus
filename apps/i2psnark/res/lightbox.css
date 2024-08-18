@@ -1,8 +1,8 @@
 .lightbox{width:100%;height:100%;position:fixed;left:0;top:0;z-index:2000;overflow:auto;visibility:hidden;color:transparent;background-color:transparent;cursor:crosshair}
-.lightbox-caption{margin:-45px auto .display:block;text-align:center;font-size:11pt;color:#fff;text-shadow:0 1px 1px #000;opacity:0}
+.lightbox-caption{margin:-45px auto;display:block;text-align:center;font-size:11pt;color:#fff;text-shadow:0 1px 1px #000;opacity:0}
 .lightbox-active .lightbox-caption{display:block;animation:fade-in .5s ease-in .5s forwards}
-.lightbox-caption span{padding:0 6px;display:inline-block;color:#333;text-shadow:none;border-radius:0 4px 4px;border:1px solid rgba(34,34,34,0.5);border-left:none;background:#fff}
-.lightbox-caption #caption{padding:0 8px;font-weight:700}
+.lightbox-caption span{padding:0 6px;display:inline-block;color:#333;text-shadow:none;border-radius:4px;background:#fff}
+.lightbox-caption span #caption{padding:0 8px;font-weight:700}
 .lightbox-caption #dimensions{padding:0;font-weight:400;border:0;box-shadow:none}
 .lightbox-close{display:none}
 .lightbox-contentwrapper{margin:auto;visibility:hidden}
