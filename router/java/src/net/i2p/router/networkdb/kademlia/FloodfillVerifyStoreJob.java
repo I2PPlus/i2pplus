@@ -123,8 +123,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
             isInboundExploratory = false;
         }
         if (replyTunnelInfo == null) {
-            if (_log.shouldWarn())
-                _log.warn("No Inbound tunnels to get a reply from");
+            if (_log.shouldWarn()) {_log.warn("No Inbound tunnels to get a reply from");}
             _facade.verifyFinished(_key);
             return;
         }

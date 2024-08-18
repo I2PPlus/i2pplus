@@ -131,7 +131,7 @@ class TransientDataStore implements DataStore {
             String v = ri.getVersion();
             String caps = ri.getCapabilities();
             if (old != null) {
-                RouterInfo ori = (RouterInfo)old;
+                RouterInfo ori = (RouterInfo) old;
                 if (ri.getPublished() > ori.getPublished()) {
                     if (_log.shouldInfo())
                         _log.info("Received updated RouterInfo [" + key.toBase64().substring(0,6) + "] -> " + v + " / " + caps +
@@ -155,7 +155,7 @@ class TransientDataStore implements DataStore {
             LeaseSet ls = (LeaseSet)data;
             String receivedAs = ls.getReceivedAsPublished() ? " -> Published via peer" : ls.getReceivedAsReply() ? " -> In response to query" : "";
             if (old != null) {
-                LeaseSet ols = (LeaseSet)old;
+                LeaseSet ols = (LeaseSet) old;
                 long oldDate, newDate;
                 if (type != DatabaseEntry.KEY_TYPE_LEASESET &&
                     ols.getType() != DatabaseEntry.KEY_TYPE_LEASESET) {
