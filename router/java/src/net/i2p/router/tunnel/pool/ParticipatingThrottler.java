@@ -106,10 +106,6 @@ class ParticipatingThrottler {
         return Math.min((MIN_LIMIT * 3), Math.max(MAX_LIMIT / 2, numTunnels * (PERCENT_LIMIT / 2) / 100));
     }
 
-    private String getRouterVersion(RouterInfo ri) {
-        return (ri != null && ri.getVersion() != null) ? ri.getVersion() : "0.0.0";
-    }
-
     private void handleNoVersion(boolean shouldDisconnect, Hash h, boolean isBanned, String caps, int bantime) {
         if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h), 60 * 1000);}
         if (!isBanned && _log.shouldWarn()) {
