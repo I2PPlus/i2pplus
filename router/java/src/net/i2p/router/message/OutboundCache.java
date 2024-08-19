@@ -43,16 +43,15 @@ public class OutboundCache {
      *
      * NOT concurrent.
      */
-    final Map<HashPair, TunnelInfo> tunnelCache = new HashMap<HashPair, TunnelInfo>(64);
+    final Map<HashPair, TunnelInfo> tunnelCache = new HashMap<HashPair, TunnelInfo>(128);
 
     /*
      * NOT concurrent.
      */
-    final Map<HashPair, TunnelInfo> backloggedTunnelCache = new HashMap<HashPair, TunnelInfo>(64);
+    final Map<HashPair, TunnelInfo> backloggedTunnelCache = new HashMap<HashPair, TunnelInfo>(128);
 
     /**
-      * Returns the reply lease set if forced to do so,
-      * or if configured to do so,
+      * Returns the reply lease set if forced to do so, or if configured to do so,
       * or if a certain percentage of the time if configured to do so,
       * or if our lease set has changed since we last talked to them,
       * or 10% of the time anyway so they don't forget us (disabled for now),
@@ -68,7 +67,7 @@ public class OutboundCache {
       *
       * Concurrent.
       */
-    final ConcurrentHashMap<HashPair, LeaseSet> leaseSetCache = new ConcurrentHashMap<HashPair, LeaseSet>(64);
+    final ConcurrentHashMap<HashPair, LeaseSet> leaseSetCache = new ConcurrentHashMap<HashPair, LeaseSet>(128);
 
     /**
      * Use the same inbound tunnel (i.e. lease) as we did for the same destination previously,
@@ -77,14 +76,12 @@ public class OutboundCache {
      *
      * We're going to use the lease until it expires, as long as it remains in the current leaseSet.
      *
-     * If not found,
-     * fetch the next lease that we should try sending through, randomly chosen
-     * from within the sorted leaseSet (NOT sorted by # of failures through each
-     * lease).
+     * If not found, fetch the next lease that we should try sending through, randomly chosen
+     * from within the sorted leaseSet (NOT sorted by # of failures through each lease).
      *
      * Concurrent.
      */
-    final ConcurrentHashMap<HashPair, Lease> leaseCache = new ConcurrentHashMap<HashPair, Lease>(64);
+    final ConcurrentHashMap<HashPair, Lease> leaseCache = new ConcurrentHashMap<HashPair, Lease>(128);
 
     /**
      * This cache is used to ensure that we request a reply every so often.
@@ -94,7 +91,7 @@ public class OutboundCache {
      *
      * Concurrent.
      */
-    final Map<HashPair, Long> lastReplyRequestCache = new ConcurrentHashMap<HashPair, Long>(64);
+    final Map<HashPair, Long> lastReplyRequestCache = new ConcurrentHashMap<HashPair, Long>(128);
 
 
     /**
@@ -102,12 +99,11 @@ public class OutboundCache {
      * we are multihomed with, or otherwise are asked to store a valid routerInfo for
      * a destination which we also host.
      */
-
-    public final ConcurrentHashMap<Hash, LeaseSet> multihomedCache = new ConcurrentHashMap<Hash, LeaseSet>(64);
+    public final ConcurrentHashMap<Hash, LeaseSet> multihomedCache = new ConcurrentHashMap<Hash, LeaseSet>(128);
 
     private final RouterContext _context;
 
-    private static final int CLEAN_INTERVAL = 5*60*1000;
+    private static final int CLEAN_INTERVAL = 8*60*1000;
 
     public OutboundCache(RouterContext ctx) {
         _context = ctx;

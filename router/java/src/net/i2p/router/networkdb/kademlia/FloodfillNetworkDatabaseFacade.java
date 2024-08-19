@@ -225,6 +225,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      */
 
     private int concurrent = 1;
+    private int failCount = 0;
 
     @Override
     void sendStore(Hash key, DatabaseEntry ds, Job onSuccess, Job onFailure, long sendTimeout, Set<Hash> toIgnore) {
@@ -237,9 +238,13 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 if (onSuccess != null) {_context.jobQueue().addJob(onSuccess);}
                 else {_context.jobQueue().addJob(new FloodfillStoreJob(_context, this, key, ds, onSuccess, onFailure, sendTimeout, toIgnore));}
                 if (onFailure != null) {
-                    concurrent = 2;
+                    failCount++;
+                    if (failCount < 4) {concurrent = 2;}
+                    else if (failCount < 10) {concurrent = 3;}
+                    else {concurrent = 5;}
                     if (_log.shouldWarn()) {
-                        _log.warn("Flood of key [" + key.toBase32().substring(0,8) + "] to [" + peer.toBase64().substring(0,6) + "] failed");
+                        _log.warn("Flood of key [" + key.toBase32().substring(0,8) + "] to [" + peer.toBase64().substring(0,6) + "] failed -> " +
+                                  "Resending to " + concurrent + " peers");
                     }
                 }
             }
