@@ -129,12 +129,8 @@ public class JobQueue {
     /** max ready and waiting jobs before we start dropping 'em */
     private int _maxWaitingJobs = DEFAULT_MAX_WAITING_JOBS;
 //    private final static int DEFAULT_MAX_WAITING_JOBS = 25;
-    private final static int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() || SystemVersion.getCores() < 4 ? 20 : 30;
-    private final static long MIN_LAG_TO_DROP = SystemVersion.isSlow() || SystemVersion.getCores() < 4 ? 200 :
-                                                SystemVersion.getCPULoadAvg() > 90 ? 10 : 100;
-
-    /** @deprecated unimplemented */
-//    @Deprecated
+    private final static int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() ? 100 : 300;
+    private final static long MIN_LAG_TO_DROP = SystemVersion.isSlow() ? 500 : 300;
 
     /**
      *  @since 0.9.52+
@@ -305,13 +301,8 @@ public class JobQueue {
     private boolean shouldDrop(Job job, long numReady) {
         if (_maxWaitingJobs <= 0) return false; // don't ever drop jobs
         if (!_allowParallelOperation) return false; // don't drop during startup [duh]
-//        if (numReady > _maxWaitingJobs) {
         if (numReady > _context.getProperty(PROP_MAX_WAITING_JOBS, DEFAULT_MAX_WAITING_JOBS)) {
             Class<? extends Job> cls = job.getClass();
-            // let's not try to drop too many tunnel messages...
-            //if (cls == HandleTunnelMessageJob.class)
-            //    return true;
-
             // we don't really *need* to answer DB lookup messages
             // This is pretty lame, there's actually a ton of different jobs we
             // could drop, but is it worth making a list?
@@ -327,14 +318,6 @@ public class JobQueue {
                 if (cls == HandleFloodfillDatabaseLookupMessageJob.class ||
                     cls == HandleGarlicMessageJob.class || cls == IterativeSearchJob.class ||
                     cls == TestJob.class) {
-                    // this tail drops based on the lag at the tail, which
-                    // makes no sense...
-                    //JobTiming jt = job.getTiming();
-                    //if (jt != null) {
-                    //    long lag =  _context.clock().now() - jt.getStartAfter();
-                    //    if (lag >= MIN_LAG_TO_DROP)
-                    //        return true;
-                    //}
                     // this tail drops based on the lag at the head
                     if (getMaxLag() >= MIN_LAG_TO_DROP)
                         return true;
@@ -394,44 +377,6 @@ public class JobQueue {
         _queueRunners.clear();
         _jobStats.clear();
         _runnerId.set(0);
-
-      /********
-        if (_log.shouldWarn()) {
-            StringBuilder buf = new StringBuilder(1024);
-            buf.append("current jobs: \n");
-            for (Iterator iter = _queueRunners.values().iterator(); iter.hasNext(); ) {
-                JobQueueRunner runner = iter.next();
-                Job j = runner.getCurrentJob();
-
-                buf.append("Runner ").append(runner.getRunnerId()).append(": ");
-                if (j == null) {
-                    buf.append("no current job ");
-                } else {
-                    buf.append(j.toString());
-                    buf.append(" started ").append(_context.clock().now() - j.getTiming().getActualStart());
-                    buf.append("ms ago");
-                }
-
-                j = runner.getLastJob();
-                if (j == null) {
-                    buf.append("no last job");
-                } else {
-                    buf.append(j.toString());
-                    buf.append(" started ").append(_context.clock().now() - j.getTiming().getActualStart());
-                    buf.append("ms ago and finished ");
-                    buf.append(_context.clock().now() - j.getTiming().getActualEnd());
-                    buf.append("ms ago");
-                }
-            }
-            buf.append("\nready jobs: ").append(_readyJobs.size()).append("\n\t");
-            for (int i = 0; i < _readyJobs.size(); i++)
-                buf.append(_readyJobs.get(i).toString()).append("\n\t");
-            buf.append("\n\ntimed jobs: ").append(_timedJobs.size()).append("\n\t");
-            for (int i = 0; i < _timedJobs.size(); i++)
-                buf.append(_timedJobs.get(i).toString()).append("\n\t");
-            _log.log(Log.WARN, buf.toString());
-        }
-      ********/
     }
 
     boolean isAlive() { return _alive; }
@@ -508,8 +453,7 @@ public class JobQueue {
             // so dont do anything
             if ( (!_queueRunners.isEmpty()) && (!_allowParallelOperation) ) return;
 
-            // we've already enabled parallel operation, so grow to however many are
-            // specified
+            // we've already enabled parallel operation, so grow to however many are specified
             if (_queueRunners.size() < numThreads) {
                 if (_log.shouldInfo())
                     _log.info("Increasing the number of queue runners from "
@@ -521,16 +465,9 @@ public class JobQueue {
                     runner.start();
                 }
             } else if (_queueRunners.size() == numThreads) {
-                //for (JobQueueRunner runner : _queueRunners.values()) {
-                //    runner.startRunning();
-                //}
                 if (_log.shouldWarn())
                     _log.warn("Already have " + numThreads + " threads");
-            } else { // numThreads < # runners, so shrink
-                //for (int i = _queueRunners.size(); i > numThreads; i++) {
-                //     QueueRunner runner = (QueueRunner)_queueRunners.get(new Integer(i));
-                //     runner.stopRunning();
-                //}
+            } else {
                 if (_log.shouldWarn())
                     _log.warn("Already have " + _queueRunners.size() + " threads, not decreasing");
             }
@@ -577,16 +514,7 @@ public class JobQueue {
                                     _readyJobs.offer(j);
                                     iter.remove();
                                 } else {
-                                    //if ( (timeToWait <= 0) || (timeLeft < timeToWait) )
-                                    // _timedJobs is now a TreeSet, so once we hit one that is
-                                    // not ready yet, we can break
-                                    // NOTE: By not going through the whole thing, a single job changing
-                                    // setStartAfter() to some far-away time, without
-                                    // calling addJob(), could clog the whole queue forever.
-                                    // Hopefully nobody does that, and as a backup, we hope
-                                    // that the TreeSet will eventually resort it from other addJob() calls.
-                                        timeToWait = timeLeft;
-
+                                    timeToWait = timeLeft;
                                     // failsafe - remove and re-add, peek at the next job,
                                     // break and go around again
                                     if (timeToWait > 10*1000 && iter.hasNext()) {
@@ -622,11 +550,9 @@ public class JobQueue {
                                 timeToWait = highLoad ? 5*1000 : 4*1000;
                             else if (timeToWait > 10*1000)
                                 timeToWait = highLoad ? 12*1000 : 10*1000;
-                            //if (_log.shouldDebug())
-                            //    _log.debug("Waiting " + timeToWait + " before rechecking the timed queue");
                             _nextPumperRun = _context.clock().now() + timeToWait;
                             _jobLock.wait(timeToWait);
-                        } // synchronize (_jobLock)
+                        }
                     } catch (InterruptedException ie) {}
                 } // while (_alive)
             } catch (Throwable t) {
@@ -729,8 +655,6 @@ public class JobQueue {
             // so we're going to DIE DIE DIE
             if (_log.shouldWarn())
                 _log.log(Log.WARN, "Router is incredibly overloaded or there's an error.");
-            //try { Thread.sleep(5000); } catch (InterruptedException ie) {}
-            //Router.getInstance().shutdown();
             return;
         }
 
@@ -738,8 +662,6 @@ public class JobQueue {
             // slow CPUs can get hosed with ElGamal, but 10s is too much.
             if (_log.shouldWarn())
                 _log.log(Log.WARN, "Router is incredibly overloaded (slow cpu?) or there's an error.");
-            //try { Thread.sleep(5000); } catch (InterruptedException ie) {}
-            //Router.getInstance().shutdown();
             return;
         }
     }
