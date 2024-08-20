@@ -65,12 +65,12 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  4 as of 0.9.2; 3 as of 0.9.9
      */
 
-    public static final int MAX_TO_FLOOD = SystemVersion.isSlow() ? 2 : 4;
+    public static final int MAX_TO_FLOOD = SystemVersion.isSlow() ? 4 : 8;
     private static final int FLOOD_PRIORITY = OutNetMessage.PRIORITY_NETDB_FLOOD;
-    private static final int FLOOD_TIMEOUT = 60*1000;
+    private static final int FLOOD_TIMEOUT = 90*1000;
     static final long NEXT_RKEY_RI_ADVANCE_TIME = 45*60*1000;
     private static final long NEXT_RKEY_LS_ADVANCE_TIME = 10*60*1000;
-    private static final int NEXT_FLOOD_QTY = MAX_TO_FLOOD - 1;
+    private static final int NEXT_FLOOD_QTY = MAX_TO_FLOOD / 2;
     private static final int MAX_LAG_BEFORE_SKIP_SEARCH = SystemVersion.isSlow() ? 600 : 300;
     private static final int PUBLISH_JOB_DELAY = 15*1000;
 
@@ -226,25 +226,32 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
     private int concurrent = 1;
     private int failCount = 0;
+    private int successCount = 0;
 
     @Override
     void sendStore(Hash key, DatabaseEntry ds, Job onSuccess, Job onFailure, long sendTimeout, Set<Hash> toIgnore) {
         // If we are a part of the floodfill netDb, don't send out our own leaseSets as part
-        // of the flooding - instead, send them to 3 random floodfill peers so they can flood 'em out.
+        // of the flooding - instead, send them to random floodfill peers so they can flood 'em out.
         Set<Hash> floodfillParticipants = selectFloodfillParticipants(toIgnore, getKBuckets(), concurrent);
         if (floodfillEnabled() && (ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)) {flood(ds);}
         else {
+            List<Hash> participantList = new ArrayList<>(floodfillParticipants);
+            Collections.shuffle(participantList);
+            floodfillParticipants = new HashSet<>(participantList);
+
             for (Hash peer : floodfillParticipants) {
-                if (onSuccess != null) {_context.jobQueue().addJob(onSuccess);}
-                else {_context.jobQueue().addJob(new FloodfillStoreJob(_context, this, key, ds, onSuccess, onFailure, sendTimeout, toIgnore));}
-                if (onFailure != null) {
+                if (onSuccess != null) {
+                    _context.jobQueue().addJob(onSuccess);
+                    successCount++;
+                }
+                else if (successCount == 0) {
+                    _context.jobQueue().addJob(new FloodfillStoreJob(_context, this, key, ds, onSuccess, onFailure, sendTimeout, toIgnore));
                     failCount++;
-                    if (failCount < 4) {concurrent = 2;}
-                    else if (failCount < 10) {concurrent = 3;}
-                    else {concurrent = 5;}
+                    if (failCount >= 10) {concurrent = 3;}
+                    else if (failCount >= 3) {concurrent = 2;}
                     if (_log.shouldWarn()) {
                         _log.warn("Flood of key [" + key.toBase32().substring(0,8) + "] to [" + peer.toBase64().substring(0,6) + "] failed -> " +
-                                  "Resending to " + concurrent + " peers");
+                                  "Resending to " + (concurrent > 1 ? concurrent + " new peers" : "a different peer") + "...");
                     }
                 }
             }
@@ -255,10 +262,10 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         Set<Hash> set = _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL);
         List<Hash> rv = new ArrayList<>(set.size());
         for (Hash h : set) {
-            RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
+            RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(h);
             String caps = ri != null ? ri.getCapabilities() : "";
             boolean isUnreachable = ri != null && caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
-            if ((toIgnore != null && toIgnore.contains(h)) || _context.banlist().isBanlisted(h) || isUnreachable ||
+            if (ri != null && (toIgnore != null && toIgnore.contains(h)) || _context.banlist().isBanlisted(h) || isUnreachable ||
                 _context.banlist().isBanlistedForever(h) || _context.profileOrganizer().peerSendsBadReplies(h)) {
                 continue;
             }
@@ -268,22 +275,6 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         Set<Hash> floodfillParticipants = new HashSet<>(rv.subList(0, Math.min(1, concurrent)));
         return floodfillParticipants;
     }
-
-/**
-    @Override
-    void sendStore(Hash key, DatabaseEntry ds, Job onSuccess, Job onFailure, long sendTimeout, Set<Hash> toIgnore) {
-        // if we are a part of the floodfill netDb, don't send out our own leaseSets as part
-        // of the flooding - instead, send them to a random floodfill peer so *they* can flood 'em out.
-        // perhaps statistically adjust this so we are the source every 1/N times... or something.
-        if (floodfillEnabled() && (ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)) {
-            flood(ds);
-            if (onSuccess != null)
-                _context.jobQueue().addJob(onSuccess);
-        } else {
-            _context.jobQueue().addJob(new FloodfillStoreJob(_context, this, key, ds, onSuccess, onFailure, sendTimeout, toIgnore));
-        }
-    }
-**/
 
     /**
      *  Increments and tests.
@@ -400,13 +391,15 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             m.setOnSendJob(floodGood);
             _context.commSystem().processMessage(m);
             flooded++;
-            if (_log.shouldDebug())
+            if (_log.shouldDebug()) {
                 _log.debug("Flooding the entry for [" + key.toBase32().substring(0,8) + "] to [" + peer.toBase64().substring(0,6) + "]");
+            }
             if (flooded >= MAX_TO_FLOOD) {break;}
         }
 
-        if (_log.shouldInfo())
+        if (_log.shouldInfo()) {
             _log.info("Flooded the entry for [" + key.toBase32().substring(0,8) + "] to " + flooded + " of " + peers.size() + " peers");
+        }
     }
 
     /**
@@ -502,8 +495,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         DataStore ds = getDataStore();
         if (ds != null) {
             for (DatabaseEntry o : ds.getEntries()) {
-                if (o.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)
+                if (o.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
                     rv.add((RouterInfo)o);
+                }
             }
         }
         return rv;
@@ -540,14 +534,10 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     // to be directed back to the clientmaking the query.
     SearchJob search(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs, boolean isLease, Hash fromLocalDest) {
         if (key == null) {
-            if (_log.shouldWarn()) {
-                _log.warn("Not searching for a NULL key!");
-            }
+            if (_log.shouldWarn()) {_log.warn("Not searching for a NULL key!");}
             return null;
         } else if (fromLocalDest == null && isClientDb()) {
-            if (_log.shouldWarn()) {
-                _log.warn("Client subDbs cannot use exploratory tunnels!");
-            }
+            if (_log.shouldWarn()) {_log.warn("Client subDbs cannot use exploratory tunnels!");}
             return null;
         } else {
             boolean isNew = false;
@@ -555,88 +545,30 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             synchronized (_activeFloodQueries) {
                 searchJob = _activeFloodQueries.get(key);
                 if (searchJob == null) {
-                    //if (SearchJob.onlyQueryFloodfillPeers(_context)) {
-                    //searchJob = new FloodOnlySearchJob(_context, this, key, onFindJob, onFailedLookupJob, (int)timeoutMs, isLease);
                     searchJob = new IterativeSearchJob(_context, this, key, onFindJob, onFailedLookupJob, (int)timeoutMs,
                                                        isLease, fromLocalDest);
-                    //} else {
-                    //    searchJob = new FloodSearchJob(_context, this, key, onFindJob, onFailedLookupJob, (int)timeoutMs, isLease);
-                    //}
                     _activeFloodQueries.put(key, searchJob);
                     isNew = true;
                 }
             }
 
-        if (isNew) {
-            if (_log.shouldDebug())
-                _log.debug("[DbId: " + this
-                           + "]: New ISJ ("
-                           + ((fromLocalDest != null) ? "through client tunnels" : "through exploratory tunnels")
-                           + ") for " + key.toBase64());
+            if (isNew) {
+                if (_log.shouldDebug())
+                    _log.debug("[DbId: " + this +
+                               "]: New IterativeSearch " + ((fromLocalDest != null) ? "via Client tunnels" : "via Exploratory tunnels") +
+                               " for key [" + key.toBase32().substring(0,8) + "]");
             _context.jobQueue().addJob(searchJob);
-        } else {
-            if (_log.shouldDebug())
-                _log.debug("Deferred IterativeSearchJob for [" + key.toBase32().substring(0,8) + "] with " + _activeFloodQueries.size() + " in progress");
-            searchJob.addDeferred(onFindJob, onFailedLookupJob, timeoutMs, isLease);
-            // not necessarily LS
-            _context.statManager().addRateData("netDb.lookupDeferred", 1, searchJob.getExpiration()-_context.clock().now());
-        }
-        return null;
+            } else {
+                if (_log.shouldDebug()) {
+                    _log.debug("Deferred IterativeSearchJob for [" + key.toBase32().substring(0,8) + "] with " + _activeFloodQueries.size() + " in progress");
+                }
+                searchJob.addDeferred(onFindJob, onFailedLookupJob, timeoutMs, isLease);
+                // not necessarily LS
+                _context.statManager().addRateData("netDb.lookupDeferred", 1, searchJob.getExpiration()-_context.clock().now());
+            }
+            return null;
         }
     }
-
-    /**
-     * Ok, the initial set of searches to the floodfill peers timed out, lets fall back on the
-     * wider kademlia-style searches
-     *
-     * Unused - called only by FloodSearchJob which is overridden - don't use this.
-     */
-/*****
-    void searchFull(Hash key, List<Job> onFind, List<Job> onFailed, long timeoutMs, boolean isLease) {
-        synchronized (_activeFloodQueries) { _activeFloodQueries.remove(key); }
-
-        Job find = null;
-        Job fail = null;
-        if (onFind != null) {
-            synchronized (onFind) {
-                if (!onFind.isEmpty())
-                    find = onFind.remove(0);
-            }
-        }
-        if (onFailed != null) {
-            synchronized (onFailed) {
-                if (!onFailed.isEmpty())
-                    fail = onFailed.remove(0);
-            }
-        }
-        SearchJob job = super.search(key, find, fail, timeoutMs, isLease);
-        if (job != null) {
-            if (_log.shouldInfo())
-                _log.info("Floodfill search timed out for " + key.toBase64() + ", falling back on normal search (#"
-                          + job.getJobId() + ") with " + timeoutMs + " remaining");
-            long expiration = timeoutMs + _context.clock().now();
-            List<Job> removed = null;
-            if (onFind != null) {
-                synchronized (onFind) {
-                    removed = new ArrayList(onFind);
-                    onFind.clear();
-                }
-                for (int i = 0; i < removed.size(); i++)
-                    job.addDeferred(removed.get(i), null, expiration, isLease);
-                removed = null;
-            }
-            if (onFailed != null) {
-                synchronized (onFailed) {
-                    removed = new ArrayList(onFailed);
-                    onFailed.clear();
-                }
-                for (int i = 0; i < removed.size(); i++)
-                    job.addDeferred(null, removed.get(i), expiration, isLease);
-                removed = null;
-            }
-        }
-    }
-*****/
 
     /**
      *  Must be called by the search job queued by search() on success or failure
@@ -672,15 +604,13 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     /** NTCP cons drop quickly but SSU takes a while, so it's prudent to keep this
      *  a little higher than 1 or 2. */
 //    protected final static int MIN_ACTIVE_PEERS = 5;
-    protected final static int MIN_ACTIVE_PEERS = SystemVersion.isSlow() ? 16 : 40;
+    protected final static int MIN_ACTIVE_PEERS = SystemVersion.isSlow() ? 16 : 32;
 
     /** @since 0.8.7 */
     private static final int MAX_DB_BEFORE_SKIPPING_SEARCH;
     static {
         long maxMemory = SystemVersion.getMaxMemory();
-        // 250 for every 32 MB, min of 250, max of 1250
-//        MAX_DB_BEFORE_SKIPPING_SEARCH = (int) Math.max(250l, Math.min(1250l, maxMemory / ((32 * 1024 * 1024l) / 250)));
-        MAX_DB_BEFORE_SKIPPING_SEARCH = SystemVersion.isSlow() ? 2000 : 3000;
+        MAX_DB_BEFORE_SKIPPING_SEARCH = SystemVersion.isSlow() ? 3000 : 5000;
     }
 
     /**
@@ -890,7 +820,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
         public String getName() { return "Timeout NetDb Lookup for Failing Peer"; }
         public void runJob() {
-            dropAfterLookupFailed(_peer);
+            if (!dropAfterLookupFailed(_peer)) {
+                dropAfterLookupFailed(_peer);
+            }
         }
     }
 
@@ -908,7 +840,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             RouterInfo updated = lookupRouterInfoLocally(_peer);
             if (updated == null || updated.getPublished() <= _info.getPublished()) {
                 // they just sent us what we already had
-                dropAfterLookupFailed(_peer);
+                if (!dropAfterLookupFailed(_peer)) {
+                    dropAfterLookupFailed(_peer);
+                }
             }
         }
     }

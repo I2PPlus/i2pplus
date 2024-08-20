@@ -950,7 +950,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0) &&
                                      isOld && (uptime > 15*60*1000 ||
-//                                     _context.netDbSegmentor().getKnownRouters() > 1500) && !isUs;
                                      _context.netDb().getKnownRouters() > 2000) && !isUs;
             boolean isLTier =  ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0;
@@ -1093,8 +1092,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
         // Don't spam the floodfills. In addition, always delay a few seconds since there may
         // be another leaseset change coming along momentarily.
-//        long nextTime = Math.max(j.lastPublished() + RepublishLeaseSetJob.REPUBLISH_LEASESET_TIMEOUT, _context.clock().now() + PUBLISH_DELAY);
-        long nextTime = _context.clock().now() + PUBLISH_DELAY*3;
+        long nextTime = Math.max(j.lastPublished() + RepublishLeaseSetJob.REPUBLISH_LEASESET_TIMEOUT, _context.clock().now() + PUBLISH_DELAY);
         // remove first since queue is a TreeSet now...
         _context.jobQueue().removeJob(j);
         j.getTiming().setStartAfter(nextTime);
@@ -1488,7 +1486,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         String v = routerInfo.getVersion();
         String minRouterVersion = "0.9.20";
         String MIN_VERSION = "0.9.61";
-        String CURRENT_VERSION = "0.9.62";
+        String CURRENT_VERSION = "0.9.63";
         String minVersionAllowed = _context.getProperty("router.minVersionAllowed");
         boolean isSlow = routerInfo != null && (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                                 routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
@@ -1646,7 +1644,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                     return caps + " Router [" + routerId + "] -> SSU only without Introducers and published over 15m ago";
                 } else {
                     if (isUnreachable && !isUs)
-                    return caps + " Router [" + routerId + "] -> Unreachable on any transport and published over 15m ago";
+                        return caps + " Router [" + routerId + "] -> Unreachable on any transport and published over 15m ago";
                 }
             }
         }
@@ -1794,9 +1792,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             return;
         }
 
-        // we always drop leaseSets that are failed [timed out],
-        // regardless of how many routers we have.  this is called on a lease if
-        // it has expired *or* its tunnels are failing and we want to see if there
+        // we always drop leaseSets that are failed [timed out], regardless of how many routers we have.
+        // this is called on a lease if it has expired *or* its tunnels are failing and we want to see if there
         // are any updates
         if (_log.shouldInfo())
             _log.info("Dropping LeaseSet [" + dbEntry.toBase32().substring(0,8) + "] -> Lookup / tunnel failure");
@@ -1819,11 +1816,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  Final remove for a router info.
      *  Do NOT use for leasesets.
      */
-    void dropAfterLookupFailed(Hash peer) {
+    boolean dropAfterLookupFailed(Hash peer) {
         if (isClientDb()) {
-//            _log.warn("Subdb", new Exception("I did it"));
-            return;
+            return false;
         }
+        boolean loggedFailure = false;
         int count = 0;
         if (count == 0) {
             _context.peerManager().removeCapabilities(peer);
@@ -1831,10 +1828,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _kb.remove(peer);
             _ds.remove(peer);
             if (_log.shouldInfo()) {
-                _log.info("Dropping RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Lookup failure");
+                if (!loggedFailure) {
+                    _log.info("Dropping RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Lookup failure");
+                    loggedFailure = true;
+                }
             }
             count++;
         }
+        return loggedFailure;
     }
 
     public void unpublish(LeaseSet localLeaseSet) {
@@ -1908,7 +1909,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /** smallest allowed period */
-    private static final int MIN_PER_PEER_TIMEOUT = 2*1000;
+    private static final int MIN_PER_PEER_TIMEOUT = 2500;
     /**
      *  We want FNDF.PUBLISH_TIMEOUT and RepublishLeaseSetJob.REPUBLISH_LEASESET_TIMEOUT
      *  to be greater than MAX_PER_PEER_TIMEOUT * TIMEOUT_MULTIPLIER by a factor of at least
@@ -1917,17 +1918,19 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private static final int MAX_PER_PEER_TIMEOUT = 5*1000;
     private static final int TIMEOUT_MULTIPLIER = 3;
 
-    /** todo: does this need more tuning? */
+    /**
+     * @return the timeout for a peer, based on the profile data, or the default timeout
+     */
     public int getPeerTimeout(Hash peer) {
+        if (peer == null) {throw new IllegalArgumentException("Peer cannot be null");}
         PeerProfile prof = _context.profileOrganizer().getProfile(peer);
-        double responseTime = MAX_PER_PEER_TIMEOUT;
-        if (prof != null && prof.getIsExpandedDB()) {
-            responseTime = prof.getDbResponseTime().getRate(60*60*1000L).getAvgOrLifetimeAvg();
-            // if 0 then there is no data, set to max.
-            if (responseTime <= 0 || responseTime > MAX_PER_PEER_TIMEOUT) {responseTime = MAX_PER_PEER_TIMEOUT;}
-            else if (responseTime < MIN_PER_PEER_TIMEOUT) {responseTime = MIN_PER_PEER_TIMEOUT;}
-        }
-        return TIMEOUT_MULTIPLIER * (int)responseTime;  // give it up to 3x the average response time
+        if (prof == null) {return TIMEOUT_MULTIPLIER * MAX_PER_PEER_TIMEOUT;}
+        double responseTime = prof.getDbResponseTime() != null &&  prof.getDbResponseTime().getRate(60*60*1000L) != null
+                              ? prof.getDbResponseTime().getRate(60*60*1000L).getAvgOrLifetimeAvg() : 0;
+        if (responseTime <= 0) {responseTime = MAX_PER_PEER_TIMEOUT;}
+        else if (responseTime > MAX_PER_PEER_TIMEOUT) {responseTime = MAX_PER_PEER_TIMEOUT;}
+        else if (responseTime < MIN_PER_PEER_TIMEOUT) {responseTime = MIN_PER_PEER_TIMEOUT;}
+        return TIMEOUT_MULTIPLIER * (int)responseTime;
     }
 
     /**

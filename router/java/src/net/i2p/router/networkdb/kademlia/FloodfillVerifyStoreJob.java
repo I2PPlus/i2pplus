@@ -177,7 +177,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                     // garlic encrypt
                     sess = MessageWrapper.generateSession(ctx, _client, VERIFY_TIMEOUT, !supportsRatchet);
                     if (sess == null) {
-                         if (_log.shouldWarn()) {_log.warn("No SessionKeyManager to reply to");}
+                         if (_log.shouldWarn()) {_log.warn("No SessionKeyManager for connection to [" + _target.toBase64().substring(0,6) + "]");}
                         _facade.verifyFinished(_key);
                         return;
                     }
@@ -193,14 +193,14 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 }
             }
             if (sess.tag != null) {
-                if (_log.shouldInfo()) {
-                _log.info("Requesting AES reply from [" + _target.toBase64().substring(0,6) +
+                if (_log.shouldDebug()) {
+                _log.debug("Requesting AES reply from [" + _target.toBase64().substring(0,6) +
                           "]\n* Session key: " + sess.key + "\n* Tag: " + sess.tag);
                 }
                 lookup.setReplySession(sess.key, sess.tag);
             } else {
-                if (_log.shouldInfo()) {
-                _log.info("Requesting AEAD reply from [" + _target.toBase64().substring(0,6) +
+                if (_log.shouldDebug()) {
+                _log.debug("Requesting AEAD reply from [" + _target.toBase64().substring(0,6) +
                           "]\n* Session key: " + sess.key + "\n* Tag: " + sess.rtag);
                 }
                 lookup.setReplySession(sess.key, sess.rtag);
@@ -432,7 +432,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
             toSkip.add(_target);
             // pass over all the ignores for the next attempt
             // unless we've had a crazy number of attempts, then start over
-            if (_ignore.size() < 20) {toSkip.addAll(_ignore);}
+            if (_ignore.size() < 50) {toSkip.addAll(_ignore);}
             if (_log.shouldWarn()) {
                 _log.warn("Floodfill Verify failed for key [" + _key.toBase32().substring(0,8) + "] -> Starting new NetDbStore...");
             }

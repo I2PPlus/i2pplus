@@ -213,9 +213,8 @@ class FloodfillPeerSelector extends PeerSelector {
      *  @param kbuckets now unused
      */
     List<Hash> selectFloodfillParticipants(Hash key, int howMany, Set<Hash> toIgnore, KBucketSet<Hash> kbuckets) {
-        if (toIgnore == null) {
-            toIgnore = Collections.singleton(_context.routerHash());
-        } else if (!toIgnore.contains(_context.routerHash())) {
+        if (toIgnore == null) {toIgnore = Collections.singleton(_context.routerHash());}
+        else if (!toIgnore.contains(_context.routerHash())) {
             // copy the Set so we don't confuse StoreJob
             toIgnore = new HashSet<Hash>(toIgnore);
             toIgnore.add(_context.routerHash());
