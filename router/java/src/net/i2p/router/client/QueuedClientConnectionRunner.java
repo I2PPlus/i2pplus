@@ -26,8 +26,6 @@ class QueuedClientConnectionRunner extends ClientConnectionRunner {
         this.queue = queue;
     }
 
-
-
     /**
      * Starts the reader thread. Does not call super().
      */
