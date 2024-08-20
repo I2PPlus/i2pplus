@@ -42,8 +42,8 @@ class ParticipatingThrottler {
 
     /** portion of the tunnel lifetime */
     private static final int LIFETIME_PORTION = 3;
-    private static final int MIN_LIMIT = (isSlow ? 20 : isHexaCore ? 60 : 40) / LIFETIME_PORTION;
-    private static final int MAX_LIMIT = (isSlow ? 100 : isHexaCore ? 500 : 400) / LIFETIME_PORTION;
+    private static final int MIN_LIMIT = (isSlow ? 40 : 120) / LIFETIME_PORTION;
+    private static final int MAX_LIMIT = (isSlow ? 600 : 1800) / LIFETIME_PORTION;
     private static final int PERCENT_LIMIT = 12 / LIFETIME_PORTION;
     private static final long CLEAN_TIME = 11 * 60 * 1000 / LIFETIME_PORTION;
     private static final String MIN_VERSION = "0.9.63";
@@ -100,9 +100,9 @@ class ParticipatingThrottler {
     }
 
     private int calculateLimit(int numTunnels, boolean isUnreachable, boolean isLowShare, boolean isFast) {
-        if (isUnreachable || isLowShare) {return Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 12, numTunnels * (PERCENT_LIMIT / 8) / 100));}
+        if (isUnreachable || isLowShare) {return Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 20, numTunnels * (PERCENT_LIMIT / 8) / 100));}
         else if (isSlow) {return Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 5, numTunnels * (PERCENT_LIMIT / 5) / 100));}
-        else if (!isQuadCore) {return Math.min(MIN_LIMIT * 3 / 2, Math.max(MAX_LIMIT / 4, numTunnels * (PERCENT_LIMIT / 4) / 100));}
+        //else if (!isQuadCore) {return Math.min(MIN_LIMIT * 3 / 2, Math.max(MAX_LIMIT / 4, numTunnels * (PERCENT_LIMIT / 4) / 100));}
         return Math.min((MIN_LIMIT * 3), Math.max(MAX_LIMIT / 2, numTunnels * (PERCENT_LIMIT / 2) / 100));
     }
 
@@ -126,7 +126,8 @@ class ParticipatingThrottler {
         return false;
     }
 
-    private boolean checkLowShareAndVersion(String version, boolean isLU, boolean shouldBlockOldRouters, Hash h, boolean shouldDisconnect, boolean isBanned, String caps, int bantime) {
+    private boolean checkLowShareAndVersion(String version, boolean isLU, boolean shouldBlockOldRouters, Hash h,
+                                            boolean shouldDisconnect, boolean isBanned, String caps, int bantime) {
         if (VersionComparator.comp(version, MIN_VERSION) < 0 && isLU && shouldBlockOldRouters) {
             if (shouldDisconnect) {
                 context.commSystem().forceDisconnect(h);
@@ -140,7 +141,8 @@ class ParticipatingThrottler {
         return false;
     }
 
-    private boolean checkUnreachableAndOld(String version, boolean isUnreachable, boolean shouldBlockOldRouters, Hash h, boolean shouldDisconnect, boolean isBanned, String caps) {
+    private boolean checkUnreachableAndOld(String version, boolean isUnreachable, boolean shouldBlockOldRouters, Hash h,
+                                           boolean shouldDisconnect, boolean isBanned, String caps) {
         if (VersionComparator.comp(version, MIN_VERSION) < 0 && isUnreachable && shouldBlockOldRouters) {
             if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h), 60 * 1000);}
             if (_log.shouldWarn()) {
@@ -151,7 +153,8 @@ class ParticipatingThrottler {
         return false;
     }
 
-    private Result evaluateThrottleConditions(int count, int limit, boolean shouldThrottle, boolean isFast, boolean isLowShare, boolean isUnreachable, Hash h, String caps, boolean isBanned, int bantime) {
+    private Result evaluateThrottleConditions(int count, int limit, boolean shouldThrottle, boolean isFast, boolean isLowShare,
+                                              boolean isUnreachable, Hash h, String caps, boolean isBanned, int bantime) {
         if (count > limit && shouldThrottle) {
             if (isFast && !isUnreachable) {
                 if (count > limit * 11 / 9) {
