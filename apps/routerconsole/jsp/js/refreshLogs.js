@@ -187,7 +187,7 @@ function start() {
         matches.forEach((match) => {
           // Capture the link text correctly, ignoring any prefix matches
           const linkedTextOnly = match.match(/([a-zA-Z0-9\~\-]{8})/)[0];
-          const linkHref = `/netdb?l=3#${linkedTextOnly}`;
+          const linkHref = `/netdb?l=3#ls_${linkedTextOnly.substring(0,4)}`;
           const link = document.createElement("a");
           link.href = linkHref;
           link.textContent = linkedTextOnly;
