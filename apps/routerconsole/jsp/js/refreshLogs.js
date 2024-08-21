@@ -88,6 +88,7 @@ function start() {
         }
       }
       linkifyRouterIds();
+      linkifyLeaseSets();
       linkifyIPv4();
       linkifyIPv6();
       if (servicelogs) {
@@ -145,8 +146,12 @@ function start() {
     }
   }
 
+  function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // Escape special characters
+  }
+
   function linkifyRouterIds() {
-    if (!routerlogsList) {return;}
+    if (!routerlogsList) { return; }
     const liElements = routerlogsList.querySelectorAll("li");
 
     liElements.forEach((li) => {
@@ -160,7 +165,36 @@ function start() {
           const link = document.createElement("a");
           link.href = linkHref;
           link.textContent = linkText;
-          li.innerHTML = li.innerHTML.replace(new RegExp(`\\[${linkText}\\]`, "g"), link.outerHTML);
+
+          // Escape the linkText to ensure it is safe for the regex
+          const escapedLinkText = escapeRegExp(linkText);
+          li.innerHTML = li.innerHTML.replace(new RegExp(`\\[${escapedLinkText}\\]`, "g"), link.outerHTML);
+        });
+      }
+    });
+  }
+
+  function linkifyLeaseSets() {
+    if (!routerlogsList) { return; }
+    const liElements = routerlogsList.querySelectorAll("li");
+
+    liElements.forEach((li) => {
+      const text = li.textContent;
+      // The regex should match a possible prefix of "key " and then the brackets
+      const matches = text.match(/(?:key\s*)?\[([a-zA-Z0-9\~\-]{8})\]/g);
+
+      if (matches) {
+        matches.forEach((match) => {
+          // Capture the link text correctly, ignoring any prefix matches
+          const linkedTextOnly = match.match(/([a-zA-Z0-9\~\-]{8})/)[0];
+          const linkHref = `/netdb?l=3#${linkedTextOnly}`;
+          const link = document.createElement("a");
+          link.href = linkHref;
+          link.textContent = linkedTextOnly;
+
+          // Escape the link text to ensure it is safe for the regex
+          const escapedLinkText = escapeRegExp(linkedTextOnly);
+          li.innerHTML = li.innerHTML.replace(new RegExp(`(?:key\\s*)?\\[${escapedLinkText}\\]`, "g"), link.outerHTML);
         });
       }
     });
@@ -237,6 +271,7 @@ function start() {
 
   document.addEventListener("DOMContentLoaded", function() {
     linkifyRouterIds();
+    linkifyLeaseSets();
     linkifyIPv4();
     linkifyIPv6();
     onVisible(mainLogs, initRefresh);
