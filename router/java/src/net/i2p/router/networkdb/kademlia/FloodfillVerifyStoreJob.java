@@ -50,8 +50,8 @@ class FloodfillVerifyStoreJob extends JobImpl {
 
     private static final int START_DELAY = 20*1000;
     private static final int START_DELAY_RAND = 10*1000;
-    private static final int VERIFY_TIMEOUT = 60*1000;
-    private static final int MAX_PEERS_TO_TRY = 10;
+    private static final int VERIFY_TIMEOUT = 75*1000;
+    private static final int MAX_PEERS_TO_TRY = 8;
     private static final int IP_CLOSE_BYTES = 3;
     private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
 
@@ -161,8 +161,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 if (supportsElGamal || supportsRatchet) {
                     sess = MessageWrapper.generateSession(ctx, ctx.sessionKeyManager(), VERIFY_TIMEOUT, !supportsRatchet);
                 } else {
-                    // We don't have a compatible way to get a reply,
-                    // skip it for now.
+                    // We don't have a compatible way to get a reply, skip it for now.
                      if (_log.shouldWarn()) {_log.warn("Skipping NetDbStore verify for incompatible Router " + peer);}
                     _facade.verifyFinished(_key);
                     return;
@@ -182,10 +181,9 @@ class FloodfillVerifyStoreJob extends JobImpl {
                         return;
                     }
                 } else {
-                    // We don't have a compatible way to get a reply,
-                    // skip it for now.
-                     if (_log.shouldWarn()) {
-                         _log.warn("Skipping NetDbStore verify to [" + _target.toBase64().substring(0,6) +
+                    // We don't have a compatible way to get a reply, skip it for now.
+                    if (_log.shouldWarn()) {
+                        _log.warn("Skipping NetDbStore verify to [" + _target.toBase64().substring(0,6) +
                                    "] for ECIES or ElG-only client [" + _client.toBase32().substring(0,8) + "]");
                     }
                     _facade.verifyFinished(_key);
