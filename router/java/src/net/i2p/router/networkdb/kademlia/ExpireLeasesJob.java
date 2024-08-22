@@ -29,7 +29,7 @@ import net.i2p.util.Log;
 class ExpireLeasesJob extends JobImpl {
     private final Log _log;
     private final KademliaNetworkDatabaseFacade _facade;
-    private final static long RERUN_DELAY_MS = 30*1000;
+    private final static long RERUN_DELAY_MS = 10*60*1000;
 
     public ExpireLeasesJob(RouterContext ctx, KademliaNetworkDatabaseFacade facade) {
         super(ctx);
@@ -51,7 +51,7 @@ class ExpireLeasesJob extends JobImpl {
                 _log.info("[DbId: " + _facade + "] Known LeaseSets: " + _facade.getKnownLeaseSets() + "; Leases to expire: " + toExpire);
             }
         }
-        //_facade.queueForExploration(toExpire); // don't do explicit searches, just explore passively
+        _facade.queueForExploration(toExpire); // don't do explicit searches, just explore passively
         requeue(RERUN_DELAY_MS);
     }
 
@@ -71,7 +71,7 @@ class ExpireLeasesJob extends JobImpl {
                     Hash h = entry.getKey();
                     toExpire.add(h);
                     if (ctx.clientManager().isLocal(h))
-                        _log.logAlways(Log.WARN, "Expired LOCAL leaseset [" + h.toBase32().substring(0,8) + "]");
+                        _log.logAlways(Log.ERROR, "Expired LOCAL LeaseSet [" + h.toBase32().substring(0,8) + "]");
                 }
             }
         }
