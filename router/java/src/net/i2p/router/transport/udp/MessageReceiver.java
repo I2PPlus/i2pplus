@@ -31,13 +31,10 @@ class MessageReceiver {
     private volatile boolean _alive;
     //private ByteCache _cache;
 
-//    private static final int MIN_THREADS = 2;  // unless < 32MB
-    private static final int MIN_THREADS = 1;  // unless < 32MB
-//    private static final int MAX_THREADS = 5;
-    private static final int MAX_THREADS = (SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ||
-                                            SystemVersion.getMaxMemory() < 512*1024*1024) ? 4 : Math.max(SystemVersion.getCores(), 8);
-    private static final int MIN_QUEUE_SIZE = 32;  // unless < 32MB
-    private static final int MAX_QUEUE_SIZE = 128;
+    private static final int MIN_THREADS = SystemVersion.isSlow() ? 2 : 4;
+    private static final int MAX_THREADS = SystemVersion.isSlow() ? 6 : Math.max(SystemVersion.getCores(), 12);
+    private static final int MIN_QUEUE_SIZE =  SystemVersion.isSlow() ? 32 : 64;
+    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 128 : 256;
     private final int _threadCount;
     private static final long POISON_IMS = -99999999999l;
     private static final int cores = SystemVersion.getCores();
@@ -46,23 +43,13 @@ class MessageReceiver {
         _context = ctx;
         _log = ctx.logManager().getLog(MessageReceiver.class);
         _transport = transport;
-
         long maxMemory = SystemVersion.getMaxMemory();
         int cores = SystemVersion.getCores();
         boolean isSlow = SystemVersion.isSlow();
         _threadCount = MAX_THREADS;
-        int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (2*1024*1024)));
+        int qsize = (int) MAX_QUEUE_SIZE;
         _completeMessages = new CoDelBlockingQueue<InboundMessageState>(ctx, "UDP-MessageReceiver", qsize);
-
-        // the runners run forever, no need to have a cache
-        //_cache = ByteCache.getInstance(64, I2NPMessage.MAX_SIZE);
         _context.statManager().createRateStat("udp.inboundExpired", "Number of inbound messages expired before receipt", "Transport [UDP]", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.inboundRemaining", "How many messages were remaining when a message is pulled off the complete queue?", "Transport [UDP]", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.inboundReady", "How many messages were ready when a message is added to the complete queue?", "Transport [UDP]", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.inboundReadTime", "Time to parse in the completed fragments into a message?", "Transport [UDP]", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.inboundReceiveProcessTime", "Time to add the message to the transport?", "Transport [UDP]", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.inboundLag", "How long the oldest ready message has been sitting on the queue (period is the queue size)?", "Transport [UDP]", UDPTransport.RATES);
-
         _alive = true;
     }
 
@@ -89,10 +76,8 @@ class MessageReceiver {
             _completeMessages.offer(ims);
         }
         for (int i = 1; i <= 5 && !_completeMessages.isEmpty(); i++) {
-            try {
-//                Thread.sleep(i * 50);
-                Thread.sleep(i * 10);
-            } catch (InterruptedException ie) {}
+            try {Thread.sleep(i * 10);}
+            catch (InterruptedException ie) {}
         }
         _completeMessages.clear();
     }
@@ -103,8 +88,6 @@ class MessageReceiver {
      *  BLOCKING if queue is full.
      */
     public void receiveMessage(InboundMessageState state) {
-        //int total = 0;
-        //long lag = -1;
         if (_alive) {
             try {
                 _completeMessages.put(state);
@@ -112,36 +95,26 @@ class MessageReceiver {
                 _alive = false;
             }
         }
-        //total = _completeMessages.size();
-        //if (total > 1)
-        //    lag = ((InboundMessageState)_completeMessages.get(0)).getLifetime();
-        //if (total > 1)
-        //    _context.statManager().addRateData("udp.inboundReady", total, 0);
-        //if (lag > 1000)
-        //    _context.statManager().addRateData("udp.inboundLag", lag, total);
     }
 
     public void loop(I2NPMessageHandler handler) {
         InboundMessageState message = null;
-        //ByteArray buf = _cache.acquire();
         ByteArray buf = new ByteArray(new byte[I2NPMessage.MAX_SIZE]);
         while (_alive) {
             int expired = 0;
             long expiredLifetime = 0;
             try {
-                    while (message == null) {
-                        message = _completeMessages.take();
-                        if ( (message != null) && (message.getMessageId() == POISON_IMS) ) {
-                            message = null;
-                            break;
-                        }
-                        if ( (message != null) && (message.isExpired()) ) {
-                            expiredLifetime += message.getLifetime();
-                            // message.releaseResources() ??
-                            message = null;
-                            expired++;
-                        }
-                        //remaining = _completeMessages.size();
+                while (message == null) {
+                    message = _completeMessages.take();
+                    if ((message != null) && (message.getMessageId() == POISON_IMS)) {
+                        message = null;
+                        break;
+                    }
+                    if ((message != null) && (message.isExpired())) {
+                        expiredLifetime += message.getLifetime();
+                        message = null;
+                        expired++;
+                    }
                 }
             } catch (InterruptedException ie) {}
 
@@ -149,16 +122,9 @@ class MessageReceiver {
                 _context.statManager().addRateData("udp.inboundExpired", expired, expiredLifetime);
 
             if (message != null) {
-                //long before = System.currentTimeMillis();
-                //if (remaining > 0)
-                //    _context.statManager().addRateData("udp.inboundRemaining", remaining, 0);
                 int size = message.getCompleteSize();
-                //if (_log.shouldDebug())
-                //    _log.debug("Full message received (" + message.getMessageId() + ") after " + message.getLifetime());
-                //long afterRead = -1;
                 try {
                     I2NPMessage msg = readMessage(buf, message, handler);
-                    //afterRead = System.currentTimeMillis();
                     if (msg != null)
                         _transport.messageReceived(msg, null, message.getFrom(), message.getLifetime(), size);
                 } catch (RuntimeException re) {
@@ -166,16 +132,8 @@ class MessageReceiver {
                     continue;
                 }
                 message = null;
-                //long after = System.currentTimeMillis();
-                //if (afterRead - before > 100)
-                //    _context.statManager().addRateData("udp.inboundReadTime", afterRead - before, remaining);
-                //if (after - afterRead > 100)
-                //    _context.statManager().addRateData("udp.inboundReceiveProcessTime", after - afterRead, remaining);
             }
         }
-
-        // no need to zero it out, as these buffers are only used with an explicit getCompleteSize
-        //_cache.release(buf, false);
     }
 
     /**
