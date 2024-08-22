@@ -48,9 +48,9 @@ class FloodfillVerifyStoreJob extends JobImpl {
     private final Set<Hash> _ignore;
     private final MaskedIPSet _ipSet;
 
-    private static final int START_DELAY = 20*1000;
-    private static final int START_DELAY_RAND = 10*1000;
-    private static final int VERIFY_TIMEOUT = 75*1000;
+    private static final int START_DELAY = 25*1000;
+    private static final int START_DELAY_RAND = 5*1000;
+    private static final int VERIFY_TIMEOUT = 90*1000;
     private static final int MAX_PEERS_TO_TRY = 8;
     private static final int IP_CLOSE_BYTES = 3;
     private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };

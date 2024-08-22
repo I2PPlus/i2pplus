@@ -36,7 +36,8 @@ class RepublishLeaseSetJob extends JobImpl {
     }
 
     public void runJob() {
-        if (!getContext().clientManager().shouldPublishLeaseSet(_dest)) {
+        long uptime = getContext().router().getUptime();
+        if (!getContext().clientManager().shouldPublishLeaseSet(_dest) || uptime < 5*60*1000) {
             return;
         }
 
@@ -47,7 +48,7 @@ class RepublishLeaseSetJob extends JobImpl {
                     if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
                         if (_log.shouldWarn()) {
                             _log.warn("Not publishing expired LOCAL LeaseSet [" + _dest.toBase32().substring(0,8) + "]",
-                                    new Exception("Publish expired LOCAL lease?"));
+                                      new Exception("Publish expired LOCAL lease?"));
                         }
                     } else {
                         if (_log.shouldInfo()) {

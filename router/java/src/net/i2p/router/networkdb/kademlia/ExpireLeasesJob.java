@@ -29,7 +29,7 @@ import net.i2p.util.Log;
 class ExpireLeasesJob extends JobImpl {
     private final Log _log;
     private final KademliaNetworkDatabaseFacade _facade;
-    private final static long RERUN_DELAY_MS = 10*60*1000;
+    private final static long RERUN_DELAY_MS = 5*60*1000;
 
     public ExpireLeasesJob(RouterContext ctx, KademliaNetworkDatabaseFacade facade) {
         super(ctx);
@@ -40,8 +40,9 @@ class ExpireLeasesJob extends JobImpl {
     public String getName() { return "Expire Leases"; }
 
     public void runJob() {
+        long uptime = getContext().router().getUptime();
         List<Hash> toExpire = selectKeysToExpire();
-        if (!toExpire.isEmpty()) {
+        if (!toExpire.isEmpty() && uptime >= 10*60*1000) {
             StringBuilder buf = new StringBuilder(16);
             buf.append("Leases to expire: ");
             for (Hash h : toExpire) {buf.append("[").append(h.toBase32().substring(0,8)).append("]"); buf.append(" ");}
