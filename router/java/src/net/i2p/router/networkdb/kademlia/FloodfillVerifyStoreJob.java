@@ -364,7 +364,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 }
                 if (_log.shouldWarn()) {
                     _log.warn("Floodfill Verify failed for key [" + _key.toBase32().substring(0,8) + "] -> Key was stale" +
-                              (_log.shouldInfo() ? "\n* " + dsm.getEntry() : ""));
+                              (_log.shouldDebug() ? "\n* " + dsm.getEntry() : ""));
                 }
             } else if (type == DatabaseSearchReplyMessage.MESSAGE_TYPE) {
                 DatabaseSearchReplyMessage dsrm = (DatabaseSearchReplyMessage) _message;
@@ -378,8 +378,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 // only for RI... LS too dangerous?
                 if (_isRouterInfo) {
                     if (_facade.isClientDb() && _log.shouldLog(Log.WARN)) {
-                        _log.warn("Warning! Client is starting a SingleLookupJob (DIRECT?) for RouterInfo" +
-                                  " [DbId: " + _facade + "]");
+                        _log.warn("Warning! Client is starting a SingleLookupJob (DIRECT?) for RouterInfo [DbId: " + _facade + "]");
                     }
                     ctx.jobQueue().addJob(new SingleLookupJob(ctx, dsrm));
                 }

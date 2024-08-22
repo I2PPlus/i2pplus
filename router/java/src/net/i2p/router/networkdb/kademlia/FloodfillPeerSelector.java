@@ -428,37 +428,22 @@ class FloodfillPeerSelector extends PeerSelector {
 //        private static final int EXTRA_MATCHES = 100;
         private static final int EXTRA_MATCHES = 200;
         public void add(Hash entry) {
-            //if (_context.profileOrganizer().isFailing(entry))
-            //    return;
-            if ( (_toIgnore != null) && (_toIgnore.contains(entry)) )
-                return;
-            //if (entry.equals(_context.routerHash()))
-            //    return;
-            // it isn't direct, so who cares if they're banlisted
-            if (_context.banlist().isBanlisted(entry))
-                return;
-            // ... unless they are really bad
-            if (_context.banlist().isBanlistedForever(entry))
-                return;
+            if ((_toIgnore != null) && (_toIgnore.contains(entry))) {return;}
+            if (_context.banlist().isBanlisted(entry)) {return;}
             RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(entry);
-            //if (info == null)
-            //    return;
-
-            if (info != null && FloodfillNetworkDatabaseFacade.isFloodfill(info)) {
-                _floodfillMatches.add(entry);
-            } else {
+            if (info != null && FloodfillNetworkDatabaseFacade.isFloodfill(info)) {_floodfillMatches.add(entry);}
+            else {
                 // This didn't really work because we stopped filling up when _wanted == _matches,
                 // thus we don't add and sort the whole db to find the closest.
                 // So we keep going for a while. This, together with periodically shuffling the
                 // KBucket (see KBucketImpl.add()) makes exploration work well.
-                if ( (!SearchJob.onlyQueryFloodfillPeers(_context)) && (_wanted + EXTRA_MATCHES > _matches) && (_key != null) ) {
+                if ((!SearchJob.onlyQueryFloodfillPeers(_context)) && (_wanted + EXTRA_MATCHES > _matches) && (_key != null)) {
                     _sorted.add(entry);
-                } else {
-                    return;
-                }
+                } else {return;}
             }
             _matches++;
         }
+
         /** get the first $howMany entries matching */
         public List<Hash> get(int howMany) {
             return get(howMany, false);
