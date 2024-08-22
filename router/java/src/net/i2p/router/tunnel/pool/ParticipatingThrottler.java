@@ -67,8 +67,7 @@ class ParticipatingThrottler {
         boolean isLowShare = ri != null && !isUs && (
             caps.indexOf(Router.CAPABILITY_BW12) >= 0 ||
             caps.indexOf(Router.CAPABILITY_BW32) >= 0 ||
-            caps.indexOf(Router.CAPABILITY_BW64) >= 0 ||
-            caps.indexOf(Router.CAPABILITY_BW128) >= 0);
+            caps.indexOf(Router.CAPABILITY_BW64) >= 0);
         boolean isFast = ri != null && !isUs && (
             caps.indexOf(Router.CAPABILITY_BW256) >= 0||
             caps.indexOf(Router.CAPABILITY_BW512) >= 0||
@@ -102,7 +101,6 @@ class ParticipatingThrottler {
     private int calculateLimit(int numTunnels, boolean isUnreachable, boolean isLowShare, boolean isFast) {
         if (isUnreachable || isLowShare) {return Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 20, numTunnels * (PERCENT_LIMIT / 8) / 100));}
         else if (isSlow) {return Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 5, numTunnels * (PERCENT_LIMIT / 5) / 100));}
-        //else if (!isQuadCore) {return Math.min(MIN_LIMIT * 3 / 2, Math.max(MAX_LIMIT / 4, numTunnels * (PERCENT_LIMIT / 4) / 100));}
         return Math.min((MIN_LIMIT * 3), Math.max(MAX_LIMIT / 2, numTunnels * (PERCENT_LIMIT / 2) / 100));
     }
 
