@@ -1,6 +1,9 @@
+2024-08-21 dr|z3d
+ * Console: Linkify leasesets and add leading key icon
+
 2024-08-09 zzz
  * I2PSnark:
-   - Reduce minimum banwdith, reduce max connections if low bandwidth
+   - Reduce minimum bandwith, reduce max connections if low bandwidth
    - Normailze strings when searching (Gitlab #488)
  * Tunnels: Do not select ElG routers for tunnels
  * Util: Reduce number of PRNG output buffers
