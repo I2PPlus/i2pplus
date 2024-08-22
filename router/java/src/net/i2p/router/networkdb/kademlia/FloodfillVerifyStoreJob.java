@@ -1,6 +1,7 @@
 package net.i2p.router.networkdb.kademlia;
 
 import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -48,8 +49,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
     private final Set<Hash> _ignore;
     private final MaskedIPSet _ipSet;
 
-    private static final int START_DELAY = 25*1000;
-    private static final int START_DELAY_RAND = 5*1000;
+    private static final int START_DELAY = 30*1000;
     private static final int VERIFY_TIMEOUT = 90*1000;
     private static final int MAX_PEERS_TO_TRY = 8;
     private static final int IP_CLOSE_BYTES = 3;
@@ -85,7 +85,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
             _ignore.add(_sentTo);
         } else {_ipSet = new MaskedIPSet(16);}
         // wait some time before trying to verify the store
-        getTiming().setStartAfter(ctx.clock().now() + START_DELAY + ctx.random().nextInt(START_DELAY_RAND));
+        getTiming().setStartAfter(ctx.clock().now() + START_DELAY);
         getContext().statManager().createRateStat("netDb.floodfillVerifyOK", "Time for successful Floodfill verify (ms)", "NetworkDatabase", RATES);
         getContext().statManager().createRateStat("netDb.floodfillVerifyFail", "Time for failed Floodfill verify (ms)", "NetworkDatabase", RATES);
         getContext().statManager().createRateStat("netDb.floodfillVerifyTimeout", "Floodfill verify timeout (ms)", "NetworkDatabase", RATES);
@@ -271,14 +271,17 @@ class FloodfillVerifyStoreJob extends JobImpl {
                     }
                 } else {
                     if (_log.shouldInfo()) {
-                        _log.info("Skipping Floodfill Verify for Router [" + peer.toBase64().substring(0,6) + "] -> Too old");
+                        _log.info("Skipping Floodfill Verify for Router [" + peer.toBase64().substring(0,6) + "] -> Router is too old");
                     }
                 }
                 _ignore.add(peer);
             }
         } else {
-            List<Hash> peers = sel.selectFloodfillParticipants(rkey, 1, _ignore, _facade.getKBuckets());
-            if (!peers.isEmpty()) {return peers.get(0);}
+            List<Hash> peers = sel.selectFloodfillParticipants(rkey, 256, _ignore, _facade.getKBuckets());
+            if (!peers.isEmpty()) {
+                Collections.shuffle(peers);
+                return peers.get(0);
+            }
         }
 
         if (_log.shouldWarn()) {_log.warn("No other peers to verify Floodfill with, using the one we sent to");}
