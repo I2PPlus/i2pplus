@@ -780,7 +780,7 @@ public class SummaryHelper extends HelperBase {
             buf.append("<table id=sb_localtunnels class=volatile>");
 
             for (Destination client : clients) {
-                String name = getName(client);
+                String name = getTunnelName(client);
                 Hash h = client.calculateHash();
                 Boolean server = _context.clientManager().shouldPublishLeaseSet(h);
                 Boolean isPing = (name.startsWith("Ping") && name.contains("[")) || name.equals("I2Ping");
@@ -788,36 +788,28 @@ public class SummaryHelper extends HelperBase {
                 Boolean isI2PChat = name.equals(_t("Messenger")) || name.toLowerCase().equals(_t("i2pchat"));
 
                 buf.append("<tr><td ");
-                if (isSnark)
-                    buf.append("class=tunnelI2PSnark ");
-                else if (isI2PChat)
-                    buf.append("class=tunnelI2PChat ");
-                else if (server)
-                    buf.append("class=tunnelServer ");
-                else if (isPing)
-                    buf.append("class=ping ");
+                if (isSnark) {buf.append("class=tunnelI2PSnark ");}
+                else if (isI2PChat) {buf.append("class=tunnelI2PChat ");}
+                else if (server) {buf.append("class=tunnelServer ");}
+                else if (isPing) {buf.append("class=ping ");}
                 buf.append("><img src=/themes/console/images/");
-                if (isSnark) {
-                    buf.append("snark.svg alt=I2PSnark title=\"").append(_t("Torrents"));
-                } else if (isI2PChat) {
-                    buf.append("i2pchat.svg alt=I2PChat title=\"").append(_t("I2PChat"));
-                } else if (server) {
+                if (isSnark) {buf.append("snark.svg alt=I2PSnark title=\"").append(_t("Torrents"));}
+                else if (isI2PChat) {buf.append("i2pchat.svg alt=I2PChat title=\"").append(_t("I2PChat"));}
+                else if (server) {
                     buf.append("server.svg alt=Server title=\"").append(_t("Server"));
-                    if (!isAdvanced()) {
-                        buf.append(" (").append(_t("service may be available to peers")).append(")");
-                     }
+                    if (!isAdvanced()) {buf.append(" (").append(_t("service may be available to peers")).append(")");}
                 } else {
-                    if (isPing)
-                        buf.append("ping.svg alt=Client title=\"").append(_t("Client"));
-                    else
-                        buf.append("client.svg alt=Client title=\"").append(_t("Client"));
-                    if (!isAdvanced()) {
-                        buf.append(" (").append(_t("service is only available locally")).append(")");
-                    }
+                    if (isPing) {buf.append("ping.svg alt=Client title=\"").append(_t("Client"));}
+                    else {buf.append("client.svg alt=Client title=\"").append(_t("Client"));}
+                    if (!isAdvanced()) {buf.append(" (").append(_t("service is only available locally")).append(")");}
                 }
                 buf.append("\" width=16 height=16>");
                 buf.append("</td><td><b><a href=\"/tunnels#").append(h.toBase64().substring(0,4));
-                buf.append("\" target=_top title=\"").append(_t("Show tunnels")).append("\">");
+                buf.append("\" target=_top title=\"").append(_t("Show tunnels"));
+                if (isAdvanced()) {
+                    buf.append(" [").append(h.toBase32().substring(0,8)).append("&hellip;b32.i2p]");
+                }
+                buf.append("\">");
                 // Increase permitted max length of tunnel name & handle overflow with css
                 if (name.length() <= 32) {buf.append(DataHelper.escapeHTML(name));}
                 else {buf.append(DataHelper.escapeHTML(ServletUtil.truncate(name, 29))).append("&hellip;");}
@@ -829,12 +821,14 @@ public class SummaryHelper extends HelperBase {
                         // red light
                         buf.append("<td class=tunnelRebuilding><img src=/themes/console/images/local_down.svg alt=\"")
                            .append(_t("Rebuilding")).append("&hellip;\" title=\"").append(_t("Leases expired")).append(" ")
-                           .append(DataHelper.formatDuration2(0 - timeToExpire));
-                        buf.append(" ").append(_t("ago")).append(". ").append(_t("Rebuilding")).append("&hellip;\" width=16 height=16></td></tr>\n");
+                           .append(DataHelper.formatDuration2(0 - timeToExpire))
+                           .append(" ").append(_t("ago")).append(". ").append(_t("Rebuilding"))
+                           .append("&hellip;\" width=16 height=16></td></tr>\n");
                     } else {
                         // green light
                         buf.append("<td class=tunnelReady><img src=/themes/console/images/local_up.svg alt=\"")
-                           .append(_t("Ready")).append("\" title=\"").append(_t("Ready")).append("\" width=16 height=16></td></tr>\n");
+                           .append(_t("Ready")).append("\" title=\"").append(_t("Ready"))
+                           .append("\" width=16 height=16></td></tr>\n");
                     }
                 } else {
                     // yellow light
@@ -866,8 +860,8 @@ public class SummaryHelper extends HelperBase {
         private final String snark = _t("I2PSnark");
 
         public int compare(Destination lhs, Destination rhs) {
-            String lname = getName(lhs);
-            String rname = getName(rhs);
+            String lname = getTunnelName(lhs);
+            String rname = getTunnelName(rhs);
             List<Destination> clients = new ArrayList<Destination>(_context.clientManager().listClients());
             for (Destination client : clients) {
                 Hash h = client.calculateHash();
@@ -898,7 +892,7 @@ public class SummaryHelper extends HelperBase {
     }
 
     /** translate here so collation works above */
-    private String getName(Destination d) {
+    private String getTunnelName(Destination d) {
         TunnelPoolSettings in = _context.tunnelManager().getInboundSettings(d.calculateHash());
         String name = (in != null ? in.getDestinationNickname() : null);
         if (name == null) {
