@@ -2,11 +2,13 @@ package net.i2p.router.networkdb.kademlia;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
 import net.i2p.router.JobImpl;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.TunnelPoolSettings;
 import net.i2p.util.Log;
 
 /**
@@ -23,6 +25,7 @@ class RepublishLeaseSetJob extends JobImpl {
     /** this is actually last attempted publish */
     private long _lastPublished;
     private final AtomicInteger failCount = new AtomicInteger(0);
+    private String tunnelName = "";
 
     public RepublishLeaseSetJob(RouterContext ctx, KademliaNetworkDatabaseFacade facade, Hash destHash) {
         super(ctx);
@@ -45,14 +48,16 @@ class RepublishLeaseSetJob extends JobImpl {
             if (getContext().clientManager().isLocal(_dest)) {
                 LeaseSet ls = _facade.lookupLeaseSetLocally(_dest);
                 if (ls != null) {
+                    tunnelName = getTunnelName(ls.getDestination());
+                    String name = !tunnelName.equals("") ? " for \'" + tunnelName + "\'" : " for key";
                     if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
                         if (_log.shouldWarn()) {
-                            _log.warn("Not publishing expired LOCAL LeaseSet [" + _dest.toBase32().substring(0,8) + "]",
+                            _log.warn("Not publishing expired LOCAL LeaseSet" + name + " [" + _dest.toBase32().substring(0,8) + "]",
                                       new Exception("Publish expired LOCAL lease?"));
                         }
                     } else {
                         if (_log.shouldInfo()) {
-                            _log.info("Attempting to publish new LeaseSet for key [" + _dest.toBase32().substring(0,8) + "]...");
+                            _log.info("Attempting to publish new LeaseSet" + name + " [" + _dest.toBase32().substring(0,8) + "]...");
                         }
                         getContext().statManager().addRateData("netDb.republishLeaseSetCount", 1);
                         _facade.sendStore(_dest, ls, null, new OnRepublishFailure(ls), REPUBLISH_LEASESET_TIMEOUT, null);
@@ -111,14 +116,28 @@ class RepublishLeaseSetJob extends JobImpl {
 
         public void runJob() {
             LeaseSet ls = _facade.lookupLeaseSetLocally(_ls.getHash());
+            if (ls != null) {tunnelName = getTunnelName(_ls.getDestination());}
             if (ls != null && ls.getEarliestLeaseDate() == _ls.getEarliestLeaseDate()) {
                 requeueRepublish();
             } else {
                 if (_log.shouldInfo()) {
-                    _log.info("Not requeueing failed publication of LeaseSet [" +
-                            _ls.getDestination().toBase32().substring(0,8) + "] -> Newer LeaseSet exists");
+                    String name = !tunnelName.equals("") ? " for \'" + tunnelName + "\'" : "";
+                    _log.info("Not requeueing failed publication of LeaseSet" + name + " [" +
+                              _ls.getDestination().toBase32().substring(0,8) + "] -> Newer LeaseSet exists");
                 }
             }
         }
     }
+
+    public String getTunnelName(Destination d) {
+        TunnelPoolSettings in = getContext().tunnelManager().getInboundSettings(d.calculateHash());
+        String name = (in != null ? in.getDestinationNickname() : null);
+        if (name == null) {
+            TunnelPoolSettings out = getContext().tunnelManager().getOutboundSettings(d.calculateHash());
+            name = (out != null ? out.getDestinationNickname() : null);
+        }
+        if (name == null) {return "";}
+        return name;
+    }
+
 }

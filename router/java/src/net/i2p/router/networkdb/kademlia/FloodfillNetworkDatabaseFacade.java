@@ -10,6 +10,7 @@ import java.util.Set;
 
 import net.i2p.crypto.SigType;
 import net.i2p.data.DatabaseEntry;
+import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.DatabaseLookupMessage;
 import net.i2p.data.i2np.DatabaseStoreMessage;
@@ -28,6 +29,7 @@ import net.i2p.router.peermanager.DBHistory;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.TunnelPoolSettings;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.util.ConcurrentHashSet;
@@ -57,6 +59,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private LookupThrottler _lookupThrottler;
     private LookupBanHammer _lookupBanner;
     private final Job _ffMonitor;
+    private String tunnelName = "";
 
     /**
      *  This is the flood redundancy. Entries are
@@ -846,4 +849,16 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             }
         }
     }
+
+    public String getTunnelName(Destination d) {
+        TunnelPoolSettings in = _context.tunnelManager().getInboundSettings(d.calculateHash());
+        String name = (in != null ? in.getDestinationNickname() : null);
+        if (name == null) {
+            TunnelPoolSettings out = _context.tunnelManager().getOutboundSettings(d.calculateHash());
+            name = (out != null ? out.getDestinationNickname() : null);
+        }
+        if (name == null) {return "";}
+        return name;
+    }
+
 }

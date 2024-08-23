@@ -10,15 +10,17 @@ import net.i2p.data.Certificate;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
-import net.i2p.data.LeaseSet2;
-import net.i2p.data.router.RouterInfo;
 import net.i2p.data.i2np.DatabaseLookupMessage;
 import net.i2p.data.i2np.DatabaseSearchReplyMessage;
 import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.data.LeaseSet;
+import net.i2p.data.LeaseSet2;
+import net.i2p.data.router.RouterInfo;
 import net.i2p.router.JobImpl;
 import net.i2p.router.LeaseSetKeys;
 import net.i2p.router.MessageSelector;
+import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.ProfileManager;
 import net.i2p.router.ReplyJob;
 import net.i2p.router.RouterContext;
@@ -227,7 +229,10 @@ class FloodfillVerifyStoreJob extends JobImpl {
         }
 
         if (_log.shouldInfo()) {
-            _log.info("Verifying Floodfill store of key [" + _key.toBase32().substring(0,8) + "] sent to [" +
+            LeaseSet ls = _facade.lookupLeaseSetLocally(_key);
+            String tunnelName = ls != null ? _facade.getTunnelName(ls.getDestination()) : "";
+            String name = !tunnelName.equals("") ? " of \'" + tunnelName + "\'" : " of key";
+            _log.info("Verifying Floodfill store" + name + " [" + _key.toBase32().substring(0,8) + "] sent to [" +
                       _sentTo.toBase64().substring(0,6) + "] -> Querying: [" + _target.toBase64().substring(0,6) + "]");
         }
         _sendTime = ctx.clock().now();
@@ -265,13 +270,13 @@ class FloodfillVerifyStoreJob extends JobImpl {
                         _ipSet.addAll(peerIPs);
                         return peer;
                     } else {
-                        if (_log.shouldInfo()) {
-                            _log.info("Skipping Floodfill Verify for Router [" + peer.toBase64().substring(0,6) + "] -> Too close to the store");
+                        if (_log.shouldDebug()) {
+                            _log.debug("Skipping Floodfill Verify for Router [" + peer.toBase64().substring(0,6) + "] -> Too close to the store");
                         }
                     }
                 } else {
-                    if (_log.shouldInfo()) {
-                        _log.info("Skipping Floodfill Verify for Router [" + peer.toBase64().substring(0,6) + "] -> Router is too old");
+                    if (_log.shouldDebug()) {
+                        _log.debug("Skipping Floodfill Verify for Router [" + peer.toBase64().substring(0,6) + "] -> Router is too old");
                     }
                 }
                 _ignore.add(peer);
@@ -329,14 +334,16 @@ class FloodfillVerifyStoreJob extends JobImpl {
             _facade.verifyFinished(_key);
             final ProfileManager pm = ctx.profileManager();
             final int type = _message.getType();
+            LeaseSet ls = _facade.lookupLeaseSetLocally(_key);
+            String tunnelName = ls != null ? _facade.getTunnelName(ls.getDestination()) : "";
+            String name = !tunnelName.equals("") ? " for \'" + tunnelName + "\'" : " for key";
             if (type == DatabaseStoreMessage.MESSAGE_TYPE) {
                 // Verify it's as recent as the one we sent
                 DatabaseStoreMessage dsm = (DatabaseStoreMessage)_message;
                 DatabaseEntry entry = dsm.getEntry();
                 if (!entry.verifySignature()) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Banning Router [" + _target.toBase64().substring(0,6) +
-                                  "] for duration of session -> Sent us BAD data (spoofed?)");
+                        _log.warn("Banning Router [" + _target.toBase64().substring(0,6) + "] for duration of session -> Sent us BAD data (spoofed?)");
                     }
                     pm.dbLookupFailed(_target);
                     ctx.banlist().banlistRouterForever(_target, "Sent bad NetDb data");
@@ -344,8 +351,10 @@ class FloodfillVerifyStoreJob extends JobImpl {
                     resend();
                     return;
                 }
+
                 long newDate;
                 boolean success;
+
                 if (_isLS2 &&
                     entry.getType() != DatabaseEntry.KEY_TYPE_ROUTERINFO &&
                     entry.getType() != DatabaseEntry.KEY_TYPE_LEASESET) {
@@ -358,13 +367,13 @@ class FloodfillVerifyStoreJob extends JobImpl {
                     if (_sentTo != null) {pm.dbStoreSuccessful(_sentTo);}
                     ctx.statManager().addRateData("netDb.floodfillVerifyOK", delay);
                     if (_log.shouldInfo()) {
-                        _log.info("Floodfill Verify succeeded for key [" + _key.toBase32().substring(0,8) + "]");
+                        _log.info("Floodfill Verify succeeded" + name + " [" + _key.toBase32().substring(0,8) + "]");
                     }
                     if (_isRouterInfo) {_facade.routerInfoPublishSuccessful();}
                     return;
                 }
                 if (_log.shouldWarn()) {
-                    _log.warn("Floodfill Verify failed for key [" + _key.toBase32().substring(0,8) + "] -> Key was stale" +
+                    _log.warn("Floodfill Verify failed" + name + " [" + _key.toBase32().substring(0,8) + "] -> Key was stale" +
                               (_log.shouldDebug() ? "\n* " + dsm.getEntry() : ""));
                 }
             } else if (type == DatabaseSearchReplyMessage.MESSAGE_TYPE) {
@@ -373,7 +382,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 pm.dbLookupReply(_target, 0, dsrm.getNumReplies(), 0, 0, delay);
                 // The peer we asked did not have the key, so _sentTo failed to flood it
                 if (_log.shouldWarn()) {
-                    _log.warn("Floodfill Verify failed for key [" + _key.toBase32().substring(0,8) + "] -> " +
+                    _log.warn("Floodfill Verify failed" + name + " [" + _key.toBase32().substring(0,8) + "] -> " +
                               "Queried peer [" + _target.toBase64().substring(0,6) + "] didn't have the key");
                 }
                 // only for RI... LS too dangerous?
@@ -415,6 +424,10 @@ class FloodfillVerifyStoreJob extends JobImpl {
             // we may have already started a new store
             // (probably, for LS, and we don't verify by default for RI)
             long newDate;
+            LeaseSet ls = _facade.lookupLeaseSetLocally(_key);
+            String tunnelName = ls != null ? _facade.getTunnelName(ls.getDestination()) : "";
+            String name = !tunnelName.equals("") ? " for \'" + tunnelName + "\'" : " for key";
+
             if (_isLS2 &&
                 ds.getType() != DatabaseEntry.KEY_TYPE_ROUTERINFO &&
                 ds.getType() != DatabaseEntry.KEY_TYPE_LEASESET) {
@@ -423,7 +436,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
             } else {newDate = ds.getDate();}
             if (newDate > _published) {
                 if (_log.shouldInfo()) {
-                    _log.info("Floodfill Verify failed for key [" + _key.toBase32().substring(0,8) + "] but new NetDbStore already succeeded");
+                    _log.info("Floodfill Verify failed" + name + " [" + _key.toBase32().substring(0,8) + "] but new NetDbStore already succeeded");
                 }
                 return;
             }
@@ -434,7 +447,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
             // unless we've had a crazy number of attempts, then start over
             if (_ignore.size() < 50) {toSkip.addAll(_ignore);}
             if (_log.shouldWarn()) {
-                _log.warn("Floodfill Verify failed for key [" + _key.toBase32().substring(0,8) + "] -> Starting new NetDbStore...");
+                _log.warn("Floodfill Verify failed" + name + " [" + _key.toBase32().substring(0,8) + "] -> Starting new NetDbStore...");
             }
             _facade.sendStore(_key, ds, null, null, FloodfillNetworkDatabaseFacade.PUBLISH_TIMEOUT, toSkip);
         }
@@ -448,7 +461,10 @@ class FloodfillVerifyStoreJob extends JobImpl {
             getContext().profileManager().dbLookupFailed(_target); // Only blame the verify peer
             getContext().statManager().addRateData("netDb.floodfillVerifyTimeout", getContext().clock().now() - _sendTime);
             if (_log.shouldWarn()) {
-                _log.warn("Floodfill Verify timed out for key [" + _key.toBase32().substring(0,8) + "] -> " +
+                LeaseSet ls = _facade.lookupLeaseSetLocally(_key);
+                String tunnelName = ls != null ? _facade.getTunnelName(ls.getDestination()) : "";
+                String name = !tunnelName.equals("") ? " for \'" + tunnelName + "\'" : " for key";
+                _log.warn("Floodfill Verify timed out" + name + " [" + _key.toBase32().substring(0,8) + "] -> " +
                           "Ignoring [" + _target.toBase64().substring(0,6) + "] and selecting a new peer...");
             }
             if (_attempted < MAX_PEERS_TO_TRY) {
