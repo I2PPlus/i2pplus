@@ -233,8 +233,7 @@ public class ProfileOrganizer {
                     noSSU = false;
                     break;
             }
-            if (cap != null && (!reachable || (bw != null &&
-                (bw.equals("K") || bw.equals("L") || bw.equals("M"))))) {
+            if (cap != null && (!reachable || (bw != null && (bw.equals("K") || bw.equals("L") || bw.equals("M"))))) {
                 if (_log.shouldInfo())
                     _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> K, L, M or Unreachable");
                 return null;

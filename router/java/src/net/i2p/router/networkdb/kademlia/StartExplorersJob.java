@@ -24,8 +24,7 @@ import net.i2p.util.RandomSource;
 import net.i2p.util.SystemVersion;
 
 /**
- * Fire off search jobs for random keys from the explore pool, up to MAX_PER_RUN
- * at a time.
+ * Fire off search jobs for random keys from the explore pool, up to MAX_PER_RUN at a time.
  * If the explore pool is empty, just search for a random key.
  *
  * For hidden mode routers, this is the primary mechanism for staying integrated.

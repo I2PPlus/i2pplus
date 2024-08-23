@@ -279,6 +279,7 @@ class FloodfillPeerSelector extends PeerSelector {
                 for (String ip : entryIPs) {
                     if (!maskedIPs.add(ip)) {sameIP = true;}
                 }
+/**                if (noSSU) {
                 country = _context.commSystem().getCountry(key);
                 if (country != null && country != "unknown") {noCountry = false;}
                 for (RouterAddress ra : info.getAddresses()) {
@@ -286,7 +287,6 @@ class FloodfillPeerSelector extends PeerSelector {
                     break;
                 }
 
-/**                if (noSSU) {
                     badff.add(entry);
                     if (_log.shouldDebug())
                         _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router has SSU transport disabled");
@@ -342,10 +342,10 @@ class FloodfillPeerSelector extends PeerSelector {
                                     _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Good");
                                 rv.add(entry);
                                 found++;
-                            } else if (prof.getDBHistory().getLastStoreFailed() <= prof.getDBHistory().getLastStoreSuccessful()
-                                       || prof.getDBHistory().getLastLookupFailed() <= prof.getDBHistory().getLastLookupSuccessful()
-                                       || (prof.getDBHistory().getLastStoreFailed() < now - NO_FAIL_STORE_OK
-                                           && prof.getDBHistory().getLastLookupFailed() < now - NO_FAIL_LOOKUP_OK)) {
+                            } else if (prof.getDBHistory().getLastStoreFailed() <= prof.getDBHistory().getLastStoreSuccessful() ||
+                                       prof.getDBHistory().getLastLookupFailed() <= prof.getDBHistory().getLastLookupSuccessful() ||
+                                       (prof.getDBHistory().getLastStoreFailed() < now - NO_FAIL_STORE_OK &&
+                                       prof.getDBHistory().getLastLookupFailed() < now - NO_FAIL_LOOKUP_OK)) {
                                 if (_log.shouldDebug())
                                     _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> OK");
                                 okff.add(entry);

@@ -111,17 +111,6 @@ class ExploreJob extends SearchJob {
 
         KBucketSet<Hash> ks = _facade.getKBuckets();
         Hash rkey = ctx.routingKeyGenerator().getRoutingKey(getState().getTarget());
-        // in a few releases, we can (and should) remove this,
-        // as routers will honor the above flag, and we want the table to include
-        // only non-floodfills.
-        // Removed in 0.8.8, good thing, as we had well over MAX_CLOSEST floodfills.
-        //if (available > 0 && ks != null) {
-        //    List peers = _peerSelector.selectFloodfillParticipants(rkey, available, ks);
-        //    int len = peers.size();
-        //    if (len > 0)
-        //        msg.getDontIncludePeers().addAll(peers);
-        //}
-        //available = MAX_CLOSEST - dontIncludePeers.size();
 
         if (available > 0) {
             // selectNearestExplicit adds our hash to the dontInclude set (3rd param) ...
