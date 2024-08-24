@@ -398,8 +398,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     private static class TempDeleter implements Runnable {
         private final File file;
-        public TempDeleter(File f) { file = f; }
-        public void run() { FileUtil.rmdir(file, false); }
+        public TempDeleter(File f) {file = f;}
+        public void run() {FileUtil.rmdir(file, false);}
     }
 
     /** @since 0.9.4 */
@@ -472,7 +472,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /** @since 0.9.1 */
-    public boolean isStopping() { return _stopping; }
+    public boolean isStopping() {return _stopping;}
 
     /**
      *  ClientApp method. Does nothing.
@@ -515,7 +515,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /** hook to I2PSnarkUtil for the servlet */
-    public I2PSnarkUtil util() { return _util; }
+    public I2PSnarkUtil util() {return _util;}
 
     /**
      *  The BandwidthManager.
@@ -826,7 +826,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private Properties getConfig(byte[] ih) {
         Properties rv = new OrderedProperties();
         File conf = configFile(_configDir, ih);
-        synchronized(_configLock) {  // one lock for all
+        synchronized(_configLock) { // one lock for all
             try {I2PSnarkUtil.loadProps(rv, conf);}
             catch (IOException ioe) {}
         }
@@ -997,7 +997,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
          String[] themes;
          if (_context.isRouterContext()) {
             File dir = new File(_context.getBaseDir(), "docs/themes/snark");
-            FileFilter fileFilter = new FileFilter() { public boolean accept(File file) { return file.isDirectory(); } };
+            FileFilter fileFilter = new FileFilter() {public boolean accept(File file) {return file.isDirectory();} };
             File[] dirnames = dir.listFiles(fileFilter);
             if (dirnames != null) {
                 List<String> th = new ArrayList<String>(dirnames.length);
@@ -1009,7 +1009,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 themes = th.toArray(new String[th.size()]);
             } else {themes = new String[0];}
         } else {
-            themes = new String[] { "classic", "dark", "light", "midnight", "ubergine", "vanilla", "zilvero" };
+            themes = new String[] {"classic", "dark", "light", "midnight", "ubergine", "vanilla", "zilvero" };
         }
         return themes;
     }
@@ -1133,7 +1133,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
         if (upLimit != null) {
             int limit = _util.getMaxUploaders();
-            try { limit = Integer.parseInt(upLimit.trim()); } catch (NumberFormatException nfe) {}
+            try {limit = Integer.parseInt(upLimit.trim());} catch (NumberFormatException nfe) {}
             if ( limit != _util.getMaxUploaders()) {
                 if ( limit >= Snark.MIN_TOTAL_UPLOADERS ) {
                     _util.setMaxUploaders(limit);
@@ -1151,7 +1151,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
         if (upBW != null) {
             int limit = _util.getMaxUpBW();
-            try { limit = Integer.parseInt(upBW.trim()); } catch (NumberFormatException nfe) {}
+            try {limit = Integer.parseInt(upBW.trim());} catch (NumberFormatException nfe) {}
             if ( limit != _util.getMaxUpBW()) {
                 if ( limit >= MIN_UP_BW ) {
                     _util.setMaxUpBW(limit);
@@ -1201,7 +1201,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
        if (startDelay != null && _context.isRouterContext()) {
            int minutes = _util.getStartupDelay();
-           try { minutes = Integer.parseInt(startDelay.trim()); } catch (NumberFormatException nfe) {}
+           try {minutes = Integer.parseInt(startDelay.trim());} catch (NumberFormatException nfe) {}
            if (minutes != _util.getStartupDelay()) {
                _util.setStartupDelay(minutes);
                changed = true;
@@ -1677,7 +1677,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * Grab the torrent given the (canonical) filename of the .torrent file
      * @return Snark or null
      */
-    public Snark getTorrent(String filename) { synchronized (_snarks) { return _snarks.get(filename); } }
+    public Snark getTorrent(String filename) {synchronized (_snarks) {return _snarks.get(filename);} }
 
     /**
      *  Unmodifiable
@@ -1925,7 +1925,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     }
                 } catch (IOException ioe) {
                     // close before rename/delete for windows
-                    if (fis != null) try { fis.close(); fis = null; } catch (IOException ioe2) {}
+                    if (fis != null) try {fis.close(); fis = null;} catch (IOException ioe2) {}
                     String err = _t("Torrent in \"{0}\" is invalid", sfile.toString()) + ": " + ioe.getLocalizedMessage();
                     addMessage(err);
                     if (!_context.isRouterContext()) {System.out.println(" • " + err);}
@@ -1937,7 +1937,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     addMessage(s);
                     throw new Snark.RouterException(s, oom);
                 } finally {
-                    if (fis != null) try { fis.close(); } catch (IOException ioe) {}
+                    if (fis != null) try {fis.close();} catch (IOException ioe) {}
                 }
             }
         } else {
@@ -2261,7 +2261,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         String time = config.getProperty(PROP_META_STAMP);
         if (time == null)
             return 0;
-        try { return Long.parseLong(time); } catch (NumberFormatException nfe) {}
+        try {return Long.parseLong(time);} catch (NumberFormatException nfe) {}
         return 0;
     }
 
@@ -2810,12 +2810,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             if (delay > 30000 && autostart) {
                 int id = _messages.addMessageNoEscape(getTime() + "&nbsp; " +
                                                       _t("Adding torrents in {0}" + "&hellip;", DataHelper.formatDuration2(delay)));
-                try { Thread.sleep(delay); } catch (InterruptedException ie) {}
+                try {Thread.sleep(delay);} catch (InterruptedException ie) {}
                 // Remove that first message
                 _messages.clearThrough(id);
             } else if (_context.isRouterContext()) {
                 // to wait for client manager to be up so we can get bandwidth limits
-                try { Thread.sleep(3000); } catch (InterruptedException ie) {}
+                try {Thread.sleep(3000);} catch (InterruptedException ie) {}
             }
             // here because we need to delay until I2CP is up
             // although the user will see the default until then
@@ -2864,7 +2864,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                             break;
                                         } else {
                                             if (!_context.isRouterContext()) {
-                                                msg = "Connected to I2P at " + ' ' + _util.getI2CPHost() + ':' + _util.getI2CPPort();
+                                                msg = _t("Connected to I2P at") + ' ' + _util.getI2CPHost() + ':' + _util.getI2CPPort();
                                                 System.out.println(" • " + msg);
                                             }
                                         }
@@ -2946,7 +2946,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     }
                 }
                 // polling period for scanning data dir for new content
-                try { Thread.sleep(30*1000); } catch (InterruptedException ie) {}
+                try {Thread.sleep(30*1000);} catch (InterruptedException ie) {}
             }
         }
     }
@@ -3074,17 +3074,16 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private String linkify(Snark snark) {
         MetaInfo meta = snark.getMetaInfo();
         Storage storage = snark.getStorage();
-        if (meta == null || storage == null)
-            return DataHelper.escapeHTML(snark.getBaseName().replace("%20", " "));
+        if (meta == null || storage == null) {return DataHelper.escapeHTML(snark.getBaseName().replace("%20", " "));}
         StringBuilder buf = new StringBuilder(256);
         String base = DataHelper.escapeHTML(storage.getBaseName());
         String enc = base.replace("[", "%5B").replace("]", "%5D").replace("|", "%7C").replace(" ", "%20")
                          .replace("è", "&egrave;").replace("é", "&eacute;").replace("à", "&agrave;");
         buf.append("<a href=\"").append(_contextPath).append('/').append(enc);
-        if (meta.getFiles() != null || !storage.complete())
-            buf.append('/');
-        buf.append("\">").append(base.replace("%20", " ").replace("&egrave;", "è").replace("&eacute;", "é")
-                         .replace("&agrave;", "à")).append("</a>");
+        if (meta.getFiles() != null || !storage.complete()) {buf.append('/');}
+        buf.append("\">")
+           .append(base.replace("%20", " ").replace("&egrave;", "è").replace("&eacute;", "é")
+                       .replace("&agrave;", "à")).append("</a>");
         return buf.toString();
     }
 
@@ -3105,8 +3104,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 if (ih != null && ih.length == 20) {
                     Properties config = getConfig(ih);
                     String name = config.getProperty(PROP_META_MAGNET_DN);
-                    if (name == null)
-                        name = _t("Magnet") + ' ' + I2PSnarkUtil.toHex(ih);
+                    if (name == null) {name = _t("Magnet") + ' ' + I2PSnarkUtil.toHex(ih);}
                     String tracker = config.getProperty(PROP_META_MAGNET_TR);
                     String dir = config.getProperty(PROP_META_MAGNET_DIR);
                     File dirf = (dir != null) ? (new File(dir)) : null;
@@ -3117,8 +3115,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 }
             }
         }
-        if (changed)
-            saveConfig();
+        if (changed) {saveConfig();}
     }
 
     /**
@@ -3133,11 +3130,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         List<String> foundNames = new ArrayList<String>(0);
         if (files != null) {
             for (int i = 0; i < files.length; i++) {
-                try {
-                    foundNames.add(files[i].getCanonicalPath());
-                } catch (IOException ioe) {
-                    _log.error("Error resolving '" + files[i] + "' in '" + dir, ioe);
-                }
+                try {foundNames.add(files[i].getCanonicalPath());}
+                catch (IOException ioe) {_log.error("Error resolving '" + files[i] + "' in '" + dir, ioe);}
             }
             // sort so the initial startup goes in natural order, more or less
             Collections.sort(foundNames, Collator.getInstance());
@@ -3180,7 +3174,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 }
                 if (shouldStart && (count++ & 0x0f) == 15) {
                     // try to prevent OOMs at startup
-                    try { Thread.sleep(250); } catch (InterruptedException ie) {}
+                    try {Thread.sleep(250);} catch (InterruptedException ie) {}
                 }
             }
         }
@@ -3491,7 +3485,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             // mark it for the UI
             snark.setStarting();
             (new I2PAppThread(new ThreadedStarter(snark), "TorrentStarter", true)).start();
-            try { Thread.sleep(200); } catch (InterruptedException ie) {}
+            try {Thread.sleep(200);} catch (InterruptedException ie) {}
         }
     }
 
@@ -3508,7 +3502,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
         }
         (new I2PAppThread(new ThreadedStarter(null), "TorrentStarterAll", true)).start();
-        try { Thread.sleep(200); } catch (InterruptedException ie) {}
+        try {Thread.sleep(200);} catch (InterruptedException ie) {}
     }
 
     /**
@@ -3517,19 +3511,14 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     private class ThreadedStarter implements Runnable {
         private final Snark snark;
-        public ThreadedStarter(Snark s) { snark = s; }
+        public ThreadedStarter(Snark s) {snark = s;}
         public void run() {
             if (snark != null) {
                 if (snark.isStopped()) {
-                    try {
-                        snark.startTorrent();
-                    } catch (RuntimeException re) {
-                        // Snark.fatal() will log and call fatal() here for user message before throwing
-                    }
+                    try {snark.startTorrent();}
+                    catch (RuntimeException re) {} // Snark.fatal() will log and call fatal() here for user message before throwing
                 }
-            } else {
-                startAll();
-            }
+            } else {startAll();}
         }
     }
 
@@ -3541,14 +3530,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         int count = 0;
         for (Snark snark : _snarks.values()) {
             if (snark.isStopped()) {
-                try {
-                    snark.startTorrent();
-                } catch (RuntimeException re) {
-                    // Snark.fatal() will log and call fatal() here for user message before throwing
-                }
+                try {snark.startTorrent();}
+                catch (RuntimeException re) {} // Snark.fatal() will log and call fatal() here for user message before throwing
                 if ((count++ & 0x0f) == 15) {
-                    // try to prevent OOMs
-                    try { Thread.sleep(250); } catch (InterruptedException ie) {}
+                    try {Thread.sleep(250);} // try to prevent OOMs
+                    catch (InterruptedException ie) {}
                 }
             }
         }
@@ -3565,8 +3551,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public void stopAllTorrents(boolean finalShutdown) {
         _stopping = true;
-        if (finalShutdown && _log.shouldWarn())
-            _log.warn("SnarkManager final shutdown");
+        if (finalShutdown && _log.shouldWarn()) {_log.warn("SnarkManager final shutdown");}
         int count = 0;
         Collection<Snark> snarks = _snarks.values();
         // We do two passes so we shutdown the high-priority snarks first.
@@ -3579,17 +3564,14 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     if (count == 0) {
                         String msg = _t("Stopping all torrents and closing the I2P tunnel.");
                         addMessage(msg);
-                        if (!_context.isRouterContext()) {
-                            System.out.println(" • " + msg);
-                        }
+                        if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                     }
                     count++;
-                    if (finalShutdown)
-                        snark.stopTorrent(true);
-                    else
-                        stopTorrent(snark, false);
+                    if (finalShutdown) {snark.stopTorrent(true);}
+                    else {stopTorrent(snark, false);}
                     if (count % 8 == 0) {
-                        try { Thread.sleep(20); } catch (InterruptedException ie) {}
+                        try {Thread.sleep(20);}
+                        catch (InterruptedException ie) {}
                     }
                 }
             }
@@ -3600,27 +3582,22 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 if (count == 0) {
                     String msg = _t("Stopping all torrents and closing the I2P tunnel.");
                     addMessage(msg);
-                    if (!_context.isRouterContext()) {
-                        System.out.println(" • " + msg);
-                    }
+                    if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                 }
                 count++;
-                if (finalShutdown)
-                    snark.stopTorrent(true);
-                else
-                    stopTorrent(snark, false);
+                if (finalShutdown) {snark.stopTorrent(true);}
+                else {stopTorrent(snark, false);}
                 // Throttle since every unannounce is now threaded.
                 // How to do this without creating a ton of threads?
                 if (count % 8 == 0) {
-                    try { Thread.sleep(20); } catch (InterruptedException ie) {}
+                    try {Thread.sleep(20);}
+                    catch (InterruptedException ie) {}
                 }
             } else {
                 CommentSet cs = snark.getComments();
                 if (cs != null) {
                     synchronized(cs) {
-                        if (cs.isModified()) {
-                            locked_saveComments(snark, cs);
-                        }
+                        if (cs.isModified()) {locked_saveComments(snark, cs);}
                     }
                 }
             }
@@ -3640,7 +3617,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     long toWait = 5*1000;
                     if (SystemVersion.isARM())
                         toWait *= 2;
-                    try { Thread.sleep(toWait); } catch (InterruptedException ie) {}
+                    try {Thread.sleep(toWait);} catch (InterruptedException ie) {}
                     _util.disconnect();
                     _stopping = false;
                 } else {
@@ -3681,7 +3658,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             return;
         }
         (new I2PAppThread(new ThreadedRechecker(snark), "TorrentRechecker", true)).start();
-        try { Thread.sleep(200); } catch (InterruptedException ie) {}
+        try {Thread.sleep(200);} catch (InterruptedException ie) {}
     }
 
     /**
@@ -3690,7 +3667,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private class ThreadedRechecker implements Runnable {
         private final Snark snark;
         /** must have non-null storage */
-        public ThreadedRechecker(Snark s) { snark = s; }
+        public ThreadedRechecker(Snark s) {snark = s;}
         public void run() {
             try {
                 if (_log.shouldWarn())
@@ -3749,7 +3726,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         double usagePercent = ((totalSpace - freeSpace) / (double) totalSpace) * 100;
         String usageAsPercentage = String.format("%d%%", (int) usagePercent);
         String usageAsTotal = String.format("%d / %d MB", freeSpaceMB, totalSpaceMB);
-        String bar = "<span class=volatile id=diskSpace title=\"" + _t("Data partition usage") +
+        String bar = "<span class=volatile id=diskSpace title=\"" + _t("Data partition") +
                      ": %s\"><span id=diskSpaceInner style='width:%d%%'></span></span>";
         return String.format(bar, usageAsTotal, (int) usagePercent);
     }
