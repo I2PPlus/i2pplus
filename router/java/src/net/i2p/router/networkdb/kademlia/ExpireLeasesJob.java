@@ -9,6 +9,7 @@ package net.i2p.router.networkdb.kademlia;
  */
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -63,18 +64,29 @@ class ExpireLeasesJob extends JobImpl {
      */
     private List<Hash> selectKeysToExpire() {
         RouterContext ctx = getContext();
-        List<Hash> toExpire = new ArrayList<Hash>(128);
+        List<Hash> toExpire = new ArrayList<Hash>();
+        List<Hash> current = new ArrayList<Hash>();
         for (Map.Entry<Hash, DatabaseEntry> entry : _facade.getDataStore().getMapEntries()) {
             DatabaseEntry obj = entry.getValue();
-            if (obj.isLeaseSet()) {
-                LeaseSet ls = (LeaseSet)obj;
+            if (obj != null && obj.isLeaseSet()) {
+                LeaseSet ls = (LeaseSet) obj;
+                Hash h = entry.getKey();
                 if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
-                    Hash h = entry.getKey();
                     toExpire.add(h);
                     if (ctx.clientManager().isLocal(h))
                         _log.logAlways(Log.ERROR, "Expired LOCAL LeaseSet [" + h.toBase32().substring(0,8) + "]");
+                } else {
+                    current.add(h);
                 }
             }
+        }
+        if (!current.isEmpty()) {
+            if (_log.shouldLog(Log.INFO)) {
+                _log.info("Adding " + current.size() + " current LeaseSets to the explore queue...");
+            }
+            Collections.shuffle(current);
+            _facade.queueForExploration(current); // passively explore non-expired keys
+            current.clear();
         }
         return toExpire;
     }
