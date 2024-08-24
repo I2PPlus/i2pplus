@@ -44,14 +44,11 @@ class ExpireLeasesJob extends JobImpl {
         long uptime = getContext().router().getUptime();
         List<Hash> toExpire = selectKeysToExpire();
         if (!toExpire.isEmpty() && uptime >= 10*60*1000) {
-            StringBuilder buf = new StringBuilder(16);
-            buf.append("Leases to expire: ");
+            StringBuilder buf = new StringBuilder(toExpire.size()*16);
+            buf.append("Leases to expire (" + toExpire.size() + "): ");
             for (Hash h : toExpire) {buf.append("[").append(h.toBase32().substring(0,8)).append("]"); buf.append(" ");}
-            _log.info(buf.toString());
             for (Hash key : toExpire) {_facade.fail(key);}
-            if (_log.shouldLog(Log.INFO)) {
-                _log.info("[DbId: " + _facade + "] Known LeaseSets: " + _facade.getKnownLeaseSets() + "; Leases to expire: " + toExpire);
-            }
+            if (_log.shouldLog(Log.INFO)) {_log.info(buf.toString());}
         }
         _facade.queueForExploration(toExpire); // don't do explicit searches, just explore passively
         requeue(RERUN_DELAY_MS);
