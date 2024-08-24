@@ -228,8 +228,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             String caps = ri.getCapabilities();
             boolean uninteresting = caps != null && (caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                     caps.indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                                    //caps.indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                                    //caps.indexOf(Router.CAPABILITY_BW64) >= 0 ||
+                                    caps.indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                     (v.equals("") || VersionComparator.comp(v, MIN_VERSION) < 0)) &&
 //                                    !isHidden && getContext().netDbSegmentor().getKnownRouters() > 1000;
                                     !isHidden && getContext().netDb().getKnownRouters() > 1000;

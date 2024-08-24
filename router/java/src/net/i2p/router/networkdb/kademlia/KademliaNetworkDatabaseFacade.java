@@ -289,8 +289,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     long getLastExploreNewDate() { return _lastExploreNew; }
     void setLastExploreNewDate(long when) {
         _lastExploreNew = when;
-        if (_exploreJob != null)
-            _exploreJob.updateExploreSchedule();
     }
 
     /** @return unmodifiable set */

@@ -39,7 +39,6 @@ class ExploreJob extends SearchJob {
 
     /** how many peers to explore through concurrently */
     static final String PROP_EXPLORE_BREDTH = "router.exploreBredth";
-//    private static final int EXPLORE_BREDTH = 1;
     private static final int EXPLORE_BREDTH = SystemVersion.isSlow() ? 1 : 2;
 
     /** Only send the closest "don't tell me about" refs...
@@ -192,23 +191,23 @@ class ExploreJob extends SearchJob {
         int cpuLoadAvg = SystemVersion.getCPULoadAvg();
         if (exploreBredth == null && getContext().netDb().getKnownRouters() < 1500 && !isSlow && !isSingleCore && cpuLoad < 95 && cpuLoadAvg < 95) {
             if (_log.shouldInfo())
-                _log.info("Initiating Exploratory Search -> Max " + EXPLORE_BREDTH * 3 + " concurrent (less than 1000 known peers)");
+                _log.info("Initiating Exploratory Search -> Max " + EXPLORE_BREDTH * 3 + " concurrent (less than 1000 RouterInfos stored on disk)");
             return EXPLORE_BREDTH * 3;
         } else if ((exploreBredth == null && getContext().netDb().getKnownRouters() > 3500) || (cpuLoad > 90 && cpuLoadAvg > 90) || (isSlow || isSingleCore)) {
             if (_log.shouldInfo())
                 if (cpuLoad > 80 || cpuLoadAvg > 80 || isSlow || isSingleCore)
                     _log.info("Initiating Exploratory Search -> Max 1 concurrent (High CPU load or device is low spec)");
                 else
-                    _log.info("Initiating Exploratory Search -> Max 1 concurrent (over 3000 known peers)");
+                    _log.info("Initiating Exploratory Search -> Max 1 concurrent (over 3500 RouterInfos stored on disk)");
             return 1;
         } else if (exploreBredth == null && !isSlow && !isSingleCore && cpuLoad < 95 && cpuLoadAvg < 95) {
             if (_log.shouldInfo())
-                _log.info("Initiating Exploratory Search -> Max " + EXPLORE_BREDTH * 2 + " concurrent (less than 3000 known peers)");
+                _log.info("Initiating Exploratory Search -> Max " + EXPLORE_BREDTH * 2 + " concurrent (less than 3500 RouterInfos stored on disk)");
             return EXPLORE_BREDTH * 2;
 //        } else if (getContext().netDbSegmentor().getKnownRouters() < 1500) {
         } else if (getContext().netDb().getKnownRouters() < 1500) {
             if (_log.shouldInfo())
-                _log.info("Initiating Exploratory Search -> Max " + Math.min(EXPLORE_BREDTH + 1, 2) + " concurrent (less than 1000 known peers)");
+                _log.info("Initiating Exploratory Search -> Max " + Math.min(EXPLORE_BREDTH + 1, 2) + " concurrent (less than 1500 RouterInfos stored on disk)");
             return Math.min(EXPLORE_BREDTH + 1, 2);
         } else if (exploreBredth != null) {
             if (_log.shouldInfo())
