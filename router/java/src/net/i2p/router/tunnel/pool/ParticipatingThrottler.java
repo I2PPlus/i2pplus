@@ -155,16 +155,16 @@ class ParticipatingThrottler {
                                               boolean isUnreachable, Hash h, String caps, boolean isBanned, int bantime) {
         if (count > limit && shouldThrottle) {
             if (isFast && !isUnreachable) {
-                if (count > limit * 11 / 9) {
+                if (count > limit * 3) {
                     handleExcessiveRequests(h, caps, count, limit, bantime);
                     return Result.DROP;
                 }
             } else if (!isLowShare && !isUnreachable) {
-                if (count > limit * 10 / 9) {
+                if (count > limit * 3) {
                     handleExcessiveRequests(h, caps, count, limit, bantime);
                     return Result.DROP;
                 }
-            } else if ((isLowShare || isUnreachable) && count > limit * 7 / 3) {
+            } else if ((isLowShare || isUnreachable) && count > limit * 3) {
                 handleExcessiveRequests(h, caps, count, limit, bantime);
                 return Result.DROP;
             } else {
