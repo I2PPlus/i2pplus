@@ -261,8 +261,8 @@ td.details{padding-left:0}
 .inactive .barOuter{background:repeating-linear-gradient(90deg,#f8f2ec 1px,#f8f2ec 5px,#f2e5d9 6px,#f2e5d9 11px)}
 .inactive .barText{color:#777}
 .inactive .rxd .barInner{background:linear-gradient(90deg,rgba(128,32,0,.15) 20px,rgba(128,128,0,.15) 50px,rgba(0,128,0,.15)),linear-gradient(180deg,rgba(255,255,255,.1),rgba(0,0,0,.1)),rgba(255,255,255,.5)}
-.barInner,.tx{height:16px;vertical-align:middle;border:0;border-right:1px solid #998;border-radius:1px;box-shadow:var(--highlight);background:linear-gradient(180deg,rgba(255,247,239,.8) 50%,rgba(207,193,181,.9) 50%,rgba(207,193,181,1))}
-.barOuter{margin:0;display:inline-block;border:1px solid #998;border-radius:1px;box-shadow:var(--highlight),inset 2px 2px 3px rgba(0,0,0,.4);background:repeating-linear-gradient(135deg,#fff7ef 1px,#fff7ef 5px,#efdfd1 6px,#efdfd1 11px);opacity:1}
+.barInner,.tx,#diskSpaceInner{height:16px;vertical-align:middle;border:0;border-right:1px solid #998;border-radius:1px;box-shadow:var(--highlight);background:linear-gradient(180deg,rgba(255,247,239,.8) 50%,rgba(207,193,181,.9) 50%,rgba(207,193,181,1))}
+.barOuter,#diskSpace{margin:0;display:inline-block;border:1px solid #998;border-radius:1px;box-shadow:var(--highlight),inset 2px 2px 3px rgba(0,0,0,.4);background:repeating-linear-gradient(135deg,#fff7ef 1px,#fff7ef 5px,#efdfd1 6px,#efdfd1 11px);opacity:1}
 .barOuter,.barText{width:84px;vertical-align:middle}
 .barText:hover,.barText:focus{opacity:.9;transition:ease opacity .15s;filter:none}
 .barText,.barOuter{text-align:center;vertical-align:middle}
@@ -277,6 +277,11 @@ td.details{padding-left:0}
 .active.seeding .tx{background:repeating-linear-gradient(90deg,#d8b8a6,#d8b8a6 5%,#f7d0ba 5%,#f7d0ba 10%);background-size:200%;animation:uploading .5s linear 4s 1 reverse}
 .peerinfo .barInner{background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(0,0,0,.1)),rgba(255,255,255,.5)}
 .peerinfo .barOuter,.peerinfo .barInner{height:12px}
+
+/* diskSpace */
+#diskSpace,#diskSpaceInner{width:80px;height:12px;display:inline-block;vertical-align:middle;text-align:left}
+#diskSpace{margin:2px 3px 1px 5px;vertical-align:text-top;contain:paint}
+#diskSpaceInner{position:absolute}
 
 /* details */
 audio,video{width:240px;background:#000}
@@ -768,7 +773,8 @@ form[action^="/i2psnark/configure"]{display:block}
 .peerclient code,#ourDest code{margin:1px 1px 1px 4px;padding:1px 4px 1px 6px;display:inline-block;line-height:1.3;background:#3f271b}
 .clientid,.peerclient,.peerclient code{display:inline-block;vertical-align:middle;line-height:1.1}
 .peerclient code{margin:0 1px;padding:1px 5px;box-shadow:none;opacity:.8}
-#ourDest{margin-left:3px;padding:0 0 0 4px;display:inline-block;line-height:1.3;border:var(--border);border-radius:2px;box-shadow:var(--highlight);background:#cfc7c2;opacity:.85;contain:paint}
+#ourDest{margin:0 -4px 0 0;padding:0 0 0 4px;display:inline-block;float:right;line-height:1.3;border:var(--border);border-radius:2px;box-shadow:var(--highlight);background:#cfc7c2;opacity:.85;contain:paint}
+#ourDest code{letter-spacing:.04em;font-weight:600;color:#fffd}
 
 /* radio and checkbox */
 .optbox{margin:4px;width:19px;height:19px;position:relative;box-sizing:border-box;border:var(--btn_border);box-shadow:inset 2px 2px 2px #b2a499;background:#faf1eb;appearance:none}

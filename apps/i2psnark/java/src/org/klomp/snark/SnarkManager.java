@@ -3737,4 +3737,20 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             return coll.compare(l.name, r.name);
         }
     }
+
+    public String getDiskUsage() {
+        File dir = getDataDir();
+        long freeSpace = dir.getUsableSpace();
+        long totalSpace = dir.getTotalSpace();
+        if (totalSpace == 0) {return "Total space is 0, unable to calculate disk usage.";}
+        int freeSpaceMB = (int) (freeSpace / (1024 * 1024));
+        int totalSpaceMB = (int) (totalSpace / (1024 * 1024));
+        double usagePercent = ((totalSpace - freeSpace) / (double) totalSpace) * 100;
+        String usageAsPercentage = String.format("%d%%", (int) usagePercent);
+        String usageAsTotal = String.format("%d / %d MB", freeSpaceMB, totalSpaceMB);
+        String bar = "<span class=volatile id=diskSpace title=\"" + _t("FreeSpace")+ 
+                     ": %s\"><span id=diskSpaceInner style='width:%d%%'></span></span>";
+        return String.format(bar, usageAsTotal, (int) usagePercent);
+    }
+
 }

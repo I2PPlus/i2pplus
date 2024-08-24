@@ -1,4 +1,8 @@
 2024-08-21 dr|z3d
+ * I2PSnark: Add disk usage/freespace indicator to torrents table footer;
+   move our destination indicator to configuration -> tunnels header
+
+2024-08-21 dr|z3d
  * Console: Linkify leasesets and add leading key icon
 
 2024-08-09 zzz

@@ -1221,26 +1221,14 @@ public class I2PSnarkServlet extends BasicServlet {
             String ibtunnels = _manager.util().getI2CPOptions().get("inbound.quantity");
             String obtunnels = _manager.util().getI2CPOptions().get("outbound.quantity");
             if (_manager.util().connected()) {
-                footer.append(" <span class=canhide title=\"" + _t("Configured maximum (actual usage may be less)") +
-                          "\"> &bullet; " + _t("Tunnels") + ": ");
-                footer.append(ibtunnels);
-                footer.append(' ');
-                footer.append(_t("in"));
-                footer.append(" / ");
-                footer.append(obtunnels);
-                footer.append(' ');
-                footer.append(_t("out"));
-                footer.append("</span>");
+                footer.append(" <span class=canhide title=\"")
+                      .append(_t("Configured maximum (actual usage may be less)"))
+                      .append("\"> &bullet; ").append(_t("Tunnels")).append(": ")
+                      .append(ibtunnels).append(' ').append(_t("in")).append(" / ")
+                      .append(obtunnels).append(' ').append(_t("out")).append("</span>");
             }
-
-            String IPString = _manager.util().getOurIPString();
-            if (!IPString.equals("unknown")) {
-                // Only truncate if it's an actual dest
-                footer.append("&nbsp;<span id=ourDest title=\"" + _t("Our destination (identity) for this session") + "\">" +
-                          _t("Dest.") + "<code>" + IPString.substring(0, 4) + "</code></span>");
-            }
-            footer.append("</span>");
-            footer.append("</th>");
+            footer.append(' ').append(_manager.getDiskUsage());
+            footer.append("</span></th>");
             if (_manager.util().connected() && total > 0) {
                 footer.append("<th class=ETA>");
                 // FIXME: add total ETA for all torrents here
@@ -1308,6 +1296,15 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
                 footer.append("</th>");
                 footer.append("<th class=tAction>");
+/**
+                String IPString = _manager.util().getOurIPString();
+                if (!IPString.equals("unknown")) {
+                    // Only truncate if it's an actual dest
+                    footer.append("&nbsp;<span id=ourDest title=\"")
+                          .append(_t("Our destination (identity) for this session")).append("\">")
+                          .append(_t("Dest.")).append("<code>").append(IPString.substring(0,4)).append("</code></span>");
+                }
+**/
                 if (dht != null && (!"2".equals(peerParam))) {
                     footer.append("<a id=debugMode href=\"?p=2\" title=\"").append(_t("Enable Debug Mode") + "\">").append(_t("Debug Mode") + "</a>");
                 } else if (dht != null) {
@@ -3639,14 +3636,18 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("</div></td></tr>\n");
 
 /* i2cp/tunnel configuration */
-
-        buf.append("<tr><th class=suboption>")
-           .append(_t("Tunnel Configuration"))
-           .append("</th></tr>\n<tr><td>\n<div class=optionlist>\n");
-
-        Map<String, String> options = new TreeMap<String, String>(_manager.util().getI2CPOptions());
         String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
+        String IPString = _manager.util().getOurIPString();
+        Map<String, String> options = new TreeMap<String, String>(_manager.util().getI2CPOptions());
 
+        buf.append("<tr><th class=suboption>").append(_t("Tunnel Configuration")).append("&nbsp;");
+        if (!IPString.equals("unknown")) {
+            // Only truncate if it's an actual dest
+            buf.append("&nbsp;<span id=ourDest title=\"")
+               .append(_t("Our destination (identity) for this session")).append("\">")
+               .append(_t("Dest.")).append("<code>").append(IPString.substring(0,4)).append("</code></span>");
+        }
+        buf.append("</th></tr>\n<tr><td>\n<div class=optionlist>\n");
         buf.append("<span class=configOption><b>")
            .append(_t("Inbound Settings"))
            .append("</b> \n")

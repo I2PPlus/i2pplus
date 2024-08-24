@@ -312,7 +312,7 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 .peerclient{margin:1px 0 1px -1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .peerclient code{margin:0 0 0 -3px;padding:2px 6px;display:inline-block;background:#d8ffd8}
 .peerclient,#ourDest{padding:1px 4px;display:inline-block;border-radius:1px;box-shadow:inset 0 0 0 1px #bbb;background:#fff}
-#ourDest{margin-left:3px;line-height:1.3}
+#ourDest{margin:0 -1px 0 0;float:right;line-height:1.3;text-transform:none}
 
 /* action buttons */
 .tAction{padding-right:5px;white-space:nowrap}
@@ -335,10 +335,10 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 .active .barComplete{background:#cf7d47}
 .inactive:not(.stopped) .barComplete{background:#ce84ce}
 .stopped .barComplete{background:#007a99}
-.barInner,.tx{height:16px;vertical-align:middle;border-right:var(--border_hard);box-shadow:0 0 0 1px #fffa inset;background:var(--tr_hover)}
-.barInner{background:#7b9d84}
+.barInner,#diskSpaceInner,.tx{height:16px;vertical-align:middle;border-right:var(--border_hard);box-shadow:0 0 0 1px #fffa inset;background:var(--tr_hover)}
+.barInner,#diskSpaceInner{background:#7b9d84}
 .barOuter,.percentbarInner,.barText{font-weight:700}
-.barOuter{border:var(--border_hard);box-shadow:0 0 0 1px #fffd inset,0 3px 3px 3px rgba(0,0,0,.35) inset,0 -5px 3px 1px rgba(255,255,255,.2) inset;background:var(--bar)}
+.barOuter,#diskSpace{border:var(--border_hard);box-shadow:0 0 0 1px #fffd inset,0 3px 3px 3px rgba(0,0,0,.35) inset,0 -5px 3px 1px rgba(255,255,255,.2) inset;background:var(--bar)}
 .active .barOuter{background:repeating-linear-gradient(135deg,#dd9 1px,#dd9 6px,#fff 6px,#fff 11px);background-size:400% 400%;will-change:transform}
 .active.downloading .barOuter{animation:progress 1s linear 1.5s both}
 .active.downloading .barInner{background:repeating-linear-gradient(135deg,#267339,#267339 5px,#47d16a 6px,#47d16a 10px)}
@@ -365,6 +365,9 @@ tr.active:hover .barComplete,tr.active:hover .txBarInner{background:#f50a}
 tr.inactive:not(.stopped):hover .barComplete,tr.inactive:not(.stopped):hover .txBarInner{background:#ff66ceaa}
 tr.stopped:hover .barComplete,tr.stopped:hover .txBarInner{background:#00b8e6aa}
 tr:hover .barText{color:#333;opacity:1}
+#diskSpace,#diskSpaceInner{width:80px;height:12px;display:inline-block;vertical-align:middle;text-align:left}
+#diskSpace{margin:1px 3px 1px 5px;vertical-align:text-top;contain:paint}
+#diskSpaceInner{position:absolute}
 
 /* details */
 audio,video,.thumb{margin:1px 0 2px -5px;padding:2px;border:var(--border_hard);box-shadow:inset 0 0 0 2px #fff}
