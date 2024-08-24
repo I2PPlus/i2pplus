@@ -72,7 +72,6 @@ class SearchJob extends JobImpl {
      * this'll help heal the network so subsequent searches will find the data.
      *
      */
-//    private static final long RESEND_TIMEOUT = 30*1000;
     private static final long RESEND_TIMEOUT = 5*1000;
 
     /**
@@ -115,7 +114,7 @@ class SearchJob extends JobImpl {
         if (_startedOn <= 0)
             _startedOn = getContext().clock().now();
         if (_log.shouldDebug())
-            _log.debug("[DbId: " + _facade + "] Searching for key [" + _state.getTarget().toBase32().substring(0,8) + "]"); // , getAddedBy());
+            _log.debug("[DbId: " + _facade + "] Searching for [" + _state.getTarget().toBase64().substring(0,6) + "]");
         searchNext();
     }
 
@@ -129,8 +128,7 @@ class SearchJob extends JobImpl {
     /** this is now misnamed, as it is only used to determine whether to return floodfill peers only */
     static boolean onlyQueryFloodfillPeers(RouterContext ctx) {
         String forceExplore = ctx.getProperty("router.exploreWhenFloodfill");
-        //if (isCongested(ctx))
-        //    return true;
+        //if (isCongested(ctx)) {return true;}
         // If we are floodfill, we want the FloodfillPeerSelector (in add()) to include
         // non-ff peers (if required) in DatabaseSearchReplyMessage responses
         // so that Exploration works.
@@ -190,18 +188,14 @@ class SearchJob extends JobImpl {
             _state.complete();
             succeed();
         } else if (isExpired()) {
-            if (_log.shouldDebug()) {
-                _log.debug("Search for key [" + _state.getTarget().toBase32().substring(0,8) + "] expired");
-            }
+            if (_log.shouldDebug()) {_log.debug("Search for [" + _state.getTarget().toBase64().substring(0,6) + "] expired");}
             _state.complete();
             fail();
         } else if (_state.getAttempted().size() > MAX_PEERS_QUERIED) {
             if (_log.shouldInfo()) {_log.info("Too many peers queried (more than " + MAX_PEERS_QUERIED + ")");}
             _state.complete();
             fail();
-        } else {
-            continueSearch();
-        }
+        } else {continueSearch();}
     }
 
     /**
@@ -373,7 +367,7 @@ class SearchJob extends JobImpl {
             return;
         } else {
             if (_log.shouldInfo())
-                _log.info("[DbId: " + _facade + "] Search for key [" + _state.getTarget().toBase32().substring(0,8) +
+                _log.info("[DbId: " + _facade + "] Search for [" + _state.getTarget().toBase64().substring(0,6) +
                           "] sent to [" + router.getIdentity().getHash().toBase64().substring(0,6) +
                           "] - " + (getPerPeerTimeoutMs(router.getIdentity().calculateHash()) / 1000) + "s timeout");
         }
@@ -439,7 +433,7 @@ class SearchJob extends JobImpl {
 
         if (_log.shouldDebug())
             _log.debug("[DbId: " + _facade + "] Sending search to [" + to.toBase64().substring(0,6) +
-                       "] for key [" + getState().getTarget().toBase32().substring(0,8) + "]\n* Replies: through [" +
+                       "] for [" + getState().getTarget().toBase32().substring(0,8) + "]\n* Replies: through [" +
                        inTunnel.getPeer(0).toBase64().substring(0,6) + "] via [Tunnel " + inTunnelId + "]");
 
         SearchMessageSelector sel = new SearchMessageSelector(getContext(), router, _expiration, _state);
@@ -471,7 +465,7 @@ class SearchJob extends JobImpl {
 
         if (_log.shouldDebug())
             _log.debug("Sending router search directly to [" + to.toBase64().substring(0,6) +
-                       "] for key [" + _state.getTarget().toBase32().substring(0,8) + "]");
+                       "] for [" + _state.getTarget().toBase64().substring(0,6) + "]");
         SearchMessageSelector sel = new SearchMessageSelector(getContext(), router, _expiration, _state);
         SearchUpdateReplyFoundJob reply = new SearchUpdateReplyFoundJob(getContext(), router, _state, _facade, this);
         if (_facade.isClientDb()) {
@@ -600,7 +594,7 @@ class SearchJob extends JobImpl {
      */
     private void succeed() {
         if (_log.shouldInfo())
-            _log.info("Successful search for key [" + _state.getTarget().toBase32().substring(0,8) +
+            _log.info("Successful search for [" + _state.getTarget().toBase64().substring(0,6) +
                       "] after " + _state.getAttempted().size() + " peers queried");
         if (_log.shouldDebug())
 //            _log.debug("State of successful search: " + _state);
@@ -706,7 +700,7 @@ class SearchJob extends JobImpl {
         }
 
         if (_log.shouldInfo())
-            _log.info("Search for key [" + _state.getTarget().toBase32().substring(0,8) + "] failed");
+            _log.info("Search for [" + _state.getTarget().toBase64().substring(0,6) + "] failed");
 //        if (_log.shouldDebug())
 //            _log.debug("Failed: " + _state);
 

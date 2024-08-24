@@ -24,9 +24,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.SystemVersion;
 
 /**
- * Send off an exploratory search for a particular key until we
- * get a DSRM response.
- *
+ * Send off an exploratory search for a particular key until we get a DSRM response.
  */
 class ExploreJob extends SearchJob {
     private final FloodfillPeerSelector _peerSelector;
@@ -172,8 +170,7 @@ class ExploreJob extends SearchJob {
             // may be null
             outMsg = MessageWrapper.wrap(ctx, msg, peer);
             if (_log.shouldDebug())
-                _log.debug("Encrypted Exploratory DbLookupMessage for [" +
-                           getState().getTarget().toBase64().substring(0,6) + "] sent to [" +
+                _log.debug("Encrypted Exploratory DbLookupMessage for [" + getState().getTarget().toBase64().substring(0,6) + "] sent to [" +
                            ident.calculateHash().toBase64().substring(0,6) + "]");
         } else {
             outMsg = msg;
