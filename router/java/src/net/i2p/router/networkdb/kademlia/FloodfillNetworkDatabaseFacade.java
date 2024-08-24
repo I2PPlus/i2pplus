@@ -395,7 +395,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             _context.commSystem().processMessage(m);
             flooded++;
             if (_log.shouldDebug()) {
-                _log.debug("Flooding the entry for [" + key.toBase32().substring(0,8) + "] to [" + peer.toBase64().substring(0,6) + "]");
+                _log.debug("Flooding the entry for [" + key.toBase32().substring(0,8) + "] to [" + peer.toBase64().substring(0,6) + "]...");
             }
             if (flooded >= MAX_TO_FLOOD) {break;}
         }
