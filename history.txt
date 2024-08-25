@@ -1,4 +1,8 @@
-2024-08-21 dr|z3d
+2024-08-25 dr|z3d
+ * Router: Fallback to RouterInfo lookups for router ips when we haven't
+   recently connected with a router to fix console flags / unknown country
+
+2024-08-24 dr|z3d
  * I2PSnark: Add disk usage/freespace indicator to torrents table footer;
    move our destination indicator to configuration -> tunnels header
 
