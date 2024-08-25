@@ -1288,6 +1288,19 @@ class NetDbRenderer {
         if (_context.banlist().isBanlisted(h)) {
             buf.append("<a class=banlisted href=\"/profiles?f=3\" title=\"").append(_t("Router is banlisted")).append("\">Banned</a> ");
         }
+        Collection<RouterAddress> addresses = info.getAddresses();
+        boolean isJavaI2P = false;
+        for (RouterAddress addr : addresses) {
+            String style = addr.getTransportStyle();
+            int transportCost = addr.getCost();
+            if ((style.equals("SSU") && transportCost == 5 || transportCost == 14) ||
+                (style.startsWith("NTCP") && transportCost == 10 || transportCost == 14)) {
+               isJavaI2P = true;
+            }
+        }
+        if (isJavaI2P) {
+            buf.append("<span class=javai2p title=\"" + _t("Java I2P variant") + "\"></span> ");
+        }
         byte[] padding = info.getIdentity().getPadding();
         if (padding != null && padding.length >= 64) {
             if (DataHelper.eq(padding, 0, padding, 32, 32)) {
