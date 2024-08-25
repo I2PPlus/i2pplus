@@ -382,8 +382,8 @@ public class GeoIP {
                 _lock.set(false);
             }
             if (_log.shouldInfo())
-                _log.info("GeoIP processing finished, looked up: " + toSearch + " found: " + found +
-                          " time: " + (_context.clock().now() - start));
+                _log.info("Finished processing " + toSearch + " GeoIP RouterInfo lookups -> Found: " + found +
+                          " (Time taken: " + (_context.clock().now() - start) + "ms");
             return rv;
         }
     }
@@ -699,14 +699,19 @@ public class GeoIP {
                 }
             }
         }
-        if (_log.shouldInfo())
-            _log.info("Old country was " + oldCountry + " new country is " + country);
         if (country != null && !country.equals(oldCountry)) {
+            if (_log.shouldDebug()) {
+                _log.debug("Our router's previously identified country was " + oldCountry + " -> New country is " + country);
+            }
             boolean wasStrict = ctx.commSystem().isInStrictCountry();
             ctx.router().saveConfig(PROP_IP_COUNTRY, country);
             boolean isStrict = ctx.commSystem().isInStrictCountry();
-            if (_log.shouldInfo())
-                _log.info("Old country was strict? " + wasStrict + "; new country is strict? " + isStrict);
+            String isStrictCountry = isStrict ? "strict" : "non-strict";
+            String wasStrictCountry = wasStrict ? "strict" : "non-strict";
+            if (_log.shouldInfo() && isStrict != wasStrict) {
+                _log.info("Our router's previously identified country (" + oldCountry + " was " + wasStrictCountry +
+                          " -> New country (" + country + ") is designated as " + isStrictCountry);
+            }
             if (isStrict || ctx.getBooleanProperty(Router.PROP_HIDDEN_HIDDEN) ||
                 ctx.getBooleanProperty(PROP_BLOCK_MY_COUNTRY)) {
                 // generate country blocklist
