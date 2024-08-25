@@ -695,6 +695,7 @@ table[id$="logs"] ul li:last-child{margin-bottom:10px}
 #enviro,table[id$="logs"]{font-size:9pt;padding:10px}
 
 #logs li a:not(:hover){color:inherit}
+#logs li a[href^="/netdb?l="]{white-space:nowrap}
 #logs li a::before{margin:0 3px 0 0;width:16px;height:16px;display:inline-block;vertical-align:text-bottom;content:""}
 #logs li a[href^="/netdb?r="]::before{background:var(--client) no-repeat center center/16px}
 #logs li a[href^="/netdb?ip"]::before{width:14px;background:url(/themes/console/images/globe.svg) no-repeat center center/14px}
@@ -1419,8 +1420,9 @@ span.tier,.netdbentry .ff,.netdbentry .hidden,.netdbentry .reachable,.netdbentry
 .gwhois,.banlisted{vertical-align:middle;font-size:0}
 .gwhois a::before{margin-left:-2px;width:12px;height:12px;display:inline-block;vertical-align:middle;background:var(--search) no-repeat left center/11px;opacity:.7;content:""}
 .gwhois:hover a::before,.gwhois a:focus::before{opacity:1;transform:scale(1.2)}
-.banlisted,.compressible{width:18px;height:18px;display:inline-block;vertical-align:middle;background:var(--ban)}
+.banlisted,.compressible,.javai2p{width:18px;height:18px;display:inline-block;vertical-align:middle;background:var(--ban)}
 .compressible{background:url(/themes/console/images/clamp.svg)}
+.javai2p{margin-right:2px;background:url(/themes/console/images/eepsites/i2p.svg)}
 .netdbentry img{margin:1px 0 0}
 .ls_crypto{display:inline-block;columns:360px 2}
 .netdb_addresses{line-height:1.35}

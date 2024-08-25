@@ -1127,8 +1127,9 @@ p.family a{padding-left:4px;width:calc(100% - 141px);max-width:400px;display:inl
 p.family b{margin-right:-3px;min-width:118px;display:inline-block;vertical-align:middle;text-align:right;font-size:90%}
 p.family+p.family,.sybil_info+.sybil_info{margin-top:-4px}
 p.family{white-space:nowrap;background:var(--family) no-repeat 8px center/28px,linear-gradient(90deg,#000,#000800 80%,#001000);background-blend-mode:normal}
-.banlisted,.compressible{width:18px;height:18px;display:inline-block;vertical-align:middle;background:var(--ban)}
+.banlisted,.compressible,.javai2p{width:18px;height:18px;display:inline-block;vertical-align:middle;background:var(--ban)}
 .compressible{background:url(/themes/console/images/clamp.svg)}
+.javai2p{margin-right:2px;background:url(/themes/console/images/eepsites/i2p.svg)}
 .configpeer:hover,.configpeer:focus{background:var(--edit_hover) var(--center)/12px,var(--badge)}
 .familyname .verified{margin-top:-2px;height:12px;width:12px;display:inline-block;vertical-align:middle;font-size:0;background:var(--verified) no-repeat center center/11px}
 .gwhois,.banlisted{vertical-align:middle;font-size:0}
@@ -2382,6 +2383,7 @@ font[color="#006600"]{color:#346}
 font[color="#000099"]{color:#363}
 #logs li font[color="#000099"]::before{background:#363}
 
+#logs li a[href^="/netdb?l="]{white-space:nowrap}
 #logs li a:not(:hover){color:inherit}
 #logs li a::before{margin:0 3px 0 0;width:16px;height:16px;display:inline-block;vertical-align:text-bottom;content:"";mix-blend-mode:luminosity}
 #logs li a[href^="/netdb?r="]::before{background:var(--client) no-repeat center center/16px}
