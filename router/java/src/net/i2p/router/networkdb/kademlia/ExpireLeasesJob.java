@@ -45,12 +45,20 @@ class ExpireLeasesJob extends JobImpl {
         List<Hash> toExpire = selectKeysToExpire();
         if (!toExpire.isEmpty() && uptime >= 10*60*1000) {
             StringBuilder buf = new StringBuilder(toExpire.size()*16);
-            buf.append("Leases to expire (" + toExpire.size() + "): ");
-            for (Hash h : toExpire) {buf.append("[").append(h.toBase32().substring(0,8)).append("]"); buf.append(" ");}
-            for (Hash key : toExpire) {_facade.fail(key);}
+            if (_log.shouldLog(Log.INFO)) {buf.append("Leases to expire (" + toExpire.size() + "): ");}
+            for (Hash h : toExpire) {
+                _facade.fail(h);
+                if (_log.shouldLog(Log.INFO)) {
+                    buf.append("[").append(h.toBase32().substring(0,8)).append("]"); buf.append(" ");
+                }
+            }
+            if (_log.shouldLog(Log.INFO)) {
+                _log.info("Adding " + toExpire.size() + " expired " +
+                          (toExpire.size() > 1 ? "LeaseSets" : "LeaseSet") + " to the explore queue...");
+            }
             if (_log.shouldLog(Log.INFO)) {_log.info(buf.toString());}
+            _facade.queueForExploration(toExpire); // don't do explicit searches, just explore passively
         }
-        _facade.queueForExploration(toExpire); // don't do explicit searches, just explore passively
         requeue(RERUN_DELAY_MS);
     }
 
@@ -72,14 +80,12 @@ class ExpireLeasesJob extends JobImpl {
                     toExpire.add(h);
                     if (ctx.clientManager().isLocal(h))
                         _log.logAlways(Log.ERROR, "Expired LOCAL LeaseSet [" + h.toBase32().substring(0,8) + "]");
-                } else {
-                    current.add(h);
-                }
+                } else {current.add(h);}
             }
         }
         if (!current.isEmpty()) {
             if (_log.shouldLog(Log.INFO)) {
-                _log.info("Adding " + current.size() + " current LeaseSets to the explore queue...");
+                _log.info("Adding " + current.size() + " current " + (current.size() > 1 ? "LeaseSets" : "LeaseSet") + " to the explore queue...");
             }
             Collections.shuffle(current);
             _facade.queueForExploration(current); // passively explore non-expired keys
