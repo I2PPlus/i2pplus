@@ -903,12 +903,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             lastUnknownPurge = now;
         }
 
+        RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
         byte[] ip = TransportImpl.getIP(peer);
-        if (ip == null) {
-            RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
-            if (ri != null) {ip = getIP(ri);}
-        }
-        if (ip == null) {
+
+        if (ip == null && ri != null) {ip = getIP(ri);}
+        if (ip == null && ri != null) {
             if (_log.shouldDebug()) {
                 _log.debug("Cannot identify country for Router [" + peer.toBase64().substring(0, 6) + "] -> IP address not found");
             }
@@ -916,7 +915,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
 
         String country = _geoIP.get(ip);
-        if (country == null) {
+        if (ri != null && country == null || country == "xx") {
             if (_log.shouldDebug()) {
                 try {
                     InetAddress address = InetAddress.getByAddress(ip);
@@ -927,7 +926,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 }
             }
             return "xx";
-        }
+        } else if (country == null && ri == null) {return "xx";}
 
         if (countryCache.size() >= MAX_COUNTRY_CACHE_SIZE) {
             // Fetch keys, synchronize to avoid ConcurrentModificationException
@@ -952,6 +951,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  @return IP or null
      */
     private static byte[] getIP(RouterInfo ri) {
+        if (ri == null) {return null;}
         for (RouterAddress ra : ri.getAddresses()) {
             byte[] rv = ra.getIP();
             if (rv != null) {return rv;}
@@ -970,6 +970,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
 
     public static byte[] getValidIP(RouterInfo ri) {
+        if (ri == null) {return null;}
         for (RouterAddress ra : ri.getAddresses()) { // NPE?!!
             byte[] rv = ra.getIP();
             if (rv != null && TransportUtil.isPubliclyRoutable(rv, true)) {return rv;}
