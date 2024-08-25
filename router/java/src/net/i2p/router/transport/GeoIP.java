@@ -383,7 +383,7 @@ public class GeoIP {
             }
             if (_log.shouldInfo())
                 _log.info("Finished processing " + toSearch + " GeoIP RouterInfo lookups -> Found: " + found +
-                          " (Time taken: " + (_context.clock().now() - start) + "ms");
+                          " (Time taken: " + (_context.clock().now() - start) + "ms)");
             return rv;
         }
     }

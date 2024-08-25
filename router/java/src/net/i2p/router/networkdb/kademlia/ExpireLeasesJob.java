@@ -45,10 +45,10 @@ class ExpireLeasesJob extends JobImpl {
         List<Hash> toExpire = selectKeysToExpire();
         if (!toExpire.isEmpty() && uptime >= 10*60*1000) {
             StringBuilder buf = new StringBuilder(toExpire.size()*16);
-            if (_log.shouldLog(Log.INFO)) {buf.append("Leases to expire (" + toExpire.size() + "): ");}
+            if (_log.shouldLog(Log.DEBUG)) {buf.append("Leases to expire (" + toExpire.size() + "): ");}
             for (Hash h : toExpire) {
                 _facade.fail(h);
-                if (_log.shouldLog(Log.INFO)) {
+                if (_log.shouldLog(Log.DEBUG)) {
                     buf.append("[").append(h.toBase32().substring(0,8)).append("]"); buf.append(" ");
                 }
             }
@@ -56,7 +56,7 @@ class ExpireLeasesJob extends JobImpl {
                 _log.info("Adding " + toExpire.size() + " expired " +
                           (toExpire.size() > 1 ? "LeaseSets" : "LeaseSet") + " to the explore queue...");
             }
-            if (_log.shouldLog(Log.INFO)) {_log.info(buf.toString());}
+            if (_log.shouldLog(Log.DEBUG)) {_log.info(buf.toString());}
             _facade.queueForExploration(toExpire); // don't do explicit searches, just explore passively
         }
         requeue(RERUN_DELAY_MS);
