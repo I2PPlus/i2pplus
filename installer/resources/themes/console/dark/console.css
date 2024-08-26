@@ -790,6 +790,7 @@ td.ipv6{width:1%;max-width:24px}
 #udpconnections tr:hover td,#ntcpconnections tr:hover td,.tunneldisplay tr:hover td{color:var(--ink)}
 
 /* profiles */
+.host_ipv6{margin:0 2px;display:inline-block;font-size:85%}
 .profilegroup{margin:3px 0 3px 10px;display:inline-block}
 .profilegroup:first-child{margin-top:6px}
 .profilegroup.fast::before{background:var(--fast) no-repeat left center}
