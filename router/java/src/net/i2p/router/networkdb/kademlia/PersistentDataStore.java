@@ -128,16 +128,6 @@ public class PersistentDataStore extends TransientDataStore {
     @Override
     public DatabaseEntry get(Hash key, boolean persist) {
         DatabaseEntry rv =  super.get(key);
-/*****
-        if (rv != null || !persist)
-            return rv;
-        rv = _writer.get(key);
-        if (rv != null)
-            return rv;
-        Job rrj = new ReadRouterJob(getRouterInfoName(key), key));
-         run in same thread
-        rrj.runJob();
-*******/
         return rv;
     }
 
@@ -197,7 +187,7 @@ public class PersistentDataStore extends TransientDataStore {
     /** How many files to write every 5 minutes. Doesn't make sense to limit it,
      *  they just back up in the queue hogging memory.
      */
-    private static final int WRITE_LIMIT = 6000;
+    private static final int WRITE_LIMIT = 10000;
     private static final long WRITE_DELAY = 5*60*1000;
 
     /*
@@ -955,11 +945,8 @@ public class PersistentDataStore extends TransientDataStore {
             boolean removed = f.delete();
             if (!removed && f.exists()) {
                 // change from warn to debug as we're likely to see only when failing to delete a previously deleted RI
-                if (_log.shouldDebug())
-                    _log.debug("Unable to delete " + f.getAbsolutePath());
-            } else if (_log.shouldDebug()) {
-                _log.debug("Deleted " + f.getAbsolutePath());
-            }
+                if (_log.shouldDebug()) {_log.debug("Unable to delete " + f.getAbsolutePath() + " -> Previously deleted?");}
+            } else if (_log.shouldDebug()) {_log.debug("Deleted " + f.getAbsolutePath());}
             return;
         }
     }

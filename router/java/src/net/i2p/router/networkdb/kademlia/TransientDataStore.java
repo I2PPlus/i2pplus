@@ -36,18 +36,12 @@ class TransientDataStore implements DataStore {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
         _data = new ConcurrentHashMap<Hash, DatabaseEntry>(1024);
-        //if (_log.shouldDebug()) {_log.debug("Transient DataStore initialized");}
     }
 
     public boolean isInitialized() {return true;}
-
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
-    public boolean enableReverseLookups() {
-        return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);
-    }
-
+    public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
     public void stop() {_data.clear();}
-
     public void rescan() {}
 
     /**
@@ -119,14 +113,12 @@ class TransientDataStore implements DataStore {
         boolean isRI = type == DatabaseEntry.KEY_TYPE_ROUTERINFO;
         if (data == null) return false;
         if (_log.shouldDebug()) {
-            _log.debug("Storing key [" + (isRI ? key.toBase64().substring(0,6) : key.toBase32().substring(0,8)) + "]");
+            _log.debug("Saving " + (isRI ? "RouterInfo" : "LeaseSet") + " [" +
+                       (isRI ? key.toBase64().substring(0,6) : key.toBase32().substring(0,8)) + "] to persistent datastore...");
         }
         DatabaseEntry old = _data.putIfAbsent(key, data);
         boolean rv = false;
         if (isRI) {
-            // Don't do this here so we don't reset it at router startup;
-            // the StoreMessageJob calls this
-            //_context.profileManager().heardAbout(key);
             RouterInfo ri = (RouterInfo)data;
             String v = ri.getVersion();
             String caps = ri.getCapabilities();
