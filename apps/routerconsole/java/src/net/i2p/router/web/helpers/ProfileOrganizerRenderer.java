@@ -75,7 +75,8 @@ class ProfileOrganizerRenderer {
                 }
             }
 //            if (prof.getLastSendSuccessful() <= hideBefore) {
-            if (mode != 2 && (prof.getLastHeardFrom() <= hideBefore || prof.getLastSendSuccessful() <= hideBefore) && !prof.getIsActive()) {
+            if (mode != 2 && (prof.getLastHeardFrom() <= hideBefore ||
+                prof.getLastSendSuccessful() <= hideBefore) && !prof.getIsActive()) {
                 older++;
                 continue;
             }
@@ -96,10 +97,14 @@ class ProfileOrganizerRenderer {
             buf.append("<p id=profiles_overview class=infohelp>");
             buf.append(ngettext("Showing {0} recent profile.", "Showing {0} recent profiles.", order.size())).append('\n');
                                 //.replace(".", " (" + _t("active in the last 20 minutes") + ").")).append('\n');
-            if (older > 0)
+            if (older > 0) {
                 buf.append(ngettext("Hiding {0} older profile.", "Hiding {0} older profiles.", older)).append('\n');
-            if (standard > 0)
-                buf.append("<a href=\"/profiles\">").append(ngettext("Hiding {0} standard profile.", "Hiding {0} standard profiles.", standard)).append("</a>\n");
+            }
+            if (standard > 0) {
+                buf.append("<a href=\"/profiles\">")
+                   .append(ngettext("Hiding {0} standard profile.","Hiding {0} standard profiles.", standard))
+                   .append("</a>\n");
+            }
             buf.append(_t("Note that the profiler relies on sustained client tunnel usage to accurately profile peers.")).append("</p>");
 
             buf.append("<div class=widescroll id=peerprofiles>\n<table id=profilelist>\n")
@@ -127,16 +132,16 @@ class ProfileOrganizerRenderer {
                .append("<th title=\"").append(_t("Tunnels peer has refused to participate in"))
                .append("\">").append(_t("Rejected")).append("</th>")
                //.append("<th>").append(_t("Integration")).append("</th>")
-               //.append("<th>").append(_t("First Heard About")).append("</th>")
+               .append("<th>").append(_t("First Heard About")).append("</th>")
                .append("<th>").append(_t("Last Heard From")).append("</th>")
                .append("<th>").append(_t("View/Edit")).append("</th>")
                .append("</tr>\n</thead>\n<tbody id=pbody>\n");
             int prevTier = 1;
             for (PeerProfile prof : order) {
                 Hash peer = prof.getPeer();
-
                 int tier = 0;
                 boolean isIntegrated = false;
+
                 if (_organizer.isFast(peer)) {
                     tier = 1;
                     fast++;
@@ -144,40 +149,30 @@ class ProfileOrganizerRenderer {
                 } else if (_organizer.isHighCapacity(peer)) {
                     tier = 2;
                     reliable++;
-                } else {
-                    tier = 3;
-                }
+                } else {tier = 3;}
 
                 if (_organizer.isWellIntegrated(peer)) {
                     isIntegrated = true;
                     integrated++;
                 }
+
                 buf.append("<tr class=lazy><td nowrap>");
                 buf.append(_context.commSystem().renderPeerHTML(peer, false));
-                // debug
-                //if(prof.getIsExpandedDB())
-                //   buf.append(" ** ");
                 RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
                 buf.append("<td>");
-                if (info != null) {
-                    buf.append(_context.commSystem().renderPeerCaps(peer, false));
-                }
+                if (info != null) {buf.append(_context.commSystem().renderPeerCaps(peer, false));}
                 buf.append("</td><td>");
                 String v = info != null ? info.getOption("router.version") : null;
                 if (v != null) {
                     buf.append("<span class=version title=\"").append(_t("Show all routers with this version in the NetDb"))
                        .append("\"><a href=\"/netdb?v=").append(DataHelper.stripHTML(v)).append("\">").append(DataHelper.stripHTML(v))
                        .append("</a></span>");
-                } else {
-                    buf.append("<span>&ensp;</span>");
-                }
+                } else {buf.append("<span>&ensp;</span>");}
                 buf.append("</td><td>");
                 long uptime = _context.router().getUptime();
                 String ip = (info != null) ? Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
                 String rl = (ip != null && enableReverseLookups() && uptime > 30*1000) ? _context.commSystem().getCanonicalHostName(ip) : null;
-                if (rl != null && rl.equals("unknown")) {
-                    rl = ip;
-                }
+                if (rl != null && rl.equals("unknown")) {rl = ip;}
                 if (enableReverseLookups()) {
                     if (rl != null && rl != "null" && rl.length() != 0 && !ip.toString().equals(rl)) {
                         buf.append("<span hidden>[XHost]</span><span class=rlookup title=\"").append(rl).append("\">");
@@ -185,14 +180,11 @@ class ProfileOrganizerRenderer {
                     } else if (ip == "null" || ip == null) {
                         buf.append("<span>").append(_t("unknown"));
                     } else {
-                        if (ip != null && ip.contains(":"))
-                            buf.append("<span hidden>[IPv6]</span>");
-                        buf.append("<span>").append(ip);
+                        if (ip != null && ip.contains(":")) {buf.append("<span hidden>[IPv6]</span>");}
+                        buf.append("<span class=host_ipv6>").append(ip);
                     }
                     buf.append("</span>");
-                } else {
-                    buf.append(ip != null ? ip : _t("unknown"));
-                }
+                } else {buf.append(ip != null ? ip : _t("unknown"));}
                 buf.append("</td><td>");
                 boolean ok = true;
                 if (_context.banlist().isBanlisted(peer)) {
@@ -208,23 +200,19 @@ class ProfileOrganizerRenderer {
                 long fails = failed.computeAverages(ra, false).getTotalEventCount();
                 long bonus = prof.getSpeedBonus();
                 long capBonus = prof.getCapacityBonus();
-                if (ok && fails == 0) {
-                    buf.append("<span class=ok>").append(_t("OK")).append("</span>");
-                } else if (fails > 0) {
+                if (ok && fails == 0) {buf.append("<span class=ok>").append(_t("OK")).append("</span>");}
+                else if (fails > 0) {
                     Rate accepted = prof.getTunnelCreateResponseTime().getRate(60*60*1000);
                     long total = fails + accepted.computeAverages(ra, false).getTotalEventCount();
                     if (total / fails <= 5) { // don't demote if less than 5%
-                        if (bonus == 9999999) {
-                            prof.setSpeedBonus(0);
-                        }
+                        if (bonus == 9999999) {prof.setSpeedBonus(0);}
                         prof.setCapacityBonus(-30);
                     }
                     if (total / fails <= 10) {  // hide if < 10%
-                        buf.append(" &bullet; ").append(fails).append('/').append(total).append(' ').append(_t("Test Fails"));
+                        buf.append(" &bullet; ").append(fails).append('/')
+                           .append(total).append(' ').append(_t("Test Fails"));
                     }
-                } else {
-                    buf.append("<span>&ensp;</span>");
-                }
+                } else {buf.append("<span>&ensp;</span>");}
                 buf.append("</td>");
                 buf.append("<td class=groups>");
                 buf.append("<span class=\"");
@@ -242,12 +230,9 @@ class ProfileOrganizerRenderer {
                 int speed = Integer.parseInt(speedApprox);
                 if (prof.getSpeedValue() > 0.1) {
                     buf.append("<span class=\"");
-                    if (bonus >= 9999999)
-                        buf.append("testOK ");
-                    else if (capBonus == -30)
-                        buf.append("testFail ");
-                    if (speed >= 9999999)
-                        speed = speed - 9999999;
+                    if (bonus >= 9999999) {buf.append("testOK ");}
+                    else if (capBonus == -30) {buf.append("testFail ");}
+                    if (speed >= 9999999) {speed = speed - 9999999;}
                     if (speed > 1025) {
                         speed = speed / 1024;
                         buf.append("kilobytes\">");
@@ -257,30 +242,23 @@ class ProfileOrganizerRenderer {
                         buf.append(speed).append("&#8239;B/s");
                     }
                     if (bonus != 0 && bonus != 9999999) {
-                        if (bonus > 0)
-                            buf.append(" (+");
-                        else
-                            buf.append(" (");
+                        if (bonus > 0) {buf.append(" (+");}
+                        else {buf.append(" (");}
                         buf.append(bonus).append(')');
                     }
                     buf.append("</span>");
                 } else {
                     buf.append("<span hidden>0</span>");
                     buf.append("<span class=\"");
-                    if (bonus >= 9999999)
-                        buf.append("testOK ");
-                    else if (capBonus <= -30)
-                        buf.append("testFail ");
+                    if (bonus >= 9999999) {buf.append("testOK ");}
+                    else if (capBonus <= -30) {buf.append("testFail ");}
                     buf.append("nospeed\">&ensp;</span>");
                 }
                 buf.append("</td>");
                 buf.append("<td class=latency>");
-                if (bonus >= 9999999)
-                    buf.append("<span class=lowlatency>✔</span>");
-                else if (capBonus == -30)
-                    buf.append("<span class=highlatency>✖</span>");
-                else
-                    buf.append("<span>&ensp;</span>");
+                if (bonus >= 9999999) {buf.append("<span class=lowlatency>✔</span>");}
+                else if (capBonus == -30) {buf.append("<span class=highlatency>✖</span>");}
+                else {buf.append("<span>&ensp;</span>");}
 /*
                 buf.append("</td><td>");
                 if (prof.getPeerTestTimeAverage() > 0)
@@ -304,15 +282,11 @@ class ProfileOrganizerRenderer {
                 buf.append("</td><td>");
                 int agreed = Math.round(prof.getTunnelHistory().getLifetimeAgreedTo());
                 int rejected = Math.round(prof.getTunnelHistory().getLifetimeRejected());
-                if (agreed > 0)
-                    buf.append(agreed);
-                else
-                    buf.append("<span hidden>0</span>");
+                if (agreed > 0) {buf.append(agreed);}
+                else {buf.append("<span hidden>0</span>");}
                 buf.append("</td><td>");
-                if (rejected > 0)
-                    buf.append(rejected);
-                else
-                    buf.append("<span hidden>0</span>");
+                if (rejected > 0) {buf.append(rejected);}
+                else {buf.append("<span hidden>0</span>");}
                 buf.append("</td><td>");
 /**
                 String integration = num(prof.getIntegrationValue()).replace(".00", "");
@@ -321,26 +295,23 @@ class ProfileOrganizerRenderer {
                 } else {
                     buf.append("<span>&ensp;</span>");
                 }
-                buf.append("</td><td>");
 **/
                 now = _context.clock().now();
-/**
                 if (prof.getFirstHeardAbout() > 0) {
                     buf.append("<span hidden>[").append(prof.getFirstHeardAbout()).append("]</span>")
                        .append(formatInterval(now, prof.getFirstHeardAbout()));
-                } else {
-**/
-                buf.append("<span hidden>[").append(prof.getLastHeardFrom() - now).append("]</span>")
-                   .append(formatInterval(now, prof.getLastHeardFrom()));
-//                }
-                buf.append("</td><td nowrap class=viewedit>");
+                }
+                buf.append("</td><td>")
+                   .append("<span hidden>[").append(prof.getLastHeardFrom() - now).append("]</span>")
+                   .append(formatInterval(now, prof.getLastHeardFrom()))
+                   .append("</td><td nowrap class=viewedit>");
                 if (prof != null) {
                     buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(peer.toBase64()).append("\" title=\"").append(_t("View profile"))
                        .append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>");
                 }
                 buf.append("<br><a class=configpeer href=\"/configpeer?peer=").append(peer.toBase64()).append("\" title=\"").append(_t("Configure peer"))
-                   .append("\" alt=\"[").append(_t("Configure peer")).append("]\">").append(_t("Edit")).append("</a>");
-                buf.append("</td></tr>\n");
+                   .append("\" alt=\"[").append(_t("Configure peer")).append("]\">").append(_t("Edit")).append("</a>")
+                   .append("</td></tr>\n");
                 // let's not build the whole page in memory (~500 bytes per peer)
                 // let's try rendering to ram and seeing if page load times are less janky
                 //out.write(buf.toString());
