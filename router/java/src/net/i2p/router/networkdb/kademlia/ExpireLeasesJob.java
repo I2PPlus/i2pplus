@@ -69,6 +69,7 @@ class ExpireLeasesJob extends JobImpl {
      */
     private List<Hash> selectKeysToExpire() {
         RouterContext ctx = getContext();
+        long now = ctx.clock().now();
         List<Hash> toExpire = new ArrayList<Hash>();
         List<Hash> current = new ArrayList<Hash>();
         for (Map.Entry<Hash, DatabaseEntry> entry : _facade.getDataStore().getMapEntries()) {
@@ -78,16 +79,17 @@ class ExpireLeasesJob extends JobImpl {
                 Hash h = entry.getKey();
                 if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
                     toExpire.add(h);
-                    if (ctx.clientManager().isLocal(h))
+                    if (ctx.clientManager().isLocal(h)) {
                         _log.logAlways(Log.ERROR, "Expired LOCAL LeaseSet [" + h.toBase32().substring(0,8) + "]");
-                } else {current.add(h);}
+                    }
+                } else if (!ls.isCurrent(90*1000)) {current.add(h);} // if we're expiring in < 90s, queue for exploration
             }
         }
         if (!current.isEmpty()) {
             if (_log.shouldLog(Log.INFO)) {
-                _log.info("Adding " + current.size() + " current " + (current.size() > 1 ? "LeaseSets" : "LeaseSet") + " to the explore queue...");
+                _log.info("Adding " + current.size() + " soon-to-expire " + (current.size() > 1 ? "LeaseSets" : "LeaseSet") + " to the explore queue...");
             }
-            Collections.shuffle(current);
+            if (current.size() > 2) {Collections.shuffle(current);}
             _facade.queueForExploration(current); // passively explore non-expired keys
             current.clear();
         }
