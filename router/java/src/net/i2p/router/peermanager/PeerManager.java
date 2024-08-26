@@ -46,24 +46,20 @@ class PeerManager {
     private final AtomicBoolean _storeLock = new AtomicBoolean();
     private volatile long _lastStore;
 
-//    private static final long REORGANIZE_TIME = 45*1000;
-//    private static final long REORGANIZE_TIME_MEDIUM = 123*1000;
-    private static final long REORGANIZE_TIME = 90*1000;
-    private static final long REORGANIZE_TIME_MEDIUM = 150*1000;
+    private static final long REORGANIZE_TIME = 45*1000;
+    private static final long REORGANIZE_TIME_MEDIUM = 125*1000;
     /**
      *  We don't want this much longer than the average connect time,
      *  as the CapacityCalculator now includes connection as a factor.
      *  This must also be less than 10 minutes, which is the shortest
      *  Rate contained in the profile, as the Rates must be coalesced.
      */
-//    static final long REORGANIZE_TIME_LONG = 351*1000;
     static final long REORGANIZE_TIME_LONG = 300*1000;
     /** After first two hours of uptime ~= 246 */
-    static final int REORGANIZES_PER_DAY = (int) (24*60*60*1000L / REORGANIZE_TIME_LONG);
-    //static final int REORGANIZES_PER_DAY = 4;
-    private static final long STORE_TIME = 2*60*60*1000;
+    static final int REORGANIZES_PER_DAY = 4;
+    //static final int REORGANIZES_PER_DAY = (int) (24*60*60*1000L / REORGANIZE_TIME_LONG);
+    private static final long STORE_TIME = 15*60*1000; // how frequently we write profiles to disk
     // for profiles stored to disk
-//    private static final long EXPIRE_AGE = 3*60*60*1000;
     private static final long EXPIRE_AGE = 7*24*60*60*1000;
 
     public static final String TRACKED_CAPS = "" +
@@ -94,22 +90,15 @@ class PeerManager {
         _organizer.setUs(context.routerHash());
         _capabilitiesByPeer = new ConcurrentHashMap<Hash, String>(256);
         _peersByCapability = new HashMap<Character, Set<Hash>>(TRACKED_CAPS.length());
-        for (int i = 0; i < TRACKED_CAPS.length(); i++)
+        for (int i = 0; i < TRACKED_CAPS.length(); i++) {
             _peersByCapability.put(Character.valueOf(Character.toLowerCase(TRACKED_CAPS.charAt(i))), new ConcurrentHashSet<Hash>());
+        }
         loadProfilesInBackground();
-        ////_context.jobQueue().addJob(new EvaluateProfilesJob(_context));
-        //SimpleTimer2.getInstance().addPeriodicEvent(new Reorg(), 0, REORGANIZE_TIME);
-        //new Reorg();
-        //_context.jobQueue().addJob(new PersistProfilesJob(_context, this));
     }
 
     private class Reorg extends SimpleTimer2.TimedEvent {
-        public Reorg() {
-            super(_context.simpleTimer2(), REORGANIZE_TIME);
-        }
-        public void timeReached() {
-            (new ReorgThread(this)).start();
-        }
+        public Reorg() {super(_context.simpleTimer2(), REORGANIZE_TIME);}
+        public void timeReached() {(new ReorgThread(this)).start();}
     }
 
     /**
@@ -131,7 +120,6 @@ class PeerManager {
         public void run() {
             long start = System.currentTimeMillis();
             long uptime = _context.router().getUptime();
-//            boolean shouldDecay = uptime > 90*60*1000;
             boolean shouldDecay = uptime > 4*60*60*1000;
             try {
                 _organizer.reorganize(true, shouldDecay);
@@ -150,8 +138,9 @@ class PeerManager {
 
                     if (shouldDecay) {
                         int count = _persistenceHelper.deleteOldProfiles(EXPIRE_AGE);
-                        if (count > 0 && _log.shouldInfo())
+                        if (count > 0 && _log.shouldInfo()) {
                             _log.info("Deleted " + count + " old profiles");
+                        }
                     }
 
                     _log.info("Finished writing peer profiles to disk, took " + (finished - start) + "ms");
@@ -172,8 +161,7 @@ class PeerManager {
 
     void storeProfiles() {
         // Don't overwrite disk profiles when testing
-        if (_context.commSystem().isDummy())
-            return;
+        if (_context.commSystem().isDummy()) {return;}
         long now = _context.clock().now();
         long cutoff = now - EXPIRE_AGE;
         // lock in case shutdown bumps into periodic store
@@ -186,23 +174,20 @@ class PeerManager {
         try {
             Set<Hash> peers = selectPeers();
             total = peers.size();
-            for (Hash peer : peers) {
-                if (storeProfile(peer, cutoff))
-                    i++;
+            for (Hash peer : peers) {if (storeProfile(peer, cutoff)) {
+                i++;}
             }
-        } finally {
-            _storeLock.set(false);
-        }
-        if (_log.shouldInfo())
-            _log.info("Stored " + i + " out of " + total + " profiles");
+        } finally {_storeLock.set(false);}
+        if (_log.shouldInfo()) {_log.info("Stored " + i + " out of " + total + " profiles");}
     }
 
     /** @since 0.8.8 */
     void clearProfiles() {
         _organizer.clearProfiles();
         _capabilitiesByPeer.clear();
-        for (Set<Hash> p : _peersByCapability.values())
+        for (Set<Hash> p : _peersByCapability.values()) {
             p.clear();
+        }
     }
 
     Set<Hash> selectPeers() {
@@ -252,9 +237,7 @@ class PeerManager {
      */
     void loadProfiles() {
         List<PeerProfile> profiles = _persistenceHelper.readProfiles();
-        for (PeerProfile prof : profiles) {
-                _organizer.addProfile(prof);
-        }
+        for (PeerProfile prof : profiles) {_organizer.addProfile(prof);}
         if (_log.shouldInfo())
             _log.info("Loaded " + profiles.size() + " profiles");
     }
@@ -272,34 +255,12 @@ class PeerManager {
         exclude.add(_context.routerHash());
         switch (criteria.getPurpose()) {
             case PeerSelectionCriteria.PURPOSE_TEST:
-                // for now, the peers we test will be the reliable ones
-                //_organizer.selectWellIntegratedPeers(criteria.getMinimumRequired(), exclude, curVals);
-
                 // The PeerTestJob does only run every 5 minutes, but
                 // this was helping drive us to connection limits, let's leave the exploration
                 // to the ExploratoryPeerSelector, which will restrict to connected peers
                 // when we get close to the limit. So let's stick with connected peers here.
-                // Todo: what's the point of the PeerTestJob anyway?
-                //_organizer.selectNotFailingPeers(criteria.getMinimumRequired(), exclude, peers);
                 _organizer.selectActiveNotFailingPeers(criteria.getMinimumRequired(), exclude, peers);
                 break;
-/****
-            case PeerSelectionCriteria.PURPOSE_TUNNEL:
-                // pull all of the fast ones, regardless of how many we
-                // want - we'll whittle them down later (40 lines from now)
-                // int num = _organizer.countFastPeers();
-                // if (num <= 0)
-                //    num = criteria.getMaximumRequired();
-                // _organizer.selectFastPeers(num, exclude, curVals);
-                _organizer.selectFastPeers(criteria.getMaximumRequired(), exclude, peers);
-                break;
-            case PeerSelectionCriteria.PURPOSE_SOURCE_ROUTE:
-                _organizer.selectHighCapacityPeers(criteria.getMinimumRequired(), exclude, peers);
-                break;
-            case PeerSelectionCriteria.PURPOSE_GARLIC:
-                _organizer.selectHighCapacityPeers(criteria.getMinimumRequired(), exclude, peers);
-                break;
-****/
             default:
                 throw new UnsupportedOperationException();
         }
@@ -310,8 +271,6 @@ class PeerManager {
                           + _organizer.countHighCapacityPeers() + " High Capacity peers and "
                           + _organizer.countFastPeers() + " Fast peers");
         }
-//        if (_log.shouldInfo())
-//            _log.info("Peers selected for testing: " + peers);
         return new ArrayList<Hash>(peers);
     }
 
@@ -360,20 +319,6 @@ class PeerManager {
             }
         }
     }
-
-/*******
-    public Hash selectRandomByCapability(char capability) {
-        int index = _context.random().nextInt(Integer.MAX_VALUE);
-        synchronized (_capabilitiesByPeer) {
-            List peers = locked_getPeers(capability);
-            if ( (peers != null) && (!peers.isEmpty()) ) {
-                index = index % peers.size();
-                return (Hash)peers.get(index);
-            }
-        }
-        return null;
-    }
-********/
 
     /**
      *  @param capability case-insensitive

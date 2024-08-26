@@ -28,8 +28,7 @@ import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
 
 /**
- *  Write profiles to disk at shutdown,
- *  read at startup.
+ *  Write profiles to disk at shutdown, read at startup.
  *  The files are gzip compressed, we previously stored them
  *  with a ".dat" extension instead of ".txt.gz", so it wasn't apparent.
  *  Now migrated to a ".txt.gz" extension.
@@ -51,7 +50,7 @@ class ProfilePersistenceHelper {
     private static final String DIR_PREFIX = "p";
     private static final String B64 = Base64.ALPHABET_I2P;
     // Max to read in at startup
-    private static final int LIMIT_PROFILES = SystemVersion.isSlow() ? 1000 : 4000;
+    private static final int LIMIT_PROFILES = SystemVersion.isSlow() ? 3000 : 5000;
 
     private final File _profileDir;
     private Hash _us;
@@ -84,7 +83,10 @@ class ProfilePersistenceHelper {
             _log.error("Error writing profile to " + f);
             return false;
         } finally {
-            if (fos != null) try { fos.close(); } catch (IOException ioe) {}
+            if (fos != null) {
+                try {fos.close();}
+                catch (IOException ioe) {}
+            }
         }
         return true;
     }
@@ -264,16 +266,16 @@ class ProfilePersistenceHelper {
         int i = 0;
         for (File f : files) {
             if (!f.isFile()) {continue;}
-            if (f.lastModified() < cutoff) {
+            if (f.lastModified() < cutoff && files.size() > LIMIT_PROFILES) {
                 i++;
-                f.delete();
-                //_log.warn("Not deleting " + f + " (debugging active)");
+                //f.delete();
+                _log.warn("Not deleting " + f + " (debugging active)");
             }
         }
         if (_log.shouldWarn()) {
             if (i > 0) {
-                _log.warn("Deleted " + i + " STALE peer profiles");
-                //_log.warn("Not deleting " + i + " (stale?) peer profiles -> Will expire when read at startup");
+                //_log.warn("Deleted " + i + " STALE peer profiles");
+                _log.warn("Not deleting " + i + " (stale?) peer profiles -> Will expire when read at startup");
             }
         }
         return i;
@@ -293,34 +295,33 @@ class ProfilePersistenceHelper {
         Hash peer = getHash(file.getName());
         try {
             if (peer == null) {
-                if (_log.shouldError()) {_log.error("Peer profile: " + file.getName() + " is not a valid hash");}
-                file.delete();
+                if (_log.shouldError()) {_log.error("Peer profile: " + file.getName() + " is not a valid hash -> Ignoring...");}
+                //file.delete();
                 return null;
             }
             PeerProfile profile = new PeerProfile(_context, peer);
             Properties props = new Properties();
-
             loadProps(props, file);
-
             long lastSentToSuccessfully = getLong(props, "lastSentToSuccessfully");
             long lastHeardFrom = getLong(props, "lastHeardFrom");
-            RouterInfo info = _context.netDb().lookupRouterInfoLocally(profile.getPeer());
+            RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
             String caps = "";
             if (info != null) {caps = DataHelper.stripHTML(info.getCapabilities());}
             else {
-                file.delete();
+                if (_log.shouldDebug()) {_log.debug("Not loading profile without RouterInfo: " + file.getName());}
+                //file.delete();
                 return null;
             }
-
+/**
             if (lastSentToSuccessfully <= cutoff && lastHeardFrom <= cutoff) {
                 if (_log.shouldDebug()) {_log.debug("Dropping STALE profile: " + file.getName());}
                 file.delete();
                 return null;
-            } else if (caps.contains("K") || caps.contains("L") ||
-                       caps.contains("M") || caps.contains("N") ||
-                       caps.contains("U") || !caps.contains("R")) {
-                if (_log.shouldDebug()) {_log.debug("Dropping uninteresting profile: " + file.getName());}
-                file.delete();
+**/
+            if (caps.contains("K") || caps.contains("L") || caps.contains("M") ||
+                caps.contains("U") || !caps.contains("R")) {
+                if (_log.shouldDebug()) {_log.debug("Ignoring uninteresting profile: " + file.getName());}
+                //file.delete();
                 return null;
             } else if (file.getName().endsWith(OLD_SUFFIX)) {
                 // migrate to new file name, ignore failure
@@ -344,14 +345,13 @@ class ProfilePersistenceHelper {
             profile.setLastSendFailed(getLong(props, "lastFailedSend"));
             profile.setLastHeardFrom(getLong(props, "lastHeardFrom"));
 
-            if (PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME)
+            if (PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME) {
                 profile.setTunnelTestTimeAverage(getFloat(props, "tunnelTestTimeAverage"));
+            }
 
-//            profile.setPeerTestTimeAverage((int) getLong(props, "peerTestTimeAverage"));
             profile.setPeakThroughputKBps(getFloat(props, "tunnelPeakThroughput"));
             profile.setPeakTunnelThroughputKBps(getFloat(props, "tunnelPeakTunnelThroughput"));
             profile.setPeakTunnel1mThroughputKBps(getFloat(props, "tunnelPeakTunnel1mThroughput"));
-
             profile.getTunnelHistory().load(props);
 
             // In the interest of keeping the in-memory profiles small,
@@ -362,27 +362,24 @@ class ProfilePersistenceHelper {
                 getLong(props, "dbHistory.lastStoreSuccessful") > 0 ||
                 getLong(props, "dbHistory.lastStoreFailed") > 0 &&
                 (!caps.contains("K") || !caps.contains("L") || !caps.contains("M") ||
-                 !caps.contains("N") || !caps.contains("U"))) {
+                 !caps.contains("U") && caps.contains("R"))) {
                 profile.expandDBProfile();
                 profile.getDBHistory().load(props);
                 profile.getDbIntroduction().load(props, "dbIntroduction", true);
                 profile.getDbResponseTime().load(props, "dbResponseTime", true);
             }
 
-            //profile.getReceiveSize().load(props, "receiveSize", true);
-            //profile.getSendSuccessSize().load(props, "sendSuccessSize", true);
             if (!caps.contains("K") || !caps.contains("L") || !caps.contains("M") ||
-                !caps.contains("N") || !caps.contains("U") && caps.contains("R")) {
+                !caps.contains("U") && caps.contains("R")) {
                 profile.getTunnelCreateResponseTime().load(props, "tunnelCreateResponseTime", true);
-
-                if (PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME)
+                if (PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME) {
                     profile.getTunnelTestResponseTime().load(props, "tunnelTestResponseTime", true);
-
-//                profile.getPeerTestResponseTime().load(props, "peerTestResponseTime", true);
+                }
             }
 
-            if (_log.shouldDebug())
+            if (_log.shouldDebug()) {
                 _log.debug("Loaded profile for [" + peer.toBase64().substring(0,6) + "] from " + file.getName());
+            }
 
             fixupFirstHeardAbout(profile);
             return profile;
@@ -409,20 +406,6 @@ class ProfilePersistenceHelper {
         if (t > 0 && t < min) min = t;
         t = p.getLastHeardFrom();
         if (t > 0 && t < min) min = t;
-        // the first was never used and the last 4 were never persisted
-        //DBHistory dh = p.getDBHistory();
-        //if (dh != null) {
-        //    t = dh.getLastLookupReceived();
-        //    if (t > 0 && t < min) min = t;
-        //    t = dh.getLastLookupSuccessful();
-        //    if (t > 0 && t < min) min = t;
-        //    t = dh.getLastLookupFailed();
-        //    if (t > 0 && t < min) min = t;
-        //    t = dh.getLastStoreSuccessful();
-        //    if (t > 0 && t < min) min = t;
-        //    t = dh.getLastStoreFailed();
-        //    if (t > 0 && t < min) min = t;
-        //}
         TunnelHistory th = p.getTunnelHistory();
         if (th != null) {
             t = th.getLastAgreedTo();
@@ -516,25 +499,4 @@ class ProfilePersistenceHelper {
         return new File(dir, PREFIX + hash + SUFFIX);
     }
 
-
-    /** generate 1000 profiles */
-/****
-    public static void main(String args[]) {
-        System.out.println("Generating 1000 profiles");
-        File dir = new File("profiles");
-        dir.mkdirs();
-        byte data[] = new byte[32];
-        java.util.Random rnd = new java.util.Random();
-        for (int i = 0; i < 1000; i++) {
-            rnd.nextBytes(data);
-            Hash peer = new Hash(data);
-            try {
-                File f = new File(dir, PREFIX + peer.toBase64() + SUFFIX);
-                f.createNewFile();
-                System.out.println("Created " + peer.toBase64());
-            } catch (IOException ioe) {}
-        }
-        System.out.println("1000 peers created in " + dir.getAbsolutePath());
-    }
-****/
 }

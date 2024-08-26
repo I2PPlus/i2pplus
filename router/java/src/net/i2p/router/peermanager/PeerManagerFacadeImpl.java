@@ -42,14 +42,12 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
         _log.info("Starting Peer Manager...");
         _manager = new PeerManager(_context);
         _persistenceHelper.setUs(_context.routerHash());
-        if (_testJob != null)
-        _testJob.startTesting(_manager);
+        if (_testJob != null) {_testJob.startTesting(_manager);}
     }
 
     public synchronized void shutdown() {
         _log.info("Shutting down Peer Manager...");
-        if (_testJob != null)
-        _testJob.stopTesting();
+        if (_testJob != null) {_testJob.stopTesting();}
         if (_manager != null) {
             _manager.storeProfiles();
             _manager.clearProfiles();
@@ -75,14 +73,6 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
         _manager.removeCapabilities(peer);
     }
 
-    /** @deprecated unused */
-    @Deprecated
-    public Hash selectRandomByCapability(char capability) {
-        //if (_manager == null) return null;
-        //return _manager.selectRandomByCapability(capability);
-        return null;
-    }
-
     /**
      *  @param capability case-insensitive
      *  @return non-null unmodifiable set
@@ -104,7 +94,6 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
 
     /** @deprecated moved to routerconsole */
     @Deprecated
-    public void renderStatusHTML(Writer out) throws IOException {
-    }
+    public void renderStatusHTML(Writer out) throws IOException {}
 
 }

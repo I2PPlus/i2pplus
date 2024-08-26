@@ -98,11 +98,8 @@ public class PeerProfile {
     // the goal is to cut an unchanged profile in half in 24 hours.
     // x**4 = .5; x = 4th root of .5,  x = .5**(1/4), x ~= 0.84
     private static final float DEGRADE_FACTOR = (float) Math.pow(TOTAL_DEGRADE_PER_DAY, 1.0d / DEGRADES_PER_DAY);
-    //static { System.out.println("Degrade factor is " + DEGRADE_FACTOR);}
     static final boolean ENABLE_TUNNEL_TEST_RESPONSE_TIME = true;
-
     private long _lastCoalesceDate = System.currentTimeMillis();
-
     private static final long[] RATES = { 60*1000l, 5*60*1000l, 10*60*1000l, 30*60*1000l, 60*60*1000l, 24*60*60*1000 };
 
     /**
