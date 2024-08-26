@@ -296,7 +296,7 @@ class ProfilePersistenceHelper {
         try {
             if (peer == null) {
                 if (_log.shouldError()) {_log.error("Peer profile: " + file.getName() + " is not a valid hash -> Ignoring...");}
-                //file.delete();
+                file.delete();
                 return null;
             }
             PeerProfile profile = new PeerProfile(_context, peer);
@@ -309,7 +309,7 @@ class ProfilePersistenceHelper {
             if (info != null) {caps = DataHelper.stripHTML(info.getCapabilities());}
             else {
                 if (_log.shouldDebug()) {_log.debug("Not loading profile without RouterInfo: " + file.getName());}
-                //file.delete();
+                file.delete();
                 return null;
             }
 /**
@@ -321,7 +321,7 @@ class ProfilePersistenceHelper {
             if (caps.contains("K") || caps.contains("L") || caps.contains("M") ||
                 caps.contains("U") || !caps.contains("R")) {
                 if (_log.shouldDebug()) {_log.debug("Ignoring uninteresting profile: " + file.getName());}
-                //file.delete();
+                file.delete();
                 return null;
             } else if (file.getName().endsWith(OLD_SUFFIX)) {
                 // migrate to new file name, ignore failure

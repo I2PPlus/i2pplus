@@ -236,10 +236,22 @@ class PeerManager {
      *  This may take a long time - 30 seconds or more
      */
     void loadProfiles() {
+        long startTime = System.currentTimeMillis();
+        long uptime = _context.router().getUptime();
+
+        while (uptime < 15 * 1000) {
+            long delay = 15 * 1000 - uptime;
+            try {Thread.sleep(delay);}
+            catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
+            }
+            uptime = _context.router().getUptime();
+        }
+
+        long elapsedTime = System.currentTimeMillis() - startTime;
         List<PeerProfile> profiles = _persistenceHelper.readProfiles();
         for (PeerProfile prof : profiles) {_organizer.addProfile(prof);}
-        if (_log.shouldInfo())
-            _log.info("Loaded " + profiles.size() + " profiles");
     }
 
     /**
