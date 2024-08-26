@@ -1275,9 +1275,7 @@ class NetDbRenderer {
     private void renderRouterInfo(StringBuilder buf, RouterInfo info, boolean isUs, boolean full) {
         String hash = info.getIdentity().getHash().toBase64();
         String family = info.getOption("family");
-        buf.append("<table class=\"netdbentry lazy\">\n")
-//           .append("<tr id=\"").append(hash.substring(0, 6)).append("\"><th>");
-           .append("<tr><th>");
+        buf.append("<table class=\"netdbentry lazy\">\n").append("<tr><th>");
         if (isUs) {
             buf.append("<b id=our-info>" + _t("Our info") + ":</b></th><th><code>").append(hash)
                .append("</code></th><th id=netdb_ourinfo>");
@@ -1290,17 +1288,22 @@ class NetDbRenderer {
         }
         Collection<RouterAddress> addresses = info.getAddresses();
         boolean isJavaI2P = false;
+        boolean isI2PD = false;
         for (RouterAddress addr : addresses) {
             String style = addr.getTransportStyle();
             int transportCost = addr.getCost();
-            if ((style.equals("SSU") && transportCost == 5 || transportCost == 14) ||
-                (style.startsWith("NTCP") && transportCost == 10 || transportCost == 14)) {
+            if ((style.startsWith("SSU") && transportCost == 5) ||
+                (style.startsWith("NTCP") && transportCost == 14)) {
                 isJavaI2P = true;
+                break;
+            }
+            if ((style.startsWith("SSU") && transportCost == 3) ||
+                (style.startsWith("NTCP") && transportCost == 8)) {
+                isI2PD = true;
             }
         }
-        if (isJavaI2P) {
-            buf.append("<span class=javai2p title=\"" + _t("Java I2P variant") + "\"></span> ");
-        }
+        if (isJavaI2P) {buf.append("<span class=javai2p title=\"" + _t("Java I2P variant") + "\"></span> ");}
+        else if (isI2PD) {buf.append("<span class=i2pd title=\"" + _t("I2Pd variant") + "\"></span> ");}
         byte[] padding = info.getIdentity().getPadding();
         if (padding != null && padding.length >= 64) {
             if (DataHelper.eq(padding, 0, padding, 32, 32)) {
@@ -1311,6 +1314,7 @@ class NetDbRenderer {
         boolean hasD = DataHelper.stripHTML(info.getCapabilities()).contains("D");
         boolean hasE = DataHelper.stripHTML(info.getCapabilities()).contains("E");
         boolean hasG = DataHelper.stripHTML(info.getCapabilities()).contains("G");
+        boolean isR = DataHelper.stripHTML(info.getCapabilities()).contains("R");
         boolean isU = DataHelper.stripHTML(info.getCapabilities()).contains("U");
         String caps = DataHelper.stripHTML(info.getCapabilities())
             .replace("XO", "X")
@@ -1333,28 +1337,20 @@ class NetDbRenderer {
             .replace("P", "<a href=\"/netdb?caps=P\"><span class=tier>P</span></a>")
             .replace("X", "<a href=\"/netdb?caps=X\"><span class=tier>X</span></a>");
         if (hasD) {
-            if (isU)
-                caps = caps.replace("D","").replace("class=tier", "class=\"tier isD\"").replace("\"><span class", "UD\"><span class");
-            else
-                caps = caps.replace("D","").replace("class=tier", "class=\"tier isD\"").replace("\"><span class", "RD\"><span class");
+            if (isU) {caps = caps.replace("D","").replace("class=tier", "class=\"tier isD\"").replace("\"><span class", "UD\"><span class");}
+            else if (isR) {caps = caps.replace("D","").replace("class=tier", "class=\"tier isD\"").replace("\"><span class", "RD\"><span class");}
+            else {caps = caps.replace("D","").replace("class=tier", "class=\"tier isD\"").replace("\"><span class", "D\"><span class");}
         } else if (hasE) {
-            if (isU)
-                caps = caps.replace("E","").replace("class=tier", "class=\"tier isE\"").replace("\"><span class", "UE\"><span class");
-            else
-                caps = caps.replace("E","").replace("class=tier", "class=\"tier isE\"").replace("\"><span class", "RE\"><span class");
+            if (isU) {caps = caps.replace("E","").replace("class=tier", "class=\"tier isE\"").replace("\"><span class", "UE\"><span class");}
+            else if (isR) {caps = caps.replace("E","").replace("class=tier", "class=\"tier isE\"").replace("\"><span class", "RE\"><span class");}
+            else {caps = caps.replace("E","").replace("class=tier", "class=\"tier isE\"").replace("\"><span class", "E\"><span class");}
         } else if (hasG) {
-            if (isU)
-                caps = caps.replace("G","").replace("class=tier", "class=\"tier isG\"").replace("\"><span class", "UG\"><span class");
-            else
-                caps = caps.replace("G","").replace("class=tier", "class=\"tier isG\"").replace("\"><span class", "RG\"><span class");
+            if (isU) {caps = caps.replace("G","").replace("class=tier", "class=\"tier isG\"").replace("\"><span class", "UG\"><span class");}
+            else if (isR) {caps = caps.replace("G","").replace("class=tier", "class=\"tier isG\"").replace("\"><span class", "RG\"><span class");}
+            else {caps = caps.replace("G","").replace("class=tier", "class=\"tier isG\"").replace("\"><span class", "G\"><span class");}
         }
         caps = caps.replace("\"><span", tooltip);
         buf.append(caps);
-/*
-        if (info != null) {
-            buf.append(_context.commSystem().renderPeerCaps(h, false));
-        }
-*/
         buf.append("&nbsp;<a href=\"/netdb?v=").append(DataHelper.stripHTML(info.getVersion())).append("\">")
            .append("<span class=version title=\"").append(_t("Show all routers with this version in the NetDb"))
            .append("\">").append(DataHelper.stripHTML(info.getVersion())).append("</span></a>");
@@ -1363,8 +1359,7 @@ class NetDbRenderer {
             if (family != null) {
                 FamilyKeyCrypto fkc = _context.router().getFamilyKeyCrypto();
                 buf.append("<a class=\"familysearch");
-                if (fkc != null)
-                    buf.append(" verified");
+                if (fkc != null) {buf.append(" verified");}
                 buf.append("\" href=\"/netdb?fam=").append(DataHelper.stripHTML(family))
                    .append("\" title=\"").append(_t("Show all members of the {0} family in NetDb", DataHelper.stripHTML(family)))
                    .append("\">").append(_t("Family")).append("</a>");
@@ -1377,14 +1372,14 @@ class NetDbRenderer {
             }
             buf.append("<a class=configpeer href=\"/configpeer?peer=").append(hash)
                .append("\" title=\"").append(_t("Configure peer"))
-               .append("\">").append(_t("Edit")).append("</a>");
-            buf.append(_context.commSystem().renderPeerFlag(h));
+               .append("\">").append(_t("Edit")).append("</a>")
+               .append(_context.commSystem().renderPeerFlag(h));
         } else {
             long used = (long) _context.statManager().getRate("router.memoryUsed").getRate(60*1000).getAvgOrLifetimeAvg();
             used /= 1024*1024;
             buf.append("&nbsp;<span id=netdb_ram><b>").append(_t("Memory usage")).append(":</b> ").append(used).append("M</span>");
         }
-        buf.append("</th></tr>\n<tr>");
+        buf.append("</span></th></tr>\n<tr>");
         long age = _context.clock().now() - info.getPublished();
         if (isUs && _context.router().isHidden()) {
             buf.append("<td><b>").append(_t("Hidden")).append(", ").append(_t("Updated")).append(":</b></td>")
@@ -1411,13 +1406,8 @@ class NetDbRenderer {
             boolean debug = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
             if (debug) {
                 buf.append("<span class=netdb_info><b>").append(_t("Routing Key")).append(":</b> ")
-                   .append("<span class=rkey>").append(info.getRoutingKey().toBase64()).append("</span>&nbsp;&nbsp;");
-                byte[] padding = info.getIdentity().getPadding();
-                if (padding != null && padding.length >= 64) {
-                    if (DataHelper.eq(padding, 0, padding, 32, 32))
-                        buf.append("<b>Compressible:</b> true");
-                }
-                buf.append("</span>\n");
+                   .append("<span class=rkey>").append(info.getRoutingKey().toBase64()).append("</span>&nbsp;&nbsp;")
+                   .append("</span>\n");
             }
 */
          } else {
@@ -1466,9 +1456,9 @@ class NetDbRenderer {
             }
             for (RouterAddress addr : addrs) {
                 String style = addr.getTransportStyle();
-                    buf.append("<li>");
-                buf.append("<b class=\"netdb_transport\"");
                 int cost = addr.getCost();
+                buf.append("<li>");
+                buf.append("<b class=\"netdb_transport\"");
                 if (!((style.equals("SSU") && cost == 5) || (style.startsWith("NTCP") && cost == 10))) {
                     buf.append(" title=\"").append(_t("Cost")).append(": ").append(cost).append("\"");
                 }
@@ -1640,7 +1630,7 @@ class NetDbRenderer {
                     .replace("tunnel.buildExploratoryExpire.60m",  "<li class=longstat><b>"   + _t("Exploratory tunnels expire (1h)"))
                     .replace("tunnel.buildExploratoryReject.60m",  "<li class=longstat><b>"   + _t("Exploratory tunnels reject (1h)"))
                     .replace("tunnel.buildExploratorySuccess.60m", "<li class=longstat><b>"   + _t("Exploratory tunnels build success (1h)"))
-                    .replace("tunnel.buildClientExpire.60m",       "<li class=longstat><b>"  + _t("Client tunnels expire (1h)"))
+                    .replace("tunnel.buildClientExpire.60m",       "<li class=longstat><b>"   + _t("Client tunnels expire (1h)"))
                     .replace("tunnel.buildClientReject.60m",       "<li class=longstat><b>"   + _t("Client tunnels reject (1h)"))
                     .replace("tunnel.buildClientSuccess.60m",      "<li class=longstat><b>"   + _t("Client tunnels build success (1h)"))
                     .replace("tunnel.participatingTunnels.60m",    "<li class=longstat><b>"   + _t("Participating tunnels (1h)"))

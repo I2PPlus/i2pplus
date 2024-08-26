@@ -25,17 +25,14 @@ public class StatHelper extends HelperBase {
      *  Prefix is inefficient.
      */
     public String getProfile() {
-        if (_peer == null || _peer.length() <= 0)
-            return "No peer specified";
-        if (_peer.length() >= 44)
-            return outputProfile();
+        if (_peer == null || _peer.length() <= 0) {
+            return "<p class=infohelp id=nopeer>No peer specified</p>";
+        }
+        if (_peer.length() >= 44) {return outputProfile();}
         Set<Hash> peers = _context.profileOrganizer().selectAllPeers();
         for (Hash peer : peers) {
-            if (peer.toBase64().startsWith(_peer)) {
-                return dumpProfile(peer);
-            }
+            if (peer.toBase64().startsWith(_peer)) {return dumpProfile(peer);}
         }
-//        return "Peer profile unavailable for: " + _peer;
         return "Peer profile unavailable";
     }
 
@@ -48,9 +45,7 @@ public class StatHelper extends HelperBase {
         try {
             peer.fromBase64(_peer);
             return dumpProfile(peer);
-        } catch (DataFormatException dfe) {
-            return "Bad peer hash " + _peer;
-        }
+        } catch (DataFormatException dfe) {return "Bad peer hash " + _peer;}
     }
 
     /**
@@ -65,12 +60,11 @@ public class StatHelper extends HelperBase {
                 wos.flush();
                 _out.flush();
                 return "";
-            } else {
-                return "Peer profile unavailable for: " + _peer;
-            }
+            } else {return "Peer profile unavailable for: " + _peer;}
         } catch (IOException e) {
             e.printStackTrace();
             return "IO Error " + e;
         }
     }
+
 }

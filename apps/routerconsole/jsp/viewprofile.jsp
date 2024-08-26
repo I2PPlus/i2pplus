@@ -23,7 +23,7 @@
     String peerB64 = request.getParameter("peer");
     if (peerB64 == null || peerB64.length() <= 0 ||
         peerB64.replaceAll("[a-zA-Z0-9~=-]", "").length() != 0) {
-        out.print("No peer specified");
+        out.print("<p class=infohelp id=nopeer>No peer specified</p>");
     } else {
 %>
 <jsp:useBean id="stathelper" class="net.i2p.router.web.helpers.StatHelper" />
