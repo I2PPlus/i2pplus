@@ -1420,8 +1420,9 @@ span.tier,.netdbentry .ff,.netdbentry .hidden,.netdbentry .reachable,.netdbentry
 .gwhois,.banlisted{vertical-align:middle;font-size:0}
 .gwhois a::before{margin-left:-2px;width:12px;height:12px;display:inline-block;vertical-align:middle;background:var(--search) no-repeat left center/11px;opacity:.7;content:""}
 .gwhois:hover a::before,.gwhois a:focus::before{opacity:1;transform:scale(1.2)}
-.banlisted,.compressible,.javai2p{width:18px;height:18px;display:inline-block;vertical-align:middle;background:var(--ban)}
+.banlisted,.compressible,.i2pd,.javai2p{width:18px;height:18px;display:inline-block;vertical-align:middle;background:var(--ban)}
 .compressible{background:url(/themes/console/images/clamp.svg)}
+.i2pd{margin-right:2px;background:url(/themes/console/images/eepsites/i2pd.svg)}
 .javai2p{margin-right:2px;background:url(/themes/console/images/eepsites/i2p.svg)}
 .netdbentry img{margin:1px 0 0}
 .ls_crypto{display:inline-block;columns:360px 2}
