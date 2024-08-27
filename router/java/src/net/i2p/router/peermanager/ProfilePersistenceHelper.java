@@ -299,6 +299,7 @@ class ProfilePersistenceHelper {
                 file.delete();
                 return null;
             }
+
             PeerProfile profile = new PeerProfile(_context, peer);
             Properties props = new Properties();
             loadProps(props, file);
@@ -306,6 +307,7 @@ class ProfilePersistenceHelper {
             long lastHeardFrom = getLong(props, "lastHeardFrom");
             RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
             String caps = "";
+
             if (info != null) {caps = DataHelper.stripHTML(info.getCapabilities());}
             else {
                 if (_log.shouldDebug()) {_log.debug("Ignoring profile without RouterInfo: " + file.getName());}
@@ -318,7 +320,7 @@ class ProfilePersistenceHelper {
                 file.delete();
                 return null;
 **/
-            if (caps != null && caps.contains("K") || caps.contains("L") || caps.contains("M") || caps.contains("U")) {
+            if (!caps.equals("") && caps.contains("K") || caps.contains("L") || caps.contains("M") || caps.contains("U")) {
                 if (_log.shouldDebug()) {_log.debug("Deleting uninteresting profile: " + file.getName() + " -> K, L, M or unreachable");}
                 file.delete();
                 return null;
