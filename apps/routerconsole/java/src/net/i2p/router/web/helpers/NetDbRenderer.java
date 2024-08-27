@@ -45,8 +45,9 @@ import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.CommSystemFacadeImpl;
+import net.i2p.router.transport.TransportImpl;
 import net.i2p.router.TunnelPoolSettings;
-import net.i2p.router.util.HashDistance;   // debug
+import net.i2p.router.util.HashDistance; // debug
 import net.i2p.router.web.Messages;
 import net.i2p.util.Addresses;
 import net.i2p.util.ConvertToHash;
@@ -1400,6 +1401,26 @@ class NetDbRenderer {
                 if (rdns != null && !rdns.equals(address) && !rdns.equals("unknown")) {
                     buf.append("<span class=netdb_info><b>").append(_t("Hostname")).append(":</b> <span class=rdns>")
                        .append(rdns).append("</span></span>&nbsp;&nbsp;");
+                }
+            } else if (uptime > 30*1000 && (isUnreachable || address == null)) {
+                byte[] ip = TransportImpl.getIP(info.getHash());
+                if (ip != null) {
+                    String directAddress = Addresses.toString(ip);
+                    if (enableReverseLookups()) {
+                        String rdns = _context.commSystem().getCanonicalHostName(directAddress);
+                        if (rdns != null && !rdns.equals(directAddress) && !rdns.equals("unknown")) {
+                            buf.append("<span class=netdb_info><b>").append(_t("Hostname")).append(" (")
+                               .append(_t("direct")).append(")")
+                               .append(":</b> <span class=rdns>").append(rdns).append(" (").append(directAddress)
+                               .append(")</span></span>&nbsp;&nbsp;");
+                        } else {
+                            buf.append("<span class=netdb_info><b>").append(_t("Direct IP Address"))
+                               .append(":</b> <span class=rdns>").append(directAddress).append("</span></span>&nbsp;&nbsp;");
+                        }
+                    } else {
+                        buf.append("<span class=netdb_info><b>").append(_t("Direct IP Address"))
+                           .append(":</b> <span class=rdns>").append(directAddress).append("</span></span>&nbsp;&nbsp;");
+                    }
                 }
             }
 /*
