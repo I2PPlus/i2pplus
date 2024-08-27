@@ -1,3 +1,11 @@
+2024-08-27 dr|z3d
+ * Console: Attempt to display (direct) ip address for unreachable routers
+   in NetDb listings
+
+2024-08-26 dr|z3d
+ * Console: Display I2P icon in netdb router listings if we think a router
+   is a Java I2P variant
+
 2024-08-25 dr|z3d
  * Router: Fallback to RouterInfo lookups for router ips when we haven't
    recently connected with a router to fix console flags / unknown country
