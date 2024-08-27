@@ -298,14 +298,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     /** @return non-null, possibly empty */
     @Override
     public List<RouterAddress> createAddresses() {
-        // No, don't do this, it makes it almost impossible to build inbound tunnels
-        //if (_context.router().isHidden())
-        //    return Collections.EMPTY_SET;
         List<RouterAddress> addresses = new ArrayList<RouterAddress>(_manager.getAddresses());
-        if (addresses.size() > 1)
-            Collections.sort(addresses, new AddrComparator());
-        //if (_log.shouldDebug())
-        //    _log.debug("Creating addresses: " + addresses, new Exception("creator"));
+        if (addresses.size() > 1) {Collections.sort(addresses, new AddrComparator());}
         return addresses;
     }
 
@@ -328,9 +322,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * UDP changed addresses, tell NTCP and restart
-     *
      * All the work moved to NTCPTransport.externalAddressReceived()
-     *
      * @param udpAddr may be null; or udpAddr's host/IP may be null
      */
     @Override
@@ -346,13 +338,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
         if (port < 0) {
             Transport udp = _manager.getTransport(UDPTransport.STYLE);
-            if (udp != null)
-                port = udp.getRequestedPort();
+            if (udp != null) {port = udp.getRequestedPort();}
         }
-        if (ip != null || port > 0)
+        if (ip != null || port > 0) {
             _manager.externalAddressReceived(Transport.AddressSource.SOURCE_SSU, ip, port);
-        else
-            notifyRemoveAddress(udpAddr);
+        } else {notifyRemoveAddress(udpAddr);}
     }
 
     /**
@@ -384,18 +374,15 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
     @Override
     public void exemptIncoming(Hash peer) {
-        if (_manager.isEstablished(peer))
-            return;
+        if (_manager.isEstablished(peer)) {return;}
         //RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
         RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
-        if (ri == null)
-            return;
+        if (ri == null) {return;}
         Collection<RouterAddress> addrs = ri.getAddresses();
         ArraySet<String> ips = new ArraySet<String>(addrs.size());
         for (RouterAddress addr : addrs) {
             String ip = addr.getHost();
-            if (ip == null)
-                continue;
+            if (ip == null) {continue;}
             // Add IPv6 even if we don't have an address, not worth the check
             ips.add(Addresses.toCanonicalString(ip));
         }
@@ -503,13 +490,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private static final int START_DELAY = SystemVersion.isSlow() ? 60*1000 : 5*1000;
     private static final int LOOKUP_TIME = 90*1000;
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
-    public boolean enableReverseLookups() {
-        return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);
-    }
-
+    public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
     private static final Charset ENCODING = StandardCharsets.UTF_8;
     private static final String NEWLINE = "\n";
-
 
     private void startGeoIP() {
         _context.simpleTimer2().addEvent(new QueueAll(), START_DELAY);
@@ -530,6 +513,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(h);
                 if (ri == null) {continue;}
                 byte[] ip = getIP(ri);
+                if (ip == null) {ip = TransportImpl.getIP(h);}
                 if (ip == null) {continue;}
                 _geoIP.add(ip);
             }
@@ -853,6 +837,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     @Override
     public boolean isInStrictCountry(RouterInfo ri) {
         byte[] ip = getIP(ri);
+        Hash h = ri.getHash();
+        if (ip == null) {ip = TransportImpl.getIP(h);}
         if (ip == null) {return false;}
         String c = _geoIP.get(ip);
         return c != null && StrictCountries.contains(c);
