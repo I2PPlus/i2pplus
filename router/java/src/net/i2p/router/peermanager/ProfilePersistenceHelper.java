@@ -318,8 +318,7 @@ class ProfilePersistenceHelper {
                 file.delete();
                 return null;
 **/
-            if (caps.contains("K") || caps.contains("L") || caps.contains("M") ||
-                caps.contains("U") || !caps.contains("R")) {
+            if (caps != null && caps.contains("K") || caps.contains("L") || caps.contains("M") || caps.contains("U")) {
                 if (_log.shouldDebug()) {_log.debug("Deleting uninteresting profile: " + file.getName() + " -> K, L, M or unreachable");}
                 file.delete();
                 return null;
@@ -361,16 +360,14 @@ class ProfilePersistenceHelper {
                 getLong(props, "dbHistory.lastLookupFailed") > 0 ||
                 getLong(props, "dbHistory.lastStoreSuccessful") > 0 ||
                 getLong(props, "dbHistory.lastStoreFailed") > 0 &&
-                (!caps.contains("K") || !caps.contains("L") || !caps.contains("M") ||
-                 !caps.contains("U") && caps.contains("R"))) {
+                (caps != null && !caps.contains("K") || !caps.contains("L") || !caps.contains("M") || !caps.contains("U"))) {
                 profile.expandDBProfile();
                 profile.getDBHistory().load(props);
                 profile.getDbIntroduction().load(props, "dbIntroduction", true);
                 profile.getDbResponseTime().load(props, "dbResponseTime", true);
             }
 
-            if (!caps.contains("K") || !caps.contains("L") || !caps.contains("M") ||
-                !caps.contains("U") && caps.contains("R")) {
+            if (caps != null && !caps.contains("K") || !caps.contains("L") || !caps.contains("M") || !caps.contains("U")) {
                 profile.getTunnelCreateResponseTime().load(props, "tunnelCreateResponseTime", true);
                 if (PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME) {
                     profile.getTunnelTestResponseTime().load(props, "tunnelTestResponseTime", true);
