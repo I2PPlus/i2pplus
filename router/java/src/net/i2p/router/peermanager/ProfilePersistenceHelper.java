@@ -308,8 +308,8 @@ class ProfilePersistenceHelper {
             String caps = "";
             if (info != null) {caps = DataHelper.stripHTML(info.getCapabilities());}
             else {
-                if (_log.shouldDebug()) {_log.debug("Not loading profile without RouterInfo: " + file.getName());}
-                file.delete();
+                if (_log.shouldDebug()) {_log.debug("Ignoring profile without RouterInfo: " + file.getName());}
+                //file.delete();
                 return null;
             }
 /**
@@ -320,7 +320,7 @@ class ProfilePersistenceHelper {
 **/
             if (caps.contains("K") || caps.contains("L") || caps.contains("M") ||
                 caps.contains("U") || !caps.contains("R")) {
-                if (_log.shouldDebug()) {_log.debug("Ignoring uninteresting profile: " + file.getName());}
+                if (_log.shouldDebug()) {_log.debug("Deleting uninteresting profile: " + file.getName() + " -> K, L, M or unreachable");}
                 file.delete();
                 return null;
             } else if (file.getName().endsWith(OLD_SUFFIX)) {

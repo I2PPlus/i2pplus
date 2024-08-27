@@ -5,6 +5,8 @@ import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.TimeUnit;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -13,15 +15,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import net.i2p.crypto.SipHashInline;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
-import net.i2p.data.SessionKey;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.data.SessionKey;
 import net.i2p.router.ClientManagerFacade;
 import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.Router;
@@ -32,7 +32,7 @@ import net.i2p.router.util.RandomIterator;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
-
+import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
 /**
@@ -76,10 +76,10 @@ public class ProfileOrganizer {
      *
      */
     public static final String PROP_MINIMUM_FAST_PEERS = "profileOrganizer.minFastPeers";
-    public static final int DEFAULT_MINIMUM_FAST_PEERS = 300;
+    public static final int DEFAULT_MINIMUM_FAST_PEERS = 400;
     /** this is misnamed, it is really the max minimum number. */
-    private static final int DEFAULT_MAXIMUM_FAST_PEERS = 400;
-    private static final int ABSOLUTE_MAX_FAST_PEERS = 500;
+    private static final int DEFAULT_MAXIMUM_FAST_PEERS = 500;
+    private static final int ABSOLUTE_MAX_FAST_PEERS = 600;
 
 
     /**
@@ -89,8 +89,8 @@ public class ProfileOrganizer {
      *
      */
     public static final String PROP_MINIMUM_HIGH_CAPACITY_PEERS = "profileOrganizer.minHighCapacityPeers";
-    public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 400;
-    private static final int ABSOLUTE_MAX_HIGHCAP_PEERS = 600;
+    public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 500;
+    private static final int ABSOLUTE_MAX_HIGHCAP_PEERS = 800;
 
     private static final long[] RATES = {60*1000l, 5*60*1000l, 10*60*1000l, 30*60*1000l, 60*60*1000l, 24*60*60*1000 };
 
@@ -338,7 +338,7 @@ public class ProfileOrganizer {
      * fetch, stop listening to them.
      *
      */
-    private final static int MAX_BAD_REPLIES_PER_HOUR = 15;
+    private final static int MAX_BAD_REPLIES_PER_HOUR = 60;
 
     /**
      * Does the given peer send us bad replies - either invalid store messages
@@ -410,9 +410,9 @@ public class ProfileOrganizer {
         if (matches.size() < howMany) {
             if (_log.shouldDebug()) {
                 if (howMany != 1) {
-                    _log.debug("Need " + howMany + " Fast peers for tunnel build; " + matches.size() + " found - selecting remainder from High Capacity tier");
+                    _log.debug("Need " + howMany + " Fast peers for tunnel build -> " + matches.size() + " found, selecting remainder from High Capacity tier...");
                 } else {
-                    _log.debug("Need " + howMany + " Fast peer for tunnel build; " + matches.size() + " found - selecting remainder from High Capacity tier");
+                    _log.debug("Need " + howMany + " Fast peer for tunnel build -> " + matches.size() + " found, selecting remainder from High Capacity tier...");
                 }
             }
             selectHighCapacityPeers(howMany, exclude, matches, mask, ipSet);
@@ -488,8 +488,8 @@ public class ProfileOrganizer {
         } finally {releaseReadLock();}
         if (matches.size() < howMany) {
             if (_log.shouldDebug())
-                _log.debug("Need " + howMany + " Fast " + (howMany > 1 ? "peers" : "peer") + " for tunnel build; " +
-                           matches.size() + " found - selecting remainder from High Capacity peers");
+                _log.debug("Need " + howMany + " Fast " + (howMany > 1 ? "peers" : "peer") + " for tunnel build -> " +
+                           matches.size() + " found, selecting remainder from High Capacity tier...");
             selectHighCapacityPeers(howMany, exclude, matches, mask, ipSet);
         } else {
             if (_log.shouldDebug())
@@ -522,8 +522,8 @@ public class ProfileOrganizer {
         } finally {releaseReadLock();}
         if (matches.size() < howMany) {
             if (_log.shouldDebug()) {
-                _log.debug("Need " + howMany + " High Capacity peers for tunnel build; " + matches.size() +
-                           " found - selecting remainder from non-failing peers");
+                _log.debug("Need " + (howMany > 1 ? "High Capacity peers" : "High Capacity peer") + " for tunnel build -> " + matches.size() +
+                           " found, selecting remainder from non-failing peers...");
             }
             selectNotFailingPeers(howMany, exclude, matches, mask, ipSet);
         } else {
@@ -568,8 +568,7 @@ public class ProfileOrganizer {
      */
     public void selectNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing,
                                       int mask, MaskedIPSet ipSet) {
-        if (matches.size() < howMany)
-            selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, mask);
+        if (matches.size() < howMany) {selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, mask);}
         return;
     }
 
@@ -610,12 +609,10 @@ public class ProfileOrganizer {
     public void selectActiveNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
         if (matches.size() < howMany) {
             List<Hash> connected = _context.commSystem().getEstablished();
-            if (connected != null && connected.isEmpty())
-                return;
+            if (connected != null && connected.isEmpty()) {return;}
             getReadLock();
-            try {
-                locked_selectActive(connected, howMany, exclude, matches, mask, ipSet);
-            } finally {releaseReadLock();}
+            try {locked_selectActive(connected, howMany, exclude, matches, mask, ipSet);}
+            finally {releaseReadLock();}
         }
     }
 
@@ -640,19 +637,18 @@ public class ProfileOrganizer {
             List<Hash> connected = _context.commSystem().getEstablished();
             if (connected != null && !connected.isEmpty()) {
                 getReadLock();
-                try {
-                    locked_selectActive(connected, howMany, exclude, matches, mask, ipSet);
-                } finally {releaseReadLock();}
+                try {locked_selectActive(connected, howMany, exclude, matches, mask, ipSet);}
+                finally {releaseReadLock();}
             }
         }
         if (matches.size() < howMany) {
             if (_log.shouldDebug())
-                _log.debug("Need " + howMany + "  active, not failing peers for tunnel build; " + matches.size() +
-                           " found - selecting remainder from most reliable failing peers");
+                _log.debug("Need " + howMany + "  active, not failing peers for tunnel build -> " + matches.size() +
+                           " found, selecting remainder from most reliable Failing peers...");
             selectNotFailingPeers(howMany, exclude, matches, mask, ipSet);
         } else {
             if (_log.shouldDebug())
-                _log.debug(howMany + " not failing peers selected for tunnel build");
+                _log.debug(howMany + " most reliable Failing peers selected for tunnel build");
         }
     }
 
@@ -694,10 +690,10 @@ public class ProfileOrganizer {
                         // we don't want the good peers, just random ones
                         continue;
                     } else {
-                        if (isSelectable(cur))
-                            selected.add(cur);
-                        else if (_log.shouldDebug())
+                        if (isSelectable(cur)) {selected.add(cur);}
+                        else if (_log.shouldDebug()) {
                             _log.debug("Not selectable for tunnel build: [" + cur.toBase64().substring(0,6) + "]");
+                        }
                     }
                 }
             } finally {releaseReadLock();}
@@ -708,13 +704,12 @@ public class ProfileOrganizer {
                 buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
             }
             buf.append("\n* All: " + _notFailingPeersList.size() + "; Strict: " + _strictCapacityOrder.size());
-            if (_log.shouldDebug())
-                _log.debug(buf.toString());
+            if (_log.shouldDebug()) {_log.debug(buf.toString());}
             matches.addAll(selected);
         }
         if (matches.size() < howMany) {
             if (_log.shouldDebug())
-                _log.debug("Need " + howMany + " Not Failing peers for tunnel build; " + matches.size() + " found - selecting remainder from most reliable Failing peers");
+                _log.debug("Need " + howMany + " Not Failing peers for tunnel build -> " + matches.size() + " found, selecting remainder from most reliable Failing peers...");
             selectFailingPeers(howMany, exclude, matches);
         } else {
             if (_log.shouldDebug())
@@ -751,7 +746,7 @@ public class ProfileOrganizer {
     private static final long MIN_EXPIRE_TIME = 3*24*60*60*1000;
     private static final long MAX_EXPIRE_TIME = 4*7*24*60*60*1000;
     private static final long ADJUST_EXPIRE_TIME = 3*60*1000;
-    private static final int ENOUGH_PROFILES = 3000;
+    private static final int ENOUGH_PROFILES = SystemVersion.isSlow() ? 4000 : 8000;
     private long _currentExpireTime = MAX_EXPIRE_TIME;
 
     /**
@@ -1211,8 +1206,7 @@ public class ProfileOrganizer {
      */
     private boolean notRestricted(Hash peer, MaskedIPSet IPSet, int mask) {
         Set<String> peerIPs = new MaskedIPSet(_context, peer, mask);
-        if (IPSet.containsAny(peerIPs))
-            return false;
+        if (IPSet.containsAny(peerIPs)) {return false;}
         IPSet.addAll(peerIPs);
         return true;
     }
