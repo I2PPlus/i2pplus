@@ -308,6 +308,11 @@ tr:hover .tx{border-color:#747}
 .txBarInner::after{width:100%;height:1px;display:inline-block;position:absolute;bottom:0;left:0;background:#000;content:""}
 .txBarText{position:relative;z-index:5}
 
+/* diskSpace */
+#diskSpace,#diskSpaceInner{width:80px;height:12px;display:inline-block;vertical-align:middle;text-align:left}
+#diskSpace{margin:2px 3px 1px 5px;vertical-align:text-top;contain:paint}
+#diskSpaceInner{position:absolute;box-shadow:var(--highlight),inset 0 7px 7px 1px #fff1;background:linear-gradient(180deg,#fff2,#0003),linear-gradient(90deg,#4049 30px,#6609 60px,#9009)}
+
 /* torrent info */
 audio,video{width:240px;vertical-align:middle}
 video:fullscreen,video:fullscreen:hover,video:fullscreen:focus{padding:0;border:0;box-shadow:none}
@@ -1037,11 +1042,6 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 #dhtDebug .dbug{margin:-2px 0 -2px -3px;padding:2px 8px;min-width:24px;background:#414;font-weight:400}
 #dhtDebug .stat{margin:3px 2px;padding:1px;box-shadow:0 0 0 1px #414,var(--highlight)}
 #noDHTPeers{margin:6px 0;border-radius:2px}
-
-/* diskSpace */
-#diskSpace,#diskSpaceInner{width:80px;height:12px;display:inline-block;vertical-align:middle;text-align:left}
-#diskSpace{margin:2px 3px 1px 5px;vertical-align:text-top;contain:paint}
-#diskSpaceInner{position:absolute}
 
 /* Resource Errors */
 .resourceError,.resourceError#NotFound{margin-bottom:9px;border:var(--border_hard)}

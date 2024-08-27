@@ -236,7 +236,6 @@ th.peerCount a img{margin-left:-5px}
 .peerCount .right{padding-right:2px;text-align:right}
 .rateUp,.rateDown,.txd{text-align:center}
 .rateUp:not(:empty),.rateDown:not(:empty),.rxd:not(:empty),.txd:not(:empty){padding:0 3px;width:1%;white-space:nowrap;line-height:.9;color:#bb7}
-.rateUp,.txd{font-style:italic}
 .rateDown .left,.rateUp .left,.txd .left,.rateDown .right,.rateUp .right,.txd .right{min-width:22px;display:inline-block;text-align:left}
 .rateDown .right,.rateUp .right,.txd .right{min-width:40px;text-align:right}
 .choked .right,.choked .left,.idle .right,.idle .left{display:none!important}
@@ -249,17 +248,16 @@ th.peerCount a img{margin-left:-5px}
 .snarkFileName{padding:4px 5px;word-break:break-all;text-align:left}
 .filetype{position:relative;vertical-align:middle}
 tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before,tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{margin-top:-8px;margin-right:4px;display:inline-block;vertical-align:middle;line-height:0;font-size:90%;font-style:normal;text-shadow:0 0 1px #010}
-tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before{content:"\27A4";transform:rotate(90deg) scaleX(0.6)}
-tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4";transform:rotate(-90deg) scaleX(0.6)}
+tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before{margin-right:-2px;content:"\27A4";transform:rotate(90deg) scaleX(0.6)}
+tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{margin-right:0;content:"\27A4";transform:rotate(-90deg) scaleX(0.6) translateX(-1px)}
 .tooltipped{display:inline-block;position:relative;z-index:99;white-space:nowrap;content:""}
 .tooltipped:hover::after,.tooltipped:active::after{padding:3px 6px;top:-3px;left:32px;border:1px solid #000;border-radius:3px;box-shadow:var(--highlight);background:#000;content:attr(data-tooltip);animation:fade-in .1s ease 3s reverse both}
 .tooltipped:hover::before,.tooltipped:active::before{margin-left:-10px;top:calc(50% - 6px);left:30px;border-width:6px;border-style:solid;border-color:#0000 #000 #0000 #0000;content:"";animation:fade-in .1s ease 3s reverse both}
 .tooltipped:hover::before,.tooltipped:active::before,.tooltipped:hover::after,.tooltipped:active::after{position:absolute;display:inline-block}
-.rxd,.ETA,.txd{width:1%;white-space:nowrap;text-align:center}
-.rxd{text-align:center;white-space:nowrap;font-weight:700}
 .ETA{padding-right:2px;font-style:italic;color:#dd7}
-.ETA:not(:empty),.txd:not(:empty),.rateDown:not(:empty),.rateUp:not(:empty){width:5%;min-width:40px;white-space:nowrap;font-weight:700}
-.ETA:not(:empty){padding-right:6px}
+.ETA:not(:empty),.rateDown:not(:empty),.rateUp:not(:empty),.txd:not(:empty){width:5%;min-width:40px;white-space:nowrap;font-weight:700}
+.ETA:not(:empty){padding-left:5px;padding-right:5px}
+.rxd{white-space:nowrap;font-weight:700}
 .tName{padding-left:2px;line-height:.9}
 .tName a,.dirInfo td.snarkFileName a{padding:4px 0;width:100%;display:inline-block;vertical-align:middle;font-weight:700}
 .tName a:hover,.snarkFileName a:hover{border-radius:0 15px 15px 0;box-shadow:none;background:linear-gradient(90deg,rgba(0,0,0,.2),rgba(0,0,0,.3) 40%)}
@@ -306,6 +304,7 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 #torrents tfoot th{padding-bottom:4px;white-space:normal}
 #torrents img{padding:0}
 #torrents code{display:inline-block;line-height:1.2;letter-spacing:.1em;font-weight:700}
+#torrents .ETA,#torrents .rxd,#torrents .txd{width:1%;white-space:nowrap;text-align:center}
 #torrents .status{padding-left:5px;padding-right:5px;width:1%;text-align:center}
 #torrents td.status{padding-left:2px}
 #torrents .infohash{margin-right:3px;padding:1px 5px 1px 17px;color:#000;background:#cc0 var(--hash2) no-repeat 3px center/12px}
@@ -382,7 +381,7 @@ tr:hover .barText{opacity:1}
 /* diskSpace */
 #diskSpace,#diskSpaceInner{width:80px;height:12px;display:inline-block;vertical-align:middle;text-align:left}
 #diskSpace{margin:2px 3px 1px 5px;vertical-align:text-top;contain:paint}
-#diskSpaceInner{position:absolute}
+#diskSpaceInner{position:absolute;box-shadow:var(--highlight),inset 0 7px 7px 1px #fff1;background:linear-gradient(180deg,#fff2,#0003),linear-gradient(90deg,#0309 30px,#6609 60px,#9009)}
 
 /* peers */
 .peerinfo code{margin:0 8px 0 0;padding:1px 4px;float:left}
