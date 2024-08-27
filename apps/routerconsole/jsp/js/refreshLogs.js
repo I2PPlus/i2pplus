@@ -206,7 +206,7 @@ function start() {
 
     liElements.forEach((li) => {
       const text = li.textContent;
-      const ipv4Regex = /\b(?:\/?)(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/g;
+      const ipv4Regex = /(?<!\bAddress:)\s*(?:\/?)(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/g;
       const matches = text.match(ipv4Regex);
 
       if (matches) {
@@ -229,7 +229,7 @@ function start() {
 
     liElements.forEach((li) => {
       const text = li.textContent;
-      const ipv6Regex = /\b(?:\/?)(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b/g;
+      const ipv6Regex = /(?<!\bAddress:)\s*(?:\/?)(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b/g;
       const matches = text.match(ipv6Regex);
 
       if (matches) {
