@@ -186,13 +186,13 @@ class ExploreJob extends SearchJob {
         boolean isSlow = SystemVersion.isSlow();
         int cpuLoad = SystemVersion.getCPULoad();
         int cpuLoadAvg = SystemVersion.getCPULoadAvg();
-        if (exploreBredth == null && getContext().netDb().getKnownRouters() < 1500 && !isSlow && !isSingleCore && cpuLoad < 95 && cpuLoadAvg < 95) {
+        if (exploreBredth == null && getContext().netDb().getKnownRouters() < 2000 && !isSlow && !isSingleCore && cpuLoad < 95 && cpuLoadAvg < 95) {
             if (_log.shouldInfo())
                 _log.info("Initiating Exploratory Search -> Max " + EXPLORE_BREDTH * 3 + " concurrent (less than 1000 RouterInfos stored on disk)");
             return EXPLORE_BREDTH * 3;
         } else if ((exploreBredth == null && getContext().netDb().getKnownRouters() > 3500) || (cpuLoad > 90 && cpuLoadAvg > 90) || (isSlow || isSingleCore)) {
             if (_log.shouldInfo())
-                if (cpuLoad > 80 || cpuLoadAvg > 80 || isSlow || isSingleCore)
+                if (cpuLoad > 95 || cpuLoadAvg > 95 || isSlow || isSingleCore)
                     _log.info("Initiating Exploratory Search -> Max 1 concurrent (High CPU load or device is low spec)");
                 else
                     _log.info("Initiating Exploratory Search -> Max 1 concurrent (over 3500 RouterInfos stored on disk)");
@@ -202,7 +202,7 @@ class ExploreJob extends SearchJob {
                 _log.info("Initiating Exploratory Search -> Max " + EXPLORE_BREDTH * 2 + " concurrent (less than 3500 RouterInfos stored on disk)");
             return EXPLORE_BREDTH * 2;
 //        } else if (getContext().netDbSegmentor().getKnownRouters() < 1500) {
-        } else if (getContext().netDb().getKnownRouters() < 1500) {
+        } else if (getContext().netDb().getKnownRouters() < 2000) {
             if (_log.shouldInfo())
                 _log.info("Initiating Exploratory Search -> Max " + Math.min(EXPLORE_BREDTH + 1, 2) + " concurrent (less than 1500 RouterInfos stored on disk)");
             return Math.min(EXPLORE_BREDTH + 1, 2);
