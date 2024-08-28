@@ -188,7 +188,7 @@ class PeerTestJob extends JobImpl {
                 (!reachable || bw.equals("K") || bw.equals("L") || bw.equals("M") || bw.equals("N"))) {
                 prof.setCapacityBonus(-30);
                 if (_log.shouldInfo())
-                    _log.info("[" + peer.toBase64().substring(0,6) + "] Setting capacity bonus to -30 and skipping test -> K, L, M, N or unreachable");
+                    _log.info("Setting capacity bonus to -30 and skipping test for [" + peer.toBase64().substring(0,6) + "] -> K, L, M, N or unreachable");
             } else if (peerInfo == null) {
                 if (_log.shouldInfo())
                     _log.info("Test of [" + peer.toBase64().substring(0,6) + "] failed: No local RouterInfo");
@@ -318,8 +318,7 @@ class PeerTestJob extends JobImpl {
                             try {
                                 prof.setCapacityBonus(-30);
                                 if (_log.shouldInfo())
-                                    _log.info("[" + _peer.toBase64().substring(0,6) +
-                                              "] Setting capacity bonus to -30 for L, M, N or unreachable router");
+                                    _log.info("Setting capacity bonus to -30 for [" + _peer.toBase64().substring(0,6) + "] -> L, M, N or unreachable");
                             } catch (NumberFormatException nfe) {}
                         } else if (timeLeft < 0) {
                             if (_log.shouldInfo())
@@ -333,7 +332,7 @@ class PeerTestJob extends JobImpl {
                                     if (speedBonus >= 9999999)
                                         prof.setSpeedBonus(speedBonus - 9999999);
                                     if (_log.shouldInfo())
-                                        _log.info("[" + _peer.toBase64().substring(0,6) + "] Setting capacity bonus to -30");
+                                        _log.info("Setting capacity bonus to -30 for [" + _peer.toBase64().substring(0,6) + "]");
                                 } catch (NumberFormatException nfe) {}
                             }
                         } else {
@@ -344,8 +343,8 @@ class PeerTestJob extends JobImpl {
                                     if (speedBonus >= 9999999)
                                         prof.setSpeedBonus(speedBonus - 9999999);
                                     if (_log.shouldInfo())
-                                        _log.info("[" + _peer.toBase64().substring(0,6) + "] Setting capacity bonus to -30"  +
-                                                  " - avg response is over twice timeout value");
+                                        _log.info("Setting capacity bonus to -30 for [" + _peer.toBase64().substring(0,6) + "]" +
+                                                  " -> Average response is over twice timeout value");
                                 } catch (NumberFormatException nfe) {}
                             } else if ((prof.getCapacityBonus() == -30 || prof.getSpeedBonus() < 9999999) && cap != null && reachable &&
                                        testAvg < (timeout * 2) && (bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
@@ -353,13 +352,13 @@ class PeerTestJob extends JobImpl {
                                     if (prof.getCapacityBonus() == -30) {
                                         prof.setCapacityBonus(0);
                                         if (_log.shouldInfo())
-                                            _log.info("[" + _peer.toBase64().substring(0,6) + "] Resetting capacity bonus to 0");
+                                            _log.info("Resetting capacity bonus to 0 for [" + _peer.toBase64().substring(0,6) + "]");
                                     }
                                     if (prof.getSpeedBonus() < 9999999 && cap != null && reachable &&
                                         (bw.equals("N") || bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
                                         prof.setSpeedBonus(speedBonus + 9999999);
                                         if (_log.shouldInfo())
-                                            _log.info("[" + _peer.toBase64().substring(0,6) + "] Setting speed bonus to 9999999");
+                                            _log.info("Setting speed bonus to 9999999 for [" + _peer.toBase64().substring(0,6) + "]");
                                     }
                                 } catch (NumberFormatException nfe) {}
                                 _matchFound = true;
@@ -431,24 +430,22 @@ class PeerTestJob extends JobImpl {
                         try {
                             prof.setCapacityBonus(0);
                             if (_log.shouldInfo())
-                                _log.info("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) +
-                                          "] Resetting capacity bonus to 0");
+                                _log.info("Resetting capacity bonus to 0 for [" + _peer.toBase64().substring(0,6) + "]");
                         } catch (NumberFormatException nfe) {}
                         return;
                     } else if (prof != null && cap != null && (!reachable || bw.equals("L") || (bw.equals("M")))) {
                         try {
                             prof.setCapacityBonus(-30);
                             if (_log.shouldInfo())
-                                _log.info("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) +
-                                          "] Setting capacity bonus to -30 for L or M tier or unreachable router");
+                                _log.info("Setting capacity bonus to -30 for [" + _peer.toBase64().substring(0,6) + "] -> L or M tier or unreachable");
                         } catch (NumberFormatException nfe) {}
                         return;
                     } else if (prof != null && cap == null) {
                         try {
                             prof.setCapacityBonus(-30);
                             if (_log.shouldInfo())
-                                _log.info("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) +
-                                          "] Setting capacity bonus to -30 for unknown class router");
+                                _log.info("Setting capacity bonus to -30 for [" + _peer.toBase64().substring(0,6) +
+                                          "] -> No capabilities published in RouterInfo");
                         } catch (NumberFormatException nfe) {}
                         return;
                     }
@@ -483,14 +480,13 @@ class PeerTestJob extends JobImpl {
             if (_selector.matchFound())
                 return;
 
-            if (getShouldFailPeer())
-                getContext().profileManager().dbLookupFailed(_peer.getIdentity().getHash());
+            if (getShouldFailPeer()) {getContext().profileManager().dbLookupFailed(_peer.getIdentity().getHash());}
 
             if (_log.shouldDebug()) {
-                _log.debug("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] Test failed (timeout reached)" +
+                _log.debug("Test failed (timeout reached) for [" + _peer.toBase64().substring(0,6) + "]" +
                            "\n* " + _sendTunnel + "\n* " + _replyTunnel);
             } else if (_log.shouldInfo()) {
-                _log.info("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] Test failed (timeout reached)");
+                _log.info("Test failed (timeout reached) for [" + _peer.toBase64().substring(0,6) + "]");
             }
 
             // don't fail the tunnels, as the peer might just plain be down, or otherwise overloaded
@@ -509,8 +505,8 @@ class PeerTestJob extends JobImpl {
                             prof.setCapacityBonus(-30);
                             prof.setSpeedBonus(0);
                             if (_log.shouldInfo())
-                                _log.info("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) +
-                                          "] Setting capacity bonus to -30 and speed bonus to 0 for slow or unreachable peer");
+                                _log.info("Setting capacity bonus to -30 and speed bonus to 0 for [" +
+                                          _peer.toBase64().substring(0,6) + "] -> Slow or unreachable");
                         } catch (NumberFormatException nfe) {}
                         return;
                     }

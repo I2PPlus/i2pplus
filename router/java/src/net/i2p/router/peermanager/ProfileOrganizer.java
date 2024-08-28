@@ -57,17 +57,14 @@ public class ProfileOrganizer {
     /** who are we? */
     private Hash _us;
     private final ProfilePersistenceHelper _persistenceHelper;
-
     /** PeerProfile objects for all peers profiled, orderd by the ones with the highest capacity first */
     private Set<PeerProfile> _strictCapacityOrder;
-
     /** threshold speed value, seperating fast from slow */
     private double _thresholdSpeedValue;
     /** threshold reliability value, seperating reliable from unreliable */
     private double _thresholdCapacityValue;
     /** integration value, seperating well integrated from not well integrated */
     private double _thresholdIntegrationValue;
-
     private final InverseCapacityComparator _comp;
 
     /**
@@ -81,7 +78,6 @@ public class ProfileOrganizer {
     private static final int DEFAULT_MAXIMUM_FAST_PEERS = 500;
     private static final int ABSOLUTE_MAX_FAST_PEERS = 600;
 
-
     /**
      * Defines the minimum number of 'high capacity' peers that the organizer should
      * select when using the mean - if less than this many are available, select the
@@ -91,7 +87,6 @@ public class ProfileOrganizer {
     public static final String PROP_MINIMUM_HIGH_CAPACITY_PEERS = "profileOrganizer.minHighCapacityPeers";
     public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 500;
     private static final int ABSOLUTE_MAX_HIGHCAP_PEERS = 800;
-
     private static final long[] RATES = {60*1000l, 5*60*1000l, 10*60*1000l, 30*60*1000l, 60*60*1000l, 24*60*60*1000 };
 
     /** synchronized against this lock when updating the tier that peers are located in (and when fetching them from a peer) */
@@ -116,31 +111,23 @@ public class ProfileOrganizer {
         _context.statManager().createRequiredRateStat("peer.profileSortTime", "Time to sort peers (ms)", "Peers", RATES);
     }
 
-    private void getReadLock() {
-        _reorganizeLock.readLock().lock();
-    }
+    private void getReadLock() {_reorganizeLock.readLock().lock();}
 
     /**
      *  Get the lock if we can. Non-blocking.
      *  @return true if the lock was acquired
      *  @since 0.8.12
      */
-    private boolean tryReadLock() {
-        return _reorganizeLock.readLock().tryLock();
-    }
+    private boolean tryReadLock() {return _reorganizeLock.readLock().tryLock();}
 
-    private void releaseReadLock() {
-        _reorganizeLock.readLock().unlock();
-    }
+    private void releaseReadLock() {_reorganizeLock.readLock().unlock();}
 
     /**
      *  Get the lock if we can. Non-blocking.
      *  @return true if the lock was acquired
      *  @since 0.9.47
      */
-    private boolean tryWriteLock() {
-        return _reorganizeLock.writeLock().tryLock();
-    }
+    private boolean tryWriteLock() {return _reorganizeLock.writeLock().tryLock();}
 
     /** @return true if the lock was acquired */
     private boolean getWriteLock() {
@@ -154,9 +141,7 @@ public class ProfileOrganizer {
         return false;
     }
 
-    private void releaseWriteLock() {
-        _reorganizeLock.writeLock().unlock();
-    }
+    private void releaseWriteLock() {_reorganizeLock.writeLock().unlock();}
 
     public void setUs(Hash us) {_us = us;}
     public Hash getUs() {return _us;}
@@ -261,10 +246,11 @@ public class ProfileOrganizer {
 
     public int countFastPeers() {return count(_fastPeers);}
     public int countHighCapacityPeers() {return count(_highCapacityPeers);}
+    public int countNotFailingPeers() {return count(_notFailingPeers);}
+
     /** @deprecated use ProfileManager.getPeersByCapability('f').size() */
     @Deprecated
     public int countWellIntegratedPeers() {return count(_wellIntegratedPeers);}
-    public int countNotFailingPeers() {return count(_notFailingPeers);}
     @Deprecated
     public int countFailingPeers() {return 0;}
 
@@ -746,7 +732,7 @@ public class ProfileOrganizer {
     private static final long MIN_EXPIRE_TIME = 3*24*60*60*1000;
     private static final long MAX_EXPIRE_TIME = 4*7*24*60*60*1000;
     private static final long ADJUST_EXPIRE_TIME = 3*60*1000;
-    private static final int ENOUGH_PROFILES = SystemVersion.isSlow() ? 4000 : 8000;
+    private static final int ENOUGH_PROFILES = SystemVersion.isSlow() ? 1000 : 2000;
     private long _currentExpireTime = MAX_EXPIRE_TIME;
 
     /**
@@ -769,45 +755,42 @@ public class ProfileOrganizer {
         Router r = _context.router();
         long uptime = (r != null) ? r.getUptime() : 0L;
         long expireOlderThan = 7*24*60*60*1000;
-        if (uptime > 60*60*1000) {
-            // dynamically adjust expire time to control memory usage
-            if (countNotFailingPeers() > ENOUGH_PROFILES)
-                _currentExpireTime = Math.max(_currentExpireTime - ADJUST_EXPIRE_TIME, MIN_EXPIRE_TIME);
-            else
-                _currentExpireTime = Math.min(_currentExpireTime + ADJUST_EXPIRE_TIME, MAX_EXPIRE_TIME);
-            // drop profiles that we haven't spoken to in a while
-            expireOlderThan = _context.clock().now() - _currentExpireTime;
-        }
 
-        if (shouldCoalesce) {
+        // drop profiles that we haven't spoken to in a while
+        if (countNotFailingPeers() > ENOUGH_PROFILES) {expireOlderThan = 8*60*60*1000;}
+        else {expireOlderThan = 24*60*60*1000;}
+
+        if (shouldCoalesce && uptime > 60*60*1000 && countNotFailingPeers() > (ENOUGH_PROFILES / 2)) {
             getReadLock();
             try {
                 long coalesceStart = System.currentTimeMillis();
                 for (PeerProfile prof : _strictCapacityOrder) {
-                    if ( (expireOlderThan > 0) && (prof.getLastSendSuccessful() <= expireOlderThan) ) {
-                        continue;
-                    }
+                    long lastGoodSend = prof.getLastSendSuccessful();
+                    if (lastGoodSend < (expireOlderThan - coalesceStart)) {continue;}
                     prof.coalesceOnly(shouldDecay);
                 }
-                coalesceTime = (int)(System.currentTimeMillis()-coalesceStart);
-            } finally {
-                releaseReadLock();
-            }
+                coalesceTime = (int) (System.currentTimeMillis() - coalesceStart);
+            } finally {releaseReadLock();}
         }
 
-        if (!getWriteLock())
-            return;
+        if (!getWriteLock()) {return;}
         long start = System.currentTimeMillis();
         try {
             Set<PeerProfile> allPeers = _strictCapacityOrder;
             Set<PeerProfile> reordered = new TreeSet<PeerProfile>(_comp);
             long sortStart = System.currentTimeMillis();
-            for (Iterator<PeerProfile> iter = _strictCapacityOrder.iterator(); iter.hasNext(); ) {
+            for (Iterator<PeerProfile> iter = _strictCapacityOrder.iterator(); iter.hasNext();) {
                 PeerProfile prof = iter.next();
-                if ((expireOlderThan > 0) && (prof.getLastSendSuccessful() <= expireOlderThan)) {
+
+                long lastGoodSend = prof.getLastSendSuccessful();
+                if (lastGoodSend < (sortStart - expireOlderThan)) {
                     expiredCount++;
-                    continue; // drop, but no need to delete, since we don't periodically reread
-                    // TODO maybe we should delete files, otherwise they are only deleted at restart
+                    //_persistenceHelper.deleteOldProfiles(expireOlderThan);
+
+                    if (_log.shouldInfo()) {
+                        _log.info("Removed " + expiredCount + " expired profiles from memory");
+                    }
+                    continue; // drop
                 }
                 prof.updateValues();
                 reordered.add(prof);
@@ -818,7 +801,7 @@ public class ProfileOrganizer {
 
             long thresholdStart = System.currentTimeMillis();
             locked_calculateThresholds(allPeers);
-            thresholdTime = System.currentTimeMillis()-thresholdStart;
+            thresholdTime = System.currentTimeMillis() - thresholdStart;
 
             _fastPeers.clear();
             _highCapacityPeers.clear();
@@ -840,7 +823,7 @@ public class ProfileOrganizer {
             // as it was picking peers in-order before the first reorganization
             //Collections.shuffle(_notFailingPeersList, _context.random());
 
-            placeTime = System.currentTimeMillis()-placeStart;
+            placeTime = System.currentTimeMillis() - placeStart;
         } finally {releaseWriteLock();}
 
 
@@ -848,7 +831,7 @@ public class ProfileOrganizer {
             _log.info("Profiles reorganized: " + expiredCount + " expired \n* Averages: [Integration: " + _thresholdIntegrationValue +
                       "] [Capacity: " + _thresholdCapacityValue + "] [Speed: " + _thresholdSpeedValue + "]");
 
-        long total = System.currentTimeMillis()-start;
+        long total = System.currentTimeMillis() - start;
         _context.statManager().addRateData("peer.profileSortTime", sortTime, profileCount);
         _context.statManager().addRateData("peer.profileCoalesceTime", coalesceTime, profileCount);
         _context.statManager().addRateData("peer.profileThresholdTime", thresholdTime, profileCount);
@@ -868,17 +851,13 @@ public class ProfileOrganizer {
         int minFastPeers = getMinimumFastPeers();
         int numToPromote = minFastPeers - _fastPeers.size();
         if (numToPromote > 0) {
-            if (_log.shouldInfo()) {
-                _log.info("Need to explicitly promote " + numToPromote + " peers to Fast group");
-            }
+            if (_log.shouldInfo()) {_log.info("Need to explicitly promote " + numToPromote + " peers to Fast group");}
             long now = _context.clock().now();
             for (PeerProfile cur : _strictCapacityOrder) {
                 if (!_fastPeers.containsKey(cur.getPeer())) {
                     if (!isSelectable(cur.getPeer())) {continue;} // skip peers we don't have in the netDb
-                    if (!cur.getIsActive(now)) {continue;} // skip inactive
-                    if (_log.shouldDebug()) {
-                        _log.debug("Promoting [" + cur.getPeer().toBase64().substring(0,6) + "] to Fast group");
-                    }
+                    //if (!cur.getIsActive(now)) {continue;} // skip inactive
+                    if (_log.shouldInfo()) {_log.info("Promoting [" + cur.getPeer().toBase64().substring(0,6) + "] to Fast group");}
                     _fastPeers.put(cur.getPeer(), cur);
                     // no need to remove it from any of the other groups, since if it is
                     // fast, it has a high capacity, and it is not failing
@@ -1283,25 +1262,22 @@ public class ProfileOrganizer {
         if (_context.router() == null) return true;
         if ( (_context.banlist() != null) && (_context.banlist().isBanlisted(peer)) ) {
              if (_log.shouldDebug())
-                 _log.debug("[" + peer.toBase64().substring(0,6) + "] is banlisted; not using it to build tunnels");
+                 _log.debug("Not selecting [" + peer.toBase64().substring(0,6) + "] for local tunnel builds -> Router is banlisted");
             return false; // never select a banlisted peer
         }
 
         RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
-        if (null != info) {
+        if (info != null) {
             String tier = DataHelper.stripHTML(info.getBandwidthTier());
             if (info.isHidden()) {
-                if (_log.shouldWarn())
-                    _log.warn("[" + peer.toBase64().substring(0,6) + "] is marked as hidden; not using it to build tunnels");
+                if (_log.shouldWarn()) {
+                    _log.warn("Not selecting [" + peer.toBase64().substring(0,6) + "] for local tunnel builds -> Router is hidden");
+                }
                 return false;
-
-/**
-            } else if (tier.equals("L") || tier.equals("M")) {
-                if (_log.shouldWarn())
-                    _log.warn("[" + peer.toBase64().substring(0,6) + "] is in tier L or M; not using it to build tunnels");
+            } else if (tier.equals("L") || tier.equals("M") || tier.equals("N")) {
+                if (_log.shouldInfo())
+                    _log.info("Not selecting [" + peer.toBase64().substring(0,6) + "] for local tunnel builds -> Router is L, M or N bandwidth tier");
                 return false;
-**/
-
             } else {
                 boolean exclude = TunnelPeerSelector.shouldExclude(_context, info);
                 if (exclude) {
@@ -1340,22 +1316,19 @@ public class ProfileOrganizer {
             isSelectable(peer) && (_context.commSystem() == null ||
             !_context.commSystem().isInStrictCountry(peer))) {
             _highCapacityPeers.put(peer, profile);
-            if (_log.shouldDebug())
-                _log.debug("Promoting [" + peer.toBase64().substring(0,6) + "] to High Capacity group");
+            if (_log.shouldDebug()) {_log.debug("Promoting [" + peer.toBase64().substring(0,6) + "] to High Capacity group");}
             if (_thresholdSpeedValue <= profile.getSpeedValue()) {
                 if (!profile.getIsActive()) {
-                    if (_log.shouldDebug())
-                        _log.debug("Not promoting  [" + peer.toBase64().substring(0,6) + "] to Fast group (inactive)");
+                    if (_log.shouldDebug()) {
+                        _log.debug("Not promoting [" + peer.toBase64().substring(0,6) + "] to Fast group -> Inactive");
+                    }
                 } else {
                     _fastPeers.put(peer, profile);
-                    if (_log.shouldDebug())
-                        _log.debug("Promoting [" + peer.toBase64().substring(0,6) + "] to Fast group");
+                    if (_log.shouldDebug()) {_log.debug("Promoting [" + peer.toBase64().substring(0,6) + "] to Fast group");}
                 }
             }
 
-        } else if (countHighCapacityPeers() < minHighCap &&
-                   isSelectable(peer) &&
-                   !_context.commSystem().isInStrictCountry(peer)) {
+        } else if (countHighCapacityPeers() < minHighCap && isSelectable(peer) && !_context.commSystem().isInStrictCountry(peer)) {
             _highCapacityPeers.put(peer, profile);
             // not high capacity, but not failing (yet)
         }
@@ -1366,8 +1339,9 @@ public class ProfileOrganizer {
         // This could be used later to see if a floodfill peer is for real.
         if (_thresholdIntegrationValue <= profile.getIntegrationValue()) {
             _wellIntegratedPeers.put(peer, profile);
-            if (_log.shouldDebug())
+            if (_log.shouldDebug()) {
                 _log.debug("Promoting [" + peer.toBase64().substring(0,6) + "] to Integrated group");
+            }
         }
 
     }
@@ -1393,35 +1367,26 @@ public class ProfileOrganizer {
      * @return minimum number of peers to be placed in the 'fast' group
      */
     protected int getMinimumFastPeers() {
-        // null for main()
-        ClientManagerFacade cm = _context.clientManager();
-        if (cm == null)
-            return DEFAULT_MAXIMUM_FAST_PEERS;
-        //int known = _context.netDbSegmentor().getKnownRouters();
+        if (_context.router() == null) return DEFAULT_MINIMUM_FAST_PEERS;
         int known = _context.netDb().getKnownRouters();
-        int def = Math.max(DEFAULT_MAXIMUM_FAST_PEERS, (10 * cm.listClients().size()) + DEFAULT_MINIMUM_FAST_PEERS - 2);
-        if (known > 3000)
-            return _context.getProperty(PROP_MINIMUM_FAST_PEERS, Math.min(known / 30, DEFAULT_MAXIMUM_FAST_PEERS));
-        else
-            return _context.getProperty(PROP_MINIMUM_FAST_PEERS, DEFAULT_MINIMUM_FAST_PEERS);
+        if (known > 3000) {return _context.getProperty(PROP_MINIMUM_FAST_PEERS, Math.max(known / 15, DEFAULT_MINIMUM_FAST_PEERS));}
+        else {return _context.getProperty(PROP_MINIMUM_FAST_PEERS, DEFAULT_MINIMUM_FAST_PEERS);}
     }
 
     /** fixme add config  @since 0.7.10 */
     protected int getMaximumFastPeers() {
+        if (_context.router() == null) return ABSOLUTE_MAX_FAST_PEERS;
         int known = _context.netDb().getKnownRouters();
-        if (known > 3000)
-            return known / 20;
-        else
-            return ABSOLUTE_MAX_FAST_PEERS;
+        if (known > 3000) {return Math.max(known / 12, ABSOLUTE_MAX_FAST_PEERS);}
+        else {return ABSOLUTE_MAX_FAST_PEERS;}
     }
 
     /** fixme add config  @since 0.7.11 */
     protected int getMaximumHighCapPeers() {
+        if (_context.router() == null) return ABSOLUTE_MAX_HIGHCAP_PEERS;
         int known = _context.netDb().getKnownRouters();
-        if (known > 3000)
-            return (Math.min(known / 10, ABSOLUTE_MAX_HIGHCAP_PEERS));
-        else
-            return ABSOLUTE_MAX_HIGHCAP_PEERS;
+        if (known > 3000) {return (Math.max(known / 10, ABSOLUTE_MAX_HIGHCAP_PEERS));}
+        else {return ABSOLUTE_MAX_HIGHCAP_PEERS;}
     }
 
     /**
@@ -1434,11 +1399,13 @@ public class ProfileOrganizer {
      * @return minimum number of peers to be placed in the 'high capacity' group
      */
     protected int getMinimumHighCapacityPeers() {
+        if (_context.router() == null) return DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS;
         int known = _context.netDb().getKnownRouters();
-        if (known > 3000)
+        if (known > 3000) {
             return _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, Math.max(known / 15, DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS));
-        else
+        } else {
             return _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS);
+        }
     }
 
     private final static DecimalFormat _fmt = new DecimalFormat("###,##0.00", new DecimalFormatSymbols(Locale.UK));

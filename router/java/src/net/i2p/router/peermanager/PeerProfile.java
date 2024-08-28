@@ -77,9 +77,8 @@ public class PeerProfile {
     //private int _consecutiveBanlists;
     private final int _distance;
 
-    /** keep track of the fastest 3 throughputs */
-//    private static final int THROUGHPUT_COUNT = 3;
-    private static final int THROUGHPUT_COUNT = 8;
+    /** keep track of the fastest 10 throughputs */
+    private static final int THROUGHPUT_COUNT = 10;
     /**
      * fastest 1 minute throughput, in bytes per minute, ordered with fastest
      * first.  this is not synchronized, as we don't *need* perfection, and we only
@@ -119,9 +118,7 @@ public class PeerProfile {
      *
      *  @param peer non-null
      */
-    public PeerProfile(RouterContext context, Hash peer) {
-        this(context, peer, true);
-    }
+    public PeerProfile(RouterContext context, Hash peer) {this(context, peer, true);}
 
     /**
      *  Caller should call setLastHeardAbout() and setFirstHeardAbout()
@@ -155,27 +152,21 @@ public class PeerProfile {
     public boolean getIsExpanded() {return _expanded;}
     public boolean getIsExpandedDB() {return _expandedDB;}
 
-    //public int incrementBanlists() {return _consecutiveBanlists++;}
-    //public void unbanlist() {_consecutiveBanlists = 0;}
-
     /**
      * Is this peer active at the moment (sending/receiving messages within the last
-     * 5 minutes)
+     * 10 minutes)
      */
     public boolean getIsActive() {
-        return getIsActive(5*60*1000, _context.clock().now());
-        //return getIsActive(60*1000, _context.clock().now());
+        return getIsActive(10*60*1000, _context.clock().now());
     }
 
     /**
-     * Is this peer active at the moment (sending/receiving messages within the last
-     * 5 minutes)
+     * Is this peer active at the moment (sending/receiving messages within the last 10 minutes)
      *
      * @since 0.9.58
      */
     public boolean getIsActive(long now) {
-        return getIsActive(5*60*1000, now);
-        //return getIsActive(60*1000, now);
+        return getIsActive(10*60*1000, now);
     }
 
     /** @since 0.8.11 */
@@ -201,8 +192,8 @@ public class PeerProfile {
         if (cs == null) {return false;}
         String us = cs.getOurCountry();
         return us != null && (_bigCountries.contains(us) ||
-               _context.getProperty(CapacityCalculator.PROP_COUNTRY_BONUS) != null) &&
-               us.equals(cs.getCountry(_peer));
+                     _context.getProperty(CapacityCalculator.PROP_COUNTRY_BONUS) != null) &&
+                     us.equals(cs.getCountry(_peer));
     }
 
     /**
@@ -286,13 +277,10 @@ public class PeerProfile {
     public DBHistory getDBHistory() {return _dbHistory;}
     public void setDBHistory(DBHistory hist) {_dbHistory = hist;}
 
-    /** how large successfully sent messages are, calculated over a 1 minute, 1 hour, and 1 day period */
-    //public RateStat getSendSuccessSize() {return _sendSuccessSize;}
-    /** how large received messages are, calculated over a 1 minute, 1 hour, and 1 day period */
-    //public RateStat getReceiveSize() {return _receiveSize;}
     /** how long it takes to get a db response from the peer (in milliseconds), calculated over a 1 minute, 1 hour, and 1 day period
         Warning - may return null if !getIsExpandedDB() */
     public RateStat getDbResponseTime() {return _dbResponseTime;}
+
     /** how long it takes to get a tunnel create response from the peer (in milliseconds), calculated over a 1 minute, 1 hour, and 1 day period
         Warning - may return null if !getIsExpanded() */
     public RateStat getTunnelCreateResponseTime() {return _tunnelCreateResponseTime;}
@@ -386,32 +374,28 @@ public class PeerProfile {
     @SuppressWarnings("deprecation")
     void updateTunnelTestTimeAverage(float ms) {
 
-        if (_tunnelTestResponseTimeAvg <= 0)
-            _tunnelTestResponseTimeAvg = 30*1000; // should we instead start at $ms?
+        if (_tunnelTestResponseTimeAvg <= 0) {_tunnelTestResponseTimeAvg = 30*1000;} // should we instead start at $ms?
 
         // weighted since we want to let the average grow quickly and shrink slowly
-        if (ms < _tunnelTestResponseTimeAvg)
-            _tunnelTestResponseTimeAvg = 0.95f * _tunnelTestResponseTimeAvg + .05f * ms;
-        else
-            _tunnelTestResponseTimeAvg = 0.75f * _tunnelTestResponseTimeAvg + .25f * ms;
+        if (ms < _tunnelTestResponseTimeAvg) {_tunnelTestResponseTimeAvg = 0.95f * _tunnelTestResponseTimeAvg + .05f * ms;}
+        else {_tunnelTestResponseTimeAvg = 0.75f * _tunnelTestResponseTimeAvg + .25f * ms;}
 
-        if (_log.shouldInfo())
+        if (_log.shouldInfo()) {
             _log.info("Timed tunnel test for [" + _peer.toBase64().substring(0,6) +
                       "] updated to " + (_tunnelTestResponseTimeAvg / 1000) + "s");
+        }
     }
 
     public float getPeerTestTimeAverage() {return _peerTestResponseTimeAvg;}
     void setPeerTestTimeAverage(float testAvg) {_peerTestResponseTimeAvg = testAvg;}
 
     void updatePeerTestTimeAverage(float ms) {
-        if (_peerTestResponseTimeAvg <= 0)
-//            _peerTestResponseTimeAvg = 10*1000; // default timeout * 2
-            _peerTestResponseTimeAvg = 1500; // default timeout * 2
-        else
-             _peerTestResponseTimeAvg = 0.75f * _peerTestResponseTimeAvg + .25f * ms;
-        if (_log.shouldInfo())
+        if (_peerTestResponseTimeAvg <= 0) {_peerTestResponseTimeAvg = 1500;} // default timeout * 2
+        else {_peerTestResponseTimeAvg = 0.75f * _peerTestResponseTimeAvg + .25f * ms;}
+        if (_log.shouldInfo()) {
             _log.info("Timed peer test average for [" + _peer.toBase64().substring(0,6) +
                       "] updated to " + (_peerTestResponseTimeAvg) + "ms");
+        }
     }
 
     public float getPeakThroughputKBps() {
@@ -485,8 +469,9 @@ public class PeerProfile {
                 buf.append("1 minute throughput for [");
                 buf.append(_peer.toBase64().substring(0,6));
                 buf.append("] updated after ").append(size).append(" bytes sent \n* Measured: ");
-                for (int i = 0; i < THROUGHPUT_COUNT; i++)
+                for (int i = 0; i < THROUGHPUT_COUNT; i++) {
                     buf.append(_peakTunnel1mThroughput[i]).append(" ");
+                }
                 _log.debug(buf.toString());
             }
         }
@@ -524,15 +509,14 @@ public class PeerProfile {
      */
     public synchronized void expandProfile() {
         String group = (null == _peer ? "profileUnknown" : _peer.toBase64().substring(0,6));
-        if (_tunnelCreateResponseTime == null)
+
+        if (_tunnelCreateResponseTime == null) {
             _tunnelCreateResponseTime = new RateStat("tunnelCreateResponseTime", "Time for tunnel create response from peer (ms)", group, RATES);
-
-        if (ENABLE_TUNNEL_TEST_RESPONSE_TIME && _tunnelTestResponseTime == null)
+        }
+        if (ENABLE_TUNNEL_TEST_RESPONSE_TIME && _tunnelTestResponseTime == null) {
             _tunnelTestResponseTime = new RateStat("tunnelTestResponseTime", "Time to test a tunnel this peer participates in (ms)", group, RATES);
-
-        if (_tunnelHistory == null)
-            _tunnelHistory = new TunnelHistory(_context, group);
-
+        }
+        if (_tunnelHistory == null) {_tunnelHistory = new TunnelHistory(_context, group);}
         _expanded = true;
     }
 
@@ -541,14 +525,15 @@ public class PeerProfile {
      */
     public synchronized void expandDBProfile() {
         String group = (null == _peer ? "profileUnknown" : _peer.toBase64().substring(0,6));
-        if (_dbResponseTime == null)
+        if (_dbResponseTime == null) {
             _dbResponseTime = new RateStat("dbResponseTime", "Time for NetDb response from peer (ms)", group, RATES);
-        if (_dbIntroduction == null)
+        }
+        if (_dbIntroduction == null) {
             _dbIntroduction = new RateStat("dbIntroduction", "Total new peers received from DbSearchReplyMsgs or DbStore messages", group, RATES);
-
-        if (_dbHistory == null)
+        }
+        if (_dbHistory == null) {
             _dbHistory = new DBHistory(_context, group);
-
+        }
         _expandedDB = true;
     }
 
@@ -563,16 +548,18 @@ public class PeerProfile {
             if (tot > lowPeak) {
                 for (int i = 0; i < THROUGHPUT_COUNT; i++) {
                     if (tot > _peakThroughput[i]) {
-                        for (int j = THROUGHPUT_COUNT-1; j > i; j--)
+                        for (int j = THROUGHPUT_COUNT-1; j > i; j--) {
                             _peakThroughput[j] = _peakThroughput[j-1];
+                        }
                         _peakThroughput[i] = tot;
                         break;
                     }
                 }
             } else {
                 if (shouldDecay) {
-                    for (int i = 0; i < THROUGHPUT_COUNT; i++)
+                    for (int i = 0; i < THROUGHPUT_COUNT; i++) {
                         _peakThroughput[i] *= DEGRADE_FACTOR;
+                    }
                 }
             }
 
@@ -608,17 +595,13 @@ public class PeerProfile {
      */
     void coalesceOnly(boolean shouldDecay) {
         _coalescing = true;
-
-        //_receiveSize.coalesceStats();
-        //_sendSuccessSize.coalesceStats();
         _tunnelCreateResponseTime.coalesceStats();
-        if (_tunnelTestResponseTime != null)
-            _tunnelTestResponseTime.coalesceStats();
 
-        if (_peerTestResponseTime != null)
-          _peerTestResponseTime.coalesceStats();
+        if (_tunnelTestResponseTime != null) {_tunnelTestResponseTime.coalesceStats();}
+        if (_peerTestResponseTime != null) {_peerTestResponseTime.coalesceStats();}
 
         _tunnelHistory.coalesceStats();
+
         if (_expandedDB) {
             _dbIntroduction.coalesceStats();
             _dbResponseTime.coalesceStats();
@@ -626,13 +609,10 @@ public class PeerProfile {
         }
 
         coalesceThroughput(shouldDecay);
-
         _speedValueNew = calculateSpeed();
         _capacityValueNew = calculateCapacity();
-        // These two are not used by InverseCapacityComparator
-        // to sort _strictCapacityOrder in ProfileOrganizer
-        // (in fact aren't really used at all), so we can
-        // update them directly
+        // These two are not used by InverseCapacityComparator to sort _strictCapacityOrder in ProfileOrganizer
+        // (in fact aren't really used at all), so we can update them directly
         _integrationValue = calculateIntegration();
     }
 
@@ -641,10 +621,8 @@ public class PeerProfile {
      *  @since 0.9.4
      */
     void updateValues() {
-        if (!_coalescing) // can happen
-            coalesceOnly(false);
+        if (!_coalescing) {coalesceOnly(false);} // can happen
         _coalescing = false;
-
         _speedValue = _speedValueNew;
         _capacityValue = _capacityValueNew;
     }
@@ -707,88 +685,5 @@ public class PeerProfile {
      * for an expanded profile, and ~212 bytes for a compacted one.
      *
      */
-/****
-    public static void main(String args[]) {
-        RouterContext ctx = new RouterContext(new net.i2p.router.Router());
-        testProfileSize(ctx, 100, 0); // 560KB
-        testProfileSize(ctx, 1000, 0); // 3.9MB
-        testProfileSize(ctx, 10000, 0); // 37MB
-        testProfileSize(ctx, 0, 10000); // 2.2MB
-        testProfileSize(ctx, 0, 100000); // 21MB
-        testProfileSize(ctx, 0, 300000);  // 63MB
-    }
-****/
 
-    /**
-     * Read in all of the profiles specified and print out
-     * their calculated values.  Usage: <pre>
-     *  PeerProfile [filename]*
-     * </pre>
-     */
-/****
-    public static void main2(String args[]) {
-        RouterContext ctx = new RouterContext(new net.i2p.router.Router());
-        DecimalFormat fmt = new DecimalFormat("0,000.0");
-        fmt.setPositivePrefix("+");
-        ProfilePersistenceHelper helper = new ProfilePersistenceHelper(ctx);
-        try { Thread.sleep(5*1000);} catch (InterruptedException e) {}
-        StringBuilder buf = new StringBuilder(1024);
-        for (int i = 0; i < args.length; i++) {
-            PeerProfile profile = helper.readProfile(new File(args[i]));
-            if (profile == null) {
-                buf.append("Could not load profile ").append(args[i]).append('\n');
-                continue;
-            }
-            //profile.coalesceStats();
-            buf.append("Peer " + profile.getPeer().toBase64()
-                       + ":\t Speed:\t" + fmt.format(profile.calculateSpeed())
-                       + " Capacity:\t" + fmt.format(profile.calculateCapacity())
-                       + " Integration:\t" + fmt.format(profile.calculateIntegration())
-                       + " Active?\t" + profile.getIsActive()
-                       + " Failing?\t" + profile.calculateIsFailing()
-                       + '\n');
-        }
-        try { Thread.sleep(5*1000);} catch (InterruptedException e) {}
-        System.out.println(buf.toString());
-    }
-
-    private static void testProfileSize(RouterContext ctx, int numExpanded, int numCompact) {
-        Runtime.getRuntime().gc();
-        PeerProfile profs[] = new PeerProfile[numExpanded];
-        PeerProfile profsCompact[] = new PeerProfile[numCompact];
-        long used = Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
-        long usedPer = used / (numExpanded+numCompact);
-        System.out.println(numExpanded + "/" + numCompact + ": create array - Used: " + used + " bytes (or " + usedPer + " bytes per array entry)");
-
-        int i = 0;
-        try {
-            for (; i < numExpanded; i++)
-                profs[i] = new PeerProfile(ctx, new Hash(new byte[Hash.HASH_LENGTH]));
-        } catch (OutOfMemoryError oom) {
-            profs = null;
-            profsCompact = null;
-            Runtime.getRuntime().gc();
-            System.out.println("Ran out of memory when creating profile " + i);
-            return;
-        }
-        try {
-            for (; i < numCompact; i++)
-                profsCompact[i] = new PeerProfile(ctx, new Hash(new byte[Hash.HASH_LENGTH]), false);
-        } catch (OutOfMemoryError oom) {
-            profs = null;
-            profsCompact = null;
-            Runtime.getRuntime().gc();
-            System.out.println("Ran out of memory when creating compacted profile " + i);
-            return;
-        }
-
-        Runtime.getRuntime().gc();
-        long usedObjects = Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
-        usedPer = usedObjects / (numExpanded+numCompact);
-        System.out.println(numExpanded + "/" + numCompact + ": create objects - Used: " + usedObjects + " bytes (or " + usedPer + " bytes per profile)");
-        profs = null;
-        profsCompact = null;
-        Runtime.getRuntime().gc();
-    }
-****/
 }

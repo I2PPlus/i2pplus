@@ -54,7 +54,7 @@ class PeerManager {
      *  This must also be less than 10 minutes, which is the shortest
      *  Rate contained in the profile, as the Rates must be coalesced.
      */
-    static final long REORGANIZE_TIME_LONG = 300*1000;
+    static final long REORGANIZE_TIME_LONG = 250*1000;
     /** After first two hours of uptime ~= 246 */
     static final int REORGANIZES_PER_DAY = 4;
     //static final int REORGANIZES_PER_DAY = (int) (24*60*60*1000L / REORGANIZE_TIME_LONG);
@@ -121,15 +121,11 @@ class PeerManager {
             long start = System.currentTimeMillis();
             long uptime = _context.router().getUptime();
             boolean shouldDecay = uptime > 4*60*60*1000;
-            try {
-                _organizer.reorganize(true, shouldDecay);
-            } catch (Throwable t) {
-                _log.log(Log.CRIT, "Error evaluating profiles", t);
-            }
+            try {_organizer.reorganize(true, shouldDecay);}
+            catch (Throwable t) {_log.log(Log.CRIT, "Error evaluating profiles", t);}
             long orgtime = System.currentTimeMillis() - start;
-            if (_lastStore == 0) {
-                _lastStore = start;
-            } else if (start - _lastStore > STORE_TIME) {
+            if (_lastStore == 0) {_lastStore = start;}
+            else if (start - _lastStore > STORE_TIME) {
                 _lastStore = start;
                 try {
                     _log.info("Started writing peer profiles to disk...");
@@ -138,23 +134,16 @@ class PeerManager {
 
                     if (shouldDecay) {
                         int count = _persistenceHelper.deleteOldProfiles(EXPIRE_AGE);
-                        if (count > 0 && _log.shouldInfo()) {
-                            _log.info("Deleted " + count + " old profiles");
-                        }
+                        if (count > 0 && _log.shouldInfo()) {_log.info("Deleted " + count + " old profiles");}
                     }
 
                     _log.info("Finished writing peer profiles to disk, took " + (finished - start) + "ms");
-                } catch (Throwable t) {
-                    _log.log(Log.CRIT, "Error storing profiles", t);
-                }
+                } catch (Throwable t) {_log.log(Log.CRIT, "Error storing profiles", t);}
             }
             long delay;
-            if (orgtime > 1000 || uptime > 2*60*60*1000)
-                delay = REORGANIZE_TIME_LONG;
-            else if (uptime > 10*60*1000)
-                delay = REORGANIZE_TIME_MEDIUM;
-            else
-                delay = REORGANIZE_TIME;
+            if (orgtime > 1000 || uptime > 2*60*60*1000) {delay = REORGANIZE_TIME_LONG;}
+            else if (uptime > 10*60*1000) {delay = REORGANIZE_TIME_MEDIUM;}
+            else {delay = REORGANIZE_TIME;}
             _event.schedule(delay);
         }
     }
@@ -174,8 +163,8 @@ class PeerManager {
         try {
             Set<Hash> peers = selectPeers();
             total = peers.size();
-            for (Hash peer : peers) {if (storeProfile(peer, cutoff)) {
-                i++;}
+            for (Hash peer : peers) {
+                if (storeProfile(peer, cutoff)) {i++;}
             }
         } finally {_storeLock.set(false);}
         if (_log.shouldInfo()) {_log.info("Stored " + i + " out of " + total + " profiles");}
@@ -185,14 +174,10 @@ class PeerManager {
     void clearProfiles() {
         _organizer.clearProfiles();
         _capabilitiesByPeer.clear();
-        for (Set<Hash> p : _peersByCapability.values()) {
-            p.clear();
-        }
+        for (Set<Hash> p : _peersByCapability.values()) {p.clear();}
     }
 
-    Set<Hash> selectPeers() {
-        return _organizer.selectAllPeers();
-    }
+    Set<Hash> selectPeers() {return _organizer.selectAllPeers();}
 
     /**
      *  @param cutoff only store if last successful send newer than this (absolute time)
@@ -202,8 +187,7 @@ class PeerManager {
         PeerProfile prof = _organizer.getProfile(peer);
         if (prof == null) return false;
         if (prof.getLastSendSuccessful() > cutoff) {
-            if (_persistenceHelper.writeProfile(prof))
-                return true;
+            if (_persistenceHelper.writeProfile(prof)) {return true;}
         }
         return false;
     }
@@ -216,17 +200,24 @@ class PeerManager {
      *
      *  @since 0.8.8
      */
-    private void loadProfilesInBackground() {
-        (new I2PThread(new ProfileLoader(), "Peer Profile Loader")).start();
-    }
+    private void loadProfilesInBackground() {(new I2PThread(new ProfileLoader(), "Peer Profile Loader")).start();}
 
     /**
-     *  Load the profiles and instantiate Reorg
+     *  Load the profiles and instantiate Reorg, waiting for 60s uptime to allow the routerinfos to load first
      *
      *  @since 0.8.8
      */
+
     private class ProfileLoader implements Runnable {
+        Router r = _context.router();
+        long uptime = (r != null) ? r.getUptime() : 0L;
+
+        @Override
         public void run() {
+            if (uptime < 60 * 1000) {
+                try {Thread.sleep(60 * 1000 - uptime);}
+                catch (InterruptedException e) {Thread.currentThread().interrupt();}
+            }
             loadProfiles();
             new Reorg();
         }
@@ -236,20 +227,6 @@ class PeerManager {
      *  This may take a long time - 30 seconds or more
      */
     void loadProfiles() {
-        long startTime = System.currentTimeMillis();
-        long uptime = _context.router().getUptime();
-
-        while (uptime < 15 * 1000) {
-            long delay = 15 * 1000 - uptime;
-            try {Thread.sleep(delay);}
-            catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                return;
-            }
-            uptime = _context.router().getUptime();
-        }
-
-        long elapsedTime = System.currentTimeMillis() - startTime;
         List<PeerProfile> profiles = _persistenceHelper.readProfiles();
         for (PeerProfile prof : profiles) {_organizer.addProfile(prof);}
     }

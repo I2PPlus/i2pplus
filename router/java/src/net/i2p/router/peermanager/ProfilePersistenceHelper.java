@@ -50,7 +50,7 @@ class ProfilePersistenceHelper {
     private static final String DIR_PREFIX = "p";
     private static final String B64 = Base64.ALPHABET_I2P;
     // Max to read in at startup
-    private static final int LIMIT_PROFILES = SystemVersion.isSlow() ? 3000 : 5000;
+    private static final int LIMIT_PROFILES = SystemVersion.isSlow() ? 1000 : 2000;
 
     private final File _profileDir;
     private Hash _us;
@@ -268,14 +268,14 @@ class ProfilePersistenceHelper {
             if (!f.isFile()) {continue;}
             if (f.lastModified() < cutoff && files.size() > LIMIT_PROFILES) {
                 i++;
-                //f.delete();
+                f.delete();
                 _log.warn("Not deleting " + f + " (debugging active)");
             }
         }
         if (_log.shouldWarn()) {
             if (i > 0) {
-                //_log.warn("Deleted " + i + " STALE peer profiles");
-                _log.warn("Not deleting " + i + " (stale?) peer profiles -> Will expire when read at startup");
+                _log.warn("Deleted " + i + " STALE peer profiles");
+                //_log.warn("Not deleting " + i + " (stale?) peer profiles -> Will expire when read at startup");
             }
         }
         return i;
@@ -287,9 +287,9 @@ class ProfilePersistenceHelper {
     @SuppressWarnings("deprecation")
     public PeerProfile readProfile(File file, long cutoff) {
         if (file.lastModified() < cutoff) {
-            if (_log.shouldWarn())
-                _log.warn("Not deleting STALE peer profile " + file.getName() + " -> Will expire when read at startup");
-            //file.delete();
+            //if (_log.shouldWarn())
+            //    _log.warn("Not deleting STALE peer profile " + file.getName() + " -> Will expire when read at startup");
+            file.delete();
             return null;
         }
         Hash peer = getHash(file.getName());
@@ -362,14 +362,14 @@ class ProfilePersistenceHelper {
                 getLong(props, "dbHistory.lastLookupFailed") > 0 ||
                 getLong(props, "dbHistory.lastStoreSuccessful") > 0 ||
                 getLong(props, "dbHistory.lastStoreFailed") > 0 &&
-                (caps != null && !caps.contains("K") || !caps.contains("L") || !caps.contains("M") || !caps.contains("U"))) {
+                (!caps.equals("") && !caps.contains("K") || !caps.contains("L") || !caps.contains("M") || !caps.contains("U"))) {
                 profile.expandDBProfile();
                 profile.getDBHistory().load(props);
                 profile.getDbIntroduction().load(props, "dbIntroduction", true);
                 profile.getDbResponseTime().load(props, "dbResponseTime", true);
             }
 
-            if (caps != null && !caps.contains("K") || !caps.contains("L") || !caps.contains("M") || !caps.contains("U")) {
+            if (!caps.equals("") && !caps.contains("K") || !caps.contains("L") || !caps.contains("M") || !caps.contains("U")) {
                 profile.getTunnelCreateResponseTime().load(props, "tunnelCreateResponseTime", true);
                 if (PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME) {
                     profile.getTunnelTestResponseTime().load(props, "tunnelTestResponseTime", true);
