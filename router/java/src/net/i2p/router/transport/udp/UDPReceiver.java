@@ -68,7 +68,7 @@ class UDPReceiver {
 
     /** if a packet been sitting in the queue for a full second (meaning the handlers are overwhelmed), drop subsequent packets */
 //    private static final long MAX_QUEUE_PERIOD = 2*1000;
-    private static final long MAX_QUEUE_PERIOD = SystemVersion.isSlow() ? 200 : 50;
+    private static final long MAX_QUEUE_PERIOD = SystemVersion.isSlow() ? 2*1000 : 1000;
 
     /** @return zero (was queue size) */
     private int receive(UDPPacket packet) {return doReceive(packet);}
@@ -135,7 +135,7 @@ class UDPReceiver {
                     _socket.receive(dpacket);
                     int size = dpacket.getLength();
                     if (_log.shouldInfo())
-                        _log.info("After blocking socket.receive, UDP packet is " + size + " bytes on " + System.identityHashCode(packet));
+                        _log.info("After blocking socket.receive, UDP packet [" + System.identityHashCode(packet) + "] is " + size + " bytes");
                     packet.resetBegin();
 
                     // and block after we know how much we read but before
