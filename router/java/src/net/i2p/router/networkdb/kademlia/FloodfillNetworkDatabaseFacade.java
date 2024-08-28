@@ -773,10 +773,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             cutoff = now - 2*60*60*1000;
             long lastLookupFailed = hist.getLastLookupFailed();
             long lastStoreFailed = hist.getLastStoreFailed();
-            if (lastLookupFailed > cutoff ||
-                lastStoreFailed > cutoff ||
-                lastLookupFailed > lastLookupSuccess ||
-                lastStoreFailed > lastStoreSuccess) {
+            if (lastLookupFailed > cutoff || lastStoreFailed > cutoff ||
+                lastLookupFailed > lastLookupSuccess || lastStoreFailed > lastStoreSuccess) {
                 //_log.warn("skip lookup dbhist store fail " + DataHelper.formatTime(lastStoreFailed) +
                 //           " lookup fail " + DataHelper.formatTime(lastLookupFailed) + ' ' + peer.toBase64());
                 super.lookupBeforeDropping(peer, info);

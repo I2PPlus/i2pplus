@@ -17,13 +17,11 @@ import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.CommSystemFacadeImpl;
-import net.i2p.router.web.Messages;
 import static net.i2p.router.web.helpers.TunnelRenderer.range;
-
+import net.i2p.router.web.Messages;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;
 import net.i2p.stat.RateStat;
-
 import net.i2p.util.Addresses;
 
 /**
@@ -40,9 +38,7 @@ class ProfileOrganizerRenderer {
     }
 
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
-    public boolean enableReverseLookups() {
-        return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);
-    }
+    public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
 
     /**
      *  @param mode 0 = high cap; 1 = all; 2 = floodfill; 3 = banned; 4 = ban summary by hash
@@ -76,8 +72,7 @@ class ProfileOrganizerRenderer {
                 }
             }
 //            if (prof.getLastSendSuccessful() <= hideBefore) {
-            if (mode != 2 && (prof.getLastHeardFrom() <= hideBefore ||
-                prof.getLastSendSuccessful() <= hideBefore) && !prof.getIsActive()) {
+            if (mode != 2 && (prof.getLastHeardFrom() <= hideBefore || prof.getLastSendSuccessful() <= hideBefore) && !prof.getIsActive()) {
                 older++;
                 continue;
             }
