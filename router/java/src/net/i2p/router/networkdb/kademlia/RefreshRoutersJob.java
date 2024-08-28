@@ -109,13 +109,10 @@ class RefreshRoutersJob extends JobImpl {
             for (Iterator<Hash> iter = _routers.iterator(); iter.hasNext(); ) {
                 Hash h = iter.next();
                 iter.remove();
-                if (h.equals(getContext().routerHash()))
-                    continue;
-                if (_log.shouldDebug())
-                    _log.debug("Checking RouterInfo [" + h.toBase64().substring(0,6) + "]");
+                if (h.equals(getContext().routerHash())) {continue;}
+                if (_log.shouldDebug()) {_log.debug("Checking RouterInfo [" + h.toBase64().substring(0,6) + "]");}
                 RouterInfo ri = getContext().netDb().lookupRouterInfoLocally(h);
-                if (ri == null)
-                    continue;
+                if (ri == null) {continue;}
 //                if (ri.getPublished() < expire) {
 //                long older = getContext().clock().now() - OLDER;
                 long older = getContext().clock().now() - ri.getPublished();
@@ -126,6 +123,7 @@ class RefreshRoutersJob extends JobImpl {
                 String MIN_VERSION = "0.9.60";
                 Hash us = getContext().routerHash();
                 boolean isUs = us.equals(ri.getIdentity().getHash());
+                boolean weAreFF = getContext().netDb().floodfillEnabled();
                 boolean isHidden = getContext().router().isHidden();
                 boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
@@ -155,10 +153,11 @@ class RefreshRoutersJob extends JobImpl {
                     }
                 }
                 int rapidScan = 10*60*1000;
-                if (uninteresting || (isFF && noSSU)) {routerAge = rapidScan;}
+                if (uninteresting && !refreshUninteresting) {routerAge = rapidScan;}
                 else if (freshness == null) {
-                    if (netDbCount > 4000) {routerAge = 6*60*60*1000;}
-                    if (netDbCount > 6000) {routerAge = 8*60*60*1000;}
+                    if (refreshUninteresting || !weAreFF) {routerAge = 15*60*1000;}
+                    else if (netDbCount > 6000) {routerAge = 8*60*60*1000;}
+                    else if (netDbCount > 4000) {routerAge = 6*60*60*1000;}
                 } else {routerAge = Integer.valueOf(freshness)*60*60*1000;}
 //                if (ri.getPublished() < older) {
                 if (older > routerAge) {
@@ -183,32 +182,7 @@ class RefreshRoutersJob extends JobImpl {
                         _facade.search(h, null, null, Integer.valueOf(refreshTimeout)*1000, false);
                     break;
                 } else {
-                    if (_log.shouldDebug())
-                        if ((routerAge / 60 / 60 / 1000) <= 1 && freshness == null && !uninteresting && !refreshUninteresting) {
-                            _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] -> Less than 1h old" +
-                                       "\n* Published: " + new Date(ri.getPublished()));
-                    } else if (uninteresting && refreshUninteresting && (routerAge / 60 / 60 / 1000) <= 1) {
-                        _log.debug("Skipping refresh of uninteresting Router [" + h.toBase64().substring(0,6) + "] -> Less than " +
-                                   (rapidScan / 60 / 1000) + "m old \n* Published: " + new Date(ri.getPublished()));
-                    } else if (uninteresting && !refreshUninteresting && !isHidden) {
-                        _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] -> Uninteresting");
-/**
-                    } else if (noSSU && isFF) {
-                        _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] -> Floodfill with SSU disabled");
-                    } else if (noCountry && uptime > 45*1000) {
-                        _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] -> Address not resolvable via GeoIP");
-                        if (_log.shouldWarn())
-                            _log.warn("Banning " + (isFF ? "Floodfill" : "Router") + " [" + h.toBase64().substring(0,6) + "] for 15m -> Address not resolvable via GeoIP");
-                        if (isFF) {
-                            getContext().banlist().banlistRouter(h, " <b>➜</b> Floodfill without GeoIP resolvable address", null, null, getContext().clock().now() + 15*60*1000);
-                        } else {
-                            getContext().banlist().banlistRouter(h, " <b>➜</b> No GeoIP resolvable address", null, null, getContext().clock().now() + 15*60*1000);
-                        }
-                        if (shouldDisconnect) {
-                            getContext().simpleTimer2().addEvent(new Disconnector(h), 3*1000);
-                        }
-**/
-                    } else {
+                    if (_log.shouldDebug()) {
                         _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] -> less than " +
                                    (routerAge / 60 / 60 / 1000) + "h old \n* Published: " + new Date(ri.getPublished()));
                     }
