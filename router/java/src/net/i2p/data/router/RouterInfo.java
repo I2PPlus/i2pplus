@@ -129,12 +129,7 @@ public class RouterInfo extends DatabaseEntry {
     public RouterInfo(RouterInfo old) {
         this();
         setIdentity(old.getIdentity());
-        //setPublished(old.getPublished());
-        //setAddresses(old.getAddresses());
         setPeers(old.getPeers());
-        //setOptions(old.getOptions());
-        //setSignature(old.getSignature());
-        // copy over _byteified?
     }
 
     public long getDate() {
@@ -273,9 +268,7 @@ public class RouterInfo extends DatabaseEntry {
      * @return sorted, non-null, NOT a copy, do not modify!!!
      */
     @Deprecated
-    public Properties getOptions() {
-        return _options;
-    }
+    public Properties getOptions() {return _options;}
 
     /**
      * Retrieve a set of options or statistics that the router can expose.
@@ -287,9 +280,7 @@ public class RouterInfo extends DatabaseEntry {
         return Collections.unmodifiableMap(_options);
     }
 
-    public String getOption(String opt) {
-        return _options.getProperty(opt);
-    }
+    public String getOption(String opt) {return _options.getProperty(opt);}
 
     /**
      * For convenience, the same as getOption("router.version"),
@@ -313,12 +304,9 @@ public class RouterInfo extends DatabaseEntry {
      * @throws IllegalStateException if RouterInfo is already signed
      */
     public void setOptions(Properties options) {
-        if (_signature != null)
-            throw new IllegalStateException();
-
+        if (_signature != null) {throw new IllegalStateException();}
         _options.clear();
-        if (options != null)
-            _options.putAll(options);
+        if (options != null) {_options.putAll(options);}
     }
 
     /**
@@ -330,14 +318,10 @@ public class RouterInfo extends DatabaseEntry {
     protected byte[] getBytes() throws DataFormatException {
         if (_byteified != null) return _byteified;
         ByteArrayOutputStream out = new ByteArrayOutputStream(2*1024);
-        try {
-            writeDataBytes(out);
-        } catch (IOException ioe) {
-            throw new DataFormatException("IO Error getting bytes", ioe);
-        }
+        try {writeDataBytes(out);}
+        catch (IOException ioe) {throw new DataFormatException("IO Error getting bytes", ioe);}
         byte data[] = out.toByteArray();
-        if (CACHE_ALL || _shouldCache)
-            _byteified = data;
+        if (CACHE_ALL || _shouldCache) {_byteified = data;}
         return data;
     }
 
@@ -408,12 +392,10 @@ public class RouterInfo extends DatabaseEntry {
     public int getNetworkId() {
         String id = _options.getProperty(PROP_NETWORK_ID);
         // shortcut
-        if ("2".equals(id))
-            return 2;
+        if ("2".equals(id)) {return 2;}
         if (id != null) {
-            try {
-                return Integer.parseInt(id);
-            } catch (NumberFormatException nfe) {}
+            try {return Integer.parseInt(id);}
+            catch (NumberFormatException nfe) {}
         }
         return -1;
     }
@@ -424,10 +406,8 @@ public class RouterInfo extends DatabaseEntry {
      */
     public String getCapabilities() {
         String capabilities = _options.getProperty(PROP_CAPABILITIES);
-        if (capabilities != null)
-            return capabilities;
-        else
-            return "";
+        if (capabilities != null) {return capabilities;}
+        else {return "";}
     }
 
     /**
