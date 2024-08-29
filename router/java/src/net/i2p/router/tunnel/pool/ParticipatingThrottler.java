@@ -31,17 +31,13 @@ class ParticipatingThrottler {
     private final ObjectCounter<Hash> counter;
     private final Log _log;
     private static final boolean isSlow = SystemVersion.isSlow();
-    private static final boolean isQuadCore = SystemVersion.getCores() >= 4;
-    private static final boolean isHexaCore = SystemVersion.getCores() >= 6;
     private static final boolean DEFAULT_BLOCK_OLD_ROUTERS = true;
     private static final boolean DEFAULT_SHOULD_DISCONNECT = false;
     private static final boolean DEFAULT_SHOULD_THROTTLE = true;
     private static final String PROP_BLOCK_OLD_ROUTERS = "router.blockOldRouters";
     private static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
     private static final String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
-
-    /** portion of the tunnel lifetime */
-    private static final int LIFETIME_PORTION = 3;
+    private static final int LIFETIME_PORTION = 3; // portion of the tunnel lifetime
     private static final int MIN_LIMIT = (isSlow ? 40 : 120) / LIFETIME_PORTION;
     private static final int MAX_LIMIT = (isSlow ? 600 : 1800) / LIFETIME_PORTION;
     private static final int PERCENT_LIMIT = 12 / LIFETIME_PORTION;
@@ -79,7 +75,7 @@ class ParticipatingThrottler {
         int limit = calculateLimit(numTunnels, isUnreachable, isLowShare, isFast);
         int count = counter.increment(h);
         Result rv;
-        int bantime = 30 * 60 * 1000;
+        int bantime = 15 * 60 * 1000;
         boolean shouldThrottle = context.getProperty(PROP_SHOULD_THROTTLE, DEFAULT_SHOULD_THROTTLE);
         boolean shouldDisconnect = context.getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
         boolean shouldBlockOldRouters = context.getProperty(PROP_BLOCK_OLD_ROUTERS, DEFAULT_BLOCK_OLD_ROUTERS);
@@ -105,7 +101,7 @@ class ParticipatingThrottler {
     }
 
     private void handleNoVersion(boolean shouldDisconnect, Hash h, boolean isBanned, String caps, int bantime) {
-        if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h), 60 * 1000);}
+        if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);}
         if (!isBanned && _log.shouldWarn()) {
             _log.warn("Banning Router [" + h.toBase64().substring(0, 6) + "] for " + (bantime / 60000) + "m -> No router version in RouterInfo");
         }
@@ -114,7 +110,7 @@ class ParticipatingThrottler {
 
     private boolean checkVersionAndCompressibility(String version, boolean isCompressible, boolean shouldDisconnect, Hash h, boolean isBanned, String caps) {
         if (VersionComparator.comp(version, "0.9.57") < 0 && isCompressible) {
-            if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h), 60 * 1000);}
+            if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);}
             if (!isBanned && _log.shouldWarn()) {
                 _log.warn("Banning Router [" + h.toBase64().substring(0, 6) + "] for 4h -> Compressible RouterInfo / " + version);
             }
@@ -130,7 +126,8 @@ class ParticipatingThrottler {
             if (shouldDisconnect) {
                 context.commSystem().forceDisconnect(h);
                 if (!isBanned && _log.shouldWarn()) {
-                    _log.warn("Banning Router [" + h.toBase64().substring(0, 6) + "] for " + (bantime / 60000) + "m -> " + version + (caps.isEmpty() ? "" : " / " + caps));
+                    _log.warn("Banning Router [" + h.toBase64().substring(0, 6) + "] for " + (bantime / 60000) +
+                              "m -> " + version + (caps.isEmpty() ? "" : " / " + caps));
                 }
             }
             context.banlist().banlistRouter(h, " <b>➜</b> LU and older than current version", null, null, context.clock().now() + (bantime * 4));
@@ -142,7 +139,7 @@ class ParticipatingThrottler {
     private boolean checkUnreachableAndOld(String version, boolean isUnreachable, boolean shouldBlockOldRouters, Hash h,
                                            boolean shouldDisconnect, boolean isBanned, String caps) {
         if (VersionComparator.comp(version, MIN_VERSION) < 0 && isUnreachable && shouldBlockOldRouters) {
-            if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h), 60 * 1000);}
+            if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);}
             if (_log.shouldWarn()) {
                 _log.warn("Ignoring Tunnel Request from Router [" + h.toBase64().substring(0, 6) + "] -> " + version + (caps.isEmpty() ? "" : " / " + caps));
             }
@@ -180,20 +177,23 @@ class ParticipatingThrottler {
         context.banlist().banlistRouter(h, " <b>➜</b> Excessive tunnel requests", null, null, context.clock().now() + bantime);
         context.simpleTimer2().addEvent(new Disconnector(h), 11 * 60 * 1000);
         if (_log.shouldWarn()) {
-            _log.warn("Banning Router [" + h.toBase64().substring(0, 6) + "] for " + (bantime / 60000) + "m -> Excessive tunnel requests -> Count / Limit: " +
-                count + " / " + limit + " in " + 11 * 60 / LIFETIME_PORTION + "s");
+            _log.warn("Banning Router [" + h.toBase64().substring(0, 6) + "] for " + (bantime / 60000) +
+                      "m -> Excessive tunnel requests -> Count / Limit: " +
+                      count + " / " + limit + " in " + 11 * 60 / LIFETIME_PORTION + "s");
         }
     }
 
     private void _logHighRequestCount(String caps, int count, int limit) {
         if (_log.shouldWarn()) {
-            _log.warn("Rejecting Tunnel Requests from " + (caps != null ? caps : "") + " Router -> Count / Limit: " + count + " / " + limit + " in " + 11 * 60 / LIFETIME_PORTION + "s");
+            _log.warn("Rejecting Tunnel Requests from " + (caps != null ? caps : "") +
+                      " Router -> Count / Limit: " + count + " / " + limit + " in " + 11 * 60 / LIFETIME_PORTION + "s");
         }
     }
 
     private void _logAcceptRequest(String caps, int count) {
         if (_log.shouldDebug()) {
-            _log.debug("Accepting Tunnel Request from " + (caps != "" ? caps : "") + " Router -> Count: " + count + " in " + 11 * 60 / LIFETIME_PORTION + "s");
+            _log.debug("Accepting Tunnel Request from " + (caps != "" ? caps : "") +
+                       " Router -> Count: " + count + " in " + 11 * 60 / LIFETIME_PORTION + "s");
         }
     }
 
