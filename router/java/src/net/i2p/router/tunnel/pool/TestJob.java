@@ -153,16 +153,16 @@ public class TestJob extends JobImpl {
                 _log.debug("Sending unencrypted garlic test to provide cover for NetDb replies...");
         }
         _id = __id.getAndIncrement();
-        if (_log.shouldDebug())
+        if (_log.shouldDebug()) {
             _log.debug("Sending garlic test [" + _id + "] of " + _outTunnel + " / " + _replyTunnel);
+        }
         ctx.tunnelDispatcher().dispatchOutbound(m, _outTunnel.getSendTunnelId(0),
                                                    _replyTunnel.getReceiveTunnelId(0),
                                                    _replyTunnel.getPeer(0));
     }
 
     public void testSuccessful(int ms) {
-        if (_pool == null || !_pool.isAlive())
-            return;
+        if (_pool == null || !_pool.isAlive()) {return;}
         getContext().statManager().addRateData("tunnel.testSuccessLength", _cfg.getLength());
         getContext().statManager().addRateData("tunnel.testSuccessTime", ms);
 
@@ -175,45 +175,48 @@ public class TestJob extends JobImpl {
 
         _cfg.testJobSuccessful(ms);
         // credit the expl. tunnel too
-        if (_otherTunnel.getLength() > 1)
-            _otherTunnel.testJobSuccessful(ms);
+        if (_otherTunnel.getLength() > 1) {_otherTunnel.testJobSuccessful(ms);}
 
-        if (_log.shouldDebug())
+        if (_log.shouldDebug()) {
             _log.debug("Tunnel Test [" + _id + "] succeeded in " + ms + "ms -> " + _cfg);
+        }
         scheduleRetest();
     }
 
     private void noteSuccess(long ms, TunnelInfo tunnel) {
-        if (tunnel != null)
-            for (int i = 0; i < tunnel.getLength(); i++)
+        if (tunnel != null) {
+            for (int i = 0; i < tunnel.getLength(); i++) {
                 getContext().profileManager().tunnelTestSucceeded(tunnel.getPeer(i), ms);
+            }
+        }
     }
 
     private void testFailed(long timeToFail) {
-        if (_pool == null || !_pool.isAlive())
-            return;
+        if (_pool == null || !_pool.isAlive()) {return;}
         if (_found) {
             // ok, not really a /success/, but we did find it, even though slowly
             noteSuccess(timeToFail, _outTunnel);
             noteSuccess(timeToFail, _replyTunnel);
         }
-        if (_pool.getSettings().isExploratory())
+        boolean isExpl = _pool.getSettings().isExploratory();
+        if (isExpl) {
             getContext().statManager().addRateData("tunnel.testExploratoryFailedTime", timeToFail);
-        else
+        } else {
             getContext().statManager().addRateData("tunnel.testFailedTime", timeToFail);
-        if (_log.shouldWarn())
-            _log.warn("Tunnel Test [" + _id + "] failed in " + timeToFail + "ms -> " + _cfg);
+        }
+        if (_log.shouldWarn()) {
+            _log.warn((isExpl ? "Exploratory tunnel" : "Tunnel") + " Test [" + _id + "] failed in " + timeToFail + "ms -> " + _cfg);
+        }
         boolean keepGoing = _cfg.tunnelFailed();
         // blame the expl. tunnel too
-        if (_otherTunnel.getLength() > 1)
-            _otherTunnel.tunnelFailed();
-        if (keepGoing) {
-            scheduleRetest(true);
-        } else {
-            if (_pool.getSettings().isExploratory())
+        if (_otherTunnel.getLength() > 1) {_otherTunnel.tunnelFailed();}
+        if (keepGoing) {scheduleRetest(true);}
+        else {
+            if (isExpl) {
                 getContext().statManager().addRateData("tunnel.testExploratoryFailedCompletelyTime", timeToFail);
-            else
+            } else {
                 getContext().statManager().addRateData("tunnel.testFailedCompletelyTime", timeToFail);
+            }
         }
     }
 
@@ -222,8 +225,7 @@ public class TestJob extends JobImpl {
 
     /** how long we allow tests to run for before failing them */
     private int getTestPeriod() {
-        if (_outTunnel == null || _replyTunnel == null)
-            return 15*1000;
+        if (_outTunnel == null || _replyTunnel == null) {return 20*1000;}
         // Give it 2.5s per hop + 5s (2 hop tunnel = length 3, so this will be 15s for two 2-hop tunnels)
         // Minimum is 7.5s (since a 0-hop could be the expl. tunnel, but only >= 1-hop client tunnels are tested)
         // Network average for success is about 1.5s.
@@ -239,7 +241,7 @@ public class TestJob extends JobImpl {
                 return delay + (2500 * (_outTunnel.getLength() + _replyTunnel.getLength()));
             }
         }
-        return 15*1000;
+        return 20*1000;
     }
 
     private void scheduleRetest() { scheduleRetest(false); }
