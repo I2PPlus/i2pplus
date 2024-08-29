@@ -1274,7 +1274,7 @@ class NetDbRenderer {
         String family = info.getOption("family");
         buf.append("<table class=\"netdbentry lazy\">\n").append("<tr><th>");
         if (isUs) {
-            buf.append("<b id=our-info>").append(_t("Our info")_.append(":</b></th><th><code>").append(hash)
+            buf.append("<b id=our-info>").append(_t("Our info")).append(":</b></th><th><code>").append(hash)
                .append("</code></th><th id=netdb_ourinfo>");
         } else {
             buf.append("<b>").append(_t("Router")).append(":</b></th><th><code>").append(hash).append("</code></th><th>");
