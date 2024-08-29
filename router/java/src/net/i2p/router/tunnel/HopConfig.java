@@ -189,7 +189,7 @@ public class HopConfig {
         buf.append("\n* Layer key: ").append(_layerKey);
         buf.append("\n* IV key: ").append(_ivKey);
         **/
-        buf.append(" to: [").append(_sendTo.toBase64().substring(0,6)).append("]");
+        buf.append(_sendTo != null ? " to: [" + _sendTo.toBase64().substring(0,6) + "]" : "");
         buf.append("\n* Expires: ").append(DataHelper.formatTime(_expiration));
         int messagesProcessed = getProcessedMessagesCount();
         if (messagesProcessed > 0) {
