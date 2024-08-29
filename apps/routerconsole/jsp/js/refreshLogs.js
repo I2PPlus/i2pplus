@@ -206,18 +206,17 @@ function start() {
 
     liElements.forEach((li) => {
       const text = li.textContent;
-      const ipv4Regex = /(?<!\bAddress:)\s*(?:\/?)(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/g;
+      const ipv4Regex = /(?<!\bAddress:)\s*(?:\/?)\s*(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\b/g;
       const matches = text.match(ipv4Regex);
 
       if (matches) {
         matches.forEach((match) => {
-          var linkText = match;
-          linkText = linkText.replace(/^\/+/, ""); // Remove leading slash
+          const linkText = match;
           const linkHref = `/netdb?ip=${linkText}`;
           const link = document.createElement("a");
           link.href = linkHref;
           link.textContent = linkText;
-          li.innerHTML = li.innerHTML.replace(new RegExp(`\\b${linkText}\\b`, "g"), link.outerHTML);
+          li.innerHTML = li.innerHTML.replace(new RegExp(`\\b${linkText}\\b`, "g"), ` ${link.outerHTML}`);
         });
       }
     });
@@ -229,18 +228,17 @@ function start() {
 
     liElements.forEach((li) => {
       const text = li.textContent;
-      const ipv6Regex = /(?<!\bAddress:)\s*(?:\/?)(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b/g;
+      const ipv6Regex = /(?<!\bAddress:)\s*(?:\/?)\s*(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})\b/g;
       const matches = text.match(ipv6Regex);
 
       if (matches) {
         matches.forEach((match) => {
-          var linkText = match;
-          linkText = linkText.replace(/^\/+/, ""); // Remove leading slash
+          const linkText = match;
           const linkHref = `/netdb?ipv6=${linkText}`;
           const link = document.createElement("a");
           link.href = linkHref;
           link.textContent = linkText;
-          li.innerHTML = li.innerHTML.replace(new RegExp(`\\b${linkText}\\b`, "g"), link.outerHTML);
+          li.innerHTML = li.innerHTML.replace(new RegExp(`\\b${linkText}\\b`, "g"), ` ${link.outerHTML}`);
         });
       }
     });
