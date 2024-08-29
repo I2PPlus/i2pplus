@@ -141,17 +141,15 @@ class NetDbRenderer {
         StringBuilder buf = new StringBuilder(4*1024);
         List<Hash> sybils = sybil != null ? new ArrayList<Hash>(128) : null;
         FloodfillNetworkDatabaseFacade netdb = (FloodfillNetworkDatabaseFacade) _context.netDb();
+
         if (allClients) {
             netdb = (FloodfillNetworkDatabaseFacade) _context.netDb();
         } else {
-        if (client != null) {
+            if (client != null) {
                 Log _log = _context.logManager().getLog(NetDbRenderer.class);
-                if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Client subdb for: " + client);
-            netdb = (FloodfillNetworkDatabaseFacade) _context.clientNetDb(client);
-            }
-            else
-                netdb = (FloodfillNetworkDatabaseFacade) _context.netDb();
+                if (_log.shouldLog(Log.DEBUG)) {_log.debug("Client subdb for: " + client);}
+                netdb = (FloodfillNetworkDatabaseFacade) _context.clientNetDb(client);
+            } else {netdb = (FloodfillNetworkDatabaseFacade) _context.netDb();}
         }
 
         if (".".equals(routerPrefix)) {
@@ -193,51 +191,32 @@ class NetDbRenderer {
                     buf.append("</div>");
                 }
             } else {
-                buf.append("<div class=netdbnotfound>");
-                buf.append("Bad Base64 router hash").append(' ');
-                buf.append(DataHelper.escapeHTML(routerPrefix));
-                buf.append("</div>");
+                buf.append("<div class=netdbnotfound>").append("Bad Base64 router hash").append(' ')
+                   .append(DataHelper.escapeHTML(routerPrefix)).append("</div>");
             }
         } else {
             StringBuilder ubuf = new StringBuilder();
-            if (routerPrefix != null)
-                ubuf.append("&amp;r=").append(routerPrefix);
-            if (version != null)
-                ubuf.append("&amp;v=").append(version);
-            if (country != null)
-                ubuf.append("&amp;c=").append(country);
-            if (family != null)
-                ubuf.append("&amp;fam=").append(family);
-            if (caps != null)
-                ubuf.append("&amp;caps=").append(caps);
-            if (tr != null)
-                ubuf.append("&amp;tr=").append(tr);
-            if (type != null)
-                ubuf.append("&amp;type=").append(type);
-            if (etype != null)
-                ubuf.append("&amp;etype=").append(etype);
-            if (ip != null)
-                ubuf.append("&amp;ip=").append(ip);
-            if (port != 0)
-                ubuf.append("&amp;port=").append(port);
-            if (mtu != null)
-                ubuf.append("&amp;mtu=").append(mtu);
-            if (ipv6 != null)
-                ubuf.append("&amp;ipv6=").append(ipv6);
-            if (ssucaps != null)
-                ubuf.append("&amp;ssucaps=").append(ssucaps);
-            if (cost != 0)
-                ubuf.append("&amp;cost=").append(cost);
-            if (sybil != null)
-                ubuf.append("&amp;sybil=").append(sybil);
+            if (routerPrefix != null) {ubuf.append("&amp;r=").append(routerPrefix);}
+            if (version != null) {ubuf.append("&amp;v=").append(version);}
+            if (country != null) {ubuf.append("&amp;c=").append(country);}
+            if (family != null) {ubuf.append("&amp;fam=").append(family);}
+            if (caps != null) {ubuf.append("&amp;caps=").append(caps);}
+            if (tr != null) {ubuf.append("&amp;tr=").append(tr);}
+            if (type != null) {ubuf.append("&amp;type=").append(type);}
+            if (etype != null) {ubuf.append("&amp;etype=").append(etype);}
+            if (ip != null) {ubuf.append("&amp;ip=").append(ip);}
+            if (port != 0) {ubuf.append("&amp;port=").append(port);}
+            if (mtu != null) {ubuf.append("&amp;mtu=").append(mtu);}
+            if (ipv6 != null) {ubuf.append("&amp;ipv6=").append(ipv6);}
+            if (ssucaps != null) {ubuf.append("&amp;ssucaps=").append(ssucaps);}
+            if (cost != 0) {ubuf.append("&amp;cost=").append(cost);}
+            if (sybil != null) {ubuf.append("&amp;sybil=").append(sybil);}
             if (page > 0) {
-                buf.append("<p class=infohelp id=pagenav>" +
-                           "<a href=\"/netdb?pg=").append(page)
-                   .append("&amp;ps=").append(pageSize).append(ubuf).append("\">");
-                buf.append(_t("Previous Page"));
-                buf.append("</a>&nbsp;&nbsp;&nbsp;");
-                buf.append(_t("Page")).append(' ').append(page + 1);
-                buf.append("</p>");
+                buf.append("<p class=infohelp id=pagenav><a href=\"/netdb?pg=").append(page)
+                   .append("&amp;ps=").append(pageSize).append(ubuf).append("\">")
+                   .append(_t("Previous Page")).append("</a>&nbsp;&nbsp;&nbsp;")
+                   .append(_t("Page")).append(' ').append(page + 1)
+                   .append("</p>");
             }
             boolean notFound = true;
             Set<RouterInfo> routers = new HashSet<RouterInfo>();
@@ -507,47 +486,33 @@ class NetDbRenderer {
             if (notFound) {
                 buf.append("<div class=netdbnotfound>");
                 buf.append(_t("Router")).append(' ');
-                if (routerPrefix != null)
-                    buf.append(routerPrefix).append(' ');
-                if (version != null)
-                    buf.append(_t("Version")).append(' ').append(version).append(' ');
-                if (country != null)
-                    buf.append(_t("Country")).append(' ').append(country).append(' ');
-                if (family != null)
-                    buf.append(_t("Family")).append(' ').append(family).append(' ');
-                if (ip != null)
-                    buf.append("IP ").append(ip).append(' ');
-                if (ipv6 != null)
-                    buf.append("IP ").append(ipv6).append(' ');
+                if (routerPrefix != null) {buf.append(routerPrefix).append(' ');}
+                if (version != null) {buf.append(_t("Version")).append(' ').append(version).append(' ');}
+                if (country != null) {buf.append(_t("Country")).append(' ').append(country).append(' ');}
+                if (family != null) {buf.append(_t("Family")).append(' ').append(family).append(' ');}
+                if (ip != null) {buf.append("IP ").append(ip).append(' ');}
+                if (ipv6 != null) {buf.append("IP ").append(ipv6).append(' ');}
                 if (port != 0) {
                     buf.append(_t("Port")).append(' ').append(port);
-                    if (highPort != 0)
-                        buf.append('-').append(highPort);
+                    if (highPort != 0) {buf.append('-').append(highPort);}
                     buf.append(' ');
                 }
-                if (mtu != null)
-                    buf.append(_t("MTU")).append(' ').append(mtu).append(' ');
-                if (cost != 0)
-                    buf.append("Cost ").append(cost).append(' ');
-                if (type != null)
-                    buf.append("Type ").append(type).append(' ');
-                if (etype != null)
-                    buf.append("Type ").append(etype).append(' ');
-                if (caps != null)
-                    buf.append("Caps ").append(caps).append(' ');
-                if (ssucaps != null)
-                    buf.append("Caps ").append(ssucaps).append(' ');
-                if (tr != null)
-                    buf.append("Transport ").append(tr).append(' ');
+                if (mtu != null) {buf.append(_t("MTU")).append(' ').append(mtu).append(' ');}
+                if (cost != 0) {buf.append("Cost ").append(cost).append(' ');}
+                if (type != null) {buf.append("Type ").append(type).append(' ');}
+                if (etype != null) {buf.append("Type ").append(etype).append(' ');}
+                if (caps != null) {buf.append("Caps ").append(caps).append(' ');}
+                if (ssucaps != null) {buf.append("Caps ").append(ssucaps).append(' ');}
+                if (tr != null) {buf.append("Transport ").append(tr).append(' ');}
                 buf.append(_t("not found in network database"));
                 buf.append("</div>");
             } else if (page > 0 || morePages) {
                 buf.append("<p class=infohelp id=pagenav>");
                 if (page > 0) {
                     buf.append("<a href=\"/netdb?pg=").append(page)
-                       .append("&amp;ps=").append(pageSize).append(ubuf).append("\">");
-                    buf.append(_t("Previous Page"));
-                    buf.append("</a>&nbsp;&nbsp;&nbsp;");
+                       .append("&amp;ps=").append(pageSize).append(ubuf).append("\">")
+                       .append(_t("Previous Page"))
+                       .append("</a>&nbsp;&nbsp;&nbsp;");
                 }
                 buf.append(_t("Page")).append(' ').append(page + 1);
                 if (morePages) {
@@ -1345,6 +1310,61 @@ class NetDbRenderer {
             if (isU) {caps = caps.replace("G","").replace("class=tier", "class=\"tier isG\"").replace("\"><span class", "G\"><span class");}
             else if (isR) {caps = caps.replace("G","").replace("class=tier", "class=\"tier isG\"").replace("\"><span class", "G\"><span class");}
             else {caps = caps.replace("G","").replace("class=tier", "class=\"tier isG\"").replace("\"><span class", "G\"><span class");}
+        }
+        if (hasD) {
+            if (isR) {
+                caps = caps.replace("caps=KD", "caps=KRD")
+                           .replace("caps=LD", "caps=LRD")
+                           .replace("caps=MD", "caps=MRD")
+                           .replace("caps=ND", "caps=NRD")
+                           .replace("caps=OD", "caps=ORD")
+                           .replace("caps=PD", "caps=PRD")
+                           .replace("caps=XD", "caps=XRD");
+            } else if (isU) {
+                caps = caps.replace("caps=KD", "caps=KUD")
+                           .replace("caps=LD", "caps=LUD")
+                           .replace("caps=MD", "caps=MUD")
+                           .replace("caps=ND", "caps=NUD")
+                           .replace("caps=OD", "caps=OUD")
+                           .replace("caps=PD", "caps=PUD")
+                           .replace("caps=XD", "caps=XUD");
+            }
+        } else if (hasE) {
+            if (isR) {
+                caps = caps.replace("caps=KE", "caps=KRE")
+                           .replace("caps=LE", "caps=LRE")
+                           .replace("caps=ME", "caps=MRE")
+                           .replace("caps=NE", "caps=NRE")
+                           .replace("caps=OE", "caps=ORE")
+                           .replace("caps=PE", "caps=PRE")
+                           .replace("caps=XE", "caps=XRE");
+            } else if (isU) {
+                caps = caps.replace("caps=KE", "caps=KUE")
+                           .replace("caps=LE", "caps=LUE")
+                           .replace("caps=ME", "caps=MUE")
+                           .replace("caps=NE", "caps=NUE")
+                           .replace("caps=OE", "caps=OUE")
+                           .replace("caps=PE", "caps=PUE")
+                           .replace("caps=XE", "caps=XUE");
+            }
+        } else if (hasG) {
+            if (isR) {
+                caps = caps.replace("KG", "KRG")
+                           .replace("LG", "LRG")
+                           .replace("MG", "MRG")
+                           .replace("NG", "NRG")
+                           .replace("OG", "ORG")
+                           .replace("PG", "PRG")
+                           .replace("XG", "XRG");
+            } else if (isU) {
+                caps = caps.replace("KG", "KUG")
+                           .replace("LG", "LUG")
+                           .replace("MG", "MUG")
+                           .replace("NG", "NUG")
+                           .replace("OG", "OUG")
+                           .replace("PG", "PUG")
+                           .replace("XG", "XUG");
+            }
         }
         caps = caps.replace("\"><span", tooltip);
         buf.append(caps);
