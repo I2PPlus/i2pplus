@@ -1000,24 +1000,26 @@ class NetDbRenderer {
         int toSkip = pageSize * page;
         boolean nextpg = routers.size() > toSkip + pageSize;
         StringBuilder buf = new StringBuilder(8192);
-        if (showStats && full && page == 0)
-            buf.append("<p class=infohelp id=debugmode>Advanced mode - includes all statistics published by floodfills. <a href=\"/netdb?f=2\">[Compact mode]</a></p>\n");
-        else if (shortStats && page == 0)
-            buf.append("<p class=infohelp>Compact mode - does not include statistics published by floodfills. <a href=\"/netdb?f=1\">[Advanced mode]</a></p>\n");
+        if (showStats && full && page == 0) {
+            buf.append("<p class=infohelp id=debugmode>")
+               .append(_t("Advanced mode - includes all statistics published by floodfills."))
+               .append("<a href=\"/netdb?f=2\">[Compact mode]</a></p>\n");
+        } else if (shortStats && page == 0) {
+            buf.append("<p class=infohelp>")
+               .append(_t("Compact mode - does not include statistics published by floodfills."))
+               .append("<a href=\"/netdb?f=1\">[Advanced mode]</a></p>\n");
+        }
         if (showStats && (page > 0 || nextpg)) {
             buf.append("<p class=infohelp id=pagenav>");
             if (page > 0) {
                 buf.append("<a href=\"/netdb?f=").append(mode).append("&amp;pg=").append(page)
-                   .append("&amp;ps=").append(pageSize).append("\">");
-                buf.append(_t("Previous Page"));
-                buf.append("</a>&nbsp;&nbsp;&nbsp;");
+                   .append("&amp;ps=").append(pageSize).append("\">").append(_t("Previous Page"))
+                   .append("</a>&nbsp;&nbsp;&nbsp;");
             }
             buf.append(_t("Page")).append(' ').append(page + 1);
             if (nextpg) {
                 buf.append("&nbsp;&nbsp;&nbsp;<a href=\"/netdb?f=").append(mode).append("&amp;pg=").append(page + 2)
-                   .append("&amp;ps=").append(pageSize).append("\">");
-                buf.append(_t("Next Page"));
-                buf.append("</a>");
+                   .append("&amp;ps=").append(pageSize).append("\">").append(_t("Next Page")).append("</a>");
             }
             buf.append("</p>");
         }
@@ -1070,9 +1072,10 @@ class NetDbRenderer {
             }
             buf.append(_t("Page")).append(' ').append(page + 1);
             if (morePages) {
-                buf.append("&nbsp;&nbsp;&nbsp;<a href=\"/netdb?f=").append(mode).append("&amp;pg=").append(page + 2).append("&amp;ps=").append(pageSize).append("\">");
-                buf.append(_t("Next Page"));
-                buf.append("</a>");
+                buf.append("&nbsp;&nbsp;&nbsp;<a href=\"/netdb?f=").append(mode).append("&amp;pg=")
+                   .append(page + 2).append("&amp;ps=").append(pageSize).append("\">")
+                   .append(_t("Next Page"))
+                   .append("</a>");
             }
             buf.append("</p>");
         }
@@ -1087,7 +1090,8 @@ class NetDbRenderer {
             if (!versionList.isEmpty()) {
                 Collections.sort(versionList, Collections.reverseOrder(new VersionComparator()));
                 buf.append("<table id=netdbversions>\n");
-                buf.append("<thead>\n<tr><th>" + _t("Version") + "</th><th>" + _t("Count") + "</th></tr>\n</thead>\n");
+                buf.append("<thead>\n<tr><th>").append(_t("Version")).append("</th><th>")
+                   .append(_t("Count")).append("</th></tr>\n</thead>\n");
                 for (String routerVersion : versionList) {
                     int num = versions.count(routerVersion);
                     String ver = DataHelper.stripHTML(routerVersion);
@@ -1101,8 +1105,9 @@ class NetDbRenderer {
             buf.setLength(0);
 
             String showAll = _t("Show all routers with this capability in the NetDb");
-            buf.append("<table id=netdbtiers>\n");
-            buf.append("<thead>\n<tr><th>" + _t("Bandwidth Tier") + "</th><th>" + _t("Count") + "</th></tr>\n</thead>\n");
+            buf.append("<table id=netdbtiers>\n")
+               .append("<thead>\n<tr><th>").append(_t("Bandwidth Tier")).append("</th><th>")
+               .append(_t("Count")).append("</th></tr>\n</thead>\n");
             if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW12).size() > 0) {
                 buf.append("<tr><td><a href=\"/netdb?caps=K\" title=\"").append(showAll).append("\"><b>K</b></a>Under 12&#8239;KB/s</td><td>")
                    .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW12).size()).append("</td></tr>\n");
@@ -1120,12 +1125,12 @@ class NetDbRenderer {
                    .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW128).size()).append("</td></tr>\n");
             }
             buf.append("<tr><td><a href=\"/netdb?caps=O\" title=\"").append(showAll).append("\"><b>O</b></a>131 - 261&#8239;KB/s</td><td>")
-               .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW256).size()).append("</td></tr>\n");
-            buf.append("<tr><td><a href=\"/netdb?caps=P\" title=\"").append(showAll).append("\"><b>P</b></a>262 - 2047&#8239;KB/s</td><td>")
-               .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW512).size()).append("</td></tr>\n");
-            buf.append("<tr><td><a href=\"/netdb?caps=X\" title=\"").append(showAll).append("\"><b>X</b></a>Over 2048&#8239;KB/s</td><td>")
-               .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW_UNLIMITED).size()).append("</td></tr>\n");
-            buf.append("</table>\n");
+               .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW256).size()).append("</td></tr>\n")
+               .append("<tr><td><a href=\"/netdb?caps=P\" title=\"").append(showAll).append("\"><b>P</b></a>262 - 2047&#8239;KB/s</td><td>")
+               .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW512).size()).append("</td></tr>\n")
+               .append("<tr><td><a href=\"/netdb?caps=X\" title=\"").append(showAll).append("\"><b>X</b></a>Over 2048&#8239;KB/s</td><td>")
+               .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW_UNLIMITED).size()).append("</td></tr>\n")
+               .append("</table>\n");
             out.write(buf.toString());
             buf.setLength(0);
 
@@ -1134,7 +1139,7 @@ class NetDbRenderer {
                 _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_NO_TUNNELS).size() > 0) {
 
                 buf.append("<table id=netdbcongestion>\n");
-                buf.append("<thead>\n<tr><th>" + _t("Congestion Cap") + "</th><th>" + _t("Count") + "</th></tr>\n</thead>\n");
+                buf.append("<thead>\n<tr><th>").append(_t("Congestion Cap")).append("</th><th>").append(_t("Count")).append("</th></tr>\n</thead>\n");
                 if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_CONGESTION_MODERATE).size() > 0) {
                     buf.append("<tr><td><a class=isD href=\"/netdb?caps=D\" title=\"").append(showAll).append("\"><b>D</b></a>")
                        .append(_t("Medium congestion / low performance")).append("</td><td>")
@@ -1157,22 +1162,19 @@ class NetDbRenderer {
 
             // transports table
             buf.append("<table id=netdbtransports>\n");
-            buf.append("<thead>\n<tr><th>" + _t("Transports") + "</th><th>" + _t("Count") + "</th></tr>\n</thead>\n");
+            buf.append("<thead>\n<tr><th>").append(_t("Transports")).append("</th><th>").append(_t("Count")).append("</th></tr>\n</thead>\n");
             for (int i = 0; i < TNAMES.length; i++) {
                 int num = transportCount[i];
                 if (num > 0) {
-                    buf.append("<tr><td>").append(_t(TNAMES[i]));
-                    buf.append("</td><td>").append(num).append("</td></tr>\n");
+                    buf.append("<tr><td>").append(_t(TNAMES[i])).append("</td><td>").append(num).append("</td></tr>\n");
                 }
             }
-            buf.append("</table>\n");
-            buf.append("</td>");
-            buf.append("<td style=vertical-align:top>\n");
+            buf.append("</table>\n").append("</td>").append("<td style=vertical-align:top>\n");
 
             // country table
             List<String> countryList = new ArrayList<String>(countries.objects());
             buf.append("<table id=netdbcountrylist data-sortable>\n");
-            buf.append("<thead>\n<tr><th>" + _t("Country") + "</th><th data-sort-default>" + _t("Count") + "</th></tr>\n</thead>\n");
+            buf.append("<thead>\n<tr><th>").append(_t("Country")).append("</th><th data-sort-default>").append(_t("Count")).append("</th></tr>\n</thead>\n");
             if (!countryList.isEmpty()) {
                 Collections.sort(countryList, new CountryComparator());
                 buf.append("<tbody id=cclist>");
@@ -1218,8 +1220,7 @@ class NetDbRenderer {
          }
 
          public int compare(String l, String r) {
-             return coll.compare(getTranslatedCountry(l),
-                                 getTranslatedCountry(r));
+             return coll.compare(getTranslatedCountry(l), getTranslatedCountry(r));
         }
     }
 
@@ -1241,10 +1242,8 @@ class NetDbRenderer {
 
          public int compare(String l, String r) {
              int rv = counts.count(r) - counts.count(l);
-             if (rv != 0)
-                 return rv;
-             return coll.compare(getTranslatedCountry(l),
-                                 getTranslatedCountry(r));
+             if (rv != 0) {return rv;}
+             return coll.compare(getTranslatedCountry(l), getTranslatedCountry(r));
         }
     }
 
@@ -1257,14 +1256,11 @@ class NetDbRenderer {
 
          public int compare(RouterAddress l, RouterAddress r) {
              int rv = l.getTransportStyle().compareTo(r.getTransportStyle());
-             if (rv != 0)
-                 return rv;
+             if (rv != 0) {return rv;}
              String lh = l.getHost();
              String rh = r.getHost();
-             if (lh == null)
-                 return (rh == null) ? 0 : -1;
-             if (rh == null)
-                 return 1;
+             if (lh == null) {return (rh == null) ? 0 : -1;}
+             if (rh == null) {return 1;}
              return lh.compareTo(rh);
         }
     }
@@ -1278,10 +1274,10 @@ class NetDbRenderer {
         String family = info.getOption("family");
         buf.append("<table class=\"netdbentry lazy\">\n").append("<tr><th>");
         if (isUs) {
-            buf.append("<b id=our-info>" + _t("Our info") + ":</b></th><th><code>").append(hash)
+            buf.append("<b id=our-info>").append(_t("Our info")_.append(":</b></th><th><code>").append(hash)
                .append("</code></th><th id=netdb_ourinfo>");
         } else {
-            buf.append("<b>" + _t("Router") + ":</b></th><th><code>").append(hash).append("</code></th><th>");
+            buf.append("<b>").append(_t("Router")).append(":</b></th><th><code>").append(hash).append("</code></th><th>");
         }
         Hash h = info.getHash();
         if (_context.banlist().isBanlisted(h)) {
@@ -1303,12 +1299,12 @@ class NetDbRenderer {
                 isI2PD = true;
             }
         }
-        if (isJavaI2P) {buf.append("<span class=javai2p title=\"" + _t("Java I2P variant") + "\"></span> ");}
-        else if (isI2PD) {buf.append("<span class=i2pd title=\"" + _t("I2Pd variant") + "\"></span> ");}
+        if (isJavaI2P) {buf.append("<span class=javai2p title=\"").append(_t("Java I2P variant")).append("\"></span> ");}
+        else if (isI2PD) {buf.append("<span class=i2pd title=\"").append(_t("I2Pd variant")).append("\"></span> ");}
         byte[] padding = info.getIdentity().getPadding();
         if (padding != null && padding.length >= 64) {
             if (DataHelper.eq(padding, 0, padding, 32, 32)) {
-                buf.append("<span class=compressible title=\"" + _t("RouterInfo is compressible") + "\"></span> ");
+                buf.append("<span class=compressible title=\"").append(_t("RouterInfo is compressible")).append("\"></span> ");
             }
         }
         String tooltip = "\" title=\"" + _t("Show all routers with this capability in the NetDb") + "\"><span";
@@ -1338,16 +1334,16 @@ class NetDbRenderer {
             .replace("P", "<a href=\"/netdb?caps=P\"><span class=tier>P</span></a>")
             .replace("X", "<a href=\"/netdb?caps=X\"><span class=tier>X</span></a>");
         if (hasD) {
-            if (isU) {caps = caps.replace("D","").replace("class=tier", "class=\"tier isD\"").replace("\"><span class", "UD\"><span class");}
-            else if (isR) {caps = caps.replace("D","").replace("class=tier", "class=\"tier isD\"").replace("\"><span class", "RD\"><span class");}
+            if (isU) {caps = caps.replace("D","").replace("class=tier", "class=\"tier isD\"").replace("\"><span class", "D\"><span class");}
+            else if (isR) {caps = caps.replace("D","").replace("class=tier", "class=\"tier isD\"").replace("\"><span class", "D\"><span class");}
             else {caps = caps.replace("D","").replace("class=tier", "class=\"tier isD\"").replace("\"><span class", "D\"><span class");}
         } else if (hasE) {
-            if (isU) {caps = caps.replace("E","").replace("class=tier", "class=\"tier isE\"").replace("\"><span class", "UE\"><span class");}
-            else if (isR) {caps = caps.replace("E","").replace("class=tier", "class=\"tier isE\"").replace("\"><span class", "RE\"><span class");}
+            if (isU) {caps = caps.replace("E","").replace("class=tier", "class=\"tier isE\"").replace("\"><span class", "E\"><span class");}
+            else if (isR) {caps = caps.replace("E","").replace("class=tier", "class=\"tier isE\"").replace("\"><span class", "E\"><span class");}
             else {caps = caps.replace("E","").replace("class=tier", "class=\"tier isE\"").replace("\"><span class", "E\"><span class");}
         } else if (hasG) {
-            if (isU) {caps = caps.replace("G","").replace("class=tier", "class=\"tier isG\"").replace("\"><span class", "UG\"><span class");}
-            else if (isR) {caps = caps.replace("G","").replace("class=tier", "class=\"tier isG\"").replace("\"><span class", "RG\"><span class");}
+            if (isU) {caps = caps.replace("G","").replace("class=tier", "class=\"tier isG\"").replace("\"><span class", "G\"><span class");}
+            else if (isR) {caps = caps.replace("G","").replace("class=tier", "class=\"tier isG\"").replace("\"><span class", "G\"><span class");}
             else {caps = caps.replace("G","").replace("class=tier", "class=\"tier isG\"").replace("\"><span class", "G\"><span class");}
         }
         caps = caps.replace("\"><span", tooltip);
@@ -1681,9 +1677,10 @@ class NetDbRenderer {
     private static final int NTCP = 4;
     private static final int IPV6 = 8;
     private static final String[] TNAMES = { _x("Hidden or starting up"), _x("SSU"), _x("SSU with introducers"), "",
-                                  _x("NTCP"), _x("NTCP and SSU"), _x("NTCP and SSU with introducers"), "",
-                                  "", _x("IPv6 SSU"), _x("IPv6 Only SSU, introducers"), _x("IPv6 SSU, introducers"),
-                                  _x("IPv6 NTCP"), _x("IPv6 NTCP, SSU"), _x("IPv6 Only NTCP, SSU, introducers"), _x("IPv6 NTCP, SSU, introducers") };
+                                             _x("NTCP"), _x("NTCP and SSU"), _x("NTCP and SSU with introducers"), "",
+                                             "", _x("IPv6 SSU"), _x("IPv6 Only SSU, introducers"), _x("IPv6 SSU, introducers"),
+                                             _x("IPv6 NTCP"), _x("IPv6 NTCP, SSU"), _x("IPv6 Only NTCP, SSU, introducers"),
+                                             _x("IPv6 NTCP, SSU, introducers") };
     /**
      *  what transport types
      */
@@ -1691,30 +1688,22 @@ class NetDbRenderer {
         int rv = 0;
         for (RouterAddress addr : info.getAddresses()) {
             String style = addr.getTransportStyle();
-            if (style.equals("NTCP2") || style.equals("NTCP")) {
-                rv |= NTCP;
-            } else if (style.equals("SSU") || style.equals("SSU2")) {
-                if (addr.getOption("itag0") != null)
-                    rv |= SSUI;
-                else
-                    rv |= SSU;
+            if (style.equals("NTCP2") || style.equals("NTCP")) {rv |= NTCP;}
+            else if (style.equals("SSU") || style.equals("SSU2")) {
+                if (addr.getOption("itag0") != null) {rv |= SSUI;}
+                else {rv |= SSU;}
             }
             String host = addr.getHost();
-            if (host != null && host.contains(":")) {
-                rv |= IPV6;
-            } else {
+            if (host != null && host.contains(":")) {rv |= IPV6;}
+            else {
                 String caps = addr.getOption("caps");
-                if (caps != null && caps.contains("6"))
-                    rv |= IPV6;
+                if (caps != null && caps.contains("6")) {rv |= IPV6;}
             }
         }
         // map invalid values with "" in TNAMES
-        if (rv == 3)
-            rv = 2;
-        else if (rv == 7)
-            rv = 6;
-        else if (rv == 8)
-            rv = 0;
+        if (rv == 3) {rv = 2;}
+        else if (rv == 7) {rv = 6;}
+        else if (rv == 8) {rv = 0;}
         return rv;
     }
 
@@ -1731,24 +1720,16 @@ class NetDbRenderer {
         if (ip.contains("::")) {
             // convert to expanded
             byte[] bip = Addresses.getIPOnly(ip);
-            if (bip != null)
-                return Addresses.toString(bip);
-        } else if (ip.contains(":0:")) {
-            // convert to canonical
-            return Addresses.toCanonicalString(ip);
-        }
+            if (bip != null) {return Addresses.toString(bip);}
+        } else if (ip.contains(":0:")) {return Addresses.toCanonicalString(ip);} // convert to canonical
         return null;
     }
 
     /** translate a string */
-    private String _t(String s) {
-        return Messages.getString(s, _context);
-    }
+    private String _t(String s) {return Messages.getString(s, _context);}
 
     /** tag only */
-    private static final String _x(String s) {
-        return s;
-    }
+    private static final String _x(String s) {return s;}
 
     /**
      *  translate a string with a parameter
@@ -1762,8 +1743,6 @@ class NetDbRenderer {
      *    Do not double the single quotes in the parameter.
      *    Use autoboxing to call with ints, longs, floats, etc.
      */
-    private String _t(String s, Object o) {
-        return Messages.getString(s, o, _context);
-    }
+    private String _t(String s, Object o) {return Messages.getString(s, o, _context);}
 
 }

@@ -23,14 +23,16 @@ class FloodOnlyLookupMatchJob extends JobImpl implements ReplyJob {
 
     public void runJob() {
         if (_success) {
-            if (_log.shouldInfo())
-                _log.info("[Job " + _search.getJobId() + "] Search for [" + _search.getKey().toBase64().substring(0,6) + "] found locally");
+            if (_log.shouldInfo()) {
+                _log.info("Search for key [" + _search.getKey().toBase32().substring(0,8) + "] found locally");
+            }
             _search.success();
         } else {
             // In practice, we always have zero remaining when this is called,
             // because the selector only returns true when there is zero remaining
-            if (_log.shouldLog(Log.INFO))
-                _log.info("[Job " + _search.getJobId() + "] Search failed for [" + _search.getKey().toBase64().substring(0,6) + "]");
+            if (_log.shouldLog(Log.INFO)) {
+                _log.info("Search failed for key [" + _search.getKey().toBase32().substring(0,8) + "]");
+            }
             _search.failed();
         }
     }
@@ -50,13 +52,12 @@ class FloodOnlyLookupMatchJob extends JobImpl implements ReplyJob {
             return;
 
         DatabaseStoreMessage dsm = (DatabaseStoreMessage)message;
-        if (_log.shouldDebug())
-            _log.debug("[Job " + _search.getJobId() + "] Received a DbStoreMsg for [" +
-                       dsm.getKey().toBase64().substring(0,6) + "]");
+        if (_log.shouldDebug()) {
+            _log.debug("Received a DbStoreMsg for key [" + dsm.getKey().toBase32().substring(0,8) + "]");
+        }
         // This store will handled by HFDSMJ.
         // Just note success here.
-        if (dsm.getKey().equals(_search.getKey()))
-            _success = true;
+        if (dsm.getKey().equals(_search.getKey())) {_success = true;}
         DatabaseEntry entry = dsm.getEntry();
         int type = entry.getType();
         if (DatabaseEntry.isLeaseSet(type)) {
