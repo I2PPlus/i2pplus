@@ -1421,6 +1421,7 @@ class NetDbRenderer {
             } else if (uptime > 30*1000 && (isUnreachable || address == null)) {
                 byte[] ip = TransportImpl.getIP(info.getHash());
                 if (ip != null) {
+                    _context.commSystem().queueLookup(ip);
                     String directAddress = Addresses.toString(ip);
                     if (enableReverseLookups()) {
                         String rdns = _context.commSystem().getCanonicalHostName(directAddress);
@@ -1482,8 +1483,10 @@ class NetDbRenderer {
            .append("<ul>\n");
 
         Collection<RouterAddress> addrs = info.getAddresses();
+        byte[] ip = TransportImpl.getIP(info.getHash());
         if (addrs.isEmpty()) {
             buf.append(_t("n/a"));
+            if (ip != null) {_context.commSystem().queueLookup(ip);}
         } else {
             if (addrs.size() > 1) {
                 // addrs is unmodifiable
@@ -1492,6 +1495,7 @@ class NetDbRenderer {
                 addrs = laddrs;
             }
             for (RouterAddress addr : addrs) {
+                if (ip != null) {_context.commSystem().queueLookup(ip);}
                 String style = addr.getTransportStyle();
                 int cost = addr.getCost();
                 buf.append("<li>");
