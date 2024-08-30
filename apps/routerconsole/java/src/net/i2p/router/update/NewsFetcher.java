@@ -216,30 +216,25 @@ class NewsFetcher extends UpdateRunner {
      *  @since 0.9.21
      */
     private URI addLang(URI uri) {
-        if (!_context.getBooleanPropertyDefaultTrue(NewsHelper.PROP_TRANSLATE))
+        if (!_context.getBooleanPropertyDefaultTrue(NewsHelper.PROP_TRANSLATE)) {
             return uri;
+        }
         String lang = Translate.getLanguage(_context);
-        if (lang.equals("en"))
-            return uri;
+        if (lang.equals("en")) {return uri;}
         String query = uri.getRawQuery();
-        if (query != null && (query.startsWith("lang=") || query.contains("&lang=")))
+        if (query != null && (query.startsWith("lang=") || query.contains("&lang="))) {
             return uri;
+        }
         String url = uri.toString();
         StringBuilder buf = new StringBuilder();
         buf.append(url);
-        if (query != null)
-            buf.append("&lang=");
-        else
-            buf.append("?lang=");
+        if (query != null) {buf.append("&lang=");}
+        else {buf.append("?lang=");}
         buf.append(lang);
         String co = Translate.getCountry(_context);
-        if (co.length() > 0)
-            buf.append('_').append(co);
-        try {
-            return new URI(buf.toString());
-        } catch (URISyntaxException use) {
-            return uri;
-        }
+        if (co.length() > 0) {buf.append('_').append(co);}
+        try {return new URI(buf.toString());}
+        catch (URISyntaxException use) {return uri;}
     }
 
     /**
@@ -247,8 +242,7 @@ class NewsFetcher extends UpdateRunner {
      */
     private boolean langChanged() {
         String old = _context.getProperty(NewsHelper.PROP_LAST_LANG);
-        if (old == null)
-            return false;
+        if (old == null) {return false;}
         String lang = Translate.getLanguage(_context);
         return !lang.equals(old);
     }
@@ -273,9 +267,9 @@ class NewsFetcher extends UpdateRunner {
     private static final String PROP_ENABLE_TORRENT_UPDATES = "router.enableTorrentUpdates";
     private static final boolean DEFAULT_ENABLE_TORRENT_UPDATES = false;
 
-    // unused
-    //private static final String I2P_SUD_KEY = "sudi2p";
-    //private static final String I2P_SU2_KEY = "su2i2p";
+    /*  @since 0.9.64+ */
+    private static final String PROP_ENABLE_VANILLA_UPDATES = "router.enableVanillaUpdates";
+    private static final boolean DEFAULT_ENABLE_VANILLA_UPDATES = false;
 
     /**
      *  @since 0.9.52
@@ -348,12 +342,14 @@ class NewsFetcher extends UpdateRunner {
                                 }
                             }
                             _log.logAlways(Log.CRIT, "Router is out of date, current version is: " + ver + " -> Update advised!");
-                            // TODO if minversion > our version, continue
-                            // and look for a second entry with clearnet URLs
-                            // TODO clearnet URLs, notify with HTTP_CLEARNET and/or HTTPS_CLEARNET
+
+                            /** TODO: - if minversion > our version, continue and look for a second entry with clearnet URLs
+                             *        - clearnet URLs, notify with HTTP_CLEARNET and/or HTTPS_CLEARNET
+                             */
                             Map<UpdateMethod, List<URI>> sourceMap = new HashMap<UpdateMethod, List<URI>>(4);
                             // Must do su3 first
-                            //if (ConfigUpdateHandler.USE_SU3_UPDATE) {
+                            boolean enableVanillaUpdates = _context.getProperty(PROP_ENABLE_VANILLA_UPDATES, DEFAULT_ENABLE_VANILLA_UPDATES);
+                            if (enableVanillaUpdates) {
                                 addMethod(HTTP, args.get(I2P_SU3_KEY), sourceMap);
                                 boolean enableTorrentUpdates = _context.getProperty(PROP_ENABLE_TORRENT_UPDATES, DEFAULT_ENABLE_TORRENT_UPDATES);
                                 if (enableTorrentUpdates) {
@@ -362,43 +358,29 @@ class NewsFetcher extends UpdateRunner {
                                 addMethod(HTTP_CLEARNET, args.get(CLEARNET_HTTP_SU3_KEY), sourceMap);
                                 addMethod(HTTPS_CLEARNET, args.get(CLEARNET_HTTPS_SU3_KEY), sourceMap);
                                 // notify about all sources at once
-                                _mgr.notifyVersionAvailable(this, _currentURI, ROUTER_SIGNED_SU3,
-                                                            "", sourceMap, ver, "");
-                            //  sourceMap.clear();
-                            //}
-                            // now do sud/su2 - DISABLED
-                            //sourceMap.put(HTTP, _mgr.getUpdateURLs(ROUTER_SIGNED, "", HTTP));
-                            //String key = FileUtil.isPack200Supported() ? SU2_KEY : SUD_KEY;
-                            //addMethod(TORRENT, args.get(key), sourceMap);
-                            // notify about all sources at once
-                            //_mgr.notifyVersionAvailable(this, _currentURI, ROUTER_SIGNED,
-                            //                            "", sourceMap, ver, "");
+                                _mgr.notifyVersionAvailable(this, _currentURI, ROUTER_SIGNED_SU3, "", sourceMap, ver, "");
+                            }
                         } else {
-                            if (_log.shouldDebug())
-                                _log.debug("Router is up to date (" + ver + ")");
+                            if (_log.shouldDebug()) {_log.debug("Router is up to date (" + ver + ")");}
                         }
                         return;
                     } else {
-                        if (_log.shouldWarn())
-                            _log.warn("No version in " + buf.toString());
+                        if (_log.shouldWarn()) {_log.warn("No version in " + buf.toString());}
                     }
                 } else {
-                    if (_log.shouldDebug())
-                        _log.debug("No match in " + buf.toString());
+                    if (_log.shouldDebug()) {_log.debug("No match in " + buf.toString());}
                 }
                 buf.setLength(0);
             }
         } catch (IOException ioe) {
-            if (_log.shouldWarn())
-                _log.warn("Error checking the news for an update", ioe);
+            if (_log.shouldWarn()) {_log.warn("Error checking the news for an update", ioe);}
             _failMsg = "Error checking the news for an update: " + ioe;
             return;
         } finally {
             if (in != null) try { in.close(); } catch (IOException ioe) {}
         }
 
-        if (_log.shouldWarn())
-            _log.warn("No version found in news.xml file");
+        if (_log.shouldWarn()) {_log.warn("No version found in news.xml file");}
     }
 
     /**
@@ -520,35 +502,26 @@ class NewsFetcher extends UpdateRunner {
 
         if (_tempFile.exists() && _tempFile.length() > 0) {
             File from;
-            // sud/su2 disabled
-            //if (url.endsWith(".su3") || url.contains(".su3?")) {
-                try {
-                    from = processSU3();
-                } catch (IOException ioe) {
-                    _log.error("Failed to extract the news file", ioe);
-                    _tempFile.delete();
-                    return;
-                }
-            //} else {
-            //    from = _tempFile;
-            //}
+            try {from = processSU3();}
+            catch (IOException ioe) {
+                _log.error("Failed to extract the news file", ioe);
+                _tempFile.delete();
+                return;
+            }
             boolean copied = FileUtil.rename(from, _newsFile);
             _tempFile.delete();
             if (copied) {
                 // this is either the start time or the Last-Modified header
                 String newVer = Long.toString(_newLastModified);
                 // fixme su3 version ? but it will be older than file version, which is older than now.
-                _mgr.notifyVersionAvailable(this, _currentURI, NEWS, "", HTTP,
-                                            null, newVer, "");
+                _mgr.notifyVersionAvailable(this, _currentURI, NEWS, "", HTTP, null, newVer, "");
                 _isNewer = true;
                 checkForUpdates();
             } else {
-                if (_log.shouldError())
-                    _log.error("Failed to copy the news file!");
+                if (_log.shouldError()) {_log.error("Failed to copy the news file!");}
             }
         } else {
-            if (_log.shouldWarn())
-                _log.warn("Transfer complete, but no file? - probably 304 Not Modified");
+            if (_log.shouldWarn()) {_log.warn("Transfer complete, but no file? - probably 304 Not Modified");}
         }
         _success = true;
     }
@@ -563,8 +536,7 @@ class NewsFetcher extends UpdateRunner {
         if (_showStatus) {
             String msg = "Unable to connect to news server " + url + ": " + DataHelper.stripHTML(cause.toString());
             updateStatus("<b class=fail>" + msg + "</b>");
-            if (_log.shouldWarn())
-                _log.warn(msg);
+            if (_log.shouldWarn()) {_log.warn(msg);}
         }
         // update manager will also log
         _mgr.notifyAttemptFailed(this, url, null);
@@ -579,8 +551,7 @@ class NewsFetcher extends UpdateRunner {
         if (_showStatus) {
             String msg = "Failed downloading news from " + url;
             updateStatus("<b class=fail>" + msg + "</b>");
-            if (_log.shouldWarn())
-                _log.warn(msg);
+            if (_log.shouldWarn()) {_log.warn(msg);}
         }
         // update manager will also log
         _mgr.notifyAttemptFailed(this, url, null);
@@ -602,20 +573,19 @@ class NewsFetcher extends UpdateRunner {
         try {
             su3.verifyAndMigrate(to1);
             int type = su3.getFileType();
-            if (su3.getContentType() != SU3File.CONTENT_NEWS)
+            if (su3.getContentType() != SU3File.CONTENT_NEWS) {
                 throw new IOException("bad content type: " + su3.getContentType());
-            if (type == SU3File.TYPE_HTML)
-                return to1;
-            if (type != SU3File.TYPE_XML && type != SU3File.TYPE_XML_GZ)
+            }
+            if (type == SU3File.TYPE_HTML) {return to1;}
+            if (type != SU3File.TYPE_XML && type != SU3File.TYPE_XML_GZ) {
                 throw new IOException("bad file type: " + type);
+            }
             File xml;
             if (type == SU3File.TYPE_XML_GZ) {
                 gunzip(to1, to2);
                 xml = to2;
                 to1.delete();
-            } else {
-                xml = to1;
-            }
+            } else {xml = to1;}
             NewsXMLParser parser = new NewsXMLParser(_context);
             Node root = parser.parse(xml);
             xml.delete();
@@ -633,17 +603,13 @@ class NewsFetcher extends UpdateRunner {
             }
             // Persist any new CRL entries
             List<CRLEntry> crlEntries = parser.getCRLEntries();
-            if (crlEntries != null)
-                persistCRLEntries(crlEntries);
-            else
-                _log.info("No CRL entries found in news feed");
+            if (crlEntries != null) {persistCRLEntries(crlEntries);}
+            else {_log.info("No CRL entries found in news feed");}
 
             // Block any new blocklist entries
             BlocklistEntries ble = parser.getBlocklistEntries();
-            if (ble != null && ble.isVerified())
-                processBlocklistEntries(ble);
-            else
-                _log.info("No blocklist entries found in news feed");
+            if (ble != null && ble.isVerified()) {processBlocklistEntries(ble);}
+            else {_log.info("No blocklist entries found in news feed");}
 
             // store entries and metadata in old news.xml format
             String sudVersion = su3.getVersionString();
@@ -651,9 +617,7 @@ class NewsFetcher extends UpdateRunner {
             File to3 = new File(_context.getTempDir(), "tmp3-" + _context.random().nextInt() + ".xml");
             outputOldNewsXML(data, entries, sudVersion, signingKeyName, to3);
             return to3;
-        } finally {
-            to2.delete();
-        }
+        } finally {to2.delete();}
     }
 
     /**
@@ -766,10 +730,7 @@ class NewsFetcher extends UpdateRunner {
                 if (!bl.isBlocklisted(ip))
                     bl.add(ip);
             }
-            if (++banned >= BlocklistEntries.MAX_ENTRIES) {
-                // prevent somebody from destroying the whole network
-                break;
-            }
+            if (++banned >= BlocklistEntries.MAX_ENTRIES) {break;} // prevent somebody from destroying the whole network
         }
         for (String s : ble.removes) {
             if (s.length() == 44) {
@@ -800,7 +761,7 @@ class NewsFetcher extends UpdateRunner {
             out.newLine();
             banned = 0;
             for (String s : ble.entries) {
-                s = s.replace(':', ';');  // IPv6
+                s = s.replace(':', ';'); // IPv6
                 out.write(reason);
                 out.write(':');
                 out.write(s);
@@ -812,9 +773,8 @@ class NewsFetcher extends UpdateRunner {
             _log.error("Error writing blocklist", ioe);
             fail = true;
         } finally {
-            if (out != null) try {
-                out.close();
-            } catch (IOException ioe) {}
+            if (out != null) try {out.close();}
+            catch (IOException ioe) {}
         }
         if (!fail) {
             f.setLastModified(ble.updated);
@@ -822,8 +782,9 @@ class NewsFetcher extends UpdateRunner {
             _context.router().saveConfig(PROP_BLOCKLIST_TIME, upd);
             _mgr.notifyInstalled(BLOCKLIST, Blocklist.ID_FEED, upd);
         }
-        if (_log.shouldWarn())
+        if (_log.shouldWarn()) {
             _log.warn("Processed " + ble.entries.size() + " blocks and " + ble.removes.size() + " unblocks from news feed");
+        }
     }
 
     /**
@@ -881,8 +842,7 @@ class NewsFetcher extends UpdateRunner {
             if (entries == null)
                 return;
             for (NewsEntry e : entries) {
-                if (e.title == null || e.content == null)
-                    continue;
+                if (e.title == null || e.content == null) {continue;}
                 out.write("<!-- Entry Date: " + e.updated + " -->\n");
                 out.write("<h3>");
                 // Warning - update NewsHandler.parseNews() if you change the format
@@ -908,16 +868,14 @@ class NewsFetcher extends UpdateRunner {
      *  @since 0.9.52
      */
     private static void writeList(Writer out, String key, List<String> values) throws IOException {
-        if (values == null || values.isEmpty())
-            return;
+        if (values == null || values.isEmpty()) {return;}
         out.write(' ');
         out.write(key);
         out.write("=\"");
         int sz = values.size();
         for (int i = 0; i < sz; i++) {
             out.write(values.get(i));
-            if (i != sz - 1)
-                out.write(',');
+            if (i != sz - 1) {out.write(',');}
         }
         out.write('"');
     }
