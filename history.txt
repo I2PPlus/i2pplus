@@ -1,3 +1,7 @@
+2024-08-30 dr|z3d
+ * Console: Remove full banlist from /configpeers, provide links instead
+ * Updater: Disable vanilla I2P updates unless router.enableVanillaUpdates=true
+
 2024-08-27 dr|z3d
  * Console: Attempt to display (direct) ip address for unreachable routers
    in NetDb listings
