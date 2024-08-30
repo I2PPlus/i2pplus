@@ -953,15 +953,12 @@ public class TransportManager implements TransportEventListener {
      * @param fromRouterHash may be null, calculated from fromRouter if null
      */
     public void messageReceived(I2NPMessage message, RouterIdentity fromRouter, Hash fromRouterHash) {
-        if (_log.shouldDebug())
-            _log.debug("I2NPMessage received: " + message.getClass().getSimpleName() /*, new Exception("Where did I come from again?") */ );
-        try {
-            _context.inNetMessagePool().add(message, fromRouter, fromRouterHash, _msgIDBloomXor);
-            //if (_log.shouldDebug())
-            //    _log.debug("Added to in pool");
-        } catch (IllegalArgumentException iae) {
-            if (_log.shouldWarn())
-                _log.warn("Error receiving message", iae);
+        if (_log.shouldDebug()) {
+            _log.debug("I2NPMessage received: " + message.getClass().getSimpleName());
+        }
+        try {_context.inNetMessagePool().add(message, fromRouter, fromRouterHash, _msgIDBloomXor);}
+        catch (IllegalArgumentException iae) {
+            if (_log.shouldWarn()) {_log.warn("Error receiving message", iae);}
         }
     }
 

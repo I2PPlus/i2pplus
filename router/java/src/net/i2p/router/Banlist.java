@@ -255,10 +255,7 @@ public class Banlist {
             _context.netDb().fail(peer);
             _context.tunnelManager().fail(peer);
         }
-        //_context.tunnelManager().peerFailed(peer);
-        //_context.messageRegistry().peerFailed(peer);
-        if (!wasAlready)
-            _context.messageHistory().banlist(peer, reason);
+        if (!wasAlready) {_context.messageHistory().banlist(peer, reason);}
         return wasAlready;
     }
 
@@ -290,11 +287,6 @@ public class Banlist {
         }
 
         if (fully) {
-            //if (realUnbanlist) {
-            //    PeerProfile prof = _context.profileOrganizer().getProfile(peer);
-            //    if (prof != null)
-            //        prof.unbanlist();
-            //}
             _context.messageHistory().unbanlist(peer);
             if (_log.shouldInfo() && e != null)
                 _log.info("Removing expired ban from [" + peer.toBase64().substring(0,6) + "]"
@@ -322,9 +314,6 @@ public class Banlist {
         }
 
         if (unbanlist) {
-            //PeerProfile prof = _context.profileOrganizer().getProfile(peer);
-            //if (prof != null)
-            //    prof.unbanlist();
             _context.messageHistory().unbanlist(peer);
             if (_log.shouldInfo())
                 _log.info("Removing expired ban from [" + peer.toBase64().substring(0,6) + "]");
@@ -350,6 +339,5 @@ public class Banlist {
 
     /** @deprecated moved to router console */
     @Deprecated
-    public void renderStatusHTML(Writer out) throws IOException {
-    }
+    public void renderStatusHTML(Writer out) throws IOException {}
 }
