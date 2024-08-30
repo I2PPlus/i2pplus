@@ -38,8 +38,8 @@ class ParticipatingThrottler {
     private static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
     private static final String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
     private static final int LIFETIME_PORTION = 3; // portion of the tunnel lifetime
-    private static final int MIN_LIMIT = (isSlow ? 40 : 120) / LIFETIME_PORTION;
-    private static final int MAX_LIMIT = (isSlow ? 600 : 1800) / LIFETIME_PORTION;
+    private static final int MIN_LIMIT = (isSlow ? 80 : 120) / LIFETIME_PORTION;
+    private static final int MAX_LIMIT = (isSlow ? 1200 : 1800) / LIFETIME_PORTION;
     private static final int PERCENT_LIMIT = 12 / LIFETIME_PORTION;
     private static final long CLEAN_TIME = 11 * 60 * 1000 / LIFETIME_PORTION;
     private static final String MIN_VERSION = "0.9.63";
@@ -75,7 +75,7 @@ class ParticipatingThrottler {
         int limit = calculateLimit(numTunnels, isUnreachable, isLowShare, isFast);
         int count = counter.increment(h);
         Result rv;
-        int bantime = 15 * 60 * 1000;
+        int bantime = 10 * 60 * 1000;
         boolean shouldThrottle = context.getProperty(PROP_SHOULD_THROTTLE, DEFAULT_SHOULD_THROTTLE);
         boolean shouldDisconnect = context.getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
         boolean shouldBlockOldRouters = context.getProperty(PROP_BLOCK_OLD_ROUTERS, DEFAULT_BLOCK_OLD_ROUTERS);
@@ -95,8 +95,8 @@ class ParticipatingThrottler {
     }
 
     private int calculateLimit(int numTunnels, boolean isUnreachable, boolean isLowShare, boolean isFast) {
-        if (isUnreachable || isLowShare) {return Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 20, numTunnels * (PERCENT_LIMIT / 8) / 100));}
-        else if (isSlow) {return Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 5, numTunnels * (PERCENT_LIMIT / 5) / 100));}
+        if (isUnreachable || isLowShare) {return Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 20, numTunnels * (PERCENT_LIMIT / 10) / 100));}
+        else if (isSlow) {return Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 10, numTunnels * (PERCENT_LIMIT / 5) / 100));}
         return Math.min((MIN_LIMIT * 3), Math.max(MAX_LIMIT / 2, numTunnels * (PERCENT_LIMIT / 2) / 100));
     }
 
@@ -112,9 +112,9 @@ class ParticipatingThrottler {
         if (VersionComparator.comp(version, "0.9.57") < 0 && isCompressible) {
             if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);}
             if (!isBanned && _log.shouldWarn()) {
-                _log.warn("Banning Router [" + h.toBase64().substring(0, 6) + "] for 4h -> Compressible RouterInfo / " + version);
+                _log.warn("Banning Router [" + h.toBase64().substring(0, 6) + "] for 24h -> Compressible RouterInfo / " + version);
             }
-            context.banlist().banlistRouter(h, " <b>➜</b> Compressible RouterInfo & older than 0.9.57", null, null, context.clock().now() + 16 * 60 * 60 * 1000);
+            context.banlist().banlistRouter(h, " <b>➜</b> Compressible RouterInfo & older than 0.9.57", null, null, context.clock().now() + 24*60*60*1000);
             return true;
         }
         return false;
@@ -126,11 +126,11 @@ class ParticipatingThrottler {
             if (shouldDisconnect) {
                 context.commSystem().forceDisconnect(h);
                 if (!isBanned && _log.shouldWarn()) {
-                    _log.warn("Banning Router [" + h.toBase64().substring(0, 6) + "] for " + (bantime / 60000) +
+                    _log.warn("Banning Router [" + h.toBase64().substring(0, 6) + "] for " + (bantime*3 / 60000) +
                               "m -> " + version + (caps.isEmpty() ? "" : " / " + caps));
                 }
             }
-            context.banlist().banlistRouter(h, " <b>➜</b> LU and older than current version", null, null, context.clock().now() + (bantime * 4));
+            context.banlist().banlistRouter(h, " <b>➜</b> LU and older than current version", null, null, context.clock().now() + (bantime * 3));
             return true;
         }
         return false;
@@ -161,7 +161,7 @@ class ParticipatingThrottler {
                     handleExcessiveRequests(h, caps, count, limit, bantime);
                     return Result.DROP;
                 }
-            } else if ((isLowShare || isUnreachable) && count > limit * 3) {
+            } else if ((isLowShare || isUnreachable) && count > limit * 5) {
                 handleExcessiveRequests(h, caps, count, limit, bantime);
                 return Result.DROP;
             } else {
@@ -204,8 +204,6 @@ class ParticipatingThrottler {
     private class Disconnector implements SimpleTimer.TimedEvent {
         private final Hash h;
         public Disconnector(Hash h) { this.h = h; }
-        public void timeReached() {
-            context.commSystem().forceDisconnect(h);
-        }
+        public void timeReached() {context.commSystem().forceDisconnect(h);}
     }
 }
