@@ -18,8 +18,70 @@ public class ConfigPeerHelper extends HelperBase {
     public String getBlocklistSummary() {
         StringWriter out = new StringWriter(4*1024);
         Blocklist bl = _context.blocklist();
-        out.write("<table id=bannedips><tr><td>" +
-                  "<table id=banneduntilrestart><tr><th><b>");
+
+        out.write("<table id=bannedips><tr><td>");
+
+        // permabanned
+        out.write("<table id=permabanned><tr><th colspan=3><b>");
+        out.write(_t("IPs Permanently Banned"));
+        out.write("</b></th></tr>");
+        int blocklistSize = bl.getBlocklistSize();
+        if (blocklistSize > 0) {
+            out.write("<tr><td><b>");
+            out.write(_t("From"));
+            out.write("</b></td><td></td><td><b>");
+            out.write(_t("To"));
+            out.write("</b></td></tr>");
+            long[] blocklist = bl.getPermanentBlocks(MAX_DISPLAY);
+            // first 0 - 127
+            for (int i = 0; i < blocklist.length; i++) {
+                int from = Blocklist.getFrom(blocklist[i]);
+                if (from < 0)
+                    continue;
+                out.write("<tr><td>");
+                out.write(Blocklist.toStr(from));
+                out.write("</td>");
+                int to = Blocklist.getTo(blocklist[i]);
+                if (to != from) {
+                    out.write("<td>-</td><td>");
+                    out.write(Blocklist.toStr(to));
+                    out.write("</td></tr>\n");
+                } else {
+                    out.write("<td></td><td>&nbsp;</td></tr>\n");
+                }
+            }
+            // then 128 - 255
+            for (int i = 0; i < blocklist.length; i++) {
+                int from = Blocklist.getFrom(blocklist[i]);
+                if (from >= 0)
+                    break;
+                out.write("<tr><td>");
+                out.write(Blocklist.toStr(from));
+                out.write("</td>");
+                int to = Blocklist.getTo(blocklist[i]);
+                if (to != from) {
+                    out.write("<td>-</td><td>");
+                    out.write(Blocklist.toStr(to));
+                    out.write("</td></tr>\n");
+                } else {
+                    out.write("<td></td><td>&nbsp;</td></tr>\n");
+                }
+            }
+            if (blocklistSize > MAX_DISPLAY)
+                // very rare, don't bother translating
+                out.write("<tr><th colspan=3>First " + MAX_DISPLAY + " displayed, see the " +
+                          Blocklist.BLOCKLIST_FILE_DEFAULT + " file for the full list</th></tr>");
+        } else {
+            out.write("<tr><td><i>");
+            out.write(_t("none"));
+            out.write("</i></td></tr>");
+        }
+        out.write("</table>");
+
+        out.write("</td><td id=sessionIpBans width=50%>");
+
+        // session banned
+        out.write("<table id=banneduntilrestart><tr><th><b>");
         out.write(_t("IPs Banned Until Restart"));
         out.write("</b></th></tr>");
         List<Integer> singles = bl.getTransientIPv4Blocks();
@@ -70,66 +132,12 @@ public class ConfigPeerHelper extends HelperBase {
         } else {
             out.write("<tr><td><i>");
             out.write(_t("none"));
-            out.write("</i></td></tr>");
+            out.write("<style>#sessionIpBans{display:none!important}</style>");
+            out.write("</i></td></tr>\n");
         }
         out.write("</table>");
-        out.write("</td><td>");
-        out.write("<table id=permabanned><tr><th colspan=3><b>");
-        out.write(_t("IPs Permanently Banned"));
-        out.write("</b></th></tr>");
-        int blocklistSize = bl.getBlocklistSize();
-        if (blocklistSize > 0) {
-            out.write("<tr><td width=49%><b>");
-            out.write(_t("From"));
-            out.write("</b></td><td></td><td width=49%><b>");
-            out.write(_t("To"));
-            out.write("</b></td></tr>");
-            long[] blocklist = bl.getPermanentBlocks(MAX_DISPLAY);
-            // first 0 - 127
-            for (int i = 0; i < blocklist.length; i++) {
-                int from = Blocklist.getFrom(blocklist[i]);
-                if (from < 0)
-                    continue;
-                out.write("<tr><td width=49%>");
-                out.write(Blocklist.toStr(from));
-                out.write("</td>");
-                int to = Blocklist.getTo(blocklist[i]);
-                if (to != from) {
-                    out.write("<td>-</td><td width=49%>");
-                    out.write(Blocklist.toStr(to));
-                    out.write("</td></tr>\n");
-                } else {
-                    out.write("<td></td><td width=49%>&nbsp;</td></tr>\n");
-                }
-            }
-            // then 128 - 255
-            for (int i = 0; i < blocklist.length; i++) {
-                int from = Blocklist.getFrom(blocklist[i]);
-                if (from >= 0)
-                    break;
-                out.write("<tr><td width=49%>");
-                out.write(Blocklist.toStr(from));
-                out.write("</td>");
-                int to = Blocklist.getTo(blocklist[i]);
-                if (to != from) {
-                    out.write("<td>-</td><td width=49%>");
-                    out.write(Blocklist.toStr(to));
-                    out.write("</td></tr>\n");
-                } else {
-                    out.write("<td></td><td width=49%>&nbsp;</td></tr>\n");
-                }
-            }
-            if (blocklistSize > MAX_DISPLAY)
-                // very rare, don't bother translating
-                out.write("<tr><th colspan=3>First " + MAX_DISPLAY + " displayed, see the " +
-                          Blocklist.BLOCKLIST_FILE_DEFAULT + " file for the full list</th></tr>");
-        } else {
-            out.write("<tr><td><i>");
-            out.write(_t("none"));
-            out.write("</i></td></tr>");
-        }
-        out.write("</table>" +
-                  "</td></tr></table>");
+
+        out.write("</td></tr></table>\n");
         return out.toString();
     }
 
