@@ -897,7 +897,7 @@ class PacketBuilder2 {
         UDPPacket packet = buildLongPacketHeader(sendID, n, HOLE_PUNCH_FLAG_BYTE, rcvID, token);
         Block block = new SSU2Payload.RelayResponseBlock(signedData);
         if (_log.shouldLog(Log.INFO))
-            _log.info("[SSU2] Sending relay HolePunch to " + to + ":" + port);
+            _log.info("[SSU2] Sending relay HolePunch to " + to.toString().replace("/", "") + ":" + port);
 
         byte[] ik = introKey.getData();
         packet.getPacket().setLength(LONG_HEADER_SIZE);
