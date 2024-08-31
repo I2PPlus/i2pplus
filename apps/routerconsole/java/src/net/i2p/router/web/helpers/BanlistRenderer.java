@@ -11,7 +11,6 @@ package net.i2p.router.web.helpers;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
-import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -32,21 +31,10 @@ class BanlistRenderer {
         _context = context;
     }
 
-    /**
-     *  As of 0.9.29, sorts in true binary order, not base64 string
-     */
-    private static class HashComparator implements Comparator<Hash>, Serializable {
-         public int compare(Hash l, Hash r) {
-             return DataHelper.compareTo(l.getData(), r.getData());
-        }
-    }
-
     public void renderStatusHTML(Writer out) throws IOException {
         int bannedCount = _context.banlist().getRouterCount();
         StringBuilder buf = new StringBuilder(bannedCount * 512 + 8192);
-        // move to the jsp
-        //buf.append("<h2>Banned Peers</h2>");
-        Map<Hash, Banlist.Entry> entries = new TreeMap<Hash, Banlist.Entry>(new HashComparator());
+        Map<Hash, Banlist.Entry> entries = new TreeMap<Hash, Banlist.Entry>(HashComparator.getInstance());
 
         entries.putAll(_context.banlist().getEntries());
         if (entries.isEmpty()) {

@@ -52,7 +52,7 @@ class ProfileOrganizerRenderer {
         long now = _context.clock().now();
         //long hideBefore = ffmode ? now - 20*60*1000 : !ffmode && mode == 2 ? now - 60*60*1000 : now - 20*60*1000;
         long hideBefore = now - 4*60*60*1000;
-        Set<PeerProfile> order = new TreeSet<PeerProfile>(mode == 2 ? new HashComparator() : new ProfileComparator());
+        Set<PeerProfile> order = new TreeSet<PeerProfile>(mode == 2 ? new ProfComparator() : new ProfileComparator());
         int older = 0;
         int standard = 0;
         int ff = 0;
@@ -500,7 +500,7 @@ class ProfileOrganizerRenderer {
         buf.setLength(0);
     }
 
-    private class ProfileComparator extends HashComparator {
+    private class ProfileComparator extends ProfComparator {
         public int compare(PeerProfile left, PeerProfile right) {
             if (_context.profileOrganizer().isFast(left.getPeer())) {
                 if (_context.profileOrganizer().isFast(right.getPeer())) {
@@ -533,9 +533,9 @@ class ProfileOrganizerRenderer {
      *  As of 0.9.29, sorts in true binary order, not base64 string
      *  @since 0.9.8
      */
-    private static class HashComparator implements Comparator<PeerProfile>, Serializable {
+    private static class ProfComparator implements Comparator<PeerProfile>, Serializable {
         public int compare(PeerProfile left, PeerProfile right) {
-            return DataHelper.compareTo(left.getPeer().getData(), right.getPeer().getData());
+            return HashComparator.comp(left.getPeer(), right.getPeer());
         }
     }
 

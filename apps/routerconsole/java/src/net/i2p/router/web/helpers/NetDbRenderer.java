@@ -103,12 +103,6 @@ class NetDbRenderer {
         }
     }
 
-    private static class RouterInfoComparator implements Comparator<RouterInfo>, Serializable {
-         public int compare(RouterInfo l, RouterInfo r) {
-             return l.getIdentity().getHash().toBase64().compareTo(r.getIdentity().getHash().toBase64());
-        }
-    }
-
     /**
      *  One String must be non-null
      *
@@ -954,7 +948,7 @@ class NetDbRenderer {
         boolean showStats = full || shortStats;  // this means show the router infos
         Hash us = _context.routerHash();
 
-        Set<RouterInfo> routers = new TreeSet<RouterInfo>(new RouterInfoComparator());
+        Set<RouterInfo> routers = new TreeSet<RouterInfo>(RouterInfoComparator.getInstance());
         if (client != null) {
             routers.addAll(_context.clientNetDb(client).getRouters());
         } else if (clientsOnly) {
