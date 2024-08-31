@@ -3717,39 +3717,46 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /* @since 0.9.64+ */
     public String getDiskUsage() {
-        File dir = getDataDir();
-        long freeSpace = dir.getUsableSpace();
-        long totalSpace = dir.getTotalSpace();
+        try {
+            File dir = getDataDir();
+            if (dir == null || !dir.exists()) {
+                if (_log.shouldError())
+                _log.error("[I2PSnark] Data directory does not exist, cannot create diskspace bar");
+                return "";
+            }
 
-        if (totalSpace == 0) {return "";}
+            long freeSpace = dir.getUsableSpace();
+            long totalSpace = dir.getTotalSpace();
 
-        double usagePercent = ((totalSpace - freeSpace) / (double) totalSpace) * 100;
-        String usageAsPercentage = String.format("%d%%", (int) usagePercent);
+            if (totalSpace <= 0) {return "";}
 
-        String freeSpaceStr;
-        if (freeSpace >= (1024*1024*1024) && totalSpace >= (1024*1024*1024)) {
-            freeSpaceStr = String.format("%.1f", freeSpace / (double) (1024*1024*1024));
-        } else if (freeSpace < (1024*1024*1024) && totalSpace < (1024*1024*1024)) {
-            freeSpaceStr = String.format("%dMB", freeSpace / (double) (1024*1024));
-        } else if (freeSpace < (1024*1024*1024)) {
-            freeSpaceStr = String.format("%dMB", freeSpace / (double) (1024*1024));
-        } else {
-            freeSpaceStr = String.format("%.1fGB", freeSpace / (double) (1024*1024*1024));
+            double usagePercent = ((totalSpace - freeSpace) / (double) totalSpace) * 100;
+            String usageAsPercentage = String.format("%d%%", (int) usagePercent);
+
+            String freeSpaceStr;
+            if (freeSpace >= (1024 * 1024 * 1024)) {
+                freeSpaceStr = String.format("%.1f G", freeSpace / (double) (1024 * 1024 * 1024));
+            } else {
+                freeSpaceStr = String.format("%d M", freeSpace / (1024 * 1024));
+            }
+
+            String totalSpaceStr = totalSpace >= (1024 * 1024 * 1024)
+                    ? String.format("%.1f G", totalSpace / (double) (1024 * 1024 * 1024))
+                    : String.format("%d M", totalSpace / (1024 * 1024));
+
+            String title = _t("Data partition") + ": " + freeSpaceStr + " / " + totalSpaceStr;
+
+            String bar = "<span class=volatile id=diskSpace title=\"" + title + "\">" +
+                         "<span id=diskSpaceInner style='width:%d%%'></span></span>";
+            bar = bar.replace(".0", "").replace(" G", "G").replace(" M", "M");
+
+            return String.format(bar, (int) usagePercent);
+        } catch (Exception e) {
+            if (_log.shouldError()) {
+                _log.error("[I2PSnark] Error retrieving disk usage: " + e.getMessage());
+            }
+            return "";
         }
-
-        String totalSpaceStr;
-        if (totalSpace >= (1024*1024*1024)) {
-            totalSpaceStr = String.format("%.1fGB", totalSpace / (double) (1024*1024*1024));
-        } else {
-            totalSpaceStr = String.format("%dMB", totalSpace / (double) (1024*1024));
-        }
-
-        String title = _t("Data partition") + ": " + freeSpaceStr + " / " + totalSpaceStr;
-        String bar = "<span class=volatile id=diskSpace title=\"" + title +
-                     "\"><span id=diskSpaceInner style='width:%d%%'></span></span>";
-        bar = bar.replace(".0", "");
-
-        return String.format(bar, (int) usagePercent);
     }
 
 }
