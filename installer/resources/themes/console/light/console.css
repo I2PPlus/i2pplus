@@ -857,33 +857,40 @@ h1::first-letter{font-size:112%}
 
 /* bans */
 .banperiod{margin:1px 0 0 1px;display:inline-block;vertical-align:middle}
-#bannedips{margin-bottom:10px}
+#bannedips{margin:1px auto 10px}
+#bannedips th, #bannedips table th{border-top:var(--border_inner);border-bottom:var(--border_inner);}
 #bannedips td{vertical-align:top;padding:0;width:50%}
-#permabanned tr:nth-child(2) td,#ipv4 td,#ipv6 td{border-bottom:var(--border_inner);background:linear-gradient(180deg,#fff 50%,rgba(238,238,255,.2) 50%,#eef 100%) #fff}
-#ipv6 td{border-top:var(--border_inner)}
 #bannedips table{margin:-1px 0;border:0;border-bottom:var(--border_inner)}
-#bannedips table th,#bannedips table td{text-align:center}
-#bannedips table td{padding:4px 2px}
-#banneduntilrestart,#permabanned{width:100%}
-#permabanned td:first-child{padding-right:10px;width:49%;text-align:right;border-left:var(--border_inner)}
-#permabanned td:nth-child(2){width:2%}
-#permabanned td:last-child{padding-left:10px;width:49%;text-align:left}
-#banneduntilrestart td{text-align:right;border-right:var(--border_inner)}
-#banneduntilrestart td:last-child{text-align:center}
+#bannedips table th,#bannedips table td{text-align:center;border-left:0;border-right:0}
+#bannedips table th{font-size:95%}
+#bannedips table td{padding:5px 2px}
+#bannedips table tr:nth-child(2) td{font-size:90%}
+#bannedips table tr:nth-child(n+3) td{border-bottom:var(--border_soft)}
+#bannedips td:nth-child(2) table{border-left:var(--border_soft)}
 #bannedips tr:nth-child(even){background:repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(240,240,255,.3) 3px,#fff 5px)}
 #bannedips tr:nth-child(odd){background:repeating-linear-gradient(45deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fff 5px)}
-#sessionBanned{margin:11px auto 9px}
+#banneduntilrestart,#permabanned{width:100%}
+#banneduntilrestart td:last-child{text-align:center}
+#banneduntilrestart td{text-align:right}
+#config_peers h3{position:relative;z-index:999}
+#ipv6 td{border-top:var(--border_inner)}
+#permabanned tr:nth-child(2) td,#ipv4 td,#ipv6 td{border-top:var(--border_inner);border-bottom:var(--border_inner);background:linear-gradient(180deg,#fff 50%,rgba(238,238,255,.2) 50%,#eef 100%) #fff}
+#permabanned td:first-child{padding-right:10px;width:49%;text-align:right}
+#permabanned td:last-child{padding-left:10px;width:49%;text-align:left}
+#permabanned td:nth-child(2){width:2%}
 #profiles #sessionBanned th, #profiles #sessionBanned td{padding:6px 12px;text-align:left}
 #profiles #sessionBanned th:nth-child(4),#profiles #sessionBanned td:nth-child(4){text-align:right}
-#sessionBanned thead th{font-size:90%;text-align:left}
-#sessionBanned tfoot th{padding:8px 12px}
-#sessionBanned th:nth-child(2),#sessionBanned td:nth-child(2){font-size:0}
-#sessionBanned td:first-child::before{width:26px;height:20px;display:inline-block;vertical-align:middle;background:var(--client) no-repeat left center/18px;content:""}
-#sessionBanned .banFF td:first-child::before{background:var(--floodfill) no-repeat left center/18px}
 #sessionBanned .b64{padding:5px 8px;display:inline-block;vertical-align:middle;line-height:1;font-family:var(--monospaced);font-size:90%;font-weight:500;box-shadow:var(--bevel);background:var(--badge);user-select:all}
+#sessionBanned .banFF td:first-child::before{background:var(--floodfill) no-repeat left center/18px}
+#sessionBanned{margin:11px auto 9px}
+#sessionBanned td:first-child::before{width:26px;height:20px;display:inline-block;vertical-align:middle;background:var(--client) no-repeat left center/18px;content:""}
+#sessionBanned tfoot th{padding:8px 12px}
+#sessionBanned thead th{font-size:90%;text-align:left}
 #sessionBanned th:last-child,#sessionBanned td:last-child{user-select:none}
+#sessionBanned th:nth-child(2),#sessionBanned td:nth-child(2){font-size:0}
 #sessionBanned th{user-select:none}
 
+/* certs */
 #certs h3{margin-top:15px;margin-bottom:-6px;border-width:1px;border-radius:0;filter:none}
 #certs h4{padding:8px 8px 6px;border-radius:0}
 #certs h3+p,#certs h4+p:not(.infohelp){padding:15px;border:var(--border_inner)}
