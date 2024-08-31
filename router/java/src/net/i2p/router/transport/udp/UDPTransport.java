@@ -1410,7 +1410,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         if (changeIt) {
             if (_log.shouldInfo())
                 _log.info("[" + from.toBase64().substring(0,6) + "] and [" + lastFrom.toBase64().substring(0,6) + "] agree we have a new IP address: "
-                          + Addresses.toString(ourIP, ourPort) + "; updating...");
+                          + Addresses.toString(ourIP, ourPort) + " -> Updating...");
             // Never change port for IPv6 or if we have UPnP
             if (_haveUPnP || ourIP.length == 16)
                 ourPort = 0;
