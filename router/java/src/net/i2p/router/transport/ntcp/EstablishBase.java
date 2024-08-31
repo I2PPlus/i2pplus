@@ -224,9 +224,7 @@ abstract class EstablishBase implements EstablishState {
                 return;
             changeState(State.CORRUPT);
         }
-        if (_log.shouldWarn())
-//            _log.warn(prefix() + "Failed to establish: " + reason, e);
-            _log.warn(prefix() + reason);
+        if (_log.shouldWarn()) {_log.warn(prefix() + reason);}
         if (!bySkew)
             _context.statManager().addRateData("ntcp.receiveCorruptEstablishment", 1);
         releaseBufs(false);
@@ -262,13 +260,10 @@ abstract class EstablishBase implements EstablishState {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);
-        if (_con.isInbound())
-            buf.append("InboundEstablishState ");
-        else
-            buf.append("OutboundEstablishState ");
+        buf.append(_con.isInbound() ? "Inbound" : "Outbound").append("EstablishState");
         buf.append(_con.toString());
         buf.append(" (").append(_state).append(")");
-        if (_con.isEstablished()) buf.append(" -> established");
+        if (_con.isEstablished()) buf.append(" -> Established");
         return buf.toString();
     }
 
