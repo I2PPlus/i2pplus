@@ -1741,7 +1741,7 @@ public class PeerState {
            .append("; Messages (in/out): ").append(_inboundMessages.size()).append("/").append(_outboundMessages.size())
            .append("; Outbound queue: ").append(_outboundQueue.size())
            .append("\n* Packets received (OK/Duplicate): ").append(_packetsReceived).append('/').append(_packetsReceivedDuplicate)
-           .append("; Packets sent (OK/Duplicate): ").append(_packetsTransmitted).append('/').append(_packetsRetransmitted);
+           .append("\n* Packets sent (OK/Duplicate): ").append(_packetsTransmitted).append('/').append(_packetsRetransmitted);
         return buf.toString();
     }
 }

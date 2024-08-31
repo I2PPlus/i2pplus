@@ -243,8 +243,10 @@ class PacketHandler {
                 header.getType() != SSU2Util.SESSION_REQUEST_FLAG_BYTE ||
                 header.getVersion() != 2 ||
                 header.getNetID() != _networkID) {
-                if (header != null && _log.shouldInfo())
-                    _log.info("Does not decrypt as Session Request, attempting to decrypt as Token Request / PeerTest / HolePunch \n* " + header + " from " + from);
+                if (header != null && _log.shouldInfo()) {
+                    _log.info("Packet does not decrypt as Session Request, attempting to decrypt as Token Request / PeerTest / HolePunch \n* " +
+                              header + " from " + from);
+                }
                 // The first 32 bytes were fine, but it corrupted the next 32 bytes
                 // TODO make this more efficient, just take the first 32 bytes
                 header = SSU2Header.trialDecryptLongHeader(packet, k1, k2);
@@ -254,7 +256,7 @@ class PacketHandler {
                     // typical case, SSU 1 that didn't validate, will be logged at WARN level above
                     // in group 4 receive packet
                     //if (_log.shouldDebug())
-                    //    _log.debug("Does not decrypt as Session Request, Token Request, or Peer Test: " + header);
+                    //    _log.debug("Packet does not decrypt as Session Request, Token Request, or Peer Test: " + header);
                     if (header != null) {
                         // conn ID decryption is the same for short and long header, with k1
                         // presumably a data packet, either ip/port changed, or a race during establishment?
@@ -468,7 +470,7 @@ class PacketHandler {
             header.getVersion() != 2 ||
             header.getNetID() != _networkID) {
             if (_log.shouldInfo())
-                _log.info("Does not decrypt as SessionCreated, attempting to decrypt as Retry \n* " + header);
+                _log.info("Packet does not decrypt as SessionCreated, attempting to decrypt as Retry" + (header != null ? "\n* " + header : ""));
             k2 = state.getRcvRetryHeaderEncryptKey2();
             header = SSU2Header.trialDecryptLongHeader(packet, k1, k2);
             if (header == null ||
@@ -476,7 +478,7 @@ class PacketHandler {
                 header.getVersion() != 2 ||
                 header.getNetID() != _networkID) {
                 if (_log.shouldInfo())
-                    _log.info("Does not decrypt as SessionCreated or Retry \n* " + header + " on " + state);
+                    _log.info("Packet does not decrypt as SessionCreated or Retry \n* " + header + " on " + state);
                 return false;
             }
             type = SSU2Util.RETRY_FLAG_BYTE;

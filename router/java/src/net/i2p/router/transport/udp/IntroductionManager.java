@@ -526,11 +526,11 @@ class IntroductionManager {
                     rcode = SSU2Util.RELAY_REJECT_BOB_SIGFAIL;
                 }
             } else {
-                // we do not set a timer to wait for alice's RI to come in.
+                // we do not set a timer to wait for Alice's RI to come in.
                 // we should have already had it.
                 // Java I2P does not send her RI before the relay request.
                 if (_log.shouldWarn())
-                    _log.warn("Alice RI not found " + alice);
+                    _log.warn("Alice's RouterInfo not found " + alice);
                 rcode = SSU2Util.RELAY_REJECT_BOB_UNKNOWN_ALICE;
             }
         }
@@ -808,16 +808,14 @@ class IntroductionManager {
         data = SSU2Util.createRelayResponseData(_context, bob.getRemotePeer(), rcode,
                                                 nonce, ourIP, ourPort, spk, token);
         if (data == null) {
-            if (_log.shouldWarn())
-                _log.warn("sig fail");
+            if (_log.shouldWarn()) {_log.warn("Signature failure (no data)");}
              return;
         }
         try {
             UDPPacket packet = _builder2.buildRelayResponse(data, bob);
             if (_log.shouldInfo())
                 _log.info("Send RelayResponse " + rcode + " as Charlie " + " nonce " + nonce + " to Bob " + bob +
-                          " with token " + token +
-                          " for Alice " + Addresses.toString(testIP, testPort) + ' ' + aliceRI);
+                          " with token " + token + " for Alice \n* Address: " + Addresses.toString(testIP, testPort) + "\n* " + aliceRI);
             _transport.send(packet);
             bob.setLastSendTime(now);
         } catch (IOException ioe) {
@@ -826,7 +824,7 @@ class IntroductionManager {
         if (rcode == SSU2Util.RELAY_ACCEPT) {
             // send hole punch with the same data we sent to Bob
             if (_log.shouldDebug())
-                _log.debug("[SSU2] Sending hole punch to " + Addresses.toString(testIP, testPort));
+                _log.debug("[SSU2] Sending hole punch to " + Addresses.toString(testIP, testPort).replace("/", ""));
             long sendId = (nonce << 32) | nonce;
             long rcvId = ~sendId;
             UDPPacket packet = _builder2.buildHolePunch(aliceIP, testPort, aliceIntroKey, sendId, rcvId, data);
