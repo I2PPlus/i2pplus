@@ -1513,7 +1513,7 @@ font[color="#006600"] span{color:var(--bg);background:#444}
 #logs li a:not(:hover){color:inherit}
 #logs li a::before{margin:0 3px 0 0;width:16px;height:16px;display:inline-block;vertical-align:text-bottom;content:""}
 #logs li a[href^="/netdb?r="]::before{background:var(--client) no-repeat center center/16px}
-#logs li a[href^="/netdb?ip"]::before{margin-right:-5px;width:14px;background:url(/themes/console/images/globe.svg) no-repeat center center/14px}
+#logs li a[href^="/netdb?ip"]::before{width:14px;background:url(/themes/console/images/globe.svg) no-repeat center center/14px}
 #logs li a[href^="/netdb?l="]::before{margin:0 1px 0 -3px;background:var(--key) no-repeat center center/12px}
 #logs li{vertical-align:middle}
 #logs ul{margin-left:-22px;margin-right:-28px;margin:-4px 0 0 -20px;display:inline-block;word-break:break-all}

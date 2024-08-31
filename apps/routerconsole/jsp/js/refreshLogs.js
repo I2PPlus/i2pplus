@@ -201,23 +201,23 @@ function start() {
   }
 
   function linkifyIPv4() {
-    if (!routerlogsList) {return;}
+    if (!routerlogsList) { return; }
     const liElements = routerlogsList.querySelectorAll("li");
 
     liElements.forEach((li) => {
       const text = li.textContent;
-      const ipv4Regex = /(?<!\bAddress:)\s*(?:\/?)\s*(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\b/g;
+      const ipv4Regex = /(^|[^a-zA-Z0-9])(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\b(?!\s*Address:)/g;
       const matches = text.match(ipv4Regex);
 
       if (matches) {
         matches.forEach((match) => {
-          const linkText = match;
+          const linkText = match.trim();
           const linkHref = `/netdb?ip=${linkText}`;
           const link = document.createElement("a");
           link.href = linkHref;
           link.textContent = linkText;
-          li.innerHTML = li.innerHTML.replace(new RegExp(`\\b${linkText}\\b`, "g"), ` ${link.outerHTML}`);
-        });
+          li.innerHTML = li.innerHTML.replace(new RegExp(`\\b${escapeRegExp(linkText)}\\b`, "g"), ` ${link.outerHTML}`);
+       });
       }
     });
   }
