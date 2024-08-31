@@ -1424,20 +1424,21 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 #banlist li a[href^="configpeer"]:last-of-type{padding:2px 2px 1px 0;position:absolute;top:0;right:0;line-height:0;border-left:1px solid #121;border-bottom:1px solid #121;box-shadow:var(--highlight),inset 0 0 1px 1px #040;background:linear-gradient(180deg,#000b00,#000600);filter:none}
 #banlist li a[href^="configpeer"]:hover,#banlist li a[href^="configpeer"]:focus{background:#000;box-shadow:0 0 0 1px #121,var(--highlight),inset 0 0 0 2px var(--hover)}
 #banlist li a[href^="configpeer"]:active{box-shadow:var(--highlight),inset 3px 3px 3px 1px #5f2400;background:var(--hover)}
-#bannedips{margin-bottom:-3px}
+#bannedips{margin:-2px auto -3px}
 #bannedips table{margin-bottom:-1px}
-#bannedips td{padding:0;width:50%;vertical-align:top}
-#bannedips table td{padding:4px 2px;text-align:center}
 #bannedips table tr:last-child{border-bottom:var(--border)}
+#bannedips td,#permabanned td{box-shadow:none}
+#bannedips td{padding:0;width:50%;vertical-align:top}
+#bannedips table td{padding:5px 2px;text-align:center;border-top:var(--border_softer)}
 #permabanned,#banneduntilrestart{margin-top:-1px;border:0}
 #permabanned{margin-top:-1px;margin-bottom:9px}
 #permabanned th,#banneduntilrestart th,#permabanned tr:nth-child(2) td,#banneduntilrestart tr:nth-child(2) td,#ipv6 td{font-size:95%}
 #permabanned th,#banneduntilrestart th{padding:5px 10px}
-#permabanned td:first-child{padding-right:10px;width:49%;text-align:right;border-left:var(--border)}
+#permabanned td:first-child{padding-right:10px;width:49%;text-align:right}
 #permabanned td:nth-child(2){width:2%}
 #permabanned td:last-child{padding-left:10px;width:49%;text-align:left}
 #banneduntilrestart{border-left:1px solid var(--border)}
-#banneduntilrestart td{border-right:var(--border);text-align:center}
+#banneduntilrestart td{border-left:var(--border_softer);text-align:center}
 #ipv4,#ipv6,#permabanned tr:nth-child(2){border-top:var(--border);border-bottom:var(--border);background:var(--th)}
 #sessionBanned{margin:11px auto 9px}
 #sessionBanned th,#sessionBanned td{padding:6px 12px}
@@ -2123,14 +2124,12 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 /* peers */
 #config_peers .optionsave,#refreshsidebar .optionsave{box-shadow:none}
 #config_peers tr:last-child{background:#000}
-#config_peers tr:last-child,#config_peers #bannedips td:last-child tr:nth-child(n+3){box-shadow:var(--highlight),inset 0 -1px 0 1px #000,inset 0 0 1px 1px #030,inset 0 -1px 1px 1px #030,inset 0 0 0 2px #000,inset 0 -1px 0 2px #000}
 #config_peers tr:last-child td{background:none}
 
 /* misc/unsorted */
 a[href^="/netdb"]:hover span{color:var(--hover)}
 .infohelp.vmcomm{margin-bottom:0}
 .tunneldisplay td,#enviro td,#floodfills td:not(.rid td),#profilelist td:not([colspan]),#routerinformation td{box-shadow:var(--highlight),inset 0 0 2px 0 #040}
-#banneduntilrestart th,#banneduntilrestart td{border-right:var(--border)}
 #jobs h3,#logs .tabletitle,#tunnels h3[id]{position:relative;overflow:hidden}
 #jobs h3::after,#logs #enviro~.tabletitle::after,#tunnels h3[id]::after{width:0;height:1px;display:inline-block;position:absolute;bottom:0;left:0;background:linear-gradient(90deg,#d30,var(--hover));content:"";animation:ease-out reloader 1s forwards;opacity:.4}
 #netdboverview tr:hover,#logs #enviro:hover td,.tunneldisplay tr:hover td,#profilelist tr:hover td,#graphs .formaction,#events tr:hover,#config_peers #bannedips td{box-shadow:none}
