@@ -2123,6 +2123,7 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 
 /* peers */
 #config_peers .optionsave,#refreshsidebar .optionsave{box-shadow:none}
+#config_peers .optionsave{padding:10px}
 #config_peers tr:last-child{background:#000}
 #config_peers tr:last-child td{background:none}
 
