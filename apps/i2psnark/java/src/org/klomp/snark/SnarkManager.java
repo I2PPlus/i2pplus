@@ -3720,9 +3720,48 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         File dir = getDataDir();
         long freeSpace = dir.getUsableSpace();
         long totalSpace = dir.getTotalSpace();
+
+        if (totalSpace == 0) {return "";}
+
+        double usagePercent = ((totalSpace - freeSpace) / (double) totalSpace) * 100;
+        String usageAsPercentage = String.format("%d%%", (int) usagePercent);
+
+        String freeSpaceStr;
+        if (freeSpace >= (1024*1024*1024) && totalSpace >= (1024*1024*1024)) {
+            freeSpaceStr = String.format("%.1f", freeSpace / (double) (1024*1024*1024));
+        } else if (freeSpace < (1024*1024*1024) && totalSpace < (1024*1024*1024)) {
+            freeSpaceStr = String.format("%dMB", freeSpace / (double) (1024*1024));
+        } else if (freeSpace < (1024*1024*1024)) {
+            freeSpaceStr = String.format("%dMB", freeSpace / (double) (1024*1024));
+        } else {
+            freeSpaceStr = String.format("%.1fGB", freeSpace / (double) (1024*1024)*1024);
+        }
+
+        String totalSpaceStr;
+        if (totalSpace >= (1024*1024*1024)) {
+            totalSpaceStr = String.format("%.1fGB", totalSpace / (double) (1024*1024*1024));
+        } else {
+            totalSpaceStr = String.format("%dMB", totalSpace / (double) (1024*1024));
+        }
+
+        String title = _t("Data partition") + ": " + freeSpaceStr + " / " + totalSpaceStr;
+        String bar = "<span class=volatile id=diskSpace title=\"" + title +
+                     "\"><span id=diskSpaceInner style='width:%d%%'></span></span>";
+        bar = bar.replace(".0", "");
+
+        return String.format(bar, (int) usagePercent);
+    }
+
+/**
+    public String getDiskUsage() {
+        File dir = getDataDir();
+        long freeSpace = dir.getUsableSpace();
+        long totalSpace = dir.getTotalSpace();
         if (totalSpace == 0) {return "";}
         int freeSpaceMB = (int) (freeSpace / (1024 * 1024));
         int totalSpaceMB = (int) (totalSpace / (1024 * 1024));
+        int freeSpaceGB = (int) (freeSpace / (1024 * 1024 * 1024));
+        int totalSpaceGB = (int) (totalSpace / (1024 * 1024 * 1024));
         double usagePercent = ((totalSpace - freeSpace) / (double) totalSpace) * 100;
         String usageAsPercentage = String.format("%d%%", (int) usagePercent);
         String usageAsTotal = String.format("%d / %d MB", freeSpaceMB, totalSpaceMB);
@@ -3730,5 +3769,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                      ": %s\"><span id=diskSpaceInner style='width:%d%%'></span></span>";
         return String.format(bar, usageAsTotal, (int) usagePercent);
     }
+**/
 
 }
