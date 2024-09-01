@@ -206,7 +206,7 @@ function start() {
 
     liElements.forEach((li) => {
       const text = li.textContent;
-      const ipv4Regex = /?<!\bAddress:)\s*(^|[^a-zA-Z0-9])(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\b/g;
+      const ipv4Regex = /(?<!\bAddress:\s*)\b(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\b/g;
       const matches = text.match(ipv4Regex);
 
       if (matches) {
@@ -230,7 +230,7 @@ function start() {
 
     liElements.forEach((li) => {
       const text = li.textContent;
-      const ipv6Regex = /(?<!\bAddress:)\s*(?:\/?)\s*(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})\b/g;
+      const ipv6Regex = /\b(?:(?<!\bAddress:)\s*|\baddress:\s*)([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b/gi;
       const matches = text.match(ipv6Regex);
 
       if (matches) {
