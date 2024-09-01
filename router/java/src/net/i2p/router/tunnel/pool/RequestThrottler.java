@@ -27,10 +27,8 @@ class RequestThrottler {
     /** portion of the tunnel lifetime */
     private static final int LIFETIME_PORTION = 4;
     private static boolean isSlow = SystemVersion.isSlow();
-    private static boolean isQuadCore = SystemVersion.getCores() >= 4;
-    private static boolean isHexaCore = SystemVersion.getCores() >= 6;
-    private static final int MIN_LIMIT = (isSlow ? 32 : 64) / LIFETIME_PORTION;
-    private static final int MAX_LIMIT = (isSlow ? 256 : isHexaCore ? 512 : 384) / LIFETIME_PORTION;
+    private static final int MIN_LIMIT = (isSlow ? 512 : 1024) / LIFETIME_PORTION;
+    private static final int MAX_LIMIT = (isSlow ? 1204 : 4096) / LIFETIME_PORTION;
     private static final int PERCENT_LIMIT = 25 / LIFETIME_PORTION;
     private static final long CLEAN_TIME = 11*60*1000 / LIFETIME_PORTION;
     private final static boolean DEFAULT_SHOULD_THROTTLE = true;
@@ -62,7 +60,8 @@ class RequestThrottler {
         boolean shouldBlockOldRouters = context.getProperty(PROP_BLOCK_OLD_ROUTERS, DEFAULT_BLOCK_OLD_ROUTERS);
         int numTunnels = this.context.tunnelManager().getParticipatingCount();
         int portion = isSlow ? 6 : 4;
-        int limit = (isUnreachable || isLowShare) ? MIN_LIMIT : Math.max(MIN_LIMIT, Math.min(MAX_LIMIT / 8, numTunnels * (isFast ? 3 / 2 : PERCENT_LIMIT / 2) / 100));
+        //int limit = (isUnreachable || isLowShare) ? MIN_LIMIT : Math.max(MIN_LIMIT, Math.min(MAX_LIMIT / 8, numTunnels * (isFast ? 3 / 2 : PERCENT_LIMIT / 2) / 100));
+        int limit = Math.max(MIN_LIMIT, Math.min(MAX_LIMIT, numTunnels * PERCENT_LIMIT / 100));
         int count = counter.increment(h);
         boolean rv = count > limit;
         boolean enableThrottle = context.getProperty(PROP_SHOULD_THROTTLE, DEFAULT_SHOULD_THROTTLE);
@@ -122,7 +121,7 @@ class RequestThrottler {
             }
         }
 
-        if (rv && count == 2 * limit && enableThrottle) {
+        if (rv && count >= 3 * limit && enableThrottle) {
             context.banlist().banlistRouter(h, "Excessive tunnel requests", null, null, context.clock().now() + 30*60*1000);
             // drop after any accepted tunnels have expired
             context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
