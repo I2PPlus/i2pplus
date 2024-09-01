@@ -83,7 +83,7 @@ class UDPReceiver {
             return 0;
 
         if (_log.shouldInfo())
-            _log.info("Received UDP packet" + packet);
+            _log.info("Received UDP packet from " + packet);
 
         RemoteHostId from = packet.getRemoteHost();
         if (_transport.isInDropList(from)) {

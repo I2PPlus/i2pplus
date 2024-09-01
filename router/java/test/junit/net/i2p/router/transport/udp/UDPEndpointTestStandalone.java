@@ -72,14 +72,14 @@ public class UDPEndpointTestStandalone {
                 boolean removed = _sentNotReceived.remove(ba);
                 int outstanding = _sentNotReceived.size();
                 if (!removed) {
-                    _log.error("Received a packet that we weren't expecting: " + packet);
+                    _log.error("Received a packet that we weren't expecting from " + packet);
                 } else {
                     _log.debug("Received an expected packet (" + received + ") with outstanding: " + outstanding);
                     received++;
                 }
                 if ((received % 10000) == 0) {
                     long time = System.currentTimeMillis() - start;
-                    _log.debug("Received "+received+" in " + time);
+                    _log.debug("Received " + received + " in " + time + "ms");
                 }
                 packet.release();
             }
@@ -92,8 +92,8 @@ public class UDPEndpointTestStandalone {
             _endpoint = peer;
         }
         public void run() {
-            System.out.println("rewrite me for SSU2");
-            throw new UnsupportedOperationException("rewrite me for SSU2");
+            System.out.println("Rewrite me for SSU2!");
+            throw new UnsupportedOperationException("Rewrite me for SSU2!");
 /*
             while (!_beginTest) {
                 try { Thread.sleep(2000); } catch (InterruptedException ie) {}

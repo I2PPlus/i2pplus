@@ -149,12 +149,12 @@ class PacketHandler {
 
                 packet.received();
                 //if (_log.shouldDebug())
-                //    _log.debug("Received: " + packet);
+                //    _log.debug("Received packet from " + packet);
                 try {
                     handlePacket(packet);
                 } catch (RuntimeException e) {
                     if (_log.shouldError())
-                        _log.error("Internal error handling a UDP packet: " + packet, e);
+                        _log.error("Internal error handling a UDP packet from " + packet, e);
                 }
                 // back to the cache with thee!
                 packet.release();

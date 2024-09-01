@@ -325,7 +325,6 @@ class UDPPacket implements CDPQEntry {
         }
         StringBuilder buf = new StringBuilder(256);
         if (_packet.getAddress().getAddress() != null) {
-            buf.append(" via ");
             buf.append(Addresses.toString(_packet.getAddress().getAddress(), _packet.getPort()));
             buf.append("\n* Size: ");
             buf.append(_packet.getLength());

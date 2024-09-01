@@ -997,7 +997,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             if (_queuedDataPackets != null) {
                 for (UDPPacket packet : _queuedDataPackets) {
                     if (_log.shouldInfo())
-                        _log.info("[SSU2] Passing possible data " + packet + " to PeerState2: " + this);
+                        _log.info("[SSU2] Passing possible data packet from " + packet + " to PeerState2: " + this);
                     _pstate.receivePacket(packet);
                     packet.release();
                 }
@@ -1019,11 +1019,11 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 _queuedDataPackets = new ArrayList<UDPPacket>(4);
             } else if (_queuedDataPackets.size() >= 10) {
                 if (_log.shouldWarn())
-                    _log.warn("[SSU2] Not queueing possible data " + packet + ", too many queued on " + this);
+                    _log.warn("[SSU2] Not queueing possible data packet from " + packet + ", too many queued on " + this);
                 return;
             }
             if (_log.shouldInfo())
-                _log.info("[SSU2] Queueing possible data " + packet + " on " + this);
+                _log.info("[SSU2] Queueing possible data packet from " + packet + " on " + this);
             // have to copy it because PacketHandler will release
             DatagramPacket pkt = packet.getPacket();
             UDPPacket packet2 = UDPPacket.acquire(_context, true);
@@ -1035,7 +1035,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         } else {
             // case 2, race, decrypt header and pass over
             if (_log.shouldInfo())
-                _log.info("[SSU2] Passing possible data " + packet + " to PeerState2: " + this);
+                _log.info("[SSU2] Passing possible data packet from " + packet + " to PeerState2: " + this);
             _pstate.receivePacket(packet);
         }
     }

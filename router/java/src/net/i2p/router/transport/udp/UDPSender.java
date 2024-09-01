@@ -142,11 +142,11 @@ class UDPSender {
         int psz = packet.getPacket().getLength();
         // minus IP header and UDP header, assume IPv4, this is just a quick check
         if (psz > PeerState2.MAX_MTU - 28) {
-            _log.error("Dropping large UDP packet " + psz + " bytes: " + packet, new Exception());
+            _log.error("Dropping large UDP packet " + psz + " bytes from " + packet, new Exception());
             return;
         }
         if (psz > 0 && psz < SSU2Util.MIN_DATA_LEN && _log.shouldWarn())
-            _log.warn("Small UDP packet " + psz + " bytes: " + packet, new Exception());
+            _log.warn("Small UDP packet " + psz + " bytes from " + packet, new Exception());
         if (_dummy) {
             // testing
             // back to the cache
@@ -174,7 +174,7 @@ class UDPSender {
             while (_keepRunning) {
                 UDPPacket packet = getNextPacket();
                 if (packet != null) {
-                    if (_log.shouldDebug()) {_log.debug("Attempting to send UDP packet to known peer " + packet);}
+                    if (_log.shouldDebug()) {_log.debug("Attempting to send UDP packet to known peer at " + packet);}
                     // ?? int size2 = packet.getPacket().getLength();
                     int size = packet.getPacket().getLength();
                     long acquireTime = _context.clock().now();
@@ -199,7 +199,7 @@ class UDPSender {
                     try {
                         DatagramPacket dp = packet.getPacket();
                          _socket.send(dp);
-                        if (_log.shouldDebug()) {_log.debug("Sent UDP packet " + packet);}
+                        if (_log.shouldDebug()) {_log.debug("Sent UDP packet to " + packet);}
                         long throttleTime = afterBW - acquireTime;
                         if (throttleTime > 10) {
                             _context.statManager().addRateData("udp.sendBWThrottleTime", throttleTime, acquireTime - packet.getBegin());
