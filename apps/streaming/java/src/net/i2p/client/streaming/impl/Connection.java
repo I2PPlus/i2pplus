@@ -725,6 +725,8 @@ class Connection {
         }
         synchronized (_connectLock) { _connectLock.notifyAll(); }
 
+        int disconnectCount = 0;
+
         if (_closeReceivedOn.get() <= 0) {
             // should have already been called from closeReceived() above
             _inputStream.closeReceived();
@@ -742,16 +744,20 @@ class Connection {
                 // only send a RESET if we ever got something (and he didn't RESET us),
                 // otherwise don't waste the crypto and tags
                 if (_log.shouldInfo()) {
-                    _log.warn("Hard disconnecting, sending RESET to " + getRemotePeerString() + " -> " +
+                    _log.warn("Hard disconnecting " + (disconnectCount > 1 ? "(Count: " + disconnectCount + ")" : "") +
+                              " and sending RESET to " + getRemotePeerString() + " -> " +
                               (removeFromConMgr ? "Removed from Connection Manager" : "Not removed from Connection Manager"));
                 }
                 sendReset();
+                disconnectCount++;
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("Hard disconnecting from " + getRemotePeerString() + " -> " +
+                    _log.warn("Hard disconnecting " + (disconnectCount > 1 ? "(Count: " + disconnectCount + ")" : "") +
+                              " from " + getRemotePeerString() + " -> " +
                               (removeFromConMgr ? "Removed from Connection Manager" : "Not removed from Connection Manager"));
             }
             _outputStream.streamErrorOccurred(new IOException("Hard disconnect"));
+            disconnectCount++;
         }
 
         if (removeFromConMgr) {

@@ -34,9 +34,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
     private volatile boolean _dead;
 
     private static final int FLAGS_INITIAL_TAGS = Packet.FLAG_SYNCHRONIZE;
-    private static final int FLAGS_FINAL_TAGS = Packet.FLAG_CLOSE |
-                                              Packet.FLAG_RESET |
-                                              Packet.FLAG_ECHO;
+    private static final int FLAGS_FINAL_TAGS = Packet.FLAG_CLOSE | Packet.FLAG_RESET | Packet.FLAG_ECHO;
     private static final int INITIAL_TAGS_TO_SEND = 32;
     private static final int MIN_TAG_THRESHOLD = 20;
     private static final int TAG_WINDOW_FACTOR = 5;
@@ -72,27 +70,15 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
      * @return true if sent
      */
     public boolean enqueue(PacketLocal packet) {
-        if (_dead)
-            return false;
-
-        //SessionKey keyUsed = packet.getKeyUsed();
-        //if (keyUsed == null)
-        //    keyUsed = new SessionKey();
-        //Set tagsSent = packet.getTagsSent();
-        //if (tagsSent == null)
-        //    tagsSent = new HashSet(0);
+        if (_dead) {return false;}
 
         if (packet.getAckTime() > 0) {
-            if (_log.shouldDebug())
-                _log.debug("Not resending " + packet);
+            if (_log.shouldDebug()) {_log.debug("Not resending packet " + packet);}
             return false;
         }
 
         Connection con = packet.getConnection();
-        if (con != null) {
-            // this updates the ack/nack fields
-            con.getInputStream().updateAcks(packet);
-        }
+        if (con != null) {con.getInputStream().updateAcks(packet);} // this updates the ack/nack fields
 
         ByteArray ba = _cache.acquire();
         byte buf[] = ba.getData();
@@ -103,16 +89,15 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
         try {
             int size = 0;
             //long beforeWrite = System.currentTimeMillis();
-            if (packet.shouldSign())
-                size = packet.writeSignedPacket(buf, 0);
-            else
-                size = packet.writePacket(buf, 0);
+            if (packet.shouldSign()) {size = packet.writeSignedPacket(buf, 0);}
+            else {size = packet.writePacket(buf, 0);}
             //long writeTime = System.currentTimeMillis() - beforeWrite;
-            //if ( (writeTime > 1000) && (_log.shouldWarn()) )
-            //    _log.warn("took " + writeTime + "ms to write the packet: " + packet);
+            //if ((writeTime > 1000) && (_log.shouldInfo())) {
+            //    _log.warn("Slow message delivery -> Took " + writeTime + "ms to write: " + packet);
+            //}
 
             // last chance to short circuit...
-            if (packet.getAckTime() > 0) return false;
+            if (packet.getAckTime() > 0) {return false;}
 
             // this should not block!
             begin = _context.clock().now();
@@ -120,11 +105,10 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             int pktTimeout = packet.getTimeout();
             if (pktTimeout > 0) {
                 // we want the router to expire it a little before we do,
-                // so if we retransmit it will use a new tunnel/lease combo
-                // If we are really close to the timeout already,
-                // give this packet a chance to be sent,
-                // but it's likely to be dropped on the router side if we're
-                // running this far behind.
+                // so if we retransmit, it will use a new tunnel/lease combo
+                // If we are really close to the timeout already, give this packet
+                // a chance to be sent, but it's likely to be dropped on the
+                // router side if we're running this far behind.
                 expires = Math.max(begin + pktTimeout - I2CP_EXPIRATION_ADJUST, begin + 25);
             }
             SendMessageOptions options = new SendMessageOptions();
@@ -154,8 +138,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                 options.setTagsToSend(sendTags);
                 options.setTagThreshold(tagThresh);
                 // CLOSE, RESET, and PING packets unlikely to have a large payload
-                // and most of the rest of the packet is
-                // uncompressible: stream ids, signature
+                // and most of the rest of the packet is uncompressible: stream ids, signature
                 options.setGzip(packet.getPayloadSize() > 50);
             } else if (packet.isFlagSet(FLAGS_INITIAL_TAGS)) {
                 if (con != null) {
@@ -211,8 +194,8 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             }
             end = _context.clock().now();
 
-            if ( (end-begin > 1000) && (_log.shouldWarn()) )
-                _log.warn("Took " + (end-begin) + "ms to send message: " + packet);
+            if ((end-begin > 1000) && (_log.shouldWarn()))
+                _log.warn("Slow message delivery -> Took " + (end-begin) + "ms to send: " + packet);
 
             _context.statManager().addRateData("stream.con.sendMessageSize", size, packet.getLifetime());
             if (packet.getNumSends() > 1)
@@ -220,22 +203,19 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
 
             if (con != null) {
                 con.incrementBytesSent(size);
-                if (packet.getNumSends() > 1)
-                    con.incrementDupMessagesSent(1);
+                if (packet.getNumSends() > 1) {con.incrementDupMessagesSent(1);}
             }
         } catch (I2PSessionException ise) {
-            if (_log.shouldWarn())
-//                _log.warn("Unable to send the packet " + packet, ise);
-                _log.warn("Unable to send the packet " + packet + "\n* " + ise.getMessage());
+            if (_log.shouldWarn()) {
+                _log.warn("Unable to send the packet " + packet + " -> " + ise.getMessage());
+            }
         }
 
         _cache.release(ba);
 
         if (!sent) {
-            if (_log.shouldWarn())
-                _log.warn("Send failed for " + packet);
-            if (con != null) // handle race on b0rk
-                con.disconnect(false);
+            if (_log.shouldWarn()) {_log.warn("Send failed for packet " + packet);}
+            if (con != null) {con.disconnect(false);} // handle race on b0rk
         } else {
             //packet.setKeyUsed(keyUsed);
             //packet.setTagsSent(tagsSent);
@@ -275,13 +255,13 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
      * @since 0.9.14
      */
     public void messageStatus(I2PSession session, long msgId, int status) {
-        if (_dead)
-            return;
+        if (_dead) {return;}
         Long id = Long.valueOf(msgId);
         Connection con = _messageStatusMap.get(id);
         if (con == null) {
-            if (_log.shouldWarn())
+            if (_log.shouldWarn()) {
                 _log.warn("Received status [" + status + "] for [MsgID " + msgId + "] on UNKNOWN connection");
+            }
             return;
         }
 
@@ -295,8 +275,9 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             case MessageStatusMessage.STATUS_SEND_FAILURE_EXPIRED:
             // overflow in router-side I2CP queue, sent as of 0.9.29, will be retried
             case MessageStatusMessage.STATUS_SEND_FAILURE_LOCAL:
-                if (_log.shouldInfo())
+                if (_log.shouldInfo()) {
                     _log.warn("Received Soft Failure status [" + status + "] for [MsgID " + msgId + "] \n* " + con);
+                }
                 _messageStatusMap.remove(id);
                 break;
 
@@ -308,8 +289,9 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                 // or we increase the timeout for it,
                 // we can't treat this one as a hard fail.
                 // Let the streaming retransmission paper over the problem.
-                if (_log.shouldWarn())
+                if (_log.shouldWarn()) {
                     _log.warn("LeaseSet lookup: Soft Failure for [MsgID " + msgId + "] \n* " + con);
+                }
                 _messageStatusMap.remove(id);
                 break;
 
