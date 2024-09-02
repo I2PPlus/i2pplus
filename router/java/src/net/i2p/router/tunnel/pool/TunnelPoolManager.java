@@ -48,8 +48,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     private static final String PROP_DISABLE_TUNNEL_TESTING = "router.disableTunnelTesting";
 
-    private static final int MIN_KBPS_TWO_HANDLERS = 64;
-    private static final int MIN_KBPS_THREE_HANDLERS = 512;
+    private static final int MIN_KBPS_TWO_HANDLERS = 32;
+    private static final int MIN_KBPS_THREE_HANDLERS = 128;
     private static final double MAX_SHARE_RATIO = 100000d;
 
     public TunnelPoolManager(RouterContext ctx) {
@@ -72,12 +72,11 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         int cores = SystemVersion.getCores();
         Boolean isSlow = SystemVersion.isSlow();
         int share = TunnelDispatcher.getShareBandwidth(ctx);
-        if (maxMemory >= 1024*1024*1024 && cores >= 3 && !isSlow)
+        if (!isSlow) {
             _numHandlerThreads = ctx.getProperty("router.buildHandlerThreads", Math.max(cores / 2, 8));
-        else if (cores < 3)
-            _numHandlerThreads = ctx.getProperty("router.buildHandlerThreads", 3);
-        else
+        } else {
             _numHandlerThreads = ctx.getProperty("router.buildHandlerThreads", Math.max(cores / 2, 6));
+        }
 
         // The following are for TestJob
         long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
@@ -546,7 +545,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (_context.clientManager().isLocal(destination)) {
             // race with buildTunnels() on restart of a client
             if (_log.shouldWarn())
-//                _log.warn("Not removing pool still registered with client manager: " + destination.toBase32(), new Exception("i did it"));
                 _log.warn("Not removing pool still registered with client manager: " + destination.toBase32());
             return;
         }
@@ -690,15 +688,10 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         ObjectCounterUnsafe<Hash> lc = new ObjectCounterUnsafe<Hash>();
         int tunnelCount = countTunnelsPerPeer(lc);
         Set<Hash> rv = new HashSet<Hash>();
-        int rnd = _context.random().nextInt(6);
-        int max;
-        if (tunnelCount >= 4 && _context.router().getUptime() > 3 * 60 * 1000) {
-            max = _context.getProperty("router.maxTunnelPercentage", DEFAULT_MAX_PCT_TUNNELS) - rnd;
-            max = Math.max(max, 1);
-            for (Hash h : lc.objects()) {
-                if (lc.count(h) > 0 && (lc.count(h) + 1) * 100 / (tunnelCount + 1) > max) {
-                    rv.add(h);
-                }
+        int max = DEFAULT_MAX_PCT_TUNNELS;
+        for (Hash h : lc.objects()) {
+            if (lc.count(h) > 0 && (lc.count(h) + 1) * 100 / (tunnelCount + 1) > max) {
+                rv.add(h);
             }
         }
         return rv;
@@ -706,12 +699,12 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
         /** for TunnelRenderer in router console */
     public Map<Hash, TunnelPool> getInboundClientPools() {
-            return new HashMap<Hash, TunnelPool>(_clientInboundPools);
+        return new HashMap<Hash, TunnelPool>(_clientInboundPools);
     }
 
     /** for TunnelRenderer in router console */
     public Map<Hash, TunnelPool> getOutboundClientPools() {
-            return new HashMap<Hash, TunnelPool>(_clientOutboundPools);
+        return new HashMap<Hash, TunnelPool>(_clientOutboundPools);
     }
 
     /**
