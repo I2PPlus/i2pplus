@@ -40,6 +40,7 @@
 --ink_btn_active:#83529f;
 --ink:#c9ceff;
 --ink_darker:#99a3ff;
+--ink_darker_soft:#99a3ff99;
 --label:linear-gradient(180deg,#002,#001);
 --li:#8589ad;
 --membarinner:linear-gradient(90deg,#0000 100px,rgba(255,0,255,.1) 160px,rgba(255,0,0,.15)),linear-gradient(180deg,rgba(100,100,220,.5),rgba(70,70,120,.5) 50%,rgba(0,0,50,.5) 50%,rgba(0,0,0,.5));

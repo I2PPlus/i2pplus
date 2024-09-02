@@ -1376,8 +1376,8 @@ font[color="#ff3300"]{color:#d00}
 font[color="#cc0000"]{color:#f00}
 #logs li font[color="#cc0000"]::before,.log_crit{background:#f00}
 /* info */
-font[color="#000099"]{color:var(--ink)}
-#logs li font[color="#000099"]::before,.log_info{background:var(--ink)}
+font[color="#000099"]{color:var(--ink_darker_soft)}
+#logs li font[color="#000099"]::before,.log_info{background:var(--ink_darker_soft)}
 
 #logs li a:not(:hover){color:inherit}
 #logs li a[href^="/netdb?l="]{white-space:nowrap}
