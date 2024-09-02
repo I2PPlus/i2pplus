@@ -51,9 +51,9 @@
  <tr><th colspan=2><%=intl._t("Manually Ban / Unban a Peer")%></th></tr>
  <tr><td class=infohelp colspan=2>
  <%=intl._t("Banning will prevent the participation of this peer in tunnels you create.")%>&nbsp;
- <%=intl._t("An overview of current bans by IP address is presented below.")%>&nbsp;
- <%=intl._t("To view all active bans, see {0}Banned Peers{1}.", "<a href=\"/profiles?f=3\">", "</a>")%>&nbsp;
- <%=intl._t("A list of {0}session-only bans{1} is also available.", "<a href=\"/profiles?f=4\">", "</a>")%>
+ <%=intl._t("A list of bans by IP address is presented below.")%>&nbsp;
+ <%=intl._t("To view all active bans by router hash, see {0}Banned Peers{1}.", "<a href=\"/profiles?f=3\">", "</a>")%>&nbsp;
+ <%=intl._t("A list of {0}session-only bans{1} by hash is also available.", "<a href=\"/profiles?f=4\">", "</a>")%>
  </td></tr>
  <tr><td class=optionsave colspan=2>
 <%

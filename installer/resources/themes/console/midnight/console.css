@@ -1205,29 +1205,29 @@ td.optionsave{padding:7px 5px;text-align:right;border-top:var(--border_inner);ba
 /* configpeers banlist */
 #bannedips{margin-bottom:-5px;margin-top:-1px}
 #bannedips table{margin-bottom:-1px}
-#bannedips td{padding:0;width:50%;vertical-align:top}
 #bannedips table tr{border-top:1px solid #000}
-#bannedips table td{padding:4px 2px;text-align:center}
 #bannedips table tr:last-child{border-bottom:var(--border_inner)}
-#permabanned th,#banneduntilrestart th{padding:8px 10px}
-#permabanned,#banneduntilrestart{margin:-1px 0;border:0}
-#permabanned td,#banneduntilrestart td{border-right:0!important}
-#permabanned td:first-child{padding-right:10px;width:49%;text-align:right;border-left:var(--border_inner)}
-#permabanned td:nth-child(2){width:2%}
-#permabanned td:last-child{padding-left:10px;width:49%;text-align:left}
+#bannedips td{padding:0;width:50%;vertical-align:top}
+#bannedips table td{padding:4px 2px;text-align:center}
+#banneduntilrestart,#permabanned{margin:-1px 0;border:0}
+#banneduntilrestart th,#permabanned th{padding:8px 10px}
 #banneduntilrestart td{border-right:var(--border_inner);text-align:center}
+#banneduntilrestart td,#permabanned td{border-right:0}
 #ipv4,#ipv6,#permabanned tr:nth-child(2){border-top:var(--border_inner);border-bottom:var(--border_inner);background:linear-gradient(180deg,#080818 50%,#000 50%)}
+#permabanned td:first-child{padding-right:10px;width:49%;text-align:right;border-left:0!important}
+#permabanned td:last-child{padding-left:10px;width:49%;text-align:left}
+#permabanned td:nth-child(2){width:2%}
 #sessionBanned{margin:11px auto 9px}
 #sessionBanned th,#sessionBanned td{padding:6px 12px}
+#sessionBanned th{user-select:none}
 #sessionBanned thead th{font-size:90%;text-align:left}
 #sessionBanned tfoot th{padding:8px 12px}
-#profiles #sessionBanned th:nth-child(2),#sessionBanned td:nth-child(2){font-size:0;border-left:0!important}
-#profiles #sessionBanned td:first-child{border-right:0!important}
-#sessionBanned td:first-child::before{width:26px;height:20px;display:inline-block;vertical-align:middle;background:var(--client) no-repeat left center/18px;content:""}
-#sessionBanned .banFF td:first-child::before{background:var(--floodfill) no-repeat left center/18px}
-#sessionBanned .b64{padding:5px 8px;display:inline-block;vertical-align:middle;line-height:1;font-family:var(--monospaced);font-size:90%;font-weight:500;box-shadow:var(--bevel);background:var(--badge);user-select:all}
 #sessionBanned th:last-child,#sessionBanned td:last-child{text-align:right;user-select:none}
-#sessionBanned th{user-select:none}
+#sessionBanned td:first-child::before{width:26px;height:20px;display:inline-block;vertical-align:middle;background:var(--client) no-repeat left center/18px;content:""}
+#sessionBanned .b64{padding:5px 8px;display:inline-block;vertical-align:middle;line-height:1;font-family:var(--monospaced);font-size:90%;font-weight:500;box-shadow:var(--bevel);background:var(--badge);user-select:all}
+#sessionBanned .banFF td:first-child::before{background:var(--floodfill) no-repeat left center/18px}
+#profiles #sessionBanned td:first-child{border-right:0!important}
+#profiles #sessionBanned th:nth-child(2),#sessionBanned td:nth-child(2){font-size:0;border-left:0!important}
 
 /* netdb (main section) */
 #netdb #pagenav~#pagenav{display:none}
