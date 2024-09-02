@@ -661,12 +661,14 @@ public class GeoIP {
      *  @param ts the timestamp of the geoip file that was read, greater than zero
      */
     private void updateOurCountry(long ts) {
-        if (! (_context instanceof RouterContext))
-            return;
+        if (! (_context instanceof RouterContext)) {return;}
         RouterContext ctx = (RouterContext) _context;
         String oldCountry = ctx.router().getConfigSetting(PROP_IP_COUNTRY);
+        boolean isHidden = ctx.getBooleanProperty(Router.PROP_HIDDEN_HIDDEN);
+        boolean blockMyCountry = ctx.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
         RouterInfo us = ctx.router().getRouterInfo();
         String country = null;
+
         // we should always have a RouterInfo by now, but we had one report of an NPE here
         if (us != null) {
             // try our published addresses
@@ -674,8 +676,7 @@ public class GeoIP {
                 byte[] ip = ra.getIP();
                 if (ip != null) {
                     country = get(ip);
-                    if (country != null)
-                        break;
+                    if (country != null) {break;}
                 }
             }
         }
@@ -684,8 +685,7 @@ public class GeoIP {
             Set<String> addrs = Addresses.getAddresses(false, true);
             for (String ip : addrs) {
                 country = get(ip);
-                if (country != null)
-                    break;
+                if (country != null) {break;}
             }
             if (country == null) {
                 String lastIP = _context.getProperty(UDPTransport.PROP_IP);
@@ -693,8 +693,7 @@ public class GeoIP {
                     country = get(lastIP);
                     if (country == null) {
                         lastIP = _context.getProperty(UDPTransport.PROP_IPV6);
-                        if (lastIP != null)
-                            country = get(lastIP);
+                        if (lastIP != null) {country = get(lastIP);}
                     }
                 }
             }
@@ -704,30 +703,34 @@ public class GeoIP {
                 _log.debug("Our router's previously identified country was " + oldCountry + " -> New country is " + country);
             }
             boolean wasStrict = ctx.commSystem().isInStrictCountry();
-            ctx.router().saveConfig(PROP_IP_COUNTRY, country);
             boolean isStrict = ctx.commSystem().isInStrictCountry();
             String isStrictCountry = isStrict ? "strict" : "non-strict";
             String wasStrictCountry = wasStrict ? "strict" : "non-strict";
+            ctx.router().saveConfig(PROP_IP_COUNTRY, country);
             if (_log.shouldInfo() && isStrict != wasStrict) {
                 _log.info("Our router's previously identified country (" + oldCountry + ") was " + wasStrictCountry +
                           " -> New country (" + country + ") is designated as " + isStrictCountry);
             }
-            if (isStrict || ctx.getBooleanProperty(Router.PROP_HIDDEN_HIDDEN) ||
-                ctx.getBooleanProperty(PROP_BLOCK_MY_COUNTRY)) {
-                // generate country blocklist
-                countryToIP(country);
-                // go thru the netdb
-                banCountry(ctx, country);
+            if (isStrict || isHidden || blockMyCountry) {
+                countryToIP(country); // generate country blocklist
+                banCountry(ctx, country); // go thru the netdb
+                if (blockMyCountry || isHidden && _log.shouldWarn()) {
+                    _log.warn("Banning all routers from our country (" + country + ") -> " +
+                              (isHidden ? "Hidden Mode is active" : "Enabled via configuration"));
+                }
             } else {
                 // remove country blocklist, won't take effect until restart
                 File bc = new File(_context.getConfigDir(), Blocklist.BLOCKLIST_COUNTRY_FILE);
                 bc.delete();
+                if (_log.shouldWarn()) {
+                    _log.warn("Removing global ban for all routers from our country (" + country + ") -> " +
+                              "Restart required");
+                }
             }
-            if (wasStrict != isStrict && ctx.getProperty(Router.PROP_HIDDEN_HIDDEN) == null) {
+            if (wasStrict != isStrict && !isHidden) {
                 if (isStrict) {
                     String name = fullName(country);
-                    if (name == null)
-                        name = country;
+                    if (name == null) {name = country;}
                     _log.logAlways(Log.WARN, "Enabling Hidden mode for additional security features in " + name +
                                              "\n* You may override this setting on the network configuration page if required");
                 }
@@ -736,19 +739,11 @@ public class GeoIP {
         } else if (country != null) {
             // No change, but we may need to update blocklist-country.txt
             boolean isStrict = ctx.commSystem().isInStrictCountry();
-            if (isStrict || ctx.getBooleanProperty(Router.PROP_HIDDEN_HIDDEN) ||
-                ctx.getBooleanProperty(PROP_BLOCK_MY_COUNTRY)) {
-                // check country blocklist timestamp
-                File bc = new File(_context.getConfigDir(), Blocklist.BLOCKLIST_COUNTRY_FILE);
+            if (isStrict || isHidden || blockMyCountry) {
+                File bc = new File(_context.getConfigDir(), Blocklist.BLOCKLIST_COUNTRY_FILE); // check country blocklist timestamp
                 long lm = bc.lastModified();
-                if (lm < ts) {
-                    // regenerate blocklist
-                    countryToIP(country);
-                }
-                if (_lookupRunCount == 1) {
-                    // go thru the netdb
-                    banCountry(ctx, country);
-                }
+                if (lm < ts) {countryToIP(country);} // regenerate blocklist
+                if (_lookupRunCount == 1) {banCountry(ctx, country);} // go thru the netdb
             }
         }
     }
@@ -758,10 +753,15 @@ public class GeoIP {
      *  @since 0.9.48
      */
     private static void banCountry(RouterContext ctx, String country) {
+        boolean blockMyCountry = ctx.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
         for (Hash h : ctx.netDb().getAllRouters()) {
             String hisCountry = ctx.commSystem().getCountry(h);
             if (country.equals(hisCountry)) {
-                ctx.banlist().banlistRouterForever(h, " <b>➜</b> In our country (we are in Hidden mode)");
+                if (blockMyCountry) {
+                    ctx.banlist().banlistRouterForever(h, " <b>➜</b> In our country (banned via config)");
+                } else {
+                    ctx.banlist().banlistRouterForever(h, " <b>➜</b> In our country (we are in Hidden mode)");
+                }
             }
         }
     }
