@@ -10,143 +10,103 @@ import net.i2p.router.Blocklist;
 import net.i2p.router.web.HelperBase;
 import net.i2p.util.Addresses;
 
-
 public class ConfigPeerHelper extends HelperBase {
 
     private static final int MAX_DISPLAY = 1000;
 
     public String getBlocklistSummary() {
-        StringWriter out = new StringWriter(4*1024);
+        StringBuilder buf = new StringBuilder(128*1024);
         Blocklist bl = _context.blocklist();
 
-        out.write("<table id=bannedips style=display:none><tr><td>");
+        buf.append("<table id=bannedips style=display:none><tr><td>\n");
 
         // permabanned
-        out.write("<table id=permabanned><tr><th colspan=3><b>");
-        out.write(_t("IPs Permanently Banned"));
-        out.write("</b></th></tr>");
+        buf.append("<table id=permabanned>")
+           .append("<tr><th colspan=3><b>").append(_t("IPs Permanently Banned")).append("</b></th></tr>\n");
         int blocklistSize = bl.getBlocklistSize();
         if (blocklistSize > 0) {
-            out.write("<tr><td><b>");
-            out.write(_t("From"));
-            out.write("</b></td><td></td><td><b>");
-            out.write(_t("To"));
-            out.write("</b></td></tr>");
+            buf.append("<tr><td><b>").append(_t("From")).append("</b></td><td></td>")
+               .append("<td><b>").append(_t("To")).append("</b></td></tr>\n");
             long[] blocklist = bl.getPermanentBlocks(MAX_DISPLAY);
             // first 0 - 127
             for (int i = 0; i < blocklist.length; i++) {
                 int from = Blocklist.getFrom(blocklist[i]);
-                if (from < 0)
-                    continue;
-                out.write("<tr><td>");
-                out.write(Blocklist.toStr(from));
-                out.write("</td>");
+                if (from < 0) {continue;}
+                buf.append("<tr><td>").append(Blocklist.toStr(from)).append("</td>");
                 int to = Blocklist.getTo(blocklist[i]);
                 if (to != from) {
-                    out.write("<td>-</td><td>");
-                    out.write(Blocklist.toStr(to));
-                    out.write("</td></tr>\n");
+                    buf.append("<td>-</td><td>").append(Blocklist.toStr(to)).append("</td></tr>\n");
                 } else {
-                    out.write("<td></td><td>&nbsp;</td></tr>\n");
+                    buf.append("<td></td><td>&nbsp;</td></tr>\n");
                 }
             }
             // then 128 - 255
             for (int i = 0; i < blocklist.length; i++) {
                 int from = Blocklist.getFrom(blocklist[i]);
-                if (from >= 0)
-                    break;
-                out.write("<tr><td>");
-                out.write(Blocklist.toStr(from));
-                out.write("</td>");
+                if (from >= 0) {break;}
+                buf.append("<tr><td>").append(Blocklist.toStr(from)).append("</td>");
                 int to = Blocklist.getTo(blocklist[i]);
                 if (to != from) {
-                    out.write("<td>-</td><td>");
-                    out.write(Blocklist.toStr(to));
-                    out.write("</td></tr>\n");
+                    buf.append("<td>-</td><td>").append(Blocklist.toStr(to)).append("</td></tr>\n");
                 } else {
-                    out.write("<td></td><td>&nbsp;</td></tr>\n");
+                    buf.append("<td></td><td>&nbsp;</td></tr>\n");
                 }
             }
             if (blocklistSize > MAX_DISPLAY)
-                // very rare, don't bother translating
-                out.write("<tr><th colspan=3>First " + MAX_DISPLAY + " displayed, see the " +
-                          Blocklist.BLOCKLIST_FILE_DEFAULT + " file for the full list</th></tr>");
+                buf.append("<tr><th colspan=3>").append(_t("First {0} displayed, see the {1} file for the full list",
+                            MAX_DISPLAY, Blocklist.BLOCKLIST_FILE_DEFAULT)).append("</th></tr>");
         } else {
-            out.write("<tr><td><i>");
-            out.write(_t("none"));
-            out.write("</i></td></tr>");
+            buf.append("<tr><td><i>").append(_t("none")).append("</i></td></tr>");
         }
-        out.write("</table>");
+        buf.append("</table>");
 
-        out.write("</td><td id=sessionIpBans width=50%>");
+        buf.append("</td>\n<td id=sessionIpBans width=50%>");
 
         // session banned
-        out.write("<table id=banneduntilrestart><tr><th><b>");
-        out.write(_t("IPs Banned Until Restart"));
-        out.write("</b></th></tr>");
+        buf.append("<table id=banneduntilrestart><tr><th><b>").append(_t("IPs Banned Until Restart")).append("</b></th></tr>\n");
         List<Integer> singles = bl.getTransientIPv4Blocks();
         List<BigInteger> s6 = bl.getTransientIPv6Blocks();
         if (!(singles.isEmpty() && s6.isEmpty())) {
             if (!singles.isEmpty()) {
                 Collections.sort(singles);
-                out.write("<tr id=ipv4><td><b>");
-                out.write(_t("IPv4 Addresses"));
-                out.write("</b></td></tr>");
+                buf.append("<tr id=ipv4><td><b>").append(_t("IPv4 Addresses")).append("</b></td></tr>\n");
             }
             // first 0 - 127
             for (Integer ii : singles) {
                  int ip = ii.intValue();
-                 if (ip < 0)
-                     continue;
-                 // don't display if on the permanent blocklist also
-                 if (bl.isPermanentlyBlocklisted(ip))
-                     continue;
-                 out.write("<tr><td>");
-                 out.write(Blocklist.toStr(ip));
-                 out.write("</td></tr>\n");
+                 if (ip < 0) {continue;}
+                 if (bl.isPermanentlyBlocklisted(ip)) {continue;} // don't display if on the permanent blocklist also
+                 buf.append("<tr><td>").append(Blocklist.toStr(ip)).append("</td></tr>\n");
             }
             // then 128 - 255
             for (Integer ii : singles) {
                  int ip = ii.intValue();
-                 if (ip >= 0)
-                     break;
-                 // don't display if on the permanent blocklist also
-                 if (bl.isPermanentlyBlocklisted(ip))
-                     continue;
-                 out.write("<tr><td>");
-                 out.write(Blocklist.toStr(ip));
-                 out.write("</td></tr>\n");
+                 if (ip >= 0) {break;}
+                 if (bl.isPermanentlyBlocklisted(ip)) {continue;} // don't display if on the permanent blocklist also
+                 buf.append("<tr><td>").append(Blocklist.toStr(ip)).append("</td></tr>\n");
             }
             // then IPv6
             if (!s6.isEmpty()) {
-                out.write("<tr id=ipv6><td><b>");
-                out.write(_t("IPv6 Addresses"));
-                out.write("</b></td></tr>");
+                buf.append("<tr id=ipv6><td><b>").append(_t("IPv6 Addresses")).append("</b></td></tr>\n");
                 Collections.sort(s6);
                 for (BigInteger bi : s6) {
-                     out.write("<tr><td>");
-                     out.write(Addresses.toString(toIPBytes(bi)));
-                     out.write("</td></tr>\n");
+                     buf.append("<tr><td>").append(Addresses.toString(toIPBytes(bi))).append("</td></tr>\n");
                 }
             }
         } else {
-            out.write("<tr><td><i>");
-            out.write(_t("none"));
-            out.write("<style>#sessionIpBans{display:none!important}</style>");
-            out.write("</i></td></tr>\n");
+            buf.append("<tr><td><i>").append(_t("none")).append("<style>#sessionIpBans{display:none!important}</style>")
+               .append("</i></td></tr>\n");
         }
-        out.write("</table>");
+        buf.append("</table>");
 
-        out.write("</td></tr></table>\n");
-        return out.toString();
+        buf.append("</td></tr></table>\n");
+        return buf.toString();
     }
 
     /**
      *  @since 0.9.50
      */
-    public boolean isBanned(Hash h) {
-        return _context.banlist().isBanlisted(h);
-    }
+    public boolean isBanned(Hash h) {return _context.banlist().isBanlisted(h);}
 
     /**
      *  Convert a (non-negative) two's complement IP to exactly 16 bytes
@@ -156,13 +116,10 @@ public class ConfigPeerHelper extends HelperBase {
     private static byte[] toIPBytes(BigInteger bi) {
         byte[] ba = bi.toByteArray();
         int len = ba.length;
-        if (len == 16)
-            return ba;
+        if (len == 16) {return ba;}
         byte[] rv = new byte[16];
-        if (len < 16)
-            System.arraycopy(ba, 0, rv, 16 - len, len);
-        else
-            System.arraycopy(ba, len - 16, rv, 0, 16);
+        if (len < 16) {System.arraycopy(ba, 0, rv, 16 - len, len);}
+        else {System.arraycopy(ba, len - 16, rv, 0, 16);}
         return rv;
     }
 }
