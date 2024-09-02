@@ -2933,3 +2933,11 @@ body.isDown::after,body.isDown::before{height:100vh;width:100%;display:block;pos
 body.isDown::before{background:rgba(0,0,16,.9);backdrop-filter:saturate(.2) blur(5px);z-index:9998}
 body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 40px);background:var(--update) center center/80px;content:"";transform:rotate(0);animation:linear spin 3s forwards infinite;z-index:9999}
 
+/* configpeers */
+#ipbans.toggle{position:relative;cursor:pointer}
+#ipbans.toggle:not(.expanded){margin-bottom:-3px}
+#ipbans.toggle:hover{color:var(--hover)}
+#ipbans.toggle::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
+#ipbans.toggle:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
+#ipbans.toggle.expanded::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:none}
+#ipbans.toggle.expanded:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:none}

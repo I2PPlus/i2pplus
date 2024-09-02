@@ -19,7 +19,7 @@ public class ConfigPeerHelper extends HelperBase {
         StringWriter out = new StringWriter(4*1024);
         Blocklist bl = _context.blocklist();
 
-        out.write("<table id=bannedips><tr><td>");
+        out.write("<table id=bannedips style=display:none><tr><td>");
 
         // permabanned
         out.write("<table id=permabanned><tr><th colspan=3><b>");

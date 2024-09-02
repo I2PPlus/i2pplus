@@ -87,14 +87,27 @@
 </tr>
 </table>
 </form>
-<h3 class=tabletitle><%=intl._t("Banned IPs")%></h3>
+<h3 id=ipbans class=tabletitle><%=intl._t("Banned IPs")%></h3>
 <jsp:getProperty name="peerhelper" property="blocklistSummary" />
 </div>
 <script nonce=<%=cspNonce%>>
-window.addEventListener("DOMContentLoaded", progressx.hide);
-document.addEventListener("DOMContentLoaded", () => {
-  lazyload();
-});
+  function toggleBans() {
+    const bannedips = document.getElementById("bannedips");
+    const ipbans = document.getElementById("ipbans");
+     if (bannedips.style.display == "none") {
+       bannedips.style.display = "table";
+       ipbans.classList.add("expanded");
+     } else {
+       bannedips.style.display = "none";
+       ipbans.classList.remove("expanded");
+     }
+  }
+  document.addEventListener("DOMContentLoaded", () => {
+    const ipbans = document.getElementById("ipbans");
+    ipbans.addEventListener("click", toggleBans);
+    ipbans.classList.add("toggle");
+  });
 </script>
+<noscript><style>#bannedips{display:table!important}</style></noscript>
 </body>
 </html>
