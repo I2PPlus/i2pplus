@@ -5124,7 +5124,7 @@ msgstr "Premie mogą być dodatnie lub ujemne i wpływać na włączenie partner
 msgid "Banned Peers"
 msgstr "Zbanowani uczestnicy"
 
-msgid "Banned IPs"
+msgid "Banned IP Addresses"
 msgstr "Zbanowane adresy IP"
 
 msgid "config plugins"

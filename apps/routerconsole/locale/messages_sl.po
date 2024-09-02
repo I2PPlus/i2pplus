@@ -5142,7 +5142,7 @@ msgstr "Bonusi lahko vplivajo pozitivno ali negativno, in vplivajo na vključite
 msgid "Banned Peers"
 msgstr "Prepovedani parterji"
 
-msgid "Banned IPs"
+msgid "Banned IP Addresses"
 msgstr "Prepovedani IP"
 
 msgid "config plugins"

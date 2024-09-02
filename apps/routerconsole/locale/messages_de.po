@@ -5106,7 +5106,7 @@ msgstr "Boni können positiv oder negativ sein und sich auf die Aufnahme des Pee
 msgid "Banned Peers"
 msgstr "Gesperrte Teilnehmer"
 
-msgid "Banned IPs"
+msgid "Banned IP Addresses"
 msgstr "Gesperrte IPs"
 
 msgid "config plugins"

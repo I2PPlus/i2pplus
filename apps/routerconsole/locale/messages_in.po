@@ -5088,7 +5088,7 @@ msgstr "Bonus dapat bernilai positif atau negatif, dan memengaruhi termasuknya p
 msgid "Banned Peers"
 msgstr "Peers yang Diblokir"
 
-msgid "Banned IPs"
+msgid "Banned IP Addresses"
 msgstr "IP yang Diblokir"
 
 msgid "config plugins"

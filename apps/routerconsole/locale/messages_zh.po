@@ -5088,7 +5088,7 @@ msgstr "评分可能是正数或负数，并影响对等节点在快速和高容
 msgid "Banned Peers"
 msgstr "已封禁对等节点"
 
-msgid "Banned IPs"
+msgid "Banned IP Addresses"
 msgstr "已封禁 IP"
 
 msgid "config plugins"

@@ -5106,7 +5106,7 @@ msgstr "Bonusar kan vara positiva eller negativa och påverka kamratens inkluder
 msgid "Banned Peers"
 msgstr "Förbjudna noder"
 
-msgid "Banned IPs"
+msgid "Banned IP Addresses"
 msgstr "Förbjudna IP:n"
 
 msgid "config plugins"

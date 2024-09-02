@@ -5106,7 +5106,7 @@ msgstr "Os bônus podem ser positivos ou negativos e afetam a inclusão do par e
 msgid "Banned Peers"
 msgstr "Pares banidos"
 
-msgid "Banned IPs"
+msgid "Banned IP Addresses"
 msgstr "IPs banidos"
 
 msgid "config plugins"

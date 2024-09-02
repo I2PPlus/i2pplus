@@ -5106,7 +5106,7 @@ msgstr "Bonusser kan være positive eller negative og påvirke peer's optagelse 
 msgid "Banned Peers"
 msgstr "Bannede peers"
 
-msgid "Banned IPs"
+msgid "Banned IP Addresses"
 msgstr "Bannede IPer"
 
 msgid "config plugins"

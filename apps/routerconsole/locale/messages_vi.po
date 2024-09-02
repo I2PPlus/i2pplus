@@ -5088,7 +5088,7 @@ msgstr "Tiền thưởng có thể tích cực hoặc tiêu cực và ảnh hư�
 msgid "Banned Peers"
 msgstr "Đồng nghiệp bị cấm"
 
-msgid "Banned IPs"
+msgid "Banned IP Addresses"
 msgstr "IP bị cấm"
 
 msgid "config plugins"

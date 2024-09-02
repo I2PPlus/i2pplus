@@ -87,7 +87,7 @@
 </tr>
 </table>
 </form>
-<h3 id=ipbans class=tabletitle><%=intl._t("Banned IPs")%></h3>
+<h3 id=ipbans class=tabletitle><%=intl._t("Banned IP Addresses")%></h3>
 <jsp:getProperty name="peerhelper" property="blocklistSummary" />
 </div>
 <script nonce=<%=cspNonce%>>

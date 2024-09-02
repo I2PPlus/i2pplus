@@ -5106,7 +5106,7 @@ msgstr "Τα μπόνους μπορεί να είναι θετικά ή αρν�
 msgid "Banned Peers"
 msgstr "Απαγορευμένοι συνομήλικοι"
 
-msgid "Banned IPs"
+msgid "Banned IP Addresses"
 msgstr "Αποκλεισμένες IP"
 
 msgid "config plugins"

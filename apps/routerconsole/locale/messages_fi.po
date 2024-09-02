@@ -5106,7 +5106,7 @@ msgstr "Bonukset voivat olla positiivisia tai negatiivisia, ja ne voivat vaikutt
 msgid "Banned Peers"
 msgstr "Estetyt vertaissolmut"
 
-msgid "Banned IPs"
+msgid "Banned IP Addresses"
 msgstr "Estetyt IP:t"
 
 msgid "config plugins"

@@ -5107,7 +5107,7 @@ msgstr "Boonused võivad olla positiivsed või negatiivsed ning mõjutada eakaas
 msgid "Banned Peers"
 msgstr "Bännitud ruuterid"
 
-msgid "Banned IPs"
+msgid "Banned IP Addresses"
 msgstr "Bännitud IP-aadressid"
 
 msgid "config plugins"

@@ -5088,7 +5088,7 @@ msgstr "ボーナスはプラスまたはマイナスであり、高速および
 msgid "Banned Peers"
 msgstr "禁止されているピア"
 
-msgid "Banned IPs"
+msgid "Banned IP Addresses"
 msgstr "禁止されたIP"
 
 msgid "config plugins"

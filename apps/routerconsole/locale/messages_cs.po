@@ -5124,7 +5124,7 @@ msgstr "Bonusy mohou být kladné nebo záporné a ovlivňují zařazení partne
 msgid "Banned Peers"
 msgstr "Zakázaní vrstevníci"
 
-msgid "Banned IPs"
+msgid "Banned IP Addresses"
 msgstr "Zakázané IP adresy"
 
 msgid "config plugins"

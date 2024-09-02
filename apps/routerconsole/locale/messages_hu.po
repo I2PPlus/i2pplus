@@ -5106,7 +5106,7 @@ msgstr "A bónuszok lehetnek pozitívak vagy negatívak, és befolyásolják a p
 msgid "Banned Peers"
 msgstr "Kitiltott Társak"
 
-msgid "Banned IPs"
+msgid "Banned IP Addresses"
 msgstr "Kitiltott IP-k"
 
 msgid "config plugins"

@@ -5088,7 +5088,7 @@ msgstr "보너스는 양수 또는 음수 일 수 있으며, 피어의 빠른 �
 msgid "Banned Peers"
 msgstr "차단된 피어"
 
-msgid "Banned IPs"
+msgid "Banned IP Addresses"
 msgstr "차단된 IP"
 
 msgid "config plugins"

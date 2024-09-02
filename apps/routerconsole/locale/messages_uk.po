@@ -5124,7 +5124,7 @@ msgstr "Бонуси можуть бути позитивними чи нега�
 msgid "Banned Peers"
 msgstr "Забанені однолітки"
 
-msgid "Banned IPs"
+msgid "Banned IP Addresses"
 msgstr "Заборонені IP-адреси"
 
 msgid "config plugins"

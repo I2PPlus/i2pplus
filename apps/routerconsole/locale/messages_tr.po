@@ -5106,7 +5106,7 @@ msgstr "Bonuslar pozitif veya negatif olabilir ve akranın hızlı ve yüksek ka
 msgid "Banned Peers"
 msgstr "Engellenmiş Eşler"
 
-msgid "Banned IPs"
+msgid "Banned IP Addresses"
 msgstr "Engellenmiş IP Adresleri"
 
 msgid "config plugins"

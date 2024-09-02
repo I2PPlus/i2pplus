@@ -5106,7 +5106,7 @@ msgstr "बोनस सकारात्मक या नकारात्म
 msgid "Banned Peers"
 msgstr "बैन किए गए समकक्ष"
 
-msgid "Banned IPs"
+msgid "Banned IP Addresses"
 msgstr "बैन किए गए आईपी"
 
 msgid "config plugins"

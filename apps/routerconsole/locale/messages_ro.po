@@ -5124,7 +5124,7 @@ msgstr "Bonusurile pot fi pozitive sau negative și afectează includerea peer-u
 msgid "Banned Peers"
 msgstr "Parteneri blocați"
 
-msgid "Banned IPs"
+msgid "Banned IP Addresses"
 msgstr "IP-uri blocate"
 
 msgid "config plugins"

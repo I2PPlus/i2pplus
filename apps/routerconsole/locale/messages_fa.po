@@ -5106,7 +5106,7 @@ msgstr "بونوس ها ممکن است مثبت یا منفی باشند و ب�
 msgid "Banned Peers"
 msgstr "همتایان ممنوع"
 
-msgid "Banned IPs"
+msgid "Banned IP Addresses"
 msgstr "آی پی های ممنوعه"
 
 msgid "config plugins"

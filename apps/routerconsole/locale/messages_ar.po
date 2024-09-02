@@ -5178,7 +5178,7 @@ msgstr "قد تكون المكافآت إيجابية أو سلبية، وتؤث
 msgid "Banned Peers"
 msgstr "مستخدمون ممنوعون"
 
-msgid "Banned IPs"
+msgid "Banned IP Addresses"
 msgstr "عناوين IP الممنوعة"
 
 msgid "config plugins"

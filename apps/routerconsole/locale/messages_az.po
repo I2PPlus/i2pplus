@@ -5106,7 +5106,7 @@ msgstr "Bonuslar müsbət və ya mənfi ola bilər və həmyaşımanın sürətl
 msgid "Banned Peers"
 msgstr "Qadağan edilmiş həmyaşıdlar"
 
-msgid "Banned IPs"
+msgid "Banned IP Addresses"
 msgstr "Qadağan edilmiş IP-lər"
 
 msgid "config plugins"

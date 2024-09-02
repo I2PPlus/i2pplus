@@ -5106,7 +5106,7 @@ msgstr ""
 msgid "Banned Peers"
 msgstr ""
 
-msgid "Banned IPs"
+msgid "Banned IP Addresses"
 msgstr ""
 
 msgid "config plugins"

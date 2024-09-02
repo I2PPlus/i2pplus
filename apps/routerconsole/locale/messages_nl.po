@@ -5106,7 +5106,7 @@ msgstr "Bonussen kunnen positief of negatief zijn en beïnvloeden de opname van 
 msgid "Banned Peers"
 msgstr "Verbannen Peers"
 
-msgid "Banned IPs"
+msgid "Banned IP Addresses"
 msgstr "Verbannen IPs"
 
 msgid "config plugins"
