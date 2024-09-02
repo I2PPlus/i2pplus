@@ -709,7 +709,7 @@ public class GeoIP {
             String isStrictCountry = isStrict ? "strict" : "non-strict";
             String wasStrictCountry = wasStrict ? "strict" : "non-strict";
             if (_log.shouldInfo() && isStrict != wasStrict) {
-                _log.info("Our router's previously identified country (" + oldCountry + " was " + wasStrictCountry +
+                _log.info("Our router's previously identified country (" + oldCountry + ") was " + wasStrictCountry +
                           " -> New country (" + country + ") is designated as " + isStrictCountry);
             }
             if (isStrict || ctx.getBooleanProperty(Router.PROP_HIDDEN_HIDDEN) ||
