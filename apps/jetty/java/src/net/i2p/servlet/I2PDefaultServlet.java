@@ -206,7 +206,7 @@ public class I2PDefaultServlet extends DefaultServlet
         String title =       "Directory: " + deTag(decodedBase);
         String pwd =         "Directory: <a href=\"" + deTag(decodedBase) + "\">" + deTag(decodedBase) + "</a>";
         String inlineCSS =   "<style>\n" +
-                             "#dirlist {margin: 2.5%; padding: 0; font-family: Open Sans, Ubuntu, SegoeUI, sans-serif; " +
+                             "#dirlist {margin: 2.5%; padding: 0; font-family: Open Sans, Segoe UI, Droid Sans, Noto Sans, sans-serif; " +
                              "font-size: 11pt; color: #333; border: 1px solid #ddd; background: #999}\n" +
                              "table {border-collapse: collapse}\n" +
                              "b, th {font-weight: 700; font-size: 90%}\n" +

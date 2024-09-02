@@ -10,7 +10,7 @@
     text.tooltip:hover{fill:#090}
     .a,.subs{fill:#fff;stroke-linejoin:round;stroke-width:1.5;stroke:#000}
     .a{filter:drop-shadow(0 0 2px rgba(64,64,64,0.5))}
-    .b,.c,.d,.e,.f,.g{font-family:Droid Sans,Segoe UI,Open Sans,Noto Sans,Ubuntu,sans-serif;text-align:center;text-anchor:middle}
+    .b,.c,.d,.e,.f,.g{font-family:Droid Sans,Open Sans,Segoe UI,Noto Sans,sans-serif;text-align:center;text-anchor:middle}
     .b,.c,.f,.g{font-size:20px}
     .book:hover rect,.subscriptions:hover rect{fill:url(#hover)}
     .book rect:active,.pbook rect:active,#sublist:active rect{filter:none}
