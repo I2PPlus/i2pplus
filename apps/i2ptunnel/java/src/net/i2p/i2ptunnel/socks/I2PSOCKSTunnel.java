@@ -43,10 +43,6 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
     /** @since 0.9.57 */
     public static final String PROP_OUTPROXY_TYPE = "outproxyType";
 
-    //public I2PSOCKSTunnel(int localPort, Logging l, boolean ownDest) {
-    //	  I2PSOCKSTunnel(localPort, l, ownDest, (EventDispatcher)null);
-    //}
-
     /**
      *  As of 0.9.20 this is fast, and does NOT connect the manager to the router,
      *  or open the local socket. You MUST call startRunning() for that.

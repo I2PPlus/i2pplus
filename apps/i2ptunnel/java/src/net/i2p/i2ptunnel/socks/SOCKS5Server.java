@@ -286,7 +286,7 @@ class SOCKS5Server extends SOCKSServer {
                     String old;
                     synchronized(_torCache) {
                         old = _torCache.put(fakeIP, host);
-            }
+                    }
                     if (old != null && !old.equals(host)) {
                         if (_log.shouldWarn())
                             _log.warn("Hash collision " + old + " and " + host);
