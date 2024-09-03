@@ -1212,51 +1212,53 @@ input.trackerhome{width:200px}
 td .commentAuthorName{margin-left:1px;min-width:87px;max-width:87px}
 td.commentRating{padding-right:4px;padding-left:0}
 td.status img{margin-left:1px}
-td.peerCount a,td.peerCount a:hover,td.peerCount a:active,.peerCount span{color:#fdf}
 td.peerCount{padding-left:4px}
+td.peerCount a,td.peerCount a:hover,td.peerCount a:active,.peerCount span{color:#fdf}
 th a img{max-height:16px}
 th.peerCount img{display:none}
+.barComplete{line-height:1.05;min-width:78px}
+.barOuter, .barText{width:72px}
 .clientid{width:44px;padding:4px}
 .commentRating img{width:14px;height:14px}
-.configPanel .configTitle{font-size:9.5pt;font-variant:normal;text-transform:uppercase}
-.configPanel .configTitle{min-width:340px}
+.configPanel .configTitle{min-width:340px;font-size:9.5pt;font-variant:normal;text-transform:uppercase}
+.details{padding-right:0;width:1%;text-align:right}
 .dirInfo .fileStatus img{float:none}
 .dirInfo td.fileStatus{font-size:0;text-align:center}
 .dirInfo td.fileStatus .percentbarText{font-size:7pt}
-.status img{height:17px}
-.status{padding-left:3px;max-width:24px}
 .page,#navbar{min-width:650px}
 .peerclient{margin-left:4px}
 .peerclient code{padding:0 3px 0 5px}
 .peerCount{padding:0}
 .peerinfo td:first-child{background-position:8px center}
-.barComplete{line-height:1.05;min-width:78px}
-.barOuter, .barText{width:72px}
 .script .control{font-size:8.5pt}
 .snarkNav,.snarkNav:visited{font-size:9pt;background-size:10pt auto,100%}
-.toggleview,#tab_config{width:260px;min-width:260px}
-.toggleview img,.configTitle img{margin-right:0;height:14px}
-.details{padding-right:0;width:1%;text-align:right}
+.status{padding-left:3px;max-width:24px}
+.status img{height:17px}
 .tName a{max-width:240px}
+.toggleview img,.configTitle img{margin-right:0;height:14px}
+.toggleview,#tab_config{width:260px;min-width:260px}
 .txd,.rateUp,.debuginfo,.alwaysShow{display:none}
-#trackerconfig a,#trackerconfig input[type=text],#addtracker input[type=text]{max-width:110px;min-width:0;box-sizing:border-box}
-#torrentInfo .infohash::before{margin-top:-1px;width:14px;height:14px}
-#torrentInfo .infohash{padding:3px 0 2px 5px;max-width:90px;font-size:8.5pt}
-#torrentInfo{position:relative;z-index:10}
-#torrentInfo th{padding-top:4px;padding-bottom:4px}
-#navbar{margin-bottom:6px;padding:8px 9px 7px}
 #addSection input[type=text],#createSection input[type=text]{width:65%}
 #addSection td:first-child,#createSection td:first-child{width:20%}
-#addtracker input.trackerhome{width:190px;max-width:190px}
+#addtracker input.trackerhome{width:180px;max-width:180px}
 #commentInfo td:first-child,#userComments td:first-child{width:120px;max-width:120px;min-width:120px}
 #configs td,#addSection td,#createSection td,input,input[name="nofilter_dataDir"],select,textarea{font-size:8.5pt}
 #configs td:first-child,.configPanel input[name="nofilter_dataDir"],.configPanel textarea{min-width:150px}
 #debugStats{margin-top:-5px}
 #expand img,#shrink img{margin-top:-3px}
+#navbar{margin-bottom:6px;padding:8px 9px 7px}
 #screenlog li{font-size:8.5pt}
 #setPriority input[type=submit]{padding-bottom:6px}
 #torrentDisplay .filter{min-width:50px;font-size:8pt}
+#torrentInfo{position:relative;z-index:10}
+#torrentInfo .infohash{padding:3px 0 2px 5px;max-width:90px;font-size:8.5pt}
+#torrentInfo .infohash::before{margin-top:-1px;width:14px;height:14px}
+#torrentInfo th{padding-top:4px;padding-bottom:4px}
 #torrents th img,#torrents th a img{max-height:18px}
+#trackerconfig a,#trackerconfig input[type=text],#addtracker input[type=text]{max-width:180px;min-width:0;box-sizing:border-box}
+#trackerconfig a{margin-left:-6px}
+#trackerconfig th:last-child::before,#trackerconfig td:last-child::before{width:14px;display:inline-block;vertical-align:middle;content:""}
+#trackerconfig th:last-child::before{width:8px}
 #trackerselect td a{max-width:180px}
 #userComments .commentDate{width:70px}
 #userComments .commentDelete{padding-left:0;background:none}
@@ -1305,6 +1307,7 @@ select[name$=".quantity"],select[name$=".length"]{min-width:95px}
 @media (min-width:1180px){
 body,th,td,#commentInfo textarea,input[type=submit],input[type=reset],select,select option,button,a.control,#torrents a:not(#debugMode){font-size:9.5pt}
 th{font-size:9pt;background:#101}
+th.radio{width:72px}
 .debugConnection{margin:2px 4px;padding:1px 3px;display:inline-block;font-weight:700;color:#fff;border-radius:2px;box-shadow:0 0 0 1px #101;background:#003000}
 .iframed #pagenavtop{margin:2px 0 -1px}
 .iframed #torrentDisplay~#pagenavtop{margin:2px 0 1px}
@@ -1321,7 +1324,7 @@ input[type=text],select{min-width:132px}
 input.r{min-width:0;max-width:92px}
 td.details img,.dirInfo td:first-child img:not(.thumb){width:18px;height:18px}
 #trackerconfig input.trackername{width:180px;max-width:180px}
-#trackerconfig th:last-child,#trackerconfig td:last-child{padding-left:50px}
+#trackerconfig th:last-child,#trackerconfig td:last-child,#trackerconfig tr:nth-last-child(4) td:last-child{padding-left:50px}
 .trackerhome,.trackerannounce,.knownTracker a{width:300px;max-width:300px}
 .details img[src$="rateme.svg"]{margin-top:-3px;width:10px;height:10px}
 }
@@ -1340,6 +1343,7 @@ td.details img,.dirInfo td:first-child img:not(.thumb){margin-top:-2px;margin-bo
 td.magnet img,td.trackerLink img{width:20px;height:20px}
 th.status{padding-left:4px}
 th,td,.choked,.unchoked{letter-spacing:0}
+th.radio{width:96px}
 .configOption::after{height:40px}
 .configPanel .configTitle{padding:6px 5px 5px;min-width:600px;font-size:11pt}
 .configPanel textarea{height:30px}
@@ -1366,6 +1370,8 @@ th,td,.choked,.unchoked{letter-spacing:0}
 .txd{padding-left:8px}
 .trackerhome,.trackerannounce,.knownTracker a{width:400px;max-width:400px}
 #addFileFilter input[type=text],#trackerconfig input[type=text]{width:220px;max-width:220px}
+#trackerconfig input.trackerannounce,#trackerconfig input.trackerhome{width:280px;max-width:80%}
+#trackerconfig input.trackerhome{margin-left:6px}
 #addSection td:first-child,#createSection td:first-child{width:200px}
 #tab_config,.toggleview{width:400px;padding:3px 0}
 #configs td{padding-top:3px;padding-bottom:3px}
