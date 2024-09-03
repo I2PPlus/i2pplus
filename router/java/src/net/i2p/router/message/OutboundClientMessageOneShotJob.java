@@ -209,7 +209,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         _to = msg.getDestination();
         Hash toHash = _to.calculateHash();
         _hashPair = new OutboundCache.HashPair(_from.calculateHash(), toHash);
-        _toString = "[" + toHash.toBase64().substring(0,8) + "]";
+        _toString = "[" + toHash.toBase64().substring(0,6) + "]";
         // we look up here rather than runJob() so we may adjust the timeout
         _leaseSet = ctx.clientNetDb(_from.calculateHash()).lookupLeaseSetLocally(toHash);
 
@@ -260,21 +260,21 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     /** call once only */
     public static void init(RouterContext ctx) {
         ctx.statManager().createFrequencyStat("client.sendMessageFailFrequency", "How often client fails to send a message", "ClientMessages", RATES);
-        ctx.statManager().createRateStat("client.sendMessageSize", "Size of messages sent by the client", "ClientMessages", RATES);
-        ctx.statManager().createRequiredRateStat("client.sendAckTime", "Message round trip time (ms)", "ClientMessages", RATES);
-        //ctx.statManager().createRateStat("client.timeoutCongestionTunnel", "Local tunnel lag when a send times out", "ClientMessages", RATES);
-        //ctx.statManager().createRateStat("client.timeoutCongestionMessage", "Time to process local messages when a send times out", "ClientMessages", RATES);
-        //ctx.statManager().createRateStat("client.timeoutCongestionInbound", "How much faster than our average bps we are receiving data when a send times out", "ClientMessages", RATES);
-        //ctx.statManager().createRateStat("client.leaseSetFoundLocally", "How often we tried to look for a leaseSet and found it locally?", "ClientMessages", RATES);
-        ctx.statManager().createRateStat("client.leaseSetFoundRemoteTime", "Time to look for a remote LeaseSet (when we succeeded)", "ClientMessages", RATES);
-        ctx.statManager().createRateStat("client.leaseSetFailedRemoteTime", "Time to look for a remote LeaseSet (when we failed)", "ClientMessages", RATES);
-        ctx.statManager().createRateStat("client.dispatchPrepareTime", "Time to queue up the Dispatch job (since we started)", "ClientMessages", RATES);
-        ctx.statManager().createRateStat("client.dispatchTime", "Time to dispatch the message (since we started)", "ClientMessages", RATES);
-        ctx.statManager().createRateStat("client.dispatchSendTime", "Time taken by the Dispatch job", "ClientMessages", RATES);
-        ctx.statManager().createRateStat("client.dispatchNoTunnels", "How long after startup we run out of local tunnels to send/receive with", "ClientMessages", RATES);
         ctx.statManager().createRateStat("client.dispatchNoACK", "Repeated message sends to a peer (no ACK required)", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.dispatchNoTunnels", "How long after startup we run out of local tunnels to send/receive with", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.dispatchPrepareTime", "Time to queue up the Dispatch job (since we started)", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.dispatchSendTime", "Time taken by the Dispatch job", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.dispatchTime", "Time to dispatch the message (since we started)", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.leaseSetFailedRemoteTime", "Time to look for a remote LeaseSet (when we failed)", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.leaseSetFoundRemoteTime", "Time to look for a remote LeaseSet (when we succeeded)", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.sendMessageSize", "Size of messages sent by the client", "ClientMessages", RATES);
         // for HandleGarlicMessageJob / GarlicMessageReceiver
         ctx.statManager().createRateStat("crypto.garlic.decryptFail", "How often undecryptable garlic messages are received", "Encryption", RATES);
+        ctx.statManager().createRequiredRateStat("client.sendAckTime", "Message round trip time (ms)", "ClientMessages", RATES);
+        //ctx.statManager().createRateStat("client.leaseSetFoundLocally", "How often we tried to look for a leaseSet and found it locally?", "ClientMessages", RATES);
+        //ctx.statManager().createRateStat("client.timeoutCongestionInbound", "How much faster than our average bps we are receiving data when a send times out", "ClientMessages", RATES);
+        //ctx.statManager().createRateStat("client.timeoutCongestionMessage", "Time to process local messages when a send times out", "ClientMessages", RATES);
+        //ctx.statManager().createRateStat("client.timeoutCongestionTunnel", "Local tunnel lag when a send times out", "ClientMessages", RATES);
     }
 
     public String getName() { return "Outbound client message"; }
