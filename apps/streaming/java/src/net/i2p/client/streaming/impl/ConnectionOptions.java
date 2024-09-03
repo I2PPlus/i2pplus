@@ -145,11 +145,11 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      *  Ref: RFC 5681 sec. 4.3, RFC 1122 sec. 4.2.3.3, ticket #2706
      */
 //    private static final int DEFAULT_INITIAL_ACK_DELAY = 500;
-    private static final int DEFAULT_INITIAL_ACK_DELAY = 150;
+    private static final int DEFAULT_INITIAL_ACK_DELAY = 450;
     static final int MIN_WINDOW_SIZE = 1;
     private static final boolean DEFAULT_ANSWER_PINGS = true;
 //    private static final int DEFAULT_INACTIVITY_TIMEOUT = 90*1000;
-    private static final int DEFAULT_INACTIVITY_TIMEOUT = 60*1000;
+    private static final int DEFAULT_INACTIVITY_TIMEOUT = 75*1000;
     private static final int DEFAULT_INACTIVITY_ACTION = INACTIVITY_ACTION_SEND;
     private static final int DEFAULT_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR = 1;
     private static final int DEFAULT_SLOW_START_GROWTH_RATE_FACTOR = 1;
@@ -818,7 +818,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public int getProfile() { return _profile; }
     public void setProfile(int profile) {
         if (profile != PROFILE_BULK)
-            throw new IllegalArgumentException("Only bulk is supported so far");
+            throw new IllegalArgumentException("Only the \'bulk\' profile is currently supported");
         _profile = profile;
     }
 
