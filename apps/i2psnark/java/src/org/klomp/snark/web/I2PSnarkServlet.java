@@ -2260,7 +2260,9 @@ public class I2PSnarkServlet extends BasicServlet {
             if (name != null && hurl != null && aurl != null) {
                 name = DataHelper.stripHTML(name.trim());
                 hurl = DataHelper.stripHTML(hurl.trim());
+                if (!hurl.startsWith("http://")) {hurl = "http://" + hurl;} // Add http:// if not present
                 aurl = DataHelper.stripHTML(aurl.trim()).replace("=", "&#61;");
+                if (!aurl.startsWith("http://")) {aurl = "http://" + aurl;}  // Add http:// if not present
                 if (name.length() > 0 && hurl.startsWith("http://") && TrackerClient.isValidAnnounce(aurl)) {
                     Map<String, Tracker> trackers = _manager.getTrackerMap();
                     trackers.put(name, new Tracker(name, aurl, hurl));
@@ -3750,9 +3752,9 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<th title=\"").append(_t("Mark filter for deletion")).append("\"></th>")
            .append("<th>").append(_t("Name")).append("</th>")
            .append("<th>").append(_t("Filter Pattern")).append("</th>")
-           .append("<th>").append(_t("Starts With")).append("</th>")
-           .append("<th>").append(_t("Contains")).append("</th>")
-           .append("<th>").append(_t("Ends With")).append("</th>")
+           .append("<th class=radio>").append(_t("Starts With")).append("</th>")
+           .append("<th class=radio>").append(_t("Contains")).append("</th>")
+           .append("<th class=radio>").append(_t("Ends With")).append("</th>")
            .append("<th>").append(_t("Enabled by Default")).append("</th>")
            .append("</tr>\n");
         for (TorrentCreateFilter f : _manager.getSortedTorrentCreateFilterStrings()) {
@@ -3809,9 +3811,9 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<th title=\"").append(_t("Select trackers for removal from I2PSnark's known list")).append("\"></th>")
            .append("<th>").append(_t("Name")).append("</th>")
            .append("<th>").append(_t("Website URL")).append("</th>")
-           .append("<th>").append(_t("Standard")).append("</th>")
-           .append("<th>").append(_t("Open")).append("</th>")
-           .append("<th>").append(_t("Private")).append("</th>")
+           .append("<th class=radio>").append(_t("Standard")).append("</th>")
+           .append("<th class=radio>").append(_t("Open")).append("</th>")
+           .append("<th class=radio>").append(_t("Private")).append("</th>")
            .append("<th>").append(_t("Announce URL")).append("</th>")
            .append("</tr>\n");
         List<String> openTrackers = _manager.util().getOpenTrackers();
