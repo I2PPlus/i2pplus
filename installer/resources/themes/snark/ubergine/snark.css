@@ -714,8 +714,8 @@ span.trackerName::before{width:20px;height:20px;display:inline-block;vertical-al
 #trackerconfig tr:nth-last-child(2) td{background:none}
 #trackerconfig tr:nth-last-child(3) td,#trackerconfig .spacer.top td,#fileFilter tr:nth-last-child(3) td,#fileFilter .spacer.top td{padding:3px 0;font-size:0;line-height:0}
 #trackerconfig tr:nth-last-child(3) td{border-bottom:var(--border_hard);background:#2b1b2b}
-#trackerconfig tr:nth-last-child(4) td,#fileFilter tr:nth-last-child(4) td{background:linear-gradient(180deg,#434 1px,#323 1px,#2b1b2b)}
-#trackerconfig tr:nth-last-child(4) td{padding-top:7px;padding-bottom:7px;border-bottom:var(--border_hard)}
+#trackerconfig tr:nth-last-child(4),#fileFilter tr:nth-last-child(4){background:linear-gradient(180deg,#434 1px,#323 1px,#2b1b2b)}
+#trackerconfig tr:nth-last-child(4) td,#fileFilter tr:nth-last-child(4) td{padding:7px 4px;border-bottom:4px solid #212;background:linear-gradient(180deg,#434 1px,#323 1px,#2b1b2b)}
 #trackerconfig tr:nth-last-child(5) td{border-bottom:var(--border_hard);padding:3px 0;font-size:0;line-height:0}
 #trackerconfig tr:nth-last-child(5){display:none}
 #trackerconfig tr:nth-last-child(5){background:rgba(48,30,48,.8)}
@@ -726,7 +726,7 @@ span.trackerName::before{width:20px;height:20px;display:inline-block;vertical-al
 #trackerconfig tr:hover td{border-top:1px solid #0000}
 #trackerconfig th,#fileFilter th{padding:5px 2px;background:none}
 #trackerconfig th:nth-child(3),#trackerconfig th:nth-child(7),#trackerconfig td:nth-child(3),#trackerconfig td:nth-child(7){padding-left:10px}
-#trackerconfig td,#fileFilter td{border-top:1px solid #212;border-bottom:1px solid #212;border-top:1px solid rgba(16,0,16,.5);border-bottom:1px solid rgba(16,0,16,.5)}
+#trackerconfig td,#fileFilter .createFilterString td{border-top:1px solid #212;border-bottom:1px solid #212;border-top:1px solid rgba(16,0,16,.5);border-bottom:1px solid rgba(16,0,16,.5)}
 #trackerconfig td:first-child,#fileFilter td:first-child{border-left:var(--border_hard)}
 #trackerconfig td:last-child,#fileFilter td:last-child{border-right:var(--border_hard)}
 #trackerconfig .delete,#trackerconfig .reload{float:left}
@@ -1009,7 +1009,9 @@ html:not(.iframed) #torrentEdit :not(tfoot) tr:first-child td:last-child{border-
 #fileFilter .delete,#fileFilter .reload{margin:6px 12px 6px -3px;float:left}
 #fileFilter input.delete[type=submit]{margin-left:0}
 #fileFilter tr:last-child, #fileFilter tr.spacer{display:none}
-#fileFilter tr:nth-last-child(4) td{padding:7px 4px;border-bottom:var(--border_hard)}
+#fileFilter tr:nth-last-child(4) td{padding:7px 4px}
+#fileFilter tr:nth-last-child(3) td{border-bottom:1px solid #212}
+#fileFilter tr:nth-last-child(2) td{border-top:1px solid #212}
 #fileFilter th:nth-child(n+4),#fileFilter td:nth-child(n+4){text-align:center}
 #addFileFilter input[type=text]{width:200px}
 form[action^="/i2psnark/configure"]{display:block}
@@ -1363,11 +1365,13 @@ th,td,.choked,.unchoked{letter-spacing:0}
 .tName a{max-width:unset}
 .txd{padding-left:8px}
 .trackerhome,.trackerannounce,.knownTracker a{width:400px;max-width:400px}
+#addFileFilter input[type=text],#trackerconfig input[type=text]{width:220px;max-width:220px}
 #addSection td:first-child,#createSection td:first-child{width:200px}
 #tab_config,.toggleview{width:400px;padding:3px 0}
 #configs td{padding-top:3px;padding-bottom:3px}
 #configs td:first-child{padding-right:10px}
 #configs td:last-child{padding-right:0}
+#fileFilter td,#trackerconfig td,#trackerconfig td label{font-size:10pt}
 #navbar{padding:11px 10px 10px}
 #navbar a{font-size:12pt}
 #navbar img{margin:-2px -9px 0 -5px}

@@ -1,5 +1,5 @@
 :root{
---bodyfont:Sora,Droid Sans,Open Sans,Noto Sans,Ubuntu,Segoe UI,Bitstream Vera Sans,DejaVu Sans,Verdana,Lucida Grande,Helvetica,sans-serif;
+--bodyfont:Sora,Droid Sans,Open Sans,Segoe UI,Noto Sans,sans-serif;
 --monospaced:FiraCode,Noto Mono,DejaVu Sans Mono,Lucida Console,monospace;
 }
 *{-webkit-text-stroke:0!important}
@@ -27,7 +27,7 @@ html[lang="zh"] #sidebar h3,html[lang="zh"] #sidebar h3 a{font-weight:500!import
 #torrents tfoot tr:first-child th{min-width:80px}
 #torrents .clientid{font-size:75%;font-weight:600}
 #totals .canhide{display:none}
-#configs input[type=text],#configs input.r,#dhtDebug .dbug,#torrents .tName{font-weight:500}
+#configs input[type=text],#configs input.r,#dhtDebug .dbug,#torrents .tName,#fileFilter td:nth-child(2),#trackerconfig td:nth-child(2){font-weight:500}
 #configs input[type=text][name^="nofilter"],#configs input#i2cpOpts{font-weight:600}
 .createFilterToggle,#torrents .barComplete,#torrents #totals{font-weight:600}
 
