@@ -78,6 +78,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  @since IPv6
      */
     private static final String PROP_DISABLED = "i2np.disable";
+    public static final String PROP_BLOCK_MY_COUNTRY = "i2np.blockMyCountry";
+    public static final String PROP_IP_COUNTRY = "i2np.lastCountry";
 
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
     private static final String COUNTRY_BUNDLE_NAME = "net.i2p.router.countries.messages";
@@ -488,7 +490,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /* We hope the routerinfos are read in and things have settled down by now, but it's not required to be so */
     private static final int START_DELAY = SystemVersion.isSlow() ? 60*1000 : 5*1000;
-    private static final int LOOKUP_TIME = 90*1000;
+    private static final int LOOKUP_TIME = 75*1000;
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
     private static final Charset ENCODING = StandardCharsets.UTF_8;
@@ -925,6 +927,18 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
 
         lastLookupTime = now;
+
+        boolean blockMyCountry = _context.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
+        boolean isStrict = _context.commSystem().isInStrictCountry();
+        boolean isHidden = _context.router().isHidden();
+
+        if (isStrict || isHidden || blockMyCountry) {
+            String myCountry = _context.getProperty(PROP_IP_COUNTRY);
+            if (myCountry != null && myCountry == country) {
+                _geoIP.banCountry(_context, country);
+            }
+        }
+
         return country;
     }
 

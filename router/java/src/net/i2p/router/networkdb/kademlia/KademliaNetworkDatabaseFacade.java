@@ -83,6 +83,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private final Hash _dbid;
     private final Job _elj, _erj;
     static final String PROP_MIN_ROUTER_VERSION = "router.minVersionAllowed";
+    public static final String PROP_BLOCK_MY_COUNTRY = "i2np.blockMyCountry";
+    public static final String PROP_IP_COUNTRY = "i2np.lastCountry";
 
     /**
      * Map of Hash to RepublishLeaseSetJob for leases we'realready managing.
@@ -970,7 +972,30 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 noCountry = false;
             }
 
-            if (!isUs && isLTier && isUnreachable && isOld) {
+            boolean blockMyCountry = _context.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
+            boolean isStrict = _context.commSystem().isInStrictCountry();
+
+            if (!isUs && !noCountry && (isStrict || isHidden || blockMyCountry)) {
+                String myCountry = _context.getProperty(PROP_IP_COUNTRY);
+                if (myCountry != null && myCountry == country && !_context.banlist().isBanlisted(key)) {
+                    if (_log.shouldInfo()) {
+                        _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> " +
+                        (isHidden || isStrict ? "Hidden mode active and router is in same country" :
+                        "i2np.hideMyCountry=true"));
+                    }
+                    if (_log.shouldWarn()) {
+                        _log.warn("Banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
+                                  " [" + key.toBase64().substring(0,6) + "] for duration of session -> LU and older than 0.9.61");
+                    }
+                    if (blockMyCountry) {
+                        _context.banlist().banlistRouterForever(key, " <b>➜</b> In our country (banned via config)");
+                    } else {
+                        _context.banlist().banlistRouterForever(key, " <b>➜</b> In our country (we are in Hidden mode)");
+                    }
+                    _ds.remove(key);
+                    _kb.remove(key);
+                }
+            } else if (!isUs && isLTier && isUnreachable && isOld) {
                 if (!_context.banlist().isBanlisted(key)) {
                     if (_log.shouldInfo()) {
                         _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> LU and older than 0.9.61");

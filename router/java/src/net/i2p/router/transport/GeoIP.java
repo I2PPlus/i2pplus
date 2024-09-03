@@ -579,12 +579,10 @@ public class GeoIP {
     private String[] readGeoIPFile(Long[] search) {
         String geoDir = _context.getProperty(PROP_GEOIP_DIR, GEOIP_DIR_DEFAULT);
         File geoFile = new File(geoDir);
-        if (!geoFile.isAbsolute())
-            geoFile = new File(_context.getBaseDir(), geoDir);
+        if (!geoFile.isAbsolute()) {geoFile = new File(_context.getBaseDir(), geoDir);}
         geoFile = new File(geoFile, GEOIP_FILE_DEFAULT);
         if (!geoFile.exists()) {
-            if (_log.shouldError())
-                _log.error("GeoIP file not found: " + geoFile.getAbsolutePath());
+            if (_log.shouldError()) {_log.error("GeoIP file not found: " + geoFile.getAbsolutePath());}
             return new String[0];
         }
         String[] rv = new String[search.length];
@@ -592,37 +590,32 @@ public class GeoIP {
         BufferedReader br = null;
         try {
             String buf = null;
-            br = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(geoFile), "ISO-8859-1"));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(geoFile), "ISO-8859-1"));
             notifyVersion("Torv4", geoFile.lastModified());
             while ((buf = br.readLine()) != null && idx < search.length) {
                 try {
-                    if (buf.charAt(0) == '#') {
-                        continue;
-                    }
+                    if (buf.charAt(0) == '#') {continue;}
                     String[] s = DataHelper.split(buf, ",");
                     long ip1 = Long.parseLong(s[0]);
                     long ip2 = Long.parseLong(s[1]);
-                    while (idx < search.length && search[idx].longValue() < ip1) {
-                        idx++;
-                    }
+                    while (idx < search.length && search[idx].longValue() < ip1) {idx++;}
                     while (idx < search.length && search[idx].longValue() >= ip1 && search[idx].longValue() <= ip2) {
                         String lc = s[2].toLowerCase(Locale.US);
                         // replace the new string with the identical one from the cache
                         String cached = _codeCache.get(lc);
-                        if (cached == null)
-                            cached = lc;
+                        if (cached == null) {cached = lc;}
                         rv[idx++] = cached;
                     }
-                } catch (IndexOutOfBoundsException ioobe) {
-                } catch (NumberFormatException nfe) {
-                }
+                } catch (IndexOutOfBoundsException ioobe) {}
+                catch (NumberFormatException nfe) {}
             }
         } catch (IOException ioe) {
-            if (_log.shouldError())
-                _log.error("Error reading the GeoIP file", ioe);
+            if (_log.shouldError()) {_log.error("Error reading the GeoIP file", ioe);}
         } finally {
-            if (br != null) try { br.close(); } catch (IOException ioe) {}
+            if (br != null) {
+                try {br.close();}
+                catch (IOException ioe) {}
+            }
         }
 
         return rv;
@@ -643,13 +636,13 @@ public class GeoIP {
      *  @since 0.9.45
      */
     static void notifyVersion(I2PAppContext ctx, String subtype, long version) {
-        if (version <= 0)
-            return;
+        if (version <= 0) {return;}
         ClientAppManager cmgr = ctx.clientAppManager();
         if (cmgr != null) {
             UpdateManager umgr = (UpdateManager) cmgr.getRegisteredApp(UpdateManager.APP_NAME);
-            if (umgr != null)
+            if (umgr != null) {
                 umgr.notifyInstalled(UpdateType.GEOIP, subtype, Long.toString(version));
+            }
         }
     }
 
@@ -752,7 +745,7 @@ public class GeoIP {
      *  @param two-letter lower-case country code
      *  @since 0.9.48
      */
-    private static void banCountry(RouterContext ctx, String country) {
+    public static void banCountry(RouterContext ctx, String country) {
         boolean blockMyCountry = ctx.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
         for (Hash h : ctx.netDb().getAllRouters()) {
             String hisCountry = ctx.commSystem().getCountry(h);
@@ -774,7 +767,7 @@ public class GeoIP {
      */
     public void add(String ip) {
         byte[] pib = Addresses.getIPOnly(ip);
-        if (pib == null) return;
+        if (pib == null) {return;}
         add(pib);
     }
 
@@ -791,8 +784,9 @@ public class GeoIP {
             ((ip[0] == 0x20 && ip[1] == 0x01 &&
               ip[2] == 0x04 && ip[3] == 0x70) ||
              (ip[0] == 0x2a && ip[1] == 0x06 &&
-              ip[2] == (byte) 0xa0 && ip[3] == 0x04)))
+              ip[2] == (byte) 0xa0 && ip[3] == 0x04))) {
             return;
+        }
         add(toLong(ip));
     }
 
@@ -800,10 +794,8 @@ public class GeoIP {
     private void add(long ip) {
         Long li = Long.valueOf(ip);
         if (!(_IPToCountry.containsKey(li) || _notFound.contains(li))) {
-            if (ip >= 0 && ip < (1L << 32))
-                _pendingSearch.add(li);
-            else
-                _pendingIPv6Search.add(li);
+            if (ip >= 0 && ip < (1L << 32)) {_pendingSearch.add(li);}
+            else {_pendingIPv6Search.add(li);}
         }
     }
 
@@ -828,27 +820,21 @@ public class GeoIP {
     String get(byte ip[]) {
         if (ip == null) {return null;}
         // skip he.net tunnel 2001:470:: so we will get correct geoip from IPv4
-        if (ip.length == 16 && ip[0] == 0x20 && ip[1] == 0x01 && ip[2] == 0x04 && ip[3] == 0x70) {
-            return null;
-        }
+        if (ip.length == 16 && ip[0] == 0x20 && ip[1] == 0x01 && ip[2] == 0x04 && ip[3] == 0x70) {return null;}
         return get(toLong(ip));
     }
 
     /** see above for ip-to-long mapping */
-    private String get(long ip) {
-        return _IPToCountry.get(Long.valueOf(ip));
-    }
+    private String get(long ip) {return _IPToCountry.get(Long.valueOf(ip));}
 
     /** see above for ip-to-long mapping */
     private static long toLong(byte ip[]) {
         long rv = 0;
         if (ip.length == 16) {
-            for (int i = 0; i < 8; i++)
-                rv |= (ip[i] & 0xffL) << ((7-i)*8);
+            for (int i = 0; i < 8; i++) {rv |= (ip[i] & 0xffL) << ((7-i)*8);}
             return rv;
         } else {
-            for (int i = 0; i < 4; i++)
-                rv |= (ip[i] & 0xff) << ((3-i)*8);
+            for (int i = 0; i < 4; i++) {rv |= (ip[i] & 0xff) << ((3-i)*8);}
             return rv & 0xffffffffl;
         }
     }
@@ -861,8 +847,7 @@ public class GeoIP {
         StringBuilder buf = new StringBuilder(15);
         for (int i = 0; i < 4; i++) {
             buf.append(Long.toString((ip >> ((3-i)*8)) & 0xff));
-            if (i == 3)
-                break;
+            if (i == 3) {break;}
             buf.append('.');
         }
         return buf.toString();
@@ -890,10 +875,8 @@ public class GeoIP {
      * @return untranslated name or null
      */
     public String fullName(String code) {
-        if (code != null && code != "a0")
-            return _codeToName.get(code);
-        else
-            return null;
+        if (code != null && code != "a0") {return _codeToName.get(code);}
+        else {return null;}
     }
 
     /**
@@ -912,12 +895,10 @@ public class GeoIP {
             System.exit(1);
         }
         GeoIP g = new GeoIP(I2PAppContext.getGlobalContext());
-        for (int i = 0; i < args.length; i++)
-            g.add(args[i]);
+        for (int i = 0; i < args.length; i++) {g.add(args[i]);}
         long start = System.currentTimeMillis();
         g.blockingLookup();
         System.out.println("Lookup took " + (System.currentTimeMillis() - start));
-        for (int i = 0; i < args.length; i++)
-            System.out.println(args[i] + " : " + g.get(args[i]));
+        for (int i = 0; i < args.length; i++) {System.out.println(args[i] + " : " + g.get(args[i]));}
     }
 }
