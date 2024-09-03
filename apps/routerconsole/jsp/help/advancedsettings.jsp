@@ -143,6 +143,9 @@
 <tr><th>i2np.udp.disablePeerTest={true|false} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]")%></td></tr>
 
+<tr><th>i2np.blockMyCountry={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]")%></td></tr>
+
 <tr><th>i2np.udp.preferred={true|false|always}</th></tr>
 <tr><td><%=intl._t("This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]")%></td></tr>
 
