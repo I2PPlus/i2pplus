@@ -695,10 +695,9 @@ public class I2PSnarkServlet extends BasicServlet {
             for (int i = msgs.size()-1; i >= 0; i--) {
                 String msg = msgs.get(i).message
                         .replace("Adding Magnet ", "Magnet added: " + "<span class=infohash>")
-                        .replace("Starting torrent: Magnet", "Starting torrent: <span class=infohash>")
-                        .replaceFirst(" \\(", "</span> (");
-                if (msg.contains(_t("Warning - No I2P")))
-                    msg = msg.replace("</span>", "");
+                        .replace("Starting torrent: Magnet", "Starting torrent: <span class=infohash>");
+                if (msg.contains("class=infohash")) {msg = msg.replaceFirst(" \\(", "</span> (");} // does this fix the display snafu?
+                if (msg.contains(_t("Warning - No I2P"))) {msg = msg.replace("</span>", "");}
                 mbuf.append("<li class=msg>").append(msg).append("</li>\n");
             }
             mbuf.append("</ul>");
