@@ -658,14 +658,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         synchronized (rdnslock) {
             File cacheFile = new File(RDNS_CACHE_FILE);
             if (!cacheFile.exists()) {
-                try {
-                    cacheFile.createNewFile();
-                } catch (IOException ex) {
-                    System.err.println("Error creating cache file: " + ex.getMessage());
-                }
-            } else {
-                readRDNSCacheFromFile();
-            }
+                try {cacheFile.createNewFile();}
+                catch (IOException ex) {System.err.println("Error creating cache file: " + ex.getMessage());}
+            } else {readRDNSCacheFromFile();}
         }
     }
 
