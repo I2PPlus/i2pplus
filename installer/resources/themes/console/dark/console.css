@@ -854,7 +854,7 @@ td.ipv6{width:1%;max-width:24px}
 #view_profile .viewprofile{margin-right:6px}
 #view_profile .identicon{margin:0;width:27px;height:27px;position:absolute;top:2px;right:2px}
 #viewprofile td{padding:0}
-#viewprofile pre,pre#activetransports{margin:0;padding:20px 20px 0;width:calc(100% - 48px);line-height:20px;letter-spacing:.05em;font-size:100%;text-shadow:var(--textshadow);border:var(--border);border-left:7px solid #242;background:var(--silhouette) no-repeat right 12px bottom,repeating-linear-gradient(180deg,rgba(0,8,0,.6) 0,rgba(0,8,0,.6) 20px,rgba(0,20,0,.6) 20px,rgba(0,20,0,.6) 40px);background-size:200px,100% 40px}
+#viewprofile pre,pre#activetransports{margin:0;padding:20px 20px 0;width:calc(100% - 48px);line-height:20px;letter-spacing:.05em;font-size:100%;text-shadow:var(--textshadow);border:var(--border);border-left:7px solid #242;background:var(--silhouette) no-repeat right 12px bottom,repeating-linear-gradient(180deg,rgba(0,8,0,.6) 0,rgba(0,8,0,.6) 20px,rgba(0,20,0,.6) 20px,rgba(0,20,0,.6) 40px);background-size:auto 96%,100% 40px}
 #viewprofile span{margin:-26px -1px -1px 0;padding:5px;float:right;border:var(--border);background:#000}
 #profiles_overview{margin-bottom:9px;background:url(../images/profile.svg) no-repeat 15px center/28px,var(--msg)}
 #peerprofiles+h3{margin-top:0}
