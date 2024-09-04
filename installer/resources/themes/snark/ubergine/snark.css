@@ -38,6 +38,9 @@
 --snarkGraph:url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true");
 --tabicon:linear-gradient(180deg,#767 50%,#323 50%,#212);
 --th:linear-gradient(180deg,#202,#101);
+--th_sub:url(/i2psnark/.res/icons/favicon.svg) no-repeat 7px center/20px,linear-gradient(135deg,rgba(16,0,16,.6),rgba(16,0,16,.3),rgba(16,0,16,.7)),var(--th2_bg);
+--th2:linear-gradient(180deg,#1018,#101b),var(--th2_bg);
+--th2_bg:linear-gradient(180deg,rgba(68,51,68,.8) 50%,rgba(28,0,28,.8) 50%);
 --txt_shadow:1px 1px 1px rgba(0,0,0,.8);
 }
 
@@ -505,7 +508,7 @@ input[type=text],input.r,select{min-width:124px}
 input[name="upBW"]+i{margin-left:3px}
 input.default{width:1px;height:1px;visibility:hidden}
 input[type=submit]::-moz-focus-inner,input[type=reset]::-moz-focus-inner{border:0;outline:none}
-input[type=submit],input[type=reset]{padding:4px 6px 4px 22px;color:var(--ink_btn);border:1px inset #bbb;background:var(--btn);background-size:14px,100%;background-position:6px center,center center;background-repeat:no-repeat,repeat}
+input[type=submit],input[type=reset]{padding:4px 6px 4px 22px;color:var(--ink_btn);border:1px inset #bbb;box-shadow:0 0 0 1px #0005;background:var(--btn);background-size:14px,100%;background-position:6px center,center center;background-repeat:no-repeat,repeat}
 input[type=submit]:hover,input[type=submit]:focus{background-blend-mode:luminosity}
 input[type=submit]:hover,input[type=submit]:focus,a.control:hover,a.control:focus{color:#fff;border:1px outset #bbb;filter:drop-shadow(0 0 1px #515)}
 input[type=submit]:focus,input[type=reset]:focus,a.control:focus{filter:drop-shadow(0 0 1px var(--hover))}
@@ -671,7 +674,7 @@ input.trackername{width:100px}
 #configs input,#configs select{margin-top:0;margin-bottom:0;vertical-align:middle;will-change:transform}
 #configs input[type=submit],#trackerconfig input[type=submit],input[name="savepri"]{text-transform:capitalize}
 #configs th,.optionlist,#configs td b,#torrentOrderControl b{filter:drop-shadow(0 0 2px rgba(16,0,16,.5))}
-#configs th{padding:7px 5px 8px 30px;font-size:9.5pt;color:rgba(255,240,255,.85);text-transform:capitalize;text-shadow:var(--txt_shadow);border:1px solid #212;border-radius:5px 5px 0 0;box-shadow:inset 0 0 0 1px #434;background:url(/i2psnark/.res/icons/favicon.svg) no-repeat 7px center/20px,linear-gradient(135deg,rgba(16,0,16,.6),rgba(16,0,16,.3)),linear-gradient(180deg,rgba(68,51,68,.8) 50%,rgba(28,0,28,.8) 50%);background-blend-mode:luminosity,normal,normal}
+#configs th{padding:7px 5px 8px 30px;font-size:9.5pt;color:rgba(255,240,255,.85);text-transform:capitalize;text-shadow:var(--txt_shadow);border:1px solid #212;border-radius:5px 5px 0 0;box-shadow:inset 0 0 0 1px #434;background:var(--th_sub);background-blend-mode:luminosity,normal,normal}
 #configs th.suboption{padding-top:9px;position:relative}
 #configs td{text-align:left;font-weight:400;vertical-align:middle;padding:4px 0;min-width:0;width:50%}
 #configs tr:nth-last-child(2) td{padding:10px 0 2px;text-align:right}
@@ -705,7 +708,7 @@ span.trackerName::before{width:20px;height:20px;display:inline-block;vertical-al
 .trackerName a{width:100%;display:inline-block;vertical-align:middle}
 #trackerconfig .spacer{display:none}
 #trackerconfig,#fileFilter table{margin-top:0;border-spacing:0;border-collapse:collapse}
-#trackerconfig tr:first-child,#fileFilter tr:first-child{background:linear-gradient(90deg,rgba(16,0,16,.6),rgba(16,0,16,.6)),linear-gradient(180deg,rgba(68,51,68,.8) 50%,rgba(28,0,28,.8) 50%)}
+#trackerconfig tr:first-child,#fileFilter tr:first-child{background:var(--th2)}
 #trackerconfig tr:nth-child(n+2),.createFilterString:nth-child(even){background:rgba(48,30,48,.8)}
 #trackerconfig tr:nth-child(2n+3),.createFilterString:nth-child(odd){background:rgba(16,0,16,.3)}
 #trackerconfig tr:nth-last-child(2) input:last-child,#configs tr:nth-last-child(2) input:last-child{margin-right:1px}
@@ -1002,7 +1005,7 @@ html:not(.iframed) #torrentEdit :not(tfoot) tr:first-child td:last-child{border-
 #fileFilter th{white-space:nowrap;border-bottom:0}
 #fileFilter th:last-child,#fileFilter td:last-child{width:1%;text-align:center}
 #fileFilter th,#fileFilter td{padding:2px 4px;border-top:var(--border)}
-#fileFilter th{padding:5px 4px}
+#fileFilter th{padding:5px 4px;border-top:1px solid #212}
 #fileFilter tr:not(:last-child).spacer td{padding:4px 0;font-size:0;border-bottom:var(--border)}
 #fileFilter input[type=submit]{margin:2px 6px}
 #fileFilter input.accept[type=submit] {float:right;margin-right:1px}
