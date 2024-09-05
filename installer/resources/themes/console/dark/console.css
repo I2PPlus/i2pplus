@@ -2639,7 +2639,7 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 .en #sitemap .applink img{padding-left:35px;padding-right:35px}
 .log_debug,.log_info,.log_warn,.log_error,.log_crit,.log_omitted{vertical-align:middle}
 .longstat.fam{margin:2px 5px -5px}
-.netdbentry .tunnel_cap,.netdbentry .tier,.netdbentry .ff,.netdbentry .reachable,.netdbentry .unreachable,.netdbentry .version,.sybil_routerinfo .tunnel_cap,.sybil_routerinfo .tier,.sybil_routerinfo .ff,.sybil_routerinfo .reachable,.sybil_routerinfo .unreachable,.sybil_routerinfo .version{padding:2px 4px}
+.netdbentry .tunnel_cap,.netdbentry .tier,.netdbentry .ff,.netdbentry .reachable,.netdbentry .unreachable,.netdbentry .version,.sybil_routerinfo .tunnel_cap,.sybil_routerinfo .tier,.sybil_routerinfo .ff,.sybil_routerinfo .reachable,.sybil_routerinfo .unreachable,.sybil_routerinfo .version{padding:4px}
 .netdb_header img[src="/flags.jsp?c=a0"]{margin-bottom:-4px}
 .netdbStats li{margin:1px 5px}
 .newsAuthor{padding-top:2px}
@@ -2660,6 +2660,8 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 .sb_netstatus:hover #ffenabled{margin:2px 0 0 2px}
 #jardump a[href^="https://gitlab.com/i2pplus"]{padding-left:11px;background-size:8px;background-position:left top}
 #netdboverview th[colspan="3"]{font-size:11pt}
+#netdb .version{line-height:1.45}
+#netdb th .version{padding:2px 8px}
 #news li::before{height:8px;background-size:7px}
 #passwordheading{margin-top:12px}
 #pluginconfig{margin-top:-13px}
