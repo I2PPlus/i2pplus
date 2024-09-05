@@ -43,7 +43,7 @@ class TunnelRenderer {
     private final RouterContext _context;
     private final Log _log;
 
-    private int DISPLAY_LIMIT = 200;
+    private int DISPLAY_LIMIT = 100;
     private int displayed;
     private final DecimalFormat fmt = new DecimalFormat("#0.00");
 
@@ -91,22 +91,21 @@ class TunnelRenderer {
             String b64 = client.toBase64().substring(0,4);
             if (isLocal) {
                 out.write("<h3 class=\"");
-                if (_context.clientManager().shouldPublishLeaseSet(client))
-                    out.write("server ");
-                else if ((getTunnelName(in).startsWith("Ping") && getTunnelName(in).contains("[")) || getTunnelName(in).equals("I2Ping"))
+                if (_context.clientManager().shouldPublishLeaseSet(client)) {out.write("server ");}
+                else if ((getTunnelName(in).startsWith("Ping") && getTunnelName(in).contains("[")) || getTunnelName(in).equals("I2Ping")) {
                     out.write("ping ");
-                else
-                    out.write("client ");
+                } else {out.write("client ");}
                 out.write("tabletitle\" ");
                 out.write("id=\"" + client.toBase64().substring(0,4) + "\" >");
                 out.write(getTunnelName(in));
                 // links are set to float:right in CSS so they will be displayed in reverse order
-                if (isAdvanced /*&& (!name.startsWith("Ping") && !name.contains("[")) || !name.equals("I2Ping")*/)
+                if (isAdvanced) {
                     out.write(" <a href=\"/configtunnels#" + b64 +"\" title=\"" +
                               _t("Configure tunnels for session") + "\">[" + _t("configure") + "]</a>");
-                else /*if ((!name.startsWith("Ping") && !name.contains("[")) || !name.equals("I2Ping"))*/
+                } else {
                     out.write(" <a href=\"/tunnelmanager\" title=\"" +
                               _t("Configure tunnels") + "\">[" + _t("configure") + "]</a>");
+                }
                 writeGraphLinks(out, in, outPool);
                 out.write(" <a class=\"lsview\" href=\"/netdb?l=3#ls_" + client.toBase32().substring(0,4) + "\">" +
                           "<span class=\"b32\" title=\"" + _t("View LeaseSet") + "\">" +
@@ -206,6 +205,7 @@ class TunnelRenderer {
                     }
                     sb.append("<td class=\"cells datatransfer\"><span class=right>").append((count * 1024 / 1000))
                       .append("</span><span class=left>&#8239;KB</span></td>");
+
                     int lifetime = (int) ((_context.clock().now() - cfg.getCreation()) / 1000);
                     if (lifetime <= 0) {lifetime = 1;}
                     else if (lifetime > 10*60) {lifetime = 10*60;}
