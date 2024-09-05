@@ -121,18 +121,18 @@ class TunnelRenderer {
                         if (ain != null) {
                             String aname = ain.getSettings().getDestinationNickname();
                             String ab64 = a.toBase64().substring(0, 4);
-                            if (aname == null)
-                                aname = ab64;
-                        out.write("<h3 class=tabletitle ");
-                        out.write("id=\"" + ab64 + "\" >");
-                        out.write(DataHelper.escapeHTML(_t(aname)));
-                        if (isAdvanced)
-                            out.write(" <a href=\"/configtunnels#" + b64 +"\" title=\"" +
-                                      _t("Configure tunnels for session") + "\">[" + _t("configure") + "]</a>");
-                        else
-                            out.write(" <a href=\"/tunnelmanager\" title=\"" +
-                                      _t("Configure tunnels") + "\">[" + _t("configure") + "]</a>");
-                        out.write("</h3>\n");
+                            if (aname == null) {aname = ab64;}
+                            out.write("<h3 class=tabletitle ");
+                            out.write("id=\"" + ab64 + "\" >");
+                            out.write(DataHelper.escapeHTML(_t(aname)));
+                            if (isAdvanced) {
+                                out.write(" <a href=\"/configtunnels#" + b64 +"\" title=\"" +
+                                          _t("Configure tunnels for session") + "\">[" + _t("configure") + "]</a>");
+                            } else {
+                                out.write(" <a href=\"/tunnelmanager\" title=\"" +
+                                          _t("Configure tunnels") + "\">[" + _t("configure") + "]</a>");
+                            }
+                            out.write("</h3>\n");
                         }
                     }
                 }
@@ -303,21 +303,24 @@ class TunnelRenderer {
             }
 
             // sort and output
-            out.write("<h3 class=tabletitle>" + _t("Transit Tunnels by Peer (Top 50)") + "</h3>\n");
-            out.write("<table id=transitSummary class=\"tunneldisplay tunnels_participating\" data-sortable>\n" +
-                      "<thead><tr data-sort-method=none>" +
-                      "<th id=country data-sortable>" + _t("Country") + "</th>" +
-                      "<th id=router data-sortable data-sort-method=natural>" + _t("Router") + "</th>" +
-                      "<th id=version data-sortable data-sort-method=dotsep>" + _t("Version") + "</th>" +
-                      "<th id=tier data-sortable data-sort=LMNOPX>" + _t("Tier") + "</th>" +
-                      "<th id=address data-sortable>" + _t("Address") + "</th>");
-            if (enableReverseLookups()) {out.write("<th id=domain data-sortable>" + _t("Domain") + "</th>");}
-            out.write("<th class=tcount data-sortable data-sort-method=number data-sort-default>" + _t("Tunnels") + "</th>" +
-                      "<th id=data data-sortable data-sort-method=dotsep>" + _t("Data") + "</th>" +
-                      //"<th data-sortable data-sort-method=number>" + _t("Speed") + "</th>" +
-                      "<th id=banned data-sortable hidden>" + _t("Banned") + "</th>" +
-                      "<th id=edit data-sort-method=none>" + _t("Edit") + "</th>" +
-                      "</tr></thead>\n<tbody id=transitPeers>\n");
+            StringBuilder tbuf = new StringBuilder(3*512);
+            tbuf.append("<h3 class=tabletitle>").append(_t("Transit Tunnels by Peer (Top 50)")).append("</h3>\n")
+                .append("<table id=transitSummary class=\"tunneldisplay tunnels_participating\" data-sortable>\n")
+                .append("<thead><tr data-sort-method=none>")
+                .append("<th id=country data-sortable>").append(_t("Country")).append("</th>")
+                .append("<th id=router data-sortable data-sort-method=natural>").append(_t("Router")).append("</th>")
+                .append("<th id=version data-sortable data-sort-method=dotsep>").append(_t("Version")).append("</th>")
+                .append("<th id=tier data-sortable data-sort=LMNOPX>").append(_t("Tier")).append("</th>")
+                .append("<th id=address data-sortable>").append(_t("Address") + "</th>");
+            if (enableReverseLookups()) {tbuf.append("<th id=domain data-sortable>").append(_t("Domain")).append("</th>");}
+            tbuf.append("<th class=tcount data-sortable data-sort-method=number data-sort-default>").append(_t("Tunnels")).append("</th>")
+                .append("<th id=data data-sortable data-sort-method=dotsep>").append(_t("Data")).append("</th>")
+                //.append("<th data-sortable data-sort-method=number>").append(_t("Speed")).append("</th>")
+                .append("<th id=banned data-sortable hidden>" + _t("Banned")).append("</th>")
+                .append("<th id=edit data-sort-method=none>" + _t("Edit")).append("</th>")
+                .append("</tr></thead>\n<tbody id=transitPeers>\n");
+            out.write(tbuf.toString());
+
             displayed = 0;
             List<Hash> sort = counts.sortedObjects();
             long uptime = _context.router().getUptime();
@@ -339,18 +342,14 @@ class TunnelRenderer {
                 String v = info != null ? info.getOption("router.version") : null;
                 int inactive = 0;
                 if (count <= 0 && (participating.size() == 0) || ++displayed > DISPLAY_LIMIT) {break;}
-                sb.append("<tr class=lazy><td>");
-                sb.append(peerFlag(h));
-                sb.append("</td><td>");
-                sb.append("<span class=routerHash><a href=\"netdb?r=" + h.toBase64().substring(0,6) + "\">");
-                sb.append(truncHash);
-                sb.append("</a></span></td><td>");
-
+                sb.append("<tr class=lazy><td>").append(peerFlag(h)).append("</td><td>")
+                  .append("<span class=routerHash><a href=\"netdb?r=").append(h.toBase64()).append("\">")
+                  .append(truncHash).append("</a></span></td><td>");
                 if (v != null) {
-                    sb.append("<span class=version title=\"" + _t("Show all routers with this version in the NetDb") +
-                              "\"><a href=\"/netdb?v=" + DataHelper.stripHTML(v) + "\">" + DataHelper.stripHTML(v) +
-                              "</a></span>");
-                } else {sb.append("<span class=version>???</span>");}
+                    sb.append("<span class=version title=\"").append(_t("Show all routers with this version in the NetDb"))
+                      .append("\"><a href=\"/netdb?v=").append(DataHelper.stripHTML(v)).append("\">")
+                      .append(DataHelper.stripHTML(v)).append("</a></span>");
+                } else {sb.append("<span>???</span>");}
                 sb.append("</td><td>");
                 if (info != null) {sb.append(_context.commSystem().renderPeerCaps(h, false));}
                 else {sb.append("<table class=\"rid ric\"><tr><td class=rbw>?</td></tr></table>");}
@@ -481,7 +480,7 @@ class TunnelRenderer {
                 if (direct != null) {directIP = Addresses.toString(direct);}
                 String ip = !directIP.equals("") ? directIP : net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info));
                 String v = info.getOption("router.version");
-                String truncHash = h.toBase64().substring(0, 4);
+                String truncHash = h.toBase64().substring(0,4);
                 String rl = "";
                 if (ip != null && enableReverseLookups() && uptime > 30 * 1000) {
                     rl = _context.commSystem().getCanonicalHostName(ip);
@@ -489,7 +488,7 @@ class TunnelRenderer {
                 sb.append("<tr class=lazy><td>")
                   .append(peerFlag(h))
                   .append("</td><td><span class=routerHash><a href=\"netdb?r=")
-                  .append(h.toBase64().substring(0, 6))
+                  .append(h.toBase64())
                   .append("\">")
                   .append(truncHash)
                   .append("</a></span></td><td>");
@@ -607,14 +606,10 @@ class TunnelRenderer {
 //             return (l.getProcessedMessagesCount() - r.getProcessedMessagesCount());
              long le = l.getExpiration();
              long re = r.getExpiration();
-             if (le < 0)
-                 le = 0;
-             if (re < 0)
-                 re = 0;
-             if (le < re)
-                 return 1;
-             if (le > re)
-                 return -1;
+             if (le < 0) {le = 0;}
+             if (re < 0) {re = 0;}
+             if (le < re) {return 1;}
+             if (le > re) {return -1;}
              return 0;
         }
     }
@@ -630,12 +625,8 @@ class TunnelRenderer {
          public int compare(TunnelInfo l, TunnelInfo r) {
              long le = l.getExpiration();
              long re = r.getExpiration();
-             if (le < re)
-//                 return -1;
-                 return 1;
-             if (le > re)
-//                 return 1;
-                 return -1;
+             if (le < re) {return 1;}
+             if (le > re) {return -1;}
              return 0;
         }
     }
@@ -648,8 +639,7 @@ class TunnelRenderer {
          private final Collator _comp = Collator.getInstance();
          public int compare(TunnelPool l, TunnelPool r) {
              int rv = _comp.compare(getTunnelName(l), getTunnelName(r));
-             if (rv != 0)
-                 return rv;
+             if (rv != 0) {return rv;}
              return l.getSettings().getDestination().toBase32().compareTo(r.getSettings().getDestination().toBase32());
         }
     }
@@ -663,28 +653,23 @@ class TunnelRenderer {
         String name = ins.getDestinationNickname();
         if (name == null) {
             TunnelPoolSettings outPool = _context.tunnelManager().getOutboundSettings(ins.getDestination());
-            if (outPool != null)
-                name = outPool.getDestinationNickname();
+            if (outPool != null) {name = outPool.getDestinationNickname();}
         }
-        if (name != null)
-            return DataHelper.escapeHTML(_t(name));
+        if (name != null) {return DataHelper.escapeHTML(_t(name));}
         return ins.getDestination().toBase32();
     }
 
     /** @since 0.9.35 */
     private void writeGraphLinks(Writer out, TunnelPool in, TunnelPool outPool) throws IOException {
-        if (in == null || outPool == null)
-            return;
+        if (in == null || outPool == null) {return;}
         String irname = in.getRateName();
         String orname = outPool.getRateName();
         RateStat irs = _context.statManager().getRate(irname);
         RateStat ors = _context.statManager().getRate(orname);
-        if (irs == null || ors == null)
-            return;
+        if (irs == null || ors == null) {return;}
         Rate ir = irs.getRate(5*60*1000L);
         Rate or = ors.getRate(5*60*1000L);
-        if (ir == null || or == null)
-            return;
+        if (ir == null || or == null) {return;}
         final String tgd = _t("Graph Data");
         final String tcg = _t("Configure Graph Display");
         // links are set to float:right in CSS so they will be displayed in reverse order
@@ -707,9 +692,8 @@ class TunnelRenderer {
     private void renderPool(Writer out, TunnelPool in, TunnelPool outPool) throws IOException {
         Comparator<TunnelInfo> comp = new TunnelInfoComparator();
         List<TunnelInfo> tunnels;
-        if (in == null) {
-            tunnels = new ArrayList<TunnelInfo>();
-        } else {
+        if (in == null) {tunnels = new ArrayList<TunnelInfo>();}
+        else {
             tunnels = in.listTunnels();
             Collections.sort(tunnels, comp);
         }
@@ -727,23 +711,19 @@ class TunnelRenderer {
         for (int i = 0; i < tunnels.size(); i++) {
             TunnelInfo info = tunnels.get(i);
             int length = info.getLength();
-            if (length > maxLength)
-                maxLength = length;
+            if (length > maxLength) {maxLength = length;}
         }
         StringBuilder buf = new StringBuilder(32*1024);
         if (tunnels.size() != 0) {
-            buf.append("<table class=\"tunneldisplay tunnels_client\"><tr><th title=\"" + _t("Inbound or outbound?") + ("\">") + _t("In/Out") +
-                      "</th><th>" + _t("Expiry") + "</th><th title=\"" + _t("Data transferred") + "\">" + _t("Data") + "</th><th>" + _t("Gateway") + "</th>");
+            buf.append("<table class=\"tunneldisplay tunnels_client\">\n")
+               .append("<tr><th title=\"").append(_t("Inbound or outbound?")).append("\">").append(_t("In/Out")).append("</th>")
+               .append("<th>").append(_t("Expiry")).append("</th>")
+               .append("<th title=\"").append(_t("Data transferred")).append("\">").append(_t("Data")).append("</th>")
+               .append("<th>").append(_t("Gateway")).append("</th>");
             if (maxLength > 3) {
-            buf.append("<th colspan=\"" + (maxLength - 2));
-            buf.append("\">" + _t("Participants") + "</th>");
-            }
-            else if (maxLength == 3) {
-                buf.append("<th>" + _t("Participant") + "</th>");
-            }
-            if (maxLength > 1) {
-                buf.append("<th>" + _t("Endpoint") + "</th>");
-            }
+                buf.append("<th colspan=\"").append(maxLength - 2).append("\">").append(_t("Participants")).append("</th>");
+            } else if (maxLength == 3) {buf.append("<th>").append(_t("Participant")).append("</th>");}
+            if (maxLength > 1) {buf.append("<th>").append(_t("Endpoint")).append("</th>");}
             buf.append("</tr>\n");
         }
         final String tib = _t("Inbound");
@@ -751,86 +731,80 @@ class TunnelRenderer {
         for (int i = 0; i < tunnels.size(); i++) {
             TunnelInfo info = tunnels.get(i);
             long timeLeft = info.getExpiration()-_context.clock().now();
-            if (timeLeft <= 0)
-                continue; // don't display tunnels in their grace period
+            if (timeLeft <= 0) {continue;} // don't display tunnels in their grace period
             live++;
             boolean isInbound = info.isInbound();
-            if (isInbound)
-                buf.append("<tr><td><span class=inbound title=\"" + tib +
-                          "\"><img src=/themes/console/images/inbound.svg alt=\"" + tib + "\"></span></td>");
-            else
-                buf.append("<tr><td><span class=outbound title=\"" + tob +
-                          "\"><img src=/themes/console/images/outbound.svg alt=\"" + tob + "\"></span></td>");
-            buf.append("<td>" + DataHelper.formatDuration2(timeLeft) + "</td>\n");
+            if (isInbound) {
+                buf.append("<tr><td><span class=inbound title=\"").append(tib).append("\">")
+                   .append("<img src=/themes/console/images/inbound.svg alt=\"").append(tib).append("\"></span></td>");
+            } else {
+                buf.append("<tr><td><span class=outbound title=\"").append(tob).append("\">")
+                   .append("<img src=/themes/console/images/outbound.svg alt=\"").append(tob).append("\"></span></td>");
+            }
+            buf.append("<td>").append(DataHelper.formatDuration2(timeLeft)).append("</td>");
             int count = info.getProcessedMessagesCount() * 1024 / 1000;
             buf.append("<td class=\"cells datatransfer\">");
-            if (count > 0)
-                buf.append("<span class=right>" + count + "</span><span class=left>&#8239;KB</span>");
+            if (count > 0) {
+                buf.append("<span class=right>").append(count).append("</span><span class=left>&#8239;KB</span>");
+            }
             buf.append("</td>\n");
             int length = info.getLength();
             boolean isAdvanced = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
             for (int j = 0; j < length; j++) {
                 Hash peer = info.getPeer(j);
                 TunnelId id = (info.isInbound() ? info.getReceiveTunnelId(j) : info.getSendTunnelId(j));
-                    char cap = getCapacity(peer);
+                char cap = getCapacity(peer);
                 if (_context.routerHash().equals(peer)) {
                     if (length < maxLength && length == 1 && isInbound) {
-                        // pad before inbound zero hop
-                        for (int k = 1; k < maxLength; k++) {
+                        for (int k = 1; k < maxLength; k++) { // pad before inbound zero hop
                             buf.append("<td></td>");
                         }
                     }
                     // Add empty content placeholders to force alignment.
-                    buf.append(" <td><span class=\"tunnel_peer tunnel_local\" title=\"" +
-                              _t("Locally hosted tunnel") + "\">" + _t("Local") + "</span>");//&nbsp;" +
-                              //"<b class=tunnel_cap title=\"" + _t("Bandwidth tier") + "\">" + cap + "</b>");
+                    buf.append(" <td><span class=\"tunnel_peer tunnel_local\" title=\"")
+                       .append(_t("Locally hosted tunnel")).append("\">").append(_t("Local")).append("</span>");
                     if (isAdvanced) {
-                        buf.append("<span class=tunnel_id title=\"" + _t("Tunnel identity") + "\">" +
-                                  (id == null ? "" : "" + id) + "</span>");
+                        buf.append("<span class=tunnel_id title=\"").append(_t("Tunnel identity")).append("\">")
+                           .append((id == null ? "" : "" + id)).append("</span>");
                     }
                     buf.append("</td>");
                 } else {
-                    buf.append(" <td><span class=tunnel_peer>" + netDbLink(peer) +
-                              "</span>");//&nbsp;<b class=tunnel_cap title=\"" + _t("Bandwidth tier") + "\">" + cap + "</b>");
+                    buf.append(" <td><span class=tunnel_peer>").append(netDbLink(peer)).append("</span>");
                     if (isAdvanced) {
-                        buf.append("<span class=tunnel_id title=\"" + _t("Tunnel identity") + "\">" +
-                                  (id == null ? "" : " " + id) + "</span>");
+                        buf.append("<span class=tunnel_id title=\"").append(_t("Tunnel identity")).append("\">")
+                           .append((id == null ? "" : " " + id)).append("</span>");
                     }
                     buf.append("</td>");
                 }
                 if (length < maxLength && ((length == 1 && !isInbound) || j == length - 2)) {
                     // pad out outbound zero hop; non-zero-hop pads in middle
-                    for (int k = length; k < maxLength; k++) {
-                        buf.append("<td></td>");
-                    }
+                    for (int k = length; k < maxLength; k++) {buf.append("<td></td>");}
                 }
             }
             buf.append("</tr>\n");
 
-            if (info.isInbound())
-                processedIn += count;
-            else
-                processedOut += count;
+            if (info.isInbound()) {processedIn += count;}
+            else {processedOut += count;}
         }
         buf.append("</table>\n");
         if (live > 0 && ((in != null || (outPool != null)))) {
             List<?> pendingIn = in.listPending();
             List<?> pendingOut = outPool.listPending();
             if ((!pendingIn.isEmpty()) || (!pendingOut.isEmpty())) {
-                buf.append("<div class=\"statusnotes building\"><center><b>" + _t("Build in progress") + ":&nbsp;");
+                buf.append("<div class=\"statusnotes building\"><center><b>").append(_t("Build in progress")).append(":&nbsp;");
                 if (in != null) {
                     // PooledTunnelCreatorConfig
-//                    List<?> pending = in.listPending();
                     if (!pendingIn.isEmpty()) {
-                        buf.append("&nbsp;<span class=pending>" + pendingIn.size() + " " + tib + "</span>&nbsp;");
+                        buf.append("&nbsp;<span class=pending>").append(pendingIn.size()).append(" ")
+                           .append(tib).append("</span>&nbsp;");
                         live += pendingIn.size();
                     }
                 }
                 if (outPool != null) {
                     // PooledTunnelCreatorConfig
-//                    List<?> pending = outPool.listPending();
                     if (!pendingOut.isEmpty()) {
-                        buf.append("&nbsp;<span class=pending>" + pendingOut.size() + " " + tob + "</span>&nbsp;");
+                        buf.append("&nbsp;<span class=pending>").append(pendingOut.size())
+                           .append(" ").append(tob).append("</span>&nbsp;");
                         live += pendingOut.size();
                     }
                 }
@@ -838,11 +812,13 @@ class TunnelRenderer {
             }
         }
         if (live <= 0) {
-            buf.append("<div class=statusnotes><center><b>" + _t("none") + "</b></center></div>\n");
+            buf.append("<div class=statusnotes><center><b>").append(_t("none")).append("</b></center></div>\n");
         } else {
-        buf.append("<div class=statusnotes><center><b>" + _t("Lifetime bandwidth usage") + ":&nbsp;&nbsp;" +
-                  DataHelper.formatSize2(processedIn*1024, true).replace("i", "") + "B " + _t("in") + ", " +
-                  DataHelper.formatSize2(processedOut*1024, true).replace("i", "") + "B " + _t("out") + "</b></center></div>");
+        buf.append("<div class=statusnotes><center><b>").append(_t("Lifetime bandwidth usage")).append(":&nbsp;&nbsp;")
+           .append(DataHelper.formatSize2(processedIn*1024, true).replace("i", ""))
+           .append("B ").append(_t("in")).append(", ")
+           .append(DataHelper.formatSize2(processedOut*1024, true).replace("i", ""))
+           .append("B ").append(_t("out")).append("</b></center></div>\n");
         }
         out.write(buf.toString());
         out.flush();
@@ -852,9 +828,8 @@ class TunnelRenderer {
     public void renderLifetimeBandwidth(Writer out, TunnelPool in, TunnelPool outPool) throws IOException {
         Comparator<TunnelInfo> comp = new TunnelInfoComparator();
         List<TunnelInfo> tunnels;
-        if (in == null) {
-            tunnels = new ArrayList<TunnelInfo>();
-        } else {
+        if (in == null) {tunnels = new ArrayList<TunnelInfo>();}
+        else {
             tunnels = in.listTunnels();
             Collections.sort(tunnels, comp);
         }
@@ -867,8 +842,7 @@ class TunnelRenderer {
         for (int i = 0; i < tunnels.size(); i++) {
             TunnelInfo info = tunnels.get(i);
             int length = info.getLength();
-            if (length > maxLength)
-                maxLength = length;
+            if (length > maxLength) {maxLength = length;}
         }
         StringBuilder buf = new StringBuilder(32*1024);
         if (tunnels.size() != 0) {
@@ -881,13 +855,10 @@ class TunnelRenderer {
         for (int i = 0; i < tunnels.size(); i++) {
             TunnelInfo info = tunnels.get(i);
             int count = info.getProcessedMessagesCount() * 1024;
-            if (info.isInbound()) {
-                lifetimeIn += count;
-            } else {
-                lifetimeOut += count;
-            }
+            if (info.isInbound()) {lifetimeIn += count;}
+            else {lifetimeOut += count;}
             String nickname = getTunnelName(in);
-            String tunnelName = nickname != null ? nickname : "Unknown";
+            String tunnelName = nickname != null ? nickname : _t("Unknown");
             buf.append("<tr><td>").append(tunnelName).append("</td><td>")
                .append(DataHelper.formatSize2(lifetimeIn, true)).append("</td><td>")
                .append(DataHelper.formatSize2(lifetimeOut, true)).append("</td></tr>\n");
@@ -911,8 +882,7 @@ class TunnelRenderer {
                     tunnelCount++;
                     for (int j = 0; j < info.getLength(); j++) {
                         Hash peer = info.getPeer(j);
-                        if (!_context.routerHash().equals(peer))
-                            lc.increment(peer);
+                        if (!_context.routerHash().equals(peer)) {lc.increment(peer);}
                     }
                 }
             }
@@ -926,19 +896,15 @@ class TunnelRenderer {
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
         for (HopConfig cfg : participating) {
             Hash from = cfg.getReceiveFrom();
-            if (from != null)
-                pc.increment(from);
+            if (from != null) {pc.increment(from);}
             Hash to = cfg.getSendTo();
-            if (to != null)
-                pc.increment(to);
+            if (to != null) {pc.increment(to);}
         }
         return participating.size();
     }
 
     private static class CountryComparator implements Comparator<Hash> {
-        public CountryComparator(CommSystemFacade comm) {
-            this.comm = comm;
-        }
+        public CountryComparator(CommSystemFacade comm) {this.comm = comm;}
         public int compare(Hash l, Hash r) {
             // get both countries
             String lc = this.comm.getCountry(l);
@@ -963,8 +929,7 @@ class TunnelRenderer {
             String caps = info.getCapabilities();
             for (int i = 0; i < RouterInfo.BW_CAPABILITY_CHARS.length(); i++) {
                 char c = RouterInfo.BW_CAPABILITY_CHARS.charAt(i);
-                if (caps.indexOf(c) >= 0)
-                    return c;
+                if (caps.indexOf(c) >= 0) {return c;}
             }
         }
         return '?';
@@ -987,19 +952,14 @@ class TunnelRenderer {
         int irateKBps = _context.bandwidthLimiter().getInboundKBytesPerSecond();
         int orateKBps = _context.bandwidthLimiter().getOutboundKBytesPerSecond();
         double pct = _context.router().getSharePercentage();
-        if (irateKBps < 0 || orateKBps < 0)
-            return ConfigNetHelper.DEFAULT_SHARE_KBPS;
+        if (irateKBps < 0 || orateKBps < 0) {return ConfigNetHelper.DEFAULT_SHARE_KBPS;}
         return (int) (pct * Math.min(irateKBps, orateKBps));
     }
 
     /** translate a string */
-    private String _t(String s) {
-        return Messages.getString(s, _context);
-    }
+    private String _t(String s) {return Messages.getString(s, _context);}
 
     /** translate a string */
-    public String _t(String s, Object o) {
-        return Messages.getString(s, o, _context);
-    }
+    public String _t(String s, Object o) {return Messages.getString(s, o, _context);}
 
 }
