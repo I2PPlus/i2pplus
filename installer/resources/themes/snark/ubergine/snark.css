@@ -701,32 +701,28 @@ input.trackername{width:100px}
 .info_tracker:active,.info_tracker:active a{color:#fff;text-shadow:none}
 .info_tracker:active{color:#fff;box-shadow:0 0 0 1px #313,inset 0 0 0 1px rgba(255,48,0,.5),inset 3px 3px 3px 2px #730;background:var(--hover) var(--tracker_active) no-repeat left 3px center/14px}
 .knownTracker a{display:inline-block;vertical-align:middle;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;width:220px}
+.trackerannounce,.trackerhome{width:260px}
 span.trackerName{padding:1px 10px 1px 5px;width:calc(100% - 20px);display:inline-block;vertical-align:middle;white-space:nowrap;text-align:left;border:var(--border_hard);border-radius:3px;background:var(--th)}
 span.trackerName::before{width:20px;height:20px;display:inline-block;vertical-align:middle;background:var(--tracker) no-repeat left center/16px;content:""}
 .spacer.top td{border-bottom:0}
 .spacer.top:hover,#trackerconfig tr:nth-last-child(3):hover,#trackerconfig tr:nth-last-child(4):hover,#trackerconfig tr:nth-last-child(5):hover{background:rgba(48,30,48,.8);box-shadow:none}
 .trackerName a{width:100%;display:inline-block;vertical-align:middle}
 #trackerconfig .spacer{display:none}
-#trackerconfig,#fileFilter table{margin-top:0;border-spacing:0;border-collapse:collapse}
+#trackerconfig,#fileFilter table{margin-top:0;border-spacing:0;border-collapse:separate}
 #trackerconfig tr:first-child,#fileFilter tr:first-child{background:var(--th2)}
-#trackerconfig tr:nth-child(n+2),.createFilterString:nth-child(even){background:rgba(48,30,48,.8)}
-#trackerconfig tr:nth-child(2n+3),.createFilterString:nth-child(odd){background:rgba(16,0,16,.3)}
+#trackerconfig tr:nth-child(n+2),.createFilterString{background:linear-gradient(180deg,#323,#2a182a)}
+#trackerconfig tr.knownTracker td,#fileFilter table tr.createFilterString td{border-top:1px solid #aaa1}
 #trackerconfig tr:nth-last-child(2) input:last-child,#configs tr:nth-last-child(2) input:last-child{margin-right:1px}
 #trackerconfig tr:nth-last-child(2) td,#fileFilter tr:nth-last-child(2) td{padding:9px 0 0;border-left:0;border-right:0}
-#trackerconfig tr:nth-child(2n+4){background:rgba(16,0,16,.5)}
 #trackerconfig tr:nth-last-child(2) td{background:none}
 #trackerconfig tr:nth-last-child(3) td,#trackerconfig .spacer.top td,#fileFilter tr:nth-last-child(3) td,#fileFilter .spacer.top td{padding:3px 0;font-size:0;line-height:0}
 #trackerconfig tr:nth-last-child(3) td{border-bottom:var(--border_hard);background:#2b1b2b}
-#trackerconfig tr:nth-last-child(4),#fileFilter tr:nth-last-child(4){background:linear-gradient(180deg,#434 1px,#323 1px,#2b1b2b)}
 #trackerconfig tr:nth-last-child(4) td,#fileFilter tr:nth-last-child(4) td{padding:7px 4px;border-bottom:4px solid #212;background:linear-gradient(180deg,#434 1px,#323 1px,#2b1b2b)}
-#trackerconfig tr:nth-last-child(5) td{border-bottom:var(--border_hard);padding:3px 0;font-size:0;line-height:0}
 #trackerconfig tr:nth-last-child(5){display:none}
-#trackerconfig tr:nth-last-child(5){background:rgba(48,30,48,.8)}
-#trackerconfig tr:nth-last-child(6) td{border-bottom:var(--border_hard)}
-#trackerconfig tr:nth-last-child(5) td,#trackerconfig tr:nth-last-child(4) td,#trackerconfig tr:nth-last-child(3) td,#trackerconfig tr:nth-last-child(2) td{border-top:0}
+#trackerconfig tr:nth-last-child(6) td,#fileFilter tr:nth-last-child(6) td{border-bottom:var(--border_hard)}
+#trackerconfig tr:nth-last-child(4) td,#trackerconfig tr:nth-last-child(3) td,#trackerconfig tr:nth-last-child(2) td{border-top:0}
 #trackerconfig tr:nth-child(n+2):hover,.createFilterString:hover{background:linear-gradient(180deg,#58165e,#4a0d56)}
 #trackerconfig tr:nth-last-child(2),#trackerconfig tr:nth-last-child(2):hover,.spacer.top:hover,#trackerconfig tr:nth-last-child(3):hover,#trackerconfig tr:nth-last-child(2):hover{background:none;box-shadow:none}
-#trackerconfig tr:hover td{border-top:1px solid #0000}
 #trackerconfig th,#fileFilter th{padding:5px 2px;background:none}
 #trackerconfig th:nth-child(3),#trackerconfig th:nth-child(7),#trackerconfig td:nth-child(3),#trackerconfig td:nth-child(7){padding-left:10px}
 #trackerconfig td,#fileFilter .createFilterString td{border-top:1px solid #212;border-bottom:1px solid #212;border-top:1px solid rgba(16,0,16,.5);border-bottom:1px solid rgba(16,0,16,.5)}
@@ -737,7 +733,6 @@ span.trackerName::before{width:20px;height:20px;display:inline-block;vertical-al
 #trackerconfig .delete{margin-left:0;margin-right:7px}
 #trackerconfig .accept{margin:2px 1px 2px 8px}
 #trackerconfig .optbox,#fileFilter .optbox{margin:4px 6px}
-.trackerhome,.trackerannounce{width:260px}
 #addtracker input[type=radio]{margin:0}
 #addtracker input[type=text]{margin-left:0}
 #addtracker td,#trackerconfig tr:nth-last-child(2) td,#fileFilter tr:nth-last-child(2) td{border-bottom:0}
