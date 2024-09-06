@@ -178,13 +178,9 @@ class Connection {
     /**
      * @since 0.9.46
      */
-    int getSSThresh() {
-        return _ssthresh;
-    }
+    int getSSThresh() {return _ssthresh;}
 
-    public long getNextOutboundPacketNum() {
-        return _lastSendId.incrementAndGet();
-    }
+    public long getNextOutboundPacketNum() {return _lastSendId.incrementAndGet();}
 
     /**
      * This doesn't "send a choke". Rather, it blocks if the outbound window is full,
@@ -261,88 +257,11 @@ class Connection {
         return (timeLeft > 0);
     }
 
-/**
-    public boolean packetSendChoke(long timeoutMs) throws IOException, InterruptedException {
-        long start = _context.clock().now();
-        long now = start;
-        long writeExpire = start + timeoutMs;  // only used if timeoutMs > 0
-        boolean started = false;
-        while (true) {
-            long timeLeft = writeExpire - now;
-            synchronized (_outboundPackets) {
-                if (!started)
-                    _context.statManager().addRateData("stream.chokeSizeBegin", _outboundPackets.size());
-                if (start + 5*60*1000 < now) // ok, 5 minutes blocking?  I don't think so
-                    return false;
-
-                // no need to wait until the other side has ACKed us before sending the first few wsize
-                // packets through
-                // Incorrect assumption, the constructor defaults _connected to true --Sponge
-                if (!_connected.get()) {
-                    if (getResetReceived())
-                        throw new I2PSocketException(I2PSocketException.STATUS_CONNECTION_RESET);
-                    throw new IOException("Socket closed");
-                }
-                if (_outputStream.getClosed())
-                    throw new IOException("Output stream closed");
-                started = true;
-                // Try to keep things moving even during NACKs and retransmissions...
-                // Limit unacked packets to the window
-                // Limit active resends to half the window
-                // Limit (highest-lowest) to twice the window (if far end doesn't like it, it can send a choke)
-                int unacked = _outboundPackets.size();
-                int wsz = _options.getWindowSize();
-                if (_isChoked || unacked >= wsz ||
-                    _activeResends.get() >= (wsz + 1) / 2 ||
-                    _lastSendId.get() - _highestAckedThrough >= Math.min(MAX_WINDOW_SIZE, 2 * wsz)) {
-                    if (timeoutMs > 0) {
-                        if (timeLeft <= 0) {
-                            if (_log.shouldInfo())
-                                _log.info("Outbound window is full (choked? " + _isChoked + ' ' + unacked
-                                          + " unacked with " + _activeResends + " active resends"
-                                          + " and we've waited too long (" + (0-(timeLeft - timeoutMs)) + "ms): "
-                                          + toString());
-                            return false;
-                        }
-                        if (_log.shouldDebug())
-                            _log.debug("Outbound window is full (choked? " + _isChoked + ' ' + unacked + '/' + wsz + '/'
-                                       + _activeResends + "), waiting " + timeLeft);
-                        try {
-                            _outboundPackets.wait(Math.min(timeLeft,250l));
-                        } catch (InterruptedException ie) {
-                            if (_log.shouldDebug())
-                                _log.debug("InterruptedException while Outbound window is full (" + _outboundPackets.size() + "/" + _activeResends +")");
-                            throw ie;
-                        }
-                    } else {
-                        //if (_log.shouldDebug())
-                        //    _log.debug("Outbound window is full (" + _outboundPackets.size() + "/" + _activeResends
-                        //               + "), waiting indefinitely");
-                        try {
-                            _outboundPackets.wait(250);
-                        } catch (InterruptedException ie) {
-                            if (_log.shouldDebug())
-                                _log.debug("InterruptedException while Outbound window is full (" + _outboundPackets.size() + "/" + _activeResends + ")");
-                            throw ie;
-                        } //10*1000
-                    }
-                    now = _context.clock().now();
-                } else {
-                    _context.statManager().addRateData("stream.chokeSizeEnd", _outboundPackets.size());
-                    return true;
-                }
-            }
-        }
-    }
-**/
-
     /**
      *  Notify all threads waiting in packetSendChoke()
      */
     void windowAdjusted() {
-        synchronized (_outboundPackets) {
-            _outboundPackets.notifyAll();
-        }
+        synchronized (_outboundPackets) {_outboundPackets.notifyAll();}
     }
 
     void ackImmediately() {
@@ -360,11 +279,11 @@ class Connection {
      */
     private void sendReset() {
         long now = _context.clock().now();
-        if (_resetSentOn.get() + 10*1000 > now) return; // don't send resets too fast
-        if (_resetReceived.get()) return;
+        if (_resetSentOn.get() + 10*1000 > now) {return;} // don't send resets too fast
+        if (_resetReceived.get()) {return;}
         // Unconditionally set
         _resetSentOn.set(now);
-        if ( (_remotePeer == null) || (_sendStreamId.get() <= 0) ) return;
+        if ((_remotePeer == null) || (_sendStreamId.get() <= 0)) {return;}
         PacketLocal reply = new PacketLocal(_context, _remotePeer, this);
         reply.setFlag(Packet.FLAG_RESET);
         reply.setFlag(Packet.FLAG_SIGNATURE_INCLUDED);
@@ -409,7 +328,7 @@ class Connection {
             packet.setFlag(Packet.FLAG_SIGNATURE_REQUESTED);
         }
 
-        if ( (packet.getSequenceNum() == 0) && (!packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) ) {
+        if ((packet.getSequenceNum() == 0) && (!packet.isFlagSet(Packet.FLAG_SYNCHRONIZE))) {
             // ACK-only
             if (_isChoking) {
                 packet.setOptionalDelay(Packet.SEND_DELAY_CHOKE);
@@ -449,12 +368,14 @@ class Connection {
 
                 // RFC 6298 section 5.1
                 if (_retransmitEvent.scheduleIfNotRunning(timeout)) {
-                   if (_log.shouldDebug())
+                   if (_log.shouldDebug()) {
                        _log.debug("[" + Connection.this + "] Resend in " + timeout + "ms for " + packet);
+                   }
 
                 } else {
-                    if (_log.shouldDebug())
+                    if (_log.shouldDebug()) {
                         _log.debug("[" + Connection.this + "] Timer was already running!");
+                    }
                 }
 
                 packet.setTimeout(timeout);
@@ -485,11 +406,9 @@ class Connection {
             } else {
                 long lowest = -1;
                 for (int i = 0; i < nacks.length; i++) {
-                    if ( (lowest < 0) || (nacks[i] < lowest) )
-                        lowest = nacks[i];
+                    if ((lowest < 0) || (nacks[i] < lowest)) {lowest = nacks[i];}
                 }
-                if (lowest - 1 > _highestAckedThrough)
-                    _highestAckedThrough = lowest - 1;
+                if (lowest - 1 > _highestAckedThrough) {_highestAckedThrough = lowest - 1;}
             }
         }
 
@@ -497,52 +416,51 @@ class Connection {
         boolean anyLeft = false;
         synchronized (_outboundPackets) {
             if (!_outboundPackets.isEmpty()) {  // short circuit iterator
-              for (Iterator<Map.Entry<Long, PacketLocal>> iter = _outboundPackets.entrySet().iterator(); iter.hasNext(); ) {
-                Map.Entry<Long, PacketLocal> e = iter.next();
-                long id = e.getKey().longValue();
-                if (id <= ackThrough) {
-                    boolean nacked = false;
-                    if (nacks != null) {
-                        // linear search since its probably really tiny
-                        for (int i = 0; i < nacks.length; i++) {
-                            if (nacks[i] == id) {
-                                nacked = true;
-                                PacketLocal nackedPacket = e.getValue();
-                                // this will do a fast retransmit if appropriate
-                                nackedPacket.incrementNACKs();
-                                break; // NACKed
+                for (Iterator<Map.Entry<Long, PacketLocal>> iter = _outboundPackets.entrySet().iterator(); iter.hasNext(); ) {
+                    Map.Entry<Long, PacketLocal> e = iter.next();
+                    long id = e.getKey().longValue();
+                    if (id <= ackThrough) {
+                        boolean nacked = false;
+                        if (nacks != null) {
+                            // linear search since its probably really tiny
+                            for (int i = 0; i < nacks.length; i++) {
+                                if (nacks[i] == id) {
+                                    nacked = true;
+                                    PacketLocal nackedPacket = e.getValue();
+                                    // this will do a fast retransmit if appropriate
+                                    nackedPacket.incrementNACKs();
+                                    break; // NACKed
+                                }
                             }
                         }
+                        if (!nacked) { // aka ACKed
+                            if (acked == null) {acked = new ArrayList<PacketLocal>(8);}
+                            PacketLocal ackedPacket = e.getValue();
+                            ackedPacket.ackReceived();
+                            acked.add(ackedPacket);
+                            iter.remove();
+                        }
+                    } else {
+                        // TODO
+                        // we do not currently do an "implicit nack" of the packets higher
+                        // than ackThrough, so those will not be fast retransmitted
+                        // we could incrementNACK them here... but we may need to set the fastRettransmit
+                        // threshold back to 3 for that.
+                        // this will do a fast retransmit if appropriate
+                        // This doesn't work because every packet has an ACK in it, so we hit the
+                        // FAST_TRANSMIT threshold in a heartbeat and retransmit everything,
+                        // even with the threshold at 3. (we never set the NO_ACK field in the header)
+                        // Also, we may need to track that we
+                        // have the same ackThrough for 3 or 4 consecutive times.
+                        // See https://secure.wikimedia.org/wikipedia/en/wiki/Fast_retransmit
+                        //if (_log.shouldInfo())
+                        //    _log.info("ACK thru " + ackThrough + " implicitly NACKs " + id);
+                        //PacketLocal nackedPacket = e.getValue();
+                        //nackedPacket.incrementNACKs();
+                        break; // _outboundPackets is ordered
                     }
-                    if (!nacked) { // aka ACKed
-                        if (acked == null)
-                            acked = new ArrayList<PacketLocal>(8);
-                        PacketLocal ackedPacket = e.getValue();
-                        ackedPacket.ackReceived();
-                        acked.add(ackedPacket);
-                        iter.remove();
-                    }
-                } else {
-                    // TODO
-                    // we do not currently do an "implicit nack" of the packets higher
-                    // than ackThrough, so those will not be fast retransmitted
-                    // we could incrementNACK them here... but we may need to set the fastRettransmit
-                    // threshold back to 3 for that.
-                    // this will do a fast retransmit if appropriate
-                    // This doesn't work because every packet has an ACK in it, so we hit the
-                    // FAST_TRANSMIT threshold in a heartbeat and retransmit everything,
-                    // even with the threshold at 3. (we never set the NO_ACK field in the header)
-                    // Also, we may need to track that we
-                    // have the same ackThrough for 3 or 4 consecutive times.
-                    // See https://secure.wikimedia.org/wikipedia/en/wiki/Fast_retransmit
-                    //if (_log.shouldInfo())
-                    //    _log.info("ACK thru " + ackThrough + " implicitly NACKs " + id);
-                    //PacketLocal nackedPacket = e.getValue();
-                    //nackedPacket.incrementNACKs();
-                    break; // _outboundPackets is ordered
-                }
-              }   // for
-            }   // !isEmpty()
+                } // for
+            } // !isEmpty()
             if (acked != null) {
                 _ackedPackets.addAndGet(acked.size());
                 for (int i = 0; i < acked.size(); i++) {
@@ -550,19 +468,23 @@ class Connection {
                     // removed from _outboundPackets above in iterator
                     if (p.getNumSends() > 1) {
                         _activeResends.decrementAndGet();
-                        if (_log.shouldDebug())
+                        if (_log.shouldDebug()) {
                             _log.debug("Active resend of " + p + " successful -> " + _activeResends + " resends remaining...");
+                        }
                     }
                 }
             }
-            if ( (_outboundPackets.isEmpty()) && (_activeResends.get() != 0) ) {
-                if (_log.shouldInfo())
+            if ((_outboundPackets.isEmpty()) && (_activeResends.get() != 0)) {
+                if (_log.shouldInfo()) {
                     _log.info("All outbound packets ACKed, clearing " + _activeResends);
+                }
                 _activeResends.set(0);
             }
+
             anyLeft = !_outboundPackets.isEmpty();
             _outboundPackets.notifyAll();
-            if ((acked != null) && (!acked.isEmpty()) ) {
+
+            if ((acked != null) && (!acked.isEmpty())) {
                 _ackSinceCongestion.set(true);
                 _bwEstimator.addSample(acked.size());
                 if (anyLeft) {
@@ -570,12 +492,14 @@ class Connection {
                     int rto = _options.getRTO();
                     _retransmitEvent.pushBackRTO(rto);
 
-                if (_log.shouldDebug())
-                    _log.debug("[" + Connection.this + "] Not all packets ACKed, pushing timer out " + rto);
+                    if (_log.shouldDebug()) {
+                        _log.debug("[" + Connection.this + "] Not all packets ACKed, pushing timer out " + rto);
+                    }
                 } else {
                     // RFC 6298 section 5.2
-                    if (_log.shouldDebug())
+                    if (_log.shouldDebug()) {
                         _log.debug("[" + Connection.this + "] All outstanding packets ACKed, cancelling timer");
+                    }
 
                     _retransmitEvent.cancel();
                 }
@@ -591,8 +515,9 @@ class Connection {
         sched.eventOccurred(this);
         long elapsed = System.currentTimeMillis() - before;
         // 250 and warn for debugging
-        if ( (elapsed > 250) && (_log.shouldWarn()) )
+        if ((elapsed > 250) && (_log.shouldWarn())) {
             _log.warn("Took " + elapsed + "ms to pump through " + sched + " on " + toString());
+        }
     }
 
     /**
@@ -603,8 +528,7 @@ class Connection {
     public void notifyCloseSent() {
         if (!_closeSentOn.compareAndSet(0, _context.clock().now())) {
             // TODO ackImmediately() after sending CLOSE causes this. Bad?
-            if (_log.shouldDebug())
-                _log.debug("Sent more than one CLOSE: " + toString());
+            if (_log.shouldDebug()) {_log.debug("Sent more than one CLOSE: " + toString());}
         }
         // that's it, wait for notifyLastPacketAcked() or closeReceived()
     }
@@ -618,11 +542,9 @@ class Connection {
         if (_closeReceivedOn.compareAndSet(0, _context.clock().now())) {
             _inputStream.closeReceived();
             // TODO if outbound && no SYN received, treat like a reset? Could this happen?
-            if (_closeSentOn.get() > 0) {
-                // received after sent
-                disconnect(true);
-            } else {
-                synchronized (_connectLock) { _connectLock.notifyAll(); }
+            if (_closeSentOn.get() > 0) {disconnect(true);} // received after sent
+            else {
+                synchronized (_connectLock) {_connectLock.notifyAll();}
             }
         }
     }
@@ -634,14 +556,11 @@ class Connection {
      */
     public void notifyLastPacketAcked() {
         long cso = _closeSentOn.get();
-        if (cso <= 0)
-            throw new IllegalStateException();
+        if (cso <= 0) {throw new IllegalStateException();}
         // we only create one CLOSE packet so we will only get called once,
         // no need to check
         long cro = _closeReceivedOn.get();
-        if (cro > 0 && cro < cso)
-            // received before sent
-            disconnect(true);
+        if (cro > 0 && cro < cso) {disconnect(true);} // received before sent
     }
 
     /**
@@ -649,20 +568,19 @@ class Connection {
      *  May be called multiple times.
      */
     public void resetReceived() {
-        if (!_resetReceived.compareAndSet(false, true))
-            return;
+        if (!_resetReceived.compareAndSet(false, true)) {return;}
         IOException ioe = new I2PSocketException(I2PSocketException.STATUS_CONNECTION_RESET);
         _outputStream.streamErrorOccurred(ioe);
         _inputStream.streamErrorOccurred(ioe);
         _connectionError = "Connection reset";
-        synchronized (_connectLock) { _connectLock.notifyAll(); }
+        synchronized (_connectLock) {_connectLock.notifyAll();}
         // RFC 793 end of section 3.4: We are completely done.
         disconnectComplete();
     }
 
-    public boolean getResetReceived() { return _resetReceived.get(); }
+    public boolean getResetReceived() {return _resetReceived.get();}
 
-    public boolean isInbound() { return _isInbound; }
+    public boolean isInbound() {return _isInbound;}
 
     /**
      *  Always true at the start, even if we haven't gotten a reply on an
@@ -675,17 +593,17 @@ class Connection {
      *  - RESET received or sent
      *  - closed on the socket side
      */
-    public boolean getIsConnected() { return _connected.get(); }
+    public boolean getIsConnected() {return _connected.get();}
 
-    public boolean getHardDisconnected() { return _hardDisconnected; }
+    public boolean getHardDisconnected() {return _hardDisconnected;}
 
-    public boolean getResetSent() { return _resetSentOn.get() > 0; }
+    public boolean getResetSent() {return _resetSentOn.get() > 0;}
 
     /** @return 0 if not sent */
-    public long getResetSentOn() { return _resetSentOn.get(); }
+    public long getResetSentOn() {return _resetSentOn.get();}
 
     /** @return 0 if not scheduled */
-    public long getDisconnectScheduledOn() { return _disconnectScheduledOn.get(); }
+    public long getDisconnectScheduledOn() {return _disconnectScheduledOn.get();}
 
     /**
      *  Must be called when we are done with this connection.
@@ -723,7 +641,7 @@ class Connection {
         if (!_connected.compareAndSet(true, false)) {
             return;
         }
-        synchronized (_connectLock) { _connectLock.notifyAll(); }
+        synchronized (_connectLock) {_connectLock.notifyAll();}
 
         int disconnectCount = 0;
 
@@ -733,10 +651,11 @@ class Connection {
         }
 
         if (cleanDisconnect) {
-            if (_log.shouldDebug())
+            if (_log.shouldDebug()) {
                 _log.debug("Clean disconnecting from " + getRemotePeerString() + " -> " +
                            (removeFromConMgr ? "Removed from Connection Manager" : "Not removed from Connection Manager") +
                            "\n* " + toString(), new Exception("Disconnected"));
+            }
             _outputStream.closeInternal();
         } else {
             _hardDisconnected = true;
@@ -751,32 +670,31 @@ class Connection {
                 sendReset();
                 disconnectCount++;
             } else {
-                if (_log.shouldWarn())
+                if (_log.shouldWarn()) {
                     _log.warn("Hard disconnecting " + (disconnectCount > 1 ? "(Count: " + disconnectCount + ")" : "") +
                               " from " + getRemotePeerString() + " -> " +
                               (removeFromConMgr ? "Removed from Connection Manager" : "Not removed from Connection Manager"));
+                }
             }
             _outputStream.streamErrorOccurred(new IOException("Hard disconnect"));
             disconnectCount++;
         }
 
         if (removeFromConMgr) {
-            if (!cleanDisconnect) {
-                disconnectComplete();
-            } else {
+            if (!cleanDisconnect) {disconnectComplete();}
+            else {
                 long cro = _closeReceivedOn.get();
                 long cso = _closeSentOn.get();
                 if (cro > 0 && cro < cso && getUnackedPacketsSent() <= 0) {
-                    if (_log.shouldInfo())
+                    if (_log.shouldInfo()) {
                         _log.info("Rcv close -> send close -> last ACKed, skip TIME-WAIT for " + toString());
+                    }
                     // They sent the first CLOSE.
                     // We do not need to enter TIME-WAIT, we are done.
                     // clean disconnect, don't schedule TIME-WAIT
                     // remove conn
                     disconnectComplete();
-                } else {
-                    scheduleDisconnectEvent();
-                }
+                } else {scheduleDisconnectEvent();}
             }
         }
     }
@@ -787,8 +705,7 @@ class Connection {
      *  May be called multiple times.
      */
     public void disconnectComplete() {
-        if (!_finalDisconnect.compareAndSet(false, true))
-            return;
+        if (!_finalDisconnect.compareAndSet(false, true)) {return;}
         _connected.set(false);
         I2PSocketFull s = _socket;
         if (s != null) {
@@ -801,8 +718,7 @@ class Connection {
         _retransmitEvent.cancel();
         _inputStream.streamErrorOccurred(new IOException("Socket closed"));
 
-        if (_log.shouldInfo())
-            _log.info("Connection disconnect complete\n" + toString());
+        if (_log.shouldInfo()) {_log.info("Connection disconnect complete\n" + toString());}
         _connectionManager.removeConnection(this);
         killOutstandingPackets();
     }
@@ -812,11 +728,8 @@ class Connection {
      */
     private void killOutstandingPackets() {
         synchronized (_outboundPackets) {
-            if (_outboundPackets.isEmpty())
-                return;  // short circuit iterator
-            for (PacketLocal pl : _outboundPackets.values()) {
-                pl.cancelled();
-            }
+            if (_outboundPackets.isEmpty()) {return;} // short circuit iterator
+            for (PacketLocal pl : _outboundPackets.values()) {pl.cancelled();}
             _outboundPackets.clear();
             _outboundPackets.notifyAll();
         }
@@ -831,20 +744,18 @@ class Connection {
      *  @since 0.9.9
      */
     private boolean scheduleDisconnectEvent() {
-        if (!_disconnectScheduledOn.compareAndSet(0, _context.clock().now()))
-            return false;
+        if (!_disconnectScheduledOn.compareAndSet(0, _context.clock().now())) {return false;}
         schedule(new DisconnectEvent(), DISCONNECT_TIMEOUT);
         return true;
     }
 
     private class DisconnectEvent implements SimpleTimer.TimedEvent {
         public DisconnectEvent() {
-            if (_log.shouldInfo())
+            if (_log.shouldInfo()) {
                 _log.info("Disconnect timer initiated on connection to " + getRemotePeerString() + "-> 5 minutes to drop...");
+            }
         }
-        public void timeReached() {
-            disconnectComplete();
-        }
+        public void timeReached() {disconnectComplete();}
     }
 
     /**
@@ -868,7 +779,7 @@ class Connection {
     /** who are we talking with
      * @return peer Destination or null if unset
      */
-    public synchronized Destination getRemotePeer() { return _remotePeer; }
+    public synchronized Destination getRemotePeer() {return _remotePeer;}
 
     private String getRemotePeerString() {
         if (_remotePeer != null) {return "[" + _remotePeer.calculateHash().toBase64().substring(0,6) + "]";}
@@ -879,11 +790,11 @@ class Connection {
      *  @param peer non-null
      */
     public void setRemotePeer(Destination peer) {
-        if (peer == null)
-            throw new NullPointerException();
+        if (peer == null) {throw new NullPointerException();}
         synchronized(this) {
-            if (_remotePeer != null)
+            if (_remotePeer != null) {
                 throw new RuntimeException("Remote peer already set [" + _remotePeer + ", " + peer + "]");
+            }
             _remotePeer = peer;
         }
         // now that we know who the other end is, get the rtt etc. from the cache
@@ -900,10 +811,8 @@ class Connection {
      *  @since 0.9.39
      */
     public synchronized SigningPublicKey getRemoteSPK() {
-        if (_transientSPK != null)
-            return _transientSPK;
-        if (_remotePeer != null)
-            return _remotePeer.getSigningPublicKey();
+        if (_transientSPK != null) {return _transientSPK;}
+        if (_remotePeer != null) {return _remotePeer.getSigningPublicKey();}
         return null;
     }
 
@@ -913,8 +822,9 @@ class Connection {
      */
     public void setRemoteTransientSPK(SigningPublicKey transientSPK) {
         synchronized(this) {
-            if (_transientSPK != null)
+            if (_transientSPK != null) {
                 throw new RuntimeException("Remote Signing Public Key already set");
+            }
             _transientSPK = transientSPK;
         }
     }
@@ -923,103 +833,99 @@ class Connection {
      *  What stream do we send data to the peer on?
      *  @return non-global stream sending ID, or 0 if unknown
      */
-    public long getSendStreamId() { return _sendStreamId.get(); }
+    public long getSendStreamId() {return _sendStreamId.get();}
 
     /**
      *  @param id 0 to 0xffffffff
      *  @throws IllegalStateException if already set to nonzero
      */
     public void setSendStreamId(long id) {
-        if (!_sendStreamId.compareAndSet(0, id))
+        if (!_sendStreamId.compareAndSet(0, id)) {
             throw new IllegalStateException("Send Stream ID already set [" + _sendStreamId + ", " + id + "]");
+        }
     }
 
     /**
      *  The stream ID of a peer connection that sends data to us, or zero if unknown.
      *  @return receive stream ID, or 0 if unknown
      */
-    public long getReceiveStreamId() { return _receiveStreamId.get(); }
+    public long getReceiveStreamId() {return _receiveStreamId.get();}
 
     /**
      *  @param id 0 to 0xffffffff
      *  @throws IllegalStateException if already set to nonzero
      */
     public void setReceiveStreamId(long id) {
-        if (!_receiveStreamId.compareAndSet(0, id))
+        if (!_receiveStreamId.compareAndSet(0, id)) {
             throw new IllegalStateException("Receive Stream ID already set [" + _receiveStreamId + ", " + id + "]");
-        synchronized (_connectLock) { _connectLock.notifyAll(); }
+        }
+        synchronized (_connectLock) {_connectLock.notifyAll();}
     }
 
     /** When did we last send anything to the peer?
      * @return Last time we sent data
      */
-    public long getLastSendTime() { return _lastSendTime; }
+    public long getLastSendTime() {return _lastSendTime;}
 
     /** What was the last packet Id sent to the peer?
      * @return The last sent packet ID
      */
-    public long getLastSendId() { return _lastSendId.get(); }
+    public long getLastSendId() {return _lastSendId.get();}
     /** Set the packet Id that was sent to a peer.
      * @param id The packet ID
      */
-    public void setLastSendId(long id) { _lastSendId.set(id); }
+    public void setLastSendId(long id) {_lastSendId.set(id);}
 
     /**
      * Retrieve the current ConnectionOptions.
      * @return the current ConnectionOptions, non-null
      */
-    public ConnectionOptions getOptions() { return _options; }
+    public ConnectionOptions getOptions() {return _options;}
     /**
      * Set the ConnectionOptions.
      * @param opts ConnectionOptions non-null
      */
-    public void setOptions(ConnectionOptions opts) { _options = opts; }
+    public void setOptions(ConnectionOptions opts) {_options = opts;}
 
     /** @since 0.9.21 */
-    public ConnectionManager getConnectionManager() { return _connectionManager; }
+    public ConnectionManager getConnectionManager() {return _connectionManager;}
 
-    public I2PSession getSession() { return _session; }
-    public I2PSocketFull getSocket() { return _socket; }
-    public void setSocket(I2PSocketFull socket) { _socket = socket; }
+    public I2PSession getSession() {return _session;}
+    public I2PSocketFull getSocket() {return _socket;}
+    public void setSocket(I2PSocketFull socket) {_socket = socket;}
 
     /**
      * The remote port.
      *  @return Default I2PSession.PORT_UNSPECIFIED (0) or PORT_ANY (0)
      *  @since 0.8.9
      */
-    public int getPort() {
-        return _remotePort;
-    }
+    public int getPort() {return _remotePort;}
 
     /**
      *  @return Default I2PSession.PORT_UNSPECIFIED (0) or PORT_ANY (0)
      *  @since 0.8.9
      */
-    public int getLocalPort() {
-        return _localPort;
-    }
+    public int getLocalPort() {return _localPort;}
 
-    public String getConnectionError() { return _connectionError; }
-    public void setConnectionError(String err) { _connectionError = err; }
+    public String getConnectionError() {return _connectionError;}
+    public void setConnectionError(String err) {_connectionError = err;}
 
     public long getLifetime() {
         long cso = _closeSentOn.get();
-        if (cso <= 0)
-            return _context.clock().now() - _createdOn;
-        else
-            return cso - _createdOn;
+        if (cso <= 0) {return _context.clock().now() - _createdOn;}
+        else {return cso - _createdOn;}
     }
 
-    public ConnectionPacketHandler getPacketHandler() { return _handler; }
+    public ConnectionPacketHandler getPacketHandler() {return _handler;}
 
-    public long getLifetimeBytesSent() { return _lifetimeBytesSent.get(); }
-    public long getLifetimeBytesReceived() { return _lifetimeBytesReceived.get(); }
-    public long getLifetimeDupMessagesSent() { return _lifetimeDupMessageSent.get(); }
-    public long getLifetimeDupMessagesReceived() { return _lifetimeDupMessageReceived.get(); }
-    public void incrementBytesSent(int bytes) { _lifetimeBytesSent.addAndGet(bytes); }
-    public void incrementDupMessagesSent(int msgs) { _lifetimeDupMessageSent.addAndGet(msgs); }
-    public void incrementBytesReceived(int bytes) { _lifetimeBytesReceived.addAndGet(bytes); }
-    public void incrementDupMessagesReceived(int msgs) { _lifetimeDupMessageReceived.addAndGet(msgs); }
+    public long getLifetimeBytesSent() {return _lifetimeBytesSent.get();}
+    public long getLifetimeBytesReceived() {return _lifetimeBytesReceived.get();}
+    public long getLifetimeDupMessagesSent() {return _lifetimeDupMessageSent.get();}
+    public long getLifetimeDupMessagesReceived() {return _lifetimeDupMessageReceived.get();}
+    public void incrementBytesSent(int bytes) {_lifetimeBytesSent.addAndGet(bytes);}
+    public void incrementDupMessagesSent(int msgs) {_lifetimeDupMessageSent.addAndGet(msgs);}
+    public void incrementBytesReceived(int bytes) {_lifetimeBytesReceived.addAndGet(bytes);}
+    public void incrementDupMessagesReceived(int msgs) {_lifetimeDupMessageReceived.addAndGet(msgs);}
 
     /**
      * Time when the scheduler next want to send a packet, or -1 if
@@ -1028,9 +934,7 @@ class Connection {
      * @return the next time the scheduler will want to send a packet, or -1 if never.
      */
     public long getNextSendTime() {
-        synchronized(_nextSendLock) {
-            return _nextSendTime;
-        }
+        synchronized(_nextSendLock) {return _nextSendTime;}
     }
 
     /**
@@ -1043,16 +947,12 @@ class Connection {
     public void setNextSendTime(long when) {
         synchronized(_nextSendLock) {
             if (_nextSendTime >= 0) {
-                if (when < _nextSendTime)
-                    _nextSendTime = when;
-            } else {
-                _nextSendTime = when;
-            }
+                if (when < _nextSendTime) {_nextSendTime = when;}
+            } else {_nextSendTime = when;}
 
             if (_nextSendTime >= 0) {
                 long max = _context.clock().now() + _options.getSendAckDelay();
-                if (max < _nextSendTime)
-                    _nextSendTime = max;
+                if (max < _nextSendTime) {_nextSendTime = max;}
             }
         }
     }
@@ -1066,14 +966,10 @@ class Connection {
     public void setChoking(boolean on) {
         if (on != _isChoking) {
             _isChoking = on;
-           if (_log.shouldWarn())
-               _log.warn("Choking changed to " + on + " on " + this);
-           if (!on)
-               _unchokesToSend.set(UNCHOKES_TO_SEND);
+           if (_log.shouldWarn()) {_log.warn("Choking changed to " + on + " on " + this);}
+           if (!on) {_unchokesToSend.set(UNCHOKES_TO_SEND);}
            ackImmediately();
-        } else if (on) {
-           ackImmediately();
-        }
+        } else if (on) {ackImmediately();}
     }
 
     /**
@@ -1084,8 +980,7 @@ class Connection {
     public void setChoked(boolean on) {
         if (on != _isChoked) {
            _isChoked = on;
-           if (_log.shouldWarn())
-               _log.warn("Choked changed to " + on + " on " + this);
+           if (_log.shouldWarn()) {_log.warn("Choked changed to " + on + " on " + this);}
         }
         if (on) {
             congestionOccurred();
@@ -1108,21 +1003,19 @@ class Connection {
      *  @return if choked
      *  @since 0.9.29
      */
-    public boolean isChoked() {
-        return _isChoked;
-    }
+    public boolean isChoked() {return _isChoked;}
 
     /** how many packets have we sent and the other side has ACKed?
      * @return Count of how many packets ACKed.
      */
-    public long getAckedPackets() { return _ackedPackets.get(); }
-    public long getCreatedOn() { return _createdOn; }
+    public long getAckedPackets() {return _ackedPackets.get();}
+    public long getCreatedOn() {return _createdOn;}
 
     /** @return 0 if not sent */
-    public long getCloseSentOn() { return _closeSentOn.get(); }
+    public long getCloseSentOn() {return _closeSentOn.get();}
 
     /** @return 0 if not received */
-    public long getCloseReceivedOn() { return _closeReceivedOn.get(); }
+    public long getCloseReceivedOn() {return _closeReceivedOn.get();}
 
     public void updateShareOpts() {
         if (_closeSentOn.get() > 0 && !_updatedShareOpts) {
@@ -1131,23 +1024,21 @@ class Connection {
         }
     }
 
-    public void incrementUnackedPacketsReceived() { _unackedPacketsReceived.incrementAndGet(); }
-    public int getUnackedPacketsReceived() { return _unackedPacketsReceived.get(); }
+    public void incrementUnackedPacketsReceived() {_unackedPacketsReceived.incrementAndGet();}
+    public int getUnackedPacketsReceived() {return _unackedPacketsReceived.get();}
 
     /** how many packets have we sent but not yet received an ACK for?
      * @return Count of packets in-flight.
      */
     public int getUnackedPacketsSent() {
-        synchronized (_outboundPackets) {
-            return _outboundPackets.size();
-        }
+        synchronized (_outboundPackets) {return _outboundPackets.size();}
     }
 
-    public long getCongestionWindowEnd() { return _congestionWindowEnd; }
-    public void setCongestionWindowEnd(long endMsg) { _congestionWindowEnd = endMsg; }
+    public long getCongestionWindowEnd() {return _congestionWindowEnd;}
+    public void setCongestionWindowEnd(long endMsg) {_congestionWindowEnd = endMsg;}
 
     /** @return the highest outbound packet we have recieved an ack for */
-    public long getHighestAckedThrough() { return _highestAckedThrough; }
+    public long getHighestAckedThrough() {return _highestAckedThrough;}
 
     public long getLastActivityOn() {
         return (_lastSendTime > _lastReceivedOn ? _lastSendTime : _lastReceivedOn);
@@ -1165,7 +1056,7 @@ class Connection {
     void packetReceived() {
         _lastReceivedOn = _context.clock().now();
         resetActivityTimer();
-        synchronized (_connectLock) { _connectLock.notifyAll(); }
+        synchronized (_connectLock) {_connectLock.notifyAll();}
     }
 
     /**
@@ -1176,45 +1067,40 @@ class Connection {
         long now = _context.clock().now();
         long expiration = now + _options.getConnectTimeout();
         while (true) {
-            if (_connected.get() && (_receiveStreamId.get() > 0) && (_sendStreamId.get() > 0) ) {
+            if (_connected.get() && (_receiveStreamId.get() > 0) && (_sendStreamId.get() > 0)) {
                 // w00t
-                if (_log.shouldDebug())
-                    _log.debug("waitForConnect(): Connected and we have Stream IDs");
+                if (_log.shouldDebug()) {_log.debug("waitForConnect(): Connected and we have Stream IDs");}
                 return;
             }
             if (_connectionError != null) {
-                if (_log.shouldDebug())
+                if (_log.shouldDebug()) {
                     _log.debug("waitForConnect(): connection error found: " + _connectionError);
+                }
                 return;
             }
             if (!_connected.get()) {
                 _connectionError = "Connection failed";
-                if (_log.shouldDebug())
-                    _log.debug("waitForConnect(): not connected");
+                if (_log.shouldDebug()) {_log.debug("waitForConnect(): not connected");}
                 return;
             }
 
             long timeLeft = expiration - now;
-            if ( (timeLeft <= 0) && (_options.getConnectTimeout() > 0) ) {
+            if ((timeLeft <= 0) && (_options.getConnectTimeout() > 0)) {
                 if (_connectionError == null) {
                     _connectionError = "Connection timed out";
                     disconnect(false);
                 }
-                if (_log.shouldDebug())
+                if (_log.shouldDebug()) {
                     _log.debug("waitForConnect(): timed out: " + _connectionError);
+                }
                 return;
             }
-            if (timeLeft > MAX_CONNECT_TIMEOUT)
-                timeLeft = MAX_CONNECT_TIMEOUT;
-            else if (_options.getConnectTimeout() <= 0)
-                timeLeft = DEFAULT_CONNECT_TIMEOUT;
+            if (timeLeft > MAX_CONNECT_TIMEOUT) {timeLeft = MAX_CONNECT_TIMEOUT;}
+            else if (_options.getConnectTimeout() <= 0) {timeLeft = DEFAULT_CONNECT_TIMEOUT;}
 
-            if (_log.shouldDebug())
-                _log.debug("waitForConnect(): wait " + timeLeft);
+            if (_log.shouldDebug()) {_log.debug("waitForConnect(): wait " + timeLeft);}
             try {
-                synchronized (_connectLock) {
-                    _connectLock.wait(timeLeft);
-                }
+                synchronized (_connectLock) {_connectLock.wait(timeLeft);}
             } catch (InterruptedException ie) {
                 if (_log.shouldDebug()) _log.debug("waitForConnect(): InterruptedException");
                 _connectionError = "InterruptedException";
@@ -1225,15 +1111,8 @@ class Connection {
 
     private void resetActivityTimer() {
         long howLong = _options.getInactivityTimeout();
-        if (howLong <= 0) {
-            //if (_log.shouldDebug())
-            //    _log.debug("Resetting the inactivity timer, but its gone!", new Exception("where did it go?"));
-            return;
-        }
+        if (howLong <= 0) {return;}
         howLong += _randomWait; // randomize it a bit, so both sides don't do it at once
-        //if (_log.shouldDebug())
-        //    _log.debug("Resetting the inactivity timer to " + howLong);
-        // this will get rescheduled, and rescheduled, and rescheduled...
         _activityTimer.reschedule(howLong, false); // use the later of current and previous timeout
     }
 
@@ -1243,8 +1122,9 @@ class Connection {
             setFuzz(5*1000); // sloppy timer, don't reschedule unless at least 5s later
         }
         public void timeReached() {
-            if (_log.shouldDebug())
+            if (_log.shouldDebug()) {
                 _log.debug("Invoking inactivity timer on connection to " + getRemotePeerString() + "...");
+            }
             // uh, nothing more to do...
             if (!_connected.get()) {
                 if (_log.shouldDebug()) _log.debug("Inactivity timeout reached, but we are already closed!");
@@ -1253,36 +1133,48 @@ class Connection {
             // we got rescheduled already
             long left = getTimeLeft();
             if (left > 0) {
-                if (_log.shouldDebug())
-                    _log.debug("Inactivity timeout reached on connection to " + getRemotePeerString() + " but there is time left (" + left + "ms)");
+                if (_log.shouldDebug()) {
+                    _log.debug("Inactivity timeout reached on connection to " + getRemotePeerString() +
+                               " but there is time left (" + left + "ms)");
+                }
                 schedule(left);
                 return;
             }
             // these are either going to time out or cause further rescheduling
             if (getUnackedPacketsSent() > 0) {
-                if (_log.shouldDebug())
-                    _log.debug("Inactivity timeout reached on connection to " + getRemotePeerString() + " but there are unACKed packets!");
+                if (_log.shouldDebug()) {
+                    _log.debug("Inactivity timeout reached on connection to " + getRemotePeerString() +
+                               " but there are unACKed packets!");
+                }
                 return;
             }
             // this shouldn't have been scheduled
             if (_options.getInactivityTimeout() <= 0) {
-                if (_log.shouldDebug()) _log.debug("Inactivity timeout reached on connection to " + getRemotePeerString() + " but there is no timer!");
+                if (_log.shouldDebug()) {
+                    _log.debug("Inactivity timeout reached on connection to " +
+                               getRemotePeerString() + " but there is no timer!");
+                }
                 return;
             }
 
-            if (_log.shouldDebug())
-                _log.debug("Inactivity timeout reached on connection to " + getRemotePeerString() + " -> " + _options.getInactivityAction());
+            if (_log.shouldDebug()) {
+                _log.debug("Inactivity timeout reached on connection to " + getRemotePeerString() +
+                           " -> " + _options.getInactivityAction());
+            }
 
             // bugger it, might as well do the hard work now
             switch (_options.getInactivityAction()) {
                 case ConnectionOptions.INACTIVITY_ACTION_NOOP:
-                    if (_log.shouldWarn())
-                        _log.warn("Inactivity timer expired on connection to " + getRemotePeerString() + " -> Not doing anything!");
+                    if (_log.shouldWarn()) {
+                        _log.warn("Inactivity timer expired on connection to " + getRemotePeerString() +
+                                  " -> Not doing anything!");
+                    }
                     break;
                 case ConnectionOptions.INACTIVITY_ACTION_SEND:
                     if (_closeSentOn.get() <= 0 && _closeReceivedOn.get() <= 0) {
-                        if (_log.shouldWarn())
+                        if (_log.shouldWarn()) {
                             _log.warn("Sending some data to " + getRemotePeerString() + " due to inactivity...");
+                        }
                         _receiver.send(null, 0, 0, true);
                         break;
                     } // else fall through
@@ -1313,22 +1205,23 @@ class Connection {
         }
 
         public final long getTimeLeft() {
-            if (getLastActivityOn() > 0)
+            if (getLastActivityOn() > 0) {
                 return getLastActivityOn() + _options.getInactivityTimeout() - _context.clock().now();
-            else
+            } else {
                 return _createdOn + _options.getInactivityTimeout() - _context.clock().now();
+            }
         }
     }
 
     /** stream that the local peer receives data on
      * @return the inbound message stream, non-null
      */
-    public MessageInputStream getInputStream() { return _inputStream; }
+    public MessageInputStream getInputStream() {return _inputStream;}
 
     /** stream that the local peer sends data to the remote peer on
      * @return the outbound message stream, non-null
      */
-    public MessageOutputStream getOutputStream() { return _outputStream; }
+    public MessageOutputStream getOutputStream() {return _outputStream;}
 
     @Override
     public String toString() {
@@ -1394,9 +1287,7 @@ class Connection {
 
         private boolean _scheduled;
 
-        RetransmitEvent() {
-            super(_timer);
-        }
+        RetransmitEvent() {super(_timer);}
 
         @Override
         public synchronized boolean cancel() {
@@ -1405,8 +1296,7 @@ class Connection {
         }
 
         public synchronized boolean scheduleIfNotRunning(long delay) {
-            if (_scheduled)
-                return false;
+            if (_scheduled) {return false;}
             _scheduled = true;
             schedule(delay);
             return true;
@@ -1414,8 +1304,9 @@ class Connection {
 
         public synchronized void pushBackRTO(int rto) {
             if (!_scheduled) {
-                if (_log.shouldWarn())
+                if (_log.shouldWarn()) {
                     _log.warn(Connection.this + " timer was not scheduled", new Exception());
+                }
             }
             reschedule(rto, false);
         }
@@ -1424,13 +1315,15 @@ class Connection {
         public void timeReached() {
 
            if (_resetSentOn.get() > 0 || _resetReceived.get() || _finalDisconnect.get()) {
-                if (_log.shouldDebug())
+                if (_log.shouldDebug()) {
                     _log.debug(Connection.this + " rtx event after close or reset");
+                }
                 return;
             }
 
-            if (_log.shouldDebug())
+            if (_log.shouldDebug()) {
                 _log.debug(Connection.this + " rtx timer timeReached()");
+            }
 
             congestionOccurred();
 
@@ -1442,20 +1335,23 @@ class Connection {
             synchronized(_outboundPackets) {
                 Map.Entry<Long, PacketLocal> e = _outboundPackets.firstEntry();
                 if (e == null) {
-                    if (_log.shouldWarn())
+                    if (_log.shouldWarn()) {
                         _log.warn(Connection.this + " Retransmission timer hit but nothing transmitted??");
+                    }
                     return;
                 }
 
                 PacketLocal oldest = e.getValue();
                 if (oldest.getNumSends() == 1) {
-                    if (_log.shouldDebug())
+                    if (_log.shouldDebug()) {
                         _log.debug(Connection.this + " cutting SlowStartThreshold and Window");
-                    _ssthresh = Math.max( (int)(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT()), 2 );
+                    }
+                    _ssthresh = Math.max((int)(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT()), 2 );
                     _ssthresh = Math.min(ConnectionPacketHandler.MAX_SLOW_START_WINDOW, _ssthresh);
                     _options.setWindowSize(1);
-                } else if (_log.shouldDebug())
+                } else if (_log.shouldDebug()) {
                     _log.debug(Connection.this + " not cutting SlowStartThreshold and Window");
+                }
 
                 toResend = new ArrayList<>(_outboundPackets.values());
                 // round down (RFC 5681 section 4.3 "MUST be no more than half")
@@ -1468,8 +1364,9 @@ class Connection {
             for (PacketLocal packet : toResend) {
                 final int nResends = packet.getNumSends();
                 if (packet.getNumSends() > _options.getMaxResends()) {
-                    if (_log.shouldDebug())
+                    if (_log.shouldDebug()) {
                         _log.debug(Connection.this + " packet " + packet + " resent too many times, closing...");
+                    }
                     packet.cancelled();
                     disconnect(false);
                     return;
@@ -1553,7 +1450,7 @@ class Connection {
             eventOccurred();
         }
         @Override
-        public String toString() { return "event on connection to " + getRemotePeerString(); }
+        public String toString() {return "event on connection to " + getRemotePeerString();}
     }
 
     /**
@@ -1584,7 +1481,7 @@ class Connection {
             _packet = packet;
         }
 
-        public void timeReached() { retransmit(); }
+        public void timeReached() { retransmit();}
 
         /**
          * @since 0.9.46
@@ -1653,7 +1550,7 @@ class Connection {
                         _options.doubleRTO();
 
                         if (_packet.getNumSends() == 1) {
-                            _ssthresh = Math.max( (int)(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT()), 2 );
+                            _ssthresh = Math.max((int)(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT()), 2 );
                             _ssthresh = Math.min(ConnectionPacketHandler.MAX_SLOW_START_WINDOW, _ssthresh);
                             int wsize = _options.getWindowSize();
                             _options.setWindowSize(Math.min(_ssthresh, wsize));
@@ -1691,7 +1588,7 @@ class Connection {
                 } else {
                     //long timeout = _options.getResendDelay() << numSends;
                     int timeout = _options.getRTO();
-                    if ( (timeout > MAX_RESEND_DELAY) || (timeout <= 0) )
+                    if ((timeout > MAX_RESEND_DELAY) || (timeout <= 0))
                         timeout = MAX_RESEND_DELAY;
                     // set this before enqueue() as it passes it on to the router
                     _packet.setTimeout(timeout);
@@ -1722,7 +1619,7 @@ class Connection {
                 }
 
                 // acked during resending (... or somethin') ????????????
-                if ( (_packet.getAckTime() > 0) && (_packet.getNumSends() > 1) ) {
+                if ((_packet.getAckTime() > 0) && (_packet.getNumSends() > 1)) {
                     _activeResends.decrementAndGet();
                     synchronized (_outboundPackets) {
                         _outboundPackets.notifyAll();
