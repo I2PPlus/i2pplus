@@ -1,5 +1,8 @@
+2024-09-06 marek
+ * I2PSnark: Ensure we don't modify the infohash when editing torrents
+
 2024-09-05 dr|z3d
- * Console: Limit display of fastest / most recent tunnels to max 100
+ * Console: Limit display of fastest / most recent transit tunnels to 100 max
 
 2024-09-04 dr|z3d
  * Router: Harden router in same country blocking when i2np.blockMyCountry=true
@@ -26,7 +29,7 @@
    move our destination indicator to configuration -> tunnels header
 
 2024-08-21 dr|z3d
- * Console: Linkify leasesets and add leading key icon
+ * Console: Linkify leasesets in router logs and add leading key icon
 
 2024-08-09 zzz
  * I2PSnark:
