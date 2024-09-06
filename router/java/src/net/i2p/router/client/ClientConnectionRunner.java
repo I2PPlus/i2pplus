@@ -985,8 +985,8 @@ class ClientConnectionRunner {
             }
             synchronized(ClientConnectionRunner.this) {
                 if (sp.rerequestTimer != Rerequest.this) {
-                    if (_log.shouldWarn())
-                        _log.warn("Cancelled request for LeaseSet [" + h.toBase32().substring(0,8) + "] -> Newer response received");
+                    if (_log.shouldInfo())
+                        _log.info("Cancelled request for LeaseSet [" + h.toBase32().substring(0,8) + "] -> Newer request received");
                     return;
                 }
             }
@@ -1030,7 +1030,7 @@ class ClientConnectionRunner {
             stopRunning();
         } catch (IOException ioe) {
             if (_log.shouldWarn())
-                _log.warn("Error sending I2CP message to client (" + ioe.getMessage() + ")");
+                _log.warn("Error sending I2CP message to client -> " + ioe.getMessage());
             stopRunning();
         } catch (Throwable t) {
             _log.log(Log.CRIT, "Unhandled exception sending I2CP message to client", t);
@@ -1208,7 +1208,7 @@ class ClientConnectionRunner {
                 doSend(msg);
             } catch (I2CPMessageException ime) {
                 if (_log.shouldWarn())
-                    _log.warn("Error updating the status for message ID " + _messageId, ime);
+                    _log.warn("Error updating the status for message ID " + _messageId + " -> " + ime.getMessage());
             }
         }
     }
