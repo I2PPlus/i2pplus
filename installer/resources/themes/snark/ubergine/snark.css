@@ -452,15 +452,17 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 #setPriority th{text-align:right}
 
 /* panel titles */
-.configPanel .configTitle{padding:6px 1px 5px;min-width:500px;position:relative;font:700 10pt var(--bodyfont);color:#f7e3fc;text-transform:uppercase;letter-spacing:.15em;text-shadow:0 0 1px #000;border:var(--border_hard);border-bottom:1px solid #212;border-top:0;box-shadow:inset 0 0 1px #545;background:linear-gradient(180deg,#545,#3d303d 50%,#101 51%,#190019 51%,#0d000d);filter:drop-shadow(0 1px 1px rgba(16,0,16,.5))}
-#fileFilter .configTitle::after,#trackers .configTitle::after{width:12px;height:12px;display:inline-block;position:absolute;right:10px;top:calc(50% - 5px);background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
+.configPanel .configTitle{padding:6px 20px 5px;min-width:500px;position:relative;font:700 10pt var(--bodyfont);color:#f7e3fc;text-transform:uppercase;letter-spacing:.15em;text-shadow:0 0 1px #000;border:var(--border_hard);border-bottom:1px solid #212;border-top:0;box-shadow:inset 0 0 1px #545;background:linear-gradient(180deg,#545,#3d303d 50%,#101 51%,#190019 51%,#0d000d);filter:drop-shadow(0 1px 1px rgba(16,0,16,.5))}
+#fileFilter .configTitle::after,#trackers .configTitle::after{width:12px;height:12px;display:inline-block;position:absolute;right:8px;top:calc(50% - 5px);background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
 .iframed #fileFilter .configTitle::after,.iframed #trackers .configTitle::after{top:calc(50% - 6px)}
 #fileFilter .configTitle.expanded::after,#trackers .configTitle.expanded::after{background:var(--dropdown_hover);transform:none}
 #fileFilter .configTitle:hover,#trackers .configTitle:hover{color:var(--hover);cursor:pointer}
 #fileFilter .configTitle:hover::after,#trackers .configTitle:hover::after{background:var(--dropdown)}
 #fileFilter .configTitle.expanded:hover::after,#trackers .configTitle.expanded:hover::after{background:var(--dropdown)}
+#fileFilter .configTitle:active,#trackers .configTitle:active{color:#f609;box-shadow:inset 0 0 1px #545,var(--shadow_inset);background:linear-gradient(180deg,#101,#332833)}
+#fileFilter .configTitle:active::after,#trackers .configTitle:active::after{opacity:.6}
 .configTitle,.toggleview{margin:0 0 -3px;display:inline-block}
-.mainsection .configTitle{margin:-11px 0 -5px;padding:7 15px 6px;font-size:120%}
+.mainsection .configTitle{margin:-11px 0 -5px;padding:7px 15px 6px;font-size:120%}
 .mainsection .toggleview{margin-top:-10px;display:block}
 #tab_config,.toggleview{padding:3px 1px;width:320px;min-width:0;vertical-align:middle;line-height:0;font-size:0;color:#0000;font-size:0;border:1px solid #212;border-bottom:var(--border_hard);border-top:0;border-radius:0 0 3px 3px;box-shadow:inset 0 0 1px #545;background:linear-gradient(180deg,#434,#212 51%,#150015 51%,#000);filter:drop-shadow(0 1px 1px rgba(17,0,17,.6))}
 #tab_config:hover,.toggleview:hover,input:focus+.toggleview{background:linear-gradient(180deg,#656,#323 51%,#202 51%,#101);box-shadow:inset 0 0 1px #939}
@@ -1225,7 +1227,7 @@ th.peerCount img{display:none}
 .barOuter, .barText{width:72px}
 .clientid{width:44px;padding:4px}
 .commentRating img{width:14px;height:14px}
-.configPanel .configTitle{min-width:380px;font-size:9.5pt;font-variant:normal;text-transform:uppercase}
+.configPanel .configTitle{min-width:400px;font-size:9.5pt;font-variant:normal;text-transform:uppercase}
 .details{padding-right:0;width:1%;text-align:right}
 .dirInfo .fileStatus img{float:none}
 .dirInfo td.fileStatus{font-size:0;text-align:center}
@@ -1351,7 +1353,7 @@ th.status{padding-left:4px}
 th,td,.choked,.unchoked{letter-spacing:0}
 th.radio{width:96px}
 .configOption::after{height:40px}
-.configPanel .configTitle{padding:6px 5px 5px;min-width:600px;font-size:11pt}
+.configPanel .configTitle{min-width:600px;font-size:11pt}
 .configPanel textarea{height:30px}
 .debugConnStat{margin-right:5px}
 .debuginfo td{font-family:var(--monospaced);font-size:9pt;line-height:1.2}

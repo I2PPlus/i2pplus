@@ -17,6 +17,7 @@ function toggleConfig(table, title) {
 
 document.addEventListener("DOMContentLoaded", () => {
   const configTitles = document.querySelectorAll("#fileFilter .configTitle, #trackers .configTitle");
+  configTitles.forEach((title) => {title.classList.remove("expanded");});
 
   document.getElementById("fileFilter").addEventListener("click", (e) => {
     if (e.target.classList.contains("configTitle")) {
