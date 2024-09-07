@@ -22,8 +22,7 @@ class RepublishLeaseSetJob extends JobImpl {
     private final static int RETRY_DELAY = 5 * 1000;
     private final Hash _dest;
     private final KademliaNetworkDatabaseFacade _facade;
-    /** this is actually last attempted publish */
-    private long _lastPublished;
+    private long _lastPublished; // this is actually last attempted publish
     private final AtomicInteger failCount = new AtomicInteger(0);
     private String tunnelName = "";
 
@@ -34,15 +33,11 @@ class RepublishLeaseSetJob extends JobImpl {
         _dest = destHash;
     }
 
-    public String getName() {
-        return "Republish Local LeaseSet";
-    }
+    public String getName() {return "Republish Local LeaseSet";}
 
     public void runJob() {
         long uptime = getContext().router().getUptime();
-        if (!getContext().clientManager().shouldPublishLeaseSet(_dest) || uptime < 5*60*1000) {
-            return;
-        }
+        if (!getContext().clientManager().shouldPublishLeaseSet(_dest) || uptime < 5*60*1000) {return;}
 
         try {
             if (getContext().clientManager().isLocal(_dest)) {
@@ -97,9 +92,7 @@ class RepublishLeaseSetJob extends JobImpl {
     /**
      * @return last attempted publish time, or 0 if never
      */
-    public long lastPublished() {
-        return _lastPublished;
-    }
+    public long lastPublished() {return _lastPublished;}
 
     /** requeue */
     private class OnRepublishFailure extends JobImpl {
@@ -110,9 +103,7 @@ class RepublishLeaseSetJob extends JobImpl {
             _ls = ls;
         }
 
-        public String getName() {
-            return "Timeout LeaseSet Publication";
-        }
+        public String getName() {return "Timeout LeaseSet Publication";}
 
         public void runJob() {
             LeaseSet ls = _facade.lookupLeaseSetLocally(_ls.getHash());
