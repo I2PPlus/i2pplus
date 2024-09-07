@@ -1102,3 +1102,5 @@ thead a img,thead img{max-height:22px}
 }
 
 @media (forced-colors:active){*{forced-color-adjust:none}}
+
+#fileFilter table,#trackers table{display:table!important}

@@ -799,3 +799,5 @@ html:not(.iframed) input:not(:checked)+#tab_torrentedit{margin-bottom:-8px}
 }
 
 @media (forced-colors:active){*{forced-color-adjust:none}}
+
+#fileFilter table,#trackers table{display:table!important}

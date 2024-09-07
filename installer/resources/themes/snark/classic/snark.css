@@ -952,3 +952,5 @@ label b,.configOption b,#trackerconfig th{font-size:9pt}
 #torrentInfoStats img[src$="head_tx.png"],#torrentInfoStats img[src$="head_rx.png"]{margin:-3px 3px 0 4px}
 #torrentInfoStats .nowrap{margin-right:6px}
 }
+
+#fileFilter table,#trackers table{display:table!important}

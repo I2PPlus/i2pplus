@@ -1006,3 +1006,5 @@ thead img,thead img:hover{max-height:22px}
 #torrentDisplay .filter{min-width:120px}
 #torrentlist{margin-top:-10px}
 }
+
+#fileFilter table,#trackers table{display:table!important}

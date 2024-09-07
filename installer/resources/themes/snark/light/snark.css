@@ -999,3 +999,5 @@ a,a:link,th,td,button,input,select,textarea{font-size:10pt}
 #pagenavtop.pagenavcontrols{margin-top:0}
 #torrents code{font-size:9pt}
 }
+
+#fileFilter table,#trackers table{display:table!important}

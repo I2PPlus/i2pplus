@@ -3747,7 +3747,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<div class=configPanel id=fileFilter><div class=snarkConfig>\n");
         writeHiddenInputs(buf, req, "Save3");
         buf.append("<span class=configTitle>").append(_t("Torrent Create File Filtering")).append("</span><hr>\n")
-           .append("<table>\n<tr>")
+           .append("<table hidden>\n<tr>")
            .append("<th title=\"").append(_t("Mark filter for deletion")).append("\"></th>")
            .append("<th>").append(_t("Name")).append("</th>")
            .append("<th>").append(_t("Filter Pattern")).append("</th>")
@@ -3771,9 +3771,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("<td>").append("<label class=filterEndsWith><input type=radio class=optbox value=\"ends_with\" name=\"filterType_")
                .append(nameUnderscore).append("\"").append(filterType.equals("ends_with") ? " checked" : "").append("></label></td>")
                .append("<td><input type=checkbox class=optbox name=\"defaultEnabled_").append(f.name).append("\"");
-            if (f.isDefault) {
-                buf.append(" checked=checked");
-            }
+            if (f.isDefault) {buf.append(" checked=checked");}
             buf.append("></td></tr>\n");
         }
         buf.append("<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n") // spacer
@@ -3793,7 +3791,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<input type=submit name=raction class=add value=\"").append(_t("Add File Filter")).append("\">\n")
            .append("</td></tr>\n")
            .append("<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n") // spacer
-           .append("</table>\n</div>\n</div></form>\n");
+           .append("</table>\n</div>\n</div>\n</form>\n");
         out.write(buf.toString());
         out.flush();
         buf.setLength(0);
@@ -3806,7 +3804,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<div class=configPanel id=trackers><div class=snarkConfig>\n");
         writeHiddenInputs(buf, req, "Save2");
         buf.append("<span class=configTitle>").append(_t("Trackers")).append("</span><hr>\n")
-           .append("<table id=trackerconfig>\n<tr>")
+           .append("<table id=trackerconfig hidden>\n<tr>")
            .append("<th title=\"").append(_t("Select trackers for removal from I2PSnark's known list")).append("\"></th>")
            .append("<th>").append(_t("Name")).append("</th>")
            .append("<th>").append(_t("Website URL")).append("</th>")
@@ -3828,39 +3826,32 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(name).append("\" name=\"delete_")
                .append(name).append("\" title=\"").append(_t("Mark tracker for deletion")).append("\">")
                .append("</td><td><label for=\"").append(name).append("\">").append(name).append("</label></td><td>");
-            if (homeURL.endsWith(".i2p/")) {
-                homeURL = homeURL.substring(0, homeURL.length() - 1);
-            }
+            if (homeURL.endsWith(".i2p/")) {homeURL = homeURL.substring(0, homeURL.length() - 1);}
             buf.append(urlify(homeURL, 64))
                .append("</td><td><input type=radio class=optbox value=\"0\" tabindex=-1 name=\"ttype_")
                .append(announceURL).append("\"");
-            if (!(isOpen || isPrivate)) {
-                buf.append(" checked=checked");
-            } else if (isKnownOpen) {
-                buf.append(" disabled=disabled");
-            }
+            if (!(isOpen || isPrivate)) {buf.append(" checked=checked");}
+            else if (isKnownOpen) {buf.append(" disabled=disabled");}
             buf.append("></td><td><input type=radio class=optbox value=1 tabindex=-1 name=\"ttype_")
                .append(announceURL).append("\"");
-            if (isOpen) {
-                buf.append(" checked=checked");
-            } else if (t.announceURL.equals("http://diftracker.i2p/announce.php") ||
-                       t.announceURL.equals("http://tracker2.postman.i2p/announce.php") ||
-                       t.announceURL.equals("http://torrfreedom.i2p/announce.php")) {
+            if (isOpen) {buf.append(" checked=checked");}
+            else if (t.announceURL.equals("http://diftracker.i2p/announce.php") ||
+                     t.announceURL.equals("http://tracker2.postman.i2p/announce.php") ||
+                     t.announceURL.equals("http://torrfreedom.i2p/announce.php")) {
                 buf.append(" disabled=disabled");
             }
             buf.append("></td><td><input type=radio class=optbox value=2 tabindex=-1 name=\"ttype_")
                .append(announceURL).append("\"");
-            if (isPrivate) {
-                buf.append(" checked=checked");
-            } else if (isKnownOpen ||
-                       t.announceURL.equals("http://diftracker.i2p/announce.php") ||
-                       t.announceURL.equals("http://tracker2.postman.i2p/announce.php") ||
-                       t.announceURL.equals("http://torrfreedom.i2p/announce.php")) {
+            if (isPrivate) {buf.append(" checked=checked");}
+            else if (isKnownOpen ||
+                     t.announceURL.equals("http://diftracker.i2p/announce.php") ||
+                     t.announceURL.equals("http://tracker2.postman.i2p/announce.php") ||
+                     t.announceURL.equals("http://torrfreedom.i2p/announce.php")) {
                 buf.append(" disabled=disabled");
             }
-            buf.append("></td><td>").append(urlify(announceURL, 64))
-               .append("</td></tr>\n");
+            buf.append("></td><td>").append(urlify(announceURL, 64)).append("</td></tr>\n");
         }
+        String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         buf.append("<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n")  // spacer
            .append("<tr id=addtracker><td><b>")
            .append(_t("Add")).append(":</b></td>")
@@ -3884,7 +3875,13 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(_t("Restore defaults")).append("\">\n")
            .append("</td></tr>")
            .append("<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n") // spacer
-           .append("</table>\n</div>\n</div></form>\n");
+           .append("</table>\n</div>\n</div></form>\n")
+           .append("<noscript><style>")
+           .append(".configPanel .configTitle{pointer-events:none!important}")
+           .append("#fileFilter table,#trackers table{display:table!important}")
+           .append("#fileFilter .configTitle::after,#trackers .configTitle::after{display:none!important}")
+           .append("</style></noscript>\n")
+           .append("<script src=\"" + resourcePath + "js/toggleConfigs.js?" + CoreVersion.VERSION + "\"></script>\n");
         out.write(buf.toString());
         out.flush();
         buf.setLength(0);

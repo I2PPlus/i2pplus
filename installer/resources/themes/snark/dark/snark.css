@@ -1087,3 +1087,5 @@ th.peerCount a img{margin-left:-20px}
 #torrents .tAction{padding:1px 3px}
 #torrents .tName{padding-left:5px}
 }
+
+#fileFilter table,#trackers table{display:table!important}
