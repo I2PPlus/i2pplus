@@ -903,9 +903,13 @@ td#bwHelp a{margin-left:2px}
 
 @media (max-width:1000px){#closelog img::after{height:8px}
 .canhide{display:none}
+.configOption{font-size:90%}
 .newTab{margin:-1px 4px 0}
 .txd,.txd:empty{width:0;max-width:0;min-width:0;padding:0;font-size:0;color:#0000}
 .txd>*{display:none}
+#fileFilter th,#trakers th{font-size:85%}
+#fileFilter th:nth-child(n+4),#fileFilter td:nth-child(n+4){min-width:70px}
+#configs input.numeric{margin-right:2px;width:54px}
 #torrentDisplay{display:flex}
 #torrentDisplay .filter{padding:2px;min-width:0;white-space:nowrap;flex-grow:1}
 #torrentDisplay .filter:first-child,#torrentDisplay .filter#all{border-left:0}
@@ -969,8 +973,8 @@ tr:hover .peerCount a,tr:hover .peerCount a:hover,tr:hover .peerCount a:focus,tr
 }
 
 @media (min-width:1000px){
-.rxd{padding-left:9px;padding-right:9px}
 .ETA:not(:empty),.rateUp:not(:empty),.txd:not(:empty),.rateDown:not(:empty){padding-right:8px;padding-left:8px}
+.rxd{padding-left:9px;padding-right:9px}
 .tName{padding-right:3px}
 #torrents .tAction{padding-left:4px;padding-right:3px}
 #userComments td{white-space:nowrap}
@@ -1088,4 +1092,14 @@ th.peerCount a img{margin-left:-20px}
 #torrents .tName{padding-left:5px}
 }
 
-#fileFilter table,#trackers table{display:table!important}
+/* toggle config section */
+#fileFilter .configTitle,#trackers .configTitle{position:relative;pointer-events:auto}
+#fileFilter .configTitle:not(.expanded){margin-bottom:-5px}
+.iframed #trackers .configTitle:not(.expanded){margin-bottom:-16px;border-radius:0 0 3px 3px}
+#fileFilter .configTitle::after,#trackers .configTitle::after{width:12px;height:12px;display:inline-block;position:absolute;right:10px;top:calc(50% - 5px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
+.iframed #fileFilter .configTitle::after,.iframed #trackers .configTitle::after{top:calc(50% - 6px)}
+#fileFilter .configTitle.expanded::after,#trackers .configTitle.expanded::after{background:var(--dropdown);transform:none}
+#fileFilter .configTitle:hover,#trackers .configTitle:hover{color:var(--hover);cursor:pointer}
+#fileFilter .configTitle:hover::after,#trackers .configTitle:hover::after{background:var(--dropdown_hover)}
+#fileFilter .configTitle:active,#trackers .configTitle:active{color:#f60b;box-shadow:var(--btn_shadow_active)}
+#fileFilter .configTitle:active::after,#trackers .configTitle:active::after{opacity:.8}

@@ -745,9 +745,9 @@ td.status{background-size:24px auto}
 input.add,input.create{min-width:90px}
 input[name="i2cpOpts"],input[name="nofilter_dataDir"]{width:436px}
 tr:hover td.trackerLink,tr:hover td.details,tr:hover td.tName,tr:hover td.rxd,tr:hover td.rateDown,tr:hover td.tAction{background:none}
-.tAction{padding-left:4px;padding-right:3px}
-.rxd{padding-left:9px;padding-right:9px}
 .ETA,.rateUp,.txd,.rateDown{padding-right:8px;padding-left:8px}
+.rxd{padding-left:9px;padding-right:9px}
+.tAction{padding-left:4px;padding-right:3px}
 .trackerLink{padding-left:10px}
 #addSection input[type=text],#createSection input[type=text]{min-width:0}
 #trackerselect{width:500px}
