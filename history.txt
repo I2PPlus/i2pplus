@@ -1,3 +1,7 @@
+2024-09-08 dr|z3d
+ * I2PSnark: Make file filters and trackers sections togglable on config page
+   (dark, ubergine, zilvero themes, others to follow)
+
 2024-09-06 marek
  * I2PSnark: Ensure we don't modify the infohash when editing torrents
 
