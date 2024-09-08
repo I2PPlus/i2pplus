@@ -21,7 +21,8 @@
 #  add entries as desired.
 #
 #  Blocking is enabled by default.
-#  To disable blocking, set router.blocklist.enable=false on http://127.0.0.1:7657/configadvanced
+#  To disable blocking, set router.blocklist.enable=false in your router.config file in your
+#  i2p configuration folder, or if routerconsole.advanced=true, on http://127.0.0.1:7657/configadvanced
 #
 #  Add additional entries as desired, sorting not required.
 #  Note that this file is only read at router startup.
