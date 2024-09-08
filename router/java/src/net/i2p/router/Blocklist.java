@@ -175,7 +175,7 @@ public class Blocklist {
             return expireIntervalInt;
         } catch(NumberFormatException nfe) {
             if (_log.shouldLog(_log.ERROR)) {
-                _log.error("format error in " + PROP_BLOCKLIST_EXPIRE_INTERVAL, nfe);
+                _log.error("Format error in " + PROP_BLOCKLIST_EXPIRE_INTERVAL, nfe);
             }
         }
         // if we don't have a valid value in this field, return 0 which is the same as disabling it.
@@ -192,8 +192,7 @@ public class Blocklist {
      *  File if specified with router.blocklist.file
      */
     public synchronized void startup() {
-        if (_started)
-            return;
+        if (_started) {return;}
         _started = true;
         if (!_context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_ENABLED)) {
             _log.warn("All blocklists disabled (router.blocklist.enable=false)");
@@ -207,9 +206,7 @@ public class Blocklist {
         if (_context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_TOR_ENABLED)) {
             blFile = new File(_context.getBaseDir(), BLOCKLIST_FILE_TOR_EXITS);
             files.add(new BLFile(blFile, ID_TOR));
-        } else {
-            _log.warn("Tor blocklist disabled (router.blocklistTor.enable=false)");
-        }
+        } else {_log.warn("Tor blocklist disabled (router.blocklistTor.enable=false)");}
         // config dir
         if (!_context.getConfigDir().equals(_context.getBaseDir())) {
             blFile = new File(_context.getConfigDir(), BLOCKLIST_FILE_DEFAULT);
@@ -217,24 +214,22 @@ public class Blocklist {
         }
         if (_context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_FEEDLIST_ENABLED)) {
             files.add(new BLFile(_blocklistFeedFile, ID_FEED));
-        } else {
-            _log.warn("Feed blocklist disabled (router.blocklistFeed.enable=false)");
-        }
+        } else {_log.warn("Feed blocklist disabled (router.blocklistFeed.enable=false)");}
         if (_context.router().isHidden() || _context.getBooleanProperty(GeoIP.PROP_BLOCK_MY_COUNTRY) ||
             _context.getBooleanProperty(PROP_BLOCKLIST_COUNTRIES_ENABLED)) {
             blFile = new File(_context.getConfigDir(), BLOCKLIST_COUNTRY_FILE);
             files.add(new BLFile(blFile, ID_COUNTRY));
-            if (_context.getBooleanProperty(PROP_BLOCKLIST_COUNTRIES_ENABLED))
+            if (_context.getBooleanProperty(PROP_BLOCKLIST_COUNTRIES_ENABLED)) {
                 _log.warn("Countries blocklist enabled (router.blocklistCountries.enable=true)");
-            else if (_context.router().isHidden())
+            } else if (_context.router().isHidden()) {
                 _log.warn("Countries blocklist enabled (Router is operating in hidden mode)");
+            }
         }
         // user specified
         String file = _context.getProperty(PROP_BLOCKLIST_FILE);
         if (file != null && !file.equals(BLOCKLIST_FILE_DEFAULT)) {
             blFile = new File(file);
-            if (!blFile.isAbsolute())
-                 blFile = new File(_context.getConfigDir(), file);
+            if (!blFile.isAbsolute()) {blFile = new File(_context.getConfigDir(), file);}
             files.add(new BLFile(blFile, ID_USER));
         }
         Job job = new ReadinJob(files);
@@ -280,47 +275,36 @@ public class Blocklist {
                 UpdateManager umgr = (UpdateManager) cmgr.getRegisteredApp(UpdateManager.APP_NAME);
                 if (umgr != null) {
                     for (BLFile blf : blfs) {
-                        if (blf.version > 0)
+                        if (blf.version > 0) {
                                umgr.notifyInstalled(UpdateType.BLOCKLIST, blf.id, Long.toString(blf.version));
+                        }
                     }
-                } else {
-                    _log.warn("No update manager");
-                }
+                } else {_log.warn("No update manager");}
             }
         }
     }
 
     private class CleanupJob extends JobImpl {
-        public CleanupJob() {
-            super(_context);
-        }
+        public CleanupJob() {super(_context);}
         public String getName() {
             if (expireInterval() > 0) {
                 String expiry = expireInterval() >= 600000 ? (expireInterval() / 60 / 1000) + "m" : (expireInterval() / 1000 + "s");
                 return "Expire blocklist at user-defined interval of " + expiry;
-            } else {
-                return "Expire blocklist";
-            }
+            } else {return "Expire blocklist";}
         }
         public void runJob() {
             clear();
             _lastExpired = System.currentTimeMillis();
-            if (_log.shouldDebug()) {
-                _log.debug("Expiring blocklist entrys at" + _lastExpired);
-            }
+            if (_log.shouldDebug()) {_log.debug("Expiring blocklist entrys at" + _lastExpired);}
             // schedule the next one
             super.requeue(expireInterval());
         }
     }
 
     private void clear() {
-        synchronized(_singleIPBlocklist) {
-            _singleIPBlocklist.clear();
-        }
+        synchronized(_singleIPBlocklist) {_singleIPBlocklist.clear();}
         if (_singleIPv6Blocklist != null) {
-            synchronized(_singleIPv6Blocklist) {
-                _singleIPv6Blocklist.clear();
-            }
+            synchronized(_singleIPv6Blocklist) {_singleIPv6Blocklist.clear();}
         }
     }
 
@@ -335,16 +319,14 @@ public class Blocklist {
             _files = files;
         }
 
-        public String getName() { return "Read Blocklist"; }
+        public String getName() {return "Read Blocklist";}
 
         public void runJob() {
             synchronized (_lock) {
                 _blocklist = allocate(_files);
-                if (_blocklist == null)
-                    return;
+                if (_blocklist == null) {return;}
                 int ccount = process();
-                if (_blocklist == null)
-                    return;
+                if (_blocklist == null) {return;}
                 if (ccount <= 0) {
                     disable();
                     return;
@@ -373,11 +355,8 @@ public class Blocklist {
                 String reason;
                 String comment = _peerBlocklist.get(peer);
                 String peerhash = peer.toBase64().substring(0,6);
-                if (comment != null) {
-                    reason = " <b>➜</b> " + _x("Hash") + ": " + peerhash;
-                } else {
-                    reason = " <b>➜</b> " + _x("Banned by Router Hash");
-                }
+                if (comment != null) {reason = " <b>➜</b> " + _x("Hash") + ": " + peerhash;}
+                else {reason = " <b>➜</b> " + _x("Banned by Router Hash");}
                 banlistRouter(peer, reason, comment);
             }
             _peerBlocklist.clear();
@@ -386,10 +365,11 @@ public class Blocklist {
     }
 
     private void banlistRouter(Hash peer, String reason, String comment) {
-        if (expireInterval() > 0)
+        if (expireInterval() > 0) {
             _context.banlist().banlistRouter(peer, reason, comment, null, expireInterval());
-        else
+        } else {
             _context.banlist().banlistRouterForever(peer, reason, comment);
+        }
     }
 
     /**
@@ -403,16 +383,15 @@ public class Blocklist {
         BLFile blf = new BLFile(blFile, ID_COUNTRY);
         List<BLFile> c = Collections.singletonList(blf);
         long[] cb = allocate(c);
-        if (cb == null)
-            return;
+        if (cb == null) {return;}
         int count = readBlocklistFile(blf, cb, 0);
-        if (count <= 0)
-            return;
+        if (count <= 0) {return;}
         ClientAppManager cmgr = _context.clientAppManager();
         if (cmgr != null) {
             UpdateManager umgr = (UpdateManager) cmgr.getRegisteredApp(UpdateManager.APP_NAME);
-            if (umgr != null)
+            if (umgr != null) {
                 umgr.notifyInstalled(UpdateType.BLOCKLIST, ID_COUNTRY, Long.toString(blFile.lastModified()));
+            }
         }
         count = merge(cb, count);
         _countryBlocklistSize = count;
@@ -436,9 +415,8 @@ public class Blocklist {
         for (BLFile blf : files) {
             maxSize += getSize(blf.file);
         }
-        try {
-            return new long[maxSize + files.size()];  // extra for wrapsave
-        } catch (OutOfMemoryError oom) {
+        try {return new long[maxSize + files.size()];} // extra for wrapsave
+        catch (OutOfMemoryError oom) {
             _log.log(Log.CRIT, "OOM creating the blocklist");
             return null;
         }
@@ -480,8 +458,7 @@ public class Blocklist {
     private int readBlocklistFile(BLFile blf, long[] blocklist, int count) {
         File blFile = blf.file;
         if (blFile == null || (!blFile.exists()) || blFile.length() <= 0) {
-            if (_log.shouldWarn())
-                _log.warn("Blocklist file not found: " + blFile);
+            if (_log.shouldWarn()) {_log.warn("Blocklist file not found: " + blFile);}
             return count;
         }
 
@@ -525,8 +502,7 @@ public class Blocklist {
                 }
             }
         } catch (IOException ioe) {
-            if (_log.shouldError())
-                _log.error("Error reading the blocklist file", ioe);
+            if (_log.shouldError()) {_log.error("Error reading the blocklist file", ioe);}
             return count;
         } catch (OutOfMemoryError oom) {
             disable();
@@ -545,15 +521,13 @@ public class Blocklist {
         }
         int read = isFeedFile ? feedcount : (count - oldcount);
         // save to tell the update manager
-        if (read > 0)
-            blf.version = blFile.lastModified();
+        if (read > 0) {blf.version = blFile.lastModified();}
         if (_log.shouldWarn()) {
-            _log.warn("Stats for " + blFile);
-            _log.warn("Removed " + badcount + " bad entries and comment lines");
-            _log.warn("Read " + read + " valid entries from the blocklist " + blFile);
-            //_log.warn("Blocking " + (isFeedFile ? feedcount : ipcount) + " IPs and " + peercount + " hashes");
-            _log.warn("Blocking " + ipcount + " IPs and " + peercount + " hashes (" + (ipcount + peercount) + " total)");
-            _log.warn("Blocklist processing finished, took: " + (_context.clock().now() - start) + "ms");
+            _log.warn("Stats for " + blFile + ":" +
+                      "\n* Removed " + badcount + " bad entries and comment lines" +
+                      "\n* Read " + read + " valid entries from the blocklist " + blFile +
+                      "\n* Blocking " + ipcount + " IPs and " + peercount + " hashes (" + (ipcount + peercount) + " total)" +
+                      "\n* Blocklist processing finished, took: " + (_context.clock().now() - start) + "ms");
         }
         return count;
     }
@@ -584,11 +558,11 @@ public class Blocklist {
         }
         int blocklistSize = count - removed;
         if (_log.shouldInfo()) {
-            _log.info("Merged Stats:\n* " +
-                      "Read " + count + " total entries from the blocklists\n* " +
-                      "Merged " + removed + " overlapping entries\n* " +
-                      "Result is " + blocklistSize + " entries\n* " +
-                      "Blocklist processing finished, time: " + (_context.clock().now() - start));
+            _log.info("Merged Stats:" +
+                      "\n* Read " + count + " total entries from the blocklists" +
+                      "\n* Merged " + removed + " overlapping entries" +
+                      "\n* Result is " + blocklistSize + " entries" +
+                      "\n* Blocklist processing finished -> Time taken: " + (_context.clock().now() - start) + "ms");
         }
         return blocklistSize;
     }
