@@ -843,7 +843,7 @@ class SummaryBarRenderer {
         if (floodfillEnabled() && !reachability.getMessage().contains(_t("Floodfill"))) {
             int lsCount = _context.netDb().getLeases().size();
             if (lsCount > 0) {
-            buf.append(" <span id=lsCount class=\"badge volatile\" hidden title=\"")
+            buf.append(" <span id=lsCount class=\"badge volatile\" title=\"")
                .append(_t("Total LeaseSets stored locally"))
                .append("\">").append(lsCount < 10 ? "0" + lsCount : lsCount).append("</span>");
             }
