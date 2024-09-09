@@ -38,13 +38,9 @@ public class NetDbHelper extends FormHandler {
     private EncType _etype;
     private String _newNonce;
     private boolean _postOK;
-
-    private static final int DEFAULT_LIMIT = SystemVersion.isSlow() ? 250 : 1000;
+    private static final int DEFAULT_LIMIT = SystemVersion.isSlow() ? 200 : 500;
     private static final int DEFAULT_PAGE = 0;
-
-    public boolean isFloodfill() {
-        return _context.netDb().floodfillEnabled();
-    }
+    public boolean isFloodfill() {return _context.netDb().floodfillEnabled();}
 
     private static final String titles[] =
                                           {_x("Summary"),                       // 0  -
@@ -284,8 +280,7 @@ public class NetDbHelper extends FormHandler {
      *  @since 0.9.38
      */
     protected void processForm() {
-        _postOK = "Start Scan".equals(_action) ||
-                  "Review".equals(_action);
+        _postOK = "Start Scan".equals(_action) || "Review".equals(_action);
         if ("Save".equals(_action)) {
                 try {
                     Map<String, String> toSave = new HashMap<String, String>(4);
@@ -328,90 +323,64 @@ public class NetDbHelper extends FormHandler {
      *   storeWriter() must be called previously
      */
     public String getFloodfillNetDbSummary() {
-        return getNetDbSummary(null, false);
+        return getNetDbSummary();
     }
 
-    public String getNetDbSummary(Hash client, boolean clientOnly) {
+    public String getNetDbSummary() {
         NetDbRenderer renderer = new NetDbRenderer(_context);
         try {
-            if (client == null && !clientOnly)
-                renderNavBar();
+            renderNavBar();
             if (_routerPrefix != null || _version != null || _country != null ||
                 _family != null || _caps != null || _ip != null || _sybil != null ||
                 _port != 0 || _type != null || _mtu != null || _ipv6 != null ||
                 _ssucaps != null || _transport != null || _cost != 0 || _etype != null ||
                 _icount > 0) {
-                if (client == null && !clientOnly)
                 renderer.renderRouterInfoHTML(_out, _limit, _page,
                                               _routerPrefix, _version, _country,
                                               _family, _caps, _ip, _sybil, _port, _highPort, _type, _etype,
-                                              _mtu, _ipv6, _ssucaps, _transport, _cost, _icount, client, clientOnly);
-            } else if (_lease) {
-                renderer.renderLeaseSetHTML(_out, _debug, client, _clientOnly);
-            } else if (_hostname != null) {
-                renderer.renderLeaseSet(_out, _hostname, true);
-            } else if (_full == 3) {
-                if (_mode == 12 && !_postOK)
-                    _mode = 0;
-                else if ((_mode == 13 || _mode == 16) && !_postOK)
-                    _mode = 14;
+                                              _mtu, _ipv6, _ssucaps, _transport, _cost, _icount);
+            } else if (_lease) {renderer.renderLeaseSetHTML(_out, _debug, null);}
+            else if (_hostname != null) {renderer.renderLeaseSet(_out, _hostname, true);}
+            else if (_full == 3) {
+                if (_mode == 12 && !_postOK) {_mode = 0;}
+                else if ((_mode == 13 || _mode == 16) && !_postOK) {_mode = 14;}
                 (new SybilRenderer(_context)).getNetDbSummary(_out, _newNonce, _mode, _date);
-            } else if (_full == 4) {
-                renderLookupForm();
-            } else if (_full == 5) {
-                renderer.renderStatusHTML(_out, _limit, _page, _full, null, true);
-            } else if (_full == 6) {
-                renderer.renderStatusHTML(_out, _limit, _page, _full, null, true);
-            } else if (_clientOnly && client == null) {
-                for (Hash _client : _context.clientManager().getPrimaryHashes()) {
-                    renderer.renderLeaseSetHTML(_out, _debug, _client, clientOnly);
+            } else if (_full == 4) {renderLookupForm();}
+            else if (_full == 5) {renderer.renderStatusHTML(_out, _limit, _page, _full);}
+            else if (_full == 6) {renderer.renderStatusHTML(_out, _limit, _page, _full);}
+            else if (_clientOnly) {
+                for (Hash client : _context.clientManager().getPrimaryHashes()) {
+                    renderer.renderLeaseSetHTML(_out, false, client);
                 }
             } else {
-                if (_full == 0 && _sort != null)
-                    _full = 3;
-                renderer.renderStatusHTML(_out, _limit, _page, _full, client, clientOnly);
+                if (_full == 0 && _sort != null) {_full = 3;}
+                renderer.renderStatusHTML(_out, _limit, _page, _full);
             }
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
+        } catch (IOException ioe) {ioe.printStackTrace();}
         return "";
-    }
-
-    public String getClientNetDbSummary(Hash client) {
-        return getNetDbSummary(client, true);
     }
 
     /**
      *  @since 0.9.1
      */
     private int getTab() {
-        if (_debug)
-            return 6;
-        if (_lease)
-            return 5;
-        if (".".equals(_routerPrefix))
-            return 1;
+        if (_debug) {return 6;}
+        if (_lease) {return 5;}
+        if (".".equals(_routerPrefix)) {return 1;}
         if (_routerPrefix != null || _version != null || _country != null ||
             _family != null || _caps != null || _ip != null || _sybil != null ||
             _port != 0 || _type != null || _mtu != null || _ipv6 != null ||
-            _ssucaps != null || _transport != null || _cost != 0 || _etype != null)
+            _ssucaps != null || _transport != null || _cost != 0 || _etype != null) {
             return 2;
-        if (_full == 2)
-            return 3;
-        if (_full == 1)
-            return 4;
-        if (_clientOnly)
-            return 7;
-        if (_full == 4)
-            return 8;
-        if (_hostname != null)
-            return 9;
-        if (_full == 5)
-            return 10;
-        if (_full == 6)
-            return 11;
-        if (_full == 3)
-            return 12;
+        }
+        if (_full == 2) {return 3;}
+        if (_full == 1) {return 4;}
+        if (_clientOnly) {return 7;}
+        if (_full == 4) {return 8;}
+        if (_hostname != null) {return 9;}
+        if (_full == 5) {return 10;}
+        if (_full == 6) {return 11;}
+        if (_full == 3) {return 12;}
         return 0;
     }
 
@@ -422,53 +391,38 @@ public class NetDbHelper extends FormHandler {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<div class=confignav id=confignav>");
         boolean span = _graphical;
-        if (!span)
-            buf.append("<center>");
+        if (!span) {buf.append("<center>");}
         int tab = getTab();
         for (int i = 0; i < titles.length; i++) {
             if (i == 1) {
                 buf.append("<span class=tab><a href=/netdbmap>").append(_t("Router Map")).append("</a></span>\n");
             }
-            if (i == 2 && tab != 2)
-                continue;   // can't nav to lookup
-            if (i == 9 && tab != 9)
-                continue;   // can't nav to lookup
-            if (i == 3 && isAdvanced())
-                continue; // only show All Routers (with full stats) in adv. mode
-            if (i == 4 && !isAdvanced())
-                continue; // and hide Routers (with full stats) from normal mode
-            if (i == 5 || i== 6)
+            if (i == 2 && tab != 2) {continue;} // can't nav to lookup
+            if (i == 9 && tab != 9) {continue;} // can't nav to lookup
+            if (i == 3 && isAdvanced()) {continue;} // only show All Routers (with full stats) in adv. mode
+            if (i == 4 && !isAdvanced()) {continue;} // and hide Routers (with full stats) from normal mode
+            if (i == 5 || i== 6) {
                 continue; // hide standard Leasesets tab in normal/adv. mode,
                           // default to client LSs. TODO: Add link to main when ff
                           // on client page.
             //if (i > 5 && !isAdvanced())
             //    continue;
-            if (i == 10 || i == 11)
-                continue;
-            if (i == 10 || i == 11) {
-                if (_context.netDb().getRouters().size() == 0) {
-                    continue;
-                }
             }
-            if (i == tab) {
-                // we are there
-                if (span)
-                    buf.append("<span class=tab2>");
+            if (i == 10 || i == 11) {continue;}
+            if (i == 10 || i == 11) {
+                if (_context.netDb().getRouters().size() == 0) {continue;}
+            }
+            if (i == tab) { // we are there
+                if (span) {buf.append("<span class=tab2>");}
                 buf.append(_t(titles[i]));
-            } else {
-                // we are not there, make a link
-                if (span)
-                    buf.append("<span class=tab>");
+            } else { // we are not there, make a link
+                if (span) {buf.append("<span class=tab>");}
                 buf.append("<a href=\"netdb").append(links[i]).append("\">").append(_t(titles[i])).append("</a>");
             }
-            if (span) {
-                buf.append("</span>\n");
-            } else if (i != titles.length - 1) {
-                buf.append("&nbsp;&nbsp;\n");
-            }
+            if (span) {buf.append("</span>\n");}
+            else if (i != titles.length - 1) {buf.append("&nbsp;&nbsp;\n");}
         }
-        if (!span)
-            buf.append("</center>");
+        if (!span) {buf.append("</center>");}
         buf.append("</div>\n");
         _out.write(buf.toString());
     }
@@ -477,73 +431,57 @@ public class NetDbHelper extends FormHandler {
      *  @since 0.9.28
      */
     private void renderLookupForm() throws IOException {
-        _out.write("<form action=\"/netdb\" method=GET id=netdbSearch>\n" +
-                   "<input type=hidden name=\"nonce\" value=\"" + _newNonce + "\" >\n" +
-/*
-                   "<div id=lookupCondensed hidden>" +
-                   "<select name=\"netdbLookup\">" +
-                   "<option value=\"caps\" selected=selected>Capabilities</option>" +
-                   "<option value=\"cost\">Cost</option>" +
-                   "<option value=\"c\">Country Code</option>" +
-                   "<option value=\"fam\">Family</option>" +
-                   "<option value=\"r\">Hash Prefix</option>" +
-                   "<option value=\"ip\">IP or Hostname</option>" +
-                   "<option value=\"ipv6\">IPV6 Prefix</option>" +
-                   "<option value=\"mtu\">MTU</option>" +
-                   "<option value=\"port\">Port Number</option>" +
-                   "<option value=\"type\">Signature Type</option>" +
-                   "<option value=\"ssucaps\">SSU Capabilities</option>" +
-                   "<option value=\"v\">Router Version</option>" +
-                   "</select>" +
-                   "<input type=text size=30></div>" +
-*/
-                   "<table id=netdblookup><tr><th colspan=4>Network Database Search</th></tr>\n" +
-                   "<tr><td colspan=4 class=subheading><b>Enter one search field <i>only</i></b></td></tr>\n" +
-                   "<tr><td><b>Capabilities</b></td><td><input type=text name=\"caps\" title=\"e.g. f or XOfR\"></td>\n" +
-                   "<td><b>Cost</b></td><td><input type=text name=\"cost\"></td></tr>\n" +
-                   "<tr><td><b>Country</b></td><td><select name=\"c\"><option value=\"\" selected=selected></option>");
+        StringBuilder buf = new StringBuilder(16*1024);
+        buf.append("<form action=\"/netdb\" method=GET id=netdbSearch>\n")
+           .append("<input type=hidden name=\"nonce\" value=\"").append(_newNonce).append("\" >\n")
+           .append("<table id=netdblookup><tr><th colspan=4>Network Database Search</th></tr>\n")
+           .append("<tr><td><b>Capabilities</b></td><td><input type=text name=\"caps\" title=\"e.g. f or XOfR\"></td>\n")
+           .append("<td><b>Cost</b></td><td><input type=text name=\"cost\"></td></tr>\n")
+           .append("<tr><td><b>Country</b></td><td><select name=\"c\"><option value=\"\" selected=selected></option>");
         Map<String, String> sorted = new TreeMap<String, String>(Collator.getInstance());
         for (Map.Entry<String, String> e : _context.commSystem().getCountries().entrySet()) {
             String tr = Messages.getString(e.getValue(), _context, Messages.COUNTRY_BUNDLE_NAME);
             sorted.put(tr, e.getKey());
         }
         for (Map.Entry<String, String> e : sorted.entrySet()) {
-            _out.write("<option value=\"" + e.getValue() + "\">" + e.getKey() + "</option>\n");
+            buf.append("<option value=\"").append(e.getValue()).append("\">").append(e.getKey()).append("</option>\n");
         }
-        _out.write("</select></td>" +
-                   "<td><b>Country Code</b></td><td><input type=text name=\"c\" title=\"e.g. ru\"></td></tr>\n" +
-                   "<tr><td><b>Hash Prefix</b></td><td><input type=text name=\"r\"></td>\n" +
-                   "<td><b>IP Address</b></td><td><input type=text name=\"ip\" " +
-                   "title=\"IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6\"></td></tr>\n" +
-                   "<tr><td><b>Hostname or b32</b></td><td><input type=text name=\"ls\"></td>\n" +
-                   "<td><b>Router Family</b></td><td><input type=text name=\"fam\"></td></tr>\n" +
-                   "<tr><td><b>IPv6 Prefix</b></td><td><input type=text name=\"ipv6\"></td>\n" +
-                   "<td><b>MTU</b></td><td><input type=text name=\"mtu\"></td></tr>\n" +
-                   "<tr><td><b>Single port or range</b></td><td><input type=text name=\"port\"></td>\n" +
-                   "<td><b>Signature Type</b></td><td><select name=\"type\"><option value=\"\" selected=selected></option>");
+        buf.append("</select></td>")
+           .append("<td><b>").append(_t("Country Codes")).append("</b></td><td><input type=text name=\"cc\" title=\"e.g. cn hk\"></td></tr>\n")
+           .append("<tr><td><b>").append(_t("Hash Prefix")).append("</b></td><td><input type=text name=\"r\"></td>\n")
+           .append("<td><b>").append(_t("IP Address")).append("</b></td><td><input type=text name=\"ip\" ")
+           .append("title=\"").append(_t("IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6")).append("\"></td></tr>\n")
+           .append("<tr><td><b>").append(_t("Hostname or b32")).append("</b></td><td><input type=text name=\"ls\"></td>\n")
+           .append("<td><b>").append(_t("Router Family")).append("</b></td><td><input type=text name=\"fam\"></td></tr>\n")
+           .append("<tr><td><b>").append(_t("IPv6 Prefix")).append("</b></td><td><input type=text name=\"ipv6\"></td>\n")
+           .append("<td><b>MTU</b></td><td><input type=text name=\"mtu\"></td></tr>\n")
+           .append("<tr><td><b>").append(_t("Single port or range")).append("</b></td><td><input type=text name=\"port\"></td>\n")
+           .append("<td><b>").append(_t("Signature Type")).append("</b></td><td><select name=\"type\"><option value=\"\" selected=selected></option>");
         for (SigType type : EnumSet.allOf(SigType.class)) {
-            _out.write("<option value=\"" + type + "\">" + type + "</option>\n");
+            buf.append("<option value=\"").append(type).append("\">").append(type).append("</option>\n");
         }
-        _out.write("</select></td></tr>\n" +
-                   "<tr><td><b>SSU Capabilities</b></td><td><input type=text name=\"ssucaps\"></td>\n" +
-                   "<td><b>Encryption Type</b></td><td><select name=\"etype\"><option value=\"\" selected=selected></option>");
+        buf.append("</select></td></tr>\n")
+           .append("<tr><td><b>").append(_t("SSU Capabilities")).append("</b></td><td><input type=text name=\"ssucaps\"></td>\n")
+           .append("<td><b>").append(_t("Encryption Type")).append("</b></td><td><select name=\"etype\"><option value=\"\" selected=selected></option>");
         for (EncType type : EnumSet.allOf(EncType.class)) {
-            _out.write("<option value=\"" + type + "\">" + type + "</option>\n");
+            buf.append("<option value=\"").append(type).append("\">").append(type).append("</option>\n");
         }
-        _out.write("</select></td></tr>\n" +
-                   "<tr><td><b>Router Version</b></td><td><input type=text name=\"v\"></td>\n" +
-                   "<td><b>Transport</b></td><td><select name=\"tr\"><option value=\"\" selected=selected>" +
-                   "<option value=\"NTCP\">NTCP</option>\n" +
-                   "<option value=\"NTCP2\">NTCP2</option>\n" +
-                   "<option value=\"SSU\">SSU</option>\n" +
-                   "<option value=\"SSU2\">SSU2</option>\n" +
-                   "</select></td></tr>\n" +
-                   "<tr><td colspan=4 class=subheading><b>Add Sybil analysis (must pick one above)</b></td></tr>\n" +
-                   "<tr id=sybilSearch><td><b>Sybil close to</b></td><td colspan=3><input type=text name=\"sybil2\" " +
-                   "title=\"Router hash, destination hash, b32, or from address book\">&nbsp;" +
-                   "<label for=\"closetorouter\"><b>or Sybil close to this router</b></label>" +
-                   "<input type=checkbox class=optbox value=1 name=\"sybil\" id=closetorouter></td></tr>\n" +
-                   "<tr><td colspan=4 class=optionsave><button type=submit class=search value=\"Lookup\">Lookup</button></td></tr>\n" +
-                   "</table>\n</form>\n");
+        buf.append("</select>");
+        buf.append("<tr><td><b>").append(_t("Router Version")).append("</b></td><td><input type=text name=\"v\"></td>\n")
+           .append("<td><b>").append(_t("Transport")).append("</b></td><td><select name=\"tr\"><option value=\"\" selected=selected>")
+           .append("<option value=\"NTCP\">NTCP</option>\n")
+           .append("<option value=\"NTCP2\">NTCP2</option>\n")
+           .append("<option value=\"SSU\">SSU</option>\n")
+           .append("<option value=\"SSU2\">SSU2</option>\n")
+           .append("</select></td></tr>\n")
+           .append("<tr><td colspan=4 class=subheading><b>").append(_t("Add Sybil analysis (must pick at least one above)")).append("</b></td></tr>\n")
+           .append("<tr id=sybilSearch><td><b>").append(_t("Sybil close to")).append("</b></td><td colspan=3><input type=text name=\"sybil2\" ")
+           .append("title=\"").append(_t("Router hash, destination hash, b32, or from address book")).append("\">&nbsp;")
+           .append("<label for=\"closetorouter\"><b>").append(_t("or Sybil close to this router")).append("</b></label>")
+           .append("<input type=checkbox class=optbox value=1 name=\"sybil\" id=closetorouter></td></tr>\n")
+           .append("<tr><td colspan=4 class=optionsave><button type=submit class=search value=\"Lookup\">")
+           .append(_t("Lookup")).append("</button></td></tr>\n")
+           .append("</table>\n</form>\n");
+        _out.write(buf.toString());
     }
 }

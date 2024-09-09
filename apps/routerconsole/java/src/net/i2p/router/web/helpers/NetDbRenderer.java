@@ -11,14 +11,15 @@ package net.i2p.router.web.helpers;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
-import java.math.BigInteger;         // debug
+import java.math.BigInteger; // debug
 import java.text.Collator;
-import java.text.DecimalFormat;      // debug
+import java.text.DecimalFormat; // debug
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -41,9 +42,11 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.data.router.RouterKeyGenerator;
 import net.i2p.router.crypto.FamilyKeyCrypto;
 import net.i2p.router.JobImpl;
+import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.RouterContext;
+import static net.i2p.router.sybil.Util.biLog2;
 import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.router.transport.TransportImpl;
 import net.i2p.router.TunnelPoolSettings;
@@ -55,27 +58,14 @@ import net.i2p.util.Log;
 import net.i2p.util.ObjectCounterUnsafe;
 import net.i2p.util.Translate;
 import net.i2p.util.VersionComparator;
-import static net.i2p.router.sybil.Util.biLog2;
-
 
 class NetDbRenderer {
     private final RouterContext _context;
-
-    public NetDbRenderer (RouterContext ctx) {
-        _context = ctx;
-    }
-
+    public NetDbRenderer (RouterContext ctx) {_context = ctx;}
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
-    public boolean enableReverseLookups() {
-        return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);
-    }
-
+    public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
     public static final int LOOKUP_WAIT = 8 * 1000;
-
-    public boolean isFloodfill() {
-//        return _context.netDbSegmentor().floodfillEnabled();
-        return _context.netDb().floodfillEnabled();
-    }
+    public boolean isFloodfill() {return _context.netDb().floodfillEnabled();}
 
     /**
      *  Inner class, can't be Serializable
@@ -95,16 +85,14 @@ class NetDbRenderer {
     /** for debugging @since 0.7.14 */
     private static class LeaseSetRoutingKeyComparator implements Comparator<LeaseSet>, Serializable {
          private final Hash _us;
-         public LeaseSetRoutingKeyComparator(Hash us) {
-             _us = us;
-         }
+         public LeaseSetRoutingKeyComparator(Hash us) {_us = us;}
          public int compare(LeaseSet l, LeaseSet r) {
              return HashDistance.getDistance(_us, l.getRoutingKey()).compareTo(HashDistance.getDistance(_us, r.getRoutingKey()));
         }
     }
 
     /**
-     *  One String must be non-null
+     *  At least one String must be non-null, non-empty
      *
      *  @param page zero-based
      *  @param routerPrefix may be null. "." for our router only
@@ -113,38 +101,14 @@ class NetDbRenderer {
      *  @param family may be null
      *  @param highPort if nonzero, a range from port to highPort inclusive
      */
-    public void renderRouterInfoHTML(Writer out, int pageSize, int page,
-                                     String routerPrefix, String version,
-                                     String country, String family, String caps,
-                                     String ip, String sybil, int port, int highPort, SigType type, EncType etype,
-                                     String mtu, String ipv6, String ssucaps,
+
+    public void renderRouterInfoHTML(Writer out, int pageSize, int page, String routerPrefix, String version,
+                                     String country, String family, String caps, String ip, String sybil, int port,
+                                     int highPort, SigType type, EncType etype, String mtu, String ipv6, String ssucaps,
                                      String tr, int cost, int icount) throws IOException {
-                                            renderRouterInfoHTML(out, pageSize, page,
-                                                                 routerPrefix, version,
-                                                                 country, family, caps,
-                                                                 ip, sybil, port, highPort, type, etype,
-                                                                 mtu, ipv6, ssucaps,
-                                                                 tr, cost, icount, null, false);
-                                     }
-    public void renderRouterInfoHTML(Writer out, int pageSize, int page,
-                                     String routerPrefix, String version,
-                                     String country, String family, String caps,
-                                     String ip, String sybil, int port, int highPort, SigType type, EncType etype,
-                                     String mtu, String ipv6, String ssucaps,
-                                     String tr, int cost, int icount, Hash client, boolean allClients) throws IOException {
         StringBuilder buf = new StringBuilder(4*1024);
         List<Hash> sybils = sybil != null ? new ArrayList<Hash>(128) : null;
-        FloodfillNetworkDatabaseFacade netdb = (FloodfillNetworkDatabaseFacade) _context.netDb();
-
-        if (allClients) {
-            netdb = (FloodfillNetworkDatabaseFacade) _context.netDb();
-        } else {
-            if (client != null) {
-                Log _log = _context.logManager().getLog(NetDbRenderer.class);
-                if (_log.shouldLog(Log.DEBUG)) {_log.debug("Client subdb for: " + client);}
-                netdb = (FloodfillNetworkDatabaseFacade) _context.clientNetDb(client);
-            } else {netdb = (FloodfillNetworkDatabaseFacade) _context.netDb();}
-        }
+        NetworkDatabaseFacade netdb = _context.netDb();
 
         if (".".equals(routerPrefix)) {
             buf.append("<p class=infowarn><b>")
@@ -166,26 +130,22 @@ class NetDbRenderer {
                         netdb.lookupRouterInfo(hash, lw, lw, LOOKUP_WAIT);
                         // just wait right here in the middle of the rendering, sure
                         synchronized(lw) {
-                            try { lw.wait(LOOKUP_WAIT); } catch (InterruptedException ie) {}
+                            try {lw.wait(LOOKUP_WAIT);} catch (InterruptedException ie) {}
                         }
                         ri = (RouterInfo) netdb.lookupLocallyWithoutValidation(hash);
                     }
                 }
-                if (ri != null) {
-                   renderRouterInfo(buf, ri, false, true);
-                } else {
+                if (ri != null) {renderRouterInfo(buf, ri, false, true);}
+                else {
                     buf.append("<div class=netdbnotfound>");
                     if (routerPrefix != null) {
-                        buf.append(_t("Router")).append(' ');
-                        buf.append(routerPrefix);
-                        buf.append(' ').append(banned ? _t("is banned") : _t("not found in network database"));
-                    } else {
-                        buf.append(_t("No results"));
-                    }
+                        buf.append(_t("Router")).append(' ').append(routerPrefix)
+                           .append(' ').append(banned ? _t("is banned") : _t("not found in network database"));
+                    } else {buf.append(_t("No results"));}
                     buf.append("</div>");
                 }
             } else {
-                buf.append("<div class=netdbnotfound>").append("Bad Base64 router hash").append(' ')
+                buf.append("<div class=netdbnotfound>").append(_t("Bad Base64 Router hash")).append(' ')
                    .append(DataHelper.escapeHTML(routerPrefix)).append("</div>");
             }
         } else {
@@ -205,279 +165,58 @@ class NetDbRenderer {
             if (ssucaps != null) {ubuf.append("&amp;ssucaps=").append(ssucaps);}
             if (cost != 0) {ubuf.append("&amp;cost=").append(cost);}
             if (sybil != null) {ubuf.append("&amp;sybil=").append(sybil);}
-            if (page > 0) {
-                buf.append("<p class=infohelp id=pagenav><a href=\"/netdb?pg=").append(page)
-                   .append("&amp;ps=").append(pageSize).append(ubuf).append("\">")
-                   .append(_t("Previous Page")).append("</a>&nbsp;&nbsp;&nbsp;")
-                   .append(_t("Page")).append(' ').append(page + 1)
-                   .append("</p>");
-            }
-            boolean notFound = true;
+            String itag;
+            if (icount > 0) {
+                ubuf.append("&amp;i=").append(icount);
+                itag = "itag" + (icount - 1);
+            } else {itag = null;}
             Set<RouterInfo> routers = new HashSet<RouterInfo>();
-            if (allClients){
-                    routers.addAll(_context.netDb().getRouters());
-            } else {
-                if (client == null)
-                    routers.addAll(_context.netDb().getRouters());
-                else
-                    routers.addAll(_context.clientNetDb(client).getRouters());
-
-            }
+            routers.addAll(_context.netDb().getRouters());
             int ipMode = 0;
             String ipArg = ip;  // save for error message
             String altIPv6 = null;
             if (ip != null) {
-                if (ip.endsWith("/24")) {
-                    ipMode = 1;
-                } else if (ip.endsWith("/16")) {
-                    ipMode = 2;
-                } else if (ip.endsWith("/8")) {
-                    ipMode = 3;
-                } else if (ip.indexOf(':') > 0) {
+                if (ip.endsWith("/24")) {ipMode = 1;}
+                else if (ip.endsWith("/16")) {ipMode = 2;}
+                else if (ip.endsWith("/8")) {ipMode = 3;}
+                else if (ip.indexOf(':') > 0) {
                     ipMode = 4;
-                    if (ip.endsWith("::")) {
-                        // truncate for prefix search
-                        ip = ip.substring(0, ip.length() - 1);
-                    } else {
-                        // We don't canonicalize as we search, so create alt string to check also
-                        altIPv6 = getAltIPv6(ip);
-                    }
+                    if (ip.endsWith("::")) {ip = ip.substring(0, ip.length() - 1);} // truncate for prefix search
+                    else {altIPv6 = getAltIPv6(ip);} // We don't canonicalize as we search, so create alt string to check also
                 }
                 if (ipMode > 0 && ipMode < 4) {
                     for (int i = 0; i < ipMode; i++) {
                         int last = ip.substring(0, ip.length() - 1).lastIndexOf('.');
-                        if (last > 0)
-                            ip = ip.substring(0, last + 1);
+                        if (last > 0) {ip = ip.substring(0, last + 1);}
                     }
                 }
             }
             if (ipv6 != null) {
-                if (ipv6.endsWith("::")) {
-                    // truncate for prefix search
-                    ipv6 = ipv6.substring(0, ipv6.length() - 1);
-                } else {
-                    // We don't canonicalize as we search, so create alt string to check also
-                    altIPv6 = getAltIPv6(ipv6);
-                }
+                if (ipv6.endsWith("::")) {ipv6 = ipv6.substring(0, ipv6.length() - 1);} // truncate for prefix search
+                else {altIPv6 = getAltIPv6(ipv6);} // We don't canonicalize as we search, so create alt string to check also
             }
-            String familyArg = family;  // save for error message
-            if (family != null)
-                family = family.toLowerCase(Locale.US);
-            int toSkip = pageSize * page;
-            int skipped = 0;
-            int written = 0;
-            boolean morePages = false;
-            outerloop:
-            for (RouterInfo ri : routers) {
-                Hash key = ri.getIdentity().getHash();
-                if ((routerPrefix != null && key.toBase64().startsWith(routerPrefix)) ||
-                    (version != null && version.equals(ri.getVersion())) ||
-                    (country != null && country.equals(_context.commSystem().getCountry(key))) ||
-                    // 'O' will catch PO and XO also
-                    (caps != null && hasCap(ri, caps)) ||
-                    (tr != null && ri.getTargetAddress(tr) != null) ||
-                    (type != null && type == ri.getIdentity().getSigType()) ||
-                    (etype != null && etype == ri.getIdentity().getEncType())) {
-                        if (skipped < toSkip) {
-                            skipped++;
-                            continue;
-                        }
-                        if (written++ >= pageSize) {
-                            morePages = true;
-                            break;
-                        }
-                        renderRouterInfo(buf, ri, false, true);
-                        if (sybil != null)
-                            sybils.add(key);
-                        notFound = false;
-                    } else if (tr != null) {
-                        boolean found;
-                        if (tr.equals("NTCP_1")) {
-                            RouterAddress ra = ri.getTargetAddress("NTCP");
-                            found = ra != null && ra.getOption("v") == null;
-                        } else if (tr.equals("NTCP_2")) {
-                            RouterAddress ra = ri.getTargetAddress("NTCP");
-                            found = ra != null && ra.getOption("v") != null;
-                        } else if (tr.equals("SSU_1")) {
-                            RouterAddress ra = ri.getTargetAddress("SSU");
-                            found = ra != null && ra.getOption("v") == null;
-                        } else if (tr.equals("SSU_2")) {
-                            RouterAddress ra = ri.getTargetAddress("SSU");
-                            found = ra != null && ra.getOption("v") != null;
-                        } else {
-                            RouterAddress ra = ri.getTargetAddress(tr);
-                            found = ra != null;
-                        }
-                        if (!found)
-                            continue;
-                        if (skipped < toSkip) {
-                            skipped++;
-                            continue;
-                        }
-                        if (written++ >= pageSize) {
-                            morePages = true;
-                            break;
-                        }
-                        renderRouterInfo(buf, ri, false, true);
-                        if (sybil != null)
-                            sybils.add(key);
-                        notFound = false;
-                    } else if (family != null) {
-                        String rifam = ri.getOption("family");
-                        if (rifam != null && rifam.toLowerCase(Locale.US).contains(family)) {
-                            if (skipped < toSkip) {
-                                skipped++;
-                                continue;
-                            }
-                            if (written++ >= pageSize) {
-                                morePages = true;
-                                break outerloop;
-                            }
-                            renderRouterInfo(buf, ri, false, true);
-                            if (sybil != null)
-                                sybils.add(key);
-                            notFound = false;
-                        }
-                    } else if (ip != null) {
-                        for (RouterAddress ra : ri.getAddresses()) {
-                            if (ipMode == 0) {
-                                if (ip.equals(ra.getHost())) {
-                                    if (skipped < toSkip) {
-                                        skipped++;
-                                        break;
-                                    }
-                                    if (written++ >= pageSize) {
-                                        morePages = true;
-                                        break outerloop;
-                                    }
-                                    renderRouterInfo(buf, ri, false, true);
-                                    if (sybil != null)
-                                        sybils.add(key);
-                                    notFound = false;
-                                    break;
-                                }
-                            } else {
-                                String host = ra.getHost();
-                            if (host != null && (host.startsWith(ip) ||
-                                                 (altIPv6 != null && host.startsWith(altIPv6)))) {
-                                    if (skipped < toSkip) {
-                                        skipped++;
-                                        break;
-                                    }
-                                    if (written++ >= pageSize) {
-                                        morePages = true;
-                                        break outerloop;
-                                    }
-                                    renderRouterInfo(buf, ri, false, true);
-                                    if (sybil != null)
-                                        sybils.add(key);
-                                    notFound = false;
-                                    break;
-                                }
-                            }
-                        }
-                    } else if (port != 0) {
-                        for (RouterAddress ra : ri.getAddresses()) {
-                        int raport = ra.getPort();
-                        if (port == raport ||
-                            (highPort > 0 && raport >= port && raport <= highPort)) {
-                                if (skipped < toSkip) {
-                                    skipped++;
-                                    break;
-                                }
-                                if (written++ >= pageSize) {
-                                    morePages = true;
-                                    break outerloop;
-                                }
-                                renderRouterInfo(buf, ri, false, true);
-                                if (sybil != null)
-                                    sybils.add(key);
-                                notFound = false;
-                                break;
-                            }
-                        }
-                    } else if (mtu != null) {
-                        for (RouterAddress ra : ri.getAddresses()) {
-                            if (mtu.equals(ra.getOption("mtu"))) {
-                                if (skipped < toSkip) {
-                                    skipped++;
-                                    break;
-                                }
-                                if (written++ >= pageSize) {
-                                    morePages = true;
-                                    break outerloop;
-                                }
-                                renderRouterInfo(buf, ri, false, true);
-                                if (sybil != null)
-                                    sybils.add(key);
-                                notFound = false;
-                                break;
-                            }
-                        }
-                    } else if (ipv6 != null) {
-                        for (RouterAddress ra : ri.getAddresses()) {
-                            String host = ra.getHost();
-                        if (host != null && (host.startsWith(ipv6) ||
-                                             (altIPv6 != null && host.startsWith(altIPv6)))) {
-                                if (skipped < toSkip) {
-                                    skipped++;
-                                    break;
-                                }
-                                if (written++ >= pageSize) {
-                                    morePages = true;
-                                    break outerloop;
-                                }
-                                renderRouterInfo(buf, ri, false, true);
-                                if (sybil != null)
-                                    sybils.add(key);
-                                notFound = false;
-                                break;
-                            }
-                        }
-                    } else if (ssucaps != null) {
-                        for (RouterAddress ra : ri.getAddresses()) {
-                            if (!"SSU".equals(ra.getTransportStyle()))
-                                continue;
-                            String racaps = ra.getOption("caps");
-                            if (racaps == null)
-                                continue;
-                            if (racaps.contains(ssucaps)) {
-                                if (skipped < toSkip) {
-                                    skipped++;
-                                    break;
-                                }
-                                if (written++ >= pageSize) {
-                                    morePages = true;
-                                    break outerloop;
-                                }
-                                renderRouterInfo(buf, ri, false, true);
-                                if (sybil != null)
-                                    sybils.add(key);
-                                notFound = false;
-                                break;
-                            }
-                        }
-                    } else if (cost != 0) {
-                        for (RouterAddress ra : ri.getAddresses()) {
-                            if (cost == ra.getCost()) {
-                                if (skipped < toSkip) {
-                                    skipped++;
-                                    break;
-                                }
-                                if (written++ >= pageSize) {
-                                    morePages = true;
-                                    break outerloop;
-                                }
-                                renderRouterInfo(buf, ri, false, true);
-                                if (sybil != null)
-                                    sybils.add(key);
-                                notFound = false;
-                                break;
-                            }
-                        }
-                    }
+            String familyArg = family; // save for error message
+            if (family != null) {family = family.toLowerCase(Locale.US);}
+            if (routerPrefix != null && !routers.isEmpty()) {filterHashPrefix(routers, routerPrefix);}
+            if (version != null && !routers.isEmpty()) {filterVersion(routers, version);}
+            if (country != null && !routers.isEmpty()) {filterCountry(routers, country);}
+            if (caps != null && !routers.isEmpty()) {filterCaps(routers, caps);}
+            if (type != null && !routers.isEmpty()) {filterSigType(routers, type);}
+            if (etype != null && !routers.isEmpty()) {filterEncType(routers, etype);}
+            if (tr != null && !routers.isEmpty()) {filterTransport(routers, tr);}
+            if (family != null && !routers.isEmpty()) {filterFamily(routers, family);}
+            if (ip != null && !routers.isEmpty()) {
+                if (ipMode == 0) {filterIP(routers, ip);}
+                else {filterIP(routers, ip, altIPv6);}
             }
-            if (notFound) {
+            if (port != 0 && !routers.isEmpty()) {filterPort(routers, port, highPort);}
+            if (mtu != null && !routers.isEmpty()) {filterMTU(routers, mtu);}
+            if (ipv6 != null && !routers.isEmpty()) {filterIP(routers, ipv6, altIPv6);}
+            if (ssucaps != null && !routers.isEmpty()) {filterSSUCaps(routers, ssucaps);}
+            if (cost != 0 && !routers.isEmpty()) {filterCost(routers, cost);}
+            if (itag != null && !routers.isEmpty()) {filterITag(routers, itag);}
+
+            if (routers.isEmpty()) {
                 buf.append("<div class=netdbnotfound>");
                 buf.append(_t("Router")).append(' ');
                 if (routerPrefix != null) {buf.append(routerPrefix).append(' ');}
@@ -500,22 +239,25 @@ class NetDbRenderer {
                 if (tr != null) {buf.append("Transport ").append(tr).append(' ');}
                 buf.append(_t("not found in network database"));
                 buf.append("</div>");
-            } else if (page > 0 || morePages) {
-                buf.append("<p class=infohelp id=pagenav>");
-                if (page > 0) {
-                    buf.append("<a href=\"/netdb?pg=").append(page)
-                       .append("&amp;ps=").append(pageSize).append(ubuf).append("\">")
-                       .append(_t("Previous Page"))
-                       .append("</a>&nbsp;&nbsp;&nbsp;");
+            } else {
+                List<RouterInfo> results = new ArrayList<RouterInfo>(routers);
+                int sz = results.size();
+                if (sz > 1) {Collections.sort(results, RouterInfoComparator.getInstance());}
+                boolean morePages = false;
+                int toSkip = pageSize * page;
+                int last = Math.min(toSkip + pageSize, sz - 1);
+                if (last < sz - 1) {morePages = true;}
+                if (page > 0 || morePages) {outputPageLinks(buf, ubuf, page, pageSize, morePages);}
+                for (int i = toSkip; i <= last; i++) {
+                    RouterInfo ri = results.get(i);
+                    renderRouterInfo(buf, ri, false, true);
+                    if (sybil != null) {sybils.add(ri.getIdentity().getHash());}
+                    if ((i & 0x07) == 0) {
+                        out.write(buf.toString());
+                        buf.setLength(0);
+                    }
                 }
-                buf.append(_t("Page")).append(' ').append(page + 1);
-                if (morePages) {
-                    buf.append("&nbsp;&nbsp;&nbsp;<a href=\"/netdb?pg=").append(page + 2)
-                       .append("&amp;ps=").append(pageSize).append(ubuf).append("\">");
-                    buf.append(_t("Next Page"));
-                    buf.append("</a>");
-                }
-                buf.append("</p>");
+                if (page > 0 || morePages) {outputPageLinks(buf, ubuf, page, pageSize, morePages);}
             }
         }
         out.write(buf.toString());
@@ -525,16 +267,302 @@ class NetDbRenderer {
     }
 
     /**
+     *  @since 0.9.64 split out from above
+     */
+    private void outputPageLinks(StringBuilder buf, StringBuilder ubuf, int page, int pageSize, boolean morePages) {
+        if (page > 0 || morePages) {
+            buf.append("<p class=infohelp id=pagenav>");
+            if (page > 0) {
+                buf.append("<a href=\"/netdb?pg=").append(page)
+                   .append("&amp;ps=").append(pageSize).append(ubuf).append("\">")
+                   .append(_t("Previous Page")).append("</a>&nbsp;&nbsp;&nbsp;");
+            }
+            buf.append(_t("Page")).append(' ').append(page + 1);
+            if (morePages) {
+                buf.append("&nbsp;&nbsp;&nbsp;<a href=\"/netdb?pg=").append(page + 2)
+                   .append("&amp;ps=").append(pageSize).append(ubuf).append("\">")
+                   .append(_t("Next Page")).append("</a>");
+            }
+            buf.append("</p>");
+        }
+    }
+
+    /**
+     *  Remove all non-matching from routers
+     *  @since 0.9.64 split out from above
+     */
+    private static void filterHashPrefix(Set<RouterInfo> routers, String routerPrefix) {
+        for (Iterator<RouterInfo> iter = routers.iterator(); iter.hasNext();) {
+            RouterInfo ri = iter.next();
+            Hash key = ri.getIdentity().getHash();
+            if (!key.toBase64().startsWith(routerPrefix)) {iter.remove();}
+        }
+    }
+
+    /**
+     *  Remove all non-matching from routers
+     *  @since 0.9.64 split out from above
+     */
+    private static void filterVersion(Set<RouterInfo> routers, String version) {
+        for (Iterator<RouterInfo> iter = routers.iterator(); iter.hasNext();) {
+            RouterInfo ri = iter.next();
+            if (!ri.getVersion().equals(version)) {iter.remove();}
+        }
+    }
+
+    /**
+     *  Remove all non-matching from routers
+     *  @since 0.9.64 split out from above
+     */
+    private void filterCountry(Set<RouterInfo> routers, String country) {
+        String[] countryCodes = country.split("[, ]+");
+        boolean foundMatch;
+        for (Iterator<RouterInfo> iter = routers.iterator(); iter.hasNext();) {
+            RouterInfo ri = iter.next();
+            Hash key = ri.getIdentity().getHash();
+            foundMatch = false;
+            for (String countryCode : countryCodes) {
+                if (_context.commSystem().getCountry(key).equalsIgnoreCase(countryCode.trim())) {
+                    foundMatch = true;
+                    break;
+                }
+            }
+            if (!foundMatch) {iter.remove();}
+        }
+    }
+
+    /**
+     *  Remove all non-matching from routers
+     *  @since 0.9.64 split out from above
+     */
+    private static void filterCaps(Set<RouterInfo> routers, String caps) {
+        int len = caps.length();
+        outer:
+        for (Iterator<RouterInfo> iter = routers.iterator(); iter.hasNext();) {
+            RouterInfo ri = iter.next();
+            String ca = ri.getCapabilities();
+            for (int i = 0; i < len; i++) {
+                // must contain all caps specified
+                if (ca.indexOf(caps.charAt(i)) < 0) {
+                    iter.remove();
+                    continue outer;
+                }
+            }
+        }
+    }
+
+    /**
+     *  Remove all non-matching from routers
+     *  @since 0.9.64 split out from above
+     */
+    private static void filterSigType(Set<RouterInfo> routers, SigType type) {
+        for (Iterator<RouterInfo> iter = routers.iterator(); iter.hasNext();) {
+            RouterInfo ri = iter.next();
+            if (ri.getIdentity().getSigType() != type) {iter.remove();}
+        }
+    }
+
+    /**
+     *  Remove all non-matching from routers
+     *  @since 0.9.64 split out from above
+     */
+    private static void filterEncType(Set<RouterInfo> routers, EncType type) {
+        for (Iterator<RouterInfo> iter = routers.iterator(); iter.hasNext();) {
+            RouterInfo ri = iter.next();
+            if (ri.getIdentity().getEncType() != type) {iter.remove();}
+        }
+    }
+
+    /**
+     *  Remove all non-matching from routers
+     *  @since 0.9.64 split out from above
+     */
+    private static void filterTransport(Set<RouterInfo> routers, String tr) {
+        String transport;
+        int mode;
+        if (tr.equals("NTCP_1")) {
+            transport = "NTCP";
+            mode = 0;
+        } else if (tr.equals("NTCP_2")) {
+            transport = "NTCP";
+            mode = 1;
+        } else if (tr.equals("SSU_1")) {
+            transport = "SSU";
+            mode = 2;
+        } else if (tr.equals("SSU_2")) {
+            transport = "SSU";
+            mode = 3;
+        } else {
+            transport = tr;
+            mode = 4;
+        }
+        for (Iterator<RouterInfo> iter = routers.iterator(); iter.hasNext();) {
+            RouterInfo ri = iter.next();
+            RouterAddress ra = ri.getTargetAddress(transport);
+            if (ra != null) {
+                switch (mode) {
+                    case 0:
+                    case 2:
+                        if (ra.getOption("v") == null) {continue;}
+                        break;
+
+                    case 1:
+                    case 3:
+                        if (ra.getOption("v") != null) {continue;}
+                        break;
+
+                    case 4:
+                        continue;
+                }
+            }
+            iter.remove();
+        }
+    }
+
+    /**
+     *  Remove all non-matching from routers
+     *  @since 0.9.64 split out from above
+     */
+    private static void filterFamily(Set<RouterInfo> routers, String family) {
+        for (Iterator<RouterInfo> iter = routers.iterator(); iter.hasNext();) {
+            RouterInfo ri = iter.next();
+            String fam = ri.getOption("family");
+            if (fam != null) {
+                if (fam.toLowerCase(Locale.US).contains(family)) {continue;}
+            }
+            iter.remove();
+        }
+    }
+
+    /**
+     *  Exact match
+     *  Remove all non-matching from routers
+     *  @since 0.9.64 split out from above
+     */
+    private static void filterIP(Set<RouterInfo> routers, String ip) {
+        outer:
+        for (Iterator<RouterInfo> iter = routers.iterator(); iter.hasNext();) {
+            RouterInfo ri = iter.next();
+            for (RouterAddress ra : ri.getAddresses()) {
+                if (ip.equals(ra.getHost())) {continue outer;}
+            }
+            iter.remove();
+        }
+    }
+
+    /**
+     *  Prefix
+     *  Remove all non-matching from routers
+     *  @param altip may be null
+     *  @since 0.9.64 split out from above
+     */
+    private static void filterIP(Set<RouterInfo> routers, String ip, String altip) {
+        outer:
+        for (Iterator<RouterInfo> iter = routers.iterator(); iter.hasNext();) {
+            RouterInfo ri = iter.next();
+            for (RouterAddress ra : ri.getAddresses()) {
+                String host = ra.getHost();
+                if (host != null && (host.startsWith(ip) || (altip != null && host.startsWith(altip)))) {
+                    continue outer;
+                }
+            }
+            iter.remove();
+        }
+    }
+
+    /**
+     *  Remove all non-matching from routers
+     *  @since 0.9.64 split out from above
+     */
+    private static void filterPort(Set<RouterInfo> routers, int port, int highPort) {
+        outer:
+        for (Iterator<RouterInfo> iter = routers.iterator(); iter.hasNext();) {
+            RouterInfo ri = iter.next();
+            for (RouterAddress ra : ri.getAddresses()) {
+                int raport = ra.getPort();
+                if (port == raport || (highPort > 0 && raport >= port && raport <= highPort)) {
+                    continue outer;
+                }
+            }
+            iter.remove();
+        }
+    }
+
+    /**
+     *  Remove all non-matching from routers
+     *  @since 0.9.64 split out from above
+     */
+    private static void filterMTU(Set<RouterInfo> routers, String smtu) {
+        outer:
+        for (Iterator<RouterInfo> iter = routers.iterator(); iter.hasNext();) {
+            RouterInfo ri = iter.next();
+            for (RouterAddress ra : ri.getAddresses()) {
+                if (smtu.equals(ra.getOption("mtu"))) {continue outer;}
+            }
+            iter.remove();
+        }
+    }
+
+    /**
+     *  Remove all non-matching from routers
+     *  @since 0.9.64 split out from above
+     */
+    private static void filterSSUCaps(Set<RouterInfo> routers, String caps) {
+        int len = caps.length();
+        outer:
+        for (Iterator<RouterInfo> iter = routers.iterator(); iter.hasNext();) {
+            RouterInfo ri = iter.next();
+            inner:
+            for (RouterAddress ra : ri.getAddresses()) {
+                String ca = ra.getOption("caps");
+                if (ca == null) {continue;}
+                for (int i = 0; i < len; i++) {
+                    // must contain all caps specified
+                    if (ca.indexOf(caps.charAt(i)) < 0) {break inner;}
+                }
+                continue outer;
+            }
+            iter.remove();
+        }
+    }
+
+    /**
+     *  Remove all non-matching from routers
+     *  @since 0.9.64 split out from above
+     */
+    private static void filterCost(Set<RouterInfo> routers, int cost) {
+        outer:
+        for (Iterator<RouterInfo> iter = routers.iterator(); iter.hasNext();) {
+            RouterInfo ri = iter.next();
+            for (RouterAddress ra : ri.getAddresses()) {
+                if (ra.getCost() == cost) {continue outer;}
+            }
+            iter.remove();
+        }
+    }
+
+    /**
+     *  Remove all non-matching from routers
+     *  @since 0.9.64 split out from above
+     */
+    private static void filterITag(Set<RouterInfo> routers, String itag) {
+        outer:
+        for (Iterator<RouterInfo> iter = routers.iterator(); iter.hasNext();) {
+            RouterInfo ri = iter.next();
+            for (RouterAddress ra : ri.getAddresses()) {
+                if (ra.getOption(itag) != null) {continue outer;}
+            }
+            iter.remove();
+        }
+    }
+
+    /**
      *  @since 0.9.48
      */
     private class LookupWaiter extends JobImpl {
-        public LookupWaiter() { super(_context); }
-        public void runJob() {
-            synchronized(this) {
-                notifyAll();
-            }
-        }
-        public String getName() { return "Console NetDb Lookup"; }
+        public LookupWaiter() {super(_context);}
+        public void runJob() {synchronized(this) {notifyAll();}}
+        public String getName() {return "Console NetDb Lookup";}
     }
 
     /**
@@ -548,9 +576,7 @@ class NetDbRenderer {
             return ricaps.contains(caps) &&
                    !ricaps.contains("P") &&
                    !ricaps.contains("X");
-        } else {
-            return ricaps.contains(caps);
-        }
+        } else {return ricaps.contains(caps);}
     }
 
     /**
@@ -559,27 +585,18 @@ class NetDbRenderer {
      *  @param debug @since 0.7.14 sort by distance from us, display
      *               median distance, and other stuff, useful when floodfill
      */
-    public void renderLeaseSetHTML(Writer out, boolean debug, Hash client, boolean clientsOnly) throws IOException {
+    public void renderLeaseSetHTML(Writer out, boolean debug, Hash client) throws IOException {
         StringBuilder buf = new StringBuilder(4*1024);
         if (debug) {
-            buf.append("<p id=debugmode>Debug mode - Sorted by hash distance, closest first. <a href=\"/netdb?l=1\">[Compact mode]</a></p>\n");
+            buf.append("<p id=debugmode>").append(_t("Debug mode - Sorted by hash distance, closest first."))
+               .append("<a href=\"/netdb?l=1\">[").append(_t("Compact mode")).append("]</a></p>\n");
         }
         Hash ourRKey;
         Set<LeaseSet> leases;
         DecimalFormat fmt;
-        FloodfillNetworkDatabaseFacade netdb = null;
-        if (clientsOnly) {
-            netdb = (FloodfillNetworkDatabaseFacade) _context.netDb();
-        } else {
-            if (client != null) {
-                Log _log = _context.logManager().getLog(NetDbRenderer.class);
-                if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Client subdb for: " + client);
-                netdb = (FloodfillNetworkDatabaseFacade) _context.clientNetDb(client);
-            }
-            else
-                netdb = (FloodfillNetworkDatabaseFacade) _context.netDb();
-        }
+        NetworkDatabaseFacade netdb;
+        if (client == null) {netdb = _context.netDb();}
+        else {netdb = _context.clientNetDb(client);}
         if (debug) {
             ourRKey = _context.routerHash();
             leases = new TreeSet<LeaseSet>(new LeaseSetRoutingKeyComparator(ourRKey));
@@ -589,11 +606,7 @@ class NetDbRenderer {
             leases = new TreeSet<LeaseSet>(new LeaseSetComparator());
             fmt = null;
         }
-        if (clientsOnly)
-            leases.addAll(netdb.getLeases());
-        else {
-            leases.addAll(netdb.getLeases());
-        }
+        leases.addAll(netdb.getLeases());
         int medianCount = 0;
         int rapCount = 0;
         BigInteger median = null;
@@ -602,16 +615,6 @@ class NetDbRenderer {
         // Summary
         if (debug) {buf.append("<table id=leasesetdebug>\n");}
         else if (client == null) {buf.append("<table id=leasesetsummary>\n");}
-/**
-        if (clientsOnly) {
-            buf.append("<tr><th colspan=4>Leaseset Summary for All Clients: ").append(client).append("</th><tr>\n");
-        } else if (client != null) {
-            buf.append("<tr><th colspan=4>Leaseset Summary for Client: ").append(client).append("</th></tr>\n");
-        } else {
-            buf.append("<tr><th colspan=4>Leaseset Summary for Floodfill</th></tr>\n");
-        }
-        buf.append("<tr><td><b>Total Leasesets:</b></td><td colspan=3>").append(leases.size()).append("</td></tr>\n");
-**/
         if (debug || client == null) {
             buf.append("<tr><th><b>Total Leasesets:</b></th><th colspan=3>").append(leases.size()).append("</th></tr>\n");
         }
@@ -704,7 +707,7 @@ class NetDbRenderer {
                 _context.netDb().lookupLeaseSetRemotely(hash, lw, lw, 8*1000, null);
                 // just wait right here in the middle of the rendering, sure
                 synchronized(lw) {
-                    try { lw.wait(9*1000); } catch (InterruptedException ie) {}
+                    try {lw.wait(9*1000);} catch (InterruptedException ie) {}
                 }
                 ls = _context.netDb().lookupLeaseSetLocally(hash);
             }
@@ -904,7 +907,7 @@ class NetDbRenderer {
      *         mode 2: abbreviated routerinfos
      *         mode 3: Same as 0 but sort countries by count
      */
-    public void renderStatusHTML(Writer out, int pageSize, int page, int mode, Hash client, boolean clientsOnly) throws IOException {
+    public void renderStatusHTML(Writer out, int pageSize, int page, int mode) throws IOException {
         if (!_context.netDb().isInitialized()) {
             out.write("<div id=notinitialized>");
             out.write(_t("Not initialized"));
@@ -917,14 +920,11 @@ class NetDbRenderer {
 
         boolean full = mode == 1;
         boolean shortStats = mode == 2;
-        boolean showStats = full || shortStats;  // this means show the router infos
+        boolean showStats = full || shortStats; // this means show the RouterInfos
         Hash us = _context.routerHash();
 
         Set<RouterInfo> routers = new TreeSet<RouterInfo>(RouterInfoComparator.getInstance());
-        if (client != null) {routers.addAll(_context.clientNetDb(client).getRouters());}
-        else if (clientsOnly) {routers.addAll(_context.netDb().getRouters());}
-        else {routers.addAll(_context.netDb().getRouters());}
-
+        routers.addAll(_context.netDb().getRouters());
         int toSkip = pageSize * page;
         boolean nextpg = routers.size() > toSkip + pageSize;
         StringBuilder buf = new StringBuilder(8192);
@@ -1660,7 +1660,7 @@ class NetDbRenderer {
     private static final int SSUI = 2;
     private static final int NTCP = 4;
     private static final int IPV6 = 8;
-    private static final String[] TNAMES = { _x("Hidden or starting up"), _x("SSU"), _x("SSU with introducers"), "",
+    private static final String[] TNAMES = {_x("Hidden or starting up"), _x("SSU"), _x("SSU with introducers"), "",
                                              _x("NTCP"), _x("NTCP and SSU"), _x("NTCP and SSU with introducers"), "",
                                              "", _x("IPv6 SSU"), _x("IPv6 Only SSU, introducers"), _x("IPv6 SSU, introducers"),
                                              _x("IPv6 NTCP"), _x("IPv6 NTCP, SSU"), _x("IPv6 Only NTCP, SSU, introducers"),

@@ -23,7 +23,11 @@
 <jsp:setProperty name="formhandler" property="router" value="<%=request.getParameter(\"r\")%>" />
 <jsp:setProperty name="formhandler" property="lease" value="<%=request.getParameter(\"l\")%>" />
 <jsp:setProperty name="formhandler" property="version" value="<%=request.getParameter(\"v\")%>" />
+<%  if (request.getParameter("cc") != null) { %>
+<jsp:setProperty name="formhandler" property="country" value="<%=request.getParameter(\"cc\")%>" />
+<%  } else { %>
 <jsp:setProperty name="formhandler" property="country" value="<%=request.getParameter(\"c\")%>" />
+<%  } %>
 <jsp:setProperty name="formhandler" property="family" value="<%=request.getParameter(\"fam\")%>" />
 <jsp:setProperty name="formhandler" property="caps" value="<%=request.getParameter(\"caps\")%>" />
 <jsp:setProperty name="formhandler" property="ip" value="<%=request.getParameter(\"ip\")%>" />
