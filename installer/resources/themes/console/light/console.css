@@ -240,7 +240,7 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 #sb_updatesection h3.collapsed a::after{content:"*"}
 #sidebar .toggleSection::before,#sidebar .toggleSection::after{display:none}
 #sidebar h3:hover .toggleSection{display:inline-block}
-#sidebar h3 a .badge,#tunnelCount,#newsCount{margin:0 0 0 2px;padding:2px 5px;display:inline-block;vertical-align:middle;white-space:nowrap;line-height:1;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;font-size:80%;box-shadow:0 0 0 1px #bbc,0 0 0 1px #fff inset;background:#eef;transform:translateY(-1px)}
+#sidebar h3 a .badge,#sidebar #sb_status #lsCount.badge,#tunnelCount,#newsCount{margin:0 0 0 2px;padding:2px 5px;display:inline-block;vertical-align:middle;white-space:nowrap;line-height:1;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;font-size:80%;box-shadow:0 0 0 1px #bbc,0 0 0 1px #fff inset;background:#eef;transform:translateY(-1px)}
 #sidebar h3 .badge:empty,#sidebar h3 .badge[hidden],#sidebar #newsCount:empty,#sidebar #tunnelCount:empty{display:none}
 #sidebar td .badge:empty::after{display:inline;content:"---"}
 #sidebar h3 a[href="/info"] .badge{text-transform:none}
@@ -2882,3 +2882,7 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 #ipbans.toggle:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
 #ipbans.toggle.expanded::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:none}
 #ipbans.toggle.expanded:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:none}
+
+@media (min-width:1600px) {
+#sidebar #sb_status #lsCount.badge{margin-left:0;padding:1px 4px 0;display:inline-block;line-height:1;font-size:11.7333px;color:var(--ink)}
+}
