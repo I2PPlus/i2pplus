@@ -631,8 +631,8 @@ class NetDbRenderer {
         int ff = 0;
         if (client == null) {
             ff = _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL).size();
-            buf.append("<tr><td><b>Known Floodfills:</b></td><td colspan=3>").append(ff).append("</td></tr>\n");
-            buf.append("<tr><td><b>Currently Floodfill?</b></td><td>").append(netdb.floodfillEnabled() ? "yes" : "no");
+            buf.append("<tr><td><b>Known Floodfills:</b></td><td colspan=3>").append(ff).append("</td></tr>\n")
+               .append("<tr><td><b>Currently Floodfill?</b></td><td>").append(netdb.floodfillEnabled() ? "yes" : "no");
         }
         if (debug) {buf.append("</td><td><b>Routing Key:</b></td><td>").append(ourRKey.toBase64());}
         else {buf.append("</td><td colspan=2>");}
@@ -694,10 +694,8 @@ class NetDbRenderer {
         StringBuilder buf = new StringBuilder(1024);
         Hash hash = ConvertToHash.getHash(hostname);
         if (hash == null) {
-            buf.append("<div class=netdbnotfound>");
-            buf.append("Hostname not found").append(' ');
-            buf.append(hostname);
-            buf.append("</div>");
+            buf.append("<div class=netdbnotfound>").append(_t("Hostname {0} not found in network databasae", hostname))
+               .append("</div>");
         } else {
             LeaseSet ls = _context.netDb().lookupLeaseSetLocally(hash);
             if (ls == null) {
@@ -705,9 +703,9 @@ class NetDbRenderer {
                 LookupWaiter lw = new LookupWaiter();
                 // use-case for the exploratory netDb here?
                 _context.netDb().lookupLeaseSetRemotely(hash, lw, lw, 8*1000, null);
-                // just wait right here in the middle of the rendering, sure
                 synchronized(lw) {
-                    try {lw.wait(9*1000);} catch (InterruptedException ie) {}
+                    try {lw.wait(9*1000);} // just wait right here in the middle of the rendering, sure
+                    catch (InterruptedException ie) {}
                 }
                 ls = _context.netDb().lookupLeaseSetLocally(hash);
             }
@@ -719,11 +717,8 @@ class NetDbRenderer {
                 renderLeaseSet(buf, ls, true, _context.clock().now(), false, distance);
                 buf.append("</div>");
             } else {
-                buf.append("<div class=netdbnotfound>");
-                buf.append(_t("LeaseSet")).append(" for ");
-                buf.append(hostname);
-                buf.append(' ').append(_t("not found in network database"));
-                buf.append("</div>");
+                buf.append("<div class=netdbnotfound>").append(_t("LeaseSet for {0} not found in network database", hostname))
+                   .append("</div>");
             }
         }
         out.write(buf.toString());
@@ -814,9 +809,9 @@ class NetDbRenderer {
         if (exp > 0) {buf.append(_t("Expires{0}", ":</b> " + DataHelper.formatDuration2(exp)).replace(" in", ""));}
         else {buf.append(_t("Expired{0} ago", ":</b> " + DataHelper.formatDuration2(0-exp)));}
         if (debug) {
-            buf.append(" &nbsp; &bullet; &nbsp;<b title=\"").append(_t("Received as published?")).append("\">RAP:</b> ").append(ls.getReceivedAsPublished());
-            buf.append(" &nbsp; &bullet; &nbsp;<b title=\"").append(_t("Received as reply?")).append("\">RAR:</b> ").append(ls.getReceivedAsReply());
-            buf.append(" &nbsp; &bullet; &nbsp;<b>").append(_t("Distance")).append(":</b> ").append(distance);
+            buf.append(" &nbsp; &bullet; &nbsp;<b title=\"").append(_t("Received as published?")).append("\">RAP:</b> ").append(ls.getReceivedAsPublished())
+               .append(" &nbsp; &bullet; &nbsp;<b title=\"").append(_t("Received as reply?")).append("\">RAR:</b> ").append(ls.getReceivedAsReply())
+               .append(" &nbsp; &bullet; &nbsp;<b>").append(_t("Distance")).append(":</b> ").append(distance);
             if (type != DatabaseEntry.KEY_TYPE_LEASESET) {
                 LeaseSet2 ls2 = (LeaseSet2) ls;
                 if (ls2.isOffline()) {
@@ -830,14 +825,14 @@ class NetDbRenderer {
                     buf.append(" &nbsp; &bullet; &nbsp;<b>").append(_t("Type")).append(":</b> ").append(ls2.getTransientSigningKey().getType());
                 }
             }
-            buf.append("</td></tr>\n<tr><td colspan=2><span class=ls_crypto>");
-            buf.append("<span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Signature type")).append(":</b> ");
+            buf.append("</td></tr>\n<tr><td colspan=2><span class=ls_crypto>")
+               .append("<span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Signature type")).append(":</b> ");
             if (dest != null && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
                 buf.append(dest.getSigningPublicKey().getType()).append("</span>");
             } else {buf.append(ls.getSigningKey().getType()).append("</span>");} // encrypted, show blinded key type
             if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
                 buf.append("<br><span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key"))
-                   .append(":</b> ELGAMAL_2048 [").append(ls.getEncryptionKey().toBase64().substring(0, 8))
+                   .append(":</b> ELGAMAL_2048 [").append(ls.getEncryptionKey().toBase64().substring(0,8))
                    .append("&hellip;]</span>");
             } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
                 LeaseSet2 ls2 = (LeaseSet2) ls;
@@ -853,8 +848,8 @@ class NetDbRenderer {
                .append(":</b> ").append(ls.getRoutingKey().toBase64().substring(0,16))
                .append("&hellip;</span></td></tr>\n");
         } else {
-            buf.append("</td></tr>\n<tr><td colspan=2>");
-            buf.append("<span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Signature type")).append(":</b> ");
+            buf.append("</td></tr>\n<tr><td colspan=2>")
+               .append("<span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Signature type")).append(":</b> ");
             if (dest != null && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {buf.append(dest.getSigningPublicKey().getType());}
             else {buf.append(ls.getSigningKey().getType());} // encrypted, show blinded key type
             buf.append("</span> ");
@@ -877,12 +872,10 @@ class NetDbRenderer {
         boolean isMeta = ls.getType() == DatabaseEntry.KEY_TYPE_META_LS2;
         for (int i = 0; i < ls.getLeaseCount(); i++) {
             Lease lease = ls.getLease(i);
-            buf.append("<li title=\"").append(_t("Lease")).append("\"><b");
-            buf.append(" class=\"leaseNumber\">");
-            buf.append(i + 1);
-            buf.append("</b> <span class=tunnel_peer title=\"Gateway\">");
-            buf.append(_context.commSystem().renderPeerHTML(lease.getGateway(), false));
-            buf.append("</span> ");
+            buf.append("<li title=\"").append(_t("Lease")).append("\"><b").append(" class=\"leaseNumber\">")
+               .append(i + 1).append("</b> <span class=tunnel_peer title=\"Gateway\">")
+               .append(_context.commSystem().renderPeerHTML(lease.getGateway(), false))
+               .append("</span> ");
             if (!isMeta && debug) {
                 buf.append("<span class=netdb_tunnel title=\"Tunnel ID\">").append(" <span class=tunnel_id>")
                    .append(lease.getTunnelId().getTunnelId()).append("</span></span> ");
@@ -897,8 +890,7 @@ class NetDbRenderer {
             }
             buf.append("</li>\n");
         }
-        buf.append("</ul>\n</td></tr>\n");
-        buf.append("</table>\n");
+        buf.append("</ul>\n</td></tr>\n</table>\n");
     }
 
     /**
@@ -1009,21 +1001,20 @@ class NetDbRenderer {
 
         if (!showStats) {
             // the summary table
-            buf.append("<table id=netdboverview width=100%>\n<tr><th colspan=3>");
-            buf.append(_t("Network Database Router Statistics"));
-            buf.append("</th></tr>\n<tr><td style=vertical-align:top>");
+            buf.append("<table id=netdboverview width=100%>\n<tr><th colspan=3>")
+               .append(_t("Network Database Router Statistics"))
+               .append("</th></tr>\n<tr><td style=vertical-align:top>");
             // versions table
             List<String> versionList = new ArrayList<String>(versions.objects());
             if (!versionList.isEmpty()) {
                 Collections.sort(versionList, Collections.reverseOrder(new VersionComparator()));
-                buf.append("<table id=netdbversions>\n");
-                buf.append("<thead>\n<tr><th>").append(_t("Version")).append("</th><th>")
-                   .append(_t("Count")).append("</th></tr>\n</thead>\n");
+                buf.append("<table id=netdbversions>\n").append("<thead>\n<tr><th>").append(_t("Version"))
+                   .append("</th><th>").append(_t("Count")).append("</th></tr>\n</thead>\n");
                 for (String routerVersion : versionList) {
                     int num = versions.count(routerVersion);
                     String ver = DataHelper.stripHTML(routerVersion);
-                    buf.append("<tr><td><span class=version><a href=\"/netdb?v=").append(ver).append("\">").append(ver);
-                    buf.append("</a></span></td><td>").append(num).append("</td></tr>\n");
+                    buf.append("<tr><td><span class=version><a href=\"/netdb?v=").append(ver).append("\">")
+                       .append(ver).append("</a></span></td><td>").append(num).append("</td></tr>\n");
                 }
                 buf.append("</table>\n");
             }
@@ -1088,8 +1079,8 @@ class NetDbRenderer {
             }
 
             // transports table
-            buf.append("<table id=netdbtransports>\n");
-            buf.append("<thead>\n<tr><th>").append(_t("Transports")).append("</th><th>").append(_t("Count")).append("</th></tr>\n</thead>\n");
+            buf.append("<table id=netdbtransports>\n")
+               .append("<thead>\n<tr><th>").append(_t("Transports")).append("</th><th>").append(_t("Count")).append("</th></tr>\n</thead>\n");
             for (int i = 0; i < TNAMES.length; i++) {
                 int num = transportCount[i];
                 if (num > 0) {buf.append("<tr><td>").append(_t(TNAMES[i])).append("</td><td>").append(num).append("</td></tr>\n");}
@@ -1098,8 +1089,9 @@ class NetDbRenderer {
 
             // country table
             List<String> countryList = new ArrayList<String>(countries.objects());
-            buf.append("<table id=netdbcountrylist data-sortable>\n");
-            buf.append("<thead>\n<tr><th>").append(_t("Country")).append("</th><th data-sort-default>").append(_t("Count")).append("</th></tr>\n</thead>\n");
+            buf.append("<table id=netdbcountrylist data-sortable>\n")
+               .append("<thead>\n<tr><th>").append(_t("Country")).append("</th><th data-sort-default>")
+               .append(_t("Count")).append("</th></tr>\n</thead>\n");
             if (!countryList.isEmpty()) {
                 Collections.sort(countryList, new CountryComparator());
                 buf.append("<tbody id=cclist>\n");

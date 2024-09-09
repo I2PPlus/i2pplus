@@ -120,89 +120,75 @@ public class NetDbHelper extends FormHandler {
      *  @since 0.9.28
      */
     public void setSybil2(String c) {
-        if (c != null && c.length() > 0)
-            _sybil = DataHelper.stripHTML(c.trim());  // XSS
+        if (c != null && c.length() > 0) {_sybil = DataHelper.stripHTML(c.trim());} // XSS
     }
 
     /** @since 0.9.28 */
     public void setPort(String f) {
-        if (f == null)
-            return;
+        if (f == null) {return;}
         try {
             int dash = f.indexOf('-');
             if (dash > 0) {
                 _port = Integer.parseInt(f.substring(0, dash).trim());
                 _highPort = Integer.parseInt(f.substring(dash + 1).trim());
-            } else {
-                _port = Integer.parseInt(f.trim());
-            }
+            } else {_port = Integer.parseInt(f.trim());}
         } catch (NumberFormatException nfe) {}
     }
 
     /** @since 0.9.28 */
     public void setType(String f) {
-        if (f != null && f.length() > 0)
-            _type = SigType.parseSigType(f);
+        if (f != null && f.length() > 0) {_type = SigType.parseSigType(f);}
     }
 
     /** @since 0.9.49 */
     public void setEtype(String f) {
-        if (f != null && f.length() > 0)
-            _etype = EncType.parseEncType(f);
+        if (f != null && f.length() > 0) {_etype = EncType.parseEncType(f);}
     }
 
     /** @since 0.9.28 */
     public void setMtu(String f) {
-        if (f != null && f.length() > 0)
-            _mtu = DataHelper.stripHTML(f.trim());  // XSS
+        if (f != null && f.length() > 0) {_mtu = DataHelper.stripHTML(f.trim());} // XSS
     }
 
     /** @since 0.9.28 */
     public void setIpv6(String f) {
         if (f != null && f.length() > 0) {
-            _ipv6 = DataHelper.stripHTML(f.trim());  // XSS
-            if (!_ipv6.endsWith(":"))
-                _ipv6 = _ipv6 + ':';
+            _ipv6 = DataHelper.stripHTML(f.trim()); // XSS
+            if (!_ipv6.endsWith(":")) {_ipv6 = _ipv6 + ':';}
         }
     }
 
     /** @since 0.9.28 */
     public void setSsucaps(String f) {
-        if (f != null && f.length() > 0)
-            _ssucaps = DataHelper.stripHTML(f.trim());  // XSS
+        if (f != null && f.length() > 0) {_ssucaps = DataHelper.stripHTML(f.trim());} // XSS
     }
 
     /** @since 0.9.36 */
     public void setTransport(String f) {
-        if (f != null && f.length() > 0)
-            _transport = DataHelper.stripHTML(f).toUpperCase(Locale.US);
+        if (f != null && f.length() > 0) {_transport = DataHelper.stripHTML(f).toUpperCase(Locale.US);}
     }
 
     /** @since 0.9.28 */
     public void setCost(String f) {
-        try {
-            _cost = Integer.parseInt(f);
-        } catch (NumberFormatException nfe) {}
+        try {_cost = Integer.parseInt(f);}
+        catch (NumberFormatException nfe) {}
     }
 
     /** @since 0.9.38 */
     public void setMode(String f) {
-        try {
-            _mode = Integer.parseInt(f);
-        } catch (NumberFormatException nfe) {}
+        try {_mode = Integer.parseInt(f);}
+        catch (NumberFormatException nfe) {}
     }
 
     /** @since 0.9.38 */
     public void setDate(String f) {
-        try {
-            _date = Long.parseLong(f);
-        } catch (NumberFormatException nfe) {}
+        try {_date = Long.parseLong(f);}
+        catch (NumberFormatException nfe) {}
     }
 
     public void setFull(String f) {
-        try {
-            _full = Integer.parseInt(f);
-        } catch (NumberFormatException nfe) {}
+        try {_full = Integer.parseInt(f);}
+        catch (NumberFormatException nfe) {}
     }
 
     public void setLease(String l) {
@@ -213,18 +199,15 @@ public class NetDbHelper extends FormHandler {
 
     /** @since 0.9.57 */
     public void setLeaseset(String f) {
-        if (f != null && f.length() > 0)
-            _hostname = DataHelper.stripHTML(f);
+        if (f != null && f.length() > 0) {_hostname = DataHelper.stripHTML(f);}
     }
 
     /** @since 0.9.36 */
     public void setLimit(String f) {
         try {
             _limit = Integer.parseInt(f);
-            if (_limit <= 0)
-                _limit = Integer.MAX_VALUE;
-            else if (_limit <= 10)
-                _limit = 10;
+            if (_limit <= 0) {_limit = Integer.MAX_VALUE;}
+            else if (_limit <= 10) {_limit = 10;}
         } catch (NumberFormatException nfe) {}
     }
 
@@ -232,38 +215,29 @@ public class NetDbHelper extends FormHandler {
     public void setPage(String f) {
         try {
             _page = Integer.parseInt(f) - 1;
-            if (_page < 0)
-                _page = 0;
+            if (_page < 0) {_page = 0;}
         } catch (NumberFormatException nfe) {}
     }
 
     /** @since 0.9.57 */
-    public void setSort(String f) {
-        _sort = f;
-    }
+    public void setSort(String f) {_sort = f;}
 
     /** @since 0.9.58 */
     public void setIntros(String f) {
-        try {
-            _icount = Integer.parseInt(f);
-        } catch (NumberFormatException nfe) {}
+        try {_icount = Integer.parseInt(f);}
+        catch (NumberFormatException nfe) {}
     }
 
     public void setClientPage(String f) {
-        try {
-
-        } catch(Exception e){
-            //if (_log.shouldLog)
-        }
+        try {}
+        catch(Exception e){}
     }
 
     /**
      *  call for non-text-mode browsers
      *  @since 0.9.1
      */
-    public void allowGraphical() {
-        _graphical = true;
-    }
+    public void allowGraphical() {_graphical = true;}
 
     /**
      *  Override to save it
@@ -308,23 +282,20 @@ public class NetDbHelper extends FormHandler {
                     toSave.put(Analysis.PROP_BLOCK, Boolean.toString(enable != null));
                     String nonff = getJettyString("nonff");
                     toSave.put(Analysis.PROP_NONFF, Boolean.toString(nonff != null));
-                    if (_context.router().saveConfig(toSave, null))
+                    if (_context.router().saveConfig(toSave, null)) {
                         addFormNotice(_t("Configuration saved successfully."));
-                    else
-                        addFormError("Error saving the configuration (applied but not saved) - please see the error logs");
+                    } else {
+                        addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"));
+                    }
                     Analysis.getInstance(_context).schedule();
-                } catch (NumberFormatException nfe) {
-                        addFormError("bad value");
-                }
+                } catch (NumberFormatException nfe) {addFormError("bad value");}
         }
     }
 
     /**
      *   storeWriter() must be called previously
      */
-    public String getFloodfillNetDbSummary() {
-        return getNetDbSummary();
-    }
+    public String getFloodfillNetDbSummary() {return getNetDbSummary();}
 
     public String getNetDbSummary() {
         NetDbRenderer renderer = new NetDbRenderer(_context);
@@ -434,10 +405,11 @@ public class NetDbHelper extends FormHandler {
         StringBuilder buf = new StringBuilder(16*1024);
         buf.append("<form action=\"/netdb\" method=GET id=netdbSearch>\n")
            .append("<input type=hidden name=\"nonce\" value=\"").append(_newNonce).append("\" >\n")
-           .append("<table id=netdblookup><tr><th colspan=4>Network Database Search</th></tr>\n")
-           .append("<tr><td><b>Capabilities</b></td><td><input type=text name=\"caps\" title=\"e.g. f or XOfR\"></td>\n")
-           .append("<td><b>Cost</b></td><td><input type=text name=\"cost\"></td></tr>\n")
-           .append("<tr><td><b>Country</b></td><td><select name=\"c\"><option value=\"\" selected=selected></option>");
+           .append("<table id=netdblookup><tr><th colspan=4>").append(_t("Network Database Search")).append("</th></tr>\n")
+           .append("<tr><td><b>").append(_t("Capabilities")).append("</b></td><td><input type=text name=\"caps\" title=\"")
+           .append(_t("e.g. f or XOfR")).append("\"></td>\n")
+           .append("<td><b>").append(_t("Cost")).append("</b></td><td><input type=text name=\"cost\"></td></tr>\n")
+           .append("<tr><td><b>").append(_t("Country")).append("</b></td><td><select name=\"c\"><option value=\"\" selected=selected></option>");
         Map<String, String> sorted = new TreeMap<String, String>(Collator.getInstance());
         for (Map.Entry<String, String> e : _context.commSystem().getCountries().entrySet()) {
             String tr = Messages.getString(e.getValue(), _context, Messages.COUNTRY_BUNDLE_NAME);
