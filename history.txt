@@ -1,4 +1,8 @@
 2024-09-08 dr|z3d
+ * Console: Display leaseset count badge in sidebar net status section when we
+   are floodfill (enabled in dark theme, other themes to follow)
+
+2024-09-08 dr|z3d
  * I2PSnark: Make file filters and trackers sections togglable on config page
    (dark, ubergine, zilvero themes, others to follow)
 
