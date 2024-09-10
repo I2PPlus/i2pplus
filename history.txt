@@ -1,3 +1,6 @@
+2024-09-10 dr|z3d
+ * Console: Add pagination when displaying all routerinfos in NetDb
+
 2024-09-08 dr|z3d
  * Console: Display leaseset count badge in sidebar net status section when we
    are floodfill (enabled in dark theme, other themes to follow)
