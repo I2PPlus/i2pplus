@@ -237,8 +237,7 @@ class NetDbRenderer {
                 if (caps != null) {buf.append("Caps ").append(caps).append(' ');}
                 if (ssucaps != null) {buf.append("Caps ").append(ssucaps).append(' ');}
                 if (tr != null) {buf.append("Transport ").append(tr).append(' ');}
-                buf.append(_t("not found in network database"));
-                buf.append("</div>");
+                buf.append(_t("not found in network database")).append("</div>");
             } else {
                 List<RouterInfo> results = new ArrayList<RouterInfo>(routers);
                 int sz = results.size();
@@ -247,7 +246,6 @@ class NetDbRenderer {
                 int toSkip = pageSize * page;
                 int last = Math.min(toSkip + pageSize, sz - 1);
                 if (last < sz - 1) {morePages = true;}
-                if (page > 0 || morePages) {outputPageLinks(buf, ubuf, page, pageSize, morePages);}
                 for (int i = toSkip; i <= last; i++) {
                     RouterInfo ri = results.get(i);
                     renderRouterInfo(buf, ri, false, true);
@@ -271,19 +269,23 @@ class NetDbRenderer {
      */
     private void outputPageLinks(StringBuilder buf, StringBuilder ubuf, int page, int pageSize, boolean morePages) {
         if (page > 0 || morePages) {
-            buf.append("<p class=infohelp id=pagenav>");
+            buf.append("<div id=pagenav>");
             if (page > 0) {
-                buf.append("<a href=\"/netdb?pg=").append(page)
-                   .append("&amp;ps=").append(pageSize).append(ubuf).append("\">")
-                   .append(_t("Previous Page")).append("</a>&nbsp;&nbsp;&nbsp;");
+                buf.append("<span id=prevPage class=pageLink>").append("<a href=\"/netdb?pg=").append(page)
+                   .append("&amp;ps=").append(pageSize).append(ubuf).append("\" title=\"").append(_t("Previous Page")).append("\">")
+                   .append("⏴").append("</a></span>");
+            }  else {
+                buf.append("<span id=prevPage class=\"pageLink disabled\">").append("⏴").append("</span>" );
             }
-            buf.append(_t("Page")).append(' ').append(page + 1);
+            buf.append(" <span class=pageLink id=currentPage>").append(page + 1).append("</span> ");
             if (morePages) {
-                buf.append("&nbsp;&nbsp;&nbsp;<a href=\"/netdb?pg=").append(page + 2)
-                   .append("&amp;ps=").append(pageSize).append(ubuf).append("\">")
-                   .append(_t("Next Page")).append("</a>");
+                buf.append("<span id=nextPage class=pageLink><a href=\"/netdb?pg=").append(page + 2)
+                   .append("&amp;ps=").append(pageSize).append(ubuf).append("\" title=\"").append(_t("Next Page")).append("\">")
+                   .append("⏵").append("</a></span>");
+            } else {
+                buf.append("<span id=nextPage class=\"pageLink disabled\">").append("⏵").append("</span>");
             }
-            buf.append("</p>");
+            buf.append("</div>");
         }
     }
 
@@ -924,26 +926,13 @@ class NetDbRenderer {
         if (showStats && full && page == 0) {
             buf.append("<p class=infohelp id=debugmode>")
                .append(_t("Advanced mode - includes all statistics published by floodfills."))
-               .append("<a href=\"/netdb?f=2\">[Compact mode]</a></p>\n");
+               .append(" <a href=\"/netdb?f=2\">[Compact mode]</a></p>\n");
         } else if (shortStats && page == 0) {
             buf.append("<p class=infohelp>")
                .append(_t("Compact mode - does not include statistics published by floodfills."))
-               .append("<a href=\"/netdb?f=1\">[Advanced mode]</a></p>\n");
+               .append(" <a href=\"/netdb?f=1\">[Advanced mode]</a></p>\n");
         }
-        if (showStats && (page > 0 || nextpg)) {
-            buf.append("<p class=infohelp id=pagenav>");
-            if (page > 0) {
-                buf.append("<a href=\"/netdb?f=").append(mode).append("&amp;pg=").append(page)
-                   .append("&amp;ps=").append(pageSize).append("\">").append(_t("Previous Page"))
-                   .append("</a>&nbsp;&nbsp;&nbsp;");
-            }
-            buf.append(_t("Page")).append(' ').append(page + 1);
-            if (nextpg) {
-                buf.append("&nbsp;&nbsp;&nbsp;<a href=\"/netdb?f=").append(mode).append("&amp;pg=").append(page + 2)
-                   .append("&amp;ps=").append(pageSize).append("\">").append(_t("Next Page")).append("</a>");
-            }
-            buf.append("</p>");
-        }
+
         if (showStats && page == 0) {
             RouterInfo ourInfo = _context.router().getRouterInfo();
             renderRouterInfo(buf, ourInfo, true, true);
@@ -982,21 +971,38 @@ class NetDbRenderer {
                 transportCount[classifyTransports(ri)]++;
             }
         }
-        if (showStats && (page > 0 || morePages)) {
-            buf.append("<p class=infohelp id=pagenav>");
-            if (page > 0) {
-                buf.append("<a href=\"/netdb?f=").append(mode).append("&amp;pg=").append(page).append("&amp;ps=").append(pageSize).append("\">");
-                buf.append(_t("Previous Page"));
-                buf.append("</a>&nbsp;&nbsp;&nbsp;");
+
+        int totalDisplayed = routers.size() - 1; // -1 for us
+        int totalPages = (int) Math.ceil((double) totalDisplayed / pageSize);
+
+        if (showStats && routers.size() > pageSize) {
+            int current = page + 1;
+            if (page == 0) {page++;}
+            buf.append("<div id=pagenav>");
+            if (current > 1) {
+                buf.append("<span id=prevPage class=pageLink>").append("<a href=\"/netdb?f=").append(mode).append("&amp;pg=")
+                   .append(current-1).append("&amp;ps=").append(pageSize).append("\" title=\"").append(_t("Previous Page"))
+                   .append("\">⏴</a></span>");
+            } else {
+                buf.append("<span id=prevPage class=\"pageLink disabled\">").append("⏴").append("</span>" );
             }
-            buf.append(_t("Page")).append(' ').append(page + 1);
-            if (morePages) {
-                buf.append("&nbsp;&nbsp;&nbsp;<a href=\"/netdb?f=").append(mode).append("&amp;pg=")
-                   .append(page + 2).append("&amp;ps=").append(pageSize).append("\">")
-                   .append(_t("Next Page"))
-                   .append("</a>");
+            for (int i = 1; i <= totalPages; i++) {
+                if (i <= totalPages) {
+                    buf.append(" <span class=pageLink").append(i == current ? " id=currentPage" : "")
+                       .append(">").append("<a href=\"/netdb?f=").append(mode).append("&amp;pg=")
+                       .append(i).append("&amp;ps=").append(pageSize).append("\">").append(i).append("</a></span> ");
+                }
             }
-            buf.append("</p>");
+            if (current < totalPages) {
+                buf.append("<span id=nextPage class=pageLink>").append("<a href=\"/netdb?f=").append(mode).append("&amp;pg=")
+                   .append(current+1).append("&amp;ps=").append(pageSize).append("\" title=\"").append(_t("Next Page")).append("\">⏵</a></span>");
+            } else {
+                buf.append("<span id=nextPage class=\"pageLink disabled\">").append("⏵").append("</span>");
+            }
+            buf.append("</div>");
+        } else if (showStats) {
+            buf.append("<div id=pagenav>").append(_t("Displaying")).append(" ").append(totalDisplayed).append(" ")
+               .append(routers.size() > 1 ? _t("routers") : _t("router")).append("</div>");
         }
 
         if (!showStats) {

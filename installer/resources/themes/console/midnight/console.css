@@ -2941,3 +2941,13 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 #ipbans.toggle:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
 #ipbans.toggle.expanded::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:none}
 #ipbans.toggle.expanded:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:none}
+
+/* netdb routers pagenav */
+.pageLink{margin:3px 1px 1px;padding:3px 8px 4px;min-width:20px;display:inline-block;vertical-align:middle;white-space:nowrap;line-height:1;letter-spacing:.01em;border:var(--border_inner);box-shadow:var(--btn_shadow);background:var(--badge);font-size:120%}
+.pageLink:active{box-shadow:var(--btn_shadow_active)}
+.pageLink.disabled{opacity:.5}
+#currentPage.pageLink{font-weight:800!important;box-shadow:var(--btn_shadow_active)}
+#currentPage.pageLink a{font-weight:800!important;color:var(--ink);pointer-events:none}
+#netdb.main{position:relative;contain:paint}
+#pagenav{margin:0 -11px -5px;padding:12px;position:sticky;bottom:0;left:-11px;right:-11px;z-index:999999;text-align:center;border:var(--border_inner);box-shadow:var(--bevel);border:var(--border);background:linear-gradient(to bottom,rgba(0,0,64,.15),rgba(0,0,48,.15) 50%,rgba(0,0,32,.15) 50%,rgba(0,0,16,.15)),var(--th);background-size:100%,100% 4px,4px 100%}
+

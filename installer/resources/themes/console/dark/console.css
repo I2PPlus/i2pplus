@@ -3042,3 +3042,10 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 #sidebar #sb_status #lsCount.badge{margin-left:2px;display:inline-block;line-height:1;font-size:11.7333px}
 }
 
+/* netdb routers pagenav */
+.pageLink{margin:3px 1px 1px;padding:3px 8px 4px;min-width:20px;display:inline-block;vertical-align:middle;white-space:nowrap;line-height:1;letter-spacing:.01em;background:var(--badge);font-size:120%;box-shadow:0 0 0 1px #141,var(--highlight)}
+.pageLink.disabled{opacity:.5}
+#currentPage.pageLink{font-weight:800}
+#currentPage.pageLink a{color:var(--ink);pointer-events:none}
+#netdb.main{position:relative;contain:paint}
+#pagenav{margin:0 -11px -2px;padding:12px;position:sticky;bottom:0;left:-11px;right:-11px;text-align:center;border:var(--border);border-radius:0 0 3px 3px;box-shadow:var(--bevel);background:#000}

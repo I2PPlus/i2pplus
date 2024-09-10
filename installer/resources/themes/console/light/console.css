@@ -2740,6 +2740,7 @@ h1[class],#wizardpage h1{padding:20px 15px 17px 55px;font-size:19pt;background-s
 .main,#news.news,h1,.sorry{margin-left:252px}
 .netdb_header img[src^="/flags"]{width:32px}
 .netdb_header .peerFlag{transform:translateY(1px)}
+.netdb_header .unknownflag {margin-right:2px;margin-top:-1px}
 .newsAuthor{padding:0 0 0 14px;font-size:9.5pt;background-size:12px;background-position:left center}
 .percentBarText{margin-top:-1px}
 .sitemapLabel{min-height:16px}
@@ -2886,3 +2887,12 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 @media (min-width:1600px) {
 #sidebar #sb_status #lsCount.badge{margin-left:0;padding:1px 4px 0;display:inline-block;line-height:1;font-size:11.7333px;color:var(--ink)}
 }
+
+/* netdb routers pagenav */
+.pageLink{margin:3px 1px 1px;padding:3px 8px 4px;min-width:20px;display:inline-block;vertical-align:middle;white-space:nowrap;line-height:1;letter-spacing:.01em;border:var(--border_inner);box-shadow:var(--btn_shadow);background:var(--badge);font-size:120%}
+.pageLink:active{box-shadow:var(--btn_shadow_active)}
+.pageLink.disabled{opacity:.5}
+#currentPage.pageLink{font-weight:800!important;box-shadow:var(--btn_shadow_active)}
+#currentPage.pageLink a{font-weight:800!important;color:var(--ink);pointer-events:none}
+#netdb.main{position:relative;contain:paint}
+#pagenav{margin:0 -16px -16px;padding:12px 12px 16px;position:sticky;bottom:-4px;left:-16px;right:-16px;z-index:99999;text-align:center;border:var(--border_inner);border-radius:0 0 1px 1px;box-shadow:var(--bevel);background:#f8f8ff var(--bg) repeat}

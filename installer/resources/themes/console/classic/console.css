@@ -2511,3 +2511,11 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 #ipbans.toggle:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
 #ipbans.toggle.expanded::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:none}
 #ipbans.toggle.expanded:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:none}
+
+/* netdb routers pagenav */
+.pageLink{margin:3px 1px 1px;padding:3px 8px 4px;min-width:20px;display:inline-block;vertical-align:middle;white-space:nowrap;line-height:1;letter-spacing:.01em;box-shadow:var(--box_border_badge);background:var(--badge);font-size:120%}
+.pageLink.disabled{opacity:.5}
+#currentPage.pageLink{font-weight:800}
+#currentPage.pageLink a{color:var(--ink);pointer-events:none}
+#netdb.main{position:relative;contain:paint}
+#pagenav{margin:0 -16px -2px;padding:12px;position:sticky;bottom:0;left:-16px;right:-16px;text-align:center;border:var(--border);border-radius:0 0 3px 3px;background:var(--bg)}
