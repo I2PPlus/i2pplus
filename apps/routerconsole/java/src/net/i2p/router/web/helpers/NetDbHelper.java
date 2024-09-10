@@ -38,7 +38,7 @@ public class NetDbHelper extends FormHandler {
     private EncType _etype;
     private String _newNonce;
     private boolean _postOK;
-    private static final int DEFAULT_LIMIT = SystemVersion.isSlow() ? 200 : 500;
+    private static final int DEFAULT_LIMIT = SystemVersion.isSlow() ? 100 : 200;
     private static final int DEFAULT_PAGE = 0;
     public boolean isFloodfill() {return _context.netDb().floodfillEnabled();}
 
