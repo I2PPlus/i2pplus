@@ -2890,10 +2890,10 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 
 /* netdb routers pagenav */
 .pageLink{margin:3px 1px 1px;padding:3px 8px 4px;min-width:20px;display:inline-block;vertical-align:middle;white-space:nowrap;line-height:1;letter-spacing:.01em;border:var(--border_inner);box-shadow:var(--btn_shadow);background:var(--badge);font-size:120%}
-.pageLink:active{box-shadow:var(--btn_shadow_active)}
+.pageLink:hover{border:1px solid var(--hover)}
+.pageLink:active,#currentPage .pageLink{padding:4px 7px 3px 9px;box-shadow:var(--btn_shadow_active)}
 .pageLink.disabled{opacity:.5}
 #currentPage{font-weight:800;color:var(--ink);pointer-events:none}
-#currentPage .pageLink{box-shadow:var(--btn_shadow_active)}
 #netdb.main{position:relative;contain:paint}
-#pagenav{margin:0 -16px -11px;padding:12px;position:sticky;bottom:-4px;left:-16px;right:-16px;z-index:99999;text-align:center;border:var(--border_inner);border-radius:0 0 1px 1px;box-shadow:var(--bevel);background:var(--nav)}
-#results{margin:3px auto;width:100%;display:block;font-weight:600}
+#pagenav{margin:0 -16px -11px;padding:12px;position:sticky;bottom:-4px;left:-16px;right:-16px;z-index:99999;text-align:center;border:var(--border_inner);border-top:var(--border);border-radius:0 0 1px 1px;box-shadow:var(--bevel),0 -1px 5px #0002;background:var(--nav)}
+#results{margin:2px auto;width:100%;display:block;font-size:115%;font-weight:600}

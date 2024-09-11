@@ -3051,4 +3051,4 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 #currentPage .pageLink{font-weight:800;box-shadow:0 0 0 1px #141,var(--btn_shadow_active)}
 #netdb.main{position:relative;contain:paint}
 #pagenav{margin:0 -11px -2px;padding:12px;position:sticky;bottom:0;left:-11px;right:-11px;text-align:center;border:var(--border);border-radius:0 0 3px 3px;box-shadow:var(--bevel);background:#000}
-#results{margin:5px auto;width:100%;display:block;font-weight:600}
+#results{margin:0 auto 5px;width:100%;display:block;font-size:110%;font-weight:600}
