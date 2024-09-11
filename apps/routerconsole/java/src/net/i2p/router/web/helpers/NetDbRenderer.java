@@ -255,7 +255,8 @@ class NetDbRenderer {
                         buf.setLength(0);
                     }
                 }
-                if (page > 0 || morePages) {outputPageLinks(buf, ubuf, page, pageSize, morePages, sz);}
+                //if (page > 0 || morePages) {paginate(buf, ubuf, page, pageSize, morePages, sz);}
+                paginate(buf, ubuf, page, pageSize, morePages, sz);
             }
         }
         out.write(buf.toString());
@@ -267,35 +268,43 @@ class NetDbRenderer {
     /**
      *  @since 0.9.64 split out from above
      */
-    private void outputPageLinks(StringBuilder buf, StringBuilder ubuf, int page, int pageSize, boolean morePages, int sz) {
+    private void paginate(StringBuilder buf, StringBuilder ubuf, int page, int pageSize, boolean morePages, int sz) {
         int totalPages = (int) Math.ceil((double) sz / pageSize);
+        String results = "<span id=results>" + sz + " " + (sz != 1 ? _t("results") : _t("result")) + "</span>\n";
+        buf.append("<div id=pagenav>\n").append(results);
         if (sz > pageSize) {
             int current = page + 1;
             if (page == 0) {page++;}
-            buf.append("<div id=pagenav>");
             if (current > 1) {
-                buf.append("<span id=prevPage class=pageLink>").append("<a href=\"/netdb?pg=").append(page)
-                   .append("&amp;ps=").append(pageSize).append(ubuf).append("\" title=\"").append(_t("Previous Page")).append("\">")
-                   .append("⏴").append("</a></span>");
+                buf.append("<a href=\"/netdb?pg=").append(page).append("&amp;ps=").append(pageSize).append(ubuf)
+                   .append("\" title=\"").append(_t("Previous Page")).append("\"><span id=prevPage class=pageLink>").append("⏴</span></a>");
             }  else {
                 buf.append("<span id=prevPage class=\"pageLink disabled\">").append("⏴").append("</span>" );
             }
             for (int i = 1; i <= totalPages; i++) {
                 if (i <= totalPages) {
-                    buf.append(" <span class=pageLink").append(i == current ? " id=currentPage" : "")
-                       .append(">").append("<a href=\"/netdb?pg=").append(i).append("&amp;ps=").append(pageSize)
-                       .append(ubuf).append("\">").append(i).append("</a></span> ");
+                    buf.append(" <a href=\"/netdb?pg=").append(i).append("&amp;ps=").append(pageSize).append(ubuf).append("\"")
+                       .append(i == current ? " id=currentPage" : "").append(">")
+                       .append("<span class=pageLink").append(">").append(i).append("</span></a> ");
                 }
             }
             if (current < totalPages) {
-                buf.append("<span id=nextPage class=pageLink><a href=\"/netdb?pg=").append(page + 2)
-                   .append("&amp;ps=").append(pageSize).append(ubuf).append("\" title=\"").append(_t("Next Page")).append("\">")
-                   .append("⏵").append("</a></span>");
+                buf.append("<a href=\"/netdb?pg=").append(page + 2).append("&amp;ps=").append(pageSize).append(ubuf)
+                   .append("\" title=\"").append(_t("Next Page")).append("\">").append("<span id=nextPage class=pageLink>⏵</span></a>\n");
             } else {
-                buf.append("<span id=nextPage class=\"pageLink disabled\">").append("⏵").append("</span>");
+                buf.append("<span id=nextPage class=\"pageLink disabled\">").append("⏵").append("</span>\n");
             }
-            buf.append("</div>");
         }
+        //renderPageSizeInput(buf);
+        buf.append("</div>\n");
+    }
+
+    private void renderPageSizeInput(StringBuilder buf) {
+        buf.append("<form id=pagesize hidden>\n")
+           .append("<label>").append(_t("Results per page")).append(": ")
+           .append("<input type=text name=pageSize value=\"\" maxlength=4 pattern=\"[0-9]{1,4}\"></label>\n")
+           .append("<input type=submit value=").append(_t("Update")).append(">\n")
+           .append("</form>");
     }
 
     /**
@@ -981,37 +990,11 @@ class NetDbRenderer {
             }
         }
 
-        int totalDisplayed = routers.size() - 1; // -1 for us
-        int totalPages = (int) Math.ceil((double) totalDisplayed / pageSize);
-
-        if (showStats && routers.size() > pageSize) {
-            int current = page + 1;
-            if (page == 0) {page++;}
-            buf.append("<div id=pagenav>");
-            if (current > 1) {
-                buf.append("<span id=prevPage class=pageLink>").append("<a href=\"/netdb?f=").append(mode).append("&amp;pg=")
-                   .append(current-1).append("&amp;ps=").append(pageSize).append("\" title=\"").append(_t("Previous Page"))
-                   .append("\">⏴</a></span>");
-            } else {
-                buf.append("<span id=prevPage class=\"pageLink disabled\">").append("⏴").append("</span>" );
-            }
-            for (int i = 1; i <= totalPages; i++) {
-                if (i <= totalPages) {
-                    buf.append(" <span class=pageLink").append(i == current ? " id=currentPage" : "")
-                       .append(">").append("<a href=\"/netdb?f=").append(mode).append("&amp;pg=")
-                       .append(i).append("&amp;ps=").append(pageSize).append("\">").append(i).append("</a></span> ");
-                }
-            }
-            if (current < totalPages) {
-                buf.append("<span id=nextPage class=pageLink>").append("<a href=\"/netdb?f=").append(mode).append("&amp;pg=")
-                   .append(current+1).append("&amp;ps=").append(pageSize).append("\" title=\"").append(_t("Next Page")).append("\">⏵</a></span>");
-            } else {
-                buf.append("<span id=nextPage class=\"pageLink disabled\">").append("⏵").append("</span>");
-            }
-            buf.append("</div>");
-        } else if (showStats) {
-            buf.append("<div id=pagenav>").append(_t("Displaying")).append(" ").append(totalDisplayed).append(" ")
-               .append(routers.size() > 1 ? _t("routers") : _t("router")).append("</div>");
+        if (showStats) {
+            int sz = routers.size() - 1; // -1 for us
+            StringBuilder ubuf = new StringBuilder();
+            ubuf.append("&amp;f=").append(mode);
+            paginate(buf, ubuf, page, pageSize, morePages, sz);
         }
 
         if (!showStats) {
