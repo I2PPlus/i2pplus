@@ -127,7 +127,6 @@ public class Blocklist {
     public static final String ID_SYBIL = "sybil";
     public static final String ID_TOR = "tor";
 
-
     /**
      *  Router MUST call startup()
      */
@@ -254,7 +253,7 @@ public class Blocklist {
         public final File file;
         public final String id;
         public long version;
-        public BLFile(File f, String s) { file = f; id = s; }
+        public BLFile(File f, String s) {file = f; id = s;}
     }
 
     /**
@@ -276,7 +275,7 @@ public class Blocklist {
                 if (umgr != null) {
                     for (BLFile blf : blfs) {
                         if (blf.version > 0) {
-                               umgr.notifyInstalled(UpdateType.BLOCKLIST, blf.id, Long.toString(blf.version));
+                            umgr.notifyInstalled(UpdateType.BLOCKLIST, blf.id, Long.toString(blf.version));
                         }
                     }
                 } else {_log.warn("No update manager");}
@@ -296,8 +295,7 @@ public class Blocklist {
             clear();
             _lastExpired = System.currentTimeMillis();
             if (_log.shouldDebug()) {_log.debug("Expiring blocklist entrys at" + _lastExpired);}
-            // schedule the next one
-            super.requeue(expireInterval());
+            super.requeue(expireInterval()); // schedule the next one
         }
     }
 
@@ -343,9 +341,7 @@ public class Blocklist {
         private int process() {
             int count = 0;
                 try {
-                    for (BLFile blf : _files) {
-                        count = readBlocklistFile(blf, _blocklist, count);
-                    }
+                    for (BLFile blf : _files) {count = readBlocklistFile(blf, _blocklist, count);}
                 } catch (OutOfMemoryError oom) {
                     _log.log(Log.CRIT, "OOM processing the blocklist");
                     disable();
@@ -412,9 +408,7 @@ public class Blocklist {
      */
     private long[] allocate(List<BLFile> files) {
         int maxSize = 0;
-        for (BLFile blf : files) {
-            maxSize += getSize(blf.file);
-        }
+        for (BLFile blf : files) {maxSize += getSize(blf.file);}
         try {return new long[maxSize + files.size()];} // extra for wrapsave
         catch (OutOfMemoryError oom) {
             _log.log(Log.CRIT, "OOM creating the blocklist");
@@ -487,19 +481,10 @@ public class Blocklist {
                 }
                 byte[] ip1 = e.ip1;
                 if (ip1.length == 4) {
-                    //if (isFeedFile) {
-                    //    // temporary
-                    //    add(ip1, source);
-                    //    feedcount++;
-                    //} else {
-                        byte[] ip2 = e.ip2;
-                        store(ip1, ip2, blocklist, count++);
-                        ipcount += 1 + toInt(ip2) - toInt(ip1); // includes dups, oh well
-                    //}
-                } else {
-                    // IPv6
-                    add(ip1, source);
-                }
+                    byte[] ip2 = e.ip2;
+                    store(ip1, ip2, blocklist, count++);
+                    ipcount += 1 + toInt(ip2) - toInt(ip1); // includes dups, oh well
+                } else {add(ip1, source);} // IPv6
             }
         } catch (IOException ioe) {
             if (_log.shouldError()) {_log.error("Error reading the blocklist file", ioe);}
@@ -509,7 +494,7 @@ public class Blocklist {
             _log.log(Log.CRIT, "OOM reading the blocklist");
             return 0;
         } finally {
-            if (br != null) try { br.close(); } catch (IOException ioe) {}
+            if (br != null) try {br.close();} catch (IOException ioe) {}
         }
 
         if (_wrapSave != null) {
@@ -592,20 +577,17 @@ public class Blocklist {
         byte[] ip2;
         int start1 = 0;
         int end1 = buf.length();
-        if (end1 <= 0)
-            return null;  // blank
-        //if (buf.charAt(end1 - 1) == '\r') {  // DataHelper.readLine leaves the \r on there
+        if (end1 <= 0) {return null;}  // blank
+        //if (buf.charAt(end1 - 1) == '\r') { // DataHelper.readLine leaves the \r on there
         //    buf.deleteCharAt(end1 - 1);
         //    end1--;
         //}
-        //if (end1 <= 0)
-        //    return null;  // blank
+        //if (end1 <= 0) {return null;} // blank
         int start2 = -1;
         int mask = -1;
         String comment = null;
         int index = buf.indexOf('#');
-        if (index == 0)
-            return null;  // comment
+        if (index == 0) {return null;} // comment
         index = buf.lastIndexOf(':');
         if (index >= 0) {
             comment = buf.substring(0, index);
@@ -613,8 +595,7 @@ public class Blocklist {
         }
         if (end1 - start1 == 44 && buf.substring(start1).indexOf('.') < 0) {
             byte b[] = Base64.decode(buf.substring(start1));
-            if (b != null)
-                return new Entry(comment, Hash.create(b), null, null);
+            if (b != null) {return new Entry(comment, Hash.create(b), null, null);}
         }
         index = buf.indexOf('-', start1);
         if (index >= 0) {
@@ -627,64 +608,49 @@ public class Blocklist {
                 mask = index + 1;
             }
         }
-        if (end1 - start1 <= 0)
-            return null;  // blank
+        if (end1 - start1 <= 0) {return null;} // blank
         try {
             String sip = buf.substring(start1, end1);
             // IPv6
             sip = sip.replace(';', ':');
             InetAddress pi = InetAddress.getByName(sip);
-            if (pi == null) return null;
+            if (pi == null) {return null;}
             ip1 = pi.getAddress();
-            //if (ip1.length != 4)
-            //    throw new UnknownHostException();
+            //if (ip1.length != 4) {throw new UnknownHostException();}
             if (start2 >= 0) {
                 pi = InetAddress.getByName(buf.substring(start2));
-                if (pi == null) return null;
+                if (pi == null) {return null;}
                 ip2 = pi.getAddress();
-                if (ip2.length != 4)
-                    throw new UnknownHostException();
+                if (ip2.length != 4) {throw new UnknownHostException();}
                 if ((ip1[0] & 0xff) < 0x80 && (ip2[0] & 0xff) >= 0x80) {
                     if (_wrapSave == null) {
                         // don't cross the boundary 127.255.255.255 - 128.0.0.0
                         // because we are sorting using signed arithmetic
                         _wrapSave = new Entry(comment, null, new byte[] {(byte)0x80,0,0,0}, new byte[] {ip2[0], ip2[1], ip2[2], ip2[3]});
                         ip2 = new byte[] {127, (byte)0xff, (byte)0xff, (byte)0xff};
-                    } else
-                        // We only save one entry crossing the boundary, throw the rest out
-                        throw new NumberFormatException();
+                    } else {throw new NumberFormatException();} // We only save one entry crossing the boundary, throw the rest out
 
                 }
                 for (int i = 0; i < 4; i++) {
-                     if ((ip2[i] & 0xff) > (ip1[i] & 0xff))
-                        break;
-                     if ((ip2[i] & 0xff) < (ip1[i] & 0xff))
-                        throw new NumberFormatException(); // backwards
+                     if ((ip2[i] & 0xff) > (ip1[i] & 0xff)) {break;}
+                     if ((ip2[i] & 0xff) < (ip1[i] & 0xff)) {throw new NumberFormatException();} // backwards
                 }
             } else if (mask >= 0) {
                 int m = Integer.parseInt(buf.substring(mask));
-                if (m < 3 || m > 32)
-                    throw new NumberFormatException();
+                if (m < 3 || m > 32) {throw new NumberFormatException();}
                 ip2 = new byte[4];
                 // ick
-                for (int i = 0; i < 4; i++)
-                    ip2[i] = ip1[i];
-                for (int i = 0; i < 32-m; i++)
-                    ip2[(31-i)/8] |= (0x01 << (i%8));
-            } else {
-                ip2 = ip1;
-            }
+                for (int i = 0; i < 4; i++) {ip2[i] = ip1[i];}
+                for (int i = 0; i < 32-m; i++) {ip2[(31-i)/8] |= (0x01 << (i%8));}
+            } else {ip2 = ip1;}
         } catch (UnknownHostException uhe) {
-            if (shouldLog)
-                _log.logAlways(Log.WARN, "Format error in the blocklist file: " + buf);
+            if (shouldLog) {_log.logAlways(Log.WARN, "Format error in the blocklist file: " + buf);}
             return null;
         } catch (NumberFormatException nfe) {
-            if (shouldLog)
-                _log.logAlways(Log.WARN, "Format error in the blocklist file: " + buf);
+            if (shouldLog) {_log.logAlways(Log.WARN, "Format error in the blocklist file: " + buf);}
             return null;
         } catch (IndexOutOfBoundsException ioobe) {
-            if (shouldLog)
-                _log.logAlways(Log.WARN, "Format error in the blocklist file: " + buf);
+            if (shouldLog) {_log.logAlways(Log.WARN, "Format error in the blocklist file: " + buf);}
             return null;
         }
         return new Entry(comment, null, ip1, ip2);
@@ -700,19 +666,19 @@ public class Blocklist {
         int lines = 0;
         BufferedReader br = null;
         try {
-            br = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(blFile), "ISO-8859-1"));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(blFile), "ISO-8859-1"));
             String s;
             while ((s = br.readLine()) != null) {
-                if (s.length() > 0 && !s.startsWith("#"))
-                    lines++;
+                if (s.length() > 0 && !s.startsWith("#")) {lines++;}
             }
         } catch (IOException ioe) {
-            if (_log.shouldWarn())
-                _log.warn("Error reading the blocklist file", ioe);
+            if (_log.shouldWarn()) {_log.warn("Error reading the blocklist file", ioe);}
             return 0;
         } finally {
-            if (br != null) try { br.close(); } catch (IOException ioe) {}
+            if (br != null) {
+                try {br.close();}
+                catch (IOException ioe) {}
+            }
         }
         return lines;
     }
@@ -723,20 +689,19 @@ public class Blocklist {
      * Caller must re-sort if return code is > 0.
      */
     private int removeOverlap(long blist[], int count) {
-        if (count <= 0) return 0;
+        if (count <= 0) {return 0;}
         int lines = 0;
         for (int i = 0; i < count - 1; ) {
             int removed = 0;
             int to = getTo(blist[i]);
             for (int next = i + 1; next < count; next++) {
-                if (to < getFrom(blist[next]))
-                    break;
-                if (_log.shouldInfo())
+                if (to < getFrom(blist[next])) {break;}
+                if (_log.shouldInfo()) {
                     _log.info("Combining entries " + toStr(blist[i]) + " and " + toStr(blist[next]));
+                }
                 int nextTo = getTo(blist[next]);
-                if (nextTo > to) // else entry next is totally inside entry i
-                    store(getFrom(blist[i]), nextTo, blist, i);
-                blist[next] = Long.MAX_VALUE;  // to be removed with another sort
+                if (nextTo > to) {store(getFrom(blist[i]), nextTo, blist, i);} // else entry next is totally inside entry i
+                blist[next] = Long.MAX_VALUE; // to be removed with another sort
                 lines++;
                 removed++;
             }
@@ -753,10 +718,9 @@ public class Blocklist {
      * @param ip IPv4 or IPv6
      */
     public void add(String ip) {
-        if (!_haveIPv6 && ip.indexOf(':') >= 0)
-            return;
+        if (!_haveIPv6 && ip.indexOf(':') >= 0) {return;}
         byte[] pib = Addresses.getIPOnly(ip);
-        if (pib == null) return;
+        if (pib == null) {return;}
         add(pib, null);
     }
 
@@ -770,10 +734,9 @@ public class Blocklist {
      * @since 0.9.57
      */
     public void add(String ip, String source) {
-        if (!_haveIPv6 && ip.indexOf(':') >= 0)
-            return;
+        if (!_haveIPv6 && ip.indexOf(':') >= 0) {return;}
         byte[] pib = Addresses.getIPOnly(ip);
-        if (pib == null) return;
+        if (pib == null) {return;}
         add(pib, source);
     }
 
@@ -784,9 +747,7 @@ public class Blocklist {
      *
      * @param ip IPv4 or IPv6
      */
-    public void add(byte ip[]) {
-        add(ip, null);
-    }
+    public void add(byte ip[]) {add(ip, null);}
 
     /**
      * Maintain a simple in-memory single-IP blocklist
@@ -805,39 +766,35 @@ public class Blocklist {
             if (us != null) {
                 byte[] usb = Addresses.getIP(us);
                 if (usb != null && DataHelper.eq(usb, ip)) {
-                    if (_log.shouldWarn())
-                        _log.warn("Not adding our own IP " + us, new Exception());
+                    if (_log.shouldWarn()) {_log.warn("Not adding our own IP " + us, new Exception());}
                     return;
                 }
             }
             rv = add(toInt(ip));
-            if (rv)
-                _context.commSystem().removeExemption(Addresses.toString(ip));
+            if (rv) {_context.commSystem().removeExemption(Addresses.toString(ip));}
         } else if (ip.length == 16) {
-            if (!_haveIPv6)
-                return;
-            // don't ever block ourselves
+            if (!_haveIPv6) {return;}
             String us = _context.getProperty(UDPTransport.PROP_IPV6);
-            if (us != null) {
+            if (us != null) { // don't ever block ourselves
                 byte[] usb = Addresses.getIP(us);
                 if (usb != null && DataHelper.eq(usb, ip)) {
-                    if (_log.shouldWarn())
+                    if (_log.shouldWarn()) {
                         _log.warn("Not adding our own IP " + us, new Exception());
+                    }
                     return;
                 }
             }
             rv = add(new BigInteger(1, ip));
-            if (rv)
-                _context.commSystem().removeExemption(Addresses.toCanonicalString(ip));
-        } else {
-            return;
-        }
+            if (rv) {_context.commSystem().removeExemption(Addresses.toCanonicalString(ip));}
+        } else {return;}
+
         if (rv) {
             // lower log level at startup when initializing from blocklist files
-            if (source == null && _log.shouldWarn())
+            if (source == null && _log.shouldWarn()) {
                 _log.warn("Banning " + Addresses.toString(ip) + " for duration of session");
-            else if (_log.shouldDebug())
+            } else if (_log.shouldDebug()) {
                 _log.debug("Banning " + Addresses.toString(ip) + " for duration of session -> Source: " + source, new Exception("Source"));
+            }
         }
     }
 
@@ -850,11 +807,9 @@ public class Blocklist {
      * @since 0.9.28
      */
     public void remove(byte ip[]) {
-        if (ip.length == 4) {
-            remove(toInt(ip));
-        } else if (ip.length == 16) {
-            if (!_haveIPv6)
-                return;
+        if (ip.length == 4) {remove(toInt(ip));}
+        else if (ip.length == 16) {
+            if (!_haveIPv6) {return;}
             remove(new BigInteger(1, ip));
         }
     }
@@ -864,12 +819,9 @@ public class Blocklist {
      */
     private boolean add(int ip) {
         // save space, don't put in both
-        if (isPermanentlyBlocklisted(ip))
-            return false;
+        if (isPermanentlyBlocklisted(ip)) {return false;}
         Integer iip = Integer.valueOf(ip);
-        synchronized(_singleIPBlocklist) {
-            return _singleIPBlocklist.put(iip, DUMMY) == null;
-        }
+        synchronized(_singleIPBlocklist) {return _singleIPBlocklist.put(iip, DUMMY) == null;}
     }
 
     /**
@@ -933,8 +885,7 @@ public class Blocklist {
      */
     private List<byte[]> getAddresses(Hash peer) {
         RouterInfo pinfo = _context.netDb().lookupRouterInfoLocally(peer);
-        if (pinfo == null)
-            return Collections.emptyList();
+        if (pinfo == null) {return Collections.emptyList();}
         return getAddresses(pinfo);
     }
 
@@ -948,8 +899,7 @@ public class Blocklist {
         for (RouterAddress pa : pinfo.getAddresses()) {
             byte[] pib = pa.getIP();
             if (pib == null) continue;
-            if (!_haveIPv6 && pib.length == 16)
-                continue;
+            if (!_haveIPv6 && pib.length == 16) {continue;}
             // O(n**2)
             boolean dup = false;
             for (int i = 0; i < rv.size(); i++) {
@@ -958,8 +908,7 @@ public class Blocklist {
                     break;
                 }
             }
-            if (!dup)
-                rv.add(pib);
+            if (!dup) {rv.add(pib);}
          }
          return rv;
     }
@@ -973,13 +922,10 @@ public class Blocklist {
      */
     public boolean isBlocklisted(Hash peer) {
         List<byte[]> ips = getAddresses(peer);
-        if (ips.isEmpty())
-            return false;
+        if (ips.isEmpty()) {return false;}
         for (byte[] ip : ips) {
             if (isBlocklisted(ip)) {
-                if (!_context.banlist().isBanlisted(peer))
-                    // nice knowing you...
-                    banlist(peer, ip);
+                if (!_context.banlist().isBanlisted(peer)) {banlist(peer, ip);} // nice knowing you...
                 return true;
             }
         }
@@ -995,14 +941,11 @@ public class Blocklist {
      */
     public boolean isBlocklisted(RouterInfo pinfo) {
         List<byte[]> ips = getAddresses(pinfo);
-        if (ips.isEmpty())
-            return false;
+        if (ips.isEmpty()) {return false;}
         for (byte[] ip : ips) {
             if (isBlocklisted(ip)) {
                 Hash peer = pinfo.getHash();
-                if (!_context.banlist().isBanlisted(peer))
-                    // nice knowing you...
-                    banlist(peer, ip);
+                if (!_context.banlist().isBanlisted(peer)) {banlist(peer, ip);} // nice knowing you...
                 return true;
             }
         }
@@ -1015,10 +958,9 @@ public class Blocklist {
      * @param ip IPv4 or IPv6
      */
     public boolean isBlocklisted(String ip) {
-        if (!_haveIPv6 && ip.indexOf(':') >= 0)
-            return false;
+        if (!_haveIPv6 && ip.indexOf(':') >= 0) {return false;}
         byte[] pib = Addresses.getIPOnly(ip);
-        if (pib == null) return false;
+        if (pib == null) {return false;}
         return isBlocklisted(pib);
     }
 
@@ -1028,11 +970,9 @@ public class Blocklist {
      * @param ip IPv4 or IPv6
      */
     public boolean isBlocklisted(byte ip[]) {
-        if (ip.length == 4)
-            return isBlocklisted(toInt(ip));
+        if (ip.length == 4) {return isBlocklisted(toInt(ip));}
         if (ip.length == 16) {
-            if (!_haveIPv6)
-                return false;
+            if (!_haveIPv6) {return false;}
             return isOnSingleList(new BigInteger(1, ip));
         }
         return false;
@@ -1047,11 +987,9 @@ public class Blocklist {
      * Each long is ((from << 32) | to)
      */
     private boolean isBlocklisted(int ip) {
-        if (isOnSingleList(ip))
-            return true;
+        if (isOnSingleList(ip)) {return true;}
         if (_countryBlocklist != null) {
-            if (isPermanentlyBlocklisted(ip, _countryBlocklist, _countryBlocklistSize))
-                return true;
+            if (isPermanentlyBlocklisted(ip, _countryBlocklist, _countryBlocklistSize)) {return true;}
         }
         return isPermanentlyBlocklisted(ip);
     }
@@ -1080,66 +1018,49 @@ public class Blocklist {
      */
     private static boolean isPermanentlyBlocklisted(int ip, long[] blocklist, int blocklistSize) {
         int hi = blocklistSize - 1;
-        if (hi <= 0)
-            return false;
+        if (hi <= 0) {return false;}
         int lo = 0;
         int cur = hi / 2;
 
         while  (!match(ip, blocklist[cur])) {
-            if (isHigher(ip, blocklist[cur]))
-                lo = cur;
-            else
-                hi = cur;
-            // make sure we get the last one
-            if (hi - lo <= 1) {
-                if (lo == cur)
-                    cur = hi;
-                else
-                    cur = lo;
+            if (isHigher(ip, blocklist[cur])) {lo = cur;}
+            else {hi = cur;}
+            if (hi - lo <= 1) { // make sure we get the last one
+                if (lo == cur) {cur = hi;}
+                else {cur = lo;}
                 break;
-            } else {
-                cur = lo + ((hi - lo) / 2);
-            }
+            } else {cur = lo + ((hi - lo) / 2);}
         }
         return match(ip, blocklist[cur]);
     }
 
 /*
     // Is the IP included in the entry _blocklist[cur] ?
-    private boolean match(int ip, int cur) {
-        return match(ip, _blocklist[cur]);
-    }
+    private boolean match(int ip, int cur) {return match(ip, _blocklist[cur]);}
 */
 
     // Is the IP included in the compressed entry?
     private static boolean match(int ip, long entry) {
-        if (getFrom(entry) > ip)
-                return false;
+        if (getFrom(entry) > ip) {return false;}
         return (ip <= getTo(entry));
     }
 
     // Is the IP higher than the entry _blocklist[cur] ?
-    private static boolean isHigher(int ip, long entry) {
-        return ip > getFrom(entry);
-    }
+    private static boolean isHigher(int ip, long entry) {return ip > getFrom(entry);}
 
-    // methods to get and store the from/to values in the array
+    /* Methods to get and store the from/to values in the array */
 
     /**
      *  Public for console only, not a public API
      *  @since public since 0.9.48
      */
-    public static int getFrom(long entry) {
-        return (int) ((entry >> 32) & 0xffffffff);
-    }
+    public static int getFrom(long entry) {return (int) ((entry >> 32) & 0xffffffff);}
 
     /**
      *  Public for console only, not a public API
      *  @since public since 0.9.48
      */
-    public static int getTo(long entry) {
-        return (int) (entry & 0xffffffff);
-    }
+    public static int getTo(long entry) {return (int) (entry & 0xffffffff);}
 
     /**
      * The in-memory blocklist is an array of longs, with the format
@@ -1151,10 +1072,8 @@ public class Blocklist {
      */
     private static long toEntry(byte ip1[], byte ip2[]) {
         long entry = 0;
-        for (int i = 0; i < 4; i++)
-            entry |= ((long) (ip2[i] & 0xff)) << ((3-i)*8);
-        for (int i = 0; i < 4; i++)
-            entry |= ((long) (ip1[i] & 0xff)) << (32 + ((3-i)*8));
+        for (int i = 0; i < 4; i++) {entry |= ((long) (ip2[i] & 0xff)) << ((3-i)*8);}
+        for (int i = 0; i < 4; i++) {entry |= ((long) (ip1[i] & 0xff)) << (32 + ((3-i)*8));}
         return entry;
     }
 
@@ -1173,8 +1092,7 @@ public class Blocklist {
 
     private static int toInt(byte ip[]) {
         int rv = 0;
-        for (int i = 0; i < 4; i++)
-            rv |= (ip[i] & 0xff) << ((3-i)*8);
+        for (int i = 0; i < 4; i++) {rv |= (ip[i] & 0xff) << ((3-i)*8);}
         return rv;
     }
 
@@ -1182,10 +1100,8 @@ public class Blocklist {
         StringBuilder buf = new StringBuilder(32);
         for (int i = 7; i >= 0; i--) {
             buf.append((entry >> (8*i)) & 0xff);
-            if (i == 4)
-                buf.append('-');
-            else if (i > 0)
-                buf.append('.');
+            if (i == 4) {buf.append('-');}
+            else if (i > 0) {buf.append('.');}
         }
         return buf.toString();
     }
@@ -1198,8 +1114,7 @@ public class Blocklist {
         StringBuilder buf = new StringBuilder(16);
         for (int i = 3; i >= 0; i--) {
             buf.append((ip >> (8*i)) & 0xff);
-            if (i > 0)
-                buf.append('.');
+            if (i > 0) {buf.append('.');}
         }
         return buf.toString();
     }
@@ -1213,34 +1128,28 @@ public class Blocklist {
      *
      */
     private void banlist(Hash peer, byte[] ip) {
-        // Don't bother unless we have IPv6
-        if (!_haveIPv6 && ip.length == 16)
-            return;
-        // Temporary reason, until the job finishes
-        String sip = Addresses.toString(ip);
+        if (!_haveIPv6 && ip.length == 16) {return;} // Don't bother unless we have IPv6
+        String sip = Addresses.toString(ip); // Temporary reason, until the job finishes
         String reason = " <b>➜</b> " + _x("Blocklist") + ": " + sip;
         if (sip != null && sip.startsWith("127.") || "0:0:0:0:0:0:0:1".equals(sip) ||
             sip.startsWith("192.168.") || sip.startsWith("10.") ||
             (ip != null && ip.length == 4 && (ip[0] * 0xff) == 172 && ip[1] >= 16 && ip[1] <= 31)) {
-                // i2pd bug, possibly at startup, don't ban forever
-                _context.banlist().banlistRouter(peer, reason, sip, null, _context.clock().now() + Banlist.BANLIST_DURATION_PRIVATE);
+            // i2pd bug, possibly at startup, don't ban forever
+            _context.banlist().banlistRouter(peer, reason, sip, null, _context.clock().now() + Banlist.BANLIST_DURATION_PRIVATE);
             return;
         }
         banlistRouter(peer, reason, sip);
-        if (!_context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_DETAIL))
-            return;
+        if (!_context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_DETAIL)) {return;}
         boolean shouldRunJob;
         int number;
         synchronized (_inProcess) {
             number = _inProcess.size();
             shouldRunJob = _inProcess.add(peer);
         }
-        if (!shouldRunJob)
-            return;
+        if (!shouldRunJob) {return;}
         // get the IPs now because it won't be in the netdb by the time the job runs
         Job job = new BanlistJob(peer, getAddresses(peer));
-        if (number > 0)
-            job.getTiming().setStartAfter(_context.clock().now() + (30*1000l * number));
+        if (number > 0) {job.getTiming().setStartAfter(_context.clock().now() + (30*1000l * number));}
         _context.jobQueue().addJob(job);
     }
 
@@ -1252,12 +1161,10 @@ public class Blocklist {
             _peer = p;
             _ips = ips;
         }
-        public String getName() { return "Enforce Blocklist IP Ban"; }
+        public String getName() {return "Enforce Blocklist IP Ban";}
         public void runJob() {
             banlistRouter(_peer, _ips, expireInterval());
-            synchronized (_inProcess) {
-                _inProcess.remove(_peer);
-            }
+            synchronized (_inProcess) {_inProcess.remove(_peer);}
         }
     }
 
@@ -1271,10 +1178,11 @@ public class Blocklist {
      *
      */
     private void banlistRouter( Hash peer, String reason, String reasonCode, long duration) {
-        if (duration > 0)
+        if (duration > 0) {
             _context.banlist().banlistRouter(peer, reason, reasonCode, null, System.currentTimeMillis() + expireInterval());
-        else
+        } else {
             _context.banlist().banlistRouterForever(peer, reason, reasonCode);
+        }
     }
 
     private synchronized void banlistRouter(Hash peer, List<byte[]> ips, long duration) {
@@ -1284,19 +1192,19 @@ public class Blocklist {
         String file = _context.getProperty(PROP_BLOCKLIST_FILE);
         if (file != null) {
             blFile = new File(file);
-            if (!blFile.isAbsolute())
-                 blFile = new File(_context.getConfigDir(), file);
-            if (!blFile.exists())
-                blFile = null;
+            if (!blFile.isAbsolute()) {blFile = new File(_context.getConfigDir(), file);}
+            if (!blFile.exists()) {blFile = null;}
         }
         // install dir
-        if (blFile == null)
+        if (blFile == null) {
             blFile = new File(_context.getBaseDir(), BLOCKLIST_FILE_DEFAULT);
+        }
 
         if ((!blFile.exists()) || blFile.length() <= 0) {
             // just ban it and be done
-            if (_log.shouldWarn())
+            if (_log.shouldWarn()) {
                 _log.warn("Banning [" + peer.toBase64().substring(0,6) + "] for duration of session");
+            }
             banlistRouter(peer, " <b>➜</b> Banned", "Banned", expireInterval());
             return;
         }
@@ -1308,19 +1216,15 @@ public class Blocklist {
             String sip = Addresses.toString(ip);
             BufferedReader br = null;
             try {
-                br = new BufferedReader(new InputStreamReader(
-                        new FileInputStream(blFile), "UTF-8"));
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(blFile), "UTF-8"));
                 String buf = null;
                 // assume the file is unsorted, so go through the whole thing
                 while ((buf = br.readLine()) != null) {
                     Entry e = parse(buf, false);
-                    if (e == null || e.peer != null) {
-                        continue;
-                    }
+                    if (e == null || e.peer != null) {continue;}
                     if (match(ipint, toEntry(e.ip1, e.ip2))) {
-                        try { br.close(); } catch (IOException ioe) {}
-                        String reason = " <b>➜</b> " + _x("Blocklist") + ": <a title=\"Lookup on gwhois.org\" class=whois href=https://gwhois.org/" +
-                                         sip + " target=_blank>" + sip + "</a>";
+                        try {br.close();} catch (IOException ioe) {}
+                        String reason = " <b>➜</b> " + _x("Blocklist") + ": " + sip;
                         // only one translate parameter for now
                         //for (int i = 0; i < 4; i++) {
                         //    reason = reason + (ip[i] & 0xff);
@@ -1328,8 +1232,9 @@ public class Blocklist {
                         //        reason = reason + '.';
                         //}
                         //reason = reason + " banned by " + BLOCKLIST_FILE_DEFAULT + " entry \"" + buf + "\"";
-                        if (_log.shouldWarn())
+                        if (_log.shouldWarn()) {
                             _log.warn("Banning [" + peer.toBase64().substring(0,6) + "] for duration of session -> Source: blocklist.txt");
+                        }
                         banlistRouter(peer, reason, buf.toString(), expireInterval());
                         return;
                     }
@@ -1338,7 +1243,7 @@ public class Blocklist {
                 if (_log.shouldWarn())
                     _log.warn("Error reading the blocklist file", ioe);
             } finally {
-                if (br != null) try { br.close(); } catch (IOException ioe) {}
+                if (br != null) try {br.close();} catch (IOException ioe) {}
             }
         }
         // We already banlisted in banlist(peer), that's good enough
@@ -1369,11 +1274,10 @@ public class Blocklist {
      *  @since 0.9.48
      */
     public List<BigInteger> getTransientIPv6Blocks() {
-        if (!_haveIPv6)
-            return Collections.<BigInteger>emptyList();
+        if (!_haveIPv6) {return Collections.<BigInteger>emptyList();}
         if (_singleIPv6Blocklist != null) {
             synchronized(_singleIPv6Blocklist) {
-                    return new ArrayList<BigInteger>(_singleIPv6Blocklist.keySet());
+                return new ArrayList<BigInteger>(_singleIPv6Blocklist.keySet());
             }
         }
         return Collections.<BigInteger>emptyList();
@@ -1399,8 +1303,7 @@ public class Blocklist {
             int i = 0;
             for (; i < _blocklistSize; i++) {
                 int from = Blocklist.getFrom(_blocklist[i]);
-                if (from >= 0)
-                    break;
+                if (from >= 0) {break;}
             }
             int sz = Math.min(_blocklistSize - i, max);
             rv = new long[sz];
@@ -1416,9 +1319,7 @@ public class Blocklist {
      *
      *  @since 0.9.48
      */
-    public synchronized int getBlocklistSize() {
-        return _blocklistSize;
-    }
+    public synchronized int getBlocklistSize() {return _blocklistSize;}
 
     /**
      *  Does nothing, moved to console ConfigPeerHelper
@@ -1426,8 +1327,7 @@ public class Blocklist {
      *  @deprecated
      */
     @Deprecated
-    public void renderStatusHTML(Writer out) throws IOException {
-    }
+    public void renderStatusHTML(Writer out) throws IOException {}
 
     /**
      *  Mark a string for extraction by xgettext and translation.
@@ -1435,28 +1335,6 @@ public class Blocklist {
      *  It does not translate!
      *  @return s
      */
-    private static final String _x(String s) {
-        return s;
-    }
+    private static final String _x(String s) {return s;}
 
-/****
-    public static void main(String args[]) throws Exception {
-        Blocklist b = new Blocklist(new Router().getContext());
-        if (args != null && args.length == 1) {
-            File f = new File(args[0]);
-            b.allocate(Collections.singletonList(f));
-            int count = b.readBlocklistFile(f, 0);
-            b.merge(count);
-            Writer w = new java.io.OutputStreamWriter(System.out);
-            b.renderStatusHTML(w);
-        }
-        System.out.println("Saved " + b._blocklistSize + " records");
-        String tests[] = {"0.0.0.0", "0.0.0.1", "0.0.0.2", "0.0.0.255", "1.0.0.0",
-                                        "3.3.3.3", "77.1.2.3", "127.0.0.0", "127.127.127.127", "128.0.0.0",
-                                        "129.1.2.3", "255.255.255.254", "255.255.255.255"};
-        for (int i = 0; i < tests.length; i++) {
-            System.out.println("Testing " + tests[i] + " returns " + b.isBlocklisted(tests[i]));
-        }
-    }
-****/
 }
