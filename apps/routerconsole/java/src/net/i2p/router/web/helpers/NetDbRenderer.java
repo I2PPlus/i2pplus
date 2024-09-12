@@ -270,7 +270,7 @@ class NetDbRenderer {
      */
     private void paginate(StringBuilder buf, StringBuilder ubuf, int page, int pageSize, boolean morePages, int sz) {
         int totalPages = (int) Math.ceil((double) sz / pageSize);
-        String results = "<span id=results>" + sz + " " + (sz != 1 ? _t("results") : _t("result")) + "</span>\n";
+        String results = "<span id=results" + (sz > pageSize ? " class=more" : "") + ">" + sz + " " + (sz != 1 ? _t("results") : _t("result")) + "</span>\n";
         buf.append("<div id=pagenav>\n").append(results);
         if (sz > pageSize) {
             int current = page + 1;
