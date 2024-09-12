@@ -1125,12 +1125,18 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         buf.append("<span class=peerFlag title=\"");
         if (ri != null) {
             String ip = net.i2p.util.Addresses.toString(getValidIP(ri));
-            if (c != "xx" && c != null && countryName.length() > 2) {
+            if (ip == null || ip.equals("null") || ip.equals("")) {
+                byte[] transportIP = getIP(ri);
+                if (transportIP != null) {ip = net.i2p.util.Addresses.toString(transportIP);}
+            }
+            if (!c.equals("xx") && c != null && countryName.length() > 2) {
                 buf.append(countryName);
-                if (ri != null && ip != null) {buf.append(" &bullet; ").append(ip);}
+                if (ip != null && !ip.equals("null") && !ip.equals("") && ip.length() > 6) {
+                    buf.append(" &bullet; ").append(ip);
+                }
             } else {buf.append(_t("unknown"));}
             buf.append("\">");
-            if (c != "xx" && c != null) {
+            if (!c.equals("xx") && c != null) {
                 buf.append("<a href=\"/netdb?c=").append(c).append("\"><img width=24 height=18 alt=\"")
                    .append(c.toUpperCase(Locale.US)).append("\" src=\"/flags.jsp?c=").append(c).append("\"></a>");
             } else {

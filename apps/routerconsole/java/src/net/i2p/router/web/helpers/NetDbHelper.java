@@ -77,43 +77,43 @@ public class NetDbHelper extends FormHandler {
 
     public void setRouter(String r) {
         if (r != null && r.length() > 0)
-            _routerPrefix = DataHelper.stripHTML(r.trim());  // XSS
+            _routerPrefix = DataHelper.stripHTML(r.trim()); // XSS
     }
 
     /** @since 0.9.21 */
     public void setVersion(String v) {
         if (v != null && v.length() > 0)
-            _version = DataHelper.stripHTML(v.trim());  // XSS
+            _version = DataHelper.stripHTML(v.trim()); // XSS
     }
 
     /** @since 0.9.21 */
     public void setCountry(String c) {
         if (c != null && c.length() > 0)
-            _country = DataHelper.stripHTML(c.trim());  // XSS
+            _country = DataHelper.stripHTML(c.trim()); // XSS
     }
 
     /** @since 0.9.28 */
     public void setFamily(String c) {
         if (c != null && c.length() > 0)
-            _family = DataHelper.stripHTML(c.trim());  // XSS
+            _family = DataHelper.stripHTML(c.trim()); // XSS
     }
 
     /** @since 0.9.28 */
     public void setCaps(String c) {
         if (c != null && c.length() > 0)
-            _caps = DataHelper.stripHTML(c.trim());  // XSS
+            _caps = DataHelper.stripHTML(c.trim()); // XSS
     }
 
     /** @since 0.9.28 */
     public void setIp(String c) {
         if (c != null && c.length() > 0)
-            _ip = DataHelper.stripHTML(c.trim());  // XSS
+            _ip = DataHelper.stripHTML(c.trim()); // XSS
     }
 
     /** @since 0.9.28 */
     public void setSybil(String c) {
         if (c != null)
-            _sybil = DataHelper.stripHTML(c.trim());  // XSS
+            _sybil = DataHelper.stripHTML(c.trim()); // XSS
     }
 
     /** For form, same as above but with a length check
