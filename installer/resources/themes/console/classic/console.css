@@ -2515,7 +2515,7 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 /* netdb routers pagenav */
 .pageLink{margin:3px 1px 1px;padding:3px 8px 4px;min-width:20px;display:inline-block;vertical-align:middle;white-space:nowrap;line-height:1;letter-spacing:.01em;box-shadow:var(--box_border_badge);background:var(--badge);font-size:120%}
 .pageLink:active,#currentPage .pageLink{box-shadow:var(--box_border_badge),var(--btn_shadow_active)}
-.pageLink.disabled{opacity:.5}
+.pageLink.disabled{opacity:.5;pointer-events:none}
 #currentPage{font-weight:800;color:var(--ink);pointer-events:none}
 #netdb.main{position:relative;contain:paint}
 #pagenav{margin:0 -16px -2px;padding:12px;position:sticky;bottom:0;left:-16px;right:-16px;text-align:center;border:var(--border);border-radius:0 0 3px 3px;background:var(--bg)}

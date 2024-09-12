@@ -2946,7 +2946,7 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 .pageLink{margin:3px 1px 1px;padding:3px 8px 4px;min-width:20px;display:inline-block;vertical-align:middle;white-space:nowrap;line-height:1;letter-spacing:.01em;border:var(--border_inner);box-shadow:var(--btn_shadow);background:var(--badge);font-size:120%}
 .pageLink:hover{box-shadow:0 0 0 1px var(--a_hover),var(--highlight)}
 .pageLink:active{box-shadow:0 0 0 1px var(--a_hover),var(--btn_shadow_active)}
-.pageLink.disabled{opacity:.5}
+.pageLink.disabled{opacity:.5;pointer-events:none}
 #currentPage{font-weight:800;color:var(--ink);pointer-events:none}
 #currentPage .pageLink{box-shadow:var(--btn_shadow_active)}
 #netdb.main{position:relative;contain:paint}

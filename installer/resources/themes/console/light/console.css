@@ -1473,7 +1473,8 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 .netdb_info.host::selection{color:#fff;background:var(--ink_code)}
 .netdb_info.port::selection{color:#fff;background:#303}
 .netdb_transport{vertical-align:middle}
-.netdb_header img[src^="/flags"],th img[src^="/flags"]{margin-left:2px;width:24px;height:auto;border-radius:2px}
+.netdb_header img[src^="/flags"],th img[src^="/flags"]{margin-left:2px;width:24px;height:auto}
+.netdb_header img[src^="/flags"]{box-shadow:0 0 0 1px #bbc}
 .netdb_header img[src="/flags.jsp?c=a0"]{margin-right:0;margin-top:-2px;display:inline-block;vertical-align:middle}
 #netdb{contain:paint}
 #netdb_ourinfo .version{margin-right:4px}
@@ -1508,6 +1509,8 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 #netdb .netdbentry th code:hover,#netdb .netdbentry th code:active,.leaseset th code:hover,.leaseset th code:active,#netdb .sybil_routerinfo th code:hover,#netdb .sybil_routerinfo th code:active{width:auto;letter-spacing:0}
 #netdb .netdbentry th code::selection,#netdb .sybil_routerinfo th code::selection,.leaseset th code::selection{background:var(--ink_code);color:#fff}
 #netdb .netdbStats .hide,#netdb .netdbStats .cap_stat.hide,#netdb .netdbStats .cap_stat.hide+hr{display:none}
+#netdb #netdb_ram{margin:3px 4px 4px 0;padding:4px 6px;display:inline-block;line-height:1.2;vertical-align:middle;font-size:90%;box-shadow:var(--highlight);border:1px solid #bbd;border-radius:2px;background:var(--badge);transform:translateY(1px)}
+#netdb #netdb_ram b{vertical-align:baseline}
 
 .configpeer,.familysearch,.viewprofile{margin:1px 2px;padding:4px;width:12px;height:12px;vertical-align:middle;display:inline-block;line-height:0;font-size:0;border:1px solid #bbd;border-radius:2px;box-shadow:var(--btn_shadow)}
 .configpeer:hover,.familysearch:hover,.viewprofile:hover,.configpeer:focus,.familysearch:focus,.viewprofile:focus{border-color:var(--hover);box-shadow:var(--btn_shadow_hover)}
@@ -1526,8 +1529,6 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 .viewprofile+.viewfullentry,.viewfullentry+.configpeer,.viewprofile+.configpeer{margin-left:-5px}
 .viewprofile:hover,.viewprofile:focus{background:var(--eye_hover) no-repeat center center/12px,var(--btn_hover)}
 .viewprofile img,.viewfullentry img,.familysearch img,.configpeer img,.profiledump img{padding:2px;display:inline-block;width:14px;height:14px;vertical-align:middle;line-height:0;border:1px solid #bbc;border-radius:2px;background:var(--row)}
-#netdb_ram{margin:1px 4px 0 -2px;padding:3px;display:inline-block;vertical-align:middle;line-height:1.2;font-size:90%;box-shadow:var(--highlight);border:1px solid #bbd;border-radius:2px;background:var(--row)}
-#netdb_ram b{margin-top:-2px}
 
 /* leasesets */
 .leaseset,.netdbentry{margin-bottom:10px}
@@ -2892,8 +2893,9 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 .pageLink{margin:3px 1px 1px;padding:3px 8px 4px;min-width:20px;display:inline-block;vertical-align:middle;white-space:nowrap;line-height:1;letter-spacing:.01em;border:var(--border_inner);box-shadow:var(--btn_shadow);background:var(--badge);font-size:120%}
 .pageLink:hover{border:1px solid var(--hover)}
 .pageLink:active,#currentPage .pageLink{padding:4px 7px 3px 9px;box-shadow:var(--btn_shadow_active)}
-.pageLink.disabled{opacity:.5}
+.pageLink.disabled{opacity:.5;pointer-events:none}
 #currentPage{font-weight:800;color:var(--ink);pointer-events:none}
 #netdb.main{position:relative;contain:paint}
-#pagenav{margin:0 -16px -11px;padding:12px;position:sticky;bottom:-4px;left:-16px;right:-16px;z-index:99999;text-align:center;border:var(--border_inner);border-top:var(--border);border-radius:0 0 1px 1px;box-shadow:var(--bevel),0 -1px 5px #0002;background:var(--nav)}
-#results{margin:2px auto;width:100%;display:block;font-size:115%;font-weight:600}
+#pagenav{margin:0 -16px -11px;padding:12px 12px 10px;position:sticky;bottom:-4px;left:-16px;right:-16px;z-index:99999;text-align:center;border:var(--border_inner);border-top:var(--border);border-radius:0 0 1px 1px;box-shadow:var(--bevel),0 -1px 5px #0002;background:var(--nav)}
+#results{margin:2px auto 4px;width:100%;display:block;font-size:115%;font-weight:600}
+#results.more{margin:-12px auto 8px;padding:4px 5%;width:fit-content;border:var(--border);border-top:0;border-radius:0 0 3px 3px;box-shadow:var(--bevel),0 1px 2px 2px #0001;background:var(--row)}

@@ -3044,10 +3044,10 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 .pageLink{margin:3px 1px 1px;padding:3px 12px 4px;min-width:20px;display:inline-block;vertical-align:middle;white-space:nowrap;line-height:1;letter-spacing:.01em;font-size:120%;text-shadow:1px 2px 1px #000;box-shadow:0 0 0 1px #141,var(--highlight);background:var(--badge)}
 .pageLink:hover{box-shadow:0 0 0 1px var(--hover),var(--highlight)}
 .pageLink:active{box-shadow:0 0 0 1px var(--hover),var(--btn_shadow_active)}
-.pageLink.disabled{opacity:.5}
+.pageLink.disabled{opacity:.5;pointer-events:none}
 #currentPage{color:var(--ink);pointer-events:none}
 #currentPage .pageLink{font-weight:800;text-shadow:1px 1px 1px #000;box-shadow:0 0 0 1px #141,var(--btn_shadow_active)}
 #netdb.main{position:relative;contain:paint}
 #pagenav{margin:0 -11px -2px;padding:12px;position:sticky;bottom:0;left:-11px;right:-11px;text-align:center;border:var(--border);border-radius:0 0 3px 3px;box-shadow:var(--bevel);background:#000}
 #results{margin:3px auto;width:100%;display:block;font-size:110%;font-weight:600}
-#results.more {margin:-12px auto 6px;padding:5px 5% 3px;width:fit-content;text-shadow:1px 1px 1px #0008;border:1px solid #020;border-top:0;border-radius:0 0 4px 4px;box-shadow:var(--highlight);background:linear-gradient(#121,#001800,#010)}
+#results.more {margin:-12px auto 8px;padding:5px 5% 3px;width:fit-content;text-shadow:1px 1px 1px #0008;border:1px solid #020;border-top:0;border-radius:0 0 4px 4px;box-shadow:var(--highlight);background:var(--glow_top),linear-gradient(#121,#001800,#010)}
