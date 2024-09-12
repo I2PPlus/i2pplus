@@ -244,8 +244,10 @@ p:empty+.sb_notice{margin-top:9px}
 .sb_netstatus.vmcomm::before{background:var(--net_vm) var(--center)}
 .sb_netstatus.clockskew::before{background:var(--net_clockskew) var(--center)/14px}
 .sb_netstatus.running:not(:hover)::before,.sb_netstatus.hidden:not(:hover)::before,.sb_netstatus.firewalled:not(:hover)::before,.sb_netstatus.testing:not(:hover)::before{margin:-3px 0;width:40px;height:24px;background-size:20px}
-.sb_netstatus.testing,.sb_netstatus.running,.sb_netstatus.hidden,.sb_netstatus.firewalled{font-size:0}
-.sb_netstatus.running:hover,.sb_netstatus.hidden:hover,.sb_netstatus.firewalled:hover,.sb_netstatus.testing:hover{font-size:inherit}
+.sb_netstatus.testing,.sb_netstatus.running:not(.floodfill),.sb_netstatus.hidden,.sb_netstatus.firewalled{font-size:0}
+.sb_netstatus.running.floodfill{font-size:0}
+.sb_netstatus.running.floodfill .badge{font-size:8pt!important}
+.sb_netstatus.running:hover,.sb_netstatus.hidden:hover,.sb_netstatus.firewalled:hover,.sb_netstatus.floodfill:hover,.sb_netstatus.testing:hover{font-size:inherit}
 .sb_netstatus.running.floodfill::before{width:50px;height:24px;background-size:16px}
 .sb_netstatus.running.floodfill::before{background:var(--net_ok) no-repeat left center,var(--floodfill) no-repeat right center!important}
 #sb_shutdownStatus{width:calc(100% - 3px)}
@@ -319,7 +321,8 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 .sb_icon#utility:active{background:var(--hardhat) no-repeat calc(50% - 3px) calc(50% + 2px)/14px,var(--configure) no-repeat 20% center/19px,var(--badge_active)}
 .sb_icon#transit:active{background:var(--share) no-repeat 25% center/19px,var(--badge_active)}
 .sb_icon#tcount:active{background:var(--hardhat) no-repeat 25% center/19px,var(--badge_active)}
-#newsCount,#sidebar h3 a .badge,#sidebar #lsCount.badge,#tunnelCount{padding:2px 5px 1px;display:inline-block;position:relative;z-index:999;white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;font-size:80%;box-shadow:0 0 0 1px #141,var(--highlight);background:var(--badge);animation:fade .25s ease .5s reverse both}
+#lsCount.badge,#newsCount,#sidebar h3 a .badge,#tunnelCount{padding:2px 5px 1px;display:inline-block;position:relative;z-index:999;white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;font-size:80%;font-weight:700;box-shadow:0 0 0 1px #141,var(--highlight);background:var(--badge);animation:fade .25s ease .5s reverse both}
+#sidebar #sb_status #lsCount.badge{padding:2px 3px 1px;margin-left:2px;line-height:1;color:#494}
 #sb_updatesection h3.collapsed:not(.updating) a::after{content:"*"}
 #sidebar h3{position:relative;contain:paint}
 #console_404 #sidebar h3 a .badge{display:none}
@@ -2958,6 +2961,7 @@ span#newtab{margin-top:4px}
 #sidebar #sb_localtunnels td:nth-child(2) a{padding-left:2px}
 #sidebar #sb_localtunnels td:first-child{background-size:18px}
 #sidebar #sb_advanced a:link,#sidebar #sb_internals a:link,#sidebar #sb_help a:link,#sidebar #sb_services a:link{max-width:216px}
+#sidebar .sb_netstatus.running.floodfill .badge{font-size:8.5pt!important}
 #sitemap h3{font-size:12pt}
 #stacktrace p:first-of-type::first-line{font-size:110%;font-weight:700;font-variant:super;text-decoration:underline}
 #tunnels #exploratory a,#tunnels h3.server a,#tunnels h3.client a{margin:-8px 0 -8px 0;padding:7px 2px 14px 0}
@@ -3038,8 +3042,6 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 #ipbans.toggle.expanded::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:none}
 #ipbans.toggle.expanded:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:none}
 
-@media (min-width:1600px) {#sidebar #sb_status #lsCount.badge{padding:2px 3px 1px;margin-left:2px;line-height:1;font-size:11.7333px;color:#494}}
-
 /* netdb routers pagenav */
 .pageLink{margin:3px 1px 1px;padding:3px 12px 4px;min-width:20px;display:inline-block;vertical-align:middle;white-space:nowrap;line-height:1;letter-spacing:.01em;font-size:120%;text-shadow:1px 2px 1px #000;box-shadow:0 0 0 1px #141,var(--highlight);background:var(--badge)}
 .pageLink:hover{box-shadow:0 0 0 1px var(--hover),var(--highlight)}
@@ -3050,4 +3052,4 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 #netdb.main{position:relative;contain:paint}
 #pagenav{margin:0 -11px -2px;padding:12px;position:sticky;bottom:0;left:-11px;right:-11px;text-align:center;border:var(--border);border-radius:0 0 3px 3px;box-shadow:var(--bevel);background:#000}
 #results{margin:3px auto;width:100%;display:block;font-size:110%;font-weight:600}
-#results.more {margin:-12px auto 8px;padding:5px 5% 3px;width:fit-content;text-shadow:1px 1px 1px #0008;border:1px solid #020;border-top:0;border-radius:0 0 4px 4px;box-shadow:var(--highlight);background:var(--glow_top),linear-gradient(#121,#001800,#010)}
+#results.more {margin:-12px auto 8px;padding:4px 5% 3px;width:fit-content;text-shadow:1px 1px 1px #0008;border:1px solid #020;border-top:0;border-radius:0 0 4px 4px;box-shadow:var(--highlight);background:var(--glow_top),linear-gradient(#121,#001800,#010)}
