@@ -50,6 +50,7 @@ import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.crypto.DHSessionKeyBuilder;
 import net.i2p.router.transport.crypto.X25519KeyFactory;
+import net.i2p.router.transport.TransportImpl;
 import net.i2p.router.transport.udp.UDPTransport;
 import net.i2p.router.util.EventLog;
 import net.i2p.util.Addresses;
@@ -62,7 +63,6 @@ import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
-
 
 public class CommSystemFacadeImpl extends CommSystemFacade {
     private final Log _log;
@@ -950,6 +950,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         for (RouterAddress ra : ri.getAddresses()) {
             byte[] rv = ra.getIP();
             if (rv != null) {return rv;}
+            else {
+                rv = TransportImpl.getIP(ri.getHash());
+                if (rv != null) {return rv;}
+            }
         }
         return null;
     }
