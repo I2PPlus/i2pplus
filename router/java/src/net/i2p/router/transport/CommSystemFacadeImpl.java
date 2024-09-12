@@ -1132,7 +1132,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             if (!c.equals("xx") && c != null && countryName.length() > 2) {
                 buf.append(countryName);
                 if (ip != null && !ip.equals("null") && !ip.equals("") && ip.length() > 6) {
-                    buf.append(" &bullet; ").append(ip);
+                    buf.append(" &bullet; ");
+                    if (enableReverseLookups() && !getCanonicalHostName(ip).equals("unknown")) {
+                        buf.append(getCanonicalHostName(ip)).append(" (").append(ip).append(")");
+                    } else {buf.append(ip);}
                 }
             } else {buf.append(_t("unknown"));}
             buf.append("\">");
