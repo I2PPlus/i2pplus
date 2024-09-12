@@ -1,3 +1,9 @@
+2024-09-12
+ * Router: If we can't identify an ip from peer's routerinfo, try transport
+
+2024-09-11 dr|z3d
+ * Console: Include number of results returned for routerinfos in NetDb
+
 2024-09-10 dr|z3d
  * Console: Add pagination when displaying all routerinfos in NetDb
 
