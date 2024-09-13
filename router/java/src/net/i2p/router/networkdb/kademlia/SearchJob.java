@@ -16,18 +16,18 @@ import java.util.Set;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
-import net.i2p.data.LeaseSet;
-import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.DatabaseSearchReplyMessage;
 import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.data.LeaseSet;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.data.TunnelId;
 import net.i2p.router.Job;
 import net.i2p.router.JobImpl;
+import net.i2p.router.message.SendMessageDirectJob;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
-import net.i2p.router.message.SendMessageDirectJob;
 import net.i2p.util.Log;
 
 /**
@@ -57,6 +57,7 @@ class SearchJob extends JobImpl {
     private int _floodfillSearchesOutstanding;
     private final long _msgIDBloomXor;
     private static int SEARCH_BREDTH = 5;
+    private static int SEARCH_BREDTH_LEASE = 8;
     static final int MAX_CLOSEST = 10; // Only send the 10 closest "don't tell me about" refs
 
     /**
@@ -64,7 +65,7 @@ class SearchJob extends JobImpl {
      *
      */
 //    private static final int PER_PEER_TIMEOUT = 5*1000;
-    private static final int PER_PEER_TIMEOUT = 3*1000;
+    private static final int PER_PEER_TIMEOUT = 4*1000;
 
     /**
      * give ourselves 5 seconds to send out the value found to the closest
@@ -76,7 +77,7 @@ class SearchJob extends JobImpl {
 
     /**
      * When we're just waiting for something to change, requeue the search status test
-     * every second.
+     * every 2 seconds.
      *
      */
     private static final long REQUEUE_DELAY = 2000;
@@ -92,8 +93,7 @@ class SearchJob extends JobImpl {
     public SearchJob(RouterContext context, KademliaNetworkDatabaseFacade facade, Hash key,
                      Job onSuccess, Job onFailure, long timeoutMs, boolean keepStats, boolean isLease, long msgIDBloomXor) {
         super(context);
-        if ( (key == null) || (key.getData() == null) )
-            throw new IllegalArgumentException("Search for null key?");
+        if ((key == null) || (key.getData() == null)) {throw new IllegalArgumentException("Search for null key?");}
         _log = getContext().logManager().getLog(getClass());
         _facade = facade;
         _state = new SearchState(getContext(), key);
@@ -111,17 +111,17 @@ class SearchJob extends JobImpl {
     }
 
     public void runJob() {
-        if (_startedOn <= 0)
-            _startedOn = getContext().clock().now();
-        if (_log.shouldDebug())
-            _log.debug("[DbId: " + _facade + "] Searching for [" + _state.getTarget().toBase64().substring(0,6) + "]");
+        if (_startedOn <= 0) {_startedOn = getContext().clock().now();}
+        if (_log.shouldDebug()) {
+            _log.debug("Searching for [" + _state.getTarget().toBase64().substring(0,6) + "]");
+        }
         searchNext();
     }
 
-    protected SearchState getState() { return _state; }
-    protected KademliaNetworkDatabaseFacade getFacade() { return _facade; }
-    public long getExpiration() { return _expiration; }
-    public long getTimeoutMs() { return _timeoutMs; }
+    protected SearchState getState() {return _state;}
+    protected KademliaNetworkDatabaseFacade getFacade() {return _facade;}
+    public long getExpiration() {return _expiration;}
+    public long getTimeoutMs() {return _timeoutMs;}
 
     private static final boolean DEFAULT_FLOODFILL_ONLY = true;
 
@@ -202,7 +202,7 @@ class SearchJob extends JobImpl {
      * True if the data is already locally stored
      *
      */
-    private boolean isLocal() { return _facade.getDataStore().isKnown(_state.getTarget()); }
+    private boolean isLocal() {return _facade.getDataStore().isKnown(_state.getTarget());}
 
     private boolean isExpired() {
         return getContext().clock().now() >= _expiration;
@@ -210,7 +210,7 @@ class SearchJob extends JobImpl {
 
     /** max # of concurrent searches */
     protected int getBredth() {
-        if (_isLease) {return SEARCH_BREDTH * 3 / 2;}
+        if (_isLease) {return SEARCH_BREDTH_LEASE;}
         else {return SEARCH_BREDTH;}
     }
 
@@ -228,15 +228,17 @@ class SearchJob extends JobImpl {
         }
         if (getContext().jobQueue().getMaxLag() > 750 || getContext().throttle().getMessageDelay() > 1000) {
             SEARCH_BREDTH -= 3;
-            if (_log.shouldDebug())
+            if (_log.shouldDebug()) {
                 _log.debug("Reducing number of parallel peer searches to " + getBredth() + " - router under load");
+            }
         }
         int toCheck = getBredth() - _state.getPending().size();
         if (toCheck <= 0) {
             // too many already pending
-            if (_log.shouldInfo())
+            if (_log.shouldInfo()) {
                 _log.info("Too many searches pending -> throttling (pending: " +
                           _state.getPending().size() + ", max: " + getBredth() + ")");
+            }
             requeuePending();
             return;
         }
@@ -246,26 +248,29 @@ class SearchJob extends JobImpl {
             //boolean onlyFloodfill = onlyQueryFloodfillPeers(getContext());
             boolean onlyFloodfill = true;
             if (_floodfillPeersExhausted && onlyFloodfill && _state.getPending().isEmpty()) {
-                if (_log.shouldWarn())
+                if (_log.shouldWarn()) {
                     _log.warn("No non-Floodfill peers left, and no more search queries pending. Searched: " +
                               _state.getAttempted().size() + " Failed: " + _state.getFailed().size());
+                }
                 fail();
                 return;
             }
             List<Hash> closestHashes = getClosestRouters(_state.getTarget(), toCheck, attempted);
-            if ( (closestHashes == null) || (closestHashes.isEmpty()) ) {
+            if ((closestHashes == null) || (closestHashes.isEmpty())) {
                 if (_state.getPending().isEmpty()) {
                     // we tried to find some peers, but there weren't any and no one else is going to answer
-                    if (_log.shouldInfo())
+                    if (_log.shouldInfo()) {
                         _log.info("No peers left, and no search queries pending! Already searched: " +
                                   _state.getAttempted().size() + " Failed: " + _state.getFailed().size());
+                    }
                     fail();
                 } else {
                     // no more to try, but we might get data or close peers from some outstanding requests
-                    if (_log.shouldInfo())
+                    if (_log.shouldInfo()) {
                         _log.info("No peers left, but search queries still pending!\n* Pending: " +
                                   _state.getPending().size() + "\n* Queried: " + _state.getAttempted().size() +
                                   "\n* Failed: " + _state.getFailed().size());
+                    }
                     requeuePending();
                 }
                 return;
@@ -274,21 +279,22 @@ class SearchJob extends JobImpl {
                 for (Hash peer : closestHashes) {
                     DatabaseEntry ds = _facade.getDataStore().get(peer);
                     if (ds == null) {
-                        if (_log.shouldInfo())
-                            _log.info("[DbId: " + _facade + "] Next closest peer [" + peer.toBase64().substring(0,6) +
+                        if (_log.shouldInfo()) {
+                            _log.info("Next closest peer [" + peer.toBase64().substring(0,6) +
                                       "] was only recently referred to us, sending a search for them");
+                        }
                         getContext().netDb().lookupRouterInfo(peer, null, null, _timeoutMs);
                     } else if (!(ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)) {
-                        if (_log.shouldWarn())
+                        if (_log.shouldWarn()) {
                             _log.warn("Error selecting closest hash that wasn't a router! "
                                       + peer + " : " + ds.getClass().getName());
+                        }
                         _state.replyTimeout(peer);
                     } else {
                         RouterInfo ri = (RouterInfo)ds;
                         if (!FloodfillNetworkDatabaseFacade.isFloodfill(ri)) {
                             _floodfillPeersExhausted = true;
-                            if (onlyFloodfill)
-                                continue;
+                            if (onlyFloodfill) {continue;}
                         }
                         if (ri.isHidden()) {} // don't bother
                         else {
@@ -324,8 +330,8 @@ class SearchJob extends JobImpl {
         public RequeuePending(RouterContext enclosingContext) {
             super(enclosingContext);
         }
-        public String getName() { return "Requeue Search with Pending"; }
-        public void runJob() { searchNext(); }
+        public String getName() {return "Requeue Search with Pending";}
+        public void runJob() {searchNext();}
     }
 
     /**
@@ -336,9 +342,10 @@ class SearchJob extends JobImpl {
      */
     private List<Hash> getClosestRouters(Hash key, int numClosest, Set<Hash> alreadyChecked) {
         Hash rkey = getContext().routingKeyGenerator().getRoutingKey(key);
-        if (_log.shouldDebug())
+        if (_log.shouldDebug()) {
             _log.debug("Checked current routing key [" + rkey.toBase64().substring(0,10) +
                        "] for [" + key.toBase64().substring(0,6) + "]");
+        }
         return _peerSelector.selectNearestExplicit(rkey, numClosest, alreadyChecked, _facade.getKBuckets());
     }
 
@@ -349,14 +356,14 @@ class SearchJob extends JobImpl {
     protected void sendSearch(RouterInfo router) {
         if (router.getIdentity().equals(getContext().router().getRouterInfo().getIdentity())) {
             // don't search ourselves
-            if (_log.shouldError())
-                _log.error("Don't send search to ourselves - why did we try?");
+            if (_log.shouldError()) {_log.error("Don't send search to ourselves - why did we try?");}
             return;
         } else {
-            if (_log.shouldInfo())
-                _log.info("[DbId: " + _facade + "] Search for [" + _state.getTarget().toBase64().substring(0,6) +
+            if (_log.shouldInfo()) {
+                _log.info("Search for [" + _state.getTarget().toBase64().substring(0,6) +
                           "] sent to [" + router.getIdentity().getHash().toBase64().substring(0,6) +
                           "] - " + (getPerPeerTimeoutMs(router.getIdentity().calculateHash()) / 1000) + "s timeout");
+            }
         }
 
         getContext().statManager().addRateData("netDb.searchMessageCount", 1);
@@ -367,11 +374,9 @@ class SearchJob extends JobImpl {
         // Always send LS lookups thru expl tunnels.
         // But this is never used for LSes...
 
-        if (_isLease ||
-             !getContext().commSystem().isEstablished(router.getIdentity().calculateHash()))
+        if (_isLease || !getContext().commSystem().isEstablished(router.getIdentity().calculateHash())) {
             sendLeaseSearch(router);
-        else
-            sendRouterSearch(router);
+        } else {sendRouterSearch(router);}
     }
 
 
@@ -389,17 +394,6 @@ class SearchJob extends JobImpl {
             return;
         }
         TunnelId inTunnelId = inTunnel.getReceiveTunnelId(0);
-
-        // this will fail if we've banlisted our inbound gateway, but the gw may not necessarily
-        // be banlisted by whomever needs to contact them, so we don't need to check this
-
-        //RouterInfo inGateway = getContext().netDbSegmentor().lookupRouterInfoLocally(inTunnel.getPeer(0));
-        //if (inGateway == null) {
-        //    _log.error("We can't find the gateway to our inbound tunnel?!");
-        //    getContext().jobQueue().addJob(new FailedJob(getContext(), router));
-        //    return;
-        //}
-
         int timeout = getPerPeerTimeoutMs(to);
         long expiration = getContext().clock().now() + timeout;
 
@@ -417,10 +411,9 @@ class SearchJob extends JobImpl {
         }
         TunnelId outTunnelId = outTunnel.getSendTunnelId(0);
 
-
         if (_log.shouldDebug()) {
-            _log.debug("[DbId: " + _facade + "] Sending search to [" + to.toBase64().substring(0,6) +
-                       "] for [" + getState().getTarget().toBase32().substring(0,8) + "]\n* Replies: through [" +
+            _log.debug("Sending search to [" + to.toBase64().substring(0,6) + "] for [" +
+                       getState().getTarget().toBase32().substring(0,8) + "]\n* Replies: through [" +
                        inTunnel.getPeer(0).toBase64().substring(0,6) + "] via [Tunnel " + inTunnelId + "]");
         }
 
@@ -456,7 +449,7 @@ class SearchJob extends JobImpl {
         SearchMessageSelector sel = new SearchMessageSelector(getContext(), router, _expiration, _state);
         SearchUpdateReplyFoundJob reply = new SearchUpdateReplyFoundJob(getContext(), router, _state, _facade, this);
         if (_facade.isClientDb()) {
-            _log.error("[DbId: " + _facade + "] Error! SendMessageDirectJob attempted in Client NetDb! \n* "
+            _log.error("Error! SendMessageDirectJob attempted in Client NetDb! \n* "
                        + "Message: " + msg, new Exception ("backtrace..."));
             return;
         }
@@ -545,7 +538,7 @@ class SearchJob extends JobImpl {
             getContext().statManager().addRateData("netDb.failedPeers", 1);
             searchNext();
         }
-        public String getName() { return "Timeout Kademlia Search"; }
+        public String getName() {return "Timeout Kademlia Search";}
     }
 
     /**
@@ -629,14 +622,14 @@ class SearchJob extends JobImpl {
         TunnelInfo outTunnel = getContext().tunnelManager().selectOutboundExploratoryTunnel(to);
 
         if (outTunnel != null) {
-            if (_log.shouldInfo())
-                _log.info("Resending LeaseSet to " + to + " through " + outTunnel + ": " + msg);
+            if (_log.shouldInfo()) {
+                _log.info("Resending LeaseSet to [" + to.base64().substring(0,6) + "] via " + outTunnel + ": " + msg);
+            }
             // TODO pass a priority to the dispatcher
             getContext().tunnelDispatcher().dispatchOutbound(msg, outTunnel.getSendTunnelId(0), null, to);
             return true;
         } else {
-            if (_log.shouldWarn())
-                _log.warn("Unable to resend a LeaseSet - no Outbound Exploratory tunnels");
+            if (_log.shouldWarn()) {_log.warn("Unable to resend a LeaseSet - no Outbound Exploratory tunnels");}
             return false;
         }
     }
@@ -646,15 +639,17 @@ class SearchJob extends JobImpl {
      */
     protected void fail() {
         if (isLocal()) {
-            if (_log.shouldError())
+            if (_log.shouldError()) {
                 _log.error("Why did we fail if the target is local? [" +
                            _state.getTarget().toBase64().substring(0,6) + "]", new Exception("failure cause"));
+            }
             succeed();
             return;
         }
 
-        if (_log.shouldInfo())
+        if (_log.shouldInfo()) {
             _log.info("Search for [" + _state.getTarget().toBase64().substring(0,6) + "] failed");
+        }
 //        if (_log.shouldDebug())
 //            _log.debug("Failed: " + _state);
 
@@ -666,9 +661,7 @@ class SearchJob extends JobImpl {
             getContext().statManager().addRateData("netDb.failedTime", time);
             //_facade.fail(_state.getTarget());
         }
-        if (_onFailure != null)
-            getContext().jobQueue().addJob(_onFailure);
-
+        if (_onFailure != null) {getContext().jobQueue().addJob(_onFailure);}
         _facade.searchComplete(_state.getTarget());
         handleDeferred(false);
     }
@@ -678,25 +671,21 @@ class SearchJob extends JobImpl {
         boolean ok = true;
         int deferred = 0;
         synchronized (_deferredSearches) {
-            if (_deferredCleared)
-                ok = false;
-            else
-                _deferredSearches.add(search);
+            if (_deferredCleared) {ok = false;}
+            else {_deferredSearches.add(search);}
             deferred = _deferredSearches.size();
         }
 
         if (!ok) {
             // race between adding deferred and search completing
-            if (_log.shouldWarn())
+            if (_log.shouldWarn()) {
                 _log.warn("Race deferred before searchCompleting?  our onFind=" + _onSuccess + " new one: " + onFind);
-
+            }
             // the following /shouldn't/ be necessary, but it doesn't hurt
             _facade.searchComplete(_state.getTarget());
             _facade.search(_state.getTarget(), onFind, onFail, expiration - getContext().clock().now(), isLease);
             return 0;
-        } else {
-            return deferred;
-        }
+        } else {return deferred;}
     }
 
     private void handleDeferred(boolean success) {
@@ -734,12 +723,12 @@ class SearchJob extends JobImpl {
             _expiration = expiration;
             _isLease = isLease;
         }
-        public Job getOnFind() { return _onFind; }
-        public Job getOnFail() { return _onFail; }
-        public long getExpiration() { return _expiration; }
+        public Job getOnFind() {return _onFind;}
+        public Job getOnFail() {return _onFail;}
+        public long getExpiration() {return _expiration;}
     }
 
-    public String getName() { return "Start Kademlia NetDb Search"; }
+    public String getName() {return "Start Kademlia NetDb Search";}
 
     @Override
     public String toString() {
@@ -747,9 +736,9 @@ class SearchJob extends JobImpl {
                + DataHelper.formatDuration((getContext().clock().now() - _startedOn)) + " ago";
     }
 
-    boolean wasAttempted(Hash peer) { return _state.wasAttempted(peer); }
+    boolean wasAttempted(Hash peer) {return _state.wasAttempted(peer);}
 
-    long timeoutMs() { return _timeoutMs; }
+    long timeoutMs() {return _timeoutMs;}
 
     /** @return true if peer was new */
     boolean add(Hash peer) {
@@ -763,5 +752,5 @@ class SearchJob extends JobImpl {
         return rv;
     }
 
-    void decrementOutstandingFloodfillSearches() { _floodfillSearchesOutstanding--; }
+    void decrementOutstandingFloodfillSearches() {_floodfillSearchesOutstanding--;}
 }

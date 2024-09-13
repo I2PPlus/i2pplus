@@ -11,7 +11,6 @@ import java.util.TreeSet;
 import net.i2p.data.Hash;
 import net.i2p.kademlia.XORComparator;
 import net.i2p.router.RouterContext;
-
 import net.i2p.util.Log;
 
 /**
@@ -46,7 +45,7 @@ class SearchState {
         _started = _context.clock().now();
     }
 
-    public Hash getTarget() { return _searchKey; }
+    public Hash getTarget() {return _searchKey;}
     public Set<Hash> getPending() {
         synchronized (_pendingPeers) {
             return new HashSet<Hash>(_pendingPeers);
@@ -64,8 +63,7 @@ class SearchState {
     }
 
     private Set<Hash> locked_getClosest(Set<Hash> peers, int max, Hash target) {
-        if (_attemptedPeers.size() <= max)
-            return new HashSet<Hash>(_attemptedPeers);
+        if (_attemptedPeers.size() <= max) {return new HashSet<Hash>(_attemptedPeers);}
         TreeSet<Hash> closest = new TreeSet<Hash>(new XORComparator<Hash>(target));
         closest.addAll(_attemptedPeers);
         Set<Hash> rv = new HashSet<Hash>(max);
@@ -92,41 +90,34 @@ class SearchState {
         }
     }
 
-    public boolean completed() { return _completed != -1; }
+    public boolean completed() {return _completed != -1;}
 
-    public void complete() {
-        _completed = _context.clock().now();
-    }
+    public void complete() {_completed = _context.clock().now();}
 
     /** @since 0.9.16 */
-    public boolean isAborted() { return _aborted; }
+    public boolean isAborted() {return _aborted;}
 
     /** @since 0.9.16 */
-    public void abort() {
-        _aborted = true;
-    }
+    public void abort() {_aborted = true;}
 
-    public long getWhenStarted() { return _started; }
-    public long getWhenCompleted() { return _completed; }
+    public long getWhenStarted() {return _started;}
+    public long getWhenCompleted() {return _completed;}
 
     public void addPending(Collection<Hash> pending) {
         synchronized (_pendingPeers) {
             _pendingPeers.addAll(pending);
-            for (Hash peer : pending)
+            for (Hash peer : pending) {
                 _pendingPeerTimes.put(peer, Long.valueOf(_context.clock().now()));
+            }
         }
-        synchronized (_attemptedPeers) {
-            _attemptedPeers.addAll(pending);
-        }
+        synchronized (_attemptedPeers) {_attemptedPeers.addAll(pending);}
     }
     public void addPending(Hash peer) {
         synchronized (_pendingPeers) {
             _pendingPeers.add(peer);
             _pendingPeerTimes.put(peer, Long.valueOf(_context.clock().now()));
         }
-        synchronized (_attemptedPeers) {
-            _attemptedPeers.add(peer);
-        }
+        synchronized (_attemptedPeers) {_attemptedPeers.add(peer);}
     }
     /** we didn't actually want to add this peer as part of the pending list... */
     public void removePending(Hash peer) {
@@ -134,9 +125,7 @@ class SearchState {
             _pendingPeers.remove(peer);
             _pendingPeerTimes.remove(peer);
         }
-        synchronized (_attemptedPeers) {
-            _attemptedPeers.remove(peer);
-        }
+        synchronized (_attemptedPeers) {_attemptedPeers.remove(peer);}
     }
 
     /** how long did it take to get the reply, or -1 if we don't know */
@@ -145,40 +134,33 @@ class SearchState {
         synchronized (_pendingPeers) {
             _pendingPeers.remove(peer);
             Long when = _pendingPeerTimes.remove(peer);
-            if (when != null)
-                rv = _context.clock().now() - when.longValue();
+            if (when != null) {rv = _context.clock().now() - when.longValue();}
         }
-        synchronized (_successfulPeers) {
-            _successfulPeers.add(peer);
-        }
+        synchronized (_successfulPeers) {_successfulPeers.add(peer);}
         return rv;
     }
 
     /** how long did it take to get the reply, or -1 if we dont know */
     public long replyFound(Hash peer) {
-        synchronized (_repliedPeers) {
-            _repliedPeers.add(peer);
-        }
+        synchronized (_repliedPeers) {_repliedPeers.add(peer);}
         synchronized (_pendingPeers) {
             _pendingPeers.remove(peer);
             Long when = _pendingPeerTimes.remove(peer);
-            if (when != null)
-                return _context.clock().now() - when.longValue();
-            else
-                return -1;
+            if (when != null) {return _context.clock().now() - when.longValue();}
+            else {return -1;}
         }
     }
 
-    public Set<Hash> getRepliedPeers() { synchronized (_repliedPeers) { return new HashSet<Hash>(_repliedPeers); } }
+    public Set<Hash> getRepliedPeers() {
+        synchronized (_repliedPeers) {return new HashSet<Hash>(_repliedPeers);}
+    }
 
     public void replyTimeout(Hash peer) {
         synchronized (_pendingPeers) {
             _pendingPeers.remove(peer);
             _pendingPeerTimes.remove(peer);
         }
-        synchronized (_failedPeers) {
-            _failedPeers.add(peer);
-        }
+        synchronized (_failedPeers) {_failedPeers.add(peer);}
     }
 
     @Override
@@ -186,13 +168,10 @@ class SearchState {
         Boolean debug = _log.shouldDebug();
         StringBuilder buf = new StringBuilder(256);
         buf.append(" Search for [").append(_searchKey.toBase64().substring(0,6)).append("]");
-        if (_successfulPeers.size() <= 0)
-            buf.append(" in progress...");
-        else
-            buf.append(" completed");
-        if (_aborted)
-            buf.append(" aborted");
-// this _should_ only show the following if debug logging is enabled, but currently it supresses it
+        if (_successfulPeers.size() <= 0) {buf.append(" in progress...");}
+        else {buf.append(" completed");}
+        if (_aborted) {buf.append(" aborted");}
+        // this _should_ only show the following if debug logging is enabled, but currently it supresses it
         if (debug) {
             if (_attemptedPeers.size() > 0) {
                 buf.append("\n* Queried: ");
@@ -231,6 +210,6 @@ class SearchState {
                 }
             }
         }
-            return buf.toString();
+        return buf.toString();
     }
 }
