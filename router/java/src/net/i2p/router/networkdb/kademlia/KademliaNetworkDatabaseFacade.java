@@ -107,11 +107,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *
      */
     void searchComplete(Hash key) {
-        if (_log.shouldDebug())
-            _log.debug("Search for key [" + key.toBase64().substring(0,6) + "] finished");
-        synchronized (_activeRequests) {
-            _activeRequests.remove(key);
-        }
+        if (_log.shouldDebug()) {_log.debug("Search for key [" + key.toBase64().substring(0,6) + "] finished");}
+        synchronized (_activeRequests) {_activeRequests.remove(key);}
     }
 
     /**
@@ -176,26 +173,23 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         Unused.
      */
 //    protected final static long PUBLISH_JOB_DELAY = 5*60*1000l;
-    protected final static long PUBLISH_JOB_DELAY = 4*60*1000l;
+    protected final static long PUBLISH_JOB_DELAY = 3*60*1000l;
 
     /** Maximum number of peers to place in the queue to explore
      */
-//    static final int MAX_EXPLORE_QUEUE = 128;
-    static final int MAX_EXPLORE_QUEUE = SystemVersion.isSlow() ? 128 : 256;
+    static final int MAX_EXPLORE_QUEUE = SystemVersion.isSlow() ? 128 : 192;
     static final String PROP_EXPLORE_QUEUE = "router.exploreQueue";
 
     /**
      *  kad K
      *  Was 500 in old implementation but that was with B ~= -8!
      */
-//    private static final int BUCKET_SIZE = 24;
-    private static final int BUCKET_SIZE = 48;
+    private static final int BUCKET_SIZE = 24;
     static final String PROP_BUCKET_SIZE = "router.exploreBucketSize";
-//    private static final int KAD_B = 4;
-    private static final int KAD_B = 5;
+    private static final int KAD_B = 4;
     static final String PROP_KAD_B = "router.exploreKadB";
 
-    private static final long[] RATES = { 60*1000, 60*60*1000, 24*60*60*1000 };
+    private static final long[] RATES = {60*1000, 60*60*1000, 24*60*60*1000 };
 
     public KademliaNetworkDatabaseFacade(RouterContext context, Hash dbid) {
         _context = context;
@@ -214,24 +208,25 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _reseedChecker = new ReseedChecker(context);
             _blindCache = new BlindCache(context);
             _exploreKeys = new ConcurrentHashSet<Hash>(64);
-        // We don't have a comm system here to check for ctx.commSystem().isDummy()
-        // we'll check before starting in startup()
-        _erj = new ExpireRoutersJob(_context, this);
+            // We don't have a comm system here to check for ctx.commSystem().isDummy()
+            // we'll check before starting in startup()
+            _erj = new ExpireRoutersJob(_context, this);
             _peerSelector = createPeerSelector();
         }
         _elj = new ExpireLeasesJob(_context, this);
-        if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Created KademliaNetworkDatabaseFacade for DbId: " + _dbid);
-        context.statManager().createRateStat("netDb.lookupDeferred", "Deferred NetDb lookups", "NetworkDatabase", RATES);
+        if (_log.shouldLog(Log.DEBUG)) {_log.debug("Created KademliaNetworkDatabaseFacade for DbId: " + _dbid);}
+
+        /* stats */
         context.statManager().createRateStat("netDb.exploreKeySet", "NetDb keys queued for exploration", "NetworkDatabase", RATES);
+        context.statManager().createRateStat("netDb.lookupDeferred", "Deferred NetDb lookups", "NetworkDatabase", RATES);
         context.statManager().createRateStat("netDb.negativeCache", "Aborted NetDb lookups (already cached)", "NetworkDatabase", RATES);
         // following are for StoreJob
-        context.statManager().createRateStat("netDb.storeRouterInfoSent", "Sent RouterInfo store messages", "NetworkDatabase", RATES);
-        context.statManager().createRateStat("netDb.storeLeaseSetSent", "Sent LeaseSet store messages", "NetworkDatabase", RATES);
-        context.statManager().createRateStat("netDb.storePeers", "Peers each NetDb must be sent to before success", "NetworkDatabase", RATES);
-        context.statManager().createRateStat("netDb.storeFailedPeers", "Peers each NetDb must be sent to before failing completely", "NetworkDatabase", RATES);
         context.statManager().createRateStat("netDb.ackTime", "Time peer takes to ACK a DbStore", "NetworkDatabase", RATES);
         context.statManager().createRateStat("netDb.replyTimeout", "Timeout expiry after a NetDb send (peer fails to reply in time)", "NetworkDatabase", RATES);
+        context.statManager().createRateStat("netDb.storeFailedPeers", "Peers each NetDb must be sent to before failing completely", "NetworkDatabase", RATES);
+        context.statManager().createRateStat("netDb.storeLeaseSetSent", "Sent LeaseSet store messages", "NetworkDatabase", RATES);
+        context.statManager().createRateStat("netDb.storePeers", "Peers each NetDb must be sent to before success", "NetworkDatabase", RATES);
+        context.statManager().createRateStat("netDb.storeRouterInfoSent", "Sent RouterInfo store messages", "NetworkDatabase", RATES);
         // following is for RepublishLeaseSetJob
         context.statManager().createRateStat("netDb.republishLeaseSetCount", "How often we republish a LeaseSet", "NetworkDatabase", RATES);
         // following is for DatabaseStoreMessage
@@ -241,29 +236,25 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     @Override
-    public boolean isInitialized() {
-        return _initialized && _ds != null && _ds.isInitialized();
-    }
+    public boolean isInitialized() {return _initialized && _ds != null && _ds.isInitialized();}
 
     /**
      *  Only for main DB
      */
     protected PeerSelector createPeerSelector() {
-       if (isClientDb())
-           throw new IllegalStateException();
+       if (isClientDb()) {throw new IllegalStateException();}
        return new FloodfillPeerSelector(_context);
     }
 
     /**
      *  @return the main DB's peer selector. Client DBs do not have their own.
      */
-    public PeerSelector getPeerSelector() { return _peerSelector; }
+    public PeerSelector getPeerSelector() {return _peerSelector;}
 
     /** @since 0.9 */
     @Override
     public ReseedChecker reseedChecker() {
-        if (isClientDb())
-            return null;
+        if (isClientDb()) {return null;}
         return _reseedChecker;
     }
 
@@ -277,32 +268,27 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @since 0.9.61
      */
     protected BlindCache blindCache() {
-        if (!isClientDb())
-            return _blindCache;
+        if (!isClientDb()) {return _blindCache;}
         return ((FloodfillNetworkDatabaseFacade) _context.netDb()).blindCache();
     }
 
     /**
      *  @return the main DB's KBucketSet. Client DBs do not have their own.
      */
-    KBucketSet<Hash> getKBuckets() { return _kb; }
-    DataStore getDataStore() { return _ds; }
+    KBucketSet<Hash> getKBuckets() {return _kb;}
+    DataStore getDataStore() {return _ds;}
 
-    long getLastExploreNewDate() { return _lastExploreNew; }
-    void setLastExploreNewDate(long when) {
-        _lastExploreNew = when;
-    }
+    long getLastExploreNewDate() {return _lastExploreNew;}
+    void setLastExploreNewDate(long when) {_lastExploreNew = when;}
 
     /** @return unmodifiable set */
     public Set<Hash> getExploreKeys() {
-        if (!_initialized || isClientDb())
-            return Collections.emptySet();
+        if (!_initialized || isClientDb()) {return Collections.emptySet();}
         return Collections.unmodifiableSet(_exploreKeys);
     }
 
     public void removeFromExploreKeys(Collection<Hash> toRemove) {
-        if (!_initialized || isClientDb())
-            return;
+        if (!_initialized || isClientDb()) {return;}
         _exploreKeys.removeAll(toRemove);
         _context.statManager().addRateData("netDb.exploreKeySet", _exploreKeys.size());
     }
@@ -315,8 +301,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             upLongEnough = down > 0 && down < 10*60*60*1000L;
         }
         if (!_initialized || isClientDb()) {
-            if (_log.shouldInfo())
-                _log.info("Datastore not initialized, cannot queue keys for exploration");
+            if (_log.shouldInfo()) {_log.info("Datastore not initialized, cannot queue keys for exploration");}
             return;
         }
         // TODO: make sure exploreQueue isn't null before assigning
@@ -331,8 +316,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  Cannot be restarted.
      */
     public synchronized void shutdown() {
-        if (_log.shouldWarn())
-            _log.warn("NetDb shutdown: " + this);
+        if (_log.shouldWarn()) {_log.warn("NetDb shutdown: " + this);}
         _initialized = false;
         if (!_context.commSystem().isDummy() && !isClientDb() &&
             _context.router().getUptime() > ROUTER_INFO_EXPIRATION_FLOODFILL + 10*60*1000 + 60*1000) {
@@ -341,18 +325,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             erj.runJob();
         }
         _context.jobQueue().removeJob(_elj);
-        if (_erj != null)
-            _context.jobQueue().removeJob(_erj);
-        if (_kb != null && !isClientDb())
-            _kb.clear();
-        if (_ds != null)
-            _ds.stop();
-        if (_exploreKeys != null)
-            _exploreKeys.clear();
-        if (_negativeCache != null)
-            _negativeCache.stop();
-        if (!isClientDb())
-            blindCache().shutdown();
+        if (_erj != null) {_context.jobQueue().removeJob(_erj);}
+        if (_kb != null && !isClientDb()) {_kb.clear();}
+        if (_ds != null) {_ds.stop();}
+        if (_exploreKeys != null) {_exploreKeys.clear();}
+        if (_negativeCache != null) {_negativeCache.stop();}
+        if (!isClientDb()) {blindCache().shutdown();}
     }
 
     /**
@@ -362,14 +340,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  @deprecated
      */
     @Deprecated
-    public synchronized void restart() {
-        throw new UnsupportedOperationException();
-    }
+    public synchronized void restart() {throw new UnsupportedOperationException();}
 
     @Override
     public void rescan() {
-        if (isInitialized())
-           _ds.rescan();
+        if (isInitialized()) {_ds.rescan();}
     }
 
     /**
@@ -378,7 +353,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *
      * @return null before startup() is called; non-null thereafter, even for subdbs.
      */
-    String getDbDir() { return _dbDir; }
+    String getDbDir() {return _dbDir;}
 
     /**
      * Check if the database is a client DB.
@@ -406,11 +381,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         } catch (IOException ioe) {throw new RuntimeException("Unable to initialize NetDb storage", ioe);}
         _dbDir = dbDir;
         _negativeCache = new NegativeLookupCache(_context);
-        if (!isClientDb())
-            blindCache().startup();
-
+        if (!isClientDb()) {blindCache().startup();}
         createHandlers();
-
         _initialized = true;
         _started = System.currentTimeMillis();
 
@@ -554,63 +526,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @param peersToIgnore can be null
      */
     public Set<Hash> findNearestRouters(Hash key, int maxNumRouters, Set<Hash> peersToIgnore) {
-        if (isClientDb()) {
-//            _log.warn("Subdb", new Exception("I did it"));
-            return Collections.emptySet();
-        }
+        if (isClientDb()) {return Collections.emptySet();}
         if (!_initialized) {return Collections.emptySet();}
         return new HashSet<Hash>(_peerSelector.selectNearest(key, maxNumRouters, peersToIgnore, _kb));
     }
 
-/*****
-    private Set<RouterInfo> getRouters(Collection hashes) {
-        if (!_initialized) return null;
-        Set rv = new HashSet(hashes.size());
-        for (Iterator iter = hashes.iterator(); iter.hasNext(); ) {
-            Hash rhash = (Hash)iter.next();
-            DataStructure ds = _ds.get(rhash);
-            if (ds == null) {
-                if (_log.shouldInfo())
-                    _log.info("Selected hash " + rhash.toBase64() + " is not stored locally");
-            } else if ( !(ds instanceof RouterInfo) ) {
-                // leaseSet
-            } else {
-                rv.add(ds);
-            }
-        }
-        return rv;
-    }
-*****/
-
-    /**
-     *  Get the hashes for all known routers
-     *
-     *  @return empty set if this is a client DB
-     */
-/**
-    public Set<Hash> getAllRouters() {
-        if (isClientDb()) {
-            _log.warn("Subdb", new Exception("I did it"));
-            return Collections.emptySet();
-        }
-        if (!_initialized) return Collections.emptySet();
-        Set<Map.Entry<Hash, DatabaseEntry>> entries = _ds.getMapEntries();
-        Set<Hash> rv = new HashSet<Hash>(entries.size());
-        for (Map.Entry<Hash, DatabaseEntry> entry : entries) {
-            if (entry.getValue().getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
-                rv.add(entry.getKey());
-            }
-        }
-        return rv;
-    }
-**/
-
     /** get the hashes for all known routers */
     public Set<Hash> getAllRouters() {
-        if (isClientDb()) {
-//            _log.warn("Subdb", new Exception("I did it"));
-            return Collections.emptySet();
-        }
+        if (isClientDb()) {return Collections.emptySet();}
         if (!_initialized) {return Collections.emptySet();}
         Collection<DatabaseEntry> entries = _ds.getEntries();
         return entries.stream()
@@ -629,37 +552,13 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      */
     @Override
     public int getKnownRouters() {
-/****
-        if (_kb == null) return 0;
-        CountRouters count = new CountRouters();
-        _kb.getAll(count);
-        return count.size();
-****/
-        if (isClientDb()) {
-//            _log.warn("Subdb", new Exception("I did it"));
-            return 0;
-        }
-        if (_ds == null) return 0;
+        if (isClientDb() || _ds == null) {return 0;}
         int rv = 0;
         for (DatabaseEntry ds : _ds.getEntries()) {
-            if (ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)
-                rv++;
+            if (ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {rv++;}
         }
         return rv;
     }
-
-/****
-    private class CountRouters implements SelectionCollector<Hash> {
-        private int _count;
-        public int size() { return _count; }
-        public void add(Hash entry) {
-            if (_ds == null) return;
-            DatabaseEntry o = _ds.get(entry);
-            if (o != null && o.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)
-                _count++;
-        }
-    }
-****/
 
     /**
      *  This is only used by StatisticsManager to publish
@@ -1456,7 +1355,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @since 0.9.7
      */
     String validate(RouterInfo routerInfo) throws IllegalArgumentException {
-        if (!isInitialized() || _context.commSystem().isDummy()) { return null; }
+        if (!isInitialized() || _context.commSystem().isDummy()) {return null;}
         long now = _context.clock().now();
         String validateUptime = _context.getProperty("router.validateRoutersAfter");
         Hash us = _context.routerHash();
@@ -1713,12 +1612,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         String err = validate(key, routerInfo);
         if (err != null)
             throw new IllegalArgumentException("Invalid NetDbStore attempt - " + err);
-
-        //if (_log.shouldDebug())
-        //    _log.debug("RouterInfo " + key.toBase64() + " is stored with "
-        //               + routerInfo.getOptionsMap().size() + " options on "
-        //               + new Date(routerInfo.getPublished()));
-
         _context.peerManager().setCapabilities(key, routerInfo.getCapabilities());
         _ds.put(key, routerInfo, persist);
         if (rv == null)
