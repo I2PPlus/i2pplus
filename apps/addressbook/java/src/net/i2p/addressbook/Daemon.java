@@ -53,7 +53,6 @@ class Daemon {
     private static final boolean DEBUG = false;
     // If you change this, change in SusiDNS SubscriptionBean also
     private static final String DEFAULT_SUB = "http://stats.i2p/cgi-bin/newhosts.txt" + "\n" +
-                                              "http://reg.i2p/export/hosts.txt" + "\n" +
                                               "http://skank.i2p/hosts.txt" + "\n" +
                                               "http://notbob.i2p/hosts.txt";
     /** @since 0.9.12 */

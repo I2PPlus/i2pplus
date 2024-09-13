@@ -47,12 +47,10 @@ public class SubscriptionsBean extends BaseBean
     private static final String SUBS_FILE = "subscriptions.txt";
     // If you change this, change in Addressbook Daemon also
     private static final String DEFAULT_SUB = "http://stats.i2p/cgi-bin/newhosts.txt" + "\n" +
-                                              "http://reg.i2p/export/hosts.txt" + "\n" +
                                               "http://skank.i2p/hosts.txt" + "\n" +
                                               "http://notbob.i2p/hosts.txt";
 
-    public String getFileName()
-    {
+    public String getFileName() {
         loadConfig();
         fileName = subsFile().toString();
         return fileName;
@@ -71,8 +69,7 @@ public class SubscriptionsBean extends BaseBean
         }
     }
 
-    private void locked_reloadSubs()
-    {
+    private void locked_reloadSubs() {
         File file = subsFile();
         if (file.isFile()) {
             StringBuilder buf = new StringBuilder();
@@ -150,8 +147,6 @@ public class SubscriptionsBean extends BaseBean
                     if (content != null && content.length() > 2 && _context.portMapper().isRegistered(PortMapper.SVC_HTTP_PROXY)) {
                         _context.namingService().requestUpdate(null);
                         message = _t("Attempting to update addressbook from subscription sources...");
-                                  // + "<img height=\"1\" width=\"1\" alt=\"\" " +
-                                  // "src=\"/addressbook/?wakeup=1&nonce=" + nonce + "\">";
                     } else if (!_context.portMapper().isRegistered(PortMapper.SVC_HTTP_PROXY)) {
                         message = _t("Cannot update subscriptions: HTTP proxy is not running!");
                     }
