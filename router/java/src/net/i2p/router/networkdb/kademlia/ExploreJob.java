@@ -32,8 +32,7 @@ class ExploreJob extends SearchJob {
 
     /** how long each exploration should run for
      *  The exploration won't "succeed" so we make it long so we query several peers */
-//    private static final long MAX_EXPLORE_TIME = 30*1000;
-    private static final long MAX_EXPLORE_TIME = SystemVersion.isSlow() ? 20*1000 : 15*1000;
+    private static final long MAX_EXPLORE_TIME = 40*1000;
 
     /** how many peers to explore through concurrently */
     static final String PROP_EXPLORE_BREDTH = "router.exploreBredth";
@@ -42,8 +41,7 @@ class ExploreJob extends SearchJob {
     /** Only send the closest "don't tell me about" refs...
      *  Override to make this bigger because we want to include both the
      *  floodfills and the previously-queried peers */
-//    static final int MAX_CLOSEST = 20; // LINT -- field hides another field, this isn't an override.
-    static final int MAX_CLOSEST = 32; // LINT -- field hides another field, this isn't an override.
+    static final int MAX_CLOSEST = 20; // LINT -- field hides another field, this isn't an override.
 
     /** Override to make this shorter, since we don't sort out the
      *  unresponsive ff peers like we do in FloodOnlySearchJob */
@@ -95,16 +93,11 @@ class ExploreJob extends SearchJob {
         //msg.setDontIncludePeers(getState().getClosestAttempted(MAX_CLOSEST));
         Set<Hash> dontIncludePeers = getState().getClosestAttempted(MAX_CLOSEST);
         msg.setMessageExpiration(expiration);
-        if (replyTunnelId != null)
-            msg.setReplyTunnel(replyTunnelId);
+        if (replyTunnelId != null) {msg.setReplyTunnel(replyTunnelId);}
 
         int available = MAX_CLOSEST - dontIncludePeers.size();
-        if (_isRealExplore) {
-            // supported as of 0.9.16. We don't add "fake hash" any more.
-            msg.setSearchType(DatabaseLookupMessage.Type.EXPL);
-        } else {
-            msg.setSearchType(DatabaseLookupMessage.Type.RI);
-        }
+        if (_isRealExplore) {msg.setSearchType(DatabaseLookupMessage.Type.EXPL);} // supported as of 0.9.16. We don't add "fake hash" any more.
+        else {msg.setSearchType(DatabaseLookupMessage.Type.RI);}
 
         KBucketSet<Hash> ks = _facade.getKBuckets();
         Hash rkey = ctx.routingKeyGenerator().getRoutingKey(getState().getTarget());
@@ -125,12 +118,7 @@ class ExploreJob extends SearchJob {
         for (Hash h : dontIncludePeers) {
             buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
         }
-        if (_log.shouldDebug())
-            _log.debug(buf.toString());
-//        else if (_log.shouldInfo())
-//            _log.info("Excluding our " + (dontIncludePeers.size() - 1) + " closest peers from exploration");
-//            _log.debug("Peers we don't want to hear about: " + dontIncludePeers);
-
+        if (_log.shouldDebug()) {_log.debug(buf.toString());}
         msg.setDontIncludePeers(dontIncludePeers);
 
         // Now encrypt if we can
@@ -151,30 +139,30 @@ class ExploreJob extends SearchJob {
                 sess = MessageWrapper.generateSession(ctx, ctx.sessionKeyManager(), MAX_EXPLORE_TIME, !supportsRatchet);
                 if (sess != null) {
                     if (sess.tag != null) {
-                        if (_log.shouldInfo())
+                        if (_log.shouldInfo()) {
                             _log.info("Requesting AES reply from [" + ident.calculateHash().toBase64().substring(0,6) +
                                       "] \n* Session Key: " + sess.key + "\n* Tag: " + sess.tag);
+                        }
                         msg.setReplySession(sess.key, sess.tag);
                     } else {
-                        if (_log.shouldInfo())
+                        if (_log.shouldInfo()) {
                             _log.info("Requesting AEAD reply from [" + ident.calculateHash().toBase64().substring(0,6) +
                                       "] \n* Session Key: " + sess.key + "\n* Tag: " + sess.rtag);
+                        }
                         msg.setReplySession(sess.key, sess.rtag);
                     }
                 } else {
-                    if (_log.shouldWarn())
-                        _log.warn("Failed encrypt to " + peer);
+                    if (_log.shouldWarn()) {_log.warn("Failed encrypt to " + peer);}
                     // client went away, but send it anyway
                 }
             }
             // may be null
             outMsg = MessageWrapper.wrap(ctx, msg, peer);
-            if (_log.shouldDebug())
-                _log.debug("Encrypted Exploratory DbLookupMessage for [" + getState().getTarget().toBase64().substring(0,6) + "] sent to [" +
-                           ident.calculateHash().toBase64().substring(0,6) + "]");
-        } else {
-            outMsg = msg;
-        }
+            if (_log.shouldDebug()) {
+                _log.debug("Encrypted Exploratory DbLookupMessage for [" + getState().getTarget().toBase64().substring(0,6) +
+                           "] sent to [" + ident.calculateHash().toBase64().substring(0,6) + "]");
+            }
+        } else {outMsg = msg;}
         return outMsg;
     }
 
@@ -182,37 +170,20 @@ class ExploreJob extends SearchJob {
     @Override
     protected int getBredth() {
         String exploreBredth = getContext().getProperty(PROP_EXPLORE_BREDTH);
-        boolean isSingleCore = SystemVersion.getCores() < 2;
-        boolean isSlow = SystemVersion.isSlow();
-        int cpuLoad = SystemVersion.getCPULoad();
-        int cpuLoadAvg = SystemVersion.getCPULoadAvg();
-        if (exploreBredth == null && getContext().netDb().getKnownRouters() < 2000 && !isSlow && !isSingleCore && cpuLoad < 95 && cpuLoadAvg < 95) {
-            if (_log.shouldInfo())
-                _log.info("Initiating Exploratory Search -> Max " + EXPLORE_BREDTH * 3 + " concurrent (less than 1000 RouterInfos stored on disk)");
+        if (exploreBredth == null && getContext().netDb().getKnownRouters() < 1500) {
+            if (_log.shouldInfo()) {
+                _log.info("Initiating Exploratory Search -> Max " + EXPLORE_BREDTH * 3 + " concurrent (less than 1500 RouterInfos stored on disk)");
+            }
             return EXPLORE_BREDTH * 3;
-        } else if ((exploreBredth == null && getContext().netDb().getKnownRouters() > 3500) || (cpuLoad > 90 && cpuLoadAvg > 90) || (isSlow || isSingleCore)) {
-            if (_log.shouldInfo())
-                if (cpuLoad > 95 || cpuLoadAvg > 95 || isSlow || isSingleCore)
-                    _log.info("Initiating Exploratory Search -> Max 1 concurrent (High CPU load or device is low spec)");
-                else
-                    _log.info("Initiating Exploratory Search -> Max 1 concurrent (over 3500 RouterInfos stored on disk)");
-            return 1;
-        } else if (exploreBredth == null && !isSlow && !isSingleCore && cpuLoad < 95 && cpuLoadAvg < 95) {
-            if (_log.shouldInfo())
-                _log.info("Initiating Exploratory Search -> Max " + EXPLORE_BREDTH * 2 + " concurrent (less than 3500 RouterInfos stored on disk)");
-            return EXPLORE_BREDTH * 2;
-//        } else if (getContext().netDbSegmentor().getKnownRouters() < 1500) {
-        } else if (getContext().netDb().getKnownRouters() < 2000) {
-            if (_log.shouldInfo())
-                _log.info("Initiating Exploratory Search -> Max " + Math.min(EXPLORE_BREDTH + 1, 2) + " concurrent (less than 1500 RouterInfos stored on disk)");
-            return Math.min(EXPLORE_BREDTH + 1, 2);
         } else if (exploreBredth != null) {
-            if (_log.shouldInfo())
+            if (_log.shouldInfo()) {
                 _log.info("Initiating Exploratory Search -> Max " + exploreBredth + " concurrent (custom configuration)");
+            }
             return Integer.valueOf(exploreBredth);
         } else {
-            if (_log.shouldInfo())
+            if (_log.shouldInfo()) {
                 _log.info("Initiating Exploratory Search -> Max " + EXPLORE_BREDTH + " concurrent");
+            }
             return EXPLORE_BREDTH;
         }
     }
@@ -227,12 +198,9 @@ class ExploreJob extends SearchJob {
         // who cares about how many new peers.  well, maybe we do.  but for now,
         // we'll do the simplest thing that could possibly work.
         if (_log.shouldInfo()) {
-            if (numNewPeers == 1)
-                _log.info("Found " + numNewPeers + " new peer via Exploratory Search");
-            else if (numNewPeers > 1)
-                _log.info("Found " + numNewPeers + " new peers via Exploratory Search");
-            else
-                _log.info("Found no new peers via Exploratory Search");
+            if (numNewPeers == 1) {_log.info("Found " + numNewPeers + " new peer via Exploratory Search");}
+            else if (numNewPeers > 1) {_log.info("Found " + numNewPeers + " new peers via Exploratory Search");}
+            else {_log.info("Found no new peers via Exploratory Search");}
         }
         _facade.setLastExploreNewDate(getContext().clock().now());
     }
