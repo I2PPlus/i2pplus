@@ -623,7 +623,7 @@ class SearchJob extends JobImpl {
 
         if (outTunnel != null) {
             if (_log.shouldInfo()) {
-                _log.info("Resending LeaseSet to [" + to.base64().substring(0,6) + "] via " + outTunnel + ": " + msg);
+                _log.info("Resending LeaseSet to [" + to.toBase64().substring(0,6) + "] via " + outTunnel + ": " + msg);
             }
             // TODO pass a priority to the dispatcher
             getContext().tunnelDispatcher().dispatchOutbound(msg, outTunnel.getSendTunnelId(0), null, to);
