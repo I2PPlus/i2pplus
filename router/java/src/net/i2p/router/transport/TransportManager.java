@@ -98,21 +98,20 @@ public class TransportManager implements TransportEventListener {
 
     /** not forever, since they may update */
     private static final long SIGTYPE_BANLIST_DURATION = 36*60*60*1000L;
-
     private static final long UPNP_REFRESH_TIME = UPnP.LEASE_TIME_SECONDS * 1000L / 3;
-
     private final long _msgIDBloomXor;
+    private static final long[] RATES = { 60*1000, 10*60*1000, 60*60*1000 };
 
     public TransportManager(RouterContext context) {
         _context = context;
         _log = _context.logManager().getLog(TransportManager.class);
-        _context.statManager().createRateStat("transport.banlistOnUnreachable", "Add peer to banlist (unreachable on any transport)", "Transport", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("transport.banlistOnUsupportedSigType", "Add peer to banlist (unsupported signature type)", "Transport", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("transport.noBidsYetNotAllUnreachable", "Add peer to banlist (unreachable on any transport)", "Transport", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("transport.bidFailBanlisted", "Failed to bid on message (banlisted peer)", "Transport", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("transport.bidFailSelf", "Failed to bid on message (self as target)", "Transport", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("transport.bidFailNoTransports", "Failed to bid on message (unreachable on any transport)", "Transport", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("transport.bidFailAllTransports", "Failed to bid on message (failed on all transports)", "Transport", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("transport.banlistOnUnreachable", "Add peer to banlist (unreachable on any transport)", "Transport", RATES);
+        _context.statManager().createRateStat("transport.banlistOnUsupportedSigType", "Add peer to banlist (unsupported signature type)", "Transport", RATES);
+        _context.statManager().createRateStat("transport.noBidsYetNotAllUnreachable", "Add peer to banlist (unreachable on any transport)", "Transport", RATES);
+        _context.statManager().createRateStat("transport.bidFailBanlisted", "Failed to bid on message (banlisted peer)", "Transport", RATES);
+        _context.statManager().createRateStat("transport.bidFailSelf", "Failed to bid on message (self as target)", "Transport", RATES);
+        _context.statManager().createRateStat("transport.bidFailNoTransports", "Failed to bid on message (unreachable on any transport)", "Transport", RATES);
+        _context.statManager().createRateStat("transport.bidFailAllTransports", "Failed to bid on message (failed on all transports)", "Transport", RATES);
         _transports = new ConcurrentHashMap<String, Transport>(2);
         _pluggableTransports = new HashMap<String, Transport>(2);
 

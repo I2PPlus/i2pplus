@@ -70,15 +70,12 @@ public class TunnelPool {
         _lastRateUpdate = _started;
         _firstInstalled = ctx.getProperty("router.firstInstalled", 0L) + 60*60*1000;
         String name;
-        if (_settings.isExploratory()) {
-            name = "Exploratory";
-        } else {
+        if (_settings.isExploratory()) {name = "Exploratory";}
+        else {
             name = _settings.getDestinationNickname();
             // just strip HTML here rather than escape it everywhere in the console
-            if (name != null)
-                name = DataHelper.stripHTML(name);
-            else
-                name = "[" + _settings.getDestination().toBase32().substring(0,6) + "]";
+            if (name != null) {name = DataHelper.stripHTML(name);}
+            else {name = "[" + _settings.getDestination().toBase32().substring(0,6) + "]";}
         }
         _rateName = "[" + name + "] " + (_settings.isInbound() ? "InBps" : "OutBps");
         refreshSettings();
@@ -116,35 +113,29 @@ public class TunnelPool {
                 requestLeaseSet(ls);
         }
         String name;
-        if (_settings.isExploratory()) {
-            name = "Exploratory tunnels";
-        } else {
+        if (_settings.isExploratory()) {name = "Exploratory tunnels";}
+        else {
             name = _settings.getDestinationNickname();
             // just strip HTML here rather than escape it everywhere in the console
-            if (name != null)
-                name = DataHelper.stripHTML(name);
-            else
-                name = _settings.getDestination().toBase32();
+            if (name != null) {name = DataHelper.stripHTML(name);}
+            else {name = _settings.getDestination().toBase32();}
         }
         if (_settings.isExploratory()) {
             _context.statManager().createRequiredRateStat(_rateName, (_settings.isInbound() ? "In " : "Out ") +
                                    "(B/s) for " + name, "Tunnels [Exploratory]",
-                                   new long[] { 60*1000l });
+                                   new long[] {60*1000l });
         } else {
             _context.statManager().createRequiredRateStat(_rateName, (_settings.isInbound() ? "In " : "Out ") +
                                    "(B/s) for " + name, "Tunnels [Services]",
-                                   new long[] { 60*1000l });
+                                   new long[] {60*1000l });
         }
     }
 
     synchronized void shutdown() {
-        if (_log.shouldInfo())
-            _log.info(toString() + ": Shutdown called");
+        if (_log.shouldInfo()) {_log.info(toString() + ": Shutdown called");}
         _alive = false;
         _context.statManager().removeRateStat(_rateName);
-        synchronized (_inProgress) {
-            _inProgress.clear();
-        }
+        synchronized (_inProgress) {_inProgress.clear();}
         _consecutiveBuildTimeouts.set(0);
     }
 
@@ -153,22 +144,20 @@ public class TunnelPool {
      *  @return non-null
      *  @since 0.9.35
      */
-    public String getRateName() {
-        return _rateName;
-    }
+    public String getRateName() {return _rateName;}
 
     private void refreshSettings() {
-        if (!_settings.isExploratory())
-            return; // don't override client specified settings
+        if (!_settings.isExploratory()) {return;} // don't override client specified settings
         Properties props = new Properties();
         props.putAll(_context.router().getConfigMap());
-        if (_settings.isInbound())
+        if (_settings.isInbound()) {
             _settings.readFromProperties(TunnelPoolSettings.PREFIX_INBOUND_EXPLORATORY, props);
-        else
+        } else {
             _settings.readFromProperties(TunnelPoolSettings.PREFIX_OUTBOUND_EXPLORATORY, props);
+        }
     }
 
-    private long getLifetime() { return System.currentTimeMillis() - _started; }
+    private long getLifetime() {return System.currentTimeMillis() - _started;}
 
     /**
      * Pull a random tunnel out of the pool.  If there are none available but
@@ -177,7 +166,7 @@ public class TunnelPool {
      *
      * @return null on failure, but it should always build and return a fallback
      */
-    TunnelInfo selectTunnel() { return selectTunnel(true); }
+    TunnelInfo selectTunnel() {return selectTunnel(true);}
 
     private TunnelInfo selectTunnel(boolean allowRecurseOnFail) {
         boolean avoidZeroHop = !_settings.getAllowZeroHop();
@@ -452,12 +441,12 @@ public class TunnelPool {
     }
 
     /** list of tunnelInfo instances of tunnels currently being built */
-    public List<PooledTunnelCreatorConfig> listPending() { synchronized (_inProgress) { return new ArrayList<PooledTunnelCreatorConfig>(_inProgress); } }
+    public List<PooledTunnelCreatorConfig> listPending() {synchronized (_inProgress) {return new ArrayList<PooledTunnelCreatorConfig>(_inProgress);} }
 
     /** duplicate of size(), let's pick one */
-    int getTunnelCount() { return size(); }
+    int getTunnelCount() {return size();}
 
-    public TunnelPoolSettings getSettings() { return _settings; }
+    public TunnelPoolSettings getSettings() {return _settings;}
 
     void setSettings(TunnelPoolSettings settings) {
         if (settings != null && _settings != null) {
@@ -860,7 +849,7 @@ public class TunnelPool {
         return ls;
     }
 
-    public long getLifetimeProcessed() { return _lifetimeProcessed; }
+    public long getLifetimeProcessed() {return _lifetimeProcessed;}
 
     /**
      * Keep a separate stat for each type, direction, and length of tunnel.
@@ -927,11 +916,11 @@ public class TunnelPool {
             if (_settings.isExploratory()) {
             _context.statManager().createRequiredRateStat(rateName, (_settings.isInbound() ? "In " : "Out ") +
                                    "Tunnel build frequency [" + name + "]", "Tunnels [Exploratory]",
-                                   new long[] { TUNNEL_LIFETIME });
+                                   new long[] {TUNNEL_LIFETIME });
             } else {
             _context.statManager().createRequiredRateStat(rateName, (_settings.isInbound() ? "In " : "Out ") +
                                    "Tunnel build frequency [" + name + "]", "Tunnels [Services]",
-                                   new long[] { TUNNEL_LIFETIME });
+                                   new long[] {TUNNEL_LIFETIME });
             }
             rs = _context.statManager().getRate(rateName);
         }
@@ -941,7 +930,7 @@ public class TunnelPool {
                 avg = (int) ( TUNNEL_LIFETIME * r.getAverageValue() / wanted);
         }
 
-        if (avg > 0 && avg < TUNNEL_LIFETIME / 3) {  // if we're taking less than 200s per tunnel to build
+        if (avg > 0 && avg < TUNNEL_LIFETIME / 3) { // if we're taking less than 200s per tunnel to build
             final int PANIC_FACTOR = 4;  // how many builds to kick off when time gets short
 //            avg += 60*1000;   // one minute safety factor
             avg += 2*60*1000;   // 2m safety factor
@@ -1178,7 +1167,7 @@ public class TunnelPool {
      *
      *  @return null on failure
      */
-    PooledTunnelCreatorConfig configureNewTunnel() { return configureNewTunnel(false); }
+    PooledTunnelCreatorConfig configureNewTunnel() {return configureNewTunnel(false);}
 
     /**
      *  @return null on failure
@@ -1194,7 +1183,7 @@ public class TunnelPool {
             int len = settings.getLengthOverride();
             if (len < 0)
                 len = settings.getLength();
-            if (len > 0 && (!settings.isExploratory()) && _context.random().nextInt(4) < 3) {  // 75%
+            if (len > 0 && (!settings.isExploratory()) && _context.random().nextInt(4) < 3) { // 75%
                 // look for a tunnel to reuse, if the right length and expiring soon
                 // ignore variance for now.
                 len++;   // us
@@ -1273,7 +1262,7 @@ public class TunnelPool {
             return;
         }
 
-        synchronized (_inProgress) { _inProgress.remove(cfg); }
+        synchronized (_inProgress) {_inProgress.remove(cfg);}
 
         switch (result) {
             case SUCCESS:
@@ -1338,7 +1327,7 @@ public class TunnelPool {
            if (pool != null)
                paired = (PooledTunnelCreatorConfig) pool.getTunnel(pairedGW);
        }
-       if (paired == null) { // not found or exploratory
+       if (paired == null) {// not found or exploratory
            if (_settings.isInbound())
                pool = _manager.getOutboundExploratoryPool();
            else

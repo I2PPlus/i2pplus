@@ -14,18 +14,9 @@ import net.i2p.data.Hash;
  * @since 0.7.12
  */
 class DummyThrottle implements OutboundMessageFragments.ActiveThrottle {
-
-    public DummyThrottle() {
-    }
-
-    public void choke(Hash peer) {
-    }
-
-    public void unchoke(Hash peer) {
-    }
-
-    public boolean isChoked(Hash peer) {
-        return false;
-    }
+    public DummyThrottle() {}
+    public void choke(Hash peer) {}
+    public void unchoke(Hash peer) {}
+    public boolean isChoked(Hash peer) {return false;}
 }
 
