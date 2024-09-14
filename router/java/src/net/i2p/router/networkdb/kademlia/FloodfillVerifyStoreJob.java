@@ -20,7 +20,6 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.JobImpl;
 import net.i2p.router.LeaseSetKeys;
 import net.i2p.router.MessageSelector;
-import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.ProfileManager;
 import net.i2p.router.ReplyJob;
 import net.i2p.router.RouterContext;

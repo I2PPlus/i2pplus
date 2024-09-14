@@ -23,7 +23,6 @@ import net.i2p.kademlia.KBucketSet;
 import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.Job;
 import net.i2p.router.JobImpl;
-import net.i2p.router.networkdb.kademlia.FloodfillPeerSelector;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.peermanager.DBHistory;
 import net.i2p.router.peermanager.PeerProfile;

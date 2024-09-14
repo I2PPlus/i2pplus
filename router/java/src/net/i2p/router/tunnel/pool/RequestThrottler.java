@@ -1,7 +1,6 @@
 package net.i2p.router.tunnel.pool;
 
 import net.i2p.data.Hash;
-import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;

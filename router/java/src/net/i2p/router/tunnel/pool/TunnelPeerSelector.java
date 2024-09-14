@@ -20,7 +20,6 @@ import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
-import net.i2p.router.LeaseSetKeys;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelPoolSettings;

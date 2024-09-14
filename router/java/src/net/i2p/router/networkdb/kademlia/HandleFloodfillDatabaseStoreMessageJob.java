@@ -14,7 +14,6 @@ import net.i2p.data.DatabaseEntry;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
-import net.i2p.data.LeaseSet2;
 import net.i2p.data.TunnelId;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;

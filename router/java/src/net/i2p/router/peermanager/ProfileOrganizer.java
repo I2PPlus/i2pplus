@@ -19,10 +19,8 @@ import java.util.TreeSet;
 import net.i2p.crypto.SipHashInline;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
-import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.data.SessionKey;
-import net.i2p.router.ClientManagerFacade;
 import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
@@ -33,7 +31,6 @@ import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
-import net.i2p.util.VersionComparator;
 
 /**
  * Keep the peer profiles organized according to the tiered model.  This does not

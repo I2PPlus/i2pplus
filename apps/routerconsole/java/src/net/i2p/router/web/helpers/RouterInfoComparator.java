@@ -3,7 +3,6 @@ package net.i2p.router.web.helpers;
 import java.io.Serializable;
 import java.util.Comparator;
 
-import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
 

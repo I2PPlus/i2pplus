@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import net.i2p.I2PAppContext;
-import net.i2p.data.DataHelper;
 import net.i2p.router.transport.udp.PeerState;
 
 /**

@@ -18,7 +18,6 @@ import java.util.TreeSet;
 
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
-import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.kademlia.KBucketSet;
 import net.i2p.kademlia.SelectionCollector;

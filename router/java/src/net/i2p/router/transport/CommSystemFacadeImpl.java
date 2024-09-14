@@ -50,7 +50,6 @@ import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.crypto.DHSessionKeyBuilder;
 import net.i2p.router.transport.crypto.X25519KeyFactory;
-import net.i2p.router.transport.TransportImpl;
 import net.i2p.router.transport.udp.UDPTransport;
 import net.i2p.router.util.EventLog;
 import net.i2p.util.Addresses;
