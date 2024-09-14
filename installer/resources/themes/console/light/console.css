@@ -339,7 +339,7 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 #sb_services a:hover::before{filter:saturate(1)}
 
 /* network status */
-.sb_netstatus,.tunnelBuildStatus{margin:-4px -1px -5px;padding:6px 3px;width:100%;display:inline-block;box-sizing:border-box;vertical-align:baseline;line-height:1.2;text-shadow:var(--txt_shadow);border:1px solid #88f;border-radius:0;box-shadow:var(--highlight),0 0 1px rgba(96,96,96,.5)}
+.sb_netstatus,.tunnelBuildStatus{margin:-4px -1px -5px;padding:6px 3px;width:100%;display:inline-block;position:relative;box-sizing:border-box;vertical-align:baseline;line-height:1.2;text-shadow:var(--txt_shadow);border:1px solid #88f;border-radius:0;box-shadow:var(--highlight),0 0 1px rgba(96,96,96,.5)}
 .sb_netstatus a{vertical-align:baseline}
 .sb_netstatus::before{margin:0 4px 0 -4px;height:18px;width:18px;vertical-align:middle;display:inline-block;content:""}
 .sb_netstatus::before{background-size:16px}
@@ -364,6 +364,11 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 #sidebar .running,.tunnelBuildStatus.accepting{color:#383;background:rgba(220,255,220,.15)}
 #sidebar .running,.tunnelBuildStatus.active{border:1px solid #595;background:rgba(220,255,220,.15);box-shadow:inset 0 0 1px 0 rgba(0,255,0,.5),0 0 1px rgba(96,96,96,.5)}
 .sb_netstatus:hover #ffenabled{margin:2px;display:inline-block;white-space:nowrap}
+
+/* netstatus tooltip */
+.sb_netstatus #netstatus{display:none;line-height:1;}
+.sb_netstatus:hover #netstatus{margin:0 auto;padding:2px 5px;width:fit-content;display:block;position:absolute;z-index:99999;top:-16px;left:0;right:0;box-shadow:var(--highlight),0 0 0 1px #bbc;background:var(--badge);animation:fade .15s ease .15s reverse both}
+.sb_netstatus:hover #netstatus::after{width:0;height:0;display:inline-block;position:absolute;bottom:-6px;left:calc(50% - 3px);border-style:solid;border-color:#bbc #0000 #0000;border-width:6px 6px 0;content:""}
 
 /* tunnel build status */
 .tunnelBuildStatus{padding:6px 3px;color:#393}

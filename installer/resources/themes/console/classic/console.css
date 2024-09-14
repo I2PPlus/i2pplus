@@ -77,7 +77,7 @@ p:empty+.sb_notice{margin-top:7px}
 #sidebar h3 a{width:calc(100% - 5px);display:inline-block;white-space:normal;text-decoration:none}
 #sidebar h3:hover:not(:active) a,#sidebar td:first-child a:hover b,#sidebar td:first-child a:visited:hover b{color:var(--hover)}
 #sidebar h3:active a{color:var(--active);transform:scale(.95) translateY(2px)}
-#sidebar h4{margin:-7px -1px -7px -1px;padding:8px 2px 4px;line-height:1.08;text-transform:capitalize;font-size:8.5pt;color:#1f7096;border:0;box-shadow:inset 0 0 2px 1px #f2f7fa;text-decoration:none;background:var(--label_focus)}
+#sidebar h4{margin:-7px -1px -7px -1px;padding:8px 2px 4px;position:relative;line-height:1.08;text-transform:capitalize;font-size:8.5pt;color:#1f7096;border:0;box-shadow:inset 0 0 2px 1px #f2f7fa;text-decoration:none;background:var(--label_focus);contain:none!important}
 #sidebar h4 a{padding:0;vertical-align:text-bottom}
 #sidebar tr,#sidebar table,#sidebar td{background:none;border:0}
 #sidebar table:not(#sb_localtunnels):not(#sb_services) tr::before{width:0;height:2px;display:inline-block;position:absolute;z-index:9999;top:-4px;left:-1px;background:#bfb;content:"";animation:bar .05s steps(3) reverse;will-change:transform}
@@ -169,14 +169,19 @@ p:empty+.sb_notice{margin-top:7px}
 .sb_netstatus.warn::before{background:var(--net_warning) no-repeat center center}
 .sb_netstatus.testing::before{background:var(--net_starting) no-repeat center center}
 .sb_netstatus.hidden::before{background:var(--net_hidden) no-repeat center center}
-.sb_netstatus.running::before{background:var(--net_ok) no-repeat center center}
-.sb_netstatus.running.floodfill::before{width:40px;background:var(--net_ok) no-repeat left center,var(--floodfill) no-repeat right center!important}
 .sb_netstatus.firewalled::before{background:var(--net_firewalled) no-repeat center center}
 .sb_netstatus.vmcomm::before{background:var(--net_vm) no-repeat center center}
 .sb_netstatus.clockskew::before{background:var(--net_clockskew) no-repeat center center}
 .sb_netstatus::before{background-size:16px}
+.sb_netstatus.running::before{background:var(--net_ok) no-repeat center center}
 .sb_netstatus.running:not(:hover)::before,.sb_netstatus.hidden:not(:hover)::before,.sb_netstatus.firewalled:not(:hover)::before,.sb_netstatus.testing:not(:hover)::before{background-size:18px}
-.sb_netstatus:hover #ffenabled{margin:2px;display:inline-block;white-space:nowrap}
+.sb_netstatus.running.floodfill::before{margin-right:4px;width:40px;display:inline-block;background:var(--net_ok) no-repeat left center,var(--floodfill) no-repeat right center!important}
+.sb_netstatus #ffenabled{white-space:nowrap}
+
+/* netstatus tooltip */
+.sb_netstatus #netstatus{display:none;line-height:1}
+.sb_netstatus:hover #netstatus{margin:0 auto;padding:2px 5px;width:fit-content;display:block;position:absolute;z-index:999;top:-14px;left:0;right:0;box-shadow:var(--highlight),0 0 0 1px #bbc;background:var(--badge);animation:fade .15s ease .15s reverse both}
+.sb_netstatus:hover #netstatus::after{width:0;height:0;display:inline-block;position:absolute;bottom:-6px;left:calc(50% - 3px);border-style:solid;border-color:#bbc #0000 #0000;border-width:6px 6px 0;content:""}
 
 /* tunnel build status */
 .tunnelBuildStatus{color:#393}
@@ -245,7 +250,7 @@ h3:hover .toggleSection{display:inline-block}
 .toggleSection:checked{transform:scaleY(-1);background-position:center calc(50% + 2px)}
 .toggleSection:not(:checked){padding-top:6px}
 #sidebar h3,#sidebar h3 a{position:relative;z-index:10}
-#sidebar h3 a .badge,#tunnelCount,#newsCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;padding:2px 5px 0;display:inline-block;font-size:80%;box-shadow:0 0 0 1px #ccd,0 0 0 1px #fff inset;background:#eef}
+#lsCount,#sidebar h3 a .badge,#tunnelCount,#newsCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;padding:2px 5px 0;display:inline-block;font-size:80%;box-shadow:0 0 0 1px #ccd,0 0 0 1px #fff inset;background:#eef}
 #sidebar h3 .badge:empty,#sidebar #newsCount:empty,#sidebar #tunnelCount:empty{display:none}
 #sidebar h3:active .badge{display:none}
 #sidebar td .badge:empty::after{display:inline;content:"---"}
@@ -286,6 +291,7 @@ h3:hover .toggleSection{display:inline-block}
 #sb_services.collapsed td,#sb_internals.collapsed td,#sb_advanced.collapsed td{justify-content:space-evenly}
 #sidebar .sb_icon{margin:0 1px}
 #sidebar table.collapsed+hr{display:block}
+#lsCount,.sb_netstatus:hover #lsCount{margin:0;display:inline-block;vertical-align:middle;font-size:8pt!important;color:var(--ink)}
 
 /* buttons & inputs */
 button:hover,input[type=submit]:hover,input[type=reset]:hover{color:var(--ink);background:var(--btn_hover)}
@@ -2457,6 +2463,7 @@ h4#updateplugins{margin-top:-16px;padding:5px 10px;font-size:10pt}
 #jardump td{font-size:9pt}
 #jardump tt{font-size:8pt}
 #leasesetdebug th,#leasesetsummary th{font-size:11pt}
+#lsCount,.sb_netstatus:hover #lsCount{font-size:8.5pt!important}
 #netconfig label::before{min-height:36px}
 #netdb h3.tabletitle,h3.sybils{font-size:10.5pt}
 #netdb .netdb_leases img[src^="/flags"]{margin:-1px -2px 1px -7px}

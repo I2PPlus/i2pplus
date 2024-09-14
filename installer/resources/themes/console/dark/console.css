@@ -233,7 +233,7 @@ p:empty+.sb_notice{margin-top:9px}
 /* network status */
 .sb_netstatus.running,#sidebar .warn,#sidebar .clockskew{box-shadow:var(--highlight),inset 0 0 2px 1px #730;background:rgba(126,48,0,.3)}
 .vmcomm{box-shadow:var(--highlight),inset 0 0 1px 1px #aaa,inset 0 0 0 2px rgba(0,0,0,.7);background:rgba(92,92,92,.3)}
-.sb_netstatus::before,.tunnelBuildStatus::before{margin:0 2px 0 -4px;height:18px;width:18px;display:inline-block;vertical-align:middle;content:""}
+.sb_netstatus::before,.tunnelBuildStatus::before{height:18px;width:18px;display:inline-block;vertical-align:middle;content:""}
 .sb_netstatus::before{background-size:16px}
 .sb_netstatus.error::before{background:var(--net_error) var(--center)/16px}
 .sb_netstatus.warn::before{background:var(--net_warning) var(--center)/16px}
@@ -243,22 +243,16 @@ p:empty+.sb_notice{margin-top:9px}
 .sb_netstatus.firewalled::before{background:var(--net_firewalled) var(--center);filter:drop-shadow(0 0 4px #000) drop-shadow(0 0 6px rgba(192,64,64,.3))}
 .sb_netstatus.vmcomm::before{background:var(--net_vm) var(--center)}
 .sb_netstatus.clockskew::before{background:var(--net_clockskew) var(--center)/14px}
-.sb_netstatus.running:not(:hover)::before,.sb_netstatus.hidden:not(:hover)::before,.sb_netstatus.firewalled:not(:hover)::before,.sb_netstatus.testing:not(:hover)::before{margin:-3px 0;width:40px;height:24px;background-size:20px}
-.sb_netstatus.testing,.sb_netstatus.running:not(.floodfill),.sb_netstatus.hidden,.sb_netstatus.firewalled{font-size:0}
-.sb_netstatus.running.floodfill{font-size:0}
-.sb_netstatus.running.floodfill .badge{font-size:8pt!important}
-.sb_netstatus.running:hover,.sb_netstatus.hidden:hover,.sb_netstatus.firewalled:hover,.sb_netstatus.floodfill:hover,.sb_netstatus.testing:hover{font-size:inherit}
-.sb_netstatus.running.floodfill::before{width:50px;height:24px;background-size:16px}
-.sb_netstatus.running.floodfill::before{background:var(--net_ok) no-repeat left center,var(--floodfill) no-repeat right center!important}
+.sb_netstatus.running.floodfill::before{background:var(--net_ok) no-repeat left center,var(--floodfill) no-repeat right center}
 #sb_shutdownStatus{width:calc(100% - 3px)}
 #sb_shutdownStatus span{margin:3px 0;padding:2px 4px;display:inline-block}
 #sidebar h4 a{width:auto;display:inline}
 #sidebar #sb_warning{margin-bottom:6px;padding:6px 5px;background:var(--msg_warn_nohat);text-align:center;line-height:1.2}
 #sb_warning+p:empty+form{margin-top:11px;margin-bottom:-6px}
 #sb_status,.sb_netstatus,.tunnelBuildStatus,#bandwidthTestRunning{display:inline-block;vertical-align:middle;vertical-align:-moz-middle-with-baseline;vertical-align:-webkit-baseline-middle;text-shadow:var(--textshadow);box-sizing:border-box}
-#sidebar #sb_status{margin:-6px 0 -8px -1px;width:calc(100% - 1px);box-shadow:var(--note_shadow)}
+#sidebar #sb_status{margin:-6px 0 -8px -1px;width:calc(100% - 1px);position:relative;box-shadow:var(--note_shadow);contain:none}
 #sidebar #sb_tunnelstatus{margin:-7px 0 -9px -1px;width:calc(100% - 1px);box-shadow:var(--note_shadow)}
-#sidebar .sb_netstatus,#sidebar .tunnelBuildStatus{margin:-3px auto;padding:8px 2px;display:block;width:calc(100% - 4px)}
+#sidebar .sb_netstatus,#sidebar .tunnelBuildStatus{margin:-3px auto;padding:8px 2px;width:calc(100% - 4px);display:block}
 #sidebar .tunnelBuildStatus{padding:8px}
 #sidebar .running,.tunnelBuildStatus.active{box-shadow:var(--highlight),inset 0 0 2px 1px rgba(0,192,0,.7);background:repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px,rgba(0,64,0,.3) 4px) center center/100% 4px,var(--glow_top),linear-gradient(to right,rgba(16,40,15,.5),rgba(0,0,0,.9),rgba(16,40,15,.5))}
 #sidebar .firewalled,.tunnelBuildStatus{color:#bb7;box-shadow:var(--bevel)}
@@ -270,7 +264,11 @@ p:empty+.sb_notice{margin-top:9px}
 #sidebar #sb_localtunnels td[colspan="3"],#sidebar #sb_localtunnels tr:hover td[colspan="3"]{width:100%;line-height:12px;font-size:0;background-size:400%!important}
 #sidebar .testing,.tunnelBuildStatus.starting,#sb_localtunnels td[colspan="3"],#sidebar #routerdown td{color:#aa3;box-shadow:var(--highlight),inset 0 0 2px 1px #bb0;background:repeating-linear-gradient(135deg,rgba(0,0,0,.5),rgba(0,0,0,.5) 10px,rgba(56,56,0,.5) 10px,rgba(48,48,0,.5) 20px) repeat center center/400%!important}
 #sidebar #routerdown td{padding:5px 0;width:100%;max-width:unset}
-.sb_netstatus:hover #ffenabled{margin:2px 0 0 4px;padding:1px 3px;display:inline-block;white-space:nowrap;box-shadow:var(--highlight),0 0 0 1px #131;background:var(--badge)}
+
+/* netstatus tooltip */
+.sb_netstatus #netstatus{display:none}
+.sb_netstatus:hover #netstatus{margin:0 auto;padding:2px 5px;width:fit-content;display:block;position:absolute;z-index:99999;top:-12px;left:0;right:0;box-shadow:var(--highlight),0 0 0 1px #252;background:var(--badge);animation:fade .15s ease .15s reverse both}
+.sb_netstatus:hover #netstatus::after{width:0;height:0;display:inline-block;position:absolute;bottom:-6px;left:calc(50% - 3px);border-style:solid;border-color:#252 #0000 #0000;border-width:6px 6px 0;content:""}
 
 /* tunnel build status */
 #sidebar .tunnelBuildStatus{color:#ee9}
@@ -322,7 +320,8 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 .sb_icon#transit:active{background:var(--share) no-repeat 25% center/19px,var(--badge_active)}
 .sb_icon#tcount:active{background:var(--hardhat) no-repeat 25% center/19px,var(--badge_active)}
 #lsCount.badge,#newsCount,#sidebar h3 a .badge,#tunnelCount{padding:2px 5px 1px;display:inline-block;position:relative;z-index:999;white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;font-size:80%;font-weight:700;box-shadow:0 0 0 1px #141,var(--highlight);background:var(--badge);animation:fade .25s ease .5s reverse both}
-#sidebar #sb_status #lsCount.badge{padding:2px 3px 1px;margin-left:2px;line-height:1;color:#494}
+#sidebar #sb_status #lsCount.badge,#sidebar .net_status:hover #sb_status #lsCount.badge{padding:2px 3px 1px;margin:0 0 0 3px;line-height:1;vertical-align:middle;color:#494}
+#lsCount.badge{margin-top:1px;font-size:8pt!important}
 #sb_updatesection h3.collapsed:not(.updating) a::after{content:"*"}
 #sidebar h3{position:relative;contain:paint}
 #console_404 #sidebar h3 a .badge{display:none}
@@ -2647,8 +2646,7 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 .netdbStats li{margin:1px 5px}
 .newsAuthor{padding-top:2px}
 .sb_netstatus.running:not(:hover)::before,.sb_netstatus.hidden:not(:hover)::before,.sb_netstatus.firewalled:not(:hover)::before,.sb_netstatus.testing:not(:hover)::before{margin:0;height:18px;width:18px;background-size:18px}
-.sb_netstatus.running:not(:hover)::before{width:40px}
-.sb_netstatus.running.floodfill:not(:hover)::before,.sb_netstatus.running.floodfill:hover::before{width:32px;height:16px}
+.sb_netstatus.running.floodfill::before,.sb_netstatus.running.floodfill:hover::before{width:38px!important;height:18px!important;background-size:18px!important}
 .sb_update b{margin:3px 0 0}
 .sitemapLink,.sitemapLabel,#sitemap .applink,#sitemap .applabel{width:160px;min-width:160px}
 .tunnelBuildStatus{font-size:90%}
@@ -2660,7 +2658,6 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 #clock{padding-top:9px;font-size:16pt}
 #help h3,#faq h3{font-size:10.5pt}
 #i2pclientconfig a,#pluginmanage a{transform:translateY(-1px)}
-.sb_netstatus:hover #ffenabled{margin:2px 0 0 2px}
 #jardump a[href^="https://gitlab.com/i2pplus"]{padding-left:11px;background-size:8px;background-position:left top}
 #netdboverview th[colspan="3"]{font-size:11pt}
 #netdb .version{line-height:1.45}
@@ -2885,8 +2882,7 @@ span#newtab{margin-top:4px}
 .sb_info .percentBarText{margin-top:-1px}
 .sb_info.sb_update{padding:5px 5px 6px}
 .sb_netstatus::before,.tunnelBuildStatus::before{margin:0 2px}
-.sb_netstatus.running.floodfill::before{margin:1px 2px 0;width:48px;height:21px;background-position:left center,right calc(50% + 2px)}
-.sb_netstatus.running.floodfill:hover::before{width:44px;margin:0 4px 0 2px}
+.sb_netstatus.running.floodfill::before{margin:1px 2px 0;width:46px;height:22px;background-position:left center,right center;background-size:20px,22px}
 .sb_update{padding-bottom:3px}
 .search td{padding:6px 6px 6px 5px}
 .search td:last-child{padding-left:0;padding-right:0}

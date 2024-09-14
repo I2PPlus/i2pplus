@@ -659,7 +659,7 @@ class SummaryBarRenderer {
     }
 
     public String renderRouterInfoHTML() {
-        if (_helper == null) return "";
+        if (_helper == null) {return "";}
         StringBuilder buf = new StringBuilder(512);
         buf.append("<h3><a href=\"/info\" target=_top title=\"")
            .append(_t("Your Local Identity [{0}] is your unique I2P router identity, similar to an IP address but tailored to I2P. ", _helper.getIdent()))
@@ -692,7 +692,7 @@ class SummaryBarRenderer {
     }
 
     public String renderShortRouterInfoHTML() {
-        if (_helper == null) return "";
+        if (_helper == null) {return "";}
         StringBuilder buf = new StringBuilder(512);
         buf.append("<table id=sb_shortgeneral class=volatile>\n")
            .append("<tr title=\"")
@@ -718,7 +718,7 @@ class SummaryBarRenderer {
 
     /** @since 0.9.32 */
     public String renderAdvancedRouterInfoHTML() {
-        if (_helper == null) return "";
+        if (_helper == null) {return "";}
         StringBuilder buf = new StringBuilder(512);
         buf.append("<h3><a href=\"/info\" target=_top title=\"")
            .append(_t("Your Local Identity [{0}] is your unique I2P router identity, similar to an IP address but tailored to I2P. ", _helper.getIdent()))
@@ -794,18 +794,18 @@ class SummaryBarRenderer {
 
     /** @since 0.9.57+ */
     public String renderMemoryBarHTML() {
-        if (_helper == null) return "";
+        if (_helper == null) {return "";}
         return _helper.getMemoryBar();
     }
 
     /** @since 0.9.57+ */
     public String renderCPUBarHTML() {
-        if (_helper == null) return "";
+        if (_helper == null) {return "";}
         return _helper.getCPUBar();
     }
 
     public String renderNetworkReachabilityHTML() {
-        if (_helper == null) return "";
+        if (_helper == null) {return "";}
         StringBuilder buf = new StringBuilder(512);
         SummaryHelper.NetworkStateMessage reachability = _helper.getReachability();
         buf.append("<h4 id=sb_status><span id=sb_netstatus class=\"sb_netstatus volatile ");
@@ -836,7 +836,8 @@ class SummaryBarRenderer {
                 buf.append("testing");
         }
         if (floodfillEnabled()) {buf.append(" floodfill");}
-        buf.append("\"><span id=netstatus>").append(_t("Status")).append(": ").append(reachability.getMessage()).append("</span>");
+        buf.append("\"><span id=netstatus>").append(_t("Status")).append(": ").append(reachability.getMessage())
+           .append(floodfillEnabled() ? " <span id=ffenabled>(" + _t("Floodfill enabled") + ")</span>" : "").append("</span>");
         if (floodfillEnabled() && !reachability.getMessage().contains(_t("Floodfill"))) {
             int lsCount = _context.netDb().getLeases().size();
             if (lsCount > 0) {
@@ -844,7 +845,6 @@ class SummaryBarRenderer {
                .append(_t("Total LeaseSets stored locally"))
                .append("\">").append(lsCount).append("</span>");
             }
-            buf.append(" <span id=ffenabled>").append(_t("Floodfill enabled")).append("</span>");
         }
         buf.append("</span></h4>\n");
         if (!SigType.ECDSA_SHA256_P256.isAvailable()) {
@@ -878,12 +878,12 @@ class SummaryBarRenderer {
     }
 
     public String renderRestartStatusHTML() {
-        if (_helper == null) return "";
+        if (_helper == null) {return "";}
         return _helper.getRestartStatus();
     }
 
     public String renderPeersHTML() {
-        if (_helper == null) return "";
+        if (_helper == null) {return "";}
         StringBuilder buf = new StringBuilder(512);
         int active = _helper.getActivePeers();
         buf.append("<h3><a href=\"/peers\" target=_top title=\"")
@@ -978,12 +978,12 @@ class SummaryBarRenderer {
     }
 
     public String renderFirewallAndReseedStatusHTML() {
-        if (_helper == null) return "";
+        if (_helper == null) {return "";}
         return _helper.getFirewallAndReseedStatus();
     }
 
     public String renderBandwidthHTML() {
-        if (_helper == null) return "";
+        if (_helper == null) {return "";}
         StringBuilder buf = new StringBuilder(512);
         buf.append("<h3><a href=\"/config\" title=\"")
            .append(_t("Configure router bandwidth allocation"))
@@ -1040,7 +1040,7 @@ class SummaryBarRenderer {
 
     /** @since 0.9.32 */
     public String renderBandwidthGraphHTML() {
-        if (_helper == null) return "";
+        if (_helper == null) {return "";}
         if (StatSummarizer.isDisabled(_context))
             return "";
         String r = _context.getProperty(CSSHelper.PROP_REFRESH, CSSHelper.DEFAULT_REFRESH);
@@ -1068,7 +1068,7 @@ class SummaryBarRenderer {
     }
 
     public String renderTunnelsHTML() {
-        if (_helper == null) return "";
+        if (_helper == null) {return "";}
         StringBuilder buf = new StringBuilder(512);
         int partTunnels = _helper.getParticipatingTunnels();
         String maxTunnels = _helper.getMaxParticipatingTunnels();
@@ -1156,7 +1156,7 @@ class SummaryBarRenderer {
     }
 
     public String renderCongestionHTML() {
-        if (_helper == null) return "";
+        if (_helper == null) {return "";}
         long maxLag = _context.jobQueue().getMaxLag();
         StringBuilder buf = new StringBuilder(512);
         buf.append("<h3><a href=\"/jobs\" target=_top title=\"")
@@ -1224,7 +1224,7 @@ class SummaryBarRenderer {
     }
 
     public String renderTunnelStatusHTML() {
-        if (_helper == null) return "";
+        if (_helper == null) {return "";}
         int partTunnels = _helper.getParticipatingTunnels();
         StringBuilder buf = new StringBuilder(50);
         String getStatus = _helper.getTunnelStatus();
@@ -1264,7 +1264,7 @@ class SummaryBarRenderer {
 
     /** @since 0.9.1 */
     public String renderNewsHeadingsHTML() {
-        if (_helper == null) return "";
+        if (_helper == null) {return "";}
         NewsHelper newshelper = _helper.getNewsHelper();
         if (newshelper == null || newshelper.shouldShowNews()) return "";
         StringBuilder buf = new StringBuilder(512);
