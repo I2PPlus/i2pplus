@@ -67,12 +67,10 @@ public class PersistentDataStore extends TransientDataStore {
     private static final String PROP_FLAT = "router.networkDatabase.flat";
     static final String DIR_PREFIX = "r";
     private static final String B64 = Base64.ALPHABET_I2P;
-    private static final int MAX_ROUTERS_INIT = SystemVersion.isSlow() ? 2000 : 5000;
+    private static final int MAX_ROUTERS_INIT = 5000;
 
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
-    public boolean enableReverseLookups() {
-        return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);
-    }
+    public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
     private final static boolean DEFAULT_SHOULD_DISCONNECT = false;
     private final static String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
 
@@ -83,16 +81,15 @@ public class PersistentDataStore extends TransientDataStore {
         super(ctx);
         _networkID = ctx.router().getNetworkID();
         _flat = ctx.getBooleanProperty(PROP_FLAT);
-//        _flat = ctx.getBooleanPropertyDefaultTrue(PROP_FLAT);
         _dbDir = getDbDir(dbDir);
         _facade = facade;
         _readJob = new ReadJob();
         _context.jobQueue().addJob(_readJob);
-        ctx.statManager().createRateStat("netDb.writeClobber", "How often we clobber a pending NetDb write", "NetworkDatabase", new long[] { 20*60*1000 });
-        ctx.statManager().createRateStat("netDb.writePending", "Number of pending NetDb writes", "NetworkDatabase", new long[] { 60*1000 });
-        ctx.statManager().createRateStat("netDb.writeOut", "Total number of NetDb writes", "NetworkDatabase", new long[] { 20*60*1000 });
-        ctx.statManager().createRateStat("netDb.writeTime", "Total time used for NetDb writes ", "NetworkDatabase", new long[] { 20*60*1000 });
-        //ctx.statManager().createRateStat("netDb.readTime", "How long one took", "NetworkDatabase", new long[] { 20*60*1000 });
+        ctx.statManager().createRateStat("netDb.writeClobber", "How often we clobber a pending NetDb write", "NetworkDatabase", new long[] {20*60*1000 });
+        ctx.statManager().createRateStat("netDb.writePending", "Number of pending NetDb writes", "NetworkDatabase", new long[] {60*1000 });
+        ctx.statManager().createRateStat("netDb.writeOut", "Total number of NetDb writes", "NetworkDatabase", new long[] {20*60*1000 });
+        ctx.statManager().createRateStat("netDb.writeTime", "Total time used for NetDb writes ", "NetworkDatabase", new long[] {20*60*1000 });
+        //ctx.statManager().createRateStat("netDb.readTime", "How long one took", "NetworkDatabase", new long[] {20*60*1000 });
         _writer = new Writer();
         I2PThread writer = new I2PThread(_writer, "DBWriter");
         // stop() must be called to flush data to disk
@@ -101,7 +98,7 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
     @Override
-    public boolean isInitialized() { return _initialized; }
+    public boolean isInitialized() {return _initialized;}
 
     // this doesn't stop the read job or the writer, maybe it should?
     @Override
@@ -117,9 +114,7 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
     @Override
-    public DatabaseEntry get(Hash key) {
-        return get(key, true);
-    }
+    public DatabaseEntry get(Hash key) {return get(key, true);}
 
     /**
      *  Prepare for having only a partial set in memory and the rest on disk
@@ -132,25 +127,19 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
     @Override
-    public DatabaseEntry remove(Hash key) {
-        return remove(key, true);
-    }
+    public DatabaseEntry remove(Hash key) {return remove(key, true);}
 
     /*
      *  @param persist if false, call super only, don't access disk
      */
     @Override
     public DatabaseEntry remove(Hash key, boolean persist) {
-        if (persist) {
-            _writer.remove(key);
-        }
+        if (persist) {_writer.remove(key);}
         return super.remove(key);
     }
 
     @Override
-    public boolean put(Hash key, DatabaseEntry data) {
-        return put(key, data, true);
-    }
+    public boolean put(Hash key, DatabaseEntry data) {return put(key, data, true);}
 
     /*
      *  @param persist if false, call super only, don't access disk
@@ -158,11 +147,10 @@ public class PersistentDataStore extends TransientDataStore {
      */
     @Override
     public boolean put(Hash key, DatabaseEntry data, boolean persist) {
-        if ( (data == null) || (key == null) ) return false;
+        if ( (data == null) || (key == null) ) {return false;}
         boolean rv = super.put(key, data);
         // Don't bother writing LeaseSets to disk
-        if (rv && persist && data.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)
-            _writer.queue(key, data);
+        if (rv && persist && data.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {_writer.queue(key, data);}
         return rv;
     }
 
@@ -179,8 +167,7 @@ public class PersistentDataStore extends TransientDataStore {
     @Override
     public boolean forcePut(Hash key, DatabaseEntry data) {
         boolean rv = super.forcePut(key, data);
-        if (rv && data.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)
-            _writer.queue(key, data);
+        if (rv && data.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {_writer.queue(key, data);}
         return rv;
     }
 
@@ -214,8 +201,7 @@ public class PersistentDataStore extends TransientDataStore {
             int pending = _keys.size();
             _keysToRemove.remove(key);
             boolean exists = (null != _keys.put(key, data));
-            if (exists)
-                _context.statManager().addRateData("netDb.writeClobber", pending);
+            if (exists) {_context.statManager().addRateData("netDb.writeClobber", pending);}
             _context.statManager().addRateData("netDb.writePending", pending);
         }
 
@@ -228,16 +214,15 @@ public class PersistentDataStore extends TransientDataStore {
          *  @since 0.9.50 was in separate RemoveJob
          */
         private void removeQueued() {
-            if (_keysToRemove.isEmpty())
-                return;
+            if (_keysToRemove.isEmpty()) {return;}
             for (Iterator<Hash> iter = _keysToRemove.iterator(); iter.hasNext(); ) {
                 Hash key = iter.next();
                 iter.remove();
-                try {
-                    removeFile(key, _dbDir);
-                } catch (IOException ioe) {
-                    if (_log.shouldWarn())
+                try {removeFile(key, _dbDir);}
+                catch (IOException ioe) {
+                    if (_log.shouldWarn()) {
                         _log.warn("Error removing key " + key, ioe);
+                    }
                 }
             }
         }
@@ -270,30 +255,26 @@ public class PersistentDataStore extends TransientDataStore {
                 if (key != null) {
                     if (data != null) {
                         // synch with the reader job
-                        synchronized (_dbDir) {
-                            write(key, data);
-                        }
+                        synchronized (_dbDir) {write(key, data);}
                         data = null;
                     }
                     key = null;
                 }
-                if (count >= WRITE_LIMIT)
-                    count = 0;
+                if (count >= WRITE_LIMIT) {count = 0;}
                 if (count == 0) {
                     removeQueued();
                     if (lastCount > 0) {
                         long time = _context.clock().now() - startTime;
-                        if (_log.shouldDebug())
+                        if (_log.shouldDebug()) {
                             _log.debug(lastCount + " RouterInfo files saved to disk in " + time + "ms");
-                         _context.statManager().addRateData("netDb.writeOut", lastCount);
-                         _context.statManager().addRateData("netDb.writeTime", time);
+                        }
+                        _context.statManager().addRateData("netDb.writeOut", lastCount);
+                        _context.statManager().addRateData("netDb.writeTime", time);
                     }
-                    if (_quit)
-                        break;
+                    if (_quit) {break;}
                     synchronized (_waitLock) {
-                        try {
-                            _waitLock.wait(WRITE_DELAY);
-                        } catch (InterruptedException ie) {}
+                        try {_waitLock.wait(WRITE_DELAY);}
+                        catch (InterruptedException ie) {}
                     }
                     startTime = _context.clock().now();
                 }
@@ -316,7 +297,7 @@ public class PersistentDataStore extends TransientDataStore {
         File dbFile = null;
         String filename = null;
         String MIN_VERSION = "0.9.61";
-        String CURRENT_VERSION = "0.9.62";
+        String CURRENT_VERSION = "0.9.63";
         String v = MIN_VERSION;
         String bw = "K";
         String ip = null;
@@ -338,12 +319,8 @@ public class PersistentDataStore extends TransientDataStore {
         reachable = caps.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
         String country = "unknown";
         boolean noCountry = true;
-        if (caps.contains("f")) {
-            isFF = true;
-        }
-        if (ip != null) {
-            hasIP = true;
-        }
+        if (caps.contains("f")) {isFF = true;}
+        if (ip != null) {hasIP = true;}
         bw = ri.getBandwidthTier();
         for (RouterAddress ra : ri.getAddresses()) {
             if (ra.getTransportStyle().contains("SSU")) {
@@ -351,20 +328,16 @@ public class PersistentDataStore extends TransientDataStore {
                     break;
             }
         }
-        country = _context.commSystem().getCountry(key);
-        if (country != null && country != "unknown") {
-            noCountry = false;
-        }
 
-        boolean isSlow = ri != null && (caps != null && caps != "unknown") && bw.equals("K") || bw.equals("L") ||
-                         bw.equals("M") || bw.equals("N");
+        boolean isSlow = ri != null && (caps != null && caps != "unknown") && bw.equals("K") || bw.equals("L") || bw.equals("M");
         boolean isLTier = bw.equals("L");
         boolean isBanned = ri != null && (_context.banlist().isBanlistedForever(key) ||
-                           _context.banlist().isBanlisted(key) ||
-                           _context.banlist().isBanlistedHostile(key));
+                                          _context.banlist().isBanlisted(key) ||
+                                          _context.banlist().isBanlistedHostile(key));
 
         String version = ri != null ? ri.getVersion() : "0.8.0";
         boolean isInvalidVersion = VersionComparator.comp(version, "2.5.0") >= 0;
+        boolean shouldDelete = false;
 
         try {
             if (data.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
@@ -378,8 +351,6 @@ public class PersistentDataStore extends TransientDataStore {
                 ip = (ri != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri)) : null;
                 String rl = ip != null ? _context.commSystem().getCanonicalHostName(ip) : null;
             }
-//            if ((dbFile.lastModified() < dataPublishDate && ri != null && !unreachable && (!isOld || isFF) &&
-//                !isBadFF && !noSSU && !isSlow && !isBanned) || isUs) {
             if (dbFile.lastModified() < dataPublishDate) {
                 // our filesystem is out of date, let's replace it
                 fos = new SecureFileOutputStream(dbFile);
@@ -392,19 +363,21 @@ public class PersistentDataStore extends TransientDataStore {
                         _log.debug("Writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
                 } catch (DataFormatException dfe) {
                     _log.error("Error writing out malformed object as [" + key.toBase64().substring(0,6) + "]: " + data, dfe);
-                    dbFile.delete();
+                    shouldDelete = true;
                 }
             } else {
                 if (ri != null && !isUs && !isBanned) {
                     if (!isUs && hasIP && ip.equals(ourIP)) {
-                        if (_log.shouldDebug())
-                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Router is spoofing our IP address");
-                        if (_log.shouldWarn())
+                        if (_log.shouldWarn()) {
                             _log.warn("Banning and disconnecting from [" + key.toBase64().substring(0,6) + "] for 72h -> Router is spoofing our IP address!");
+                        }
                         _context.banlist().banlistRouter(key, " <b>➜</b> Spoofed IP address (ours)", null, null, _context.clock().now() + 72*60*60*1000);
                         _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
-                        dbFile.delete();
+                        shouldDelete = true;
                     } else if (isInvalidVersion) {
+                        if (_log.shouldDebug() && dbFile == null) {
+                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Invalid version in RouterInfo (" + version + ")");
+                        }
                         if (_log.shouldWarn() && !isBanned)
                             _log.warn("Banning for 24h and disconnecting from Router [" + key.toBase64().substring(0,6) + "]" +
                                       " -> Invalid version " + version + " / " + bw + (unreachable ? "U" : ""));
@@ -412,53 +385,37 @@ public class PersistentDataStore extends TransientDataStore {
                                                          (unreachable ? "U" : reachable ? "R" : "") + ")", null,
                                                           null, _context.clock().now() + 24*60*60*1000);
                         _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
-                        dbFile.delete();
+                        shouldDelete = true;
                     } else if (isLTier && unreachable && isOlderThanCurrent) {
-                        if (_log.shouldDebug())
+                        if (_log.shouldDebug() && dbFile == null) {
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> LU and older than " + CURRENT_VERSION);
-                        if (_log.shouldWarn())
+                        }
+                        if (_log.shouldWarn()) {
                             _log.warn("Banning and disconnecting from [" + key.toBase64().substring(0,6) + "] for 8h -> LU and older than current version");
+                        }
                         _context.banlist().banlistRouter(key, " <b>➜</b> LU and older than 0.9.59", null, null, _context.clock().now() + 8*60*60*1000);
                         _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
-                        dbFile.delete();
+                        shouldDelete = true;
                     } else if (unreachable) {
-                        if (_log.shouldDebug())
+                        if (_log.shouldDebug() && dbFile == null) {
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Unreachable");
-                        dbFile.delete();
-/**
-                    } else if (isBadFF) {
-                        if (_log.shouldDebug())
-                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Floodfill with SSU disabled");
-                        dbFile.delete();
-**/
+                        }
+                        shouldDelete = true;
                     } else if (isSlow) {
-                        if (_log.shouldDebug())
+                        if (_log.shouldDebug() && dbFile == null) {
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> K, L, M or N tier");
-                        dbFile.delete();
+                        }
+                        shouldDelete = true;
                     } else if (isOld) {
-                        if (_log.shouldDebug())
+                        if (_log.shouldDebug() && dbFile == null) {
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Older than " + MIN_VERSION);
-                        dbFile.delete();
-/**
-                    } else if (noCountry && uptime > 10*60*1000) {
-                        if (_log.shouldDebug())
-                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> IP address does not resolve via GeoIP");
-                        if (_log.shouldWarn())
-                            _log.warn("Banning " + (isFF ? "Floodfill" : "Router") + " [" + key.toBase64().substring(0,6) + "] for 15m -> Address not resolvable via GeoIP");
-                        if (isFF) {
-                            _context.banlist().banlistRouter(key, " <b>➜</b> Floodfill without GeoIP resolvable address", null, null, _context.clock().now() + 15*60*1000);
-                        } else {
-                            _context.banlist().banlistRouter(key, " <b>➜</b> No GeoIP resolvable address", null, null, _context.clock().now() + 15*60*1000);
                         }
-                        if (shouldDisconnect) {
-                            _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
-                        }
-                        dbFile.delete();
-**/
+                        shouldDelete = true;
                     } else {
                         // we've already written the file, no need to waste our time
-                        if (_log.shouldDebug())
+                        if (_log.shouldDebug()) {
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Local copy is newer");
+                        }
                     }
                 }
             }
@@ -469,13 +426,12 @@ public class PersistentDataStore extends TransientDataStore {
             _log.error("Error writing to disk (" + ioe.getMessage() + ")");
             }
         } finally {
-            if (fos != null) try { fos.close(); } catch (IOException ioe) {}
+            if (fos != null) try {fos.close();} catch (IOException ioe) {}
         }
+        if (shouldDelete && dbFile != null) {dbFile.delete();}
     }
 
-    private static long getPublishDate(DatabaseEntry data) {
-        return data.getDate();
-    }
+    private static long getPublishDate(DatabaseEntry data) {return data.getDate();}
 
     /**
      *  This was mostly for manual reseeding, i.e. the user manually
@@ -493,11 +449,9 @@ public class PersistentDataStore extends TransientDataStore {
         private static final int MIN_ROUTERS = KademliaNetworkDatabaseFacade.MIN_RESEED;
         private static final long MIN_RESEED_INTERVAL = 90*60*1000;
 
-        public ReadJob() {
-            super(PersistentDataStore.this._context);
-        }
+        public ReadJob() {super(PersistentDataStore.this._context);}
 
-        public String getName() { return "Read NetDb"; }
+        public String getName() {return "Read NetDb";}
 
         public void runJob() {
             if (getContext().router().gracefulShutdownInProgress()) {
@@ -524,18 +478,13 @@ public class PersistentDataStore extends TransientDataStore {
                 if (_log.shouldDebug())
                     _log.debug("Scanning for new RouterInfo files in: " + _dbDir);
                 // synch with the writer job
-                synchronized (_dbDir) {
-                    // _lastModified must be 0 for the first run
-                    readFiles();
-                }
+                synchronized (_dbDir) {readFiles();} // _lastModified must be 0 for the first run
                 _lastModified = now;
             }
             requeue(READ_DELAY);
         }
 
-        public void wakeup() {
-            requeue(0);
-        }
+        public void wakeup() {requeue(0);}
 
         private void readFiles() {
             int routerCount = 0;
@@ -546,8 +495,7 @@ public class PersistentDataStore extends TransientDataStore {
                     routerCount = routerInfoFiles.length;
                     for (int i = 0; i < routerInfoFiles.length; i++) {
                         // drop out if the router gets killed right after startup
-                        if (!_context.router().isAlive())
-                            break;
+                        if (!_context.router().isAlive()) {break;}
                         Hash key = getRouterInfoHash(routerInfoFiles[i].getName());
                         if (key != null) {
                             // Run it inline so we don't clog up the job queue, esp. at startup
@@ -561,8 +509,7 @@ public class PersistentDataStore extends TransientDataStore {
                 }
             } else {
                 // move all new RIs to subdirs, then scan those
-                if (routerInfoFiles != null)
-                    migrate(_dbDir, routerInfoFiles);
+                if (routerInfoFiles != null) {migrate(_dbDir, routerInfoFiles);}
                 // Loading the files in-order causes clumping in the kbuckets,
                 // and bias on early peer selection, so first collect all the files,
                 // then shuffle and load.
@@ -570,17 +517,12 @@ public class PersistentDataStore extends TransientDataStore {
                 for (int j = 0; j < B64.length(); j++) {
                     File subdir = new File(_dbDir, DIR_PREFIX + B64.charAt(j));
                     File[] files = subdir.listFiles(RI_FILTER);
-                    if (files == null)
-                        continue;
+                    if (files == null) {continue;}
                     long lastMod = subdir.lastModified();
-                    if (routerCount >= MIN_ROUTERS && lastMod <= _lastModified)
-                        continue;
+                    if (routerCount >= MIN_ROUTERS && lastMod <= _lastModified) {continue;}
                     routerCount += files.length;
-                    if (lastMod <= _lastModified)
-                        continue;
-                    for (int i = 0; i < files.length; i++) {
-                        toRead.add(files[i]);
-                    }
+                    if (lastMod <= _lastModified) {continue;}
+                    for (int i = 0; i < files.length; i++) {toRead.add(files[i]);}
                 }
                 Collections.shuffle(toRead, _context.random());
                 int i = 0;
@@ -659,7 +601,7 @@ public class PersistentDataStore extends TransientDataStore {
             _key = key;
         }
 
-        public String getName() { return "Read RouterInfo"; }
+        public String getName() {return "Read RouterInfo";}
 
         private boolean shouldRead() {
             // persist = false to call only super.get()
@@ -816,7 +758,7 @@ public class PersistentDataStore extends TransientDataStore {
                     if (_log.shouldInfo())
                         _log.info("Deleted " + _routerFile.getName() + " -> Unable to read Router reference \n* " + e.getMessage());
                 } finally {
-                    if (fis != null) try { fis.close(); } catch (IOException ioe) {}
+                    if (fis != null) try {fis.close();} catch (IOException ioe) {}
                 }
                 if (corrupt) _routerFile.delete();
                 return !corrupt;
@@ -953,7 +895,7 @@ public class PersistentDataStore extends TransientDataStore {
 
     private class Disconnector implements SimpleTimer.TimedEvent {
         private final Hash h;
-        public Disconnector(Hash h) { this.h = h; }
+        public Disconnector(Hash h) {this.h = h;}
         public void timeReached() {
             _context.commSystem().forceDisconnect(h);
         }
