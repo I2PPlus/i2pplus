@@ -16,10 +16,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import com.southernstorm.noise.protocol.ChaChaPolyCipherState;
 
@@ -136,11 +136,11 @@ class EstablishmentManager {
 
     /** max pending outbound connections (waiting because we are at MAX_CONCURRENT_ESTABLISH) */
 //    private static final int MAX_QUEUED_OUTBOUND = 50;
-    private static final int MAX_QUEUED_OUTBOUND = SystemVersion.isSlow() ? 48 : SystemVersion.getCores() < 4 ? 128 : 256;
+    private static final int MAX_QUEUED_OUTBOUND = SystemVersion.isSlow() ? 64 : 256;
 
     /** max queued msgs per peer while the peer connection is queued */
 //    private static final int MAX_QUEUED_PER_PEER = 16;
-    private static final int MAX_QUEUED_PER_PEER = SystemVersion.isSlow() ? 16 : SystemVersion.getCores() < 4 ? 32 : 64;
+    private static final int MAX_QUEUED_PER_PEER = SystemVersion.isSlow() ? 32 : 64;
 
     private static final long MAX_NONCE = 0xFFFFFFFFl;
 
@@ -153,7 +153,7 @@ class EstablishmentManager {
      * But SSU probably isn't higher priority than NTCP.
      * And it's important to not fail an establishment too soon and waste it.
      */
-    private static final int MAX_OB_ESTABLISH_TIME = SystemVersion.isSlow() ? 25*1000 : 15*1000;
+    private static final int MAX_OB_ESTABLISH_TIME = SystemVersion.isSlow() ? 25*1000 : 20*1000;
 
     /**
      * Kill any inbound that takes more than this
@@ -171,8 +171,9 @@ class EstablishmentManager {
     private static final int IB_BAN_TIME = 15*60*1000;
 
     // SSU 2
+//    private static final int MIN_TOKENS = 128;
 //    private static final int MAX_TOKENS = 2048;
-    private static final int MIN_TOKENS = 128;
+    private static final int MIN_TOKENS = 256;
     private static final int MAX_TOKENS = SystemVersion.isSlow() ? 4096 : 8192;
     public static final long IB_TOKEN_EXPIRATION = 60*60*1000L;
     private static final long MAX_SKEW = 2*60*1000;
