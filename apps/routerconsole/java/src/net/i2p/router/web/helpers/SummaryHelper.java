@@ -334,6 +334,7 @@ public class SummaryHelper extends HelperBase {
                 for (RouterAddress ra : ras) {
                     ip = ra.getIP();
                     if (ip != null) {break;}
+                }
                 if (ip == null) {
                     // Usually a transient issue during state transitions, possibly with hidden mod, don't show this
                     // NTCP2 addresses may not have an IP
@@ -344,18 +345,20 @@ public class SummaryHelper extends HelperBase {
                     return new NetworkStateMessage(NetworkState.RUNNING, txstatus);
                 }
                 return new NetworkStateMessage(NetworkState.ERROR, _t("Private TCP Address"));
-            }
+
             case IPV4_SNAT_IPV6_UNKNOWN:
             case DIFFERENT:
                 return new NetworkStateMessage(NetworkState.ERROR, _t("SymmetricNAT"));
 
             case REJECT_UNSOLICITED:
                 state = NetworkState.FIREWALLED;
+
             case IPV4_DISABLED_IPV6_FIREWALLED:
                 if (routerInfo.getTargetAddress("NTCP") != null) {
                     return new NetworkStateMessage(NetworkState.WARN, _t("Firewalled with Inbound TCP Enabled"));
                 }
-                // fall through...
+
+            // fall through...
             case IPV4_FIREWALLED_IPV6_OK:
             case IPV4_FIREWALLED_IPV6_UNKNOWN:
                 if ((_context.netDb()).floodfillEnabled()) {
@@ -374,6 +377,7 @@ public class SummaryHelper extends HelperBase {
 
             case UNKNOWN:
                 state = NetworkState.TESTING;
+
             case IPV4_UNKNOWN_IPV6_FIREWALLED:
             case IPV4_DISABLED_IPV6_UNKNOWN:
             default:
