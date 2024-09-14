@@ -47,8 +47,6 @@ import net.i2p.router.web.ConfigUpdateHandler;
  */
 public class SummaryHelper extends HelperBase {
 
-    // Opera 10.63 doesn't have the char, TODO check UA
-    //static final String THINSP = "&thinsp;/&thinsp;";
     static final String THINSP = " / ";
     private static final char S = ',';
     static final String PROP_SUMMARYBAR = "routerconsole.summaryBar.";
@@ -216,20 +214,17 @@ public class SummaryHelper extends HelperBase {
      *
      */
     public String getIdent() {
-        if (_context == null) return "[no router]";
-
-        if (_context.routerHash() != null)
-            return _context.routerHash().toBase64().substring(0, 4);
-        else
-            return "[unknown]";
+        if (_context == null) {return "[no router]";}
+        if (_context.routerHash() != null) {return _context.routerHash().toBase64().substring(0, 4);}
+        else {return "[unknown]";}
     }
+
     /**
      * Retrieve the version number of the router.
      *
      */
-    public String getVersion() {
-        return RouterVersion.FULL_VERSION;
-    }
+    public String getVersion() {return RouterVersion.FULL_VERSION;}
+
     /**
      * Retrieve a pretty printed uptime count (ala 4d or 7h or 39m)
      *
@@ -238,10 +233,8 @@ public class SummaryHelper extends HelperBase {
         if (_context == null) return "[no router]";
 
         Router router = _context.router();
-        if (router == null)
-            return "[not up]";
-        else
-            return DataHelper.formatDuration2(router.getUptime());
+        if (router == null) {return "[not up]";}
+        else {return DataHelper.formatDuration2(router.getUptime());}
     }
 
     /** allowReseed */
@@ -253,7 +246,7 @@ public class SummaryHelper extends HelperBase {
     }
 
     /** subtract one for ourselves, so if we know no other peers it displays zero */
-    public int getAllPeers() { return Math.max(_context.netDb().getKnownRouters() - 1, 0); }
+    public int getAllPeers() {return Math.max(_context.netDb().getKnownRouters() - 1, 0);}
 
     public enum NetworkState {
         HIDDEN,
@@ -284,18 +277,12 @@ public class SummaryHelper extends HelperBase {
             this.msg = msg;
         }
 
-        public NetworkState getState() {
-            return state;
-        }
+        public NetworkState getState() {return state;}
 
-        public String getMessage() {
-            return msg;
-        }
+        public String getMessage() {return msg;}
 
         @Override
-        public String toString() {
-            return "(" + state + "; " + msg + ')';
-        }
+        public String toString() {return "(" + state + "; " + msg + ')';}
     }
 
     public NetworkStateMessage getReachability() {
@@ -307,8 +294,7 @@ public class SummaryHelper extends HelperBase {
     }
 
     private NetworkStateMessage reachability() {
-        if (_context.commSystem().isDummy())
-            return new NetworkStateMessage(NetworkState.VMCOMM, "VM Comm System");
+        if (_context.commSystem().isDummy()) {return new NetworkStateMessage(NetworkState.VMCOMM, "VM Comm System");}
 /*
         if (_context.router().getUptime() > 60*1000 &&
             !_context.clientManager().isAlive() &&
@@ -322,13 +308,12 @@ public class SummaryHelper extends HelperBase {
         //if (!_context.clock().getUpdatedSuccessfully())
         long skew = _context.commSystem().getFramedAveragePeerClockSkew(10);
         // Display the actual skew, not the offset
-        if (Math.abs(skew) > 30*1000)
+        if (Math.abs(skew) > 30*1000) {
             return new NetworkStateMessage(NetworkState.CLOCKSKEW, _t("Clock Skew of {0}", DataHelper.formatDuration2(Math.abs(skew))));
-        if (_context.router().isHidden())
-            return new NetworkStateMessage(NetworkState.HIDDEN, _t("Hidden"));
+        }
+        if (_context.router().isHidden()) {return new NetworkStateMessage(NetworkState.HIDDEN, _t("Hidden"));}
         RouterInfo routerInfo = _context.router().getRouterInfo();
-        if (routerInfo == null)
-            return new NetworkStateMessage(NetworkState.TESTING, _t("Testing"));
+        if (routerInfo == null) {return new NetworkStateMessage(NetworkState.TESTING, _t("Testing"));}
 
         // TODO: Migrate/decouple + enhance .sb_netstatus linked advice to Network Reachability section,
         // add tooltips to .sb_netstatus to explain status/nature of error (user may have Reachability section hidden),
@@ -344,25 +329,22 @@ public class SummaryHelper extends HelperBase {
             case IPV4_DISABLED_IPV6_OK:
             case IPV4_SNAT_IPV6_OK:
                 List<RouterAddress> ras = routerInfo.getTargetAddresses("NTCP", "NTCP2");
-                if (ras.isEmpty())
-                    return new NetworkStateMessage(NetworkState.RUNNING, txstatus);
+                if (ras.isEmpty()) {return new NetworkStateMessage(NetworkState.RUNNING, txstatus);}
                 byte[] ip = null;
                 for (RouterAddress ra : ras) {
                     ip = ra.getIP();
-                    if (ip != null)
-                        break;
-                }
+                    if (ip != null) {break;}
                 if (ip == null) {
                     // Usually a transient issue during state transitions, possibly with hidden mod, don't show this
                     // NTCP2 addresses may not have an IP
                     //return new NetworkStateMessage(NetworkState.ERROR, _t("Unresolved TCP Address"));
                     return new NetworkStateMessage(NetworkState.RUNNING, txstatus);
                 }
-                // TODO set IPv6 arg based on configuration?
-                if (TransportUtil.isPubliclyRoutable(ip, true))
+                if (TransportUtil.isPubliclyRoutable(ip, true)) { // TODO set IPv6 arg based on configuration?
                     return new NetworkStateMessage(NetworkState.RUNNING, txstatus);
+                }
                 return new NetworkStateMessage(NetworkState.ERROR, _t("Private TCP Address"));
-
+            }
             case IPV4_SNAT_IPV6_UNKNOWN:
             case DIFFERENT:
                 return new NetworkStateMessage(NetworkState.ERROR, _t("SymmetricNAT"));
@@ -370,13 +352,15 @@ public class SummaryHelper extends HelperBase {
             case REJECT_UNSOLICITED:
                 state = NetworkState.FIREWALLED;
             case IPV4_DISABLED_IPV6_FIREWALLED:
-                if (routerInfo.getTargetAddress("NTCP") != null)
+                if (routerInfo.getTargetAddress("NTCP") != null) {
                     return new NetworkStateMessage(NetworkState.WARN, _t("Firewalled with Inbound TCP Enabled"));
+                }
                 // fall through...
             case IPV4_FIREWALLED_IPV6_OK:
             case IPV4_FIREWALLED_IPV6_UNKNOWN:
-                if ((_context.netDb()).floodfillEnabled())
+                if ((_context.netDb()).floodfillEnabled()) {
                     return new NetworkStateMessage(NetworkState.WARN, _t("Firewalled &amp; Floodfill"));
+                }
                 //if (_context.router().getRouterInfo().getCapabilities().indexOf('O') >= 0)
                 //    return new NetworkStateMessage(NetworkState.WARN, _t("WARN-Firewalled and Fast"));
                 return new NetworkStateMessage(state, txstatus);
@@ -395,13 +379,15 @@ public class SummaryHelper extends HelperBase {
             default:
                 List<RouterAddress> ra = routerInfo.getTargetAddresses("SSU", "SSU2");
                 if (ra.isEmpty() && _context.router().getUptime() > 5*60*1000) {
-                    if (getActivePeers() <= 0)
-                        return new NetworkStateMessage(NetworkState.ERROR, _t("No Active Peers")); // TODO: display advice in .sb_warning -> _t("Check Network Connection and Firewall"));
-                    else if (_context.getProperty(ConfigNetHelper.PROP_I2NP_NTCP_HOSTNAME) == null ||
-                        _context.getProperty(ConfigNetHelper.PROP_I2NP_NTCP_PORT) == null)
+                    if (getActivePeers() <= 0) {
+                        // TODO: display advice in .sb_warning -> _t("Check Network Connection and Firewall"));
+                        return new NetworkStateMessage(NetworkState.ERROR, _t("No Active Peers"));
+                    } else if (_context.getProperty(ConfigNetHelper.PROP_I2NP_NTCP_HOSTNAME) == null ||
+                        _context.getProperty(ConfigNetHelper.PROP_I2NP_NTCP_PORT) == null) {
                         return new NetworkStateMessage(NetworkState.ERROR, _t("UDP Disabled &amp; Inbound TCP host/port not set"));
-                    else
+                    } else {
                         return new NetworkStateMessage(NetworkState.WARN, _t("Firewalled with UDP Disabled"));
+                    }
                 }
                 return new NetworkStateMessage(state, txstatus);
         }
@@ -424,8 +410,7 @@ public class SummaryHelper extends HelperBase {
         }
         used /= 1024*1024;
         long total = tot / (1024*1024);
-        if (used > total)
-            used = total;
+        if (used > total) {used = total;}
         // long free = Runtime.getRuntime().freeMemory()/1024/1024;
         // return integerFormatter.format(used) + "MB (" + usedPc + "%)";
         // return integerFormatter.format(used) + "MB / " + free + " MB";
@@ -450,10 +435,8 @@ public class SummaryHelper extends HelperBase {
             used /= 1024*1024;
         }
         long total = tot / (1024*1024);
-        if (used > total)
-            used = total;
-        if (usedPc > 100)
-            usedPc = 100;
+        if (used > total) {used = total;}
+        if (usedPc > 100) {usedPc = 100;}
         // long free = Runtime.getRuntime().freeMemory()/1024/1024;
         // return integerFormatter.format(used) + "MB (" + usedPc + "%)";
         // return integerFormatter.format(used) + "MB / " + free + " MB";
@@ -468,10 +451,8 @@ public class SummaryHelper extends HelperBase {
      * @since 0.9.58+
      */
     public int getCPULoad() {
-        if (_context == null)
-            return 0;
-        else
-            return SystemVersion.getCPULoad();
+        if (_context == null) {return 0;}
+        else {return SystemVersion.getCPULoad();}
     }
 
     /**
@@ -479,10 +460,8 @@ public class SummaryHelper extends HelperBase {
      * @since 0.9.58+
      */
     public int getCPULoadAvg() {
-        if (_context == null)
-            return 0;
-        else
-            return SystemVersion.getCPULoadAvg();
+        if (_context == null) {return 0;}
+        else {return SystemVersion.getCPULoadAvg();}
     }
 
     /**
@@ -490,10 +469,8 @@ public class SummaryHelper extends HelperBase {
      * @since 0.9.58+
      */
     public int getSystemLoad() {
-        if (_context == null)
-            return 0;
-        else
-            return SystemVersion.getSystemLoad();
+        if (_context == null) {return 0;}
+        else {return SystemVersion.getSystemLoad();}
     }
 
     /**
@@ -512,8 +489,7 @@ public class SummaryHelper extends HelperBase {
      * @since 0.9.58+
      */
     public int getTunnelBuildSuccess() {
-        if (_context == null)
-            return 0;
+        if (_context == null) {return 0;}
         Rate explSuccess = _context.statManager().getRate("tunnel.buildExploratorySuccess").getRate(10*60*1000);
         Rate explReject = _context.statManager().getRate("tunnel.buildExploratoryReject").getRate(10*60*1000);
         Rate explExpire = _context.statManager().getRate("tunnel.buildExploratoryExpire").getRate(10*60*1000);
@@ -524,13 +500,10 @@ public class SummaryHelper extends HelperBase {
         int reject = (int)explReject.getLastEventCount() + (int)clientReject.getLastEventCount();
         int expire = (int)explExpire.getLastEventCount() + (int)clientExpire.getLastEventCount();
         int percentage;
-        if (success < 1)
-            success = 1;
+        if (success < 1) {success = 1;}
         percentage = (100 * success) / (success + reject + expire);
-        if (percentage == 100 || percentage == 0)
-            return 0;
-        else
-            return percentage;
+        if (percentage == 100 || percentage == 0) {return 0;}
+        else {return percentage;}
     }
 
     /**
@@ -538,10 +511,8 @@ public class SummaryHelper extends HelperBase {
      *
      */
     public int getActivePeers() {
-        if (_context == null)
-            return 0;
-        else
-            return _context.commSystem().countActivePeers();
+        if (_context == null) {return 0;}
+        else {return _context.commSystem().countActivePeers();}
     }
 
     /**
@@ -565,38 +536,31 @@ public class SummaryHelper extends HelperBase {
      *
      */
     public int getActiveProfiles() {
-        if (_context == null)
-            return 0;
-        else
-            return _context.profileOrganizer().countActivePeersInLastHour();
+        if (_context == null) {return 0;}
+        else {return _context.profileOrganizer().countActivePeersInLastHour();}
     }
     /**
      * How many active peers the router ranks as fast.
      *
      */
     public int getFastPeers() {
-        if (_context == null)
-            return 0;
-        else
-            return _context.profileOrganizer().countFastPeers();
+        if (_context == null) {return 0;}
+        else {return _context.profileOrganizer().countFastPeers();}
     }
     /**
      * How many active peers the router ranks as having a high capacity.
      *
      */
     public int getHighCapacityPeers() {
-        if (_context == null)
-            return 0;
-        else
-            return _context.profileOrganizer().countHighCapacityPeers();
+        if (_context == null) {return 0;}
+        else {return _context.profileOrganizer().countHighCapacityPeers();}
     }
     /**
      * How many active peers the router ranks as well integrated.
      *
      */
     public int getWellIntegratedPeers() {
-        if (_context == null)
-            return 0;
+        if (_context == null) {return 0;}
         //return _context.profileOrganizer().countWellIntegratedPeers();
         return _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL).size();
     }
@@ -606,10 +570,8 @@ public class SummaryHelper extends HelperBase {
      * @since 0.9.32 uncommented
      */
     public int getBanlistedPeers() {
-        if (_context == null)
-            return 0;
-        else
-            return _context.banlist().getRouterCount();
+        if (_context == null) {return 0;}
+        else {return _context.banlist().getRouterCount();}
     }
 
     /**
@@ -617,8 +579,7 @@ public class SummaryHelper extends HelperBase {
      *
      */
     public int getUnreachablePeers() {
-        if (_context == null)
-            return 0;
+        if (_context == null) {return 0;}
         return _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_UNREACHABLE).size();
     }
 
@@ -626,14 +587,12 @@ public class SummaryHelper extends HelperBase {
      *    @return "x.xx / y.yy {K|M}"
      */
     public String getSecondKBps() {
-        if (_context == null) {
-            return "0 / 0";
-        } else if (_context.bandwidthLimiter().getReceiveBps() < 1024 * 1024 || _context.bandwidthLimiter().getSendBps() < 1024 * 1024) {
+        if (_context == null) {return "0 / 0";}
+        else if (_context.bandwidthLimiter().getReceiveBps() < 1024 * 1024 || _context.bandwidthLimiter().getSendBps() < 1024 * 1024) {
             return formatPair(Math.round(_context.bandwidthLimiter().getReceiveBps() * 10.0 / 10.0),
                               Math.round(_context.bandwidthLimiter().getSendBps() * 10.0 / 10.0));
         } else {
-            return formatPair(_context.bandwidthLimiter().getReceiveBps(),
-                              _context.bandwidthLimiter().getSendBps());
+            return formatPair(_context.bandwidthLimiter().getReceiveBps(), _context.bandwidthLimiter().getSendBps());
         }
     }
 
@@ -641,49 +600,39 @@ public class SummaryHelper extends HelperBase {
      *    @return "x.xx / y.yy {K|M}"
      */
     public String getFiveMinuteKBps() {
-        if (_context == null)
-            return "0 / 0";
+        if (_context == null) {return "0 / 0";}
 
         RateStat receiveRate = _context.statManager().getRate("bw.recvRate");
         double in = 0;
         if (receiveRate != null) {
             Rate r = receiveRate.getRate(5*60*1000);
-            if (r != null)
-                in = r.getAverageValue();
+            if (r != null) {in = r.getAverageValue();}
         }
         RateStat sendRate = _context.statManager().getRate("bw.sendRate");
         double out = 0;
         if (sendRate != null) {
             Rate r = sendRate.getRate(5*60*1000);
-            if (r != null)
-                out = r.getAverageValue();
+            if (r != null) {out = r.getAverageValue();}
         }
         if (in < 1024 * 1024 || out < 1024 * 1024) {
             return formatPair(Math.round(in) * 10.0 / 10.0, Math.round(out) * 10.0 / 10.0);
-        } else {
-            return formatPair(in, out);
-        }
+        } else {return formatPair(in, out);}
     }
 
     /**
      *    @return "x.xx / y.yy {K|M}"
      */
     public String getLifetimeKBps() {
-        if (_context == null)
-            return "0 / 0";
+        if (_context == null) {return "0 / 0";}
 
         RateStat receiveRate = _context.statManager().getRate("bw.recvRate");
         double in;
-        if (receiveRate == null)
-            in = 0;
-        else
-            in = receiveRate.getLifetimeAverageValue();
+        if (receiveRate == null) {in = 0;}
+        else {in = receiveRate.getLifetimeAverageValue();}
         RateStat sendRate = _context.statManager().getRate("bw.sendRate");
         double out;
-        if (sendRate == null)
-            out = 0;
-        else
-            out = sendRate.getLifetimeAverageValue();
+        if (sendRate == null) {out = 0;}
+        else {out = sendRate.getLifetimeAverageValue();}
         return formatPair(in, out);
     }
 
@@ -703,16 +652,11 @@ public class SummaryHelper extends HelperBase {
         }
         // control total width
         DecimalFormat fmt;
-        if ((in >= 1000 || out >= 1000) && mega)
-            fmt = new DecimalFormat("#0.00");
-        else if ((in >= 10 || out >= 10) && mega)
-            fmt = new DecimalFormat("#0.0");
-        else if (!mega || in <= 10 * 1000 || out <= 10 * 1000)
-            fmt = new DecimalFormat("#0.0");
-        else
-            fmt = new DecimalFormat("#0.0");
-        return fmt.format(in) + THINSP + fmt.format(out) + "&nbsp;" +
-               (mega ? 'M' : 'K');
+        if ((in >= 1000 || out >= 1000) && mega) {fmt = new DecimalFormat("#0.00");}
+        else if ((in >= 10 || out >= 10) && mega) {fmt = new DecimalFormat("#0.0");}
+        else if (!mega || in <= 10 * 1000 || out <= 10 * 1000) {fmt = new DecimalFormat("#0.0");}
+        else {fmt = new DecimalFormat("#0.0");}
+        return fmt.format(in) + THINSP + fmt.format(out) + "&nbsp;" + (mega ? 'M' : 'K');
     }
 
     /**
@@ -721,10 +665,8 @@ public class SummaryHelper extends HelperBase {
      *
      */
     public String getInboundTransferred() {
-        if (_context == null)
-            return "0";
+        if (_context == null) {return "0";}
         long received = _context.bandwidthLimiter().getTotalAllocatedInboundBytes();
-//        return DataHelper.formatSize2Decimal(received) + 'B';
         return DataHelper.formatSize2(received) + 'B';
     }
 
@@ -734,10 +676,8 @@ public class SummaryHelper extends HelperBase {
      *
      */
     public String getOutboundTransferred() {
-        if (_context == null)
-            return "0";
+        if (_context == null) {return "0";}
         long sent = _context.bandwidthLimiter().getTotalAllocatedOutboundBytes();
-//        return DataHelper.formatSize2Decimal(sent) + 'B';
         return DataHelper.formatSize2(sent) + 'B';
     }
 
@@ -747,8 +687,7 @@ public class SummaryHelper extends HelperBase {
      * @since 0.9.58
      */
     public boolean isI2PTunnelRunning() {
-        if (!_context.portMapper().isRegistered(PortMapper.SVC_I2PTUNNEL))
-            return false;
+        if (!_context.portMapper().isRegistered(PortMapper.SVC_I2PTUNNEL)) {return false;}
         ClientAppManager cmgr = _context.clientAppManager();
         return cmgr != null && cmgr.getRegisteredApp("i2ptunnel") != null;
     }
@@ -765,16 +704,15 @@ public class SummaryHelper extends HelperBase {
         StringBuilder buf = new StringBuilder(512);
         boolean link = isI2PTunnelRunning();
         buf.append("<h3 id=sb_localTunnelsHeading");
-        if (!link)
-            buf.append(" class=unregistered");
+        if (!link) {buf.append(" class=unregistered");}
         buf.append("><a href=\"/tunnelmanager\" target=_top title=\"")
            .append(_t("Add/remove/edit &amp; control your client and server tunnels"))
            .append("\">")
            .append(_t("Service Tunnels"))
            .append(" <span id=tunnelCount class=badge title=\"").append(_t("How many local service tunnels we're running"))
            .append("\">").append("</span>")
-           .append("</a>");
-        buf.append("<input type=checkbox id=toggle_sb_localtunnels class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n");
+           .append("</a>")
+           .append("<input type=checkbox id=toggle_sb_localtunnels class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n");
         if (!clients.isEmpty()) {
             DataHelper.sort(clients, new AlphaComparator());
             buf.append("<table id=sb_localtunnels class=volatile>");
@@ -878,14 +816,10 @@ public class SummaryHelper extends HelperBase {
                 if (lServer) {lname = "a_" + lname; rname = "a_" + rname;}
                 if (lClient) {lname = "b_" + lname; rname = "b_" + rname;}
                 if (lPing) {lname = "c_" + lname; rname = "c_" + rname;}
-                if (lSnark && !rSnark)
-                    return -1;
-                else if (lServer && !rServer)
-                    return 0;
-                else if (lClient && !rClient)
-                    return 1;
-                else if (lPing && !rPing)
-                    return 2;
+                if (lSnark && !rSnark) {return -1;}
+                else if (lServer && !rServer) {return 0;}
+                else if (lClient && !rClient) {return 1;}
+                else if (lPing && !rPing) {return 2;}
             }
             return Collator.getInstance().compare(lname.toLowerCase(), rname.toLowerCase());
         }
@@ -898,13 +832,9 @@ public class SummaryHelper extends HelperBase {
         if (name == null) {
             TunnelPoolSettings out = _context.tunnelManager().getOutboundSettings(d.calculateHash());
             name = (out != null ? out.getDestinationNickname() : null);
-            if (name == null)
-                name = d.toBase32();
-            else
-                name = _t(name);
-        } else {
-            name = _t(name);
-        }
+            if (name == null) {name = d.toBase32();}
+            else {name = _t(name);}
+        } else {name = _t(name);}
         return name;
     }
 
@@ -913,10 +843,8 @@ public class SummaryHelper extends HelperBase {
      *
      */
     public int getInboundTunnels() {
-        if (_context == null)
-            return 0;
-        else
-            return _context.tunnelManager().getFreeTunnelCount();
+        if (_context == null) {return 0;}
+        else {return _context.tunnelManager().getFreeTunnelCount();}
     }
 
     /**
@@ -924,10 +852,8 @@ public class SummaryHelper extends HelperBase {
      *
      */
     public int getOutboundTunnels() {
-        if (_context == null)
-            return 0;
-        else
-            return _context.tunnelManager().getOutboundTunnelCount();
+        if (_context == null) {return 0;}
+        else {return _context.tunnelManager().getOutboundTunnelCount();}
     }
 
     /**
@@ -935,10 +861,8 @@ public class SummaryHelper extends HelperBase {
      *
      */
     public int getInboundClientTunnels() {
-        if (_context == null)
-            return 0;
-        else
-            return _context.tunnelManager().getInboundClientTunnelCount();
+        if (_context == null) {return 0;}
+        else {return _context.tunnelManager().getInboundClientTunnelCount();}
     }
 
     /**
@@ -946,10 +870,8 @@ public class SummaryHelper extends HelperBase {
      *
      */
     public int getOutboundClientTunnels() {
-        if (_context == null)
-            return 0;
-        else
-            return _context.tunnelManager().getOutboundClientTunnelCount();
+        if (_context == null) {return 0;}
+        else {return _context.tunnelManager().getOutboundClientTunnelCount();}
     }
 
     /**
@@ -957,32 +879,28 @@ public class SummaryHelper extends HelperBase {
      *
      */
     public int getParticipatingTunnels() {
-        if (_context == null)
-            return 0;
-        else
-            return _context.tunnelManager().getParticipatingCount();
+        if (_context == null) {return 0;}
+        else {return _context.tunnelManager().getParticipatingCount();}
     }
 
     public String getMaxParticipatingTunnels() {
         int defaultMax = SystemVersion.isSlow() ? 2*1000 :
                          SystemVersion.getMaxMemory() < 512*1024*1024 ? 5*1000 :
                          SystemVersion.getCores() >= 8 ? 12*1000 : 8*1000;
-        if (_context.getProperty("router.maxParticipatingTunnels") != null)
+        if (_context.getProperty("router.maxParticipatingTunnels") != null) {
             return _context.getProperty("router.maxParticipatingTunnels");
-        else
+        } else {
             return Integer.toString(defaultMax);
+        }
     }
 
     /** @since 0.7.10 */
     public String getShareRatio() {
-        if (_context == null)
-            return "0";
+        if (_context == null) {return "0";}
         double sr = _context.tunnelManager().getShareRatio();
         DecimalFormat fmt = new DecimalFormat("##0");
-        if (sr < 1)
-            fmt = new DecimalFormat("##0.00");
-        else if (sr < 10)
-            fmt = new DecimalFormat("##0.0");
+        if (sr < 1) {fmt = new DecimalFormat("##0.00");}
+        else if (sr < 10) {fmt = new DecimalFormat("##0.0");}
         return fmt.format(sr).replace("0.00", "0");
     }
 
@@ -992,25 +910,25 @@ public class SummaryHelper extends HelperBase {
      *
      */
     public String getJobLag() {
-        if (_context == null)
-            return "0";
+        if (_context == null) {return "0";}
         RateStat rs = _context.statManager().getRate("jobQueue.jobLag");
-        if (rs == null)
-            return "0";
+        if (rs == null) {return "0";}
         Rate lagRate = rs.getRate(60*1000);
         long maxLag = _context.jobQueue().getMaxLag();
         if (!isAdvanced() || maxLag < (double)30) {
-            if (lagRate.getAverageValue() < 1)
+            if (lagRate.getAverageValue() < 1) {
                 return DataHelper.formatDuration2((double)lagRate.getAverageValue());
-            else
+            } else {
                 return DataHelper.formatDuration2((long)lagRate.getAverageValue());
+            }
         } else {
-            if (lagRate.getAverageValue() < 1 && (double)maxLag < 1)
+            if (lagRate.getAverageValue() < 1 && (double)maxLag < 1) {
                 return DataHelper.formatDuration2((double)lagRate.getAverageValue()) + THINSP + (double)maxLag + "&nbsp;µs";
-            else if (lagRate.getAverageValue() < 1)
+            } else if (lagRate.getAverageValue() < 1) {
                 return DataHelper.formatDuration2((double)lagRate.getAverageValue()) + THINSP + maxLag + "&nbsp;ms";
-            else
+            } else {
                 return (long)lagRate.getAverageValue() + THINSP + maxLag + "&nbsp;ms";
+            }
         }
     }
 
@@ -1020,8 +938,7 @@ public class SummaryHelper extends HelperBase {
      *
      */
     public String getMessageDelay() {
-        if (_context == null)
-            return "0";
+        if (_context == null) {return "0";}
         return DataHelper.formatDuration2(_context.throttle().getMessageDelay());
     }
 
@@ -1031,20 +948,17 @@ public class SummaryHelper extends HelperBase {
      *
      */
     public String getTunnelLag() {
-        if (_context == null)
-            return "0";
+        if (_context == null) {return "0";}
         return DataHelper.formatDuration2(_context.throttle().getTunnelLag());
     }
 
     public String getTunnelStatus() {
-        if (_context == null)
-            return "";
+        if (_context == null) {return "";}
         return _context.throttle().getLocalizedTunnelStatus();
     }
 
     public String getConcurrency() {
-        if (_context == null)
-            return "0 / 0";
+        if (_context == null) {return "0 / 0";}
         RateStat cb = _context.statManager().getRate("tunnel.concurrentBuilds");
         RateStat brt = _context.statManager().getRate("tunnel.buildRequestTime");
         Rate concurrentBuilds = cb.getRate(60*1000);
@@ -1052,32 +966,25 @@ public class SummaryHelper extends HelperBase {
         double cbavg = concurrentBuilds.getAvgOrLifetimeAvg();
         String brtavg = DataHelper.formatDuration2((long)buildRequestTime.getAvgOrLifetimeAvg());
         Router router = _context.router();
-        if (router.getUptime() < 15 * 1000) {
-            return "0 / 0";
-        } else {
+        if (router.getUptime() < 15 * 1000) {return "0 / 0";}
+        else {
             DecimalFormat fmt = new DecimalFormat("##0.0");
             if (cbavg < 0.1 || cbavg > 10) {
-                if (cbavg < 0.1)
-                    fmt = new DecimalFormat("##0.00");
-                if (cbavg > 10)
-                    fmt = new DecimalFormat("##0");
+                if (cbavg < 0.1) {fmt = new DecimalFormat("##0.00");}
+                if (cbavg > 10) {fmt = new DecimalFormat("##0");}
                 return String.valueOf(fmt.format(cbavg).replace(".00", "")) + " / " + brtavg;
-            } else {
-                return String.valueOf(fmt.format(cbavg).replace(".0", "")) + " / " + brtavg;
-            }
+            } else {return String.valueOf(fmt.format(cbavg).replace(".0", "")) + " / " + brtavg;}
         }
     }
 
     public String getInboundBacklog() {
-        if (_context == null)
-            return "0";
+        if (_context == null) {return "0";}
         return String.valueOf(_context.tunnelManager().getInboundBuildQueueSize());
     }
 
     /** @since 0.9.49+ */
     public int getAvgPeerTestTime() {
-        if (_context == null)
-            return 0;
+        if (_context == null) {return 0;}
         RateStat ok = _context.statManager().getRate("peer.testOK");
         Rate rok = ok.getRate(60*60*1000);
         RateStat tooslow = _context.statManager().getRate("peer.testTooSlow");
@@ -1088,8 +995,7 @@ public class SummaryHelper extends HelperBase {
 
     /** @since 0.9.50+ */
     public int getAvgPeerTestTimeGood() {
-        if (_context == null)
-            return 0;
+        if (_context == null) {return 0;}
         RateStat ok = _context.statManager().getRate("peer.testOK");
         Rate rok = ok.getRate(60*60*1000);
         int avgTestTimeGood = (int) rok.getLifetimeAverageValue();
@@ -1135,32 +1041,27 @@ public class SummaryHelper extends HelperBase {
         boolean needSpace = false;
         if (status.length() > 0) {
             buf.append("<h4 class=\"sb_info sb_update volatile");
-            if (NewsHelper.isUpdateInProgress()) {
-                buf.append(" inProgress");
-            }
+            if (NewsHelper.isUpdateInProgress()) {buf.append(" inProgress");}
             buf.append("\">").append(status).append("</h4>\n");
             needSpace = true;
         }
         String dver = NewsHelper.updateVersionDownloaded();
         if (dver == null) {
             dver = NewsHelper.devSU3VersionDownloaded();
-            if (dver == null)
-                dver = NewsHelper.unsignedVersionDownloaded();
+            if (dver == null) {dver = NewsHelper.unsignedVersionDownloaded();}
         }
         if (dver != null && !NewsHelper.isUpdateInProgress() && !_context.router().gracefulShutdownInProgress()) {
-            if (needSpace)
-                buf.append("<hr>");
-            else
-                needSpace = true;
+            if (needSpace) {buf.append("<hr>");}
+            else {needSpace = true;}
             if (!_context.router().gracefulShutdownInProgress() && !NewsHelper.isUpdateInProgress()) {
                 buf.append("<h4 id=restartRequired class=\"sb_info sb_update volatile\" title=\"");
-                if (_context.hasWrapper() || NewsHelper.isExternalRestartPending())
+                if (_context.hasWrapper() || NewsHelper.isExternalRestartPending()) {
                     buf.append(_t("Click Restart to install").replace("Click ", ""));
-                else
+                } else {
                     buf.append(_t("Click Shutdown and restart to install").replace("Click ", ""));
+                }
                 buf.append("\"><b>");
-                if (source != null && source.contains("skank"))
-                    buf.append("I2P+ ");
+                if (source != null && source.contains("skank")) {buf.append("I2P+ ");}
                 buf.append(_t("Update downloaded")).append("<br>")
                    .append("[").append(_t("{0}", DataHelper.escapeHTML(dver))).append("]")
                    .append("</b></h4>");
@@ -1195,20 +1096,16 @@ public class SummaryHelper extends HelperBase {
         if (unsignedAvail && unsignedConstraint != null &&
             !NewsHelper.isUpdateInProgress() &&
             !_context.router().gracefulShutdownInProgress()) {
-            if (needSpace)
-                buf.append("<hr>");
-            else
-                needSpace = true;
+            if (needSpace) {buf.append("<hr>");}
+            else {needSpace = true;}
             buf.append("<h4 class=\"sb_info sb_update volatile\"><b>").append(_t("Update available")).append(":<br>")
                .append(_t("Version {0}", getUnsignedUpdateVersion())).append("<br>")
                .append(unsignedConstraint).append("</b></h4>");
             unsignedAvail = false;
         }
         if (devSU3Avail && devSU3Constraint != null && !NewsHelper.isUpdateInProgress() && !_context.router().gracefulShutdownInProgress()) {
-            if (needSpace)
-                buf.append("<hr>");
-            else
-                needSpace = true;
+            if (needSpace) {buf.append("<hr>");}
+            else {needSpace = true;}
             buf.append("<h4 class=\"sb_info sb_update volatile\"><b>").append(_t("Update available")).append(":<br>")
                .append(_t("Version {0}", getDevSU3UpdateVersion())).append("<br>")
                .append(devSU3Constraint).append("</b></h4>");
@@ -1218,12 +1115,13 @@ public class SummaryHelper extends HelperBase {
             !_context.router().gracefulShutdownInProgress() && !_context.commSystem().isDummy() &&
             _context.portMapper().isRegistered(PortMapper.SVC_HTTP_PROXY) &&  // assume using proxy for now
             getAction() == null && getUpdateNonce() == null) {
-                if (needSpace)
-                    buf.append("<hr>");
+                if (needSpace) {buf.append("<hr>");}
+                // else {needSpace = true;} // needed ?
                 long nonce = _context.random().nextLong();
                 String prev = System.getProperty("net.i2p.router.web.UpdateHandler.nonce");
-                if (prev != null)
+                if (prev != null) {
                     System.setProperty("net.i2p.router.web.UpdateHandler.noncePrev", prev);
+                }
                 System.setProperty("net.i2p.router.web.UpdateHandler.nonce", nonce + "");
                 String uri = getRequestURI();
                 buf.append("<form id=sb_updateform action=\"").append(uri).append("\" method=POST class=volatile target=processSidebarForm>\n")
@@ -1234,7 +1132,7 @@ public class SummaryHelper extends HelperBase {
                        .append(_t("Version")).append(": ").append(getUpdateVersion())
                        .append("</i></span><br><button type=submit id=sb_downloadReleaseUpdate class=download name=updateAction value=\"signed\" >")
                        // Note to translators: parameter is a version, e.g. "0.8.4"
-//                       .append(_t("Download {0} Update", getUpdateVersion()))
+                       .append(_t("Download {0} Update", getUpdateVersion()))
                        .append(_t("Download I2P Update"))
                        .append("</button><br>\n");
                 }
@@ -1243,30 +1141,18 @@ public class SummaryHelper extends HelperBase {
                     buf.append("<span id=updateAvailable class=volatile>").append(_t("Signed development update available")).append("<br><i>")
                        .append(_t("Version")).append(": ").append(getDevSU3UpdateVersion())
                        .append("</i></span><br><button type=submit id=sb_downloadSignedDevUpdate class=download name=updateAction value=\"DevSU3\" >")
-                       // Note to translators: parameter is a router version, e.g. "0.9.19-16"
-                       // <br> is optional, to help the browser make the lines even in the button
-                       // If the translation is shorter than the English, you should probably not include <br>
-//                       .append(_t("Download Signed<br>Development Update<br>{0}", getDevSU3UpdateVersion()))
                        .append(_t("Download I2P Update"))
                        .append("</button><br>\n");
                 }
 
                 if (unsignedAvail) {
                     buf.append("<span id=updateAvailable class=volatile>");
-                    if (source.contains("skank"))
-                        buf.append(_t("Unsigned update available").replace("update", "I2P+ update"));
-                    else
-                        buf.append(_t("Unsigned update available").replace("update", "I2P update"));
+                    if (source.contains("skank")) {buf.append(_t("Unsigned update available").replace("update", "I2P+ update"));}
+                    else {buf.append(_t("Unsigned update available").replace("update", "I2P update"));}
                     buf.append("<br><i>").append(getUnsignedUpdateVersion())
                        .append("</i></span><br><button type=submit id=sb_downloadUnsignedDevUpdate class=download name=updateAction value=\"Unsigned\" >");
-                       // Note to translators: parameter is a date and time, e.g. "02-Mar 20:34 UTC"
-                       // <br> is optional, to help the browser make the lines even in the button
-                       // If the translation is shorter than the English, you should probably not include <br>
-//                       .append(_t("Download Unsigned<br>Update {0}", getUnsignedUpdateVersion()))
-                    if (source != null && source.contains("skank"))
-                        buf.append(_t("Download I2P Update").replace("I2P", "I2P+"));
-                    else
-                        buf.append(_t("Download I2P Update"));
+                    if (source != null && source.contains("skank")) {buf.append(_t("Download I2P Update").replace("I2P", "I2P+"));}
+                    else {buf.append(_t("Download I2P Update"));}
                     buf.append("</button><br>\n");
                 }
                 buf.append("</form>\n");
@@ -1294,10 +1180,7 @@ public class SummaryHelper extends HelperBase {
                .append("\">")
                .append(_t("Check network connection and NAT/firewall!"))
                .append("</a></span></h4>");
-        } else {
-            // Hide warn but retain h4 so ajax refresh picks it up
-            buf.append("<h4 id=sb_warning class=\"volatile hide\" hidden></h4>");
-        }
+        } else {buf.append("<h4 id=sb_warning class=\"volatile hide\" hidden></h4>");} // Hide warn but retain h4 so ajax refresh picks it up
 
         if (DeadlockDetector.isDeadlocked()) {
             buf.append("<div class=sb_notice><b>")
@@ -1338,14 +1221,13 @@ public class SummaryHelper extends HelperBase {
                 buf.append("\" id=sb_manualReseed class=reload value=\"Reseed\" >").append(_t("Reseed")).append("</button></form></p>\n");
             }
         }
-        if (buf.length() <= 0)
-            return "";
+        if (buf.length() <= 0) {return "";}
         return buf.toString();
     }
 
     private NewsHelper _newshelper;
-    public void storeNewsHelper(NewsHelper n) { _newshelper = n; }
-    public NewsHelper getNewsHelper() { return _newshelper; }
+    public void storeNewsHelper(NewsHelper n) {_newshelper = n;}
+    public NewsHelper getNewsHelper() {return _newshelper;}
 
     private static final String SS = Character.toString(S);
 
@@ -1356,27 +1238,28 @@ public class SummaryHelper extends HelperBase {
         } else if (oldHome) {
             config = _context.getProperty(PROP_SUMMARYBAR + page);
             if (config == null)
-                if (version.equals(firstVersion))
+                if (version.equals(firstVersion)) {
                     config = _context.getProperty(PROP_SUMMARYBAR + "default", isAdvanced() ? DEFAULT_FULL_ADVANCED_OLDHOME : DEFAULT_FULL_OLDHOME_NEWUSER);
-                else
+                } else {
                     config = _context.getProperty(PROP_SUMMARYBAR + "default", isAdvanced() ? DEFAULT_FULL_ADVANCED_OLDHOME : DEFAULT_FULL_OLDHOME);
+                }
         } else {
             config = _context.getProperty(PROP_SUMMARYBAR + page);
-            if (config == null)
-                if (version.equals(firstVersion))
+            if (config == null) {
+                if (version.equals(firstVersion)) {
                     config = _context.getProperty(PROP_SUMMARYBAR + "default", isAdvanced() ? DEFAULT_FULL_ADVANCED : DEFAULT_FULL_NEWUSER);
-                else
+                } else {
                     config = _context.getProperty(PROP_SUMMARYBAR + "default", isAdvanced() ? DEFAULT_FULL_ADVANCED : DEFAULT_FULL);
+                }
+            }
         }
-        if (config.length() <= 0)
-            return Collections.emptyList();
+        if (config.length() <= 0) {return Collections.emptyList();}
         return Arrays.asList(DataHelper.split(config, SS));
     }
 
     static void saveSummaryBarSections(RouterContext ctx, String page, Map<Integer, String> sections) {
         StringBuilder buf = new StringBuilder(512);
-        for(String section : sections.values())
-            buf.append(section).append(S);
+        for(String section : sections.values()) {buf.append(section).append(S);}
         ctx.router().saveConfig(PROP_SUMMARYBAR + page, buf.toString());
     }
 
@@ -1389,26 +1272,24 @@ public class SummaryHelper extends HelperBase {
     /* below here is stuff we need to get from summarynoframe.jsp to SummaryBarRenderer */
 
     private String _action;
-    public void setAction(String s) { _action = s == null ? null : DataHelper.stripHTML(s); }
-    public String getAction() { return _action; }
+    public void setAction(String s) {_action = s == null ? null : DataHelper.stripHTML(s);}
+    public String getAction() {return _action;}
 
     private String _consoleNonce;
-    public void setConsoleNonce(String s) { _consoleNonce = s == null ? null : DataHelper.stripHTML(s); }
-    public String getConsoleNonce() { return _consoleNonce; }
+    public void setConsoleNonce(String s) {_consoleNonce = s == null ? null : DataHelper.stripHTML(s);}
+    public String getConsoleNonce() {return _consoleNonce;}
 
     private String _updateNonce;
-    public void setUpdateNonce(String s) { _updateNonce = s == null ? null : DataHelper.stripHTML(s); }
-    public String getUpdateNonce() { return _updateNonce; }
+    public void setUpdateNonce(String s) {_updateNonce = s == null ? null : DataHelper.stripHTML(s);}
+    public String getUpdateNonce() {return _updateNonce;}
 
     private String _requestURI;
-    public void setRequestURI(String s) { _requestURI = s == null ? null : DataHelper.stripHTML(s); }
+    public void setRequestURI(String s) {_requestURI = s == null ? null : DataHelper.stripHTML(s);}
 
     /**
      * @return non-null; "/home" if (strangely) not set by jsp
      */
-    public String getRequestURI() {
-        return _requestURI != null ? _requestURI : "/home";
-    }
+    public String getRequestURI() {return _requestURI != null ? _requestURI : "/home";}
 
     public String getConfigTable() {
         String[] allSections = SummaryBarRenderer.ALL_SECTIONS;
@@ -1419,20 +1300,15 @@ public class SummaryHelper extends HelperBase {
 
         // Forward-convert old section names
         int pos = sections.indexOf("General");
-        if (pos >= 0) {
-            sections.set(pos, "RouterInfo");
-        }
+        if (pos >= 0) {sections.set(pos, "RouterInfo");}
         pos = sections.indexOf("ShortGeneral");
-        if (pos >= 0) {
-            sections.set(pos, "ShortRouterInfo");
-        }
+        if (pos >= 0) {sections.set(pos, "ShortRouterInfo");}
 
         for (int i = 0; i < allSections.length; i++) {
             String section = allSections[i];
             if (!sections.contains(section)) {
                 String name = sectionNames.get(section);
-                if (name != null)
-                    sortedSections.put(_t(name), section);
+                if (name != null) {sortedSections.put(_t(name), section);}
             }
         }
 
@@ -1450,8 +1326,7 @@ public class SummaryHelper extends HelperBase {
         for (String section : sections) {
             int i = sections.indexOf(section);
             String name = sectionNames.get(section);
-            if (name == null)
-                continue;
+            if (name == null) {continue;}
             buf.append("<tr><td><input type=checkbox class=optbox id=\"")
                .append(name.replace(" ", "_").replace("\'", "").replace("(", "").replace(")", "").replace("&amp;", ""))
                .append("\" name=\"delete_")
@@ -1475,8 +1350,8 @@ public class SummaryHelper extends HelperBase {
                    .append("move_top.png")
                    .append("\" title=\"")
                    .append(_t("Move to top"))
-                   .append("\"/></button>");
-                buf.append("<button type=submit class=buttonUp name=action value=\"move_")
+                   .append("\"/></button>")
+                   .append("<button type=submit class=buttonUp name=action value=\"move_")
                    .append(i)
                    .append("_up\"><img alt=\"")
                    .append(_t("Up"))
@@ -1498,8 +1373,8 @@ public class SummaryHelper extends HelperBase {
                    .append("move_down.png")
                    .append("\" title=\"")
                    .append(_t("Move down"))
-                   .append("\"/></button>");
-                buf.append("<button type=submit class=buttonBottom name=action value=\"move_")
+                   .append("\"/></button>")
+                   .append("<button type=submit class=buttonBottom name=action value=\"move_")
                    .append(i)
                    .append("_bottom\"><img alt=\"")
                    .append(_t("Bottom"))
@@ -1512,31 +1387,22 @@ public class SummaryHelper extends HelperBase {
             }
             buf.append("</td></tr>\n");
         }
-        buf.append("<tr><td>" +
-                   "<input type=submit name=action class=delete value=\"")
-           .append(_t("Delete selected"))
-           .append("\"></td><td>")
-           .append("<select name=\"name\">\n" +
-                   "<option value=\"\" selected=selected>")
+        buf.append("<tr><td><input type=submit name=action class=delete value=\"")
+           .append(_t("Delete selected")).append("\"></td><td>")
+           .append("<select name=\"name\">\n<option value=\"\" selected=selected>")
            .append(_t("Select a section to add"))
            .append("</option>\n");
 
         for (Map.Entry<String, String> e : sortedSections.entrySet()) {
             String name = e.getKey();
             String s = e.getValue();
-            buf.append("<option value=\"").append(s).append("\">")
-               .append(name).append("</option>\n");
+            buf.append("<option value=\"").append(s).append("\">").append(name).append("</option>\n");
         }
 
-        buf.append("</select>\n" +
-                   "<input type=hidden name=\"order\" value=\"")
-           .append(sections.size())
-           .append("\"></td>" +
-                   "<td colspan=2>" +
-                   "<input type=submit name=action class=\"add\" value=\"")
-           .append(_t("Add item"))
-           .append("\"></td></tr>")
-           .append("</table>\n");
+        buf.append("</select>\n<input type=hidden name=\"order\" value=\"")
+           .append(sections.size()).append("\"></td><td colspan=2>")
+           .append("<input type=submit name=action class=\"add\" value=\"")
+           .append(_t("Add item")).append("\"></td></tr>\n").append("</table>\n");
         return buf.toString();
     }
 }
