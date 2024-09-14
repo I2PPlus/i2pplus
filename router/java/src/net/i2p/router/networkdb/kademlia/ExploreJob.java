@@ -141,13 +141,13 @@ class ExploreJob extends SearchJob {
                     if (sess.tag != null) {
                         if (_log.shouldInfo()) {
                             _log.info("Requesting AES reply from [" + ident.calculateHash().toBase64().substring(0,6) +
-                                      "] \n* Session Key: " + sess.key + "\n* Tag: " + sess.tag);
+                                      "] \n* Session Key: " + sess.key + "\n* " + sess.tag);
                         }
                         msg.setReplySession(sess.key, sess.tag);
                     } else {
                         if (_log.shouldInfo()) {
                             _log.info("Requesting AEAD reply from [" + ident.calculateHash().toBase64().substring(0,6) +
-                                      "] \n* Session Key: " + sess.key + "\n* Tag: " + sess.rtag);
+                                      "] \n* Session Key: " + sess.key + "\n* " + sess.rtag);
                         }
                         msg.setReplySession(sess.key, sess.rtag);
                     }

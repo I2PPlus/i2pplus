@@ -182,7 +182,7 @@ class SearchJob extends JobImpl {
             fail();
             return;
         }
-        if (_log.shouldInfo()) {_log.info("[Job " + getJobId() + "]" + _state);}
+        if (_log.shouldInfo()) {_log.info("" + _state);}
         if (isLocal()) {
             if (_log.shouldInfo()) {_log.info("Key found locally");}
             _state.complete();
@@ -204,9 +204,7 @@ class SearchJob extends JobImpl {
      */
     private boolean isLocal() {return _facade.getDataStore().isKnown(_state.getTarget());}
 
-    private boolean isExpired() {
-        return getContext().clock().now() >= _expiration;
-    }
+    private boolean isExpired() {return getContext().clock().now() >= _expiration;}
 
     /** max # of concurrent searches */
     protected int getBredth() {
@@ -222,21 +220,20 @@ class SearchJob extends JobImpl {
      */
     protected void continueSearch() {
         if (_state.completed()) {
-            if (_log.shouldDebug())
-                _log.debug("Search already completed", new Exception("already completed"));
+            if (_log.shouldDebug()) {_log.debug("Search already completed", new Exception("already completed"));}
             return;
         }
         if (getContext().jobQueue().getMaxLag() > 750 || getContext().throttle().getMessageDelay() > 1000) {
             SEARCH_BREDTH -= 3;
             if (_log.shouldDebug()) {
-                _log.debug("Reducing number of parallel peer searches to " + getBredth() + " - router under load");
+                _log.debug("Reducing number of parallel peer searches to " + getBredth() + " -> Router under load");
             }
         }
         int toCheck = getBredth() - _state.getPending().size();
         if (toCheck <= 0) {
             // too many already pending
             if (_log.shouldInfo()) {
-                _log.info("Too many searches pending -> throttling (pending: " +
+                _log.info("Too many searches pending -> Throttling (Pending: " +
                           _state.getPending().size() + ", max: " + getBredth() + ")");
             }
             requeuePending();
@@ -249,8 +246,8 @@ class SearchJob extends JobImpl {
             boolean onlyFloodfill = true;
             if (_floodfillPeersExhausted && onlyFloodfill && _state.getPending().isEmpty()) {
                 if (_log.shouldWarn()) {
-                    _log.warn("No non-Floodfill peers left, and no more search queries pending. Searched: " +
-                              _state.getAttempted().size() + " Failed: " + _state.getFailed().size());
+                    _log.warn("No non-Floodfill peers left, and no more search queries pending -> Searched: " +
+                              _state.getAttempted().size() + " (Failed: " + _state.getFailed().size() + ")");
                 }
                 fail();
                 return;
@@ -260,8 +257,8 @@ class SearchJob extends JobImpl {
                 if (_state.getPending().isEmpty()) {
                     // we tried to find some peers, but there weren't any and no one else is going to answer
                     if (_log.shouldInfo()) {
-                        _log.info("No peers left, and no search queries pending! Already searched: " +
-                                  _state.getAttempted().size() + " Failed: " + _state.getFailed().size());
+                        _log.info("No peers left, and no search queries pending! -> Already searched: " +
+                                  _state.getAttempted().size() + " (Failed: " + _state.getFailed().size() + ")");
                     }
                     fail();
                 } else {
