@@ -296,7 +296,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             upLongEnough = down > 0 && down < 10*60*60*1000L;
         }
         if (!_initialized || isClientDb()) {
-            if (_log.shouldInfo()) {_log.info("Datastore not initialized, cannot queue keys for exploration");}
+            if (_log.shouldInfo() && !_initialized) {_log.info("Datastore not initialized, cannot queue keys for exploration");}
             return;
         }
         // TODO: make sure exploreQueue isn't null before assigning
@@ -362,7 +362,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return true;
     }
 
-  public void startup() {
+    public void startup() {
         if (_log.shouldInfo()) {_log.info("Starting up the Kademlia Network Database...");}
         RouterInfo ri = _context.router().getRouterInfo();
         String dbDir = _context.getProperty(PROP_DB_DIR, DEFAULT_DB_DIR);
