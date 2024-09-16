@@ -627,7 +627,7 @@ class NetDbRenderer {
         boolean noLeasesets = _context.netDb().getLeases().size() <= 0;
         if (debug && !noLeasesets) {
             buf.append("<p id=debugmode>").append(_t("Debug mode - Sorted by hash distance, closest first."))
-               .append("<a href=\"/netdb?l=1\">[").append(_t("Compact mode")).append("]</a></p>\n");
+               .append("&nbsp;<a href=\"/netdb?l=1\">[").append(_t("Compact mode")).append("]</a></p>\n");
         }
         Hash ourRKey;
         DecimalFormat fmt;

@@ -98,6 +98,9 @@
     }
 %>
 <div class=main id=netdb>
+<%  if (r == null && ls != null || l != null) { %>
+<div class=leasesets_container>
+<%  } %>
 <%
     formhandler.storeWriter(out);
     if (allowIFrame) {formhandler.allowGraphical();}
