@@ -808,7 +808,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     @Override
     public boolean isInStrictCountry() {
         String us = getOurCountry();
-        return (us != null && StrictCountries.contains(us)) || _context.getBooleanProperty("router.forceStrictCountry");
+        return (us != null && StrictCountries.contains(us)) ||
+                _context.getBooleanProperty("router.forceStrictCountry") ||
+                _context.getBooleanProperty("router.blockMyCountry");
     }
 
     /**
