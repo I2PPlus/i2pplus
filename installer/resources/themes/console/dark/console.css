@@ -839,10 +839,9 @@ td.ipv6{width:1%;max-width:24px}
 #profilelist .highcap.integrated{background:var(--highcap) no-repeat calc(50% - 10px) center,var(--integrated) no-repeat calc(50% + 10px) center}
 #profilelist .standard{background:var(--standard) var(--center)}
 #profilelist .standard.integrated{background:var(--standard) no-repeat calc(50% - 10px) center,var(--integrated) no-repeat calc(50% + 10px) center}
-#profilelist .version{line-height:1.3}
+#profilelist .version{line-height:1.375;vertical-align:middle}
 #profilelist .viewprofile,#profilelist .configpeer{margin:1px}
 #profilelist .viewedit{padding:1px}
-#profilelist .version{line-height:1.4}
 #profilelist .nospeed{text-align:center}
 #floodfills td:empty::before,#ntcpconnections td:not(:last-child):empty::before,#udpconnections td:not(:last-child):empty::before,#profilelist td:empty::before,#tunnels .cells:empty::after{width:100%;display:inline-block;text-align:center;content:"\2013";opacity:.8}
 #profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(6) span,#profilelist td:nth-last-child(2) span{min-width:20px;display:inline-block;vertical-align:middle;text-align:right}
@@ -3000,7 +2999,7 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 .tunnel_local,.tunnel_id,.rid td,.version,.routerHash{box-shadow:var(--highlight),0 0 1px 1px rgba(16,48,16,.8) inset!important;background:var(--badge)}
 .tunnel_local{width:98px;box-sizing:border-box}
 .tunnel_peer{display:inline-block;vertical-align:middle}
-.rid,.rid td{margin:0;padding:2px 1px;line-height:0;vertical-align:middle;text-align:center;border:var(--border_soft)!important;background:var(--badge)}
+.rid,.rid td{margin:0;padding:2px 1px;line-height:0;vertical-align:middle;text-align:center;border:1px solid #143f14!important;background:var(--badge)}
 .rid td,tr:hover .rid td,#floodfills tr:hover .rid td{font-family:var(--monospaced);letter-spacing:.1em}
 .rid,.ric{width:unset;box-shadow:0 0 0 1px #000}
 .rid .rih{padding:2px 6px;vertical-align:middle;font-family:var(--monospaced);font-size:9pt}
