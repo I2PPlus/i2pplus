@@ -27,105 +27,52 @@ public class Lease extends DataStructureImpl {
     protected TunnelId _tunnelId;
     protected long _end;
 
-    public Lease() {
-    }
+    public Lease() {}
 
     /** Retrieve the router at which the destination can be contacted
      * @return identity of the router acting as a gateway
      */
-    public Hash getGateway() {
-        return _gateway;
-    }
+    public Hash getGateway() {return _gateway;}
 
     /** Configure the router at which the destination can be contacted
      * @param ident router acting as the gateway
      */
-    public void setGateway(Hash ident) {
-        _gateway = ident;
-    }
+    public void setGateway(Hash ident) {_gateway = ident;}
 
     /** Tunnel on the gateway to communicate with
      * @return tunnel ID
      */
-    public TunnelId getTunnelId() {
-        return _tunnelId;
-    }
+    public TunnelId getTunnelId() {return _tunnelId;}
 
     /** Configure the tunnel on the gateway to communicate with
      * @param id tunnel ID
      */
-    public void setTunnelId(TunnelId id) {
-        _tunnelId = id;
-    }
+    public void setTunnelId(TunnelId id) {_tunnelId = id;}
 
     /**
      * @deprecated use getEndTime()
      */
     @Deprecated
-    public Date getEndDate() {
-        return new Date(_end);
-    }
+    public Date getEndDate() {return new Date(_end);}
 
     /**
      * @deprecated use setEndDate(long)
      */
     @Deprecated
-    public void setEndDate(Date date) {
-        _end = date.getTime();
-    }
+    public void setEndDate(Date date) {_end = date.getTime();}
 
     /**
      * @since 0.9.48
      */
-    public long getEndTime() {
-        return _end;
-    }
+    public long getEndTime() {return _end;}
 
     /**
      * @since 0.9.48
      */
-    public void setEndDate(long date) {
-        _end = date;
-    }
-
-    /**
-     * Transient attribute of the lease, used to note how many times messages sent
-     * to the destination through the current lease were successful.
-     *
-     */
-/****
-    public int getNumSuccess() {
-        return _numSuccess;
-    }
-****/
-
-/****
-    public void setNumSuccess(int num) {
-        _numSuccess = num;
-    }
-****/
-
-    /**
-     * Transient attribute of the lease, used to note how many times messages sent
-     * to the destination through the current lease failed.
-     *
-     */
-/****
-    public int getNumFailure() {
-        return _numFailure;
-    }
-****/
-
-/****
-    public void setNumFailure(int num) {
-        _numFailure = num;
-    }
-****/
+    public void setEndDate(long date) {_end = date;}
 
     /** has this lease already expired? */
-    public boolean isExpired() {
-        return isExpired(0);
-    }
+    public boolean isExpired() {return isExpired(0);}
 
     /** has this lease already expired (giving allowing up the fudgeFactor milliseconds for clock skew)? */
     public boolean isExpired(long fudgeFactor) {
@@ -142,8 +89,9 @@ public class Lease extends DataStructureImpl {
     }
 
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
-        if ((_gateway == null) || (_tunnelId == null))
+        if ((_gateway == null) || (_tunnelId == null)) {
             throw new DataFormatException("Not enough data to write out a Lease");
+        }
 
         _gateway.writeBytes(out);
         _tunnelId.writeBytes(out);
@@ -152,19 +100,18 @@ public class Lease extends DataStructureImpl {
 
     @Override
     public boolean equals(Object object) {
-        if (object == this) return true;
-        if ((object == null) || !(object instanceof Lease)) return false;
+        if (object == this) {return true;}
+        if ((object == null) || !(object instanceof Lease)) {return false;}
         Lease lse = (Lease) object;
-        return _end == lse.getEndTime()
-               && DataHelper.eq(_tunnelId, lse.getTunnelId())
-               && DataHelper.eq(_gateway, lse.getGateway());
+        return _end == lse.getEndTime() &&
+                       DataHelper.eq(_tunnelId, lse.getTunnelId()) &&
+                       DataHelper.eq(_gateway, lse.getGateway());
 
     }
 
     @Override
     public int hashCode() {
-        return (int) _end ^ DataHelper.hashCode(_gateway)
-               ^ DataHelper.hashCode(_tunnelId);
+        return (int) _end ^ DataHelper.hashCode(_gateway) ^ DataHelper.hashCode(_tunnelId);
     }
 
     @Override

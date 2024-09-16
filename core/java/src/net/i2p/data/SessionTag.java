@@ -40,27 +40,20 @@ public class SessionTag {
      *  Instantiate the data array and fill it with random data.
      *  @param create ignored as of 0.9.44, assumed true
      */
-    public SessionTag(boolean create) {
-        this();
-    }
+    public SessionTag(boolean create) {this();}
 
     /**
      *  @param val as of 0.9.44, non-null
      */
     public SessionTag(byte val[]) {
-        if (val.length != BYTE_LENGTH)
-            throw new IllegalArgumentException();
+        if (val.length != BYTE_LENGTH) {throw new IllegalArgumentException();}
         _data = val;
         _cachedHashCode = SipHash.hashCode(val);
     }
 
-    public byte[] getData() {
-        return _data;
-    }
+    public byte[] getData() {return _data;}
 
-    public int length() {
-        return BYTE_LENGTH;
-    }
+    public int length() {return BYTE_LENGTH;}
 
     /**
      *  SessionTags are generated both locally and by peers, in quantity,
@@ -68,27 +61,20 @@ public class SessionTag {
      *  so we use a secure hashCode function.
      */
     @Override
-    public int hashCode() {
-        return _cachedHashCode;
-    }
+    public int hashCode() {return _cachedHashCode;}
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if ((obj == null) || !(obj instanceof SessionTag)) return false;
+        if (obj == this) {return true;}
+        if ((obj == null) || !(obj instanceof SessionTag)) {return false;}
         return Arrays.equals(_data, ((SessionTag) obj)._data);
     }
 
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);
-//        buf.append("[SessionTag: ");
-        if (_data == null) {
-            buf.append("null");
-        } else {
-            buf.append(Base64.encode(_data));
-        }
-//        buf.append(']');
+        if (_data == null) {buf.append("null");}
+        else {buf.append(Base64.encode(_data));}
         return buf.toString();
     }
 }

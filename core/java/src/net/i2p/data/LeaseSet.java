@@ -447,10 +447,10 @@ public class LeaseSet extends DatabaseEntry {
             encryp(key);
         } catch (DataFormatException dfe) {
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(LeaseSet.class);
-            log.error("Error encrypting lease: " + _destination.calculateHash(), dfe);
+            log.error("Error encrypting Lease: " + _destination.calculateHash(), dfe);
         } catch (IOException ioe) {
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(LeaseSet.class);
-            log.error("Error encrypting lease: " + _destination.calculateHash(), ioe);
+            log.error("Error encrypting Lease: " + _destination.calculateHash(), ioe);
         }
     }
 

@@ -26,8 +26,9 @@ public class Lease2 extends Lease {
 
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
-        if ((_gateway == null) || (_tunnelId == null))
+        if ((_gateway == null) || (_tunnelId == null)) {
             throw new DataFormatException("Not enough data to write out a Lease");
+        }
         _gateway.writeBytes(out);
         _tunnelId.writeBytes(out);
         DataHelper.writeLong(out, 4, _end / 1000);
@@ -38,14 +39,13 @@ public class Lease2 extends Lease {
         if (object == this) return true;
         if ((object == null) || !(object instanceof Lease2)) return false;
         Lease2 lse = (Lease2) object;
-        return _end == lse.getEndTime()
-               && DataHelper.eq(_tunnelId, lse.getTunnelId())
-               && DataHelper.eq(_gateway, lse.getGateway());
+        return _end == lse.getEndTime() &&
+                       DataHelper.eq(_tunnelId, lse.getTunnelId()) &&
+                       DataHelper.eq(_gateway, lse.getGateway());
     }
 
     @Override
     public int hashCode() {
-        return (int) _end ^ DataHelper.hashCode(_gateway)
-               ^ (int) _tunnelId.getTunnelId();
+        return (int) _end ^ DataHelper.hashCode(_gateway) ^ (int) _tunnelId.getTunnelId();
     }
 }
