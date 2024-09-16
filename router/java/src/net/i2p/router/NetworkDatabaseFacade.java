@@ -156,6 +156,23 @@ public abstract class NetworkDatabaseFacade implements Service {
     /** public for NetDbRenderer in routerconsole */
     public Set<RouterInfo> getRouters() { return Collections.emptySet(); }
 
+
+    /** public for NetDbRenderer in routerconsole */
+    /* @since 0.9.64+ */
+    public Set<LeaseSet> getClientLeases() { return Collections.emptySet(); }
+
+    /** public for NetDbRenderer in routerconsole */
+    /* @since 0.9.64+ */
+    public Set<LeaseSet> getPublishedLeases() { return Collections.emptySet(); }
+
+    /** public for NetDbRenderer in routerconsole */
+    /* @since 0.9.64+ */
+    public Set<LeaseSet> getUnpublishedLeases() { return Collections.emptySet(); }
+
+    /** public for NetDbRenderer in routerconsole */
+    /* @since 0.9.64+ */
+    public Set<LeaseSet> getFloodfillLeases() { return Collections.emptySet(); }
+
     /** @since 0.9 */
     public ReseedChecker reseedChecker() { return null; };
 
