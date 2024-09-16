@@ -806,8 +806,8 @@ class NetDbRenderer {
         Destination dest = ls.getDestination();
         Hash key = ls.getHash();
         if (key != null) {
-            buf.append("<table class=leaseset id=\"ls_").append(key.toBase32().substring(0,4)).append("\">\n");
-        } else {buf.append("<table class=leaseset>\n");}
+            buf.append("<table class=\"leaseset lazy\" id=\"ls_").append(key.toBase32().substring(0,4)).append("\">\n");
+        } else {buf.append("<table class=\"leaseset lazy\">\n");}
         buf.append("<tr><th><b class=lskey>").append(_t("LeaseSet")).append(":</b> <code title =\"")
            .append(_t("LeaseSet Key")).append("\">").append(key.toBase64()).append("</code>");
         int type = ls.getType();
@@ -819,7 +819,7 @@ class NetDbRenderer {
             buf.append("<th>");
             boolean unpublished = !_context.clientManager().shouldPublishLeaseSet(key);
             TunnelPoolSettings in = _context.tunnelManager().getInboundSettings(key);
-            buf.append("<a href=\"tunnels#" + key.toBase64().substring(0,4) + "\"><span class=\"lsdest");
+            buf.append("<a href=\"tunnels#").append(key.toBase64().substring(0,4)).append("\"><span class=\"lsdest");
             if (!unpublished) {buf.append(" published");}
             buf.append("\" title=\"").append(_t("View local tunnels for destination"));
             if (!unpublished) {buf.append(" (").append(_t("published")).append(")");}

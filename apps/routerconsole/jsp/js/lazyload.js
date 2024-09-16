@@ -1,11 +1,12 @@
 const lazyload = () => {
   const lazyelements = document.querySelectorAll(".lazy");
   const parentSelectors = [
-    "#host_list",
-    "#profilelist",
-    "#ffProfiles",
+    ".leasesets_container",
     ".tunneldisplay",
-    ".main"
+    "#ffProfiles",
+    "#host_list",
+    ".main",
+    "#profilelist"
   ];
   let parentElement;
 

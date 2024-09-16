@@ -1244,9 +1244,8 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .addtobook a{font-size:0}
 .addtobook a:hover{filter:drop-shadow(0 0 1px var(--hover))}
 .addtobook a::after{margin:-14px -4px -8px;padding-left:6px;width:24px;height:26px;display:inline-block;vertical-align:middle;border-left:var(--border_softer);background:var(--ahelp) var(--center)/14px;content:""}
-.leaseset,.netdbentry{margin-bottom:10px;width:100%}
 .leaseset:first-of-type{margin-top:0}
-.leasesets_container{columns:680px 2;column-gap:10px}
+.leasesets_container{margin-bottom:-2px;columns:680px 2;column-gap:10px}
 .leasesets_container table{-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
 .leasesets_container #leasesetdebug{margin:-4px 0 10px;column-span:all}
 .leasesets_container .leaseset:first-child,.leaseset:first-of-type{margin-top:0}
@@ -1286,7 +1285,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .netdb_leases .tunnel_peer a{margin:0;padding:0;letter-spacing:.1em}
 .netdb_name{text-transform:capitalize;font-weight:700;color:var(--ink)}
 .netdb_tunnel{margin:0 5px 0 -1px;padding:1px 4px;display:inline-block;border:var(--border_badge);border-radius:2px;box-shadow:var(--outline);background:#020}
-#leasesetsummary{margin-bottom:14px}
+#leasesetsummary{margin:0 0 10px}
 #leasesetdebug td:nth-child(even){white-space:nowrap;text-align:left}
 #leasesetdebug td:nth-child(odd){width:200px;white-space:nowrap;text-align:right;border-right:var(--border_softer)}
 #leasesetdebug td:nth-child(2){width:10px}
@@ -1300,6 +1299,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #leasesetsummary tr:last-child td:last-child{text-align:left}
 #netdb a[href$="i2p"]{margin-left:6px;display:inline-block}
 #netdb code{font-weight:400}
+#netdb .leaseset,#netdb .netdbentry{margin-bottom:10px;width:100%}
 #netdb .leaseset:target{border:1px solid #770}
 #netdb .leaseset:target th:first-child,#netdb .leaseset:target td:first-child,.leaseset:target .addtobook a::after{border-left:1px solid #770}
 #netdb .leaseset:target th:last-child,#netdb .leaseset:target td:last-child{border-right:1px solid #770}
@@ -1645,7 +1645,7 @@ th.th_title{padding:8px 10px;position:static;text-align:left;background:var(--h1
 #config_peers tr:nth-child(3) td.infohelp{padding:20px 24px 20px 58px;background:var(--ban) no-repeat 15px center/28px,var(--msg)}
 #config_reseed p.infohelp{padding:20px 24px 20px 58px;background:var(--reseed) no-repeat 15px center/28px,var(--msg)}
 #consolepass tr:first-child td{padding:20px 24px 20px 58px;white-space:normal;background:var(--useradd) no-repeat 15px center/28px,var(--msg)}
-#debugmode{margin-top:11px;padding:20px 24px 20px 58px;background:var(--bug) no-repeat 15px center/28px,var(--msg)}
+#debugmode{margin:11px 0 10px;padding:20px 24px 20px 58px;background:var(--bug) no-repeat 15px center/28px,var(--msg)}
 #enablefullstats,#gatherstats{padding:20px 24px 20px 58px;background:var(--stats) no-repeat 15px center/28px,var(--msg)}
 #externali2cp th{text-align:left}
 #externaltcp .nowrap:first-child{margin:5px 0 -18px;display:inline-block}
@@ -2554,7 +2554,7 @@ ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 .newsentry.lazyhide{contain:none}
 .newsentry.lazyshow{transition:ease opacity .15s}
 .lazy.lazyshow,.lazy.lazyshow td,#peers .lazy:not(.lazyhide){opacity:1}
-.leasesets_container .lazy.lazyhide,.leasesets_container .lazy.lazyhide td,.leasesets_container .lazy:not(.lazyshow){opacity:1;contain:none}
+.leasesets_container .lazy.lazyhide{opacity:0}
 #tunnelPeerCount .lazy{contain:none}
 
 /* iframes */
@@ -2977,7 +2977,6 @@ div[id^="config_"] .confignav{margin-top:-3px}
 }
 
 @media (min-width:1634px){
-.leasesets_container{margin-bottom:8px}
 th code{font-size:9pt}
 }
 
