@@ -128,19 +128,19 @@ class EstablishmentManager {
     private final int DEFAULT_MAX_CONCURRENT_ESTABLISH;
 //    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 20 : 40;
 //    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = 150;
-    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 64 : SystemVersion.getCores() < 4 ? 256 : 384;
-    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 256 : SystemVersion.getCores() < 4 ? 512 : 1024;
+    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 32 : 64;
+    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 128 : 256;
     private static final String PROP_MAX_CONCURRENT_ESTABLISH = "i2np.udp.maxConcurrentEstablish";
     private static final float DEFAULT_THROTTLE_FACTOR = SystemVersion.isSlow() ? 1.5f : 3f;
     private static final String PROP_THROTTLE_FACTOR = "router.throttleFactor";
 
     /** max pending outbound connections (waiting because we are at MAX_CONCURRENT_ESTABLISH) */
 //    private static final int MAX_QUEUED_OUTBOUND = 50;
-    private static final int MAX_QUEUED_OUTBOUND = SystemVersion.isSlow() ? 64 : 256;
+    private static final int MAX_QUEUED_OUTBOUND = SystemVersion.isSlow() ? 32 : 64;
 
     /** max queued msgs per peer while the peer connection is queued */
 //    private static final int MAX_QUEUED_PER_PEER = 16;
-    private static final int MAX_QUEUED_PER_PEER = SystemVersion.isSlow() ? 32 : 64;
+    private static final int MAX_QUEUED_PER_PEER = SystemVersion.isSlow() ? 15 : 32;
 
     private static final long MAX_NONCE = 0xFFFFFFFFl;
 
@@ -173,8 +173,8 @@ class EstablishmentManager {
     // SSU 2
 //    private static final int MIN_TOKENS = 128;
 //    private static final int MAX_TOKENS = 2048;
-    private static final int MIN_TOKENS = 256;
-    private static final int MAX_TOKENS = SystemVersion.isSlow() ? 4096 : 8192;
+    private static final int MIN_TOKENS = SystemVersion.isSlow() ? 128 : 256;
+    private static final int MAX_TOKENS = SystemVersion.isSlow() ? 1024 : 2048;
     public static final long IB_TOKEN_EXPIRATION = 60*60*1000L;
     private static final long MAX_SKEW = 2*60*1000;
     private static final String TOKEN_FILE = "ssu2tokens.txt";
@@ -195,8 +195,7 @@ class EstablishmentManager {
         _outboundByHash = new ConcurrentHashMap<Hash, OutboundEstablishState>();
         _inboundBans = new LHMCache<RemoteHostId, Long>(32);
         // roughly scale based on expected traffic
-//        int tokenCacheSize = Math.max(MIN_TOKENS, Math.min(MAX_TOKENS, 3 * _transport.getMaxConnections() / 4));
-        int tokenCacheSize = Math.max(MIN_TOKENS, Math.min(MAX_TOKENS, _transport.getMaxConnections()));
+        int tokenCacheSize = Math.max(MIN_TOKENS, Math.min(MAX_TOKENS, 3 * _transport.getMaxConnections() / 4));
         _inboundTokens = new InboundTokens(tokenCacheSize);
         _outboundTokens = new LHMCache<RemoteHostId, Token>(tokenCacheSize);
         _terminationCounter = new ObjectCounter<RemoteHostId>();
@@ -259,8 +258,9 @@ class EstablishmentManager {
             OutboundEstablishState state = _outboundStates.get(from);
             if (state == null) {
                 state = _outboundByClaimedAddress.get(from);
-                if (state != null && _log.shouldInfo())
+                if (state != null && _log.shouldInfo()) {
                     _log.info("[SSU2] Found by claimed address: " + state);
+                }
             }
             // if ( (state == null) && (_log.shouldDebug()) )
             //     _log.debug("No outbound states for " + from + ", with remaining: " + _outboundStates);
@@ -290,9 +290,7 @@ class EstablishmentManager {
      *
      * Note - if we go back to multiple PacketHandler threads, this may need more locking.
      */
-    public void establish(OutNetMessage msg) {
-        establish(msg, true);
-    }
+    public void establish(OutNetMessage msg) {establish(msg, true);}
 
     /**
      *  @param queueIfMaxExceeded true normally, false if called from locked_admit so we don't loop
@@ -318,8 +316,7 @@ class EstablishmentManager {
             } else {
                 _context.banlist().banlistRouterForever(toHash, " <b>➜</b> Not in our network: " + id);
             }
-            if (_log.shouldWarn())
-                _log.warn("Not in our network: " + toRouterInfo, new Exception());
+            if (_log.shouldWarn()) {_log.warn("Not in our network: " + toRouterInfo, new Exception());}
             _transport.markUnreachable(toHash);
             _transport.failed(msg, "Peer is on the wrong network, cannot establish connection");
             return;
@@ -2941,8 +2938,7 @@ class EstablishmentManager {
         }
     }
 
-
-    //// End SSU 2 ////
+    /** End SSU 2 **/
 
 
     /**
@@ -2954,18 +2950,16 @@ class EstablishmentManager {
     private class Establisher implements Runnable {
         public void run() {
             while (_alive) {
-                try {
-                    doPass();
-                } catch (RuntimeException re) {
+                try {doPass();}
+                catch (RuntimeException re) {
                     if (re.toString().contains("unsupported address type")) {
-                       if (_log.shouldWarn())
+                       if (_log.shouldWarn()) {
                            _log.warn("Error in the establisher: Unsupported address type (localhost?)");
-                    } else {
-                        _log.error("Error in the establisher", re);
-                    }
+                       }
+                    } else {_log.error("Error in the establisher", re);}
                     // don't loop too fast
 //                    try { Thread.sleep(1000); } catch (InterruptedException ie) {}
-                    try { Thread.sleep(300); } catch (InterruptedException ie) {}
+                    try { Thread.sleep(500); } catch (InterruptedException ie) {}
                 }
             }
             _inboundStates.clear();
@@ -2977,6 +2971,7 @@ class EstablishmentManager {
 
         private long _lastFailsafe;
         private static final long FAILSAFE_INTERVAL = 3*60*1000;
+
         // Debugging
         private long _lastPrinted;
         private static final long PRINT_INTERVAL = 5*1000;
@@ -3005,19 +3000,13 @@ class EstablishmentManager {
             long nextSendTime = Math.min(handleInbound(), handleOutbound());
             long delay = nextSendTime - now;
             if (delay > 0) {
-                if (delay > 1000)
-                    delay = 1000;
+                if (delay > 1000) {delay = 1000;}
                 try {
                     synchronized (_activityLock) {
-                        if (_activity > 0)
-                            return;
+                        if (_activity > 0) {return;}
                         _activityLock.wait(delay);
                     }
-                } catch (InterruptedException ie) {
-                }
-                // if (_log.shouldDebug())
-                //     _log.debug("After waiting w/ nextSend=" + nextSendTime
-                //                + " and delay=" + delay + " and interrupted=" + interrupted);
+                } catch (InterruptedException ie) {}
             }
         }
 
@@ -3027,24 +3016,21 @@ class EstablishmentManager {
                 OutboundEstablishState state = iter.next();
                 if (state.getLifetime(now) > 3*MAX_OB_ESTABLISH_TIME) {
                     iter.remove();
-                    if (_log.shouldWarn())
-                        _log.warn("Failsafe removal of LiveIntroduction: " + state);
+                    if (_log.shouldWarn()) {_log.warn("Failsafe removal of LiveIntroduction: " + state);}
                 }
             }
             for (Iterator<OutboundEstablishState> iter = _outboundByClaimedAddress.values().iterator(); iter.hasNext(); ) {
                 OutboundEstablishState state = iter.next();
                 if (state.getLifetime(now) > 3*MAX_OB_ESTABLISH_TIME) {
                     iter.remove();
-                    if (_log.shouldWarn())
-                        _log.warn("Failsafe removal of OutboundByClaimedAddress: " + state);
+                    if (_log.shouldWarn()) {_log.warn("Failsafe removal of OutboundByClaimedAddress: " + state);}
                 }
             }
             for (Iterator<OutboundEstablishState> iter = _outboundByHash.values().iterator(); iter.hasNext(); ) {
                 OutboundEstablishState state = iter.next();
                 if (state.getLifetime(now) > 3*MAX_OB_ESTABLISH_TIME) {
                     iter.remove();
-                    if (_log.shouldWarn())
-                        _log.warn("Failsafe removal of OutboundByHash: " + state);
+                    if (_log.shouldWarn()) {_log.warn("Failsafe removal of OutboundByHash: " + state);}
                 }
             }
             if (_inboundTokens != null) {
@@ -3059,8 +3045,7 @@ class EstablishmentManager {
                         }
                     }
                 }
-                if (count > 0 && _log.shouldDebug())
-                    _log.debug("Expired " + count + " inbound tokens");
+                if (count > 0 && _log.shouldDebug()) {_log.debug("Expired " + count + " inbound tokens");}
                 count = 0;
                 synchronized(_outboundTokens) {
                     for (Iterator<Token> iter = _outboundTokens.values().iterator(); iter.hasNext(); ) {
@@ -3071,8 +3056,7 @@ class EstablishmentManager {
                         }
                     }
                 }
-                if (count > 0 && _log.shouldDebug())
-                    _log.debug("Expired " + count + " outbound tokens");
+                if (count > 0 && _log.shouldDebug()) {_log.debug("Expired " + count + " outbound tokens");}
                 _terminationCounter.clear();
                 _transport.getIntroManager().cleanup();
             }
