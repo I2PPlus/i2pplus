@@ -492,8 +492,8 @@ abstract class StoreJob extends JobImpl {
             StoreMessageSelector selector = new StoreMessageSelector(ctx, getJobId(), peer, msg.getReplyToken(), expiration);
 
             if (_log.shouldDebug()) {
-                    _log.debug("[DbId: " + _facade + "] Sending encrypted store to [" + to.toBase64().substring(0,6) +
-                               "] through " + outTunnel + ": " + sent + " with reply to " + replyGW + ' ' + replyTunnelId);
+                    _log.debug("Sending encrypted store [" + sent + "] to [" + to.toBase64().substring(0,6) +
+                               "]\n Via: " + outTunnel + " with reply to " + replyGW.toBase64().substring(0,6) + "] -> [TunnelId: " + replyTunnelId + "]");
 
             }
             ctx.messageRegistry().registerPending(selector, onReply, onFail);
@@ -630,13 +630,13 @@ abstract class StoreJob extends JobImpl {
             StoreMessageSelector selector = new StoreMessageSelector(ctx, getJobId(), peer, msg.getReplyToken(), expiration);
 
             if (_log.shouldDebug()) {
-                _log.debug(getJobId() + ": sending encrypted store to [" + to.toBase64().substring(0,6) + "] through " + outTunnel + ": " + sent);
+                _log.debug("Sending encrypted store [" + sent + "] to [" + to.toBase64().substring(0,6) + "]\n* Via: " + outTunnel);
             }
             ctx.messageRegistry().registerPending(selector, onReply, onFail);
             ctx.tunnelDispatcher().dispatchOutbound(sent, outTunnel.getSendTunnelId(0), null, to);
         } else {
             if (_log.shouldWarn())
-                _log.warn("No Outbound Exploratory tunnels to send a dbStore out - delaying...");
+                _log.warn("No Outbound Exploratory tunnels to send a DbStore out - delaying...");
             // continueSending() above did an addPending() so remove it here.
             // This means we will skip the peer next time, can't be helped for now
             // without modding StoreState
