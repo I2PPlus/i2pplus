@@ -363,12 +363,18 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     public void startup() {
-        if (_log.shouldInfo()) {_log.info("Starting up the Kademlia Network Database...");}
         RouterInfo ri = _context.router().getRouterInfo();
         String dbDir = _context.getProperty(PROP_DB_DIR, DEFAULT_DB_DIR);
         if (isClientDb()) {_kb = ((FloodfillNetworkDatabaseFacade) _context.netDb()).getKBuckets();}
-        else {_kb = new KBucketSet<Hash>(_context, ri.getIdentity().getHash(), BUCKET_SIZE, KAD_B, new RejectTrimmer<Hash>());}
-        if (_log.shouldInfo()) {_log.info("BucketSize: " + BUCKET_SIZE + "; B Value: " + KAD_B);}
+        else {
+            synchronized (this) {
+                _kb = new KBucketSet<Hash>(_context, ri.getIdentity().getHash(), BUCKET_SIZE, KAD_B, new RejectTrimmer<Hash>());
+            }
+        }
+        if (_log.shouldInfo() && _context.router().getUptime() < 3*60*1000) {
+            _log.info("Starting up the Kademlia Network Database...\n" +
+                      "BucketSize: " + BUCKET_SIZE + "; B Value: " + KAD_B);
+        }
         try {
             if (!isClientDb()) {_ds = new PersistentDataStore(_context, dbDir, this);}
             else {_ds = new TransientDataStore(_context);}
