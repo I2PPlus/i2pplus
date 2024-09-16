@@ -421,7 +421,7 @@ div[id^="config_"].main{padding-bottom:14px}
 .tab:active,#sidebar h3:active{box-shadow:var(--highlight),inset 3px 2px 3px rgba(0,0,0,.7);background:linear-gradient(180deg,#930,var(--hover));transition:ease box-shadow .15s}
 .tab:active a,#sidebar h3:active a{color:var(--ink);text-shadow:0 -1px 1px rgba(0,0,0,.4)}
 #debug .confignav{margin-bottom:-4px;z-index:999}
-#netdb .confignav{margin-bottom:11px}
+#netdb .confignav{margin-bottom:11px;column-span:all}
 
 /* notifications */
 .main:not(#config_update):not(#graphs) .messages,#config_update #messages{margin-left:-11px;margin-right:-11px;width:calc(100% - 60px);position:absolute;top:-13px;z-index:100;animation:2s hide-up 8s ease-out forwards;box-shadow:inset 0 0 1px 0 #f00,0 0 2px 2px #000;background:var(--infohelp) no-repeat 15px center/28px,var(--close) no-repeat right 7px top 6px/14px,var(--msg);background-blend-mode:normal,luminosity,normal,normal,normal}
@@ -1248,6 +1248,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .leasesets_container table:first-child{margin-top:0}
 .leasesets_container table:last-child{margin-bottom:0}
 .leasesets_container table{-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
+.leaseset:first-of-type{margin-top:0}
 .leaseset th code{font-size:8.5pt}
 .leaseset th{font-size:9pt}
 .leaseset th:last-child a[href$="i2p/"]{padding-left:22px;background:var(--link) no-repeat 5px center/12px,var(--badge)}
@@ -2866,7 +2867,7 @@ span#newtab{margin-top:4px}
 .addtobook a::after{margin:-14px -6px -6px 0;padding-left:0;padding-left:8px;width:24px;height:30px;background-size:16px}
 .appicon{padding:5px 0 8px;height:35px}
 .applabel{width:140px}
-.applabel a,.footnote,.leaseset a[href$=".i2p"],.leaseset th code,.main[id^="config_"].encDests td,.main[id^="config_"].encDests th,.newsAuthor,.sb_notice,.smallhead th,.sybil_distance th,.topness,.tunnel_local,#floodfill th,#jardump td,#jobs .jobcount,#jobs .joblog li,#jobstats td:first-child,#schedjobs td,#servicelogs pre,#sidebar a,#sidebar button,#sidebar h4,#sidebar h4 a,#sidebar td{font-size:9pt}
+.applabel a,.footnote,.leasesets_container a[href*=".i2p"],.leaseset th code,.main[id^="config_"].encDests td,.main[id^="config_"].encDests th,.newsAuthor,.sb_notice,.smallhead th,.sybil_distance th,.topness,.tunnel_local,#floodfill th,#jardump td,#jobs .jobcount,#jobs .joblog li,#jobstats td:first-child,#schedjobs td,#servicelogs pre,#sidebar a,#sidebar button,#sidebar h4,#sidebar h4 a,#sidebar td{font-size:9pt}
 .applabel a{max-width:130px;overflow:hidden;text-overflow:ellipsis}
 .applink img{margin-top:-8px;padding:10px 53px 38px}
 .applink:hover img,a:focus .applink img{margin-top:-6px}

@@ -1230,6 +1230,7 @@ td.optionsave{padding:7px 5px;text-align:right;border-top:var(--border_inner);ba
 #profiles #sessionBanned th:nth-child(2),#sessionBanned td:nth-child(2){font-size:0;border-left:0!important}
 
 /* netdb (main section) */
+#netdb .leasesets_container .confignav{margin-bottom:10px;column-span:all}
 #netdb #pagenav~#pagenav{display:none}
 #netdboverview{margin:-4px auto 8px;background:repeating-linear-gradient(180deg,rgba(0,0,0,.7) 2px,rgba(0,0,16,.5) 4px);background-size:100% 4px}
 #netdboverview tr{background:none}
@@ -2636,29 +2637,27 @@ input.check[value$="updates"],input.check[value$="updates"]:hover,input.check[va
 .news h3,#newspage h3{padding-left:26px;font-size:9.5pt;background-position:9px center}
 .profilegroup::before{width:18px;height:14px}
 .sb_netstatus{padding:6px 3px}
-.tab2{padding:3px 12px 4px}
-.tab a{padding:2px 14px}
-.tab a{padding-left:9px;padding-right:9px}
-.tab,.tab2{min-width:48px}
+.tab a{padding:2px 9px}
 .tab,.tab2{padding:1px 0 2px;min-width:50px}
+.tab2{padding:3px 12px 4px}
 td.optionsave,#config_update td:first-child{width:30%;white-space:normal}
-#tunnels #peercount img{margin:-2px -4px}
-#tunnels .percentBarOuter,#tunnels .percentBarText{margin:0 2px;width:70px}
-#netconfig label,#externali2cp td label,#externali2cp .optionlist .nowrap,#reseedconfig .nowrap{width:calc(100% - 10px)}
+#config_update td:first-child{line-height:1.2}
 #floodfills td{border-right:1px inset #120f35}
 #floodfills td:last-child{border-right:var(--border_inner)}
-#plugininstall input[type=text]{min-width:200px}
-#config_update td:first-child{line-height:1.2}
-#portfaq td:nth-child(2){white-space:normal}
 #help h3,#faq h3{font-size:10pt}
+#jardump th:nth-child(3),#jardump th:nth-child(4),#jardump th:nth-child(5),#jardump th:nth-child(6),#jardump td:nth-child(3),#jardump td:nth-child(4),#jardump td:nth-child(5),#jardump td:nth-child(6){display:none}
+#netconfig label,#externali2cp td label,#externali2cp .optionlist .nowrap,#reseedconfig .nowrap{width:calc(100% - 10px)}
+#plugininstall input[type=text]{min-width:200px}
+#portfaq td:nth-child(2){white-space:normal}
 #profilelist .fast,#profilelist .highcap,#profilelist .integrated,#profilelist .standard,#profilelist .fast.integrated,#profilelist .highcap.integrated,#profilelist .standard.integrated{width:50px;height:14px;background-size:14px}
 #profilelist .fast,#profilelist .highcap.integrated,#profilelist .standard.integrated{background-position:calc(50% - 8px) center,calc(50% + 8px) center;background-size:14px}
 #profilelist td:nth-last-child(2) span,#profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(5) span{text-align:center}
-#searchbar select{padding-top:6px;padding-bottom:6px}
 #searchbar button{height:27px}
+#searchbar select{padding-top:6px;padding-bottom:6px}
 #tunnels .cells:first-child{width:1%;max-width:48px;min-width:48px}
 #tunnels .cells:nth-child(2),#tunnels .cells:nth-child(3),.tunnels_participating td:nth-child(4){width:1%;min-width:72px}
-#jardump th:nth-child(3),#jardump th:nth-child(4),#jardump th:nth-child(5),#jardump th:nth-child(6),#jardump td:nth-child(3),#jardump td:nth-child(4),#jardump td:nth-child(5),#jardump td:nth-child(6){display:none}
+#tunnels #peercount img{margin:-2px -4px}
+#tunnels .percentBarOuter,#tunnels .percentBarText{margin:0 2px;width:70px}
 }
 
 @media (max-width:1000px){

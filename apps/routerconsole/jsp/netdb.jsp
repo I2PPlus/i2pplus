@@ -100,11 +100,13 @@
 <div class=main id=netdb>
 <%
     formhandler.storeWriter(out);
-    if (allowIFrame)
-        formhandler.allowGraphical();
+    if (allowIFrame) {formhandler.allowGraphical();}
 %>
 <%@include file="formhandler.jsi" %>
- <jsp:getProperty name="formhandler" property="floodfillNetDbSummary" />
+<jsp:getProperty name="formhandler" property="floodfillNetDbSummary" />
+<%  if (r == null && ls != null || l != null) { %>
+</div>
+<%  } %>
 </div>
 <script nonce=<%=cspNonce%> src=/js/lazyload.js></script>
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.js></script>

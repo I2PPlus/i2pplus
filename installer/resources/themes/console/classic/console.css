@@ -1145,7 +1145,7 @@ p.infohelp+hr,p.infohelp+p+hr,#tunnelconfig+hr{display:none}
 /* netdb */
 a.keysearch{padding:2px 5px 2px 15px;display:inline-block;font-size:90%;border:1px solid #bbd;border-radius:2px;background:var(--crypto) no-repeat 2px center/12px,var(--th)}
 .addtobook{text-align:right}
-.addtobook a{font-size:0}
+.addtobook a{vertical-align:middle;font-size:0}
 .addtobook a::after{width:16px;height:16px;display:inline-block;vertical-align:middle;background:var(--abook_helper) no-repeat center center/16px;content:""}
 .banlisted,.compressible,.i2pd,.javai2p{width:18px;height:18px;display:inline-block;vertical-align:middle;background:var(--ban)}
 .compressible{background:url(/themes/console/images/clamp.svg)}
@@ -1158,6 +1158,7 @@ a.keysearch{padding:2px 5px 2px 15px;display:inline-block;font-size:90%;border:1
 .gwhois a::before{margin:-2px 0 0 -2px;width:12px;height:12px;display:inline-block;vertical-align:middle;background:var(--search) no-repeat left center/11px;opacity:.7;content:""}
 .gwhois:hover a::before,.gwhois a:focus::before{opacity:1;transform:scale(1.2)}
 .identicon{margin:-1px -1px -1px 8px;border-left:var(--border)}
+.leaseset th a{display:inline-block;vertical-align:text-top}
 .netdb_addresses .nowrap{margin:0 0 0 3px}
 .netdbentry{margin-top:10px}
 .netdbentry img{margin:1px 0 0}
@@ -1182,12 +1183,12 @@ p.family a{display:inline-block}
 #netdb .confignav .tab a{padding:5px 12px}
 #netdb hr{margin:2px 0;display:none;width:100%}
 #netdb li,#netdb li:first-child{margin:1px 0;padding:0;display:inline-block;vertical-align:middle}
-#netdb .leaseset th:first-child code{width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#netdb .leaseset th:first-child code{margin-left:4px;width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #netdb .netdb_addresses li{margin:2px 1px;padding:0 6px 0 0;line-height:1.5;border:1px solid #bbc;background:var(--badge);contain:paint}
 #netdb li.longstat{width:100%}
 #netdb .netdbentry th code,#netdb .sybil_routerinfo th code,#netdb .leaseset th code{padding:2px 4px;display:inline-block;vertical-align:middle;font-family:var(--monospaced);border-radius:0;box-shadow:var(--box_border_badge);background:var(--badge)}
-#netdb .netdb_transport{padding:3px;width:46px;display:inline-block;text-align:center;font-size:90%;background:var(--badge)}
 #netdb_ram,.netdbentry .version,.netdb_transport{padding:1px 5px;display:inline-block;box-shadow:var(--box_border_badge);background:var(--badge)}
+#netdb .netdb_transport{padding:3px;width:46px;display:inline-block;text-align:center;font-size:90%;background:var(--badge)}
 #netdb_ram{padding:1px 3px}
 #netdb ul,.netdb_addresses{margin:0;padding:0;columns:auto}
 #netdb .netdbStats{line-height:1.5}
@@ -1212,18 +1213,19 @@ p.family a{display:inline-block}
 .leaseset th{padding:5px;text-align:left;font-weight:400}
 .leaseset:last-child{margin-bottom:5px}
 .leaseset{margin:5px 0 10px;font-size:9pt}
+.leaseset:first-of-type{margin-top:0}
 .lsdest,.leaseset a[href$="i2p/"],.leaseset a[href$="i2p"]{font-size:90%}
-.lsdest,.leaseset th:last-child a[href$="i2p/"]{margin-left:3px;padding:2px 4px 4px;display:inline-block;border:1px solid var(--border_badge);border-radius:2px;background:var(--badge)}
-.lsdest{padding-left:22px;border-radius:0;border-left-width:4px;border-right-width:4px;background:var(--hardhat) no-repeat 4px center/14px,var(--badge)}
+.lsdest,.leaseset th:last-child a[href$="i2p/"]{margin-left:3px;padding:3px 4px;display:inline-block;vertical-align:text-top;border:1px solid var(--border_badge);border-radius:2px;background:var(--badge)}
+.lsdest{padding-left:22px;line-height:1;border-radius:0;border-left-width:4px;border-right-width:4px;background:var(--hardhat) no-repeat 4px center/14px,var(--badge)}
 .lsdest.published{padding-left:38px;background:var(--hardhat) no-repeat 4px center/14px,var(--globe) no-repeat 22px center/12px,var(--badge)}
 .netdb_gateway img{vertical-align:middle}
 .netdb_leases,.netdb_leases li{padding:0;margin:-1px 0 0}
 .netdb_leases li{padding:2px 0;vertical-align:middle;list-style:none}
 .netdb_leases li b:first-child{margin-right:2px;display:inline-block}
-.netdb_leases li b:first-child.leaseNumber{margin:0 -1px 0 6px;padding:2px 4px;min-width:24px;display:inline-block;vertical-align:middle;text-align:center;box-shadow:var(--box_border_badge);background:var(--badge)}
+.netdb_leases li b:first-child.leaseNumber{margin:0 0 0 6px;min-width:20px;display:inline-block;vertical-align:middle;text-align:center;font-weight:700;box-shadow:none}
 .netdb_leases .tunnel_id{padding-left:20px;min-width:80px;text-align:right}
 .netdb_leases .tunnel_peer img{margin-bottom:-1px}
-.netdb_leases .tunnel_peer{margin-left:2px}
+.netdb_leases .tunnel_peer{margin-bottom:2px}
 .netdb_leases .tunnel_peer tt{margin:0 3px 0 0}
 .netdb_tunnel{display:inline-block;vertical-align:middle}
 #leasesetdebug,#leasesetsummary{font-size:9pt}
@@ -1239,6 +1241,7 @@ p.family a{display:inline-block}
 #leasesetdebug td:nth-child(odd){width:200px;white-space:nowrap;text-align:right;border-right:var(--border_softer)}
 #leasesetdebug td:nth-child(2){width:10px}
 #netdb .debugMode .netdb_leases{margin-right:12px;columns:auto 380px;column-gap:4px;page-break-inside:avoid}
+#netdb .leasesets_container .confignav{margin:-16px -16px 16px !important;column-span:all}
 #netdb .netdb_leases{margin-left:0;columns:8 104px;column-gap:2px}
 #netdb .netdb_leases li{display:inline-block;white-space:nowrap;vertical-align:middle}
 #netdb .netdb_leases li::before{min-height:24px;display:inline-block;vertical-align:middle;content:""}
@@ -1566,6 +1569,7 @@ font[color="#006600"] span{color:var(--bg);background:#444}
 .bucket:hover{font-weight:700}
 .bucket::selection{color:var(--bg);background:var(--code)!important}
 .bucket:empty{display:none}
+.buckets br+br{line-height:5px}
 .expiry td{padding-left:3%}
 .debug_version{color:var(--code)}
 .debug_outboundtarget td,.skm_key td{background:linear-gradient(180deg,#fcfcff,#fafaff 51%,#f6f6ff 100%)}
@@ -1589,6 +1593,7 @@ font[color="#006600"] span{color:var(--bg);background:#444}
 #debug td{padding:5px;border:var(--border)}
 #debug th:first-child,#debug td:first-child{padding-left:10px}
 #debug td:last-child{text-align:right;vertical-align:top;padding-right:10px}
+#debug td div,#debug td ul{columns:400px auto}
 #debug ul{margin:0 0 10px}
 #debug .expiry ul{margin:3px 0 10px -35px}
 #debug li{padding:0}
@@ -1629,9 +1634,6 @@ font[color="#006600"] span{color:var(--bg);background:#444}
 #jardump a:hover code{color:var(--hover)}
 #revision,#jardump a code{padding-left:16px;background:var(--gitlab) no-repeat left center/13px}
 #jardump a code{padding-left:13px;background-size:11px}
-
-#debug td div,#debug td ul{columns:400px auto}
-.buckets br+br{line-height:5px}
 
 .optionlist,.optionsingle,#reseedssl,#updatehelper.optionlist:hover,#updateProxyHostPort.optionlist:hover{vertical-align:middle}
 .optionlist{columns:500px auto}
@@ -2050,7 +2052,7 @@ div[lang="pt"] li br{display:none}
 .rid td{line-height:1;font-family:var(--monospaced);letter-spacing:.1em;box-shadow:var(--highlight)}
 .rif{padding:0 1px}
 .rif,.rif img{line-height:0;font-size:0}
-.rif img{padding:0;margin:0!important;width:24px;height:18px;vertical-align:middle;display:inline-block}
+.rif img{padding:0;margin:0!important;width:24px;height:18px;vertical-align:middle;display:inline-block;border-radius:0}
 .rid .rih{padding:2px 6px;font-family:var(--monospaced);font-size:9pt;vertical-align:middle}
 .rid .rbw{min-width:20px;text-align:center;line-height:1}
 .rbw.isff{background:var(--isFF),var(--badge)}
@@ -2119,7 +2121,6 @@ span.b32:active{box-shadow:0 0 0 1px var(--border_color),var(--btn_shadow_active
 #routertunnels.tunnelsHidden #tunnels{padding-bottom:30px}
 #tunnels .lsview{margin:1px 4px 0}
 #tunnels h3 a:not(.lsview), #logs h3 a{margin:-1px 2px 0}
-
 
 /* transit summary */
 #tunnels #transitSummary th{position:relative}
@@ -2263,7 +2264,7 @@ table[id*="connections"] td,#floodfills td:not(.rif):not(.rih):not(.rbw),#jobsta
 .sitemapLink{margin:0 -11px 6px 14px}
 .statusnotes:last-child{margin-bottom:0}
 .tab,.tab2{padding:1px 0;min-width:50px}
-.tab2{padding:3px 10px}
+.tab2{padding:6px 10px 4px}
 .tab a{padding:2px 12px}
 .tunnel_id{display:none}
 .widescroll+.infohelp{margin:0}
@@ -2282,6 +2283,7 @@ table[id*="connections"] td,#floodfills td:not(.rif):not(.rih):not(.rbw),#jobsta
 #minigraph{margin-left:-50px;height:42px}
 #netconfig label,#externali2cp td label,#externali2cp .optionlist .nowrap,#reseedconfig .nowrap{width:calc(100% - 10px)}
 #netdb h3.tabletitle,h3.sybils{font-size:10pt}
+#netdb .leasesets_container .confignav{margin:-6px -16px 5px!important}
 #netdblookup{margin-bottom:-11px}
 #netdb #netdboverview,#netdblookup{margin:11px 0 0}
 #ntcpconnections{margin-bottom:0}

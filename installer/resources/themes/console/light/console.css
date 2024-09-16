@@ -1482,6 +1482,7 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 .netdb_header img[src^="/flags"]{box-shadow:0 0 0 1px #bbc}
 .netdb_header img[src="/flags.jsp?c=a0"]{margin-right:0;margin-top:-2px;display:inline-block;vertical-align:middle}
 #netdb{contain:paint}
+#netdb .leasesets_container .confignav{margin:-10px -16px 16px;column-span:all}
 #netdb_ourinfo .version{margin-right:4px}
 #netdboverview thead{border:0}
 #netdboverview th,#netdblookup th{padding:8px 5px 8px 32px;word-spacing:.1em;letter-spacing:.08em;text-transform:uppercase;font-size:11pt;background:var(--globe) no-repeat 8px center/18px,var(--h2)}
@@ -1570,7 +1571,7 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 .netdb_leases .tunnel_peer a{letter-spacing:.1em;margin:0;padding:0}
 .netdb_tunnel{margin:0 0 0 -4px;display:inline-block}
 .addtobook{text-align:right}
-.addtobook a{font-size:0}
+.addtobook a{vertical-align:middle;font-size:0}
 .addtobook a:hover{filter:drop-shadow(0 0 1px var(--hover))}
 .addtobook a::after{width:16px;height:16px;display:inline-block;vertical-align:middle;background:var(--abook_helper) no-repeat center center/16px;content:""}
 .debugMode .netdb_leases{columns:12 380px;column-gap:4px}
@@ -2534,7 +2535,7 @@ hr[hidden]+#sb_graphcontainer{margin-top:-9px}
 #clock{font-size:16pt}
 #config_clients #i2pclientconfig a,#config_bandwidth #bwlimiter .h3navlinks{margin-top:-4px}
 #config_logging h3 a::before,#webappconfiguration a::before,#i2pclientconfig a::before,#pluginmanage a::before{margin-top:-2px}
-#confignav .tab2{margin-top:1px;height:39px}
+#confignav .tab2{margin-top:1px}
 #consolepass input[name="nofilter_pw"],#externali2cp input[name="nofilter_pw"],#reseedconfig input[type="password"]{width:184px}
 #enablefull label{margin-top:4px}
 #graphdisplay a{margin-top:-5px}
@@ -2743,6 +2744,7 @@ h1[class],#wizardpage h1{padding:20px 15px 17px 55px;font-size:19pt;background-s
 .homelinkedit th:first-child,#sidebarconf th:first-child,#consolepass th:first-child{font-size:0}
 .log_debug,.log_info,.log_warn,.log_error,.log_crit,.log_omitted{margin:2px -3px -2px;min-width:40px;max-width:40px}
 .log_omitted{margin-right:1px}
+.leasesets_container a[href*=".i2p"]{font-size:9pt}
 .main,#news.news,h1,.sorry{margin-left:252px}
 .netdb_header img[src^="/flags"]{width:32px}
 .netdb_header .peerFlag{transform:translateY(1px)}
