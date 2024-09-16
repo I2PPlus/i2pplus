@@ -1,4 +1,7 @@
-2024-09-12
+2024-09-15 dr|z3d
+ * Console: Start work on overhauling LeaseSet display in netdb
+
+2024-09-12 dr|z3d
  * Router: If we can't identify an ip from peer's routerinfo, try transport
 
 2024-09-11 dr|z3d
