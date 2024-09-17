@@ -14,11 +14,13 @@ import java.util.List;
 import java.util.Map;
 
 import net.i2p.data.DatabaseEntry;
+import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
 import net.i2p.router.JobImpl;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.TunnelPoolSettings;
 import net.i2p.util.Log;
 
 /**
@@ -30,7 +32,7 @@ import net.i2p.util.Log;
 class ExpireLeasesJob extends JobImpl {
     private final Log _log;
     private final KademliaNetworkDatabaseFacade _facade;
-    private final static long RERUN_DELAY_MS = 5*60*1000;
+    private final static long RERUN_DELAY_MS = 3*60*1000;
 
     public ExpireLeasesJob(RouterContext ctx, KademliaNetworkDatabaseFacade facade) {
         super(ctx);
@@ -77,10 +79,11 @@ class ExpireLeasesJob extends JobImpl {
             if (obj != null && obj.isLeaseSet()) {
                 LeaseSet ls = (LeaseSet) obj;
                 Hash h = entry.getKey();
+                String tunnelName = ls != null ? " for \'" + getTunnelName(ls.getDestination()) + "\'" : "";
                 if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
                     toExpire.add(h);
                     if (ctx.clientManager().isLocal(h)) {
-                        _log.logAlways(Log.ERROR, "Expired LOCAL LeaseSet [" + h.toBase32().substring(0,8) + "]");
+                        _log.logAlways(Log.ERROR, "LOCAL LeaseSet" + tunnelName + " [" + h.toBase32().substring(0,8) + "] has expired");
                     }
                 } else if (!ls.isCurrent(90*1000)) {current.add(h);} // if we're expiring in < 90s, queue for exploration
             }
@@ -94,6 +97,17 @@ class ExpireLeasesJob extends JobImpl {
             current.clear();
         }
         return toExpire;
+    }
+
+    public String getTunnelName(Destination d) {
+        TunnelPoolSettings in = getContext().tunnelManager().getInboundSettings(d.calculateHash());
+        String name = (in != null ? in.getDestinationNickname() : null);
+        if (name == null) {
+            TunnelPoolSettings out = getContext().tunnelManager().getOutboundSettings(d.calculateHash());
+            name = (out != null ? out.getDestinationNickname() : null);
+        }
+        if (name == null) {return "";}
+        return name;
     }
 
 }
