@@ -314,7 +314,7 @@ class ClientManager {
      *  @since 0.9.39
      */
     public void unregisterEncryptedDestination(ClientConnectionRunner runner, Hash hash) {
-        if (_log.shouldWarn()) {_log.warn("Unregistering ENCRYPTED LeaseSet [" + hash.toBase32().substring(0,8) + "]";}
+        if (_log.shouldWarn()) {_log.warn("Unregistering ENCRYPTED LeaseSet [" + hash.toBase32().substring(0,8) + "]");}
         synchronized (_runners) {_runnersByHash.remove(hash);}
     }
 
@@ -378,7 +378,7 @@ class ClientManager {
         }
 
         if (!rv) {
-            _log.error("Encrypted destination collision for LeaseSet [" + hash.toBase32().substring(0,8) + "]";
+            _log.error("Encrypted destination collision for LeaseSet [" + hash.toBase32().substring(0,8) + "]");
         }
         return rv;
     }
@@ -754,12 +754,10 @@ class ClientManager {
             if (runner != null) {
                 if (dest != null) {runner.receiveMessage(dest, null, _msg.getPayload());}
                 else {runner.receiveMessage(_msg.getDestinationHash(), null, _msg.getPayload());}
-            } else {
+            } else if (_log.shouldWarn()) {
                 // no client connection... we should pool these somewhere...
-                if (_log.shouldWarn()) {
-                    _log.warn("Message received but no current connection to [" dest.toBase32().substring(0,8) + " / " +
-                              _msg.getDestinationHash().toBase32().substring(0,8) + "] -> DROPPED", new Exception());
-                }
+                _log.warn("Message received but no current connection to [" + dest.toBase32().substring(0,8) + " / " +
+                          _msg.getDestinationHash().toBase32().substring(0,8) + "] -> DROPPED", new Exception());
             }
         }
     }
