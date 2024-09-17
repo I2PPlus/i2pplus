@@ -77,7 +77,8 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     @Override
     public boolean isAlive() {return _manager != null && _manager.isAlive();}
 
-    private static final long MAX_TIME_TO_REBUILD = 10*60*1000;
+    //private static final long MAX_TIME_TO_REBUILD = 10*60*1000;
+    private static final long MAX_TIME_TO_REBUILD = 8*60*1000;
 
     @Override
     public boolean verifyClientLiveliness() {
