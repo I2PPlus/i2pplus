@@ -198,22 +198,6 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     public synchronized long getVerifiedBytesTransferred() { return _verifiedBytesTransferred; }
 
-/**** unused
-    public synchronized double getPeakThroughputKBps() {
-        double rv = 0;
-        for (int i = 0; i < THROUGHPUT_COUNT; i++)
-            rv += _peakThroughput[i];
-        rv /= (60d*1024d*THROUGHPUT_COUNT);
-        return rv;
-    }
-
-    public synchronized void setPeakThroughputKBps(double kBps) {
-        _peakThroughput[0] = kBps*60*1024;
-        //for (int i = 0; i < THROUGHPUT_COUNT; i++)
-        //    _peakThroughput[i] = kBps*60;
-    }
-****/
-
     /**
      * The tunnel failed a test, so (maybe) stop using it
      *

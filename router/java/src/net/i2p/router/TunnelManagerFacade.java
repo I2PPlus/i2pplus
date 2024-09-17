@@ -141,9 +141,8 @@ public interface TunnelManagerFacade extends Service {
     public Set<Hash> selectPeersInTooManyTunnels();
 
     /**
-     * the client connected (or updated their settings), so make sure we have
-     * the tunnels for them, and whenever necessary, ask them to authorize
-     * leases.
+     * The client connected (or updated their settings), so make sure we have the tunnels
+     * for them, and whenever necessary, ask them to authorize leases.
      *
      */
     public void buildTunnels(Destination client, ClientTunnelSettings settings);

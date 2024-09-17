@@ -637,16 +637,6 @@ public class TunnelDispatcher implements Service {
                 _log.log(level, "No matching Outbound tunnel for id=" + outboundTunnel
                            + ": existing = " + _outboundGateways.size(), new Exception("src"));
         }
-
-        //long dispatchTime = _context.clock().now() - before;
-        //if (dispatchTime > 1000) {
-        //    if (_log.shouldWarn())
-        //        _log.warn("slow? took " + dispatchTime + " to dispatch " + msg + " out " + outboundTunnel + " in " + gw);
-        //}
-        //if (gw instanceof TunnelGatewayZeroHop)
-        //    _context.statManager().addRateData("tunnel.dispatchOutboundZeroHopTime", dispatchTime, dispatchTime);
-        //else
-        //    _context.statManager().addRateData("tunnel.dispatchOutboundTime", dispatchTime, dispatchTime);
     }
 
     /**
