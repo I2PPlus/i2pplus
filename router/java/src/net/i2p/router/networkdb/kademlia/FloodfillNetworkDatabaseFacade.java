@@ -637,12 +637,14 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 }
             }
             if (isNew) {
-                if (_log.shouldDebug())
+                if (_log.shouldDebug()) {
                     _log.debug("Direct RouterInfo lookup for [" + peer.toBase64().substring(0,6) + "]");
+                }
                 _context.jobQueue().addJob(searchJob);
             } else {
-                if (_log.shouldDebug())
+                if (_log.shouldDebug()) {
                     _log.debug("Pending Direct RouterInfo lookup for [" + peer.toBase64().substring(0,6) + "]");
+                }
                 searchJob.addDeferred(onFindJob, onFailedLookupJob, 10*1000, false);
             }
             return;
@@ -654,17 +656,18 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         // yikes2 don't do this either - deadlock! // getKnownRouters() < MIN_REMAINING_ROUTERS ||
         long uptime = _context.router().getUptime();
         String nofail = _context.getProperty("router.noFailGracePeriod");
-        if (nofail != null)
-            DONT_FAIL_PERIOD = Long.valueOf(nofail)*60*1000;
+        if (nofail != null) {DONT_FAIL_PERIOD = Long.valueOf(nofail)*60*1000;}
         int knownRouters = getKBucketSetSize();
-        if (info.getNetworkId() == _networkID && (knownRouters < MIN_REMAINING_ROUTERS ||(uptime < DONT_FAIL_PERIOD && knownRouters < 2500) ||
+        if (info.getNetworkId() == _networkID && (knownRouters < MIN_REMAINING_ROUTERS ||(uptime < DONT_FAIL_PERIOD && knownRouters < 2000) ||
             _context.commSystem().countActivePeers() <= MIN_ACTIVE_PEERS) || _context.commSystem().getStatus() == Status.DISCONNECTED) {
-            if (uptime < DONT_FAIL_PERIOD && knownRouters < 2500) {
-                if (_log.shouldInfo())
+            if (uptime < DONT_FAIL_PERIOD && knownRouters < 2000) {
+                if (_log.shouldInfo()) {
                     _log.info("Lookup of [" + peer.toBase64().substring(0,6) + "] failed -> Not dropping (startup grace period)");
+                }
             } else {
-                if (_log.shouldInfo())
+                if (_log.shouldInfo()) {
                     _log.info("Lookup of [" + peer.toBase64().substring(0,6) + "] failed -> Not dropping (Our Router has issues)");
+                }
             }
             return;
         }
@@ -684,28 +687,27 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                        info.getCapabilities().indexOf(Router.CAPABILITY_BW512) >= 0 ||
                        info.getCapabilities().indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0);
         boolean uninteresting = info != null && !isHidden && (VersionComparator.comp(v, MIN_VERSION) < 0 && !fast) &&
-//                                _context.netDbSegmentor().getKnownRouters() > 2000 && !isUs;
                                 _context.netDb().getKnownRouters() > 2000 && !isUs;
         boolean isFF = false;
-        boolean noSSU = true;
+        //boolean noSSU = true;
         String caps = "unknown";
         if (info != null) {
             caps = info.getCapabilities();
-            if (caps.contains("f")) {
-                isFF = true;
-            }
+            if (caps.contains("f")) {isFF = true;}
+/**
             for (RouterAddress ra : info.getAddresses()) {
                 if (ra.getTransportStyle().contains("SSU")) {
                     noSSU = false;
                     break;
                 }
             }
+**/
         }
-        boolean isBadFF = isFF && noSSU;
+        //boolean isBadFF = isFF && noSSU;
         if ((_floodfillEnabled && !forceExplore) ||
              _context.router().gracefulShutdownInProgress() ||
              _context.jobQueue().getMaxLag() > MAX_LAG_BEFORE_SKIP_SEARCH ||
-             _context.banlist().isBanlisted(peer) || uninteresting || isBadFF) {
+             _context.banlist().isBanlisted(peer) || uninteresting) {
             /**
              * Don't try to overload ourselves (e.g. failing 3000 router refs at once, and then firing off 3000 netDb lookup tasks)
              * Also don't queue a search if we have plenty of routerinfos (KBucketSetSize() includes leasesets but avoids locking)
@@ -717,6 +719,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                     _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Banlisted");
                 } else if (uninteresting) {
                     _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Uninteresting");
+                } else if (_context.jobQueue().getMaxLag() > MAX_LAG_BEFORE_SKIP_SEARCH) {
+                    _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> High Job Lag");
+                }
 /**
                 } else if (isBadFF) {
                     _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Floodfill with SSU disabled");
@@ -724,9 +729,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 } else if (getKBucketSetSize() > MAX_DB_BEFORE_SKIPPING_SEARCH) {
                     _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> KBucket is full");
 **/
-                } else {
-                    _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> High Job Lag");
-                }
+                super.lookupBeforeDropping(peer, info);
+                return;
             }
         }
 
