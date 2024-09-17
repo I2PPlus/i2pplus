@@ -40,7 +40,6 @@ ol li:first-child{margin-top:10px}
 ol{padding:1px 0 0 20px;display:inline}
 pre{width:98%}
 table{padding:1px;width:100%;font-size:9pt;border:var(--border);border-collapse:collapse}
-table:not(.leaseset){margin:10px 0}
 table hr{margin:0 0;padding:0 0;height:1px;display:none;color:var(--a);border:0;background:#252}
 td{padding:4px 6px;vertical-align:middle;border-top:var(--border_softer)}
 th[aria-sort]{font-style:italic}
