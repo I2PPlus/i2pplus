@@ -829,17 +829,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             boolean noCountry = true;
             String country = "unknown";
             if (caps.contains("F")) {isFF = true;}
-            boolean noSSU = true;
-            for (RouterAddress ra : ri.getAddresses()) {
-                if (ra.getTransportStyle().contains("SSU")) {
-                    noSSU = false;
-                    break;
-                }
-            }
-
             country = _context.commSystem().getCountry(key);
             if (country != null && country != "unknown") {noCountry = false;}
-
             String myCountry = _context.getProperty(PROP_IP_COUNTRY);
             boolean blockMyCountry = _context.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
             boolean isStrict = _context.commSystem().isInStrictCountry(); // us
@@ -879,13 +870,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                     _ds.remove(key);
                     _kb.remove(key);
                 }
-/**
-            } else if (!isUs && uninteresting && !isHidden) {
-                if (_log.shouldInfo())
-                    _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Uninteresting");
-                _ds.remove(key);
-                _kb.remove(key);
-**/
             } else if (key != null && _context.banlist().isBanlistedForever(key)) {
                 if (_log.shouldInfo())
                     _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Permanently blocklisted");
@@ -939,7 +923,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         } else {return null;}
     }
 
-    private static final long PUBLISH_DELAY = 5*1000;
+    private static final long PUBLISH_DELAY = 3*1000;
 
     /**
      * Stores in local netdb, and publishes to floodfill if client manager says to
@@ -981,8 +965,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _context.jobQueue().removeJob(j); // remove first since queue is a TreeSet now...
         j.getTiming().setStartAfter(nextTime);
         if (_log.shouldInfo()) {
-            //_log.info("Queueing LOCAL LeaseSet [" + localLeaseSet.toBase64().substring(0,6) + "] -> Publishing at " + (new Date(nextTime)));
-            _log.info("Queueing LOCAL LeaseSet [" + h.toBase32().substring(0,8) + "] for publication...");
+            _log.info("Queueing LOCAL LeaseSet [" + h.toBase32().substring(0,8) + "] for publication..." +
+                      "\n* Publication time: "  + (new Date(nextTime)));
         }
         _context.jobQueue().addJob(j);
     }
@@ -1330,7 +1314,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                            routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0;
         boolean isBanned = routerInfo != null && _context.banlist().isBanlisted(routerInfo.getIdentity().getHash());
         boolean isFF = false;
-        boolean noSSU = true;
         String caps = "";
         boolean noCountry = true;
         String country = "unknown";
@@ -1342,16 +1325,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             caps = routerInfo.getCapabilities().toUpperCase();
             h = routerInfo.getIdentity().getHash();
             if (caps.contains("F")) {isFF = true;}
-            for (RouterAddress ra : routerInfo.getAddresses()) {
-                if (ra.getTransportStyle().contains("SSU")) {
-                    noSSU = false;
-                    break;
-                }
-            }
             country = _context.commSystem().getCountry(h);
-            if (country != null && country != "unknown") {
-                noCountry = false;
-            }
+            if (country != null && country != "unknown") {noCountry = false;}
 
             for (RouterAddress ra : routerInfo.getTargetAddresses("NTCP2")) {
                 String i = ra.getOption("i");
@@ -1625,7 +1600,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _log.warn("RouterInfo verification failure (Unknown cause)\n" + entry);
         }
     }
-
 
     /**
      *   Final remove for a leaseset.

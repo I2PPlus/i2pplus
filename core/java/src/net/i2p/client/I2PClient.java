@@ -44,7 +44,6 @@ public interface I2PClient {
     /** @since 0.9.12 */
     public static final String PROP_SIGTYPE = "i2cp.destination.sigType";
     /** @since 0.9.12 */
-//    public static final SigType DEFAULT_SIGTYPE = SigType.DSA_SHA1;
     public static final SigType DEFAULT_SIGTYPE = SigType.EdDSA_SHA512_Ed25519;
 
     /**

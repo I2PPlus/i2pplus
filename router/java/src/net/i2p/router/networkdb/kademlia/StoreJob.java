@@ -95,7 +95,7 @@ abstract class StoreJob extends JobImpl {
             else {_connectMask = ConnectChecker.ANY_V4;}
         }
         if (_log.shouldDebug()) {
-            _log.debug("[DbId: " + _facade + "] New store job for \n" + data, new Exception("I did it"));
+            _log.debug("[" + _facade + "] New store job for \n" + data, new Exception("I did it"));
         }
     }
 
@@ -145,9 +145,7 @@ abstract class StoreJob extends JobImpl {
         if (_state.completed()) return;
         int toCheck = getParallelization() - _state.getPendingCount();
         if (toCheck <= 0) {
-            // too many already pending
-            if (_log.shouldDebug())
-                _log.debug("Too many store messages pending");
+            if (_log.shouldDebug()) {_log.debug("Too many store messages pending");} // too many already pending
             return;
         }
         if (toCheck > getParallelization()) {toCheck = getParallelization();}
@@ -161,12 +159,14 @@ abstract class StoreJob extends JobImpl {
         closestHashes = getClosestFloodfillRouters(_state.getTarget(), toCheck, _state.getAttempted());
         if ( (closestHashes == null) || (closestHashes.isEmpty()) ) {
             if (_state.getPendingCount() <= 0) {
-                if (_log.shouldInfo())
-                    _log.info("[DbId: " + _facade + "] No more peers left and none pending");
+                if (_log.shouldInfo()) {
+                    _log.info("[" + _facade + "] No more peers left and none pending");
+                }
                 fail();
             } else {
-                if (_log.shouldInfo())
-                    _log.info("[DbId: " + _facade + "] No more peers left but some are pending, waiting...");
+                if (_log.shouldInfo()) {
+                    _log.info("[" + _facade + "] No more peers left but some are pending, waiting...");
+                }
                 return;
             }
         } else {
@@ -180,13 +180,13 @@ abstract class StoreJob extends JobImpl {
                                       null;
             for (Hash peer : closestHashes) {
                 DatabaseEntry ds;
-                if (_facade.isClientDb())
+                if (_facade.isClientDb()) {
                     ds = ((FloodfillNetworkDatabaseFacade) getContext().netDb()).getDataStore().get(peer);
-                else
-                    ds = _facade.getDataStore().get(peer);
+                 } else {ds = _facade.getDataStore().get(peer);}
                 if ((ds == null) || !(ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)) {
                     if (_log.shouldInfo()) {
-                        _log.info("[DbId: " + _facade + "] Error selecting closest hash that wasn't a Router! [" + peer.toBase64().substring(0,6) + "]: " + ds);
+                        _log.info("[" + _facade + "] Error selecting closest hash that wasn't a Router! [" +
+                                  peer.toBase64().substring(0,6) + "]: " + ds);
                     }
                     _state.addSkipped(peer);
                     skipped++;
@@ -205,7 +205,7 @@ abstract class StoreJob extends JobImpl {
                 } else {
                     int peerTimeout = _facade.getPeerTimeout(peer);
                     if (_log.shouldInfo()) {
-                       _log.info("[DbId: " + _facade + "] Sending key [" + _state.getTarget().toBase64().substring(0,6) +
+                       _log.info("[" + _facade + "] Sending key [" + _state.getTarget().toBase64().substring(0,6) +
                                  "] (attempt " + (_state.getAttemptedCount() + 1) + ")\n* To: " + closestHashes);
                     }
                     _state.addPending(peer);
@@ -214,10 +214,10 @@ abstract class StoreJob extends JobImpl {
                 }
             }
             if (queued == 0 && _state.getPendingCount() <= 0) {
-                if (_log.shouldInfo())
-                    _log.info("[DbId: " + _facade + "] No more peers left after skipping " + skipped + " and none pending");
-                // queue a job to go around again rather than recursing
-                getContext().jobQueue().addJob(new WaitJob(getContext()));
+                if (_log.shouldInfo()) {
+                    _log.info("[" + _facade + "] No more peers left after skipping " + skipped + " and none pending");
+                }
+                getContext().jobQueue().addJob(new WaitJob(getContext())); // queue a job to go around again rather than recursing
             }
         }
     }
@@ -277,15 +277,10 @@ abstract class StoreJob extends JobImpl {
         RouterContext ctx = getContext();
         if (msg.getEntry().isLeaseSet()) {
             ctx.statManager().addRateData("netDb.storeLeaseSetSent", 1);
-            // if it is an encrypted leaseset...
-            if (_facade.isClientDb())
-                sendStoreThroughClient(msg, peer, expiration);
-            else if (ctx.keyRing().get(msg.getKey()) != null)
-                sendStoreThroughExploratory(msg, peer, expiration);
-            else if (msg.getEntry().getType() == DatabaseEntry.KEY_TYPE_META_LS2)
-                sendWrappedStoreThroughExploratory(msg, peer, expiration);
-            else
-                sendStoreThroughClient(msg, peer, expiration);
+            if (_facade.isClientDb()) {sendStoreThroughClient(msg, peer, expiration);} // if it is an encrypted leaseset...
+            else if (ctx.keyRing().get(msg.getKey()) != null) {sendStoreThroughExploratory(msg, peer, expiration);}
+            else if (msg.getEntry().getType() == DatabaseEntry.KEY_TYPE_META_LS2) {sendWrappedStoreThroughExploratory(msg, peer, expiration);}
+            else {sendStoreThroughClient(msg, peer, expiration);}
         } else {
             ctx.statManager().addRateData("netDb.storeRouterInfoSent", 1);
             // Special handling if we're in the client context.
@@ -298,16 +293,15 @@ abstract class StoreJob extends JobImpl {
                 // For now, send it out through exploratory tunnels,
                 // and issue a warning.
                 sendStoreThroughExploratory(msg, peer, expiration);
-                if (_log.shouldLog(Log.WARN))
-                    _log.warn("[DbId: " + _facade + "]"
-                              + " Sending RI store (though exploratory tunnels) in a client context to "
-                              + peer.getIdentity().getHash() + " with message " + msg);
+                if (_log.shouldLog(Log.WARN)) {
+                    _log.warn("[" + _facade + "] Sending RouterInfo store via Exploratory tunnels in client context to [" +
+                              peer.getIdentity().getHash().toBase64().substring(0,6) + "] with message " + msg);
+                }
             }
             else if (ctx.commSystem().isEstablished(h) ||
-                (!ctx.commSystem().wasUnreachable(h) && _connectChecker.canConnect(_connectMask, peer)))
+                     (!ctx.commSystem().wasUnreachable(h) && _connectChecker.canConnect(_connectMask, peer))) {
                 sendDirect(msg, peer, expiration);
-            else
-                sendStoreThroughExploratory(msg, peer, expiration);
+            } else {sendStoreThroughExploratory(msg, peer, expiration);}
         }
     }
 
@@ -332,8 +326,9 @@ abstract class StoreJob extends JobImpl {
         StoreMessageSelector selector = new StoreMessageSelector(getContext(), getJobId(), peer, msg.getReplyToken(), expiration);
 
         // ToDo: Craft a nasty error message here if the _facade is not the floodfill facade.
-        if (_log.shouldDebug())
+        if (_log.shouldDebug()) {
             _log.debug("Sending store directly to [" + to.toBase64().substring(0,6) + "]");
+        }
         OutNetMessage m = new OutNetMessage(getContext(), msg, expiration, STORE_PRIORITY, peer);
         m.setOnFailedReplyJob(onFail);
         m.setOnFailedSendJob(onFail);
@@ -356,37 +351,37 @@ abstract class StoreJob extends JobImpl {
         // to the target. After that we pick a random tunnel, or else we'd pick the
         // same tunnels every time.
         TunnelInfo replyTunnel;
-        if (_state.getAttemptedCount() <= 1)
+        if (_state.getAttemptedCount() <= 1) {
             replyTunnel = getContext().tunnelManager().selectInboundExploratoryTunnel(to);
-        else
-            replyTunnel = getContext().tunnelManager().selectInboundTunnel();
+        } else {replyTunnel = getContext().tunnelManager().selectInboundTunnel();}
         if (replyTunnel == null) {
             _log.warn("No Inbound tunnels available for reply");
             return;
         }
+
         TunnelId replyTunnelId = replyTunnel.getReceiveTunnelId(0);
         msg.setReplyTunnel(replyTunnelId);
         msg.setReplyGateway(replyTunnel.getPeer(0));
-
         _state.addPending(to);
-
         TunnelInfo outTunnel;
-        if (_state.getAttemptedCount() <= 1)
+
+        if (_state.getAttemptedCount() <= 1) {
             outTunnel = getContext().tunnelManager().selectOutboundExploratoryTunnel(to);
-        else
+        } else {
             outTunnel = getContext().tunnelManager().selectOutboundTunnel();
+        }
         if (outTunnel != null) {
             SendSuccessJob onReply = new SendSuccessJob(getContext(), peer, outTunnel, msg.getMessageSize());
             FailedJob onFail = new FailedJob(getContext(), peer, getContext().clock().now());
             StoreMessageSelector selector = new StoreMessageSelector(getContext(), getJobId(), peer, msg.getReplyToken(), expiration);
 
-            if (_log.shouldDebug())
+            if (_log.shouldDebug()) {
                 _log.debug("Sending store to [" + to.toBase64().substring(0,6) + "] through " + outTunnel + ": " + msg);
+            }
             getContext().messageRegistry().registerPending(selector, onReply, onFail);
             getContext().tunnelDispatcher().dispatchOutbound(msg, outTunnel.getSendTunnelId(0), null, to);
         } else {
-            if (_log.shouldWarn())
-                _log.warn("No Outbound tunnels available for sending a DbStore");
+            if (_log.shouldWarn()) {_log.warn("No Outbound tunnels available for sending a DbStore");}
             fail();
         }
     }
@@ -412,11 +407,8 @@ abstract class StoreJob extends JobImpl {
         Hash client;
         int dstype = msg.getEntry().getType();
         if (dstype == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
-            // get the real client hash
-            client = ((LeaseSet)msg.getEntry()).getDestination().calculateHash();
-        } else {
-            client = msg.getKey();
-        }
+            client = ((LeaseSet)msg.getEntry()).getDestination().calculateHash(); // get the real client hash
+        } else {client = msg.getKey();}
 
         RouterIdentity ident = peer.getIdentity();
         Hash to = ident.getHash();
@@ -433,27 +425,25 @@ abstract class StoreJob extends JobImpl {
             replyTunnelId = lease.getTunnelId();
         } else {
             TunnelInfo replyTunnel;
-            if (_state.getAttemptedCount() <= 1)
-                replyTunnel = ctx.tunnelManager().selectInboundTunnel(client, to);
-            else
-                replyTunnel = ctx.tunnelManager().selectInboundTunnel(client);
-        if (replyTunnel == null) {
-            if (_log.shouldWarn())
-                _log.warn("No Inbound tunnels available for reply");
-            fail();
-            return;
-        }
-        replyTunnelId = replyTunnel.getReceiveTunnelId(0);
-        replyGW = replyTunnel.getPeer(0);
+            if (_state.getAttemptedCount() <= 1) {replyTunnel = ctx.tunnelManager().selectInboundTunnel(client, to);}
+            else {replyTunnel = ctx.tunnelManager().selectInboundTunnel(client);}
+            if (replyTunnel == null) {
+                if (_log.shouldWarn()) {_log.warn("No Inbound tunnels available for reply");}
+                fail();
+                return;
+            }
+            replyTunnelId = replyTunnel.getReceiveTunnelId(0);
+            replyGW = replyTunnel.getPeer(0);
         }
         msg.setReplyTunnel(replyTunnelId);
         msg.setReplyGateway(replyGW);
 
         TunnelInfo outTunnel;
-        if (_state.getAttemptedCount() <= 1)
+        if (_state.getAttemptedCount() <= 1) {
             outTunnel = ctx.tunnelManager().selectOutboundTunnel(client, to);
-        else
+        } else {
             outTunnel = ctx.tunnelManager().selectOutboundTunnel(client);
+        }
         if (outTunnel != null) {
             I2NPMessage sent;
             LeaseSetKeys lsk = ctx.keyManager().getKeys(client);
@@ -463,20 +453,20 @@ abstract class StoreJob extends JobImpl {
                 // garlic encrypt
                 MessageWrapper.WrappedMessage wm = MessageWrapper.wrap(ctx, msg, client, peer);
                 if (wm == null) {
-                    if (_log.shouldWarn())
+                    if (_log.shouldWarn()) {
                         _log.warn("Failed garlic encrypting from client: [" + client.toBase64().substring(0,6) + "]");
+                    }
                     fail();
                     return;
                 }
                 sent = wm.getMessage();
                 _state.addPending(to, wm);
-            } else if (type == EncType.ECIES_X25519 ||
-                       lsk.isSupported(EncType.ECIES_X25519)) {
-                // force full ElG for ECIES-only
-                sent = MessageWrapper.wrap(ctx, msg, peer);
+            } else if (type == EncType.ECIES_X25519 || lsk.isSupported(EncType.ECIES_X25519)) {
+                sent = MessageWrapper.wrap(ctx, msg, peer); // force full ElG for ECIES-only
                 if (sent == null) {
-                    if (_log.shouldWarn())
+                    if (_log.shouldWarn()) {
                         _log.warn("Failed garlic encrypting from client: [" + client.toBase64().substring(0,6) + "]");
+                    }
                     fail();
                     return;
                 }
@@ -493,14 +483,14 @@ abstract class StoreJob extends JobImpl {
 
             if (_log.shouldDebug()) {
                     _log.debug("Sending encrypted store [" + sent + "] to [" + to.toBase64().substring(0,6) +
-                               "]\n Via: " + outTunnel + " with reply to " + replyGW.toBase64().substring(0,6) + "] -> [TunnelId: " + replyTunnelId + "]");
+                               "]\n Via: " + outTunnel + " with reply to " + replyGW.toBase64().substring(0,6) +
+                               "] -> [TunnelId: " + replyTunnelId + "]");
 
             }
             ctx.messageRegistry().registerPending(selector, onReply, onFail);
             ctx.tunnelDispatcher().dispatchOutbound(sent, outTunnel.getSendTunnelId(0), null, to);
         } else {
-            if (_log.shouldWarn())
-                _log.warn("No Outbound tunnels available for sending a DbStore - deferring");
+            if (_log.shouldWarn()) {_log.warn("No Outbound tunnels available for sending a DbStore - deferring");}
             // continueSending() above did an addPending() so remove it here.
             // This means we will skip the peer next time, can't be helped for now
             // without modding StoreState
@@ -520,17 +510,11 @@ abstract class StoreJob extends JobImpl {
      */
     private Lease pickReplyTunnel(LeaseSet ls, int attempts, Hash to) {
         int c = ls.getLeaseCount();
-        if (c <= 0)
-            throw new IllegalStateException();
-        if (c == 1)
-            return ls.getLease(0);
-        if (attempts > 1)
-            return ls.getLease(getContext().random().nextInt(c));
-        // pick closest
-        Lease[] leases = new Lease[c];
-        for (int i = 0; i < c; i++) {
-            leases[i] = ls.getLease(i);
-        }
+        if (c <= 0) {throw new IllegalStateException();}
+        if (c == 1) {return ls.getLease(0);}
+        if (attempts > 1) {return ls.getLease(getContext().random().nextInt(c));}
+        Lease[] leases = new Lease[c]; // pick closest
+        for (int i = 0; i < c; i++) {leases[i] = ls.getLease(i);}
         Arrays.sort(leases, new LeaseComparator(to));
         return leases[0];
     }
@@ -546,9 +530,7 @@ abstract class StoreJob extends JobImpl {
         /**
          * @param target key to compare distances with
          */
-        public LeaseComparator(Hash target) {
-            _base = target.getData();
-        }
+        public LeaseComparator(Hash target) {_base = target.getData();}
 
         public int compare(Lease lhs, Lease rhs) {
             byte lhsb[] = lhs.getGateway().getData();
@@ -556,10 +538,8 @@ abstract class StoreJob extends JobImpl {
             for (int i = 0; i < _base.length; i++) {
                 int ld = (lhsb[i] ^ _base[i]) & 0xff;
                 int rd = (rhsb[i] ^ _base[i]) & 0xff;
-                if (ld < rd)
-                    return -1;
-                if (ld > rd)
-                    return 1;
+                if (ld < rd) {return -1;}
+                if (ld > rd) {return 1;}
             }
             // latest-expiring first as a tie-breaker
             return (int) (rhs.getEndTime() - lhs.getEndTime());
@@ -581,13 +561,15 @@ abstract class StoreJob extends JobImpl {
         Hash to = peer.getIdentity().getHash();
         // see comments in method above
         TunnelInfo replyTunnel;
-        if (_state.getAttemptedCount() <= 1)
+        if (_state.getAttemptedCount() <= 1) {
             replyTunnel = ctx.tunnelManager().selectInboundExploratoryTunnel(to);
-        else
+        } else {
             replyTunnel = ctx.tunnelManager().selectInboundTunnel();
+        }
         if (replyTunnel == null) {
-            if (_log.shouldWarn())
+            if (_log.shouldWarn()) {
                 _log.warn("No Inbound Exploratory tunnels for reply - delaying...");
+            }
             // continueSending() above did an addPending() so remove it here.
             // This means we will skip the peer next time, can't be helped for now
             // without modding StoreState
@@ -602,10 +584,9 @@ abstract class StoreJob extends JobImpl {
         msg.setReplyGateway(replyTunnel.getPeer(0));
 
         TunnelInfo outTunnel;
-        if (_state.getAttemptedCount() <= 1)
+        if (_state.getAttemptedCount() <= 1) {
             outTunnel = ctx.tunnelManager().selectOutboundExploratoryTunnel(to);
-        else
-            outTunnel = ctx.tunnelManager().selectOutboundTunnel();
+        } else {outTunnel = ctx.tunnelManager().selectOutboundTunnel();}
         if (outTunnel != null) {
             I2NPMessage sent;
             // garlic encrypt using router SKM
@@ -614,8 +595,7 @@ abstract class StoreJob extends JobImpl {
             if (ptype == EncType.ELGAMAL_2048 && mtype == EncType.ELGAMAL_2048) {
                 MessageWrapper.WrappedMessage wm = MessageWrapper.wrap(ctx, msg, null, peer);
                 if (wm == null) {
-                    if (_log.shouldWarn())
-                        _log.warn("Garlic encryption failure");
+                    if (_log.shouldWarn()) {_log.warn("Garlic encryption failure");}
                     fail();
                     return;
                 }
@@ -635,8 +615,9 @@ abstract class StoreJob extends JobImpl {
             ctx.messageRegistry().registerPending(selector, onReply, onFail);
             ctx.tunnelDispatcher().dispatchOutbound(sent, outTunnel.getSendTunnelId(0), null, to);
         } else {
-            if (_log.shouldWarn())
+            if (_log.shouldWarn()) {
                 _log.warn("No Outbound Exploratory tunnels to send a DbStore out - delaying...");
+            }
             // continueSending() above did an addPending() so remove it here.
             // This means we will skip the peer next time, can't be helped for now
             // without modding StoreState
@@ -652,13 +633,9 @@ abstract class StoreJob extends JobImpl {
      * @since 0.7.10
      */
     private class WaitJob extends JobImpl {
-        public WaitJob(RouterContext enclosingContext) {
-            super(enclosingContext);
-        }
-        public void runJob() {
-            sendNext();
-        }
-        public String getName() { return "Delay Kademlia Store Send"; }
+        public WaitJob(RouterContext enclosingContext) {super(enclosingContext);}
+        public void runJob() {sendNext();}
+        public String getName() {return "Delay Kademlia Store Send";}
     }
 
     /**
@@ -673,14 +650,11 @@ abstract class StoreJob extends JobImpl {
      */
     static boolean shouldStoreTo(RouterInfo ri) {
         String v = ri.getVersion();
-        if (VersionComparator.comp(v, MIN_STORE_VERSION) < 0)
-            return false;
+        if (VersionComparator.comp(v, MIN_STORE_VERSION) < 0) {return false;}
         RouterIdentity ident = ri.getIdentity();
-        if (ident.getSigningPublicKey().getType() == SigType.DSA_SHA1)
-            return false;
+        if (ident.getSigningPublicKey().getType() == SigType.DSA_SHA1) {return false;}
         EncType type = ident.getPublicKey().getType();
-        if (DatabaseLookupMessage.USE_ECIES_FF)
-            return LeaseSetKeys.SET_BOTH.contains(type);
+        if (DatabaseLookupMessage.USE_ECIES_FF) {return LeaseSetKeys.SET_BOTH.contains(type);}
         return type == EncType.ELGAMAL_2048;
     }
 
@@ -731,10 +705,8 @@ abstract class StoreJob extends JobImpl {
             super(enclosingContext);
             _peer = peer;
             _sendThrough = sendThrough;
-            if (size <= 0)
-                _msgSize = 0;
-            else
-                _msgSize = ((size + 1023) / 1024) * 1024;
+            if (size <= 0) {_msgSize = 0;}
+            else {_msgSize = ((size + 1023) / 1024) * 1024;}
         }
 
         public String getName() { return "Verify Kademlia Store Send"; }
@@ -742,21 +714,23 @@ abstract class StoreJob extends JobImpl {
         public void runJob() {
             Hash hash = _peer.getIdentity().getHash();
             MessageWrapper.WrappedMessage wm = _state.getPendingMessage(hash);
-            if (wm != null)
-                wm.acked();
+            if (wm != null) {wm.acked();}
             long howLong = _state.confirmed(hash);
 
-            if (_log.shouldInfo())
+            if (_log.shouldInfo()) {
                 _log.info("Store of key [" + _state.getTarget().toBase32().substring(0,8) + "] to [" +
                           hash.toBase64().substring(0,6) + "] successful after " + howLong + "ms");
+            }
             getContext().profileManager().dbStoreSent(hash, howLong);
             getContext().statManager().addRateData("netDb.ackTime", howLong, howLong);
 
             if ( (_sendThrough != null) && (_msgSize > 0) ) {
-                if (_log.shouldDebug())
+                if (_log.shouldDebug()) {
                     _log.debug("Sent a " + _msgSize + " byte NetDb message through: " + _sendThrough + " after " + howLong + "ms");
-                for (int i = 0; i < _sendThrough.getLength(); i++)
+                }
+                for (int i = 0; i < _sendThrough.getLength(); i++) {
                     getContext().profileManager().tunnelDataPushed(_sendThrough.getPeer(i), howLong, _msgSize);
+                }
                 _sendThrough.incrementVerifiedBytesTransferred(_msgSize);
             }
             if (_sendThrough == null) {
@@ -764,16 +738,11 @@ abstract class StoreJob extends JobImpl {
                 getContext().commSystem().mayDisconnect(_peer.getHash());
             }
 
-            if (_state.getCompleteCount() >= getRedundancy()) {
-                succeed();
-            } else {
-                sendNext();
-            }
+            if (_state.getCompleteCount() >= getRedundancy()) {succeed();}
+            else {sendNext();}
         }
 
-        public void setMessage(I2NPMessage message) {
-            // ignored, since if the selector matched it, its fine by us
-        }
+        public void setMessage(I2NPMessage message) {} // ignored, since if the selector matched it, its fine by us
     }
 
     /**
@@ -792,16 +761,15 @@ abstract class StoreJob extends JobImpl {
             _sendOn = sendOn;
         }
         public void runJob() {
-            if (!_wasRun.compareAndSet(false, true))
-                return;
+            if (!_wasRun.compareAndSet(false, true)) {return;}
             Hash hash = _peer.getIdentity().getHash();
-            if (_log.shouldInfo())
+            if (_log.shouldInfo()) {
                 _log.info("Testing Peer [" + hash.toBase64().substring(0,6)
                           + "]\n* Timed out sending key [" + _state.getTarget().toBase64().substring(0,6) + "]");
+            }
 
             MessageWrapper.WrappedMessage wm = _state.getPendingMessage(hash);
-            if (wm != null)
-                wm.fail();
+            if (wm != null) {wm.fail();}
             _state.replyTimeout(hash);
 
             getContext().profileManager().dbStoreFailed(hash);
@@ -809,7 +777,7 @@ abstract class StoreJob extends JobImpl {
 
             sendNext();
         }
-        public String getName() { return "Timeout Kademlia Store Send"; }
+        public String getName() {return "Timeout Kademlia Store Send";}
     }
 
     /**

@@ -151,7 +151,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         // Only initialize the handlers for the flooodfill netDb.
        if (!isClientDb()) {
             if (_log.shouldInfo())
-                _log.info("[DbId: " + this +  "] Initializing the message handlers");
+                _log.info("[" + this +  "] Initializing the message handlers");
         _context.inNetMessagePool().registerHandlerJobBuilder(DatabaseLookupMessage.MESSAGE_TYPE, new FloodfillDatabaseLookupMessageHandler(_context, this));
         _context.inNetMessagePool().registerHandlerJobBuilder(DatabaseStoreMessage.MESSAGE_TYPE, new FloodfillDatabaseStoreMessageHandler(_context, this));
         }
@@ -556,7 +556,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
             if (isNew) {
                 if (_log.shouldDebug())
-                    _log.debug("[DbId: " + this +
+                    _log.debug("[" + this +
                                "]: New IterativeSearch " + ((fromLocalDest != null) ? "via Client tunnels" : "via Exploratory tunnels") +
                                " for key [" + key.toBase32().substring(0,8) + "]");
             _context.jobQueue().addJob(searchJob);

@@ -817,12 +817,12 @@ class NetDbRenderer {
         buf.append("</th>");
         if (_context.clientManager().isLocal(key)) {
             buf.append("<th>");
-            boolean unpublished = !_context.clientManager().shouldPublishLeaseSet(key);
+            boolean published = _context.clientManager().shouldPublishLeaseSet(key);
             TunnelPoolSettings in = _context.tunnelManager().getInboundSettings(key);
             buf.append("<a href=\"tunnels#").append(key.toBase64().substring(0,4)).append("\"><span class=\"lsdest");
-            if (!unpublished) {buf.append(" published");}
+            if (published) {buf.append(" published");}
             buf.append("\" title=\"").append(_t("View local tunnels for destination"));
-            if (!unpublished) {buf.append(" (").append(_t("published")).append(")");}
+            if (published) {buf.append(" (").append(_t("published")).append(")");}
             buf.append("\">");
             if (in != null && in.getDestinationNickname() != null) {
                 buf.append(DataHelper.escapeHTML(in.getDestinationNickname()));
@@ -836,13 +836,13 @@ class NetDbRenderer {
                 // <td> is appended with an "Add to addressbook" link, so this
                 // <td> should not span 2 columns.
                 String host = null;
-                if (!unpublished) {host = _context.namingService().reverseLookup(dest);}
-                if (unpublished || host != null || !linkSusi) {buf.append(" colspan=2");}
+                if (published) {host = _context.namingService().reverseLookup(dest);}
+                if (!published || host != null || !linkSusi) {buf.append(" colspan=2");}
                 buf.append(">");
                 String b32 = key.toBase32();
                 String truncb32 = b32.substring(0, 24);
                 buf.append("<a href=\"http://").append(b32).append("/\">").append(truncb32).append("&hellip;b32.i2p</a></td>");
-                if (linkSusi && !unpublished && host == null) {
+                if (linkSusi && published && host == null) {
                     buf.append("<td class=addtobook colspan=2>").append("<a title=\"").append(_t("Add to addressbook"))
                        .append("\" target=_blank href=\"/susidns/addressbook.jsp?book=private&amp;destination=")
                        .append(dest.toBase64()).append("#add\">").append(_t("Add to local addressbook")).append("</a></td>");
