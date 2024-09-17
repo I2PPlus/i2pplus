@@ -296,8 +296,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
         String lsType = props.getProperty("i2cp.leaseSetType");
         if ("5".equals(lsType)) {
             SigType stype = dest.getSigningPublicKey().getType();
-            if (stype != SigType.EdDSA_SHA512_Ed25519 &&
-                stype != SigType.RedDSA_SHA512_Ed25519) {
+            if (stype != SigType.EdDSA_SHA512_Ed25519 && stype != SigType.RedDSA_SHA512_Ed25519) {
                 _runner.disconnectClient("Invalid sig type for encrypted LeaseSet");
                 return;
             }
@@ -326,30 +325,21 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
         int status = _runner.sessionEstablished(cfg);
         if (status != SessionStatusMessage.STATUS_CREATED) {
             // For now, we do NOT send a SessionStatusMessage - see javadoc above
-            if (_log.shouldError()) {
-                _log.error("Session establish failed: code = " + status);
-            }
+            if (_log.shouldError()) {_log.error("Session establish failed: code = " + status);}
             String msg;
-            if (status == SessionStatusMessage.STATUS_DUP_DEST) {
-                msg = "duplicate destination";
-                // not in spec, change to INVALID if we send it
-                // status = SessionStatusMessage.STATUS_INVALID
-            } else if (status == SessionStatusMessage.STATUS_INVALID) {
-                msg = "bad session configuration parameters";
-            } else if (status == SessionStatusMessage.STATUS_REFUSED) {
-                msg = "session limit exceeded";
-            } else {
-                msg = "unknown error";
-            }
+            if (status == SessionStatusMessage.STATUS_DUP_DEST) {msg = "duplicate destination";}
+            // not in spec, change to INVALID if we send it
+            // status = SessionStatusMessage.STATUS_INVALID
+            else if (status == SessionStatusMessage.STATUS_INVALID) {msg = "bad session configuration parameters";}
+            else if (status == SessionStatusMessage.STATUS_REFUSED) {msg = "session limit exceeded";}
+            else {msg = "unknown error";}
             _runner.disconnectClient(msg);
             return;
         }
 
         id = _runner.getSessionId(dest.calculateHash()); // get the new session ID
 
-        if (_log.shouldInfo()) {
-            _log.info("Session " + id + " established for " + dest.calculateHash());
-        }
+        if (_log.shouldInfo()) {_log.info("Session " + id + " established for " + dest.calculateHash());}
         if (isPrimary) {
             sendStatusMessage(id, status);
             startCreateSessionJob(cfg);
@@ -380,8 +370,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
      *  @since 0.9.11
      */
     private boolean checkAuth(Properties props) {
-        if (_authorized)
-            return true;
+        if (_authorized) {return true;}
         if (_enforceAuth && _context.getBooleanProperty(PROP_AUTH)) {
             String user = null;
             String pw = null;
@@ -522,14 +511,10 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     private void handleDestroySession(DestroySessionMessage message) {
         SessionId id = message.getSessionId();
         if (id != null) {_runner.removeSession(id);}
-        else {
-            if (_log.shouldWarn()) {_log.warn("Destroyed session with null ID");}
-        }
+        else if (_log.shouldWarn()) {_log.warn("Destroyed session with null ID");}
         int left = _runner.getSessionIds().size();
         if (left <= 0 || id == null) {_runner.stopRunning();}
-        else {
-            if (_log.shouldInfo()) {_log.info("Still " + left + " sessions left");}
-        }
+        else if (_log.shouldInfo()) {_log.info("Still " + left + " sessions left");}
     }
 
     /** override for testing */
@@ -604,13 +589,11 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
         }
         if (type != DatabaseEntry.KEY_TYPE_META_LS2) {
             LeaseSetKeys keys = _context.keyManager().getKeys(dest);
-            if (keys == null ||
-                !message.getPrivateKey().equals(keys.getDecryptionKey())) {
+            if (keys == null || !message.getPrivateKey().equals(keys.getDecryptionKey())) {
                 // Verify and register crypto keys if new or if changed
                 // Private crypto key should never change, and if it does,
                 // one of the checks below will fail
-                if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
-                    // LS1
+                if (type == DatabaseEntry.KEY_TYPE_LEASESET) { // LS1
                     PublicKey pk;
                     try {pk = message.getPrivateKey().toPublic();}
                     catch (IllegalArgumentException iae) {
@@ -627,8 +610,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                     }
                     // just register new SPK, don't verify, unused
                     _context.keyManager().registerKeys(dest, message.getSigningPrivateKey(), message.getPrivateKey());
-                } else {
-                    // LS2
+                } else { // LS2
                     LeaseSet2 ls2 = (LeaseSet2) ls;
                     CreateLeaseSet2Message msg2 = (CreateLeaseSet2Message) message;
                     List<PublicKey> eks = ls2.getEncryptionKeys();
@@ -676,9 +658,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
             if (type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
                 // store the decrypted ls also
                 EncryptedLeaseSet encls = (EncryptedLeaseSet) ls;
-                if (_log.shouldDebug()) {
-                    _log.debug("Storing decrypted: " + encls.getDecryptedLeaseSet());
-                }
+                if (_log.shouldDebug()) {_log.debug("Storing decrypted: " + encls.getDecryptedLeaseSet());}
                 _runner.getFloodfillNetworkDatabaseFacade().store(dest.getHash(), encls.getDecryptedLeaseSet());
             }
         } catch (IllegalArgumentException iae) {
@@ -686,7 +666,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
             _runner.disconnectClient("Invalid LeaseSet: " + iae);
             return;
         }
-        if (_log.shouldInfo()) {_log.info("New LeaseSet created \nDestination: " + dest);}
+        if (_log.shouldInfo()) {_log.info("New LeaseSet created \n* " + dest);}
 
         // leaseSetCreated takes care of all the LeaseRequestState stuff (including firing any jobs)
         _runner.leaseSetCreated(ls);
@@ -708,8 +688,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
         Hash h;
         if (sid != null) {h = _runner.getDestHash(sid);}
         else {
-            // fixup if necessary
-            if (message.getReqID() >= 0) {sid = new SessionId(65535);}
+            if (message.getReqID() >= 0) {sid = new SessionId(65535);} // fixup if necessary
             h = null;
         }
         if (h == null) {h = _runner.getDestHash();} // h may still be null, an LS lookup for b32 will go out expl. tunnels
