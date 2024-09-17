@@ -95,7 +95,7 @@ end_ip=""
 cp $output_file ${output_file}.bak
 
 # Print URL and date to the output file
-echo "# $url + second_list_url" > $output_file
+echo "# $url + $second_list_url" > $output_file
 echo "# $today" >> $output_file
 
 # Function to print the IP range with prefix
