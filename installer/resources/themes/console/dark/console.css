@@ -40,7 +40,7 @@ ol li:first-child{margin-top:10px}
 ol{padding:1px 0 0 20px;display:inline}
 pre{width:98%}
 table{padding:1px;width:100%;font-size:9pt;border:var(--border);border-collapse:collapse}
-table:not(.leaseset){margin:1px 0}
+table:not(.leaseset){margin:10px 0}
 table hr{margin:0 0;padding:0 0;height:1px;display:none;color:var(--a);border:0;background:#252}
 td{padding:4px 6px;vertical-align:middle;border-top:var(--border_softer)}
 th[aria-sort]{font-style:italic}
@@ -1084,7 +1084,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #netdb #netdboverview td{border-right:var(--border)}
 #netdb #netdboverview th,#netdb #netdboverview tr,#netdb #netdboverview td{line-height:1;box-shadow:none}
 #netdbcongestion a,#netdboverview a[href^="/netdb?caps"]{margin:0 10px 0 0;padding:3px;display:inline-block;vertical-align:middle;line-height:1}
-#netdboverview{margin-bottom:10px}
+#netdboverview{margin:11px 0 9px}
 #netdboverview #netdbcongestion td,#netdboverview #netdbversions td,#netdboverview #netdbtransports td,#netdboverview #netdbcountrylist td,#netdboverview #netdbtiers td{border-right:0;border-left:0}
 #netdboverview td{background:repeating-linear-gradient(90deg,rgba(0,0,0,.5) 2px,rgba(0,16,0,.5) 4px);background-size:4px 100%}
 #netdboverview td:nth-child(2){border-left:var(--border_softer);border-right:var(--border_softer)}
@@ -1223,7 +1223,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 
 /* netdb lookup */
 #netdb .tabletitle{margin-bottom:-2px}
-#netdblookup{margin-bottom:9px}
+#netdblookup{margin:11px 0 9px}
 #netdblookup th{padding:10px;text-align:left;letter-spacing:.08em;text-transform:uppercase;font-size:11pt;background:var(--title)}
 #netdblookup td{padding:3px 6px}
 #netdblookup td:nth-child(odd){padding-left:10px;padding-right:0;text-align:right;white-space:nowrap;font-weight:700}
@@ -1376,12 +1376,12 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 #sybilanalysis hr,#sybilanalysis i{margin:8px 0}
 #sybilanalysis i{display:inline-block}
 #sybilanalysis{margin:10px 0 9px;padding:10px 10px 8px 58px;border:var(--border);box-shadow:var(--highlight),inset 0 0 2px 1px #030;background:var(--sybil) no-repeat 15px center/28px,var(--msg_nohat)}
+#sybilnav,#sybils_summary{margin-bottom:10px;padding:10px;line-height:1.6;border:var(--border);background:#000}
+#sybilnav{margin:0 -11px 10px;padding:6px 5px;overflow:hidden;border:var(--border);box-shadow:var(--highlight),inset 0 0 2px 1px #030;columns:5 200px;column-gap:4px}
 #sybilnav::after{width:100%;height:10px;display:block;content:""}
 #sybilnav a{width:100%;display:inline-block;text-shadow:var(--textshadow)}
-#sybilnav li{-webkit-column-break-inside:avoid;break-inside:avoid;page-break-before:right}
-#sybilnav{margin:-12px -11px 10px;padding:6px 5px;overflow:hidden;border:var(--border);box-shadow:var(--highlight),inset 0 0 2px 1px #030;columns:5 200px;column-gap:4px}
-#sybilnav,#sybils_summary{margin-bottom:10px;padding:10px;line-height:1.6;border:var(--border);background:#000}
 #sybilnav ul{margin:0}
+#sybilnav li{-webkit-column-break-inside:avoid;break-inside:avoid;page-break-before:right}
 #sybilnav ul li{margin-left:0;margin-bottom:4px;padding-left:0;min-width:150px;white-space:nowrap;list-style:none;border:1px solid #151;box-shadow:var(--highlight),inset 0 0 2px 1px #030;background:linear-gradient(90deg,#000,#010 80%)}
 #sybilnav ul li:hover a{color:var(--hover)}
 #sybilnav ul li:hover::before{background:var(--eye_hover) no-repeat left center/16px}
@@ -2169,6 +2169,7 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 #debug h2+h3,.buckets{margin-top:-13px}
 #debug h2+hr,.buckets hr{display:none}
 #debug h2{margin-top:15px;padding:10px 10px 8px;font-size:11.5pt;background:var(--bug) no-repeat right 10px center,var(--h3),#010;background-size:18px,2px}
+#debug #debug_sockets{margin-top:11px}
 #debug h3{border-width:1px;padding:5px 10px;font-size:10pt}
 #debug h3.debug_inboundsessions{background:var(--in) no-repeat 8px center/14px,var(--th)}
 #debug h3.debug_outboundsessions,#debug h3.debug_inboundsessions{padding:6px 10px 5px 28px}
@@ -2177,6 +2178,7 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 #debug li:last-child{padding-bottom:2px}
 #debug{line-height:1.4;padding-bottom:11px}
 #debug table{margin-top:-13px}
+#debug #sockets {margin-bottom:0}
 #debug th,#debug td{text-align:left;padding:5px 10px}
 #debug th{padding:7px 10px}
 #debug th:first-child{text-align:left}
@@ -3051,4 +3053,4 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 #netdb.main{position:relative;contain:paint}
 #pagenav{margin:0 -11px -2px;padding:12px;position:sticky;bottom:0;left:-11px;right:-11px;text-align:center;border:var(--border);border-radius:0 0 3px 3px;box-shadow:var(--bevel);background:#000}
 #results{margin:3px auto;width:100%;display:block;font-size:110%;font-weight:600}
-#results.more {margin:-12px auto 8px;padding:4px 5% 3px;width:fit-content;text-shadow:1px 1px 1px #0008;border:1px solid #020;border-top:0;border-radius:0 0 4px 4px;box-shadow:var(--highlight);background:var(--glow_top),linear-gradient(#121,#001800,#010)}
+#results.more{margin:-12px auto 8px;padding:4px 5% 3px;width:fit-content;text-shadow:1px 1px 1px #0008;border:1px solid #020;border-top:0;border-radius:0 0 4px 4px;box-shadow:var(--highlight);background:var(--glow_top),linear-gradient(#121,#001800,#010)}
