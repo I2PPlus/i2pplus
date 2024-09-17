@@ -693,7 +693,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             if (onFindJob != null) {_context.jobQueue().addJob(onFindJob);}
         } else if (isNegativeCached(key)) {
             if (_log.shouldInfo()) {
-                _log.info("Not searching for negatively cached LeaseSet [" + key.toBase32().substring(0,8) + "]");
+                _log.info("LeaseSet [" + key.toBase32().substring(0,8) + "] is negatively cached -> Queueing for search...");
             }
             if (onFailedLookupJob != null) {_context.jobQueue().addJob(onFailedLookupJob);}
         } else {

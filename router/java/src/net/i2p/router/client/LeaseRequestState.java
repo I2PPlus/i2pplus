@@ -19,8 +19,6 @@ import net.i2p.router.Job;
 class LeaseRequestState {
     private LeaseSet _grantedLeaseSet;
     private final LeaseSet _requestedLeaseSet;
-    //private PrivateKey _leaseSetPrivateKey;
-    //private SigningPrivateKey _leaseSetSigningPrivateKey;
     private final Job _onGranted;
     private final Job _onFailed;
     private final long _expiration;
@@ -45,30 +43,19 @@ class LeaseRequestState {
     }
 
     /** created lease set from client - FIXME always null */
-    public LeaseSet getGranted() { return _grantedLeaseSet; }
+    public LeaseSet getGranted() {return _grantedLeaseSet;}
 
     /** FIXME unused - why? */
-    public void setGranted(LeaseSet ls) { _grantedLeaseSet = ls; }
+    public void setGranted(LeaseSet ls) {_grantedLeaseSet = ls;}
 
     /** lease set that is being requested */
-    public LeaseSet getRequested() { return _requestedLeaseSet; }
-    //public void setRequested(LeaseSet ls) { _requestedLeaseSet = ls; }
-
-    /** the private encryption key received regarding the lease set */
-    //public PrivateKey getPrivateKey() { return _leaseSetPrivateKey; }
-    //public void setPrivateKey(PrivateKey pk) { _leaseSetPrivateKey = pk; }
-
-    /** the private signing key received regarding the lease set (for revocation) */
-    //public SigningPrivateKey getSigningPrivateKey() { return _leaseSetSigningPrivateKey; }
-    //public void setSigningPrivateKey(SigningPrivateKey spk) { _leaseSetSigningPrivateKey = spk; }
+    public LeaseSet getRequested() {return _requestedLeaseSet;}
 
     /** what to do once the lease set is created */
     public Job getOnGranted() { return _onGranted; }
-    //public void setOnGranted(Job jb) { _onGranted = jb; }
 
     /** what to do if the lease set create fails / times out */
     public Job getOnFailed() { return _onFailed; }
-    //public void setOnFailed(Job jb) { _onFailed = jb; }
 
     /** when the request for the lease set expires */
     public long getExpiration() { return _expiration; }
@@ -92,4 +79,5 @@ class LeaseRequestState {
                + " succeeding? " + _successful
                + " expiring on " + _expiration;
     }
+
 }

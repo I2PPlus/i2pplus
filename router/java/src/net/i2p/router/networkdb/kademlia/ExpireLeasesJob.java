@@ -83,7 +83,8 @@ class ExpireLeasesJob extends JobImpl {
                 if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
                     toExpire.add(h);
                     if (ctx.clientManager().isLocal(h)) {
-                        tunnelName = ls != null ? " for \'" + getTunnelName(ls.getDestination()) + "\'" : "";
+                        tunnelName = ls != null && getTunnelName(ls.getDestination()) != null ?
+                                     " for \'" + getTunnelName(ls.getDestination()) + "\'" : "";
                         _log.logAlways(Log.ERROR, "LOCAL LeaseSet" + tunnelName + " [" + h.toBase32().substring(0,8) + "] has expired");
                     }
                 } else if (!ls.isCurrent(90*1000)) {current.add(h);} // if we're expiring in < 90s, queue for exploration
