@@ -50,7 +50,6 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     public ClientManagerFacadeImpl(RouterContext context) {
         _context = context;
         _log = _context.logManager().getLog(ClientManagerFacadeImpl.class);
-        //_log.debug("Client manager facade created");
     }
 
     public synchronized void startup() {
@@ -60,31 +59,25 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
         _manager.start();
     }
 
-    public synchronized void shutdown() {
-        shutdown("Router shutdown");
-    }
+    public synchronized void shutdown() {shutdown("Router shutdown");}
 
     /**
      *  @param msg message to send to the clients
      *  @since 0.8.8
      */
     public synchronized void shutdown(String msg) {
-        if (_manager != null)
-            _manager.shutdown(msg);
+        if (_manager != null) {_manager.shutdown(msg);}
     }
 
     public synchronized void restart() {
-        if (_manager != null)
-            _manager.restart();
-        else
-            startup();
+        if (_manager != null) {_manager.restart();}
+        else {startup();}
     }
 
     @Override
-    public boolean isAlive() { return _manager != null && _manager.isAlive(); }
+    public boolean isAlive() {return _manager != null && _manager.isAlive();}
 
-//    private static final long MAX_TIME_TO_REBUILD = 10*60*1000;
-    private static final long MAX_TIME_TO_REBUILD = 11*60*1000;
+    private static final long MAX_TIME_TO_REBUILD = 10*60*1000;
 
     @Override
     public boolean verifyClientLiveliness() {
@@ -94,13 +87,13 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
             ClientConnectionRunner runner = _manager.getRunner(dest);
             if ( (runner == null) || (runner.getIsDead())) continue;
             LeaseSet ls = runner.getLeaseSet(dest.calculateHash());
-            if (ls == null)
-                continue; // still building
+            if (ls == null) {continue;} // still building
             long howLongAgo = _context.clock().now() - ls.getEarliestLeaseDate();
             if (howLongAgo > MAX_TIME_TO_REBUILD) {
-                if (_log.shouldError())
-                    _log.error("Client [" + dest.toBase32().substring(0,6) +
-                               "] has LeaseSet that expired " + DataHelper.formatDuration(howLongAgo) + " ago");
+                if (_log.shouldError()) {
+                    _log.error("Client [" + dest.toBase32().substring(0,6) + "] has LeaseSet that expired " +
+                               DataHelper.formatDuration(howLongAgo) + " ago");
+                }
                 lively = false;
             }
         }
@@ -124,10 +117,8 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      * @param onFailedJob Job to run after the timeout passes without receiving authorization
      */
     public void requestLeaseSet(Destination dest, LeaseSet set, long timeout, Job onCreateJob, Job onFailedJob) {
-        if (_manager != null)
-            _manager.requestLeaseSet(dest, set, timeout, onCreateJob, onFailedJob);
-        else
-            _log.error("Null manager on requestLeaseSet!");
+        if (_manager != null) {_manager.requestLeaseSet(dest, set, timeout, onCreateJob, onFailedJob);}
+        else {_log.error("Null manager on requestLeaseSet!");}
     }
 
     /**
@@ -140,8 +131,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      *            The LeaseSet contains Leases only; it is unsigned and does not have the destination set.
      */
     public void requestLeaseSet(Hash dest, LeaseSet set) {
-        if (_manager != null)
-            _manager.requestLeaseSet(dest, set);
+        if (_manager != null) {_manager.requestLeaseSet(dest, set);}
     }
 
 
@@ -154,10 +144,8 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      * @param severity How severe the abuse is, with 0 being not severe and 255 is the max
      */
     public void reportAbuse(Destination dest, String reason, int severity) {
-        if (_manager != null)
-            _manager.reportAbuse(dest, reason, severity);
-        else
-            _log.error("Null manager on reportAbuse!");
+        if (_manager != null) {_manager.reportAbuse(dest, reason, severity);}
+        else {_log.error("Null manager on reportAbuse!");}
     }
     /**
      * Determine if the destination specified is managed locally.  This call
@@ -166,13 +154,13 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      * @param dest Destination to be checked
      */
     public boolean isLocal(Destination dest) {
-        if (_manager != null)
-            return _manager.isLocal(dest);
+        if (_manager != null) {return _manager.isLocal(dest);}
         else {
             _log.debug("Null manager on isLocal(dest)!");
             return false;
         }
     }
+
     /**
      * Determine if the destination specified is managed locally.  This call
      * DOES block.
@@ -180,8 +168,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      * @param destHash Hash of Destination to be checked
      */
     public boolean isLocal(Hash destHash) {
-        if (_manager != null)
-            return _manager.isLocal(destHash);
+        if (_manager != null) {return _manager.isLocal(destHash);}
         else {
             _log.debug("Null manager on isLocal(hash)!");
             return false;
@@ -189,7 +176,9 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     }
 
     @Override
-    public boolean shouldPublishLeaseSet(Hash destinationHash) { return _manager.shouldPublishLeaseSet(destinationHash); }
+    public boolean shouldPublishLeaseSet(Hash destinationHash) {
+        return _manager.shouldPublishLeaseSet(destinationHash);
+    }
 
     /**
      *  @param id the router's ID for this message
@@ -197,17 +186,13 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      *  @param status see I2CP MessageStatusMessage for success/failure codes
      */
     public void messageDeliveryStatusUpdate(Destination fromDest, MessageId id, long messageNonce, int status) {
-        if (_manager != null)
-            _manager.messageDeliveryStatusUpdate(fromDest, id, messageNonce, status);
-        else
-            _log.error("Null manager on messageDeliveryStatusUpdate!");
+        if (_manager != null) {_manager.messageDeliveryStatusUpdate(fromDest, id, messageNonce, status);}
+        else {_log.error("Null manager on messageDeliveryStatusUpdate!");}
     }
 
     public void messageReceived(ClientMessage msg) {
-        if (_manager != null)
-            _manager.messageReceived(msg);
-        else
-            _log.error("Null manager on messageReceived!");
+        if (_manager != null) {_manager.messageReceived(msg);}
+        else {_log.error("Null manager on messageReceived!");}
     }
 
     /**
@@ -215,8 +200,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      *
      */
     public SessionConfig getClientSessionConfig(Destination dest) {
-        if (_manager != null)
-            return _manager.getClientSessionConfig(dest);
+        if (_manager != null) {return _manager.getClientSessionConfig(dest);}
         else {
             _log.error("Null manager on getClientSessionConfig!");
             return null;
@@ -228,8 +212,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      *
      */
     public SessionKeyManager getClientSessionKeyManager(Hash dest) {
-        if (_manager != null)
-            return _manager.getClientSessionKeyManager(dest);
+        if (_manager != null) {return _manager.getClientSessionKeyManager(dest);}
         else {
             _log.error("Null manager on getClientSessionKeyManager!");
             return null;
@@ -240,8 +223,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     @Override
     @Deprecated
     public void renderStatusHTML(Writer out) throws IOException {
-        if (_manager != null)
-            _manager.renderStatusHTML(out);
+        if (_manager != null) {_manager.renderStatusHTML(out);}
     }
 
     /**
@@ -251,10 +233,8 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      */
     @Override
     public Set<Destination> listClients() {
-        if (_manager != null)
-            return _manager.listClients();
-        else
-            return Collections.emptySet();
+        if (_manager != null) {return _manager.listClients();}
+        else {return Collections.emptySet();}
     }
 
     /**
@@ -264,8 +244,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      *  @since 0.8.3
      */
     public I2CPMessageQueue connect() throws I2PSessionException {
-        if (_manager != null)
-            return _manager.internalConnect();
+        if (_manager != null) {return _manager.internalConnect();}
         throw new I2PSessionException("No manager yet");
     }
 
@@ -278,8 +257,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      */
     @Override
     public void registerMetaDest(Destination dest) throws I2PSessionException {
-        if (_manager != null)
-            _manager.registerMetaDest(dest);
+        if (_manager != null) {_manager.registerMetaDest(dest);}
     }
 
     /**
@@ -289,37 +267,33 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      */
     @Override
     public void unregisterMetaDest(Destination dest) {
-        if (_manager != null)
-            _manager.unregisterMetaDest(dest);
+        if (_manager != null) {_manager.unregisterMetaDest(dest);}
     }
 
     /**
      * get the FloodfillNetworkDatabaseFacade associated with a particular client destination.
      * This is inside the runner, so it won't be there if the runner isn't ready.
-     * 
+     *
      * @param destHash destination hash associated with the client who's subDb we're looking for
      * @return the netdb or null
      * @since 0.9.61
      */
     @Override
     public FloodfillNetworkDatabaseFacade getClientFloodfillNetworkDatabaseFacade(Hash destHash) {
-        if (_manager != null)
-            return _manager.getClientFloodfillNetworkDatabaseFacade(destHash);
-        else
-            return null;
+        if (_manager != null) {return _manager.getClientFloodfillNetworkDatabaseFacade(destHash);}
+        else {return null;}
     }
 
     /**
      * get all the primary hashes for all the clients and return them as a set
-     * 
+     *
      * @return all the hashes or an empty set, non-null
      * @since 0.9.61
      */
     @Override
     public Set<Hash> getPrimaryHashes() {
-        if (_manager != null)
-            return _manager.getPrimaryHashes();
-        else
-            return Collections.emptySet();
-    }    
+        if (_manager != null) {return _manager.getPrimaryHashes();}
+        else {return Collections.emptySet();}
+    }
+
 }
