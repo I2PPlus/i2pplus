@@ -74,15 +74,16 @@ class ExpireLeasesJob extends JobImpl {
         long now = ctx.clock().now();
         List<Hash> toExpire = new ArrayList<Hash>();
         List<Hash> current = new ArrayList<Hash>();
+        String tunnelName = "";
         for (Map.Entry<Hash, DatabaseEntry> entry : _facade.getDataStore().getMapEntries()) {
             DatabaseEntry obj = entry.getValue();
             if (obj != null && obj.isLeaseSet()) {
                 LeaseSet ls = (LeaseSet) obj;
                 Hash h = entry.getKey();
-                String tunnelName = ls != null ? " for \'" + getTunnelName(ls.getDestination()) + "\'" : "";
                 if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
                     toExpire.add(h);
                     if (ctx.clientManager().isLocal(h)) {
+                        tunnelName = ls != null ? " for \'" + getTunnelName(ls.getDestination()) + "\'" : "";
                         _log.logAlways(Log.ERROR, "LOCAL LeaseSet" + tunnelName + " [" + h.toBase32().substring(0,8) + "] has expired");
                     }
                 } else if (!ls.isCurrent(90*1000)) {current.add(h);} // if we're expiring in < 90s, queue for exploration
@@ -100,14 +101,17 @@ class ExpireLeasesJob extends JobImpl {
     }
 
     public String getTunnelName(Destination d) {
-        TunnelPoolSettings in = getContext().tunnelManager().getInboundSettings(d.calculateHash());
-        String name = (in != null ? in.getDestinationNickname() : null);
-        if (name == null) {
-            TunnelPoolSettings out = getContext().tunnelManager().getOutboundSettings(d.calculateHash());
-            name = (out != null ? out.getDestinationNickname() : null);
+        if (d != null) {
+            TunnelPoolSettings in = getContext().tunnelManager().getInboundSettings(d.calculateHash());
+            String name = (in != null ? in.getDestinationNickname() : null);
+            if (name == null) {
+                TunnelPoolSettings out = getContext().tunnelManager().getOutboundSettings(d.calculateHash());
+                name = (out != null ? out.getDestinationNickname() : null);
+            }
+            if (name != null) {return name;}
+            else {return "";}
         }
-        if (name == null) {return "";}
-        return name;
+        return "";
     }
 
 }
