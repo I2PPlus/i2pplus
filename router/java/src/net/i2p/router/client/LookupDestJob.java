@@ -40,8 +40,7 @@ class LookupDestJob extends JobImpl {
     private final Hash _fromLocalDest;
     private final BlindData _blindData;
 
-//    private static final long DEFAULT_TIMEOUT = 15*1000;
-    private static final long DEFAULT_TIMEOUT = 10*1000;
+    private static final long DEFAULT_TIMEOUT = 15*1000;
 
     public LookupDestJob(RouterContext context, ClientConnectionRunner runner, Hash h, Hash fromLocalDest) {
         this(context, runner, -1, DEFAULT_TIMEOUT, null, h, null, fromLocalDest);
@@ -84,8 +83,7 @@ class LookupDestJob extends JobImpl {
                 if (b != null) {
                     if (b.length == Hash.HASH_LENGTH) {
                         h = Hash.create(b);
-                        if (_log.shouldDebug())
-                            _log.debug("Converting name lookup " + name + " to " + h);
+                        if (_log.shouldDebug()) {_log.debug("Converting name lookup " + name + " to " + h);}
                         name = null;
                     } else if (b.length >= 35) {
                         // encrypted LS2
@@ -101,11 +99,8 @@ class LookupDestJob extends JobImpl {
                                     (bd.getSecretRequired() && (bd2.getSecret() == null || bd2.getSecret().length() == 0))) {
                                     // don't copy over existing info, this will force an immediate
                                     // failure in runJob()
-                                    if (_log.shouldDebug())
-                                        _log.debug("No auth or secret, immediate fail " + bd);
-                                } else {
-                                    bd = bd2;
-                                }
+                                    if (_log.shouldDebug()) {_log.debug("No auth or secret, immediate fail " + bd);}
+                                } else {bd = bd2;}
                             } else {
                                 long now = getContext().clock().now();
                                 bd.setDate(now);
@@ -115,22 +110,18 @@ class LookupDestJob extends JobImpl {
                                 getContext().netDb().setBlindData(bd);
                             }
                             h = bd.getBlindedHash();
-                            if (_log.shouldDebug())
+                            if (_log.shouldDebug()) {
                                 _log.debug("Converting name lookup " + name + " to blinded " + h +
                                            " using BlindData:\n" + bd);
+                            }
                             name = null;
                         } catch (RuntimeException re) {
-                            if (_log.shouldWarn())
-                                _log.debug("Failed blinding conversion of " + name, re);
-                            // Do NOT lookup as a name, naming service will call us again and infinite loop
-                            name = null;
+                            if (_log.shouldWarn()) {_log.debug("Failed blinding conversion of " + name, re);}
+                            name = null; // Do NOT lookup as a name, naming service will call us again and infinite loop
                             // h and name both null, runJob will fail immediately
                         }
                     }
-                } else {
-                    // base32 decode fail
-                    name = null;
-                }
+                } else {name = null;} // base32 decode fail
             }
         }
         _hash = h;
@@ -150,14 +141,12 @@ class LookupDestJob extends JobImpl {
                             (_blindData.getSecret() == null || _blindData.getSecret().length() == 0);
             if (fail1 || fail2) {
                 int code;
-                if (fail1 && fail2)
-                    code = HostReplyMessage.RESULT_SECRET_AND_KEY_REQUIRED;
-                else if (fail1)
-                    code = HostReplyMessage.RESULT_KEY_REQUIRED;
-                else
-                    code = HostReplyMessage.RESULT_SECRET_REQUIRED;
-                if (_log.shouldDebug())
-                    _log.debug("Failed b33 lookup " + _blindData.getUnblindedPubKey() + " with code " + code);
+                if (fail1 && fail2) {code = HostReplyMessage.RESULT_SECRET_AND_KEY_REQUIRED;}
+                else if (fail1) {code = HostReplyMessage.RESULT_KEY_REQUIRED;}
+                else {code = HostReplyMessage.RESULT_SECRET_REQUIRED;}
+                if (_log.shouldDebug()) {
+                    _log.debug("Failed B33 lookup " + _blindData.getUnblindedPubKey() + " with code " + code);
+                }
                 returnFail(code);
                 return;
             }
@@ -165,8 +154,9 @@ class LookupDestJob extends JobImpl {
             // have the dest, it won't help get a LS.
             Destination d = _blindData.getDestination();
             if (d != null) {
-                if (_log.shouldDebug())
-                    _log.debug("Found cached b33 lookup " + _blindData.getUnblindedPubKey() + " to " + d);
+                if (_log.shouldDebug()) {
+                    _log.debug("Found cached B33 lookup " + _blindData.getUnblindedPubKey() + " to " + d);
+                }
                 returnDest(d);
                 return;
             }
@@ -175,42 +165,36 @@ class LookupDestJob extends JobImpl {
             // inline, ignore timeout
             Destination d = getContext().namingService().lookup(_name);
             if (d != null) {
-                if (_log.shouldDebug())
+                if (_log.shouldDebug()) {
                     _log.debug("Successful name lookup [Hostname: " + _name + "]" + d);
+                }
                 returnDest(d);
             } else {
-                if (_log.shouldDebug())
+                if (_log.shouldDebug()) {
                     _log.debug("Failed name lookup [Address: " + _name.replace("\n", "") + "]");
+                }
                 returnFail();
             }
         } else if (_hash != null) {
             DoneJob done = new DoneJob(getContext());
             // shorten timeout so we can respond before the client side times out
             long timeout = _timeout;
-            if (timeout > 1500) {
-                timeout -= 500;
-            }
+            if (timeout > 1500) {timeout -= 500;}
             // TODO tell router this is an encrypted lookup, skip 38 or earlier ffs?
             NetworkDatabaseFacade db = _runner.getFloodfillNetworkDatabaseFacade();
-            if (db == null) {
-                db = getContext().netDb();
-            }
+            if (db == null) {db = getContext().netDb();}
             db.lookupDestination(_hash, done, timeout, _fromLocalDest);
-        } else {
-            // blinding decode fail
-            returnFail(HostReplyMessage.RESULT_DECRYPTION_FAILURE);
-        }
+        } else {returnFail(HostReplyMessage.RESULT_DECRYPTION_FAILURE);} // blinding decode fail
     }
 
     private class DoneJob extends JobImpl {
-        public DoneJob(RouterContext enclosingContext) {
-            super(enclosingContext);
-        }
-        public String getName() { return "Lookup LeaseSet &amp; Reply to Client"; }
+        public DoneJob(RouterContext enclosingContext) {super(enclosingContext);}
+
+        public String getName() {return "Lookup LeaseSet &amp; Reply to Client";}
+
         public void runJob() {
             NetworkDatabaseFacade db = _runner.getFloodfillNetworkDatabaseFacade();
-            if (db == null)
-                db = getContext().netDb();
+            if (db == null) {db = getContext().netDb();}
             Destination dest = db.lookupDestinationLocally(_hash);
             if (dest == null && _blindData != null) {
                 // TODO store and lookup original hash instead
@@ -219,18 +203,14 @@ class LookupDestJob extends JobImpl {
                     // already decrypted
                     EncryptedLeaseSet encls = (EncryptedLeaseSet) ls;
                     LeaseSet decls = encls.getDecryptedLeaseSet();
-                    if (decls != null) {
-                        dest = decls.getDestination();
-                    }
+                    if (decls != null) {dest = decls.getDestination();}
                 }
             }
             if (dest != null) {
-                if (_log.shouldDebug())
-                    _log.debug("Successful destination lookup " + dest);
+                if (_log.shouldDebug()) {_log.debug("Successful destination lookup " + dest);}
                 returnDest(dest);
             } else {
-                if (_log.shouldDebug())
-                    _log.debug("Failed destination lookup [Hash: " + _hash + "]");
+                if (_log.shouldDebug()) {_log.debug("Failed destination lookup [Hash: " + _hash + "]");}
                 returnFail();
             }
         }
@@ -238,22 +218,17 @@ class LookupDestJob extends JobImpl {
 
     private void returnDest(Destination d) {
         I2CPMessage msg;
-        if (_reqID >= 0)
-            msg = new HostReplyMessage(_sessID, d, _reqID);
-        else
-            msg = new DestReplyMessage(d);
-        try {
-            _runner.doSend(msg);
-        } catch (I2CPMessageException ime) {}
+        if (_reqID >= 0) {msg = new HostReplyMessage(_sessID, d, _reqID);}
+        else {msg = new DestReplyMessage(d);}
+        try {_runner.doSend(msg);}
+        catch (I2CPMessageException ime) {}
     }
 
     /**
      *  Return the request ID or failed hash so the client can correlate replies with requests
      *  @since 0.8.3
      */
-    private void returnFail() {
-        returnFail(HostReplyMessage.RESULT_FAILURE);
-    }
+    private void returnFail() {returnFail(HostReplyMessage.RESULT_FAILURE);}
 
     /**
      *  Return the request ID or failed hash so the client can correlate replies with requests
@@ -262,14 +237,11 @@ class LookupDestJob extends JobImpl {
      */
     private void returnFail(int code) {
         I2CPMessage msg;
-        if (_reqID >= 0)
-            msg = new HostReplyMessage(_sessID, code, _reqID);
-        else if (_hash != null)
-            msg = new DestReplyMessage(_hash);
-        else
-            return; // shouldn't happen
-        try {
-            _runner.doSend(msg);
-        } catch (I2CPMessageException ime) {}
+        if (_reqID >= 0) {msg = new HostReplyMessage(_sessID, code, _reqID);}
+        else if (_hash != null) {msg = new DestReplyMessage(_hash);}
+        else {return;} // shouldn't happen
+        try {_runner.doSend(msg);}
+        catch (I2CPMessageException ime) {}
     }
+
 }
