@@ -82,18 +82,12 @@ class ClientManager {
     private static final String PROP_ENABLE_SSL = "i2cp.SSL";
     /** Disable local-local "loopback", force all traffic through tunnels @since 0.9.44 */
     private static final String PROP_DISABLE_LOOPBACK = "i2cp.disableLoopback";
-
-    private static final int INTERNAL_QUEUE_SIZE = SystemVersion.isSlow() ? 192 : SystemVersion.getMaxMemory() < 1024*1024*1024 ? 384 : 512;
-
+    private static final int INTERNAL_QUEUE_SIZE = 256;
     private static final long REQUEST_LEASESET_TIMEOUT = 90*1000;
-
-    /** 2 bytes, save 65535 for unknown */
-    private static final int MAX_SESSION_ID = 65534;
+    private static final int MAX_SESSION_ID = 65534; /** 2 bytes, save 65535 for unknown */
     private static final String PROP_MAX_SESSIONS = "i2cp.maxSessions";
     private static final int DEFAULT_MAX_SESSIONS = 512;
-    /** 65535 */
-    public static final SessionId UNKNOWN_SESSION_ID = new SessionId(MAX_SESSION_ID + 1);
-
+    public static final SessionId UNKNOWN_SESSION_ID = new SessionId(MAX_SESSION_ID + 1); /** 65535 */
 
     /**
      *  Does not start the listeners.
@@ -270,20 +264,13 @@ class ClientManager {
      *  Remove all sessions for this runner.
      */
     public void unregisterConnection(ClientConnectionRunner runner) {
-        synchronized (_pendingRunners) {
-            _pendingRunners.remove(runner);
-        }
+        synchronized (_pendingRunners) {_pendingRunners.remove(runner);}
 
         List<SessionId> ids = runner.getSessionIds();
         List<Destination> dests = runner.getDestinations();
-        if (_log.shouldWarn())
-            if (ids != null && !ids.isEmpty()) {
-                _log.warn("Dropping client connection with IDs: " + ids);
-            }
-            // uninformative, tells us nothing useful
-            // else {
-            //    _log.warn("Dropping a client connection...");
-            //}
+        if (_log.shouldWarn() && ids != null && !ids.isEmpty()) {
+            _log.warn("Dropping client connection with IDs: " + ids);
+        }
         synchronized (_runners) {
             for (SessionId id : ids) {
                 _runnerSessionIds.remove(id);
@@ -312,8 +299,7 @@ class ClientManager {
      *  @since 0.9.21
      */
     public void unregisterSession(SessionId id, Destination dest) {
-        if (_log.shouldWarn())
-            _log.warn("Unregistering client session: "  + id);
+        if (_log.shouldWarn()) {_log.warn("Unregistering Client session: "  + id);}
         synchronized (_runners) {
             _runnerSessionIds.remove(id);
             _runners.remove(dest);
@@ -328,11 +314,8 @@ class ClientManager {
      *  @since 0.9.39
      */
     public void unregisterEncryptedDestination(ClientConnectionRunner runner, Hash hash) {
-        if (_log.shouldWarn())
-            _log.warn("Unregistering ENCRYPTED LeaseSet "  + hash.toBase32());
-        synchronized (_runners) {
-            _runnersByHash.remove(hash);
-        }
+        if (_log.shouldWarn()) {_log.warn("Unregistering ENCRYPTED LeaseSet [" + hash.toBase32().substring(0,8) + "]";}
+        synchronized (_runners) {_runnersByHash.remove(hash);}
     }
 
     /**
@@ -362,9 +345,7 @@ class ClientManager {
                     _runners.put(dest, runner);
                     _runnersByHash.put(h, runner);
                     rv = SessionStatusMessage.STATUS_CREATED;
-                } else {
-                    rv = SessionStatusMessage.STATUS_REFUSED;
-                }
+                } else {rv = SessionStatusMessage.STATUS_REFUSED;}
             }
         }
         if (rv == SessionStatusMessage.STATUS_DUP_DEST) {
@@ -386,17 +367,19 @@ class ClientManager {
      *  @since 0.9.39
      */
     public boolean registerEncryptedDestination(ClientConnectionRunner runner, Hash hash) {
-        if (_log.shouldDebug())
-            _log.debug("New ENCRYPTED LeaseSet " + hash.toBase32());
+        if (_log.shouldDebug()) {
+            _log.debug("New ENCRYPTED LeaseSet: " + hash.toBase32());
+        }
 
         boolean rv;
         synchronized (_runners) {
             rv = !_runnersByHash.containsKey(hash);
-            if (rv)
-                _runnersByHash.put(hash, runner);
+            if (rv) {_runnersByHash.put(hash, runner);}
         }
-        if (!rv)
-            _log.error("Encrypted destination collision " + hash.toBase32());
+
+        if (!rv) {
+            _log.error("Encrypted destination collision for LeaseSet [" + hash.toBase32().substring(0,8) + "]";
+        }
         return rv;
     }
 
@@ -449,7 +432,7 @@ class ClientManager {
             if (_runnerSessionIds.add(id))
                 return id;
         }
-        _log.logAlways(Log.WARN, "Session refused, can't find ID slot");
+        _log.logAlways(Log.WARN, "Session refused -> No ID slot found");
         return null;
     }
 
@@ -464,23 +447,20 @@ class ClientManager {
     void distributeMessage(ClientConnectionRunner sender, Destination fromDest, Destination toDest, Payload payload,
                            MessageId msgId, long messageNonce, long expiration, int flags) {
         ClientConnectionRunner runner;
-        if (_ctx.getBooleanProperty(PROP_DISABLE_LOOPBACK)) {
-            runner = null;
-        } else {
-            // check if there is a runner for it
-            runner = getRunner(toDest);
-        }
+        if (_ctx.getBooleanProperty(PROP_DISABLE_LOOPBACK)) {runner = null;}
+        else {runner = getRunner(toDest);} // check if there is a runner for it
         if (runner != null) {
-            if (_log.shouldDebug())
-                _log.debug("[Message " + msgId + "] is targeting a LOCAL destination; distribute it as such");
+            if (_log.shouldDebug()) {
+                _log.debug("[Message " + msgId + "] is targeting a LOCAL destination -> Distributing locally");
+            }
             if (runner != sender) {
             // run this inline so we don't clog up the job queue
             Job j = new DistributeLocal(toDest, runner, sender, fromDest, payload, msgId, messageNonce);
-            //_ctx.jobQueue().addJob(j);
             j.runJob();
             } else {
-                if (_log.shouldWarn())
+                if (_log.shouldWarn()) {
                     _log.warn("Loopback attempt from client " + fromDest.getHash());
+                }
                 int rc = MessageStatusMessage.STATUS_SEND_FAILURE_LOOPBACK;
                 sender.updateMessageDeliveryStatus(fromDest, msgId, messageNonce, rc);
             }
@@ -490,16 +470,13 @@ class ClientManager {
             sender.updateMessageDeliveryStatus(fromDest, msgId, messageNonce, rc);
         } else {
             // remote.  w00t
-            if (_log.shouldDebug())
-                _log.debug("[Message " + msgId + "] is targeting a REMOTE destination! Added to the client message pool");
-            runner = getRunner(fromDest);
-            if (runner == null) {
-                // sender went away
-                return;
+            if (_log.shouldDebug()) {
+                _log.debug("[Message " + msgId + "] is targeting a REMOTE destination! -> Added to the client message pool");
             }
+            runner = getRunner(fromDest);
+            if (runner == null) {return;} // sender went away
             SessionConfig config = runner.getConfig(fromDest.calculateHash());
-            if (config == null)
-                return;
+            if (config == null) {return;}
             ClientMessage msg = new ClientMessage(toDest, payload, config,
                                                   fromDest, msgId,
                                                   messageNonce, expiration, flags);
@@ -532,7 +509,7 @@ class ClientManager {
             _messageNonce = messageNonce;
         }
 
-        public String getName() { return "Distribute local message"; }
+        public String getName() {return "Distribute local message";}
 
         public void runJob() {
             boolean ok = _to.receiveMessage(_toDest, _fromDest, _payload);
@@ -563,9 +540,10 @@ class ClientManager {
     public void requestLeaseSet(Destination dest, LeaseSet set, long timeout, Job onCreateJob, Job onFailedJob) {
         ClientConnectionRunner runner = getRunner(dest);
         if (runner == null) {
-            if (_log.shouldWarn())
-                _log.warn("Cannot request the LeaseSet, as we can't find a client runner for "
-                          + dest.toBase32() + "; disconnected?");
+            if (_log.shouldWarn()) {
+                _log.warn("Cannot request LeaseSet -> No client runner found for [" +
+                          dest.toBase32().substring(0,8) + "] - disconnected?");
+            }
             _ctx.jobQueue().addJob(onFailedJob);
         } else {
             runner.requestLeaseSet(dest.calculateHash(), set, timeout, onCreateJob, onFailedJob);
@@ -584,12 +562,12 @@ class ClientManager {
     public void requestLeaseSet(Hash dest, LeaseSet ls) {
         ClientConnectionRunner runner = getRunner(dest);
         if (runner != null)  {
-            // no need to fire off any jobs...
-            runner.requestLeaseSet(dest, ls, REQUEST_LEASESET_TIMEOUT, null, null);
+            runner.requestLeaseSet(dest, ls, REQUEST_LEASESET_TIMEOUT, null, null); // no need to fire off any jobs...
         } else {
-            if (_log.shouldWarn())
-                _log.warn("Cannot request LeaseSet, as we can't find a client runner for ["
-                          + dest.toBase32().substring(0,6) + "] - disconnected?");
+            if (_log.shouldWarn()) {
+                _log.warn("Cannot request LeaseSet -? No client runner found for ["
+                          + dest.toBase32().substring(0,8) + "] - disconnected?");
+            }
         }
     }
 
@@ -636,9 +614,7 @@ class ClientManager {
     /**
      *  Unsynchronized
      */
-    ClientConnectionRunner getRunner(Destination dest) {
-        return _runners.get(dest);
-    }
+    ClientConnectionRunner getRunner(Destination dest) {return _runners.get(dest);}
 
     /**
      * Return the client's current config, or null if not connected
@@ -646,10 +622,8 @@ class ClientManager {
      */
     public SessionConfig getClientSessionConfig(Destination dest) {
         ClientConnectionRunner runner = getRunner(dest);
-        if (runner != null)
-            return runner.getConfig(dest.calculateHash());
-        else
-            return null;
+        if (runner != null) {return runner.getConfig(dest.calculateHash());}
+        else {return null;}
     }
 
     /**
@@ -659,18 +633,15 @@ class ClientManager {
      */
     public SessionKeyManager getClientSessionKeyManager(Hash dest) {
         ClientConnectionRunner runner = getRunner(dest);
-        if (runner != null)
-            return runner.getSessionKeyManager();
-        else
-            return null;
+        if (runner != null) {return runner.getSessionKeyManager();}
+        else {return null;}
     }
 
     /**
      *  Unsynchronized
      */
     private ClientConnectionRunner getRunner(Hash destHash) {
-        if (destHash == null)
-            return null;
+        if (destHash == null) {return null;}
         return _runnersByHash.get(destHash);
     }
 
@@ -682,14 +653,16 @@ class ClientManager {
     public void messageDeliveryStatusUpdate(Destination fromDest, MessageId id, long messageNonce, int status) {
         ClientConnectionRunner runner = getRunner(fromDest);
         if (runner != null) {
-            if (_log.shouldDebug())
-                _log.debug("Delivering status " + status + " to ["
-                           + fromDest.toBase32().substring(0,6) + "] for message " + id);
+            if (_log.shouldDebug()) {
+                _log.debug("Delivering status " + status + " to [" + fromDest.toBase32().substring(0,8) +
+                           "] for message " + id);
+            }
             runner.updateMessageDeliveryStatus(fromDest, id, messageNonce, status);
         } else {
-            if (_log.shouldWarn())
-                _log.warn("Cannot deliver status " + status + " to ["
-                          + fromDest.toBase32().substring(0,6) + "] for message " + id);
+            if (_log.shouldWarn()) {
+                _log.warn("Cannot deliver status " + status + " to [" + fromDest.toBase32().substring(0,8) +
+                          "] for message " + id);
+            }
         }
     }
 
@@ -708,72 +681,18 @@ class ClientManager {
     public void reportAbuse(Destination dest, String reason, int severity) {
         if (dest != null) {
             ClientConnectionRunner runner = getRunner(dest);
-            if (runner != null) {
-                runner.reportAbuse(dest, reason, severity);
-            }
+            if (runner != null) {runner.reportAbuse(dest, reason, severity);}
         } else {
-            for (Destination d : _runners.keySet()) {
-                reportAbuse(d, reason, severity);
-            }
+            for (Destination d : _runners.keySet()) {reportAbuse(d, reason, severity);}
         }
     }
 
     /** @deprecated unused */
     @Deprecated
-    public void renderStatusHTML(Writer out) throws IOException {
-/******
-        StringBuilder buf = new StringBuilder(8*1024);
-        buf.append("<u><b>Local destinations</b></u><br>");
-
-        Map<Destination, ClientConnectionRunner> runners = null;
-        synchronized (_runners) {
-            runners = (Map)_runners.clone();
-        }
-        for (Iterator<Destination> iter = runners.keySet().iterator(); iter.hasNext(); ) {
-            Destination dest = iter.next();
-            ClientConnectionRunner runner = runners.get(dest);
-            buf.append("<b>*</b> ").append(dest.calculateHash().toBase64().substring(0,6)).append("<br>\n");
-            LeaseSet ls = runner.getLeaseSet();
-            if (ls == null) {
-                buf.append("<font color=red><i>No lease</i></font><br>\n");
-            } else {
-                long leaseAge = ls.getEarliestLeaseDate() - _ctx.clock().now();
-                if (leaseAge <= 0) {
-                    buf.append("<font color=red><i>Lease expired ");
-                    buf.append(DataHelper.formatDuration(0-leaseAge)).append(" ago</i></font><br>\n");
-                } else {
-                    int count = ls.getLeaseCount();
-                    if (count <= 0) {
-                        buf.append("<font color=red><i>No tunnels</i></font><br>\n");
-                    } else {
-                        TunnelId id = ls.getLease(0).getTunnelId();
-                        TunnelInfo info = _ctx.tunnelManager().getTunnelInfo(id);
-                        if (info == null) {
-                            buf.append("<font color=red><i>Failed tunnels</i></font><br>\n");
-                        } else {
-                            buf.append(count).append(" x ");
-                            buf.append(info.getLength() - 1).append(" hop tunnel");
-                            if (count != 1)
-                                buf.append('s');
-                            buf.append("<br>\n");
-                            buf.append("Expiring in ").append(DataHelper.formatDuration(leaseAge));
-                            buf.append("<br>\n");
-                        }
-                    }
-                }
-            }
-        }
-
-        buf.append("\n<hr>\n");
-        out.write(buf.toString());
-        out.flush();
-******/
-    }
+    public void renderStatusHTML(Writer out) throws IOException {}
 
     public void messageReceived(ClientMessage msg) {
-        // This is fast and non-blocking, run in-line
-        //_ctx.jobQueue().addJob(new HandleJob(msg));
-        (new HandleJob(msg)).runJob();
+        (new HandleJob(msg)).runJob(); // This is fast and non-blocking, run in-line
     }
 
     /**
@@ -786,16 +705,19 @@ class ClientManager {
      */
     public FloodfillNetworkDatabaseFacade getClientFloodfillNetworkDatabaseFacade(Hash destHash) {
         if (destHash != null) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldLog(Log.DEBUG)) {
                 _log.debug("Getting subDb for destination hash [" + destHash.toBase32().substring(0,8) + "]");
+            }
             ClientConnectionRunner runner = getRunner(destHash);
             if (runner == null) {
-                if (_log.shouldLog(Log.INFO))
-                _log.warn("ClientManager received a NULL runner for [" + destHash.toBase32().substring(0,8) + "]");
+                if (_log.shouldLog(Log.INFO)) {
+                    _log.warn("ClientManager received a NULL runner for [" + destHash.toBase32().substring(0,8) + "]");
+                }
                 return null;
             }
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldLog(Log.DEBUG)) {
                 _log.debug("ClientManager received a runner for [" + destHash.toBase32().substring(0,8) + "]");
+            }
             return runner.getFloodfillNetworkDatabaseFacade();
         }
         return null;
@@ -809,8 +731,7 @@ class ClientManager {
      */
     public Set<Hash> getPrimaryHashes() {
         Set<Hash> rv = new HashSet<Hash>();
-        for (ClientConnectionRunner runner : _runners.values())
-            rv.add(runner.getDestHash());
+        for (ClientConnectionRunner runner : _runners.values()) {rv.add(runner.getDestHash());}
         return rv;
     }
 
@@ -822,30 +743,23 @@ class ClientManager {
             _msg = msg;
         }
 
-        public String getName() { return "Handle Inbound Client Messages"; }
+        public String getName() {return "Handle Inbound Client Messages";}
 
         public void runJob() {
             ClientConnectionRunner runner;
             Destination dest = _msg.getDestination();
-            if (dest != null)
-                runner = getRunner(dest);
-            else
-                runner = getRunner(_msg.getDestinationHash());
+            if (dest != null) {runner = getRunner(dest);}
+            else {runner = getRunner(_msg.getDestinationHash());}
 
             if (runner != null) {
-                //_ctx.statManager().addRateData("client.receiveMessageSize",
-                //                                   _msg.getPayload().getSize(), 0);
-                if (dest != null)
-                    runner.receiveMessage(dest, null, _msg.getPayload());
-                else
-                    runner.receiveMessage(_msg.getDestinationHash(), null, _msg.getPayload());
+                if (dest != null) {runner.receiveMessage(dest, null, _msg.getPayload());}
+                else {runner.receiveMessage(_msg.getDestinationHash(), null, _msg.getPayload());}
             } else {
-                // no client connection...
-                // we should pool these somewhere...
-                if (_log.shouldWarn())
-                    _log.warn("Message received but we don't have a connection to ["
-                              + dest + "/" + _msg.getDestinationHash().toBase32().substring(0,6)
-                              + "] currently.  DROPPED", new Exception());
+                // no client connection... we should pool these somewhere...
+                if (_log.shouldWarn()) {
+                    _log.warn("Message received but no current connection to [" dest.toBase32().substring(0,8) + " / " +
+                              _msg.getDestinationHash().toBase32().substring(0,8) + "] -> DROPPED", new Exception());
+                }
             }
         }
     }
@@ -860,31 +774,25 @@ class ClientManager {
         public static final long LOOP_TIME = 10*60*1000;
 
         /** must call schedule() later */
-        public ClientTimestamper() {
-            super(_ctx.simpleTimer2());
-        }
+        public ClientTimestamper() {super(_ctx.simpleTimer2());}
 
         public void timeReached() {
-            if (!_isStarted)
-                return;
+            if (!_isStarted) {return;}
             for (ClientConnectionRunner runner : _runners.values()) {
-                if (runner instanceof QueuedClientConnectionRunner)
-                    continue;
-                if (runner.isDead())
-                    continue;
+                if (runner instanceof QueuedClientConnectionRunner) {continue;}
+                if (runner.isDead()) {continue;}
                 SessionConfig cfg = runner.getPrimaryConfig();
-                if (cfg == null)
-                    continue;  // simple session or no session yet
-                if (runner.getLeaseSet(cfg.getDestination().calculateHash()) == null)
+                if (cfg == null) {continue;} // simple session or no session yet
+                if (runner.getLeaseSet(cfg.getDestination().calculateHash()) == null) {
                     continue;  // don't confuse client while waiting for CreateLeaseSet msg
+                }
                 try {
                     // only send version if the client can handle it (0.8.7 or greater)
                     runner.doSend(new SetDateMessage(runner.getClientVersion() != null ?
                                                      CoreVersion.PUBLISHED_VERSION : null));
                 } catch (I2CPMessageException ime) {}
             }
-            if (_isStarted)
-                schedule(LOOP_TIME);
+            if (_isStarted) {schedule(LOOP_TIME);}
         }
     }
 }
