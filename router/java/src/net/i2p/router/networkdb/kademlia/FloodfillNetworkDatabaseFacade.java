@@ -555,14 +555,15 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             }
 
             if (isNew) {
-                if (_log.shouldDebug())
-                    _log.debug("[" + this +
-                               "]: New IterativeSearch " + ((fromLocalDest != null) ? "via Client tunnels" : "via Exploratory tunnels") +
-                               " for key [" + key.toBase32().substring(0,8) + "]");
-            _context.jobQueue().addJob(searchJob);
+                if (_log.shouldDebug()) {
+                    _log.debug("New IterativeSearch via " + ((fromLocalDest != null) ? "Client tunnels" : "Exploratory tunnels") +
+                               " for key [" + key.toBase32().substring(0,8) + "] -> For " + this);
+                }
+                _context.jobQueue().addJob(searchJob);
             } else {
                 if (_log.shouldDebug()) {
-                    _log.debug("Deferred IterativeSearchJob for [" + key.toBase32().substring(0,8) + "] with " + _activeFloodQueries.size() + " in progress");
+                    _log.debug("Deferred IterativeSearch for [" + key.toBase32().substring(0,8) + "] with " +
+                               _activeFloodQueries.size() + " in progress");
                 }
                 searchJob.addDeferred(onFindJob, onFailedLookupJob, timeoutMs, isLease);
                 // not necessarily LS

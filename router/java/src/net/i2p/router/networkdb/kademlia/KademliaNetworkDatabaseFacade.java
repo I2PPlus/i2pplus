@@ -1105,7 +1105,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             rv = (LeaseSet)_ds.get(key);
             if (rv != null && !force && !isNewer(leaseSet, rv)) {
                 if (_log.shouldDebug())
-                    _log.debug("Not storing LeaseSet [" + key.toBase32().substring(0,8) + "] -> Older than our current copy");
+                    _log.debug("Not storing LeaseSet [" + key.toBase32().substring(0,8) + "] -> Local copy is newer");
                 // if it hasn't changed, no need to do anything
                 // except copy over the flags
                 Hash to = leaseSet.getReceivedBy();
@@ -1517,7 +1517,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             rv = (RouterInfo)_ds.get(key, persist);
             if (rv != null && rv.getPublished() >= routerInfo.getPublished()) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Not storing RouterInfo [" + key.toBase64().substring(0,6) + "] -> Older than our current copy");
+                    _log.debug("Not storing RouterInfo [" + key.toBase64().substring(0,6) + "] -> Local copy is newer");
                 }
                 return rv; // quick check without calling validate()
             }
@@ -1587,7 +1587,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                             String stype = (type != null) ? type.toString() : Integer.toString(kc.getSigTypeCode());
                             _context.banlist().banlistRouterForever(h, " <b>➜</b> " + "Unsupported Signature type " + stype);
                             if (_log.shouldWarn()) {
-                                _log.warn("Unsupported Signature type (" + stype + ") for [" +
+                                _log.warn("Unsupported Signature type " + stype + " for [" +
                                           h.toBase64().substring(0,6) + "] - banned until restart");
                             }
                             throw new UnsupportedCryptoException("Sig type " + stype);
