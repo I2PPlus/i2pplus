@@ -237,7 +237,7 @@ class ClientManager {
             runner.startRunning();
             synchronized (_pendingRunners) {_pendingRunners.add(runner);}
         } catch (IOException ioe) {
-            _log.error("Error starting up the runner", ioe);
+            _log.error("Error starting up the ClientConnection Runner...", ioe);
             runner.stopRunning();
         }
     }
@@ -251,7 +251,7 @@ class ClientManager {
         List<SessionId> ids = runner.getSessionIds();
         List<Destination> dests = runner.getDestinations();
         if (_log.shouldWarn() && ids != null && !ids.isEmpty()) {
-            _log.warn("Dropping client connection with IDs: " + ids);
+            _log.warn("Dropping Client connection with IDs: " + ids);
         }
         synchronized (_runners) {
             for (SessionId id : ids) {_runnerSessionIds.remove(id);}
@@ -277,7 +277,7 @@ class ClientManager {
      *  @since 0.9.21
      */
     public void unregisterSession(SessionId id, Destination dest) {
-        if (_log.shouldWarn()) {_log.warn("Unregistering Client session: "  + id);}
+        if (_log.shouldInfo()) {_log.info("Unregistering Client session: " + id);}
         synchronized (_runners) {
             _runnerSessionIds.remove(id);
             _runners.remove(dest);

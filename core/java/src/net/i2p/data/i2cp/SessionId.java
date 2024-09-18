@@ -84,6 +84,6 @@ public class SessionId {
 
     @Override
     public String toString() {
-        return "SessionID: " + _sessionId;
+        return "[SessionID " + _sessionId + "]";
     }
 }
