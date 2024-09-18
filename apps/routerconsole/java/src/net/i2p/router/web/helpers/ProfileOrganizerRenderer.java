@@ -358,8 +358,9 @@ class ProfileOrganizerRenderer {
             buf.append("<div class=widescroll id=ff>\n")
                .append("<table id=floodfills data-sortable>\n")
                .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>")
-               .append("<colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=good></colgroup>")
-               .append("<colgroup class=bad></colgroup><colgroup class=bad></colgroup><colgroup class=bad></colgroup><colgroup class=bad></colgroup>")
+               .append("<colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=good></colgroup>")
+               .append("<colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=bad></colgroup>")
+               .append("<colgroup class=bad></colgroup><colgroup class=bad></colgroup><colgroup class=bad></colgroup>");
                .append("<thead class=smallhead><tr>")
                .append("<th>").append(_t("Peer")).append("</th>")
                .append("<th>").append(_t("1h Fail Rate").replace("Rate","")).append("</th>")
@@ -503,27 +504,16 @@ class ProfileOrganizerRenderer {
     private class ProfileComparator extends ProfComparator {
         public int compare(PeerProfile left, PeerProfile right) {
             if (_context.profileOrganizer().isFast(left.getPeer())) {
-                if (_context.profileOrganizer().isFast(right.getPeer())) {
-                    return super.compare(left, right);
-                } else {
-                    return -1; // fast comes first
-                }
+                if (_context.profileOrganizer().isFast(right.getPeer())) {return super.compare(left, right);}
+                else {return -1;} // fast comes first
             } else if (_context.profileOrganizer().isHighCapacity(left.getPeer())) {
-                if (_context.profileOrganizer().isFast(right.getPeer())) {
-                    return 1;
-                } else if (_context.profileOrganizer().isHighCapacity(right.getPeer())) {
-                    return super.compare(left, right);
-                } else {
-                    return -1;
-                }
+                if (_context.profileOrganizer().isFast(right.getPeer())) {return 1;}
+                else if (_context.profileOrganizer().isHighCapacity(right.getPeer())) {return super.compare(left, right);}
+                else {return -1;}
             } else {
-                if (_context.profileOrganizer().isFast(right.getPeer())) {
-                    return 1;
-                } else if (_context.profileOrganizer().isHighCapacity(right.getPeer())) {
-                    return 1;
-                } else {
-                    return super.compare(left, right);
-                }
+                if (_context.profileOrganizer().isFast(right.getPeer())) {return 1;}
+                else if (_context.profileOrganizer().isHighCapacity(right.getPeer())) {return 1;}
+                else {return super.compare(left, right);}
             }
         }
     }
@@ -545,27 +535,21 @@ class ProfileOrganizerRenderer {
 
     private String avg (PeerProfile prof, long rate, RateAverages ra) {
             RateStat rs = prof.getDbResponseTime();
-            if (rs == null)
-                return _t(NA);
+            if (rs == null) {return _t(NA);}
             Rate r = rs.getRate(rate);
-            if (r == null)
-                return _t(NA);
+            if (r == null) {return _t(NA);}
             r.computeAverages(ra, false);
-            if (ra.getTotalEventCount() == 0)
-                return _t(NA);
+            if (ra.getTotalEventCount() == 0) {return _t(NA);}
             return DataHelper.formatDuration2(Math.round(ra.getAverage()));
     }
 
     private String davg (DBHistory dbh, long rate, RateAverages ra) {
             RateStat rs = dbh != null ? dbh.getFailedLookupRate() : null;
-            if (rs == null)
-                return "0%";
+            if (rs == null) {return "0%";}
             Rate r = rs.getRate(rate);
-            if (r == null)
-                return "0%";
+            if (r == null) {return "0%";}
             r.computeAverages(ra, false);
-            if (ra.getTotalEventCount() <= 0)
-                return "0%";
+            if (ra.getTotalEventCount() <= 0) {return "0%";}
             double avg = 0.5 + 100 * ra.getAverage();
             return ((int) avg) + "%";
     }
