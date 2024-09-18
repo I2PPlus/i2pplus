@@ -310,11 +310,11 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  @since 0.9.36 for NTCP2
      */
     public boolean floodConditional(DatabaseEntry ds) {
-        if (!floodfillEnabled())
-            return false;
+        if (!floodfillEnabled()) {return false;}
         Hash h = ds.getHash();
-        if (_context.banlist().isBanlistedForever(h) || _context.banlist().isBanlistedHostile(h))
+        if (_context.banlist().isBanlistedForever(h) || _context.banlist().isBanlistedHostile(h)) {
             return false;
+        }
         if (shouldThrottleFlood(h)) {
             _context.statManager().addRateData("netDb.floodThrottled", 1);
             return false;
@@ -369,8 +369,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             }
             if (i > 0) {
                 max += i;
-                if (_log.shouldDebug())
+                if (_log.shouldDebug()) {
                     _log.debug("Flooding the entry for [" + key.toBase32().substring(0,8) + "] to " + i + " more, just before midnight");
+                }
             }
         }
         int flooded = 0;
@@ -378,8 +379,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             Hash peer = peers.get(i);
             RouterInfo target = lookupRouterInfoLocally(peer);
             if (!shouldFloodTo(key, type, lsSigType, peer, target)) {
-                if (_log.shouldDebug())
+                if (_log.shouldDebug()) {
                     _log.debug("Not flooding [" + key.toBase32().substring(0,8) + "] to [" + peer.toBase64().substring(0,6) + "] -> Too old");
+                }
                 continue;
             }
             DatabaseStoreMessage msg = new DatabaseStoreMessage(_context);
@@ -416,8 +418,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
        // But other implementations may not...
        if (type == DatabaseEntry.KEY_TYPE_ROUTERINFO && peer.equals(key)) {return false;}
        if (peer.equals(_context.routerHash())) {return false;}
-       if ((type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2 ||
-           lsSigType == SigType.RedDSA_SHA512_Ed25519) &&
+       if ((type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2 || lsSigType == SigType.RedDSA_SHA512_Ed25519) &&
            !StoreJob.shouldStoreEncLS2To(target)) {
            return false;
        }
@@ -433,7 +434,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             super(ctx);
             _peer = peer;
         }
-        public String getName() { return "Flood failed"; }
+        public String getName() {return "Flood failed";}
         public void runJob() {getContext().profileManager().dbStoreFailed(_peer);}
     }
 
@@ -448,7 +449,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             super(ctx);
             _peer = peer;
         }
-        public String getName() { return "Flood succeeded"; }
+        public String getName() {return "Flood succeeded";}
         public void runJob() {getContext().profileManager().dbStoreSuccessful(_peer);}
     }
 
@@ -487,7 +488,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  @param peer may be null, returns false if null
      */
     public static boolean isFloodfill(RouterInfo peer) {
-        if (peer == null) return false;
+        if (peer == null) {return false;}
         String caps = peer.getCapabilities();
         return caps.indexOf(CAPABILITY_FLOODFILL) >= 0;
     }
@@ -497,9 +498,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         DataStore ds = getDataStore();
         if (ds != null) {
             for (DatabaseEntry o : ds.getEntries()) {
-                if (o.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
-                    rv.add((RouterInfo)o);
-                }
+                if (o.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {rv.add((RouterInfo)o);}
             }
         }
         return rv;
@@ -590,23 +589,16 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     }
 
     /** @since 0.7.10 */
-    boolean isVerifyInProgress(Hash h) {
-        return _verifiesInProgress.contains(h);
-    }
+    boolean isVerifyInProgress(Hash h) {return _verifiesInProgress.contains(h);}
 
     /** @since 0.7.10 */
-    void verifyStarted(Hash h) {
-        _verifiesInProgress.add(h);
-    }
+    void verifyStarted(Hash h) {_verifiesInProgress.add(h);}
 
     /** @since 0.7.10 */
-    void verifyFinished(Hash h) {
-        _verifiesInProgress.remove(h);
-    }
+    void verifyFinished(Hash h) {_verifiesInProgress.remove(h);}
 
     /** NTCP cons drop quickly but SSU takes a while, so it's prudent to keep this
      *  a little higher than 1 or 2. */
-//    protected final static int MIN_ACTIVE_PEERS = 5;
     protected final static int MIN_ACTIVE_PEERS = SystemVersion.isSlow() ? 16 : 32;
 
     /** @since 0.8.7 */
@@ -660,12 +652,10 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         int knownRouters = getKBucketSetSize();
         if (info.getNetworkId() == _networkID && (knownRouters < MIN_REMAINING_ROUTERS ||(uptime < DONT_FAIL_PERIOD && knownRouters < 2000) ||
             _context.commSystem().countActivePeers() <= MIN_ACTIVE_PEERS) || _context.commSystem().getStatus() == Status.DISCONNECTED) {
-            if (uptime < DONT_FAIL_PERIOD && knownRouters < 2000) {
-                if (_log.shouldInfo()) {
+            if (_log.shouldInfo()) {
+                if (uptime < DONT_FAIL_PERIOD && knownRouters < 2000) {
                     _log.info("Lookup of [" + peer.toBase64().substring(0,6) + "] failed -> Not dropping (startup grace period)");
-                }
-            } else {
-                if (_log.shouldInfo()) {
+                } else {
                     _log.info("Lookup of [" + peer.toBase64().substring(0,6) + "] failed -> Not dropping (Our Router has issues)");
                 }
             }
@@ -810,8 +800,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         //search(peer, new DropLookupFoundJob(_context, peer, info),
         //        new DropLookupFailedJob(_context, peer, info), 10*1000, false);
         if (_log.shouldDebug()) {
-            _log.debug("Initiating floodfill lookup of [" + peer.toBase64().substring(0,6) + "] before dropping..." +
-                       "\n* Published: " + info.getPublished());
+            _log.debug("Initiating Floodfill Lookup of [" + peer.toBase64().substring(0,6) + "] before dropping..." +
+                       "\n* Published: " + new java.util.Date(info.getPublished()));
         }
         search(peer, new DropLookupFoundJob(_context, peer, info), new DropLookupFailedJob(_context, peer, info), 8*1000, false);
     }
