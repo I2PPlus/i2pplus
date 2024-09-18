@@ -103,6 +103,7 @@ abstract class StoreJob extends JobImpl {
     public void runJob() {sendNext();}
     private boolean isExpired() {return getContext().clock().now() >= _expiration;}
     private static final int MAX_PEERS_SENT = 10;
+    private static final int RESEND_DELAY = 2*1000; // upstream is 3s
 
     /**
      * send the key to the next batch of peers
@@ -496,7 +497,7 @@ abstract class StoreJob extends JobImpl {
             // without modding StoreState
             _state.replyTimeout(to);
             Job waiter = new WaitJob(ctx);
-            waiter.getTiming().setStartAfter(ctx.clock().now() + 3*1000);
+            waiter.getTiming().setStartAfter(ctx.clock().now() + RESEND_DELAY);
             ctx.jobQueue().addJob(waiter);
             //fail();
         }
@@ -575,7 +576,7 @@ abstract class StoreJob extends JobImpl {
             // without modding StoreState
             _state.replyTimeout(to);
             Job waiter = new WaitJob(ctx);
-            waiter.getTiming().setStartAfter(ctx.clock().now() + 3*1000);
+            waiter.getTiming().setStartAfter(ctx.clock().now() + RESEND_DELAY);
             ctx.jobQueue().addJob(waiter);
             return;
         }
@@ -623,7 +624,7 @@ abstract class StoreJob extends JobImpl {
             // without modding StoreState
             _state.replyTimeout(to);
             Job waiter = new WaitJob(ctx);
-            waiter.getTiming().setStartAfter(ctx.clock().now() + 3*1000);
+            waiter.getTiming().setStartAfter(ctx.clock().now() + RESEND_DELAY);
             ctx.jobQueue().addJob(waiter);
         }
     }

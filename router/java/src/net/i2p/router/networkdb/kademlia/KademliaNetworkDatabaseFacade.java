@@ -923,7 +923,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         } else {return null;}
     }
 
-    private static final long PUBLISH_DELAY = 3*1000;
+    private static final long PUBLISH_DELAY = 2*1000;
 
     /**
      * Stores in local netdb, and publishes to floodfill if client manager says to
