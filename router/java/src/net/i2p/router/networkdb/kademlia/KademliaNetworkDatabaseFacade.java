@@ -362,6 +362,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     public void startup() {
         RouterInfo ri = _context.router().getRouterInfo();
         String dbDir = _context.getProperty(PROP_DB_DIR, DEFAULT_DB_DIR);
+        boolean initMessage = false;
         if (isClientDb()) {_kb = ((FloodfillNetworkDatabaseFacade) _context.netDb()).getKBuckets();}
         else {
             synchronized (this) {
@@ -369,9 +370,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                            BUCKET_SIZE, KAD_B, new RejectTrimmer<Hash>());
             }
         }
-        if (_log.shouldInfo() && _context.router().getUptime() < 3*60*1000) {
+        if (_log.shouldInfo() && _context.router().getUptime() < 60*1000 && !initMessage) {
             _log.info("Starting up the Kademlia Network Database...\n" +
                       "BucketSize: " + BUCKET_SIZE + "; B Value: " + KAD_B);
+            initMessage = true;
         }
         try {
             if (!isClientDb()) {_ds = new PersistentDataStore(_context, dbDir, this);}
