@@ -264,7 +264,7 @@ public class InNetMessagePool implements Service {
               }
               allowMatches = false;
               if (_log.shouldLog(Log.DEBUG))
-                  _log.debug("Finished processing dsm (allowMatches = false) from Router "
+                  _log.debug("Finished processing DeliveryStatusMessage (allowMatches = false) from Router "
                              + fromRouter + " / " + fromRouterHash
                              + " origMessages.size() = " + sz
                              + " message: " + messageBody);
@@ -333,7 +333,7 @@ public class InNetMessagePool implements Service {
                       default:
                         if (_log.shouldWarn())
                             _log.warn("Message expiring on " + messageBody.getMessageExpiration() +
-                                      " was not handled by a HandlerJobBuilder - DROPPING: " + messageBody);
+                                      " was not handled by a HandlerJobBuilder -> DROPPING: " + messageBody);
 //                                      new Exception("f00!"));
                         _context.statManager().addRateData("inNetPool.dropped", 1);
                         break;

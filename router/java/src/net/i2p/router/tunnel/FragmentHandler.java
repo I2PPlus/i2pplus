@@ -394,19 +394,19 @@ class FragmentHandler {
             // OutboundTunnelEndpoint doesn't check for null Hash, passes it
             // to OutboundMessageDistributor.distribute() which will NPE
             if (_log.shouldWarn())
-                _log.warn("Dropping message at tunnel endpoint with unsupported delivery instruction type " +
+                _log.warn("Dropping message at Tunnel Endpoint with unsupported delivery instruction type " +
                           type + " rcvr: " + _receiver);
             _context.statManager().addRateData("tunnel.corruptMessage", 1);
         } else if (type == TYPE_TUNNEL && tunnelId == null) {
             // do this after the above since we have to return offset
             // i2pd 2.19 bug? see above
             if (_log.shouldWarn())
-                _log.warn("Dropping msg at tunnel endpoint with delivery instruction to tunnel 0" +
-                          " gw: " + router +
-                          " fragmented? " + fragmented +
-                          " id: " + messageId +
-                          " size: " + size +
-                          " type: " + (preprocessed[offset] & 0xff));
+                _log.warn("Dropping messages at Tunnel Endpoint with delivery instruction to tunnel 0" +
+                          "\n* Gateway: " + router +
+                          "; Fragmented? " + fragmented +
+                          "; ID: " + messageId +
+                          "; Size: " + size +
+                          "; Type: " + (preprocessed[offset] & 0xff));
             _context.statManager().addRateData("tunnel.corruptMessage", 1);
         } else if (fragmented) {
             FragmentedMessage msg;
