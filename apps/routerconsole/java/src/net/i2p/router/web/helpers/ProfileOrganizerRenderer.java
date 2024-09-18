@@ -360,7 +360,7 @@ class ProfileOrganizerRenderer {
                .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>")
                .append("<colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=good></colgroup>")
                .append("<colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=bad></colgroup>")
-               .append("<colgroup class=bad></colgroup><colgroup class=bad></colgroup><colgroup class=bad></colgroup>");
+               .append("<colgroup class=bad></colgroup><colgroup class=bad></colgroup><colgroup class=bad></colgroup>")
                .append("<thead class=smallhead><tr>")
                .append("<th>").append(_t("Peer")).append("</th>")
                .append("<th>").append(_t("1h Fail Rate").replace("Rate","")).append("</th>")
