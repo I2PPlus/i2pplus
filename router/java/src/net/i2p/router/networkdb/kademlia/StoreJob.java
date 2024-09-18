@@ -103,7 +103,7 @@ abstract class StoreJob extends JobImpl {
     public void runJob() {sendNext();}
     private boolean isExpired() {return getContext().clock().now() >= _expiration;}
     private static final int MAX_PEERS_SENT = 10;
-    private static final int RESEND_DELAY = 2*1000; // upstream is 3s
+    private static final int RESEND_DELAY = 1000; // upstream is 3s
 
     /**
      * send the key to the next batch of peers
@@ -246,7 +246,7 @@ abstract class StoreJob extends JobImpl {
         }
         if (router.getIdentity().equals(getContext().router().getRouterInfo().getIdentity())) {
             // don't send it to ourselves
-            _log.error("Don't send store to ourselves - why did we try?");
+            _log.error("Not attempting to send our RouterInfo to us -> Why did we try?");
             return;
         }
 
@@ -255,7 +255,7 @@ abstract class StoreJob extends JobImpl {
         if (type == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
             if (responseTime > MAX_DIRECT_EXPIRATION) {responseTime = MAX_DIRECT_EXPIRATION;}
         } else if (!DatabaseEntry.isLeaseSet(type)) {
-            throw new IllegalArgumentException("Storing an unknown data type! " + _state.getData());
+            throw new IllegalArgumentException("Attempt to store an unknown data type! " + _state.getData());
         }
         msg.setEntry(_state.getData());
         long now = getContext().clock().now();
