@@ -57,8 +57,8 @@ abstract class StoreJob extends JobImpl {
     private final PeerSelector _peerSelector;
     private final ConnectChecker _connectChecker;
     private final int _connectMask;
-    private final static int PARALLELIZATION = 4; // how many sent at a time
-    private final static int REDUNDANCY = 4; // we want the data sent to 4 peers
+    private final static int PARALLELIZATION = 6; // how many sent at a time
+    private final static int REDUNDANCY = 6; // we want the data sent to 5 peers
     private final static int STORE_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_STORE;
 
     /**
@@ -193,13 +193,13 @@ abstract class StoreJob extends JobImpl {
                     skipped++;
                 } else if (!shouldStoreTo((RouterInfo)ds)) {
                     if (_log.shouldInfo()) {
-                        _log.info("Skipping ld router [" + peer.toBase64().substring(0,6) + "]");
+                        _log.info("Skipping old Router [" + peer.toBase64().substring(0,6) + "]");
                     }
                     _state.addSkipped(peer);
                     skipped++;
                 } else if ((type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2 || lsSigType == SigType.RedDSA_SHA512_Ed25519) && !shouldStoreEncLS2To((RouterInfo)ds)) {
                     if (_log.shouldInfo()) {
-                        _log.info("Skipping router that doesn't support encrypted LS2/RedDSA [" + peer.toBase64().substring(0,6) + "]");
+                        _log.info("Skipping Router [" + peer.toBase64().substring(0,6) + "] -> No support for encrypted LS2/RedDSA");
                     }
                     _state.addSkipped(peer);
                     skipped++;
@@ -207,7 +207,7 @@ abstract class StoreJob extends JobImpl {
                     int peerTimeout = _facade.getPeerTimeout(peer);
                     if (_log.shouldInfo()) {
                          int attempts = _state.getAttemptedCount() + 1;
-                         _log.info("[" + _facade + "] Sending key [" + _state.getTarget().toBase64().substring(0,6) + "] " +
+                         _log.info("[" + _facade + "] Sending key [" + _state.getTarget().toBase32().substring(0,8) + "] " +
                                    (attempts > 1 ? "(Attempt: " + attempts + ")" : "") + "\n* To: " + closestHashes);
                     }
                     _state.addPending(peer);
