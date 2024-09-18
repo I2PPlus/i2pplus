@@ -31,7 +31,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     private static final long JOB_LAG_LIMIT_NETDB = 2*1000;
     // TODO reduce
 //    private static final long JOB_LAG_LIMIT_TUNNEL = 500;
-    private static final long JOB_LAG_LIMIT_TUNNEL = SystemVersion.isSlow() ? 400 : 300;
+    private static final long JOB_LAG_LIMIT_TUNNEL = SystemVersion.isSlow() ? 1000 : 750;
     public static final String PROP_MAX_TUNNELS = "router.maxParticipatingTunnels";
     public static final int DEFAULT_MAX_TUNNELS = SystemVersion.isSlow() ? 2*1000 :
                                                   SystemVersion.getMaxMemory() < 512*1024*1024 ? 5*1000 :
@@ -41,16 +41,13 @@ public class RouterThrottleImpl implements RouterThrottle {
     private static final long DEFAULT_REJECT_STARTUP_TIME = 10*60*1000;
     private static final long MIN_REJECT_STARTUP_TIME = 90*1000;
     private static final String PROP_REJECT_STARTUP_TIME = "router.rejectStartupTime";
-    private static final int DEFAULT_MIN_THROTTLE_TUNNELS = SystemVersion.isAndroid() ? 100 :
-                                                            SystemVersion.isARM() && SystemVersion.getCores() < 4 ? 800 :
-                                                            SystemVersion.isARM() ? 1200 : 2500;
+    private static final int DEFAULT_MIN_THROTTLE_TUNNELS = SystemVersion.isSlow() ? 1200 : 2500;
     private static final String PROP_MIN_THROTTLE_TUNNELS = "router.minThrottleTunnels";
 
     /**
      *  TO BE FIXED - SEE COMMENTS BELOW
      */
-//    private static final int DEFAULT_MAX_PROCESSINGTIME = 2250;
-    private static final int DEFAULT_MAX_PROCESSINGTIME = SystemVersion.isSlow() ? 1500 : 750;
+    private static final int DEFAULT_MAX_PROCESSINGTIME = SystemVersion.isSlow() ? 3000 : 2000;
 
     /** tunnel acceptance */
     public static final int TUNNEL_ACCEPT = 0;
@@ -67,18 +64,18 @@ public class RouterThrottleImpl implements RouterThrottle {
         _rejectStartupTime = Math.max(MIN_REJECT_STARTUP_TIME, _context.getProperty(PROP_REJECT_STARTUP_TIME, DEFAULT_REJECT_STARTUP_TIME));
         _context.simpleTimer2().addEvent(new ResetStatus(), 5*1000 + _rejectStartupTime);
         _context.statManager().createRateStat("router.throttleNetworkCause", "JobQueue lag when an I2NP event was throttled", "Router [Throttle]", RATES);
-        //_context.statManager().createRateStat("router.throttleNetDbCause", "How lagged the jobQueue was when a networkDb request was throttled", "Throttle", RATES);
-        _context.statManager().createRateStat("router.throttleTunnelCause", "JobQueue lag when a tunnel request was throttled", "Router [Throttle]", RATES);
-        _context.statManager().createRateStat("tunnel.bytesAllocatedAtAccept", "Allocated bytes for transit tunnels when we accepted a request", "Tunnels [Participating]", RATES);
-        _context.statManager().createRateStat("router.throttleTunnelProcessingTime1m", "Message processing time when we throttle a tunnel", "Router [Throttle]", RATES);
-        _context.statManager().createRateStat("router.throttleTunnelMaxExceeded", "Transit tunnels when max limit reached", "Router [Throttle]", RATES);
-        _context.statManager().createRateStat("router.throttleTunnelProbTooFast", "Transit tunnels beyond previous 1h average when we throttle", "Router [Throttle]", RATES);
-        //_context.statManager().createRateStat("router.throttleTunnelProbTestSlow", "How slow are our tunnel tests when our average exceeds the old average and we throttle?", "Router [Throttle]", RATES);
         _context.statManager().createRateStat("router.throttleTunnelBandwidthExceeded", "Bandwidth allocated when we refuse to build tunnel (bandwidth exceeded)", "Router [Throttle]", RATES);
         _context.statManager().createRateStat("router.throttleTunnelBytesAllowed", "Bytes permitted to be sent when we get a tunnel request", "Router [Throttle]", RATES);
         _context.statManager().createRateStat("router.throttleTunnelBytesUsed", "Used B/s at request (period = max KB/s)", "Router [Throttle]", RATES);
+        _context.statManager().createRateStat("router.throttleTunnelCause", "JobQueue lag when a tunnel request was throttled", "Router [Throttle]", RATES);
         _context.statManager().createRateStat("router.throttleTunnelFailCount1m", "Average message send fails in last 2 minutes (failure spike throttle)", "Router [Throttle]", RATES);
+        _context.statManager().createRateStat("router.throttleTunnelMaxExceeded", "Transit tunnels when max limit reached", "Router [Throttle]", RATES);
+        _context.statManager().createRateStat("router.throttleTunnelProbTooFast", "Transit tunnels beyond previous 1h average when we throttle", "Router [Throttle]", RATES);
+        _context.statManager().createRateStat("router.throttleTunnelProcessingTime1m", "Message processing time when we throttle a tunnel", "Router [Throttle]", RATES);
+        _context.statManager().createRateStat("tunnel.bytesAllocatedAtAccept", "Allocated bytes for transit tunnels when we accepted a request", "Tunnels [Participating]", RATES);
+        //_context.statManager().createRateStat("router.throttleNetDbCause", "How lagged the jobQueue was when a networkDb request was throttled", "Throttle", RATES);
         //_context.statManager().createRateStat("router.throttleTunnelQueueOverload", "How many pending tunnel request messages have we received when we reject them due to overload (period = time to process each)?", "Router [Throttle]", RATES);
+        //_context.statManager().createRateStat("router.throttleTunnelProbTestSlow", "How slow are our tunnel tests when our average exceeds the old average and we throttle?", "Router [Throttle]", RATES);
     }
 
     /**
@@ -89,8 +86,7 @@ public class RouterThrottleImpl implements RouterThrottle {
      */
     private class ResetStatus implements SimpleTimer.TimedEvent {
         public void timeReached() {
-            if (_tunnelStatus.contains(_x("Starting up")))
-                cancelShutdownStatus();
+            if (_tunnelStatus.contains(_x("Starting up"))) {cancelShutdownStatus();}
         }
     }
 
@@ -103,17 +99,12 @@ public class RouterThrottleImpl implements RouterThrottle {
      * FIXME or should we do this at all? We have Codel queues all over now...
      */
     public boolean acceptNetworkMessage() {
-        //if (true) return true;
         long lag = _context.jobQueue().getMaxLag();
-//        if ( (lag > JOB_LAG_LIMIT_NETWORK) && (_context.router().getUptime() > 60*1000) ) {
-        if ( (lag > JOB_LAG_LIMIT_NETWORK) && (_context.router().getUptime() > 3*60*1000) ) {
-            if (_log.shouldWarn())
-                _log.warn("Throttling Network Reader -> Job lag is " + lag + "ms");
+        if ((lag > JOB_LAG_LIMIT_NETWORK) && (_context.router().getUptime() > 60*1000)) {
+            if (_log.shouldWarn()) {_log.warn("Throttling Network Reader -> Job lag is " + lag + "ms");}
             _context.statManager().addRateData("router.throttleNetworkCause", lag);
             return false;
-        } else {
-            return true;
-        }
+        } else {return true;}
     }
 
     /** @deprecated unused, function moved to netdb */
@@ -121,13 +112,10 @@ public class RouterThrottleImpl implements RouterThrottle {
     public boolean acceptNetDbLookupRequest(Hash key) {
         long lag = _context.jobQueue().getMaxLag();
         if (lag > JOB_LAG_LIMIT_NETDB) {
-            if (_log.shouldDebug())
-                _log.debug("Refusing NetDb Lookup request -> Job lag is " + lag + "ms");
+            if (_log.shouldDebug()) {_log.debug("Refusing NetDb Lookup request -> Job lag is " + lag + "ms");}
             _context.statManager().addRateData("router.throttleNetDbCause", lag);
             return false;
-        } else {
-            return true;
-        }
+        } else {return true;}
     }
 
     /**
@@ -165,8 +153,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         int maxTunnels = _context.getProperty(PROP_MAX_TUNNELS, DEFAULT_MAX_TUNNELS);
         RateStat rs = _context.statManager().getRate("transport.sendProcessingTime");
         Rate r = null;
-        if (rs != null)
-            r = rs.getRate(60*1000);
+        if (rs != null) {r = rs.getRate(60*1000);}
 
         //Reject tunnels if the time to process messages and send them is too large. Too much time implies congestion.
         if (r != null) {
@@ -229,36 +216,36 @@ public class RouterThrottleImpl implements RouterThrottle {
                 if (avg < min)
                     avg = min;
                 // if the current tunnel count is higher than 1.3 * the average...
-                if ( (avg > 0) && (avg*tunnelGrowthFactor < numTunnels) ) {
+                if ((avg > 0) && (avg*tunnelGrowthFactor < numTunnels)) {
                     // we're accelerating, let's try not to take on too much too fast
                     double probAccept = (avg*tunnelGrowthFactor) / numTunnels;
                     probAccept *= probAccept; // square the decelerator for tunnel counts
                     int v = _context.random().nextInt(100);
-                    if (v < probAccept*100) {
-                        // ok
-                        if (_log.shouldInfo())
+                    if (v < probAccept*100) { // ok
+                        if (_log.shouldInfo()) {
                             _log.info("Probabalistically accepting Tunnel Request (p=" + probAccept
                                       + " v=" + v + " avg=" + avg + " current=" + numTunnels + ")");
+                        }
                     } else {
-                        if (_log.shouldWarn())
+                        if (_log.shouldWarn()) {
                             _log.warn("Probabalistically refusing Tunnel Request (avg=" + avg
                                       + " current=" + numTunnels + ")");
+                        }
                         _context.statManager().addRateData("router.throttleTunnelProbTooFast", (long)(numTunnels-avg));
                         // hard to do {0} from here
                         //setTunnelStatus("Rejecting " + (100 - (int) probAccept*100) + "% of tunnels: High number of requests");
-                        if (probAccept <= 0.5)
+                        if (probAccept <= 0.5) {
                             setTunnelStatus("[rejecting/overload]" + _x("Rejecting most tunnel requests" + ":<br>" + _x("High number of requests")));
-                        else if (probAccept <= 0.9)
-                            setTunnelStatus("[accepting]" + _x("Accepting most tunnel requests"));
-                        else if (numTunnels > 0)
-                            setTunnelStatus("[accepting]" + _x("Accepting tunnel requests"));
-                        else
-                            setTunnelStatus("[ready]" + _x("Accepting tunnel requests"));
+                        }
+                        else if (probAccept <= 0.9) {setTunnelStatus("[accepting]" + _x("Accepting most tunnel requests"));}
+                        else if (numTunnels > 0) {setTunnelStatus("[accepting]" + _x("Accepting tunnel requests"));}
+                        else {setTunnelStatus("[ready]" + _x("Accepting tunnel requests"));}
                         return TunnelHistory.TUNNEL_REJECT_PROBABALISTIC_REJECT;
                     }
                 } else {
-                    if (_log.shouldInfo())
+                    if (_log.shouldInfo()) {
                         _log.info("Accepting Tunnel Request -> Tunnel count average is " + avg + " and we only have " + numTunnels + ")");
+                    }
                 }
             }
         }
@@ -270,31 +257,18 @@ public class RouterThrottleImpl implements RouterThrottle {
             double avg1m = tunnelTestTime1m.getAverageValue();
             double avg10m = tunnelTestTime10m.getAvgOrLifetimeAvg();
 
-            if (avg10m < 5000)
-                avg10m = 5000; // minimum before complaining
+            if (avg10m < 5000) {avg10m = 5000;} // minimum before complaining
 
             if ( (avg10m > 0) && (avg1m > avg10m * tunnelTestTimeGrowthFactor) ) {
                 double probAccept = (avg10m*tunnelTestTimeGrowthFactor)/avg1m;
                 probAccept = probAccept * probAccept; // square the decelerator for test times
                 int v = _context.random().nextInt(100);
-                if (v < probAccept*100) {
-                    // ok
-                    if (_log.shouldInfo())
+                if (v < probAccept*100) { // ok
+                    if (_log.shouldInfo()) {
                         _log.info("Probabalistically accepting Tunnel Request (p=" + probAccept
                                   + " v=" + v + " test time avg 1m=" + avg1m + " 10m=" + avg10m + ")");
-                //} else if (false) {
-                //    if (_log.shouldWarn())
-                //        _log.warn("Probabalistically refusing Tunnel Request (test time avg 1m=" + avg1m
-                //                  + " 10m=" + avg10m + ")");
-                //    _context.statManager().addRateData("router.throttleTunnelProbTestSlow", (long)(avg1m-avg10m), 0);
-                //    setTunnelStatus("Rejecting " + ((int) probAccept*100) + "% of tunnels: High test time");
-                //    return TunnelHistory.TUNNEL_REJECT_PROBABALISTIC_REJECT;
+                    }
                 }
-            } else {
-                // not yet...
-                //if (_log.shouldInfo())
-                //    _log.info("Accepting Tunnel Request, since 60m test time average is " + avg10m
-                //              + " and past 1m only has " + avg1m + ")");
             }
         }
 
@@ -305,11 +279,11 @@ public class RouterThrottleImpl implements RouterThrottle {
         double messagesPerTunnel = 0;
         if (rs != null) {
             r = rs.getRate(60*1000);
-            if (r != null)
-                messagesPerTunnel = r.computeAverages(ra, true).getAverage();
+            if (r != null) {messagesPerTunnel = r.computeAverages(ra, true).getAverage();}
         }
-        if (messagesPerTunnel < DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE)
+        if (messagesPerTunnel < DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE) {
             messagesPerTunnel = DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE;
+        }
 
         double bytesAllocated = messagesPerTunnel * numTunnels * PREPROCESSED_SIZE;
 
@@ -317,33 +291,6 @@ public class RouterThrottleImpl implements RouterThrottle {
             _context.statManager().addRateData("router.throttleTunnelBandwidthExceeded", (long)bytesAllocated);
             return TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
         }
-
-/***
-        int queuedRequests = _context.tunnelManager().getInboundBuildQueueSize();
-        int timePerRequest = 1000;
-        rs = _context.statManager().getRate("tunnel.decryptRequestTime");
-        if (rs != null) {
-            r = rs.getRate(60*1000);
-            if (r.getLastEventCount() > 0)
-                timePerRequest = (int)r.getAverageValue();
-            else
-                timePerRequest = (int)rs.getLifetimeAverageValue();
-        }
-        float pctFull = (queuedRequests * timePerRequest) / (4*1000f);
-        double pReject = Math.pow(pctFull, 16); //1 - ((1-pctFull) * (1-pctFull));
-***/
-        // let it in because we drop overload- rejecting may be overkill,
-        // especially since we've done the cpu-heavy lifting to figure out
-        // whats up
-        /*
-        if ( (pctFull >= 1) || (pReject >= _context.random().nextFloat()) ) {
-            if (_log.shouldWarn())
-                _log.warn("Rejecting a new Tunnel Request because we have too many pending requests (" + queuedRequests
-                          + " at " + timePerRequest + "ms each, %full = " + pctFull);
-            _context.statManager().addRateData("router.throttleTunnelQueueOverload", queuedRequests, timePerRequest);
-            return TunnelHistory.TUNNEL_REJECT_TRANSIENT_OVERLOAD;
-        }
-        */
 
         // ok, all is well, let 'er in
         _context.statManager().addRateData("tunnel.bytesAllocatedAtAccept", (long)bytesAllocated, 60*10*1000);
@@ -361,7 +308,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     private static final String LIMIT_STR = _x("Declining requests" + ": " + "Bandwidth limit");
 
     /**
-     * with bytesAllocated already accounted for across the numTunnels existing
+     * With bytesAllocated already accounted for across the numTunnels existing
      * tunnels we have agreed to, can we handle another tunnel with our existing
      * bandwidth?
      *
@@ -381,9 +328,10 @@ public class RouterThrottleImpl implements RouterThrottle {
         // dropping packets with WRED
         int availBps = Math.min((maxKBpsIn*1024*9/10) - usedIn, (maxKBpsOut*1024*9/10) - usedOut);
         if (availBps < MIN_AVAILABLE_BPS) {
-//            if (_log.shouldWarn())
+            if (_log.shouldWarn()) {
             _log.warn("Rejecting participating tunnel requests \n* Available bandwidth (" + availBps +
                       "B/s) is less than minimum required (" + MIN_AVAILABLE_BPS + "B/s)");
+            }
             setTunnelStatus("[rejecting/max]" + LIMIT_STR);
             return false;
         }
@@ -404,8 +352,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         int used1mIn = _context.router().get1mRateIn();
         int used1mOut = _context.router().get1mRate(true);
         long overage = Math.max(used1mIn - (maxKBpsIn*1024), used1mOut - (maxKBpsOut*1024));
-        if ( (overage > 0) &&
-             ((overage/(maxKBps*1024f)) > _context.random().nextFloat()) ) {
+        if ((overage > 0) && ((overage/(maxKBps*1024f)) > _context.random().nextFloat())) {
             _log.warn("Rejecting participating Tunnel Request \n* 1 minute rate (" + overage + " over) indicates overload.");
             setTunnelStatus("[rejecting/overload]" + LIMIT_STR);
             return false;
@@ -416,7 +363,6 @@ public class RouterThrottleImpl implements RouterThrottle {
         if (availBps <= 0) {
             probReject = 1;
             reject = true;
-            //if (_log.shouldWarn())
             _log.warn("Rejecting participating tunnel -> Insufficient bandwidth available" +
                       "\n* Available: " + availBps + "; Maximum allocated: " + maxKBps + "; In use: " + used +
                       "\n* Active tunnels: " + numTunnels + "; Estimated bandwidth required = " + bytesAllocated);
@@ -425,38 +371,36 @@ public class RouterThrottleImpl implements RouterThrottle {
             float maxBps = (maxKBps * 1024f * 0.9f) - MIN_AVAILABLE_BPS;
             float pctFull = (maxBps - availBps) / (maxBps);
             if (pctFull < 0.83f) {
-                // probReject < ~5%
-                probReject = 0;
+                probReject = 0; // probReject < ~5%
                 reject = false;
-                if (_log.shouldDebug())
+                if (_log.shouldDebug()) {
                     _log.debug("Accept avail / maxK / used " + availBps + " / " + maxKBps + " / "
                                + used + "\n* pReject = 0 numTunnels = " + numTunnels
                                + " est = " + bytesAllocated);
+                }
             } else {
                 probReject = Math.pow(pctFull, 16); // steep curve
                 double rand = _context.random().nextFloat();
                 reject = rand <= probReject;
-                if (reject && _log.shouldWarn())
-                    _log.warn("Reject avail / maxK / used " + availBps + " / " + maxKBps + " / "
-                          + used + "\n* pReject = " + probReject + " pFull = " + pctFull + " numTunnels = " + numTunnels
-                          + " rand = " + rand + " est = " + bytesAllocated);
-                else if (_log.shouldDebug())
-                    _log.debug("Accept avail / maxK/ used " + availBps + " / " + maxKBps + " / "
+                if (reject) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Reject avail / maxK / used " + availBps + " / " + maxKBps + " / " +
+                                  used + "\n* pReject = " + probReject + " pFull = " + pctFull + " numTunnels = " + numTunnels +
+                                  " rand = " + rand + " est = " + bytesAllocated);
+                    }
+                } else if (_log.shouldDebug()) {
+                    _log.debug("Accept avail / maxK / used " + availBps + " / " + maxKBps + " / "
                            + used + "\n* pReject = " + probReject + " pFull = " + pctFull + " numTunnels = " + numTunnels
                            + " rand = " + rand + " est = " + bytesAllocated);
+                }
             }
         }
 
-            if (probReject >= 0.9)
-                setTunnelStatus("[rejecting]" + LIMIT_STR);
-            else if (probReject >= 0.5)
-                setTunnelStatus("[rejecting/bandwidth]" + _x("Declining requests" + ": " + "Bandwidth limit"));
-            else if(probReject >= 0.1)
-                // hard to do {0} from here
-                setTunnelStatus("[accepting]" + _x("Accepting most tunnel requests"));
-            else
-                setTunnelStatus("[accepting]" + _x("Accepting tunnel requests"));
-            return !reject;
+        if (probReject >= 0.9) {setTunnelStatus("[rejecting]" + LIMIT_STR);}
+        else if (probReject >= 0.5) {setTunnelStatus("[rejecting/bandwidth]" + _x("Declining requests" + ": " + "Bandwidth limit"));}
+        else if(probReject >= 0.1) {setTunnelStatus("[accepting]" + _x("Accepting most tunnel requests"));} // hard to do {0} from here
+        else {setTunnelStatus("[accepting]" + _x("Accepting tunnel requests"));}
+        return !reject;
     }
 
     /** don't ever probabalistically throttle tunnels if we have less than this many */
@@ -467,29 +411,22 @@ public class RouterThrottleImpl implements RouterThrottle {
     private double getTunnelGrowthFactor() {
         try {
             String p = _context.getProperty("router.tunnelGrowthFactor");
-            if (p == null)
-                return 1.2d;
+            if (p == null) {return 1.5d;}
             return Double.parseDouble(p);
-        } catch (NumberFormatException nfe) {
-            return 1.2d;
-        }
+        } catch (NumberFormatException nfe) {return 1.5d;}
     }
 
     private double getTunnelTestTimeGrowthFactor() {
         try {
             String p = _context.getProperty("router.tunnelTestTimeGrowthFactor");
-            if (p == null)
-                return 1.2d;
+            if (p == null) {return 1.5d;}
             return Double.parseDouble(p);
-        } catch (NumberFormatException nfe) {
-            return 1.2d;
-        }
+        } catch (NumberFormatException nfe) {return 1.5d;}
     }
 
     public long getMessageDelay() {
         RateStat rs = _context.statManager().getRate("transport.sendProcessingTime");
-        if (rs == null)
-            return 0;
+        if (rs == null) {return 0;}
         Rate delayRate = rs.getRate(60*1000);
         return (long)delayRate.getAverageValue();
     }
@@ -499,9 +436,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         return (long)lagRate.getAverageValue();
     }
 
-    public String getTunnelStatus() {
-        return _tunnelStatus;
-    }
+    public String getTunnelStatus() {return _tunnelStatus;}
 
     /**
      * getTunnelStatus(), translated if available.
@@ -527,14 +462,10 @@ public class RouterThrottleImpl implements RouterThrottle {
         RouterInfo ri = _context.router().getRouterInfo();
         if (maxTunnels > 0 && !_context.router().isHidden() && ri != null && !ri.getBandwidthTier().equals("K")) {
             setTunnelStatus("[accepting]" + _x("Accepting tunnel requests"));
-        } else {
-            setTunnelStatus("[rejecting/disabled]" + _x("Declining Tunnel Requests"));
-        }
+        } else {setTunnelStatus("[rejecting/disabled]" + _x("Declining Tunnel Requests"));}
     }
 
-    public void setTunnelStatus(String msg) {
-        _tunnelStatus = msg;
-    }
+    public void setTunnelStatus(String msg) {_tunnelStatus = msg;}
 
     /**
      *  Mark a string for extraction by xgettext and translation.
@@ -542,7 +473,6 @@ public class RouterThrottleImpl implements RouterThrottle {
      *  It does not translate!
      *  @return s
      */
-    private static final String _x(String s) {
-        return s;
-    }
+    private static final String _x(String s) {return s;}
+
 }
