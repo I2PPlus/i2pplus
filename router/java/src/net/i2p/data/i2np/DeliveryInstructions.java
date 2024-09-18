@@ -446,7 +446,7 @@ public class DeliveryInstructions extends DataStructureImpl {
                 buf.append("Local");
                 break;
             case DELIVERY_MODE_DESTINATION:
-                buf.append("Destination");
+                //buf.append("Destination");
                 break;
             case DELIVERY_MODE_ROUTER:
                 buf.append("Router");

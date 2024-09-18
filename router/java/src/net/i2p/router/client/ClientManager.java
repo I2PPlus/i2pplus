@@ -475,7 +475,7 @@ class ClientManager {
             _messageNonce = messageNonce;
         }
 
-        public String getName() {return "Distribute local message";}
+        public String getName() {return "Distribute Local Message";}
 
         public void runJob() {
             boolean ok = _to.receiveMessage(_toDest, _fromDest, _payload);
@@ -673,7 +673,7 @@ class ClientManager {
             ClientConnectionRunner runner = getRunner(destHash);
             if (runner == null) {
                 if (_log.shouldLog(Log.INFO)) {
-                    _log.warn("ClientManager received a NULL runner for [" + destHash.toBase32().substring(0,8) + "]");
+                    _log.info("ClientManager received a NULL runner for [" + destHash.toBase32().substring(0,8) + "]");
                 }
                 return null;
             }
