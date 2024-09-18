@@ -205,16 +205,15 @@ public class RouterThrottleImpl implements RouterThrottle {
          * sensitive to sudden rapid growth of load, which are not instantly detected by these metrics.
          * Reduce tunnel growth if we are growing faster than the lag based metrics can detect reliably.
          */
-        if (SystemVersion.getCPULoad() > 95 && SystemVersion.getCPULoadAvg() > 90) {
+        if (SystemVersion.getCPULoad() > 95 && SystemVersion.getCPULoadAvg() > 95) {
             setTunnelStatus("[rejecting/overload]" + _x("Rejecting all tunnel requests" + ":<br>" + _x("High system load")));
         } else if ((numTunnels > getMinThrottleTunnels()) && (DEFAULT_MAX_TUNNELS >= maxTunnels)) {
             Rate avgTunnels = _context.statManager().getRate("tunnel.participatingTunnels").getRate(10*60*1000);
             if (avgTunnels != null) {
                 double avg = avgTunnels.getAvgOrLifetimeAvg();
-                double tunnelGrowthFactor = SystemVersion.isSlow() || SystemVersion.getCPULoad() > 80 ? getTunnelGrowthFactor() : getTunnelGrowthFactor() * 3 / 2;
+                double tunnelGrowthFactor = SystemVersion.isSlow() || SystemVersion.getCPULoad() > 95 ? getTunnelGrowthFactor() : getTunnelGrowthFactor() * 3 / 2;
                 int min = getMinThrottleTunnels();
-                if (avg < min)
-                    avg = min;
+                if (avg < min) {avg = min;}
                 // if the current tunnel count is higher than 1.3 * the average...
                 if ((avg > 0) && (avg*tunnelGrowthFactor < numTunnels)) {
                     // we're accelerating, let's try not to take on too much too fast
