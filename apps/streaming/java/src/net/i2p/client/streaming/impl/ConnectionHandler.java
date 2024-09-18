@@ -37,8 +37,7 @@ class ConnectionHandler {
     private boolean _restartPending;
 
     /** max time after receiveNewSyn() and before the matched accept() */
-    //private static final int DEFAULT_ACCEPT_TIMEOUT = 3*1000;
-    private static final int DEFAULT_ACCEPT_TIMEOUT = SystemVersion.isSlow() ? 5*1000 : 4*1000;
+    private static final int DEFAULT_ACCEPT_TIMEOUT = 3*1000;
 
     /**
      *  This is both SYNs and subsequent packets, and with an initial window size of 12,
@@ -72,8 +71,9 @@ class ConnectionHandler {
     public synchronized void setActive(boolean active) {
         // FIXME active=false this only kills for one thread in accept()
         // if there are more, they won't get a poison packet.
-        if (_log.shouldInfo())
+        if (_log.shouldInfo()) {
             _log.info("setActive(" + active + ") called, previously " + _active, new Exception("I did it"));
+        }
         // if starting, clear any old poison
         if (active && !_active) {
             _restartPending = false;
@@ -88,7 +88,7 @@ class ConnectionHandler {
         }
     }
 
-    public boolean getActive() { return _active; }
+    public boolean getActive() {return _active;}
 
     /**
      * Non-SYN packets with a zero SendStreamID may also be queued here so
@@ -102,31 +102,24 @@ class ConnectionHandler {
     public void receiveNewSyn(Packet packet) {
         if (!_active) {
             if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
-                if (_log.shouldWarn())
-                    _log.warn("Dropping new SYN request because we're not listening");
+                if (_log.shouldWarn()) {_log.warn("Dropping new SYN request because we're not listening");}
                 sendReset(packet);
-            } else {
-                if (_log.shouldWarn())
-                    _log.warn("Dropping non-SYN packet - not listening");
-            }
+            } else if (_log.shouldWarn()) {_log.warn("Dropping non-SYN packet -> Not listening");}
             return;
         }
         if (_manager.wasRecentlyClosed(packet.getSendStreamId())) {
-            if (_log.shouldWarn())
-                _log.warn("Dropping packet for recently closed stream: " + packet);
+            if (_log.shouldWarn()) {_log.warn("Dropping packet for recently closed stream: " + packet);}
             return;
         }
-        if (_log.shouldInfo())
-            _log.info("Received new SYN packet: " + packet + "; Timeout in " + (_acceptTimeout / 1000) + "s");
+        if (_log.shouldInfo()) {
+            _log.info("Received new SYN packet with " + (_acceptTimeout / 1000) + "s timeout: " + packet);
+        }
         // also check if expiration of the head is long past for overload detection with peek() ?
         boolean success = _synQueue.offer(packet); // fail immediately if full
-        if (success) {
-            _timer.addEvent(new TimeoutSyn(packet), _acceptTimeout);
-        } else {
-            if (_log.shouldWarn())
-                _log.warn("Dropping new SYN request because queue is full");
-            if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE))
-                sendReset(packet);
+        if (success) {_timer.addEvent(new TimeoutSyn(packet), _acceptTimeout);}
+        else {
+            if (_log.shouldWarn()) {_log.warn("Dropping new SYN request because queue is full");}
+            if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {sendReset(packet);}
         }
     }
 
@@ -146,35 +139,33 @@ class ConnectionHandler {
      *                  if a timeout was previously set with setSoTimeout and the timeout has been reached.
      */
     public Connection accept(long timeoutMs) throws RouterRestartException, ConnectException, SocketTimeoutException {
-        if (_log.shouldDebug())
-            _log.debug("Accept("+ timeoutMs+") called");
+        if (_log.shouldDebug()) {_log.debug("Accept with timeout of " + timeoutMs + "ms called...");}
 
         long expiration = timeoutMs + _context.clock().now();
         while (true) {
-            if ( (timeoutMs > 0) && (expiration < _context.clock().now()) )
+            if ((timeoutMs > 0) && (expiration < _context.clock().now())) {
                 throw new SocketTimeoutException("accept() timed out");
-            if (!_active) {
-                // fail all the ones we had queued up
+            }
+            if (!_active) { // fail all the ones we had queued up
                 while(true) {
                     Packet packet = _synQueue.poll(); // fails immediately if empty
-                    if (packet == null || packet.getOptionalDelay() == PoisonPacket.POISON_MAX_DELAY_REQUEST)
+                    if (packet == null || packet.getOptionalDelay() == PoisonPacket.POISON_MAX_DELAY_REQUEST) {
                         break;
+                    }
                     sendReset(packet);
                 }
-                if (_restartPending)
-                    throw new RouterRestartException();
+                if (_restartPending) {throw new RouterRestartException();}
                 throw new ConnectException("ServerSocket closed");
             }
 
             Packet syn = null;
             while ( _active && syn == null) {
-                if (_log.shouldDebug())
-                    _log.debug("Accept("+ timeoutMs+"): active=" + _active + " queue: "
-                               + _synQueue.size());
+                if (_log.shouldDebug()) {
+                    _log.debug("Accept("+ timeoutMs+"): active=" + _active + " queue: "+ _synQueue.size());
+                }
                 if (timeoutMs <= 0) {
-                    try {
-                       syn = _synQueue.take(); // waits forever
-                    } catch (InterruptedException ie) {
+                    try {syn = _synQueue.take();} // waits forever
+                    catch (InterruptedException ie) {
                        ConnectException ce = new ConnectException("Interrupted accept()");
                        ce.initCause(ie);
                        throw ce;
@@ -186,11 +177,9 @@ class ConnectionHandler {
                     // The specified amount of real time has elapsed, more or less.
                     // If timeout is zero, however, then real time is not taken into consideration
                     // and the thread simply waits until notified.
-                    if (remaining < 1)
-                        break;
-                    try {
-                        syn = _synQueue.poll(remaining, TimeUnit.MILLISECONDS); // waits the specified time max
-                    } catch (InterruptedException ie) {
+                    if (remaining < 1) {break;}
+                    try {syn = _synQueue.poll(remaining, TimeUnit.MILLISECONDS);} // waits the specified time max
+                    catch (InterruptedException ie) {
                        ConnectException ce = new ConnectException("Interrupted accept()");
                        ce.initCause(ie);
                        throw ce;
@@ -201,12 +190,11 @@ class ConnectionHandler {
 
             if (syn != null) {
                 if (syn.getOptionalDelay() == PoisonPacket.POISON_MAX_DELAY_REQUEST) {
-                    if (_restartPending)
-                        throw new RouterRestartException();
+                    if (_restartPending) {throw new RouterRestartException();}
                     throw new ConnectException("ServerSocket closed");
                 }
 
-                // deal with forged / invalid syn packets in _manager.receiveConnection()
+                /** deal with forged / invalid syn packets in _manager.receiveConnection() **/
 
                 // Handle both SYN and non-SYN packets in the queue
                 if (syn.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
@@ -214,18 +202,15 @@ class ConnectionHandler {
                     // a good place to check for dup SYNs and drop them
                     Destination from = syn.getOptionalFrom();
                     if (from == null) {
-                        if (_log.shouldWarn())
-                            _log.warn("Dropping SYN packet with no FROM: " + syn);
-                        // drop it
-                        continue;
+                        if (_log.shouldWarn()) {_log.warn("Dropping SYN packet with no FROM: " + syn);}
+                        continue; // drop it
                     }
                     Connection oldcon = _manager.getConnectionByOutboundId(syn.getReceiveStreamId());
                     if (oldcon != null) {
                         // His ID not guaranteed to be unique to us, but probably is...
                         // only drop it on a destination match too
                         if (from.equals(oldcon.getRemotePeer())) {
-                            if (_log.shouldWarn())
-                                _log.warn("Dropping duplicate SYN packet: " + syn);
+                            if (_log.shouldWarn()) {_log.warn("Dropping duplicate SYN packet: " + syn);}
                             continue;
                         }
                     }
@@ -233,7 +218,6 @@ class ConnectionHandler {
                     if (con != null) {return con;}
                 } else {reReceivePacket(syn);} // ... and keep looping
             }
-            // keep looping...
         }
     }
 
@@ -245,20 +229,21 @@ class ConnectionHandler {
         Connection con = _manager.getConnectionByOutboundId(packet.getReceiveStreamId());
         if (con != null) {
             // Send it through the packet handler again
-            if (_log.shouldWarn())
+            if (_log.shouldWarn()) {
                 _log.warn("Connection found for queued non-SYN packet: " + packet);
+            }
             // false -> don't requeue, fixes a race where a SYN gets dropped
             // between here and PacketHandler, causing the packet to loop forever....
             _manager.getPacketHandler().receivePacketDirect(packet, false);
         } else {
             // log it here, just before we kill it - dest will be unknown
-            if (I2PSocketManagerFull.pcapWriter != null &&
-                _context.getBooleanProperty(I2PSocketManagerFull.PROP_PCAP))
+            if (I2PSocketManagerFull.pcapWriter != null && _context.getBooleanProperty(I2PSocketManagerFull.PROP_PCAP)) {
                 packet.logTCPDump(null);
-
+            }
             // goodbye
-            if (_log.shouldWarn())
-                _log.warn("Connection not found for queued non-SYN packet, dropping: " + packet);
+            if (_log.shouldWarn()) {
+                _log.warn("Connection not found for queued non-SYN packet, dropping" + (packet != null? ": " + packet : "...");
+            }
             packet.releasePayload();
         }
     }
@@ -274,8 +259,9 @@ class ConnectionHandler {
         boolean ok = packet.verifySignature(_context, ba.getData());
         _cache.release(ba);
         if (!ok) {
-            if (_log.shouldWarn())
-                _log.warn("Can't send RESET in response to packet: " + packet);
+            if (_log.shouldWarn()) {
+                _log.warn("Can't send RESET in response to unverifiable packet" + (packet != null? ": " + packet : "...");
+            }
             return;
         }
         PacketLocal reply = new PacketLocal(_context, packet.getOptionalFrom(), packet.getSession());
@@ -286,35 +272,24 @@ class ConnectionHandler {
         // As of 0.9.20 we do not require FROM
         // Removed in 0.9.39
         //reply.setOptionalFrom();
-        if (_log.shouldDebug())
-            _log.debug("Sending RESET: " + reply + " because of " + packet);
-        // this just sends the packet - no retries or whatnot
-        _manager.getPacketQueue().enqueue(reply);
+        if (_log.shouldDebug()) {_log.debug("Sending RESET: " + reply + " because of " + packet);}
+        _manager.getPacketQueue().enqueue(reply); // this just sends the packet - no retries or whatnot
     }
 
     private class TimeoutSyn implements SimpleTimer.TimedEvent {
         private final Packet _synPacket;
 
-        public TimeoutSyn(Packet packet) {
-            _synPacket = packet;
-        }
+        public TimeoutSyn(Packet packet) {_synPacket = packet;}
 
         public void timeReached() {
             boolean removed = _synQueue.remove(_synPacket);
 
             if (removed) {
                 if (_synPacket.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
-                    if (_log.shouldWarn())
-                        _log.warn("Expired on the SYN queue: " + _synPacket);
-                    // timeout - send RST
-                    sendReset(_synPacket);
-                } else {
-                    // non-syn packet got stranded on the syn queue, send it to the con
-                    reReceivePacket(_synPacket);
-                }
-            } else {
-                // handled.  noop
-            }
+                    if (_log.shouldWarn()) {_log.warn("Expired on the SYN queue: " + _synPacket);}
+                    sendReset(_synPacket); // timeout - send RST
+                } else {reReceivePacket(_synPacket);} // non-syn packet got stranded on the syn queue, send it to the con
+            } else {} // handled. noop
         }
     }
 
@@ -326,16 +301,12 @@ class ConnectionHandler {
     private static class PoisonPacket extends Packet {
         public static final int POISON_MAX_DELAY_REQUEST = Packet.MAX_DELAY_REQUEST + 1;
 
-        public PoisonPacket() {
-            super(null);
-        }
+        public PoisonPacket() {super(null);}
 
         @Override
-        public int getOptionalDelay() { return POISON_MAX_DELAY_REQUEST; }
+        public int getOptionalDelay() {return POISON_MAX_DELAY_REQUEST;}
 
         @Override
-        public String toString() {
-            return "POISON";
-        }
+        public String toString() {return "POISON";}
     }
 }
