@@ -64,8 +64,7 @@ class SearchJob extends JobImpl {
      * How long will we give each peer to reply to our search?
      *
      */
-//    private static final int PER_PEER_TIMEOUT = 5*1000;
-    private static final int PER_PEER_TIMEOUT = 4*1000;
+    private static final int PER_PEER_TIMEOUT = 5*1000;
 
     /**
      * give ourselves 5 seconds to send out the value found to the closest
@@ -77,10 +76,10 @@ class SearchJob extends JobImpl {
 
     /**
      * When we're just waiting for something to change, requeue the search status test
-     * every 2 seconds.
+     * every second.
      *
      */
-    private static final long REQUEUE_DELAY = 2000;
+    private static final long REQUEUE_DELAY = 1000;
 
     // TODO pass to the tunnel dispatcher
     //private final static int LOOKUP_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_LOOKUP;
@@ -145,16 +144,12 @@ class SearchJob extends JobImpl {
 
     protected int getPerPeerTimeoutMs(Hash peer) {
         int timeout = 0;
-        if (_floodfillPeersExhausted && _floodfillSearchesOutstanding <= 0)
-            timeout = _facade.getPeerTimeout(peer);
-        else
-            timeout = PER_FLOODFILL_PEER_TIMEOUT;
+        if (_floodfillPeersExhausted && _floodfillSearchesOutstanding <= 0) {timeout = _facade.getPeerTimeout(peer);}
+        else {timeout = PER_FLOODFILL_PEER_TIMEOUT;}
         long now = getContext().clock().now();
 
-        if (now + timeout > _expiration)
-            return (int) Math.max(_expiration - now, MIN_TIMEOUT);
-        else
-            return timeout;
+        if (now + timeout > _expiration) {return (int) Math.max(_expiration - now, MIN_TIMEOUT);}
+        else {return timeout;}
     }
 
     /**
