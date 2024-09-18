@@ -918,11 +918,11 @@ a[href^="configpeer?peer"]:active::after{background:var(--edit_active) var(--cen
 #profiles #profilelist .separator td{padding:1px}
 #floodfills .good{background:rgba(0,96,0,.1)}
 #floodfills .bad{background:rgba(72,0,0,.4)}
-#floodfills td:nth-child(8){border-right:1px solid #400}
-#floodfills td:nth-child(n+9){color:#f11!important;border:1px solid #400}
+#floodfills td:nth-child(9){border-right:1px solid #400}
+#floodfills td:nth-child(n+10){color:#f11!important;border:1px solid #400}
 #floodfills td:last-child{border-right:var(--border)}
 #floodfills tr:last-child td{border-bottom:var(--border)}
-#floodfills tr:hover td:nth-child(n+9){background:#500;color:#fff!important}
+#floodfills tr:hover td:nth-child(n+10){background:#500;color:#fff!important}
 #floodfills .poor{color:#900}
 
 /* events */
