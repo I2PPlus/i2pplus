@@ -31,11 +31,10 @@ class PacketHandler {
     private final int _networkID;
 
     private static final int TYPE_POISON = -99999;
-    private static final int MIN_QUEUE_SIZE = SystemVersion.isSlow() || SystemVersion.getCores() < 4 ? 32 : 64;
-    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() || SystemVersion.getCores() < 4 ? 256 : 384;
+    private static final int MIN_QUEUE_SIZE = SystemVersion.isSlow() ? 32 : 64;
+    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 192 : 384;
     private static final int MIN_NUM_HANDLERS = 1;  // if < 128MB
-    private static final int MAX_NUM_HANDLERS = (SystemVersion.isSlow() || SystemVersion.getCores() < 4 ||
-                                                 SystemVersion.getMaxMemory() < 512*1024*1024) ? 4 : Math.max(SystemVersion.getCores(), 8);
+    private static final int MAX_NUM_HANDLERS = (SystemVersion.isSlow() ? 4 : Math.max(SystemVersion.getCores(), 8);
 
     PacketHandler(RouterContext ctx, UDPTransport transport, boolean enableSSU1, boolean enableSSU2, EstablishmentManager establisher,
                   InboundMessageFragments inbound, PeerTestManager testManager, IntroductionManager introManager) {
@@ -52,14 +51,10 @@ class PacketHandler {
         int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (2*1024*1024)));
         _inboundQueue = new CoDelBlockingQueue<UDPPacket>(ctx, "UDP-Receiver", qsize);
         int num_handlers;
-        if (maxMemory < 128*1024*1024)
-            num_handlers = 1;
-         else
-            num_handlers = MAX_NUM_HANDLERS;
+        if (maxMemory < 128*1024*1024) {num_handlers = 1;}
+        else {num_handlers = MAX_NUM_HANDLERS;}
         _handlers = new Handler[num_handlers];
-        for (int i = 0; i < num_handlers; i++) {
-            _handlers[i] = new Handler();
-        }
+        for (int i = 0; i < num_handlers; i++) {_handlers[i] = new Handler();}
 
         _context.statManager().createRateStat("udp.destroyedInvalidSkew", "Session destroyed (bad skew)", "Transport [UDP]", UDPTransport.RATES);
     }
@@ -130,11 +125,9 @@ class PacketHandler {
         UDPPacket rv = null;
         //int remaining = 0;
         while (_keepReading && rv == null) {
-            try {
-                rv = _inboundQueue.take();
-            } catch (InterruptedException ie) {}
-            if (rv != null && rv.getMessageType() == TYPE_POISON)
-                return null;
+            try {rv = _inboundQueue.take();}
+            catch (InterruptedException ie) {}
+            if (rv != null && rv.getMessageType() == TYPE_POISON) {return null;}
         }
         //_context.statManager().addRateData("udp.receiveRemaining", remaining, 0);
         return rv;
@@ -145,16 +138,16 @@ class PacketHandler {
         public void run() {
             while (_keepReading) {
                 UDPPacket packet = receiveNext();
-                if (packet == null) break; // keepReading is probably false, or bind failed...
+                if (packet == null) {break;} // keepReading is probably false, or bind failed...
 
                 packet.received();
                 //if (_log.shouldDebug())
                 //    _log.debug("Received packet from " + packet);
-                try {
-                    handlePacket(packet);
-                } catch (RuntimeException e) {
-                    if (_log.shouldError())
+                try {handlePacket(packet);}
+                catch (RuntimeException e) {
+                    if (_log.shouldError()) {
                         _log.error("Internal error handling a UDP packet from " + packet, e);
+                    }
                 }
                 // back to the cache with thee!
                 packet.release();
@@ -182,8 +175,9 @@ class PacketHandler {
                 InboundEstablishState est = _establisher.getInboundState(rem);
                 if (est != null) {
                     // Group 2: Inbound Establishment
-                    if (_log.shouldDebug())
+                    if (_log.shouldDebug()) {
                         _log.debug("Packet received IS for an Inbound establishment");
+                    }
                     receiveSSU2Packet(rem, packet, (InboundEstablishState2) est);
                 } else {
                     //if (_log.shouldDebug())
@@ -191,13 +185,15 @@ class PacketHandler {
                     OutboundEstablishState oest = _establisher.getOutboundState(rem);
                     if (oest != null) {
                         // Group 3: Outbound Establishment
-                        if (_log.shouldDebug())
+                        if (_log.shouldDebug()) {
                             _log.debug("Packet received IS for an Outbound establishment");
+                        }
                         receiveSSU2Packet(packet, (OutboundEstablishState2) oest);
                     } else {
                         // Group 4: New conn or needs fallback
-                        if (_log.shouldDebug())
+                        if (_log.shouldDebug()) {
                             _log.debug("Packet received is not for an Inbound or Outbound establishment");
+                        }
                         // ok, not already known establishment, try as a new one
                         // Last chance for success, using our intro key
                         receiveSSU2Packet(rem, packet, (InboundEstablishState2) null);
@@ -250,9 +246,7 @@ class PacketHandler {
                 // The first 32 bytes were fine, but it corrupted the next 32 bytes
                 // TODO make this more efficient, just take the first 32 bytes
                 header = SSU2Header.trialDecryptLongHeader(packet, k1, k2);
-                if (header == null ||
-                    header.getVersion() != 2 ||
-                    header.getNetID() != _networkID) {
+                if (header == null || header.getVersion() != 2 || header.getNetID() != _networkID) {
                     // typical case, SSU 1 that didn't validate, will be logged at WARN level above
                     // in group 4 receive packet
                     //if (_log.shouldDebug())
@@ -264,8 +258,9 @@ class PacketHandler {
                         long id = header.getDestConnID();
                         PeerState2 ps2 = _transport.getPeerState(id);
                         if (ps2 != null) {
-                            if (_log.shouldInfo())
+                            if (_log.shouldInfo()) {
                                 _log.info("Migrated " + packet.getPacket().getLength() + " byte packet from " + from + ps2);
+                            }
                             ps2.receivePacket(from, packet);
                             return true;
                         }
@@ -273,9 +268,10 @@ class PacketHandler {
                         if (dead != null) {
                             // Probably termination ack.
                             // Prevent attempted SSU1 fallback processing and adding to fail cache
-                            if (_log.shouldDebug())
+                            if (_log.shouldDebug()) {
                                 _log.debug("Handling " + packet.getPacket().getLength() + " byte packet from " + from +
                                            " for recently closed ID " + id);
+                            }
                             dead.receivePacket(from, packet);
                             return true;
                         }
@@ -283,22 +279,20 @@ class PacketHandler {
                     return false;
                 }
                 type = header.getType();
-                if (type == SSU2Util.SESSION_CONFIRMED_FLAG_BYTE) {
-                    // one in a million decrypt of SSU 1 packet with type/version/netid all correct?
-                    // can't have session confirmed with null state, avoid NPE below
-                    return false;
-                }
+
+                /* One in a million decrypt of SSU 1 packet with type/version/netid all correct?
+                   can't have session confirmed with null state, avoid NPE below */
+                if (type == SSU2Util.SESSION_CONFIRMED_FLAG_BYTE) {return false;}
                 if (type == SSU2Util.SESSION_REQUEST_FLAG_BYTE &&
                     packet.getPacket().getLength() == SSU2Util.MIN_HANDSHAKE_DATA_LEN - 1) {
                     // i2pd short 87 byte session request thru 0.9.56, drop packet
-                    if (_log.shouldWarn())
+                    if (_log.shouldWarn()) {
                         _log.warn("Received short Session Request (87 bytes) from " + from);
+                    }
                     shouldBan = true;
                     return true;
                 }
-            } else {
-                type = SSU2Util.SESSION_REQUEST_FLAG_BYTE;
-            }
+            } else {type = SSU2Util.SESSION_REQUEST_FLAG_BYTE;}
         } else {
             // Session Request (after Retry) or Session Confirmed
             // or retransmitted Session Request or Token Request
@@ -317,8 +311,9 @@ class PacketHandler {
                         header.getVersion() == 2 && header.getNetID() == _networkID &&
                         packet.getPacket().getLength() == 87) {
                         // i2pd short 87 byte session request thru 0.9.56, drop packet
-                        if (_log.shouldWarn())
+                        if (_log.shouldWarn()) {
                             _log.warn("Received short Session Request (87 bytes) after Retry on " + state);
+                        }
                         shouldBan = true;
                         return true;
                     }
@@ -326,18 +321,20 @@ class PacketHandler {
                         header.getType() != SSU2Util.TOKEN_REQUEST_FLAG_BYTE ||
                         header.getVersion() != 2 ||
                         header.getNetID() != _networkID) {
-                        if (_log.shouldWarn())
+                        if (_log.shouldWarn()) {
                             _log.warn("Failed to decrypt Session or Token Request after Retry \n* " + header +
                                       " (" + packet.getPacket().getLength() + " bytes) on " + state);
+                        }
                         shouldBan = true;
                         return false;
                     }
-                    //yes, retransmitted token request
+                    // yes, retransmitted token request
                 }
                 if (header.getSrcConnID() != state.getSendConnID()) {
-                    if (_log.shouldWarn())
+                    if (_log.shouldWarn()) {
                         _log.warn("Received BAD Source Connection ID \n* " + header +
                                   " (" + packet.getPacket().getLength() + " bytes) on " + state);
+                    }
                     // TODO could be a retransmitted Session Request,
                     // tell establisher?
                     shouldBan = true;
@@ -345,9 +342,10 @@ class PacketHandler {
                 }
                 if (header.getDestConnID() != state.getRcvConnID()) {
                     // i2pd bug changing after retry, thru 0.9.56, drop packet
-                    if (_log.shouldWarn())
+                    if (_log.shouldWarn()) {
                         _log.warn("Received BAD Destination Connection ID \n* " + header +
                                   " (" + packet.getPacket().getLength() + " bytes) on " + state);
+                    }
                     shouldBan = true;
                     return true;
                 }
@@ -357,22 +355,25 @@ class PacketHandler {
                 header = SSU2Header.trialDecryptShortHeader(packet, k1, k2);
                 if (header == null) {
                     // Java I2P thru 0.9.56 retransmits session confirmed with 1-2 byte packets
-                    if (_log.shouldWarn())
+                    if (_log.shouldWarn()) {
                         _log.warn("Received SessionConfirmed packet was too short (" +
                                   + packet.getPacket().getLength() + " bytes) on " + state);
+                    }
                     shouldBan = true;
                     return false;
                 }
                 if (header.getDestConnID() != state.getRcvConnID()) {
-                    if (_log.shouldWarn())
+                    if (_log.shouldWarn()) {
                         _log.warn("Received BAD Destination Connection ID \n* " + header + " on " + state);
+                    }
                     shouldBan = true;
                     return false;
                 }
                 if (header.getPacketNumber() != 0 ||
                     header.getType() != SSU2Util.SESSION_CONFIRMED_FLAG_BYTE) {
-                    if (_log.shouldInfo())
+                    if (_log.shouldInfo()) {
                         _log.info("Queueing possible data packet (" + packet.getPacket().getLength() + " bytes) on: " + state);
+                    }
                     // TODO either attempt to decrypt as a retransmitted
                     // Session Request or Token Request,
                     // or just tell establisher so it can retransmit Session Created or Retry
@@ -386,47 +387,25 @@ class PacketHandler {
                 }
                 type = SSU2Util.SESSION_CONFIRMED_FLAG_BYTE;
             }
-/**
-            String fromIP = packet.getPacket().getAddress().toString().replace("/", "");
-            String targetIP = fromIP.toString().replace("/", "");
-            byte[] ip = Addresses.getIP(targetIP);
-            if (shouldBan && ip != null && !_context.blocklist().isBlocklisted(ip)) {
-                if (_log.shouldWarn()) {
-                    _log.warn("[SSU2] Blocklisting " + targetIP + " for duration of session -> Sending suspect or malformed packets");
-                }
-                _context.blocklist().add(fromIP, "Suspect SSU packets");
-                return false;
-            } else if (shouldBan) {
-                return false;
-            }
-**/
         }
         // all good
         SSU2Header.acceptTrialDecrypt(packet, header);
         if (type == SSU2Util.SESSION_REQUEST_FLAG_BYTE) {
-            if (_log.shouldDebug())
-                _log.debug("Received a Session Request on " + state);
+            if (_log.shouldDebug()) {_log.debug("Received a Session Request on " + state);}
             _establisher.receiveSessionOrTokenRequest(from, state, packet);
         } else if (type == SSU2Util.TOKEN_REQUEST_FLAG_BYTE) {
-            if (_log.shouldDebug())
-                _log.debug("Received a Token Request on " + state);
+            if (_log.shouldDebug()) {_log.debug("Received a Token Request on " + state);}
             _establisher.receiveSessionOrTokenRequest(from, state, packet);
         } else if (type == SSU2Util.SESSION_CONFIRMED_FLAG_BYTE) {
-            if (_log.shouldDebug())
-                _log.debug("Received a SessionConfirmed on " + state);
+            if (_log.shouldDebug()) {_log.debug("Received a SessionConfirmed on " + state);}
             _establisher.receiveSessionConfirmed(state, packet);
         } else if (type == SSU2Util.PEER_TEST_FLAG_BYTE) {
-            if (_log.shouldDebug())
-                _log.debug("Received a PeerTest");
+            if (_log.shouldDebug()) {_log.debug("Received a PeerTest");}
             _testManager.receiveTest(from, packet);
         } else if (type == SSU2Util.HOLE_PUNCH_FLAG_BYTE) {
-            if (_log.shouldDebug())
-                _log.debug("Received a HolePunch");
+            if (_log.shouldDebug()) {_log.debug("Received a HolePunch");}
             _establisher.receiveHolePunch(from, packet);
-        } else {
-            if (_log.shouldWarn())
-                _log.warn("Received UNKNOWN SSU2 message \n* " + header + " from " + from);
-        }
+        } else if (_log.shouldWarn()) {_log.warn("Received UNKNOWN SSU2 message \n* " + header + " from " + from);}
         return true;
     }
 
@@ -455,58 +434,49 @@ class PacketHandler {
                 // dest conn ID decrypts the same for both Session Created
                 // and Retry, so we can bail out now if it doesn't match
                 if (header.getDestConnID() != state.getRcvConnID()) {
-                    if (_log.shouldWarn())
-                        _log.warn("Received BAD Destination Connection ID \n* " + header);
+                    if (_log.shouldWarn()) {_log.warn("Received BAD Destination Connection ID \n* " + header);}
                     return false;
                 }
             }
-        } else {
-            // we have only sent a Token Request
-            header = null;
-        }
+        } else {header = null;} // we have only sent a Token Request
         int type;
         if (header == null ||
             header.getType() != SSU2Util.SESSION_CREATED_FLAG_BYTE ||
             header.getVersion() != 2 ||
             header.getNetID() != _networkID) {
-            if (_log.shouldInfo())
+            if (_log.shouldInfo()) {
                 _log.info("Packet does not decrypt as SessionCreated, attempting to decrypt as Retry" + (header != null ? "\n* " + header : ""));
+            }
             k2 = state.getRcvRetryHeaderEncryptKey2();
             header = SSU2Header.trialDecryptLongHeader(packet, k1, k2);
-            if (header == null ||
-                header.getType() != SSU2Util.RETRY_FLAG_BYTE ||
-                header.getVersion() != 2 ||
-                header.getNetID() != _networkID) {
-                if (_log.shouldInfo())
+            if (header == null || header.getType() != SSU2Util.RETRY_FLAG_BYTE ||
+                header.getVersion() != 2 || header.getNetID() != _networkID) {
+                if (_log.shouldInfo()) {
                     _log.info("Packet does not decrypt as SessionCreated or Retry \n* " + header + " on " + state);
+                }
                 return false;
             }
             type = SSU2Util.RETRY_FLAG_BYTE;
-        } else {
-            type = SSU2Util.SESSION_CREATED_FLAG_BYTE;
-        }
+        } else {type = SSU2Util.SESSION_CREATED_FLAG_BYTE;}
         if (header.getDestConnID() != state.getRcvConnID()) {
-            if (_log.shouldWarn())
-                _log.warn("Received BAD Destination Connection ID \n* " + header);
+            if (_log.shouldWarn()) {_log.warn("Received BAD Destination Connection ID \n* " + header);}
             return false;
         }
         if (header.getSrcConnID() != state.getSendConnID()) {
-            if (_log.shouldWarn())
-                _log.warn("Received BAD Source Connection ID \n* " + header);
+            if (_log.shouldWarn()) {_log.warn("Received BAD Source Connection ID \n* " + header);}
             return false;
         }
 
         // all good
         SSU2Header.acceptTrialDecrypt(packet, header);
         if (type == SSU2Util.SESSION_CREATED_FLAG_BYTE) {
-            if (_log.shouldDebug())
-                _log.debug("Received a SessionCreated on " + state);
+            if (_log.shouldDebug()) {_log.debug("Received a SessionCreated on " + state);}
             _establisher.receiveSessionCreated(state, packet);
         } else {
-            if (_log.shouldDebug())
-                _log.debug("Received a Retry on " + state);
+            if (_log.shouldDebug()) {_log.debug("Received a Retry on " + state);}
             _establisher.receiveRetry(state, packet);
         }
         return true;
     }
+
 }
