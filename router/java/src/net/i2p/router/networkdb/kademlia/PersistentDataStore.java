@@ -391,10 +391,10 @@ public class PersistentDataStore extends TransientDataStore {
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> LU and older than " + CURRENT_VERSION);
                         }
                         if (_log.shouldWarn()) {
-                            _log.warn("Banning and disconnecting from [" + key.toBase64().substring(0,6) + "] for 8h -> LU and older than current version");
+                            _log.warn("Banning [" + key.toBase64().substring(0,6) + "] for 8h -> LU and older than current version");
                         }
                         _context.banlist().banlistRouter(key, " <b>➜</b> LU and older than 0.9.59", null, null, _context.clock().now() + 8*60*60*1000);
-                        _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
+                        _context.simpleTimer2().addEvent(new Disconnector(key), 11*60*1000);
                         shouldDelete = true;
                     } else if (unreachable) {
                         if (_log.shouldDebug() && dbFile == null) {
