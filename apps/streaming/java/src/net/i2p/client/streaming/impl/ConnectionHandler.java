@@ -242,7 +242,7 @@ class ConnectionHandler {
             }
             // goodbye
             if (_log.shouldWarn()) {
-                _log.warn("Connection not found for queued non-SYN packet, dropping" + (packet != null? ": " + packet : "...");
+                _log.warn("Connection not found for queued non-SYN packet, dropping" + (packet != null ? ": " + packet : "..."));
             }
             packet.releasePayload();
         }
@@ -260,7 +260,7 @@ class ConnectionHandler {
         _cache.release(ba);
         if (!ok) {
             if (_log.shouldWarn()) {
-                _log.warn("Can't send RESET in response to unverifiable packet" + (packet != null? ": " + packet : "...");
+                _log.warn("Can't send RESET in response to unverifiable packet" + (packet != null ? ": " + packet : "..."));
             }
             return;
         }
