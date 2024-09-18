@@ -49,6 +49,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
     // Must be lower than LIMIT_ROUTERS in StartExplorersJob because exploration does not register a reply job
     private static final int LIMIT_ROUTERS = SystemVersion.isSlow() ? 1000 : 4000;
     private final long _msgIDBloomXor;
+    private static final int RESEND_DELAY = 2*1000;
 
     /**
      * @param receivedMessage must never have reply token set if it came down a tunnel
@@ -502,7 +503,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
         // Randomize for a little protection against clock-skew fingerprinting.
         // But the "arrival" isn't used for anything, right?
         // TODO we have no session to garlic wrap this with, needs new message
-        msg.setArrival(getContext().clock().now() - getContext().random().nextInt(3*1000));
+        msg.setArrival(getContext().clock().now() - getContext().random().nextInt(RESEND_DELAY));
         // may be null
         TunnelId replyTunnel = _message.getReplyTunnel();
         // A store of our own RI, only if we are not FF
