@@ -94,20 +94,17 @@ class FloodfillStoreJob extends StoreJob {
                 LeaseSet2 ls2 = (LeaseSet2) data;
                 published = ls2.getPublished();
             } else {published = data.getDate();}
-            // we should always have exactly one successful entry
-            Hash sentTo = _state.getSuccessful();
+            Hash sentTo = _state.getSuccessful(); // we should always have exactly one successful entry
             Hash client;
-            if (type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
-                client = ((LeaseSet)data).getDestination().calculateHash(); // get the real client hash
-            } else {client = key;}
+            if (type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {client = ((LeaseSet)data).getDestination().calculateHash();} // get the real client hash
+            else {client = key;}
             Job fvsj = new FloodfillVerifyStoreJob(ctx, key, client, published, type, sentTo, _state.getAttempted(), _facade);
             if (shouldLog) {
-                _log.info("Succeeded sending key [" + key.toBase64().substring(0,6) +
-                          "] - queueing VerifyFloodfillStore Job [" + fvsj.getJobId() + "]");
+                _log.info("Succeeded sending key [" + key.toBase32().substring(0,8) + "] -> Queueing Verify Store Job...");
             }
             ctx.jobQueue().addJob(fvsj);
     }
 
     @Override
-    public String getName() { return "Verify Floodfill Store"; }
+    public String getName() {return "Verify Floodfill Store";}
 }

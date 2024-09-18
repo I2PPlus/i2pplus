@@ -206,8 +206,9 @@ abstract class StoreJob extends JobImpl {
                 } else {
                     int peerTimeout = _facade.getPeerTimeout(peer);
                     if (_log.shouldInfo()) {
-                       _log.info("[" + _facade + "] Sending key [" + _state.getTarget().toBase64().substring(0,6) +
-                                 "] (attempt " + (_state.getAttemptedCount() + 1) + ")\n* To: " + closestHashes);
+                         int attempts = _state.getAttemptedCount() + 1;
+                         _log.info("[" + _facade + "] Sending key [" + _state.getTarget().toBase64().substring(0,6) + "] " +
+                                   (attempts > 1 ? "(Attempt: " + attempts + ")" : "") + "\n* To: " + closestHashes);
                     }
                     _state.addPending(peer);
                     sendStore((RouterInfo)ds, peerTimeout);

@@ -131,9 +131,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
         TunnelInfo outTunnel;
         if (_isRouterInfo || ctx.keyRing().get(_key) != null || _type == DatabaseEntry.KEY_TYPE_META_LS2) {
             outTunnel = ctx.tunnelManager().selectOutboundExploratoryTunnel(_target);
-        } else {
-            outTunnel = ctx.tunnelManager().selectOutboundTunnel(_client, _target);
-        }
+        } else {outTunnel = ctx.tunnelManager().selectOutboundTunnel(_client, _target);}
         if (outTunnel == null) {
             if (_log.shouldWarn()) {_log.warn("No Outbound tunnels to verify a store");}
             _facade.verifyFinished(_key);
@@ -174,8 +172,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 // but an ECIES router does not supports ElGamal requests
                 supportsElGamal = lsk != null && lsk.isSupported(EncType.ELGAMAL_2048) && type == EncType.ELGAMAL_2048;
                 if (supportsElGamal || supportsRatchet) {
-                    // garlic encrypt
-                    sess = MessageWrapper.generateSession(ctx, _client, VERIFY_TIMEOUT, !supportsRatchet);
+                    sess = MessageWrapper.generateSession(ctx, _client, VERIFY_TIMEOUT, !supportsRatchet); // garlic encrypt
                     if (sess == null) {
                          if (_log.shouldWarn()) {_log.warn("No SessionKeyManager for connection to [" + _target.toBase64().substring(0,6) + "]");}
                         _facade.verifyFinished(_key);
