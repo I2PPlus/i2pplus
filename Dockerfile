@@ -5,10 +5,10 @@ ENV APP_HOME="/i2p"
 WORKDIR /tmp/build
 COPY . .
 
-RUN add-pkg --virtual build-base gettext tar bzip2 apache-ant openjdk17 \
+RUN apk add --virtual build-base gettext tar bzip2 apache-ant openjdk17 \
     && ant preppkg-linux-only \
     && rm -rf pkg-temp/osid pkg-temp/lib/wrapper pkg-temp/lib/wrapper.* \
-    && del-pkg build-base gettext tar bzip2 apache-ant openjdk17
+    && apk del build-base gettext tar bzip2 apache-ant openjdk17
 
 FROM alpine:latest
 ENV APP_HOME="/i2p"
