@@ -1,4 +1,4 @@
-FROM alpine:latest as builder
+FROM alpine:latest AS builder
 
 ENV APP_HOME="/i2p"
 
@@ -6,6 +6,7 @@ WORKDIR /tmp/build
 COPY . .
 
 RUN apk add --virtual build-base gettext tar bzip2 apache-ant openjdk17 \
+    && echo "build.built-by=Docker" >> override.properties \
     && ant preppkg-linux-only \
     && rm -rf pkg-temp/osid pkg-temp/lib/wrapper pkg-temp/lib/wrapper.* \
     && apk del build-base gettext tar bzip2 apache-ant openjdk17
@@ -13,12 +14,13 @@ RUN apk add --virtual build-base gettext tar bzip2 apache-ant openjdk17 \
 FROM alpine:latest
 ENV APP_HOME="/i2p"
 
-RUN apk add openjdk17-jre ttf-opensans
+RUN apk add openjdk17-jre ttf-dejavu
 WORKDIR ${APP_HOME}
 COPY --from=builder /tmp/build/pkg-temp .
 
 # "install" i2p by copying over installed files
-COPY docker/rootfs/ /
+COPY --chown=root:root docker/rootfs/ /
+RUN chmod +x /startapp.sh
 
 # Mount home and snark
 VOLUME ["${APP_HOME}/.i2p"]
@@ -26,7 +28,7 @@ VOLUME ["/i2psnark"]
 
 EXPOSE 7654 7656 7657 7658 4444 6668 7659 7660 7667 12345
 
-# Metadata
+# Metadata.
 LABEL \
       org.label-schema.name="i2p" \
       org.label-schema.description="Docker container for I2P+" \
