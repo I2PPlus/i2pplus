@@ -20,14 +20,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-
-import java.util.LinkedHashSet;
-
 
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SigType;
@@ -690,18 +688,18 @@ class NetDbRenderer {
             if (leases.size() > 0) {
                 buf.append("<tr><td><b>Published (RAP) Leasesets:</b></td><td colspan=3>").append(netdb.getKnownLeaseSets()).append("</td></tr>\n");
             }
-            buf.append("<tr><td><b>Mod Data:</b></td><td>").append(DataHelper.getUTF8(gen.getModData())).append("</td>")
-               .append("<td><b>Last Changed:</b></td><td>").append(DataHelper.formatTime(gen.getLastChanged())).append("</td></tr>\n")
-               .append("<tr><td><b>Next Mod Data:</b></td><td>").append(DataHelper.getUTF8(gen.getNextModData())).append("</td>")
-               .append("<td><b>Change in:</b></td><td>").append(DataHelper.formatDuration(gen.getTimeTillMidnight())).append("</td></tr>\n");
+            buf.append("<tr><td><b>").append(_t("Mod Data")).append(":</b></td><td>").append(DataHelper.getUTF8(gen.getModData())).append("</td>")
+               .append("<td><b>").append(_t("Last Changed")).append(":</b></td><td>").append(DataHelper.formatTime(gen.getLastChanged())).append("</td></tr>\n")
+               .append("<tr><td><b>").append(_t("Next Mod Data")).append(":</b></td><td>").append(DataHelper.getUTF8(gen.getNextModData())).append("</td>")
+               .append("<td><b>").append(_t("Change in")).append(":</b></td><td>").append(DataHelper.formatDuration(gen.getTimeTillMidnight())).append("</td></tr>\n");
         }
         int ff = 0;
         if (client == null) {
             ff = _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL).size();
-            buf.append("<tr><td><b>Known Floodfills:</b></td><td colspan=3>").append(ff).append("</td></tr>\n")
-               .append("<tr><td><b>Currently Floodfill?</b></td><td>").append(netdb.floodfillEnabled() ? "yes" : "no");
+            buf.append("<tr><td><b>").append(_t("Known Floodfills")).append(":</b></td><td colspan=3>").append(ff).append("</td></tr>\n")
+               .append("<tr><td><b>").append(_t("Floodfill mode enabled")).append("</b></td><td>").append(netdb.floodfillEnabled() ? "yes" : "no");
         }
-        if (debug) {buf.append("</td><td><b>Routing Key:</b></td><td>").append(ourRKey.toBase64());}
+        if (debug) {buf.append("</td><td><b>").append(_t("Routing Key")).append(":</b></td><td>").append(ourRKey.toBase64());}
         else {buf.append("</td><td colspan=2>");}
         buf.append("</td></tr>\n</table>\n");
         if (!leases.isEmpty()) {
@@ -741,13 +739,6 @@ class NetDbRenderer {
                   buf.append("</td></tr>\n</table>\n");
               } // median table
         } // !empty
-
-/**
-        if (buf.toString().length() < 64) {
-            buf.append("<div id=noleasesets><i>").append(_t("No Leasesets currently active.")).append("</i></div>");
-            headersAdded.add("noLeasesets");
-        }
-**/
         out.write(buf.toString());
         out.flush();
     }
@@ -785,9 +776,7 @@ class NetDbRenderer {
                 DecimalFormat fmt = new DecimalFormat("#0.00");
                 String distance = fmt.format(biLog2(dist));
                 long now = _context.clock().now();
-                //buf.append("<div class=\"leasesets_container netdbsearch\">");
                 renderLeaseSet(buf, ls, true, now, false, distance);
-                //buf.append("</div>");
             } else {
                 buf.append("<div class=netdbnotfound>").append(_t("LeaseSet for {0} not found in network database", hostname)).append("</div>");
             }
@@ -826,7 +815,7 @@ class NetDbRenderer {
             buf.append("\">");
             if (in != null && in.getDestinationNickname() != null) {
                 buf.append(DataHelper.escapeHTML(in.getDestinationNickname()));
-            } else {buf.append(dest.toBase64().substring(0, 6));}
+            } else {buf.append(dest.toBase64().substring(0,6));}
             buf.append("</span></a></th></tr>\n");
 
             // we don't show a b32 or addressbook links if encrypted
@@ -840,7 +829,7 @@ class NetDbRenderer {
                 if (!published || host != null || !linkSusi) {buf.append(" colspan=2");}
                 buf.append(">");
                 String b32 = key.toBase32();
-                String truncb32 = b32.substring(0, 24);
+                String truncb32 = b32.substring(0,24);
                 buf.append("<a href=\"http://").append(b32).append("/\">").append(truncb32).append("&hellip;b32.i2p</a></td>");
                 if (linkSusi && published && host == null) {
                     buf.append("<td class=addtobook colspan=2>").append("<a title=\"").append(_t("Add to addressbook"))
@@ -857,7 +846,7 @@ class NetDbRenderer {
                 String b32 = key.toBase32();
                 String truncb32 = b32.substring(0, 24);
                 buf.append("<code title=\"").append(_t("Destination")).append("\">");
-                if (dest != null) {buf.append(dest.toBase64().substring(0, 6));}
+                if (dest != null) {buf.append(dest.toBase64().substring(0,6));}
                 else {buf.append("n/a");}
                 buf.append("</code></th></tr>\n<tr><td");
                 if (!linkSusi) {buf.append(" colspan=2");}
@@ -915,7 +904,7 @@ class NetDbRenderer {
                     EncType etype = pk.getType();
                     if (etype != null) {buf.append(etype);}
                     else {buf.append(_t("Unsupported type")).append(" ").append(pk.getUnknownTypeCode());}
-                    buf.append(" [").append(pk.toBase64().substring(0, 8)).append("&hellip;]</span>");
+                    buf.append(" [").append(pk.toBase64().substring(0,8)).append("&hellip;]</span>");
                 }
             }
             buf.append("<br><span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Routing Key"))
@@ -954,22 +943,7 @@ class NetDbRenderer {
                .append(expired ? " expired" : "").append("\" title=\"").append(expiry).append("\">")
                .append(i + 1).append("</b> <span class=tunnel_peer title=Gateway>")
                .append(_context.commSystem().renderPeerHTML(lease.getGateway(), false))
-               .append("</span> ");
-            /**
-            if (!isMeta && debug) {
-                buf.append("<span class=netdb_tunnel title=\"Tunnel ID\">").append(" <span class=tunnel_id>")
-                   .append(lease.getTunnelId().getTunnelId()).append("</span></span> ");
-            }
-            if (debug) {
-                long exl = lease.getEndTime() - now;
-                if (exl > 0) {
-                    buf.append("&#10140; <b class=netdb_expiry>").append(_t("Expires in {0}", DataHelper.formatDuration2(exl))).append("</b>");
-                } else {
-                    buf.append("&#10140; <b class=netdb_expiry>").append(_t("Expired {0} ago", DataHelper.formatDuration2(0-exl))).append("</b>");
-                }
-            }
-            **/
-            buf.append("</li>\n");
+               .append("</span> </li>\n");
         }
         buf.append("</ul>\n</td></tr>\n</table>\n");
     }
@@ -1393,9 +1367,8 @@ class NetDbRenderer {
             }
             PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(info.getHash());
             if (prof != null) {
-                buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(hash)
-                   .append("\" title=\"").append(_t("View profile"))
-                   .append("\">").append(_t("Profile")).append("</a>");
+                buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(hash).append("\" title=\"")
+                   .append(_t("View profile")).append("\">").append(_t("Profile")).append("</a>");
             }
             buf.append("<a class=configpeer href=\"/configpeer?peer=").append(hash)
                .append("\" title=\"").append(_t("Configure peer"))
