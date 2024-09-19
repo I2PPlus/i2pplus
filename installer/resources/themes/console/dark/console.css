@@ -1306,7 +1306,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #netdb .leaseset tr,#netdb .leaseset td{box-shadow:none}
 #netdb .netdb_transport{margin-right:4px;width:48px;display:inline-block;text-align:center;color:var(--ink)}
 #netdb .sybil_addresses .netdb_transport{width:auto;text-align:right}
-#noleasesets,#notinitialized,.netdbnotfound{margin-bottom:10px;padding:20px 24px 20px 58px;text-align:left;border:var(--border);background:#000 var(--infohelp) no-repeat 15px center/28px}
+#noleasesets,#notinitialized,.netdbnotfound{margin:10px auto 12px;padding:20px 24px 20px 58px;text-align:left;border:var(--border);background:#000 var(--infohelp) no-repeat 15px center/28px}
 
 /* sybils */
 h3#threats.sybils{margin-bottom:10px}
