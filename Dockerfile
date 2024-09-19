@@ -13,7 +13,7 @@ RUN apk add --virtual build-base gettext tar bzip2 apache-ant openjdk17 \
 FROM alpine:latest
 ENV APP_HOME="/i2p"
 
-RUN add-pkg openjdk17-jre ttf-opensans
+RUN apk add openjdk17-jre ttf-opensans
 WORKDIR ${APP_HOME}
 COPY --from=builder /tmp/build/pkg-temp .
 
