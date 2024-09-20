@@ -68,12 +68,7 @@
 <script src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/scrollTo.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script nonce="<%=cspNonce%>">
-window.jdenticon_config = {
-  padding: 0,
-  saturation: {color: 1, grayscale: 0}
-};
-</script>
+<script nonce="<%=cspNonce%>">window.jdenticon_config = { padding: 0, saturation: {color: 1, grayscale: 0} };</script>
 <script nonce="<%=cspNonce%>" src="/js/jdenticon.js"></script>
 <%
     //String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
