@@ -564,10 +564,12 @@
 
         case 'scrollTo':
           scrollRequestFromChild(false)
+          resizeIFrame()
           break
 
         case 'scrollToOffset':
           scrollRequestFromChild(true)
+          resizeIFrame()
           break
 
         case 'pageInfo':

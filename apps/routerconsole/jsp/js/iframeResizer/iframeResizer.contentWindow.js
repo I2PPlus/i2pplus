@@ -87,9 +87,7 @@
     )
     window.addEventListener('test', noop, options)
     window.removeEventListener('test', noop, options)
-  } catch (error) {
-    /* */
-  }
+  } catch (error) {}
 
   function addEventListener(el, evt, func, options) {
     el.addEventListener(evt, func, passiveSupported ? options || {} : false)
@@ -218,17 +216,11 @@
     var splitName = key.split('Callback')
 
     if (splitName.length === 2) {
-      var name =
-        'on' + splitName[0].charAt(0).toUpperCase() + splitName[0].slice(1)
+      var name = 'on' + splitName[0].charAt(0).toUpperCase() + splitName[0].slice(1)
       this[name] = this[key]
       delete this[key]
-      warn(
-        "Deprecated: '" +
-          key +
-          "' has been renamed '" +
-          name +
-          "'. The old method will be removed in the next major version."
-      )
+      warn("Deprecated: '" + key + "' has been renamed '" + name +
+          "'. The old method will be removed in the next major version.")
     }
   }
 
@@ -241,16 +233,13 @@
 
       onMessage = 'onMessage' in data ? data.onMessage : onMessage
       onReady = 'onReady' in data ? data.onReady : onReady
-      targetOriginDefault =
-        'targetOrigin' in data ? data.targetOrigin : targetOriginDefault
-      heightCalcMode =
-        'heightCalculationMethod' in data
-          ? data.heightCalculationMethod
-          : heightCalcMode
-      widthCalcMode =
-        'widthCalculationMethod' in data
-          ? data.widthCalculationMethod
-          : widthCalcMode
+      targetOriginDefault = 'targetOrigin' in data ? data.targetOrigin : targetOriginDefault
+      heightCalcMode = 'heightCalculationMethod' in data
+                       ? data.heightCalculationMethod
+                       : heightCalcMode
+      widthCalcMode = 'widthCalculationMethod' in data
+                      ? data.widthCalculationMethod
+                      : widthCalcMode
     }
 
     function setupCustomCalcMethods(calcMode, calcFunc) {
@@ -331,28 +320,24 @@
       listener[options.method](options.eventName)
     }
 
-    log(
-      capitalizeFirstLetter(options.method) +
-        ' event listener: ' +
-        options.eventType
-    )
+    log(capitalizeFirstLetter(options.method) + ' event listener: ' + options.eventType)
   }
 
   function manageEventListeners(method) {
     manageTriggerEvent({
       method: method,
       eventType: 'Animation Start',
-      eventNames: ['animationstart', 'webkitAnimationStart']
+      eventNames: ['animationstart', 'animationstart']
     })
     manageTriggerEvent({
       method: method,
       eventType: 'Animation Iteration',
-      eventNames: ['animationiteration', 'webkitAnimationIteration']
+      eventNames: ['animationiteration', 'animationiteration']
     })
     manageTriggerEvent({
       method: method,
       eventType: 'Animation End',
-      eventNames: ['animationend', 'webkitAnimationEnd']
+      eventNames: ['animationend', 'animationend']
     })
     manageTriggerEvent({
       method: method,
@@ -402,35 +387,17 @@
     manageTriggerEvent({
       method: method,
       eventType: 'Transition Start',
-      eventNames: [
-        'transitionstart',
-        'webkitTransitionStart',
-        'MSTransitionStart',
-        'oTransitionStart',
-        'otransitionstart'
-      ]
+      eventNames: ['transitionstart', 'transitionstart']
     })
     manageTriggerEvent({
       method: method,
       eventType: 'Transition Iteration',
-      eventNames: [
-        'transitioniteration',
-        'webkitTransitionIteration',
-        'MSTransitionIteration',
-        'oTransitionIteration',
-        'otransitioniteration'
-      ]
+      eventNames: ['transitioniteration', 'transitioniteration']
     })
     manageTriggerEvent({
       method: method,
       eventType: 'Transition End',
-      eventNames: [
-        'transitionend',
-        'webkitTransitionEnd',
-        'MSTransitionEnd',
-        'oTransitionEnd',
-        'otransitionend'
-      ]
+      eventNames: ['transitionend', 'transitionend']
     })
     if ('child' === resizeFrom) {
       manageTriggerEvent({
@@ -444,9 +411,7 @@
   function checkCalcMode(calcMode, calcModeDefault, modes, type) {
     if (calcModeDefault !== calcMode) {
       if (!(calcMode in modes)) {
-        warn(
-          calcMode + ' is not a valid option for ' + type + 'CalculationMethod.'
-        )
+        warn(calcMode + ' is not a valid option for ' + type + 'CalculationMethod.')
         calcMode = calcModeDefault
       }
       log(type + ' calculation method set to "' + calcMode + '"')
@@ -456,47 +421,21 @@
   }
 
   function checkHeightMode() {
-    heightCalcMode = checkCalcMode(
-      heightCalcMode,
-      heightCalcModeDefault,
-      getHeight,
-      'height'
-    )
+    heightCalcMode = checkCalcMode(heightCalcMode, heightCalcModeDefault, getHeight, 'height')
   }
 
-  function checkWidthMode() {
-    widthCalcMode = checkCalcMode(
-      widthCalcMode,
-      widthCalcModeDefault,
-      getWidth,
-      'width'
-    )
+  function checkWidthMode() {widthCalcMode = checkCalcMode(widthCalcMode, widthCalcModeDefault, getWidth, 'width')
   }
 
   function startEventListeners() {
     if (true === autoResize) {
       manageEventListeners('add')
       setupMutationObserver()
-    } else {
-      log('Auto Resize disabled')
-    }
+    } else {log('Auto Resize disabled')}
   }
 
-  //   function stopMsgsToParent() {
-  //     log('Disable outgoing messages')
-  //     sendPermit = false
-  //   }
-
-  //   function removeMsgListener() {
-  //     log('Remove event listener: Message')
-  //     removeEventListener(window, 'message', receiver)
-  //   }
-
   function disconnectMutationObserver() {
-    if (null !== bodyObserver) {
-      /* istanbul ignore next */ // Not testable in PhantonJS
-      bodyObserver.disconnect()
-    }
+    if (null !== bodyObserver) {bodyObserver.disconnect()} /* istanbul ignore next */ // Not testable in PhantonJS
   }
 
   function stopEventListeners() {
@@ -504,12 +443,6 @@
     disconnectMutationObserver()
     clearInterval(intervalTimer)
   }
-
-  //   function teardown() {
-  //     stopMsgsToParent()
-  //     removeMsgListener()
-  //     if (true === autoResize) stopEventListeners()
-  //   }
 
   function injectClearFixIntoBodyElement() {
     var clearFix = document.createElement('div')
@@ -548,31 +481,17 @@
       function jumpToTarget(target) {
         var jumpPosition = getElementPosition(target)
 
-        log(
-          'Moving to in page link (#' +
-            hash +
-            ') at x: ' +
-            jumpPosition.x +
-            ' y: ' +
-            jumpPosition.y
-        )
+        log('Moving to in page link (#' + hash + ') at x: ' + jumpPosition.x + ' y: ' + jumpPosition.y)
         sendMsg(jumpPosition.y, jumpPosition.x, 'scrollToOffset') // X&Y reversed at sendMsg uses height/width
       }
 
       var hash = location.split('#')[1] || location, // Remove # if present
         hashData = decodeURIComponent(hash),
-        target =
-          document.getElementById(hashData) ||
-          document.getElementsByName(hashData)[0]
+        target = document.getElementById(hashData) || document.getElementsByName(hashData)[0]
 
-      if (undefined !== target) {
-        jumpToTarget(target)
-      } else {
-        log(
-          'In page link (#' +
-            hash +
-            ') not found in iFrame, so sending to parent'
-        )
+      if (undefined !== target) {jumpToTarget(target)}
+      else {
+        log('In page link (#' + hash + ') not found in iFrame, so sending to parent')
         sendMsg(0, 0, 'inPageLink', '#' + hash)
       }
     }
@@ -581,9 +500,7 @@
       var hash = window.location.hash
       var href = window.location.href
 
-      if ('' !== hash && '#' !== hash) {
-        findTarget(href)
-      }
+      if ('' !== hash && '#' !== hash) {findTarget(href)}
     }
 
     function bindAnchors() {
@@ -622,22 +539,13 @@
         bindAnchors()
         bindLocationHash()
         initCheck()
-      } else {
-        warn(
-          'In page linking not fully supported in this browser! (See README.md for IE8 workaround)'
-        )
       }
     }
 
-    if (inPageLinks.enable) {
-      enableInPageLinks()
-    } else {
-      log('In page linking not enabled')
-    }
+    if (inPageLinks.enable) {enableInPageLinks()}
+    else {log('In page linking not enabled')}
 
-    return {
-      findTarget: findTarget
-    }
+    return {findTarget: findTarget}
   }
 
   function setupMouseEvents() {
@@ -848,15 +756,9 @@
     var forceIntervalTimer = 0 > interval
 
     // Not testable in PhantomJS
-    /* istanbul ignore if */ if (
-      window.MutationObserver ||
-      window.WebKitMutationObserver
-    ) {
-      if (forceIntervalTimer) {
-        initInterval()
-      } else {
-        bodyObserver = setupBodyMutationObserver()
-      }
+    if (window.MutationObserver ||window.WebKitMutationObserver) { /* istanbul ignore if */
+      if (forceIntervalTimer) {initInterval()}
+      else {bodyObserver = setupBodyMutationObserver()}
     } else {
       log('MutationObserver not supported in this browser!')
       initInterval()
@@ -891,12 +793,9 @@
       timer = Date.now()
 
     for (var i = 0; i < elementsLength; i++) {
-      elVal =
-        elements[i].getBoundingClientRect()[side] +
-        getComputedStyle('margin' + Side, elements[i])
-      if (elVal > maxVal) {
-        maxVal = elVal
-      }
+      elVal = elements[i].getBoundingClientRect()[side] +
+              getComputedStyle('margin' + Side, elements[i])
+      if (elVal > maxVal) {maxVal = elVal}
     }
 
     timer = Date.now() - timer
@@ -1048,20 +947,13 @@
         return !retVal
       }
 
-      currentHeight =
-        undefined !== customHeight ? customHeight : getHeight[heightCalcMode]()
-      currentWidth =
-        undefined !== customWidth ? customWidth : getWidth[widthCalcMode]()
+      currentHeight = undefined !== customHeight ? customHeight : getHeight[heightCalcMode]()
+      currentWidth = undefined !== customWidth ? customWidth : getWidth[widthCalcMode]()
 
-      return (
-        checkTolarance(height, currentHeight) ||
-        (calculateWidth && checkTolarance(width, currentWidth))
-      )
+      return (checkTolarance(height, currentHeight) || (calculateWidth && checkTolarance(width, currentWidth)))
     }
 
-    function isForceResizableEvent() {
-      return !(triggerEvent in { init: 1, interval: 1, size: 1 })
-    }
+    function isForceResizableEvent() {return !(triggerEvent in { init: 1, interval: 1, size: 1 })}
 
     function isForceResizableCalcMode() {
       return (
@@ -1199,9 +1091,7 @@
         if (!initLock) {
           log('Page size reset by host page')
           triggerReset('resetPage')
-        } else {
-          log('Page reset ignored by init')
-        }
+        } else {log('Page reset ignored by init')}
       },
 
       resize: function resizeFromParent() {
@@ -1274,17 +1164,11 @@
       } else if (isInitMsg()) {
         processRequestFromParent.init()
       } else {
-        log(
-          'Ignored message of type "' +
-            getMessageType() +
-            '". Received before initialization.'
-        )
+        log('Ignored message of type "' + getMessageType() + '". Received before initialization.')
       }
     }
 
-    if (isMessageForUs()) {
-      processMessage()
-    }
+    if (isMessageForUs()) {processMessage()}
   }
 
   // Normally the parent kicks things off when it detects the iFrame has loaded.
