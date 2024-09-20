@@ -85,8 +85,7 @@ LOGDIR="$I2P_CONFIG_DIR"
 #LOGDIR="$I2PTEMP"
 LOGFILE="$LOGDIR/wrapper.log"
 
-# If you'd like to run I2P as root (not recommended), uncomment the
-# following line
+# If you'd like to run I2P as root (not recommended), uncomment below
 #ALLOW_ROOT=true
 
 # FIXED_COMMAND tells the script to use a hard coded action rather than
@@ -128,7 +127,7 @@ WAIT_FOR_STARTED_TIMEOUT=120
 USE_UPSTART=
 
 # Raise the soft open files soft ulimit to this value, if able
-OPEN_FILES_ULIMIT=2048
+OPEN_FILES_ULIMIT=16384
 
 # Source the environment variables for the locale if $LANG isn't set
 # If you want to set custom locale variables for I2P,
@@ -183,7 +182,6 @@ for file in $files; do
         chmod +x "$I2P/$file"
     fi
 done
-
 
 if [ ! -e "$WRAPPER_CONF" ]; then
        echo "Starting I2P Failed: Unable to find $WRAPPER_CONF"
@@ -387,7 +385,6 @@ then
     fi
 fi
 
-
 # Resolve the os
 DIST_OS=`uname -s | $TREXE "[A-Z]" "[a-z]" | $TREXE -d ' '`
 case "$DIST_OS" in
@@ -541,14 +538,16 @@ gettext() {
     # Call external gettext using our own translation files.
     # Don't attempt to translate via the wrapper,
     # it probably isn't supported in the community edition.
-    if [ "X${LANG#en}" = "X$LANG" ] && [ $(which $GETTEXT > /dev/null 2>&1) ] ; then
-            TEXTDOMAINDIR=$I2P/locale $GETTEXT -d i2prouter "$1"
-            if [ $? != 0 ] ; then
-                echo "$1"
-            fi
-        else
+    if [ "X${LANG#en}" = "X$LANG" ] && [ $(which $GETTEXT > /dev/null 2>&1) ]
+    then
+        TEXTDOMAINDIR=$I2P/locale $GETTEXT -d i2prouter "$1"
+        if [ $? != 0 ]
+        then
             echo "$1"
         fi
+        else
+            echo "$1"
+    fi
 }
 
 outputFile() {
@@ -718,7 +717,6 @@ fi
 if [ $WAIT_FOR_STARTED_STATUS = true ] ; then
     DETAIL_STATUS=true
 fi
-
 
 # Build the lock file clause.  Only create a lock file if the lock directory exists on this platform.
 LOCKPROP=
