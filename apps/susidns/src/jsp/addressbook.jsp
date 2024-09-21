@@ -55,12 +55,23 @@
 <link rel=preload href="<%=book.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
 <link rel=preload href="<%=book.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
 <link rel=stylesheet href="<%=book.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
+<link rel="icon shortcut" href=/themes/console/images/addressbook.svg type=image/svg+xml>
 <%
     if (base.useSoraFont()) {
 %>
 <link href="<%=base.getTheme()%>../../fonts/Sora.css" rel=stylesheet>
 <%
     }
+%>
+<%
+    String query = request.getQueryString();
+    RequestWrapper bookRequest = new RequestWrapper(request);
+    String here = bookRequest.getParameter("book");
+    // This is what does the form processing.
+    // We need to do this before any notEmpty test and before loadBookMessages() which displays the entry count.
+    // Messages will be displayed below.
+    String formMessages = book.getMessages();
+    String susiNonce = book.getSerial(); // have to only do this once per page
 %>
 <link rel=stylesheet href="<%=book.getTheme()%>override.css">
 <script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
@@ -70,19 +81,9 @@
 <script src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce="<%=cspNonce%>">window.jdenticon_config = { padding: 0, saturation: {color: 1, grayscale: 0} };</script>
 <script nonce="<%=cspNonce%>" src="/js/jdenticon.js"></script>
-<%
-    //String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
-    String query = request.getQueryString();
-    RequestWrapper bookRequest = new RequestWrapper(request);
-    String here = bookRequest.getParameter("book");
-    // This is what does the form processing.
-    // We need to do this before any notEmpty test and before loadBookMessages() which displays the entry count.
-    // Messages will be displayed below.
-    String formMessages = book.getMessages();
-%>
 </head>
-<body id=bk style=display:none;pointer-events:none>
-<div<% if (book.getBook().equals("published")) { %> id=published<% } %> class=page>
+<body id=bk class="<%=book.getThemeName()%>" style=display:none;pointer-events:none>
+<div<% if (book.getBook().equals("published")) { %> id=published<% } %> id=page>
 <div id=navi class="${book.getBook()}">
 <a class="abook router<%=(here.contains("router") ? " selected" : "")%>" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
 <a class="abook master<%=(here.contains("master") ? " selected" : "")%>" href="addressbook?book=master&amp;filter=none"><%=intl._t("Master")%></a>&nbsp;
@@ -92,16 +93,18 @@
 <a id=configlink href="config"><%=intl._t("Configuration")%></a>&nbsp;
 <a id=overview href="index"><%=intl._t("Help")%></a>
 </div>
+<main>
 <hr>
 <form action="export" id=exportlist method=GET target=_blank hidden></form>
 <div class=headline id=addressbook>
 <h3><%=intl._t("Book")%>: <%=intl._t(book.getBook())%>${book.loadBookMessages}<c:if test="${book.isEmpty}">&nbsp;<span class=results>(<%=intl._t("No entries")%>)</span></c:if>
-<c:if test="${book.isEmpty}"><span id=export><input form="exportlist" type=submit class=export id=exporthosts <c:if test="${book.isEmpty}">disabled</c:if>></span></c:if>
+<span id=export>
+<a href=#add id=addNewDest class=fakebutton title="<%=intl._t("Add new destination")%>" style=display:none!important hidden></a><a href=#import id=importFromFile class=fakebutton title="<%=intl._t("Import from hosts.txt file")%>" style=display:none!important hidden></a>
+<c:if test="${book.isEmpty}"><input form="exportlist" type=submit class=export id=exporthosts <c:if test="${book.isEmpty}">disabled</c:if>></c:if>
 <c:if test="${book.notEmpty}">
 <%
     if (book.getEntries().length > 0) { /* Don't show if no results. Can't figure out how to do this with c:if */
 %>
-<span id=export>
 <input form="exportlist" type=hidden name="book" value="${book.book}">
 <c:if test="${book.search} != null && ${book.search}.length() > 0"><input form="exportlist" type=hidden name="search" value="${book.search}"></c:if>
 <c:if test="${book.hasFilter}"><input form="exportlist" type=hidden name="filter" value="${book.filter}"></c:if>
@@ -116,14 +119,14 @@
 <%
         }
 %>
-</span>
 <%
     } else { /* book.getEntries().length() > 0 */
 %>
-<span id=export><input form="exportlist" type=submit class=export id=exporthosts disabled></span>
+<input form="exportlist" type=submit class=export id=exporthosts disabled>
 <%
     }
 %>
+</span>
 </h3>
 </div>
 <% /* need this whether book is empty or not to display the form messages */ %>
@@ -392,9 +395,6 @@
 %>
 </div>
 </c:if>
-<%
-    String susiNonce = book.getSerial(); // have to only do this once per page
-%>
 <c:if test="${book.notEmpty}">
 <form method=POST action="addressbook">
 <input type=hidden name="book" value="${book.book}">
@@ -419,7 +419,7 @@
         boolean haveImagegen = book.haveImagegen();
         if (haveImagegen) {
 %>
-<a href="details?h=${addr.name}&amp;book=${book.book}" title="<%=intl._t("More information on this entry")%>"><svg width="24" height="24" class=identicon data-jdenticon-value="${addr.b32}" xmlns="http://www.w3.org/2000/svg"></svg><noscript><img src="/imagegen/id?s=24&amp;c=${addr.b32}" loading=lazy></noscript></a>
+<a href="details?h=${addr.name}&amp;book=${book.book}" title="<%=intl._t("More information on this entry")%>"><svg width="24" height="24" class=identicon data-jdenticon-value="${addr.b32}" xmlns="http://www.w3.org/2000/svg"></svg><noscript><img src="/imagegen/id?s=24&amp;c=${addr.b32}" loading=lazy><style>.identicon{display:none!important}</style></noscript></a>
 <%
         }  else { // haveImagegen
 %>
@@ -465,6 +465,7 @@
 <input type=hidden name="serial" value="<%=susiNonce%>">
 <input type=hidden name="begin" value="0">
 <input type=hidden name="end" value="99">
+</form>
 <div id=add>
 <h3><%=intl._t("Add new destination")%></h3>
 <table>
@@ -486,7 +487,6 @@
 <input class="add scrollToNav" type=submit name=action value="<%=intl._t("Add")%>">
 </p>
 </div>
-</form>
 <%
     if (!book.getBook().equals("published")) {
 %>
@@ -508,12 +508,65 @@
     }
 %>
 <c:if test="${book.isEmpty}"></div></c:if>
+</main>
+</div>
 <span data-iframe-height></span>
 <style>body{display:block!important;pointer-events:auto!important}</style>
-</div>
-<!--
-<script src="/themes/search.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
--->
 <script src=/js/lazyload.js></script>
+<script nonce="<%=cspNonce%>">
+  document.addEventListener("DOMContentLoaded", function() {
+    if (!document.body.classList.contains("dark")) {return;} // dark theme only for now
+
+    const addButton = document.getElementById("addNewDest");
+    const addContainer = document.getElementById("add");
+    const importButton = document.getElementById("importFromFile");
+    const importContainer = document.getElementById("import");
+    const resetAdd = document.querySelector("#add input[type=reset]");
+    const resetImport = document.querySelector("#import input[type=reset]");
+
+    [addContainer, importContainer].forEach(container => {
+      container.hidden = true;
+    });
+
+    [addButton, importButton].forEach(button => {
+      button.removeAttribute("href");
+      button.removeAttribute("style");
+      button.hidden = false;
+    });
+
+    function toggleBodyClass() {
+      const hidden = addContainer.hidden && importContainer.hidden;
+      if (hidden) {document.body.classList.remove("displayPanels");}
+      else {document.body.classList.add("displayPanels");}
+    }
+
+    addButton.addEventListener("click", function() {
+      addContainer.hidden = !addContainer.hidden;
+      importContainer.hidden = true;
+    });
+
+    resetAdd.addEventListener("click", function() {
+      const textInputs = document.querySelectorAll('#add input[type="text"]');
+      textInputs.forEach(input => {input.value = "";});
+      addContainer.hidden = true;
+    });
+
+    importButton.addEventListener("click", function() {
+      importContainer.hidden = !importContainer.hidden;
+      addContainer.hidden = true;
+    });
+
+    resetImport.addEventListener("click", function() {
+      const textInputs = document.querySelectorAll('#import input[type="text"]');
+      textInputs.forEach(input => {input.value = "";});
+      importContainer.hidden = true;
+    });
+
+    [addButton, resetAdd, importButton, resetImport].forEach(button => {
+      button.addEventListener("click", toggleBodyClass);
+    });
+
+  });
+</script>
 </body>
 </html>
