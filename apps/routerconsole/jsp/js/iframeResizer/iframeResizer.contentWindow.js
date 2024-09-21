@@ -121,9 +121,7 @@
     return function () {
       var now = Date.now()
 
-      if (!previous) {
-        previous = now
-      }
+      if (!previous) {previous = now}
 
       var remaining = throttledTimer - (now - previous)
 
@@ -139,34 +137,21 @@
         previous = now
         result = func.apply(context, args)
 
-        if (!timeout) {
-          // eslint-disable-next-line no-multi-assign
-          context = args = null
-        }
-      } else if (!timeout) {
-        timeout = setTimeout(later, remaining)
-      }
+        if (!timeout) {context = args = null} // eslint-disable-next-line no-multi-assign
+      } else if (!timeout) {timeout = setTimeout(later, remaining)}
 
       return result
     }
   }
 
-  function formatLogMsg(msg) {
-    return msgID + '[' + myID + '] ' + msg
-  }
+  function formatLogMsg(msg) {return msgID + '[' + myID + '] ' + msg}
 
   function log(msg) {
-    if (logging && 'object' === typeof window.console) {
-      // eslint-disable-next-line no-console
-      console.log(formatLogMsg(msg))
-    }
+    if (logging && 'object' === typeof window.console) {console.log(formatLogMsg(msg))} // eslint-disable-next-line no-console
   }
 
   function warn(msg) {
-    if ('object' === typeof window.console) {
-      // eslint-disable-next-line no-console
-      console.warn(formatLogMsg(msg))
-    }
+    if ('object' === typeof window.console) {console.warn(formatLogMsg(msg))} // eslint-disable-next-line no-console
   }
 
   function init() {
@@ -189,9 +174,7 @@
   }
 
   function readDataFromParent() {
-    function strBool(str) {
-      return 'true' === str
-    }
+    function strBool(str) {return 'true' === str}
 
     var data = initMsg.substr(msgIdLen).split(':')
 
@@ -252,10 +235,7 @@
       return calcMode
     }
 
-    if (
-      'iFrameResizer' in window &&
-      Object === window.iFrameResizer.constructor
-    ) {
+    if ('iFrameResizer' in window && Object === window.iFrameResizer.constructor) {
       readData()
       heightCalcMode = setupCustomCalcMethods(heightCalcMode, 'height')
       widthCalcMode = setupCustomCalcMethods(widthCalcMode, 'width')
@@ -281,9 +261,7 @@
 
   function setMargin() {
     // If called via V1 script, convert bodyMargin from int to str
-    if (undefined === bodyMarginStr) {
-      bodyMarginStr = bodyMargin + 'px'
-    }
+    if (undefined === bodyMarginStr) {bodyMarginStr = bodyMargin + 'px'}
 
     setBodyStyle('margin', chkCSS('margin', bodyMarginStr))
   }
@@ -297,9 +275,7 @@
   function manageTriggerEvent(options) {
     var listener = {
       add: function (eventName) {
-        function handleEvent() {
-          sendSize(options.eventName, options.eventType)
-        }
+        function handleEvent() {sendSize(options.eventName, options.eventType)}
 
         eventHandlersByName[eventName] = handleEvent
 
@@ -327,17 +303,17 @@
     manageTriggerEvent({
       method: method,
       eventType: 'Animation Start',
-      eventNames: ['animationstart', 'animationstart']
+      eventName: 'animationstart'
     })
     manageTriggerEvent({
       method: method,
       eventType: 'Animation Iteration',
-      eventNames: ['animationiteration', 'animationiteration']
+      eventName: 'animationiteration'
     })
     manageTriggerEvent({
       method: method,
       eventType: 'Animation End',
-      eventNames: ['animationend', 'animationend']
+      eventName: 'animationend'
     })
     manageTriggerEvent({
       method: method,
@@ -362,7 +338,12 @@
     manageTriggerEvent({
       method: method,
       eventType: 'Print',
-      eventName: ['afterprint', 'beforeprint']
+      eventName: 'afterprint'
+    })
+    manageTriggerEvent({
+      method: method,
+      eventType: 'Print',
+      eventName: 'beforeprint'
     })
     manageTriggerEvent({
       method: method,
@@ -387,17 +368,17 @@
     manageTriggerEvent({
       method: method,
       eventType: 'Transition Start',
-      eventNames: ['transitionstart', 'transitionstart']
+      eventName: 'transitionstart'
     })
     manageTriggerEvent({
       method: method,
       eventType: 'Transition Iteration',
-      eventNames: ['transitioniteration', 'transitioniteration']
+      eventName: 'transitioniteration'
     })
     manageTriggerEvent({
       method: method,
       eventType: 'Transition End',
-      eventNames: ['transitionend', 'transitionend']
+      eventName: 'transitionend'
     })
     if ('child' === resizeFrom) {
       manageTriggerEvent({

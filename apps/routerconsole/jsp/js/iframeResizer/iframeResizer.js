@@ -243,25 +243,17 @@
         checkOrigin = settings[iframeId] && settings[iframeId].checkOrigin
 
       if (checkOrigin && '' + origin !== 'null' && !checkAllowedOrigin()) {
-        throw new Error(
-          'Unexpected message received from: ' +
-            origin +
-            ' for ' +
-            messageData.iframe.id +
-            '. Message was: ' +
-            event.data +
-            '. This error can be disabled by setting the checkOrigin: false option or by providing of array of trusted domains.'
-        )
+        throw new Error('Unexpected message received from: ' + origin + ' for ' + messageData.iframe.id +
+            '. Message was: ' + event.data +
+            '. This error can be disabled by setting the checkOrigin: false option or by providing of array of trusted domains.')
       }
 
       return true
     }
 
     function isMessageForUs() {
-      return (
-        msgId === ('' + msg).substr(0, msgIdLen) &&
-        msg.substr(msgIdLen).split(':')[0] in settings
-      ) // ''+Protects against non-string msg
+      // ''+Protects against non-string msg
+      return (msgId === ('' + msg).substr(0, msgIdLen) && msg.substr(msgIdLen).split(':')[0] in settings)
     }
 
     function isMessageFromMetaParent() {
@@ -281,19 +273,9 @@
     }
 
     function forwardMsgFromIFrame(msgBody) {
-      log(
-        iframeId,
-        'onMessage passed: {iframe: ' +
-          messageData.iframe.id +
-          ', message: ' +
-          msgBody +
-          '}'
-      )
+      log(iframeId, 'onMessage passed: {iframe: ' + messageData.iframe.id + ', message: ' + msgBody +'}')
 
-      on('onMessage', {
-        iframe: messageData.iframe,
-        message: JSON.parse(msgBody)
-      })
+      on('onMessage', {iframe: messageData.iframe, message: JSON.parse(msgBody)})
 
       log(iframeId, '--')
     }
@@ -305,14 +287,8 @@
       return JSON.stringify({
         iframeHeight: iFramePosition.height,
         iframeWidth: iFramePosition.width,
-        clientHeight: Math.max(
-          document.documentElement.clientHeight,
-          window.innerHeight || 0
-        ),
-        clientWidth: Math.max(
-          document.documentElement.clientWidth,
-          window.innerWidth || 0
-        ),
+        clientHeight: Math.max(document.documentElement.clientHeight, window.innerHeight || 0),
+        clientWidth: Math.max(document.documentElement.clientWidth, window.innerWidth || 0),
         offsetTop: parseInt(iFramePosition.top - bodyPosition.top, 10),
         offsetLeft: parseInt(iFramePosition.left - bodyPosition.left, 10),
         scrollTop: window.pageYOffset,
@@ -334,11 +310,8 @@
     function startPageInfoMonitor() {
       function setListener(type, func) {
         function sendPageInfo() {
-          if (settings[id]) {
-            sendPageInfoToIframe(settings[id].iframe, id)
-          } else {
-            stop()
-          }
+          if (settings[id]) {sendPageInfoToIframe(settings[id].iframe, id)}
+          else {stop()}
         }
 
         ;['scroll', 'resize'].forEach(function (evt) {
@@ -347,21 +320,15 @@
         })
       }
 
-      function stop() {
-        setListener('Remove ', removeEventListener)
-      }
+      function stop() {setListener('Remove ', removeEventListener)}
 
-      function start() {
-        setListener('Add ', addEventListener)
-      }
+      function start() {setListener('Add ', addEventListener)}
 
       var id = iframeId // Create locally scoped copy of iFrame ID
 
       start()
 
-      if (settings[id]) {
-        settings[id].stopPageInfo = stop
-      }
+      if (settings[id]) {settings[id].stopPageInfo = stop}
     }
 
     function stopPageInfoMonitor() {
@@ -414,85 +381,46 @@
             newPosition.y
           )
         } else {
-          warn(
-            iframeId,
-            'Unable to scroll to requested position, window.parentIFrame not found'
-          )
+          warn(iframeId, 'Unable to scroll to requested position, window.parentIFrame not found')
         }
       }
 
-      var offset = addOffset
-          ? getElementPosition(messageData.iframe)
-          : { x: 0, y: 0 },
-        newPosition = calcOffset()
+      var offset = addOffset ? getElementPosition(messageData.iframe) : { x: 0, y: 0 }, newPosition = calcOffset()
 
-      log(
-        iframeId,
-        'Reposition requested from iFrame (offset x:' +
-          offset.x +
-          ' y:' +
-          offset.y +
-          ')'
-      )
+      log(iframeId, 'Reposition requested from iFrame (offset x:' + offset.x + ' y:' + offset.y + ')')
 
-      if (window.top !== window.self) {
-        scrollParent()
-      } else {
-        reposition()
-      }
+      if (window.top !== window.self) {scrollParent()}
+      else {reposition()}
     }
 
     function scrollTo() {
-      if (false !== on('onScroll', pagePosition)) {
-        setPagePosition(iframeId)
-      } else {
-        unsetPagePosition()
-      }
+      if (false !== on('onScroll', pagePosition)) {setPagePosition(iframeId)}
+      else {unsetPagePosition()}
     }
 
     function findTarget(location) {
       function jumpToTarget() {
         var jumpPosition = getElementPosition(target)
 
-        log(
-          iframeId,
-          'Moving to in page link (#' +
-            hash +
-            ') at x: ' +
-            jumpPosition.x +
-            ' y: ' +
-            jumpPosition.y
-        )
-        pagePosition = {
-          x: jumpPosition.x,
-          y: jumpPosition.y
-        }
+        log(iframeId, 'Moving to in page link (#' + hash + ') at x: ' + jumpPosition.x + ' y: ' + jumpPosition.y)
+        pagePosition = {x: jumpPosition.x, y: jumpPosition.y}
 
         scrollTo()
         log(iframeId, '--')
       }
 
       function jumpToParent() {
-        if (window.parentIFrame) {
-          window.parentIFrame.moveToAnchor(hash)
-        } else {
-          log(iframeId, 'In page link #' + hash + ' not found and window.parentIFrame not found')
-        }
+        if (window.parentIFrame) {window.parentIFrame.moveToAnchor(hash)}
+        else {log(iframeId, 'In page link #' + hash + ' not found and window.parentIFrame not found')}
       }
 
       var hash = location.split('#')[1] || '',
         hashData = decodeURIComponent(hash),
-        target =
-          document.getElementById(hashData) ||
-          document.getElementsByName(hashData)[0]
+        target = document.getElementById(hashData) || document.getElementsByName(hashData)[0]
 
-      if (target) {
-        jumpToTarget()
-      } else if (window.top !== window.self) {
-        jumpToParent()
-      } else {
-        log(iframeId, 'In page link #' + hash + ' not found')
-      }
+      if (target) {jumpToTarget()}
+      else if (window.top !== window.self) {jumpToParent()}
+      else {log(iframeId, 'In page link #' + hash + ' not found')}
     }
 
     function onMouse(event) {
@@ -500,16 +428,8 @@
 
       if (Number(messageData.width) === 0 && Number(messageData.height) === 0) {
         var data = getMsgBody(9).split(':')
-        mousePos = {
-          x: data[1],
-          y: data[0]
-        }
-      } else {
-        mousePos = {
-          x: messageData.width,
-          y: messageData.height
-        }
-      }
+        mousePos = {x: data[1], y: data[0]}
+      } else {mousePos = {x: messageData.width, y: messageData.height}}
 
       on(event, {
         iframe: messageData.iframe,
@@ -519,9 +439,7 @@
       })
     }
 
-    function on(funcName, val) {
-      return chkEvent(iframeId, funcName, val)
-    }
+    function on(funcName, val) {return chkEvent(iframeId, funcName, val)}
 
     function actionMsg() {
       if (settings[iframeId] && settings[iframeId].firstRun) firstRun()
@@ -581,19 +499,14 @@
           break
 
         default:
-          if (
-            Number(messageData.width) === 0 &&
-            Number(messageData.height) === 0
-          ) {
+          if (Number(messageData.width) === 0 && Number(messageData.height) === 0) {
             warn(
               'Unsupported message received (' +
                 messageData.type +
                 '), this is likely due to the iframe containing a later ' +
                 'version of iframe-resizer than the parent page'
             )
-          } else {
-            resizeIFrame()
-          }
+          } else {resizeIFrame()}
       }
     }
 
