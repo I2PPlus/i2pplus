@@ -116,6 +116,23 @@ public class BaseBean
     }
 
     /**
+     * Returns the theme name
+     * @since 0.9.64+
+     */
+    public String getThemeName() {
+        loadConfig();
+        String theme = _context.getProperty(RC_PROP_THEME_NAME, DEFAULT_THEME);
+        theme = properties.getProperty(PROP_THEME_NAME, theme);
+        String[] themes = getThemes();
+        boolean themeExists = false;
+        for (int i = 0; i < themes.length; i++) {
+            if (themes[i].equals(theme)) {themeExists = true; break;}
+        }
+        if (!themeExists) {theme = DEFAULT_THEME;}
+        return theme;
+    }
+
+    /**
      * Get all themes
      * @return String[] -- Array of all the themes found.
      * @since 0.9.2
