@@ -51,7 +51,7 @@
 <style>body{display:none;pointer-events:none}</style>
 </head>
 <body id=ovrvw>
-<div class=page>
+<div id=page>
 <div id=navi>
 <a class="abook router" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
 <a class="abook master" href="addressbook?book=master&amp;filter=none"><%=intl._t("Master")%></a>&nbsp;
