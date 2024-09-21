@@ -84,27 +84,28 @@ class SessionIdleTimer implements SimpleTimer.TimedEvent {
         if (_session.isClosed()) {return;}
         long now = _context.clock().now();
         long lastActivity = _session.lastActivity();
+        String sessionName = _session.getName();
         if (_log.shouldInfo()) {
             _log.info("Firing idle timer -> last activity detected " + DataHelper.formatDuration(now - lastActivity) + " ago ");
         }
         long nextDelay = 0;
         if (_shutdownEnabled && now - lastActivity >= _shutdownTime) {
-            if (_log.shouldWarn()) {_log.warn("Closing tunnels on idle -> " + _session);}
+            if (_log.shouldWarn()) {_log.warn("Closing tunnels on idle -> " + sessionName);}
             _session.destroySession();
             return;
         } else if (lastActivity <= _lastActive && !_shutdownEnabled) {
-            if (_log.shouldDebug()) {_log.debug("Still idle, sleeping again -> " + _session);}
+            if (_log.shouldDebug()) {_log.debug("Still idle, sleeping again -> " + sessionName);}
             nextDelay = _reduceTime;
         } else if (_reduceEnabled && now - lastActivity >= _reduceTime) {
-            if (_log.shouldInfo()) {_log.info("Reducing tunnel quantity on idle -> " + _session + ' ');}
+            if (_log.shouldInfo()) {_log.info("Reducing tunnel quantity on idle -> " + sessionName);}
             try {_session.getProducer().updateTunnels(_session, _reduceQuantity);}
             catch (I2PSessionException ise) {
-                _log.error("Error attempting to reduce tunnel count on idle" + ise);
+                _log.error("Error attempting to reduce tunnel count on idle for " + sessionName + " (" + ise.getMessage() + ")");
             }
             _session.setReduced();
             _lastActive = lastActivity;
-            if (_shutdownEnabled) {nextDelay =  _shutdownTime - (now - lastActivity);}
-            else {nextDelay =  _reduceTime;}
+            if (_shutdownEnabled) {nextDelay = _shutdownTime - (now - lastActivity);}
+            else {nextDelay = _reduceTime;}
         } else {nextDelay = _minimumTime - (now - lastActivity);}
         _context.simpleTimer2().addEvent(this, nextDelay);
     }
