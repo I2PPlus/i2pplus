@@ -363,8 +363,8 @@ textarea,pre{font-size:9.5pt}
 
 /* add/import panel toggles */
 main {position:relative}
-.displayPanels main::after{display:block;position:absolute;top:0;left:0;bottom:0;right:0;z-index:1000;background:linear-gradient(180deg,#0005,#000a 200px);content:"";pointer-events:none}
-.displayPanels #add, .displayPanels #import{margin:0;position:absolute;z-index:9999;top:-13px;left:0;right:0;filter:drop-shadow(0 4px 5px #000)}
+.displayPanels main::after{display:block;position:absolute;top:0;left:0;bottom:0;right:0;z-index:1000;background:linear-gradient(180deg,#0005,#000a 200px);content:"";pointer-events:none;will-change:transform}
+.displayPanels #add, .displayPanels #import{margin:0;position:absolute;z-index:1500;top:-13px;left:0;right:0;filter:drop-shadow(0 4px 5px #000);animation:slideDown 1s ease-out 0s both;will-change:transform}
 .iframed .displayPanels #add,.iframed .displayPanels #import{top:-9px;left:-13px;right:-13px}
 #navi{position:relative;z-index:2000}
 #paginate{margin-right:68px}
@@ -374,4 +374,4 @@ main {position:relative}
 #export #importFromFile{margin-right:-8px;background:var(--download) no-repeat center center/14px,var(--th)}
 #export #importFromFile:hover{background-image:var(--download_hover)}
 #exporthosts{transform:rotateX(180deg)}
-
+@keyframes slideDown{from{transform:translateY(-800px)}to{transform:translateY(0)}
