@@ -1,3 +1,7 @@
+2024-09-21 dr|z3d
+ * SusiDNS: Make Add/Import panels togglable with header butttons
+   (WIP - dark theme only for now)
+
 2024-09-15 dr|z3d
  * Console: Start work on overhauling LeaseSet display in netdb
 
