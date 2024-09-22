@@ -51,31 +51,21 @@ public class AddressbookBean extends BaseBean {
     protected static final Comparator<AddressBean> sorter;
     private static final int DISPLAY_SIZE = 100;
 
-    static {
-        sorter = new AddressByNameSorter();
-    }
-    public String getSearch() {
-        return search;
-    }
-    public void setSearch(String search) {
-        this.search = DataHelper.stripHTML(search).trim();  // XSS;
-    }
-    public boolean isHasFilter() {
-        return filter != null && filter.length() > 0;
-    }
-    public void setTrClass(int trClass) {
-        this.trClass = trClass;
-    }
-    public int getTrClass() {
-        trClass = 1 - trClass;
-        return trClass;
-    }
-    public boolean isIsEmpty() {
-        return ! isNotEmpty();
-    }
-    public boolean isNotEmpty() {
-        return addressbook != null && !addressbook.isEmpty();
-    }
+    static {sorter = new AddressByNameSorter();}
+
+    public String getSearch() {return search;}
+
+    public void setSearch(String search) {this.search = DataHelper.stripHTML(search).trim();} // XSS;
+
+    public boolean isHasFilter() {return filter != null && filter.length() > 0;}
+
+    public void setTrClass(int trClass) {this.trClass = trClass;}
+
+    public int getTrClass() {trClass = 1 - trClass; return trClass;}
+
+    public boolean isIsEmpty() {return !isNotEmpty();}
+
+    public boolean isNotEmpty() {return addressbook != null && !addressbook.isEmpty();}
 
     public AddressbookBean() {
         super();
@@ -87,45 +77,38 @@ public class AddressbookBean extends BaseBean {
     public String getFileName() {
         loadConfig();
         String filename = properties.getProperty(getBook() + "_addressbook");
-        // clean up the ../ with getCanonicalPath()
-        File path = new File(addressbookDir(), filename);
-        try {
-            return path.getCanonicalPath();
-        } catch (IOException ioe) {}
+        File path = new File(addressbookDir(), filename); // clean up the ../ with getCanonicalPath()
+        try {return path.getCanonicalPath();}
+        catch (IOException ioe) {}
         return filename;
     }
 
-    public String getDisplayName() {
-        return getFileName();
-    }
+    public String getDisplayName() {return getFileName();}
 
     protected AddressBean[] entries;
 
-    public AddressBean[] getEntries() {
-        return entries;
-    }
+    public AddressBean[] getEntries() {return entries;}
 
     /**
     * This always returns a valid book, non-null.
     */
     public String getBook() {
         if (book == null || (!book.equalsIgnoreCase("master") &&
-                !book.equalsIgnoreCase("router") &&
-                !book.equalsIgnoreCase("private") &&
-                !book.equalsIgnoreCase("published")))
+            !book.equalsIgnoreCase("router") &&
+            !book.equalsIgnoreCase("private") &&
+            !book.equalsIgnoreCase("published")))
             book = "router";
         return book;
     }
+
     public void setBook(String book) {
-        if ("local".equals(book))
-            book = "master";
-        this.book = DataHelper.stripHTML(book);  // XSS
+        if ("local".equals(book)) {book = "master";}
+        this.book = DataHelper.stripHTML(book); // XSS
     }
 
     /** Load addressbook and apply filter, returning messages about this. */
     public String getLoadBookMessages() {
-        // Config and addressbook now loaded here, hence not needed in getMessages()
-        loadConfig();
+        loadConfig(); // Config and addressbook now loaded here, not needed in getMessages()
         addressbook = new Properties();
 
         String message = "";
@@ -140,18 +123,12 @@ public class AddressbookBean extends BaseBean {
                 if (filter != null && filter.length() > 0) {
                     if (filter.compareTo("0-9") == 0) {
                         char first = name.charAt(0);
-                        if (first < '0' || first > '9')
-                            continue;
-                    }
-                    else if (! name.toLowerCase(Locale.US).startsWith(filter.toLowerCase(Locale.US))) {
+                        if (first < '0' || first > '9') {continue;}
+                    } else if (! name.toLowerCase(Locale.US).startsWith(filter.toLowerCase(Locale.US))) {
                         continue;
                     }
                 }
-                if (search != null && search.length() > 0) {
-                    if (name.indexOf(search) == -1) {
-                        continue;
-                    }
-                }
+                if (search != null && search.length() > 0 && name.indexOf(search) == -1) {continue;}
                 list.addLast(new AddressBean(name, destination));
             }
             AddressBean array[] = list.toArray(new AddressBean[list.size()]);
@@ -160,14 +137,14 @@ public class AddressbookBean extends BaseBean {
 
             message = generateLoadMessage();
         }
-        catch (IOException e) {
-            warn(e);
-        } finally {
-            if (fis != null)
-                try { fis.close(); } catch (IOException ioe) {}
+        catch (IOException e) {warn(e);}
+        finally {
+            if (fis != null) {
+                try {fis.close();}
+                catch (IOException ioe) {}
+            }
         }
-        if (message.length() > 0)
-            message = "<p id=filtered>" + message + "</p>";
+        if (message.length() > 0) {message = "<p id=filtered>" + message + "</p>";}
         return message;
     }
 
@@ -197,54 +174,41 @@ public class AddressbookBean extends BaseBean {
                                resultCount);
             message = "</span><span id=results>" + message + "</span>";
         } else {
-            if (resultCount <= 0) {
-                // covered in jsp
-                message = "";
-            } else {
+            if (resultCount <= 0) {message = "";} // covered in jsp
+            else {
                 message = ngettext("1 entry", "{0} entries", resultCount);
                 message = " (" + message + ")";
             }
         }
-        if (resultCount <= 0) {
-            // nothing to display
-        } else if (getBeginInt() == 0 && getEndInt() == resultCount - 1) {
-            message += "</span>";
-        } else {
+        if (resultCount <= 0) {} // nothing to display
+        else if (getBeginInt() == 0 && getEndInt() == resultCount - 1) {message += "</span>";}
+        else {
             message += "</span><span id=paginate>";
             if (getBeginInt() > 0) {
                 int newBegin = Math.max(0, getBeginInt() - DISPLAY_SIZE);
                 int newEnd = Math.max(0, getBeginInt() - 1);
-                        message += " <span id=prev><a href=\"addressbook?book=" + getBook() + filterArg +
-                                   "&amp;begin=" + newBegin + "&amp;end=" + newEnd + "\">" + (newBegin+1) +
-                                   " - "  + (newEnd+1) + "</a></span> | ";
-                } else {
-                    message += " <span id=prev class=inactive></span> | ";
-                }
+                message += " <span id=prev><a href=\"addressbook?book=" + getBook() + filterArg +
+                           "&amp;begin=" + newBegin + "&amp;end=" + newEnd + "\">" + (newBegin+1) +
+                           " - "  + (newEnd+1) + "</a></span> | ";
+                } else {message += " <span id=prev class=inactive></span> | ";}
                 message += " <span id=current>" + (getBeginInt()+1) + " - " + (getEndInt()+1) + "</span>";
                 if (getEndInt() < resultCount - 1) {
-                    if (getBeginInt() <= 0)
-                        message += " | ";
+                    if (getBeginInt() <= 0) {message += " | ";}
                     int newBegin = Math.min(resultCount - 1, getEndInt() + 1);
                     int newEnd = Math.min(resultCount, getEndInt() + DISPLAY_SIZE);
-                    if (getBeginInt() > 0)
-                        message += " | ";
+                    if (getBeginInt() > 0) {message += " | ";}
                     message += "<span id=next><a href=\"addressbook?book=" + getBook() + filterArg +
                                "&amp;begin=" + newBegin + "&amp;end=" + newEnd + "\">" + (newBegin+1) +
                                " - " + (newEnd+1) + "</a></span>";
-            } else {
-                message += "<span id=next class=inactive></span>";
-            }
+            } else {message += "<span id=next class=inactive></span>";}
             message += "</span>"; // close #showing span in NamingServiceBean
         }
         return message;
     }
 
     /** Perform actions, returning messages about this. */
-    public String getMessages()
-    {
-        // Loading config and addressbook moved into getLoadBookMessages()
-        String message = "";
-
+    public String getMessages() {
+        String message = ""; // Loading config and addressbook moved into getLoadBookMessages()
         if (action != null) {
             if (_context.getBooleanProperty(PROP_PW_ENABLE) || (serial != null && serial.equals(lastSerial))) {
                 boolean changed = false;
@@ -254,7 +218,6 @@ public class AddressbookBean extends BaseBean {
                             // throws IAE with translated message
                             String host = AddressBean.toASCII(hostname);
                             String displayHost = host.equals(hostname) ? hostname : hostname + " (" + host + ')';
-
                             String oldDest = (String) addressbook.get(host);
                             if (destination.equals(oldDest)) {
                                 message = _t("Host name {0} is already in address book, unchanged.", displayHost);
@@ -264,73 +227,55 @@ public class AddressbookBean extends BaseBean {
                                 boolean valid = true;
                                 boolean wasB32 = false;
                                 try {
-                                    if (destination.length() >= 516) {
-                                        // just to check validity
-                                        new Destination(destination);
-                                    } else if (destination.contains(".b32.i2p")) {
+                                    if (destination.length() >= 516) {new Destination(destination);} // just to check validity
+                                    else if (destination.contains(".b32.i2p")) {
                                         wasB32 = true;
                                         Destination dest;
                                         if (destination.startsWith("http://") || destination.startsWith("https://")) {
-                                            // do them a favor, pull b32 out of pasted URL
-                                            try {
+                                            try { // do them a favor, pull b32 out of pasted URL
                                                 URI uri = new URI(destination);
                                                 String b32 = uri.getHost();
-                                                if (b32 == null || !b32.endsWith(".b32.i2p") || b32.length() < 60)
+                                                if (b32 == null || !b32.endsWith(".b32.i2p") || b32.length() < 60) {
                                                     throw new DataFormatException("");
+                                                }
                                                 dest = _context.namingService().lookup(b32);
-                                                if (dest == null)
+                                                if (dest == null) {
                                                     throw new DataFormatException(_t("Unable to resolve Base 32 address"));
-                                            } catch(URISyntaxException use) {
-                                                throw new DataFormatException("");
-                                            }
+                                                }
+                                            } catch(URISyntaxException use) {throw new DataFormatException("");}
                                         } else if (destination.endsWith(".b32.i2p") && destination.length() >= 60) {
                                             dest = _context.namingService().lookup(destination);
-                                            if (dest == null)
-                                                throw new DataFormatException(_t("Unable to resolve Base 32 address"));
-                                        } else {
-                                            throw new DataFormatException("");
-                                        }
+                                            if (dest == null) {throw new DataFormatException(_t("Unable to resolve Base 32 address"));}
+                                        } else {throw new DataFormatException("");}
                                         destination = dest.toBase64();
-                                    } else {
-                                        throw new DataFormatException("");
-                                    }
+                                    } else {throw new DataFormatException("");}
                                 } catch (DataFormatException dfe) {
                                     valid = false;
                                     String msg = dfe.getMessage();
-                                    if (msg != null)
-                                        message = msg;
+                                    if (msg != null) {message = msg;}
                                 }
                                 if (valid) {
                                     addressbook.put(host, destination);
                                     changed = true;
-                                    if (oldDest == null)
-                                        message = _t("Destination added for {0}.", displayHost);
-                                    else
-                                        message = _t("Destination changed for {0}.", displayHost);
-                                    if (!host.endsWith(".i2p"))
-                                        message += "<br>" + _t("Warning - host name does not end with \".i2p\"");
+                                    if (oldDest == null) {message = _t("Destination added for {0}.", displayHost);}
+                                    else {message = _t("Destination changed for {0}.", displayHost);}
+                                    if (!host.endsWith(".i2p")) {message += "<br>" + _t("Warning - host name does not end with \".i2p\"");}
                                     // clear form
                                     hostname = null;
                                     destination = null;
                                 } else {
                                     if (message.length() <= 0) {
-                                        if (wasB32)
-                                            message = _t("Invalid Base 32 host name.");
-                                        else
-                                            message = _t("Invalid Base 64 destination.");
+                                        if (wasB32) {message = _t("Invalid Base 32 host name.");}
+                                        else {message = _t("Invalid Base 64 destination.");}
                                     }
                                 }
                             }
                         } catch (IllegalArgumentException iae) {
                             message = iae.getMessage();
-                            if (message == null)
-                                message = _t("Invalid host name \"{0}\".", hostname);
+                            if (message == null) {message = _t("Invalid host name \"{0}\".", hostname);}
                         }
-                    } else {
-                        message = _t("Please enter a host name and destination");
-                    }
-                    // clear search when adding
-                    search = null;
+                    } else {message = _t("Please enter a host name and destination");}
+                    search = null; // clear search when adding
                 } else if (action.equals(_t("Delete Selected")) || action.equals(_t("Delete Entry"))) {
                     String name = null;
                     int deleted = 0;
@@ -344,20 +289,11 @@ public class AddressbookBean extends BaseBean {
                         }
                     }
                     if (changed) {
-                        if (deleted == 1)
-                            message = _t("Destination {0} deleted.", name);
-                        else
-                            // parameter will always be >= 2
-                            message = ngettext("1 destination deleted.", "{0} destinations deleted.", deleted);
-                    } else {
-                        message = _t("No entries selected to delete.");
-                    }
-                    if (action.equals(_t("Delete Entry")))
-                        search = null;
-                } else if (action.equals(_t("Add Alternate"))) {
-                    // button won't be in UI
-                    message = "Unsupported";
-                }
+                        if (deleted == 1) {message = _t("Destination {0} deleted.", name);}
+                        else {message = ngettext("1 destination deleted.", "{0} destinations deleted.", deleted);} // parameter will always be >= 2
+                    } else {message = _t("No entries selected to delete.");}
+                    if (action.equals(_t("Delete Entry"))) {search = null;}
+                } else if (action.equals(_t("Add Alternate"))) {message = "Unsupported";} // button won't be in UI
                 if (changed) {
                     try {
                         save();
@@ -367,8 +303,7 @@ public class AddressbookBean extends BaseBean {
                         message += "<br>" + _t("ERROR: Could not write addressbook file.");
                     }
                 }
-            }
-            else {
+            } else {
                 message = _t("Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit.") + "<br>" +
                           _t("If the problem persists, verify that you have cookies enabled in your browser.");
             }
@@ -376,31 +311,25 @@ public class AddressbookBean extends BaseBean {
 
         action = null;
 
-        if (message.length() > 0)
-            message = "<p class=messages>" + message + "</p>";
+        if (message.length() > 0) {message = "<p class=messages>" + message + "</p>";}
         return message;
     }
 
-    private void save() throws IOException
-    {
+    private void save() throws IOException {
         String filename = properties.getProperty(getBook() + "_addressbook");
-
         FileOutputStream fos = null;
         try {
             fos = new SecureFileOutputStream(new File(addressbookDir(), filename));
             addressbook.store(fos, null);
         } finally {
             if (fos != null) {
-                try {
-                    fos.close();
-                } catch (IOException ioe) {}
+                try {fos.close();}
+                catch (IOException ioe) {}
             }
         }
     }
 
-    public String getFilter() {
-        return filter;
-    }
+    public String getFilter() {return filter;}
 
     /**
     * Because the following from addressbook.jsp fails parsing in the new EL:
@@ -424,56 +353,41 @@ public class AddressbookBean extends BaseBean {
             filter = null;
             search = null;
         }
-        this.filter = DataHelper.stripHTML(filter);  // XSS
-    }
-    public String getDestination() {
-        return destination;
-    }
-    public void setDestination(String destination) {
-        this.destination = DataHelper.stripHTML(destination).trim();  // XSS
-    }
-    public String getHostname() {
-        return hostname;
-    }
-    public void setResetDeletionMarks(String dummy) {
-        deletionMarks.clear();
-    }
-    public void setMarkedForDeletion(String name) {
-        deletionMarks.addLast(DataHelper.stripHTML(name));    // XSS
-    }
-    public void setHostname(String hostname) {
-        this.hostname = DataHelper.stripHTML(hostname).trim();  // XSS
+        this.filter = DataHelper.stripHTML(filter); // XSS
     }
 
-    protected int getBeginInt() {
-        return Math.max(0, Math.min(resultSize() - 1, beginIndex));
-    }
+    public String getDestination() {return destination;}
 
-    public String getBegin() {
-        return Integer.toString(getBeginInt());
-    }
+    public void setDestination(String destination) {this.destination = DataHelper.stripHTML(destination).trim();} // XSS
+
+    public String getHostname() {return hostname;}
+
+    public void setResetDeletionMarks(String dummy) {deletionMarks.clear();}
+
+    public void setMarkedForDeletion(String name) {deletionMarks.addLast(DataHelper.stripHTML(name));} // XSS
+
+    public void setHostname(String hostname) {this.hostname = DataHelper.stripHTML(hostname).trim();} // XSS
+
+    protected int getBeginInt() {return Math.max(0, Math.min(resultSize() - 1, beginIndex));}
+
+    public String getBegin() {return Integer.toString(getBeginInt());}
 
     /**
     *  @return beginning index into results
     *  @since 0.8.7
     */
-    public String getResultBegin() {
-        return isPrefiltered() ? "0" : Integer.toString(getBeginInt());
-    }
+    public String getResultBegin() {return isPrefiltered() ? "0" : Integer.toString(getBeginInt());}
 
     public void setBegin(String s) {
-        try {
-            beginIndex = Integer.parseInt(s);
-        } catch (NumberFormatException nfe) {}
+        try {beginIndex = Integer.parseInt(s);}
+        catch (NumberFormatException nfe) {}
     }
 
     protected int getEndInt() {
         return Math.max(0, Math.max(getBeginInt(), Math.min(resultSize() - 1, endIndex)));
     }
 
-    public String getEnd() {
-        return Integer.toString(getEndInt());
-    }
+    public String getEnd() {return Integer.toString(getEndInt());}
 
     /**
     *  @return ending index into results
@@ -484,9 +398,8 @@ public class AddressbookBean extends BaseBean {
     }
 
     public void setEnd(String s) {
-        try {
-            endIndex = Integer.parseInt(s);
-        } catch (NumberFormatException nfe) {}
+        try {endIndex = Integer.parseInt(s);}
+        catch (NumberFormatException nfe) {}
     }
 
     /**
@@ -494,23 +407,18 @@ public class AddressbookBean extends BaseBean {
     *  or must we index into it?
     *  @since 0.8.7
     */
-    protected boolean isPrefiltered() {
-        return false;
-    }
+    protected boolean isPrefiltered() {return false;}
 
     /**
     *  @return the size of the lookup result
     *  @since 0.8.7
     */
-    protected int resultSize() {
-        return entries.length;
-    }
+    protected int resultSize() {return entries.length;}
 
     /**
     *  @return the total size of the address book
     *  @since 0.8.7
     */
-    protected int totalSize() {
-        return entries.length;
-    }
+    protected int totalSize() {return entries.length;}
+
 }
