@@ -209,6 +209,7 @@ public class AddressbookBean extends BaseBean {
     /** Perform actions, returning messages about this. */
     public String getMessages() {
         String message = ""; // Loading config and addressbook moved into getLoadBookMessages()
+        boolean fail = false;
         if (action != null) {
             if (_context.getBooleanProperty(PROP_PW_ENABLE) || (serial != null && serial.equals(lastSerial))) {
                 boolean changed = false;
@@ -223,6 +224,7 @@ public class AddressbookBean extends BaseBean {
                                 message = _t("Host name {0} is already in address book, unchanged.", displayHost);
                             } else if (oldDest != null && !action.equals(_t("Replace"))) {
                                 message = _t("Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite.", displayHost);
+                                fail = true;
                             } else {
                                 boolean valid = true;
                                 boolean wasB32 = false;
@@ -251,6 +253,7 @@ public class AddressbookBean extends BaseBean {
                                     } else {throw new DataFormatException("");}
                                 } catch (DataFormatException dfe) {
                                     valid = false;
+                                    fail = true;
                                     String msg = dfe.getMessage();
                                     if (msg != null) {message = msg;}
                                 }
@@ -267,12 +270,14 @@ public class AddressbookBean extends BaseBean {
                                     if (message.length() <= 0) {
                                         if (wasB32) {message = _t("Invalid Base 32 host name.");}
                                         else {message = _t("Invalid Base 64 destination.");}
+                                        fail = true;
                                     }
                                 }
                             }
                         } catch (IllegalArgumentException iae) {
                             message = iae.getMessage();
                             if (message == null) {message = _t("Invalid host name \"{0}\".", hostname);}
+                            fail = true;
                         }
                     } else {message = _t("Please enter a host name and destination");}
                     search = null; // clear search when adding
@@ -301,17 +306,19 @@ public class AddressbookBean extends BaseBean {
                     } catch (IOException e) {
                         warn(e);
                         message += "<br>" + _t("ERROR: Could not write addressbook file.");
+                        fail = true;
                     }
                 }
             } else {
                 message = _t("Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit.") + "<br>" +
                           _t("If the problem persists, verify that you have cookies enabled in your browser.");
+                fail = true;
             }
         }
 
         action = null;
 
-        if (message.length() > 0) {message = "<p class=messages>" + message + "</p>";}
+        if (message.length() > 0) {message = "<p class=\"messages" + (fail ? " fail" : "") + "\">" + message + "</p>";}
         return message;
     }
 

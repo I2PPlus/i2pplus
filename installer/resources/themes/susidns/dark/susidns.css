@@ -52,7 +52,7 @@ th{padding:5px 10px;text-align:left;color:var(--ink);font-size:8.5pt}
 
 /* topnav */
 #navi{margin:-16px auto 24px;padding:5px 3px;position:sticky;top:-1px;z-index:999;text-align:center;border:var(--border_hard);border-radius:0 1px 2px 2px;box-shadow:var(--bevel),0 2px 2px 2px rgba(0,0,0,.4);background:var(--topnav)}
-.iframed #navi{margin:-6px -15px 27px;padding:5px 0;position:static;border:var(--border_hard);border-right:0;border-left:0;border-radius:0}
+.iframed #navi{margin:-6px -15px 27px;padding:5px 0;border:var(--border_hard);border-right:0;border-left:0;border-radius:0}
 #navi a:link{text-transform:capitalize}
 #navi a:first-child{border-radius:2px 0 0 2px}
 #navi a:last-child{border-radius:0 2px 2px 0}
@@ -293,8 +293,10 @@ svg #arrow stop:last-child{stop-color:#010}
 /* notifications */
 #messages:empty{display:none}
 #messages:hover{cursor:crosshair;background-blend-mode:normal}
-#messages{padding:18px 20px 20px;width:calc(100% - 66px);position:absolute;top:0;z-index:999;line-height:1.2;font-weight:700;border:var(--border);box-shadow:var(--highlight);background:#020 url(/themes/snark/dark/images/delete.png) right 6px top 6px no-repeat;background-blend-mode:luminosity}
-#messages p{margin:0;padding:15px 15px 15px 50px;color:var(--ink);border-radius:0;background:car(--infohelp) no-repeat 6px center;background-size:32px}
+#messages{padding:18px 20px 20px;width:calc(100% - 42px);position:absolute;top:-14px;z-index:999;line-height:1.2;font-weight:700;border:var(--border_hard);box-shadow:var(--highlight),0 0 3px 2px #131 inset;background:#020 var(--close) no-repeat right 6px top 6px/12px;animation:slideDown .5s ease 10s reverse both}
+#messages:hover{background-image:var(--close_hover)}
+#messages p{margin:0;padding:15px 15px 15px 50px;color:var(--ink);border-radius:0;background:var(--infohelp) no-repeat 6px center;background-size:32px}
+#messages p.fail{background-image:var(--err)}
 #messages+p,p.book{padding:20px 20px 20px 50px;border:var(--border);box-shadow:var(--highlight),inset 0 0 2px 1px #030;background:#000 var(--addressbook) no-repeat 10px center/20px}
 
 /* iframe */

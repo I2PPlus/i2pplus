@@ -170,6 +170,7 @@
     <war destfile="${project}.war" webxml="WEB-INF/web-out.xml">
       <fileset dir=".">
         <include name="WEB-INF/**/*.class" />
+        <include name="js/*" />
         <include name="svg/*" />
       </fileset>
       <manifest>

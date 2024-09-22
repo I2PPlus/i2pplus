@@ -46,7 +46,8 @@
     RequestWrapper bookRequest = new RequestWrapper(request);
     String here = bookRequest.getParameter("book");
     // This is what does the form processing.
-    // We need to do this before any notEmpty test and before loadBookMessages() which displays the entry count.
+    // We need to do this before any notEmpty test and
+    // before loadBookMessages() which displays the entry count.
     // Messages will be displayed below.
     String formMessages = book.getMessages();
     String susiNonce = book.getSerial(); // have to only do this once per page
@@ -85,17 +86,17 @@
 <body id=bk class="<%=book.getThemeName()%>" style=display:none;pointer-events:none>
 <div<% if (book.getBook().equals("published")) { %> id=published<% } %> id=page>
 <div id=navi class="${book.getBook()}">
-<a class="abook router<%=(here.contains("router") ? " selected" : "")%>" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
-<a class="abook master<%=(here.contains("master") ? " selected" : "")%>" href="addressbook?book=master&amp;filter=none"><%=intl._t("Master")%></a>&nbsp;
-<a class="abook private<%=(here.contains("private") ? " selected" : "")%>" href="addressbook?book=private&amp;filter=none"><%=intl._t("Private")%></a>&nbsp;
-<a class="abook published<%=(here.contains("published") ? " selected" : "")%>" href="addressbook?book=published&amp;filter=none"><%=intl._t("Published")%></a>&nbsp;
+<a class="abook router<%=(here.contains("router") ? " selected" : "")%>" href="/susidns/addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
+<a class="abook master<%=(here.contains("master") ? " selected" : "")%>" href="/susidns/addressbook?book=master&amp;filter=none"><%=intl._t("Master")%></a>&nbsp;
+<a class="abook private<%=(here.contains("private") ? " selected" : "")%>" href="/susidns/addressbook?book=private&amp;filter=none"><%=intl._t("Private")%></a>&nbsp;
+<a class="abook published<%=(here.contains("published") ? " selected" : "")%>" href="/susidns/addressbook?book=published&amp;filter=none"><%=intl._t("Published")%></a>&nbsp;
 <a id=subs href="subscriptions"><%=intl._t("Subscriptions")%></a>&nbsp;
 <a id=configlink href="config"><%=intl._t("Configuration")%></a>&nbsp;
 <a id=overview href="index"><%=intl._t("Help")%></a>
 </div>
 <main>
 <hr>
-<form action="export" id=exportlist method=GET target=_blank hidden></form>
+<form action="/susidns/export" id=exportlist method=GET target=_blank hidden></form>
 <div class=headline id=addressbook>
 <h3><%=intl._t("Book")%>: <%=intl._t(book.getBook())%>${book.loadBookMessages}<c:if test="${book.isEmpty}">&nbsp;<span class=results>(<%=intl._t("No entries")%>)</span></c:if>
 <span id=export>
@@ -130,7 +131,7 @@
 </h3>
 </div>
 <% /* need this whether book is empty or not to display the form messages */ %>
-<div id=messages>${book.messages}
+<div id=messages><%=formMessages%>
 <%
    if (importMessages != null) {
 %>
@@ -140,7 +141,7 @@
 %>
 </div>
 <div id=search>
-<form method=GET action="addressbook?book=${book.book}">
+<form method=GET action="/susidns/addressbook?book=${book.book}">
 <input id=bookname type=hidden name="book" value="${book.book}">
 <input type=hidden name="begin" value="0">
 <input type=hidden name="end" value="99">
@@ -182,7 +183,7 @@
 
         if (notActive) {
 %>
-<a href="addressbook?book=${book.book}&amp;filter=<%= filterValue %>&amp;begin=0"><%= displayText %></a>
+<a href="/susidns/addressbook?book=${book.book}&amp;filter=<%= filterValue %>&amp;begin=0"><%= displayText %></a>
 <%
         } else {
 %>
@@ -194,7 +195,7 @@
 </div>
 </c:if>
 <c:if test="${book.notEmpty}">
-<form method=POST action="addressbook">
+<form method=POST action="/susidns/addressbook">
 <input type=hidden name="book" value="${book.book}">
 <input type=hidden name="serial" value="<%=susiNonce%>">
 <input type=hidden name="begin" value="0">
@@ -258,7 +259,7 @@
     /* book.notEmpty */
 %>
 <c:if test="${book.isEmpty}"></h3></div><div id=empty></div></c:if>
-<form id=addDestForm method=POST action="addressbook?book=${book.book}">
+<form id=addDestForm method=POST action="/susidns/addressbook?book=${book.book}">
 <input type=hidden name="book" value="${book.book}">
 <input type=hidden name="serial" value="<%=susiNonce%>">
 <input type=hidden name="begin" value="0">
@@ -288,7 +289,7 @@
 <%
     if (!book.getBook().equals("published")) {
 %>
-<form id=importHostsForm method=POST action="addressbook?book=${book.book}" enctype="multipart/form-data" accept-charset=utf-8>
+<form id=importHostsForm method=POST action="/susidns/addressbook?book=${book.book}" enctype="multipart/form-data" accept-charset=utf-8>
 <input type=hidden name="book" value="${book.book}">
 <input type=hidden name="serial" value="<%=susiNonce%>">
 <input type=hidden name="begin" value="0">
@@ -311,87 +312,6 @@
 <span data-iframe-height></span>
 <style>body{display:block!important;pointer-events:auto!important}</style>
 <script src=/js/lazyload.js></script>
-<script nonce="<%=cspNonce%>">
-  document.addEventListener("DOMContentLoaded", function() {
-    if (!document.body.classList.contains("dark")) {return;} // dark theme only for now
-
-    const addButton = document.getElementById("addNewDest");
-    const addContainer = document.getElementById("add");
-    const addDestForm = document.getElementById("addDestForm")
-    const importButton = document.getElementById("importFromFile");
-    const importContainer = document.getElementById("import");
-    const resetAdd = document.querySelector("#add input[type=reset]");
-    const resetImport = document.querySelector("#import input[type=reset]");
-
-    [addContainer, importContainer].forEach(container => {
-      container.hidden = true;
-    });
-
-    [addButton, importButton].forEach(button => {
-      button.removeAttribute("href");
-      button.removeAttribute("style");
-      button.hidden = false;
-    });
-
-    function toggleBodyClass() {
-      const hidden = addContainer.hidden && importContainer.hidden;
-      const importHostsForm = document.getElementById("importHostsForm")
-
-      if (hidden) {document.body.classList.remove("displayPanels");}
-      else {document.body.classList.add("displayPanels");}
-      if (!hidden) {
-          if (addContainer.hidden) {
-              addContainer.removeAttribute("style");
-              const importHeight = importContainer.getBoundingClientRect();
-              importHostsForm.style.minHeight = importHeight + "px";
-          } else {
-              importContainer.removeAttribute("style");
-              const addHeight = importContainer.getBoundingClientRect();
-              addDestForm.style.minHeight = addHeight + "px";
-          }
-       }
-    }
-
-    function validateAddForm(event) {
-      const textInputs = document.querySelectorAll('#add input[type="text"]');
-      const failed = textInputs.forEach(input => input.value.trim() !== "");
-      if (failed) {
-        addContainer.hidden = false;
-        importContainer.hidden = true;
-      }
-    }
-
-    addButton.addEventListener("click", function() {
-      const textInputs = document.querySelectorAll('#add input[type="text"]');
-      addContainer.hidden = !addContainer.hidden;
-      importContainer.hidden = true;
-    });
-
-    resetAdd.addEventListener("click", function() {
-      const textInputs = document.querySelectorAll('#add input[type="text"]');
-      textInputs.forEach(input => {input.value = "";});
-      addContainer.hidden = true;
-    });
-
-    importButton.addEventListener("click", function() {
-      importContainer.hidden = !importContainer.hidden;
-      addContainer.hidden = true;
-    });
-
-    resetImport.addEventListener("click", function() {
-      const textInputs = document.querySelectorAll('#import input[type="text"]');
-      textInputs.forEach(input => {input.value = "";});
-      importContainer.hidden = true;
-    });
-
-    [addButton, resetAdd, importButton, resetImport].forEach(button => {
-      button.addEventListener("click", toggleBodyClass);
-    });
-
-    //addDestForm.addEventListener("submit", validateAddForm);
-    validateAddForm();
-
-  });
-</script>
+<script src=/susidns/js/togglePanels.js></script>
 </body>
 </html>
