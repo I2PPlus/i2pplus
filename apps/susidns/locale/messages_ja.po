@@ -275,7 +275,7 @@ msgstr "検索"
 msgid "other"
 msgstr "その他"
 
-msgid "clear filter"
+msgid "all"
 msgstr "フィルターをクリア"
 
 msgid "Info"

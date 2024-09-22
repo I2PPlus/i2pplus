@@ -310,7 +310,7 @@ msgstr "بحث"
 msgid "other"
 msgstr "أخر"
 
-msgid "clear filter"
+msgid "all"
 msgstr "الغاء الترشيح"
 
 msgid "Info"

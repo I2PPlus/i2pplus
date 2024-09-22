@@ -282,7 +282,7 @@ msgstr "Zoek"
 msgid "other"
 msgstr "andere"
 
-msgid "clear filter"
+msgid "all"
 msgstr "wis filter"
 
 msgid "Info"

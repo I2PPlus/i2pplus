@@ -282,7 +282,7 @@ msgstr "Axtarış"
 msgid "other"
 msgstr "başqa"
 
-msgid "clear filter"
+msgid "all"
 msgstr "filtiri təmizlə"
 
 msgid "Info"

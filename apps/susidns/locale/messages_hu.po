@@ -282,7 +282,7 @@ msgstr "Keresés"
 msgid "other"
 msgstr "egyéb"
 
-msgid "clear filter"
+msgid "all"
 msgstr "szűrő törlése"
 
 msgid "Info"

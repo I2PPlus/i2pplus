@@ -296,7 +296,7 @@ msgstr "Iskanje"
 msgid "other"
 msgstr "drugo"
 
-msgid "clear filter"
+msgid "all"
 msgstr "počisti filtr"
 
 msgid "Info"

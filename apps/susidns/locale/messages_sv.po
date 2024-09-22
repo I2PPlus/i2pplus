@@ -282,7 +282,7 @@ msgstr "Sök"
 msgid "other"
 msgstr "andra"
 
-msgid "clear filter"
+msgid "all"
 msgstr "rensa filter"
 
 msgid "Info"

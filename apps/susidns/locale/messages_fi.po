@@ -282,7 +282,7 @@ msgstr "Haku"
 msgid "other"
 msgstr "muut"
 
-msgid "clear filter"
+msgid "all"
 msgstr "kirkas suodatin"
 
 msgid "Info"

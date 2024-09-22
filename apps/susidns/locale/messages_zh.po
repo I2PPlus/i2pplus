@@ -275,7 +275,7 @@ msgstr "搜索"
 msgid "other"
 msgstr "其他"
 
-msgid "clear filter"
+msgid "all"
 msgstr "清除过滤器"
 
 msgid "Info"

@@ -282,7 +282,7 @@ msgstr "جستجو"
 msgid "other"
 msgstr "سایر"
 
-msgid "clear filter"
+msgid "all"
 msgstr "پاکسازی فیلتر"
 
 msgid "Info"

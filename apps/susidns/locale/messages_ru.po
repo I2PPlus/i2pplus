@@ -289,7 +289,7 @@ msgstr "Поиск"
 msgid "other"
 msgstr "прочее"
 
-msgid "clear filter"
+msgid "all"
 msgstr "сбросить фильтр"
 
 msgid "Info"

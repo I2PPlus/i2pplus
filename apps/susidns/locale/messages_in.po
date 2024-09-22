@@ -275,7 +275,7 @@ msgstr "Cari"
 msgid "other"
 msgstr "lainnya"
 
-msgid "clear filter"
+msgid "all"
 msgstr "Hapus filter"
 
 msgid "Info"
