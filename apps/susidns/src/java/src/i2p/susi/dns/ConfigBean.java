@@ -36,81 +36,67 @@ import net.i2p.util.OrderedProperties;
 
 public class ConfigBean extends BaseBean implements Serializable {
 
-	private String config;
-	private boolean saved;
+    private String config;
+    private boolean saved;
 
-	public String getfileName() {
-		return configFile().toString();
-	}
+    public String getfileName() {return configFile().toString();}
 
-	public boolean isSaved() {
-		return saved;
-	}
+    public boolean isSaved() {return saved;}
 
-	public String getConfig()
-	{
-		if( config != null )
-			return config;
-		reload();
-		return config;
-	}
+    public String getConfig() {
+        if (config != null) {return config;}
+        reload();
+        return config;
+    }
 
-	@Override
-	protected void reload()
-	{
-		super.reload();
-		StringBuilder buf = new StringBuilder(256);
-		for (Map.Entry<Object, Object> e : properties.entrySet()) {
-			buf.append((String) e.getKey()).append('=')
-			   .append((String) e.getValue()).append('\n');
-		}
-		config = buf.toString();
-		saved = true;
-	}
+    @Override
+    protected void reload() {
+        super.reload();
+        StringBuilder buf = new StringBuilder(256);
+        for (Map.Entry<Object, Object> e : properties.entrySet()) {
+            buf.append((String) e.getKey()).append('=')
+               .append((String) e.getValue()).append('\n');
+        }
+        config = buf.toString();
+        saved = true;
+    }
 
-	private void save()
-	{
-		try {
-			// use loadProps to trim, use storeProps to sort and get line endings right
-			Properties props = new OrderedProperties();
-			DataHelper.loadProps(props, new ByteArrayInputStream(config.getBytes("UTF-8")));
-			synchronized (BaseBean.class) {
-				DataHelper.storeProps(props, configFile());
-			}
-			saved = true;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+    private void save() {
+        try {
+            // use loadProps to trim, use storeProps to sort and get line endings right
+            Properties props = new OrderedProperties();
+            DataHelper.loadProps(props, new ByteArrayInputStream(config.getBytes("UTF-8")));
+            synchronized (BaseBean.class) {DataHelper.storeProps(props, configFile());}
+            saved = true;
+        } catch (IOException e) {e.printStackTrace();} // TODO Auto-generated catch block
+    }
 
-	public void setConfig(String config) {
-		// will come from form with \r\n line endings
-		this.config = config;
-		this.saved = false;
-	}
+    public void setConfig(String config) {
+        // will come from form with \r\n line endings
+        this.config = config;
+        this.saved = false;
+    }
 
-	public String getMessages() {
-		String message = "";
-		if( action != null ) {
-                        if (I2PAppContext.getGlobalContext().getBooleanProperty(BaseBean.PROP_PW_ENABLE) ||
-			    (serial != null && serial.equals(lastSerial))) {
-				if(action.equals(_t("Save"))) {
-					save();
-					message = _t("Configuration saved.");
-				} else if (action.equals(_t("Reload"))) {
-					reload();
-					message = _t("Configuration reloaded.");
-				}
-			}
-			else {
-				message = _t("Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit.")
-                                          + ' ' +
-                                          _t("If the problem persists, verify that you have cookies enabled in your browser.");
-			}
-		}
-		if( message.length() > 0 )
-			message = "<p class=\"messages\">" + message + "</p>";
-		return message;
-	}
+    public String getMessages() {
+        String message = "";
+        if (action != null) {
+            if (I2PAppContext.getGlobalContext().getBooleanProperty(BaseBean.PROP_PW_ENABLE) ||
+                (serial != null && serial.equals(lastSerial))) {
+                if (action.equals(_t("Save"))) {
+                    save();
+                    message = _t("Configuration saved.");
+                } else if (action.equals(_t("Reload"))) {
+                    reload();
+                    message = _t("Configuration reloaded.");
+                }
+            }
+            else {
+                message = _t("Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit.") +
+                             ' ' + _t("If the problem persists, verify that you have cookies enabled in your browser.");
+            }
+        }
+        if (message.length() > 0) {message = "<p class=\"messages\">" + message + "</p>";}
+        return message;
+    }
+
 }

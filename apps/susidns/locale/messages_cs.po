@@ -289,7 +289,7 @@ msgstr "Hledat"
 msgid "other"
 msgstr "ostatní"
 
-msgid "clear filter"
+msgid "all"
 msgstr "průhledný filtr"
 
 msgid "Info"

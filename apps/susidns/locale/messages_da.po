@@ -282,7 +282,7 @@ msgstr "Søg"
 msgid "other"
 msgstr "andet"
 
-msgid "clear filter"
+msgid "all"
 msgstr "ryd filter"
 
 msgid "Info"

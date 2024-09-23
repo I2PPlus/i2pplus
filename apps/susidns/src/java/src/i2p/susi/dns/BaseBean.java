@@ -16,8 +16,7 @@ import net.i2p.util.OrderedProperties;
  * Holds methods common to several Beans.
  * @since 0.9.1
  */
-public class BaseBean
-{
+public class BaseBean {
     protected final I2PAppContext _context;
     protected final Properties properties;
     protected String action, lastSerial, serial;
@@ -33,8 +32,7 @@ public class BaseBean
     private static final String ADDRESSBOOK_DIR = "addressbook";
     private static final String CONFIG_FILE = "config.txt";
 
-    public BaseBean()
-    {
+    public BaseBean() {
         _context = I2PAppContext.getGlobalContext();
         properties = new OrderedProperties();
     }
@@ -53,12 +51,10 @@ public class BaseBean
         return new File(addressbookDir(), CONFIG_FILE);
     }
 
-    protected void loadConfig()
-    {
+    protected void loadConfig() {
         synchronized (BaseBean.class) {
             long currentTime = System.currentTimeMillis();
-            if( !properties.isEmpty() &&  currentTime - configLastLoaded < 10000 )
-                return;
+            if (!properties.isEmpty() &&  currentTime - configLastLoaded < 10000 ) {return;}
             reload();
         }
     }
@@ -70,11 +66,10 @@ public class BaseBean
         try {
             synchronized (BaseBean.class) {
                 properties.clear();
-                // use loadProps to trim
-                DataHelper.loadProps(properties, configFile());
-                // added in 0.5, for compatibility with 0.4 config.txt
-                if( properties.getProperty(PRIVATE_BOOK) == null)
+                DataHelper.loadProps(properties, configFile()); // use loadProps to trim
+                if (properties.getProperty(PRIVATE_BOOK) == null) { // added in 0.5, for compatibility with 0.4 config.txt
                     properties.setProperty(PRIVATE_BOOK, DEFAULT_PRIVATE_BOOK);
+                }
                 // migrate from I2P
                 String master = properties.getProperty("master_addressbook");
                 if (master != null) {
@@ -84,9 +79,7 @@ public class BaseBean
                 configLastLoaded = System.currentTimeMillis();
             }
         }
-        catch (IOException e) {
-            warn(e);
-        }
+        catch (IOException e) {warn(e);}
     }
 
     /**
@@ -109,10 +102,26 @@ public class BaseBean
                 break;
             }
         }
-        if (!themeExists)
-            theme = DEFAULT_THEME;
+        if (!themeExists) {theme = DEFAULT_THEME;}
         url += theme + "/";
         return url;
+    }
+
+    /**
+     * Returns the theme name
+     * @since 0.9.64+
+     */
+    public String getThemeName() {
+        loadConfig();
+        String theme = _context.getProperty(RC_PROP_THEME_NAME, DEFAULT_THEME);
+        theme = properties.getProperty(PROP_THEME_NAME, theme);
+        String[] themes = getThemes();
+        boolean themeExists = false;
+        for (int i = 0; i < themes.length; i++) {
+            if (themes[i].equals(theme)) {themeExists = true; break;}
+        }
+        if (!themeExists) {theme = DEFAULT_THEME;}
+        return theme;
     }
 
     /**
@@ -132,9 +141,7 @@ public class BaseBean
                     th.add(name);
                 }
                 themes = th.toArray(new String[th.size()]);
-            } else {
-                themes = new String[0];
-            }
+            } else {themes = new String[0];}
             return themes;
     }
 
@@ -146,16 +153,12 @@ public class BaseBean
     /**
      * @since 0.9.13 moved from subclasses
      */
-    public String getAction() {
-        return action;
-    }
+    public String getAction() {return action;}
 
     /**
      * @since 0.9.13 moved from subclasses
      */
-    public void setAction(String action) {
-        this.action = DataHelper.stripHTML(action);
-    }
+    public void setAction(String action) {this.action = DataHelper.stripHTML(action);}
 
     /**
      * @since 0.9.13 moved from subclasses
@@ -169,49 +172,38 @@ public class BaseBean
     /**
      * @since 0.9.13 moved from subclasses
      */
-    public void setSerial(String serial) {
-        this.serial = DataHelper.stripHTML(serial);
-    }
+    public void setSerial(String serial) {this.serial = DataHelper.stripHTML(serial);}
 
     /**
      * Translate
      * @since 0.9.13 moved from subclasses
      */
-    protected static String _t(String s) {
-        return Messages.getString(s);
-    }
+    protected static String _t(String s) {return Messages.getString(s);}
 
     /**
      * Translate
      * @since 0.9.13 moved from subclasses
      */
-    protected static String _t(String s, Object o) {
-        return Messages.getString(s, o);
-    }
+    protected static String _t(String s, Object o) {return Messages.getString(s, o);}
 
     /**
      * Translate
      * @since 0.9.13 moved from subclasses
      */
-    protected static String _t(String s, Object o, Object o2) {
-        return Messages.getString(s, o, o2);
-    }
+    protected static String _t(String s, Object o, Object o2) {return Messages.getString(s, o, o2);}
 
     /**
      * Translate (ngettext)
      * @since 0.9.13 moved from subclasses
      */
-    protected static String ngettext(String s, String p, int n) {
-        return Messages.getString(n, s, p);
-    }
+    protected static String ngettext(String s, String p, int n) {return Messages.getString(n, s, p);}
 
     /**
      * @since 0.9.13 moved from Debug
      */
     protected void debug(String msg) {
         Log log = _context.logManager().getLog(getClass());
-        if (log.shouldDebug())
-            log.debug(msg);
+        if (log.shouldDebug()) {log.debug(msg);}
     }
 
     /**
@@ -219,7 +211,7 @@ public class BaseBean
      */
     protected void warn(Throwable t) {
         Log log = _context.logManager().getLog(getClass());
-        if (log.shouldWarn())
-            log.warn("SusiDNS", t);
+        if (log.shouldWarn()) {log.warn("SusiDNS", t);}
     }
+
 }

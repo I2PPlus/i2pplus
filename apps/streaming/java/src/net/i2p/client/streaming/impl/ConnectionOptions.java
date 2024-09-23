@@ -90,7 +90,8 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private static final float TCP_KAPPA = 4;
 
     private static final String PROP_INITIAL_RTO = "i2p.streaming.initialRTO";
-    private static final int INITIAL_RTO = 9000;
+//    private static final int INITIAL_RTO = 9000;
+    private static final int INITIAL_RTO = 5000;
 
     public static final String PROP_CONNECT_DELAY = "i2p.streaming.connectDelay";
     public static final String PROP_PROFILE = "i2p.streaming.profile";
@@ -139,8 +140,10 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /** RFC 5681 sec. 3.1 */
     static final int INITIAL_WINDOW_SIZE = 3;
     static final int DEFAULT_MAX_SENDS = 8;
-    public static final int DEFAULT_INITIAL_RTT = 8*1000;
-    private static final int MAX_RTT = 60*1000;
+//    public static final int DEFAULT_INITIAL_RTT = 8*1000;
+//    private static final int MAX_RTT = 60*1000;
+    public static final int DEFAULT_INITIAL_RTT = 4500;
+    private static final int MAX_RTT = 30*1000;
     /**
      *  Ref: RFC 5681 sec. 4.3, RFC 1122 sec. 4.2.3.3, ticket #2706
      */
@@ -815,10 +818,15 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * TODO: Only bulk is supported so far.
      * @return the profile of the connection.
      */
-    public int getProfile() { return _profile; }
+    public int getProfile() {return _profile;}
+
+    /**
+     * Set the profile for this connection.
+     * Through API 0.9.63, threw an IllegalArgumentException for any value !=1.
+     * As of API 0.9.64, all values are saved.
+     * Warning: unused.
+     */
     public void setProfile(int profile) {
-        if (profile != PROFILE_BULK)
-            throw new IllegalArgumentException("Only the \'bulk\' profile is currently supported");
         _profile = profile;
     }
 

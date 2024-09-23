@@ -27,16 +27,10 @@ package i2p.susi.dns;
 import java.io.Serializable;
 import java.util.Comparator;
 
-public class AddressByNameSorter implements Comparator<AddressBean>, Serializable
-{
-	public int compare(AddressBean a, AddressBean b)
-	{
-		if( a == null )
-			return 1;
-
-		if( b == null )
-			return -1;
-
-		return a.getDisplayName().compareToIgnoreCase(b.getDisplayName());
-	}
+public class AddressByNameSorter implements Comparator<AddressBean>, Serializable {
+    public int compare(AddressBean a, AddressBean b) {
+        if (a == null) {return 1;}
+        if (b == null) {return -1;}
+        return a.getDisplayName().compareToIgnoreCase(b.getDisplayName());
+    }
 }

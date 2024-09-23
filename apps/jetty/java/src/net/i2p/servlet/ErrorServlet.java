@@ -76,8 +76,7 @@ public class ErrorServlet extends HttpServlet {
             _cssPath = dir + '/' + DEFAULT_CSS;
         }
         _webappName = getInitParameter("name");
-        if (_webappName == null)
-            _webappName = "unknown";
+        if (_webappName == null) {_webappName = "unknown";}
         _bundleName = getInitParameter("bundle");
         _defaultBundle = _bundleName != null ? _bundleName : CONSOLE_BUNDLE_NAME;
     }
@@ -87,10 +86,8 @@ public class ErrorServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
         resp.setHeader("X-Content-Type-Options", "nosniff");
         resp.setHeader("Accept-Ranges", "none");
-        //resp.setDateHeader("Expires", 0);
         resp.setHeader("Cache-Control", "private, no-cache, max-age=3600");
         resp.setHeader("Pragma", "no-cache");
-//        resp.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'none'");
         // add unsafe-inline script-src to allow iframe escape to function
         resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; form-action 'none'; object-src 'none'; media-src 'none'");
         Integer ERROR_CODE = (Integer) req.getAttribute("javax.servlet.error.status_code");
@@ -98,17 +95,11 @@ public class ErrorServlet extends HttpServlet {
         String ERROR_MESSAGE = (String) req.getAttribute("javax.servlet.error.message");
         Throwable ERROR_THROWABLE = (Throwable) req.getAttribute("javax.servlet.error.exception");
         int errorCode = ERROR_CODE != null ? ERROR_CODE.intValue() : 0;
-        if (ERROR_CODE != null) {
-            resp.setStatus(errorCode);
-        }
-        if (ERROR_URI == null)
-            ERROR_URI = "";
-        else
-            ERROR_URI = DataHelper.escapeHTML(ERROR_URI);
-        if (ERROR_MESSAGE == null)
-            ERROR_MESSAGE = "";
-        else
-            ERROR_MESSAGE = DataHelper.escapeHTML(ERROR_MESSAGE);
+        if (ERROR_CODE != null) {resp.setStatus(errorCode);}
+        if (ERROR_URI == null) {ERROR_URI = "";}
+        else {ERROR_URI = DataHelper.escapeHTML(ERROR_URI);}
+        if (ERROR_MESSAGE == null) {ERROR_MESSAGE = "";}
+        else {ERROR_MESSAGE = DataHelper.escapeHTML(ERROR_MESSAGE);}
         if (errorCode == 404 &&
             (ERROR_URI.endsWith(".png") ||
              ERROR_URI.endsWith(".jpg") ||
@@ -130,10 +121,8 @@ public class ErrorServlet extends HttpServlet {
         String themePath = BASE_THEME_PATH + _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME) + "/";
         out.print("<!DOCTYPE HTML>\n");
         out.print("<html>\n<head>\n<title>");
-        if (errorCode == 404)
-            out.print(_t("Error 404: Page Not Found").replace("Page", "Resource"));
-        else
-            out.print(_t("Error 500: Internal Error"));
+        if (errorCode == 404) {out.print(_t("Error 404: Page Not Found").replace("Page", "Resource"));}
+        else {out.print(_t("Error 500: Internal Error"));}
         out.print("</title>\n");
         out.print("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n");
         out.print("<link href=\"" + _cssPath + '?' + CoreVersion.VERSION + "\" rel=stylesheet>\n");
@@ -151,10 +140,8 @@ public class ErrorServlet extends HttpServlet {
         out.print("</div>\n");
         out.print("<div class=warning id=warning>\n");
         out.print("<h3>" + _w(_webappName) + ": ");
-        if (errorCode == 404)
-            out.print(_t("Page Not Found").replace("Page", "Resource"));
-        else
-            out.print(_t("Internal Server Error"));
+        if (errorCode == 404) {out.print(_t("Page Not Found").replace("Page", "Resource"));}
+        else {out.print(_t("Internal Server Error"));}
         out.print("</h3>\n");
         outputMessage(out, errorCode, ERROR_MESSAGE, ERROR_URI, ERROR_THROWABLE);
         out.print("<span data-iframe-height></span>\n</div>\n</body>\n</html>");
@@ -222,10 +209,8 @@ public class ErrorServlet extends HttpServlet {
             out.println("<b>Java version:</b> " + System.getProperty("java.vendor") + ' ' + System.getProperty("java.version") +
                         " (" + System.getProperty("java.runtime.name") + ' ' + System.getProperty("java.runtime.version") + ")<br>");
             out.println("<b>Wrapper version:</b> " + System.getProperty("wrapper.version", "none") + "<br>");
-            try {
-                // wrap in case not running on Jetty
-                out.println("<b>Server version:</b> " + Server.getVersion() + "<br>");
-            }  catch (Throwable t) {}
+            try {out.println("<b>Server version:</b> " + Server.getVersion() + "<br>");} // wrap in case not running on Jetty
+            catch (Throwable t) {}
             out.println("<b>Platform:</b> " + System.getProperty("os.name") + ' ' + System.getProperty("os.arch") +
                         ' ' + System.getProperty("os.version") + "<br>");
             out.println("<b>Processor:</b> " + NativeBigInteger.cpuModel() + " (" + NativeBigInteger.cpuType() + ")<br>");
@@ -242,22 +227,15 @@ public class ErrorServlet extends HttpServlet {
     }
 
     /** translate a string, with webapp bundle */
-    protected String _w(String s) {
-        return Translate.getString(s, _context, _defaultBundle);
-    }
+    protected String _w(String s) {return Translate.getString(s, _context, _defaultBundle);}
 
     /** translate a string, console bundle */
-    protected String _t(String s) {
-        return Translate.getString(s, _context, CONSOLE_BUNDLE_NAME);
-    }
+    protected String _t(String s) {return Translate.getString(s, _context, CONSOLE_BUNDLE_NAME);}
 
     /** translate a string, console bundle */
-    protected String _t(String s, Object o) {
-        return Translate.getString(s, o, _context, CONSOLE_BUNDLE_NAME);
-    }
+    protected String _t(String s, Object o) {return Translate.getString(s, o, _context, CONSOLE_BUNDLE_NAME);}
 
     /** translate a string, console bundle */
-    protected String _t(String s, Object o, Object o2) {
-        return Translate.getString(s, o, o2, _context, CONSOLE_BUNDLE_NAME);
-    }
+    protected String _t(String s, Object o, Object o2) {return Translate.getString(s, o, o2, _context, CONSOLE_BUNDLE_NAME);}
+
 }

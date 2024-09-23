@@ -282,7 +282,7 @@ msgstr "खोज"
 msgid "other"
 msgstr "अन्य"
 
-msgid "clear filter"
+msgid "all"
 msgstr "फ़िल्टर साफ़ करें"
 
 msgid "Info"

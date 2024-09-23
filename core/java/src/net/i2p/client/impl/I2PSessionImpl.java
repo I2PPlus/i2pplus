@@ -677,7 +677,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                         break;
                     case CLOSED:
                         if (wasOpening)
-                            throw new I2PSessionException("connect by other thread failed");
+                            throw new I2PSessionException("Connect by other thread failed");
                         loop = false;
                         break;
                     case OPENING:
@@ -690,7 +690,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                         }
                         break;
                     case CLOSING:
-                        throw new I2PSessionException("close in progress");
+                        throw new I2PSessionException("Close in progress...");
                     case OPEN:
                         return;
                 }
@@ -1779,11 +1779,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      */
     public Destination lookupDest(String name, long maxWait) throws I2PSessionException {
         LookupWaiter waiter = x_lookupDest(name, maxWait);
-        if (waiter == null)
-            return null;
-        synchronized(waiter) {
-            return waiter.destination;
-        }
+        if (waiter == null) {return null;}
+        synchronized(waiter) {return waiter.destination;}
     }
 
     /**
@@ -1797,13 +1794,13 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      */
     public LookupResult lookupDest2(String name, long maxWait) throws I2PSessionException {
         LookupWaiter waiter = x_lookupDest(name, maxWait);
-        if (waiter == null)
-            return new LkupResult(LookupResult.RESULT_FAILURE, null);
+        if (waiter == null) {return new LkupResult(LookupResult.RESULT_FAILURE, null);}
         synchronized(waiter) {
             int code = waiter.code;
             Destination d = waiter.destination;
-            if (d == null && code == LookupResult.RESULT_SUCCESS)
+            if (d == null && code == LookupResult.RESULT_SUCCESS) {
                 code = LookupResult.RESULT_FAILURE;
+            }
             return new LkupResult(code, d);
         }
     }
@@ -1816,59 +1813,46 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *  @return null on failure
      */
     private LookupWaiter x_lookupDest(String name, long maxWait) throws I2PSessionException {
-        if (name.length() == 0)
-            return null;
+        if (name.length() == 0) {return null;}
         // Shortcut for b64
         if (name.length() >= 516) {
-            try {
-                return new LookupWaiter(new Destination(name));
-            } catch (DataFormatException dfe) {
-                return null;
-            }
+            try {return new LookupWaiter(new Destination(name));}
+            catch (DataFormatException dfe) {return null;}
         }
         // won't fit in Mapping
-        if (name.length() >= 256 && !_context.isRouterContext())
-            return null;
+        if (name.length() >= 256 && !_context.isRouterContext()) {return null;}
         synchronized (_lookupCache) {
             Destination rv = _lookupCache.get(name);
-            if (rv != null)
-                return new LookupWaiter(rv);
+            if (rv != null) {return new LookupWaiter(rv);}
         }
         if (isClosed()) {
-            if (_log.shouldInfo())
-                _log.info("Session closed, cannot lookup: " + name);
+            if (_log.shouldInfo()) {_log.info("Session closed, cannot lookup: " + name);}
             return null;
         }
         if (!_routerSupportsHostLookup) {
             // do them a favor and convert to Hash lookup
-            if (name.length() == 60 && name.toLowerCase(Locale.US).endsWith(".b32.i2p"))
+            if (name.length() == 60 && name.toLowerCase(Locale.US).endsWith(".b32.i2p")) {
                 return new LookupWaiter(lookupDest(Hash.create(Base32.decode(name.toLowerCase(Locale.US).substring(0, 52))), maxWait));
+            }
             // else unsupported
-            if (_log.shouldWarn())
-                _log.warn("Router does not support HostLookup for: " + name);
+            if (_log.shouldWarn()) {_log.warn("Router does not support HostLookup for: " + name);}
             return null;
         }
         int nonce = _lookupID.incrementAndGet() & 0x7fffffff;
         LookupWaiter waiter = new LookupWaiter(name, nonce);
         _pendingLookups.offer(waiter);
         try {
-            if (_log.shouldInfo())
-                _log.info("Sending HostLookup for: " + name);
+            if (_log.shouldInfo()) {_log.info("Sending HostLookup for: " + name);}
             SessionId id = _sessionId;
-            if (id == null)
-                id = DUMMY_SESSION;
+            if (id == null) {id = DUMMY_SESSION;}
             sendMessage_unchecked(new HostLookupMessage(id, name, nonce, maxWait));
             try {
                 synchronized (waiter) {
                     waiter.wait(maxWait);
                     return waiter;
                 }
-            } catch (InterruptedException ie) {
-                throw new I2PSessionException("Interrupted", ie);
-            }
-        } finally {
-            _pendingLookups.remove(waiter);
-        }
+            } catch (InterruptedException ie) {throw new I2PSessionException("Interrupted", ie);}
+        } finally {_pendingLookups.remove(waiter);}
     }
 
     /**
@@ -1883,19 +1867,13 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         synchronized (_stateLock) {
             // not before GOTDATE
             if (STATES_CLOSED_OR_OPENING.contains(_state)) {
-                if (_log.shouldInfo())
-                    _log.info("Session closed, cannot get bandwidth limits");
+                if (_log.shouldInfo()) {_log.info("Session for " + getName() + " closed -> Cannot get bandwidth limits");}
                 return null;
             }
         }
         sendMessage_unchecked(new GetBandwidthLimitsMessage());
-        try {
-            synchronized (_bwReceivedLock) {
-                _bwReceivedLock.wait(5*1000);
-            }
-        } catch (InterruptedException ie) {
-            throw new I2PSessionException("Interrupted", ie);
-        }
+        try {synchronized (_bwReceivedLock) {_bwReceivedLock.wait(5*1000);}}
+        catch (InterruptedException ie) {throw new I2PSessionException("Interrupted", ie);}
         return _bwLimits;
     }
 
@@ -1904,13 +1882,10 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *  @since 0.9.43
      */
     public void sendBlindingInfo(BlindData bd) throws I2PSessionException {
-        if (!_routerSupportsBlindingInfo)
-            throw new I2PSessionException("Router does not support BlindingInfo");
-        if (_log.shouldInfo())
-            _log.info("Sending BlindingInfo...");
+        if (!_routerSupportsBlindingInfo) {throw new I2PSessionException("Router does not support BlindingInfo");}
+        if (_log.shouldInfo()) {_log.info("Sending BlindingInfo...");}
         SessionId id = _sessionId;
-        if (id == null)
-            id = DUMMY_SESSION;
+        if (id == null) {id = DUMMY_SESSION;}
         sendMessage_unchecked(new BlindingInfoMessage(bd, id));
     }
 
@@ -1921,8 +1896,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *  @since 0.9.46
      */
     public String getRouterVersion() {
-        if (_context.isRouterContext())
-            return CoreVersion.PUBLISHED_VERSION;
+        if (_context.isRouterContext()) {return CoreVersion.PUBLISHED_VERSION;}
         return _routerVersion;
     }
 
@@ -1930,23 +1904,19 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         _lastActivity = _context.clock().now();
         if (_isReduced) {
             _isReduced = false;
-            if (_log.shouldWarn())
-                _log.warn(getPrefix() + "Restoring configured tunnel quantity...");
-            try {
-                _producer.updateTunnels(this, 0);
-            } catch (I2PSessionException ise) {
-                _log.error(getPrefix() + "Failed to restore configured tunnel quantity");
+            if (_log.shouldWarn()) {
+                _log.warn(getPrefix() + "Restoring configured tunnel quantity for " + getName() + "...");
+            }
+            try {_producer.updateTunnels(this, 0);}
+            catch (I2PSessionException ise) {
+                _log.error(getPrefix() + "Failed to restore configured tunnel quantity for " + getName());
             }
         }
     }
 
-    public long lastActivity() {
-        return _lastActivity;
-    }
+    public long lastActivity() {return _lastActivity;}
 
-    public void setReduced() {
-        _isReduced = true;
-    }
+    public void setReduced() {_isReduced = true;}
 
     private void startIdleMonitor() {
         _isReduced = false;
@@ -1961,11 +1931,9 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(32);
-//        buf.append("Session: ");
-        if (_myDestination != null)
+        if (_myDestination != null) {
             buf.append("[").append(_myDestination.calculateHash().toBase64().substring(0, 6)).append("]" );
-        else
-            buf.append("[null dest] ");
+        } else {buf.append("[null dest] ");}
         buf.append(getPrefix());
         return buf.toString();
     }

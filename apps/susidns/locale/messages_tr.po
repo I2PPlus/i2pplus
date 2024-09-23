@@ -282,7 +282,7 @@ msgstr "Arayın"
 msgid "other"
 msgstr "diğer"
 
-msgid "clear filter"
+msgid "all"
 msgstr "süzgeci temizleyin"
 
 msgid "Info"

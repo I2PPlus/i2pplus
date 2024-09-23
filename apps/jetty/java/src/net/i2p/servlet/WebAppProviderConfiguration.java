@@ -26,14 +26,10 @@ public class WebAppProviderConfiguration {
         String[] classNames = WebAppContext.getDefaultConfigurationClasses();
         int sz = classNames.length;
         String[] newClassNames = new String[sz + 1];
-        for (int j = 0; j < sz; j++) {
-            newClassNames[j] = classNames[j];
-        }
+        for (int j = 0; j < sz; j++) {newClassNames[j] = classNames[j];}
         newClassNames[sz] = WAPConfiguration.class.getName();
         wap.setConfigurationClasses(newClassNames);
-
-        // set the temp dir while we're at it,
-        // so the extracted wars don't end up in /tmp
+        // set the temp dir while we're at it, so the extracted wars don't end up in /tmp
         wap.setTempDir(I2PAppContext.getGlobalContext().getTempDir());
     }
 

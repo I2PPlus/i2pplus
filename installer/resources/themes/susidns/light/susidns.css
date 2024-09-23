@@ -90,7 +90,7 @@ tr:hover .destaddress{color:#333}
 .headline{margin:-1px 0 -2px;padding:8px 5px;border:var(--border_inner);background:linear-gradient(135deg,#fafaff,#f2f2ff)}
 .help#helpsubs{padding:0 15px 0 45px;font-size:10pt;background:var(--infohelp) no-repeat 10px center/26px,linear-gradient(135deg,#fafaff,#f8f8ff)}
 .info a[href^="http"],.helper a{width:100%;display:inline-block}
-.page{margin:-4px 0;padding:10px 0;min-width:700px;font-size:9pt;border:0;border-radius:2px}
+#page{margin:-4px 0;padding:10px 0;min-width:700px;font-size:9pt;border:0;border-radius:2px}
 .selected,#activefilter{font-weight:700;color:#999;box-shadow:var(--highlight),inset 2px 2px 2px #aaa}
 .storage::-moz-selection{background:#373}
 .storage::selection{background:#373}
@@ -140,7 +140,7 @@ tr:hover .destaddress{color:#333}
 #messages:empty{display:none}
 #messages p{font-size:105%;color:#ff9;text-shadow:1px 1px 1px #000}
 #messages+p,.headline+p{margin:1px 0 -1px;padding:10px;border:var(--border_inner)}
-#ovrvw .page{margin:0}
+#ovrvw #page{margin:0}
 #paginate,#showing{display:inline-block}
 #paginate{margin:-3px 8px 0 0;position:relative;overflow:hidden;font-size:0;text-align:center;border:var(--border_inner);border-radius:2px;background:var(--row)}
 #search{margin:1px 0 -2px;padding-top:4px;position:sticky;top:40px;z-index:999}
@@ -149,7 +149,7 @@ tr:hover .destaddress{color:#333}
 #subscriptions h3{background:#fcfcff var(--subscription) no-repeat 6px center/18px}
 .iframed div.help{border-radius:0 0 2px 2px}
 .iframed .headline{margin-top:6px}
-.iframed .page{margin:1px;padding:10px 10px 0;min-width:520px;overflow:hidden;background-color:#0000}
+.iframed #page{margin:1px;padding:10px 10px 0;min-width:520px;overflow:hidden;background-color:#0000}
 .iframed #add{margin:12px 0 10px}
 .iframed #add p.buttons{margin-bottom:0;border-bottom:0}
 .iframed #book,.iframed #emptybook{margin-bottom:0}
@@ -161,8 +161,8 @@ tr:hover .destaddress{color:#333}
 .iframed #import{margin:0 0 14px}
 .iframed #empty{margin-bottom:20px;height:20px;border:0;border-top:var(--border_inner);border-bottom:var(--border_inner)}
 .iframed #messages{border:0}
-#bk.iframed .page{padding-bottom:18px}
-#bk.iframed #published.page{padding-bottom:3px}
+#bk.iframed #page{padding-bottom:18px}
+#bk.iframed #published#page{padding-bottom:3px}
 
 /* subscription log */
 #subsLog h3 span{margin:2px 4px 0 0;float:right;text-transform:none;letter-spacing:0;word-spacing:0;font-weight:500;font-size:80%;opacity:.9}

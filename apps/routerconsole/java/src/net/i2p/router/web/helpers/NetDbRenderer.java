@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -226,26 +225,26 @@ class NetDbRenderer {
 
             if (routers.isEmpty()) {
                 buf.append("<div class=netdbnotfound>");
-                buf.append(_t("Router")).append(' ');
-                if (routerPrefix != null) {buf.append(routerPrefix).append(' ');}
-                if (version != null) {buf.append(_t("Version")).append(' ').append(version).append(' ');}
-                if (country != null) {buf.append(_t("Country")).append(' ').append(country).append(' ');}
-                if (family != null) {buf.append(_t("Family")).append(' ').append(family).append(' ');}
-                if (ip != null) {buf.append("IP ").append(ip).append(' ');}
-                if (ipv6 != null) {buf.append("IP ").append(ipv6).append(' ');}
+                buf.append(_t("No routers with")).append(' ');
+                if (routerPrefix != null) {buf.append("[").append(_t("Hash prefix")).append(' ').append(routerPrefix).append("] ");}
+                if (version != null) {buf.append("[").append(_t("Version")).append(' ').append(version).append("] ");}
+                if (country != null) {buf.append("[").append(_t("Country")).append(' ').append(country).append("] ");}
+                if (family != null) {buf.append("[").append(_t("Family")).append(' ').append(family).append("] ");}
+                if (ip != null) {buf.append("[").append("IPv4 address ").append(ip).append("] ");}
+                if (ipv6 != null) {buf.append("[").append("IPv6 address ").append(ipv6).append("] ");}
                 if (port != 0) {
-                    buf.append(_t("Port")).append(' ').append(port);
+                    buf.append("[").append(_t("Port")).append(' ').append(port);
                     if (highPort != 0) {buf.append('-').append(highPort);}
-                    buf.append(' ');
+                    buf.append("] ");
                 }
-                if (mtu != null) {buf.append(_t("MTU")).append(' ').append(mtu).append(' ');}
-                if (cost != 0) {buf.append("Cost ").append(cost).append(' ');}
-                if (type != null) {buf.append("Type ").append(type).append(' ');}
-                if (etype != null) {buf.append("Type ").append(etype).append(' ');}
-                if (caps != null) {buf.append("Caps ").append(caps).append(' ');}
-                if (ssucaps != null) {buf.append("Caps ").append(ssucaps).append(' ');}
-                if (tr != null) {buf.append("Transport ").append(tr).append(' ');}
-                buf.append(_t("not found in network database")).append("</div>");
+                if (mtu != null) {buf.append("[").append(_t("MTU")).append(' ').append(mtu).append("] ");}
+                if (cost != 0) {buf.append("[").append("Cost ").append(cost).append("] ");}
+                if (type != null) {buf.append("[").append("Type ").append(type).append("] ");}
+                if (etype != null) {buf.append("[").append("Type ").append(etype).append("] ");}
+                if (caps != null) {buf.append("[").append("Caps ").append(caps).append("] ");}
+                if (ssucaps != null) {buf.append("[").append("SSU Caps ").append(ssucaps).append("] ");}
+                if (tr != null) {buf.append("[").append("Transport ").append(tr).append("] ");}
+                buf.append(_t("found in the network database")).append("</div>");
             } else {
                 List<RouterInfo> results = new ArrayList<RouterInfo>(routers);
                 int sz = results.size();

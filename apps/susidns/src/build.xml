@@ -104,7 +104,7 @@
           -   _jspx_dependants.put("file:lib/standard.jar", Long.valueOf(1200000000000L));
           -  We first strip the full path in case the latter steps don't work due to changing JspC
     implementation.
-          -->
+    -->
     <replace file="tmp/i2p/susi/dns/jsp/addressbook_jsp.java">
       <replacefilter token="${user.dir}/apps/susidns/src/" value="" />
     </replace>
@@ -133,9 +133,9 @@
     <property name="__multipart"
       value="&#10;
        &lt;multipart-config&gt;&#10;
-           &lt;max-file-size&gt;67108864&lt;/max-file-size&gt;&#10;
-           &lt;max-request-size&gt;67108864&lt;/max-request-size&gt;&#10;
-           &lt;file-size-threshold&gt;262144&lt;/file-size-threshold&gt;&#10;
+       &lt;max-file-size&gt;67108864&lt;/max-file-size&gt;&#10;
+       &lt;max-request-size&gt;67108864&lt;/max-request-size&gt;&#10;
+       &lt;file-size-threshold&gt;262144&lt;/file-size-threshold&gt;&#10;
        &lt;/multipart-config&gt;" />
     <replace file="WEB-INF/web-out.xml">
       <replacefilter token="${__class1}" value="${__class1}${__multipart}" />
@@ -170,6 +170,7 @@
     <war destfile="${project}.war" webxml="WEB-INF/web-out.xml">
       <fileset dir=".">
         <include name="WEB-INF/**/*.class" />
+        <include name="js/*" />
         <include name="svg/*" />
       </fileset>
       <manifest>
@@ -201,7 +202,7 @@
   <target name="bundle" depends="compile, precompilejsp" unless="no.bundle">
     <mkdir dir="build/messages-src" />
     <!-- Update the messages_*.po files.
-             We need to supply the bat file for windows, and then change the fail property to true -->
+         We need to supply the bat file for windows, and then change the fail property to true -->
     <exec executable="sh" osfamily="unix" failifexecutionfails="true"
       failonerror="${require.gettext}">
       <env key="JAVA_HOME" value="${java.home}" />

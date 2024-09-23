@@ -26,26 +26,37 @@
 <%@page trimDirectiveWhitespaces="true"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page contentType="text/html"%>
-<%@page import="net.i2p.servlet.RequestWrapper"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="net.i2p.servlet.RequestWrapper" %>
+<%@ page import="java.util.regex.Pattern" %>
+<%@ page import="java.util.regex.Matcher" %>
 <%@include file="headers.jsi"%>
 <jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session" />
 <jsp:useBean id="book" class="i2p.susi.dns.NamingServiceBean" scope="session" />
 <jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application" />
 <jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application" />
-<%
-   String importMessages = null;
-   if (intl._t("Import").equals(request.getParameter("action"))) {
-       RequestWrapper wrequest = new RequestWrapper(request);
-       importMessages = book.importFile(wrequest);
-   }
-   boolean isFiltered = book.isHasFilter();
-%>
 <jsp:setProperty name="book" property="*" />
 <jsp:setProperty name="book" property="resetDeletionMarks" value="1"/>
 <c:forEach items="${paramValues.checked}" var="checked">
 <jsp:setProperty name="book" property="markedForDeletion" value="${checked}"/>
 </c:forEach>
+<%
+    String importMessages = null;
+    String query = request.getQueryString();
+    RequestWrapper bookRequest = new RequestWrapper(request);
+    String here = bookRequest.getParameter("book");
+    // This is what does the form processing.
+    // We need to do this before any notEmpty test and
+    // before loadBookMessages() which displays the entry count.
+    // Messages will be displayed below.
+    String formMessages = book.getMessages();
+    String susiNonce = book.getSerial(); // have to only do this once per page
+    boolean isFiltered = book.isHasFilter();
+    if (intl._t("Import").equals(request.getParameter("action"))) {
+        RequestWrapper wrequest = new RequestWrapper(request);
+        importMessages = book.importFile(wrequest);
+    }
+%>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -55,6 +66,7 @@
 <link rel=preload href="<%=book.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
 <link rel=preload href="<%=book.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
 <link rel=stylesheet href="<%=book.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
+<link rel="icon shortcut" href=/themes/console/images/addressbook.svg type=image/svg+xml>
 <%
     if (base.useSoraFont()) {
 %>
@@ -68,45 +80,32 @@
 <script src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/scrollTo.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script nonce="<%=cspNonce%>">
-window.jdenticon_config = {
-  padding: 0,
-  saturation: {color: 1, grayscale: 0}
-};
-</script>
+<script nonce="<%=cspNonce%>">window.jdenticon_config = { padding: 0, saturation: {color: 1, grayscale: 0} };</script>
 <script nonce="<%=cspNonce%>" src="/js/jdenticon.js"></script>
-<%
-    //String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
-    String query = request.getQueryString();
-    RequestWrapper bookRequest = new RequestWrapper(request);
-    String here = bookRequest.getParameter("book");
-    // This is what does the form processing.
-    // We need to do this before any notEmpty test and before loadBookMessages() which displays the entry count.
-    // Messages will be displayed below.
-    String formMessages = book.getMessages();
-%>
 </head>
-<body id=bk style=display:none;pointer-events:none>
-<div<% if (book.getBook().equals("published")) { %> id=published<% } %> class=page>
+<body id=bk class="<%=book.getThemeName()%>" style=display:none;pointer-events:none>
+<div<% if (book.getBook().equals("published")) { %> id=published<% } %> id=page>
 <div id=navi class="${book.getBook()}">
-<a class="abook router<%=(here.contains("router") ? " selected" : "")%>" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
-<a class="abook master<%=(here.contains("master") ? " selected" : "")%>" href="addressbook?book=master&amp;filter=none"><%=intl._t("Master")%></a>&nbsp;
-<a class="abook private<%=(here.contains("private") ? " selected" : "")%>" href="addressbook?book=private&amp;filter=none"><%=intl._t("Private")%></a>&nbsp;
-<a class="abook published<%=(here.contains("published") ? " selected" : "")%>" href="addressbook?book=published&amp;filter=none"><%=intl._t("Published")%></a>&nbsp;
+<a class="abook router<%=(here.contains("router") ? " selected" : "")%>" href="/susidns/addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
+<a class="abook master<%=(here.contains("master") ? " selected" : "")%>" href="/susidns/addressbook?book=master&amp;filter=none"><%=intl._t("Master")%></a>&nbsp;
+<a class="abook private<%=(here.contains("private") ? " selected" : "")%>" href="/susidns/addressbook?book=private&amp;filter=none"><%=intl._t("Private")%></a>&nbsp;
+<a class="abook published<%=(here.contains("published") ? " selected" : "")%>" href="/susidns/addressbook?book=published&amp;filter=none"><%=intl._t("Published")%></a>&nbsp;
 <a id=subs href="subscriptions"><%=intl._t("Subscriptions")%></a>&nbsp;
 <a id=configlink href="config"><%=intl._t("Configuration")%></a>&nbsp;
 <a id=overview href="index"><%=intl._t("Help")%></a>
 </div>
+<main>
 <hr>
-<form action="export" id=exportlist method=GET target=_blank hidden></form>
+<form action="/susidns/export" id=exportlist method=GET target=_blank hidden></form>
 <div class=headline id=addressbook>
 <h3><%=intl._t("Book")%>: <%=intl._t(book.getBook())%>${book.loadBookMessages}<c:if test="${book.isEmpty}">&nbsp;<span class=results>(<%=intl._t("No entries")%>)</span></c:if>
-<c:if test="${book.isEmpty}"><span id=export><input form="exportlist" type=submit class=export id=exporthosts <c:if test="${book.isEmpty}">disabled</c:if>></span></c:if>
+<span id=export>
+<a href=#add id=addNewDest class=fakebutton title="<%=intl._t("Add new destination")%>" style=display:none!important hidden></a><a href=#import id=importFromFile class=fakebutton title="<%=intl._t("Import from hosts.txt file")%>" style=display:none!important hidden></a>
+<c:if test="${book.isEmpty}"><input form="exportlist" type=submit class=export id=exporthosts <c:if test="${book.isEmpty}">disabled</c:if>></c:if>
 <c:if test="${book.notEmpty}">
 <%
     if (book.getEntries().length > 0) { /* Don't show if no results. Can't figure out how to do this with c:if */
 %>
-<span id=export>
 <input form="exportlist" type=hidden name="book" value="${book.book}">
 <c:if test="${book.search} != null && ${book.search}.length() > 0"><input form="exportlist" type=hidden name="search" value="${book.search}"></c:if>
 <c:if test="${book.hasFilter}"><input form="exportlist" type=hidden name="filter" value="${book.filter}"></c:if>
@@ -121,18 +120,18 @@ window.jdenticon_config = {
 <%
         }
 %>
-</span>
 <%
     } else { /* book.getEntries().length() > 0 */
 %>
-<span id=export><input form="exportlist" type=submit class=export id=exporthosts disabled></span>
+<input form="exportlist" type=submit class=export id=exporthosts disabled>
 <%
     }
 %>
+</span>
 </h3>
 </div>
 <% /* need this whether book is empty or not to display the form messages */ %>
-<div id=messages>${book.messages}
+<div id=messages><%=formMessages%>
 <%
    if (importMessages != null) {
 %>
@@ -142,7 +141,7 @@ window.jdenticon_config = {
 %>
 </div>
 <div id=search>
-<form method=GET action="addressbook?book=${book.book}">
+<form method=GET action="/susidns/addressbook?book=${book.book}">
 <input id=bookname type=hidden name="book" value="${book.book}">
 <input type=hidden name="begin" value="0">
 <input type=hidden name="end" value="99">
@@ -165,243 +164,38 @@ window.jdenticon_config = {
 </div>
 <div id=filter>
 <%
-    if (query != null && !query.contains("filter=a")) {
+    String[][] filters = {
+        {"a", "A"}, {"b", "B"}, {"c", "C"}, {"d", "D"},
+        {"e", "E"}, {"f", "F"}, {"g", "G"}, {"h", "H"},
+        {"i", "I"}, {"j", "J"}, {"k", "K"}, {"l", "L"},
+        {"m", "M"}, {"n", "N"}, {"o", "O"}, {"p", "P"},
+        {"q", "Q"}, {"r", "R"}, {"s", "S"}, {"t", "T"},
+        {"u", "U"}, {"v", "V"}, {"w", "W"}, {"x", "X"},
+        {"y", "Y"}, {"z", "Z"}, {"0-9", "0-9"}, {"xn--", intl._t("other")},
+        {"none", intl._t("all")}
+    };
+
+    for (String[] filter : filters) {
+        String filterValue = filter[0];
+        String displayText = filter[1];
+        boolean notActive = query != null && !query.matches(".*[?&]filter=" + filterValue + "(&|$).*");
+        boolean showAll = query == null || query.contains("none") || !query.contains("filter");
+
+        if (notActive) {
 %>
-<a href="addressbook?book=${book.book}&amp;filter=a&amp;begin=0&amp;end=99">a</a>
+<a href="/susidns/addressbook?book=${book.book}&amp;filter=<%= filterValue %>&amp;begin=0"><%= displayText %></a>
 <%
-    } else {
+        } else {
 %>
-<span id=activefilter>A</span>
-<%  }
-    if (query != null && !query.contains("filter=b")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=b&amp;begin=0&amp;end=99">b</a>
+<span id="activefilter"><%= displayText %></span>
 <%
-    } else {
-%>
-<span id=activefilter>B</span>
-<%  }
-    if (query != null && !query.contains("filter=c")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=c&amp;begin=0&amp;end=99">c</a>
-<%
-    } else {
-%>
-<span id=activefilter>C</span>
-<%  }
-    if (query != null && !query.contains("filter=d")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=d&amp;begin=0&amp;end=99">d</a>
-<%
-    } else {
-%>
-<span id=activefilter>D</span>
-<%  }
-    if (query != null && !query.contains("filter=e")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=e&amp;begin=0&amp;end=99">e</a>
-<%
-    } else {
-%>
-<span id=activefilter>E</span>
-<%  }
-    if (query != null && !query.contains("filter=f")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=f&amp;begin=0&amp;end=99">f</a>
-<%
-    } else {
-%>
-<span id=activefilter>F</span>
-<%  }
-    if (query != null && !query.contains("filter=g")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=g&amp;begin=0&amp;end=99">g</a>
-<%
-    } else {
-%>
-<span id=activefilter>G</span>
-<%  }
-    if (query != null && !query.contains("filter=h")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=h&amp;begin=0&amp;end=99">h</a>
-<%
-    } else {
-%>
-<span id=activefilter>H</span>
-<%  }
-    if (query != null && !query.contains("filter=i")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=i&amp;begin=0&amp;end=99">i</a>
-<%
-    } else {
-%>
-<span id=activefilter>I</span>
-<%  }
-    if (query != null && !query.contains("filter=j")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=j&amp;begin=0&amp;end=99">j</a>
-<%
-    } else {
-%>
-<span id=activefilter>J</span>
-<%  }
-    if (query != null && !query.contains("filter=k")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=k&amp;begin=0&amp;end=99">k</a>
-<%
-    } else {
-%>
-<span id=activefilter>K</span>
-<%  }
-    if (query != null && !query.contains("filter=l")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=l&amp;begin=0&amp;end=99">l</a>
-<%
-    } else {
-%>
-<span id=activefilter>L</span>
-<%  }
-    if (query != null && !query.contains("filter=m")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=m&amp;begin=0&amp;end=99">m</a>
-<%
-    } else {
-%>
-<span id=activefilter>M</span>
-<%  }
-    if (query != null && !query.contains("filter=n&")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=n&amp;begin=0&amp;end=99">n</a>
-<%
-    } else {
-%>
-<span id=activefilter>N</span>
-<%  }
-    if (query != null && !query.contains("filter=o")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=o&amp;begin=0&amp;end=99">o</a>
-<%
-    } else {
-%>
-<span id=activefilter>O</span>
-<%  }
-    if (query != null && !query.contains("filter=p")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=p&amp;begin=0&amp;end=99">p</a>
-<%
-    } else {
-%>
-<span id=activefilter>P</span>
-<%  }
-    if (query != null && !query.contains("filter=q")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=q&amp;begin=0&amp;end=99">q</a>
-<%
-    } else {
-%>
-<span id=activefilter>Q</span>
-<%  }
-    if (query != null && !query.contains("filter=r")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=r&amp;begin=0&amp;end=99">r</a>
-<%
-    } else {
-%>
-<span id=activefilter>R</span>
-<%  }
-    if (query != null && !query.contains("filter=s")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=s&amp;begin=0&amp;end=99">s</a>
-<%
-    } else {
-%>
-<span id=activefilter>S</span>
-<%  }
-    if (query != null && !query.contains("filter=t")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=t&amp;begin=0&amp;end=99">t</a>
-<%
-    } else {
-%>
-<span id=activefilter>T</span>
-<%  }
-    if (query != null && !query.contains("filter=u")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=u&amp;begin=0&amp;end=99">u</a>
-<%
-    } else {
-%>
-<span id=activefilter>U</span>
-<%  }
-    if (query != null && !query.contains("filter=v")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=v&amp;begin=0&amp;end=99">v</a>
-<%
-    } else {
-%>
-<span id=activefilter>V</span>
-<%  }
-    if (query != null && !query.contains("filter=w")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=w&amp;begin=0&amp;end=99">w</a>
-<%
-    } else {
-%>
-<span id=activefilter>W</span>
-<%  }
-    if (query != null && !query.contains("filter=x&")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=x&amp;begin=0&amp;end=99">x</a>
-<%
-    } else {
-%>
-<span id=activefilter>X</span>
-<%  }
-    if (query != null && !query.contains("filter=y")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=y&amp;begin=0&amp;end=99">y</a>
-<%
-    } else {
-%>
-<span id=activefilter>Y</span>
-<%  }
-    if (query != null && !query.contains("filter=z")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=z&amp;begin=0&amp;end=99">z</a>
-<%
-    } else {
-%>
-<span id=activefilter>Z</span>
-<%  }
-    if (query != null && !query.contains("filter=0-9")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=0-9&amp;begin=0&amp;end=99">0-9</a>
-<%
-    } else {
-%>
-<span id=activefilter>0-9</span>
-<%  }
-    if (query != null && !query.contains("filter=xn--&")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=xn--&amp;begin=0&amp;end=99"><%=intl._t("other")%></a>
-<%
-    } else {
-%>
-<span id=activefilter>Other</span>
-<%  }
-    if (query != null && !query.contains("filter=none")) {
-%>
-<a href="addressbook?book=${book.book}&amp;filter=none&amp;begin=0&amp;end=99"><%=intl._t("clear filter")%></a>
-<%
+        }
     }
 %>
 </div>
 </c:if>
-<%
-    String susiNonce = book.getSerial(); // have to only do this once per page
-%>
 <c:if test="${book.notEmpty}">
-<form method=POST action="addressbook">
+<form method=POST action="/susidns/addressbook">
 <input type=hidden name="book" value="${book.book}">
 <input type=hidden name="serial" value="<%=susiNonce%>">
 <input type=hidden name="begin" value="0">
@@ -424,7 +218,7 @@ window.jdenticon_config = {
         boolean haveImagegen = book.haveImagegen();
         if (haveImagegen) {
 %>
-<a href="details?h=${addr.name}&amp;book=${book.book}" title="<%=intl._t("More information on this entry")%>"><svg width="24" height="24" class=identicon data-jdenticon-value="${addr.b32}" xmlns="http://www.w3.org/2000/svg"></svg><noscript><img src="/imagegen/id?s=24&amp;c=${addr.b32}" loading=lazy></noscript></a>
+<a href="details?h=${addr.name}&amp;book=${book.book}" title="<%=intl._t("More information on this entry")%>"><svg width="24" height="24" class=identicon data-jdenticon-value="${addr.b32}" xmlns="http://www.w3.org/2000/svg"></svg><noscript><img src="/imagegen/id?s=24&amp;c=${addr.b32}" loading=lazy><style>.identicon{display:none!important}</style></noscript></a>
 <%
         }  else { // haveImagegen
 %>
@@ -465,7 +259,7 @@ window.jdenticon_config = {
     /* book.notEmpty */
 %>
 <c:if test="${book.isEmpty}"></h3></div><div id=empty></div></c:if>
-<form method=POST action="addressbook?book=${book.book}">
+<form id=addDestForm method=POST action="/susidns/addressbook?book=${book.book}">
 <input type=hidden name="book" value="${book.book}">
 <input type=hidden name="serial" value="<%=susiNonce%>">
 <input type=hidden name="begin" value="0">
@@ -495,7 +289,7 @@ window.jdenticon_config = {
 <%
     if (!book.getBook().equals("published")) {
 %>
-<form method=POST action="addressbook?book=${book.book}" enctype="multipart/form-data" accept-charset=utf-8>
+<form id=importHostsForm method=POST action="/susidns/addressbook?book=${book.book}" enctype="multipart/form-data" accept-charset=utf-8>
 <input type=hidden name="book" value="${book.book}">
 <input type=hidden name="serial" value="<%=susiNonce%>">
 <input type=hidden name="begin" value="0">
@@ -513,12 +307,11 @@ window.jdenticon_config = {
     }
 %>
 <c:if test="${book.isEmpty}"></div></c:if>
+</main>
+</div>
 <span data-iframe-height></span>
 <style>body{display:block!important;pointer-events:auto!important}</style>
-</div>
-<!--
-<script src="/themes/search.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
--->
 <script src=/js/lazyload.js></script>
+<script src=/susidns/js/togglePanels.js></script>
 </body>
 </html>

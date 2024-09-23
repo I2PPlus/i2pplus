@@ -275,7 +275,7 @@ msgstr "Tìm"
 msgid "other"
 msgstr "khác"
 
-msgid "clear filter"
+msgid "all"
 msgstr "bộ lọc rõ ràng"
 
 msgid "Info"

@@ -1,3 +1,12 @@
+2024-09-21 dr|z3d
+ * SusiDNS:
+   - Remove inline addressbook javascript and migrate to togglePanels.js
+   - Fix display of informational messages / warnings
+
+2024-09-21 dr|z3d
+ * SusiDNS: Make Add/Import panels togglable with header butttons
+   (WIP - dark theme only for now)
+
 2024-09-15 dr|z3d
  * Console: Start work on overhauling LeaseSet display in netdb
 
@@ -12,11 +21,10 @@
 
 2024-09-08 dr|z3d
  * Console: Display leaseset count badge in sidebar net status section when we
-   are floodfill (enabled in dark theme, other themes to follow)
+   are floodfill (enabled in dark/light themes, others to follow)
 
 2024-09-08 dr|z3d
  * I2PSnark: Make file filters and trackers sections togglable on config page
-   (dark, ubergine, zilvero themes, others to follow)
 
 2024-09-06 marek
  * I2PSnark: Ensure we don't modify the infohash when editing torrents

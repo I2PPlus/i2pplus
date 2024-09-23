@@ -63,48 +63,34 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
      * @param buf data to be sent - may be null
      * @param off offset into the buffer to start writing from
      * @param size how many bytes of the buffer to write (may be 0)
-     * @return an object to allow optional blocking for data acceptance or
-     *         delivery.
+     * @return an object to allow optional blocking for data acceptance or delivery.
      */
     public MessageOutputStream.WriteStatus writeData(byte[] buf, int off, int size) {
         Connection con = _connection;
         //if (con == null) return _dummyStatus;
         boolean doSend = true;
-        if ( (size <= 0) && (con.getLastSendId() >= 0) ) {
+        if ((size <= 0) && (con.getLastSendId() >= 0)) {
             if (con.getOutputStream().getClosed()) {
-                if (con.getCloseSentOn() <= 0) {
-                    doSend = true;
-                } else {
-                    // closed, no new data, and we've already sent a close packet
-                    doSend = false;
-                }
-            } else {
-                // no new data, not closed, already synchronized
-                doSend = false;
-            }
+                if (con.getCloseSentOn() <= 0) {doSend = true;}
+                else {doSend = false;} // closed, no new data, and we've already sent a close packet
+            } else {doSend = false;} // no new data, not closed, already synchronized
         }
 
-        if (con.getUnackedPacketsReceived() > 0)
-            doSend = true;
+        if (con.getUnackedPacketsReceived() > 0) {doSend = true;}
 
-        if (_log.shouldInfo() && !doSend)
+        if (_log.shouldInfo() && !doSend) {
             _log.info("writeData called: size="+size + " doSend=" + doSend
                        + " unackedReceived: " + con.getUnackedPacketsReceived()
                        + " con: " + con  /* , new Exception("write called by") */ );
+        }
 
         if (doSend) {
             PacketLocal packet = send(buf, off, size);
-            // this shouldn't be null
-            //if (packet == null) return _dummyStatus;
-
-            //dont wait for non-acks
-            if ( (packet.getSequenceNum() > 0) || (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) )
+            //don't wait for non-acks
+            if ((packet.getSequenceNum() > 0) || (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE))) {
                 return packet;
-            else
-                return _dummyStatus;
-        } else {
-            return _dummyStatus;
-        }
+            } else {return _dummyStatus;}
+        } else {return _dummyStatus;}
     }
 
 
@@ -134,16 +120,8 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
      * @return the packet sent
      */
     public PacketLocal send(byte buf[], int off, int size, boolean forceIncrement) {
-        //long before = System.currentTimeMillis();
         PacketLocal packet = buildPacket(buf, off, size, forceIncrement);
-        //long built = System.currentTimeMillis();
         _connection.sendPacket(packet);
-        //long sent = System.currentTimeMillis();
-
-        //if ( (built-before > 5*1000) && (_log.shouldWarn()) )
-        //    _log.warn(took " + (built-before) + "ms to build a packet: " + packet);
-        //if ( (sent-built> 5*1000) && (_log.shouldWarn()) )
-        //    _log.warn(took " + (sent-built) + "ms to send a packet: " + packet);
         return packet;
     }
 
@@ -176,32 +154,26 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
         PacketLocal packet = new PacketLocal(_context, _connection.getRemotePeer(), _connection);
         //ByteArray data = packet.acquirePayload();
         ByteArray data = new ByteArray(new byte[size]);
-        if (size > 0)
-            System.arraycopy(buf, off, data.getData(), 0, size);
+        if (size > 0) {System.arraycopy(buf, off, data.getData(), 0, size);}
         data.setValid(size);
         data.setOffset(0);
         packet.setPayload(data);
-        if ( (ackOnly && !forceIncrement) && (!isFirst) )
-            packet.setSequenceNum(0);
-        else
-            packet.setSequenceNum(_connection.getNextOutboundPacketNum());
+        if ((ackOnly && !forceIncrement) && (!isFirst)) {packet.setSequenceNum(0);}
+        else {packet.setSequenceNum(_connection.getNextOutboundPacketNum());}
         packet.setSendStreamId(_connection.getSendStreamId());
         packet.setReceiveStreamId(_connection.getReceiveStreamId());
-
-        // not needed here, handled in PacketQueue.enqueue()
-        //con.getInputStream().updateAcks(packet);
 
         // Do not set optional delay here, set in Connection.sendPacket()
 
         // bugfix release 0.7.8, we weren't dividing by 1000
         packet.setResendDelay(_connection.getOptions().getResendDelay() / 1000);
 
-        if (_connection.getOptions().getProfile() == ConnectionOptions.PROFILE_INTERACTIVE)
+/*
+        if (_connection.getOptions().getProfile() == ConnectionOptions.PROFILE_INTERACTIVE) {
             packet.setFlag(Packet.FLAG_PROFILE_INTERACTIVE, true);
-        else
-            packet.setFlag(Packet.FLAG_PROFILE_INTERACTIVE, false);
+        } else {packet.setFlag(Packet.FLAG_PROFILE_INTERACTIVE, false);}
+*/
 
-        //if ( (!ackOnly) && (packet.getSequenceNum() <= 0) ) {
         if (isFirst) {
             packet.setFlag(Packet.FLAG_SYNCHRONIZE);
             packet.setOptionalFrom();
@@ -209,9 +181,7 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
             if (!_connection.isInbound()) {
                 byte[] h = _connection.getRemotePeer().calculateHash().getData();
                 long[] fakeNacks = new long[8];
-                for (int i = 0; i < 8; i++) {
-                    fakeNacks[i] = DataHelper.fromLong(h, i << 2, 4);
-                }
+                for (int i = 0; i < 8; i++) {fakeNacks[i] = DataHelper.fromLong(h, i << 2, 4);}
                 packet.setNacks(fakeNacks);
             }
         }
@@ -230,12 +200,13 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
         // throughout network?
         //
         if (_connection.getOutputStream().getClosed() &&
-            ( (size > 0) || (_connection.getUnackedPacketsSent() <= 0) || (packet.getSequenceNum() > 0) ) ) {
+            ((size > 0) || (_connection.getUnackedPacketsSent() <= 0) || (packet.getSequenceNum() > 0)) ) {
             packet.setFlag(Packet.FLAG_CLOSE);
             _connection.notifyCloseSent();
         }
-        if (_log.shouldDebug())
+        if (_log.shouldDebug()) {
             _log.debug("New Outbound packet (ACKs not yet filled in): " + packet + " on " + _connection);
+        }
         return packet;
     }
 
@@ -250,7 +221,5 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
         public final boolean writeSuccessful() { return true; }
     }
 
-    void destroy() {
-        //_connection = null;
-    }
+    void destroy() {} //_connection = null;
 }

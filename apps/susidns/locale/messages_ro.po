@@ -289,7 +289,7 @@ msgstr "Caută"
 msgid "other"
 msgstr "altul"
 
-msgid "clear filter"
+msgid "all"
 msgstr "ștergeți filtrul"
 
 msgid "Info"

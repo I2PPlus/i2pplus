@@ -61,7 +61,6 @@ public class CPUID {
     private static final boolean isSunos = System.getProperty("os.name").toLowerCase(Locale.US).contains("sunos");
     private static final boolean isMac = SystemVersion.isMac();
 
-
     /**
      * This isn't always correct.
      * http://stackoverflow.com/questions/807263/how-do-i-detect-which-kind-of-jre-is-installed-32bit-vs-64bit
@@ -74,10 +73,7 @@ public class CPUID {
      */
     private static final boolean is64 = SystemVersion.is64Bit();
 
-    static
-    {
-        loadNative();
-    }
+    static {loadNative();}
 
     /**
      *  A class that can (amongst other things I assume) represent the state of the
@@ -88,8 +84,7 @@ public class CPUID {
         final int EBX;
         final int ECX;
         final int EDX;
-        CPUIDResult(int EAX,int EBX,int ECX, int EDX)
-        {
+        CPUIDResult(int EAX,int EBX,int ECX, int EDX) {
             this.EAX = EAX;
             this.EBX = EBX;
             this.ECX = ECX;
@@ -117,13 +112,9 @@ public class CPUID {
      *  @since 0.9.26
      */
     private static int fetchJcpuidVersion() {
-        if (!_nativeOk)
-            return 0;
-        try {
-            return nativeJcpuidVersion();
-        } catch (Throwable t) {
-            return 2;
-        }
+        if (!_nativeOk) {return 0;}
+        try {return nativeJcpuidVersion();}
+        catch (Throwable t) {return 2;}
     }
 
     /**
@@ -131,12 +122,9 @@ public class CPUID {
      *  @return 0 if no jcpuid available, 2 if version not supported
      *  @since 0.9.26
      */
-    public static int getJcpuidVersion() {
-        return _jcpuidVersion;
-    }
+    public static int getJcpuidVersion() {return _jcpuidVersion;}
 
-    static String getCPUVendorID()
-    {
+    static String getCPUVendorID() {
         CPUIDResult c = doCPUID(0);
         StringBuilder sb= new StringBuilder(13);
         sb.append((char)( c.EBX        & 0xFF));
@@ -158,15 +146,13 @@ public class CPUID {
     }
 
     /** @return 0-15 */
-    static int getCPUFamily()
-    {
+    static int getCPUFamily() {
         CPUIDResult c = doCPUID(1);
         return (c.EAX >> 8) & 0xf;
     }
 
     /** @return 0-15 */
-    static int getCPUModel()
-    {
+    static int getCPUModel() {
         CPUIDResult c = doCPUID(1);
         return (c.EAX >> 4) & 0xf;
     }
@@ -176,15 +162,13 @@ public class CPUID {
      *  Left shift by 4 and then add model to get full model.
      *  @return 0-15
      */
-    static int getCPUExtendedModel()
-    {
+    static int getCPUExtendedModel() {
         CPUIDResult c = doCPUID(1);
         return (c.EAX >> 16) & 0xf;
     }
 
     /** @return 0-15 */
-    static int getCPUType()
-    {
+    static int getCPUType() {
         CPUIDResult c = doCPUID(1);
         return (c.EAX >> 12) & 0xf;
     }
@@ -194,40 +178,34 @@ public class CPUID {
      *  Add family to get full family.
      *  @return 0-255
      */
-    static int getCPUExtendedFamily()
-    {
+    static int getCPUExtendedFamily() {
         CPUIDResult c = doCPUID(1);
         return (c.EAX >> 20) & 0xff;
     }
 
     /** @return 0-15 */
-    static int getCPUStepping()
-    {
+    static int getCPUStepping() {
         CPUIDResult c = doCPUID(1);
         return c.EAX & 0xf;
     }
 
-    static int getEDXCPUFlags()
-    {
+    static int getEDXCPUFlags() {
         CPUIDResult c = doCPUID(1);
         return c.EDX;
     }
 
-    static int getECXCPUFlags()
-    {
+    static int getECXCPUFlags() {
         CPUIDResult c = doCPUID(1);
         return c.ECX;
     }
 
-    static int getExtendedECXCPUFlags()
-    {
+    static int getExtendedECXCPUFlags() {
         CPUIDResult c = doCPUID(0x80000001);
         return c.ECX;
     }
 
     /** @since 0.8.7 */
-    static int getExtendedEDXCPUFlags()
-    {
+    static int getExtendedEDXCPUFlags() {
         CPUIDResult c = doCPUID(0x80000001);
         return c.EDX;
     }
@@ -235,8 +213,7 @@ public class CPUID {
     /**
      *  @since 0.9.26
      */
-    static int getExtendedEBXFeatureFlags()
-    {
+    static int getExtendedEBXFeatureFlags() {
         // Supposed to set ECX to 0 before calling?
         // But we don't have support for that in jcpuid.
         // And it works just fine without that.
@@ -248,8 +225,7 @@ public class CPUID {
      *  There's almost nothing in here.
      *  @since 0.9.26
      */
-    static int getExtendedECXFeatureFlags()
-    {
+    static int getExtendedECXFeatureFlags() {
         // Supposed to set ECX to 0 before calling?
         // But we don't have support for that in jcpuid.
         // And it works just fine without that.
@@ -267,8 +243,7 @@ public class CPUID {
     static String getCPUModelName() {
         CPUIDResult c = doCPUID(0x80000000);
         long maxSupported = c.EAX & 0xFFFFFFFFL;
-        if (maxSupported < 0x80000004L)
-            return null;
+        if (maxSupported < 0x80000004L) {return null;}
         StringBuilder buf = new StringBuilder(48);
         int[] regs = new int[4];
         for (int fn = 0x80000002; fn <= 0x80000004; fn++) {
@@ -281,8 +256,7 @@ public class CPUID {
                 int reg = regs[i];
                 for (int j = 0; j < 4; j++) {
                     char ch = (char) (reg & 0xff);
-                    if (ch == 0)
-                        return buf.toString().trim();
+                    if (ch == 0) {return buf.toString().trim();}
                     buf.append(ch);
                     reg >>= 8;
                 }
@@ -299,28 +273,23 @@ public class CPUID {
      * is nothing preventing them from coding up new providers, probably using
      * other detection methods than the x86-only CPUID instruction
      */
-    public static CPUInfo getInfo() throws UnknownCPUException
-    {
-        if(!_nativeOk) {
+    public static CPUInfo getInfo() throws UnknownCPUException {
+        if (!_nativeOk) {
             throw new UnknownCPUException("Failed to read CPU information from the system. Please verify the existence of the " +
                                           getLibraryPrefix() + "jcpuid " + getLibrarySuffix() + " file.");
         }
         String id = getCPUVendorID();
-        if(id.equals("CentaurHauls"))
-            return new VIAInfoImpl();
-        if(!isX86)
+        if (id.equals("CentaurHauls")) {return new VIAInfoImpl();}
+        if (!isX86) {
             throw new UnknownCPUException("Failed to read CPU information from the system. The CPUID instruction exists on x86 CPUs only.");
+        }
         // http://lkml.iu.edu/hypermail/linux/kernel/1806.1/00730.html
-        if(id.equals("AuthenticAMD") || id.equals("HygonGenuine"))
-            return new AMDInfoImpl();
-        if(id.equals("GenuineIntel"))
-            return new IntelInfoImpl();
+        if (id.equals("AuthenticAMD") || id.equals("HygonGenuine")) {return new AMDInfoImpl();}
+        if (id.equals("GenuineIntel")) {return new IntelInfoImpl();}
         throw new UnknownCPUException("Unknown CPU type: '" + id + '\'');
     }
 
-
-    public static void main(String args[])
-    {
+    public static void main(String args[]) {
         _doLog = true; // this is too late to log anything from above
         String path = System.getProperty("java.library.path");
         String name = getLibraryPrefix() + "jcpuid" + getLibrarySuffix();
@@ -340,88 +309,82 @@ public class CPUID {
                                name + " file in the library path, or set -Djava.library.path=. in the command line");
         }
         System.out.println("JCPUID Version: " + _jcpuidVersion);
-        System.out.println("**CPUInfo**");
+        System.out.println("** CPUInfo **");
         String mname = getCPUModelName();
-        if (mname != null)
-            System.out.println("CPU Name:     " + mname);
+        if (mname != null) {System.out.println("CPU Name: " + mname);}
         String vendor = getCPUVendorID();
-        System.out.println("CPU Vendor:   " + vendor);
+        System.out.println("CPU Vendor: " + vendor);
         // http://en.wikipedia.org/wiki/Cpuid
         // http://web.archive.org/web/20110307080258/http://www.intel.com/Assets/PDF/appnote/241618.pdf
         // http://www.intel.com/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-vol-2a-manual.pdf
         int family = getCPUFamily();
         int model = getCPUModel();
-        if (family == 15 ||
-            (family == 6 && "GenuineIntel".equals(vendor))) {
-            model += getCPUExtendedModel() << 4;
-        }
-        if (family == 15) {
-            family += getCPUExtendedFamily();
-        }
-        System.out.println("CPU Family:   " + family);
-        System.out.println("CPU Model:    " + model + " (0x" + Integer.toHexString(model) + ')');
+        if (family == 15 || (family == 6 && "GenuineIntel".equals(vendor))) {model += getCPUExtendedModel() << 4;}
+        if (family == 15) {family += getCPUExtendedFamily();}
+        System.out.println("CPU Family: " + family);
+        System.out.println("CPU Model: " + model + " (0x" + Integer.toHexString(model) + ')');
         System.out.println("CPU Stepping: " + getCPUStepping());
-        System.out.println("CPU Flags (EDX):      0x" + Integer.toHexString(getEDXCPUFlags()));
-        System.out.println("CPU Flags (ECX):      0x" + Integer.toHexString(getECXCPUFlags()));
+        System.out.println("CPU Flags (EDX): 0x" + Integer.toHexString(getEDXCPUFlags()));
+        System.out.println("CPU Flags (ECX): 0x" + Integer.toHexString(getECXCPUFlags()));
         System.out.println("CPU Ext. Info. (EDX): 0x" + Integer.toHexString(getExtendedEDXCPUFlags()));
         System.out.println("CPU Ext. Info. (ECX): 0x" + Integer.toHexString(getExtendedECXCPUFlags()));
         System.out.println("CPU Ext. Feat. (EBX): 0x" + Integer.toHexString(getExtendedEBXFeatureFlags()));
         System.out.println("CPU Ext. Feat. (ECX): 0x" + Integer.toHexString(getExtendedECXFeatureFlags()));
 
         CPUInfo c = getInfo();
-        System.out.println("\n**More CPUInfo**");
+        System.out.println("\n** More CPUInfo **");
         System.out.println("CPU model name: " + c.getCPUModelString());
-        System.out.println("CPU has MMX:    " + c.hasMMX());
-        System.out.println("CPU has SSE:    " + c.hasSSE());
-        System.out.println("CPU has SSE2:   " + c.hasSSE2());
-        System.out.println("CPU has SSE3:   " + c.hasSSE3());
+        System.out.println("CPU has MMX: " + c.hasMMX());
+        System.out.println("CPU has SSE: " + c.hasSSE());
+        System.out.println("CPU has SSE2: " + c.hasSSE2());
+        System.out.println("CPU has SSE3: " + c.hasSSE3());
         System.out.println("CPU has SSE4.1: " + c.hasSSE41());
         System.out.println("CPU has SSE4.2: " + c.hasSSE42());
-        System.out.println("CPU has SSE4A:  " + c.hasSSE4A());
+        System.out.println("CPU has SSE4A: " + c.hasSSE4A());
         System.out.println("CPU has AES-NI: " + c.hasAES());
-        System.out.println("CPU has AVX:    " + c.hasAVX());
-        System.out.println("CPU has AVX2:   " + c.hasAVX2());
+        System.out.println("CPU has AVX: " + c.hasAVX());
+        System.out.println("CPU has AVX2: " + c.hasAVX2());
         System.out.println("CPU has AVX512: " + c.hasAVX512());
-        System.out.println("CPU has ADX:    " + c.hasADX());
-        System.out.println("CPU has TBM:    " + c.hasTBM());
-        System.out.println("CPU has BMI1:   " + c.hasBMI1());
-        System.out.println("CPU has BMI2:   " + c.hasBMI2());
-        System.out.println("CPU has FMA3:   " + c.hasFMA3());
-        System.out.println("CPU has MOVBE:  " + c.hasMOVBE());
-        System.out.println("CPU has ABM:    " + c.hasABM());
-        if(c instanceof IntelCPUInfo){
+        System.out.println("CPU has ADX: " + c.hasADX());
+        System.out.println("CPU has TBM: " + c.hasTBM());
+        System.out.println("CPU has BMI1: " + c.hasBMI1());
+        System.out.println("CPU has BMI2: " + c.hasBMI2());
+        System.out.println("CPU has FMA3: " + c.hasFMA3());
+        System.out.println("CPU has MOVBE: " + c.hasMOVBE());
+        System.out.println("CPU has ABM: " + c.hasABM());
+        if (c instanceof IntelCPUInfo) {
             IntelCPUInfo cc = (IntelCPUInfo) c;
-            System.out.println("\n**Intel-info**");
-            System.out.println("Is PII-compatible:       " + cc.IsPentium2Compatible());
-            System.out.println("Is PIII-compatible:      " + cc.IsPentium3Compatible());
-            System.out.println("Is PIV-compatible:       " + cc.IsPentium4Compatible());
-            System.out.println("Is Atom-compatible:      " + cc.IsAtomCompatible());
+            System.out.println("\n** Intel Info **");
+            System.out.println("Is PII-compatible: " + cc.IsPentium2Compatible());
+            System.out.println("Is PIII-compatible: " + cc.IsPentium3Compatible());
+            System.out.println("Is PIV-compatible: " + cc.IsPentium4Compatible());
+            System.out.println("Is Atom-compatible: " + cc.IsAtomCompatible());
             System.out.println("Is Pentium M compatible: " + cc.IsPentiumMCompatible());
-            System.out.println("Is Core2-compatible:     " + cc.IsCore2Compatible());
-            System.out.println("Is Corei-compatible:     " + cc.IsCoreiCompatible());
-            System.out.println("Is Sandy-compatible:     " + cc.IsSandyCompatible());
-            System.out.println("Is Ivy-compatible:       " + cc.IsIvyCompatible());
-            System.out.println("Is Haswell-compatible:   " + cc.IsHaswellCompatible());
+            System.out.println("Is Core2-compatible: " + cc.IsCore2Compatible());
+            System.out.println("Is Corei-compatible: " + cc.IsCoreiCompatible());
+            System.out.println("Is Sandy-compatible: " + cc.IsSandyCompatible());
+            System.out.println("Is Ivy-compatible: " + cc.IsIvyCompatible());
+            System.out.println("Is Haswell-compatible: " + cc.IsHaswellCompatible());
             System.out.println("Is Broadwell-compatible: " + cc.IsBroadwellCompatible());
-            System.out.println("Is Skylake-compatible:   " + cc.IsSkylakeCompatible());
+            System.out.println("Is Skylake-compatible: " + cc.IsSkylakeCompatible());
         } else if (c instanceof AMDCPUInfo) {
             AMDCPUInfo cc = (AMDCPUInfo) c;
-            System.out.println("\n**AMD-info**");
-            System.out.println("Is K6-compatible:          " + cc.IsK6Compatible());
-            System.out.println("Is K6_2-compatible:        " + cc.IsK6_2_Compatible());
-            System.out.println("Is K6_3-compatible:        " + cc.IsK6_3_Compatible());
-            System.out.println("Is Geode-compatible:       " + cc.IsGeodeCompatible());
-            System.out.println("Is Athlon-compatible:      " + cc.IsAthlonCompatible());
-            System.out.println("Is Athlon64-compatible:    " + cc.IsAthlon64Compatible());
-            System.out.println("Is Bobcat-compatible:      " + cc.IsBobcatCompatible());
-            System.out.println("Is K10-compatible:         " + cc.IsK10Compatible());
-            System.out.println("Is Jaguar-compatible:      " + cc.IsJaguarCompatible());
-            System.out.println("Is Bulldozer-compatible:   " + cc.IsBulldozerCompatible());
-            System.out.println("Is Piledriver-compatible:  " + cc.IsPiledriverCompatible());
+            System.out.println("\n** AMD Info **");
+            System.out.println("Is K6-compatible: " + cc.IsK6Compatible());
+            System.out.println("Is K6_2-compatible: " + cc.IsK6_2_Compatible());
+            System.out.println("Is K6_3-compatible: " + cc.IsK6_3_Compatible());
+            System.out.println("Is Geode-compatible: " + cc.IsGeodeCompatible());
+            System.out.println("Is Athlon-compatible: " + cc.IsAthlonCompatible());
+            System.out.println("Is Athlon64-compatible: " + cc.IsAthlon64Compatible());
+            System.out.println("Is Bobcat-compatible: " + cc.IsBobcatCompatible());
+            System.out.println("Is K10-compatible: " + cc.IsK10Compatible());
+            System.out.println("Is Jaguar-compatible: " + cc.IsJaguarCompatible());
+            System.out.println("Is Bulldozer-compatible: " + cc.IsBulldozerCompatible());
+            System.out.println("Is Piledriver-compatible: " + cc.IsPiledriverCompatible());
             System.out.println("Is Steamroller-compatible: " + cc.IsSteamrollerCompatible());
-            System.out.println("Is Excavator-compatible:   " + cc.IsExcavatorCompatible());
-            System.out.println("Is Zen-compatible:         " + cc.IsZenCompatible());
-            System.out.println("Is Zen2-compatible:        " + cc.IsZen2Compatible());
+            System.out.println("Is Excavator-compatible: " + cc.IsExcavatorCompatible());
+            System.out.println("Is Zen-compatible: " + cc.IsZenCompatible());
+            System.out.println("Is Zen2-compatible: " + cc.IsZen2Compatible());
         }
     }
 
@@ -433,35 +396,41 @@ public class CPUID {
      *
      */
     private static final void loadNative() {
-        try{
+        try {
         String wantedProp = System.getProperty("jcpuid.enable", "true");
         boolean wantNative = Boolean.parseBoolean(wantedProp);
         if (wantNative) {
             boolean loaded = loadGeneric();
             if (loaded) {
                 _nativeOk = true;
-                if (_doLog)
+                if (_doLog) {
                     System.err.println("INFO: Native CPUID library " + getLibraryMiddlePart() + " loaded from file");
+                }
             } else {
                 loaded = loadFromResource();
                 if (loaded) {
                     _nativeOk = true;
-                    if (_doLog)
+                    if (_doLog) {
                         System.err.println("INFO: Native CPUID library " + getResourceName() + " loaded from resource");
+                    }
                 } else {
                     _nativeOk = false;
-                    if (_doLog)
+                    if (_doLog) {
                         System.err.println("WARNING: Native CPUID library jcpuid not loaded - will not be able to read CPU information using CPUID");
+                    }
                 }
             }
             _jcpuidVersion = fetchJcpuidVersion();
         } else {
-            if (_doLog)
+            if (_doLog) {
                 System.err.println("INFO: Native CPUID library jcpuid not loaded - will not be able to read CPU information using CPUID");
+            }
         }
-        }catch(Exception e){
-            if (_doLog)
-                System.err.println("INFO: Native CPUID library jcpuid not loaded, reason: '"+e.getMessage()+"' - will not be able to read CPU information using CPUID");
+        } catch(Exception e) {
+            if (_doLog) {
+                System.err.println("INFO: Native CPUID library jcpuid not loaded\n* Reason: '" + e.getMessage() +
+                                   "' - will not be able to read CPU information using CPUID");
+            }
         }
     }
 
@@ -477,9 +446,7 @@ public class CPUID {
         try {
             System.loadLibrary("jcpuid");
             return true;
-        } catch (UnsatisfiedLinkError ule) {
-            // fallthrough, try the OS-specific filename
-        }
+        } catch (UnsatisfiedLinkError ule) {} // fallthrough, try the OS-specific filename
 
         // Don't bother trying a 64 bit filename variant.
 
@@ -489,12 +456,7 @@ public class CPUID {
         // However, a distribution may put the file in, e.g., /usr/lib/jni/
         // with the libjcpuid-x86-linux.so name.
         // Ubuntu packages now use libjcpuid.so
-        //try {
-        //    System.loadLibrary(getLibraryMiddlePart());
-        //    return true;
-        //} catch (UnsatisfiedLinkError ule) {
-            return false;
-        //}
+        return false;
     }
 
     /**
@@ -528,19 +490,15 @@ public class CPUID {
         String resourceName = getResourceName64();
         if (resourceName != null) {
             boolean success = extractLoadAndCopy(resourceName);
-            if (success)
-                return true;
-            if (_doLog)
-                System.err.println("WARNING: Resource name [" + resourceName + "] was not found");
+            if (success) {return true;}
+            if (_doLog) {System.err.println("WARNING: Resource name [" + resourceName + "] not found");}
         }
 
         // now try 32 bit
         resourceName = getResourceName();
         boolean success = extractLoadAndCopy(resourceName);
-        if (success)
-            return true;
-        if (_doLog)
-            System.err.println("WARNING: Resource name [" + resourceName + "] was not found");
+        if (success) {return true;}
+        if (_doLog) {System.err.println("WARNING: Resource name [" + resourceName + "] not found");}
         return false;
     }
 
@@ -554,8 +512,7 @@ public class CPUID {
      */
     private static final boolean extractLoadAndCopy(String resourceName) {
         URL resource = CPUID.class.getClassLoader().getResource(resourceName);
-        if (resource == null)
-            return false;
+        if (resource == null) {return false;}
         InputStream libStream = null;
         File outFile = null;
         FileOutputStream fos = null;
@@ -570,25 +527,24 @@ public class CPUID {
             System.load(outFile.getAbsolutePath());//System.load requires an absolute path to the lib
         } catch (UnsatisfiedLinkError ule) {
             if (_doLog) {
-                System.err.println("WARNING: The resource " + resourceName
-                                   + " was not a valid library for this platform " + ule);
+                System.err.println("WARNING: The resource " + resourceName +
+                                   " was not a valid library for this platform " + ule);
                 //ule.printStackTrace();
             }
-            if (outFile != null)
-                outFile.delete();
+            if (outFile != null) {outFile.delete();}
             return false;
         } catch (IOException ioe) {
             if (_doLog) {
                 System.err.println("ERROR: Problem writing out the temporary native library data");
                 ioe.printStackTrace();
             }
-            if (outFile != null)
-                outFile.delete();
+            if (outFile != null) {outFile.delete();}
             return false;
         } finally {
             if (libStream != null) try { libStream.close(); } catch (IOException ioe) {}
             if (fos != null) {
-                try { fos.close(); } catch (IOException ioe) {}
+                try {fos.close();}
+                catch (IOException ioe) {}
             }
         }
         // copy to install dir, ignore failure
@@ -598,8 +554,7 @@ public class CPUID {
     }
 
     /** @return non-null */
-    private static final String getResourceName()
-    {
+    private static final String getResourceName() {
         return getLibraryPrefix() + getLibraryMiddlePart() + getLibrarySuffix();
     }
 
@@ -611,43 +566,33 @@ public class CPUID {
         // As of GMP 6,
         // libjcpuid-x86_64-osx.jnilib file is a fat binary that contains both 64- and 32-bit binaries
         // See loadFromResource() for more info.
-        if (!is64 && !isMac)
-            return null;
+        if (!is64 && !isMac) {return null;}
         return getLibraryPrefix() + get64LibraryMiddlePart() + getLibrarySuffix();
     }
 
-    private static final String getLibraryPrefix()
-    {
-        if(isWindows)
-            return "";
-        else
-            return "lib";
+    private static final String getLibraryPrefix() {
+        if (isWindows) {return "";}
+        else {return "lib";}
     }
 
-    private static final String getLibraryMiddlePart(){
-        if(isWindows)
-             return "jcpuid-x86-windows"; // The convention on Windows
-	if(isMac) {
-	    if(isX86) {
+    private static final String getLibraryMiddlePart() {
+        if (isWindows) {return "jcpuid-x86-windows";} // The convention on Windows
+        if (isMac) {
+            if (isX86) {
                 // As of GMP6,
                 // our libjcpuid-x86_64.osx.jnilib is a fat binary,
                 // with the 32-bit lib in it also.
                 // Not sure if that was on purpose...
-	        return "jcpuid-x86_64-osx";  // The convention on Intel Macs
-	    }
+                return "jcpuid-x86_64-osx";  // The convention on Intel Macs
+            }
             // this will fail, we don't have any ppc libs, but we can't return null here.
-	    return "jcpuid-ppc-osx";
-	}
-        if(isKFreebsd)
-            return "jcpuid-x86-kfreebsd"; // The convention on kfreebsd...
-        if(isFreebsd)
-            return "jcpuid-x86-freebsd"; // The convention on freebsd...
-        if(isNetbsd)
-            return "jcpuid-x86-netbsd"; // The convention on netbsd...
-        if(isOpenbsd)
-            return "jcpuid-x86-openbsd"; // The convention on openbsd...
-        if(isSunos)
-            return "jcpuid-x86-solaris"; // The convention on SunOS
+            return "jcpuid-ppc-osx";
+        }
+        if (isKFreebsd) {return "jcpuid-x86-kfreebsd";} // The convention on kfreebsd...
+        if (isFreebsd) {return "jcpuid-x86-freebsd";} // The convention on freebsd...
+        if (isNetbsd) {return "jcpuid-x86-netbsd";} // The convention on netbsd...
+        if (isOpenbsd) {return "jcpuid-x86-openbsd";} // The convention on openbsd...
+        if (isSunos) {return "jcpuid-x86-solaris";} // The convention on SunOS
         //throw new RuntimeException("Dont know jcpuid library name for os type '"+System.getProperty("os.name")+"'");
         // use linux as the default, don't throw exception
         return "jcpuid-x86-linux";
@@ -655,36 +600,25 @@ public class CPUID {
 
     /** @since 0.8.7 */
     private static final String get64LibraryMiddlePart() {
-        if(isWindows)
-             return "jcpuid-x86_64-windows";
-        if(isKFreebsd)
-            return "jcpuid-x86_64-kfreebsd";
-        if(isFreebsd)
-            return "jcpuid-x86_64-freebsd";
-        if(isNetbsd)
-            return "jcpuid-x86_64-netbsd";
-        if(isOpenbsd)
-            return "jcpuid-x86_64-openbsd";
-	if(isMac){
-	    if(isX86){
-	        return "jcpuid-x86_64-osx";
-	    }
+        if (isWindows) {return "jcpuid-x86_64-windows";}
+        if (isKFreebsd) {return "jcpuid-x86_64-kfreebsd";}
+        if (isFreebsd) {return "jcpuid-x86_64-freebsd";}
+        if (isNetbsd) {return "jcpuid-x86_64-netbsd";}
+        if (isOpenbsd) {return "jcpuid-x86_64-openbsd";}
+        if (isMac) {
+            if (isX86){return "jcpuid-x86_64-osx";}
             // this will fail, we don't have any ppc libs, but we can't return null here.
-	    return "jcpuid-ppc_64-osx";
-	}
-        if(isSunos)
-            return "jcpuid-x86_64-solaris";
+            return "jcpuid-ppc_64-osx";
+        }
+        if (isSunos) {return "jcpuid-x86_64-solaris";}
         // use linux as the default, don't throw exception
         return "jcpuid-x86_64-linux";
     }
 
-    private static final String getLibrarySuffix()
-    {
-        if(isWindows)
-            return ".dll";
-	if(isMac)
-	    return ".jnilib";
-	else
-            return ".so";
+    private static final String getLibrarySuffix() {
+        if (isWindows) {return ".dll";}
+        if (isMac) {return ".jnilib";}
+        else {return ".so";}
     }
+
 }

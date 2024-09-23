@@ -282,7 +282,7 @@ msgstr "Αναζήτηση"
 msgid "other"
 msgstr "άλλο"
 
-msgid "clear filter"
+msgid "all"
 msgstr "εκκαθάριση φίλτρου"
 
 msgid "Info"

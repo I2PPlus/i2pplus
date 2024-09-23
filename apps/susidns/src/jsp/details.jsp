@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function() {
 <%  String query = request.getQueryString(); %>
 </head>
 <body id=dtls style=display:none;pointer-events:none>
-<div class=page>
+<div id=page>
 <div id=navi>
 <a class="abook router<%=(query.contains("book=router") ? " details selected" : "")%>" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
 <a class="abook master<%=(query.contains("book=master") ? " details selected" : "")%>" href="addressbook?book=master&amp;filter=none"><%=intl._t("Master")%></a>&nbsp;

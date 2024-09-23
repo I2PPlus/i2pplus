@@ -128,8 +128,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
                 tmp.delete();
             }
         } catch (IOException ioe) {
-            if (tmp != null)
-                tmp.delete();
+            if (tmp != null) {tmp.delete();}
             a = Collections.emptyMap();
         }
         this.addresses = a;
@@ -151,11 +150,8 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
     public AddressBook(File file) {
         this.location = file.toString();
         Map<String, HostTxtEntry> a;
-        try {
-            a = HostTxtParser.parse(file);
-        } catch (IOException exp) {
-            a = new HashMap<String, HostTxtEntry>();
-        }
+        try {a = HostTxtParser.parse(file);}
+        catch (IOException exp) {a = new HashMap<String, HostTxtEntry>();}
         this.addresses = a;
         this.subFile = null;
     }
@@ -178,11 +174,8 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
      */
     public Iterator<Map.Entry<String, HostTxtEntry>> iterator() {
         if (this.subFile != null) {
-            try {
-                return new HostTxtIterator(this.subFile);
-            } catch (IOException ioe) {
-                return new HostTxtIterator();
-            }
+            try {return new HostTxtIterator(this.subFile);}
+            catch (IOException ioe) {return new HostTxtIterator();}
         }
         return this.addresses.entrySet().iterator();
     }
@@ -192,12 +185,10 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
      * @since 0.8.7
      */
     public void delete() {
-        if (this.subFile != null) {
-            this.subFile.delete();
-        } else if (this.addresses != null) {
-            try {
-                this.addresses.clear();
-            } catch (UnsupportedOperationException uoe) {}
+        if (this.subFile != null) {this.subFile.delete();}
+        else if (this.addresses != null) {
+            try {this.addresses.clear();}
+            catch (UnsupportedOperationException uoe) {}
         }
     }
 
@@ -208,9 +199,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
      *         depending on how the instance was constructed.
      *         Will be null if created with the Map constructor.
      */
-    public String getLocation() {
-        return this.location;
-    }
+    public String getLocation() {return this.location;}
 
     /**
      * Return a string representation of the origin of the AddressBook.
@@ -219,8 +208,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
      */
     @Override
     public String toString() {
-        if (this.location != null)
-            return "Book from " + this.location;
+        if (this.location != null) {return "Book from " + this.location;}
         return "Map containing " + this.addresses.size() + " entries";
     }
 
@@ -319,12 +307,10 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
      * @throws IllegalStateException if this was created with the Subscription constructor.
      */
     public void write(File file) {
-        if (this.addresses == null)
-            throw new IllegalStateException();
+        if (this.addresses == null) {throw new IllegalStateException();}
         if (this.modified) {
-            try {
-                HostTxtParser.write(this.addresses, file);
-            } catch (IOException exp) {
+            try {HostTxtParser.write(this.addresses, file);}
+            catch (IOException exp) {
                 System.err.println("Error writing addressbook " + file.getAbsolutePath() + " : " + exp.toString());
             }
         }
@@ -338,9 +324,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
      * @throws IllegalStateException if this was not created with the File constructor.
      */
     public void write() {
-        if (this.location == null || this.location.startsWith("http://")) {
-            throw new IllegalStateException();
-        }
+        if (this.location == null || this.location.startsWith("http://")) {throw new IllegalStateException();}
         this.write(new File(this.location));
     }
 

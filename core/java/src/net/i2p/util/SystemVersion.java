@@ -93,8 +93,8 @@ public abstract class SystemVersion {
         String vendor = System.getProperty("java.vendor");
         _isAndroid = vendor.contains("Android");
         _isApache = vendor.startsWith("Apache");
-        _isGNU = vendor.startsWith("GNU Classpath") ||               // JamVM
-                 vendor.startsWith("Free Software Foundation");      // gij
+        _isGNU = vendor.startsWith("GNU Classpath") || // JamVM
+                 vendor.startsWith("Free Software Foundation"); // gij
         String runtime = System.getProperty("java.runtime.name");
         _isOpenJDK = runtime != null && runtime.contains("OpenJDK");
         _isLinuxService = !_isWin && !_isMac && !_isAndroid &&
@@ -102,7 +102,6 @@ public abstract class SystemVersion {
                            (_isGentoo && GENTOO_USER.equals(System.getProperty("user.name"))));
         _isService = _isLinuxService || _isWindowsService;
         // we assume the Apple M1 is not slow, however isSlow() below will still return true until we have a jbigi
-//        _isSlow = _isAndroid || _isApache || (isARM() && !_isMac) || _isGNU || _isZero || getMaxMemory() < 128*1024*1024L;
         _isSlow = _isAndroid || _isApache || (isARM() && !_isMac) || _isGNU || _isZero || getMaxMemory() < 256*1024*1024L;
 
         int sdk = 0;
@@ -138,8 +137,7 @@ public abstract class SystemVersion {
         } else {
             String version = System.getProperty("java.version");
             // handle versions like "8-ea" or "9-internal"
-            if (!version.startsWith("1."))
-                version = "1." + version;
+            if (!version.startsWith("1.")) {version = "1." + version;}
             _oneDotSix = VersionComparator.comp(version, "1.6") >= 0;
             _oneDotSeven = _oneDotSix && VersionComparator.comp(version, "1.7") >= 0;
             _oneDotEight = _oneDotSeven && VersionComparator.comp(version, "1.8") >= 0;
@@ -171,18 +169,13 @@ public abstract class SystemVersion {
      * @since 0.9.53
      */
     public static String getOS() {
-        if (isWindows())
-            return "Windows";
-        if (isMac())
-            return "Apple";
-        if (isGNU())
-            return "Linux"; /* actually... */
-        if (isLinuxService())
-            return "Linux (Service)";
-        if (isAndroid())
-            return "Android";
+        if (isWindows()) {return "Windows";}
+        if (isMac()) {return "Apple";}
+        if (isGNU()) {return "Linux";} /* actually... */
+        if (isLinuxService()) {return "Linux (Service)";}
+        if (isAndroid()) {return "Android";}
         /** Everybody else knows if they're on a Windows machine or a
-         * Mac, so for now, assume linux here.
+         *  Mac, so for now, assume linux here.
          */
         return "Linux";
     }
@@ -197,59 +190,41 @@ public abstract class SystemVersion {
      * @since 0.9.53
      */
     public static String getArch() {
-        if (is64Bit()){
-            if (isARM())
-                return "ARM64";
-            if (isX86())
-                return "AMD64";
+        if (is64Bit()) {
+            if (isARM()) {return "ARM64";}
+            if (isX86()) {return "AMD64";}
         }
-        if (isARM())
-            return "ARM";
-        if (isX86())
-            return "386";
+        if (isARM()) {return "ARM";}
+        if (isX86()) {return "386";}
         return "unknown";
     }
 
 
-    public static boolean isWindows() {
-        return _isWin;
-    }
+    public static boolean isWindows() {return _isWin;}
 
-    public static boolean isMac() {
-        return _isMac;
-    }
+    public static boolean isMac() {return _isMac;}
 
-    public static boolean isAndroid() {
-        return _isAndroid;
-    }
+    public static boolean isAndroid() {return _isAndroid;}
 
     /**
      *  Apache Harmony JVM, or Android
      */
-    public static boolean isApache() {
-        return _isApache || _isAndroid;
-    }
+    public static boolean isApache() {return _isApache || _isAndroid;}
 
     /**
      *  gij or JamVM with GNU Classpath
      */
-    public static boolean isGNU() {
-        return _isGNU;
-    }
+    public static boolean isGNU() {return _isGNU;}
 
     /**
      *  @since 0.9.23
      */
-    public static boolean isGentoo() {
-        return _isGentoo;
-    }
+    public static boolean isGentoo() {return _isGentoo;}
 
     /**
      *  @since 0.9.26
      */
-    public static boolean isOpenJDK() {
-        return _isOpenJDK;
-    }
+    public static boolean isOpenJDK() {return _isOpenJDK;}
 
     /**
      *  @since 0.9.8
@@ -263,17 +238,13 @@ public abstract class SystemVersion {
     /**
      *  @since 0.9.14
      */
-    public static boolean isX86() {
-        return _isX86;
-    }
+    public static boolean isX86() {return _isX86;}
 
     /**
      *  Is this a very slow interpreted mode VM?
      *  @since 0.9.38
      */
-    public static boolean isZeroVM() {
-        return _isZero;
-    }
+    public static boolean isZeroVM() {return _isZero;}
 
     /**
      *  Our best guess on whether this is a slow architecture / OS / JVM,
@@ -284,8 +255,9 @@ public abstract class SystemVersion {
     public static boolean isSlow() {
         // we don't put the NBI call in the static field,
         // to prevent a circular initialization with NBI.
-        return _isSlow || !NativeBigInteger.isNative() || (getCores() < 4 && !is64Bit()) || (getCores() == 1 && getMaxMemory() < 384*1024*1024L)
-                       && !I2PAppContext.getGlobalContext().getBooleanProperty(PROP_OVERRIDE_IS_SLOW);
+        return _isSlow || !NativeBigInteger.isNative() || (getCores() < 4 && !is64Bit()) ||
+               (getCores() == 1 && getMaxMemory() < 384*1024*1024L) &&
+               !I2PAppContext.getGlobalContext().getBooleanProperty(PROP_OVERRIDE_IS_SLOW);
     }
 
     /**
@@ -294,9 +266,7 @@ public abstract class SystemVersion {
      *
      *  @return true if Java 1.6 or higher, or Android API 9 or higher
      */
-    public static boolean isJava6() {
-        return _oneDotSix;
-    }
+    public static boolean isJava6() {return _oneDotSix;}
 
     /**
      *  Better than (new VersionComparator()).compare(System.getProperty("java.version"), "1.7") &gt;= 0
@@ -305,144 +275,112 @@ public abstract class SystemVersion {
      *  @return true if Java 1.7 or higher, or Android API 19 or higher
      *  @since 0.9.14
      */
-    public static boolean isJava7() {
-        return _oneDotSeven;
-    }
+    public static boolean isJava7() {return _oneDotSeven;}
 
     /**
      *
      *  @return true if Java 1.8 or higher, false for Android.
      *  @since 0.9.15
      */
-    public static boolean isJava8() {
-        return _oneDotEight;
-    }
+    public static boolean isJava8() {return _oneDotEight;}
 
     /**
      *
      *  @return true if Java 9 or higher, false for Android.
      *  @since 0.9.23
      */
-    public static boolean isJava9() {
-        return _oneDotNine;
-    }
+    public static boolean isJava9() {return _oneDotNine;}
 
     /**
      *
      *  @return true if Java 10 or higher, false for Android.
      *  @since 0.9.33
      */
-    public static boolean isJava10() {
-        return _oneDotTen;
-    }
+    public static boolean isJava10() {return _oneDotTen;}
 
     /**
      *
      *  @return true if Java 11 or higher, false for Android.
      *  @since 0.9.35
      */
-    public static boolean isJava11() {
-        return _oneDotEleven;
-    }
+    public static boolean isJava11() {return _oneDotEleven;}
 
     /**
      *
      *  @return true if Java 12 or higher, false for Android.
      *  @since 0.9.59+
      */
-    public static boolean isJava12() {
-        return _twelve;
-    }
+    public static boolean isJava12() {return _twelve;}
 
     /**
      *
      *  @return true if Java 13 or higher, false for Android.
      *  @since 0.9.59+
      */
-    public static boolean isJava13() {
-        return _thirteen;
-    }
+    public static boolean isJava13() {return _thirteen;}
 
     /**
      *
      *  @return true if Java 14 or higher, false for Android.
      *  @since 0.9.59+
      */
-    public static boolean isJava14() {
-        return _fourteen;
-    }
+    public static boolean isJava14() {return _fourteen;}
 
     /**
      *
      *  @return true if Java 15 or higher, false for Android.
      *  @since 0.9.59+
      */
-    public static boolean isJava15() {
-        return _fifteen;
-    }
+    public static boolean isJava15() {return _fifteen;}
 
     /**
      *
      *  @return true if Java 16 or higher, false for Android.
      *  @since 0.9.59+
      */
-    public static boolean isJava16() {
-        return _sixteen;
-    }
+    public static boolean isJava16() {return _sixteen;}
 
     /**
      *
      *  @return true if Java 17 or higher, false for Android.
      *  @since 0.9.59+
      */
-    public static boolean isJava17() {
-        return _seventeen;
-    }
+    public static boolean isJava17() {return _seventeen;}
 
     /**
      *
      *  @return true if Java 18 or higher, false for Android.
      *  @since 0.9.59+
      */
-    public static boolean isJava18() {
-        return _eighteen;
-    }
+    public static boolean isJava18() {return _eighteen;}
 
     /**
      *
      *  @return true if Java 19 or higher, false for Android.
      *  @since 0.9.59+
      */
-    public static boolean isJava19() {
-        return _nineteen;
-    }
+    public static boolean isJava19() {return _nineteen;}
 
     /**
      *
      *  @return true if Java 20 or higher, false for Android.
      *  @since 0.9.59+
      */
-    public static boolean isJava20() {
-        return _twenty;
-    }
+    public static boolean isJava20() {return _twenty;}
 
     /**
      *
      *  @return true if Java 21 or higher, false for Android.
      *  @since 0.9.59+
      */
-    public static boolean isJava21() {
-        return _twentyOne;
-    }
+    public static boolean isJava21() {return _twentyOne;}
 
     /**
      *
      *  @return true if Java 21 or higher, false for Android.
      *  @since 0.9.59+
      */
-    public static boolean isJava22() {
-        return _twentyTwo;
-    }
+    public static boolean isJava22() {return _twentyTwo;}
 
     /**
      *  Handles Android also
@@ -451,9 +389,7 @@ public abstract class SystemVersion {
      *  @return true if greater than or equal to minVersion
      *  @since 0.9.41
      */
-    public static boolean isJava(int minVersion) {
-        return isJava("1." + minVersion);
-    }
+    public static boolean isJava(int minVersion) {return isJava("1." + minVersion);}
 
     /**
      *  Handles Android, and minVersions in both forms (e.g. 11 or 1.11)
@@ -464,15 +400,11 @@ public abstract class SystemVersion {
      */
     public static boolean isJava(String minVersion) {
         String version = System.getProperty("java.version");
-        if (!version.startsWith("1."))
-            version = "1." + version;
-        if (!minVersion.startsWith("1."))
-            minVersion = "1." + minVersion;
+        if (!version.startsWith("1.")) {version = "1." + version;}
+        if (!minVersion.startsWith("1.")) {minVersion = "1." + minVersion;}
         if (_isAndroid) {
-            if (minVersion.startsWith("1.6"))
-                return _oneDotSix;
-            if (minVersion.startsWith("1.7"))
-                return _oneDotSeven;
+            if (minVersion.startsWith("1.6")) {return _oneDotSix;}
+            if (minVersion.startsWith("1.7")) {return _oneDotSeven;}
             return false;
         }
         return VersionComparator.comp(version, minVersion) >= 0;
@@ -488,47 +420,35 @@ public abstract class SystemVersion {
      * sun.arch.data.model == 32 =&gt; A 32 bit JVM but could be either 32 or 64 bit processor or libs
      * os.arch contains "64" could be 32 or 64 bit libs
      */
-    public static boolean is64Bit() {
-        return _is64;
-    }
+    public static boolean is64Bit() {return _is64;}
 
     /*
      *  @since 0.9.28
      */
-    public static boolean isLinuxService() {
-        return _isLinuxService;
-    }
+    public static boolean isLinuxService() {return _isLinuxService;}
 
     /*
      *  @since 0.9.46
      */
-    public static boolean isWindowsService() {
-        return _isWindowsService;
-    }
+    public static boolean isWindowsService() {return _isWindowsService;}
 
     /*
      *  @since 0.9.46
      */
-    public static boolean isService() {
-        return _isService;
-    }
+    public static boolean isService() {return _isService;}
 
     /**
      *  Identical to android.os.Build.VERSION.SDK_INT.
      *  For use outside of Android code.
      *  @return The SDK (API) version, e.g. 8 for Froyo, 0 if unknown
      */
-    public static int getAndroidVersion() {
-        return _androidSDK;
-    }
+    public static int getAndroidVersion() {return _androidSDK;}
 
     /**
      *  Is the wrapper present?
      *  Same as I2PAppContext.hasWrapper()
      */
-    public static boolean hasWrapper() {
-        return _hasWrapper;
-    }
+    public static boolean hasWrapper() {return _hasWrapper;}
 
     /**
      *  Runtime.getRuntime().maxMemory() but check for
@@ -537,10 +457,7 @@ public abstract class SystemVersion {
      */
     public static long getMaxMemory() {
         long maxMemory = Runtime.getRuntime().maxMemory();
-        if (maxMemory >= Long.MAX_VALUE / 2)
-//            maxMemory = 96*1024*1024l;
-            /** speed: use sane default */
-            maxMemory = 8192*1024*1024l;
+        if (maxMemory >= Long.MAX_VALUE / 2) {maxMemory = 8192*1024*1024l;}
         return maxMemory;
     }
 
@@ -549,17 +466,14 @@ public abstract class SystemVersion {
      *  @return never smaller than 1
      *  @since 0.9.34
      */
-    public static int getCores() {
-        return Runtime.getRuntime().availableProcessors();
-    }
+    public static int getCores() {return Runtime.getRuntime().availableProcessors();}
 
     /** calculate how many (virtual) cores should be actually used by a thread pool */
     public static int usableCores() {
         /** On these OSes we want our threads to occupy the CPU as long as possible
          * instead of being put to sleep by the power saving features
          */
-        if (_isWin || _isMac)
-            return 1;
+        if (_isWin || _isMac) {return 1;}
 
         int dividend = 1;
         int divisor = 1;
@@ -601,8 +515,7 @@ public abstract class SystemVersion {
      */
     public static TimeZone getSystemTimeZone(I2PAppContext ctx) {
         String systemTimeZone = ctx.getProperty("i2p.systemTimeZone");
-        if (systemTimeZone != null)
-            return TimeZone.getTimeZone(systemTimeZone);
+        if (systemTimeZone != null) {return TimeZone.getTimeZone(systemTimeZone);}
         return TimeZone.getDefault();
     }
 
@@ -611,36 +524,21 @@ public abstract class SystemVersion {
      */
     public static void main(String[] args) {
         String jvm = isOpenJDK() ? "(OpenJDK)" : isZeroVM() ? "(Zero JVM)" : isApache() ? "(Apache)" : "";
-        if (isJava8())
-            System.out.println("Java 8 " + jvm);
-        else if (isJava9())
-            System.out.println("Java 9 " + jvm);
-        else if (isJava10())
-            System.out.println("Java 10 " + jvm);
-        else if (isJava11())
-            System.out.println("Java 11 " + jvm);
-        else if (isJava12())
-            System.out.println("Java 12 " + jvm);
-        else if (isJava13())
-            System.out.println("Java 13 " + jvm);
-        else if (isJava14())
-            System.out.println("Java 14 " + jvm);
-        else if (isJava15())
-            System.out.println("Java 15 " + jvm);
-        else if (isJava16())
-            System.out.println("Java 16 " + jvm);
-        else if (isJava17())
-            System.out.println("Java 17 " + jvm);
-        else if (isJava18())
-            System.out.println("Java 18 " + jvm);
-        else if (isJava19())
-            System.out.println("Java 19 " + jvm);
-        else if (isJava20())
-            System.out.println("Java 20 " + jvm);
-        else if (isJava21())
-            System.out.println("Java 21 " + jvm);
-        else if (isJava22())
-            System.out.println("Java 22 " + jvm);
+        if (isJava8()) {System.out.println("Java 8 " + jvm);}
+        else if (isJava9()) {System.out.println("Java 9 " + jvm);}
+        else if (isJava10()) {System.out.println("Java 10 " + jvm);}
+        else if (isJava11()) {System.out.println("Java 11 " + jvm);}
+        else if (isJava12()) {System.out.println("Java 12 " + jvm);}
+        else if (isJava13()) {System.out.println("Java 13 " + jvm);}
+        else if (isJava14()) {System.out.println("Java 14 " + jvm);}
+        else if (isJava15()) {System.out.println("Java 15 " + jvm);}
+        else if (isJava16()) {System.out.println("Java 16 " + jvm);}
+        else if (isJava17()) {System.out.println("Java 17 " + jvm);}
+        else if (isJava18()) {System.out.println("Java 18 " + jvm);}
+        else if (isJava19()) {System.out.println("Java 19 " + jvm);}
+        else if (isJava20()) {System.out.println("Java 20 " + jvm);}
+        else if (isJava21()) {System.out.println("Java 21 " + jvm);}
+        else if (isJava22()) {System.out.println("Java 22 " + jvm);}
         System.out.println("Platform: " + getOS() + (is64Bit() ? " (64Bit)" : " (32Bit)"));
         System.out.println("Cores / Max memory: " + getCores() + " / " + (getMaxMemory() / 1024 / 1024) + "KB");
         System.out.println("");
@@ -649,13 +547,9 @@ public abstract class SystemVersion {
         for (String k : keys) {
             String v = System.getProperty(k);
             if (k.equals("line.separator")) {
-                if ("\n".equals(v))
-                    v = "\\n";
-                else if ("\r\n".equals(v))
-                    v = "\\r\\n";
-            } else if (k.contains("user") || k.contains("vendor.url") || k.contains("printer")) {
-                continue;
-            }
+                if ("\n".equals(v)) {v = "\\n";}
+                else if ("\r\n".equals(v)) {v = "\\r\\n";}
+            } else if (k.contains("user") || k.contains("vendor.url") || k.contains("printer")) {continue;}
             System.out.println("  " + k + " = " + v);
         }
     }
@@ -671,8 +565,7 @@ public abstract class SystemVersion {
         double cpuLoadAvg = osmxb.getProcessCpuLoad() * 100;
         int cpuLoad = (int) cpuLoadAvg;
         int max = 100;
-        if (cpuLoad > max)
-            cpuLoad = max;
+        if (cpuLoad > max) {cpuLoad = max;}
         return cpuLoad;
     }
 
@@ -691,12 +584,9 @@ public abstract class SystemVersion {
             long count = (1 + (3 * stat.getCurrentEventCount() + stat.getLastEventCount()));
             if (count > 1) {
                 loadAvg = (long) (getCPULoad() + ((3 * stat.getCurrentTotalValue()) + stat.getLastTotalValue()) / count);
-            } else {
-                loadAvg = getCPULoad();
-            }
+            } else {loadAvg = getCPULoad();}
             int load = Math.toIntExact(loadAvg);
-            if (load > max)
-                load = max;
+            if (load > max) {load = max;}
             return load;
         }
     }
@@ -706,18 +596,15 @@ public abstract class SystemVersion {
      * @since 0.9.57+
      */
     public static int getSystemLoad() {
-        if (I2PAppContext.getGlobalContext().statManager() == null) {
-            return 0;
-        } else {
+        if (I2PAppContext.getGlobalContext().statManager() == null) {return 0;}
+        else {
             DecimalFormat integerFormatter = new DecimalFormat("###,###,##0");
             int cores = SystemVersion.getCores();
             OperatingSystemMXBean osmxb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
             double systemLoadAvg = (osmxb.getSystemLoadAverage() / cores) * 100;
             int sysLoad = (int) systemLoadAvg;
-            if (sysLoad < 0)
-                return 0;
-            else
-                return sysLoad;
+            if (sysLoad < 0) {return 0;}
+            else {return sysLoad;}
         }
     }
 
@@ -726,8 +613,7 @@ public abstract class SystemVersion {
      * @since 0.9.58+
      */
     public static int getTunnelBuildSuccess() {
-        if (I2PAppContext.getGlobalContext().statManager() == null)
-            return 0;
+        if (I2PAppContext.getGlobalContext().statManager() == null) {return 0;}
         Rate explSuccess = I2PAppContext.getGlobalContext().statManager().getRate("tunnel.buildExploratorySuccess").getRate(10*60*1000);
         Rate explReject = I2PAppContext.getGlobalContext().statManager().getRate("tunnel.buildExploratoryReject").getRate(10*60*1000);
         Rate explExpire = I2PAppContext.getGlobalContext().statManager().getRate("tunnel.buildExploratoryExpire").getRate(10*60*1000);
@@ -738,13 +624,10 @@ public abstract class SystemVersion {
         int reject = (int)explReject.getLastEventCount() + (int)clientReject.getLastEventCount();
         int expire = (int)explExpire.getLastEventCount() + (int)clientExpire.getLastEventCount();
         int percentage;
-        if (success < 1)
-            success = 1;
+        if (success < 1) {success = 1;}
         percentage = (100 * success) / (success + reject + expire);
-        if (percentage == 100 || percentage == 0)
-            return 0;
-        else
-            return percentage;
+        if (percentage == 100 || percentage == 0) {return 0;}
+        else {return percentage;}
     }
 
 }

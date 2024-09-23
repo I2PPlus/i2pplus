@@ -47,17 +47,12 @@ public class LogBean extends BaseBean
     /**
      * @since 0.9.35
      */
-    private File logFile() {
-        return new File(addressbookDir(), LOG_FILE);
-    }
+    private File logFile() {return new File(addressbookDir(), LOG_FILE);}
 
     private void reloadLog() {
-        synchronized(LogBean.class) {
-            locked_reloadLog();
-        }
+        synchronized(LogBean.class) {locked_reloadLog();}
     }
 
-/**
     private void locked_reloadLog() {
         File log = logFile();
         int maxLines = 600;
@@ -69,77 +64,34 @@ public class LogBean extends BaseBean
                 String line;
                 while ((line = br.readLine()) != null) {
                     lines.add(line);
-                    if (lines.size() >= maxLines) {
-                        lines.remove(0);
-                    }
+                    if (lines.size() >= maxLines) {lines.remove(0);}
                 }
                 StringBuilder buf = new StringBuilder(maxLines * 80);
 
                 for (int i = lines.size() - 1; i >= 0; i--) { // Reverse order, most recent first
                     if (!lines.get(i).contains("Bad hostname")) {
-                        buf.append("<li>").append(lines.get(i).replace(" added to addressbook", "")
-                           .replace("GMT", "UTC")).append("</li>\n");
+                        String[] parts = lines.get(i).split(" -- ");
+                        String date = parts[0].replace("GMT", "UTC");
+                        String message = parts[1];
+                        String[] messageParts = message.split(" ");
+                        String domain = messageParts[2].replace("[","").replace("]","");
+                        String subhost = messageParts[3].replace("http://", "");
+
+                        buf.append("<li><span class=date>").append(date).append("</span> &nbsp;").append(_t("New domain"))
+                           .append(" <a href=http://").append(domain).append("/ target=_blank>").append(domain)
+                           .append("</a> <span class=subhost>").append(subhost).append("</span></li>\n");
                     }
                 }
                 logged = buf.toString();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } finally {
-                if (br != null)
-                    try {br.close();} catch (IOException ioe) {}
-            }
-        } else {
-            logged = LOG_FILE;
-        }
-    }
-**/
-
-private void locked_reloadLog() {
-    File log = logFile();
-    int maxLines = 600;
-    if (log.isFile()) {
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(log), "UTF-8"));
-            List<String> lines = new ArrayList<String>(maxLines);
-            String line;
-            while ((line = br.readLine()) != null) {
-                lines.add(line);
-                if (lines.size() >= maxLines) {
-                    lines.remove(0);
+            } catch (IOException e) {e.printStackTrace();} // TODO Auto-generated catch block
+            finally {
+                if (br != null) {
+                    try {br.close();}
+                    catch (IOException ioe) {}
                 }
             }
-            StringBuilder buf = new StringBuilder(maxLines * 80);
-
-            for (int i = lines.size() - 1; i >= 0; i--) { // Reverse order, most recent first
-                if (!lines.get(i).contains("Bad hostname")) {
-                    String[] parts = lines.get(i).split(" -- ");
-                    String date = parts[0].replace("GMT", "UTC");
-                    String message = parts[1];
-                    String[] messageParts = message.split(" ");
-                    String domain = messageParts[2].replace("[","").replace("]","");
-                    String subhost = messageParts[3].replace("http://", "");
-
-                    buf.append("<li><span class=date>").append(date).append("</span> &nbsp;").append(_t("New domain"))
-                       .append(" <a href=http://").append(domain).append("/ target=_blank>").append(domain)
-                       .append("</a> <span class=subhost>").append(subhost).append("</span></li>\n");
-                }
-            }
-            logged = buf.toString();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } finally {
-            if (br != null)
-                try {br.close();} catch (IOException ioe) {}
-        }
-    } else {
-        logged = LOG_FILE;
+        } else {logged = LOG_FILE;}
     }
-}
-
-
 
     public String getMessages() {
         String message = "";
@@ -149,21 +101,14 @@ private void locked_reloadLog() {
                 message = _t("Subscription log reloaded.");
             }
         }
-        if (message.length() > 0) {
-            message = "<p class=\"messages\">" + message + "</p>";
-        }
+        if (message.length() > 0) {message = "<p class=\"messages\">" + message + "</p>";}
         return message;
     }
 
-    public void setLogged(String logged) {
-        // will come from form with \r\n line endings
-        this.logged = DataHelper.stripHTML(logged);
-    }
+    public void setLogged(String logged) {this.logged = DataHelper.stripHTML(logged);} // will come from form with \r\n line endings
 
     public String getLogged() {
-        if (logged != null) {
-            return logged;
-        }
+        if (logged != null) {return logged;}
         reloadLog();
         return logged;
     }

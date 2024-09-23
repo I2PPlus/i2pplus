@@ -26,7 +26,7 @@ th,td{font-size:9pt}
 th{padding:5px 10px;text-align:left;background:var(--title);background-size:4px 100%,100%}
 td{padding:5px}
 .buttons,#buttons,#host_list img,#host_list td:nth-child(n+2) a,#host_list tr:first-child,#navi{user-select:none}
-.page{margin:10px 0;padding:0;font-size:9pt;color:var(--ink);background:linear-gradient(180deg,rgba(0,0,16,.2),#0000)}
+#page{margin:10px 0;padding:0;font-size:9pt;color:var(--ink);background:linear-gradient(180deg,rgba(0,0,16,.2),#0000)}
 .destaddress{scrollbar-color:#114 #0000;scrollbar-width:thin}
 #content h3{box-shadow:none}
 
@@ -315,7 +315,7 @@ svg #arrow stop:last-child{stop-color:#001}
 .iframed .book tr.head th{border-top:var(--border);border-bottom:var(--border)}
 .iframed .headline h3:first-child+h4{margin:13px 10px 0}
 .iframed .headline h3,.iframed h4,.iframed #filtered,.iframed #search,.iframed #helpconfig{margin:-1px 10px 0}
-.iframed .page{margin:1px 0 0;overflow:hidden;border:0}
+.iframed #page{margin:1px 0 0;overflow:hidden;border:0}
 .iframed #book #host_details{border-top:var(--border)}
 .iframed #book,.iframed #book+#buttons,.iframed #book table{border-top:0;border-bottom:0}
 .iframed #config+#buttons,.iframed #content+#buttons{margin:12px 10px}

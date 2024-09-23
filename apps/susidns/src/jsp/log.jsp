@@ -52,7 +52,7 @@
 <script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 </head>
 <body id=subsLog style=display:none;pointer-events:none>
-<div class=page>
+<div id=page>
 <div id=navi>
 <a class="abook router" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
 <a class="abook master" href="addressbook?book=master&amp;filter=none"><%=intl._t("Master")%></a>&nbsp;

@@ -282,7 +282,7 @@ msgstr "Procurar"
 msgid "other"
 msgstr "outros"
 
-msgid "clear filter"
+msgid "all"
 msgstr "limpar filtro"
 
 msgid "Info"

@@ -41,8 +41,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.util.PortMapper;
 import net.i2p.util.SecureFileOutputStream;
 
-public class SubscriptionsBean extends BaseBean
-{
+public class SubscriptionsBean extends BaseBean {
     private String fileName, content;
     private static final String SUBS_FILE = "subscriptions.txt";
     // If you change this, change in Addressbook Daemon also
@@ -59,14 +58,10 @@ public class SubscriptionsBean extends BaseBean
     /**
      * @since 0.9.13
       */
-    private File subsFile() {
-        return new File(addressbookDir(), SUBS_FILE);
-    }
+    private File subsFile() {return new File(addressbookDir(), SUBS_FILE);}
 
     private void reloadSubs() {
-        synchronized(SubscriptionsBean.class) {
-            locked_reloadSubs();
-        }
+        synchronized(SubscriptionsBean.class) {locked_reloadSubs();}
     }
 
     private void locked_reloadSubs() {
@@ -82,22 +77,18 @@ public class SubscriptionsBean extends BaseBean
                     buf.append("\n");
                 }
                 content = buf.toString();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } finally {
-                if (br != null)
-                    try {br.close();} catch (IOException ioe) {}
+            } catch (IOException e) {e.printStackTrace();} // TODO Auto-generated catch block
+            finally {
+                if (br != null) {
+                    try {br.close();}
+                    catch (IOException ioe) {}
+                }
             }
-        } else {
-            content = DEFAULT_SUB;
-        }
+        } else {content = DEFAULT_SUB;}
     }
 
     private void save() {
-        synchronized(SubscriptionsBean.class) {
-            locked_save();
-        }
+        synchronized(SubscriptionsBean.class) {locked_save();}
     }
 
     private void locked_save() {
@@ -109,21 +100,14 @@ public class SubscriptionsBean extends BaseBean
             String line;
             while ((line = DataHelper.readLine(in)) != null) {
                 line = line.trim();
-                if (line.length() > 0)
-                    urls.add(line);
+                if (line.length() > 0) {urls.add(line);}
             }
             Collections.sort(urls);
             PrintWriter out = new PrintWriter(new OutputStreamWriter(new SecureFileOutputStream(file), "UTF-8"));
-            for (String url : urls) {
-                out.println(url);
-            }
+            for (String url : urls) {out.println(url);}
             out.close();
-            if (out.checkError())
-                throw new IOException("Failed write to " + file);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+            if (out.checkError()) {throw new IOException("Failed write to " + file);}
+        } catch (IOException e) {e.printStackTrace();} // TODO Auto-generated catch block
     }
 
     public String getMessages() {
@@ -134,15 +118,6 @@ public class SubscriptionsBean extends BaseBean
                     save();
                     message = _t("Subscriptions saved.");
                 }
-                /*******
-                    String nonce = System.getProperty("addressbook.nonce");
-                    if (nonce != null) {
-                        // Yes this is a hack.
-                        // No it doesn't work on a text-mode browser.
-                        // Fetching from the addressbook servlet
-                        // with the correct parameters will kick off a
-                        // config reload and fetch.
-                *******/
                 if (action.equals(_t("Update"))) {
                     if (content != null && content.length() > 2 && _context.portMapper().isRegistered(PortMapper.SVC_HTTP_PROXY)) {
                         _context.namingService().requestUpdate(null);
@@ -159,20 +134,18 @@ public class SubscriptionsBean extends BaseBean
                           _t("If the problem persists, verify that you have cookies enabled in your browser.");
             }
         }
-        if (message.length() > 0)
-            message = "<p class=\"messages\">" + message + "</p>";
+        if (message.length() > 0) {message = "<p class=\"messages\">" + message + "</p>";}
         return message;
     }
 
     public void setContent(String content) {
-        // will come from form with \r\n line endings
-        this.content = DataHelper.stripHTML(content);
+        this.content = DataHelper.stripHTML(content); // will come from form with \r\n line endings
     }
 
     public String getContent() {
-        if (content != null)
-            return content;
+        if (content != null) {return content;}
         reloadSubs();
         return content;
     }
+
 }
