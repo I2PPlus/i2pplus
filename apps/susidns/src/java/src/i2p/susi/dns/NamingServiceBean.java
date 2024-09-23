@@ -320,6 +320,7 @@ public class NamingServiceBean extends AddressbookBean {
                         String displayHost = uni.equals(n) ? n :  uni + " (" + n + ')';
                         if (!success) {
                             message += _t("Failed to delete Destination for {0} from naming service {1}", displayHost, getNamingService().getName()) + "<br>";
+                            fail = true;
                         } else if (deleted++ == 0) {
                             changed = true;
                             name = displayHost;
@@ -337,9 +338,8 @@ public class NamingServiceBean extends AddressbookBean {
             }
             else {
                 fail = true;
-                message = _t("Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit.")
-                                          + ' ' +
-                                          _t("If the problem persists, verify that you have cookies enabled in your browser.");
+                message = _t("Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit.") +
+                          ' ' + _t("If the problem persists, verify that you have cookies enabled in your browser.");
             }
         }
 

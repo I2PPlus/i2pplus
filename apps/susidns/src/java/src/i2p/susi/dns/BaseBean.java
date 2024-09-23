@@ -16,8 +16,7 @@ import net.i2p.util.OrderedProperties;
  * Holds methods common to several Beans.
  * @since 0.9.1
  */
-public class BaseBean
-{
+public class BaseBean {
     protected final I2PAppContext _context;
     protected final Properties properties;
     protected String action, lastSerial, serial;

@@ -27,9 +27,7 @@ public class CommandLine extends net.i2p.util.CommandLine {
         List<String> classes = new ArrayList<String>(ACLASSES.size() + CLASSES.size());
         classes.addAll(ACLASSES);
         classes.addAll(CLASSES);
-        if (args.length > 0) {
-            exec(args, classes);
-        }
+        if (args.length > 0) {exec(args, classes);}
         usage(classes);
         System.exit(1);
     }
