@@ -6,19 +6,22 @@
   document.addEventListener("DOMContentLoaded", function () {
     if (!document.body.classList.contains("dark")) {return;}
 
-    const addToggle = document.getElementById("addNewDest");
     const addContainer = document.getElementById("add");
+    const addReset = document.querySelector("#add input[type=reset]");
     const addSubmits = document.querySelectorAll("#addDestForm input[type=submit]");
-    const importToggle = document.getElementById("importFromFile");
+    const addTextInputs = document.querySelectorAll("#add input[type=text]");
+    const addToggle = document.getElementById("addNewDest");
     const importContainer = document.getElementById("import");
+    const importReset = document.querySelector("#import input[type=reset]");
     const importSubmit = document.querySelector("#importHostsForm input[type=submit]");
-    const resetAdd = document.querySelector("#add input[type=reset]");
-    const resetImport = document.querySelector("#import input[type=reset]");
+    const importToggle = document.getElementById("importFromFile");
     const messages = document.querySelector("#messages p");
 
     [addContainer, importContainer].forEach((container) => {
       container.hidden = true;
     });
+
+    addTextInputs.forEach(input => {input.value = "";});
 
     [addToggle, importToggle].forEach((button) => {
       button.removeAttribute("href");
@@ -27,14 +30,23 @@
     });
 
     function toggleVisibility(showContainer, hideContainer) {
-        showContainer.hidden = false;
-        hideContainer.hidden = true;
-        toggleBodyClass();
+      showContainer.hidden = false;
+      hideContainer.hidden = true;
+      toggleBodyClass();
     }
 
     function toggleBodyClass() {
       const hidden = addContainer.hidden && importContainer.hidden;
       document.body.classList.toggle("displayPanels", !hidden);
+    }
+
+    function resetAddInputs() {
+      addTextInputs.forEach(input => {
+        input.removeAttribute("value");
+        input.setAttribute("value", "");
+      });
+      addContainer.hidden = true;
+      toggleBodyClass();
     }
 
     addToggle.addEventListener("click", () =>
@@ -44,6 +56,13 @@
     importToggle.addEventListener("click", () =>
       toggleVisibility(importContainer, addContainer)
     );
+
+    addReset.addEventListener("click", resetAddInputs);
+
+    importReset.addEventListener("click", () => {
+      importContainer.hidden = true;
+      toggleBodyClass();
+    });
 
   });
 })();
