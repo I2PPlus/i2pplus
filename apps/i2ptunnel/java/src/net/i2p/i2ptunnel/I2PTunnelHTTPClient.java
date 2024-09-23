@@ -106,115 +106,101 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      *  These are backups if the xxx.ht error page is missing.
      */
     private final static String ERR_REQUEST_DENIED =
-            "HTTP/1.1 403 Access Denied\r\n" +
-            "Content-Type: text/html; charset=iso-8859-1\r\n" +
-            "Cache-Control: no-cache\r\n" +
-            "Connection: close\r\n"+
-            "\r\n" +
-            "<html><body><H1>I2P ERROR: REQUEST DENIED</H1>" +
-            "The requested address appears to be invalid.<BR>";
-//            "You attempted to connect to a non-I2P website or location.<BR>";
+        "HTTP/1.1 403 Access Denied\r\n" +
+        "Content-Type: text/html; charset=iso-8859-1\r\n" +
+        "Cache-Control: no-cache\r\n" +
+        "Connection: close\r\n"+
+        "\r\n" +
+        "<html><body><H1>I2P ERROR: REQUEST DENIED</H1>" +
+        "The requested address appears to be invalid.<BR>";
 
-    /*****
-    private final static byte[] ERR_TIMEOUT =
-    ("HTTP/1.1 504 Gateway Timeout\r\n"+
-    "Content-Type: text/html; charset=iso-8859-1\r\n"+
-    "Cache-Control: no-cache\r\n\r\n"+
-    "<html><body><H1>I2P ERROR: TIMEOUT</H1>"+
-    "That Destination was reachable, but timed out getting a "+
-    "response.  This is likely a temporary error, so you should simply "+
-    "try to refresh, though if the problem persists, the remote "+
-    "destination may have issues.  Could not get a response from "+
-    "the following Destination:<BR><BR>")
-    .getBytes();
-     *****/
     private final static String ERR_NO_OUTPROXY =
-            "HTTP/1.1 503 Service Unavailable\r\n" +
-            "Content-Type: text/html; charset=iso-8859-1\r\n" +
-            "Cache-Control: no-cache\r\n" +
-            "Connection: close\r\n"+
-            "\r\n" +
-            "<html><body><H1>I2P ERROR: No outproxy found</H1>" +
-            "Your request was for a site outside of I2P, but you have no " +
-            "HTTP outproxy configured. Please configure an outproxy in I2PTunnel";
+        "HTTP/1.1 503 Service Unavailable\r\n" +
+        "Content-Type: text/html; charset=iso-8859-1\r\n" +
+        "Cache-Control: no-cache\r\n" +
+        "Connection: close\r\n"+
+        "\r\n" +
+        "<html><body><H1>I2P ERROR: No outproxy found</H1>" +
+        "Your request was for a site outside of I2P, but you have no " +
+        "HTTP outproxy configured. Please configure an outproxy in I2PTunnel";
 
     private final static String ERR_AHELPER_CONFLICT =
-            "HTTP/1.1 409 Conflict\r\n" +
-            "Content-Type: text/html; charset=iso-8859-1\r\n" +
-            "Cache-Control: no-cache\r\n" +
-            "Connection: close\r\n"+
-            "\r\n" +
-            "<html><body><H1>I2P ERROR: Destination key conflict</H1>" +
-            "The addresshelper link you followed specifies a different destination key " +
-            "than a host entry in your host database. " +
-            "Someone could be trying to impersonate another website, " +
-            "or people have given two websites identical names.<p>" +
-            "You can resolve the conflict by considering which key you trust, " +
-            "and either discarding the addresshelper link, " +
-            "discarding the host entry from your host database, " +
-            "or naming one of them differently.<p>";
+        "HTTP/1.1 409 Conflict\r\n" +
+        "Content-Type: text/html; charset=iso-8859-1\r\n" +
+        "Cache-Control: no-cache\r\n" +
+        "Connection: close\r\n"+
+        "\r\n" +
+        "<html><body><H1>I2P ERROR: Destination key conflict</H1>" +
+        "The addresshelper link you followed specifies a different destination key " +
+        "than a host entry in your host database. " +
+        "Someone could be trying to impersonate another website, " +
+        "or people have given two websites identical names.<p>" +
+        "You can resolve the conflict by considering which key you trust, " +
+        "and either discarding the addresshelper link, " +
+        "discarding the host entry from your host database, " +
+        "or naming one of them differently.<p>";
 
     private final static String ERR_AHELPER_NOTFOUND =
-            "HTTP/1.1 404 Not Found\r\n" +
-            "Content-Type: text/html; charset=iso-8859-1\r\n" +
-            "Cache-Control: no-cache\r\n" +
-            "Connection: close\r\n"+
-            "\r\n" +
-            "<html><body><H1>I2P ERROR: Helper key not resolvable.</H1>" +
-            "The helper key you put for i2paddresshelper= is not resolvable. " +
-            "It seems to be garbage data, or a mistyped b32. Check your URL " +
-            "to try and fix the helper key to be either a b32 or a base64.";
+        "HTTP/1.1 404 Not Found\r\n" +
+        "Content-Type: text/html; charset=iso-8859-1\r\n" +
+        "Cache-Control: no-cache\r\n" +
+        "Connection: close\r\n"+
+        "\r\n" +
+        "<html><body><H1>I2P ERROR: Helper key not resolvable.</H1>" +
+        "The helper key you put for i2paddresshelper= is not resolvable. " +
+        "It seems to be garbage data, or a mistyped b32. Check your URL " +
+        "to try and fix the helper key to be either a b32 or a base64.";
 
     private final static String ERR_AHELPER_NEW =
-            "HTTP/1.1 409 New Address\r\n" +
-            "Content-Type: text/html; charset=iso-8859-1\r\n" +
-            "Cache-Control: no-cache\r\n" +
-            "Connection: close\r\n"+
-            "\r\n" +
-            "<html><body><H1>New Host Name with Address Helper</H1>" +
-            "The address helper link you followed is for a new host name that is not in your addressbook. " +
-            "You may either save the destination for this host name to your addressbook, or remember it only until your router restarts. " +
-            "If you save it to your addressbook, you will not see this message again. " +
-            "If you do not wish to visit this host, click the \"back\" button on your browser.";
+        "HTTP/1.1 409 New Address\r\n" +
+        "Content-Type: text/html; charset=iso-8859-1\r\n" +
+        "Cache-Control: no-cache\r\n" +
+        "Connection: close\r\n"+
+        "\r\n" +
+        "<html><body><H1>New Host Name with Address Helper</H1>" +
+        "The address helper link you followed is for a new host name that is not in your addressbook. " +
+        "You may either save the destination for this host name to your addressbook, or remember it only until your router restarts. " +
+        "If you save it to your addressbook, you will not see this message again. " +
+        "If you do not wish to visit this host, click the \"back\" button on your browser.";
 
     private final static String ERR_BAD_PROTOCOL =
-            "HTTP/1.1 403 Bad Protocol\r\n" +
-            "Content-Type: text/html; charset=iso-8859-1\r\n" +
-            "Cache-Control: no-cache\r\n" +
-            "Connection: close\r\n"+
-            "\r\n" +
-            "<html><body><H1>I2P ERROR: NON-HTTP PROTOCOL</H1>" +
-            "The request uses a bad protocol. " +
-            "The I2P HTTP Proxy supports HTTP and HTTPS requests only. Other protocols such as FTP are not allowed.<BR>";
+        "HTTP/1.1 403 Bad Protocol\r\n" +
+        "Content-Type: text/html; charset=iso-8859-1\r\n" +
+        "Cache-Control: no-cache\r\n" +
+        "Connection: close\r\n"+
+        "\r\n" +
+        "<html><body><H1>I2P ERROR: NON-HTTP PROTOCOL</H1>" +
+        "The request uses a bad protocol. " +
+        "The I2P HTTP Proxy supports HTTP and HTTPS requests only. Other protocols such as FTP are not allowed.<BR>";
 
     private final static String ERR_BAD_URI =
-            "HTTP/1.1 403 Bad URI\r\n" +
-            "Content-Type: text/html; charset=iso-8859-1\r\n" +
-            "Cache-Control: no-cache\r\n" +
-            "Connection: close\r\n"+
-            "\r\n" +
-            "<html><body><H1>I2P ERROR: INVALID REQUEST URI</H1>" +
-            "The request URI is invalid, and probably contains illegal characters. " +
-            "If you clicked e.g. a forum link, check the end of the URI for any characters the browser has mistakenly added on.<BR>";
+        "HTTP/1.1 403 Bad URI\r\n" +
+        "Content-Type: text/html; charset=iso-8859-1\r\n" +
+        "Cache-Control: no-cache\r\n" +
+        "Connection: close\r\n"+
+        "\r\n" +
+        "<html><body><H1>I2P ERROR: INVALID REQUEST URI</H1>" +
+        "The request URI is invalid, and probably contains illegal characters. " +
+        "If you clicked e.g. a forum link, check the end of the URI for any characters the browser has mistakenly added on.<BR>";
 
     private final static String ERR_LOCALHOST =
-            "HTTP/1.1 403 Access Denied\r\n" +
-            "Content-Type: text/html; charset=iso-8859-1\r\n" +
-            "Cache-Control: no-cache\r\n" +
-            "Connection: close\r\n"+
-            "\r\n" +
-            "<html><body><H1>I2P ERROR: REQUEST DENIED</H1>" +
-            "Your browser is misconfigured. Do not use the proxy to access the router console or other localhost destinations.<BR>";
+        "HTTP/1.1 403 Access Denied\r\n" +
+        "Content-Type: text/html; charset=iso-8859-1\r\n" +
+        "Cache-Control: no-cache\r\n" +
+        "Connection: close\r\n"+
+        "\r\n" +
+        "<html><body><H1>I2P ERROR: REQUEST DENIED</H1>" +
+        "Your browser is misconfigured. Do not use the proxy to access the router console or other localhost destinations.<BR>";
 
     private final static String ERR_INTERNAL_SSL =
-            "HTTP/1.1 403 SSL Rejected\r\n" +
-            "Content-Type: text/html; charset=iso-8859-1\r\n" +
-            "Cache-Control: no-cache\r\n" +
-            "Connection: close\r\n"+
-            "\r\n" +
-            "<html><body><H1>I2P ERROR: SSL to I2P address rejected</H1>" +
-            "SSL to .i2p addresses denied by configuration." +
-            "You may change the configuration in I2PTunnel";
+        "HTTP/1.1 403 SSL Rejected\r\n" +
+        "Content-Type: text/html; charset=iso-8859-1\r\n" +
+        "Cache-Control: no-cache\r\n" +
+        "Connection: close\r\n"+
+        "\r\n" +
+        "<html><body><H1>I2P ERROR: SSL to I2P address rejected</H1>" +
+        "SSL to .i2p addresses denied by configuration." +
+        "You may change the configuration in I2PTunnel";
 
     /**
      *  This constructor always starts the tunnel (ignoring the i2cp.delayOpen option).
