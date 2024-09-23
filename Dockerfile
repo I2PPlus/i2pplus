@@ -18,8 +18,8 @@ RUN apk add openjdk21-jre ttf-opensans
 WORKDIR ${APP_HOME}
 COPY --from=builder /tmp/build/pkg-temp .
 
-# "install" i2p by copying over installed files
-COPY --chown=root:root docker/rootfs/ /
+# "install" I2P+ by copying over installed files
+COPY docker/rootfs/ /
 RUN chmod +x /startapp.sh
 
 # Mount home and snark
