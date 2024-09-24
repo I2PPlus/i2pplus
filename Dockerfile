@@ -19,6 +19,7 @@ COPY --from=builder /tmp/build/pkg-temp .
 
 # "install" I2P+ by copying over installed files
 COPY docker/rootfs/ /
+RUN chmod +x /startapp.sh
 
 # Mount home and snark
 VOLUME ["${APP_HOME}/.i2p"]
