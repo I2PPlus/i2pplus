@@ -5,9 +5,10 @@ ENV APP_HOME="/i2p"
 WORKDIR /tmp/build
 
 RUN apk add --virtual build-base gettext tar bzip2 apache-ant openjdk21 git
-RUN echo "build.built-by=Docker" >> override.properties
 
 COPY . .
+RUN echo "build.built-by=Docker" >> override.properties
+
 RUN ant preppkg-linux-only
 RUN rm -rf pkg-temp/osid pkg-temp/lib/wrapper pkg-temp/lib/wrapper.*
 
