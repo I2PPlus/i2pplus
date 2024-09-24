@@ -3,13 +3,13 @@ FROM alpine:latest AS builder
 ENV APP_HOME="/i2p"
 
 WORKDIR /tmp/build
-COPY . .
 
-RUN apk add --virtual build-base gettext tar bzip2 apache-ant openjdk21 \
-    && echo "build.built-by=Docker" >> override.properties \
-    && ant preppkg-linux-only \
-    && rm -rf pkg-temp/osid pkg-temp/lib/wrapper pkg-temp/lib/wrapper.* \
-    && apk del build-base gettext tar bzip2 apache-ant openjdk21
+RUN apk add --virtual build-base gettext tar bzip2 apache-ant openjdk21
+RUN echo "build.built-by=Docker" >> override.properties
+
+COPY . .
+RUN ant preppkg-linux-only
+RUN rm -rf pkg-temp/osid pkg-temp/lib/wrapper pkg-temp/lib/wrapper.*
 
 FROM alpine:latest
 ENV APP_HOME="/i2p"
