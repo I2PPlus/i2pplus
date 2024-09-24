@@ -97,6 +97,7 @@ public abstract class TransportImpl implements Transport {
     private static final int MAX_CONNECTION_FACTOR = 100;
     // see constructor
     private final boolean REBALANCE_NTCP;
+    private static final int SEND_POOL_CAPACITY = SystemVersion.isSlow() ? 32 : 64;
 
     /**
      * Initialize the new transport
@@ -116,7 +117,7 @@ public abstract class TransportImpl implements Transport {
         //_context.statManager().createRequiredRateStat("transport.sendProcessingTime." + getStyle(), "Time to process and send a message (ms)", "Transport", RATES);
 
         _currentAddresses = new ArrayList<RouterAddress>(3);
-        if (getStyle().equals("NTCP")) {_sendPool = new ArrayBlockingQueue<OutNetMessage>(8);}
+        if (getStyle().equals("NTCP")) {_sendPool = new ArrayBlockingQueue<OutNetMessage>(SEND_POOL_CAPACITY);}
         else {_sendPool = null;}
         _unreachableEntries = new ConcurrentHashMap<Hash, Long>(32);
         _wasUnreachableEntries = new ConcurrentHashMap<Hash, Long>(32);
@@ -171,20 +172,19 @@ public abstract class TransportImpl implements Transport {
 
             switch (bw) {
                 case Router.CAPABILITY_BW12:
-                case 'u':  // unknown
+                case Router.CAPABILITY_BW32:
+                case 'u': // unknown
                 default:
                     break;
-                case Router.CAPABILITY_BW32: def *= 2;
+                case Router.CAPABILITY_BW64: def *= 2;
                     break;
-                case Router.CAPABILITY_BW64: def *= 3;
+                case Router.CAPABILITY_BW128: def *= 3;
                     break;
-                case Router.CAPABILITY_BW128: def *= 5;
+                case Router.CAPABILITY_BW256: def *= 5;
                     break;
-                case Router.CAPABILITY_BW256: def *= 9;
+                case Router.CAPABILITY_BW512: def *= 8;
                     break;
-                case Router.CAPABILITY_BW512: def *= 11;
-                    break;
-                case Router.CAPABILITY_BW_UNLIMITED: def *= 14;
+                case Router.CAPABILITY_BW_UNLIMITED: def *= 10;
                     break;
             }
 
