@@ -28,7 +28,7 @@ VOLUME ["/i2psnark"]
 
 EXPOSE 7654 7656 7657 7658 4444 6668 7659 7660 7667 12345
 
-# Metadata.
+# Metadata
 LABEL \
       org.label-schema.name="i2p" \
       org.label-schema.description="Docker container for I2P+" \
