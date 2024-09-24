@@ -804,27 +804,29 @@ public class SummaryHelper extends HelperBase {
         public int compare(Destination lhs, Destination rhs) {
             String lname = getTunnelName(lhs);
             String rname = getTunnelName(rhs);
-            List<Destination> clients = new ArrayList<Destination>(_context.clientManager().listClients());
-            for (Destination client : clients) {
-                Hash h = client.calculateHash();
-                boolean lSnark = lname.equals("I2PSnark") || lname.equals(snark);
-                boolean rSnark = rname.startsWith("I2PSnark") || rname.startsWith(snark);
-                boolean isServer = _context.clientManager().shouldPublishLeaseSet(h) && !lname.equals(_t("I2PSnark")) || !rname.equals((_t("I2PSnark")));
-                boolean lServer = _context.clientManager().shouldPublishLeaseSet(h) && !lname.equals(_t("I2PSnark"));
-                boolean rServer = _context.clientManager().shouldPublishLeaseSet(h) && !rname.equals(_t("I2PSnark"));
-                boolean lClient = !isServer;
-                boolean rClient = !isServer;
-                boolean lPing = (lname.startsWith("Ping") && lname.contains("[")) || lname.equals("I2Ping");
-                boolean rPing = (rname.startsWith("Ping") && rname.contains("[")) || rname.equals("I2Ping");
 
-                if (lServer) {lname = "a_" + lname; rname = "a_" + rname;}
-                if (lClient) {lname = "b_" + lname; rname = "b_" + rname;}
-                if (lPing) {lname = "c_" + lname; rname = "c_" + rname;}
-                if (lSnark && !rSnark) {return -1;}
-                else if (lServer && !rServer) {return 0;}
-                else if (lClient && !rClient) {return 1;}
-                else if (lPing && !rPing) {return 2;}
-            }
+            boolean lSnark = lname.startsWith("I2PSnark") || lname.equals(snark);
+            boolean rSnark = rname.startsWith("I2PSnark") || rname.equals(snark);
+            boolean lServer = _context.clientManager().shouldPublishLeaseSet(lhs.calculateHash()) && !lSnark;
+            boolean rServer = _context.clientManager().shouldPublishLeaseSet(rhs.calculateHash()) && !rSnark;
+            boolean lClient = !lServer && !lSnark;
+            boolean rClient = !rServer && !rSnark;
+            boolean lI2PChat = lname.equals("Messenger") || lname.equals("I2PChat");
+            boolean rI2PChat = lname.equals("Messenger") || lname.equals("I2PChat");
+            boolean lPing = lname.startsWith("Ping") || lname.equals("I2Ping");
+            boolean rPing = rname.startsWith("Ping") || rname.equals("I2Ping");
+
+            if (lI2PChat && !rI2PChat) return -1;
+            if (!lI2PChat && rI2PChat) return 1;
+            if (lSnark && !rSnark) return -1;
+            if (!lSnark && rSnark) return 1;
+            if (lServer && !rServer) return -1;
+            if (!lServer && rServer) return 1;
+            if (lClient && !rClient) return -1;
+            if (!lClient && rClient) return 1;
+            if (lPing && !rPing) return -1;
+            if (!lPing && rPing) return 1;
+
             return Collator.getInstance().compare(lname.toLowerCase(), rname.toLowerCase());
         }
     }
