@@ -11,7 +11,7 @@ fi
 # Explicitly define HOME otherwise it might not have been set
 export HOME=/i2p
 
-export I2P=${HOME}/i2p
+export I2P=${HOME}
 
 echo "Starting I2P"
 
@@ -26,7 +26,7 @@ if [ -f /.dockerenv ] || [ -f /run/.containerenv ]; then
     echo "[startapp] Running in container"
     if [ -z "$IP_ADDR" ]; then
         export IP_ADDR=$(hostname -i)
-        echo "[startapp] Running in docker network"
+        echo "[startapp] Running in docker network(intended for host and other containers), if you intend to connect to this from other computers on your lan, set IP_ADDR to 0.0.0.0 or this device's lan ip"
     fi
     echo "[startapp] setting reachable IP to container IP $IP_ADDR"
     find . -name '*.config' -exec sed -i "s/127.0.0.1/$IP_ADDR/g" {} \;
