@@ -30,15 +30,12 @@ class OutboundMessageDistributor {
     private int _newRouterCount;
     private long _newRouterTime;
 
-//    private static final long MAX_DISTRIBUTE_TIME = 15*1000;
-    private static final long MAX_DISTRIBUTE_TIME = SystemVersion.isSlow() ? 15*1000 : 10*1000;
+    private static final long MAX_DISTRIBUTE_TIME = 15*1000;
     // This is probably too high, to be reduced later
 //    private static final int MAX_ROUTERS_PER_PERIOD = 60;
 //    private static final long NEW_ROUTER_PERIOD = 30*1000;
     private static final int coreCount = SystemVersion.getCores();
-    private static final int MAX_ROUTERS_PER_PERIOD = SystemVersion.isSlow() ? 16 :
-                                                      coreCount < 2 || SystemVersion.getMaxMemory() < 512*1024*1024 ? 32 :
-                                                      Math.max(coreCount * 3, 48);
+    private static final int MAX_ROUTERS_PER_PERIOD = SystemVersion.isSlow() ? 32 : 64;
     private static final long NEW_ROUTER_PERIOD = SystemVersion.isSlow() ? 30*1000 : 15*1000;
 
     /**

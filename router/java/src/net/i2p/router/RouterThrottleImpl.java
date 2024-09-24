@@ -449,9 +449,18 @@ public class RouterThrottleImpl implements RouterThrottle {
         setTunnelStatus("[starting]" + _x("Starting up") + "&hellip;");
     }
 
+    public static boolean isShuttingDown(RouterContext _context) {
+        int code = _context.router().scheduledGracefulExitCode();
+        return Router.EXIT_GRACEFUL == code || Router.EXIT_HARD == code;
+    }
+
     /** @since 0.8.12 */
     public void setShutdownStatus() {
-        setTunnelStatus("[shutdown]" + _x("Declining requests") + ": " + _x("Shutting down") + "&hellip;");
+        if (isShuttingDown(_context)) {
+            setTunnelStatus("[shutdown]" + _x("Declining requests") + ": " + _x("Shutting down") + "&hellip;");
+        } else {
+            setTunnelStatus("[shutdown]" + _x("Declining requests") + ": " + _x("Restarting") + "&hellip;");
+        }
     }
 
     /** @since 0.8.12 */

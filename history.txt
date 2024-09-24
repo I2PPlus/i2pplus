@@ -1,3 +1,8 @@
+2024-09-23 dr|z3d
+ * Console:
+   - Sort sidebar service tunnels by icon and type
+   - Streamline presentation of leasesets
+
 2024-09-21 dr|z3d
  * SusiDNS:
    - Remove inline addressbook javascript and migrate to togglePanels.js

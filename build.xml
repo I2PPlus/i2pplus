@@ -90,7 +90,7 @@
     <echo message=" updaterWithJettyFixesAndJbigi                Updater + local Jetty patches + jBigi library" />
     <echo message=" updaterWithJettyFixes                        Updater + local Jetty patches" />
     <echo message=" updaterWithJetty                             Updater + Jetty" />
-    <echo message=" updater200                                   Updater (pack200 - requires Java &lt; v14 or pre-existing lib/pack2000.jar) &#10140; ./i2pupdate200.zip" />
+    <echo message=" updater200                                   Updater (pack200 - requires Java &lt; v14 or pre-existing lib/pack200.jar) &#10140; ./i2pupdate200.zip" />
     <echo message=" updater200Compact                            Updater (pack200) w/o SAM, DesktopGUI, systray, country/continent lists, docs/proxy, docs/readme" />
     <echo message=" updater200CompactWithDocs                    Compact updater (pack200) with readme and proxy docs" />
     <echo message=" updater200CompactWithGeoIP                   Compact updater (pack200) with GeoIP database" />

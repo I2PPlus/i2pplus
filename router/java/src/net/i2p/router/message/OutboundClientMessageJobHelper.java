@@ -82,16 +82,6 @@ class OutboundClientMessageJobHelper {
      * @param requireAck if true, bundle replyToken in an ack clove
      * @return garlic, or null if no tunnels were found (or other errors)
      */
-/****
-    static GarlicMessage createGarlicMessage(RouterContext ctx, long replyToken, long expiration, PublicKey recipientPK,
-                                             Payload data, Hash from, Destination dest, TunnelInfo replyTunnel,
-                                             SessionKey wrappedKey, Set<SessionTag> wrappedTags,
-                                             boolean requireAck, LeaseSet bundledReplyLeaseSet) {
-        PayloadGarlicConfig dataClove = buildDataClove(ctx, data, dest, expiration);
-        return createGarlicMessage(ctx, replyToken, expiration, recipientPK, dataClove, from, dest, replyTunnel,
-                                   0, 0, wrappedKey, wrappedTags, requireAck, bundledReplyLeaseSet);
-    }
-****/
 
     /**
      * Allow the app to specify the data clove directly, which enables OutboundClientMessage to resend the
@@ -118,19 +108,15 @@ class OutboundClientMessageJobHelper {
                                              ReplyCallback callback) {
 
         SessionKeyManager skm = ctx.clientManager().getClientSessionKeyManager(from);
-        if (skm == null)
-            return null;
+        if (skm == null) {return null;}
         boolean isECIES = recipientPK.getType() == EncType.ECIES_X25519;
-        // force ack off if ECIES
-        boolean ackInGarlic = isECIES ? false : requireAck;
+        boolean ackInGarlic = isECIES ? false : requireAck; // force ack off if ECIES
         GarlicConfig config = createGarlicConfig(ctx, replyToken, expiration, recipientPK, dataClove,
                                                  from, dest, replyTunnel, ackInGarlic, bundledReplyLeaseSet, skm);
-        if (config == null)
-            return null;
+        if (config == null) {return null;}
         GarlicMessage msg;
-        if (isECIES) {
-            msg = GarlicMessageBuilder.buildECIESMessage(ctx, config, from, dest, skm, callback);
-        } else {
+        if (isECIES) {msg = GarlicMessageBuilder.buildECIESMessage(ctx, config, from, dest, skm, callback);}
+        else {
             // no use sending tags unless we have a reply token set up already
             int tagsToSend = replyToken >= 0 ? (tagsToSendOverride > 0 ? tagsToSendOverride : skm.getTagsToSend()) : 0;
             int lowThreshold = lowTagsOverride > 0 ? lowTagsOverride : skm.getLowThreshold();
@@ -158,8 +144,7 @@ class OutboundClientMessageJobHelper {
                                                    TunnelInfo replyTunnel, boolean requireAck,
                                                    LeaseSet bundledReplyLeaseSet, SessionKeyManager skm) {
         Log log = ctx.logManager().getLog(OutboundClientMessageJobHelper.class);
-        if (replyToken >= 0 && log.shouldDebug())
-            log.debug("Reply token: " + replyToken);
+        if (replyToken >= 0 && log.shouldDebug()) {log.debug("Reply token: " + replyToken);}
         // need random CloveSet ID as it's checked in receiver MessageValidator pre-0.9.44
         // See GarlicMessageReceiver
         GarlicConfig config = new GarlicConfig(Certificate.NULL_CERT,
@@ -171,8 +156,7 @@ class OutboundClientMessageJobHelper {
             // extend the expiration of the return message
             PayloadGarlicConfig ackClove = buildAckClove(ctx, from, replyTunnel, replyToken,
                                                          expiration + ACK_EXTRA_EXPIRATION, skm);
-            if (ackClove == null)
-                return null; // no tunnels... TODO carry on anyway?
+            if (ackClove == null) {return null;} // no tunnels... TODO carry on anyway?
             config.addClove(ackClove);
         }
 
@@ -184,15 +168,14 @@ class OutboundClientMessageJobHelper {
         // As of 0.9.2, since the receiver processes them in-order,
         // put data clove last to speed up the ack,
         // and get the leaseset stored before handling the data
-        if (dataClove != null)
-            config.addClove(dataClove);
+        if (dataClove != null) {config.addClove(dataClove);}
 
         config.setRecipientPublicKey(recipientPK);
 
-        if (log.shouldInfo())
+        if (log.shouldInfo()) {
             log.info("Creating garlic config to be encrypted to " + recipientPK
                      + "\n* Destination: [" + dest.calculateHash().toBase64().substring(0,6) + "]");
-
+        }
         return config;
     }
 
@@ -208,26 +191,30 @@ class OutboundClientMessageJobHelper {
         Log log = ctx.logManager().getLog(OutboundClientMessageJobHelper.class);
 
         if (replyToTunnel == null) {
-            if (log.shouldWarn())
+            if (log.shouldWarn()) {
                 log.warn("Unable to send client message from [" + from.toBase64().substring(0,6)
-                         + "] - no inbound tunnels available");
+                         + "] -> No Inbound tunnels available");
+            }
             return null;
         }
 
         TunnelId replyToTunnelId = replyToTunnel.getReceiveTunnelId(0); // tunnel id on that gateway
         Hash replyToTunnelRouter = replyToTunnel.getPeer(0); // inbound tunnel gateway
-        if (log.shouldDebug())
+        if (log.shouldDebug()) {
             log.debug("ACK for the data message will come back along [Tunnel " + replyToTunnelId
                       + "]: " + replyToTunnel);
-
+        }
         DeliveryInstructions ackInstructions = new DeliveryInstructions();
         ackInstructions.setDeliveryMode(DeliveryInstructions.DELIVERY_MODE_TUNNEL);
         ackInstructions.setRouter(replyToTunnelRouter);
         ackInstructions.setTunnelId(replyToTunnelId);
-        // defaults
-        //ackInstructions.setDelayRequested(false);
-        //ackInstructions.setDelaySeconds(0);
-        //ackInstructions.setEncrypted(false);
+
+        /**
+         * Defaults:
+         *  ackInstructions.setDelayRequested(false);
+         *  ackInstructions.setDelaySeconds(0);
+         *  ackInstructions.setEncrypted(false);
+         */
 
         DeliveryStatusMessage dsm = buildDSM(ctx, replyToken);
         // wrap the DSM if we can
@@ -248,17 +235,6 @@ class OutboundClientMessageJobHelper {
         PayloadGarlicConfig ackClove = new PayloadGarlicConfig(Certificate.NULL_CERT,
                                                                ctx.random().nextLong(I2NPMessage.MAX_ID_VALUE),
                                                                expiration, ackInstructions, msg);
-        // this does nothing, the clove is not separately encrypted
-        //ackClove.setRecipient(ctx.router().getRouterInfo());
-        // defaults
-        //ackClove.setRequestAck(false);
-
-        //if (log.shouldDebug())
-        //    log.debug("Delivery status message is targeting us ["
-        //              + ackClove.getRecipient().getIdentity().getHash().toBase64()
-        //              + "] via tunnel " + replyToTunnelId.getTunnelId() + " on "
-        //              + replyToTunnelRouter.toBase64());
-
         return ackClove;
     }
 
@@ -294,36 +270,6 @@ class OutboundClientMessageJobHelper {
     }
 
     /**
-     * Build a clove that sends the payload to the destination
-     */
-/****
-    private static PayloadGarlicConfig buildDataClove(RouterContext ctx, Payload data, Destination dest, long expiration) {
-
-        DeliveryInstructions instructions = new DeliveryInstructions();
-        instructions.setDeliveryMode(DeliveryInstructions.DELIVERY_MODE_DESTINATION);
-        instructions.setDestination(dest.calculateHash());
-
-        // defaults
-        //instructions.setDelayRequested(false);
-        //instructions.setDelaySeconds(0);
-        //instructions.setEncrypted(false);
-
-        DataMessage msg = new DataMessage(ctx);
-        msg.setData(data.getEncryptedData());
-        // need random CloveSet ID as it's checked in receiver GMR.isValid() MessageValidator pre-0.9.44
-        // See GarlicMessageReceiver
-        PayloadGarlicConfig clove = new PayloadGarlicConfig(Certificate.NULL_CERT,
-                                                            ctx.random().nextLong(I2NPMessage.MAX_ID_VALUE),
-                                                            expiration, instructions, msg);
-        // defaults
-        //clove.setRecipientPublicKey(null);
-        //clove.setRequestAck(false);
-
-        return clove;
-    }
-****/
-
-    /**
      * Build a clove that stores the leaseSet locally
      */
     private static PayloadGarlicConfig buildLeaseSetClove(RouterContext ctx, long expiration, LeaseSet replyLeaseSet) {
@@ -335,10 +281,6 @@ class OutboundClientMessageJobHelper {
         PayloadGarlicConfig clove = new PayloadGarlicConfig(Certificate.NULL_CERT,
                                                             ctx.random().nextLong(I2NPMessage.MAX_ID_VALUE),
                                                             expiration, DeliveryInstructions.LOCAL, msg);
-        // defaults
-        //clove.setRecipientPublicKey(null);
-        //clove.setRequestAck(false);
-
         return clove;
     }
 }

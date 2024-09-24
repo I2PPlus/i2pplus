@@ -72,20 +72,43 @@ class NetDbRenderer {
      */
     private class LeaseSetComparator implements Comparator<LeaseSet> {
          public int compare(LeaseSet l, LeaseSet r) {
-             Hash dl = l.getHash();
-             Hash dr = r.getHash();
+             Hash keyL = l.getHash();
+             Hash keyR = r.getHash();
+             TunnelPoolSettings inL = _context.tunnelManager().getInboundSettings(keyL);
+             TunnelPoolSettings inR = _context.tunnelManager().getInboundSettings(keyR);
 
-             boolean publishedl = _context.clientManager().shouldPublishLeaseSet(dl);
-             boolean publishedr = _context.clientManager().shouldPublishLeaseSet(dr);
-             if (publishedl && !publishedr) return -10;
-             if (publishedr && !publishedl) return -9;
+             boolean isClientL = !_context.clientNetDb(keyL).toString().contains("Main");
+             boolean isClientR = !_context.clientNetDb(keyR).toString().contains("Main");
+             boolean isMetaL = l.getType() == DatabaseEntry.KEY_TYPE_META_LS2;
+             boolean isMetaR = r.getType() == DatabaseEntry.KEY_TYPE_META_LS2;
+             boolean nicknameL = inL != null && inL.getDestinationNickname() != null;
+             boolean nicknameR = inR != null && inR.getDestinationNickname() != null;
+             boolean nameL =  _context.namingService().reverseLookup(keyL) != null && !isMetaL;
+             boolean nameR =  _context.namingService().reverseLookup(keyR) != null && !isMetaR;
+             boolean publishedL = _context.clientManager().shouldPublishLeaseSet(keyL) && !isMetaL;
+             boolean publishedR = _context.clientManager().shouldPublishLeaseSet(keyR) && !isMetaR;
+             boolean localL = _context.clientManager().isLocal(keyL) && !isMetaL;
+             boolean localR = _context.clientManager().isLocal(keyR) && !isMetaR;
 
-             boolean locall = _context.clientManager().isLocal(dl);
-             boolean localr = _context.clientManager().isLocal(dr);
-             if (locall && !localr) return -1;
-             if (localr && !locall) return 1;
+             if (publishedL && !publishedR) return -1;
+             if (publishedR && !publishedL) return 1;
 
-             return dl.toBase32().compareTo(dr.toBase32());
+             if (isClientL && !isClientR) return -1;
+             if (isClientR && !isClientL) return 1;
+
+             if (nicknameL && !nicknameR) return -1;
+             if (nicknameR && !nicknameL) return 1;
+
+             if (nameL && !nameR) return -1;
+             if (nameR && !nameL) return 1;
+/*
+             if (localL && !localR) return -1;
+             if (localR && !localL) return 1;
+
+             if (isMetaL && !isMetaR) return -1;
+             if (isMetaR && !isMetaL) return 1;
+*/
+             return keyL.toBase32().compareTo(keyR.toBase32());
         }
     }
 
@@ -647,6 +670,14 @@ class NetDbRenderer {
 
         if (debug) {leases.addAll(netdb.getLeases());}
         else {
+            if (netdb.getClientLeases().size() > 0) {
+                if (!headersAdded.contains("requested")) {
+                    //buf.append("<h2 class=requested>").append(_t("Requested LeaseSets")).append("</h2>");
+                    headersAdded.add("clientLeases");
+                }
+                leases.addAll(netdb.getClientLeases());
+            }
+
             if (netdb.getPublishedLeases().size() > 0) {
                 if (!headersAdded.contains("localPub")) {
                     //buf.append("<h2 class=localPub>").append(_t("Local Published LeaseSets")).append("</h2>");
@@ -661,14 +692,6 @@ class NetDbRenderer {
                     headersAdded.add("localUnpublished");
                 }
                 leases.addAll(netdb.getUnpublishedLeases());
-            }
-
-            if (netdb.getClientLeases().size() > 0) {
-                if (!headersAdded.contains("requested")) {
-                    //buf.append("<h2 class=requested>").append(_t("Requested LeaseSets")).append("</h2>");
-                    headersAdded.add("clientLeases");
-                }
-                leases.addAll(netdb.getClientLeases());
             }
         }
         int medianCount = 0;
@@ -793,12 +816,20 @@ class NetDbRenderer {
         // warning - will be null for non-local encrypted
         Destination dest = ls.getDestination();
         Hash key = ls.getHash();
+        int type = ls.getType();
+        NetworkDatabaseFacade subDbKey = key != null ? _context.clientNetDb(key): null;
         if (key != null) {
             buf.append("<table class=\"leaseset lazy\" id=\"ls_").append(key.toBase32().substring(0,4)).append("\">\n");
         } else {buf.append("<table class=\"leaseset lazy\">\n");}
-        buf.append("<tr><th><b class=lskey>").append(_t("LeaseSet")).append(":</b> <code title =\"")
+        buf.append("<tr><th><b class=lskey>");
+        if (type == DatabaseEntry.KEY_TYPE_META_LS2) {buf.append(_t("Meta"));}
+        buf.append(_t("LeaseSet")).append(":</b> <code title =\"")
            .append(_t("LeaseSet Key")).append("\">").append(key.toBase64()).append("</code>");
-        int type = ls.getType();
+        /*
+        if (subDbKey != null && !subDbKey.toString().contains("Main")) {
+            buf.append("<code id=subDb hidden style=display:none>").append(subDbKey.toString().replace("ClientNetDb [","").replace("]","")).append("</code>");
+        }
+        */
         if (type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2 || _context.keyRing().get(key) != null) {
             buf.append(" <b class=encls>(").append(_t("Encrypted")).append(")</b>");
         }
@@ -816,111 +847,86 @@ class NetDbRenderer {
                 buf.append(DataHelper.escapeHTML(in.getDestinationNickname()));
             } else {buf.append(dest.toBase64().substring(0,6));}
             buf.append("</span></a></th></tr>\n");
-
-            // we don't show a b32 or addressbook links if encrypted
-            if (type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
-                buf.append("<tr><td");
-                // If the dest is published but not in the addressbook, an extra
-                // <td> is appended with an "Add to addressbook" link, so this
-                // <td> should not span 2 columns.
-                String host = null;
-                if (published) {host = _context.namingService().reverseLookup(dest);}
-                if (!published || host != null || !linkSusi) {buf.append(" colspan=2");}
-                buf.append(">");
-                String b32 = key.toBase32();
-                String truncb32 = b32.substring(0,24);
-                buf.append("<a href=\"http://").append(b32).append("/\">").append(truncb32).append("&hellip;b32.i2p</a></td>");
-                if (linkSusi && published && host == null) {
-                    buf.append("<td class=addtobook colspan=2>").append("<a title=\"").append(_t("Add to addressbook"))
-                       .append("\" target=_blank href=\"/susidns/addressbook.jsp?book=private&amp;destination=")
-                       .append(dest.toBase64()).append("#add\">").append(_t("Add to local addressbook")).append("</a></td>");
-                } // else probably a client
-            }
         } else {
             buf.append("<th>");
             String host = (dest != null) ? _context.namingService().reverseLookup(dest) : null;
             if (host != null) {
                 buf.append("<a class=destlink target=_blank href=\"http://").append(host).append("/\">").append(host).append("</a></th>");
             } else {
-                String b32 = key.toBase32();
-                String truncb32 = b32.substring(0, 24);
-                buf.append("<code title=\"").append(_t("Destination")).append("\">");
-                if (dest != null) {buf.append(dest.toBase64().substring(0,6));}
-                else {buf.append("n/a");}
-                buf.append("</code></th></tr>\n<tr><td");
-                if (!linkSusi) {buf.append(" colspan=2");}
-                buf.append("><a href=\"http://").append(b32).append("\">").append(truncb32).append("&hellip;b32.i2p</a></td>");
-                if (linkSusi && dest != null) {
-                    buf.append("<td class=addtobook><a title=\"").append(_t("Add to addressbook"))
-                       .append("\" target=_blank href=\"/susidns/addressbook.jsp?book=private&amp;destination=")
-                       .append(dest.toBase64()).append("#add\">").append(_t("Add to local addressbook")).append("</a></td></tr>\n");
-                }
+                if (dest != null) {
+                    String b32 = key.toBase32();
+                    String truncb32 = b32.substring(0, 5) + "…" + b32.substring(b32.length() - 13, b32.length() - 10) + ".b32.i2p";
+                    buf.append("<a target=_blank href=\"http://").append(b32).append("\">").append(truncb32).append("</a>");
+                } else {buf.append("n/a");}
+                buf.append("</th></tr>\n");
             }
         }
+
         long exp;
+        String bullet = "&nbsp; &bullet; &nbsp;";
         buf.append("<tr><td colspan=2>");
         if (type == DatabaseEntry.KEY_TYPE_LEASESET) {exp = ls.getLatestLeaseDate() - now;}
         else {
             LeaseSet2 ls2 = (LeaseSet2) ls;
             long pub = now - ls2.getPublished();
-            buf.append("&nbsp; &bullet; &nbsp;<b>").append(_t("Type")).append(":</b> ").append(type)
-               .append(" &nbsp; &bullet; &nbsp;<b>").append(_t("Published{0} ago", ":</b> " + DataHelper.formatDuration2(pub)));
+            buf.append(bullet).append("<b>").append(_t("Type")).append(":</b> ").append(type).append(' ')
+               .append(bullet).append("<b>").append(_t("Published{0} ago", ":</b> " + DataHelper.formatDuration2(pub)));
             exp = ((LeaseSet2)ls).getExpires()-now;
         }
-        buf.append(" &nbsp; &bullet; &nbsp;<b>");
+        buf.append(' ').append(bullet).append("<b>");
         if (exp > 0) {buf.append(_t("Expires{0}", ":</b> " + DataHelper.formatDuration2(exp)).replace(" in", ""));}
         else {buf.append(_t("Expired{0} ago", ":</b> " + DataHelper.formatDuration2(0-exp)));}
         if (debug) {
-            buf.append(" &nbsp; &bullet; &nbsp;<b title=\"").append(_t("Received as published?")).append("\">RAP:</b> ").append(ls.getReceivedAsPublished())
-               .append(" &nbsp; &bullet; &nbsp;<b title=\"").append(_t("Received as reply?")).append("\">RAR:</b> ").append(ls.getReceivedAsReply())
-               .append(" &nbsp; &bullet; &nbsp;<b>").append(_t("Distance")).append(":</b> ").append(distance);
+            buf.append(' ').append(bullet).append("<b title=\"").append(_t("Received as published?")).append("\">RAP:</b> ").append(ls.getReceivedAsPublished())
+               .append(' ').append(bullet).append("<b title=\"").append(_t("Received as reply?")).append("\">RAR:</b> ").append(ls.getReceivedAsReply())
+               .append(' ').append(bullet).append("<b>").append(_t("Distance")).append(":</b> ").append(distance);
             if (type != DatabaseEntry.KEY_TYPE_LEASESET) {
                 LeaseSet2 ls2 = (LeaseSet2) ls;
                 if (ls2.isOffline()) {
-                    buf.append(" &nbsp; &bullet; &nbsp;<b>").append(_t("Offline signed")).append(":</b> ");
+                    buf.append(' ').append(bullet).append("<b>").append(_t("Offline signed")).append(":</b> ");
                     exp = ls2.getTransientExpiration() - now;
                     if (exp > 0) {
-                        buf.append(" &nbsp; &bullet; &nbsp;<b>").append(_t("Expires{0}", ":</b> " + DataHelper.formatDuration2(exp)));
+                        buf.append(' ').append(bullet).append("<b>").append(_t("Expires{0}", ":</b> " + DataHelper.formatDuration2(exp)));
                     } else {
-                        buf.append(" &nbsp; &bullet; &nbsp;<b>").append(_t("Expired{0} ago", ":</b> " + DataHelper.formatDuration2(0-exp)));
+                        buf.append(' ').append(bullet).append("<b>").append(_t("Expired{0} ago", ":</b> " + DataHelper.formatDuration2(0-exp)));
                     }
-                    buf.append(" &nbsp; &bullet; &nbsp;<b>").append(_t("Type")).append(":</b> ").append(ls2.getTransientSigningKey().getType());
+                    buf.append(' ').append(bullet).append("<b>").append(_t("Type")).append(":</b> ").append(ls2.getTransientSigningKey().getType());
                 }
             }
             buf.append("</td></tr>\n<tr><td colspan=2><span class=ls_crypto>")
-               .append("<span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Signature type")).append(":</b> ");
+               .append("<span class=nowrap>").append(bullet).append("<b>").append(_t("Signature type")).append(":</b> ");
             if (dest != null && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
                 buf.append(dest.getSigningPublicKey().getType()).append("</span>");
             } else {buf.append(ls.getSigningKey().getType()).append("</span>");} // encrypted, show blinded key type
             if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
-                buf.append("<br><span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key"))
+                buf.append("<br><span class=nowrap>").append(bullet).append("<b>").append(_t("Encryption Key"))
                    .append(":</b> ELGAMAL_2048 [").append(ls.getEncryptionKey().toBase64().substring(0,8))
                    .append("&hellip;]</span>");
             } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
                 LeaseSet2 ls2 = (LeaseSet2) ls;
                 for (PublicKey pk : ls2.getEncryptionKeys()) {
-                    buf.append("<br><span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ");
+                    buf.append("<br><span class=nowrap>").append(bullet).append("<b>").append(_t("Encryption Key")).append(":</b> ");
                     EncType etype = pk.getType();
                     if (etype != null) {buf.append(etype);}
                     else {buf.append(_t("Unsupported type")).append(" ").append(pk.getUnknownTypeCode());}
                     buf.append(" [").append(pk.toBase64().substring(0,8)).append("&hellip;]</span>");
                 }
             }
-            buf.append("<br><span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Routing Key"))
+            buf.append("<br><span class=nowrap>").append(bullet).append("<b>").append(_t("Routing Key"))
                .append(":</b> ").append(ls.getRoutingKey().toBase64().substring(0,16))
                .append("&hellip;</span></td></tr>\n");
         } else {
             buf.append("</td></tr>\n<tr><td colspan=2>")
-               .append("<span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Signature type")).append(":</b> ");
+               .append("<span class=nowrap>").append(bullet).append("<b>").append(_t("Signature type")).append(":</b> ");
             if (dest != null && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {buf.append(dest.getSigningPublicKey().getType());}
             else {buf.append(ls.getSigningKey().getType());} // encrypted, show blinded key type
             buf.append("</span> ");
             if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
-                buf.append("<span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ELGAMAL_2048</span>");
+                buf.append("<span class=nowrap>").append(bullet).append("<b>").append(_t("Encryption Key")).append(":</b> ELGAMAL_2048</span>");
             } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
                 LeaseSet2 ls2 = (LeaseSet2) ls;
                 for (PublicKey pk : ls2.getEncryptionKeys()) {
-                    buf.append("<span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ");
+                    buf.append("<span class=nowrap>").append(bullet).append("<b>").append(_t("Encryption Key")).append(":</b> ");
                     EncType etype = pk.getType();
                     if (etype != null) {buf.append(etype).append("</span> ");}
                     else {buf.append(_t("Unsupported type")).append(" ").append(pk.getUnknownTypeCode()).append("</span> ");}
@@ -938,7 +944,7 @@ class NetDbRenderer {
             boolean expired = exl <= 0;
             String expiry = !expired ? _t("Expires in {0}", DataHelper.formatDuration2(exl))
                                      : _t("Expired {0} ago", DataHelper.formatDuration2(0-exl));
-            buf.append("<li title=\"").append(_t("Lease")).append("\"><b").append(" class=\"leaseNumber")
+            buf.append("<li><b").append(" class=\"leaseNumber")
                .append(expired ? " expired" : "").append("\" title=\"").append(expiry).append("\">")
                .append(i + 1).append("</b> <span class=tunnel_peer title=Gateway>")
                .append(_context.commSystem().renderPeerHTML(lease.getGateway(), false))

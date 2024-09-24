@@ -77,8 +77,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     @Override
     public boolean isAlive() {return _manager != null && _manager.isAlive();}
 
-    //private static final long MAX_TIME_TO_REBUILD = 10*60*1000;
-    private static final long MAX_TIME_TO_REBUILD = 5*60*1000;
+    private static final long MAX_TIME_TO_REBUILD = 10*60*1000;
 
     @Override
     public boolean verifyClientLiveliness() {
@@ -246,7 +245,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      */
     public I2CPMessageQueue connect() throws I2PSessionException {
         if (_manager != null) {return _manager.internalConnect();}
-        throw new I2PSessionException("No manager yet");
+        throw new I2PSessionException("No Client Manager yet");
     }
 
     /**

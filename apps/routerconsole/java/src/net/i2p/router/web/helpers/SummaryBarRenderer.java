@@ -4,19 +4,26 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.text.Collator;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.TreeMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
+import java.util.TreeMap;
 
 import net.i2p.app.ClientAppManager;
 import net.i2p.crypto.SigType;
 import net.i2p.data.DataHelper;
-import net.i2p.router.RouterContext;
+import net.i2p.data.router.RouterInfo;
 import net.i2p.router.news.NewsEntry;
 import net.i2p.router.news.NewsManager;
+import net.i2p.router.RouterContext;
 import net.i2p.router.web.ConfigUpdateHandler;
+import net.i2p.router.web.ContextHelper;
 import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.Messages;
 import net.i2p.router.web.NavHelper;
@@ -24,15 +31,6 @@ import net.i2p.router.web.NewsHelper;
 import net.i2p.router.web.StatSummarizer;
 import net.i2p.util.PortMapper;
 import net.i2p.util.SystemVersion;
-
-import net.i2p.data.router.RouterInfo;
-
-// for UTC clock
-import java.util.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-import java.util.TimeZone;
 
 /**
  *  Refactored from summarynoframe.jsp to save ~100KB
@@ -808,6 +806,10 @@ class SummaryBarRenderer {
         if (_helper == null) {return "";}
         StringBuilder buf = new StringBuilder(512);
         SummaryHelper.NetworkStateMessage reachability = _helper.getReachability();
+        RouterContext ctx = ContextHelper.getContext(null);
+        boolean shuttingDown = ConfigRestartBean.isShuttingDown(ctx);
+        boolean restarting = ConfigRestartBean.isRestarting(ctx);
+        long timeRemaining = ctx.router().getShutdownTimeRemaining();
         buf.append("<h4 id=sb_status><span id=sb_netstatus class=\"sb_netstatus volatile ");
         switch (reachability.getState()) {
             case VMCOMM:
@@ -836,23 +838,24 @@ class SummaryBarRenderer {
                 buf.append("testing");
         }
         if (floodfillEnabled()) {buf.append(" floodfill");}
+        if (shuttingDown) {buf.append(" shuttingDown");}
+        else if (restarting) {buf.append(" restarting");}
         buf.append("\"><span id=netstatus>").append(_t("Status")).append(": ").append(reachability.getMessage())
-           .append(floodfillEnabled() ? " <span id=ffenabled>(" + _t("Floodfill enabled") + ")</span>" : "").append("</span>");
+           .append(floodfillEnabled() ? " <span id=ffenabled>(" + _t("Floodfill enabled") + ")</span>" : "");
+        buf.append("</span>");
         if (floodfillEnabled() && !reachability.getMessage().contains(_t("Floodfill"))) {
+            //int lsCountFF = _context.netDb().getFloodfillLeases().size();
+            //int lsCountLocal = _context.netDb().getClientLeases().size();
             int lsCount = _context.netDb().getLeases().size();
             if (lsCount > 0) {
             buf.append(" <span id=lsCount class=\"badge volatile\" title=\"")
-               .append(_t("Total LeaseSets stored locally"))
+               .append(_t("Total number of LeaseSets stored in our NetDb"))
                .append("\">").append(lsCount).append("</span>");
             }
         }
         buf.append("</span></h4>\n");
         if (!SigType.ECDSA_SHA256_P256.isAvailable()) {
-            buf.append("<hr>\n<h4><span class=warn><a href=\"http://trac.i2p2.i2p/wiki/Crypto/ECDSA");
-            if ("ru".equals(Messages.getLanguage(_context))) {buf.append("-ru");}
-            buf.append("\" target=_top title=\"")
-               .append(_t("See more information on the wiki"))
-               .append("\">")
+            buf.append("<hr>\n<h4><span class=warn>")
                .append(_t("Warning: ECDSA is not available. Update your Java or OS"))
                .append("</a></span></h4>\n");
         }

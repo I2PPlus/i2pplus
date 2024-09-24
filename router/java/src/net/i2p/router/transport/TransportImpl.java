@@ -79,12 +79,15 @@ public abstract class TransportImpl implements Transport {
     /** @since 0.9.44 */
     protected static final String PROP_IPV6_FIREWALLED = "i2np.lastIPv6Firewalled";
 
+    /** @since 0.9.64+ */
+    protected static final String PROP_BOOST_CONNECTION_LIMITS = "i2np.boostConnectionLimits";
+
     private static final long[] RATES = {60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
 
     static {
         long maxMemory = SystemVersion.getMaxMemory();
         long min = 512;
-        long max = 4096;
+        long max = 8192;
         // 1024 nominal for 128 MB
         int size = (int) Math.max(min, Math.min(max, 1 + (maxMemory / (128*1024))));
         _IPMap = new LHMCache<Hash, byte[]>(size);
@@ -94,6 +97,7 @@ public abstract class TransportImpl implements Transport {
     private static final int MAX_CONNECTION_FACTOR = 100;
     // see constructor
     private final boolean REBALANCE_NTCP;
+    private static final int SEND_POOL_CAPACITY = SystemVersion.isSlow() ? 32 : 64;
 
     /**
      * Initialize the new transport
@@ -103,27 +107,24 @@ public abstract class TransportImpl implements Transport {
         _context = context;
         _log = _context.logManager().getLog(getClass());
 
-        _context.statManager().createRateStat("transport.sendMessageFailureLifetime", "Lifetime of failed sent messages", "Transport", RATES);
-        _context.statManager().createRequiredRateStat("transport.sendMessageSize", "Size of sent messages (bytes)", "Transport", RATES);
-        _context.statManager().createRequiredRateStat("transport.receiveMessageSize", "Size of received messages (bytes)", "Transport", RATES);
-        _context.statManager().createRateStat("transport.receiveMessageTime", "Time to read a received message (ms)", "Transport", RATES);
+        _context.statManager().createRateStat("transport.expiredOnQueueLifetime", "Time to process message expired in outbound queue (ms)", "Transport", RATES );
         _context.statManager().createRateStat("transport.receiveMessageTimeSlow", "Time to read a received message (over 1s)", "Transport", RATES);
+        _context.statManager().createRateStat("transport.receiveMessageTime", "Time to read a received message (ms)", "Transport", RATES);
+        _context.statManager().createRateStat("transport.sendMessageFailureLifetime", "Lifetime of failed sent messages", "Transport", RATES);
+        _context.statManager().createRequiredRateStat("transport.receiveMessageSize", "Size of received messages (bytes)", "Transport", RATES);
+        _context.statManager().createRequiredRateStat("transport.sendMessageSize", "Size of sent messages (bytes)", "Transport", RATES);
         _context.statManager().createRequiredRateStat("transport.sendProcessingTime", "Time to process and send a message (ms)", "Transport", RATES);
-        //_context.statManager().createRateStat("transport.sendProcessingTime." + getStyle(), "Time to process and send a message (ms)", "Transport", new long[] {60*1000l });
-        _context.statManager().createRateStat("transport.expiredOnQueueLifetime", "Time to process message expired in outbound queue", "Transport", RATES );
+        //_context.statManager().createRequiredRateStat("transport.sendProcessingTime." + getStyle(), "Time to process and send a message (ms)", "Transport", RATES);
 
         _currentAddresses = new ArrayList<RouterAddress>(3);
-        if (getStyle().equals("NTCP"))
-            _sendPool = new ArrayBlockingQueue<OutNetMessage>(8);
-        else
-            _sendPool = null;
+        if (getStyle().equals("NTCP")) {_sendPool = new ArrayBlockingQueue<OutNetMessage>(SEND_POOL_CAPACITY);}
+        else {_sendPool = null;}
         _unreachableEntries = new ConcurrentHashMap<Hash, Long>(32);
         _wasUnreachableEntries = new ConcurrentHashMap<Hash, Long>(32);
         _localAddresses = new ConcurrentHashSet<InetAddress>(4);
         if (allowLocal()) {
-            // don't ban for a long time in testnet, or else
-            // everybody is excluded by ProfileOrganizer.selectPeersLocallyUnreachable()
-            // at startup for half an hour
+            // don't ban for a long time in testnet, or else everybody is excluded by
+            // ProfileOrganizer.selectPeersLocallyUnreachable() at startup for half an hour
             UNREACHABLE_PERIOD = 60*1000;
             WAS_UNREACHABLE_PERIOD = 60*1000;
         } else {
@@ -171,25 +172,25 @@ public abstract class TransportImpl implements Transport {
 
             switch (bw) {
                 case Router.CAPABILITY_BW12:
-                case 'u':  // unknown
+                case Router.CAPABILITY_BW32:
+                case 'u': // unknown
                 default:
                     break;
-                case Router.CAPABILITY_BW32: def *= 2;
+                case Router.CAPABILITY_BW64: def *= 2;
                     break;
-                case Router.CAPABILITY_BW64: def *= 3;
+                case Router.CAPABILITY_BW128: def *= 3;
                     break;
-                case Router.CAPABILITY_BW128: def *= 5;
+                case Router.CAPABILITY_BW256: def *= 5;
                     break;
-                case Router.CAPABILITY_BW256: def *= 9;
+                case Router.CAPABILITY_BW512: def *= 8;
                     break;
-                case Router.CAPABILITY_BW512: def *= 11;
-                    break;
-                case Router.CAPABILITY_BW_UNLIMITED: def *= 14;
+                case Router.CAPABILITY_BW_UNLIMITED: def *= 10;
                     break;
             }
 
-        if (_context.netDb().floodfillEnabled()) {
-            def *= 17; def /= 10;
+        if (_context.netDb().floodfillEnabled() ||
+            _context.getBooleanProperty(PROP_BOOST_CONNECTION_LIMITS)) {
+            def *= 20; def /= 10;
         }
         // increase limit for SSU, for now
         long maxMemory = SystemVersion.getMaxMemory();
@@ -197,29 +198,30 @@ public abstract class TransportImpl implements Transport {
         boolean isSlow = SystemVersion.isSlow();
         if (style.equals("SSU")) {
             if (REBALANCE_NTCP) {
-                if (maxMemory >= 1024*1024*1024 && cores >= 4) {def *= 8;}
+                if (maxMemory >= 1024*1024*1024 && !isSlow) {def *= 8;}
                 else if (maxMemory >= 512*1024*1024) {def *= 5;}
                 else {def *= 5; def /= 2;}
             } else {def *= 3;}
-            if (def > 8000 && maxMemory >= 2048*1024*1024 && cores >= 4 && !isSlow) {def = 8000;}
-            else if (def > 5000 && maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow) {def = 5000;}
-            else if (def > 4000 && maxMemory >= 512*1024*1024 && cores >= 4 && !isSlow) {def = 4000;}
+            if (def > 8000 && maxMemory >= 2048*1024*1024 && !isSlow) {def = 8000;}
+            else if (def > 5000 && maxMemory >= 1024*1024*1024 && !isSlow) {def = 5000;}
+            else if (def > 4000 && maxMemory >= 512*1024*1024 && !isSlow) {def = 4000;}
             else if (def > 3000) {def = 3000;}
         } else if (style.equals("NTCP")) {
             if (REBALANCE_NTCP) {
-                if (maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow) {def *= 6;}
-                else if (maxMemory >= 512*1024*1024 && cores >= 4 && !isSlow) {def *= 4;}
+                if (maxMemory >= 1024*1024*1024 && !isSlow) {def *= 6;}
+                else if (maxMemory >= 512*1024*1024 && !isSlow) {def *= 4;}
                 else {def *= 3; def /= 2;}
-                if (def > 4000 && maxMemory >= 2048*1024*1024 && cores >= 4 && !isSlow) {def = 5000;}
-                else if (def > 4000 && maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow) {def = 4000;}
-                else if (def > 3000 && maxMemory >= 512*1024*1024 && cores >= 4 && !isSlow) {def = 3000;}
+                if (def > 4000 && maxMemory >= 2048*1024*1024 && !isSlow) {def = 5000;}
+                else if (def > 4000 && maxMemory >= 1024*1024*1024 && !isSlow) {def = 4000;}
+                else if (def > 3000 && maxMemory >= 512*1024*1024 && !isSlow) {def = 3000;}
                 else if (def > 2000) {def = 2000;}
             }
         }
         return _context.getProperty(maxProp, def);
     }
 
-    private static final int DEFAULT_CAPACITY_PCT = 75;
+    //private static final int DEFAULT_CAPACITY_PCT = 75;
+    private static final int DEFAULT_CAPACITY_PCT = 90;
 
     /**
      * Can we initiate or accept a connection to another peer, saving some margin
@@ -252,8 +254,7 @@ public abstract class TransportImpl implements Transport {
      */
     protected OutNetMessage getNextMessage() {
         OutNetMessage msg = _sendPool.poll();
-        if (msg != null)
-            msg.beginSend();
+        if (msg != null) {msg.beginSend();}
         return msg;
     }
 
@@ -303,25 +304,23 @@ public abstract class TransportImpl implements Transport {
         }
         //boolean log = false;
         final boolean debug = _log.shouldDebug();
-        if (sendSuccessful)
-            msg.timestamp("afterSend(successful)");
-        else
-            msg.timestamp("afterSend(failed)");
+        if (sendSuccessful) {msg.timestamp("afterSend(successful)");}
+        else {msg.timestamp("afterSend(failed)");}
 
         if (!sendSuccessful) {
             int prev = msg.transportFailed(getStyle());
             // This catches the usual case with two enabled transports
             // GetBidsJob will check against actual transport count
-            if (prev > 0)
-                allowRequeue = false;
+            if (prev > 0) {allowRequeue = false;}
         }
 
         if (msToSend > 1500) {
-            if (debug)
+            if (debug) {
                 _log.debug("[" + getStyle() + "] afterSend slow: " + (sendSuccessful ? "Success! " : "FAIL! ")
                           + "\n* " + msg.getMessageSize() + " byte "
                           + msg.getMessageType() + "[MsgID "+ msg.getMessageId() + "] to ["
                           + msg.getTarget().getIdentity().calculateHash().toBase64().substring(0,6) + "] took " + msToSend + " ms");
+            }
         }
         //if (true)
         //    _log.error("(not error) I2NP message sent? " + sendSuccessful + " " + msg.getMessageId() + " after " + msToSend + "/" + msg.getTransmissionTime());
