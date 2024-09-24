@@ -1640,10 +1640,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         for (DatabaseEntry o : getDataStore().getEntries()) {
             if (o.isLeaseSet()) {
                 Hash key = o.getHash();
-                boolean published = _context.clientManager().shouldPublishLeaseSet(key);
-                boolean isLocal = !o.getReceivedAsPublished() && !o.getReceivedAsReply() &&
-                                  _context.clientManager().isLocal(key);
-                if (!isLocal) {leases.add((LeaseSet)o);}
+                boolean isLocal = !o.getReceivedAsPublished() && !o.getReceivedAsReply();
+                if (isLocal) {leases.add((LeaseSet)o);}
             }
         }
         return leases;
@@ -1658,7 +1656,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         for (DatabaseEntry o : getDataStore().getEntries()) {
             if (o.isLeaseSet()) {
                 Hash key = o.getHash();
-                boolean isLocal = _context.clientManager().isLocal(key);
+                boolean isLocal = !o.getReceivedAsPublished() && !o.getReceivedAsReply();
                 boolean published = _context.clientManager().shouldPublishLeaseSet(key);
                 if (published && isLocal) {leases.add((LeaseSet)o);} // include i2cp/sam clients like snark etc
             }
@@ -1676,8 +1674,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             if (o.isLeaseSet()) {
                 Hash key = o.getHash();
                 boolean published = _context.clientManager().shouldPublishLeaseSet(key);
-                boolean isLocal = !o.getReceivedAsPublished() && !o.getReceivedAsReply() &&
-                                  _context.clientManager().isLocal(key);
+                boolean isLocal = !o.getReceivedAsPublished() && !o.getReceivedAsReply();
                 if (!published && isLocal) {leases.add((LeaseSet)o);}
             }
         }

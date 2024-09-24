@@ -108,9 +108,8 @@ class RepublishLeaseSetJob extends JobImpl {
         public void runJob() {
             LeaseSet ls = _facade.lookupLeaseSetLocally(_ls.getHash());
             if (ls != null) {tunnelName = getTunnelName(_ls.getDestination());}
-            if (ls != null && ls.getEarliestLeaseDate() == _ls.getEarliestLeaseDate()) {
-                requeueRepublish();
-            } else {
+            if (ls != null && ls.getEarliestLeaseDate() == _ls.getEarliestLeaseDate()) {requeueRepublish();}
+            else {
                 if (_log.shouldInfo()) {
                     String name = !tunnelName.equals("") ? " for \'" + tunnelName + "\'" : "";
                     _log.info("Not requeueing failed publication of LeaseSet" + name + " [" +

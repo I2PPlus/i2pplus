@@ -825,9 +825,11 @@ class NetDbRenderer {
         if (type == DatabaseEntry.KEY_TYPE_META_LS2) {buf.append(_t("Meta"));}
         buf.append(_t("LeaseSet")).append(":</b> <code title =\"")
            .append(_t("LeaseSet Key")).append("\">").append(key.toBase64()).append("</code>");
+        /*
         if (subDbKey != null && !subDbKey.toString().contains("Main")) {
             buf.append("<code id=subDb hidden style=display:none>").append(subDbKey.toString().replace("ClientNetDb [","").replace("]","")).append("</code>");
         }
+        */
         if (type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2 || _context.keyRing().get(key) != null) {
             buf.append(" <b class=encls>(").append(_t("Encrypted")).append(")</b>");
         }
@@ -942,7 +944,7 @@ class NetDbRenderer {
             boolean expired = exl <= 0;
             String expiry = !expired ? _t("Expires in {0}", DataHelper.formatDuration2(exl))
                                      : _t("Expired {0} ago", DataHelper.formatDuration2(0-exl));
-            buf.append("<li title=\"").append(_t("Lease")).append("\"><b").append(" class=\"leaseNumber")
+            buf.append("<li><b").append(" class=\"leaseNumber")
                .append(expired ? " expired" : "").append("\" title=\"").append(expiry).append("\">")
                .append(i + 1).append("</b> <span class=tunnel_peer title=Gateway>")
                .append(_context.commSystem().renderPeerHTML(lease.getGateway(), false))

@@ -25,10 +25,7 @@ public class ConfigRestartBean {
     private static final String _systemNonce = Long.toString(RandomSource.getInstance().nextLong());
     private static final String PROP_ADVANCED = "routerconsole.advanced";
 
-    /** formerly System.getProperty("console.nonce") */
-    public static String getNonce() {
-        return _systemNonce;
-    }
+    public static String getNonce() {return _systemNonce;}
 
     public static boolean isAdvanced() {
         RouterContext ctx = ContextHelper.getContext(null);
@@ -42,25 +39,18 @@ public class ConfigRestartBean {
         if ( (nonce != null) && (systemNonce.equals(nonce)) && (action != null) ) {
             // Normal browsers send value, IE sends button label
             if ("shutdownImmediate".equals(action) || _t("Shutdown immediately", ctx).equals(action)) {
-                if (ctx.hasWrapper())
-                    ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_HARD, false);
-                //ctx.router().shutdown(Router.EXIT_HARD); // never returns
+                if (ctx.hasWrapper()) {ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_HARD, false);}
                 ctx.router().shutdownGracefully(Router.EXIT_HARD); // give the UI time to respond
-            } else if ("cancelShutdown".equals(action) || _t("Cancel shutdown", ctx).equals(action) ||
-                       _t("Cancel restart", ctx).equals(action)) {
+            } else if ("cancelShutdown".equals(action) || _t("Cancel shutdown", ctx).equals(action) || _t("Cancel restart", ctx).equals(action)) {
                 ctx.router().cancelGracefulShutdown();
             } else if ("restartImmediate".equals(action) || _t("Restart immediately", ctx).equals(action)) {
-                if (ctx.hasWrapper())
-                    ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_HARD_RESTART, false);
-                //ctx.router().shutdown(Router.EXIT_HARD_RESTART); // never returns
+                if (ctx.hasWrapper()) {ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_HARD_RESTART, false);}
                 ctx.router().shutdownGracefully(Router.EXIT_HARD_RESTART); // give the UI time to respond
             } else if ("restart".equals(action) || _t("Restart", ctx).equals(action)) {
-                if (ctx.hasWrapper())
-                    ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_GRACEFUL_RESTART, false);
+                if (ctx.hasWrapper()) {ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_GRACEFUL_RESTART, false);}
                 ctx.router().shutdownGracefully(Router.EXIT_GRACEFUL_RESTART);
             } else if ("shutdown".equals(action) || _t("Shutdown", ctx).equals(action)) {
-                if (ctx.hasWrapper())
-                    ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_GRACEFUL, false);
+                if (ctx.hasWrapper()) {ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_GRACEFUL, false);}
                 ctx.router().shutdownGracefully();
             }
         }
@@ -71,10 +61,8 @@ public class ConfigRestartBean {
         StringBuilder buf = new StringBuilder(128);
         if ((shuttingDown || restarting) && timeRemaining <= 45*1000) {
             buf.append("<h4 id=sb_shutdownStatus class=volatile><span>");
-            if (restarting)
-                buf.append(_t("Restart imminent", ctx));
-            else
-                buf.append(_t("Shutdown imminent", ctx));
+            if (restarting) {buf.append(_t("Restart imminent", ctx));}
+            else {buf.append(_t("Shutdown imminent", ctx));}
             buf.append("</span></h4>");
         } else if (shuttingDown) {
             buf.append("<h4 id=sb_shutdownStatus class=volatile><span>");
@@ -108,10 +96,8 @@ public class ConfigRestartBean {
             buf.append("</span></h4><hr>");
             buttons(ctx, buf, urlBase, systemNonce, SET2);
         } else {
-            if (ctx.hasWrapper() || NewsHelper.isExternalRestartPending())
-                buttons(ctx, buf, urlBase, systemNonce, SET3);
-            else
-                buttons(ctx, buf, urlBase, systemNonce, SET4);
+            if (ctx.hasWrapper() || NewsHelper.isExternalRestartPending()) {buttons(ctx, buf, urlBase, systemNonce, SET3);}
+            else {buttons(ctx, buf, urlBase, systemNonce, SET4);}
         }
         return buf.toString();
     }
@@ -131,24 +117,21 @@ public class ConfigRestartBean {
         buf.append("</form>\n");
     }
 
-    private static boolean isShuttingDown(RouterContext ctx) {
+    public static boolean isShuttingDown(RouterContext ctx) {
         int code = ctx.router().scheduledGracefulExitCode();
-        return Router.EXIT_GRACEFUL == code ||
-               Router.EXIT_HARD == code;
+        return Router.EXIT_GRACEFUL == code || Router.EXIT_HARD == code;
     }
 
-    private static boolean isRestarting(RouterContext ctx) {
+    public static boolean isRestarting(RouterContext ctx) {
         int code = ctx.router().scheduledGracefulExitCode();
-        return Router.EXIT_GRACEFUL_RESTART == code ||
-               Router.EXIT_HARD_RESTART == code;
+        return Router.EXIT_GRACEFUL_RESTART == code || Router.EXIT_HARD_RESTART == code;
     }
 
     /** this is for summaryframe.jsp */
     public static long getRestartTimeRemaining() {
         RouterContext ctx = ContextHelper.getContext(null);
-        if (ctx.router().gracefulShutdownInProgress())
-            return ctx.router().getShutdownTimeRemaining();
-        return Long.MAX_VALUE/2;  // summaryframe.jsp adds a safety factor so we don't want to overflow...
+        if (ctx.router().gracefulShutdownInProgress()) {return ctx.router().getShutdownTimeRemaining();}
+        return Long.MAX_VALUE/2; // summaryframe.jsp adds a safety factor so we don't want to overflow...
     }
 
     private static String _t(String s, RouterContext ctx) {

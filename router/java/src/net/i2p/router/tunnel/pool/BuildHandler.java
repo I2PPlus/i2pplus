@@ -220,9 +220,9 @@ class BuildHandler implements Runnable {
         _isRunning = true;
         while (_isRunning && !_manager.isShutdown()) {
             try {handleInboundRequest();}
-            catch (RuntimeException e) {_log.log(Log.CRIT, "B0rked in the tunnel handler", e);}
+            catch (RuntimeException e) {_log.log(Log.CRIT, "Catastrophic Tunnel Manager failure! -> " +  e.getMessage());}
         }
-        if (_log.shouldWarn()) {_log.warn("Completed handling inbound build requests");}
+        if (_log.shouldWarn()) {_log.warn("Completed handling Inbound build requests");}
         _isRunning = false;
     }
 
