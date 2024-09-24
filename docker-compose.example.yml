@@ -1,0 +1,10 @@
+services:
+    i2p:
+        build:
+          context: .
+        network_mode: host
+        volumes:
+            - ./docker/run/home/config:/i2p/.i2p
+            - ./docker/run/torrents:/i2psnark
+        environment:
+            IP_ADDR: "0.0.0.0"
