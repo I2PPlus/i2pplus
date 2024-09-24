@@ -11,9 +11,9 @@ fi
 # Explicitly define HOME otherwise it might not have been set
 export HOME=/i2p
 
-export I2P=${HOME}/i2p
+export I2P=${HOME}
 
-echo "Starting I2P"
+echo "Starting I2P+..."
 
 cd $HOME
 export CLASSPATH=.
@@ -27,8 +27,12 @@ if [ -f /.dockerenv ] || [ -f /run/.containerenv ]; then
     if [ -z "$IP_ADDR" ]; then
         export IP_ADDR=$(hostname -i)
         echo "[startapp] Running in docker network"
+        echo ""
+        echo "Note: To access from other computers on your lan, set IP_ADDR to this host's lan ip,"
+        echo "or 0.0.0.0 for access from anywhere - make sure your firewall permissions prevent"
+        echo "access from the public internet if using 0.0.0.0"
     fi
-    echo "[startapp] setting reachable IP to container IP $IP_ADDR"
+    echo "[startapp] Setting reachable IP to container IP $IP_ADDR"
     find . -name '*.config' -exec sed -i "s/127.0.0.1/$IP_ADDR/g" {} \;
     find . -name '*.config' -exec sed -i "s/localhost/$IP_ADDR/g" {} \;
 fi

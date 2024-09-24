@@ -1,19 +1,22 @@
-FROM alpine:latest as builder
+FROM alpine:latest AS builder
 
 ENV APP_HOME="/i2p"
 
 WORKDIR /tmp/build
+
+RUN apk add gettext tar bzip2 apache-ant openjdk21 git
+
 COPY . .
 
-RUN apk add --virtual build-base gettext tar bzip2 apache-ant openjdk17 \
-    && ant preppkg-linux-only \
-    && rm -rf pkg-temp/osid pkg-temp/lib/wrapper pkg-temp/lib/wrapper.* \
-    && apk del build-base gettext tar bzip2 apache-ant openjdk17
+RUN echo "build.built-by=DockerUser" >> override.properties
+
+RUN ant preppkg-linux-only
+RUN rm -rf pkg-temp/osid pkg-temp/lib/wrapper pkg-temp/lib/wrapper.*
 
 FROM alpine:latest
 ENV APP_HOME="/i2p"
 
-RUN apk add openjdk17-jre ttf-opensans
+RUN apk add openjdk21-jre ttf-opensans
 WORKDIR ${APP_HOME}
 COPY --from=builder /tmp/build/pkg-temp .
 
