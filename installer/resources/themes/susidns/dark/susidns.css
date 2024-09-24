@@ -129,6 +129,7 @@ td.checkbox{padding:3px 10px;width:1%}
 .destaddress::selection{background:rgba(255,255,0,.99)}
 .destaddress,textarea{scrollbar-color:rgba(16,48,16,.4) #0000}
 #book+#buttons{margin-top:3px;padding:0 0 10px;border:var(--border)}
+.iframe #book+#buttons{margin-bottom:-2px}
 #book,#emptybook{margin:-29px 0 -5px;padding:0}
 #empty{margin-top:-4px;width:100%;border-bottom:var(--border)}
 #emptybook{margin-bottom:-7px}
