@@ -4,7 +4,7 @@ ENV APP_HOME="/i2p"
 
 WORKDIR /tmp/build
 
-RUN apk add --virtual build-base gettext tar bzip2 apache-ant openjdk21 git
+RUN apk add gettext tar bzip2 apache-ant openjdk21 git
 
 COPY . .
 RUN echo "build.built-by=Docker" >> override.properties
