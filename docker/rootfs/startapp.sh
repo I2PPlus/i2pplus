@@ -5,7 +5,7 @@ set -e
 if [ -z $JVM_XMX ]; then
     echo "[startapp] Using the default 512MB JVM heap limit for I2P+..."
     echo "[startapp] To configure a different maximum value, change the JVM_XMX"
-    echo "[startapp] variable value in startapp.sh (for example JVM_XMX=256m)"
+    echo "[startapp] variable value in startapp.sh (for example JVM_XMX=1024m)"
     echo ""
     JVM_XMX=512m
 fi
@@ -36,10 +36,10 @@ export CLASSPATH
 
 # Configure IP address based on container environment
 if [ -f /.dockerenv ] || [ -f /run/.containerenv ]; then
-    echo "[startapp] Running I2P+ in container"
+    echo "[startapp] Running I2P+ in docker container"
     if [ -z "$IP_ADDR" ]; then
         export IP_ADDR=$(hostname -i)
-        echo "[startapp] Running I2P+ in docker network"
+        echo "[startapp] Docker network isolation enabled: use $IP_ADDR to access I2P+ locally"
         echo ""
         echo "[startapp] Note: To access I2P+ from other computers on your lan, set IP_ADDR to this host's lan ip,"
         echo "[startapp] or 0.0.0.0 for access from anywhere - make sure your firewall permissions prevent"
@@ -64,6 +64,6 @@ fi
 JAVA_OPTS="-Djava.net.preferIPv4Stack=false -Djava.library.path=${I2P}:${I2P}/lib -Di2p.dir.base=${I2P} -Di2p.dir.config=${HOME}/.i2p -DloggerFilenameOverride=logs/log-router-@.txt -Xmx$JVM_XMX"
 
 # Launch I2P+
-echo "[startapp] Launching I2P+ ... please standy by ..."
+echo "[startapp] Launching I2P+ ... please stand by ..."
 echo ""
 java -cp "${CLASSPATH}" ${JAVA_OPTS} net.i2p.router.RouterLaunch
