@@ -35,8 +35,7 @@ public class TestJob extends JobImpl {
     private TunnelInfo _outTunnel;
     private TunnelInfo _replyTunnel;
     private PooledTunnelCreatorConfig _otherTunnel;
-    /** save this so we can tell the SKM to kill it if the test fails */
-    private SessionTag _encryptTag;
+    private SessionTag _encryptTag; // save this so we can tell the SKM to kill it if the test fails
     private RatchetSessionTag _ratchetEncryptTag;
     private static final AtomicInteger __id = new AtomicInteger();
     private int _id;
@@ -48,53 +47,46 @@ public class TestJob extends JobImpl {
         super(ctx);
         _log = ctx.logManager().getLog(TestJob.class);
         _cfg = cfg;
-        if (pool != null)
-            _pool = pool;
-        else
-            _pool = cfg.getTunnelPool();
-        if ( (_pool == null) && (_log.shouldError()) )
+        if (pool != null) {_pool = pool;}
+        else {_pool = cfg.getTunnelPool();}
+        if ((_pool == null) && (_log.shouldError())) {
             _log.error("Invalid tunnel test configuration: no pool for " + cfg, new Exception("origin"));
+        }
         getTiming().setStartAfter(getDelay() + ctx.clock().now());
         // stats are created in TunnelPoolManager
     }
 
-    public String getName() { return "Test Local Tunnel"; }
+    public String getName() {return "Test Local Tunnel";}
 
     public void runJob() {
-        if (_pool == null || !_pool.isAlive())
-            return;
+        if (_pool == null || !_pool.isAlive()) {return;}
         final RouterContext ctx = getContext();
         long lag = ctx.jobQueue().getMaxLag();
         if (lag > 250) {
-            if (_log.shouldWarn())
-                _log.warn("Deferred test due to job lag (" + lag + "ms) -> " + _cfg);
+            if (_log.shouldWarn()) {_log.warn("Deferred test due to job lag (" + lag + "ms) -> " + _cfg);}
             ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
             scheduleRetest();
             return;
         }
-        if (ctx.router().gracefulShutdownInProgress())
-            return;   // don't reschedule
+        if (ctx.router().gracefulShutdownInProgress()) {return;} // don't reschedule
         _found = false;
         boolean isExpl = _pool.getSettings().isExploratory();
         if (_cfg.isInbound()) {
             _replyTunnel = _cfg;
-            if (isExpl)
-                _outTunnel = ctx.tunnelManager().selectOutboundTunnel();
-            else
-                _outTunnel = ctx.tunnelManager().selectOutboundTunnel(_pool.getSettings().getDestination());
+            if (isExpl) {_outTunnel = ctx.tunnelManager().selectOutboundTunnel();}
+            else {_outTunnel = ctx.tunnelManager().selectOutboundTunnel(_pool.getSettings().getDestination());}
             _otherTunnel = (PooledTunnelCreatorConfig) _outTunnel;
         } else {
-            if (isExpl)
-                _replyTunnel = ctx.tunnelManager().selectInboundTunnel();
-            else
-                _replyTunnel = ctx.tunnelManager().selectInboundTunnel(_pool.getSettings().getDestination());
+            if (isExpl) {_replyTunnel = ctx.tunnelManager().selectInboundTunnel();}
+            else {_replyTunnel = ctx.tunnelManager().selectInboundTunnel(_pool.getSettings().getDestination());}
             _outTunnel = _cfg;
             _otherTunnel = (PooledTunnelCreatorConfig) _replyTunnel;
         }
 
-        if ( (_replyTunnel == null) || (_outTunnel == null) ) {
-            if (_log.shouldWarn())
+        if ((_replyTunnel == null) || (_outTunnel == null)) {
+            if (_log.shouldWarn()) {
                 _log.warn("Insufficient tunnels to test " + _cfg + " with: " + _replyTunnel + " / " + _outTunnel);
+            }
             ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
             scheduleRetest();
         } else {
@@ -115,9 +107,9 @@ public class TestJob extends JobImpl {
     }
 
     private void sendTest(I2NPMessage m, int testPeriod) {
-        // garlic route that DeliveryStatusMessage to ourselves so the endpoints and gateways
-        // can't tell its a test.  to simplify this, we encrypt it with a random key and tag,
-        // remembering that key+tag so that we can decrypt it later.  this means we can do the
+        // Garlic route that DeliveryStatusMessage to ourselves so the endpoints and gateways
+        // can't tell it's a test.  To simplify this, we encrypt it with a random key and tag,
+        // remembering that key+tag so that we can decrypt it later.  This means we can do the
         // garlic encryption without any ElGamal (yay)
         final RouterContext ctx = getContext();
         if (ctx.random().nextInt(4) != 0) {
@@ -125,32 +117,27 @@ public class TestJob extends JobImpl {
             if (_cfg.isInbound() && !_pool.getSettings().isExploratory()) {
                 // to client. false means don't force AES
                 sess = MessageWrapper.generateSession(ctx, _pool.getSettings().getDestination(), testPeriod, false);
-            } else {
-                // to router. AES or ChaCha.
-                sess = MessageWrapper.generateSession(ctx, testPeriod);
-            }
+            } else {sess = MessageWrapper.generateSession(ctx, testPeriod);} // to router. AES or ChaCha.
             if (sess == null) {
                 scheduleRetest();
                 return;
             }
             if (sess.tag != null) {
-                // AES
-                _encryptTag = sess.tag;
+                _encryptTag = sess.tag; // AES
                 m = MessageWrapper.wrap(ctx, m, sess.key, sess.tag);
             } else {
-                // ratchet
-                _ratchetEncryptTag = sess.rtag;
+                _ratchetEncryptTag = sess.rtag; // ratchet
                 m = MessageWrapper.wrap(ctx, m, sess.key, sess.rtag);
             }
             if (m == null) {
-                // overloaded / unknown peers / etc
-                scheduleRetest();
+                scheduleRetest(); // overloaded / unknown peers / etc
                 return;
             }
         } else {
             // Periodically send unencrypted DSM to provide cover for netdb replies
-            if (_log.shouldDebug())
+            if (_log.shouldDebug()) {
                 _log.debug("Sending unencrypted garlic test to provide cover for NetDb replies...");
+            }
         }
         _id = __id.getAndIncrement();
         if (_log.shouldDebug()) {
@@ -165,21 +152,13 @@ public class TestJob extends JobImpl {
         if (_pool == null || !_pool.isAlive()) {return;}
         getContext().statManager().addRateData("tunnel.testSuccessLength", _cfg.getLength());
         getContext().statManager().addRateData("tunnel.testSuccessTime", ms);
-
         _outTunnel.incrementVerifiedBytesTransferred(1024);
-        // reply tunnel is marked in the inboundEndpointProcessor
-        //_replyTunnel.incrementVerifiedBytesTransferred(1024);
-
+        /* reply tunnel is marked in the inboundEndpointProcessor */
         noteSuccess(ms, _outTunnel);
         noteSuccess(ms, _replyTunnel);
-
         _cfg.testJobSuccessful(ms);
-        // credit the expl. tunnel too
-        if (_otherTunnel.getLength() > 1) {_otherTunnel.testJobSuccessful(ms);}
-
-        if (_log.shouldDebug()) {
-            _log.debug("Tunnel Test [#" + _id + "] succeeded in " + ms + "ms -> " + _cfg);
-        }
+        if (_otherTunnel.getLength() > 1) {_otherTunnel.testJobSuccessful(ms);} // credit the expl. tunnel too
+        if (_log.shouldDebug()) {_log.debug("Tunnel Test [#" + _id + "] succeeded in " + ms + "ms -> " + _cfg);}
         scheduleRetest();
     }
 
@@ -199,29 +178,22 @@ public class TestJob extends JobImpl {
             noteSuccess(timeToFail, _replyTunnel);
         }
         boolean isExpl = _pool.getSettings().isExploratory();
-        if (isExpl) {
-            getContext().statManager().addRateData("tunnel.testExploratoryFailedTime", timeToFail);
-        } else {
-            getContext().statManager().addRateData("tunnel.testFailedTime", timeToFail);
-        }
+        if (isExpl) {getContext().statManager().addRateData("tunnel.testExploratoryFailedTime", timeToFail);}
+        else {getContext().statManager().addRateData("tunnel.testFailedTime", timeToFail);}
         if (_log.shouldWarn()) {
             _log.warn((isExpl ? "Exploratory tunnel" : "Tunnel") + " Test failed in " + timeToFail + "ms -> " + _cfg);
         }
         boolean keepGoing = _cfg.tunnelFailed();
-        // blame the expl. tunnel too
-        if (_otherTunnel.getLength() > 1) {_otherTunnel.tunnelFailed();}
+        if (_otherTunnel.getLength() > 1) {_otherTunnel.tunnelFailed();} // blame the expl. tunnel too
         if (keepGoing) {scheduleRetest(true);}
         else {
-            if (isExpl) {
-                getContext().statManager().addRateData("tunnel.testExploratoryFailedCompletelyTime", timeToFail);
-            } else {
-                getContext().statManager().addRateData("tunnel.testFailedCompletelyTime", timeToFail);
-            }
+            if (isExpl) {getContext().statManager().addRateData("tunnel.testExploratoryFailedCompletelyTime", timeToFail);}
+            else {getContext().statManager().addRateData("tunnel.testFailedCompletelyTime", timeToFail);}
         }
     }
 
     /** randomized time we should wait before testing */
-    private int getDelay() { return TEST_DELAY + getContext().random().nextInt(TEST_DELAY / 3); }
+    private int getDelay() {return TEST_DELAY + getContext().random().nextInt(TEST_DELAY / 3);}
 
     /** how long we allow tests to run for before failing them */
     private int getTestPeriod() {
@@ -244,18 +216,19 @@ public class TestJob extends JobImpl {
         return 20*1000;
     }
 
-    private void scheduleRetest() { scheduleRetest(false); }
+    private void scheduleRetest() {scheduleRetest(false);}
 
     private void scheduleRetest(boolean asap) {
-        if (_pool == null || !_pool.isAlive())
-            return;
+        if (_pool == null || !_pool.isAlive()) {return;}
         if (asap) {
-            if (_cfg.getExpiration() > getContext().clock().now() + (60 * 1000))
+            if (_cfg.getExpiration() > getContext().clock().now() + (60 * 1000)) {
                 requeue((TEST_DELAY / 4) + getContext().random().nextInt(TEST_DELAY / 4));
+            }
         } else {
             int delay = getDelay();
-            if (_cfg.getExpiration() > getContext().clock().now() + delay + (3 * getTestPeriod()))
+            if (_cfg.getExpiration() > getContext().clock().now() + delay + (3 * getTestPeriod())) {
                 requeue(delay);
+            }
         }
     }
 
@@ -269,9 +242,9 @@ public class TestJob extends JobImpl {
             _found = false;
         }
 
-        public boolean continueMatching() { return !_found && getContext().clock().now() < _expiration; }
+        public boolean continueMatching() {return !_found && getContext().clock().now() < _expiration;}
 
-        public long getExpiration() { return _expiration; }
+        public long getExpiration() {return _expiration;}
 
         public boolean isMatch(I2NPMessage message) {
             if (message.getType() == DeliveryStatusMessage.MESSAGE_TYPE) {
@@ -283,8 +256,8 @@ public class TestJob extends JobImpl {
         @Override
         public String toString() {
             StringBuilder rv = new StringBuilder(64);
-            rv.append("Testing tunnel ").append(_cfg.toString()).append(" waiting for ");
-            rv.append(_id).append(" found? ").append(_found);
+            rv.append("Testing tunnel ").append(_cfg.toString()).append(" waiting for ")
+              .append(_id).append(" found? ").append(_found);
             return rv.toString();
         }
     }
@@ -296,19 +269,16 @@ public class TestJob extends JobImpl {
         private long _successTime;
         private OutNetMessage _sentMessage;
 
-        public OnTestReply() { super(TestJob.this.getContext()); }
+        public OnTestReply() {super(TestJob.this.getContext());}
 
-        public String getName() { return "Verify Tunnel Test"; }
+        public String getName() {return "Verify Tunnel Test";}
 
-        public void setSentMessage(OutNetMessage m) { _sentMessage = m; }
+        public void setSentMessage(OutNetMessage m) {_sentMessage = m;}
 
         public void runJob() {
-            if (_sentMessage != null)
-                getContext().messageRegistry().unregisterPending(_sentMessage);
-            if (_successTime < getTestPeriod())
-                testSuccessful((int)_successTime);
-            else
-                testFailed(_successTime);
+            if (_sentMessage != null) {getContext().messageRegistry().unregisterPending(_sentMessage);}
+            if (_successTime < getTestPeriod()) {testSuccessful((int)_successTime);}
+            else {testFailed(_successTime);}
             _found = true;
         }
 
@@ -320,8 +290,8 @@ public class TestJob extends JobImpl {
         @Override
         public String toString() {
             StringBuilder rv = new StringBuilder(64);
-            rv.append("Testing tunnel ").append(_cfg.toString());
-            rv.append(" successful after ").append(_successTime).append("ms");
+            rv.append("Testing tunnel ").append(_cfg.toString())
+              .append(" successful after ").append(_successTime).append("ms");
             return rv.toString();
         }
     }
@@ -337,7 +307,7 @@ public class TestJob extends JobImpl {
             _started = now;
         }
 
-        public String getName() { return "Timeout Tunnel Test"; }
+        public String getName() {return "Timeout Tunnel Test";}
 
         public void runJob() {
             if (_log.shouldDebug())
@@ -347,40 +317,27 @@ public class TestJob extends JobImpl {
                 SessionKeyManager skm;
                 if (_cfg.isInbound() && !_pool.getSettings().isExploratory()) {
                     skm = getContext().clientManager().getClientSessionKeyManager(_pool.getSettings().getDestination());
-                } else {
-                    skm = getContext().sessionKeyManager();
-                }
+                } else {skm = getContext().sessionKeyManager();}
                 if (skm != null) {
-                    if (_encryptTag != null) {
-                        // AES
-                        skm.consumeTag(_encryptTag);
-                    } else {
-                        // ratchet
-                        RatchetSKM rskm;
-                        if (skm instanceof RatchetSKM) {
-                            rskm = (RatchetSKM) skm;
-                        } else if (skm instanceof MuxedSKM) {
-                            rskm = ((MuxedSKM) skm).getECSKM();
-                        } else {
-                            // shouldn't happen
-                            rskm = null;
-                        }
-                        if (rskm != null)
-                            rskm.consumeTag(_ratchetEncryptTag);
+                    if (_encryptTag != null) {skm.consumeTag(_encryptTag);} // AES
+                    else {
+                        RatchetSKM rskm; // ratchet
+                        if (skm instanceof RatchetSKM) {rskm = (RatchetSKM) skm;}
+                        else if (skm instanceof MuxedSKM) {rskm = ((MuxedSKM) skm).getECSKM();}
+                        else {rskm = null;} // shouldn't happen
+                        if (rskm != null) {rskm.consumeTag(_ratchetEncryptTag);}
                     }
                 }
             }
-            if (!_found) {
-                testFailed(getContext().clock().now() - _started);
-            }
+            if (!_found) {testFailed(getContext().clock().now() - _started);}
         }
 
         @Override
         public String toString() {
             StringBuilder rv = new StringBuilder(64);
-            rv.append("Testing tunnel ").append(_cfg.toString());
-            rv.append(" timed out");
+            rv.append("Testing tunnel ").append(_cfg.toString()).append(" timed out");
             return rv.toString();
         }
     }
+
 }
