@@ -48,8 +48,11 @@ class BanlistRenderer {
             Hash key = e.getKey();
             Banlist.Entry entry = e.getValue();
             long expires = entry.expireOn-_context.clock().now();
-            if (expires <= 0)
+            if (expires <= 0) {continue;}
+            if (entries.size() > 300 && (entry.causeCode != null && entry.causeCode.contains("LU")) ||
+                (entry.cause != null && entry.cause.contains("LU"))) {
                 continue;
+            }
             buf.append("<li class=lazy>").append(_context.commSystem().renderPeerHTML(key, false));
             buf.append(' ').append("<span class=banperiod>");
             String expireString = DataHelper.formatDuration2(expires);
