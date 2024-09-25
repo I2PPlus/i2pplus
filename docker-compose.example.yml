@@ -1,8 +1,18 @@
+# docker-compose.yml
+
+# Service definition for I2P router
 services:
-    i2p:
-        build:
-          context: .
-        network_mode: host
-        volumes:
-            - ./docker/run/home/config:/i2p/.i2p
-            - ./docker/run/torrents:/i2psnark
+  i2p:
+    # Build the service from the Dockerfile in the current directory
+    build:
+      context: .
+
+    # Run the container in host network mode for direct access to host network
+    network_mode: host
+
+    # Mount volumes for persistent data storage
+    volumes:
+      # Config directory for I2P router
+      - ${I2P_CONFIG_DIR:-./docker/run/home/config}:/i2p/.i2p
+      # Torrents directory for I2PSnark
+      - ${TORRENTS_DIR:-./docker/run/torrents}:/i2psnark

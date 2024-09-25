@@ -10,8 +10,8 @@ if [ -z $JVM_XMX ]; then
     JVM_XMX=512m
 fi
 
-# Manually configure an ip address to use by uncommenting the
-# IP_ADDR line below and editing as required
+# Manually configure an ip address to use for I2P+ service access
+# by uncommenting the IP_ADDR line below and editing as required
 #IP_ADDR=192.168.1.10
 
 # Set environment variables
@@ -39,7 +39,6 @@ if [ -f /.dockerenv ] || [ -f /run/.containerenv ]; then
     echo "[startapp] Running I2P+ in docker container"
     if [ -z "$IP_ADDR" ]; then
         export IP_ADDR=$(hostname -i)
-        echo "[startapp] Docker network isolation enabled: use $IP_ADDR to access I2P+ locally"
         echo ""
         echo "[startapp] Note: To access I2P+ from other computers on your lan, set IP_ADDR to this host's lan ip,"
         echo "[startapp] or 0.0.0.0 for access from anywhere - make sure your firewall permissions prevent"
