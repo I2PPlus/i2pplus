@@ -51,16 +51,19 @@
     String l = request.getParameter("l");
     String ls = request.getParameter("ls");
     String r = request.getParameter("r");
+    boolean delayLoad = false;
     if (f == null && l == null && ls == null && r == null) {
 %>
 <h1 class=netwrk><%=intl._t("Network Database")%></h1>
 <%
     } else if (f != null) {
         if (f.equals("1") || f.equals("2")) {
+            delayLoad = true;
 %>
 <h1 class=netwrk><%=intl._t("Network Database")%> &ndash; <%=intl._t("All Routers")%></h1>
 <%
         } else if (f.equals("3")) {
+            delayLoad = true;
 %>
 <h1 class=netwrk><%=intl._t("Network Database")%> &ndash; <%=intl._t("Sybil Analysis")%></h1>
 <%
@@ -83,6 +86,7 @@
 <h1 class=netwrk><%=intl._t("Network Database")%> &ndash; <%=intl._t("LeaseSet Lookup")%></h1>
 <%
         } else if (r == null && ls == null && l != null) {
+            delayLoad = true;
 %>
 <h1 class=netwrk><%=intl._t("Network Database")%> &ndash; <%=intl._t("LeaseSets")%></h1>
 <%
@@ -98,6 +102,9 @@
     }
 %>
 <div class=main id=netdb>
+<%  if (delayLoad) { %>
+<div id=netdbwrap style=height:5px;opacity:0>
+<%  } %>
 <%  if (r == null && ls != null || l != null) { %>
 <div class=leasesets_container>
 <%  } %>
@@ -111,6 +118,10 @@
 </div>
 <%  } %>
 </div>
+<%  if (delayLoad) { %>
+</div>
+<style>#netdbwrap{height:unset!important;opacity:1!important}#netdb::before{display:none}</style>
+<%  } %>
 <script nonce=<%=cspNonce%> src=/js/lazyload.js></script>
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.js></script>
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.number.js></script>
