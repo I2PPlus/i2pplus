@@ -114,7 +114,6 @@
             var pbodyResponse = xhrprofiles.responseXML.getElementById("pbody");
             pbody.innerHTML = pbody.innerHTML;
             sorterP.refresh();
-            lazyload();
           } else {
             var plistResponse = xhrprofiles.responseXML.getElementById("profilelist");
             plist.innerHTML = plistResponse.innerHTML;
@@ -130,7 +129,6 @@
             var ffprofilesResponse = xhrprofiles.responseXML.getElementById("ffProfiles");
             ffprofiles.innerHTML = ffprofilesResponse.innerHTML;
             sorterFF.refresh();
-            lazyload();
           } else {
             var ffResponse = xhrprofiles.responseXML.getElementById("floodfills");
             ff.innerHTML = ffResponse.innerHTML;
@@ -157,7 +155,6 @@
     }
   }
   document.addEventListener("DOMContentLoaded", () => {
-    lazyload();
     initRefresh();
     progressx.hide();
   });

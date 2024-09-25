@@ -82,8 +82,6 @@
 
   function initRefresh() {
     addSortListeners();
-    //refreshPeers();
-    lazyload();
   }
 
   function addSortListeners() {
