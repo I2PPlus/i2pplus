@@ -35,7 +35,7 @@ LABEL \
       org.label-schema.name="i2p" \
       org.label-schema.description="Docker container for I2P+" \
       org.label-schema.version="1.0" \
-      org.label-schema.vcs-url="https://gitlab.com/i2pplus/I2P.Plus" \
+      org.label-schema.vcs-url="https://github.com/I2PPlus/i2pplus" \
       org.label-schema.schema-version="1.0"
 
 ENTRYPOINT ["/startapp.sh"]
