@@ -47,7 +47,8 @@ if [ -f /.dockerenv ] || [ -f /run/.containerenv ]; then
         echo ""
     fi
     echo "[startapp] Setting IP address for I2P+ console and service access to $IP_ADDR"
-    echo "[startapp] When I2P+ is running, you can reach the web console at https:://$IP_ADDR:7667/"
+    echo "[startapp] When I2P+ is running, you can reach the web console at https://$IP_ADDR:7667/"
+    echo "[startapp] Note that your browser may warn you about the site certificate which is self-signed."
     echo ""
 
     # Update configuration files with the new IP
