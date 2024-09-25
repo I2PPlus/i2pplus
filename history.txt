@@ -1,3 +1,6 @@
+2024-09-25 dr|z3d
+ * Console: Exclude LU class routers from banlist display if bans > 300
+
 2024-09-23 dr|z3d
  * Console:
    - Sort sidebar service tunnels by icon and type
