@@ -27,7 +27,7 @@ if [ -d "lib" ]; then
         CLASSPATH="${CLASSPATH}:${jar}"
     done
 else
-    echo "[startapp] Error: lib directory not found. Cannot build classpath!"
+    echo "[startapp] Error: i2p/lib directory not found. Cannot build classpath!"
     exit 1
 fi
 
