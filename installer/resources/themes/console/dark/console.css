@@ -2888,6 +2888,7 @@ span#newtab{margin-top:4px}
 .leaseset th{line-height:1}
 .log_debug,.log_info,.log_warn,.log_error,.log_crit,.log_omitted{margin-bottom:-3px;min-width:42px;max-width:42px}
 .main,#news,h1,h1[class],.sorry,h1+.sorry,#console_404 .sorry{margin-left:272px}
+.sb_netstatus.floodfill.restarting::after{width:18px;height:18px;display:inline-block;content:"";position:absolute;left:calc(50% - 60px);top:calc(50% - 8px);background:var(--update) no-repeat left center/cover}
 .newsAuthor{padding-left:18px;background-size:13px}
 .sb_info .percentBarText{margin-top:-1px}
 .sb_info.sb_update{padding:5px 5px 6px}
