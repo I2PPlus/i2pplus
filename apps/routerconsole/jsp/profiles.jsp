@@ -45,7 +45,8 @@
 <%
     }
 %>
-<div class=main id=profiles><div class=wideload>
+<div class=main id=profiles>
+<div class=wideload style=height:5px;opacity:0>
 <%
     profilesHelper.storeWriter(out);
     if (allowIFrame)
@@ -159,5 +160,6 @@
     progressx.hide();
   });
 </script>
+<style>.wideload{height:unset!important;opacity:1!important}#profiles::before{display:none}</style>
 </body>
 </html>
