@@ -372,9 +372,11 @@ main {position:relative}
 #navi{position:relative;z-index:2000}
 #paginate{margin-right:68px}
 #export a{margin:7px 0 0 3px;padding:0;height:26px;width:26px;min-width:0;display:inline-block;vertical-align:middle;line-height:0;font-size:0}
-#export #addNewDest{background:var(--add) no-repeat center center/14px,var(--th)}
+#export #addNewDest{background:var(--add) no-repeat center center/12px,var(--th)}
 #export #addNewDest:hover{background-image:var(--add_hover)}
 #export #importFromFile{margin-right:-8px;background:var(--download) no-repeat center center/14px,var(--th)}
 #export #importFromFile:hover{background-image:var(--download_hover)}
-#exporthosts{transform:rotateX(180deg)}
-@keyframes slideDown{from{transform:translateY(-800px)}to{transform:translateY(0)}
+input#exporthosts{background:var(--save) no-repeat center center/14px,var(--th)}
+input#exporthosts:hover,input#exporthosts:active{background:var(--save_hover) no-repeat center center/14px,var(--th)}
+#export input:active,#export .fakebutton:active{box-shadow:var(--btn_shadow_active);background-color:#050}
+@keyframes slideDown{from{transform:translateY(-800px)}to{transform:translateY(0)}}
