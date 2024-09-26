@@ -310,39 +310,50 @@ function refreshSidebar() {
     const graphCanvas = document.getElementById("minigraph");
     const ctx = graphCanvas ? graphCanvas.getContext("2d") : null;
 
-    function refreshGraph() {
+    if (ctx) {
+      ctx.imageSmoothingEnabled = false;
+      ctx.globalCompositeOperation = "copy";
+      ctx.globalAlpha = 1;
+    }
+
+    async function refreshGraph() {
       const graphContainer = document.getElementById("sb_graphcontainer");
       const graphContainerHR = document.querySelector("#sb_graphcontainer + hr");
       const minigraph = document.getElementById("minigraph");
       const minigraph_height = 50;
       const minigraph_width = 245;
-      const image = new Image(minigraph_width, minigraph_height);
-      if (minigraph) {
-        if (graphContainer.hidden === true) {
-          graphContainer.hidden = null;
-          graphContainerHR.hidden = null;
-        }
-        image.onload = renderGraph;
-        image.src = "/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=" + Date.now();
-        if (ctx) {
-          ctx.imageSmoothingEnabled = false;
-          ctx.imageSmoothingQuality = "low";
-          ctx.globalCompositeOperation = "copy";
-          ctx.globalAlpha = 1;
-          //minigraph.style.background = image.src;
-        }
+      const image = new Image();
 
-        function renderGraph() {
+      if (graphContainer.hidden === true) {
+        graphContainer.hidden = null;
+        graphContainerHR.hidden = null;
+      }
+
+      const response = await fetch(`/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=${Date.now()}`);
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      image.src = url;
+
+      return new Promise((resolve) => {
+        image.onload = () => {
           minigraph.width = minigraph_width;
           minigraph.height = minigraph_height;
-          if (ctx) {ctx.drawImage(image, 0, 0, minigraph_width, minigraph_height);}
-        }
-      }
+          if (ctx) {
+            ctx.drawImage(image, 0, 0, minigraph_width, minigraph_height);
+          }
+          resolve();
+        };
+      });
     }
+
     if ("requestIdleCallback" in window) {
-      requestIdleCallback(refreshGraph);
+      requestIdleCallback(async () => {
+        await refreshGraph();
+      });
     } else {
-      window.requestAnimationFrame(refreshGraph);
+      window.requestAnimationFrame(async () => {
+        await refreshGraph();
+      });
     }
 
     function uncollapse() {

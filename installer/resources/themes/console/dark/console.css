@@ -2354,7 +2354,7 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #logs #wrapperlogs .nologs{padding:7px 18px}
 #routerlogs li,#criticallogs li{margin:0 -11px 0 -9px;padding:0 10px;line-height:1.7;width:calc(100% - 5px)}
 #routerlogs li::after,#criticallogs li::after{display:none}
-#routerlogs li:hover font[color="#cc0000"],#criticallogs li:hover [color="#cc0000"]{filter:saturate(120%)}
+#routerlogs li:hover font[color],#criticallogs li:hover font[color="#cc0000"]{filter:saturate(120%)}
 #routerlogs li:hover font,#criticallogs li:hover font{filter:saturate(200%)}
 #routerlogs td p,#wrapperlogs td p{margin:0;width:fit-content}
 #routerlogs ul,#criticallogs ul{margin:-4px 0;border:0}
@@ -2376,7 +2376,7 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #logRefreshInterval:focus,#logFilterInput:focus{box-shadow:var(--btn_shadow_active);filter:none!important;caret-color:#225;background-blend-mode:normal}
 #logRefreshInterval:focus{background:var(--refresh) no-repeat 6px center / 16px,var(--input_txt)}
 
-#logs font[color^="#"]::before{margin-left:0;margin-right:5px;content:"";display:inline-block;width:6px;height:6px;vertical-align:calc(1px);color:#777;border-radius:50%;filter:saturate(1);animation:linear ping .1s}
+#logs font[color]::before{margin-left:0;margin-right:5px;content:"";display:inline-block;width:6px;height:6px;vertical-align:calc(1px);color:#777;border-radius:50%;filter:saturate(1);transform:none;animation:linear ping .1s}
 /* critical */
 font[color="#cc0000"]{color:#900}
 #logs li font[color="#cc0000"]::before{background:#900}
@@ -2591,7 +2591,7 @@ iframe.iframed{margin:15px 0 0}
 @keyframes hide-up{0%{margin-top:0;filter:opacity(1)}30%{filter:opacity(0)}100%{margin-top:-300px}}
 @keyframes indentity{from{text-indent:8%}to{text-indent:0}}
 @keyframes mainload{0%{width:0}100%{width:110%}}
-@keyframes ping{from{filter:saturate(2)}}
+@keyframes ping{from{filter:saturate(3);transform:scale(1.5)}}
 @keyframes progress{from{background-position:200%}to{background-position:0}}
 @keyframes reloader{0%,100%{width:0}80%,99%{width:120%}}
 @keyframes routerdown{from{background-position:-10px center}}

@@ -273,7 +273,15 @@ function start() {
     linkifyLeaseSets();
     linkifyIPv4();
     linkifyIPv6();
-    onVisible(mainLogs, initRefresh);
+    if ("requestIdleCallback" in window) {
+      onVisible(mainLogs, () => {
+        window.requestIdleCallback(initRefresh);
+      });
+    } else {
+      onVisible(mainLogs, () => {
+        window.requestAnimationFrame(initRefresh);
+      });
+    }
     onHidden(mainLogs, stopRefresh);
     updateInterval();
     addFilterInput();
