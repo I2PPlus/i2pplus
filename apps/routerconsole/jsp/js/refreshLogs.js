@@ -43,7 +43,7 @@ function start() {
   function refreshLogs() {
     const storedFilterValue = localStorage.getItem("logFilter");
     const filterInput = document.getElementById("logFilterInput");
-    let filterValue = filterInput.value.toLowerCase();
+    let filterValue = encodeURIComponent(filterInput.value.trim().toLowerCase()).replace(/%20/g, " ");
     if (storedFilterValue) {filterValue = storedFilterValue;}
 
     xhrlogs.open("GET", "/logs", true);
@@ -51,24 +51,21 @@ function start() {
     xhrlogs.onload = function () {
       if (!xhrlogs.responseXML) {return;}
       const mainLogsResponse = xhrlogs.responseXML.getElementById("logs");
+      const criticallogsResponse = criticallogs !== null ? xhrlogs.responseXML.getElementById("criticallogs") : null;
       progressx.show(theme);
       progressx.progress(0.3);
 
-      if (!xhrlogs.responseXML) {return;}
-
-      if (criticallogs) {
-        const criticallogsResponse = xhrlogs.responseXML.getElementById("criticallogs");
-        if (criticallogs && criticallogsResponse) {
+      if (!criticallogs && criticallogsResponse) {
+          mainLogs.innerHTML = mainLogsResponse.innerHTML;
+      } else if (criticallogs && criticallogsResponse) {
           if (criticallogsResponse.innerHTML !== criticallogs.innerHTML) {
             criticallogs.innerHTML = criticallogsResponse.innerHTML;
           }
-        } else if (!criticallogs && criticallogsResponse) {
-          mainLogs.innerHTML = mainLogsResponse.innerHTML;
-        } else {
-          critLogsHead.remove();
-          criticallogs.remove();
-        }
+      } else {
+        critLogsHead?.remove();
+        criticallogs?.remove();
       }
+
       if (routerlogsList) {
         const routerlogsListResponse = xhrlogs.responseXML.querySelector("#routerlogs td ul");
         const routerlogsFileInfoResponse = xhrlogs.responseXML.querySelector("#routerlogs tr:first-child td p");
