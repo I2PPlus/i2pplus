@@ -680,7 +680,7 @@
     <jar destfile="./build/launchi2p.jar">
       <manifest>
         <attribute name="Main-Class" value="net.i2p.router.RouterLaunch" />
-        <attribute name="Class-Path" value="lib/i2p.jar lib/router.jar lib/jbigi.jar lib/sam.jar lib/mstreaming.jar lib/streaming.jar lib/routerconsole.jar lib/i2ptunnel.jar lib/org.mortbay.jetty.jar lib/javax.servlet.jar lib/jasper-runtime.jar lib/commons-el.jar lib/wrapper.jar lib/systray.jar lib/desktopgui.jar lib/i2psnark.jar lib/jrobin.jar lib/jstl.jar lib/standard.jar lib/jetty-continuation.jar lib/jetty-deploy.jar lib/jetty-http.jar lib/jetty-i2p.jar lib/jetty-io.jar lib/jetty-rewrite-handler.jar lib/jetty-security.jar lib/jetty-servlet.jar lib/jetty-servlets.jar lib/jetty-start.jar lib/jetty-util.jar lib/jetty-webapp.jar lib/jetty-xml.jar lib/fcgi-client.jar lib/fcgi-server.jar lib/ecj.jar" />
+        <attribute name="Class-Path" value="lib/commons-el.jar lib/desktopgui.jar lib/i2p.jar lib/i2psnark.jar lib/i2ptunnel.jar lib/jasper-runtime.jar lib/javax.servlet.jar lib/jbigi.jar lib/jetty-continuation.jar lib/jetty-deploy.jar lib/jetty-http.jar lib/jetty-i2p.jar lib/jetty-io.jar lib/jetty-rewrite-handler.jar lib/jetty-security.jar lib/jetty-servlet.jar lib/jetty-servlets.jar lib/jetty-start.jar lib/jetty-util.jar lib/jetty-webapp.jar lib/jetty-xml.jar lib/jrobin.jar lib/jstl.jar lib/mstreaming.jar lib/org.mortbay.jetty.jar lib/pack200.jar lib/routerconsole.jar lib/router.jar lib/sam.jar lib/standard.jar lib/streaming.jar lib/systray.jar lib/wrapper.jar" />
         <attribute name="Built-By" value="${build.built-by}" />
         <attribute name="Build-Date" value="${build.timestamp}" />
         <attribute name="Base-Revision" value="${workspace.version}" />
