@@ -61,8 +61,7 @@
   }
 
   const debouncedLazyLoad = debounce(() => {
-    if ("requestIdleCallback" in window) {requestIdleCallback(lazyload);}
-    else {requestAnimationFrame(lazyload);}
+    requestAnimationFrame(lazyload);
   }, 180);
 
   function checkView() {lazyload();}
