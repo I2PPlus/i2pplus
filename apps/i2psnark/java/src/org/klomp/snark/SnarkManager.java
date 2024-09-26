@@ -1183,10 +1183,13 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
         }
 
+        String restart = _t("Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change.");
+
         if (_util.enableVaryInboundHops() != enableVaryInboundHops) {
             _config.setProperty(PROP_VARY_INBOUND_HOPS, Boolean.toString(enableVaryInboundHops));
             if (enableVaryInboundHops) {addMessage(_t("Enabled +0/1 tunnel hop randomization on Inbound tunnels"));}
             else {addMessage(_t("Disabled tunnel hop randomization on Inbound tunnels"));}
+            addMessage(restart);
             _util.setEnableVaryInboundHops(enableVaryInboundHops);
             changed = true;
         }
@@ -1195,6 +1198,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             _config.setProperty(PROP_VARY_OUTBOUND_HOPS, Boolean.toString(enableVaryOutboundHops));
             if (enableVaryOutboundHops) {addMessage(_t("Enabled +0/1 tunnel hop randomization on Outbound tunnels"));}
             else {addMessage(_t("Disabled tunnel hop randomization on Outbound tunnels"));}
+            addMessage(restart);
             _util.setEnableVaryOutboundHops(enableVaryOutboundHops);
             changed = true;
         }
