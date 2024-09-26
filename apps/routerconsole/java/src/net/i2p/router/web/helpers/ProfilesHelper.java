@@ -72,7 +72,7 @@ public class ProfilesHelper extends HelperBase {
                .append(_t("Total number of banned peers")).append(": <b>").append(banned).append("</b>");
             if (banned > 300) {
                 buf.append(".&nbsp;").append(_t("Note: \'LU\' class routers have been excluded from the list."))
-                   .append("&nbsp;").append(_t("To view, see {0}Session Bans{1}", "<a href=\"/profiles?f=4\">", "</a>"));
+                   .append("&nbsp;").append(_t("To view, see {0}Session Bans{1}.", "<a href=\"/profiles?f=4\">", "</a>"));
             }
             buf.append("</p>\n");
             _out.write(buf.toString());
