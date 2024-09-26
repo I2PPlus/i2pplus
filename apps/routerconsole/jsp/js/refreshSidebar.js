@@ -283,6 +283,11 @@ function refreshSidebar() {
       const updatingResponseLen = updatingResponse?.length;
       if (updatingLen !== updatingResponseLen) {
         window.requestAnimationFrame(refreshAll);
+      } else if ("requestIdleCallback" in window) {
+        requestIdleCallback(updateVolatile);
+        requestIdleCallback(sectionToggler);
+        requestIdleCallback(countTunnels);
+        requestIdleCallback(countNewsItems);
       } else {
         window.requestAnimationFrame(updateVolatile);
         window.requestAnimationFrame(sectionToggler);
@@ -340,7 +345,11 @@ function refreshSidebar() {
         }
       }
     }
-    window.requestAnimationFrame(refreshGraph);
+    if ("requestIdleCallback" in window) {
+      requestIdleCallback(refreshGraph);
+    } else {
+      window.requestAnimationFrame(refreshGraph);
+    }
 
     function uncollapse() {
       window.requestAnimationFrame(sectionToggler);
