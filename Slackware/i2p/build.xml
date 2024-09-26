@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project basedir="." default="slackpkg">
-    <target name="slackpkg">
-        <echo message="Building Slackware package." />
-        <chmod file="./i2p.Slackbuild" perm="755" />
-        <exec executable="./i2p.SlackBuild" failifexecutionfails="true" />
-    </target>
+  <target name="slackpkg">
+    <echo message="Building Slackware package." />
+    <chmod file="./i2p.Slackbuild" perm="755" />
+    <exec executable="./i2p.SlackBuild" failifexecutionfails="true" />
+  </target>
 </project>

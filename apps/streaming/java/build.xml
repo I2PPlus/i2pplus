@@ -1,321 +1,321 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="streaming">
-    <target name="all" depends="clean, build" />
-    <target name="build" depends="builddep, jar" />
-    <target name="builddep">
-        <!-- run from top level build.xml to get dependencies built -->
-    </target>
-    <condition property="depend.available">
-        <typefound name="depend" />
+  <target name="all" depends="clean, build" />
+  <target name="build" depends="builddep, jar" />
+  <target name="builddep">
+    <!-- run from top level build.xml to get dependencies built -->
+  </target>
+  <condition property="depend.available">
+    <typefound name="depend" />
+  </condition>
+  <target name="depend" if="depend.available">
+    <depend
+      cache="../../../build"
+      srcdir="./src:./test/junit"
+      destdir="./build/obj">
+      <!-- Depend on classes instead of jars where available -->
+      <classpath>
+        <pathelement location="../../../core/java/build/obj" />
+        <pathelement location="../../ministreaming/java/build/obj" />
+      </classpath>
+    </depend>
+  </target>
+
+  <!-- only used if not set by a higher build.xml -->
+  <property name="javac.compilerargs" value="" />
+  <property name="javac.version" value="1.8" />
+  <property name="javac.release" value="8" />
+
+  <target name="compile" depends="depend">
+    <mkdir dir="./build" />
+    <mkdir dir="./build/obj" />
+    <javac
+      srcdir="./src"
+      debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
+      release="${javac.release}"
+      includeAntRuntime="false"
+      encoding="UTF-8"
+      destdir="./build/obj"
+      classpath="../../../core/java/build/i2p.jar:../../ministreaming/java/build/mstreaming.jar">
+      <compilerarg line="${javac.compilerargs}" />
+    </javac>
+  </target>
+  <target name="builddeptest">
+    <ant dir="../../../core/java" target="jar" />
+    <ant dir="../../../apps/ministreaming/java/" target="jar" />
+  </target>
+  <target name="junit.compileTest" depends="builddeptest, compile">
+
+    <echo message="[DEBUG] ant home is ${ant.home}" />
+    <echo message="[DEBUG] junit home before override is ${junit.home}" />
+    <echo message="[DEBUG] hamcrest home before override is ${hamcrest.home}" />
+    <echo message="[DEBUG] mockito home before override is ${mockito.home}" />
+
+    <property name="junit.home" value="${ant.home}/lib" />
+    <property name="hamcrest.home" value="${ant.home}/lib" />
+    <property name="mockito.home" value="${ant.home}/lib" />
+
+    <echo message="[DEBUG] junit home after override is ${junit.home}" />
+    <echo message="[DEBUG] hamcrest home after override is ${hamcrest.home}" />
+    <echo message="[DEBUG] mockito home after override is ${mockito.home}" />
+
+    <javac
+      srcdir="./test/junit"
+      debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
+      release="${javac.release}"
+      includeAntRuntime="false"
+      encoding="UTF-8"
+      destdir="./build/obj">
+      <classpath>
+        <pathelement path="${javac.classpath}" />
+        <pathelement location="../../../core/java/build/i2p.jar" />
+        <pathelement location="../../ministreaming/java/build/mstreaming.jar" />
+        <pathelement location="${junit.home}/junit4.jar" />
+        <pathelement location="${hamcrest.home}/hamcrest.jar" />
+        <pathelement location="${hamcrest.home}/hamcrest-all.jar" />
+        <pathelement location="${mockito.home}/byte-buddy.jar" />
+        <pathelement location="${mockito.home}/objenesis.jar" />
+        <pathelement location="${mockito.home}/mockito-core.jar" />
+      </classpath>
+      <compilerarg line="${javac.compilerargs}" />
+    </javac>
+  </target>
+
+  <!-- preparation of code coverage tool of choice -->
+  <target name="prepareClover" depends="compile" if="with.clover">
+    <taskdef resource="clovertasks" />
+    <mkdir dir="../../../reports/streaming/clover" />
+    <clover-setup initString="../../../reports/streaming/clover/coverage.db" />
+  </target>
+  <target name="prepareCobertura" depends="compile" if="with.cobertura">
+    <taskdef classpath="${with.cobertura}" resource="tasks.properties" onerror="report" />
+    <mkdir dir="./build/obj_cobertura" />
+    <delete file="./cobertura.ser" />
+    <cobertura-instrument todir="./build/obj_cobertura">
+      <fileset dir="./build/obj">
+        <include name="**/*.class" />
+        <!-- exclude Test classes -->
+        <exclude name="**/*Test.class" />
+        <exclude name="**/*TestBase.class" />
+        <exclude name="**/*IT.class" />
+        <exclude name="**/*IT$*.class" />
+        <exclude name="**/StreamingITBase.class" />
+        <exclude name="**/StreamingITBase$*.class" />
+        <!-- exclude anything not in net.i2p.* -->
+        <exclude name="org/cybergarage/**/*.class" />
+        <exclude name="org/freenetproject/**/*.class" />
+        <exclude name="org/xlattice/**/*.class" />
+      </fileset>
+    </cobertura-instrument>
+  </target>
+
+  <target name="prepareTest" depends="prepareClover, prepareCobertura" />
+
+  <target name="junit.test" depends="clean, junit.compileTest, prepareTest">
+    <mkdir dir="../../../reports/streaming/junit/" />
+    <delete>
+      <fileset dir="../../../reports/streaming/junit">
+        <include name="TEST-*.xml" />
+      </fileset>
+    </delete>
+
+    <property name="junit.home" value="${ant.home}/lib" />
+    <property name="hamcrest.home" value="${ant.home}/lib" />
+    <property name="mockito.home" value="${ant.home}/lib" />
+
+    <junit printsummary="withOutAndErr" fork="yes" showoutput="yes">
+      <sysproperty key="net.sourceforge.cobertura.datafile" file="./cobertura.ser" />
+      <classpath>
+        <pathelement path="${javac.classpath}" />
+        <pathelement location="${hamcrest.home}/hamcrest-core.jar" />
+        <pathelement location="${hamcrest.home}/hamcrest-library.jar" />
+        <pathelement location="${hamcrest.home}/hamcrest-integration.jar" />
+        <pathelement location="${hamcrest.home}/hamcrest-all.jar" />
+        <pathelement location="${mockito.home}/byte-buddy.jar" />
+        <pathelement location="${mockito.home}/objenesis.jar" />
+        <pathelement location="${mockito.home}/mockito-core.jar" />
+        <pathelement location="${junit.home}/junit4.jar" />
+        <pathelement location="./build/obj_cobertura" />
+        <pathelement location="./build/obj" />
+        <pathelement location="../../../core/java/build/i2ptest.jar" />
+        <pathelement location="../../../core/java/build/i2p.jar" />
+        <pathelement location="../../ministreaming/java/build/mstreaming.jar" />
+        <pathelement location="../../build/jbigi.jar" />
+        <pathelement location="${with.clover}" />
+        <pathelement location="${with.cobertura}" />
+      </classpath>
+      <batchtest todir="../../../reports/streaming/junit/">
+        <fileset dir="./test/junit">
+          <include name="**/*Test.java" />
+          <include name="**/*IT.java" if="runIntegrationTests" />
+        </fileset>
+      </batchtest>
+      <formatter type="xml" />
+    </junit>
+    <!-- set if unset -->
+    <property name="host.fakename" value="i2ptester" />
+    <!-- replace hostname that junit inserts into reports with fake one -->
+    <replaceregexp byline="true"
+      match="(hostname=)&quot;[^&quot;]+&quot;"
+      replace="\1&quot;${host.fakename}&quot;">
+      <fileset dir="../../../reports/streaming/junit/" />
+    </replaceregexp>
+  </target>
+  <target name="test" depends="junit.test" />
+  <!-- test reports -->
+  <target name="junit.report">
+    <junitreport todir="../../../reports/streaming/junit">
+      <fileset dir="../../../reports/streaming/junit">
+        <include name="TEST-*.xml" />
+      </fileset>
+      <report format="frames" todir="../../../reports/streaming/html/junit" />
+    </junitreport>
+  </target>
+  <target name="clover.report" depends="test" if="with.clover">
+    <clover-report>
+      <current outfile="../../../reports/streaming/html/clover">
+        <format type="html" />
+      </current>
+    </clover-report>
+  </target>
+  <target name="cobertura.report" depends="test" if="with.cobertura">
+    <mkdir dir="../../../reports/streaming/cobertura" />
+    <cobertura-report format="xml" srcdir="./src" destdir="../../../reports/streaming/cobertura" />
+    <mkdir dir="../../../reports/streaming/html/cobertura" />
+    <cobertura-report format="html" srcdir="./src" destdir="../../../reports/streaming/html/cobertura" />
+    <delete file="./cobertura.ser" />
+  </target>
+  <target name="test.report" depends="junit.report, clover.report, cobertura.report" />
+  <!-- end test reports -->
+  <target name="fulltest" depends="cleandep, test, test.report" />
+  <!-- end unit tests -->
+
+  <target name="listChangedFiles" depends="jarUpToDate" if="shouldListChanges">
+    <exec executable="mtn" outputproperty="workspace.changes" errorproperty="mtn.error2" failifexecutionfails="false">
+      <arg value="list" />
+      <arg value="changed" />
+      <arg value="." />
+    </exec>
+    <!-- \n in an attribute value generates an invalid manifest -->
+    <exec executable="tr" inputstring="${workspace.changes}" outputproperty="workspace.changes.tr" errorproperty="mtn.error2" failifexecutionfails="false">
+      <arg value="-s" />
+      <arg value="[:space:]" />
+      <arg value="," />
+    </exec>
+  </target>
+
+  <target name="jar" depends="builddep, compile, jarUpToDate, listChangedFiles" unless="jar.uptodate">
+    <!-- set if unset -->
+    <property name="workspace.changes.tr" value="" />
+    <jar destfile="./build/streaming.jar" basedir="./build/obj" includes="**/*.class">
+      <manifest>
+        <attribute name="Specification-Title" value="I2P Streaming Implementation" />
+        <attribute name="Specification-Version" value="${api.version}" />
+        <attribute name="Specification-Vendor" value="The I2P Project https://geti2p.net/" />
+        <attribute name="Implementation-Title" value="I2P Java Streaming Implementation" />
+        <attribute name="Implementation-Version" value="${full.version}" />
+        <attribute name="Implementation-Vendor" value="The I2P Project https://geti2p.net/" />
+        <attribute name="Built-By" value="${build.built-by}" />
+        <attribute name="Build-Date" value="${build.timestamp}" />
+        <attribute name="Base-Revision" value="${workspace.version}" />
+        <attribute name="Workspace-Changes" value="${workspace.changes.tr}" />
+        <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
+        <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
+      </manifest>
+    </jar>
+  </target>
+
+  <target name="jarUpToDate">
+    <uptodate property="jar.uptodate" targetfile="build/streaming.jar">
+      <srcfiles dir="." includes="build/obj/**/*.class" />
+    </uptodate>
+    <condition property="shouldListChanges">
+      <and>
+        <not>
+          <isset property="jar.uptodate" />
+        </not>
+        <isset property="mtn.available" />
+      </and>
     </condition>
-    <target name="depend" if="depend.available">
-        <depend
-            cache="../../../build"
-            srcdir="./src:./test/junit"
-            destdir="./build/obj" >
-            <!-- Depend on classes instead of jars where available -->
-            <classpath>
-                <pathelement location="../../../core/java/build/obj" />
-                <pathelement location="../../ministreaming/java/build/obj" />
-            </classpath>
-        </depend>
-    </target>
+  </target>
 
-    <!-- only used if not set by a higher build.xml -->
-    <property name="javac.compilerargs" value="" />
-    <property name="javac.version" value="1.8" />
-    <property name="javac.release" value="8" />
+  <target name="jarTest" depends="jar, junit.compileTest">
+    <jar destfile="./build/streaming.jar" basedir="./build/obj" includes="**/*Test*.class" update="true" />
+  </target>
 
-    <target name="compile" depends="depend">
-        <mkdir dir="./build" />
-        <mkdir dir="./build/obj" />
-        <javac
-            srcdir="./src"
-            debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
-            release="${javac.release}"
-            includeAntRuntime="false"
-            encoding="UTF-8"
-            destdir="./build/obj"
-            classpath="../../../core/java/build/i2p.jar:../../ministreaming/java/build/mstreaming.jar" >
-            <compilerarg line="${javac.compilerargs}" />
-        </javac>
-    </target>
-    <target name="builddeptest">
-        <ant dir="../../../core/java" target="jar" />
-        <ant dir="../../../apps/ministreaming/java/" target="jar" />
-    </target>
-    <target name="junit.compileTest" depends="builddeptest, compile">
-
-        <echo message="[DEBUG] ant home is ${ant.home}" />
-        <echo message="[DEBUG] junit home before override is ${junit.home}" />
-        <echo message="[DEBUG] hamcrest home before override is ${hamcrest.home}" />
-        <echo message="[DEBUG] mockito home before override is ${mockito.home}" />
-
-        <property name="junit.home" value="${ant.home}/lib" />
-        <property name="hamcrest.home" value="${ant.home}/lib" />
-        <property name="mockito.home" value="${ant.home}/lib" />
-
-        <echo message="[DEBUG] junit home after override is ${junit.home}" />
-        <echo message="[DEBUG] hamcrest home after override is ${hamcrest.home}" />
-        <echo message="[DEBUG] mockito home after override is ${mockito.home}" />
-
-        <javac
-            srcdir="./test/junit"
-            debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
-            release="${javac.release}"
-            includeAntRuntime="false"
-            encoding="UTF-8"
-            destdir="./build/obj" >
-            <classpath>
-                <pathelement path="${javac.classpath}" />
-                <pathelement location="../../../core/java/build/i2p.jar" />
-                <pathelement location="../../ministreaming/java/build/mstreaming.jar" />
-                <pathelement location="${junit.home}/junit4.jar" />
-                <pathelement location="${hamcrest.home}/hamcrest.jar" />
-                <pathelement location="${hamcrest.home}/hamcrest-all.jar" />
-                <pathelement location="${mockito.home}/byte-buddy.jar" />
-                <pathelement location="${mockito.home}/objenesis.jar" />
-                <pathelement location="${mockito.home}/mockito-core.jar" />
-            </classpath>
-            <compilerarg line="${javac.compilerargs}" />
-        </javac>
-    </target>
-
-    <!-- preparation of code coverage tool of choice -->
-    <target name="prepareClover" depends="compile" if="with.clover">
-        <taskdef resource="clovertasks"/>
-        <mkdir dir="../../../reports/streaming/clover" />
-        <clover-setup initString="../../../reports/streaming/clover/coverage.db"/>
-    </target>
-    <target name="prepareCobertura" depends="compile" if="with.cobertura">
-        <taskdef classpath="${with.cobertura}" resource="tasks.properties" onerror="report" />
-        <mkdir dir="./build/obj_cobertura" />
-        <delete file="./cobertura.ser" />
-        <cobertura-instrument todir="./build/obj_cobertura">
-            <fileset dir="./build/obj">
-                <include name="**/*.class"/>
-                <!-- exclude Test classes -->
-                <exclude name="**/*Test.class" />
-                <exclude name="**/*TestBase.class" />
-                <exclude name="**/*IT.class" />
-                <exclude name="**/*IT$*.class" />
-                <exclude name="**/StreamingITBase.class" />
-                <exclude name="**/StreamingITBase$*.class" />
-                <!-- exclude anything not in net.i2p.* -->
-                <exclude name="org/cybergarage/**/*.class" />
-                <exclude name="org/freenetproject/**/*.class" />
-                <exclude name="org/xlattice/**/*.class" />
-            </fileset>
-        </cobertura-instrument>
-    </target>
-
-    <target name="prepareTest" depends="prepareClover, prepareCobertura" />
-
-    <target name="junit.test" depends="clean, junit.compileTest, prepareTest">
-        <mkdir dir="../../../reports/streaming/junit/" />
-        <delete>
-            <fileset dir="../../../reports/streaming/junit">
-                <include name="TEST-*.xml"/>
-            </fileset>
-        </delete>
-
-        <property name="junit.home" value="${ant.home}/lib" />
-        <property name="hamcrest.home" value="${ant.home}/lib" />
-        <property name="mockito.home" value="${ant.home}/lib" />
-
-        <junit printsummary="withOutAndErr" fork="yes" showoutput="yes" >
-            <sysproperty key="net.sourceforge.cobertura.datafile" file="./cobertura.ser" />
-            <classpath>
-                <pathelement path="${javac.classpath}" />
-                <pathelement location="${hamcrest.home}/hamcrest-core.jar" />
-                <pathelement location="${hamcrest.home}/hamcrest-library.jar" />
-                <pathelement location="${hamcrest.home}/hamcrest-integration.jar" />
-                <pathelement location="${hamcrest.home}/hamcrest-all.jar" />
-                <pathelement location="${mockito.home}/byte-buddy.jar" />
-                <pathelement location="${mockito.home}/objenesis.jar" />
-                <pathelement location="${mockito.home}/mockito-core.jar" />
-                <pathelement location="${junit.home}/junit4.jar" />
-                <pathelement location="./build/obj_cobertura" />
-                <pathelement location="./build/obj" />
-                <pathelement location="../../../core/java/build/i2ptest.jar" />
-                <pathelement location="../../../core/java/build/i2p.jar" />
-                <pathelement location="../../ministreaming/java/build/mstreaming.jar" />
-                <pathelement location="../../build/jbigi.jar" />
-                <pathelement location="${with.clover}" />
-                <pathelement location="${with.cobertura}" />
-            </classpath>
-            <batchtest todir="../../../reports/streaming/junit/">
-                <fileset dir="./test/junit">
-                    <include name="**/*Test.java" />
-                    <include name="**/*IT.java" if="runIntegrationTests" />
-                </fileset>
-            </batchtest>
-            <formatter type="xml"/>
-        </junit>
-        <!-- set if unset -->
-        <property name="host.fakename" value="i2ptester" />
-        <!-- replace hostname that junit inserts into reports with fake one -->
-        <replaceregexp byline="true"
-            match="(hostname=)&quot;[^&quot;]+&quot;"
-            replace="\1&quot;${host.fakename}&quot;">
-            <fileset dir="../../../reports/streaming/junit/" />
-        </replaceregexp>
-    </target>
-    <target name="test" depends="junit.test"/>
-    <!-- test reports -->
-    <target name="junit.report">
-        <junitreport todir="../../../reports/streaming/junit">
-            <fileset dir="../../../reports/streaming/junit">
-                <include name="TEST-*.xml"/>
-            </fileset>
-            <report format="frames" todir="../../../reports/streaming/html/junit"/>
-        </junitreport>
-    </target>
-    <target name="clover.report" depends="test" if="with.clover">
-        <clover-report>
-            <current outfile="../../../reports/streaming/html/clover">
-                <format type="html"/>
-            </current>
-        </clover-report>
-    </target>
-    <target name="cobertura.report" depends="test" if="with.cobertura">
-        <mkdir dir="../../../reports/streaming/cobertura" />
-        <cobertura-report format="xml" srcdir="./src" destdir="../../../reports/streaming/cobertura" />
-        <mkdir dir="../../../reports/streaming/html/cobertura" />
-        <cobertura-report format="html" srcdir="./src" destdir="../../../reports/streaming/html/cobertura" />
-        <delete file="./cobertura.ser" />
-    </target>
-    <target name="test.report" depends="junit.report, clover.report, cobertura.report"/>
-    <!-- end test reports -->
-    <target name="fulltest" depends="cleandep, test, test.report" />
-    <!-- end unit tests -->
-
-    <target name="listChangedFiles" depends="jarUpToDate" if="shouldListChanges" >
-        <exec executable="mtn" outputproperty="workspace.changes" errorproperty="mtn.error2" failifexecutionfails="false" >
-            <arg value="list" />
-            <arg value="changed" />
-            <arg value="." />
-        </exec>
-        <!-- \n in an attribute value generates an invalid manifest -->
-        <exec executable="tr" inputstring="${workspace.changes}" outputproperty="workspace.changes.tr" errorproperty="mtn.error2" failifexecutionfails="false" >
-            <arg value="-s" />
-            <arg value="[:space:]" />
-            <arg value="," />
-        </exec>
-    </target>
-
-    <target name="jar" depends="builddep, compile, jarUpToDate, listChangedFiles" unless="jar.uptodate" >
-        <!-- set if unset -->
-        <property name="workspace.changes.tr" value="" />
-        <jar destfile="./build/streaming.jar" basedir="./build/obj" includes="**/*.class" >
-            <manifest>
-                <attribute name="Specification-Title" value="I2P Streaming Implementation" />
-                <attribute name="Specification-Version" value="${api.version}" />
-                <attribute name="Specification-Vendor" value="The I2P Project https://geti2p.net/" />
-                <attribute name="Implementation-Title" value="I2P Java Streaming Implementation" />
-                <attribute name="Implementation-Version" value="${full.version}" />
-                <attribute name="Implementation-Vendor" value="The I2P Project https://geti2p.net/" />
-                <attribute name="Built-By" value="${build.built-by}" />
-                <attribute name="Build-Date" value="${build.timestamp}" />
-                <attribute name="Base-Revision" value="${workspace.version}" />
-                <attribute name="Workspace-Changes" value="${workspace.changes.tr}" />
-                <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
-                <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
-            </manifest>
-        </jar>
-    </target>
-
-    <target name="jarUpToDate">
-        <uptodate property="jar.uptodate" targetfile="build/streaming.jar" >
-            <srcfiles dir= "." includes="build/obj/**/*.class" />
-        </uptodate>
-        <condition property="shouldListChanges" >
-            <and>
-                <not>
-                    <isset property="jar.uptodate" />
-                </not>
-                <isset property="mtn.available" />
-            </and>
-        </condition>
-    </target>
-
-    <target name="jarTest" depends="jar, junit.compileTest">
-        <jar destfile="./build/streaming.jar" basedir="./build/obj" includes="**/*Test*.class" update="true" />
-    </target>
-
-    <target name="javadoc">
-        <mkdir dir="./build" />
-        <mkdir dir="./build/javadoc" />
-        <javadoc access="package"
-            source="${javac.version}"
-            destdir="./build/javadoc"
-            packagenames="*"
-            use="true"
-            splitindex="true"
-            failonerror="true"
-            additionalparam="-notimestamp"
-            doctitle="I2P Javadocs for Release ${release.number} Build ${i2p.build.number}${build.extra}"
-            windowtitle="I2P Anonymous Network - Java Documentation - Version ${release.number}">
-            <group title="Streaming Library Implementation" packages="*" />
-            <sourcepath>
-                <pathelement location="./src" />
-            </sourcepath>
-            <classpath>
-                <pathelement location="../../../core/java/build/i2p.jar" />
-                <pathelement location="../../ministreaming/java/build/mstreaming.jar" />
-                <!-- following are only for debian builds -->
-                <pathelement location="../../../core/java/build/libintl.jar" />
-                <pathelement location="../../../core/java/build/gnu-getopt.jar" />
-            </classpath>
-            <!-- These variables are stored in build.properties.
+  <target name="javadoc">
+    <mkdir dir="./build" />
+    <mkdir dir="./build/javadoc" />
+    <javadoc access="package"
+      source="${javac.version}"
+      destdir="./build/javadoc"
+      packagenames="*"
+      use="true"
+      splitindex="true"
+      failonerror="true"
+      additionalparam="-notimestamp"
+      doctitle="I2P Javadocs for Release ${release.number} Build ${i2p.build.number}${build.extra}"
+      windowtitle="I2P Anonymous Network - Java Documentation - Version ${release.number}">
+      <group title="Streaming Library Implementation" packages="*" />
+      <sourcepath>
+        <pathelement location="./src" />
+      </sourcepath>
+      <classpath>
+        <pathelement location="../../../core/java/build/i2p.jar" />
+        <pathelement location="../../ministreaming/java/build/mstreaming.jar" />
+        <!-- following are only for debian builds -->
+        <pathelement location="../../../core/java/build/libintl.jar" />
+        <pathelement location="../../../core/java/build/gnu-getopt.jar" />
+      </classpath>
+      <!-- These variables are stored in build.properties.
                   End-users can override by creating the file override.properties -->
-            <link offline="true" href="${javasedocs.url}" packagelistLoc="../../../installer/resources/package-lists/java/" />
-            <link offline="true" href="${javaeedocs.url}" packagelistLoc="../../../installer/resources/package-lists/javaee/" />
-            <link offline="true" href="${jettydocs.url}" packagelistLoc="../../../installer/resources/package-lists/jetty/" />
-            <link offline="true" href="${wrapperdocs.url}" packagelistLoc="../../../installer/resources/package-lists/wrapper/" />
-        </javadoc>
-    </target>
+      <link offline="true" href="${javasedocs.url}" packagelistLoc="../../../installer/resources/package-lists/java/" />
+      <link offline="true" href="${javaeedocs.url}" packagelistLoc="../../../installer/resources/package-lists/javaee/" />
+      <link offline="true" href="${jettydocs.url}" packagelistLoc="../../../installer/resources/package-lists/jetty/" />
+      <link offline="true" href="${wrapperdocs.url}" packagelistLoc="../../../installer/resources/package-lists/wrapper/" />
+    </javadoc>
+  </target>
 
-    <!-- for Maven Central -->
-    <target name="javadocJar" depends="javadoc">
-        <jar jarfile="./build/streaming-${release.number}-javadoc.jar">
-            <fileset dir="./build/javadoc" />
-            <manifest>
-                <attribute name="Specification-Title" value="I2P Streaming Implementation" />
-                <attribute name="Specification-Version" value="${api.version}" />
-                <attribute name="Specification-Vendor" value="The I2P Project https://geti2p.net/" />
-                <attribute name="Implementation-Title" value="I2P Java Streaming Implementation" />
-                <attribute name="Implementation-Version" value="${full.version}" />
-                <attribute name="Implementation-Vendor" value="The I2P Project https://geti2p.net/" />
-                <attribute name="Built-By" value="${build.built-by}" />
-                <attribute name="Build-Date" value="${build.timestamp}" />
-                <attribute name="Base-Revision" value="${workspace.version}" />
-            </manifest>
-        </jar>
-    </target>
+  <!-- for Maven Central -->
+  <target name="javadocJar" depends="javadoc">
+    <jar jarfile="./build/streaming-${release.number}-javadoc.jar">
+      <fileset dir="./build/javadoc" />
+      <manifest>
+        <attribute name="Specification-Title" value="I2P Streaming Implementation" />
+        <attribute name="Specification-Version" value="${api.version}" />
+        <attribute name="Specification-Vendor" value="The I2P Project https://geti2p.net/" />
+        <attribute name="Implementation-Title" value="I2P Java Streaming Implementation" />
+        <attribute name="Implementation-Version" value="${full.version}" />
+        <attribute name="Implementation-Vendor" value="The I2P Project https://geti2p.net/" />
+        <attribute name="Built-By" value="${build.built-by}" />
+        <attribute name="Build-Date" value="${build.timestamp}" />
+        <attribute name="Base-Revision" value="${workspace.version}" />
+      </manifest>
+    </jar>
+  </target>
 
-    <target name="sourcesJar">
-        <jar jarfile="./build/streaming-${release.number}-sources.jar">
-            <fileset dir="./src" />
-            <manifest>
-                <attribute name="Specification-Title" value="I2P Streaming Implementation" />
-                <attribute name="Specification-Version" value="${api.version}" />
-                <attribute name="Specification-Vendor" value="The I2P Project https://geti2p.net/" />
-                <attribute name="Implementation-Title" value="I2P Java Streaming Implementation" />
-                <attribute name="Implementation-Version" value="${full.version}" />
-                <attribute name="Implementation-Vendor" value="The I2P Project https://geti2p.net/" />
-                <attribute name="Built-By" value="${build.built-by}" />
-                <attribute name="Build-Date" value="${build.timestamp}" />
-                <attribute name="Base-Revision" value="${workspace.version}" />
-            </manifest>
-        </jar>
-    </target>
+  <target name="sourcesJar">
+    <jar jarfile="./build/streaming-${release.number}-sources.jar">
+      <fileset dir="./src" />
+      <manifest>
+        <attribute name="Specification-Title" value="I2P Streaming Implementation" />
+        <attribute name="Specification-Version" value="${api.version}" />
+        <attribute name="Specification-Vendor" value="The I2P Project https://geti2p.net/" />
+        <attribute name="Implementation-Title" value="I2P Java Streaming Implementation" />
+        <attribute name="Implementation-Version" value="${full.version}" />
+        <attribute name="Implementation-Vendor" value="The I2P Project https://geti2p.net/" />
+        <attribute name="Built-By" value="${build.built-by}" />
+        <attribute name="Build-Date" value="${build.timestamp}" />
+        <attribute name="Base-Revision" value="${workspace.version}" />
+      </manifest>
+    </jar>
+  </target>
 
-    <target name="clean">
-        <delete dir="./build" />
-    </target>
-    <target name="cleandep" depends="clean">
-    </target>
-    <target name="distclean" depends="clean">
-    </target>
+  <target name="clean">
+    <delete dir="./build" />
+  </target>
+  <target name="cleandep" depends="clean">
+  </target>
+  <target name="distclean" depends="clean">
+  </target>
 </project>

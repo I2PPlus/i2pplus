@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="source">
-    <property name="i2pbase" value="../.."/>
-    <property name="i2plib" value="${i2pbase}/build"/>
-    <property name="jettylib" value="${i2pbase}/apps/jetty/jettylib"/>
-    <property name="wrapperlib" value="${i2pbase}/installer/lib/wrapper/all"/>
+  <property name="i2pbase" value="../.." />
+  <property name="i2plib" value="${i2pbase}/build" />
+  <property name="jettylib" value="${i2pbase}/apps/jetty/jettylib" />
+  <property name="wrapperlib" value="${i2pbase}/installer/lib/wrapper/all" />
 
-    <!--
+  <!--
          Supports four build options:
          1) war (jsonrpc.war) for running under the console
          2) jar (i2pcontrol.jar) for starting and running on its own Jetty instance,
@@ -15,139 +15,139 @@
          4) TODO xxxjar with bundled, small non-Jetty server, similar to I2PTunnelHTTPClient?
      -->
 
-    <path id="cp">
-        <pathelement location="${i2plib}/i2p.jar" />
-        <pathelement location="${i2plib}/router.jar" />
-        <pathelement location="${jettylib}/org.mortbay.jetty.jar" />
-        <pathelement location="${jettylib}/javax.servlet.jar" />
-        <pathelement location="${jettylib}/jetty-servlet.jar" />
-        <pathelement location="${wrapperlib}/wrapper.jar" />
-        <!-- following jar only present for debian builds -->
-        <pathelement location="../../core/java/build/json-simple.jar" />
-    </path>
+  <path id="cp">
+    <pathelement location="${i2plib}/i2p.jar" />
+    <pathelement location="${i2plib}/router.jar" />
+    <pathelement location="${jettylib}/org.mortbay.jetty.jar" />
+    <pathelement location="${jettylib}/javax.servlet.jar" />
+    <pathelement location="${jettylib}/jetty-servlet.jar" />
+    <pathelement location="${wrapperlib}/wrapper.jar" />
+    <!-- following jar only present for debian builds -->
+    <pathelement location="../../core/java/build/json-simple.jar" />
+  </path>
 
-    <path id="cpSocket">
-        <pathelement location="${i2plib}/i2p.jar" />
-        <pathelement location="${i2plib}/router.jar" />
-        <!-- TODO get rid of wraper dependency also -->
-        <pathelement location="${wrapperlib}/wrapper.jar" />
-        <!-- following jar only present for debian builds -->
-        <pathelement location="../../core/java/build/json-simple.jar" />
-    </path>
+  <path id="cpSocket">
+    <pathelement location="${i2plib}/i2p.jar" />
+    <pathelement location="${i2plib}/router.jar" />
+    <!-- TODO get rid of wraper dependency also -->
+    <pathelement location="${wrapperlib}/wrapper.jar" />
+    <!-- following jar only present for debian builds -->
+    <pathelement location="../../core/java/build/json-simple.jar" />
+  </path>
 
-    <target name="all" depends="clean, build" />
-    <target name="build" depends="jar" />
-    <condition property="depend.available">
-        <typefound name="depend" />
-    </condition>
-    <target name="builddep" if="depend.available">
-        <depend
-            cache="${i2pbase}/build"
-            srcdir="./java" 
-            classpath="${cp}"
-            destdir="./build/obj" >
-        </depend>
-    </target>
+  <target name="all" depends="clean, build" />
+  <target name="build" depends="jar" />
+  <condition property="depend.available">
+    <typefound name="depend" />
+  </condition>
+  <target name="builddep" if="depend.available">
+    <depend
+      cache="${i2pbase}/build"
+      srcdir="./java"
+      classpath="${cp}"
+      destdir="./build/obj">
+    </depend>
+  </target>
 
-    <property name="javac.compilerargs" value="" />
-    <property name="javac.version" value="1.8" />
-    <property name="javac.release" value="8" />
+  <property name="javac.compilerargs" value="" />
+  <property name="javac.version" value="1.8" />
+  <property name="javac.release" value="8" />
 
-    <target name="compile" depends="builddep" >
-        <mkdir dir="./build" />
-        <mkdir dir="./build/obj" />
-        <javac 
-            srcdir="./java" 
-            debug="true" deprecation="on" source="${javac.version}" target="${javac.version}" 
-            release="${javac.release}"
-            includeAntRuntime="false"
-            encoding="UTF-8"
-            destdir="./build/obj" 
-            classpath="${cp}">
-            <compilerarg line="${javac.compilerargs}" />
-            <classpath refid="cp"/>
-        </javac>
-    </target>
+  <target name="compile" depends="builddep">
+    <mkdir dir="./build" />
+    <mkdir dir="./build/obj" />
+    <javac
+      srcdir="./java"
+      debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
+      release="${javac.release}"
+      includeAntRuntime="false"
+      encoding="UTF-8"
+      destdir="./build/obj"
+      classpath="${cp}">
+      <compilerarg line="${javac.compilerargs}" />
+      <classpath refid="cp" />
+    </javac>
+  </target>
 
-    <!--
+  <!--
       More TODO here. jsonrpc2 lib uses MessageContext which depends on servlet
      -->
-    <target name="compileSocketJar" depends="builddep" >
-        <mkdir dir="./build" />
-        <mkdir dir="./build/obj" />
-        <javac 
-            sourcepath=""
-            srcdir="./java" 
-            debug="true" deprecation="on" source="${javac.version}" target="${javac.version}" 
-            release="${javac.release}"
-            includeAntRuntime="false"
-            encoding="UTF-8"
-            destdir="./build/obj" 
-            classpath="${cpSocket}">
-            <compilerarg line="${javac.compilerargs}" />
-            <classpath refid="cpSocket" />
-            <exclude name="**/I2PControlController.java" />
-            <exclude name="**/HostCheckHandler.java" />
-            <exclude name="**/JSONRPC2Servlet.java" />
-        </javac>
-    </target>
+  <target name="compileSocketJar" depends="builddep">
+    <mkdir dir="./build" />
+    <mkdir dir="./build/obj" />
+    <javac
+      sourcepath=""
+      srcdir="./java"
+      debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
+      release="${javac.release}"
+      includeAntRuntime="false"
+      encoding="UTF-8"
+      destdir="./build/obj"
+      classpath="${cpSocket}">
+      <compilerarg line="${javac.compilerargs}" />
+      <classpath refid="cpSocket" />
+      <exclude name="**/I2PControlController.java" />
+      <exclude name="**/HostCheckHandler.java" />
+      <exclude name="**/JSONRPC2Servlet.java" />
+    </javac>
+  </target>
 
-    <target name="jar" depends="compile">
-        <!-- set if unset -->
-        <property name="workspace.changes.tr" value="" />
-        <jar destfile="build/i2pcontrol.jar" basedir="./build/obj" includes="**/*.class" >
-            <manifest>
-                <attribute name="Implementation-Version" value="${full.version}" />
-                <attribute name="Built-By" value="${build.built-by}" />
-                <attribute name="Build-Date" value="${build.timestamp}" />
-                <attribute name="Base-Revision" value="${workspace.version}" />
-                <attribute name="Workspace-Changes" value="${workspace.changes.tr}" />
-                <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
-                <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
-            </manifest>
-        </jar>
-    </target>    
+  <target name="jar" depends="compile">
+    <!-- set if unset -->
+    <property name="workspace.changes.tr" value="" />
+    <jar destfile="build/i2pcontrol.jar" basedir="./build/obj" includes="**/*.class">
+      <manifest>
+        <attribute name="Implementation-Version" value="${full.version}" />
+        <attribute name="Built-By" value="${build.built-by}" />
+        <attribute name="Build-Date" value="${build.timestamp}" />
+        <attribute name="Base-Revision" value="${workspace.version}" />
+        <attribute name="Workspace-Changes" value="${workspace.changes.tr}" />
+        <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
+        <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
+      </manifest>
+    </jar>
+  </target>
 
-    <target name="socketJar" depends="compileSocketJar">
-        <!-- set if unset -->
-        <property name="workspace.changes.tr" value="" />
-        <jar destfile="build/i2pcontrol.jar" basedir="./build/obj" includes="**/*.class" >
-            <manifest>
-                <attribute name="Implementation-Version" value="${full.version}" />
-                <attribute name="Built-By" value="${build.built-by}" />
-                <attribute name="Build-Date" value="${build.timestamp}" />
-                <attribute name="Base-Revision" value="${workspace.version}" />
-                <attribute name="Workspace-Changes" value="${workspace.changes.tr}" />
-                <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
-                <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
-            </manifest>
-        </jar>
-    </target>    
+  <target name="socketJar" depends="compileSocketJar">
+    <!-- set if unset -->
+    <property name="workspace.changes.tr" value="" />
+    <jar destfile="build/i2pcontrol.jar" basedir="./build/obj" includes="**/*.class">
+      <manifest>
+        <attribute name="Implementation-Version" value="${full.version}" />
+        <attribute name="Built-By" value="${build.built-by}" />
+        <attribute name="Build-Date" value="${build.timestamp}" />
+        <attribute name="Base-Revision" value="${workspace.version}" />
+        <attribute name="Workspace-Changes" value="${workspace.changes.tr}" />
+        <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
+        <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
+      </manifest>
+    </jar>
+  </target>
 
-    <target name="war" depends="compile" >
-        <!-- set if unset -->
-        <property name="workspace.changes.tr" value="" />
-        <war destfile="build/jsonrpc.war" webxml="web.xml" >
-            <classes dir="./build/obj" excludes="net/i2p/i2pcontrol/I2PControlController.class net/i2p/i2pcontrol/HostCheckHandler.class net/i2p/i2pcontrol/SocketController*.class" />
-            <manifest>
-                <attribute name="Implementation-Version" value="${full.version}" />
-                <attribute name="Built-By" value="${build.built-by}" />
-                <attribute name="Build-Date" value="${build.timestamp}" />
-                <attribute name="Base-Revision" value="${workspace.version}" />
-                <attribute name="Workspace-Changes" value="${workspace.changes.tr}" />
-                <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
-                <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
-            </manifest>
-        </war>
-    </target>
+  <target name="war" depends="compile">
+    <!-- set if unset -->
+    <property name="workspace.changes.tr" value="" />
+    <war destfile="build/jsonrpc.war" webxml="web.xml">
+      <classes dir="./build/obj" excludes="net/i2p/i2pcontrol/I2PControlController.class net/i2p/i2pcontrol/HostCheckHandler.class net/i2p/i2pcontrol/SocketController*.class" />
+      <manifest>
+        <attribute name="Implementation-Version" value="${full.version}" />
+        <attribute name="Built-By" value="${build.built-by}" />
+        <attribute name="Build-Date" value="${build.timestamp}" />
+        <attribute name="Base-Revision" value="${workspace.version}" />
+        <attribute name="Workspace-Changes" value="${workspace.changes.tr}" />
+        <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
+        <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
+      </manifest>
+    </war>
+  </target>
 
-    <target name="clean">
-        <delete dir="./build" />
-    </target>
+  <target name="clean">
+    <delete dir="./build" />
+  </target>
 
-    <target name="cleandep" depends="clean">
-    </target>
+  <target name="cleandep" depends="clean">
+  </target>
 
-    <target name="distclean" depends="clean">
-    </target>
+  <target name="distclean" depends="clean">
+  </target>
 </project>

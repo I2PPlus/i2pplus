@@ -501,7 +501,7 @@
     <!-- set if unset -->
     <property name="workspace.changes.tr" value="" />
     <copy todir="build/obj" file="resources/log4j.properties" />
-      <jar destfile="./jettylib/jetty-i2p.jar" basedir="./build/obj" includes="**/*.class log4j.properties" excludes="**/JspC.class">
+    <jar destfile="./jettylib/jetty-i2p.jar" basedir="./build/obj" includes="**/*.class log4j.properties" excludes="**/JspC.class">
       <manifest>
         <attribute name="Implementation-Version" value="${full.version}" />
         <attribute name="Built-By" value="${build.built-by}" />
