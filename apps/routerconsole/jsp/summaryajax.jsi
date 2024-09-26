@@ -2,7 +2,7 @@
 <% if (!intl.getDisableRefresh()) { %>
 <script nonce="<%=cspNonce%>" type="module">
   import {refreshSidebar} from "/js/refreshSidebar.js";
-  import {sectionToggler, countTunnels, countNewsItems} from "/js/sectionToggle.js";
+  import {sectionToggler, countNewsItems} from "/js/sectionToggle.js";
   import {stickySidebar} from "/js/stickySidebar.js";
   import {onVisible} from "/js/onVisible.js";
   const refresh = parseInt(<%=intl.getRefresh()%>, 10);
@@ -26,7 +26,7 @@
 <% } else { %>
 <script nonce="<%=cspNonce%>" type="module">
   import {refreshSidebar} from "/js/refreshSidebar.js";
-  import {sectionToggler, countTunnels, countNewsItems} from "/js/sectionToggle.js";
+  import {sectionToggler, countNewsItems} from "/js/sectionToggle.js";
   import {stickySidebar} from "/js/stickySidebar.js";
   import {onVisible} from "/js/onVisible.js";
   document.addEventListener("DOMContentLoaded", function() {

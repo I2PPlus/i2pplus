@@ -12,6 +12,11 @@ import java.util.Map;
 
 import javax.imageio.stream.ImageOutputStream;
 
+// enumerate system fonts
+import java.awt.GraphicsEnvironment;
+import java.util.Arrays;
+import java.util.List;
+
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
@@ -28,14 +33,6 @@ import org.rrd4j.graph.RrdGraphDef;
 import org.rrd4j.graph.SVGImageWorker;
 
 import eu.bengreen.data.utility.LargestTriangleThreeBucketsTime;
-
-
-
-// enumerate system fonts
-import java.awt.GraphicsEnvironment;
-import java.util.Arrays;
-import java.util.List;
-
 
 /**
  *  Generate the RRD graph png images,

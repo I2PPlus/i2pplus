@@ -707,19 +707,19 @@ public class SummaryHelper extends HelperBase {
 
         StringBuilder buf = new StringBuilder(512);
         boolean link = isI2PTunnelRunning();
-        buf.append("<h3 id=sb_localTunnelsHeading");
-        if (!link) {buf.append(" class=unregistered");}
-        buf.append("><a href=\"/tunnelmanager\" target=_top title=\"")
-           .append(_t("Add/remove/edit &amp; control your client and server tunnels"))
-           .append("\">")
-           .append(_t("Service Tunnels"))
-           .append(" <span id=tunnelCount class=badge title=\"").append(_t("How many local service tunnels we're running"))
-           .append("\">").append("</span>")
-           .append("</a>")
-           .append("<input type=checkbox id=toggle_sb_localtunnels class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n");
+        int clientCount = 0;
         if (!clients.isEmpty()) {
             DataHelper.sort(clients, new AlphaComparator());
-            buf.append("<table id=sb_localtunnels class=volatile>");
+            clientCount = clients.size();
+            buf.append("<h3 id=sb_localTunnelsHeading");
+            if (!link) {buf.append(" class=unregistered");}
+            buf.append("><a href=\"/tunnelmanager\" target=_top title=\"")
+               .append(_t("Add/remove/edit &amp; control your client and server tunnels"))
+               .append("\">").append(_t("Service Tunnels"))
+               .append(" <span id=tunnelCount class=\"badge volatile\" title=\"").append(_t("How many local service tunnels we're running"))
+               .append("\">").append(clientCount).append("</span>").append("</a>")
+               .append("<input type=checkbox id=toggle_sb_localtunnels class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n")
+               .append("<table id=sb_localtunnels class=volatile>");
 
             for (Destination client : clients) {
                 String name = getTunnelName(client);
@@ -781,7 +781,15 @@ public class SummaryHelper extends HelperBase {
             }
             buf.append("</table>");
         } else {
-            buf.append("<table id=sb_localtunnels class=volatile>\n<tr><td colspan=3><center><i>")
+            buf.append("<h3 id=sb_localTunnelsHeading");
+            if (!link) {buf.append(" class=unregistered");}
+            buf.append("><a href=\"/tunnelmanager\" target=_top title=\"")
+               .append(_t("Add/remove/edit &amp; control your client and server tunnels"))
+               .append("\">").append(_t("Service Tunnels"))
+               .append(" <span id=tunnelCount class=\"badge volatile\" title=\"").append(_t("How many local service tunnels we're running"))
+               .append("\">").append(clientCount).append("</span>").append("</a>")
+               .append("<input type=checkbox id=toggle_sb_localtunnels class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n")
+               .append("<table id=sb_localtunnels class=\"volatile notunnels\">\n<tr><td colspan=3><center><i>")
                .append(_t("none")).append("</i></center></td></tr>\n</table>\n");
         }
         buf.append("<table id=localtunnelSummary hidden>\n<tr id=localtunnelsActive><td>")

@@ -1,7 +1,7 @@
 /* I2P+ RefreshSidebar by dr|z3d */
 /* License: AGPLv3 or later */
 
-import {sectionToggler, countTunnels, countNewsItems} from "/js/sectionToggle.js";
+import {sectionToggler, countNewsItems} from "/js/sectionToggle.js";
 import {stickySidebar} from "/js/stickySidebar.js";
 import {onVisible} from "/js/onVisible.js";
 
@@ -49,7 +49,6 @@ const visible = document.visibilityState;
 
 sb.addEventListener("loaded", () => {
   window.requestAnimationFrame(sectionToggler);
-  window.requestAnimationFrame(countTunnels);
   window.requestAnimationFrame(countNewsItems);
 });
 
@@ -283,15 +282,9 @@ function refreshSidebar() {
       const updatingResponseLen = updatingResponse?.length;
       if (updatingLen !== updatingResponseLen) {
         window.requestAnimationFrame(refreshAll);
-      } else if ("requestIdleCallback" in window) {
-        requestIdleCallback(updateVolatile);
-        requestIdleCallback(sectionToggler);
-        requestIdleCallback(countTunnels);
-        requestIdleCallback(countNewsItems);
       } else {
-        window.requestAnimationFrame(updateVolatile);
         window.requestAnimationFrame(sectionToggler);
-        window.requestAnimationFrame(countTunnels);
+        window.requestAnimationFrame(updateVolatile);
         window.requestAnimationFrame(countNewsItems);
       }
     }
@@ -305,9 +298,10 @@ function refreshSidebar() {
             xhrContainer.innerHTML = sbResponse.innerHTML;
           });
           window.requestAnimationFrame(sectionToggler);
-          window.requestAnimationFrame(countTunnels);
           window.requestAnimationFrame(countNewsItems);
         }
+      } else if ("requestIdleCallback" in window) {
+        requestIdleCallback(tangoDown);
       } else {
         window.requestAnimationFrame(tangoDown);
       }
@@ -353,7 +347,6 @@ function refreshSidebar() {
 
     function uncollapse() {
       window.requestAnimationFrame(sectionToggler);
-      window.requestAnimationFrame(countTunnels);
       window.requestAnimationFrame(countNewsItems);
     }
 
@@ -361,17 +354,11 @@ function refreshSidebar() {
     const sidebarform = document.getElementById("form_sidebar");
     const updatesform = document.getElementById("form_updates");
     if (reseedform) {
-      reseedform.onsubmit = function() {
-        handleFormSubmit();
-      };
+      reseedform.onsubmit = function() {handleFormSubmit();};
     } else if (sidebarform) {
-      sidebarform.onsubmit = function() {
-        handleFormSubmit();
-      };
+      sidebarform.onsubmit = function() {handleFormSubmit();};
     } else if (updatesform) {
-      updatesform.onsubmit = function() {
-        handleFormSubmit();
-      };
+      updatesform.onsubmit = function() {handleFormSubmit();};
     }
 
     function handleFormSubmit() {
