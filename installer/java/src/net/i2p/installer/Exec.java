@@ -19,12 +19,10 @@ public class Exec {
 
             // ugly hack, because it seems we'll block otherwise!
             // http://cephas.net/blog/2004/03/23/external_applications_javas_runtimeexec.html
-            try { proc.exitValue(); } catch (Throwable t) { }
+            try {proc.exitValue();}
+            catch (Throwable t) {}
             Runtime.getRuntime().halt(0);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException e) {e.printStackTrace();}
+        catch (RuntimeException e) {e.printStackTrace();}
     }
 }

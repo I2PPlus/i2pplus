@@ -22,22 +22,18 @@ import java.io.OutputStreamWriter;
  */
 public class FixWinPaths{
     public static void main(String args[]) {
-        if(args.length != 1) {
+        if (args.length != 1) {
             System.err.println("Usage: FixWinPaths [wrapper.conf]\r\n");
             System.exit(1);
         }
 
         // This is only intended for Windows systems
-        if(!System.getProperty("os.name").startsWith("Win")) {
-            return;
-        }
+        if (!System.getProperty("os.name").startsWith("Win")) {return;}
         replace(args[0]);
 
     }
     private static void replace(String file) {
-        //  Shouldn't be true
-        if (!file.contains("wrapper.conf"))
-            return;
+        if (!file.contains("wrapper.conf")) {return;} //  Shouldn't be true
         String wConf = file;
         String wConfTemp = wConf + ".tmp";
 
@@ -65,21 +61,14 @@ public class FixWinPaths{
                 bw.write(line);
                 bw.newLine();
             }
-        } catch (IOException e) {
-            return;
-        } finally {
+        } catch (IOException e) {return;}
+        finally {
             try {
-                if(br != null)
-                    br.close();
-            } catch (IOException e) {
-                //
-            }
+                if (br != null) {br.close();}
+            } catch (IOException e) {}
             try {
-                if(bw != null)
-                    bw.close();
-            } catch (IOException e) {
-                //
-            }
+                if (bw != null) {bw.close();}
+            } catch (IOException e) {}
         }
         boolean successful = false;
         File oldFile = new File(wConf);

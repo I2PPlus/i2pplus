@@ -16,21 +16,14 @@ public class Main {
     private static final String USAGE = "Usage: {copy|delete|exec|fixwinpaths} [args...]";
 
     public static void main(String args[]) {
-        if (args.length == 0)
-            throw new IllegalArgumentException(USAGE);
+        if (args.length == 0) {throw new IllegalArgumentException(USAGE);}
         String cmd = args[0];
         String[] shift = new String[args.length - 1];
-        if (shift.length > 0)
-            System.arraycopy(args, 1, shift, 0, shift.length);
-        if (cmd.equals("copy"))
-            Copy.main(shift);
-        else if (cmd.equals("delete"))
-            Delete.main(shift);
-        else if (cmd.equals("exec"))
-            Exec.main(shift);
-        else if (cmd.equals("fixwinpaths"))
-            FixWinPaths.main(shift);
-        else
-            throw new IllegalArgumentException(USAGE);
+        if (shift.length > 0) {System.arraycopy(args, 1, shift, 0, shift.length);}
+        if (cmd.equals("copy")) {Copy.main(shift);}
+        else if (cmd.equals("delete")) {Delete.main(shift);}
+        else if (cmd.equals("exec")) {Exec.main(shift);}
+        else if (cmd.equals("fixwinpaths")) {FixWinPaths.main(shift);}
+        else {throw new IllegalArgumentException(USAGE);}
     }
 }
