@@ -35,34 +35,29 @@ class RequestVariableLeaseSetMessageHandler extends RequestLeaseSetMessageHandle
 
     @Override
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
-        if (_log.shouldDebug())
-            _log.debug("Handle " + message);
+        if (_log.shouldDebug()) {_log.debug("Handle " + message);}
         RequestVariableLeaseSetMessage msg = (RequestVariableLeaseSetMessage) message;
         boolean isLS2 = requiresLS2(session);
         LeaseSet leaseSet;
         if (isLS2) {
             LeaseSet2 ls2;
-            if (_ls2Type == DatabaseEntry.KEY_TYPE_LS2) {
-                ls2 = new LeaseSet2();
-            } else if (_ls2Type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
-                ls2 = new EncryptedLeaseSet();
-            } else if (_ls2Type == DatabaseEntry.KEY_TYPE_META_LS2) {
-                ls2 = new MetaLeaseSet();
-            } else {
+            if (_ls2Type == DatabaseEntry.KEY_TYPE_LS2) {ls2 = new LeaseSet2();}
+            else if (_ls2Type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {ls2 = new EncryptedLeaseSet();}
+            else if (_ls2Type == DatabaseEntry.KEY_TYPE_META_LS2) {ls2 = new MetaLeaseSet();}
+            else {
               session.propogateError("Unsupported LS2 type", new Exception());
               session.destroySession();
               return;
             }
-            if (Boolean.parseBoolean(session.getOptions().getProperty("i2cp.dontPublishLeaseSet")))
+            if (Boolean.parseBoolean(session.getOptions().getProperty("i2cp.dontPublishLeaseSet"))) {
                 ls2.setUnpublished();
+            }
             // ensure 1-second resolution timestamp is higher than last one
             long now = Math.max(_context.clock().now(), session.getLastLS2SignTime() + 1000);
             ls2.setPublished(now);
             session.setLastLS2SignTime(now);
             leaseSet = ls2;
-        } else {
-            leaseSet = new LeaseSet();
-        }
+        } else {leaseSet = new LeaseSet();}
         // Full Meta support TODO
         for (int i = 0; i < msg.getEndpoints(); i++) {
             Lease lease;
@@ -77,11 +72,10 @@ class RequestVariableLeaseSetMessageHandler extends RequestLeaseSetMessageHandle
                 }
                 lease.setGateway(old.getGateway());
                 lease.setEndDate(old.getEndTime());
-            } else {
-                lease = msg.getEndpoint(i);
-            }
+            } else {lease = msg.getEndpoint(i);}
             leaseSet.addLease(lease);
         }
         signLeaseSet(leaseSet, isLS2, session);
     }
+
 }
