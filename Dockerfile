@@ -9,8 +9,9 @@ RUN apk add gettext tar bzip2 apache-ant openjdk21 git
 COPY . .
 
 RUN echo "build.built-by=DockerUser" >> override.properties
+RUN echo "javac.compilerargs=-Xlint:none" >> override.properties
 
-RUN ant preppkg-linux-only
+RUN ant preppkg-linux-only -q
 RUN rm -rf pkg-temp/osid pkg-temp/lib/wrapper pkg-temp/lib/wrapper.*
 
 FROM alpine:latest
