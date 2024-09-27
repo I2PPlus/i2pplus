@@ -25,8 +25,7 @@ class DisconnectMessageHandler extends HandlerImpl {
     }
 
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
-        if (_log.shouldDebug())
-            _log.debug("Handle " + message);
+        if (_log.shouldInfo()) {_log.info("Handling " + message);}
         String reason = ((DisconnectMessage)message).getReason();
         session.propogateError(reason, new I2PSessionException("Disconnect Message received: " + reason));
         session.destroySession(false);

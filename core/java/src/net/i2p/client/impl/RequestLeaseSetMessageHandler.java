@@ -105,7 +105,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 _ls2Type = type;
                 if (type != DatabaseEntry.KEY_TYPE_LEASESET) {return true;}
             } catch (NumberFormatException nfe) {
-              session.propogateError("Bad LeaseSet2 type", nfe);
+              session.propogateError("BAD LeaseSet2 type", nfe);
               session.destroySession();
               return true;
             }
@@ -117,7 +117,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
     }
 
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
-        if (_log.shouldDebug()) {_log.debug("Handle " + message);}
+        if (_log.shouldInfo()) {_log.info("Handling " + message);}
         RequestLeaseSetMessage msg = (RequestLeaseSetMessage) message;
         boolean isLS2 = requiresLS2(session);
         LeaseSet leaseSet;
@@ -251,15 +251,15 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 if (signingPrivKey != null) {
                     li = new LeaseInfo(privKeys, signingPrivKey);
                     if (_log.shouldInfo())
-                        _log.info("Creating LeaseInfo for [" + dest.toBase32().substring(0,8) + "] -> LS1 with configured private keys");
+                        _log.info("Creating LS1 LeaseInfo for [" + dest.toBase32().substring(0,8) + "] with configured private keys");
                 } else if (isLS2) {
                     li = new LeaseInfo(privKeys);
                     if (_log.shouldInfo())
-                        _log.info("Creating LeaseInfo for [" + dest.toBase32().substring(0,8) + "] -> LS2 with configured private keys");
+                        _log.info("Creating LS2 LeaseInfo for [" + dest.toBase32().substring(0,8) + "] with configured private keys");
                 } else {
                     li = new LeaseInfo(privKeys, dest);
                     if (_log.shouldInfo())
-                        _log.info("Creating LeaseInfo for [" + dest.toBase32().substring(0,8) + "] -> LS1 with configured private keys and new revocation key");
+                        _log.info("Creating LS1 LeaseInfo for [" + dest.toBase32().substring(0,8) + "] with configured private keys and new revocation key");
                 }
             } else {
                 li = new LeaseInfo(dest, types, isLS2);
@@ -268,8 +268,8 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
             }
             _existingLeaseSets.put(dest, li);
         } else {
-            if (_log.shouldDebug())
-                _log.debug("Caching old LeaseInfo keys for [" + dest.toBase32().substring(0,8) + "]");
+            if (_log.shouldInfo())
+                _log.info("Caching old LeaseInfo keys for [" + dest.toBase32().substring(0,8) + "]");
         }
 
         if (isLS2) {
@@ -296,7 +296,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 leaseSet.encrypt(key);
                 _context.keyRing().put(h, key);
             } catch (DataFormatException dfe) {
-                _log.error("Bad LeaseSet key: " + sk);
+                _log.error("BAD LeaseSet key: " + sk);
                 _context.keyRing().remove(h);
             }
         } else {_context.keyRing().remove(h);}
@@ -309,7 +309,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
             if (!ok) {
                 String s;
                 if (exp <= _context.clock().now()) {s = "Offline Signature for tunnel expired " + DataHelper.formatTime(exp);}
-                else {s = "Bad Offline Signature";}
+                else {s = "BAD Offline Signature";}
                 session.propogateError(s, new Exception());
                 session.destroySession();
             }
@@ -329,7 +329,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                         try {
                             PrivateKey pk = new PrivateKey(EncType.ECIES_X25519, b);
                             clientKeys.add(pk.toPublic());
-                        } catch (IllegalArgumentException iae) {_log.error("Bad priv key: " + p, iae);}
+                        } catch (IllegalArgumentException iae) {_log.error("BAD private key: " + p, iae);}
                     }
                     int i = 0;
                     while ((p = opts.getProperty(pfx + i)) != null) {
@@ -339,7 +339,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                         try {
                             PublicKey pk = new PublicKey(EncType.ECIES_X25519, b);
                             clientKeys.add(pk);
-                        } catch (IllegalArgumentException iae) {_log.error("Bad client key: " + p, iae);}
+                        } catch (IllegalArgumentException iae) {_log.error("BAD client key: " + p, iae);}
                         i++;
                     }
                     els2.sign(session.getPrivateKey(), authType, clientKeys);
@@ -354,7 +354,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                         try {
                             PrivateKey pk = new PrivateKey(EncType.ECIES_X25519, b);
                             clientKeys.add(pk);
-                        } catch (IllegalArgumentException iae) {_log.error("Bad private key: " + p, iae);}
+                        } catch (IllegalArgumentException iae) {_log.error("BAD private key: " + p, iae);}
                     }
                     int i = 0;
                     while ((p = opts.getProperty(pfx + i)) != null) {
@@ -364,7 +364,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                         try {
                             PrivateKey pk = new PrivateKey(EncType.ECIES_X25519, b);
                             clientKeys.add(pk);
-                        } catch (IllegalArgumentException iae) {_log.error("Bad client key: " + p, iae);}
+                        } catch (IllegalArgumentException iae) {_log.error("BAD client key: " + p, iae);}
                         i++;
                     }
                     els2.sign(session.getPrivateKey(), authType, clientKeys);
@@ -386,7 +386,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
             }
             session.getProducer().createLeaseSet(session, leaseSet, spk, li.getPrivateKeys());
             session.setLeaseSet(leaseSet);
-            if (_log.shouldDebug()) {_log.debug("Created and signed LeaseSet" + leaseSet);}
+            if (_log.shouldInfo()) {_log.info("Created and signed " + leaseSet);}
         } catch (DataFormatException dfe) {
             session.propogateError("Error signing the LeaseSet", dfe);
             session.destroySession();
@@ -420,7 +420,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                                 PrivateKey privKey = new PrivateKey(type);
                                 privKey.fromBase64(spk.substring(colon + 1));
                                 privKeys.add(privKey);
-                            } catch (DataFormatException dfe) {_log.error("Bad private key: " + spk, dfe);}
+                            } catch (DataFormatException dfe) {_log.error("BAD private key: " + spk, dfe);}
                         } else if (_log.shouldDebug()) {_log.debug("Ignoring private key with unconfigured crypto type: " + type);}
                     } else {_log.error("Unsupported crypto type: " + type);}
                 } else {_log.error("Unsupported crypto type: " + spk);}
@@ -431,7 +431,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                         PrivateKey privKey = new PrivateKey();
                         privKey.fromBase64(spk);
                         privKeys.add(privKey);
-                    } catch (DataFormatException dfe) {_log.error("Bad private key: " + spk, dfe);}
+                    } catch (DataFormatException dfe) {_log.error("BAD private key: " + spk, dfe);}
                 } else if (_log.shouldDebug()) {_log.debug("Ignoring private key with unconfigured crypto type: " + type);}
             } else {_log.error("Empty crypto type");}
         }

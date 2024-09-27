@@ -121,7 +121,7 @@ public class I2PClientImpl implements I2PClient {
             try {
                 signingKeys = KeyGenerator.getInstance().generateSigningKeys(type);
             } catch (GeneralSecurityException gse) {
-                throw new I2PException("keygen fail", gse);
+                throw new I2PException("Keygen failure", gse);
             }
         } else {
             signingKeys = KeyGenerator.getInstance().generateSigningKeys();

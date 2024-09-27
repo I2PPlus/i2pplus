@@ -111,7 +111,7 @@ class MessageState {
             synchronized (this) {
                 if (_state != State.INIT) {
                     if (_log.shouldDebug())
-                        _log.debug(_prefix + "Received a confirm (one way or the other)");
+                        _log.debug(_prefix + "Received a confirm (one way or another)");
                     return;
                 }
                 if (timeToWait > 5000)

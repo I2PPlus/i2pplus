@@ -478,7 +478,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
      */
     private void handleReceiveBegin(ReceiveMessageBeginMessage message) {
         if (_runner.isDead()) {return;}
-        if (_log.shouldDebug()) {_log.debug("Handling receive begin: id = " + message.getMessageId());}
+        if (_log.shouldInfo()) {_log.info("Handling receive begin: id = " + message.getMessageId());}
         Payload payload = _runner.getPayload(new MessageId(message.getMessageId()));
         if (payload == null) {
             if (_log.shouldWarn()) {

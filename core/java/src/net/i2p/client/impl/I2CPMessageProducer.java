@@ -66,10 +66,18 @@ class I2CPMessageProducer {
     // http://i2p-projekt.i2p/en/docs/protocol/i2cp
     // Note that some are listed for both client and server side, don't include those below.
     private static final String[] CLIENT_SIDE_OPTIONS = new String[] {
-        "i2cp.closeIdleTime", "i2cp.closeOnIdle", "i2cp.encryptLeaseSet",
-        I2PClient.PROP_GZIP, "i2cp.leaseSetKey", "i2cp.leaseSetPrivateKey",
-        "i2cp.leaseSetSigningPrivateKey", "i2cp.reduceIdleTime", "i2cp.reduceOnIdle",
-        I2PClient.PROP_ENABLE_SSL, I2PClient.PROP_TCP_HOST, I2PClient.PROP_TCP_PORT,
+        "i2cp.closeIdleTime",
+        "i2cp.closeOnIdle",
+        "i2cp.encryptLeaseSet",
+        I2PClient.PROP_GZIP,
+        "i2cp.leaseSetKey",
+        "i2cp.leaseSetPrivateKey",
+        "i2cp.leaseSetSigningPrivateKey",
+        "i2cp.reduceIdleTime",
+        "i2cp.reduceOnIdle",
+        I2PClient.PROP_ENABLE_SSL,
+        I2PClient.PROP_TCP_HOST,
+        I2PClient.PROP_TCP_PORT,
         // long and shouldn't be passed through
         "i2p.reseedURL"
     };
