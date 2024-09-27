@@ -1409,9 +1409,9 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      */
     protected String getPrefix() {
         StringBuilder buf = new StringBuilder();
-        buf.append(" Tunnel: ");
+        buf.append(" (Tunnel: ");
         getName(buf);
-        buf.append(" -> ").append(_state.toString().append(' ');
+        buf.append(") -> ").append(_state.toString()).append(' ');
         return buf.toString();
     }
 
