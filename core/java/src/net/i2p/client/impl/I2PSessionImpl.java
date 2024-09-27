@@ -1810,7 +1810,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     public String toString() {
         StringBuilder buf = new StringBuilder(32);
         if (_myDestination != null) {
-            buf.append("[").append(_myDestination.calculateHash().toBase64().substring(0, 6)).append("]" );
+            buf.append("[").append(_myDestination.calculateHash().toBase32().substring(0,8)).append("]" );
         } else {buf.append("[null dest] ");}
         buf.append(getPrefix());
         return buf.toString();
