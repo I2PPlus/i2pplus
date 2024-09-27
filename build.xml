@@ -495,7 +495,7 @@
     <property name="full.version" value="${release.number}-${i2p.build.number}${build.extra}" />
     <echo message="Ant: ${ant.version}" />
     <echo message="JDK: ${java.vendor} ${java.version} (${java.runtime.name} ${java.runtime.version})" />
-    <echo message="Building version ${full.version} (revision ${workspace.version}) ..." />
+    <echo message="Building I2P+ version ${full.version} (revision ${workspace.version}) ..." />
   </target>
 
   <target name="setBuildTimestamp" unless="${build.reproducible}">
