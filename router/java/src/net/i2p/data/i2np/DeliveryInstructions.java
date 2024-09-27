@@ -17,23 +17,17 @@ import net.i2p.data.DataStructureImpl;
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
 import net.i2p.data.TunnelId;
-//import net.i2p.util.Log;
-
 
 /**
  * Contains the delivery instructions for garlic cloves.
- * Generic "delivery instructions" are used both in tunnel messages
- * and in garlic cloves, with slight differences.
- * However,
- * the tunnel message generator TrivialPreprocessor and reader FragmentHandler do not use this class,
+ * Generic "delivery instructions" are used both in tunnel messages and in
+ * garlic cloves, with slight differences. However, the tunnel message generator
+ * TrivialPreprocessor and reader FragmentHandler do not use this class,
  * the reading and writing is handled inline there.
  *
  * @author jrandom
  */
 public class DeliveryInstructions extends DataStructureImpl {
-    //private final static Log _log = new Log(DeliveryInstructions.class);
-    //private boolean _encrypted;
-    //private SessionKey _encryptionKey;
     private int _deliveryMode;
     public final static int DELIVERY_MODE_LOCAL = 0;
     public final static int DELIVERY_MODE_DESTINATION = 1;
@@ -173,20 +167,6 @@ public class DeliveryInstructions extends DataStructureImpl {
         int cur = offset;
         int flags = data[cur] & 0xff;
         cur++;
-        //if (_log.shouldDebug())
-        //    _log.debug("Read flags: " + flags + " mode: " +  flagMode(flags));
-
-     /****
-        if (flagEncrypted(flags)) {
-            byte kd[] = new byte[SessionKey.KEYSIZE_BYTES];
-            System.arraycopy(data, cur, kd, 0, SessionKey.KEYSIZE_BYTES);
-            cur += SessionKey.KEYSIZE_BYTES;
-            setEncryptionKey(new SessionKey(kd));
-            setEncrypted(true);
-        } else {
-            setEncrypted(false);
-        }
-      ****/
 
         setDeliveryMode(flagMode(flags));
         switch (flagMode(flags)) {
@@ -228,16 +208,6 @@ public class DeliveryInstructions extends DataStructureImpl {
         return cur - offset;
     }
 
-
-    /**
-     * For cloves only (not tunnels), default false, unused
-     */
-/****
-    private static boolean flagEncrypted(long flags) {
-        return (0 != (flags & FLAG_ENCRYPTED));
-    }
-****/
-
     /** high bits */
     private static int flagMode(int flags) {
         int v = flags & FLAG_MODE;
@@ -252,10 +222,7 @@ public class DeliveryInstructions extends DataStructureImpl {
 
     private int getFlags() {
         int val = 0;
-     /****
-        if (getEncrypted())
-            val = val | FLAG_ENCRYPTED;
-      ****/
+
         switch (getDeliveryMode()) {
             case FLAG_MODE_LOCAL:
                 break;
@@ -271,23 +238,14 @@ public class DeliveryInstructions extends DataStructureImpl {
         }
         if (getDelayRequested())
             val |= FLAG_DELAY;
-        //if (_log.shouldDebug())
-        //    _log.debug("getFlags() = " + val);
         return val;
     }
 
     private int getAdditionalInfoSize() {
         int additionalSize = 0;
-     /****
-        if (getEncrypted()) {
-            if (_encryptionKey == null) throw new IllegalStateException("Encryption key is not set");
-            additionalSize += SessionKey.KEYSIZE_BYTES;
-        }
-      ****/
+
         switch (getDeliveryMode()) {
             case FLAG_MODE_LOCAL:
-                //if (_log.shouldDebug())
-                //    _log.debug("mode = local");
                 break;
             case FLAG_MODE_DESTINATION:
                 if (_destinationHash == null) throw new IllegalStateException("Destination hash is not set");
@@ -310,54 +268,21 @@ public class DeliveryInstructions extends DataStructureImpl {
         return additionalSize;
     }
 
-/****
-    private byte[] getAdditionalInfo() {
-        int additionalSize = getAdditionalInfoSize();
-        byte rv[] = new byte[additionalSize];
-        int offset = 0;
-        offset += getAdditionalInfo(rv, offset);
-        if (offset != additionalSize)
-            //_log.log(Log.CRIT, "size mismatch, additionalSize = " + additionalSize + ", offset = " + offset);
-            throw new IllegalStateException("size mismatch, additionalSize = " + additionalSize + ", offset = " + offset);
-        return rv;
-    }
-****/
-
-    /** */
     private int getAdditionalInfo(byte rv[], int offset) {
         int origOffset = offset;
 
-      /****
-        if (getEncrypted()) {
-            if (_encryptionKey == null) throw new IllegalStateException("Encryption key is not set");
-            System.arraycopy(_encryptionKey.getData(), 0, rv, offset, SessionKey.KEYSIZE_BYTES);
-            offset += SessionKey.KEYSIZE_BYTES;
-            if (_log.shouldDebug())
-                _log.debug("IsEncrypted");
-        } else {
-            if (_log.shouldDebug())
-                _log.debug("Is NOT Encrypted");
-        }
-      ****/
-
         switch (getDeliveryMode()) {
             case FLAG_MODE_LOCAL:
-                //if (_log.shouldDebug())
-                //    _log.debug("mode = local");
                 break;
             case FLAG_MODE_DESTINATION:
                 if (_destinationHash == null) throw new IllegalStateException("Destination hash is not set");
                 System.arraycopy(_destinationHash.getData(), 0, rv, offset, Hash.HASH_LENGTH);
                 offset += Hash.HASH_LENGTH;
-                //if (_log.shouldDebug())
-                //    _log.debug("mode = destination, hash = " + _destinationHash);
                 break;
             case FLAG_MODE_ROUTER:
                 if (_routerHash == null) throw new IllegalStateException("Router hash is not set");
                 System.arraycopy(_routerHash.getData(), 0, rv, offset, Hash.HASH_LENGTH);
                 offset += Hash.HASH_LENGTH;
-                //if (_log.shouldDebug())
-                //    _log.debug("mode = router, routerHash = " + _routerHash);
                 break;
             case FLAG_MODE_TUNNEL:
                 if ( (_routerHash == null) || (_tunnelId == null) ) throw new IllegalStateException("Router hash or tunnel ID is not set");
@@ -365,19 +290,11 @@ public class DeliveryInstructions extends DataStructureImpl {
                 offset += Hash.HASH_LENGTH;
                 DataHelper.toLong(rv, offset, 4, _tunnelId.getTunnelId());
                 offset += 4;
-                //if (_log.shouldDebug())
-                //    _log.debug("mode = tunnel, tunnelId = " + _tunnelId.getTunnelId()
-                //               + ", routerHash = " + _routerHash);
                 break;
         }
         if (getDelayRequested()) {
-            //if (_log.shouldDebug())
-            //    _log.debug("delay requested: " + getDelaySeconds());
             DataHelper.toLong(rv, offset, 4, getDelaySeconds());
             offset += 4;
-        } else {
-            //if (_log.shouldDebug())
-            //    _log.debug("delay NOT requested");
         }
         return offset - origOffset;
     }
@@ -397,9 +314,6 @@ public class DeliveryInstructions extends DataStructureImpl {
     public int writeBytes(byte target[], int offset) {
         if ( (_deliveryMode < 0) || (_deliveryMode > FLAG_MODE_TUNNEL) ) throw new IllegalStateException("Invalid data: mode = " + _deliveryMode);
         int flags = getFlags();
-        //if (_log.shouldDebug())
-        //    _log.debug("Write flags: " + flags + " mode: " + getDeliveryMode()
-        //               + " =?= " + flagMode(flags));
         int origOffset = offset;
         target[offset++] = (byte) flags;
         offset += getAdditionalInfo(target, offset);
@@ -407,14 +321,12 @@ public class DeliveryInstructions extends DataStructureImpl {
     }
 
     public int getSize() {
-        return 1 // flags
-               + getAdditionalInfoSize();
+        return 1 + getAdditionalInfoSize(); // flags +
     }
 
     @Override
     public boolean equals(Object obj) {
-        if ( (obj == null) || !(obj instanceof DeliveryInstructions))
-            return false;
+        if ((obj == null) || !(obj instanceof DeliveryInstructions)) {return false;}
         DeliveryInstructions instr = (DeliveryInstructions)obj;
         return (getDelayRequested() == instr.getDelayRequested()) &&
                (getDelaySeconds() == instr.getDelaySeconds()) &&
@@ -455,16 +367,10 @@ public class DeliveryInstructions extends DataStructureImpl {
                 buf.append("Tunnel");
                 break;
         }
-        if (_delayRequested)
-            buf.append("\n* Delay seconds: ").append(getDelaySeconds());
-        if (_destinationHash != null)
-            buf.append("\n* Destination: ").append(getDestination());
-        //buf.append("\n* Encrypted: ").append(getEncrypted());
-        //buf.append("\n* Encryption key: ").append(getEncryptionKey());
-        if (_routerHash != null)
-            buf.append("\n* Router: ").append(getRouter());
-        if (_tunnelId != null)
-            buf.append("\n* TunnelId: ").append(getTunnelId());
+        if (_delayRequested) {buf.append("\n* Delay seconds: ").append(getDelaySeconds());}
+        if (_destinationHash != null) {buf.append("\n* Destination: ").append(getDestination());}
+        if (_tunnelId != null) {buf.append("\n* TunnelId: ").append(getTunnelId());}
+        if (_routerHash != null) {buf.append("\n* Router: ").append(getRouter());}
         return buf.toString();
     }
 

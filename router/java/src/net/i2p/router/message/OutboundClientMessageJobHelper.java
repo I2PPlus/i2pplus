@@ -173,8 +173,8 @@ class OutboundClientMessageJobHelper {
         config.setRecipientPublicKey(recipientPK);
 
         if (log.shouldInfo()) {
-            log.info("Creating garlic config to be encrypted to " + recipientPK
-                     + "\n* Destination: [" + dest.calculateHash().toBase64().substring(0,6) + "]");
+            log.info("Creating garlic config to be encrypted to " + recipientPK +
+                     "\n* Destination: [" + dest.calculateHash().toBase32().substring(0,8) + "]");
         }
         return config;
     }

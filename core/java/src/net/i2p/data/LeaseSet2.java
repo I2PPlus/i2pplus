@@ -610,8 +610,7 @@ public class LeaseSet2 extends LeaseSet {
         StringBuilder buf = new StringBuilder(128);
         buf.append(" LeaseSet2");
         if (_destination != null) {
-            buf.append("\n* Destination: ").append(_destination)
-               .append("\n* B32: ").append(_destination.toBase32());
+            buf.append("\n* Destination: ").append(_destination.toBase32());
         }
         List<PublicKey> keys = getEncryptionKeys();
         int sz = keys.size();

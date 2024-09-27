@@ -51,10 +51,8 @@ public class HostReplyMessage extends I2CPMessageImpl {
      *  @param reqID 0 to 2**32 - 1
      */
     public HostReplyMessage(SessionId id, Destination d, long reqID) {
-        if (id == null || d == null)
-            throw new IllegalArgumentException();
-        if (reqID < 0 || reqID > MAX_INT)
-            throw new IllegalArgumentException();
+        if (id == null || d == null) {throw new IllegalArgumentException();}
+        if (reqID < 0 || reqID > MAX_INT) {throw new IllegalArgumentException();}
         _sessionId = id;
         _dest = d;
         _reqID = reqID;
@@ -67,20 +65,15 @@ public class HostReplyMessage extends I2CPMessageImpl {
      *  @param reqID from the HostLookup 0 to 2**32 - 1
      */
     public HostReplyMessage(SessionId id, int failureCode, long reqID) {
-        if (id == null)
-            throw new IllegalArgumentException();
-        if (failureCode <= 0 || failureCode > 255)
-            throw new IllegalArgumentException();
-        if (reqID < 0 || reqID > MAX_INT)
-            throw new IllegalArgumentException();
+        if (id == null) {throw new IllegalArgumentException();}
+        if (failureCode <= 0 || failureCode > 255) {throw new IllegalArgumentException();}
+        if (reqID < 0 || reqID > MAX_INT) {throw new IllegalArgumentException();}
         _sessionId = id;
         _code = failureCode;
         _reqID = reqID;
     }
 
-    public SessionId getSessionId() {
-        return _sessionId;
-    }
+    public SessionId getSessionId() {return _sessionId;}
 
     /**
      * Return the SessionId for this message.
@@ -88,30 +81,22 @@ public class HostReplyMessage extends I2CPMessageImpl {
      * @since 0.9.21
      */
     @Override
-    public SessionId sessionId() {
-        return _sessionId;
-    }
+    public SessionId sessionId() {return _sessionId;}
 
     /**
      *  @return 0 to 2**32 - 1
      */
-    public long getReqID() {
-        return _reqID;
-    }
+    public long getReqID() {return _reqID;}
 
     /**
      *  @return 0 on success, 1-255 on failure
      */
-    public int getResultCode() {
-        return _code;
-    }
+    public int getResultCode() {return _code;}
 
     /**
      *  @return non-null only if result code is zero
      */
-    public Destination getDestination() {
-        return _dest;
-    }
+    public Destination getDestination() {return _dest;}
 
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         try {
@@ -119,20 +104,17 @@ public class HostReplyMessage extends I2CPMessageImpl {
             _sessionId.readBytes(in);
             _reqID = DataHelper.readLong(in, 4);
             _code = in.read();
-            if (_code < 0)
-                throw new EOFException();
-            if (_code == RESULT_SUCCESS)
-                _dest = Destination.create(in);
-        } catch (DataFormatException dfe) {
-            throw new I2CPMessageException("bad data", dfe);
-        }
+            if (_code < 0) {throw new EOFException();}
+            if (_code == RESULT_SUCCESS) {_dest = Destination.create(in);}
+        } catch (DataFormatException dfe) {throw new I2CPMessageException("bad data", dfe);}
     }
 
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         int len = 7;
         if (_code == RESULT_SUCCESS) {
-            if (_dest == null)
+            if (_dest == null) {
                 throw new I2CPMessageException("Unable to write out the message as there is not enough data");
+            }
             len += _dest.size();
         }
         ByteArrayStream os = new ByteArrayStream(len);
@@ -140,11 +122,8 @@ public class HostReplyMessage extends I2CPMessageImpl {
             _sessionId.writeBytes(os);
             DataHelper.writeLong(os, 4, _reqID);
             os.write((byte) _code);
-            if (_code == RESULT_SUCCESS)
-                _dest.writeBytes(os);
-        } catch (DataFormatException dfe) {
-            throw new I2CPMessageException("bad data", dfe);
-        }
+            if (_code == RESULT_SUCCESS) {_dest.writeBytes(os);}
+        } catch (DataFormatException dfe) {throw new I2CPMessageException("BAD data", dfe);}
         return os.toByteArray();
     }
 
@@ -157,10 +136,9 @@ public class HostReplyMessage extends I2CPMessageImpl {
         StringBuilder buf = new StringBuilder();
         buf.append("HostReplyMessage ");
         buf.append("\n* ").append(_sessionId);
-        buf.append(" ReqID: ").append(_reqID);
+        buf.append(" RequestID: ").append(_reqID);
         buf.append(" Result: ").append(_code);
-        if (_code == RESULT_SUCCESS)
-            buf.append("\n* Destination: ").append(_dest);
+        if (_code == RESULT_SUCCESS) {buf.append("\n* Destination: ").append(_dest);}
         return buf.toString();
     }
 }

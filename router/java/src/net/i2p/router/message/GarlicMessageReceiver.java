@@ -51,8 +51,6 @@ public class GarlicMessageReceiver {
         _log = context.logManager().getLog(GarlicMessageReceiver.class);
         _clientDestination = clientDestination;
         _receiver = receiver;
-        //_log.error("New GMR dest = " + clientDestination);
-        // all createRateStat in OCMOSJ.init()
     }
 
     public void receive(GarlicMessage message) {
@@ -66,18 +64,19 @@ public class GarlicMessageReceiver {
                 decryptionKey = keys.getDecryptionKey();
                 decryptionKey2 = keys.getDecryptionKey(EncType.ECIES_X25519);
                 if (decryptionKey == null && decryptionKey2 == null) {
-                    if (_log.shouldWarn())
+                    if (_log.shouldWarn()) {
                         _log.warn("No key to decrypt for " + _clientDestination.toBase32());
+                    }
                     return;
                 }
                 if (decryptionKey == null) {
-                    // swap
-                    decryptionKey = decryptionKey2;
+                    decryptionKey = decryptionKey2; // swap
                     decryptionKey2 = null;
                 }
             } else {
-                if (_log.shouldWarn())
-                    _log.warn("Not decrypting " + message + " for disconnected client \n* Destination: " + _clientDestination.toBase32());
+                if (_log.shouldWarn()) {
+                    _log.warn("Not decrypting " + message + " for disconnected client \n* Destination: " + _clientDestination);
+                }
                 return;
             }
         } else {
@@ -87,10 +86,11 @@ public class GarlicMessageReceiver {
 
         // Pass both keys if available for muxed decrypt
         CloveSet set;
-        if (decryptionKey2 != null)
+        if (decryptionKey2 != null) {
             set = _context.garlicMessageParser().getGarlicCloves(message, decryptionKey, decryptionKey2, skm);
-        else
+        } else {
             set = _context.garlicMessageParser().getGarlicCloves(message, decryptionKey, skm);
+        }
         if (set != null) {
             for (int i = 0; i < set.getCloveCount(); i++) {
                 GarlicClove clove = set.getClove(i);
@@ -114,24 +114,23 @@ public class GarlicMessageReceiver {
      *
      */
     private void handleClove(GarlicClove clove) {
-        if (!isValid(clove)) {
-            //if (_log.shouldWarn())
-            //    _log.warn("Invalid clove received " + clove);
-            return;
-        }
-        //if (_log.shouldDebug())
-        //    _log.debug("Valid clove received " + clove);
+        if (!isValid(clove)) {return;}
         _receiver.handleClove(clove.getInstructions(), clove.getData());
     }
 
     private boolean isValid(GarlicClove clove) {
-        // As of 0.9.44, no longer check the clove ID in the Bloom filter, just check the expiration.
-        // The Clove ID is just another random number, and the message ID in the clove
-        // will be checked in the Bloom filter; that is sufficient.
-        // Checking the clove ID as well just doubles the number of entries in the Bloom filter,
-        // doubling the number of false positives over what is expected.
-        // For ECIES-Ratchet, the clove ID is set to the message ID after decryption, as there
-        // is no longer a separate field for the clove ID in the transmission format.
+        /**
+         *  As of 0.9.44, no longer check the clove ID in the Bloom filter, just check the expiration.
+         *  The Clove ID is just another random number, and the message ID in the clove
+         *  will be checked in the Bloom filter; that is sufficient.
+         *
+         *  Checking the clove ID as well just doubles the number of entries in the Bloom filter,
+         *  doubling the number of false positives over what is expected.
+         *
+         *  For ECIES-Ratchet, the clove ID is set to the message ID after decryption, as there
+         *  is no longer a separate field for the clove ID in the transmission format.
+         */
+
         //String invalidReason = _context.messageValidator().validateMessage(clove.getCloveId(),
         //                                                                   clove.getExpiration().getTime());
         String invalidReason = _context.messageValidator().validateMessage(clove.getExpiration());
@@ -139,16 +138,19 @@ public class GarlicMessageReceiver {
         boolean rv = invalidReason == null;
         if (!rv) {
             String howLongAgo = DataHelper.formatDuration(_context.clock().now()-clove.getExpiration());
-            if (_log.shouldDebug())
-                _log.debug("Clove is NOT valid: id=" + clove.getCloveId()
-                           + " expiration " + howLongAgo + " ago", new Exception("Invalid within..."));
-            else if (_log.shouldWarn())
-                _log.warn("Clove is NOT valid: id=" + clove.getCloveId()
-                           + " expiration " + howLongAgo + " ago: " + invalidReason + ": " + clove);
+            if (_log.shouldDebug()) {
+                _log.debug("Clove is NOT valid: id=" + clove.getCloveId() + " expiration " + howLongAgo + " ago",
+                           new Exception("Invalid within..."));
+            }
+            else if (_log.shouldWarn()) {
+                _log.warn("Clove is NOT valid: id=" + clove.getCloveId() + " expiration " + howLongAgo + " ago: " +
+                          invalidReason + ": " + clove);
+            }
             _context.messageHistory().messageProcessingError(clove.getCloveId(),
                                                              clove.getData().getClass().getSimpleName(),
                                                              "Clove is not valid (expiration " + howLongAgo + " ago)");
         }
         return rv;
     }
+
 }
