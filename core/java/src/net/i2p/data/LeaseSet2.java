@@ -537,7 +537,7 @@ public class LeaseSet2 extends LeaseSet {
     @Override
     public void sign(SigningPrivateKey key) throws DataFormatException {
         if (_signature != null) {throw new IllegalStateException();}
-        if (key == null) {throw new DataFormatException("No signing key");}
+        if (key == null) {throw new DataFormatException("No Signing Key");}
         int len = size();
         ByteArrayStream out = new ByteArrayStream(1 + len);
         try {
@@ -614,9 +614,9 @@ public class LeaseSet2 extends LeaseSet {
         }
         List<PublicKey> keys = getEncryptionKeys();
         int sz = keys.size();
-        buf.append("\n* Encryption Keys: ").append(sz);
+        if (sz > 1) {buf.append("\n* Encryption Keys: ").append(sz);}
         for (int i = 0; i < sz; i++) {
-            buf.append("\n* Encryption Key ").append((sz > 1 ? i+1 : "")).append(": ").append(keys.get(i));
+            buf.append("\n* ").append((sz > 1 ? "Key #" + (i+1) : "Encryption Key")).append(": ").append(keys.get(i));
         }
         if (isOffline()) {
             buf.append("\n* Transient Key: ").append(_transientSigningPublicKey);
