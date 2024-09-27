@@ -373,7 +373,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     public String toString() {
         StringBuilder buf = new StringBuilder();
         buf.append("MessageStatusMessage ");
-        buf.append(" [MsgID ").append(_messageId).append("] -> ").append(getStatusString(_status);
+        buf.append(" [MsgID ").append(_messageId).append("] -> ").append(getStatusString(_status));
         buf.append("\n* SessionID: ").append(_sessionId);
         buf.append("; Nonce: ").append(_nonce);
         if (_size > 0) {buf.append("; Size: ").append(_size).append(" bytes");}
