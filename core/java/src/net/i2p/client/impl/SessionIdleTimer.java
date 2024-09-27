@@ -86,7 +86,7 @@ class SessionIdleTimer implements SimpleTimer.TimedEvent {
         long lastActivity = _session.lastActivity();
         String sessionName = _session.getName();
         if (_log.shouldInfo()) {
-            _log.info("Firing idle timer -> last activity detected " + DataHelper.formatDuration(now - lastActivity) + " ago ");
+            _log.info("Firing idle timer -> Last activity detected " + DataHelper.formatDuration(now - lastActivity) + " ago ");
         }
         long nextDelay = 0;
         if (_shutdownEnabled && now - lastActivity >= _shutdownTime) {
