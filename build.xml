@@ -106,6 +106,10 @@
     <echo message=" signed-updater200WithJavadocAndJetty         Signed Updater (pack200) + javadocs + Jetty &#10140; ./i2pupdate.su3" />
     <echo message=" signed-updater200WithJavadoc                 Signed Updater (pack200) + javadocs &#10140; ./i2pupdate.su3" />
     <echo message=" signed-updater200withJetty                   Signed Updater (pack200) + Jetty" />
+    <echo message=" zip-freebsd                                  Installation zip for FreeBSD without installer &#10140; ./i2p-freebsd.zip" />
+    <echo message=" zip-linux                                    Installation zip for Linux without installer &#10140; ./i2p-linux.zip" />
+    <echo message=" zip-macos                                    Installation zip for macOS without installer &#10140; ./i2p-macos.zip" />
+    <echo message=" zip-windows                                  Installation zip for Windows without installer &#10140; ./i2p-windows.zip" />
     <echo message=" updateTorBlocklist                           Update Tor blocklist &#10140; installer/resources/blocklist_tor.txt" />
     <!-- <echo message=" translationReport                            Generate in-console translation status report" /> -->
     <!-- <echo message="  debianrepo                                   Build a Debian repository (reprepro required)" /> -->
@@ -1469,6 +1473,7 @@
       <fileset dir="pkg-temp" includes="webapps/addressbook.war" />
     </delete>
     <copy file="build/i2p.jar" todir="pkg-temp/lib/" />
+    <copy file="build/pack200.jar" todir="pkg-temp/lib/" />
     <copy file="build/i2ptunnel.jar" todir="pkg-temp/lib/" />
     <copy file="build/mstreaming.jar" todir="pkg-temp/lib/" />
     <copy file="build/streaming.jar" todir="pkg-temp/lib/" />
@@ -1513,6 +1518,38 @@
       <fileset dir="installer/resources/eepsite-jetty9.3" />
     </copy>
     <copy file="installer/resources/themes/console/light/images/favicon.svg" tofile="pkg-temp/eepsite/docroot/favicon.svg" />
+  </target>
+
+  <target name="zip-linux">
+    <delete dir="pkg-temp" />
+    <ant target="preppkg-linux" />
+    <zip destfile="i2p-linux.zip">
+      <fileset dir="pkg-temp"/>
+    </zip>
+  </target>
+
+  <target name="zip-windows">
+    <delete dir="pkg-temp" />
+    <ant target="preppkg-windows" />
+    <zip destfile="i2p-windows.zip">
+      <fileset dir="pkg-temp"/>
+    </zip>
+  </target>
+
+  <target name="zip-macos">
+    <delete dir="pkg-temp" />
+    <ant target="preppkg-osx" />
+    <zip destfile="i2p-macos.zip">
+      <fileset dir="pkg-temp"/>
+    </zip>
+  </target>
+
+  <target name="zip-freebsd">
+    <delete dir="pkg-temp" />
+    <ant target="preppkg-freebsd" />
+    <zip destfile="i2p-freebsd.zip">
+      <fileset dir="pkg-temp"/>
+    </zip>
   </target>
 
   <target name="copyflags">
