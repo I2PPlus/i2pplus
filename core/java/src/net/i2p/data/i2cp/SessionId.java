@@ -67,7 +67,7 @@ public class SessionId {
     }
 
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
-        if (_sessionId < 0) throw new DataFormatException("Invalid session ID: " + _sessionId);
+        if (_sessionId < 0) throw new DataFormatException("Invalid Session ID: " + _sessionId);
         DataHelper.writeLong(out, 2, _sessionId);
     }
 

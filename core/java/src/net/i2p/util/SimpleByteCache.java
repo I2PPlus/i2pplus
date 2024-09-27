@@ -21,9 +21,7 @@ public final class SimpleByteCache {
      *
      * @param size how large should the objects cached be?
      */
-    public static SimpleByteCache getInstance(int size) {
-        return getInstance(DEFAULT_SIZE, size);
-    }
+    public static SimpleByteCache getInstance(int size) {return getInstance(DEFAULT_SIZE, size);}
 
     /**
      * Get a cache responsible for objects of the given size
@@ -39,8 +37,7 @@ public final class SimpleByteCache {
         if (cache == null) {
             cache = new SimpleByteCache(cacheSize, size);
             SimpleByteCache old = _caches.putIfAbsent(sz, cache);
-            if (old != null)
-                cache = old;
+            if (old != null) {cache = old;}
         }
         cache.resize(cacheSize);
         return cache;
@@ -50,8 +47,7 @@ public final class SimpleByteCache {
      *  Clear everything (memory pressure)
      */
     public static void clearAll() {
-        for (SimpleByteCache bc : _caches.values())
-            bc.clear();
+        for (SimpleByteCache bc : _caches.values()) {bc.clear();}
     }
 
     private final TryCache<byte[]> _available;
@@ -61,13 +57,9 @@ public final class SimpleByteCache {
     private static class ByteArrayFactory implements TryCache.ObjectFactory<byte[]> {
         private final int sz;
 
-        ByteArrayFactory(int entrySize) {
-            sz = entrySize;
-        }
+        ByteArrayFactory(int entrySize) {sz = entrySize;}
 
-        public byte[] newInstance() {
-            return new byte[sz];
-        }
+        public byte[] newInstance() {return new byte[sz];}
     }
 
     private SimpleByteCache(int maxCachedEntries, int entrySize) {
@@ -83,32 +75,26 @@ public final class SimpleByteCache {
     /**
      * Get the next available array, either from the cache or a brand new one
      */
-    public static byte[] acquire(int size) {
-        return getInstance(size).acquire();
-    }
+    public static byte[] acquire(int size) {return getInstance(size).acquire();}
 
      /**
      * Get the next available array, either from the cache or a brand new one
      */
-    private byte[] acquire() {
-        return _available.acquire();
-    }
+    private byte[] acquire() {return _available.acquire();}
 
     /**
      * Put this array back onto the available cache for reuse
      */
     public static void release(byte[] entry) {
         SimpleByteCache cache = _caches.get(entry.length);
-        if (cache != null)
-            cache.releaseIt(entry);
+        if (cache != null) {cache.releaseIt(entry);}
     }
 
     /**
      * Put this array back onto the available cache for reuse
      */
     private void releaseIt(byte[] entry) {
-        if (entry == null || entry.length != _entrySize)
-            return;
+        if (entry == null || entry.length != _entrySize) {return;}
         // should be safe without this
         //Arrays.fill(entry, (byte) 0);
         _available.release(entry);
@@ -117,7 +103,6 @@ public final class SimpleByteCache {
     /**
      *  Clear everything (memory pressure)
      */
-    private void clear() {
-        _available.clear();
-    }
+    private void clear() {_available.clear();}
+
 }

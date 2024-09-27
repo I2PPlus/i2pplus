@@ -386,7 +386,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
             }
             session.getProducer().createLeaseSet(session, leaseSet, spk, li.getPrivateKeys());
             session.setLeaseSet(leaseSet);
-            if (_log.shouldDebug()) {_log.debug("Created and signed LeaseSet: " + leaseSet);}
+            if (_log.shouldDebug()) {_log.debug("Created and signed LeaseSet" + leaseSet);}
         } catch (DataFormatException dfe) {
             session.propogateError("Error signing the LeaseSet", dfe);
             session.destroySession();

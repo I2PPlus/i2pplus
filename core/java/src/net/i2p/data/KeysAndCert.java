@@ -284,8 +284,7 @@ public class KeysAndCert extends DataStructureImpl {
         buf.append("\n* Certificate: ").append(_certificate);
         if ((_publicKey != null && _publicKey.getType() != EncType.ELGAMAL_2048) ||
             !cls.equals("Destination")) {
-            // router identities only
-            buf.append("\n* Public Key: ").append(_publicKey);
+            buf.append("\n* Public Key: ").append(_publicKey); // router identities only
         }
         buf.append("\n* Public Signing Key: ").append(_signingKey);
         if (_padding != null) {
