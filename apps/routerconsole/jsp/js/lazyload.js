@@ -2,11 +2,8 @@
 /* Show and hide tagged elements as they enter and exit the viewport */
 /* License: AGPL3 or later */
 
-/* I2P+ lazyload.js by dr|z3d */
-/* Show and hide tagged elements as they enter and exit the viewport */
-/* License: AGPL3 or later */
+(function initLazyload() {
 
-(function() {
   const parentSelectors = [
     ".leasesets_container",
     ".main",
