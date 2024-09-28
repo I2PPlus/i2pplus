@@ -631,8 +631,8 @@ public class LeaseSet2 extends LeaseSet {
                 buf.append("\n* ").append(key).append(": ").append(val);
             }
         }
-        buf.append("\n* Unpublished? ").append(isUnpublished());
-        if (isBlindedWhenPublished()) {buf.append("\n* Blinded? ").append(isBlindedWhenPublished());}
+        buf.append("\n* Published: ").append(!isUnpublished());
+        if (isBlindedWhenPublished()) {buf.append("\n* Blinded: ").append(isBlindedWhenPublished());}
         buf.append("\n* Signature: ").append(_signature);
         buf.append("\n* Published: ").append(new java.util.Date(_published));
         buf.append("\n* Expires: ").append(new java.util.Date(_expires));
