@@ -70,9 +70,7 @@ public class SessionConfig extends DataStructureImpl {
      */
     private final static long OFFSET_VALIDITY = 3*60*1000;
 
-    public SessionConfig() {
-        this(null);
-    }
+    public SessionConfig() {this(null);}
 
     public SessionConfig(Destination dest) {
         _destination = dest;
@@ -84,9 +82,7 @@ public class SessionConfig extends DataStructureImpl {
      *
      * @return Destination for this session
      */
-    public Destination getDestination() {
-        return _destination;
-    }
+    public Destination getDestination() {return _destination;}
 
     /**
      * Determine when this session was authorized by the destination (so we can
@@ -94,22 +90,16 @@ public class SessionConfig extends DataStructureImpl {
      *
      * @return Date
      */
-    public Date getCreationDate() {
-        return _creationDate;
-    }
+    public Date getCreationDate() {return _creationDate;}
 
-    public void setCreationDate(Date date) {
-        _creationDate = date;
-    }
+    public void setCreationDate(Date date) {_creationDate = date;}
 
     /**
      * Retrieve any configuration options for the session
      *
      * @return Properties of this session
      */
-    public Properties getOptions() {
-        return _options;
-    }
+    public Properties getOptions() {return _options;}
 
     /**
      * Configure the session with the given options;
@@ -123,17 +113,11 @@ public class SessionConfig extends DataStructureImpl {
      *
      * @param options Properties for this session
      */
-    public void setOptions(Properties options) {
-        _options = options;
-    }
+    public void setOptions(Properties options) {_options = options;}
 
-    public Signature getSignature() {
-        return _signature;
-    }
+    public Signature getSignature() {return _signature;}
 
-    public void setSignature(Signature sig) {
-        _signature = sig;
-    }
+    public void setSignature(Signature sig) {_signature = sig;}
 
     /**
      *  Set the offline signing data.
@@ -145,11 +129,9 @@ public class SessionConfig extends DataStructureImpl {
      *  @since 0.9.38
      */
     public void setOfflineSignature(long expires, SigningPublicKey transientSPK, Signature offlineSig) {
-        if (_options == null)
-            throw new IllegalStateException();
+        if (_options == null) {throw new IllegalStateException();}
         _options.setProperty(PROP_OFFLINE_EXPIRATION, Long.toString(expires / 1000));
-        _options.setProperty(PROP_TRANSIENT_KEY,
-                             transientSPK.getType().getCode() + ":" + transientSPK.toBase64());
+        _options.setProperty(PROP_TRANSIENT_KEY, transientSPK.getType().getCode() + ":" + transientSPK.toBase64());
         _options.setProperty(PROP_OFFLINE_SIGNATURE, offlineSig.toBase64());
     }
 
@@ -159,16 +141,11 @@ public class SessionConfig extends DataStructureImpl {
      *  @since 0.9.38
      */
     public long getOfflineExpiration() {
-        if (_options == null)
-            return 0;
+        if (_options == null) {return 0;}
         String s = _options.getProperty(PROP_OFFLINE_EXPIRATION);
-        if (s == null)
-            return 0;
-        try {
-            return Long.parseLong(s) * 1000;
-        } catch (NumberFormatException nfe) {
-            return 0;
-        }
+        if (s == null) {return 0;}
+        try {return Long.parseLong(s) * 1000;}
+        catch (NumberFormatException nfe) {return 0;}
     }
 
     /**
@@ -176,29 +153,22 @@ public class SessionConfig extends DataStructureImpl {
      *  @since 0.9.38
      */
     public SigningPublicKey getTransientSigningPublicKey() {
-        if (_options == null || _destination == null)
-            return null;
+        if (_options == null || _destination == null) {return null;}
         String s = _options.getProperty(PROP_TRANSIENT_KEY);
-        if (s == null)
-            return null;
+        if (s == null) {return null;}
         int colon = s.indexOf(':');
         SigType type;
         if (colon > 0) {
             String stype = s.substring(0, colon);
             type = SigType.parseSigType(stype);
-            if (type == null)
-                return null;
+            if (type == null) {return null;}
             s = s.substring(colon + 1);
-        } else {
-            type = SigType.DSA_SHA1;
-        }
+        } else {type = SigType.DSA_SHA1;}
         SigningPublicKey rv = new SigningPublicKey(type);
         try {
             rv.fromBase64(s);
             return rv;
-        } catch (DataFormatException dfe) {
-            return null;
-        }
+        } catch (DataFormatException dfe) {return null;}
     }
 
     /**
@@ -206,18 +176,14 @@ public class SessionConfig extends DataStructureImpl {
      *  @since 0.9.38
      */
     public Signature getOfflineSignature() {
-        if (_options == null || _destination == null)
-            return null;
+        if (_options == null || _destination == null) {return null;}
         String s = _options.getProperty(PROP_OFFLINE_SIGNATURE);
-        if (s == null)
-            return null;
+        if (s == null) {return null;}
         Signature rv = new Signature(_destination.getSigningPublicKey().getType());
         try {
             rv.fromBase64(s);
             return rv;
-        } catch (DataFormatException dfe) {
-            return null;
-        }
+        } catch (DataFormatException dfe) {return null;}
     }
 
     /**
@@ -230,11 +196,11 @@ public class SessionConfig extends DataStructureImpl {
     public void signSessionConfig(SigningPrivateKey signingKey) throws DataFormatException {
         byte data[] = getBytes();
         if (data == null) throw new DataFormatException("Unable to retrieve bytes for signing");
-        if (signingKey == null)
-            throw new DataFormatException("No Signing Key");
+        if (signingKey == null) {throw new DataFormatException("No Signing Key");}
         _signature = DSAEngine.getInstance().sign(data, signingKey);
-        if (_signature == null)
+        if (_signature == null) {
             throw new DataFormatException("Signature failed with " + signingKey.getType() + " key");
+        }
     }
 
     /**
@@ -248,53 +214,29 @@ public class SessionConfig extends DataStructureImpl {
      * @return true only if the signature matches
      */
     public boolean verifySignature() {
-        if (getSignature() == null) {
-            //if (_log.shouldWarn()) _log.warn("Signature is null!");
-            return false;
-        }
-        if (getDestination() == null) {
-            //if (_log.shouldWarn()) _log.warn("Destination is null!");
-            return false;
-        }
-        if (getCreationDate() == null) {
-            //if (_log.shouldWarn()) _log.warn("Date is null!");
-            return false;
-        }
-        if (tooOld()) {
-            //if (_log.shouldWarn()) _log.warn("Too old!");
+        if (getSignature() == null || getDestination() == null ||
+            getCreationDate() == null || tooOld()) {
             return false;
         }
         byte data[] = getBytes();
-        if (data == null) {
-            //if (_log.shouldWarn()) _log.warn("Bytes could not be found");
-            return false;
-        }
+        if (data == null) {return false;}
 
         SigningPublicKey spk = getTransientSigningPublicKey();
         if (spk != null) {
-            // validate offline sig
-            long expires = getOfflineExpiration();
-            if (expires < _creationDate.getTime())
-                return false;
+            long expires = getOfflineExpiration(); // validate offline sig
+            if (expires < _creationDate.getTime()) {return false;}
             Signature sig = getOfflineSignature();
-            if (sig == null)
-                return false;
+            if (sig == null) {return false;}
             ByteArrayStream baos = new ByteArrayStream(6 + spk.length());
             try {
                 DataHelper.writeLong(baos, 4, expires / 1000);
                 DataHelper.writeLong(baos, 2, spk.getType().getCode());
                 spk.writeBytes(baos);
-            } catch (IOException ioe) {
-                return false;
-            } catch (DataFormatException dfe) {
-                return false;
-            }
+            } catch (IOException ioe) {return false;}
+            catch (DataFormatException dfe) {return false;}
             boolean ok = baos.verifySignature(sig, _destination.getSigningPublicKey());
-            if (!ok)
-                return false;
-        } else {
-            spk = getDestination().getSigningPublicKey();
-        }
+            if (!ok) {return false;}
+        } else {spk = getDestination().getSigningPublicKey();}
 
         boolean ok = DSAEngine.getInstance().verifySignature(getSignature(), data, spk);
         if (!ok) {
@@ -311,23 +253,20 @@ public class SessionConfig extends DataStructureImpl {
         long now = Clock.getInstance().now();
         long earliestValid = now - OFFSET_VALIDITY;
         long latestValid = now + OFFSET_VALIDITY;
-        if (_creationDate == null) return true;
-        if (_creationDate.getTime() < earliestValid) return true;
-        if (_creationDate.getTime() > latestValid) return true;
+        if (_creationDate == null || _creationDate.getTime() < earliestValid ||
+            _creationDate.getTime() > latestValid) {
+            return true;
+        }
         return false;
     }
 
     private byte[] getBytes() {
-        if (_destination == null) return null;
-        if (_options == null) return null;
-        if (_creationDate == null) return null;
+        if (_destination == null || _options == null || _creationDate == null) {return null;}
 
         ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
         try {
-            //_log.debug("PubKey size for destination: " + _destination.getPublicKey().getData().length);
-            //_log.debug("SigningKey size for destination: " + _destination.getSigningPublicKey().getData().length);
             _destination.writeBytes(out);
-            DataHelper.writeProperties(out, _options, true);  // UTF-8
+            DataHelper.writeProperties(out, _options, true); // UTF-8
             DataHelper.writeDate(out, _creationDate);
         } catch (IOException ioe) {
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(SessionConfig.class);
@@ -346,15 +285,15 @@ public class SessionConfig extends DataStructureImpl {
         _options = DataHelper.readProperties(rawConfig);
         _creationDate = DataHelper.readDate(rawConfig);
         SigningPublicKey spk = getTransientSigningPublicKey();
-        if (spk == null)
-            spk = _destination.getSigningPublicKey();
+        if (spk == null) {spk = _destination.getSigningPublicKey();}
         _signature = new Signature(spk.getType());
         _signature.readBytes(rawConfig);
     }
 
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
-        if ((_destination == null) || (_options == null) || (_signature == null) || (_creationDate == null))
+        if ((_destination == null) || (_options == null) || (_signature == null) || (_creationDate == null)) {
             throw new DataFormatException("Not enough data to create the session config");
+        }
         _destination.writeBytes(out);
         DataHelper.writeProperties(out, _options, true);  // UTF-8
         DataHelper.writeDate(out, _creationDate);
@@ -365,19 +304,17 @@ public class SessionConfig extends DataStructureImpl {
     public boolean equals(Object object) {
         if ((object != null) && (object instanceof SessionConfig)) {
             SessionConfig cfg = (SessionConfig) object;
-            return DataHelper.eq(getSignature(), cfg.getSignature())
-                   && DataHelper.eq(getDestination(), cfg.getDestination())
-                   && DataHelper.eq(getCreationDate(), cfg.getCreationDate())
-                   && DataHelper.eq(getOptions(), cfg.getOptions());
+            return DataHelper.eq(getSignature(), cfg.getSignature()) &&
+                   DataHelper.eq(getDestination(), cfg.getDestination()) &&
+                   DataHelper.eq(getCreationDate(), cfg.getCreationDate()) &&
+                   DataHelper.eq(getOptions(), cfg.getOptions());
         }
 
         return false;
     }
 
     @Override
-    public int hashCode() {
-        return _signature != null ? _signature.hashCode() : 0;
-    }
+    public int hashCode() {return _signature != null ? _signature.hashCode() : 0;}
 
     @Override
     public String toString() {
