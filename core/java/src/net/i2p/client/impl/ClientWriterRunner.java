@@ -28,12 +28,10 @@ class ClientWriterRunner implements Runnable {
     private final I2PSessionImpl _session;
     private final BlockingQueue<I2CPMessage> _messagesToWrite;
     private static final AtomicLong __Id = new AtomicLong();
-    //private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(ClientWriterRunner.class);
 
 //    private static final int MAX_QUEUE_SIZE = 32;
-//    private static final long MAX_SEND_WAIT = 10*1000;
-    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 32 : SystemVersion.getCores() < 4 ? 128 : 256;
-    private static final long MAX_SEND_WAIT = SystemVersion.isSlow() || SystemVersion.getCores() < 4 ? 10*1000 : 8*1000;
+    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 32 : 64;
+    private static final long MAX_SEND_WAIT = 10*1000;
 
     /**
      *  As of 0.9.11 does not start the thread, caller must call startWriting()
@@ -60,15 +58,16 @@ class ClientWriterRunner implements Runnable {
      */
     public void addMessage(I2CPMessage msg) throws I2PSessionException {
         try {
-            if (!_messagesToWrite.offer(msg, MAX_SEND_WAIT, TimeUnit.MILLISECONDS))
+            if (!_messagesToWrite.offer(msg, MAX_SEND_WAIT, TimeUnit.MILLISECONDS)) {
                 throw new I2PSessionException("Timed out waiting while write queue was full");
+            }
         } catch (InterruptedException ie) {
             throw new I2PSessionException("Interrupted while write queue was full", ie);
         }
     }
 
     /**
-     * No more messages - dont even try to send what we have
+     * No more messages - don't even try to send what we have
      *
      */
     public void stopWriting() {
@@ -86,8 +85,7 @@ class ClientWriterRunner implements Runnable {
             // only thread, we don't need synchronized
             try {
                 msg.writeMessage(_out);
-                if (_messagesToWrite.isEmpty())
-                    _out.flush();
+                if (_messagesToWrite.isEmpty()) {_out.flush();}
             } catch (I2CPMessageException ime) {
                 _session.propogateError("Error writing out the message", ime);
                 _session.disconnect();
