@@ -12,9 +12,9 @@ jobs:
     steps:
       - name: GetText
         run: sudo apt install gettext
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@main
       - name: Set up JDK 8
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@main
         with:
           java-version: '8'
           distribution: 'temurin'
@@ -26,28 +26,28 @@ jobs:
       - name: Build i2pupdate.zip with Ant
         run: ant distclean updaterCompact
       - name: Upload i2pupdate.zip
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@main
         with:
           name: i2pupdate.zip-${{ github.sha }}
           path: i2pupdate.zip
       - name: Build installer with Ant
         run: ant pkg
       - name: Upload installer.jar
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@main
         with:
           name: I2P-install.jar-${{ github.sha }}
           path: install.jar
       - name: Build javadocs with Ant
         run: ant javadoc-zip
       - name: Upload javadoc.zip
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@main
         with:
           name: javadoc.zip-${{ github.sha }}
           path: javadoc.zip
       - name: Build I2PSnark standalone with Ant
         run: ant i2psnark
       - name: Upload i2psnark-standalone.zip
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@main
         with:
           name: i2psnark-standalone.zip-${{ github.sha }}
           path: i2psnark-standalone.zip
