@@ -85,6 +85,7 @@ class RepublishLeaseSetJob extends JobImpl {
         if (_log.shouldWarn()) {
             _log.warn("Failed to publish LeaseSet for [" + _dest.toBase32().substring(0,8) + "] -> Retrying..." + count);
         }
+        getContext().statManager().addRateData("netDb.republishLeaseSetFail", 1);
         getContext().jobQueue().removeJob(this);
         requeue(RETRY_DELAY);
     }
