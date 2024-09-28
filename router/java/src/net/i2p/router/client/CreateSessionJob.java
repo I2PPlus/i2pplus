@@ -43,12 +43,13 @@ class CreateSessionJob extends JobImpl {
         ClientTunnelSettings settings = new ClientTunnelSettings(dest);
         Properties props = new Properties();
 
-        // We're NOT going to force all clients to use the router's defaults, since that may be
-        // excessive.  This means that unless the user says otherwise, we'll be satisfied with whatever
-        // is available.  Otherwise, when the router starts up, if there aren't sufficient tunnels with the
-        // adequate number of hops, the user will have to wait.  Once peer profiles are persistent, we can
-        // reenable this, since on startup we'll have a sufficient number of high enough ranked peers to
-        // tunnel through.  (perhaps).
+        /**
+         * We're NOT going to force all clients to use the router's defaults, since that may be excessive.
+         * This means that unless the user says otherwise, we'll be satisfied with whatever is available.
+         * Otherwise, when the router starts up, if there aren't sufficient tunnels with the adequate number
+         * of hops, the user will have to wait.  Once peer profiles are persistent, we can reenable this,
+         * since on startup we'll have a sufficient number of high enough ranked peers to tunnel through (perhaps).
+         */
 
         // XXX take the router's defaults
         // XXX props.putAll(Router.getInstance().getConfigMap());

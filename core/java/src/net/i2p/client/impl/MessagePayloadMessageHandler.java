@@ -32,7 +32,7 @@ class MessagePayloadMessageHandler extends HandlerImpl {
     }
 
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
-        if (_log.shouldInfo()) {_log.info("Handling " + message + "\n* Session: " + session);}
+        if (_log.shouldDebug()) {_log.debug("Handling " + message + "\n* Session: " + session);}
         try {
             MessagePayloadMessage msg = (MessagePayloadMessage) message;
             long id = msg.getMessageId();

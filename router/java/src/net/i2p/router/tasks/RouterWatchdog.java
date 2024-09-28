@@ -23,8 +23,7 @@ public class RouterWatchdog implements Runnable {
     private volatile boolean _isRunning;
     private long _lastDump;
 
-//    private static final long MAX_JOB_RUN_LAG = 60*1000;
-    private static final long MAX_JOB_RUN_LAG = 3*60*1000;
+    private static final long MAX_JOB_RUN_LAG = 60*1000;
     private static final long MIN_DUMP_INTERVAL= 6*60*60*1000;
 
     public RouterWatchdog(RouterContext ctx) {
@@ -34,29 +33,21 @@ public class RouterWatchdog implements Runnable {
     }
 
     /** @since 0.8.8 */
-    public void shutdown() {
-        _isRunning = false;
-    }
+    public void shutdown() {_isRunning = false;}
 
     public boolean verifyJobQueueLiveliness() {
         long when = _context.jobQueue().getLastJobBegin();
-        if (when < 0)
-            return true;
+        if (when < 0) {return true;}
         long howLongAgo = _context.clock().now() - when;
         if (howLongAgo > MAX_JOB_RUN_LAG) {
             Job cur = _context.jobQueue().getLastJob();
             if (cur != null) {
-                if (_log.shouldError())
-                    _log.error("Last job was queued up " + DataHelper.formatDuration(howLongAgo)
-                               + " ago: " + cur);
+                if (_log.shouldError()) {
+                    _log.error("Last job was queued up " + DataHelper.formatDuration(howLongAgo) + " ago: " + cur);
+                }
                 return false;
-            } else {
-                // no prob, just normal lag
-                return true;
-            }
-        } else {
-            return true;
-        }
+            } else {return true;} // no prob, just normal lag
+        } else {return true;}
     }
 
     public boolean verifyClientLiveliness() {
@@ -64,14 +55,11 @@ public class RouterWatchdog implements Runnable {
     }
 
     private boolean shutdownOnHang() {
-        // prop default false
-        if (!_context.getBooleanProperty("watchdog.haltOnHang"))
-            return false;
+        if (!_context.getBooleanProperty("watchdog.haltOnHang")) {return false;} // prop default false
 
         // Client manager starts complaining after 10 minutes, and we run every minute,
         // so this will restart 30 minutes after we lose a lease, if the wrapper is present.
-        if (_consecutiveErrors >= 20 && SystemVersion.hasWrapper())
-            return true;
+        if (_consecutiveErrors >= 20 && SystemVersion.hasWrapper()) {return true;}
         return false;
     }
 
@@ -79,14 +67,11 @@ public class RouterWatchdog implements Runnable {
         if (_log.shouldError()) {
             RateStat rs = _context.statManager().getRate("transport.sendProcessingTime");
             Rate r = null;
-            if (rs != null)
-                r = rs.getRate(60*1000);
+            if (rs != null) {r = rs.getRate(60*1000);}
             double processTime = (r != null ? r.getAverageValue() : 0);
-
             rs = _context.statManager().getRate("bw.sendBps");
             r = null;
-            if (rs != null)
-                r = rs.getRate(60*1000);
+            if (rs != null) {r = rs.getRate(60*1000);}
             double bps = (r != null ? r.getAverageValue() : 0);
             long max = Runtime.getRuntime().maxMemory();
             long used = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
@@ -117,7 +102,8 @@ public class RouterWatchdog implements Runnable {
 
     public void run() {
         while (_isRunning) {
-            try { Thread.sleep(60*1000); } catch (InterruptedException ie) {}
+            try {Thread.sleep(60*1000);}
+            catch (InterruptedException ie) {}
             monitorRouter();
         }
     }
@@ -126,22 +112,19 @@ public class RouterWatchdog implements Runnable {
         boolean ok = verifyJobQueueLiveliness();
         // If we aren't connected to the network that's why there's nobody to talk to
         long netErrors = 0;
-        if (_context.commSystem().getStatus() == Status.DISCONNECTED) {
-            netErrors = 10;
-        } else {
+        if (_context.commSystem().getStatus() == Status.DISCONNECTED) {netErrors = 10;}
+        else {
             RateStat rs = _context.statManager().getRate("udp.sendException");
             if (rs != null) {
                 Rate r = rs.getRate(60*1000);
-                if (r != null)
-                    netErrors = r.getLastEventCount();
+                if (r != null) {netErrors = r.getLastEventCount();}
             }
         }
 
         ok = ok && (verifyClientLiveliness() || netErrors >= 5);
 
-        if (ok) {
-            _consecutiveErrors = 0;
-        } else {
+        if (ok) {_consecutiveErrors = 0;}
+        else {
             _consecutiveErrors++;
             dumpStatus();
             if (shutdownOnHang()) {
@@ -152,4 +135,5 @@ public class RouterWatchdog implements Runnable {
             }
         }
     }
+
 }

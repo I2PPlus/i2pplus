@@ -30,8 +30,8 @@ class LeaseRequestState {
      *         the current LS (NOT the requested one), or 0 if none
      *  @param expiration absolute time, when the request expires (not when the LS expires)
      *  @param requested LeaseSet with requested leases - this object must be updated to contain the
-     *             signed version (as well as any changed/added/removed Leases)
-     *             The LeaseSet contains Leases and destination only, it is unsigned.
+     *         signed version (as well as any changed/added/removed Leases)
+     *         The LeaseSet contains Leases and destination only, it is unsigned.
      */
     public LeaseRequestState(Job onGranted, Job onFailed, long currentEarliestLeastDate,
                              long expiration, LeaseSet requested) {
@@ -66,11 +66,11 @@ class LeaseRequestState {
      *
      * @since 0.9.39
      */
-    public long getCurrentEarliestLeaseDate() { return _currentEarliestLeastDate; }
+    public long getCurrentEarliestLeaseDate() {return _currentEarliestLeastDate;}
 
     /** whether the request was successful in the time allotted */
-    public boolean getIsSuccessful() { return _successful; }
-    public void setIsSuccessful(boolean is) { _successful = is; }
+    public boolean getIsSuccessful() {return _successful;}
+    public void setIsSuccessful(boolean is) {_successful = is;}
 
     @Override
     public String toString() {

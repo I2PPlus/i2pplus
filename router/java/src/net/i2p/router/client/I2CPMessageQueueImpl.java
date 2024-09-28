@@ -29,9 +29,7 @@ class I2CPMessageQueueImpl extends I2CPMessageQueue {
      *  Send a message, nonblocking
      *  @return success (false if no space available)
      */
-    public boolean offer(I2CPMessage msg) {
-        return _out.offer(msg);
-    }
+    public boolean offer(I2CPMessage msg) {return _out.offer(msg);}
 
     /**
      *  Send a message, blocking.
@@ -44,25 +42,20 @@ class I2CPMessageQueueImpl extends I2CPMessageQueue {
     }
 
     /**
-     *  Receive a message, nonblocking
+     *  Receive a message, non-blocking
      *  @return message or null if none available
      */
-    public I2CPMessage poll() {
-        return _in.poll();
-    }
+    public I2CPMessage poll() {return _in.poll();}
 
     /**
      *  Send a message, blocking until space is available
      */
-    public void put(I2CPMessage msg) throws InterruptedException {
-        _out.put(msg);
-    }
+    public void put(I2CPMessage msg) throws InterruptedException {_out.put(msg);}
 
     /**
      *  Receive a message, blocking until one is available
      *  @return message
      */
-    public I2CPMessage take() throws InterruptedException {
-        return _in.take();
-    }
+    public I2CPMessage take() throws InterruptedException {return _in.take();}
+
 }

@@ -27,7 +27,7 @@ class MessageStatusMessageHandler extends HandlerImpl {
     }
 
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
-        if (_log.shouldInfo()) {_log.info("Handling " + message);}
+        if (_log.shouldDebug()) {_log.debug("Handling " + message);}
         MessageStatusMessage msg = (MessageStatusMessage) message;
         int status = msg.getStatus();
         long id = msg.getMessageId();

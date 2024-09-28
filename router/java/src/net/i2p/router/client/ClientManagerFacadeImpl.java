@@ -53,7 +53,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     }
 
     public synchronized void startup() {
-        _log.info("Starting up the Client Manager...");
+        _log.info("Starting up the Router Client Manager...");
         int port = _context.getProperty(PROP_CLIENT_PORT, DEFAULT_PORT);
         _manager = new ClientManager(_context, port);
         _manager.start();
@@ -85,7 +85,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
         boolean lively = true;
         for (Destination dest : _manager.getRunnerDestinations()) {
             ClientConnectionRunner runner = _manager.getRunner(dest);
-            if ( (runner == null) || (runner.getIsDead())) continue;
+            if ((runner == null) || (runner.getIsDead())) continue;
             LeaseSet ls = runner.getLeaseSet(dest.calculateHash());
             if (ls == null) {continue;} // still building
             long howLongAgo = _context.clock().now() - ls.getEarliestLeaseDate();

@@ -24,16 +24,14 @@ abstract class ThreadDump {
                          false if timed out, dump result otherwise
      */
     public static boolean dump(I2PAppContext context, int secondsToWait) {
-        if (SystemVersion.isWindows() || !context.hasWrapper())
-            return false;
+        if (SystemVersion.isWindows() || !context.hasWrapper()) {return false;}
         ShellCommand sc = new ShellCommand();
         File i2pr = new File(context.getBaseDir(), "i2prouter");
         String[] args = new String[2];
         args[0] = i2pr.getAbsolutePath();
         args[1] = "dump";
         boolean success = sc.executeSilentAndWaitTimed(args, secondsToWait);
-        if (secondsToWait <= 0)
-            success = true;
+        if (secondsToWait <= 0) {success = true;}
         if (success) {
             Log log = context.logManager().getLog(ThreadDump.class);
             File f = new File(context.getConfigDir(), "wrapper.log");
@@ -42,4 +40,5 @@ abstract class ThreadDump {
         }
         return success;
     }
+
 }

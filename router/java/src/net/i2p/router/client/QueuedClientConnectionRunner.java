@@ -19,7 +19,6 @@ class QueuedClientConnectionRunner extends ClientConnectionRunner {
 
     /**
      * Create a new runner with the given queues
-     *
      */
     public QueuedClientConnectionRunner(RouterContext context, ClientManager manager, I2CPMessageQueue queue) {
         super(context, manager, null);
@@ -51,20 +50,17 @@ class QueuedClientConnectionRunner extends ClientConnectionRunner {
      *  Since we have no writer thread this shouldn't happen.
      */
     @Override
-    void writeMessage(I2CPMessage msg) {
-        throw new RuntimeException("huh?");
-    }
+    void writeMessage(I2CPMessage msg) {throw new RuntimeException("huh?");}
 
     /**
      * Actually send the I2CPMessage to the client.
-     * Nonblocking.
+     * Non-blocking.
      * @throws I2CPMessageException if queue full or on other errors
      */
     @Override
     void doSend(I2CPMessage msg) throws I2CPMessageException {
         boolean success = queue.offer(msg);
-        if (!success)
-            throw new I2CPMessageException("I2CP write to queue failed");
+        if (!success) {throw new I2CPMessageException("I2CP write to queue failed");}
     }
 
     /**
@@ -80,7 +76,6 @@ class QueuedClientConnectionRunner extends ClientConnectionRunner {
      *  @since 0.9.7
      */
     @Override
-    public String getClientVersion() {
-        return CoreVersion.PUBLISHED_VERSION;
-    }
+    public String getClientVersion() {return CoreVersion.PUBLISHED_VERSION;}
+
 }

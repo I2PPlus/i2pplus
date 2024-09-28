@@ -23,16 +23,13 @@ import net.i2p.util.Log;
 public class Republish implements SimpleTimer.TimedEvent {
     private final RouterContext _context;
 
-    public Republish(RouterContext ctx) {
-        _context = ctx;
-    }
+    public Republish(RouterContext ctx) {_context = ctx;}
 
     public void timeReached() {
         RouterInfo ri = null;
         try {
             ri = _context.router().getRouterInfo();
-            if (ri != null)
-                _context.netDb().publish(ri);
+            if (ri != null) {_context.netDb().publish(ri);}
         } catch (IllegalArgumentException iae) {
             Log log = _context.logManager().getLog(Router.class);
             // clock skew / shift race?
@@ -42,8 +39,7 @@ public class Republish implements SimpleTimer.TimedEvent {
                 long diff = Math.abs(now - published);
                 if (diff > 60*1000) {
                     log.logAlways(Log.WARN, "Large clock shift detected (" + DataHelper.formatDuration(diff) + "), rebuilding local RouterInfo...");
-                    // let's just try this again and hope for better results
-                    _context.router().rebuildRouterInfo();
+                    _context.router().rebuildRouterInfo(); // let's just try this again and hope for better results
                     return;
                 }
             }
@@ -51,5 +47,6 @@ public class Republish implements SimpleTimer.TimedEvent {
             _context.router().rebuildNewIdentity();
         }
     }
+
 }
 
