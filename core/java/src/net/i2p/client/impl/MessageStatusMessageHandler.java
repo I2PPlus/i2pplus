@@ -36,29 +36,25 @@ class MessageStatusMessageHandler extends HandlerImpl {
                 ReceiveMessageBeginMessage m = new ReceiveMessageBeginMessage();
                 m.setMessageId(id);
                 m.setSessionId(msg.getSessionId());
-                try {
-                    session.sendMessage(m);
-                } catch (I2PSessionException ise) {
-                    _log.error("Error asking for the message", ise);
-                }
+                try {session.sendMessage(m);}
+                catch (I2PSessionException ise) {_log.error("Error asking for the message", ise);}
                 return;
 
             case MessageStatusMessage.STATUS_SEND_ACCEPTED:
                 session.receiveStatus((int)id, msg.getNonce(), status);
-                // noop
-                return;
+                return; // noop
 
             default:
                 if (msg.isSuccessful()) {
-                    if (_log.shouldDebug())
-                        _log.debug("Message delivery succeeded for [MsgID " + id + "]");
+                    if (_log.shouldDebug()) {_log.debug("Message delivery succeeded for [MsgID " + id + "]");}
                 } else {
-                    if (_log.shouldInfo())
-                        _log.info("Message delivery FAILED (" + status + ") for [MsgID " + id + "]");
+                    if (_log.shouldDebug())
+                        _log.debug("Message delivery FAILED for [MsgID " + id + "] -> " +
+                                   MessageStatusMessage.getStatusString(status));
                 }
-                //if (!skipStatus)
-                session.receiveStatus((int)id, msg.getNonce(), status);
+                session.receiveStatus((int)id, msg.getNonce(), status); //if (!skipStatus)
                 return;
         }
     }
+
 }

@@ -196,14 +196,15 @@ public class MessageStatusMessage extends I2CPMessageImpl {
      */
     public final static int STATUS_SEND_FAILURE_LOOPBACK = 23;
 
-    // NOTE:
-    // Add any new status codes to handlers in:
-    // net.i2p.client.impl.MessageState
-    // net.i2p.client.impl.MessageStatusMessageHandler
-    // net.i2p.client.streaming.I2PSocketException
-    // net.i2p.client.streaming.impl.PacketQueue
-    // net.i2p.i2ptunnel.I2PTunnelHTTPClientBase
-    // and update http://i2p-projekt.i2p/spec/i2cp
+    /**
+     * NOTE: Add any new status codes to handlers in:
+     *   net.i2p.client.impl.MessageState
+     *   net.i2p.client.impl.MessageStatusMessageHandler
+     *   net.i2p.client.streaming.I2PSocketException
+     *   net.i2p.client.streaming.impl.PacketQueue
+     *   net.i2p.i2ptunnel.I2PTunnelHTTPClientBase
+     *   and update http://i2p-projekt.i2p/spec/i2cp
+     */
 
     public MessageStatusMessage() {
         _sessionId = -1;
@@ -300,21 +301,21 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     public static final String getStatusString(int status) {
         switch (status) {
         case STATUS_AVAILABLE:
-            return "AVAILABLE          ";
+            return "AVAILABLE";
         case STATUS_SEND_ACCEPTED:
-            return "SEND ACCEPTED      ";
+            return "SEND ACCEPTED";
         case STATUS_SEND_BEST_EFFORT_SUCCESS:
             return "BEST EFFORT SUCCESS";
         case STATUS_SEND_GUARANTEED_SUCCESS:
-            return "GUARANTEED SUCCESS ";
+            return "GUARANTEED SUCCESS";
         case STATUS_SEND_SUCCESS_LOCAL:
-            return "LOCAL SUCCESS      ";
+            return "LOCAL SUCCESS";
         case STATUS_SEND_BEST_EFFORT_FAILURE:
-            return "PROBABLE FAILURE   ";
+            return "PROBABLE FAILURE";
         case STATUS_SEND_FAILURE_NO_TUNNELS:
-            return "NO LOCAL TUNNELS   ";
+            return "NO LOCAL TUNNELS";
         case STATUS_SEND_FAILURE_NO_LEASESET:
-            return "LEASESET NOT FOUND ";
+            return "LEASESET NOT FOUND";
         default:
             return "SEND FAILURE CODE: " + status;
         }

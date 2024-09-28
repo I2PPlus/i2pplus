@@ -134,7 +134,7 @@ public class I2PSimpleSession extends I2PSessionImpl2 {
             // ... or an Idle timer, or a VerifyUsage
             success = true;
             if (_log.shouldInfo())
-                _log.info(getPrefix() + " simple session connected");
+                _log.info(getPrefix() + " -> SimpleSession connected");
         } catch (InterruptedException ie) {
             throw new I2PSessionException("Interrupted", ie);
         } catch (UnknownHostException uhe) {

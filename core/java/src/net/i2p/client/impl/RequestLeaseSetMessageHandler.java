@@ -371,14 +371,14 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 } else {els2.sign(session.getPrivateKey());}
             } else {leaseSet.sign(session.getPrivateKey());}
             SigningPrivateKey spk = li.getSigningPrivateKey();
-            if (isLS2) {
-                // no revocation key in LS2
-                spk = null;
-            } else if (!_context.isRouterContext() && spk.getType() != SigType.DSA_SHA1) {
-                // Workaround for unparsable serialized signing private key for revocation
-                // Send him a dummy DSA_SHA1 private key since it's unused anyway
-                // See CreateLeaseSetMessage.doReadMessage()
-                // For LS1 only
+            if (isLS2) {spk = null;} // no revocation key in LS2
+            else if (!_context.isRouterContext() && spk.getType() != SigType.DSA_SHA1) {
+               /**
+                * Workaround for unparsable serialized signing private key for revocation
+                * Send him a dummy DSA_SHA1 private key since it's unused anyway
+                * See CreateLeaseSetMessage.doReadMessage()
+                * For LS1 only
+                */
                 byte[] dummy = new byte[SigningPrivateKey.KEYSIZE_BYTES];
                 _context.random().nextBytes(dummy);
                 spk = new SigningPrivateKey(dummy);
@@ -386,15 +386,16 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
             }
             session.getProducer().createLeaseSet(session, leaseSet, spk, li.getPrivateKeys());
             session.setLeaseSet(leaseSet);
-            if (_log.shouldInfo()) {_log.info("Created and signed " + leaseSet);}
+            if (_log.shouldInfo()) {_log.info("Created and signed" + leaseSet);}
         } catch (DataFormatException dfe) {
             session.propogateError("Error signing the LeaseSet", dfe);
             session.destroySession();
         } catch (I2PSessionException ise) {
             if (session.isClosed()) {
-                // race, closed while signing leaseset
-                // EOFExceptions are logged at WARN level (see I2PSessionImpl.propogateError())
-                // so the user won't see this
+                /**
+                 * race, closed while signing leaseset - EOFExceptions are logged at WARN level
+                 * (see I2PSessionImpl.propogateError()) so the user won't see this
+                 */
                 EOFException eof = new EOFException("Session closed while signing LeaseSet");
                 eof.initCause(ise);
                 session.propogateError("Session closed while signing LeaseSet", eof);
