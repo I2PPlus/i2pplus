@@ -293,8 +293,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
             if (_log.shouldWarn()) {_log.warn("Error: [MsgID " + msgId + "] already received!");}
             return null;
         }
-        // future - check magic number to see whether to decompress
-        if (SHOULD_DECOMPRESS) {
+        if (SHOULD_DECOMPRESS) { // future - check magic number to see whether to decompress
             try {return DataHelper.decompress(compressed);}
             catch (IOException ioe) {
                 if (_log.shouldWarn()) {_log.warn("Error decompressing message \n* " + ioe.getMessage());}
@@ -324,10 +323,12 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         long nonce = _sendMessageNonce.incrementAndGet();
         MessageState state = new MessageState(_context, nonce, getPrefix());
 
-        // since this is 'best effort', all we're waiting for is a status update
-        // saying that the router received it - in theory, that should come back
-        // immediately, but in practice can take up to a second (though usually
-        // much quicker).  setting this to false will short-circuit that delay
+        /**
+         * Since this is 'best effort', all we're waiting for is a status update saying
+         * that the router received it - in theory, that should come back immediately,
+         * but in practice can take up to a second (though usually much quicker).
+         * Setting this to false will short-circuit that delay
+         */
         boolean actuallyWait = false; // true;
         if (actuallyWait) {_sendingStates.put(Long.valueOf(nonce), state);}
         _producer.sendMessage(this, dest, nonce, payload, expires, flags);
@@ -341,12 +342,12 @@ class I2PSessionImpl2 extends I2PSessionImpl {
 
         if (found) {
             if (_log.shouldInfo()) {
-                _log.info(getPrefix() + "Message sent after " + state.getElapsed() + "ms with "
+                _log.info(getPrefix() + " -> Message sent after " + state.getElapsed() + "ms with "
                           + payload.length + " bytes");
             }
         } else {
             if (_log.shouldInfo()) {
-                _log.info(getPrefix() + "Message send failed after " + state.getElapsed() + "ms with "
+                _log.info(getPrefix() + " -> Message send failed after " + state.getElapsed() + "ms with "
                           + payload.length + " bytes");
             }
             return false;
@@ -384,18 +385,18 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     @Override
     public void receiveStatus(int msgId, long nonce, int status) {
         if (_log.shouldDebug()) {
-            _log.debug(getPrefix() + "Received status " + status + " for [MsgID " + msgId + " / " + nonce + "]");
+            _log.debug(getPrefix() + " -> Received status " + status + " for [MsgID " + msgId + " / " + nonce + "]");
         }
 
         MessageState state = null;
         if ((state = _sendingStates.get(Long.valueOf(nonce))) != null) {
-            if (_log.shouldDebug()) {_log.debug(getPrefix() + "Found a matching state");}
+            if (_log.shouldDebug()) {_log.debug(getPrefix() + " -> Found a matching state");}
         } else if (!_sendingStates.isEmpty()) {
             // O(n**2)
             // shouldn't happen, router sends good nonce for all statuses as of 0.9.14
             for (MessageState s : _sendingStates.values()) {
                 if (s.getMessageId() != null && s.getMessageId().getMessageId() == msgId) {
-                    if (_log.shouldDebug()) {_log.debug(getPrefix() + "Found a matching state by msgID");}
+                    if (_log.shouldDebug()) {_log.debug(getPrefix() + "-> Found a matching state by MsgID");}
                     state = s;
                     break;
                 }
@@ -433,7 +434,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
 
         } else {
             if (_log.shouldInfo())
-                _log.info(getPrefix() + "No matching state for [MsgID " + msgId + " / " + nonce
+                _log.info(getPrefix() + " -> No matching state for [MsgID " + msgId + " / " + nonce
                           + "] with status = " + status);
         }
     }
@@ -458,7 +459,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
             state.cancel();
         }
         if (_log.shouldInfo())
-            _log.info(getPrefix() + "Disconnecting " + _sendingStates.size() + " states");
+            _log.info(getPrefix() + " -> Disconnecting " + _sendingStates.size() + " states");
         _sendingStates.clear();
     }
 
