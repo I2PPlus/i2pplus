@@ -231,7 +231,7 @@ public class SessionConfig extends DataStructureImpl {
         byte data[] = getBytes();
         if (data == null) throw new DataFormatException("Unable to retrieve bytes for signing");
         if (signingKey == null)
-            throw new DataFormatException("No signing key");
+            throw new DataFormatException("No Signing Key");
         _signature = DSAEngine.getInstance().sign(data, signingKey);
         if (_signature == null)
             throw new DataFormatException("Signature failed with " + signingKey.getType() + " key");
@@ -382,10 +382,10 @@ public class SessionConfig extends DataStructureImpl {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder("SessionConfig: ");
-        buf.append("\n* Destination: ").append(getDestination());
-        buf.append("\n* Signature: ").append(getSignature());
-        buf.append("\n* Creation Date: ").append(getCreationDate());
-        buf.append("\n* Options: #: ").append(_options.size());
+        buf.append("\n* Destination: ").append(getDestination())
+           .append("\n* Signature: ").append(getSignature())
+           .append("\n* Creation Date: ").append(getCreationDate())
+           .append("\n* Options (").append(_options.size()).append(")");
         Properties sorted = new OrderedProperties();
         sorted.putAll(_options);
         for (Map.Entry<Object, Object> e : sorted.entrySet()) {

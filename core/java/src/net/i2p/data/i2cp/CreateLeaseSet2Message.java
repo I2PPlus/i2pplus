@@ -21,16 +21,15 @@ import net.i2p.data.PublicKey;
 import net.i2p.util.ByteArrayStream;
 
 /**
- * Like CreateLeaseSetMessage, but supports both old
- * and new LeaseSet types, including LS2, Meta, and Encrypted.
+ * Like CreateLeaseSetMessage, but supports both old and new
+ * LeaseSet types, including LS2, Meta, and Encrypted.
  * Revocation keys are not present.
  * Multiple public/private encryption keys are possible.
  *
  * For LS2:
  * Same as CreateLeaseSetMessage, but has a netdb type before
- * the LeaseSet. PrivateKeys are
- * serialized after the LeaseSet, not before, so we can
- * infer the types from the LeaseSet.
+ * the LeaseSet. PrivateKeys are serialized after the LeaseSet,
+ * not before, so we can infer the types from the LeaseSet.
  *
  * For Meta LS:
  * PrivateKeys are not present.
@@ -46,24 +45,17 @@ public class CreateLeaseSet2Message extends CreateLeaseSetMessage {
      *  Format changed as of 0.9.39, changed type to 41.
      */
     public final static int MESSAGE_TYPE = 41;
-
-    // only used if more than one key, otherwise null
-    private List<PrivateKey> _privateKeys;
-
-    public CreateLeaseSet2Message() {
-        super();
-    }
+    private List<PrivateKey> _privateKeys; // only used if more than one key, otherwise null
+    public CreateLeaseSet2Message() {super();}
 
     /**
      *  This returns all the keys. getPrivateKey() returns the first one.
      *  @return not a copy, do not modify, null if none
      */
     public List<PrivateKey> getPrivateKeys() {
-        if (_privateKeys != null)
-            return _privateKeys;
+        if (_privateKeys != null) {return _privateKeys;}
         PrivateKey pk = getPrivateKey();
-        if (pk != null)
-            return Collections.singletonList(pk);
+        if (pk != null) {return Collections.singletonList(pk);}
         return null;
     }
 
@@ -72,9 +64,8 @@ public class CreateLeaseSet2Message extends CreateLeaseSetMessage {
      */
     public void addPrivateKey(PrivateKey key) {
         PrivateKey pk = getPrivateKey();
-        if (pk == null) {
-            setPrivateKey(key);
-        } else {
+        if (pk == null) {setPrivateKey(key);}
+        else {
             if (_privateKeys == null) {
                 _privateKeys = new ArrayList<PrivateKey>(4);
                 _privateKeys.add(pk);
@@ -89,57 +80,41 @@ public class CreateLeaseSet2Message extends CreateLeaseSetMessage {
             _sessionId = new SessionId();
             _sessionId.readBytes(in);
             int type = in.read();
-            if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
-                _leaseSet = new LeaseSet();
-            } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
-                _leaseSet = new LeaseSet2();
-            } else if (type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
-                _leaseSet = new EncryptedLeaseSet();
-            } else if (type == DatabaseEntry.KEY_TYPE_META_LS2) {
-                _leaseSet = new MetaLeaseSet();
-            } else if (type == -1) {
-                throw new EOFException("EOF reading LS type");
-            } else {
-                throw new I2CPMessageException("Unsupported Leaseset type: " + type);
-            }
+            if (type == DatabaseEntry.KEY_TYPE_LEASESET) {_leaseSet = new LeaseSet();}
+            else if (type == DatabaseEntry.KEY_TYPE_LS2) {_leaseSet = new LeaseSet2();}
+            else if (type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {_leaseSet = new EncryptedLeaseSet();}
+            else if (type == DatabaseEntry.KEY_TYPE_META_LS2) {_leaseSet = new MetaLeaseSet();}
+            else if (type == -1) {throw new EOFException("EOF reading LS type");}
+            else {throw new I2CPMessageException("Unsupported LeaseSet type: " + type);}
             _leaseSet.readBytes(in);
             if (type != DatabaseEntry.KEY_TYPE_META_LS2) {
-                // In CLSM this is the type of the dest, but revocation is unimplemented.
-                // In CLS2M this is the type of the signature (which may be different than the
-                // type of the dest if it's an offline signature)
-                // and is needed by the session tag manager.
+                /**
+                 * In CLSM this is the type of the dest, but revocation is unimplemented.
+                 * In CLS2M this is the type of the signature (which may be different than the type
+                 * of the dest if it's an offline signature) and is needed by the session tag manager.
+                 */
                 SigType stype = _leaseSet.getSignature().getType();
-                if (stype == null)
-                    throw new I2CPMessageException("Unsupported signature type");
-                if (type == DatabaseEntry.KEY_TYPE_LS2 ||
-                    type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
+                if (stype == null) {throw new I2CPMessageException("Unsupported Signature Type");}
+                if (type == DatabaseEntry.KEY_TYPE_LS2 || type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
                     LeaseSet2 ls2 = (LeaseSet2) _leaseSet;
-                    // get one PrivateKey for each PublicKey
-                    List<PublicKey> pks = ls2.getEncryptionKeys();
+                    List<PublicKey> pks = ls2.getEncryptionKeys(); // get one PrivateKey for each PublicKey
                     int numkeys = in.read();
-                    // pks is null for encrypted LS2
-                    if (pks != null && numkeys != pks.size())
+                    if (pks != null && numkeys != pks.size()) { // pks is null for encrypted LS2
                         throw new I2CPMessageException("Wrong number of privkeys");
+                    }
                     for (int i = 0; i < numkeys; i++) {
                         int encType = (int) DataHelper.readLong(in, 2);
                         int encLen = (int) DataHelper.readLong(in, 2);
                         EncType etype;
                         if (pks != null) {
-                            // standard LS2
-                            etype = pks.get(i).getType();
-                            if (etype == null)
-                                throw new I2CPMessageException("Unsupported encryption type: " + encType);
-                            if (encType != etype.getCode())
-                                throw new I2CPMessageException("Encryption type mismatch");
-                            if (encLen != etype.getPrivkeyLen())
-                                throw new I2CPMessageException("Encryption type bad length");
+                            etype = pks.get(i).getType(); // standard LS2
+                            if (etype == null) {throw new I2CPMessageException("Unsupported encryption type: " + encType);}
+                            if (encType != etype.getCode()) {throw new I2CPMessageException("Encryption type mismatch");}
+                            if (encLen != etype.getPrivkeyLen()) {throw new I2CPMessageException("Encryption type bad length");}
                         } else {
-                            // encrypted LS2
-                            etype = EncType.getByCode(encType);
-                            if (etype == null)
-                                throw new I2CPMessageException("Unsupported encryption type: " + encType);
-                            if (encLen != etype.getPrivkeyLen())
-                                throw new I2CPMessageException("Encryption type bad length");
+                            etype = EncType.getByCode(encType); // encrypted LS2
+                            if (etype == null) {throw new I2CPMessageException("Unsupported encryption type: " + encType);}
+                            if (encLen != etype.getPrivkeyLen()) {throw new I2CPMessageException("Encryption type bad length");}
                         }
                         PrivateKey priv = new PrivateKey(etype);
                         priv.readBytes(in);
@@ -147,8 +122,7 @@ public class CreateLeaseSet2Message extends CreateLeaseSetMessage {
                     }
                 } else {
                     EncType etype = _leaseSet.getEncryptionKey().getType();
-                    if (etype == null)
-                        throw new I2CPMessageException("Unsupported encryption type");
+                    if (etype == null) {throw new I2CPMessageException("Unsupported encryption type");}
                     _privateKey = new PrivateKey(etype);
                     _privateKey.readBytes(in);
                 }
@@ -160,19 +134,18 @@ public class CreateLeaseSet2Message extends CreateLeaseSetMessage {
 
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
-        if (_leaseSet == null)
+        if (_leaseSet == null) {
             throw new I2CPMessageException("Unable to write out the message as there is not enough data");
+        }
         int type = _leaseSet.getType();
-        if (_sessionId == null ||
-            (type != DatabaseEntry.KEY_TYPE_META_LS2 && _privateKey == null))
+        if (_sessionId == null || (type != DatabaseEntry.KEY_TYPE_META_LS2 && _privateKey == null)) {
             throw new I2CPMessageException("Unable to write out the message as there is not enough data");
+        }
         int size = 4 // sessionId
                  + 1 // type
                  + _leaseSet.size();
         if (type != DatabaseEntry.KEY_TYPE_META_LS2) {
-            for (PrivateKey pk : getPrivateKeys()) {
-                size += pk.length();
-            }
+            for (PrivateKey pk : getPrivateKeys()) {size += pk.length();}
         }
         ByteArrayStream os = new ByteArrayStream(size);
         try {
@@ -196,24 +169,18 @@ public class CreateLeaseSet2Message extends CreateLeaseSetMessage {
     }
 
     @Override
-    public int getType() {
-        return MESSAGE_TYPE;
-    }
+    public int getType() {return MESSAGE_TYPE;}
 
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        buf.append("[CreateLeaseSet2Message: ");
-        buf.append("\n\tLeaseSet: ").append(_leaseSet);
+        buf.append("CreateLeaseSet2Message: ").append("\n* LeaseSet: ").append(_leaseSet);
         int type = _leaseSet.getType();
-        if (type != DatabaseEntry.KEY_TYPE_META_LS2 &&
-            type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
-            for (PrivateKey pk : getPrivateKeys()) {
-                buf.append("\n\tPrivateKey: ").append(pk);
-            }
+        if (type != DatabaseEntry.KEY_TYPE_META_LS2 && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
+            for (PrivateKey pk : getPrivateKeys()) {buf.append("\n* PrivateKey: ").append(pk);}
         }
-        buf.append("\n\tSessionId: ").append(getSessionId());
-        buf.append("]");
+        buf.append("\n* SessionId: ").append(getSessionId());
         return buf.toString();
     }
+
 }

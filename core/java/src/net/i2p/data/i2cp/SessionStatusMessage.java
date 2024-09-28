@@ -39,13 +39,9 @@ public class SessionStatusMessage extends I2CPMessageImpl {
      */
     public final static int STATUS_DUP_DEST = 5;
 
-    public SessionStatusMessage() {
-        setStatus(STATUS_INVALID);
-    }
+    public SessionStatusMessage() {setStatus(STATUS_INVALID);}
 
-    public SessionId getSessionId() {
-        return _sessionId;
-    }
+    public SessionId getSessionId() {return _sessionId;}
 
     /**
      * Return the SessionId for this message.
@@ -53,21 +49,13 @@ public class SessionStatusMessage extends I2CPMessageImpl {
      * @since 0.9.21
      */
     @Override
-    public SessionId sessionId() {
-        return _sessionId;
-    }
+    public SessionId sessionId() {return _sessionId;}
 
-    public void setSessionId(SessionId id) {
-        _sessionId = id;
-    }
+    public void setSessionId(SessionId id) {_sessionId = id;}
 
-    public int getStatus() {
-        return _status;
-    }
+    public int getStatus() {return _status;}
 
-    public void setStatus(int status) {
-        _status = status;
-    }
+    public void setStatus(int status) {_status = status;}
 
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
@@ -75,8 +63,7 @@ public class SessionStatusMessage extends I2CPMessageImpl {
             _sessionId = new SessionId();
             _sessionId.readBytes(in);
             _status = in.read();
-            if (_status < 0)
-                throw new EOFException();
+            if (_status < 0) {throw new EOFException();}
         } catch (DataFormatException dfe) {
             throw new I2CPMessageException("Unable to load the message data", dfe);
         }
@@ -84,8 +71,9 @@ public class SessionStatusMessage extends I2CPMessageImpl {
 
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
-        if (_sessionId == null)
+        if (_sessionId == null) {
             throw new I2CPMessageException("Unable to write out the message as there is not enough data");
+        }
         ByteArrayStream os = new ByteArrayStream(3);
         try {
             _sessionId.writeBytes(os);
@@ -96,16 +84,14 @@ public class SessionStatusMessage extends I2CPMessageImpl {
         return os.toByteArray();
     }
 
-    public int getType() {
-        return MESSAGE_TYPE;
-    }
+    public int getType() {return MESSAGE_TYPE;}
 
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        buf.append(getSessionId());
-        buf.append(" SessionStatusMessage: ");
-        buf.append(" [Status: ").append(getStatus() + "]");
+        buf.append(getSessionId()).append(" SessionStatusMessage: ")
+           .append(" [Status: ").append(getStatus() + "]");
         return buf.toString();
     }
+
 }

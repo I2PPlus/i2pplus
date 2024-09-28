@@ -43,28 +43,21 @@ public class SetDateMessage extends I2CPMessageImpl {
         _version = version;
     }
 
-    public Date getDate() {
-        return _date;
-    }
+    public Date getDate() {return _date;}
 
-    public void setDate(Date date) {
-        _date = date;
-    }
+    public void setDate(Date date) {_date = date;}
 
     /**
      *  @return may be null
      *  @since 0.8.7
      */
-    public String getVersion() {
-        return _version;
-    }
+    public String getVersion() {return _version;}
 
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         try {
             _date = DataHelper.readDate(in);
-            if (size > DataHelper.DATE_LENGTH)
-                _version = DataHelper.readString(in);
+            if (size > DataHelper.DATE_LENGTH) {_version = DataHelper.readString(in);}
         } catch (DataFormatException dfe) {
             throw new I2CPMessageException("Unable to load the message data", dfe);
         }
@@ -72,29 +65,28 @@ public class SetDateMessage extends I2CPMessageImpl {
 
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
-        if (_date == null)
+        if (_date == null) {
             throw new I2CPMessageException("Unable to write out the message as there is not enough data");
+        }
         ByteArrayStream os = new ByteArrayStream(8 + 1 + 6);
         try {
             DataHelper.writeDate(os, _date);
-            if (_version != null)
-                DataHelper.writeString(os, _version);
+            if (_version != null) {DataHelper.writeString(os, _version);}
         } catch (DataFormatException dfe) {
             throw new I2CPMessageException("Error writing out the message data", dfe);
         }
         return os.toByteArray();
     }
 
-    public int getType() {
-        return MESSAGE_TYPE;
-    }
+    public int getType() {return MESSAGE_TYPE;}
 
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        buf.append("SetDateMessage:");
+        buf.append("SetDateMessage: ");
         buf.append(_date);
         buf.append(" [Version: ").append(_version).append("]");
         return buf.toString();
     }
+
 }

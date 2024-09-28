@@ -26,8 +26,7 @@ import net.i2p.data.DataHelper;
  */
 public abstract class I2CPMessageImpl implements I2CPMessage {
 
-    public I2CPMessageImpl() { // nop
-    }
+    public I2CPMessageImpl() {} // nop
 
     /**
      * Validate the type and size of the message, and then read the message into the data structures.  <p>
@@ -36,15 +35,13 @@ public abstract class I2CPMessageImpl implements I2CPMessage {
      */
     public void readMessage(InputStream in) throws I2CPMessageException, IOException {
         int length = 0;
-        try {
-            length = (int) DataHelper.readLong(in, 4);
-        } catch (DataFormatException dfe) {
+        try {length = (int) DataHelper.readLong(in, 4);}
+        catch (DataFormatException dfe) {
             throw new I2CPMessageException("Error reading the length bytes", dfe);
         }
         if (length < 0) throw new I2CPMessageException("Invalid message length specified");
         int type = in.read();
-        if (type < 0)
-            throw new EOFException();
+        if (type < 0) {throw new EOFException();}
         readMessage(in, length, type);
     }
 
@@ -55,21 +52,12 @@ public abstract class I2CPMessageImpl implements I2CPMessage {
      * @throws IOException
      */
     public void readMessage(InputStream in, int length, int type) throws I2CPMessageException, IOException {
-        if (type != getType())
-            throw new I2CPMessageException("Invalid message type (found: " + type + " supported: " + getType()
-                                           + " class: " + getClass().getName() + ")");
-        if (length < 0) throw new IOException("Negative payload size");
+        if (type != getType()) {
+            throw new I2CPMessageException("Invalid message type (found: " + type + " supported: " + getType() +
+                                           " class: " + getClass().getName() + ")");
+        }
+        if (length < 0) {throw new IOException("Negative payload size");}
 
-        /*
-        byte buf[] = new byte[length];
-        int read = DataHelper.read(in, buf);
-        if (read != length)
-            throw new IOException("Not able to read enough bytes [" + read + "] read, expected [ " + length + "]");
-
-        ByteArrayInputStream bis = new ByteArrayInputStream(buf);
-
-        doReadMessage(bis, length);
-         */
         doReadMessage(in, length);
     }
 
@@ -112,17 +100,15 @@ public abstract class I2CPMessageImpl implements I2CPMessage {
     }
 
     public void readBytes(InputStream in) throws DataFormatException, IOException {
-        try {
-            readMessage(in);
-        } catch (I2CPMessageException ime) {
+        try {readMessage(in);}
+        catch (I2CPMessageException ime) {
             throw new DataFormatException("Error reading the message", ime);
         }
     }
 
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
-        try {
-            writeMessage(out);
-        } catch (I2CPMessageException ime) {
+        try {writeMessage(out);}
+        catch (I2CPMessageException ime) {
             throw new DataFormatException("Error writing the message", ime);
         }
     }
@@ -136,5 +122,6 @@ public abstract class I2CPMessageImpl implements I2CPMessage {
      * @return null always. Extending classes with a SessionId must override.
      * @since 0.9.21
      */
-    public SessionId sessionId() { return null; }
+    public SessionId sessionId() {return null;}
+
 }
