@@ -149,20 +149,19 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         super.destroySession(sendDisconnect);
     }
 
-    /** Don't bother if really small.
-     *  Three 66-byte messages will fit in one tunnel message.
-     *  Four messages don't fit no matter how small. So below 66 it isn't worth it.
-     *  See ConnectionOptions.java in the streaming lib for similar calculations.
-     *  Since we still have to pass it through gzip -0 the CPU savings
-     *  is trivial but it's the best we can do for now. See below.
-     *  i2cp.gzip defaults to SHOULD_COMPRESS = true.
-     *  Perhaps the http server (which does its own compression)
-     *  and P2P apps (with generally uncompressible data) should
-     *  set to false.
+    /**
+     * Don't bother if really small. Three 66-byte messages will fit in one tunnel message.
+     * Four messages don't fit no matter how small. So below 66 it isn't worth it.
+     * See ConnectionOptions.java in the streaming lib for similar calculations.
      *
-     *  Todo: don't compress if destination is local?
+     * Since we still have to pass it through gzip -0 the CPU savings is trivial but it's
+     * the best we can do for now. See below. i2cp.gzip defaults to SHOULD_COMPRESS = true.
+     *
+     * Perhaps the http server (which does its own compression) and P2P apps
+     * (with generally uncompressible data) should set to false.
      */
-    private static final int DONT_COMPRESS_SIZE = 66;
+
+    private static final int DONT_COMPRESS_SIZE = 66; // Todo: don't compress if destination is local?
 
     protected boolean shouldCompress(int size) {
          if (size <= DONT_COMPRESS_SIZE) {return false;}
@@ -259,10 +258,11 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         /**
          * Sadly there is no way to send something completely uncompressed in a backward-compatible way,
          * so we have to still send it in a gzip format, which adds 23 bytes (2.4% for a 960-byte msg)
-         *  (10 byte header + 5 byte block header + 8 byte trailer)
+         * (10 byte header + 5 byte block header + 8 byte trailer)
+         *
          * In the future we can add a one-byte magic number != 0x1F to signal an uncompressed msg
-         *  (Gzip streams start with 0x1F 0x8B 0x08)
-         *  assuming we don't need the CRC-32 that comes with gzip (do we?)
+         * (Gzip streams start with 0x1F 0x8B 0x08) assuming we don't need the CRC-32 that comes with gzip?
+         *
          * Maybe implement this soon in receiveMessage() below so we are ready
          * in case we ever make an incompatible network change.
          * This would save 22 of the 23 bytes and a little CPU.
@@ -461,4 +461,5 @@ class I2PSessionImpl2 extends I2PSessionImpl {
             _log.info(getPrefix() + "Disconnecting " + _sendingStates.size() + " states");
         _sendingStates.clear();
     }
+
 }

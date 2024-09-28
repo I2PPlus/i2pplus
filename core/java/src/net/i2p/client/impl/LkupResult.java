@@ -21,11 +21,11 @@ public class LkupResult implements LookupResult {
     /**
      * @return zero for success, nonzero for failure
      */
-    public int getResultCode() { return _code; }
+    public int getResultCode() {return _code;}
 
     /**
      * @return Destination on success, null on failure
      */
-    public Destination getDestination() { return _dest; }
+    public Destination getDestination() {return _dest;}
 
 }

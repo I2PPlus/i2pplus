@@ -71,11 +71,8 @@ public class I2PClientImpl implements I2PClient {
      */
     public Destination createDestination(OutputStream destKeyStream, SigType type) throws I2PException, IOException {
         Certificate cert;
-        if (type == SigType.DSA_SHA1) {
-            cert = Certificate.NULL_CERT;
-        } else {
-            cert = new KeyCertificate(type);
-        }
+        if (type == SigType.DSA_SHA1) {cert = Certificate.NULL_CERT;}
+        else {cert = new KeyCertificate(type);}
         return createDestination(destKeyStream, cert);
     }
 
@@ -95,12 +92,7 @@ public class I2PClientImpl implements I2PClient {
      */
     public Destination createDestination(OutputStream destKeyStream, Certificate cert) throws I2PException, IOException {
         Destination d = new Destination();
-        // Don't generate ElGamal keys anymore, they are unused since release 0.6 2005
-        //Object keypair[] = KeyGenerator.getInstance().generatePKIKeypair();
-        //PublicKey publicKey = (PublicKey) keypair[0];
-        //PrivateKey privateKey = (PrivateKey) keypair[1];
-        // repeating pattern to be used in pubkey and padding, so the
-        // destination will be compressible
+        // Repeating pattern to be used in pubkey and padding, so the destination will be compressible
         byte[] rand = new byte[PADDING_ENTROPY];
         RandomSource.getInstance().nextBytes(rand);
         byte[] pk = new byte[PublicKey.KEYSIZE_BYTES];
@@ -118,14 +110,9 @@ public class I2PClientImpl implements I2PClient {
         if (cert.getCertificateType() == Certificate.CERTIFICATE_TYPE_KEY) {
             KeyCertificate kcert = cert.toKeyCertificate();
             SigType type = kcert.getSigType();
-            try {
-                signingKeys = KeyGenerator.getInstance().generateSigningKeys(type);
-            } catch (GeneralSecurityException gse) {
-                throw new I2PException("Keygen failure", gse);
-            }
-        } else {
-            signingKeys = KeyGenerator.getInstance().generateSigningKeys();
-        }
+            try {signingKeys = KeyGenerator.getInstance().generateSigningKeys(type);}
+            catch (GeneralSecurityException gse) {throw new I2PException("Keygen failure", gse);}
+        } else {signingKeys = KeyGenerator.getInstance().generateSigningKeys();}
         SigningPublicKey signingPubKey = (SigningPublicKey) signingKeys[0];
         SigningPrivateKey signingPrivKey = (SigningPrivateKey) signingKeys[1];
         d.setPublicKey(publicKey);
@@ -138,8 +125,7 @@ public class I2PClientImpl implements I2PClient {
             if (len < 128) {
                 int padLen = 128 - len;
                 byte[] pad = new byte[padLen];
-                // pad with the same pattern as in the public key
-                for (int i = 0; i < padLen; i += PADDING_ENTROPY) {
+                for (int i = 0; i < padLen; i += PADDING_ENTROPY) { // pad with the same pattern as in the public key
                     System.arraycopy(rand, 0, pad, i, Math.min(PADDING_ENTROPY, padLen - i));
                 }
                 d.setPadding(pad);
@@ -178,4 +164,5 @@ public class I2PClientImpl implements I2PClient {
     public I2PSession createSession(I2PAppContext context, InputStream destKeyStream, Properties options) throws I2PSessionException {
         return new I2PSessionMuxedImpl(context, destKeyStream, options); // thread safe and muxed
     }
+
 }

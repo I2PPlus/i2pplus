@@ -76,7 +76,7 @@ public final class SigUtil {
             case RSA:
                 return toJavaRSAKey(pk);
             default:
-                throw new InvalidKeyException("unsupported key: " + pk);
+                throw new InvalidKeyException("Unsupported Key: " + pk);
         }
     }
 
@@ -95,7 +95,7 @@ public final class SigUtil {
             case RSA:
                 return toJavaRSAKey(pk);
             default:
-                throw new InvalidKeyException("unsupported key: " + pk);
+                throw new InvalidKeyException("Unsupported Key: " + pk);
         }
     }
 

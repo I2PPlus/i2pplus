@@ -113,13 +113,10 @@ class SubSession extends I2PSessionMuxedImpl {
             // wait until we have created a lease set
             int waitcount = 0;
             while (_leaseSet == null) {
-                if (waitcount++ > 5*60) {
+                if (waitcount++ > 10*60) {
                     throw new IOException("No tunnels built after waiting 5 minutes. Your network connection may be down, or there is severe network congestion.");
                 }
-                synchronized (_leaseSetWait) {
-                    // InterruptedException caught below
-                    _leaseSetWait.wait(1000);
-                }
+                synchronized (_leaseSetWait) {_leaseSetWait.wait(500);} // InterruptedException caught below
             }
             synchronized(_stateLock) {
                 if (_state != State.OPEN) {
@@ -129,9 +126,8 @@ class SubSession extends I2PSessionMuxedImpl {
                 }
             }
             success = true;
-        } catch (InterruptedException ie) {
-            throw new I2PSessionException("Interrupted", ie);
-        } catch (IOException ioe) {
+        } catch (InterruptedException ie) {throw new I2PSessionException("Interrupted", ie);}
+        catch (IOException ioe) {
             throw new I2PSessionException(getPrefix() + "Cannot connect to the router on " + _hostname + ':' + _portNum, ioe);
         } finally {
             if (!success) {
@@ -146,9 +142,7 @@ class SubSession extends I2PSessionMuxedImpl {
      *  False when open and during transitions.
      */
     @Override
-    public boolean isClosed() {
-        return super.isClosed() || _primary.isClosed();
-    }
+    public boolean isClosed() {return super.isClosed() || _primary.isClosed();}
 
     /**
      * Deliver an I2CP message to the router
@@ -161,10 +155,10 @@ class SubSession extends I2PSessionMuxedImpl {
         // workaround for now, as primary will send out our CreateSession
         // from his connect, while we are still closed.
         // If we did it in connect() we wouldn't need this
-        if (isClosed() &&
-            message.getType() != CreateSessionMessage.MESSAGE_TYPE &&
-            message.getType() != CreateLeaseSetMessage.MESSAGE_TYPE)
+        if (isClosed() && message.getType() != CreateSessionMessage.MESSAGE_TYPE &&
+            message.getType() != CreateLeaseSetMessage.MESSAGE_TYPE) {
             throw new I2PSessionException("Already closed");
+        }
         _primary.sendMessage_unchecked(message);
     }
 
@@ -189,7 +183,7 @@ class SubSession extends I2PSessionMuxedImpl {
     @Override
     void propogateError(String msg, Throwable error) {
         _primary.propogateError(msg, error);
-        if (_sessionListener != null) _sessionListener.errorOccurred(this, msg, error);
+        if (_sessionListener != null) {_sessionListener.errorOccurred(this, msg, error);}
     }
 
     /**
@@ -200,9 +194,8 @@ class SubSession extends I2PSessionMuxedImpl {
     @Override
     public void destroySession() {
         _primary.destroySession();
-        if (_availabilityNotifier != null)
-            _availabilityNotifier.stopNotifying();
-        if (_sessionListener != null) _sessionListener.disconnected(this);
+        if (_availabilityNotifier != null) {_availabilityNotifier.stopNotifying();}
+        if (_sessionListener != null) {_sessionListener.disconnected(this);}
         changeState(State.CLOSED);
     }
 
@@ -210,14 +203,10 @@ class SubSession extends I2PSessionMuxedImpl {
      * Will interrupt a connect in progress.
      */
     @Override
-    protected void disconnect() {
-        _primary.disconnect();
-    }
+    protected void disconnect() {_primary.disconnect();}
 
     @Override
-    protected boolean reconnect() {
-        return _primary.reconnect();
-    }
+    protected boolean reconnect() {return _primary.reconnect();}
 
     /**
      *  Called by the message handler
@@ -226,9 +215,7 @@ class SubSession extends I2PSessionMuxedImpl {
      *  This will never happen, as the dest reply message does not contain a session ID.
      */
     @Override
-    void destReceived(Destination d) {
-        _primary.destReceived(d);
-    }
+    void destReceived(Destination d) {_primary.destReceived(d);}
 
     /**
      *  Called by the message handler
@@ -239,49 +226,37 @@ class SubSession extends I2PSessionMuxedImpl {
      *  @param h non-null
      */
     @Override
-    void destLookupFailed(Hash h) {
-        _primary.destLookupFailed(h);
-    }
+    void destLookupFailed(Hash h) {_primary.destLookupFailed(h);}
 
     /**
      *  Called by the message handler
      *  on reception of HostReplyMessage
      *  @param d non-null
      */
-    void destReceived(long nonce, Destination d) {
-        _primary.destReceived(nonce, d);
-    }
+    void destReceived(long nonce, Destination d) {_primary.destReceived(nonce, d);}
 
     /**
      *  Called by the message handler
      *  on reception of HostReplyMessage
      */
     @Override
-    void destLookupFailed(long nonce, int code) {
-        _primary.destLookupFailed(nonce, code);
-    }
+    void destLookupFailed(long nonce, int code) {_primary.destLookupFailed(nonce, code);}
 
     /**
      * Called by the message handler.
      * This will never happen, as the bw limits message does not contain a session ID.
      */
     @Override
-    void bwReceived(int[] i) {
-        _primary.bwReceived(i);
-    }
+    void bwReceived(int[] i) {_primary.bwReceived(i);}
 
     /**
-     *  Blocking. Waits a max of 10 seconds by default.
-     *  See lookupDest with maxWait parameter to change.
-     *  Implemented in 0.8.3 in I2PSessionImpl;
-     *  previously was available only in I2PSimpleSession.
+     *  Blocking. Waits a max of 10 seconds by default.  See lookupDest with maxWait parameter to change.
+     *  Implemented in 0.8.3 in I2PSessionImpl; previously was available only in I2PSimpleSession.
      *  Multiple outstanding lookups are now allowed.
      *  @return null on failure
      */
     @Override
-    public Destination lookupDest(Hash h) throws I2PSessionException {
-        return _primary.lookupDest(h);
-    }
+    public Destination lookupDest(Hash h) throws I2PSessionException {return _primary.lookupDest(h);}
 
     /**
      *  Blocking.
@@ -330,22 +305,15 @@ class SubSession extends I2PSessionMuxedImpl {
      *  it won't be routed back to us
      */
     @Override
-    public int[] bandwidthLimits() throws I2PSessionException {
-        return _primary.bandwidthLimits();
-    }
+    public int[] bandwidthLimits() throws I2PSessionException {return _primary.bandwidthLimits();}
 
     @Override
-    protected void updateActivity() {
-        _primary.updateActivity();
-    }
+    protected void updateActivity() {_primary.updateActivity();}
 
     @Override
-    public long lastActivity() {
-        return _primary.lastActivity();
-    }
+    public long lastActivity() {return _primary.lastActivity();}
 
     @Override
-    public void setReduced() {
-        _primary.setReduced();
-    }
+    public void setReduced() {_primary.setReduced();}
+
 }
