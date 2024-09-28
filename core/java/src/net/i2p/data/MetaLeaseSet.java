@@ -123,25 +123,25 @@ public class MetaLeaseSet extends LeaseSet2 {
     public String toString() {
         StringBuilder buf = new StringBuilder(128);
         buf.append("\nMetaLeaseSet: ");
-        buf.append("\n* Destination: ").append(_destination);
+        buf.append("\n* Destination: ").append(_destination.toBase32());
         if (isOffline()) {
-            buf.append("\n* Transient Key: ").append(_transientSigningPublicKey);
-            buf.append("\n* Transient Expires: ").append(new java.util.Date(_transientExpires));
-            buf.append("\n* Offline Signature: ").append(_offlineSignature);
+            buf.append("\n* Transient Key: ").append(_transientSigningPublicKey)
+               .append("\n* Transient Expiry: ").append(new java.util.Date(_transientExpires))
+               .append("\n* Offline Signature: ").append(_offlineSignature);
         }
-        buf.append("\n* Options: ").append((_options != null) ? _options.size() : 0);
-        if (_options != null && !_options.isEmpty()) {
+        if (_options != null && _options.size() > 0) {
+            buf.append("\nOptions: ").append(_options.size());
             for (Map.Entry<Object, Object> e : _options.entrySet()) {
                 String key = (String) e.getKey();
                 String val = (String) e.getValue();
-                buf.append(" [").append(key).append("] = [").append(val).append("]");
+                buf.append("\n* ").append(key).append(": ").append(val);
             }
         }
-        buf.append("\n* Unpublished? ").append(isUnpublished());
-        buf.append("\n* Signature: ").append(_signature);
-        buf.append("\n* Published: ").append(new java.util.Date(_published));
-        buf.append("\n* Expires: ").append(new java.util.Date(_expires));
-        buf.append("\n* Leases: ").append(getLeaseCount());
+        buf.append("\n* Unpublished? ").append(isUnpublished())
+           .append("\n* Signature: ").append(_signature)
+           .append("\n* Published: ").append(new java.util.Date(_published))
+           .append("\n* Expires: ").append(new java.util.Date(_expires))
+           .append("\n* Leases: ").append(getLeaseCount());
         for (int i = 0; i < getLeaseCount(); i++) {buf.append(getLease(i));}
         return buf.toString();
     }

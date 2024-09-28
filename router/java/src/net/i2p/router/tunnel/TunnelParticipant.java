@@ -27,10 +27,8 @@ class TunnelParticipant {
     private final FragmentHandler _handler;
     private RouterInfo _nextHopCache;
 
-//    private static final long MAX_LOOKUP_TIME = 15*1000;
-    private static final long MAX_LOOKUP_TIME = 12*1000;
+    private static final long MAX_LOOKUP_TIME = 15*1000;
     /** for next hop when a tunnel is first created */
-//    private static final long LONG_MAX_LOOKUP_TIME = 30*1000;
     private static final long LONG_MAX_LOOKUP_TIME = 25*1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_PARTICIPATING;
 
@@ -54,21 +52,20 @@ class TunnelParticipant {
         _log = ctx.logManager().getLog(TunnelParticipant.class);
         _config = config;
         _processor = processor;
-        if ( (config == null) || (config.getSendTo() == null) )
+        if ((config == null) || (config.getSendTo() == null)) {
             _handler = new FragmentHandler(ctx, new DefragmentedHandler(), true);
-        else
-            _handler = null; // final
+        } else {_handler = null;} // final
 
         _inboundEndpointProcessor = inEndProc;
-        if (inEndProc != null)
+        if (inEndProc != null) {
             _inboundDistributor = new InboundMessageDistributor(ctx, inEndProc.getDestination());
-        else
-            _inboundDistributor = null; // final
+        } else {_inboundDistributor = null;} // final
 
-        if ( (_config != null) && (_config.getSendTo() != null) ) {
+        if ((_config != null) && (_config.getSendTo() != null)) {
             _nextHopCache = _context.netDb().lookupRouterInfoLocally(_config.getSendTo());
-            if (_nextHopCache == null)
+            if (_nextHopCache == null) {
                 _context.netDb().lookupRouterInfo(_config.getSendTo(), new Found(_context), null, LONG_MAX_LOOKUP_TIME);
+            }
         }
         // all createRateStat() in TunnelDispatcher
     }
@@ -95,32 +92,32 @@ class TunnelParticipant {
 
         if (!ok) {
             if (_log.shouldInfo()) {
-                _log.warn("Failed to dispatch " + msg + "\n* Processor: " + _processor
-                           + "\n* Inbound Endpoint: " + _inboundEndpointProcessor);
+                _log.warn("Failed to dispatch " + msg + "\n* Processor: " + _processor + "\n* Inbound Endpoint: " +
+                          _inboundEndpointProcessor);
             } else if (_log.shouldWarn()) {
-                _log.warn("Failed to dispatch " + msg + " via " + _processor);
+                _log.warn("Failed to dispatch " + msg + " via " + (_processor != null ? _processor : "NULL tunnel"));
             }
-            if (_config != null)
-                _config.incrementProcessedMessages();
+            if (_config != null) {_config.incrementProcessedMessages();}
             return;
         }
 
         if ( (_config != null) && (_config.getSendTo() != null) ) {
             _config.incrementProcessedMessages();
             RouterInfo ri = _nextHopCache;
-            if (ri == null)
-                ri = _context.netDb().lookupRouterInfoLocally(_config.getSendTo());
+            if (ri == null) {ri = _context.netDb().lookupRouterInfoLocally(_config.getSendTo());}
             if (ri != null) {
-                if (_log.shouldDebug())
+                if (_log.shouldDebug()) {
                     _log.debug("Dispatched " + msg + " directly to nextHop [" + _config.getSendTo().toBase64().substring(0,6) + "]");
+                }
                 send(_config, msg, ri);
                 // see comments below
                 //if (_config != null)
                 //    incrementThroughput(_config.getReceiveFrom());
             } else {
                 // It should be rare to forget the router info for the next peer
-                if (_log.shouldInfo())
+                if (_log.shouldInfo()) {
                     _log.info("Looking up nextHop [" + _config.getSendTo().toBase64().substring(0,6) + "] for " + msg);
+                }
                 _context.netDb().lookupRouterInfo(_config.getSendTo(), new SendJob(_context, msg),
                                                   new TimeoutJob(_context, msg), MAX_LOOKUP_TIME);
             }
@@ -129,8 +126,7 @@ class TunnelParticipant {
             TunnelCreatorConfig cfg = _inboundEndpointProcessor.getConfig();
             cfg.incrementProcessedMessages();
             ok = _handler.receiveTunnelMessage(data, 0, data.length);
-            if (ok) {
-            if (_log.shouldDebug())
+            if (ok && _log.shouldDebug()) {
                 _log.debug("Received fragment on " + _config + ": " + msg);
             } else {
                 // blame everybody equally
@@ -139,8 +135,9 @@ class TunnelParticipant {
                     int pct = 100 / (lenm1);
                     for (int i = 0; i < lenm1; i++) {
                         Hash h = cfg.getPeer(i);
-                        if (_log.shouldWarn())
+                        if (_log.shouldWarn()) {
                             _log.warn(toString() + ": Blaming [" + h.toBase64().substring(0,6) + "] -> " + pct + '%');
+                        }
                         _context.profileManager().tunnelFailed(h, pct);
                     }
                 }
@@ -148,63 +145,31 @@ class TunnelParticipant {
         }
     }
 
-/****
-    private int _periodMessagesTransferred;
-    private long _lastCoallesced = System.currentTimeMillis();
-****/
-
-    /**
-     * take note that the peers specified were able to push us data.  hmm, is this safe?
-     * this could be easily gamed to get us to rank some peer of their choosing as quite
-     * fast.  That peer would have to actually be quite fast, but having a remote peer
-     * influence who we spend our time profiling is dangerous, so this will be disabled for
-     * now.
-     */
-/****
-    private void incrementThroughput(Hash prev) {
-        if (true) return;
-        long now = System.currentTimeMillis();
-        long timeSince = now - _lastCoallesced;
-        if (timeSince >= 60*1000) {
-            int amount = 1024 * _periodMessagesTransferred;
-            int normalized = (int)((double)amount * 60d*1000d / (double)timeSince);
-            _periodMessagesTransferred = 0;
-            _lastCoallesced = now;
-            _context.profileManager().tunnelDataPushed1m(prev, normalized);
-        } else {
-            _periodMessagesTransferred++;
-        }
-    }
-****/
-
     /** getCompleteCount */
     public int getCompleteCount() {
-        if (_handler != null)
-            return _handler.getCompleteCount();
-        else
-            return 0;
+        if (_handler != null) {return _handler.getCompleteCount();}
+        else {return 0;}
     }
 
     public int getFailedCount() {
-        if (_handler != null)
-            return _handler.getFailedCount();
-        else
-            return 0;
+        if (_handler != null) {return _handler.getFailedCount();}
+        else {return 0;}
     }
 
     private class DefragmentedHandler implements FragmentHandler.DefragmentedReceiver {
         public void receiveComplete(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
-            if (_log.shouldDebug())
+            if (_log.shouldDebug()) {
                 _log.debug("Receive complete: on " + _config + ": " + msg);
+            }
             _inboundDistributor.distribute(msg, toRouter, toTunnel);
         }
-
     }
 
     private void send(HopConfig config, TunnelDataMessage msg, RouterInfo ri) {
         if (_context.tunnelDispatcher().shouldDropParticipatingMessage(TunnelDispatcher.Location.PARTICIPANT,
-                                                                       TunnelDataMessage.MESSAGE_TYPE, 1024))
+                                                                       TunnelDataMessage.MESSAGE_TYPE, 1024)) {
             return;
+        }
         //_config.incrementSentMessages();
         long oldId = msg.getUniqueId();
         long newId = _context.random().nextLong(I2NPMessage.MAX_ID_VALUE);
@@ -213,8 +178,7 @@ class TunnelParticipant {
         msg.setMessageExpiration(_context.clock().now() + 10*1000);
         msg.setTunnelId(config.getSendTunnel());
         OutNetMessage m = new OutNetMessage(_context, msg, msg.getMessageExpiration(), PRIORITY, ri);
-        if (_log.shouldDebug())
-            _log.debug("Forward on from " + _config + ": " + msg);
+        if (_log.shouldDebug()) {_log.debug("Forward on from " + _config + ": " + msg);}
         _context.outNetMessagePool().add(m);
     }
 
@@ -229,9 +193,8 @@ class TunnelParticipant {
         public String getName() { return "Participant send after lookup"; }
 
         public void runJob() {
-            if (_nextHopCache != null) {
-                send(_config, _msg, _nextHopCache);
-            } else {
+            if (_nextHopCache != null) {send(_config, _msg, _nextHopCache);}
+            else {
                 RouterInfo ri = _context.netDb().lookupRouterInfoLocally(_config.getSendTo());
                 int stat;
                 if (ri != null) {
@@ -239,9 +202,10 @@ class TunnelParticipant {
                     send(_config, _msg, ri);
                     stat = 1;
                 } else {
-                    if (_log.shouldWarn())
-                        _log.warn("Lookup the nextHop (" + _config.getSendTo()
-                                  + " failed! Where do we go for " + _config + "?  msg dropped: " + _msg);
+                    if (_log.shouldWarn()) {
+                        _log.warn("Lookup of nextHop [" + _config.getSendTo().toBase64().substring(0,6) + "] failed! " +
+                                  "Where do we go for " + _config + "?  -> Message dropped: " + _msg);
+                    }
                     stat = 0;
                 }
                 _context.statManager().addRateData("tunnel.participantLookupSuccess", stat);
@@ -257,22 +221,22 @@ class TunnelParticipant {
             _msg = msg;
         }
 
-        public String getName() { return "Participant next hop lookup timeout"; }
+        public String getName() {return "Participant next hop lookup timeout";}
 
         public void runJob() {
-            if (_nextHopCache != null)
-                return;
+            if (_nextHopCache != null) {return;}
 
             RouterInfo ri = _context.netDb().lookupRouterInfoLocally(_config.getSendTo());
             if (ri != null) {
                 _nextHopCache = ri;
-                if (_log.shouldWarn())
-                    _log.warn("Lookup the nextHop (" + _config.getSendTo()
-                              + " failed, but we found it!! Where do we go for " + _config + "?  msg dropped: " + _msg);
+                if (_log.shouldWarn()) {
+                    _log.warn("Lookup of nextHop [" + _config.getSendTo().toBase64().substring(0,6) + "] failed, but we found it!! " +
+                              "Where do we go for " + _config + "? -> Message dropped: " + _msg);
+                }
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("Lookup the nextHop (" + _config.getSendTo()
-                              + " failed! Where do we go for " + _config + "?  msg dropped: " + _msg);
+                    _log.warn("Lookup of nextHop [" + _config.getSendTo().toBase64().substring(0,6) + "] failed! " +
+                              "Where do we go for " + _config + "? -> Message dropped: " + _msg);
             }
             _context.statManager().addRateData("tunnel.participantLookupSuccess", 0);
         }
@@ -284,8 +248,7 @@ class TunnelParticipant {
             StringBuilder buf = new StringBuilder(64);
             buf.append("participant at ").append(_config.toString());
             return buf.toString();
-        } else {
-            return "Inbound Endpoint";
-        }
+        } else {return "Inbound Endpoint";}
     }
+
 }

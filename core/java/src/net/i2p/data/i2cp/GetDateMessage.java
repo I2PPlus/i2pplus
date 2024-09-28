@@ -120,7 +120,7 @@ public class GetDateMessage extends I2CPMessageImpl {
         buf.append("[GetDateMessage]");
         buf.append("\n\tVersion: ").append(_version);
         if (_options != null && !_options.isEmpty()) {
-            buf.append("\n\tOptions: #: ").append(_options.size());
+            buf.append("\n\tOptions: ").append(_options.size());
             Properties sorted = new OrderedProperties();
             sorted.putAll(_options);
             for (Map.Entry<Object, Object> e : sorted.entrySet()) {

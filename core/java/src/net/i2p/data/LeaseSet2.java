@@ -620,19 +620,19 @@ public class LeaseSet2 extends LeaseSet {
         }
         if (isOffline()) {
             buf.append("\n* Transient Key: ").append(_transientSigningPublicKey);
-            buf.append("\n* Transient Expires: ").append(new java.util.Date(_transientExpires));
+            buf.append("\n* Transient Expiry: ").append(new java.util.Date(_transientExpires));
             buf.append("\n* Offline Signature: ").append(_offlineSignature);
         }
-        buf.append("\nOptions: ").append((_options != null) ? _options.size() : 0);
-        if (_options != null && !_options.isEmpty()) {
+        if (_options != null && _options.size() > 0) {
+            buf.append("\nOptions: ").append(_options.size());
             for (Map.Entry<Object, Object> e : _options.entrySet()) {
                 String key = (String) e.getKey();
                 String val = (String) e.getValue();
-                buf.append("\n* [").append(key).append("] = [").append(val).append("]");
+                buf.append("\n* ").append(key).append(": ").append(val);
             }
         }
         buf.append("\n* Unpublished? ").append(isUnpublished());
-        buf.append("\n* Blinded? ").append(isBlindedWhenPublished());
+        if (isBlindedWhenPublished()) {buf.append("\n* Blinded? ").append(isBlindedWhenPublished());}
         buf.append("\n* Signature: ").append(_signature);
         buf.append("\n* Published: ").append(new java.util.Date(_published));
         buf.append("\n* Expires: ").append(new java.util.Date(_expires));
