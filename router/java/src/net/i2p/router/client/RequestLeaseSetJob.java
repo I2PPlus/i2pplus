@@ -35,7 +35,8 @@ class RequestLeaseSetJob extends JobImpl {
     private final ClientConnectionRunner _runner;
     private final LeaseRequestState _requestState;
 
-    private static final long MAX_FUDGE = 2*1000;
+    //private static final long MAX_FUDGE = 2*1000;
+    private static final long MAX_FUDGE = 3*1000;
 
     public RequestLeaseSetJob(RouterContext ctx, ClientConnectionRunner runner, LeaseRequestState state) {
         super(ctx);
@@ -62,15 +63,18 @@ class RequestLeaseSetJob extends JobImpl {
 
         LeaseSet requested = _requestState.getRequested();
         long endTime = requested.getEarliestLeaseDate();
-        // Add a small number of ms (0 to MAX_FUDGE) that increases as we approach the expire time.
-        // Since the earliest date functions as a version number,
-        // this will force the floodfill to flood each new version;
-        // otherwise it won't if the earliest time hasn't changed.
+        /**
+         * Add a small number of ms (0 to MAX_FUDGE) that increases as we approach the expire time.
+         * Since the earliest date functions as a version number,
+         * this will force the floodfill to flood each new version;
+         * otherwise it won't if the earliest time hasn't changed.
+         */
 
         if (isLS2) {
-            // fix for 0.9.38 floodfills,
-            // adding some ms doesn't work since the dates are truncated,
-            // and 0.9.38 did not use LeaseSet2.getPublished()
+            /**
+             * Fix for 0.9.38 floodfills, adding some ms doesn't work since
+             * the dates are truncated, and 0.9.38 did not use LeaseSet2.getPublished()
+             */
             long earliest = 1000 + _requestState.getCurrentEarliestLeaseDate();
             if (endTime < earliest) {endTime = earliest;}
         } else {
@@ -148,7 +152,7 @@ class RequestLeaseSetJob extends JobImpl {
         public void runJob() {
             if (_runner.isDead()) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Runner is already dead, not trying to expire the LeaseSet lookup");
+                    _log.debug("Runner is already dead -> Not trying to expire the LeaseSet lookup...");
                 }
                 return;
             }
@@ -168,6 +172,7 @@ class RequestLeaseSetJob extends JobImpl {
                 _runner.failLeaseRequest(_requestState);
             }
         }
+
         public String getName() {return "Check LeaseSet Request Status";}
     }
 
