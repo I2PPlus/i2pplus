@@ -111,20 +111,23 @@ public class JobQueue {
      */
     private final Object _runnerLock = new Object();
 
+    private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
+
     /**
      *  Does not start the pumper. Caller MUST call startup.
      */
     public JobQueue(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(JobQueue.class);
-        _context.statManager().createRateStat("jobQueue.readyJobs", "Ready and waiting scheduled jobs", "JobQueue", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("jobQueue.droppedJobs", "Scheduled jobs dropped due to insane overload", "JobQueue", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("jobQueue.queuedJobs", "Scheduled jobs in queue", "JobQueue", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
+
+        _context.statManager().createRateStat("jobQueue.droppedJobs", "Scheduled jobs dropped due to insane overload", "JobQueue", RATES);
+        _context.statManager().createRateStat("jobQueue.queuedJobs", "Scheduled jobs in queue", "JobQueue", RATES);
+        _context.statManager().createRateStat("jobQueue.readyJobs", "Ready and waiting scheduled jobs", "JobQueue", RATES);
         // following are for JobQueueRunner
-        _context.statManager().createRateStat("jobQueue.jobRun", "Duration of scheduled jobs", "JobQueue", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("jobQueue.jobRunSlow", "Duration of jobs that take over a second (ms)", "JobQueue", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRequiredRateStat("jobQueue.jobLag", "Delay before waiting jobs are run (ms)", "JobQueue", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("jobQueue.jobWait", "Time a scheduled job stays queued before running (ms)", "JobQueue", new long[] { 60*1000, 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRateStat("jobQueue.jobRun", "Duration of scheduled jobs", "JobQueue", RATES);
+        _context.statManager().createRateStat("jobQueue.jobRunSlow", "Duration of jobs that take over a second (ms)", "JobQueue", RATES);
+        _context.statManager().createRateStat("jobQueue.jobWait", "Time a scheduled job stays queued before running (ms)", "JobQueue", RATES);
+        _context.statManager().createRequiredRateStat("jobQueue.jobLag", "Delay before waiting jobs are run (ms)", "JobQueue", RATES);
 
         _readyJobs = new LinkedBlockingQueue<Job>();
         _timedJobs = new TreeSet<Job>(new JobComparator());
@@ -358,7 +361,7 @@ public class JobQueue {
     public synchronized void runQueue(int numThreads) {
         // we're still starting up [serially] and we've got at least one runner,
         // so dont do anything
-        if ( (!_queueRunners.isEmpty()) && (!_allowParallelOperation) ) return;
+        if ((!_queueRunners.isEmpty()) && (!_allowParallelOperation)) {return;}
 
         // we've already enabled parallel operation, so grow to however many are specified
         if (_queueRunners.size() < numThreads) {
@@ -377,7 +380,7 @@ public class JobQueue {
         }
     }
 
-    void removeRunner(int id) { _queueRunners.remove(Integer.valueOf(id)); }
+    void removeRunner(int id) {_queueRunners.remove(Integer.valueOf(id));}
 
     /**
      * Responsible for moving jobs from the timed queue to the ready queue,
@@ -499,7 +502,7 @@ public class JobQueue {
      * a warning (and if its really excessive, kill the router)
      */
     void updateStats(Job job, long doStart, long origStartAfter, long duration) {
-        if (_context.router() == null) return;
+        if (_context.router() == null) {return;}
         String key = job.getName();
         long lag = doStart - origStartAfter; // how long were we ready and waiting?
         MessageHistory hist = _context.messageHistory();
@@ -517,13 +520,11 @@ public class JobQueue {
         stats.jobRan(duration, lag);
 
         String dieMsg = null;
-
         if (lag > _lagWarning) {
             dieMsg = "Too much lag for " + job.getName() + " Job: " + lag + "ms with run time of " + duration + "ms";
         } else if (duration > _runWarning) {
             dieMsg = "Run too long for " + job.getName() + " Job: " + lag + "ms lag with run time of " + duration + "ms";
         }
-
         if (dieMsg != null) {
             if (_log.shouldWarn()) {_log.warn(dieMsg);}
             if (hist != null) {hist.messageProcessingError(-1, JobQueue.class.getName(), dieMsg);}
