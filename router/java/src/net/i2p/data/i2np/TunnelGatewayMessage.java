@@ -22,7 +22,6 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
     private TunnelId _tunnelId;
     private I2NPMessage _msg;
     private byte _msgData[];
-    //private Exception _creator;
 
     public final static int MESSAGE_TYPE = 19;
     /** if we can't deliver a tunnel message in 10s, forget it */
@@ -31,17 +30,15 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
     public TunnelGatewayMessage(I2PAppContext context) {
         super(context);
         setMessageExpiration(context.clock().now() + EXPIRATION_PERIOD);
-        //_creator = new Exception("i made this");
     }
 
-    public TunnelId getTunnelId() { return _tunnelId; }
+    public TunnelId getTunnelId() {return _tunnelId;}
 
     /**
      *  @throws IllegalStateException if id previously set, to protect saved checksum
      */
     public void setTunnelId(TunnelId id) {
-        if (_tunnelId != null)
-            throw new IllegalStateException();
+        if (_tunnelId != null) {throw new IllegalStateException();}
         _tunnelId = id;
     }
 
@@ -55,35 +52,30 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
      *  Note that if you change the expiration on the embedded message it will
      *  mess up the checksum of this message, so don't do that.
      */
-    public I2NPMessage getMessage() { return _msg; }
+    public I2NPMessage getMessage() {return _msg;}
 
     /**
      *  @throws IllegalStateException if msg previously set, to protect saved checksum
      */
     public void setMessage(I2NPMessage msg) {
-        if (_msg != null)
-            throw new IllegalStateException();
-        if (msg == null)
-            throw new IllegalArgumentException("Don't set me to null!");
+        if (_msg != null) {throw new IllegalStateException();}
+        if (msg == null) {throw new IllegalArgumentException("Don't set me to null!");}
         _msg = msg;
     }
 
     protected int calculateWrittenLength() {
         int rv = 4 + 2;
         synchronized (this) {
-            if (_msg != null)
-                rv += _msg.getMessageSize();
-            else if (_msgData != null)
-                rv += _msgData.length;
-            else
-                throw new IllegalStateException();
-            }
+            if (_msg != null) {rv += _msg.getMessageSize();}
+            else if (_msgData != null) {rv += _msgData.length;}
+            else {throw new IllegalStateException();}
+        }
         return rv;
     }
 
     /** write the message body to the output array, starting at the given index */
     protected int writeMessageBody(byte out[], int curIndex) throws I2NPMessageException {
-        if ( (_tunnelId == null) || ( (_msg == null) && (_msgData == null) ) ) {
+        if ((_tunnelId == null) || ((_msg == null) && (_msgData == null)) ) {
             _log.log(Log.CRIT, "failing to write out gateway message");
             throw new I2NPMessageException("Not enough data to write out (id=" + _tunnelId + " data=" + _msg + ")");
         }
@@ -130,14 +122,16 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
         _tunnelId = new TunnelId(DataHelper.fromLong(data, curIndex, 4));
         curIndex += 4;
 
-        if (_tunnelId.getTunnelId() <= 0)
+        if (_tunnelId.getTunnelId() <= 0) {
             throw new I2NPMessageException("Invalid tunnel Id " + _tunnelId);
+        }
 
         int len = (int) DataHelper.fromLong(data, curIndex, 2);
         curIndex += 2;
-        if (len <= 1 || curIndex + len > data.length || len > dataSize - 6)
+        if (len <= 1 || curIndex + len > data.length || len > dataSize - 6) {
             throw new I2NPMessageException("I2NP length in TGM: " + len +
                                            " but remaining bytes: " + Math.min(data.length - curIndex, dataSize - 6));
+        }
 
         // OLD WAY full message parsing and instantiation
         //handler.readMessage(data, curIndex);
@@ -161,7 +155,7 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
         _msg = umsg;
     }
 
-    public int getType() { return MESSAGE_TYPE; }
+    public int getType() {return MESSAGE_TYPE;}
 
     @Override
     public int hashCode() {
@@ -171,14 +165,12 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
 
     @Override
     public boolean equals(Object object) {
-        if ( (object != null) && (object instanceof TunnelGatewayMessage) ) {
+        if ((object != null) && (object instanceof TunnelGatewayMessage)) {
             TunnelGatewayMessage msg = (TunnelGatewayMessage)object;
             return DataHelper.eq(getTunnelId(),msg.getTunnelId()) &&
                    DataHelper.eq(_msgData, msg._msgData) &&
                    DataHelper.eq(getMessage(), msg.getMessage());
-        } else {
-            return false;
-        }
+        } else {return false;}
     }
 
     @Override
@@ -190,4 +182,5 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
         buf.append("\n* Message: ").append(_msg);
         return buf.toString();
     }
+
 }

@@ -41,7 +41,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      */
     private long _uniqueId = -1;
 
-    public final static long DEFAULT_EXPIRATION_MS = 1*60*1000; // 1 minute by default
+    public final static long DEFAULT_EXPIRATION_MS = 60*1000; // 1 minute by default
     public final static int CHECKSUM_LENGTH = 1; //Hash.HASH_LENGTH;
 
     /** 16 */

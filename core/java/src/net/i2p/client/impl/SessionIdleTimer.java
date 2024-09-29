@@ -19,7 +19,7 @@ import net.i2p.util.SimpleTimer;
  * @author zzz
  */
 class SessionIdleTimer implements SimpleTimer.TimedEvent {
-    public static final long MINIMUM_TIME = 1*60*1000; // allow close time of 60 seconds
+    public static final long MINIMUM_TIME = 60*1000; // allow close time of 60 seconds
     private static final long DEFAULT_REDUCE_TIME = 20*60*1000;
     private static final long DEFAULT_CLOSE_TIME = 30*60*1000;
     private final Log _log;
@@ -86,7 +86,7 @@ class SessionIdleTimer implements SimpleTimer.TimedEvent {
         long lastActivity = _session.lastActivity();
         String sessionName = _session.getName();
         if (_log.shouldInfo()) {
-            _log.info("Firing idle timer -> Last activity detected " + DataHelper.formatDuration(now - lastActivity) + " ago ");
+            _log.info("Firing idle timer -> Last activity " + DataHelper.formatDuration(now - lastActivity) + " ago");
         }
         long nextDelay = 0;
         if (_shutdownEnabled && now - lastActivity >= _shutdownTime) {

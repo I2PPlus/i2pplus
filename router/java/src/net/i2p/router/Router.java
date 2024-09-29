@@ -114,7 +114,7 @@ public class Router implements RouterClock.ClockShiftListener {
     public final static String PROP_CONFIG_FILE = "router.configLocation";
 
     /** let clocks be off by 1 minute */
-    public final static long CLOCK_FUDGE_FACTOR = 1*60*1000;
+    public final static long CLOCK_FUDGE_FACTOR = 60*1000;
 
     /** used to differentiate routerInfo files on different networks */
     private static final int DEFAULT_NETWORK_ID = 2;
