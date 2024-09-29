@@ -69,26 +69,19 @@ public class JobQueue {
     static {
         long maxMemory = SystemVersion.getMaxMemory();
         int cores = SystemVersion.getCores();
-        if (cores == 1 || SystemVersion.isSlow() || maxMemory < 256*1024*1024L)
-            RUNNERS = 4;
-        else if (cores <= 4)
-            RUNNERS = cores + 2;
-        else if (maxMemory >= 1024*1024*1024L)
-            RUNNERS = Math.min(cores, 8);
-        else if (maxMemory >= 512*1024*1024L)
-            RUNNERS = Math.min(cores - 2, 6);
-        else
-            RUNNERS = Math.min(cores, 5);
+        if (cores == 1 || SystemVersion.isSlow()) {RUNNERS = 4;}
+        else if (cores <= 4) {RUNNERS = Math.max(cores + 2, 6);}
+        else if (maxMemory >= 512*1024*1024L) {RUNNERS = Math.max(cores - 2, 8);}
+        else {RUNNERS = Math.min(cores, 5);}
     }
 
     /** default max # job queue runners operating */
-    private static int DEFAULT_MAX_RUNNERS = Math.min(SystemVersion.getCores() + 2, 8);
+    private static int DEFAULT_MAX_RUNNERS = Math.max(SystemVersion.getCores() + 2, 8);
     /** router.config parameter to override the max runners */
     private final static String PROP_MAX_RUNNERS = "router.maxJobRunners";
 
     /** how frequently should we check and update the max runners */
-//    private final static long MAX_LIMIT_UPDATE_DELAY = 3*60*1000;
-    private final static long MAX_LIMIT_UPDATE_DELAY = 5*60*1000;
+    private final static long MAX_LIMIT_UPDATE_DELAY = 3*60*1000;
 
     /** if a job is this lagged, spit out a warning, but keep going */
     private long _lagWarning = DEFAULT_LAG_WARNING;
@@ -120,17 +113,15 @@ public class JobQueue {
 
     /** don't enforce fatal limits until the router has been up for this long */
     private long _warmupTime = DEFAULT_WARMUP_TIME;
-//    private final static long DEFAULT_WARMUP_TIME = 10*60*1000;
-    private final static long DEFAULT_WARMUP_TIME = 15*60*1000;
+    private final static long DEFAULT_WARMUP_TIME = 10*60*1000;
     /** @deprecated unimplemented */
     @Deprecated
     private final static String PROP_WARMUP_TIME = "router.jobWarmupTime";
 
     /** max ready and waiting jobs before we start dropping 'em */
     private int _maxWaitingJobs = DEFAULT_MAX_WAITING_JOBS;
-//    private final static int DEFAULT_MAX_WAITING_JOBS = 25;
     private final static int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() ? 100 : 300;
-    private final static long MIN_LAG_TO_DROP = SystemVersion.isSlow() ? 500 : 300;
+    private final static long MIN_LAG_TO_DROP = SystemVersion.isSlow() ? 1500 : 1000;
 
     /**
      *  @since 0.9.52+
@@ -173,7 +164,7 @@ public class JobQueue {
     public void addJob(Job job) {
         if (job == null || !_alive) return;
 
-        long numReady;
+        int numReady;
         boolean alreadyExists = false;
         boolean dropped = false;
         // getNext() is now outside the jobLock, is that ok?
@@ -181,40 +172,32 @@ public class JobQueue {
         long start = job.getTiming().getStartAfter();
         if (start > now + 3*24*60*60*1000L) {
             // catch bugs, Job.requeue() argument is a delay not a time
-            if (_log.shouldWarn())
-                _log.warn(job + " scheduled far in the future: " + (new Date(start)));
+            if (_log.shouldWarn()) {_log.warn(job + " scheduled far in the future: " + (new Date(start)));}
         }
         synchronized (_jobLock) {
-            if (_readyJobs.contains(job))
-                alreadyExists = true;
+            alreadyExists = _readyJobs.contains(job);
             numReady = _readyJobs.size();
-            if (!alreadyExists) {
-                //if (_timedJobs.contains(job))
-                //    alreadyExists = true;
-                // Always remove and re-add, since it needs to be
-                // re-sorted in the TreeSet.
-                boolean removed = _timedJobs.remove(job);
-                if (removed && _log.shouldWarn())
-                    _log.warn(job + " rescheduled");
-            }
 
-            if ((!alreadyExists) && shouldDrop(job, numReady)) {
-                job.dropped();
-                dropped = true;
-            } else {
-                if (!alreadyExists) {
+            if (!alreadyExists) {
+                // Always remove and re-add, since it needs to be re-sorted in the TreeSet
+                boolean removed = _timedJobs.remove(job);
+                if (removed && _log.shouldWarn()) {_log.warn(job + " rescheduled");}
+
+                if (shouldDrop(job, numReady)) {
+                    job.dropped();
+                    dropped = true;
+                }
+                else {
                     if (start <= now) {
-                        // don't skew us - its 'start after' its been queued, or later
+                        // Don't skew us - it's 'start after' it's been queued, or later
                         job.getTiming().setStartAfter(now);
-                        if (job instanceof JobImpl)
-                            ((JobImpl)job).madeReady(now);
+                        if (job instanceof JobImpl) {((JobImpl) job).madeReady(now);}
                         _readyJobs.offer(job);
                     } else {
                         _timedJobs.add(job);
                         // only notify for _timedJobs, as _readyJobs does not use that lock
                         // only notify if sooner, to reduce contention
-                        if (start < _nextPumperRun)
-                            _jobLock.notifyAll();
+                        if (start < _nextPumperRun) {_jobLock.notifyAll();}
                     }
                 }
             }
@@ -224,15 +207,15 @@ public class JobQueue {
         _context.statManager().addRateData("jobQueue.queuedJobs", _timedJobs.size());
         if (dropped) {
             _context.statManager().addRateData("jobQueue.droppedJobs", 1);
-            if (_log.shouldWarn())
+            if (_log.shouldWarn()) {
                 _log.warn(job + " dropped due to backlog: " + numReady + " jobs already queued");
+            }
             String key = job.getName();
             JobStats stats = _jobStats.get(key);
             if (stats == null) {
                 stats = new JobStats(key);
                 JobStats old = _jobStats.putIfAbsent(key, stats);
-                if (old != null)
-                    stats = old;
+                if (old != null) {stats = old;}
             }
             stats.jobDropped();
         }
@@ -242,8 +225,7 @@ public class JobQueue {
         synchronized (_jobLock) {
             boolean removed = _timedJobs.remove(job);
             // linear search, do this last
-            if (!removed)
-                _readyJobs.remove(job);
+            if (!removed) {_readyJobs.remove(job);}
         }
     }
 
@@ -285,8 +267,7 @@ public class JobQueue {
             if (j == null) return 0;
             JobTiming jt = j.getTiming();
             // PoisonJob timing is null, prevent NPE at shutdown
-            if (jt == null)
-                return 0;
+            if (jt == null) {return 0;}
             long startAfter = jt.getStartAfter();
             return _context.clock().now() - startAfter;
     }
@@ -303,24 +284,22 @@ public class JobQueue {
         if (!_allowParallelOperation) return false; // don't drop during startup [duh]
         if (numReady > _context.getProperty(PROP_MAX_WAITING_JOBS, DEFAULT_MAX_WAITING_JOBS)) {
             Class<? extends Job> cls = job.getClass();
-            // we don't really *need* to answer DB lookup messages
-            // This is pretty lame, there's actually a ton of different jobs we
-            // could drop, but is it worth making a list?
-            //
-            // Garlic added in 0.9.19, floodfills were getting overloaded
-            // with encrypted lookups
-            //
-            // ISJ added in 0.9.31, can get backed up due to DNS
-            //
-            // Obviously we can only drop one-shot jobs, not those that requeue
-            //
+            /**
+             * We don't really *need* to answer DB lookup messages. This is pretty lame,
+             * there's actually a ton of different jobs we could drop, but is it worth making a list?
+             *
+             * Garlic added in 0.9.19, floodfills were getting overloaded with encrypted lookups
+             *
+             * ISJ added in 0.9.31, can get backed up due to DNS
+             *
+             * Obviously we can only drop one-shot jobs, not those that requeue
+             */
             if (_context.getBooleanProperty("router.disableTunnelTesting") == false) {
                 if (cls == HandleFloodfillDatabaseLookupMessageJob.class ||
                     cls == HandleGarlicMessageJob.class || cls == IterativeSearchJob.class ||
                     cls == TestJob.class) {
                     // this tail drops based on the lag at the head
-                    if (getMaxLag() >= MIN_LAG_TO_DROP)
-                        return true;
+                    if (getMaxLag() >= MIN_LAG_TO_DROP) {return true;}
                 }
             } else {
                     if (cls == HandleFloodfillDatabaseLookupMessageJob.class ||
@@ -379,7 +358,7 @@ public class JobQueue {
         _runnerId.set(0);
     }
 
-    boolean isAlive() { return _alive; }
+    boolean isAlive() {return _alive;}
 
     /**
      * When did the most recently begin job start?
@@ -390,8 +369,7 @@ public class JobQueue {
         long when = -1;
         for (JobQueueRunner runner : _queueRunners.values()) {
             long cur = runner.getLastBegin();
-            if (cur > when)
-                when = cur;
+            if (cur > when) {when = cur;}
         }
         return when;
     }
@@ -404,8 +382,7 @@ public class JobQueue {
         long when = -1;
         for (JobQueueRunner runner : _queueRunners.values()) {
             long cur = runner.getLastEnd();
-            if (cur > when)
-                when = cur;
+            if (cur > when) {when = cur;}
         }
         return when;
     }
@@ -433,13 +410,11 @@ public class JobQueue {
         while (_alive) {
             try {
                 Job j = _readyJobs.take();
-                if (j.getJobId() == POISON_ID)
-                    break;
+                if (j.getJobId() == POISON_ID) {break;}
                 return j;
             } catch (InterruptedException ie) {}
         }
-        if (_log.shouldWarn())
-            _log.warn("Job no longer alive; returning null");
+        if (_log.shouldWarn()) {_log.warn("Job no longer alive; returning null");}
         return null;
     }
 
@@ -449,28 +424,25 @@ public class JobQueue {
      * runners if necessary.  This does not ever stop or reduce threads.
      */
     public synchronized void runQueue(int numThreads) {
-            // we're still starting up [serially] and we've got at least one runner,
-            // so dont do anything
-            if ( (!_queueRunners.isEmpty()) && (!_allowParallelOperation) ) return;
+        // we're still starting up [serially] and we've got at least one runner,
+        // so dont do anything
+        if ( (!_queueRunners.isEmpty()) && (!_allowParallelOperation) ) return;
 
-            // we've already enabled parallel operation, so grow to however many are specified
-            if (_queueRunners.size() < numThreads) {
-                if (_log.shouldInfo())
-                    _log.info("Increasing the number of queue runners from "
-                              + _queueRunners.size() + " to " + numThreads);
-                for (int i = _queueRunners.size(); i < numThreads; i++) {
-                    JobQueueRunner runner = new JobQueueRunner(_context, i);
-                    _queueRunners.put(Integer.valueOf(i), runner);
-                    runner.setName("JobQueue " + _runnerId.incrementAndGet() + '/' + numThreads);
-                    runner.start();
-                }
-            } else if (_queueRunners.size() == numThreads) {
-                if (_log.shouldWarn())
-                    _log.warn("Already have " + numThreads + " threads");
-            } else {
-                if (_log.shouldWarn())
-                    _log.warn("Already have " + _queueRunners.size() + " threads, not decreasing");
+        // we've already enabled parallel operation, so grow to however many are specified
+        if (_queueRunners.size() < numThreads) {
+            if (_log.shouldInfo()) {
+                _log.info("Increasing the number of queue runners from " + _queueRunners.size() + " to " + numThreads);
             }
+            for (int i = _queueRunners.size(); i < numThreads; i++) {
+                JobQueueRunner runner = new JobQueueRunner(_context, i);
+                _queueRunners.put(Integer.valueOf(i), runner);
+                runner.setName("JobQueue " + _runnerId.incrementAndGet() + '/' + numThreads);
+                runner.start();
+            }
+        } else if (_log.shouldWarn()) {
+            if (_queueRunners.size() == numThreads) {_log.warn("Already have " + numThreads + " threads");}
+            else {_log.warn("Already have " + _queueRunners.size() + " threads, not decreasing...");}
+        }
     }
 
     void removeRunner(int id) { _queueRunners.remove(Integer.valueOf(id)); }
@@ -500,17 +472,14 @@ public class JobQueue {
                                 Job j = iter.next();
                                 // find jobs due to start before now
                                 long timeLeft = j.getTiming().getStartAfter() - now;
-                                if (lastJob != null && lastTime > j.getTiming().getStartAfter()) {
-                                    if (_log.shouldInfo())
-                                        _log.info(lastJob + " out of order with " + j + "\n* Difference: " +
-                                                   DataHelper.formatDuration(lastTime - j.getTiming().getStartAfter()));
+                                if (lastJob != null && lastTime > j.getTiming().getStartAfter() && _log.shouldInfo()) {
+                                    _log.info(lastJob + " out of order with " + j + "\n* Difference: " +
+                                              DataHelper.formatDuration(lastTime - j.getTiming().getStartAfter()));
                                 }
                                 lastJob = j;
                                 lastTime = lastJob.getTiming().getStartAfter();
                                 if (timeLeft <= 0) {
-                                    if (j instanceof JobImpl)
-                                        ((JobImpl)j).madeReady(now);
-
+                                    if (j instanceof JobImpl) {((JobImpl)j).madeReady(now);}
                                     _readyJobs.offer(j);
                                     iter.remove();
                                 } else {
@@ -518,46 +487,37 @@ public class JobQueue {
                                     // failsafe - remove and re-add, peek at the next job,
                                     // break and go around again
                                     if (timeToWait > 10*1000 && iter.hasNext()) {
-                                        if (_log.shouldInfo())
+                                        if (_log.shouldInfo()) {
                                             _log.info(j + " deferred for " + DataHelper.formatDuration(timeToWait));
+                                        }
                                         iter.remove();
                                         Job nextJob = iter.next();
                                         _timedJobs.add(j);
                                         long nextTimeLeft = nextJob.getTiming().getStartAfter() - now;
                                         if (timeToWait > nextTimeLeft) {
-                                            if (_log.shouldInfo())
+                                            if (_log.shouldInfo()) {
                                                 _log.info(j + " out of order with " + nextJob + "\n* Difference: " +
                                                            DataHelper.formatDuration(timeToWait - nextTimeLeft));
+                                            }
                                             timeToWait = Math.max(10, nextTimeLeft);
                                         }
                                     }
                                     break;
                                 }
                             }
-                            boolean highLoad = SystemVersion.getCPULoadAvg() > 90 || SystemVersion.getCPULoad() > 95;
+                            boolean highLoad = SystemVersion.getCPULoadAvg() > 98 || SystemVersion.getCPULoad() > 98;
                             boolean isSlow = SystemVersion.isSlow();
-                            boolean isQuadCore = SystemVersion.getCores() >= 4;
-                            boolean isHexaCore = SystemVersion.getCores() >= 6;
-                            if (timeToWait < 0)
-//                                timeToWait = 1000;
-                                timeToWait = highLoad ? 250 : 100;
-                            else if (timeToWait < 10)
-                                timeToWait = highLoad ? 100 : 50;
-                                //timeToWait = 100;
-                            else if (!isSlow && isHexaCore && timeToWait > 2500)
-                                timeToWait = highLoad ? 3500 : 2500;
-                            else if (!isSlow && isQuadCore && timeToWait > 4*1000)
-                                timeToWait = highLoad ? 5*1000 : 4*1000;
-                            else if (timeToWait > 10*1000)
-                                timeToWait = highLoad ? 12*1000 : 10*1000;
+                            if (timeToWait < 0) {timeToWait = highLoad ? 250 : 100;}
+                            else if (timeToWait < 10) {timeToWait = highLoad ? 100 : 50;}
+                            else if (!isSlow && timeToWait > 2500) {timeToWait = highLoad ? 3500 : 2500;}
+                            else if (timeToWait > 10*1000) {timeToWait = highLoad ? 12*1000 : 10*1000;}
                             _nextPumperRun = _context.clock().now() + timeToWait;
                             _jobLock.wait(timeToWait);
                         }
                     } catch (InterruptedException ie) {}
                 } // while (_alive)
             } catch (Throwable t) {
-                if (_log.shouldError())
-                    _log.error("Pumper killed?!", t);
+                if (_log.shouldError()) {_log.error("Pumper killed?!", t);}
             } finally {
                 _context.clock().removeUpdateListener(this);
                 ((RouterClock) _context.clock()).removeShiftListener(this);
@@ -566,9 +526,7 @@ public class JobQueue {
 
         public void offsetChanged(long delta) {
             updateJobTimings(delta);
-            synchronized (_jobLock) {
-                _jobLock.notifyAll();
-            }
+            synchronized (_jobLock) {_jobLock.notifyAll();}
         }
 
         /**
@@ -578,12 +536,9 @@ public class JobQueue {
          *  @since 0.9.23
          */
         public void clockShift(long delta) {
-            if (delta < 0) {
-                offsetChanged(delta);
-            } else {
-                synchronized (_jobLock) {
-                    _jobLock.notifyAll();
-                }
+            if (delta < 0) {offsetChanged(delta);}
+            else {
+                synchronized (_jobLock) {_jobLock.notifyAll();}
             }
         }
 
@@ -595,18 +550,13 @@ public class JobQueue {
      */
     private void updateJobTimings(long delta) {
         synchronized (_jobLock) {
-            for (Job j : _timedJobs) {
-                j.getTiming().offsetChanged(delta);
-            }
-            for (Job j : _readyJobs) {
-                j.getTiming().offsetChanged(delta);
-            }
+            for (Job j : _timedJobs) {j.getTiming().offsetChanged(delta);}
+            for (Job j : _readyJobs) {j.getTiming().offsetChanged(delta);}
         }
         synchronized (_runnerLock) {
             for (JobQueueRunner runner : _queueRunners.values()) {
                 Job job = runner.getCurrentJob();
-                if (job != null)
-                    job.getTiming().offsetChanged(delta);
+                if (job != null) {job.getTiming().offsetChanged(delta);}
             }
         }
     }
@@ -623,15 +573,14 @@ public class JobQueue {
         MessageHistory hist = _context.messageHistory();
         long uptime = _context.router().getUptime();
 
-        if (lag < 0) lag = 0;
-        if (duration < 0) duration = 0;
+        if (lag < 0) {lag = 0;}
+        if (duration < 0) {duration = 0;}
 
         JobStats stats = _jobStats.get(key);
         if (stats == null) {
             stats = new JobStats(key);
             JobStats old = _jobStats.putIfAbsent(key, stats);
-            if (old != null)
-                stats = old;
+            if (old != null) {stats = old;}
         }
         stats.jobRan(duration, lag);
 
@@ -644,40 +593,37 @@ public class JobQueue {
         }
 
         if (dieMsg != null) {
-            if (_log.shouldWarn())
-                _log.warn(dieMsg);
-            if (hist != null)
-                hist.messageProcessingError(-1, JobQueue.class.getName(), dieMsg);
+            if (_log.shouldWarn()) {_log.warn(dieMsg);}
+            if (hist != null) {hist.messageProcessingError(-1, JobQueue.class.getName(), dieMsg);}
         }
 
-        if ( (lag > _lagFatal) && (uptime > _warmupTime) ) {
+        if ((lag > _lagFatal) && (uptime > _warmupTime)) {
             // this is fscking bad - the network at this size shouldn't have this much real contention
             // so we're going to DIE DIE DIE
-            if (_log.shouldWarn())
-                _log.log(Log.WARN, "Router is incredibly overloaded or there's an error.");
+            if (_log.shouldWarn()) {_log.log(Log.WARN, "Router is incredibly overloaded or there's an error.");}
             return;
         }
 
-        if ( (uptime > _warmupTime) && (duration > _runFatal) ) {
+        if ((uptime > _warmupTime) && (duration > _runFatal)) {
             // slow CPUs can get hosed with ElGamal, but 10s is too much.
-            if (_log.shouldWarn())
+            if (_log.shouldWarn()) {
                 _log.log(Log.WARN, "Router is incredibly overloaded (slow cpu?) or there's an error.");
+            }
             return;
         }
     }
-
 
     /** job ID counter changed from int to long so it won't wrap negative */
     private static final int POISON_ID = -99999;
 
     private static class PoisonJob implements Job {
-        public String getName() { return null; }
-        public long getJobId() { return POISON_ID; }
-        public JobTiming getTiming() { return null; }
+        public String getName() {return null;}
+        public long getJobId() {return POISON_ID;}
+        public JobTiming getTiming() {return null;}
         public void runJob() {}
 
         @SuppressWarnings("deprecation")
-        public Exception getAddedBy() { return null; }
+        public Exception getAddedBy() {return null;}
 
         public void dropped() {}
     }
@@ -691,20 +637,15 @@ public class JobQueue {
          public int compare(Job l, Job r) {
              // equals first, Jobs generally don't override so this should be fast
              // And this MUST be first so we can remove a job even if its timing has changed.
-             if (l.equals(r))
-                 return 0;
+             if (l.equals(r)) {return 0;}
              // This is for _timedJobs, which always have a JobTiming.
              // PoisonJob only goes in _readyJobs.
              long ld = l.getTiming().getStartAfter() - r.getTiming().getStartAfter();
-             if (ld < 0)
-                 return -1;
-             if (ld > 0)
-                 return 1;
+             if (ld < 0) {return -1;}
+             if (ld > 0) {return 1;}
              ld = l.getJobId() - r.getJobId();
-             if (ld < 0)
-                 return -1;
-             if (ld > 0)
-                 return 1;
+             if (ld < 0) {return -1;}
+             if (ld > 0) {return 1;}
              return l.hashCode() - r.hashCode();
         }
     }
@@ -724,12 +665,10 @@ public class JobQueue {
                        Collection<Job> activeJobs, Collection<Job> justFinishedJobs) {
         for (JobQueueRunner runner :_queueRunners.values()) {
             Job job = runner.getCurrentJob();
-            if (job != null) {
-                activeJobs.add(job);
-            } else {
+            if (job != null) {activeJobs.add(job);}
+            else {
                 job = runner.getLastJob();
-                if (job != null)
-                    justFinishedJobs.add(job);
+                if (job != null) {justFinishedJobs.add(job);}
             }
         }
         synchronized (_jobLock) {
@@ -751,6 +690,6 @@ public class JobQueue {
 
     /** @deprecated moved to router console */
     @Deprecated
-    public void renderStatusHTML(Writer out) throws IOException {
-    }
+    public void renderStatusHTML(Writer out) throws IOException {}
+
 }
