@@ -1290,7 +1290,6 @@ public class DataHelper {
         return offset + cur;
     }
 
-
     /**
      * Read a newline delimited line from the stream, returning the line (without
      * the newline), or null if EOF reached on an empty line
@@ -2006,7 +2005,6 @@ public class DataHelper {
             throw new IOException(aioobe);
         }
     }
-
 
     /**
      *  Same as orig.getBytes("UTF-8") but throws an unchecked RuntimeException

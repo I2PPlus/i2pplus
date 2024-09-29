@@ -92,7 +92,6 @@ public class Lease extends DataStructureImpl {
         if ((_gateway == null) || (_tunnelId == null)) {
             throw new DataFormatException("Not enough data to write out a Lease");
         }
-
         _gateway.writeBytes(out);
         _tunnelId.writeBytes(out);
         DataHelper.writeLong(out, 8, _end);
@@ -117,10 +116,10 @@ public class Lease extends DataStructureImpl {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);
-        buf.append("\n* Lease:");
-        buf.append(" [TunnelID ").append(_tunnelId).append("]");
-        buf.append(" -> Gateway: [").append(_gateway.toBase64().substring(0,6) + "]");
+        buf.append("\n* Gateway: [").append(_gateway.toBase64().substring(0,6) + "]");
         buf.append(" -> Expires: ").append(DataHelper.formatTime(_end));
+        buf.append(" [TunnelID ").append(_tunnelId).append("]");
         return buf.toString();
     }
+
 }
