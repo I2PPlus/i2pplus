@@ -60,7 +60,6 @@ public class JobQueue {
     private volatile boolean _allowParallelOperation;
     /** have we been killed or are we alive? */
     private volatile boolean _alive;
-
     private final Object _jobLock;
     private volatile long _nextPumperRun;
 
@@ -70,7 +69,7 @@ public class JobQueue {
         long maxMemory = SystemVersion.getMaxMemory();
         int cores = SystemVersion.getCores();
         if (cores == 1 || SystemVersion.isSlow()) {RUNNERS = 6;}
-        else if (cores <= 4) {RUNNERS = Math.max(cores*3, 8);}
+        else if (cores <= 4) {RUNNERS = Math.max(cores*3, 10);}
         else if (maxMemory >= 512*1024*1024L) {RUNNERS = Math.max(cores*2, 12);}
         else {RUNNERS = Math.max(cores, 8);}
     }
@@ -79,45 +78,23 @@ public class JobQueue {
     private static int DEFAULT_MAX_RUNNERS = RUNNERS;
     /** router.config parameter to override the max runners */
     private final static String PROP_MAX_RUNNERS = "router.maxJobRunners";
-
     /** how frequently should we check and update the max runners */
     private final static long MAX_LIMIT_UPDATE_DELAY = 3*60*1000;
-
     /** if a job is this lagged, spit out a warning, but keep going */
     private long _lagWarning = DEFAULT_LAG_WARNING;
     private final static long DEFAULT_LAG_WARNING = 5*1000;
-    /** @deprecated unimplemented */
-    @Deprecated
-    private final static String PROP_LAG_WARNING = "router.jobLagWarning";
-
     /** If a job is this lagged, the router is hosed, so spit out a warning (don't shut it down) */
     private long _lagFatal = DEFAULT_LAG_FATAL;
     private final static long DEFAULT_LAG_FATAL = 30*1000;
-    /** @deprecated unimplemented */
-    @Deprecated
-    private final static String PROP_LAG_FATAL = "router.jobLagFatal";
-
     /** If a job takes this long to run, spit out a warning, but keep going */
     private long _runWarning = DEFAULT_RUN_WARNING;
     private final static long DEFAULT_RUN_WARNING = 5*1000;
-    /** @deprecated unimplemented */
-    @Deprecated
-    private final static String PROP_RUN_WARNING = "router.jobRunWarning";
-
     /** If a job takes this long to run, the router is hosed, so spit out a warning (don't shut it down) */
     private long _runFatal = DEFAULT_RUN_FATAL;
     private final static long DEFAULT_RUN_FATAL = 30*1000;
-    /** @deprecated unimplemented */
-    @Deprecated
-    private final static String PROP_RUN_FATAL = "router.jobRunFatal";
-
     /** Don't enforce fatal limits until the router has been up for this long */
     private long _warmupTime = DEFAULT_WARMUP_TIME;
     private final static long DEFAULT_WARMUP_TIME = 15*60*1000;
-    /** @deprecated unimplemented */
-    @Deprecated
-    private final static String PROP_WARMUP_TIME = "router.jobWarmupTime";
-
     /** max ready and waiting jobs before we start dropping 'em */
     private int _maxWaitingJobs = DEFAULT_MAX_WAITING_JOBS;
     private final static int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() ? 100 : 300;
@@ -294,16 +271,6 @@ public class JobQueue {
         pumperThread.start();
     }
 
-    /** @deprecated do you really want to do this? */
-    @Deprecated
-    public void restart() {
-        synchronized (_jobLock) {
-            _timedJobs.clear();
-            _readyJobs.clear();
-            _jobLock.notifyAll();
-        }
-    }
-
     void shutdown() {
         _alive = false;
         synchronized (_jobLock) {
@@ -311,8 +278,7 @@ public class JobQueue {
             _readyJobs.clear();
             _jobLock.notifyAll();
         }
-        // The JobQueueRunners are NOT daemons,
-        // so they must be stopped.
+        // The JobQueueRunners are NOT daemons, so they must be stopped.
         Job poison = new PoisonJob();
         for (JobQueueRunner runner : _queueRunners.values()) {
              runner.stopRunning();
@@ -652,9 +618,5 @@ public class JobQueue {
     public Collection<JobStats> getJobStats() {
         return Collections.unmodifiableCollection(_jobStats.values());
     }
-
-    /** @deprecated moved to router console */
-    @Deprecated
-    public void renderStatusHTML(Writer out) throws IOException {}
 
 }
