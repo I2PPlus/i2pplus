@@ -20,7 +20,7 @@ import net.i2p.data.i2cp.ReceiveMessageEndMessage;
 /**
  * Handle I2CP MessagePayloadMessages from the router delivering the contents
  * of a message by accepting it, decrypting the payload, adding it to the set of
- * recieved messages, and telling the router that it has been recieved correctly.
+ * received messages, and telling the router that it has been received correctly.
  *
  * We don't really decrypt (no more end-to-end crypto)
  *

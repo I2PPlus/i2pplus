@@ -90,7 +90,7 @@ public class SSDPNotifySocket extends HTTPMUSocket implements Runnable
 	 *
 	 * @param req the {@link SSDPNotifyRequest} to send
 	 * @return true if and only if the trasmission succeced<br>
-	 * 	Because it rely on UDP doesn't mean that it's also recieved
+	 * 	Because it rely on UDP doesn't mean that it's also received
 	 */
 	public boolean post(SSDPNotifyRequest req)
 	{
