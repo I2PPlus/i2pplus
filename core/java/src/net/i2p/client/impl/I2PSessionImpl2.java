@@ -433,9 +433,10 @@ class I2PSessionImpl2 extends I2PSessionImpl {
             }
 
         } else {
-            if (_log.shouldInfo())
+            if (_log.shouldInfo()) {
                 _log.info(getPrefix() + " -> No matching state for [MsgID " + msgId + " / " + nonce
                           + "] with status = " + status);
+            }
         }
     }
 
@@ -453,13 +454,13 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     }
 
     private void clearStates() {
-        if (_sendingStates == null)    // only null if overridden by I2PSimpleSession
-            return;
-        for (MessageState state : _sendingStates.values()) {
-            state.cancel();
+        if (_sendingStates == null) {return;} // only null if overridden by I2PSimpleSession
+        for (MessageState state : _sendingStates.values()) {state.cancel();}
+        if (_log.shouldInfo()) {
+            int states = _sendingStates.size();
+            String stateStr = states > 1 ? "states" : "state";
+            _log.info(getPrefix() + (states > 0 ? " -> Disconnecting " + _sendingStates.size() + ' ' + stateStr : ""));
         }
-        if (_log.shouldInfo())
-            _log.info(getPrefix() + " -> Disconnecting " + _sendingStates.size() + " states");
         _sendingStates.clear();
     }
 
