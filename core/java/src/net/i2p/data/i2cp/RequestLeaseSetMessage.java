@@ -36,13 +36,9 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
     private final ArrayList<TunnelEndpoint> _endpoints;
     private Date _end;
 
-    public RequestLeaseSetMessage() {
-        _endpoints = new ArrayList<TunnelEndpoint>(6);
-    }
+    public RequestLeaseSetMessage() {_endpoints = new ArrayList<TunnelEndpoint>(6);}
 
-    public SessionId getSessionId() {
-        return _sessionId;
-    }
+    public SessionId getSessionId() {return _sessionId;}
 
     /**
      * Return the SessionId for this message.
@@ -50,47 +46,31 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
      * @since 0.9.21
      */
     @Override
-    public SessionId sessionId() {
-        return _sessionId;
-    }
+    public SessionId sessionId() {return _sessionId;}
 
-    public void setSessionId(SessionId id) {
-        _sessionId = id;
-    }
+    public void setSessionId(SessionId id) {_sessionId = id;}
 
-    public int getEndpoints() {
-        return _endpoints.size();
-    }
+    public int getEndpoints() {return _endpoints.size();}
 
     public Hash getRouter(int endpoint) {
-        if ((endpoint < 0) || (_endpoints.size() <= endpoint)) return null;
+        if ((endpoint < 0) || (_endpoints.size() <= endpoint)) {return null;}
         return _endpoints.get(endpoint).getRouter();
     }
 
     public TunnelId getTunnelId(int endpoint) {
-        if ((endpoint < 0) || (_endpoints.size() <= endpoint)) return null;
+        if ((endpoint < 0) || (_endpoints.size() <= endpoint)) {return null;}
         return _endpoints.get(endpoint).getTunnelId();
     }
 
-    /** @deprecated unused - presumably he meant remove? */
-    @Deprecated
-    public void remoteEndpoint(int endpoint) {
-        if ((endpoint >= 0) && (endpoint < _endpoints.size())) _endpoints.remove(endpoint);
-    }
-
     public void addEndpoint(Hash router, TunnelId tunnel) {
-        if (router == null) throw new IllegalArgumentException("Null router (tunnel=" + tunnel +")");
-        if (tunnel == null) throw new IllegalArgumentException("Null tunnel (router=" + router +")");
+        if (router == null) {throw new IllegalArgumentException("Null Router -> [TunnelId " + tunnel + "]");}
+        if (tunnel == null) {throw new IllegalArgumentException("Null Tunnel -> Router [" + router.toBase64().substring(0,6) + "]");}
         _endpoints.add(new TunnelEndpoint(router, tunnel));
     }
 
-    public Date getEndDate() {
-        return _end;
-    }
+    public Date getEndDate() {return _end;}
 
-    public void setEndDate(Date end) {
-        _end = end;
-    }
+    public void setEndDate(Date end) {_end = end;}
 
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
@@ -101,8 +81,6 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
             // EOF will be caught below
             _endpoints.clear();
             for (int i = 0; i < numTunnels; i++) {
-                //Hash router = new Hash();
-                //router.readBytes(in);
                 Hash router = Hash.create(in);
                 TunnelId tunnel = new TunnelId();
                 tunnel.readBytes(in);
@@ -116,8 +94,9 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
 
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
-        if (_sessionId == null)
+        if (_sessionId == null) {
             throw new I2CPMessageException("Unable to write out the message as there is not enough data");
+        }
         int len = 2 + 1 + (_endpoints.size() * (32 + 4)) + 8;
         ByteArrayStream os = new ByteArrayStream(len);
         try {
@@ -136,19 +115,17 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
         return os.toByteArray();
     }
 
-    public int getType() {
-        return MESSAGE_TYPE;
-    }
+    public int getType() {return MESSAGE_TYPE;}
 
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        buf.append("RequestLeaseSetMessage: ");
-        buf.append("\n* SessionId: ").append(getSessionId());
-        buf.append("\n* Tunnels:");
+        buf.append("RequestLeaseSetMessage: ")
+           .append("\n* SessionId: ").append(getSessionId())
+           .append("\n* Tunnels:");
         for (int i = 0; i < getEndpoints(); i++) {
-            buf.append("\n* RouterIdentity: ").append(getRouter(i));
-            buf.append("\n* TunnelId: ").append(getTunnelId(i));
+            buf.append("\n* RouterIdentity: ").append(getRouter(i))
+               .append("\n* TunnelId: ").append(getTunnelId(i));
         }
         buf.append("\n* EndDate: ").append(getEndDate());
         return buf.toString();
@@ -164,12 +141,9 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
             _tunnelId = id;
         }
 
-        public Hash getRouter() {
-            return _router;
-        }
+        public Hash getRouter() {return _router;}
 
-        public TunnelId getTunnelId() {
-            return _tunnelId;
-        }
+        public TunnelId getTunnelId() {return _tunnelId;}
     }
+
 }

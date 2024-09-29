@@ -186,7 +186,7 @@ abstract class StoreJob extends JobImpl {
                  } else {ds = _facade.getDataStore().get(peer);}
                 if ((ds == null) || !(ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)) {
                     if (_log.shouldInfo()) {
-                        _log.info("[" + _facade + "] Error selecting closest hash that wasn't a Router! [" +
+                        _log.info("Error selecting closest hash that wasn't a Router! [" +
                                   peer.toBase64().substring(0,6) + "]: " + ds);
                     }
                     _state.addSkipped(peer);
@@ -207,7 +207,7 @@ abstract class StoreJob extends JobImpl {
                     int peerTimeout = _facade.getPeerTimeout(peer);
                     if (_log.shouldInfo()) {
                          int attempts = _state.getAttemptedCount() + 1;
-                         _log.info("[" + _facade + "] Sending key [" + _state.getTarget().toBase32().substring(0,8) + "] " +
+                         _log.info("Sending key [" + _state.getTarget().toBase32().substring(0,8) + "] " +
                                    (attempts > 1 ? "(Attempt: " + attempts + ")" : "") + "\n* To: " + closestHashes);
                     }
                     _state.addPending(peer);
@@ -245,8 +245,7 @@ abstract class StoreJob extends JobImpl {
             _log.error("Hash mismatch StoreJob");
             return;
         }
-        if (router.getIdentity().equals(getContext().router().getRouterInfo().getIdentity())) {
-            // don't send it to ourselves
+        if (router.getIdentity().equals(getContext().router().getRouterInfo().getIdentity())) { // don't send it to ourselves
             _log.error("Not attempting to send our RouterInfo to us -> Why did we try?");
             return;
         }
@@ -256,7 +255,7 @@ abstract class StoreJob extends JobImpl {
         if (type == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
             if (responseTime > MAX_DIRECT_EXPIRATION) {responseTime = MAX_DIRECT_EXPIRATION;}
         } else if (!DatabaseEntry.isLeaseSet(type)) {
-            throw new IllegalArgumentException("Attempt to store an unknown data type! " + _state.getData());
+            throw new IllegalArgumentException("Attempt to store an UNKNOWN data type! " + _state.getData());
         }
         msg.setEntry(_state.getData());
         long now = getContext().clock().now();
@@ -378,7 +377,7 @@ abstract class StoreJob extends JobImpl {
             StoreMessageSelector selector = new StoreMessageSelector(getContext(), getJobId(), peer, msg.getReplyToken(), expiration);
 
             if (_log.shouldDebug()) {
-                _log.debug("Sending store to [" + to.toBase64().substring(0,6) + "] through " + outTunnel + ": " + msg);
+                _log.debug("Sending store to [" + to.toBase64().substring(0,6) + "] via " + outTunnel + ": " + msg);
             }
             getContext().messageRegistry().registerPending(selector, onReply, onFail);
             getContext().tunnelDispatcher().dispatchOutbound(msg, outTunnel.getSendTunnelId(0), null, to);
