@@ -2894,7 +2894,7 @@ span#newtab{margin-top:4px}
 .sb_info.sb_update{padding:5px 5px 6px}
 .sb_netstatus::before,.tunnelBuildStatus::before{margin:0 2px}
 .sb_netstatus.running.floodfill::before{margin:1px 2px 0;width:46px;height:22px;background-position:left center,right center;background-size:20px,22px}
-.sb_netstatus.floodfill.restarting::after{width:20px;height:20px;display:inline-block;content:"";position:absolute;left:calc(50% - 63px);top:calc(50% - 9px);background:var(--update) no-repeat left center/cover;animation:spin 30s linear 0s both;will-change:transform}
+.sb_netstatus.floodfill.restarting::after{width:20px;height:20px;display:inline-block;content:"";position:absolute;left:calc(50% - 63px);top:calc(50% - 9px);background:var(--update) no-repeat left center/cover;animation:spin 30s linear 0s infinite both;will-change:transform}
 .sb_update{padding-bottom:3px}
 .search td{padding:6px 6px 6px 5px}
 .search td:last-child{padding-left:0;padding-right:0}
