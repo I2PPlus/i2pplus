@@ -69,14 +69,14 @@ public class JobQueue {
     static {
         long maxMemory = SystemVersion.getMaxMemory();
         int cores = SystemVersion.getCores();
-        if (cores == 1 || SystemVersion.isSlow()) {RUNNERS = 4;}
-        else if (cores <= 4) {RUNNERS = Math.max(cores + 2, 6);}
-        else if (maxMemory >= 512*1024*1024L) {RUNNERS = Math.max(cores - 2, 8);}
-        else {RUNNERS = Math.min(cores, 5);}
+        if (cores == 1 || SystemVersion.isSlow()) {RUNNERS = 6;}
+        else if (cores <= 4) {RUNNERS = Math.max(cores*3, 8);}
+        else if (maxMemory >= 512*1024*1024L) {RUNNERS = Math.max(cores*2, 12);}
+        else {RUNNERS = Math.max(cores, 8);}
     }
 
     /** default max # job queue runners operating */
-    private static int DEFAULT_MAX_RUNNERS = Math.max(SystemVersion.getCores() + 2, 8);
+    private static int DEFAULT_MAX_RUNNERS = RUNNERS;
     /** router.config parameter to override the max runners */
     private final static String PROP_MAX_RUNNERS = "router.maxJobRunners";
 
@@ -90,30 +90,30 @@ public class JobQueue {
     @Deprecated
     private final static String PROP_LAG_WARNING = "router.jobLagWarning";
 
-    /** if a job is this lagged, the router is hosed, so spit out a warning (don't shut it down) */
+    /** If a job is this lagged, the router is hosed, so spit out a warning (don't shut it down) */
     private long _lagFatal = DEFAULT_LAG_FATAL;
     private final static long DEFAULT_LAG_FATAL = 30*1000;
     /** @deprecated unimplemented */
     @Deprecated
     private final static String PROP_LAG_FATAL = "router.jobLagFatal";
 
-    /** if a job takes this long to run, spit out a warning, but keep going */
+    /** If a job takes this long to run, spit out a warning, but keep going */
     private long _runWarning = DEFAULT_RUN_WARNING;
     private final static long DEFAULT_RUN_WARNING = 5*1000;
     /** @deprecated unimplemented */
     @Deprecated
     private final static String PROP_RUN_WARNING = "router.jobRunWarning";
 
-    /** if a job takes this long to run, the router is hosed, so spit out a warning (don't shut it down) */
+    /** If a job takes this long to run, the router is hosed, so spit out a warning (don't shut it down) */
     private long _runFatal = DEFAULT_RUN_FATAL;
     private final static long DEFAULT_RUN_FATAL = 30*1000;
     /** @deprecated unimplemented */
     @Deprecated
     private final static String PROP_RUN_FATAL = "router.jobRunFatal";
 
-    /** don't enforce fatal limits until the router has been up for this long */
+    /** Don't enforce fatal limits until the router has been up for this long */
     private long _warmupTime = DEFAULT_WARMUP_TIME;
-    private final static long DEFAULT_WARMUP_TIME = 10*60*1000;
+    private final static long DEFAULT_WARMUP_TIME = 15*60*1000;
     /** @deprecated unimplemented */
     @Deprecated
     private final static String PROP_WARMUP_TIME = "router.jobWarmupTime";
@@ -121,7 +121,7 @@ public class JobQueue {
     /** max ready and waiting jobs before we start dropping 'em */
     private int _maxWaitingJobs = DEFAULT_MAX_WAITING_JOBS;
     private final static int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() ? 100 : 300;
-    private final static long MIN_LAG_TO_DROP = SystemVersion.isSlow() ? 1500 : 1000;
+    private final static long MIN_LAG_TO_DROP = SystemVersion.isSlow() ? 2000 : 1500;
 
     /**
      *  @since 0.9.52+
@@ -129,7 +129,7 @@ public class JobQueue {
     private final static String PROP_MAX_WAITING_JOBS = "router.maxWaitingJobs";
 
     /**
-     * queue runners wait on this whenever they're not doing anything, and
+     * Queue runners wait on this whenever they're not doing anything, and
      * this gets notified *once* whenever there are ready jobs
      */
     private final Object _runnerLock = new Object();
@@ -170,9 +170,9 @@ public class JobQueue {
         // getNext() is now outside the jobLock, is that ok?
         long now = _context.clock().now();
         long start = job.getTiming().getStartAfter();
-        if (start > now + 3*24*60*60*1000L) {
+        if (start > now + 3*24*60*60*1000L && _log.shouldWarn()) {
             // catch bugs, Job.requeue() argument is a delay not a time
-            if (_log.shouldWarn()) {_log.warn(job + " scheduled far in the future: " + (new Date(start)));}
+            _log.warn(job + " scheduled far in the future: " + (new Date(start)));
         }
         synchronized (_jobLock) {
             alreadyExists = _readyJobs.contains(job);
@@ -224,56 +224,24 @@ public class JobQueue {
     public void removeJob(Job job) {
         synchronized (_jobLock) {
             boolean removed = _timedJobs.remove(job);
-            // linear search, do this last
-            if (!removed) {_readyJobs.remove(job);}
+            if (!removed) {_readyJobs.remove(job);} // linear search, do this last
         }
     }
 
-    /**
-     * Returns <code>true</code> if a given job is waiting or running;
-     * <code>false</code> if the job is finished or doesn't exist in the queue.
-     *
-     * @deprecated unused
-     */
-    @Deprecated
-    public boolean isJobActive(Job job) {
-        synchronized (_jobLock) {
-            if (_readyJobs.contains(job) || _timedJobs.contains(job))
-                return true;
-        }
-        for (JobQueueRunner runner: _queueRunners.values())
-            if (runner.getCurrentJob() == job)
-                return true;
-        return false;
-    }
-
-    /**
-     *  @deprecated contention - see JobTiming.setStartAfter() comments
-     */
-    @Deprecated
-    public void timingUpdated() {
-        synchronized (_jobLock) {
-            _jobLock.notifyAll();
-        }
-    }
-
-    public int getReadyCount() {
-            return _readyJobs.size();
-    }
+    public int getReadyCount() {return _readyJobs.size();}
 
     public long getMaxLag() {
-            // first job is the one that has been waiting the longest
-            Job j = _readyJobs.peek();
-            if (j == null) return 0;
-            JobTiming jt = j.getTiming();
-            // PoisonJob timing is null, prevent NPE at shutdown
-            if (jt == null) {return 0;}
-            long startAfter = jt.getStartAfter();
-            return _context.clock().now() - startAfter;
+        // first job is the one that has been waiting the longest
+        Job j = _readyJobs.peek();
+        if (j == null) {return 0;}
+        JobTiming jt = j.getTiming();
+        if (jt == null) {return 0;} // PoisonJob timing is null, prevent NPE at shutdown
+        long startAfter = jt.getStartAfter();
+        return _context.clock().now() - startAfter;
     }
 
     /**
-     * are we so overloaded that we should drop the given job?
+     * Are we so overloaded that we should drop the given job?
      * This is driven both by the numReady and waiting jobs, the type of job
      * in question, and what the router's router.maxWaitingJobs config parameter
      * is set to.
@@ -294,19 +262,17 @@ public class JobQueue {
              *
              * Obviously we can only drop one-shot jobs, not those that requeue
              */
-            if (_context.getBooleanProperty("router.disableTunnelTesting") == false) {
-                if (cls == HandleFloodfillDatabaseLookupMessageJob.class ||
-                    cls == HandleGarlicMessageJob.class || cls == IterativeSearchJob.class ||
-                    cls == TestJob.class) {
-                    // this tail drops based on the lag at the head
-                    if (getMaxLag() >= MIN_LAG_TO_DROP) {return true;}
+            boolean disableTunnelTests = _context.getBooleanProperty("router.disableTunnelTesting");
+            boolean shouldDrop = getMaxLag() >= MIN_LAG_TO_DROP;
+            if (shouldDrop) { // this tail drops based on the lag at the head
+                if (!disableTunnelTests && cls == TestJob.class) {
+                    return true;
                 }
-            } else {
-                    if (cls == HandleFloodfillDatabaseLookupMessageJob.class ||
-                        cls == HandleGarlicMessageJob.class || cls == IterativeSearchJob.class) {
-                        if (getMaxLag() >= MIN_LAG_TO_DROP)
-                            return true;
-                    }
+                if (cls == HandleFloodfillDatabaseLookupMessageJob.class ||
+                    cls == HandleGarlicMessageJob.class ||
+                    cls == IterativeSearchJob.class) {
+                    return true;
+                }
             }
         }
         return false;
@@ -497,7 +463,7 @@ public class JobQueue {
                                         if (timeToWait > nextTimeLeft) {
                                             if (_log.shouldInfo()) {
                                                 _log.info(j + " out of order with " + nextJob + "\n* Difference: " +
-                                                           DataHelper.formatDuration(timeToWait - nextTimeLeft));
+                                                          DataHelper.formatDuration(timeToWait - nextTimeLeft));
                                             }
                                             timeToWait = Math.max(10, nextTimeLeft);
                                         }
@@ -598,14 +564,13 @@ public class JobQueue {
         }
 
         if ((lag > _lagFatal) && (uptime > _warmupTime)) {
-            // this is fscking bad - the network at this size shouldn't have this much real contention
-            // so we're going to DIE DIE DIE
+            // This is BAD - the network at this size shouldn't have this much real contention, we will DIE
             if (_log.shouldWarn()) {_log.log(Log.WARN, "Router is incredibly overloaded or there's an error.");}
             return;
         }
 
         if ((uptime > _warmupTime) && (duration > _runFatal)) {
-            // slow CPUs can get hosed with ElGamal, but 10s is too much.
+            // Slow CPUs can get hosed with ElGamal, but 10s is too much.
             if (_log.shouldWarn()) {
                 _log.log(Log.WARN, "Router is incredibly overloaded (slow cpu?) or there's an error.");
             }
