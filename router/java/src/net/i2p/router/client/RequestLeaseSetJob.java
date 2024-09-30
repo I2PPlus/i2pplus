@@ -36,7 +36,7 @@ class RequestLeaseSetJob extends JobImpl {
     private final LeaseRequestState _requestState;
 
     //private static final long MAX_FUDGE = 2*1000;
-    private static final long MAX_FUDGE = 3*1000;
+    private static final long MAX_FUDGE = 5*1000;
 
     public RequestLeaseSetJob(RouterContext ctx, ClientConnectionRunner runner, LeaseRequestState state) {
         super(ctx);
