@@ -82,13 +82,13 @@ class ParticipatingThrottler {
         boolean isBanned = context.banlist().isBanlisted(h);
         String version = ri != null ? ri.getVersion() : "";
 
-        if (version.equals("0")) {
+        if (version.equals("0") || version.equals("")) {
             handleNoVersion(shouldDisconnect, h, isBanned, caps, bantime);
             return Result.DROP;
         }
         if (checkVersionAndCompressibility(version, isCompressible, shouldDisconnect, h, isBanned, caps)) return Result.DROP;
         if (checkLowShareAndVersion(version, isLU, shouldBlockOldRouters, h, shouldDisconnect, isBanned, caps, bantime)) return Result.DROP;
-        if (checkUnreachableAndOld(version, isUnreachable, shouldBlockOldRouters, h, shouldDisconnect, isBanned, caps)) return Result.DROP;
+        if (checkUnreachableAndOld(version, isUnreachable, isFast, shouldBlockOldRouters, h, shouldDisconnect, isBanned, caps)) return Result.DROP;
 
         rv = evaluateThrottleConditions(count, limit, shouldThrottle, isFast, isLowShare, isUnreachable, h, caps, isBanned, bantime);
         return rv;
@@ -136,9 +136,9 @@ class ParticipatingThrottler {
         return false;
     }
 
-    private boolean checkUnreachableAndOld(String version, boolean isUnreachable, boolean shouldBlockOldRouters, Hash h,
+    private boolean checkUnreachableAndOld(String version, boolean isUnreachable, boolean isFast, boolean shouldBlockOldRouters, Hash h,
                                            boolean shouldDisconnect, boolean isBanned, String caps) {
-        if (VersionComparator.comp(version, MIN_VERSION) < 0 && isUnreachable && shouldBlockOldRouters) {
+        if (VersionComparator.comp(version, MIN_VERSION) < 0 && isUnreachable && shouldBlockOldRouters && !isFast) {
             if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);}
             if (_log.shouldWarn()) {
                 _log.warn("Ignoring Tunnel Request from Router [" + h.toBase64().substring(0, 6) + "] -> " + version + (caps.isEmpty() ? "" : " / " + caps));
