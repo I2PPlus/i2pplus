@@ -158,7 +158,7 @@ abstract class StoreJob extends JobImpl {
         // Perhaps the ultimate solution is to send RouterInfos through a lease also.
         List<Hash> closestHashes;
         closestHashes = getClosestFloodfillRouters(_state.getTarget(), toCheck, _state.getAttempted());
-        if ( (closestHashes == null) || (closestHashes.isEmpty()) ) {
+        if ((closestHashes == null) || (closestHashes.isEmpty())) {
             if (_state.getPendingCount() <= 0) {
                 if (_log.shouldInfo()) {
                     _log.info("[" + _facade + "] No more peers left and none pending");
@@ -720,14 +720,14 @@ abstract class StoreJob extends JobImpl {
 
             if (_log.shouldInfo()) {
                 _log.info("Store of key [" + _state.getTarget().toBase32().substring(0,8) + "] to [" +
-                          hash.toBase64().substring(0,6) + "] successful after " + howLong + "ms");
+                          hash.toBase64().substring(0,6) + "] succeeded -> Took " + howLong + "ms");
             }
             getContext().profileManager().dbStoreSent(hash, howLong);
             getContext().statManager().addRateData("netDb.ackTime", howLong, howLong);
 
-            if ( (_sendThrough != null) && (_msgSize > 0) ) {
+            if ((_sendThrough != null) && (_msgSize > 0)) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Sent a " + _msgSize + " byte NetDb message through: " + _sendThrough + " after " + howLong + "ms");
+                    _log.debug("Sent a " + _msgSize + " byte NetDb message through: " + _sendThrough + " -> Took " + howLong + "ms");
                 }
                 for (int i = 0; i < _sendThrough.getLength(); i++) {
                     getContext().profileManager().tunnelDataPushed(_sendThrough.getPeer(i), howLong, _msgSize);
@@ -765,8 +765,8 @@ abstract class StoreJob extends JobImpl {
             if (!_wasRun.compareAndSet(false, true)) {return;}
             Hash hash = _peer.getIdentity().getHash();
             if (_log.shouldInfo()) {
-                _log.info("Testing Peer [" + hash.toBase64().substring(0,6)
-                          + "]\n* Timed out sending key [" + _state.getTarget().toBase64().substring(0,6) + "]");
+                _log.info("Peer test of [" + hash.toBase64().substring(0,6) + "] timed out sending key [" +
+                          _state.getTarget().toBase64().substring(0,6) + "]");
             }
 
             MessageWrapper.WrappedMessage wm = _state.getPendingMessage(hash);
@@ -803,4 +803,5 @@ abstract class StoreJob extends JobImpl {
         _state.complete(true);
         getContext().statManager().addRateData("netDb.storeFailedPeers", _state.getAttemptedCount());
     }
+
 }

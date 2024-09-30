@@ -64,22 +64,21 @@ class RequestLeaseSetJob extends JobImpl {
 
         LeaseSet requested = _requestState.getRequested();
         long endTime = requested.getEarliestLeaseDate();
+        long maxFudge = getContext().getProperty(PROP_MAX_FUDGE, DEFAULT_MAX_FUDGE);
         /**
          * Add a small number of ms (0 to MAX_FUDGE) that increases as we approach the expire time.
          * Since the earliest date functions as a version number,
          * this will force the floodfill to flood each new version;
          * otherwise it won't if the earliest time hasn't changed.
          */
-
         if (isLS2) {
             /**
              * Fix for 0.9.38 floodfills, adding some ms doesn't work since
              * the dates are truncated, and 0.9.38 did not use LeaseSet2.getPublished()
              */
-            long earliest = 1000 + _requestState.getCurrentEarliestLeaseDate();
+            long earliest = maxFudge + _requestState.getCurrentEarliestLeaseDate();
             if (endTime < earliest) {endTime = earliest;}
         } else {
-            long maxFudge = getContext().getProperty(PROP_MAX_FUDGE, DEFAULT_MAX_FUDGE);
             long diff = endTime - getContext().clock().now();
             long fudge = maxFudge - (diff / (10*60*1000 / maxFudge));
             endTime += fudge;
