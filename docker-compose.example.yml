@@ -1,6 +1,6 @@
 # docker-compose.yml
 
-# Service definition for I2P router
+# Service definition for I2P+ router
 services:
   i2p:
     # Build the service from the Dockerfile in the current directory

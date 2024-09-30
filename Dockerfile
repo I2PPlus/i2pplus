@@ -21,9 +21,14 @@ RUN apk add openjdk21-jre ttf-opensans
 WORKDIR ${APP_HOME}
 COPY --from=builder /tmp/build/pkg-temp .
 
-# "install" I2P+ by copying over installed files
+# Install I2P+ by copying over installed files
 COPY docker/rootfs/ /
 RUN chmod +x /startapp.sh
+
+# Configure I2P+ to use chosen port - ensure this port is port-forwarded and unfirewalled as required,
+# otherwise your router will run in firewalled mode
+RUN echo "i2np.udp.internalPort=17616=$EXTERNAL_PORT" >> ${APP_HOME}/router.config
+RUN echo "i2np.udp.port=$EXTERNAL_PORT" >> ${APP_HOME}/router.config
 
 # Mount home and snark
 VOLUME ["${APP_HOME}/.i2p"]
@@ -33,10 +38,10 @@ EXPOSE 7654 7656 7657 7658 4444 6668 7659 7660 7667 12345
 
 # Metadata
 LABEL \
-      org.label-schema.name="i2p" \
-      org.label-schema.description="Docker container for I2P+" \
-      org.label-schema.version="1.0" \
-      org.label-schema.vcs-url="https://github.com/I2PPlus/i2pplus" \
-      org.label-schema.schema-version="1.0"
+ org.label-schema.name="i2p" \
+ org.label-schema.description="Docker container for I2P+" \
+ org.label-schema.version="1.0" \
+ org.label-schema.vcs-url="https://github.com/I2PPlus/i2pplus" \
+ org.label-schema.schema-version="1.0"
 
 ENTRYPOINT ["/startapp.sh"]
