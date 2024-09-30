@@ -72,7 +72,7 @@ class FloodfillStoreJob extends StoreJob {
             RouterContext ctx = getContext();
             if (ctx.router().gracefulShutdownInProgress()) {
                 if (shouldLog) {
-                    _log.info("Skipping verify of [" + key.toBase64().substring(0,6) + "] - shutdown in progress...");
+                    _log.info("Skipping verify of [" + key.toBase64().substring(0,6) + "] -> Shutdown/Restart in progress...");
                 }
                 return;
             }
