@@ -971,6 +971,7 @@ input.reload[value^="Update"]:hover,input.reload[value^="Update"]:focus{backgrou
 #dumpthreads input.reload:hover#dumpthreads input.reload:focus{background:var(--recycle) no-repeat 8px center/15px,var(--btn_hover)}
 input.stop,button.stop{padding:5px 9px 5px 24px;background:var(--shutdown) no-repeat 8px center/12px,var(--btn)}
 input.stop:hover,button.stop:hover,input.stop:focus,button.stop:focus{background:var(--shutdown_hover) no-repeat 8px center/14px,var(--btn_hover)}
+#miscConfig{display:none}
 
 /* client config buttons aka project "X" */
 button.control{padding:12px;font-size:0;background-size:14px,100%;will-change:transform}
