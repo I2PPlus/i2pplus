@@ -623,6 +623,13 @@ public class LeaseSet2 extends LeaseSet {
             buf.append("\n* Transient Expiry: ").append(new java.util.Date(_transientExpires));
             buf.append("\n* Offline Signature: ").append(_offlineSignature);
         }
+        buf.append("\n* Published: ").append(!isUnpublished());
+        if (isBlindedWhenPublished()) {buf.append("\n* Blinded: ").append(isBlindedWhenPublished());}
+        buf.append("\n* Signature: ").append(_signature);
+        buf.append("\n* Published: ").append(new java.util.Date(_published));
+        buf.append("\n* Expires: ").append(new java.util.Date(_expires));
+        buf.append("\n* Leases: ").append(getLeaseCount());
+        for (int i = 0; i < getLeaseCount(); i++) {buf.append(getLease(i));}
         if (_options != null && _options.size() > 0) {
             buf.append("\nOptions: ").append(_options.size());
             for (Map.Entry<Object, Object> e : _options.entrySet()) {
@@ -631,13 +638,6 @@ public class LeaseSet2 extends LeaseSet {
                 buf.append("\n* ").append(key).append(": ").append(val);
             }
         }
-        buf.append("\n* Published: ").append(!isUnpublished());
-        if (isBlindedWhenPublished()) {buf.append("\n* Blinded: ").append(isBlindedWhenPublished());}
-        buf.append("\n* Signature: ").append(_signature);
-        buf.append("\n* Published: ").append(new java.util.Date(_published));
-        buf.append("\n* Expires: ").append(new java.util.Date(_expires));
-        buf.append("\n* Leases: ").append(getLeaseCount());
-        for (int i = 0; i < getLeaseCount(); i++) {buf.append(getLease(i));}
         return buf.toString();
     }
 

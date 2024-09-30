@@ -44,34 +44,23 @@ public class SigningPublicKey extends SimpleDataStructure {
      * @throws ArrayIndexOutOfBoundsException if not enough bytes, FIXME should throw DataFormatException
      * @since 0.8.3
      */
-    public static SigningPublicKey create(byte[] data, int off) {
-        return _cache.get(data, off);
-    }
+    public static SigningPublicKey create(byte[] data, int off) {return _cache.get(data, off);}
 
     /**
      * Pull from cache or return new
      * @since 0.8.3
      */
-    public static SigningPublicKey create(InputStream in) throws IOException {
-        return _cache.get(in);
-    }
+    public static SigningPublicKey create(InputStream in) throws IOException {return _cache.get(in);}
 
-    public SigningPublicKey() {
-        this(DEF_TYPE);
-    }
+    public SigningPublicKey() {this(DEF_TYPE);}
 
     /**
      *  @param type if null, type is unknown
      *  @since 0.9.8
      */
-    public SigningPublicKey(SigType type) {
-        super();
-        _type = type;
-    }
+    public SigningPublicKey(SigType type) {super(); _type = type;}
 
-    public SigningPublicKey(byte data[]) {
-        this(DEF_TYPE, data);
-    }
+    public SigningPublicKey(byte data[]) {this(DEF_TYPE, data);}
 
     /**
      *  @param type if null, type is unknown
@@ -80,10 +69,8 @@ public class SigningPublicKey extends SimpleDataStructure {
     public SigningPublicKey(SigType type, byte data[]) {
         super();
         _type = type;
-        if (type != null || data == null)
-            setData(data);
-        else
-            _data = data;  // bypass length check
+        if (type != null || data == null) {setData(data);}
+        else {_data = data;}  // bypass length check
     }
 
     /** constructs from base64
@@ -99,10 +86,8 @@ public class SigningPublicKey extends SimpleDataStructure {
      *  @return if type unknown, the length of the data, or 128 if no data
      */
     public int length() {
-        if (_type != null)
-            return _type.getPubkeyLen();
-        if (_data != null)
-            return _data.length;
+        if (_type != null) {return _type.getPubkeyLen();}
+        if (_data != null) {return _data.length;}
         return KEYSIZE_BYTES;
     }
 
@@ -110,9 +95,7 @@ public class SigningPublicKey extends SimpleDataStructure {
      *  @return null if unknown
      *  @since 0.9.8
      */
-    public SigType getType() {
-        return _type;
-    }
+    public SigType getType() {return _type;}
 
     /**
      *  Up-convert this from an untyped (type 0) SPK to a typed SPK based on the Key Cert given.
@@ -122,33 +105,23 @@ public class SigningPublicKey extends SimpleDataStructure {
      *  @since 0.9.12
      */
     public SigningPublicKey toTypedKey(KeyCertificate kcert) {
-        if (_data == null)
-            throw new IllegalStateException();
+        if (_data == null) {throw new IllegalStateException();}
         SigType newType = kcert.getSigType();
-        if (_type == newType)
-            return this;
-        if (_type != SigType.DSA_SHA1)
-            throw new IllegalArgumentException("Cannot convert " + _type + " to " + newType);
-        // unknown type, keep the 128 bytes of data
-        if (newType == null)
-            return new SigningPublicKey(null, _data);
+        if (_type == newType) {return this;}
+        if (_type != SigType.DSA_SHA1) {throw new IllegalArgumentException("Cannot convert " + _type + " to " + newType);}
+        if (newType == null) {return new SigningPublicKey(null, _data);} // unknown type, keep the 128 bytes of data
         int newLen = newType.getPubkeyLen();
         int ctype = kcert.getCryptoTypeCode();
         if (ctype == 0) {
-            // prohibit excess key data
-            // TODO non-zero crypto type if added
             int sz = 7;
-            if (newLen > KEYSIZE_BYTES)
-                sz += newLen - KEYSIZE_BYTES;
-            if (kcert.size() != sz)
-                throw new IllegalArgumentException("Excess data in key certificate");
+            if (newLen > KEYSIZE_BYTES) {sz += newLen - KEYSIZE_BYTES;}
+            // prohibit excess key data - TODO non-zero crypto type if added
+            if (kcert.size() != sz) {throw new IllegalArgumentException("Excess data in key certificate");}
         }
-        if (newLen == KEYSIZE_BYTES)
-            return new SigningPublicKey(newType, _data);
+        if (newLen == KEYSIZE_BYTES) {return new SigningPublicKey(newType, _data);}
         byte[] newData = new byte[newLen];
         if (newLen < KEYSIZE_BYTES) {
-            // right-justified
-            System.arraycopy(_data, _data.length - newLen, newData, 0, newLen);
+            System.arraycopy(_data, _data.length - newLen, newData, 0, newLen); // right-justified
         } else {
             // full 128 bytes + fragment in kcert
             System.arraycopy(_data, 0, newData, 0, _data.length);
@@ -166,16 +139,12 @@ public class SigningPublicKey extends SimpleDataStructure {
      *  @since 0.9.12
      */
     public byte[] getPadding(KeyCertificate kcert) {
-        if (_data == null)
-            throw new IllegalStateException();
+        if (_data == null) {throw new IllegalStateException();}
         SigType newType = kcert.getSigType();
-        if (_type == newType || newType == null)
-            return null;
-        if (_type != SigType.DSA_SHA1)
-            throw new IllegalStateException("Cannot convert " + _type + " to " + newType);
+        if (_type == newType || newType == null) {return null;}
+        if (_type != SigType.DSA_SHA1) {throw new IllegalStateException("Cannot convert " + _type + " to " + newType);}
         int newLen = newType.getPubkeyLen();
-        if (newLen >= KEYSIZE_BYTES)
-            return null;
+        if (newLen >= KEYSIZE_BYTES) {return null;}
         int padLen = KEYSIZE_BYTES - newLen;
         byte[] pad = new byte[padLen];
         System.arraycopy(_data, 0, pad, 0, padLen);
@@ -191,10 +160,8 @@ public class SigningPublicKey extends SimpleDataStructure {
         // we don't use _type here so we can write the data even for unknown type
         //if (_type.getPubkeyLen() <= KEYSIZE_BYTES)
         if (_data == null) throw new DataFormatException("No data to write out");
-        if (_data.length <= KEYSIZE_BYTES)
-            out.write(_data);
-        else
-            out.write(_data, 0, KEYSIZE_BYTES);
+        if (_data.length <= KEYSIZE_BYTES) {out.write(_data);}
+        else {out.write(_data, 0, KEYSIZE_BYTES);}
     }
 
     /**
@@ -216,39 +183,32 @@ public class SigningPublicKey extends SimpleDataStructure {
         StringBuilder buf = new StringBuilder(64);
         buf.append("SigningPublicKey ").append((_type != null) ? _type.toString() : "unknown type").append(' ');
         int length = length();
-        if (_data == null) {
-            buf.append("null");
-        } else if (length <= 32) {
-            buf.append(toBase64().substring(0,6));
-        } else {
-            buf.append("Size: ").append(length).append(" bytes");;
-        }
+        if (_data == null) {buf.append("null");}
+        else if (length <= 32) {buf.append(toBase64().substring(0,6));}
+        else {buf.append("Size: ").append(length).append(" bytes");}
         return buf.toString();
     }
 
     /**
      *  @since 0.9.17
      */
-    public static void clearCache() {
-        _cache.clear();
-    }
+    public static void clearCache() {_cache.clear();}
 
     /**
      *  @since 0.9.17
      */
     @Override
-    public int hashCode() {
-        return DataHelper.hashCode(_type) ^ super.hashCode();
-    }
+    public int hashCode() {return DataHelper.hashCode(_type) ^ super.hashCode();}
 
     /**
      *  @since 0.9.17
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || !(obj instanceof SigningPublicKey)) return false;
+        if (obj == this) {return true;}
+        if (obj == null || !(obj instanceof SigningPublicKey)) {return false;}
         SigningPublicKey s = (SigningPublicKey) obj;
         return _type == s._type && Arrays.equals(_data, s._data);
     }
+
 }
