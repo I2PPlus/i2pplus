@@ -1,3 +1,6 @@
+2024-09-30 dr|z3d
+ * Console: Add floodfill by country count to netdb overview page
+
 2024-09-28 dr|z3d
  * Console: Add stats to record local leaseset republish failure
 
