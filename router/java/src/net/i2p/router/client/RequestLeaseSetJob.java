@@ -36,7 +36,8 @@ class RequestLeaseSetJob extends JobImpl {
     private final LeaseRequestState _requestState;
 
     //private static final long MAX_FUDGE = 2*1000;
-    private static final long MAX_FUDGE = 5*1000;
+    private static final long DEFAULT_MAX_FUDGE = 5*1000;
+    private static final String PROP_MAX_FUDGE = "router.requestLeaseSetMaxFudge";
 
     public RequestLeaseSetJob(RouterContext ctx, ClientConnectionRunner runner, LeaseRequestState state) {
         super(ctx);
@@ -78,8 +79,9 @@ class RequestLeaseSetJob extends JobImpl {
             long earliest = 1000 + _requestState.getCurrentEarliestLeaseDate();
             if (endTime < earliest) {endTime = earliest;}
         } else {
+            long maxFudge = getContext().getProperty(PROP_MAX_FUDGE, DEFAULT_MAX_FUDGE);
             long diff = endTime - getContext().clock().now();
-            long fudge = MAX_FUDGE - (diff / (10*60*1000 / MAX_FUDGE));
+            long fudge = maxFudge - (diff / (10*60*1000 / maxFudge));
             endTime += fudge;
         }
 
