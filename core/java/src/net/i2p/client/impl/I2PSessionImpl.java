@@ -175,18 +175,10 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         CLOSED
     }
 
-    private static final Set<State> STATES_CLOSED =
-        EnumSet.of(State.INIT, State.CLOSED);
-
-    private static final Set<State> STATES_OPENING =
-        EnumSet.of(State.INIT, State.OPENING);
-
-    private static final Set<State> STATES_CLOSED_OR_OPENING =
-        EnumSet.of(State.INIT, State.CLOSED, State.OPENING);
-
-    private static final Set<State> STATES_CLOSED_OR_CLOSING =
-        EnumSet.of(State.INIT, State.CLOSED, State.CLOSING);
-
+    private static final Set<State> STATES_CLOSED = EnumSet.of(State.INIT, State.CLOSED);
+    private static final Set<State> STATES_OPENING = EnumSet.of(State.INIT, State.OPENING);
+    private static final Set<State> STATES_CLOSED_OR_OPENING = EnumSet.of(State.INIT, State.CLOSED, State.OPENING);
+    private static final Set<State> STATES_CLOSED_OR_CLOSING = EnumSet.of(State.INIT, State.CLOSED, State.CLOSING);
     protected State _state = State.INIT;
     protected final Object _stateLock = new Object();
 
@@ -219,12 +211,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * @since 0.9.14
      */
     protected static final String PROP_DOMAIN_SOCKET = "i2cp.domainSocket";
-
     private static final long VERIFY_USAGE_TIME = 60*1000;
-
     private static final long MAX_SEND_WAIT = 10*1000;
-
-//    private static final String MIN_FAST_VERSION = "0.9.4";
     private static final String MIN_FAST_VERSION = "0.9.30";
     private static final String MIN_LS2_VERSION = "0.9.38";
     private static final String MIN_BLINDINFO_VERSION = "0.9.43";
@@ -233,25 +221,18 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     void dateUpdated(String routerVersion) {
         _routerVersion = routerVersion;
         boolean isrc = _context.isRouterContext();
-        _routerSupportsFastReceive = isrc ||
-                                     (routerVersion != null && routerVersion.length() > 0 &&
-                                      VersionComparator.comp(routerVersion, MIN_FAST_VERSION) >= 0);
-        _routerSupportsHostLookup = isrc ||
-                                     (routerVersion != null && routerVersion.length() > 0 &&
-                                      VersionComparator.comp(routerVersion, MIN_HOST_LOOKUP_VERSION) >= 0);
-        _routerSupportsSubsessions = isrc ||
-                                     (routerVersion != null && routerVersion.length() > 0 &&
-                                      VersionComparator.comp(routerVersion, MIN_SUBSESSION_VERSION) >= 0);
-        _routerSupportsLS2 = isrc ||
-                                     (routerVersion != null && routerVersion.length() > 0 &&
-                                      VersionComparator.comp(routerVersion, MIN_LS2_VERSION) >= 0);
-        _routerSupportsBlindingInfo = isrc ||
-                                     (routerVersion != null && routerVersion.length() > 0 &&
+        _routerSupportsFastReceive = isrc || (routerVersion != null && routerVersion.length() > 0 &&
+                                     VersionComparator.comp(routerVersion, MIN_FAST_VERSION) >= 0);
+        _routerSupportsHostLookup = isrc || (routerVersion != null && routerVersion.length() > 0 &&
+                                    VersionComparator.comp(routerVersion, MIN_HOST_LOOKUP_VERSION) >= 0);
+        _routerSupportsSubsessions = isrc || (routerVersion != null && routerVersion.length() > 0 &&
+                                     VersionComparator.comp(routerVersion, MIN_SUBSESSION_VERSION) >= 0);
+        _routerSupportsLS2 = isrc || (routerVersion != null && routerVersion.length() > 0 &&
+                                     VersionComparator.comp(routerVersion, MIN_LS2_VERSION) >= 0);
+        _routerSupportsBlindingInfo = isrc || (routerVersion != null && routerVersion.length() > 0 &&
                                       VersionComparator.comp(routerVersion, MIN_BLINDINFO_VERSION) >= 0);
         synchronized (_stateLock) {
-            if (_state == State.OPENING) {
-                changeState(State.GOTDATE);
-            }
+            if (_state == State.OPENING) {changeState(State.GOTDATE);}
         }
     }
 
@@ -278,13 +259,9 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     protected I2PSessionImpl(I2PSessionImpl primary, InputStream destKeyStream, Properties options) throws I2PSessionException {
         this(primary.getContext(), options, primary.getHandlerMap(), primary.getProducer(), true);
         _availabilityNotifier = new AvailabilityNotifier();
-        try {
-            readDestination(destKeyStream);
-        } catch (DataFormatException dfe) {
-            throw new I2PSessionException("Error reading the destination key stream", dfe);
-        } catch (IOException ioe) {
-            throw new I2PSessionException("Error reading the destination key stream", ioe);
-        }
+        try {readDestination(destKeyStream);}
+        catch (DataFormatException dfe) {throw new I2PSessionException("Error reading the destination key stream", dfe);}
+        catch (IOException ioe) {throw new I2PSessionException("Error reading the destination key stream", ioe);}
     }
 
     /**
@@ -343,11 +320,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         this(context, options, new I2PClientMessageHandlerMap(context), new I2CPMessageProducer(context), true);
         _availabilityNotifier = new AvailabilityNotifier();
         try {readDestination(destKeyStream);}
-        catch (DataFormatException dfe) {
-            throw new I2PSessionException("Error reading the destination key stream", dfe);
-        } catch (IOException ioe) {
-            throw new I2PSessionException("Error reading the destination key stream", ioe);
-        }
+        catch (DataFormatException dfe) {throw new I2PSessionException("Error reading the destination key stream", dfe);}
+        catch (IOException ioe) {throw new I2PSessionException("Error reading the destination key stream", ioe);}
     }
 
     /**
@@ -436,9 +410,9 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * @since 0.9.7 was in loadConfig()
      */
     private String getHost() {
-        if (_context.isRouterContext()) {return "[internal connection]";} // just for logging
+        if (_context.isRouterContext()) {return "[Internal connection]";} // just for logging
         else if (SystemVersion.isAndroid() && Boolean.parseBoolean(_options.getProperty(PROP_DOMAIN_SOCKET))) {
-            return "[Domain socket connection]"; // just for logging
+            return "[DomainSocket connection]"; // just for logging
         }
         return _options.getProperty(I2PClient.PROP_TCP_HOST, "127.0.0.1");
     }
@@ -456,7 +430,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         try {return Integer.parseInt(portNum);}
         catch (NumberFormatException nfe) {
             if (_log.shouldWarn()) {
-                _log.warn(getPrefix() + "Invalid port number specified, defaulting to " + LISTEN_PORT, nfe);
+                _log.warn(getPrefix() + " -> Invalid port specified, defaulting to " + LISTEN_PORT, nfe);
             }
             return LISTEN_PORT;
         }
@@ -634,18 +608,14 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                         loop = false;
                         break;
                     case CLOSED:
-                        if (wasOpening)
-                            throw new I2PSessionException("Connect by other thread failed");
+                        if (wasOpening) {throw new I2PSessionException("Connect by other thread failed");}
                         loop = false;
                         break;
                     case OPENING:
                     case GOTDATE:
                         wasOpening = true;
-                        try {
-                            _stateLock.wait(10*1000);
-                        } catch (InterruptedException ie) {
-                            throw new I2PSessionException("Interrupted", ie);
-                        }
+                        try {_stateLock.wait(10*1000);}
+                        catch (InterruptedException ie) {throw new I2PSessionException("Interrupted", ie);}
                         break;
                     case CLOSING:
                         throw new I2PSessionException("Close in progress...");
@@ -681,36 +651,27 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                     _queue = mgr.connect();
                     _reader = new QueuedI2CPMessageReader(_queue, this);
                 } else {
-                    if (SystemVersion.isAndroid() &&
-                            _options.getProperty(PROP_DOMAIN_SOCKET) != null) {
+                    String errMsg = "Cannot load DomainSocketFactory";
+                    if (SystemVersion.isAndroid() && _options.getProperty(PROP_DOMAIN_SOCKET) != null) {
                         try {
                             Class<?> clazz = Class.forName("net.i2p.client.DomainSocketFactory");
                             Constructor<?> ctor = clazz.getDeclaredConstructor(I2PAppContext.class);
                             Object fact = ctor.newInstance(_context);
                             Method createSocket = clazz.getDeclaredMethod("createSocket", String.class);
-                            try {
-                                _socket = (Socket) createSocket.invoke(fact, _options.getProperty(PROP_DOMAIN_SOCKET));
-                            } catch (InvocationTargetException e) {
-                                throw new I2PSessionException("Cannot create domain socket", e);
-                            }
-                        } catch (ClassNotFoundException e) {
-                            throw new I2PSessionException("Cannot load DomainSocketFactory", e);
-                        } catch (NoSuchMethodException e) {
-                            throw new I2PSessionException("Cannot load DomainSocketFactory", e);
-                        } catch (InstantiationException e) {
-                            throw new I2PSessionException("Cannot load DomainSocketFactory", e);
-                        } catch (IllegalAccessException e) {
-                            throw new I2PSessionException("Cannot load DomainSocketFactory", e);
-                        } catch (InvocationTargetException e) {
-                            throw new I2PSessionException("Cannot load DomainSocketFactory", e);
-                        }
+                            try {_socket = (Socket) createSocket.invoke(fact, _options.getProperty(PROP_DOMAIN_SOCKET));}
+                            catch (InvocationTargetException e) {throw new I2PSessionException("Cannot create DomainSocket", e);}
+                        } catch (ClassNotFoundException e) {throw new I2PSessionException(errMsg, e);}
+                        catch (NoSuchMethodException e) {throw new I2PSessionException(errMsg, e);}
+                        catch (InstantiationException e) {throw new I2PSessionException(errMsg, e);}
+                        catch (IllegalAccessException e) {throw new I2PSessionException(errMsg, e);}
+                        catch (InvocationTargetException e) {throw new I2PSessionException(errMsg, e);}
                     } else if (Boolean.parseBoolean(_options.getProperty(I2PClient.PROP_ENABLE_SSL))) {
                         try {
                             I2PSSLSocketFactory fact = new I2PSSLSocketFactory(_context, false, "certificates/i2cp");
                             _socket = fact.createSocket(_hostname, _portNum);
                             _socket.setKeepAlive(true);
                         } catch (GeneralSecurityException gse) {
-                            IOException ioe = new IOException("SSL Fail");
+                            IOException ioe = new IOException("SSL Failure");
                             ioe.initCause(gse);
                             throw ioe;
                         }
@@ -727,10 +688,10 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                     InputStream in = new BufferedInputStream(_socket.getInputStream(), BUF_SIZE);
                     _reader = new I2CPMessageReader(in, this);
                 }
-                if (_log.shouldDebug()) {_log.debug(getPrefix() + "Before startReading");}
+                if (_log.shouldDebug()) {_log.debug(getPrefix() + " -> Before startReading");}
                 _reader.startReading();
             }
-            if (_log.shouldDebug()) {_log.debug(getPrefix() + "Before getDate");}
+            if (_log.shouldDebug()) {_log.debug(getPrefix() + " -> Before getDate");}
             Properties auth = null;
             if ((!_context.isRouterContext()) && _options.containsKey(I2PClient.PROP_USER) && _options.containsKey(I2PClient.PROP_PW)) {
                 // Only supported by routers 0.9.11 or higher, but we don't know the version yet.
@@ -742,9 +703,9 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             sendMessage_unchecked(new GetDateMessage(CoreVersion.PUBLISHED_VERSION, auth));
             waitForDate();
 
-            if (_log.shouldDebug()) {_log.debug(getPrefix() + "Before producer.connect()");}
+            if (_log.shouldDebug()) {_log.debug(getPrefix() + " -> Before producer.connect()");}
             _producer.connect(this);
-            if (_log.shouldDebug()) {_log.debug(getPrefix() + "After producer.connect()");}
+            if (_log.shouldDebug()) {_log.debug(getPrefix() + " -> After producer.connect()");}
 
             // wait until we have created a lease set
             int waitcount = 0;
@@ -766,7 +727,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             }
             if (_log.shouldInfo()) {
                 long connected = _context.clock().now();
-                _log.info(getPrefix() + " -> LeaseSet created with Inbound tunnels after " + (connected - startConnect) + "ms - ready!");
+                _log.info(getPrefix() + " -> LeaseSet created with Inbound tunnels after " + (connected - startConnect) + "ms");
             }
             Thread notifier = new I2PAppThread(_availabilityNotifier, "ClientNotifier " + getName(), true);
             notifier.start();
@@ -777,39 +738,31 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             // now send CreateSessionMessages for all subsessions, one at a time, must wait for each response
             synchronized(_subsessionLock) {
                 for (SubSession ss : _subsessions) {
-                   if (_log.shouldInfo())
-                       _log.info(getPrefix() + " -> Connecting sub-session " + ss);
+                   if (_log.shouldInfo()) {_log.info(getPrefix() + " -> Connecting sub-session " + ss);}
                     _producer.connect(ss);
                 }
             }
 
-        } catch (InterruptedException ie) {
-            throw new I2PSessionException("Interrupted", ie);
-        } catch (UnknownHostException uhe) {
-            throw new I2PSessionException(getPrefix() + " -> Cannot connect to the router on " + _hostname + ':' + _portNum, uhe);
+        } catch (InterruptedException ie) {throw new I2PSessionException("Interrupted", ie);}
+        catch (UnknownHostException uhe) {
+          throw new I2PSessionException(getPrefix() + " -> Cannot connect to Router on " + _hostname + ':' + _portNum, uhe);
         } catch (IOException ioe) {
-            // Generate the best error message as this will be logged
-            String msg;
-            if (_context.isRouterContext())
+            String msg; // Generate the best error message as this will be logged
+            if (_context.isRouterContext()) {
                 msg = "Failed to build tunnels";
-            else if (SystemVersion.isAndroid() &&
-                    _options.getProperty(PROP_DOMAIN_SOCKET) != null)
-                msg = "Failed to bind to the router on " + _options.getProperty(PROP_DOMAIN_SOCKET) + " to build tunnels";
-            else
-                msg = "Cannot connect to the router on " + _hostname + ':' + _portNum + " to build tunnels";
-            if (ioe.getMessage() != null)
-                msg += "\n* " + ioe.getMessage();
+            } else if (SystemVersion.isAndroid() && _options.getProperty(PROP_DOMAIN_SOCKET) != null) {
+                msg = "Failed to bind to Router on " + _options.getProperty(PROP_DOMAIN_SOCKET) + " to build tunnels";
+            } else {msg = "Cannot connect Router on " + _hostname + ':' + _portNum + " to build tunnels";}
+            if (ioe.getMessage() != null) {msg += "\n* " + ioe.getMessage();}
             throw new I2PSessionException(getPrefix() + msg, ioe);
         } finally {
-            if (success) {
-                changeState(State.OPEN);
-            } else {
+            if (success) {changeState(State.OPEN);}
+            else {
                 _availabilityNotifier.stopNotifying();
                 synchronized(_stateLock) {
                     changeState(State.CLOSING);
-                    try {
-                        _producer.disconnect(this);
-                    } catch (I2PSessionException ipe) {}
+                    try {_producer.disconnect(this);}
+                    catch (I2PSessionException ipe) {}
                     closeSocket();
                 }
             }
@@ -824,7 +777,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             int waitcount = 0;
             while (true) {
                 if (waitcount++ > 30) {
-                    throw new IOException("No handshake received from the router");
+                    throw new IOException("No handshake received from Router");
                 }
                 synchronized(_stateLock) {
                     if (_state == State.GOTDATE)
@@ -862,15 +815,6 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     }
 
     public abstract void receiveStatus(int msgId, long nonce, int status);
-
-/****** no end-to-end crypto
-    protected static final Set createNewTags(int num) {
-        Set tags = new HashSet();
-        for (int i = 0; i < num; i++)
-            tags.add(new SessionTag(true));
-        return tags;
-    }
-*******/
 
     /**
      * Recieve a payload message and let the app know its available
@@ -912,10 +856,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         }
 
         public void timeReached() {
-            if (isClosed())
-                return;
-            //if (_log.shouldDebug())
-            //    _log.debug(getPrefix() + " VerifyUsage of " + toCheck.size());
+            if (isClosed()) {return;}
             if (!toCheck.isEmpty()) {
                 for (Long msgId : toCheck) {
                     MessagePayloadMessage removed = _availableMessages.remove(msgId);
@@ -965,9 +906,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                 Integer size = null;
                 synchronized (AvailabilityNotifier.this) {
                     if (_pendingIds.isEmpty()) {
-                        try {
-                            AvailabilityNotifier.this.wait();
-                        } catch (InterruptedException ie) {} // nop
+                        try {AvailabilityNotifier.this.wait();}
+                        catch (InterruptedException ie) {} // nop
                     }
                     if (!_pendingIds.isEmpty()) {
                         msgId = _pendingIds.remove(0);
@@ -1014,30 +954,25 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         int type = message.getType();
         SessionId id = message.sessionId();
         SessionId currId = _sessionId;
-        if (id == null || id.equals(currId) ||
-            (currId == null && id != null && type == SessionStatusMessage.MESSAGE_TYPE) ||
-            ((id == null || id.getSessionId() == 65535) &&
-             (type == HostReplyMessage.MESSAGE_TYPE || type == DestReplyMessage.MESSAGE_TYPE))) {
+        if (id == null || id.equals(currId) || (currId == null && id != null && type == SessionStatusMessage.MESSAGE_TYPE) ||
+            ((id == null || id.getSessionId() == 65535) && (type == HostReplyMessage.MESSAGE_TYPE || type == DestReplyMessage.MESSAGE_TYPE))) {
             // it's for us
             I2CPMessageHandler handler = _handlerMap.getHandler(type);
             if (handler != null) {
-                if (_log.shouldDebug())
+                handler.handleMessage(message, this);
+                if (_log.shouldDebug()) {
                     _log.debug(getPrefix() + "Message [Type: " + type
                                + "] received -> " + handler.getClass().getSimpleName());
-                handler.handleMessage(message, this);
-            } else {
-                if (_log.shouldWarn())
-                    _log.warn(getPrefix() + "Unknown message or unhandleable message received [Type: "
-                              + type + "]");
+                }
+            } else if (_log.shouldWarn()) {
+                _log.warn(getPrefix() + "Unknown message or unhandleable message received [Type: " + type + "]");
             }
         } else {
             SubSession sub = _subsessionMap.get(id);
             if (sub != null) {
                 // it's for a subsession
-                if (_log.shouldDebug())
-                    _log.debug(getPrefix() + "Message [Type: " + type
-                               + "] received -> " + sub);
                 sub.messageReceived(reader, message);
+                if (_log.shouldDebug()) {_log.debug(getPrefix() + "Message [Type: " + type + "] received -> " + sub);}
             } else if (id != null && type == SessionStatusMessage.MESSAGE_TYPE) {
                 // look for a subsession without a session
                 synchronized (_subsessionLock) {
@@ -1049,28 +984,24 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                                 if (id.equals(_sessionId)) {
                                     // shouldnt happen
                                     sess.setSessionId(null);
-                                    if (_log.shouldWarn())
-                                        _log.warn("Duplicate or our SessionID " + id);
+                                    if (_log.shouldWarn()) {_log.warn("Duplicate or our SessionID " + id);}
                                 } else {
                                     SubSession old = _subsessionMap.putIfAbsent(id, sess);
-                                    if (old != null) {
-                                        // shouldnt happen
+                                    if (old != null) { // shouldnt happen
                                         sess.setSessionId(null);
-                                        if (_log.shouldWarn())
-                                            _log.warn("Duplicate SessionID " + id);
+                                        if (_log.shouldWarn()) {_log.warn("Duplicate SessionID " + id);}
                                     }
                                 }
                             }
                             return;
                         }
-                        if (_log.shouldWarn())
+                        if (_log.shouldWarn()) {
                             _log.warn(getPrefix() + "No session " + id + " to handle message: [Type: " + type + "]");
+                        }
                     }
                 }
-            } else {
-                // it's for nobody
-                if (_log.shouldWarn())
-                    _log.warn(getPrefix() + "No session " + id + " to handle message: [Type: " + type + "]");
+            } else if (_log.shouldWarn()) { // it's for nobody
+                _log.warn(getPrefix() + "No session " + id + " to handle message: [Type: " + type + "]");
             }
         }
     }
