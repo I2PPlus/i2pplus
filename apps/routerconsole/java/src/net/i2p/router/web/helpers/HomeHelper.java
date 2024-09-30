@@ -11,14 +11,12 @@ import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
 import net.i2p.router.web.App;
 import net.i2p.router.web.ConfigUpdateHandler;
+import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.Messages;
 import net.i2p.router.web.NavHelper;
 import net.i2p.router.web.PluginStarter;
 import net.i2p.util.PortMapper;
-
-import net.i2p.router.web.CSSHelper;
-
 
 /**
  *  For /home and /confighome
@@ -35,8 +33,6 @@ public class HomeHelper extends HelperBase {
     static final String PROP_MONITORING = "routerconsole.monitoring";
     static final String PROP_OLDHOME = "routerconsole.oldHomePage";
     static final String PROP_SEARCH = "routerconsole.showSearch";
-    /** @since 0.9.35 */
-//    static final String PROP_NEWTAB = "routerconsole.homeExtLinksToNewTab";
 
     // No commas allowed in text strings!
     static final String DEFAULT_SERVICES =
