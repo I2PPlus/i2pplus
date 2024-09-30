@@ -2060,23 +2060,23 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 #configstats label::after{font-size:95%}
 
 /* bandwidth */
-.bw_title{margin:2px -13px 0 -38px;padding:2px 5px 4px;display:block;text-align:left;font-size:11pt;font-weight:700;background:linear-gradient(90deg,#000,#010)}
+.bw_title{margin:2px -13px 0 -38px;padding:2px 5px 4px 8px;display:block;text-align:left;font-size:11pt;font-weight:700;background:linear-gradient(90deg,#000,#010)}
 .net_bw,.net_bwrate,.net_datausage{display:inline-block;white-space:nowrap;text-align:center}
 .net_bw{margin:3px;padding:5px 8px;display:inline-block;white-space:nowrap;text-align:center;box-shadow:0 0 0 1px #020,var(--highlight);background:linear-gradient(180deg,#020,#000)}
 .net_bwrate{font-weight:700;font-size:110%;display:inline-block;padding:2px;width:100%;min-width:320px;text-align:center}
 .net_bwrate::before,#bandwidthconfig tr:nth-child(4) .net_bwrate::before{background:var(--share) no-repeat left center;background-size:18px}
 .net_datausage{font-style:italic;display:inline-block;padding:4px 5px;margin:3px -7px;width:100%;min-width:320px;white-space:nowrap;text-align:center;border-top:1px solid #020}
 #bandwidthconfig{margin-bottom:-4px;padding:5px 10px}
-#bandwidthconfig .bw_out,#bandwidthconfig .bw_in,#bandwidthconfig .bw_share{margin:10px 5px;background-size:24px}
-#bandwidthconfig .bw_in{background:#020 url(/themes/console/images/inbound.svg) no-repeat 10px calc(50% + 14px)}
-#bandwidthconfig .bw_out{background:#020 url(/themes/console/images/outbound.svg) no-repeat 10px calc(50% + 14px)}
-#bandwidthconfig .bw_share{background:#020 var(--share) no-repeat 10px calc(50% + 14px)/28px}
 #bandwidthconfig input,#bandwidthconfig select{margin-right:3px}
 #bandwidthconfig .net_bwrate::before{margin-right:4px;content:"";width:20px;height:20px;display:inline-block;vertical-align:middle;background-size:20px}
 #bandwidthconfig .optionsingle{margin-left:2px;padding:0 15px 0 40px;background:#002500}
 #bandwidthconfig .optionsingle:hover,#reseedproxytype label:hover,#graphs .nowrap:hover{background-color:#030}
 #bandwidthconfig .optionsingle::after{min-height:54px}
-#bandwidthconfig .optionsingle input,#bandwidthconfig select{margin-top:16px;min-width:100px;text-align:right}
+#bandwidthconfig .optionsingle input,#bandwidthconfig select{min-width:100px;vertical-align:middle;text-align:right}
+#bandwidthconfig .bw_out,#bandwidthconfig .bw_in,#bandwidthconfig .bw_share{margin:10px 5px}
+#bandwidthconfig .bw_in{background:#020 url(/themes/console/images/inbound.svg) no-repeat 12px calc(50% + 16px)/24px}
+#bandwidthconfig .bw_out{background:#020 url(/themes/console/images/outbound.svg) no-repeat 12px calc(50% + 16px)/24px}
+#bandwidthconfig .bw_share{background:#020 var(--share) no-repeat 12px calc(50% + 16px)/28px}
 #bandwidthconfig select{text-align:center}
 #bandwidthconfig select option{text-align:right}
 #bandwidthconfig td:first-child:not(.infohelp):not(.optionsave){padding:0 50px 0 5px;background:#000800 url(/themes/console/images/arrow_right.svg) no-repeat right 12px center/24px;background-blend-mode:luminosity}
