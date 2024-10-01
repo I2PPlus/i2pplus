@@ -716,16 +716,18 @@ class NetDbRenderer {
         BigInteger median = null;
         int c = 0;
 
-        // Summary
+        /** Summary */
         if (debug) {buf.append("<table id=leasesetdebug>\n");}
         else if (client == null) {buf.append("<table id=leasesetsummary>\n");}
         if (debug || client == null) {
-            buf.append("<tr><th><b>Total Leasesets:</b></th><th colspan=3>").append(leases.size()).append("</th></tr>\n");
+            buf.append("<tr><th><b>").append(_t("Total Leasesets")).append(":</b></th>")
+               .append("<th colspan=3>").append(leases.size()).append("</th></tr>\n");
         }
         if (debug) {
             RouterKeyGenerator gen = _context.routerKeyGenerator();
             if (leases.size() > 0) {
-                buf.append("<tr><td><b>Published (RAP) Leasesets:</b></td><td colspan=3>").append(netdb.getKnownLeaseSets()).append("</td></tr>\n");
+                buf.append("<tr><td><b>").append(_t("Published (RAP) Leasesets")).append(":</b></td><td colspan=3>")
+                   .append(netdb.getKnownLeaseSets()).append("</td></tr>\n");
             }
             buf.append("<tr><td><b>").append(_t("Mod Data")).append(":</b></td><td>").append(DataHelper.getUTF8(gen.getModData())).append("</td>")
                .append("<td><b>").append(_t("Last Changed")).append(":</b></td><td>").append(DataHelper.formatTime(gen.getLastChanged())).append("</td></tr>\n")
@@ -739,8 +741,10 @@ class NetDbRenderer {
                .append("<tr><td><b>").append(_t("Floodfill mode enabled")).append("</b></td><td>").append(netdb.floodfillEnabled() ? "yes" : "no");
         }
         if (debug) {buf.append("</td><td><b>").append(_t("Routing Key")).append(":</b></td><td>").append(ourRKey.toBase64());}
-        //else {buf.append("</td><td colspan=2>");}
-        //buf.append("</td></tr>\n</table>\n");
+        else if (client == null) {buf.append("</td><td colspan=2>");}
+        if (debug || client == null) {buf.append("</td></tr>\n</table>\n");}
+
+        /** LeaseSets */
         if (!leases.isEmpty()) {
             boolean linkSusi = _context.portMapper().isRegistered("susidns");
             long now = _context.clock().now();
@@ -765,12 +769,12 @@ class NetDbRenderer {
                   //buf.append("</b></p><p><b>Center of Key Space (router hash): " + ourRKey.toBase64());
                   if (median != null) {
                       double log2 = biLog2(median);
-                      buf.append("</td></tr>\n")
-                         .append("<tr><td><b>").append(_t("Median distance (bits)")).append(":</b></td><td colspan=3>")
-                         .append(fmt.format(log2)).append("</td></tr>\n");
                       // 2 for 4 floodfills... -1 for median - this can be way off for unknown reasons
                       int total = (int) Math.round(Math.pow(2, 2 + 256 - 1 - log2));
-                      buf.append("<tr><td><b>").append(_t("Estimated total floodfills")).append(":</b></td><td colspan=3>")
+                      buf.append("</td></tr>\n")
+                         .append("<tr><td><b>").append(_t("Median distance (bits)")).append(":</b></td><td colspan=3>")
+                         .append(fmt.format(log2)).append("</td></tr>\n")
+                         .append("<tr><td><b>").append(_t("Estimated total floodfills")).append(":</b></td><td colspan=3>")
                          .append(total).append("</td></tr>\n")
                          .append("<tr><td><b>").append(_t("Estimated total leasesets")).append(":</b></td><td colspan=3>")
                          .append(total * rapCount / 4);
@@ -942,7 +946,7 @@ class NetDbRenderer {
             }
             buf.append("<br><span class=nowrap>").append(bullet).append("<b>").append(_t("Routing Key"))
                .append(":</b> ").append(ls.getRoutingKey().toBase64().substring(0,16))
-               .append("&hellip;</span></td></tr>\n");
+               .append("&hellip;</span></span></td></tr>\n");
         } else {
             //buf.append("</td></tr>\n<tr><td colspan=2>")
             buf.append(" <span class=\"nowrap stype\" title=\"").append(_t("Signature type")).append("\">").append(bullet)

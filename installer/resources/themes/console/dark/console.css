@@ -1249,7 +1249,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .addtobook a::after{margin:-14px -4px -8px;padding-left:6px;width:24px;height:26px;display:inline-block;vertical-align:middle;border-left:var(--border_softer);background:var(--ahelp) var(--center)/14px;content:""}
 .leasesets_container{margin-bottom:8px;columns:680px 2;column-gap:10px}
 .leasesets_container table{-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
-.leasesets_container #leasesetdebug{margin:-4px 0 10px;column-span:all}
+.leasesets_container #leasesetdebug{margin:0 0 10px;column-span:all}
 .leaseset:first-of-type{margin-top:0}
 .leaseset:last-of-type{margin-bottom:0}
 .leaseset th code{font-size:85%}
