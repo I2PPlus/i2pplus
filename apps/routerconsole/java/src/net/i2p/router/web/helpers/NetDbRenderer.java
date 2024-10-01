@@ -739,8 +739,8 @@ class NetDbRenderer {
                .append("<tr><td><b>").append(_t("Floodfill mode enabled")).append("</b></td><td>").append(netdb.floodfillEnabled() ? "yes" : "no");
         }
         if (debug) {buf.append("</td><td><b>").append(_t("Routing Key")).append(":</b></td><td>").append(ourRKey.toBase64());}
-        else {buf.append("</td><td colspan=2>");}
-        buf.append("</td></tr>\n</table>\n");
+        //else {buf.append("</td><td colspan=2>");}
+        //buf.append("</td></tr>\n</table>\n");
         if (!leases.isEmpty()) {
             boolean linkSusi = _context.portMapper().isRegistered("susidns");
             long now = _context.clock().now();
@@ -880,23 +880,34 @@ class NetDbRenderer {
         }
 
         long exp;
-        String bullet = "&nbsp; &bullet; &nbsp;";
+        String bullet = "<span class=bullet>&nbsp; &bullet; &nbsp;</span>";
         buf.append("<tr><td colspan=2>");
         if (type == DatabaseEntry.KEY_TYPE_LEASESET) {exp = ls.getLatestLeaseDate() - now;}
         else {
             LeaseSet2 ls2 = (LeaseSet2) ls;
             long pub = now - ls2.getPublished();
-            buf.append(bullet).append("<b>").append(_t("Type")).append(":</b> ").append(type).append(' ')
-               .append(bullet).append("<b>").append(_t("Published{0} ago", ":</b> " + DataHelper.formatDuration2(pub)));
-            exp = ((LeaseSet2)ls).getExpires()-now;
+            exp = ((LeaseSet2)ls).getExpires() - now;
+            /*
+            if (debug) {
+                buf.append(bullet).append("<b>").append(_t("Type")).append(":</b> ").append(type)
+                   .append(" <span class=\"nowrap published\" title=\"").append(_t("Published")).append("\">").append(bullet)
+                   .append("<b>").append(_t("Published{0} ago", ":</b> " + DataHelper.formatDuration2(pub))).append("</span> ");
+            }
+            */
         }
-        buf.append(' ').append(bullet).append("<b>");
+        buf.append("<span class=\"nowrap expiry\" title=\"").append(_t("Expiry")).append("\">").append(bullet).append("<b>");
         if (exp > 0) {buf.append(_t("Expires{0}", ":</b> " + DataHelper.formatDuration2(exp)).replace(" in", ""));}
         else {buf.append(_t("Expired{0} ago", ":</b> " + DataHelper.formatDuration2(0-exp)));}
+        buf.append("</span>");
         if (debug) {
-            buf.append(' ').append(bullet).append("<b title=\"").append(_t("Received as published?")).append("\">RAP:</b> ").append(ls.getReceivedAsPublished())
-               .append(' ').append(bullet).append("<b title=\"").append(_t("Received as reply?")).append("\">RAR:</b> ").append(ls.getReceivedAsReply())
-               .append(' ').append(bullet).append("<b>").append(_t("Distance")).append(":</b> ").append(distance);
+            boolean asPublished = ls.getReceivedAsPublished();
+            boolean asReply = ls.getReceivedAsReply();
+            if (asPublished) {
+                buf.append(' ').append(bullet).append("<b title=\"").append(_t("Received as published")).append("\">RAP</b>");
+            } else if (asReply) {
+               buf.append(' ').append(bullet).append("<b title=\"").append(_t("Received as reply")).append("\">RAR</b>");
+            }
+            buf.append(' ').append(bullet).append("<b>").append(_t("Distance")).append(":</b> ").append(distance);
             if (type != DatabaseEntry.KEY_TYPE_LEASESET) {
                 LeaseSet2 ls2 = (LeaseSet2) ls;
                 if (ls2.isOffline()) {
@@ -933,19 +944,27 @@ class NetDbRenderer {
                .append(":</b> ").append(ls.getRoutingKey().toBase64().substring(0,16))
                .append("&hellip;</span></td></tr>\n");
         } else {
-            buf.append("</td></tr>\n<tr><td colspan=2>")
-               .append("<span class=nowrap>").append(bullet).append("<b>").append(_t("Signature type")).append(":</b> ");
+            //buf.append("</td></tr>\n<tr><td colspan=2>")
+            buf.append(" <span class=\"nowrap stype\" title=\"").append(_t("Signature type")).append("\">").append(bullet)
+               .append("<b>").append(_t("Signature type")).append(":</b> ");
             if (dest != null && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {buf.append(dest.getSigningPublicKey().getType());}
             else {buf.append(ls.getSigningKey().getType());} // encrypted, show blinded key type
             buf.append("</span> ");
             if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
-                buf.append("<span class=nowrap>").append(bullet).append("<b>").append(_t("Encryption Key")).append(":</b> ELGAMAL_2048</span>");
+                buf.append(" <span class=\"nowrap ekey\" title=\"").append(_t("Encryption Key")).append("\">").append(bullet)
+                   .append("<b>").append(_t("Encryption Key")).append(":</b> <span title=ELGAMAL_2048>ElGamal</span>");
             } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
                 LeaseSet2 ls2 = (LeaseSet2) ls;
                 for (PublicKey pk : ls2.getEncryptionKeys()) {
-                    buf.append("<span class=nowrap>").append(bullet).append("<b>").append(_t("Encryption Key")).append(":</b> ");
+                    buf.append(" <span class=\"nowrap ekey\" title=\"").append(_t("Encryption Key")).append("\">").append(bullet)
+                       .append("<b>").append(_t("Encryption Key")).append(":</b> ");
                     EncType etype = pk.getType();
-                    if (etype != null) {buf.append(etype).append("</span> ");}
+                    if (etype != null) {
+                        String enctype = "";
+                        if (etype.toString().trim().equals("ECIES_X25519")) {enctype = "ECIES";}
+                        else if (etype.toString().trim().equals("ELGAMAL_2048")) {enctype = "ElGamal";}
+                        buf.append("<span title=\"").append(etype).append("\">").append(enctype).append("</span>");
+                    }
                     else {buf.append(_t("Unsupported type")).append(" ").append(pk.getUnknownTypeCode()).append("</span> ");}
                 }
             }
