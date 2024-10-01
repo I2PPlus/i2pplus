@@ -2716,10 +2716,10 @@ msgstr "{0} 后过期"
 msgid "Expired{0} ago"
 msgstr "{0} 前过期"
 
-msgid "Received as published?"
+msgid "Received as published"
 msgstr "接收已发布？"
 
-msgid "Received as reply?"
+msgid "Received as reply"
 msgstr "收到的答复是什么？"
 
 msgid "Distance"

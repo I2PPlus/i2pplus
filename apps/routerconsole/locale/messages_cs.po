@@ -2732,10 +2732,10 @@ msgstr "Platnost vyprší{0}"
 msgid "Expired{0} ago"
 msgstr "Platnost vypršela{0}"
 
-msgid "Received as published?"
+msgid "Received as published"
 msgstr "Přijato tak, jak bylo zveřejněno?"
 
-msgid "Received as reply?"
+msgid "Received as reply"
 msgstr "Přijato jako odpověď?"
 
 msgid "Distance"

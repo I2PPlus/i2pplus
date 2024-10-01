@@ -2740,10 +2740,10 @@ msgstr "Isteka{0}"
 msgid "Expired{0} ago"
 msgstr "Isteklo{0} pred tem"
 
-msgid "Received as published?"
+msgid "Received as published"
 msgstr "Prejeto kot objavljeno?"
 
-msgid "Received as reply?"
+msgid "Received as reply"
 msgstr "Prejeto kot odgovor?"
 
 msgid "Distance"

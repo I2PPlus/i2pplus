@@ -2725,10 +2725,10 @@ msgstr "Scade{0}"
 msgid "Expired{0} ago"
 msgstr "Scaduto{0} fa"
 
-msgid "Received as published?"
+msgid "Received as published"
 msgstr "Ricevuto come pubblicato?"
 
-msgid "Received as reply?"
+msgid "Received as reply"
 msgstr "Ricevuto come risposta?"
 
 msgid "Distance"

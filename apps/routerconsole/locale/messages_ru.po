@@ -2732,10 +2732,10 @@ msgstr "Срок действия истекает{0}"
 msgid "Expired{0} ago"
 msgstr "Срок действия истек{0} назад"
 
-msgid "Received as published?"
+msgid "Received as published"
 msgstr "Получено как опубликованное?"
 
-msgid "Received as reply?"
+msgid "Received as reply"
 msgstr "Получено в качестве ответа?"
 
 msgid "Distance"

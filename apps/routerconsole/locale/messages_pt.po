@@ -2724,10 +2724,10 @@ msgstr "Expira{0}"
 msgid "Expired{0} ago"
 msgstr "Expirou{0} atrás"
 
-msgid "Received as published?"
+msgid "Received as published"
 msgstr "Recebido conforme publicado?"
 
-msgid "Received as reply?"
+msgid "Received as reply"
 msgstr "Recebido como resposta?"
 
 msgid "Distance"

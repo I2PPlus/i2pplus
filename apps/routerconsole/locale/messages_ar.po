@@ -2756,10 +2756,10 @@ msgstr "انتهاء الصلاحية{0}"
 msgid "Expired{0} ago"
 msgstr "انتهت الصلاحية{0} منذ"
 
-msgid "Received as published?"
+msgid "Received as published"
 msgstr "هل وردت كما نشرت؟"
 
-msgid "Received as reply?"
+msgid "Received as reply"
 msgstr "وردت كرد؟"
 
 msgid "Distance"

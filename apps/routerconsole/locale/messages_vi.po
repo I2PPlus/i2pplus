@@ -2716,10 +2716,10 @@ msgstr "Hết hạn{0}"
 msgid "Expired{0} ago"
 msgstr "Đã hết hạn{0} trước"
 
-msgid "Received as published?"
+msgid "Received as published"
 msgstr "Nhận được như đã xuất bản?"
 
-msgid "Received as reply?"
+msgid "Received as reply"
 msgstr "Đã nhận được thư trả lời?"
 
 msgid "Distance"

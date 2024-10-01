@@ -2724,10 +2724,10 @@ msgstr "Süresi doluyor{0}"
 msgid "Expired{0} ago"
 msgstr "Süresi{0} önce doldu"
 
-msgid "Received as published?"
+msgid "Received as published"
 msgstr "Yayınlandığı gibi mi alındı?"
 
-msgid "Received as reply?"
+msgid "Received as reply"
 msgstr "Cevap olarak mı aldınız?"
 
 msgid "Distance"

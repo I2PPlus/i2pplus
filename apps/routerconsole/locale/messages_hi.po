@@ -2724,10 +2724,10 @@ msgstr "{0} पर समाप्त"
 msgid "Expired{0} ago"
 msgstr "{0} पहले समाप्त हो गया"
 
-msgid "Received as published?"
+msgid "Received as published"
 msgstr "प्रकाशित के रूप में प्राप्त?"
 
-msgid "Received as reply?"
+msgid "Received as reply"
 msgstr "जवाब के रूप में प्राप्त?"
 
 msgid "Distance"

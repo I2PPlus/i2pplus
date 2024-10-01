@@ -2724,10 +2724,10 @@ msgstr "Caduca{0}"
 msgid "Expired{0} ago"
 msgstr "Hace caducado{0}"
 
-msgid "Received as published?"
+msgid "Received as published"
 msgstr "¿Recibido cómo publicado?"
 
-msgid "Received as reply?"
+msgid "Received as reply"
 msgstr "¿Recibido como respuesta?"
 
 msgid "Distance"

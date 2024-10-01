@@ -2724,10 +2724,10 @@ msgstr "Utløper{0}"
 msgid "Expired{0} ago"
 msgstr "Utløp for{0} siden"
 
-msgid "Received as published?"
+msgid "Received as published"
 msgstr "Mottatt som publisert?"
 
-msgid "Received as reply?"
+msgid "Received as reply"
 msgstr "Mottatt som svar?"
 
 msgid "Distance"

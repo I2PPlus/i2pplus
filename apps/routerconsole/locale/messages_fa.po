@@ -2724,10 +2724,10 @@ msgstr "انقضا{0}"
 msgid "Expired{0} ago"
 msgstr "منقضی شده{0} پیش"
 
-msgid "Received as published?"
+msgid "Received as published"
 msgstr "به عنوان منتشر شده دریافت شد؟"
 
-msgid "Received as reply?"
+msgid "Received as reply"
 msgstr "به عنوان پاسخ دریافت شد؟"
 
 msgid "Distance"

@@ -2724,10 +2724,10 @@ msgstr "Upphör{0}"
 msgid "Expired{0} ago"
 msgstr "Upphörde för{0} sedan"
 
-msgid "Received as published?"
+msgid "Received as published"
 msgstr "Mottagen som publicerad?"
 
-msgid "Received as reply?"
+msgid "Received as reply"
 msgstr "Fick du som svar?"
 
 msgid "Distance"

@@ -2724,10 +2724,10 @@ msgstr "Vanhenee{0}"
 msgid "Expired{0} ago"
 msgstr "Vanhentunut{0} sitten"
 
-msgid "Received as published?"
+msgid "Received as published"
 msgstr "vastaanotettu sellaisena kuin se on julkaistu?"
 
-msgid "Received as reply?"
+msgid "Received as reply"
 msgstr "Saitko vastauksena?"
 
 msgid "Distance"

@@ -2725,10 +2725,10 @@ msgstr "Aegub{0}"
 msgid "Expired{0} ago"
 msgstr "Aegunud{0} tagasi"
 
-msgid "Received as published?"
+msgid "Received as published"
 msgstr "vastu võetud avaldatud kujul?"
 
-msgid "Received as reply?"
+msgid "Received as reply"
 msgstr "Kas saite vastuseks?"
 
 msgid "Distance"

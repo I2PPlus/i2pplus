@@ -2732,10 +2732,10 @@ msgstr "Expiră{0}"
 msgid "Expired{0} ago"
 msgstr "A expirat{0} în urmă"
 
-msgid "Received as published?"
+msgid "Received as published"
 msgstr "Primit ca publicat?"
 
-msgid "Received as reply?"
+msgid "Received as reply"
 msgstr "Primit ca răspuns?"
 
 msgid "Distance"

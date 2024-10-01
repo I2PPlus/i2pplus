@@ -2732,10 +2732,10 @@ msgstr "Wygasa{0}"
 msgid "Expired{0} ago"
 msgstr "Wygasło{0} temu"
 
-msgid "Received as published?"
+msgid "Received as published"
 msgstr "Otrzymano jako opublikowane?"
 
-msgid "Received as reply?"
+msgid "Received as reply"
 msgstr "Otrzymano jako odpowiedź?"
 
 msgid "Distance"

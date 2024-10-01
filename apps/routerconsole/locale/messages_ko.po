@@ -2716,10 +2716,10 @@ msgstr "만료{0}"
 msgid "Expired{0} ago"
 msgstr "{0} 전 만료됨"
 
-msgid "Received as published?"
+msgid "Received as published"
 msgstr "게시된 대로 받았나요?"
 
-msgid "Received as reply?"
+msgid "Received as reply"
 msgstr "답장을 받았나요?"
 
 msgid "Distance"
