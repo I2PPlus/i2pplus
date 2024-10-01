@@ -80,7 +80,6 @@ class PacketBuilder2 {
     // every this many packets
     private static final int DATETIME_SEND_FREQUENCY = 256;
 
-
     /**
      *  No state, all methods are thread-safe.
      *
