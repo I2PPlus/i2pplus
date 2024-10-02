@@ -1307,7 +1307,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #netdb .leaseset tr,#netdb .leaseset td{box-shadow:none}
 #netdb .sybil_addresses .netdb_transport{width:auto;text-align:right}
 #noleasesets,#notinitialized,.netdbnotfound{margin:10px auto 12px;padding:20px 24px 20px 58px;text-align:left;border:var(--border);background:#000 var(--infohelp) no-repeat 15px center/28px}
-.leasesets_container #notinitialized{margin-bottom:2px;column-span:all}
+.leasesets_container #notinitialized{margin-bottom:10px;column-span:all}
 .leaseset .ekey,.leaseset .stype{margin-left:6px;padding-left:14px;background:var(--crypto) no-repeat left center/12px}
 .leaseset .expiry{margin-left:4px;padding-left:15px;background:var(--clock) no-repeat left calc(50% + 1px)/12px}
 .leaseset .stype{background:var(--lock) no-repeat left center/12px}
