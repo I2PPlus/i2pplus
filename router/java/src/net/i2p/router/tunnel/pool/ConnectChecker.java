@@ -79,7 +79,7 @@ public class ConnectChecker {
         if (rf == null) {return true;}
         int ct;
         if (ust) {ct = getInboundMask(rt);} // to us
-        } else {
+        else {
             Collection<RouterAddress> at = rt.getAddresses();
             // assume nothing if hidden
             if (at.isEmpty()) {return false;}
@@ -97,8 +97,8 @@ public class ConnectChecker {
         boolean rv = (ct & cf) != 0;
         if (!rv && log.shouldWarn()) {
             log.warn("Cannot connect [" +
-                     (usf ? "us" : from.toString().substring(0,6)) + "] with mask " + cf + " -> [" +
-                     (ust ? "us" : to.toString().substring(0,6)) + "] with mask " + ct);
+                     (usf ? "Us" : from.toString().substring(0,6)) + "] with mask " + cf + " -> [" +
+                     (ust ? "Us" : to.toString().substring(0,6)) + "] with mask " + ct);
         }
         return rv;
     }

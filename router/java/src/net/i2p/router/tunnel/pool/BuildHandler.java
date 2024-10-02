@@ -555,7 +555,7 @@ class BuildHandler implements Runnable {
                         _log.info("Dropping next hop lookup -> High job queue lag (Max: " + maxQueueLag + "ms)" +
                                   "\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]" + req);
                     } else if (highLoad) {
-                        _log.info("Dropping next hop lookup -> High CPU Load (" + SystemVersion.getCPULoad() + "%)"
+                        _log.info("Dropping next hop lookup -> High CPU Load (" + SystemVersion.getCPULoad() + "%)" +
                                   "\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]" + req);
                     } else {
                         _log.info("Dropping next hop lookup -> Limit: " + limit + " / " + PERCENT_LOOKUP_LIMIT + "%" +
