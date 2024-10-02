@@ -532,10 +532,13 @@ class BuildHandler implements Runnable {
             int numTunnels = _context.tunnelManager().getParticipatingCount();
             int limit = Math.max(MIN_LOOKUP_LIMIT, Math.min(MAX_LOOKUP_LIMIT, numTunnels * PERCENT_LOOKUP_LIMIT / 100));
             int current;
+            boolean highLoad = SystemVersion.getCPULoad() > 80;
+            long maxQueueLag = _context.jobQueue().getMaxLag();
+            boolean isLagged = SystemVersion.isSlow() ? maxQueueLag > 500 : maxQueueLag > 200;
             // leaky counter, since it isn't reliable
             if (_context.random().nextInt(16) > 0) {current = _currentLookups.incrementAndGet();}
             else {current = 1;}
-            if (current <= limit) {
+            if (current <= limit && !highLoad && !isLagged) {
                 if (current <= 0) {_currentLookups.set(1);} // don't let it go negative
                 if (_log.shouldDebug()) {
                     _log.debug("Request handled; looking up next peer [" + nextPeer.toBase64().substring(0,6)
@@ -547,8 +550,16 @@ class BuildHandler implements Runnable {
             } else {
                 _currentLookups.decrementAndGet();
                 if (_log.shouldInfo()) {
-                    _log.info("Dropping next hop lookup (Limit: " + limit + " / " + PERCENT_LOOKUP_LIMIT + "%) " +
-                    "\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]" + req);
+                    if (isLagged) {
+                        _log.info("Dropping next hop lookup -> High job queue lag (Max: " + maxQueueLag + "ms)" +
+                                  "\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]" + req);
+                    } else if (highLoad) {
+                        _log.info("Dropping next hop lookup -> High CPU Load" +
+                                  "\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]" + req);
+                    } else {
+                        _log.info("Dropping next hop lookup -> Limit: " + limit + " concurrent / " + PERCENT_LOOKUP_LIMIT + "%" +
+                                  "\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]" + req);
+                    }
                 }
                 _context.statManager().addRateData("tunnel.dropLookupThrottle", 1);
                 if (from != null) {_context.commSystem().mayDisconnect(from);}
