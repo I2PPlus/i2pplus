@@ -421,12 +421,6 @@ div[id^="config_"].main{padding-bottom:14px}
 .tab:active,#sidebar h3:active{box-shadow:var(--highlight),inset 3px 2px 3px rgba(0,0,0,.7);background:linear-gradient(180deg,#930,var(--hover));transition:ease box-shadow .15s}
 .tab:active a,#sidebar h3:active a{color:var(--ink);text-shadow:0 -1px 1px rgba(0,0,0,.4)}
 #debug .confignav{margin-bottom:-4px;z-index:999}
-#netdb .leasesets_container p, #netdb .leasesets_container .confignav{column-span:all}
-#netdb .leasesets_container .confignav{margin-bottom:11px}
-.leaseset .ekey,.leaseset .stype{margin-left:6px;padding-left:14px;background:var(--key) no-repeat left center/11px}
-.leaseset .expiry{margin-left:4px;padding-left:15px;background:var(--clock) no-repeat left calc(50% + 1px)/12px}
-.leaseset .stype{background:var(--lock) no-repeat left center/12px}
-.leaseset .ekey b,.leaseset .stype b,.leaseset .expiry b,.leaseset .ekey .bullet,.leaseset .expiry .bullet,.leaseset .stype .bullet{display:none}
 
 /* notifications */
 .main:not(#config_update):not(#graphs) .messages,#config_update #messages{margin-left:-11px;margin-right:-11px;width:calc(100% - 60px);position:absolute;top:-13px;z-index:100;animation:2s hide-up 8s ease-out forwards;box-shadow:inset 0 0 1px 0 #f00,0 0 2px 2px #000;background:var(--infohelp) no-repeat 15px center/28px,var(--close) no-repeat right 7px top 6px/14px,var(--msg);background-blend-mode:normal,luminosity,normal,normal,normal}
@@ -1314,9 +1308,12 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #netdb .sybil_addresses .netdb_transport{width:auto;text-align:right}
 #noleasesets,#notinitialized,.netdbnotfound{margin:10px auto 12px;padding:20px 24px 20px 58px;text-align:left;border:var(--border);background:#000 var(--infohelp) no-repeat 15px center/28px}
 .leasesets_container #notinitialized{margin-bottom:2px;column-span:all}
-
-/* experimental */
-/*#netdb .leaseset:not(:hover) tr:nth-child(n+2):not(:last-child){display:none}*/
+.leaseset .ekey,.leaseset .stype{margin-left:6px;padding-left:14px;background:var(--crypto) no-repeat left center/12px}
+.leaseset .expiry{margin-left:4px;padding-left:15px;background:var(--clock) no-repeat left calc(50% + 1px)/12px}
+.leaseset .stype{background:var(--lock) no-repeat left center/12px}
+.leaseset .ekey b,.leaseset .stype b,.leaseset .expiry b,.leaseset .ekey .bullet,.leaseset .expiry .bullet,.leaseset .stype .bullet{display:none}
+#netdb .leasesets_container p, #netdb .leasesets_container .confignav{column-span:all}
+#netdb .leasesets_container .confignav{margin-bottom:11px}
 
 /* sybils */
 h3#threats.sybils{margin-bottom:10px}

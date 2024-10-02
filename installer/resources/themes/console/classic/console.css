@@ -1247,6 +1247,10 @@ p.family a{display:inline-block}
 #netdb .netdb_leases li::before{min-height:24px;display:inline-block;vertical-align:middle;content:""}
 #netdb tr:not(.debugMode) .netdb_leases li{margin:-2px -4px -4px 0}
 #noleasesets,#notinitialized,.netdbnotfound{margin:10px 0 7px;padding:20px;text-align:center;font-weight:700;border:var(--border);background:var(--bg3)}
+.leaseset .ekey,.leaseset .stype{margin-left:6px;padding-left:14px;background:var(--crypto) no-repeat left center/12px}
+.leaseset .expiry{margin-left:4px;padding-left:15px;background:var(--clock) no-repeat left center/12px}
+.leaseset .stype{background:var(--lock) no-repeat left center/12px}
+.leaseset .ekey b,.leaseset .stype b,.leaseset .expiry b,.leaseset .ekey .bullet,.leaseset .expiry .bullet,.leaseset .stype .bullet{display:none}
 
 /* Advanced lookup */
 .subheading{padding:10px;text-align:left;border:var(--border);background:var(--bg)}

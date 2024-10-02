@@ -1541,7 +1541,7 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 .leaseset,.netdbentry{margin-bottom:10px}
 .leaseset,#leasesetdebug,#leasesetsummary{font-size:9pt}
 .leaseset:last-child,.netdbentry:last-child{margin-bottom:5px}
-.leasesets_container{margin:10px 0;columns:580px 2;column-gap:4px}
+.leasesets_container{margin:10px 0 -1px;columns:580px 2;column-gap:4px}
 .leasesets_container table{break-inside:avoid;page-break-inside:avoid;-webkit-column-break-inside:avoid}
 .leasesets_container table:first-child{margin-top:0}
 .leaseset,.leaseset tr,.leaseset th,.leaseset td:not(.rif):not(.rih){border-color:#dfdfec}
@@ -1592,6 +1592,11 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 #leasesetsummary td:not(.rif):not(.rih):first-child{width:1%}
 #leasesetsummary td:not(.rif):not(.rih):last-child{text-align:left}
 #leasesetsummary td.infohelp{padding:15px 10px 15px 50px;white-space:normal}
+.leasesets_container #notinitialized{margin-bottom:2px;column-span:all}
+.leaseset .ekey,.leaseset .stype{margin-left:6px;padding-left:14px;background:var(--crypto) no-repeat left center/12px}
+.leaseset .expiry{margin-left:4px;padding-left:15px;background:var(--clock) no-repeat left center/12px}
+.leaseset .stype{background:var(--lock) no-repeat left center/12px}
+.leaseset .ekey b,.leaseset .stype b,.leaseset .expiry b,.leaseset .ekey .bullet,.leaseset .expiry .bullet,.leaseset .stype .bullet{display:none}
 
 /* highlight linked leaseset */
 .leaseset:target{border:1px solid #5a5}
@@ -2745,6 +2750,7 @@ h1[class],#wizardpage h1{padding:20px 15px 17px 55px;font-size:19pt;background-s
 .homelinkedit th:first-child,#sidebarconf th:first-child,#consolepass th:first-child{font-size:0}
 .log_debug,.log_info,.log_warn,.log_error,.log_crit,.log_omitted{margin:2px -3px -2px;min-width:40px;max-width:40px}
 .log_omitted{margin-right:1px}
+.leasesets_container{margin-bottom:7px}
 .leasesets_container a[href*=".i2p"]{font-size:9pt}
 .main,#news.news,h1,.sorry{margin-left:252px}
 .netdb_header img[src^="/flags"]{width:32px}
@@ -2793,6 +2799,7 @@ h4#updateplugins,#news p{font-size:10pt}
 #minigraphcontainer{margin-top:-43px;margin-left:1px;width:234px;height:38px;background-size:248px 40px}
 #minigraph{margin-top:-20px;width:234px;height:44px}
 #netdbcountrylist img{width:24px;height:auto}
+#netdb .leaseset:last-of-type{margin-bottom:2px}
 #peerprofiles.widescroll{padding-top:123px}
 #sb_advancedgeneral td::after,#sb_bandwidth td::after,#sb_general td::after,#sb_peersadvanced td::after,#sb_peers td::after,#sb_queue td::after,#sb_shortgeneral td::after,#sb_tunnels td::after{min-height:14px}
 #pluginconfig td:first-child label::before{height:20px}
@@ -2865,7 +2872,6 @@ body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_int
 }
 
 @media (min-width:1634px){
-.leasesets_container{margin-bottom:2px}
 th code{font-size:9pt}
 }
 
