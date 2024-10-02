@@ -65,9 +65,9 @@ class BuildExecutor implements Runnable {
         _context.statManager().createRateStat("tunnel.buildFailFirstHop", "OB tunnel build failure frequency (can't contact 1st hop)", "Tunnels", RATES);
         _context.statManager().createRateStat("tunnel.buildReplySlow", "Build reply late, but not too late", "Tunnels", RATES);
         _context.statManager().createRateStat("tunnel.concurrentBuildsLagged", "Concurrent build count before rejecting (job lag)", "Tunnels", RATES); // (period is lag)
-        _context.statManager().createRequiredRateStat("tunnel.buildClientExpire", "No response to our build request", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildClientReject", "Response time for rejection (ms)", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildClientSuccess", "Response time for success (ms)", "Tunnels", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.buildClientExpire", "No response to our build request", "Tunnels [Participating]", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.buildClientReject", "Response time for rejection (ms)", "Tunnels [Participating]", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.buildClientSuccess", "Response time for success (ms)", "Tunnels [Participating]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildConfigTime", "Time to build a tunnel config (ms)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildExploratoryExpire", "No response to our build request", "Tunnels [Exploratory]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildExploratoryReject", "Response time for rejection (ms)", "Tunnels [Exploratory]", RATES);
@@ -89,7 +89,7 @@ class BuildExecutor implements Runnable {
             String bwTier = String.valueOf(bwTiers.charAt(i));
             statMgr.createRateStat("tunnel.tierAgree" + bwTier, "Agreed joins from bandwidth tier " + bwTier, "Tunnels [Participating]", RATES);
             statMgr.createRateStat("tunnel.tierReject" + bwTier, "Rejected joins from bandwidth tier " + bwTier, "Tunnels [Participating]", RATES);
-            statMgr.createRateStat("tunnel.tierExpire" + bwTier, "Expired joins from bandwidth tier " + bwTier, "Tunnels", RATES);
+            statMgr.createRateStat("tunnel.tierExpire" + bwTier, "Expired joins from bandwidth tier " + bwTier, "Tunnels [Participating]", RATES);
         }
         // For caution, also create stats for unknown
         statMgr.createRateStat("tunnel.tierAgreeUnknown", "Agreed joins from unknown bandwidth tier", "Tunnels [Participating]", RATES);
@@ -134,7 +134,7 @@ class BuildExecutor implements Runnable {
                     allowed = throttle;
                     if (!isSlow && avg < 100) {allowed *= 2;}
                     if (allowed > MAX_CONCURRENT_BUILDS && _log.shouldInfo()) {
-                        _log.info("Throttling tunnel builds to " + allowed + " due to average build time of " + ((int) avg) + "ms");
+                        _log.info("Throttling concurrent tunnel builds to " + allowed + " -> Average build time is " + ((int) avg) + "ms");
                     }
                 }
             } else if (avg <= 0 && rs.getLifetimeAverageValue() > 0) {
@@ -213,7 +213,7 @@ class BuildExecutor implements Runnable {
                 if (cpuloadavg > 98 && cpuload > 98) {
                     _log.warn("High CPU load (" + cpuloadavg + "%) -> Slowing down new tunnel builds...");
                 } else {
-                    _log.warn("Job queue too lagged (" + lag + "ms) -> Slowing down new tunnel builds...");
+                    _log.warn("Job queue is lagged (" + lag + "ms) -> Slowing down new tunnel builds...");
                 }
             _context.statManager().addRateData("tunnel.concurrentBuildsLagged", concurrent, lag);
             // if we have a job heavily blocking our jobqueue, ssllloowww dddooowwwnnn
@@ -226,7 +226,7 @@ class BuildExecutor implements Runnable {
         return allowed;
     }
 
-    private static final int LOOP_TIME = SystemVersion.isSlow() ? 500 : 200;
+    private static final int LOOP_TIME = 200;
 
     public void run() {
         _isRunning = true;
@@ -239,7 +239,7 @@ class BuildExecutor implements Runnable {
                        "\nJava 8 compiler used with JRE version " + System.getProperty("java.version") +
                        " and no bootclasspath specified." +
                        "\nUpdate to Java 8 or contact packager." +
-                       "\nStop I2P now, it will not build tunnels.";
+                       "\nStop I2P+ now, it will not build tunnels!";
             _log.log(Log.CRIT, s, nsme);
             System.out.println(s);
             throw nsme;
@@ -274,7 +274,7 @@ class BuildExecutor implements Runnable {
                     synchronized (_currentlyBuilding) {
                         if (!_repoll) {
                             if (_log.shouldDebug())
-                                _log.debug("No tunnel to build with (allowed=" + allowed + ", wanted=" + wanted.size() + "), wait for a while");
+                                _log.debug("No tunnel to build with (Allowed / Requested: " + allowed + " / " + wanted.size() + ") -> Waiting for a moment...");
                             try {_currentlyBuilding.wait(500 +_context.random().nextInt(500));}
                             catch (InterruptedException ie) {}
                         }
@@ -314,7 +314,7 @@ class BuildExecutor implements Runnable {
                                 long pTime = System.currentTimeMillis() - bef;
                                 _context.statManager().addRateData("tunnel.buildConfigTime", pTime);
                                 if (_log.shouldDebug()) {
-                                    _log.debug("Configuring new tunnel [" + i + "] for " + pool + "\n* " + cfg);
+                                    _log.debug("Configuring new tunnel [" + i + "] for " + pool + " -> " + cfg);
                                 }
                                 buildTunnel(cfg);
                                 //realBuilt++;
@@ -335,14 +335,15 @@ class BuildExecutor implements Runnable {
                     } catch (InterruptedException ie) {} // someone wanted to build something
                 }
             } catch (RuntimeException e) {
-                    _log.log(Log.CRIT, "Catastrophic Tunnel Manager failure! -> " + e.getMessage());
-                    try { Thread.sleep(LOOP_TIME); } catch (InterruptedException ie) {}
+                _log.log(Log.CRIT, "Catastrophic Tunnel Manager failure! -> " + e.getMessage());
+                try {Thread.sleep(LOOP_TIME);}
+                catch (InterruptedException ie) {}
             }
             wanted.clear();
             pools.clear();
         }
 
-        if (_log.shouldWarn()) {_log.warn("Done building");}
+        if (_log.shouldInfo()) {_log.info("Done building");}
     }
 
     /**
@@ -402,10 +403,8 @@ class BuildExecutor implements Runnable {
     void buildTunnel(PooledTunnelCreatorConfig cfg) {
         long beforeBuild = System.currentTimeMillis();
         if (cfg.getLength() > 1) {
-            do {
-                // should we allow an ID of 0?
-                cfg.setReplyMessageId(_context.random().nextLong(I2NPMessage.MAX_ID_VALUE));
-            } while (addToBuilding(cfg)); // if a dup, go araound again
+            do {cfg.setReplyMessageId(_context.random().nextLong(I2NPMessage.MAX_ID_VALUE));} // should we allow an ID of 0?
+            while (addToBuilding(cfg)); // if a dup, go araound again
         }
         boolean ok = BuildRequestor.request(_context, cfg, this);
         if (!ok) {return;}
@@ -443,14 +442,14 @@ class BuildExecutor implements Runnable {
         // (via BuildRequestor.TunnelBuildFirstHopFailJob)
         long now = _context.clock().now();
         long buildTime = now + 10*60*1000 - cfg.getExpiration();
-        if (buildTime > 200) {
+        if (buildTime > 100) {
             synchronized (_currentlyBuilding) {_currentlyBuilding.notifyAll();}
-        } else if (cfg.getLength() > 1 && _log.shouldInfo()) {
-            _log.info("Build completed really fast (" + buildTime + "ms)" + cfg);
+        } else if (cfg.getLength() > 1 && _log.shouldInfo() && buildTime < 50) {
+            _log.info("Build completed really fast (" + buildTime + "ms) -> " + cfg);
         }
         long expireBefore = now + 10*60*1000 - BuildRequestor.REQUEST_TIMEOUT;
         if (cfg.getExpiration() <= expireBefore && _log.shouldDebug()) {
-            _log.debug("Build completed for expired tunnel " + cfg);
+            _log.debug("Build completed for expired tunnel -> " + cfg);
         }
         if (result == Result.SUCCESS) {
             _manager.buildComplete(cfg);
