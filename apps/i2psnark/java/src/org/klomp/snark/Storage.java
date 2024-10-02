@@ -1091,11 +1091,13 @@ public class Storage implements Closeable {
             }
             if (!resume) {_checkProgress.set((int) (pieces * lengthProgress / total_length));}
             else {
-                String msg = "File '" + tf.name + "' exists, but has wrong length (expected " +
-                             tf.length + " but found " + length + ") - repairing corruption...";
-                if (listener != null) {listener.addMessage(msg);}
-                if (!ctx.isRouterContext()) {System.out.println(" • " + msg);}
-                _log.error(msg);
+                if (tf.length != length) {
+                    String msg = "File '" + tf.name + "' exists, but has wrong length (expected " +
+                                 tf.length + " but found " + length + ") - repairing corruption...";
+                    if (listener != null) {listener.addMessage(msg);}
+                    if (!ctx.isRouterContext()) {System.out.println(" • " + msg);}
+                    _log.error(msg);
+                }
                 changed = true;
                 resume = true;
                 _checkProgress.set(0);
