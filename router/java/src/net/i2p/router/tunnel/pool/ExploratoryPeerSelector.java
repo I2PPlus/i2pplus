@@ -93,27 +93,27 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                 // If hidden and inbound, use connected peers to guarantee
                 // that the adjacent hop can connect to us.
                 if (log.shouldInfo())
-                    log.info("ExploratoryPeerSelector : SelectAllNonFailingPeers closest " + (isInbound ? "Inbound " : "Outbound ") + closestExclude);
+                    log.info("SelectAllNonFailingPeers closest " + (isInbound ? "Inbound " : "Outbound ") + closestExclude);
                 ctx.profileOrganizer().selectActiveNotFailingPeers(1, closestExclude, closest, ipRestriction, ipSet);
                 if (closest.isEmpty()) {
                     if (hiddenInbound) {
                         // No connected peers found, give up now
                         if (log.shouldWarn())
-                            log.warn("ExploratoryPeerSelector : SelectAllNonFailingPeers (hidden) closest Inbound -> No active peers found, returning null");
+                            log.warn("SelectAllNonFailingPeers (hidden) closest Inbound -> No active peers found, returning null");
                         return null;
                     }
                     // ANFP does not fall back to non-connected
                     if (log.shouldInfo())
-                        log.info("ExploratoryPeerSelector : SelectFastPeersclosest " + (isInbound ? "Inbound " : "Outbound ") + closestExclude);
+                        log.info("SelectFastPeersclosest " + (isInbound ? "Inbound " : "Outbound ") + closestExclude);
                     ctx.profileOrganizer().selectFastPeers(1, closestExclude, closest, ipRestriction, ipSet);
                 }
             } else if (exploreHighCap) {
                 if (log.shouldInfo())
-                    log.info("ExploratoryPeerSelector : SelectHighCapPeers closest " + (isInbound ? "Inbound " : "Outbound ") + closestExclude);
+                    log.info("SelectHighCapPeers closest " + (isInbound ? "Inbound " : "Outbound ") + closestExclude);
                 ctx.profileOrganizer().selectHighCapacityPeers(1, closestExclude, closest, ipRestriction, ipSet);
             } else {
                 if (log.shouldInfo())
-                    log.info("ExploratoryPeerSelector : SelectNonFailingPeers closest " + (isInbound ? "Inbound " : "Outbound ") + closestExclude);
+                    log.info("SelectNonFailingPeers closest " + (isInbound ? "Inbound " : "Outbound ") + closestExclude);
                 ctx.profileOrganizer().selectNotFailingPeers(1, closestExclude, closest, false, ipRestriction, ipSet);
             }
             if (!closest.isEmpty()) {
@@ -153,12 +153,12 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
             if (pickFurthest) {
                 ArraySet<Hash> furthest = new ArraySet<Hash>(1);
                 if (log.shouldInfo())
-                    log.info("ExploratoryPeerSelector : SelectAllNonFailingPeers OBEP exclude " + exclude);
+                    log.info("SelectAllNonFailingPeers OBEP exclude " + exclude);
                 ctx.profileOrganizer().selectActiveNotFailingPeers(1, exclude, furthest, ipRestriction, ipSet);
                 if (furthest.isEmpty()) {
                     // ANFP does not fall back to non-connected
                     if (log.shouldInfo())
-                        log.info("ExploratoryPeerSelector : SelectFastPeersOBEP exclude " + exclude);
+                        log.info("SelectFastPeersOBEP exclude " + exclude);
                     ctx.profileOrganizer().selectFastPeers(1, exclude, furthest, ipRestriction, ipSet);
                 }
                 if (!furthest.isEmpty()) {
@@ -175,7 +175,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
             Set<Hash> matches = new ArraySet<Hash>(length);
             if (exploreHighCap) {
                 if (log.shouldInfo())
-                    log.info("ExploratoryPeerSelector : SelectHighCapPeers " + length + (isInbound ? " Inbound " : " Outbound ") + exclude);
+                    log.info("SelectHighCapPeers " + length + (isInbound ? " Inbound " : " Outbound ") + exclude);
                 ctx.profileOrganizer().selectHighCapacityPeers(length, exclude, matches, ipRestriction, ipSet);
             } else {
                 // As of 0.9.23, we include a max of 2 not failing peers,
@@ -185,7 +185,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                     ctx.profileOrganizer().selectHighCapacityPeers(length - 2, exclude, matches);
                 // select will check both matches and exclude, no need to add matches to exclude here
                 if (log.shouldInfo())
-                    log.info("ExploratoryPeerSelector : SelectNonFailingPeers " + length + (isInbound ? " Inbound " : " Outbound ") + exclude);
+                    log.info("SelectNonFailingPeers " + length + (isInbound ? " Inbound " : " Outbound ") + exclude);
                 ctx.profileOrganizer().selectNotFailingPeers(length, exclude, matches, false, ipRestriction, ipSet);
             }
             matches.remove(ctx.routerHash());
