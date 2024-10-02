@@ -29,8 +29,7 @@ class ExpireJob extends JobImpl {
         // Also skew the inbound away from the outbound
         long expire = cfg.getExpiration();
         if (cfg.getTunnelPool().getSettings().isInbound()) {
-            // wait extra long for IB so we don't drop msgs that
-            // got all the way to us.
+            // wait extra long for IB so we don't drop msgs that got all the way to us.
             _dropAfter = expire + (2 * Router.CLOCK_FUDGE_FACTOR);
             expire -= IB_EARLY_EXPIRE + ctx.random().nextLong(IB_EARLY_EXPIRE);
         } else {
@@ -42,9 +41,7 @@ class ExpireJob extends JobImpl {
         getTiming().setStartAfter(expire);
     }
 
-    public String getName() {
-        return "Expire Local Tunnel";
-    }
+    public String getName() {return "Expire Local Tunnel";}
 
     public void runJob() {
         if (_leaseUpdated.compareAndSet(false,true)) {
@@ -56,10 +53,10 @@ class ExpireJob extends JobImpl {
             long timeToDrop = _dropAfter - getContext().clock().now();
             requeue(timeToDrop);
         } else {
-            // Second run
-            // already removed/refreshed, but now lets make it
+            // Second run - already removed/refreshed, but now let's make it
             // so we dont even honor the tunnel anymore
             getContext().tunnelDispatcher().remove(_cfg);
         }
     }
+
 }
