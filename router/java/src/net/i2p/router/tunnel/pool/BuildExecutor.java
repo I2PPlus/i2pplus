@@ -385,10 +385,10 @@ class BuildExecutor implements Runnable {
                 PooledTunnelCreatorConfig cfg = pool.configureNewTunnel();
                 if (cfg != null) {
                     if (_log.shouldDebug()) {
-                        _log.debug("Configuring short tunnel for " + pool + ": " + cfg);
+                        _log.debug("Configuring short tunnel for " + pool + " -> " + cfg);
                     }
                     buildTunnel(cfg);
-                    if (cfg.getLength() > 1) {allowed--;} // oops... shouldn't have done that, but hey, its not that bad...
+                    if (cfg.getLength() > 1) {allowed--;} // oops... shouldn't have done that, but hey, it's not that bad...
                     iter.remove();
                 } else {
                     if (_log.shouldDebug()) {_log.debug("Configured a NULL tunnel!");}
@@ -442,10 +442,10 @@ class BuildExecutor implements Runnable {
         // (via BuildRequestor.TunnelBuildFirstHopFailJob)
         long now = _context.clock().now();
         long buildTime = now + 10*60*1000 - cfg.getExpiration();
-        if (buildTime > 100) {
+        if (buildTime > 250) {
             synchronized (_currentlyBuilding) {_currentlyBuilding.notifyAll();}
         } else if (cfg.getLength() > 1 && _log.shouldInfo() && buildTime < 50) {
-            _log.info("Build completed really fast (" + buildTime + "ms) -> " + cfg);
+            _log.info("Build completed fast (" + buildTime + "ms) -> " + cfg);
         }
         long expireBefore = now + 10*60*1000 - BuildRequestor.REQUEST_TIMEOUT;
         if (cfg.getExpiration() <= expireBefore && _log.shouldDebug()) {
