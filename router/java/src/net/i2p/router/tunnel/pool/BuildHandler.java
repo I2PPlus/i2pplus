@@ -333,30 +333,26 @@ class BuildHandler implements Runnable {
 
                 int howBad = statuses[record];
 
-                    // Look up routerInfo
-                    RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
-                    String bwTier = "Unknown"; // Default and detect bandwidth tier
-                    if (ri != null) {
-                        bwTier = ri.getBandwidthTier(); // Returns "Unknown" if none recognized
-                        if (bwTier == "Unknown") {
-                            if (_log.shouldWarn()) {
-                                _log.warn("Banning [" + peer.toBase64().substring(0,6) + "] for 4h -> No Bandwidth Tier in RouterInfo");
-                            }
-                            String reason = " <b>➜</b> No Bandwidth Tier in RouterInfo";
-                            _context.commSystem().mayDisconnect(peer);
-                            _context.banlist().banlistRouter(peer, reason, null, null, 4*60*60*1000);
+                RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer); // Look up routerInfo
+                String bwTier = "Unknown"; // Default and detect bandwidth tier
+                if (ri != null) {
+                    bwTier = ri.getBandwidthTier(); // Returns "Unknown" if none recognized
+                    if (bwTier == "Unknown") {
+                        if (_log.shouldWarn()) {
+                            _log.warn("Banning [" + peer.toBase64().substring(0,6) + "] for 4h -> No Bandwidth Tier in RouterInfo");
                         }
+                        String reason = " <b>➜</b> No Bandwidth Tier in RouterInfo";
+                        _context.commSystem().mayDisconnect(peer);
+                        _context.banlist().banlistRouter(peer, reason, null, null, 4*60*60*1000);
                     }
+                }
 
+                if (howBad == 0) {
                     // Record that a peer of the given tier agreed or rejected
-                    if (howBad == 0) {_context.statManager().addRateData("tunnel.tierAgree" + bwTier, 1);}
-                    else {_context.statManager().addRateData("tunnel.tierReject" + bwTier, 1);}
-                    if (_log.shouldInfo()) {
-                        _log.info("Received reply from [" + peer.toBase64().substring(0,6) + "] for [MsgID " + msg.getUniqueId() + "] with status: " + howBad);
-                    }
-
-                if (howBad == 0) {_context.profileManager().tunnelJoined(peer, rtt);} // w3wt
-                else {
+                    _context.statManager().addRateData("tunnel.tierAgree" + bwTier, 1);
+                    _context.profileManager().tunnelJoined(peer, rtt);
+                } else {
+                    _context.statManager().addRateData("tunnel.tierReject" + bwTier, 1);
                     allAgree = false;
                     switch (howBad) {
                         case TunnelHistory.TUNNEL_REJECT_BANDWIDTH:
@@ -375,6 +371,11 @@ class BuildHandler implements Runnable {
                     // penalize peer based on their reported error level
                     _context.profileManager().tunnelRejected(peer, rtt, howBad);
                     _context.messageHistory().tunnelParticipantRejected(peer, "peer rejected after " + rtt + " with " + howBad + ": " + cfg.toString());
+                }
+
+                if (_log.shouldInfo()) {
+                    _log.info("Received reply from [" + peer.toBase64().substring(0,6) + "] for [MsgID " + msg.getUniqueId() +
+                              "] -> Request " + (howBad == 0 ? "accepted" : "rejected" + " (Status: " + howBad + ")"));
                 }
             }
 
@@ -534,7 +535,7 @@ class BuildHandler implements Runnable {
             int current;
             boolean highLoad = SystemVersion.getCPULoad() > 80;
             long maxQueueLag = _context.jobQueue().getMaxLag();
-            boolean isLagged = SystemVersion.isSlow() ? maxQueueLag > 500 : maxQueueLag > 200;
+            boolean isLagged = SystemVersion.isSlow() ? maxQueueLag > 300 : maxQueueLag > 150;
             // leaky counter, since it isn't reliable
             if (_context.random().nextInt(16) > 0) {current = _currentLookups.incrementAndGet();}
             else {current = 1;}
@@ -554,10 +555,10 @@ class BuildHandler implements Runnable {
                         _log.info("Dropping next hop lookup -> High job queue lag (Max: " + maxQueueLag + "ms)" +
                                   "\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]" + req);
                     } else if (highLoad) {
-                        _log.info("Dropping next hop lookup -> High CPU Load" +
+                        _log.info("Dropping next hop lookup -> High CPU Load (" + SystemVersion.getCPULoad() + "%)"
                                   "\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]" + req);
                     } else {
-                        _log.info("Dropping next hop lookup -> Limit: " + limit + " concurrent / " + PERCENT_LOOKUP_LIMIT + "%" +
+                        _log.info("Dropping next hop lookup -> Limit: " + limit + " / " + PERCENT_LOOKUP_LIMIT + "%" +
                                   "\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]" + req);
                     }
                 }
