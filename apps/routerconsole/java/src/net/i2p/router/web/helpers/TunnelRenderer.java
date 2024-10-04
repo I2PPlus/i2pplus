@@ -292,13 +292,11 @@ class TunnelRenderer {
                 int msgs = cfg.getProcessedMessagesCount();
                 if (from != null) {
                     counts.increment(from);
-                    if (msgs > 0)
-                        bws.add(from, msgs);
+                    if (msgs > 0) {bws.add(from, msgs);}
                 }
                 if (to != null) {
                     counts.increment(to);
-                    if (msgs > 0)
-                        bws.add(to, msgs);
+                    if (msgs > 0) {bws.add(to, msgs);}
                 }
             }
 

@@ -19,14 +19,10 @@ import net.i2p.router.web.HelperBase;
 public class WizardHelper extends HelperBase {
 
     public static final String PROP_COMPLETE = "routerconsole.welcomeWizardComplete";
-    // scale bw test results by this for limiter settings
-    public static final float BW_SCALE = 0.75f;
-    // KBps
-    private static final float MIN_DOWN_BW = 32.0f;
+    public static final float BW_SCALE = 0.75f; // scale bw test results by this for limiter settings
+    private static final float MIN_DOWN_BW = 32.0f; // KBps
     private static final float MIN_UP_BW = 12.0f;
-
-    // session scope, but it's an underlying singleton
-    private MLabRunner _mlab;
+    private MLabRunner _mlab; // session scope, but it's an underlying singleton
 
     // session scope
     private TestListener _listener;
@@ -43,21 +39,10 @@ public class WizardHelper extends HelperBase {
         }
     }
 
-    public void complete() {
-        _context.router().saveConfig(PROP_COMPLETE, "true");
-    }
-
-    public synchronized boolean isNDTComplete() {
-        return _listener != null && _listener.isComplete();
-    }
-
-    public synchronized boolean isNDTRunning() {
-        return _listener != null && !_listener.isComplete();
-    }
-
-    public synchronized boolean isNDTSuccessful() {
-        return isNDTComplete() && getUpBandwidth() > 0 && getDownBandwidth() > 0;
-    }
+    public void complete() {_context.router().saveConfig(PROP_COMPLETE, "true");}
+    public synchronized boolean isNDTComplete() {return _listener != null && _listener.isComplete();}
+    public synchronized boolean isNDTRunning() {return _listener != null && !_listener.isComplete();}
+    public synchronized boolean isNDTSuccessful() {return isNDTComplete() && getUpBandwidth() > 0 && getDownBandwidth() > 0;}
 
     /**
      * @return HTML-escaped status string or ""
@@ -66,8 +51,7 @@ public class WizardHelper extends HelperBase {
         String rv = "";
         if (_runner != null) {
             String s = _runner.getStatus();
-            if (s != null)
-                rv = DataHelper.escapeHTML(s);
+            if (s != null) {rv = DataHelper.escapeHTML(s);}
         }
         return rv;
     }
@@ -79,8 +63,7 @@ public class WizardHelper extends HelperBase {
         String rv = "";
         if (_listener != null) {
             String s = _listener.getSummary();
-            if (s != null)
-                rv = DataHelper.escapeHTML(s);
+            if (s != null) {rv = DataHelper.escapeHTML(s);}
         }
         return rv;
     }
@@ -92,8 +75,7 @@ public class WizardHelper extends HelperBase {
         String rv = "";
         if (_listener != null) {
             String s = _listener.getDetail();
-            if (s != null)
-                rv = DataHelper.escapeHTML(s);
+            if (s != null) {rv = DataHelper.escapeHTML(s);}
         }
         return rv;
     }
@@ -101,16 +83,12 @@ public class WizardHelper extends HelperBase {
     /**
      * @return bytes per second or 0
      */
-    public long getUpBandwidth() {
-        return getLongResult("up");
-    }
+    public long getUpBandwidth() {return getLongResult("up");}
 
     /**
      * @return bytes per second or 0
      */
-    public long getDownBandwidth() {
-        return getLongResult("down");
-    }
+    public long getDownBandwidth() {return getLongResult("down");}
 
     /**
      * @return HTML-escaped location or ""
@@ -118,14 +96,11 @@ public class WizardHelper extends HelperBase {
     public String getServerLocation() {
         StringBuilder buf = new StringBuilder(64);
         String s = getStringResult("server_city");
-        if (s != null)
-            buf.append(s).append(' ');
+        if (s != null) {buf.append(s).append(' ');}
         s = getStringResult("server_country");
-        if (s != null)
-            buf.append(s).append(' ');
+        if (s != null) {buf.append(s).append(' ');}
         s = getStringResult("server_host");
-        if (s != null)
-            buf.append(s);
+        if (s != null) {buf.append(s);}
         return DataHelper.escapeHTML(buf.toString());
     }
 
@@ -134,8 +109,7 @@ public class WizardHelper extends HelperBase {
             Map<String, Object> results = _listener.getResults();
             if (results != null) {
                 Long v = (Long) results.get(key);
-                if (v != null)
-                    return v.longValue();
+                if (v != null) {return v.longValue();}
             }
         }
         return 0;
@@ -144,9 +118,7 @@ public class WizardHelper extends HelperBase {
     private synchronized String getStringResult(String key) {
         if (_listener != null) {
             Map<String, Object> results = _listener.getResults();
-            if (results != null) {
-                return (String) results.get(key);
-            }
+            if (results != null) {return (String) results.get(key);}
         }
         return null;
     }
@@ -160,11 +132,8 @@ public class WizardHelper extends HelperBase {
     public String getInboundBurstRate() {
         float bw;
         long result = getDownBandwidth();
-        if (result > 0) {
-            bw = Math.max(MIN_DOWN_BW, BW_SCALE * result / 1000f);
-        } else {
-            bw = _context.bandwidthLimiter().getInboundBurstKBytesPerSecond() * 1.024f;
-        }
+        if (result > 0) {bw = Math.max(MIN_DOWN_BW, BW_SCALE * result / 1000f);}
+        else {bw = _context.bandwidthLimiter().getInboundBurstKBytesPerSecond() * 1.024f;}
         return Integer.toString(Math.round(bw));
     }
 
@@ -177,11 +146,8 @@ public class WizardHelper extends HelperBase {
     public String getOutboundBurstRate() {
         float bw;
         long result = getUpBandwidth();
-        if (result > 0) {
-            bw = Math.max(MIN_UP_BW, BW_SCALE * result / 1000f);
-        } else {
-            bw = _context.bandwidthLimiter().getOutboundBurstKBytesPerSecond() * 1.024f;
-        }
+        if (result > 0) {bw = Math.max(MIN_UP_BW, BW_SCALE * result / 1000f);}
+        else {bw = _context.bandwidthLimiter().getOutboundBurstKBytesPerSecond() * 1.024f;}
         return Integer.toString(Math.round(bw));
     }
 
@@ -205,9 +171,7 @@ public class WizardHelper extends HelperBase {
      * Copied from ConfigNetHelper.
      * @return decimal
      */
-    public String getShareRateBits() {
-        return kbytesToBits(getShareBandwidth());
-    }
+    public String getShareRateBits() {return kbytesToBits(getShareBandwidth());}
 
     /**
      * Copied from ConfigNetHelper.
@@ -228,19 +192,12 @@ public class WizardHelper extends HelperBase {
         float irateKBps;
         float orateKBps;
         long result = getDownBandwidth();
-        if (result > 0) {
-            irateKBps = Math.max(MIN_DOWN_BW, BW_SCALE * result / 1024f);
-        } else {
-            irateKBps = _context.bandwidthLimiter().getInboundKBytesPerSecond();
-        }
+        if (result > 0) {irateKBps = Math.max(MIN_DOWN_BW, BW_SCALE * result / 1024f);}
+        else {irateKBps = _context.bandwidthLimiter().getInboundKBytesPerSecond();}
         result = getUpBandwidth();
-        if (result > 0) {
-            orateKBps = Math.max(MIN_UP_BW, BW_SCALE * result / 1024f);
-        } else {
-            orateKBps = _context.bandwidthLimiter().getOutboundKBytesPerSecond();
-        }
-        if (irateKBps < 0 || orateKBps < 0)
-            return ConfigNetHelper.DEFAULT_SHARE_KBPS;
+        if (result > 0) {orateKBps = Math.max(MIN_UP_BW, BW_SCALE * result / 1024f);}
+        else {orateKBps = _context.bandwidthLimiter().getOutboundKBytesPerSecond();}
+        if (irateKBps < 0 || orateKBps < 0) {return ConfigNetHelper.DEFAULT_SHARE_KBPS;}
         double pct = _context.router().getSharePercentage();
         return (int) (pct * Math.min(irateKBps, orateKBps));
     }
@@ -260,8 +217,7 @@ public class WizardHelper extends HelperBase {
             Map<String, Object> map = new HashMap<String, Object>(2);
             lsnr.complete(map);
         }
-        // replace the old listener
-        _listener = lsnr;
+        _listener = lsnr; // replace the old listener
         return rv;
     }
 
@@ -270,9 +226,7 @@ public class WizardHelper extends HelperBase {
      *  @return success
      */
     synchronized boolean cancelNDT() {
-        if (!_mlab.isRunning()) {
-            return false;
-        }
+        if (!_mlab.isRunning()) {return false;}
         boolean rv = _runner != null;
         if (rv) {
             _runner.cancel();
@@ -285,33 +239,13 @@ public class WizardHelper extends HelperBase {
     private static class TestListener implements MLabRunner.ToolListener {
         private String _summary, _detail;
         private Map<String, Object> _results;
-
-        public synchronized void reportSummary(String str) {
-            _summary = str;
-        }
-
-        public synchronized void reportDetail(String str) {
-            _detail = str;
-        }
-
-        public synchronized void complete(Map<String, Object> results) {
-            _results = results;
-        }
-
-        public synchronized boolean isComplete() {
-            return _results != null;
-        }
-
-        public synchronized String getSummary() {
-            return _summary;
-        }
-
-        public synchronized String getDetail() {
-            return _detail;
-        }
-
-        public synchronized Map<String, Object> getResults() {
-            return _results;
-        }
+        public synchronized void reportSummary(String str) {_summary = str;}
+        public synchronized void reportDetail(String str) {_detail = str;}
+        public synchronized void complete(Map<String, Object> results) {_results = results;}
+        public synchronized boolean isComplete() {return _results != null;}
+        public synchronized String getSummary() {return _summary;}
+        public synchronized String getDetail() {return _detail;}
+        public synchronized Map<String, Object> getResults() {return _results;}
     }
+
 }

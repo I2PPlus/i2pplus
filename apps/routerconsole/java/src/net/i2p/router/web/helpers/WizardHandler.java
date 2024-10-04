@@ -22,21 +22,19 @@ public class WizardHandler extends FormHandler {
     /**
      *  Bind the helper (scope session) to this handler (scope request)
      */
-    public void setWizardHelper(WizardHelper helper) {
-        _helper = helper;
-    }
+    public void setWizardHelper(WizardHelper helper) {_helper = helper;}
 
     @Override
     protected void processForm() {
         if (getJettyString("cancelbw") != null) {
             cancelNDT();
             for (int i = 0; i < 20 && !_helper.isNDTComplete(); i++) {
-                try { Thread.sleep(100); } catch (InterruptedException ie) {}
+                try {Thread.sleep(100);}
+                catch (InterruptedException ie) {}
             }
             return;
         }
-        if (getJettyString("next") == null)
-            return;
+        if (getJettyString("next") == null) {return;}
         if (_action.equals("blah")) {
             // note that the page is the page we are on now,
             // which is the page after the one the settings were on.
@@ -45,37 +43,25 @@ public class WizardHandler extends FormHandler {
                 // Saved in CSSHelper, assume success
                 addFormNoticeNoEscape(_t("Console language saved."));
             }
-            if ("3".equals(page)) {
-                startNDT();
-            } else if ("4".equals(page)) {
+            if ("3".equals(page)) {startNDT();}
+            else if ("4".equals(page)) {
                 synchronized (_helper) {
-                    if (_helper.isNDTSuccessful()) {
-                        addFormNotice(_t("Bandwidth test completed successfully"));
-                    } else if (_helper.isNDTComplete()) {
-                        addFormError(_t("Bandwidth test failed"));
-                    } else if (_helper.isNDTRunning()) {
-                        addFormError(_t("Bandwidth test did not complete"));
-                    } else {
-                        // didn't run at all?
-                        addFormError(_t("Bandwidth test did not complete"));
-                    }
+                    if (_helper.isNDTSuccessful()) {addFormNotice(_t("Bandwidth test completed successfully"));}
+                    else if (_helper.isNDTComplete()) {addFormError(_t("Bandwidth test failed"));}
+                    else if (_helper.isNDTRunning()) {addFormError(_t("Bandwidth test did not complete"));}
+                    else {addFormError(_t("Bandwidth test did not complete"));} // didn't run at all?
                 }
             } else if ("5".equals(page)) {
                 Map<String, String> changes = new HashMap<String, String>();
                 boolean updated = updateRates(changes);
                 if (updated) {
                     boolean saved = _context.router().saveConfig(changes, null);
-                    // this has to be after the save
-                    _context.bandwidthLimiter().reinitialize();
-                    if (saved)
-                        addFormNotice(_t("Configuration saved successfully"));
-                    else
-                        addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"));
+                    _context.bandwidthLimiter().reinitialize(); // this has to be after the save
+                    if (saved) {addFormNotice(_t("Configuration saved successfully"));}
+                    else {addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"));}
                 }
             }
-        } else {
-            addFormError(_t("Unsupported") + ": " + _action);
-        }
+        } else {addFormError(_t("Unsupported") + ": " + _action);}
     }
 
     /**
@@ -108,9 +94,7 @@ public class WizardHandler extends FormHandler {
                 rate -= Math.min(rate * ConfigNetHandler.DEF_BURST_PCT / 100, 50);
                 changes.put(FIFOBandwidthRefiller.PROP_INBOUND_BANDWIDTH, Integer.toString(Math.round(rate)));
             bwUpdated = true;
-            } catch (NumberFormatException nfe) {
-                addFormError(_t("Invalid bandwidth"));
-            }
+            } catch (NumberFormatException nfe) {addFormError(_t("Invalid bandwidth"));}
         }
         if ((outboundRate != null) && (outboundRate.length() > 0) &&
             !outboundRate.equals(_context.getProperty(FIFOBandwidthRefiller.PROP_OUTBOUND_BURST_BANDWIDTH,
@@ -123,9 +107,7 @@ public class WizardHandler extends FormHandler {
                 rate -= Math.min(rate * ConfigNetHandler.DEF_BURST_PCT / 100, 50);
                 changes.put(FIFOBandwidthRefiller.PROP_OUTBOUND_BANDWIDTH, Integer.toString(Math.round(rate)));
             bwUpdated = true;
-            } catch (NumberFormatException nfe) {
-                addFormError(_t("Invalid bandwidth"));
-            }
+            } catch (NumberFormatException nfe) {addFormError(_t("Invalid bandwidth"));}
         }
         if (bwUpdated) {
             addFormNotice(_t("Updated bandwidth limits"));
@@ -136,23 +118,16 @@ public class WizardHandler extends FormHandler {
 
     /** start the test */
     private void startNDT() {
-        if (_helper == null) {
-            addFormError("Bad state for test");
-        } else if (_helper.startNDT()) {
-            addFormNotice(_t("Bandwidth test started"));
-        } else {
-            addFormError(_t("Bandwidth test is already running"));
-        }
+        if (_helper == null) {addFormError(_t("Bad state for test"));}
+        else if (_helper.startNDT()) {addFormNotice(_t("Bandwidth test started"));}
+        else {addFormError(_t("Bandwidth test is already running"));}
     }
 
     /** cancel the test */
     private void cancelNDT() {
-        if (_helper == null) {
-            addFormError("Bad state for test");
-        } else if (_helper.cancelNDT()) {
-            addFormError(_t("Bandwidth test cancelled"));
-        } else {
-            addFormError(_t("Bandwidth test was not running"));
-        }
+        if (_helper == null) {addFormError(_t("Bad state for test"));}
+        else if (_helper.cancelNDT()) {addFormError(_t("Bandwidth test cancelled"));}
+        else {addFormError(_t("Bandwidth test was not running"));}
     }
+
 }
