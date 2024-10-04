@@ -1298,7 +1298,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #netdb .confignav{position:relative;z-index:9999}
 #netdb .netdbentry,#netdb .leaseset{margin-bottom:10px;width:100%;box-shadow:0 0 0 1px #000,0 0 0 3px #252}
 #netdb .netdbentry{margin:2px auto 14px;width:calc(100% - 6px)}
-#netdb #debugmode,#netdb #leasesetdebug{box-shadow:0 0 0 1px #000,0 0 0 3px #252}
+#netdb .leasesets_container #debugmode,#netdb #leasesetdebug{box-shadow:0 0 0 1px #000,0 0 0 3px #252}
 #netdb #leasesetdebug{margin-bottom:12px}
 #netdb .confignav+.netdbentry{margin-top:15px}
 #netdb .netdb_transport{margin-right:4px;width:48px;display:inline-block;text-align:center;color:var(--ink)}
