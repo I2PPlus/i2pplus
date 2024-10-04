@@ -68,10 +68,8 @@ public class JobQueue {
     static {
         long maxMemory = SystemVersion.getMaxMemory();
         int cores = SystemVersion.getCores();
-        if (cores == 1 || SystemVersion.isSlow()) {RUNNERS = 6;}
-        else if (cores <= 4) {RUNNERS = Math.max(cores*3, 10);}
-        else if (maxMemory >= 512*1024*1024L) {RUNNERS = Math.max(cores*2, 12);}
-        else {RUNNERS = Math.max(cores, 8);}
+        if (cores == 1 || SystemVersion.isSlow()) {RUNNERS = 10;}
+        else {RUNNERS = Math.max(cores*4, 16);}
     }
 
     /** default max # job queue runners operating */
