@@ -1264,7 +1264,7 @@ td.optionsave{padding:7px 5px;text-align:right;border-top:var(--border_inner);ba
 #netdbcongestion b{margin:0;min-width:unset}
 #netdbcountrylist a,#netdbcountrylist img{display:inline-block;vertical-align:middle}
 #netdbcountrylist img{margin:0 8px;padding:1px;width:24px;height:auto;text-align:right;font-size:70%;border-radius:4px;border:var(--border)}
-#netdbcountrylist .countFF{text-align:center}
+#netdbcountrylist .countFF,#netdbcountrylist .countX{text-align:center}
 .netdb_header img[src^="/flags"]{margin:1px 1px 0 4px;width:28px;height:auto;vertical-align:top;border:var(--border_badge);border-radius:3px}
 table[cellspacing="30"]>tbody>tr>th[colspan="3"]{padding:10px;word-spacing:.1em;letter-spacing:.08em;text-transform:uppercase;font-size:11pt}
 
@@ -2648,6 +2648,7 @@ td.optionsave,#config_update td:first-child{width:30%;white-space:normal}
 #floodfills td:last-child{border-right:var(--border_inner)}
 #help h3,#faq h3{font-size:10pt}
 #jardump th:nth-child(3),#jardump th:nth-child(4),#jardump th:nth-child(5),#jardump th:nth-child(6),#jardump td:nth-child(3),#jardump td:nth-child(4),#jardump td:nth-child(5),#jardump td:nth-child(6){display:none}
+#netdb #netdboverview th,#netdb #netdboverview tr,#netdb #netdboverview td{white-space:nowrap;font-size:95%}
 #netconfig label,#externali2cp td label,#externali2cp .optionlist .nowrap,#reseedconfig .nowrap{width:calc(100% - 10px)}
 #plugininstall input[type=text]{min-width:200px}
 #portfaq td:nth-child(2){white-space:normal}

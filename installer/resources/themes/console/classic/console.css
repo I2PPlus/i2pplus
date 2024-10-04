@@ -1399,7 +1399,7 @@ img.unknownflag{opacity:.8}
 #netdbversions,#netdbcountrylist,#netdbtiers{margin-top:-7px}
 #netdbcountrylist{margin-bottom:-7px}
 #netdb #netdbcountrylist td[colspan="2"]{text-align:center}
-#netdbcountrylist .countFF{width:15%;text-align:center}
+#netdbcountrylist .countFF,#netdbcountrylist .countX{width:15%;text-align:center}
 #netdbcongestion td:first-child,#netdbcountrylist td:first-child,#netdbtransports td:first-child,#netdbtiers td:first-child,#netdbversions td:first-child{border-left:0}
 #netdbcongestion td:last-child,#netdbcountrylist td:last-child,#netdbtransports td:last-child,#netdbtiers td:last-child,#netdbversions td:last-child{border-right:0}
 #netdbtransports{position:relative}
@@ -2291,6 +2291,7 @@ table[id*="connections"] td,#floodfills td:not(.rif):not(.rih):not(.rbw),#jobsta
 #netdb .leasesets_container .confignav{margin:-6px -16px 5px!important}
 #netdblookup{margin-bottom:-11px}
 #netdb #netdboverview,#netdblookup{margin:11px 0 0}
+#netdb #netdboverview th,#netdb #netdboverview tr,#netdb #netdboverview td{white-space:nowrap;font-size:95%}
 #ntcpconnections{margin-bottom:0}
 #ntcpconnections th,#udpconnections th{font-size:8pt}
 #peers .confignav{margin:-6px -6px 5px -6px;padding-top:0;padding-bottom:0}

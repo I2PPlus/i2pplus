@@ -1505,7 +1505,7 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 #netdbcongestion a:hover b,#netdbtiers a:hover b{color:var(--hover)}
 #netdbversions th:first-child,#netdbversions td:first-child{text-align:center}
 #netdbcountrylist img{margin-right:8px;padding:1px;vertical-align:middle;text-align:right;border:1px solid #d0d0db;border-radius:3px}
-#netdb #netdbcountrylist td[colspan="2"],#netdbcountrylist .countFF{text-align:center}
+#netdb #netdbcountrylist td[colspan="2"],#netdbcountrylist .countFF,#netdbcountrylist .countX{text-align:center}
 #netdb th span,#netdb th img,#netdb th code,#netdb th a,#netdb th b{vertical-align:middle}
 #netdb code{font-weight:400}
 #netdb .netdbentry th{padding-top:2px;padding-bottom:2px}
@@ -2614,6 +2614,7 @@ td.spacer,th.spacer{display:none}
 #jobs #jobstats th:nth-child(n+2){text-align:center}
 #jobs #jobstats tr:not(:hover) td:nth-child(even){background:rgba(220,220,255,.2)}
 #netconfig label,#externali2cp td label,#externali2cp .optionlist .nowrap,#reseedconfig .nowrap{width:calc(100% - 10px)}
+#netdb #netdboverview th,#netdb #netdboverview tr,#netdb #netdboverview td{white-space:nowrap;font-size:95%}
 #peers .duptx,#peers .duprx,#peers .skew{display:none}
 #portfaq td:nth-child(2){white-space:normal}
 #profilelist .fast,#profilelist .highcap.integrated,#profilelist .standard.integrated{background-position:calc(50% - 8px) center,calc(50% + 8px) center;background-size:14px}

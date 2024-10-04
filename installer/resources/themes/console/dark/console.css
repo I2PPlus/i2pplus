@@ -1109,7 +1109,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #netdbcountrylist img{margin:0 10px 0 5px;padding:0;width:24px;height:18px;box-shadow:var(--outline),0 0 0 2px var(--a);background:#000}
 #netdbcountrylist a:hover img{box-shadow:var(--outline),0 0 0 2px var(--hover);transform:scale(1.1)}
 #netdb #netdbcountrylist td[colspan="2"]{text-align:center}
-#netdbcountrylist .countFF{text-align:center}
+#netdbcountrylist .countFF,#netdbcountrylist .countX{text-align:center}
 #netdbcongestion a,#netdbtiers a{margin:0 8px 0 0;padding:0 4px;min-width:20px}
 #netdbcongestion a.isD{background:var(--isD),var(--badge)}
 #netdbcongestion a.isE{background:var(--isE),var(--badge)}
@@ -2718,6 +2718,7 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 }
 
 @media (max-width:1240px){
+#netdb #netdboverview th,#netdb #netdboverview tr,#netdb #netdboverview td{white-space:nowrap;font-size:95%}
 #peers .confignav,#tunnels .confignav{margin:-6px -6px 5px}
 #peers #udpcon{margin-top:-5px}
 #peers .confignav+#udpcon{margin-top:0}

@@ -401,6 +401,23 @@ class NetDbRenderer {
     }
 
     /**
+     *  Count all X tier routers in specified country code
+     *  @since 0.9.64 split out from above
+     */
+    private int countXTierInCountry(Set<RouterInfo> routers, String countryCode) {
+        int count = 0;
+        for (RouterInfo ri : routers) {
+            String caps = ri.getCapabilities();
+            Hash key = ri.getIdentity().getHash();
+            if (_context.commSystem().getCountry(key).equalsIgnoreCase(countryCode.trim()) &&
+                caps.indexOf("X") >=0) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /**
      *  Remove all non-matching from routers
      *  @since 0.9.64 split out from above
      */
@@ -1168,8 +1185,12 @@ class NetDbRenderer {
             // country table
             List<String> countryList = new ArrayList<String>(countries.objects());
             buf.append("<table id=netdbcountrylist data-sortable>\n")
-               .append("<thead>\n<tr><th>").append(_t("Country")).append("</th><th class=countFF>").append(_t("Floodfills")).append("</th>")
-               .append("<th data-sort-default>").append(_t("Total")).append("</th></tr>\n</thead>\n");
+               .append("<thead>\n<tr>")
+               .append("<th>").append(_t("Country")).append("</th>")
+               .append("<th class=countX>").append(_t("X Tier")).append("</th>")
+               .append("<th class=countFF>").append(_t("Floodfills")).append("</th>")
+               .append("<th data-sort-default>").append(_t("Total")).append("</th>")
+               .append("</tr>\n</thead>\n");
             if (!countryList.isEmpty()) {
                 Collections.sort(countryList, new CountryComparator());
                 buf.append("<tbody id=cclist>\n");
@@ -1178,8 +1199,10 @@ class NetDbRenderer {
                     buf.append("<tr><td><a href=\"/netdb?c=").append(country).append("\">")
                        .append("<img width=20 height=15 alt=\"").append(country.toUpperCase(Locale.US)).append("\"")
                        .append(" src=\"/flags.jsp?c=").append(country).append("\">")
-                       .append(getTranslatedCountry(country).replace("xx", _t("Unknown")))
-                       .append("</a></td><td class=countFF>").append("<a href=\"/netdb?caps=f&amp;cc=").append(country).append("\">")
+                       .append(getTranslatedCountry(country).replace("xx", _t("Unknown"))).append("</a></td>")
+                       .append("<td class=countX>").append("<a href=\"/netdb?caps=X&amp;cc=").append(country).append("\">")
+                       .append(countXTierInCountry(routers, country)).append("</a></td>")
+                       .append("<td class=countFF>").append("<a href=\"/netdb?caps=f&amp;cc=").append(country).append("\">")
                        .append(countFloodfillsInCountry(routers, country)).append("</a></td>")
                        .append("<td>").append(num).append("</td></tr>\n");
                 }
