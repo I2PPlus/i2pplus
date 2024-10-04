@@ -101,13 +101,15 @@ public class FIFOBandwidthRefiller implements Runnable {
      * the bandwidth limiter will get an update this often (ms)
      */
 //    private static final long REPLENISH_FREQUENCY = 40;
-    private static final long REPLENISH_FREQUENCY = SystemVersion.isSlow() || SystemVersion.getCPULoad() > 80 ? 100 : 20;
+    private static final long REPLENISH_FREQUENCY = SystemVersion.isSlow() || SystemVersion.getCPULoadAvg() > 80 ? 100 : 20;
 
     FIFOBandwidthRefiller(RouterContext context, FIFOBandwidthLimiter limiter) {
         _limiter = limiter;
         _context = context;
         _log = context.logManager().getLog(FIFOBandwidthRefiller.class);
-        _context.statManager().createRateStat("bwLimiter.participatingBandwidthQueue", "Participating tunnel queue (bytes)", "BandwidthLimiter", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l });
+        _context.statManager().createRateStat("bwLimiter.participatingBandwidthQueue",
+                                              "Participating tunnel queue (bytes)", "BandwidthLimiter",
+                                              new long[] { 60*1000l, 5*60*1000l, 60*60*1000l });
         reinitialize();
         _isRunning = true;
     }

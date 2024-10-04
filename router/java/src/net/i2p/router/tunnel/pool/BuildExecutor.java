@@ -207,14 +207,11 @@ class BuildExecutor implements Runnable {
 
         long lag = _context.jobQueue().getMaxLag();
         int cpuloadavg = SystemVersion.getCPULoadAvg();
-        int cpuload = SystemVersion.getCPULoad();
-        if (_context.router().getUptime() > 5*60*1000 && (lag > 2000 || (cpuloadavg > 98 && cpuload > 98))) {
-            if (_log.shouldWarn())
-                if (cpuloadavg > 98 && cpuload > 98) {
-                    _log.warn("High CPU load (" + cpuloadavg + "%) -> Slowing down new tunnel builds...");
-                } else {
-                    _log.warn("Job queue is lagged (" + lag + "ms) -> Slowing down new tunnel builds...");
-                }
+        boolean highload = lag > 1000 && cpuloadavg > 98;
+        if (_context.router().getUptime() > 5*60*1000 && highload) {
+            if (_log.shouldWarn() && highload) {
+                _log.warn("System is under load -> Slowing down new tunnel builds...");
+            }
             _context.statManager().addRateData("tunnel.concurrentBuildsLagged", concurrent, lag);
             // if we have a job heavily blocking our jobqueue, ssllloowww dddooowwwnnn
             return SystemVersion.isSlow() ? 1 : 3;
@@ -324,11 +321,14 @@ class BuildExecutor implements Runnable {
                         }
                     }
 
+                    long lag = _context.jobQueue().getMaxLag();
+                    int cpuloadavg = SystemVersion.getCPULoadAvg();
+                    boolean highload = lag > 1000 && cpuloadavg > 98;
                     // wait whether we built tunnels or not
                     try {
                         synchronized (_currentlyBuilding) {
                             if (!_repoll) {
-                                int delay = SystemVersion.isSlow() ? LOOP_TIME : LOOP_TIME / 2;
+                                int delay = SystemVersion.isSlow() || highload ? LOOP_TIME : LOOP_TIME / 2;
                                 _currentlyBuilding.wait(delay);
                             }
                         }

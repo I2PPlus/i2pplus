@@ -74,7 +74,7 @@ class RefreshRoutersJob extends JobImpl {
 //        int netDbCount = getContext().netDbSegmentor().getKnownRouters();
         int netDbCount = getContext().netDb().getKnownRouters();
         long uptime = getContext().router().getUptime();
-        boolean isCpuHighLoad = SystemVersion.getCPULoad() > 80;
+        boolean isCpuHighLoad = SystemVersion.getCPULoadAvg() > 80;
         boolean shouldDisconnect = getContext().getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
         if (_facade.isInitialized() && lag < 500 && getContext().commSystem().getStatus() != Status.DISCONNECTED && uptime > 60*1000) {
             if (_routers == null || _routers.isEmpty()) {

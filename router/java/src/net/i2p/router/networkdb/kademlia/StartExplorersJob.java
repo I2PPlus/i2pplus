@@ -70,7 +70,8 @@ class StartExplorersJob extends JobImpl {
         int count = _facade.getDataStore().size();
         boolean forceExplore = getContext().getBooleanProperty(PROP_FORCE_EXPLORE);
         boolean isFF = _facade.floodfillEnabled();
-        boolean isCpuHighLoad = SystemVersion.getCPULoad() > 90 && SystemVersion.getCPULoadAvg() > 90;
+        long lag = getContext().jobQueue().getMaxLag();
+        boolean highload = SystemVersion.getCPULoadAvg() > 90 && lag > 1000;
         if (!isFF || forceExplore) {
             if (!(getContext().jobQueue().getMaxLag() > MAX_LAG ||
                   getContext().throttle().getMessageDelay() > MAX_MSG_DELAY ||
@@ -90,7 +91,7 @@ class StartExplorersJob extends JobImpl {
                         num += 2;
                     if (getContext().jobQueue().getMaxLag() > 250 || getContext().throttle().getMessageDelay() > 500)
                         num = 2;
-                    if (getContext().jobQueue().getMaxLag() > 500 || getContext().throttle().getMessageDelay() > 1000 || isCpuHighLoad)
+                    if (getContext().jobQueue().getMaxLag() > 500 || getContext().throttle().getMessageDelay() > 1000 || highload)
                         num = 1;
                 } else {
                     num = Integer.valueOf(exploreBuckets);
@@ -128,10 +129,10 @@ class StartExplorersJob extends JobImpl {
             String exploreDelay = getContext().getProperty(PROP_EXPLORE_DELAY);
             long delay = getNextRunDelay();
             long laggedDelay = 3*60*1000;
-            if (exploreDelay != null && !isCpuHighLoad) {
+            if (exploreDelay != null && !highload) {
                 if (_log.shouldInfo()) {_log.info("Next Peer Exploration run in " + Integer.valueOf(exploreDelay) + "s");}
                 requeue(Integer.valueOf(exploreDelay) * 1000);
-            } else if (getContext().jobQueue().getMaxLag() > 500 || getContext().throttle().getMessageDelay() > 750 || isCpuHighLoad) {
+            } else if (getContext().jobQueue().getMaxLag() > 500 || getContext().throttle().getMessageDelay() > 750 || highload) {
                 if (_log.shouldInfo()) {_log.info("Next Peer Exploration run in " + (laggedDelay / 1000) + "s (router is under load)");}
                 requeue(laggedDelay);
             } else {

@@ -375,14 +375,10 @@ class EventPumper implements Runnable {
                         continue;
                     }
                 } else {
-                   int cpuLoad = SystemVersion.getCPULoad();
                    int cpuLoadAvg = SystemVersion.getCPULoadAvg();
-                   int sysLoad = SystemVersion.getSystemLoad();
                     // another 100% CPU workaround
                     // TODO remove or only if we appear to be looping with no interest ops
-                    int pause = SystemVersion.isSlow() || (cpuLoad > 90 && cpuLoadAvg > 90) ? 30 :
-                                SystemVersion.getCores() < 6 || SystemVersion.getMaxMemory() < 768*1024*1024 ? 20 :
-                                5;
+                    int pause = SystemVersion.isSlow() || cpuLoadAvg > 90 ? 30 : 5;
                     if ((loopCount % failsafeLoopCount) == failsafeLoopCount - 1) {
                         if (_log.shouldInfo())
                             _log.info("EventPumper throttle " + loopCount + " loops in " +

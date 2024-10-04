@@ -50,7 +50,7 @@ public class TestJob extends JobImpl {
         if (pool != null) {_pool = pool;}
         else {_pool = cfg.getTunnelPool();}
         if ((_pool == null) && (_log.shouldError())) {
-            _log.error("Invalid tunnel test configuration: no pool for " + cfg, new Exception("origin"));
+            _log.error("Invalid tunnel test configuration -> No pool for " + cfg, new Exception("origin"));
         }
         getTiming().setStartAfter(getDelay() + ctx.clock().now());
         // stats are created in TunnelPoolManager

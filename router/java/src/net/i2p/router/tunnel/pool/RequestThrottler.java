@@ -70,6 +70,8 @@ class RequestThrottler {
         String country = "unknown";
         boolean isOld = false;
         long uptime = context.router().getUptime();
+        long lag = context.jobQueue().getMaxLag();
+        boolean highload = lag > 1000 && SystemVersion.getCPULoadAvg() > 95;
         if (ri != null) {
             isFF = ri.getCapabilities().contains("f");
             v = ri.getVersion();
@@ -77,41 +79,34 @@ class RequestThrottler {
             isOld = VersionComparator.comp(v, "0.9.61") < 0;
         }
 
-        if (SystemVersion.getCPULoad() > 95 && SystemVersion.getCPULoadAvg() > 95) {
+        if (highload) {
             if (_log.shouldWarn())
                 _log.warn("Rejecting Tunnel Request from Router [" + h.toBase64().substring(0,6) + "] -> " +
                           "CPU is under sustained high load");
         }
-
-/**
-        if (isFF && (isUnreachable || isLowShare) && enableThrottle) {
-            if (_log.shouldWarn())
-                _log.warn("Dropping all connections from [" + h.toBase64().substring(0,6) + "] -> Unreachable or slow Floodfill / " + v);
-            context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
-        }
-**/
-
-        if (isLTier && isUnreachable && isOld) {
+        else if (isLTier && isUnreachable && isOld) {
             if (_log.shouldWarn() && !context.banlist().isBanlisted(h)) {
                 _log.warn("Banning for 4h and disconnecting from [" + h.toBase64().substring(0,6) + "] -> LU / " + v);
             }
             context.banlist().banlistRouter(h, " <b>➜</b> LU and older than current version", null, null, context.clock().now() + 4*60*60*1000);
             context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
         } else if (isOld && (isUnreachable || isLowShare) && shouldBlockOldRouters) {
-            if (_log.shouldWarn())
+            if (_log.shouldWarn()) {
                 _log.warn("Dropping all connections from [" + h.toBase64().substring(0,6) + "] -> Unreachable / Slow / " + v);
-            context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            }
+            context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
         } else if (rv && enableThrottle) {
             int bantime = (isLowShare || isUnreachable) ? 60*60*1000 : 30*60*1000;
             int period = bantime / 60 / 1000;
             if (count == limit + 1) {
                 context.banlist().banlistRouter(h, " <b>➜</b> Excessive tunnel requests", null, null, context.clock().now() + bantime);
                 context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
-                if (_log.shouldWarn())
+                if (_log.shouldWarn()) {
                     _log.warn("Banning " + (isLowShare || isUnreachable ? "slow or unreachable" : "") +
                               " Router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
                               "\n* Excessive tunnel requests (Requested: " + count + " / Hard limit " + limit +
                               " in " + (11*60 / portion) + "s)");
+                }
             } else {
                 if (_log.shouldInfo())
                     _log.info("Rejecting Tunnel Requests from temp banned Router [" + h.toBase64().substring(0,6) + "] -> " +
@@ -132,9 +127,7 @@ class RequestThrottler {
     }
 
     private class Cleaner implements SimpleTimer.TimedEvent {
-        public void timeReached() {
-            RequestThrottler.this.counter.clear();
-        }
+        public void timeReached() {RequestThrottler.this.counter.clear();}
     }
 
     /**
@@ -144,9 +137,7 @@ class RequestThrottler {
     private class Disconnector implements SimpleTimer.TimedEvent {
         private final Hash h;
         public Disconnector(Hash h) { this.h = h; }
-        public void timeReached() {
-            context.commSystem().forceDisconnect(h);
-        }
+        public void timeReached() {context.commSystem().forceDisconnect(h);}
     }
 
 }

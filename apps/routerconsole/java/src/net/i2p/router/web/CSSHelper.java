@@ -1,14 +1,13 @@
 package net.i2p.router.web;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import net.i2p.servlet.util.ServletUtil;
 import net.i2p.util.RandomSource;
 import net.i2p.util.SystemVersion;
-
 
 /**
  * Copied and modded from I2PTunnel IndexBean (GPL)
@@ -17,7 +16,6 @@ import net.i2p.util.SystemVersion;
 public class CSSHelper extends HelperBase {
 
     private static final Map<String, Boolean> _UACache = new ConcurrentHashMap<String, Boolean>();
-
     public static final String PROP_UNIVERSAL_THEMING = "routerconsole.universal.theme";
     public static final String PROP_THEME_NAME = "routerconsole.theme";
     /**  @since 0.9.33 moved from ConfigUIHelper */
@@ -36,17 +34,13 @@ public class CSSHelper extends HelperBase {
     /** @since 0.9.59+ */
     public static final String PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
     public static final boolean DEFAULT_ENABLE_SORA_FONT = false;
-
-
     private static final String _consoleNonce = Long.toString(RandomSource.getInstance().nextLong());
 
     /**
      *  formerly stored in System.getProperty("router.consoleNonce")
      *  @since 0.9.4
      */
-    public static String getNonce() {
-        return _consoleNonce;
-    }
+    public static String getNonce() {return _consoleNonce;}
 
     public String getTheme(String userAgent) {
         String url = BASE_THEME_PATH;
@@ -54,8 +48,9 @@ public class CSSHelper extends HelperBase {
             url += FORCE + "/";
         } else {
             // This is the first thing to use _context on most pages
-            if (_context == null)
+            if (_context == null) {
                 throw new IllegalStateException("No contexts. This is usually because the router is either starting up or shutting down.");
+            }
             String theme = _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME);
             url += theme + "/";
         }
@@ -66,17 +61,13 @@ public class CSSHelper extends HelperBase {
      * Returns whether app embedding is enabled or disabled
      * @since 0.9.32
      */
-    public boolean embedApps() {
-        return _context.getBooleanProperty(PROP_EMBED_APPS);
-    }
+    public boolean embedApps() {return _context.getBooleanProperty(PROP_EMBED_APPS);}
 
     /**
      * Returns whether we should use Sora display font
      * @since 0.9.59+
      */
-    public boolean useSoraDisplayFont() {
-        return _context.getBooleanProperty(PROP_ENABLE_SORA_FONT);
-    }
+    public boolean useSoraDisplayFont() {return _context.getBooleanProperty(PROP_ENABLE_SORA_FONT);}
 
     /**
      *  Save config for alternative display font if enabled
@@ -114,9 +105,7 @@ public class CSSHelper extends HelperBase {
      * needed for conditional css loads for zh
      * @return two-letter only, lower-case
      */
-    public String getLang() {
-        return Messages.getLanguage(_context);
-    }
+    public String getLang() {return Messages.getLanguage(_context);}
 
     /**
      *  Show / hide news on home page
@@ -125,8 +114,7 @@ public class CSSHelper extends HelperBase {
      */
     public void setNews(String val) {
         // Protected with nonce in css.jsi
-        if (val != null)
-            NewsHelper.showNews(_context, val.equals("1"));
+        if (val != null) {NewsHelper.showNews(_context, val.equals("1"));}
     }
 
     /**
@@ -134,33 +122,25 @@ public class CSSHelper extends HelperBase {
      *  Default true
      *  @since 0.9.1
      */
-    public boolean shouldSendXFrame() {
-        return !_context.getBooleanProperty(PROP_XFRAME);
-    }
+    public boolean shouldSendXFrame() {return !_context.getBooleanProperty(PROP_XFRAME);}
 
     /** change refresh and save it */
     public void setRefresh(String r) {
         try {
-            if (Integer.parseInt(r) < MIN_REFRESH)
-                r = Integer.toString(MIN_REFRESH);
+            if (Integer.parseInt(r) < MIN_REFRESH) {r = Integer.toString(MIN_REFRESH);}
             _context.router().saveConfig(PROP_REFRESH, r);
-        } catch (RuntimeException e) {
-        }
+        } catch (RuntimeException e) {}
     }
 
     /** @return refresh time in seconds, as a string */
     public String getRefresh() {
         String r = _context.getProperty(PROP_REFRESH, DEFAULT_REFRESH);
         try {
-            if (Integer.parseInt(r) < MIN_REFRESH)
-                r = Integer.toString(MIN_REFRESH);
-        } catch (RuntimeException e) {
-            r = Integer.toString(MIN_REFRESH);
-        }
-        if (SystemVersion.getCPULoad() > 90 && Integer.parseInt(r) < 5)
+            if (Integer.parseInt(r) < MIN_REFRESH) {r = Integer.toString(MIN_REFRESH);}
+        } catch (RuntimeException e) {r = Integer.toString(MIN_REFRESH);}
+        if (SystemVersion.getCPULoadAvg() > 90 && Integer.parseInt(r) < 5 && Integer.parseInt(r) != 0) {
             return "5";
-        else
-            return r;
+        } else {return r;}
     }
 
     /**
@@ -169,8 +149,7 @@ public class CSSHelper extends HelperBase {
      */
     public void setDisableRefresh(String r) {
         String disableRefresh = "false";
-        if ("0".equals(r))
-            disableRefresh = "true";
+        if ("0".equals(r)) {disableRefresh = "true";}
         _context.router().saveConfig(PROP_DISABLE_REFRESH, disableRefresh);
     }
 
@@ -178,9 +157,7 @@ public class CSSHelper extends HelperBase {
      * @return true if refresh is disabled
      * @since 0.9.1
      */
-    public boolean getDisableRefresh() {
-        return _context.getBooleanProperty(PROP_DISABLE_REFRESH);
-    }
+    public boolean getDisableRefresh() {return _context.getBooleanProperty(PROP_DISABLE_REFRESH);}
 
     /** translate the title and display consistently */
     public String title(String s) {
@@ -207,13 +184,10 @@ public class CSSHelper extends HelperBase {
      */
     public boolean allowIFrame(String ua) {
         boolean forceMobileConsole = _context.getBooleanProperty(PROP_FORCE_MOBILE_CONSOLE);
-        if (forceMobileConsole)
-            return false;
-        if (ua == null)
-            return true;
+        if (forceMobileConsole) {return false;}
+        if (ua == null) {return true;}
         Boolean brv = _UACache.get(ua);
-        if (brv != null)
-            return brv.booleanValue();
+        if (brv != null) {return brv.booleanValue();}
         boolean rv = shouldAllowIFrame(ua);
         _UACache.put(ua, Boolean.valueOf(rv));
         return rv;

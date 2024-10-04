@@ -82,7 +82,7 @@ class PeerTestJob extends JobImpl {
     private long getPeerTestDelay() {
         long uptime = getContext().router().getUptime();
         int testDelay = getContext().getProperty(PROP_PEER_TEST_DELAY, DEFAULT_PEER_TEST_DELAY);
-        if (uptime > 3*60*60*1000 || SystemVersion.getCPULoad() > 80)
+        if (uptime > 3*60*60*1000 || SystemVersion.getCPULoadAvg() > 80)
             return testDelay + 1000;
         else if (uptime >= 3*60*1000)
             return testDelay;
@@ -105,8 +105,7 @@ class PeerTestJob extends JobImpl {
         int cores = SystemVersion.getCores();
         long memory = SystemVersion.getMaxMemory();
         int testConcurrent = getContext().getProperty(PROP_PEER_TEST_CONCURRENCY, DEFAULT_PEER_TEST_CONCURRENCY);
-        if (SystemVersion.getCPULoad() > 90 || SystemVersion.getCPULoadAvg() > 80)
-            testConcurrent = 1;
+        if (SystemVersion.getCPULoadAvg() > 80) {testConcurrent = 1;}
         return testConcurrent;
     }
 
@@ -117,18 +116,15 @@ class PeerTestJob extends JobImpl {
         getContext().jobQueue().addJob(this);
         long uptime = getContext().router().getUptime();
         if (uptime < 3*60*100) {
-            if (_log.shouldInfo())
-                _log.info("Peer testing will commence in 3 minutes...");
-        } else {
-            if (_log.shouldInfo())
-                _log.info("Initialising peer tests -> Timeout: " + getTestTimeout() + "ms per peer");
+            if (_log.shouldInfo()) {_log.info("Peer testing will commence in 3 minutes...");}
+        } else if (_log.shouldInfo()) {
+            _log.info("Initialising peer tests -> Timeout: " + getTestTimeout() + "ms per peer");
         }
     }
 
     public synchronized void stopTesting() {
         _keepTesting = false;
-        if (_log.shouldInfo())
-            _log.info("Ending peer tests...");
+        if (_log.shouldInfo()) {_log.info("Ending peer tests...");}
     }
 
     public String getName() { return "Test Peers"; }
@@ -140,7 +136,7 @@ class PeerTestJob extends JobImpl {
         for (RouterInfo peer : peers) {
             testPeer(peer);
         }
-        if (lag > 300 || SystemVersion.getCPULoad() > 90 || SystemVersion.getCPULoadAvg() > 80) {
+        if (lag > 300 || SystemVersion.getCPULoadAvg() > 80) {
             requeue(getPeerTestDelay() * 2);
             if (_log.shouldWarn())
             if (lag > 300) {

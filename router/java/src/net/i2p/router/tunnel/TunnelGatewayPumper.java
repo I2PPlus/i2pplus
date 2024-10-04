@@ -69,8 +69,8 @@ class TunnelGatewayPumper implements Runnable {
             PumpedTunnelGateway poison = new PoisonPTG(_context);
             wantsPumping(poison);
         }
-        long adjusted = (SystemVersion.getCPULoad() > 90 && SystemVersion.getCPULoadAvg() > 90) ? REQUEUE_TIME * 3 / 2 : REQUEUE_TIME;
-        if (SystemVersion.getCPULoad() > 95 && SystemVersion.getCPULoadAvg() >= 95) {
+        long adjusted = (SystemVersion.getCPULoadAvg() > 90) ? REQUEUE_TIME * 3 / 2 : REQUEUE_TIME;
+        if (SystemVersion.getCPULoadAvg() >= 95) {
             adjusted =  REQUEUE_TIME * 2;
         }
         if (_log.shouldWarn() && adjusted != REQUEUE_TIME) {
