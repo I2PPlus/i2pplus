@@ -340,6 +340,7 @@ class TunnelRenderer {
                 String ip = !directIP.equals("") ? directIP : (info != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
                 String rl = (ip != null && enableReverseLookups() && uptime > 30*1000) ? _context.commSystem().getCanonicalHostName(ip) : null;
                 String v = info != null ? info.getOption("router.version") : null;
+                boolean isBanned = _context.banlist().isBanlisted(h);
                 int inactive = 0;
                 if (count <= 0 && (participating.size() == 0) || ++displayed > DISPLAY_LIMIT) {break;}
                 sb.append("<tr class=lazy><td>").append(peerFlag(h)).append("</td><td>")
@@ -349,7 +350,8 @@ class TunnelRenderer {
                     sb.append("<span class=version title=\"").append(_t("Show all routers with this version in the NetDb"))
                       .append("\"><a href=\"/netdb?v=").append(DataHelper.stripHTML(v)).append("\">")
                       .append(DataHelper.stripHTML(v)).append("</a></span>");
-                } else {sb.append("<span>???</span>");}
+                } else if (isBanned) {sb.append("<span class=banlisted title=\"").append(_t("Router is banlisted")).append("\">???</span>");}
+                else {sb.append("<span>???</span>");}
                 sb.append("</td><td>");
                 if (info != null) {sb.append(_context.commSystem().renderPeerCaps(h, false));}
                 else {sb.append("<table class=\"rid ric\"><tr><td class=rbw>?</td></tr></table>");}
@@ -397,7 +399,6 @@ class TunnelRenderer {
                 }
 */
                 sb.append("</td><td class=isBanned hidden>");
-                boolean isBanned = _context.banlist().isBanlisted(h);
                 if (isBanned) {
                     sb.append("<span hidden>ban</span><a class=banlisted href=\"/profiles?f=3\" title=\"")
                       .append(_t("Router is banlisted")).append("\">Banned</a> ");
