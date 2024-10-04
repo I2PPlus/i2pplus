@@ -81,16 +81,16 @@ class BuildHandler implements Runnable {
 
     /** TODO these may be too high, review and adjust */
     private static final int MIN_QUEUE = SystemVersion.isSlow() ? 32 : 64;
-    private static final int MAX_QUEUE = SystemVersion.isSlow() ? 192 : 384;
+    private static final int MAX_QUEUE = SystemVersion.isSlow() ? 128 : 256;
     private static final String PROP_MAX_QUEUE = "router.buildHandlerMaxQueue";
-    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 15*1000;
+    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 8*1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_BUILD_REPLY;
 
     /** limits on concurrent next-hop RI lookup */
-    private static final int MIN_LOOKUP_LIMIT = SystemVersion.isSlow() ? 8 : 32;
-    private static final int MAX_LOOKUP_LIMIT = SystemVersion.isSlow() ? 256 : 512;
+    private static final int MIN_LOOKUP_LIMIT = SystemVersion.isSlow() ? 32 : 64;
+    private static final int MAX_LOOKUP_LIMIT = SystemVersion.isSlow() ? 128 : 384;
     /** limit lookups to this % of current participating tunnels */
-    private static final int PERCENT_LOOKUP_LIMIT = SystemVersion.isSlow() ? 10 : 25;
+    private static final int PERCENT_LOOKUP_LIMIT = SystemVersion.isSlow() ? 5 : 20;
     /**
      *  This must be high, as if we timeout the send we remove the tunnel from
      *  participating via OnFailedSendJob.
@@ -98,13 +98,13 @@ class BuildHandler implements Runnable {
      *  all the traffic in TunnelDispatcher.dispatch(TunnelDataMessage msg, Hash recvFrom).
      *  10s was not enough.
      */
-    private static final int NEXT_HOP_SEND_TIMEOUT = 25*1000;
+    private static final int NEXT_HOP_SEND_TIMEOUT = 20*1000;
 
     private static final long MAX_REQUEST_FUTURE = 5*60*1000;
     /** must be > 1 hour due to rounding down */
     private static final long MAX_REQUEST_AGE = 65*60*1000;
     private static final long MAX_REQUEST_AGE_ECIES = 8*60*1000;
-    private static final long JOB_LAG_LIMIT_TUNNEL = SystemVersion.isSlow() ? 800 : 500;
+    private static final long JOB_LAG_LIMIT_TUNNEL = SystemVersion.isSlow() ? 1250 : 1000;
     private static final long[] RATES = {60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000};
 
     public BuildHandler(RouterContext ctx, TunnelPoolManager manager, BuildExecutor exec) {
@@ -113,7 +113,7 @@ class BuildHandler implements Runnable {
         _manager = manager;
         _exec = exec;
         // Queue size = 12 * share BW / 48K
-//        int sz = Math.min(MAX_QUEUE, Math.max(MIN_QUEUE, TunnelDispatcher.getShareBandwidth(ctx) * MIN_QUEUE / 48));
+        //int sz = Math.min(MAX_QUEUE, Math.max(MIN_QUEUE, TunnelDispatcher.getShareBandwidth(ctx) * MIN_QUEUE / 48));
         int sz = ctx.getProperty(PROP_MAX_QUEUE, MAX_QUEUE);
         _inboundBuildMessages = new CoDelBlockingQueue(ctx, "BuildHandler", sz);
         ctx.statManager().createRateStat("tunnel.buildReplyTooSlow", "Received a tunnel build reply after timeout", "Tunnels", RATES);
@@ -236,10 +236,7 @@ class BuildHandler implements Runnable {
         catch (InterruptedException ie) {return;}
 
         // check for poison
-        if (state.msg == null) {
-            _isRunning = false;
-            return;
-        }
+        if (state.msg == null) {_isRunning = false; return;}
 
         long now = _context.clock().now();
         long uptime = _context.router().getUptime();
@@ -247,9 +244,11 @@ class BuildHandler implements Runnable {
         String PROP_MAX_TUNNELS = _context.getProperty("router.maxParticipatingTunnels");
         int DEFAULT_MAX_TUNNELS = SystemVersion.isSlow() ? 2*1000 : 8*1000;
         int maxTunnels;
-        boolean highLoad = SystemVersion.getCPULoadAvg() > 98 && SystemVersion.getCPULoad() > 98 && uptime > 5*60*1000;
         if (PROP_MAX_TUNNELS != null) {maxTunnels = Integer.valueOf(PROP_MAX_TUNNELS);}
         else {maxTunnels = DEFAULT_MAX_TUNNELS;}
+        long lag = _context.jobQueue().getMaxLag();
+        boolean isLagged = lag > JOB_LAG_LIMIT_TUNNEL && maxTunnels > 0 && uptime > 5*60*1000;
+        boolean highLoad = SystemVersion.getCPULoadAvg() > 98 && isLagged;
         if (state.recvTime <= dropBefore) {
             if (_log.shouldWarn()) {
                 _log.warn("Not processing stale tunnel build request [MsgID " + state.msg.getUniqueId() + "]" +
@@ -263,9 +262,7 @@ class BuildHandler implements Runnable {
             return;
         }
 
-        long lag = _context.jobQueue().getMaxLag();
-        // TODO reject instead of drop also for a lower limit? see throttle
-        if (lag > JOB_LAG_LIMIT_TUNNEL && maxTunnels > 0) {
+        if (isLagged) { // TODO reject instead of drop also for a lower limit? see throttle
             if (_log.shouldWarn()) {
                 _log.warn("Dropping Tunnel Request -> Job lag (" + lag + "ms)");
                 _context.throttle().setTunnelStatus("[rejecting/overload]" + _x("Dropping Tunnel Requests: High job lag")
@@ -277,7 +274,7 @@ class BuildHandler implements Runnable {
 
         if (highLoad && maxTunnels > 0) {
             if (_log.shouldWarn()) {
-                _log.warn("Dropping Tunnel Request -> High CPU load");
+                _log.warn("Dropping Tunnel Request -> System under load");
                 _context.throttle().setTunnelStatus("[rejecting/overload]" + _x("Dropping Tunnel Requests:<br>High CPU load"));
             }
             _context.statManager().addRateData("router.throttleTunnelCause", lag);
@@ -294,10 +291,10 @@ class BuildHandler implements Runnable {
         // search through the tunnels for a reply
         long replyMessageId = state.msg.getUniqueId();
         PooledTunnelCreatorConfig cfg = _exec.removeFromBuilding(replyMessageId);
-        if (cfg == null) {
-            // cannot handle - not pending... took too long?
-            if (_log.shouldWarn())
+        if (cfg == null) { // cannot handle - not pending... took too long?
+            if (_log.shouldWarn()) {
                 _log.warn("Reply [MsgID " + replyMessageId + "] did not match any pending tunnels");
+            }
             _context.statManager().addRateData("tunnel.buildReplyTooSlow", 1);
         } else {handleReply(state.msg, cfg, System.currentTimeMillis() - state.recvTime);}
     }
@@ -317,8 +314,7 @@ class BuildHandler implements Runnable {
         int statuses[] = _buildReplyHandler.decrypt(msg, cfg, order);
         if (statuses != null) {
             boolean allAgree = true;
-            // For each peer in the tunnel
-            for (int i = 0; i < cfg.getLength(); i++) {
+            for (int i = 0; i < cfg.getLength(); i++) { // For each peer in the tunnel
                 Hash peer = cfg.getPeer(i);
                 // If this tunnel member is us, skip this record, don't update profile or stats
                 // for ourselves, we always agree - why must we save a slot for ourselves anyway?
@@ -533,17 +529,17 @@ class BuildHandler implements Runnable {
             int numTunnels = _context.tunnelManager().getParticipatingCount();
             int limit = Math.max(MIN_LOOKUP_LIMIT, Math.min(MAX_LOOKUP_LIMIT, numTunnels * PERCENT_LOOKUP_LIMIT / 100));
             int current;
-            boolean highLoad = SystemVersion.getCPULoad() > 80;
             long maxQueueLag = _context.jobQueue().getMaxLag();
-            boolean isLagged = SystemVersion.isSlow() ? maxQueueLag > 300 : maxQueueLag > 150;
-            // leaky counter, since it isn't reliable
+            boolean highload = SystemVersion.getCPULoadAvg() > 95 && maxQueueLag > 1000;
+            boolean lucky = _context.random().nextInt(5) > 0;
+            // leaky counter, not reliable
             if (_context.random().nextInt(16) > 0) {current = _currentLookups.incrementAndGet();}
             else {current = 1;}
-            if (current <= limit && !highLoad && !isLagged) {
+            if (current <= limit && !highload && lucky) {
                 if (current <= 0) {_currentLookups.set(1);} // don't let it go negative
                 if (_log.shouldDebug()) {
-                    _log.debug("Request handled; looking up next peer [" + nextPeer.toBase64().substring(0,6)
-                               + "] \n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() +
+                    _log.debug("Request handled; looking up next peer [" + nextPeer.toBase64().substring(0,6) +
+                               "] \n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() +
                                "]\n* Lookups: " + current + " / " + limit + req);
                 }
                 _context.netDb().lookupRouterInfo(nextPeer, new HandleReq(_context, state, req, nextPeer),
@@ -551,16 +547,10 @@ class BuildHandler implements Runnable {
             } else {
                 _currentLookups.decrementAndGet();
                 if (_log.shouldInfo()) {
-                    if (isLagged) {
-                        _log.info("Dropping next hop lookup -> High job queue lag (Max: " + maxQueueLag + "ms)" +
-                                  "\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]" + req);
-                    } else if (highLoad) {
-                        _log.info("Dropping next hop lookup -> High CPU Load (" + SystemVersion.getCPULoad() + "%)" +
-                                  "\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]" + req);
-                    } else {
-                        _log.info("Dropping next hop lookup -> Limit: " + limit + " / " + PERCENT_LOOKUP_LIMIT + "%" +
-                                  "\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]" + req);
-                    }
+                    String status = "\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]" + req;
+                    if (!lucky) {_log.info("Dropping next hop lookup -> 20% chance of drop" + status);}
+                    else if (highload) {_log.info("Dropping next hop lookup -> System is under load" + status);}
+                    else {_log.info("Dropping next hop lookup -> Limit: " + limit + " / " + PERCENT_LOOKUP_LIMIT + "%" + status);}
                 }
                 _context.statManager().addRateData("tunnel.dropLookupThrottle", 1);
                 if (from != null) {_context.commSystem().mayDisconnect(from);}
