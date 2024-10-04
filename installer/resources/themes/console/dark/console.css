@@ -1296,18 +1296,19 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #netdb a[href$="i2p"]{margin-left:6px;display:inline-block}
 #netdb code{font-weight:400}
 #netdb .confignav{position:relative;z-index:9999}
-#netdb .netdbentry,#netdb .leaseset{margin-bottom:10px;width:100%;contain:strict}
+#netdb .netdbentry,#netdb .leaseset{margin-bottom:10px;width:100%;box-shadow:0 0 0 1px #000,0 0 0 3px #252}
+#netdb .netdbentry{margin:2px auto 14px;width:calc(100% - 6px)}
 #netdb .confignav+.netdbentry{margin-top:12px}
 #netdb .netdb_transport{margin-right:4px;width:48px;display:inline-block;text-align:center;color:var(--ink)}
-#netdb .leaseset:target{border:1px solid #770}
+#netdb .leaseset:target{border:1px solid #770;box-shadow:0 0 0 1px #000,0 0 0 3px #770}
 #netdb .leaseset:target th:first-child,#netdb .leaseset:target td:first-child,.leaseset:target .addtobook a::after{border-left:1px solid #770}
 #netdb .leaseset:target th:last-child,#netdb .leaseset:target td:last-child{border-right:1px solid #770}
 #netdb .leaseset:target tr:first-child th,#netdb .leaseset:target td{border-top:1px solid #770;border-bottom:1px solid #770}
 #netdb .leaseset th:first-child{padding-left:10px}
 #netdb .leaseset tr,#netdb .leaseset td{box-shadow:none}
 #netdb .sybil_addresses .netdb_transport{width:auto;text-align:right}
-#noleasesets,#notinitialized,.netdbnotfound{margin:10px auto 12px;padding:20px 24px 20px 58px;text-align:left;border:var(--border);background:#000 var(--infohelp) no-repeat 15px center/28px}
-.leasesets_container #notinitialized{margin-bottom:10px;column-span:all}
+#noleasesets,#notinitialized,.netdbnotfound{margin:12px auto 10px;padding:20px 24px 20px 58px;text-align:left;border:var(--border);background:#000 var(--infohelp) no-repeat 15px center/28px}
+.leasesets_container #notinitialized,.leasesets_container #noleasesets{margin-bottom:10px;column-span:all}
 .leaseset .ekey,.leaseset .stype{margin-left:6px;padding-left:14px;background:var(--crypto) no-repeat left center/12px}
 .leaseset .expiry{margin-left:4px;padding-left:15px;background:var(--clock) no-repeat left calc(50% + 1px)/12px}
 .leaseset .stype{background:var(--lock) no-repeat left center/12px}
@@ -1650,7 +1651,7 @@ th.th_title{padding:8px 10px;position:static;text-align:left;background:var(--h1
 #config_peers tr:nth-child(3) td.infohelp{padding:20px 24px 20px 58px;background:var(--ban) no-repeat 15px center/28px,var(--msg)}
 #config_reseed p.infohelp{padding:20px 24px 20px 58px;background:var(--reseed) no-repeat 15px center/28px,var(--msg)}
 #consolepass tr:first-child td{padding:20px 24px 20px 58px;white-space:normal;background:var(--useradd) no-repeat 15px center/28px,var(--msg)}
-#debugmode{margin:11px 0 10px;padding:20px 24px 20px 58px;background:var(--bug) no-repeat 15px center/28px,var(--msg)}
+#debugmode{margin:11px 0 12px;padding:20px 24px 20px 58px;background:var(--bug) no-repeat 15px center/28px,var(--msg)}
 #enablefullstats,#gatherstats{padding:20px 24px 20px 58px;background:var(--stats) no-repeat 15px center/28px,var(--msg)}
 #externali2cp th{text-align:left}
 #externaltcp .nowrap:first-child{margin:5px 0 -18px;display:inline-block}
@@ -3054,7 +3055,7 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 #ipbans.toggle.expanded:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:none}
 
 /* netdb routers pagenav */
-.pageLink{margin:3px 1px 1px;padding:3px 12px 4px;min-width:20px;display:inline-block;vertical-align:middle;white-space:nowrap;line-height:1;letter-spacing:.01em;font-size:120%;text-shadow:1px 2px 1px #000;box-shadow:0 0 0 1px #141,var(--highlight);background:var(--badge)}
+.pageLink{margin:3px 1px 1px;padding:4px 12px 3px;min-width:20px;display:inline-block;vertical-align:middle;white-space:nowrap;line-height:1;letter-spacing:.01em;font-size:120%;text-shadow:1px 2px 1px #000;box-shadow:0 0 0 1px #141,var(--highlight);background:var(--badge)}
 .pageLink:hover{box-shadow:0 0 0 1px var(--hover),var(--highlight)}
 .pageLink:active{box-shadow:0 0 0 1px var(--hover),var(--btn_shadow_active)}
 .pageLink.disabled{opacity:.5;pointer-events:none}
