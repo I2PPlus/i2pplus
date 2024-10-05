@@ -24,55 +24,36 @@ public class JobTiming implements Clock.ClockUpdateListener {
     public JobTiming(RouterContext context) {
         _context = context;
         _start = context.clock().now();
-        //context.clock().addUpdateListener(this);
     }
 
-    /**
-     * # of milliseconds after the epoch to start the job
-     *
-     */
-    public long getStartAfter() { return _start; }
+    /** Number of milliseconds after the epoch to start the job */
+    public long getStartAfter() {return _start;}
 
     /**
      * WARNING - this does not force a resort of the job queue any more...
      * ALWAYS call JobImpl.requeue() instead if job is already queued.
      */
-    public void setStartAfter(long startTime) {
-        _start = startTime;
-    }
+    public void setStartAfter(long startTime) {_start = startTime;}
 
-    /**
-     * # of milliseconds after the epoch the job actually started
-     *
-     */
-    public long getActualStart() { return _actualStart; }
-    public void setActualStart(long actualStartTime) { _actualStart = actualStartTime; }
-    /**
-     * Notify the timing that the job began
-     *
-     */
-    public void start() { _actualStart = _context.clock().now(); }
-    /**
-     * # of milliseconds after the epoch the job actually ended
-     *
-     */
-    public long getActualEnd() { return _actualEnd; }
-    public void setActualEnd(long actualEndTime) { _actualEnd = actualEndTime; }
-    /**
-     * Notify the timing that the job finished
-     *
-     */
-    public void end() {
-        _actualEnd = _context.clock().now();
-        //_context.clock().removeUpdateListener(this);
-    }
+    /** Number of milliseconds after the epoch the job actually started */
+    public long getActualStart() {return _actualStart;}
+
+    public void setActualStart(long actualStartTime) {_actualStart = actualStartTime;}
+    /** Notify the timing that the job began */
+    public void start() {_actualStart = _context.clock().now();}
+
+    /** Number of milliseconds after the epoch the job actually ended */
+    public long getActualEnd() {return _actualEnd;}
+
+    public void setActualEnd(long actualEndTime) {_actualEnd = actualEndTime;}
+
+    /** Notify the timing that the job finished */
+    public void end() {_actualEnd = _context.clock().now();}
 
     public void offsetChanged(long delta) {
-        if (_start != 0)
-            _start += delta;
-        if (_actualStart != 0)
-            _actualStart += delta;
-        if (_actualEnd != 0)
-            _actualEnd += delta;
+        if (_start != 0) {_start += delta;}
+        if (_actualStart != 0) {_actualStart += delta;}
+        if (_actualEnd != 0) {_actualEnd += delta;}
     }
+
 }

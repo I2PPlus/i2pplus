@@ -96,7 +96,7 @@ public class JobQueue {
     /** max ready and waiting jobs before we start dropping 'em */
     private int _maxWaitingJobs = DEFAULT_MAX_WAITING_JOBS;
     private final static int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() ? 100 : 300;
-    private final static long MIN_LAG_TO_DROP = SystemVersion.isSlow() ? 2000 : 1500;
+    private final static long MIN_LAG_TO_DROP = SystemVersion.isSlow() ? 1500 : 1000;
 
     /**
      *  @since 0.9.52+
@@ -109,7 +109,7 @@ public class JobQueue {
      */
     private final Object _runnerLock = new Object();
 
-    private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
+    private static final long[] RATES = {60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l};
 
     /**
      *  Does not start the pumper. Caller MUST call startup.
