@@ -26,12 +26,7 @@ if (c != null && (c.length() == 2 || c.length() == 7) && c.replaceAll("[a-z0-9_]
     String flagSet = "flags_svg";
     String ext = ".svg";
     String s = request.getParameter("s");
-/*
-    if (s != null && s.equals("48")) {
-        flagSet = "flags48x48";
-        ext = ".png";
-    }
-*/
+
     java.io.File ffile;
     long lastmod = 0;
     java.io.InputStream fin = flags_jsp.class.getResourceAsStream("/net/i2p/router/web/resources/icons/" + flagSet + '/' + c + ext);
@@ -61,8 +56,7 @@ if (c != null && (c.length() == 2 || c.length() == 7) && c.replaceAll("[a-z0-9_]
         // iflast is -1 if not present; round down file time
         if (iflast >= ((lastmod / 1000) * 1000)) {
             response.setStatus(304);
-            if (fin != null)
-                fin.close();
+            if (fin != null) {fin.close();}
             return;
         }
         response.setDateHeader("Last-Modified", lastmod);
@@ -70,34 +64,30 @@ if (c != null && (c.length() == 2 || c.length() == 7) && c.replaceAll("[a-z0-9_]
     // cache for a month
     response.setHeader("Cache-Control", "max-age=2628000, immutable");
     response.setHeader("X-Content-Type-Options", "nosniff");
-    if (ext.equals(".svg"))
+    if (ext.equals(".svg")) {
         response.setContentType("image/svg+xml; charset=utf-8");
-/*
-    else
-        response.setContentType("image/png");
-*/
+    }
     response.setHeader("Accept-Ranges", "none");
     java.io.OutputStream cout = response.getOutputStream();
 
     try {
         // flags dir may be a symlink, which readFile will reject
         // We carefully vetted the "c" value above.
-        if (fin == null)
-            fin = new java.io.FileInputStream(ffile);
+        if (fin == null) {fin = new java.io.FileInputStream(ffile);}
         net.i2p.data.DataHelper.copy(fin, cout);
     } catch (java.io.IOException ioe) {
         // prevent 'Committed' IllegalStateException from Jetty
-        if (!response.isCommitted()) {
-            response.sendError(403, ioe.toString());
-        }  else {
+        if (!response.isCommitted()) {response.sendError(403, ioe.toString());}
+        else {
             // not an error, happens when the browser closes the stream
             net.i2p.I2PAppContext.getGlobalContext().logManager().getLog(getClass()).warn("Error serving flags/" + c + ext, ioe);
-            // Jetty doesn't log this
-            throw ioe;
+            throw ioe; // Jetty doesn't log this
         }
     } finally {
-        if (fin != null)
-            try { fin.close(); } catch (java.io.IOException ioe) {}
+        if (fin != null) {
+            try {fin.close();}
+            catch (java.io.IOException ioe) {}
+        }
     }
 
 } else {
