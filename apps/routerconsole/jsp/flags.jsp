@@ -23,6 +23,16 @@
  */
 String c = request.getParameter("c");
 if (c != null && (c.length() == 2 || c.length() == 7) && c.replaceAll("[a-z0-9_]", "").length() == 0) {
+
+    /* aliases */
+    if ("a0".equals(c) || "a1".equals(c) || "a2".equals(c)) {c = "xx";}
+    else if ("bl".equals(c) || "gf".equals(c) || "gp".equals(c) || "mf".equals(c) ||  "mq".equals(c) ||
+             "pm".equals(c) || "re".equals(c) || "wf".equals(c) || "yt".equals(c)) {c = "fr";}
+    else if ("bq".equals(c)) {c = "nl";}
+    else if ("bv".equals(c) || "sj".equals(c)) {c = "no";}
+    else if ("hm".equals(c)) {c = "au";}
+    else if ("um".equals(c)) {c = "us";}
+
     String flagSet = "flags_svg";
     String ext = ".svg";
     String s = request.getParameter("s");
