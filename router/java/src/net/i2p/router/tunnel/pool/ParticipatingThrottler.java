@@ -12,17 +12,15 @@ import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
 /**
- * Count how often we have accepted a tunnel with the peer
- * as the previous or next hop.
- * We limit each peer to a percentage of all participating tunnels,
- * subject to minimum and maximum values for the limit.
+ * Count how often we have accepted a tunnel with the peer as the previous or next hop.
+ * We limit each peer to a percentage of all participating tunnels, subject to minimum
+ * and maximum values for the limit.
  *
- * This offers basic protection against simple attacks
- * but is not a complete solution, as by design, we don't know
- * the originator of a tunnel request.
+ * This offers basic protection against simple attacks but is not a complete solution,
+ * as by design, we don't know the originator of a tunnel request.
  *
- * This also effectively limits the number of tunnels between
- * any given pair of routers, which probably isn't a bad thing.
+ * This also effectively limits the number of tunnels between any given pair of routers,
+ * which probably isn't a bad thing.
  *
  * @since 0.8.4
  */
@@ -38,9 +36,9 @@ class ParticipatingThrottler {
     private static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
     private static final String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
     private static final int LIFETIME_PORTION = 3; // portion of the tunnel lifetime
-    private static final int MIN_LIMIT = (isSlow ? 80 : 120) / LIFETIME_PORTION;
+    private static final int MIN_LIMIT = (isSlow ? 100 : 150) / LIFETIME_PORTION;
     private static final int MAX_LIMIT = (isSlow ? 1200 : 1800) / LIFETIME_PORTION;
-    private static final int PERCENT_LIMIT = 12 / LIFETIME_PORTION;
+    private static final int PERCENT_LIMIT = 15 / LIFETIME_PORTION;
     private static final long CLEAN_TIME = 11 * 60 * 1000 / LIFETIME_PORTION;
     private static final String MIN_VERSION = "0.9.63";
 
@@ -75,7 +73,7 @@ class ParticipatingThrottler {
         int limit = calculateLimit(numTunnels, isUnreachable, isLowShare, isFast);
         int count = counter.increment(h);
         Result rv;
-        int bantime = 10 * 60 * 1000;
+        int bantime = isLU ? 15*60*1000 : isLowShare || isUnreachable ? 10*60*1000 : 5*60*1000;
         boolean shouldThrottle = context.getProperty(PROP_SHOULD_THROTTLE, DEFAULT_SHOULD_THROTTLE);
         boolean shouldDisconnect = context.getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
         boolean shouldBlockOldRouters = context.getProperty(PROP_BLOCK_OLD_ROUTERS, DEFAULT_BLOCK_OLD_ROUTERS);
@@ -151,17 +149,16 @@ class ParticipatingThrottler {
     private Result evaluateThrottleConditions(int count, int limit, boolean shouldThrottle, boolean isFast, boolean isLowShare,
                                               boolean isUnreachable, Hash h, String caps, boolean isBanned, int bantime) {
         if (count > limit && shouldThrottle) {
-            if (isFast && !isUnreachable) {
-                if (count > limit * 3) {
-                    handleExcessiveRequests(h, caps, count, limit, bantime);
-                    return Result.DROP;
-                }
-            } else if (!isLowShare && !isUnreachable) {
-                if (count > limit * 3) {
-                    handleExcessiveRequests(h, caps, count, limit, bantime);
-                    return Result.DROP;
-                }
-            } else if ((isLowShare || isUnreachable) && count > limit * 5) {
+            if (isFast && !isUnreachable && count > limit * 10) {
+                handleExcessiveRequests(h, caps, count, limit, bantime);
+                return Result.DROP;
+            } else if (!isLowShare && !isUnreachable && count > limit * 8) {
+                handleExcessiveRequests(h, caps, count, limit, bantime);
+                return Result.DROP;
+            } else if (isUnreachable && count > limit * 7) {
+                handleExcessiveRequests(h, caps, count, limit, bantime);
+                return Result.DROP;
+            } else if (isLowShare && count > limit * 6) {
                 handleExcessiveRequests(h, caps, count, limit, bantime);
                 return Result.DROP;
             } else {
