@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" id="geomap" viewBox="0 0 720 475">
-  <rect id="sea" width="100%" height="100%" x="0" y="0" fill="#227b"/>
+<svg xmlns="http://www.w3.org/2000/svg" id="geomap" viewBox="0 120 720 355">
+  <rect id="sea" width="100%" height="475" x="0" y="0" fill="#227b"/>
   <g id="countries" style="opacity:0">
     <path d="M 385,243 V 242 L 384,241 V 240 H 386 L 385,239 H 386 L 387,240 388,241 387,242 H 386Z"/>
     <path d="M 402,316 V 317 H 400 V 315 H 402Z"/>

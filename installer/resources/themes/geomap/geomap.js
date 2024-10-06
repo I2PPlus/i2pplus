@@ -245,7 +245,7 @@
             var country = row.querySelector('a[href^="/netdb?c="]');
             if (country) {
               var code = country.getAttribute("href").split("=")[1];
-              // get the total count, not floodfills or X tier for now
+              // Get the total count, not floodfills or X tier for now
               // TODO: enable toggle for X and floodfill count
               if (row.children[3]) {
                 routerCounts[code] = row.children[3].textContent.trim();
@@ -373,7 +373,9 @@
         if (containerRect.right - shapeRect.width < event.clientX + 10) {
           xPosition = (event.clientX - containerRect.left - shapeRect.width - 20) * scaleWidth;
         }
-        if (containerRect.bottom - shapeRect.height < event.clientY + 10) {
+        if (containerRect.top + shapeRect.height + 120 > event.clientY + 10) {
+          yPosition = (event.clientY + containerRect.top + shapeRect.height + 20) * scaleHeight;
+        } else if (containerRect.bottom - shapeRect.height < event.clientY + 10) {
           yPosition = (event.clientY - containerRect.top - shapeRect.height - 20) * scaleHeight;
         }
       } else if (shapeId && sectionId in m.data) {
