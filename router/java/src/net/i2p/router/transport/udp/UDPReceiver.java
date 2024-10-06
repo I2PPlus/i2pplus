@@ -129,7 +129,7 @@ class UDPReceiver {
                 //if (_log.shouldDebug())
                 //    _log.debug("Before throttling receive");
                 while (!_context.throttle().acceptNetworkMessage())
-                    try { Thread.sleep(10); } catch (InterruptedException ie) {}
+                    try {Thread.sleep(10);} catch (InterruptedException ie) {}
 
                 try {
                     _socket.receive(dpacket);
@@ -150,15 +150,14 @@ class UDPReceiver {
                     } else if (size >= SSU2Util.MIN_DATA_LEN) {
                         //FIFOBandwidthLimiter.Request req = _context.bandwidthLimiter().requestInbound(size, "UDP receiver");
                         //_context.bandwidthLimiter().requestInbound(req, size, "UDP receiver");
-                        FIFOBandwidthLimiter.Request req =
-                              _context.bandwidthLimiter().requestInbound(size, "UDP receiver");
+                        FIFOBandwidthLimiter.Request req = _context.bandwidthLimiter().requestInbound(size, "UDP receiver");
                         // failsafe, don't wait forever
                         int waitCount = 0;
                         while (req.getPendingRequested() > 0 && waitCount++ < 5) {
                             req.waitForNextAllocation();
                         }
                         if (waitCount >= 5) {
-                            // tell FBL we didn't receive it, but receive it anyway
+                            // tell FBL we didn't receive it, but accept it anyway
                             req.abort();
                             _context.statManager().addRateData("udp.receiveFailsafe", 1);
                         }

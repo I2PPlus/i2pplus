@@ -204,34 +204,22 @@ public class PeerHelper extends HelperBase {
             Transport t = e.getValue();
             int[] counts = t.getPeerCounts();
             for (int idx = 0; idx < 8; idx += 4) {
-                if (style.equals("NTCP") && idx == 0)
-                    continue;
-                    if (style.equals("SSU") && idx == 0) // && !_context.getBooleanProperty(TransportManager.PROP_ENABLE_SSU1))
-                    continue;
+                if (style.equals("NTCP") && idx == 0) {continue;}
+                if (style.equals("SSU") && idx == 0) {continue;}
                 rows++;
                 buf.append("<tr><td><b>").append(style).append(1 + (idx / 4)).append("</b></td><td");
                 int total = 0;
-                for (int i = 0; i < 4; i++) {
-                    total += counts[idx + i];
-                }
-                if (total <= 0)
-                    buf.append(" class=warn");
-                else
-                    totals[0] += total;
+                for (int i = 0; i < 4; i++) {total += counts[idx + i];}
+                if (total <= 0) {buf.append(" class=warn");}
+                else {totals[0] += total;}
                 buf.append(">").append(total);
                 for (int i = 0; i < 4; i++) {
-                    if (!showIPv4 && i < 2)
-                        continue;
-                    if (!showIPv6 && i >= 2)
-                        break;
+                    if (!showIPv4 && i < 2) {continue;}
+                    if (!showIPv6 && i >= 2) {break;}
                     int cnt = counts[idx + i];
                     buf.append("</td><td");
-                    if (cnt <= 0) {
-                        if ((i & 0x01) != 0 || warnInbound)
-                            buf.append(" class=notice");
-                    } else {
-                        totals[i + 1] += cnt;
-                    }
+                    if (cnt <= 0 && ((i & 0x01) != 0 || warnInbound) {buf.append(" class=notice");}
+                    } else {totals[i + 1] += cnt;}
                     buf.append(">").append(cnt);
                 }
                 buf.append("</td></tr>\n");
@@ -241,17 +229,12 @@ public class PeerHelper extends HelperBase {
         if (rows > 1) {
             buf.append("<tfoot><tr class=tablefooter><td><b>").append(_t("Total")).append("</b>");
             for (int i = 0; i < 5; i++) {
-                if (!showIPv4 && i > 0 && i < 3)
-                    continue;
-                if (!showIPv6 && i >= 3)
-                    break;
+                if (!showIPv4 && i > 0 && i < 3) {continue;}
+                if (!showIPv6 && i >= 3) {break;}
                 int cnt = totals[i];
                 buf.append("</td><td");
-                    if (cnt <= 0) {
-                        if ((i & 0x01) == 0 || warnInbound)
-                            buf.append(" class=warn");
-                        }
-                        buf.append(">").append(cnt);
+                if (cnt <= 0 && ((i & 0x01) == 0 || warnInbound) {buf.append(" class=warn");}
+                buf.append(">").append(cnt);
             }
             buf.append("</td></tr></tfoot>\n");
         }
@@ -264,7 +247,7 @@ public class PeerHelper extends HelperBase {
      */
     private void renderNavBar(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
-        buf.append("<div class=confignav id=confignav>");
+        buf.append("<div class=confignav id=peerNav>");
         boolean span = _graphical;
         if (!span)
             buf.append("<center>");
