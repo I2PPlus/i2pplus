@@ -687,11 +687,11 @@ class NetDbRenderer {
         DecimalFormat fmt;
         NetworkDatabaseFacade netdb;
         Set<LeaseSet> leases;
-        Set<String> headersAdded = new HashSet<>();
+        boolean notLocal = (client == null || debug);
 
         if (client == null) {netdb = _context.netDb();}
         else {netdb = _context.clientNetDb(client);}
-        if (debug) {
+        if (notLocal) {
             ourRKey = _context.routerHash();
             leases = new TreeSet<LeaseSet>(new LeaseSetRoutingKeyComparator(ourRKey));
             fmt = new DecimalFormat("#0.00");
@@ -702,29 +702,15 @@ class NetDbRenderer {
             fmt = null;
         }
 
-        if (debug) {leases.addAll(netdb.getLeases());}
+        if (notLocal) {leases.addAll(netdb.getLeases());}
         else {
-            if (netdb.getClientLeases().size() > 0) {
-                if (!headersAdded.contains("requested")) {
-                    //buf.append("<h2 class=requested>").append(_t("Requested LeaseSets")).append("</h2>");
-                    headersAdded.add("clientLeases");
-                }
-                leases.addAll(netdb.getClientLeases());
-            }
-
+            //if (netdb.getClientLeases().size() > 0) {
+            //    leases.addAll(netdb.getClientLeases());
+            //}
             if (netdb.getPublishedLeases().size() > 0) {
-                if (!headersAdded.contains("localPub")) {
-                    //buf.append("<h2 class=localPub>").append(_t("Local Published LeaseSets")).append("</h2>");
-                    headersAdded.add("localPublished");
-                }
                 leases.addAll(netdb.getPublishedLeases());
             }
-
             if (netdb.getUnpublishedLeases().size() > 0) {
-                if (!headersAdded.contains("localUnpub")) {
-                    //buf.append("<h2 class=localUnpub>").append(_t("Local Unpublished LeaseSets")).append("</h2>");
-                    headersAdded.add("localUnpublished");
-                }
                 leases.addAll(netdb.getUnpublishedLeases());
             }
         }
@@ -736,7 +722,7 @@ class NetDbRenderer {
         /** Summary */
         if (debug) {buf.append("<table id=leasesetdebug>\n");}
         else if (client == null) {buf.append("<table id=leasesetsummary>\n");}
-        if (debug || client == null) {
+        if (notLocal) {
             buf.append("<tr><th><b>").append(_t("Total Leasesets")).append(":</b></th>")
                .append("<th colspan=3>").append(leases.size()).append("</th></tr>\n");
         }
@@ -759,7 +745,7 @@ class NetDbRenderer {
         }
         if (debug) {buf.append("</td><td><b>").append(_t("Routing Key")).append(":</b></td><td>").append(ourRKey.toBase64());}
         else if (client == null) {buf.append("</td><td colspan=2>");}
-        if (debug || client == null) {buf.append("</td></tr>\n</table>\n");}
+        if (notLocal) {buf.append("</td></tr>\n</table>\n");}
 
         /** LeaseSets */
         if (!leases.isEmpty()) {
@@ -1189,7 +1175,7 @@ class NetDbRenderer {
                .append("<th>").append(_t("Country")).append("</th>")
                .append("<th class=countX>").append(_t("X Tier")).append("</th>")
                .append("<th class=countFF>").append(_t("Floodfills")).append("</th>")
-               .append("<th data-sort-default>").append(_t("Total")).append("</th>")
+               .append("<th class=countCC data-sort-default>").append(_t("Total")).append("</th>")
                .append("</tr>\n</thead>\n");
             if (!countryList.isEmpty()) {
                 Collections.sort(countryList, new CountryComparator());
@@ -1204,7 +1190,7 @@ class NetDbRenderer {
                        .append(countXTierInCountry(routers, country)).append("</a></td>")
                        .append("<td class=countFF>").append("<a href=\"/netdb?caps=f&amp;cc=").append(country).append("\">")
                        .append(countFloodfillsInCountry(routers, country)).append("</a></td>")
-                       .append("<td>").append(num).append("</td></tr>\n");
+                       .append("<td class=countCC>").append(num).append("</td></tr>\n");
                 }
                 buf.append("</tbody></table>\n");
             } else {
