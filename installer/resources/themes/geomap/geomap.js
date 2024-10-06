@@ -245,7 +245,11 @@
             var country = row.querySelector('a[href^="/netdb?c="]');
             if (country) {
               var code = country.getAttribute("href").split("=")[1];
-              routerCounts[code] = row.children[1].textContent.trim();
+              // get the total count, not floodfills or X tier for now
+              // TODO: enable toggle for X and floodfill count
+              if (row.children[3]) {
+                routerCounts[code] = row.children[3].textContent.trim();
+              }
             }
           });
 
