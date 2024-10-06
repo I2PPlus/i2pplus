@@ -45,9 +45,6 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
 
     private static final long[] CODEL_RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
 
-    public static final String PROP_CODEL_TARGET = "router.codelTarget";
-    public static final String PROP_CODEL_INTERVAL = "router.codelInterval";
-
     /**
      *  Quote:
      *  Below a target of 5 ms, utilization suffers for some conditions and traffic loads;
@@ -57,8 +54,8 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      *
      *  Maybe need to make configurable per-instance.
      */
-//    private static final int TARGET = 15;
-    private static final int DEFAULT_CODEL_TARGET = 40;
+    private static final int DEFAULT_CODEL_TARGET = 10;
+    public static final String PROP_CODEL_TARGET = "router.codelTarget";
     private final long _target;
 
     /**
@@ -69,8 +66,8 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      *
      *  Maybe need to make configurable per-instance.
      */
-//    private static final int INTERVAL = 300;
-    private static final int DEFAULT_CODEL_INTERVAL = 750;
+    private static final int DEFAULT_CODEL_INTERVAL = 200;
+    public static final String PROP_CODEL_INTERVAL = "router.codelInterval";
     private final long _interval;
     //private static final int MAXPACKET = 512;
 
@@ -81,14 +78,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     /** if priority is &gt;= this, never drop */
     public static final int DONT_DROP_PRIORITY = 1000;
 //    private static final long BACKLOG_TIME = 2*1000;
-    private static final long BACKLOG_TIME = SystemVersion.isSlow() ? 200 : 50;
-
-    /**
-     *  @param name for stats
-     */
-
-//    public CoDelPriorityBlockingQueue(I2PAppContext ctx, String name, int initialCapacity) {
-//        this(ctx, name, initialCapacity, TARGET, INTERVAL);
+    private static final long BACKLOG_TIME = SystemVersion.isSlow() ? 2*1000 : 1000;
 
     public CoDelPriorityBlockingQueue(I2PAppContext ctx, String name, int initialCapacity) {
         this(ctx, name, initialCapacity, ctx.getProperty(PROP_CODEL_TARGET, DEFAULT_CODEL_TARGET),
@@ -275,8 +265,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
                         }
                     }
                 }
-            } else if (ok_to_drop &&
-                       rv.getPriority() < DONT_DROP_PRIORITY &&
+            } else if (ok_to_drop && rv.getPriority() < DONT_DROP_PRIORITY &&
                        (_now - _drop_next < _interval || _now - _first_above_time >= _interval)) {
                 // If we get here, then we're not in dropping state. If the sojourn time has been above
                 // target for interval, then we decide whether it's time to enter dropping state.
@@ -295,10 +284,8 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
                 _dropping = true;
                 // If we're in a drop cycle, the drop rate that controlled the queue
                 // on the last cycle is a good starting point to control it now.
-                if (_now - _drop_next < _interval)
-                    _count = _count > 2 ? _count - 2 : 1;
-                else
-                    _count = 1;
+                if (_now - _drop_next < _interval) {_count = _count > 2 ? _count - 2 : 1;}
+                else {_count = 1;}
                 control_law(_now);
             }
         }
