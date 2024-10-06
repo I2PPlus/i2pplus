@@ -218,8 +218,8 @@ public class PeerHelper extends HelperBase {
                     if (!showIPv6 && i >= 2) {break;}
                     int cnt = counts[idx + i];
                     buf.append("</td><td");
-                    if (cnt <= 0 && ((i & 0x01) != 0 || warnInbound) {buf.append(" class=notice");}
-                    } else {totals[i + 1] += cnt;}
+                    if (cnt <= 0 && ((i & 0x01) != 0 || warnInbound)) {buf.append(" class=notice");}
+                    else {totals[i + 1] += cnt;}
                     buf.append(">").append(cnt);
                 }
                 buf.append("</td></tr>\n");
@@ -233,7 +233,7 @@ public class PeerHelper extends HelperBase {
                 if (!showIPv6 && i >= 3) {break;}
                 int cnt = totals[i];
                 buf.append("</td><td");
-                if (cnt <= 0 && ((i & 0x01) == 0 || warnInbound) {buf.append(" class=warn");}
+                if (cnt <= 0 && ((i & 0x01) == 0 || warnInbound)) {buf.append(" class=warn");}
                 buf.append(">").append(cnt);
             }
             buf.append("</td></tr></tfoot>\n");
