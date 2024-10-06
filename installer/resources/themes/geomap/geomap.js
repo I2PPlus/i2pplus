@@ -8,6 +8,10 @@
   // Initialize DOMParser for potential future parsing needs
   const parser = new DOMParser();
 
+  const STORE_INTERVAL = 30000;
+  const DEBOUNCE_DELAY = 60;
+  const TIMEOUT = 15000;
+
   // Define constants for dimensions
   const width = 720;
   const height = 475;
@@ -260,7 +264,7 @@
         } else {
           // Clear local storage on error and schedule another check
           localStorage.removeItem("routerCounts");
-          setTimeout(storeRouterCounts, 15000);
+          setTimeout(storeRouterCounts, TIMEOUT);
         }
       }
     };
@@ -400,7 +404,7 @@
         }
       }
     } else {hideTooltip();}
-  }, 10);
+  }, DEBOUNCE_DELAY);
 
   function updateShapePosition(element, x, y, opacity) {
     element.setAttribute("x", x);
@@ -452,7 +456,7 @@
   const codes = Object.values(m.data.countries).map(country => country.code);
   preloadFlags(codes);
 
-  setInterval(storeRouterCounts, 60 * 1000);
+  setInterval(storeRouterCounts, STORE_INTERVAL);
   storeRouterCounts();
 
   geomap.addEventListener("mouseenter", handleEvent);
