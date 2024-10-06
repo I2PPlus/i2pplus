@@ -1235,6 +1235,8 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #netdblookup .optbox{margin:10px }
 #netdblookup input[type=text]{width:calc(100% - 12px)}
 #netdblookup select{width:calc(100% - 11px)}
+#netdbRouterMap::before,#netdbRouterMap::after{display:inline-block;top:0;right:0;bottom:0;left:0;content:"";z-index:0;background:repeating-linear-gradient(to bottom,#0000,#0000 20px,#000 21px,#0000 22px),repeating-linear-gradient(to right,#0000,#0000 20px,#000 21px,#0000 22px) center center;position:absolute;box-shadow:0 0 0 2px #000 inset,0 0 0 6px #005 inset;pointer-events:none}
+#netdbRouterMap::after{background:none;position:absolute;z-index:999;box-shadow:0 0 0 2px #000 inset,0 0 0 6px #191d58 inset,0 0 0 7px #000 inset,0 0 0 8px #fff3 inset;pointer-events:none}
 
 /* leasesets */
 .addtobook{text-align:right}
