@@ -1,3 +1,5 @@
+2024-10-07 2.7.0+ (API 0.9.64) released
+
 2024-10-04 dr|z3d
  * Console: Add X Tier by country count to netdb overview page
 
