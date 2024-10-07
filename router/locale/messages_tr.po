@@ -110,6 +110,9 @@ msgstr "Reddedilen istekler"
 msgid "Shutting down"
 msgstr "Kapatılıyor"
 
+msgid "Restarting"
+msgstr ""
+
 msgid "Declining Tunnel Requests"
 msgstr "Tünel isteklerinin reddedilmesi"
 

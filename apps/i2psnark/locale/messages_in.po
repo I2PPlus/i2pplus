@@ -48,6 +48,9 @@ msgstr "Batas Upload BW berubah menjadi {0} KBps"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Batas bandwidth upload minimum adalah {0} KBps"
 
+msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
+msgstr ""
+
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Randomisasi lompatan terowongan +0/1 diaktifkan pada terowongan masuk"
 
@@ -340,6 +343,9 @@ msgstr "Menambahkan torrent di {0}"
 msgid "Connecting to I2P"
 msgstr "Menghubungkan ke I2P"
 
+msgid "Connected to I2P at"
+msgstr ""
+
 #, java-format
 msgid "Starting up torrent {0}"
 msgstr "Memulai torrent {0}"
@@ -411,6 +417,9 @@ msgstr "Selesai memeriksa torrent {0}, tidak berubah"
 #, java-format
 msgid "Error checking the torrent {0}"
 msgstr "Error dalam memeriksa torrent {0}"
+
+msgid "Data partition"
+msgstr ""
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -654,12 +663,6 @@ msgstr "masuk"
 
 msgid "out"
 msgstr "keluar"
-
-msgid "Our destination (identity) for this session"
-msgstr "Destinasi (identitas) kita untuk sesi ini"
-
-msgid "Dest."
-msgstr "Tujuan."
 
 msgid "Estimated download time for all torrents"
 msgstr "Perkiraan waktu pengunduhan untuk semua torrent"
@@ -1200,6 +1203,12 @@ msgstr "Jumlah maksimum file yang diizinkan per torrent - perhatikan bahwa pelac
 msgid "Tunnel Configuration"
 msgstr "Konfigurasi Terowongan"
 
+msgid "Our destination (identity) for this session"
+msgstr "Destinasi (identitas) kita untuk sesi ini"
+
+msgid "Dest."
+msgstr "Tujuan."
+
 msgid "Inbound Settings"
 msgstr "Setting inbound"
 
@@ -1476,5 +1485,3 @@ msgstr "Simpan Perubahan"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent harus dihentikan"
-
-#, java-format

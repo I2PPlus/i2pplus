@@ -48,6 +48,9 @@ msgstr "Omejitev zgornjega BW spremenjena na {0}KBps"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Minimalna omejitev zgornjega prenosnega širinevja je {0}KBps"
 
+msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
+msgstr ""
+
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Naključna razporeditev +0/1 skoka po tunelu je omogočena na vhodnih tunelah"
 
@@ -340,6 +343,9 @@ msgstr "Dodajanje torrentov v {0}…"
 msgid "Connecting to I2P"
 msgstr "Povezovanje z I2P"
 
+msgid "Connected to I2P at"
+msgstr ""
+
 #, java-format
 msgid "Starting up torrent {0}"
 msgstr "Zagon torrenta {0}"
@@ -411,6 +417,9 @@ msgstr "Preverjanje torrenta {0} končano, ne spremenjeno"
 #, java-format
 msgid "Error checking the torrent {0}"
 msgstr "Napaka pri preverjanju torrenta {0}"
+
+msgid "Data partition"
+msgstr ""
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -663,12 +672,6 @@ msgstr "v"
 
 msgid "out"
 msgstr "iz"
-
-msgid "Our destination (identity) for this session"
-msgstr "Naslov (identiteta) za to sejo"
-
-msgid "Dest."
-msgstr "Dest."
 
 msgid "Estimated download time for all torrents"
 msgstr "Ocena časa za prenos vseh torrentov"
@@ -1215,6 +1218,12 @@ msgstr "Maksimalna število datotek, dovoljeno za vsak torrent - vendar trackerj
 msgid "Tunnel Configuration"
 msgstr "Konfiguracija tunela"
 
+msgid "Our destination (identity) for this session"
+msgstr "Naslov (identiteta) za to sejo"
+
+msgid "Dest."
+msgstr "Dest."
+
 msgid "Inbound Settings"
 msgstr "Nastavitve vhodov"
 
@@ -1500,5 +1509,3 @@ msgstr "Shrani spremembe"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent mora biti ustavljen"
-
-#, java-format

@@ -267,6 +267,12 @@ msgstr "Buch"
 msgid "No entries"
 msgstr "Keine Einträge"
 
+msgid "Add new destination"
+msgstr "Füge neues Ziel hinzu"
+
+msgid "Import from hosts.txt file"
+msgstr "Import aus hosts.txt Datei"
+
 msgid "Export in hosts.txt format"
 msgstr "Im hosts.txt-Format exportieren"
 
@@ -315,9 +321,6 @@ msgstr "zum Löschen markieren"
 msgid "Cancel"
 msgstr "Abbruch"
 
-msgid "Add new destination"
-msgstr "Füge neues Ziel hinzu"
-
 msgid "e.g. newdomain.i2p"
 msgstr "z.B. newdomain.i2p"
 
@@ -326,9 +329,6 @@ msgstr "B64 oder B32"
 
 msgid "Full destination or b32 address"
 msgstr "Vollständiges Ziel oder B32-Adresse"
-
-msgid "Import from hosts.txt file"
-msgstr "Import aus hosts.txt Datei"
 
 msgid "Select file"
 msgstr "Datei auswählen"

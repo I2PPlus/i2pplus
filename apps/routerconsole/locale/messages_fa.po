@@ -1352,15 +1352,6 @@ msgstr "مقدار ظرفیت بد"
 msgid "Unsupported"
 msgstr "پشتیبانی نمی شود"
 
-msgid "IPs Banned Until Restart"
-msgstr "IP ها تا راه اندازی مجدد ممنوع شدند"
-
-msgid "IPv4 Addresses"
-msgstr "آدرس های IPv4"
-
-msgid "IPv6 Addresses"
-msgstr "آدرس های IPv6"
-
 msgid "IPs Permanently Banned"
 msgstr "IP ها برای همیشه ممنوع می شوند"
 
@@ -1369,6 +1360,19 @@ msgstr "از"
 
 msgid "To"
 msgstr "به"
+
+#, java-format
+msgid "First {0} displayed, see the {1} file for the full list"
+msgstr ""
+
+msgid "IPs Banned Until Restart"
+msgstr "IP ها تا راه اندازی مجدد ممنوع شدند"
+
+msgid "IPv4 Addresses"
+msgstr "آدرس های IPv4"
+
+msgid "IPv6 Addresses"
+msgstr "آدرس های IPv6"
 
 msgid "Reseed now"
 msgstr "اکنون دوباره بکارید"
@@ -1415,11 +1419,11 @@ msgstr "لیست URL را بازنشانی کنید"
 msgid "URL list reset successfully"
 msgstr "لیست URL با موفقیت بازنشانی شد"
 
-msgid "Cancel shutdown"
-msgstr "خاموش شدن را لغو کنید"
-
 msgid "Cancel restart"
 msgstr "لغو راه اندازی مجدد"
+
+msgid "Cancel shutdown"
+msgstr "خاموش شدن را لغو کنید"
 
 msgid "Restart immediately"
 msgstr "بلافاصله دوباره شروع کنید"
@@ -2649,6 +2653,69 @@ msgstr "تجزیه و تحلیل سیبیل"
 msgid "Router Map"
 msgstr " نقشه روتر"
 
+msgid "Network Database Search"
+msgstr ""
+
+msgid "Capabilities"
+msgstr "قابلیت ها"
+
+msgid "e.g. f or XOfR"
+msgstr ""
+
+msgid "Cost"
+msgstr "هزینه"
+
+msgid "Country"
+msgstr "کشور"
+
+msgid "Country Codes"
+msgstr ""
+
+msgid "Hash Prefix"
+msgstr ""
+
+msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
+msgstr ""
+
+msgid "Hostname or b32"
+msgstr ""
+
+msgid "IPv6 Prefix"
+msgstr ""
+
+msgid "Single port or range"
+msgstr ""
+
+msgid "Signature Type"
+msgstr ""
+
+msgid "SSU Capabilities"
+msgstr ""
+
+msgid "Encryption Type"
+msgstr ""
+
+msgid "Router Version"
+msgstr ""
+
+msgid "Transport"
+msgstr "انتقال"
+
+msgid "Add Sybil analysis (must pick at least one above)"
+msgstr ""
+
+msgid "Sybil close to"
+msgstr ""
+
+msgid "Router hash, destination hash, b32, or from address book"
+msgstr ""
+
+msgid "or Sybil close to this router"
+msgstr ""
+
+msgid "Lookup"
+msgstr "جستجو"
+
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "هرگز هویت روتر خود را برای کسی فاش نکنید، زیرا به صورت منحصر به فرد به آدرس IP شما در پایگاه داده شبکه مرتبط است."
 
@@ -2661,14 +2728,14 @@ msgstr "در پایگاه داده شبکه یافت نشد"
 msgid "No results"
 msgstr "نتیجه ای نداشت"
 
-msgid "Previous Page"
-msgstr "صفحه قبل"
+msgid "Bad Base64 Router hash"
+msgstr ""
 
-msgid "Page"
-msgstr "صفحه"
+msgid "No routers with"
+msgstr ""
 
-msgid "Country"
-msgstr "کشور"
+msgid "Hash prefix"
+msgstr ""
 
 msgid "Port"
 msgstr "پورت"
@@ -2676,11 +2743,56 @@ msgstr "پورت"
 msgid "MTU"
 msgstr "MTU"
 
+msgid "found in the network database"
+msgstr ""
+
+msgid "results"
+msgstr ""
+
+msgid "Previous Page"
+msgstr "صفحه قبل"
+
 msgid "Next Page"
 msgstr "صفحه بعدی"
 
-msgid "No Leasesets currently active."
-msgstr "در حال حاضر هیچ مجموعه اجاره ای فعال نیست."
+msgid "Results per page"
+msgstr ""
+
+msgid "Not initialized"
+msgstr "مقداردهی اولیه نشده است"
+
+msgid "Debug mode - Sorted by hash distance, closest first."
+msgstr ""
+
+msgid "Compact mode"
+msgstr ""
+
+msgid "Total Leasesets"
+msgstr ""
+
+msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Mod Data"
+msgstr ""
+
+msgid "Last Changed"
+msgstr ""
+
+msgid "Next Mod Data"
+msgstr ""
+
+msgid "Change in"
+msgstr ""
+
+msgid "Known Floodfills"
+msgstr "سیلاب های شناخته شده"
+
+msgid "Floodfill mode enabled"
+msgstr ""
+
+msgid "Routing Key"
+msgstr "کلید مسیریابی"
 
 msgid "Network data"
 msgstr "داده های شبکه"
@@ -2694,6 +2806,17 @@ msgstr "برآورد کل سیل"
 msgid "Estimated total leasesets"
 msgstr "برآورد کل اجاره"
 
+#, java-format
+msgid "Hostname {0} not found in network database"
+msgstr ""
+
+#, java-format
+msgid "LeaseSet for {0} not found in network database"
+msgstr ""
+
+msgid "Meta"
+msgstr ""
+
 msgid "LeaseSet"
 msgstr "LeaseSet"
 
@@ -2705,16 +2828,6 @@ msgstr "مشاهده تونل های محلی برای مقصد"
 
 msgid "published"
 msgstr "منتشر شد"
-
-msgid "Add to addressbook"
-msgstr "افزودن به دفترچه آدرس"
-
-msgid "Add to local addressbook"
-msgstr "افزودن به دفترچه خصوصی محلی"
-
-#, java-format
-msgid "Published{0} ago"
-msgstr "انتشار{0} پیش"
 
 #, java-format
 msgid "Expires{0}"
@@ -2742,12 +2855,6 @@ msgstr "نوع امضا"
 msgid "Unsupported type"
 msgstr "نوع پشتیبانی نشده"
 
-msgid "Routing Key"
-msgstr "کلید مسیریابی"
-
-msgid "Lease"
-msgstr "اجاره"
-
 #, java-format
 msgid "Expires in {0}"
 msgstr "در {0} منقضی می شود"
@@ -2756,8 +2863,11 @@ msgstr "در {0} منقضی می شود"
 msgid "Expired {0} ago"
 msgstr "{0} پیش منقضی شده است"
 
-msgid "Not initialized"
-msgstr "مقداردهی اولیه نشده است"
+msgid "Advanced mode - includes all statistics published by floodfills."
+msgstr ""
+
+msgid "Compact mode - does not include statistics published by floodfills."
+msgstr ""
 
 msgid "Network Database Router Statistics"
 msgstr "آمار روتر پایگاه داده شبکه"
@@ -2780,6 +2890,15 @@ msgstr "رد کلیه درخواست های تونل"
 msgid "Transports"
 msgstr "انتقال ها"
 
+msgid "X Tier"
+msgstr ""
+
+msgid "Floodfills"
+msgstr "سیل"
+
+msgid "Total"
+msgstr "مجموع"
+
 msgid "Unknown"
 msgstr "ناشناس"
 
@@ -2792,6 +2911,12 @@ msgstr "اطلاعات ما"
 msgid "Router is banlisted"
 msgstr "روتر ممنوع است"
 
+msgid "Java I2P variant"
+msgstr ""
+
+msgid "I2Pd variant"
+msgstr ""
+
 msgid "RouterInfo is compressible"
 msgstr "RouterInfo فشرده است"
 
@@ -2802,11 +2927,11 @@ msgstr "نمایش تمام روترهای دارای این نسخه در NetDb
 msgid "Show all members of the {0} family in NetDb"
 msgstr "نمایش همه اعضای خانواده {0} در NetDb"
 
-msgid "View profile"
-msgstr "مشاهده نمایه"
-
 msgid "Profile"
 msgstr "نمایه"
+
+msgid "View profile"
+msgstr "مشاهده نمایه"
 
 msgid "Configure peer"
 msgstr "پیکربندی همتا"
@@ -2822,6 +2947,9 @@ msgstr "منتشرشده"
 
 msgid "Hostname"
 msgstr "نام میزبان"
+
+msgid "direct"
+msgstr ""
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "تایید شده (گواهی امضا وارد شده و معتبر است)"
@@ -2841,17 +2969,11 @@ msgstr "آدرسها"
 msgid "n/a"
 msgstr "n/a"
 
-msgid "Cost"
-msgstr "هزینه"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "نمایش همه روترها با این آدرس در NetDb"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "نمایش تمام روترهای دارای این پورت در NetDb"
-
-msgid "Capabilities"
-msgstr "قابلیت ها"
 
 msgid "Core version"
 msgstr "نسخه اصلی"
@@ -2940,11 +3062,11 @@ msgstr "IPv6 NTCP"
 msgid "IPv6 NTCP, SSU"
 msgstr "IPv6 NTCP، SSU"
 
-msgid "IPv6 NTCP, SSU, introducers"
-msgstr "IPv6 NTCP، SSU، معرفی‌کنندگان"
-
 msgid "IPv6 Only NTCP, SSU, introducers"
 msgstr "IPv6 فقط NTCP، SSU، معرفی‌کنندگان"
+
+msgid "IPv6 NTCP, SSU, introducers"
+msgstr "IPv6 NTCP، SSU، معرفی‌کنندگان"
 
 msgid "No peer connections available"
 msgstr "اتصال همتا موجود نیست"
@@ -2969,9 +3091,6 @@ msgstr "اتصالات همتا"
 msgid "Auto-refresh"
 msgstr "بازخوانی خودکار"
 
-msgid "Transport"
-msgstr "انتقال"
-
 msgid "Active in the last minute"
 msgstr "فعال در آخرین دقیقه"
 
@@ -2980,9 +3099,6 @@ msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
-
-msgid "Total"
-msgstr "مجموع"
 
 msgid "Current / maximum permitted"
 msgstr "فعلی / حداکثر مجاز"
@@ -3233,9 +3349,6 @@ msgid_plural "Showing {0} recent profiles."
 msgstr[0] "نمایش پروفایل های {0} اخیر."
 msgstr[1] "نمایش مشخصات {0} اخیر."
 
-msgid "active in the last 20 minutes"
-msgstr "در 15 دقیقه گذشته فعال است"
-
 #, java-format
 msgid "Hiding {0} older profile."
 msgid_plural "Hiding {0} older profiles."
@@ -3277,6 +3390,9 @@ msgstr "همتایان تونل از شرکت در آن خودداری کرده 
 
 msgid "Rejected"
 msgstr "رد شد"
+
+msgid "First Heard About"
+msgstr ""
 
 msgid "Last Heard From"
 msgstr "آخرین شنیده از"
@@ -3450,6 +3566,13 @@ msgstr "ممنوعیت‌های نشست"
 
 msgid "Total number of banned peers"
 msgstr "تعداد کل همتاهای ممنوع شده"
+
+msgid "Note: 'LU' class routers have been excluded from the list."
+msgstr ""
+
+#, java-format
+msgid "To view, see {0}Session Bans{1}."
+msgstr ""
 
 msgid "Select search engine"
 msgstr "انتخاب موتور جستجو"
@@ -3722,9 +3845,6 @@ msgstr "Jars"
 msgid "Review extended info about installed .jar and .war files"
 msgstr "اطلاعات گسترده در مورد پرونده های نصب شده .jar و .war را مرور کنید"
 
-msgid "Lookup"
-msgstr "جستجو"
-
 msgid "Textual router performance statistics"
 msgstr "آمار عملکرد روتر متنی"
 
@@ -3759,8 +3879,8 @@ msgstr "حافظه"
 msgid "Floodfill enabled"
 msgstr "فعال کردن floodfill"
 
-msgid "See more information on the wiki"
-msgstr "اطلاعات بیشتر را در ویکی ببینید"
+msgid "Total number of LeaseSets stored in our NetDb"
+msgstr ""
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "هشدار: ECDSA در دسترس نیست."
@@ -3834,8 +3954,8 @@ msgstr "ورودی/خروجی"
 msgid "Used for building and testing tunnels, and communicating with floodfill peers"
 msgstr "برای ساخت و آزمایش تونل‌ها و ارتباط با همتاهای فلودفیل مورد استفاده قرار می‌گیرد"
 
-msgid "Exploratory"
-msgstr "کاوشگر"
+msgid "Utility"
+msgstr "سودمند"
 
 msgid "Tunnels we are participating in, directly contributing bandwidth to the network"
 msgstr "تونل‌هایی که در آن شرکت می‌کنیم و مستقیما پهنای باند را به شبکه تخصیص می‌دهیم"
@@ -3843,8 +3963,8 @@ msgstr "تونل‌هایی که در آن شرکت می‌کنیم و مستق�
 msgid "Current / Maximum"
 msgstr "فعلی/حداکثر"
 
-msgid "Participating"
-msgstr "مشارکت"
+msgid "Transit"
+msgstr "ترانزیت"
 
 msgid "Concurrent tunnel builds (averaged over a minute) / single tunnel build time"
 msgstr "ساخت تونل‌های هم‌زمان (میانگین در یک دقیقه) / زمان ساخت یک تونل واحد"
@@ -3866,12 +3986,6 @@ msgstr "نسبت سهم"
 
 msgid "tunnels"
 msgstr "تونل ها"
-
-msgid "Transit"
-msgstr "ترانزیت"
-
-msgid "Utility"
-msgstr "سودمند"
 
 msgid "Tunnel Count by Peer"
 msgstr "شمارش تونل توسط Peer"
@@ -4179,9 +4293,6 @@ msgstr "اجرای بلوک برای"
 msgid "days"
 msgstr "روز"
 
-msgid "Known Floodfills"
-msgstr "سیلاب های شناخته شده"
-
 msgid "Average closest floodfill distance"
 msgstr "میانگین نزدیکترین فاصله سیلابی"
 
@@ -4320,6 +4431,9 @@ msgstr "فاصله تا "
 msgid "Distance for"
 msgstr "فاصله برای"
 
+msgid "Exploratory"
+msgstr "کاوشگر"
+
 msgid "Configure tunnels"
 msgstr "تونل ها را پیکربندی کنید"
 
@@ -4394,6 +4508,9 @@ msgstr "روتر در حال حاضر در حالت مخفی کار می کند 
 msgid "No transit tunnels currently active."
 msgstr "در حال حاضر هیچ تونل ترانزیت فعال نیست."
 
+msgid "Transit Tunnels by Peer (Top 50)"
+msgstr ""
+
 msgid "Address"
 msgstr "آدرس"
 
@@ -4465,6 +4582,9 @@ msgstr "تست پهنای باند ناموفق بود"
 
 msgid "Bandwidth test did not complete"
 msgstr "تست پهنای باند کامل نشد"
+
+msgid "Bad state for test"
+msgstr ""
 
 msgid "Bandwidth test started"
 msgstr "تست پهنای باند شروع شد"
@@ -5097,14 +5217,22 @@ msgstr "دستی ممنوع / لغو ممنوعیت یک همتا"
 msgid "Banning will prevent the participation of this peer in tunnels you create."
 msgstr "ممنوعیت از مشارکت این همتا در تونل هایی که ایجاد می کنید جلوگیری می کند."
 
+msgid "A list of bans by IP address is presented below."
+msgstr ""
+
+#, java-format
+msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
+msgstr ""
+
+#, java-format
+msgid "A list of {0}session-only bans{1} by hash is also available."
+msgstr ""
+
 msgid "Adjust Profile Bonuses"
 msgstr "پاداش های نمایه را تنظیم کنید"
 
 msgid "Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels."
 msgstr "بونوس ها ممکن است مثبت یا منفی باشند و بر شامل شدن همتای در لایه های سرعت بالا و ظرفیت بالا تأثیر می گذارند. همتایان سریع برای تونل های مشتری مورد استفاده قرار می گیرند و همتایان با ظرفیت بالا برای برخی از تونل های جستجویی استفاده می شوند."
-
-msgid "Banned Peers"
-msgstr "همتایان ممنوع"
 
 msgid "Banned IP Addresses"
 msgstr "آی پی های ممنوعه"
@@ -5651,6 +5779,9 @@ msgstr "این تنظیم به شما امکان می دهد در صورت فع�
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "این تنظیم اجازه می دهد تا تست های SSU را غیرفعال کنید تا مشخص شود آیا روتر شما دارای فایروال است یا خیر و می توان آن را برای روترهایی که قطعا فایروال ندارند اما مشکلات فایروال متناوب را تجربه می کنند فعال کرد. "
+
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
+msgstr ""
 
 msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
 msgstr "این تنظیم تعیین می کند که کدام حمل و نقل در هنگام برقراری ارتباط با همتایان اولویت دارد. "
@@ -6234,6 +6365,9 @@ msgstr "حالت لپ‌تاپ"
 msgid "An <a href=/confignet#ipchange>optional configuration</a> that automatically changes your <a href=/netdb?r=.>router identity</a> and <a href=/confignet#udpconfig>external port</a> when the public ip address your system is on changes. This can prevent an adversary from correlating your router identity and ip address in scenarios where your ip address may change frequently, for example when you're running I2P on a laptop from multiple locations."
 msgstr "تنظیم‌گیری<a href=/confignet#ipchange>اختیاری</a> است که به‌طور خودکار شناسه <a href=/netdb?r=.>مسیریاب</a> شما و <a href=/confignet#udpconfig> درگاه خارجی</a> را وقتی که آدرس آی‌پی عمومی سیستم شما تغییر می‌کند، تغییر می‌دهد. این می‌تواند جلوی ارتباط‌یابی شناسه مسیریاب و آدرس آی‌پی شما توسط طرف مقابل را در مواردی که آدرس آی‌پی شما ممکن است به‌طور مکرر تغییر کند، بگیرد. برای مثال وقتی I2P را روی لپ‌تاپ از مکان‌های متفاوت اجرا می‌کنید."
 
+msgid "Lease"
+msgstr "اجاره"
+
 msgid "The information that defines the authorization for a particular tunnel to receive messages targeting a <i>Destination</i>."
 msgstr "اطلاعاتی که مشخص می‌کند گذرواژه‌ای برای تونل خاصی برای دریافت پیام‌های مقصد یک <i>مقصد</i> را تعریف می‌کند."
 
@@ -6807,6 +6941,9 @@ msgstr "تونل‌هایی که توسط روترتان برای ارتباط �
 msgid "Tunnels built by your router for each client's use."
 msgstr "تونل‌هایی که توسط روترتان برای استفاده هر مشتری ساخته شده‌اند."
 
+msgid "Participating"
+msgstr "مشارکت"
+
 msgid "Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a  href='/config'>Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a href='/configadvanced'>Advanced configuration page</a>. <a href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
 msgstr "تونل‌هایی که توسط روترهای دیگر از طریق روتر شما ساخته شده‌اند. این تعداد ممکن است بسیار متغیر باشد و به تقاضای شبکه، پهنای‌باند اشتراکی و ترافیک تولیدی‌تان بستگی داشته باشد. روش توصیه‌شده برای محدود کردن تونل‌های مشارکتی، تغییر درصد اشتراک‌دهی در صفحه <a href='/config'>تنظیمات پهنای‌باند</a> است. می‌توانید تعداد کل را نیز با تنظیم <code>router.maxParticipatingTunnels=nnn</code> در صفحه <a href='/configadvanced'>تنظیمات پیشرفته</a> محدود کنید. <a href='/configstats#tunnel.participatingTunnels'>[فعال‌سازی نمودار]</a>."
 
@@ -7235,8 +7372,8 @@ msgstr "پروفایل های همتا"
 msgid "Session Banned Peers"
 msgstr "همتایان محروم از جلسه"
 
-msgid "Floodfills"
-msgstr "سیل"
+msgid "Banned Peers"
+msgstr "همتایان ممنوع"
 
 msgid "Fast / High Capacity"
 msgstr "سریع / ظرفیت بالا"
@@ -7580,3 +7717,11 @@ msgstr "بعدی"
 
 msgid "Finished"
 msgstr "به پایان رسیده"
+
+
+
+
+
+#, java-format
+
+

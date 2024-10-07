@@ -48,6 +48,9 @@ msgstr "Новое значение лимита скорости отдачи: 
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Минимально допустимое значение для лимита скорости отдачи: {0} КБ/с"
 
+msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
+msgstr ""
+
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Включена рандомизация перепрыгивания туннелей +0/1 на входящих туннелях"
 
@@ -340,6 +343,9 @@ msgstr "Добавление торрентов в {0}&hellip;"
 msgid "Connecting to I2P"
 msgstr "Устанавливается соединение с I2P"
 
+msgid "Connected to I2P at"
+msgstr ""
+
 #, java-format
 msgid "Starting up torrent {0}"
 msgstr "Торрент запускается: {0}"
@@ -411,6 +417,9 @@ msgstr "Закончена перепроверка торрента {0}, без
 #, java-format
 msgid "Error checking the torrent {0}"
 msgstr "Ошибка проверки торрента {0}"
+
+msgid "Data partition"
+msgstr ""
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -660,12 +669,6 @@ msgstr "в"
 
 msgid "out"
 msgstr "вне"
-
-msgid "Our destination (identity) for this session"
-msgstr "Мой адрес назначения в этой сессии"
-
-msgid "Dest."
-msgstr "Назначения"
 
 msgid "Estimated download time for all torrents"
 msgstr "Ожидаемое время загрузки всех торрентов"
@@ -1210,6 +1213,12 @@ msgstr "Максимальное количество файлов, разреш
 msgid "Tunnel Configuration"
 msgstr "Конфигурация туннеля"
 
+msgid "Our destination (identity) for this session"
+msgstr "Мой адрес назначения в этой сессии"
+
+msgid "Dest."
+msgstr "Назначения"
+
 msgid "Inbound Settings"
 msgstr "Входящие туннели"
 
@@ -1492,5 +1501,3 @@ msgstr "Сохранить изменения"
 
 msgid "Torrent must be stopped"
 msgstr "Торрент остановлен {0}"
-
-#, java-format

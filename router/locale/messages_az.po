@@ -110,6 +110,9 @@ msgstr "Tələblərin rədd edilməsi"
 msgid "Shutting down"
 msgstr "Söndürür"
 
+msgid "Restarting"
+msgstr ""
+
 msgid "Declining Tunnel Requests"
 msgstr "Tunel sorğularının rədd edilməsi"
 

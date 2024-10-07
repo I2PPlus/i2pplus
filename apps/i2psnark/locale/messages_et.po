@@ -48,6 +48,9 @@ msgstr "Üleslaadimise BW piir vahetatud {0}KBps"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Üleslaadimise bändivõrgu piiri minimaalne väärtus on {0}KBps"
 
+msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
+msgstr ""
+
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "+0/1 tunnelihüppe juhuslik kättesaadavus sissetulevates tunnelites on lubatud"
 
@@ -340,6 +343,9 @@ msgstr "Torrente lisamine {0}..."
 msgid "Connecting to I2P"
 msgstr "Ühendamine I2P-ga"
 
+msgid "Connected to I2P at"
+msgstr ""
+
 #, java-format
 msgid "Starting up torrent {0}"
 msgstr "Torrenti käivitamine {0}"
@@ -411,6 +417,9 @@ msgstr "Torrenti {0} kontroll lõpetatud, mitte muutunud"
 #, java-format
 msgid "Error checking the torrent {0}"
 msgstr "Torrenti {0} kontrollimisel tekkis viga"
+
+msgid "Data partition"
+msgstr ""
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -657,12 +666,6 @@ msgstr "sisenev"
 
 msgid "out"
 msgstr "väljas"
-
-msgid "Our destination (identity) for this session"
-msgstr "Meie sihtkoht (identiteet) selles sessios"
-
-msgid "Dest."
-msgstr "Siht"
 
 msgid "Estimated download time for all torrents"
 msgstr "Kõigi torrentide hinnatud allalaadimisaeg"
@@ -1205,6 +1208,12 @@ msgstr "Maksimaalne failide arv torrentis - märk, et trackerid võivad määrat
 msgid "Tunnel Configuration"
 msgstr "Tunneli seadistused"
 
+msgid "Our destination (identity) for this session"
+msgstr "Meie sihtkoht (identiteet) selles sessios"
+
+msgid "Dest."
+msgstr "Siht"
+
 msgid "Inbound Settings"
 msgstr "Sisenevate seadistused"
 
@@ -1484,5 +1493,3 @@ msgstr "Salvesta muudatused"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent peab olema peatatud"
-
-#, java-format

@@ -110,6 +110,9 @@ msgstr "リクエストの拒否"
 msgid "Shutting down"
 msgstr "シャットダウン"
 
+msgid "Restarting"
+msgstr ""
+
 msgid "Declining Tunnel Requests"
 msgstr "トンネルリクエストの拒否"
 

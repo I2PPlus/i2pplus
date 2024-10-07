@@ -267,6 +267,12 @@ msgstr "पुस्तक"
 msgid "No entries"
 msgstr "कोई प्रविष्टि नहीं"
 
+msgid "Add new destination"
+msgstr "नया गंतव्य जोड़ें"
+
+msgid "Import from hosts.txt file"
+msgstr "hosts.txt फ़ाइल से आयात करें"
+
 msgid "Export in hosts.txt format"
 msgstr "hosts.txt प्रारूप में निर्यात करें"
 
@@ -315,9 +321,6 @@ msgstr "हटाने के लिए चिह्नित करें"
 msgid "Cancel"
 msgstr "रद्द करें"
 
-msgid "Add new destination"
-msgstr "नया गंतव्य जोड़ें"
-
 msgid "e.g. newdomain.i2p"
 msgstr "उदाहरण के लिए newdomain.i2p"
 
@@ -326,9 +329,6 @@ msgstr "B64 या B32"
 
 msgid "Full destination or b32 address"
 msgstr "पूर्ण गंतव्य या b32 पता"
-
-msgid "Import from hosts.txt file"
-msgstr "hosts.txt फ़ाइल से आयात करें"
 
 msgid "Select file"
 msgstr "फ़ाइल चुनें"

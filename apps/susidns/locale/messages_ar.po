@@ -295,6 +295,12 @@ msgstr "كتاب"
 msgid "No entries"
 msgstr "لا توجد إدخالات"
 
+msgid "Add new destination"
+msgstr "أضف وجهة جديدة"
+
+msgid "Import from hosts.txt file"
+msgstr "استيراد من ملف hosts.txt"
+
 msgid "Export in hosts.txt format"
 msgstr "التصدير بتنسيق hosts.txt"
 
@@ -343,9 +349,6 @@ msgstr "اختر للحذف"
 msgid "Cancel"
 msgstr "الغاء"
 
-msgid "Add new destination"
-msgstr "أضف وجهة جديدة"
-
 msgid "e.g. newdomain.i2p"
 msgstr "على سبيل المثال. newdomain.i2"
 
@@ -354,9 +357,6 @@ msgstr "ب64 أو ب32"
 
 msgid "Full destination or b32 address"
 msgstr "الوجهة الكاملة أو عنوان b32"
-
-msgid "Import from hosts.txt file"
-msgstr "استيراد من ملف hosts.txt"
 
 msgid "Select file"
 msgstr "اختر الملف"

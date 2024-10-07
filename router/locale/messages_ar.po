@@ -110,6 +110,9 @@ msgstr "رفض الطلبات"
 msgid "Shutting down"
 msgstr "الاغلاق"
 
+msgid "Restarting"
+msgstr ""
+
 msgid "Declining Tunnel Requests"
 msgstr "رفض طلبات الأنفاق"
 

@@ -48,6 +48,9 @@ msgstr "アップロード帯域制限は{0}Kbpsに変更されました"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "最低アップロード帯域は{0}KBpsです"
 
+msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
+msgstr ""
+
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "インバウンドトンネルで+0/1トンネルホップのランダム化が有効になりました"
 
@@ -340,6 +343,9 @@ msgstr "{0} にトレントを追加しています..."
 msgid "Connecting to I2P"
 msgstr "I2Pに接続しています"
 
+msgid "Connected to I2P at"
+msgstr ""
+
 #, java-format
 msgid "Starting up torrent {0}"
 msgstr "トレント {0} の起動"
@@ -411,6 +417,9 @@ msgstr "トレント {0} の再チェックが終了しました。変更はあ�
 #, java-format
 msgid "Error checking the torrent {0}"
 msgstr "トレント {0} のチェック中にエラーが発生しました"
+
+msgid "Data partition"
+msgstr ""
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -654,12 +663,6 @@ msgstr "で"
 
 msgid "out"
 msgstr "アウト"
-
-msgid "Our destination (identity) for this session"
-msgstr "今回のセッションの目的地（アイデンティティ）"
-
-msgid "Dest."
-msgstr "宛先"
 
 msgid "Estimated download time for all torrents"
 msgstr "すべてのトレントの推定ダウンロード時間"
@@ -1200,6 +1203,12 @@ msgstr "トレントごとに許可されるファイルの最大数 - トラッ
 msgid "Tunnel Configuration"
 msgstr "トンネル構成"
 
+msgid "Our destination (identity) for this session"
+msgstr "今回のセッションの目的地（アイデンティティ）"
+
+msgid "Dest."
+msgstr "宛先"
+
 msgid "Inbound Settings"
 msgstr "受信設定"
 
@@ -1476,5 +1485,3 @@ msgstr "変更を保存"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent を停止する必要があります"
-
-#, java-format

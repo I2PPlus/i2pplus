@@ -48,6 +48,9 @@ msgstr "BW:n yläraja muutettu arvoon {0}KBpsKaistanleveyden enimmäisraja palve
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Kaistanleveyden vähimmäisraja on {0}KBpsKaistanleveyden vähimmäisraja palvelimelle kopioinnissa on {0} kilotavua sekunnissa"
 
+msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
+msgstr ""
+
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "+0/1 tunnelin huppaaminen satunnaisesti otettu käyttöön sisäntulevissa tunnelissa"
 
@@ -340,6 +343,9 @@ msgstr "Torrentien lisääminen kohteeseen {0}..."
 msgid "Connecting to I2P"
 msgstr "Yhdistetään I2P:hen"
 
+msgid "Connected to I2P at"
+msgstr ""
+
 #, java-format
 msgid "Starting up torrent {0}"
 msgstr "Torrentin käynnistys {0}"
@@ -411,6 +417,9 @@ msgstr "Torrentin {0} uudelleentarkistus valmis, ei muutoksia"
 #, java-format
 msgid "Error checking the torrent {0}"
 msgstr "Virheentarkistus vertaisverkossa {0}"
+
+msgid "Data partition"
+msgstr ""
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -657,12 +666,6 @@ msgstr "sisään"
 
 msgid "out"
 msgstr "ulkona"
-
-msgid "Our destination (identity) for this session"
-msgstr "Tämän istunnon määränpäämme (identiteettimme)"
-
-msgid "Dest."
-msgstr "Koh."
 
 msgid "Estimated download time for all torrents"
 msgstr "Arvioitu latausaika kaikille torrenteille"
@@ -1205,6 +1208,12 @@ msgstr "Tiedostojen enimmäismäärä torrentia kohden – huomaa, että seurant
 msgid "Tunnel Configuration"
 msgstr "Tunnelin määritys"
 
+msgid "Our destination (identity) for this session"
+msgstr "Tämän istunnon määränpäämme (identiteettimme)"
+
+msgid "Dest."
+msgstr "Koh."
+
 msgid "Inbound Settings"
 msgstr "Saapuvien asetukset"
 
@@ -1484,5 +1493,3 @@ msgstr "Tallenna muutokset"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent on pysäytettävä"
-
-#, java-format

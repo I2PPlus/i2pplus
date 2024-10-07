@@ -110,6 +110,9 @@ msgstr "Відхилення запитів"
 msgid "Shutting down"
 msgstr "Вимкнення"
 
+msgid "Restarting"
+msgstr ""
+
 msgid "Declining Tunnel Requests"
 msgstr "Відхилення запитів на тунель"
 

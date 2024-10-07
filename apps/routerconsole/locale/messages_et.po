@@ -1353,15 +1353,6 @@ msgstr "Kehtetu mahu väärtus"
 msgid "Unsupported"
 msgstr "Mitte toetatud"
 
-msgid "IPs Banned Until Restart"
-msgstr "Uuesti käivitumiseni bännitud IP-d"
-
-msgid "IPv4 Addresses"
-msgstr "IPv4 aadressid"
-
-msgid "IPv6 Addresses"
-msgstr "IPv6 aadressid"
-
 msgid "IPs Permanently Banned"
 msgstr "Jäädavalt bännitud IP-d"
 
@@ -1370,6 +1361,19 @@ msgstr "Kust"
 
 msgid "To"
 msgstr "Kuhu"
+
+#, java-format
+msgid "First {0} displayed, see the {1} file for the full list"
+msgstr ""
+
+msgid "IPs Banned Until Restart"
+msgstr "Uuesti käivitumiseni bännitud IP-d"
+
+msgid "IPv4 Addresses"
+msgstr "IPv4 aadressid"
+
+msgid "IPv6 Addresses"
+msgstr "IPv6 aadressid"
 
 msgid "Reseed now"
 msgstr "Külvi kohe uuesti"
@@ -1416,11 +1420,11 @@ msgstr "lähtestage URL-i loend"
 msgid "URL list reset successfully"
 msgstr "URL-i loendi lähtestamine õnnestus"
 
-msgid "Cancel shutdown"
-msgstr "Tühista välja lülitumine"
-
 msgid "Cancel restart"
 msgstr "Tühista uuesti käivitumine"
+
+msgid "Cancel shutdown"
+msgstr "Tühista välja lülitumine"
 
 msgid "Restart immediately"
 msgstr "Käivitu kohe uuesti"
@@ -2650,6 +2654,69 @@ msgstr "Sybil -analüüs"
 msgid "Router Map"
 msgstr "Routteri kaart"
 
+msgid "Network Database Search"
+msgstr ""
+
+msgid "Capabilities"
+msgstr "Võimalused"
+
+msgid "e.g. f or XOfR"
+msgstr ""
+
+msgid "Cost"
+msgstr "Maksumus"
+
+msgid "Country"
+msgstr "Maa"
+
+msgid "Country Codes"
+msgstr ""
+
+msgid "Hash Prefix"
+msgstr ""
+
+msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
+msgstr ""
+
+msgid "Hostname or b32"
+msgstr ""
+
+msgid "IPv6 Prefix"
+msgstr ""
+
+msgid "Single port or range"
+msgstr ""
+
+msgid "Signature Type"
+msgstr ""
+
+msgid "SSU Capabilities"
+msgstr ""
+
+msgid "Encryption Type"
+msgstr ""
+
+msgid "Router Version"
+msgstr ""
+
+msgid "Transport"
+msgstr "Transpord"
+
+msgid "Add Sybil analysis (must pick at least one above)"
+msgstr ""
+
+msgid "Sybil close to"
+msgstr ""
+
+msgid "Router hash, destination hash, b32, or from address book"
+msgstr ""
+
+msgid "or Sybil close to this router"
+msgstr ""
+
+msgid "Lookup"
+msgstr "Otsi"
+
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "Ärge kunagi avaldage kellelegi oma ruuteri identiteeti, kuna see on võrguandmebaasis unikaalselt seotud teie IP-aadressiga."
 
@@ -2662,14 +2729,14 @@ msgstr "ei leitud võrguandmebaasist"
 msgid "No results"
 msgstr "Tulemusi pole"
 
-msgid "Previous Page"
-msgstr "Eelmine leht"
+msgid "Bad Base64 Router hash"
+msgstr ""
 
-msgid "Page"
-msgstr "lk"
+msgid "No routers with"
+msgstr ""
 
-msgid "Country"
-msgstr "Maa"
+msgid "Hash prefix"
+msgstr ""
 
 msgid "Port"
 msgstr "Sadam"
@@ -2677,11 +2744,56 @@ msgstr "Sadam"
 msgid "MTU"
 msgstr "MTU"
 
+msgid "found in the network database"
+msgstr ""
+
+msgid "results"
+msgstr ""
+
+msgid "Previous Page"
+msgstr "Eelmine leht"
+
 msgid "Next Page"
 msgstr "Järgmine leht"
 
-msgid "No Leasesets currently active."
-msgstr "Hetkel aktiivseid üürilepinguid pole."
+msgid "Results per page"
+msgstr ""
+
+msgid "Not initialized"
+msgstr "Lähtestamata"
+
+msgid "Debug mode - Sorted by hash distance, closest first."
+msgstr ""
+
+msgid "Compact mode"
+msgstr ""
+
+msgid "Total Leasesets"
+msgstr ""
+
+msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Mod Data"
+msgstr ""
+
+msgid "Last Changed"
+msgstr ""
+
+msgid "Next Mod Data"
+msgstr ""
+
+msgid "Change in"
+msgstr ""
+
+msgid "Known Floodfills"
+msgstr "Tuntud üleujutused"
+
+msgid "Floodfill mode enabled"
+msgstr ""
+
+msgid "Routing Key"
+msgstr "Marsruutimisvõti"
 
 msgid "Network data"
 msgstr "Võrguandmed"
@@ -2695,6 +2807,17 @@ msgstr "hinnanguline üleujutuste koguarv"
 msgid "Estimated total leasesets"
 msgstr "hinnanguline rendisumma kokku"
 
+#, java-format
+msgid "Hostname {0} not found in network database"
+msgstr ""
+
+#, java-format
+msgid "LeaseSet for {0} not found in network database"
+msgstr ""
+
+msgid "Meta"
+msgstr ""
+
 msgid "LeaseSet"
 msgstr "Lüüsikirjegrupp"
 
@@ -2706,16 +2829,6 @@ msgstr "vaadake sihtpunkti kohalikke tunneleid"
 
 msgid "published"
 msgstr "avaldatud"
-
-msgid "Add to addressbook"
-msgstr "Lisa aadressiraamatusse"
-
-msgid "Add to local addressbook"
-msgstr "Lisage kohalikku aadressiraamatusse"
-
-#, java-format
-msgid "Published{0} ago"
-msgstr "Avaldatud{0} tagasi"
 
 #, java-format
 msgid "Expires{0}"
@@ -2743,12 +2856,6 @@ msgstr "Allkirja tüüp"
 msgid "Unsupported type"
 msgstr "Toetamata tüüp"
 
-msgid "Routing Key"
-msgstr "Marsruutimisvõti"
-
-msgid "Lease"
-msgstr "Lüüsikirje"
-
 #, java-format
 msgid "Expires in {0}"
 msgstr "Aegub {0} pärast"
@@ -2757,8 +2864,11 @@ msgstr "Aegub {0} pärast"
 msgid "Expired {0} ago"
 msgstr "Aegus {0} eest"
 
-msgid "Not initialized"
-msgstr "Lähtestamata"
+msgid "Advanced mode - includes all statistics published by floodfills."
+msgstr ""
+
+msgid "Compact mode - does not include statistics published by floodfills."
+msgstr ""
 
 msgid "Network Database Router Statistics"
 msgstr "Võrguandmebaasi ruuterite statistika"
@@ -2781,6 +2891,15 @@ msgstr "kõigi tunnelitaotluste tagasilükkamine"
 msgid "Transports"
 msgstr "Transpordid"
 
+msgid "X Tier"
+msgstr ""
+
+msgid "Floodfills"
+msgstr "Üleujutused"
+
+msgid "Total"
+msgstr "Kokku"
+
 msgid "Unknown"
 msgstr "Teadmatu"
 
@@ -2793,6 +2912,12 @@ msgstr "Meie info"
 msgid "Router is banlisted"
 msgstr "ruuter on keelatud"
 
+msgid "Java I2P variant"
+msgstr ""
+
+msgid "I2Pd variant"
+msgstr ""
+
 msgid "RouterInfo is compressible"
 msgstr "RouterInfo on tihendatav"
 
@@ -2803,11 +2928,11 @@ msgstr "kuvage NetDb-s kõik selle versiooniga ruuterid"
 msgid "Show all members of the {0} family in NetDb"
 msgstr "Kuva kõik perekonna {0} liikmed NetDb-s"
 
-msgid "View profile"
-msgstr "Vaata profiili"
-
 msgid "Profile"
 msgstr "profiil"
+
+msgid "View profile"
+msgstr "Vaata profiili"
 
 msgid "Configure peer"
 msgstr "kaaslaste konfigureerimine"
@@ -2823,6 +2948,9 @@ msgstr "Avaldatud"
 
 msgid "Hostname"
 msgstr "Hostinimi"
+
+msgid "direct"
+msgstr ""
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "Kinnitatud perekond (allkirjastamissertifikaat on installitud ja kehtiv)"
@@ -2842,17 +2970,11 @@ msgstr "Aadressid"
 msgid "n/a"
 msgstr "puudub"
 
-msgid "Cost"
-msgstr "Maksumus"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "Kuva kõik selle aadressiga ruuterid NetDb-s"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "Kuva NetDb-s kõik selle pordiga ruuterid"
-
-msgid "Capabilities"
-msgstr "Võimalused"
 
 msgid "Core version"
 msgstr "Põhiversioon"
@@ -2941,11 +3063,11 @@ msgstr "IPv6 NTCP"
 msgid "IPv6 NTCP, SSU"
 msgstr "IPv6 NTCP, SSU"
 
-msgid "IPv6 NTCP, SSU, introducers"
-msgstr "IPv6 NTCP, SSU, tutvustajad"
-
 msgid "IPv6 Only NTCP, SSU, introducers"
 msgstr "IPv6 Ainult NTCP, SSU, tutvustajad"
+
+msgid "IPv6 NTCP, SSU, introducers"
+msgstr "IPv6 NTCP, SSU, tutvustajad"
 
 msgid "No peer connections available"
 msgstr "Peer-ühendused pole saadaval"
@@ -2970,9 +3092,6 @@ msgstr "Vastastikused ühendused"
 msgid "Auto-refresh"
 msgstr "Automaatne värskendamine"
 
-msgid "Transport"
-msgstr "Transpord"
-
 msgid "Active in the last minute"
 msgstr "Aktiivne viimasel minutil"
 
@@ -2981,9 +3100,6 @@ msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
-
-msgid "Total"
-msgstr "Kokku"
 
 msgid "Current / maximum permitted"
 msgstr "vool / maksimaalne lubatud"
@@ -3234,9 +3350,6 @@ msgid_plural "Showing {0} recent profiles."
 msgstr[0] "{0} hiljutine profiil."
 msgstr[1] "{0} hiljutised profiilid."
 
-msgid "active in the last 20 minutes"
-msgstr "aktiivne viimase 15 minuti jooksul"
-
 #, java-format
 msgid "Hiding {0} older profile."
 msgid_plural "Hiding {0} older profiles."
@@ -3278,6 +3391,9 @@ msgstr "Tunneli eakaaslane on keeldunud osalemast"
 
 msgid "Rejected"
 msgstr "tagasi lükatud"
+
+msgid "First Heard About"
+msgstr ""
 
 msgid "Last Heard From"
 msgstr "Viimati kuuldud temalt"
@@ -3451,6 +3567,13 @@ msgstr "Seansi keelud"
 
 msgid "Total number of banned peers"
 msgstr "keelatud kaaslaste koguarv"
+
+msgid "Note: 'LU' class routers have been excluded from the list."
+msgstr ""
+
+#, java-format
+msgid "To view, see {0}Session Bans{1}."
+msgstr ""
 
 msgid "Select search engine"
 msgstr "valige otsingumootor"
@@ -3723,9 +3846,6 @@ msgstr "Purgid"
 msgid "Review extended info about installed .jar and .war files"
 msgstr "vaadake üle laiendatud teave installitud .jar- ja .war-failide kohta"
 
-msgid "Lookup"
-msgstr "Otsi"
-
 msgid "Textual router performance statistics"
 msgstr "Ruuteri jõudlusinfo teksti kujul"
 
@@ -3760,8 +3880,8 @@ msgstr "Mälu"
 msgid "Floodfill enabled"
 msgstr "Ülekannefunktsioon lubatud"
 
-msgid "See more information on the wiki"
-msgstr "Vaadake lisateavet vikis"
+msgid "Total number of LeaseSets stored in our NetDb"
+msgstr ""
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Hoiatus: ECDSA pole saadaval. Uuendage oma Java või OS -i"
@@ -3835,8 +3955,8 @@ msgstr "sissetulev / väljaminev"
 msgid "Used for building and testing tunnels, and communicating with floodfill peers"
 msgstr "kasutatakse tunnelite ehitamiseks ja katsetamiseks ning üleujutuste täitekaaslastega suhtlemiseks"
 
-msgid "Exploratory"
-msgstr "Avastamine"
+msgid "Utility"
+msgstr "Kasulikkus"
 
 msgid "Tunnels we are participating in, directly contributing bandwidth to the network"
 msgstr "Tunnelid, milles osaleme, andes otse võrgu ribalaiuse"
@@ -3844,8 +3964,8 @@ msgstr "Tunnelid, milles osaleme, andes otse võrgu ribalaiuse"
 msgid "Current / Maximum"
 msgstr "praegune / maksimaalne"
 
-msgid "Participating"
-msgstr "Osalemine"
+msgid "Transit"
+msgstr "Transiit"
 
 msgid "Concurrent tunnel builds (averaged over a minute) / single tunnel build time"
 msgstr "samaaegsed tunneliehitused (keskmiselt üle minuti) / ühe tunneli ehitamise aeg"
@@ -3867,12 +3987,6 @@ msgstr "Jagamistase"
 
 msgid "tunnels"
 msgstr "tunnelid"
-
-msgid "Transit"
-msgstr "Transiit"
-
-msgid "Utility"
-msgstr "Kasulikkus"
 
 msgid "Tunnel Count by Peer"
 msgstr "Tunnelite loendus, autor Peer"
@@ -4180,9 +4294,6 @@ msgstr "Jõustab blokeering"
 msgid "days"
 msgstr "päeva"
 
-msgid "Known Floodfills"
-msgstr "Tuntud üleujutused"
-
 msgid "Average closest floodfill distance"
 msgstr "Keskmine lähim üleujutuse täituvus"
 
@@ -4321,6 +4432,9 @@ msgstr "Kaugus"
 msgid "Distance for"
 msgstr "Kaugus"
 
+msgid "Exploratory"
+msgstr "Avastamine"
+
 msgid "Configure tunnels"
 msgstr "Tunnelite seadistamine"
 
@@ -4395,6 +4509,9 @@ msgstr "ruuter töötab praegu varjatud režiimis, mis takistab transiiditunneli
 msgid "No transit tunnels currently active."
 msgstr "praegu aktiivseid ühistransporditunneleid ei ole."
 
+msgid "Transit Tunnels by Peer (Top 50)"
+msgstr ""
+
 msgid "Address"
 msgstr "Aadress"
 
@@ -4466,6 +4583,9 @@ msgstr "Ribalaiuse test ebaõnnestus"
 
 msgid "Bandwidth test did not complete"
 msgstr "Ribalaiuse testi ei lõpetatud"
+
+msgid "Bad state for test"
+msgstr ""
 
 msgid "Bandwidth test started"
 msgstr "Ribalaiuse test algas"
@@ -5098,14 +5218,22 @@ msgstr "Bänni ruuter käsitsi / tühista bänn"
 msgid "Banning will prevent the participation of this peer in tunnels you create."
 msgstr "Bännimine takistab ruuterit üheski sinu ruuteri tunnelis osalemast."
 
+msgid "A list of bans by IP address is presented below."
+msgstr ""
+
+#, java-format
+msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
+msgstr ""
+
+#, java-format
+msgid "A list of {0}session-only bans{1} by hash is also available."
+msgstr ""
+
 msgid "Adjust Profile Bonuses"
 msgstr "Muuda profiili boonuseid"
 
 msgid "Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels."
 msgstr "Boonused võivad olla positiivsed või negatiivsed ning mõjutada eakaaslaste kaasamist kiirete ja suure mahutavusega. Kiireid eakaaslasi kasutatakse kliendi tunnelite jaoks ja mõne uurimusliku tunneli jaoks kasutatakse suure mahutavusega eakaaslasi."
-
-msgid "Banned Peers"
-msgstr "Bännitud ruuterid"
 
 msgid "Banned IP Addresses"
 msgstr "Bännitud IP-aadressid"
@@ -5652,6 +5780,9 @@ msgstr "Selle seadistuse abil saate konfigureerida allkirjastamata värskenduste
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "See seadistus lubab keelata SSU testid, et teha kindlaks, kas teie ruuter on tulemüüri taga ja see saab lubada ruuteritele, mis pole kindlasti tulemüüri taga, kuid kogevad katkendlikke tulemüüri probleeme. Testimise keelamise korral peaksid nii SSU kui ka NTCP teatama teie praeguse avaliku IP-aadressi aadressil <a href=/info>ruuteri teabekülg</a>. [Nõutav taaskäivitamine]"
+
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
+msgstr ""
 
 msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
 msgstr "Selle seade määrab, milline ühendusviis saab prioriteedi seosetute serveritega suhtlemisel. Vaikimisi eelistatakse NTCP-d UDP asemel (SSU). Kui seada väärtuseks true, eelistatakse UDP-d, välja arvatud juhul, kui juba on olemas NTCP-ühendus; kui seada väärtuseks always, kasutatakse alati UDP-d, hoolimata olemasolevast NTCP-ühendusest . [Vaikimisi on false]"
@@ -6235,6 +6366,9 @@ msgstr "Sülearvuti režiim"
 msgid "An <a href=/confignet#ipchange>optional configuration</a> that automatically changes your <a href=/netdb?r=.>router identity</a> and <a href=/confignet#udpconfig>external port</a> when the public ip address your system is on changes. This can prevent an adversary from correlating your router identity and ip address in scenarios where your ip address may change frequently, for example when you're running I2P on a laptop from multiple locations."
 msgstr "Valikuline seadistus, mis muudab automaatselt sinu ruuteri identiteedi ja välise pordi, kui su süsteemi avalik IP-aadress muutub. See võib takistada vastaspoolel su ruuteri identiteedi ja IP-aadressi seostamist olukordades, kus su IP-aadress võib sageli muutuda, näiteks kui kasutad I2P-d sülearvutis, liikuvast asukohast."
 
+msgid "Lease"
+msgstr "Lüüsikirje"
+
 msgid "The information that defines the authorization for a particular tunnel to receive messages targeting a <i>Destination</i>."
 msgstr "Teave, mis määratleb teisest võrgusihist pärit sõnumite vastuvõtmiseks konkreetsele tunnelile autoriseerimise."
 
@@ -6808,6 +6942,9 @@ msgstr "Tunnelid, mis ehitatakse teie marsruuteri poolt ja mida kasutatakse suht
 msgid "Tunnels built by your router for each client's use."
 msgstr "Tunnelid, mis ehitatakse teie marsruuteri poolt iga kliendi kasutamiseks."
 
+msgid "Participating"
+msgstr "Osalemine"
+
 msgid "Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a  href='/config'>Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a href='/configadvanced'>Advanced configuration page</a>. <a href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
 msgstr "Tunnelid, mis ehitatakse teiste marsruuterite poolt teie marsruuteri kaudu. See võib palju varieeruda, olenevalt võrgu nõudlusest, teie jagatavast ribalaiusest ja kohapealsest liiklusest. Soovitatav meetod osalevate tunnelite piiramiseks on muuta oma osakaalu protsent lehele <a href='/config'>Ribakonfiguratsioon</a>. Teil on võimalik piirata ka koguarvu, määrates <code>router.maxParticipatingTunnels=nnn</code> lehel <a href='/configadvanced'>Täpsem konfiguratsioonileht</a>. <a href='/configstats#tunnel.participatingTunnels'>[Graafiku lubamiseks]</a>."
 
@@ -7236,8 +7373,8 @@ msgstr "kaaslaste profiilid"
 msgid "Session Banned Peers"
 msgstr "Seansi ajal keelatud kaaslased"
 
-msgid "Floodfills"
-msgstr "Üleujutused"
+msgid "Banned Peers"
+msgstr "Bännitud ruuterid"
 
 msgid "Fast / High Capacity"
 msgstr "Kiire / suur võimsus"
@@ -7581,3 +7718,11 @@ msgstr "Järgmine"
 
 msgid "Finished"
 msgstr "Lõppenud"
+
+
+
+
+
+#, java-format
+
+

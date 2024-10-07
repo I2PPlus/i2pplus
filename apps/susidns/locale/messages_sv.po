@@ -267,6 +267,12 @@ msgstr "Bok"
 msgid "No entries"
 msgstr "Inga anmälningar"
 
+msgid "Add new destination"
+msgstr "Lägg till nytt mål"
+
+msgid "Import from hosts.txt file"
+msgstr "Importera från hosts.txt-fil"
+
 msgid "Export in hosts.txt format"
 msgstr "Exportera till hosts.txt format"
 
@@ -315,9 +321,6 @@ msgstr "Markera för borttagning"
 msgid "Cancel"
 msgstr "Avbryt"
 
-msgid "Add new destination"
-msgstr "Lägg till nytt mål"
-
 msgid "e.g. newdomain.i2p"
 msgstr "t.ex. newdomain.i2p"
 
@@ -326,9 +329,6 @@ msgstr "B64 eller B32"
 
 msgid "Full destination or b32 address"
 msgstr "Fullständig destination eller b32-adress"
-
-msgid "Import from hosts.txt file"
-msgstr "Importera från hosts.txt-fil"
 
 msgid "Select file"
 msgstr "Välj fil"

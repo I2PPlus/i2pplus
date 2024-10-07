@@ -260,6 +260,12 @@ msgstr "本"
 msgid "No entries"
 msgstr "記入なし"
 
+msgid "Add new destination"
+msgstr "新しい宛先を追加"
+
+msgid "Import from hosts.txt file"
+msgstr "hosts.txt ファイルからインポート"
+
 msgid "Export in hosts.txt format"
 msgstr "hosts.txt 形式でエクスポート"
 
@@ -308,9 +314,6 @@ msgstr "削除にマーク"
 msgid "Cancel"
 msgstr "キャンセル"
 
-msgid "Add new destination"
-msgstr "新しい宛先を追加"
-
 msgid "e.g. newdomain.i2p"
 msgstr "例"
 
@@ -319,9 +322,6 @@ msgstr "B64またはB32"
 
 msgid "Full destination or b32 address"
 msgstr "完全な宛先または b32 アドレス"
-
-msgid "Import from hosts.txt file"
-msgstr "hosts.txt ファイルからインポート"
 
 msgid "Select file"
 msgstr "ファイルを選択"

@@ -1349,15 +1349,6 @@ msgstr "不良な許容値"
 msgid "Unsupported"
 msgstr "非サポート"
 
-msgid "IPs Banned Until Restart"
-msgstr "再起動まで禁止された IP"
-
-msgid "IPv4 Addresses"
-msgstr "IPv4 アドレス"
-
-msgid "IPv6 Addresses"
-msgstr "IPv6 アドレス"
-
 msgid "IPs Permanently Banned"
 msgstr "永久に禁止された IP"
 
@@ -1366,6 +1357,19 @@ msgstr "送信元"
 
 msgid "To"
 msgstr "送信先"
+
+#, java-format
+msgid "First {0} displayed, see the {1} file for the full list"
+msgstr ""
+
+msgid "IPs Banned Until Restart"
+msgstr "再起動まで禁止された IP"
+
+msgid "IPv4 Addresses"
+msgstr "IPv4 アドレス"
+
+msgid "IPv6 Addresses"
+msgstr "IPv6 アドレス"
 
 msgid "Reseed now"
 msgstr "今ブートストラップ"
@@ -1411,11 +1415,11 @@ msgstr "URLリストをリセット"
 msgid "URL list reset successfully"
 msgstr "URLリストのリセットに成功しました"
 
-msgid "Cancel shutdown"
-msgstr "シャットダウンをキャンセル"
-
 msgid "Cancel restart"
 msgstr "再起動をキャンセル"
+
+msgid "Cancel shutdown"
+msgstr "シャットダウンをキャンセル"
 
 msgid "Restart immediately"
 msgstr "すぐに再起動"
@@ -2641,6 +2645,69 @@ msgstr "シビル分析"
 msgid "Router Map"
 msgstr "ルーター地図"
 
+msgid "Network Database Search"
+msgstr ""
+
+msgid "Capabilities"
+msgstr "能力"
+
+msgid "e.g. f or XOfR"
+msgstr ""
+
+msgid "Cost"
+msgstr "コスト"
+
+msgid "Country"
+msgstr "国"
+
+msgid "Country Codes"
+msgstr ""
+
+msgid "Hash Prefix"
+msgstr ""
+
+msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
+msgstr ""
+
+msgid "Hostname or b32"
+msgstr ""
+
+msgid "IPv6 Prefix"
+msgstr ""
+
+msgid "Single port or range"
+msgstr ""
+
+msgid "Signature Type"
+msgstr ""
+
+msgid "SSU Capabilities"
+msgstr ""
+
+msgid "Encryption Type"
+msgstr ""
+
+msgid "Router Version"
+msgstr ""
+
+msgid "Transport"
+msgstr "トランスポート"
+
+msgid "Add Sybil analysis (must pick at least one above)"
+msgstr ""
+
+msgid "Sybil close to"
+msgstr ""
+
+msgid "Router hash, destination hash, b32, or from address book"
+msgstr ""
+
+msgid "or Sybil close to this router"
+msgstr ""
+
+msgid "Lookup"
+msgstr "ルックアップ"
+
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "ルーターのアイデンティティはネットワーク データベース内の IP アドレスに一意にリンクされているため、決して他人に明かさないでください。"
 
@@ -2653,14 +2720,14 @@ msgstr "ネットワークデータベース内に見つかりませんでした
 msgid "No results"
 msgstr "結果なし"
 
-msgid "Previous Page"
-msgstr "前のページ"
+msgid "Bad Base64 Router hash"
+msgstr ""
 
-msgid "Page"
-msgstr "ページ"
+msgid "No routers with"
+msgstr ""
 
-msgid "Country"
-msgstr "国"
+msgid "Hash prefix"
+msgstr ""
 
 msgid "Port"
 msgstr "ポート"
@@ -2668,11 +2735,56 @@ msgstr "ポート"
 msgid "MTU"
 msgstr "男"
 
+msgid "found in the network database"
+msgstr ""
+
+msgid "results"
+msgstr ""
+
+msgid "Previous Page"
+msgstr "前のページ"
+
 msgid "Next Page"
 msgstr "次のページ"
 
-msgid "No Leasesets currently active."
-msgstr "現在アクティブなリースセットはありません。"
+msgid "Results per page"
+msgstr ""
+
+msgid "Not initialized"
+msgstr "未初期化"
+
+msgid "Debug mode - Sorted by hash distance, closest first."
+msgstr ""
+
+msgid "Compact mode"
+msgstr ""
+
+msgid "Total Leasesets"
+msgstr ""
+
+msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Mod Data"
+msgstr ""
+
+msgid "Last Changed"
+msgstr ""
+
+msgid "Next Mod Data"
+msgstr ""
+
+msgid "Change in"
+msgstr ""
+
+msgid "Known Floodfills"
+msgstr "既知の洪水地帯"
+
+msgid "Floodfill mode enabled"
+msgstr ""
+
+msgid "Routing Key"
+msgstr "ルーティングキー"
 
 msgid "Network data"
 msgstr "ネットワークデータ"
@@ -2686,6 +2798,17 @@ msgstr "推定総氾濫水量"
 msgid "Estimated total leasesets"
 msgstr "リースセットの推定合計数"
 
+#, java-format
+msgid "Hostname {0} not found in network database"
+msgstr ""
+
+#, java-format
+msgid "LeaseSet for {0} not found in network database"
+msgstr ""
+
+msgid "Meta"
+msgstr ""
+
 msgid "LeaseSet"
 msgstr "リースセット"
 
@@ -2697,16 +2820,6 @@ msgstr "宛先のローカルトンネルを表示"
 
 msgid "published"
 msgstr "公開"
-
-msgid "Add to addressbook"
-msgstr "アドレス帳に追加"
-
-msgid "Add to local addressbook"
-msgstr "ローカルのアドレス帳に追加"
-
-#, java-format
-msgid "Published{0} ago"
-msgstr "{0}前に公開"
 
 #, java-format
 msgid "Expires{0}"
@@ -2734,12 +2847,6 @@ msgstr "署名の種類"
 msgid "Unsupported type"
 msgstr "サポートされていないタイプ"
 
-msgid "Routing Key"
-msgstr "ルーティングキー"
-
-msgid "Lease"
-msgstr "リース"
-
 #, java-format
 msgid "Expires in {0}"
 msgstr "{0} に期限切れ"
@@ -2748,8 +2855,11 @@ msgstr "{0} に期限切れ"
 msgid "Expired {0} ago"
 msgstr "{0} 前に期限切れ"
 
-msgid "Not initialized"
-msgstr "未初期化"
+msgid "Advanced mode - includes all statistics published by floodfills."
+msgstr ""
+
+msgid "Compact mode - does not include statistics published by floodfills."
+msgstr ""
 
 msgid "Network Database Router Statistics"
 msgstr "ネットワークデータベースルーター統計"
@@ -2772,6 +2882,15 @@ msgstr "すべてのトンネルリクエストを拒否する"
 msgid "Transports"
 msgstr "トランスポート"
 
+msgid "X Tier"
+msgstr ""
+
+msgid "Floodfills"
+msgstr "埋め立て地"
+
+msgid "Total"
+msgstr "合計"
+
 msgid "Unknown"
 msgstr "不明"
 
@@ -2784,6 +2903,12 @@ msgstr "情報"
 msgid "Router is banlisted"
 msgstr "ルーターが禁止リストに登録されています"
 
+msgid "Java I2P variant"
+msgstr ""
+
+msgid "I2Pd variant"
+msgstr ""
+
 msgid "RouterInfo is compressible"
 msgstr "RouterInfoは圧縮可能です"
 
@@ -2794,11 +2919,11 @@ msgstr "NetDb 内のこのバージョンのすべてのルーターを表示し
 msgid "Show all members of the {0} family in NetDb"
 msgstr "NetDb の {0} ファミリのすべてのメンバーを表示します"
 
-msgid "View profile"
-msgstr "プロフィールを見る"
-
 msgid "Profile"
 msgstr "プロフィール"
+
+msgid "View profile"
+msgstr "プロフィールを見る"
 
 msgid "Configure peer"
 msgstr "ピアの設定"
@@ -2814,6 +2939,9 @@ msgstr "公開済み"
 
 msgid "Hostname"
 msgstr "ホスト名"
+
+msgid "direct"
+msgstr ""
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "検証済みファミリー (署名証明書がインストールされており、有効です)"
@@ -2833,17 +2961,11 @@ msgstr "アドレス"
 msgid "n/a"
 msgstr "n/a"
 
-msgid "Cost"
-msgstr "コスト"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "NetDb 内のこのアドレスを持つすべてのルーターを表示します"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "NetDb 内のこのポートを持つすべてのルーターを表示します"
-
-msgid "Capabilities"
-msgstr "能力"
 
 msgid "Core version"
 msgstr "コアバージョン"
@@ -2932,11 +3054,11 @@ msgstr "IPv6 NTCP"
 msgid "IPv6 NTCP, SSU"
 msgstr "IPv6 NTCP, SSU"
 
-msgid "IPv6 NTCP, SSU, introducers"
-msgstr "IPv6 NTCP, SSU, イントロデューサー"
-
 msgid "IPv6 Only NTCP, SSU, introducers"
 msgstr "IPv6 のみ NTCP, SSU, イントロデューサー"
+
+msgid "IPv6 NTCP, SSU, introducers"
+msgstr "IPv6 NTCP, SSU, イントロデューサー"
 
 msgid "No peer connections available"
 msgstr "ピア接続は利用できません"
@@ -2961,9 +3083,6 @@ msgstr "ピア接続"
 msgid "Auto-refresh"
 msgstr "自動更新"
 
-msgid "Transport"
-msgstr "トランスポート"
-
 msgid "Active in the last minute"
 msgstr "最後の瞬間にアクティブ"
 
@@ -2972,9 +3091,6 @@ msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
-
-msgid "Total"
-msgstr "合計"
 
 msgid "Current / maximum permitted"
 msgstr "現在 / 最大許可"
@@ -3222,9 +3338,6 @@ msgid "Showing {0} recent profile."
 msgid_plural "Showing {0} recent profiles."
 msgstr[0] "{0}最近のプロファイルを表示します。"
 
-msgid "active in the last 20 minutes"
-msgstr "active in the last 20 minutes"
-
 #, java-format
 msgid "Hiding {0} older profile."
 msgid_plural "Hiding {0} older profiles."
@@ -3264,6 +3377,9 @@ msgstr "トンネルピアが参加を拒否しました"
 
 msgid "Rejected"
 msgstr "拒否されました"
+
+msgid "First Heard About"
+msgstr ""
 
 msgid "Last Heard From"
 msgstr "次から最後に耳にした:"
@@ -3434,6 +3550,13 @@ msgstr "セッション禁止"
 
 msgid "Total number of banned peers"
 msgstr "禁止されたピアの総数"
+
+msgid "Note: 'LU' class routers have been excluded from the list."
+msgstr ""
+
+#, java-format
+msgid "To view, see {0}Session Bans{1}."
+msgstr ""
 
 msgid "Select search engine"
 msgstr "検索エンジンを選択"
@@ -3704,9 +3827,6 @@ msgstr "瓶"
 msgid "Review extended info about installed .jar and .war files"
 msgstr "インストールされている .jar および .war ファイルに関する詳細情報を確認する"
 
-msgid "Lookup"
-msgstr "ルックアップ"
-
 msgid "Textual router performance statistics"
 msgstr "テキストのルーターパフォーマンス統計"
 
@@ -3741,8 +3861,8 @@ msgstr "記憶"
 msgid "Floodfill enabled"
 msgstr "Floodfill機能有効"
 
-msgid "See more information on the wiki"
-msgstr "Wiki 上で詳細を表示"
+msgid "Total number of LeaseSets stored in our NetDb"
+msgstr ""
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "警告: ECDSA が利用できません。 Java または OS を更新してください"
@@ -3816,8 +3936,8 @@ msgstr "インバウンド / アウトバウンド"
 msgid "Used for building and testing tunnels, and communicating with floodfill peers"
 msgstr "トンネルの作成・テストと、floodfillピアとコミュニケーションを取るのに使用され た"
 
-msgid "Exploratory"
-msgstr "予備"
+msgid "Utility"
+msgstr "ユーティリティ"
 
 msgid "Tunnels we are participating in, directly contributing bandwidth to the network"
 msgstr "参加していて、ネットワークの帯域幅に直接貢献しているトンネル"
@@ -3825,8 +3945,8 @@ msgstr "参加していて、ネットワークの帯域幅に直接貢献して
 msgid "Current / Maximum"
 msgstr "現在 / 最大"
 
-msgid "Participating"
-msgstr "参加中"
+msgid "Transit"
+msgstr "トランジット"
 
 msgid "Concurrent tunnel builds (averaged over a minute) / single tunnel build time"
 msgstr "同時トンネル ビルド (1 分間の平均) / 単一トンネル ビルド時間"
@@ -3848,12 +3968,6 @@ msgstr "共有比率"
 
 msgid "tunnels"
 msgstr "トンネル"
-
-msgid "Transit"
-msgstr "トランジット"
-
-msgid "Utility"
-msgstr "ユーティリティ"
 
 msgid "Tunnel Count by Peer"
 msgstr "ピア別のトンネル数"
@@ -4161,9 +4275,6 @@ msgstr "ブロックを強制する"
 msgid "days"
 msgstr "日"
 
-msgid "Known Floodfills"
-msgstr "既知の洪水地帯"
-
 msgid "Average closest floodfill distance"
 msgstr "平均最も近い洪水埋め立て距離"
 
@@ -4302,6 +4413,9 @@ msgstr "までの距離"
 msgid "Distance for"
 msgstr "距離"
 
+msgid "Exploratory"
+msgstr "予備"
+
 msgid "Configure tunnels"
 msgstr "トンネルの構成"
 
@@ -4376,6 +4490,9 @@ msgstr "ルーターは現在隠しモードで動作しているため、中継
 msgid "No transit tunnels currently active."
 msgstr "現在アクティブなトランジット トンネルはありません。"
 
+msgid "Transit Tunnels by Peer (Top 50)"
+msgstr ""
+
 msgid "Address"
 msgstr "住所"
 
@@ -4447,6 +4564,9 @@ msgstr "帯域幅テストに失敗しました"
 
 msgid "Bandwidth test did not complete"
 msgstr "帯域幅テストが完了しませんでした"
+
+msgid "Bad state for test"
+msgstr ""
 
 msgid "Bandwidth test started"
 msgstr "帯域幅テスト開始"
@@ -5079,14 +5199,22 @@ msgstr "ピアを手動で禁止/禁止解除する"
 msgid "Banning will prevent the participation of this peer in tunnels you create."
 msgstr "禁止すると、作成したトンネルにこのピアが参加できなくなります。"
 
+msgid "A list of bans by IP address is presented below."
+msgstr ""
+
+#, java-format
+msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
+msgstr ""
+
+#, java-format
+msgid "A list of {0}session-only bans{1} by hash is also available."
+msgstr ""
+
 msgid "Adjust Profile Bonuses"
 msgstr "プロフィールボーナスの調整"
 
 msgid "Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels."
 msgstr "ボーナスはプラスまたはマイナスであり、高速および大容量の層へのピアの含有に影響を与える可能性があります。 高速ピアはクライアントトンネルに使用され、いくつかの探索的トンネルには大容量のピアが使用されます。"
-
-msgid "Banned Peers"
-msgstr "禁止されているピア"
 
 msgid "Banned IP Addresses"
 msgstr "禁止されたIP"
@@ -5633,6 +5761,9 @@ msgstr "この設定を使用すると、有効になっている場合、署名
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "この設定により、ルータがファイアウォールであるかどうかを判断するためのSSUテストを無効にすることができます。ファイアウォールでないことが確認されているが、一時的なファイアウォールの問題が発生しているルータに対して有効にすることもできます。テストが無効にされている場合、SSUとNTCPの両方が<a href=/info>ルータ情報ページ</a>で現在の公開IPアドレスを報告するはずです。[再起動が必要です]"
+
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
+msgstr ""
 
 msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
 msgstr "この設定により、ピアとの通信時に優先されるトランスポートを決定します。デフォルトでは、UDP (SSU) よりもNTCPが優先されています。値をtrueに設定すると、事前のNTCP接続が存在しない限り、UDPが優先されます。alwaysに設定すると、事前のNTCP接続の有無に関係なく常にUDPが使用されます。[デフォルトはfalse]"
@@ -6216,6 +6347,9 @@ msgstr "ラップトップモード"
 msgid "An <a href=/confignet#ipchange>optional configuration</a> that automatically changes your <a href=/netdb?r=.>router identity</a> and <a href=/confignet#udpconfig>external port</a> when the public ip address your system is on changes. This can prevent an adversary from correlating your router identity and ip address in scenarios where your ip address may change frequently, for example when you're running I2P on a laptop from multiple locations."
 msgstr "システムが接続されている公共のIPアドレスが変更された場合に、自動的に<a href=/confignet#ipchange>オプションの設定</a>を変更して、<a href=/netdb?r=.>ルーターの識別子</a>と<a href=/confignet#udpconfig>外部ポート</a>を変更します。これにより、IPアドレスが頻繁に変更される場合、たとえばラップトップを複数の場所で使用してI2Pを実行している場合に、攻撃者がルーターの識別子とIPアドレスを関連付けるのを防ぐことができます。"
 
+msgid "Lease"
+msgstr "リース"
+
 msgid "The information that defines the authorization for a particular tunnel to receive messages targeting a <i>Destination</i>."
 msgstr "特定のトンネルが<i>Destination</i>に対してメッセージを受け取るための認証を定義する情報です。"
 
@@ -6789,6 +6923,9 @@ msgstr "ルーターによって構築され、洪水フィルピアとのコミ
 msgid "Tunnels built by your router for each client's use."
 msgstr "クライアントごとにルーターによって構築されたトンネル。"
 
+msgid "Participating"
+msgstr "参加中"
+
 msgid "Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a  href='/config'>Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a href='/configadvanced'>Advanced configuration page</a>. <a href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
 msgstr "他のルーターがあなたのルーターを介して作成するトンネルです。これは、ネットワークの需要、共有帯域幅、および地域生成トラフィックの量によって大きく異なります。参加トンネルを制限する推奨方法は、<a href='/config'>帯域幅設定ページ</a>で共有割合を変更することです。また、<a href='/configadvanced'>高度な設定ページ</a>で<code>router.maxParticipatingTunnels=nnn</code>を設定することで、総数を制限することもできます。<a href='/configstats#tunnel.participatingTunnels'>[グラフ化を有効にする]</a>。"
 
@@ -7217,8 +7354,8 @@ msgstr "ピアプロファイル"
 msgid "Session Banned Peers"
 msgstr "セッション禁止ピア"
 
-msgid "Floodfills"
-msgstr "埋め立て地"
+msgid "Banned Peers"
+msgstr "禁止されているピア"
 
 msgid "Fast / High Capacity"
 msgstr "高速/大容量"
@@ -7562,3 +7699,11 @@ msgstr "次へ"
 
 msgid "Finished"
 msgstr "完了"
+
+
+
+
+
+#, java-format
+
+

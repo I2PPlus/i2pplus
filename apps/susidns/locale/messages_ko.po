@@ -260,6 +260,12 @@ msgstr "책"
 msgid "No entries"
 msgstr "항목이 없습니다."
 
+msgid "Add new destination"
+msgstr "새 목적지 축"
+
+msgid "Import from hosts.txt file"
+msgstr "hosts.txt 파일에서 가져오기"
+
 msgid "Export in hosts.txt format"
 msgstr "hosts.txt 포맷으로 내보내기"
 
@@ -308,9 +314,6 @@ msgstr "삭제표시"
 msgid "Cancel"
 msgstr "취소"
 
-msgid "Add new destination"
-msgstr "새 목적지 축"
-
 msgid "e.g. newdomain.i2p"
 msgstr "예: newdomain.i2p"
 
@@ -319,9 +322,6 @@ msgstr "B64 또는 B32"
 
 msgid "Full destination or b32 address"
 msgstr "전체 대상 또는 b32 주소"
-
-msgid "Import from hosts.txt file"
-msgstr "hosts.txt 파일에서 가져오기"
 
 msgid "Select file"
 msgstr "파일 선택"

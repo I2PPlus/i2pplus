@@ -110,6 +110,9 @@ msgstr "Elutasító kérelmek"
 msgid "Shutting down"
 msgstr "Leállítás"
 
+msgid "Restarting"
+msgstr ""
+
 msgid "Declining Tunnel Requests"
 msgstr "Csökkenő alagútkérések"
 

@@ -1355,15 +1355,6 @@ msgstr "Špatná hodnota kapacity"
 msgid "Unsupported"
 msgstr "Nepodporováno"
 
-msgid "IPs Banned Until Restart"
-msgstr "IPs Zakázáno Až Do Restartu"
-
-msgid "IPv4 Addresses"
-msgstr "Adresy IPv4"
-
-msgid "IPv6 Addresses"
-msgstr "Adresy IPv6"
-
 msgid "IPs Permanently Banned"
 msgstr "IPs Je Trvale Zakázáno"
 
@@ -1372,6 +1363,19 @@ msgstr "Od"
 
 msgid "To"
 msgstr "Do"
+
+#, java-format
+msgid "First {0} displayed, see the {1} file for the full list"
+msgstr ""
+
+msgid "IPs Banned Until Restart"
+msgstr "IPs Zakázáno Až Do Restartu"
+
+msgid "IPv4 Addresses"
+msgstr "Adresy IPv4"
+
+msgid "IPv6 Addresses"
+msgstr "Adresy IPv6"
 
 msgid "Reseed now"
 msgstr "Znovu semeno"
@@ -1419,11 +1423,11 @@ msgstr "Resetujte seznam URL"
 msgid "URL list reset successfully"
 msgstr "Seznam adres URL byl úspěšně resetován"
 
-msgid "Cancel shutdown"
-msgstr "Zrušte vypnutí"
-
 msgid "Cancel restart"
 msgstr "Zrušte restart"
+
+msgid "Cancel shutdown"
+msgstr "Zrušte vypnutí"
 
 msgid "Restart immediately"
 msgstr "Okamžitě restartujte"
@@ -2657,6 +2661,69 @@ msgstr "Analýza sybil"
 msgid "Router Map"
 msgstr "Mapa Routeru"
 
+msgid "Network Database Search"
+msgstr ""
+
+msgid "Capabilities"
+msgstr "Schopnosti"
+
+msgid "e.g. f or XOfR"
+msgstr ""
+
+msgid "Cost"
+msgstr "Cena"
+
+msgid "Country"
+msgstr "Země"
+
+msgid "Country Codes"
+msgstr ""
+
+msgid "Hash Prefix"
+msgstr ""
+
+msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
+msgstr ""
+
+msgid "Hostname or b32"
+msgstr ""
+
+msgid "IPv6 Prefix"
+msgstr ""
+
+msgid "Single port or range"
+msgstr ""
+
+msgid "Signature Type"
+msgstr ""
+
+msgid "SSU Capabilities"
+msgstr ""
+
+msgid "Encryption Type"
+msgstr ""
+
+msgid "Router Version"
+msgstr ""
+
+msgid "Transport"
+msgstr "Doprava"
+
+msgid "Add Sybil analysis (must pick at least one above)"
+msgstr ""
+
+msgid "Sybil close to"
+msgstr ""
+
+msgid "Router hash, destination hash, b32, or from address book"
+msgstr ""
+
+msgid "or Sybil close to this router"
+msgstr ""
+
+msgid "Lookup"
+msgstr "Vyhledání"
+
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "Nikdy nikomu neprozrazujte identitu vašeho routeru, protože je jednoznačně spojena s vaší IP adresou v síťové databázi."
 
@@ -2669,14 +2736,14 @@ msgstr "nenalezeno v síťové databázi"
 msgid "No results"
 msgstr "Žádné výsledky"
 
-msgid "Previous Page"
-msgstr "Předchozí strana"
+msgid "Bad Base64 Router hash"
+msgstr ""
 
-msgid "Page"
-msgstr "Str"
+msgid "No routers with"
+msgstr ""
 
-msgid "Country"
-msgstr "Země"
+msgid "Hash prefix"
+msgstr ""
 
 msgid "Port"
 msgstr "Port"
@@ -2684,11 +2751,56 @@ msgstr "Port"
 msgid "MTU"
 msgstr "MTU"
 
+msgid "found in the network database"
+msgstr ""
+
+msgid "results"
+msgstr ""
+
+msgid "Previous Page"
+msgstr "Předchozí strana"
+
 msgid "Next Page"
 msgstr "Další stránka"
 
-msgid "No Leasesets currently active."
-msgstr "Momentálně nejsou aktivní žádné sady pronájmu."
+msgid "Results per page"
+msgstr ""
+
+msgid "Not initialized"
+msgstr "Neinicializováno"
+
+msgid "Debug mode - Sorted by hash distance, closest first."
+msgstr ""
+
+msgid "Compact mode"
+msgstr ""
+
+msgid "Total Leasesets"
+msgstr ""
+
+msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Mod Data"
+msgstr ""
+
+msgid "Last Changed"
+msgstr ""
+
+msgid "Next Mod Data"
+msgstr ""
+
+msgid "Change in"
+msgstr ""
+
+msgid "Known Floodfills"
+msgstr "Známé záplavy"
+
+msgid "Floodfill mode enabled"
+msgstr ""
+
+msgid "Routing Key"
+msgstr "Směrovací klíč"
 
 msgid "Network data"
 msgstr "Síťová data"
@@ -2702,6 +2814,17 @@ msgstr "Odhadované celkové zaplavení"
 msgid "Estimated total leasesets"
 msgstr "Odhadovaný celkový počet pronájmů"
 
+#, java-format
+msgid "Hostname {0} not found in network database"
+msgstr ""
+
+#, java-format
+msgid "LeaseSet for {0} not found in network database"
+msgstr ""
+
+msgid "Meta"
+msgstr ""
+
 msgid "LeaseSet"
 msgstr "LeaseSet"
 
@@ -2713,16 +2836,6 @@ msgstr "Zobrazte místní tunely pro cíl"
 
 msgid "published"
 msgstr "zveřejněno"
-
-msgid "Add to addressbook"
-msgstr "Přidat do adresáře"
-
-msgid "Add to local addressbook"
-msgstr "Přidat do lokální knihy kontaktů (addressbook)"
-
-#, java-format
-msgid "Published{0} ago"
-msgstr "Publikováno před{0}"
 
 #, java-format
 msgid "Expires{0}"
@@ -2750,12 +2863,6 @@ msgstr "Typ podpisu"
 msgid "Unsupported type"
 msgstr "Nepodporovaný typ"
 
-msgid "Routing Key"
-msgstr "Směrovací klíč"
-
-msgid "Lease"
-msgstr "Pronájem"
-
 #, java-format
 msgid "Expires in {0}"
 msgstr "Platnost vyprší za {0}"
@@ -2764,8 +2871,11 @@ msgstr "Platnost vyprší za {0}"
 msgid "Expired {0} ago"
 msgstr "Platnost vypršela před {0}"
 
-msgid "Not initialized"
-msgstr "Neinicializováno"
+msgid "Advanced mode - includes all statistics published by floodfills."
+msgstr ""
+
+msgid "Compact mode - does not include statistics published by floodfills."
+msgstr ""
 
 msgid "Network Database Router Statistics"
 msgstr "Statistika směrovače síťové databáze"
@@ -2788,6 +2898,15 @@ msgstr "Odmítnutí všech požadavků na tunel"
 msgid "Transports"
 msgstr "Doprava"
 
+msgid "X Tier"
+msgstr ""
+
+msgid "Floodfills"
+msgstr "Záplavy"
+
+msgid "Total"
+msgstr "Celkově"
+
 msgid "Unknown"
 msgstr "Neznámý"
 
@@ -2800,6 +2919,12 @@ msgstr "Naše informace"
 msgid "Router is banlisted"
 msgstr "Směrovač je zakázán"
 
+msgid "Java I2P variant"
+msgstr ""
+
+msgid "I2Pd variant"
+msgstr ""
+
 msgid "RouterInfo is compressible"
 msgstr "RouterInfo je komprimovatelné"
 
@@ -2810,11 +2935,11 @@ msgstr "Zobrazit všechny routery s touto verzí v NetDb"
 msgid "Show all members of the {0} family in NetDb"
 msgstr "Zobrazit všechny členy rodiny {0} v NetDb"
 
-msgid "View profile"
-msgstr "Zobrazit profil"
-
 msgid "Profile"
 msgstr "Profil"
+
+msgid "View profile"
+msgstr "Zobrazit profil"
 
 msgid "Configure peer"
 msgstr "Nakonfigurujte peer"
@@ -2830,6 +2955,9 @@ msgstr "Zveřejněný"
 
 msgid "Hostname"
 msgstr "Název hostitele"
+
+msgid "direct"
+msgstr ""
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "Ověřená rodina (podpisový certifikát je nainstalován a platný)"
@@ -2849,17 +2977,11 @@ msgstr "Adresy"
 msgid "n/a"
 msgstr "neaplikovatelné"
 
-msgid "Cost"
-msgstr "Cena"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "Zobrazit všechny routery s touto adresou v NetDb"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "Zobrazit všechny routery s tímto portem v NetDb"
-
-msgid "Capabilities"
-msgstr "Schopnosti"
 
 msgid "Core version"
 msgstr "Základní verze"
@@ -2948,11 +3070,11 @@ msgstr "IPv6 NTCP"
 msgid "IPv6 NTCP, SSU"
 msgstr "IPv6 NTCP, SSU"
 
-msgid "IPv6 NTCP, SSU, introducers"
-msgstr "IPv6 NTCP, SSU, zavaděče"
-
 msgid "IPv6 Only NTCP, SSU, introducers"
 msgstr "IPv6 Pouze NTCP, SSU, zavaděče"
+
+msgid "IPv6 NTCP, SSU, introducers"
+msgstr "IPv6 NTCP, SSU, zavaděče"
 
 msgid "No peer connections available"
 msgstr "Nejsou k dispozici žádná peer připojení"
@@ -2977,9 +3099,6 @@ msgstr "Peer Connections"
 msgid "Auto-refresh"
 msgstr "Automatické obnovení"
 
-msgid "Transport"
-msgstr "Doprava"
-
 msgid "Active in the last minute"
 msgstr "Aktivní v poslední minutě"
 
@@ -2988,9 +3107,6 @@ msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
-
-msgid "Total"
-msgstr "Celkově"
 
 msgid "Current / maximum permitted"
 msgstr "Aktuální / maximální povolený"
@@ -3244,9 +3360,6 @@ msgstr[0] "Zobrazování {0} nedávného profilu."
 msgstr[1] "Zobrazování {0} nedávných profilů."
 msgstr[2] "Zobrazování {0} nedávných profilů."
 
-msgid "active in the last 20 minutes"
-msgstr "aktivní v posledních 15 minutách"
-
 #, java-format
 msgid "Hiding {0} older profile."
 msgid_plural "Hiding {0} older profiles."
@@ -3290,6 +3403,9 @@ msgstr "Peer tunelu se odmítl zúčastnit"
 
 msgid "Rejected"
 msgstr "Zamítnuto"
+
+msgid "First Heard About"
+msgstr ""
 
 msgid "Last Heard From"
 msgstr "Poslední odezva"
@@ -3466,6 +3582,13 @@ msgstr "Zákazy relace"
 
 msgid "Total number of banned peers"
 msgstr "Celkový počet zakázaných vrstevníků"
+
+msgid "Note: 'LU' class routers have been excluded from the list."
+msgstr ""
+
+#, java-format
+msgid "To view, see {0}Session Bans{1}."
+msgstr ""
 
 msgid "Select search engine"
 msgstr "Vyberte vyhledávač"
@@ -3740,9 +3863,6 @@ msgstr "Sklenice"
 msgid "Review extended info about installed .jar and .war files"
 msgstr "Zkontrolujte rozšířené informace o nainstalovaných souborech .jar a .war"
 
-msgid "Lookup"
-msgstr "Vyhledání"
-
 msgid "Textual router performance statistics"
 msgstr "Statistika výkonu textového routeru"
 
@@ -3777,8 +3897,8 @@ msgstr "Paměť"
 msgid "Floodfill enabled"
 msgstr "Floodfill je povolen"
 
-msgid "See more information on the wiki"
-msgstr "Více informací naleznete na wiki"
+msgid "Total number of LeaseSets stored in our NetDb"
+msgstr ""
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Varování: ECDSA není k dispozici. "
@@ -3852,8 +3972,8 @@ msgstr "příchozí / odchozí"
 msgid "Used for building and testing tunnels, and communicating with floodfill peers"
 msgstr "Používá se pro stavbu a testování tunelů a komunikaci s vrstevníky zásypu"
 
-msgid "Exploratory"
-msgstr "Průzkumný"
+msgid "Utility"
+msgstr "Užitečnost"
 
 msgid "Tunnels we are participating in, directly contributing bandwidth to the network"
 msgstr "Tunely, kterých se účastníme, přímo přispívající šířkou pásma do sítě"
@@ -3861,8 +3981,8 @@ msgstr "Tunely, kterých se účastníme, přímo přispívající šířkou pá
 msgid "Current / Maximum"
 msgstr "Aktuální / Maximální"
 
-msgid "Participating"
-msgstr "Účast"
+msgid "Transit"
+msgstr "Tranzit"
 
 msgid "Concurrent tunnel builds (averaged over a minute) / single tunnel build time"
 msgstr "Souběžné vytváření tunelu (v průměru za minutu) / doba vytvoření jednoho tunelu"
@@ -3884,12 +4004,6 @@ msgstr "Poměr podílu"
 
 msgid "tunnels"
 msgstr "tunely"
-
-msgid "Transit"
-msgstr "Tranzit"
-
-msgid "Utility"
-msgstr "Užitečnost"
 
 msgid "Tunnel Count by Peer"
 msgstr "Počet Tunelů podle Peer"
@@ -4197,9 +4311,6 @@ msgstr "Vynutit blokování pro"
 msgid "days"
 msgstr "dní"
 
-msgid "Known Floodfills"
-msgstr "Známé záplavy"
-
 msgid "Average closest floodfill distance"
 msgstr "Průměrná nejbližší zaplavovací vzdálenost"
 
@@ -4338,6 +4449,9 @@ msgstr "Vzdálenost k"
 msgid "Distance for"
 msgstr "Vzdálenost pro"
 
+msgid "Exploratory"
+msgstr "Průzkumný"
+
 msgid "Configure tunnels"
 msgstr "Konfigurace tunelů"
 
@@ -4412,6 +4526,9 @@ msgstr "Router aktuálně pracuje ve skrytém režimu, který zabraňuje budová
 msgid "No transit tunnels currently active."
 msgstr "Momentálně nejsou aktivní žádné tranzitní tunely."
 
+msgid "Transit Tunnels by Peer (Top 50)"
+msgstr ""
+
 msgid "Address"
 msgstr "Adresa"
 
@@ -4483,6 +4600,9 @@ msgstr "Test šířky pásma selhal"
 
 msgid "Bandwidth test did not complete"
 msgstr "Test šířky pásma nebyl dokončen"
+
+msgid "Bad state for test"
+msgstr ""
 
 msgid "Bandwidth test started"
 msgstr "Byl spuštěn test šířky pásma"
@@ -5115,14 +5235,22 @@ msgstr "Manuálně zakázat / zrušit zákaz peeru"
 msgid "Banning will prevent the participation of this peer in tunnels you create."
 msgstr "Banning zabrání účasti tohoto partnera v tunelech, které vytvoříte."
 
+msgid "A list of bans by IP address is presented below."
+msgstr ""
+
+#, java-format
+msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
+msgstr ""
+
+#, java-format
+msgid "A list of {0}session-only bans{1} by hash is also available."
+msgstr ""
+
 msgid "Adjust Profile Bonuses"
 msgstr "Upravte profilové bonusy"
 
 msgid "Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels."
 msgstr "Bonusy mohou být kladné nebo záporné a ovlivňují zařazení partnera do úrovní Rychlý a Vysokokapacitní. Pro klientské tunely se používají rychlé partnery a pro některé průzkumné tunely se používají vysokokapacitní partnery."
-
-msgid "Banned Peers"
-msgstr "Zakázaní vrstevníci"
 
 msgid "Banned IP Addresses"
 msgstr "Zakázané IP adresy"
@@ -5669,6 +5797,9 @@ msgstr "Toto nastavení vám umožňuje nakonfigurovat URL adresu aktualizace pr
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Toto nastavení umožňuje deaktivovat testy SSU, aby se zjistilo, zda je váš směrovač chráněn firewallem, a může být povoleno pro směrovače, které jsou určitě bez firewalu, ale mají problémy s přerušovaným blokováním firewallu. Pokud jsou testy zakázány, měly by oba protokoly SSU a NTCP hlásit vaši aktuální veřejnou IP adresu na <a href=/info>stránce s informacemi o směrovači</a>. [Je vyžadován restart]"
+
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
+msgstr ""
 
 msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
 msgstr "Toto nastavení určuje, který přenos má přednost při komunikaci s vrstevníky. Výchozí nastavení upřednostňuje NTCP před UDP (SSU). Pokud hodnota bude nastavena na true, UDP bude upřednostňováno, pokud již existuje předem zavedené spojení NTCP; pokud bude nastaveno na always, bude vždy použito UDP bez ohledu na předem zavedené spojení NTCP. [Výchozí hodnota je false]"
@@ -6258,6 +6389,9 @@ msgstr "Režim notebooku"
 msgid "An <a href=/confignet#ipchange>optional configuration</a> that automatically changes your <a href=/netdb?r=.>router identity</a> and <a href=/confignet#udpconfig>external port</a> when the public ip address your system is on changes. This can prevent an adversary from correlating your router identity and ip address in scenarios where your ip address may change frequently, for example when you're running I2P on a laptop from multiple locations."
 msgstr "Volitelná konfigurace, která automaticky mění vaši <a href=/netdb?r=.>identitu routeru</a> a <a href=/confignet#udpconfig>externí port</a>, když se změní veřejná IP adresa vašeho systému. Tím lze zabránit protivníkovi v propojování vaší identity routeru a IP adresy v situacích, kdy se vaše IP adresa může často měnit, například pokud používáte I2P na notebooku z různých míst."
 
+msgid "Lease"
+msgstr "Pronájem"
+
 msgid "The information that defines the authorization for a particular tunnel to receive messages targeting a <i>Destination</i>."
 msgstr "Informace, které definují autorizaci pro daný tunel a přijímání zpráv cílených na <i>Destinaci</i>."
 
@@ -6831,6 +6965,9 @@ msgstr "Tunely postavené vašim směrovačem, které slouží pro komunikaci s 
 msgid "Tunnels built by your router for each client's use."
 msgstr "Tunely postavené vaším směrovačem pro každého klienta."
 
+msgid "Participating"
+msgstr "Účast"
+
 msgid "Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a  href='/config'>Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a href='/configadvanced'>Advanced configuration page</a>. <a href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
 msgstr "Tunely vybudované jinými routery skrz váš router. To se může velmi lišit v závislosti na síťovém vytížení, sdílené šířce pásma a množství lokálně generovaného provozu. Doporučenou metodou pro omezení účastnících se tunelů je změnit procento sdílení na <a  href='/config'>konfigurační stránce šířky pásma</a>. Také můžete omezit celkový počet nastavením <code>router.maxParticipatingTunnels=nnn</code> na <a href='/configadvanced'>stránce pokročilé konfigurace</a>. <a href='/configstats#tunnel.participatingTunnels'>[Povolit grafy]</a>."
 
@@ -7259,8 +7396,8 @@ msgstr "Profily vrstevníků"
 msgid "Session Banned Peers"
 msgstr "Sousedé zakázáni ve spuštěné relaci"
 
-msgid "Floodfills"
-msgstr "Záplavy"
+msgid "Banned Peers"
+msgstr "Zakázaní vrstevníci"
 
 msgid "Fast / High Capacity"
 msgstr "Rychlý / Vysoká kapacita"
@@ -7604,3 +7741,11 @@ msgstr "Další"
 
 msgid "Finished"
 msgstr "Hotové"
+
+
+
+
+
+#, java-format
+
+

@@ -1352,15 +1352,6 @@ msgstr "Mauvaise valeur de capacité"
 msgid "Unsupported"
 msgstr "Non pris en charge"
 
-msgid "IPs Banned Until Restart"
-msgstr "IP bannies jusqu’au redémarrage"
-
-msgid "IPv4 Addresses"
-msgstr "Adresses IPv4"
-
-msgid "IPv6 Addresses"
-msgstr "Adresses IPv6"
-
 msgid "IPs Permanently Banned"
 msgstr "IP bannies irrémédiablement"
 
@@ -1369,6 +1360,19 @@ msgstr "De"
 
 msgid "To"
 msgstr "Vers"
+
+#, java-format
+msgid "First {0} displayed, see the {1} file for the full list"
+msgstr ""
+
+msgid "IPs Banned Until Restart"
+msgstr "IP bannies jusqu’au redémarrage"
+
+msgid "IPv4 Addresses"
+msgstr "Adresses IPv4"
+
+msgid "IPv6 Addresses"
+msgstr "Adresses IPv6"
 
 msgid "Reseed now"
 msgstr "Réamorcer maintenant"
@@ -1415,11 +1419,11 @@ msgstr "Réinitialiser la liste des URL"
 msgid "URL list reset successfully"
 msgstr "La liste des URL a été réinitialisée avec succès"
 
-msgid "Cancel shutdown"
-msgstr "Annuler la fermeture"
-
 msgid "Cancel restart"
 msgstr "Annuler le redémarrage"
+
+msgid "Cancel shutdown"
+msgstr "Annuler la fermeture"
 
 msgid "Restart immediately"
 msgstr "Redémarrer immédiatement"
@@ -2649,6 +2653,69 @@ msgstr "Analyse Sybille"
 msgid "Router Map"
 msgstr "Carte du routeur"
 
+msgid "Network Database Search"
+msgstr ""
+
+msgid "Capabilities"
+msgstr "Capacités"
+
+msgid "e.g. f or XOfR"
+msgstr ""
+
+msgid "Cost"
+msgstr "Coût"
+
+msgid "Country"
+msgstr "Pays"
+
+msgid "Country Codes"
+msgstr ""
+
+msgid "Hash Prefix"
+msgstr ""
+
+msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
+msgstr ""
+
+msgid "Hostname or b32"
+msgstr ""
+
+msgid "IPv6 Prefix"
+msgstr ""
+
+msgid "Single port or range"
+msgstr ""
+
+msgid "Signature Type"
+msgstr ""
+
+msgid "SSU Capabilities"
+msgstr ""
+
+msgid "Encryption Type"
+msgstr ""
+
+msgid "Router Version"
+msgstr ""
+
+msgid "Transport"
+msgstr "Transport"
+
+msgid "Add Sybil analysis (must pick at least one above)"
+msgstr ""
+
+msgid "Sybil close to"
+msgstr ""
+
+msgid "Router hash, destination hash, b32, or from address book"
+msgstr ""
+
+msgid "or Sybil close to this router"
+msgstr ""
+
+msgid "Lookup"
+msgstr "Chercher"
+
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "Ne divulguez jamais votre identité de routeur à quiconque, car elle est associée de façon unique à votre adresse IP dans la base de données de réseau."
 
@@ -2661,14 +2728,14 @@ msgstr "introuvable dans la base de données de réseau"
 msgid "No results"
 msgstr "Aucun résultat"
 
-msgid "Previous Page"
-msgstr "Page précédente"
+msgid "Bad Base64 Router hash"
+msgstr ""
 
-msgid "Page"
-msgstr "Page"
+msgid "No routers with"
+msgstr ""
 
-msgid "Country"
-msgstr "Pays"
+msgid "Hash prefix"
+msgstr ""
 
 msgid "Port"
 msgstr "Port"
@@ -2676,11 +2743,56 @@ msgstr "Port"
 msgid "MTU"
 msgstr "MTU"
 
+msgid "found in the network database"
+msgstr ""
+
+msgid "results"
+msgstr ""
+
+msgid "Previous Page"
+msgstr "Page précédente"
+
 msgid "Next Page"
 msgstr "Page suivante"
 
-msgid "No Leasesets currently active."
-msgstr "Aucun ensemble de baux actuellement actif."
+msgid "Results per page"
+msgstr ""
+
+msgid "Not initialized"
+msgstr "Non initialisé"
+
+msgid "Debug mode - Sorted by hash distance, closest first."
+msgstr ""
+
+msgid "Compact mode"
+msgstr ""
+
+msgid "Total Leasesets"
+msgstr ""
+
+msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Mod Data"
+msgstr ""
+
+msgid "Last Changed"
+msgstr ""
+
+msgid "Next Mod Data"
+msgstr ""
+
+msgid "Change in"
+msgstr ""
+
+msgid "Known Floodfills"
+msgstr "Remplissages connus"
+
+msgid "Floodfill mode enabled"
+msgstr ""
+
+msgid "Routing Key"
+msgstr "Clé de routage"
 
 msgid "Network data"
 msgstr "données réseau"
@@ -2694,6 +2806,17 @@ msgstr "Remplissages totaux estimés"
 msgid "Estimated total leasesets"
 msgstr "Total estimé des baux"
 
+#, java-format
+msgid "Hostname {0} not found in network database"
+msgstr ""
+
+#, java-format
+msgid "LeaseSet for {0} not found in network database"
+msgstr ""
+
+msgid "Meta"
+msgstr ""
+
 msgid "LeaseSet"
 msgstr "Jeu de baux"
 
@@ -2705,16 +2828,6 @@ msgstr "Afficher les tunnels locaux pour la destination"
 
 msgid "published"
 msgstr "publié"
-
-msgid "Add to addressbook"
-msgstr "Ajouter au carnet d’adresses"
-
-msgid "Add to local addressbook"
-msgstr "Ajouter au carnet d’adresses local"
-
-#, java-format
-msgid "Published{0} ago"
-msgstr "Publié il y a{0}"
 
 #, java-format
 msgid "Expires{0}"
@@ -2742,12 +2855,6 @@ msgstr "Type de signature"
 msgid "Unsupported type"
 msgstr "Type non pris en charge"
 
-msgid "Routing Key"
-msgstr "Clé de routage"
-
-msgid "Lease"
-msgstr "Bail"
-
 #, java-format
 msgid "Expires in {0}"
 msgstr "Arrive à expiration dans {0}"
@@ -2756,8 +2863,11 @@ msgstr "Arrive à expiration dans {0}"
 msgid "Expired {0} ago"
 msgstr "Expiré il y a {0}"
 
-msgid "Not initialized"
-msgstr "Non initialisé"
+msgid "Advanced mode - includes all statistics published by floodfills."
+msgstr ""
+
+msgid "Compact mode - does not include statistics published by floodfills."
+msgstr ""
 
 msgid "Network Database Router Statistics"
 msgstr "Statistiques de la base de données de réseau du routeur"
@@ -2780,6 +2890,15 @@ msgstr "Rejet de toutes les demandes de tunnel"
 msgid "Transports"
 msgstr "Transports"
 
+msgid "X Tier"
+msgstr ""
+
+msgid "Floodfills"
+msgstr "Décharges"
+
+msgid "Total"
+msgstr "Totale"
+
 msgid "Unknown"
 msgstr "Inconnu"
 
@@ -2792,6 +2911,12 @@ msgstr "Nos infos"
 msgid "Router is banlisted"
 msgstr "Le routeur est banni"
 
+msgid "Java I2P variant"
+msgstr ""
+
+msgid "I2Pd variant"
+msgstr ""
+
 msgid "RouterInfo is compressible"
 msgstr "RouterInfo est compressible"
 
@@ -2802,11 +2927,11 @@ msgstr "Afficher tous les routeurs avec cette version dans NetDb"
 msgid "Show all members of the {0} family in NetDb"
 msgstr "Afficher tous les membres de la famille {0} dans NetDb"
 
-msgid "View profile"
-msgstr "Voir le profil"
-
 msgid "Profile"
 msgstr "Profil"
+
+msgid "View profile"
+msgstr "Voir le profil"
 
 msgid "Configure peer"
 msgstr "Configurer le pair"
@@ -2822,6 +2947,9 @@ msgstr "Publié"
 
 msgid "Hostname"
 msgstr "Nom d'hôte"
+
+msgid "direct"
+msgstr ""
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "Famille vérifiée (le certificat de signature est installé et valide)"
@@ -2841,17 +2969,11 @@ msgstr "Adresses"
 msgid "n/a"
 msgstr "n.d."
 
-msgid "Cost"
-msgstr "Coût"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "Afficher tous les routeurs avec cette adresse dans NetDb"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "Afficher tous les routeurs dotés de ce port dans NetDb"
-
-msgid "Capabilities"
-msgstr "Capacités"
 
 msgid "Core version"
 msgstr "version de base"
@@ -2940,11 +3062,11 @@ msgstr "NTCP IPv6"
 msgid "IPv6 NTCP, SSU"
 msgstr "NTCP, SSU IPv6"
 
-msgid "IPv6 NTCP, SSU, introducers"
-msgstr "IPv6 NTCP, SSU, proposeurs"
-
 msgid "IPv6 Only NTCP, SSU, introducers"
 msgstr "IPv6 seulement NTCP, SSU, proposeurs"
+
+msgid "IPv6 NTCP, SSU, introducers"
+msgstr "IPv6 NTCP, SSU, proposeurs"
 
 msgid "No peer connections available"
 msgstr "Aucune connexion homologue disponible"
@@ -2969,9 +3091,6 @@ msgstr "Connexions entre pairs"
 msgid "Auto-refresh"
 msgstr "actualisation automatique"
 
-msgid "Transport"
-msgstr "Transport"
-
 msgid "Active in the last minute"
 msgstr "Actif à la dernière minute"
 
@@ -2980,9 +3099,6 @@ msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
-
-msgid "Total"
-msgstr "Totale"
 
 msgid "Current / maximum permitted"
 msgstr "Courant / maximum autorisé"
@@ -3233,9 +3349,6 @@ msgid_plural "Showing {0} recent profiles."
 msgstr[0] "Affichage {0} Profil récent."
 msgstr[1] "Affichage {0} Profils récents."
 
-msgid "active in the last 20 minutes"
-msgstr "actif au cours des 15 dernières minutes"
-
 #, java-format
 msgid "Hiding {0} older profile."
 msgid_plural "Hiding {0} older profiles."
@@ -3277,6 +3390,9 @@ msgstr "Tunnels pair a refusé de participer à"
 
 msgid "Rejected"
 msgstr "Rejeté"
+
+msgid "First Heard About"
+msgstr ""
 
 msgid "Last Heard From"
 msgstr "Dernière communication"
@@ -3450,6 +3566,13 @@ msgstr "Interdictions de session"
 
 msgid "Total number of banned peers"
 msgstr "Nombre total de pairs interdits"
+
+msgid "Note: 'LU' class routers have been excluded from the list."
+msgstr ""
+
+#, java-format
+msgid "To view, see {0}Session Bans{1}."
+msgstr ""
 
 msgid "Select search engine"
 msgstr "Sélectionner le moteur de recherche"
@@ -3722,9 +3845,6 @@ msgstr "Jar"
 msgid "Review extended info about installed .jar and .war files"
 msgstr "Réviser les informations détaillées sur les fichiers .jar et .war installés"
 
-msgid "Lookup"
-msgstr "Chercher"
-
 msgid "Textual router performance statistics"
 msgstr "Statistiques textuelles des performances du routeur"
 
@@ -3759,8 +3879,8 @@ msgstr "Mémoire"
 msgid "Floodfill enabled"
 msgstr "Floodfill activé"
 
-msgid "See more information on the wiki"
-msgstr "Plus d’informations se trouvent sur le wiki"
+msgid "Total number of LeaseSets stored in our NetDb"
+msgstr ""
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Avertissement: ECDSA n’est pas disponible. Mettre à jour votre Java ou votre SE"
@@ -3834,8 +3954,8 @@ msgstr "entrant / sortant"
 msgid "Used for building and testing tunnels, and communicating with floodfill peers"
 msgstr "Utilisé pour construire et tester des tunnels, ainsi que pour communiquer avec des pairs de remplissage par diffusion"
 
-msgid "Exploratory"
-msgstr "Exploratoires"
+msgid "Utility"
+msgstr "Utilité"
 
 msgid "Tunnels we are participating in, directly contributing bandwidth to the network"
 msgstr "Tunnels auxquels nous participons, qui contribuent directement à la bande passante du réseau"
@@ -3843,8 +3963,8 @@ msgstr "Tunnels auxquels nous participons, qui contribuent directement à la ban
 msgid "Current / Maximum"
 msgstr "Courant / Maximum"
 
-msgid "Participating"
-msgstr "Participant"
+msgid "Transit"
+msgstr "Transit"
 
 msgid "Concurrent tunnel builds (averaged over a minute) / single tunnel build time"
 msgstr "Construction simultanée de tunnels (moyenne sur une minute) / temps de construction d'un tunnel unique"
@@ -3866,12 +3986,6 @@ msgstr "Ratio de partage"
 
 msgid "tunnels"
 msgstr "tunnels"
-
-msgid "Transit"
-msgstr "Transit"
-
-msgid "Utility"
-msgstr "Utilité"
 
 msgid "Tunnel Count by Peer"
 msgstr "Nombre de Tunnel par Pair"
@@ -4179,9 +4293,6 @@ msgstr "Appliquer le bloc pour"
 msgid "days"
 msgstr "jours"
 
-msgid "Known Floodfills"
-msgstr "Remplissages connus"
-
 msgid "Average closest floodfill distance"
 msgstr "Distance moyenne de remplissage la plus proche"
 
@@ -4320,6 +4431,9 @@ msgstr "Distance à"
 msgid "Distance for"
 msgstr "Distance pour"
 
+msgid "Exploratory"
+msgstr "Exploratoires"
+
 msgid "Configure tunnels"
 msgstr "Configurer les tunnels"
 
@@ -4394,6 +4508,9 @@ msgstr "Le routeur fonctionne actuellement en mode caché, ce qui empêche la co
 msgid "No transit tunnels currently active."
 msgstr "Aucun tunnel de transit actuellement actif."
 
+msgid "Transit Tunnels by Peer (Top 50)"
+msgstr ""
+
 msgid "Address"
 msgstr "Adresse"
 
@@ -4465,6 +4582,9 @@ msgstr "Le test de bande passante a échoué"
 
 msgid "Bandwidth test did not complete"
 msgstr "Le test de bande passante ne s’est pas terminé"
+
+msgid "Bad state for test"
+msgstr ""
 
 msgid "Bandwidth test started"
 msgstr "Le test de bande passante est lancé"
@@ -5097,14 +5217,22 @@ msgstr "Bannir, lever du bannissement manuel d’un pair"
 msgid "Banning will prevent the participation of this peer in tunnels you create."
 msgstr "Le bannissement empêchera que ce pair participe aux tunnels que vous créez."
 
+msgid "A list of bans by IP address is presented below."
+msgstr ""
+
+#, java-format
+msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
+msgstr ""
+
+#, java-format
+msgid "A list of {0}session-only bans{1} by hash is also available."
+msgstr ""
+
 msgid "Adjust Profile Bonuses"
 msgstr "Ajuster la bonification des profils"
 
 msgid "Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels."
 msgstr "Les bonus peuvent être positifs ou négatifs et affecter l'inclusion du pair dans des niveaux de capacité rapide et élevée. Des pairs rapides sont utilisés pour les tunnels clients et les pairs de grande capacité sont utilisés pour certains tunnels exploratoires."
-
-msgid "Banned Peers"
-msgstr "Pairs bannis"
 
 msgid "Banned IP Addresses"
 msgstr "IP bannies"
@@ -5651,6 +5779,9 @@ msgstr "Ce paramètre vous permet de configurer l'URL de mise à jour pour la fo
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Ce paramètre permet de désactiver les tests SSU pour déterminer si votre routeur est derrière un pare-feu et peut être activé pour les routeurs qui ne sont définitivement pas derrière un pare-feu mais rencontrent des problèmes de pare-feu intermittents. Dans le cas où les tests sont désactivés, le SSU et le NTCP devraient afficher votre adresse IP publique actuelle sur la <a href=/info>page d'informations du routeur</a>. [Redémarrage requis]"
+
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
+msgstr ""
 
 msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
 msgstr "Ce paramètre détermine quel transport est prioritaire lors de la communication avec les pairs. Par défaut, le NTCP est privilégié par rapport au UDP (SSU). En définissant la valeur sur true, le UDP sera privilégié sauf s'il existe déjà une connexion NTCP ; lorsqu'il est défini sur always, le UDP sera toujours utilisé quelles que soient les connexions NTCP préexistantes. [La valeur par défaut est false]"
@@ -6234,6 +6365,9 @@ msgstr "Mode ordinateur portable"
 msgid "An <a href=/confignet#ipchange>optional configuration</a> that automatically changes your <a href=/netdb?r=.>router identity</a> and <a href=/confignet#udpconfig>external port</a> when the public ip address your system is on changes. This can prevent an adversary from correlating your router identity and ip address in scenarios where your ip address may change frequently, for example when you're running I2P on a laptop from multiple locations."
 msgstr "Une <a href=/confignet#ipchange>configuration optionnelle</a> qui change automatiquement votre <a href=/netdb?r=.>identité de routeur</a> et votre <a href=/confignet#udpconfig>port externe</a> lorsque l'adresse IP publique de votre système change. Cela peut empêcher qu'un adversaire corrèle votre identité de routeur et votre adresse IP dans des scénarios où votre adresse IP peut changer fréquemment, par exemple lorsque vous exécutez I2P sur un ordinateur portable depuis plusieurs endroits."
 
+msgid "Lease"
+msgstr "Bail"
+
 msgid "The information that defines the authorization for a particular tunnel to receive messages targeting a <i>Destination</i>."
 msgstr "Les informations qui définissent l'autorisation pour un tunnel particulier de recevoir des messages ciblant une <i>Destination</i>."
 
@@ -6807,6 +6941,9 @@ msgstr "Tunnels construits par votre routeur et utilisés pour la communication 
 msgid "Tunnels built by your router for each client's use."
 msgstr "Tunnels construits par votre routeur pour être utilisés par chaque client."
 
+msgid "Participating"
+msgstr "Participant"
+
 msgid "Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a  href='/config'>Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a href='/configadvanced'>Advanced configuration page</a>. <a href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
 msgstr "Tunnels construits par d'autres routeurs via votre routeur. Cela peut varier grandement selon la demande du réseau, votre bande passante partagée et le volume de trafic généré localement. La méthode recommandée pour limiter les tunnels de participation consiste à modifier votre pourcentage de partage sur la page de <a href='/config'>configuration de bande passante</a>. Vous pouvez également limiter le nombre total en définissant <code>router.maxParticipatingTunnels=nnn</code> sur la page de <a href='/configadvanced'>configuration avancée</a>. <a href='/configstats#tunnel.participatingTunnels'>[Activer le graphique]</a>."
 
@@ -7235,8 +7372,8 @@ msgstr "Profils des pairs"
 msgid "Session Banned Peers"
 msgstr "Pairs interdits de session"
 
-msgid "Floodfills"
-msgstr "Décharges"
+msgid "Banned Peers"
+msgstr "Pairs bannis"
 
 msgid "Fast / High Capacity"
 msgstr "rapide/haute capacité"
@@ -7580,3 +7717,11 @@ msgstr "Suivant"
 
 msgid "Finished"
 msgstr "Terminé"
+
+
+
+
+
+#, java-format
+
+

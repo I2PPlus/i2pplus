@@ -48,6 +48,9 @@ msgstr "Limita de incărcare BW schimbată la {0} Kbps"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Limita de lățime de bandă minima la incărcarea este {0} Kbps"
 
+msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
+msgstr ""
+
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Randomizarea sarelor de tunel +0/1 a fost activată pe tunelurile de intrare"
 
@@ -340,6 +343,9 @@ msgstr "Adăugarea de torrente în {0}"
 msgid "Connecting to I2P"
 msgstr "Se conectează la I2P"
 
+msgid "Connected to I2P at"
+msgstr ""
+
 #, java-format
 msgid "Starting up torrent {0}"
 msgstr "Pornirea torrentului {0}"
@@ -411,6 +417,9 @@ msgstr "S-a terminat reverificarea torrentului {0}, este nemodificat"
 #, java-format
 msgid "Error checking the torrent {0}"
 msgstr "Eroare la verificarea torrentului {0}"
+
+msgid "Data partition"
+msgstr ""
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -660,12 +669,6 @@ msgstr "în"
 
 msgid "out"
 msgstr "afară"
-
-msgid "Our destination (identity) for this session"
-msgstr "Destinația (identitatea) noastră pentru această sesiune"
-
-msgid "Dest."
-msgstr "Dest."
 
 msgid "Estimated download time for all torrents"
 msgstr "Timpul de descărcare estimat pentru toate torrentele"
@@ -1210,6 +1213,12 @@ msgstr "Numărul maxim de fișiere permise per torrent - rețineți că trackere
 msgid "Tunnel Configuration"
 msgstr "Configurarea tunelului"
 
+msgid "Our destination (identity) for this session"
+msgstr "Destinația (identitatea) noastră pentru această sesiune"
+
+msgid "Dest."
+msgstr "Dest."
+
 msgid "Inbound Settings"
 msgstr "Setări de intrare"
 
@@ -1492,5 +1501,3 @@ msgstr "Salvați modificările"
 
 msgid "Torrent must be stopped"
 msgstr "Torentul trebuie oprit"
-
-#, java-format

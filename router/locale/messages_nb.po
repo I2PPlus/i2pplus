@@ -110,6 +110,9 @@ msgstr "Avvisende forespørsler"
 msgid "Shutting down"
 msgstr "Avslutning"
 
+msgid "Restarting"
+msgstr ""
+
 msgid "Declining Tunnel Requests"
 msgstr "Avvisende tunnelforespørsler"
 

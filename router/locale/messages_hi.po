@@ -110,6 +110,9 @@ msgstr "अनुरोध अस्वीकार कर रहा है"
 msgid "Shutting down"
 msgstr "बंद कर रहा है"
 
+msgid "Restarting"
+msgstr ""
+
 msgid "Declining Tunnel Requests"
 msgstr "टंनल अनुरोध अस्वीकार कर रहा है"
 

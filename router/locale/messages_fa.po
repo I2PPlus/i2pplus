@@ -110,6 +110,9 @@ msgstr "رد درخواست ها"
 msgid "Shutting down"
 msgstr "خاموش شدن"
 
+msgid "Restarting"
+msgstr ""
+
 msgid "Declining Tunnel Requests"
 msgstr "رد درخواست های تونل"
 

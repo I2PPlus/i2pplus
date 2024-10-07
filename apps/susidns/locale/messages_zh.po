@@ -260,6 +260,12 @@ msgstr "书籍"
 msgid "No entries"
 msgstr "没有条目"
 
+msgid "Add new destination"
+msgstr "添加新目标"
+
+msgid "Import from hosts.txt file"
+msgstr "从 hosts.txt 文件导入"
+
 msgid "Export in hosts.txt format"
 msgstr "导出 hosts.txt 格式"
 
@@ -308,9 +314,6 @@ msgstr "标记为删除"
 msgid "Cancel"
 msgstr "取消"
 
-msgid "Add new destination"
-msgstr "添加新目标"
-
 msgid "e.g. newdomain.i2p"
 msgstr "例如"
 
@@ -319,9 +322,6 @@ msgstr "B64或B32"
 
 msgid "Full destination or b32 address"
 msgstr "完整目的地或 b32 地址"
-
-msgid "Import from hosts.txt file"
-msgstr "从 hosts.txt 文件导入"
 
 msgid "Select file"
 msgstr "选择文件"

@@ -1352,15 +1352,6 @@ msgstr "Pis tutum dəyəri"
 msgid "Unsupported"
 msgstr "Dəstəklənmir"
 
-msgid "IPs Banned Until Restart"
-msgstr "IP-lər Yenidən Başlayana qədər Qadağan Edildi"
-
-msgid "IPv4 Addresses"
-msgstr "IPv4 Ünvanları"
-
-msgid "IPv6 Addresses"
-msgstr "IPv6 Ünvanları"
-
 msgid "IPs Permanently Banned"
 msgstr "İP-lər Daimi Qadağan Edildi"
 
@@ -1369,6 +1360,19 @@ msgstr "Etibarən"
 
 msgid "To"
 msgstr "Qədər"
+
+#, java-format
+msgid "First {0} displayed, see the {1} file for the full list"
+msgstr ""
+
+msgid "IPs Banned Until Restart"
+msgstr "IP-lər Yenidən Başlayana qədər Qadağan Edildi"
+
+msgid "IPv4 Addresses"
+msgstr "IPv4 Ünvanları"
+
+msgid "IPv6 Addresses"
+msgstr "IPv6 Ünvanları"
 
 msgid "Reseed now"
 msgstr "İndi yenidən oxuyun"
@@ -1415,11 +1419,11 @@ msgstr "URL siyahısını sıfırlayın"
 msgid "URL list reset successfully"
 msgstr "URL siyahısı uğurla sıfırlandı"
 
-msgid "Cancel shutdown"
-msgstr "Bağlanmağı ləğv edin"
-
 msgid "Cancel restart"
 msgstr "Yenidən başlamanı ləğv edin"
+
+msgid "Cancel shutdown"
+msgstr "Bağlanmağı ləğv edin"
 
 msgid "Restart immediately"
 msgstr "Dərhal yenidən başladın"
@@ -2649,6 +2653,69 @@ msgstr "Sibil təhlili"
 msgid "Router Map"
 msgstr "Ruter Xəritəsi"
 
+msgid "Network Database Search"
+msgstr ""
+
+msgid "Capabilities"
+msgstr "Bacarıqlar"
+
+msgid "e.g. f or XOfR"
+msgstr ""
+
+msgid "Cost"
+msgstr "Xərc"
+
+msgid "Country"
+msgstr "Ölkə"
+
+msgid "Country Codes"
+msgstr ""
+
+msgid "Hash Prefix"
+msgstr ""
+
+msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
+msgstr ""
+
+msgid "Hostname or b32"
+msgstr ""
+
+msgid "IPv6 Prefix"
+msgstr ""
+
+msgid "Single port or range"
+msgstr ""
+
+msgid "Signature Type"
+msgstr ""
+
+msgid "SSU Capabilities"
+msgstr ""
+
+msgid "Encryption Type"
+msgstr ""
+
+msgid "Router Version"
+msgstr ""
+
+msgid "Transport"
+msgstr "Nəqliyyat"
+
+msgid "Add Sybil analysis (must pick at least one above)"
+msgstr ""
+
+msgid "Sybil close to"
+msgstr ""
+
+msgid "Router hash, destination hash, b32, or from address book"
+msgstr ""
+
+msgid "or Sybil close to this router"
+msgstr ""
+
+msgid "Lookup"
+msgstr "Axtarış"
+
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "Heç vaxt marşrutlaşdırıcınızın kimliyini heç kimə açıqlamayın, çünki o, şəbəkə verilənlər bazasındakı IP ünvanınızla unikal şəkildə əlaqələndirilir."
 
@@ -2661,14 +2728,14 @@ msgstr "şəbəkə verilənlər bazasında tapılmadı"
 msgid "No results"
 msgstr "Nəticə yoxdur"
 
-msgid "Previous Page"
-msgstr "Əvvəlki Səhifə"
+msgid "Bad Base64 Router hash"
+msgstr ""
 
-msgid "Page"
-msgstr "Səhifə"
+msgid "No routers with"
+msgstr ""
 
-msgid "Country"
-msgstr "Ölkə"
+msgid "Hash prefix"
+msgstr ""
 
 msgid "Port"
 msgstr "Port"
@@ -2676,11 +2743,56 @@ msgstr "Port"
 msgid "MTU"
 msgstr "MTU"
 
+msgid "found in the network database"
+msgstr ""
+
+msgid "results"
+msgstr ""
+
+msgid "Previous Page"
+msgstr "Əvvəlki Səhifə"
+
 msgid "Next Page"
 msgstr "Növbəti səhifə"
 
-msgid "No Leasesets currently active."
-msgstr "Hazırda aktiv olan İcarəyə Dəstək yoxdur."
+msgid "Results per page"
+msgstr ""
+
+msgid "Not initialized"
+msgstr "Başlanılmadı"
+
+msgid "Debug mode - Sorted by hash distance, closest first."
+msgstr ""
+
+msgid "Compact mode"
+msgstr ""
+
+msgid "Total Leasesets"
+msgstr ""
+
+msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Mod Data"
+msgstr ""
+
+msgid "Last Changed"
+msgstr ""
+
+msgid "Next Mod Data"
+msgstr ""
+
+msgid "Change in"
+msgstr ""
+
+msgid "Known Floodfills"
+msgstr "Tanınmış daşqınlar"
+
+msgid "Floodfill mode enabled"
+msgstr ""
+
+msgid "Routing Key"
+msgstr "Marşrut açarı"
 
 msgid "Network data"
 msgstr "Şəbəkə məlumatları"
@@ -2694,6 +2806,17 @@ msgstr "Təxmini ümumi daşqınlar"
 msgid "Estimated total leasesets"
 msgstr "Təxmini ümumi icarələr"
 
+#, java-format
+msgid "Hostname {0} not found in network database"
+msgstr ""
+
+#, java-format
+msgid "LeaseSet for {0} not found in network database"
+msgstr ""
+
+msgid "Meta"
+msgstr ""
+
 msgid "LeaseSet"
 msgstr "İcarəyə verilir"
 
@@ -2705,16 +2828,6 @@ msgstr "Təyinat üçün yerli tunellərə baxın"
 
 msgid "published"
 msgstr "nəşr edilmişdir"
-
-msgid "Add to addressbook"
-msgstr "Ünvan kitabına əlavə edin"
-
-msgid "Add to local addressbook"
-msgstr "Yerli ünvan kitabçasına əlavə edin"
-
-#, java-format
-msgid "Published{0} ago"
-msgstr "{0} əvvəl dərc edilib"
 
 #, java-format
 msgid "Expires{0}"
@@ -2742,12 +2855,6 @@ msgstr "İmza növü"
 msgid "Unsupported type"
 msgstr "Dəstəklənməyən növ"
 
-msgid "Routing Key"
-msgstr "Marşrut açarı"
-
-msgid "Lease"
-msgstr "İcarəyə götürmək"
-
 #, java-format
 msgid "Expires in {0}"
 msgstr "{0} tarixində bitir"
@@ -2756,8 +2863,11 @@ msgstr "{0} tarixində bitir"
 msgid "Expired {0} ago"
 msgstr "Müddəti {0} əvvəl keçib"
 
-msgid "Not initialized"
-msgstr "Başlanılmadı"
+msgid "Advanced mode - includes all statistics published by floodfills."
+msgstr ""
+
+msgid "Compact mode - does not include statistics published by floodfills."
+msgstr ""
 
 msgid "Network Database Router Statistics"
 msgstr "Şəbəkə Verilənlər Bazasının Router Statistikası"
@@ -2780,6 +2890,15 @@ msgstr "Bütün tunel sorğularının rədd edilməsi"
 msgid "Transports"
 msgstr "Nəqliyyatlar"
 
+msgid "X Tier"
+msgstr ""
+
+msgid "Floodfills"
+msgstr "Daşqınlar"
+
+msgid "Total"
+msgstr "Cəmi"
+
 msgid "Unknown"
 msgstr "Bilinmeyen"
 
@@ -2792,6 +2911,12 @@ msgstr "Bizim məlumatımız"
 msgid "Router is banlisted"
 msgstr "Router qadağan edilib"
 
+msgid "Java I2P variant"
+msgstr ""
+
+msgid "I2Pd variant"
+msgstr ""
+
 msgid "RouterInfo is compressible"
 msgstr "RouterInfo sıxılır"
 
@@ -2802,11 +2927,11 @@ msgstr "Bu versiya ilə bütün marşrutlaşdırıcıları NetDb-də göstərin"
 msgid "Show all members of the {0} family in NetDb"
 msgstr "NetDb-də {0} ailəsinin bütün üzvlərini göstərin"
 
-msgid "View profile"
-msgstr "Profilə baxın"
-
 msgid "Profile"
 msgstr "Profil"
+
+msgid "View profile"
+msgstr "Profilə baxın"
 
 msgid "Configure peer"
 msgstr "Peer-i konfiqurasiya edin"
@@ -2822,6 +2947,9 @@ msgstr "Nəşr edilmişdir"
 
 msgid "Hostname"
 msgstr "Host adı"
+
+msgid "direct"
+msgstr ""
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "Doğrulanmış ailə (imza sertifikatı quraşdırılıb və etibarlıdır)"
@@ -2841,17 +2969,11 @@ msgstr "Ünvanlar"
 msgid "n/a"
 msgstr "n/a"
 
-msgid "Cost"
-msgstr "Xərc"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "NetDb-də bu ünvana malik bütün marşrutlaşdırıcıları göstərin"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "NetDb-də bu portu olan bütün marşrutlaşdırıcıları göstərin"
-
-msgid "Capabilities"
-msgstr "Bacarıqlar"
 
 msgid "Core version"
 msgstr "Əsas versiya"
@@ -2940,11 +3062,11 @@ msgstr "IPv6 NTCP"
 msgid "IPv6 NTCP, SSU"
 msgstr "IPv6 NTCP, SSU"
 
-msgid "IPv6 NTCP, SSU, introducers"
-msgstr "IPv6 NTCP, SSU, təqdimatçılar"
-
 msgid "IPv6 Only NTCP, SSU, introducers"
 msgstr "IPv6 Yalnız NTCP, SSU, təqdim edənlər"
+
+msgid "IPv6 NTCP, SSU, introducers"
+msgstr "IPv6 NTCP, SSU, təqdimatçılar"
 
 msgid "No peer connections available"
 msgstr "Peer əlaqələri mövcud deyil"
@@ -2969,9 +3091,6 @@ msgstr "Peer Əlaqələri"
 msgid "Auto-refresh"
 msgstr "Avtomatik yeniləmə"
 
-msgid "Transport"
-msgstr "Nəqliyyat"
-
 msgid "Active in the last minute"
 msgstr "Son dəqiqədə aktivdir"
 
@@ -2980,9 +3099,6 @@ msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
-
-msgid "Total"
-msgstr "Cəmi"
 
 msgid "Current / maximum permitted"
 msgstr "Cari / maksimum icazə verilir"
@@ -3233,9 +3349,6 @@ msgid_plural "Showing {0} recent profiles."
 msgstr[0] "Göstərici {0} son profil."
 msgstr[1] "Göstərmək {0} son profillər."
 
-msgid "active in the last 20 minutes"
-msgstr "son 15 dəqiqə ərzində aktivdir"
-
 #, java-format
 msgid "Hiding {0} older profile."
 msgid_plural "Hiding {0} older profiles."
@@ -3277,6 +3390,9 @@ msgstr "Tunel həmkarı iştirak etməkdən imtina etdi"
 
 msgid "Rejected"
 msgstr "Rədd edildi"
+
+msgid "First Heard About"
+msgstr ""
 
 msgid "Last Heard From"
 msgstr "Son eşitmə"
@@ -3450,6 +3566,13 @@ msgstr "Sessiya qadağaları"
 
 msgid "Total number of banned peers"
 msgstr "Qadağan edilmiş həmyaşıdların ümumi sayı"
+
+msgid "Note: 'LU' class routers have been excluded from the list."
+msgstr ""
+
+#, java-format
+msgid "To view, see {0}Session Bans{1}."
+msgstr ""
 
 msgid "Select search engine"
 msgstr "Axtarış motorunu seçin"
@@ -3722,9 +3845,6 @@ msgstr "Bankalar"
 msgid "Review extended info about installed .jar and .war files"
 msgstr "Quraşdırılmış .jar və .war faylları haqqında geniş məlumatı nəzərdən keçirin"
 
-msgid "Lookup"
-msgstr "Axtarış"
-
 msgid "Textual router performance statistics"
 msgstr "Mətn yönləndirici performans statistikası"
 
@@ -3759,8 +3879,8 @@ msgstr "Yaddaş"
 msgid "Floodfill enabled"
 msgstr "Floodfill aktivdir"
 
-msgid "See more information on the wiki"
-msgstr "Vikidə daha çox məlumata baxın"
+msgid "Total number of LeaseSets stored in our NetDb"
+msgstr ""
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Xəbərdarlıq: ECDSA mövcud deyil. "
@@ -3834,8 +3954,8 @@ msgstr "gələn / gedən"
 msgid "Used for building and testing tunnels, and communicating with floodfill peers"
 msgstr "Tunellərin tikintisi və sınaqdan keçirilməsi və daşqınların həmyaşıdları ilə ünsiyyət üçün istifadə olunur"
 
-msgid "Exploratory"
-msgstr "Kəşfiyyat"
+msgid "Utility"
+msgstr "Faydalı proqram"
 
 msgid "Tunnels we are participating in, directly contributing bandwidth to the network"
 msgstr "İştirak etdiyimiz tunellər, şəbəkəyə birbaşa bant genişliyinə töhfə verir"
@@ -3843,8 +3963,8 @@ msgstr "İştirak etdiyimiz tunellər, şəbəkəyə birbaşa bant genişliyinə
 msgid "Current / Maximum"
 msgstr "Cari / Maksimum"
 
-msgid "Participating"
-msgstr "İştirak edir"
+msgid "Transit"
+msgstr "Tranzit"
 
 msgid "Concurrent tunnel builds (averaged over a minute) / single tunnel build time"
 msgstr "Paralel tunel tikintisi (orta hesabla bir dəqiqədən çox) / tək tunel qurma vaxtı"
@@ -3866,12 +3986,6 @@ msgstr "Pay nisbəti"
 
 msgid "tunnels"
 msgstr "tunellər"
-
-msgid "Transit"
-msgstr "Tranzit"
-
-msgid "Utility"
-msgstr "Faydalı proqram"
 
 msgid "Tunnel Count by Peer"
 msgstr "Peer tərəfindən tunel sayı"
@@ -4179,9 +4293,6 @@ msgstr "Bloku tətbiq edin"
 msgid "days"
 msgstr "günlük"
 
-msgid "Known Floodfills"
-msgstr "Tanınmış daşqınlar"
-
 msgid "Average closest floodfill distance"
 msgstr "Orta ən yaxın daşqın məsafəsi"
 
@@ -4320,6 +4431,9 @@ msgstr "Məsafə "
 msgid "Distance for"
 msgstr "Məsafə"
 
+msgid "Exploratory"
+msgstr "Kəşfiyyat"
+
 msgid "Configure tunnels"
 msgstr "Tunelləri konfiqurasiya edin"
 
@@ -4394,6 +4508,9 @@ msgstr "Router hazırda tranzit tunellərin qurulmasının qarşısını alan Gi
 msgid "No transit tunnels currently active."
 msgstr "Hazırda aktiv tranzit tunel yoxdur."
 
+msgid "Transit Tunnels by Peer (Top 50)"
+msgstr ""
+
 msgid "Address"
 msgstr "Ünvan"
 
@@ -4465,6 +4582,9 @@ msgstr "Bant genişliyi sınağı alınmadı"
 
 msgid "Bandwidth test did not complete"
 msgstr "Bant genişliyi testi tamamlanmadı"
+
+msgid "Bad state for test"
+msgstr ""
 
 msgid "Bandwidth test started"
 msgstr "Bant genişliyi testi başladı"
@@ -5097,14 +5217,22 @@ msgstr "Həmyaşıdları Əllə Qadağa / Qadağadan Çıxar"
 msgid "Banning will prevent the participation of this peer in tunnels you create."
 msgstr "Qadağa bu həmyaşıdın yaratdığınız tunellərdə iştirakına mane olacaq."
 
+msgid "A list of bans by IP address is presented below."
+msgstr ""
+
+#, java-format
+msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
+msgstr ""
+
+#, java-format
+msgid "A list of {0}session-only bans{1} by hash is also available."
+msgstr ""
+
 msgid "Adjust Profile Bonuses"
 msgstr "Profil Bonuslarını Tənzimləyin"
 
 msgid "Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels."
 msgstr "Bonuslar müsbət və ya mənfi ola bilər və həmyaşımanın sürətli və yüksək potensiallara daxil olmasına təsir göstərir. Sürətli həmyaşıdları müştəri tunelləri üçün istifadə olunur və bəzi kəşfiyyat tunelləri üçün yüksək tutumlu həmyaşıdları istifadə olunur."
-
-msgid "Banned Peers"
-msgstr "Qadağan edilmiş həmyaşıdlar"
 
 msgid "Banned IP Addresses"
 msgstr "Qadağan edilmiş IP-lər"
@@ -5651,6 +5779,9 @@ msgstr "Bu parametr, effektiv olduqda, imzalanmamış yeniləmə xüsusiyyəti �
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Bu parametr, ruterinizin möhkəm olub-olmadığını müəyyən etmək üçün SSU testlərini deaktiv etməyə icazə verir və mütləq firewalled olmayan, lakin aralıq yanğına qarşı problemlər yaşayan marşrutlaşdırıcılar üçün aktivləşdirilə bilər. Test qeyri-aktiv edildikdə, həm SDU, həm də NTCP <a href=/info>marşrutlaşdırıcı məlumat səhifəsində cari ictimai ip ünvanınızı bildirməlidir</a>. [Yenidən başladın tələb olunur]"
+
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
+msgstr ""
 
 msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
 msgstr "Bu parametr həmkarlar ilə ünsiyyət zamanı hansı nəqliyyatın üstünlük təşkil etdiyini müəyyən edir. Standart olaraq, MTCP UDP-dən (SDU) üstün tutulur. Dəyəri doğru təyin etməklə əvvəlcədən mövcud NTCP bağlantısı mövcud olmayana qədər ÜPİ-yə üstünlük veriləcək; hər zaman təyin edildikdə, hər hansı əvvəlcədən mövcud NTCP bağlantısından asılı olmayaraq ÜPİ həmişə istifadə ediləcək. [Standart yanlışdır]"
@@ -6234,6 +6365,9 @@ msgstr "Laptop Modu"
 msgid "An <a href=/confignet#ipchange>optional configuration</a> that automatically changes your <a href=/netdb?r=.>router identity</a> and <a href=/confignet#udpconfig>external port</a> when the public ip address your system is on changes. This can prevent an adversary from correlating your router identity and ip address in scenarios where your ip address may change frequently, for example when you're running I2P on a laptop from multiple locations."
 msgstr "Sizin sisteminizin olduğu umumi IP ünvanının dəyişməsi halında avtomatik olaraq <a href=/confignet#ipchange>isteğe bağlı yapılandırmadır</a>, bu zaman <a href=/netdb?r=.>router identifikasiyasını</a> və <a href=/confignet#udpconfig>qeyri-mütləq portu</a> dəyişdirir. Bu, IP ünvanınızın sə frequently dəyişə biləcəyi mənada router identifikasiyası və IP ünvanınızın ayıklanmasına qarşı qoruyucu tədbirlər almaq üçün could prevent. Məsələn, I2P-ni bir neçə mövqeydən laptoptan çalışdırırsınız."
 
+msgid "Lease"
+msgstr "İcarəyə götürmək"
+
 msgid "The information that defines the authorization for a particular tunnel to receive messages targeting a <i>Destination</i>."
 msgstr "Bir <i>Mənsibə</i> üçün mesajları qəbul etmək üçün müəyyən bir tunnel üçün icazəni təyin edən məlumat."
 
@@ -6807,6 +6941,9 @@ msgstr "Routeriniz tərəfindən inşa edilən tunellər və dağılım-doldurma
 msgid "Tunnels built by your router for each client's use."
 msgstr "Routeriniz tərəfindən hər bir müştəri istifadəsi üçün inşa edilən tunellər."
 
+msgid "Participating"
+msgstr "İştirak edir"
+
 msgid "Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a  href='/config'>Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a href='/configadvanced'>Advanced configuration page</a>. <a href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
 msgstr "Digər routerlər tərəfindən sizin routeriniz vasitəsilə inşa edilən tunellər. Bu şəbəklə bağlı tələbə, sizin paylaşılan bant genişliyiniz və yerli yaratılan trafik miqdarına əsasən aşağı-yuxarı dəyişə bilər. İştirak edən tunelləri məhdudlaşdırmaq üçün tövsiyyə olunan yol <a  href='/config'>Bant enfişarları səhifəsinə</a>dəyişiklik etməkdir. Maksimum sayını da <a href='/configadvanced'>Əlavə Konfiqurasiya səhifəsində</a> <code>router.maxParticipatingTunnels=nnn</code> dəyəri qeyd edərək məhdudlaşdıra bilərsiniz. <a href='/configstats#tunnel.participatingTunnels'>[Qrafika imkanı aktivləşdir]</a>"
 
@@ -7235,8 +7372,8 @@ msgstr "Həmyaşıd profilləri"
 msgid "Session Banned Peers"
 msgstr "Sessiya Qadağan Edilən Həmyaşıdlar"
 
-msgid "Floodfills"
-msgstr "Daşqınlar"
+msgid "Banned Peers"
+msgstr "Qadağan edilmiş həmyaşıdlar"
 
 msgid "Fast / High Capacity"
 msgstr "Sürətli / Yüksək Tutumlu"
@@ -7580,3 +7717,11 @@ msgstr "Növbəti"
 
 msgid "Finished"
 msgstr "Bitdi"
+
+
+
+
+
+#, java-format
+
+

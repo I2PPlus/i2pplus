@@ -267,6 +267,12 @@ msgstr "Kitap"
 msgid "No entries"
 msgstr "Giriş yok"
 
+msgid "Add new destination"
+msgstr "Yeni hedef ekleyin"
+
+msgid "Import from hosts.txt file"
+msgstr "hosts.txt dosyasından içe aktar"
+
 msgid "Export in hosts.txt format"
 msgstr "hosts.txt biçiminde dışa aktar."
 
@@ -315,9 +321,6 @@ msgstr "Silmek üzere işaretleyin"
 msgid "Cancel"
 msgstr "İptal"
 
-msgid "Add new destination"
-msgstr "Yeni hedef ekleyin"
-
 msgid "e.g. newdomain.i2p"
 msgstr "ör. newdomain.i2p"
 
@@ -326,9 +329,6 @@ msgstr "B64 veya B32"
 
 msgid "Full destination or b32 address"
 msgstr "Tam hedef veya b32 adresi"
-
-msgid "Import from hosts.txt file"
-msgstr "hosts.txt dosyasından içe aktar"
 
 msgid "Select file"
 msgstr "Dosya seç"

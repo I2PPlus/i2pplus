@@ -48,6 +48,9 @@ msgstr "Üst bant genişliği sınırı {0}KBps olarak değiştirildi"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "En düşük bant genişliği sınırı {0}KBps"
 
+msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
+msgstr ""
+
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Gelen tünel kanalları üzerinde +0/1 tünel atlama rastgeleleştirme etkinleştirildi"
 
@@ -340,6 +343,9 @@ msgstr "{0} 'a torrent ekleme ..."
 msgid "Connecting to I2P"
 msgstr "I2P bağlantısı kuruluyor"
 
+msgid "Connected to I2P at"
+msgstr ""
+
 #, java-format
 msgid "Starting up torrent {0}"
 msgstr "Torrent başlatılıyor {0}"
@@ -411,6 +417,9 @@ msgstr "{0} torrentinin yeniden kontrolü tamamlandı, değişmedi{0} torrentini
 #, java-format
 msgid "Error checking the torrent {0}"
 msgstr "{0} torrenti denetlenirken bir sorun çıktı"
+
+msgid "Data partition"
+msgstr ""
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -657,12 +666,6 @@ msgstr "içinde"
 
 msgid "out"
 msgstr "dışarı"
-
-msgid "Our destination (identity) for this session"
-msgstr "Bu oturum için hedef (kimlik)"
-
-msgid "Dest."
-msgstr "Hedef."
 
 msgid "Estimated download time for all torrents"
 msgstr "Tüm torrentler için tahmini indirme süresi"
@@ -1205,6 +1208,12 @@ msgstr "Torrent başına izin verilen maksimum dosya sayısı - izleyicilerin ke
 msgid "Tunnel Configuration"
 msgstr "Tünel Yapılandırması"
 
+msgid "Our destination (identity) for this session"
+msgstr "Bu oturum için hedef (kimlik)"
+
+msgid "Dest."
+msgstr "Hedef."
+
 msgid "Inbound Settings"
 msgstr "Geliş Ayarları"
 
@@ -1484,5 +1493,3 @@ msgstr "Değişiklikleri Kaydet"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent durdurulmalı"
-
-#, java-format

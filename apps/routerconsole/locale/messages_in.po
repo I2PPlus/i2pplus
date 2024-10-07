@@ -1349,15 +1349,6 @@ msgstr "Nilai kapasitas buruk"
 msgid "Unsupported"
 msgstr "Tidak didukung"
 
-msgid "IPs Banned Until Restart"
-msgstr "IP diblokir sampai restart"
-
-msgid "IPv4 Addresses"
-msgstr "Alamat IPv4"
-
-msgid "IPv6 Addresses"
-msgstr "Alamat IPv6"
-
 msgid "IPs Permanently Banned"
 msgstr "IP secara permanen diblokir"
 
@@ -1366,6 +1357,19 @@ msgstr "Dari"
 
 msgid "To"
 msgstr "Ke"
+
+#, java-format
+msgid "First {0} displayed, see the {1} file for the full list"
+msgstr ""
+
+msgid "IPs Banned Until Restart"
+msgstr "IP diblokir sampai restart"
+
+msgid "IPv4 Addresses"
+msgstr "Alamat IPv4"
+
+msgid "IPv6 Addresses"
+msgstr "Alamat IPv6"
 
 msgid "Reseed now"
 msgstr "Reseed sekarang"
@@ -1411,11 +1415,11 @@ msgstr "Reset daftar URL"
 msgid "URL list reset successfully"
 msgstr "Daftar URL berhasil direset"
 
-msgid "Cancel shutdown"
-msgstr "Batalkan shutdown"
-
 msgid "Cancel restart"
 msgstr "Batalkan restart"
+
+msgid "Cancel shutdown"
+msgstr "Batalkan shutdown"
 
 msgid "Restart immediately"
 msgstr "Restart segera"
@@ -2641,6 +2645,69 @@ msgstr "Analisis Sybil"
 msgid "Router Map"
 msgstr "Peta Router"
 
+msgid "Network Database Search"
+msgstr ""
+
+msgid "Capabilities"
+msgstr "Kemampuan"
+
+msgid "e.g. f or XOfR"
+msgstr ""
+
+msgid "Cost"
+msgstr "Biaya"
+
+msgid "Country"
+msgstr "Negara"
+
+msgid "Country Codes"
+msgstr ""
+
+msgid "Hash Prefix"
+msgstr ""
+
+msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
+msgstr ""
+
+msgid "Hostname or b32"
+msgstr ""
+
+msgid "IPv6 Prefix"
+msgstr ""
+
+msgid "Single port or range"
+msgstr ""
+
+msgid "Signature Type"
+msgstr ""
+
+msgid "SSU Capabilities"
+msgstr ""
+
+msgid "Encryption Type"
+msgstr ""
+
+msgid "Router Version"
+msgstr ""
+
+msgid "Transport"
+msgstr "Transport "
+
+msgid "Add Sybil analysis (must pick at least one above)"
+msgstr ""
+
+msgid "Sybil close to"
+msgstr ""
+
+msgid "Router hash, destination hash, b32, or from address book"
+msgstr ""
+
+msgid "or Sybil close to this router"
+msgstr ""
+
+msgid "Lookup"
+msgstr "Pencarian"
+
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "Jangan pernah mengungkapkan identitas router Anda kepada siapa pun, karena identitas tersebut tertaut secara unik ke alamat IP Anda di database jaringan."
 
@@ -2653,14 +2720,14 @@ msgstr "Tidak ditemukan di database jaringan"
 msgid "No results"
 msgstr "Tidak ada hasil"
 
-msgid "Previous Page"
-msgstr "Halaman Sebelumnya"
+msgid "Bad Base64 Router hash"
+msgstr ""
 
-msgid "Page"
-msgstr "Halaman"
+msgid "No routers with"
+msgstr ""
 
-msgid "Country"
-msgstr "Negara"
+msgid "Hash prefix"
+msgstr ""
 
 msgid "Port"
 msgstr "Port"
@@ -2668,11 +2735,56 @@ msgstr "Port"
 msgid "MTU"
 msgstr "MTU"
 
+msgid "found in the network database"
+msgstr ""
+
+msgid "results"
+msgstr ""
+
+msgid "Previous Page"
+msgstr "Halaman Sebelumnya"
+
 msgid "Next Page"
 msgstr "Halaman Berikutnya"
 
-msgid "No Leasesets currently active."
-msgstr "Tidak ada Sewa yang aktif saat ini."
+msgid "Results per page"
+msgstr ""
+
+msgid "Not initialized"
+msgstr "Tidak diaktifkan"
+
+msgid "Debug mode - Sorted by hash distance, closest first."
+msgstr ""
+
+msgid "Compact mode"
+msgstr ""
+
+msgid "Total Leasesets"
+msgstr ""
+
+msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Mod Data"
+msgstr ""
+
+msgid "Last Changed"
+msgstr ""
+
+msgid "Next Mod Data"
+msgstr ""
+
+msgid "Change in"
+msgstr ""
+
+msgid "Known Floodfills"
+msgstr "Timbunan Banjir yang Diketahui"
+
+msgid "Floodfill mode enabled"
+msgstr ""
+
+msgid "Routing Key"
+msgstr "Kunci Perutean"
 
 msgid "Network data"
 msgstr "Data jaringan"
@@ -2686,6 +2798,17 @@ msgstr "Perkiraan total timbunan banjir"
 msgid "Estimated total leasesets"
 msgstr "Perkiraan total sewa"
 
+#, java-format
+msgid "Hostname {0} not found in network database"
+msgstr ""
+
+#, java-format
+msgid "LeaseSet for {0} not found in network database"
+msgstr ""
+
+msgid "Meta"
+msgstr ""
+
 msgid "LeaseSet"
 msgstr "LeaseSet "
 
@@ -2697,16 +2820,6 @@ msgstr "Lihat terowongan lokal untuk tujuan"
 
 msgid "published"
 msgstr "diterbitkan"
-
-msgid "Add to addressbook"
-msgstr "Tambahkan ke addressbook"
-
-msgid "Add to local addressbook"
-msgstr "Tambahkan ke addressbook lokal"
-
-#, java-format
-msgid "Published{0} ago"
-msgstr "Diterbitkan{0} yang lalu"
 
 #, java-format
 msgid "Expires{0}"
@@ -2734,12 +2847,6 @@ msgstr "Jenis tanda tangan"
 msgid "Unsupported type"
 msgstr "Tipe tidak didukung"
 
-msgid "Routing Key"
-msgstr "Kunci Perutean"
-
-msgid "Lease"
-msgstr "Sewa"
-
 #, java-format
 msgid "Expires in {0}"
 msgstr "Kedaluwarsa dalam {0}"
@@ -2748,8 +2855,11 @@ msgstr "Kedaluwarsa dalam {0}"
 msgid "Expired {0} ago"
 msgstr "Kadaluarsa dalam {0} yang lalu"
 
-msgid "Not initialized"
-msgstr "Tidak diaktifkan"
+msgid "Advanced mode - includes all statistics published by floodfills."
+msgstr ""
+
+msgid "Compact mode - does not include statistics published by floodfills."
+msgstr ""
 
 msgid "Network Database Router Statistics"
 msgstr "Statistik Database Router Jaringan"
@@ -2772,6 +2882,15 @@ msgstr "Menolak semua permintaan terowongan"
 msgid "Transports"
 msgstr "Transport"
 
+msgid "X Tier"
+msgstr ""
+
+msgid "Floodfills"
+msgstr "Timbunan Banjir"
+
+msgid "Total"
+msgstr "Total "
+
 msgid "Unknown"
 msgstr "Tidak Diketahui"
 
@@ -2784,6 +2903,12 @@ msgstr "Info kami"
 msgid "Router is banlisted"
 msgstr "Router dilarang"
 
+msgid "Java I2P variant"
+msgstr ""
+
+msgid "I2Pd variant"
+msgstr ""
+
 msgid "RouterInfo is compressible"
 msgstr "RouterInfo dapat dikompres"
 
@@ -2794,11 +2919,11 @@ msgstr "Tampilkan semua router dengan versi ini di NetDb"
 msgid "Show all members of the {0} family in NetDb"
 msgstr "Tampilkan semua anggota keluarga {0} di NetDb"
 
-msgid "View profile"
-msgstr "Lihat profil"
-
 msgid "Profile"
 msgstr "Profil"
+
+msgid "View profile"
+msgstr "Lihat profil"
 
 msgid "Configure peer"
 msgstr "Konfigurasi peer"
@@ -2814,6 +2939,9 @@ msgstr "Telah dipublikasikan"
 
 msgid "Hostname"
 msgstr "Nama host"
+
+msgid "direct"
+msgstr ""
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "Keluarga terverifikasi (sertifikat penandatanganan terpasang dan valid)"
@@ -2833,17 +2961,11 @@ msgstr "Alamat"
 msgid "n/a"
 msgstr "tidak ada"
 
-msgid "Cost"
-msgstr "Biaya"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "Tampilkan semua router dengan alamat ini di NetDb"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "Tampilkan semua router dengan port ini di NetDb"
-
-msgid "Capabilities"
-msgstr "Kemampuan"
 
 msgid "Core version"
 msgstr "Versi inti"
@@ -2932,11 +3054,11 @@ msgstr "IPv6 NTCP "
 msgid "IPv6 NTCP, SSU"
 msgstr "IPv6 NTCP, SSU "
 
-msgid "IPv6 NTCP, SSU, introducers"
-msgstr "IPv6 NTCP, SSU, introducer"
-
 msgid "IPv6 Only NTCP, SSU, introducers"
 msgstr "Hanya IPv6 NTCP, SSU, introducers"
+
+msgid "IPv6 NTCP, SSU, introducers"
+msgstr "IPv6 NTCP, SSU, introducer"
 
 msgid "No peer connections available"
 msgstr "Tidak ada koneksi rekan yang tersedia"
@@ -2961,9 +3083,6 @@ msgstr "Koneksi Rekan"
 msgid "Auto-refresh"
 msgstr "Penyegaran otomatis"
 
-msgid "Transport"
-msgstr "Transport "
-
 msgid "Active in the last minute"
 msgstr "Aktif di menit terakhir"
 
@@ -2972,9 +3091,6 @@ msgstr "IPV4"
 
 msgid "IPv6"
 msgstr "IPv6 "
-
-msgid "Total"
-msgstr "Total "
 
 msgid "Current / maximum permitted"
 msgstr "Saat ini / maksimum yang diizinkan"
@@ -3222,9 +3338,6 @@ msgid "Showing {0} recent profile."
 msgid_plural "Showing {0} recent profiles."
 msgstr[0] "Menunjukkan {0} profil terbaru."
 
-msgid "active in the last 20 minutes"
-msgstr "aktif dalam 15 menit terakhir"
-
 #, java-format
 msgid "Hiding {0} older profile."
 msgid_plural "Hiding {0} older profiles."
@@ -3264,6 +3377,9 @@ msgstr "Rekan terowongan menolak untuk berpartisipasi"
 
 msgid "Rejected"
 msgstr "Ditolak"
+
+msgid "First Heard About"
+msgstr ""
 
 msgid "Last Heard From"
 msgstr "Terakhir mendengar dari"
@@ -3434,6 +3550,13 @@ msgstr "Larangan Sesi"
 
 msgid "Total number of banned peers"
 msgstr "Jumlah total rekan yang diblokir"
+
+msgid "Note: 'LU' class routers have been excluded from the list."
+msgstr ""
+
+#, java-format
+msgid "To view, see {0}Session Bans{1}."
+msgstr ""
 
 msgid "Select search engine"
 msgstr "Pilih mesin pencari"
@@ -3704,9 +3827,6 @@ msgstr "Jar"
 msgid "Review extended info about installed .jar and .war files"
 msgstr "Tinjau kembali info tentang file .jar dan .war yang terinstall"
 
-msgid "Lookup"
-msgstr "Pencarian"
-
 msgid "Textual router performance statistics"
 msgstr "Statistik kinerja router tekstual"
 
@@ -3741,8 +3861,8 @@ msgstr "Memori"
 msgid "Floodfill enabled"
 msgstr "Floodfill diaktifkan"
 
-msgid "See more information on the wiki"
-msgstr "Lihat informasi lebih lanjut di wiki"
+msgid "Total number of LeaseSets stored in our NetDb"
+msgstr ""
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Peringatan: ECDSA tidak tersedia. Memperbarui Java atau OS"
@@ -3816,8 +3936,8 @@ msgstr "masuk / keluar"
 msgid "Used for building and testing tunnels, and communicating with floodfill peers"
 msgstr "Digunakan untuk membangun dan menguji tunnel, dan berkomunikasi dengan peer floodfill"
 
-msgid "Exploratory"
-msgstr "Exploratory "
+msgid "Utility"
+msgstr "Utilitas"
 
 msgid "Tunnels we are participating in, directly contributing bandwidth to the network"
 msgstr "Tunnel yang kita ikut partisipasi di dalamnya, memberikan kontribusi bandwidth langsung untuk jaringan"
@@ -3825,8 +3945,8 @@ msgstr "Tunnel yang kita ikut partisipasi di dalamnya, memberikan kontribusi ban
 msgid "Current / Maximum"
 msgstr "Saat Ini / Maksimum"
 
-msgid "Participating"
-msgstr "Berpartisipasi"
+msgid "Transit"
+msgstr "Transit"
 
 msgid "Concurrent tunnel builds (averaged over a minute) / single tunnel build time"
 msgstr "Pembangunan terowongan secara bersamaan (rata-rata lebih dari satu menit) / waktu pembangunan terowongan tunggal"
@@ -3848,12 +3968,6 @@ msgstr "Rasio pembagian"
 
 msgid "tunnels"
 msgstr "terowongan"
-
-msgid "Transit"
-msgstr "Transit"
-
-msgid "Utility"
-msgstr "Utilitas"
 
 msgid "Tunnel Count by Peer"
 msgstr "Jumlah Terowongan menurut Rekan"
@@ -4161,9 +4275,6 @@ msgstr "Terapkan blok untuk"
 msgid "days"
 msgstr "hari"
 
-msgid "Known Floodfills"
-msgstr "Timbunan Banjir yang Diketahui"
-
 msgid "Average closest floodfill distance"
 msgstr "Rata-rata jarak timbunan banjir terdekat"
 
@@ -4302,6 +4413,9 @@ msgstr "Jarak ke"
 msgid "Distance for"
 msgstr "Jarak untuk"
 
+msgid "Exploratory"
+msgstr "Exploratory "
+
 msgid "Configure tunnels"
 msgstr "Konfigurasi tunnel"
 
@@ -4376,6 +4490,9 @@ msgstr "Router saat ini beroperasi dalam Mode Tersembunyi yang mencegah terowong
 msgid "No transit tunnels currently active."
 msgstr "Saat ini tidak ada terowongan transit yang aktif."
 
+msgid "Transit Tunnels by Peer (Top 50)"
+msgstr ""
+
 msgid "Address"
 msgstr "Alamat"
 
@@ -4447,6 +4564,9 @@ msgstr "Tes bandwidth gagal"
 
 msgid "Bandwidth test did not complete"
 msgstr "Tes bandwidth tidak selesai"
+
+msgid "Bad state for test"
+msgstr ""
 
 msgid "Bandwidth test started"
 msgstr "Tes bandwidth dimulai"
@@ -5079,14 +5199,22 @@ msgstr "Blokir Peer Secara Manual"
 msgid "Banning will prevent the participation of this peer in tunnels you create."
 msgstr "Pemblokiran akan mencegah keikutsertaan peer ini dalam tunnel yang anda buat."
 
+msgid "A list of bans by IP address is presented below."
+msgstr ""
+
+#, java-format
+msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
+msgstr ""
+
+#, java-format
+msgid "A list of {0}session-only bans{1} by hash is also available."
+msgstr ""
+
 msgid "Adjust Profile Bonuses"
 msgstr "Sesuaikan Bonus Profil"
 
 msgid "Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels."
 msgstr "Bonus dapat bernilai positif atau negatif, dan memengaruhi termasuknya peer dalam tingkatan Cepat dan Kapasitas Tinggi. Peer Cepat digunakan untuk terowongan klien, dan Peer Kapasitas Tinggi digunakan untuk beberapa terowongan eksplorasi."
-
-msgid "Banned Peers"
-msgstr "Peers yang Diblokir"
 
 msgid "Banned IP Addresses"
 msgstr "IP yang Diblokir"
@@ -5633,6 +5761,9 @@ msgstr "Pengaturan ini memungkinkan Anda mengkonfigurasi alamat URL pembaruan un
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Pengaturan ini memungkinkan pematikan pengujian SSU untuk menentukan apakah router Anda dibatasi firewall dan dapat diaktifkan untuk router yang pasti tidak dibatasi firewall namun mengalami masalah pembatasan firewall yang tidak beraturan. Dalam hal pengujian dinonaktifkan, baik SSU maupun NTCP seharusnya melaporkan alamat IP publik saat ini Anda di <a href=/info>halaman informasi router</a>. [Restart diperlukan]"
+
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
+msgstr ""
 
 msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
 msgstr "Pengaturan ini menentukan transportasi mana yang diprioritaskan saat berkomunikasi dengan rekan-rekan. Secara default, NTCP lebih disukai daripada UDP (SSU). Dengan menetapkan nilai ke true, UDP akan diutamakan kecuali ada koneksi NTCP yang sudah ada sebelumnya; bila diatur ke selalu, UDP akan selalu digunakan terlepas dari koneksi NTCP yang sudah ada sebelumnya. [Defaultnya salah]"
@@ -6216,6 +6347,9 @@ msgstr "Mode Laptop"
 msgid "An <a href=/confignet#ipchange>optional configuration</a> that automatically changes your <a href=/netdb?r=.>router identity</a> and <a href=/confignet#udpconfig>external port</a> when the public ip address your system is on changes. This can prevent an adversary from correlating your router identity and ip address in scenarios where your ip address may change frequently, for example when you're running I2P on a laptop from multiple locations."
 msgstr "Konfigurasi <a href=/confignet#ipchange>opsional</a> yang secara otomatis mengubah <a href=/netdb?r=.>identitas router</a> dan <a href=/confignet#udpconfig>port eksternal</a> saat alamat IP publik sistem Anda berubah. Ini dapat mencegah lawan menghubungkan identitas router dan alamat IP Anda dalam skenario di mana alamat IP Anda mungkin berubah sering, misalnya saat Anda menjalankan I2P di laptop dari berbagai lokasi."
 
+msgid "Lease"
+msgstr "Sewa"
+
 msgid "The information that defines the authorization for a particular tunnel to receive messages targeting a <i>Destination</i>."
 msgstr "Informasi yang mendefinisikan otorisasi untuk terowongan tertentu untuk menerima pesan yang menargetkan <i>Tujuan</i>."
 
@@ -6789,6 +6923,9 @@ msgstr "Terowongan yang dibangun oleh router Anda dan digunakan untuk berkomunik
 msgid "Tunnels built by your router for each client's use."
 msgstr "Terowongan yang dibangun oleh router Anda untuk penggunaan setiap klien."
 
+msgid "Participating"
+msgstr "Berpartisipasi"
+
 msgid "Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a  href='/config'>Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a href='/configadvanced'>Advanced configuration page</a>. <a href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
 msgstr "Terowongan yang dibangun oleh router lain melalui router Anda. Hal ini dapat bervariasi lebar tergantung dari permintaan jaringan, bandwidth yang Anda bagikan, dan jumlah lalu lintas yang dihasilkan secara lokal. Metode yang disarankan untuk membatasi terowongan berpartisipasi adalah dengan mengubah persentase bagian Anda di halaman <a href='/config'>Konfigurasi Bandwidth</a>. Anda juga dapat membatasi total jumlah dengan mengatur <code>router.maxParticipatingTunnels=nnn</code> di halaman <a href='/configadvanced'>Konfigurasi lanjutan</a>. <a href='/configstats#tunnel.participatingTunnels'>[Aktifkan grafik]</a>."
 
@@ -7217,8 +7354,8 @@ msgstr "Profil Rekan"
 msgid "Session Banned Peers"
 msgstr "Sesi Dilarang Rekan"
 
-msgid "Floodfills"
-msgstr "Timbunan Banjir"
+msgid "Banned Peers"
+msgstr "Peers yang Diblokir"
 
 msgid "Fast / High Capacity"
 msgstr "Cepat / Kapasitas Tinggi"
@@ -7562,3 +7699,11 @@ msgstr "Selanjutnya"
 
 msgid "Finished"
 msgstr "Selesai"
+
+
+
+
+
+#, java-format
+
+

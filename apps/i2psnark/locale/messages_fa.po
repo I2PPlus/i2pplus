@@ -48,6 +48,9 @@ msgstr "حد BW بالا به {0}KBps تغییر کرد"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "حداقل محدودیت پهنای باند {0}KBps است"
 
+msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
+msgstr ""
+
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "رندومیزاسیون برد و برگشت +0/1 تونل روی تونل‌های ورودی فعال شد"
 
@@ -340,6 +343,9 @@ msgstr "افزودن تورنت در {0}"
 msgid "Connecting to I2P"
 msgstr "اتصال به I2P"
 
+msgid "Connected to I2P at"
+msgstr ""
+
 #, java-format
 msgid "Starting up torrent {0}"
 msgstr "راه اندازی تورنت {0}"
@@ -411,6 +417,9 @@ msgstr "بررسی مجدد تورنت {0} به پایان رسید، بدون �
 #, java-format
 msgid "Error checking the torrent {0}"
 msgstr "خطا در بررسی تورنت {0}"
+
+msgid "Data partition"
+msgstr ""
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -657,12 +666,6 @@ msgstr "در"
 
 msgid "out"
 msgstr "خارج"
-
-msgid "Our destination (identity) for this session"
-msgstr "مقصد (هویت) ما برای این جلسه"
-
-msgid "Dest."
-msgstr "مقصد."
 
 msgid "Estimated download time for all torrents"
 msgstr "زمان تخمینی دانلود برای همه تورنت ها"
@@ -1205,6 +1208,12 @@ msgstr "حداکثر تعداد فایل‌های مجاز در هر تورنت 
 msgid "Tunnel Configuration"
 msgstr "پیکربندی تونل"
 
+msgid "Our destination (identity) for this session"
+msgstr "مقصد (هویت) ما برای این جلسه"
+
+msgid "Dest."
+msgstr "مقصد."
+
 msgid "Inbound Settings"
 msgstr "تنظیمات ورودی"
 
@@ -1484,5 +1493,3 @@ msgstr "ذخیره تغییرات"
 
 msgid "Torrent must be stopped"
 msgstr "تورنت باید متوقف شود"
-
-#, java-format

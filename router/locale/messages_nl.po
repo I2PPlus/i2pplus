@@ -110,6 +110,9 @@ msgstr "Afwijzende verzoeken"
 msgid "Shutting down"
 msgstr "Afsluiten"
 
+msgid "Restarting"
+msgstr ""
+
 msgid "Declining Tunnel Requests"
 msgstr "Weigerende tunnelaanvragen"
 

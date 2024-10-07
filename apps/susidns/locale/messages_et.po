@@ -267,6 +267,12 @@ msgstr "Raamat"
 msgid "No entries"
 msgstr "Kirju puudub"
 
+msgid "Add new destination"
+msgstr "Lisa uus sihtkoht"
+
+msgid "Import from hosts.txt file"
+msgstr "Impordi hosts.txt failist"
+
 msgid "Export in hosts.txt format"
 msgstr "Ekspordi hosts.txt formaadis"
 
@@ -315,9 +321,6 @@ msgstr "Märgi kustutamiseks"
 msgid "Cancel"
 msgstr "Katkesta"
 
-msgid "Add new destination"
-msgstr "Lisa uus sihtkoht"
-
 msgid "e.g. newdomain.i2p"
 msgstr "nt. newdomain.i2p"
 
@@ -326,9 +329,6 @@ msgstr "B64 või B32"
 
 msgid "Full destination or b32 address"
 msgstr "Täielik sihtkoht või b32 aadress"
-
-msgid "Import from hosts.txt file"
-msgstr "Impordi hosts.txt failist"
 
 msgid "Select file"
 msgstr "Vali fail"

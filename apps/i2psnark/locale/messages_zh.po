@@ -48,6 +48,9 @@ msgstr "上传带宽限制改为 {0} KB/s"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "最小上传带宽限制为 {0} KB/s"
 
+msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
+msgstr ""
+
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "已在入站隧道上启用了+0/1隧道跳随机化"
 
@@ -340,6 +343,9 @@ msgstr "从 {0}添加了种子&hellip;"
 msgid "Connecting to I2P"
 msgstr "正在连接到I2P"
 
+msgid "Connected to I2P at"
+msgstr ""
+
 #, java-format
 msgid "Starting up torrent {0}"
 msgstr "正在启动种子{0}"
@@ -411,6 +417,9 @@ msgstr "已完成对种子 {0} 的重新检查，未变更"
 #, java-format
 msgid "Error checking the torrent {0}"
 msgstr "检查种子 {0} 时出错"
+
+msgid "Data partition"
+msgstr ""
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -654,12 +663,6 @@ msgstr "在"
 
 msgid "out"
 msgstr "出"
-
-msgid "Our destination (identity) for this session"
-msgstr "这个会话中我们的目标（身份）"
-
-msgid "Dest."
-msgstr "目标"
 
 msgid "Estimated download time for all torrents"
 msgstr "所有洪流的估计下载时间"
@@ -1200,6 +1203,12 @@ msgstr "每个 torrent 允许的最大文件数 - 请注意，跟踪器可能会
 msgid "Tunnel Configuration"
 msgstr "隧道设置"
 
+msgid "Our destination (identity) for this session"
+msgstr "这个会话中我们的目标（身份）"
+
+msgid "Dest."
+msgstr "目标"
+
 msgid "Inbound Settings"
 msgstr "入站设置"
 
@@ -1476,5 +1485,3 @@ msgstr "保存更改"
 
 msgid "Torrent must be stopped"
 msgstr "必须停止洪流"
-
-#, java-format

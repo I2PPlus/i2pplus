@@ -110,6 +110,9 @@ msgstr "Richieste rifiutate"
 msgid "Shutting down"
 msgstr "Spegnimento"
 
+msgid "Restarting"
+msgstr ""
+
 msgid "Declining Tunnel Requests"
 msgstr "Richieste tunnel in calo"
 

@@ -267,6 +267,12 @@ msgstr "Bog"
 msgid "No entries"
 msgstr "Ingen tilmeldinger"
 
+msgid "Add new destination"
+msgstr "Tilføj ny destination"
+
+msgid "Import from hosts.txt file"
+msgstr "Importer fra hosts.txt-fil"
+
 msgid "Export in hosts.txt format"
 msgstr "Eksporter i hosts.txt-format"
 
@@ -315,9 +321,6 @@ msgstr "Marker for sletning"
 msgid "Cancel"
 msgstr "Annuller"
 
-msgid "Add new destination"
-msgstr "Tilføj ny destination"
-
 msgid "e.g. newdomain.i2p"
 msgstr "f.eks. newdomain.i2p"
 
@@ -326,9 +329,6 @@ msgstr "B64 eller B32"
 
 msgid "Full destination or b32 address"
 msgstr "Fuld destination eller b32-adresse"
-
-msgid "Import from hosts.txt file"
-msgstr "Importer fra hosts.txt-fil"
 
 msgid "Select file"
 msgstr "Vælg fil"

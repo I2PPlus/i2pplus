@@ -110,6 +110,9 @@ msgstr "Odmítání požadavků"
 msgid "Shutting down"
 msgstr "Vypínání"
 
+msgid "Restarting"
+msgstr ""
+
 msgid "Declining Tunnel Requests"
 msgstr "Odmítání požadavků na tunel"
 

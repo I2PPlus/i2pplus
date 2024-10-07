@@ -110,6 +110,9 @@ msgstr "Отклоняемые запросы"
 msgid "Shutting down"
 msgstr "Выключение"
 
+msgid "Restarting"
+msgstr ""
+
 msgid "Declining Tunnel Requests"
 msgstr "Отклонение запросов на туннель"
 

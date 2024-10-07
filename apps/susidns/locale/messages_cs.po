@@ -274,6 +274,12 @@ msgstr "Kniha"
 msgid "No entries"
 msgstr "Žádné záznamy"
 
+msgid "Add new destination"
+msgstr "Přidat nový cíl"
+
+msgid "Import from hosts.txt file"
+msgstr "Import ze souboru hosts.txt"
+
 msgid "Export in hosts.txt format"
 msgstr "Export ve formátu hosts.txt"
 
@@ -322,9 +328,6 @@ msgstr "Označit pro smazání"
 msgid "Cancel"
 msgstr "Zrušit"
 
-msgid "Add new destination"
-msgstr "Přidat nový cíl"
-
 msgid "e.g. newdomain.i2p"
 msgstr "např. newdomain.i2p"
 
@@ -333,9 +336,6 @@ msgstr "B64 nebo B32"
 
 msgid "Full destination or b32 address"
 msgstr "Úplný cíl nebo adresa b32"
-
-msgid "Import from hosts.txt file"
-msgstr "Import ze souboru hosts.txt"
 
 msgid "Select file"
 msgstr "Vyberte soubor"

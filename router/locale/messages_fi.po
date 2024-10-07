@@ -110,6 +110,9 @@ msgstr "Hylkäävät pyynnöt"
 msgid "Shutting down"
 msgstr "Sammutus"
 
+msgid "Restarting"
+msgstr ""
+
 msgid "Declining Tunnel Requests"
 msgstr "Vähenevät tunnelipyynnöt"
 

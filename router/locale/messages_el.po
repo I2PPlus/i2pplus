@@ -110,6 +110,9 @@ msgstr "Απόρριψη αιτημάτων"
 msgid "Shutting down"
 msgstr "Κλείσιμο"
 
+msgid "Restarting"
+msgstr ""
+
 msgid "Declining Tunnel Requests"
 msgstr "Απόρριψη αιτημάτων για τούνελ"
 

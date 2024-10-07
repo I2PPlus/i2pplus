@@ -110,6 +110,9 @@ msgstr "Solicitudes rechazadas"
 msgid "Shutting down"
 msgstr "Apagar"
 
+msgid "Restarting"
+msgstr ""
+
 msgid "Declining Tunnel Requests"
 msgstr "Solicitudes de túnel rechazadas"
 

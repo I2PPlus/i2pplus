@@ -110,6 +110,9 @@ msgstr "Taotluste tagasilükkamine"
 msgid "Shutting down"
 msgstr "Väljalülitamine"
 
+msgid "Restarting"
+msgstr ""
+
 msgid "Declining Tunnel Requests"
 msgstr "Tunnelitaotluste vähenemine"
 

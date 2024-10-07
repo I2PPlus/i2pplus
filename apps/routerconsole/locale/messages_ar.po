@@ -1364,15 +1364,6 @@ msgstr "قدرة غير جيدة"
 msgid "Unsupported"
 msgstr "غير مدعومة"
 
-msgid "IPs Banned Until Restart"
-msgstr "عناوين IP محظورة حتى إعادة التشغيل"
-
-msgid "IPv4 Addresses"
-msgstr "عناوين IPv4"
-
-msgid "IPv6 Addresses"
-msgstr "عناوين IPv6"
-
 msgid "IPs Permanently Banned"
 msgstr "عناوين IP محظورة نهائيًا"
 
@@ -1381,6 +1372,19 @@ msgstr "من"
 
 msgid "To"
 msgstr "إلى"
+
+#, java-format
+msgid "First {0} displayed, see the {1} file for the full list"
+msgstr ""
+
+msgid "IPs Banned Until Restart"
+msgstr "عناوين IP محظورة حتى إعادة التشغيل"
+
+msgid "IPv4 Addresses"
+msgstr "عناوين IPv4"
+
+msgid "IPv6 Addresses"
+msgstr "عناوين IPv6"
 
 msgid "Reseed now"
 msgstr "Reseed الآن"
@@ -1431,11 +1435,11 @@ msgstr "إعادة تعيين قائمة URL"
 msgid "URL list reset successfully"
 msgstr "تم إعادة تعيين قائمة URL بنجاح"
 
-msgid "Cancel shutdown"
-msgstr "الغاء التوقيف"
-
 msgid "Cancel restart"
 msgstr "الغاء اعادة التشغيل"
+
+msgid "Cancel shutdown"
+msgstr "الغاء التوقيف"
 
 msgid "Restart immediately"
 msgstr "أعد التشغيل الآن"
@@ -2681,6 +2685,69 @@ msgstr "تحليل سيبيل"
 msgid "Router Map"
 msgstr "خريطة ال router"
 
+msgid "Network Database Search"
+msgstr ""
+
+msgid "Capabilities"
+msgstr "القدرات"
+
+msgid "e.g. f or XOfR"
+msgstr ""
+
+msgid "Cost"
+msgstr "التكلفة"
+
+msgid "Country"
+msgstr "البلد"
+
+msgid "Country Codes"
+msgstr ""
+
+msgid "Hash Prefix"
+msgstr ""
+
+msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
+msgstr ""
+
+msgid "Hostname or b32"
+msgstr ""
+
+msgid "IPv6 Prefix"
+msgstr ""
+
+msgid "Single port or range"
+msgstr ""
+
+msgid "Signature Type"
+msgstr ""
+
+msgid "SSU Capabilities"
+msgstr ""
+
+msgid "Encryption Type"
+msgstr ""
+
+msgid "Router Version"
+msgstr ""
+
+msgid "Transport"
+msgstr "نقل"
+
+msgid "Add Sybil analysis (must pick at least one above)"
+msgstr ""
+
+msgid "Sybil close to"
+msgstr ""
+
+msgid "Router hash, destination hash, b32, or from address book"
+msgstr ""
+
+msgid "or Sybil close to this router"
+msgstr ""
+
+msgid "Lookup"
+msgstr "بحث"
+
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "لا تكشف أبدًا عن هوية جهاز التوجيه الخاص بك لأي شخص، لأنه مرتبط بشكل فريد بعنوان IP الخاص بك في قاعدة بيانات الشبكة."
 
@@ -2693,14 +2760,14 @@ msgstr "غير موجود في قاعدة الشبكة"
 msgid "No results"
 msgstr "لا توجد نتائج"
 
-msgid "Previous Page"
-msgstr "الصفحة السابقة"
+msgid "Bad Base64 Router hash"
+msgstr ""
 
-msgid "Page"
-msgstr "الصفحة"
+msgid "No routers with"
+msgstr ""
 
-msgid "Country"
-msgstr "البلد"
+msgid "Hash prefix"
+msgstr ""
 
 msgid "Port"
 msgstr "منفذ"
@@ -2708,11 +2775,56 @@ msgstr "منفذ"
 msgid "MTU"
 msgstr "MTU"
 
+msgid "found in the network database"
+msgstr ""
+
+msgid "results"
+msgstr ""
+
+msgid "Previous Page"
+msgstr "الصفحة السابقة"
+
 msgid "Next Page"
 msgstr "الصفحة التالية"
 
-msgid "No Leasesets currently active."
-msgstr "لا توجد مجموعات مستأجرة نشطة حاليًا."
+msgid "Results per page"
+msgstr ""
+
+msgid "Not initialized"
+msgstr "لم تتم تهيئة"
+
+msgid "Debug mode - Sorted by hash distance, closest first."
+msgstr ""
+
+msgid "Compact mode"
+msgstr ""
+
+msgid "Total Leasesets"
+msgstr ""
+
+msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Mod Data"
+msgstr ""
+
+msgid "Last Changed"
+msgstr ""
+
+msgid "Next Mod Data"
+msgstr ""
+
+msgid "Change in"
+msgstr ""
+
+msgid "Known Floodfills"
+msgstr "مدافن الفيضانات المعروفة"
+
+msgid "Floodfill mode enabled"
+msgstr ""
+
+msgid "Routing Key"
+msgstr "مفتاح التوجيه"
 
 msgid "Network data"
 msgstr "بيانات الشبكة"
@@ -2726,6 +2838,17 @@ msgstr "إجمالي الفيضانات المقدرة"
 msgid "Estimated total leasesets"
 msgstr "مجموع الإيجارات المقدرة"
 
+#, java-format
+msgid "Hostname {0} not found in network database"
+msgstr ""
+
+#, java-format
+msgid "LeaseSet for {0} not found in network database"
+msgstr ""
+
+msgid "Meta"
+msgstr ""
+
 msgid "LeaseSet"
 msgstr "مجموعة الإيجار"
 
@@ -2737,16 +2860,6 @@ msgstr "عرض الأنفاق المحلية للوجهة"
 
 msgid "published"
 msgstr "نشرت"
-
-msgid "Add to addressbook"
-msgstr "إضافة إلى دفتر العناوين"
-
-msgid "Add to local addressbook"
-msgstr "أضف الى دفتر العناوين"
-
-#, java-format
-msgid "Published{0} ago"
-msgstr "تم النشر{0} منذ"
 
 #, java-format
 msgid "Expires{0}"
@@ -2774,12 +2887,6 @@ msgstr "نوع التوقيع"
 msgid "Unsupported type"
 msgstr "نوع غير مدعوم"
 
-msgid "Routing Key"
-msgstr "مفتاح التوجيه"
-
-msgid "Lease"
-msgstr "الإيجار"
-
 #, java-format
 msgid "Expires in {0}"
 msgstr "ينتهي في مدة {0}"
@@ -2788,8 +2895,11 @@ msgstr "ينتهي في مدة {0}"
 msgid "Expired {0} ago"
 msgstr "انتهى {0} منذ"
 
-msgid "Not initialized"
-msgstr "لم تتم تهيئة"
+msgid "Advanced mode - includes all statistics published by floodfills."
+msgstr ""
+
+msgid "Compact mode - does not include statistics published by floodfills."
+msgstr ""
 
 msgid "Network Database Router Statistics"
 msgstr "احصائيات قاعدة البيانات I2P"
@@ -2812,6 +2922,15 @@ msgstr "رفض جميع طلبات النفق"
 msgid "Transports"
 msgstr "نقل"
 
+msgid "X Tier"
+msgstr ""
+
+msgid "Floodfills"
+msgstr "مدافن الفيضانات"
+
+msgid "Total"
+msgstr "مجموع"
+
 msgid "Unknown"
 msgstr "غير معروف"
 
@@ -2824,6 +2943,12 @@ msgstr "المعلومات"
 msgid "Router is banlisted"
 msgstr "تم حظر جهاز التوجيه"
 
+msgid "Java I2P variant"
+msgstr ""
+
+msgid "I2Pd variant"
+msgstr ""
+
 msgid "RouterInfo is compressible"
 msgstr "معلومات جهاز التوجيه قابلة للضغط"
 
@@ -2834,11 +2959,11 @@ msgstr "إظهار جميع أجهزة التوجيه بهذا الإصدار ف
 msgid "Show all members of the {0} family in NetDb"
 msgstr "إظهار جميع أفراد عائلة {0} في NetDb"
 
-msgid "View profile"
-msgstr "عرض الملف الشخصي"
-
 msgid "Profile"
 msgstr "حساب تعريفي"
+
+msgid "View profile"
+msgstr "عرض الملف الشخصي"
 
 msgid "Configure peer"
 msgstr "تكوين النظير"
@@ -2854,6 +2979,9 @@ msgstr "تم نشره منذ"
 
 msgid "Hostname"
 msgstr "اسم المضيف"
+
+msgid "direct"
+msgstr ""
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "تم التحقق من العائلة (شهادة التوقيع مثبتة وصالحة)"
@@ -2873,17 +3001,11 @@ msgstr "عناوين"
 msgid "n/a"
 msgstr "غير متوفر"
 
-msgid "Cost"
-msgstr "التكلفة"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "إظهار جميع أجهزة التوجيه بهذا العنوان في NetDb"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "إظهار كافة أجهزة التوجيه التي تحتوي على هذا المنفذ في NetDb"
-
-msgid "Capabilities"
-msgstr "القدرات"
 
 msgid "Core version"
 msgstr "النسخة الأساسية"
@@ -2972,11 +3094,11 @@ msgstr "IPv6 NTCP"
 msgid "IPv6 NTCP, SSU"
 msgstr "IPv6 NTCP، SSU"
 
-msgid "IPv6 NTCP, SSU, introducers"
-msgstr "IPv6 NTCP، SSU، المُقدمين"
-
 msgid "IPv6 Only NTCP, SSU, introducers"
 msgstr "IPv6 فقط NTCP، SSU، المُقدمين"
+
+msgid "IPv6 NTCP, SSU, introducers"
+msgstr "IPv6 NTCP، SSU، المُقدمين"
 
 msgid "No peer connections available"
 msgstr "لا تتوفر اتصالات نظير"
@@ -3001,9 +3123,6 @@ msgstr "اتصالات الأقران"
 msgid "Auto-refresh"
 msgstr "أنعشتحديث تلقائي"
 
-msgid "Transport"
-msgstr "نقل"
-
 msgid "Active in the last minute"
 msgstr "نشط في اللحظة الأخيرة"
 
@@ -3012,9 +3131,6 @@ msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
-
-msgid "Total"
-msgstr "مجموع"
 
 msgid "Current / maximum permitted"
 msgstr "الحالي/الحد الأقصى المسموح به"
@@ -3277,9 +3393,6 @@ msgstr[3] "عرض {0} ملفات تعريف حديثة."
 msgstr[4] "عرض {0} ملفات تعريف حديثة."
 msgstr[5] "عرض {0} ملفات تعريف حديثة."
 
-msgid "active in the last 20 minutes"
-msgstr "نشط في آخر 15 دقيقة"
-
 #, java-format
 msgid "Hiding {0} older profile."
 msgid_plural "Hiding {0} older profiles."
@@ -3329,6 +3442,9 @@ msgstr "الأنفاق نظير رفض المشاركة فيها"
 
 msgid "Rejected"
 msgstr "مرفوض"
+
+msgid "First Heard About"
+msgstr ""
 
 msgid "Last Heard From"
 msgstr "آخر سماع من"
@@ -3514,6 +3630,13 @@ msgstr "حظر الجلسة"
 
 msgid "Total number of banned peers"
 msgstr "إجمالي عدد الأقران المحظورين"
+
+msgid "Note: 'LU' class routers have been excluded from the list."
+msgstr ""
+
+#, java-format
+msgid "To view, see {0}Session Bans{1}."
+msgstr ""
 
 msgid "Select search engine"
 msgstr "اختر محرك البحث"
@@ -3794,9 +3917,6 @@ msgstr "الجرار"
 msgid "Review extended info about installed .jar and .war files"
 msgstr "قم بمراجعة المعلومات الموسعة حول ملفات .jar و.war المثبتة"
 
-msgid "Lookup"
-msgstr "بحث"
-
 msgid "Textual router performance statistics"
 msgstr "احصائات نصية للموجه"
 
@@ -3831,8 +3951,8 @@ msgstr "الذاكرة"
 msgid "Floodfill enabled"
 msgstr "تم تمكين floodfill"
 
-msgid "See more information on the wiki"
-msgstr "انظر المزيد من المعلومات على الويكي"
+msgid "Total number of LeaseSets stored in our NetDb"
+msgstr ""
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "تحذير: ECDSA غير متوفر. "
@@ -3906,8 +4026,8 @@ msgstr "الوارد/الصادر"
 msgid "Used for building and testing tunnels, and communicating with floodfill peers"
 msgstr "يستخدم في بناء واختبار الأنفاق والتواصل مع أقرانه في مجال الردم"
 
-msgid "Exploratory"
-msgstr "تصفح"
+msgid "Utility"
+msgstr "فائدة"
 
 msgid "Tunnels we are participating in, directly contributing bandwidth to the network"
 msgstr "الأنفاق التي نشارك فيها، تساهم بشكل مباشر في عرض النطاق الترددي للشبكة"
@@ -3915,8 +4035,8 @@ msgstr "الأنفاق التي نشارك فيها، تساهم بشكل مبا
 msgid "Current / Maximum"
 msgstr "الحالي/الحد الأقصى"
 
-msgid "Participating"
-msgstr "مشارك"
+msgid "Transit"
+msgstr "العبور"
 
 msgid "Concurrent tunnel builds (averaged over a minute) / single tunnel build time"
 msgstr "بناء النفق المتزامن (متوسط ​​أكثر من دقيقة) / وقت بناء النفق الفردي"
@@ -3938,12 +4058,6 @@ msgstr "نسبة المشاركة"
 
 msgid "tunnels"
 msgstr "الأنفاق"
-
-msgid "Transit"
-msgstr "العبور"
-
-msgid "Utility"
-msgstr "فائدة"
 
 msgid "Tunnel Count by Peer"
 msgstr "إحصاء الأنفاق حسب الأقران"
@@ -4251,9 +4365,6 @@ msgstr "فرض الحظر على"
 msgid "days"
 msgstr "أيام"
 
-msgid "Known Floodfills"
-msgstr "مدافن الفيضانات المعروفة"
-
 msgid "Average closest floodfill distance"
 msgstr "متوسط ​​أقرب مسافة لردم الفيضان"
 
@@ -4392,6 +4503,9 @@ msgstr "المسافة إلى"
 msgid "Distance for"
 msgstr "المسافة ل"
 
+msgid "Exploratory"
+msgstr "تصفح"
+
 msgid "Configure tunnels"
 msgstr "تكوين الأنفاق"
 
@@ -4466,6 +4580,9 @@ msgstr "يعمل جهاز التوجيه حاليًا في الوضع المخف
 msgid "No transit tunnels currently active."
 msgstr "لا توجد أنفاق عبور نشطة حاليًا."
 
+msgid "Transit Tunnels by Peer (Top 50)"
+msgstr ""
+
 msgid "Address"
 msgstr "العنوان"
 
@@ -4537,6 +4654,9 @@ msgstr "فشل اختبار النطاق الترددي"
 
 msgid "Bandwidth test did not complete"
 msgstr "لم يكتمل اختبار النطاق الترددي"
+
+msgid "Bad state for test"
+msgstr ""
 
 msgid "Bandwidth test started"
 msgstr "بدأ اختبار النطاق الترددي"
@@ -5169,14 +5289,22 @@ msgstr "منع / الغاء منع يدويا لنظير"
 msgid "Banning will prevent the participation of this peer in tunnels you create."
 msgstr "سيؤدي الحظر إلى منع مشاركة هذا النظير في الأنفاق التي تقوم بإنشائها."
 
+msgid "A list of bans by IP address is presented below."
+msgstr ""
+
+#, java-format
+msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
+msgstr ""
+
+#, java-format
+msgid "A list of {0}session-only bans{1} by hash is also available."
+msgstr ""
+
 msgid "Adjust Profile Bonuses"
 msgstr "ضبط مكافآت الملف الشخصي"
 
 msgid "Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels."
 msgstr "قد تكون المكافآت إيجابية أو سلبية، وتؤثر على إدراج النظير في المستويات السريعة والعالية السعة. يتم استخدام الأقران السريعة في أنفاق العميل، ويتم استخدام الأقران عالية السعة في بعض الأنفاق الاستكشافية."
-
-msgid "Banned Peers"
-msgstr "مستخدمون ممنوعون"
 
 msgid "Banned IP Addresses"
 msgstr "عناوين IP الممنوعة"
@@ -5723,6 +5851,9 @@ msgstr "هذا الإعداد يسمح لك بتكويف عنوان URL التح
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "هذا الإعداد يسمح بتعطيل اختبارات SSU لتحديد ما إذا كان الراوتر الخاص بك محمي بجدار ناري ويمكن تمكينه للرواتر التي لا شك أنها غير محمية بجدار ناري ولكنها تعاني من قضايا فرض جدار ناري متقطعة. في حالة تعطيل الاختبار، كلا SSU وـ NTCP يجب أن يبلغ عن عنوان IP العام الحالي الخاص بك على <a href=/info>صفحة معلومات الراوتر</a>. [إعادة تشغيل مطلوبة]"
+
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
+msgstr ""
 
 msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
 msgstr "هذا الإعداد يحدد أي وسيلة نقل تحظى بالأولوية عند الاتصال مع الأقران. بشكل افتراضي، يحظى NTCP بالأولوية على UDP (SSU). بتعيين القيمة على صحيح، سيحظى UDP بالأولوية ما لم توجد اتصال موجود مسبقاً عبر NTCP؛ عند تعيينه على دائماً، سيتم استخدام UDP بشكل دائم بغض النظر عن أي اتصال موجود مسبقاً عبر NTCP. [الافتراضي هو خطأ]"
@@ -6306,6 +6437,9 @@ msgstr "أزياء الكمبيوتر المحمول"
 msgid "An <a href=/confignet#ipchange>optional configuration</a> that automatically changes your <a href=/netdb?r=.>router identity</a> and <a href=/confignet#udpconfig>external port</a> when the public ip address your system is on changes. This can prevent an adversary from correlating your router identity and ip address in scenarios where your ip address may change frequently, for example when you're running I2P on a laptop from multiple locations."
 msgstr "تهيئة<a href=/confignet#ipchange>اختيارية</a> تغير تلقائيًا هويتك الموجه <a href=/netdb?r=.>هوية موجهك</a> و<a href=/confignet#udpconfig>المنفذ الخارجي</a> عندما يتغير عنوان IP العام الذي تعمل عليه نظامك. يمكن ذلك منع طرف خبيث من ربط هوية موجهك وعنوان IP في السيناريوهات التي قد يتغير فيها عنوان IP بشكل متكرر، على سبيل المثال عند تشغيل I2P على جهاز لاب توب من عدة مواقع."
 
+msgid "Lease"
+msgstr "الإيجار"
+
 msgid "The information that defines the authorization for a particular tunnel to receive messages targeting a <i>Destination</i>."
 msgstr "المعلومات التي تحدد تفويض نفق معين لاستقبال الرسائل الموجهة إلى <i>وجهة</i>."
 
@@ -6879,6 +7013,9 @@ msgstr "الأنفاق التي يبنيها موجهك للاتصال بالأ�
 msgid "Tunnels built by your router for each client's use."
 msgstr "الأنفاق التي يبنيها موجهك لاستخدام كل عميل."
 
+msgid "Participating"
+msgstr "مشارك"
+
 msgid "Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a  href='/config'>Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a href='/configadvanced'>Advanced configuration page</a>. <a href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
 msgstr "الأنفاق التي يبنيها موجهات أخرى عبر موجهك. قد يختلف هذا اختلافًا كبيرًا حسب الطلب على الشبكة، وعرض النطاق المشترك لديك، وحجم حركة المرور المولدة محليًا. أفضل طريقة لتقييد عدد الأنفاق المشاركة هي تغيير نسبة المشاركة في <a href='/config'>صفحة تكوين حركة البيانات</a>. كما يمكنك تقييد العدد الإجمالي عن طريق تعيين <code>router.maxParticipatingTunnels=nnn</code> في <a href='/configadvanced'>صفحة الإعدادات المتقدمة</a>. <a href='/configstats#tunnel.participatingTunnels'>[تمكين الرسم البياني]</a>."
 
@@ -7307,8 +7444,8 @@ msgstr "ملفات تعريف الأقران"
 msgid "Session Banned Peers"
 msgstr "جلسة المحظورة أقرانهم"
 
-msgid "Floodfills"
-msgstr "مدافن الفيضانات"
+msgid "Banned Peers"
+msgstr "مستخدمون ممنوعون"
 
 msgid "Fast / High Capacity"
 msgstr "سريع/عالي السعة"
@@ -7652,3 +7789,11 @@ msgstr "التالي"
 
 msgid "Finished"
 msgstr "منتهي"
+
+
+
+
+
+#, java-format
+
+

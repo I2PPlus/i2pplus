@@ -274,6 +274,12 @@ msgstr "Cartea"
 msgid "No entries"
 msgstr "Fără intrări"
 
+msgid "Add new destination"
+msgstr "Adăuga o destinație nouă"
+
+msgid "Import from hosts.txt file"
+msgstr "Importați din fișierul hosts.txt"
+
 msgid "Export in hosts.txt format"
 msgstr "Exportare în format hosts.txt"
 
@@ -322,9 +328,6 @@ msgstr "Marcați pentru ștergere"
 msgid "Cancel"
 msgstr "Anulează"
 
-msgid "Add new destination"
-msgstr "Adăuga o destinație nouă"
-
 msgid "e.g. newdomain.i2p"
 msgstr "de ex. newdomain.i2p"
 
@@ -333,9 +336,6 @@ msgstr "B64 sau B32"
 
 msgid "Full destination or b32 address"
 msgstr "Destinație completă sau adresa b32"
-
-msgid "Import from hosts.txt file"
-msgstr "Importați din fișierul hosts.txt"
 
 msgid "Select file"
 msgstr "Selectați fișierul"

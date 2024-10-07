@@ -1352,15 +1352,6 @@ msgstr "Helytelen kapacitás érték"
 msgid "Unsupported"
 msgstr "Nem támogatott"
 
-msgid "IPs Banned Until Restart"
-msgstr "IP-k Kitiltva Újraindításig"
-
-msgid "IPv4 Addresses"
-msgstr "IPv4 címek"
-
-msgid "IPv6 Addresses"
-msgstr "IPv6 címek"
-
 msgid "IPs Permanently Banned"
 msgstr "Állandóan kitiltott IP-k"
 
@@ -1369,6 +1360,19 @@ msgstr "Innen"
 
 msgid "To"
 msgstr "Ide"
+
+#, java-format
+msgid "First {0} displayed, see the {1} file for the full list"
+msgstr ""
+
+msgid "IPs Banned Until Restart"
+msgstr "IP-k Kitiltva Újraindításig"
+
+msgid "IPv4 Addresses"
+msgstr "IPv4 címek"
+
+msgid "IPv6 Addresses"
+msgstr "IPv6 címek"
 
 msgid "Reseed now"
 msgstr "Újravetés most"
@@ -1415,11 +1419,11 @@ msgstr "URL-lista visszaállítása"
 msgid "URL list reset successfully"
 msgstr "Az URL-lista visszaállítása sikeres volt"
 
-msgid "Cancel shutdown"
-msgstr "Kikapcsolás visszavonása"
-
 msgid "Cancel restart"
 msgstr "Újraindítás visszavonása"
+
+msgid "Cancel shutdown"
+msgstr "Kikapcsolás visszavonása"
 
 msgid "Restart immediately"
 msgstr "Azonnali Újraindítás"
@@ -2649,6 +2653,69 @@ msgstr "Sybil Elemzés"
 msgid "Router Map"
 msgstr "Router térkép"
 
+msgid "Network Database Search"
+msgstr ""
+
+msgid "Capabilities"
+msgstr "Képességek"
+
+msgid "e.g. f or XOfR"
+msgstr ""
+
+msgid "Cost"
+msgstr "Költség"
+
+msgid "Country"
+msgstr "Ország"
+
+msgid "Country Codes"
+msgstr ""
+
+msgid "Hash Prefix"
+msgstr ""
+
+msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
+msgstr ""
+
+msgid "Hostname or b32"
+msgstr ""
+
+msgid "IPv6 Prefix"
+msgstr ""
+
+msgid "Single port or range"
+msgstr ""
+
+msgid "Signature Type"
+msgstr ""
+
+msgid "SSU Capabilities"
+msgstr ""
+
+msgid "Encryption Type"
+msgstr ""
+
+msgid "Router Version"
+msgstr ""
+
+msgid "Transport"
+msgstr "Szállítás"
+
+msgid "Add Sybil analysis (must pick at least one above)"
+msgstr ""
+
+msgid "Sybil close to"
+msgstr ""
+
+msgid "Router hash, destination hash, b32, or from address book"
+msgstr ""
+
+msgid "or Sybil close to this router"
+msgstr ""
+
+msgid "Lookup"
+msgstr "Lookup"
+
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "Soha ne tegye fel az útválasztó identitását, mivel felhasználható a helyének azonosításához."
 
@@ -2661,14 +2728,14 @@ msgstr "nem található a hálózati adatbázisban"
 msgid "No results"
 msgstr "Nincs találat"
 
-msgid "Previous Page"
-msgstr "Előző Oldal"
+msgid "Bad Base64 Router hash"
+msgstr ""
 
-msgid "Page"
-msgstr "Oldal"
+msgid "No routers with"
+msgstr ""
 
-msgid "Country"
-msgstr "Ország"
+msgid "Hash prefix"
+msgstr ""
 
 msgid "Port"
 msgstr "Port"
@@ -2676,11 +2743,56 @@ msgstr "Port"
 msgid "MTU"
 msgstr "MTU"
 
+msgid "found in the network database"
+msgstr ""
+
+msgid "results"
+msgstr ""
+
+msgid "Previous Page"
+msgstr "Előző Oldal"
+
 msgid "Next Page"
 msgstr "Következő Oldal"
 
-msgid "No Leasesets currently active."
-msgstr "Jelenleg nincs aktív bérlet."
+msgid "Results per page"
+msgstr ""
+
+msgid "Not initialized"
+msgstr "Nincs inicializálva"
+
+msgid "Debug mode - Sorted by hash distance, closest first."
+msgstr ""
+
+msgid "Compact mode"
+msgstr ""
+
+msgid "Total Leasesets"
+msgstr ""
+
+msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Mod Data"
+msgstr ""
+
+msgid "Last Changed"
+msgstr ""
+
+msgid "Next Mod Data"
+msgstr ""
+
+msgid "Change in"
+msgstr ""
+
+msgid "Known Floodfills"
+msgstr "Ismert Floodfills"
+
+msgid "Floodfill mode enabled"
+msgstr ""
+
+msgid "Routing Key"
+msgstr "Útválasztó kulcs"
 
 msgid "Network data"
 msgstr "Hálózati adatok"
@@ -2694,6 +2806,17 @@ msgstr "Becsült teljes árvízkitöltés"
 msgid "Estimated total leasesets"
 msgstr "Becsült összes bérleti szerződés"
 
+#, java-format
+msgid "Hostname {0} not found in network database"
+msgstr ""
+
+#, java-format
+msgid "LeaseSet for {0} not found in network database"
+msgstr ""
+
+msgid "Meta"
+msgstr ""
+
 msgid "LeaseSet"
 msgstr "LeaseSet"
 
@@ -2705,16 +2828,6 @@ msgstr "Helyi alagutak megtekintése a célállomáshoz"
 
 msgid "published"
 msgstr "közzétéve"
-
-msgid "Add to addressbook"
-msgstr "Hozzáadás a címjegyzékhez"
-
-msgid "Add to local addressbook"
-msgstr "Hozzáadás a helyi címjegyzékhez"
-
-#, java-format
-msgid "Published{0} ago"
-msgstr "Közzétéve{0} ezelőtt"
 
 #, java-format
 msgid "Expires{0}"
@@ -2742,12 +2855,6 @@ msgstr "Aláírás típusa"
 msgid "Unsupported type"
 msgstr "Nem támogatott típus"
 
-msgid "Routing Key"
-msgstr "Útválasztó kulcs"
-
-msgid "Lease"
-msgstr "Kiad"
-
 #, java-format
 msgid "Expires in {0}"
 msgstr "Lejár {0} belül"
@@ -2756,8 +2863,11 @@ msgstr "Lejár {0} belül"
 msgid "Expired {0} ago"
 msgstr "Lejárt {0} ezelőtt"
 
-msgid "Not initialized"
-msgstr "Nincs inicializálva"
+msgid "Advanced mode - includes all statistics published by floodfills."
+msgstr ""
+
+msgid "Compact mode - does not include statistics published by floodfills."
+msgstr ""
 
 msgid "Network Database Router Statistics"
 msgstr "Hálózati Adatbázis Router Statisztika"
@@ -2780,6 +2890,15 @@ msgstr "Minden alagútkérelem elutasítása"
 msgid "Transports"
 msgstr "Átvitel"
 
+msgid "X Tier"
+msgstr ""
+
+msgid "Floodfills"
+msgstr "Árvizek"
+
+msgid "Total"
+msgstr "Összes"
+
 msgid "Unknown"
 msgstr "Ismeretlen"
 
@@ -2792,6 +2911,12 @@ msgstr "Mi infónk"
 msgid "Router is banlisted"
 msgstr "A router tiltva van"
 
+msgid "Java I2P variant"
+msgstr ""
+
+msgid "I2Pd variant"
+msgstr ""
+
 msgid "RouterInfo is compressible"
 msgstr "A RouterInfo tömöríthető"
 
@@ -2802,11 +2927,11 @@ msgstr "Az összes ilyen verziójú útválasztó megjelenítése a NetDb-ben"
 msgid "Show all members of the {0} family in NetDb"
 msgstr "A {0} család összes tagjának megjelenítése a NetDb-ben"
 
-msgid "View profile"
-msgstr "Profil megtekintése"
-
 msgid "Profile"
 msgstr "Profil"
+
+msgid "View profile"
+msgstr "Profil megtekintése"
 
 msgid "Configure peer"
 msgstr "Peer konfigurálása"
@@ -2822,6 +2947,9 @@ msgstr "Közzétett"
 
 msgid "Hostname"
 msgstr "Hostnév"
+
+msgid "direct"
+msgstr ""
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "Ellenőrzött család (aláíró tanúsítvány telepítve és érvényes)"
@@ -2841,17 +2969,11 @@ msgstr "Címek"
 msgid "n/a"
 msgstr "nem elérhető"
 
-msgid "Cost"
-msgstr "Költség"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "Az összes ezzel a címmel rendelkező útválasztó megjelenítése a NetDb-ben"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "Az ezzel a porttal rendelkező összes útválasztó megjelenítése a NetDb-ben"
-
-msgid "Capabilities"
-msgstr "Képességek"
 
 msgid "Core version"
 msgstr "Core verzió"
@@ -2940,11 +3062,11 @@ msgstr "IPv6 NTCP"
 msgid "IPv6 NTCP, SSU"
 msgstr "IPv6 NTCP, SSU"
 
-msgid "IPv6 NTCP, SSU, introducers"
-msgstr "IPv6 NTCP, SSU, bevezetők"
-
 msgid "IPv6 Only NTCP, SSU, introducers"
 msgstr "IPv6 Csak NTCP, SSU, bevezetők"
+
+msgid "IPv6 NTCP, SSU, introducers"
+msgstr "IPv6 NTCP, SSU, bevezetők"
 
 msgid "No peer connections available"
 msgstr "Nincsenek peer kapcsolatok"
@@ -2969,9 +3091,6 @@ msgstr "Távoli csatlakozások"
 msgid "Auto-refresh"
 msgstr "Automatikus frissítés"
 
-msgid "Transport"
-msgstr "Szállítás"
-
 msgid "Active in the last minute"
 msgstr "Aktív az utolsó pillanatban"
 
@@ -2980,9 +3099,6 @@ msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
-
-msgid "Total"
-msgstr "Összes"
 
 msgid "Current / maximum permitted"
 msgstr "Áram / maximálisan megengedett"
@@ -3233,9 +3349,6 @@ msgid_plural "Showing {0} recent profiles."
 msgstr[0] "A {0} legújabb profil megjelenítése."
 msgstr[1] "A {0} legújabb profilok bemutatása."
 
-msgid "active in the last 20 minutes"
-msgstr "aktív az elmúlt 15 percben"
-
 #, java-format
 msgid "Hiding {0} older profile."
 msgid_plural "Hiding {0} older profiles."
@@ -3277,6 +3390,9 @@ msgstr "Az alagutak partnere megtagadta a részvételt"
 
 msgid "Rejected"
 msgstr "Elutasítva"
+
+msgid "First Heard About"
+msgstr ""
 
 msgid "Last Heard From"
 msgstr "Legutoljára Hallott a Következőtől:"
@@ -3450,6 +3566,13 @@ msgstr "Munkamenet tiltások"
 
 msgid "Total number of banned peers"
 msgstr "A kitiltott társak száma összesen"
+
+msgid "Note: 'LU' class routers have been excluded from the list."
+msgstr ""
+
+#, java-format
+msgid "To view, see {0}Session Bans{1}."
+msgstr ""
 
 msgid "Select search engine"
 msgstr "Válassz keresőmotort"
@@ -3722,9 +3845,6 @@ msgstr "Üvegek"
 msgid "Review extended info about installed .jar and .war files"
 msgstr "Tekintse át a telepített .jar és .war fájlokkal kapcsolatos kiterjesztett információkat"
 
-msgid "Lookup"
-msgstr "Lookup"
-
 msgid "Textual router performance statistics"
 msgstr "Szöveges router teljesítmény statisztika"
 
@@ -3759,8 +3879,8 @@ msgstr "Memória"
 msgid "Floodfill enabled"
 msgstr "Floodfill engedélyezve"
 
-msgid "See more information on the wiki"
-msgstr "További információ a wikiről"
+msgid "Total number of LeaseSets stored in our NetDb"
+msgstr ""
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Figyelmeztetés: Az ECDSA nem elérhető. Frissítsd a Javádat vagy az operációs rendszeredet"
@@ -3834,8 +3954,8 @@ msgstr "bejövő / kimenő"
 msgid "Used for building and testing tunnels, and communicating with floodfill peers"
 msgstr "Alagutak építésére és tesztelésére, valamint az árvízvédelmi társakkal való kommunikációra szolgál"
 
-msgid "Exploratory"
-msgstr "Felderítő"
+msgid "Utility"
+msgstr "Utility"
 
 msgid "Tunnels we are participating in, directly contributing bandwidth to the network"
 msgstr "Alagutak, amelyekben részt veszünk, közvetlenül hozzájárulva a hálózat sávszélességéhez"
@@ -3843,8 +3963,8 @@ msgstr "Alagutak, amelyekben részt veszünk, közvetlenül hozzájárulva a há
 msgid "Current / Maximum"
 msgstr "Áram / Maximum"
 
-msgid "Participating"
-msgstr "Résztvevő"
+msgid "Transit"
+msgstr "Tranzit"
 
 msgid "Concurrent tunnel builds (averaged over a minute) / single tunnel build time"
 msgstr "Egyidejű alagútépítések (egy perc alatt átlagolva) / egy alagútépítési idő"
@@ -3866,12 +3986,6 @@ msgstr "Megosztási ráta"
 
 msgid "tunnels"
 msgstr "alagutak"
-
-msgid "Transit"
-msgstr "Tranzit"
-
-msgid "Utility"
-msgstr "Utility"
 
 msgid "Tunnel Count by Peer"
 msgstr "Alagútszámlálás, Peer"
@@ -4179,9 +4293,6 @@ msgstr "Blokkolás kikényszerítése"
 msgid "days"
 msgstr "napok"
 
-msgid "Known Floodfills"
-msgstr "Ismert Floodfills"
-
 msgid "Average closest floodfill distance"
 msgstr "Átlagos legközelebbi elárasztási távolság"
 
@@ -4320,6 +4431,9 @@ msgstr "Távolság "
 msgid "Distance for"
 msgstr "Távolság"
 
+msgid "Exploratory"
+msgstr "Felderítő"
+
 msgid "Configure tunnels"
 msgstr "Alagutak konfigurálása"
 
@@ -4394,6 +4508,9 @@ msgstr "A router jelenleg rejtett üzemmódban működik, ami megakadályozza a 
 msgid "No transit tunnels currently active."
 msgstr "Jelenleg nincsenek aktív tranzitalagutak."
 
+msgid "Transit Tunnels by Peer (Top 50)"
+msgstr ""
+
 msgid "Address"
 msgstr "Cím"
 
@@ -4465,6 +4582,9 @@ msgstr "Sávszélesség teszt sikertelen"
 
 msgid "Bandwidth test did not complete"
 msgstr "A sávszélesség teszt nem fejeződött be"
+
+msgid "Bad state for test"
+msgstr ""
 
 msgid "Bandwidth test started"
 msgstr "Sávszélesség teszt elindítva"
@@ -5097,14 +5217,22 @@ msgstr "Társ Kézi Kitiltása / Kitiltás Visszavonása"
 msgid "Banning will prevent the participation of this peer in tunnels you create."
 msgstr "A kitiltás megakadályozza a társ részvételét az általad létrehozott alagutakban."
 
+msgid "A list of bans by IP address is presented below."
+msgstr ""
+
+#, java-format
+msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
+msgstr ""
+
+#, java-format
+msgid "A list of {0}session-only bans{1} by hash is also available."
+msgstr ""
+
 msgid "Adjust Profile Bonuses"
 msgstr "Profil Bónusz Módosítása"
 
 msgid "Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels."
 msgstr "A bónuszok lehetnek pozitívak vagy negatívak, és befolyásolják a partnerek gyors és nagy kapacitású szintekbe való felvételét. Az ügyfélalagutakhoz gyors, míg egyes feltáró alagutakhoz nagy kapacitású peereket használnak."
-
-msgid "Banned Peers"
-msgstr "Kitiltott Társak"
 
 msgid "Banned IP Addresses"
 msgstr "Kitiltott IP-k"
@@ -5651,6 +5779,9 @@ msgstr "Ezzel a beállítással konfigurálhatja a honosítatlan frissítési fu
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Ez a beállítás lehetővé teszi az SSU tesztek letiltását a router tűzfalállapotának meghatározásához, és engedélyezhető azokon a routerekre, amelyek határozottan nincsenek tűzfalon kívül, de időszakos tűzfalozási problémákkal küzdenek. Abban az esetben, ha a tesztelés le van tiltva, mind az SSU, mind az NTCP jelentenie kell a jelenlegi nyilvános IP-címet a <a href=/info>tűzfal információ oldal</a>on. [Újraindítás szükséges]"
+
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
+msgstr ""
 
 msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
 msgstr "Ez a beállítás meghatározza, hogy melyik átviteli mód kap előnyt a többi résztvevővel való kommunikáció során. Alapértelmezés szerint az NTCP kedvez a UDP (SSU) előtt. Az érték true-ra állításával az UDP lesz az elsődleges, hacsak nem létezik előre meghatározott NTCP kapcsolat; ha mindigre van állítva, mindig az UDP-t használja, függetlenül az előre meghatározott NTCP kapcsolattól. [Az alapérték false]"
@@ -6234,6 +6365,9 @@ msgstr "Laptop Mód"
 msgid "An <a href=/confignet#ipchange>optional configuration</a> that automatically changes your <a href=/netdb?r=.>router identity</a> and <a href=/confignet#udpconfig>external port</a> when the public ip address your system is on changes. This can prevent an adversary from correlating your router identity and ip address in scenarios where your ip address may change frequently, for example when you're running I2P on a laptop from multiple locations."
 msgstr "Egy <a href=/confignet#ipchange>opcionális konfiguráció</a>, amely automatikusan megváltoztatja a <a href=/netdb?r=.>router azonosítóját</a> és az <a href=/confignet#udpconfig>külső portot</a>, amikor a rendszer nyilvános IP-címe megváltozik. Ez megakadályozhatja, hogy egy ellenfél korrelálja a router azonosítóját és az IP-címét olyan helyzetekben, ahol az IP-címe gyakran változhat, például amikor több helyről futtatod az I2P-t egy laptopon."
 
+msgid "Lease"
+msgstr "Kiad"
+
 msgid "The information that defines the authorization for a particular tunnel to receive messages targeting a <i>Destination</i>."
 msgstr "Az az információ, amely definiálja egy adott alagútnak a megfelelő engedélyezését annak érdekében, hogy üzeneteket fogadjon egy <i>Célpontra</i>."
 
@@ -6807,6 +6941,9 @@ msgstr "Az útválasztó által épített alagutak, amelyeket a floodfill társa
 msgid "Tunnels built by your router for each client's use."
 msgstr "Az útválasztó által épített alagutak minden ügyfél számára."
 
+msgid "Participating"
+msgstr "Résztvevő"
+
 msgid "Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a  href='/config'>Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a href='/configadvanced'>Advanced configuration page</a>. <a href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
 msgstr "A többi útválasztón keresztül épített átjárók az útválasztóján keresztül. Ez jelentősen eltérő lehet a hálózat igényétől, megosztott sávszélességétől és a helyben keletkezett forgalom mennyiségétől. A résztvevő átjárók korlátozásának javasolt módja, hogy megváltoztassa a részesedési arányát a <a href='/config'>Sávszélesség beállítások oldalon</a>. A teljes számot is korlátozhatja a <code>router.maxParticipatingTunnels=nnn</code> beállításával az<a href='/configadvanced'>Haladó beállítások oldalon</a>. <a href='/configstats#tunnel.participatingTunnels'>[Grafikon engedélyezése]</a>."
 
@@ -7235,8 +7372,8 @@ msgstr "Peer Profilok"
 msgid "Session Banned Peers"
 msgstr "Munkamenet tiltott társak"
 
-msgid "Floodfills"
-msgstr "Árvizek"
+msgid "Banned Peers"
+msgstr "Kitiltott Társak"
 
 msgid "Fast / High Capacity"
 msgstr "Gyors / Nagy kapacitás"
@@ -7580,3 +7717,11 @@ msgstr "Következő"
 
 msgid "Finished"
 msgstr "Befejeződött"
+
+
+
+
+
+#, java-format
+
+

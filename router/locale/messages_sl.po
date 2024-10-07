@@ -110,6 +110,9 @@ msgstr "Zavračanje zahtev"
 msgid "Shutting down"
 msgstr "Zapiranje"
 
+msgid "Restarting"
+msgstr ""
+
 msgid "Declining Tunnel Requests"
 msgstr "Zavračanje zahtevkov za tunel"
 

@@ -1349,15 +1349,6 @@ msgstr "容量值无效"
 msgid "Unsupported"
 msgstr "不支持"
 
-msgid "IPs Banned Until Restart"
-msgstr "IP 已封禁直到重启"
-
-msgid "IPv4 Addresses"
-msgstr "IPv4 地址"
-
-msgid "IPv6 Addresses"
-msgstr "IPv6 地址"
-
 msgid "IPs Permanently Banned"
 msgstr "IP 永久封禁"
 
@@ -1366,6 +1357,19 @@ msgstr "从"
 
 msgid "To"
 msgstr "至"
+
+#, java-format
+msgid "First {0} displayed, see the {1} file for the full list"
+msgstr ""
+
+msgid "IPs Banned Until Restart"
+msgstr "IP 已封禁直到重启"
+
+msgid "IPv4 Addresses"
+msgstr "IPv4 地址"
+
+msgid "IPv6 Addresses"
+msgstr "IPv6 地址"
 
 msgid "Reseed now"
 msgstr "立刻补种"
@@ -1411,11 +1415,11 @@ msgstr "重置 URL 列表"
 msgid "URL list reset successfully"
 msgstr "URL 列表重置成功"
 
-msgid "Cancel shutdown"
-msgstr "取消关闭"
-
 msgid "Cancel restart"
 msgstr "取消重启"
+
+msgid "Cancel shutdown"
+msgstr "取消关闭"
 
 msgid "Restart immediately"
 msgstr "立刻重启"
@@ -2641,6 +2645,69 @@ msgstr "Sybil分析"
 msgid "Router Map"
 msgstr "路由器地图"
 
+msgid "Network Database Search"
+msgstr ""
+
+msgid "Capabilities"
+msgstr "功能"
+
+msgid "e.g. f or XOfR"
+msgstr ""
+
+msgid "Cost"
+msgstr "成本"
+
+msgid "Country"
+msgstr "国家"
+
+msgid "Country Codes"
+msgstr ""
+
+msgid "Hash Prefix"
+msgstr ""
+
+msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
+msgstr ""
+
+msgid "Hostname or b32"
+msgstr ""
+
+msgid "IPv6 Prefix"
+msgstr ""
+
+msgid "Single port or range"
+msgstr ""
+
+msgid "Signature Type"
+msgstr ""
+
+msgid "SSU Capabilities"
+msgstr ""
+
+msgid "Encryption Type"
+msgstr ""
+
+msgid "Router Version"
+msgstr ""
+
+msgid "Transport"
+msgstr "传输"
+
+msgid "Add Sybil analysis (must pick at least one above)"
+msgstr ""
+
+msgid "Sybil close to"
+msgstr ""
+
+msgid "Router hash, destination hash, b32, or from address book"
+msgstr ""
+
+msgid "or Sybil close to this router"
+msgstr ""
+
+msgid "Lookup"
+msgstr "查找"
+
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "绝对不要向任何人泄露您的路由身份，因为它在网络数据库中独一无二的联系到您的 IP 地址。"
 
@@ -2653,14 +2720,14 @@ msgstr "在网络数据库中未找到"
 msgid "No results"
 msgstr "没有结果"
 
-msgid "Previous Page"
-msgstr "上一页"
+msgid "Bad Base64 Router hash"
+msgstr ""
 
-msgid "Page"
-msgstr "页面"
+msgid "No routers with"
+msgstr ""
 
-msgid "Country"
-msgstr "国家"
+msgid "Hash prefix"
+msgstr ""
 
 msgid "Port"
 msgstr "端口"
@@ -2668,11 +2735,56 @@ msgstr "端口"
 msgid "MTU"
 msgstr "MTU"
 
+msgid "found in the network database"
+msgstr ""
+
+msgid "results"
+msgstr ""
+
+msgid "Previous Page"
+msgstr "上一页"
+
 msgid "Next Page"
 msgstr "下一页"
 
-msgid "No Leasesets currently active."
-msgstr "目前没有租约集。"
+msgid "Results per page"
+msgstr ""
+
+msgid "Not initialized"
+msgstr "未初始化"
+
+msgid "Debug mode - Sorted by hash distance, closest first."
+msgstr ""
+
+msgid "Compact mode"
+msgstr ""
+
+msgid "Total Leasesets"
+msgstr ""
+
+msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Mod Data"
+msgstr ""
+
+msgid "Last Changed"
+msgstr ""
+
+msgid "Next Mod Data"
+msgstr ""
+
+msgid "Change in"
+msgstr ""
+
+msgid "Known Floodfills"
+msgstr "已知的播种节点"
+
+msgid "Floodfill mode enabled"
+msgstr ""
+
+msgid "Routing Key"
+msgstr "路由器密钥"
 
 msgid "Network data"
 msgstr "网络数据"
@@ -2686,6 +2798,17 @@ msgstr "估算的洪泛节点总数"
 msgid "Estimated total leasesets"
 msgstr "估计的租约集总数"
 
+#, java-format
+msgid "Hostname {0} not found in network database"
+msgstr ""
+
+#, java-format
+msgid "LeaseSet for {0} not found in network database"
+msgstr ""
+
+msgid "Meta"
+msgstr ""
+
 msgid "LeaseSet"
 msgstr "租约集"
 
@@ -2697,16 +2820,6 @@ msgstr "查看目标的本地隧道"
 
 msgid "published"
 msgstr "发布"
-
-msgid "Add to addressbook"
-msgstr "添加到地址簿"
-
-msgid "Add to local addressbook"
-msgstr "添加到本地地址簿"
-
-#, java-format
-msgid "Published{0} ago"
-msgstr "{0} 前结束"
 
 #, java-format
 msgid "Expires{0}"
@@ -2734,12 +2847,6 @@ msgstr "签名类型"
 msgid "Unsupported type"
 msgstr "不支持的类型"
 
-msgid "Routing Key"
-msgstr "路由器密钥"
-
-msgid "Lease"
-msgstr "租约"
-
 #, java-format
 msgid "Expires in {0}"
 msgstr "{0} 后过期"
@@ -2748,8 +2855,11 @@ msgstr "{0} 后过期"
 msgid "Expired {0} ago"
 msgstr "{0} 前过期"
 
-msgid "Not initialized"
-msgstr "未初始化"
+msgid "Advanced mode - includes all statistics published by floodfills."
+msgstr ""
+
+msgid "Compact mode - does not include statistics published by floodfills."
+msgstr ""
 
 msgid "Network Database Router Statistics"
 msgstr "网络数据库路由统计"
@@ -2772,6 +2882,15 @@ msgstr "拒绝所有隧道请求"
 msgid "Transports"
 msgstr "传输"
 
+msgid "X Tier"
+msgstr ""
+
+msgid "Floodfills"
+msgstr "洪水填充"
+
+msgid "Total"
+msgstr "总计"
+
 msgid "Unknown"
 msgstr "未知"
 
@@ -2784,6 +2903,12 @@ msgstr "我方信息"
 msgid "Router is banlisted"
 msgstr "路由器被禁止"
 
+msgid "Java I2P variant"
+msgstr ""
+
+msgid "I2Pd variant"
+msgstr ""
+
 msgid "RouterInfo is compressible"
 msgstr "Routerinfo是可压缩的"
 
@@ -2794,11 +2919,11 @@ msgstr "在 NetDb 中显示具有此版本的所有路由器"
 msgid "Show all members of the {0} family in NetDb"
 msgstr "在NetDB查看家族{0}的所有成员"
 
-msgid "View profile"
-msgstr "对等节点摘要"
-
 msgid "Profile"
 msgstr "配置文件"
+
+msgid "View profile"
+msgstr "对等节点摘要"
 
 msgid "Configure peer"
 msgstr "配置对等节点"
@@ -2814,6 +2939,9 @@ msgstr "发布"
 
 msgid "Hostname"
 msgstr "域名"
+
+msgid "direct"
+msgstr ""
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "已验证系列（签名证书已安装且有效）"
@@ -2833,17 +2961,11 @@ msgstr "地址"
 msgid "n/a"
 msgstr "n/a"
 
-msgid "Cost"
-msgstr "成本"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "在NetDb中显示有此地址的所有路由器"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "显示NetDb中具有此端口的所有路由器"
-
-msgid "Capabilities"
-msgstr "功能"
 
 msgid "Core version"
 msgstr "版本"
@@ -2932,11 +3054,11 @@ msgstr "IPv6 NTCP"
 msgid "IPv6 NTCP, SSU"
 msgstr "IPv6 NTCP, SSU"
 
-msgid "IPv6 NTCP, SSU, introducers"
-msgstr "IPv6 NTCP, SSU, 中介"
-
 msgid "IPv6 Only NTCP, SSU, introducers"
 msgstr "IPv6 仅 NTCP, SSU, 中介"
+
+msgid "IPv6 NTCP, SSU, introducers"
+msgstr "IPv6 NTCP, SSU, 中介"
 
 msgid "No peer connections available"
 msgstr "没有可用的连接"
@@ -2961,9 +3083,6 @@ msgstr "对等节点连接"
 msgid "Auto-refresh"
 msgstr "自动刷新"
 
-msgid "Transport"
-msgstr "传输"
-
 msgid "Active in the last minute"
 msgstr "在最后一刻活跃"
 
@@ -2972,9 +3091,6 @@ msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
-
-msgid "Total"
-msgstr "总计"
 
 msgid "Current / maximum permitted"
 msgstr "当前/最大允许传输单元"
@@ -3222,9 +3338,6 @@ msgid "Showing {0} recent profile."
 msgid_plural "Showing {0} recent profiles."
 msgstr[0] "正显示最近的 {0} 个摘要。"
 
-msgid "active in the last 20 minutes"
-msgstr "过去 15 分钟内活跃"
-
 #, java-format
 msgid "Hiding {0} older profile."
 msgid_plural "Hiding {0} older profiles."
@@ -3264,6 +3377,9 @@ msgstr "拒绝参与的tunnels对等点"
 
 msgid "Rejected"
 msgstr "拒绝"
+
+msgid "First Heard About"
+msgstr ""
 
 msgid "Last Heard From"
 msgstr "上次连接"
@@ -3434,6 +3550,13 @@ msgstr "会话禁止"
 
 msgid "Total number of banned peers"
 msgstr "已封禁对等节点数量"
+
+msgid "Note: 'LU' class routers have been excluded from the list."
+msgstr ""
+
+#, java-format
+msgid "To view, see {0}Session Bans{1}."
+msgstr ""
 
 msgid "Select search engine"
 msgstr "选择搜索引擎"
@@ -3704,9 +3827,6 @@ msgstr "Jar"
 msgid "Review extended info about installed .jar and .war files"
 msgstr "查看已安装的 .jar 和 .war 文件的扩展信息"
 
-msgid "Lookup"
-msgstr "查找"
-
 msgid "Textual router performance statistics"
 msgstr "路由性能文字统计"
 
@@ -3741,8 +3861,8 @@ msgstr "内存"
 msgid "Floodfill enabled"
 msgstr "启用泛洪填充"
 
-msgid "See more information on the wiki"
-msgstr "在 wiki 查看更多信息"
+msgid "Total number of LeaseSets stored in our NetDb"
+msgstr ""
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "警告：ECDSA 不可用。请更新您的 Java 或操作系统"
@@ -3816,8 +3936,8 @@ msgstr "入站/出站"
 msgid "Used for building and testing tunnels, and communicating with floodfill peers"
 msgstr "用来建立或测试隧道，与洪泛对等节点通信"
 
-msgid "Exploratory"
-msgstr "探测"
+msgid "Utility"
+msgstr "公用事业"
 
 msgid "Tunnels we are participating in, directly contributing bandwidth to the network"
 msgstr "我方参与的隧道，直接为网络贡献带宽"
@@ -3825,8 +3945,8 @@ msgstr "我方参与的隧道，直接为网络贡献带宽"
 msgid "Current / Maximum"
 msgstr "当前/最大"
 
-msgid "Participating"
-msgstr "参与"
+msgid "Transit"
+msgstr "中转"
 
 msgid "Concurrent tunnel builds (averaged over a minute) / single tunnel build time"
 msgstr "并行隧道建设（平均超过一分钟）/单个隧道建设时间"
@@ -3848,12 +3968,6 @@ msgstr "共享比率"
 
 msgid "tunnels"
 msgstr "隧道"
-
-msgid "Transit"
-msgstr "中转"
-
-msgid "Utility"
-msgstr "公用事业"
 
 msgid "Tunnel Count by Peer"
 msgstr "计数"
@@ -4161,9 +4275,6 @@ msgstr "强制阻止"
 msgid "days"
 msgstr "日"
 
-msgid "Known Floodfills"
-msgstr "已知的播种节点"
-
 msgid "Average closest floodfill distance"
 msgstr "平均最近洪泛节点距离"
 
@@ -4302,6 +4413,9 @@ msgstr "距离 "
 msgid "Distance for"
 msgstr "距离"
 
+msgid "Exploratory"
+msgstr "探测"
+
 msgid "Configure tunnels"
 msgstr "配置隧道"
 
@@ -4376,6 +4490,9 @@ msgstr "路由器目前正在以隐藏模式运行，该模式可防止运输隧
 msgid "No transit tunnels currently active."
 msgstr "目前没有参与的隧道在运行。"
 
+msgid "Transit Tunnels by Peer (Top 50)"
+msgstr ""
+
 msgid "Address"
 msgstr "地址"
 
@@ -4447,6 +4564,9 @@ msgstr "带宽测试失败"
 
 msgid "Bandwidth test did not complete"
 msgstr "带宽测试未完成"
+
+msgid "Bad state for test"
+msgstr ""
 
 msgid "Bandwidth test started"
 msgstr "带宽测试已开始"
@@ -5079,14 +5199,22 @@ msgstr "手动封禁/解封对等节点"
 msgid "Banning will prevent the participation of this peer in tunnels you create."
 msgstr "封锁将阻止对等节点参与您的隧道创建。"
 
+msgid "A list of bans by IP address is presented below."
+msgstr ""
+
+#, java-format
+msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
+msgstr ""
+
+#, java-format
+msgid "A list of {0}session-only bans{1} by hash is also available."
+msgstr ""
+
 msgid "Adjust Profile Bonuses"
 msgstr "调整配置文件评分"
 
 msgid "Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels."
 msgstr "评分可能是正数或负数，并影响对等节点在快速和高容量类型中的排名。快速对等节点用于客户端隧道，高容量对等节点用于一些探索隧道。"
-
-msgid "Banned Peers"
-msgstr "已封禁对等节点"
 
 msgid "Banned IP Addresses"
 msgstr "已封禁 IP"
@@ -5633,6 +5761,9 @@ msgstr "此设置允许您为未签名的更新功能配置更新 URL（如果�
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "此设置允许禁用 SSU 测试，以确定您的路由器是否已设置防火墙，是否可以为肯定没有防火墙但遇到间歇性防火墙问题的路由器启用。如果禁用测试，SSU 和 NTCP 都应在路由器信息页面上报告< a href=/info>的当前公共 IP 地址</a>。[需要重新启动]"
+
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
+msgstr ""
 
 msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
 msgstr "这个设置决定了在与其他节点进行通信时，哪种传输方式具有优先权。默认情况下，NTCP比UDP（SSU）更受青睐。将该值设置为 \"true\"，除非存在预先存在的NTCP连接，否则UDP将被优先考虑；当设置为 \"always \"时，无论是否存在预先存在的NTCP连接，UDP将始终被使用。[默认值是false]"
@@ -6216,6 +6347,9 @@ msgstr "笔记本模式"
 msgid "An <a href=/confignet#ipchange>optional configuration</a> that automatically changes your <a href=/netdb?r=.>router identity</a> and <a href=/confignet#udpconfig>external port</a> when the public ip address your system is on changes. This can prevent an adversary from correlating your router identity and ip address in scenarios where your ip address may change frequently, for example when you're running I2P on a laptop from multiple locations."
 msgstr "一个可选<a href=\"http://127.0.0.1:7657/confignet#ipchange\">配置</a> 以自动更改 <a href=\"http://127.0.0.1:7657/netdb?r=.\">路由器身份</a> 和 <a href=\"http://127.0.0.1:7657/confignet#udpconfig\">外部端口</a> 。当您的系统所在的公共 IP 地址发生更改时 ，这可以防止攻击者将您的路由器身份和 IP 地址关联起来。尤其是 IP 地址可能会经常更改，例如当您从多个位置在笔记本电脑上运行 I2P 时。"
 
+msgid "Lease"
+msgstr "租约"
+
 msgid "The information that defines the authorization for a particular tunnel to receive messages targeting a <i>Destination</i>."
 msgstr "定义某条隧道接收针对某个<i>目标</i>的信息的授权。"
 
@@ -6789,6 +6923,9 @@ msgstr "由路由构建的隧道，用于与洪泛对等节点通信，构建新
 msgid "Tunnels built by your router for each client's use."
 msgstr "路由为每个客户端使用构建的隧道。"
 
+msgid "Participating"
+msgstr "参与"
+
 msgid "Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a  href='/config'>Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a href='/configadvanced'>Advanced configuration page</a>. <a href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
 msgstr "其他路由器通过您的路由器建立的隧道。这可能根据网络需求、您共享的带宽和本地生成流量的数量有很大差异。限制参与隧道的建议方法是在<a href='/config'>带宽配置页面</a>修改您的共享百分比。您也可以在<a href='/configadvanced'>高级配置页面</a>设置<code>router.maxParticipatingTunnels=nnn</code>来限制总数量。<a href='/configstats#tunnel.participatingTunnels'>[启用图表]</a>。"
 
@@ -7217,8 +7354,8 @@ msgstr "对等节点摘要"
 msgid "Session Banned Peers"
 msgstr "会话被禁止的对等点"
 
-msgid "Floodfills"
-msgstr "洪水填充"
+msgid "Banned Peers"
+msgstr "已封禁对等节点"
 
 msgid "Fast / High Capacity"
 msgstr "快速/高容量"
@@ -7562,3 +7699,11 @@ msgstr "下一步"
 
 msgid "Finished"
 msgstr "完成"
+
+
+
+
+
+#, java-format
+
+

@@ -48,6 +48,9 @@ msgstr "최대 속도가 {0}KBps로 변경되었습니다"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "최소 속도는 {0}KBps입니다"
 
+msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
+msgstr ""
+
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "입간 터널에서 +0/1 터널 점프 무작위화가 활성화되었습니다."
 
@@ -340,6 +343,9 @@ msgstr "{0}에 급류 추가 ..."
 msgid "Connecting to I2P"
 msgstr "I2P에 연결중"
 
+msgid "Connected to I2P at"
+msgstr ""
+
 #, java-format
 msgid "Starting up torrent {0}"
 msgstr "토렌트 시작: {0}"
@@ -411,6 +417,9 @@ msgstr "토렌트 {0}를 재확인하는것을 마쳤습니다, 변경사항 없
 #, java-format
 msgid "Error checking the torrent {0}"
 msgstr "토렌트 {0}를 확인하는데 오류가 있습니다"
+
+msgid "Data partition"
+msgstr ""
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -654,12 +663,6 @@ msgstr "인"
 
 msgid "out"
 msgstr "아웃"
-
-msgid "Our destination (identity) for this session"
-msgstr "이 세션의 목적지(ID)"
-
-msgid "Dest."
-msgstr "목적지"
 
 msgid "Estimated download time for all torrents"
 msgstr "모든 토렌트의 예상 다운로드 시간"
@@ -1200,6 +1203,12 @@ msgstr "토렌트당 허용되는 최대 파일 수 - 추적기는 자체 제한
 msgid "Tunnel Configuration"
 msgstr "터널 구성"
 
+msgid "Our destination (identity) for this session"
+msgstr "이 세션의 목적지(ID)"
+
+msgid "Dest."
+msgstr "목적지"
+
 msgid "Inbound Settings"
 msgstr "수신  세팅"
 
@@ -1476,5 +1485,3 @@ msgstr "변경 사항 저장"
 
 msgid "Torrent must be stopped"
 msgstr "토렌트를 중지해야 합니다"
-
-#, java-format

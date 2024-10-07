@@ -48,6 +48,9 @@ msgstr "Horní BW limit změněn na {0}KBps"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Nejmenší horní limit přenosové rychlist je {0}KBps"
 
+msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
+msgstr ""
+
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Povoleno náhodné přeskočení +0/1 na příchozích tunelích"
 
@@ -340,6 +343,9 @@ msgstr "Přidávání torrentů v {0}"
 msgid "Connecting to I2P"
 msgstr "Připojuji se k I2P"
 
+msgid "Connected to I2P at"
+msgstr ""
+
 #, java-format
 msgid "Starting up torrent {0}"
 msgstr "Spouštění torrentu {0}"
@@ -411,6 +417,9 @@ msgstr "Dokončeno překontrolování torrentu {0}, nezměněno"
 #, java-format
 msgid "Error checking the torrent {0}"
 msgstr "Chyba při kontrole torrentu {0}"
+
+msgid "Data partition"
+msgstr ""
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -660,12 +669,6 @@ msgstr "v"
 
 msgid "out"
 msgstr "ven"
-
-msgid "Our destination (identity) for this session"
-msgstr "Náš cíl (identita) pro tuto relaci"
-
-msgid "Dest."
-msgstr "Dest."
 
 msgid "Estimated download time for all torrents"
 msgstr "Odhadovaná doba stahování pro všechny torrenty"
@@ -1210,6 +1213,12 @@ msgstr "Maximální povolený počet souborů na torrent – ​​mějte na pam
 msgid "Tunnel Configuration"
 msgstr "Konfigurace tunelu"
 
+msgid "Our destination (identity) for this session"
+msgstr "Náš cíl (identita) pro tuto relaci"
+
+msgid "Dest."
+msgstr "Dest."
+
 msgid "Inbound Settings"
 msgstr "Příchozí nastavení"
 
@@ -1492,5 +1501,3 @@ msgstr "Uložit změny"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent musí být zastaven"
-
-#, java-format

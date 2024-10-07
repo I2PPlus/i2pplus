@@ -48,6 +48,9 @@ msgstr "अपलोड BW सीमा {0}KBps तक बदल दी गई"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "कम से कम अपलोड बैंडविड्थ सीमा {0}KBps होनी चाहिए"
 
+msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
+msgstr ""
+
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "आगंतुक टनल में +0/1 टनल हॉप रैंडमाइज़ेशन सक्षम कर दिया गया है"
 
@@ -340,6 +343,9 @@ msgstr "{0} में टॉरेंट जोड़ रहे हैं…"
 msgid "Connecting to I2P"
 msgstr "I2P के साथ कनेक्ट कर रहे हैं"
 
+msgid "Connected to I2P at"
+msgstr ""
+
 #, java-format
 msgid "Starting up torrent {0}"
 msgstr "{0} टॉरेंट को शुरू कर रहा हूँ"
@@ -411,6 +417,9 @@ msgstr "{0} टॉरेंट की पुनः जाँच पूरी ह
 #, java-format
 msgid "Error checking the torrent {0}"
 msgstr "{0} टॉरेंट की जाँच में त्रुटि"
+
+msgid "Data partition"
+msgstr ""
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -657,12 +666,6 @@ msgstr "अंदर"
 
 msgid "out"
 msgstr "बाहर"
-
-msgid "Our destination (identity) for this session"
-msgstr "इस सत्र के लिए हमारा गंतव्य (Identity)"
-
-msgid "Dest."
-msgstr "गंतव्य"
 
 msgid "Estimated download time for all torrents"
 msgstr "सभी टॉरेंट के लिए अनुमानित डाउनलोड समय"
@@ -1205,6 +1208,12 @@ msgstr "प्रति टॉरेंट की अनुमतित अध�
 msgid "Tunnel Configuration"
 msgstr "टंनल सेटिंग"
 
+msgid "Our destination (identity) for this session"
+msgstr "इस सत्र के लिए हमारा गंतव्य (Identity)"
+
+msgid "Dest."
+msgstr "गंतव्य"
+
 msgid "Inbound Settings"
 msgstr "इनबाउंड सेटिंग्स"
 
@@ -1484,5 +1493,3 @@ msgstr "बदलाव सहेजें"
 
 msgid "Torrent must be stopped"
 msgstr "टॉरेंट को रोकना होगा"
-
-#, java-format

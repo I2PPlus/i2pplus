@@ -110,6 +110,9 @@ msgstr "요청 거절"
 msgid "Shutting down"
 msgstr "종료 중"
 
+msgid "Restarting"
+msgstr ""
+
 msgid "Declining Tunnel Requests"
 msgstr "터널 요청 거부"
 

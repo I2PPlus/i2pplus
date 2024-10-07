@@ -110,6 +110,9 @@ msgstr "Yêu cầu từ chối"
 msgid "Shutting down"
 msgstr "Tắt máy"
 
+msgid "Restarting"
+msgstr ""
+
 msgid "Declining Tunnel Requests"
 msgstr "Yêu cầu đường hầm giảm"
 

@@ -267,6 +267,12 @@ msgstr "کتاب"
 msgid "No entries"
 msgstr "ورودی وجود ندارد"
 
+msgid "Add new destination"
+msgstr "افزودن مقصد جدید"
+
+msgid "Import from hosts.txt file"
+msgstr "درون برد از فایل hosts.txt"
+
 msgid "Export in hosts.txt format"
 msgstr "برون برد در فرمت hosts.txt"
 
@@ -315,9 +321,6 @@ msgstr "علامت دهی برای حذف"
 msgid "Cancel"
 msgstr "لغو کردن"
 
-msgid "Add new destination"
-msgstr "افزودن مقصد جدید"
-
 msgid "e.g. newdomain.i2p"
 msgstr "به عنوان مثال "
 
@@ -326,9 +329,6 @@ msgstr "B64 یا B32"
 
 msgid "Full destination or b32 address"
 msgstr "آدرس کامل مقصد یا b32"
-
-msgid "Import from hosts.txt file"
-msgstr "درون برد از فایل hosts.txt"
 
 msgid "Select file"
 msgstr "فایل را انتخاب کنید"

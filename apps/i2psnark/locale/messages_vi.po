@@ -48,6 +48,9 @@ msgstr "Giới hạn băng thông lên đổi thành {0}KBps"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Tối thiểu băng thông lên là {0}KBps"
 
+msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
+msgstr ""
+
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Ngẫu nhiên hóa nhảy đường hầm +0/1 đã được kích hoạt trên các đường hầm đến"
 
@@ -340,6 +343,9 @@ msgstr "Thêm torrent trong {0}"
 msgid "Connecting to I2P"
 msgstr "Nối kết vào I2P"
 
+msgid "Connected to I2P at"
+msgstr ""
+
 #, java-format
 msgid "Starting up torrent {0}"
 msgstr "Đang khởi động torrent {0}"
@@ -411,6 +417,9 @@ msgstr "Đã hoàn tất kiểm tra lại torrent {0}, không thay đổi"
 #, java-format
 msgid "Error checking the torrent {0}"
 msgstr "Lỗi kiểm tra torrent {0}"
+
+msgid "Data partition"
+msgstr ""
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -654,12 +663,6 @@ msgstr "trong"
 
 msgid "out"
 msgstr "ra ngoài"
-
-msgid "Our destination (identity) for this session"
-msgstr "Đích đến (danh tính) của chúng ta cho phiên này"
-
-msgid "Dest."
-msgstr "Đích."
 
 msgid "Estimated download time for all torrents"
 msgstr "Thời gian tải xuống ước tính cho tất cả các torrent"
@@ -1200,6 +1203,12 @@ msgstr "Số lượng tệp tối đa được phép trên mỗi torrent - lưu 
 msgid "Tunnel Configuration"
 msgstr "Cấu hình đường hầm"
 
+msgid "Our destination (identity) for this session"
+msgstr "Đích đến (danh tính) của chúng ta cho phiên này"
+
+msgid "Dest."
+msgstr "Đích."
+
 msgid "Inbound Settings"
 msgstr "Cài đặt gửi đến"
 
@@ -1476,5 +1485,3 @@ msgstr "Lưu thay đổi"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent phải dừng lại"
-
-#, java-format

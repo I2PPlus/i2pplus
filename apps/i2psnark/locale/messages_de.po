@@ -48,6 +48,9 @@ msgstr "Hochladebandbreitenbegrenzung geändert auf {0}kbyte/s"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Minimale Hochladebandbreitenbegrenzung ist {0} kbyte/s"
 
+msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
+msgstr ""
+
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Zufällige +0/1 Tunnel-Hops auf eingehenden Tunneln aktiviert"
 
@@ -340,6 +343,9 @@ msgstr "Hinzufügen von Torrents in {0} ..."
 msgid "Connecting to I2P"
 msgstr "Verbinde mit I2P"
 
+msgid "Connected to I2P at"
+msgstr ""
+
 #, java-format
 msgid "Starting up torrent {0}"
 msgstr "Torrent {0} wird gestartet"
@@ -411,6 +417,9 @@ msgstr "Überprüfung von Torrent {0} beendet, keine Änderung"
 #, java-format
 msgid "Error checking the torrent {0}"
 msgstr "Fehler bei der Überprüfung von Torrent {0}"
+
+msgid "Data partition"
+msgstr ""
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -657,12 +666,6 @@ msgstr "in"
 
 msgid "out"
 msgstr "aus"
-
-msgid "Our destination (identity) for this session"
-msgstr "Unsere Adresse (Identität) für diese Session"
-
-msgid "Dest."
-msgstr "Ziel."
 
 msgid "Estimated download time for all torrents"
 msgstr "Geschätzte Downloadzeit für alle Torrents"
@@ -1205,6 +1208,12 @@ msgstr "Maximal zulässige Anzahl von Dateien pro Torrent – ​​beachten Sie
 msgid "Tunnel Configuration"
 msgstr "Tunnelkonfiguration"
 
+msgid "Our destination (identity) for this session"
+msgstr "Unsere Adresse (Identität) für diese Session"
+
+msgid "Dest."
+msgstr "Ziel."
+
 msgid "Inbound Settings"
 msgstr "Einstellungen eingehend"
 
@@ -1484,5 +1493,3 @@ msgstr "Änderungen speichern"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent muss gestoppt werden"
-
-#, java-format

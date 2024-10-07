@@ -1352,15 +1352,6 @@ msgstr "Feil kapasitetsverdi"
 msgid "Unsupported"
 msgstr "Ustøttet"
 
-msgid "IPs Banned Until Restart"
-msgstr "IP-er bannlyst til neste omstart"
-
-msgid "IPv4 Addresses"
-msgstr "IPv4-adresser"
-
-msgid "IPv6 Addresses"
-msgstr "IPv6-adresser"
-
 msgid "IPs Permanently Banned"
 msgstr "IP-er som er bannlyst for godt"
 
@@ -1369,6 +1360,19 @@ msgstr "Fra"
 
 msgid "To"
 msgstr "Til"
+
+#, java-format
+msgid "First {0} displayed, see the {1} file for the full list"
+msgstr ""
+
+msgid "IPs Banned Until Restart"
+msgstr "IP-er bannlyst til neste omstart"
+
+msgid "IPv4 Addresses"
+msgstr "IPv4-adresser"
+
+msgid "IPv6 Addresses"
+msgstr "IPv6-adresser"
 
 msgid "Reseed now"
 msgstr "Sett på nytt nå"
@@ -1415,11 +1419,11 @@ msgstr "Tilbakestill nettadresseliste"
 msgid "URL list reset successfully"
 msgstr "Nettadresseliste tilbakestilt"
 
-msgid "Cancel shutdown"
-msgstr "Avbryt avsluttningsprosessen"
-
 msgid "Cancel restart"
 msgstr "Avbryt omstart"
+
+msgid "Cancel shutdown"
+msgstr "Avbryt avsluttningsprosessen"
 
 msgid "Restart immediately"
 msgstr "Omstart umiddelbart"
@@ -2649,6 +2653,69 @@ msgstr "Sybilanalyse"
 msgid "Router Map"
 msgstr "Routerkart"
 
+msgid "Network Database Search"
+msgstr ""
+
+msgid "Capabilities"
+msgstr "Evner"
+
+msgid "e.g. f or XOfR"
+msgstr ""
+
+msgid "Cost"
+msgstr "Kostnad"
+
+msgid "Country"
+msgstr "Land"
+
+msgid "Country Codes"
+msgstr ""
+
+msgid "Hash Prefix"
+msgstr ""
+
+msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
+msgstr ""
+
+msgid "Hostname or b32"
+msgstr ""
+
+msgid "IPv6 Prefix"
+msgstr ""
+
+msgid "Single port or range"
+msgstr ""
+
+msgid "Signature Type"
+msgstr ""
+
+msgid "SSU Capabilities"
+msgstr ""
+
+msgid "Encryption Type"
+msgstr ""
+
+msgid "Router Version"
+msgstr ""
+
+msgid "Transport"
+msgstr "Overføring"
+
+msgid "Add Sybil analysis (must pick at least one above)"
+msgstr ""
+
+msgid "Sybil close to"
+msgstr ""
+
+msgid "Router hash, destination hash, b32, or from address book"
+msgstr ""
+
+msgid "or Sybil close to this router"
+msgstr ""
+
+msgid "Lookup"
+msgstr "Oppslag"
+
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "Avslør aldri ruterens identitet til noen, siden den er unikt knyttet til IP-adressen din i nettverksdatabasen."
 
@@ -2661,14 +2728,14 @@ msgstr "ikke funnet i nettverksdatabasen"
 msgid "No results"
 msgstr "Ingen resultater"
 
-msgid "Previous Page"
-msgstr "Forrige side"
+msgid "Bad Base64 Router hash"
+msgstr ""
 
-msgid "Page"
-msgstr "Side"
+msgid "No routers with"
+msgstr ""
 
-msgid "Country"
-msgstr "Land"
+msgid "Hash prefix"
+msgstr ""
 
 msgid "Port"
 msgstr "Port"
@@ -2676,11 +2743,56 @@ msgstr "Port"
 msgid "MTU"
 msgstr "MTU"
 
+msgid "found in the network database"
+msgstr ""
+
+msgid "results"
+msgstr ""
+
+msgid "Previous Page"
+msgstr "Forrige side"
+
 msgid "Next Page"
 msgstr "Neste side"
 
-msgid "No Leasesets currently active."
-msgstr "Ingen leiesett aktive for øyeblikket."
+msgid "Results per page"
+msgstr ""
+
+msgid "Not initialized"
+msgstr "Ikke igangsatt"
+
+msgid "Debug mode - Sorted by hash distance, closest first."
+msgstr ""
+
+msgid "Compact mode"
+msgstr ""
+
+msgid "Total Leasesets"
+msgstr ""
+
+msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Mod Data"
+msgstr ""
+
+msgid "Last Changed"
+msgstr ""
+
+msgid "Next Mod Data"
+msgstr ""
+
+msgid "Change in"
+msgstr ""
+
+msgid "Known Floodfills"
+msgstr "Kjente flomfyllinger"
+
+msgid "Floodfill mode enabled"
+msgstr ""
+
+msgid "Routing Key"
+msgstr "Rutenøkkel"
 
 msgid "Network data"
 msgstr "Nettverksdata"
@@ -2694,6 +2806,17 @@ msgstr "Estimert totale flomfyllinger"
 msgid "Estimated total leasesets"
 msgstr "Estimert totale leieforhold"
 
+#, java-format
+msgid "Hostname {0} not found in network database"
+msgstr ""
+
+#, java-format
+msgid "LeaseSet for {0} not found in network database"
+msgstr ""
+
+msgid "Meta"
+msgstr ""
+
 msgid "LeaseSet"
 msgstr "Leasesett"
 
@@ -2705,16 +2828,6 @@ msgstr "Se lokale tunneler for destinasjon"
 
 msgid "published"
 msgstr "publisert"
-
-msgid "Add to addressbook"
-msgstr "Legg til i adressebok"
-
-msgid "Add to local addressbook"
-msgstr "Legg til i lokal adressebok"
-
-#, java-format
-msgid "Published{0} ago"
-msgstr "Publisert for{0} siden"
 
 #, java-format
 msgid "Expires{0}"
@@ -2742,12 +2855,6 @@ msgstr "Signaturtype"
 msgid "Unsupported type"
 msgstr "Ustøttet type"
 
-msgid "Routing Key"
-msgstr "Rutenøkkel"
-
-msgid "Lease"
-msgstr "Leie"
-
 #, java-format
 msgid "Expires in {0}"
 msgstr "Utløper om {0}"
@@ -2756,8 +2863,11 @@ msgstr "Utløper om {0}"
 msgid "Expired {0} ago"
 msgstr "Utløp for {0} siden"
 
-msgid "Not initialized"
-msgstr "Ikke igangsatt"
+msgid "Advanced mode - includes all statistics published by floodfills."
+msgstr ""
+
+msgid "Compact mode - does not include statistics published by floodfills."
+msgstr ""
 
 msgid "Network Database Router Statistics"
 msgstr "Nettverksdatabaseruterstatistikk"
@@ -2780,6 +2890,15 @@ msgstr "Avviser alle tunnelforespørsler"
 msgid "Transports"
 msgstr "Overføringer"
 
+msgid "X Tier"
+msgstr ""
+
+msgid "Floodfills"
+msgstr "Flomfyllinger"
+
+msgid "Total"
+msgstr "Total"
+
 msgid "Unknown"
 msgstr "Ukjent"
 
@@ -2792,6 +2911,12 @@ msgstr "Vår informasjon"
 msgid "Router is banlisted"
 msgstr "Ruteren er utestengt"
 
+msgid "Java I2P variant"
+msgstr ""
+
+msgid "I2Pd variant"
+msgstr ""
+
 msgid "RouterInfo is compressible"
 msgstr "RouterInfo er komprimerbar"
 
@@ -2802,11 +2927,11 @@ msgstr "Vis alle rutere med denne versjonen i NetDb"
 msgid "Show all members of the {0} family in NetDb"
 msgstr "Vis alle medlemmer av {0}-familien i NetDb"
 
-msgid "View profile"
-msgstr "Se profil"
-
 msgid "Profile"
 msgstr "Profil"
+
+msgid "View profile"
+msgstr "Se profil"
 
 msgid "Configure peer"
 msgstr "Sett opp likemann"
@@ -2822,6 +2947,9 @@ msgstr "Publisert"
 
 msgid "Hostname"
 msgstr "Vertsnavn"
+
+msgid "direct"
+msgstr ""
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "Verifisert familie (signeringssertifikat er installert og gyldig)"
@@ -2841,17 +2969,11 @@ msgstr "Adresser"
 msgid "n/a"
 msgstr "n/a"
 
-msgid "Cost"
-msgstr "Kostnad"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "Vis alle rutere med denne adressen i NetDb"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "Vis alle rutere med denne porten i NetDb"
-
-msgid "Capabilities"
-msgstr "Evner"
 
 msgid "Core version"
 msgstr "Kjerneversjon"
@@ -2940,11 +3062,11 @@ msgstr "IPv6-NTCP"
 msgid "IPv6 NTCP, SSU"
 msgstr "IPv6-NTCP, SSU"
 
-msgid "IPv6 NTCP, SSU, introducers"
-msgstr "IPv6 NTCP, SSU, introdusere"
-
 msgid "IPv6 Only NTCP, SSU, introducers"
 msgstr "IPv6 Kun NTCP, SSU, introdusere"
+
+msgid "IPv6 NTCP, SSU, introducers"
+msgstr "IPv6 NTCP, SSU, introdusere"
 
 msgid "No peer connections available"
 msgstr "Ingen peer-tilkoblinger tilgjengelig"
@@ -2969,9 +3091,6 @@ msgstr "Personforbindelser"
 msgid "Auto-refresh"
 msgstr "Automatisk oppdatering"
 
-msgid "Transport"
-msgstr "Overføring"
-
 msgid "Active in the last minute"
 msgstr "Aktiv i siste liten"
 
@@ -2980,9 +3099,6 @@ msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
-
-msgid "Total"
-msgstr "Total"
 
 msgid "Current / maximum permitted"
 msgstr "Strøm / maksimum tillatt"
@@ -3233,9 +3349,6 @@ msgid_plural "Showing {0} recent profiles."
 msgstr[0] "Viser {0} nylige profil."
 msgstr[1] "Viser {0} nylige profiler."
 
-msgid "active in the last 20 minutes"
-msgstr "aktive de siste 15 minuttene"
-
 #, java-format
 msgid "Hiding {0} older profile."
 msgid_plural "Hiding {0} older profiles."
@@ -3277,6 +3390,9 @@ msgstr "Tunnels-peer har nektet å delta i"
 
 msgid "Rejected"
 msgstr "Avvist"
+
+msgid "First Heard About"
+msgstr ""
 
 msgid "Last Heard From"
 msgstr "Sist hørt fra"
@@ -3450,6 +3566,13 @@ msgstr "Øktforbud"
 
 msgid "Total number of banned peers"
 msgstr "Totalt antall utestengte jevnaldrende"
+
+msgid "Note: 'LU' class routers have been excluded from the list."
+msgstr ""
+
+#, java-format
+msgid "To view, see {0}Session Bans{1}."
+msgstr ""
 
 msgid "Select search engine"
 msgstr "Velg søkemotor"
@@ -3722,9 +3845,6 @@ msgstr "Krukker"
 msgid "Review extended info about installed .jar and .war files"
 msgstr "Se over utvidet info om installerte .jar og .war-filer"
 
-msgid "Lookup"
-msgstr "Oppslag"
-
 msgid "Textual router performance statistics"
 msgstr "Tekstbasert statistikk av ruterytelse"
 
@@ -3759,8 +3879,8 @@ msgstr "Minne"
 msgid "Floodfill enabled"
 msgstr "Floodfill er slått på"
 
-msgid "See more information on the wiki"
-msgstr "Se mer informasjon på wiki-en"
+msgid "Total number of LeaseSets stored in our NetDb"
+msgstr ""
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Advarsel: ECDSA er ikke tilgjengelig. Oppdater Java eller OS-et ditt."
@@ -3834,8 +3954,8 @@ msgstr "inngående / utgående"
 msgid "Used for building and testing tunnels, and communicating with floodfill peers"
 msgstr "Brukt for bygging og testing av tunneler, og kommunikasjon med flodfyll-likemenn"
 
-msgid "Exploratory"
-msgstr "Utforskende"
+msgid "Utility"
+msgstr "Verktøy"
 
 msgid "Tunnels we are participating in, directly contributing bandwidth to the network"
 msgstr "Tunneler brukt til deltagelse i, direkte bidrag av båndbredde til nettverket."
@@ -3843,8 +3963,8 @@ msgstr "Tunneler brukt til deltagelse i, direkte bidrag av båndbredde til nettv
 msgid "Current / Maximum"
 msgstr "Nåværende / Maksimum"
 
-msgid "Participating"
-msgstr "Deltagende"
+msgid "Transit"
+msgstr "Transitt"
 
 msgid "Concurrent tunnel builds (averaged over a minute) / single tunnel build time"
 msgstr "Samtidig tunnelbygging (gjennomsnittlig over ett minutt) / enkel tunnelbyggingstid"
@@ -3866,12 +3986,6 @@ msgstr "Delingsforhold"
 
 msgid "tunnels"
 msgstr "tunneler"
-
-msgid "Transit"
-msgstr "Transitt"
-
-msgid "Utility"
-msgstr "Verktøy"
 
 msgid "Tunnel Count by Peer"
 msgstr "Tunneltelling av Peer"
@@ -4179,9 +4293,6 @@ msgstr "Håndhev blokkering for"
 msgid "days"
 msgstr "dager"
 
-msgid "Known Floodfills"
-msgstr "Kjente flomfyllinger"
-
 msgid "Average closest floodfill distance"
 msgstr "Gjennomsnittlig nærmeste flomfyllingsavstand"
 
@@ -4320,6 +4431,9 @@ msgstr "Avstand til"
 msgid "Distance for"
 msgstr "Avstand for"
 
+msgid "Exploratory"
+msgstr "Utforskende"
+
 msgid "Configure tunnels"
 msgstr "Sett opp tunneler"
 
@@ -4394,6 +4508,9 @@ msgstr "Ruteren opererer for tiden i skjult modus som forhindrer at transitttunn
 msgid "No transit tunnels currently active."
 msgstr "Ingen transitttunneler er aktive for øyeblikket."
 
+msgid "Transit Tunnels by Peer (Top 50)"
+msgstr ""
+
 msgid "Address"
 msgstr "Adresse"
 
@@ -4465,6 +4582,9 @@ msgstr "Båndbreddetest mislyktes"
 
 msgid "Bandwidth test did not complete"
 msgstr "Båndbreddetest ble ikke fullført"
+
+msgid "Bad state for test"
+msgstr ""
 
 msgid "Bandwidth test started"
 msgstr "Båndbreddetest startet"
@@ -5097,14 +5217,22 @@ msgstr "Manuelt utestenge / fjerne forbud mot en kollega"
 msgid "Banning will prevent the participation of this peer in tunnels you create."
 msgstr "Banning vil forhindre deltakelse av denne jevnaldrende i tunneler du oppretter."
 
+msgid "A list of bans by IP address is presented below."
+msgstr ""
+
+#, java-format
+msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
+msgstr ""
+
+#, java-format
+msgid "A list of {0}session-only bans{1} by hash is also available."
+msgstr ""
+
 msgid "Adjust Profile Bonuses"
 msgstr "Juster profilbonuser"
 
 msgid "Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels."
 msgstr "Bonuser kan være positive eller negative, og påvirke peerens inkludering i rask og høy kapasitetsnivå. Rask jevnaldrende brukes til klienttunneler, og jevnaldrende jevnaldrende brukes til noen utforskende tunneler."
-
-msgid "Banned Peers"
-msgstr "Bannlyste likemenn"
 
 msgid "Banned IP Addresses"
 msgstr "Bannlyste IP-er"
@@ -5651,6 +5779,9 @@ msgstr "Denne innstillingen lar deg konfigurere oppdaterings-URLen for funksjone
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Denne innstillingen tillater å deaktivere SSU-tester for å bestemme om ruteren din har brannmur og kan brukes for rutere som definitivt ikke har brannmur, men som opplever periodiske brannmursproblemer. Hvis testingen er deaktivert, bør både SSU og NTCP rapportere din nåværende offentlige IP-adresse på siden <a href=/info>router informasjon</a>. [Omstart kreves]"
+
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
+msgstr ""
 
 msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
 msgstr "Denne innstillingen bestemmer hvilken transport som prioriteres ved kommunikasjon med jevnaldrende. Som standard foretrekkes NTCP fremfor UDP (SSU). Ved å sette verdien til true, vil UDP foretrekkes med mindre det allerede eksisterer en NTCP-tilkobling; når den er satt til alltid, vil UDP alltid bli brukt uansett om det allerede eksisterer en NTCP-tilkobling. [Standard er false]"
@@ -6234,6 +6365,9 @@ msgstr "Laptop-modus"
 msgid "An <a href=/confignet#ipchange>optional configuration</a> that automatically changes your <a href=/netdb?r=.>router identity</a> and <a href=/confignet#udpconfig>external port</a> when the public ip address your system is on changes. This can prevent an adversary from correlating your router identity and ip address in scenarios where your ip address may change frequently, for example when you're running I2P on a laptop from multiple locations."
 msgstr "En <a href=/confignet#ipchange>valgfri konfigurasjon</a> som automatisk endrer din <a href=/netdb?r=.>rutens identitet</a> og <a href=/confignet#udpconfig>ekstern port</a> når IP-adressen din endres. Dette kan forhindre en motstander i å korrelere rutens identitet og IP-adressen din i scenarier der IP-adressen din kan endres hyppig, for eksempel når du kjører I2P på en bærbar datamaskin fra forskjellige steder."
 
+msgid "Lease"
+msgstr "Leie"
+
 msgid "The information that defines the authorization for a particular tunnel to receive messages targeting a <i>Destination</i>."
 msgstr "Informasjonen som definerer autorisasjonen for en bestemt tunnel for å motta meldinger som er rettet mot en <i>Destinasjon</i>."
 
@@ -6807,6 +6941,9 @@ msgstr "Tunneler bygd av ruteren din og brukt for kommunikasjon med floodfill-pe
 msgid "Tunnels built by your router for each client's use."
 msgstr "Tunneler bygd av din ruter for hver klients bruk."
 
+msgid "Participating"
+msgstr "Deltagende"
+
 msgid "Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a  href='/config'>Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a href='/configadvanced'>Advanced configuration page</a>. <a href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
 msgstr "Tunneler bygd av andre rutere gjennom din ruter. Dette kan variere mye avhengig av nettverkets etterspørsel, din delte båndbredde og mengden lokalt-generert trafikk. Den anbefalte metoden for å begrense deltagende tunneler er å endre andelsprosenten din på <a  href='/config'>Båndbreddekonfigurasjon-siden</a>. Du kan også begrense det totale antallet ved å sette <code>router.maxParticipatingTunnels=nnn</code> på <a href='/configadvanced'>Avansert konfigureringsside</a>. <a href='/configstats#tunnel.participatingTunnels'>[Aktiver grafing]</a>."
 
@@ -7235,8 +7372,8 @@ msgstr "Personprofiler"
 msgid "Session Banned Peers"
 msgstr "Sesjon forbudte jevnaldrende"
 
-msgid "Floodfills"
-msgstr "Flomfyllinger"
+msgid "Banned Peers"
+msgstr "Bannlyste likemenn"
 
 msgid "Fast / High Capacity"
 msgstr "Rask / høy kapasitet"
@@ -7580,3 +7717,11 @@ msgstr "Neste"
 
 msgid "Finished"
 msgstr "Sluttført"
+
+
+
+
+
+#, java-format
+
+

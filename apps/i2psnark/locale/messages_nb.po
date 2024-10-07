@@ -48,6 +48,9 @@ msgstr "Opp-båndbredde endret til {0}KBps"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Minimum opp-båndbredde er {0}KBps"
 
+msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
+msgstr ""
+
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Aktiverte +0/1 tilfeldig tunnelhop på innbøydende tunnler"
 
@@ -340,6 +343,9 @@ msgstr "Legge til torrenter i {0}"
 msgid "Connecting to I2P"
 msgstr "Kobler til I2P"
 
+msgid "Connected to I2P at"
+msgstr ""
+
 #, java-format
 msgid "Starting up torrent {0}"
 msgstr "Starter opp torrent {0}"
@@ -411,6 +417,9 @@ msgstr "Fullført ny kontroll av torrent {0}, uendret"
 #, java-format
 msgid "Error checking the torrent {0}"
 msgstr "Feil under kontroll av torrenten {0}"
+
+msgid "Data partition"
+msgstr ""
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -657,12 +666,6 @@ msgstr "i"
 
 msgid "out"
 msgstr "ut"
-
-msgid "Our destination (identity) for this session"
-msgstr "Vår destinasjon (identitet) for denne økten"
-
-msgid "Dest."
-msgstr "Dest."
 
 msgid "Estimated download time for all torrents"
 msgstr "Estimert nedlastingstid for alle torrenter"
@@ -1205,6 +1208,12 @@ msgstr "Maksimalt antall filer tillatt per torrent - merk at sporere kan sette s
 msgid "Tunnel Configuration"
 msgstr "Tunnelkonfigurasjon"
 
+msgid "Our destination (identity) for this session"
+msgstr "Vår destinasjon (identitet) for denne økten"
+
+msgid "Dest."
+msgstr "Dest."
+
 msgid "Inbound Settings"
 msgstr "Inngående innstillinger"
 
@@ -1484,5 +1493,3 @@ msgstr "Lagre endringer"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent må stoppes"
-
-#, java-format

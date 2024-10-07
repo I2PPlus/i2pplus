@@ -110,6 +110,9 @@ msgstr "Menolak permintaan"
 msgid "Shutting down"
 msgstr "Mematikan"
 
+msgid "Restarting"
+msgstr ""
+
 msgid "Declining Tunnel Requests"
 msgstr "Menolak permintaan terowongan"
 

@@ -267,6 +267,12 @@ msgstr "Boek"
 msgid "No entries"
 msgstr "Geen vermeldingen"
 
+msgid "Add new destination"
+msgstr "Nieuwe destination toevoegen"
+
+msgid "Import from hosts.txt file"
+msgstr "Importeren uit hosts.txt-bestand"
+
 msgid "Export in hosts.txt format"
 msgstr "Exporteren in hosts.txt-formaat"
 
@@ -315,9 +321,6 @@ msgstr "Markeer voor verwijdering"
 msgid "Cancel"
 msgstr "Annuleer"
 
-msgid "Add new destination"
-msgstr "Nieuwe destination toevoegen"
-
 msgid "e.g. newdomain.i2p"
 msgstr "bijv. newdomain.i2p"
 
@@ -326,9 +329,6 @@ msgstr "B64 of B32"
 
 msgid "Full destination or b32 address"
 msgstr "Volledige bestemming of b32-adres"
-
-msgid "Import from hosts.txt file"
-msgstr "Importeren uit hosts.txt-bestand"
 
 msgid "Select file"
 msgstr "Selecteer bestand"

@@ -1352,15 +1352,6 @@ msgstr "बुरा क्षमता मान"
 msgid "Unsupported"
 msgstr "समर्थन नहीं"
 
-msgid "IPs Banned Until Restart"
-msgstr "पुनः शुरू होने तक IP प्रतिबंधित"
-
-msgid "IPv4 Addresses"
-msgstr "IPv4 पताएँ"
-
-msgid "IPv6 Addresses"
-msgstr "IPv6 पताएँ"
-
 msgid "IPs Permanently Banned"
 msgstr "स्थायी रूप से प्रतिबंधित IP"
 
@@ -1369,6 +1360,19 @@ msgstr "से"
 
 msgid "To"
 msgstr "के लिए"
+
+#, java-format
+msgid "First {0} displayed, see the {1} file for the full list"
+msgstr ""
+
+msgid "IPs Banned Until Restart"
+msgstr "पुनः शुरू होने तक IP प्रतिबंधित"
+
+msgid "IPv4 Addresses"
+msgstr "IPv4 पताएँ"
+
+msgid "IPv6 Addresses"
+msgstr "IPv6 पताएँ"
 
 msgid "Reseed now"
 msgstr "अब पुनःसंचय"
@@ -1415,11 +1419,11 @@ msgstr "URL सूची रीसेट करें"
 msgid "URL list reset successfully"
 msgstr "URL सूची सफलतापूर्वक रीसेट की गई"
 
-msgid "Cancel shutdown"
-msgstr "बंद होने को रद्द करें"
-
 msgid "Cancel restart"
 msgstr "पुनः शुरू करने को रद्द करें"
+
+msgid "Cancel shutdown"
+msgstr "बंद होने को रद्द करें"
 
 msgid "Restart immediately"
 msgstr "तुरंत पुनः शुरू करें"
@@ -2649,6 +2653,69 @@ msgstr "सिबिल विश्लेषण"
 msgid "Router Map"
 msgstr "राउटर मानचित्र"
 
+msgid "Network Database Search"
+msgstr ""
+
+msgid "Capabilities"
+msgstr "क्षमताएं"
+
+msgid "e.g. f or XOfR"
+msgstr ""
+
+msgid "Cost"
+msgstr "मूल्य"
+
+msgid "Country"
+msgstr "देश"
+
+msgid "Country Codes"
+msgstr ""
+
+msgid "Hash Prefix"
+msgstr ""
+
+msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
+msgstr ""
+
+msgid "Hostname or b32"
+msgstr ""
+
+msgid "IPv6 Prefix"
+msgstr ""
+
+msgid "Single port or range"
+msgstr ""
+
+msgid "Signature Type"
+msgstr ""
+
+msgid "SSU Capabilities"
+msgstr ""
+
+msgid "Encryption Type"
+msgstr ""
+
+msgid "Router Version"
+msgstr ""
+
+msgid "Transport"
+msgstr "ट्रांसपोर्ट"
+
+msgid "Add Sybil analysis (must pick at least one above)"
+msgstr ""
+
+msgid "Sybil close to"
+msgstr ""
+
+msgid "Router hash, destination hash, b32, or from address book"
+msgstr ""
+
+msgid "or Sybil close to this router"
+msgstr ""
+
+msgid "Lookup"
+msgstr "खोज"
+
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "कभी भी अपनी राउटर पहचान किसी को न बताएँ, क्योंकि यह आपके आईपी पते के साथ नेटवर्क डेटाबेस में अद्वितीय रूप से जुड़ी हुई है।"
 
@@ -2661,14 +2728,14 @@ msgstr "नेटवर्क डेटाबेस में नहीं म�
 msgid "No results"
 msgstr "कोई परिणाम नहीं"
 
-msgid "Previous Page"
-msgstr "पिछला पृष्ठ"
+msgid "Bad Base64 Router hash"
+msgstr ""
 
-msgid "Page"
-msgstr "पृष्ठ"
+msgid "No routers with"
+msgstr ""
 
-msgid "Country"
-msgstr "देश"
+msgid "Hash prefix"
+msgstr ""
 
 msgid "Port"
 msgstr "पोर्ट"
@@ -2676,11 +2743,56 @@ msgstr "पोर्ट"
 msgid "MTU"
 msgstr "MTU"
 
+msgid "found in the network database"
+msgstr ""
+
+msgid "results"
+msgstr ""
+
+msgid "Previous Page"
+msgstr "पिछला पृष्ठ"
+
 msgid "Next Page"
 msgstr "अगला पृष्ठ"
 
-msgid "No Leasesets currently active."
-msgstr "वर्तमान में कोई लीज़ सेट सक्रिय नहीं है।"
+msgid "Results per page"
+msgstr ""
+
+msgid "Not initialized"
+msgstr "इनिशियलाइज़ेशन नहीं किया"
+
+msgid "Debug mode - Sorted by hash distance, closest first."
+msgstr ""
+
+msgid "Compact mode"
+msgstr ""
+
+msgid "Total Leasesets"
+msgstr ""
+
+msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Mod Data"
+msgstr ""
+
+msgid "Last Changed"
+msgstr ""
+
+msgid "Next Mod Data"
+msgstr ""
+
+msgid "Change in"
+msgstr ""
+
+msgid "Known Floodfills"
+msgstr "परिचित Floodfills"
+
+msgid "Floodfill mode enabled"
+msgstr ""
+
+msgid "Routing Key"
+msgstr "रूटिंग की"
 
 msgid "Network data"
 msgstr "नेटवर्क डेटा"
@@ -2694,6 +2806,17 @@ msgstr "अनुमानित कुल फ्लूडफिल्स"
 msgid "Estimated total leasesets"
 msgstr "अनुमानित कुल लीज़ सेट्स"
 
+#, java-format
+msgid "Hostname {0} not found in network database"
+msgstr ""
+
+#, java-format
+msgid "LeaseSet for {0} not found in network database"
+msgstr ""
+
+msgid "Meta"
+msgstr ""
+
 msgid "LeaseSet"
 msgstr "लीज़ सेट"
 
@@ -2705,16 +2828,6 @@ msgstr "उद्देश्य के लिए स्थानीय टं�
 
 msgid "published"
 msgstr "प्रकाशित"
-
-msgid "Add to addressbook"
-msgstr "ठेके में जोड़ें"
-
-msgid "Add to local addressbook"
-msgstr "स्थानीय ठेके में जोड़ें"
-
-#, java-format
-msgid "Published{0} ago"
-msgstr "{0} पहले प्रकाशित"
 
 #, java-format
 msgid "Expires{0}"
@@ -2742,12 +2855,6 @@ msgstr "साइनेचर तरीका"
 msgid "Unsupported type"
 msgstr "समर्थन नहीं किया जाता"
 
-msgid "Routing Key"
-msgstr "रूटिंग की"
-
-msgid "Lease"
-msgstr "रेंट"
-
 #, java-format
 msgid "Expires in {0}"
 msgstr "{0} में समाप्त हो जाएगा"
@@ -2756,8 +2863,11 @@ msgstr "{0} में समाप्त हो जाएगा"
 msgid "Expired {0} ago"
 msgstr "{0} पहले समाप्त हो गया"
 
-msgid "Not initialized"
-msgstr "इनिशियलाइज़ेशन नहीं किया"
+msgid "Advanced mode - includes all statistics published by floodfills."
+msgstr ""
+
+msgid "Compact mode - does not include statistics published by floodfills."
+msgstr ""
 
 msgid "Network Database Router Statistics"
 msgstr "नेटवर्क डेटाबेस राउटर स्टैटिस्टिक्स"
@@ -2780,6 +2890,15 @@ msgstr "सभी टंनल अनुरोधों को अस्वी�
 msgid "Transports"
 msgstr "ट्रांसपोर्ट"
 
+msgid "X Tier"
+msgstr ""
+
+msgid "Floodfills"
+msgstr "Floodfills"
+
+msgid "Total"
+msgstr "कुल"
+
 msgid "Unknown"
 msgstr "अज्ञात"
 
@@ -2792,6 +2911,12 @@ msgstr "हमारी जानकारी"
 msgid "Router is banlisted"
 msgstr "राउटर बैनलिस्टेड है"
 
+msgid "Java I2P variant"
+msgstr ""
+
+msgid "I2Pd variant"
+msgstr ""
+
 msgid "RouterInfo is compressible"
 msgstr "RouterInfo को संपीड़ित किया जा सकता है"
 
@@ -2802,11 +2927,11 @@ msgstr "NetDb में इस संस्करण के साथ सभी 
 msgid "Show all members of the {0} family in NetDb"
 msgstr "NetDb में {0} परिवार के सभी सदस्य दिखाएं"
 
-msgid "View profile"
-msgstr "प्रोफ़ाइल देखें"
-
 msgid "Profile"
 msgstr "प्रोफ़ाइल"
+
+msgid "View profile"
+msgstr "प्रोफ़ाइल देखें"
 
 msgid "Configure peer"
 msgstr "समकक्ष विन्यास करें"
@@ -2822,6 +2947,9 @@ msgstr "प्रकाशित"
 
 msgid "Hostname"
 msgstr "होस्टनाम"
+
+msgid "direct"
+msgstr ""
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "पुष्टि की परिवार (साइनिंग सर्टिफिकेट स्थापित और वैध है)"
@@ -2841,17 +2969,11 @@ msgstr "पते"
 msgid "n/a"
 msgstr "न/ए"
 
-msgid "Cost"
-msgstr "मूल्य"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "NetDb में इस पते के साथ सभी राउटर दिखाएं"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "NetDb में इस पोर्ट के साथ सभी राउटर दिखाएं"
-
-msgid "Capabilities"
-msgstr "क्षमताएं"
 
 msgid "Core version"
 msgstr "कोर संस्करण"
@@ -2940,11 +3062,11 @@ msgstr "IPv6 NTCP"
 msgid "IPv6 NTCP, SSU"
 msgstr "IPv6 NTCP, SSU"
 
-msgid "IPv6 NTCP, SSU, introducers"
-msgstr "IPv6 NTCP, SSU, परिचयक"
-
 msgid "IPv6 Only NTCP, SSU, introducers"
 msgstr "IPv6 केवल NTCP, SSU, परिचयक"
+
+msgid "IPv6 NTCP, SSU, introducers"
+msgstr "IPv6 NTCP, SSU, परिचयक"
 
 msgid "No peer connections available"
 msgstr "समकक्ष कनेक्शन उपलब्ध नहीं"
@@ -2969,9 +3091,6 @@ msgstr "समकक्ष कनेक्शन"
 msgid "Auto-refresh"
 msgstr "स्वचालित ताजा करें"
 
-msgid "Transport"
-msgstr "ट्रांसपोर्ट"
-
 msgid "Active in the last minute"
 msgstr "अंतिम मिनट में सक्रिय"
 
@@ -2980,9 +3099,6 @@ msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
-
-msgid "Total"
-msgstr "कुल"
 
 msgid "Current / maximum permitted"
 msgstr "वर्तमान / अनुमतित की अधिकतम सीमा"
@@ -3233,9 +3349,6 @@ msgid_plural "Showing {0} recent profiles."
 msgstr[0] "{0} हाल का प्रोफ़ाइल दिखा रहा है।"
 msgstr[1] "{0} हाल के प्रोफ़ाइल दिखा रहे हैं।"
 
-msgid "active in the last 20 minutes"
-msgstr "अंतिम 20 मिनटों में सक्रिय"
-
 #, java-format
 msgid "Hiding {0} older profile."
 msgid_plural "Hiding {0} older profiles."
@@ -3277,6 +3390,9 @@ msgstr "समकक्ष ने सहभागिता करने से �
 
 msgid "Rejected"
 msgstr "अस्वीकृत"
+
+msgid "First Heard About"
+msgstr ""
 
 msgid "Last Heard From"
 msgstr "अंतिम बार सुना"
@@ -3450,6 +3566,13 @@ msgstr "सत्र प्रतिबंध"
 
 msgid "Total number of banned peers"
 msgstr "प्रतिबंधित पीयर की कुल संख्या"
+
+msgid "Note: 'LU' class routers have been excluded from the list."
+msgstr ""
+
+#, java-format
+msgid "To view, see {0}Session Bans{1}."
+msgstr ""
 
 msgid "Select search engine"
 msgstr "खोज इंजन चुनें"
@@ -3722,9 +3845,6 @@ msgstr "जार"
 msgid "Review extended info about installed .jar and .war files"
 msgstr "इंस्टॉलेड .jar और .war फ़ाइलों के बारे में विस्तृत जानकारी की समीक्षा करें"
 
-msgid "Lookup"
-msgstr "खोज"
-
 msgid "Textual router performance statistics"
 msgstr "लिखित रूटर प्रदर्शन सांख्यिकी"
 
@@ -3759,8 +3879,8 @@ msgstr "मेमोरी"
 msgid "Floodfill enabled"
 msgstr "फ्लॉडफिल सक्षम"
 
-msgid "See more information on the wiki"
-msgstr "विकी पर अधिक जानकारी देखें"
+msgid "Total number of LeaseSets stored in our NetDb"
+msgstr ""
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "सावधानी: ECDSA उपलब्ध नहीं है। अपने जावा या ऑपरेटिंग सिस्टम को अपडेट करें"
@@ -3834,8 +3954,8 @@ msgstr "आगंतुकीय / निर्गमी"
 msgid "Used for building and testing tunnels, and communicating with floodfill peers"
 msgstr "टनल बनाने, परीक्षण करने और फ्लॉडफिल पीयर के साथ संवाद करने के लिए उपयोग किया जाता है"
 
-msgid "Exploratory"
-msgstr "अन्वेषणीय"
+msgid "Utility"
+msgstr "उपयोगिता"
 
 msgid "Tunnels we are participating in, directly contributing bandwidth to the network"
 msgstr "जिन टनल में हम भाग ले रहे हैं, जो सीधे नेटवर्क के बैंडविड्थ को योगदान करते हैं"
@@ -3843,8 +3963,8 @@ msgstr "जिन टनल में हम भाग ले रहे है�
 msgid "Current / Maximum"
 msgstr "वर्तमान / मौजूदा मानक"
 
-msgid "Participating"
-msgstr "भाग लेने वाले"
+msgid "Transit"
+msgstr "पारगम्यता"
 
 msgid "Concurrent tunnel builds (averaged over a minute) / single tunnel build time"
 msgstr "समान समय में टनल बनाने (एक मिनट पर औसत) / एकल टनल बनाने का समय"
@@ -3866,12 +3986,6 @@ msgstr "शेयर अनुपात"
 
 msgid "tunnels"
 msgstr "टनल"
-
-msgid "Transit"
-msgstr "पारगम्यता"
-
-msgid "Utility"
-msgstr "उपयोगिता"
 
 msgid "Tunnel Count by Peer"
 msgstr "पीयर द्वारा टनल की संख्या"
@@ -4179,9 +4293,6 @@ msgstr "ब्लॉक को लागू करें के लिए"
 msgid "days"
 msgstr "दिन"
 
-msgid "Known Floodfills"
-msgstr "परिचित Floodfills"
-
 msgid "Average closest floodfill distance"
 msgstr "औसत सबसे निकट floodfill दूरी"
 
@@ -4320,6 +4431,9 @@ msgstr "दूरी के लिए "
 msgid "Distance for"
 msgstr "दूरी के लिए"
 
+msgid "Exploratory"
+msgstr "अन्वेषणीय"
+
 msgid "Configure tunnels"
 msgstr "टनल का सेटिंग करें"
 
@@ -4394,6 +4508,9 @@ msgstr "रूटर क्रेन्टली हाइडन मोड म�
 msgid "No transit tunnels currently active."
 msgstr "वर्तमान में कोई सक्रिय ट्रांजिट टनल नहीं है।"
 
+msgid "Transit Tunnels by Peer (Top 50)"
+msgstr ""
+
 msgid "Address"
 msgstr "पता"
 
@@ -4465,6 +4582,9 @@ msgstr "बैंडविड्थ परीक्षण विफल रहा
 
 msgid "Bandwidth test did not complete"
 msgstr "बैंडविड्थ परीक्षण पूरा नहीं हुआ"
+
+msgid "Bad state for test"
+msgstr ""
 
 msgid "Bandwidth test started"
 msgstr "बैंडविड्थ परीक्षण शुरू किया गया"
@@ -5097,14 +5217,22 @@ msgstr "समकक्ष को गैर-मान्य / मान्य �
 msgid "Banning will prevent the participation of this peer in tunnels you create."
 msgstr "बैनिंग इस समकक्ष को आपके बनाए गए टनलों में भाग लेने से रोकेगा।"
 
+msgid "A list of bans by IP address is presented below."
+msgstr ""
+
+#, java-format
+msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
+msgstr ""
+
+#, java-format
+msgid "A list of {0}session-only bans{1} by hash is also available."
+msgstr ""
+
 msgid "Adjust Profile Bonuses"
 msgstr "प्रोफ़ाइल बोनस को समायोजित करें"
 
 msgid "Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels."
 msgstr "बोनस सकारात्मक या नकारात्मक हो सकते हैं, और त्वरित और उच्च क्षमता वर्ग में समकक्षों की शामिली को प्रभावित करते हैं। त्वरित समकक्ष ग्राहक टनल के लिए उपयोग किए जाते हैं, और उच्च क्षमता वाले समकक्ष अनुसंधानी टनल के लिए कुछ के लिए उपयोग किए जाते हैं।"
-
-msgid "Banned Peers"
-msgstr "बैन किए गए समकक्ष"
 
 msgid "Banned IP Addresses"
 msgstr "बैन किए गए आईपी"
@@ -5651,6 +5779,9 @@ msgstr "यदि सक्षम, तो यह सेटिंग आपको
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "यह सेटिंग आपको यह जांच करने के लिए SSU परीक्षणों को अक्षम करने की अनुमति देती है कि आपका राउटर फ़ायरवॉल के पीछे है या नहीं, और जो राउटर निश्चित रूप से फ़ायरवॉल के पीछे नहीं हैं लेकिन अनियमित फ़ायरवॉलिंग समस्याओं का सामना कर रहे हैं। यदि परीक्षण अक्षम किया जाता है, तो दोनों SSU और NTCP <a href=/info>राउटर जानकारी पृष्ठ</a> पर आपकी वर्तमान सार्वजनिक IP पता रिपोर्ट करने चाहिए। [रीस्टार्ट की आवश्यकता है]"
+
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
+msgstr ""
 
 msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
 msgstr "यह सेटिंग देखभाल करने के लिए कौन सा ट्रांसपोर्ट प्राथमिकता प्राप्त करता है जब समकक्षों के साथ संवाद किया जाता है। मानक रूप से, एनटीसीपी को यूडीपी (एसएसयू) के मुक़ाबले में पसंद किया जाता है। यदि मान को सत्य कर दिया जाता है, तो यूडीपी को प्राथमिकता दी जाएगी जब तक कि पहले से मौजूद एनटीसीपी कनेक्शन नहीं हो; जब यह हमेशा के रूप में सेट किया जाता है, तो यूडीपी हमेशा उपयोग की जाएगा चाहे कितने भी पहले से मौजूद एनटीसीपी कनेक्शन हों। [मानक रूप से असत्य]"
@@ -6234,6 +6365,9 @@ msgstr "लैपटॉप मोड"
 msgid "An <a href=/confignet#ipchange>optional configuration</a> that automatically changes your <a href=/netdb?r=.>router identity</a> and <a href=/confignet#udpconfig>external port</a> when the public ip address your system is on changes. This can prevent an adversary from correlating your router identity and ip address in scenarios where your ip address may change frequently, for example when you're running I2P on a laptop from multiple locations."
 msgstr "एक <a href=/confignet#ipchange>वैकल्पिक सेटिंग</a> है जो आपके सिस्टम पर जब सार्वजनिक IP पता बदलता है, तो आपकी <a href=/netdb?r=.>रूटर पहचान</a> और <a href=/confignet#udpconfig>exteranal पोर्ट</a> को स्वचालित रूप से बदलता है। यह ऐसे मामलों में एक दुश्मन को आपकी रूटर पहचान और IP पते को संबंधित करने से रोक सकता है, जहां आपका IP पता अक्सर बदल सकता है, जैसे कि आप कई स्थानों से एक लैपटॉप पर I2P चला रहे हों।"
 
+msgid "Lease"
+msgstr "रेंट"
+
 msgid "The information that defines the authorization for a particular tunnel to receive messages targeting a <i>Destination</i>."
 msgstr "एक विशेष टंनल को एक <i>Destinatation</i> के लिए उपलब्ध संदेश प्राप्त करने की अनुमति देने वाली जानकारी।"
 
@@ -6807,6 +6941,9 @@ msgstr "आपके रूटर द्वारा बनाए गए टन�
 msgid "Tunnels built by your router for each client's use."
 msgstr "प्रत्येक क्लाइंट के उपयोग के लिए आपके रूटर द्वारा बनाए गए टनल।"
 
+msgid "Participating"
+msgstr "भाग लेने वाले"
+
 msgid "Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a  href='/config'>Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a href='/configadvanced'>Advanced configuration page</a>. <a href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
 msgstr "अन्य रूटरों द्वारा आपके रूटर के माध्यम से बनाए गए टनल। यह नेटवर्क की मांग, आपकी साझा बैंडविड्थ और स्थानीय तरंगों की मात्रा के आधार पर विविधतापूर्ण हो सकता है। भागीदारी टनल की सीमा लगाने की सिफारिश विधि आपके बैंडविड्थ के संरचना पृष्ठ (<a href='/config'>Bandwidth Configuration page</a>) पर आपके शेयर प्रतिशत को बदलना है। आप भी <a href='/configadvanced'>अनुकूलन पृष्ठ</a> पर <code>router.maxParticipatingTunnels=nnn</code> को सेट करके कुल संख्या की सीमा लगा सकते हैं। <a href='/configstats#tunnel.participatingTunnels'>[ग्राफ़ चालू करें]</a>."
 
@@ -7235,8 +7372,8 @@ msgstr "पीयर प्रोफ़ाइल"
 msgid "Session Banned Peers"
 msgstr "सेशन में प्रतिबंधित पीयर"
 
-msgid "Floodfills"
-msgstr "Floodfills"
+msgid "Banned Peers"
+msgstr "बैन किए गए समकक्ष"
 
 msgid "Fast / High Capacity"
 msgstr "तेज़ / उच्च क्षमता"
@@ -7580,3 +7717,11 @@ msgstr "अगला"
 
 msgid "Finished"
 msgstr "समाप्त"
+
+
+
+
+
+#, java-format
+
+
