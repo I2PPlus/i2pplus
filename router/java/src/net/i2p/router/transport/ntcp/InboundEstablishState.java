@@ -726,7 +726,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         boolean isSlow = (cap != null && !cap.equals("")) && bw.equals("K") ||
                           bw.equals("L") || bw.equals("M") || bw.equals("N");
         String version = ri.getVersion();
-        boolean isOld = VersionComparator.comp(version, "0.9.61") < 0;
+        boolean isOld = VersionComparator.comp(version, "0.9.62") < 0;
         boolean isInvalidVersion = VersionComparator.comp(version, "2.5.0") >= 0;
 
         if (isInvalidVersion) {

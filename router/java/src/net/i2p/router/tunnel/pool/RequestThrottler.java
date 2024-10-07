@@ -76,7 +76,7 @@ class RequestThrottler {
             isFF = ri.getCapabilities().contains("f");
             v = ri.getVersion();
             country = context.commSystem().getCountry(h);
-            isOld = VersionComparator.comp(v, "0.9.61") < 0;
+            isOld = VersionComparator.comp(v, "0.9.62") < 0;
         }
 
         if (highload) {
