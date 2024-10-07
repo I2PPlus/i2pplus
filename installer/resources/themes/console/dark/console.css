@@ -1136,7 +1136,7 @@ p.family{white-space:nowrap;background:var(--family) no-repeat 8px center/28px,l
 .banlisted,.compressible,.i2pd,.javai2p{width:18px;height:18px;display:inline-block;vertical-align:middle;background:var(--ban)}
 .compressible{background:url(/themes/console/images/clamp.svg)}
 .i2pd{margin-right:2px;background:url(/themes/console/images/eepsites/i2pd.svg)}
-.javai2p{margin-right:2px;background:url(/themes/console/images/eepsites/i2p.svg)}
+.javai2p{margin:0 2px 0 4px;background:url(/themes/console/images/eepsites/i2p.svg)}
 .configpeer:hover,.configpeer:focus{background:var(--edit_hover) var(--center)/12px,var(--badge)}
 .familyname .verified{margin-top:-2px;height:12px;width:12px;display:inline-block;vertical-align:middle;font-size:0;background:var(--verified) no-repeat center center/11px}
 .gwhois,.banlisted{vertical-align:middle;font-size:0}
