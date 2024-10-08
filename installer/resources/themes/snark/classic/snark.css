@@ -468,9 +468,15 @@ input.toggle_input::before{content:none}
 .toggleview:hover{cursor:pointer;color:var(--hover)}
 input#toggle_addtorrent:not(checked) + label + hr + table,input#toggle_createtorrent:not(checked) + label + hr + table,input:not(:checked) + .toggleview + hr ~ table{display:none}
 input#toggle_addtorrent:checked + label + hr + table,input#toggle_createtorrent:checked + label + hr + table{display:table}
+
 .peerinfo td:first-child{background:var(--peer) no-repeat center center/18px}
 .peerinfo td:first-child::after{min-height:24px;display:inline-block;vertical-align:middle;box-sizing:border-box;content:""}
-#totals{margin:2px 0 2px 5px;display:inline-block}
+
+#totals{margin:-3px 0 -3px 3px;padding:4px 0 4px 20px;display:inline-block;white-space:nowrap;vertical-align:middle;background:url(images/disk.svg) no-repeat left center/22px}
+#totals .badge{margin-left:3px}
+#totals .counter{margin:-10px 0;padding:5px 8px 7px 10px;width:fit-content;height:20px;position:relative;display:inline-block;vertical-align:middle;border-right:var(--border)}
+#totals #torrentCount.counter{margin-left:10px;border-left:var(--border)}
+#totals .counter img{height:20px;pointer-events:none}
 
 /* torrent priorities */
 .priorityHigh{background:url(/i2psnark/.res/icons/clock_red.png) no-repeat left 26px center}

@@ -1083,16 +1083,14 @@ public class I2PSnarkServlet extends BasicServlet {
             } else {
                 sort = "-7";
             }
-            hbuf.append("<a class=sorter href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
-            hbuf.append(separator).append(filterQuery);
-            hbuf.append("\">");
+            hbuf.append("<a class=sorter href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort))
+                .append(separator).append(filterQuery).append("\">");
         }
         tx = _t("TX");
         hbuf.append(toThemeImg("head_tx", tx, showSort ? _t("Sort by {0}", (nextRatSort ? _t("Upload ratio") : _t("Uploaded"))) : _t("Uploaded")));
-        if (showSort)
-            hbuf.append("</a></span>");
-        hbuf.append("</th>");
-        hbuf.append("<th class=rateUp>");
+        if (showSort) {hbuf.append("</a></span>");}
+        hbuf.append("</th>")
+            .append("<th class=rateUp>");
         // FIXME only show icon when total up rate > 0 and no choked peers
         if (_manager.util().connected() && !snarks.isEmpty()) {
             boolean isUploading = false;
@@ -1116,18 +1114,16 @@ public class I2PSnarkServlet extends BasicServlet {
                     } else {
                         sort = "-9";
                     }
-                    hbuf.append("<a class=sorter href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
-                    hbuf.append(separator).append(filterQuery);
-                    hbuf.append("\">");
+                    hbuf.append("<a class=sorter href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort))
+                        .append(separator).append(filterQuery).append("\">");
                 }
                 tx = _t("TX Rate");
                 hbuf.append(toThemeImg("head_txspeed", tx, showSort ? _t("Sort by {0}", _t("Up Rate")) : _t("Up Rate")));
-                if (showSort)
-                    hbuf.append("</a></span>");
+                if (showSort) {hbuf.append("</a></span>");}
             }
         }
-        hbuf.append("</th>");
-        hbuf.append("<th class=tAction>");
+        hbuf.append("</th>")
+            .append("<th class=tAction>");
         if (_manager.isStopping()) {
             hbuf.append("");
         } else if (_manager.util().connected()) {
@@ -1160,83 +1156,80 @@ public class I2PSnarkServlet extends BasicServlet {
             displaySnark(out, req, snark, uri, i, stats, showPeers, isDegraded, noThinsp, showDebug, hide, isRatSort, canWrite);
         }
 
-        StringBuilder footer = new StringBuilder(2*1024);
+        StringBuilder ftr = new StringBuilder(2*1024);
         if (total == 0) {
-            footer.append("<tr id=noload class=noneLoaded><td colspan=12><i>");
+            ftr.append("<tr id=noload class=noneLoaded><td colspan=12><i>");
             synchronized(this) {
                 File dd = _resourceBase;
                 if (!dd.exists() && !dd.mkdirs()) {
-                    footer.append(_t("Data directory cannot be created") + ": " + DataHelper.escapeHTML(dd.toString()));
+                    ftr.append(_t("Data directory cannot be created") + ": " + DataHelper.escapeHTML(dd.toString()));
                 } else if (!dd.isDirectory()) {
-                    footer.append(_t("Not a directory") + ": " + DataHelper.escapeHTML(dd.toString()));
+                    ftr.append(_t("Not a directory") + ": " + DataHelper.escapeHTML(dd.toString()));
                 } else if (!dd.canRead()) {
-                    footer.append(_t("Unreadable") + ": " + DataHelper.escapeHTML(dd.toString()));
+                    ftr.append(_t("Unreadable") + ": " + DataHelper.escapeHTML(dd.toString()));
                 } else if (!canWrite) {
-                    footer.append(_t("No write permissions for data directory") + ": " + DataHelper.escapeHTML(dd.toString()));
+                    ftr.append(_t("No write permissions for data directory") + ": " + DataHelper.escapeHTML(dd.toString()));
                 } else if (isSearch) {
-                    footer.append(_t("No torrents found."));
+                    ftr.append(_t("No torrents found."));
                 } else {
-                    footer.append(_t("No torrents loaded."));
+                    ftr.append(_t("No torrents loaded."));
                 }
             }
-            footer.append("</i></td></tr></tbody>\n");
-            footer.append("<tfoot id=\"snarkFoot");
-            if (_manager.util().isConnecting()) {footer.append("\" class=\"initializing");}
-            footer.append("\"><tr><th id=torrentTotals align=left colspan=12></th></tr></tfoot>\n");
+            ftr.append("</i></td></tr></tbody>\n").append("<tfoot id=\"snarkFoot");
+            if (_manager.util().isConnecting()) {ftr.append("\" class=\"initializing");}
+            ftr.append("\"><tr><th id=torrentTotals align=left colspan=12></th></tr></tfoot>\n");
         } else if (snarks.size() > 0) {
-
             // Add a pagenav to bottom of table if we have 50+ torrents per page
             // TODO: disable on pages where torrents is < 50 e.g. last page
             if (total > 0 && (start > 0 || total > pageSize) && pageSize >= 50 && total - start >= 20) {
-                footer.append("<tr id=pagenavbottom><td colspan=12><div class=pagenavcontrols>");
+                ftr.append("<tr id=pagenavbottom><td colspan=12><div class=pagenavcontrols>");
                 StringWriter stringWriter = new StringWriter();
                 PrintWriter tempPrintWriter = new PrintWriter(stringWriter);
                 writePageNav(tempPrintWriter, req, start, pageSize, total, filter, noThinsp);
                 tempPrintWriter.flush();
-                footer.append(stringWriter.getBuffer().toString());
-                footer.append("</div></td></tr>\n");
+                ftr.append(stringWriter.getBuffer().toString()).append("</div></td></tr>\n");
             } else {
-                footer.append("<tr id=pagenavbottom hidden><td colspan=12><div class=pagenavcontrols></div></td></tr>\n");
+                ftr.append("<tr id=pagenavbottom hidden><td colspan=12><div class=pagenavcontrols></div></td></tr>\n");
             }
-            footer.append("</tbody>\n<tfoot id=snarkFoot><tr class=volatile><th id=torrentTotals align=left colspan=6>");
-            footer.append("<span id=totals><span class=canhide>");
-            footer.append(_t("Totals"));
-            footer.append(":&nbsp;</span>");
-            footer.append(ngettext("1 torrent", "{0} torrents", total));
-            footer.append(" &bullet; ");
-            footer.append(DataHelper.formatSize2(stats[5]) + "B");
-            if (_manager.util().connected() && total > 0 && stats[4] > 0) {
-                footer.append(" &bullet; ");
-                footer.append(ngettext("1 connected peer", "{0} connected peers", (int) stats[4])
-                      .replace("connected peers", "peer connections"));
-            }
+            ftr.append("</tbody>\n<tfoot id=snarkFoot><tr class=volatile>")
+               .append("<th id=torrentTotals align=left colspan=6><span id=totals>");
 
-            DHT dht = _manager.util().getDHT();
-            if (dht != null) {
-                int dhts = dht.size();
-                if (dhts > 0) {
-                    footer.append(" &bullet; <span>");
-                    footer.append(ngettext("1 DHT peer", "{0} DHT peers", dhts));
-                    footer.append("</span>");
-                }
-            }
+            // Disk usage
+            ftr.append(_manager.getDiskUsage());
 
+            // torrent count
+            ftr.append("<span id=torrentCount class=counter title=\"").append(ngettext("1 torrent", "{0} torrents", total)).append("\">");
+            toThemeImg(ftr, "torrent");
+            ftr.append("<span class=badge>").append(total).append("</span></span>");
+
+            // torrents filesize
+            ftr.append("<span id=torrentFilesize class=counter title=\"").append(_t("Total size of loaded torrents")).append("\">");
+            toThemeImg(ftr, "size");
+            ftr.append("<span class=badge>").append(DataHelper.formatSize2(stats[5]).replace("i", "")).append("</span></span>");
+
+            // connected peers
+            ftr.append("<span id=peerCount class=counter title=\"").append(ngettext("1 connected peer", "{0} connected peers", (int) stats[4])
+                                                                   .replace("connected peers", "peer connections")).append("\">");
+            toThemeImg(ftr, "showpeers");
+            ftr.append("<span class=badge>").append((int) stats[4]).append("</span></span>");
+/*
+            // TODO: This needs to show current tunnel count, not limits
             String ibtunnels = _manager.util().getI2CPOptions().get("inbound.quantity");
             String obtunnels = _manager.util().getI2CPOptions().get("outbound.quantity");
             if (_manager.util().connected()) {
-                footer.append(" <span class=canhide title=\"")
-                      .append(_t("Configured maximum (actual usage may be less)"))
-                      .append("\"> &bullet; ").append(_t("Tunnels")).append(": ")
-                      .append(ibtunnels).append(' ').append(_t("in")).append(" / ")
-                      .append(obtunnels).append(' ').append(_t("out")).append("</span>");
+                ftr.append(" <span class=canhide title=\"")
+                   .append(_t("Configured maximum (actual usage may be less)"))
+                   .append("\"> &bullet; ").append(_t("Tunnels")).append(": ")
+                   .append(ibtunnels).append(' ').append(_t("in")).append(" / ")
+                   .append(obtunnels).append(' ').append(_t("out")).append("</span>");
             }
-            footer.append(' ').append(_manager.getDiskUsage());
-            footer.append("</span></th>");
+*/
+            ftr.append("</span></th>");
             if (_manager.util().connected() && total > 0) {
-                footer.append("<th class=ETA>");
+                ftr.append("<th class=ETA>");
                 // FIXME: add total ETA for all torrents here
-                // footer.append("<th class=ETA title=\"");
-                // footer.append(_t("Estimated download time for all torrents") + "\">");
+                // ftr.append("<th class=ETA title=\"");
+                // ftr.append(_t("Estimated download time for all torrents") + "\">");
 
                 if (_manager.util().connected() && !snarks.isEmpty()) {
                     boolean hasPeers = false;
@@ -1256,36 +1249,34 @@ public class I2PSnarkServlet extends BasicServlet {
                         hasPeers = true;
                         if (hasPeers) {
                             if (totalETA > 0) {
-                                footer.append("<span title=\"");
-                                footer.append(_t("Estimated download time for all torrents") + "\">");
-                                footer.append(DataHelper.formatDuration2(Math.max(totalETA, 10) * 1000));
-                                footer.append("</span>");
+                                ftr.append("<span title=\"")
+                                   .append(_t("Estimated download time for all torrents") + "\">")
+                                   .append(DataHelper.formatDuration2(Math.max(totalETA, 10) * 1000))
+                                   .append("</span>");
                             }
                         }
                         break;
                     }
                 }
-                footer.append("</th>");
-                footer.append("<th class=rxd title=\"");
-                footer.append(_t("Data downloaded this session") + "\">");
+                ftr.append("</th>")
+                   .append("<th class=rxd title=\"")
+                   .append(_t("Data downloaded this session") + "\">");
                 if (stats[0] > 0) {
-                    footer.append(formatSize(stats[0]).replaceAll("iB", ""));
+                    ftr.append(formatSize(stats[0]).replaceAll("iB", ""));
                 }
-                footer.append("</th>");
-                footer.append("<th class=rateDown title=\"");
-                footer.append(_t("Total download speed") + "\">");
+                ftr.append("</th>")
+                   .append("<th class=rateDown title=\"").append(_t("Total download speed") + "\">");
                 if (stats[2] > 0) {
-                    footer.append(formatSize(stats[2]).replaceAll("iB", "") + "/s");
+                    ftr.append(formatSize(stats[2]).replaceAll("iB", "") + "/s");
                 }
-                footer.append("</th>");
-                footer.append("<th class=txd  title=\"");
-                footer.append(_t("Total data uploaded (for listed torrents)") + "\">");
+                ftr.append("</th>")
+                   .append("<th class=txd  title=\"")
+                   .append(_t("Total data uploaded (for listed torrents)") + "\">");
                 if (stats[1] > 0) {
-                    footer.append(formatSize(stats[1]).replaceAll("iB", ""));
+                    ftr.append(formatSize(stats[1]).replaceAll("iB", ""));
                 }
-                footer.append("</th>");
-                footer.append("<th class=rateUp title=\"");
-                footer.append(_t("Total upload speed") + "\">");
+                ftr.append("</th>")
+                   .append("<th class=rateUp title=\"").append(_t("Total upload speed") + "\">");
                 boolean isUploading = false;
                 int end = Math.min(start + pageSize, snarks.size());
                 for (int i = start; i < end; i++) {
@@ -1295,47 +1286,42 @@ public class I2PSnarkServlet extends BasicServlet {
                     }
                 }
                 if (stats[3] > 0 && isUploading) {
-                    footer.append(formatSize(stats[3]).replaceAll("iB", "") + "/s");
+                    ftr.append(formatSize(stats[3]).replaceAll("iB", "") + "/s");
                 }
-                footer.append("</th>");
-                footer.append("<th class=tAction>");
+                ftr.append("</th>")
+                   .append("<th class=tAction>");
 /**
                 String IPString = _manager.util().getOurIPString();
                 if (!IPString.equals("unknown")) {
                     // Only truncate if it's an actual dest
-                    footer.append("&nbsp;<span id=ourDest title=\"")
+                    ftr.append("&nbsp;<span id=ourDest title=\"")
                           .append(_t("Our destination (identity) for this session")).append("\">")
                           .append(_t("Dest.")).append("<code>").append(IPString.substring(0,4)).append("</code></span>");
                 }
 **/
+                DHT dht = _manager.util().getDHT();
                 if (dht != null && (!"2".equals(peerParam))) {
-                    footer.append("<a id=debugMode href=\"?p=2\" title=\"").append(_t("Enable Debug Mode") + "\">").append(_t("Debug Mode") + "</a>");
+                    ftr.append("<a id=debugMode href=\"?p=2\" title=\"").append(_t("Toggle Debug Mode") + "\">").append(_t("Debug Mode") + "</a>");
                 } else if (dht != null) {
-                    footer.append("<a id=debugMode href=\"?p\" title=\"").append(_t("Disable Debug Mode") + "\">").append(_t("Normal Mode") + "</a>");
+                    ftr.append("<a id=debugMode href=\"?p\" title=\"").append(_t("Toggle Debug Mode") + "\">").append(_t("Normal Mode") + "</a>");
                 }
-                footer.append("</th>");
-                } else {
-                    footer.append("<th colspan=6></th>");
-                }
-                footer.append("</tr>\n");
+                ftr.append("</th>");
+                } else {ftr.append("<th colspan=6></th>");}
+                ftr.append("</tr>\n");
 
-                if (showDebug) {footer.append("<tr id=dhtDebug>");}
-                else {footer.append("<tr id=dhtDebug hidden>");}
-                footer.append("<th colspan=12><span class=volatile>");
-                if (dht != null) {
-                    footer.append(_manager.getBandwidthListener().toString())
-                          .append(dht.renderStatusHTML());
-                } else {
-                    footer.append("<b id=noDHTpeers>").append(_t("No DHT Peers")).append("</b>");
-                }
-                footer.append("</span></th></tr>").append("</tfoot>\n");
+                if (showDebug) {ftr.append("<tr id=dhtDebug>");}
+                else {ftr.append("<tr id=dhtDebug hidden>");}
+                ftr.append("<th colspan=12><span class=volatile>");
+                if (dht != null) {ftr.append(_manager.getBandwidthListener().toString()).append(dht.renderStatusHTML());}
+                else {ftr.append("<b id=noDHTpeers>").append(_t("No DHT Peers")).append("</b>");}
+                ftr.append("</span></th></tr>").append("</tfoot>\n");
             }
 
-            footer.append("</table>\n");
-            if (isForm) {footer.append("</form>");}
+            ftr.append("</table>\n");
+            if (isForm) {ftr.append("</form>");}
 
-            out.write(footer.toString());
-            footer.setLength(0);
+            out.write(ftr.toString());
+            ftr.setLength(0);
             out.flush();
 
             return start == 0;

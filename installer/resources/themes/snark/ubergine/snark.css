@@ -232,12 +232,15 @@ td.status img{margin:-2px 3px -2px 1px;height:23px;width:auto;display:inline-blo
 #torrents code{font:8.5pt var(--monospaced);font-weight:700;color:#cc0;margin-right:2px;letter-spacing:.1em}
 #torrents .infohash{margin-right:2px;padding-left:15px;background:var(--hash) no-repeat 2px center/12px,linear-gradient(180deg,#cc0,#aa0)}
 #torrentSort{padding-left:1px;text-align:left}
-#totals{display:inline-block;margin:6px 0 6px 6px;font-weight:700;vertical-align:middle;line-height:1.6}
 #totals span,#ourDest{white-space:nowrap}
 .iframed #torrentlist{border-radius:0}
 .iframed #torrents{margin:1px 0;border-radius:0}
 .iframed #torrents thead th{padding-bottom:3px}
 .iframed #torrents tfoot tr:first-child th{padding-top:4px;padding-bottom:2px}
+#totals{margin:6px 0 6px 6px;padding-left:20px;display:inline-block;font-weight:700;vertical-align:middle;line-height:1.6;background:url(images/disk.svg) no-repeat left center/22px}
+#totals .counter{margin:-6px 0;padding:6px 10px 6px 8px;width:fit-content;height:20px;position:relative;display:inline-block;vertical-align:middle;border-right:var(--border_inner)}
+#totals #torrentCount.counter{margin-left:10px;border-left:var(--border_inner)}
+#totals .counter img{height:20px;pointer-events:none}
 
 /* peer count */
 .peerCount{padding-right:0;width:1%;min-width:110px;white-space:nowrap;font-weight:700}

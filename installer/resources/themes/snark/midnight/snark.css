@@ -203,7 +203,12 @@ th.status img,td.status img{margin:2px;width:auto;height:22px}
 #torrents .trackerLink,#torrents .details{width:1%;text-align:center;font-weight:700}
 #torrents tr:not(#pagenavbottom):hover,.knownTracker:hover,#trackerselect tr:nth-child(n+2):hover,#dirInfo tr:hover,#trackerselect tr:nth-child(n+2):hover td{background:#1e0b28}
 #torrents tr:hover td,.dirInfo tr:hover td{color:#ccd1ff}
-#totals{display:inline-block;margin:2px 0 2px 5px;font-weight:700}
+#totals{margin:-3px 0 -3px 3px;padding:6px 0 4px 20px;display:inline-block;white-space:nowrap;vertical-align:middle;font-weight:700;background:url(images/disk.svg) no-repeat left center/22px;contain:paint}
+#totals .badge{margin-left:2px}
+#totals .counter{margin:-10px 0;padding:6px 10px 12px 9px;width:fit-content;height:20px;position:relative;display:inline-block;vertical-align:middle;border-right:var(--border_soft)}
+#totals #torrentCount.counter{margin-left:8px;border-left:var(--border_soft)}
+#totals .counter img{height:20px;pointer-events:none}
+#totals #diskSpace{margin-top:-3px;vertical-align:middle}
 .peerinfo,.debuginfo{background:#030317}
 .peerinfo td:first-child{background:var(--peer) no-repeat center center/18px}
 .peerinfo td,.debuginfo td{padding-top:5px;padding-bottom:5px}

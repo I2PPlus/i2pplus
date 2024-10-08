@@ -244,7 +244,11 @@ td.details{padding-left:0}
 #torrents th:empty,#torrents td:empty{padding:0;width:0;min-width:0;font-size:0}
 #torrents code{padding:2px 3px;letter-spacing:.1em;color:#fff;background:#7f654f}
 #torrentSort{text-align:right}
-#totals{display:inline-block;margin:2px 0 2px 6px;font-weight:700}
+#totals{margin:-5px 0 -5px 3px;padding-left:20px;display:inline-block;font-weight:700;vertical-align:middle;line-height:1.6;background:url(images/disk.svg) no-repeat left center/22px}
+#totals .badge{margin-left:3px}
+#totals .counter{margin:-8px 0 -6px;padding:4px 10px 8px 8px;width:fit-content;height:20px;position:relative;display:inline-block;vertical-align:middle;border-right:var(--border)}
+#totals #torrentCount.counter{margin-left:10px;border-left:var(--border)}
+#totals .counter img{height:20px;pointer-events:none}
 #totals span,#ourDest{white-space:nowrap}
 #totals code{line-height:1.7}
 

@@ -211,7 +211,11 @@ tfoot .rateUp,tfoot .rateDown,td.rateUp,td.rateDown,tfoot .txd,td.txd{text-align
 #torrents th:empty,#torrents td:empty{padding:0;width:0;min-width:0;max-width:0;font-size:0;overflow:hidden}
 #torrents code{padding:2px 3px;margin:0 3px;display:inline-block;letter-spacing:.1em;font-size:8.5pt;text-shadow:var(--txt_shadow);border-radius:2px}
 #totals span,#ourDest,#ourDest code{display:inline-block;white-space:nowrap;line-height:1.5}
-#totals{margin:2px 0 2px 5px;font-weight:700}
+#totals{margin:-6px 0 -3px 3px;padding:4px 0 4px 20px;display:inline-block;white-space:nowrap;vertical-align:middle;font-weight:700;background:url(images/disk.svg) no-repeat left center/22px}
+#totals .badge{margin-left:2px}
+#totals .counter{margin:-10px 0;padding:5px 8px 7px 8px;width:fit-content;height:20px;position:relative;display:inline-block;vertical-align:middle;border-right:var(--border_soft)}
+#totals #torrentCount.counter{margin-left:8px;border-left:var(--border_soft)}
+#totals .counter img{height:20px;pointer-events:none}
 #torrents tr.active:hover td,#torrents tr.downloading.active:hover td,#torrents tr.active:hover td.ETA,#torrents tr.active:hover td.txd{background-color:#0000}
 #torrentSort{max-width:60px;text-align:left}
 
