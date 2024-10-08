@@ -89,7 +89,7 @@ class PacketHandler {
                 receivePong(packet);
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("ECHO packet " + packet + " received with no StreamIDs");
+                    _log.warn("Received ECHO packet " + packet + " with no StreamIDs");
             }
             packet.releasePayload();
             return;
@@ -134,7 +134,7 @@ class PacketHandler {
                         } else {
                             // Apparently an i2pd bug...
                             if (_log.shouldWarn())
-                                _log.warn("Received a SYN packet with the wrong IDs: [" + con + "]\n* Packet: " + packet);
+                                _log.warn("Received SYN packet with wrong IDs: [" + con + "]\n* Packet: " + packet);
                             sendReset(packet);
                             packet.releasePayload();
                             return;
@@ -156,7 +156,7 @@ class PacketHandler {
                     }
                 } else if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
                     if (_log.shouldWarn())
-                        _log.warn("Received a SYN packet " + packet + " with the wrong IDs, sending RESET");
+                        _log.warn("Received SYN packet " + packet + " with wrong IDs -> Sending RESET...");
                     sendReset(packet);
                     packet.releasePayload();
                 } else {
@@ -165,7 +165,7 @@ class PacketHandler {
                         // It isn't a SYN so it isn't likely to have a FROM to send a reset back to
                         if (_log.shouldWarn()) {
                             StringBuilder buf = new StringBuilder(512);
-                            buf.append("Received a packet on the wrong stream: ");
+                            buf.append("Received packet on the wrong stream: ");
                             buf.append(packet);
                             buf.append("\nthis connection:\n");
                             buf.append(con);
@@ -238,13 +238,13 @@ class PacketHandler {
                 receivePong(packet);
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("ECHO packet " + packet + " received with no StreamIDs");
+                    _log.warn("Received ECHO packet " + packet + " without StreamIDs");
             }
             packet.releasePayload();
         } else {
             // this happens a lot
             if (_log.shouldInfo() && !packet.isFlagSet(Packet.FLAG_SYNCHRONIZE))
-                _log.info("Packet received on an UNKNOWN stream (and not an ECHO or SYN) -> " + packet);
+                _log.info("Received packet on UNKNOWN stream (not ECHO / SYN) -> " + packet);
             if (sendId <= 0) {
                 Connection con = _manager.getConnectionByOutboundId(packet.getReceiveStreamId());
                 if (con != null) {
@@ -290,7 +290,7 @@ class PacketHandler {
                 // Then ConnectionHandler.accept() will check the connection list
                 // and call receivePacket() above instead of receiveConnection().
                 if (_log.shouldWarn()) {
-                    _log.warn("Packet " + packet + " belongs to no other connections, putting on the SYN queue");
+                    _log.warn("Packet " + packet + " belongs to no other connections, putting on the SYN queue...");
                 }
                 if (_log.shouldDebug()) {
                     StringBuilder buf = new StringBuilder(128);
@@ -323,7 +323,7 @@ class PacketHandler {
         _cache.release(ba);
         if (!ok) {
             if (_log.shouldWarn())
-                _log.warn("BAD ping, dropping: " + packet);
+                _log.warn("BAD ping, sig verify failed -> Dropping " + packet);
         } else {
             _manager.receivePing(con, packet);
         }
