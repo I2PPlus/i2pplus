@@ -951,7 +951,6 @@ class NetDbRenderer {
                .append(":</b> ").append(ls.getRoutingKey().toBase64().substring(0,16))
                .append("&hellip;</span></span></td></tr>\n");
         } else {
-            //buf.append("</td></tr>\n<tr><td colspan=2>")
             buf.append(" <span class=\"nowrap stype\" title=\"").append(_t("Signature type")).append("\">").append(bullet)
                .append("<b>").append(_t("Signature type")).append(":</b> ");
             if (dest != null && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {buf.append(dest.getSigningPublicKey().getType());}
@@ -959,7 +958,7 @@ class NetDbRenderer {
             buf.append("</span> ");
             if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
                 buf.append(" <span class=\"nowrap ekey\" title=\"").append(_t("Encryption Key")).append("\">").append(bullet)
-                   .append("<b>").append(_t("Encryption Key")).append(":</b> <span title=ELGAMAL_2048>ElGamal</span>");
+                   .append("<b>").append(_t("Encryption Key")).append(":</b> <span title=ELGAMAL_2048>ElGamal</span></span>");
             } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
                 LeaseSet2 ls2 = (LeaseSet2) ls;
                 for (PublicKey pk : ls2.getEncryptionKeys()) {
@@ -972,10 +971,11 @@ class NetDbRenderer {
                         else if (etype.toString().trim().equals("ELGAMAL_2048")) {enctype = "ElGamal";}
                         buf.append("<span title=\"").append(etype).append("\">").append(enctype).append("</span>");
                     }
-                    else {buf.append(_t("Unsupported type")).append(" ").append(pk.getUnknownTypeCode()).append("</span> ");}
+                    else {buf.append(_t("Unsupported type")).append(" ").append(pk.getUnknownTypeCode());}
+                    buf.append("</span>");
                 }
             }
-            buf.append("</span></td></tr>");
+            buf.append("</td></tr>");
         }
         buf.append("<tr");
         if (debug) {buf.append(" class=debugMode");}
@@ -1549,7 +1549,8 @@ class NetDbRenderer {
                     String name = (String) e.getKey();
                     String val = (String) e.getValue();
                     // hide keys which are dupes of the router hash displayed in header, and ntcp version
-                    if (name.contains("key") || name.contains("itag") || name.contains("iexp") || (name.equals("v") && style.equals("NTCP"))) {
+                    if (name.equals("v")) {continue;}
+                    if (name.contains("key") || name.contains("itag") || name.contains("iexp")) {
                         buf.append("<span class=hide><span class=nowrap><span class=netdb_name>")
                            .append(_t(DataHelper.stripHTML(name)))
                            .append(":</span> <span class=netdb_info>").append(DataHelper.stripHTML(val)).append("</span></span></span>");
@@ -1592,15 +1593,13 @@ class NetDbRenderer {
                            .append(DataHelper.stripHTML(val))
                            .append("</a></span></span> ");
                      } else {
-                        buf.append(" <span class=nowrap><span class=netdb_name>");
-                        buf.append(_t(DataHelper.stripHTML(name)))
+                        buf.append(" <span class=nowrap><span class=netdb_name>").append(_t(DataHelper.stripHTML(name)))
                            .append(":</span> <span class=netdb_info>").append(DataHelper.stripHTML(val)).append("</span></span> ");
                      }
                 }
                 if (!isUs) {buf.append("</li>\n");}
             }
-            buf.append("</ul>\n");
-            buf.append("</td></tr>\n");
+            buf.append("</ul>\n").append("</td></tr>\n");
         }
         if (full && !isUs) {
             PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(info.getHash());
