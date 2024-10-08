@@ -14,6 +14,8 @@ import net.i2p.data.Hash;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
+import org.klomp.snark.SnarkManager;
+
 /**
  * The tracker stores peers, i.e. Dest hashes (not nodes).
  *
@@ -41,8 +43,7 @@ class DHTTracker {
     private static final int MAX_PEERS = 2000;
     private static final int MAX_PEERS_PER_TORRENT = 150;
     private static final int ABSOLUTE_MAX_PER_TORRENT = MAX_PEERS_PER_TORRENT * 2;
-//    private static final int MAX_TORRENTS = 400;
-    private static final int MAX_TORRENTS = 1000;
+    private static final int MAX_TORRENTS = 2000;
 
     DHTTracker(I2PAppContext ctx) {
         _context = ctx;
@@ -137,13 +138,18 @@ class DHTTracker {
         return rv2;
     }
 
+    private transient SnarkManager _manager;
+
     /**
      * Debug info, HTML formatted
      */
     public void renderStatusHTML(StringBuilder buf) {
+        DHT dht = _manager.util().getDHT();
+        int dhtPeers = dht.size();
         String separator = " <span class=bullet>&nbsp;&bullet;&nbsp;</span> ";
         buf.append("<div class=debugStats>")
            .append("<span class=stat><b>DHT Torrents:</b> <span class=dbug>").append(_torrentCount).append("</span></span>").append(separator)
+           .append("<span class=stat><b>DHT Peers:</b> <span class=dbug>").append(dhtPeers).append("</span></span>").append(separator)
            .append("<span class=stat><b>DHT Tracker Peers:</b> <span class=dbug>").append(_peerCount).append("</span></span>").append(separator)
            .append("<span class=stat><b>Peer Expiration:</b> <span class=dbug>").append(DataHelper.formatDuration(_expireTime)).append("</span></span>")
            .append(separator); // append blacklisted peers info here
