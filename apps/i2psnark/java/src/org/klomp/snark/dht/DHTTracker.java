@@ -145,7 +145,8 @@ class DHTTracker {
      */
     public void renderStatusHTML(StringBuilder buf) {
         DHT dht = _manager.util().getDHT();
-        int dhtPeers = dht.size();
+        int dhtPeers = 0;
+        if (dht != null) {dhtPeers = dht.size();}
         String separator = " <span class=bullet>&nbsp;&bullet;&nbsp;</span> ";
         buf.append("<div class=debugStats>")
            .append("<span class=stat><b>DHT Torrents:</b> <span class=dbug>").append(_torrentCount).append("</span></span>").append(separator)
