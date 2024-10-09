@@ -3278,7 +3278,7 @@ public class I2PSnarkServlet extends BasicServlet {
               .append(name).append("</label>");
         }
 
-        buf.append("</td></tr>")
+        buf.append("</div></td></tr>")
            .append("<tr><td>").append(_t("Trackers")).append(":</td>")
            .append("<td>\n<table id=trackerselect>\n")
            .append("<tr><td>Name</td><td>").append(_t("Primary")).append("</td><td>")
