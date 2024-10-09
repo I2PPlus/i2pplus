@@ -237,8 +237,9 @@ td.status img{margin:-2px 3px -2px 1px;height:23px;width:auto;display:inline-blo
 .iframed #torrents{margin:1px 0;border-radius:0}
 .iframed #torrents thead th{padding-bottom:3px}
 .iframed #torrents tfoot tr:first-child th{padding-top:4px;padding-bottom:2px}
-#totals{margin:6px 0 6px 6px;padding-left:20px;display:inline-block;font-weight:700;vertical-align:middle;line-height:1.6;background:url(images/disk.svg) no-repeat left center/22px}
-#totals .counter{margin:-6px 0;padding:6px 10px 6px 8px;width:fit-content;height:20px;position:relative;display:inline-block;vertical-align:middle;border-right:var(--border_inner)}
+#totals{margin:-4px 0 -4px 6px;padding-left:20px;display:inline-block;font-weight:700;vertical-align:middle;line-height:1.6;background:url(images/disk.svg) no-repeat left center/22px}
+#totals .badge{margin-left:2px}
+#totals .counter{margin:-14px 0 -12px;padding:7px 12px 7px 10px;width:fit-content;height:20px;position:relative;display:inline-block;vertical-align:middle;border-right:var(--border_inner)}
 #totals #torrentCount.counter{margin-left:10px;border-left:var(--border_inner)}
 #totals .counter img{height:20px;pointer-events:none}
 
