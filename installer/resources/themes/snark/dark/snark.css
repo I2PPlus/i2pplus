@@ -743,6 +743,7 @@ input.trackerhome,input.trackerannounce{width:210px}
 .iframed #configSection,.iframed #trackers,.iframed .mainsection#snarkInfo{margin-bottom:-9px}
 .iframed .page #snarkInfo~#commentSection{margin-bottom:-10px}
 .iframed #configSection{border-radius:0 0 4px 4px}
+.iframed #mainsection+#lowersection{margin-top:-11px}
 #mainsection+#lowersection>#configSection{margin-top:-1px}
 #mainsection+#lowersection #createSection+#configSection{margin-top:-11px;padding-bottom:14px}
 #navbar,#createSection,#addSection,#configSection,.configPanel,.optionlist{box-shadow:var(--highlight),0 0 2px 1px #252 inset}
