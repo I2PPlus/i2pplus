@@ -1,3 +1,6 @@
+2024-10-09 dr|z3d
+ * I2PSnark: Iconize main table footer counters (torrents/torrent size/peers)
+
 2024-10-07 2.7.0+ (API 0.9.64) released
 
 2024-10-04 dr|z3d
