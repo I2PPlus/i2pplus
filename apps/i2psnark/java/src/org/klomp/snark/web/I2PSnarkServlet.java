@@ -1313,10 +1313,10 @@ public class I2PSnarkServlet extends BasicServlet {
 
                 if (showDebug) {ftr.append("<tr id=dhtDebug>");}
                 else {ftr.append("<tr id=dhtDebug hidden>");}
-                ftr.append("<th colspan=12 class=volatile>");
+                ftr.append("<th colspan=12><div class=volatile>");
                 if (dht != null) {ftr.append(_manager.getBandwidthListener().toString()).append(dht.renderStatusHTML());}
                 else {ftr.append("<b id=noDHTpeers>").append(_t("No DHT Peers")).append("</b>");}
-                ftr.append("</th></tr>").append("</tfoot>\n");
+                ftr.append("</div></th></tr>").append("</tfoot>\n");
             }
 
             ftr.append("</table>\n");
