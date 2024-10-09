@@ -1225,6 +1225,8 @@ public class I2PSnarkServlet extends BasicServlet {
             }
 */
             ftr.append("</span></th>");
+
+            DHT dht = _manager.util().getDHT();
             if (_manager.util().connected() && total > 0) {
                 ftr.append("<th class=ETA>");
                 // FIXME: add total ETA for all torrents here
@@ -1299,7 +1301,6 @@ public class I2PSnarkServlet extends BasicServlet {
                           .append(_t("Dest.")).append("<code>").append(IPString.substring(0,4)).append("</code></span>");
                 }
 **/
-                DHT dht = _manager.util().getDHT();
                 if (dht != null && (!"2".equals(peerParam))) {
                     ftr.append("<a id=debugMode href=\"?p=2\" title=\"").append(_t("Toggle Debug Mode") + "\">").append(_t("Debug Mode") + "</a>");
                 } else if (dht != null) {
