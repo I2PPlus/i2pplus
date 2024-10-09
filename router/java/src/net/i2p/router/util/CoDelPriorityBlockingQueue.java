@@ -77,8 +77,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     private static final int[] PRIORITIES = {MIN_PRIORITY, 200, 300, 400, 500};
     /** if priority is &gt;= this, never drop */
     public static final int DONT_DROP_PRIORITY = 1000;
-//    private static final long BACKLOG_TIME = 2*1000;
-    private static final long BACKLOG_TIME = SystemVersion.isSlow() ? 2*1000 : 1000;
+    private static final long BACKLOG_TIME = SystemVersion.isSlow() ? 2000 : 1000;
 
     public CoDelPriorityBlockingQueue(I2PAppContext ctx, String name, int initialCapacity) {
         this(ctx, name, initialCapacity, ctx.getProperty(PROP_CODEL_TARGET, DEFAULT_CODEL_TARGET),
@@ -116,9 +115,8 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     @Override
     public E take() throws InterruptedException {
         E rv;
-        do {
-            rv = deque();
-        } while (rv == null);
+        do {rv = deque();}
+        while (rv == null);
         return rv;
     }
 
@@ -149,9 +147,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     public int drainTo(Collection<? super E> c, int maxElements) {
         int rv = 0;
         E e;
-        while ((e = poll()) != null && rv++ < maxElements) {
-            c.add(e);
-        }
+        while ((e = poll()) != null && rv++ < maxElements) {c.add(e);}
         return rv;
     }
 
@@ -169,10 +165,8 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     @Override
     public boolean isBacklogged() {
         E e = peek();
-        if (e == null)
-            return false;
-        return _dropping ||
-               _context.clock().now() - e.getEnqueueTime() >= BACKLOG_TIME ||
+        if (e == null) {return false;}
+        return _dropping || _context.clock().now() - e.getEnqueueTime() >= BACKLOG_TIME ||
                size() >= _context.getProperty(PROP_BACKLOG_SIZE, DEFAULT_BACKLOG_SIZE);
     }
 
@@ -181,7 +175,8 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     @Override
     protected void timestamp(E o) {
         super.timestamp(o);
-        o.setEnqueueTime(_context.clock().now());
+        getCurrentTime();
+        o.setEnqueueTime(_now);
         if (o.getPriority() < MIN_PRIORITY && _log.shouldWarn())
             _log.warn(_name + " added item with low priority " + o.getPriority() + ": " + o);
     }
@@ -191,32 +186,33 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      *  @param entry may be null
      */
     private boolean updateVars(E entry) {
-        // This is a helper routine that tracks whether the sojourn time
-        // is above or below target and, if above, if it has remained above continuously for at least interval.
-        // It returns a boolean indicating whether it is OK to drop (sojourn time above target
-        // for at least interval)
+        /**
+         * This is a helper routine that tracks whether the sojourn time is above or below target and,
+         * if above, it has remained above continuously for at least interval.
+         * Returns boolean indicating if OK to drop (sojourn time above target for at least interval)
+         */
+        getCurrentTime();
         if (entry == null) {
             _first_above_time = 0;
             return false;
         }
-        _now = _context.clock().now();
+        long sojourn = _now - entry.getEnqueueTime();
         boolean ok_to_drop = false;
-        long sojurn = _now - entry.getEnqueueTime();
-        _context.statManager().addRateData(STAT_DELAY, sojurn);
+        _context.statManager().addRateData(STAT_DELAY, sojourn);
         // I2P uses isEmpty instead of size() < MAXPACKET
-        if (sojurn < _target || isEmpty()) {
-            _first_above_time = 0;
-        } else {
+        if (sojourn < _target || isEmpty()) {_first_above_time = 0;}
+        else {
             if (_first_above_time == 0) {
-                // just went above from below. if we stay above
-                // for at least _interval we'll say it's ok to drop
+                // Went above from below.
+                // If we stay above for at least _interval we'll say it's ok to drop
                 _first_above_time = _now + _interval;
-            } else if (_now >= _first_above_time) {
-                ok_to_drop = true;
-            }
+            } else if (_now >= _first_above_time) {ok_to_drop = true;}
         }
         return ok_to_drop;
     }
+
+    /* @since 0.9.65+ */
+    private void getCurrentTime() {_now = _context.clock().now();}
 
     /**
      *  @return if null, call again
@@ -230,10 +226,11 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      *  @param rv may be null
      *  @return rv or a subequent entry or null if dropped
      */
+
     private E codel(E rv) {
+        getCurrentTime();
         synchronized (this) {
             // non-blocking inside this synchronized block
-
             boolean ok_to_drop = updateVars(rv);
             // All of the work of CoDel is done here.
             // There are two branches: if we're in packet-dropping state (meaning that the queue-sojourn
@@ -241,10 +238,8 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
             // to leave or if it's time for the next drop(s); if we're not in dropping state, then we need
             // to decide if it's time to enter and do the initial drop.
             if (_dropping) {
-                if (!ok_to_drop) {
-                    // sojurn time below target - leave dropping state
-                    _dropping = false;
-                } else {
+                if (!ok_to_drop) {_dropping = false;} // sojourn time below target - leave dropping state
+                else {
                     // It's time for the next drop. Drop the current packet and dequeue the next.
                     // The dequeue might take us out of dropping state. If not, schedule the next drop.
                     // A large backlog might result in drop rates so high that the next drop should happen now;
@@ -256,13 +251,8 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
                         // inside the lock. If empty, deque() will be called again.
                         rv = super.poll();
                         ok_to_drop = updateVars(rv);
-                        if (!ok_to_drop) {
-                            // leave dropping state
-                            _dropping = false;
-                        } else {
-                            // schedule the next drop
-                            control_law(_drop_next);
-                        }
+                        if (!ok_to_drop) {_dropping = false;} // leave dropping state
+                        else {control_law(_drop_next);} // schedule the next drop
                     }
                 }
             } else if (ok_to_drop && rv.getPriority() < DONT_DROP_PRIORITY &&
@@ -293,16 +283,18 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     }
 
     private void drop(E entry) {
-        long delay = _context.clock().now() - entry.getEnqueueTime();
+        getCurrentTime();
+        long delay = _now - entry.getEnqueueTime();
         // round down for the stat
-        int priority = entry.getPriority() / 100 * 100;
+        //int priority = entry.getPriority() / 100 * 100;
+        int priority = Math.floorDiv(entry.getPriority(), 100) * 100;
         _context.statManager().addRateData(STAT_DROP + priority, delay);
         if (_log.shouldWarn())
             _log.warn("[CDPQ " + _id + "] " + _name + " dropped item \n* Delay: " + delay + "ms; Priority: " +
                       entry.getPriority() + "; Seq: " +
                       entry.getSeqNum() + "\n* Time since first drop: " +
-                      DataHelper.formatDuration(_context.clock().now() - _first_above_time) +
-                      "\n* Time since next drop: " + DataHelper.formatDuration(_context.clock().now() - _drop_next) +
+                      DataHelper.formatDuration(_now - _first_above_time) +
+                      "\n* Time since next drop: " + DataHelper.formatDuration(_now - _drop_next) +
                       "\n* Messages dropped: " + (_count+1) + " (" + size() + " remaining in queue)" + entry);
         entry.drop();
     }
@@ -313,4 +305,5 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     private void control_law(long t) {
         _drop_next = t + (long) (_interval / Math.sqrt(_count));
     }
+
 }
