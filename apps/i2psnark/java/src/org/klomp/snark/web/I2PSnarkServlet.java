@@ -1221,6 +1221,28 @@ public class I2PSnarkServlet extends BasicServlet {
             ftr.append("\">");
             toThemeImg(ftr, "showpeers");
             ftr.append("<span class=badge>").append((int) stats[4]).append("</span></span>");
+
+            // actively downloading
+            int downloads = 0;
+            for (int i = start; i < snarks.size(); i++) {
+                if ((snarks.get(i).getPeerList().size() >= 1) && (snarks.get(i).getDownloadRate() > 0)) {
+                    downloads++;
+                }
+            }
+            ftr.append("<span id=rxCount class=counter title=\"").append(_t("Active downloads")).append("\">");
+            toThemeImg(ftr, "head_rx");
+            ftr.append("<span class=badge>").append(downloads).append("</span></span>");
+
+            // actively uploading
+            int uploads = 0;
+            for (int i = start; i < snarks.size(); i++) {
+                if ((snarks.get(i).getPeerList().size() >= 1) && (snarks.get(i).getUploadRate() > 0)) {
+                    uploads++;
+                }
+            }
+            ftr.append("<span id=txCount class=counter title=\"").append(_t("Active uploads")).append("\">");
+            toThemeImg(ftr, "head_tx");
+            ftr.append("<span class=badge>").append(uploads).append("</span></span>");
 /*
             // TODO: This needs to show current tunnel count, not limits
             String ibtunnels = _manager.util().getI2CPOptions().get("inbound.quantity");
@@ -1237,10 +1259,6 @@ public class I2PSnarkServlet extends BasicServlet {
 
             if (_manager.util().connected() && total > 0) {
                 ftr.append("<th class=ETA>");
-                // FIXME: add total ETA for all torrents here
-                // ftr.append("<th class=ETA title=\"");
-                // ftr.append(_t("Estimated download time for all torrents") + "\">");
-
                 if (_manager.util().connected() && !snarks.isEmpty()) {
                     boolean hasPeers = false;
                     long remainingSeconds = 0;
@@ -1248,13 +1266,9 @@ public class I2PSnarkServlet extends BasicServlet {
                     int end = Math.min(start + pageSize, snarks.size());
                     for (int i = start; i < end; i++) {
                         long needed = snarks.get(i).getNeededLength();
-                        if (needed > total)
-                            needed = total;
-                            if (stats[2] > 0 && needed > 0) {
-                                remainingSeconds = needed / stats[2];
-                            } else {
-                                remainingSeconds = 0;
-                            }
+                        if (needed > total) {needed = total;}
+                        if (stats[2] > 0 && needed > 0) {remainingSeconds = needed / stats[2];}
+                        else {remainingSeconds = 0;}
                         totalETA+= remainingSeconds;
                         hasPeers = true;
                         if (hasPeers) {
@@ -1269,17 +1283,11 @@ public class I2PSnarkServlet extends BasicServlet {
                     }
                 }
                 ftr.append("</th>").append("<th class=rxd title=\"").append(_t("Data downloaded this session") + "\">");
-                if (stats[0] > 0) {
-                    ftr.append(formatSize(stats[0]).replaceAll("iB", ""));
-                }
+                if (stats[0] > 0) {ftr.append(formatSize(stats[0]).replaceAll("iB", ""));}
                 ftr.append("</th>").append("<th class=rateDown title=\"").append(_t("Total download speed") + "\">");
-                if (stats[2] > 0) {
-                    ftr.append(formatSize(stats[2]).replaceAll("iB", "") + "/s");
-                }
+                if (stats[2] > 0) {ftr.append(formatSize(stats[2]).replaceAll("iB", "") + "/s");}
                 ftr.append("</th>").append("<th class=txd  title=\"").append(_t("Total data uploaded (for listed torrents)") + "\">");
-                if (stats[1] > 0) {
-                    ftr.append(formatSize(stats[1]).replaceAll("iB", ""));
-                }
+                if (stats[1] > 0) {ftr.append(formatSize(stats[1]).replaceAll("iB", ""));}
                 ftr.append("</th>").append("<th class=rateUp title=\"").append(_t("Total upload speed") + "\">");
                 boolean isUploading = false;
                 int end = Math.min(start + pageSize, snarks.size());
@@ -1289,9 +1297,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         break;
                     }
                 }
-                if (stats[3] > 0 && isUploading) {
-                    ftr.append(formatSize(stats[3]).replaceAll("iB", "") + "/s");
-                }
+                if (stats[3] > 0 && isUploading) {ftr.append(formatSize(stats[3]).replaceAll("iB", "") + "/s");}
                 ftr.append("</th>").append("<th class=tAction>");
 /**
                 String IPString = _manager.util().getOurIPString();
@@ -2444,10 +2450,8 @@ public class I2PSnarkServlet extends BasicServlet {
         int curPeers = snark.getPeerList().size();
         stats[4] += curPeers;
         long total = snark.getTotalLength();
-        if (total > 0)
-            stats[5] += total;
-        if (statsOnly)
-            return;
+        if (total > 0) {stats[5] += total;}
+        if (statsOnly) {return;}
 
         String basename = snark.getBaseName();
         String fullBasename = basename;
@@ -2460,17 +2464,13 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         // includes skipped files, -1 for magnet mode
         long remaining = snark.getRemainingLength();
-        if (remaining > total)
-            remaining = total;
+        if (remaining > total) {remaining = total;}
         // does not include skipped files, -1 for magnet mode or when not running.
         long needed = snark.getNeededLength();
-        if (needed > total)
-            needed = total;
+        if (needed > total) {needed = total;}
         long remainingSeconds;
-        if (downBps > 0 && needed > 0)
-            remainingSeconds = needed / downBps;
-        else
-            remainingSeconds = -1;
+        if (downBps > 0 && needed > 0) {remainingSeconds = needed / downBps;}
+        else {remainingSeconds = -1;}
 
         MetaInfo meta = snark.getMetaInfo();
         String b64 = Base64.encode(snark.getInfoHash());
