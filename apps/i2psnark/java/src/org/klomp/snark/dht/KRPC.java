@@ -704,7 +704,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
            .append(DataHelper.formatSize2(_rxBytes.get()).replace("i", "")).append("B").append(bullet)
            .append(DataHelper.formatSize2Decimal(_rxBytes.get() * 1000 / uptime)).append("B/s").append(bullet)
            .append(_incomingTokens.size()).append(" tokens</span></span>").append(separator)
-           .append("<span class=stat><b>Queries pending:</b> <span class=dbug>").append(_sentQueries.size()).append("</span></span>");
+           .append("<span class=stat><b>Queries pending:</b> <span class=dbug>").append(_sentQueries.size()).append("</span></span></div>");
         _tracker.renderStatusHTML(buf);
         buf.append("<span class=stat><b>Blacklisted Peers:</b> <span class=dbug>").append(_blacklist.size()).append("</span></span>")
            .append("</div>");
