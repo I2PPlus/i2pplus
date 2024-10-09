@@ -1208,8 +1208,17 @@ public class I2PSnarkServlet extends BasicServlet {
             ftr.append("<span class=badge>").append(DataHelper.formatSize2(stats[5]).replace("i", "")).append("</span></span>");
 
             // connected peers
-            ftr.append("<span id=peerCount class=counter title=\"").append(ngettext("1 connected peer", "{0} connected peers", (int) stats[4])
-                                                                   .replace("connected peers", "peer connections")).append("\">");
+            ftr.append("<span id=peerCount class=counter title=\"")
+               .append(ngettext("1 connected peer", "{0} connected peers", (int) stats[4])
+               .replace("connected peers", "peer connections"));
+            DHT dht = _manager.util().getDHT();
+            if (dht != null) {
+                int dhts = dht.size();
+                if (dhts > 0) {
+                    ftr.append(" (").append(ngettext("1 DHT peer", "{0} DHT peers", dhts)).append(")");
+                }
+            }
+            ftr.append("\">");
             toThemeImg(ftr, "showpeers");
             ftr.append("<span class=badge>").append((int) stats[4]).append("</span></span>");
 /*
@@ -1226,7 +1235,6 @@ public class I2PSnarkServlet extends BasicServlet {
 */
             ftr.append("</span></th>");
 
-            DHT dht = _manager.util().getDHT();
             if (_manager.util().connected() && total > 0) {
                 ftr.append("<th class=ETA>");
                 // FIXME: add total ETA for all torrents here
@@ -1260,25 +1268,19 @@ public class I2PSnarkServlet extends BasicServlet {
                         break;
                     }
                 }
-                ftr.append("</th>")
-                   .append("<th class=rxd title=\"")
-                   .append(_t("Data downloaded this session") + "\">");
+                ftr.append("</th>").append("<th class=rxd title=\"").append(_t("Data downloaded this session") + "\">");
                 if (stats[0] > 0) {
                     ftr.append(formatSize(stats[0]).replaceAll("iB", ""));
                 }
-                ftr.append("</th>")
-                   .append("<th class=rateDown title=\"").append(_t("Total download speed") + "\">");
+                ftr.append("</th>").append("<th class=rateDown title=\"").append(_t("Total download speed") + "\">");
                 if (stats[2] > 0) {
                     ftr.append(formatSize(stats[2]).replaceAll("iB", "") + "/s");
                 }
-                ftr.append("</th>")
-                   .append("<th class=txd  title=\"")
-                   .append(_t("Total data uploaded (for listed torrents)") + "\">");
+                ftr.append("</th>").append("<th class=txd  title=\"").append(_t("Total data uploaded (for listed torrents)") + "\">");
                 if (stats[1] > 0) {
                     ftr.append(formatSize(stats[1]).replaceAll("iB", ""));
                 }
-                ftr.append("</th>")
-                   .append("<th class=rateUp title=\"").append(_t("Total upload speed") + "\">");
+                ftr.append("</th>").append("<th class=rateUp title=\"").append(_t("Total upload speed") + "\">");
                 boolean isUploading = false;
                 int end = Math.min(start + pageSize, snarks.size());
                 for (int i = start; i < end; i++) {
@@ -1290,8 +1292,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (stats[3] > 0 && isUploading) {
                     ftr.append(formatSize(stats[3]).replaceAll("iB", "") + "/s");
                 }
-                ftr.append("</th>")
-                   .append("<th class=tAction>");
+                ftr.append("</th>").append("<th class=tAction>");
 /**
                 String IPString = _manager.util().getOurIPString();
                 if (!IPString.equals("unknown")) {
@@ -1312,10 +1313,10 @@ public class I2PSnarkServlet extends BasicServlet {
 
                 if (showDebug) {ftr.append("<tr id=dhtDebug>");}
                 else {ftr.append("<tr id=dhtDebug hidden>");}
-                ftr.append("<th colspan=12><span class=volatile>");
+                ftr.append("<th colspan=12 class=volatile>");
                 if (dht != null) {ftr.append(_manager.getBandwidthListener().toString()).append(dht.renderStatusHTML());}
                 else {ftr.append("<b id=noDHTpeers>").append(_t("No DHT Peers")).append("</b>");}
-                ftr.append("</span></th></tr>").append("</tfoot>\n");
+                ftr.append("</th></tr>").append("</tfoot>\n");
             }
 
             ftr.append("</table>\n");
