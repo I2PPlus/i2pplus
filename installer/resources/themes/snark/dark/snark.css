@@ -317,6 +317,7 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{margin-right:0;
 #totals .badge{margin-left:2px}
 #totals .counter{margin:-8px 0;padding:6px 10px 8px 8px;width:fit-content;height:20px;position:relative;display:inline-block;vertical-align:middle;border-right:var(--border)}
 #totals #torrentCount.counter{margin-left:8px;border-left:var(--border)}
+#totals #peerCount.counter{padding-left:7px}
 #totals .counter img{height:20px;pointer-events:none}
 
 /* table sort indicators */
