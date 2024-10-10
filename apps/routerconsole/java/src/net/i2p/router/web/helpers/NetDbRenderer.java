@@ -1519,8 +1519,8 @@ class NetDbRenderer {
            .append("\">").append(info.getIdentity().getPublicKey().getType().toString())
            .append("</a></span></td></tr>\n<tr>")
            .append("<td><b>" + _t("Addresses") + ":</b></td>")
-           .append("<td colspan=2 class=\"netdb_addresses\">\n")
-           .append("<ul>\n");
+           .append("<td colspan=2 class=\"netdb_addresses\">")
+           .append("<ul>");
 
         Collection<RouterAddress> addrs = info.getAddresses();
         byte[] ip = TransportImpl.getIP(info.getHash());
@@ -1622,19 +1622,14 @@ class NetDbRenderer {
                     if (name.equals("v")) {continue;}
                     if (!full && (name.equals("caps") || name.equals("mtu"))) {continue;} // only show caps and mtu keys if adv. mode
                     if (hasHost && !full) {break;} // only show I and S keys if no host or if in adv. mode
-                    if (name.contains("key") || name.contains("itag") || name.contains("iexp")) {
-                        buf.append("<span class=hide><span class=nowrap><span class=netdb_name>")
-                           .append(_t(DataHelper.stripHTML(name)))
-                           .append(":</span> <span class=netdb_info>").append(DataHelper.stripHTML(val)).append("</span></span></span>");
-                    } else {
-                        buf.append(" <span class=nowrap><span class=netdb_name>").append(_t(DataHelper.stripHTML(name)).replace("Mtu","MTU"))
-                           .append(":</span> <span class=netdb_info>").append(DataHelper.stripHTML(val)).append("</span></span> ");
-                    }
+                    if (name.contains("key") || name.contains("itag") || name.contains("iexp")) {continue;}
+                    if (name.toLowerCase().equals("mtu")) {name = name.toUpperCase();}
+                    buf.append(" <span class=nowrap><span class=netdb_name>").append(_t(DataHelper.stripHTML(name)))
+                       .append(":</span> <span class=netdb_info>").append(DataHelper.stripHTML(val)).append("</span></span> ");
                 }
-
-                if (!isUs) {buf.append("</li>\n");}
+                if (!isUs) {buf.append("</li>");}
             }
-            buf.append("</ul>\n").append("</td></tr>\n");
+            buf.append("</ul>").append("</td></tr>\n");
         }
         if (full && !isUs) {
             PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(info.getHash());
