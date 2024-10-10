@@ -71,8 +71,5 @@ findbugs.html
 # Gradle
 .gradle
 
-# artifacts
-builds/
-
 # TODO: why does this file appear?
 apps/routerconsole/jsp/favicon.ico
