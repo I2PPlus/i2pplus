@@ -1534,16 +1534,11 @@ class NetDbRenderer {
                 Collections.sort(laddrs, new RAComparator());
                 addrs = laddrs;
             }
+            boolean hasDetails = false;
             for (RouterAddress addr : addrs) {
                 if (ip != null) {_context.commSystem().queueLookup(ip);}
                 String style = addr.getTransportStyle();
                 int cost = addr.getCost();
-                buf.append("<li>");
-                buf.append("<b class=\"netdb_transport\"");
-                if (!((style.equals("SSU") && cost == 5) || (style.startsWith("NTCP") && cost == 10))) {
-                    buf.append(" title=\"").append(_t("Cost")).append(": ").append(cost).append("\"");
-                }
-                buf.append(">").append(DataHelper.stripHTML(style)).append("</b> ");
 
                 Map<Object, Object> p = addr.getOptionsMap();
                 List<Map.Entry<Object, Object>> hostPortEntries = new ArrayList<>();
@@ -1556,6 +1551,9 @@ class NetDbRenderer {
                         hostPortEntries.add(e);
                     } else {
                         otherEntries.add(e);
+                    }
+                    if (!hostPortEntries.isEmpty() || !otherEntries.isEmpty()) {
+                       hasDetails = true;
                     }
                 }
 
@@ -1573,6 +1571,15 @@ class NetDbRenderer {
                     return key1.compareTo(key2);
                 });
 
+                if (!hasDetails) {continue;}
+                buf.append("<li>");
+                buf.append("<b class=\"netdb_transport\"");
+                if (!((style.equals("SSU") && cost == 5) || (style.startsWith("NTCP") && cost == 10))) {
+                    buf.append(" title=\"").append(_t("Cost")).append(": ").append(cost).append("\"");
+                }
+                buf.append(">").append(DataHelper.stripHTML(style)).append("</b> ");
+
+                boolean hasHost = false;
                 // Append host and port first
                 for (Map.Entry<Object, Object> e : hostPortEntries) {
                     String name = (String) e.getKey();
@@ -1595,6 +1602,7 @@ class NetDbRenderer {
                         }
                         buf.append("</span>");
                         buf.append("</span> ");
+                        hasHost = true;
                     } else if (name.contains("port")) {
                         buf.append("<span class=nowrap><span class=netdb_name>")
                            .append(_t(DataHelper.stripHTML(name)))
@@ -1611,13 +1619,15 @@ class NetDbRenderer {
                 for (Map.Entry<Object, Object> e : otherEntries) {
                     String name = (String) e.getKey();
                     String val = (String) e.getValue();
-                    if (name.equals("v")) continue;
+                    if (name.equals("v")) {continue;}
+                    if (!full && (name.equals("caps") || name.equals("mtu"))) {continue;} // only show caps and mtu keys if adv. mode
+                    if (hasHost && !full) {break;} // only show I and S keys if no host or if in adv. mode
                     if (name.contains("key") || name.contains("itag") || name.contains("iexp")) {
                         buf.append("<span class=hide><span class=nowrap><span class=netdb_name>")
                            .append(_t(DataHelper.stripHTML(name)))
                            .append(":</span> <span class=netdb_info>").append(DataHelper.stripHTML(val)).append("</span></span></span>");
                     } else {
-                        buf.append(" <span class=nowrap><span class=netdb_name>").append(_t(DataHelper.stripHTML(name)))
+                        buf.append(" <span class=nowrap><span class=netdb_name>").append(_t(DataHelper.stripHTML(name)).replace("Mtu","MTU"))
                            .append(":</span> <span class=netdb_info>").append(DataHelper.stripHTML(val)).append("</span></span> ");
                     }
                 }
