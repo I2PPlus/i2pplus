@@ -13,8 +13,6 @@ jobs:
           sudo apt install -y gettext
           echo "gettext installation completed."
 
-      - uses: actions/checkout@main  # Checking out the main branch to build
-
       - name: Set up JDK 8
         uses: actions/setup-java@main
         with:
@@ -49,6 +47,12 @@ jobs:
           echo "I2PSnark build complete. Current directory contents:"
           ls -al
 
+      # Checkout artifacts branch
+      - name: Checkout artifacts branch
+        uses: actions/checkout@main
+        with:
+          ref: artifacts
+
       # Move artifacts to builds folder
       - name: Move artifacts to builds folder
         run: |
@@ -60,13 +64,6 @@ jobs:
           mv i2psnark-standalone.zip builds/ && echo "Moved i2psnark-standalone.zip to builds/"
           echo "Contents of the builds folder:"
           ls -al builds/
-
-      # Checkout artifacts branch
-      - name: Checkout artifacts branch
-        run: |
-          echo "Checking out the artifacts branch..."
-          git fetch origin artifacts || git checkout --orphan artifacts # Create if it does not exist
-          git reset --hard origin/artifacts
 
       # Commit and push changes to the artifacts branch
       - name: Commit changes
