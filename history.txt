@@ -1,3 +1,6 @@
+2024-10-10 dr|z3d
+ * Console: Display host and port before other key values in RouterInfos
+
 2024-10-09 dr|z3d
  * I2PSnark: Iconize main table footer counters (torrents/torrent size/peers)
 
