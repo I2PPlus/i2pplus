@@ -8,7 +8,10 @@ jobs:
 
     steps:
       - name: GetText
-        run: sudo apt install gettext
+        run: |
+          echo "Installing gettext..."
+          sudo apt install -y gettext
+          echo "gettext installation completed."
 
       - uses: actions/checkout@main  # Checking out the main branch to build
 
@@ -19,28 +22,56 @@ jobs:
           distribution: 'temurin'
 
       - name: Build i2pupdate.zip with Ant
-        run: ant distclean updaterCompact
+        run: |
+          echo "Building i2pupdate.zip..."
+          ant distclean updaterCompact
+          echo "Build complete. Here are the files:"
+          ls -al
 
       - name: Build installer with Ant
-        run: ant pkg
+        run: |
+          echo "Building installer..."
+          ant pkg
+          echo "Installer build complete. Current directory contents:"
+          ls -al
 
       - name: Build javadocs with Ant
-        run: ant javadoc-zip
+        run: |
+          echo "Building javadocs..."
+          ant javadoc-zip
+          echo "Javadocs build complete. Current directory contents:"
+          ls -al
 
       - name: Build I2PSnark standalone with Ant
-        run: ant i2psnark
+        run: |
+          echo "Building I2PSnark standalone..."
+          ant i2psnark
+          echo "I2PSnark build complete. Current directory contents:"
+          ls -al
 
-      # Move artifacts to builds folder (assuming the 'builds' folder already exists)
+      # Move artifacts to builds folder
       - name: Move artifacts to builds folder
         run: |
-          mv i2pupdate.zip builds/
-          mv install.jar builds/
-          mv javadoc.zip builds/
-          mv i2psnark-standalone.zip builds/
+          echo "Moving artifacts to builds folder..."
+          mkdir -p builds  # Create the builds directory if it doesn't exist
+          mv i2pupdate.zip builds/ && echo "Moved i2pupdate.zip to builds/"
+          mv install.jar builds/ && echo "Moved install.jar to builds/"
+          mv javadoc.zip builds/ && echo "Moved javadoc.zip to builds/"
+          mv i2psnark-standalone.zip builds/ && echo "Moved i2psnark-standalone.zip to builds/"
+          echo "Contents of the builds folder:"
+          ls -al builds/
+
+      # Checkout artifacts branch
+      - name: Checkout artifacts branch
+        run: |
+          echo "Checking out the artifacts branch..."
+          git fetch origin artifacts || git checkout --orphan artifacts # Create if it does not exist
+          git reset --hard origin/artifacts
 
       # Commit and push changes to the artifacts branch
       - name: Commit changes
         run: |
+          echo "Configuring git..."
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add builds/
