@@ -1544,18 +1544,40 @@ class NetDbRenderer {
                     buf.append(" title=\"").append(_t("Cost")).append(": ").append(cost).append("\"");
                 }
                 buf.append(">").append(DataHelper.stripHTML(style)).append("</b> ");
+
                 Map<Object, Object> p = addr.getOptionsMap();
+                List<Map.Entry<Object, Object>> hostPortEntries = new ArrayList<>();
+                List<Map.Entry<Object, Object>> otherEntries = new ArrayList<>();
+
+                // Separate host and port from others
                 for (Map.Entry<Object, Object> e : p.entrySet()) {
                     String name = (String) e.getKey();
+                    if (name.equalsIgnoreCase("host") || name.equalsIgnoreCase("port")) {
+                        hostPortEntries.add(e);
+                    } else {
+                        otherEntries.add(e);
+                    }
+                }
+
+                // Sort host and port alphabetically
+                Collections.sort(hostPortEntries, (e1, e2) -> {
+                    String key1 = (String) e1.getKey();
+                    String key2 = (String) e2.getKey();
+                    return key1.compareTo(key2);
+                });
+
+                // Sort other entries alphabetically
+                Collections.sort(otherEntries, (e1, e2) -> {
+                    String key1 = (String) e1.getKey();
+                    String key2 = (String) e2.getKey();
+                    return key1.compareTo(key2);
+                });
+
+                // Append host and port first
+                for (Map.Entry<Object, Object> e : hostPortEntries) {
+                    String name = (String) e.getKey();
                     String val = (String) e.getValue();
-                    // hide keys which are dupes of the router hash displayed in header, and ntcp version
-                    if (name.equals("v")) {continue;}
-                    if (name.contains("key") || name.contains("itag") || name.contains("iexp")) {
-                        buf.append("<span class=hide><span class=nowrap><span class=netdb_name>")
-                           .append(_t(DataHelper.stripHTML(name)))
-                           .append(":</span> <span class=netdb_info>").append(DataHelper.stripHTML(val)).append("</span></span></span>");
-                    // tag the hosts and ports so we can make them visually prominent and single clickable
-                    } else if (name.contains("host")) {
+                    if (name.contains("host")) {
                         buf.append("<span class=nowrap><span class=netdb_name>")
                            .append(_t(DataHelper.stripHTML(name))).append(":</span> ")
                            .append("<span class=\"netdb_info host\">");
@@ -1572,16 +1594,6 @@ class NetDbRenderer {
                             buf.append("\">").append(DataHelper.stripHTML(val)).append("</a>");
                         }
                         buf.append("</span>");
-/*
-                        if (!DataHelper.stripHTML(val).equals("::") && !DataHelper.stripHTML(val).equals("127.0.0.1")) {
-                            buf.append(" <span class=\"gwhois\" title=\"").append(_t("Lookup via gwhois.org"))
-                               .append("\"><a href=\"https://gwhois.org/").append(DataHelper.stripHTML(val))
-                               .append("\" target=_blank>gwhois</a></span>");
-                        }
-                        if (!DataHelper.stripHTML(val).equals("::") && !DataHelper.stripHTML(val).equals("127.0.0.1")) {
-                            buf.append("<span>").append(DataHelper.stripHTML(val)).append("</span>");
-                        }
-*/
                         buf.append("</span> ");
                     } else if (name.contains("port")) {
                         buf.append("<span class=nowrap><span class=netdb_name>")
@@ -1592,11 +1604,24 @@ class NetDbRenderer {
                            .append(DataHelper.stripHTML(val)).append("\">")
                            .append(DataHelper.stripHTML(val))
                            .append("</a></span></span> ");
-                     } else {
+                    }
+                }
+
+                // Append other entries
+                for (Map.Entry<Object, Object> e : otherEntries) {
+                    String name = (String) e.getKey();
+                    String val = (String) e.getValue();
+                    if (name.equals("v")) continue;
+                    if (name.contains("key") || name.contains("itag") || name.contains("iexp")) {
+                        buf.append("<span class=hide><span class=nowrap><span class=netdb_name>")
+                           .append(_t(DataHelper.stripHTML(name)))
+                           .append(":</span> <span class=netdb_info>").append(DataHelper.stripHTML(val)).append("</span></span></span>");
+                    } else {
                         buf.append(" <span class=nowrap><span class=netdb_name>").append(_t(DataHelper.stripHTML(name)))
                            .append(":</span> <span class=netdb_info>").append(DataHelper.stripHTML(val)).append("</span></span> ");
-                     }
+                    }
                 }
+
                 if (!isUs) {buf.append("</li>\n");}
             }
             buf.append("</ul>\n").append("</td></tr>\n");
@@ -1628,7 +1653,7 @@ class NetDbRenderer {
                         .replace("tunnel.buildExploratoryExpire.60m",  "<li class=longstat><b>"   + _t("Exploratory tunnels expire (1h)"))
                         .replace("tunnel.buildExploratoryReject.60m",  "<li class=longstat><b>"   + _t("Exploratory tunnels reject (1h)"))
                         .replace("tunnel.buildExploratorySuccess.60m", "<li class=longstat><b>"   + _t("Exploratory tunnels build success (1h)"))
-                        .replace("tunnel.buildClientExpire.60m",       "<li class=longstat><b>"  + _t("Client tunnels expire (1h)"))
+                        .replace("tunnel.buildClientExpire.60m",       "<li class=longstat><b>"   + _t("Client tunnels expire (1h)"))
                         .replace("tunnel.buildClientReject.60m",       "<li class=longstat><b>"   + _t("Client tunnels reject (1h)"))
                         .replace("tunnel.buildClientSuccess.60m",      "<li class=longstat><b>"   + _t("Client tunnels build success (1h)"))
                         .replace("tunnel.participatingTunnels.60m",    "<li class=longstat><b>"   + _t("Participating tunnels (1h)"))
@@ -1682,9 +1707,9 @@ class NetDbRenderer {
             for (Map.Entry<Object, Object> e : p.entrySet()) {
                 String key = (String) e.getKey();
                 String netDbKey = DataHelper.stripHTML(key)
-                    .replace("caps", "<li class=\"cap_stat hide\" hidden><b>"  + _t("Capabilities")) // hide caps as already in the header
+                    .replace("caps", "<li class=\"cap_stat hide\" hidden><b>" + _t("Capabilities")) // hide caps as already in the header
                     .replace("router.version", "<li class=hide hidden><b>" + _t("Version")) // hide version as already in the header
-                    .replace("coreVersion", "<li class=hide hidden><b>"    + _t("Core version")) // do we need this?
+                    .replace("coreVersion", "<li class=hide hidden><b>" + _t("Core version")) // do we need this?
                     .replace("netdb.", "")
                     .replace("netId", "<hr><li><b>" + _t("Network ID")) // only show for our own id
                     .replace("knownLeaseSets", "<li><b>" + _t("LeaseSets"))
@@ -1697,16 +1722,16 @@ class NetDbRenderer {
                     .replace("family", "<li class=\"longstat fam hide\" hidden><b>" + _t("Family"))
                     .replace("Family key", "<li class=\"longstat fam\"><b>" + _t("Family Key"))
                     .replace("Family sig", "<li class=\"longstat fam\"><b>" + _t("Family Sig"))
-                    .replace("tunnel.buildExploratoryExpire.60m",  "<li class=longstat><b>"   + _t("Exploratory tunnels expire (1h)"))
-                    .replace("tunnel.buildExploratoryReject.60m",  "<li class=longstat><b>"   + _t("Exploratory tunnels reject (1h)"))
-                    .replace("tunnel.buildExploratorySuccess.60m", "<li class=longstat><b>"   + _t("Exploratory tunnels build success (1h)"))
-                    .replace("tunnel.buildClientExpire.60m",       "<li class=longstat><b>"   + _t("Client tunnels expire (1h)"))
-                    .replace("tunnel.buildClientReject.60m",       "<li class=longstat><b>"   + _t("Client tunnels reject (1h)"))
-                    .replace("tunnel.buildClientSuccess.60m",      "<li class=longstat><b>"   + _t("Client tunnels build success (1h)"))
-                    .replace("tunnel.participatingTunnels.60m",    "<li class=longstat><b>"   + _t("Participating tunnels (1h)"))
-                    .replace("tunnel.participatingTunnels.60s",    "<li class=longstat><b>"   + _t("Participating tunnels (60s)"))
-                    .replace("stat_bandwidthSendBps.60m",          "<li class=longstat><b>"   + _t("Bandwidth send rate (1h)"))
-                    .replace("stat_bandwidthReceiveBps.60m",       "<li class=longstat><b>"   + _t("Bandwidth receive rate (1h)"));
+                    .replace("tunnel.buildExploratoryExpire.60m",  "<li class=longstat><b>" + _t("Exploratory tunnels expire (1h)"))
+                    .replace("tunnel.buildExploratoryReject.60m",  "<li class=longstat><b>" + _t("Exploratory tunnels reject (1h)"))
+                    .replace("tunnel.buildExploratorySuccess.60m", "<li class=longstat><b>" + _t("Exploratory tunnels build success (1h)"))
+                    .replace("tunnel.buildClientExpire.60m",       "<li class=longstat><b>" + _t("Client tunnels expire (1h)"))
+                    .replace("tunnel.buildClientReject.60m",       "<li class=longstat><b>" + _t("Client tunnels reject (1h)"))
+                    .replace("tunnel.buildClientSuccess.60m",      "<li class=longstat><b>" + _t("Client tunnels build success (1h)"))
+                    .replace("tunnel.participatingTunnels.60m",    "<li class=longstat><b>" + _t("Participating tunnels (1h)"))
+                    .replace("tunnel.participatingTunnels.60s",    "<li class=longstat><b>" + _t("Participating tunnels (60s)"))
+                    .replace("stat_bandwidthSendBps.60m",          "<li class=longstat><b>" + _t("Bandwidth send rate (1h)"))
+                    .replace("stat_bandwidthReceiveBps.60m",       "<li class=longstat><b>" + _t("Bandwidth receive rate (1h)"));
                     buf.append(netDbKey);
                     String val = (String) e.getValue();
                     String netDbValue = DataHelper.stripHTML(val)
