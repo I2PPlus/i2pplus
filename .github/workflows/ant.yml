@@ -1,6 +1,3 @@
-# Mostly copied from https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-ant
-# zlatinb
-
 name: Java CI
 
 on: [push]
@@ -18,36 +15,33 @@ jobs:
         with:
           java-version: '8'
           distribution: 'temurin'
-#      - name : Generate override.properties
-#        run: |
-#          rm -f override.properties
-#          echo "build.built-by=GitHub Actions" >> override.properties
-#          echo "noExe=true" >> override.properties
       - name: Build i2pupdate.zip with Ant
         run: ant distclean updaterCompact
-      - name: Upload i2pupdate.zip
-        uses: actions/upload-artifact@main
-        with:
-          name: i2pupdate.zip-${{ github.sha }}
-          path: i2pupdate.zip
       - name: Build installer with Ant
         run: ant pkg
-      - name: Upload installer.jar
-        uses: actions/upload-artifact@main
-        with:
-          name: I2P-install.jar-${{ github.sha }}
-          path: install.jar
       - name: Build javadocs with Ant
         run: ant javadoc-zip
-      - name: Upload javadoc.zip
-        uses: actions/upload-artifact@main
-        with:
-          name: javadoc.zip-${{ github.sha }}
-          path: javadoc.zip
       - name: Build I2PSnark standalone with Ant
         run: ant i2psnark
-      - name: Upload i2psnark-standalone.zip
-        uses: actions/upload-artifact@main
+
+      # Move artifacts to builds folder
+      - name: Move i2pupdate.zip
+        run: mv i2pupdate.zip builds/
+      - name: Move installer.jar
+        run: mv install.jar builds/
+      - name: Move javadoc.zip
+        run: mv javadoc.zip builds/
+      - name: Move i2psnark-standalone.zip
+        run: mv i2psnark-standalone.zip builds/
+
+      # Commit and push changes
+      - name: Commit changes
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add builds/
+          git commit -m "Add artifacts to builds folder" || true
+      - name: Push changes
+        uses: ad-m/github-push-action@master
         with:
-          name: i2psnark-standalone.zip-${{ github.sha }}
-          path: i2psnark-standalone.zip
+          github_token: ${{ secrets.GITHUB_TOKEN }}
