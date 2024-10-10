@@ -9,39 +9,45 @@ jobs:
     steps:
       - name: GetText
         run: sudo apt install gettext
-      - uses: actions/checkout@main
+
+      - uses: actions/checkout@main  # Checking out the main branch to build
+
       - name: Set up JDK 8
         uses: actions/setup-java@main
         with:
           java-version: '8'
           distribution: 'temurin'
+
       - name: Build i2pupdate.zip with Ant
         run: ant distclean updaterCompact
+
       - name: Build installer with Ant
         run: ant pkg
+
       - name: Build javadocs with Ant
         run: ant javadoc-zip
+
       - name: Build I2PSnark standalone with Ant
         run: ant i2psnark
 
-      # Move artifacts to builds folder
-      - name: Move i2pupdate.zip
-        run: mv i2pupdate.zip builds/
-      - name: Move installer.jar
-        run: mv install.jar builds/
-      - name: Move javadoc.zip
-        run: mv javadoc.zip builds/
-      - name: Move i2psnark-standalone.zip
-        run: mv i2psnark-standalone.zip builds/
+      # Move artifacts to builds folder (assuming the 'builds' folder already exists)
+      - name: Move artifacts to builds folder
+        run: |
+          mv i2pupdate.zip builds/
+          mv install.jar builds/
+          mv javadoc.zip builds/
+          mv i2psnark-standalone.zip builds/
 
-      # Commit and push changes
+      # Commit and push changes to the artifacts branch
       - name: Commit changes
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add builds/
-          git commit -m "Add artifacts to builds folder" || true
+          git commit -m "Add artifacts to builds folder" || echo "No changes to commit"
+
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: artifacts  # Push to the 'artifacts' branch
