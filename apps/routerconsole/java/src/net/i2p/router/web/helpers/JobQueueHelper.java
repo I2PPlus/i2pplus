@@ -137,8 +137,8 @@ public class JobQueueHelper extends HelperBase {
         for (int i = 0; i < timedJobs.size(); i++) {
             Job j = timedJobs.get(i);
             counter.increment(j.getName());
-            if (i >= MAX_JOBS)
-                continue;
+            if (i >= MAX_JOBS) {continue;}
+            if (j.toString().toLowerCase().contains("disabled")) {continue;}
             long time = j.getTiming().getStartAfter() - now;
             // translators: {0} is a job name, {1} is a time, e.g. 6 min
             buf.append("<li>").append(_t("{0} starts in {1}", "<b title=\"" + j.toString() + "\">" +
