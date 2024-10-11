@@ -104,7 +104,7 @@ class BuildHandler implements Runnable {
     /** must be > 1 hour due to rounding down */
     private static final long MAX_REQUEST_AGE = 65*60*1000;
     private static final long MAX_REQUEST_AGE_ECIES = 8*60*1000;
-    private static final long JOB_LAG_LIMIT_TUNNEL = SystemVersion.isSlow() ? 1250 : 1000;
+    private static final long JOB_LAG_LIMIT_TUNNEL = SystemVersion.isSlow() ? 1000 : 500;
     private static final long[] RATES = {60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000};
 
     public BuildHandler(RouterContext ctx, TunnelPoolManager manager, BuildExecutor exec) {
@@ -608,7 +608,7 @@ class BuildHandler implements Runnable {
                 getContext().statManager().addRateData("tunnel.buildLookupSuccess", 1);
             } else {
                 if (_log.shouldInfo()) {
-                    _log.info("Lookup deferred successfully, but we couldn't find [" + _nextPeer.toBase64().substring(0,6) + "] ? " + _req);
+                    _log.info("Lookup deferred, but we couldn't find [" + _nextPeer.toBase64().substring(0,6) + "] ? " + _req);
                 }
                 getContext().statManager().addRateData("tunnel.buildLookupSuccess", 0);
             }

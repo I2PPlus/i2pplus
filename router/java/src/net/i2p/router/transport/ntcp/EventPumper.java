@@ -66,11 +66,7 @@ class EventPumper implements Runnable {
      *  message, which is a 5-slot VTBM (~2700 bytes).
      *  The occasional larger message can use multiple buffers.
      */
-
-//    private static final int BUF_SIZE = 8*1024;
-//    private static final int MAX_CACHE_SIZE = 64; // unused
-    private static final int BUF_SIZE = SystemVersion.isSlow() ? 8*1024 :
-                                        SystemVersion.getMaxMemory() < 1024*1024*1024 ? 16*1024 : 32*1024;
+    private static final int BUF_SIZE = SystemVersion.isSlow() ? 8*1024 : 32*1024;
 
     private static class BufferFactory implements TryCache.ObjectFactory<ByteBuffer> {
         public ByteBuffer newInstance() {
@@ -89,14 +85,13 @@ class EventPumper implements Runnable {
 //    private static final long FAILSAFE_ITERATION_FREQ = 2*1000l;
 //    private static final int FAILSAFE_LOOP_COUNT = 512;
 //    private static final long SELECTOR_LOOP_DELAY = 200;
-    private static final int FAILSAFE_ITERATION_FREQ = 60*1000;
-    private static final int FAILSAFE_LOOP_COUNT = 1024;
-    private static final long SELECTOR_LOOP_DELAY = SystemVersion.isSlow() ? 100 : 50;
+    private static final int FAILSAFE_ITERATION_FREQ = 15*1000;
+    private static final int FAILSAFE_LOOP_COUNT = SystemVersion.isSlow() ? 512 : 1024;
+    private static final long SELECTOR_LOOP_DELAY = SystemVersion.isSlow() ? 300 : 150;
     private static final long BLOCKED_IP_FREQ = 12*60*1000;
 
     /** tunnel test now disabled, but this should be long enough to allow an active tunnel to get started */
-    //private static final long MIN_EXPIRE_IDLE_TIME = 120*1000l;
-    private static final long MIN_EXPIRE_IDLE_TIME = 90*1000l;
+    private static final long MIN_EXPIRE_IDLE_TIME = 120*1000l;
     private static final long MAX_EXPIRE_IDLE_TIME = 11*60*1000l;
     private static final long MAY_DISCON_TIMEOUT = 10*1000;
     private static final long RI_STORE_INTERVAL = 29*60*1000;
@@ -109,13 +104,12 @@ class EventPumper implements Runnable {
      *
      *  @see java.nio.ByteBuffer
      */
-    //private static final String PROP_DIRECT = "i2np.ntcp.useDirectBuffers";
     private static final String PROP_NODELAY = "i2np.ntcp.nodelay";
 
 //    private static final int MIN_MINB = 4;
 //    private static final int MAX_MINB = 12;
-    private static final int MIN_MINB = SystemVersion.isSlow() ? 8 : SystemVersion.getMaxMemory() < 512*1024*1024 ? 32 : 64;
-    private static final int MAX_MINB = SystemVersion.isSlow() ? 32 : SystemVersion.getMaxMemory() < 512*1024*1024 ? 256 : 512;
+    private static final int MIN_MINB = SystemVersion.isSlow() ? 8 : 64;
+    private static final int MAX_MINB = SystemVersion.isSlow() ? 32 : 512;
     public static final String PROP_MAX_MINB = "i2np.ntcp.eventPumperMaxBuffers";
     private static final int MIN_BUFS;
     static {
@@ -224,7 +218,6 @@ class EventPumper implements Runnable {
         while (_alive && _selector.isOpen()) {
             try {
                 loopCount++;
-
                 try {
                     int count = _selector.select(SELECTOR_LOOP_DELAY);
                     if (count > 0) {
@@ -238,11 +231,10 @@ class EventPumper implements Runnable {
                 } catch (ClosedSelectorException cse) {
                     continue;
                 } catch (IOException ioe) {
-                    if (_log.shouldWarn())
-                        _log.warn("Error selecting", ioe);
+                    if (_log.shouldWarn()) {_log.warn("Error selecting", ioe);}
+                    continue;
                 } catch (CancelledKeyException cke) {
-                    if (_log.shouldWarn())
-                        _log.warn("Error selecting", cke);
+                    if (_log.shouldWarn()) {_log.warn("Error selecting", cke);}
                     continue;
                 }
 

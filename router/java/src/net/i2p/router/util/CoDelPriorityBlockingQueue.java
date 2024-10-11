@@ -54,7 +54,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      *
      *  Maybe need to make configurable per-instance.
      */
-    private static final int DEFAULT_CODEL_TARGET = 10;
+    private static final int DEFAULT_CODEL_TARGET = 25;
     public static final String PROP_CODEL_TARGET = "router.codelTarget";
     private final long _target;
 
@@ -66,11 +66,9 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      *
      *  Maybe need to make configurable per-instance.
      */
-    private static final int DEFAULT_CODEL_INTERVAL = 200;
+    private static final int DEFAULT_CODEL_INTERVAL = 500;
     public static final String PROP_CODEL_INTERVAL = "router.codelInterval";
     private final long _interval;
-    //private static final int MAXPACKET = 512;
-
     private final String STAT_DROP;
     private final String STAT_DELAY;
     public static final int MIN_PRIORITY = 100;
@@ -199,7 +197,6 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
         long sojourn = _now - entry.getEnqueueTime();
         boolean ok_to_drop = false;
         _context.statManager().addRateData(STAT_DELAY, sojourn);
-        // I2P uses isEmpty instead of size() < MAXPACKET
         if (sojourn < _target || isEmpty()) {_first_above_time = 0;}
         else {
             if (_first_above_time == 0) {
