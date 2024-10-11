@@ -28,10 +28,8 @@ class ClientWriterRunner implements Runnable {
     private final I2PSessionImpl _session;
     private final BlockingQueue<I2CPMessage> _messagesToWrite;
     private static final AtomicLong __Id = new AtomicLong();
-
-//    private static final int MAX_QUEUE_SIZE = 32;
-    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 32 : 64;
-    private static final long MAX_SEND_WAIT = 10*1000;
+    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 64 : 256;
+    private static final long MAX_SEND_WAIT = SystemVersion.isSlow() ? 10*1000 : 5*1000;
 
     /**
      *  As of 0.9.11 does not start the thread, caller must call startWriting()
@@ -47,7 +45,7 @@ class ClientWriterRunner implements Runnable {
      */
     public void startWriting() {
         Thread t = new I2PAppThread(this, "I2CP Client Writer " + __Id.incrementAndGet(), true);
-        t.setPriority(Thread.MAX_PRIORITY - 1);
+        t.setPriority(Thread.MAX_PRIORITY);
         t.start();
     }
 
