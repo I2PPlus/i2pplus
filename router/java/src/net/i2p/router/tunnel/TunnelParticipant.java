@@ -123,7 +123,7 @@ class TunnelParticipant {
             cfg.incrementProcessedMessages();
             ok = _handler.receiveTunnelMessage(data, 0, data.length);
             if (ok && _log.shouldDebug()) {_log.debug("Received fragment on " + _config + ": " + msg);}
-            else {
+            else if (!ok) {
                 // blame everybody equally
                 int lenm1 = cfg.getLength() - 1;
                 if (lenm1 > 0) {
