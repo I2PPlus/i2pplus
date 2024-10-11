@@ -531,14 +531,14 @@ class BuildHandler implements Runnable {
             int current;
             long maxQueueLag = _context.jobQueue().getMaxLag();
             boolean highload = SystemVersion.getCPULoadAvg() > 95 && maxQueueLag > 1000;
-            boolean lucky = _context.random().nextInt(5) > 0;
+            boolean lucky = _context.random().nextInt(5) > 1;
             // leaky counter, not reliable
             if (_context.random().nextInt(16) > 0) {current = _currentLookups.incrementAndGet();}
             else {current = 1;}
             if (current <= limit && !highload && lucky) {
                 if (current <= 0) {_currentLookups.set(1);} // don't let it go negative
                 if (_log.shouldDebug()) {
-                    _log.debug("Request handled; looking up next peer [" + nextPeer.toBase64().substring(0,6) +
+                    _log.debug("Request handled -> Looking up next peer [" + nextPeer.toBase64().substring(0,6) +
                                "] \n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() +
                                "]\n* Lookups: " + current + " / " + limit + req);
                 }
@@ -548,7 +548,7 @@ class BuildHandler implements Runnable {
                 _currentLookups.decrementAndGet();
                 if (_log.shouldInfo()) {
                     String status = "\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]" + req;
-                    if (!lucky) {_log.info("Dropping next hop lookup -> 20% chance of drop" + status);}
+                    if (!lucky) {_log.info("Dropping next hop lookup -> 40% chance of drop" + status);}
                     else if (highload) {_log.info("Dropping next hop lookup -> System is under load" + status);}
                     else {_log.info("Dropping next hop lookup -> Limit: " + limit + " / " + PERCENT_LOOKUP_LIMIT + "%" + status);}
                 }
