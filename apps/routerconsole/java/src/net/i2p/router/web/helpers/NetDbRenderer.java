@@ -92,22 +92,13 @@ class NetDbRenderer {
 
              if (publishedL && !publishedR) return -1;
              if (publishedR && !publishedL) return 1;
-
              if (isClientL && !isClientR) return -1;
              if (isClientR && !isClientL) return 1;
-
              if (nicknameL && !nicknameR) return -1;
              if (nicknameR && !nicknameL) return 1;
-
              if (nameL && !nameR) return -1;
              if (nameR && !nameL) return 1;
-/*
-             if (localL && !localR) return -1;
-             if (localR && !localL) return 1;
 
-             if (isMetaL && !isMetaR) return -1;
-             if (isMetaR && !isMetaL) return 1;
-*/
              return keyL.toBase32().compareTo(keyR.toBase32());
         }
     }
@@ -285,7 +276,6 @@ class NetDbRenderer {
                         buf.setLength(0);
                     }
                 }
-                //if (page > 0 || morePages) {paginate(buf, ubuf, page, pageSize, morePages, sz);}
                 paginate(buf, ubuf, page, pageSize, morePages, sz);
             }
         }
@@ -1484,8 +1474,7 @@ class NetDbRenderer {
             boolean debug = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
             if (debug) {
                 buf.append("<span class=netdb_info><b>").append(_t("Routing Key")).append(":</b> ")
-                   .append("<span class=rkey>").append(info.getRoutingKey().toBase64()).append("</span>&nbsp;&nbsp;")
-                   .append("</span>\n");
+                   .append("<span class=rkey>").append(info.getRoutingKey().toBase64()).append("</span></span>&nbsp;&nbsp;");
             }
 */
          } else {
@@ -1534,6 +1523,7 @@ class NetDbRenderer {
                 Collections.sort(laddrs, new RAComparator());
                 addrs = laddrs;
             }
+
             boolean hasDetails = false;
             for (RouterAddress addr : addrs) {
                 if (ip != null) {_context.commSystem().queueLookup(ip);}
@@ -1541,35 +1531,46 @@ class NetDbRenderer {
                 int cost = addr.getCost();
 
                 Map<Object, Object> p = addr.getOptionsMap();
-                List<Map.Entry<Object, Object>> hostPortEntries = new ArrayList<>();
+                List<Map.Entry<Object, Object>> netProps = new ArrayList<>();
                 List<Map.Entry<Object, Object>> otherEntries = new ArrayList<>();
 
-                // Separate host and port from others
+                // Separate host, port, mtu, and caps from others
                 for (Map.Entry<Object, Object> e : p.entrySet()) {
                     String name = (String) e.getKey();
-                    if (name.equalsIgnoreCase("host") || name.equalsIgnoreCase("port")) {
-                        hostPortEntries.add(e);
+                    if (name.equalsIgnoreCase("host") || name.equalsIgnoreCase("port") || name.equalsIgnoreCase("mtu") || name.equalsIgnoreCase("caps")) {
+                        netProps.add(e);
                     } else {
                         otherEntries.add(e);
                     }
-                    if (!hostPortEntries.isEmpty() || !otherEntries.isEmpty()) {
-                       hasDetails = true;
+                    if (!netProps.isEmpty() || !otherEntries.isEmpty()) {
+                        hasDetails = true;
                     }
                 }
 
-                // Sort host and port alphabetically
-                Collections.sort(hostPortEntries, (e1, e2) -> {
+                // Sort host, port, mtu, and caps alphabetically
+                Collections.sort(netProps, (e1, e2) -> {
                     String key1 = (String) e1.getKey();
                     String key2 = (String) e2.getKey();
                     return key1.compareTo(key2);
                 });
 
-                // Sort other entries alphabetically
-                Collections.sort(otherEntries, (e1, e2) -> {
-                    String key1 = (String) e1.getKey();
-                    String key2 = (String) e2.getKey();
-                    return key1.compareTo(key2);
-                });
+                // Create a new list with unique entries for each property name
+                List<Map.Entry<Object, Object>> sortedProps = new ArrayList<>();
+                Set<String> seenNames = new HashSet<>();
+                for (Map.Entry<Object, Object> e : netProps) {
+                    String name = (String) e.getKey();
+                    if (!seenNames.contains(name)) {
+                        sortedProps.add(e);
+                        seenNames.add(name);
+                    }
+                }
+                for (Map.Entry<Object, Object> e : otherEntries) {
+                    String name = (String) e.getKey();
+                    if (!seenNames.contains(name)) {
+                        sortedProps.add(e);
+                        seenNames.add(name);
+                    }
+                }
 
                 if (!hasDetails) {continue;}
                 buf.append("<li>");
@@ -1581,10 +1582,10 @@ class NetDbRenderer {
 
                 boolean hasHost = false;
                 // Append host and port first
-                for (Map.Entry<Object, Object> e : hostPortEntries) {
+                for (Map.Entry<Object, Object> e : sortedProps) {
                     String name = (String) e.getKey();
                     String val = (String) e.getValue();
-                    if (name.contains("host")) {
+                    if (name.equalsIgnoreCase("host")) {
                         buf.append("<span class=nowrap><span class=netdb_name>")
                            .append(_t(DataHelper.stripHTML(name))).append(":</span> ")
                            .append("<span class=\"netdb_info host\">");
@@ -1603,7 +1604,7 @@ class NetDbRenderer {
                         buf.append("</span>");
                         buf.append("</span> ");
                         hasHost = true;
-                    } else if (name.contains("port")) {
+                    } else if (name.equalsIgnoreCase("port")) {
                         buf.append("<span class=nowrap><span class=netdb_name>")
                            .append(_t(DataHelper.stripHTML(name)))
                            .append(":</span> <span class=\"netdb_info port\">").append("<a title=\"")
@@ -1616,9 +1617,10 @@ class NetDbRenderer {
                 }
 
                 // Append other entries
-                for (Map.Entry<Object, Object> e : otherEntries) {
+                for (Map.Entry<Object, Object> e : sortedProps) {
                     String name = (String) e.getKey();
                     String val = (String) e.getValue();
+                    if (name.equalsIgnoreCase("host") || name.equalsIgnoreCase("port")) continue;
                     if (name.equals("v")) {continue;}
                     if (!full && (name.equals("caps") || name.equals("mtu"))) {continue;} // only show caps and mtu keys if adv. mode
                     if (hasHost && !full) {break;} // only show I and S keys if no host or if in adv. mode
@@ -1637,22 +1639,17 @@ class NetDbRenderer {
                 buf.append("<tr><td><b>").append(_t("Stats")).append(":</b><td colspan=2>\n<ul class=\"netdbStats\">");
                 Map<Object, Object> p = info.getOptionsMap();
                 for (Map.Entry<Object, Object> e : p.entrySet()) {
-                    //String name = (String) e.getKey();
                     String key = (String) e.getKey();
+                    if (key.equals("caps") || key.toLowerCase().contains("netid") || key.equals("family") ||
+                        key.toLowerCase().contains("version")) {continue;}
                     String netDbKey = DataHelper.stripHTML(key)
-                        .replace("caps", "<li class=\"cap_stat hide\" hidden><b>"  + _t("Capabilities")) // hide caps as already in the header
-                        .replace("router.version", "<li class=hide hidden><b>" + _t("Version")) // hide version as already in the header
-                        .replace("coreVersion", "<li class=hide hidden><b>"    + _t("Core version")) // do we need this?
                         .replace("netdb.", "")
-                        .replace("netId", "<li class=hide hidden><b>" + _t("Network ID"))
                         .replace("knownLeaseSets", "<li><b>" + _t("LeaseSets"))
                         .replace("knownRouters", "<li><b>" + _t("Routers"))
                         .replace("stat_", "")
                         .replace("uptime", "<li><b>" + _t("Uptime"))
                         // TODO: place family entries underneath general network stats
                         .replace("family.", "Family ")
-                        // hide family name in css as it's already displayed above
-                        .replace("family", "<li class=\"longstat fam hide\" hidden><b>" + _t("Family"))
                         .replace("Family key", "<li class=\"longstat fam\"><b>" + _t("Family Key"))
                         .replace("Family sig", "<li class=\"longstat fam\"><b>" + _t("Family Sig"))
                         .replace("tunnel.buildExploratoryExpire.60m",  "<li class=longstat><b>"   + _t("Exploratory tunnels expire (1h)"))
