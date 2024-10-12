@@ -313,13 +313,15 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{margin-right:0;
 #torrents .tAction{white-space:nowrap;text-align:center}
 #torrents #snarkTbody:empty{display:none}
 #torrentlist{margin-bottom:-12px;contain:paint}
-#totals{margin-left:3px;display:inline-block;white-space:nowrap;font-weight:700;padding-left:20px;background:url(images/disk.svg) no-repeat left center/22px}
-#totals .badge{margin-left:2px}
-#totals .counter{margin:-8px 0;padding:6px 10px 8px 8px;width:fit-content;height:20px;position:relative;display:inline-block;vertical-align:middle;border-right:var(--border)}
-#totals #torrentCount.counter{margin-left:8px;border-left:var(--border)}
-#totals #peerCount.counter{padding-left:7px}
-#torrents #rxCount .badge,#torrents #txCount .badge{margin:0 -1px 0 1px}
+#totals{margin:-10px 0 -10px -3px;padding:7px 0 7px 24px;display:inline-block;white-space:nowrap;font-weight:700;background:url(images/disk.svg) no-repeat 4px center/22px,var(--th)}
+#totals .badge{margin-left:2px;color:#bb7}
+#totals .counter{margin:-8px 0;padding:5px 9px 8px 5px;width:fit-content;height:20px;position:relative;display:inline-block;vertical-align:middle;border-right:var(--border)}
 #totals .counter img{height:20px;pointer-events:none}
+#totals #torrentCount.counter{margin-left:8px;border-left:var(--border)}
+#totals #peerCount .badge{margin:0 -1px 0 1px}
+#totals #torrentFilesize.counter{padding:5px 8px 8px 4px}
+#torrents #rxCount .badge,#torrents #txCount .badge{margin:0 -1px}
+#torrentTotals{padding-left:0;contain:paint}
 
 /* table sort indicators */
 .sortIcon{position:relative}
@@ -385,8 +387,8 @@ tr:hover .barText{opacity:1}
 .tx{padding:2px 2px 0;min-width:68px;display:inline-block;position:relative;text-align:center;line-height:1.3;border:1px solid #141;border-left-width:5px;box-shadow:var(--highlight),inset 0 3px 3px rgba(0,0,0,.6);background:repeating-linear-gradient(90deg,#000,#000 10%,#020 10%,#020 20%)}
 
 /* diskSpace */
-#diskSpace,#diskSpaceInner{width:80px;height:12px;display:inline-block;vertical-align:middle;text-align:left;border-color:#494a}
-#diskSpace{margin:2px 3px 1px 5px;vertical-align:text-top;contain:paint}
+#diskSpace,#diskSpaceInner{width:80px;height:13px;display:inline-block;vertical-align:middle;text-align:left;border-color:#494a}
+#diskSpace{margin:0 0 1px 5px;vertical-align:middle;contain:paint}
 #diskSpaceInner{position:absolute;box-shadow:var(--highlight),inset 0 7px 7px 1px #fff1;background:linear-gradient(180deg,#fff1 35%,#0001),linear-gradient(90deg,#252a 20px,#770a 60px,#c00a)}
 
 /* peers */

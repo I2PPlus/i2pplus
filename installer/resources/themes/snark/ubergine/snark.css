@@ -238,10 +238,11 @@ td.status img{margin:-2px 3px -2px 1px;height:23px;width:auto;display:inline-blo
 .iframed #torrents thead th{padding-bottom:3px}
 .iframed #torrents tfoot tr:first-child th{padding-top:4px;padding-bottom:2px}
 #totals{margin:-4px 0 -4px 6px;padding-left:20px;display:inline-block;font-weight:700;vertical-align:middle;line-height:1.6;background:url(images/disk.svg) no-repeat left center/22px}
-#totals .badge{margin-left:2px}
-#totals .counter{margin:-14px 0 -12px;padding:7px 12px 7px 10px;width:fit-content;height:20px;position:relative;display:inline-block;vertical-align:middle;border-right:var(--border_inner)}
-#totals #torrentCount.counter{margin-left:10px;border-left:var(--border_inner)}
+#totals .badge{margin-left:2px;font-weight:700;color:#bbb}
+#totals .counter{margin:-14px 0 -12px;padding:6px 12px 8px 10px;width:fit-content;height:20px;position:relative;display:inline-block;vertical-align:middle;border-right:var(--border_inner)}
 #totals .counter img{height:20px;pointer-events:none}
+#totals #peerCount .badge{margin-left:3px}
+#totals #torrentCount.counter{margin-left:10px;border-left:var(--border_inner)}
 
 /* peer count */
 .peerCount{padding-right:0;width:1%;min-width:110px;white-space:nowrap;font-weight:700}
@@ -316,7 +317,7 @@ tr:hover .tx{border-color:#747}
 .txBarText{position:relative;z-index:5}
 
 /* diskSpace */
-#diskSpace,#diskSpaceInner{width:80px;height:12px;display:inline-block;vertical-align:middle;text-align:left}
+#diskSpace,#diskSpaceInner{width:80px;height:12px;display:inline-block;vertical-align:middle;text-align:left;border-color:#481848}
 #diskSpace{margin:2px 3px 1px 5px;vertical-align:text-top;contain:paint}
 #diskSpaceInner{position:absolute;box-shadow:var(--highlight),inset 0 7px 7px 1px #fff1;background:linear-gradient(180deg,#fff2,#0003),linear-gradient(90deg,#4049 30px,#6609 60px,#9009)}
 
