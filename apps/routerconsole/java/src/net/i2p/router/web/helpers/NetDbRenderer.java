@@ -884,13 +884,6 @@ class NetDbRenderer {
             LeaseSet2 ls2 = (LeaseSet2) ls;
             long pub = now - ls2.getPublished();
             exp = ((LeaseSet2)ls).getExpires() - now;
-            /*
-            if (debug) {
-                buf.append(bullet).append("<b>").append(_t("Type")).append(":</b> ").append(type)
-                   .append(" <span class=\"nowrap published\" title=\"").append(_t("Published")).append("\">").append(bullet)
-                   .append("<b>").append(_t("Published{0} ago", ":</b> " + DataHelper.formatDuration2(pub))).append("</span> ");
-            }
-            */
         }
         buf.append("<span class=\"nowrap expiry\" title=\"").append(_t("Expiry")).append("\">").append(bullet).append("<b>");
         if (exp > 0) {buf.append(_t("Expires{0}", ":</b> " + DataHelper.formatDuration2(exp)).replace(" in", ""));}
@@ -981,7 +974,7 @@ class NetDbRenderer {
                .append(expired ? " expired" : "").append("\" title=\"").append(expiry).append("\">")
                .append(i + 1).append("</b> <span class=tunnel_peer title=Gateway>")
                .append(_context.commSystem().renderPeerHTML(lease.getGateway(), false))
-               .append("</span> </li>\n");
+               .append("</span></li>\n");
         }
         buf.append("</ul>\n</td></tr>\n</table>\n");
     }
