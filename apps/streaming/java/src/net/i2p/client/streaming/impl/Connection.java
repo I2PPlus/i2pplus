@@ -23,9 +23,7 @@ import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 
 /**
- * Maintain the state controlling a streaming connection between two
- * destinations.
- *
+ * Maintain the state controlling a streaming connection between two destinations.
  */
 class Connection {
     private final I2PAppContext _context;
@@ -110,15 +108,11 @@ class Connection {
 
     public static final int DEFAULT_CONNECT_TIMEOUT = 60*1000;
     private static final long MAX_CONNECT_TIMEOUT = 2*60*1000;
-
-//   public static final int MAX_WINDOW_SIZE = 128;
-    public static final int MAX_WINDOW_SIZE = SystemVersion.isSlow() ? 256 : 512;
-//    private static final int UNCHOKES_TO_SEND = 8;
-    private static final int UNCHOKES_TO_SEND = SystemVersion.isSlow() ? 8 : 16;
+    public static final int MAX_WINDOW_SIZE = 512;
+    private static final int UNCHOKES_TO_SEND = 12;
 
     /** Maximum number of packets to retransmit when the timer hits */
-//    private static final int MAX_RTX = 16;
-    private static final int MAX_RTX = SystemVersion.isSlow() ? 16 : 32;
+    private static final int MAX_RTX = 12;
 
     /**
      *  @param opts may be null
@@ -186,8 +180,7 @@ class Connection {
      * This doesn't "send a choke". Rather, it blocks if the outbound window is full,
      * thus choking the sender that calls this.
      *
-     * Block until there is an open outbound packet slot or the write timeout
-     * expires.
+     * Block until there is an open outbound packet slot or the write timeout expires.
      * PacketLocal is the only caller, generally with -1.
      *
      * @param timeoutMs 0 or negative means wait forever, 5 minutes max
@@ -196,7 +189,7 @@ class Connection {
      */
     public boolean packetSendChoke(long timeoutMs) throws IOException, InterruptedException {
         final long MAX_BLOCKING_TIME_MS = 5 * 60 * 1000;  // 5 minutes
-        final int WAIT_TIME_MS = 250;  // wait time in milliseconds
+        final int WAIT_TIME_MS = 250;
 
         long start = _context.clock().now();
         long writeExpire = start + timeoutMs;
@@ -290,8 +283,6 @@ class Connection {
         reply.setSendStreamId(_sendStreamId.get());
         reply.setReceiveStreamId(_receiveStreamId.get());
         // As of 0.9.20 we do not require FROM
-        // Removed in 0.9.39
-        //reply.setOptionalFrom();
         reply.setLocalPort(_localPort);
         reply.setRemotePort(_remotePort);
         // this just sends the packet - no retries or whatnot
