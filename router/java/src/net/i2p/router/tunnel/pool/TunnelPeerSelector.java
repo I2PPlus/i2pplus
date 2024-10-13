@@ -427,7 +427,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         }
     }
 
-
     private static final String PROP_OUTBOUND_EXPLORATORY_EXCLUDE_SLOW = "router.outboundExploratoryExcludeSlow";
     private static final String PROP_OUTBOUND_CLIENT_EXCLUDE_SLOW = "router.outboundClientExcludeSlow";
     private static final String PROP_INBOUND_EXPLORATORY_EXCLUDE_SLOW = "router.inboundExploratoryExcludeSlow";
@@ -439,22 +438,17 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      */
     protected boolean filterSlow(boolean isInbound, boolean isExploratory) {
         if (isExploratory) {
-            if (isInbound)
-                return ctx.getProperty(PROP_INBOUND_EXPLORATORY_EXCLUDE_SLOW, true);
-            else
-                return ctx.getProperty(PROP_OUTBOUND_EXPLORATORY_EXCLUDE_SLOW, true);
+            if (isInbound) {return ctx.getProperty(PROP_INBOUND_EXPLORATORY_EXCLUDE_SLOW, true);}
+            else {return ctx.getProperty(PROP_OUTBOUND_EXPLORATORY_EXCLUDE_SLOW, true);}
         } else {
-            if (isInbound)
-                return ctx.getProperty(PROP_INBOUND_CLIENT_EXCLUDE_SLOW, true);
-            else
-                return ctx.getProperty(PROP_OUTBOUND_CLIENT_EXCLUDE_SLOW, true);
+            if (isInbound) {return ctx.getProperty(PROP_INBOUND_CLIENT_EXCLUDE_SLOW, true);}
+            else {return ctx.getProperty(PROP_OUTBOUND_CLIENT_EXCLUDE_SLOW, true);}
         }
     }
 
     /** see HashComparator */
     protected void orderPeers(List<Hash> rv, SessionKey key) {
-        if (rv.size() > 1)
-            Collections.sort(rv, new HashComparator(key));
+        if (rv.size() > 1) {Collections.sort(rv, new HashComparator(key));}
     }
 
     /**
@@ -493,10 +487,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         public int compare(Hash l, Hash r) {
             long lh = SipHashInline.hash24(k0, k1, l.getData());
             long rh = SipHashInline.hash24(k0, k1, r.getData());
-            if (lh > rh)
-                return 1;
-            if (lh < rh)
-                return -1;
+            if (lh > rh) {return 1;}
+            if (lh < rh) {return -1;}
             return 0;
         }
     }
@@ -513,16 +505,15 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  @since 0.9.34
      */
     protected boolean checkTunnel(boolean isInbound, boolean isExploratory, List<Hash> tunnel) {
-        if (!checkTunnel(tunnel))
-            return false;
+        if (!checkTunnel(tunnel)) {return false;}
         // client OBEP/IBGW checks now in CPS
-        if (!isExploratory)
-            return true;
+        if (!isExploratory) {return true;}
         if (isInbound) {
             Hash h = tunnel.get(tunnel.size() - 1);
             if (!allowAsIBGW(h)) {
-                if (log.shouldWarn())
+                if (log.shouldWarn()) {
                     log.warn("Selected IPv6-only or unreachable peer for Inbound Gateway [" + h.toBase64().substring(0,6) + "]");
+                }
                 // treat as a timeout in the profile
                 // tunnelRejected() would set the last heard from time
                 ctx.profileManager().tunnelTimedOut(h);
@@ -531,8 +522,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         } else {
             Hash h = tunnel.get(0);
             if (!allowAsOBEP(h)) {
-                if (log.shouldWarn())
+                if (log.shouldWarn()) {
                     log.warn("Selected IPv6-only peer for Outbound Endpoint [" + h.toBase64().substring(0,6) + "]");
+                }
                 // treat as a timeout in the profile
                 // tunnelRejected() would set the last heard from time
                 ctx.profileManager().tunnelTimedOut(h);
@@ -564,7 +556,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                 if (log.shouldWarn())
                     log.warn("Connection check failed at hop [" + (i+1) + " -> " + i +
                              "] in tunnel (Gateway -> Endpoint)\n* Tunnel: " + buf.toString());
-//                             "] in tunnel (Gateway -> Endpoint): \n* " + DataHelper.toString(tunnel));
                 // Blame them both
                 // treat as a timeout in the profile
                 // tunnelRejected() would set the last heard from time
@@ -622,13 +613,10 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
          */
         @Override
         public boolean contains(Object o) {
-            if (s.contains(o))
-                return true;
+            if (s.contains(o)) {return true;}
             Hash h = (Hash) o;
             if (shouldExclude(h, _isIn, _isExpl)) {
                 s.add(h);
-                //if (log.shouldDebug())
-                //    log.debug("TPS exclude " + h.toBase64());
                 return true;
             }
             return false;
@@ -657,10 +645,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             super(set);
             isIn = isInbound;
             RouterInfo ri = ctx.router().getRouterInfo();
-            if (ri != null)
-                ourMask = isInbound ? getInboundMask(ri) : getOutboundMask(ri);
-            else
-                ourMask = 0xff;
+            if (ri != null) {ourMask = isInbound ? getInboundMask(ri) : getOutboundMask(ri);}
+            else {ourMask = 0xff;}
         }
 
         /**
@@ -672,26 +658,17 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
          *  @return true if peer should be excluded
          */
         public boolean contains(Object o) {
-            if (s.contains(o))
-                return true;
+            if (s.contains(o)) {return true;}
             Hash h = (Hash) o;
-            if (ctx.commSystem().isEstablished(h))
-                return false;
+            if (ctx.commSystem().isEstablished(h)) {return false;}
             boolean canConnect;
             RouterInfo peer = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(h);
-            if (peer == null) {
-                canConnect = false;
-            } else if (isIn) {
-                canConnect = canConnect(peer, ourMask);
-            } else {
-                canConnect = canConnect(ourMask, peer);
-            }
-            if (!canConnect) {
-                s.add(h);
-                //if (log.shouldDebug())
-                //    log.debug("TPS closest exclude "  h.toBase64());
-            }
+            if (peer == null) {canConnect = false;}
+            else if (isIn) {canConnect = canConnect(peer, ourMask);}
+            else {canConnect = canConnect(ourMask, peer);}
+            if (!canConnect) {s.add(h);}
             return !canConnect;
         }
     }
+
 }

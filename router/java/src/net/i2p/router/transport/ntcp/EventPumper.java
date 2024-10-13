@@ -526,7 +526,7 @@ class EventPumper implements Runnable {
             String ba = Addresses.toString(ip).replace("/", "");
             if (_context.blocklist().isBlocklisted(ip)) {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Refusing Session Request from blocklisted IP: " + ba);
+                    _log.warn("Refusing Session Request from blocklisted IP address " + ba);
                 try { chan.close(); } catch (IOException ioe) { }
                 return;
             }

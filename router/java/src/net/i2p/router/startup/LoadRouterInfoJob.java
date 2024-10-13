@@ -196,7 +196,7 @@ class LoadRouterInfoJob extends JobImpl {
                 getContext().keyManager().setKeys(pubkey, privkey, signingPubKey, signingPrivKey);
             }
         } catch (IOException ioe) {
-            _log.log(Log.CRIT, "Error reading the router info from " + rif.getAbsolutePath() + " and the keys from " + rkf.getAbsolutePath(), ioe);
+            _log.log(Log.CRIT, "Error reading RouterInfo from " + rif.getAbsolutePath() + " and the keys from " + rkf.getAbsolutePath(), ioe);
             _us = null;
             // windows... close before deleting
             if (fis1 != null) {
@@ -207,7 +207,7 @@ class LoadRouterInfoJob extends JobImpl {
             rkf.delete();
             rkf2.delete();
         } catch (DataFormatException dfe) {
-            _log.log(Log.CRIT, "Corrupt router info or keys at " + rif.getAbsolutePath() + " / " + rkf.getAbsolutePath(), dfe);
+            _log.log(Log.CRIT, "Corrupt RouterInfo or keys at " + rif.getAbsolutePath() + " / " + rkf.getAbsolutePath(), dfe);
             _us = null;
             // windows... close before deleting
             if (fis1 != null) {
