@@ -108,7 +108,7 @@ public class Blocklist {
      *  the tables by a determined attacker, esp. on IPv6
      */
     private static final int MAX_IPV4_SINGLES = SystemVersion.isSlow() ? 2048 : 8192;
-    private static final int MAX_IPV6_SINGLES = SystemVersion.isSlow() ? 256 : 4096;
+    private static final int MAX_IPV6_SINGLES = SystemVersion.isSlow() ? 1024 : 4096;
 
     private final Map<Integer, Object> _singleIPBlocklist = new LHMCache<Integer, Object>(MAX_IPV4_SINGLES);
     private final Map<BigInteger, Object> _singleIPv6Blocklist;
@@ -168,9 +168,7 @@ public class Blocklist {
             } else {
                 expireIntervalInt = Integer.parseInt(expireIntervalValue);
             }
-            if (expireIntervalInt < 0) {
-                expireIntervalInt = 0;
-            }
+            if (expireIntervalInt < 0) {expireIntervalInt = 0;}
             return expireIntervalInt;
         } catch(NumberFormatException nfe) {
             if (_log.shouldLog(_log.ERROR)) {
@@ -199,16 +197,14 @@ public class Blocklist {
         }
         List<BLFile> files = new ArrayList<BLFile>(5);
 
-        // install dir
-        File blFile = new File(_context.getBaseDir(), BLOCKLIST_FILE_DEFAULT);
+        File blFile = new File(_context.getBaseDir(), BLOCKLIST_FILE_DEFAULT); // install dir
         files.add(new BLFile(blFile, ID_SYSTEM));
         if (_context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_TOR_ENABLED)) {
             blFile = new File(_context.getBaseDir(), BLOCKLIST_FILE_TOR_EXITS);
             files.add(new BLFile(blFile, ID_TOR));
         } else {_log.warn("Tor blocklist disabled (router.blocklistTor.enable=false)");}
-        // config dir
         if (!_context.getConfigDir().equals(_context.getBaseDir())) {
-            blFile = new File(_context.getConfigDir(), BLOCKLIST_FILE_DEFAULT);
+            blFile = new File(_context.getConfigDir(), BLOCKLIST_FILE_DEFAULT); // config dir
             files.add(new BLFile(blFile, ID_LOCAL));
         }
         if (_context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_FEEDLIST_ENABLED)) {
@@ -232,12 +228,10 @@ public class Blocklist {
             files.add(new BLFile(blFile, ID_USER));
         }
         Job job = new ReadinJob(files);
-        // Run immediately, so it's initialized before netdb.
-        // As this is called by Router.runRouter() before job queue parallel operation,
-        // this will block StartupJob, and will complete before netdb initialization.
-        // If there is a huge blocklist, it will delay router startup,
-        // but it's important to have this initialized before we read in the netdb.
-        //job.getTiming().setStartAfter(_context.clock().now() + 30*1000);
+        // Run immediately, so it's initialized before netdb. As this is called by Router.runRouter()
+        // before job queue parallel operation, this will block StartupJob, and will complete before
+        // netdb initialization. If there is a huge blocklist, it will delay router startup, but it's
+        // important to have this initialized before we read in the netdb.
         _context.jobQueue().addJob(job);
         if (expireInterval() > 0) {
             Job cleanupJob = new CleanupJob();
@@ -325,17 +319,11 @@ public class Blocklist {
                 if (_blocklist == null) {return;}
                 int ccount = process();
                 if (_blocklist == null) {return;}
-                if (ccount <= 0) {
-                    disable();
-                    return;
-                }
+                if (ccount <= 0) {disable(); return;}
                 _blocklistSize = merge(_blocklist, ccount);
-                // we're done with _peerBlocklist, but leave it
-                // in case we need it for a later readin
-                //_peerBlocklist = null;
+                // we're done with _peerBlocklist, but leave it in case we need it for a later readin
             }
-            // schedules itself
-            new VersionNotifier(_files);
+            new VersionNotifier(_files); // schedules itself
         }
 
         private int process() {
@@ -547,7 +535,7 @@ public class Blocklist {
                       "\n* Read " + count + " total entries from the blocklists" +
                       "\n* Merged " + removed + " overlapping entries" +
                       "\n* Result is " + blocklistSize + " entries" +
-                      "\n* Blocklist processing finished -> Time taken: " + (_context.clock().now() - start) + "ms");
+                      "\n* Blocklist processing finished in " + (_context.clock().now() - start) + "ms");
         }
         return blocklistSize;
     }
@@ -578,11 +566,6 @@ public class Blocklist {
         int start1 = 0;
         int end1 = buf.length();
         if (end1 <= 0) {return null;}  // blank
-        //if (buf.charAt(end1 - 1) == '\r') { // DataHelper.readLine leaves the \r on there
-        //    buf.deleteCharAt(end1 - 1);
-        //    end1--;
-        //}
-        //if (end1 <= 0) {return null;} // blank
         int start2 = -1;
         int mask = -1;
         String comment = null;
@@ -611,12 +594,10 @@ public class Blocklist {
         if (end1 - start1 <= 0) {return null;} // blank
         try {
             String sip = buf.substring(start1, end1);
-            // IPv6
-            sip = sip.replace(';', ':');
+            sip = sip.replace(';', ':'); // IPv6
             InetAddress pi = InetAddress.getByName(sip);
             if (pi == null) {return null;}
             ip1 = pi.getAddress();
-            //if (ip1.length != 4) {throw new UnknownHostException();}
             if (start2 >= 0) {
                 pi = InetAddress.getByName(buf.substring(start2));
                 if (pi == null) {return null;}
@@ -624,8 +605,7 @@ public class Blocklist {
                 if (ip2.length != 4) {throw new UnknownHostException();}
                 if ((ip1[0] & 0xff) < 0x80 && (ip2[0] & 0xff) >= 0x80) {
                     if (_wrapSave == null) {
-                        // don't cross the boundary 127.255.255.255 - 128.0.0.0
-                        // because we are sorting using signed arithmetic
+                        // don't cross the boundary 127.255.255.255 - 128.0.0.0 because we are sorting using signed arithmetic
                         _wrapSave = new Entry(comment, null, new byte[] {(byte)0x80,0,0,0}, new byte[] {ip2[0], ip2[1], ip2[2], ip2[3]});
                         ip2 = new byte[] {127, (byte)0xff, (byte)0xff, (byte)0xff};
                     } else {throw new NumberFormatException();} // We only save one entry crossing the boundary, throw the rest out
@@ -778,9 +758,7 @@ public class Blocklist {
             if (us != null) { // don't ever block ourselves
                 byte[] usb = Addresses.getIP(us);
                 if (usb != null && DataHelper.eq(usb, ip)) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Not adding our own IP " + us, new Exception());
-                    }
+                    if (_log.shouldWarn()) {_log.warn("Not adding our own IP " + us, new Exception());}
                     return;
                 }
             }
@@ -829,16 +807,12 @@ public class Blocklist {
      */
     private void remove(int ip) {
         Integer iip = Integer.valueOf(ip);
-        synchronized(_singleIPBlocklist) {
-            _singleIPBlocklist.remove(iip);
-        }
+        synchronized(_singleIPBlocklist) {_singleIPBlocklist.remove(iip);}
     }
 
     private boolean isOnSingleList(int ip) {
         Integer iip = Integer.valueOf(ip);
-        synchronized(_singleIPBlocklist) {
-            return _singleIPBlocklist.get(iip) != null;
-        }
+        synchronized(_singleIPBlocklist) {return _singleIPBlocklist.get(iip) != null;}
     }
 
     /**
@@ -848,9 +822,7 @@ public class Blocklist {
      */
     private boolean add(BigInteger ip) {
         if (_singleIPv6Blocklist != null) {
-            synchronized(_singleIPv6Blocklist) {
-                return _singleIPv6Blocklist.put(ip, DUMMY) == null;
-            }
+            synchronized(_singleIPv6Blocklist) {return _singleIPv6Blocklist.put(ip, DUMMY) == null;}
         }
         return false;
     }
@@ -861,9 +833,7 @@ public class Blocklist {
      */
     private void remove(BigInteger ip) {
         if (_singleIPv6Blocklist != null) {
-            synchronized(_singleIPv6Blocklist) {
-                _singleIPv6Blocklist.remove(ip);
-            }
+            synchronized(_singleIPv6Blocklist) {_singleIPv6Blocklist.remove(ip);}
         }
     }
 
@@ -873,9 +843,7 @@ public class Blocklist {
      */
     private boolean isOnSingleList(BigInteger ip) {
         if (_singleIPv6Blocklist != null) {
-            synchronized(_singleIPv6Blocklist) {
-                return _singleIPv6Blocklist.get(ip) != null;
-            }
+            synchronized(_singleIPv6Blocklist) {return _singleIPv6Blocklist.get(ip) != null;}
         }
         return false;
     }
@@ -895,18 +863,14 @@ public class Blocklist {
      */
     private List<byte[]> getAddresses(RouterInfo pinfo) {
         List<byte[]> rv = new ArrayList<byte[]>(4);
-        // for each peer address
-        for (RouterAddress pa : pinfo.getAddresses()) {
+        for (RouterAddress pa : pinfo.getAddresses()) { // for each peer address
             byte[] pib = pa.getIP();
             if (pib == null) continue;
             if (!_haveIPv6 && pib.length == 16) {continue;}
             // O(n**2)
             boolean dup = false;
             for (int i = 0; i < rv.size(); i++) {
-                if (DataHelper.eq(rv.get(i), pib)) {
-                    dup = true;
-                    break;
-                }
+                if (DataHelper.eq(rv.get(i), pib)) {dup = true; break;}
             }
             if (!dup) {rv.add(pib);}
          }
@@ -914,10 +878,8 @@ public class Blocklist {
     }
 
     /**
-     * Does the peer's IP address appear in the blocklist?
-     * If so, and it isn't banlisted, banlist it forever...
-     * or, if the user configured an override, ban it for the
-     * override period.
+     * Does the peer's IP address appear in the blocklist? If so, and it isn't banlisted, banlist
+     * it forever... or, if the user configured an override, ban it for the override period.
      * @since 0.9.29
      */
     public boolean isBlocklisted(Hash peer) {
@@ -953,7 +915,7 @@ public class Blocklist {
     }
 
     /**
-     * calling this externally won't banlist the peer, this is just an IP check
+     * Calling this externally won't banlist the peer, this is just an IP check
      *
      * @param ip IPv4 or IPv6
      */
@@ -965,7 +927,7 @@ public class Blocklist {
     }
 
     /**
-     * calling this externally won't banlist the peer, this is just an IP check
+     * Calling this externally won't banlist the peer, this is just an IP check
      *
      * @param ip IPv4 or IPv6
      */
@@ -979,11 +941,8 @@ public class Blocklist {
     }
 
     /**
-     * First check the single-IP list.
-     * Then do a
-     * binary search through the in-memory range list which
-     * is a sorted array of longs.
-     * The array is sorted in signed order, but we don't care.
+     * First check the single-IP list. Then do a binary search through the in-memory range list which
+     * is a sorted array of longs. The array is sorted in signed order, but we don't care.
      * Each long is ((from << 32) | to)
      */
     private boolean isBlocklisted(int ip) {
@@ -995,8 +954,7 @@ public class Blocklist {
     }
 
     /**
-     * Do a binary search through the in-memory range list which
-     * is a sorted array of longs.
+     * Do a binary search through the in-memory range list which is a sorted array of longs.
      * The array is sorted in signed order, but we don't care.
      * Each long is ((from &lt;&lt; 32) | to)
      *
@@ -1009,8 +967,7 @@ public class Blocklist {
     }
 
     /**
-     * Do a binary search through the in-memory range list which
-     * is a sorted array of longs.
+     * Do a binary search through the in-memory range list which is a sorted array of longs.
      * The array is sorted in signed order, but we don't care.
      * Each long is ((from << 32) | to)
      *
@@ -1033,11 +990,6 @@ public class Blocklist {
         }
         return match(ip, blocklist[cur]);
     }
-
-/*
-    // Is the IP included in the entry _blocklist[cur] ?
-    private boolean match(int ip, int cur) {return match(ip, _blocklist[cur]);}
-*/
 
     // Is the IP included in the compressed entry?
     private static boolean match(int ip, long entry) {
@@ -1063,8 +1015,7 @@ public class Blocklist {
     public static int getTo(long entry) {return (int) (entry & 0xffffffff);}
 
     /**
-     * The in-memory blocklist is an array of longs, with the format
-     * ((from IP) << 32) | (to IP)
+     * The in-memory blocklist is an array of longs, with the format ((from IP) << 32) | (to IP)
      * The XOR is so the signed sort is in normal (unsigned) order.
      *
      * So the size is (cough) almost 2MB for the 240,000 line splist.txt.
@@ -1120,11 +1071,9 @@ public class Blocklist {
     }
 
     /**
-     * We don't keep the comment field in-memory,
-     * so we have to go back out to the file to find it.
+     * We don't keep the comment field in-memory, so we have to go back out to the file to find it.
      *
-     * Put this in a job because we're looking for the
-     * actual line in the blocklist file, this could take a while.
+     * Put this in a job because we're looking for the actual line in the blocklist file, this could take a while.
      *
      */
     private void banlist(Hash peer, byte[] ip) {
@@ -1147,7 +1096,7 @@ public class Blocklist {
             shouldRunJob = _inProcess.add(peer);
         }
         if (!shouldRunJob) {return;}
-        // get the IPs now because it won't be in the netdb by the time the job runs
+        // Get the IPs now because it won't be in the netdb by the time the job runs
         Job job = new BanlistJob(peer, getAddresses(peer));
         if (number > 0) {job.getTiming().setStartAfter(_context.clock().now() + (30*1000l * number));}
         _context.jobQueue().addJob(job);
@@ -1187,18 +1136,14 @@ public class Blocklist {
 
     private synchronized void banlistRouter(Hash peer, List<byte[]> ips, long duration) {
         // This only checks one file for now, pick the best one
-        // user specified
-        File blFile = null;
+        File blFile = null; // user specified
         String file = _context.getProperty(PROP_BLOCKLIST_FILE);
         if (file != null) {
             blFile = new File(file);
             if (!blFile.isAbsolute()) {blFile = new File(_context.getConfigDir(), file);}
             if (!blFile.exists()) {blFile = null;}
         }
-        // install dir
-        if (blFile == null) {
-            blFile = new File(_context.getBaseDir(), BLOCKLIST_FILE_DEFAULT);
-        }
+        if (blFile == null) {blFile = new File(_context.getBaseDir(), BLOCKLIST_FILE_DEFAULT);}  // install dir
 
         if ((!blFile.exists()) || blFile.length() <= 0) {
             // just ban it and be done
@@ -1209,8 +1154,8 @@ public class Blocklist {
             return;
         }
 
-        // look through the file for each address to find which one was the cause
-        for (Iterator<byte[]> iter = ips.iterator(); iter.hasNext(); ) {
+        // Look through the file for each address to find which one was the cause
+        for (Iterator<byte[]> iter = ips.iterator(); iter.hasNext();) {
             byte ip[] = iter.next();
             int ipint = toInt(ip);
             String sip = Addresses.toString(ip);
@@ -1218,20 +1163,13 @@ public class Blocklist {
             try {
                 br = new BufferedReader(new InputStreamReader(new FileInputStream(blFile), "UTF-8"));
                 String buf = null;
-                // assume the file is unsorted, so go through the whole thing
+                // Assume the file is unsorted, so go through the whole thing
                 while ((buf = br.readLine()) != null) {
                     Entry e = parse(buf, false);
                     if (e == null || e.peer != null) {continue;}
                     if (match(ipint, toEntry(e.ip1, e.ip2))) {
                         try {br.close();} catch (IOException ioe) {}
                         String reason = " <b>➜</b> " + _x("Blocklist") + ": " + sip;
-                        // only one translate parameter for now
-                        //for (int i = 0; i < 4; i++) {
-                        //    reason = reason + (ip[i] & 0xff);
-                        //    if (i != 3)
-                        //        reason = reason + '.';
-                        //}
-                        //reason = reason + " banned by " + BLOCKLIST_FILE_DEFAULT + " entry \"" + buf + "\"";
                         if (_log.shouldWarn()) {
                             _log.warn("Banning [" + peer.toBase64().substring(0,6) + "] for duration of session -> Source: blocklist.txt");
                         }
@@ -1276,16 +1214,13 @@ public class Blocklist {
     public List<BigInteger> getTransientIPv6Blocks() {
         if (!_haveIPv6) {return Collections.<BigInteger>emptyList();}
         if (_singleIPv6Blocklist != null) {
-            synchronized(_singleIPv6Blocklist) {
-                return new ArrayList<BigInteger>(_singleIPv6Blocklist.keySet());
-            }
+            synchronized(_singleIPv6Blocklist) {return new ArrayList<BigInteger>(_singleIPv6Blocklist.keySet());}
         }
         return Collections.<BigInteger>emptyList();
     }
 
     /**
-     *  IP ranges blocked until restart. Sorted,
-     *  but as signed longs, so 128-255 are first
+     *  IP ranges blocked until restart. Sorted, but as signed longs, so 128-255 are first
      *
      *  Public for console only, not a public API
      *
@@ -1331,8 +1266,7 @@ public class Blocklist {
 
     /**
      *  Mark a string for extraction by xgettext and translation.
-     *  Use this only in static initializers.
-     *  It does not translate!
+     *  Use this only in static initializers. It does not translate!
      *  @return s
      */
     private static final String _x(String s) {return s;}
