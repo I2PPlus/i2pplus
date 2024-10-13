@@ -36,40 +36,37 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;
 
 /**
- * Implement the session key management, but keep everything in memory (don't write
- * to disk).  However, this being java, we cannot guarantee that the keys aren't swapped
- * out to disk so this should not be considered secure in that sense.
+ * Implement the session key management, but keep everything in memory (don't write to disk).
+ * However, this being java, we cannot guarantee that the keys aren't swapped out to disk so
+ * this should not be considered secure in that sense.
  *
- * The outbound and inbound sides are completely independent, each with
- * their own keys and tags.
+ * The outbound and inbound sides are completely independent, each with their own keys and tags.
  *
  * For a new session, outbound tags are not considered delivered until an ack is received.
- * Otherwise, the loss of the first message would render all subsequent messages
- * undecryptable. True?
+ * Otherwise, the loss of the first message would render all subsequent messages undecryptable.
  *
- * For an existing session, outbound tags are immediately considered delivered, and are
- * later revoked if the ack times out. This prevents massive stream slowdown caused by
- * repeated tag delivery after the minimum tag threshold is reached. Included tags
- * pushes messages above the ideal 1956 size by ~2KB and causes excessive fragmentation
- * and padding. As the tags are not seen by the streaming lib, they aren't accounted
- * for in the window size, and one or more of a series of large messages is likely to be dropped,
- * either due to high fragmentation or drop priorites at the tunnel OBEP.
+ * For an existing session, outbound tags are immediately considered delivered, and are later
+ * revoked if the ack times out. This prevents massive stream slowdown caused by repeated tag
+ * delivery after the minimum tag threshold is reached. Included tags pushes messages above the
+ * ideal 1956 size by ~2KB and causes excessive fragmentation and padding. As the tags are not
+ * seen by the streaming lib, they aren't accounted for in the window size, and one or more of a
+ * series of large messages is likely to be dropped, either due to high fragmentation or drop
+ * priorites at the tunnel OBEP.
  *
  * For this to work, the minimum tag threshold and tag delivery quanitity defined in
  * GarlicMessageBuilder must be chosen with streaming lib windows sizes in mind.
- * If a single TagSet is not delivered, there will be no stall as long as the
- * current window size is smaller than the minimum tag threshold.
- * Additional TagSets will be sent before the acked tags completely run out. See below.
- * all subsequent messages will fail to decrypt.
+ * If a single TagSet is not delivered, there will be no stall as long as the current window
+ * size is smaller than the minimum tag threshold. Additional TagSets will be sent before the
+ * acked tags completely run out. See below. All subsequent messages will fail to decrypt.
  * See ConnectionOptions in streaming for more information.
  *
  * There are large inefficiencies caused by the repeated delivery of tags in a new session.
- * With an initial streaming window size of 6 and 40 tags per delivery, a web server
- * would deliver up to 240 tags (7680 bytes, not including bundled leaseset, etc.)
- * in the first volley of the response.
+ * With an initial streaming window size of 6 and 40 tags per delivery, a web server would
+ * deliver up to 240 tags (7680 bytes, not including bundled leaseset, etc.) in the first
+ * volley of the response.
  *
- * Could the two directions be linked somehow, such that the initial request could
- * contain a key or tags for the response?
+ * Could the two directions be linked somehow, such that the initial request could contain a
+ * key or tags for the response?
  *
  * Should the tag threshold and quantity be adaptive?
  *
@@ -114,7 +111,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      * a few MB? how about 24 MB!
      * This is the max size of _inboundTagSets.
      */
-    public final static int MAX_INBOUND_SESSION_TAGS = 750 * 1000;
+    public final static int MAX_INBOUND_SESSION_TAGS = 800 * 1000;
 
     /**
      *  This was 100 since 0.6.1.10 (50 before that). It's important because:
@@ -122,30 +119,27 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      *  - Tags are 32 bytes. So it previously added 3200 bytes to an initial message.
      *  - Too many tags adds a huge overhead to short-duration connections
      *    (like http, datagrams, etc.)
-     *  - Large messages have a much higher chance of being dropped due to
-     *    one of their 1KB fragments being discarded by a tunnel participant.
-     *  - This reduces the effective maximum datagram size because the client
-     *    doesn't know when tags will be bundled, so the tag size must be
-     *    subtracted from the maximum I2NP size or transport limit.
+     *  - Large messages have a much higher chance of being dropped due to one of their
+     *    1KB fragments being discarded by a tunnel participant.
+     *  - This reduces the effective maximum datagram size because the client doesn't
+     *    know when tags will be bundled, so the tag size must be subtracted from the
+     *    maximum I2NP size or transport limit.
      * </pre>
      *
      *  Issues with too small a value:
      * <pre>
-     *  - When tags are sent, a reply leaseset (~1KB) is always bundled.
-     *    Maybe don't need to bundle more than every minute or so
-     *    rather than every time?
-     *  - Does the number of tags (and the threshold of 20) limit the effective
-     *    streaming lib window size? Should the threshold and the number of
-     *    sent tags be variable based on the message rate?
+     *  - When tags are sent, a reply leaseset (~1KB) is always bundled. Maybe we don't need
+     *    to bundle more than every minute or so rather than every time?
+     *  - Does the number of tags (and the threshold of 20) limit the effective streaming lib
+     *    window size? Should the threshold and the number of sent tags be variable based on
+     *    the message rate?
      * </pre>
      *
-     *  We have to be very careful if we implement an adaptive scheme,
-     *  since the key manager is per-router, not per-local-dest.
-     *  Or maybe that's a bad idea, and we need to move to a per-dest manager.
-     *  This needs further investigation.
+     *  We have to be very careful if we implement an adaptive scheme, since the key manager
+     *  is per-router, not per-local-dest. Or maybe that's a bad idea, and we need to move to
+     *  a per-dest manager. This needs further investigation.
      *
-     *  So a value somewhat higher than the low threshold
-     *  seems appropriate.
+     *  So a value somewhat higher than the low threshold seems appropriate.
      *
      *  Use care when adjusting these values. See ConnectionOptions in streaming,
      *  and TransientSessionKeyManager in crypto, for more information.
@@ -190,24 +184,18 @@ public class TransientSessionKeyManager extends SessionKeyManager {
 
     @Override
     public void shutdown() {
-         _alive = false;
-        synchronized (_inboundTagSets) {
-            _inboundTagSets.clear();
-        }
-        synchronized (_outboundSessions) {
-            _outboundSessions.clear();
-        }
+        _alive = false;
+        synchronized (_inboundTagSets) {_inboundTagSets.clear();}
+        synchronized (_outboundSessions) {_outboundSessions.clear();}
     }
 
     private class CleanupEvent implements SimpleTimer.TimedEvent {
         public void timeReached() {
-            if (!_alive)
-                return;
+            if (!_alive) {return;}
             long beforeExpire = _context.clock().now();
             int expired = aggressiveExpire();
             int overage = _inboundTagSets.size() - MAX_INBOUND_SESSION_TAGS;
-            if (overage > 0)
-                clearExcess(overage);
+            if (overage > 0) {clearExcess(overage);}
             long expireTime = _context.clock().now() - beforeExpire;
             _context.statManager().addRateData("crypto.sessionTagsExpired", expired, expireTime);
             _context.simpleTimer2().addEvent(this, 60*1000);
@@ -228,35 +216,6 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             return new HashSet<OutboundSession>(_outboundSessions.values());
         }
     }
-
-/****** leftover from when we had the persistent SKM
-    protected void setData(Set<TagSet> inboundTagSets, Set<OutboundSession> outboundSessions) {
-        if (_log.shouldInfo())
-            _log.info("Loading " + inboundTagSets.size() + " inbound tag sets, and "
-                      + outboundSessions.size() + " outbound sessions");
-        Map<SessionTag, TagSet> tagSets = new HashMap(inboundTagSets.size());
-        for (Iterator<TagSet> iter = inboundTagSets.iterator(); iter.hasNext();) {
-            TagSet ts = iter.next();
-            for (Iterator<SessionTag> tsIter = ts.getTags().iterator(); tsIter.hasNext();) {
-                SessionTag tag = tsIter.next();
-                tagSets.put(tag, ts);
-            }
-        }
-        synchronized (_inboundTagSets) {
-            _inboundTagSets.clear();
-            _inboundTagSets.putAll(tagSets);
-        }
-        Map<PublicKey, OutboundSession> sessions = new HashMap(outboundSessions.size());
-        for (Iterator<OutboundSession> iter = outboundSessions.iterator(); iter.hasNext();) {
-            OutboundSession sess = iter.next();
-            sessions.put(sess.getTarget(), sess);
-        }
-        synchronized (_outboundSessions) {
-            _outboundSessions.clear();
-            _outboundSessions.putAll(sessions);
-        }
-    }
-******/
 
     /**
      * Retrieve the session key currently associated with encryption to the target,
