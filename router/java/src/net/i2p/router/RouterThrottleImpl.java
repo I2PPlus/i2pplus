@@ -39,7 +39,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     private static final long DEFAULT_REJECT_STARTUP_TIME = 3*60*1000;
     private static final long MIN_REJECT_STARTUP_TIME = 90*1000;
     private static final String PROP_REJECT_STARTUP_TIME = "router.rejectStartupTime";
-    private static final int DEFAULT_MIN_THROTTLE_TUNNELS = SystemVersion.isSlow() ? 1200 : 2500;
+    private static final int DEFAULT_MIN_THROTTLE_TUNNELS = SystemVersion.isSlow() ? 1500 : 3000;
     private static final String PROP_MIN_THROTTLE_TUNNELS = "router.minThrottleTunnels";
 
     /**
@@ -291,7 +291,8 @@ public class RouterThrottleImpl implements RouterThrottle {
         return TUNNEL_ACCEPT;
     }
 
-    static final int DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE = 40; // .067KBps
+    //static final int DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE = 40; // .067KBps
+    static final int DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE = 4000;
     /** also limited to 90% - see below */
     private static final int MIN_AVAILABLE_BPS = 4*1024; // always leave at least 4KBps free when allowing
     //private static final String LIMIT_STR = _x("Declining Tunnel Requests" + ":<br>" + "Bandwidth limit");
