@@ -87,10 +87,10 @@ class BuildHandler implements Runnable {
     private static final int PRIORITY = OutNetMessage.PRIORITY_BUILD_REPLY;
 
     /** limits on concurrent next-hop RI lookup */
-    private static final int MIN_LOOKUP_LIMIT = SystemVersion.isSlow() ? 32 : 64;
-    private static final int MAX_LOOKUP_LIMIT = SystemVersion.isSlow() ? 128 : 384;
+    private static final int MIN_LOOKUP_LIMIT = SystemVersion.isSlow() ? 8 : 16;
+    private static final int MAX_LOOKUP_LIMIT = SystemVersion.isSlow() ? 64 : 128;
     /** limit lookups to this % of current participating tunnels */
-    private static final int PERCENT_LOOKUP_LIMIT = SystemVersion.isSlow() ? 5 : 20;
+    private static final int PERCENT_LOOKUP_LIMIT = SystemVersion.isSlow() ? 5 : 10;
     /**
      *  This must be high, as if we timeout the send we remove the tunnel from
      *  participating via OnFailedSendJob.
@@ -523,15 +523,17 @@ class BuildHandler implements Runnable {
             if (from != null) {_context.commSystem().mayDisconnect(from);}
             return -1;
         }
+
         RouterInfo nextPeerInfo = _context.netDb().lookupRouterInfoLocally(nextPeer);
+
         if (nextPeerInfo == null) {
-            // limit concurrent next-hop lookups to prevent job queue overload attacks
             int numTunnels = _context.tunnelManager().getParticipatingCount();
+            // limit concurrent next-hop lookups to prevent job queue overload attacks
             int limit = Math.max(MIN_LOOKUP_LIMIT, Math.min(MAX_LOOKUP_LIMIT, numTunnels * PERCENT_LOOKUP_LIMIT / 100));
             int current;
             long maxQueueLag = _context.jobQueue().getMaxLag();
-            boolean highload = SystemVersion.getCPULoadAvg() > 95 && maxQueueLag > 1000;
-            boolean lucky = _context.random().nextInt(5) > 1;
+            boolean highload = SystemVersion.getCPULoadAvg() > 95 && maxQueueLag > 500;
+            boolean lucky = numTunnels < 500 ? _context.random().nextInt(5) > 1 : _context.random().nextInt(10) > 7;
             // leaky counter, not reliable
             if (_context.random().nextInt(16) > 0) {current = _currentLookups.incrementAndGet();}
             else {current = 1;}
@@ -542,13 +544,15 @@ class BuildHandler implements Runnable {
                                "] \n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() +
                                "]\n* Lookups: " + current + " / " + limit + req);
                 }
-                _context.netDb().lookupRouterInfo(nextPeer, new HandleReq(_context, state, req, nextPeer),
-                                                  new TimeoutReq(_context, state, req, nextPeer), NEXT_HOP_LOOKUP_TIMEOUT);
+                if (_context.netDb().lookupLocallyWithoutValidation(nextPeer) == null) {
+                    _context.netDb().lookupRouterInfo(nextPeer, new HandleReq(_context, state, req, nextPeer),
+                                                      new TimeoutReq(_context, state, req, nextPeer), NEXT_HOP_LOOKUP_TIMEOUT);
+                }
             } else {
                 _currentLookups.decrementAndGet();
                 if (_log.shouldInfo()) {
                     String status = "\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]" + req;
-                    if (!lucky) {_log.info("Dropping next hop lookup -> 40% chance of drop" + status);}
+                    if (!lucky) {_log.info("Dropping next hop lookup -> " + (numTunnels < 500 ? "40" : "80") + "% chance of drop" + status);}
                     else if (highload) {_log.info("Dropping next hop lookup -> System is under load" + status);}
                     else {_log.info("Dropping next hop lookup -> Limit: " + limit + " / " + PERCENT_LOOKUP_LIMIT + "%" + status);}
                 }
