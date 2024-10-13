@@ -51,21 +51,11 @@ class PumpedTunnelGateway extends TunnelGateway {
     private static final int MAX_IB_MSGS_PER_PUMP = 24;
     private static final int INITIAL_OB_QUEUE = 64;
     private static final int MAX_IB_QUEUE = 1024;
-    private static final int MAX_OB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 64 : SystemVersion.getCores() < 4 ? 256 : 512;
-    private static final int MAX_IB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 24 : SystemVersion.getCores() < 4 ? 96 : 192;
-    private static final int INITIAL_OB_QUEUE = SystemVersion.isSlow() ? 64 : SystemVersion.getCores() < 4 ? 256 : 512;
-    private static final int MAX_IB_QUEUE = SystemVersion.isSlow() ? 1024 : SystemVersion.getCores() < 4 ? 4096 : 8192;
 */
-    private static final int MAX_OB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 1024 :
-                                                    SystemVersion.getCores() < 4 ||
-                                                    SystemVersion.getMaxMemory() < 512*1024*1024 ? 4096 : 8192;
-    private static final int MAX_IB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 1024 :
-                                                    SystemVersion.getCores() < 4 ||
-                                                    SystemVersion.getMaxMemory() < 512*1024*1024 ? 4096 : 8192;
-    private static final int INITIAL_OB_QUEUE = SystemVersion.isSlow() ? 1024 :
-                                                SystemVersion.getCores() < 4 ||
-                                                SystemVersion.getMaxMemory() < 512*1024*1024 ? 4096 : 8192;
-    private static final int MAX_IB_QUEUE = SystemVersion.isSlow() ? 1024 : SystemVersion.getCores() < 4 ? 4096 : 8192;
+    private static final int MAX_OB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 256 : 1024;
+    private static final int MAX_IB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 128 : 512;
+    private static final int INITIAL_OB_QUEUE = SystemVersion.isSlow() ? 128 : 512;
+    private static final int MAX_IB_QUEUE = SystemVersion.isSlow() ? 1024 : 4096;
 
     public static final String PROP_MAX_OB_MSGS_PER_PUMP = "router.pumpMaxOutboundMsgs";
     public static final String PROP_MAX_IB_MSGS_PER_PUMP = "router.pumpMaxInboundMsgs";
@@ -171,6 +161,7 @@ class PumpedTunnelGateway extends TunnelGateway {
         int remaining = 0;
         long afterPreprocess = 0;
         long afterExpire = 0;
+
         synchronized (_queue) {
             _queue.addAll(queueBuf);
             if (debug) {
@@ -199,12 +190,14 @@ class PumpedTunnelGateway extends TunnelGateway {
                 afterExpire = _context.clock().now();
                 _log.debug("Remaining after preprocessing: " + _queue);
             }
+
+            // Clear queueBuf while still holding the lock on _queue
+            queueBuf.clear();
         }
 
         if (delayedFlush) {
             _delayedFlush.reschedule(delayAmount);
         }
-        //_context.statManager().addRateData("tunnel.lockedGatewayAdd", afterAdded-beforeLock, remaining);
         if (debug) {
             long complete = _context.clock().now();
             _log.debug("Time to add " + queueBuf.size() + " messages to " + toString() + ":" + (complete-startAdd)
@@ -214,7 +207,6 @@ class PumpedTunnelGateway extends TunnelGateway {
                        + "; Expire: " + (afterExpire-afterPreprocess)
                        + "; Queue flush: " + (complete-afterExpire));
         }
-        queueBuf.clear();
         if (rv && _log.shouldInfo())
             _log.info("PumpedTunnelGateway remaining to [" + _nextHop.toBase64().substring(0,6) + "] -> Pre-queue: " + _prequeue.size() +
                       "bytes; Inbound? " + _isInbound + "; Backlogged? " + backlogged);
