@@ -71,7 +71,7 @@ public class JobQueue {
         int maxRunners = 24;
         int minRunners = 12;
         if (cores == 1 || SystemVersion.isSlow()) {RUNNERS = minRunners - 2;}
-        else {RUNNERS = Math.min(Math.max(cores * 4, minRunners), maxRunners);}
+        else {RUNNERS = Math.min(Math.max(cores * 3, minRunners), maxRunners);}
     }
 
     /** default max # job queue runners operating */

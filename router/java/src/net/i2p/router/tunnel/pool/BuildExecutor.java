@@ -38,12 +38,9 @@ class BuildExecutor implements Runnable {
     private final RouterContext _context;
     private final Log _log;
     private final TunnelPoolManager _manager;
-    /** Notify lock */
-    private final Object _currentlyBuilding;
-    /** indexed by ptcc.getReplyMessageId() */
-    private final ConcurrentHashMap<Long, PooledTunnelCreatorConfig> _currentlyBuildingMap;
-    /** indexed by ptcc.getReplyMessageId() */
-    private final ConcurrentHashMap<Long, PooledTunnelCreatorConfig> _recentlyBuildingMap;
+    private final Object _currentlyBuilding; // Notify lock
+    private final ConcurrentHashMap<Long, PooledTunnelCreatorConfig> _currentlyBuildingMap; // indexed by ptcc.getReplyMessageId()
+    private final ConcurrentHashMap<Long, PooledTunnelCreatorConfig> _recentlyBuildingMap; // indexed by ptcc.getReplyMessageId()
     private volatile boolean _isRunning;
     private boolean _repoll;
     private static final int MAX_CONCURRENT_BUILDS = SystemVersion.isSlow() ? 10 : Math.max(SystemVersion.getCores() * 4, 16);
@@ -74,17 +71,9 @@ class BuildExecutor implements Runnable {
         _context.statManager().createRequiredRateStat("tunnel.buildExploratorySuccess", "Response time for success (ms)", "Tunnels [Exploratory]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildRequestTime", "Time to build a tunnel request (ms)", "Tunnels [Participating]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.concurrentBuilds", "How many builds are going at once", "Tunnels", RATES);
-        //_context.statManager().createRateStat("tunnel.buildRequestZeroHopTime", "Time to build a zero hop tunnel", "Tunnels", RATES);
-        //_context.statManager().createRateStat("tunnel.pendingRemaining", "How many inbound requests are pending after a pass (period is how long the pass takes)?", "Tunnels", RATES);
-        //ctx.statManager().createRateStat("tunnel.buildClientExpireIB", "", "Tunnels", RATES);
-        //ctx.statManager().createRateStat("tunnel.buildClientExpireOB", "", "Tunnels", RATES);
-        //ctx.statManager().createRateStat("tunnel.buildExploratoryExpireIB", "", "Tunnels [Exploratory]", RATES);
-        //ctx.statManager().createRateStat("tunnel.buildExploratoryExpireOB", "", "Tunnels [Exploratory]", RATES);
 
-        // Get stat manager, get recognized bandwidth tiers
-        StatManager statMgr = _context.statManager();
-        String bwTiers = RouterInfo.BW_CAPABILITY_CHARS;
-        // For each bandwidth tier, create tunnel build agree/reject/expire stats
+        StatManager statMgr = _context.statManager(); // Get stat manager, get recognized bandwidth tiers
+        String bwTiers = RouterInfo.BW_CAPABILITY_CHARS; // For each bandwidth tier, create tunnel build agree/reject/expire stats
         for (int i = 0; i < bwTiers.length(); i++) {
             String bwTier = String.valueOf(bwTiers.charAt(i));
             statMgr.createRateStat("tunnel.tierAgree" + bwTier, "Agreed joins from bandwidth tier " + bwTier, "Tunnels [Participating]", RATES);

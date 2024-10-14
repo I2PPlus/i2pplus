@@ -1,9 +1,9 @@
 package net.i2p.router.tunnel.pool;
 
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.BlockingQueue;
 import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import net.i2p.crypto.EncType;
 import net.i2p.data.DataHelper;
@@ -83,14 +83,11 @@ class BuildHandler implements Runnable {
     private static final int MIN_QUEUE = SystemVersion.isSlow() ? 32 : 64;
     private static final int MAX_QUEUE = SystemVersion.isSlow() ? 128 : 256;
     private static final String PROP_MAX_QUEUE = "router.buildHandlerMaxQueue";
-    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 8*1000;
+    private static final int NEXT_HOP_LOOKUP_TIMEOUT = SystemVersion.isSlow() ? 8*1000 : 5*1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_BUILD_REPLY;
-
-    /** limits on concurrent next-hop RI lookup */
-    private static final int MIN_LOOKUP_LIMIT = SystemVersion.isSlow() ? 8 : 16;
+    private static final int MIN_LOOKUP_LIMIT = SystemVersion.isSlow() ? 8 : 16; // limits on concurrent next-hop RI lookup
     private static final int MAX_LOOKUP_LIMIT = SystemVersion.isSlow() ? 64 : 128;
-    /** limit lookups to this % of current participating tunnels */
-    private static final int PERCENT_LOOKUP_LIMIT = SystemVersion.isSlow() ? 5 : 10;
+    private static final int PERCENT_LOOKUP_LIMIT = SystemVersion.isSlow() ? 5 : 10; // limit lookups to this % of current participating tunnels
     /**
      *  This must be high, as if we timeout the send we remove the tunnel from
      *  participating via OnFailedSendJob.
@@ -99,10 +96,8 @@ class BuildHandler implements Runnable {
      *  10s was not enough.
      */
     private static final int NEXT_HOP_SEND_TIMEOUT = 20*1000;
-
     private static final long MAX_REQUEST_FUTURE = 5*60*1000;
-    /** must be > 1 hour due to rounding down */
-    private static final long MAX_REQUEST_AGE = 65*60*1000;
+    private static final long MAX_REQUEST_AGE = 65*60*1000; /** must be > 1 hour due to rounding down */
     private static final long MAX_REQUEST_AGE_ECIES = 8*60*1000;
     private static final long JOB_LAG_LIMIT_TUNNEL = SystemVersion.isSlow() ? 1000 : 500;
     private static final long[] RATES = {60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000};
@@ -116,6 +111,7 @@ class BuildHandler implements Runnable {
         //int sz = Math.min(MAX_QUEUE, Math.max(MIN_QUEUE, TunnelDispatcher.getShareBandwidth(ctx) * MIN_QUEUE / 48));
         int sz = ctx.getProperty(PROP_MAX_QUEUE, MAX_QUEUE);
         _inboundBuildMessages = new CoDelBlockingQueue(ctx, "BuildHandler", sz);
+        ctx.statManager().createRateStat("tunnel.buildLookupSuccess", "Confirmation of successful deferred lookup", "Tunnels", RATES);
         ctx.statManager().createRateStat("tunnel.buildReplyTooSlow", "Received a tunnel build reply after timeout", "Tunnels", RATES);
         ctx.statManager().createRateStat("tunnel.corruptBuildReply", "Corrupt tunnel build replies received", "Tunnels", RATES);
         ctx.statManager().createRateStat("tunnel.dropConnLimits", "Dropped not rejected tunnel build (connection limits)", "Tunnels [Participating]", RATES);
@@ -148,14 +144,11 @@ class BuildHandler implements Runnable {
         ctx.statManager().createRequiredRateStat("tunnel.rejectHopThrottle", "Rejected tunnel build (per-hop limit)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.rejectHostile", "Rejected malicious tunnel build", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.rejectOverloaded", "Delay processing rejected request (ms)", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRateStat("tunnel.buildLookupSuccess", "Confirmation of successful deferred lookup", "Tunnels", RATES);
 
         _processor = new BuildMessageProcessor(ctx);
-        // used for previous hop, for all requests
-        boolean testMode = ctx.getBooleanProperty("i2np.allowLocal");
+        boolean testMode = ctx.getBooleanProperty("i2np.allowLocal"); // used for previous hop, for all requests
         _requestThrottler = testMode ? null : new RequestThrottler(ctx);
-        // used for previous and next hops, for successful builds only
-        _throttler = testMode ? null : new ParticipatingThrottler(ctx);
+        _throttler = testMode ? null : new ParticipatingThrottler(ctx); // used for previous and next hops, for successful builds only
         _buildReplyHandler = new BuildReplyHandler(ctx);
         _buildMessageHandlerJob = new TunnelBuildMessageHandlerJob(ctx);
         _buildReplyMessageHandlerJob = new TunnelBuildReplyMessageHandlerJob(ctx);
@@ -553,16 +546,16 @@ class BuildHandler implements Runnable {
                                                       new TimeoutReq(_context, state, req, nextPeer), NEXT_HOP_LOOKUP_TIMEOUT);
                 }
             } else {
-                _currentLookups.decrementAndGet();
-                if (_log.shouldInfo()) {
-                    String status = "\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]" + req;
-                    if (!lucky) {
+                String status = "\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]" + req;
+                if (lucky) {_currentLookups.decrementAndGet();}
+                else if (!lucky) {
+                    if (numTunnels > 2000) {_currentLookups.incrementAndGet();} // increment counter even though we dropped the lookup
+                    if (_log.shouldInfo()) {
                         _log.info("Dropping next hop lookup -> " + (numTunnels < 800 ? "40" : (numTunnels < 3000 ? "70" : "90")) +
                                   "% chance of drop" + status);
                     }
-                    else if (highload) {_log.info("Dropping next hop lookup -> System is under load" + status);}
-                    else {_log.info("Dropping next hop lookup -> Limit: " + limit + " / " + PERCENT_LOOKUP_LIMIT + "%" + status);}
-                }
+                } else if (highload) {_log.info("Dropping next hop lookup -> System is under load" + status);}
+                else {_log.info("Dropping next hop lookup -> Limit: " + limit + " / " + PERCENT_LOOKUP_LIMIT + "%" + status);}
                 _context.statManager().addRateData("tunnel.dropLookupThrottle", 1);
                 if (from != null) {_context.commSystem().mayDisconnect(from);}
             }
