@@ -533,7 +533,11 @@ class BuildHandler implements Runnable {
             int current;
             long maxQueueLag = _context.jobQueue().getMaxLag();
             boolean highload = SystemVersion.getCPULoadAvg() > 95 && maxQueueLag > 500;
-            boolean lucky = numTunnels < 500 ? _context.random().nextInt(5) > 1 : _context.random().nextInt(10) > 7;
+            boolean lucky;
+            if (numTunnels < 500) {lucky = _context.random().nextInt(5) > 1;}
+            else if (numTunnels < 3000) {lucky = _context.random().nextInt(10) > 6;}
+            else {lucky = _context.random().nextInt(10) > 8;}
+
             // leaky counter, not reliable
             if (_context.random().nextInt(16) > 0) {current = _currentLookups.incrementAndGet();}
             else {current = 1;}
@@ -552,7 +556,10 @@ class BuildHandler implements Runnable {
                 _currentLookups.decrementAndGet();
                 if (_log.shouldInfo()) {
                     String status = "\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]" + req;
-                    if (!lucky) {_log.info("Dropping next hop lookup -> " + (numTunnels < 500 ? "40" : "80") + "% chance of drop" + status);}
+                    if (!lucky) {
+                        _log.info("Dropping next hop lookup -> " + (numTunnels < 800 ? "40" : (numTunnels < 3000 ? "70" : "90")) +
+                                  "% chance of drop" + status);
+                    }
                     else if (highload) {_log.info("Dropping next hop lookup -> System is under load" + status);}
                     else {_log.info("Dropping next hop lookup -> Limit: " + limit + " / " + PERCENT_LOOKUP_LIMIT + "%" + status);}
                 }
@@ -671,8 +678,7 @@ class BuildHandler implements Runnable {
         Hash from = state.fromHash;
         if (from == null && state.from != null) {from = state.from.calculateHash();}
 
-        // warning, from could be null, but it should only happen if
-        // we will be a IBGW and it came from us as a OBEP
+        // Warning! from could be null, but should only happen if we will be IBGW and it came from us as OBEP
         if (isInGW && isOutEnd) {
             _context.statManager().addRateData("tunnel.rejectHostile", 1);
             if (_log.shouldWarn()) {_log.warn("Dropping HOSTILE Tunnel Request -> IBGW+OBEP " + req);}
