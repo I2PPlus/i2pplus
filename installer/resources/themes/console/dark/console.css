@@ -3037,7 +3037,7 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 .rbw.isU.isE{background:var(--isE),var(--isU),var(--badge)}
 .rbw.isU.isG{background:var(--isG),var(--isU),var(--badge)}
 .rif,.rif img{line-height:0;font-size:0}
-.rif img{padding:0;margin:0!important;width:24px;height:16px;vertical-align:middle;display:inline-block}
+.rif img{padding:0;margin:-1px 0!important;width:24px;height:18px;vertical-align:middle;display:inline-block}
 #banlist li .rid{margin-right:5px;margin-left:-4px;float:left}
 #floodfills .rif img{box-shadow:0 0 0 1px rgba(0,0,0,.3)}
 #jobs label{float:right}
