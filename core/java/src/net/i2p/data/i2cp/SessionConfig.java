@@ -309,7 +309,6 @@ public class SessionConfig extends DataStructureImpl {
                    DataHelper.eq(getCreationDate(), cfg.getCreationDate()) &&
                    DataHelper.eq(getOptions(), cfg.getOptions());
         }
-
         return false;
     }
 

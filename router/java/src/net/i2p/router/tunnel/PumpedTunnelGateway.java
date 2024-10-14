@@ -63,12 +63,10 @@ class PumpedTunnelGateway extends TunnelGateway {
     public static final String PROP_MAX_IB_QUEUE = "router.pumpMaxInboundQueue";
 
     /**
-     * @param preprocessor this pulls Pending messages off a list, builds some
-     *                     full preprocessed messages, and pumps those into the sender
-     * @param sender this takes a preprocessed message, encrypts it, and sends it to
-     *               the receiver
-     * @param receiver this receives the encrypted message and forwards it off
-     *                 to the first hop
+     * @param preprocessor this pulls Pending messages off a list, builds some full preprocessed
+                           messages, and pumps those into the sender
+     * @param sender this takes a preprocessed message, encrypts it, and sends it to the receiver
+     * @param receiver this receives the encrypted message and forwards it off to the first hop
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public PumpedTunnelGateway(RouterContext context, QueuePreprocessor preprocessor,
@@ -90,8 +88,8 @@ class PumpedTunnelGateway extends TunnelGateway {
     }
 
     /**
-     * Add a message to be sent down the tunnel, either sending it now (perhaps
-     * coalesced with other pending messages) or after a brief pause (_flushFrequency).
+     * Add a message to be sent down the tunnel, either sending it now (perhaps coalesced with
+     * other pending messages) or after a brief pause (_flushFrequency).
      * If it is queued up past its expiration, it is silently dropped
      *
      * This is only for OBGWs. See TPTG override for IBGWs.
@@ -103,57 +101,52 @@ class PumpedTunnelGateway extends TunnelGateway {
     @Override
     public void add(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
         OutboundGatewayMessage cur = new OutboundGatewayMessage(msg, toRouter, toTunnel);
-        if (_log.shouldDebug())
+        if (_log.shouldDebug()) {
             _log.debug("Outbound PumpedTunnelGateway added [Type " + msg.getType() + "] at priority: " + cur.getPriority());
+        }
         add(cur);
     }
 
     protected void add(PendingGatewayMessage cur) {
         _messagesSent++;
-        if (_prequeue.offer(cur))
-            _pumper.wantsPumping(this);
-        else
-            _context.statManager().addRateData("tunnel.dropGatewayOverflow", 1);
+        if (_prequeue.offer(cur)) {_pumper.wantsPumping(this);}
+        else {_context.statManager().addRateData("tunnel.dropGatewayOverflow", 1);}
     }
 
     /**
-     * run in one of the TunnelGatewayPumper's threads, this pulls pending messages
-     * off the prequeue, adds them to the queue and then tries to preprocess the queue,
-     * scheduling a later delayed flush as necessary.  this allows the gw.add call to
-     * go quickly, rather than blocking its callers on potentially substantial
-     * processing.
+     * Run in one of the TunnelGatewayPumper's threads, this pulls pending messages off the prequeue,
+     * adds them to the queue and then tries to preprocess the queue, scheduling a later delayed flush
+     * as necessary.  This allows the gw.add call to go quickly, rather than blocking its callers on
+     * potentially substantial processing.
      *
      * @param queueBuf Empty list for convenience, to use as a temporary buffer.
      *                 Must be empty when called; will always be emptied before return.
      * @return true if we did not finish, and the pumper should be requeued.
      */
     public boolean pump(List<PendingGatewayMessage> queueBuf) {
-        // If the next hop is backlogged,
-        // drain only a little... better to let things back up here,
+        // If the next hop is backlogged, drain only a little... better to let things back up here,
         // before fragmentation, where we have priority queueing (for OBGW)
         int max;
         boolean backlogged = _context.commSystem().isBacklogged(_nextHop);
         long lag = _context.jobQueue().getMaxLag();
         boolean highLoad = SystemVersion.getCPULoadAvg() > 95 && lag > 1000;
-        if (backlogged && _log.shouldInfo())
+        if (backlogged && _log.shouldInfo()) {
             _log.info("PumpedTunnelGateway backlogged, queued to " + _nextHop + " : " + _prequeue.size() +
                       " Inbound? " + _isInbound);
+        }
         if (backlogged) {max = _isInbound ? 1 : 2;}
         else {
             max = _isInbound ? _context.getProperty(PROP_MAX_IB_MSGS_PER_PUMP, MAX_IB_MSGS_PER_PUMP) :
                                _context.getProperty(PROP_MAX_OB_MSGS_PER_PUMP, MAX_OB_MSGS_PER_PUMP);
         }
         _prequeue.drainTo(queueBuf, max);
-        if (queueBuf.isEmpty())
-            return false;
+        if (queueBuf.isEmpty()) {return false;}
         boolean rv = !_prequeue.isEmpty();
 
         final boolean debug = _log.shouldDebug();
         long startAdd;
-        if (debug)
-            startAdd = _context.clock().now();
-        else
-            startAdd = 0;
+        if (debug) {startAdd = _context.clock().now();}
+        else {startAdd = 0;}
         long beforeLock = startAdd;
         long afterAdded = -1;
         boolean delayedFlush = false;
@@ -169,18 +162,17 @@ class PumpedTunnelGateway extends TunnelGateway {
                 _log.debug("Added before direct flush preprocessing for " + toString() + ":\n* " + _queue);
             }
             delayedFlush = _preprocessor.preprocessQueue(_queue, _sender, _receiver);
-            if (debug)
-                afterPreprocess = _context.clock().now();
-            if (delayedFlush)
-                delayAmount = _preprocessor.getDelayAmount();
+            if (debug) {afterPreprocess = _context.clock().now();}
+            if (delayedFlush) {delayAmount = _preprocessor.getDelayAmount();}
             _lastFlush = _context.clock().now();
 
             // expire any as necessary, even if fragmented
             for (int i = 0; i < _queue.size(); i++) {
                 PendingGatewayMessage m = _queue.get(i);
                 if (m.getExpiration() + Router.CLOCK_FUDGE_FACTOR < _lastFlush) {
-                    if (debug)
+                    if (debug) {
                         _log.debug("Expire on the queue (size=" + _queue.size() + "): " + m);
+                    }
                     _queue.remove(i);
                     i--;
                 }
@@ -195,9 +187,7 @@ class PumpedTunnelGateway extends TunnelGateway {
             queueBuf.clear();
         }
 
-        if (delayedFlush) {
-            _delayedFlush.reschedule(delayAmount);
-        }
+        if (delayedFlush) {_delayedFlush.reschedule(delayAmount);}
         if (debug) {
             long complete = _context.clock().now();
             _log.debug("Time to add " + queueBuf.size() + " messages to " + toString() + ":" + (complete-startAdd)
