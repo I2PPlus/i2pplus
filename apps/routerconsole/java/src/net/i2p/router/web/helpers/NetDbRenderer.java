@@ -151,12 +151,13 @@ class NetDbRenderer {
                         catch (InterruptedException ie) {}
                     }
                 }
+                netdb.lookupLocallyWithoutValidation(hash);
                 if (ri != null) {renderRouterInfo(buf, ri, false, true);}
                 else {
                     buf.append("<div class=netdbnotfound>");
                     if (routerPrefix != null) {
                         buf.append(_t("Router")).append(' ').append(routerPrefix)
-                           .append(' ').append(banned ? _t("is banned") : _t("not found in network database"));
+                           .append(' ').append(banned ? _t("is banned") : _t("not found in network database")).append(".");
                     } else {buf.append(_t("No results"));}
                     buf.append("</div>");
                 }
@@ -253,7 +254,7 @@ class NetDbRenderer {
                 if (caps != null) {buf.append("[").append("Caps ").append(caps).append("] ");}
                 if (ssucaps != null) {buf.append("[").append("SSU Caps ").append(ssucaps).append("] ");}
                 if (tr != null) {buf.append("[").append("Transport ").append(tr).append("] ");}
-                buf.append(_t("found in the network database")).append("</div>");
+                buf.append(_t("found in the network database")).append(".</div>");
             } else {
                 List<RouterInfo> results = new ArrayList<RouterInfo>(routers);
                 int sz = results.size();
@@ -794,10 +795,9 @@ class NetDbRenderer {
             if (ls == null) {
                 // Remote lookup
                 LookupWaiter lw = new LookupWaiter();
-                _context.netDb().lookupLeaseSetRemotely(hash, lw, lw, LOOKUP_WAIT, null);
-                // Wait for the lookup to complete
                 synchronized(lw) {
-                    try {lw.wait(LOOKUP_WAIT + 1000);}
+                    _context.netDb().lookupLeaseSetRemotely(hash, lw, lw, LOOKUP_WAIT, null);
+                    try {lw.wait(LOOKUP_WAIT + 1000);} // Wait for the lookup to complete
                     catch (InterruptedException ie) {}
                 }
                 ls = _context.netDb().lookupLeaseSetLocally(hash);
