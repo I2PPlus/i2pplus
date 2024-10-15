@@ -455,7 +455,7 @@ class BuildHandler implements Runnable {
             if (caps != null) {
                 if (caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0) {
                     _context.statManager().addRateData("tunnel.dropTunnelFromCongestionCapability", 1);
-                    if (_log.shouldLog(Log.WARN)) {
+                    if (_log.shouldLog(Log.WARN) && from != null) {
                         _log.warn("Dropped request from [" + from.toBase64().substring(0,6) + "] -> Local congestion");
                     }
                     RouterInfo fromRI = _context.netDb().lookupRouterInfoLocally(from);
@@ -498,13 +498,15 @@ class BuildHandler implements Runnable {
                       " received " + (timeSinceReceived+decryptTime) + "ms ago");
         }
         if (req == null) {
-            // no records matched, or the decryption failed.  bah
-            if (_log.shouldInfo()) {
-                _log.info("Request [MsgID " + state.msg.getUniqueId() + "] could not be decrypted from [" +
-                          from.toBase64().substring(0,6) + "]");
-            }
             _context.statManager().addRateData("tunnel.dropDecryptFail", 1);
-            if (from != null) {_context.commSystem().mayDisconnect(from);}
+            if (from != null) {
+                _context.commSystem().mayDisconnect(from);
+                // no records matched, or the decryption failed. bah
+                if (_log.shouldInfo()) {
+                    _log.info("Request [MsgID " + state.msg.getUniqueId() + "] could not be decrypted from [" +
+                              from.toBase64().substring(0,6) + "]");
+                }
+            }
             return -1;
         }
 
@@ -850,7 +852,7 @@ class BuildHandler implements Runnable {
         if (response == 0 && !isInGW && _throttler != null && from != null && shouldThrottle) {
             ParticipatingThrottler.Result result = _throttler.shouldThrottle(from);
             if (result == ParticipatingThrottler.Result.DROP) {
-                if (_log.shouldWarn()) {
+                if (_log.shouldWarn() && from != null && req != null) {
                     _log.warn("Dropping Tunnel Request (hop throttle), previous hop -> [" + from.toBase64().substring(0,6) + "] " + req);
                 }
                 _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
@@ -860,7 +862,7 @@ class BuildHandler implements Runnable {
                 return;
             }
             if (result == ParticipatingThrottler.Result.REJECT) {
-                if (_log.shouldWarn()) {
+                if (_log.shouldWarn() && from != null && req != null) {
                     _log.warn("Rejecting Tunnel Request (hop throttle), previous hop -> [" + from.toBase64().substring(0,6) + "] " + req);
                 }
                 _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
