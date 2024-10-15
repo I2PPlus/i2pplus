@@ -144,16 +144,11 @@ class NetDbRenderer {
                 RouterInfo ri = (RouterInfo) netdb.lookupLocallyWithoutValidation(hash);
                 boolean banned = false;
                 if (ri == null) {
-                    banned = _context.banlist().isBanlisted(hash);
-                    if (!banned) {
-                        // remote lookup
-                        LookupWaiter lw = new LookupWaiter();
-                        netdb.lookupRouterInfo(hash, lw, lw, LOOKUP_WAIT);
-                        // just wait right here in the middle of the rendering, sure
-                        synchronized(lw) {
-                            try {lw.wait(LOOKUP_WAIT);} catch (InterruptedException ie) {}
-                        }
-                        ri = (RouterInfo) netdb.lookupLocallyWithoutValidation(hash);
+                    LookupWaiter lw = new LookupWaiter();
+                    synchronized(lw) {
+                        netdb.lookupRouterInfo(hash, lw, lw, LOOKUP_WAIT); // remote lookup
+                        try {lw.wait(LOOKUP_WAIT);}
+                        catch (InterruptedException ie) {}
                     }
                 }
                 if (ri != null) {renderRouterInfo(buf, ri, false, true);}
