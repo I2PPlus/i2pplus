@@ -1,14 +1,9 @@
 <%
-   if (request.getCharacterEncoding() == null) {
-     request.setCharacterEncoding("UTF-8");
-   }
+   if (request.getCharacterEncoding() == null) {request.setCharacterEncoding("UTF-8");}
    String i2pcontextId = request.getParameter("i2p.contextId");
    try {
-     if (i2pcontextId != null) {
-       session.setAttribute("i2p.contextId", i2pcontextId);
-     } else {
-       i2pcontextId = (String) session.getAttribute("i2p.contextId");
-     }
+     if (i2pcontextId != null) {session.setAttribute("i2p.contextId", i2pcontextId);}
+     else {i2pcontextId = (String) session.getAttribute("i2p.contextId");}
    } catch (IllegalStateException ise) {}
 %>
 <jsp:useBean class="net.i2p.router.web.CSSHelper" id="intl" scope="request" />
@@ -26,23 +21,20 @@
   java.io.File themeOverride = new java.io.File(themeBase + "override.css");
   boolean hasOverride = themeOverride.exists();
   boolean useSoraFont = intl.useSoraDisplayFont();
+  String defaultCSP = "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; script-src 'self' 'nonce-" + cspNonce + "'; font-src 'self'; object-src 'none'; media-src 'none';";
   response.setHeader("Accept-Ranges", "bytes");
   if (uri.contains("netdbmap")) {
       response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; script-src 'self' 'unsafe-eval' 'nonce-" + cspNonce + "'; font-src 'self'; object-src 'none'; media-src 'none';");
-  } else {
-      response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; script-src 'self' 'nonce-" + cspNonce + "'; font-src 'self'; object-src 'none'; media-src 'none';");
-  }
+  } else {response.setHeader("Content-Security-Policy", defaultCSP);}
   response.setHeader("X-XSS-Protection", "1; mode=block");
   response.setHeader("X-Content-Type-Options", "nosniff");
   response.setHeader("Referrer-Policy", "same-origin");
-  if (uri.contains("override.css")) {
+  if (uri.contains("override.css")) {response.setHeader("Cache-Control", "private, no-cache, max-age=2628000");}
+  else if (uri.endsWith("xhr1.jsp")) {response.setHeader("Cache-Control", "private, no-cache, max-age=180");}
+  else if (uri.contains("themes") || uri.contains("js") || uri.contains("flags")) {response.setHeader("Cache-Control", "private, max-age=2628000, immutable");}
+  else {
     response.setHeader("Cache-Control", "private, no-cache, max-age=2628000");
-  } else if (uri.endsWith("xhr1.jsp")) {
-    response.setHeader("Cache-Control", "private, no-cache, max-age=180");
-  } else if (uri.contains("themes") || uri.contains("js") || uri.contains("flags")) {
-    response.setHeader("Cache-Control", "private, max-age=2628000, immutable");
-  } else {
-    response.setHeader("Cache-Control", "private, no-cache, max-age=2628000");
+    response.setHeader("Content-Security-Policy", defaultCSP);
   }
   String conNonceParam = request.getParameter("consoleNonce");
   if (net.i2p.router.web.CSSHelper.getNonce().equals(conNonceParam)) {
