@@ -538,14 +538,11 @@ class BuildHandler implements Runnable {
                 if (current <= 0) {_currentLookups.set(1);} // don't let it go negative
                 if (_log.shouldDebug()) {
                     _log.debug("Request handled -> Looking up next peer [" + nextPeer.toBase64().substring(0,6) +
-                               "] \n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() +
+                               "]\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() +
                                "]\n* Lookups: " + current + " / " + limit + req);
                 }
                 LookupWaiter lw = new LookupWaiter();
-                synchronized(lw) {
-                    _context.netDb().lookupRouterInfo(nextPeer, new HandleReq(_context, state, req, nextPeer),
-                                                      new TimeoutReq(_context, state, req, nextPeer), NEXT_HOP_LOOKUP_TIMEOUT);
-                }
+                synchronized(lw) {_context.netDb().lookupRouterInfo(nextPeer, lw, lw, NEXT_HOP_LOOKUP_TIMEOUT);}
                 _context.netDb().lookupLocallyWithoutValidation(nextPeer);
             } else {
                 String status = "\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]" + req;
@@ -647,9 +644,9 @@ class BuildHandler implements Runnable {
                           "\n* From: " + from + " [MsgID " + _state.msg.getUniqueId() + "]");
             }
             if (_nextPeer != null) {_context.commSystem().mayDisconnect(_nextPeer);}
-            // ???  should we blame the peer here?
-            getContext().profileManager().tunnelTimedOut(_nextPeer);
-            getContext().messageHistory().tunnelRejected(_state.fromHash, new TunnelId(_req.readReceiveTunnelId()), _nextPeer, "lookup fail");
+            _context.profileManager().tunnelFailed(_nextPeer, 100); // blame
+            _context.profileManager().tunnelTimedOut(_nextPeer);
+            _context.messageHistory().tunnelRejected(_state.fromHash, new TunnelId(_req.readReceiveTunnelId()), _nextPeer, "lookup fail");
         }
     }
 
