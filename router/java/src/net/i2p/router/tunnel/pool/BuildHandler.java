@@ -213,7 +213,7 @@ class BuildHandler implements Runnable {
         _isRunning = true;
         while (_isRunning && !_manager.isShutdown()) {
             try {handleInboundRequest();}
-            catch (RuntimeException e) {_log.log(Log.CRIT, "Catastrophic Tunnel Manager failure! -> " +  e.getMessage());}
+            catch (RuntimeException e) {_log.log(Log.CRIT, "Catastrophic tunnel build failure! -> " +  e.getMessage());}
         }
         if (_log.shouldWarn()) {_log.warn("Completed handling Inbound build requests");}
         _isRunning = false;
@@ -430,6 +430,8 @@ class BuildHandler implements Runnable {
         }
     }
 
+    private static final Object lookupLock = new Object();
+
     /**
      *  Decrypt the request, lookup the RI locally,
      *  and call handleReq() if found or queue a lookup job.
@@ -517,7 +519,7 @@ class BuildHandler implements Runnable {
             return -1;
         }
 
-        RouterInfo nextPeerInfo = _context.netDb().lookupRouterInfoLocally(nextPeer);
+        RouterInfo nextPeerInfo = (RouterInfo) _context.netDb().lookupRouterInfoLocally(nextPeer);
 
         if (nextPeerInfo == null) {
             int numTunnels = _context.tunnelManager().getParticipatingCount();
@@ -541,7 +543,7 @@ class BuildHandler implements Runnable {
                                "] \n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() +
                                "]\n* Lookups: " + current + " / " + limit + req);
                 }
-                if (_context.netDb().lookupLocallyWithoutValidation(nextPeer) == null) {
+                synchronized(lookupLock) {
                     _context.netDb().lookupRouterInfo(nextPeer, new HandleReq(_context, state, req, nextPeer),
                                                       new TimeoutReq(_context, state, req, nextPeer), NEXT_HOP_LOOKUP_TIMEOUT);
                 }
