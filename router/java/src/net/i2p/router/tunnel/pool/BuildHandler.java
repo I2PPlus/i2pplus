@@ -430,8 +430,6 @@ class BuildHandler implements Runnable {
         }
     }
 
-    private static final Object lookupLock = new Object();
-
     /**
      *  Decrypt the request, lookup the RI locally,
      *  and call handleReq() if found or queue a lookup job.
@@ -543,10 +541,12 @@ class BuildHandler implements Runnable {
                                "] \n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() +
                                "]\n* Lookups: " + current + " / " + limit + req);
                 }
-                synchronized(lookupLock) {
+                LookupWaiter lw = new LookupWaiter();
+                synchronized(lw) {
                     _context.netDb().lookupRouterInfo(nextPeer, new HandleReq(_context, state, req, nextPeer),
                                                       new TimeoutReq(_context, state, req, nextPeer), NEXT_HOP_LOOKUP_TIMEOUT);
                 }
+                _context.netDb().lookupLocallyWithoutValidation(nextPeer);
             } else {
                 String status = "\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]" + req;
                 if (lucky) {_currentLookups.decrementAndGet();}
@@ -1213,6 +1213,12 @@ class BuildHandler implements Runnable {
                 log.info("Timeout (" + NEXT_HOP_LOOKUP_TIMEOUT/1000 + "s) contacting next hop" + _cfg);
             }
         }
+    }
+
+    private class LookupWaiter extends JobImpl {
+        public LookupWaiter() {super(_context);}
+        public void runJob() {synchronized(this) {notifyAll();}}
+        public String getName() {return "Console NetDb Lookup";}
     }
 
     /**
