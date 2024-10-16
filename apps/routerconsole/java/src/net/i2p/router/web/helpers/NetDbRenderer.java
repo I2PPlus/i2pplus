@@ -1628,8 +1628,8 @@ class NetDbRenderer {
                 Map<Object, Object> p = info.getOptionsMap();
                 for (Map.Entry<Object, Object> e : p.entrySet()) {
                     String key = (String) e.getKey();
-                    if (key.equals("caps") || key.toLowerCase().contains("netid") || key.equals("family") ||
-                        key.toLowerCase().contains("version")) {continue;}
+                    if (key.equals("caps") || key.toLowerCase().contains("netid") || key.toLowerCase().equals("family") ||
+                        key.toLowerCase().contains("version") ||key.toLowerCase().contains("netid")) {continue;}
                     String netDbKey = DataHelper.stripHTML(key)
                         .replace("netdb.", "")
                         .replace("knownLeaseSets", "<li><b>" + _t("LeaseSets"))
@@ -1696,10 +1696,9 @@ class NetDbRenderer {
             Map<Object, Object> p = info.getOptionsMap();
             for (Map.Entry<Object, Object> e : p.entrySet()) {
                 String key = (String) e.getKey();
+                if (key.toLowerCase().contains("caps") || key.toLowerCase().contains("version") ||
+                    key.toLowerCase().equals("family")) {continue;}
                 String netDbKey = DataHelper.stripHTML(key)
-                    .replace("caps", "<li class=\"cap_stat hide\" hidden><b>" + _t("Capabilities")) // hide caps as already in the header
-                    .replace("router.version", "<li class=hide hidden><b>" + _t("Version")) // hide version as already in the header
-                    .replace("coreVersion", "<li class=hide hidden><b>" + _t("Core version")) // do we need this?
                     .replace("netdb.", "")
                     .replace("netId", "<hr><li><b>" + _t("Network ID")) // only show for our own id
                     .replace("knownLeaseSets", "<li><b>" + _t("LeaseSets"))
@@ -1708,8 +1707,6 @@ class NetDbRenderer {
                     .replace("uptime", "<li><b>" + _t("Uptime"))
                     // TODO: place family entries underneath general network stats
                     .replace("family.", "Family ")
-                    // hide family name in css as it's already displayed above
-                    .replace("family", "<li class=\"longstat fam hide\" hidden><b>" + _t("Family"))
                     .replace("Family key", "<li class=\"longstat fam\"><b>" + _t("Family Key"))
                     .replace("Family sig", "<li class=\"longstat fam\"><b>" + _t("Family Sig"))
                     .replace("tunnel.buildExploratoryExpire.60m",  "<li class=longstat><b>" + _t("Exploratory tunnels expire (1h)"))
