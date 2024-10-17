@@ -828,17 +828,12 @@ class NetDbRenderer {
         int type = ls.getType();
         NetworkDatabaseFacade subDbKey = key != null ? _context.clientNetDb(key): null;
         if (key != null) {
-            buf.append("<table class=\"leaseset lazy\" id=\"ls_").append(key.toBase32().substring(0,4)).append("\">\n");
-        } else {buf.append("<table class=\"leaseset lazy\">\n");}
+            buf.append("<table class=\"leaseset lazy\" id=\"ls_").append(key.toBase32().substring(0,4)).append("\">");
+        } else {buf.append("<table class=\"leaseset lazy\">");}
         buf.append("<tr><th><b class=lskey>");
         if (type == DatabaseEntry.KEY_TYPE_META_LS2) {buf.append(_t("Meta"));}
         buf.append(_t("LeaseSet")).append(":</b> <code title =\"")
            .append(_t("LeaseSet Key")).append("\">").append(key.toBase64()).append("</code>");
-        /*
-        if (subDbKey != null && !subDbKey.toString().contains("Main")) {
-            buf.append("<code id=subDb hidden style=display:none>").append(subDbKey.toString().replace("ClientNetDb [","").replace("]","")).append("</code>");
-        }
-        */
         if (type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2 || _context.keyRing().get(key) != null) {
             buf.append(" <b class=encls>(").append(_t("Encrypted")).append(")</b>");
         }
@@ -1256,7 +1251,7 @@ class NetDbRenderer {
     private void renderRouterInfo(StringBuilder buf, RouterInfo info, boolean isUs, boolean full) {
         String hash = info.getIdentity().getHash().toBase64();
         String family = info.getOption("family");
-        buf.append("<table class=\"netdbentry lazy\">\n").append("<tr><th>");
+        buf.append("<table class=\"netdbentry lazy\">").append("<tr><th>");
         if (isUs) {
             buf.append("<b id=our-info>").append(_t("Our info")).append(":</b></th><th><code>").append(hash)
                .append("</code></th><th id=netdb_ourinfo>");
@@ -1659,37 +1654,37 @@ class NetDbRenderer {
                                                   .replace("U", "")
                                                   .replace(";", " <span class=\"bullet\">&bullet;</span> ")
                                                   .replace("&bullet;</span> 555", "&bullet;</span> " +_t("n/a"));
-                    buf.append(":</b> ").append(netDbValue).append("</li>\n");
+                    buf.append(":</b> ").append(netDbValue).append("</li>");
                 }
                 long now = _context.clock().now();
                 long heard = prof.getFirstHeardAbout();
                 if (heard > 0) {
                     long peerAge = Math.max(now - heard, 1);
                     buf.append("<li><b>").append(_t("First heard about")).append(":</b> ")
-                       .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>\n");
+                       .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>");
                 } else {
                     buf.append("<li><b>").append(_t("First heard about")).append(":</b> ")
-                       .append(_t("n/a")).append("</li>\n");
+                       .append(_t("n/a")).append("</li>");
                 }
                 heard = prof.getLastHeardAbout();
                 if (heard > 0) {
                     long peerAge = Math.max(now - heard, 1);
                     buf.append("<li><b>").append(_t("Last heard about")).append(":</b> ")
-                       .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>\n");
+                       .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>");
                 } else {
                     buf.append("<li><b>").append(_t("Last heard about")).append(":</b> ")
-                       .append(_t("n/a")).append("</li>\n");
+                       .append(_t("n/a")).append("</li>");
                 }
                 heard = prof.getLastHeardFrom();
                 if (heard > 0) {
                     long peerAge = Math.max(now - heard, 1);
                     buf.append("<li><b>").append(_t("Last heard from")).append(":</b> ")
-                       .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>\n");
+                       .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>");
                 } else {
                     buf.append("<li><b>").append(_t("Last heard from")).append(":</b> ")
-                       .append(_t("n/a")).append("</li>\n");
+                       .append(_t("n/a")).append("</li>");
                 }
-                buf.append("</ul>\n</td></tr>\n");
+                buf.append("</ul></td></tr>\n");
             }
         } else if (full) {
             buf.append("<tr><td><b>" + _t("Stats") + ":</b><td colspan=2>\n<ul class=netdbStats>");
@@ -1728,9 +1723,9 @@ class NetDbRenderer {
                                                   .replace("U", "")
                                                   .replace(";", " <span class=\"bullet\">&bullet;</span> ")
                                                   .replace("&bullet;</span> 555", "&bullet;</span> " +_t("n/a"));
-                    buf.append(":</b> ").append(netDbValue).append("</li>\n");
+                    buf.append(":</b> ").append(netDbValue).append("</li>");
             }
-            buf.append("</ul>\n</td></tr>\n");
+            buf.append("</ul></td></tr>\n");
         }
         buf.append("</table>\n");
     }
