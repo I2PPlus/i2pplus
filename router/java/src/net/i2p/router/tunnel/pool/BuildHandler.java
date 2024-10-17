@@ -543,9 +543,8 @@ class BuildHandler implements Runnable {
                                "]\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() +
                                "]\n* Lookups: " + current + " / " + limit + req);
                 }
-                LookupWaiter lw = new LookupWaiter();
-                synchronized(lw) {_context.netDb().lookupRouterInfo(nextPeer, lw, lw, NEXT_HOP_LOOKUP_TIMEOUT);}
-                _context.netDb().lookupLocallyWithoutValidation(nextPeer);
+                _context.netDb().lookupRouterInfo(nextPeer, new HandleReq(_context, state, req, nextPeer),
+                                                  new TimeoutReq(_context, state, req, nextPeer), NEXT_HOP_LOOKUP_TIMEOUT);
             } else {
                 String status = "\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]" + req;
                 if (lucky) {_currentLookups.decrementAndGet();}
@@ -1128,8 +1127,7 @@ class BuildHandler implements Runnable {
         final long recvTime;
 
         /**
-         *  Either f or h may be null, but both should be null only if
-         *  we're to be a IBGW and it came from us as a OBEP.
+         *  Either f or h may be null, but both should be null only if we're to be a IBGW and it came from us as a OBEP.
          */
         public BuildMessageState(RouterContext ctx, I2NPMessage m, RouterIdentity f, Hash h) {
             _ctx = ctx;
@@ -1212,12 +1210,6 @@ class BuildHandler implements Runnable {
                 log.info("Timeout (" + NEXT_HOP_LOOKUP_TIMEOUT/1000 + "s) contacting next hop" + _cfg);
             }
         }
-    }
-
-    private class LookupWaiter extends JobImpl {
-        public LookupWaiter() {super(_context);}
-        public void runJob() {synchronized(this) {notifyAll();}}
-        public String getName() {return "Console NetDb Lookup";}
     }
 
     /**
