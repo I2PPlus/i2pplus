@@ -722,7 +722,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     public void lookupRouterInfo(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs) {
-        if (!_initialized) return;
+        if (!_initialized) {return;}
         RouterInfo ri = lookupRouterInfoLocally(key);
         if (ri != null) {
             if (onFindJob != null) {_context.jobQueue().addJob(onFindJob);}

@@ -538,8 +538,8 @@ class BuildHandler implements Runnable {
             else {current = 1;}
             if (current <= limit && !highload && lucky) {
                 if (current <= 0) {_currentLookups.set(1);} // don't let it go negative
-                if (_log.shouldDebug()) {
-                    _log.debug("Request handled -> Looking up next peer [" + nextPeer.toBase64().substring(0,6) +
+                if (_log.shouldInfo()) {
+                    _log.info("Looking up next hop [" + nextPeer.toBase64().substring(0,6) +
                                "]\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() +
                                "]\n* Lookups: " + current + " / " + limit + req);
                 }
@@ -566,7 +566,7 @@ class BuildHandler implements Runnable {
             long handleTime = System.currentTimeMillis() - beforeHandle;
             if (_log.shouldDebug()) {
                 _log.debug("Request handled after " + handleTime + "ms / " + decryptTime + "ms / " + timeSinceReceived + "ms" +
-                           " and we know the next peer [" + nextPeer.toBase64().substring(0,6) + "]" +
+                           " and next hop [" + nextPeer.toBase64().substring(0,6) + "] is known" +
                            "\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]" + req);
             }
             return handleTime;
