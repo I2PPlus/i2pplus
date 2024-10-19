@@ -116,7 +116,7 @@ class BuildHandler implements Runnable {
         ctx.statManager().createRateStat("tunnel.corruptBuildReply", "Corrupt tunnel build replies received", "Tunnels", RATES);
         ctx.statManager().createRateStat("tunnel.dropConnLimits", "Dropped not rejected tunnel build (connection limits)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRateStat("tunnel.dropDecryptFail", "Dropped tunnel build (decryption failed)", "Tunnels [Participating]", RATES);
-        //ctx.statManager().createRateStat("tunnel.handleRemaining", "Remaining queued inbound requests after one pass", "Tunnels [Participating]", RATES);
+        ctx.statManager().createRateStat("tunnel.handleRemaining", "Waiting inbound requests after 1 pass", "Tunnels [Participating]", RATES);
         ctx.statManager().createRateStat("tunnel.receiveRejectionBandwidth", "Received tunnel build rejection (bandwidth overload)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRateStat("tunnel.receiveRejectionCritical", "Received tunnel build rejection (critical failure)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRateStat("tunnel.receiveRejectionProbabalistic", "Received tunnel build rejection probabalistically", "Tunnels [Participating]", RATES);
@@ -146,9 +146,10 @@ class BuildHandler implements Runnable {
         ctx.statManager().createRequiredRateStat("tunnel.rejectOverloaded", "Delay processing rejected request (ms)", "Tunnels [Participating]", RATES);
 
         _processor = new BuildMessageProcessor(ctx);
-        boolean testMode = ctx.getBooleanProperty("i2np.allowLocal"); // used for previous hop, for all requests
-        _requestThrottler = testMode ? null : new RequestThrottler(ctx);
-        _throttler = testMode ? null : new ParticipatingThrottler(ctx); // used for previous and next hops, for successful builds only
+        boolean testMode = ctx.getBooleanProperty("i2np.allowLocal"); // previous hop, all requests
+        boolean shouldThrottle = _context.getBooleanPropertyDefaultTrue(PROP_SHOULD_THROTTLE);
+        _requestThrottler = testMode || !shouldThrottle ? null : new RequestThrottler(ctx);
+        _throttler = testMode || !shouldThrottle ? null : new ParticipatingThrottler(ctx); // previous and next hops, successful builds only
         _buildReplyHandler = new BuildReplyHandler(ctx);
         _buildMessageHandlerJob = new TunnelBuildMessageHandlerJob(ctx);
         _buildReplyMessageHandlerJob = new TunnelBuildReplyMessageHandlerJob(ctx);
