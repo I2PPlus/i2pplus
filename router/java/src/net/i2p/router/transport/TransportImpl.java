@@ -160,64 +160,101 @@ public abstract class TransportImpl implements Transport {
     /** Per-transport connection limit */
     public int getMaxConnections() {
         if (_context.commSystem().isDummy()) {return 0;} // testing
+
         String style = getStyle();
-        // object churn
         String maxProp;
         if (style.equals("SSU")) {maxProp = "i2np.udp.maxConnections";}
         else if (style.equals("NTCP")) {maxProp = "i2np.ntcp.maxConnections";}
         else {maxProp = "i2np." + style.toLowerCase(Locale.US) + ".maxConnections";} // shouldn't happen
+
         int def = MAX_CONNECTION_FACTOR;
-        // get it from here, not the RI, to avoid deadlock
         char bw = _context.router().getBandwidthClass();
 
-            switch (bw) {
-                case Router.CAPABILITY_BW12:
-                case Router.CAPABILITY_BW32:
-                case 'u': // unknown
-                default:
-                    break;
-                case Router.CAPABILITY_BW64: def *= 2;
-                    break;
-                case Router.CAPABILITY_BW128: def *= 3;
-                    break;
-                case Router.CAPABILITY_BW256: def *= 5;
-                    break;
-                case Router.CAPABILITY_BW512: def *= 8;
-                    break;
-                case Router.CAPABILITY_BW_UNLIMITED: def *= 10;
-                    break;
-            }
+        switch (bw) {
+            case Router.CAPABILITY_BW12:
+            case Router.CAPABILITY_BW32:
+            case 'u': // unknown
+            default:
+                break;
+            case Router.CAPABILITY_BW64:
+                def *= 2;
+                break;
+            case Router.CAPABILITY_BW128:
+                def *= 3;
+                break;
+            case Router.CAPABILITY_BW256:
+                def *= 5;
+                break;
+            case Router.CAPABILITY_BW512:
+                def *= 8;
+                break;
+            case Router.CAPABILITY_BW_UNLIMITED:
+                def *= 10;
+                break;
+        }
 
-        if (_context.netDb().floodfillEnabled() ||
-            _context.getBooleanProperty(PROP_BOOST_CONNECTION_LIMITS)) {
-            def *= 20; def /= 10;
+        if (_context.netDb().floodfillEnabled() || _context.getBooleanProperty(PROP_BOOST_CONNECTION_LIMITS)) {
+            def *= 2;
         }
-        // increase limit for SSU, for now
-        long maxMemory = SystemVersion.getMaxMemory();
-        int cores = SystemVersion.getCores();
-        boolean isSlow = SystemVersion.isSlow();
+
         if (style.equals("SSU")) {
-            if (REBALANCE_NTCP) {
-                if (maxMemory >= 1024*1024*1024 && !isSlow) {def *= 8;}
-                else if (maxMemory >= 512*1024*1024) {def *= 5;}
-                else {def *= 5; def /= 2;}
-            } else {def *= 3;}
-            if (def > 8000 && maxMemory >= 2048*1024*1024 && !isSlow) {def = 8000;}
-            else if (def > 5000 && maxMemory >= 1024*1024*1024 && !isSlow) {def = 5000;}
-            else if (def > 4000 && maxMemory >= 512*1024*1024 && !isSlow) {def = 4000;}
-            else if (def > 3000) {def = 3000;}
+            def *= 3;
+            if (def > 3000) {def = 3000;}
         } else if (style.equals("NTCP")) {
-            if (REBALANCE_NTCP) {
-                if (maxMemory >= 1024*1024*1024 && !isSlow) {def *= 6;}
-                else if (maxMemory >= 512*1024*1024 && !isSlow) {def *= 4;}
-                else {def *= 3; def /= 2;}
-                if (def > 4000 && maxMemory >= 2048*1024*1024 && !isSlow) {def = 5000;}
-                else if (def > 4000 && maxMemory >= 1024*1024*1024 && !isSlow) {def = 4000;}
-                else if (def > 3000 && maxMemory >= 512*1024*1024 && !isSlow) {def = 3000;}
-                else if (def > 2000) {def = 2000;}
-            }
+            def *= 3;
+            if (def > 2000) {def = 2000;}
         }
+
         return _context.getProperty(maxProp, def);
+    }
+
+    public static int getTransportMaxConnections(RouterContext ctx, String style) {
+        if (ctx.commSystem().isDummy()) {return 0;} // testing
+
+        String maxProp;
+        if (style.equals("SSU")) {maxProp = "i2np.udp.maxConnections";}
+        else if (style.equals("NTCP")) {maxProp = "i2np.ntcp.maxConnections";}
+        else {maxProp = "i2np." + style.toLowerCase(Locale.US) + ".maxConnections";} // shouldn't happen
+
+        int def = MAX_CONNECTION_FACTOR;
+        char bw = ctx.router().getBandwidthClass();
+
+        switch (bw) {
+            case Router.CAPABILITY_BW12:
+            case Router.CAPABILITY_BW32:
+            case 'u': // unknown
+            default:
+                break;
+            case Router.CAPABILITY_BW64:
+                def *= 2;
+                break;
+            case Router.CAPABILITY_BW128:
+                def *= 3;
+                break;
+            case Router.CAPABILITY_BW256:
+                def *= 5;
+                break;
+            case Router.CAPABILITY_BW512:
+                def *= 8;
+                break;
+            case Router.CAPABILITY_BW_UNLIMITED:
+                def *= 10;
+                break;
+        }
+
+        if (ctx.netDb().floodfillEnabled() || ctx.getBooleanProperty(PROP_BOOST_CONNECTION_LIMITS)) {
+            def *= 2;
+        }
+
+        if (style.equals("SSU")) {
+            def *= 3;
+            if (def > 3000) {def = 3000;}
+        } else if (style.equals("NTCP")) {
+            def *= 3;
+            if (def > 2000) {def = 2000;}
+        }
+
+        return ctx.getProperty(maxProp, def);
     }
 
     //private static final int DEFAULT_CAPACITY_PCT = 75;
@@ -322,104 +359,85 @@ public abstract class TransportImpl implements Transport {
                           + msg.getTarget().getIdentity().calculateHash().toBase64().substring(0,6) + "] took " + msToSend + " ms");
             }
         }
-        //if (true)
-        //    _log.error("(not error) I2NP message sent? " + sendSuccessful + " " + msg.getMessageId() + " after " + msToSend + "/" + msg.getTransmissionTime());
 
         long lifetime = msg.getLifetime();
         if (lifetime > 3000) {
             int level = Log.DEBUG;
-            //if (!sendSuccessful)
-            //    level = Log.DEBUG;
-            if (_log.shouldLog(level))
+            if (_log.shouldLog(level)) {
                 _log.log(level, "[" + getStyle() + "] afterSend slow: " + (sendSuccessful ? "Success! " : "FAIL! ")
                           + "(Lifetime: " + lifetime + "ms / Time taken: " + msToSend + "ms)\n* " + msg.getMessageSize() + " byte "
                           + msg.getMessageType() + " [MsgID " + msg.getMessageId() + "] from [" + _context.routerHash().toBase64().substring(0,6)
                           + "] to [" + msg.getTarget().getIdentity().calculateHash().toBase64().substring(0,6) + "]: " + msg.toString());
+            }
         } else {
-            if (debug)
+            if (debug) {
                 _log.debug("[" + getStyle() + "] afterSend: " + (sendSuccessful ? "Success! " : "FAIL! ")
                           + "\n* " + msg.getMessageSize() + " byte "
                           + msg.getMessageType() + " [MsgID " + msg.getMessageId() + "] from [" + _context.routerHash().toBase64().substring(0,6)
                           + "] to [" + msg.getTarget().getIdentity().calculateHash().toBase64().substring(0,6) + "] " + msg.toString());
+            }
         }
 
         long now = _context.clock().now();
         if (sendSuccessful) {
-            if (debug)
+            if (debug) {
                 _log.debug("[" + getStyle() + "] Sent " + msg.getMessageType() + " successfully to ["
                            + msg.getTarget().getIdentity().getHash().toBase64().substring(0,6) + "]");
+            }
             Job j = msg.getOnSendJob();
-            if (j != null)
-                _context.jobQueue().addJob(j);
-            //log = true;
+            if (j != null) {_context.jobQueue().addJob(j);}
             msg.discardData();
         } else {
-            if (debug)
+            if (debug) {
                 _log.debug("[" + getStyle() + "] Failed to send " + msg.getMessageType() +
                           " to [" + msg.getTarget().getIdentity().getHash().toBase64().substring(0,6) + "]" + msg);
+            }
             if (msg.getExpiration() < now)
                 _context.statManager().addRateData("transport.expiredOnQueueLifetime", lifetime);
 
             if (allowRequeue) {
-                if ( ( (msg.getExpiration() <= 0) || (msg.getExpiration() > now) )
-                     && (msg.getMessage() != null) ) {
+                if (((msg.getExpiration() <= 0) || (msg.getExpiration() > now)) && (msg.getMessage() != null)) {
                     // this may not be the last transport available - keep going
                     _context.outNetMessagePool().add(msg);
                     // don't discard the data yet!
                 } else {
-                    if (debug)
+                    if (debug) {
                         _log.debug("[" + getStyle() + "] Failed to send the " + msg.getMessageType() + " (out of time)\n* Expired: " + new Date(msg.getExpiration()));
-                    if (msg.getOnFailedSendJob() != null)
-                        _context.jobQueue().addJob(msg.getOnFailedSendJob());
-                    MessageSelector selector = msg.getReplySelector();
-                    if (selector != null) {
-                        _context.messageRegistry().unregisterPending(msg);
                     }
-                    //log = true;
+                    if (msg.getOnFailedSendJob() != null) {_context.jobQueue().addJob(msg.getOnFailedSendJob());}
+                    MessageSelector selector = msg.getReplySelector();
+                    if (selector != null) {_context.messageRegistry().unregisterPending(msg);}
                     msg.discardData();
                 }
             } else {
                 MessageSelector selector = msg.getReplySelector();
-                if (debug)
+                if (debug) {
                     _log.debug("[" + getStyle() + "] Failed and no requeue allowed for " + msg.getMessageSize() + " byte " +
                               msg.getMessageType() + " with selector " + selector);
-                if (msg.getOnFailedSendJob() != null)
-                    _context.jobQueue().addJob(msg.getOnFailedSendJob());
-                if (msg.getOnFailedReplyJob() != null)
-                    _context.jobQueue().addJob(msg.getOnFailedReplyJob());
-                if (selector != null)
-                    _context.messageRegistry().unregisterPending(msg);
-                //log = true;
+                }
+                if (msg.getOnFailedSendJob() != null) {_context.jobQueue().addJob(msg.getOnFailedSendJob());}
+                if (msg.getOnFailedReplyJob() != null) {_context.jobQueue().addJob(msg.getOnFailedReplyJob());}
+                if (selector != null) {_context.messageRegistry().unregisterPending(msg);}
                 msg.discardData();
             }
         }
 
-/****
-        if (log) {
-            String type = msg.getMessageType();
-            // the udp transport logs some further details
-            _context.messageHistory().sendMessage(type, msg.getMessageId(),
-                                                  msg.getExpiration(),
-                                                  msg.getTarget().getIdentity().getHash(),
-                                                  sendSuccessful);
-        }
-****/
-
         long sendTime = now - msg.getSendBegin();
         long allTime = now - msg.getCreated();
         if (allTime > 5*1000) {
-            if (debug)
+            if (debug) {
                 _log.debug("Took too long (" + allTime + "ms) from preparation to afterSend (ok? " + sendSuccessful +
                           ")\n* Sent: " + new Date(sendTime) + " after failing on " +
                           msg.getFailedTransports() +
                           (sendSuccessful ? (" and succeeding on " + getStyle()) : ""));
-            if ( (allTime > 60*1000) && (sendSuccessful) ) {
-                // VERY slow
-                if (_log.shouldWarn())
+            }
+            if ((allTime > 60*1000) && (sendSuccessful)) { // VERY slow
+                if (_log.shouldWarn()) {
                     _log.warn("Severe latency? More than a minute slow? \n* " + msg.getMessageType() +
                               " of [MsgID " + msg.getMessageId() + "] \n* Send began: " +
                               new Date(msg.getSendBegin()) + "\n* Message created: " +
                               new Date(msg.getCreated()) + msg);
+                }
                 _context.messageHistory().messageProcessingError(msg.getMessageId(),
                                                                  msg.getMessageType(),
                                                                  "Took too long to send [" + allTime + "ms]");
@@ -456,25 +474,19 @@ public abstract class TransportImpl implements Transport {
      */
     public void send(OutNetMessage msg) {
         if (msg.getTarget() == null) {
-            if (_log.shouldError())
+            if (_log.shouldError()) {
                 _log.error("BAD message enqueued (Target is null): " + msg, new Exception("Added by"));
+            }
             return;
         }
-        try {
-            _sendPool.put(msg);
-        } catch (InterruptedException ie) {
-            if (_log.shouldError())
-                _log.error("Interrupted during send " + msg);
+        try {_sendPool.put(msg);}
+        catch (InterruptedException ie) {
+            if (_log.shouldError()) {_log.error("Interrupted during send " + msg);}
             return;
         }
-
-        //if (_log.shouldDebug())
-        //    _log.debug("Message added to send pool");
-        //msg.timestamp("send on " + getStyle());
         outboundMessageReady();
-        //if (_log.shouldInfo())
-        //    _log.debug("OutboundMessageReady called");
     }
+
     /**
      * This message is called whenever a new message is added to the send pool,
      * and it should not block
@@ -492,26 +504,18 @@ public abstract class TransportImpl implements Transport {
      */
     public void messageReceived(I2NPMessage inMsg, RouterIdentity remoteIdent, Hash remoteIdentHash, long msToReceive, int bytesReceived) {
         int level = Log.DEBUG;
-        //if (msToReceive > 5000)
-        //    level = Log.WARN;
         if (_log.shouldLog(level)) {
             StringBuilder buf = new StringBuilder(128);
-            buf.append("Received ").append(inMsg.getClass().getSimpleName()).append(" [MsgID ").append(inMsg.getUniqueId()).append("]");
-            buf.append(" (").append(bytesReceived).append(" bytes)");
-            buf.append(" in ").append(msToReceive).append("ms");
-            buf.append(" from [");
-            if (remoteIdentHash != null) {
-                buf.append(remoteIdentHash.toBase64().substring(0,6) + "]");
-            } else if (remoteIdent != null) {
-                buf.append(remoteIdent.getHash().toBase64().substring(0,6) + "]");
-            } else {
-                buf.append("unknown]");
-            }
+            buf.append("Received ").append(inMsg.getClass().getSimpleName()).append(" [MsgID ").append(inMsg.getUniqueId()).append("]")
+               .append(" (").append(bytesReceived).append(" bytes)").append(" in ").append(msToReceive).append("ms")
+               .append(" from [");
+            if (remoteIdentHash != null) {buf.append(remoteIdentHash.toBase64().substring(0,6) + "]");}
+            else if (remoteIdent != null) {buf.append(remoteIdent.getHash().toBase64().substring(0,6) + "]");}
+            else {buf.append("unknown]");}
             _log.log(level, buf.toString());
         }
 
-        if (remoteIdent != null)
-            remoteIdentHash = remoteIdent.getHash();
+        if (remoteIdent != null) {remoteIdentHash = remoteIdent.getHash();}
         if (remoteIdentHash != null) {
             _context.profileManager().messageReceived(remoteIdentHash, getStyle(), msToReceive, bytesReceived);
             _context.statManager().addRateData("transport.receiveMessageSize", bytesReceived, msToReceive);
@@ -558,8 +562,7 @@ public abstract class TransportImpl implements Transport {
     public RouterAddress getCurrentAddress(boolean ipv6) {
         synchronized(_currentAddresses) {
             for (RouterAddress ra : _currentAddresses) {
-                if (ipv6 == TransportUtil.isIPv6(ra))
-                    return ra;
+                if (ipv6 == TransportUtil.isIPv6(ra)) {return ra;}
             }
         }
         return null;
@@ -570,9 +573,7 @@ public abstract class TransportImpl implements Transport {
      *  @since IPv6
      */
     public boolean hasCurrentAddress() {
-        synchronized(_currentAddresses) {
-            return !_currentAddresses.isEmpty();
-        }
+        synchronized(_currentAddresses) {return !_currentAddresses.isEmpty();}
     }
 
     /**
@@ -582,9 +583,7 @@ public abstract class TransportImpl implements Transport {
      * @since 0.7.12
      */
     public List<RouterAddress> updateAddress() {
-        synchronized(_currentAddresses) {
-            return new ArrayList<RouterAddress>(_currentAddresses);
-        }
+        synchronized(_currentAddresses) {return new ArrayList<RouterAddress>(_currentAddresses);}
     }
 
     /**
@@ -600,12 +599,10 @@ public abstract class TransportImpl implements Transport {
         boolean isIPv6;
         if (address != null) {
             isIPv6 = TransportUtil.isIPv6(address);
-        if (_log.shouldWarn())
-//            _log.warn("Replacing  IPv" + (isIPv6 ? '6' : '4') + " address with " + address, new Exception());
-            _log.warn("Replacing  IPv" + (isIPv6 ? '6' : '4') + " address with " + address);
-        } else {
-            isIPv6 = false;
-        }
+            if (_log.shouldWarn()) {
+                _log.warn("Replacing  IPv" + (isIPv6 ? '6' : '4') + " address with " + address);
+            }
+        } else {isIPv6 = false;}
         int sz;
         synchronized(_currentAddresses) {
             if (address == null) {
@@ -614,18 +611,16 @@ public abstract class TransportImpl implements Transport {
             } else {
                 for (Iterator<RouterAddress> iter = _currentAddresses.iterator(); iter.hasNext(); ) {
                     RouterAddress ra = iter.next();
-                    if (isIPv6 == TransportUtil.isIPv6(ra)) {
-                        iter.remove();
-                    }
+                    if (isIPv6 == TransportUtil.isIPv6(ra)) {iter.remove();}
                 }
                 _currentAddresses.add(address);
                 sz = _currentAddresses.size();
             }
         }
-        if (_log.shouldWarn())
+        if (_log.shouldWarn()) {
              _log.warn("[" + getStyle() + "] now has " + sz + " addresses");
-        if (_listener != null)
-            _listener.transportAddressChanged();
+        }
+        if (_listener != null) {_listener.transportAddressChanged();}
     }
 
     /**
@@ -637,9 +632,7 @@ public abstract class TransportImpl implements Transport {
      *  @since 0.9.20
      */
     protected void removeAddress(RouterAddress address) {
-        if (_log.shouldWarn())
-//             _log.warn("[" + getStyle() + "] Removing address " + address, new Exception());
-             _log.warn("Removing exisiting address\n* " + address);
+        if (_log.shouldWarn()) {_log.warn("Removing exisiting address\n* " + address);}
         boolean changed;
         int sz;
         synchronized(_currentAddresses) {
@@ -647,14 +640,9 @@ public abstract class TransportImpl implements Transport {
             sz = _currentAddresses.size();
         }
         if (changed) {
-            if (_log.shouldWarn())
-                 _log.warn("[" + getStyle() + "] now has " + sz + " addresses");
-            if (_listener != null)
-                _listener.transportAddressChanged();
-        } else {
-            if (_log.shouldWarn())
-                 _log.warn("[" + getStyle() + "] No addresses removed");
-        }
+            if (_log.shouldWarn()) {_log.warn("[" + getStyle() + "] now has " + sz + " addresses");}
+            if (_listener != null) {_listener.transportAddressChanged();}
+        } else if (_log.shouldWarn()) {_log.warn("[" + getStyle() + "] No addresses removed");}
     }
 
     /**
@@ -680,14 +668,9 @@ public abstract class TransportImpl implements Transport {
             sz = _currentAddresses.size();
         }
         if (changed) {
-            if (_log.shouldWarn())
-                 _log.warn("[" + getStyle() + "] now has " + sz + " addresses");
-            if (_listener != null)
-                _listener.transportAddressChanged();
-        } else {
-            if (_log.shouldWarn())
-                 _log.warn("[" + getStyle() + "] No addresses removed");
-        }
+            if (_log.shouldWarn()) {_log.warn("[" + getStyle() + "] now has " + sz + " addresses");}
+            if (_listener != null) {_listener.transportAddressChanged();}
+        } else if (_log.shouldWarn()) {_log.warn("[" + getStyle() + "] No addresses removed");}
     }
 
     /**
@@ -711,8 +694,7 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     *  Get all available address we can use,
-     *  shuffled and then sorted by cost/preference.
+     *  Get all available address we can use, shuffled and then sorted by cost/preference.
      *  Lowest cost (most preferred) first.
      *  @return non-null, possibly empty
      *  @since IPv6, public since 0.9.50, was protected
@@ -731,15 +713,7 @@ public abstract class TransportImpl implements Transport {
             int adj;
             switch (config) {
                   case IPV6_DISABLED:
-                    adj = 10;
-                  /**** IPv6 addresses will be rejected in isPubliclyRoutable()
-                    for (Iterator<RouterAddress> iter = rv.iterator(); iter.hasNext(); ) {
-                        byte[] ip = iter.next().getIP();
-                        if (ip != null && ip.length == 16)
-                            iter.remove();
-                    }
-                   ****/
-                    break;
+                    adj = 10; break;
 
                   case IPV6_NOT_PREFERRED:
                     adj = 1; break;
@@ -752,15 +726,7 @@ public abstract class TransportImpl implements Transport {
                     adj = -1; break;
 
                   case IPV6_ONLY:
-                    adj = -10;
-                  /**** IPv6 addresses will be rejected in isPubliclyRoutable()
-                    for (Iterator<RouterAddress> iter = rv.iterator(); iter.hasNext(); ) {
-                        byte[] ip = iter.next().getIP();
-                        if (ip != null && ip.length == 4)
-                            iter.remove();
-                    }
-                   ****/
-                    break;
+                    adj = -10; break;
             }
             Collections.sort(rv, new AddrComparator(adj));
         }
@@ -915,22 +881,22 @@ public abstract class TransportImpl implements Transport {
         Status status = _context.commSystem().getStatus();
         if (status == Status.DISCONNECTED || status == Status.HOSED) {return;}
         Long now = Long.valueOf(_context.clock().now());
-        // This isn't very useful since it is cleared when they contact us
-        _unreachableEntries.put(peer, now);
+        _unreachableEntries.put(peer, now); // This isn't very useful since it is cleared when they contact us
         if (peer == _lastReachablePeer) {_lastReachablePeer = null;}
-        // This is not cleared when they contact us
-        markWasUnreachable(peer, true);
+        markWasUnreachable(peer, true); // This is not cleared when they contact us
     }
 
     /** called when we establish a peer connection (outbound or inbound) */
     public void markReachable(Hash peer, boolean isInbound) {
-        // The legacy treatment for the peer has been to unban them because:
-        // if *some* transport can reach them, then we shouldn't banlist 'em
-        // But, we really shouldn't be here if they're HARD banned.
-        // Maintain the legacy treatment, but check to see if they were
-        // even HARD banned in the first place (we've been unbanning everybody
-        // who reaches here, whether they're banned or not), then mark it
-        // with an warning-level log entry.
+        /**
+         * The legacy treatment for the peer has been to unban them because if any transport
+         * can reach them, then we shouldn't banlist them. But, we really shouldn't be here
+         * if they're HARD banned.
+         *
+         * Maintain the legacy treatment, but check to see if they were even HARD banned in
+         * the first place (we've been unbanning everybody who reaches here, whether they're
+         * banned or not), then mark it with an warning-level log entry.
+         */
         if (_context.banlist().isBanlistedForever(peer)) {
             if (_log.shouldLog(Log.WARN)) {
                 _log.warn("Unbanning HARD-banned peer (due to reachability): " + peer, new Exception("Unbanned by"));
@@ -960,7 +926,7 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     * Was the peer UNreachable (outbound only) the last time we tried it?
+     * Was the peer Unreachable (outbound only) the last time we tried it?
      * This is NOT reset if the peer contacts us.
      */
     public boolean wasUnreachable(Hash peer) {
