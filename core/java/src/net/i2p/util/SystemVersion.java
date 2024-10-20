@@ -451,8 +451,7 @@ public abstract class SystemVersion {
     public static boolean hasWrapper() {return _hasWrapper;}
 
     /**
-     *  Runtime.getRuntime().maxMemory() but check for
-     *  bogus values
+     *  Runtime.getRuntime().maxMemory() but check for bogus values
      *  @since 0.9.8
      */
     public static long getMaxMemory() {
