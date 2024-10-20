@@ -188,12 +188,12 @@ public class PeerHelper extends HelperBase {
            .append("<th>").append(_t("Transport")).append("</th>");
 
         if (showIPv4) {
-            buf.append("<th class=\"ipv4 in\">").append(_t("IPv4")).append("&nbsp;<span>").append(_t("Inbound")).append("</span></th>")
-               .append("<th class=\"ipv4 out\">").append(_t("IPv4")).append("&nbsp;<span>").append(_t("Outbound")).append("</span></th>");
+            buf.append("<th class=\"ipv4 out\">").append(_t("IPv4")).append("&nbsp;<span>").append(_t("Outbound")).append("</span></th>")
+               .append("<th class=\"ipv4 in\">").append(_t("IPv4")).append("&nbsp;<span>").append(_t("Inbound")).append("</span></th>");
         }
         if (showIPv6) {
-            buf.append("<th class=\"ipv6 in\">").append(_t("IPv6")).append("&nbsp;<span>").append(_t("Inbound")).append("</span></th>")
-               .append("<th class=\"ipv6 out\">").append(_t("IPv6")).append("&nbsp;<span>").append(_t("Outbound")).append("</span></th>");
+            buf.append("<th class=\"ipv6 out\">").append(_t("IPv6")).append("&nbsp;<span>").append(_t("Outbound")).append("</span></th>")
+               .append("<th class=\"ipv6 in\">").append(_t("IPv6")).append("&nbsp;<span>").append(_t("Inbound")).append("</span></th>");
         }
 
         buf.append("<th title=\"").append(_t("Active in the last minute")).append("\">").append(_t("Count")).append("</th>")
@@ -227,7 +227,7 @@ public class PeerHelper extends HelperBase {
                     buf.append("<td");
                     if (cnt <= 0 && ((i & 0x01) != 0 || warnInbound)) {buf.append(" class=notice>");}
                     else {
-                        int totalIndex = (i % 2 == 0) ? i + 2 : i;
+                        int totalIndex = i;
                         totals[totalIndex] += cnt;
                         buf.append(">");
                     }
