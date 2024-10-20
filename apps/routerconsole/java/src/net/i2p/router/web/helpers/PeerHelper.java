@@ -181,30 +181,24 @@ public class PeerHelper extends HelperBase {
                            (ntcpConfig != TransportUtil.IPv6Config.IPV6_DISABLED ||
                             ssuConfig != TransportUtil.IPv6Config.IPV6_DISABLED);
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<h3 id=transports>").append(_t("Peer Connections"))
-           .append("<label class=script hidden><input name=autorefresh id=autorefresh type=checkbox class=\"optbox slider\" checked=checked>")
-           .append(_t("Auto-refresh")).append("</label></h3>\n")
+        buf.append("<h3 id=transports>").append(_t("Peer Connections")).append("</h3>\n")
            .append("<table id=transportSummary>\n<thead><tr>")
-           .append("<th>").append(_t("Transport")).append("</th>");
-
+           .append("<th>").append(_t("Transport")).append("</th>")
+           .append("<th title=\"").append(_t("Active in the last minute")).append("\">").append(_t("Count")).append("</th>");
         if (showIPv4) {
-            buf.append("<th class=\"ipv4 out\">").append(_t("IPv4")).append("&nbsp;<span>").append(_t("Outbound")).append("</span></th>")
-               .append("<th class=\"ipv4 in\">").append(_t("IPv4")).append("&nbsp;<span>").append(_t("Inbound")).append("</span></th>");
+           buf.append("<th class=\"ipv4 in\">").append(_t("IPv4")).append("&nbsp;<span>").append(_t("Inbound")).append("</span></th>")
+              .append("<th class=\"ipv4 out\">").append(_t("IPv4")).append("&nbsp;<span>").append(_t("Outbound")).append("</span></th>");
         }
         if (showIPv6) {
-            buf.append("<th class=\"ipv6 out\">").append(_t("IPv6")).append("&nbsp;<span>").append(_t("Outbound")).append("</span></th>")
-               .append("<th class=\"ipv6 in\">").append(_t("IPv6")).append("&nbsp;<span>").append(_t("Inbound")).append("</span></th>");
+            buf.append("<th class=\"ipv6 in\">").append(_t("IPv6")).append("&nbsp;<span>").append(_t("Inbound")).append("</span></th>")
+               .append("<th class=\"ipv6 out\">").append(_t("IPv6")).append("&nbsp;<span>").append(_t("Outbound")).append("</span></th>");
         }
-
-        buf.append("<th title=\"").append(_t("Active in the last minute")).append("\">").append(_t("Count")).append("</th>")
-           .append("<th title=\"").append(_t("Maximum permitted connections")).append("\">").append(_t("Limit")).append("</th>")
+        buf.append("<th title=\"").append(_t("Maximum permitted connections")).append("\">").append(_t("Limit")).append("</th>")
            .append("</tr></thead>\n<tbody>\n");
-
-        boolean warnInbound = !_context.router().isHidden() && _context.router().getUptime() > 15 * 60 * 1000;
+        boolean warnInbound = !_context.router().isHidden() && _context.router().getUptime() > 15*60*1000;
         int[] totals = new int[5];
         int rows = 0;
         SortedMap<String, Transport> transports = _context.commSystem().getTransports();
-
         for (Map.Entry<String, Transport> e : transports.entrySet()) {
             String style = e.getKey();
             Transport t = e.getValue();
@@ -213,49 +207,39 @@ public class PeerHelper extends HelperBase {
                 if (style.equals("NTCP") && idx == 0) {continue;}
                 if (style.equals("SSU") && idx == 0) {continue;}
                 rows++;
-                buf.append("<tr><td><b>").append(style).append(1 + (idx / 4)).append("</b></td>");
-
+                buf.append("<tr><td><b>").append(style).append(1 + (idx / 4)).append("</b></td><td");
                 int total = 0;
                 for (int i = 0; i < 4; i++) {total += counts[idx + i];}
-                if (total <= 0) {buf.append("<td class=warn>").append(total).append("</td>");}
-                else {totals[0] += total; buf.append("<td>").append(total).append("</td>");}
-
+                if (total <= 0) {buf.append(" class=warn");}
+                else {totals[0] += total;}
+                buf.append(">").append(total);
                 for (int i = 0; i < 4; i++) {
                     if (!showIPv4 && i < 2) {continue;}
                     if (!showIPv6 && i >= 2) {break;}
                     int cnt = counts[idx + i];
-                    buf.append("<td");
-                    if (cnt <= 0 && ((i & 0x01) != 0 || warnInbound)) {buf.append(" class=notice>");}
-                    else {
-                        int totalIndex = i;
-                        totals[totalIndex] += cnt;
-                        buf.append(">");
-                    }
-                    buf.append(cnt).append("</td>");
+                    buf.append("</td><td");
+                    if (cnt <= 0 && ((i & 0x01) != 0 || warnInbound)) {buf.append(" class=notice");}
+                    else {totals[i + 1] += cnt;}
+                    buf.append(">").append(cnt);
                 }
                 buf.append("<td>").append(TransportImpl.getTransportMaxConnections(_context, style)).append("</td>");
                 buf.append("</tr>\n");
             }
         }
-
         buf.append("</tbody>\n");
-
         if (rows > 1) {
             buf.append("<tfoot><tr class=tablefooter><td><b>").append(_t("Total")).append("</b>");
-
-            for (int i = 1; i < 5; i++) {
+            for (int i = 0; i < 5; i++) {
                 if (!showIPv4 && i > 0 && i < 3) {continue;}
                 if (!showIPv6 && i >= 3) {break;}
                 int cnt = totals[i];
-                buf.append("<td");
-                if (cnt <= 0 && ((i & 0x01) == 0 || warnInbound)) {buf.append(" class=warn>");}
-                else {buf.append(">");}
-                buf.append(cnt).append("</td>");
+                buf.append("</td><td");
+                if (cnt <= 0 && ((i & 0x01) == 0 || warnInbound)) {buf.append(" class=warn");}
+                buf.append(">").append(cnt);
             }
             int combinedLimit = TransportImpl.getTransportMaxConnections(_context, "NTCP") +
                                 TransportImpl.getTransportMaxConnections(_context, "SSU");
-            buf.append("<td>").append(totals[0]).append("</td>")
-               .append("<td>").append(combinedLimit).append("</td></tr></tfoot>\n");
+            buf.append("<td>").append(combinedLimit).append("</td></tr></tfoot>\n");
         }
         buf.append("</table>\n");
         out.write(buf.toString());
