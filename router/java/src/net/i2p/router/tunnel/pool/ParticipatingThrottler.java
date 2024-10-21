@@ -73,7 +73,7 @@ class ParticipatingThrottler {
         int limit = calculateLimit(numTunnels, isUnreachable, isLowShare, isFast);
         int count = counter.increment(h);
         Result rv;
-        int bantime = isLU ? 15*60*1000 : isLowShare || isUnreachable ? 10*60*1000 : 5*60*1000;
+        int bantime = isLU || isLowShare || isUnreachable ? 60*60*1000 : 4*60*60*1000;
         boolean shouldThrottle = context.getProperty(PROP_SHOULD_THROTTLE, DEFAULT_SHOULD_THROTTLE);
         boolean shouldDisconnect = context.getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
         boolean shouldBlockOldRouters = context.getProperty(PROP_BLOCK_OLD_ROUTERS, DEFAULT_BLOCK_OLD_ROUTERS);
@@ -124,7 +124,7 @@ class ParticipatingThrottler {
             if (shouldDisconnect) {
                 context.commSystem().forceDisconnect(h);
                 if (!isBanned && _log.shouldWarn()) {
-                    _log.warn("Banning Router [" + h.toBase64().substring(0, 6) + "] for " + (bantime*3 / 60000) +
+                    _log.warn("Banning Router [" + h.toBase64().substring(0, 6) + "] for " + (bantime * 3 / 60000) +
                               "m -> " + version + (caps.isEmpty() ? "" : " / " + caps));
                 }
             }
