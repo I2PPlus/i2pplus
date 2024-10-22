@@ -1,5 +1,6 @@
 package org.rrd4j.graph;
 
+import java.awt.BasicStroke;
 import java.awt.Font;
 import java.awt.Paint;
 import java.math.BigDecimal;
@@ -164,13 +165,9 @@ class ValueAxis extends Axis {
 
                     int length = (int) (worker.getStringWidth(graph_label, font));
                     worker.drawString(graph_label, x0 - length - PADDING_VLABEL, y + labelOffset, font, fontColor);
-//                    worker.drawLine(x0 - 2, y, x0 + 2, y, mGridColor, gdef.tickStroke);
-//                    worker.drawLine(x1 - 2, y, x1 + 2, y, mGridColor, gdef.tickStroke);
                     worker.drawLine(x0, y, x1, y, mGridColor, gdef.gridStroke);
                 }
                 else if (!(gdef.noMinorGrid)) {
-//                    worker.drawLine(x0 - 1, y, x0 + 1, y, gridColor, gdef.tickStroke);
-//                    worker.drawLine(x1 - 1, y, x1 + 1, y, gridColor, gdef.tickStroke);
                     worker.drawLine(x0, y, x1, y, gridColor, gdef.gridStroke);
                 }
             }
@@ -197,14 +194,14 @@ class ValueAxis extends Axis {
             if (this.getPixelsPerGridline(thisYLabel) > 5 ) {
                 //Yep; now we might have to check the number of labels
                 if(im.minval < 0.0 && im.maxval > 0.0) {
-                    //The graph covers positive and negative values, so we need the
+                    // The graph covers positive and negative values, so we need the
                     // desiredMinimumLabelCount number of labels, which is going to
                     // usually be 3, then maybe 2, then only as a last resort, 1.
                     // So, we need to find out what the label factor would be
                     // if we chose this ylab definition
                     labelFactor = findLabelFactor(thisYLabel);
                     if(labelFactor == -1) {
-                        //Default to too many to satisfy the label count test, unless we're looking for just 1
+                        // Default to too many to satisfy the label count test, unless we're looking for just 1
                         // in which case be sure to satisfy the label count test
                         labelFactor = desiredMinimumLabelCount==1?1:desiredMinimumLabelCount+1;
                     }
