@@ -57,7 +57,8 @@ class ParticipatingThrottler {
         Hash us = context.routerHash();
         String caps = ri != null ? ri.getCapabilities() : "";
         boolean isUs = ri != null && us.equals(ri.getIdentity().getHash());
-        boolean isUnreachable = ri != null && !isUs && caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
+        boolean isUnreachable = ri != null && !isUs && (caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
+                                                        caps.indexOf(Router.CAPABILITY_REACHABLE) < 0);
         boolean isLowShare = ri != null && !isUs && (
             caps.indexOf(Router.CAPABILITY_BW12) >= 0 ||
             caps.indexOf(Router.CAPABILITY_BW32) >= 0 ||
