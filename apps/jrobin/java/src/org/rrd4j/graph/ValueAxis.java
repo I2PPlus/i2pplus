@@ -215,8 +215,7 @@ class ValueAxis extends Axis {
                     }
 
                 } else {
-                    //Only positive or negative on the graph y-axis.  No need to
-                    // care about the label count.
+                    //Only positive or negative on the graph y-axis.  No need to care about the label count.
                     return thisYLabel;
                 }
             }

@@ -2645,7 +2645,7 @@ public final class SVGGraphics2D extends Graphics2D {
         defs.append("<link xmlns=\"http://www.w3.org/1999/xhtml\" rel=\"stylesheet\" type=\"text/css\" href=\"/themes/fonts/FiraCode.css\"/>");
         defs.append("<style>text{font-weight:600;text-rendering:optimizeLegibility;white-space:pre}")
             .append("line,path,rect{shape-rendering:crispEdges;vector-effect:non-scaling-stroke}")
-            .append("line,rect,text{clip-path:url(#clip-2)}")
+            .append("line,rect,text{clip-path:url(#clip-1)}")
             .append(".axis{stroke-width:").append(axisStrokeWidth).append(";stroke-linecap:round}")
             .append(".bg{fill:#000b}")
             .append(".bold,.sans.s12 text,.sans.s13 text,.sans.s14 text{font-weight:700}")
