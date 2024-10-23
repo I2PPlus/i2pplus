@@ -1,3 +1,9 @@
+2024-10-22 zzz
+ * Console: Merge in more upstream rrd4j changes for 3.10
+
+2024-10-20 dr|z3d
+ * Console: Add counts for max permitted NTCP/SSU connections on /peers
+
 2024-10-10 dr|z3d
  * Console: Display host and port before other key values in RouterInfos
 
