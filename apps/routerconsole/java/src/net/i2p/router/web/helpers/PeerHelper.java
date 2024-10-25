@@ -57,14 +57,9 @@ public class PeerHelper extends HelperBase {
 
     public void setSort(String flags) {
         if (flags != null) {
-            try {
-                _sortFlags = Integer.parseInt(flags);
-            } catch (NumberFormatException nfe) {
-                _sortFlags = 0;
-            }
-        } else {
-            _sortFlags = 0;
-        }
+            try {_sortFlags = Integer.parseInt(flags);}
+            catch (NumberFormatException nfe) {_sortFlags = 0;}
+        } else {_sortFlags = 0;}
     }
 
     public void setUrlBase(String base) {_urlBase = base;}
@@ -76,18 +71,11 @@ public class PeerHelper extends HelperBase {
      *  call for non-text-mode browsers
      *  @since 0.9.38
      */
-    public void allowGraphical() {
-        _graphical = true;
-    }
+    public void allowGraphical() {_graphical = true;}
 
     public String getPeerSummary() {
-        try {
-            renderStatusHTML(_out, _urlBase, _sortFlags);
-            // boring and not worth translating
-            //_context.bandwidthLimiter().renderStatusHTML(_out);
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
+        try {renderStatusHTML(_out, _urlBase, _sortFlags);}
+        catch (IOException ioe) {ioe.printStackTrace();}
         return "";
     }
 
@@ -137,16 +125,13 @@ public class PeerHelper extends HelperBase {
         } else if (_transport == null) {
             StringBuilder buf = new StringBuilder(1024);
             buf.append("<p class=infohelp>")
-               .append(_t("Your transport connection limits are automatically set based on your configured bandwidth.")).append(" ");
-            buf.append(_t("To override these limits, add the settings {0} and {1}",
+               .append(_t("Your transport connection limits are automatically set based on your configured bandwidth.")).append(" ")
+               .append(_t("To override these limits, add the settings {0} and {1}",
                           "<code>i2np.ntcp.maxConnections=nnn</code>",
                           "<code>i2np.udp.maxConnections=nnn</code>")).append(" ");
             if (isAdvanced()) {
-                buf.append(_t("on the {0}Advanced Configuration page{1}.",
-                             "<a href=\"/configadvanced\">", "</a>"));
-            } else {
-                buf.append(_t("to your router.config file."));
-            }
+                buf.append(_t("on the {0}Advanced Configuration page{1}.", "<a href=\"/configadvanced\">", "</a>"));
+            } else {buf.append(_t("to your router.config file."));}
             buf.append("</p>\n");
             out.write(buf.toString());
             renderSummary(out);
@@ -158,12 +143,9 @@ public class PeerHelper extends HelperBase {
      *  @since 0.9.38
      */
     private int getTab() {
-        if ("ntcp".equals(_transport))
-            return 1;
-        if ("ssu".equals(_transport))
-            return 2;
-        if ("ssudebug".equals(_transport))
-            return 3;
+        if ("ntcp".equals(_transport)) {return 1;}
+        if ("ssu".equals(_transport)) {return 2;}
+        if ("ssudebug".equals(_transport)) {return 3;}
         return 0;
     }
 
@@ -252,37 +234,27 @@ public class PeerHelper extends HelperBase {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<div class=confignav id=peerNav>");
         boolean span = _graphical;
-        if (!span)
-            buf.append("<center>");
+        if (!span) {buf.append("<center>");}
         int tab = getTab();
         for (int i = 0; i < titles.length; i++) {
             if (i == tab) {
                 // we are there
-                if (span)
-                    buf.append("<span class=tab2>");
+                if (span) {buf.append("<span class=tab2>");}
                 buf.append(_t(titles[i]));
             } else {
                 if (i == 1) {
-                    if (!_context.getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_NTCP))
-                        continue;
+                    if (!_context.getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_NTCP)) {continue;}
                 } else if (i == 2) {
-                    if (!_context.getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_UDP))
-                        continue;
-                } else if (i == 3 && !isAdvanced()) {
-                    continue;
-                }
+                    if (!_context.getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_UDP)) {continue;}
+                } else if (i == 3 && !isAdvanced()) {continue;}
                 // we are not there, make a link
-                if (span)
-                    buf.append("<span class=tab>");
+                if (span) {buf.append("<span class=tab>");}
                 buf.append("<a href=\"peers").append(links[i]).append("\">").append(_t(titles[i])).append("</a>");
             }
-            if (span)
-                buf.append("</span>\n");
-            else if (i != titles.length - 1)
-                buf.append("&nbsp;&nbsp;\n");
+            if (span) {buf.append("</span>\n");}
+            else if (i != titles.length - 1) {buf.append("&nbsp;&nbsp;\n");}
         }
-        if (!span)
-            buf.append("</center>");
+        if (!span) {buf.append("</center>");}
         buf.append("</div>");
         out.write(buf.toString());
     }
@@ -316,9 +288,7 @@ public class PeerHelper extends HelperBase {
            .append(_t("Current / maximum permitted")).append("\">")
            .append(_t("NTCP connections")).append(":&nbsp; ").append(nt.countActivePeers())
            .append(" / ").append(nt.getMaxConnections())
-           .append("<span id=topCount hidden></span>")
-           .append("<label class=script hidden><input name=autorefresh id=autorefresh type=checkbox class=\"optbox slider\" checked=checked>")
-           .append(_t("Auto-refresh")).append("</label></h3>\n")
+           .append("<span id=topCount hidden></span></h3>\n")
            .append("<div class=widescroll>\n<table id=ntcpconnections class=cells data-sortable>\n");
         if (peers.size() != 0) {
             buf.append("<thead><tr><th class=peer>").append(_t("Peer")).append("</th>")
@@ -341,7 +311,7 @@ public class PeerHelper extends HelperBase {
         int inactive = 0;
         for (NTCPConnection con : peers) {
             // exclude older peers
-            if (con.getTimeSinceReceive(now) > 60*1000 || con.getTimeSinceSend(now) > 60*1000) {
+            if (con.getTimeSinceReceive(now) > 3*60*1000 || con.getTimeSinceSend(now) > 3*60*1000) {
                 inactive += 1;
                 continue;
             }
@@ -370,13 +340,13 @@ public class PeerHelper extends HelperBase {
             String tx = formatRate(bpsSend/1000).replace(".00", "");
             if (con.getRecvRate() >= 0.01 || con.getSendRate() >= 0.01) {
                 buf.append("<span class=right>");
-                if (con.getTimeSinceReceive(now) <= 60*1000) {
+                if (con.getTimeSinceReceive(now) <= 3*60*1000) {
                     float r = con.getRecvRate();
                     buf.append(rx);
                     bpsRecv += r;
                 } else {buf.append("0");}
                 buf.append("</span>").append(THINSP).append("<span class=left>");
-                if (con.getTimeSinceSend(now) <= 60*1000) {
+                if (con.getTimeSinceSend(now) <= 3*60*1000) {
                     float r = con.getSendRate();
                     buf.append(tx);
                     bpsSend += r;
@@ -492,9 +462,7 @@ public class PeerHelper extends HelperBase {
         if (!debugmode) {
             buf.append("&nbsp;<span id=ssuadv><a href=\"/peers?transport=ssudebug\">[").append(_t("Advanced View")).append("]</a></span>");
         }
-        buf.append("<span id=topCount hidden></span>")
-           .append("<label class=script hidden><input name=autorefresh id=autorefresh type=checkbox class=\"optbox slider\" checked=checked>")
-           .append(_t("Auto-refresh")).append("</label></h3>\n")
+        buf.append("<span id=topCount hidden></span></h3>\n")
            .append("<div class=widescroll>\n<table id=udpconnections class=\"");
         if (debugmode) {buf.append("advancedview ");}
         buf.append("cells\" data-sortable>\n");
@@ -593,7 +561,7 @@ public class PeerHelper extends HelperBase {
         buf.setLength(0);
         long now = _context.clock().now();
         for (PeerState peer : peers) {
-            if (now-peer.getLastReceiveTime() > 60*1000) {
+            if (now-peer.getLastReceiveTime() > 3*60*1000) {
                 continue; // don't include old peers
             }
             buf.append("<tr class=lazy><td class=peer nowrap>");
@@ -733,9 +701,7 @@ public class PeerHelper extends HelperBase {
             buf.append("<tfoot><tr class=tablefooter><td class=peer colspan=");
             if (debugmode) {buf.append("6");}
             else {buf.append("4");}
-            buf.append("><b>")
-               .append(ngettext("{0} peer", "{0} peers", ut.countActivePeers()))
-               .append("</b></td>");
+            buf.append("><b>").append(ngettext("{0} peer", "{0} peers", ut.countActivePeers())).append("</b></td>");
 
             buf.append("<td class=inout nowrap><span class=right><b>");
             String bwin = formatKBps(bpsIn).replace(".00", "");
@@ -825,16 +791,11 @@ public class PeerHelper extends HelperBase {
     }
 
     private static final DecimalFormat _fmt = new DecimalFormat("#,##0.00");
-    static {
-        _fmt.setRoundingMode(RoundingMode.HALF_UP);
-    }
+    static {_fmt.setRoundingMode(RoundingMode.HALF_UP);}
 
     private static final String formatKBps(int bps) {
-        if (bps < 5)
-            return "0";
-        synchronized (_fmt) {
-            return _fmt.format((float)bps/1000);
-        }
+        if (bps < 5) {return "0";}
+        synchronized (_fmt) {return _fmt.format((float)bps/1000);}
     }
 
 }
