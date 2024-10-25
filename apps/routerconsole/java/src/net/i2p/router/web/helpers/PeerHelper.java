@@ -311,7 +311,13 @@ public class PeerHelper extends HelperBase {
         int inactive = 0;
         for (NTCPConnection con : peers) {
             // exclude older peers
-            if (con.getTimeSinceReceive(now) > 3*60*1000 || con.getTimeSinceSend(now) > 3*60*1000) {
+            if (peers.size() >= 300 && (con.getTimeSinceReceive(now) > 60*1000 || con.getTimeSinceSend(now) > 60*1000)) {
+                inactive += 1;
+                continue;
+            } else if (peers.size() >= 100 && (con.getTimeSinceReceive(now) > 3*60*1000 || con.getTimeSinceSend(now) > 3*60*1000)) {
+                inactive += 1;
+                continue;
+            } else if (con.getTimeSinceReceive(now) > 10*60*1000 || con.getTimeSinceSend(now) > 10*60*1000) {
                 inactive += 1;
                 continue;
             }
@@ -340,13 +346,17 @@ public class PeerHelper extends HelperBase {
             String tx = formatRate(bpsSend/1000).replace(".00", "");
             if (con.getRecvRate() >= 0.01 || con.getSendRate() >= 0.01) {
                 buf.append("<span class=right>");
-                if (con.getTimeSinceReceive(now) <= 3*60*1000) {
+                if ((peers.size() >= 300 && con.getTimeSinceReceive(now) <= 60*1000) ||
+                    (peers.size() >= 100 && con.getTimeSinceReceive(now) <= 3*60*1000) ||
+                    con.getTimeSinceReceive(now) <= 10*60*1000) {
                     float r = con.getRecvRate();
                     buf.append(rx);
                     bpsRecv += r;
                 } else {buf.append("0");}
                 buf.append("</span>").append(THINSP).append("<span class=left>");
-                if (con.getTimeSinceSend(now) <= 3*60*1000) {
+                if ((peers.size() >= 300 && con.getTimeSinceSend(now) <= 60*1000) ||
+                    (peers.size() >= 100 && con.getTimeSinceSend(now) <= 3*60*1000) ||
+                    con.getTimeSinceSend(now) <= 10*60*1000) {
                     float r = con.getSendRate();
                     buf.append(tx);
                     bpsSend += r;
@@ -561,9 +571,9 @@ public class PeerHelper extends HelperBase {
         buf.setLength(0);
         long now = _context.clock().now();
         for (PeerState peer : peers) {
-            if (now-peer.getLastReceiveTime() > 3*60*1000) {
-                continue; // don't include old peers
-            }
+            if (peers.size() >= 300 && now-peer.getLastReceiveTime() > 60*1000) {continue;} // don't include old peers
+            if (peers.size() >= 100 && now-peer.getLastReceiveTime() > 3*60*1000) {continue;}
+            else if (now-peer.getLastReceiveTime() > 10*60*1000) {continue;}
             buf.append("<tr class=lazy><td class=peer nowrap>");
             buf.append(_context.commSystem().renderPeerHTML(peer.getRemotePeer(), false));
             Hash h = peer.getRemotePeer().calculateHash();
@@ -637,15 +647,11 @@ public class PeerHelper extends HelperBase {
             long resent = peer.getPacketsRetransmitted();
             long dupRecv = peer.getPacketsReceivedDuplicate();
             buf.append("<td class=duptx>");
-            if (resent > 0) {
-                buf.append("<span class=right>").append(resent).append("</span>");
-            }
+            if (resent > 0) {buf.append("<span class=right>").append(resent).append("</span>");}
             buf.append("</td>");
 
             buf.append("<td class=duprx>");
-            if (dupRecv > 0) {
-                buf.append("<span class=right>").append(dupRecv).append("</span>");
-            }
+            if (dupRecv > 0) {buf.append("<span class=right>").append(dupRecv).append("</span>");}
             buf.append("</td>");
 
             long sendWindow = peer.getSendWindowBytes();
