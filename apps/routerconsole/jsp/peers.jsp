@@ -55,6 +55,6 @@
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.number.js></script>
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.natural.js></script>
 <script nonce=<%=cspNonce%> src=/js/lazyload.js></script>
-<script nonce=<%=cspNonce%> src=/themes/js/peers.js></script>
+<script nonce=<%=cspNonce%> src=/js/peers.js></script>
 </body>
 </html>
