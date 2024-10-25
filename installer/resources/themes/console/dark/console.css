@@ -762,7 +762,6 @@ td.ipv6{width:1%;max-width:24px}
 #peers .whois,#peers .whois img{margin:0;display:inline-block;vertical-align:middle}
 #peers .edit a{margin:2px;vertical-align:middle}
 #peers .reachability{display:none}
-#peers #ntcpcon:hover #topCount,#peers #udpcon:hover #topCount{display:none}
 #peers #ntcpconnections .edit,#peers #udpconnections .edit{width:1%;white-space:nowrap}
 #peers #udpconnections tfoot .peer,#peers #ntcpconnections tfoot .peer{padding-left:8px;text-align:left}
 #topCount{display:inline-block;position:absolute;right:3px;top:3px}

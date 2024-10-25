@@ -1132,7 +1132,6 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 #peers #udpconnections tbody tr:last-child td,#peers #ntcpconnections tbody tr:last-child td{border-bottom:var(--border_inner)}
 #peers #udpconnections tfoot .peer,#peers #ntcpconnections tfoot .peer,#peers .tablefooter td{padding-left:8px;text-align:left;border-bottom:var(--border_inner)}
 #peers #ntcpcon,#peers #udpcon{position:relative}
-#peers #ntcpcon:hover #topCount,#peers #udpcon:hover #topCount{display:none}
 #peers #transportSummary tfoot td{text-align:center}
 #peerdefs td{padding:5px;line-height:1.5}
 #peerdefs ul{margin:0;width:100%;display:inline-block;columns:500px auto;column-gap:0}

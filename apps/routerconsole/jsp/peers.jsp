@@ -5,8 +5,7 @@
 <%
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null)
-        lang = ctx.getProperty("routerconsole.lang");
+    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
 %>
 <html lang="<%=lang%>">
 <head>
@@ -46,8 +45,7 @@
 <div class=main id=peers>
 <%
     peerHelper.storeWriter(out);
-    if (allowIFrame)
-        peerHelper.allowGraphical();
+    if (allowIFrame) {peerHelper.allowGraphical();}
 %>
 <jsp:getProperty name="peerHelper" property="peerSummary" />
 </div>

@@ -2917,7 +2917,6 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 #peers #udpconnections tfoot .peer,#peers #ntcpconnections tfoot .peer{padding-left:8px;text-align:left}
 #peers #ntcpconnections .edit,#peers #udpconnections .edit{width:1%;white-space:nowrap}
 #peers #ntcpcon,#peers #udpcon{position:relative}
-#peers #ntcpcon:hover #topCount,#peers #udpcon:hover #topCount{display:none}
 #profiles span[hidden]{display:none!important}
 #topCount{display:inline-block;position:absolute;right:2px;top:2px}
 #topCount table,#topCount td{line-height:1}

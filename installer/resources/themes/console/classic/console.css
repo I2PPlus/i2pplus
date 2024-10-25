@@ -21,6 +21,7 @@
 body{margin:3px;padding:0;text-align:left;line-height:1.3;font-size:10pt;background:var(--bg_doc);background-attachment:fixed}
 code,pre,.bucket,#logs li,#servicelogs li{font:500 8.5pt var(--monospaced)}
 code,tt{font-weight:500}
+code,.bucket{color:var(--code)}
 h1,tr,.main,iframe,.sb,#sb_wrap{contain:layout}
 h1,.main,.news,.sorry{margin-left:211px}
 hr{margin:3px 0;height:2px;border:0;background:var(--border_color)}
@@ -31,7 +32,7 @@ pre{margin:0 20px;padding-top:10px;width:95%;overflow:auto;font-size:8.5pt}
 thead,tfoot{border:var(--border)}
 th,td{position:relative}
 tr,h3,h4{contain:paint}
-tr:hover th{color:var(--ink)}code,.bucket{color:var(--code)}
+tr:hover th{color:var(--ink)}
 .clearer{height:0;line-height:0;clear:left}
 .hide,.hideme,p:empty,.footnote,.footnote hr,.topness,.viewedit br{display:none}
 .links li b:first-of-type{color:#1f7096}
@@ -1876,7 +1877,6 @@ table[id*="connections"] .tablefooter td:first-child{text-align:left}
 #peers .tab,#peers .tab2{min-width:96px}
 #peers .caps{width:1%}
 #peers #ntcpcon,#peers #udpcon{position:relative}
-#peers #ntcpcon:hover #topCount,#peers #udpcon:hover #topCount{display:none}
 #peers #udpconnections tfoot .peer,#peers #ntcpconnections tfoot .peer{padding-left:8px;text-align:left}
 #peers #ntcpconnections .edit,#peers #udpconnections .edit{width:1%;white-space:nowrap}
 #peers .edit a{margin:2px 1px;vertical-align:middle}

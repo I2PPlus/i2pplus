@@ -22,22 +22,22 @@
   let sorterNTCP, sorterSSU;
 
   if (peersNTCP && typeof sorterNTCP === "undefined") {
-    sorterNTCP = new Tablesort(ntcpConn, {descending: true });
+    sorterNTCP = new Tablesort(ntcpConn, {descending: true});
   }
   if (peersSSU && typeof sorterSSU === "undefined") {
-    sorterSSU = new Tablesort(ssuConn, {descending: true });
+    sorterSSU = new Tablesort(ssuConn, {descending: true});
   }
 
   function initRefresh() {addSortListeners();}
 
   function addSortListeners() {
     if (ntcpConn) {
-      ntcpConn.addEventListener('beforeSort', function() {progressx.show(theme); progressx.progress(0.5);});
-      ntcpConn.addEventListener('afterSort', function() {progressx.hide();});
+      ntcpConn.addEventListener("beforeSort", function() {progressx.show(theme); progressx.progress(0.5);});
+      ntcpConn.addEventListener("afterSort", function() {progressx.hide();});
     }
     if (ssuConn) {
-      ssuConn.addEventListener('beforeSort', function() {progressx.show(theme); progressx.progress(0.5);});
-      ssuConn.addEventListener('afterSort', function() {progressx.hide();});
+      ssuConn.addEventListener("beforeSort", function() {progressx.show(theme); progressx.progress(0.5);});
+      ssuConn.addEventListener("afterSort", function() {progressx.hide();});
     }
   }
 
@@ -146,5 +146,5 @@
     initRefresh();
     countTiers();
     setInterval(refreshPeers, REFRESH_INTERVAL);
-  });
+ });
 })();
