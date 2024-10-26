@@ -161,6 +161,9 @@
 <tr><th>i2p.streaming.maxPongDelay={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used.")%></td></tr>
 
+<tr><th>router.blockCountries={countrycode,countrycode2} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru")%></td></tr>
+
 <tr><th>router.codelInterval={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]")%></td></tr>
 

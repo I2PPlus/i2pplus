@@ -1,10 +1,14 @@
 package net.i2p.router.tunnel.pool;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
-
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer;
@@ -12,8 +16,8 @@ import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
 /**
- * Like ParticipatingThrottler, but checked much earlier,
- * cleaned more frequently, and with more than double the min and max limits.
+ * Like ParticipatingThrottler, but checked much earlier, cleaned more frequently,
+ * and with more than double the min and max limits.
  * This is called before the request is queued or decrypted.
  *
  * @since 0.9.5
@@ -36,6 +40,8 @@ class RequestThrottler {
     private final static String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
     private final static boolean DEFAULT_BLOCK_OLD_ROUTERS = true;
     private final static String PROP_BLOCK_OLD_ROUTERS = "router.blockOldRouters";
+    private final static String PROP_BLOCK_COUNTRIES = "router.blockCountries";
+    private final static String DEFAULT_BLOCK_COUNTRIES = "";
 
     RequestThrottler(RouterContext ctx) {
         this.context = ctx;
@@ -77,6 +83,16 @@ class RequestThrottler {
             v = ri.getVersion();
             country = context.commSystem().getCountry(h);
             isOld = VersionComparator.comp(v, "0.9.62") < 0;
+        }
+
+        Set<String> blockedCountries = getBlockedCountries();
+        if (blockedCountries.contains(country)) {
+            if (_log.shouldWarn()) {
+                _log.warn("Banning and disconnecting from [" + h.toBase64().substring(0,6) + "] -> Blocked country: " + country);
+            }
+            context.banlist().banlistRouter(h, " <b>➜</b> Blocked country: " + country, null, null, context.clock().now() + 8*60*60*1000);
+            context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            return true;
         }
 
         if (highload) {
@@ -126,17 +142,21 @@ class RequestThrottler {
         return rv;
     }
 
+    /** @since 0.9.65+ */
+    private Set<String> getBlockedCountries() {
+        String blockCountries = context.getProperty(PROP_BLOCK_COUNTRIES, DEFAULT_BLOCK_COUNTRIES);
+        if (blockCountries.isEmpty()) {return Collections.emptySet();}
+        return new HashSet<>(Arrays.asList(blockCountries.toLowerCase().split(",")));
+    }
+
     private class Cleaner implements SimpleTimer.TimedEvent {
         public void timeReached() {RequestThrottler.this.counter.clear();}
     }
 
-    /**
-     *  @since 0.9.52
-     */
-
+    /** @since 0.9.52 */
     private class Disconnector implements SimpleTimer.TimedEvent {
         private final Hash h;
-        public Disconnector(Hash h) { this.h = h; }
+        public Disconnector(Hash h) {this.h = h;}
         public void timeReached() {context.commSystem().forceDisconnect(h);}
     }
 
