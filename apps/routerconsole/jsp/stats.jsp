@@ -5,8 +5,7 @@
 <%
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null)
-        lang = ctx.getProperty("routerconsole.lang");
+    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
 %>
 <html lang="<%=lang%>">
 <head>
@@ -25,59 +24,6 @@
 <div class=main id=stats>
 <jsp:getProperty name="oldhelper" property="stats" />
 </div>
-<script nonce=<%=cspNonce%>>
-  function initRefresh() {
-    setInterval(updateStats, 60000);
-  }
-  function updateStats() {
-    progressx.show(theme);
-    progressx.progress(0.5);
-    var xhrstats = new XMLHttpRequest();
-    xhrstats.open('GET', '/stats', true);
-    xhrstats.responseType = "document";
-    xhrstats.onreadystatechange = function () {
-      if (xhrstats.readyState==4 && xhrstats.status==200) {
-        var info = document.getElementById("gatherstats");
-        if (info) {
-          var infoResponse = xhrstats.responseXML.getElementById("gatherstats");
-          if (infoResponse && !Object.is(info.innerHTML, infoResponse.innerHTML)) {
-            info.innerHTML = infoResponse.innerHTML;
-          }
-        }
-        var statlist = document.getElementById("statlist");
-        var statlistResponse = xhrstats.responseXML.getElementById("statlist");
-        var statlistParent = statlist.parentNode;
-        if (!Object.is(statlist.innerHTML, statlistResponse.innerHTML)) {
-          statlistParent.replaceChild(statlistResponse, statlist);
-        }
-      }
-    }
-    xhrstats.send();
-    progressx.hide();
-  }
-  var infohelp = document.querySelector("#gatherstats");
-  var nav = document.querySelector(".confignav");
-  var routerTab = document.getElementById("Router");
-  var tabs = document.querySelectorAll(".togglestat");
-  function initTabs() {
-    for (var i = 0; i < tabs.length; i++) {
-      tabs[i].classList.remove("tab2");
-    }
-  }
-  nav.addEventListener("click", function(element) {
-    if (element.target.classList.contains("togglestat")) {
-      if (infohelp) {infohelp.remove();}
-      updateStats();
-      initTabs();
-      element.target.classList.add("tab2");
-      progressx.hide();
-    }
-  });
-  document.addEventListener("DOMContentLoaded", () => {
-    initRefresh();
-    initTabs();
-    progressx.hide();
-  });
-</script>
+<script nonce=<%=cspNonce%> src=/js/stats.js></script>
 </body>
 </html>
