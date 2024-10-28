@@ -31,58 +31,6 @@
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.js></script>
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.dotsep.js></script>
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.number.js></script>
-<script nonce=<%=cspNonce%>>
-  const jobs = document.getElementById("jobstats");
-  const sorter = new Tablesort((jobs), {descending: true});
-  const xhrjobs = new XMLHttpRequest();
-  progressx.hide();
-  const visibility = document.visibilityState;
-  if (visibility === "visible") {
-    setInterval(function() {
-      xhrjobs.open('GET', '/jobs', true);
-      xhrjobs.responseType = "document";
-      xhrjobs.onload = function () {
-        if (!xhrjobs.responseXML) {
-          //alert("Your browser doesn't support AJAX. Please upgrade to a newer browser or enable support for XHR requests.");
-          return;
-        }
-        const jobsResponse = xhrjobs.responseXML.getElementById("jobstats");
-        const rows = document.querySelectorAll("#statCount tr");
-        const rowsResponse = xhrjobs.responseXML?.querySelectorAll("#statCount tr");
-        const tbody = document.getElementById("statCount");
-        const tbodyResponse = xhrjobs.responseXML.getElementById("statCount");
-        const tfoot = document.getElementById("statTotals");
-        const tfootResponse = xhrjobs.responseXML.getElementById("statTotals");
-        const updatingTds = document.querySelectorAll("#statCount td");
-        const updatingTdsResponse = xhrjobs.responseXML?.querySelectorAll("#statCount td");
-        let updated = false;
-        if (!Object.is(jobs.innerHTML, jobsResponse.innerHTML)) {
-          if (rows.length !== rowsResponse.length) {
-            tbody.innerHTML = tbodyResponse.innerHTML;
-            tfoot.innerHTML = tfootResponse.innerHTML;
-            updated = true;
-          } else {
-            Array.from(updatingTds).forEach((elem, index) => {
-              elem.classList.remove("updated");
-              if (elem.innerHTML !== "<span hidden>[0.]</span>0" && elem.innerHTML !== updatingTdsResponse[index].innerHTML) {
-                elem.innerHTML = updatingTdsResponse[index].innerHTML;
-                elem.classList.add("updated");
-                updated = true;
-              }
-            });
-            if (tfoot.innerHTML !== tfootResponse.innerHTML) {
-              tfoot.innerHTML = tfootResponse.innerHTML;
-            }
-          }
-          sorter.refresh();
-        }
-      }
-      progressx.hide();
-      xhrjobs.send();
-    }, 10000);
-  }
-  jobs.addEventListener("beforeSort", function() {progressx.show(theme);progressx.progress(0.5);});
-  jobs.addEventListener("afterSort", function() {progressx.hide();});
-</script>
+<script nonce=<%=cspNonce%> src=/js/jobs.js></script>
 </body>
 </html>
