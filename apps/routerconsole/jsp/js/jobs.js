@@ -12,7 +12,7 @@
 
   if (visibility === "visible") {
     setInterval(function() {
-      xhrjobs.open('GET', '/jobs', true);
+      xhrjobs.open("GET", "/jobs", true);
       xhrjobs.responseType = "document";
       xhrjobs.onload = function() {
         if (!xhrjobs.responseXML) {return;}

@@ -17,7 +17,7 @@
 
   function updateNetDb() {
     const xhrnetdb = new XMLHttpRequest();
-    xhrnetdb.open('GET', '/netdb', true);
+    xhrnetdb.open("GET", "/netdb", true);
     xhrnetdb.responseType = "document";
     xhrnetdb.onload = function () {
       const congestion = document.getElementById("netdbcongestion");
