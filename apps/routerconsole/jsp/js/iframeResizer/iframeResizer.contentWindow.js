@@ -718,9 +718,7 @@
     }
 
     var elements = [],
-      MutationObserver =
-        window.MutationObserver || window.WebKitMutationObserver,
-      observer = createMutationObserver()
+      MutationObserver = window.MutationObserver, observer = createMutationObserver()
 
     return {
       disconnect: function () {
@@ -737,7 +735,7 @@
     var forceIntervalTimer = 0 > interval
 
     // Not testable in PhantomJS
-    if (window.MutationObserver ||window.WebKitMutationObserver) { /* istanbul ignore if */
+    if (window.MutationObserver) { /* istanbul ignore if */
       if (forceIntervalTimer) {initInterval()}
       else {bodyObserver = setupBodyMutationObserver()}
     } else {
@@ -1116,11 +1114,7 @@
     }
 
     function isMiddleTier() {
-      return (
-        (!(typeof module !== 'undefined' && module.exports) &&
-          'iFrameResize' in window) ||
-        ('jQuery' in window && 'iFrameResize' in window.jQuery.prototype)
-      )
+      return (!(typeof module !== 'undefined' && module.exports) && 'iFrameResize' in window);
     }
 
     function isInitMsg() {
@@ -1163,6 +1157,5 @@
   addEventListener(window, 'message', receiver)
   addEventListener(window, 'readystatechange', chkLateLoaded)
   chkLateLoaded()
-
 
 })()

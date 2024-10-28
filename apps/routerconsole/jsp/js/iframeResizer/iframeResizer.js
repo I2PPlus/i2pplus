@@ -68,12 +68,9 @@
       onScroll: function () {return true}
     }
 
+
   function getMutationObserver() {
-    return (
-      window.MutationObserver ||
-      window.WebKitMutationObserver ||
-      window.MozMutationObserver
-    )
+    return window.MutationObserver;
   }
 
   function addEventListener(el, evt, func) {
@@ -1033,7 +1030,6 @@
 
   // Not testable in PhantomJS
   /* istanbul ignore next */
-
   function fixHiddenIFrames() {
     function checkIFrames() {
       function checkIFrame(settingId) {
@@ -1125,7 +1121,6 @@
     addEventListener(window, 'message', iFrameListener)
     addEventListener(window, 'resize', function () {resizeIFrames('resize')})
     addEventListener(document, 'visibilitychange', tabVisible)
-    addEventListener(document, '-webkit-visibilitychange', tabVisible)
   }
 
   function factory() {
@@ -1181,24 +1176,6 @@
 
       return iFrames
     }
-  }
-
-  function createJQueryPublicMethod($) {
-    if (!$.fn) {
-      info('', 'Unable to bind to jQuery, it is not fully loaded.')
-    } else if (!$.fn.iFrameResize) {
-      $.fn.iFrameResize = function $iFrameResizeF(options) {
-        function init(index, element) {
-          setupIFrame(element, options)
-        }
-
-        return this.filter('iframe').each(init).end()
-      }
-    }
-  }
-
-  if (window.jQuery) {
-    createJQueryPublicMethod(window.jQuery)
   }
 
   if (typeof define === 'function' && define.amd) {define([], factory)}
