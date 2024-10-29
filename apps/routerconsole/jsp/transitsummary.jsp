@@ -5,8 +5,7 @@
 <%
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null)
-        lang = ctx.getProperty("routerconsole.lang");
+    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
 %>
 <html lang="<%=lang%>" id=participatingTunnels>
 <head>
@@ -29,9 +28,7 @@
 </div>
 <jsp:useBean class="net.i2p.router.web.helpers.TransitSummaryHelper" id="transitSummaryHelper" scope="request" />
 <jsp:setProperty name="transitSummaryHelper" property="contextId" value="<%=i2pcontextId%>" />
-<%
-    transitSummaryHelper.storeWriter(out);
-%>
+<% transitSummaryHelper.storeWriter(out); %>
 <jsp:getProperty name="transitSummaryHelper" property="transitSummary" />
 </div>
 <script nonce=<%=cspNonce%> src=/js/lazyload.js></script>
@@ -39,56 +36,6 @@
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.dotsep.js></script>
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.natural.js></script>
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.number.js></script>
-<script nonce=<%=cspNonce%> type=module>
-  import {onVisible} from "/js/onVisible.js";
-  var main = document.getElementById("tunnels");
-  var peers = document.getElementById("transitPeers");
-  var summary = document.getElementById("transitSummary");
-  var visible = document.visibilityState;
-  var xhrtunnels = new XMLHttpRequest();
-  if (summary) {var sorter = new Tablesort((summary), {descending: true});}
-  function initRefresh() {
-    if (refreshId) {
-      clearInterval(refreshId);
-    }
-    var refreshId = setInterval(updateTunnels, 15000);
-    if (summary && sorter === null) {
-      var sorter = new Tablesort((summary), {descending: true});
-    }
-    addSortListeners();
-    updateTunnels();
-  }
-  function addSortListeners() {
-    if (summary) {
-      summary.addEventListener('beforeSort', function() {progressx.show(theme);progressx.progress(0.5);});
-      summary.addEventListener('afterSort', function() {progressx.hide();});
-    }
-  }
-  function updateTunnels() {
-    xhrtunnels.open('GET', '/transitsummary', true);
-    xhrtunnels.responseType = "document";
-    xhrtunnels.onreadystatechange = function () {
-      if (xhrtunnels.readyState === 4 && xhrtunnels.status === 200) {
-        var mainResponse = xhrtunnels.responseXML.getElementById("tunnels");
-        var peersResponse = xhrtunnels.responseXML.getElementById("transitPeers");
-        if (peersResponse) {
-        addSortListeners();
-          if (peers && peers !== peersResponse) {
-            peers.innerHTML = peersResponse.innerHTML;
-            sorter.refresh();
-          }
-        } else if (!summary || !peersResponse) {
-          main.innerHTML = mainResponse.innerHTML;
-        }
-      }
-    }
-    if (sorter) {sorter.refresh();}
-    xhrtunnels.send();
-  }
-  onVisible(main, () => {updateTunnels();});
-  if (visible === "hidden") {clearInterval(refreshId);}
-  window.addEventListener("DOMContentLoaded", progressx.hide);
-  document.addEventListener("DOMContentLoaded", initRefresh);
-</script>
+<script nonce=<%=cspNonce%> type=module src=/js/transitsummary.js></script>
 </body>
 </html>

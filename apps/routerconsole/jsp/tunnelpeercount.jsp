@@ -35,71 +35,7 @@
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.js></script>
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.number.js></script>
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.natural.js></script>
-<script nonce=<%=cspNonce%> type=module>
-  import {onVisible} from "/js/onVisible.js";
-  const footer = document.querySelector(".tablefooter");
-  const main = document.getElementById("tunnels");
-  const peers = document.getElementById("allPeers");
-  const refresh = document.getElementById("refreshPage");
-  const tunnels = document.getElementById("tunnelPeerCount");
-  const xhrtunnels = new XMLHttpRequest();
-  const visible = document.visibilityState;
-  if (tunnels) {var sorter = new Tablesort((tunnels), {descending: true});}
-  function initRefresh() {
-    let refreshId = null;
-    if (refreshId) {
-      clearInterval(refreshId);
-    }
-    refreshId = setInterval(updateTunnels, 60000);
-    if (tunnels && sorter === null) {
-      const sorter = new Tablesort((tunnels), {descending: true});
-      removeHref();
-    }
-    addSortListeners();
-    updateTunnels();
-  }
-  function removeHref() {
-    if (refresh) {refresh.removeAttribute("href");}
-  }
-  function addSortListeners() {
-    if (tunnels) {
-      tunnels.addEventListener('beforeSort', function() {progressx.show(theme);progressx.progress(0.5);});
-      tunnels.addEventListener('afterSort', function() {progressx.hide();});
-    }
-  }
-  function updateTunnels() {
-    xhrtunnels.open("GET", "/tunnelpeercount", true);
-    xhrtunnels.responseType = "document";
-    xhrtunnels.onload = function () {
-      const mainResponse = xhrtunnels.responseXML.getElementById("tunnels");
-      const peersResponse = xhrtunnels.responseXML.getElementById("allPeers");
-      const footerResponse = xhrtunnels.responseXML.querySelector(".tablefooter");
-      if (peersResponse) {
-        addSortListeners();
-        if (peers && peers !== peersResponse) {
-          peers.innerHTML = peersResponse.innerHTML;
-          sorter.refresh();
-          removeHref();
-        }
-        if (footer && footerResponse && footer !== footerResponse) {
-          footer.innerHTML = footerResponse.innerHTML;
-        }
-      } else if ((!tunnels || !peersResponse) && mainResponse) {
-        main.innerHTML = mainResponse.innerHTML;
-      }
-    }
-    if (sorter) {sorter.refresh();}
-    xhrtunnels.send();
-  }
-  if (refresh) {
-    refresh.addEventListener("click", function() {progressx.show(theme);progressx.progress(0.5);updateTunnels();progressx.hide();});
-    refresh.addEventListener("mouseenter", removeHref);
-  }
-  onVisible(main, () => {updateTunnels();});
-  if (visible === "hidden") {clearInterval(refreshId);}
-  window.addEventListener("DOMContentLoaded", progressx.hide);
-  document.addEventListener("DOMContentLoaded", initRefresh);
-</script>
 <script nonce=<%=cspNonce%> src=/js/lazyload.js></script>
+<script nonce=<%=cspNonce%> type=module src=/js/tunnelpeercount.js></script>
 </body>
 </html>

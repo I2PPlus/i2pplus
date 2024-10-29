@@ -979,9 +979,9 @@
         <pathelement location="core/java/build/json-simple.jar" />
       </classpath>
       <!--
-                  These variables are stored in build.properties.
-                  End-users can override by creating the file override.properties
-            -->
+         These variables are stored in build.properties.
+         End-users can override by creating the file override.properties
+      -->
       <link offline="true" href="${javasedocs.url}" packagelistLoc="installer/resources/package-lists/java/" />
       <link offline="true" href="${javaeedocs.url}" packagelistLoc="installer/resources/package-lists/javaee/" />
       <link offline="true" href="${jettydocs.url}" packagelistLoc="installer/resources/package-lists/jetty/" />
