@@ -17,7 +17,7 @@
   const query = location.search;
   const queryParams = new URL(url.href).searchParams;
   const xhrPeers = new XMLHttpRequest();
-  const REFRESH_INTERVAL = 30*1000;
+  const REFRESH_INTERVAL = summary ? 10*1000 : 30*1000;
 
   let sorterNTCP, sorterSSU;
 
@@ -72,7 +72,7 @@
                        (countU > 0 ? "<td class=rbw id=u>U<span> " + countU + "</span></td>" : "") +
                        (countFF > 0 ? "<td class=rbw id=ff>F<span> " + countFF + "</span></td>" : "") +
                        "</tr></table>";
-    if (topCount) {topCount.innerHTML = counter;}
+      if (topCount) {topCount.innerHTML = counter;}
     }
   }
 
