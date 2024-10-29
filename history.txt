@@ -1,3 +1,9 @@
+2024-10-29 dr|z3d
+ * Console:
+   - Migrate remaining js to separate files and consolidate
+   - Streamline display of routerinfos on /netdb and suppress display of
+     various stats in full/advanced mode
+
 2024-10-25 dr|z3d
  * Console: Migrate inline js on /peers and /profiles to separate files
 
