@@ -5,8 +5,7 @@
 <%
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null)
-        lang = ctx.getProperty("routerconsole.lang");
+    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
 %>
 <html lang="<%=lang%>">
 <head>
@@ -27,14 +26,9 @@
 <tr><td><b>I2P:</b></td><td><%=net.i2p.router.RouterVersion.FULL_VERSION%>&ensp;<b>API:</b>&ensp;<%=net.i2p.CoreVersion.PUBLISHED_VERSION%>&ensp;<b>Wrapper:</b>&ensp;<%=System.getProperty("wrapper.version", "none")%> &ensp;<b>Built by:</b>&ensp;<jsp:getProperty name="logsHelper" property="builtBy" /></td></tr>
 <tr><td><b>Revision:</b></td><td><jsp:getProperty name="logsHelper" property="revision" /></td></tr>
 <tr><td><b>Platform:</b></td><td><%=System.getProperty("os.name")%>&ensp;<%=System.getProperty("os.arch")%>&ensp;<%=System.getProperty("os.version")%></td></tr>
+<tr><td><b>Processor:</b></td><td><span id=cputype><%=net.i2p.util.NativeBigInteger.cpuType()%></span>
 <%
    boolean isX86 = net.i2p.util.SystemVersion.isX86();
-   if (isX86) {
-%>
-<%
-   }
-%><tr><td><b>Processor:</b></td><td><span id=cputype><%=net.i2p.util.NativeBigInteger.cpuType()%></span>
-<%
    if (isX86) {
 %>&ensp;<%=net.i2p.util.NativeBigInteger.cpuModel()%>
 <%
@@ -54,32 +48,7 @@
 <h3 class=tabletitle><%=intl._t("Router Information")%></h3>
 <jsp:getProperty name="infohelper" property="console" />
 </div>
-<script nonce=<%=cspNonce%>>
-  function refreshInfo() {
-    var xhrInfo = new XMLHttpRequest();
-    xhrInfo.open('GET', '/info', true);
-    xhrInfo.responseType = "document";
-    xhrInfo.onreadystatechange = function () {
-      if (xhrInfo.readyState === 4 && xhrInfo.status === 200) {
-        progressx.show(theme);
-        progressx.progress(0.5);
-        var updating = document.querySelectorAll(".ajax");
-        var updatingResponse = xhrInfo.responseXML.querySelectorAll(".ajax");
-        var i;
-        for (i = 0; i < updating.length; i += 1) {
-          if (updating[i] !== null) {
-            if (updatingResponse[i] !== null && updating[i] !== updatingResponse[i]) {
-              updating[i].innerHTML = updatingResponse[i].innerHTML;
-            }
-          }
-        }
-        progressx.hide();
-      }
-    }
-    xhrInfo.send();
-  }
-  setInterval(refreshInfo, 30000);
-  window.addEventListener("DOMContentLoaded", progressx.hide);
-</script>
+<script nonce=<%=cspNonce%> src="/js/refreshElements.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script nonce=<%=cspNonce%>>refreshElements(".ajax", "/info", 30000);</script>
 </body>
 </html>
