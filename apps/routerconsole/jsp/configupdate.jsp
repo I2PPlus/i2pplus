@@ -197,39 +197,8 @@
 </table>
 </form>
 </div>
-<script nonce=<%=cspNonce%>>
-  function refresh() {
-    const message = document.getElementById("statusNews");
-    const xhrRefresh = new XMLHttpRequest();
-    xhrRefresh.open("GET", "/configupdate", true);
-    xhrRefresh.responseType = "document";
-    xhrRefresh.onreadystatechange = function() {
-      if (xhrRefresh.readyState === XMLHttpRequest.DONE) {
-        if (xhrRefresh.status === 200) {
-          progressx.show(theme);
-          const messageResponse = xhrRefresh.responseXML.getElementById("statusNews");
-          message.innerHTML = messageResponse.innerHTML;
-        }
-      }
-    };
-    xhrRefresh.send();
-    progressx.hide();
-  }
-  const updatesForm = document.getElementById("form_updates");
-  const processForm = document.getElementById("processForm");
-  let formSubmit = false;
-  window.addEventListener("DOMContentLoaded", progressx.hide);
-  updatesForm.addEventListener("submit", function() {
-    progressx.show(theme);
-    formSubmit = true;
-  });
-  processForm.addEventListener("load", function() {
-    if (formSubmit) {
-      refresh();
-      progressx.hide();
-      formSubmit = false;
-    }
-  });
-</script>
+<script nonce=<%=cspNonce%> src=/js/formsubmit.js></script>
+<script nonce=<%=cspNonce%> src="/js/refreshElements.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script nonce=<%=cspNonce%>>refreshElements("#statusNews", "/configupdate", 10000);</script>
 </body>
 </html>

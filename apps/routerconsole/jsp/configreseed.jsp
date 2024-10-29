@@ -252,38 +252,6 @@
 </tr>
 </table>
 </div>
-<script nonce=<%=cspNonce%>>
-  function refresh() {
-    const main = document.getElementById("config_reseed");
-    const xhrRefresh = new XMLHttpRequest();
-    xhrRefresh.open("GET", "/configreseed", true);
-    xhrRefresh.responseType = "document";
-    xhrRefresh.onreadystatechange = function() {
-      if (xhrRefresh.readyState === XMLHttpRequest.DONE) {
-        if (xhrRefresh.status === 200) {
-          const mainResponse = xhrRefresh.responseXML.getElementById("config_reseed");
-          progressx.show(theme);
-          main.innerHTML = mainResponse.innerHTML;
-        }
-      }
-    };
-    xhrRefresh.send();
-    progressx.hide();
-  }
-  const reseedForm = document.getElementById("form_reseed");
-  const processForm = document.getElementById("processForm");
-  window.addEventListener("DOMContentLoaded", progressx.hide);
-  reseedForm.addEventListener("submit", function() {
-    progressx.show(theme);
-    formSubmit = true;
-  });
-  processForm.addEventListener("load", function() {
-    if (formSubmit) {
-      refresh();
-      progressx.hide();
-      formSubmit = false;
-    }
-  });
-</script>
+<script nonce=<%=cspNonce%> src=/js/formsubmit.js></script>
 </body>
 </html>
