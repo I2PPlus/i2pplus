@@ -15,6 +15,7 @@ import java.math.BigInteger; // debug
 import java.text.Collator;
 import java.text.DecimalFormat; // debug
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -151,7 +152,7 @@ class NetDbRenderer {
                         catch (InterruptedException ie) {}
                     }
                 }
-                netdb.lookupLocallyWithoutValidation(hash);
+                  netdb.lookupLocallyWithoutValidation(hash);
                 if (ri != null) {renderRouterInfo(buf, ri, false, true);}
                 else {
                     buf.append("<div class=netdbnotfound>");
@@ -1616,116 +1617,101 @@ class NetDbRenderer {
             }
             buf.append("</ul>").append("</td></tr>\n");
         }
-        if (full && !isUs) {
+
+        if (full) {
             PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(info.getHash());
-            if (prof != null) {
-                buf.append("<tr><td><b>").append(_t("Stats")).append(":</b><td colspan=2>\n<ul class=\"netdbStats\">");
+            boolean isFF = info.getCapabilities().indexOf("f") >= 0;
+            if (prof != null || isUs) {
+            buf.append("<tr><td><b>" + _t("Stats") + ":</b><td colspan=2>\n<ul class=netdbStats>");
                 Map<Object, Object> p = info.getOptionsMap();
                 for (Map.Entry<Object, Object> e : p.entrySet()) {
                     String key = (String) e.getKey();
-                    if (key.equals("caps") || key.toLowerCase().contains("netid") || key.toLowerCase().equals("family") ||
-                        key.toLowerCase().contains("version") ||key.toLowerCase().contains("netid")) {continue;}
+                    if (key.toLowerCase().contains("caps") || key.toLowerCase().contains("version") ||
+                        key.toLowerCase().equals("family") || key.toLowerCase().contains("tunnel.") ||
+                        key.toLowerCase().contains("stat_") || (key.equals("netId") && !isUs)) {continue;}
+
                     String netDbKey = DataHelper.stripHTML(key)
                         .replace("netdb.", "")
                         .replace("knownLeaseSets", "<li><b>" + _t("LeaseSets"))
                         .replace("knownRouters", "<li><b>" + _t("Routers"))
                         .replace("stat_", "")
-                        .replace("uptime", "<li><b>" + _t("Uptime"))
+                        .replace("uptime", "<li><b>" + _t("Uptime"));
+                        // only show for our own id
+                        if (isFF) {netDbKey = netDbKey.replace("netId", "<hr><li><b>" + _t("Network ID"));}
+                        else {netDbKey = netDbKey.replace("netId", "<li><b>" + _t("Network ID"));}
+
+/**
                         // TODO: place family entries underneath general network stats
                         .replace("family.", "Family ")
                         .replace("Family key", "<li class=\"longstat fam\"><b>" + _t("Family Key"))
                         .replace("Family sig", "<li class=\"longstat fam\"><b>" + _t("Family Sig"))
-                        .replace("tunnel.buildExploratoryExpire.60m",  "<li class=longstat><b>"   + _t("Exploratory tunnels expire (1h)"))
-                        .replace("tunnel.buildExploratoryReject.60m",  "<li class=longstat><b>"   + _t("Exploratory tunnels reject (1h)"))
-                        .replace("tunnel.buildExploratorySuccess.60m", "<li class=longstat><b>"   + _t("Exploratory tunnels build success (1h)"))
-                        .replace("tunnel.buildClientExpire.60m",       "<li class=longstat><b>"   + _t("Client tunnels expire (1h)"))
-                        .replace("tunnel.buildClientReject.60m",       "<li class=longstat><b>"   + _t("Client tunnels reject (1h)"))
-                        .replace("tunnel.buildClientSuccess.60m",      "<li class=longstat><b>"   + _t("Client tunnels build success (1h)"))
-                        .replace("tunnel.participatingTunnels.60m",    "<li class=longstat><b>"   + _t("Participating tunnels (1h)"))
-                        .replace("tunnel.participatingTunnels.60s",    "<li class=longstat><b>"   + _t("Participating tunnels (60s)"))
-                        .replace("stat_bandwidthSendBps.60m",          "<li class=longstat><b>"   + _t("Bandwidth send rate (1h)"))
-                        .replace("stat_bandwidthReceiveBps.60m",       "<li class=longstat><b>"   + _t("Bandwidth receive rate (1h)"));
-                    buf.append(netDbKey);
+                        .replace("tunnel.buildExploratoryExpire.60m",  "<li class=longstat><b>" + _t("Exploratory tunnels expire (1h)"))
+                        .replace("tunnel.buildExploratoryReject.60m",  "<li class=longstat><b>" + _t("Exploratory tunnels reject (1h)"))
+                        .replace("tunnel.buildExploratorySuccess.60m", "<li class=longstat><b>" + _t("Exploratory tunnels build success (1h)"))
+                        .replace("tunnel.buildClientExpire.60m",       "<li class=longstat><b>" + _t("Client tunnels expire (1h)"))
+                        .replace("tunnel.buildClientReject.60m",       "<li class=longstat><b>" + _t("Client tunnels reject (1h)"))
+                        .replace("tunnel.buildClientSuccess.60m",      "<li class=longstat><b>" + _t("Client tunnels build success (1h)"))
+                        .replace("tunnel.participatingTunnels.60m",    "<li class=longstat><b>" + _t("Participating tunnels (1h)"))
+                        .replace("tunnel.participatingTunnels.60s",    "<li class=longstat><b>" + _t("Participating tunnels (60s)"))
+                        .replace("stat_bandwidthSendBps.60m",          "<li class=longstat><b>" + _t("Bandwidth send rate (1h)"))
+                        .replace("stat_bandwidthReceiveBps.60m",       "<li class=longstat><b>" + _t("Bandwidth receive rate (1h)"));
+**/
+
                     String val = (String) e.getValue();
-                    String netDbValue = DataHelper.stripHTML(val)
-                                                  .replace("XO", "X")
-                                                  .replace("PO", "P")
-                                                  .replace("R", "")
-                                                  .replace("U", "")
-                                                  .replace(";", " <span class=\"bullet\">&bullet;</span> ")
-                                                  .replace("&bullet;</span> 555", "&bullet;</span> " +_t("n/a"));
-                    buf.append(":</b> ").append(netDbValue).append("</li>");
+                    String[] values = DataHelper.stripHTML(val).split(";");
+
+                    // Hide these stats
+                    // TODO: only show 4th value for each stat
+                    List<String> stats = Arrays.asList(
+                        "tunnel.buildExploratoryExpire.60m",
+                        "tunnel.buildExploratoryReject.60m",
+                        "tunnel.buildExploratorySuccess.60m",
+                        "tunnel.buildClientExpire.60m",
+                        "tunnel.buildClientReject.60m",
+                        "tunnel.buildClientSuccess.60m",
+                        "tunnel.participatingTunnels.60m",
+                        "tunnel.participatingTunnels.60s",
+                        "stat_bandwidthSendBps.60m",
+                        "stat_bandwidthReceiveBps.60m"
+                    );
+
+                    if (!stats.contains(key) && !key.toLowerCase().contains("family")) {
+                        buf.append(netDbKey);
+                        String netDbValue = DataHelper.stripHTML(val)
+                                                      .replace("XO", "X")
+                                                      .replace("PO", "P")
+                                                      .replace("R", "")
+                                                      .replace("U", "")
+                                                      .replace(";", " <span class=\"bullet\">&bullet;</span> ")
+                                                      .replace("&bullet;</span> 555", "&bullet;</span> " + _t("n/a"));
+                        buf.append(":</b> ").append(netDbValue).append("</li>");
+                    }
                 }
-                long now = _context.clock().now();
-                long heard = prof.getFirstHeardAbout();
-                if (heard > 0) {
-                    long peerAge = Math.max(now - heard, 1);
-                    buf.append("<li><b>").append(_t("First heard about")).append(":</b> ")
-                       .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>");
-                } else {
-                    buf.append("<li><b>").append(_t("First heard about")).append(":</b> ")
-                       .append(_t("n/a")).append("</li>");
-                }
-                heard = prof.getLastHeardAbout();
-                if (heard > 0) {
-                    long peerAge = Math.max(now - heard, 1);
-                    buf.append("<li><b>").append(_t("Last heard about")).append(":</b> ")
-                       .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>");
-                } else {
-                    buf.append("<li><b>").append(_t("Last heard about")).append(":</b> ")
-                       .append(_t("n/a")).append("</li>");
-                }
-                heard = prof.getLastHeardFrom();
-                if (heard > 0) {
-                    long peerAge = Math.max(now - heard, 1);
-                    buf.append("<li><b>").append(_t("Last heard from")).append(":</b> ")
-                       .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>");
-                } else {
-                    buf.append("<li><b>").append(_t("Last heard from")).append(":</b> ")
-                       .append(_t("n/a")).append("</li>");
+
+                if (!isUs && prof != null) {
+                    long now = _context.clock().now();
+                    long heard = prof.getFirstHeardAbout();
+                    if (heard > 0) {
+                        long peerAge = Math.max(now - heard, 1);
+                        if (isFF) {buf.append("<br>");}
+                        buf.append("<li><b>").append(_t("First heard about")).append(":</b> ")
+                           .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>");
+                    }
+                    heard = prof.getLastHeardAbout();
+                    if (heard > 0) {
+                        long peerAge = Math.max(now - heard, 1);
+                        buf.append("<li><b>").append(_t("Last heard about")).append(":</b> ")
+                           .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>");
+                    }
+                    heard = prof.getLastHeardFrom();
+                    if (heard > 0) {
+                        long peerAge = Math.max(now - heard, 1);
+                        buf.append("<li><b>").append(_t("Last heard from")).append(":</b> ")
+                           .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>");
+                    }
                 }
                 buf.append("</ul></td></tr>\n");
             }
-        } else if (full) {
-            buf.append("<tr><td><b>" + _t("Stats") + ":</b><td colspan=2>\n<ul class=netdbStats>");
-            Map<Object, Object> p = info.getOptionsMap();
-            for (Map.Entry<Object, Object> e : p.entrySet()) {
-                String key = (String) e.getKey();
-                if (key.toLowerCase().contains("caps") || key.toLowerCase().contains("version") ||
-                    key.toLowerCase().equals("family")) {continue;}
-                String netDbKey = DataHelper.stripHTML(key)
-                    .replace("netdb.", "")
-                    .replace("netId", "<hr><li><b>" + _t("Network ID")) // only show for our own id
-                    .replace("knownLeaseSets", "<li><b>" + _t("LeaseSets"))
-                    .replace("knownRouters", "<li><b>" + _t("Routers"))
-                    .replace("stat_", "")
-                    .replace("uptime", "<li><b>" + _t("Uptime"))
-                    // TODO: place family entries underneath general network stats
-                    .replace("family.", "Family ")
-                    .replace("Family key", "<li class=\"longstat fam\"><b>" + _t("Family Key"))
-                    .replace("Family sig", "<li class=\"longstat fam\"><b>" + _t("Family Sig"))
-                    .replace("tunnel.buildExploratoryExpire.60m",  "<li class=longstat><b>" + _t("Exploratory tunnels expire (1h)"))
-                    .replace("tunnel.buildExploratoryReject.60m",  "<li class=longstat><b>" + _t("Exploratory tunnels reject (1h)"))
-                    .replace("tunnel.buildExploratorySuccess.60m", "<li class=longstat><b>" + _t("Exploratory tunnels build success (1h)"))
-                    .replace("tunnel.buildClientExpire.60m",       "<li class=longstat><b>" + _t("Client tunnels expire (1h)"))
-                    .replace("tunnel.buildClientReject.60m",       "<li class=longstat><b>" + _t("Client tunnels reject (1h)"))
-                    .replace("tunnel.buildClientSuccess.60m",      "<li class=longstat><b>" + _t("Client tunnels build success (1h)"))
-                    .replace("tunnel.participatingTunnels.60m",    "<li class=longstat><b>" + _t("Participating tunnels (1h)"))
-                    .replace("tunnel.participatingTunnels.60s",    "<li class=longstat><b>" + _t("Participating tunnels (60s)"))
-                    .replace("stat_bandwidthSendBps.60m",          "<li class=longstat><b>" + _t("Bandwidth send rate (1h)"))
-                    .replace("stat_bandwidthReceiveBps.60m",       "<li class=longstat><b>" + _t("Bandwidth receive rate (1h)"));
-                    buf.append(netDbKey);
-                    String val = (String) e.getValue();
-                    String netDbValue = DataHelper.stripHTML(val)
-                                                  .replace("XO", "X")
-                                                  .replace("PO", "P")
-                                                  .replace("R", "")
-                                                  .replace("U", "")
-                                                  .replace(";", " <span class=\"bullet\">&bullet;</span> ")
-                                                  .replace("&bullet;</span> 555", "&bullet;</span> " +_t("n/a"));
-                    buf.append(":</b> ").append(netDbValue).append("</li>");
-            }
-            buf.append("</ul></td></tr>\n");
         }
         buf.append("</table>\n");
     }
