@@ -1632,13 +1632,11 @@ class NetDbRenderer {
 
                     String netDbKey = DataHelper.stripHTML(key)
                         .replace("netdb.", "")
+                        .replace("netId", "<li><b>" + _t("Network ID")) // only shown for our own routerinfo
                         .replace("knownLeaseSets", "<li><b>" + _t("LeaseSets"))
                         .replace("knownRouters", "<li><b>" + _t("Routers"))
                         .replace("stat_", "")
                         .replace("uptime", "<li><b>" + _t("Uptime"));
-                        // only show for our own id
-                        if (isFF) {netDbKey = netDbKey.replace("netId", "<hr><li><b>" + _t("Network ID"));}
-                        else {netDbKey = netDbKey.replace("netId", "<li><b>" + _t("Network ID"));}
 
 /**
                         // TODO: place family entries underneath general network stats
