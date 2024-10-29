@@ -16,40 +16,41 @@
     xhrRefresh.onreadystatechange = function() {
       if (xhrRefresh.readyState === XMLHttpRequest.DONE) {
         if (xhrRefresh.status === 200) {
-          progressx.show(theme);
           const elementResponse = xhrRefresh.responseXML.getElementById(elementId);
           element.innerHTML = elementResponse.innerHTML;
         }
+        progressx.hide();
       }
     };
     xhrRefresh.send();
-    progressx.hide();
   }
 
   function setupFormListeners(formId, elementId, url) {
     const form = document.getElementById(formId);
 
-    window.addEventListener("DOMContentLoaded", () => {
-      progressx.hide();
-    });
-
     form.addEventListener("submit", function(event) {
       progressx.show(theme);
       formSubmit = true;
+      form.target = "processForm";
+      form.submit();
     });
 
     processForm.addEventListener("load", function() {
       if (formSubmit) {
         refresh(elementId, url);
-        progressx.hide();
         formSubmit = false;
       }
     });
   }
 
   window.addEventListener("DOMContentLoaded", function() {
-    if (statusNews) {setupFormListeners("form_updates", "statusNews", "/configupdate");}
-    if (configReseed) {setupFormListeners("form_reseed", "config_reseed", "/configreseed");}
+    progressx.hide();
+    if (statusNews) {
+      setupFormListeners("form_updates", "statusNews", "/configupdate");
+    }
+    if (configReseed) {
+      setupFormListeners("form_reseed", "config_reseed", "/configreseed");
+    }
   });
 
 })();
