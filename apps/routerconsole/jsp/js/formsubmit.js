@@ -31,8 +31,6 @@
     form.addEventListener("submit", function(event) {
       progressx.show(theme);
       formSubmit = true;
-      form.target = "processForm";
-      form.submit();
     });
 
     processForm.addEventListener("load", function() {
