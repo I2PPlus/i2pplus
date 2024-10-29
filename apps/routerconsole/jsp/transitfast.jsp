@@ -5,8 +5,7 @@
 <%
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null)
-        lang = ctx.getProperty("routerconsole.lang");
+    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
 %>
 <html lang="<%=lang%>" id=participatingTunnels>
 <head>
@@ -29,87 +28,14 @@
 </div>
 <jsp:useBean class="net.i2p.router.web.helpers.TunnelParticipatingFastestHelper" id="tunnelParticipatingFastestHelper" scope="request" />
 <jsp:setProperty name="tunnelParticipatingFastestHelper" property="contextId" value="<%=i2pcontextId%>" />
-<%
-    tunnelParticipatingFastestHelper.storeWriter(out);
-%>
+<% tunnelParticipatingFastestHelper.storeWriter(out); %>
 <jsp:getProperty name="tunnelParticipatingFastestHelper" property="tunnelParticipatingFastest" />
+</div>
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.js></script>
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.number.js></script>
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.natural.js></script>
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.dotsep.js></script>
-<script nonce=<%=cspNonce%> type=module>
-  import {onVisible} from "/js/onVisible.js";
-  var main = document.getElementById("tunnels");
-  var peers = document.getElementById("transitPeers");
-  var tunnels = document.getElementById("allTransit");
-  var refresh = document.getElementById("refreshPage");
-  var visible = document.visibilityState;
-  var xhrtunnels = new XMLHttpRequest();
-  if (tunnels) {var sorter = new Tablesort((tunnels), {descending: true});}
-  function initRefresh() {
-    if (refreshId) {clearInterval(refreshId);}
-    var refreshId = setInterval(updateTunnels, 60000);
-    if (tunnels && sorter === null) {
-      var sorter = new Tablesort((tunnels), {descending: true});
-      removeHref();
-    }
-    addSortListeners();
-    updateTunnels();
-  }
-  function removeHref() {
-    if (refresh) {refresh.removeAttribute("href");}
-  }
-  function addSortListeners() {
-    if (tunnels) {
-      tunnels.addEventListener('beforeSort', function() {progressx.show(theme);progressx.progress(0.5);});
-      tunnels.addEventListener('afterSort', function() {progressx.hide();});
-    }
-  }
-  function updateNotes() {
-    var notes = document.querySelectorAll(".statusnotes");
-    if (notes[0] !== null) {
-      var notesResponse = xhrtunnels.responseXML.querySelectorAll(".statusnotes");
-      var i;
-      for (i = 0; i < notes.length; i++) {
-        if (notesResponse[i] !== null) {
-          notes[i].innerHTML = notesResponse[i].innerHTML;
-        }
-      }
-    }
-  }
-  function updateTunnels() {
-    xhrtunnels.open('GET', '/transitfast', true);
-    xhrtunnels.responseType = "document";
-    xhrtunnels.onreadystatechange = function () {
-      if (xhrtunnels.readyState === 4 && xhrtunnels.status === 200) {
-        var mainResponse = xhrtunnels.responseXML.getElementById("tunnels");
-        var peersResponse = xhrtunnels.responseXML.getElementById("transitPeers");
-        if (peersResponse) {
-          addSortListeners();
-          if (peers && peers !== peersResponse) {
-            peers.innerHTML = peersResponse.innerHTML;
-            updateNotes();
-            sorter.refresh();
-            removeHref();
-          }
-        } else if (!tunnels || !peersResponse) {
-          main.innerHTML = mainResponse.innerHTML;
-        }
-      }
-    }
-    if (sorter) {sorter.refresh();}
-    xhrtunnels.send();
-  }
-  if (refresh) {
-    refresh.addEventListener("click", function() {progressx.show(theme);progressx.progress(0.5);updateTunnels();progressx.hide();});
-    refresh.addEventListener("mouseenter", removeHref);
-  }
-  onVisible(main, () => {updateTunnels();});
-  if (visible === "hidden") {clearInterval(refreshId);}
-  window.addEventListener("DOMContentLoaded", progressx.hide);
-  document.addEventListener("DOMContentLoaded", initRefresh);
-</script>
-</div>
 <script nonce=<%=cspNonce%> src=/js/lazyload.js></script>
+<script nonce=<%=cspNonce%> type=module src=/js/transitfast.js></script>
 </body>
 </html>
