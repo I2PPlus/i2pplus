@@ -6,9 +6,7 @@
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";
     String pageTitlePrefix = "";
-    if (ctx.getProperty("routerconsole.lang") != null) {
-        lang = ctx.getProperty("routerconsole.lang");
-    }
+    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
     if (ctx.getProperty("routerconsole.pageTitlePrefix") != null) {
         pageTitlePrefix = ctx.getProperty("routerconsole.pageTitlePrefix");
     }
@@ -48,7 +46,19 @@
 <p id=fullhistory><a href="/history.txt" target="_blank" rel="noreferrer"><%=intl._t("View the full change log")%></a></p>
 </div>
 </div>
-
+<script nonce=<%=cspNonce%>>
+  function spanify() {
+    const content = document.querySelector("#changelog pre");
+    if (!content) return;
+    const text = content.textContent.trim();
+    const blocks = text.split("\n\n");
+    const wrappedContent = blocks.map(function(block) {
+      return "<span>" + block + "</span>";
+    }).join("\n\n");
+    content.innerHTML = wrappedContent;
+  }
+  spanify();
+</script>
 <%@include file="../summaryajax.jsi" %>
 </body>
 </html>
