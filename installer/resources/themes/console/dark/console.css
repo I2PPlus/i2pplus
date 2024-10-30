@@ -438,7 +438,7 @@ div[id^="config_"].main{padding-bottom:14px}
 .optionlist{padding-bottom:1px;columns:500px auto;contain:paint}
 .optionsingle{background:#010}
 .optionlist:hover,.optionsingle:hover,.optiontextarea:hover{border:var(--border_soft);box-shadow:var(--option_highlight);transition:ease box-shadow .5s,ease background .2s .01s;background:#002500}
-.optionlist label{min-width:300px;-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
+.optionlist label{min-width:300px;break-inside:avoid}
 .options input[type=checkbox],.suboption .optbox{margin:0 3px 0 0}
 .optiontextarea,#reseedconfig .optiontextarea{box-shadow:inset 0 0 0 2px #000}
 b.suboption{margin:0;padding:5px 8px 6px 10px;display:inline-block;white-space:nowrap;text-shadow:var(--textshadow);border:var(--border_soft);border-bottom:0;box-shadow:var(--highlight);background:var(--label)}
@@ -567,7 +567,7 @@ input[type=file]::file-selector-button{font-size:8.5pt}
 .joblog{margin-top:15px;text-align:justify;border-radius:4px 4px 0 0}
 .joblog h3{margin-top:10px}
 .joblog br{margin-bottom:5px}
-.joblog ol li{padding-bottom:5px;width:calc(100% - 45px);min-width:360px;display:inline-block;text-align:left;list-style-position:inside;-webkit-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
+.joblog ol li{padding-bottom:5px;width:calc(100% - 45px);min-width:360px;display:inline-block;text-align:left;list-style-position:inside;break-inside:avoid}
 .joblog ol li:last-child{border:0;text-align:left}
 .joblog ol:empty{display:none}
 .joblog ol li:first-child{margin-top:2px}
@@ -723,7 +723,7 @@ td.ipv6{width:1%;max-width:24px}
 #ntcp+#udp{margin-top:-12px}
 #peerdefs img{padding-left:0;margin-left:0}
 #peerdefs img[width="12"]{margin-right:3px;margin-left:2px}
-#peerdefs li{margin:3px;padding:4px 8px;width:calc(100% - 24px);display:inline-block;line-height:1.6;border:var(--border_soft);box-shadow:var(--highlight),inset 0 0 2px 1px #020;background:#000800;-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
+#peerdefs li{margin:3px;padding:4px 8px;width:calc(100% - 24px);display:inline-block;line-height:1.6;border:var(--border_soft);box-shadow:var(--highlight),inset 0 0 2px 1px #020;background:#000800;break-inside:avoid}
 #peerdefs{margin-bottom:11px}
 #peerdefs td{padding:4px;line-height:1.4;background:repeating-linear-gradient(180deg,#000,#000 1px,#000800 2px,#000800 3px)}
 #peerdefs ul{margin:0;width:100%;display:inline-block;columns:500px auto;column-gap:0}
@@ -1244,7 +1244,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .addtobook a:hover{filter:drop-shadow(0 0 1px var(--hover))}
 .addtobook a::after{margin:-14px -4px -8px;padding-left:6px;width:24px;height:26px;display:inline-block;vertical-align:middle;border-left:var(--border_softer);background:var(--ahelp) var(--center)/14px;content:""}
 .leasesets_container{margin-bottom:9px;columns:680px 2;column-gap:10px}
-.leasesets_container table{-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
+.leasesets_container table{break-inside:avoid}
 .leasesets_container #leasesetdebug{margin:0 0 10px;column-span:all}
 .leaseset:first-of-type{margin-top:0}
 .leaseset:last-of-type{margin-bottom:0}
@@ -1353,7 +1353,7 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 .sybil_routerinfo .netdb_header img[src^="/flags.jsp?c="]{margin:0 5px 0 3px}
 .sybil_routerinfo .netdbheader{margin-right:0;padding:3px;text-align:right}
 .sybil_routerinfo .netdb_transport{margin:0 3px;display:inline-block}
-.sybil_routerinfo p{margin:0 0 0 3px;padding:0;line-height:1.4;-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
+.sybil_routerinfo p{margin:0 0 0 3px;padding:0;line-height:1.4;break-inside:avoid}
 .sybil_routerinfo th[colspan="2"] b[style="float:right"]{margin-right:6px;font-size:85%;font-weight:400;font-style:italic}
 .sybil_routerinfo th:first-child{white-space:nowrap;text-align:left}
 .sybil_routerinfo th img[src^="/flags"]{margin-right:5px;width:30px;height:22px}
@@ -1368,7 +1368,7 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 .threatpoints{margin-bottom:-5px;background:var(--eye_threat) no-repeat 8px center/20px,linear-gradient(90deg,#000,#000800 80%,#001000)}
 .threatpoints.hot{background:var(--eye_threat) no-repeat 8px center/20px,var(--hot) no-repeat right 2px center/24px,linear-gradient(90deg,#000,#000800 80%,#001000)}
 .threatpoints+ul{margin:4px 0 10px;padding:3px 5px;width:calc(100% - 12px);display:inline-block;border:var(--border);background:#000}
-.threatpoints+ul li{margin:1px 3px;display:inline-block;vertical-align:text-bottom;list-style:none;-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
+.threatpoints+ul li{margin:1px 3px;display:inline-block;vertical-align:text-bottom;list-style:none;break-inside:avoid}
 .threatpoints+ul li a{max-width:200px;display:inline-block;vertical-align:text-bottom;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #known{margin-bottom:0}
 #netdb .sybil_addresses,#netdb .sybil_addresses td{border-top:0}
@@ -1392,7 +1392,7 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 #sybilnav::after{width:100%;height:10px;display:block;content:""}
 #sybilnav a{width:100%;display:inline-block;text-shadow:var(--textshadow)}
 #sybilnav ul{margin:0}
-#sybilnav li{-webkit-column-break-inside:avoid;break-inside:avoid;page-break-before:right}
+#sybilnav li{break-inside:avoid;page-break-before:right}
 #sybilnav ul li{margin-left:0;margin-bottom:4px;padding-left:0;min-width:150px;white-space:nowrap;list-style:none;border:1px solid #151;box-shadow:var(--highlight),inset 0 0 2px 1px #030;background:linear-gradient(90deg,#000,#010 80%)}
 #sybilnav ul li:hover a{color:var(--hover)}
 #sybilnav ul li:hover::before{background:var(--eye_hover) no-repeat left center/16px}
@@ -1433,7 +1433,7 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 #bannedpeers{margin-top:15px}
 #banlist{margin:-1px 0 13px;padding:8px 5px;columns:328px auto;column-gap:8px;column-rule:var(--dotted);border:var(--border);background:none}
 #profiles #banlist{margin:3px -8px -1px;padding:5px 0;border:0}
-#banlist li,#banlist li:first-child{margin:4px 8px;padding:6px 8px 6px 10px;width:calc(100% - 16px);min-height:48px;display:inline-block;position:relative;list-style:none;text-shadow:var(--textshadow);border:1px solid #121;box-shadow:0 0 2px 2px rgba(0,0,0,.8),var(--bevel),inset 0 0 0 3px #000;background:linear-gradient(180deg,#000b00,#000600);box-sizing:border-box;-webkit-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
+#banlist li,#banlist li:first-child{margin:4px 8px;padding:6px 8px 6px 10px;width:calc(100% - 16px);min-height:48px;display:inline-block;position:relative;list-style:none;text-shadow:var(--textshadow);border:1px solid #121;box-shadow:0 0 2px 2px rgba(0,0,0,.8),var(--bevel),inset 0 0 0 3px #000;background:linear-gradient(180deg,#000b00,#000600);box-sizing:border-box;break-inside:avoid}
 #banlist li::first-line{color:#bb8}
 #banlist li:last-child{margin-bottom:0}
 #banlist li hr{margin:2px 0 2px -1px;background:linear-gradient(90deg,#121 75%,#0000);opacity:.75}
@@ -1590,7 +1590,7 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 
 /* configure */
 td.optionsave,.buckets,.formaction,#certs h4,#certs p,#certs textarea,#config_advanced td,#config_bandwidth td.infohelp,#config_peers #banlist,#config_peers tr:not(:last-child) td,#consolepass td[colspan="3"],#criticallogs tr:first-child td,#enablefullstats,#help div,#helptranslate,#langsettings,#pluginconfigtext,#plugininstall tr:first-child .infohelp,#routerlogs tr:first-child td,#themeoptions,#themesettings,#wrapperlogs tr:first-child td{box-shadow:var(--highlight),inset 0 0 1px 1px #040}
-.optionlist label,.optionlist .nowrap{min-width:300px;-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid;will-change:transform}
+.optionlist label,.optionlist .nowrap{min-width:300px;break-inside:avoid;will-change:transform}
 .configtable th{word-spacing:0;letter-spacing:0;text-transform:none}
 #config_advanced td.optionsave,#config_bandwidth td.optionsave,#config_clients .formaction,#config_homepage .formaction,#config_i2cp td.optionsave,#config_keyring .optionsave,#config_logging td.optionsave,#config_network td.optionsave,#config_peers .configtable tr:last-child td,#config_peers .configtable tr:nth-child(4) td,#config_service .formaction,#configstats tr.tablefooter,#config_summarybar .formaction,#config_ui .formaction,#graphing.formaction,#config_update tr:nth-child(2),#config_update tr.tablefooter,#pluginconfigactions.formaction,#reseedconfig td.optionsave,#sidebarconf tr:last-child,#sybilTask .optionsave,#tunnelconfigsave.formaction,#webappconfigactions.formaction{background:var(--h3),var(--footer);background-size:2px,100%}
 #externali2cp tr,#config_update tr,#joinfamily tr,#manualreseed tr,#netconfig tr,#newfamily tr:last-child,#plugininstall,#plugininstall2,#reseedconfig tr{box-shadow:var(--highlight),inset 0 0 1px 1px #040;background:none}
@@ -1686,7 +1686,7 @@ th.th_title{padding:8px 10px;position:static;text-align:left;background:var(--h1
 #webappconfiguration a::before,#i2pclientconfig a::before,#pluginmanage a::before{margin-top:-2px;width:15px;background:var(--settings) no-repeat left center/12px}
 
 /* service */
-.service_container{margin:0 2px -10px;width:calc(100% - 4px);display:inline-block;-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid;will-change:transform}
+.service_container{margin:0 2px -10px;width:calc(100% - 4px);display:inline-block;break-inside:avoid;will-change:transform}
 .service_container .infohelp{padding:20px 24px 20px 58px}
 .service_container h3 a{font-size:0;float:right}
 #advancedconfig a::after{margin:-1px 2px -4px 0}
@@ -2448,11 +2448,12 @@ p+.twocol{margin:10px 25px}
 .sitelink.external{background:rgba(0,64,0,.3) var(--planet) no-repeat 3px center/12px}
 .sitelink.external:hover{background:var(--planet) no-repeat 3px center/12px,var(--label)}
 .twocol{display:block;columns:2 400px;column-gap:0}
-.twocol li{-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
+.twocol li{break-inside:avoid}
 ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 #advancedsettings,#browserconfig,#configurationhelp,#faq,#filterlist,#glossary,#legal,#newuserguide,#reachabilityhelp,#reseedhelp,#sidebarhelp,#themeoverride,#troubleshoot,#tunnman,#volunteer,#webhosting{border:var(--border);padding:0 20px;margin:9px 0;background:#000}
 #changelog h2{margin:0 0 -11px;padding:10px;word-spacing:.1em;letter-spacing:.08em;text-align:left;text-transform:uppercase;font-size:11pt;border-radius:0}
 #changelog pre{margin-top:11px;padding:10px 10px 10px 20px;width:calc(100% - 32px);max-height:600px;overflow-y:scroll;font-size:10pt;text-shadow:1px 1px 1px rgba(0,0,0,.9);border-left:var(--border);border-right:var(--border);background:#000 url(images/tank.webp) no-repeat right 18px bottom 10px/180px auto}
+#changelog pre span{margin-bottom:-8px;padding:0 10px 10px;width:calc(100% - 34px);display:inline-block;border-bottom:1px dotted #252;page-break-inside:avoid}
 #changelog:hover pre{will-change:transform}
 #configinfo .infowarn{display:none}
 #configinfo{margin:0 auto 0;width:calc(100% - 20px);border:0}
@@ -2499,7 +2500,7 @@ ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 #help_reseed{background:var(--reseed) no-repeat 15px center/32px,var(--helpbox)}
 #helptoc b{font-size:120%;text-shadow:var(--textshadow)}
 #helptoc li:first-child{margin-top:0}
-#helptoc li,#helptoc li:last-child{margin:10px 0 12px;padding:20px 10px 20px 60px;width:calc(100% - 70px);list-style:none;box-shadow:0 0 0 1px #242,var(--highlight),inset 0 0 0 2px #020;background-blend-mode:luminosity;-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid;transition:ease box-shadow .2s}
+#helptoc li,#helptoc li:last-child{margin:10px 0 12px;padding:20px 10px 20px 60px;width:calc(100% - 70px);list-style:none;box-shadow:0 0 0 1px #242,var(--highlight),inset 0 0 0 2px #020;background-blend-mode:luminosity;break-inside:avoid;transition:ease box-shadow .2s}
 #helptoc li:hover{box-shadow:0 0 0 1px #242,var(--highlight),inset 0 0 0 2px rgba(146,48,0,.7);background-blend-mode:normal;transition:ease box-shadow .3s}
 #helptoc li:last-child{margin-bottom:0}
 #helptoc{margin:11px 0 10px;columns:550px 2;column-gap:12px}
@@ -2845,10 +2846,11 @@ th{font-size:8pt}
 @media (min-width:1200px){
 .ls_crypto{display:inline-block;columns:340px 4}
 .tab2{margin-bottom:-1px;padding:5px 12px 6px}
+#changelog pre span{width:calc(100% - 30px)}
 #jobstats tbody td:first-child{padding-left:28px;background:var(--yes) no-repeat 8px center;background-size:12px}
 #jobstats tbody td.updated:first-child{animation:updatingIcon .5s ease both}
 #terms{padding:5px 0 15px;columns:2 auto;column-gap:35px;column-rule:1px solid #020}
-#terms p{break-inside:avoid;page-break-inside:avoid;-webkit-column-break-inside:avoid}
+#terms p{break-inside:avoid}
 #terms p:first-child{margin-top:0}
 }
 
@@ -2863,7 +2865,7 @@ th{font-size:8pt}
 @media (min-width:1400px){
 .statsName{border:1px solid #131}
 #statlist{padding:10px;columns:auto 540px;column-gap:10px;text-align:center}
-#help #changelog pre{margin-left:0;padding-left:10px;width:calc(100% - 22px);overflow-y:hidden;font-size:10pt;columns:515px auto;column-gap:30px;column-rule:var(--dotted);background-size:300px}
+#changelog pre span{width:calc(100% - 28px)}
 #help .confignav,#debug .confignav{position:sticky;top:0}
 #profiles #banlist{margin:3px -5px 0;padding:10px 5px;border:0}
 #statsWrap{margin-bottom:-10px}
@@ -3002,6 +3004,8 @@ th code{font-size:9pt}
 #help .confignav{margin-bottom:11px;display:flex}
 #help .confignav .tab,#help .confignav .tab2{margin-left:0;margin-right:0;padding:6px 5px;max-width:9%;min-width:unset;display:flex;flex-grow:1;flex-shrink:1;justify-content:center;align-items:center;line-height:1.1}
 #help .confignav .tab a{padding:0;display:inline-block}
+#help #changelog pre{margin-left:0;padding-left:30px;padding-right:30px;padding:20px;width:calc(100% - 42px);overflow-y:hidden;font-size:10.5pt;font-weight:500!important;columns:auto 2;column-gap:60px;column-rule:var(--dotted);background-size:300px}
+#changelog pre span{width:calc(100% - 22px);page-break-inside:avoid}
 }
 
 @media (min-width:1840px){
