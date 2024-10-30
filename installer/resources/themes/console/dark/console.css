@@ -2452,9 +2452,10 @@ p+.twocol{margin:10px 25px}
 ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 #advancedsettings,#browserconfig,#configurationhelp,#faq,#filterlist,#glossary,#legal,#newuserguide,#reachabilityhelp,#reseedhelp,#sidebarhelp,#themeoverride,#troubleshoot,#tunnman,#volunteer,#webhosting{border:var(--border);padding:0 20px;margin:9px 0;background:#000}
 #changelog h2{margin:0 0 -11px;padding:10px;word-spacing:.1em;letter-spacing:.08em;text-align:left;text-transform:uppercase;font-size:11pt;border-radius:0}
-#changelog pre{margin-top:11px;padding:10px 10px 10px 20px;width:calc(100% - 32px);max-height:600px;overflow-y:scroll;font-size:10pt;text-shadow:1px 1px 1px rgba(0,0,0,.9);border-left:var(--border);border-right:var(--border);background:#000 url(images/tank.webp) no-repeat right 18px bottom 10px/180px auto}
-#changelog pre span{margin-bottom:-8px;padding:0 10px 10px;width:calc(100% - 34px);display:inline-block;border-bottom:1px dotted #252;page-break-inside:avoid}
-#changelog:hover pre{will-change:transform}
+#changelog pre{margin-top:11px;padding:10px 10px 10px 20px;width:calc(100% - 32px);max-height:600px;overflow-y:scroll;font-size:10pt;text-shadow:1px 1px 1px rgba(0,0,0,.9);border-left:var(--border);border-right:var(--border);background:#000 url(images/tank.webp) no-repeat right 18px bottom 10px/180px auto;will-change:transform}
+#changelog pre span{margin-bottom:-10px;padding:0 10px 10px;width:calc(100% - 34px);display:inline-block;position:relative;font-weight:500;border-bottom:1px dotted #252}
+#changelog pre span:last-of-type{display:none}
+#changelog pre span::first-line{padding-left:12px;line-height:1.75;font-weight:700}
 #configinfo .infowarn{display:none}
 #configinfo{margin:0 auto 0;width:calc(100% - 20px);border:0}
 #configinfo td{padding:5px 15px 10px;line-height:1.4;text-align:justify;background:#000}
@@ -3004,8 +3005,8 @@ th code{font-size:9pt}
 #help .confignav{margin-bottom:11px;display:flex}
 #help .confignav .tab,#help .confignav .tab2{margin-left:0;margin-right:0;padding:6px 5px;max-width:9%;min-width:unset;display:flex;flex-grow:1;flex-shrink:1;justify-content:center;align-items:center;line-height:1.1}
 #help .confignav .tab a{padding:0;display:inline-block}
-#help #changelog pre{margin-left:0;padding-left:30px;padding-right:30px;padding:20px;width:calc(100% - 42px);overflow-y:hidden;font-size:10.5pt;font-weight:500!important;columns:auto 2;column-gap:60px;column-rule:var(--dotted);background-size:300px}
-#changelog pre span{width:calc(100% - 22px);page-break-inside:avoid}
+#help #changelog pre{margin-left:0;padding:20px;width:calc(100% - 42px);overflow-y:hidden;font-size:10.5pt;columns:auto 2;column-gap:60px;column-rule:var(--dotted);background-size:300px}
+#changelog pre span{width:calc(100% - 22px);break-inside:avoid}
 }
 
 @media (min-width:1840px){

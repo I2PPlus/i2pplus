@@ -916,7 +916,7 @@ div[lang="es"] .twocol,div[lang="pt"] .twocol,div[lang="sv"] .twocol,div[lang="z
 div[lang="sv"] li::first-letter{text-transform:uppercase}
 div[lang="de"] .links li{padding-left:0}
 .twocol{margin:20px 0;display:block;columns:2 400px;column-gap:0}
-.twocol li{break-inside:avoid;page-break-inside:avoid;-webkit-column-break-inside:avoid}
+.twocol li{break-inside:avoid}
 .twocol li:first-child{margin-top:0}
 #console p{margin-left:10px;margin-right:10px}
 #console li>b:first-of-type{margin:-4px 0 2px;display:inline-block;vertical-align:text-top;font-size:110%}
@@ -1049,7 +1049,7 @@ tfoot td:not(:last-child),#peers tfoot td:not(:last-child){border-right:0;box-sh
 #jobrunners{display:none}
 #jobs h3{margin-bottom:-2px;border-width:1px;border-radius:0;filter:none}
 #jobs h3:first-child{margin-top:10px}
-#jobs ol{margin-top:1px;padding:4px 2px;border:var(--border_inner);box-shadow:var(--highlight);background:repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(240,240,255,.3) 3px,#fff 5px),#fff;columns:440px auto;column-gap:0;-webkit-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
+#jobs ol{margin-top:1px;padding:4px 2px;border:var(--border_inner);box-shadow:var(--highlight);background:repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(240,240,255,.3) 3px,#fff 5px),#fff;columns:440px auto;column-gap:0;break-inside:avoid}
 #jobs ol.jobqueue:last-of-type{padding-bottom:4px}
 #jobs ol:empty{display:none}
 #jobs ol li{margin:2px 2px 3px;padding:5px 0 5px 20px;white-space:nowrap;border:1px solid #dde}
@@ -1091,7 +1091,7 @@ h3#scheduledjobs+ol li::before{background:var(--timer) no-repeat 6px center/12px
 .joblog p{line-height:1.3}
 .joblog table{margin-top:15px}
 #statlist ul{word-wrap:break-word;text-align:justify;line-height:1;margin-top:-5px}
-#statlist li{word-wrap:break-word;line-height:1.5;padding:0;page-break-inside:avoid;-webkit-break-inside:avoid;break-inside:avoid}
+#statlist li{word-wrap:break-word;line-height:1.5;padding:0;break-inside:avoid}
 #statlist li a{font-size:90%}
 
 /* peers */
@@ -1135,7 +1135,7 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 #peers #transportSummary tfoot td{text-align:center}
 #peerdefs td{padding:5px;line-height:1.5}
 #peerdefs ul{margin:0;width:100%;display:inline-block;columns:500px auto;column-gap:0}
-#peerdefs li{margin:3px;padding:4px 8px;width:calc(100% - 24px);display:inline-block;line-height:1.6;border:1px solid #bbd;box-shadow:var(--highlight),inset 0 0 2px 1px #ddf,0 0 1px #ddf;background:rgba(248,248,255,.6);-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
+#peerdefs li{margin:3px;padding:4px 8px;width:calc(100% - 24px);display:inline-block;line-height:1.6;border:1px solid #bbd;box-shadow:var(--highlight),inset 0 0 2px 1px #ddf,0 0 1px #ddf;background:rgba(248,248,255,.6);break-inside:avoid}
 #peer_thresholds{position:absolute;top:10px;width:100%}
 #thresholds tr:hover td,#leasesetdebug tr:hover td,tr:hover .cells,.cells tr:hover td{box-shadow:inset 0 0 0 1px #ffe;transition:ease all .05s}
 #transportSummary tr:hover{background:#ffd}
@@ -1280,7 +1280,7 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 
 /* banned peers */
 #banlist{padding:5px 5px 3px 0;display:block;border:var(--border_inner);border-radius:2px;background:#fafaff;text-align:center;columns:328px auto;column-gap:0}
-#banlist li{margin:3px 0 2px 5px;padding:3px 3px 3px 5px;min-width:calc(100% - 13px);min-height:42px;display:inline-block;position:relative;line-height:1.2;list-style:none;box-shadow:0 0 0 1px #ccd,var(--highlight),inset 0 0 8px 3px rgba(232,232,255,.6);background:linear-gradient(180deg,#fff,#f8f8ff);-webkit-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
+#banlist li{margin:3px 0 2px 5px;padding:3px 3px 3px 5px;min-width:calc(100% - 13px);min-height:42px;display:inline-block;position:relative;line-height:1.2;list-style:none;box-shadow:0 0 0 1px #ccd,var(--highlight),inset 0 0 8px 3px rgba(232,232,255,.6);background:linear-gradient(180deg,#fff,#f8f8ff);break-inside:avoid}
 #banlist li:hover{background:#ffe}
 #banlist li a[href^="configpeer"]{padding:2px 2px 1px 0;position:absolute;top:0;right:0;line-height:0;border-left:1px solid #ccd;border-bottom:1px solid #ccd;border-radius:0 0 0 2px;box-shadow:var(--highlight),inset 0 0 1px 1px #ffe;background:#fff;filter:none}
 #banlist li a[href^="configpeer"]:hover,#banlist li a[href^="configpeer"]:focus{box-shadow:inset 0 0 0 1px var(--hover)}
@@ -1541,7 +1541,7 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 .leaseset,#leasesetdebug,#leasesetsummary{font-size:9pt}
 .leaseset:last-child,.netdbentry:last-child{margin-bottom:5px}
 .leasesets_container{margin:10px 0 -1px;columns:580px 2;column-gap:4px}
-.leasesets_container table{break-inside:avoid;page-break-inside:avoid;-webkit-column-break-inside:avoid}
+.leasesets_container table{break-inside:avoid}
 .leasesets_container table:first-child{margin-top:0}
 .leaseset,.leaseset tr,.leaseset th,.leaseset td:not(.rif):not(.rih){border-color:#dfdfec}
 .leaseset th:first-child code{margin-left:4px}
@@ -1621,7 +1621,7 @@ p.threatpoints{margin-top:10px;padding-left:33px;background:var(--eye_static) no
 .sybil_addresses table{margin:0;width:100%;border-top:var(--border_inner);border-bottom:var(--border_inner)}
 .sybil_addresses table,.sybil_addresses td{border:0}
 .sybil_addresses td:first-child{padding-right:9px;max-width:155px;font-weight:700}
-.sybil_container p{break-inside:avoid;page-break-inside:avoid;-webkit-column-break-inside:avoid}
+.sybil_container p{break-inside:avoid}
 .sybil_container p:first-child{margin-top:0}
 .sybil_container p:last-child{margin-bottom:0}
 .sybil_container,.sybilinfo_container,.threatpoints+ul{margin:10px 0;padding:4px 5px;columns:300px 5;column-gap:0}
@@ -1638,7 +1638,7 @@ p.threatpoints{margin-top:10px;padding-left:33px;background:var(--eye_static) no
 .sybil_routerinfo .netdbheader{margin-right:0;padding:3px;text-align:right}
 .sybil_routerinfo .netdb_header .viewprofile{margin:3px 10px}
 .sybil_routerinfo .netdb_transport{margin:0 3px;display:inline-block}
-.sybil_routerinfo p{margin:0 0 0 3px;padding:1px 0;width:100%;min-width:240px;-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
+.sybil_routerinfo p{margin:0 0 0 3px;padding:1px 0;width:100%;min-width:240px;break-inside:avoid}
 .sybil_routerinfo,.sybil_routerinfo tr:nth-child(2) td,#netdb .sybil_routerinfo tr:last-child td{border-bottom:0}
 .sybil_routerinfo td[colspan="3"]{white-space:normal}
 .sybil_routerinfo td:first-child,.netdbentry td:first-child{padding-right:8px;text-align:right}
@@ -1655,7 +1655,7 @@ p.threatpoints{margin-top:10px;padding-left:33px;background:var(--eye_static) no
 .sybilScan:last-of-type table{margin-bottom:2px}
 .threatpoints+ul{margin:-4px 0 7px;padding:8px 10px 0;width:calc(100% - 22px);display:inline-block;border:var(--border_inner);box-shadow:var(--highlight);background:repeating-linear-gradient(45deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fafaff 5px),#fafaff}
 .threatpoints+ul+a[name]+.sybil_routerinfo th img{margin-top:-1px;margin-bottom:-1px}
-.threatpoints+ul li{margin:0 0 0 20px;width:100%;display:inline-block;line-height:1.2;list-style:none;-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
+.threatpoints+ul li{margin:0 0 0 20px;width:100%;display:inline-block;line-height:1.2;list-style:none;break-inside:avoid}
 .threatpoints+ul li:first-child{margin-top:0}
 .threatpoints+ul li:last-child{margin-bottom:10px}
 .threatpoints+ul li a{margin-left:2px;padding:0 2px;white-space:nowrap;font-size:8pt;border-radius:1px;background:#eef}
@@ -1913,7 +1913,7 @@ th.options{padding:8px 5px 8px 10px;font-size:9pt}
 .h3navlinks a{margin-left:2px;padding:2px 8px;min-width:52px;letter-spacing:0;text-align:center;text-transform:capitalize}
 .optionlist{columns:500px auto}
 .optionlist:hover,.optionsingle:hover,.optiontextarea:hover{border:1px solid #afafcf;box-shadow:inset 0 0 0 1px #a79;background:#ffd;transition:ease box-shadow .1s,ease background .05s .01s}
-.optionlist label,.optionlist .nowrap{min-width:300px;break-inside:avoid;page-break-inside:avoid;-webkit-column-break-inside:avoid}
+.optionlist label,.optionlist .nowrap{min-width:300px;break-inside:avoid}
 .optionlist,.optionsingle,#reseedssl{padding:1px 2px;border:var(--border_inner);box-shadow:inset 0 0 0 2px #fff;background:#fff;column-gap:2px;filter:var(--filter_shadow);transition:ease box-shadow .1s}
 .optionlist,.optionsingle,#reseedssl,#updatehelper .optionlist:hover,#updateProxyHostPort .optionlist:hover{vertical-align:middle}
 .options input[type=checkbox],.suboption .optbox{margin:0 3px 0 0}
@@ -2088,7 +2088,7 @@ select[name="newlogclass"]{margin-left:3px}
 #netconfig .optbox:not(:checked)+input[type=text][name="ntcphost"]:not(:focus),#netconfig .optbox:not(:checked)+input[type=text][name="udpHost1"]:not(:focus){width:140px;min-width:140px;transition:ease width .1s}
 
 /* service */
-.service_container{margin-bottom:-2px;width:100%;display:inline-block;break-inside:avoid;page-break-inside:avoid;-webkit-column-break-inside:avoid}
+.service_container{margin-bottom:-2px;width:100%;display:inline-block;break-inside:avoid}
 .service_container .infohelp{padding:20px 20px 20px 53px;text-align:left}
 .service_container h3 a img{max-width:16px}
 #config_service .messages{margin:12px -4px 6px}
@@ -2305,7 +2305,7 @@ td#pw_adduser input{margin:5px 20px 5px 5px}
 .confignav+#sidebarhelp{margin-top:13px}
 #advancedsettings,#browserconfig,#changelog,#configurationhelp,#faq,#filterlist,#glossary,#legal,#newuserguide,#reachabilityhelp,#reseedhelp,#sidebarhelp,#themeoverride,#troubleshoot,#tunnman,#volunteer,#webhosting{border:var(--border_inner);border-radius:2px;margin-bottom:10px;padding:0 10px 5px;background:#fafaff}
 #changelog{margin-bottom:5px;padding:0 0 0 10px}
-#changelog pre{margin:-10px 0 0;padding-top:8px;width:100%;height:600px;white-space:pre-wrap;font-size:8.5pt;will-change:transform}
+#changelog pre{margin:-10px 0 0;padding:8px 0;width:100%;height:600px;white-space:pre-wrap;font-size:8.5pt;will-change:transform}
 #configinfo td.infowarn,#configinfo tr:hover td.infowarn{padding-left:46px}
 #help #changelog h2{margin-right:-1px}
 #help code{font-size:9pt;font-weight:600;color:var(--ink_code);user-select:all}
@@ -2338,7 +2338,7 @@ td#pw_adduser input{margin:5px 20px 5px 5px}
 #volunteer,#configurationhelp{margin-top:15px}
 
 /* toc */
-#helptoc li,#helptoc li:last-child{margin:10px 0 12px;padding:20px 10px 20px 60px;width:calc(100% - 70px);list-style:none;box-shadow:0 0 0 1px rgba(185,185,198,.65),var(--highlight),inset 0 0 0 2px #ddf;background-blend-mode:luminosity;break-inside:avoid;page-break-inside:avoid;-webkit-column-break-inside:avoid;transition:ease box-shadow .2s}
+#helptoc li,#helptoc li:last-child{margin:10px 0 12px;padding:20px 10px 20px 60px;width:calc(100% - 70px);list-style:none;box-shadow:0 0 0 1px rgba(185,185,198,.65),var(--highlight),inset 0 0 0 2px #ddf;background-blend-mode:luminosity;break-inside:avoid;transition:ease box-shadow .2s}
 #helptoc li:hover{box-shadow:0 0 0 1px rgba(185,185,198,.65),var(--highlight),inset 0 0 0 2px rgba(146,48,0,.7);background-blend-mode:normal;transition:ease box-shadow .3s}
 #helptoc li:hover b{color:var(--hover)}
 #helptoc li:first-child{margin-top:0}
@@ -2722,7 +2722,7 @@ th.queue{white-space:nowrap}
 #jobstats tr:last-child td:first-child,#jobstats tr:last-child:hover td:first-child{padding:7px 8px;background-image:none}
 #jobstats tbody td.updated:first-child{animation:updatingIcon .5s ease both}
 #ntcpconnections .spacer{display:none}
-#terms p{-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
+#terms p{break-inside:avoid}
 #terms p:first-child{margin-top:0}
 #tunnels #tunnelPeerCount td:nth-child(2){white-space:nowrap}
 }
@@ -2900,6 +2900,9 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 #ipbans.toggle.expanded:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:none}
 
 @media (min-width:1600px) {
+#changelog pre{overflow:hidden;overflow-x:auto}
+#changelog pre span{margin:0 10px -10px 0;padding:0 8px 8px;width:calc(100% - 32px);display:inline-block;box-sizing:border-box;border-bottom:1px dotted #559;break-inside:avoid}
+#changelog pre span::first-line{line-height:1.75;font-weight:700}
 #sidebar #sb_status #lsCount.badge{margin-left:0;padding:1px 4px 0;display:inline-block;line-height:1;font-size:11.7333px;color:var(--ink)}
 }
 
