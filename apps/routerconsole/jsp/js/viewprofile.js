@@ -12,8 +12,8 @@
     let tableHTML = "<table>";
 
     lines.forEach((line) => {
-      if (line.startsWith("# ---")) {
-      } else if (line.startsWith("# ") && line.includes(":")) {
+      if (line.startsWith("# ---")) {} // skip
+      else if (line.startsWith("# ") && line.includes(":")) {
         const [key, ...rest] = line.slice(2).split(":");
         const value = rest.join(":").trim();
         const cleanedValue = cleanValue(value);
@@ -21,10 +21,13 @@
         if (key.trim() === "Period") {
           const concatenatedValue = key + ": " + cleanedValue;
           tableHTML += "<tr class=subheading><th colspan=2>" + concatenatedValue + "</th></tr>";
-        } else {tableHTML += "<tr><td>" + key + "</td><td>" + cleanedValue + "</td></tr>";}
+        } else {
+          tableHTML += "<tr><td>" + key + "</td><td>" + cleanedValue + "</td></tr>";
+        }
       } else if (line.startsWith("# ") && !line.includes(":")) {
         const sectionTitle = line.slice(2).trim();
-        tableHTML += "<tr class=section><th colspan=2>" + sectionTitle + "</th></tr>";
+        const [text, title] = extractTooltip(sectionTitle);
+        tableHTML += "<tr class='section'><th colspan='2' title='" + title + "'>" + text + "</th></tr>";
       }
     });
 
@@ -34,8 +37,20 @@
     setTimeout(addToggles, 50);
   });
 
+  function extractTooltip(title) {
+    const match = title.match(/\[(.*?)\]/);
+    if (match) {
+      const titleContent = match[1];
+      const text = title.replace(match[0], '').trim();
+      return [text, titleContent];
+    }
+    return [title, ''];
+  }
+
   function cleanValue(value) {
     let cleanedValue = value.replace(/\[.*?\]/g, '').trim();
+    cleanedValue = cleanedValue.replace(/GMT/g, '<span class=utc>UTC</span>');
+    cleanedValue = cleanedValue.replace(/_/g, ' ');
     cleanedValue = cleanedValue.replace(/0\.0/g, '0');
     if (cleanedValue.endsWith('.0')) {cleanedValue = cleanedValue.slice(0, -2);}
     return cleanedValue;
