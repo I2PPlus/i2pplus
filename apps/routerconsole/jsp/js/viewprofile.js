@@ -22,7 +22,7 @@
         if (cleanedKey === "Speed") {
           const speed = parseFloat(cleanedValue);
           const convertedSpeed = speed >= 1024 ? convertBtoKB(speed) : speed.toFixed(0);
-          tableHTML += "<tr><td>" + cleanedKey + "</td><td>" + convertedSpeed + (speed >= 1024 ? " KB/s" : " B/s") + "</td></tr>";
+          tableHTML += "<tr class=stat><td>" + cleanedKey + "</td><td>" + convertedSpeed + (speed >= 1024 ? " KB/s" : " B/s") + "</td></tr>";
         } else if (cleanedKey === "Time of last failed lookup from peer" ||
             cleanedKey === "Time of last successful lookup from peer" ||
             cleanedKey === "Time of last failed store to peer" ||
