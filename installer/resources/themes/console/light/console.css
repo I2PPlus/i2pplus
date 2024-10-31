@@ -1404,6 +1404,18 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 #view_profile td{padding:0}
 #view_profile pre{margin:0;padding:20px 20px 0;width:100%;line-height:20px;white-space:pre-wrap;word-break:break-all;box-sizing:border-box;text-shadow:var(--txt_shadow);border-left:5px solid #aad;background:repeating-linear-gradient(180deg,rgba(120,120,255,.2),rgba(210,210,255,.4) 1px,rgba(210,210,255,.4) 19px,rgba(120,120,255,.2) 19px,rgba(240,240,255,.4) 20px,rgba(240,240,255,.4) 40px)}
 #view_profile td span{padding:3px 5px;position:absolute;bottom:0;right:0;display:inline-block;font-size:90%;border:var(--border_inner);border-radius:4px 0 0 0;box-shadow:var(--highlight);background:linear-gradient(180deg,#fff 50%,#e2e2ff 50%);user-select:none}
+#viewprofile.tabulated tr:first-child{display:none}
+#viewprofile.tabulated tr:nth-child(even) td{background:#eef}
+#viewprofile.tabulated tr:nth-child(odd) td{background:#f2f2ff}
+#viewprofile.tabulated tr:hover td{background:#ffd}
+#viewprofile.tabulated th,#viewprofile.tabulated td{padding:8px}
+#viewprofile.tabulated th{text-align:left;font-size:100%}
+#viewprofile.tabulated th:not(.subheading){font-size:120%}
+#viewprofile.tabulated th.subheading::before{margin-right:4px;display:inline-block;height:14px;width:14px;vertical-align:middle;background:var(--clock);content:""}
+#viewprofile.tabulated td{border-top:var(--border_softer)}
+#viewprofile.tabulated tr:nth-child(2) td{border-top:var(--border_inner)}
+#viewprofile.tabulated tr:last-child td{border-bottom:var(--border_inner)}
+#viewprofile.tabulated td:first-child{width:50%;font-weight:600;border-right:var(--border_softer)}
 
 /* netdb */
 span.tier,.netdbentry .ff,.netdbentry .hidden,.netdbentry .reachable,.netdbentry .ssuintro,.netdbentry .unreachable,.sybil_routerinfo .ff,.sybil_routerinfo .hidden,.sybil_routerinfo .reachable,.sybil_routerinfo .ssuintro,.sybil_routerinfo .unreachable,#capabilities_key b,#floodfills .hidden,#floodfills .reachable,#floodfills .ssuintro,#floodfills .tier,#floodfills .unreachable{margin:2px;padding:1px 0;min-width:28px;display:inline-block;box-sizing:border-box;text-align:center;text-transform:none;font-weight:700;color:#4a415e;text-shadow:var(--txt_shadow);border:1px solid #bbc;box-shadow:var(--highlight);background:var(--tier)}

@@ -590,6 +590,21 @@ a.viewfullentry:hover{filter:drop-shadow(0 0 1px var(--hover))}
 #view_profile h3{position:relative;z-index:10}
 #view_profile h3 a::after{margin-top:-1.5px}
 #view_profile .configpeer{margin-right:-5px}
+#view_profile h3{margin:0 auto -1px;position:relative}
+#viewprofile td{padding:0}
+#view_profile pre{margin:0;padding:20px;width:calc(100% - 40px);line-height:20px;background:var(--pre)}
+#view_profile span{padding:5px;float:right}
+#view_profile .identicon{margin-top:-6px;margin-right:5px;height:100%;width:auto;position:absolute;right:54px;border-right:var(--border)}
+#viewprofile.tabulated tr:first-child{display:none}
+#viewprofile.tabulated tr:nth-child(even) td{background:#eef}
+#viewprofile.tabulated tr:nth-child(odd) td{background:#f2f2ff}
+#viewprofile.tabulated tr:hover td{background:#ffe}
+#viewprofile.tabulated th,#viewprofile.tabulated td{padding:8px}
+#viewprofile.tabulated th{text-align:left;font-size:100%}
+#viewprofile.tabulated th:not(.subheading){font-size:120%}
+#viewprofile.tabulated th.subheading::before{margin-right:4px;display:inline-block;height:14px;width:14px;vertical-align:middle;background:var(--clock);content:""}
+#viewprofile.tabulated td{border-top:var(--border_softer)}
+#viewprofile.tabulated td:first-child{width:50%;font-weight:600;border-right:var(--border_softer)}
 
 /* sort icons */
 .sortup,.sortdown,.sortupactive,.sortdownactive{margin:2px 1px 0;padding:1px 0;width:16px;height:12px;display:inline-block;vertical-align:middle;text-align:center;border:var(--border);border-radius:2px}
@@ -1194,11 +1209,6 @@ p.family a{display:inline-block}
 #netdb ul,.netdb_addresses{margin:0;padding:0;columns:auto}
 #netdb .netdbStats{line-height:1.5}
 #netdb .netdbStats .hide,#netdb .netdbStats .cap_stat.hide,#netdb .netdbStats .cap_stat.hide+hr{display:none}
-#view_profile h3{margin-bottom:-11px;position:relative}
-#viewprofile td{padding:0}
-#view_profile pre{margin:0;padding:20px;width:calc(100% - 40px);line-height:20px;background:var(--pre)}
-#view_profile span{padding:5px;float:right}
-#view_profile .identicon{margin-top:-6px;margin-right:5px;height:100%;width:auto;position:absolute;right:54px;border-right:var(--border)}
 #geomap{margin:1px!important}
 
 /* leasesets */
@@ -1241,7 +1251,7 @@ p.family a{display:inline-block}
 #leasesetdebug td:nth-child(even){white-space:nowrap;text-align:left}
 #leasesetdebug td:nth-child(odd){width:200px;white-space:nowrap;text-align:right;border-right:var(--border_softer)}
 #leasesetdebug td:nth-child(2){width:10px}
-#netdb .debugMode .netdb_leases{margin-right:12px;columns:auto 380px;column-gap:4px;page-break-inside:avoid}
+#netdb .debugMode .netdb_leases{margin-right:12px;columns:auto 380px;column-gap:4px;break-inside:avoid}
 #netdb .leasesets_container .confignav{margin:-16px -16px 16px !important;column-span:all}
 #netdb .netdb_leases{margin-left:0;columns:8 104px;column-gap:2px}
 #netdb .netdb_leases li{display:inline-block;white-space:nowrap;vertical-align:middle}
@@ -1271,7 +1281,7 @@ p.family a{display:inline-block}
 th code{user-select:all}
 .leasesets_container{columns:680px 2;column-gap:10px}
 .leasesets_container table:first-child{margin-top:0}
-.leasesets_container table,.sybil_container p,.sybil_routerinfo p,#sybilnav li,#sybilnav li:first-child,.threatpoints+ul li,#peerdefs li,#banlist li,.joblog ol li,.twocol li,.optionlist label,.optionlist .nowrap,#helptoc li,#helptoc li:last-child,.service_container{-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
+.leasesets_container table,.sybil_container p,.sybil_routerinfo p,#sybilnav li,#sybilnav li:first-child,.threatpoints+ul li,#peerdefs li,#banlist li,.joblog ol li,.twocol li,.optionlist label,.optionlist .nowrap,#helptoc li,#helptoc li:last-child,.service_container{break-inside:avoid}
 .netdb_addresses br:first-child,.sybil_routerinfo tr:last-child td br:first-child{display:none}
 .netdb_addresses{line-height:1.5}
 .netdbentry th:first-child::after{min-height:20px;display:inline-block;vertical-align:middle;content:""}
@@ -2402,7 +2412,7 @@ th.queue{white-space:nowrap}
 #jobstats tr:not(last-child):td:first-child,#jobstats tr:not(last-child):hover td:first-child{padding:6px 0 6px 26px;background:var(--yes) no-repeat 8px center/12px}
 #peers .confignav+#udp,#peers .confignav+#ntcp{margin-top:15px}
 #terms{padding:5px 0 15px;columns:2 auto;column-gap:35px;column-rule:var(--border_color)}
-#terms p{-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
+#terms p{break-inside:avoid}
 #terms p:first-child{margin-top:0}
 }
 @media (min-width:1400px){
