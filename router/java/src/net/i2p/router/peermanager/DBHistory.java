@@ -33,7 +33,7 @@ public class DBHistory {
         _statGroup = statGroup;
         _failedLookupRate = new RateStat("dbHistory.failedLookupRate", "How often peer responds to a lookup",
                                          statGroup, new long[] {10*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _invalidReplyRate = new RateStat("dbHistory.invalidReplyRate", "How often peer gives us a bad RI?",
+        _invalidReplyRate = new RateStat("dbHistory.invalidReplyRate", "How often peer sends us a bad RouterInfo?",
                                          statGroup, new long[] {10*60*1000l, 60*60*1000l, 24*60*60*1000l });
     }
 

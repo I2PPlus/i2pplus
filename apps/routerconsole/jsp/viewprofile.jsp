@@ -59,5 +59,6 @@
 %>
 </div>
 <script nonce=<%=cspNonce%> src=/js/viewprofile.js></script>
+<noscript><style>#viewprofile{display:table!important}#viewprofile:empty::before,#viewprofile:empty::after{display:none!important}</style></noscript>
 </body>
 </html>
