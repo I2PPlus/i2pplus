@@ -904,6 +904,7 @@ a[href^="configpeer?peer"]:active::after{background:var(--edit_active) var(--cen
 #viewprofile.tabulated tr:hover td{background:#020}
 #viewprofile.tabulated .hidden{display:none}
 #viewprofile.tabulated .section th{font-size:120%}
+#viewprofile.tabulated .section.heading th{text-transform:uppercase;letter-spacing:.1em}
 #viewprofile.tabulated .section.expanded th{box-shadow:var(--highlight),0 0 0 2px #f605 inset}
 #viewprofile.tabulated .section th::before{margin:-2px 6px 0 0;width:18px;height:18px;background:url(/themes/console/images/stats.svg)}
 #viewprofile.tabulated .section.tnl th::before{background:url(/themes/console/images/hardhat.svg)}
