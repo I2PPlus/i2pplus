@@ -124,22 +124,22 @@ class ProfilePersistenceHelper {
             if (_us != null) {buf.append("# as calculated by ").append(_us.toBase64()).append(NL);}
             buf.append(HR).append(NL);
             // TODO: copy version, sig, caps to parent header?
-            buf.append("#").append(TAB).append("Version:").append(TAB);
+            buf.append("# ").append("Version:").append(TAB);
             if (info != null) {
                 String version = DataHelper.stripHTML(info.getVersion());
                 buf.append(version);
             }
             buf.append(NL);
-            buf.append("#").append(TAB).append("Signature:").append(TAB);
+            buf.append("# ").append("Signature:").append(TAB);
             if (info != null) {buf.append(DataHelper.stripHTML(info.getIdentity().getSigningPublicKey().getType().toString()));}
             buf.append(NL);
-            buf.append("#").append(TAB).append("Capabilities:").append(TAB);
+            buf.append("# ").append("Capabilities:").append(TAB);
             if (info != null) {buf.append(DataHelper.stripHTML(info.getCapabilities()).toUpperCase().replace("XO", "X").replace("PO", "P"));}
             buf.append(NL);
-            buf.append("#").append(TAB).append("Speed:").append(TAB).append(TAB).append(speed).append(" B/s").append(NL);
-            buf.append("#").append(TAB).append("Capacity:").append(TAB).append(capacity).append(" tunnels/hour").append(NL);
-            buf.append("#").append(TAB).append("Integration:").append(TAB).append(integration).append(" peers").append(NL);
-            buf.append("#").append(TAB).append("Groups:").append(TAB).append(groups).append(NL);
+            if (speed > 0) {buf.append("# ").append("Speed:").append(TAB).append(TAB).append(speed).append(" B/s").append(NL);}
+            if (capacity > 0) {buf.append("# ").append("Capacity:").append(TAB).append(capacity).append(" tunnels/hour").append(NL);}
+            if (integration > 0) {buf.append("# ").append("Integration:").append(TAB).append(integration).append(" peers").append(NL);}
+            buf.append("# ").append("Groups:").append(TAB).append(groups).append(NL);
             buf.append(HR).append(NL).append(NL);
         }
         if (profile.getSpeedBonus() != 0) {add(buf, addComments, "speedBonus", profile.getSpeedBonus(), "Manual Speed Score adjustment: " +  profile.getSpeedBonus());}
@@ -154,9 +154,15 @@ class ProfilePersistenceHelper {
             add(buf, addComments, "tunnelTestTimeAverage", (long) profile.getTunnelTestTimeAverage(), "Average peer response time: " +  (long) profile.getTunnelTestTimeAverage());
         }
         // TODO: needs clarification - difference between tunnel peak and tunnel peak tunnel? And round down KBps display to 2 decimal places
-        add(buf, addComments, "tunnelPeakThroughput", (long) profile.getPeakThroughputKBps(), "Tunnel Peak throughput: " + (long) profile.getPeakThroughputKBps() + "KB/s");
-        add(buf, addComments, "tunnelPeakTunnelThroughput", (long) profile.getPeakTunnelThroughputKBps(), "Tunnel Peak Tunnel throughput: " + (long) profile.getPeakTunnelThroughputKBps() + "KB/s");
-        add(buf, addComments, "tunnelPeakTunnel1mThroughput", (long) profile.getPeakTunnel1mThroughputKBps(), "Tunnel Peak Tunnel throughput for 1 minute: " + (long) profile.getPeakTunnel1mThroughputKBps() + "KB/s");
+        if (profile.getPeakThroughputKBps() >= 1) {
+            add(buf, addComments, "tunnelPeakThroughput", (long) profile.getPeakThroughputKBps(), "Tunnel Peak throughput: " + (long) profile.getPeakThroughputKBps() + "KB/s");
+        }
+        if (profile.getPeakTunnelThroughputKBps() >= 1) {
+            add(buf, addComments, "tunnelPeakTunnelThroughput", (long) profile.getPeakTunnelThroughputKBps(), "Tunnel Peak Tunnel throughput: " + (long) profile.getPeakTunnelThroughputKBps() + "KB/s");
+        }
+        if (profile.getPeakTunnel1mThroughputKBps() >= 1) {
+            add(buf, addComments, "tunnelPeakTunnel1mThroughput", (long) profile.getPeakTunnel1mThroughputKBps(), "Tunnel Peak Tunnel throughput for 1 minute: " + (long) profile.getPeakTunnel1mThroughputKBps() + "KB/s");
+        }
         if (addComments) {buf.append(NL);}
 
         out.write(buf.toString().getBytes("UTF-8"));

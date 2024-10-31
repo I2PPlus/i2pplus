@@ -464,42 +464,22 @@ public class Rate {
      * @since 0.9.41
      */
     public synchronized void store(String prefix, StringBuilder buf, boolean addComments) throws IOException {
-        PersistenceHelper.addTime(buf, addComments, prefix, ".period", "Length of period:", _period);
-        PersistenceHelper.addDate(buf, addComments, prefix, ".creationDate",
-                              "Rate creation time:", _creationDate);
-        PersistenceHelper.addDate(buf, addComments, prefix, ".lastCoalesceDate",
-                              "Last time rate was coalesced:",
-                              _lastCoalesceDate);
-        PersistenceHelper.addDate(buf, addComments, prefix, ".currentDate",
-                              "Data written:", now());
-        PersistenceHelper.add(buf, addComments, prefix, ".currentTotalValue",
-                              "Total value of data points in current period (uncoalesced): " + _currentTotalValue, _currentTotalValue);
-        PersistenceHelper.add(buf, addComments, prefix, ".currentEventCount",
-                              "Total events in current period (uncoalesced): " + _currentEventCount, _currentEventCount);
-        PersistenceHelper.addTime(buf, addComments, prefix, ".currentTotalEventTime",
-                              "Total time used by events in current period (uncoalesced):",
-                              _currentTotalEventTime);
-        PersistenceHelper.add(buf, addComments, prefix, ".lastTotalValue",
-                              "Total value of data points in most recent period (coalesced): " + _lastTotalValue, _lastTotalValue);
-        PersistenceHelper.add(buf, addComments, prefix, ".lastEventCount",
-                              "Total events in most recent period (coalesced): " + _lastEventCount, _lastEventCount);
-        PersistenceHelper.addTime(buf, addComments, prefix, ".lastTotalEventTime",
-                              "Total time used by events in most recent period (coalesced):",
-                              _lastTotalEventTime);
-        PersistenceHelper.add(buf, addComments, prefix, ".extremeTotalValue",
-                              "Total value of data points in most extreme period: " + _extremeTotalValue, _extremeTotalValue);
-        PersistenceHelper.add(buf, addComments, prefix, ".extremeEventCount",
-                              "Total events in most extreme period: " + _extremeEventCount, _extremeEventCount);
-        PersistenceHelper.addTime(buf, addComments, prefix, ".extremeTotalEventTime",
-                              "Total time used by events in most extreme period:",
-                              _extremeTotalEventTime);
-        PersistenceHelper.add(buf, addComments, prefix, ".lifetimeTotalValue",
-                              "Total value of data points since this stat was created: " + _lifetimeTotalValue, _lifetimeTotalValue);
-        PersistenceHelper.add(buf, addComments, prefix, ".lifetimeEventCount",
-                              "Total events since this stat was created: " + _lifetimeEventCount, _lifetimeEventCount);
-        PersistenceHelper.addTime(buf, addComments, prefix, ".lifetimeTotalEventTime",
-                              "Total time used by events since this stat was created:",
-                              _lifetimeTotalEventTime);
+        PersistenceHelper.addDate(buf, addComments, prefix, ".creationDate", "Rate creation time:", _creationDate);
+        PersistenceHelper.addDate(buf, addComments, prefix, ".lastCoalesceDate", "Last time rate was coalesced:", _lastCoalesceDate);
+        PersistenceHelper.addTime(buf, addComments, prefix, ".currentTotalEventTime", "Total time used by events in current period (uncoalesced):", _currentTotalEventTime);
+        PersistenceHelper.addTime(buf, addComments, prefix, ".lastTotalEventTime", "Total time used by events in most recent period (coalesced):", _lastTotalEventTime);
+        PersistenceHelper.addTime(buf, addComments, prefix, ".extremeTotalEventTime", "Total time used by events in most extreme period:", _extremeTotalEventTime);
+        PersistenceHelper.addTime(buf, addComments, prefix, ".lifetimeTotalEventTime", "Total time used by events since this stat was created:", _lifetimeTotalEventTime);
+        PersistenceHelper.add(buf, addComments, prefix, ".currentEventCount", "Total events in current period (uncoalesced): " + _currentEventCount, _currentEventCount);
+        PersistenceHelper.add(buf, addComments, prefix, ".lastEventCount", "Total events in most recent period (coalesced): " + _lastEventCount, _lastEventCount);
+        PersistenceHelper.add(buf, addComments, prefix, ".extremeEventCount", "Total events in most extreme period: " + _extremeEventCount, _extremeEventCount);
+        PersistenceHelper.add(buf, addComments, prefix, ".lifetimeEventCount", "Total events since this stat was created: " + _lifetimeEventCount, _lifetimeEventCount);
+        PersistenceHelper.add(buf, addComments, prefix, ".currentTotalValue", "Total value of data points in current period (uncoalesced): " + _currentTotalValue, _currentTotalValue);
+        PersistenceHelper.add(buf, addComments, prefix, ".lastTotalValue", "Total value of data points in most recent period (coalesced): " + _lastTotalValue, _lastTotalValue);
+        PersistenceHelper.add(buf, addComments, prefix, ".extremeTotalValue", "Total value of data points in most extreme period: " + _extremeTotalValue, _extremeTotalValue);
+        PersistenceHelper.add(buf, addComments, prefix, ".lifetimeTotalValue", "Total value of data points since this stat was created: " + _lifetimeTotalValue, _lifetimeTotalValue);
+        //PersistenceHelper.addDate(buf, addComments, prefix, ".currentDate", "Data written:", now());
+        //PersistenceHelper.addTime(buf, addComments, prefix, ".period", "Length of period:", _period);
     }
 
     /**
@@ -529,9 +509,9 @@ public class Rate {
         _lifetimeEventCount = PersistenceHelper.getLong(props, prefix, ".lifetimeEventCount");
         _lifetimeTotalEventTime = PersistenceHelper.getLong(props, prefix, ".lifetimeTotalEventTime");
 
-        if (treatAsCurrent) _lastCoalesceDate = now();
+        if (treatAsCurrent) {_lastCoalesceDate = now();}
 
-        if (_period <= 0) throw new IllegalArgumentException("Period for " + prefix + " is invalid");
+        if (_period <= 0) {throw new IllegalArgumentException("Period for " + prefix + " is invalid");}
         coalesce();
     }
 
@@ -541,15 +521,12 @@ public class Rate {
      */
     @Override
     public synchronized boolean equals(Object obj) {
-        if ((obj == null) || !(obj instanceof Rate)) return false;
-        if (obj == this) return true;
+        if ((obj == null) || !(obj instanceof Rate)) {return false;}
+        if (obj == this) {return true;}
         Rate r = (Rate) obj;
-        if (_period != r.getPeriod())
-            return false;
-        if (_stat == null && r._stat == null)
-            return true;
-        if (_stat != null && r._stat != null)
-            return _stat.nameGroupDescEquals(r._stat);
+        if (_period != r.getPeriod()) {return false;}
+        if (_stat == null && r._stat == null) {return true;}
+        if (_stat != null && r._stat != null) {return _stat.nameGroupDescEquals(r._stat);}
         return false;
     }
 
@@ -558,9 +535,7 @@ public class Rate {
      * (RateStat stores in an array) so let's make this easy.
      */
     @Override
-    public synchronized int hashCode() {
-        return DataHelper.hashCode(_stat) ^ _period;
-    }
+    public synchronized int hashCode() {return DataHelper.hashCode(_stat) ^ _period;}
 
     @Override
     public synchronized String toString() {
