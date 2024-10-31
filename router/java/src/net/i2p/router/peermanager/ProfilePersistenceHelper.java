@@ -124,22 +124,18 @@ class ProfilePersistenceHelper {
             if (_us != null) {buf.append("# as calculated by ").append(_us.toBase64()).append(NL);}
             buf.append(HR).append(NL);
             // TODO: copy version, sig, caps to parent header?
-            buf.append("# ").append("Version:").append(TAB);
             if (info != null) {
                 String version = DataHelper.stripHTML(info.getVersion());
-                buf.append(version);
+                buf.append("# ").append("Version: ").append(version != null ? version : "unknown").append(NL);
+                buf.append("# ").append("Signature: ").append(DataHelper.stripHTML(info.getIdentity().getSigningPublicKey().getType().toString())).append(NL);
+                buf.append("# ").append("Capabilities: ").append(DataHelper.stripHTML(info.getCapabilities()).toUpperCase().replace("XO", "X").replace("PO", "P")).append(NL);
+                if (speed > 0) {buf.append("# ").append("Speed: ").append(speed).append("B/s").append(NL);}
+                if (capacity > 0) {buf.append("# ").append("Capacity: ").append(capacity).append("tunnels/hour").append(NL);}
+                if (integration > 0) {buf.append("# ").append("Integration: ").append(integration).append(integration == 1 ? "peer" : "peers").append(NL);}
+                buf.append("# ").append("Groups: ").append(groups).append(NL);
+            } else {
+                buf.append("# No RouterInfo found for peer");
             }
-            buf.append(NL);
-            buf.append("# ").append("Signature:").append(TAB);
-            if (info != null) {buf.append(DataHelper.stripHTML(info.getIdentity().getSigningPublicKey().getType().toString()));}
-            buf.append(NL);
-            buf.append("# ").append("Capabilities:").append(TAB);
-            if (info != null) {buf.append(DataHelper.stripHTML(info.getCapabilities()).toUpperCase().replace("XO", "X").replace("PO", "P"));}
-            buf.append(NL);
-            if (speed > 0) {buf.append("# ").append("Speed:").append(TAB).append(TAB).append(speed).append(" B/s").append(NL);}
-            if (capacity > 0) {buf.append("# ").append("Capacity:").append(TAB).append(capacity).append(" tunnels/hour").append(NL);}
-            if (integration > 0) {buf.append("# ").append("Integration:").append(TAB).append(integration).append(" peers").append(NL);}
-            buf.append("# ").append("Groups:").append(TAB).append(groups).append(NL);
             buf.append(HR).append(NL).append(NL);
         }
         if (profile.getSpeedBonus() != 0) {add(buf, addComments, "speedBonus", profile.getSpeedBonus(), "Manual Speed Score adjustment: " +  profile.getSpeedBonus());}
@@ -151,7 +147,7 @@ class ProfilePersistenceHelper {
         if (profile.getLastSendSuccessful() != 0) {addDate(buf, addComments, "lastSentToSuccessfully", profile.getLastSendSuccessful(), "Last successful message sent to peer:");}
         if (profile.getLastSendFailed() != 0) {addDate(buf, addComments, "lastFailedSend", profile.getLastSendFailed(), "Last failed message to sent peer:");}
         if (profile.getTunnelTestTimeAverage() != 0 && PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME) {
-            add(buf, addComments, "tunnelTestTimeAverage", (long) profile.getTunnelTestTimeAverage(), "Average peer response time: " +  (long) profile.getTunnelTestTimeAverage());
+            add(buf, addComments, "tunnelTestTimeAverage", (long) profile.getTunnelTestTimeAverage(), "Average peer response time: " +  (long) profile.getTunnelTestTimeAverage() + "ms");
         }
         // TODO: needs clarification - difference between tunnel peak and tunnel peak tunnel? And round down KBps display to 2 decimal places
         if (profile.getPeakThroughputKBps() >= 1) {
