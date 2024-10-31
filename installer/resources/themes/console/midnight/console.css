@@ -1491,12 +1491,12 @@ h3[id="udpcon"]{width:auto}
 #view_profile .viewprofile,#view_profile .configpeer{margin:-6px 36px 0 0;font-size:0}
 #view_profile .viewprofile{padding:6px;margin:-6px 4px 0 0}
 #viewprofile.tabulated tr:first-child{display:none}
-#viewprofile.tabulated tr:hover td{background:#202}
 #viewprofile.tabulated th,#viewprofile.tabulated td{padding:8px}
 #viewprofile.tabulated th{text-align:left;font-size:100%}
 #viewprofile.tabulated td:first-child{width:50%;font-weight:600;border-right:var(--border_softer)}
 #viewprofile.tabulated tr:nth-child(even) td{background:#001}
 #viewprofile.tabulated tr:nth-child(odd) td{background:#002}
+#viewprofile.tabulated tr:hover td{background:#202}
 #viewprofile.tabulated .hidden{display:none}
 #viewprofile.tabulated .section th{font-size:120%}
 #viewprofile.tabulated .section th:hover{color:var(--hover);cursor:pointer}

@@ -893,7 +893,6 @@ a[href^="configpeer?peer"]:active::after{background:var(--edit_active) var(--cen
 #floodfills td:empty,#tunnels .cells:empty{text-align:center;vertical-align:middle}
 #profiles span[hidden]{display:none}
 #viewprofile.tabulated tr:first-child{display:none}
-#viewprofile.tabulated tr:hover td{background:#020}
 #viewprofile.tabulated th,#viewprofile.tabulated td{padding:8px}
 #viewprofile.tabulated th{text-align:left;font-size:100%}
 #viewprofile.tabulated .section th{font-size:120%}
@@ -904,6 +903,7 @@ a[href^="configpeer?peer"]:active::after{background:var(--edit_active) var(--cen
 #viewprofile.tabulated td:first-child{width:50%;font-weight:600;border-right:var(--border_softer)}
 #viewprofile.tabulated tr:nth-child(even) td{background:#000400}
 #viewprofile.tabulated tr:nth-child(odd) td{background:#000d00}
+#viewprofile.tabulated tr:hover td{background:#020}
 #viewprofile.tabulated .hidden{display:none}
 #viewprofile.tabulated .section th:hover{color:var(--hover);cursor:pointer}
 #viewprofile.tabulated .section th::after{margin-top:3px;width:10px;height:10px;float:right;background:var(--dropdown);transform:rotate(-90deg);content:""}
