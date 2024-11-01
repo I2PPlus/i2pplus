@@ -122,21 +122,23 @@ class ProfilePersistenceHelper {
             buf.append(HR).append(NL);
             buf.append("# Profile for peer: ").append(profile.getPeer().toBase64()).append(NL);
             if (_us != null) {buf.append("# as calculated by ").append(_us.toBase64()).append(NL);}
-            buf.append(HR).append(NL);
+            buf.append(HR).append(NL).append(NL);
             // TODO: copy version, sig, caps to parent header?
             if (info != null) {
                 String version = DataHelper.stripHTML(info.getVersion());
+                buf.append(HR).append(NL);
+                buf.append("# Router Information").append(NL);
+                buf.append(HR).append(NL).append(NL);
                 buf.append("# ").append("Version: ").append(version != null ? version : "unknown").append(NL);
                 buf.append("# ").append("Signature: ").append(DataHelper.stripHTML(info.getIdentity().getSigningPublicKey().getType().toString())).append(NL);
                 buf.append("# ").append("Capabilities: ").append(DataHelper.stripHTML(info.getCapabilities()).toUpperCase().replace("XO", "X").replace("PO", "P")).append(NL);
                 if (speed > 0) {buf.append("# ").append("Speed: ").append(speed).append("B/s").append(NL);}
-                if (capacity > 0) {buf.append("# ").append("Capacity: ").append(capacity).append("tunnels/hour").append(NL);}
+                if (capacity > 0) {buf.append("# ").append("Capacity: ").append(capacity).append(capacity == 1 ? " tunnel" : " tunnels").append(" per hour").append(NL);}
                 if (integration > 0) {buf.append("# ").append("Integration: ").append(integration).append(integration == 1 ? "peer" : "peers").append(NL);}
                 buf.append("# ").append("Groups: ").append(groups).append(NL);
             } else {
                 buf.append("# No RouterInfo found for peer");
             }
-            buf.append(HR).append(NL).append(NL);
         }
         if (profile.getSpeedBonus() != 0) {add(buf, addComments, "speedBonus", profile.getSpeedBonus(), "Manual Speed Score adjustment: " +  profile.getSpeedBonus());}
         if (profile.getCapacityBonus() != 0) {add(buf, addComments, "capacityBonus", profile.getCapacityBonus(), "Manual Capacity Score adjustment: " +  profile.getCapacityBonus());}
@@ -151,16 +153,15 @@ class ProfilePersistenceHelper {
         }
         // TODO: needs clarification - difference between tunnel peak and tunnel peak tunnel? And round down KBps display to 2 decimal places
         if (profile.getPeakThroughputKBps() >= 1) {
-            add(buf, addComments, "tunnelPeakThroughput", (long) profile.getPeakThroughputKBps(), "Tunnel Peak throughput: " + (long) profile.getPeakThroughputKBps() + "KB/s");
+            add(buf, addComments, "tunnelPeakThroughput", (long) profile.getPeakThroughputKBps(), "Tunnel Peak throughput: " + (long) profile.getPeakThroughputKBps() + " KB/s");
         }
         if (profile.getPeakTunnelThroughputKBps() >= 1) {
-            add(buf, addComments, "tunnelPeakTunnelThroughput", (long) profile.getPeakTunnelThroughputKBps(), "Tunnel Peak Tunnel throughput: " + (long) profile.getPeakTunnelThroughputKBps() + "KB/s");
+            add(buf, addComments, "tunnelPeakTunnelThroughput", (long) profile.getPeakTunnelThroughputKBps(), "Tunnel Peak Tunnel throughput: " + (long) profile.getPeakTunnelThroughputKBps() + " KB/s");
         }
         if (profile.getPeakTunnel1mThroughputKBps() >= 1) {
-            add(buf, addComments, "tunnelPeakTunnel1mThroughput", (long) profile.getPeakTunnel1mThroughputKBps(), "Tunnel Peak Tunnel throughput for 1 minute: " + (long) profile.getPeakTunnel1mThroughputKBps() + "KB/s");
+            add(buf, addComments, "tunnelPeakTunnel1mThroughput", (long) profile.getPeakTunnel1mThroughputKBps(), "Tunnel Peak Tunnel throughput for 1 minute: " + (long) profile.getPeakTunnel1mThroughputKBps() + " KB/s");
         }
-        if (addComments) {buf.append(NL);}
-
+        if (addComments) {buf.append(HR).append(NL).append(NL);}
         out.write(buf.toString().getBytes("UTF-8"));
 
         if (profile.getIsExpanded()) {

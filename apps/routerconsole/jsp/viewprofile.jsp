@@ -39,24 +39,16 @@
         if (pm.isRegistered("imagegen")) {
 %>
 <img class=identicon src="/imagegen/id?s=41&amp;c=<%=peerB64%>" style=float:right>
-<%
-        }
-%>
+<%      } %>
 </h3>
 <table id=viewprofile>
 <tr><td><pre><jsp:getProperty name="stathelper" property="profile" /></pre>
-<%
-        if (peerB64 != null || peerB64.length() > 0) {
-%>
+<%      if (peerB64 != null || peerB64.length() > 0) { %>
 <span><a href="#view_profile"><%=intl._t("Return to Top")%></a></span>
-<%
-        }
-%>
+<%      } %>
 </td></tr>
 </table>
-<%
-    }
-%>
+<%  } %>
 </div>
 <script nonce=<%=cspNonce%> src=/js/viewprofile.js></script>
 <noscript><style>#viewprofile{display:table!important}#viewprofile:empty::before,#viewprofile:empty::after{display:none!important}</style></noscript>

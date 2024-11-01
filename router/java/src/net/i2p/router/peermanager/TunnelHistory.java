@@ -29,7 +29,7 @@ public class TunnelHistory {
     private final RateStat _rejectRate;
     private final RateStat _failRate;
     private final String _statGroup;
-    static final long[] RATES = new long[] { 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
+    static final long[] RATES = new long[] {10*60*1000l, 60*60*1000l, 24*60*60*1000l };
 
     /** probabalistic tunnel rejection due to a flood of requests - infrequent */
     public static final int TUNNEL_REJECT_PROBABALISTIC_REJECT = 10;
@@ -44,32 +44,30 @@ public class TunnelHistory {
         _context = context;
         _log = context.logManager().getLog(TunnelHistory.class);
         _statGroup = statGroup;
-        _rejectRate = new RateStat("tunnelHistory.rejectRate", "How often does this peer reject a tunnel request?", statGroup, RATES);
+        _rejectRate = new RateStat("tunnelHistory.rejectRate", "How often peer rejects a tunnel request?", statGroup, RATES);
         _failRate = new RateStat("tunnelHistory.failRate", "How often do tunnels this peer accepts fail?", statGroup, RATES);
     }
 
     /** total tunnels the peer has agreed to participate in */
-    public long getLifetimeAgreedTo() { return _lifetimeAgreedTo.get(); }
+    public long getLifetimeAgreedTo() {return _lifetimeAgreedTo.get();}
     /** total tunnels the peer has refused to participate in */
-    public long getLifetimeRejected() { return _lifetimeRejected.get(); }
+    public long getLifetimeRejected() {return _lifetimeRejected.get();}
     /** total tunnels the peer has agreed to participate in that were later marked as failed prematurely */
-    public long getLifetimeFailed() { return _lifetimeFailed.get(); }
+    public long getLifetimeFailed() {return _lifetimeFailed.get();}
     /** when the peer last agreed to participate in a tunnel */
-    public long getLastAgreedTo() { return _lastAgreedTo; }
+    public long getLastAgreedTo() {return _lastAgreedTo;}
     /** when the peer last refused to participate in a tunnel with level of critical */
-    public long getLastRejectedCritical() { return _lastRejectedCritical; }
+    public long getLastRejectedCritical() {return _lastRejectedCritical;}
     /** when the peer last refused to participate in a tunnel complaining of bandwidth overload */
-    public long getLastRejectedBandwidth() { return _lastRejectedBandwidth; }
+    public long getLastRejectedBandwidth() {return _lastRejectedBandwidth;}
     /** when the peer last refused to participate in a tunnel complaining of transient overload */
-    public long getLastRejectedTransient() { return _lastRejectedTransient; }
+    public long getLastRejectedTransient() {return _lastRejectedTransient;}
     /** when the peer last refused to participate in a tunnel probabalistically */
-    public long getLastRejectedProbabalistic() { return _lastRejectedProbabalistic; }
+    public long getLastRejectedProbabalistic() {return _lastRejectedProbabalistic;}
     /** when the last tunnel the peer participated in failed */
-    public long getLastFailed() { return _lastFailed; }
+    public long getLastFailed() {return _lastFailed;}
 
-    public void incrementProcessed(int processedSuccessfully, int failedProcessing) {
-        // old strict speed calculator
-    }
+    public void incrementProcessed(int processedSuccessfully, int failedProcessing) {} // old strict speed calculator
 
     public void incrementAgreedTo() {
         _lifetimeAgreedTo.incrementAndGet();
@@ -83,15 +81,10 @@ public class TunnelHistory {
     public void incrementRejected(int severity) {
         _lifetimeRejected.incrementAndGet();
         long now = _context.clock().now();
-        if (severity >= TUNNEL_REJECT_CRIT) {
-            _lastRejectedCritical = now;
-        } else if (severity >= TUNNEL_REJECT_BANDWIDTH) {
-            _lastRejectedBandwidth = now;
-        } else if (severity >= TUNNEL_REJECT_TRANSIENT_OVERLOAD) {
-            _lastRejectedTransient = now;
-        } else if (severity >= TUNNEL_REJECT_PROBABALISTIC_REJECT) {
-            _lastRejectedProbabalistic = now;
-        }
+        if (severity >= TUNNEL_REJECT_CRIT) {_lastRejectedCritical = now;}
+        else if (severity >= TUNNEL_REJECT_BANDWIDTH) {_lastRejectedBandwidth = now;}
+        else if (severity >= TUNNEL_REJECT_TRANSIENT_OVERLOAD) {_lastRejectedTransient = now;}
+        else if (severity >= TUNNEL_REJECT_PROBABALISTIC_REJECT) {_lastRejectedProbabalistic = now;}
         // a rejection is always a rejection, don't factor based on severity,
         // which could impact our ability to avoid a congested peer
         _rejectRate.addData(1);
@@ -107,24 +100,11 @@ public class TunnelHistory {
         _lastFailed = _context.clock().now();
     }
 
-/*****  all unused
-    public void setLifetimeAgreedTo(long num) { _lifetimeAgreedTo = num; }
-    public void setLifetimeRejected(long num) { _lifetimeRejected = num; }
-    public void setLifetimeFailed(long num) { _lifetimeFailed = num; }
-    public void setLastAgreedTo(long when) { _lastAgreedTo = when; }
-    public void setLastRejectedCritical(long when) { _lastRejectedCritical = when; }
-    public void setLastRejectedBandwidth(long when) { _lastRejectedBandwidth = when; }
-    public void setLastRejectedTransient(long when) { _lastRejectedTransient = when; }
-    public void setLastRejectedProbabalistic(long when) { _lastRejectedProbabalistic = when; }
-    public void setLastFailed(long when) { _lastFailed = when; }
-******/
-
-    public RateStat getRejectionRate() { return _rejectRate; }
-    public RateStat getFailedRate() { return _failRate; }
+    public RateStat getRejectionRate() {return _rejectRate;}
+    public RateStat getFailedRate() {return _failRate;}
 
     public void coalesceStats() {
-        if (_log.shouldDebug())
-            _log.debug("Coalescing Profile Manager stats");
+        if (_log.shouldDebug()) {_log.debug("Coalescing Profile Manager stats...");}
         _rejectRate.coalesceStats();
         _failRate.coalesceStats();
     }
@@ -148,21 +128,15 @@ public class TunnelHistory {
             buf.append("# Tunnel History").append(NL);
             buf.append(HR).append(NL).append(NL);
         }
-        if (_lastAgreedTo != 0)
-            addDate(buf, addComments, "lastAgreedTo", _lastAgreedTo, "Last time peer agreed to participate in a tunnel:");
-        if (_lastFailed != 0)
-            addDate(buf, addComments, "lastFailed", _lastFailed, "Last time of participating tunnel failure for peer:");
-        if (_lastRejectedCritical != 0)
-            addDate(buf, addComments, "lastRejectedCritical", _lastRejectedCritical, "Last time peer refused tunnel participation (Critical):");
-        if (_lastRejectedBandwidth != 0)
-            addDate(buf, addComments, "lastRejectedBandwidth", _lastRejectedBandwidth, "Last time peer refused tunnel participation (Bandwidth):");
-        if (_lastRejectedTransient != 0)
-            addDate(buf, addComments, "lastRejectedTransient", _lastRejectedTransient, "Last time peer refused tunnel participation (Transient):");
-        if (_lastRejectedProbabalistic != 0)
-            addDate(buf, addComments, "lastRejectedProbabalistic", _lastRejectedProbabalistic, "Last time peer refused tunnel participation (Probabalistic):");
-        add(buf, addComments, "lifetimeAgreedTo", _lifetimeAgreedTo.get(), "Total tunnels peer agreed to participate in: " + _lifetimeAgreedTo.get());
-        add(buf, addComments, "lifetimeFailed", _lifetimeFailed.get(), "Total failed tunnels peer agreed to participate in: " + _lifetimeFailed.get());
-        add(buf, addComments, "lifetimeRejected", _lifetimeRejected.get(), "Total tunnels peer refused to participate in: " + _lifetimeRejected.get());
+        if (_lastAgreedTo != 0) {addDate(buf, addComments, "lastAgreedTo", _lastAgreedTo, "Last time peer agreed to participate in a tunnel:");}
+        if (_lastRejectedCritical != 0) {addDate(buf, addComments, "lastRejectedCritical", _lastRejectedCritical, "Last time peer refused tunnel participation (Critical):");}
+        if (_lastRejectedBandwidth != 0) {addDate(buf, addComments, "lastRejectedBandwidth", _lastRejectedBandwidth, "Last time peer refused tunnel participation (Bandwidth):");}
+        if (_lastRejectedTransient != 0) {addDate(buf, addComments, "lastRejectedTransient", _lastRejectedTransient, "Last time peer refused tunnel participation (Transient):");}
+        if (_lastRejectedProbabalistic != 0) {addDate(buf, addComments, "lastRejectedProbabalistic", _lastRejectedProbabalistic, "Last time peer refused tunnel participation (Probabalistic):");}
+        if (_lastFailed != 0) {addDate(buf, addComments, "lastFailed", _lastFailed, "Last time of participating tunnel failure for peer:");}
+        if (_lifetimeAgreedTo.get() > 0) {add(buf, addComments, "lifetimeAgreedTo", _lifetimeAgreedTo.get(), "Total tunnels peer agreed to participate in: " + _lifetimeAgreedTo.get());}
+        if (_lifetimeRejected.get() > 0) {add(buf, addComments, "lifetimeRejected", _lifetimeRejected.get(), "Total tunnels peer refused to participate in: " + _lifetimeRejected.get());}
+        if (_lifetimeFailed.get() > 0) {add(buf, addComments, "lifetimeFailed", _lifetimeFailed.get(), "Total failed tunnels peer agreed to participate in: " + _lifetimeFailed.get());}
         out.write(buf.toString().getBytes("UTF-8"));
         _rejectRate.store(out, "tunnelHistory.rejectRate", addComments);
         _failRate.store(out, "tunnelHistory.failRate", addComments);
@@ -172,17 +146,13 @@ public class TunnelHistory {
         if (addComments) {
             String when = val > 0 ? (new Date(val)).toString() : "Never";
             add(buf, true, name, val, description + ' ' + when);
-//            buf.append("# ").append(description).append(' ').append(when).append(NL);
-        } else {
-            add(buf, false, name, val, description);
-        }
+            //buf.append("# ").append(description).append(' ').append(when).append(NL);
+        } else {add(buf, false, name, val, description);}
     }
 
     private static void add(StringBuilder buf, boolean addComments, String name, long val, String description) {
-        if (addComments)
-            buf.append("# ").append(description).append(NL);
-        else
-            buf.append("tunnels.").append(name).append('=').append(val).append(NL);
+        if (addComments) {buf.append("# ").append(description).append(NL);}
+        else {buf.append("tunnels.").append(name).append('=').append(val).append(NL);}
     }
 
     public void load(Properties props) {

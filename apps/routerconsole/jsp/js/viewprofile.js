@@ -6,7 +6,7 @@
   document.addEventListener("DOMContentLoaded", () => {
     const viewprofile = document.getElementById("viewprofile");
     const profileContainer = document.querySelector("#viewprofile pre");
-    const profile = document.querySelector("#viewprofile pre").innerText;
+    const profile = profileContainer.innerText;
     const lines = profile.split("\n");
     profileContainer.style.display = "none";
     let tableHTML = "<table>";
@@ -21,7 +21,8 @@
 
         if (cleanedKey === "Speed") {
           const speed = parseFloat(cleanedValue);
-          const convertedSpeed = speed >= 1024 ? convertBtoKB(speed) : speed.toFixed(0);
+          let convertedSpeed;
+          if (!isNaN(speed)) {convertedSpeed = speed >= 1024 ? convertBtoKB(speed) : speed.toFixed(0);}
           tableHTML += "<tr class=stat><td>" + cleanedKey + "</td><td>" + convertedSpeed + (speed >= 1024 ? " KB/s" : " B/s") + "</td></tr>";
         } else if (cleanedKey === "Time of last failed lookup from peer" ||
             cleanedKey === "Time of last successful lookup from peer" ||
@@ -31,19 +32,21 @@
           tableHTML += "<tr class=stat><td>" + cleanedKey + "</td><td>" + convertedDate + "</td></tr>";
         } else if (cleanedKey === "Period") {
           const concatenatedValue = cleanedKey + ": " + cleanedValue;
-          tableHTML += "<tr class=subheading><th colspan=2>" + concatenatedValue + "</th></tr>";
+          tableHTML += "<tr class='subheading period'><th colspan=2>" + concatenatedValue + "</th></tr>";
         } else {
           tableHTML += "<tr class=stat><td>" + cleanedKey + "</td><td>" + cleanedValue + "</td></tr>";
         }
       } else if (line.startsWith("# ") && !line.includes(":")) {
         const sectionTitle = line.slice(2).trim();
         const [text, title] = extractTooltip(sectionTitle);
-        if (text === "NetDb History") {
-          tableHTML += "<tr class='section heading db'><th colspan='2' title='" + title + "'>" + text + "</th></tr>";
+        if (text === "Router Information") {
+          tableHTML += "<tr class='section heading ri expanded'><th colspan='2' title='" + title + "'>" + text + "</th></tr>";
+        } else if (text === "NetDb History") {
+          tableHTML += "<tr class='section heading db expanded'><th colspan='2' title='" + title + "'>" + text + "</th></tr>";
         } else if (text === "Tunnel History") {
-          tableHTML += "<tr class='section heading tnl'><th colspan='2' title='" + title + "'>" + text + "</th></tr>";
+          tableHTML += "<tr class='section heading tnl expanded'><th colspan='2' title='" + title + "'>" + text + "</th></tr>";
         } else {
-          tableHTML += "<tr class='section'><th colspan='2' title='" + title + "'>" + text + "</th></tr>";
+          tableHTML += "<tr class=section><th colspan='2' title='" + title + "'>" + text + "</th></tr>";
         }
       }
     });
@@ -124,7 +127,31 @@
         else {window.scrollTo(0,0);}
       });
     });
-    setTimeout(viewprofile.removeAttribute("hidden"), 100);
+
+    // Expand the .ri, .tnl, and .db sections by default
+    const sectionsToExpand = document.querySelectorAll(".ri, .tnl, .db");
+    if (sectionsToExpand.length > 0) {
+      Array.from(sectionsToExpand).forEach(section => {
+        section.classList.add("expanded");
+        let next = section.nextElementSibling;
+        while (next && !next.classList.contains("section")) {
+          next.classList.remove("hidden");
+          next = next.nextElementSibling;
+        }
+      });
+    }
+
+    // Collapse any subsequent sections after the specified sections
+    document.querySelectorAll(".section").forEach(section => {
+      if (!Array.from(sectionsToExpand).includes(section)) {
+        let next = section.nextElementSibling;
+        while (next && !next.classList.contains("section")) {
+          next.classList.add("hidden");
+          next = next.nextElementSibling;
+        }
+      }
+    });
+    setTimeout(() => viewprofile.removeAttribute("hidden"), 100);
   }
 
 })();

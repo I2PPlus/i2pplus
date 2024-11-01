@@ -891,24 +891,27 @@ a[href^="configpeer?peer"]:active::after{background:var(--edit_active) var(--cen
 #capabilities_key b{padding:1px 2px;min-width:16px;display:inline-block;text-align:center;text-transform:none;text-shadow:var(--textshadow);border-radius:2px;background:#002000}
 #capabilities_key b{text-transform:none}
 #floodfills td:empty,#tunnels .cells:empty{text-align:center;vertical-align:middle}
-#profiles span[hidden]{display:none}
+#profiles span[hidden],#viewprofile[hidden]{display:none}
 #viewprofile.tabulated tr:first-child{display:none}
-#viewprofile.tabulated th,#viewprofile.tabulated td{padding:8px}
-#viewprofile.tabulated th{text-align:left;font-size:100%}
-#viewprofile.tabulated th::before{margin:-1px 4px 0 0;display:inline-block;height:14px;width:14px;vertical-align:middle;background:var(--clock);content:""}
+#viewprofile.tabulated th{padding:7px 8px;text-align:left;font-size:100%}
+#viewprofile.tabulated th::before{margin:0 4px 0 0;display:inline-block;height:14px;width:14px;vertical-align:text-top;background:var(--clock);content:""}
+#viewprofile.tabulated td{padding:6px 8px}
 #viewprofile.tabulated td:first-child{width:50%;font-weight:600;border-right:var(--border_softer)}
+#viewprofile.tabulated .stat td{font-size:100%}
 #viewprofile.tabulated .stat td:first-child{padding-left:12px;font-weight:500}
-#viewprofile.tabulated .stat td:first-child::before{margin:-2px 6px 0 0;display:inline-block;height:10px;width:10px;vertical-align:middle;background:var(--tunn_active);content:""}
+#viewprofile.tabulated .stat td:first-child::before{margin:-2px 10px 0 3px;display:inline-block;height:10px;width:10px;vertical-align:middle;background:var(--tunn_active);content:""}
 #viewprofile.tabulated tr:nth-child(even) td{background:#000400}
 #viewprofile.tabulated tr:nth-child(odd) td{background:#000d00}
 #viewprofile.tabulated tr:hover td{background:#020}
 #viewprofile.tabulated .hidden{display:none}
-#viewprofile.tabulated .section th{font-size:120%}
-#viewprofile.tabulated .section.heading th{text-transform:uppercase;letter-spacing:.1em}
-#viewprofile.tabulated .section.expanded th{box-shadow:var(--highlight),0 0 0 2px #f605 inset}
-#viewprofile.tabulated .section th::before{margin:-2px 6px 0 0;width:18px;height:18px;background:url(/themes/console/images/stats.svg)}
-#viewprofile.tabulated .section.tnl th::before{background:url(/themes/console/images/hardhat.svg)}
+#viewprofile.tabulated .section th{font-size:110%}
+#viewprofile.tabulated .section.heading th{padding:10px 10px 8px;text-transform:uppercase;letter-spacing:.1em;font-size:120%;font-weight:700!important;box-shadow:var(--highlight),0 0 0 2px #3934 inset}
+#viewprofile.tabulated .section.expanded th{box-shadow:var(--highlight),0 0 0 2px #f608 inset}
+#viewprofile.tabulated .section th::before{margin:0 8px 0 4px;width:16px;height:16px;background:url(/themes/console/images/stats.svg)}
+#viewprofile.tabulated .section.db th::before,#viewprofile.tabulated .section.ri th::before,#viewprofile.tabulated .section.tnl th::before{margin:0 6px 0 2px;width:18px;height:18px}
 #viewprofile.tabulated .section.db th::before{background:url(/themes/console/images/globe.svg)}
+#viewprofile.tabulated .section.ri th::before{background:url(/themes/console/images/server.svg)}
+#viewprofile.tabulated .section.tnl th::before{background:url(/themes/console/images/hardhat.svg)}
 #viewprofile.tabulated .section th:hover{color:var(--hover);cursor:pointer}
 #viewprofile.tabulated .section th::after{margin-top:3px;width:10px;height:10px;float:right;background:var(--dropdown);transform:rotate(-90deg);content:""}
 #viewprofile.tabulated .section th:hover::after{background:var(--dropdown_hover)}
