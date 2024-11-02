@@ -892,6 +892,7 @@ a[href^="configpeer?peer"]:active::after{background:var(--edit_active) var(--cen
 #capabilities_key b{text-transform:none}
 #floodfills td:empty,#tunnels .cells:empty{text-align:center;vertical-align:middle}
 #profiles span[hidden],#viewprofile[hidden]{display:none}
+#viewprofile.tabulated td,#viewprofile.tabulated th{box-shadow:var(--highlight)}
 #viewprofile.tabulated td:first-child{border-right:var(--border_softer)}
 #viewprofile.tabulated tr:nth-child(even) td{background:#000400}
 #viewprofile.tabulated tr:nth-child(odd) td{background:#000d00}
