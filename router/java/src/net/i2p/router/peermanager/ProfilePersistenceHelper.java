@@ -136,9 +136,7 @@ class ProfilePersistenceHelper {
                 if (capacity > 0) {buf.append("# ").append("Capacity: ").append(capacity).append(capacity == 1 ? " tunnel" : " tunnels").append(" per hour").append(NL);}
                 if (integration > 0) {buf.append("# ").append("Integration: ").append(integration).append(integration == 1 ? "peer" : "peers").append(NL);}
                 buf.append("# ").append("Groups: ").append(groups).append(NL);
-            } else {
-                buf.append("# No RouterInfo found for peer");
-            }
+            } else {buf.append("# No RouterInfo found for peer").append(NL);}
         }
         if (profile.getSpeedBonus() != 0) {add(buf, addComments, "speedBonus", profile.getSpeedBonus(), "Manual Speed Score adjustment: " +  profile.getSpeedBonus());}
         if (profile.getCapacityBonus() != 0) {add(buf, addComments, "capacityBonus", profile.getCapacityBonus(), "Manual Capacity Score adjustment: " +  profile.getCapacityBonus());}
