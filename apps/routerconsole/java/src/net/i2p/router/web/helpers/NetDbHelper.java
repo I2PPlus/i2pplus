@@ -76,44 +76,37 @@ public class NetDbHelper extends FormHandler {
 
 
     public void setRouter(String r) {
-        if (r != null && r.length() > 0)
-            _routerPrefix = DataHelper.stripHTML(r.trim()); // XSS
+        if (r != null && r.length() > 0) {_routerPrefix = DataHelper.stripHTML(r.trim());} // XSS
     }
 
     /** @since 0.9.21 */
     public void setVersion(String v) {
-        if (v != null && v.length() > 0)
-            _version = DataHelper.stripHTML(v.trim()); // XSS
+        if (v != null && v.length() > 0) {_version = DataHelper.stripHTML(v.trim());} // XSS
     }
 
     /** @since 0.9.21 */
     public void setCountry(String c) {
-        if (c != null && c.length() > 0)
-            _country = DataHelper.stripHTML(c.trim()); // XSS
+        if (c != null && c.length() > 0) {_country = DataHelper.stripHTML(c.trim());} // XSS
     }
 
     /** @since 0.9.28 */
     public void setFamily(String c) {
-        if (c != null && c.length() > 0)
-            _family = DataHelper.stripHTML(c.trim()); // XSS
+        if (c != null && c.length() > 0) {_family = DataHelper.stripHTML(c.trim());} // XSS
     }
 
     /** @since 0.9.28 */
     public void setCaps(String c) {
-        if (c != null && c.length() > 0)
-            _caps = DataHelper.stripHTML(c.trim()); // XSS
+        if (c != null && c.length() > 0) {_caps = DataHelper.stripHTML(c.trim());} // XSS
     }
 
     /** @since 0.9.28 */
     public void setIp(String c) {
-        if (c != null && c.length() > 0)
-            _ip = DataHelper.stripHTML(c.trim()); // XSS
+        if (c != null && c.length() > 0) {_ip = DataHelper.stripHTML(c.trim());} // XSS
     }
 
     /** @since 0.9.28 */
     public void setSybil(String c) {
-        if (c != null)
-            _sybil = DataHelper.stripHTML(c.trim()); // XSS
+        if (c != null) {_sybil = DataHelper.stripHTML(c.trim());} // XSS
     }
 
     /** For form, same as above but with a length check
@@ -230,7 +223,7 @@ public class NetDbHelper extends FormHandler {
 
     public void setClientPage(String f) {
         try {}
-        catch(Exception e){}
+        catch(Exception e) {}
     }
 
     /**
@@ -256,39 +249,39 @@ public class NetDbHelper extends FormHandler {
     protected void processForm() {
         _postOK = "Start Scan".equals(_action) || "Review".equals(_action);
         if ("Save".equals(_action)) {
-                try {
-                    Map<String, String> toSave = new HashMap<String, String>(4);
-                    String newTime = getJettyString("runFrequency");
-                    if (newTime != null) {
-                        long ntime = Long.parseLong(newTime) * 60*60*1000;
-                        toSave.put(Analysis.PROP_FREQUENCY, Long.toString(ntime));
-                    }
-                    String thresh = getJettyString("threshold");
-                    if (thresh != null && thresh.length() > 0) {
-                        float val = Math.max(Float.parseFloat(thresh), Analysis.MIN_BLOCK_POINTS);
-                        toSave.put(Analysis.PROP_THRESHOLD, Float.toString(val));
-                    }
-                    String days = getJettyString("days");
-                    if (days != null && days.length() > 0) {
-                        long val = 24*60*60*1000L * Integer.parseInt(days);
-                        toSave.put(Analysis.PROP_BLOCKTIME, Long.toString(val));
-                    }
-                    String age = getJettyString("deleteAge");
-                    if (age != null && age.length() > 0) {
-                        long val = 24*60*60*1000L * Integer.parseInt(age);
-                        toSave.put(Analysis.PROP_REMOVETIME, Long.toString(val));
-                    }
-                    String enable = getJettyString("block");
-                    toSave.put(Analysis.PROP_BLOCK, Boolean.toString(enable != null));
-                    String nonff = getJettyString("nonff");
-                    toSave.put(Analysis.PROP_NONFF, Boolean.toString(nonff != null));
-                    if (_context.router().saveConfig(toSave, null)) {
-                        addFormNotice(_t("Configuration saved successfully."));
-                    } else {
-                        addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"));
-                    }
-                    Analysis.getInstance(_context).schedule();
-                } catch (NumberFormatException nfe) {addFormError("bad value");}
+            try {
+                Map<String, String> toSave = new HashMap<String, String>(4);
+                String newTime = getJettyString("runFrequency");
+                if (newTime != null) {
+                    long ntime = Long.parseLong(newTime) * 60*60*1000;
+                    toSave.put(Analysis.PROP_FREQUENCY, Long.toString(ntime));
+                }
+                String thresh = getJettyString("threshold");
+                if (thresh != null && thresh.length() > 0) {
+                    float val = Math.max(Float.parseFloat(thresh), Analysis.MIN_BLOCK_POINTS);
+                    toSave.put(Analysis.PROP_THRESHOLD, Float.toString(val));
+                }
+                String days = getJettyString("days");
+                if (days != null && days.length() > 0) {
+                    long val = 24*60*60*1000L * Integer.parseInt(days);
+                    toSave.put(Analysis.PROP_BLOCKTIME, Long.toString(val));
+                }
+                String age = getJettyString("deleteAge");
+                if (age != null && age.length() > 0) {
+                    long val = 24*60*60*1000L * Integer.parseInt(age);
+                    toSave.put(Analysis.PROP_REMOVETIME, Long.toString(val));
+                }
+                String enable = getJettyString("block");
+                toSave.put(Analysis.PROP_BLOCK, Boolean.toString(enable != null));
+                String nonff = getJettyString("nonff");
+                toSave.put(Analysis.PROP_NONFF, Boolean.toString(nonff != null));
+                if (_context.router().saveConfig(toSave, null)) {
+                    addFormNotice(_t("Configuration saved successfully."));
+                } else {
+                    addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"));
+                }
+                Analysis.getInstance(_context).schedule();
+            } catch (NumberFormatException nfe) {addFormError("Bad value");}
         }
     }
 
