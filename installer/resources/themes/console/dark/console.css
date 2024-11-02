@@ -892,33 +892,14 @@ a[href^="configpeer?peer"]:active::after{background:var(--edit_active) var(--cen
 #capabilities_key b{text-transform:none}
 #floodfills td:empty,#tunnels .cells:empty{text-align:center;vertical-align:middle}
 #profiles span[hidden],#viewprofile[hidden]{display:none}
-#viewprofile.tabulated tr:first-child{display:none}
-#viewprofile.tabulated th{padding:7px 8px;text-align:left;font-size:100%}
-#viewprofile.tabulated th::before{margin:0 4px 0 0;display:inline-block;height:14px;width:14px;vertical-align:text-top;background:var(--clock);content:""}
-#viewprofile.tabulated td{padding:6px 8px}
-#viewprofile.tabulated td:first-child{width:50%;font-weight:600;border-right:var(--border_softer)}
-#viewprofile.tabulated .stat td{font-size:100%}
-#viewprofile.tabulated .stat td:first-child{padding-left:12px;font-weight:500}
-#viewprofile.tabulated .stat td:first-child::before{margin:-2px 10px 0 3px;display:inline-block;height:10px;width:10px;vertical-align:middle;background:var(--tunn_active);content:""}
+#viewprofile.tabulated td:first-child{border-right:var(--border_softer)}
 #viewprofile.tabulated tr:nth-child(even) td{background:#000400}
 #viewprofile.tabulated tr:nth-child(odd) td{background:#000d00}
 #viewprofile.tabulated tr:hover td{background:#020}
-#viewprofile.tabulated .hidden{display:none}
 #viewprofile.tabulated .section th{padding-right:10px;font-size:110%}
-#viewprofile.tabulated .section.heading th{padding:10px 10px 8px;text-transform:uppercase;letter-spacing:.1em;font-size:120%;font-weight:700!important;box-shadow:var(--highlight),0 0 0 2px #3934 inset}
+#viewprofile.tabulated .section.heading th{box-shadow:var(--highlight),0 0 0 2px #3934 inset}
 #viewprofile.tabulated .section.expanded th{box-shadow:var(--highlight),0 0 0 2px #f608 inset}
-#viewprofile.tabulated .section th::before{margin:0 8px 0 4px;width:16px;height:16px;background:url(/themes/console/images/stats.svg)}
-#viewprofile.tabulated .section.db th::before,#viewprofile.tabulated .section.ri th::before,#viewprofile.tabulated .section.tnl th::before{margin:0 6px 0 2px;width:18px;height:18px}
-#viewprofile.tabulated .section.db th::before{background:url(/themes/console/images/globe.svg)}
-#viewprofile.tabulated .section.ri th::before{background:url(/themes/console/images/server.svg)}
-#viewprofile.tabulated .section.tnl th::before{background:url(/themes/console/images/hardhat.svg)}
-#viewprofile.tabulated .section th:hover{color:var(--hover);cursor:pointer}
-#viewprofile.tabulated .section th::after{margin-top:3px;width:10px;height:10px;float:right;background:var(--dropdown);transform:rotate(-90deg);content:""}
-#viewprofile.tabulated .section th:hover::after{background:var(--dropdown_hover)}
-#viewprofile.tabulated .section.expanded th::after,#viewprofile.tabulated .section.expanded th:hover::after{transform:none}
-#viewprofile.tabulated .subheading th{padding-left:11px;background:linear-gradient(90deg,#131 5px,#000 5px,#000400)}
-#viewprofile:empty::before{margin:0 -8px 0 8px;height:32px;width:44px;display:inline-block;vertical-align:middle;background:var(--warning) no-repeat 12px center;content:""}
-#viewprofile:empty::after{padding:20px;display:inline-block;font-size:120%;font-weight:500;content:"No profile available"}
+#viewprofile.tabulated .subheading th{background:linear-gradient(90deg,#131 5px,#000 5px,#000400)}
 
 /* floodfills */
 #floodfills{margin:12px 0 10px}
@@ -1162,6 +1143,7 @@ p.family+p.family,.sybil_info+.sybil_info{margin-top:-4px}
 p.family{white-space:nowrap;background:var(--family) no-repeat 8px center/28px,linear-gradient(90deg,#000,#000800 80%,#001000);background-blend-mode:normal}
 .banlisted,.compressible,.i2pd,.javai2p{width:18px;height:18px;display:inline-block;vertical-align:middle;background:var(--ban)}
 .compressible{background:url(/themes/console/images/clamp.svg)}
+.confignav+table[id^="ls"]{margin-top:11px}
 .i2pd{margin-right:2px;background:url(/themes/console/images/eepsites/i2pd.svg)}
 .javai2p{margin:0 2px 0 4px;background:url(/themes/console/images/eepsites/i2p.svg)}
 .configpeer:hover,.configpeer:focus{background:var(--edit_hover) var(--center)/12px,var(--badge)}
@@ -1297,7 +1279,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .netdb_expiry{margin-left:3px}
 .netdb_gateway{margin-left:0;margin-right:-10px;vertical-align:bottom}
 .netdb_info{margin-right:1px}
-.netdb_leases{columns:auto 100px;column-gap:0}
+.netdb_leases{columns:auto 104px;column-gap:0}
 .netdb_leases li{margin:.5px 1px;padding:1px 0;display:inline-block;vertical-align:middle;white-space:nowrap;list-style:none}
 .netdb_leases li b:first-child{margin:0;padding:0;min-width:60px;display:inline-block;text-align:right}
 .netdb_leases li b.leaseNumber{margin-right:0;padding:1px 0 0;min-width:22px;position:relative;vertical-align:middle;text-align:center;text-shadow:var(--textshadow);background:#020;border-radius:2px 0 0 2px;filter:drop-shadow(0 0 1px #000)}

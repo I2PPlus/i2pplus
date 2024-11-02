@@ -9,6 +9,7 @@
 %>
 <html lang="<%=lang%>">
 <head>
+<link href=/themes/console/viewprofile.css rel=stylesheet>
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("Peer Profile")%>

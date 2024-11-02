@@ -1404,32 +1404,15 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 #view_profile td{padding:0}
 #view_profile pre{margin:0;padding:20px 20px 0;width:100%;line-height:20px;white-space:pre-wrap;word-break:break-all;box-sizing:border-box;text-shadow:var(--txt_shadow);border-left:5px solid #aad;background:repeating-linear-gradient(180deg,rgba(120,120,255,.2),rgba(210,210,255,.4) 1px,rgba(210,210,255,.4) 19px,rgba(120,120,255,.2) 19px,rgba(240,240,255,.4) 20px,rgba(240,240,255,.4) 40px)}
 #view_profile td span{padding:3px 5px;position:absolute;bottom:0;right:0;display:inline-block;font-size:90%;border:var(--border_inner);border-radius:4px 0 0 0;box-shadow:var(--highlight);background:linear-gradient(180deg,#fff 50%,#e2e2ff 50%);user-select:none}
-#viewprofile.tabulated tr:first-child{display:none}
-#viewprofile.tabulated th,#viewprofile.tabulated td{padding:8px}
-#viewprofile.tabulated th{text-align:left;font-size:100%}
-#viewprofile.tabulated th::before{margin:-1px 4px 0 0;display:inline-block;height:14px;width:14px;vertical-align:middle;background:var(--clock);content:""}
 #viewprofile.tabulated td{border-top:var(--border_softer)}
-#viewprofile.tabulated td:first-child{width:50%;font-weight:500;border-right:var(--border_softer)}
+#viewprofile.tabulated td:first-child{border-right:var(--border_softer)}
 #viewprofile.tabulated tr:last-child td{border-bottom:var(--border_inner)}
 #viewprofile.tabulated tr:nth-child(2) td{border-top:var(--border_inner)}
 #viewprofile.tabulated tr:nth-child(even) td{background:#eef}
 #viewprofile.tabulated tr:nth-child(odd) td{background:#f2f2ff}
 #viewprofile.tabulated tr:hover td{background:#ffd}
-#viewprofile.tabulated .hidden{display:none}
-#viewprofile.tabulated .section.expanded th::after,#viewprofile.tabulated .section.expanded th:hover::after{transform:none}
 #viewprofile.tabulated .section.expanded th{box-shadow:var(--highlight),0 0 0 2px var(--hover) inset}
-#viewprofile.tabulated .section th::after{margin-top:3px;width:10px;height:10px;float:right;background:var(--dropdown);transform:rotate(-90deg);content:""}
-#viewprofile.tabulated .section th{font-size:110%}
-#viewprofile.tabulated .section.heading th{padding:8px 8px 7px;font-size:120%;font-weight:700;text-transform:uppercase}
-#viewprofile.tabulated .subheading th{padding-left: 11px;background:linear-gradient(90deg,#99d 5px,#fff 5px)}
-#viewprofile.tabulated .section th:hover::after{background:var(--dropdown_hover)}
-#viewprofile.tabulated .section th:hover{color:var(--hover);cursor:pointer}
-#viewprofile.tabulated .section th::before{margin:0 8px 0 4px;width:16px;height:16px;background:url(/themes/console/images/stats.svg)}
-#viewprofile.tabulated .section.db th::before,#viewprofile.tabulated .section.ri th::before,#viewprofile.tabulated .section.tnl th::before{margin:0 6px 0 2px;width:18px;height:18px;vertical-align:text-bottom}
-#viewprofile.tabulated .section.db th::before{background:url(/themes/console/images/globe.svg)}
-#viewprofile.tabulated .section.ri th::before{background:url(/themes/console/images/server.svg)}
-#viewprofile.tabulated .section.tnl th::before{background:url(/themes/console/images/hardhat.svg)}
-#viewprofile.tabulated .stat td:first-child::before{margin:-2px 10px 0 6px;display:inline-block;height:10px;width:10px;vertical-align:middle;background:var(--tunn_active);content:""}
+#viewprofile.tabulated .subheading th{background:linear-gradient(90deg,#99d 5px,#fff 5px)}
 
 /* netdb */
 span.tier,.netdbentry .ff,.netdbentry .hidden,.netdbentry .reachable,.netdbentry .ssuintro,.netdbentry .unreachable,.sybil_routerinfo .ff,.sybil_routerinfo .hidden,.sybil_routerinfo .reachable,.sybil_routerinfo .ssuintro,.sybil_routerinfo .unreachable,#capabilities_key b,#floodfills .hidden,#floodfills .reachable,#floodfills .ssuintro,#floodfills .tier,#floodfills .unreachable{margin:2px;padding:1px 0;min-width:28px;display:inline-block;box-sizing:border-box;text-align:center;text-transform:none;font-weight:700;color:#4a415e;text-shadow:var(--txt_shadow);border:1px solid #bbc;box-shadow:var(--highlight);background:var(--tier)}

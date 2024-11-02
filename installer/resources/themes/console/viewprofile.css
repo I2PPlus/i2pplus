@@ -1,0 +1,23 @@
+#viewprofile.tabulated tr:first-child{display:none}
+#viewprofile.tabulated th{padding:7px 8px;text-align:left;font-size:100%}
+#viewprofile.tabulated th::before{margin:0 4px 0 0;display:inline-block;height:14px;width:14px;vertical-align:text-top;background:var(--clock);content:""}
+#viewprofile.tabulated td{padding:6px 8px}
+#viewprofile.tabulated td:first-child{width:50%;font-weight:600}
+#viewprofile.tabulated .hidden{display:none}
+#viewprofile.tabulated .section th{padding-right:10px;font-size:110%}
+#viewprofile.tabulated .section.heading th{padding:10px 10px 8px;text-transform:uppercase;letter-spacing:.1em;font-size:120%;font-weight:700!important}
+#viewprofile.tabulated .section th::before{margin:0 8px 0 4px;width:16px;height:16px;background:url(/themes/console/images/stats.svg)}
+#viewprofile.tabulated .section.db th::before,#viewprofile.tabulated .section.ri th::before,#viewprofile.tabulated .section.tnl th::before{margin:0 6px 0 2px;width:18px;height:18px}
+#viewprofile.tabulated .section.db th::before{background:url(/themes/console/images/globe.svg)}
+#viewprofile.tabulated .section.ri th::before{background:url(/themes/console/images/server.svg)}
+#viewprofile.tabulated .section.tnl th::before{background:url(/themes/console/images/hardhat.svg)}
+#viewprofile.tabulated .section th:hover{color:var(--hover);cursor:pointer}
+#viewprofile.tabulated .section th::after{margin-top:3px;width:10px;height:10px;float:right;background:var(--dropdown);transform:rotate(-90deg);content:""}
+#viewprofile.tabulated .section th:hover::after{background:var(--dropdown_hover)}
+#viewprofile.tabulated .section.expanded th::after,#viewprofile.tabulated .section.expanded th:hover::after{transform:none}
+#viewprofile.tabulated .stat td{font-size:100%}
+#viewprofile.tabulated .stat td:first-child{padding-left:12px;font-weight:500}
+#viewprofile.tabulated .stat td:first-child::before{margin:-2px 10px 0 3px;display:inline-block;height:10px;width:10px;vertical-align:middle;background:var(--tunn_active);content:""}
+#viewprofile.tabulated .subheading th{padding-left:11px}
+#viewprofile:empty::before{margin:0 -8px 0 8px;height:32px;width:44px;display:inline-block;vertical-align:middle;background:var(--warning) no-repeat 12px center;content:""}
+#viewprofile:empty::after{padding:20px;display:inline-block;font-size:120%;font-weight:500;content:"No profile available"}

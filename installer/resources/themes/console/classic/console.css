@@ -303,7 +303,7 @@ button:active a{color:var(--ink_light)}
 input{margin:3px 5px 3px 0}
 input[name="refreshInterval"]{width:80px;min-width:80px;text-align:right}
 input[type=file]::file-selector-button{margin:3px 8px 3px 0}
-input[type="file"]{margin:3px 5px;background:none}
+input[type=file]{margin:3px 5px;background:none}
 input[type=text],input[type=password]{margin:3px 5px}
 input[disabled]:hover{filter:none}
 label[for="0"]{cursor:default;color:var(--ink)}
@@ -587,30 +587,19 @@ a.viewfullentry:hover{filter:drop-shadow(0 0 1px var(--hover))}
 #profilelist .standard{background:var(--standard) no-repeat center center}
 #profilelist .standard.integrated{background:var(--standard) no-repeat calc(50% - 10px) center,var(--integrated) no-repeat calc(50% + 10px) center}
 #profilelist .fast.integrated{background:var(--fast) no-repeat left center,var(--highcap) no-repeat center center,var(--integrated) no-repeat right center}
-#view_profile h3{position:relative;z-index:10}
-#view_profile h3 a::after{margin-top:-1.5px}
-#view_profile .configpeer{margin-right:-5px}
-#view_profile h3{margin:0 auto -1px;position:relative}
-#viewprofile td{padding:0}
-#view_profile pre{margin:0;padding:20px;width:calc(100% - 40px);line-height:20px;background:var(--pre)}
+#view_profile h3{margin:0 auto -1px;position:relative;z-index:10}
+#view_profile h3 .configpeer{margin:0 26px 0 0}
+#view_profile h3 .viewprofile{margin:0;width:18px;height:18px;display:inline-block;vertical-align:middle;border:var(--border);border-radius:1px;background:var(--bg) var(--eye) no-repeat center center/12px}
 #view_profile span{padding:5px;float:right}
-#view_profile .identicon{margin-top:-6px;margin-right:5px;height:100%;width:auto;position:absolute;right:54px;border-right:var(--border)}
-#viewprofile.tabulated tr:first-child{display:none}
+#view_profile pre{margin:0;padding:20px;width:calc(100% - 40px);line-height:20px;background:var(--pre)}
+#viewprofile td{padding:0}
+#view_profile .identicon{margin-top:-6px;margin-right:5px;height:100%;width:auto;position:absolute;right:-6px;border-right:var(--border)}
 #viewprofile.tabulated tr:nth-child(even) td{background:#eef}
 #viewprofile.tabulated tr:nth-child(odd) td{background:#f2f2ff}
 #viewprofile.tabulated tr:hover td{background:#ffe}
-#viewprofile.tabulated th,#viewprofile.tabulated td{padding:8px}
-#viewprofile.tabulated th{text-align:left;font-size:100%}
-#viewprofile.tabulated th::before{margin-right:4px;display:inline-block;height:14px;width:14px;vertical-align:middle;background:var(--clock);content:""}
-#viewprofile.tabulated .section th{font-size:120%}
-#viewprofile.tabulated .section th:hover{color:var(--hover);cursor:pointer}
-#viewprofile.tabulated .section th:hover::after{background:var(--dropdown_hover)}
-#viewprofile.tabulated .section th::before{margin:-2px 6px 0 0;width:18px;height:18px;background:url(/themes/console/images/stats.svg)}
 #viewprofile.tabulated td{border-top:var(--border_softer)}
-#viewprofile.tabulated td:first-child{width:50%;font-weight:600;border-right:var(--border_softer)}
-#viewprofile.tabulated .hidden{display:none}
-#viewprofile.tabulated .section th::after{margin-top:3px;width:10px;height:10px;float:right;background:var(--dropdown);transform:rotate(-90deg);content:""}
-#viewprofile.tabulated .section.expanded th::after,#viewprofile.tabulated .section.expanded th:hover::after{margin-right:2px;transform:none}
+#viewprofile.tabulated td:first-child{border-right:var(--border_softer)}
+#viewprofile.tabulated .stat td{font-size:105%}
 #viewprofile.tabulated .section.expanded th{box-shadow:var(--highlight),0 0 0 2px var(--hover) inset}
 
 /* sort icons */
@@ -1767,7 +1756,7 @@ b.suboption{margin:0;padding:5px 10px;position:relative;z-index:10;display:inlin
 #reseedproxysslhostport .nowrap{min-width:0}
 #reseedproxytype .optbox{margin-left:10px}
 #config_reseed form{margin:0;padding:0}
-#manualreseed .optionlist input[type=text],#manualreseed .optionlist input[type="file"]{width:50;min-width:0;max-width:50%}
+#manualreseed .optionlist input[type=text],#manualreseed .optionlist input[type=file]{width:50;min-width:0;max-width:50%}
 #manualreseed .optionsingle{padding:5px 0 5px 10px}
 #config_network .optionlist:hover,#config_i2cp .optionlist:hover,#reseedssl:hover,#manualreseed .optionsingle:hover,.optiontextarea:hover,#reseed_urlselection:hover{border:var(--border);box-shadow:var(--highlight_hover);transition:ease box-shadow .5s}
 #manualreseed{margin:0 0 7px;background:none}
@@ -1780,10 +1769,10 @@ b.suboption{margin:0;padding:5px 10px;position:relative;z-index:10;display:inlin
 #config_reseed #reseedcreatefile{text-align:justify;background:var(--bg2) var(--package) no-repeat 14px center/28px}
 #config_reseed #reseedcreatefile:hover,#config_reseed #reseedzip:hover,#config_reseed #reseedurl:hover{background-color:var(--row_hover)}
 #reseedcreatefile p{margin:0;padding:0 10px 0 5px;display:inline-block}
-#addkeyring input[type=text],#reseedurl input[type=text],#reseedzip input[type="file"],#reseedcreatefile p{width:calc(100% - 5px)}
+#addkeyring input[type=text],#reseedurl input[type=text],#reseedzip input[type=file],#reseedcreatefile p{width:calc(100% - 5px)}
 #reseedconfig .reload{margin-left:0}
-.optionsave .accept,.optionsave .add,.formaction .accept,div[id^="config"] input[type="submit"]:last-of-type{margin-right:0}
-#config_reseed input[type="submit"]:last-of-type{margin-right:5px}
+.optionsave .accept,.optionsave .add,.formaction .accept,div[id^="config"] input[type=submit]:last-of-type{margin-right:0}
+#config_reseed input[type=submit]:last-of-type{margin-right:5px}
 #manualreseed .optionsingle td:last-child{text-align:right;width:1%;white-space:nowrap;padding-right:0}
 #config_update td,#netconfig td:not(.infohelp):not(.infowarn):not(.optionsave),#graphs td{padding:5px}
 #config_update td{padding-top:6px;padding-bottom:6px}
@@ -1791,15 +1780,15 @@ b.suboption{margin:0;padding:5px 10px;position:relative;z-index:10;display:inlin
 #config_keyring h3{margin-bottom:-2px}
 #installPluginUrl table,#installPluginFile table{margin-bottom:0}
 #installPluginUrl table,#installPluginUrl tr,#installPluginUrl td,#installPluginFile table,#installPluginFile tr,#installPluginFile td,#createNewFamily table,#createNewFamily tr,#createNewFamily td,#joinfamily table,#joinfamily tr:nth-child(n+3),#joinfamily tr:nth-child(n+3) td,#joinfamily tr:nth-child(n+3) table tr{background:none;border:0;box-shadow:none}
-#installPluginUrl input[type=text],#installPluginFile input[type="file"],#config_family input[type=text],#config_family input[type="file"]{width:100%}
+#installPluginUrl input[type=text],#installPluginFile input[type=file],#config_family input[type=text],#config_family input[type=file]{width:100%}
 #config_reseed form,#installPluginUrl form,#installPluginFile form,#newFamily form,#joinfamily form{margin:0;padding:0}
 #installPluginUrl,#installPluginFile{background:var(--bg2)}
 #installPluginUrl{margin-bottom:4px}
 #installPluginUrl td:first-child{padding:var(--pad_info);background:var(--bg2) var(--link) var(--bgpos_info)}
 #installPluginFile td:first-child{padding:var(--pad_info);background:var(--bg2) var(--files) var(--bgpos_info)}
 #installPluginUrl:hover td,#installPluginFile #file:hover td{background-color:var(--row_hover)}
-#installPluginUrl input[type=text],#installPluginFile input[type="file"]{width:100%}
-input[type="file"]:hover{cursor:pointer}
+#installPluginUrl input[type=text],#installPluginFile input[type=file]{width:100%}
+input[type=file]:hover{cursor:pointer}
 #joinfamily tr:nth-child(3) td,#newfamily tr:nth-child(3) td{padding:5px}
 #newfamily{margin-top:14px}
 #newfamily .optionsingle{padding:5px 5px 0 45px;background:var(--bg2) var(--tag) no-repeat 10px center/28px}
@@ -2332,7 +2321,7 @@ table[id*="connections"] td,#floodfills td:not(.rif):not(.rih):not(.rbw),#jobsta
 #profiles #peerprofiles+h3.tabletitle{margin-top:3px}
 #profiles,#peers,#tunnels,#jobs,#netdb{padding:5px;min-width:590px}
 #profiles table,#peers table,#tunnels table{margin:5px 0}
-#reseedurl input[type=text],#reseedzip input[type="file"],#reseedcreatefile p{white-space:normal}
+#reseedurl input[type=text],#reseedzip input[type=file],#reseedcreatefile p{white-space:normal}
 #sb_graphcontainer{height:44px;background:repeating-linear-gradient(90deg,#0000 12px,rgba(120,120,255,.5) 13px,#0000 13px,#0000 28px),repeating-linear-gradient(to top,#0000 11px,rgba(120,120,255,.5) 12px,rgba(255,255,255,0) 12px,rgba(255,255,255,0) 24px)}
 #schedjobs{margin:-11px 0 -6px}
 #searchbar button{height:25px}
@@ -2396,7 +2385,7 @@ input[name="pluginURL"]{margin-left:0;width:190px}
 .homelinkedit input[name="nofilter_url"]{width:240px}
 #consolepass input[name="name"],#consolepass input[name="nofilter_pw"],#externali2cp input[name="nofilter_pw"],#externali2cp input[name="user"]{width:130px;min-width:130px}
 #jobs table,#peers table,#profiles table,#tunnels table{font-size:8pt}
-#joinfamily input[type="file"]{width:220px}
+#joinfamily input[type=file]{width:220px}
 #newfamily input[type=text]{width:160px}
 #netdbversions th:last-child,#netdbtransports th:last-child,#netdbcountrylist th:last-child{max-width:60px;overflow:hidden;text-overflow:ellipsis}
 #netdbversions td,#netdbtransports td,#netdbcountrylist td{font-size:8.5pt}
@@ -2447,7 +2436,7 @@ a.graphstat{margin-right:2px;font-size:90%}
 #stats ul#statlist{margin-top:10px;padding-bottom:0;width:100%;border:0;background:none}
 }
 @media (min-width:1500px){
-body,.main,.main td,.news p,#news p,.tab,.tab2,.main li b,.joblog li,.themelabel,.ui_lang,.statusnotes,#sidebar button.download,#consolepass td,#peerdefs,#profile_defs,#thresholds,#configinfo,.infohelp,.infowarn,button,input,select,textarea,.netdbentry th,.configtable th,#statlist a[name],#statlist b,#statlist li b,#statlist a[name]:hover,div.messages,th,label,input,input[type="submit"],input[type="reset"],button,.fakebutton{font-size:10pt}
+body,.main,.main td,.news p,#news p,.tab,.tab2,.main li b,.joblog li,.themelabel,.ui_lang,.statusnotes,#sidebar button.download,#consolepass td,#peerdefs,#profile_defs,#thresholds,#configinfo,.infohelp,.infowarn,button,input,select,textarea,.configtable th,.netdbentry th,.sitemapLabel,#statlist a[name],#statlist b,#statlist li b,#statlist a[name]:hover,div.messages,th,label,input,input[type=submit],input[type=reset],button,.fakebutton{font-size:10pt}
 body{overflow-x:hidden}
 button.control{padding:14px}
 code,pre,tt,tt a,.applabel a,.bucket,.tabletextarea textarea,#logs li,#routerlogs li,#servicelogs li,#updateAvailable{font-size:9.5pt}
