@@ -780,7 +780,6 @@ class NetDbRenderer {
      * Single LeaseSet
      * @since 0.9.57
      */
-
     public void renderLeaseSet(Writer out, String hostname, boolean debug) throws IOException {
         StringBuilder buf = new StringBuilder(3*1024);
         if (!_context.netDb().isInitialized()) {
