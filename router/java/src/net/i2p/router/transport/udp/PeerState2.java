@@ -286,22 +286,36 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      *  @since 0.9.55 split out from above
      */
     private boolean checkRetransmitSessionConfirmed(long now, boolean force) {
+        boolean rv = checkRetransmitSessionConfirmed2(now, force);
+        if (!rv) {
+            // pulled out from synch block below to avoid deadlock
+            if (_log.shouldWarn())
+                _log.warn("[SSU2] Retransimit failure -> No SessionConfirmed ACK received " + this);
+            try {
+                UDPPacket pkt = _transport.getBuilder2().buildSessionDestroyPacket(SSU2Util.REASON_FRAME_TIMEOUT, this);
+                _transport.send(pkt);
+            } catch (IOException ioe) {}
+            _transport.dropPeer(this, true, "No SessionConfirmed ACK received");
+        }
+        return rv;
+    }
+
+    /**
+     *  Only call for outbound, if we don't have ack 0 yet.
+     *
+     *  @param force ignore timer, always send
+     *  @return success, false if total fail
+     *  @since 0.9.65 split out from above
+     */
+    private boolean checkRetransmitSessionConfirmed2(long now, boolean force) {
         UDPPacket[] packets = null;
         synchronized(this) {
             if (_sessConfForReTX != null) {
                 // retransmit Session Confirmed when it's time
                 if (force || _sessConfSentTime + (OutboundEstablishState.RETRANSMIT_DELAY << (_sessConfSentCount - 1)) < now) {
                     if (_sessConfSentCount >= MAX_SESS_CONF_RETX) {
-                        // note: we generally won't get here, because the
-                        // first outbound message will timeout before this
+                        // note: we generally won't get here, because the first outbound message will timeout before this
                         // and close the session in super.finishMessages()
-                        if (_log.shouldWarn())
-                            _log.warn("[SSU2] Fail, no SessionConfirmed ACK received " + this);
-                        try {
-                            UDPPacket pkt = _transport.getBuilder2().buildSessionDestroyPacket(SSU2Util.REASON_FRAME_TIMEOUT, this);
-                            _transport.send(pkt);
-                        } catch (IOException ioe) {}
-                        _transport.dropPeer(this, true, "No Sess Conf ACK rcvd");
                         _sessConfForReTX = null;
                         return false;
                     }
