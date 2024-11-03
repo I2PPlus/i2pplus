@@ -305,6 +305,7 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 #torrents #snarkTbody .peerinfo.active{box-shadow:var(--highlight);background:var(--tr_peer_active)}
 #torrents #snarkTbody .peerinfo .status{background:var(--client) no-repeat center center/20px}
 #torrents #snarkTbody .peerinfo:hover .status{background:var(--client) no-repeat center center/20px,var(--tr_snark_hover)}
+#torrentTotals{contain:paint}
 #totals{margin-left:3px;padding:4px 0 4px 20px;white-space:nowrap;background:url(images/disk.svg) no-repeat left center/22px}
 #totals .badge{margin-left:3px}
 #totals .counter{margin:-6px 0;padding:6px 8px 6px 10px;width:fit-content;height:20px;position:relative;display:inline-block;vertical-align:middle;border-right:var(--border)}

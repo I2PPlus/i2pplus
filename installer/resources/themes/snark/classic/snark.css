@@ -270,6 +270,7 @@ th.peerCount{text-align:center}
 #torrents thead a img{display:inline}
 #torrents img{margin:0;padding:0}
 #totals{margin-left:3px}
+#torrentTotals{contain:paint}
 #torrents{margin-top:-1px;border:0;background:var(--bg)}
 #torrents th{text-align:center}
 #torrents th:first-child{width:30px;padding-right:0;text-align:center}
