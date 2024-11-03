@@ -1,4 +1,4 @@
-import {initToggleInfo} from "./toggleTunnelInfo.js";
+import {initToggleInfo} from "/i2ptunnel/js/toggleTunnelInfo.js";
 
 var control = document.getElementById("globalTunnelControl");
 var countClient = document.getElementById("countClient");
@@ -61,42 +61,69 @@ function countServices() {
   const stoppedClient = document.querySelectorAll(".cli.statusNotRunning");
   const stoppedServerCount = document.querySelector("#countServer .stopped");
   const stoppedServer = document.querySelectorAll(".svr.statusNotRunning");
+
+  // Helper function to set the status class on the parent <tr>
+  function setStatusClass(parentTr, status) {
+    parentTr.classList.remove("running", "standby", "starting", "stopped");
+    parentTr.classList.add(status);
+  }
+
   if (control) {
     if (runningClient && runningClient.length > 0) {
       runningClientCount.textContent = " x " + runningClient.length;
-    } else if (runningClient && runningClientCount) {
-      runningClientCount.textContent = "";
-    }
+      runningClient.forEach(client => {
+        const parentTr = client.closest("tr");
+        if (parentTr) {setStatusClass(parentTr, "running");}
+      });
+    } else if (runningClient && runningClientCount) {runningClientCount.textContent = "";}
+
     if (runningServer && runningServer.length > 0) {
       runningServerCount.textContent = " x " + runningServer.length;
-    } else if (runningServer && runningServerCount) {
-      runningServerCount.textContent = "";
-    }
+      runningServer.forEach(server => {
+        const parentTr = server.closest("tr");
+        if (parentTr) {setStatusClass(parentTr, "running");}
+      });
+    } else if (runningServer && runningServerCount) {runningServerCount.textContent = "";}
+
     if (standbyClient && standbyClient.length > 0) {
       standbyClientCount.textContent = " x " + standbyClient.length;
-    } else if (standbyClient && standbyClientCount) {
-      standbyClientCount.textContent = "";
-    }
+      standbyClient.forEach(client => {
+        const parentTr = client.closest("tr");
+        if (parentTr) {setStatusClass(parentTr, "standby");}
+      });
+    } else if (standbyClient && standbyClientCount) {standbyClientCount.textContent = "";}
+
     if (startingClient && startingClient.length > 0) {
       startingClientCount.textContent = " x " + startingClient.length;
-    } else if (startingClient && startingClientCount) {
-      startingClientCount.textContent = "";
-    }
+      startingClient.forEach(client => {
+        const parentTr = client.closest("tr");
+        if (parentTr) {setStatusClass(parentTr, "starting");}
+      });
+    } else if (startingClient && startingClientCount) {startingClientCount.textContent = "";}
+
     if (startingServer && startingServer.length > 0) {
       startingServerCount.textContent = " x " + startingServer.length;
-    } else if (startingServer && startingServerCount) {
-      startingServerCount.textContent = "";
-    }
+      startingServer.forEach(server => {
+        const parentTr = server.closest("tr");
+        if (parentTr) {setStatusClass(parentTr, "starting");}
+      });
+    } else if (startingServer && startingServerCount) {startingServerCount.textContent = "";}
+
     if (stoppedClient && stoppedClient.length > 0) {
       stoppedClientCount.textContent = " x " + stoppedClient.length;
-    } else if (stoppedClient && stoppedClientCount) {
-      stoppedClientCount.textContent = "";
-    }
+      stoppedClient.forEach(client => {
+        const parentTr = client.closest("tr");
+        if (parentTr) {setStatusClass(parentTr, "stopped");}
+      });
+    } else if (stoppedClient && stoppedClientCount) {stoppedClientCount.textContent = "";}
+
     if (stoppedServer && stoppedServer.length > 0) {
       stoppedServerCount.textContent = " x " + stoppedServer.length;
-    } else if (stoppedServer && stoppedServerCount) {
-      stoppedServerCount.textContent = "";
-    }
+      stoppedServer.forEach(server => {
+        const parentTr = server.closest("tr");
+        if (parentTr) {setStatusClass(parentTr, "stopped");}
+      });
+    } else if (stoppedServer && stoppedServerCount) {stoppedServerCount.textContent = "";}
   }
 }
 
@@ -152,9 +179,7 @@ function refreshAll() {
   }
 }
 
-function reloadPage() {
-  location.reload(true);
-}
+function reloadPage() {location.reload(true);}
 
 function bindToggle() {
   if (toggle) {
