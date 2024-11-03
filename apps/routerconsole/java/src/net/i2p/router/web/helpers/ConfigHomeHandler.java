@@ -21,14 +21,7 @@ public class ConfigHomeHandler extends FormHandler {
         boolean deleting = _action.equals(_t("Delete selected"));
         boolean adding = _action.equals(_t("Add item"));
         boolean restoring = _action.equals(_t("Restore defaults"));
-        if (_action.equals(_t("Save")) && "0".equals(group)) {
-            boolean old = _context.getBooleanProperty(HomeHelper.PROP_OLDHOME);
-            boolean nnew = getJettyString("oldHome") != null;
-            if (old != nnew) {
-                _context.router().saveConfig(HomeHelper.PROP_OLDHOME, Boolean.toString(nnew));
-                addFormNotice(_t("Home page changed"));
-            }
-        } else if (adding || deleting || restoring) {
+        if (adding || deleting || restoring) {
             String prop;
             String dflt;
             if ("1".equals(group)) {
@@ -40,15 +33,6 @@ public class ConfigHomeHandler extends FormHandler {
             } else if ("3".equals(group)) {
                 prop = SearchHelper.PROP_ENGINES;
                 dflt = SearchHelper.ENGINES_DEFAULT;
-/*
-            } else if ("4".equals(group)) {
-                prop = HomeHelper.PROP_CONFIG;
-                dflt = HomeHelper.DEFAULT_CONFIG;
-            } else if ("5".equals(group)) {
-                prop = HomeHelper.PROP_MONITORING;
-                dflt = HomeHelper.DEFAULT_MONITORING;
-*/
-
             } else {
                 addFormError("Bad group");
                 return;
@@ -62,10 +46,8 @@ public class ConfigHomeHandler extends FormHandler {
             }
             String config = _context.getProperty(prop, dflt);
             Collection<App> apps;
-            if ("3".equals(group))
-                apps = HomeHelper.buildSearchApps(config);
-            else
-                apps = HomeHelper.buildApps(_context, config);
+            if ("3".equals(group)) {apps = HomeHelper.buildSearchApps(config);}
+            else {apps = HomeHelper.buildApps(_context, config);}
             if (adding) {
                 String name = getJettyString("nofilter_name");
                 if (name == null || name.length() <= 0) {
@@ -77,37 +59,21 @@ public class ConfigHomeHandler extends FormHandler {
                     addFormError(_t("No URL entered"));
                     return;
                 }
-                // these would get double-escaped so we can't do it this way...
-                //name = DataHelper.escapeHTML(name).replace(",", "&#44;");
-                //url = DataHelper.escapeHTML(url).replace(",", "&#44;");
                 name = name.replace(",", ".");
                 url = url.replace(",", "."); // fail
                 App app;
-                if ("1".equals(group))
-                    app = new App(name, "", url, "/themes/console/images/eepsite.png");
-                else if ("2".equals(group))
-                    app = new App(name, "", url, "/themes/console/images/title_window.png");
-/**
-                else if ("3".equals(group))
-                    app = new App(name, "", url, "/themes/console/images/question.png");
-                else if ("4".equals(group))
-                    app = new App(name, "", url, "/themes/console/images/server.png");
-                else if ("5".equals(group))
-                    app = new App(name, "", url, "/themes/console/images/chart_line.png");
-**/
-                else
-                    app = new App(name, "", url, "/themes/console/images/question.png");
+                if ("1".equals(group)) {app = new App(name, "", url, "/themes/console/images/planet.svg");}
+                else if ("2".equals(group)) {app = new App(name, "", url, "/themes/console/images/package.svg");}
+                else {app = new App(name, "", url, "/themes/console/images/helplink.svg");}
                 apps.add(app);
                 addFormNotice(_t("Added") + ": " + app.name);
             } else {
                 // deleting
                 Set<String> toDelete = new HashSet<String>();
                 for (Object o : _settings.keySet()) {
-                     if (!(o instanceof String))
-                         continue;
+                     if (!(o instanceof String)) {continue;}
                      String k = (String) o;
-                     if (!k.startsWith("delete_"))
-                         continue;
+                     if (!k.startsWith("delete_")) {continue;}
                      k = k.substring(7);
                      toDelete.add(k);
                 }
@@ -120,8 +86,7 @@ public class ConfigHomeHandler extends FormHandler {
                 }
             }
             HomeHelper.saveApps(_context, prop, apps, !("3".equals(group)));
-        } else {
-            //addFormError(_t("Unsupported"));
         }
     }
+
 }
