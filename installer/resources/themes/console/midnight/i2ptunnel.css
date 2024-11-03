@@ -16,7 +16,7 @@
 *:hover{scrollbar-color:rgba(24,24,80,.8) rgba(0,0,0,.9);transition:ease scrollbar-color .1s}
 a:hover,a:visited:hover,a:focus,a:focus:hover{color:var(--a_hover)}
 a:active,a:visited:active{color:var(--active)}
-body{margin:5px 0 15px;padding:0;text-align:center;background:repeating-linear-gradient(180deg,rgba(0,0,24,.75) 3px,rgba(0,0,0,.9) 5px,rgba(0,0,0,.7) 6px),var(--tile),#000010}
+body{margin:5px 0 15px;padding:0;display:block!important;text-align:center;background:repeating-linear-gradient(180deg,rgba(0,0,24,.75) 3px,rgba(0,0,0,.9) 5px,rgba(0,0,0,.7) 6px),var(--tile),#000010;pointer-events:auto!important}
 .iframed body{margin:0 5px;padding:0}
 br{clear:left}
 div{box-sizing:border-box}
@@ -298,10 +298,10 @@ td.infohelp{padding:15px 10px 15px 38px;background:var(--infohelp) no-repeat 10p
 /* server/client count */
 #countClient,#countServer{margin:-5px -5px 0 0;float:right;line-height:1.45;text-transform:none}
 #countClient span:empty,#countServer span:empty{display:none}
-.running:not([hidden]),.standby:not([hidden]),.starting:not([hidden]),.stopped:not([hidden]){padding:4px 6px 4px 26px;display:inline-block;font-size:9pt;box-shadow:var(--bevel);background:var(--local_up) no-repeat 6px center/14px,var(--badge)}
-.standby:not([hidden]){background-image:var(--local_standby),var(--badge)}
-.starting:not([hidden]){background-image:var(--local_inprogress),var(--badge)}
-.stopped:not([hidden]){background-image:var(--local_down),var(--badge)}
+span.running:not([hidden]),span.standby:not([hidden]),span.starting:not([hidden]),span.stopped:not([hidden]){padding:4px 6px 4px 26px;display:inline-block;font-size:9pt;box-shadow:var(--bevel);background:var(--local_up) no-repeat 6px center/14px,var(--badge)}
+span.standby:not([hidden]){background-image:var(--local_standby),var(--badge)}
+span.starting:not([hidden]){background-image:var(--local_inprogress),var(--badge)}
+span.stopped:not([hidden]){background-image:var(--local_down),var(--badge)}
 
 @keyframes spin{from{transform:rotate(-360deg)}}
 

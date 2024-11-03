@@ -58,7 +58,7 @@
 <link rel=icon href="<%=activeTheme%>images/favicon.svg">
 <style>body{display:none;pointer-events:none}</style>
 </head>
-<body id=tunnelListPage>
+<body id=tunnelListPage style=display:none;pointer-events:none>
 <iframe name=processForm id=processForm hidden></iframe>
 <div id=page>
 <%
@@ -636,6 +636,5 @@ ElGamal-2048
 <script src="js/refreshIndex.js?<%=net.i2p.CoreVersion.VERSION%>" type=module></script>
 <span data-iframe-height></span>
 <noscript><style>.script{display:none!important}.tunnelInfo{display:table-row!important}#screenlog_buttons{display:table-row!important}</style></noscript>
-<style>body{display:block;pointer-events:auto}</style>
 </body>
 </html>

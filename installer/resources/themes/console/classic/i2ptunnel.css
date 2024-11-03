@@ -10,7 +10,7 @@
 --create:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%234d5f80' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A");
 --create_hover:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23f60' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A");}
 
-body{margin:2.5% 2%;padding:0;text-align:center;background:#eef url(images/bg0.png) scroll center center/90px;background-size:90px;image-rendering:-webkit-optimize-contrast}
+body{margin:2.5% 2%;padding:0;display:block!important;text-align:center;background:#eef url(images/bg0.png) scroll center center/90px;background-size:90px;image-rendering:-webkit-optimize-contrast;pointer-events:auto!important}
 .iframed body{margin:0 0 9px}
 b{color:var(--ink_light)}
 div{box-sizing:border-box}
@@ -269,10 +269,10 @@ td[colspan="2"] select#profile{width:calc(50% - 15px)}
 #screenlog .clearlog:active{box-shadow:var(--btn_shadow_active);background:#f2f2f2 var(--close) no-repeat center center/14px}
 
 /* server/client count */
-.running:not([hidden]),.standby:not([hidden]),.starting:not([hidden]),.stopped:not([hidden]){margin-left:6px;padding:4px 6px 4px 26px;display:inline-block;font-size:9pt;box-shadow:var(--box_border_badge);background:var(--local_up) no-repeat 6px center/14px,var(--badge)}
-.standby:not([hidden]){background-image:var(--local_standby),var(--badge)}
-.starting:not([hidden]){background-image:var(--local_inprogress),var(--badge)}
-.stopped:not([hidden]){background-image:var(--local_down),var(--badge)}
+span.running:not([hidden]),span.standby:not([hidden]),span.starting:not([hidden]),span.stopped:not([hidden]){margin-left:6px;padding:4px 6px 4px 26px;display:inline-block;font-size:9pt;box-shadow:var(--box_border_badge);background:var(--local_up) no-repeat 6px center/14px,var(--badge)}
+span.standby:not([hidden]){background-image:var(--local_standby),var(--badge)}
+span.starting:not([hidden]){background-image:var(--local_inprogress),var(--badge)}
+span.stopped:not([hidden]){background-image:var(--local_down),var(--badge)}
 #countClient,#countServer{height:100%;display:flex;position:absolute;top:0;right:6px;line-height:1.45;text-transform:none;align-items:center;justify-content:right}
 #countClient span:empty,#countServer span:empty{display:none}
 
