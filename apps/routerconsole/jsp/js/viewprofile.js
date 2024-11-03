@@ -9,8 +9,31 @@
     const profile = profileContainer.innerText;
     const lines = profile.split("\n");
     profileContainer.style.display = "none";
-    let tableHTML = "<table>";
 
+    let manualSpeedScoreAdjustment = 0; // Initialize the adjustment value
+    let speedValue = null; // Initialize the speed value
+
+    // First pass to collect all relevant values
+    lines.forEach((line) => {
+      if (line.startsWith("# ---")) {} // skip
+      else if (line.startsWith("# ") && line.includes(":")) {
+        const [key, ...rest] = line.slice(2).split(":");
+        const value = rest.join(":").trim();
+        const cleanedKey = key.replace("(ms since the epoch)", "").trim();
+        const cleanedValue = cleanValue(value);
+
+        if (cleanedKey === "Manual Speed Score adjustment") {
+          manualSpeedScoreAdjustment = parseFloat(cleanedValue);
+        }
+
+        if (cleanedKey === "Speed") {
+          speedValue = parseFloat(cleanedValue);
+        }
+      }
+    });
+
+    // Second pass to generate the table HTML
+    let tableHTML = "<table>";
     lines.forEach((line) => {
       if (line.startsWith("# ---")) {} // skip
       else if (line.startsWith("# ") && line.includes(":")) {
@@ -20,10 +43,19 @@
         const cleanedValue = cleanValue(value);
 
         if (cleanedKey === "Speed") {
-          const speed = parseFloat(cleanedValue);
-          let convertedSpeed;
-          if (!isNaN(speed)) {convertedSpeed = speed >= 1024 ? convertBtoKB(speed) : speed.toFixed(0);}
-          tableHTML += "<tr class=stat><td>" + cleanedKey + "</td><td>" + convertedSpeed + (speed >= 1024 ? " KB/s" : " B/s") + "</td></tr>";
+          const speed = speedValue - manualSpeedScoreAdjustment;
+          if (speed > 0) { // Only display if speed is greater than 0 B/s
+            let convertedSpeed;
+            if (!isNaN(speed)) {
+              if (speed >= 1024) {
+                convertedSpeed = (speed / 1024).toFixed(2); // Convert to MB/s
+                tableHTML += "<tr class=stat><td>" + cleanedKey + "</td><td>" + convertedSpeed + " MB/s</td></tr>";
+              } else {
+                convertedSpeed = speed.toFixed(0);
+                tableHTML += "<tr class=stat><td>" + cleanedKey + "</td><td>" + convertedSpeed + " B/s</td></tr>";
+              }
+            }
+          }
         } else if (cleanedKey === "Time of last failed lookup from peer" ||
             cleanedKey === "Time of last successful lookup from peer" ||
             cleanedKey === "Time of last failed store to peer" ||
@@ -33,6 +65,17 @@
         } else if (cleanedKey === "Period") {
           const concatenatedValue = cleanedKey + ": " + cleanedValue;
           tableHTML += "<tr class='subheading period'><th colspan=2>" + concatenatedValue + "</th></tr>";
+        } else if (cleanedKey === "Average peer response time") {
+          const responseTime = parseFloat(cleanedValue);
+          let formattedResponseTime;
+          if (!isNaN(responseTime)) {
+            if (responseTime > 1000) {
+              formattedResponseTime = (responseTime / 1000).toFixed(2) + " seconds";
+            } else {
+              formattedResponseTime = responseTime + " milliseconds";
+            }
+          }
+          tableHTML += "<tr class=stat><td>" + cleanedKey + "</td><td>" + formattedResponseTime + "</td></tr>";
         } else {
           tableHTML += "<tr class=stat><td>" + cleanedKey + "</td><td>" + cleanedValue + "</td></tr>";
         }
