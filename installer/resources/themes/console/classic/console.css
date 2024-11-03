@@ -2414,6 +2414,13 @@ th.queue{white-space:nowrap}
 @media (min-width:1400px){
 a.graphstat{margin-right:2px;font-size:90%}
 .joblog ul{margin-left:-40px}
+.statsLongName{margin-bottom:8px}
+.statsName::before{content:none}
+.statsName>b{padding-left:14px;background:var(--stats) no-repeat left center/10px}
+.statsName b,.statsLongName{width:100%;display:inline-block;text-align:left}
+.statsName i{display:inline-block}
+.statsViewGraphs{margin:4px 0;padding:1px 8px 2px;width:calc(100% - 46px);display:inline-block;border-top:var(--border_soft);border-bottom:var(--border_soft)}
+#help #changelog pre{margin-left:0;padding-left:10px;columns:560px auto;column-gap:40px;column-rule:1px dotted #abf}
 #statlist .bullet{display:none}
 #statlist{padding-top:10px;text-align:center;columns:auto 540px;column-gap:10px}
 #statlist li::before,#statlist li li::before,#statlist li li:last-child::before,a.graphstat::before{display:none;content:none}
@@ -2425,13 +2432,6 @@ a.graphstat{margin-right:2px;font-size:90%}
 #statlist li li{margin-right:-10px}
 #statlist li li:not(.noevents):last-child{margin-bottom:-20px}
 #statlist .statsName:first-child{margin-top:0}
-.statsLongName{margin-bottom:8px}
-.statsName::before{content:none}
-.statsName>b{padding-left:14px;background:var(--stats) no-repeat left center/10px}
-.statsName b,.statsLongName{width:100%;display:inline-block;text-align:left}
-.statsName i{display:inline-block}
-.statsViewGraphs{margin:4px 0;padding:1px 8px 2px;width:calc(100% - 46px);display:inline-block;border-top:var(--border_soft);border-bottom:var(--border_soft)}
-#help #changelog pre{margin-left:0;padding-left:10px;columns:560px auto;column-gap:40px;column-rule:1px dotted #abf}
 #stats .statsName{margin:0 6px 10px 0;padding:10px 10px 0;width:calc(100% - 22px);min-width:540px;display:inline-block;border:var(--border);box-shadow:var(--highlight);background:var(--th)}
 #stats ul#statlist{margin-top:10px;padding-bottom:0;width:100%;border:0;background:none}
 }

@@ -2243,7 +2243,7 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 #jarfiles tr:hover .unsignedmod:not(:empty){background:#700;color:#fff}
 #jarfiles tr:hover hr{background:#0000}
 #jarfiles tr:hover tt{color:#dd0}
-#jarfiles a[href^="https://gitlab.com/i2pplus"]{margin-left:-4px;padding-left:14px;background:var(--gitlab) no-repeat left center;background-size:11px}
+#jarfiles a[href^="http://git.skank.i2p/i2pplus"]{margin-left:-4px;padding-left:14px;background:var(--gitlab) no-repeat left center;background-size:11px}
 #jarfiles font[color="red"]{color:#d00}
 #jarfiles hr{margin:1px 0;width:100%;height:1px;background:#131;display:block}
 #jarfiles .subheading{padding-top:6px;padding-bottom:6px;border-top-width:2px;border-bottom-width:2px}
@@ -2688,7 +2688,7 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 #clock{padding-top:9px;font-size:16pt}
 #help h3,#faq h3{font-size:10.5pt}
 #i2pclientconfig a,#pluginmanage a{transform:translateY(-1px)}
-#jardump a[href^="https://gitlab.com/i2pplus"]{padding-left:11px;background-size:8px;background-position:left top}
+#jardump a[href^="http://git.skank.i2p/i2pplus"]{padding-left:11px;background-size:8px;background-position:left top}
 #netdboverview th[colspan="3"]{font-size:11pt}
 #netdb .version{line-height:1.45}
 #netdb th .version{padding:2px 8px}

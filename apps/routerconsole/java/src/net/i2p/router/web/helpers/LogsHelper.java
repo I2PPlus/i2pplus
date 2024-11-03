@@ -293,7 +293,7 @@ public class LogsHelper extends HelperBase {
             String date = FileDumpHelper.getAtt(att, "Build-Date");
             String by = FileDumpHelper.getAtt(att, "Built-By");
             if (rev != null && by.contains("|z3d")) {
-                return "<a id=revision target=_blank rel=\"noreferrer\" href=\"https://gitlab.com/i2pplus/I2P.Plus/-/tree/" +
+                return "<a id=revision target=_blank rel=\"noreferrer\" href=\"http://git.skank.i2p/i2pplus/I2P.Plus/src/commit/" +
                         rev + "\">" + rev + "</a> (Build date: " + date + ")";
             } else {
                 return rev + " (Build date: " + date + ")";

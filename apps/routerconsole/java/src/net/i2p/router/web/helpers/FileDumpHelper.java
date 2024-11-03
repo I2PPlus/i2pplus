@@ -31,7 +31,7 @@ import net.i2p.util.SystemVersion;
 public class FileDumpHelper extends HelperBase {
 
     private static final boolean isWindows = SystemVersion.isWindows();
-    private static final String LINK = "https://gitlab.com/i2pplus/I2P.Plus/-/tree/";
+    private static final String LINK = "http://git.skank.i2p/i2pplus/I2P.Plus/src/commit/";
     private static final String UPSTREAMLINK = "https://github.com/i2p/i2p.i2p/tree/";
 
     public String getFileSummary() {
