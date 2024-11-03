@@ -23,7 +23,7 @@
 
 /* globals*/
 body,html{min-height:100%}
-body{margin:3px;background:var(--bodybg) url(/themes/console/light/images/tile2.png) center top/32px;scrollbar-color:#779 rgba(255,255,255,.5)}
+body{margin:3px;display:block!important;background:var(--bodybg) url(/themes/console/light/images/tile2.png) center top/32px;scrollbar-color:#779 rgba(255,255,255,.5);pointer-events:auto!important}
 .iframed body{margin:6px 1px 0;background:none}
 html:not(.iframed) #navbar,html:not(.iframed) .page{border:1px solid rgba(168,168,192,.4);border-radius:0;box-shadow:0 0 0 1px rgba(96,96,128,.7)}
 a:link,a:visited{color:#3b6bbf;color:rgba(59,107,191,.85);text-decoration:none;font-weight:700;word-wrap:break-word;font-size:9pt}

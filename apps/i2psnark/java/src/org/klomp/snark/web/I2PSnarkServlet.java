@@ -4044,10 +4044,9 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String HEADER_I = "images/images.css?" + CoreVersion.VERSION + "\" rel=stylesheet>";
     private static final String HEADER_Z = "override.css\" rel=stylesheet>";
     private static final String TABLE_HEADER = "<table id=torrents width=100% border=0>\n" + "<thead id=snarkHead>";
-    private static final String SHOWPAGE_CSS = "<style>body{display:block!important;pointer-events:auto!important}:-moz-broken{opacity:0}</style>\n";
-    private static final String FOOTER = "</div>\n</center>\n<span id=endOfPage data-iframe-height></span>\n" + SHOWPAGE_CSS +
+    private static final String FOOTER = "</div>\n</center>\n<span id=endOfPage data-iframe-height></span>\n" +
                                          "<script src=/js/setupIframe.js></script>\n" + "</body>\n</html>";
-    private static final String FOOTER_STANDALONE = "</div>\n</center>" + SHOWPAGE_CSS + "</body>\n</html>";
+    private static final String FOOTER_STANDALONE = "</div>\n</center></body>\n</html>";
     private static final String IFRAME_FORM = "<iframe name=processForm id=processForm hidden></iframe>\n";
 
     /**
@@ -4060,15 +4059,7 @@ public class I2PSnarkServlet extends BasicServlet {
       // $Id: Resource.java,v 1.32 2009/05/16 01:53:36 gregwilkins Exp $
       // Copyright 1996-2004 Mort Bay Consulting Pty. Ltd.
       // ------------------------------------------------------------------------
-      // Licensed under the Apache License, Version 2.0 (the "License");
-      // you may not use this file except in compliance with the License.
-      // You may obtain a copy of the License at
-      // http://www.apache.org/licenses/LICENSE-2.0
-      // Unless required by applicable law or agreed to in writing, software
-      // distributed under the License is distributed on an "AS IS" BASIS,
-      // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-      // See the License for the specific language governing permissions and
-      // limitations under the License.
+      // Licensed under the Apache License, Version 2.0
       // ========================================================================
      * </pre>
      *
@@ -4202,7 +4193,7 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<script nonce=" + cspNonce + " src=\"/themes/setPriority.js?" + CoreVersion.VERSION + "\"></script>\n"); // debugging
 **/
 
-        buf.append("</head>\n<body display:none;pointer-events:none class=lang_").append(lang).append(">\n");
+        buf.append("</head>\n<body style=display:none;pointer-events:none class=lang_").append(lang).append(">\n");
         buf.append("<center>\n<div id=navbar><a href=\"").append(_contextPath).append("/\" title=Torrents class=\"snarkNav nav_main\">");
         if (_contextName.equals(DEFAULT_NAME)) {buf.append(_t("I2PSnark"));}
         else {buf.append(_contextName);}

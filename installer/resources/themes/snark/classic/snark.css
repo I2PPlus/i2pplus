@@ -28,7 +28,7 @@
 --snarkGraph:url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true");
 }
 
-body{margin:3px 4px;background:var(--bg3) url(/themes/console/classic/images/bg0.png) repeat scroll center bottom/120px}
+body{margin:3px 4px;display:block!important;background:var(--bg3) url(/themes/console/classic/images/bg0.png) repeat scroll center bottom/120px;pointer-events:auto!important}
 .iframed body{margin:1px 0}
 p{line-height:1.5}
 hr{width:0;height:1px;margin:5px 0 7px 0;text-align:center;color:#0000;background:#0000}

@@ -40,7 +40,7 @@
 /* globals */
 ::selection{color:white;background:#900}
 html{min-height:100%;border-right:var(--border);background:repeating-linear-gradient(180deg,#6f5b4c 1px,#a9927e 1px,#bfa388 4px),#cab39b;background-size:100% 4px;scrollbar-color:#a38a75 #cab39b}
-body{min-width:900px;font:9pt var(--bodyfont);color:var(--ink)}
+body{min-width:900px;display:block!important;font:9pt var(--bodyfont);color:var(--ink);pointer-events:auto!important}
 .iframed body{margin:6px 0}
 a:link,a:visited{text-decoration:none;color:#cf0f00}
 a:active,a:visited:active,th a:active,th a:visited:active,td a:active,td a:visited:active{color:#f00}

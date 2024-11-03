@@ -51,7 +51,7 @@ a img,img,label,.configTitle,.toggleview,#navbar,#configs{user-select:none}
 body,input[type=submit],input[type=text],span,table a,select,td,textarea,th{font-family:var(--bodyfont);font-size:9pt}
 body,html{min-height:calc(100% - 5px)}
 html{border-right:var(--border);background:repeating-linear-gradient(180deg,#ddd 2px,#bbb 4px) #bbb;background-size:100% 4px;scrollbar-color:#999 #eee}
-body{margin:0;padding:5px 5px 0;min-width:800px;color:var(--ink);background:var(--b_snark_hover),var(--b_snark_active),var(--b_tracker_hover),var(--b_tracker_active),var(--b_forum_hover),var(--b_forum_active);background-size:0}
+body{margin:0;padding:5px 5px 0;min-width:800px;display:block1important;color:var(--ink);background:var(--b_snark_hover),var(--b_snark_active),var(--b_tracker_hover),var(--b_tracker_active),var(--b_forum_hover),var(--b_forum_active);background-size:0;pointer-events:auto!important}
 .iframed body{min-width:700px;padding:0;background:#777}
 code{font-weight:700;color:#393}
 form{margin:0}

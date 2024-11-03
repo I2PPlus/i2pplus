@@ -26,7 +26,7 @@ a:hover,a:focus,.trackerName a:visited:hover,.trackerName a:visited:focus,#torre
 a img{filter:drop-shadow(0 0 1px #000)}
 a img:hover,a img:focus{filter:saturate(200%) drop-shadow(0 0 2px #652787)}
 a:hover img,a:focus img{filter:drop-shadow(0 0 1px #652787);mix-blend-mode:normal}
-body{margin:2px;background:repeating-linear-gradient(180deg,rgba(0,0,24,.75) 2px,rgba(0,0,0,.7) 4px),var(--tile),var(--offline),#000010;background-size:100% 4px,171px 148px,0}
+body{margin:2px;display:block!important;background:repeating-linear-gradient(180deg,rgba(0,0,24,.75) 2px,rgba(0,0,0,.7) 4px),var(--tile),var(--offline),#000010;background-size:100% 4px,171px 148px,0;pointer-events:auto!important}
 .iframed body{margin:1px 0;background:var(--offline);background-size:0}
 hr{width:0;height:1px;margin:5px 0 7px 0;border:0}
 img{margin:0 3px 1px 3px;vertical-align:middle;line-height:1;border:0}

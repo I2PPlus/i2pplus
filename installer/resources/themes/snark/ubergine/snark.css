@@ -47,6 +47,7 @@
 /* globals */
 ::selection{background:rgba(96,0,96,.8);color:white}
 html{min-height:100%;font:9pt var(--bodyfont);color:var(--ink);background:repeating-linear-gradient(90deg,rgba(0,0,0,.5) 2px,rgba(48,0,48,.5) 4px),repeating-linear-gradient(180deg,#080008 2px,#212 4px),var(--offline) no-repeat,#130313;background-size:4px 100%,100% 4px,0;scrollbar-color:#481840 #180818}
+body{display:block!important;pointer-events:auto!important}
 .iframed body{margin:0}
 a:link,a:visited{color:#f70;text-decoration:none;font-weight:700;word-wrap:break-word;outline:none}
 a:hover,a:visited:hover,a:focus,a:visited:focus{color:#fb0}
