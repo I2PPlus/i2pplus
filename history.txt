@@ -1,4 +1,7 @@
 2024-10-31 dr|z3d
+ * Console: Replace links to i2pplus gitlab revisions with git.skank.i2p
+
+2024-10-31 dr|z3d
  * Console: Tabulate individual profiles with js to enhance presentation
 
 2024-10-30 dr|z3d
