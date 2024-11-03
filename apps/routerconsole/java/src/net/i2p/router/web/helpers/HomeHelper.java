@@ -31,7 +31,6 @@ public class HomeHelper extends HelperBase {
     static final String PROP_FAVORITES = "routerconsole.favorites";
     static final String PROP_CONFIG = "routerconsole.configopts";
     static final String PROP_MONITORING = "routerconsole.monitoring";
-    static final String PROP_OLDHOME = "routerconsole.oldHomePage";
     static final String PROP_SEARCH = "routerconsole.showSearch";
 
     // No commas allowed in text strings!
@@ -43,6 +42,7 @@ public class HomeHelper extends HelperBase {
         _x("Manage Plugins") + S + _x("Install and configure I2P plugins") + S + "/configplugins" + S + I + "pluginconfig.svg" + S +
         _x("NetDb Search") + S + _x("Network database search tool") + S + "/netdb?f=4" + S + I + "searchnetdb.svg" + S +
         _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "globe.svg" + S +
+        _x("Peer Profiles") + S + _x("List of recently connected peers with profiling info") + S + "/profiles?f=1" + S + I + "profile.svg" + S +
         _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "info.svg" + S +
         _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "logs.svg" + S +
         _x("Router Updates") + S + _x("Configure update URLs and policy") + S + "/configupdate" + S + I + "update.svg" + S +
@@ -63,6 +63,7 @@ public class HomeHelper extends HelperBase {
         _x("Help") + S + _x("I2P Router Help") + S + "/help/" + S + I + "help.svg" + S +
         _x("Manage Plugins") + S + _x("Install and configure I2P plugins") + S + "/configplugins" + S + I + "pluginconfig.svg" + S +
         _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "globe.svg" + S +
+        _x("Peer Profiles") + S + _x("List of recently connected peers with profiling info") + S + "/profiles?f=1" + S + I + "profile.svg" + S +
         _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "info.svg" + S +
         _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "logs.svg" + S +
         _x("Router Updates") + S + _x("Configure update URLs and policy") + S + "/configupdate" + S + I + "update.svg" + S +
@@ -222,22 +223,14 @@ public class HomeHelper extends HelperBase {
         _x("WashingtonInstitute") + S + _x("Advancing a balanced &amp; realistic understanding of American interests in the Middle East") + S + "http://washingtoninstitute.i2p/" + S + I + "eepsites/washingtoninstitute.svg" + S +
         "";
 
-    public boolean shouldShowWelcome() {
-        return _context.getProperty(Messages.PROP_LANG) == null;
-    }
+    public boolean shouldShowWelcome() {return _context.getProperty(Messages.PROP_LANG) == null;}
 
     /* @since 0.9.52+ */
-    public boolean shouldShowBandwidthConfig() {
-        return _context.getProperty("i2np.bandwidth.outboundKBytesPerSecond") == null;
-    }
+    public boolean shouldShowBandwidthConfig() {return _context.getProperty("i2np.bandwidth.outboundKBytesPerSecond") == null;}
 
-    public boolean shouldShowSearch() {
-        return _context.getBooleanProperty(PROP_SEARCH);
-    }
+    public boolean shouldShowSearch() {return _context.getBooleanProperty(PROP_SEARCH);}
 
-    public boolean isAdvanced() {
-        return _context.getBooleanProperty(PROP_ADVANCED);
-    }
+    public boolean isAdvanced() {return _context.getBooleanProperty(PROP_ADVANCED);}
 
     public String getServices() {
         List<App> plugins = NavHelper.getInstance(_context).getClientApps(_context);
@@ -253,23 +246,13 @@ public class HomeHelper extends HelperBase {
         }
     }
 
-    public String getFavorites() {
-        return homeTable(PROP_FAVORITES, DEFAULT_FAVORITES, null);
-    }
+    public String getFavorites() {return homeTable(PROP_FAVORITES, DEFAULT_FAVORITES, null);}
 
-    public String getConfigServices() {
-        return configTable(PROP_SERVICES, DEFAULT_SERVICES);
-    }
+    public String getConfigServices() {return configTable(PROP_SERVICES, DEFAULT_SERVICES);}
 
-    public String getConfigFavorites() {
-        return configTable(PROP_FAVORITES, DEFAULT_FAVORITES);
-    }
+    public String getConfigFavorites() {return configTable(PROP_FAVORITES, DEFAULT_FAVORITES);}
 
-    public String getConfigSearch() {
-        return configTable(SearchHelper.PROP_ENGINES, SearchHelper.ENGINES_DEFAULT);
-    }
-
-    public String getConfigHome() {return getChecked(PROP_OLDHOME);}
+    public String getConfigSearch() {return configTable(SearchHelper.PROP_ENGINES, SearchHelper.ENGINES_DEFAULT);}
 
     public String getProxyStatus() {
         int port = _context.portMapper().getPort(PortMapper.SVC_HTTP_PROXY);
