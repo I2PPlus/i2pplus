@@ -736,20 +736,27 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             boolean isOlderThanCurrent = VersionComparator.comp(v, CURRENT_VERSION) < 0;
             Hash us = _context.routerHash();
             boolean isUs = us.equals(ri.getIdentity().getHash());
+            String caps = ri.getCapabilities().toUpperCase();
             boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
+                                     ri.getCapabilities().indexOf(Router.CAPABILITY_REACHABLE) < 0 ||
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0) &&
                                      isOld && (uptime > 15*60*1000 ||
                                      _context.netDb().getKnownRouters() > 2000) && !isUs;
-            boolean isLTier =  ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                               ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0;
-            boolean isUnreachable = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
-            String caps = ri.getCapabilities().toUpperCase();
+            boolean isLTier = ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
+                              ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0;
+            boolean isXTier = ri.getCapabilities().indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0;
+            boolean isUnreachable = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
+                                    ri.getCapabilities().indexOf(Router.CAPABILITY_REACHABLE) < 0;
+            boolean isNotRorU = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) < 0 &&
+                                ri.getCapabilities().indexOf(Router.CAPABILITY_REACHABLE) < 0;
             boolean isFF = false;
+            boolean isG = false;
             boolean noCountry = true;
             String country = "unknown";
-            if (caps.contains("F")) {isFF = true;}
+            if (caps != null && caps.contains("F")) {isFF = true;}
+            if (caps != null && ri.getCapabilities().indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0) {isG = true;}
             country = _context.commSystem().getCountry(key);
             if (country != null && country != "unknown") {noCountry = false;}
             String myCountry = _context.getProperty(PROP_IP_COUNTRY);
@@ -777,6 +784,20 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                         _context.banlist().banlistRouterForever(key, " <b>➜</b> In our country (we are in Hidden mode)");
                     }
                 }
+/**
+            } else if (!isUs && isG && isNotRorU && isXTier) {
+                if (!_context.banlist().isBanlisted(key)) {
+                    if (_log.shouldInfo()) {
+                        _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> X tier and G Cap, neither R nor U");
+                    }
+                    if (_log.shouldWarn() && !_context.banlist().isBanlisted(key)) {
+                        _log.warn("Banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
+                                  " [" + key.toBase64().substring(0,6) + "] for 4h -> XG and older than 0.9.61 (using proxy?)");
+                    }
+                    _context.banlist().banlistRouter(key, " <b>➜</b> XG Router, neither R nor U (proxied?)", null, null, _context.clock().now() + 4*60*60*1000);
+                    shouldRemove = true;
+                }
+**/
             } else if (!isUs && isLTier && isUnreachable && isOld) {
                 if (!_context.banlist().isBanlisted(key)) {
                     if (_log.shouldInfo()) {
@@ -1245,7 +1266,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             routerId = routerInfo.getIdentity().getHash().toBase64().substring(0,6);
             caps = routerInfo.getCapabilities().toUpperCase();
             h = routerInfo.getIdentity().getHash();
-            if (caps.contains("F")) {isFF = true;}
+            if (caps != null && caps.contains("F")) {isFF = true;}
             country = _context.commSystem().getCountry(h);
             if (country != null && country != "unknown") {noCountry = false;}
 
