@@ -470,7 +470,7 @@ class IntroductionManager {
             if (isDup) {
                 // fairly common from i2pd
                 if (_log.shouldInfo())
-                    _log.info("Dropping dup relay request from " + alice 
+                    _log.info("Dropping dup relay request from " + alice
                           + " for tag " + tag
                           + " nonce " + nonce
                           + " time " + time
@@ -587,12 +587,8 @@ class IntroductionManager {
      *  @return DELAYED if awaiting Alice RI, DROPPED on fatal error, or REPLIED if we replied to Bob with a RelayResponse
      *  @since 0.9.55
      */
-    RelayIntroResult receiveRelayIntro(PeerState2 bob, Hash alice, byte[] data) {
-        RelayIntroResult rv = receiveRelayIntro(bob, alice, data, 0);
-        if (_log.shouldInfo()) {
-            _log.info("Receive relay intro from bob " + bob + " for alice " + alice.toBase64() + " result " + rv);
-        }
-        return rv;
+    void receiveRelayIntro(PeerState2 bob, Hash alice, byte[] data) {
+        receiveRelayIntro(bob, alice, data, 0);
     }
 
     /**
@@ -607,21 +603,22 @@ class IntroductionManager {
      *  @return DELAYED if should retry (no RI), DROPPED on fatal error, or REPLIED if we replied to Bob with a RelayResponse
      *  @since 0.9.55
      */
-    private RelayIntroResult receiveRelayIntro(PeerState2 bob, Hash alice, byte[] data, int retryCount) {
+    private boolean receiveRelayIntro(PeerState2 bob, Hash alice, byte[] data, int retryCount) {
         RouterInfo aliceRI = null;
         if (retryCount >= 5) {aliceRI = _context.netDb().lookupRouterInfoLocally(alice);} // last chance
         else if (!_context.banlist().isBanlisted(alice)) {
             aliceRI = _context.netDb().lookupRouterInfoLocally(alice);
             if (aliceRI == null) {
                 if (_log.shouldInfo()) {
-                    _log.info("Delay after " + retryCount + " retries, no RI for " + alice.toBase64());
+                    _log.info("Delaying after " + retryCount + " retries -> No RouterInfo for [" +
+                              alice.toBase64().substring(0,6) + "]");
                 }
                 if (retryCount == 0) {new DelayIntro(bob, alice, data);}
-                return RelayIntroResult.DELAYED;
+                return false;
             }
         }
-        boolean rv = receiveRelayIntro(bob, alice, data, aliceRI);
-        return rv ? RelayIntroResult.REPLIED : RelayIntroResult.DROPPED;
+        receiveRelayIntro(bob, alice, data, aliceRI);
+        return true;
     }
 
     /**
@@ -644,8 +641,9 @@ class IntroductionManager {
         }
 
         public void timeReached() {
-            RelayIntroResult result = receiveRelayIntro(bob, alice, data, ++count);
-            if (result == RelayIntroResult.DELAYED) {reschedule(DELAY << count);}
+            boolean ok = receiveRelayIntro(bob, alice, data, ++count);
+            if (!ok)
+                reschedule(DELAY << count);
         }
     }
 
