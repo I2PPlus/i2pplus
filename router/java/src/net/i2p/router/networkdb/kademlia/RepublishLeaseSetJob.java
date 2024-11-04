@@ -109,7 +109,7 @@ class RepublishLeaseSetJob extends JobImpl {
         public void runJob() {
             LeaseSet ls = _facade.lookupLeaseSetLocally(_ls.getHash());
             if (ls != null) {tunnelName = getTunnelName(_ls.getDestination());}
-            if (ls != null && ls.getEarliestLeaseDate() == _ls.getEarliestLeaseDate()) {requeueRepublish();}
+            if (ls != null && !KademliaNetworkDatabaseFacade.isNewer(ls, _ls)) {requeueRepublish();}
             else {
                 if (_log.shouldInfo()) {
                     String name = !tunnelName.equals("") ? " for \'" + tunnelName + "\'" : "";
