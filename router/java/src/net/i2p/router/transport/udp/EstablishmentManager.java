@@ -40,10 +40,13 @@ import net.i2p.router.OutNetMessage;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.TransportUtil;
+import net.i2p.router.transport.crypto.DHSessionKeyBuilder;
 import static net.i2p.router.transport.udp.InboundEstablishState.InboundState.*;
 import static net.i2p.router.transport.udp.OutboundEstablishState.OutboundState.*;
 import static net.i2p.router.transport.udp.OutboundEstablishState2.IntroState.*;
 import static net.i2p.router.transport.udp.SSU2Util.*;
+import net.i2p.router.util.DecayingHashSet;
+import net.i2p.router.util.DecayingBloomFilter;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;
 import net.i2p.stat.RateStat;
@@ -55,6 +58,7 @@ import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
+import net.i2p.util.VersionComparator;
 
 /**
  * Coordinate the establishment of new sessions - both inbound and outbound.
@@ -1166,46 +1170,18 @@ class EstablishmentManager {
     }
 
     /**
-     * Don't send our info immediately, just send a small data packet, and 5-10s later,
-     * if the peer isn't banlisted, *then* send them our info.  this will help kick off
-     * the oldnet
-     * The "oldnet" was < 0.6.1.10, it is long gone.
-     * The delay really slows down the network.
-     * The peer is unbanlisted and marked reachable by addRemotePeerState() which calls markReachable()
-     * so the check below is fairly pointless.
-     * If for some strange reason an oldnet router (NETWORK_ID == 1) does show up,
-     * it's handled in UDPTransport.messageReceived()
-     * (where it will get dropped, marked unreachable and banlisted at that time).
+     * send our info immediately
+     * TODO move to / combine with sendAck0()
      */
     private void sendInboundComplete(PeerState peer) {
-        // SimpleTimer.getInstance().addEvent(new PublishToNewInbound(peer), 10*1000);
         if (_log.shouldDebug()) {_log.debug("Completing initial handshake with " + peer);}
-        DeliveryStatusMessage dsm;
-        if (peer.getVersion() == 1) {
-            dsm = new DeliveryStatusMessage(_context);
-            dsm.setArrival(_networkID); // overloaded, sure, but future versions can check this
-                                        // This causes huge values in the inNetPool.droppedDeliveryStatusDelay stat
-                                        // so it needs to be caught in InNetMessagePool.
-            dsm.setMessageExpiration(_context.clock().now() + DATA_MESSAGE_TIMEOUT);
-            dsm.setMessageId(_context.random().nextLong(I2NPMessage.MAX_ID_VALUE));
-            // sent below
-        } else {dsm = null;} // SSU 2 uses an ACK of packet 0
+        // SSU 2 uses an ACK of packet 0
 
         Hash hash = peer.getRemotePeer();
         if ((hash != null) && (!_context.banlist().isBanlisted(hash)) && (!_transport.isUnreachable(hash))) {
             // bundle the two messages together for efficiency
             DatabaseStoreMessage dbsm = getOurInfo();
-            List<I2NPMessage> msgs = new ArrayList<I2NPMessage>(2);
-            if (dsm != null) {msgs.add(dsm);}
-            msgs.add(dbsm);
-            _transport.send(msgs, peer);
-        } else if (dsm != null) {
-            _transport.send(dsm, peer);
-            // nuh uh.
-            if (_log.shouldWarn()) {
-                _log.warn("NOT publishing to the peer after confirm plus delay (WITH banlist): " +
-                          (hash != null ? hash.toString() : "unknown"));
-            }
+            _transport.send(dbsm, peer);
         }
     }
 
