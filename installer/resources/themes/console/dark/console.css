@@ -1073,6 +1073,8 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnels span[hidden]{display:none}
 #tunnels table{position:relative;z-index:1}
 #tunnels .tab,#tunnels .tab2{min-width:140px}
+#tunnels .rid,#tunnels .routerHash,#tunnels .version{margin:0;vertical-align:middle;line-height:1.35}
+#tunnels .routerHash,#tunnels .version{margin-top:1px}
 #tunnels #participating{padding:6px 6px 4px 35px;letter-spacing:.1em;background:var(--share) no-repeat 10px center/18px,var(--title)}
 #tunnels #peercount{background:url(/themes/console/images/peers.svg) no-repeat 9px center/18px,var(--title)}
 #tunnels tbody td{border:var(--border_softer)}
@@ -1144,7 +1146,7 @@ p.family+p.family,.sybil_info+.sybil_info{margin-top:-4px}
 p.family{white-space:nowrap;background:var(--family) no-repeat 8px center/28px,linear-gradient(90deg,#000,#000800 80%,#001000);background-blend-mode:normal}
 .banlisted,.compressible,.i2pd,.javai2p{width:18px;height:18px;display:inline-block;vertical-align:middle;background:var(--ban)}
 .compressible{background:url(/themes/console/images/clamp.svg)}
-.confignav+table[id^="ls"]{margin-top:11px}
+:not(.leasesets_container) .confignav+table[id^="ls"]{margin-top:11px}
 .i2pd{margin-right:2px;background:url(/themes/console/images/eepsites/i2pd.svg)}
 .javai2p{margin:0 2px 0 4px;background:url(/themes/console/images/eepsites/i2p.svg)}
 .configpeer:hover,.configpeer:focus{background:var(--edit_hover) var(--center)/12px,var(--badge)}
@@ -1188,7 +1190,7 @@ p.family{white-space:nowrap;background:var(--family) no-repeat 8px center/28px,l
 .netdb_info.host::selection,.netdb_info.port::selection{color:#fff;background:#770}
 .netdb_ouraddresses:empty{display:none}
 .netdb_ouraddresses .netdb_transport{margin:-1px 5px 0 -6px;padding:2px;display:inline-block}
-.netdbstats .hide+hr{display:none}
+.netdbstats .hide+hr,.netdbstats>br{display:none}
 .netdbstats hr#expl,.netdbstats hr#hrd{display:block}
 .netdbStats hr,.sybil_routerinfo hr{margin:2px 0;display:block;color:#0000;opacity:.5;border-bottom:var(--border_badge);background:none}
 .netdbStats li .bullet:last-of-type{opacity:0}
