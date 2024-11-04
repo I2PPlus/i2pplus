@@ -187,7 +187,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
     private static final int REPLY_REQUEST_INTERVAL = 60*1000;
 
-    private static final long[] RATES = { 60*1000l, 60*60*1000l, 24*60*60*1000l };
+    private static final long[] RATES = {60*1000l, 60*60*1000l, 24*60*60*1000l };
 
     /**
      * Send it.
@@ -209,7 +209,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         _to = msg.getDestination();
         Hash toHash = _to.calculateHash();
         _hashPair = new OutboundCache.HashPair(_from.calculateHash(), toHash);
-        _toString = "[" + toHash.toBase64().substring(0,6) + "]";
+        _toString = "[" + toHash.toBase32().substring(0,8) + "]";
         // we look up here rather than runJob() so we may adjust the timeout
         _leaseSet = ctx.clientNetDb(_from.calculateHash()).lookupLeaseSetLocally(toHash);
 
@@ -218,8 +218,9 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         long overallExpiration = msg.getExpiration();
         if (overallExpiration > 0) {
             if (overallExpiration < 24*60*60*1000l) {
-                if (_log.shouldWarn())
+                if (_log.shouldWarn()) {
                     _log.warn("Client bug - interval instead of timestamp " + overallExpiration);
+                }
                 overallExpiration += _start;
             }
             // Unless it's already expired, set a min and max expiration
@@ -228,12 +229,11 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 long minTimeout = _leaseSet != null ? OVERALL_TIMEOUT_MS_MIN : OVERALL_TIMEOUT_NOLS_MIN;
                 overallExpiration = Math.max(overallExpiration, _start + minTimeout);
                 overallExpiration = Math.min(overallExpiration, _start + OVERALL_TIMEOUT_MS_MAX);
-                if (_log.shouldInfo())
+                if (_log.shouldInfo()) {
                     _log.info("Message Expiration: " + (overallExpiration - _start) + "ms");
-            } else {
-                if (_log.shouldWarn())
-                    _log.warn("Message expired before we got to it");
-                // runJob() will call dieFatal()
+                }
+            } else if (_log.shouldWarn()) {
+                _log.warn("Message expired before we got to it"); // runJob() will call dieFatal()
             }
         } else {
             // undocumented until 0.9.14, unused
@@ -241,18 +241,17 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             if (param == null)
                 param = ctx.router().getConfigSetting(OVERALL_TIMEOUT_MS_PARAM);
             if (param != null) {
-                try {
-                    timeoutMs = Long.parseLong(param);
-                } catch (NumberFormatException nfe) {
-                    if (_log.shouldWarn())
+                try {timeoutMs = Long.parseLong(param);}
+                catch (NumberFormatException nfe) {
+                    if (_log.shouldWarn()) {
                         _log.warn("Invalid client message timeout specified [" + param
                                   + "], defaulting to " + OVERALL_TIMEOUT_MS_DEFAULT, nfe);
+                    }
                     timeoutMs = OVERALL_TIMEOUT_MS_DEFAULT;
                 }
             }
             overallExpiration = timeoutMs + _start;
-           if (_log.shouldDebug())
-               _log.debug(getJobId() + " Default Expiration: " + timeoutMs + "ms");
+            if (_log.shouldDebug()) {_log.debug(getJobId() + " Default Expiration: " + timeoutMs + "ms");}
         }
         _overallExpiration = overallExpiration;
     }
@@ -271,13 +270,9 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         // for HandleGarlicMessageJob / GarlicMessageReceiver
         ctx.statManager().createRateStat("crypto.garlic.decryptFail", "How often undecryptable garlic messages are received", "Encryption", RATES);
         ctx.statManager().createRequiredRateStat("client.sendAckTime", "Message round trip time (ms)", "ClientMessages", RATES);
-        //ctx.statManager().createRateStat("client.leaseSetFoundLocally", "How often we tried to look for a leaseSet and found it locally?", "ClientMessages", RATES);
-        //ctx.statManager().createRateStat("client.timeoutCongestionInbound", "How much faster than our average bps we are receiving data when a send times out", "ClientMessages", RATES);
-        //ctx.statManager().createRateStat("client.timeoutCongestionMessage", "Time to process local messages when a send times out", "ClientMessages", RATES);
-        //ctx.statManager().createRateStat("client.timeoutCongestionTunnel", "Local tunnel lag when a send times out", "ClientMessages", RATES);
     }
 
-    public String getName() { return "Outbound client message"; }
+    public String getName() {return "Outbound client message";}
 
     public void runJob() {
         if (_to.getEncType() != EncType.ELGAMAL_2048) {
@@ -339,9 +334,10 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             success.runJob();
         } else {
             _leaseSetLookupBegin = getContext().clock().now();
-            if (_log.shouldDebug())
+            if (_log.shouldDebug()) {
                 _log.debug("Send Outbound client message - initiating LeaseSet Lookup job " +
                            _toString + " from client " + _from.calculateHash().toBase32());
+            }
             LookupLeaseSetFailedJob failed = new LookupLeaseSetFailedJob(getContext());
             Hash key = _to.calculateHash();
             getContext().clientNetDb(_from.calculateHash()).lookupLeaseSet(key, success, failed, LS_LOOKUP_TIMEOUT, _from.calculateHash());
@@ -354,30 +350,31 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      */
     private LeaseSet getReplyLeaseSet(boolean force) {
         LeaseSet newLS = getContext().clientNetDb(_from.calculateHash()).lookupLeaseSetLocally(_from.calculateHash());
-        if (newLS == null)
-            return null;   // punt
+        if (newLS == null) {return null;} // punt
 
         // If the last leaseSet we sent him is still good, don't bother sending again
         // As of 0.9.44, we do not put it in the cache here, we wait until it is acked
         // and do it in SendSuccessJob.
 
-            if (!force) {
-                LeaseSet ls = _cache.leaseSetCache.get(_hashPair);
-                if (ls != null) {
-                    if (ls.getDate() >= newLS.getDate()) {
-                            if (_log.shouldInfo())
-                                _log.info("LeaseSet already ACKed - NOT sending reply LeaseSet to " + _toString);
-                            return null;
-                    } else {
-                        if (_log.shouldInfo())
-                            _log.info("Expired from cache - sending reply LeaseSet to " + _toString);
-                    }
+        if (!force) {
+            LeaseSet ls = _cache.leaseSetCache.get(_hashPair);
+            if (ls != null) {
+                if (ls.getDate() >= newLS.getDate()) {
+                        if (_log.shouldInfo()) {
+                            _log.info("LeaseSet already ACKed - NOT sending reply LeaseSet to " + _toString);
+                        }
+                        return null;
                 } else {
-                    if (_log.shouldInfo())
-                        _log.info("Not ACKed - sending reply LeaseSet to " + _toString);
+                    if (_log.shouldInfo()) {
+                        _log.info("Expired from cache - sending reply LeaseSet to " + _toString);
+                    }
+                }
+            } else {
+                if (_log.shouldInfo()) {
+                    _log.info("Not ACKed - sending reply LeaseSet to " + _toString);
                 }
             }
-
+        }
         return newLS;
     }
 
@@ -387,11 +384,9 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      *  It is only run on the job queue after a LS lookup.
      */
     private class SendJob extends JobImpl {
-        public SendJob(RouterContext enclosingContext) {
-            super(enclosingContext);
-        }
+        public SendJob(RouterContext enclosingContext) {super(enclosingContext);}
 
-        public String getName() { return "Delay OB Client Message Send"; }
+        public String getName() {return "Delay OB Client Message Send";}
 
         public void runJob() {
             if (_leaseSetLookupBegin > 0) {
@@ -400,13 +395,12 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             }
             _wantACK = false;
             int rc = getNextLease();
-            if (rc == 0) {
-                send();
-            } else {
+            if (rc == 0) {send();}
+            else {
                 // shouldn't happen unless unsupported encryption
-                if (_log.shouldWarn())
-//                    _log.warn("Received Lease but can't send to it, failure code " + rc + " (to=" + _toString + ")");
+                if (_log.shouldWarn()) {
                     _log.warn("Received Lease " + _toString + " but can't send to it -> Unsupported encryption? (Failure code: " + rc  + ")");
+                }
                 dieFatal(rc);
             }
         }
@@ -431,12 +425,14 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             _leaseSet = getContext().clientNetDb(_from.calculateHash()).lookupLeaseSetLocally(_to.calculateHash());
             if (_leaseSet == null) {
                 // shouldn't happen
-                if (_log.shouldWarn())
+                if (_log.shouldWarn()) {
                     _log.warn("Router LeaseSet " + _toString + " not found via local lookup");
+                }
                 return MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET;
             } else if (_leaseSet.getReceivedAsPublished()) {
-                if (_log.shouldWarn())
+                if (_log.shouldWarn()) {
                     _log.warn(getJobId() + ": Only have ReceivedAsPublished LeaseSet for " + _toString);
+                }
                 return MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET;
             }
         }
@@ -447,8 +443,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         if (lsType != DatabaseEntry.KEY_TYPE_LEASESET &&
             lsType != DatabaseEntry.KEY_TYPE_LS2) {
             if (lsType == DatabaseEntry.KEY_TYPE_META_LS2) {
-                // can't send to a meta LS
-                return MessageStatusMessage.STATUS_SEND_FAILURE_META_LEASESET;
+                return MessageStatusMessage.STATUS_SEND_FAILURE_META_LEASESET; // can't send to a meta LS
             }
             return MessageStatusMessage.STATUS_SEND_FAILURE_BAD_LEASESET;
         }
@@ -456,16 +451,14 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         // select an encryption key from the leaseset
         Set<EncType> supported;
         LeaseSetKeys ourKeys = getContext().keyManager().getKeys(_from);
-        if (ourKeys != null)
-            supported = ourKeys.getSupportedEncryption();
-        else
-            supported = LeaseSetKeys.SET_ELG;
+        if (ourKeys != null) {supported = ourKeys.getSupportedEncryption();}
+        else {supported = LeaseSetKeys.SET_ELG;}
         _encryptionKey = _leaseSet.getEncryptionKey(supported);
         if (_encryptionKey == null) {
-            if (_leaseSet.getEncryptionKey() != null)
+            if (_leaseSet.getEncryptionKey() != null) {
                 return MessageStatusMessage.STATUS_SEND_FAILURE_UNSUPPORTED_ENCRYPTION;
-            // no keys at all?
-            return MessageStatusMessage.STATUS_SEND_FAILURE_BAD_LEASESET;
+            }
+            return MessageStatusMessage.STATUS_SEND_FAILURE_BAD_LEASESET; // no keys at all?
         }
 
         // Use the same lease if it's still good
@@ -483,16 +476,14 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                     //if (_lease.equals(lease)) {
                     if (_lease.getTunnelId().equals(lease.getTunnelId()) &&
                         _lease.getGateway().equals(lease.getGateway())) {
-                        if (_log.shouldInfo())
-                            _log.info("Lease for " + _toString + " found in cache");
+                        if (_log.shouldInfo()) {_log.info("Lease for " + _toString + " found in cache");}
                         return 0;
                     }
                 }
             }
             // remove only if still equal to _lease (concurrent)
             _cache.leaseCache.remove(_hashPair, _lease);
-            if (_log.shouldInfo())
-                _log.info("Lease for " + _toString + " expired from cache");
+            if (_log.shouldInfo()) {_log.info("Lease for " + _toString + " expired from cache");}
         }
 
         // get the possible leases
@@ -500,8 +491,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         // first try to get ones that really haven't expired
         for (int i = 0; i < _leaseSet.getLeaseCount(); i++) {
             Lease lease = _leaseSet.getLease(i);
-            if (!lease.isExpired(Router.CLOCK_FUDGE_FACTOR / 4))
-                leases.add(lease);
+            if (!lease.isExpired(Router.CLOCK_FUDGE_FACTOR / 4)) {leases.add(lease);}
         }
 
         if (leases.isEmpty()) {
@@ -510,40 +500,18 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             // try again with a fudge factor
             for (int i = 0; i < _leaseSet.getLeaseCount(); i++) {
                 Lease lease = _leaseSet.getLease(i);
-                if (!lease.isExpired(Router.CLOCK_FUDGE_FACTOR))
-                    leases.add(lease);
+                if (!lease.isExpired(Router.CLOCK_FUDGE_FACTOR)) {leases.add(lease);}
             }
         }
 
         if (leases.isEmpty()) {
-            if (_log.shouldInfo())
-                _log.info("No Leases found from " + _leaseSet);
+            if (_log.shouldInfo()) {_log.info("No Leases found from " + _leaseSet);}
             return MessageStatusMessage.STATUS_SEND_FAILURE_BAD_LEASESET;
         }
 
         // randomize the ordering (so leases with equal # of failures per next
         // sort are randomly ordered)
-        if (leases.size() > 1)
-            Collections.shuffle(leases, getContext().random());
-
-/****
-        if (false) {
-            // ordered by lease number of failures
-            TreeMap orderedLeases = new TreeMap();
-            for (Iterator iter = leases.iterator(); iter.hasNext(); ) {
-                Lease lease = (Lease)iter.next();
-                long id = lease.getNumFailure();
-                while (orderedLeases.containsKey(new Long(id)))
-                    id++;
-                orderedLeases.put(new Long(id), lease);
-                if (_log.shouldDebug())
-                    _log.debug("Ranking lease we haven't sent it down as " + id);
-            }
-
-            _lease = (Lease)orderedLeases.get(orderedLeases.firstKey());
-        } else {
-****/
-
+        if (leases.size() > 1) {Collections.shuffle(leases, getContext().random());}
 
         // Avoid a lease on a gateway we think is unreachable, if possible
         for (int i = 0; i < leases.size(); i++) {
@@ -560,30 +528,26 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 _lease = l;
                 break;
             }
-            if (_log.shouldWarn())
+            if (_log.shouldWarn()) {
                 _log.warn("Skipping UNREACHABLE Gateway [" + l.getGateway().toBase64().substring(0,8) + "] for " + _toString);
+            }
         }
         if (_lease == null) {
             _lease = leases.get(0);
-            if (_log.shouldWarn())
-                _log.warn("All leases are UNREACHABLE for " + _toString);
+            if (_log.shouldWarn()) {_log.warn("All leases are UNREACHABLE for " + _toString);}
         }
         _cache.leaseCache.put(_hashPair, _lease);
-        if (_log.shouldInfo())
-            _log.info("Added to cache - Lease for " + _toString);
+        if (_log.shouldInfo()) {_log.info("Added to cache - Lease for " + _toString);}
         _wantACK = true;
         return 0;
     }
-
 
     /**
      * We couldn't even find the leaseSet, so die
      */
     private class LookupLeaseSetFailedJob extends JobImpl {
-        public LookupLeaseSetFailedJob(RouterContext enclosingContext)  {
-            super(enclosingContext);
-        }
-        public String getName() { return "Timeout OB Client Message Lease Lookup"; }
+        public LookupLeaseSetFailedJob(RouterContext enclosingContext) {super(enclosingContext);}
+        public String getName() {return "Timeout OB Client Message Lease Lookup";}
         public void runJob() {
             if (_leaseSetLookupBegin > 0) {
                 long lookupTime = getContext().clock().now() - _leaseSetLookupBegin;
@@ -592,15 +556,16 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
             int cause;
             if (getContext().clientNetDb(_from.calculateHash()).isNegativeCachedForever(_to.calculateHash())) {
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldLog(Log.WARN)) {
                     _log.warn("Cannot send to " + _toString + " -> Unsupported Signature type");
+                }
                 cause = MessageStatusMessage.STATUS_SEND_FAILURE_UNSUPPORTED_ENCRYPTION;
             } else {
-                if (_log.shouldInfo())
+                if (_log.shouldInfo()) {
                     _log.info("Cannot send to " + _toString + " -> LeaseSet not found");
+                }
                 cause = MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET;
             }
-
             dieFatal(cause);
         }
     }
@@ -616,9 +581,9 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     private void send() {
         synchronized(this) {
             if (_finished != Result.NONE) {
-                if (_log.shouldWarn())
-                    _log.warn(OutboundClientMessageOneShotJob.this.getJobId()
-                              + ": SEND-AFTER-" + _finished);
+                if (_log.shouldWarn()) {
+                    _log.warn(OutboundClientMessageOneShotJob.this.getJobId() + ": SEND-AFTER-" + _finished);
+                }
                 return;
             }
         }
@@ -630,8 +595,9 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
         _outTunnel = selectOutboundTunnel(_to);
         if (_outTunnel == null) {
-            if (_log.shouldWarn())
+            if (_log.shouldWarn()) {
                 _log.warn("No outbound tunnels to send payload through; this might take a while...");
+            }
             getContext().statManager().addRateData("client.dispatchNoTunnels", now - _start);
             dieFatal(MessageStatusMessage.STATUS_SEND_FAILURE_NO_TUNNELS);
             return;
@@ -650,10 +616,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         int sendFlags = _clientMessage.getFlags();
         // Per-message flag > 0 overrides per-session option
         int tagsRequired = SendMessageOptions.getTagThreshold(sendFlags);
-        boolean wantACK = _wantACK ||
-                          shouldRequestReply ||
-                          GarlicMessageBuilder.needsTags(getContext(), _encryptionKey,
-                                                         _from.calculateHash(), tagsRequired);
+        boolean wantACK = _wantACK || shouldRequestReply ||
+                          GarlicMessageBuilder.needsTags(getContext(), _encryptionKey, _from.calculateHash(), tagsRequired);
 
         LeaseSet replyLeaseSet;
         // Per-message flag == false overrides session option which is default true
@@ -667,11 +631,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             // ACKs find their own way back, they don't need a leaseset.
             replyLeaseSet = getReplyLeaseSet(false);
             // ... and vice versa  (so we know he got it)
-            if (replyLeaseSet != null)
-                wantACK = true;
-        } else {
-            replyLeaseSet = null;
-        }
+            if (replyLeaseSet != null) {wantACK = true;}
+        } else {replyLeaseSet = null;}
 
         long token;
         if (wantACK) {
@@ -680,9 +641,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             // 0.9.38 change to DESTINATION reply delivery
             // NOPE! Rejected in InboundMessageDistributor
             _inTunnel = selectInboundTunnel();
-        } else {
-            token = -1;
-        }
+        } else {token = -1;}
 
         PayloadGarlicConfig clove;
         if (_clientMessageSize > 0) {
@@ -691,10 +650,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 dieFatal(MessageStatusMessage.STATUS_SEND_FAILURE_UNSUPPORTED_ENCRYPTION);
                 return;
             }
-        } else {
-            // ratchet-layer acks
-            clove = null;
-        }
+        } else {clove = null;} // ratchet-layer acks
 
         SessionKey sessKey = new SessionKey();
         Set<SessionTag> tags = new HashSet<SessionTag>();
@@ -720,15 +676,13 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             // set to null if there are no tunnels to ack the reply back through
             // (should we always fail for this? or should we send it anyway, even if
             // we dont receive the reply? hmm...)
-            if (_log.shouldWarn())
+            if (_log.shouldWarn()) {
                 _log.warn("Unable to create garlic message to " + _toString + " -> No available tunnels or too lagged");
+            }
             getContext().statManager().addRateData("client.dispatchNoTunnels", now - _start);
             dieFatal(MessageStatusMessage.STATUS_SEND_FAILURE_NO_TUNNELS);
             return;
         }
-
-        //if (_log.shouldDebug())
-        //    _log.debug("send() - token expected " + token + " to " + _toString);
 
         SendSuccessJob onReply;
         SendTimeoutJob onFail;
@@ -737,9 +691,10 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         if (wantACK && _encryptionKey.getType() == EncType.ELGAMAL_2048) {
             TagSetHandle tsh = null;
             if (!tags.isEmpty()) {
-                    SessionKeyManager skm = getContext().clientManager().getClientSessionKeyManager(_from.calculateHash());
-                    if (skm != null)
-                        tsh = skm.tagsDelivered(_encryptionKey, sessKey, tags);
+                SessionKeyManager skm = getContext().clientManager().getClientSessionKeyManager(_from.calculateHash());
+                if (skm != null) {
+                    tsh = skm.tagsDelivered(_encryptionKey, sessKey, tags);
+                }
             }
             onFail = new SendTimeoutJob(sessKey, tsh);
             onReply = new SendSuccessJob(sessKey, tsh, replyLeaseSet, onFail);
@@ -756,11 +711,12 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             selector = null;
         }
 
-        if (_log.shouldDebug())
+        if (_log.shouldDebug()) {
             _log.debug("Sending message out on [TunnelID " + _outTunnel.getSendTunnelId(0) + "]\n* Target: "
                            + _toString + " at [TunnelID "
                            + _lease.getTunnelId() + "] on Gateway ["
                            + _lease.getGateway().toBase64().substring(0,6) + "]");
+        }
 
         DispatchJob dispatchJob = new DispatchJob(msg, selector, onReply, onFail);
         //if (false) // dispatch may take 100+ms, so toss it in its own job
@@ -768,8 +724,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         //else
         dispatchJob.runJob();
         getContext().statManager().addRateData("client.dispatchPrepareTime", now - _start);
-        if (!wantACK)
-            getContext().statManager().addRateData("client.dispatchNoACK", 1);
+        if (!wantACK) {getContext().statManager().addRateData("client.dispatchNoACK", 1);}
     }
 
     /**
@@ -796,7 +751,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             _replyTimeout = timeout;
         }
 
-        public String getName() { return "Outbound client message dispatch"; }
+        public String getName() {return "Outbound client message dispatch";}
 
         public void runJob() {
             if (_selector != null) {
@@ -804,10 +759,11 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                     // We use the Message Registry to call our timeout when the selector expires
                     // Either the success or timeout job will fire, never both.
                     getContext().messageRegistry().registerPending(_selector, _replyFound, _replyTimeout);
-                    if (_log.shouldInfo())
+                    if (_log.shouldInfo()) {
                         _log.info("[Job " + OutboundClientMessageOneShotJob.this.getJobId() + "] Reply selector expires " +
                                   DataHelper.formatDuration(_overallExpiration - _selector.getExpiration()) +
                                   " before message, using selector only");
+                    }
                 } else {
                     // We put our own timeout on the job queue before the selector expires,
                     // so we can keep waiting for the reply and restore the tags (success-after-failure)
@@ -815,10 +771,11 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                     getContext().messageRegistry().registerPending(_selector, _replyFound, null);
                     _replyTimeout.getTiming().setStartAfter(_overallExpiration);
                     getContext().jobQueue().addJob(_replyTimeout);
-                    if (_log.shouldInfo())
+                    if (_log.shouldInfo()) {
                         _log.info("[Job " + OutboundClientMessageOneShotJob.this.getJobId() + "] Reply selector expires " +
                                   DataHelper.formatDuration(_selector.getExpiration() - _overallExpiration) +
                                   " after message, queueing separate timeout job");
+                    }
                 }
             } else if (_replyTimeout != null) {
                 // ECIES
@@ -826,18 +783,15 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 _replyTimeout.getTiming().setStartAfter(expiration);
                 getContext().jobQueue().addJob(_replyTimeout);
             }
-            if (_log.shouldInfo())
+            if (_log.shouldInfo()) {
                 _log.info("[Job " + OutboundClientMessageOneShotJob.this.getJobId() + "] Dispatching message to " + _toString + _msg);
+            }
             long before = getContext().clock().now();
 
-            // Note we do not have a first hop fail job, or a success job, here,
-            // as we do in e.g. build handler.
+            // Note we do not have a first hop fail job, or a success job, here, as we do in e.g. build handler.
             // Nor do we ever send a STATUS_SEND_BEST_EFFORT_SUCCESS (when no selector)
             getContext().tunnelDispatcher().dispatchOutbound(_msg, _outTunnel.getSendTunnelId(0), _lease.getTunnelId(), _lease.getGateway());
             long dispatchSendTime = getContext().clock().now() - before;
-            //if (_log.shouldInfo())
-            //    _log.info("[Job " + OutboundClientMessageOneShotJob.this.getJobId() +
-            //              "] Dispatching message to " + _toString + " complete");
             // avg. 6 ms on a 2005-era PC
             getContext().statManager().addRateData("client.dispatchTime", getContext().clock().now() - _start);
             // avg. 1 ms on a 2005-era PC
@@ -852,9 +806,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      * Or remove entries that were sent and succeeded after this was sent but before this failed.
      * But it's a start.
      */
-    private void clearCaches() {
-        _cache.clearCaches(_hashPair, _lease, _inTunnel, _outTunnel);
-    }
+    private void clearCaches() {_cache.clearCaches(_hashPair, _lease, _inTunnel, _outTunnel);}
 
     /**
      *  Choose our outbound tunnel to send the message through.
@@ -874,33 +826,34 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             if (tunnel != null) {
                 if (getContext().tunnelManager().isValidTunnel(_from.calculateHash(), tunnel)) {
                     if (!getContext().commSystem().isBacklogged(tunnel.getPeer(1))) {
-                        if (_log.shouldWarn())
+                        if (_log.shouldWarn()) {
                             _log.warn("Switching back to [Tunnel " + tunnel + "] for " + _toString);
+                        }
                         _cache.backloggedTunnelCache.remove(_hashPair);
                         _cache.tunnelCache.put(_hashPair, tunnel);
                         _wantACK = true;
                         return tunnel;
                     }  // else still backlogged
-                } else // no longer valid
-                    _cache.backloggedTunnelCache.remove(_hashPair);
+                } else {_cache.backloggedTunnelCache.remove(_hashPair);} // no longer valid
             }
             // Use the same tunnel unless backlogged
             tunnel = _cache.tunnelCache.get(_hashPair);
             if (tunnel != null) {
                 if (getContext().tunnelManager().isValidTunnel(_from.calculateHash(), tunnel)) {
-                    if (tunnel.getLength() <= 1 || !getContext().commSystem().isBacklogged(tunnel.getPeer(1)))
+                    if (tunnel.getLength() <= 1 || !getContext().commSystem().isBacklogged(tunnel.getPeer(1))) {
                         return tunnel;
+                    }
                     // backlogged
-                    if (_log.shouldWarn())
+                    if (_log.shouldWarn()) {
                         _log.warn("Switching from backlogged [Tunnel " + tunnel + "] for " + _toString);
+                    }
                     _cache.backloggedTunnelCache.put(_hashPair, tunnel);
                 } // else no longer valid
                 _cache.tunnelCache.remove(_hashPair);
             }
             // Pick a new tunnel
             tunnel = selectOutboundTunnel();
-            if (tunnel != null)
-                _cache.tunnelCache.put(_hashPair, tunnel);
+            if (tunnel != null) {_cache.tunnelCache.put(_hashPair, tunnel);}
             _wantACK = true;
         }
         return tunnel;
@@ -932,29 +885,17 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
-     * give up the ghost, this message just aint going through.  tell the client.
-     *
-     * this is safe to call multiple times (only tells the client once)
-     */
-/****
-    private void dieFatal() {
-        dieFatal(MessageStatusMessage.STATUS_SEND_GUARANTEED_FAILURE);
-    }
-****/
-
-    /**
-     * give up the ghost, this message just aint going through.  tell the client.
-     *
-     * this is safe to call multiple times (only tells the client once)
-     * We may still succeed later.
+     * Give up the ghost, this message just aint going through. tell the client.
+     * This is safe to call multiple times (only tells the client once). We may still succeed later.
      */
     private void dieFatal(int status) {
         // never fail twice or fail after success
         synchronized(this) {
             if (_finished != Result.NONE) {
-                if (_log.shouldWarn())
+                if (_log.shouldWarn()) {
                     _log.warn("[Job " + OutboundClientMessageOneShotJob.this.getJobId()
                               + "] FAIL-AFTER-" + _finished);
+                }
                 return;
             }
             _finished = Result.FAIL;
@@ -1008,17 +949,15 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             } else {
                 _log.warn("Sending of " + _clientMessageId + " to " + _toString +
                           " failed after " + sendTime + "ms (Status code: " + status + ")");
-//                      + "\n\t" + _outTunnel
-//                      + "\n\t" + _inTunnel
-//                      + "\n\t" + _lease + " ACK");
             }
         }
 
         clearCaches();
         //getContext().messageHistory().sendPayloadMessage(_clientMessageId.getMessageId(), false, sendTime);
         long nonce = _clientMessage.getMessageNonce();
-        if (nonce > 0)
+        if (nonce > 0) {
             getContext().clientManager().messageDeliveryStatusUpdate(_from, _clientMessageId, nonce, status);
+        }
         getContext().statManager().updateFrequency("client.sendMessageFailFrequency");
     }
 
@@ -1040,11 +979,9 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
         DataMessage msg = new DataMessage(getContext());
         Payload p = _clientMessage.getPayload();
-        if (p == null)
-            return null;
+        if (p == null) {return null;}
         byte d[] = p.getEncryptedData();
-        if (d == null)
-            return null;
+        if (d == null) {return null;}
         msg.setData(d);
         long expires = OVERALL_TIMEOUT_MS_DEFAULT + getContext().clock().now();
         msg.setMessageExpiration(expires);
@@ -1058,10 +995,6 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         // defaults
         //clove.setRecipientPublicKey(null);
         //clove.setRequestAck(false);
-
-
-        //if (_log.shouldDebug())
-        //    _log.debug("Built payload clove with id " + clove.getId());
         return clove;
     }
 
@@ -1079,21 +1012,14 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             _expiration = expiration;
         }
 
-        public boolean continueMatching() {
-            return false;
-        }
+        public boolean continueMatching() {return false;}
 
-        public long getExpiration() { return _expiration; }
+        public long getExpiration() {return _expiration;}
 
         public boolean isMatch(I2NPMessage inMsg) {
             if (inMsg.getType() == DeliveryStatusMessage.MESSAGE_TYPE) {
-                //if (_log.shouldDebug())
-                //    _log.debug(OutboundClientMessageOneShotJob.this.getJobId()
-                //               + ": delivery status message received: " + inMsg + " our token: " + _pendingToken);
                 return _pendingToken == ((DeliveryStatusMessage)inMsg).getMessageId();
-            } else {
-                return false;
-            }
+            } else {return false;}
         }
 
         @Override
@@ -1132,7 +1058,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             _replyTimeout = timeout;
         }
 
-        public String getName() { return "Verify OB Client Message Send"; }
+        public String getName() {return "Verify OB Client Message Send";}
 
         /**
          * May be run after SendTimeoutJob, will re-add the tags.
@@ -1144,12 +1070,14 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 if (oldls != null) {
                     if (_deliveredLS.getDate() > oldls.getDate()) {
                         _cache.leaseSetCache.put(_hashPair, _deliveredLS);
-                         if (_log.shouldInfo())
+                         if (_log.shouldInfo()) {
                              _log.info("Added to cache - got reply LeaseSet from " + _toString);
+                         }
                     }
                 } else {
-                    if (_log.shouldInfo())
+                    if (_log.shouldInfo()) {
                          _log.info("Added to cache - got reply LeaseSet from " + _toString);
+                    }
                 }
             }
             // do we leak tags here?
@@ -1158,28 +1086,27 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             synchronized(OutboundClientMessageOneShotJob.this) {
                 old = _finished;
                 if (old == Result.SUCCESS) {
-                    if (_log.shouldWarn())
-                        _log.warn("[Job " + OutboundClientMessageOneShotJob.this.getJobId()
-                                  + "] SUCCESS-AFTER-SUCCESS");
+                    if (_log.shouldWarn()) {
+                        _log.warn("[Job " + OutboundClientMessageOneShotJob.this.getJobId() + "] SUCCESS-AFTER-SUCCESS");
+                    }
                     return;
                 }
                 _finished = Result.SUCCESS;
                 // in sync block so we don't race with SendTimeoutJob
                 if (_key != null && _tags != null && _leaseSet != null) {
                     SessionKeyManager skm = getContext().clientManager().getClientSessionKeyManager(_from.calculateHash());
-                    if (skm != null)
-                        skm.tagsAcked(_encryptionKey, _key, _tags);
+                    if (skm != null) {skm.tagsAcked(_encryptionKey, _key, _tags);}
                 }
             }
-            if (_replyTimeout != null)
-                getContext().jobQueue().removeJob(_replyTimeout);
+            if (_replyTimeout != null) {getContext().jobQueue().removeJob(_replyTimeout);}
 
             long sendTime = getContext().clock().now() - _start;
             if (old == Result.FAIL) {
-                if (_log.shouldWarn())
+                if (_log.shouldWarn()) {
                     _log.warn("[Job " + OutboundClientMessageOneShotJob.this.getJobId()
                            + "] SUCCESS-AFTER-TIMEOUT " + _clientMessageId
                            + " ACKed by DbStoreMsg after " + sendTime + "ms");
+                }
             } else if (_log.shouldInfo()) {
                 _log.info("[Job " + OutboundClientMessageOneShotJob.this.getJobId()
                            + "] SUCCESS " + _clientMessageId
@@ -1189,19 +1116,17 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             //long dataMsgId = _cloveId;   // fake ID 99999
             getContext().messageHistory().sendPayloadMessage(99999, true, sendTime);
             long nonce = _clientMessage.getMessageNonce();
-            if (nonce > 0)
+            if (nonce > 0) {
                 getContext().clientManager().messageDeliveryStatusUpdate(_from, _clientMessageId, nonce,
                                                                          MessageStatusMessage.STATUS_SEND_GUARANTEED_SUCCESS);
-            // unused
-            //_lease.setNumSuccess(_lease.getNumSuccess()+1);
+            }
 
             int size = _clientMessageSize;
 
             getContext().statManager().addRateData("client.sendAckTime", sendTime);
             getContext().statManager().addRateData("client.sendMessageSize", _clientMessageSize, sendTime);
             if (_outTunnel != null) {
-                if (_outTunnel.getLength() > 0)
-                    size = ((size + 1023) / 1024) * 1024; // messages are in ~1KB blocks
+                if (_outTunnel.getLength() > 0) {size = ((size + 1023) / 1024) * 1024;} // messages are in ~1KB blocks
 
                 // skip ourselves at first hop
                 for (int i = 1; i < _outTunnel.getLength(); i++) {
@@ -1227,18 +1152,14 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      * @since 0.9.46
      */
     private class ECIESReplyCallback extends SendSuccessJob implements ReplyCallback {
-        public ECIESReplyCallback(LeaseSet ls, SendTimeoutJob timeout) {
-            super(null, null, ls, timeout);
-        }
+        public ECIESReplyCallback(LeaseSet ls, SendTimeoutJob timeout) {super(null, null, ls, timeout);}
 
         public long getExpiration() {
             // longer timeout so we can have success-after-failure via ratchet
             return Math.max(_overallExpiration, _start + RATCHET_REPLY_TIMEOUT_MS_MIN);
         }
 
-        public void onReply() {
-            super.runJob();
-        }
+        public void onReply() {super.runJob();}
     }
 
     /**
@@ -1263,7 +1184,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             _tags = tags;
         }
 
-        public String getName() { return "Timeout OB Client Message Send"; }
+        public String getName() {return "Timeout OB Client Message Send";}
 
         /**
          * May be run after SendSuccessJob, will have no effect.
@@ -1274,20 +1195,19 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             synchronized(OutboundClientMessageOneShotJob.this) {
                 old = _finished;
                 if (old == Result.SUCCESS) {
-                    if (_log.shouldInfo())
-                        _log.info("[Job " + OutboundClientMessageOneShotJob.this.getJobId()
-                                  + "] TIMEOUT-AFTER-SUCCESS");
+                    if (_log.shouldInfo()) {
+                        _log.info("[Job " + OutboundClientMessageOneShotJob.this.getJobId() + "] TIMEOUT-AFTER-SUCCESS");
+                    }
                     return;
                 }
                 // in sync block so we don't fail after success
                 if (_key != null && _tags != null && _leaseSet != null) {
                     SessionKeyManager skm = getContext().clientManager().getClientSessionKeyManager(_from.calculateHash());
-                    if (skm != null)
-                        skm.failTags(_encryptionKey, _key, _tags);
+                    if (skm != null) {skm.failTags(_encryptionKey, _key, _tags);}
                 }
             }
-            if (old == Result.NONE)
-                dieFatal(MessageStatusMessage.STATUS_SEND_BEST_EFFORT_FAILURE);
+            if (old == Result.NONE) {dieFatal(MessageStatusMessage.STATUS_SEND_BEST_EFFORT_FAILURE);}
         }
     }
+
 }
