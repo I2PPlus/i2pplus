@@ -452,7 +452,7 @@ class ProfileOrganizerRenderer {
                .append("<tr>").append("<td><a href=\"/netdb?caps=P\" title=\"").append(_t("Show all routers with this capability in the NetDb"))
                .append("\"><b>P</b></a></td><td>").append(_t("{0} shared bandwidth", range(Router.MIN_BW_P, Router.MIN_BW_X))).append("</td>")
                .append("<td><a href=\"/netdb?caps=X\" title=\"").append(_t("Show all routers with this capability in the NetDb"))
-               .append("\"><b>X</b></a></td><td>").append(_t("Over {0} shared bandwidth", Math.round(Router.MIN_BW_X * 1.024f))).append(" KB/s").append("</td>")
+               .append("\"><b>X</b></a></td><td>").append(_t("Over {0} KB/s shared bandwidth", Math.round(Router.MIN_BW_X * 1.024f))).append("</td>")
                .append("</tr>\n")
                .append("</tbody>\n</table>\n</td></tr>\n") // profile_defs
                .append("<tr><td><b>")
