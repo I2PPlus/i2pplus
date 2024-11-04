@@ -769,7 +769,7 @@ public class Blocklist {
         if (rv) {
             // lower log level at startup when initializing from blocklist files
             if (source == null && _log.shouldWarn()) {
-                _log.warn("Banning " + Addresses.toString(ip) + " for duration of session");
+                _log.warn("Banning " + Addresses.toString(ip) + " for duration of session -> Blocklist entry");
             } else if (_log.shouldDebug()) {
                 _log.debug("Banning " + Addresses.toString(ip) + " for duration of session -> Source: " + source, new Exception("Source"));
             }
@@ -1148,7 +1148,7 @@ public class Blocklist {
         if ((!blFile.exists()) || blFile.length() <= 0) {
             // just ban it and be done
             if (_log.shouldWarn()) {
-                _log.warn("Banning [" + peer.toBase64().substring(0,6) + "] for duration of session");
+                _log.warn("Banning [" + peer.toBase64().substring(0,6) + "] for duration of session -> Blocklist entry");
             }
             banlistRouter(peer, " <b>➜</b> Banned", "Banned", expireInterval());
             return;
@@ -1171,7 +1171,7 @@ public class Blocklist {
                         try {br.close();} catch (IOException ioe) {}
                         String reason = " <b>➜</b> " + _x("Blocklist") + ": " + sip;
                         if (_log.shouldWarn()) {
-                            _log.warn("Banning [" + peer.toBase64().substring(0,6) + "] for duration of session -> Source: blocklist.txt");
+                            _log.warn("Banning [" + peer.toBase64().substring(0,6) + "] for duration of session -> Blocklist entry");
                         }
                         banlistRouter(peer, reason, buf.toString(), expireInterval());
                         return;
