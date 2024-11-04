@@ -36,8 +36,8 @@ public class FileDumpHelper extends HelperBase {
 
     public String getFileSummary() {
         StringBuilder buf = new StringBuilder(16*1024);
-        buf.append("<table id=jarfiles>\n<thead>\n<tr><th>File</th><th>Size</th><th>Date</th><th>SHA 256</th><th>Revision</th>" +
-                   "<th>JDK</th><th>Built</th><th>By</th><th>Mods</th></tr>\n</thead>\n");
+        buf.append("<table id=jarfiles>\n<thead>\n<tr><th>File</th><th>Size</th><th>Date</th><th>SHA 256</th><th>Revision</th>")
+           .append("<th>JDK</th><th>Built</th><th>By</th><th>Mods</th></tr>\n</thead>\n");
 
         // jars added in wrapper.config
         ClassLoader loader = ClassLoader.getSystemClassLoader();
@@ -57,9 +57,7 @@ public class FileDumpHelper extends HelperBase {
                 }
             }
             Collections.sort(flist);
-            for (File f : flist) {
-                dumpFile(buf, f, true);
-            }
+            for (File f : flist) {dumpFile(buf, f, true);}
         }
 
         // our jars
@@ -101,62 +99,47 @@ public class FileDumpHelper extends HelperBase {
 
     private static void dumpDir(StringBuilder buf, File dir, String suffix, boolean linkrev) {
         File[] files = dir.listFiles(new FileSuffixFilter(suffix));
-        if (files == null)
-            return;
+        if (files == null) {return;}
         Arrays.sort(files);
-        for (int i = 0; i < files.length; i++) {
-            dumpFile(buf, files[i], linkrev);
-        }
+        for (int i = 0; i < files.length; i++) {dumpFile(buf, files[i], linkrev);}
     }
 
     private static void dumpFile(StringBuilder buf, File f, boolean linkrev) {
-        buf.append("<tr><td><b title=\"").append(f.getAbsolutePath()).append("\">").append(f.getName()).append("</b></td>" +
-                   "<td>").append(f.length()).append("</td>" +
-                   "<td title=\"UTC\">");
+        buf.append("<tr><td><b title=\"").append(f.getAbsolutePath()).append("\">").append(f.getName()).append("</b></td>")
+           .append("<td>").append(f.length()).append("</td><td title=\"UTC\">");
         long mod = f.lastModified();
-        if (mod > 0)
-            buf.append((new Date(mod)).toString().replace(" GMT", ""));
-        else
-            buf.append("<font color=red>Not found</font>");
+        if (mod > 0) {buf.append((new Date(mod)).toString().replace(" GMT", ""));}
+        else {buf.append("<font color=red>Not found</font>");}
         buf.append("</td><td>");
-        if (mod > 0 && !FileUtil.verifyZip(f))
-            buf.append("<font color=red>CORRUPT</font><br>");
+        if (mod > 0 && !FileUtil.verifyZip(f)) {buf.append("<font color=red>CORRUPT</font><br>");}
         byte[] hash = sha256(f);
         if (hash != null) {
             byte[] hh = new byte[16];
             System.arraycopy(hash, 0, hh, 0, 16);
             buf.append("<span class=sha256><code>");
             String p1 = DataHelper.toHexString(hh);
-            for (int i = p1.length(); i < 32; i++) {
-                buf.append('0');
-            }
+            for (int i = p1.length(); i < 32; i++) {buf.append('0');}
             buf.append(p1).append("</code><br>");
             System.arraycopy(hash, 16, hh, 0, 16);
             buf.append("<code>").append(DataHelper.toHexString(hh)).append("</code></span>");
         }
         Attributes att = attributes(f);
-        if (att == null)
-            att = new Attributes();
+        if (att == null) {att = new Attributes();}
         buf.append("<td>");
         String iv = getAtt(att, "Implementation-Version");
-        if (iv != null)
-            buf.append("<b>").append(iv).append("</b>");
+        if (iv != null) {buf.append("<b>").append(iv).append("</b>");}
         String s = getAtt(att, "Base-Revision");
         String builder = getAtt(att, "Built-By");
         if (s != null && s.length() >= 8) {
-            if (iv != null)
-                buf.append("<br>");
+            if (iv != null) {buf.append("<br>");}
             if (linkrev) {
                 buf.append("<a target=_blank rel=\"noreferrer\" href=\"");
-                if (builder.equals("zzz"))
-                    buf.append(UPSTREAMLINK);
-                else
-                    buf.append(LINK);
+                if (builder.equals("zzz")) {buf.append(UPSTREAMLINK);}
+                else {buf.append(LINK);}
             buf.append(s).append("\">");
             }
             buf.append("<span class=revision><code>").append(s.substring(0, 8)).append("</code></span>");
-            if (linkrev)
-                buf.append("</a>");
+            if (linkrev) {buf.append("</a>");}
         }
         buf.append("</td><td>");
         s = getAtt(att, "Created-By");
@@ -171,12 +154,10 @@ public class FileDumpHelper extends HelperBase {
         }
         buf.append("</td><td title=\"UTC\">");
         s = getAtt(att, "Build-Date");
-        if (s != null)
-            buf.append(s.replace(" UTC", ""));
+        if (s != null) {buf.append(s.replace(" UTC", ""));}
         buf.append("</td><td>");
         s = getAtt(att, "Built-By");
-        if (s != null)
-            buf.append(s);
+        if (s != null) {buf.append(s);}
         buf.append("</td><td>");
         s = getAtt(att, "Workspace-Changes");
         if (s != null && s != "") {
@@ -195,15 +176,14 @@ public class FileDumpHelper extends HelperBase {
             MessageDigest md = SHA256Generator.getDigestInstance();
             byte[] b = new byte[4096];
             int cnt = 0;
-            while ((cnt = in.read(b)) >= 0) {
-                md.update(b, 0, cnt);
-            }
+            while ((cnt = in.read(b)) >= 0) {md.update(b, 0, cnt);}
             return md.digest();
-        } catch (IOException ioe) {
-            //ioe.printStackTrace();
-            return null;
-        } finally {
-            if (in != null) try { in.close(); } catch (IOException e) {}
+        } catch (IOException ioe) {return null;}
+        finally {
+            if (in != null) {
+                try {in.close();}
+                catch (IOException e) {}
+            }
         }
     }
 
@@ -217,11 +197,12 @@ public class FileDumpHelper extends HelperBase {
             in = (new URL("jar:file:" + f.getAbsolutePath() + "!/META-INF/MANIFEST.MF")).openStream();
             Manifest man = new Manifest(in);
             return man.getMainAttributes();
-        } catch (IOException ioe) {
-            //ioe.printStackTrace();
-            return null;
-        } finally {
-            if (in != null) try { in.close(); } catch (IOException e) {}
+        } catch (IOException ioe) {return null;}
+        finally {
+            if (in != null) {
+                try {in.close();}
+                catch (IOException e) {}
+            }
         }
     }
 
@@ -232,8 +213,8 @@ public class FileDumpHelper extends HelperBase {
      */
     static String getAtt(Attributes atts, String s) {
         String rv = atts.getValue(s);
-        if (rv != null)
-            rv = DataHelper.stripHTML(rv);
+        if (rv != null) {rv = DataHelper.stripHTML(rv);}
         return rv;
     }
+
 }
