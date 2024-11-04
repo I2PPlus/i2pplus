@@ -33,52 +33,7 @@ import net.i2p.util.VersionComparator;
 
 /**
  *  Keep track of inbound and outbound introductions.
- *
- *  IPv6 info: Alice-Bob communication may be via IPv4 or IPv6.
- *  Bob-Charlie communication must be via established IPv4 session as that's the only way
- *  that Bob knows Charlie's IPv4 address to give it to Alice.
- *  Alice-Charlie communication is via IPv4.
- *  If Alice-Bob is over IPv6, Alice must include her IPv4 address in
- *  the RelayRequest message.
- *
- *  From udp.html on the website:
-
-<p>Indirect session establishment by means of a third party introduction
-is necessary for efficient NAT traversal.  Charlie, a router behind a
-NAT or firewall which does not allow unsolicited inbound UDP packets,
-first contacts a few peers, choosing some to serve as introducers.  Each
-of these peers (Bob, Bill, Betty, etc) provide Charlie with an introduction
-tag - a 4 byte random number - which he then makes available to the public
-as methods of contacting him.  Alice, a router who has Charlie's published
-contact methods, first sends a RelayRequest packet to one or more of the
-introducers, asking each to introduce her to Charlie (offering the
-introduction tag to identify Charlie).  Bob then forwards a RelayIntro
-packet to Charlie including Alice's public IP and port number, then sends
-Alice back a RelayResponse packet containing Charlie's public IP and port
-number.  When Charlie receives the RelayIntro packet, he sends off a small
-random packet to Alice's IP and port (poking a hole in his NAT/firewall),
-and when Alice receives Bob's RelayResponse packet, she begins a new
-full direction session establishment with the specified IP and port.</p>
-<p>
-Alice first connects to introducer Bob, who relays the request to Charlie.
-</p>
-<pre>
-        Alice                         Bob                  Charlie
-    RelayRequest ----------------------&gt;
-         &lt;-------------- RelayResponse    RelayIntro -----------&gt;
-         &lt;-------------------------------------------- HolePunch (data ignored)
-    SessionRequest --------------------------------------------&gt;
-         &lt;-------------------------------------------- SessionCreated
-    SessionConfirmed ------------------------------------------&gt;
-         &lt;-------------------------------------------- DeliveryStatusMessage
-         &lt;-------------------------------------------- DatabaseStoreMessage
-    DatabaseStoreMessage --------------------------------------&gt;
-    Data &lt;--------------------------------------------------&gt; Data
-</pre>
-
-<p>
-After the hole punch, the session is established between Alice and Charlie as in a direct establishment.
-</p>
+ *  See http://i2p-projekt.i2p/spec/ssu2 for documentation.
  */
 class IntroductionManager {
     private final RouterContext _context;
@@ -113,6 +68,12 @@ class IntroductionManager {
     private static final long INTRODUCER_EXPIRATION = 80*60*1000L;
     private static final String MIN_IPV6_INTRODUCER_VERSION = "0.9.50";
     private static final long MAX_SKEW = 2*60*1000;
+
+    /**
+     *  See receiveRelayIntro()
+     *  @since 0.9.65
+     */
+    public enum RelayIntroResult { REPLIED, DELAYED, DROPPED }
 
     public IntroductionManager(RouterContext ctx, UDPTransport transport) {
         _context = ctx;
@@ -560,12 +521,12 @@ class IntroductionManager {
                         );
             byte[] info = aliceRI.toByteArray();
             byte[] gzipped = DataHelper.compress(info, 0, info.length, DataHelper.MAX_COMPRESSION);
-            if (_log.shouldDebug())
+            if (_log.shouldDebug()) {
                 _log.debug("Alice RI: " + info.length + " bytes uncompressed, " + gzipped.length +
                            " compressed, charlie MTU " + charlie.getMTU() + ", available " + avail);
+            }
             boolean gzip = gzipped.length < info.length;
-            if (gzip)
-                info = gzipped;
+            if (gzip) {info = gzipped;}
 
             try {
                 if (info.length <= avail) {
@@ -583,10 +544,7 @@ class IntroductionManager {
                 }
                 charlie.setLastSendTime(now);
                 return;
-            } catch (IOException ioe) {
-                rcode = SSU2Util.RELAY_REJECT_BOB_UNSPEC;
-                // fall thru to send reject
-            }
+            } catch (IOException ioe) {rcode = SSU2Util.RELAY_REJECT_BOB_UNSPEC;} // fall thru to send reject
         }
 
         try {
@@ -595,15 +553,15 @@ class IntroductionManager {
             data = SSU2Util.createRelayResponseData(_context, _context.routerHash(), rcode,
                                                     nonce, null, 0, spk, 0);
             if (data == null) {
-                if (_log.shouldWarn())
-                    _log.warn("sig fail");
-                 return;
+                if (_log.shouldWarn()) {_log.warn("Signature failure");}
+                return;
             }
-            if (_log.shouldInfo())
+            if (_log.shouldInfo()) {
                 _log.info("Send RelayReponse rejection as Bob (Reason: " + rcode + ") to Alice " + alice);
+            }
             UDPPacket packet = _builder2.buildRelayResponse(data, alice);
             alice.setLastSendTime(now);
-        _transport.send(packet);
+            _transport.send(packet);
         } catch (IOException ioe) {}
     }
 
@@ -614,10 +572,15 @@ class IntroductionManager {
      *
      *  SSU 2 only.
      *
+     *  @return DELAYED if awaiting Alice RI, DROPPED on fatal error, or REPLIED if we replied to Bob with a RelayResponse
      *  @since 0.9.55
      */
-    void receiveRelayIntro(PeerState2 bob, Hash alice, byte[] data) {
-        receiveRelayIntro(bob, alice, data, 0);
+    RelayIntroResult receiveRelayIntro(PeerState2 bob, Hash alice, byte[] data) {
+        RelayIntroResult rv = receiveRelayIntro(bob, alice, data, 0);
+        if (_log.shouldInfo()) {
+            _log.info("Receive relay intro from bob " + bob + " for alice " + alice.toBase64() + " result " + rv);
+        }
+        return rv;
     }
 
     /**
@@ -629,26 +592,24 @@ class IntroductionManager {
      *
      *  SSU 2 only.
      *
-     *  @return true if RI found, false to delay and retry.
+     *  @return DELAYED if should retry (no RI), DROPPED on fatal error, or REPLIED if we replied to Bob with a RelayResponse
      *  @since 0.9.55
      */
-    private boolean receiveRelayIntro(PeerState2 bob, Hash alice, byte[] data, int retryCount) {
+    private RelayIntroResult receiveRelayIntro(PeerState2 bob, Hash alice, byte[] data, int retryCount) {
         RouterInfo aliceRI = null;
-        if (retryCount >= 5) {
-            // last chance
-            aliceRI = _context.netDb().lookupRouterInfoLocally(alice);
-        } else if (!_context.banlist().isBanlisted(alice)) {
+        if (retryCount >= 5) {aliceRI = _context.netDb().lookupRouterInfoLocally(alice);} // last chance
+        else if (!_context.banlist().isBanlisted(alice)) {
             aliceRI = _context.netDb().lookupRouterInfoLocally(alice);
             if (aliceRI == null) {
-                if (_log.shouldInfo())
+                if (_log.shouldInfo()) {
                     _log.info("Delay after " + retryCount + " retries, no RI for " + alice.toBase64());
-                if (retryCount == 0)
-                    new DelayIntro(bob, alice, data);
-                return false;
+                }
+                if (retryCount == 0) {new DelayIntro(bob, alice, data);}
+                return RelayIntroResult.DELAYED;
             }
         }
-        receiveRelayIntro(bob, alice, data, aliceRI);
-        return true;
+        boolean rv = receiveRelayIntro(bob, alice, data, aliceRI);
+        return rv ? RelayIntroResult.REPLIED : RelayIntroResult.DROPPED;
     }
 
     /**
@@ -671,9 +632,8 @@ class IntroductionManager {
         }
 
         public void timeReached() {
-            boolean ok = receiveRelayIntro(bob, alice, data, ++count);
-            if (!ok)
-                reschedule(DELAY << count);
+            RelayIntroResult result = receiveRelayIntro(bob, alice, data, ++count);
+            if (result == RelayIntroResult.DELAYED) {reschedule(DELAY << count);}
         }
     }
 
@@ -706,75 +666,63 @@ class IntroductionManager {
      *
      *  @since 0.9.55
      */
-    private void receiveRelayIntro(PeerState2 bob, Hash alice, byte[] data, RouterInfo aliceRI) {
+    private boolean receiveRelayIntro(PeerState2 bob, Hash alice, byte[] data, RouterInfo aliceRI) {
         long nonce = DataHelper.fromLong(data, 0, 4);
         long tag = DataHelper.fromLong(data, 4, 4);
         long time = DataHelper.fromLong(data, 8, 4) * 1000;
         long now = _context.clock().now();
         long skew = time - now;
         if (skew > MAX_SKEW || skew < 0 - MAX_SKEW) {
-            if (_log.shouldWarn())
-                _log.warn("Too skewed for relay intro from " + bob);
-            return;
+            if (_log.shouldWarn()) {_log.warn("Too skewed for relay intro from " + bob);}
+            return false;
         }
         int ver = data[12] & 0xff;
         if (ver != 2) {
-            if (_log.shouldWarn())
-                _log.warn("Bad relay intro version " + ver + " from " + bob);
-            return;
+            if (_log.shouldWarn()) {_log.warn("Bad relay intro version " + ver + " from " + bob);}
+            return false;
         }
         int iplen = data[13] & 0xff;
         if (iplen != 6 && iplen != 18) {
-            if (_log.shouldWarn())
-                _log.warn("Bad IP length " + iplen + " from " + bob);
-            return;
+            if (_log.shouldWarn()) {_log.warn("Bad IP length " + iplen + " from " + bob);}
+            return false;
         }
         boolean isIPv6 = iplen == 18;
         int testPort = (int) DataHelper.fromLong(data, 14, 2);
         byte[] testIP = new byte[iplen - 2];
         System.arraycopy(data, 16, testIP, 0, iplen - 2);
         InetAddress aliceIP;
-        try {
-            aliceIP = InetAddress.getByAddress(testIP);
-        } catch (UnknownHostException uhe) {
-            return;
-        }
+        try {aliceIP = InetAddress.getByAddress(testIP);}
+        catch (UnknownHostException uhe) {return false;}
 
         SessionKey aliceIntroKey = null;
         int rcode;
         PeerState aps = _transport.getPeerState(alice);
-        if (_transport.isSymNatted()) {
-            rcode = SSU2Util.RELAY_REJECT_CHARLIE_ADDRESS;
-        } else if (aps != null && aps.isIPv6() == isIPv6) {
-            rcode = SSU2Util.RELAY_REJECT_CHARLIE_CONNECTED;
-        } else if (_context.banlist().isBanlisted(alice) ||
-                   _context.blocklist().isBlocklisted(testIP)) {
+        if (_transport.isSymNatted()) {rcode = SSU2Util.RELAY_REJECT_CHARLIE_ADDRESS;}
+        else if (aps != null && aps.isIPv6() == isIPv6) {rcode = SSU2Util.RELAY_REJECT_CHARLIE_CONNECTED;}
+        else if (_context.banlist().isBanlisted(alice) ||_context.blocklist().isBlocklisted(testIP)) {
             rcode = SSU2Util.RELAY_REJECT_CHARLIE_BANNED;
-        } else if (!TransportUtil.isValidPort(testPort) ||
-                  !_transport.isValid(testIP) ||
-                 _transport.isTooClose(testIP)) {
+        } else if (!TransportUtil.isValidPort(testPort) || !_transport.isValid(testIP) || _transport.isTooClose(testIP)) {
             rcode = SSU2Util.RELAY_REJECT_CHARLIE_ADDRESS;
         } else {
-            // bob should have sent it to us. Don't bother to lookup
-            // remotely if he didn't, or it was lost.
+            // bob should have sent it to us. Don't bother to lookup remotely if he didn't, or it was lost.
             if (aliceRI != null) {
                 // validate signed data
                 SigningPublicKey spk = aliceRI.getIdentity().getSigningPublicKey();
                 if (SSU2Util.validateSig(_context, SSU2Util.RELAY_REQUEST_PROLOGUE,
                                          bob.getRemotePeer(), _context.routerHash(), data, spk)) {
                     aliceIntroKey = PeerTestManager.getIntroKey(getAddress(aliceRI, isIPv6));
-                    if (aliceIntroKey != null)
-                        rcode = SSU2Util.RELAY_ACCEPT;
-                    else
-                        rcode = SSU2Util.RELAY_REJECT_CHARLIE_ADDRESS;
+                    if (aliceIntroKey != null) {rcode = SSU2Util.RELAY_ACCEPT;}
+                    else {rcode = SSU2Util.RELAY_REJECT_CHARLIE_ADDRESS;}
                 } else {
-                    if (_log.shouldWarn())
+                    if (_log.shouldWarn()) {
                         _log.warn("Signature failed relay intro\n" + aliceRI);
+                    }
                     rcode = SSU2Util.RELAY_REJECT_CHARLIE_SIGFAIL;
                 }
             } else {
-                if (_log.shouldWarn())
+                if (_log.shouldWarn()) {
                     _log.warn("Alice's RouterInfo  [" + alice + "] not found for relay intro from " + bob);
+                }
                 rcode = SSU2Util.RELAY_REJECT_CHARLIE_UNKNOWN_ALICE;
             }
         }
@@ -783,13 +731,11 @@ class IntroductionManager {
         if (ourra != null) {
             ourIP = ourra.getIP();
             if (ourIP == null) {
-                if (_log.shouldWarn())
-                    _log.warn("No IP address to send in RelayReponse");
+                if (_log.shouldWarn()) {_log.warn("No IP address to send in RelayReponse");}
                 rcode = SSU2Util.RELAY_REJECT_CHARLIE_ADDRESS;
             }
         } else {
-            if (_log.shouldWarn())
-                _log.warn("No address to send in RelayReponse");
+            if (_log.shouldWarn()) {_log.warn("No address to send in RelayReponse");}
             rcode = SSU2Util.RELAY_REJECT_CHARLIE_ADDRESS;
         }
         int ourPort = _transport.getRequestedPort();
@@ -801,35 +747,34 @@ class IntroductionManager {
             RemoteHostId aliceID = new RemoteHostId(testIP, testPort);
             EstablishmentManager.Token tok = _transport.getEstablisher().getInboundToken(aliceID, 60*1000);
             token = tok.getToken();
-        } else {
-            token = 0;
-        }
+        } else {token = 0;}
         SigningPrivateKey spk = _context.keyManager().getSigningPrivateKey();
         data = SSU2Util.createRelayResponseData(_context, bob.getRemotePeer(), rcode,
                                                 nonce, ourIP, ourPort, spk, token);
         if (data == null) {
             if (_log.shouldWarn()) {_log.warn("Signature failure (no data)");}
-             return;
+            return false;
         }
         try {
             UDPPacket packet = _builder2.buildRelayResponse(data, bob);
-            if (_log.shouldInfo())
+            if (_log.shouldInfo()) {
                 _log.info("Send RelayResponse " + rcode + " as Charlie " + " nonce " + nonce + " to Bob " + bob +
                           " with token " + token + " for Alice \n* Address: " + Addresses.toString(testIP, testPort) + "\n* " + aliceRI);
+            }
             _transport.send(packet);
             bob.setLastSendTime(now);
-        } catch (IOException ioe) {
-            return;
-        }
+        } catch (IOException ioe) {return false;}
         if (rcode == SSU2Util.RELAY_ACCEPT) {
             // send hole punch with the same data we sent to Bob
-            if (_log.shouldDebug())
+            if (_log.shouldDebug()) {
                 _log.debug("[SSU2] Sending hole punch to " + Addresses.toString(testIP, testPort).replace("/", ""));
+            }
             long sendId = (nonce << 32) | nonce;
             long rcvId = ~sendId;
             UDPPacket packet = _builder2.buildHolePunch(aliceIP, testPort, aliceIntroKey, sendId, rcvId, data);
             _transport.send(packet);
         }
+        return true;
     }
 
     /**
@@ -851,14 +796,12 @@ class IntroductionManager {
         peer.setLastReceiveTime(now);
         long skew = time - now;
         if (skew > MAX_SKEW || skew < 0 - MAX_SKEW) {
-            if (_log.shouldWarn())
-                _log.warn("Too skewed for relay resp from " + peer);
+            if (_log.shouldWarn()) {_log.warn("Too skewed for relay resp from " + peer);}
             return;
         }
         int ver = data[8] & 0xff;
         if (ver != 2) {
-            if (_log.shouldWarn())
-                _log.warn("Bad relay intro version " + ver + " from " + peer);
+            if (_log.shouldWarn()) {_log.warn("Bad relay intro version " + ver + " from " + peer);}
             return;
         }
         // Look up nonce to determine if we are Alice or Bob

@@ -692,9 +692,11 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     public void gotRelayIntro(Hash aliceHash, byte[] data) {
-        _transport.getIntroManager().receiveRelayIntro(this, aliceHash, data);
+        IntroductionManager.RelayIntroResult result = _transport.getIntroManager().receiveRelayIntro(this, aliceHash, data);
         // Relay blocks are ACK-eliciting
-        messagePartiallyReceived();
+        // but we will usually respond to Bob immediately with a relay response, which includes the ack,
+        // so only schedule an ack if we didn't respond
+        if (result != IntroductionManager.RelayIntroResult.REPLIED) {messagePartiallyReceived();}
     }
 
     public void gotPeerTest(int msg, int status, Hash h, byte[] data) {
@@ -772,7 +774,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             synchronized(this) {_packetsReceivedDuplicate++;}
             if (_log.shouldInfo()) {
                 if (state != null) {
-                    _log.info("[SSU2] Recieved duplicate fragment [" + frag + "] for " + state);
+                    _log.info("[SSU2] Received duplicate fragment [" + frag + "] for " + state);
                 } else {
                     _log.info("[SSU2] Received duplicate fragment [" + frag + "] " + this);
                 }
@@ -882,11 +884,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                 setLastReceiveTime(now);
                             } catch (IOException ioe) {}
                         } else {messagePartiallyReceived();}
-                    } else {
-                        // caller will handle
-                        // ACK-eliciting
-                        messagePartiallyReceived();
-                    }
+                    } else {messagePartiallyReceived();} // caller will handle - ACK-eliciting
                     break;
 
                 default:

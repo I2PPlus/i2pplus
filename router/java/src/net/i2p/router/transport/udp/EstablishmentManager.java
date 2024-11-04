@@ -1506,8 +1506,7 @@ class EstablishmentManager {
                     // if we didn't try to connect, it must have had a bad RI
                     if (istate == INTRO_STATE_HAS_RI)
                         istate = INTRO_STATE_REJECTED;
-                    if (oldState != istate)
-                        state2.setIntroState(h, istate);
+                    if (oldState != istate) {state2.setIntroState(h, istate);}
                 }
             }
             if (sent) {
@@ -1531,12 +1530,9 @@ class EstablishmentManager {
                     }
                 }
             }
-            if (sent) {
-                // not really
-                state.introSent();
-            } else {
-                if (_log.shouldDebug())
-                    _log.debug("[SSU2] No valid Introducers for " + state);
+            if (sent) {state.introSent();} // not really
+            else {
+                if (_log.shouldDebug()) {_log.debug("[SSU2] No valid Introducers for " + state);}
                 processExpired(state);
             }
     }
@@ -1604,7 +1600,7 @@ class EstablishmentManager {
             if (_log.shouldDebug()) {
                 _log.debug("[SSU2] Duplicate or unknown RelayResponse: " + nonce);
             }
-            return; // already established
+            return; // already established, or we were Bob and got a dup from Charlie
         }
         if (charlie.getVersion() != 2) {return;}
         OutboundEstablishState2 charlie2 = (OutboundEstablishState2) charlie;
