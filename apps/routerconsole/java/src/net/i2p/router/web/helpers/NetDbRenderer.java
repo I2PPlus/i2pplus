@@ -776,6 +776,62 @@ class NetDbRenderer {
         out.flush();
     }
 
+/** WIP
+    public void renderLeaseSet(Writer out, String hostname, boolean debug) throws IOException {
+        StringBuilder buf = new StringBuilder(3*1024);
+        if (!_context.netDb().isInitialized()) {
+            buf.append("<div id=notinitialized>").append(_t("Not initialized")).append("</div>");
+            out.write(buf.toString());
+            return;
+        }
+        NetworkDatabaseFacade netdb = _context.netDb();
+        Set<LeaseSet> leases = new HashSet<>(netdb.getLeases());
+        Hash hash = ConvertToHash.getHash(hostname);
+        List<LeaseSet> matchedLeases = new ArrayList<>();
+        if (hash != null) {
+            LeaseSet ls = netdb.lookupLeaseSetLocally(hash);
+            if (ls != null) {matchedLeases.add(ls);}
+        } else {matchedLeases = matchPartialHash(hostname, leases);}
+        if (!matchedLeases.isEmpty()) {
+            for (LeaseSet ls : matchedLeases) {
+                BigInteger dist = HashDistance.getDistance(_context.routerHash(), ls.getRoutingKey());
+                DecimalFormat fmt = new DecimalFormat("#0.00");
+                String distance = fmt.format(biLog2(dist));
+                long now = _context.clock().now();
+                renderLeaseSet(buf, ls, true, now, false, distance);
+            }
+        } else {
+            if (hash == null) {
+                buf.append("<div class=netdbnotfound>")
+                  .append(_t("Hostname {0} not found in network database", hostname))
+                  .append("</div>");
+            } else {
+                buf.append("<div class=netdbnotfound>")
+                   .append(_t("LeaseSet containing substring \'{0}\' not found in network database", hostname))
+                   .append("</div>");
+            }
+        }
+        out.write(buf.toString());
+        out.flush();
+    }
+
+    public List<LeaseSet> matchPartialHash(String hostname, Collection<LeaseSet> leases) {
+        Hash hash = ConvertToHash.getHash(hostname);
+        List matchedLeases = new ArrayList<>();
+        for (LeaseSet lsQuery : leases) {
+            String queryHashStr = lsQuery.getHash().toString();
+            if (hash != null) {
+                String b32 = hash.toBase32();
+                String b64 = hash.toBase64();
+                if (queryHashStr.equals(hash)) {matchedLeases.add(lsQuery);}
+                else if (queryHashStr.contains(hostname) || queryHashStr.contains(b32) || queryHashStr.contains(b64)) {
+                    matchedLeases.add(lsQuery);
+                }
+            } else if (queryHashStr.contains(hostname)) {matchedLeases.add(lsQuery);}
+        }
+        return matchedLeases;
+    }
+**/
     /**
      * Single LeaseSet
      * @since 0.9.57
@@ -791,7 +847,12 @@ class NetDbRenderer {
         if (hash == null) {
             buf.append("<div class=netdbnotfound>").append(_t("Hostname {0} not found in network database", hostname)).append("</div>");
         } else {
-            LeaseSet ls = _context.netDb().lookupLeaseSetLocally(hash);
+            NetworkDatabaseFacade netdb;
+            netdb = _context.netDb();
+            LeaseSet ls = netdb.lookupLeaseSetLocally(hash);
+            Set<LeaseSet> leases;
+            leases = new TreeSet<LeaseSet>(new LeaseSetComparator());
+            leases.addAll(netdb.getLeases());
             if (ls == null) {
                 // Remote lookup
                 LookupWaiter lw = new LookupWaiter();
