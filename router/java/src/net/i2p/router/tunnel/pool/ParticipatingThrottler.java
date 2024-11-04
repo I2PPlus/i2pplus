@@ -59,7 +59,8 @@ class ParticipatingThrottler {
         boolean isUs = ri != null && us.equals(ri.getIdentity().getHash());
         boolean isUnreachable = ri != null && !isUs && (caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                                         caps.indexOf(Router.CAPABILITY_REACHABLE) < 0);
-        boolean isLowShare = ri != null && !isUs && (
+        boolean isG = ri != null && !isUs && caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0;
+        boolean isLowShare = ri != null && !isUs && isG || (
             caps.indexOf(Router.CAPABILITY_BW12) >= 0 ||
             caps.indexOf(Router.CAPABILITY_BW32) >= 0 ||
             caps.indexOf(Router.CAPABILITY_BW64) >= 0);
@@ -150,16 +151,16 @@ class ParticipatingThrottler {
     private Result evaluateThrottleConditions(int count, int limit, boolean shouldThrottle, boolean isFast, boolean isLowShare,
                                               boolean isUnreachable, Hash h, String caps, boolean isBanned, int bantime) {
         if (count > limit && shouldThrottle) {
-            if (isFast && !isUnreachable && count > limit * 10) {
+            if (isFast && !isUnreachable && count > limit * 3) {
                 handleExcessiveRequests(h, caps, count, limit, bantime);
                 return Result.DROP;
-            } else if (!isLowShare && !isUnreachable && count > limit * 8) {
+            } else if (!isLowShare && !isUnreachable && count > limit * 2) {
                 handleExcessiveRequests(h, caps, count, limit, bantime);
                 return Result.DROP;
-            } else if (isUnreachable && count > limit * 7) {
+            } else if (isUnreachable && count > limit + 30) {
                 handleExcessiveRequests(h, caps, count, limit, bantime);
                 return Result.DROP;
-            } else if (isLowShare && count > limit * 6) {
+            } else if (isLowShare && count > limit + 20) {
                 handleExcessiveRequests(h, caps, count, limit, bantime);
                 return Result.DROP;
             } else {
