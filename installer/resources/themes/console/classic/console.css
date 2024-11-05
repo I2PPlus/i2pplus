@@ -2067,6 +2067,8 @@ div[lang="pt"] li br{display:none}
 .rid .rih{padding:2px 6px;font-family:var(--monospaced);font-size:9pt;vertical-align:middle}
 .rid .rbw{min-width:20px;text-align:center;line-height:1}
 .rbw.isff{background:var(--isFF),var(--badge)}
+.rbw.isG{background:var(--isG),var(--badge)}
+.rbw.isU{background:var(--isU),var(--badge)}
 .rbw.isff.isD{background:var(--isD),var(--isFF),var(--badge)}
 .rbw.isff.isE{background:var(--isE),var(--isFF),var(--badge)}
 .rbw.isff.isG{background:var(--isG),var(--isFF),var(--badge)}
@@ -2074,7 +2076,6 @@ div[lang="pt"] li br{display:none}
 .rbw.isff.isU.isD{background:var(--isD),var(--isFF),var(--isU),var(--badge)}
 .rbw.isff.isU.isE{background:var(--isE),var(--isFF),var(--isU),var(--badge)}
 .rbw.isff.isU.isG{background:var(--isG),var(--isFF),var(--isU),var(--badge)}
-.rbw.isU{background:var(--isU),var(--badge)}
 .rbw.isU.isD{background:var(--isD),var(--isU),var(--badge)}
 .rbw.isU.isE{background:var(--isE),var(--isU),var(--badge)}
 .rbw.isU.isG{background:var(--isG),var(--isU),var(--badge)}

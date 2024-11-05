@@ -481,6 +481,8 @@ hr+#newsStatus,hr+#newsStatus+#newsDisplay{padding-top:1px}
 .rid .rbw{padding:2px 4px;min-width:16px;text-align:center;line-height:1;font-weight:900}
 .rid.ric .rbw{line-height:1.2}
 .rid .rbw.isff{background:var(--isFF),var(--badge)}
+.rid .rbw.isG{background:var(--isG),var(--badge)}
+.rid .rbw.isU{background:var(--isU),var(--badge)}
 .rid .rbw.isff.isD{background:var(--isD),var(--isFF),var(--badge)}
 .rid .rbw.isff.isE{background:var(--isE),var(--isFF),var(--badge)}
 .rid .rbw.isff.isG{background:var(--isG),var(--isFF),var(--badge)}
@@ -488,7 +490,6 @@ hr+#newsStatus,hr+#newsStatus+#newsDisplay{padding-top:1px}
 .rid .rbw.isff.isU.isD{background:var(--isD),var(--isFF),var(--isU),var(--badge)}
 .rid .rbw.isff.isU.isE{background:var(--isE),var(--isFF),var(--isU),var(--badge)}
 .rid .rbw.isff.isU.isG{background:var(--isG),var(--isFF),var(--isU),var(--badge)}
-.rid .rbw.isU{background:var(--isU),var(--badge)}
 .rid .rbw.isU.isD{background:var(--isD),var(--isU),var(--badge)}
 .rid .rbw.isU.isE{background:var(--isE),var(--isU),var(--badge)}
 .rid .rbw.isU.isG{background:var(--isG),var(--isU),var(--badge)}

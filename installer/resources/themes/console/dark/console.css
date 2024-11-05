@@ -3042,6 +3042,8 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 .rid .rbw{padding:2px 1px 2px 3px;min-width:20px;text-align:center;line-height:1;font-weight:900}
 .ric .rbw{line-height:1.2}
 .rbw.isff{background:var(--isFF),var(--badge)}
+.rbw.isG{background:var(--isG),var(--badge)}
+.rbw.isU{background:var(--isU),var(--badge)}
 .rbw.isff.isD{background:var(--isD),var(--isFF),var(--badge)}
 .rbw.isff.isE{background:var(--isE),var(--isFF),var(--badge)}
 .rbw.isff.isG{background:var(--isG),var(--isFF),var(--badge)}
@@ -3049,7 +3051,6 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 .rbw.isff.isU.isD{background:var(--isD),var(--isFF),var(--isU),var(--badge)}
 .rbw.isff.isU.isE{background:var(--isE),var(--isFF),var(--isU),var(--badge)}
 .rbw.isff.isU.isG{background:var(--isG),var(--isFF),var(--isU),var(--badge)}
-.rbw.isU{background:var(--isU),var(--badge)}
 .rbw.isU.isD{background:var(--isD),var(--isU),var(--badge)}
 .rbw.isU.isE{background:var(--isE),var(--isU),var(--badge)}
 .rbw.isU.isG{background:var(--isG),var(--isU),var(--badge)}
