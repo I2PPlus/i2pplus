@@ -1,5 +1,5 @@
-/* I2P Theme Override:Dark */
-/* Comment:Larger text (and other tweaks) for Chinese & other doublebyte charactersets */
+/* I2P+ Theme Override: Dark */
+/* Larger text (and other tweaks) for Chinese & other doublebyte charactersets */
 /* Author: dr|z3d */
 a[href^="configpeer?peer"],h3#iptransport a,h3#iptransport a{font-size:0}
 button,button:visited,input[type=submit],input[type="reset"],.cancel,.accept{margin:4px;padding:6px 8px;display:inline-block;min-width:80px;line-height:1.5;font-size:110%;font-weight:400;letter-spacing:.05em}
