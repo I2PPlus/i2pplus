@@ -39,7 +39,7 @@
       else if (line.startsWith("# ") && line.includes(":")) {
         const [key, ...rest] = line.slice(2).split(":");
         const value = rest.join(":").trim();
-        const cleanedKey = key.replace("(ms since the epoch)", "").trim();
+        const cleanedKey = key.replace("(ms since the epoch)", "").replace("(ms)", "").trim();
         const cleanedValue = cleanValue(value);
 
         if (cleanedKey === "Speed") {
@@ -70,7 +70,7 @@
           let formattedResponseTime;
           if (!isNaN(responseTime)) {
             if (responseTime > 1000) {
-              formattedResponseTime = (responseTime / 1000).toFixed(2) + " seconds";
+              formattedResponseTime = (responseTime / 1000).toFixed(1) + " seconds";
             } else {
               formattedResponseTime = responseTime + " milliseconds";
             }
@@ -104,18 +104,19 @@
     const match = title.match(/\[(.*?)\]/);
     if (match) {
       const titleContent = match[1];
-      const text = title.replace(match[0], '').trim();
+      const text = title.replace(match[0], "").trim();
       return [text, titleContent];
     }
-    return [title, ''];
+    return [title, ""];
   }
 
   function cleanValue(value) {
-    let cleanedValue = value.replace(/\[.*?\]/g, '').trim();
-    cleanedValue = cleanedValue.replace(/GMT/g, '');
-    cleanedValue = cleanedValue.replace(/_/g, ' ');
-    cleanedValue = cleanedValue.replace(/0\.0/g, '0');
-    if (cleanedValue.endsWith('.0')) {cleanedValue = cleanedValue.slice(0, -2);}
+    let cleanedValue = value.replace(/\[.*?\]/g, "").trim();
+    cleanedValue = cleanedValue.replace(/GMT/g, "");
+    cleanedValue = cleanedValue.replace(/_/g, " ");
+    cleanedValue = cleanedValue.replace(/0\.0/g, "0");
+    cleanedValue = cleanedValue.replace(/9999999/g, "9999999 (Low latency)")
+    if (cleanedValue.endsWith(".0")) {cleanedValue = cleanedValue.slice(0, -2);}
     return cleanedValue;
   }
 

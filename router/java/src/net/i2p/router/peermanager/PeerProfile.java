@@ -374,7 +374,7 @@ public class PeerProfile {
     @SuppressWarnings("deprecation")
     void updateTunnelTestTimeAverage(float ms) {
 
-        if (_tunnelTestResponseTimeAvg <= 0) {_tunnelTestResponseTimeAvg = 30*1000;} // should we instead start at $ms?
+        if (_tunnelTestResponseTimeAvg <= 0) {_tunnelTestResponseTimeAvg = ms;} // should we instead start at $ms?
 
         // weighted since we want to let the average grow quickly and shrink slowly
         if (ms < _tunnelTestResponseTimeAvg) {_tunnelTestResponseTimeAvg = 0.95f * _tunnelTestResponseTimeAvg + .05f * ms;}
@@ -390,7 +390,7 @@ public class PeerProfile {
     void setPeerTestTimeAverage(float testAvg) {_peerTestResponseTimeAvg = testAvg;}
 
     void updatePeerTestTimeAverage(float ms) {
-        if (_peerTestResponseTimeAvg <= 0) {_peerTestResponseTimeAvg = 1500;} // default timeout * 2
+        if (_peerTestResponseTimeAvg <= 0) {_peerTestResponseTimeAvg = ms;} // default timeout * 2
         else {_peerTestResponseTimeAvg = 0.75f * _peerTestResponseTimeAvg + .25f * ms;}
         if (_log.shouldInfo()) {
             _log.info("Timed peer test average for [" + _peer.toBase64().substring(0,6) +
