@@ -139,62 +139,44 @@
     return (bytes / 1024).toFixed(2);
   }
 
-  function addToggles() {
-    document.querySelectorAll(".section").forEach(section => {
+function addToggles() {
+  document.querySelectorAll(".section").forEach(section => {
+    let next = section.nextElementSibling;
+    while (next && !next.classList.contains("section")) {
+      next.classList.add("hidden");
+      next = next.nextElementSibling;
+    }
+  });
+
+  document.querySelectorAll(".section").forEach(section => {
+    section.addEventListener("click", function() {
+      this.classList.toggle("expanded");
+      let next = this.nextElementSibling;
+      while (next && !next.classList.contains("section")) {
+        next.classList.toggle("hidden");
+        next = next.nextElementSibling;
+      }
+      if (this.classList.contains("expanded")) {
+        window.scrollTo(0, this.offsetTop);
+      } else {
+        window.scrollTo(0, 0);
+      }
+    });
+  });
+
+  // Expand the .ri, .tnl, and .db sections by default
+  const sectionsToExpand = document.querySelectorAll(".ri, .tnl, .db");
+  if (sectionsToExpand.length > 0) {
+    Array.from(sectionsToExpand).forEach(section => {
+      section.classList.add("expanded");
       let next = section.nextElementSibling;
       while (next && !next.classList.contains("section")) {
-        next.classList.add("hidden");
+        next.classList.remove("hidden");
         next = next.nextElementSibling;
       }
     });
-
-    document.querySelectorAll(".section").forEach(section => {
-      section.addEventListener("click", function() {
-        document.querySelectorAll(".section").forEach(otherSection => {
-          if (otherSection !== this) {
-            otherSection.classList.remove("expanded");
-            let next = otherSection.nextElementSibling;
-            while (next && !next.classList.contains("section")) {
-              next.classList.add("hidden");
-              next = next.nextElementSibling;
-            }
-          }
-        });
-        this.classList.toggle("expanded");
-        let next = this.nextElementSibling;
-        while (next && !next.classList.contains("section")) {
-          next.classList.toggle("hidden");
-          next = next.nextElementSibling;
-        }
-        if (this.classList.contains("expanded")) {window.scrollTo(0, this.offsetTop);}
-        else {window.scrollTo(0,0);}
-      });
-    });
-
-    // Expand the .ri, .tnl, and .db sections by default
-    const sectionsToExpand = document.querySelectorAll(".ri, .tnl, .db");
-    if (sectionsToExpand.length > 0) {
-      Array.from(sectionsToExpand).forEach(section => {
-        section.classList.add("expanded");
-        let next = section.nextElementSibling;
-        while (next && !next.classList.contains("section")) {
-          next.classList.remove("hidden");
-          next = next.nextElementSibling;
-        }
-      });
-    }
-
-    // Collapse any subsequent sections after the specified sections
-    document.querySelectorAll(".section").forEach(section => {
-      if (!Array.from(sectionsToExpand).includes(section)) {
-        let next = section.nextElementSibling;
-        while (next && !next.classList.contains("section")) {
-          next.classList.add("hidden");
-          next = next.nextElementSibling;
-        }
-      }
-    });
-    setTimeout(() => viewprofile.removeAttribute("hidden"), 100);
   }
+  setTimeout(() => viewprofile.removeAttribute("hidden"), 100);
+}
 
 })();

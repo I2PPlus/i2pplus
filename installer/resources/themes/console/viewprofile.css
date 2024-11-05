@@ -1,3 +1,6 @@
+/* I2P+ global viewprofile theme */
+/* Author: dr|z3d */
+
 #viewprofile.tabulated tr:first-child{display:none}
 #viewprofile.tabulated th{padding:7px 8px;text-align:left;font-size:100%}
 #viewprofile.tabulated th::before{margin:0 4px 0 0;display:inline-block;height:14px;width:14px;vertical-align:text-top;background:var(--clock);content:""}
@@ -5,6 +8,7 @@
 #viewprofile.tabulated td:first-child{width:50%;font-weight:600}
 #viewprofile.tabulated .hidden{display:none}
 #viewprofile.tabulated .section th{padding-right:10px;font-size:110%}
+#viewprofile.tabulated .section:not(.heading){display:none}
 #viewprofile.tabulated .section.heading th{padding:10px 10px 8px;text-transform:uppercase;letter-spacing:.1em;font-size:120%;font-weight:700!important}
 #viewprofile.tabulated .section th::before{margin:0 8px 0 4px;width:16px;height:16px;background:url(/themes/console/images/stats.svg)}
 #viewprofile.tabulated .section.db th::before,#viewprofile.tabulated .section.ri th::before,#viewprofile.tabulated .section.tnl th::before{margin:0 6px 0 2px;width:18px;height:18px}
