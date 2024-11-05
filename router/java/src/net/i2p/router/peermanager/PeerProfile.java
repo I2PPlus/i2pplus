@@ -548,18 +548,14 @@ public class PeerProfile {
             if (tot > lowPeak) {
                 for (int i = 0; i < THROUGHPUT_COUNT; i++) {
                     if (tot > _peakThroughput[i]) {
-                        for (int j = THROUGHPUT_COUNT-1; j > i; j--) {
-                            _peakThroughput[j] = _peakThroughput[j-1];
-                        }
+                        for (int j = THROUGHPUT_COUNT-1; j > i; j--) {_peakThroughput[j] = _peakThroughput[j-1];}
                         _peakThroughput[i] = tot;
                         break;
                     }
                 }
             } else {
                 if (shouldDecay) {
-                    for (int i = 0; i < THROUGHPUT_COUNT; i++) {
-                        _peakThroughput[i] *= DEGRADE_FACTOR;
-                    }
+                    for (int i = 0; i < THROUGHPUT_COUNT; i++) {_peakThroughput[i] *= DEGRADE_FACTOR;}
                 }
             }
 
@@ -580,13 +576,13 @@ public class PeerProfile {
      *  Update the stats and rates. This is only called by addProfile()
      */
     void coalesceStats() {
-        if (!_expanded) return;
-
+        if (!_expanded) {return;}
         coalesceOnly(false);
         updateValues();
-
-        if (_log.shouldDebug())
-            _log.debug("Coalesced stats: Speed [" + _speedValue + "] Capacity [" + _capacityValue + "] Integration [" + _integrationValue + "]");
+        if (_log.shouldDebug()) {
+            _log.debug("Coalesced stats: Speed [" + _speedValue + "] Capacity [" + _capacityValue +
+                       "] Integration [" + _integrationValue + "]");
+        }
     }
 
     /**
