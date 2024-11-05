@@ -72,7 +72,7 @@
             if (responseTime > 1000) {
               formattedResponseTime = (responseTime / 1000).toFixed(1) + " seconds";
             } else {
-              formattedResponseTime = responseTime + " milliseconds";
+              formattedResponseTime = responseTime.toFixed(0) + " milliseconds";
             }
           }
           tableHTML += "<tr class=stat><td>" + cleanedKey + "</td><td>" + formattedResponseTime + "</td></tr>";
