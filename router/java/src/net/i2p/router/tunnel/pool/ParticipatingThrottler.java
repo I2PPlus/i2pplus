@@ -60,10 +60,10 @@ class ParticipatingThrottler {
         boolean isUnreachable = ri != null && !isUs && (caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                                                         caps.indexOf(Router.CAPABILITY_REACHABLE) < 0);
         boolean isG = ri != null && !isUs && caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0;
-        boolean isLowShare = ri != null && !isUs && isG || (
+        boolean isLowShare = ri != null && !isUs && (
             caps.indexOf(Router.CAPABILITY_BW12) >= 0 ||
             caps.indexOf(Router.CAPABILITY_BW32) >= 0 ||
-            caps.indexOf(Router.CAPABILITY_BW64) >= 0);
+            caps.indexOf(Router.CAPABILITY_BW64) >= 0 || isG);
         boolean isFast = ri != null && !isUs && (
             caps.indexOf(Router.CAPABILITY_BW256) >= 0||
             caps.indexOf(Router.CAPABILITY_BW512) >= 0||
