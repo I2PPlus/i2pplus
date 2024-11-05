@@ -1330,7 +1330,8 @@ class NetDbRenderer {
             String style = addr.getTransportStyle();
             int transportCost = addr.getCost();
             if ((style.startsWith("SSU") && transportCost == 5) ||
-                (style.startsWith("NTCP") && transportCost == 14)) {
+                (style.startsWith("NTCP") && transportCost == 14) &&
+                (style.startsWith("SSU") && transportCost != 15)) {
                 isJavaI2P = true;
                 break;
             } else if ((style.startsWith("SSU") && transportCost == 3) ||
