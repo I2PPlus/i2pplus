@@ -1,4 +1,4 @@
-/* I2P+ Theme:Camo aka Dark */
+/* I2P+ Theme: Camo aka Dark */
 /* Military Grade. */
 /* Thanks to Florian Kuhlmann for the hatface images. [http://www.flickr.com/photos/floriankuhlmann/] */
 /* Author: dr|z3d */
@@ -801,6 +801,7 @@ td.ipv6{width:1%;max-width:24px}
 #netdb::before,#profiles::before{display:block;height:5px;position:absolute;top:0;left:1px;right:1px;z-index:999;background:linear-gradient(180deg,#f60 50%,#d30 50%);opacity:.7;content:"";animation:mainload 5s ease-out 0s both,fade 2s ease 5s both}
 #netdb::before{animation:mainload 10s ease-out 0s both,fade 2s ease 10s both}
 #netdb #netdbwrap .confignav,#peers .confignav,#profiles .confignav{animation:fade 0s ease 3s reverse both}
+#nopeer{margin:11px auto 10px}
 #peerprofiles.widescroll{margin-top:-10px;padding-top:112px;position:relative}
 #peer_thresholds{width:100%;position:absolute;top:0}
 #profiles{position:relative;contain:paint}
