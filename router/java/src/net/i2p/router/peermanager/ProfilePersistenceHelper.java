@@ -50,7 +50,7 @@ class ProfilePersistenceHelper {
     private static final String DIR_PREFIX = "p";
     private static final String B64 = Base64.ALPHABET_I2P;
     // Max to read in at startup
-    private static final int LIMIT_PROFILES = SystemVersion.isSlow() ? 1000 : 2000;
+    private static final int LIMIT_PROFILES = SystemVersion.isSlow() ? 1000 : 3000;
 
     private final File _profileDir;
     private Hash _us;
@@ -67,7 +67,7 @@ class ProfilePersistenceHelper {
         }
     }
 
-    public void setUs(Hash routerIdentHash) { _us = routerIdentHash; }
+    public void setUs(Hash routerIdentHash) {_us = routerIdentHash;}
 
     /**
      * write out the data from the profile to the file
@@ -140,38 +140,37 @@ class ProfilePersistenceHelper {
         }
         if (profile.getSpeedBonus() != 0) {add(buf, addComments, "speedBonus", profile.getSpeedBonus(), "Manual Speed Score adjustment: " +  profile.getSpeedBonus());}
         if (profile.getCapacityBonus() != 0) {add(buf, addComments, "capacityBonus", profile.getCapacityBonus(), "Manual Capacity Score adjustment: " +  profile.getCapacityBonus());}
-        if (profile.getIntegrationBonus() != 0) {add(buf, addComments, "integrationBonus", profile.getIntegrationBonus(), "Manual Integration Score adjustment: " + profile.getIntegrationBonus());}
+        if (profile.getIntegrationBonus() != 0) {add(buf, addComments, "integrationBonus", profile.getIntegrationBonus(), "Manual Integration Score adjustment:");}
         addDate(buf, addComments, "firstHeardAbout", profile.getFirstHeardAbout(), "First reference to peer received:");
         addDate(buf, addComments, "lastHeardAbout", profile.getLastHeardAbout(), "Last reference to peer received:");
         if (profile.getLastHeardFrom() != 0) {addDate(buf, addComments, "lastHeardFrom", profile.getLastHeardFrom(), "Last message from peer received:");}
         if (profile.getLastSendSuccessful() != 0) {addDate(buf, addComments, "lastSentToSuccessfully", profile.getLastSendSuccessful(), "Last successful message sent to peer:");}
         if (profile.getLastSendFailed() != 0) {addDate(buf, addComments, "lastFailedSend", profile.getLastSendFailed(), "Last failed message to sent peer:");}
         if (profile.getTunnelTestTimeAverage() != 0 && PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME) {
-            add(buf, addComments, "tunnelTestTimeAverage", (long) profile.getTunnelTestTimeAverage(), "Average peer response time: " +  (long) profile.getTunnelTestTimeAverage() + "ms");
+            add(buf, addComments, "tunnelTestTimeAverage", (long) profile.getTunnelTestTimeAverage(), "Average peer response time (ms):");
         }
         // TODO: needs clarification - difference between tunnel peak and tunnel peak tunnel? And round down KBps display to 2 decimal places
         if (profile.getPeakThroughputKBps() >= 1) {
-            add(buf, addComments, "tunnelPeakThroughput", (long) profile.getPeakThroughputKBps(), "Tunnel Peak throughput: " + (long) profile.getPeakThroughputKBps() + " KB/s");
+            add(buf, addComments, "tunnelPeakThroughput", (long) profile.getPeakThroughputKBps(), "Tunnel Peak throughput (KB/s):");
         }
         if (profile.getPeakTunnelThroughputKBps() >= 1) {
-            add(buf, addComments, "tunnelPeakTunnelThroughput", (long) profile.getPeakTunnelThroughputKBps(), "Tunnel Peak Tunnel throughput: " + (long) profile.getPeakTunnelThroughputKBps() + " KB/s");
+            add(buf, addComments, "tunnelPeakTunnelThroughput", (long) profile.getPeakTunnelThroughputKBps(), "Tunnel Peak Tunnel throughput (KB/s):");
         }
         if (profile.getPeakTunnel1mThroughputKBps() >= 1) {
-            add(buf, addComments, "tunnelPeakTunnel1mThroughput", (long) profile.getPeakTunnel1mThroughputKBps(), "Tunnel Peak Tunnel throughput for 1 minute: " + (long) profile.getPeakTunnel1mThroughputKBps() + " KB/s");
+            add(buf, addComments, "tunnelPeakTunnel1mThroughput", (long) profile.getPeakTunnel1mThroughputKBps(), "Tunnel Peak Tunnel throughput for 1 minute (KB/s):");
         }
         if (addComments) {buf.append(HR).append(NL).append(NL);}
         out.write(buf.toString().getBytes("UTF-8"));
 
-        if (profile.getIsExpanded()) {
-            // only write out expanded data if, uh, we've got it
+        if (profile.getIsExpanded()) { // only write out expanded data if, uh, we've got it
             profile.getTunnelHistory().store(out, addComments);
-            //profile.getReceiveSize().store(out, "receiveSize");
-            //profile.getSendSuccessSize().store(out, "sendSuccessSize");
             profile.getTunnelCreateResponseTime().store(out, "tunnelCreateResponseTime", addComments);
-            if (PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME)
+            if (PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME) {
                 profile.getTunnelTestResponseTime().store(out, "tunnelTestResponseTime", addComments);
-            if (profile.getPeerTestResponseTime() != null)
+            }
+            if (profile.getPeerTestResponseTime() != null) {
                 profile.getPeerTestResponseTime().store(out, "peerTestResponseTime", addComments);
+            }
         }
 
         if (profile.getIsExpandedDB()) {
@@ -270,7 +269,7 @@ class ProfilePersistenceHelper {
             if (f.lastModified() < cutoff && files.size() > LIMIT_PROFILES) {
                 i++;
                 f.delete();
-                _log.warn("Not deleting " + f + " (debugging active)");
+                //_log.warn("Not deleting " + f + " (debugging active)");
             }
         }
         if (_log.shouldWarn()) {
