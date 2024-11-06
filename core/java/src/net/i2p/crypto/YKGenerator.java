@@ -36,7 +36,6 @@ import net.i2p.util.SystemVersion;
  * @author jrandom
  */
 final class YKGenerator {
-    //private final static Log _log = new Log(YKGenerator.class);
     private final int MIN_NUM_BUILDERS;
     private final int MAX_NUM_BUILDERS;
     private final int CALC_DELAY;
@@ -48,9 +47,9 @@ final class YKGenerator {
     public final static String PROP_YK_PRECALC_MIN = "crypto.yk.precalc.min";
     public final static String PROP_YK_PRECALC_MAX = "crypto.yk.precalc.max";
     public final static String PROP_YK_PRECALC_DELAY = "crypto.yk.precalc.delay";
-    public final static int DEFAULT_YK_PRECALC_MIN = 20;
-    public final static int DEFAULT_YK_PRECALC_MAX = 50;
-    public final static int DEFAULT_YK_PRECALC_DELAY = 200;
+    public final static int DEFAULT_YK_PRECALC_MIN = SystemVersion.isSlow() ? 30 : 50;
+    public final static int DEFAULT_YK_PRECALC_MAX = SystemVersion.isSlow() ? 100 : 200;
+    public final static int DEFAULT_YK_PRECALC_DELAY =  SystemVersion.isSlow() ? 200 : 150;
 
     /**
      *  Caller must also call start() to start the background precalc thread.
@@ -59,21 +58,15 @@ final class YKGenerator {
     public YKGenerator(I2PAppContext context) {
         ctx = context;
 
-        // add to the defaults for every 128MB of RAM, up to 1GB
+        // Add to the defaults for every 128MB of RAM, up to 1GB
         long maxMemory = SystemVersion.getMaxMemory();
         int factor = (int) Math.max(1l, Math.min(8l, 1 + (maxMemory / (128*1024*1024l))));
         int defaultMin = DEFAULT_YK_PRECALC_MIN * factor;
         int defaultMax = DEFAULT_YK_PRECALC_MAX * factor;
         MIN_NUM_BUILDERS = ctx.getProperty(PROP_YK_PRECALC_MIN, defaultMin);
         MAX_NUM_BUILDERS = ctx.getProperty(PROP_YK_PRECALC_MAX, defaultMax);
-
         CALC_DELAY = ctx.getProperty(PROP_YK_PRECALC_DELAY, DEFAULT_YK_PRECALC_DELAY);
         _values = new LinkedBlockingQueue<BigInteger[]>(MAX_NUM_BUILDERS);
-
-        //if (_log.shouldDebug())
-        //    _log.debug("ElGamal YK Precalc (minimum: " + MIN_NUM_BUILDERS + " max: " + MAX_NUM_BUILDERS + ", delay: "
-        //               + CALC_DELAY + ")");
-
         ctx.statManager().createRateStat("crypto.YKUsed", "How often a precalculated ephemeral key (YK) is needed from queue", "Encryption", new long[] { 60*1000, 60*60*1000 });
         ctx.statManager().createRateStat("crypto.YKEmpty", "How often precalculated ephemeral key (YK) queue is empty", "Encryption", new long[] { 60*1000, 60*60*1000 });
     }
@@ -87,10 +80,8 @@ final class YKGenerator {
      *  @since 0.9.14
      */
     public synchronized void start() {
-        if (_isRunning)
-            return;
-        _precalcThread = new I2PThread(new YKPrecalcRunner(MIN_NUM_BUILDERS, MAX_NUM_BUILDERS),
-                                       "YK Precalc", true);
+        if (_isRunning) {return;}
+        _precalcThread = new I2PThread(new YKPrecalcRunner(MIN_NUM_BUILDERS, MAX_NUM_BUILDERS), "YK Precalc", true);
         _precalcThread.setPriority(Thread.NORM_PRIORITY - 2);
         _isRunning = true;
         _precalcThread.start();
@@ -105,30 +96,23 @@ final class YKGenerator {
      */
     public synchronized void shutdown() {
         _isRunning = false;
-        if (_precalcThread != null)
-            _precalcThread.interrupt();
+        if (_precalcThread != null) {_precalcThread.interrupt();}
         _values.clear();
     }
 
-    private final int getSize() {
-        return _values.size();
-    }
+    private final int getSize() {return _values.size();}
 
     /** @return true if successful, false if full */
-    private final boolean addValues(BigInteger yk[]) {
-        return _values.offer(yk);
-    }
+    private final boolean addValues(BigInteger yk[]) {return _values.offer(yk);}
 
     /** @return rv[0] = Y; rv[1] = K */
     public BigInteger[] getNextYK() {
         ctx.statManager().addRateData("crypto.YKUsed", 1);
         BigInteger[] rv = _values.poll();
-        if (rv != null)
-            return rv;
+        if (rv != null) {return rv;}
         ctx.statManager().addRateData("crypto.YKEmpty", 1);
         rv = generateYK();
-        if (_precalcThread != null)
-            _precalcThread.interrupt();
+        if (_precalcThread != null) {_precalcThread.interrupt();}
         return rv;
     }
 
@@ -138,12 +122,8 @@ final class YKGenerator {
     private final BigInteger[] generateYK() {
         NativeBigInteger k = null;
         BigInteger y = null;
-        //long t0 = 0;
-        //long t1 = 0;
         while (k == null) {
-            //t0 = Clock.getInstance().now();
             k = new NativeBigInteger(ctx.keyGenerator().getElGamalExponentSize(), ctx.random());
-            //t1 = Clock.getInstance().now();
             if (BigInteger.ZERO.compareTo(k) == 0) {
                 k = null;
                 continue;
@@ -151,38 +131,13 @@ final class YKGenerator {
             BigInteger kPlus2 = k.add(TWO);
             if (kPlus2.compareTo(CryptoConstants.elgp) > 0) k = null;
         }
-        //long t2 = Clock.getInstance().now();
         y = CryptoConstants.elgg.modPow(k, CryptoConstants.elgp);
 
         BigInteger yk[] = new BigInteger[2];
         yk[0] = y;
         yk[1] = k;
-
-        //long diff = t2 - t0;
-        //if (diff > 1000) {
-        //    if (_log.shouldWarn()) _log.warn("Took too long to generate YK value for ElGamal (" + diff + "ms)");
-        //}
-
         return yk;
     }
-
-/****
-    private static final int RUNS = 500;
-
-    public static void main(String args[]) {
-        // warmup crypto
-        ctx.random().nextInt();
-        System.out.println("Begin YK generator speed test");
-        long startNeg = Clock.getInstance().now();
-        for (int i = 0; i < RUNS; i++) {
-            getNextYK();
-        }
-        long endNeg = Clock.getInstance().now();
-        long  negTime = endNeg - startNeg;
-        // 14 ms each on a 2008 netbook (with jbigi)
-        System.out.println("YK fetch time for " + RUNS + " runs: " + negTime + " @ " + (negTime / RUNS) + "ms each");
-    }
-****/
 
     /** the thread */
     private class YKPrecalcRunner implements Runnable {
@@ -199,44 +154,23 @@ final class YKGenerator {
 
         public void run() {
             while (_isRunning) {
-                //long start = Clock.getInstance().now();
                 int startSize = getSize();
                 // Adjust delay
-                if (startSize <= (_minSize * 2 / 3) && _checkDelay > 1000)
-                    _checkDelay -= 1000;
-                else if (startSize > (_minSize * 3 / 2) && _checkDelay < 60*1000)
-                    _checkDelay += 1000;
+                if (startSize <= (_minSize * 2 / 3) && _checkDelay > 1000) {_checkDelay -= 1000;}
+                else if (startSize > (_minSize * 3 / 2) && _checkDelay < 60*1000) {_checkDelay += 1000;}
                 if (startSize < _minSize) {
-                    // fill all the way up, do the check here so we don't
-                    // throw away one when full in addValues()
+                    // Fill all the way up, do the check here so we don't throw away one when full in addValues()
                     while (getSize() < _maxSize && _isRunning) {
-                        //long begin = Clock.getInstance().now();
-                        if (!addValues(generateYK()))
-                            break;
-                        //long end = Clock.getInstance().now();
-                        //if (_log.shouldDebug()) _log.debug("Precalculated YK value in " + (end - begin) + "ms");
-                        // for some relief...
-                        try {
-                            Thread.sleep(CALC_DELAY);
-                        } catch (InterruptedException ie) { // nop
-                        }
+                        if (!addValues(generateYK())) {break;}
+                        try {Thread.sleep(CALC_DELAY);} // for some relief...
+                        } catch (InterruptedException ie) {} // no-op
                     }
                 }
-                //long end = Clock.getInstance().now();
-                //int numCalc = curSize - startSize;
-                //if (numCalc > 0) {
-                //    if (_log.shouldDebug())
-                //        _log.debug("Precalced " + numCalc + " to " + curSize + " in "
-                //                   + (end - start - CALC_DELAY * numCalc) + "ms (not counting "
-                //                   + (CALC_DELAY * numCalc) + "ms relief).  now sleeping");
-                //}
-                if (!_isRunning)
-                    break;
-                try {
-                    Thread.sleep(_checkDelay);
-                } catch (InterruptedException ie) { // nop
-                }
+                if (!_isRunning) {break;}
+                try {Thread.sleep(_checkDelay);}
+                } catch (InterruptedException ie) {} // no-op
             }
         }
     }
+
 }
