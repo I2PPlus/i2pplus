@@ -32,6 +32,7 @@
 <jsp:getProperty name="transitSummaryHelper" property="transitSummary" />
 </div>
 <script nonce=<%=cspNonce%> src=/js/lazyload.js></script>
+<script nonce=<%=cspNonce%> src=/js/convertKBtoMB.js></script>
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.js></script>
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.dotsep.js></script>
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.natural.js></script>
