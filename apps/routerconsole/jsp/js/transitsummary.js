@@ -43,6 +43,7 @@ function updateTunnels() {
         addSortListeners();
         if (peers && peers !== peersResponse) {
           peers.innerHTML = peersResponse.innerHTML;
+          convertKbToMb();
           if (sorter) {sorter.refresh();}
         }
       } else if (!summary || !peersResponse) {
@@ -54,9 +55,28 @@ function updateTunnels() {
   xhrtunnels.send();
 }
 
+function convertKbToMb() {
+  const elements = document.querySelectorAll(".tcount+td");
+  elements.forEach(element => {
+    const text = element.textContent;
+    const match = text.match(/(\d+(\.\d+)?)\s*KB/i);
+    if (match) {
+      const kbValue = parseFloat(match[1]);
+      if (kbValue > 1024) {
+        const mbValue = kbValue / 1024;
+        element.textContent = text.replace(match[0], mbValue.toFixed(1) + 'MB');
+      }
+    }
+  });
+}
+
 onVisible(main, () => updateTunnels());
 
 if (visible === "hidden") {clearInterval(refreshId);}
 
 window.addEventListener("DOMContentLoaded", () => progressx.hide());
-document.addEventListener("DOMContentLoaded", initRefresh);
+document.addEventListener("DOMContentLoaded", () => {
+  initRefresh();
+  convertKbToMb();
+});
+  

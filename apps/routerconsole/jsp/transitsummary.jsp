@@ -36,6 +36,7 @@
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.dotsep.js></script>
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.natural.js></script>
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.number.js></script>
+<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.filesize.js></script>
 <script nonce=<%=cspNonce%> type=module src=/js/transitsummary.js></script>
 </body>
 </html>

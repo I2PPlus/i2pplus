@@ -23,26 +23,26 @@
 
     switch(suffix[0]) {
       case 'k':
-        return Math.pow(base, 2);
+        return Math.pow(base, 1);
       case 'm':
-        return Math.pow(base, 3);
+        return Math.pow(base, 2);
       case 'g':
-        return Math.pow(base, 4);
+        return Math.pow(base, 3);
       case 't':
-        return Math.pow(base, 5);
+        return Math.pow(base, 4);
       case 'p':
-        return Math.pow(base, 6);
+        return Math.pow(base, 5);
       case 'e':
-        return Math.pow(base, 7);
+        return Math.pow(base, 6);
       case 'z':
-        return Math.pow(base, 8);
+        return Math.pow(base, 7);
       case 'y':
-        return Math.pow(base, 9);
+        return Math.pow(base, 8);
       default:
         return base;
     }
   },
-  
+
   // Converts filesize to bytes
   // Ex. filesize2num('123 KB') -> 123000
   // Ex. filesize2num('123 KiB') -> 125952

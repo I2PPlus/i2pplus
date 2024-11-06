@@ -312,7 +312,7 @@ class TunnelRenderer {
                 .append("<th id=address data-sortable>").append(_t("Address") + "</th>");
             if (enableReverseLookups()) {tbuf.append("<th id=domain data-sortable>").append(_t("Domain")).append("</th>");}
             tbuf.append("<th class=tcount data-sortable data-sort-method=number data-sort-default>").append(_t("Tunnels")).append("</th>")
-                .append("<th id=data data-sortable data-sort-method=dotsep>").append(_t("Data")).append("</th>")
+                .append("<th id=data data-sortable data-sort-method=filesize>").append(_t("Data")).append("</th>")
                 //.append("<th data-sortable data-sort-method=number>").append(_t("Speed")).append("</th>")
                 .append("<th id=banned data-sortable hidden>" + _t("Banned")).append("</th>")
                 .append("<th id=edit data-sort-method=none>" + _t("Edit")).append("</th>")
