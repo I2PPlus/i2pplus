@@ -6,6 +6,9 @@
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";
     if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+    boolean isValid = true;
+    String peerB64 = request.getParameter("peer");
+    if (peerB64 == null || peerB64.length() <= 0 || peerB64.replaceAll("[a-zA-Z0-9~=-]", "").length() != 0) {isValid = false;}
 %>
 <html lang="<%=lang%>">
 <head>
@@ -13,6 +16,9 @@
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("Peer Profile")%>
+<%  if (!isValid) { %>
+<meta http-equiv=refresh content="5;url=/profiles?f=1" />
+<%  } %>
 </head>
 <body>
 <script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
@@ -28,11 +34,8 @@
 <span class=tab2><%=intl._t("Profile View")%></span>
 </div>
 <%
-    String peerB64 = request.getParameter("peer");
-    if (peerB64 == null || peerB64.length() <= 0 ||
-        peerB64.replaceAll("[a-zA-Z0-9~=-]", "").length() != 0) {
-        out.print("<p class=infohelp id=nopeer>No peer specified</p>");
-    } else {
+    if (!isValid) {out.print("<p class=infohelp id=nopeer>No peer specified</p>");}
+    else {
 %>
 <jsp:useBean id="stathelper" class="net.i2p.router.web.helpers.StatHelper" />
 <jsp:setProperty name="stathelper" property="contextId" value="<%=i2pcontextId%>" />
