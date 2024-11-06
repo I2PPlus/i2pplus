@@ -85,14 +85,12 @@ public final class ChaCha20 {
         //dumpBlock(output);
         while (length > 0) {
             int tempLen = 64;
-            if (tempLen > length)
-                tempLen = length;
+            if (tempLen > length) {tempLen = length;}
             ChaChaCore.hash(output, input);
             //System.out.println("hash " + ++ctr);
             //dumpBlock(output);
             ChaChaCore.xorBlock(plaintext, plaintextOffset, ciphertext, ciphertextOffset, tempLen, output);
-            if (++(input[12]) == 0)
-                ++(input[13]);
+            if (++(input[12]) == 0) {++(input[13]);}
             plaintextOffset += tempLen;
             ciphertextOffset += tempLen;
             length -= tempLen;
@@ -126,41 +124,4 @@ public final class ChaCha20 {
         encrypt(key, iv, ivOffset, ciphertext, ciphertextOffset, plaintext, plaintextOffset, length);
     }
 
-/****
-    public static void main(String[] args) {
-        // vectors as in RFC 7539
-        byte[] plaintext = DataHelper.getASCII("Ladies and Gentlemen of the class of '99: If I could offer you only one tip for the future, sunscreen would be it.");
-        byte[] key = new byte[32];
-        for (int i = 0; i < 32; i++) {
-            key[i] = (byte) i;
-        }
-        byte[] iv = new byte[12];
-        iv[7] = 0x4a;
-        byte[] out = new byte[plaintext.length];
-        encrypt(key, iv, plaintext, 0, out, 0, plaintext.length);
-        //  Ciphertext Sunscreen:
-        //  000  6e 2e 35 9a 25 68 f9 80 41 ba 07 28 dd 0d 69 81  n.5.%h..A..(..i.
-        //  016  e9 7e 7a ec 1d 43 60 c2 0a 27 af cc fd 9f ae 0b  .~z..C`..'......
-        //  032  f9 1b 65 c5 52 47 33 ab 8f 59 3d ab cd 62 b3 57  ..e.RG3..Y=..b.W
-        //  048  16 39 d6 24 e6 51 52 ab 8f 53 0c 35 9f 08 61 d8  .9.$.QR..S.5..a.
-        //  064  07 ca 0d bf 50 0d 6a 61 56 a3 8e 08 8a 22 b6 5e  ....P.jaV....".^
-        //  080  52 bc 51 4d 16 cc f8 06 81 8c e9 1a b7 79 37 36  R.QM.........y76
-        //  096  5a f9 0b bf 74 a3 5b e6 b4 0b 8e ed f2 78 5e 42  Z...t.[......x^B
-        //  112  87 4d                                            .M
-        System.out.println("Ciphertext:\n" + net.i2p.util.HexDump.dump(out));
-        byte[] out2 = new byte[plaintext.length];
-        decrypt(key, iv, out, 0, out2, 0, plaintext.length);
-        System.out.println("Plaintext:\n" + net.i2p.util.HexDump.dump(out2));
-    }
-
-    private static void dumpBlock(int[] b) {
-        byte[] d = new byte[64];
-        for (int i = 0; i < 16; i++) {
-            //DataHelper.toLongLE(d, i*4, 4, b[i] & 0xffffffffL);
-            // use BE so the bytes look right
-            DataHelper.toLong(d, i*4, 4, b[i] & 0xffffffffL);
-        }
-        System.out.println(net.i2p.util.HexDump.dump(d));
-    }
-****/
 }
