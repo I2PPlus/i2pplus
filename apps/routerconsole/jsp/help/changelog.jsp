@@ -18,6 +18,7 @@
 </head>
 <body>
 <%@include file="../summary.jsi" %>
+<%@include file="../summaryajax.jsi" %>
 <h1 class=hlp><%=intl._t("Change Log")%></h1>
 <div class=main id=help>
 <div class=confignav>
@@ -46,19 +47,18 @@
 <p id=fullhistory><a href="/history.txt" target="_blank" rel="noreferrer"><%=intl._t("View the full change log")%></a></p>
 </div>
 </div>
+<script nonce=<%=cspNonce%> src=/js/lazyload.js></script>
 <script nonce=<%=cspNonce%>>
-  function spanify() {
+  (function spanify() {
     const content = document.querySelector("#changelog pre");
-    if (!content) return;
+    if (!content) {return;}
     const text = content.textContent.trim();
     const blocks = text.split("\n\n");
     const wrappedContent = blocks.map(function(block) {
-      return "<span>" + block + "</span>";
+      return "<span class=lazy>" + block + "</span>";
     }).join("\n\n");
     content.innerHTML = wrappedContent;
-  }
-  spanify();
+  })();
 </script>
-<%@include file="../summaryajax.jsi" %>
 </body>
 </html>
