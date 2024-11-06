@@ -854,7 +854,8 @@ td.ipv6{width:1%;max-width:24px}
 #profilelist .nospeed{text-align:center}
 #view_profile h3{margin:10px auto 13px;position:relative;vertical-align:middle;border-width:1px;border-radius:0}
 #view_profile h3 a{letter-spacing:0;font-size:90%;text-transform:none}
-#view_profile .profiledump,#view_profile .configpeer,#view_profile h3 a.viewprofile{font-size:0}
+#view_profile .confignav{margin-bottom:0}
+#view_profile .configpeer,#view_profile .profiledump,#view_profile h3 a.viewprofile{font-size:0}
 #view_profile .configpeer,#view_profile .viewprofile{margin:-2px 27px -2px 0}
 #view_profile .viewprofile{margin-right:6px}
 #view_profile .identicon{margin:0;width:27px;height:27px;position:absolute;top:2px;right:2px}
