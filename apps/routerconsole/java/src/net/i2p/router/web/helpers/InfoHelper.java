@@ -11,7 +11,6 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
-
 import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.router.transport.Transport;
 import net.i2p.router.transport.udp.UDPTransport;
@@ -23,9 +22,7 @@ public class InfoHelper extends HelperBase {
 
     public InfoHelper() {}
 
-    public void setFull(String f) {
-        _full = f != null && f.length() > 0;
-    }
+    public void setFull(String f) {_full = f != null && f.length() > 0;}
 
     public String getConsole() {
         try {
@@ -37,9 +34,7 @@ public class InfoHelper extends HelperBase {
                 renderStatusHTML(new OutputStreamWriter(baos));
                 return baos.toString();
             }
-        } catch (IOException ioe) {
-            return "<b>Error displaying the console.</b>";
-        }
+        } catch (IOException ioe) {return "<b>" + _t("Error displaying the info page.") + "</b>";}
     }
 
     public String getStats() {
@@ -53,64 +48,38 @@ public class InfoHelper extends HelperBase {
                 gen.generateStatsPage(new OutputStreamWriter(baos), _full);
                 return baos.toString();
             }
-        } catch (IOException ioe) {
-            return "<b>Error displaying the console.</b>";
-        }
+        } catch (IOException ioe) {return "<b>" + _t("Error displaying the info page.") + "</b>";}
     }
 
     /** @return host or "unknown" */
     public String getUdpIP() {
         String rv = _context.getProperty(UDPTransport.PROP_IP);
-        if (rv != null)
-            return rv;
+        if (rv != null) {return rv;}
         RouterAddress addr = _context.router().getRouterInfo().getTargetAddress("SSU");
         if (addr != null) {
             rv = addr.getHost();
-            if (rv != null)
-                return rv;
+            if (rv != null) {return rv;}
         }
         addr = _context.router().getRouterInfo().getTargetAddress("NTCP");
         if (addr != null) {
             rv = addr.getHost();
-            if (rv != null)
-                return rv;
+            if (rv != null) {return rv;}
         }
         return _t("unknown");
     }
 
-    public String lastCountry() {
-        return _context.getProperty("i2np.lastCountry");
-    }
-
-    public String getUdpPort() {
-        return _context.getProperty("i2np.udp.port");
-    }
-
-    public String firstInstalled() {
-        return _context.getProperty("router.firstInstalled");
-    }
-
-    public String firstVersion() {
-        return _context.getProperty("router.firstVersion");
-    }
-
-    public String lastUpdated() {
-        return _context.getProperty("router.updateLastInstalled");
-    }
-
-    public String updatePolicy() {
-        return _context.getProperty("router.updatePolicy");
-    }
-
-    public String updateDevSU3() {
-        return _context.getProperty("router.updateDevSU3");
-    }
+    public String lastCountry() {return _context.getProperty("i2np.lastCountry");}
+    public String getUdpPort() {return _context.getProperty("i2np.udp.port");}
+    public String firstInstalled() {return _context.getProperty("router.firstInstalled");}
+    public String firstVersion() {return _context.getProperty("router.firstVersion");}
+    public String lastUpdated() {return _context.getProperty("router.updateLastInstalled");}
+    public String updatePolicy() {return _context.getProperty("router.updatePolicy");}
+    public String updateDevSU3() {return _context.getProperty("router.updateDevSU3");}
 
     public String updateUnsigned() {
-        if (_context.getProperty("router.updateUnsigned") != null)
+        if (_context.getProperty("router.updateUnsigned") != null) {
             return _context.getProperty("router.updateUnsigned");
-        else
-            return "true";
+        } else {return "true";}
     }
 
     public boolean isRouterSlow() {
@@ -118,9 +87,7 @@ public class InfoHelper extends HelperBase {
         else {return false;}
     }
 
-    public String getCoreCount() {
-        return Integer.toString(SystemVersion.getCores());
-    }
+    public String getCoreCount() {return Integer.toString(SystemVersion.getCores());}
 
     public String bwIn() {
         String in = _context.getProperty("i2np.bandwidth.inboundKBytesPerSecond");
@@ -143,13 +110,13 @@ public class InfoHelper extends HelperBase {
     public String codelInterval() {
         String interval = _context.getProperty("router.codelInterval");
         if (interval != null) {return interval;}
-        else {return "750";}
+        else {return "500";}
     }
 
     public String codelTarget() {
         String target = _context.getProperty("router.codelTarget");
         if (target != null) {return target;}
-        else {return "40";}
+        else {return "20";}
     }
 
     public String getFamily() {
@@ -199,7 +166,7 @@ public class InfoHelper extends HelperBase {
             buf.append("&ensp;<a href=\"/configadvanced\">").append(_t("Configure")).append("</a></td></tr>\n");
         }
         if (bwIn() != null && bwOut() != null && bwShare() != null) {
-            buf.append("<tr><td><b>").append(_t("Bandwidth")).append(":</b></td><td><b>").append( _t("Inbound")).append(":</b> ")
+            buf.append("<tr><td><b>").append(_t("Bandwidth")).append(":</b></td><td class=ajax><b>").append( _t("Inbound")).append(":</b> ")
                .append(bwIn()).append("KB/s &ensp;<b>").append(_t("Outbound")).append(":</b> ").append(bwOut()).append("KB/s &ensp;<b>")
                .append(_t("Shared")).append(":</b> ").append(bwShare()).append("% (").append(shareBW).append("KB/s) &ensp;<b>")
                .append(_t("Tier")).append(":</b> ").append(ri.getBandwidthTier());
@@ -210,8 +177,8 @@ public class InfoHelper extends HelperBase {
                 else if (congestionCap.equals("G")) {buf.append(" (").append(_t("No transit tunnels")).append(")");}
             }
         }
-        buf.append("&ensp;<a href=\"/config\">").append(_t("Configure")).append("</a></td></tr>\n");
-        buf.append("<tr><td><b>").append(_t("Performance")).append(":</b></td><td><b>").append(_t("Available CPU Cores")).append(":</b> ")
+        buf.append("&ensp;<a href=\"/config\">").append(_t("Configure")).append("</a></td></tr>\n")
+           .append("<tr><td><b>").append(_t("Performance")).append(":</b></td><td><b>").append(_t("Available CPU Cores")).append(":</b> ")
            .append(getCoreCount()).append("&ensp;<b>").append(_t("Classified as slow")).append(":</b>");
         if (isRouterSlow()) {buf.append(" <span class=\"yes\">").append(_t("Yes")).append("</span>");}
         else {buf.append(" <span class=\"no\">").append(_t("No")).append("</span>");}
@@ -230,10 +197,10 @@ public class InfoHelper extends HelperBase {
         }
         if (firstInstalled() != null && firstVersion() != null && lastUpdated() != null) {
             buf.append("<tr><td><b>").append(_t("Installed")).append(":</b></td><td>").append(installDate).append(" (")
-                .append(firstVersion()).append(")").append(" &ensp;<span class=nowrap><b>").append(_t("Location")).append(":</b> ")
-                .append(appDir.toString()).append("</span>").append(" &ensp;<span class=nowrap><b>").append(_t("Config Dir"))
-                .append(":</b> ").append(configDir).append("</span></td></tr>\n")
-                .append("<tr><td><b>").append(_t("Updated")).append(":</b></td><td>").append(lastUpdate);
+               .append(firstVersion()).append(")").append(" &ensp;<span class=nowrap><b>").append(_t("Location")).append(":</b> ")
+               .append(appDir.toString()).append("</span>").append(" &ensp;<span class=nowrap><b>").append(_t("Config Dir"))
+               .append(":</b> ").append(configDir).append("</span></td></tr>\n")
+               .append("<tr><td><b>").append(_t("Updated")).append(":</b></td><td>").append(lastUpdate);
             if (updatePolicy() != null) {
                 buf.append(" &ensp;<b>").append(_t("Update Policy")).append(":</b> ").append(updatePolicy());
             }
@@ -244,8 +211,8 @@ public class InfoHelper extends HelperBase {
         }
         buf.append("<tr><td><b>").append(_t("Started")).append(":</b></td><td class=ajax>").append(new Date(_context.router().getWhenStarted()))
            .append(" &ensp;<b>").append(_t("Uptime")).append(":</b> ").append(DataHelper.formatDuration(_context.router().getUptime()))
-           .append(" &ensp;<b>").append(_t("Clock Skew")).append(":</b> ").append(_context.clock().getOffset()).append("ms</td></tr>\n");
-        buf.append("</table>\n");
+           .append(" &ensp;<b>").append(_t("Clock Skew")).append(":</b> ").append(_context.clock().getOffset()).append("ms</td></tr>\n")
+           .append("</table>\n");
 
         buf.append("<h3 id=transports>").append(_t("Router Transport Addresses")).append("</h3>\n<pre id=activetransports class=ajax>\n");
         SortedMap<String, Transport> transports = _context.commSystem().getTransports();
@@ -264,4 +231,5 @@ public class InfoHelper extends HelperBase {
         _context.commSystem().renderStatusHTML(_out);
         out.flush();
     }
+
 }
