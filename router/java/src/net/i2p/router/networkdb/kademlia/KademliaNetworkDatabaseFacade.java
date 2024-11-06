@@ -751,16 +751,15 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             boolean isNotRorU = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) < 0 &&
                                 ri.getCapabilities().indexOf(Router.CAPABILITY_REACHABLE) < 0;
             boolean isFF = false;
-            boolean isG = false;
+            boolean isG = ri.getCapabilities().indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0;
             boolean noCountry = true;
             String country = "unknown";
             if (caps != null && caps.contains("F")) {isFF = true;}
-            if (caps != null && ri.getCapabilities().indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0) {isG = true;}
             country = _context.commSystem().getCountry(key);
             if (country != null && country != "unknown") {noCountry = false;}
             String myCountry = _context.getProperty(PROP_IP_COUNTRY);
             boolean blockMyCountry = _context.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
-            boolean blockXG = _context.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
+            boolean blockXG = _context.getBooleanProperty(PROP_BLOCK_XG);
             boolean isStrict = _context.commSystem().isInStrictCountry(); // us
             boolean shouldRemove = false;
 
@@ -1095,7 +1094,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             }
         }
 
-
         String err = validate(key, leaseSet);
         if (err != null) {
             throw new IllegalArgumentException("Invalid NetDbStore attempt -> " + err);
@@ -1253,6 +1251,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         boolean isLTier =  routerInfo != null && routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                            routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0;
         boolean isBanned = routerInfo != null && _context.banlist().isBanlisted(routerInfo.getIdentity().getHash());
+
         boolean isFF = false;
         String caps = "";
         boolean noCountry = true;
@@ -1289,8 +1288,13 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             }
 
             boolean blockMyCountry = _context.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
+            boolean blockXG = _context.getBooleanProperty(PROP_BLOCK_XG);
             boolean isHidden = _context.router().isHidden();
             boolean isStrict = _context.commSystem().isInStrictCountry();
+            boolean isXTier = routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0;
+            boolean isNotRorU = routerInfo.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) < 0 &&
+                                routerInfo.getCapabilities().indexOf(Router.CAPABILITY_REACHABLE) < 0;
+            boolean isG = routerInfo.getCapabilities().indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0;
 
             if (isStrict || isHidden || blockMyCountry) {
                 String myCountry = _context.getProperty(PROP_IP_COUNTRY);
@@ -1314,6 +1318,17 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                     }
                     //_ds.remove(key);
                     //_kb.remove(key);
+                }
+            } else if (!isUs && isG && isNotRorU && isXTier && blockXG) {
+                if (!_context.banlist().isBanlisted(h)) {
+                    if (_log.shouldInfo()) {
+                        _log.info("Dropping RouterInfo [" + h.toBase64().substring(0,6) + "] -> X tier and G Cap, neither R nor U");
+                    }
+                    if (_log.shouldWarn() && !_context.banlist().isBanlisted(h)) {
+                        _log.warn("Banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
+                                  " [" + h.toBase64().substring(0,6) + "] for 4h -> XG and older than 0.9.61 (using proxy?)");
+                    }
+                    _context.banlist().banlistRouter(h, " <b>➜</b> XG Router, neither R nor U (proxied?)", null, null, _context.clock().now() + 4*60*60*1000);
                 }
             } else if (upLongEnough && !isUs && !routerInfo.isCurrent(adjustedExpiration)) {
                 long age = now - routerInfo.getPublished();
