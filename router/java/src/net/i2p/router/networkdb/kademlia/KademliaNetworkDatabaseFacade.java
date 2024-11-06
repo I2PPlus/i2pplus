@@ -85,6 +85,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     static final String PROP_MIN_ROUTER_VERSION = "router.minVersionAllowed";
     public static final String PROP_BLOCK_MY_COUNTRY = "i2np.blockMyCountry";
     public static final String PROP_IP_COUNTRY = "i2np.lastCountry";
+    public static final String PROP_BLOCK_XG = "i2np.blockXG";
 
     /**
      * Map of Hash to RepublishLeaseSetJob for leases we'realready managing.
@@ -116,7 +117,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * offline for a while, we'll have a chance of finding some live peers with the
      * previous references
      */
-//    protected final static long DONT_FAIL_PERIOD = 10*60*1000;
     public static long DONT_FAIL_PERIOD = 15*60*1000;
 
     /** Don't probe or broadcast data, just respond and search when explicitly needed */
@@ -135,8 +135,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  As of 0.9.4, we make this LOWER than the min for reseeding, so
      *  a reseed will be forced if necessary.
      */
-//    protected final static int MIN_REMAINING_ROUTERS = MIN_RESEED - 10;
-    protected final static int MIN_REMAINING_ROUTERS = MIN_RESEED - 5;
+    protected final static int MIN_REMAINING_ROUTERS = MIN_RESEED ;
 
     /**
      * Limits for accepting a dbStore of a router (unless we don't
@@ -761,6 +760,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             if (country != null && country != "unknown") {noCountry = false;}
             String myCountry = _context.getProperty(PROP_IP_COUNTRY);
             boolean blockMyCountry = _context.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
+            boolean blockXG = _context.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
             boolean isStrict = _context.commSystem().isInStrictCountry(); // us
             boolean shouldRemove = false;
 
@@ -784,8 +784,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                         _context.banlist().banlistRouterForever(key, " <b>➜</b> In our country (we are in Hidden mode)");
                     }
                 }
-/**
-            } else if (!isUs && isG && isNotRorU && isXTier) {
+            } else if (!isUs && isG && isNotRorU && isXTier && blockXG) {
                 if (!_context.banlist().isBanlisted(key)) {
                     if (_log.shouldInfo()) {
                         _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> X tier and G Cap, neither R nor U");
@@ -797,7 +796,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                     _context.banlist().banlistRouter(key, " <b>➜</b> XG Router, neither R nor U (proxied?)", null, null, _context.clock().now() + 4*60*60*1000);
                     shouldRemove = true;
                 }
-**/
             } else if (!isUs && isLTier && isUnreachable && isOld) {
                 if (!_context.banlist().isBanlisted(key)) {
                     if (_log.shouldInfo()) {
