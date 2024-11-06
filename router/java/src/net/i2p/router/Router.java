@@ -1110,7 +1110,7 @@ public class Router implements RouterClock.ClockShiftListener {
         char cong = 0;
         int maxTunnels = _context.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS, RouterThrottleImpl.DEFAULT_MAX_TUNNELS);
         if (forceG || maxTunnels <= 0) {cong = CAPABILITY_NO_TUNNELS;}
-        else if (maxTunnels <= 50 || SystemVersion.isSlow()) {cong = CAPABILITY_CONGESTION_MODERATE;}
+        else if (maxTunnels <= 500 || SystemVersion.isSlow()) {cong = CAPABILITY_CONGESTION_MODERATE;}
         else {
             int numTunnels = _context.tunnelManager().getParticipatingCount();
             if (numTunnels > 9 * maxTunnels / 10) {cong = CAPABILITY_CONGESTION_SEVERE;}
