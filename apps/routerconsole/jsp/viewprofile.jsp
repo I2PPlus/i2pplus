@@ -19,6 +19,14 @@
 <%@include file="summary.jsi" %>
 <h1 class=netwrk><%=intl._t("Peer Profile")%></h1>
 <div class=main id=view_profile>
+<div class=confignav id=confignav>
+<span class=tab><a href="/profiles"><%=intl._t("All")%></a></span>
+<span class=tab><a href="/profiles?f=1"><%=intl._t("High Capacity")%></a></span>
+<span class=tab><a href="/profiles?f=2"><%=intl._t("Floodfill")%></a></span>
+<span class=tab><a href="/profiles?f=3"><%=intl._t("Banned")%></a></span>
+<span class=tab><a href="/profiles?f=4"><%=intl._t("Session Bans")%></a></span>
+<span class=tab2><%=intl._t("Profile View")%></span>
+</div>
 <%
     String peerB64 = request.getParameter("peer");
     if (peerB64 == null || peerB64.length() <= 0 ||

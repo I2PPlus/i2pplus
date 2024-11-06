@@ -116,6 +116,7 @@
     cleanedValue = cleanedValue.replace(/_/g, " ");
     cleanedValue = cleanedValue.replace(/0\.0/g, "0");
     cleanedValue = cleanedValue.replace(/9999999/g, "9999999 (Low latency)")
+    cleanedValue = cleanedValue.replace(/-30/g, "-30 (High latency)")
     if (cleanedValue.endsWith(".0")) {cleanedValue = cleanedValue.slice(0, -2);}
     return cleanedValue;
   }

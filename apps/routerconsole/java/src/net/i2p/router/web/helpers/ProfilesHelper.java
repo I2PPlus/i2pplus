@@ -123,7 +123,7 @@ public class ProfilesHelper extends HelperBase {
             else if (i != titles.length - 1) {buf.append("&nbsp;&nbsp;\n");}
         }
         if (!span) {buf.append("</center>");}
-        buf.append("</div>");
+        buf.append("</div>\n");
         _out.write(buf.toString());
     }
 
