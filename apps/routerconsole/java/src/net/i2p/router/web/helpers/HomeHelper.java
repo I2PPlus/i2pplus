@@ -78,7 +78,7 @@ public class HomeHelper extends HelperBase {
     static final String ADVANCED_SERVICES =
         _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns" + S + I + "addressbook.svg" + S +
         _x("Advanced Config") + S + _x("Advanced router configuration") + S + "/configadvanced" + S + I + "configure.svg" + S +
-        _x("Changelog") + S + _x("Recent changes") + S + "/help/changelog" + S + I + "changelog.svg" + S +
+        _x("Changelog") + S + _x("Recent changes") + S + "/changelog" + S + I + "changelog.svg" + S +
         _x("Clients") + S + _x("Start or stop Router clients") + S + "/configclients" + S + I + "editclient.svg" + S +
         _x("Graphs") + S + _x("Graph Router Performance") + S + "/graphs" + S + I + "graphs.svg" + S +
         _x("I2PMail") + S + _x("Anonymous webmail client") + S + "/webmail" + S + I + "mail.svg" + S +
@@ -238,13 +238,9 @@ public class HomeHelper extends HelperBase {
         net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
         String version = net.i2p.CoreVersion.VERSION;
         String firstVersion = ctx.getProperty("router.firstVersion");
-        if (!isAdvanced() && version.equals(firstVersion)) {
-            return homeTable(PROP_SERVICES, NEWINSTALL_SERVICES, plugins);
-        } else if (!version.equals(firstVersion) && !isAdvanced()) {
-            return homeTable(PROP_SERVICES, DEFAULT_SERVICES, plugins);
-        } else {
-            return homeTable(PROP_SERVICES, ADVANCED_SERVICES, plugins);
-        }
+        if (!isAdvanced() && version.equals(firstVersion)) {return homeTable(PROP_SERVICES, NEWINSTALL_SERVICES, plugins);}
+        else if (!version.equals(firstVersion) && !isAdvanced()) {return homeTable(PROP_SERVICES, DEFAULT_SERVICES, plugins);}
+        else {return homeTable(PROP_SERVICES, ADVANCED_SERVICES, plugins);}
     }
 
     public String getFavorites() {return homeTable(PROP_FAVORITES, DEFAULT_FAVORITES, null);}
@@ -398,8 +394,7 @@ public class HomeHelper extends HelperBase {
 
     /** ignore case, current locale */
     private static class AppComparator implements Comparator<App>, Serializable {
-        public int compare(App l, App r) {
-            return l.name.toLowerCase().compareTo(r.name.toLowerCase());
-        }
+        public int compare(App l, App r) {return l.name.toLowerCase().compareTo(r.name.toLowerCase());}
     }
+
 }
