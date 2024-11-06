@@ -54,7 +54,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      *
      *  Maybe need to make configurable per-instance.
      */
-    private static final int DEFAULT_CODEL_TARGET = 25;
+    private static final int DEFAULT_CODEL_TARGET = 20;
     public static final String PROP_CODEL_TARGET = "router.codelTarget";
     private final long _target;
 
@@ -75,7 +75,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     private static final int[] PRIORITIES = {MIN_PRIORITY, 200, 300, 400, 500};
     /** if priority is &gt;= this, never drop */
     public static final int DONT_DROP_PRIORITY = 1000;
-    private static final long BACKLOG_TIME = SystemVersion.isSlow() ? 2000 : 1000;
+    private static final long BACKLOG_TIME = SystemVersion.isSlow() ? 1000 : 500;
 
     public CoDelPriorityBlockingQueue(I2PAppContext ctx, String name, int initialCapacity) {
         this(ctx, name, initialCapacity, ctx.getProperty(PROP_CODEL_TARGET, DEFAULT_CODEL_TARGET),

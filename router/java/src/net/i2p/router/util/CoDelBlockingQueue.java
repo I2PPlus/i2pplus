@@ -63,9 +63,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      *  I2P: Raise to 15 due to multithreading environment
      *
      */
-//    private static final int TARGET = 10;
-//    private static final int TARGET = 25;
-    private static final int DEFAULT_CODEL_TARGET = 40;
+    private static final int DEFAULT_CODEL_TARGET = 20;
     private final long _target;
 
     /**
@@ -73,17 +71,12 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      *  A setting of 100 ms works well across a range of RTTs from 10 ms to 1 second
      *
      */
-//    private static final int INTERVAL = 200;
-//    private static final int INTERVAL = 500;
-    private static final int DEFAULT_CODEL_INTERVAL = 750;
+    private static final int DEFAULT_CODEL_INTERVAL = 500;
     private final long _interval;
-    //private static final int MAXPACKET = 512;
-
     private final String STAT_DROP;
     private final String STAT_DELAY;
     private static final long[] RATES = {60*1000, 5*60*1000, 60*60*1000};
-//    private static final long BACKLOG_TIME = 2*1000;
-    private static final long BACKLOG_TIME = SystemVersion.isSlow() ? 200 : 50;
+    private static final long BACKLOG_TIME = SystemVersion.isSlow() ? 1000 : 500;
 
     /**
      *  Target 15, interval 100
