@@ -10,6 +10,7 @@ package net.i2p.router.networkdb.kademlia;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -51,6 +52,7 @@ import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.Log;
+import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
@@ -85,6 +87,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     static final String PROP_MIN_ROUTER_VERSION = "router.minVersionAllowed";
     public static final String PROP_BLOCK_MY_COUNTRY = "i2np.blockMyCountry";
     public static final String PROP_IP_COUNTRY = "i2np.lastCountry";
+    private final static String PROP_BLOCK_COUNTRIES = "router.blockCountries";
+    private final static String DEFAULT_BLOCK_COUNTRIES = "";
     public static final String PROP_BLOCK_XG = "i2np.blockXG";
 
     /**
@@ -759,6 +763,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             if (country != null && country != "unknown") {noCountry = false;}
             String myCountry = _context.getProperty(PROP_IP_COUNTRY);
             boolean blockMyCountry = _context.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
+            Set<String> blockedCountries = getBlockedCountries();
             boolean blockXG = _context.getBooleanProperty(PROP_BLOCK_XG);
             boolean isStrict = _context.commSystem().isInStrictCountry(); // us
             boolean shouldRemove = false;
@@ -783,7 +788,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                         _context.banlist().banlistRouterForever(key, " <b>➜</b> In our country (we are in Hidden mode)");
                     }
                 }
-            } else if (!isUs && isG && isNotRorU && isXTier && blockXG) {
+            } else if (blockedCountries.contains(country) && !_context.banlist().isBanlisted(key)) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Banning and disconnecting from [" + key.toBase64().substring(0,6) + "] -> Blocked country: " + country);
+                }
+                _context.banlist().banlistRouter(key, " <b>➜</b> Blocked country: " + country, null, null, _context.clock().now() + 8*60*60*1000);
+                _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
+                shouldRemove = true;
+            } else if (!isUs && isG && isNotRorU && isXTier && blockXG && !_context.banlist().isBanlisted(key)) {
                 if (!_context.banlist().isBanlisted(key)) {
                     if (_log.shouldInfo()) {
                         _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> X tier and G Cap, neither R nor U");
@@ -793,7 +805,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                   " [" + key.toBase64().substring(0,6) + "] for 4h -> XG and older than 0.9.61 (using proxy?)");
                     }
                     _context.banlist().banlistRouter(key, " <b>➜</b> XG Router, neither R nor U (proxied?)", null, null, _context.clock().now() + 4*60*60*1000);
-                    shouldRemove = true;
+                    shouldRemove = false;
                 }
             } else if (!isUs && isLTier && isUnreachable && isOld) {
                 if (!_context.banlist().isBanlisted(key)) {
@@ -1295,6 +1307,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             boolean isNotRorU = routerInfo.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) < 0 &&
                                 routerInfo.getCapabilities().indexOf(Router.CAPABILITY_REACHABLE) < 0;
             boolean isG = routerInfo.getCapabilities().indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0;
+            Set<String> blockedCountries = getBlockedCountries();
 
             if (isStrict || isHidden || blockMyCountry) {
                 String myCountry = _context.getProperty(PROP_IP_COUNTRY);
@@ -1319,6 +1332,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                     //_ds.remove(key);
                     //_kb.remove(key);
                 }
+            } else if (blockedCountries.contains(country) && !_context.banlist().isBanlisted(h)) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Banning and disconnecting from [" + h.toBase64().substring(0,6) + "] -> Blocked country: " + country);
+                }
+                _context.banlist().banlistRouter(h, " <b>➜</b> Blocked country: " + country, null, null, _context.clock().now() + 8*60*60*1000);
+                _context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             } else if (!isUs && isG && isNotRorU && isXTier && blockXG) {
                 if (!_context.banlist().isBanlisted(h)) {
                     if (_log.shouldInfo()) {
@@ -1832,6 +1851,20 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     public String toString() {
         if (!isClientDb()) {return "MainNetDb";}
         return "ClientNetDb [" + _dbid.toBase32().substring(0,8) + "]";
+    }
+
+    /** @since 0.9.65+ */
+    private Set<String> getBlockedCountries() {
+        String blockCountries = _context.getProperty(PROP_BLOCK_COUNTRIES, DEFAULT_BLOCK_COUNTRIES);
+        if (blockCountries.isEmpty()) {return Collections.emptySet();}
+        return new HashSet<>(Arrays.asList(blockCountries.toLowerCase().split(",")));
+    }
+
+    /** @since 0.9.52 */
+    private class Disconnector implements SimpleTimer.TimedEvent {
+        private final Hash h;
+        public Disconnector(Hash h) {this.h = h;}
+        public void timeReached() {_context.commSystem().forceDisconnect(h);}
     }
 
 }

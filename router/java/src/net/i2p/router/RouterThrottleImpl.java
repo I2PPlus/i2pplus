@@ -292,7 +292,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     }
 
     //static final int DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE = 40; // .067KBps
-    static final int DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE = 4000;
+    static final int DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE = 400;
     /** also limited to 90% - see below */
     private static final int MIN_AVAILABLE_BPS = 4*1024; // always leave at least 4KBps free when allowing
     //private static final String LIMIT_STR = _x("Declining Tunnel Requests" + ":<br>" + "Bandwidth limit");
