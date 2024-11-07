@@ -146,6 +146,9 @@
 <tr><th>i2np.blockMyCountry={true|false} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]")%></td></tr>
 
+<tr><th>i2np.blockXG={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]")%></td></tr>
+
 <tr><th>i2np.udp.preferred={true|false|always}</th></tr>
 <tr><td><%=intl._t("This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]")%></td></tr>
 
@@ -232,6 +235,9 @@
 
 <tr><th>router.refreshTimeout={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting (in seconds) allows you to manually configure the amount of time to wait before an attempt to refresh a router is determined to have failed. [The default is 20 seconds]")%></td></tr>
+
+<tr><th>router.relaxCongestionCaps={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]")%></td></tr>
 
 <tr><th>router.refreshUninteresting={true|false} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting determines whether routers classified as uninteresting (K or L tier, unreachable or older than 0.9.50) are checked during the refresh router process after 1 hour of uptime. [Default is false]")%></td></tr>
