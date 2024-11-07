@@ -2203,7 +2203,7 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 #debug li:last-child{padding-bottom:2px}
 #debug{line-height:1.4;padding-bottom:11px}
 #debug table{margin-top:-13px}
-#debug #sockets {margin-bottom:0}
+#debug #sockets{margin-bottom:0}
 #debug th,#debug td{text-align:left;padding:5px 10px}
 #debug th{padding:7px 10px}
 #debug th:first-child{text-align:left}
@@ -2470,6 +2470,8 @@ ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 #changelog pre span{margin-bottom:-10px;padding:0 10px 10px;width:calc(100% - 34px);display:inline-block;position:relative;font-weight:500;border-bottom:1px dotted #252}
 #changelog pre span:last-of-type{display:none}
 #changelog pre span::first-line{padding-left:12px;line-height:1.75;font-weight:700}
+#changelog .bullet,#changelog .star{font-size:0}
+#changelog .bullet::before,#changelog .star::before{margin:-4px 0 0 5px;width:11px;height:11px;display:inline-block;background:var(--star) no-repeat center center/contain;content:""}#changelog .bullet::before{margin:-8px 0 0 26px;width:7px;height:7px;vertical-align:text-top;background:var(--tunn_active) no-repeat center center/contain}
 #configinfo .infowarn{display:none}
 #configinfo{margin:0 auto 0;width:calc(100% - 20px);border:0}
 #configinfo td{padding:5px 15px 10px;line-height:1.4;text-align:justify;background:#000}
