@@ -145,6 +145,7 @@ public class Router implements RouterClock.ClockShiftListener {
     private static final boolean CONGESTION_CAPS = true;
     private static final int SHUTDOWN_WAIT_SECS = 60;
     private static final String PROP_ADVANCED = "routerconsole.advanced";
+    private static final String PROP_RELAX_CONGESTION_CAP = "router.relaxCongestionCap";
     public boolean isAdvanced() {return getContext().getBooleanProperty(PROP_ADVANCED);}
     private static final String originalTimeZoneID;
     static {
@@ -1070,8 +1071,7 @@ public class Router implements RouterClock.ClockShiftListener {
 
         if (hidden || _context.getBooleanProperty(PROP_FORCE_UNREACHABLE)) {
             rv.append(CAPABILITY_UNREACHABLE);
-            //if (CONGESTION_CAPS)
-            //    rv.append(CAPABILITY_NO_TUNNELS);
+            //if (CONGESTION_CAPS) {rv.append(CAPABILITY_NO_TUNNELS);}
             return rv.toString();
         }
         boolean forceG = false;
@@ -1109,17 +1109,25 @@ public class Router implements RouterClock.ClockShiftListener {
 
         char cong = 0;
         int maxTunnels = _context.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS, RouterThrottleImpl.DEFAULT_MAX_TUNNELS);
+        boolean disableCongestionCaps = isAdvanced() && _context.getBooleanProperty(PROP_RELAX_CONGESTION_CAP);
+        boolean capsEnabled = false;
         if (forceG || maxTunnels <= 0) {cong = CAPABILITY_NO_TUNNELS;}
-        else if (maxTunnels <= 500 || SystemVersion.isSlow()) {cong = CAPABILITY_CONGESTION_MODERATE;}
+        else if (maxTunnels <= 1000 || SystemVersion.isSlow()) {cong = CAPABILITY_CONGESTION_MODERATE;}
         else {
             int numTunnels = _context.tunnelManager().getParticipatingCount();
             if (numTunnels > 9 * maxTunnels / 10) {cong = CAPABILITY_CONGESTION_SEVERE;}
             else if (numTunnels > 8 * maxTunnels / 10) {cong = CAPABILITY_CONGESTION_MODERATE;}
             else {
                 // this is a greatly simplified version of RouterThrottleImpl.acceptTunnelRequest()
-                long lag = _context.jobQueue().getMaxLag();
-                if (lag > 1000 && getUptime() > 10*60*1000) {
-                    if (lag > 1500) {cong = CAPABILITY_CONGESTION_SEVERE;}
+                long maxLag = _context.jobQueue().getMaxLag();
+                RateStat jobLag = _context.statManager().getRate("jobQueue.jobLag");
+                long avgLag = 0;
+                if (jobLag != null) {
+                    Rate lagRate = jobLag.getRate(60*1000);
+                    avgLag = (long) lagRate.getAverageValue();
+                }
+                if (maxLag > 1000 && avgLag > 200 && getUptime() > 10*60*1000) {
+                    if (maxLag > 1500 && avgLag > 300) {cong = CAPABILITY_CONGESTION_SEVERE;}
                     else {cong = CAPABILITY_CONGESTION_MODERATE;}
                 } else {
                     double bwLim = getSharePercentage() * 1024 *
@@ -1141,15 +1149,30 @@ public class Router implements RouterClock.ClockShiftListener {
                         }
                         double bpsAllocated = messagesPerTunnel * numTunnels * 1024 / (10 * 60);
                         if (_log.shouldInfo()) {_log.info("Bytes/s allocated: " + bpsAllocated + " -> Bandwidth limit: " + bwLim);}
-                        if (bpsAllocated > 0.9 * bwLim) {cong = CAPABILITY_CONGESTION_SEVERE;}
-                        else if (bpsAllocated > 0.8 * bwLim) {cong = CAPABILITY_CONGESTION_MODERATE;}
+                        if (bpsAllocated > 0.9 * bwLim) {
+                            cong = CAPABILITY_CONGESTION_SEVERE;
+                            capsEnabled =true;
+                        }
+                        else if (bpsAllocated > 0.8 * bwLim) {
+                            cong = CAPABILITY_CONGESTION_MODERATE;
+                            capsEnabled =true;
+                        }
+                        else {cong = 0;}
+                        if (capsEnabled && disableCongestionCaps) {
+                            cong = 0;
+                            if (_log.shouldWarn()) {
+                                _log.warn("Not applying congestion caps due to bandwidth -> Disabled by config");
+                            }
+                        }
                     }
                 }
             }
         }
         if (cong != 0) {
-            if (CONGESTION_CAPS) {rv.append(cong);}
-            else if (_log.shouldWarn()) {_log.warn("Congestion cap: " + cong);}
+            if (CONGESTION_CAPS) {
+                rv.append(cong);
+                if (_log.shouldWarn()) {_log.warn("Congestion cap \'" + cong + "\' activated");}
+            }
         }
         return rv.toString();
     }
