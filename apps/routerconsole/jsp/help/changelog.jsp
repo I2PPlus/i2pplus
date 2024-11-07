@@ -52,11 +52,12 @@
   (function spanify() {
     const content = document.querySelector("#changelog pre");
     if (!content) {return;}
-    const text = content.textContent.trim();
-    const blocks = text.split("\n\n");
-    const wrappedContent = blocks.map(function(block) {
-      return "<span class=lazy>" + block + "</span>";
-    }).join("\n\n");
+    const blocks = content.textContent.trim().split("\n\n");
+    const wrappedBlocks = blocks.map(function(block) {
+      let transformedBlock = block.replace(/ \* /g, "<b class=star>*</b> ").replace(/   - /g, "<b class=bullet>-</b> ");
+      return "<span class=lazy>" + transformedBlock + "</span>";
+    });
+    const wrappedContent = wrappedBlocks.join("\n\n");
     content.innerHTML = wrappedContent;
   })();
 </script>
