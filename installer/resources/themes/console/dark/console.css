@@ -2343,7 +2343,7 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #criticallogs ul{margin:-6px -11px;border:var(--border)}
 #criticallogs ul:empty{display:none}
 #critLogsHead{margin-bottom:-2px}
-#enviro #revision{padding-left:14px;background:var(--gitlab) no-repeat left center/11px}
+#enviro #revision{padding-left:16px;background:var(--gitlab) no-repeat left center/14px}
 #logs a.configure:active::after{transform:rotate(90deg);transition:linear transform .2s}
 #logs a.delete{margin-left:8px}
 #logs a.delete:hover::after{background:var(--close_hover) var(--center)/14px}
