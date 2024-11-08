@@ -2473,8 +2473,7 @@ ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 #changelog .bullet,#changelog .star{font-size:0}
 #changelog .bullet::before,#changelog .star::before{margin:-4px -5px 0 9px;width:11px;height:11px;display:inline-block;background:var(--star) no-repeat center center/contain;content:""}#changelog .bullet::before{margin:-8px -2px 0 29px;width:7px;height:7px;vertical-align:text-top;background:var(--tunn_active) no-repeat center center/contain}
 #configinfo .infowarn{display:none}
-#configinfo{margin:0 auto 0;width:calc(100% - 20px);border:0}
-#configinfo{margin-bottom:5px;width:100%;border-collapse:separate;border-spacing:0}
+#configinfo{margin-bottom:5px;width:100%;border:0;border-collapse:separate;border-spacing:0}
 #configinfo td{padding:12px;line-height:1.4;text-align:justify;background:#000}
 #configinfo th{text-align:left;padding:10px 0 5px;letter-spacing:.05em;font:500 9pt var(--monospaced);color:#dd0;background:#000;border:0}
 #configinfo tr.config.expanded th{border:2px solid #131;border-left-width:5px;box-shadow:var(--highlight)}

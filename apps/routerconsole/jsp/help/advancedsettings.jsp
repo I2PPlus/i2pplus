@@ -269,14 +269,14 @@
 <tr class=config><th>i2p.vmCommSystem={true|false}</th></tr>
 <tr><td><%=intl._t("When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption.")%></td></tr>
 
-<tr id=ntpserverconfig><th>time.sntpServerList={server1,server2}</th></tr>
+<tr class=config id=ntpserverconfig><th>time.sntpServerList={server1,server2}</th></tr>
 <tr><td><%=intl._t("This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]")%></td></tr>
 
 </table>
 
 </div>
 </div>
-<% if (theme.equals("dark")) { %>
+<% if (theme.equals("dark") || theme.equals("light")) { %>
 <script src=/js/advancedsettings.js></script>
 <noscript><style>#configinfo tr.config th{cursor:default}#configinfo tr.config th::after{display:none!important}#configinfo td{border-bottom-width:1px!important}</style></noscript>
 <% } %>
