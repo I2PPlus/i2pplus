@@ -40,19 +40,16 @@
 </div>
 <div id=faq>
 <h2><%=intl._t("Abridged I2P FAQ")%></h2>
-
 <p class=infohelp><%=intl._t("This is a shortened version of the official FAQ. For the full version, please visit <a href=https://geti2p.net/faq target=_blank rel=noreferrer class='sitelink external'>https://geti2p.net/faq</a> or <a href=http://i2p-projekt.i2p/faq target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p/faq</a>.")%></p>
 
 <h3><%=intl._t("My router has been up for several minutes and has zero or very few connections")%></h3>
-
 <p><%=intl._t("If after a few minutes of uptime your router is indicating 0 Active Peers and 0 Known Peers, with a notification in the sidebar that you need to check your network connection, verify that you can access the internet. If your internet connection is functional, you may need to unblock Java in your firewall. Otherwise, you may need to reseed your I2P router. Visit the <a href=/configreseed#reseedconfig>Reseed Configuration page</a> and click the <i>Save Changes and Reseed Now</i> button. For more information, see the <a href=#reseedhelp>Reseed help section</a> above.")%></p>
 
 <h3><%=intl._t("My router has very few active peers, is this OK?")%></h3>
-
 <p><%=intl._t("If your router has 10 or more active peers, everything is fine. The router should maintain connections to a few peers at all times. The best way to stay \"better-connected\" to the network is to <a href=/config>share more bandwidth</a>.")%></p>
 
 <h3 id=addressbooksubs><%=intl._t("I'm missing lots of hosts in my addressbook. What are some good subscription links?")%></h3>
-
+<span>
 <p><%=intl._t("The default subscription is to <code>http://i2p-projekt.i2p/hosts.txt</code> which is seldom updated. If you don't have another subscription, you may often have to use \"jump\" links which is much slower but ensures that your addressbook is only populated by sites you use (in addition to the default subscription addresses). To speed up browsing on I2P, it's a good idea to add some addressbook subscriptions.")%></p>
 
 <p><%=intl._t("Here are some other public addressbook subscription links. You may wish to add one or two to your <a href=/susidns/subscriptions target=_blank rel=noreferrer>susidns subscription list</a>. In the event that addresses conflict in the subscriptions, the lists placed at the top of your susidns configuration will take precedence over those placed further down.")%></p>
@@ -60,39 +57,33 @@
 <ul>
 <li><code>http://stats.i2p/cgi-bin/newhosts.txt</code></li>
 <li><code>http://reg.i2p/export/hosts.txt</code></li>
-<!--<li><code>http://scanner.linuxfarm.i2p/hosts.txt</code></li>-->
 <li><code>http://notbob.i2p/hosts.txt</code></li>
 <li><code>http://skank.i2p/hosts.txt</code></li>
 </ul>
 
 <p><%=intl._t("Note that subscribing to a hosts.txt service is an act of trust, as a malicious subscription could give you incorrect addresses, so be careful subscribing to lists from unknown sources. The operators of these services may have various policies for listing hosts. Presence on this list does not imply endorsement.")%></p>
+</span>
 
 <h3><%=intl._t("How do I access IRC, BitTorrent, or other services on the regular Internet?")%></h3>
-
 <p><%=intl._t("Unless an outproxy has been set up for the service you want to connect to, this is not possible, with the exception of BitTorrent (see below). There are only three types of outproxies running right now: HTTP, HTTPS, and email. Note that there is currently no publicly listed SOCKS outproxy. If this type of service is required, try <a href=https://torproject.org/ target=_blank rel=noreferrer class='sitelink external'>Tor</a>.")%></p>
 
 <h3><%=intl._t("Can I download torrents from non-I2P trackers?")%></h3>
-
 <p><%=intl._t("Until the advent of I2P integration in <a href=http://www.vuze.com/ target=_blank rel=noreferrer class='sitelink external'>Vuze</a>, it wasn't possible to download torrents that weren't hosted on the I2P network. However, now that Vuze (and latterly <a href=https://www.biglybt.com/ target=_blank rel=noreferrer class='sitelink external'>Bigly</a>) allow users to share non-I2P torrents on I2P, non-I2P torrents can be downloaded over I2P if Vuze/Bigly users have chosen to make content available to the I2P network. Popular torrents with a large number of peers are more likely to be accessible via I2P; to determine if the content is available, add the torrent link, magnet or infohash to your I2P-enabled BitTorrent client.")%></p>
 
 <h3 id=alternative_browser><%=intl._t("How do I configure I2P to open at startup in a specific web browser?")%></h3>
-
 <p><%=intl._t("By default, I2P will use the system configured default browser to launch at startup. If you wish to nominate an alternative browser, you will need to edit your router.config file (or the <a href=/configadvanced>Advanced Configuration page</a> if you have enabled advanced console mode) and add a new configuration line <code>routerconsole.browser=/path/to/browser</code> or <code>routerconsole.browser=\\path\\to\\browser.exe</code> if using Windows, replacing <code>\\path\\to\\browser</code> with the location of the browser you wish to use. Note: If the path to your chosen browser contains spaces, you may need to encase the path in quotes e.g. <code>routerconsole.browser=\"C:\\Program Files\\Mozilla\\Firefox.exe\"</code>")%></p>
 
 <h3><%=intl._t("How do I configure my browser to access .i2p websites?")%></h3>
-
 <p><%=intl._t("You will need to configure your browser to use the HTTP proxy server (by default on host: <code>127.0.0.1</code> port: <code>4444</code>). See the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>Browser Proxy Configuration Guide</a> for a more detailed explanation.")%></p>
 
 <h3><%=intl._t("What is an eepsite?")%></h3>
-
 <p><%=intl._t("An eepsite is a website that is hosted anonymously on the I2P network - you can access it by configuring your web browser to use I2P's HTTP proxy (see above) and browsing to the <code>.i2p</code> suffixed website (e.g. <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p</a>). Also ensure your browser is configured to resolve DNS remotely when using the proxy to avoid DNS leaks.")%></p>
 
 <h3><%=intl._t("Most of the eepsites are down?")%></h3>
-
 <p><%=intl._t("If you consider every eepsite that has ever been created, yes, most of them are down. People and eepsites come and go. A good way to get started in I2P is check out a list of eepsites that are currently up. <a href=http://notbob.i2p/ target=_blank rel=noreferrer class=sitelink>http://notbob.i2p</a> tracks active eepsites.")%></p>
 
 <h3><%=intl._t("Where are my I2P configuration files stored?")%></h3>
-
+<span>
 <p><%=intl._t("Configuration files for the router, installed plugins, and router logs are stored in the following location:")%></p>
 <ul id=faqconfigfiles>
 <li><b><%=intl._t("Windows")%>:</b> <code>%APPDATA%\I2P\</code></li>
@@ -104,19 +95,23 @@
 </ul>
 </li>
 </ul>
+</span>
 
 <h3><%=intl._t("How do I enable https:// access for the router console?")%></h3>
+<span>
 <p><%=intl._t("Locate the configuration file: <code>00-net.i2p.router.web.RouterConsoleRunner-clients.config</code> in the <code>clients.config.d</code> folder in your I2P settings directory, and then edit accordingly:")%></p>
 <ul>
 <li><b><%=intl._t("For both non-SSL and SSL")%>:</b> <code>clientApp.0.args=7657 127.0.0.1 -s 7667 127.0.0.1 ./webapps/</code></li>
 <li><b><%=intl._t("For SSL only")%>:</b> <code>clientApp.0.args=-s 7667 127.0.0.1 ./webapps/</code></li>
 </ul>
+</span>
 
 <h3><%=intl._t("How do I connect to IRC within I2P?")%></h3>
-
+<span>
 <p><%=intl._t("A tunnel to the main IRC server network within I2P, Irc2P, is created when I2P is installed (see the <a href=/i2ptunnelmgr>Tunnel Manager</a>), and is automatically started when the I2P router starts. To connect to it, tell your IRC client to connect to server: <code>127.0.0.1</code> port: <code>6668</code>.")%></p>
 
 <p><%=intl._t("XChat-like client users can create a new network with the server <code>127.0.0.1/6668</code> (remember to tick <i>Bypass proxy server</i> if you have a proxy server configured), or you can connect with the command <code>/server 127.0.0.1 6668</code>. Different IRC clients may vary the syntax.")%></p>
+</span>
 
 <h3><%=intl._t("My IRC client keeps disconnecting from the network, is there anything I can do?")%></h3>
 
@@ -157,7 +152,7 @@
 </div>
 <% if (theme.equals("dark")) { %>
 <script nonce=<%=cspNonce%> src=/js/toggleElements.js></script>
-<script nonce=<%=cspNonce%>>setupToggles("#help h3", "#help h3~*:not(h3)", "block");</script>
+<script nonce=<%=cspNonce%>>setupToggles("#faq h3", "#faq h3~*:not(h3)", "block");</script>
 <noscript><style>#faq h3{margin-bottom:10px!important;cursor:default!important}#faq h3::after{display:none!important}</style></noscript>
 <% } %>
 </body>
