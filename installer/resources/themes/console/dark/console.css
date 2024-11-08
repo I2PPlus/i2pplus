@@ -2474,9 +2474,23 @@ ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 #changelog .bullet::before,#changelog .star::before{margin:-4px -5px 0 9px;width:11px;height:11px;display:inline-block;background:var(--star) no-repeat center center/contain;content:""}#changelog .bullet::before{margin:-8px -2px 0 29px;width:7px;height:7px;vertical-align:text-top;background:var(--tunn_active) no-repeat center center/contain}
 #configinfo .infowarn{display:none}
 #configinfo{margin:0 auto 0;width:calc(100% - 20px);border:0}
-#configinfo td{padding:5px 15px 10px;line-height:1.4;text-align:justify;background:#000}
+#configinfo{margin-bottom:5px;width:100%;border-collapse:separate;border-spacing:0}
+#configinfo td{padding:12px;line-height:1.4;text-align:justify;background:#000}
 #configinfo th{text-align:left;padding:10px 0 5px;letter-spacing:.05em;font:500 9pt var(--monospaced);color:#dd0;background:#000;border:0}
-#configinfo tr:nth-last-child(n+2) td{border-bottom:var(--border_dotted)}
+#configinfo tr.config.expanded th{border:2px solid #131;border-left-width:5px;box-shadow:var(--highlight)}
+#configinfo tr.config.expanded+tr td{border-bottom:1px solid #131}
+#configinfo tr.config th{padding:8px 12px;border:1px solid #131;background:var(--th);cursor:pointer}
+#configinfo tr.config th::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:""}
+#configinfo tr.config:hover th::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:""}
+#configinfo tr.config:not(.expanded):hover th::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
+#configinfo tr.config:not(.expanded) th{color:#dd0b}
+#configinfo tr.config:not(.expanded) th::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
+#configinfo tr.config:hover th{color:var(--hover)}
+#configinfo tr:not(.config) td{border:1px solid #131;border-bottom-width:0;border-top:0}
+#configinfo tr.section{margin-bottom:-1px;display:table-row!important;display:inline-block!important;border:1px solid #131}
+#configinfo tr.section~tr.section{margin-top:15px}
+#configinfo tr.section th{padding:8px 12px;line-height:1;text-transform:uppercase;letter-spacing:.08em;font-family:var(--bodyfont);color:var(--ink);text-shadow:1px 1px 1px #0004;background:#131}
+
 #fullhistory a{display:inline-block;line-height:1.6;font-size:90%}
 #fullhistory a:hover{color:var(--hover)}
 #fullhistory a::before{width:19px;height:20px;display:inline-block;vertical-align:middle;background:var(--eye) no-repeat left 45%/16px;content:""}
@@ -2532,7 +2546,7 @@ ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 #browserconfig h2{padding-left:38px;background:var(--firefox) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 #changelog h2{padding-left:38px;background:var(--changelog) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 #configurationhelp h2,#advancedsettings h2{padding-left:38px;background:var(--settings_inert) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
-#configurationhelp h2#confignet{background-image:url(../images/networkconfig.svg)}
+#configurationhelp h2#confignet{background:url(../images/networkconfig.svg) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 #faq h2{padding-left:38px;background:var(--faq) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 #filterlist h2{padding-left:38px;background:var(--filter) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 #glossary h2{padding-left:38px;background:var(--ask) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
@@ -3021,7 +3035,7 @@ th code{font-size:9pt}
 #help .confignav{margin-bottom:11px;display:flex}
 #help .confignav .tab,#help .confignav .tab2{margin-left:0;margin-right:0;padding:6px 5px;max-width:9%;min-width:unset;display:flex;flex-grow:1;flex-shrink:1;justify-content:center;align-items:center;line-height:1.1}
 #help .confignav .tab a{padding:0;display:inline-block}
-#help #changelog pre{margin-left:0;padding:20px;width:calc(100% - 42px);overflow-y:hidden;font-size:10.5pt;columns:auto 2;column-gap:60px;column-rule:var(--dotted);background-size:300px}
+#help #changelog pre{margin-left:0;padding:20px 20px 20px 40px;width:calc(100% - 62px);overflow-y:hidden;font-size:10.5pt;columns:auto 2;column-gap:60px;column-rule:var(--dotted);background-size:300px}
 #changelog pre span{width:calc(100% - 22px);break-inside:avoid}
 }
 
