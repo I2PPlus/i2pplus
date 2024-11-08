@@ -8,11 +8,8 @@ function setupToggles(toggleSelector, hiddenSelector, displayStyle, collapseByDe
 
   hiddenElements.forEach(function(hiddenElement) {
     if (!hiddenElement.classList.contains("config")) {
-      if (collapseByDefault) {
-        hiddenElement.style.display = "none";
-      } else {
-        hiddenElement.style.display = displayStyle;
-      }
+      if (collapseByDefault) {hiddenElement.style.display = "none";}
+      else {hiddenElement.style.display = displayStyle;}
     }
   });
 
@@ -26,15 +23,31 @@ function setupToggles(toggleSelector, hiddenSelector, displayStyle, collapseByDe
     if (hiddenElement) {
       toggleElement.addEventListener("click", function() {
         if (displaySingle) {
-          const configElements = document.querySelectorAll(toggleElement.classList[0]);
+          const relevantToggleElements = Array.from(toggleElements).filter(function(element) {
+            return element.nextElementSibling === hiddenElement || element.nextElementSibling && element.nextElementSibling.classList.contains("toggle");
+          });
 
-          configElements.forEach(function(otherToggleElement) {
+          relevantToggleElements.forEach(function(otherToggleElement) {
             if (otherToggleElement !== toggleElement && otherToggleElement.classList.contains("expanded")) {
               const otherHiddenElement = otherToggleElement.nextElementSibling;
               if (otherHiddenElement.nodeType === Node.ELEMENT_NODE) {
                 otherHiddenElement.style.display = "none";
                 otherToggleElement.classList.remove("expanded");
               }
+            }
+          });
+
+          const nonExpandedHiddenElements = Array.from(hiddenElements).filter(function(element) {
+            return !element.classList.contains("expanded") && element !== hiddenElement;
+          });
+
+          nonExpandedHiddenElements.forEach(function(nonExpandedHiddenElement) {
+            nonExpandedHiddenElement.style.display = "none";
+          });
+
+          toggleElements.forEach(function(otherToggleElement) {
+            if (otherToggleElement !== toggleElement) {
+              otherToggleElement.classList.remove("expanded");
             }
           });
         }
