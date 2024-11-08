@@ -655,7 +655,13 @@ pre#activetransports{margin:-11px 0 0;padding:15px 15px 0;width:calc(100% - 32px
 #advconf .infohelp{padding:20px 15px 20px 36px;background-size:22px;background-position:8px center}
 #addkeyring{margin-bottom:-5px}
 #addkeyring td:first-child:not(.infohelp){line-height:1.15}
+#configinfo{margin-top:18px;border:0}
+#configinfo th,#configinfo td{border:var(--border)}
 #configinfo th{text-align:left;font-family:var(--monospaced);font-weight:600;padding:7px 10px;color:#050}
+#configinfo .section{margin:0 0 -1px -1px;padding-left:5px;display:inline-block;border:var(--border);box-shadow:var(--highlight);background:linear-gradient(90deg, #bfc3d9 5px,#0000 5px),var(--th)}
+#configinfo .section~.section{margin-top:12px}
+#configinfo .section th{border:0}
+#configinfo .section th{padding:8px 12px 6px;text-transform:uppercase;letter-spacing:.08em;font-family:var(--bodyfont);color:var(--ink);font-size:120%}
 #configinfo td{text-align:justify;padding:5px 15px;background:rgba(230,230,255,.5)}
 #config_clients label[for="0"]{cursor:default;color:var(--ink)}
 #config_homepage td:not(.optionsave),#config_reseed td:not(.optionsave){padding:5px}
