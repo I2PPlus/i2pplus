@@ -90,8 +90,8 @@
 <h3 id=ipbans class=tabletitle><%=intl._t("Banned IP Addresses")%></h3>
 <jsp:getProperty name="peerhelper" property="blocklistSummary" />
 </div>
-<script nonce=<%=cspNonce%> src=/js/toggleElement.js></script>
-<script nonce=<%=cspNonce%>>document.addEventListener("DOMContentLoaded", () => setupToggle("ipbans", "bannedips", "table"));</script>
+<script nonce=<%=cspNonce%> src=/js/toggleElements.js></script>
+<script nonce=<%=cspNonce%>>document.addEventListener("DOMContentLoaded", () => setupToggles("#ipbans", "#bannedips", "table"));</script>
 <noscript><style>#bannedips{display:table!important}</style></noscript>
 </body>
 </html>

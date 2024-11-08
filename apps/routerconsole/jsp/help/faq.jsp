@@ -20,6 +20,7 @@
 </head>
 <body>
 <%@include file="../summary.jsi" %>
+<%@include file="../summaryajax.jsi" %>
 <h1 class=hlp><%=intl._t("Frequently Asked Questions")%></h1>
 <div class=main id=help>
 <div class=confignav>
@@ -154,7 +155,10 @@
 </table>
 </div>
 </div>
-
-<%@include file="../summaryajax.jsi" %>
+<% if (theme.equals("dark")) { %>
+<script nonce=<%=cspNonce%> src=/js/toggleElements.js></script>
+<script nonce=<%=cspNonce%>>setupToggles("#help h3", "#help h3~*:not(h3)", "block");</script>
+<noscript><style>#faq h3{margin-bottom:10px!important;cursor:default!important}#faq h3::after{display:none!important}</style></noscript>
+<% } %>
 </body>
 </html>

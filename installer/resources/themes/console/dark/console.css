@@ -2562,7 +2562,13 @@ ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 
 /* faq */
 #faq code{user-select:all}
-#faq h3{padding-left:35px;word-spacing:0;letter-spacing:0;text-transform:none;font-size:10.5pt;background:var(--ask) no-repeat 10px center/18px,var(--h1);background-size:18px,2px,100% 4px,100%,96px}
+#faq h3{padding-left:35px;position:relative;word-spacing:0;letter-spacing:0;text-transform:none;font-size:10.5pt;background:var(--ask) no-repeat 10px center/18px,var(--h1);background-size:18px,2px,100% 4px,100%,96px;cursor:pointer}
+#faq h3:not(.expanded){margin-bottom:-1px}
+#faq h3:hover{color:var(--hover)}
+#faq h3::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:""}
+#faq h3:hover::after{background:var(--dropdown_hover);content:""}
+#faq h3:not(.expanded)::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
+#faq h3:not(.expanded):hover::after{background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
 #faq p.infohelp{margin:-1px -11px 9px}
 #faq li code{margin-left:10px}
 #faq ul{margin-bottom:15px}
