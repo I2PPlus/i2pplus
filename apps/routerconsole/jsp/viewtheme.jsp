@@ -52,10 +52,8 @@ switch (uri.substring(uri.lastIndexOf(".") + 1)) {
     response.sendError(HttpServletResponse.SC_NOT_FOUND);
     return;
 }
-
 response.setContentType(contentType);
 response.setCharacterEncoding("UTF-8");
-
 response.setHeader("Accept-Ranges", "none");
 response.setHeader("X-Content-Type-Options", "nosniff");
 
@@ -73,17 +71,13 @@ if (uri.startsWith(PFX) && uri.length() > PFX.length() + 1) {
     if (slash > 0) {
         theme = theme.substring(0, slash);
         themePath = net.i2p.I2PAppContext.getGlobalContext().getProperty("routerconsole.theme." + theme);
-        if (themePath != null)
-            uri = uri.substring(PFX.length() + theme.length()); // /bar/baz
+        if (themePath != null) {uri = uri.substring(PFX.length() + theme.length());} // /bar/baz
     }
 }
 
 String base;
-if (themePath != null)
-    base = themePath;
-else
-    base = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() +
-           java.io.File.separatorChar + "docs";
+if (themePath != null) {base = themePath;}
+else {base = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() + java.io.File.separatorChar + "docs";}
 
 java.io.File file = new java.io.File(base, uri);
 if (!file.exists()) {
@@ -103,27 +97,21 @@ if (lastmod > 0) {
 }
 
 if (uri.contains("override.css")) {
-    response.setHeader("Cache-Control", "private, no-cache, max-age=2628000");
-} else if (uri.contains(".css") || uri.contains(".js") || uri.contains(".png") || uri.contains(".jpg") || uri.contains(".webp")
-           || uri.contains(".svg") || uri.contains(".ico") || uri.contains(".ttf") || uri.contains(".woff2")) {
-    response.setHeader("Cache-Control", "private, max-age=2628000, immutable");
-} else {
     response.setHeader("Cache-Control", "no-cache, private, max-age=2628000");
-}
+} else if (uri.contains(".css") || uri.contains(".js") || uri.contains(".png") || uri.contains(".jpg") || uri.contains(".webp") ||
+           uri.contains(".svg") || uri.contains(".ico") || uri.contains(".ttf") || uri.contains(".woff2")) {
+    response.setHeader("Cache-Control", "private, max-age=2628000, immutable");
+} else {response.setHeader("Cache-Control", "no-cache, private, max-age=2628000");}
 
 long length = file.length();
-if (length > 0) {
-    response.setHeader("Content-Length", Long.toString(length));
-}
+if (length > 0) {response.setHeader("Content-Length", Long.toString(length));}
 
 try {
     net.i2p.util.FileUtil.readFile(uri, base, response.getOutputStream());
     response.getOutputStream().close();
 } catch (java.io.IOException ioe) {
-    // prevent 'Committed' IllegalStateException from Jetty
-    if (!response.isCommitted()) {
-      response.sendError(403, ioe.toString());
-    }  else {
+    if (!response.isCommitted()) {response.sendError(403, ioe.toString());} // prevent 'Committed' IllegalStateException from Jetty
+    else {
         // not an error, happens when the browser closes the stream
         net.i2p.I2PAppContext.getGlobalContext().logManager().getLog(getClass()).warn("Error serving " + uri + " (" + ioe.getMessage() + ")");
         // Jetty doesn't log this
