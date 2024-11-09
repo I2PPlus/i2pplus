@@ -26,32 +26,22 @@ public class ConfigAdvancedHandler extends FormHandler {
     @Override
     protected void processForm() {
         if (_shouldSave) {
-            if ("ff".equals(_action) && _ff != null) {
-                saveFF();
-            } else if (isAdvanced()) {
-                saveChanges();
-            } else {
-                addFormError("Save disabled, edit the router.config file to make changes") ;
-            }
-        } else {
-            // noop
-        }
+            if ("ff".equals(_action) && _ff != null) {saveFF();}
+            else if (isAdvanced()) {saveChanges();}
+            else {addFormError("Save disabled, edit the router.config file to make changes");}
+        } else {} // no-op
     }
 
     public void setShouldsave(String moo) { _shouldSave = true; }
     //public void setRestart(String moo) { _forceRestart = true; }
 
     /** @since 0.9.20 */
-    public void setFf(String ff) { _ff = ff; }
+    public void setFf(String ff) {_ff = ff;}
 
-    public void setNofilter_config(String val) {
-        _config = val;
-    }
+    public void setNofilter_config(String val) {_config = val;}
 
     /** @since 0.9.33 */
-    public void setNofilter_oldConfig(String val) {
-        _oldConfig = val;
-    }
+    public void setNofilter_oldConfig(String val) {_oldConfig = val;}
 
     /**
      * The user made changes to the config and wants to save them, so
@@ -81,18 +71,13 @@ public class ConfigAdvancedHandler extends FormHandler {
                 String nnew = (String) e.getValue();
                 String old = oldProps.getProperty(key);
                 unsetKeys.remove(key);
-                if (nnew.equals(old)) {
-                    // no change
-                    iter.remove();
-                }
+                if (nnew.equals(old)) {iter.remove();} // no change
             }
             // what's remaining in unsetKeys will be deleted
 
             boolean saved = _context.router().saveConfig(props, unsetKeys);
-            if (saved)
-                addFormNotice(_t("Configuration saved successfully"));
-            else
-                addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"));
+            if (saved) {addFormNotice(_t("Configuration saved successfully"));}
+            else {addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"));}
 
             //if (_forceRestart) {
             //    addFormNotice("Performing a soft restart");
@@ -111,9 +96,8 @@ public class ConfigAdvancedHandler extends FormHandler {
             // this will rebuild the RI, log in the event log, etc.
             fndf.setFloodfillEnabled(isFF);
         }
-        if (saved)
-            addFormNotice(_t("Configuration saved successfully"));
-        else
-            addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"));
+        if (saved) {addFormNotice(_t("Configuration saved successfully"));}
+        else {addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"));}
     }
+
 }
