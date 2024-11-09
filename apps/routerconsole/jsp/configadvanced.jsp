@@ -94,7 +94,9 @@
 </div>
 <% if (theme.equals("dark") && isAdvanced) { %>
 <script nonce=<%=cspNonce%> src=/js/advconfig.js></script>
-<noscript><style>#advancedsettings:display:block!important}</style></noscript>
+<noscript><style>#advancedsettings{display:block!important}</style></noscript>
+<% } else { %>
+<style>#advancedsettings{display:block!important}</style></noscript>
 <% } %>
 <noscript><style>#advconf.readonly tr.section{pointer-events:none}#advconf.readonly tr.section th::after{display:none}</style></noscript>
 <% if (!isAdvanced) { %><script nonce=<%=cspNonce%> src=/js/tableSectionToggler.js></script><% } %>
