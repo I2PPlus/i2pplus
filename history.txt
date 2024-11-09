@@ -1,3 +1,10 @@
+2024-11-089 dr|z3d
+ * Console: Enhance presentation and functionality of /configadvanced
+   when in advanced mode; add key/value filter
+
+2024-11-08 dr|z3d
+ * Console: Add section toggles to /help/advancedsettings and /help/faq
+
 2024-11-06 dr|z3d
  * Console: Add navigation bar to /viewprofile
 
