@@ -1932,15 +1932,19 @@ input[type=hidden]+p+p{margin-top:20px;margin-bottom:-21px;padding:10px;border:v
 #advconf.readonly td:not(.infohelp):first-child{width:1%;white-space:nowrap;border-right:var(--border_softer)}
 #advconf.readonly td:nth-child(2){word-break:break-all}
 #advconf.readonly .section+tr td{border-top:var(--border)}
-#advconf #addNew td,#advconf .configline td{padding:5px 8px;line-height:1.2;vertical-align:top;border:var(--border_soft);outline:none;background:#0004}
-#advconf #addNew td::after,#advconf .configline td::after{height:20px;display:inline-block;vertical-align:middle;content:""}
-#advconf .configline td:focus{color:var(--hover);box-shadow:var(--highlight),0 0 0 2px #f608 inset,5px 5px 3px #0008 inset;background:#010}
+#advconf .configline:hover td:not(:focus),#advconf #addNew td:hover td:not(:focus){background:#030}
+#advconf .configline td,#advconf #addNew td{padding:5px 8px;line-height:1.2;vertical-align:top;border:var(--border_soft);outline:none;background:#0004}
+#advconf .configline td::after,#advconf #addNew td::after{height:20px;display:inline-block;vertical-align:middle;content:""}
+#advconf .configline td:focus,#advconf #addNew td:focus{color:var(--hover);box-shadow:var(--highlight),0 0 0 2px #f608 inset,5px 5px 3px #0008 inset;background:#010}
 #advconf .newKey:empty:not(:focus)::before{display:inline;font-style:italic;color:#ee8a;content:"Add New..."}
-#advconf td.delete{padding:5px 0;text-align:center;vertical-align:middle;font-size:0}
-#advconf td.delete::after{width:32px;height:20px;display:inline-block;vertical-align:middle;background:var(--nuke) no-repeat center center/14px;opacity:.5;content:"";filter:grayscale(.5)}
-#advconf td.delete:hover::after{opacity:1;filter:none;cursor:pointer}
-#advconf td.key{white-space:nowrap;font-weight:500}
-#advconf td.value{word-break:break-all}
+#advconf .delete{padding:5px 0;width:1%;text-align:center;vertical-align:middle;font-size:0}
+#advconf .delete::after{width:32px;height:20px;display:inline-block;vertical-align:middle;background:var(--nuke) no-repeat center center/14px;opacity:.5;content:"";filter:grayscale(.5)}
+#advconf .delete:hover::after{opacity:1;filter:none;cursor:pointer}
+#advconf .newKey,#advconf .key{width:1%;min-width:340px;white-space:nowrap;font-weight:500}
+#advconf .value{word-break:break-all}
+#advancedconfig{position:relative}
+#advancedconfig input[type=text]{margin:0;padding:3px 5px 3px 20px;width:160px;position:absolute;right:44px;top:6px;font-size:85%;background:var(--filter) no-repeat 5px center/12px;filter:none}
+#advancedconfig input[type=text]:focus{border-color:var(--hover);color:var(--hover);box-shadow:var(--highlight),5px 5px 3px #0008 inset;background-color:#010}
 
 /* configtunnels */
 #config_tunnels hr{display:none}
