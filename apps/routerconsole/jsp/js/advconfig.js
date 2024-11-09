@@ -2,7 +2,7 @@
 /* Enhance /configadvanced in advanced mode */
 /* License: AGPL3 or later */
 
-const advConfig = function() {
+const initAdvConfigHelper = function() {
 
   const container = document.querySelector("td.tabletextarea");
   const textarea = document.querySelector("textarea#advancedsettings");
@@ -92,7 +92,7 @@ const advConfig = function() {
     });
   });
 
-  observer.observe(container, { childList: true, subtree: true });
+  observer.observe(table, { childList: true, subtree: true });
 
   const updateTextarea = function() {
     const updatedItems = [];
@@ -121,9 +121,16 @@ const advConfig = function() {
     }
   });
 
+
   const submitNewKeyValue = function() {
     const newKey = newKeyCell.textContent.trim();
+    const existingKey = configItems.some(item => item[0] === newKey);
     const newValue = newValueCell.textContent.trim();
+    if (existingKey) {
+      alert("Duplicate key '" + newKey + "' detected. Please modify the existing key.");
+      event.preventDefault();
+      return;
+    }
     if (newKey) {
       const newRow = document.createElement("tr");
       const keyCell = document.createElement("td");
@@ -169,7 +176,7 @@ const advConfig = function() {
   const saveButton = advForm.querySelector("input[type=submit]");
   const cancelButton = advForm.querySelector("input.cancel");
 
-  advForm.addEventListener("submit", function(event) {updateTextarea();});
+  advForm.addEventListener("submit", function(event) { updateTextarea(); });
 
   document.addEventListener("keydown", function(event) {
     if (event.key === "Enter") { // save when Return is pressed
@@ -178,8 +185,7 @@ const advConfig = function() {
       const newKey = document.querySelector("#addNew .newKey");
       if (newKey && newKey.textContent.trim()) {submitNewKeyValue();}
       saveButton.click();
-    }
-    if (event.key === "Escape") {resetForm();} // reset when Escape is pressed
+    } else if (event.key === "Escape") {resetForm();} // reset when Escape is pressed
   });
 
   function resetForm() {
@@ -192,4 +198,4 @@ const advConfig = function() {
 
 }
 
-document.addEventListener("DOMContentLoaded", advConfig);
+document.addEventListener("DOMContentLoaded", initAdvConfigHelper);
