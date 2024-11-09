@@ -71,7 +71,11 @@
 <input type=hidden name="nofilter_oldConfig" value="<%=advConfig%>">
 <table class=configtable id=advconf>
 <tr><td class=infohelp><b><%=intl._t("NOTE")%>:</b> <%=intl._t("Some changes may require a restart to take effect.")%></td></tr>
+<%      if (theme.equals("dark")) { %>
+<tr><td class=tabletextarea><textarea id=advancedsettings rows=32 cols=60 name="nofilter_config" wrap=off spellcheck=false hidden><%=advConfig%></textarea></td></tr>
+<%      } else {  %>
 <tr><td class=tabletextarea><textarea id=advancedsettings rows=32 cols=60 name="nofilter_config" wrap=off spellcheck=false><%=advConfig%></textarea></td></tr>
+<%      } %>
 <tr><td class=optionsave><input type=reset class=cancel value="<%=intl._t("Cancel")%>"><input type=submit name="shouldsave" class=accept value="<%=intl._t("Save changes")%>"></td></tr>
 </table>
 </form>
@@ -88,7 +92,11 @@
 </div>
 </div>
 </div>
+<% if (theme.equals("dark") && isAdvanced) { %>
+<script nonce=<%=cspNonce%> src=/js/advconfig.js></script>
+<noscript><style>#advancedsettings:display:block!important}</style></noscript>
+<% } %>
 <noscript><style>#advconf.readonly tr.section{pointer-events:none}#advconf.readonly tr.section th::after{display:none}</style></noscript>
-<script nonce=<%=cspNonce%> src=/js/tableSectionToggler.js></script>
+<% if (!isAdvanced) { %><script nonce=<%=cspNonce%> src=/js/tableSectionToggler.js></script><% } %>
 </body>
 </html>
