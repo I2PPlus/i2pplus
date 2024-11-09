@@ -92,7 +92,7 @@
 </div>
 </div>
 </div>
-<% if (theme.equals("dark") && isAdvanced) { %>
+<% if (theme.equals("dark") || theme.equals("light") && isAdvanced) { %>
 <script nonce=<%=cspNonce%> src=/js/advconfig.js></script>
 <noscript><style>#advancedsettings{display:block!important}</style></noscript>
 <% } else { %>

@@ -1,3 +1,7 @@
+/* I2P+ advconfig.js by dr|z3d */
+/* Enhance /configadvanced in advanced mode */
+/* License: AGPL3 or later */
+
 const advConfig = function() {
 
   const container = document.querySelector("td.tabletextarea");
@@ -5,6 +9,7 @@ const advConfig = function() {
   const table = document.getElementById("advconf");
   const infohelp = document.querySelector("#advconf td.infohelp");
 
+  document.body.classList.add("js");
   textarea.style.display = "none";
   infohelp.setAttribute("colspan", "3");
 

@@ -1992,6 +1992,22 @@ select[name="newlogclass"]{margin-left:3px}
 #advconf textarea,#advconf textarea[disabled]:focus{margin:-5px 0;padding:3px 5px;width:calc(100% + 5px);white-space:pre-wrap;word-break:break-all;color:var(--ink);font-size:9pt;border:0;box-shadow:none;background:linear-gradient(135deg,#f8f8ff,#efefff);filter:none}
 #advconf textarea:not([disabled]):focus{color:#287d28;border-radius:1px;background:#fff}
 #advconf textarea:not([disabled])::selection{color:#fff;background:#141}
+#advconf .configline:hover td:not(:focus),#advconf #addNew td:hover td:not(:focus){background:#ffd}
+#advconf .configline td,#advconf #addNew td{padding:5px 8px;line-height:1.2;vertical-align:top;border:var(--border_inner);outline:none;background:#fff}
+#advconf .configline td::after,#advconf #addNew td::after{height:20px;display:inline-block;vertical-align:middle;content:""}
+#advconf .configline td:focus,#advconf #addNew td:focus{color:var(--hover);box-shadow:var(--highlight),0 0 0 2px #f608 inset,3px 3px 3px #0004 inset;background:#fff}
+#advconf .configline:nth-child(even) td{background:linear-gradient(180deg,#fff,#d8d8ff)}
+#advconf .configline:nth-child(even) td{background:linear-gradient(180deg,#fff,#f4f4ff)}
+#advconf .newKey:empty:not(:focus)::before{display:inline;font-style:italic;content:"Add New..."}
+#advconf .delete{padding:5px 0;width:1%;text-align:center;vertical-align:middle;font-size:0}
+#advconf .delete::after{width:32px;height:20px;display:inline-block;vertical-align:middle;background:var(--nuke) no-repeat center center/14px;opacity:.8;content:"";filter:grayscale(.5)}
+#advconf .delete:hover::after{opacity:1;filter:none;cursor:pointer}
+#advconf .newKey,#advconf .key{width:1%;min-width:340px;white-space:nowrap;font-weight:500}
+#advconf .value{word-break:break-all}
+#advancedconfig{position:relative}
+#advancedconfig input[type=text]{margin:0;padding:3px 5px 3px 20px;width:160px;position:absolute;right:55px;top:5px;font-size:85%;background:#fff var(--filter) no-repeat 5px center/12px;opacity:.75;filter:none}
+#advancedconfig input[type=text]:focus{font-weight:600;border-color:var(--hover);box-shadow:var(--highlight),3px 3px 3px #0004 inset;opacity:.85}
+.js .tabletextarea{display:none}
 #floodfillconfig tr:nth-child(2) td{padding:8px 10px 8px 18px}
 #floodfillconfig tr:nth-child(2) b{margin-right:10px}
 
