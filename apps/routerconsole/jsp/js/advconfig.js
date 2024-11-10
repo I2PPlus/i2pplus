@@ -31,11 +31,6 @@ const initAdvConfigHelper = function() {
       return a[0].localeCompare(b[0]);
     });
 
-  let maxLength = 0;
-  configItems.forEach(function(item) {
-    maxLength = Math.max(maxLength, item[0].length);
-  });
-
   const saveCancelRow = table.querySelector("#advconf tr:last-child");
   saveCancelRow.querySelector("td").setAttribute("colspan", "3");
   let lastConfigRow = null;
@@ -45,6 +40,7 @@ const initAdvConfigHelper = function() {
     const keyCell = document.createElement("td");
     const valueCell = document.createElement("td");
     const delCell = document.createElement("td");
+    const fragment = document.createDocumentFragment();
     keyCell.textContent = item[0];
     valueCell.textContent = item[1];
     keyCell.setAttribute("contenteditable", true);
@@ -55,10 +51,10 @@ const initAdvConfigHelper = function() {
     valueCell.className = "value";
     row.className = "configline";
     delCell.className = "delete";
-    row.appendChild(keyCell);
-    row.appendChild(valueCell);
-    row.appendChild(delCell);
-    delCell.textContent = "delete";
+    fragment.appendChild(keyCell);
+    fragment.appendChild(valueCell);
+    fragment.appendChild(delCell);
+    row.appendChild(fragment);
     lastConfigRow ? lastConfigRow.insertAdjacentElement("afterend", row) : saveCancelRow.insertAdjacentElement("beforebegin", row);
     lastConfigRow = row;
   });
@@ -78,7 +74,6 @@ const initAdvConfigHelper = function() {
   newValueCell.setAttribute("contenteditable", true);
   newValueCell.setAttribute("spellcheck", "false");
   newDelCell.className = "delete";
-  newDelCell.textContent = "delete";
 
   const firstConfigRow = table.querySelector(".configline");
   if (firstConfigRow) {firstConfigRow.insertAdjacentElement("beforebegin", addNewRow);}
@@ -121,7 +116,6 @@ const initAdvConfigHelper = function() {
     }
   });
 
-
   const submitNewKeyValue = function() {
     const newKey = newKeyCell.textContent.trim();
     const existingKey = configItems.some(item => item[0] === newKey);
@@ -147,7 +141,6 @@ const initAdvConfigHelper = function() {
       valueCell.className = "value";
       newRow.className = "configline";
       delCell.className = "delete";
-      delCell.textContent = "delete";
       newRow.appendChild(keyCell);
       newRow.appendChild(valueCell);
       newRow.appendChild(delCell);
@@ -176,25 +169,29 @@ const initAdvConfigHelper = function() {
   const saveButton = advForm.querySelector("input[type=submit]");
   const cancelButton = advForm.querySelector("input.cancel");
 
-  advForm.addEventListener("submit", function(event) { updateTextarea(); });
+  function doSave(event) {
+    updateTextarea();
+    const newKey = document.querySelector("#addNew .newKey");
+    if (newKey && newKey.textContent.trim()) {submitNewKeyValue();}
+    if (event.key === "Enter") {
+      event.preventDefault();
+      saveButton.click();
+    } else {advForm.requestSubmit(saveButton);}
+  }
 
   document.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") { // save when Return is pressed
-      event.preventDefault();
-      updateTextarea();
-      const newKey = document.querySelector("#addNew .newKey");
-      if (newKey && newKey.textContent.trim()) {submitNewKeyValue();}
-      saveButton.click();
-    } else if (event.key === "Escape") {resetForm();} // reset when Escape is pressed
+    if (event.key === "Enter") { doSave(event); } // save when Return is pressed
+    else if (event.key === "Escape") { resetForm(event); } // reset when Escape is pressed
   });
 
-  function resetForm() {
+  function resetForm(event) {
     event.preventDefault();
     textarea.value = document.querySelector("input[name=nofilter_oldConfig]").value;
-    advForm.submit();
+    advForm.requestSubmit(saveButton);
   };
 
-  cancelButton.addEventListener("click", function(event) {resetForm();});
+  cancelButton.addEventListener("click", function(event) { resetForm(event) ;});
+  saveButton.addEventListener("click", function(event) { event.preventDefault(); doSave(event); });
 
 }
 
