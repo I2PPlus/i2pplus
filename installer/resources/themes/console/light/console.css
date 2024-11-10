@@ -2005,8 +2005,11 @@ select[name="newlogclass"]{margin-left:3px}
 #advconf .newKey,#advconf .key{width:1%;min-width:340px;white-space:nowrap;font-weight:500}
 #advconf .value{word-break:break-all}
 #advancedconfig{position:relative}
-#advancedconfig input[type=text]{margin:0;padding:3px 5px 3px 20px;width:160px;position:absolute;right:55px;top:5px;font-size:85%;background:#fff var(--filter) no-repeat 5px center/12px;opacity:.75;filter:none}
-#advancedconfig input[type=text]:focus{font-weight:600;border-color:var(--hover);box-shadow:var(--highlight),3px 3px 3px #0004 inset;opacity:.85}
+#advfilter{margin:0;padding:0;position:absolute;top:4px;right:56px}
+#advfilter button{margin:0 0 0 -24px;padding:5px;display:inline-block;width:24px;height:26px;min-width:0;position:relative;z-index:10;font-size:0;border:0;box-shadow:none;background:var(--no) no-repeat center center/10px;mix-blend-mode:luminosity}
+#advfilter button:hover,#advfilter input:focus+button{opacity:1;mix-blend-mode:normal}
+#advfilter input[type=text]{margin:0;padding:4px 5px 3px 20px;width:160px;font-size:85%;background:#fff var(--filter) no-repeat 5px center/12px;opacity:.75;filter:none}
+#advfilter input[type=text]:focus{font-weight:600;border-color:var(--hover);box-shadow:var(--highlight),3px 3px 3px #0004 inset;opacity:.85}
 .js .tabletextarea{display:none}
 #floodfillconfig tr:nth-child(2) td{padding:8px 10px 8px 18px}
 #floodfillconfig tr:nth-child(2) b{margin-right:10px}

@@ -151,19 +151,37 @@ const initAdvConfigHelper = function() {
     }
   };
 
-  const filterInput = document.createElement("input");
-  filterInput.setAttribute("type", "text");
-  document.querySelector("h3#advancedconfig").appendChild(filterInput);
-  filterInput.addEventListener("input", function(event) {
-    const filterValue = event.target.value.toLowerCase();
-    const rows = document.querySelectorAll(".configline");
-    rows.forEach(function(row) {
-      const key = row.querySelector(".key").textContent.toLowerCase();
-      const value = row.querySelector(".value").textContent.toLowerCase();
-      if (key.includes(filterValue) || value.includes(filterValue)) {row.style.display = "table-row";}
-      else {row.style.display = "none";}
+  (function addFilter() {
+    const advFilter = document.createElement("span");
+    advFilter.id = "advfilter";
+
+    const filterInput = document.createElement("input");
+    filterInput.setAttribute("type", "text");
+    advFilter.appendChild(filterInput);
+    filterInput.addEventListener("input", function(event) {
+      const filterValue = event.target.value.toLowerCase();
+      const rows = document.querySelectorAll(".configline");
+      rows.forEach(function(row) {
+        const key = row.querySelector(".key").textContent.toLowerCase();
+        const value = row.querySelector(".value").textContent.toLowerCase();
+        if (key.includes(filterValue) || value.includes(filterValue)) {row.style.display = "table-row";}
+        else {row.style.display = "none";}
+      });
     });
-  });
+
+    const clearFilter = document.createElement("button");
+    clearFilter.textContent = "X";
+    clearFilter.addEventListener("click", () => {
+      filterInput.value = "";
+      const rows = document.querySelectorAll(".configline");
+      rows.forEach((row) => {
+        row.style.display = "table-row";
+      });
+    });
+    advFilter.appendChild(clearFilter);
+
+    document.querySelector("h3#advancedconfig").appendChild(advFilter);
+  })();
 
   const advForm = document.querySelector("#advancedconfig+form");
   const saveButton = advForm.querySelector("input[type=submit]");
