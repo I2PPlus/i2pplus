@@ -1,0 +1,79 @@
+NO WARRANTY
+
+The program provided "as is", no warranty of any kind, risks assumed by user, including all necessary servicing, repair or correction. Copyright holders and/or other parties not liable for damages arising out of use or inability to use the program.
+
+LICENSES
+
+Core API (i2p.jar)
+Public domain with exceptions:
+
+ * ElGamal and DSA code: LICENSE-ElGamalDSA.txt
+ * ElGamal: LICENSE-SHA256.txt
+ * AES code: LICENSE-Cryptix.txt
+ * Crypto filters: LICENSE-BSD.txt
+ * SNTP code: LICENSE-SNTP.txt
+ * PRNG: LICENSE-LGPLv2.1.txt
+ * HashCash code: LICENSE-HashCash.txt
+ * GettextResource: LICENSE-LGPLv2.1.txt
+ * SSLEepGet: LICENSE-InstallCert.txt
+ * SipHashInline: LICENSE-Apache2.0.txt
+ * Getopt: LICENSE-LGPLv2.1.txt
+ * EdDSA-Java: LICENSE-CC0-1.0-Universal.txt
+ * HostnameVerifier: LICENSE-Apache2.0.txt
+ * json-simple: LICENSE-Apache2.0.txt
+ * Noise library: LICENSE-Noise.txt
+ * MiniDNS library: LICENSE-LGPL2.1.txt, LICENSE-Apache2.0.txt, DWTFYWTPL
+ * Router (router.jar)
+
+Router (router.jar)
+Public domain with exceptions:
+
+ * UPnP.java: LICENSE-GPLv2.txt
+ * UPnP subsystem: LICENSE-UPnP.txt
+ * GeoIP API: LICENSE-LGPLv2.1.txt
+ * GeoIP2-java: LICENSE-Apache2.0.txt
+ * Maxmind-DB-Reader-java: LICENSE-Apache2.0.txt
+ * Noise library: LICENSE-Noise.txt
+ * SparseArray: LICENSE-Apache2.0.txt
+ * SSU HMAC: LICENSE-SHA256.txt
+ * Installer
+ * Launch4j included in upstream source package and Windows binaries: LICENSE-Launch4j.txt
+
+GeoIP Data
+ * Includes GeoLite2 data by MaxMind: LICENSE-GeoIP.txt
+
+Launchers
+ * Copyright (c) 2002-2018 EPFL, Lausanne / Lightbend, Inc.: LICENSE-Scala.md
+
+Java Service Wrapper Community Edition
+ * Tanuki Software, Ltd.: LICENSE-Wrapper.txt
+
+Jbigi Libraries (jbigi.jar)
+ * JNI code: public domain.
+
+GMP 4.3.2 / 5.0.2: LICENSE-LGPLv3.txt
+GMP 6.0.0 / 6.1.2 / 6.2.0: LICENSE-GPLv2.txt
+
+Applications:
+
+Addressbook: LICENSE-Addressbook.txt
+ * Desktopgui: LICENSE-DesktopGUI.txt
+ * Glassfish Standard Tag Library: LICENSE-GPLv2.txt
+ * I2PControl: LICENSE-Apache2.0.txt
+ * I2PSnark: LICENSE-GPLv2.txt
+ * I2PTunnel: LICENSE-I2PTunnel.txt, LICENSE-GPLv2.txt
+ * Imagegen: LICENSE-Identicon.txt, LICENSE-BSD.txt, LICENSE-Apache2.0.txt
+ * Jetty: LICENSE-Apache2.0.txt, LICENSE-ECLIPSE-1.0.html
+ * RRD4J: LICENSE-Apache2.0.txt, LICENSE-LGPLv2.1.txt
+ * Ministreaming Lib: LICENSE-BSD.txt
+ * Proxyscript: Public domain.
+ * Router console: Public domain.
+ * Router Console M-Lab subsystem: LICENSE-GPLv2.txt
+ * Router Console NDT subsystem: LICENSE-NDT.txt
+ * SAM: Public domain.
+ * Streaming Lib: Public domain.
+ * SusiDNS: LICENSE-GPLv2.txt
+ * SusiMail: LICENSE-GPLv2.txt
+ * Systray: Public domain.
+ * Tomcat: LICENSE-Apache2.0.txt, NOTICE-Tomcat.txt
+ * SusiMail Pagedown: LICENSE-pagedown.txt
