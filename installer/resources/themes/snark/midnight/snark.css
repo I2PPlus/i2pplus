@@ -1017,7 +1017,8 @@ thead img,thead img:hover{max-height:22px}
 #screenlog li::before{margin:0 1px 0 1px;width:15px;background-size:10px 10px}
 #screenlog li,#screenlog li a{font-size:9.5pt}
 #screenlog{margin-bottom:-10px}
-#torrents{margin-top:0}
+#torrents{margin-top:9px}
+.iframed #torrents{margin-top:0}
 #torrents td{padding-top:4px;padding-bottom:4px}
 #torrents td.details img,.dirInfo td:first-child img:not(.thumb){margin:-2px 0;width:24px;height:24px;max-width:24px;max-height:24px}
 #torrents td.trackerLink img, #torrents td.magnet img{margin:0 1px;padding:2px;width:18px;height:18px;max-height:18px}
