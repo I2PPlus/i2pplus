@@ -4,65 +4,75 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
+  const head = document.head;
   const htmlTag = document.documentElement;
-  const slider = document.createElement("style");
-  slider.innerHTML = "#confirmDialog:not(.cancelled):not(.postMsg){animation:slide-up .8s ease-out 0s both reverse}" +
-                     "@keyframes slide-up{0%{transform:translate(-50%, -50%)}100%{transform:translate(-50%, -500px)}}";
-  document.body.appendChild(slider);
+  const modalCss = document.getElementById("modalCss");
+  const fragment = document.createDocumentFragment();
+
+  (function injectCss() {
+    if (modalCss) {return;}
+    const snarkTheme = head.querySelector("#snarkTheme");
+    console.log("snarkTheme found:", snarkTheme); // Add this line
+    const css = document.createElement("style");
+    css.id = "modalCss";
+    css.textContent = ".modal{overflow:hidden;contain:paint}" +
+                      "#confirmDialog:not(.cancelled):not(.postMsg){animation:slide-up .8s ease-out 0s both reverse}" +
+                      "@keyframes slide-up{0%{transform:translate(-50%, -50%)}100%{transform:translate(-50%, -500px)}}" +
+                      "#confirmButtons{margin:0 -14px -20px;padding:15px;text-align:center}" +
+                      "#confirmYes,#confirmNo{margin:4px 12px;padding:6px 8px;width:120px;font-weight:700;cursor:pointer}" +
+                      "#confirmButtons button:hover{opacity:1}" +
+                      "#confirmYes:active,#confirmNo:active{transform:scale(0.9)}" +
+                      "#confirmDialog{padding:10px 15px 21px;width:480px;position:absolute;left:50%;z-index:100000;" +
+                      "user-select:none;animation:fade .3s ease 1s both;transform:translate(-50%,-50%)}" +
+                      "#confirmDialog.postMsg{animation:slide-down 5s ease-in 3s both reverse}" +
+                      "#confirmDialog.cancelled{animation:slide-down 5s ease-in 0s both reverse}" +
+                      "#confirmOverlay{position:fixed;left:0;bottom:0;right:0;z-index:99999}" +
+                      "#confirmOverlay.cancelled{animation:fade .3s ease 0s both reverse}" +
+                      "#confirmOverlay.done{animation:fade .3s ease 3s both reverse}" +
+                      "#msg{margin:-9px -14px 0;padding:30px 20px 30px 88px;text-align:left;font-size:110%}" +
+                      "#msg b{max-width:384px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:bottom}" +
+                      "#msg .hr{margin:11px 0 10px;height:0;width:100%;display:block}" +
+                      "#msg.deleting{margin-bottom:-20px}" +
+                      "@keyframes slide-down{0%{transform:translate(-50%, -3000px)}100%{transform:translate(-50%, -50%)}}";
+    fragment.appendChild(css);
+    if (snarkTheme) {head.insertBefore(css, snarkTheme);}
+    else {head.appendChild(css);}
+    document.body.appendChild(fragment);
+    fragment.textContent = "";
+  })();
+
+  function handleResize() {
+    const dialog = document.getElementById("confirmDialog");
+    const dialogHeight = dialog.offsetHeight;
+    const viewportHeight = htmlTag.classList.contains("iframed") ? parent.window.innerHeight : window.innerHeight;
+    const topOffset = viewportHeight > 600 ? viewportHeight * 0.05 : 0;
+    let topPosition = ((viewportHeight - dialogHeight) / 2) - topOffset;
+    if (topPosition < 0) {topPosition = 0;}
+    else if (topPosition + dialogHeight > viewportHeight) {topPosition = viewportHeight - dialogHeight;}
+    dialog.style.top = topPosition + "px";
+  }
 
   function customConfirm(options) {
     return new Promise((resolve) => {
-      const fragment = document.createDocumentFragment();
-      const overlay = document.createElement("div");
-      overlay.id = "confirmOverlay";
-      overlay.style.position = "fixed";
-      overlay.style.top = "0";
-      overlay.style.left = "0";
-      overlay.style.width = "100%";
-      overlay.style.height = "100%";
-      overlay.style.zIndex = "99999";
-      fragment.appendChild(overlay);
-
+      htmlTag.classList.add("modal");
       const dialog = document.createElement("div");
-      dialog.style.zIndex = "100000";
+      const overlay = document.createElement("div");
       dialog.innerHTML = options.message +
                          "<p id=confirmButtons>" +
                          "<button id=confirmNo data-action=no>" + options.noLabel + "</button>" +
                          "<button id=confirmYes data-action=yes>" + options.yesLabel + "</button>" +
                          "</p>\n";
-      fragment.appendChild(dialog);
-
-      const styles = document.createElement("style");
-      styles.id = "confirmStyles";
-      styles.innerHTML = ".modal{overflow:hidden;contain:paint}" +
-                         "#confirmButtons{margin:0 -14px -20px;padding:15px;text-align:center}" +
-                         "#confirmYes,#confirmNo{margin:4px 12px;padding:6px 8px;width:120px;font-weight:700;cursor:pointer}" +
-                         "#confirmButtons button:hover{opacity:1}" +
-                         "#confirmYes:active,#confirmNo:active{transform:scale(0.9)}" +
-                         "#confirmDialog{padding:10px 15px 21px;width:480px;z-index:100000;user-select:none;animation:fade .3s ease 1s both}" +
-                         "#confirmDialog.postMsg{animation:slide-down 5s ease-in 3s both reverse}" +
-                         "#confirmDialog.cancelled{animation:slide-down 5s ease-in 0s both reverse}" +
-                         "#confirmOverlay{position:absolute;top:0;left:0;bottom:0;right:0;z-index:99999}" +
-                         "#confirmOverlay.cancelled{animation:fade .3s ease 0s both reverse}" +
-                         "#confirmOverlay.done{animation:fade .3s ease 3s both reverse}" +
-                         "#msg{margin:-9px -14px 0;padding:30px 20px 30px 88px;text-align:left;font-size:110%}" +
-                         "#msg b{max-width:384px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:bottom}" +
-                         "#msg .hr{margin:11px 0 10px;height:0;width:100%;display:block}" +
-                         "#msg.deleting{margin-bottom:-20px}" +
-                         "@keyframes slide-down{0%{transform:translate(-50%, -3000px)}100%{transform:translate(-50%, -50%)}}";
-      fragment.appendChild(styles);
-      document.body.appendChild(fragment);
-
-      const dialogHeight = dialog.offsetHeight;
-      const viewportHeight = htmlTag.classList.contains("iframed") ? parent.window.innerHeight : window.innerHeight;
-      const topPosition = (viewportHeight - dialogHeight) / 2;
-      dialog.style.top = topPosition + "px";
       dialog.id = "confirmDialog";
-      dialog.style.position = "absolute";
-      dialog.style.left = "50%";
-      dialog.style.transform = "translate(-50%, -50%)";
-      htmlTag.classList.add("modal");
+      overlay.id = "confirmOverlay";
+      fragment.appendChild(overlay);
+      fragment.appendChild(dialog);
+      document.body.appendChild(fragment);
+      fragment.textContent = "";
+
       scrollToTop();
+      handleResize();
+
+      window.addEventListener("resize", handleResize);
 
       overlay.addEventListener("click", (event) => { event.stopPropagation(); });
 
@@ -109,9 +119,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
       function removeDialog() {
         document.removeEventListener("keydown", captureKeyDown);
+        window.removeEventListener("resize", handleResize);
         document.getElementById("confirmDialog")?.remove();
         document.getElementById("confirmOverlay")?.remove();
-        document.getElementById("confirmStyles")?.remove();
         htmlTag.classList.remove("modal");
       }
     });
