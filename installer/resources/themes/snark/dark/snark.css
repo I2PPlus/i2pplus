@@ -860,6 +860,7 @@ form[action^="/i2psnark/configure"]{display:block}
 #confirmNo:hover{border:1px solid #f008}
 #confirmYes:active,#confirmNo:active{transform:scale(0.9)}
 #msg{margin:-9px -14px 0;padding:30px 20px 30px 88px;text-align:left;font-size:110%;border-bottom:1px solid #000;background:url(/i2psnark/.res/icons/warn.svg) no-repeat 20px center/48px,linear-gradient(180deg,#000,#010)}
+#msg .hr{margin:11px 0 10px;height:0;width:100%;display:block;border-top:1px solid #131}
 #msg.deleting{margin-bottom:-20px}
 
 /* animation */

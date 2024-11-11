@@ -857,7 +857,7 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 #NotFound{border:var(--border)}
 
 /* custom confirm dialogs */
-.modal{overflow:hidden}
+.modal{height:100vh;overflow:hidden;contain:paint}
 #confirmButtons{margin:0 -14px -20px;padding:15px;text-align:center;border-top:1px solid #2275;background:linear-gradient(180deg,#002,#001)}
 #confirmDialog{padding:10px 15px 21px;width:480px;box-shadow:var(--highlight),0 0 0 1px #338,0 0 0 2px #113,0 0 0 6px #225,0 0 0 7px #113,3px 3px 8px 3px #000;background:#001;z-index:100000;animation:fade .3s ease 1s both;user-select:none}
 #confirmOverlay{position:absolute;top:0;left:0;bottom:0;right:0;z-index:99999;background:#000a}
@@ -867,7 +867,8 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 #confirmYes:hover{border:1px solid #0f08}
 #confirmNo:hover{border:1px solid #f008}
 #confirmYes:active,#confirmNo:active{transform:scale(0.9)}
-#msg{margin:-9px -14px 0;padding:30px 20px 30px 88px;text-align:left;font-size:120%;border-bottom:1px solid #000;background:url(/i2psnark/.res/icons/warn.svg) no-repeat 20px center/48px,linear-gradient(180deg,#000,#001)}
+#msg,#msg2{margin:-9px -14px 0;padding:30px 20px 30px 88px;text-align:left;font-size:120%;border-bottom:1px solid #000;background:url(/i2psnark/.res/icons/warn.svg) no-repeat 20px center/48px,linear-gradient(180deg,#000,#001)}
+#msg .hr{margin:11px 0 10px;height:0;width:100%;display:block;border-top:1px solid #113}
 #msg.deleting{margin-bottom:-20px}
 
 /* animations */

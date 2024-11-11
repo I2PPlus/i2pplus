@@ -1080,6 +1080,7 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 #confirmYes:active{box-shadow:0 0 0 4px #0f0,0 0 3px 3px #0008 inset}
 #confirmNo:active{box-shadow:0 0 0 4px #f00,0 0 3px 3px #0008 inset}
 #msg{margin:-9px -14px 0;padding:30px 20px 30px 88px;text-align:left;font-size:110%;background:url(/i2psnark/.res/icons/warn.svg) no-repeat 20px center/48px,linear-gradient(180deg,#303,#400040)}
+#msg .hr{margin:11px 0 10px;height:0;width:100%;display:block;border-top:1px solid #414}
 #msg.deleting{margin-bottom:-20px}
 
 /* animations */

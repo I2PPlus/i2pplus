@@ -812,6 +812,7 @@ form[action^="/i2psnark/configure"]{display:block}
 #confirmYes:active{box-shadow:var(--btn_shadow_active),0 0 0 4px #0f0}
 #confirmNo:active{box-shadow:var(--btn_shadow_active),0 0 0 4px #f00}
 #msg{margin:-9px -14px 0;padding:30px 20px 30px 88px;text-align:left;font-size:110%;color:#333;border-bottom:1px solid #bbb;background:url(/i2psnark/.res/icons/warn.svg) no-repeat 20px center/48px,linear-gradient(180deg,#ccd,#dde)}
+#msg .hr{margin:11px 0 10px;height:0;width:100%;display:block;border-top:var(--border_inner)}
 #msg.deleting{margin-bottom:-20px}
 
 /* animations */
