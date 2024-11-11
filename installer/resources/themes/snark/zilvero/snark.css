@@ -71,7 +71,7 @@ code{margin:0 2px}
 .configTitle img{display:none}
 .dirInfo .ParentDir a,.dirInfo .snarkFileName a,#torrents .tName a{padding:2px 0;display:inline-block;width:100%}
 .dirInfo,#torrentInfo,#userComments,#commentInfo,#mediaContainer{width:100%}
-.page{margin-bottom:5px;padding:5px;border:var(--border);box-shadow:var(--highlight);background:#ddd;animation:fade-in .02s ease .3s both}
+.page{margin-bottom:5px;padding:5px;border:var(--border);box-shadow:var(--highlight);background:#ddd;animation:fade .02s ease .3s both}
 .iframed .page,.iframed #navbar{border:0}
 .iframed .page{margin-bottom:0;border-top:var(--border)}
 .noneLoaded td{border-bottom:var(--border)}
@@ -568,8 +568,8 @@ body.debug #dhtDebug{display:table-row;box-shadow:var(--highlight);background:li
 .tooltipped{display:inline-block;position:relative;z-index:99;content:""}
 .tooltipped:hover{filter:drop-shadow(0 0 1px rgba(0,0,0,.2))}
 .tooltipped:hover::before,.tooltipped:active::before,.tooltipped:hover::after,.tooltipped:active::after{position:absolute;display:inline-block}
-.tooltipped:hover::after,.tooltipped:active::after{padding:3px 6px;top:0;left:32px;font-weight:600;border:1px solid #cca;border-radius:2px;box-shadow:var(--highlight);background:linear-gradient(180deg,#fff,#ffd);content:attr(data-tooltip);animation:fade-in .1s ease 3s reverse both}
-.tooltipped:hover::before,.tooltipped:active::before{margin-left:-10px;top:calc(50% - 4px);left:30px;border-width:6px;border-style:solid;border-color:#0000 #cca #0000 #0000;content:"";animation:fade-in .1s ease 3s reverse both}
+.tooltipped:hover::after,.tooltipped:active::after{padding:3px 6px;top:0;left:32px;font-weight:600;border:1px solid #cca;border-radius:2px;box-shadow:var(--highlight);background:linear-gradient(180deg,#fff,#ffd);content:attr(data-tooltip);animation:fade .1s ease 3s reverse both}
+.tooltipped:hover::before,.tooltipped:active::before{margin-left:-10px;top:calc(50% - 4px);left:30px;border-width:6px;border-style:solid;border-color:#0000 #cca #0000 #0000;content:"";animation:fade .1s ease 3s reverse both}
 #bwHelp{visibility:hidden;background:#fff url(/i2psnark/.res/icons/favicon.svg) no-repeat 10px center/28px;text-align:center;padding:15px 15px 15px 55px;border-radius:3px;width:320px;position:absolute;z-index:2000;bottom:125%;left:0;margin-left:-183px;display:block;white-space:normal;font-size:10pt;filter:drop-shadow(0 0 1px #999);opacity:0}
 #bwhelp::after{content:"";position:absolute;top:100%;left:50%;margin-left:-10px;border-width:10px;border-style:solid;border-color:#fff #0000 #0000 #0000}
 #bwHoverHelp img{margin-right:5px;width:16px;height:16px;filter:saturate(0) opacity(.5)}
@@ -592,7 +592,7 @@ body.debug #dhtDebug{display:table-row;box-shadow:var(--highlight);background:li
 
 /* table sort indicators */
 .sortIcon{position:relative;display:inline-block}
-.ascending,.descending{display:inline-block;position:absolute;top:-2px;right:-8px;border-width:4px;border-style:solid;border-color:#0000 #0000 #999 #0000;filter:opacity(0);animation:ease fade-in .2s .6s forwards}
+.ascending,.descending{display:inline-block;position:absolute;top:-2px;right:-8px;border-width:4px;border-style:solid;border-color:#0000 #0000 #999 #0000;filter:opacity(0);animation:ease fade .2s .6s forwards}
 .descending{top:2px;border-color:#999 #0000 #0000 #0000}
 .sortIcon:hover .ascending,.sortIcon:hover .descending{transform:rotate(180deg);transition:linear transform .1s}
 .sortIcon:hover .ascending{top:2px;border-color:#0000 #0000 #d30 #0000}
@@ -726,7 +726,7 @@ form[action^="/i2psnark/configure"]{display:block}
 @keyframes disappear{from{visibility:visible}to{visibility:collapse}}
 @keyframes progress{from{background-position:0}to{background-position:-12px}}
 @keyframes progressTX{from{background-position:-12px}to{background-position:0}}
-@keyframes fade-in{0%{filter:opacity(0)}100%{filter:opacity(1)}}
+@keyframes fade{0%{filter:opacity(0)}100%{filter:opacity(1)}}
 @keyframes active{from{background:linear-gradient(270deg,#f3c 3px,#0000 3px)}to{background:linear-gradient(270deg,#cb4dcb 3px,#0000 3px)}}
 @keyframes downloading{from{background:var(--td_dl)}to{background:linear-gradient(270deg,#7f7 3px,#0000 3px)}}
 

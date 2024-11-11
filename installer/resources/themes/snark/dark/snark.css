@@ -19,7 +19,7 @@
 }
 
 html,body{background:#000}
-body{margin:3px;display:block!important;font-size:9pt;animation:fade-in .01s cubic-bezier(.95,.05,.8,.04) .2s both,disappear .01s linear .2s reverse;pointer-events:auto!important}
+body{margin:3px;display:block!important;font-size:9pt;animation:fade .01s cubic-bezier(.95,.05,.8,.04) .2s both,disappear .01s linear .2s reverse;pointer-events:auto!important}
 .iframed body{margin:1px 0;background:none}
 body::before{width:32px;height:32px;display:inline-block;position:absolute;bottom:0;right:0;z-index:-1;background:var(--snark_hover),var(--forum_hover),var(--tracker_hover),var(--search_hover),var(--snark_active),var(--forum_active),var(--tracker_active),var(--search_active);opacity:0;content:""}
 body,input,select,#commentInfo textarea{font-family:var(--bodyfont)}
@@ -183,8 +183,8 @@ select{margin:2px 4px 2px 0;padding:7px 24px 7px 12px;min-width:120px;font-size:
 #addSection{margin:-1px 0 0;padding:0 10px}
 #addSection table[border="0"]{margin-bottom:10px}
 #addSection table,#createSection table{background:none}
-#addSection table,#createSection table:not(#trackerselect){animation:fade-in .2s linear,slide-in .15s ease-out;will-change:transform}
-.iframed #addSection table,.iframed #createSection table:not(#trackerselect){animation:fade-in .15s linear;will-change:transform}
+#addSection table,#createSection table:not(#trackerselect){animation:fade .2s linear,slide-in .15s ease-out;will-change:transform}
+.iframed #addSection table,.iframed #createSection table:not(#trackerselect){animation:fade .15s linear;will-change:transform}
 #addtracker td,#addFileFilter td{border-top:var(--border);background:var(--th)}
 #addtracker td:first-child b,#addFileFilter td:first-child b{display:inline-block;width:20px;height:20px;vertical-align:middle;font-size:0;background:var(--add) no-repeat center center/20px}
 #createSection,#addSection,#configSection{box-shadow:inset 0 0 5px 2px #000}
@@ -251,8 +251,8 @@ tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before,tfoot .rateUp
 tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before{margin-right:-2px;content:"\27A4";transform:rotate(90deg) scaleX(0.6)}
 tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{margin-right:0;content:"\27A4";transform:rotate(-90deg) scaleX(0.6) translateX(-1px)}
 .tooltipped{display:inline-block;position:relative;z-index:99;white-space:nowrap;content:""}
-.tooltipped:hover::after,.tooltipped:active::after{padding:3px 6px;top:-3px;left:32px;border:1px solid #000;border-radius:3px;box-shadow:var(--highlight);background:#000;content:attr(data-tooltip);animation:fade-in .1s ease 3s reverse both}
-.tooltipped:hover::before,.tooltipped:active::before{margin-left:-10px;top:calc(50% - 6px);left:30px;border-width:6px;border-style:solid;border-color:#0000 #000 #0000 #0000;content:"";animation:fade-in .1s ease 3s reverse both}
+.tooltipped:hover::after,.tooltipped:active::after{padding:3px 6px;top:-3px;left:32px;border:1px solid #000;border-radius:3px;box-shadow:var(--highlight);background:#000;content:attr(data-tooltip);animation:fade .1s ease 3s reverse both}
+.tooltipped:hover::before,.tooltipped:active::before{margin-left:-10px;top:calc(50% - 6px);left:30px;border-width:6px;border-style:solid;border-color:#0000 #000 #0000 #0000;content:"";animation:fade .1s ease 3s reverse both}
 .tooltipped:hover::before,.tooltipped:active::before,.tooltipped:hover::after,.tooltipped:active::after{position:absolute;display:inline-block}
 .ETA{padding-right:2px;font-style:italic;color:#dd7}
 .ETA:not(:empty),.rateDown:not(:empty),.rateUp:not(:empty),.txd:not(:empty){width:5%;min-width:40px;white-space:nowrap;font-weight:700}
@@ -867,7 +867,7 @@ form[action^="/i2psnark/configure"]{display:block}
 @keyframes bar{from{width:100%}}
 @keyframes disappear{from{visibility:visible}to{visibility:collapse}}
 @keyframes downloading{from{border:1px solid #050}}
-@keyframes fade-in{0%,20%{filter:opacity(0)}100%{filter:opacity(1)}}
+@keyframes fade{0%,20%{filter:opacity(0)}100%{filter:opacity(1)}}
 @keyframes progress{0%,100%{background-position:center center,left center}50%{background-position:center center,-20px center}}
 @keyframes scale{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
 @keyframes seeding{from{box-shadow:inset 0 0 0 1px rgba(0,0,0,.7),inset 0 0 3px 3px rgba(64,72,0,.7);background:radial-gradient(at center bottom,rgba(64,72,0,.7) 0,#0000 50%),linear-gradient(180deg,#030,#000200)}}

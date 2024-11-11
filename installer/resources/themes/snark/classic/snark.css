@@ -186,7 +186,7 @@ a.controld{display:none}
 .sortIcon:hover .ascending{top:2px;border-color:#0000 #0000 var(--hover) #0000}
 .sortIcon:hover .descending{top:-2px;border-color:var(--hover) #0000 #0000 #0000}
 #torrentSort .ascending,th#torrentSort .descending{right:-11px}
-.ascending,.descending{filter:opacity(0);animation:ease fade-in .2s .6s forwards}
+.ascending,.descending{filter:opacity(0);animation:ease fade .2s .6s forwards}
 
 /* torrents */
 #torrents{margin:0;background:var(--bg)}
@@ -446,16 +446,16 @@ input:checked + #tab_files{margin-top:-4px}
 .mainsection,#createSection,#addSection,#configSection,.configPanel{word-wrap:break-word;text-align:center;border:var(--border);background:var(--bg)}
 .mainsection{margin:0;padding:0;border-bottom:0;background:none}
 .mainsection + .mainsection{margin:-1px 0}
-.snarkAddInfo code{animation:fade-in .5s ease-out}
+.snarkAddInfo code{animation:fade .5s ease-out}
 .toggleview{position:relative;z-index:10}
 .iframed #addSection,.iframed #new,.iframed #addSection,.iframed #createSection{margin:-1px 0}
-.iframed #addSection table,.iframed #createSection table:not(#trackerselect){animation:fade-in .2s ease-out;will-change:transform}
+.iframed #addSection table,.iframed #createSection table:not(#trackerselect){animation:fade .2s ease-out;will-change:transform}
 .iframed #createSection,.iframed #addSection,.iframed #configSection{border-radius:0}
 .iframed #new,.iframed #new + #configSection{margin-top:-11px}
 #addSection,#createSection,#configSection{border-radius:3px;box-shadow:var(--highlight);background-blend-mode:luminosity}
 #addSection{margin:9px 0;padding:0 10px;background:var(--bg3);background:var(--section)}
 #addSection table,#createSection table{margin-top:-5px}
-#addSection table,#createSection table:not(#trackerselect){animation:slide-in .1s ease-out,fade-in .5s linear;position:relative;will-change:transform}
+#addSection table,#createSection table:not(#trackerselect){animation:slide-in .1s ease-out,fade .5s linear;position:relative;will-change:transform}
 #addtracker td{border-top:var(--border);background:linear-gradient(180deg,var(--bg2),#e7e8ff)}
 #configSection{margin:0;padding:0 10px 12px 10px;background:var(--bg3);background:var(--section)}
 #createSection{margin:0 0 9px 0;padding:0 10px;background:var(--bg3);background:var(--section)}
@@ -630,8 +630,8 @@ td.commentAuthor{padding-left:5px}
 /* tooltip */
 .tooltipped{display:inline-block;position:relative;z-index:99;content:""}
 .tooltipped:hover{filter:drop-shadow(0 0 1px rgba(0,0,0,.4))}
-.tooltipped:hover::before,.tooltipped:active::before{margin-left:-10px;top:calc(50% - 6px);left:30px;border-width:6px;border-style:solid;border-color:#0000 #bbc #0000 #0000;content:"";animation:fade-in .1s ease 3s reverse both}
-.tooltipped:hover::after,.tooltipped:active::after{padding:3px 6px;top:0;left:32px;font-weight:600;border:1px solid #bbc;border-radius:2px;box-shadow:var(--highlight);background:linear-gradient(180deg,#fff,#eef);content:attr(data-tooltip);animation:fade-in .1s ease 3s reverse both}
+.tooltipped:hover::before,.tooltipped:active::before{margin-left:-10px;top:calc(50% - 6px);left:30px;border-width:6px;border-style:solid;border-color:#0000 #bbc #0000 #0000;content:"";animation:fade .1s ease 3s reverse both}
+.tooltipped:hover::after,.tooltipped:active::after{padding:3px 6px;top:0;left:32px;font-weight:600;border:1px solid #bbc;border-radius:2px;box-shadow:var(--highlight);background:linear-gradient(180deg,#fff,#eef);content:attr(data-tooltip);animation:fade .1s ease 3s reverse both}
 .tooltipped:hover::before,.tooltipped:active::before,.tooltipped:hover::after,.tooltipped:active::after{position:absolute;display:inline-block}
 
 /* language overrides */
@@ -803,7 +803,7 @@ form[action^="/i2psnark/configure"]{display:block}
 
 /* animations */
 @keyframes slide-in{0%{transform:translateY(-40px)}100%{transform:translateY(0)}}
-@keyframes fade-in{0%{filter:opacity(0)}100%{filter:opacity(1)}}
+@keyframes fade{0%{filter:opacity(0)}100%{filter:opacity(1)}}
 @keyframes disappear{from{visibility:visible}to{visibility:collapse}}
 @keyframes activity{0%,100%{background-position:left center}50%{background-position:center center}}
 @keyframes scale{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}

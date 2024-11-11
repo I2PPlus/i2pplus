@@ -358,8 +358,8 @@ input.create:hover,input.create:focus{background:var(--create) no-repeat center 
 
 .tooltipped{display:inline-block;position:relative;z-index:99;content:""}
 .tooltipped:hover{filter:drop-shadow(0 0 1px rgba(0,0,0,.4))}
-.tooltipped:hover::before,.tooltipped:active::before{margin-left:-10px;top:calc(50% - 6px);left:30px;border-width:6px;border-style:solid;border-color:#0000 #bbc #0000 #0000;content:"";animation:fade-in .1s ease 3s reverse both}
-.tooltipped:hover::after,.tooltipped:active::after{padding:3px 6px;top:0;left:32px;font-weight:600;border:1px solid #bbc;border-radius:2px;box-shadow:var(--highlight);background:linear-gradient(180deg,#fff,#eef);content:attr(data-tooltip);animation:fade-in .1s ease 3s reverse both}
+.tooltipped:hover::before,.tooltipped:active::before{margin-left:-10px;top:calc(50% - 6px);left:30px;border-width:6px;border-style:solid;border-color:#0000 #bbc #0000 #0000;content:"";animation:fade .1s ease 3s reverse both}
+.tooltipped:hover::after,.tooltipped:active::after{padding:3px 6px;top:0;left:32px;font-weight:600;border:1px solid #bbc;border-radius:2px;box-shadow:var(--highlight);background:linear-gradient(180deg,#fff,#eef);content:attr(data-tooltip);animation:fade .1s ease 3s reverse both}
 .tooltipped:hover::before,.tooltipped:active::before,.tooltipped:hover::after,.tooltipped:active::after{position:absolute;display:inline-block}
 
 .configPanel,#addSection,#createSection,#configSection{margin-bottom:-1px;padding:0 10px;text-align:center;border:var(--border_soft);border-left:0;border-right:0;box-shadow:var(--highlight);background:var(--panel)}
@@ -375,7 +375,7 @@ form:last-child .configPanel{margin-top:10px}
 .mainsection#snarkInfo{margin-top:9px}
 .magnetLabel{display:inline-block}
 .spacer td{border-bottom:var(--border_soft)}
-#addSection table,#createSection table:not(#trackerselect){position:relative;animation:slide-in .2s ease-out,fade-in .3s ease-out;will-change:transform}
+#addSection table,#createSection table:not(#trackerselect){position:relative;animation:slide-in .2s ease-out,fade .3s ease-out;will-change:transform}
 #addSection tr:first-child td>*,#createSection tr:first-child td>*{vertical-align:middle}
 #commentSection{padding-bottom:1px;border-bottom:0}
 #configSection{margin:-11px 0 -1px;padding-bottom:13px}
@@ -392,7 +392,7 @@ form:last-child .configPanel{margin-top:10px}
 .iframed #commentSection{margin-top:-1px}
 .iframed #configSection,.iframed #commentInfo,.iframed #trackers{border-bottom:0}
 .iframed #configSection,.iframed #trackers,.iframed .mainsection#snarkInfo{margin-bottom:1px}
-.iframed #createSection table:not(#trackerselect),.iframed #addSection table{position:static;animation:fade-in .1s ease-out;animation:none}
+.iframed #createSection table:not(#trackerselect),.iframed #addSection table{position:static;animation:fade .1s ease-out;animation:none}
 .iframed #editSection{margin-top:-3px}
 .iframed #mainsection>#screenlog+#torrentlist,.iframed #mainsection>#screenlog + script+#torrentlist{margin-top:0}
 .iframed #mainsection>#torrentlist{margin-top:-11px}
@@ -819,7 +819,7 @@ form[action^="/i2psnark/configure"]{display:block}
 @keyframes disappear{from{visibility:visible}to{visibility:collapse}}
 @keyframes down{from{background-position:left bottom,right bottom}to{background-position:left bottom,left top}}
 @keyframes downloadbar{0%,100%{background-position:left center}50%{background-position:20% center}}
-@keyframes fade-in{0%{filter:opacity(0)}100%{filter:opacity(1)}}
+@keyframes fade{0%{filter:opacity(0)}100%{filter:opacity(1)}}
 @keyframes scale{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
 @keyframes slide-in{0%{transform:translateY(-40px)}100%{transform:translateY(0)}}
 @keyframes spin{from{transform:rotate(360deg)}}

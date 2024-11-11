@@ -4,6 +4,11 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
+  const slider = document.createElement("style");
+  slider.innerHTML = "#confirmDialog:not(.cancelled):not(.postMsg){animation:slide-up .8s ease-out 0s both reverse}" +
+                     "@keyframes slide-up{0%{transform:translate(-50%, -50%)}100%{transform:translate(-50%, -500px)}}";
+  document.body.appendChild(slider);
+
   function customConfirm(options) {
     return new Promise((resolve) => {
       const fragment = document.createDocumentFragment();
@@ -25,6 +30,15 @@ document.addEventListener("DOMContentLoaded", function () {
                          "<button id=confirmYes data-action=yes>" + options.yesLabel + "</button>" +
                          "</p>\n";
       fragment.appendChild(dialog);
+
+      const styles = document.createElement("style");
+      styles.id = "confirmStyles";
+      styles.innerHTML = "#confirmDialog.postMsg{animation:slide-down 5s ease-in 3s both reverse}" +
+                         "#confirmDialog.cancelled{animation:slide-down 5s ease-in 0s both reverse}" +
+                         "#confirmOverlay.cancelled{animation:fade .3s ease 0s both reverse}" +
+                         "#confirmOverlay.done{animation:fade .3s ease 3s both reverse}" +
+                         "@keyframes slide-down{0%{transform:translate(-50%, -3000px)}100%{transform:translate(-50%, -50%)}}";
+      fragment.appendChild(styles);
       document.body.appendChild(fragment);
 
       const htmlTag = document.documentElement;
@@ -46,17 +60,22 @@ document.addEventListener("DOMContentLoaded", function () {
         const className = target.className;
         if (target.tagName === "BUTTON") {
           const action = target.dataset.action;
+          if (action !== null) {}
           if (action === "yes") {
             resolve(true);
+            dialog.classList.add("postMsg");
+            overlay.classList.add("done");
             let delMsg = options.className === "actionDelete" ? postDeleteMsg : postRemoveMsg + "...";
             delMsg = delMsg.replace("{0}", "<b>" + options.torrent + "</b>");
             document.getElementById("confirmButtons").style.display = "none";
             document.getElementById("msg").classList.add("deleting");
             document.getElementById("msg").innerHTML = delMsg;
-            setTimeout(() => { removeDialog(); }, 3 * 1000);
+            setTimeout(() => { removeDialog(); }, 4 * 1000);
           } else if (action === "no") {
             resolve(false);
-            removeDialog();
+            dialog.classList.add("cancelled");
+            overlay.classList.add("cancelled");
+            setTimeout(() => { removeDialog(); }, 1 * 1000);
           }
         }
       });
@@ -82,6 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.removeEventListener("keydown", captureKeyDown);
         document.getElementById("confirmDialog").remove();
         document.getElementById("confirmOverlay").remove();
+        document.getElementById("confirmStyles").remove();
         htmlTag.classList.remove("modal");
       }
     });
