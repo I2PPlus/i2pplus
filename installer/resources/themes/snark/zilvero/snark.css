@@ -707,20 +707,17 @@ form[action^="/i2psnark/configure"]{display:block}
 #fileFilter .createFilterString td:nth-child(2){font-weight:500}
 
 /* custom confirm dialogs */
-.modal{overflow:hidden}
-#confirmButtons{margin:0 -14px -20px;padding:15px;text-align:center;border-top:1px solid #f6f6f6;background:linear-gradient(180deg,#ddd,#ccc)}
-#confirmDialog{padding:10px 15px 21px;width:480px;box-shadow:var(--highlight),0 0 0 1px #ddd,0 0 0 6px #e0e0e0,0 0 0 7px #d0d0d0,3px 3px 3px #808080;background:#ddd;z-index:100000;animation:fade .3s ease 1s both;user-select:none}
-#confirmOverlay{position:absolute;top:0;left:0;bottom:0;right:0;z-index:99999;background:#000c}
-#confirmYes,#confirmNo{margin:4px 12px;padding:6px 8px;width:120px;font-weight:700;color:#0000;box-shadow:0 0 0 4px #aaa;border:1px solid #101;background:#fff url(/i2psnark/.res/icons/tick.svg) no-repeat center center/20px;cursor:pointer;opacity:.7}
+#confirmButtons{border-top:1px solid #f6f6f6;background:linear-gradient(180deg,#ddd,#ccc)}
+#confirmDialog{box-shadow:var(--highlight),0 0 0 1px #ddd,0 0 0 6px #e0e0e0,0 0 0 7px #d0d0d0,3px 3px 3px #808080;background:#ddd}
+#confirmOverlay{background:#000c}
+#confirmYes,#confirmNo{color:#0000;box-shadow:0 0 0 4px #aaa;border:1px solid #101;background:#fff url(/i2psnark/.res/icons/tick.svg) no-repeat center center/20px;cursor:pointer;opacity:.7}
 #confirmNo{background:#fff url(/i2psnark/.res/icons/cross.svg) no-repeat center center/17px}
-#confirmButtons button:hover{opacity:1}
 #confirmYes:hover{box-shadow:0 0 0 4px #0f0}
 #confirmNo:hover{box-shadow:0 0 0 4px #f00}
 #confirmYes:active{box-shadow:0 0 0 4px #0f0,0 0 3px 3px #0003 inset}
 #confirmNo:active{box-shadow:0 0 0 4px #f00,0 0 3px 3px #0003 inset}
-#msg{margin:-9px -14px 0;padding:30px 20px 30px 88px;text-align:left;font-size:110%;border-bottom:1px solid #bbb;background:url(/i2psnark/.res/icons/warn.svg) no-repeat 20px center/48px,linear-gradient(180deg,#ccc,#ddd)}
-#msg .hr{margin:11px 0 10px;height:0;width:100%;display:block;border-top:1px solid #888}
-#msg.deleting{margin-bottom:-20px}
+#msg{border-bottom:1px solid #bbb;background:url(/i2psnark/.res/icons/warn.svg) no-repeat 20px center/48px,linear-gradient(180deg,#ccc,#ddd)}
+#msg .hr{border-top:1px solid #888}
 
 /* animations */
 @keyframes disappear{from{visibility:visible}to{visibility:collapse}}

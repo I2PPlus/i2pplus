@@ -4,6 +4,7 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
+  const htmlTag = document.documentElement;
   const slider = document.createElement("style");
   slider.innerHTML = "#confirmDialog:not(.cancelled):not(.postMsg){animation:slide-up .8s ease-out 0s both reverse}" +
                      "@keyframes slide-up{0%{transform:translate(-50%, -50%)}100%{transform:translate(-50%, -500px)}}";
@@ -33,15 +34,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const styles = document.createElement("style");
       styles.id = "confirmStyles";
-      styles.innerHTML = "#confirmDialog.postMsg{animation:slide-down 5s ease-in 3s both reverse}" +
+      styles.innerHTML = ".modal{overflow:hidden;contain:paint}" +
+                         "#confirmButtons{margin:0 -14px -20px;padding:15px;text-align:center}" +
+                         "#confirmYes,#confirmNo{margin:4px 12px;padding:6px 8px;width:120px;font-weight:700;cursor:pointer}" +
+                         "#confirmButtons button:hover{opacity:1}" +
+                         "#confirmYes:active,#confirmNo:active{transform:scale(0.9)}" +
+                         "#confirmDialog{padding:10px 15px 21px;width:480px;z-index:100000;user-select:none;animation:fade .3s ease 1s both}" +
+                         "#confirmDialog.postMsg{animation:slide-down 5s ease-in 3s both reverse}" +
                          "#confirmDialog.cancelled{animation:slide-down 5s ease-in 0s both reverse}" +
+                         "#confirmOverlay{position:absolute;top:0;left:0;bottom:0;right:0;z-index:99999}" +
                          "#confirmOverlay.cancelled{animation:fade .3s ease 0s both reverse}" +
                          "#confirmOverlay.done{animation:fade .3s ease 3s both reverse}" +
+                         "#msg{margin:-9px -14px 0;padding:30px 20px 30px 88px;text-align:left;font-size:110%}" +
+                         "#msg b{max-width:384px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:bottom}" +
+                         "#msg .hr{margin:11px 0 10px;height:0;width:100%;display:block}" +
+                         "#msg.deleting{margin-bottom:-20px}" +
                          "@keyframes slide-down{0%{transform:translate(-50%, -3000px)}100%{transform:translate(-50%, -50%)}}";
       fragment.appendChild(styles);
       document.body.appendChild(fragment);
 
-      const htmlTag = document.documentElement;
       const dialogHeight = dialog.offsetHeight;
       const viewportHeight = htmlTag.classList.contains("iframed") ? parent.window.innerHeight : window.innerHeight;
       const topPosition = (viewportHeight - dialogHeight) / 2;
@@ -51,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
       dialog.style.left = "50%";
       dialog.style.transform = "translate(-50%, -50%)";
       htmlTag.classList.add("modal");
-      if (htmlTag.classList.contains("iframed") && htmlTag.classList.contains("modal")) {scrollToTop();}
+      scrollToTop();
 
       overlay.addEventListener("click", (event) => { event.stopPropagation(); });
 
@@ -60,7 +71,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const className = target.className;
         if (target.tagName === "BUTTON") {
           const action = target.dataset.action;
-          if (action !== null) {}
           if (action === "yes") {
             resolve(true);
             dialog.classList.add("postMsg");
@@ -80,11 +90,11 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       });
 
-      document.addEventListener("keydown", captureKeyDown);
+      htmlTag.addEventListener("keydown", captureKeyDown);
 
       function scrollToTop() {
         window.scrollTo(0,0);
-        parent.window.scrollTo(0,0);
+        if (htmlTag.classList.contains("iframed")) {parent.window.scrollTo(0,0);}
       }
 
       function captureKeyDown(event) {
@@ -99,15 +109,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
       function removeDialog() {
         document.removeEventListener("keydown", captureKeyDown);
-        document.getElementById("confirmDialog").remove();
-        document.getElementById("confirmOverlay").remove();
-        document.getElementById("confirmStyles").remove();
+        document.getElementById("confirmDialog")?.remove();
+        document.getElementById("confirmOverlay")?.remove();
+        document.getElementById("confirmStyles")?.remove();
         htmlTag.classList.remove("modal");
       }
     });
   }
 
-  document.addEventListener("click", function (event) {
+  htmlTag.addEventListener("click", function (event) {
     const target = event.target;
     const form = document.getElementById("torrentlist");
     if (!target.matches("input") || !form) {return;}
