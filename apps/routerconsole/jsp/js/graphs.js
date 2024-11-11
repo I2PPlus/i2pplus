@@ -18,43 +18,47 @@ import {onVisible, onHidden} from "/js/onVisible.js";
   function initCss() {
     const graph = document.querySelector(".statimage");
     if (graph === null) {location.reload();}
-    else {injectCss();}
-  }
 
-  function injectCss() {
-    const gwrap = document.head.querySelector("style#gwrap");
-    if (!gwrap) {return;}
-    const graph = document.querySelector(".statimage");
-    const widepanel = document.querySelector(".widepanel");
-    const delay =  Math.max(graphCount*5, 120);
-    widepanel.id = "nographs";
-    const graphWidth = graph.naturalWidth > 40 ? graph.naturalWidth : 0;
-    const graphHeight = graph.naturalHeight;
-    const dimensions = ".graphContainer{width:" + (graphWidth + 4) + "px;height:" + (graphHeight + 4) + "px}";
-    let retryCount = 0;
-    if (graphWidth !== "auto" && graphWidth !== "0" && dimensions.indexOf("width:4px") === -1) {gwrap.innerText = dimensions;}
-    else {gwrap.innerText = "";}
+    graph.addEventListener("load", () => {
+      const gwrap = document.head.querySelector("style#gwrap");
+      if (!gwrap) {return;}
+      const widepanel = document.querySelector(".widepanel");
+      const delay =  Math.max(graphCount*5, 120);
+      widepanel.id = "nographs";
+      const graphWidth = graph.naturalWidth > 40 ? graph.naturalWidth : 0;
+      const graphHeight = graph.naturalHeight;
+      const dimensions = ".graphContainer{width:" + (graphWidth + 4) + "px;height:" + (graphHeight + 4) + "px}";
 
-    function checkGwrap() {
-      if (gwrap.innerText === dimensions) {
-        setTimeout(() => {
-          widepanel.id = "";
-          allgraphs.removeAttribute("hidden");
-          configs.removeAttribute("hidden");
-        }, delay);
-        updateGraphs();
-      } else {
-        retryCount++;
-        if (retryCount < 3) {setTimeout(() => {checkGwrap();}, 20);}
-        else if (retryCount < 5) {setTimeout(() => {location.reload(true);}, delay);}
-        else {
-          widepanel.id = "";
-          allgraphs.removeAttribute("hidden");
-          configs.removeAttribute("hidden");
+      let retryCount = 0;
+      if (graphWidth !== "auto" && graphWidth !== "0" && dimensions.indexOf("width:4px") === -1) {gwrap.innerText = dimensions;}
+      else {gwrap.innerText = "";}
+
+      function checkGwrap() {
+        if (gwrap.innerText === dimensions) {
+          setTimeout(() => {
+            widepanel.id = "";
+            allgraphs.removeAttribute("hidden");
+            configs.removeAttribute("hidden");
+          }, delay);
+          updateGraphs();
+        } else {
+          retryCount++;
+          if (retryCount < 3) {setTimeout(() => {checkGwrap();}, 20);}
+          else if (retryCount < 5) {setTimeout(() => {location.reload(true);}, delay);}
+          else {
+            widepanel.id = "";
+            allgraphs.removeAttribute("hidden");
+            configs.removeAttribute("hidden");
+          }
         }
       }
+      checkGwrap();
+    });
+
+    // Trigger the load event manually in case the image is already loaded
+    if (graph.complete) {
+      graph.dispatchEvent(new Event("load"));
     }
-    checkGwrap();
   }
 
   function updateGraphs() {
