@@ -39,54 +39,47 @@ document.addEventListener("DOMContentLoaded", function () {
         const target = event.target;
         if (target.tagName === "BUTTON") {
           const action = target.dataset.action;
-          if (action === "yes") {resolve(true);}
-          else if (action === "no") {resolve(false);}
           if (action === "yes") {
-              document.getElementById("confirmButtons").style.display = "none";
-              document.getElementById("msg").classList.add("deleting");
-              document.getElementById("msg").textContent = "Deleting...";
-              setTimeout(() => { removeDialog(); }, 2*1000);
-          } else {removeDialog();}
+            resolve(true);
+            document.getElementById("confirmButtons").style.display = "none";
+            document.getElementById("msg").classList.add("deleting");
+            document.getElementById("msg").textContent = "Deleting...";
+            setTimeout(() => { removeDialog(); }, 2 * 1000);
+          } else if (action === "no") {
+            resolve(false);
+            removeDialog();
+          }
         }
       });
+
+      function removeDialog() {
+        document.getElementById("confirmDialog").remove();
+        document.getElementById("confirmOverlay").remove();
+        document.documentElement.classList.remove("modal");
+      }
     });
-
-    function removeDialog() {
-      document.getElementById("confirmDialog").remove();
-      document.getElementById("confirmOverlay").remove();
-      document.documentElement.classList.remove("modal");
-    }
-
   }
-
-  document.addEventListener("click", function (event) {
-    const target = event.target;
-    if (target.matches("#confirmNo, #confirmYes")) {
-      event.stopPropagation();
-      return;
-    }
-    event.preventDefault();
-    event.stopPropagation();
-  });
 
   document.addEventListener("click", function (event) {
     const target = event.target;
     const form = document.getElementById("torrentlist");
     if (!target.matches("input") || !form) {return;}
+
     const className = target.className;
     if (className === "actionRemove" || className === "actionDelete") {
+      event.preventDefault();
       const torrent = target.getAttribute("data-name");
       const msg = className === "actionRemove" ? deleteMessage1 : deleteMessage2;
       const name = target.name;
       const value = target.value;
+
+      // Create confirmation dialog
       customConfirm({
         message: msg.replace("{0}", torrent),
         yesLabel: "Delete",
         noLabel: "Cancel"
       }).then((result) => {
-        if (!result) {
-          return false;
-        } else {
+        if (result) { // User confirmed deletion
           const hiddenInput = document.createElement("input");
           hiddenInput.type = "hidden";
           hiddenInput.name = name;
@@ -97,4 +90,5 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
   });
+
 });

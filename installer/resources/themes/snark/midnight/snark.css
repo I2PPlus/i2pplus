@@ -204,7 +204,7 @@ th.status img,td.status img{margin:2px;width:auto;height:22px}
 #torrents tr:not(#pagenavbottom):hover,.knownTracker:hover,#trackerselect tr:nth-child(n+2):hover,#dirInfo tr:hover,#trackerselect tr:nth-child(n+2):hover td{background:#1e0b28}
 #torrents tr:hover td,.dirInfo tr:hover td{color:#ccd1ff}
 #torrentTotals{contain:paint}
-#torrentTotals::before{height:32px;display:inline-block;vertical-align:middle;content:""}
+#torrentTotals::before{height:20px;display:inline-block;vertical-align:middle;content:""}
 #totals{margin:-3px 0 -3px 3px;padding:6px 0 4px 20px;display:inline-block;white-space:nowrap;vertical-align:middle;font-weight:700;background:url(images/disk.svg) no-repeat left center/22px;contain:paint}
 #totals .badge{margin-left:2px}
 #totals .counter{margin:-10px 0;padding:6px 10px 12px 9px;width:fit-content;height:20px;position:relative;display:inline-block;vertical-align:middle;border-right:var(--border_soft)}

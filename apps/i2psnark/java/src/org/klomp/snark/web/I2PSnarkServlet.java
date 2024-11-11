@@ -417,7 +417,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("  import {initSnarkRefresh} from \"").append(resourcePath).append("js/refreshTorrents.js").append("\";\n")
                .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n")
                .append("<script nonce=").append(cspNonce).append(" type=module src=").append(resourcePath).append("js/onVisible.js></script>\n");
-            if (theme.equals("ubergine")) {
+            if (theme.equals("ubergine") || theme.equals("zilvero")) {
                 buf.append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath).append("js/confirm.js?")
                    .append(CoreVersion.VERSION).append("\"></script>\n");
             } else {

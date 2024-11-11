@@ -314,7 +314,7 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{margin-right:0;
 #torrents #snarkTbody:empty{display:none}
 #torrentlist{margin-bottom:-12px;contain:paint}
 #torrentTotals{contain:paint}
-#torrentTotals::before{height:32px;display:inline-block;vertical-align:middle;content:""}
+#torrentTotals::before{height:20px;display:inline-block;vertical-align:middle;content:""}
 #totals{margin:-10px 0 -10px -3px;padding:7px 0 7px 24px;display:inline-block;white-space:nowrap;font-weight:700;background:url(images/disk.svg) no-repeat 4px center/22px,var(--th)}
 #totals .badge{margin-left:2px;color:#bb7}
 #totals .counter{margin:-8px 0;padding:5px 9px 8px 5px;width:fit-content;height:20px;position:relative;display:inline-block;vertical-align:middle;border-right:var(--border)}

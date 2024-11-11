@@ -51,7 +51,7 @@ a img,img,label,.configTitle,.toggleview,#navbar,#configs{user-select:none}
 body,input[type=submit],input[type=text],span,table a,select,td,textarea,th{font-family:var(--bodyfont);font-size:9pt}
 body,html{min-height:calc(100% - 5px)}
 html{border-right:var(--border);background:repeating-linear-gradient(180deg,#ddd 2px,#bbb 4px) #bbb;background-size:100% 4px;scrollbar-color:#999 #eee}
-body{margin:0;padding:5px 5px 0;min-width:800px;display:block1important;color:var(--ink);background:var(--b_snark_hover),var(--b_snark_active),var(--b_tracker_hover),var(--b_tracker_active),var(--b_forum_hover),var(--b_forum_active);background-size:0;pointer-events:auto!important}
+body{margin:0;padding:5px 5px 0;min-width:800px;display:block1important;color:var(--ink);background:var(--b_snark_hover),var(--b_snark_active),var(--b_tracker_hover),var(--b_tracker_active),var(--b_forum_hover),var(--b_forum_active);background-size:0;display:block!important;pointer-events:auto!important}
 .iframed body{min-width:700px;padding:0;background:#777}
 code{font-weight:700;color:#393}
 form{margin:0}
@@ -266,8 +266,8 @@ tr:hover .magnetLabel{opacity:1}
 .peerinfo td{border-bottom:1px solid #bbb}
 .peerinfo .status{background-size:18px}
 .rateDown .left,.rateUp .left,.txd .left,.rateDown .right,.rateUp .right,.txd .right{min-width:22px;display:inline-block;text-align:left}
-.rateDown,.rateUp,.txd{text-align:center}
 .rateDown .right,.rateUp .right,.txd .right{min-width:40px;text-align:right}
+.rateDown,.rateUp,.txd{text-align:center}
 tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before,tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{margin-right:1px;margin-top:-3px;display:inline-block;vertical-align:middle;line-height:0;font-size:80%}
 tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before{content:"\27A4";transform:rotate(90deg) scaleX(0.6)}
 tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4";transform:rotate(-90deg) scaleX(0.6)}
@@ -306,7 +306,7 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 #torrents #snarkTbody .peerinfo .status{background:var(--client) no-repeat center center/20px}
 #torrents #snarkTbody .peerinfo:hover .status{background:var(--client) no-repeat center center/20px,var(--tr_snark_hover)}
 #torrentTotals{contain:paint}
-#torrentTotals::before{height:32px;display:inline-block;vertical-align:middle;content:""}
+#torrentTotals::before{height:20px;display:inline-block;vertical-align:middle;content:""}
 #totals{margin-left:3px;padding:4px 0 4px 20px;white-space:nowrap;background:url(images/disk.svg) no-repeat left center/22px}
 #totals .badge{margin-left:3px}
 #totals .counter{margin:-6px 0;padding:6px 8px 6px 10px;width:fit-content;height:20px;position:relative;display:inline-block;vertical-align:middle;border-right:var(--border)}
@@ -361,7 +361,7 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 .stopped .txBarInner{background:#007a9988}
 .txBarInner:hover{background:#f6f8}
 .txBarInner[style="width:calc(100% - 2px)"]{box-shadow:0 7px 7px 1px #fff7 inset,0 -7px 7px 1px #0003 inset}
-.txBarText{margin-top:1px;display:inline-block;position:relative;z-index:5;vertical-align:middle;font-weight:700}
+.txBarText{display:inline-block;position:relative;z-index:5;vertical-align:text-top;font-weight:700}
 .active .tx{background-size:400% 400%;animation:progressTX 1s linear both;background:var(--bar_upload_active)}
 .active .txBarInner{height:calc(100% - 2px);display:inline-block;position:absolute;top:1px;left:1px;box-shadow:inset 0 3px 3px rgba(0,0,0,.3);background:#f608}
 tr:not(.peerinfo).active.downloading .barOuter{background:var(--bar_active)}
@@ -706,6 +706,22 @@ form[action^="/i2psnark/configure"]{display:block}
 #fileFilter .accept,#fileFilter .add{float:right}
 #fileFilter .createFilterString td:nth-child(2){font-weight:500}
 
+/* custom confirm dialogs */
+.modal{overflow:hidden}
+#confirmButtons{margin:0 -14px -20px;padding:15px;text-align:center;border-top:1px solid #f6f6f6;background:linear-gradient(180deg,#ddd,#ccc)}
+#confirmDialog{padding:10px 15px 21px;width:480px;box-shadow:var(--highlight),0 0 0 1px #ddd,0 0 0 6px #e0e0e0,0 0 0 7px #d0d0d0,3px 3px 3px #808080;background:#ddd;z-index:100000;animation:fade .3s ease 1s both}
+#confirmOverlay{position:absolute;top:0;left:0;bottom:0;right:0;z-index:99999;background:#000c}
+#confirmYes,#confirmNo{margin:4px 12px;padding:6px 8px;width:120px;font-weight:700;color:#0000;box-shadow:0 0 0 4px #aaa;border:1px solid #101;background:#fff url(/i2psnark/.res/icons/tick.svg) no-repeat center center/20px;cursor:pointer;opacity:.7}
+#confirmNo{background:#fff url(/i2psnark/.res/icons/cross.svg) no-repeat center center/17px}
+#confirmButtons button:hover{opacity:1}
+#confirmYes:hover{box-shadow:0 0 0 4px #0f0}
+#confirmNo:hover{box-shadow:0 0 0 4px #f00}
+#confirmYes:active{box-shadow:0 0 0 4px #0f0,0 0 3px 3px #0003 inset}
+#confirmNo:active{box-shadow:0 0 0 4px #f00,0 0 3px 3px #0003 inset}
+#msg{margin:-9px -14px 0;padding:30px 20px 30px 88px;text-align:left;font-size:110%;border-bottom:1px solid #bbb;background:url(/i2psnark/.res/icons/warn.svg) no-repeat 20px center/48px,linear-gradient(180deg,#ccc,#ddd)}
+#msg.deleting{margin-bottom:-20px}
+
+/* animations */
 @keyframes disappear{from{visibility:visible}to{visibility:collapse}}
 @keyframes progress{from{background-position:0}to{background-position:-12px}}
 @keyframes progressTX{from{background-position:-12px}to{background-position:0}}
