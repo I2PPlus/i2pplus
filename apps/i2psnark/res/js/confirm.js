@@ -18,11 +18,6 @@ document.addEventListener("DOMContentLoaded", function () {
       fragment.appendChild(overlay);
 
       const dialog = document.createElement("div");
-      dialog.id = "confirmDialog";
-      dialog.style.position = "absolute";
-      dialog.style.top = "40%";
-      dialog.style.left = "50%";
-      dialog.style.transform = "translate(-50%, -50%)";
       dialog.style.zIndex = "100000";
       dialog.innerHTML = "<p id=msg>" + options.message + "</p>\n" +
                          "<p id=confirmButtons>" +
@@ -31,7 +26,18 @@ document.addEventListener("DOMContentLoaded", function () {
                          "</p>\n";
       fragment.appendChild(dialog);
       document.body.appendChild(fragment);
-      document.documentElement.classList.add("modal");
+
+      const htmlTag = document.documentElement;
+      const dialogHeight = dialog.offsetHeight;
+      const viewportHeight = htmlTag.classList.contains("iframed") ? parent.window.innerHeight : window.innerHeight;
+      const topPosition = (viewportHeight - dialogHeight) / 2;
+      dialog.style.top = topPosition + "px";
+      dialog.id = "confirmDialog";
+      dialog.style.position = "absolute";
+      dialog.style.left = "50%";
+      dialog.style.transform = "translate(-50%, -50%)";
+      htmlTag.classList.add("modal");
+      if (htmlTag.classList.contains("iframed") && htmlTag.classList.contains("modal")) {scrollToTop();}
 
       overlay.addEventListener("click", (event) => { event.stopPropagation(); });
 
@@ -52,10 +58,15 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       });
 
+      function scrollToTop() {
+        window.scrollTo(0,0);
+        parent.window.scrollTo(0,0);
+      }
+
       function removeDialog() {
         document.getElementById("confirmDialog").remove();
         document.getElementById("confirmOverlay").remove();
-        document.documentElement.classList.remove("modal");
+        htmlTag.classList.remove("modal");
       }
     });
   }
