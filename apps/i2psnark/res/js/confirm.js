@@ -12,22 +12,21 @@ document.addEventListener("DOMContentLoaded", function () {
   (function injectCss() {
     if (modalCss) {return;}
     const snarkTheme = head.querySelector("#snarkTheme");
-    console.log("snarkTheme found:", snarkTheme); // Add this line
     const css = document.createElement("style");
     css.id = "modalCss";
     css.textContent = ".modal{overflow:hidden;contain:paint}" +
-                      "#confirmDialog:not(.cancelled):not(.postMsg){animation:slide-up .8s ease-out 0s both reverse}" +
+                      "#confirmDialog:not(.cancelled):not(.postMsg){animation:slide-up .8s ease-out .2s both reverse}" +
                       "@keyframes slide-up{0%{transform:translate(-50%, -50%)}100%{transform:translate(-50%, -500px)}}" +
                       "#confirmButtons{margin:0 -14px -20px;padding:15px;text-align:center}" +
                       "#confirmYes,#confirmNo{margin:4px 12px;padding:6px 8px;width:120px;font-weight:700;cursor:pointer}" +
                       "#confirmButtons button:hover{opacity:1}" +
                       "#confirmYes:active,#confirmNo:active{transform:scale(0.9)}" +
                       "#confirmDialog{padding:10px 15px 21px;width:480px;position:absolute;left:50%;z-index:100000;" +
-                      "user-select:none;animation:fade .3s ease 1s both;transform:translate(-50%,-50%)}" +
+                      "user-select:none;animation:fade .3s ease .8s both;transform:translate(-50%,-50%)}" +
                       "#confirmDialog.postMsg{animation:slide-down 5s ease-in 3s both reverse}" +
-                      "#confirmDialog.cancelled{animation:slide-down 5s ease-in 0s both reverse}" +
+                      "#confirmDialog.cancelled{animation:slide-down 5s ease-in .2s both reverse}" +
                       "#confirmOverlay{position:fixed;left:0;bottom:0;right:0;z-index:99999}" +
-                      "#confirmOverlay.cancelled{animation:fade .3s ease 0s both reverse}" +
+                      "#confirmOverlay.cancelled{animation:fade .3s ease .2s both reverse}" +
                       "#confirmOverlay.done{animation:fade .3s ease 3s both reverse}" +
                       "#msg{margin:-9px -14px 0;padding:30px 20px 30px 88px;text-align:left;font-size:110%}" +
                       "#msg b{max-width:384px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:bottom}" +
@@ -135,7 +134,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const className = target.className;
     if (className === "actionRemove" || className === "actionDelete") {
       event.preventDefault();
-      const torrent = target.getAttribute("data-name");
+      let torrent = target.getAttribute("data-name");
+      if (torrent.length > 50) {torrent = torrent.substring(0, 48) + "&hellip;";}
       let msg;
       msg = className === "actionRemove" ?
                           "<p id=msg>" + removeMsg + "<span class=hr></span>" + removeMsg2 + "</p>\n" :

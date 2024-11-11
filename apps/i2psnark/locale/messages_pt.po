@@ -466,11 +466,11 @@ msgid "Anonymous BitTorrent Client"
 msgstr "Cliente BitTorrent Anônimo"
 
 #, java-format
-msgid "Are you sure you want to delete {0} ?"
+msgid "Are you sure you want to delete torrent file {0} ?"
 msgstr "Tem certeza que deseja excluir o arquivo \\''{0}\\'' (os dados baixados não serão excluídos) ?Tem a certeza que deseja apagar o ficheiro \\\"{0}\\\" (dados transferidos não serão apagados) ?"
 
 #, java-format
-msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgid "Are you sure you want to delete torrent file {0} and all downloaded data?"
 msgstr "Tem certeza de que deseja excluir o torrent \\''{0}\\'' e todos os dados baixados?Está seguro de que quer apagar o arquivo torrente \\''{0}\\'' e todos os dados descarregados deste torrente?"
 
 msgid "I2PSnark has stopped"

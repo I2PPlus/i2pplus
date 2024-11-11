@@ -1079,7 +1079,7 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 #confirmNo:active{box-shadow:0 0 0 4px #f00,0 0 3px 3px #0008 inset}
 #msg{background:url(/i2psnark/.res/icons/warn.svg) no-repeat 20px center/48px,linear-gradient(180deg,#303,#400040)}
 #msg.deleting{background:url(/i2psnark/.res/icons/processing.svg) no-repeat 20px center/48px,linear-gradient(180deg,#303,#400040)}
-#msg .hr{border-top:1px solid #414}
+#msg .hr{margin-bottom:11px;border-top:1px solid #270527;border-bottom:1px solid #414}
 
 /* animations */
 @keyframes active{from{background:linear-gradient(to left,#dd0 1px,rgba(255,255,0,0) 1px)}}

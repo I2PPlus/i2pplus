@@ -406,7 +406,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("  const postDeleteMsg = \"")
                .append(_t("Deleting <b>{0}</b> and all associated data...")).append("\";\n")
                .append("  const removeMsg = \"")
-               .append(_t("Are you sure you want to delete {0} ?")).append("\";\n")
+               .append(_t("Are you sure you want to delete torrent file {0} ?")).append("\";\n")
                .append("  const removeMsg2 = \"")
                .append(_t("Note: Downloaded data will not be deleted.")).append("\";\n")
                .append("  const postRemoveMsg = \"")
