@@ -1,5 +1,5 @@
 /* I2P+ confirm.js by dr|z3d */
-/* Customized confirm dialogs for I2PSnark */
+/* Custom confirm dialogs for I2PSnark */
 /* License: AGPL3 or later */
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
           else if (action === "no") {resolve(false);}
           if (action === "yes") {
               document.getElementById("confirmButtons").style.display = "none";
+              document.getElementById("msg").classList.add("deleting");
               document.getElementById("msg").textContent = "Deleting...";
               setTimeout(() => { removeDialog(); }, 2*1000);
           } else {removeDialog();}
@@ -51,8 +52,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function removeDialog() {
-      overlay.remove();
-      dialog.remove();
+      document.getElementById("confirmDialog").remove();
+      document.getElementById("confirmOverlay").remove();
       document.documentElement.classList.remove("modal");
     }
 
