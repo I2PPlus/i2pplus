@@ -404,9 +404,9 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<link rel=stylesheet href=").append(resourcePath).append("toast.css>\n")
                .append("<script nonce=").append(cspNonce).append(">\n")
                .append("  const deleteMessage1 = \"")
-               .append(_t("Are you sure you want to delete the file \\''{0}\\'' (downloaded data will not be deleted) ?")).append("\";\n")
+               .append(_t("Are you sure you want to delete the file \\''{0}\\'' (downloaded data will not be deleted) ?").replace("\\''{0}\\''","<b>{0}</b>")).append("\";\n")
                .append("  const deleteMessage2 = \"")
-               .append(_t("Are you sure you want to delete the torrent \\''{0}\\'' and all downloaded data?")).append("\";\n")
+               .append(_t("Are you sure you want to delete the torrent \\''{0}\\'' and all downloaded data?").replace("\\''{0}\\''","<b>{0}</b>")).append("\";\n")
                .append("  const snarkPageSize = ").append(pageSize).append(";\n")
                .append("  const snarkRefreshDelay = ").append(delay).append(";\n")
                .append("  const totalSnarks = ").append(_manager.listTorrentFiles().size()).append(";\n")
@@ -416,9 +416,14 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("<script nonce=").append(cspNonce).append(" type=module>\n")
                .append("  import {initSnarkRefresh} from \"").append(resourcePath).append("js/refreshTorrents.js").append("\";\n")
                .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n")
-               .append("<script nonce=").append(cspNonce).append(" type=module src=").append(resourcePath).append("js/onVisible.js></script>\n")
-               .append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath).append("js/delete.js?")
-               .append(CoreVersion.VERSION).append("\"></script>\n");
+               .append("<script nonce=").append(cspNonce).append(" type=module src=").append(resourcePath).append("js/onVisible.js></script>\n");
+            if (theme.equals("ubergine")) {
+                buf.append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath).append("js/confirm.js?")
+                   .append(CoreVersion.VERSION).append("\"></script>\n");
+            } else {
+                buf.append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath).append("js/delete.js?")
+                   .append(CoreVersion.VERSION).append("\"></script>\n");
+            }
             if (delay > 0) {
                 String downMsg = _context.isRouterContext() ? _t("Router is down") : _t("I2PSnark has stopped");
                 // fallback to metarefresh when javascript is disabled
@@ -2771,7 +2776,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append("<input type=submit class=actionRemove name=\"action_Remove_").append(b64).append("\" value=\"")
                    .append(_t("Remove")).append("\" title=\"").append(_t("Remove the torrent from the active list, deleting the .torrent file")
                    .replace("Remove the torrent from the active list, deleting the .torrent file", "Remove and delete torrent, retaining downloaded files"));
-                buf.append("\" client=\"").append(escapeJSString(snark.getName())).append("\">");
+                buf.append("\" client=\"").append(escapeJSString(snark.getName()))
+                   .append("\" data-name=\"").append(escapeJSString(snark.getBaseName())).append(".torrent\">");
             }
 
             // We can delete magnets without write privs
@@ -2780,7 +2786,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append("<input type=submit class=actionDelete name=\"action_Delete_").append(b64).append("\" value=\"")
                    .append(_t("Delete")).append("\" title=\"").append(_t("Delete the .torrent file and the associated data files")
                    .replace("the .torrent file", "torrent file").replace("and the associated", "and associated"));
-                buf.append("\" client=\"").append(escapeJSString(snark.getName())).append("\">");
+                buf.append("\" client=\"").append(escapeJSString(snark.getName()))
+                   .append("\" data-name=\"").append(escapeJSString(snark.getBaseName())).append(".torrent\">");
             }
         }
         buf.append("</td></tr>\n");

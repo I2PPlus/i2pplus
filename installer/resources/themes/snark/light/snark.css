@@ -211,6 +211,7 @@ tfoot .rateUp,tfoot .rateDown,td.rateUp,td.rateDown,tfoot .txd,td.txd{text-align
 #torrents th:empty,#torrents td:empty{padding:0;width:0;min-width:0;max-width:0;font-size:0;overflow:hidden}
 #torrents code{padding:2px 3px;margin:0 3px;display:inline-block;letter-spacing:.1em;font-size:8.5pt;text-shadow:var(--txt_shadow);border-radius:2px}
 #torrentTotals{contain:paint}
+#torrentTotals::before{height:32px;display:inline-block;vertical-align:middle;content:""}
 #totals span,#ourDest,#ourDest code{display:inline-block;white-space:nowrap;line-height:1.5}
 #totals{margin:-6px 0 -3px 3px;padding:4px 0 4px 20px;display:inline-block;white-space:nowrap;vertical-align:middle;font-weight:700;background:url(images/disk.svg) no-repeat left center/22px}
 #totals .badge{margin-left:2px}
