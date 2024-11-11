@@ -399,8 +399,6 @@ public class I2PSnarkServlet extends BasicServlet {
         String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         String pageSize = String.valueOf(_manager.getPageSize());
         if (!isConfigure) {
-            //buf.append("<script nonce=" + cspNonce + " type=module ");
-            //buf.append("src=\"" + resourcePath + "js/toggleLinks.js?" + CoreVersion.VERSION + "\"></script>\n");
             buf.append("<link rel=stylesheet href=").append(resourcePath).append("toast.css>\n")
                .append("<script nonce=").append(cspNonce).append(">\n")
                .append("  const deleteMessage1 = \"")
@@ -417,26 +415,16 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("  import {initSnarkRefresh} from \"").append(resourcePath).append("js/refreshTorrents.js").append("\";\n")
                .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n")
                .append("<script nonce=").append(cspNonce).append(" type=module src=").append(resourcePath).append("js/onVisible.js></script>\n");
-            if (theme.equals("ubergine") || theme.equals("zilvero")) {
-                buf.append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath).append("js/confirm.js?")
-                   .append(CoreVersion.VERSION).append("\"></script>\n");
-            } else {
-                buf.append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath).append("js/delete.js?")
-                   .append(CoreVersion.VERSION).append("\"></script>\n");
-            }
+               .append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath).append("js/confirm.js?")
+               .append(CoreVersion.VERSION).append("\"></script>\n");
+
             if (delay > 0) {
                 String downMsg = _context.isRouterContext() ? _t("Router is down") : _t("I2PSnark has stopped");
                 // fallback to metarefresh when javascript is disabled
-                buf.append("<noscript><meta http-equiv=refresh content=\"").append(delay).append(";")
+                buf.append("<noscript><meta http-equiv=refresh content=\"").append(delay < 10 ? 10 : delay).append(";")
                    .append(_contextPath).append("/").append(peerString).append("\"></noscript>\n");
             }
-        } else {
-            delay = 0;
-        }
-
-        // custom dialog boxes for javascript alerts
-        //buf.append("<script src=\"" + jsPfx + "/js/custom-alert.js\"></script>\n");
-        //buf.append("<link rel=stylesheet href=\"" + _contextPath + WARBASE + "custom-alert.css\">\n");
+        } else {delay = 0;}
 
         // selected theme inserted here
         buf.append(HEADER_A).append(_themePath).append(HEADER_B).append("\n");

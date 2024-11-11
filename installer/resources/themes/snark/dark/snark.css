@@ -313,8 +313,6 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{margin-right:0;
 #torrents .tAction{white-space:nowrap;text-align:center}
 #torrents #snarkTbody:empty{display:none}
 #torrentlist{margin-bottom:-12px;contain:paint}
-#torrentTotals{contain:paint}
-#torrentTotals::before{height:20px;display:inline-block;vertical-align:middle;content:""}
 #totals{margin:-10px 0 -10px -3px;padding:7px 0 7px 24px;display:inline-block;white-space:nowrap;font-weight:700;background:url(images/disk.svg) no-repeat 4px center/22px,var(--th)}
 #totals .badge{margin-left:2px;color:#bb7}
 #totals .counter{margin:-8px 0;padding:5px 9px 8px 5px;width:fit-content;height:20px;position:relative;display:inline-block;vertical-align:middle;border-right:var(--border)}
@@ -324,6 +322,7 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{margin-right:0;
 #totals #torrentFilesize.counter{padding:5px 8px 8px 4px}
 #torrents #rxCount .badge,#torrents #txCount .badge{margin:0 -1px}
 #torrentTotals{padding-left:0;contain:paint}
+#torrentTotals::before{height:20px;display:inline-block;vertical-align:middle;content:""}
 
 /* table sort indicators */
 .sortIcon{position:relative}
@@ -848,6 +847,20 @@ form[action^="/i2psnark/configure"]{display:block}
 #DoesNotExist{margin-top:10px;border:0;border-bottom:var(--border)}
 #DoesNotExist th{border-top:var(--border)}
 #NotFound{border-bottom:var(--border)}
+
+/* custom confirm dialogs */
+.modal{overflow:hidden}
+#confirmButtons{margin:0 -14px -20px;padding:15px;text-align:center;border-top:1px solid #3734;background:linear-gradient(180deg,#020,#010)}
+#confirmDialog{padding:10px 15px 21px;width:480px;box-shadow:var(--highlight),0 0 0 1px #383,0 0 0 2px #131,0 0 0 6px #373,0 0 0 7px #131,3px 3px 8px 3px #000;background:#010;z-index:100000;animation:fade .3s ease 1s both;user-select:none}
+#confirmOverlay{position:absolute;top:0;left:0;bottom:0;right:0;z-index:99999;background:#000a}
+#confirmYes,#confirmNo{margin:5px 12px;padding:8px;width:120px;font-weight:700;color:#0000;text-shadow:none;border:1px solid #131;box-shadow:var(--highlight),0 0 0 1px #000;background:#000 url(/i2psnark/.res/icons/tick.svg) no-repeat center center/20px;cursor:pointer;opacity:.7}
+#confirmNo{background:#000 url(/i2psnark/.res/icons/cross.svg) no-repeat center center/17px}
+#confirmButtons button:hover{opacity:1}
+#confirmYes:hover{border:1px solid #0f08}
+#confirmNo:hover{border:1px solid #f008}
+#confirmYes:active,#confirmNo:active{transform:scale(0.9)}
+#msg{margin:-9px -14px 0;padding:30px 20px 30px 88px;text-align:left;font-size:110%;border-bottom:1px solid #000;background:url(/i2psnark/.res/icons/warn.svg) no-repeat 20px center/48px,linear-gradient(180deg,#000,#010)}
+#msg.deleting{margin-bottom:-20px}
 
 /* animation */
 @keyframes bar{from{width:100%}}

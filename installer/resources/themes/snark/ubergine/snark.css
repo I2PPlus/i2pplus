@@ -234,7 +234,7 @@ td.status img{margin:-2px 3px -2px 1px;height:23px;width:auto;display:inline-blo
 #torrents .infohash{margin-right:2px;padding-left:15px;background:var(--hash) no-repeat 2px center/12px,linear-gradient(180deg,#cc0,#aa0)}
 #torrentSort{padding-left:1px;text-align:left}
 #torrentTotals{contain:paint}
-#torrentTotals::before{height:20px;display:inline-block;vertical-align:middle;content:""}
+#torrentTotals::before{height:32px;display:inline-block;vertical-align:middle;content:""}
 #totals span,#ourDest{white-space:nowrap}
 .iframed #torrentlist{border-radius:0}
 .iframed #torrents{margin:1px 0;border-radius:0}
@@ -1072,7 +1072,7 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 /* custom confirm dialogs */
 .modal{overflow:hidden}
 #confirmButtons{margin:0 -15px -20px;padding:15px;text-align:center;border-top:1px solid #000;background:linear-gradient(180deg,#202,#101)}
-#confirmDialog{padding:10px 15px 20px;width:480px;box-shadow:var(--highlight),0 0 0 1px #900,0 0 0 6px #404,0 0 0 7px #515,3px 3px 3px #0008;background:#414;z-index:100000;animation:fade .3s ease 1s both}
+#confirmDialog{padding:10px 15px 20px;width:480px;box-shadow:var(--highlight),0 0 0 1px #900,0 0 0 6px #404,0 0 0 7px #515,3px 3px 3px #0008;background:#414;z-index:100000;animation:fade .3s ease 1s both;user-select:none}
 #confirmOverlay{position:absolute;top:0;left:0;bottom:0;right:0;z-index:99999;background:#000a}
 #confirmYes,#confirmNo{margin:4px 12px;padding:6px 8px;width:120px;font-weight:700;color:#0000;box-shadow:0 0 0 4px #0f0;border:1px solid #101;background:url(/i2psnark/.res/icons/tick.svg) no-repeat center center/20px,linear-gradient(180deg,#363,#252);cursor:pointer;opacity:.7}
 #confirmButtons button:hover{opacity:1}
