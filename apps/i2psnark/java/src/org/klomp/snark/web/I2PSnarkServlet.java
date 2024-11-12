@@ -378,19 +378,14 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<link rel=preload href=\"").append(_themePath).append("images/images.css?").append(CoreVersion.VERSION).append("\" as=style>\n")
            .append("<link rel=\"shortcut icon\" href=\"").append(_contextPath).append(WARBASE).append("icons/favicon.svg\">\n");
         buf.append("<title>");
-        if (_contextName.equals(DEFAULT_NAME))
-            buf.append(_t("I2PSnark"));
-        else
-            buf.append(_contextName);
+        if (_contextName.equals(DEFAULT_NAME)) {buf.append(_t("I2PSnark"));}
+        else {buf.append(_contextName);}
         buf.append(" - ");
-        if (isConfigure) {
-            buf.append(_t("Configuration"));
-        } else {
+        if (isConfigure) {buf.append(_t("Configuration"));}
+        else {
             String peerParam = req.getParameter("p");
-            if ("2".equals(peerParam))
-                buf.append(_t("Debug Mode"));
-            else
-                buf.append(_t("Anonymous BitTorrent Client"));
+            if ("2".equals(peerParam)) {buf.append(_t("Debug Mode"));}
+            else {buf.append(_t("Anonymous BitTorrent Client"));}
         }
         buf.append("</title>\n");
 
@@ -399,14 +394,13 @@ public class I2PSnarkServlet extends BasicServlet {
         String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         String pageSize = String.valueOf(_manager.getPageSize());
         if (!isConfigure) {
-            buf.append("<link rel=stylesheet href=").append(resourcePath).append("toast.css>\n")
-               .append("<script nonce=").append(cspNonce).append(">\n")
+            buf.append("<script nonce=").append(cspNonce).append(">\n")
                .append("  const deleteMsg = \"")
                .append(_t("Are you sure you want to delete {0} and all downloaded data?")).append("\";\n")
                .append("  const postDeleteMsg = \"")
                .append(_t("Deleting <b>{0}</b> and all associated data...")).append("\";\n")
                .append("  const removeMsg = \"")
-               .append(_t("Are you sure you want to delete torrent file {0} ?")).append("\";\n")
+               .append(_t("Are you sure you want to delete torrent file {0} and associated metadata?")).append("\";\n")
                .append("  const removeMsg2 = \"")
                .append(_t("Note: Downloaded data will not be deleted.")).append("\";\n")
                .append("  const postRemoveMsg = \"")
@@ -460,16 +454,17 @@ public class I2PSnarkServlet extends BasicServlet {
         if (noCollapse || !collapsePanels) {
             buf.append(HEADER_A).append(_themePath).append(HEADER_C).append("\n");
         }
-        // add placeholders filterbar, toggleLog, toggleLinks css
-        buf.append("<style id=cssfilter></style>\n").append("<style id=toggleLogCss></style>\n")
-           .append("<style id=toggleLinks></style>\n");
+        // add placeholders filterbar, toggleLog css
+        buf.append("<style id=cssfilter></style>\n").append("<style id=toggleLogCss></style>\n");
+
         if (!isStandalone() && delay <= 0) {
             buf.append("<style id=graphcss>:root{--snarkGraph:url('/viewstat.jsp")
                .append("?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160")
                .append("&hideLegend=true&hideTitle=true&hideGrid=true&t=").append(now).append("\')}\"</style>\n");
         }
         buf.append("</head>\n<body style=display:none;pointer-events:none id=snarkxhr class=\"").append(_manager.getTheme())
-           .append(" lang_").append(lang).append("\">\n").append("<center>\n").append(IFRAME_FORM);
+           .append(" lang_").append(lang).append("\">\n")
+           .append("<span id=toast hidden></span>\n").append("<center>\n").append(IFRAME_FORM);
         List<Tracker> sortedTrackers = null;
         List<TorrentCreateFilter> sortedFilters = null;
         buf.append("<div id=navbar>\n");
@@ -518,7 +513,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String newURL = req.getParameter("newURL");
         if (newURL != null && newURL.trim().length() > 0 && req.getMethod().equals("GET"))
             _manager.addMessage(_t("Click \"Add torrent\" button to fetch torrent"));
-        buf.append("<div class=page>\n<div id=mainsection class=mainsection>\n");
+        buf.append("<div id=page>\n<div id=mainsection class=mainsection>\n");
         out.write(buf.toString());
         buf.setLength(0);
         out.flush();
@@ -655,58 +650,41 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write(displayText);
         out.write("</td></tr></table></span>\n");
         StringBuilder mbuf = new StringBuilder(entries*256);
-        mbuf.append("<span id=toast hidden=hidden></span>\n");
         if (!msgs.isEmpty()) {
-            mbuf.append("<div id=screenlog");
-        if (isConfigure) {
-            mbuf.append(" class=configpage");
-        }
-        mbuf.append(" tabindex=0>\n");
+            mbuf.append("<div id=screenlog").append(isConfigure ? " class=configpage" : "").append(" tabindex=0>\n");
             mbuf.append("<a id=closelog href=\"").append(_contextPath).append('/');
-            if (isConfigure) {
-                mbuf.append("configure");
-            }
-            if (peerString.length() > 0) {
-                mbuf.append(peerString).append("&amp;");
-            } else {
-                mbuf.append("?");
-            }
+            if (isConfigure) {mbuf.append("configure");}
+            if (peerString.length() > 0) {mbuf.append(peerString).append("&amp;");}
+            else {mbuf.append("?");}
             int lastID = msgs.get(msgs.size() - 1).id;
-            mbuf.append("action=Clear&amp;id=").append(lastID)
-                .append("&amp;nonce=").append(_nonce).append("\">");
+            mbuf.append("action=Clear&amp;id=").append(lastID).append("&amp;nonce=").append(_nonce).append("\">");
             String tx = _t("clear messages");
-            mbuf.append(toThemeSVG("delete", tx, tx));
-            mbuf.append("</a>\n");
+            mbuf.append(toThemeSVG("delete", tx, tx)).append("</a>\n");
             mbuf.append("<a class=script id=expand hidden>");
             String x = _t("Expand");
-            mbuf.append(toThemeSVG("expand", x, x));
-            mbuf.append("</a>\n");
+            mbuf.append(toThemeSVG("expand", x, x)).append("</a>\n");
             mbuf.append("<a class=script id=shrink hidden>");
             String s = _t("Shrink");
-            mbuf.append(toThemeSVG("shrink", s, s));
-            mbuf.append("</a>\n");
+            mbuf.append(toThemeSVG("shrink", s, s)).append("</a>\n");
             mbuf.append("<ul id=messages class=volatile>\n");
-            // FIXME only show once
             if (!_manager.util().connected()) {
-                mbuf.append("<noscript>\n<li class=noscriptWarning>");
-                mbuf.append(_t("Warning! Javascript is disabled in your browser. " +
+                mbuf.append("<noscript>\n<li class=noscriptWarning>")
+                    .append(_t("Warning! Javascript is disabled in your browser. " +
                             "If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs.",
-                            "<a href=\"configure\">" + _t("page refresh") + "</a>"));
-                mbuf.append("</li>\n</noscript>\n");
+                            "<a href=\"configure\">" + _t("page refresh") + "</a>"))
+                    .append("</li>\n</noscript>\n");
             }
 
             for (int i = msgs.size()-1; i >= 0; i--) {
                 String msg = msgs.get(i).message
-                        .replace("Adding Magnet ", "Magnet added: " + "<span class=infohash>")
-                        .replace("Starting torrent: Magnet", "Starting torrent: <span class=infohash>");
+                                        .replace("Adding Magnet ", "Magnet added: " + "<span class=infohash>")
+                                        .replace("Starting torrent: Magnet", "Starting torrent: <span class=infohash>");
                 if (msg.contains("class=infohash")) {msg = msg.replaceFirst(" \\(", "</span> (");} // does this fix the display snafu?
                 if (msg.contains(_t("Warning - No I2P"))) {msg = msg.replace("</span>", "");}
                 mbuf.append("<li class=msg>").append(msg).append("</li>\n");
             }
             mbuf.append("</ul>");
-        } else {
-            mbuf.append("<div id=screenlog hidden><ul id=messages></ul>");
-        }
+        } else {mbuf.append("<div id=screenlog hidden><ul id=messages></ul>");}
         mbuf.append("</div>\n");
         if (isConfigure) {
             mbuf.append("<script nonce=").append(cspNonce).append(" type=module defer>\n")
@@ -753,9 +731,7 @@ public class I2PSnarkServlet extends BasicServlet {
             StringBuilder buf = new StringBuilder(1280);
             if (showStatusFilter && !snarks.isEmpty() && _manager.util().connected()) {
                 buf.append("<form id=torrentlist class=filterbarActive action=\"_post\" method=POST target=processForm>\n");
-            } else {
-                buf.append("<form id=torrentlist action=\"_post\" method=POST target=processForm>\n");
-            }
+            } else {buf.append("<form id=torrentlist action=\"_post\" method=POST target=processForm>\n");}
 
             // selective display of torrents based on status
             if (showStatusFilter) {
@@ -3444,22 +3420,17 @@ public class I2PSnarkServlet extends BasicServlet {
                 String langSettings = (String) getLangSettings.invoke(null, _context);
                 // If we get to here, we have the language settings
                 buf.append("<span class=configOption><b>").append(_t("Language")).append("</b> ")
-                   .append(langSettings)
-                   .append("</span><br>\n");
+                   .append(langSettings).append("</span><br>\n");
             } catch (ClassNotFoundException e) {
             } catch (NoSuchMethodException e) {
             } catch (IllegalAccessException e) {
             } catch (InvocationTargetException e) {
             }
         } else {
-            buf.append("<span class=configOption><b>")
-               .append(_t("Language"))
-               .append("</b> <span id=snarkLang>")
-               .append(lang)
-               .append("</span> <a href=\"/configui#langheading\" target=_blank>")
-               .append("[")
-               .append(_t("Configure"))
-               .append("]</a></span><br>\n");
+            buf.append("<span class=configOption><b>").append(_t("Language")).append("</b> ")
+               .append("<span id=snarkLang>").append(lang).append("</span> ")
+               .append("<a href=\"/configui#langheading\" target=_blank>").append("[").append(_t("Configure")).append("]</a>")
+               .append("</span><br>\n");
         }
 
         buf.append("<span class=configOption><label for=\"smartSort\"><b>")
@@ -3477,10 +3448,8 @@ public class I2PSnarkServlet extends BasicServlet {
            .append((collapsePanels ? "checked " : ""))
            .append("title=\"");
         if (noCollapse) {
-        String ua = req.getHeader("user-agent");
-            buf.append(_t("Your browser does not support this feature."))
-               .append("[" + ua + "]")
-               .append("\" disabled=\"disabled");
+            String ua = req.getHeader("user-agent");
+            buf.append(_t("Your browser does not support this feature.")).append("[" + ua + "]").append("\" disabled=\"disabled");
         } else {
             buf.append(_t("Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode"));
         }

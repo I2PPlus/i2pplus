@@ -37,8 +37,8 @@ code,.bucket{font:700 8.5pt var(--monospaced);padding:0 2px;color:#050}
 .center{text-align:center}
 .nowrap{white-space:nowrap;display:inline-block}
 .script{margin:5px 0 2px;display:inline-block}
-.page{margin:5px 0 0 0;padding:9px;min-width:900px;line-height:1.6;text-align:center;border:var(--border);border-radius:0 0 3px 3px;box-shadow:var(--highlight);background:var(--page);background-size:4px 100%}
-.iframed .page{margin:5px 0;padding:0;border:0;border-radius:0;box-shadow:none}
+#page{margin:5px 0 0 0;padding:9px;min-width:900px;line-height:1.6;text-align:center;border:var(--border);border-radius:0 0 3px 3px;box-shadow:var(--highlight);background:var(--page);background-size:4px 100%}
+.iframed #page{margin:5px 0;padding:0;border:0;border-radius:0;box-shadow:none}
 .noPointer{filter:saturate(0) opacity(.5);pointer-events:none}
 table{margin:0 0 10px 0;padding:0;border:0;border-spacing:0;border-collapse:collapse}
 thead,tfoot{background:var(--bg)}
@@ -853,7 +853,7 @@ body{margin:3px}
 .iframed #new,.iframed #new + #configSection{margin-top:-5px}
 .logshim{margin-top:-5px}
 .nav_main{padding-left:22px}
-.page{padding:4px}
+#page{padding:4px}
 .snarkNav,.snarkNav:hover,.snarkNav:focus{background-size:14px,100%}
 .toggleview,.configTitle{font-size:9.5pt}
 #addSection,#createSection,#configSection,.configPanel{margin-top:4px;margin-bottom:4px}
@@ -884,7 +884,7 @@ td#bwHelp{background:url(images/details.svg) no-repeat left 10px center/14px}
 }
 
 @media (max-width:800px){
-.page{min-width:680px}
+#page{min-width:680px}
 #navbar{min-width:688px}
 .snarkNav.nav_main:not(:last-child),.snarkNav.nav_forum{padding-left:8px;width:12px;text-indent:-999999px;color:#0000}
 .ETA a img,.trackerLink a img{display:none}

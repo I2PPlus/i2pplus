@@ -18,46 +18,25 @@ const xhrsnarklog = new XMLHttpRequest();
 let hideAlertTimeoutId;
 
 function addTorrentNotify() {
-  if (hideAlertTimeoutId) {clearTimeout(hideAlertTimeoutId);}
   if (notify) {
-    setTimeout(function() {
-      refreshScreenLog(showAddAlert);
-    }, 1000);
+    setTimeout(function() { refreshScreenLog(() => showNotification(addNotify, inputAddFile)); }, 1000);
   }
 }
 
 function createTorrentNotify() {
-  if (hideAlertTimeoutId) {clearTimeout(hideAlertTimeoutId);}
   if (notify) {
-    setTimeout(function() {
-      refreshScreenLog(showCreateAlert);
-    }, 1000);
+    setTimeout(function() { refreshScreenLog(() => showNotification(createNotify, inputNewFile)); }, 1000);
   }
 }
 
-function showAddAlert() {
-  addNotify.removeAttribute("hidden");
+function showNotification(notificationElement, inputElement) {
+  if (hideAlertTimeoutId) { clearTimeout(hideAlertTimeoutId); }
+  notificationElement.removeAttribute("hidden");
   setTimeout(() => {
     hideAlert();
-    inputAddFile.value = "";
-    inputAddFile.focus();
+    inputElement.value = "";
+    inputElement.focus();
   }, 5000);
-}
-
-function showCreateAlert() {
-  createNotify.removeAttribute("hidden");
-  setTimeout(() => {
-    hideAlert();
-    inputNewFile.value = "";
-    inputNewFile.focus();
-  }, 5000);
-}
-
-function injectCss() {
-  const alertCss = document.querySelector("#snarkAlert");
-  if (!alertCss) {
-    document.head.innerHTML += "<link id=snarkAlert rel=stylesheet href=/i2psnark/.res/snarkAlert.css>";
-  }
 }
 
 function hideAlert() {
@@ -71,10 +50,24 @@ function hideAlert() {
   }, 10000);
 }
 
+function injectCss() {
+  const alertCss = document.head.querySelector("#snarkAlert");
+  if (!alertCss) {
+    const link = document.createElement("link");
+    link.id = "snarkAlert";
+    link.rel = "stylesheet";
+    link.href = "/i2psnark/.res/snarkAlert.css";
+    if (document.head.firstChild) {document.head.insertBefore(link, document.head.firstChild);}
+    else {document.head.appendChild(link);}
+  }
+}
+
 function initSnarkAlert() {
   if (!addNotify) {return;}
-  addTorrent.addEventListener("submit", addTorrentNotify);
-  createTorrent.addEventListener("submit", createTorrentNotify);
+  addTorrent?.removeEventListener("submit", addTorrentNotify);
+  createTorrent?.removeEventListener("submit", createTorrentNotify);
+  addTorrent?.addEventListener("submit", addTorrentNotify);
+  createTorrent?.addEventListener("submit", createTorrentNotify);
   injectCss();
 }
 

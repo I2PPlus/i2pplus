@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
                       "user-select:none;animation:fade .3s ease .8s both;transform:translate(-50%,-50%)}" +
                       "#confirmDialog.postMsg{animation:slide-down 5s ease-in 3s both reverse}" +
                       "#confirmDialog.cancelled{animation:slide-down 5s ease-in .2s both reverse}" +
-                      "#confirmOverlay{position:fixed;left:0;bottom:0;right:0;z-index:99999}" +
+                      "#confirmOverlay{width:100%;height:100%;position:fixed;left:0;bottom:0;right:0;z-index:99999}" +
                       "#confirmOverlay.cancelled{animation:fade .3s ease .2s both reverse}" +
                       "#confirmOverlay.done{animation:fade .3s ease 3s both reverse}" +
                       "#msg{margin:-9px -14px 0;padding:30px 20px 30px 88px;text-align:left;font-size:110%}" +
@@ -36,7 +36,6 @@ document.addEventListener("DOMContentLoaded", function () {
     fragment.appendChild(css);
     if (snarkTheme) {head.insertBefore(css, snarkTheme);}
     else {head.appendChild(css);}
-    document.body.appendChild(fragment);
     fragment.textContent = "";
   })();
 
@@ -68,8 +67,10 @@ document.addEventListener("DOMContentLoaded", function () {
       document.body.appendChild(fragment);
       fragment.textContent = "";
 
-      scrollToTop();
-      handleResize();
+      requestAnimationFrame(() => {
+        scrollToTop();
+        handleResize();
+      });
 
       window.addEventListener("resize", handleResize);
 

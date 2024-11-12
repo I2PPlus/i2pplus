@@ -69,12 +69,12 @@ thead a:active img{transform:scale(.9);filter:drop-shadow(0 0 1px #990047) drop-
 tfoot td:first-child{padding-left:0;text-align:left}
 tfoot tr:first-child th{vertical-align:middle;font-weight:700;color:#4d2200}
 .noPointer{filter:saturate(0) opacity(.5);pointer-events:none}
-.page{margin:5px 0 0 0;padding:10px 10px 0;line-height:1.6;text-align:center;font-size:9pt;color:#310;border:var(--border);border-radius:2px;box-shadow:inset 0 0 3px 0 #c6b39f,0 0 1px 0 rgba(77,61,51,.3);background:repeating-linear-gradient(180deg,#efebdd 1px,#ecebdd 2px,#ebe5d5 4px);background-size:100% 4px}
+#page{margin:5px 0 0 0;padding:10px 10px 0;line-height:1.6;text-align:center;font-size:9pt;color:#310;border:var(--border);border-radius:2px;box-shadow:inset 0 0 3px 0 #c6b39f,0 0 1px 0 rgba(77,61,51,.3);background:repeating-linear-gradient(180deg,#efebdd 1px,#ecebdd 2px,#ebe5d5 4px);background-size:100% 4px}
 .center,.left,.right{display:inline-block;vertical-align:middle}
 .center{text-align:center}
 .left{text-align:left}
 .right{text-align:right}
-.iframed .page{padding:0;border:0;box-shadow:none;background:none}
+.iframed #page{padding:0;border:0;box-shadow:none;background:none}
 .newTab{margin:1px 4px -2px;float:right}
 #commentInfo th a:link,td a:link{word-wrap:break-word;text-decoration:none;font-weight:700;color:#cf0f00}
 th a:hover,th a:visited:hover,th a:focus,th a:visited:focus,td a:hover,td a:visited:hover,td a:focus,td a:visited:focus{color:#df0067;filter:none}

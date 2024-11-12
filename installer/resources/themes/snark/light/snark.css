@@ -25,7 +25,7 @@
 body,html{min-height:100%}
 body{margin:3px;display:block!important;background:var(--bodybg) url(/themes/console/light/images/tile2.png) center top/32px;scrollbar-color:#779 rgba(255,255,255,.5);pointer-events:auto!important}
 .iframed body{margin:6px 1px 0;background:none}
-html:not(.iframed) #navbar,html:not(.iframed) .page{border:1px solid rgba(168,168,192,.4);border-radius:0;box-shadow:0 0 0 1px rgba(96,96,128,.7)}
+html:not(.iframed) #navbar,html:not(.iframed) #page{border:1px solid rgba(168,168,192,.4);border-radius:0;box-shadow:0 0 0 1px rgba(96,96,128,.7)}
 a:link,a:visited{color:#3b6bbf;color:rgba(59,107,191,.85);text-decoration:none;font-weight:700;word-wrap:break-word;font-size:9pt}
 a:hover,a:focus,.trackerName a:visited:hover,.trackerName a:visited:focus{color:var(--hover)}
 a:active{color:#f30}
@@ -66,8 +66,8 @@ td{padding:3px 4px;color:var(--ink_light);opacity:1;font-size:9pt}
 .nopeers.zero td.peerCount,.stopped.zero td.peerCount{text-align:center}
 .noPointer{filter:saturate(0) opacity(.5);pointer-events:none}
 .optbox[disabled],.optbox[disabled]:hover,.optbox[name^="ttype"],.optbox[name^="ttype"]:hover,.optbox[name^="ttype"]:checked{cursor:default;opacity:.6;filter:none}
-.page{margin:-10px 0 0;padding:0;min-width:900px;line-height:1.6;text-align:center;font-size:9pt;border:var(--border_soft);border-radius:2px;background:#dfe0ff}
-.iframed .page{margin:5px 0 -4px;border-radius:0;border-left:0;border-right:0}
+#page{margin:-10px 0 0;padding:0;min-width:900px;line-height:1.6;text-align:center;font-size:9pt;border:var(--border_soft);border-radius:2px;background:#dfe0ff}
+.iframed #page{margin:5px 0 -4px;border-radius:0;border-left:0;border-right:0}
 .snarkNav,.tName a,#torrents:hover .barText,.toggleview{will-change:transform}
 .toggleview,.configTitle,#navbar,img,input[type=submit],input[type=radio],input[type=checkbox],label,th img,#createSection,#closelog,#expand,#shrink,#pagenavbottom,#configs{user-select:none}
 ::selection{background:#27377f;color:#fff;text-shadow:none}
@@ -894,7 +894,7 @@ code{font-size:8pt}
 .canhide{display:none}
 .details img{width:auto;max-height:20px}
 .ETA,.txd,.rateDown,.rateUp{min-width:0}
-.page{min-width:600px}
+#page{min-width:600px}
 .pagenavcontrols,.iframed .pagenavcontrols{padding:3px 5px}
 .status{width:0;max-width:24px}
 .status img{height:20px}

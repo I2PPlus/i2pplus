@@ -54,9 +54,9 @@ tfoot tr:nth-child(n+1){text-align:left}
 th img,td img,#closelog,#expand,#shrink{font-size:0}
 .noPointer{filter:saturate(0) opacity(.5);pointer-events:none}
 .toggleview,.configTitle,#navbar,img,input[type=submit],.optbox,label,th img,#createSection,#closeLog,#expand,#shrink{user-select:none}
-.page{margin:5px 0 0;padding:0 0 12px;line-height:1.6;text-align:center;font-size:9pt;border:var(--border);border-radius:0 0 2px 2px;background:#003}
-.iframed .page{margin:4px 0 5px;padding:0;border:0;border-radius:0;box-shadow:none;background:none}
-#navbar,.page{min-width:900px}
+#page{margin:5px 0 0;padding:0 0 12px;line-height:1.6;text-align:center;font-size:9pt;border:var(--border);border-radius:0 0 2px 2px;background:#003}
+.iframed #page{margin:4px 0 5px;padding:0;border:0;border-radius:0;box-shadow:none;background:none}
+#navbar,#page{min-width:900px}
 
 /* topnav */
 #navbar{margin:0 0 -6px;padding:10px 0;position:sticky;top:-1px;z-index:999;word-spacing:1px;letter-spacing:.15em;text-align:center;border:var(--border);border-radius:2px 2px 0 0;background:var(--panel);background-size:4px 100%,100%;will-change:transform}
@@ -992,13 +992,13 @@ thead img,thead img:hover{max-height:22px}
 .configTitle,.toggleview,#tab_config{min-width:400px}
 .dirInfo{margin-bottom:0}
 .dirInfo tr:nth-child(n+2) td:first-child img:not(.thumb){margin-top:-2px;margin-bottom:-1px;width:22px;max-width:22px;height:22px;max-height:22px}
-.iframed .page{background:none}
+.iframed #page{background:none}
 .iframed #pagenavcontrols{transform:translateX(66px)}
 .iframed #screenlog{margin-top:-6px;margin-bottom:9px}
 .iframed #torrentDisplay{margin:-10px 0 -1px}
 .logshim{margin-top:-9px}
 .mainsection{background:none}
-.page{padding:10px;box-shadow:var(--highlight),inset 0 0 2px 1px #337;background:repeating-linear-gradient(90deg,#000 2px,#000028 4px);background-size:4px 100%}
+#page{padding:10px;box-shadow:var(--highlight),inset 0 0 2px 1px #337;background:repeating-linear-gradient(90deg,#000 2px,#000028 4px);background-size:4px 100%}
 .barComplete{padding-top:3px}
 .snarkNav:first-child{padding-left:28px}
 .snarkNav{padding-top:4px;padding-bottom:4px}

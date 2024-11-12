@@ -7,7 +7,6 @@ import {pageNav} from "./pageNav.js";
 import {showBadge} from "./filterBar.js";
 import {snarkSort} from "./snarkSort.js";
 import {toggleDebug} from "./toggleDebug.js";
-import {initLinkToggler} from "./toggleLinks.js";
 import {initToggleLog} from "./toggleLog.js";
 import {Lightbox} from "./lightbox.js";
 import {initSnarkAlert} from "./snarkAlert.js";
@@ -225,13 +224,11 @@ function refreshScreenLog(callback) {
   const lowerSection = document.getElementById("lowersection");
   const addNotify = lowerSection.querySelector("#addNotify");
   const createNotify = lowerSection.querySelector("#createNotify");
-  const toast = document.getElementById("toast");
   xhrsnarklog.open("GET", "/i2psnark/.ajax/xhrscreenlog.html");
   xhrsnarklog.responseType = "document";
   xhrsnarklog.onload = function () {
     const notifyResponse = xhrsnarklog.responseXML.getElementById("notify");
     const screenlogResponse = xhrsnarklog.responseXML.getElementById("messages");
-    const toastResponse = xhrsnarklog.responseXML.getElementById("toast");
     if (screenlog && screenlogResponse && screenlog.innerHTML !== screenlogResponse.innerHTML) {
       screenlog.innerHTML = screenlogResponse.innerHTML;
     }
@@ -244,7 +241,6 @@ function refreshScreenLog(callback) {
           createNotify.innerHTML = notifyResponse.innerHTML;
         }
       }, 500);
-      toast.innerHTML = toastResponse.innerHTML;
       if (callback) {callback();}
     }
   };
@@ -263,7 +259,6 @@ function initHandlers() {
   const topNav = document.getElementById("pagenavtop");
   requestAnimationFrame(() => {
     setLinks();
-    initLinkToggler();
     if (screenlog) {initSnarkAlert();}
     if (topNav) {pageNav();}
     if (filterbar) {showBadge();}

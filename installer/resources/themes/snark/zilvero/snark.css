@@ -71,9 +71,9 @@ code{margin:0 2px}
 .configTitle img{display:none}
 .dirInfo .ParentDir a,.dirInfo .snarkFileName a,#torrents .tName a{padding:2px 0;display:inline-block;width:100%}
 .dirInfo,#torrentInfo,#userComments,#commentInfo,#mediaContainer{width:100%}
-.page{margin-bottom:5px;padding:5px;border:var(--border);box-shadow:var(--highlight);background:#ddd;animation:fade .02s ease .3s both}
+#page{margin-bottom:5px;padding:5px;border:var(--border);box-shadow:var(--highlight);background:#ddd;animation:fade .02s ease .3s both}
 .iframed .page,.iframed #navbar{border:0}
-.iframed .page{margin-bottom:0;border-top:var(--border)}
+.iframed #page{margin-bottom:0;border-top:var(--border)}
 .noneLoaded td{border-bottom:var(--border)}
 .noPointer{filter:saturate(0) opacity(.5);pointer-events:none}
 .peerinfo:hover td,#torrentEdit tr:hover td{background-color:var(--tr_hover)}

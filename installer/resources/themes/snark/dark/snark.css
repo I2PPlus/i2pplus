@@ -63,8 +63,8 @@ th a img,th a:visited img{opacity:1}
 th,#showRatings{padding:3px 2px;white-space:nowrap;vertical-align:middle;font-size:9pt;border-top:var(--border);border-bottom:var(--border);background:var(--th)}
 tr{contain:layout}
 select{margin:2px 4px 2px 0;padding:7px 24px 7px 12px;min-width:120px;font-size:8pt}
-.page{margin:5px 0 0;min-width:890px;line-height:1.6;text-align:center;font-size:9pt;background:#000}
-.iframed .page{margin:5px 0;padding:0;border:0;background:none}
+#page{margin:5px 0 0;min-width:890px;line-height:1.6;text-align:center;font-size:9pt;background:#000}
+.iframed #page{margin:5px 0;padding:0;border:0;background:none}
 .iframed #navbar,.iframed .mainsection,.iframed #addSection,.iframed #createSection,.iframed #configSection,.iframed .configPanel{border-left:0;border-right:0;border-radius:0}
 .infohash{font-family:var(--monospaced);color:#cc0;border-radius:2px;user-select:all}
 .infohash::selection{color:#000;background:#0f0}
@@ -225,9 +225,8 @@ th.peerCount a img{margin-left:-5px}
 .inactivity{margin-left:12px;height:6px;min-width:5px;max-width:400px;display:inline-block;vertical-align:middle;border-radius:5px;box-shadow:0 0 0 1px #010,0 0 0 1px #fff3 inset;background:repeating-linear-gradient(90deg,#0000,#0000 15px,rgba(0,0,0,.6) 15px,rgba(0,0,0,.6) 16px,#0000 16px),linear-gradient(180deg,rgba(255,255,255,.3) 50%,rgba(0,0,0,.3) 50%),linear-gradient(90deg,#770 60px,#900)}
 .inactivity[style="width:0px"],.inactivity[style="width:1px"],.inactivity[style="width:2px"],.inactivity[style="width:3px"],.inactivity[style="width:4px"],.inactivity[style="width:5px"]{display:none}
 .noneLoaded i{padding:15px 10px;display:inline-block;font-size:115%}
-.magnet:not(hidden),.trackerLink:not(hidden){padding:4px;width:1%;text-align:center}
+.magnet:not([hidden]),.trackerLink:not([hidden]){padding:4px;width:1%;text-align:center}
 #mainsection #linkswitch,#mainsection #snarkTbody .magnet img,#mainsection #snarkTbody .trackerLink img{margin-left:4px}
-#linkswitch::before{margin:0 -4px 0 0!important;padding:0}
 .magnet a:hover,.trackerLink a:hover{transform:scale(1.2)}
 .trackerLink a:hover img{filter:none}
 .peerCount .left{padding-left:2px;text-align:left}
@@ -964,7 +963,7 @@ tr:hover .peerCount a,tr:hover .peerCount a:hover,tr:hover .peerCount a:focus,tr
 .status img{width:20px}
 .status{padding-left:2px;max-width:20px}
 .iframed .configPanel .configTitle{padding-bottom:6px}
-.page{min-width:650px}
+#page{min-width:650px}
 .peerCount a,.peerCount a:hover,.peerCount a:focus,.peerCount a:active{color:#bb7;cursor:default}
 .barText{padding:1px 0;line-height:1;font-size:8pt}
 .snarkConfigSection .configTitle{font-size:10pt}
@@ -1077,7 +1076,7 @@ th.peerCount a img{margin-left:-20px}
 .iframed #screenlog{margin:0;position:static}
 .iframed #snarkInfo+#snarkFiles{margin-top:-11px}
 .optionlist{margin-bottom:-28px}
-.page{padding:10px;border:var(--border)}
+#page{padding:10px;border:var(--border)}
 .peerCount b{min-width:104px}
 .peerCount .left,.peerCount .right{text-align:center!important}
 .peerCount .left{margin-left:2px}
