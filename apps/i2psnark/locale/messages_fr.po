@@ -465,7 +465,7 @@ msgid "Anonymous BitTorrent Client"
 msgstr "Client BitTorrent anonyme"
 
 #, java-format
-msgid "Are you sure you want to delete torrent file {0} ?"
+msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "Voulez-vous vraiment supprimer le fichier «{0}» (les données téléchargées ne seront pas supprimées) ?"
 
 #, java-format

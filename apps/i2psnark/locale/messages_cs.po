@@ -466,7 +466,7 @@ msgid "Anonymous BitTorrent Client"
 msgstr "Anonymní klient BitTorrent"
 
 #, java-format
-msgid "Are you sure you want to delete torrent file {0} ?"
+msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "Opravdu chcete smazat soubor \\''{0}\\'' (stažená data nebudou smazána)?"
 
 #, java-format
