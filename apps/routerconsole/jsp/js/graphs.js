@@ -55,10 +55,7 @@ import {onVisible, onHidden} from "/js/onVisible.js";
       checkGwrap();
     });
 
-    // Trigger the load event manually in case the image is already loaded
-    if (graph.complete) {
-      graph.dispatchEvent(new Event("load"));
-    }
+    if (graph.complete) { graph.dispatchEvent(new Event("load")); }
   }
 
   function updateGraphs() {
