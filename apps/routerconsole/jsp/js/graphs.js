@@ -13,6 +13,9 @@ import {onVisible, onHidden} from "/js/onVisible.js";
   const submit = form.querySelector(".accept");
   const toggle = document.getElementById("toggleSettings");
   let graphsTimerId;
+  let longestLoadTime = 500;
+  let lastRefreshTime = 0;
+  let debugging = false;
 
   if (configs !== null) {toggle.hidden = true;}
 
@@ -47,19 +50,40 @@ import {onVisible, onHidden} from "/js/onVisible.js";
 
   function updateGraphs() {
     if (graphRefreshInterval <= 0) {return;}
+    progressx.show(theme);
+    progressx.progress(0.5);
     stopRefresh();
     graphsTimerId = setInterval(updateGraphs, graphRefreshInterval);
     const images = document.querySelectorAll(".statimage");
     const now = Date.now();
-    progressx.show(theme);
-    progressx.progress(0.5);
-    images.forEach((image) => {
+    const timeSinceLastRefresh = now - lastRefreshTime;
+    const allLoaded = [...images].every(img => img.complete);
+    if (timeSinceLastRefresh < longestLoadTime || !allLoaded) {return;}
+    lastRefreshTime = now;
+
+    const startTime = Date.now();
+
+    const promises = Array.from(images).map((image) => {
       const imageSrc = image.src.replace(/time=\d+/, "time=" + now);
-      fetch(imageSrc).then((response) => {
-        if (response.ok) { requestAnimationFrame(() => {image.src = imageSrc;}); }
-      })
+      return fetch(imageSrc).then((response) => {
+        if (response.ok) {
+          return new Promise((resolve) => {
+            requestAnimationFrame(() => {
+              image.src = imageSrc;
+              resolve();
+            });
+          });
+        }
+      });
     });
-    setTimeout(() => { progressx.hide();}, 180);
+
+    Promise.all(promises).then(() => {
+      progressx.hide();
+      const endTime = Date.now();
+      const totalTime = endTime - startTime;
+      longestLoadTime = Math.max(longestLoadTime, totalTime);
+      if (debugging) {console.log("Total load time for all images: " + totalTime + "ms");}
+    });
   }
 
   function stopRefresh() { if (graphsTimerId) {clearInterval(graphsTimerId);} }
