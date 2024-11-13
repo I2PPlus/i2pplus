@@ -15,6 +15,21 @@ let magnetsVisible = false;
 function initLinkToggler() {
   if (!toggle) { return; }
 
+  function scrollToTop(timeout) {
+    const X = window.pageXOffset;
+    const Y = window.pageYOffset;
+    window.scrollTo(0, 0);
+    if (document.documentElement.classList.contains("iframed")) {
+      const parentX = parent.window.pageXOffset;
+      const parentY = parent.window.pageYOffset;
+      parent.window.scrollTo(0, 0);
+      setTimeout(() => {
+        window.scrollTo(X, Y);
+        parent.window.scrollTo(parentX, parentY);
+      }, timeout);
+    } else { setTimeout(() => { window.scrollTo(X, Y); }, timeout); }
+  }
+
   function setLinkMode() {
     const isMagnetMode = linkToggleConfig === "magnets";
     toggle.checked = isMagnetMode;
@@ -32,6 +47,7 @@ function initLinkToggler() {
     toast.classList.remove("dismiss");
     toast.innerHTML = msg;
     toast.removeAttribute("hidden");
+    scrollToTop(3000);
     setTimeout(() => { toast.classList.add("dismiss"); }, 3000);
   }
 
