@@ -24,7 +24,7 @@
     boolean allowRefresh = intl.allowIFrame(request.getHeader("User-Agent")); // meta must be inside the head
     if (allowRefresh) {out.print(graphHelper.getRefreshMeta());}
 %>
-<script nonce="<%=cspNonce%>">
+<script nonce=<%=cspNonce%>>
   var graphRefreshInterval = <% out.print(graphHelper.getRefreshValue() * 1000); %>;
   var graphCount = <% out.print(graphHelper.countGraphs()); %>;
 </script>
@@ -42,7 +42,8 @@
 <span id=graphConfigs hidden><jsp:getProperty name="graphHelper" property="form" /></span>
 </div>
 </div>
-<script nonce="<%=cspNonce%>" src="/js/graphs.js?<%=net.i2p.CoreVersion.VERSION%>" type=module></script>
+<script nonce=<%=cspNonce%> src=/js/lazyload.js></script>
+<script nonce=<%=cspNonce%> src="/js/graphs.js?<%=net.i2p.CoreVersion.VERSION%>" type=module></script>
 <noscript><style>#allgraphs,#gform,#graphConfigs{display:block!important}#graphdisplay{margin-bottom:15px!important;color:var(--ink)!important;cursor:default!important}</style></noscript>
 </body>
 </html>

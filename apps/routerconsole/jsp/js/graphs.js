@@ -2,38 +2,130 @@
 /* Ajax graph refresh and configuration toggle */
 /* License: AGPL3 or later */
 
-import {onVisible, onHidden} from "/js/onVisible.js";
+import { onVisible, onHidden } from "/js/onVisible.js";
 
 (function() {
-  const form = document.getElementById("gform");
-  const configs = document.getElementById("graphConfigs");
-  const allgraphs = document.getElementById("allgraphs");
-  const h3 = document.getElementById("graphdisplay");
-  const sb = document.getElementById("sidebar");
-  const submit = form.querySelector(".accept");
-  const toggle = document.getElementById("toggleSettings");
+  const $ = id => document.getElementById(id);
+  const query = selector => document.querySelector(selector);
+
+  const form = $("gform");
+  const configs = $("graphConfigs");
+  const allgraphs = $("allgraphs");
+  const h3 = $("graphdisplay");
+  const sb = $("sidebar");
   let graphsTimerId;
   let longestLoadTime = 500;
   let lastRefreshTime = 0;
-  let debugging = false;
+  let previousRefreshInterval = 0;
+  let debugging = true;
 
-  if (configs !== null) {toggle.hidden = true;}
+  if (configs) configs.hidden = true;
 
-  function initCss() {
-    const graph = document.querySelector(".statimage");
+  const updateGraphs = async () => {
+    if (graphRefreshInterval <= 0) return;
+    progressx.show(theme);
+    progressx.progress(0.5);
+    clearInterval(graphsTimerId);
+    graphsTimerId = setInterval(updateGraphs, graphRefreshInterval);
+
+    const images = [...document.querySelectorAll(".statimage")];
+    images.forEach(img => img.classList.add("lazy"));
+    const now = Date.now();
+    const timeSinceLastRefresh = now - lastRefreshTime;
+    const allLoaded = images.every(img => img.complete);
+    if (timeSinceLastRefresh < longestLoadTime || !allLoaded) {
+      const newRefreshInterval = Math.max(longestLoadTime + 1000 - timeSinceLastRefresh, graphRefreshInterval);
+      if (newRefreshInterval !== previousRefreshInterval && newRefreshInterval !== graphRefreshInterval) {
+        previousRefreshInterval = newRefreshInterval;
+        if (debugging) {
+          console.log(`Not all images loaded in the allocated time (${graphRefreshInterval}ms), updating refresh interval to: ${newRefreshInterval}ms`);
+        }
+      } else if (newRefreshInterval === graphRefreshInterval) {
+        previousRefreshInterval = newRefreshInterval;
+      }
+      graphsTimerId = setTimeout(updateGraphs, newRefreshInterval);
+      return;
+    }
+
+    lastRefreshTime = now;
+    const startTime = Date.now();
+    const visibleImages = images.filter(image => !image.classList.contains("lazyhide"));
+    const lazyImages = images.filter(image => image.classList.contains("lazyhide"));
+
+    await Promise.all(visibleImages.map(async image => {
+      const imageSrc = image.src.replace(/time=\d+/, `time=${now}`);
+      const response = await fetch(imageSrc);
+      if (response.ok) {image.src = imageSrc;}
+    }));
+
+    progressx.hide();
+    const endTime = Date.now();
+    const totalTime = endTime - startTime;
+    longestLoadTime = Math.max(longestLoadTime, totalTime);
+    if (debugging) {console.log(`Total load time for all visible images: ${totalTime}ms`);}
+
+    await new Promise(resolve => setTimeout(resolve, 5000));
+
+    await Promise.all(lazyImages.map(async image => {
+      const lazyImageSrc = image.src.replace(/time=\d+/, "time=" + Date.now());
+      const lazyResponse = await fetch(lazyImageSrc);
+      if (lazyResponse.ok) { image.src = lazyImageSrc; }
+    }));
+  };
+
+  const stopRefresh = () => clearInterval(graphsTimerId);
+
+  const isDown = () => {
+    const images = [...document.querySelectorAll(".statimage")];
+    if (!images.length) {
+      allgraphs.innerHTML = "<span id=nographs><b>No connection to Router</b></span>";
+      progressx.hide();
+    }
+    setTimeout(initCss, 5000);
+  };
+
+  const toggleView = () => {
+    const toggle = $("toggleSettings");
+    if (!toggle) {return;}
+    const isHidden = toggle.checked ? false : true;
+    form.hidden = isHidden;
+    toggle.checked = !isHidden;
+    h3.classList[isHidden ? "remove" : "add"]("visible");
+    if (!isHidden) {
+      $("gwidth")?.focus();
+      if (sb && sb.scrollHeight < document.body.scrollHeight) {
+        setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" }), 500);
+      }
+    }
+  };
+
+  const loadToggleCss = () => {
+    const css = query("#graphToggleCss");
+    if (!css) {
+      const link = document.createElement("link");
+      link.href = "/themes/console/graphConfig.css";
+      link.rel = "stylesheet";
+      link.id = "graphToggleCss";
+      document.head.appendChild(link);
+    }
+  };
+
+  const initCss = () => {
+    const graph = query(".statimage");
+    if (!graph) return;
 
     graph.addEventListener("load", () => {
-      const gwrap = document.head.querySelector("style#gwrap");
-      if (!gwrap) {return;}
+      const gwrap = query("style#gwrap");
+      if (!gwrap) return;
       if (!document.body.classList.contains("loaded")) {
-        const widepanel = document.querySelector(".widepanel");
-        const delay =  Math.max(graphCount*5, 120);
+        const widepanel = query(".widepanel");
+        const delay = Math.max(graphCount * 5, 120);
         widepanel.id = "nographs";
         const graphWidth = graph.naturalWidth > 40 ? graph.naturalWidth : 0;
         const graphHeight = graph.naturalHeight;
-        const dimensions = ".graphContainer{width:" + (graphWidth + 4) + "px;height:" + (graphHeight + 4) + "px}";
+        const dimensions = `.graphContainer{width:${graphWidth + 4}px;height:${graphHeight + 4}px}`;
 
-        if (graphWidth !== "auto" && graphWidth !== "0" && dimensions.indexOf("width:4px") === -1) {
+        if (graphWidth !== "auto" && graphWidth !== "0" && !dimensions.includes("width:4px")) {
           gwrap.innerText = dimensions;
           document.body.classList.add("loaded");
         } else {gwrap.innerText = "";}
@@ -45,92 +137,16 @@ import {onVisible, onHidden} from "/js/onVisible.js";
         }, delay);
       }
     });
-    if (graph.complete) { graph.dispatchEvent(new Event("load")); }
-  }
+    if (graph.complete) graph.dispatchEvent(new Event("load"));
+  };
 
-  function updateGraphs() {
-    if (graphRefreshInterval <= 0) {return;}
-    progressx.show(theme);
-    progressx.progress(0.5);
-    stopRefresh();
-    graphsTimerId = setInterval(updateGraphs, graphRefreshInterval);
-    const images = document.querySelectorAll(".statimage");
-    const now = Date.now();
-    const timeSinceLastRefresh = now - lastRefreshTime;
-    const allLoaded = [...images].every(img => img.complete);
-    if (timeSinceLastRefresh < longestLoadTime || !allLoaded) {return;}
-    lastRefreshTime = now;
-
-    const startTime = Date.now();
-
-    const promises = Array.from(images).map((image) => {
-      const imageSrc = image.src.replace(/time=\d+/, "time=" + now);
-      return fetch(imageSrc).then((response) => {
-        if (response.ok) {
-          return new Promise((resolve) => {
-            requestAnimationFrame(() => {
-              image.src = imageSrc;
-              resolve();
-            });
-          });
-        }
-      });
-    });
-
-    Promise.all(promises).then(() => {
-      progressx.hide();
-      const endTime = Date.now();
-      const totalTime = endTime - startTime;
-      longestLoadTime = Math.max(longestLoadTime, totalTime);
-      if (debugging) {console.log("Total load time for all images: " + totalTime + "ms");}
-    });
-  }
-
-  function stopRefresh() { if (graphsTimerId) {clearInterval(graphsTimerId);} }
-
-  function isDown() {
-    const images = document.querySelectorAll(".statimage");
-    let totalImages = images.length;
-    if (!images.length) {
-      graphs.innerHTML = "<span id=nographs><b>No connection to Router<\/b><\/span>";
-      progressx.hide();
-    }
-    setTimeout(() => { initCss(); }, 5*1000);
-  }
-
-  function toggleView() {
-    if (!toggle) {return;}
-    if (toggle.checked === false) {
-      form.hidden = true;
-      toggle.removeAttribute("checked");
-      if (h3.classList.contains("visible")) {h3.classList.remove("visible");}
-    } else {
-      form.hidden = false;
-      toggle.setAttribute("checked", "checked");
-      if (!h3.classList.contains("visible")) {h3.classList.add("visible");}
-      document.getElementById("gwidth").focus();
-      if (sb !== null && sb.scrollHeight < document.body.scrollHeight) {
-        setTimeout(() => {window.scrollTo({top: document.body.scrollHeight, behavior: "smooth"});}, 500);
-      }
-    }
-  }
-
-  function loadToggleCss() {
-    const css = document.querySelector("#graphToggleCss");
-    if (css) {return;}
-    const link = document.createElement("link");
-    link.href = "/themes/console/graphConfig.css";
-    link.rel = "stylesheet";
-    link.id = "graphToggleCss";
-    document.head.appendChild(link);
-  }
-
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", () => {
     initCss();
     onVisible(allgraphs, updateGraphs);
     onHidden(allgraphs, stopRefresh);
     loadToggleCss();
     toggleView();
+    const toggle = $("toggleSettings");
     toggle?.addEventListener("click", toggleView);
     progressx.hide();
   });
@@ -138,4 +154,3 @@ import {onVisible, onHidden} from "/js/onVisible.js";
   setTimeout(isDown, 60000);
 
 })();
-  
