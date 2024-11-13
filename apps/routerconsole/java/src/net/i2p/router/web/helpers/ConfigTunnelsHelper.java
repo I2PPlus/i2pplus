@@ -29,8 +29,10 @@ public class ConfigTunnelsHelper extends HelperBase {
         int cur = 1;
         int snarkInCount = 0;
         int snarkInHops = 0;
+        int snarkInHopsVary = 0;
         int snarkOutCount = 0;
         int snarkOutHops = 0;
+        int snarkOutHopsVary = 0;
         Set<Destination> clients = _context.clientManager().listClients();
         TunnelManagerFacade mgr = _context.tunnelManager();
         // display name to in pool
@@ -71,9 +73,11 @@ public class ConfigTunnelsHelper extends HelperBase {
 
             if (getTunnelName(in).equals(_t("I2PSnark"))) {
                 snarkInCount = in.getQuantity();
-                snarkOutCount = out.getQuantity();
                 snarkInHops = in.getLength();
+                snarkInHopsVary = in.getLengthVariance();
+                snarkOutCount = out.getQuantity();
                 snarkOutHops = out.getLength();
+                snarkOutHopsVary = out.getLengthVariance();
             }
         }
 
@@ -83,6 +87,8 @@ public class ConfigTunnelsHelper extends HelperBase {
             buf.append("<span id=snarkOut hidden>").append(snarkOutCount).append("</span>");
             buf.append("<span id=snarkInHops hidden>").append(snarkInHops).append("</span>");
             buf.append("<span id=snarkOutHops hidden>").append(snarkOutHops).append("</span>");
+            buf.append("<span id=snarkInHopsVary hidden>").append(snarkInHopsVary).append("</span>");
+            buf.append("<span id=snarkOutHopsVary hidden>").append(snarkOutHopsVary).append("</span>");
         }
         return buf.toString();
     }
