@@ -5,11 +5,12 @@
 import {onVisible, onHidden} from "/js/onVisible.js";
 
 (function() {
-  const config = document.getElementById("gform");
+  const form = document.getElementById("gform");
   const configs = document.getElementById("graphConfigs");
   const allgraphs = document.getElementById("allgraphs");
   const h3 = document.getElementById("graphdisplay");
   const sb = document.getElementById("sidebar");
+  const submit = form.querySelector(".accept");
   const toggle = document.getElementById("toggleSettings");
   let graphsTimerId;
 
@@ -17,44 +18,30 @@ import {onVisible, onHidden} from "/js/onVisible.js";
 
   function initCss() {
     const graph = document.querySelector(".statimage");
-    if (graph === null) {location.reload();}
 
     graph.addEventListener("load", () => {
       const gwrap = document.head.querySelector("style#gwrap");
       if (!gwrap) {return;}
-      const widepanel = document.querySelector(".widepanel");
-      const delay =  Math.max(graphCount*5, 120);
-      widepanel.id = "nographs";
-      const graphWidth = graph.naturalWidth > 40 ? graph.naturalWidth : 0;
-      const graphHeight = graph.naturalHeight;
-      const dimensions = ".graphContainer{width:" + (graphWidth + 4) + "px;height:" + (graphHeight + 4) + "px}";
+      if (!document.body.classList.contains("loaded")) {
+        const widepanel = document.querySelector(".widepanel");
+        const delay =  Math.max(graphCount*5, 120);
+        widepanel.id = "nographs";
+        const graphWidth = graph.naturalWidth > 40 ? graph.naturalWidth : 0;
+        const graphHeight = graph.naturalHeight;
+        const dimensions = ".graphContainer{width:" + (graphWidth + 4) + "px;height:" + (graphHeight + 4) + "px}";
 
-      let retryCount = 0;
-      if (graphWidth !== "auto" && graphWidth !== "0" && dimensions.indexOf("width:4px") === -1) {gwrap.innerText = dimensions;}
-      else {gwrap.innerText = "";}
+        if (graphWidth !== "auto" && graphWidth !== "0" && dimensions.indexOf("width:4px") === -1) {
+          gwrap.innerText = dimensions;
+          document.body.classList.add("loaded");
+        } else {gwrap.innerText = "";}
 
-      function checkGwrap() {
-        if (gwrap.innerText === dimensions) {
-          setTimeout(() => {
-            widepanel.id = "";
-            allgraphs.removeAttribute("hidden");
-            configs.removeAttribute("hidden");
-          }, delay);
-          updateGraphs();
-        } else {
-          retryCount++;
-          if (retryCount < 3) {setTimeout(() => {checkGwrap();}, 20);}
-          else if (retryCount < 5) {setTimeout(() => {location.reload(true);}, delay);}
-          else {
-            widepanel.id = "";
-            allgraphs.removeAttribute("hidden");
-            configs.removeAttribute("hidden");
-          }
-        }
+        setTimeout(() => {
+          widepanel.id = "";
+          allgraphs.removeAttribute("hidden");
+          configs.removeAttribute("hidden");
+        }, delay);
       }
-      checkGwrap();
     });
-
     if (graph.complete) { graph.dispatchEvent(new Event("load")); }
   }
 
@@ -64,24 +51,18 @@ import {onVisible, onHidden} from "/js/onVisible.js";
     graphsTimerId = setInterval(updateGraphs, graphRefreshInterval);
     const images = document.querySelectorAll(".statimage");
     const now = Date.now();
-    const imagesLoaded = 0;
     progressx.show(theme);
     progressx.progress(0.5);
     images.forEach((image) => {
       const imageSrc = image.src.replace(/time=\d+/, "time=" + now);
       fetch(imageSrc).then((response) => {
-        if (response.ok) {
-          requestAnimationFrame(() => {image.src = imageSrc;});
-          imagesLoaded++;
-        }
-      }).catch((error) => {});
+        if (response.ok) { requestAnimationFrame(() => {image.src = imageSrc;}); }
+      })
     });
-    setTimeout(() => {progressx.hide();}, 180);
+    setTimeout(() => { progressx.hide();}, 180);
   }
 
-  function stopRefresh() {
-    if (graphsTimerId) {clearInterval(graphsTimerId);}
-  }
+  function stopRefresh() { if (graphsTimerId) {clearInterval(graphsTimerId);} }
 
   function isDown() {
     const images = document.querySelectorAll(".statimage");
@@ -90,17 +71,17 @@ import {onVisible, onHidden} from "/js/onVisible.js";
       graphs.innerHTML = "<span id=nographs><b>No connection to Router<\/b><\/span>";
       progressx.hide();
     }
-    setTimeout(() => {initCss();}, 5*1000);
+    setTimeout(() => { initCss(); }, 5*1000);
   }
 
   function toggleView() {
     if (!toggle) {return;}
     if (toggle.checked === false) {
-      config.hidden = true;
+      form.hidden = true;
       toggle.removeAttribute("checked");
       if (h3.classList.contains("visible")) {h3.classList.remove("visible");}
     } else {
-      config.hidden = false;
+      form.hidden = false;
       toggle.setAttribute("checked", "checked");
       if (!h3.classList.contains("visible")) {h3.classList.add("visible");}
       document.getElementById("gwidth").focus();
@@ -121,13 +102,13 @@ import {onVisible, onHidden} from "/js/onVisible.js";
   }
 
   document.addEventListener("DOMContentLoaded", function() {
-    progressx.hide();
     initCss();
     onVisible(allgraphs, updateGraphs);
     onHidden(allgraphs, stopRefresh);
     loadToggleCss();
     toggleView();
     toggle?.addEventListener("click", toggleView);
+    progressx.hide();
   });
 
   setTimeout(isDown, 60000);
