@@ -54,7 +54,7 @@ function initLinkToggler() {
         let magnetName = anchor.substring(anchor.lastIndexOf("=") + 1);
         magnetName = decodeURIComponent(magnetName);
         showToast("Magnet link copied to clipboard: <b>" + magnetName + "</b><br>Hash: <b>" + magnetHash + "</b>");
-        setTimeout(() => { document.body.classList.remove("copyingToClipboard"); }, 3000);
+        setTimeout(() => { document.body.classList.remove("copyingToClipboard"); }, 3500);
       } else {showToast("Invalid magnet link.");}
     }
   }
