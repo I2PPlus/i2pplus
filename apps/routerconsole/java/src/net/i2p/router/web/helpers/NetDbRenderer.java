@@ -152,7 +152,7 @@ class NetDbRenderer {
                         catch (InterruptedException ie) {}
                     }
                 }
-                  netdb.lookupLocallyWithoutValidation(hash);
+                ri = (RouterInfo) netdb.lookupLocallyWithoutValidation(hash);
                 if (ri != null) {renderRouterInfo(buf, ri, false, true);}
                 else {
                     buf.append("<div class=netdbnotfound>");
