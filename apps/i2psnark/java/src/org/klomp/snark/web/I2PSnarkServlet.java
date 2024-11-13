@@ -410,8 +410,12 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("  const totalSnarks = ").append(_manager.listTorrentFiles().size()).append(";\n")
                .append("  window.snarkPageSize = snarkPageSize;\n")
                .append("  window.snarkRefreshDelay = snarkRefreshDelay;\n")
-               .append("  window.totalSnarks = totalSnarks;\n</script>\n")
-               .append("<script nonce=").append(cspNonce).append(" type=module>\n")
+               .append("  window.totalSnarks = totalSnarks;\n</script>\n");
+            if (!isStandalone()) {
+                buf.append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath).append("js/tunnelCounter.js?")
+                   .append(CoreVersion.VERSION).append("\" type=module></script>\n");
+            }
+            buf.append("<script nonce=").append(cspNonce).append(" type=module>\n")
                .append("  import {initSnarkRefresh} from \"").append(resourcePath).append("js/refreshTorrents.js").append("\";\n")
                .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n")
                .append("<script nonce=").append(cspNonce).append(" type=module src=").append(resourcePath).append("js/onVisible.js></script>\n")
@@ -1227,9 +1231,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
                 ftr.append("<span id=tnlOutCount class=counter title=\"").append(_t("Active Outbound tunnels / hops")).append("\" hidden>");
                 toThemeSVG(ftr, "outbound", "", "");
-                ftr.append("<span class=badge>").append("</span></span>")
-                   .append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath).append("js/tunnelCounter.js?")
-                   .append(CoreVersion.VERSION).append("\"></script>\n");
+                ftr.append("<span class=badge>").append("</span></span>");
             }
 
             ftr.append("</span></th>");

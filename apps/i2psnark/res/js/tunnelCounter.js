@@ -3,48 +3,67 @@
 /* Requires I2P+, doesn't work with standalone I2PSnark */
 /* License: AGPL3 or later */
 
-async function getSnarkTunnelCount() {
+let cachedTunnelCounts = null;
+let inLabel = "";
+let outLabel = "";
+
+async function fetchTunnelData() {
   const url = "/configtunnels";
-
+  const timeout = 10 * 1000;
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
   try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error("Network response was not ok: " + response.statusText);
-    }
-    const html = await response.text();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
-    const snarkInCount = doc.querySelector("#snarkIn");
-    const snarkInHops = doc.querySelector("#snarkInHops");
-    const snarkOutCount = doc.querySelector("#snarkOut");
-    const snarkOutHops = doc.querySelector("#snarkOutHops");
+    const response = await fetch(url, { signal: controller.signal });
+    if (!response.ok) throw new Error("Network response was not ok: " + response.statusText);
+    const doc = new DOMParser().parseFromString(await response.text(), "text/html");
+    const data = {
+      inCount: doc.querySelector("#snarkIn")?.textContent.trim(),
+      inHops: doc.querySelector("#snarkInHops")?.textContent.trim(),
+      outCount: doc.querySelector("#snarkOut")?.textContent.trim(),
+      outHops: doc.querySelector("#snarkOutHops")?.textContent.trim()
+    };
 
-    if (snarkInCount && snarkInHops && snarkOutCount && snarkOutHops) {
-      const inCount = snarkInCount.textContent.trim();
-      const inHops = snarkInHops.textContent.trim();
-      const outCount = snarkOutCount.textContent.trim();
-      const outHops = snarkOutHops.textContent.trim();
-      return { inCount, inHops, outCount, outHops };
+    if (Object.values(data).every(Boolean)) {
+      return data;
     } else {
       console.error("One or more tunnel count elements not found in the response.");
     }
   } catch (error) {
-    console.error("Error fetching or processing data:", error);
+    if (error.name !== 'AbortError') {
+      console.error("Error fetching or processing data:", error);
+    }
+  } finally {
+    clearTimeout(id);
   }
+  return null;
+}
+
+async function getSnarkTunnelCount() {
+  if (cachedTunnelCounts && Date.now() - cachedTunnelCounts.timestamp < 60000) {
+    try {
+      const response = await fetch("/configtunnels", { method: 'HEAD' });
+      if (response.ok && new Date(response.headers.get('last-modified')) > new Date(cachedTunnelCounts.timestamp)) {
+        cachedTunnelCounts.data = await fetchTunnelData();
+        cachedTunnelCounts.timestamp = Date.now();
+      }
+    } catch (error) {
+      console.error("Error checking for a fresher version:", error);
+    }
+    return cachedTunnelCounts?.data || null;
+  }
+
+  cachedTunnelCounts = { timestamp: Date.now(), data: await fetchTunnelData() };
+  return cachedTunnelCounts.data;
 }
 
 function updateTunnelCounts(result) {
   if (result) {
-    const snarkIn = document.getElementById("tnlInCount");
+    injectCss();
     const snarkInCount = document.querySelector("#tnlInCount .badge");
-    const snarkOut = document.getElementById("tnlOutCount");
     const snarkOutCount = document.querySelector("#tnlOutCount .badge");
-
     if (snarkInCount && snarkOutCount) {
-      snarkIn.removeAttribute("hidden");
-      snarkInCount.textContent = result.inCount + " / " + result.inHops;
-      snarkOut.removeAttribute("hidden");
-      snarkOutCount.textContent = result.outCount + " / " + result.outHops;
+      inLabel = `${result.inCount} / ${result.inHops}`;
+      outLabel = `${result.outCount} / ${result.outHops}`;
     } else {
       console.error("Badge elements not found for updating counts.");
     }
@@ -53,9 +72,25 @@ function updateTunnelCounts(result) {
   }
 }
 
+function injectCss() {
+  const css = document.createElement("style");
+  const styles = `#tnlInCount .badge::after{content:"${inLabel}"}#tnlOutCount .badge::after{content:"${outLabel}"}`;
+  css.textContent = styles;
+
+  const existingCss = document.head.querySelector("#tc");
+  if (!existingCss) {
+    css.id = "tc";
+    document.head.appendChild(css);
+  } else {
+    existingCss.textContent = styles;
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   getSnarkTunnelCount().then(result => {
+    injectCss();
     updateTunnelCounts(result);
   });
-  setInterval(() => getSnarkTunnelCount().then(result => updateTunnelCounts(result)), Math.max(snarkRefreshDelay, 15) * 1000);
+  getSnarkTunnelCount().then(updateTunnelCounts);
+  setInterval(() => getSnarkTunnelCount().then(updateTunnelCounts), Math.max(snarkRefreshDelay, 30) * 1000);
 });
