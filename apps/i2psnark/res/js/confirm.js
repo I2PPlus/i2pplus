@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
       let msg;
       msg = className === "actionRemove" ?
                           "<p id=msg>" + removeMsg + "<span class=hr></span>" + removeMsg2 + "</p>\n" :
-                          "<p>" + deleteMsg + "<p>\n";
+                          "<p id=msg>" + deleteMsg + "<p>\n";
       const name = target.name;
       const value = target.value;
 
