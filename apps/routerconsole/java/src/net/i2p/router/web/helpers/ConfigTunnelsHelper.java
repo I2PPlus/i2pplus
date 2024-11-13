@@ -27,6 +27,10 @@ public class ConfigTunnelsHelper extends HelperBase {
         // HTML: <input> cannot be inside a <table>
         buf.append("<input type=hidden name=\"pool.0\" value=\"exploratory\" >\n");
         int cur = 1;
+        int snarkInCount = 0;
+        int snarkInHops = 0;
+        int snarkOutCount = 0;
+        int snarkOutHops = 0;
         Set<Destination> clients = _context.clientManager().listClients();
         TunnelManagerFacade mgr = _context.tunnelManager();
         // display name to in pool
@@ -64,9 +68,22 @@ public class ConfigTunnelsHelper extends HelperBase {
             String prefix = h.toBase64().substring(0,4);
             renderForm(buf, cur, prefix, _t("Client tunnels for {0}", getTunnelName(in)), in, out);
             cur++;
+
+            if (getTunnelName(in).equals(_t("I2PSnark"))) {
+                snarkInCount = in.getQuantity();
+                snarkOutCount = out.getQuantity();
+                snarkInHops = in.getLength();
+                snarkOutHops = out.getLength();
+            }
         }
 
         buf.append("</table>\n");
+        if (snarkInCount > 0 || snarkOutCount > 0) {
+            buf.append("<span id=snarkIn hidden>").append(snarkInCount).append("</span>");
+            buf.append("<span id=snarkOut hidden>").append(snarkOutCount).append("</span>");
+            buf.append("<span id=snarkInHops hidden>").append(snarkInHops).append("</span>");
+            buf.append("<span id=snarkOutHops hidden>").append(snarkOutHops).append("</span>");
+        }
         return buf.toString();
     }
 
@@ -78,8 +95,7 @@ public class ConfigTunnelsHelper extends HelperBase {
          private final Collator _comp = Collator.getInstance();
          public int compare(TunnelPoolSettings l, TunnelPoolSettings r) {
              int rv = _comp.compare(getTunnelName(l), getTunnelName(r));
-             if (rv != 0)
-                 return rv;
+             if (rv != 0) {return rv;}
              return l.getDestination().toBase32().compareTo(r.getDestination().toBase32());
         }
     }
@@ -92,11 +108,9 @@ public class ConfigTunnelsHelper extends HelperBase {
         String name = ins.getDestinationNickname();
         if (name == null) {
             TunnelPoolSettings outPool = _context.tunnelManager().getOutboundSettings(ins.getDestination());
-            if (outPool != null)
-                name = outPool.getDestinationNickname();
+            if (outPool != null) {name = outPool.getDestinationNickname();}
         }
-        if (name != null)
-            return DataHelper.escapeHTML(_t(name));
+        if (name != null) {return DataHelper.escapeHTML(_t(name));}
         return ins.getDestination().toBase32();
     }
 

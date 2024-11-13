@@ -16,7 +16,6 @@ document.addEventListener("DOMContentLoaded", function () {
     css.id = "modalCss";
     css.textContent = ".modal{overflow:hidden;contain:paint}" +
                       "#confirmDialog:not(.cancelled):not(.postMsg){animation:slide-up .8s ease-out .2s both reverse}" +
-                      "@keyframes slide-up{0%{transform:translate(-50%, -50%)}100%{transform:translate(-50%, -500px)}}" +
                       "#confirmButtons{margin:0 -14px -20px;padding:15px;text-align:center}" +
                       "#confirmYes,#confirmNo{margin:4px 12px;padding:6px 8px;width:120px;font-weight:700;cursor:pointer}" +
                       "#confirmButtons button:hover{opacity:1}" +
@@ -32,7 +31,8 @@ document.addEventListener("DOMContentLoaded", function () {
                       "#msg b{max-width:384px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:bottom}" +
                       "#msg .hr{margin:11px 0 10px;height:0;width:100%;display:block}" +
                       "#msg.deleting{margin-bottom:-20px}" +
-                      "@keyframes slide-down{0%{transform:translate(-50%, -3000px)}100%{transform:translate(-50%, -50%)}}";
+                      "@keyframes slide-down{0%{transform:translate(-50%, -3000px)}100%{transform:translate(-50%, -50%)}}" +
+                      "@keyframes slide-up{0%{transform:translate(-50%, -50%)}100%{transform:translate(-50%, -500px)}}";
     fragment.appendChild(css);
     if (snarkTheme) {head.insertBefore(css, snarkTheme);}
     else {head.appendChild(css);}

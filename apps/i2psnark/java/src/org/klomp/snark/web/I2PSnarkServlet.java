@@ -1218,18 +1218,20 @@ public class I2PSnarkServlet extends BasicServlet {
             ftr.append("<span id=txCount class=counter title=\"").append(_t("Active uploads")).append("\">");
             toThemeImg(ftr, "head_tx");
             ftr.append("<span class=badge>").append(uploads).append("</span></span>");
-/*
-            // TODO: This needs to show current tunnel count, not limits
-            String ibtunnels = _manager.util().getI2CPOptions().get("inbound.quantity");
-            String obtunnels = _manager.util().getI2CPOptions().get("outbound.quantity");
-            if (_manager.util().connected()) {
-                ftr.append(" <span class=canhide title=\"")
-                   .append(_t("Configured maximum (actual usage may be less)"))
-                   .append("\"> &bullet; ").append(_t("Tunnels")).append(": ")
-                   .append(ibtunnels).append(' ').append(_t("in")).append(" / ")
-                   .append(obtunnels).append(' ').append(_t("out")).append("</span>");
+
+            if (!isStandalone()) {
+                String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
+                ftr.append("<span id=tnlInCount class=counter title=\"").append(_t("Active Inbound tunnels / hops")).append("\" hidden>");
+                toThemeSVG(ftr, "inbound", "", "");
+                ftr.append("<span class=badge>").append("</span></span>");
+
+                ftr.append("<span id=tnlOutCount class=counter title=\"").append(_t("Active Outbound tunnels / hops")).append("\" hidden>");
+                toThemeSVG(ftr, "outbound", "", "");
+                ftr.append("<span class=badge>").append("</span></span>")
+                   .append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath).append("js/tunnelCounter.js?")
+                   .append(CoreVersion.VERSION).append("\"></script>\n");
             }
-*/
+
             ftr.append("</span></th>");
 
             if (_manager.util().connected() && total > 0) {

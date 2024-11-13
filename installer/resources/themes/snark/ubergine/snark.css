@@ -234,7 +234,7 @@ td.status img{margin:-2px 3px -2px 1px;height:23px;width:auto;display:inline-blo
 #torrents .infohash{margin-right:2px;padding-left:15px;background:var(--hash) no-repeat 2px center/12px,linear-gradient(180deg,#cc0,#aa0)}
 #torrentSort{padding-left:1px;text-align:left}
 #torrentTotals{contain:paint}
-#torrentTotals::before{height:32px;display:inline-block;vertical-align:middle;content:""}
+#torrentTotals::before{height:30px;display:inline-block;vertical-align:middle;content:""}
 #totals span,#ourDest{white-space:nowrap}
 .iframed #torrentlist{border-radius:0}
 .iframed #torrents{margin:1px 0;border-radius:0}
