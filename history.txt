@@ -1,3 +1,8 @@
+2024-11-13 dr|z3d
+ * I2PSnark: More robust toggle magnets / links and copy magnet to
+   clipboard functionality
+ * Console: Refactor and simplify graphs js loader
+
 2024-11-11 dr|z3d
  * I2PSnark: Replace default browser confirmation dialog with confirm.js
    themeable implementation
