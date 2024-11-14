@@ -8,6 +8,7 @@ const initAdvConfigHelper = function() {
   const textarea = document.querySelector("textarea#advancedsettings");
   const table = document.getElementById("advconf");
   const infohelp = document.querySelector("#advconf td.infohelp");
+  const header = document.querySelector("h3#advancedconfig");
 
   document.body.classList.add("js");
   textarea.style.display = "none";
@@ -110,7 +111,9 @@ const initAdvConfigHelper = function() {
         let removedKey = row.querySelector("td:first-child").textContent;
         row.remove();
         updateTextarea();
-        infohelp.innerHTML = "Key <b style=color:#f00>" + removedKey + "</b> selected for removal. To commit the change, save the configuration, or cancel to restore.";
+        infohelp.id = "removeKey";
+        infohelp.innerHTML = msgKeyRemove.replace("{0}", removedKey);
+        header.scrollIntoView();
       } else {
          document.querySelector(".newKey").textContent = "";
          document.querySelector(".newValue").textContent = "";
@@ -182,7 +185,7 @@ const initAdvConfigHelper = function() {
     });
     advFilter.appendChild(clearFilter);
 
-    document.querySelector("h3#advancedconfig").appendChild(advFilter);
+    header.appendChild(advFilter);
   })();
 
   const advForm = document.querySelector("#advancedconfig+form");

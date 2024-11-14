@@ -15,7 +15,10 @@
 <%=intl.title("config advanced")%>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
+<script nonce=<%=cspNonce%>>
+  progressx.show(theme);progressx.progress(0.1);
+  const msgKeyRemove = <%=intl._t("Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore.")%>);
+</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigAdvancedHelper" id="advancedhelper" scope="request" />
 <jsp:setProperty name="advancedhelper" property="contextId" value="<%=i2pcontextId%>" />

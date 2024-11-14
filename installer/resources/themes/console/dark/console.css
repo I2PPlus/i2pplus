@@ -1951,6 +1951,7 @@ input[type=hidden]+p+p{margin-top:20px;margin-bottom:-21px;padding:10px;border:v
 #advfilter button:hover,#advfilter input:focus+button{mix-blend-mode:normal}
 #advfilter input[type=text]{margin:0;padding:4px 24px 3px;width:160px;font-size:85%;background:#0008 var(--filter) no-repeat 7px center/12px;opacity:.75;filter:none}
 #advfilter input[type=text]:focus{width:200px;border-color:var(--hover);color:var(--hover);box-shadow:var(--highlight),5px 5px 3px #0008 inset;background-color:#010;opacity:.85}
+#advconf #removeKey b{color:#f00}
 
 /* configtunnels */
 #config_tunnels hr{display:none}
