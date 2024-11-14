@@ -2,28 +2,28 @@
  * https://github.com/ryadpasha/progressx
  * Copyright (c) 2018 Ryad Pasha
  * Licensed under the MIT License
- * Modifications and optimizations by dr|z3d, 2024 */
+ * Optimizations and theme support by dr|z3d, 2024 */
 
 function initProgressX(window, document) {
   "use strict";
 
-  var lastTime = 0;
+  let lastTime = 0;
 
   if (!window.requestAnimationFrame) {
     window.requestAnimationFrame = function(callback) {
-      var currTime = Date.now();
-      var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-      var id = window.setTimeout(function() {callback(currTime + timeToCall);}, timeToCall);
+      const currTime = Date.now();
+      const timeToCall = Math.max(0, 16 - (currTime - lastTime));
+      const id = window.setTimeout(() => callback(currTime + timeToCall), timeToCall);
       lastTime = currTime + timeToCall;
       return id;
     };
   }
 
   if (!window.cancelAnimationFrame) {
-    window.cancelAnimationFrame = function(id) {clearTimeout(id);};
+    window.cancelAnimationFrame = function(id) { clearTimeout(id); };
   }
 
-  var canvas, progressTimerId, fadeTimerId, currentProgress, showing, options = {
+  let canvas, context, progressTimerId, fadeTimerId, currentProgress = 0, showing = false, options = {
     autoRun: true,
     barThickness: 3,
     barColors: {
@@ -45,33 +45,37 @@ function initProgressX(window, document) {
   function createCanvas() {
     canvas = document.createElement("canvas");
     canvas.id = "pageloader";
-    var style = canvas.style;
-    style.position = "fixed";
-    style.top = style.left = style.right = style.margin = style.padding = 0;
-    style.zIndex = 100001;
-    style.display = "none";
+    canvas.style.position = "fixed";
+    canvas.style.top = canvas.style.left = canvas.style.right = canvas.style.margin = canvas.style.padding = 0;
+    canvas.style.zIndex = 100001;
+    canvas.style.display = "none";
     document.body.appendChild(canvas);
+    context = canvas.getContext("2d");
     window.addEventListener("resize", repaint);
   }
 
   function repaint() {
-    var ctx = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
-    canvas.height = options.barThickness;
+    if (!canvas) return;
+    const { barThickness, barColors: { current: lineColors } } = options;
+    const width = window.innerWidth;
+    const height = barThickness;
 
-    if (options.barColors.current) {
-      var lineGradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+    canvas.width = width;
+    canvas.height = height;
 
-      Object.keys(options.barColors.current).forEach(function(stop) {
-        lineGradient.addColorStop(parseFloat(stop), options.barColors.current[stop]);
-      });
+    if (lineColors) {
+      const lineGradient = context.createLinearGradient(0, 0, width, 0);
+      for (const stop in lineColors) {
+        lineGradient.addColorStop(parseFloat(stop), lineColors[stop]);
+      }
 
-      ctx.lineWidth = options.barThickness;
-      ctx.beginPath();
-      ctx.moveTo(0, options.barThickness / 2);
-      ctx.lineTo(Math.ceil(currentProgress * canvas.width), options.barThickness / 2);
-      ctx.strokeStyle = lineGradient;
-      ctx.stroke();
+      context.clearRect(0, 0, width, height);
+      context.lineWidth = height;
+      context.beginPath();
+      context.moveTo(0, height / 2);
+      context.lineTo(Math.ceil(currentProgress * width), height / 2);
+      context.strokeStyle = lineGradient;
+      context.stroke();
     }
   }
 
@@ -80,55 +84,60 @@ function initProgressX(window, document) {
   }
 
   function progressxConfig(opts) {
-    for (key in opts) {
-      if (key === "barColors") {
-        var colorSet;
-        for (colorSet in opts[key]) {options.barColors[colorSet] = opts[key][colorSet];}
-      } else {
-        if (options.hasOwnProperty(key)) {options[key] = opts[key];}
+    options = {
+      ...options,
+      ...opts,
+      barColors: {
+        ...options.barColors,
+        ...(opts.barColors || {})
       }
-    }
+    };
+  }
+
+  function runProgressLoop() {
+    progressTimerId = window.requestAnimationFrame(() => {
+      progressxProgress("+" + (0.05 * Math.pow(1 - Math.sqrt(currentProgress), 2)));
+      runProgressLoop();
+    });
   }
 
   function progressxShow(colorSet) {
-    if (showing) {return;}
+    if (showing) return;
     showing = true;
-    if (fadeTimerId !== null) {window.cancelAnimationFrame(fadeTimerId);}
-    if (!canvas) {createCanvas();}
+    if (fadeTimerId !== null) window.cancelAnimationFrame(fadeTimerId);
+    if (!canvas) createCanvas();
     canvas.style.opacity = 1;
     canvas.style.display = "block";
-    progressxProgress(0);
+    currentProgress = 0;
     options.barColors.current = options.barColors[colorSet] || options.barColors.default;
     if (options.autoRun) {
-      (function loop() {
-        progressTimerId = window.requestAnimationFrame(loop);
-        progressxProgress("+" + (0.05 * Math.pow(1 - Math.sqrt(currentProgress), 2)));
-      })();
+      runProgressLoop();
     }
   }
 
   function progressxProgress(to) {
     if (typeof to === "string") {
-      to = (to.indexOf("+") >= 0 || to.indexOf("-") >= 0 ? currentProgress : 0) + parseFloat(to);
+      to = (to.startsWith("+") || to.startsWith("-") ? currentProgress : 0) + parseFloat(to);
     }
-    currentProgress = to > 1 ? 1 : to;
-    repaint();
+    currentProgress = Math.min(1, Math.max(0, to));
+    requestAnimationFrame(repaint);
     return currentProgress;
   }
 
   function progressxHide() {
-    if (!showing) {return;}
+    if (!showing) return;
     showing = false;
-    if (progressTimerId != null) {
+    if (progressTimerId !== null) {
       window.cancelAnimationFrame(progressTimerId);
       progressTimerId = null;
     }
     (function loop() {
-      if (progressxProgress("+.1") >= 1) {
+      if (progressxProgress("+0.1") >= 1) {
         canvas.style.opacity -= 0.25;
         if (canvas.style.opacity <= 0.25) {
           canvas.style.display = "none";
           fadeTimerId = null;
+          window.removeEventListener("resize", repaint);
           return;
         }
       }
@@ -139,11 +148,10 @@ function initProgressX(window, document) {
   if (typeof module === "object" && typeof module.exports === "object") {
     module.exports = { config: progressxConfig, show: progressxShow, progress: progressxProgress, hide: progressxHide };
   } else if (typeof define === "function" && define.amd) {
-    define(function() {
-      return { config: progressxConfig, show: progressxShow, progress: progressxProgress, hide: progressxHide };
-    });
+    define(() => ({ config: progressxConfig, show: progressxShow, progress: progressxProgress, hide: progressxHide }));
   } else {
     window.progressx = { config: progressxConfig, show: progressxShow, progress: progressxProgress, hide: progressxHide };
   }
 }
+
 initProgressX(window, document);

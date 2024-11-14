@@ -107,8 +107,10 @@ const initAdvConfigHelper = function() {
     if (target.classList.contains("delete")) {
       const row = target.closest("tr");
       if (row.id !== "addNew") {
+        let removedKey = row.querySelector("td:first-child").textContent;
         row.remove();
         updateTextarea();
+        infohelp.innerHTML = "Key <b style=color:#f00>" + removedKey + "</b> selected for removal. To commit the change, save the configuration, or cancel to restore.";
       } else {
          document.querySelector(".newKey").textContent = "";
          document.querySelector(".newValue").textContent = "";
