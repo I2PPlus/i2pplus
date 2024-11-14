@@ -91,7 +91,13 @@ class TunnelRenderer {
             String b64 = client.toBase64().substring(0,4);
             if (isLocal) {
                 out.write("<h3 class=\"");
-                if (_context.clientManager().shouldPublishLeaseSet(client)) {out.write("server ");}
+                if (_context.clientManager().shouldPublishLeaseSet(client)) {
+                    out.write("server ");
+                    if (getTunnelName(in).equals(_t("I2PSnark")) {out.write("snark ");}
+                    else if (getTunnelName(in).toLowerCase().equals("messenger") || getTunnelName(in).toLowerCase().equals("i2pchat") {
+                    out.write("i2pchat ");
+                    }
+                }
                 else if ((getTunnelName(in).startsWith("Ping") && getTunnelName(in).contains("[")) || getTunnelName(in).equals("I2Ping")) {
                     out.write("ping ");
                 } else {out.write("client ");}
