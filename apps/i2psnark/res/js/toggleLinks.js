@@ -4,10 +4,12 @@
 
 "use strict";
 
-const toggleCss = document.head.querySelector("#toggleLinks");
-const toggle = document.getElementById("linkswitch");
-const toast = document.getElementById("toast");
-const page = document.getElementById("page");
+const d = document;
+const htmlTag = d.documentElement;
+const toggleCss = d.head.querySelector("#toggleLinks");
+const toggle = d.getElementById("linkswitch");
+const toast = d.getElementById("toast");
+const page = d.getElementById("page");
 
 let linkToggleConfig = localStorage.getItem("linkToggle") || "magnets";
 let magnetsVisible = false;
@@ -15,26 +17,34 @@ let magnetsVisible = false;
 function initLinkToggler() {
   if (!toggle) { return; }
 
-  function scrollToTop(timeout) {
-    const X = window.pageXOffset;
-    const Y = window.pageYOffset;
-    window.scrollTo(0, 0);
-    if (document.documentElement.classList.contains("iframed")) {
-      const parentX = parent.window.pageXOffset;
-      const parentY = parent.window.pageYOffset;
-      parent.window.scrollTo(0, 0);
-      setTimeout(() => {
-        window.scrollTo(X, Y);
-        parent.window.scrollTo(parentX, parentY);
-      }, timeout);
-    } else { setTimeout(() => { window.scrollTo(X, Y); }, timeout); }
+  async function scrollToTop(timeout) {
+    const X = window.pageXOffset, Y = window.pageYOffset;
+    const iframed = htmlTag.classList.contains("iframed") || window.top !== parent.window.top;
+    const delay = iframed ? 3500 : 3750;
+    return new Promise((resolve) => {
+      window.scrollTo(0, 0);
+      let parentX, parentY;
+      if (iframed) {
+        parentX = parent.window.pageXOffset;
+        parentY = parent.window.pageYOffset;
+        parent.window.scrollTo(0, 0);
+      }
+      const scrollToOriginal = () => {
+        window.scrollTo({ top: Y, left: X, behavior: "smooth" });
+        if (iframed) {
+          parent.window.scrollTo({ top: parentY, left: parentX, behavior: "smooth" });
+        }
+        resolve();
+      };
+      setTimeout(scrollToOriginal, timeout);
+    });
   }
 
   function setLinkMode() {
     const isMagnetMode = linkToggleConfig === "magnets";
     toggle.checked = isMagnetMode;
-    document.body.classList.toggle("magnets", isMagnetMode);
-    document.body.classList.toggle("tlinks", !isMagnetMode);
+    d.body.classList.toggle("magnets", isMagnetMode);
+    d.body.classList.toggle("tlinks", !isMagnetMode);
   }
 
   function doToggle() {
@@ -47,32 +57,31 @@ function initLinkToggler() {
     toast.classList.remove("dismiss");
     toast.innerHTML = msg;
     toast.removeAttribute("hidden");
-    scrollToTop(3000);
-    setTimeout(() => { toast.classList.add("dismiss"); }, 3000);
+    scrollToTop(3500);
+    setTimeout(() => { toast.classList.add("dismiss"); }, 3500);
   }
 
   function copyMagnetHandler(event) {
     if (event.target.matches(".copyMagnet")) {
-      document.body.classList.add("copyingToClipboard");
+      d.body.classList.add("copyingToClipboard");
       event.preventDefault();
       event.stopPropagation();
       const anchor = event.target.closest("a").href;
 
       if (anchor && anchor.startsWith("magnet:?xt=urn:btih:")) {
-        const tempInput = document.createElement("input");
-        tempInput.value = anchor;
-        document.body.appendChild(tempInput);
-        tempInput.select();
-        document.execCommand("copy");
-        document.body.removeChild(tempInput);
-
+        copyToClipboard(anchor);
         let magnetHash = anchor.substring(anchor.indexOf(":") + 1, anchor.indexOf("&"));
         let magnetName = anchor.substring(anchor.lastIndexOf("=") + 1);
         magnetName = decodeURIComponent(magnetName);
         showToast("Magnet link copied to clipboard: <b>" + magnetName + "</b><br>Hash: <b>" + magnetHash + "</b>");
-        setTimeout(() => { document.body.classList.remove("copyingToClipboard"); }, 3500);
+        setTimeout(() => { d.body.classList.remove("copyingToClipboard"); }, 4000);
       } else {showToast("Invalid magnet link.");}
     }
+  }
+
+  async function copyToClipboard(text) {
+    try { await navigator.clipboard.writeText(text); }
+    catch (error) {}
   }
 
   setLinkMode();
@@ -80,6 +89,6 @@ function initLinkToggler() {
   page.addEventListener("change", doToggle);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+d.addEventListener("DOMContentLoaded", () => {
   initLinkToggler();
 });
