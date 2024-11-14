@@ -1,6 +1,6 @@
 /* I2P+ tunnelCounter.js for I2PSnark by dr|z3d */
 /* Counts active in/out snark tunnels and inserts them in the UI */
-/* Requires I2P+, doesn't work with standalone I2PSnark */
+/* Requires I2P+, doesn"t work with standalone I2PSnark */
 /* License: AGPL3 or later */
 
 let cachedTunnelCounts = null;
@@ -18,79 +18,48 @@ async function fetchTunnelData() {
     const doc = new DOMParser().parseFromString(await response.text(), "text/html");
     const data = {
       inCount: doc.querySelector("#snarkIn")?.textContent.trim(),
-      inHops: doc.querySelector("#snarkInHops")?.textContent.trim(),
       outCount: doc.querySelector("#snarkOut")?.textContent.trim(),
-      outHops: doc.querySelector("#snarkOutHops")?.textContent.trim()
     };
-
-    if (Object.values(data).every(Boolean)) {
-      return data;
-    } else {
-      console.error("One or more tunnel count elements not found in the response.");
-    }
-  } catch (error) {
-    if (error.name !== 'AbortError') {
-      console.error("Error fetching or processing data:", error);
-    }
-  } finally {
-    clearTimeout(id);
-  }
+    if (Object.values(data).every(Boolean)) {return data;}
+  } catch (error) {}
+  finally {clearTimeout(id);}
   return null;
 }
 
 async function getSnarkTunnelCount() {
-  if (cachedTunnelCounts && Date.now() - cachedTunnelCounts.timestamp < 60000) {
-    try {
-      const response = await fetch("/configtunnels", { method: 'HEAD' });
-      if (response.ok && new Date(response.headers.get('last-modified')) > new Date(cachedTunnelCounts.timestamp)) {
-        cachedTunnelCounts.data = await fetchTunnelData();
-        cachedTunnelCounts.timestamp = Date.now();
-      }
-    } catch (error) {
-      console.error("Error checking for a fresher version:", error);
-    }
-    return cachedTunnelCounts?.data || null;
+  const interval = 30 * 1000;
+  if (cachedTunnelCounts && Date.now() - cachedTunnelCounts.timestamp < interval) {
+    return cachedTunnelCounts.data;
   }
-
   cachedTunnelCounts = { timestamp: Date.now(), data: await fetchTunnelData() };
   return cachedTunnelCounts.data;
 }
 
 function updateTunnelCounts(result) {
   if (result) {
-    injectCss();
     const snarkInCount = document.querySelector("#tnlInCount .badge");
     const snarkOutCount = document.querySelector("#tnlOutCount .badge");
     if (snarkInCount && snarkOutCount) {
-      inLabel = `${result.inCount} / ${result.inHops}`;
-      outLabel = `${result.outCount} / ${result.outHops}`;
-    } else {
-      console.error("Badge elements not found for updating counts.");
+      inLabel = `${result.inCount}`;
+      outLabel = `${result.outCount}`;
+      let styleTag = document.head.querySelector("#tc");
+      const styles = `#tnlInCount .badge::after{content:"${inLabel}"}#tnlOutCount .badge::after{content:"${outLabel}"}`;
+      if (!styleTag) {
+        styleTag = document.createElement("style");
+        styleTag.id = "tc";
+        document.head.appendChild(styleTag);
+      }
+      if (styleTag.textContent !== styles) {styleTag.textContent = styles;}
     }
-  } else {
-    console.warn("No result to update tunnel counts.");
   }
 }
 
-function injectCss() {
-  const css = document.createElement("style");
-  const styles = `#tnlInCount .badge::after{content:"${inLabel}"}#tnlOutCount .badge::after{content:"${outLabel}"}`;
-  css.textContent = styles;
-
-  const existingCss = document.head.querySelector("#tc");
-  if (!existingCss) {
-    css.id = "tc";
-    document.head.appendChild(css);
-  } else {
-    existingCss.textContent = styles;
-  }
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  getSnarkTunnelCount().then(result => {
-    injectCss();
+document.addEventListener("DOMContentLoaded", async () => {
+  const result = await getSnarkTunnelCount();
+  const refresh = snarkRefreshDelay !== null ? snarkRefreshDelay - 500 : 10*1000;
+  updateTunnelCounts(result);
+  setInterval(async () => {
+    const result = await getSnarkTunnelCount();
     updateTunnelCounts(result);
-  });
-  getSnarkTunnelCount().then(updateTunnelCounts);
-  setInterval(() => getSnarkTunnelCount().then(updateTunnelCounts), Math.max(snarkRefreshDelay, 30) * 1000);
+  }, Math.max(refresh, 10*1000));
 });

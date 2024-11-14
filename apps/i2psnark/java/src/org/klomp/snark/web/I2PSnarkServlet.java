@@ -1225,11 +1225,11 @@ public class I2PSnarkServlet extends BasicServlet {
 
             if (!isStandalone()) {
                 String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
-                ftr.append("<span id=tnlInCount class=counter title=\"").append(_t("Active Inbound tunnels / hops")).append("\" hidden>");
+                ftr.append("<span id=tnlInCount class=counter title=\"").append(_t("Active Inbound tunnels")).append("\" hidden>");
                 toThemeSVG(ftr, "inbound", "", "");
                 ftr.append("<span class=badge>").append("</span></span>");
 
-                ftr.append("<span id=tnlOutCount class=counter title=\"").append(_t("Active Outbound tunnels / hops")).append("\" hidden>");
+                ftr.append("<span id=tnlOutCount class=counter title=\"").append(_t("Active Outbound tunnels")).append("\" hidden>");
                 toThemeSVG(ftr, "outbound", "", "");
                 ftr.append("<span class=badge>").append("</span></span>");
             }
@@ -2339,12 +2339,10 @@ public class I2PSnarkServlet extends BasicServlet {
     private static String buildI2CPOpts(HttpServletRequest req) {
         StringBuilder buf = new StringBuilder(128);
         String p = req.getParameter("i2cpOpts");
-        if (p != null)
-            buf.append(p);
+        if (p != null) {buf.append(p);}
         for (int i = 0; i < iopts.length; i++) {
             p = req.getParameter(iopts[i]);
-            if (p != null)
-                buf.append(' ').append(iopts[i]).append('=').append(p);
+            if (p != null) {buf.append(' ').append(iopts[i]).append('=').append(p);}
         }
         return buf.toString();
     }
@@ -2355,15 +2353,13 @@ public class I2PSnarkServlet extends BasicServlet {
             int sort = 0;
             String ssort = req.getParameter("sort");
             if (ssort != null) {
-                try {
-                    sort = Integer.parseInt(ssort);
-                } catch (NumberFormatException nfe) {}
+                try {sort = Integer.parseInt(ssort);}
+                catch (NumberFormatException nfe) {}
             }
             String lang;
-            if (_manager.isSmartSortEnabled())
+            if (_manager.isSmartSortEnabled()) {
                 lang = Translate.getLanguage(_manager.util().getContext());
-            else
-                lang = null;
+            } else {lang = null;}
             // Java 7 TimSort - may be unstable
             DataHelper.sort(rv, Sorters.getComparator(sort, lang, this));
         }
@@ -2436,10 +2432,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String fullBasename = basename;
         if (basename.length() > MAX_DISPLAYED_FILENAME_LENGTH) {
             String start = ServletUtil.truncate(basename, MAX_DISPLAYED_FILENAME_LENGTH);
-            if (start.indexOf(' ') < 0 && start.indexOf('-') < 0) {
-                // browser has nowhere to break it
-                basename = start + HELLIP;
-            }
+            if (start.indexOf(' ') < 0 && start.indexOf('-') < 0) {basename = start + HELLIP;} // browser has nowhere to break it
         }
         // includes skipped files, -1 for magnet mode
         long remaining = snark.getRemainingLength();
@@ -2484,7 +2477,7 @@ public class I2PSnarkServlet extends BasicServlet {
         } else if (snark.isStarting()) {
             statusString = toSVGWithDataTooltip("stalled", "", _t("Starting")) + "</td>" + "<td class=peerCount><b>";
             snarkStatus = "active starting";
-        } else if (remaining == 0 || needed == 0) {  // < 0 means no meta size yet
+        } else if (remaining == 0 || needed == 0) { // < 0 means no meta size yet
             // partial complete or seeding
             if (isRunning) {
                 String img;
@@ -2632,16 +2625,13 @@ public class I2PSnarkServlet extends BasicServlet {
                    .replace("Magnet ", "<span class=infohash>")
                    .replaceFirst("\\(", "</span> <span class=magnetLabel>").replaceAll("\\)$", ""));
                 buf.append("</span>");
-            } else {
-                buf.append(DataHelper.escapeHTML(basename));
-            }
-            if (remaining == 0 || isMultiFile)
-                buf.append("</a>");
+            } else {buf.append(DataHelper.escapeHTML(basename));}
+            if (remaining == 0 || isMultiFile) {buf.append("</a>");}
             buf.append("</td><td class=ETA>");
-            if (isRunning && remainingSeconds > 0 && !snark.isChecking())
-                buf.append(DataHelper.formatDuration2(Math.max(remainingSeconds, 10) * 1000)); // (eta 6h)
-            buf.append("</td>");
-            buf.append("<td class=rxd>");
+            if (isRunning && remainingSeconds > 0 && !snark.isChecking()) {
+                buf.append(DataHelper.formatDuration2(Math.max(remainingSeconds, 10) * 1000));
+            } // (eta 6h)
+            buf.append("</td>").append("<td class=rxd>");
             if (remaining > 0) {
                 long percent = 100 * (total - remaining) / total;
                 buf.append("<div class=barOuter>")
@@ -2662,8 +2652,7 @@ public class I2PSnarkServlet extends BasicServlet {
                    .append(formatSize(total).replaceAll("iB","")) // 3GB
                    .append("</div>");
             }
-            buf.append("</td>");
-            buf.append("<td class=\"rateDown");
+            buf.append("</td>").append("<td class=\"rateDown");
             if (downBps >= 100000) {buf.append(" hundred");}
             else if (downBps >= 10000) {buf.append(" ten");}
             buf.append("\">");
@@ -2677,8 +2666,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                               .replace("G", "</span><span class=left>G"));
                 buf.append("/s</span>");
             }
-            buf.append("</td>");
-            buf.append("<td class=txd>");
+            buf.append("</td>").append("<td class=txd>");
             if (isValid) {
                 double ratio = uploaded / ((double) total);
                 if (total <= 0) {ratio = 0;}
@@ -2714,12 +2702,9 @@ public class I2PSnarkServlet extends BasicServlet {
                    .append(" - 2px)\"></span></span>");
             }
         }
-        buf.append("</td>");
-        buf.append("<td class=\"rateUp");
-        if (upBps >= 100000)
-            buf.append(" hundred");
-        else if (upBps >= 10000)
-            buf.append(" ten");
+        buf.append("</td>").append("<td class=\"rateUp");
+        if (upBps >= 100000) {buf.append(" hundred");}
+        else if (upBps >= 10000) {buf.append(" ten");}
         buf.append("\">");
         if (isRunning && isValid && upBps > 0 && curPeers > 0) {
             buf.append("<span class=right>");
@@ -2730,12 +2715,9 @@ public class I2PSnarkServlet extends BasicServlet {
                                         .replace("G", "</span><span class=left>G"));
             buf.append("/s</span>");
         }
-        buf.append("</td>");
-        buf.append("<td class=tAction>");
-        if (snark.isChecking()) {
-            // show no buttons
-            buf.append("<span class=isChecking></span>");
-        } else if (isRunning) {
+        buf.append("</td>").append("<td class=tAction>");
+        if (snark.isChecking()) {buf.append("<span class=isChecking></span>");} // show no buttons
+        else if (isRunning) {
             // Stop Button
             buf.append("<input type=submit class=actionStop name=\"action_Stop_").append(b64).append("\" value=\"")
                .append(_t("Stop")).append("\" title=\"").append(_t("Stop the torrent").replace(" the", "")).append("\">");
@@ -2780,9 +2762,8 @@ public class I2PSnarkServlet extends BasicServlet {
                         snarkStatus += " RX";
                 } else {snarkStatus = "inactive";}
                 if (!peer.isConnected()) {continue;}
-                buf.append("<tr class=\"peerinfo ").append(snarkStatus).append(" volatile\">\n<td class=status title=\"");
-                buf.append(_t("Peer attached to swarm"));
-                buf.append("\"></td><td class=peerdata colspan=5>");
+                buf.append("<tr class=\"peerinfo ").append(snarkStatus).append(" volatile\">\n<td class=status title=\"")
+                   .append(_t("Peer attached to swarm")).append("\"></td><td class=peerdata colspan=5>");
                 PeerID pid = peer.getPeerID();
                 String client = null;
                 String ch = pid != null ? pid.toString() : "????";
@@ -2799,9 +2780,8 @@ public class I2PSnarkServlet extends BasicServlet {
                     ch = ch.substring(0, 4);
                     String version = ("ZV".equals(ch.substring(2,4)) || "VUZP".equals(ch) ? getRobtVersion(pid.getID()) : getAzVersion(pid.getID()));
                     boolean hasVersion = version != null && !version.equals("");
-                    buf.append("<span class=peerclient><code title=\"");
-                    buf.append(_t("Destination (identity) of peer"));
-                    buf.append("\">").append(peer.toString().substring(5, 9)).append("</code>&nbsp;");
+                    buf.append("<span class=peerclient><code title=\"").append(_t("Destination (identity) of peer")).append("\">")
+                       .append(peer.toString().substring(5, 9)).append("</code>&nbsp;");
                     if (hasVersion) {buf.append("<span class=clientid title=\"").append(_t("Version")).append(": ").append(version).append("\">");}
                     else {buf.append("<span class=clientid>");}
                     if ("AwMD".equals(ch)) {client = "I2PSnark";}
@@ -2829,8 +2809,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                 try {
                                     String s = bev.getString();
                                     if (s.length() > 0) {
-                                        if (s.length() > 64)
-                                            s = s.substring(0, 64);
+                                        if (s.length() > 64) {s = s.substring(0, 64);}
                                         client = DataHelper.escapeHTML(s);
                                         addVersion = false;
                                     }
@@ -2839,12 +2818,6 @@ public class I2PSnarkServlet extends BasicServlet {
                          }
                          if (client == null) {client = ch;}
                     }
-
-                    //if (addVersion) {
-                    //    byte[] id = pid.getID();
-                    //    if (id != null && id[0] == '-')
-                    //        client += getAzVersion(id);
-                    //}
                     buf.append(client + "</span></span>");
                 }
                 if (t >= 5000) {
@@ -2852,9 +2825,7 @@ public class I2PSnarkServlet extends BasicServlet {
                        .append("px\" title=\"").append(_t("Inactive")).append(": ")
                        .append(t / 1000).append(' ').append(_t("seconds")).append("\"></span>");
                 }
-                buf.append("</td>");
-                buf.append("<td class=ETA></td>");
-                buf.append("<td class=rxd>");
+                buf.append("</td>").append("<td class=ETA></td>").append("<td class=rxd>");
                 float pct;
                 if (isValid) {
                     pct = (float) (100.0 * peer.completed() / meta.getPieces());
@@ -2868,11 +2839,7 @@ public class I2PSnarkServlet extends BasicServlet {
                            .append("<div class=barInner style=\"width:").append(ps).append("%;\">")
                            .append("</div></div>");
                     }
-                } else {
-                    pct = (float) 101.0;
-                    // until we get the metainfo we don't know how many pieces there are
-                    //buf.append("??");
-                }
+                } else {pct = (float) 101.0;} // until we get the metainfo we don't know how many pieces there are
                 buf.append("</td>");
                 buf.append("<td class=\"rateDown");
                 if (peer.getDownloadRate() >= 100000) {buf.append(" hundred");}
@@ -2916,14 +2883,9 @@ public class I2PSnarkServlet extends BasicServlet {
                                                   .replace("G", "</span><span class=left>G"));
                         buf.append("/s</span></span>");
                 }
-                buf.append("</td>");
-                buf.append("<td class=txd>");
-                buf.append("</td>");
-                buf.append("<td class=\"rateUp");
-                if (peer.getUploadRate() >= 100000)
-                    buf.append(" hundred");
-                else if (peer.getUploadRate() >= 10000)
-                    buf.append(" ten");
+                buf.append("</td>").append("<td class=txd>").append("</td>").append("<td class=\"rateUp");
+                if (peer.getUploadRate() >= 100000) {buf.append(" hundred");}
+                else if (peer.getUploadRate() >= 10000) {buf.append(" ten");}
                 buf.append("\">");
                 if (isValid && pct < 100.0) {
                     if (peer.isInterested() && !peer.isChoking() && peer.getUploadRate() > 0) {
@@ -2936,9 +2898,8 @@ public class I2PSnarkServlet extends BasicServlet {
                                                   .replace("G", "</span><span class=left>G"));
                         buf.append("/s</span></span>");
                     } else if (peer.isInterested() && !peer.isChoking()) {
-                        buf.append("<span class=\"unchoked idle\" title=\"");
-                        buf.append(_t("Peer is interested but currently idle"));
-                        buf.append("\">");
+                        buf.append("<span class=\"unchoked idle\" title=\"")
+                           .append(_t("Peer is interested but currently idle")).append("\">");
                     } else {
                         buf.append("<span class=choked title=\"");
                         if (!peer.isInterested()) {
@@ -2956,9 +2917,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         buf.append("/s</span></span>");
                     }
                 }
-                buf.append("</td>");
-                buf.append("<td class=tAction>");
-                buf.append("</td></tr>\n");
+                buf.append("</td>").append("<td class=tAction>").append("</td></tr>\n");
 /**
                 if (showDebug) {buf.append("<tr class=\"debuginfo volatile ").append(rowClass).append("\">\n");}
                 else {buf.append("<tr class=\"debuginfo volatile ").append(rowClass).append("\" hidden>\n");}
