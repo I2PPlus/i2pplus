@@ -1,85 +1,70 @@
 function initButtons() {
   const buttonsMap = {
-    delete1: addClickHandler1,
-    markall: addClickHandler2,
-    clearselection: addClickHandler3,
-    tdclick: addClickHandler4,
+    delete1: setupDeleteClickHandler,
+    markall: setupToggleSelectionHandler(true),
+    clearselection: setupToggleSelectionHandler(false),
+    tdclick: addDirectClickHandler,
   };
 
   for (const [className, handler] of Object.entries(buttonsMap)) {
     const buttons = document.getElementsByClassName(className);
-    for (let index = 0; index < buttons.length; index++) {
-      const button = buttons[index];
-      handler(button);
-    }
+    Array.from(buttons).forEach(button => handler(button, button.form));
   }
 
   const form = document.forms[0];
   deleteboxclicked(form);
 }
 
-function addClickHandler1(elem) {
-  elem.addEventListener("click", function() {
-    deleteboxclicked(this.form);
+function setupDeleteClickHandler(elem, form) {
+  elem.addEventListener("click", () => {
+    const checkboxes = form.querySelectorAll(".optbox.delete1:not(.inactive)");
+    const hasOne = Array.from(checkboxes).some(checkbox => {
+      const row = checkbox.closest("tr");
+      return !row || row.style.display !== "none" && checkbox.checked;
+    });
+    form.delete.disabled = !hasOne;
   });
 }
 
-function addClickHandler2(elem) {
-  elem.addEventListener("click", function() {
-    const form = this.form;
-    form.delete.disabled = false;
-    form.markall.disabled = true;
-    form.clearselection.disabled = false;
-    const buttons = document.getElementsByClassName("delete1");
-    for (let index = 0; index < buttons.length; index++) {
-      buttons[index].checked = true;
-    }
-    event.preventDefault();
-  });
+function setupToggleSelectionHandler(selectAll) {
+  return function(elem, form) {
+    elem.addEventListener("click", function(event) {
+      const checkboxes = form.querySelectorAll(".optbox.delete1:not(.inactive)");
+      Array.from(checkboxes).forEach(checkbox => {
+        const row = checkbox.closest("tr");
+        if (!row || row.style.display !== "none") {
+          checkbox.checked = selectAll;
+        }
+      });
+      const hasOne = Array.from(checkboxes).some(checkbox => {
+        const row = checkbox.closest("tr");
+        return !row || row.style.display !== "none" && checkbox.checked;
+      });
+      const hasAll = Array.from(checkboxes).every(checkbox => {
+        const row = checkbox.closest("tr");
+        return !row || row.style.display !== "none" && checkbox.checked;
+      });
+      form.delete.disabled = !hasOne;
+      form.markall.disabled = hasAll;
+      form.clearselection.disabled = !hasOne;
+      event.preventDefault();
+    });
+  };
 }
 
-function addClickHandler3(elem) {
-  elem.addEventListener("click", function() {
-    const form = this.form;
-    form.delete.disabled = true;
-    form.markall.disabled = false;
-    form.clearselection.disabled = true;
-    const buttons = document.getElementsByClassName("delete1");
-    for (let index = 0; index < buttons.length; index++) {
-      buttons[index].checked = false;
-    }
-    event.preventDefault();
-  });
-}
-
-function addClickHandler4(elem) {
-  elem.addEventListener("click", function() {
-    document.location = elem.dataset.url;
-  });
+function addDirectClickHandler(elem) {
+  const url = elem.dataset.url;
+  elem.addEventListener("click", function() { document.location = url; });
 }
 
 function deleteboxclicked(form) {
-  let hasOne = false;
-  let hasAll = true;
-  let hasNone = true;
-
-  for (let i = 0; i < form.elements.length; i++) {
-    const elem = form.elements[i];
-    if (elem.type === "checkbox") {
-      if (elem.checked) {
-        hasOne = true;
-        hasNone = false;
-      } else {
-        hasAll = false;
-      }
-    }
-  }
-
+  const checkboxes = form.querySelectorAll(".optbox.delete1:not(.inactive)");
+  const hasOne = Array.from(checkboxes).some(checkbox => checkbox.checked);
+  const hasAll = Array.from(checkboxes).every(checkbox => checkbox.checked);
+  if (!form.delete) {return;}
   form.delete.disabled = !hasOne;
   form.markall.disabled = hasAll;
-  form.clearselection.disabled = hasNone;
+  form.clearselection.disabled = !hasOne;
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-  initButtons();
-}, true);
+document.addEventListener("DOMContentLoaded", () => { initButtons(); });
