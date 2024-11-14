@@ -3554,7 +3554,7 @@ public class WebMail extends HttpServlet
             String b64UIDL = Base64.encode(uidl);
             String loc = myself + '?' + (folderName.equals(DIR_DRAFTS) ? NEW_UIDL : SHOW) + '=' + b64UIDL + floc;
             String link = "<a href=\"" + loc + "\" class=" + type + ">";
-            String jslink = "tdclick\" onclickloc=\"" + loc + "\"";
+            String jslink = "tdclick\" data-url=\"" + loc + "\"";
 
             boolean idChecked = false;
             String checkId = sessionObject.pageChanged ? null : request.getParameter("check" + b64UIDL);
@@ -3748,7 +3748,7 @@ public class WebMail extends HttpServlet
      *  @since 0.9.35
      */
     private static void showFolderSelect(PrintWriter out, String currentName, boolean disableCurrent) {
-        out.print("<select name=\"" + NEW_FOLDER + "\" class=\"select" + (disableCurrent ? "1" : "2") + "\">\n");
+        out.print("<select name=\"" + NEW_FOLDER + "\" class=" + (disableCurrent ? "moveToFolder" : "switchFolder") + ">\n");
         for (int i = 0; i < DIRS.length; i++) {
             String dir = DIRS[i];
             if (currentName.equals(dir)) {continue;} // can't move or switch to self

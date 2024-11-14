@@ -372,9 +372,9 @@ tr.mailbody td{border-top:var(--border_inner)}
 #viewmail{position:relative}
 #viewmail .folders{padding:5px 6px 5px 4px;position:absolute;top:-1px;right:-1px;border:var(--border_inner);border-radius:0 0 0 3px;box-shadow:var(--highlight);background:linear-gradient(180deg,rgba(255,255,255,.7) 50%,rgba(240,240,255,.4) 50%),repeating-linear-gradient(180deg,#eef 1px,#eef 2px,#fff 3px)}
 input.switchto,input.moveto{padding:5px 7px 5px 24px;background:var(--folder) no-repeat 6px center/14px,var(--btn)}
-#viewmail .moveto,#viewmail .select1{margin-top:3px;margin-bottom:1px}
+#viewmail .moveto,#viewmail .moveToFolder{margin-top:3px;margin-bottom:1px}
 #viewmail .moveto{margin-right:8px}
-#viewmail .select1{margin-right:0}
+#viewmail .moveToFolder{margin-right:0}
 #folderName{font-weight:700;color:#5b5b71;text-transform:capitalize}
 
 /* mail headers */

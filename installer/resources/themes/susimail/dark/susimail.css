@@ -156,7 +156,7 @@ input.switchto:hover,input.moveto:hover,input.switchto:focus,input.moveto:focus{
 input.switchto:active,input.moveto:active{background:#f60 var(--folder_active) no-repeat 10px center/14px}
 input[disabled]{opacity:.4;pointer-events:none}
 input[type=file]::file-selector-button{margin:2px 3px;padding:4px 2px}
-.topbuttons .select2{margin:0 -2px;padding:7px 24px 7px 8px}
+.topbuttons .switchFolder{margin:0 -2px;padding:7px 24px 7px 8px}
 input:active,.fakebutton:active{text-shadow:none}
 .bottombuttoms td[colspan="4"]{padding-right:1px}
 input[type="file"]{padding:5px 0;max-width:400px;background:none}
