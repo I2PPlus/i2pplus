@@ -4,13 +4,20 @@
 
 const initAdvConfigHelper = function() {
 
-  const container = document.querySelector("td.tabletextarea");
-  const textarea = document.querySelector("textarea#advancedsettings");
-  const table = document.getElementById("advconf");
-  const infohelp = document.querySelector("#advconf td.infohelp");
-  const header = document.querySelector("h3#advancedconfig");
+  const d = document;
+  Element.prototype.getId = function(id) { return this.getElementById(id); };
+  Element.prototype.query = function(selector) { return this.querySelector(selector); };
+  Element.prototype.queryAll = function(selector) { return this.querySelectorAll(selector); };
+  Element.prototype.hasClass = function(className) { return this.classList.contains(className); };
+  const query = selector => d.querySelector(selector);
+  const queryAll = selector => d.querySelectorAll(selector);
+  const container = query("td.tabletextarea");
+  const textarea = query("textarea#advancedsettings");
+  const table = d.getElementById("advconf");
+  const infohelp = query("#advconf td.infohelp");
+  const header = query("h3#advancedconfig");
 
-  document.body.classList.add("js");
+  d.body.classList.add("js");
   textarea.style.display = "none";
   infohelp.setAttribute("colspan", "3");
 
@@ -32,16 +39,16 @@ const initAdvConfigHelper = function() {
       return a[0].localeCompare(b[0]);
     });
 
-  const saveCancelRow = table.querySelector("#advconf tr:last-child");
-  saveCancelRow.querySelector("td").setAttribute("colspan", "3");
+  const saveCancelRow = table.query("#advconf tr:last-child");
+  saveCancelRow.query("td").setAttribute("colspan", "3");
   let lastConfigRow = null;
 
   configItems.forEach(function(item) {
-    const row = document.createElement("tr");
-    const keyCell = document.createElement("td");
-    const valueCell = document.createElement("td");
-    const delCell = document.createElement("td");
-    const fragment = document.createDocumentFragment();
+    const row = d.createElement("tr");
+    const keyCell = d.createElement("td");
+    const valueCell = d.createElement("td");
+    const delCell = d.createElement("td");
+    const fragment = d.createDocumentFragment();
     keyCell.textContent = item[0];
     valueCell.textContent = item[1];
     keyCell.setAttribute("contenteditable", true);
@@ -60,11 +67,11 @@ const initAdvConfigHelper = function() {
     lastConfigRow = row;
   });
 
-  const addNewRow = document.createElement("tr");
+  const addNewRow = d.createElement("tr");
   addNewRow.id = "addNew";
-  const newKeyCell = document.createElement("td");
-  const newValueCell = document.createElement("td");
-  const newDelCell = document.createElement("td");
+  const newKeyCell = d.createElement("td");
+  const newValueCell = d.createElement("td");
+  const newDelCell = d.createElement("td");
   addNewRow.appendChild(newKeyCell);
   addNewRow.appendChild(newValueCell);
   addNewRow.appendChild(newDelCell);
@@ -76,7 +83,7 @@ const initAdvConfigHelper = function() {
   newValueCell.setAttribute("spellcheck", "false");
   newDelCell.className = "delete";
 
-  const firstConfigRow = table.querySelector(".configline");
+  const firstConfigRow = table.query(".configline");
   if (firstConfigRow) {firstConfigRow.insertAdjacentElement("beforebegin", addNewRow);}
   else {saveCancelRow.insertAdjacentElement("beforebegin", addNewRow);}
 
@@ -92,7 +99,7 @@ const initAdvConfigHelper = function() {
 
   const updateTextarea = function() {
     const updatedItems = [];
-    const rows = document.querySelectorAll(".configline");
+    const rows = queryAll(".configline");
     rows.forEach(function(row) {
       const keyTd = row.children[0];
       const valueTd = row.children[1];
@@ -105,18 +112,18 @@ const initAdvConfigHelper = function() {
 
   table.addEventListener("click", function(event) {
     const target = event.target;
-    if (target.classList.contains("delete")) {
+    if (target.hasClass("delete")) {
       const row = target.closest("tr");
       if (row.id !== "addNew") {
-        let removedKey = row.querySelector("td:first-child").textContent;
+        let removedKey = row.query("td:first-child").textContent;
         row.remove();
         updateTextarea();
         infohelp.id = "removeKey";
         infohelp.innerHTML = msgKeyRemove.replace("{0}", removedKey);
         header.scrollIntoView();
       } else {
-         document.querySelector(".newKey").textContent = "";
-         document.querySelector(".newValue").textContent = "";
+         table.query(".newKey").textContent = "";
+         table.query(".newValue").textContent = "";
       }
     }
   });
@@ -131,10 +138,10 @@ const initAdvConfigHelper = function() {
       return;
     }
     if (newKey) {
-      const newRow = document.createElement("tr");
-      const keyCell = document.createElement("td");
-      const valueCell = document.createElement("td");
-      const delCell = document.createElement("td");
+      const newRow = d.createElement("tr");
+      const keyCell = d.createElement("td");
+      const valueCell = d.createElement("td");
+      const delCell = d.createElement("td");
 
       keyCell.textContent = newKey;
       valueCell.textContent = newValue;
@@ -157,44 +164,43 @@ const initAdvConfigHelper = function() {
   };
 
   (function addFilter() {
-    const advFilter = document.createElement("span");
+    const advFilter = d.createElement("span");
     advFilter.id = "advfilter";
 
-    const filterInput = document.createElement("input");
+    const filterInput = d.createElement("input");
     filterInput.setAttribute("type", "text");
     advFilter.appendChild(filterInput);
     filterInput.addEventListener("input", function(event) {
       const filterValue = event.target.value.toLowerCase();
-      const rows = document.querySelectorAll(".configline");
+      const rows = queryAll(".configline");
       rows.forEach(function(row) {
-        const key = row.querySelector(".key").textContent.toLowerCase();
-        const value = row.querySelector(".value").textContent.toLowerCase();
+        const key = row.query(".key").textContent.toLowerCase();
+        const value = row.query(".value").textContent.toLowerCase();
         if (key.includes(filterValue) || value.includes(filterValue)) {row.style.display = "table-row";}
         else {row.style.display = "none";}
       });
     });
 
-    const clearFilter = document.createElement("button");
+    const clearFilter = d.createElement("button");
     clearFilter.textContent = "X";
     clearFilter.addEventListener("click", () => {
       filterInput.value = "";
-      const rows = document.querySelectorAll(".configline");
+      const rows = table.queryAll(".configline");
       rows.forEach((row) => {
         row.style.display = "table-row";
       });
     });
     advFilter.appendChild(clearFilter);
-
     header.appendChild(advFilter);
   })();
 
-  const advForm = document.querySelector("#advancedconfig+form");
-  const saveButton = advForm.querySelector("input[type=submit]");
-  const cancelButton = advForm.querySelector("input.cancel");
+  const advForm = query("#advancedconfig+form");
+  const saveButton = advForm.query("input[type=submit]");
+  const cancelButton = advForm.query("input.cancel");
 
   function doSave(event) {
     updateTextarea();
-    const newKey = document.querySelector("#addNew .newKey");
+    const newKey = table.query("#addNew .newKey");
     if (newKey && newKey.textContent.trim()) {submitNewKeyValue();}
     if (event.key === "Enter") {
       event.preventDefault();
@@ -202,14 +208,14 @@ const initAdvConfigHelper = function() {
     } else {advForm.requestSubmit(saveButton);}
   }
 
-  document.addEventListener("keydown", function(event) {
+  d.addEventListener("keydown", function(event) {
     if (event.key === "Enter") { doSave(event); } // save when Return is pressed
     else if (event.key === "Escape") { resetForm(event); } // reset when Escape is pressed
   });
 
   function resetForm(event) {
     event.preventDefault();
-    textarea.value = document.querySelector("input[name=nofilter_oldConfig]").value;
+    textarea.value = query("input[name=nofilter_oldConfig]").value;
     advForm.requestSubmit(saveButton);
   };
 

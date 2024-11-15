@@ -17,7 +17,7 @@
 <body>
 <script nonce=<%=cspNonce%>>
   progressx.show(theme);progressx.progress(0.1);
-  const msgKeyRemove = <%=intl._t("Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore.")%>);
+  const msgKeyRemove = "<%=intl._t("Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore.")%>";
 </script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigAdvancedHelper" id="advancedhelper" scope="request" />
@@ -62,7 +62,7 @@
 <tr><td class=optionsave><input type=submit name="shouldsave" class=accept value="<%=intl._t("Save changes")%>"></td></tr>
 </table>
 </form>
-<h3 id=advancedconfig class=tabletitle><%=intl._t("Advanced I2P Configuration")%>&nbsp;<span class=h3navlinks><a title="Help with additional configuration settings" href="/help/advancedsettings">[Additional Options]</a></span></h3>
+<h3 id=advancedconfig class=tabletitle><%=intl._t("Advanced I2P Configuration")%>&nbsp;<span class=h3navlinks><a title="<%=intl._t("Help with additional configuration settings")%>" href=/help/advancedsettings>[Additional Options]</a></span></h3>
 <%
     String advConfig = advancedhelper.getSettings();
     boolean isAdvanced = advancedhelper.isAdvanced();
@@ -95,13 +95,13 @@
 </div>
 </div>
 </div>
-<% if (theme.equals("dark") || theme.equals("light") && isAdvanced) { %>
-<script nonce=<%=cspNonce%> src=/js/advconfig.js></script>
+<% if (theme.equals("dark") || theme.equals("light") || theme.equals("classic") && isAdvanced) { %>
+<script nonce=<%=cspNonce%> src=/js/advconfig.js type=module></script>
 <noscript><style>#advancedsettings{display:block!important}</style></noscript>
 <% } else { %>
-<style>#advancedsettings{display:block!important}</style></noscript>
+<style>#advancedsettings{display:block!important}</style>
 <% } %>
 <noscript><style>#advconf.readonly tr.section{pointer-events:none}#advconf.readonly tr.section th::after{display:none}</style></noscript>
-<% if (!isAdvanced) { %><script nonce=<%=cspNonce%> src=/js/tableSectionToggler.js></script><% } %>
+<% if (!isAdvanced) { %><script nonce=<%=cspNonce%> src=/js/tableSectionToggler.js type=module></script><% } %>
 </body>
 </html>

@@ -890,6 +890,27 @@ td,#externali2cp td,#config_keyring td,#config_logging td,#config_network td,#co
 #advconf.readonly td:not(.infohelp):first-child{width:1%;white-space:nowrap;border-right:var(--border_softer)}
 #advconf.readonly td:nth-child(2){word-break:break-all}
 #advconf.readonly .section+tr td{border-top:var(--border)}
+#advconf .configline:hover td:not(:focus):not(.delete),#advconf #addNew td:hover td:not(:focus):not(.delete){background:#ffe}
+#advconf .configline td,#advconf #addNew td{padding:5px 8px;line-height:1.2;vertical-align:top;border:var(--border_soft);;box-shadow:var(--highlight),3px 3px 3px #0002 inset;background:#fff;outline:none}
+#advconf .configline td:first-child,#advconf #addNew td:first-child{border-left:var(--border)}
+#advconf .configline td:last-child,#advconf #addNew td:last-child{border-right:var(--border)}
+#advconf .configline:nth-child(even) td{background:#f0f0ff}
+#advconf .configline:nth-child(odd) td{background:#fff}
+#advconf .configline td::after,#advconf #addNew td::after{height:20px;display:inline-block;vertical-align:middle;content:""}
+#advconf .configline td:focus,#advconf #addNew td:focus{color:var(--hover);box-shadow:var(--highlight),0 0 0 2px #f608 inset,3px 3px 2px #0002 inset;background:#fff}
+#advconf .newKey:empty:not(:focus)::before{width:12px;height:12px;display:inline-block;vertical-align:middle;background:var(--star);content:""}
+#advconf .configline td.delete,#advconf #addNew td.delete{padding:5px 0;width:1%;text-align:center;vertical-align:middle;font-size:0;box-shadow:var(--bevel);background:var(--th)}
+#advconf .delete::after{width:32px;height:20px;display:inline-block;vertical-align:middle;background:var(--nuke) no-repeat center center/14px;opacity:.8;content:"";filter:grayscale(.5)}
+#advconf .delete:hover::after{opacity:1;filter:none;cursor:pointer}
+#advconf .newKey,#advconf .key{width:1%;min-width:340px;white-space:nowrap;font-weight:500}
+#advconf .value{word-break:break-all}
+#advancedconfig{position:relative}
+#advfilter{margin:0;padding:0;position:absolute;top:3px;right:37px}
+#advfilter button{margin:0 0 0 -24px;padding:5px;display:inline-block;width:24px;height:26px;min-width:0;position:relative;z-index:10;font-size:0;border:0;box-shadow:none;background:var(--no) no-repeat center center/10px;mix-blend-mode:luminosity}
+#advfilter button:hover,#advfilter input:focus+button{opacity:1;mix-blend-mode:normal}
+#advfilter input[type=text]{margin:0;padding:3px 20px;width:160px;font-size:85%;background:#fff var(--filter) no-repeat 5px center/12px;opacity:.75;filter:none}
+#advfilter input[type=text]:focus{font-weight:600;border-color:var(--hover);box-shadow:var(--highlight),3px 3px 3px #0004 inset;opacity:.85}
+.js .tabletextarea{display:none}
 
 /* headings */
 h1{margin:0 0 0 211px;padding:16px 20px 16px 56px;min-width:530px;line-height:.93;word-spacing:.1em;letter-spacing:.08em;text-transform:uppercase;font-size:18pt;text-align:left;color:var(--ink_h1);border:var(--border);background-color:var(--bg)}

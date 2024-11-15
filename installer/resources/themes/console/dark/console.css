@@ -1933,9 +1933,12 @@ input[type=hidden]+p+p{margin-top:20px;margin-bottom:-21px;padding:10px;border:v
 #advconf.readonly td:nth-child(2){word-break:break-all}
 #advconf.readonly .section+tr td{border-top:var(--border)}
 #advconf .configline:hover td:not(:focus):not(.delete),#advconf #addNew td:hover td:not(:focus):not(.delete){background:#020}
-#advconf .configline td,#advconf #addNew td{padding:5px 8px;line-height:1.2;vertical-align:top;border:var(--border_soft);outline:none;background:#0004;background:linear-gradient(180deg,#020,#000);background:var(--th)}
+#advconf .configline td,#advconf #addNew td{padding:5px 8px;line-height:1.2;vertical-align:top;border:var(--border_soft);box-shadow:var(--highlight),5px 5px 3px #0008 inset;outline:none;background:linear-gradient(180deg,#000a,#0108)}
+#advconf .configline:nth-child(even) td{background:linear-gradient(180deg,#010a,#0208)}
+#advconf .configline td.delete,#advconf #addNew td.delete{box-shadow:var(--bevel);background:var(--th)}
+#advconf .configline td.delete:hover,#advconf #addNew td.delete:hover{box-shadow:var(--highlight),0 0 0 2px #f608 inset}
 #advconf .configline td::after,#advconf #addNew td::after{height:20px;display:inline-block;vertical-align:middle;content:""}
-#advconf .configline td:focus,#advconf #addNew td:focus{color:var(--hover);box-shadow:var(--highlight),0 0 0 2px #f608 inset,5px 5px 3px #0008 inset;background:#010}
+#advconf .configline td:focus,#advconf #addNew td:focus{font-weight:700;color:var(--hover);box-shadow:var(--bevel),0 0 0 2px #f608 inset,var(--btn_shadow_active);background:#020}
 #advconf .configline td.delete,#advconf #addNew td.delete{padding:0;width:1%;text-align:center;vertical-align:middle;font-size:0}
 #advconf .configline:focus-within td:not(:focus):not(.delete){background:#030}
 #advconf .newKey:empty:not(:focus)::before{display:inline;font-style:italic;color:#ee8a;content:"Add New..."}
@@ -1943,7 +1946,7 @@ input[type=hidden]+p+p{margin-top:20px;margin-bottom:-21px;padding:10px;border:v
 #advconf .delete::after{width:48px;height:32px;display:inline-block;vertical-align:middle;background:var(--nuke) no-repeat center center/14px;opacity:.75;content:"";filter:grayscale(.6)}
 #advconf .delete:hover::after{opacity:1;filter:none;cursor:pointer;transform:scale(1.1)}
 #advconf .delete:active::after{transform:scale(.9)}
-#advconf .newKey,#advconf .key{width:1%;min-width:340px;white-space:nowrap;font-weight:500}
+#advconf .newKey,#advconf .key{width:1%;min-width:360px;white-space:nowrap;font-weight:500}
 #advconf .value{word-break:break-all}
 #advancedconfig{position:relative}
 #advfilter{display:inline-block;position:absolute;right:44px;top:5px}
