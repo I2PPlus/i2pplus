@@ -10,7 +10,7 @@
 input_file="torbulkexitlist"
 second_list_input_file="torlist_exit"
 output_file="blocklist_tor.txt"
-http_proxy=${http_proxy:-"http://127.0.0.1:7777"}
+http_proxy=${http_proxy:-"http://127.0.0.1:4444"}
 
 # Variables
 url="https://check.torproject.org/$input_file"
