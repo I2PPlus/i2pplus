@@ -2,13 +2,12 @@
 /* Enhance /configadvanced in advanced mode */
 /* License: AGPL3 or later */
 
-const initAdvConfigHelper = function() {
+const init = function() {
 
   const d = document;
-  Element.prototype.getId = function(id) { return this.getElementById(id); };
-  Element.prototype.query = function(selector) { return this.querySelector(selector); };
-  Element.prototype.queryAll = function(selector) { return this.querySelectorAll(selector); };
-  Element.prototype.hasClass = function(className) { return this.classList.contains(className); };
+  Element.prototype.query = function(selector) { return this.querySelector(selector); }
+  Element.prototype.queryAll = function(selector) { return this.querySelectorAll(selector); }
+  Element.prototype.hasClass = function(className) { return this.classList.contains(className); }
   const query = selector => d.querySelector(selector);
   const queryAll = selector => d.querySelectorAll(selector);
   const container = query("td.tabletextarea");
@@ -16,14 +15,13 @@ const initAdvConfigHelper = function() {
   const table = d.getElementById("advconf");
   const infohelp = query("#advconf td.infohelp");
   const header = query("h3#advancedconfig");
+  const items = textarea.value.split("\n");
+  const parentRow = container.parentNode;
 
   d.body.classList.add("js");
   textarea.style.display = "none";
   infohelp.setAttribute("colspan", "3");
 
-  const items = textarea.value.split("\n");
-
-  const parentRow = container.parentNode;
   while (parentRow.firstChild && parentRow.firstChild.firstChild !== textarea) {
     parentRow.removeChild(parentRow.firstChild);
   }
@@ -40,6 +38,7 @@ const initAdvConfigHelper = function() {
     });
 
   const saveCancelRow = table.query("#advconf tr:last-child");
+  saveCancelRow.id = "saveConfig";
   saveCancelRow.query("td").setAttribute("colspan", "3");
   let lastConfigRow = null;
 
@@ -110,7 +109,7 @@ const initAdvConfigHelper = function() {
     textarea.value = updatedItems.join("\n");
   };
 
-  table.addEventListener("click", function(event) {
+  table.addEventListener("click", (event) => {
     const target = event.target;
     if (target.hasClass("delete")) {
       const row = target.closest("tr");
@@ -170,7 +169,7 @@ const initAdvConfigHelper = function() {
     const filterInput = d.createElement("input");
     filterInput.setAttribute("type", "text");
     advFilter.appendChild(filterInput);
-    filterInput.addEventListener("input", function(event) {
+    filterInput.addEventListener("input", (event) => {
       const filterValue = event.target.value.toLowerCase();
       const rows = queryAll(".configline");
       rows.forEach(function(row) {
@@ -195,8 +194,26 @@ const initAdvConfigHelper = function() {
   })();
 
   const advForm = query("#advancedconfig+form");
-  const saveButton = advForm.query("input[type=submit]");
-  const cancelButton = advForm.query("input.cancel");
+
+  function stickyButtons() {
+    let buttonwrap;
+    const saveConfig = table.querySelector("#saveConfig");
+    if (saveConfig) {
+      buttonwrap = d.createElement("div");
+      buttonwrap.id = "saveConfig";
+      buttonwrap.classList.add("optionsave");
+      buttonwrap.innerHTML = saveConfig.innerHTML;
+      saveConfig.parentNode.removeChild(saveConfig);
+      const fragment = d.createDocumentFragment();
+      fragment.appendChild(buttonwrap);
+      table.parentNode.insertBefore(fragment, table.nextSibling);
+    }
+  }
+
+  if (theme === "dark") {stickyButtons();}
+
+  const saveButton = query("#saveConfig input[type=submit]");
+  const cancelButton = query("#saveConfig input.cancel");
 
   function doSave(event) {
     updateTextarea();
@@ -208,7 +225,7 @@ const initAdvConfigHelper = function() {
     } else {advForm.requestSubmit(saveButton);}
   }
 
-  d.addEventListener("keydown", function(event) {
+  d.addEventListener("keydown", (event) => {
     if (event.key === "Enter") { doSave(event); } // save when Return is pressed
     else if (event.key === "Escape") { resetForm(event); } // reset when Escape is pressed
   });
@@ -217,11 +234,45 @@ const initAdvConfigHelper = function() {
     event.preventDefault();
     textarea.value = query("input[name=nofilter_oldConfig]").value;
     advForm.requestSubmit(saveButton);
-  };
+  }
 
-  cancelButton.addEventListener("click", function(event) { resetForm(event) ;});
-  saveButton.addEventListener("click", function(event) { event.preventDefault(); doSave(event); });
+  cancelButton.addEventListener("click", (event) => { resetForm(event); });
+  saveButton.addEventListener("click", (event) => { event.preventDefault(); doSave(event); });
+
+  if (theme === "dark") {
+    function wrapTable() {
+      const wrap = d.createElement("div");
+      wrap.id = "advconfwrapper";
+      table.parentNode.insertBefore(wrap, table);
+      wrap.appendChild(table);
+    }
+
+    let statusAdded = false
+    function floodfillStatus() {
+      const h3ff = query("#ffconf");
+      let ffstatus = "";
+      const info = d.createElement("span");
+      info.id = "ffstatus";
+      h3ff.classList.add("ffinfo");
+      ffstatus = query("#floodfillconfig .infohelp").textContent.match(/\(.*?\)/);
+      ffstatus = ffstatus[0].replace("(", "").replace(")", "").replace(".", "");
+      info.textContent = ffstatus;
+      if (!statusAdded) {h3ff.appendChild(info);}
+      statusAdded = true;
+    }
+
+    requestAnimationFrame(() => {
+      wrapTable();
+      floodfillStatus();
+    });
+
+    query("#ffconf").addEventListener("click", floodfillStatus);
+    window.addEventListener("resize", floodfillStatus);
+
+  }
 
 }
 
-document.addEventListener("DOMContentLoaded", initAdvConfigHelper);
+document.addEventListener("DOMContentLoaded", () => {
+  init();
+});

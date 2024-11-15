@@ -412,7 +412,7 @@ div[id^="config_"].main{padding-bottom:14px}
 .confignav{margin:-1px -11px -1px;padding:7px 7px 8px;position:relative;font-weight:700;line-height:1.36;text-align:center;box-shadow:var(--bevel);background:var(--topnav);contain:none!important}
 .confignav::after{position:absolute;left:2px;bottom:-3px;width:calc(100% - 4px);height:1px;display:inline-block;background:#0c250c;content:""}
 .tab,.tab2{margin:0 -3px -1px -3px;padding:1px 0 2px;min-width:60px;display:inline-block;position:relative;box-sizing:border-box;vertical-align:middle;background:#000}
-.tab{box-shadow:var(--highlight),inset 0 0 1px 1px #040;background:var(--glow_top),linear-gradient(180deg,#002900,#000400)}
+.tab{box-shadow:var(--bevel_cell);background:var(--glow_top),linear-gradient(180deg,#002900,#000400)}
 .tab a{padding:4px 14px;display:inline-block;text-shadow:var(--textshadow)}
 .tab:hover,#sidebar h3:hover{background:radial-gradient(at center bottom,rgba(128,0,0,.5) 0,#0000 130%),var(--tab_hover);box-shadow:var(--highlight),inset 0 0 0 2px rgba(128,48,0,.6)}
 .tab:hover{z-index:20}
@@ -1453,7 +1453,7 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 #banlist li:last-child{margin-bottom:0}
 #banlist li hr{margin:2px 0 2px -1px;background:linear-gradient(90deg,#121 75%,#0000);opacity:.75}
 #banlist+hr{display:none}
-#banlist li a[href^="configpeer"]:last-of-type{padding:2px 2px 1px 0;position:absolute;top:0;right:0;line-height:0;border-left:1px solid #121;border-bottom:1px solid #121;box-shadow:var(--highlight),inset 0 0 1px 1px #040;background:linear-gradient(180deg,#000b00,#000600);filter:none}
+#banlist li a[href^="configpeer"]:last-of-type{padding:2px 2px 1px 0;position:absolute;top:0;right:0;line-height:0;border-left:1px solid #121;border-bottom:1px solid #121;box-shadow:var(--bevel_cell);background:linear-gradient(180deg,#000b00,#000600);filter:none}
 #banlist li a[href^="configpeer"]:hover,#banlist li a[href^="configpeer"]:focus{background:#000;box-shadow:0 0 0 1px #121,var(--highlight),inset 0 0 0 2px var(--hover)}
 #banlist li a[href^="configpeer"]:active{box-shadow:var(--highlight),inset 3px 3px 3px 1px #5f2400;background:var(--hover)}
 #bannedips{margin:-2px auto -3px}
@@ -1604,16 +1604,16 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 #certs textarea+#end,#certs h3+#end{margin-bottom:10px;display:inline-block}
 
 /* configure */
-td.optionsave,.buckets,.formaction,#certs h4,#certs p,#certs textarea,#config_advanced td,#config_bandwidth td.infohelp,#config_peers #banlist,#config_peers tr:not(:last-child) td,#consolepass td[colspan="3"],#criticallogs tr:first-child td,#enablefullstats,#help div,#helptranslate,#langsettings,#pluginconfigtext,#plugininstall tr:first-child .infohelp,#routerlogs tr:first-child td,#themeoptions,#themesettings,#wrapperlogs tr:first-child td{box-shadow:var(--highlight),inset 0 0 1px 1px #040}
+td.optionsave,.buckets,.formaction,#certs h4,#certs p,#certs textarea,#config_advanced td,#config_bandwidth td.infohelp,#config_peers #banlist,#config_peers tr:not(:last-child) td,#consolepass td[colspan="3"],#criticallogs tr:first-child td,#enablefullstats,#help div,#helptranslate,#langsettings,#pluginconfigtext,#plugininstall tr:first-child .infohelp,#routerlogs tr:first-child td,#themeoptions,#themesettings,#wrapperlogs tr:first-child td{box-shadow:var(--bevel_cell)}
 .optionlist label,.optionlist .nowrap{min-width:300px;break-inside:avoid;will-change:transform}
 .configtable th{word-spacing:0;letter-spacing:0;text-transform:none}
 #config_advanced td.optionsave,#config_bandwidth td.optionsave,#config_clients .formaction,#config_homepage .formaction,#config_i2cp td.optionsave,#config_keyring .optionsave,#config_logging td.optionsave,#config_network td.optionsave,#config_peers .configtable tr:last-child td,#config_peers .configtable tr:nth-child(4) td,#config_service .formaction,#configstats tr.tablefooter,#config_summarybar .formaction,#config_ui .formaction,#graphing.formaction,#config_update tr:nth-child(2),#config_update tr.tablefooter,#pluginconfigactions.formaction,#reseedconfig td.optionsave,#sidebarconf tr:last-child,#sybilTask .optionsave,#tunnelconfigsave.formaction,#webappconfigactions.formaction{background:var(--h3),var(--footer);background-size:2px,100%}
-#externali2cp tr,#config_update tr,#joinfamily tr,#manualreseed tr,#netconfig tr,#newfamily tr:last-child,#plugininstall,#plugininstall2,#reseedconfig tr{box-shadow:var(--highlight),inset 0 0 1px 1px #040;background:none}
+#externali2cp tr,#config_update tr,#joinfamily tr,#manualreseed tr,#netconfig tr,#newfamily tr:last-child,#plugininstall,#plugininstall2,#reseedconfig tr{box-shadow:var(--bevel_cell);background:none}
 #configstats tr.tablefooter td.optionsave,#sidebarconf tr:last-child td,#config_update tr.tablefooter td{background:#0000 }
 #externali2cp input[name="port"]{margin-left:6px}
 #externali2cp td{padding:5px}
 #netconfig .suboption,#externali2cp .suboption{padding-top:3px;padding-bottom:3px}
-#netconfig td.infohelp,#reseedconfig td.infohelp{box-shadow:var(--highlight),inset 0 0 1px 1px #040;background:#000 var(--infohelp) no-repeat 15px center/32px}
+#netconfig td.infohelp,#reseedconfig td.infohelp{box-shadow:var(--bevel_cell);background:#000 var(--infohelp) no-repeat 15px center/32px}
 #netconfig td.infowarn{background:#000 var(--infowarn) no-repeat 15px center/32px}
 #plugininstall,#reseedconfig{margin-bottom:10px}
 #refreshsidebar tr:first-child{box-shadow:var(--highlight),inset 0 -1px 0 1px #000,inset 0 0 1px 1px #030,inset 0 -1px 1px 1px #030}
@@ -1955,6 +1955,19 @@ input[type=hidden]+p+p{margin-top:20px;margin-bottom:-21px;padding:10px;border:v
 #advfilter input[type=text]{margin:0;padding:4px 24px 3px;width:160px;font-size:85%;background:#0008 var(--filter) no-repeat 7px center/12px;opacity:.75;filter:none}
 #advfilter input[type=text]:focus{width:200px;border-color:var(--hover);color:var(--hover);box-shadow:var(--highlight),5px 5px 3px #0008 inset;background-color:#010;opacity:.85}
 #advconf #removeKey b{color:#f00}
+#config_advanced #advconfwrapper{overflow:hidden;max-height:calc(100vh - 281px);scrollbar-color:#373 #0000}
+.hasExpandedElement #config_advanced #advconfwrapper{max-height:calc(100vh - 446px)}
+#config_advanced #advconfwrapper:hover{overflow-y:auto}
+#ffconf.toggle:hover{color:var(--hover);cursor:pointer}
+#ffconf.toggle::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:""}
+#ffconf.toggle:hover::after{background:var(--dropdown_hover);content:""}
+#ffconf.toggle:not(.expanded){margin-bottom:-1px}
+#ffconf.toggle:not(.expanded)::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
+#ffconf.toggle:not(.expanded):hover::after{background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
+#ffstatus{float:right;font-size:85%;margin:2px 20px 0 0;letter-spacing:0;text-transform:none;opacity:1;transition:ease .2s opacity}
+.expanded #ffstatus,#ffconf:hover #ffstatus{opacity:0}
+.hasExpandedElement #floodfillconfig{display:table!important}
+#saveConfig{margin-bottom:-2px;padding:6px 10px;z-index:99999;text-align:right;border:var(--border);box-shadow:var(--bevel_cell);background:var(--h3),var(--footer);background-size:2px,100%}
 
 /* configtunnels */
 #config_tunnels hr{display:none}

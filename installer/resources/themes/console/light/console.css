@@ -1999,7 +1999,7 @@ select[name="newlogclass"]{margin-left:3px}
 #advconf .configline:nth-child(even) td{background:linear-gradient(180deg,#fff,#d8d8ff)}
 #advconf .configline:nth-child(even) td{background:linear-gradient(180deg,#fff,#f4f4ff)}
 #advconf .newKey:empty:not(:focus)::before{display:inline;font-style:italic;content:"Add New..."}
-#advconf .delete{padding:5px 0;width:1%;text-align:center;vertical-align:middle;font-size:0}
+#advconf td.delete{padding:5px 0;width:1%;text-align:center;vertical-align:middle;font-size:0}
 #advconf .delete::after{width:32px;height:20px;display:inline-block;vertical-align:middle;background:var(--nuke) no-repeat center center/14px;opacity:.8;content:"";filter:grayscale(.5)}
 #advconf .delete:hover::after{opacity:1;filter:none;cursor:pointer}
 #advconf .newKey,#advconf .key{width:1%;min-width:340px;white-space:nowrap;font-weight:500}
