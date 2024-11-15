@@ -1056,6 +1056,8 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnels h3.client{padding-left:35px;background:var(--client) no-repeat 9px center/18px,var(--title)}
 #tunnels h3{padding-right:5px;padding-bottom:2px;position:relative;z-index:0}
 #tunnels h3.server{padding-left:35px;background:var(--server) no-repeat 9px center/18px,var(--title)}
+#tunnels h3.server.i2pchat{background:url(/themes/console/images/i2pchat.svg) no-repeat 9px center/19px,var(--title)}
+#tunnels h3.server.snark{background:url(/themes/console/images/snark.svg) no-repeat 9px center/20px,var(--title)}
 #tunnels h3:last-of-type{padding-left:35px;padding-bottom:7px;background:var(--speed) no-repeat no-repeat 9px center/18px,var(--title)}
 #tunnels h3+h3{margin-top:-1px;display:none}
 #tunnels h3+h3 a{display:none}
@@ -1966,7 +1968,7 @@ input[type=hidden]+p+p{margin-top:20px;margin-bottom:-21px;padding:10px;border:v
 #ffconf.toggle:not(.expanded):hover::after{background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
 #ffstatus{float:right;font-size:85%;margin:2px 20px 0 0;letter-spacing:0;text-transform:none;opacity:1;transition:ease .2s opacity}
 .expanded #ffstatus,#ffconf:hover #ffstatus{opacity:0}
-.hasExpandedElement #floodfillconfig{display:table!important}
+.hasExpandedElement #floodfillconfig{margin-bottom:-1px;display:table!important}
 #saveConfig{margin-bottom:-2px;padding:6px 10px;z-index:99999;text-align:right;border:var(--border);box-shadow:var(--bevel_cell);background:var(--h3),var(--footer);background-size:2px,100%}
 
 /* configtunnels */

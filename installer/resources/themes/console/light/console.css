@@ -584,22 +584,20 @@ hr+#newsStatus,hr+#newsStatus+#newsDisplay{padding-top:1px}
 #updategraphs .messages{margin-bottom:4px}
 
 /* notifications */
-.error{color:#900}
-.error li{display:list-item;list-style:none;background:var(--err) no-repeat left center/16px}
 .messages{margin:15px 0;padding:15px;font-weight:700;line-height:1.3;box-shadow:var(--highlight);border:var(--border_inner);border-radius:2px;background:url(/themes/snark/ubergine/images/hat.webp) no-repeat bottom right/auto 100%,linear-gradient(90deg,#fafaff,#eef);filter:var(--filter_shadow)}
 .messages ul{margin:0;padding:0}
-.messages li,.messages li:first-child,.error li:first-child,.error li{margin:0 10px 0 0;padding:0 0 0 24px;line-height:1.35;list-style:none;text-align:justify;font-weight:700;border:0;background:var(--err) no-repeat left center/16px}
-.messages li br+b{margin-left:6px}
-.messages li br{display:none}
+.messages li,.messages li:first-child,.error li:first-child,.error li{margin:0 10px 0 0;padding:0 0 0 32px;line-height:1.35;list-style:none;text-align:justify;font-weight:700;border:0}
+.error{color:#900}
+.error li{display:list-item;list-style:none;background:var(--err) no-repeat left center/24px}
 .messages #newsDisplay,.messages #newsStatus{padding:0}
 .messages #newsDisplay{float:right;color:#0000}
 .messages #newsDisplay a:first-child{display:none}
 .messages #newsDisplay a:last-child{margin-right:-5px;font-size:smaller}
 .notice{margin:0;padding:0;font-style:italic}
-.notice li{margin-right:15px;display:inline-block;list-style:none;background:var(--yes) no-repeat left center/16px}
+.notice li{margin-right:15px;display:inline-block;list-style:none;background:var(--yes) no-repeat left center/24px}
 #config_update .messages{margin-bottom:11px;padding:20px 20px 20px 53px;background:var(--news) no-repeat 15px center/28px,url(/themes/snark/ubergine/images/hat.webp) no-repeat bottom right/auto 100%,var(--div_infohelp)}
 #events .messages{margin-bottom:0}
-#messages li{color:var(--ink_light)}
+#messages li{line-height:24px;color:var(--ink_light)}
 #messages .error li{color:#900}
 .main#graphs .messages{margin:20px auto 8px}
 
@@ -1998,8 +1996,8 @@ select[name="newlogclass"]{margin-left:3px}
 #advconf .configline td:focus,#advconf #addNew td:focus{color:var(--hover);box-shadow:var(--highlight),0 0 0 2px #f608 inset,3px 3px 3px #0004 inset;background:#fff}
 #advconf .configline:nth-child(even) td{background:linear-gradient(180deg,#fff,#d8d8ff)}
 #advconf .configline:nth-child(even) td{background:linear-gradient(180deg,#fff,#f4f4ff)}
-#advconf .newKey:empty:not(:focus)::before{display:inline;font-style:italic;content:"Add New..."}
-#advconf td.delete{padding:5px 0;width:1%;text-align:center;vertical-align:middle;font-size:0}
+#advconf .newKey:empty:not(:focus)::before{width:12px;height:12px;display:inline-block;vertical-align:middle;background:var(--star) no-repeat center center/12px;content:""}
+#advconf td.delete{padding:5px 0;width:1%;min-width:35px;text-align:center;vertical-align:middle;font-size:0}
 #advconf .delete::after{width:32px;height:20px;display:inline-block;vertical-align:middle;background:var(--nuke) no-repeat center center/14px;opacity:.8;content:"";filter:grayscale(.5)}
 #advconf .delete:hover::after{opacity:1;filter:none;cursor:pointer}
 #advconf .newKey,#advconf .key{width:1%;min-width:340px;white-space:nowrap;font-weight:500}
@@ -2013,6 +2011,8 @@ select[name="newlogclass"]{margin-left:3px}
 .js .tabletextarea{display:none}
 #floodfillconfig tr:nth-child(2) td{padding:8px 10px 8px 18px}
 #floodfillconfig tr:nth-child(2) b{margin-right:10px}
+#removeKey b{color:#900}
+#saveConfig{margin:-13px 0 10px;padding:5px;text-align:right;border:var(--border_inner);background:#fafaff}
 
 /* sidebar */
 .buttonTop{background:var(--mv_top) no-repeat center center,var(--btn)}
