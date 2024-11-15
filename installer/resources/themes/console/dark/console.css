@@ -1948,8 +1948,11 @@ input[type=hidden]+p+p{margin-top:20px;margin-bottom:-21px;padding:10px;border:v
 #advconf .delete::after{width:48px;height:32px;display:inline-block;vertical-align:middle;background:var(--nuke) no-repeat center center/14px;opacity:.75;content:"";filter:grayscale(.6)}
 #advconf .delete:hover::after{opacity:1;filter:none;cursor:pointer;transform:scale(1.1)}
 #advconf .delete:active::after{transform:scale(.9)}
-#advconf .newKey,#advconf .key{width:1%;min-width:360px;white-space:nowrap;font-weight:500}
-#adconf .key::before{display:inline-block;width:12px;height:12px;vertical-align:middle;background:var(--key) no-repeat center center/12px;content:""}
+#advconf .newKey,#advconf .key{width:1%;min-width:400px;white-space:nowrap;font-weight:500}
+#advconf .newKey{min-width:384px}
+#advconf .key::before,#advconf #addNew td:focus::before{margin-right:6px;display:inline-block;width:12px;height:12px;vertical-align:middle;background:var(--key) no-repeat center center/12px;content:""}
+#advconf #addNew td:focus{padding-left:24px}
+#advconf #addNew td:focus::before{margin: 0 6px 0 -16px}
 #advconf #addNew td{border-top:0;}
 #advconf .value{word-break:break-all}
 #advancedconfig{position:relative}
