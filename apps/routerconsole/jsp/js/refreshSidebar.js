@@ -48,8 +48,8 @@ const updateSectionHR = document.querySelector("#sb_updatesection + hr");
 const visible = document.visibilityState;
 
 sb.addEventListener("loaded", () => {
-  window.requestAnimationFrame(sectionToggler);
-  window.requestAnimationFrame(countNewsItems);
+  requestAnimationFrame(sectionToggler);
+  requestAnimationFrame(countNewsItems);
 });
 
 function tangoDown() {
@@ -74,7 +74,7 @@ function tangoDown() {
   }
   isDown = true;
   onVisible(sb, () => {
-    window.requestAnimationFrame(refreshSidebar);
+    requestAnimationFrame(refreshSidebar);
   });
 }
 
@@ -93,13 +93,13 @@ function refreshSidebar() {
       if (isDownTimer !== null) {location.reload();}
       document.querySelector("body").classList.remove("isDown");
     } else if (xhrsb.status === 404 || xhrsb.status === 500) {
-      window.requestAnimationFrame(tangoDown);
+      requestAnimationFrame(tangoDown);
     } else {
       console.log("Unexpected status code: " + xhrsb.status);
     }
 
     const badgesResponse = xhrsb.responseXML.querySelectorAll(".badge");
-    if (!xhrsb.responseXML || badgesResponse.length !== badges.length) {window.requestAnimationFrame(refreshAll);}
+    if (!xhrsb.responseXML || badgesResponse.length !== badges.length) {requestAnimationFrame(refreshAll);}
 
     const advancedGeneralResponse = xhrsb.responseXML.getElementById("sb_advancedgeneral");
     const bandwidthResponse = xhrsb.responseXML.getElementById("sb_bandwidth");
@@ -128,7 +128,7 @@ function refreshSidebar() {
     statusPanel.forEach(statusPanel => (statusPanel.classList.remove("statusDown")));
 
     function updateVolatile() {
-      window.requestAnimationFrame(uncollapse);
+      requestAnimationFrame(uncollapse);
 
       if (clock && clockResponse && !Object.is(clock?.textContent, clockResponse?.textContent)) {
         clock.textContent = clockResponse.textContent;
@@ -281,11 +281,11 @@ function refreshSidebar() {
       const updatingResponse = xhrsb.responseXML.querySelectorAll("#sb .volatile");
       const updatingResponseLen = updatingResponse?.length;
       if (updatingLen !== updatingResponseLen) {
-        window.requestAnimationFrame(refreshAll);
+        requestAnimationFrame(refreshAll);
       } else {
-        window.requestAnimationFrame(sectionToggler);
-        window.requestAnimationFrame(updateVolatile);
-        window.requestAnimationFrame(countNewsItems);
+        requestAnimationFrame(sectionToggler);
+        requestAnimationFrame(updateVolatile);
+        requestAnimationFrame(countNewsItems);
       }
     }
     checkSections();
@@ -294,16 +294,16 @@ function refreshSidebar() {
       if (sb && xhrsb.responseXML) {
         const sbResponse = xhrsb.responseXML.getElementById("sb");
         if (sbResponse && !Object.is(sb.innerHTML, sbResponse.innerHTML)) {
-          window.requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
             xhrContainer.innerHTML = sbResponse.innerHTML;
           });
-          window.requestAnimationFrame(sectionToggler);
-          window.requestAnimationFrame(countNewsItems);
+          requestAnimationFrame(sectionToggler);
+          requestAnimationFrame(countNewsItems);
         }
       } else if ("requestIdleCallback" in window) {
         requestIdleCallback(tangoDown);
       } else {
-        window.requestAnimationFrame(tangoDown);
+        requestAnimationFrame(tangoDown);
       }
     }
 
@@ -348,17 +348,19 @@ function refreshSidebar() {
 
     if ("requestIdleCallback" in window) {
       requestIdleCallback(async () => {
-        await refreshGraph();
+        try {await refreshGraph();}
+        catch (error) {}
       });
     } else {
-      window.requestAnimationFrame(async () => {
-        await refreshGraph();
+      requestAnimationFrame(async () => {
+        try {await refreshGraph();}
+        catch (error) {}
       });
     }
 
     function uncollapse() {
-      window.requestAnimationFrame(sectionToggler);
-      window.requestAnimationFrame(countNewsItems);
+      requestAnimationFrame(sectionToggler);
+      requestAnimationFrame(countNewsItems);
     }
 
     const reseedform = document.getElementById("form_reseed");
