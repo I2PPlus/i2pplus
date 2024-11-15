@@ -2751,7 +2751,7 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 .sitemapLink,.sitemapLabel,#sitemap .applink,#sitemap .applabel{width:160px;min-width:160px}
 .tunnelBuildStatus{font-size:90%}
 .tunnel_local{line-height:14px}
-#advancedconfig a{padding:7px 0 0;border:0}
+#advancedconfig a{padding:6px 6px 0;border:0}
 #advancedconfig{padding-right:6px}
 #applinks a::after{margin-top:-3px}
 #banlist+h3{margin-bottom:-2px}

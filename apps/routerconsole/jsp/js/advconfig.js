@@ -186,6 +186,7 @@ const init = function() {
       rows.forEach((row) => {
         row.style.display = "table-row";
       });
+      addNewRow.scrollIntoView();
     });
     advFilter.appendChild(clearFilter);
     header.appendChild(advFilter);
