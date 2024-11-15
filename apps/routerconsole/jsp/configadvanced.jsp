@@ -17,7 +17,7 @@
 <body>
 <script nonce=<%=cspNonce%>>
   progressx.show(theme);progressx.progress(0.1);
-  const msgKeyRemove = "<%=intl._t("Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore.")%>";
+  const msgKeyRemove = "<%=intl._t("Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key.")%>";
 </script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigAdvancedHelper" id="advancedhelper" scope="request" />
@@ -62,7 +62,7 @@
 <tr><td class=optionsave><input type=submit name="shouldsave" class=accept value="<%=intl._t("Save changes")%>"></td></tr>
 </table>
 </form>
-<h3 id=advancedconfig class=tabletitle><%=intl._t("Advanced I2P Configuration")%>&nbsp;<span class=h3navlinks><a title="<%=intl._t("Help with additional configuration settings")%>" href=/help/advancedsettings>[Additional Options]</a></span></h3>
+<h3 id=advancedconfig class=tabletitle><%=intl._t("Advanced I2P+ Configuration")%>&nbsp;<span class=h3navlinks><a title="<%=intl._t("Help with additional configuration settings")%>" href=/help/advancedsettings>[Additional Options]</a></span></h3>
 <%
     String advConfig = advancedhelper.getSettings();
     boolean isAdvanced = advancedhelper.isAdvanced();
@@ -72,15 +72,19 @@
 <input type=hidden name="nonce" value="<%=pageNonce%>">
 <input type=hidden name=action value="blah">
 <input type=hidden name="nofilter_oldConfig" value="<%=advConfig%>">
+<div id=advconfwrapper>
 <table class=configtable id=advconf>
-<tr><td class=infohelp><b><%=intl._t("NOTE")%>:</b> <%=intl._t("Some changes may require a restart to take effect.")%></td></tr>
-<%      if (theme.equals("dark")) { %>
-<tr><td class=tabletextarea><textarea id=advancedsettings rows=32 cols=60 name="nofilter_config" wrap=off spellcheck=false hidden><%=advConfig%></textarea></td></tr>
+<thead hidden><tr><td class=infohelp></td></tr></thead>
+<tbody>
+<%      if (theme.equals("dark") || theme.equals("light") || theme.equals("classic")) { %>
+<tr><td class=tabletextarea id=text_advconfig><textarea id=advancedsettings rows=32 cols=60 name="nofilter_config" wrap=off spellcheck=false hidden><%=advConfig%></textarea></td></tr>
 <%      } else {  %>
-<tr><td class=tabletextarea><textarea id=advancedsettings rows=32 cols=60 name="nofilter_config" wrap=off spellcheck=false><%=advConfig%></textarea></td></tr>
+<tr><td class=tabletextarea id=text_advconfig><textarea id=advancedsettings rows=32 cols=60 name="nofilter_config" wrap=off spellcheck=false><%=advConfig%></textarea></td></tr>
+</tbody>
 <%      } %>
-<tr><td class=optionsave><input type=reset class=cancel value="<%=intl._t("Cancel")%>"><input type=submit name="shouldsave" class=accept value="<%=intl._t("Save changes")%>"></td></tr>
 </table>
+</div>
+<div id=saveConfig class=optionsave><input type=reset class=cancel value="<%=intl._t("Cancel")%>"><input type=submit name="shouldsave" class=accept value="<%=intl._t("Save changes")%>"></div>
 </form>
 <%
     } else {  // isAdvanced

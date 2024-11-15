@@ -69,15 +69,11 @@ public class ConfigAdvancedHelper extends HelperBase {
                 }
                 String type = key;
                 int dot = key.indexOf('.');
-                if (dot > 0) {
-                    type = type.substring(0, dot);
-                }
+                if (dot > 0) {type = type.substring(0, dot);}
                 if (!type.equals(lastType)) {
                     lastType = type;
                     String dtype = _headers.get(type);
-                    if (dtype == null) {
-                        dtype = type;
-                    }
+                    if (dtype == null) {dtype = type;}
                     if (type.length() > 0) {
                         buf.append("<tr class=section><th colspan=2>").append(_t(dtype)).append("</th></tr>\n");
                     }
@@ -85,17 +81,13 @@ public class ConfigAdvancedHelper extends HelperBase {
                     buf.append("<tr><td>").append(name).append("</td>")
                        .append("<td>").append(val).append("</td></tr>\n");
                 }
-            } else {
-                buf.append(name).append('=').append(val).append('\n');
-            }
+            } else {buf.append(name).append('=').append(val).append('\n');} // adv. mode
         }
         return buf.toString();
     }
 
     /** @since 0.9.14.1 */
-    public String getConfigFileName() {
-        return _context.router().getConfigFilename();
-    }
+    public String getConfigFileName() {return _context.router().getConfigFilename();}
 
     /** @since 0.9.20 */
     public String getFFChecked(int mode) {
@@ -108,7 +100,5 @@ public class ConfigAdvancedHelper extends HelperBase {
     }
 
     /** @since 0.9.21 */
-    public boolean isFloodfill() {
-        return _context.netDb().floodfillEnabled();
-    }
+    public boolean isFloodfill() {return _context.netDb().floodfillEnabled();}
 }

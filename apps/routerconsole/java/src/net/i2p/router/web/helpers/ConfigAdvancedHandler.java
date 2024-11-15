@@ -54,6 +54,7 @@ public class ConfigAdvancedHandler extends FormHandler {
         if (_oldConfig != null && _config != null) {
             Properties oldProps = new Properties();
             Properties props = new Properties();
+
             try {
                 DataHelper.loadProps(oldProps, new ByteArrayInputStream(DataHelper.getUTF8(_oldConfig)));
                 DataHelper.loadProps(props, new ByteArrayInputStream(DataHelper.getUTF8(_config)));
@@ -64,26 +65,45 @@ public class ConfigAdvancedHandler extends FormHandler {
                 return;
             }
 
-            Set<String> unsetKeys = new HashSet<String>(oldProps.stringPropertyNames());
+            // Create a set of keys from oldProps to track which keys are to be removed
+            Set<String> keysToRemove = new HashSet<>(oldProps.stringPropertyNames());
+
+            // Iterate through the entries in props
             for (Iterator<Map.Entry<Object, Object>> iter = props.entrySet().iterator(); iter.hasNext(); ) {
                 Map.Entry<Object, Object> e = iter.next();
                 String key = (String) e.getKey();
-                String nnew = (String) e.getValue();
-                String old = oldProps.getProperty(key);
-                unsetKeys.remove(key);
-                if (nnew.equals(old)) {iter.remove();} // no change
+                String newValue = (String) e.getValue();
+                String oldValue = oldProps.getProperty(key);
+
+                // Remove the key from keysToRemove if it exists in props
+                keysToRemove.remove(key);
+
+                // If the value has not changed, remove the entry from props
+                if (newValue.equals(oldValue)) {iter.remove();}
             }
-            // what's remaining in unsetKeys will be deleted
 
-            boolean saved = _context.router().saveConfig(props, unsetKeys);
-            if (saved) {addFormNotice(_t("Configuration saved successfully"));}
-            else {addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"));}
+            // Check if there are any changes left
+            boolean noChange = props.isEmpty() && keysToRemove.isEmpty();
 
-            //if (_forceRestart) {
-            //    addFormNotice("Performing a soft restart");
-            //    _context.router().restart();
-            //    addFormNotice("Soft restart complete");
-            //}
+            // Save the changes to the configuration
+            boolean saved = _context.router().saveConfig(props, keysToRemove);
+
+            // Add appropriate form notices or errors based on the result
+            if (noChange) {
+                addFormNotice(_t("No changes made to the configuration"));
+            } else if (saved) {
+                addFormNoticeNoEscape(_t("Configuration saved successfully") + "<br>" +
+                                      _t("Note") + ": " + _t("Some changes may require a restart to take effect."));
+            } else {
+                addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"));
+            }
+
+            // Optionally, perform a soft restart if required
+            // if (_forceRestart) {
+            //     addFormNotice("Performing a soft restart");
+            //     _context.router().restart();
+            //     addFormNotice("Soft restart complete");
+            // }
         }
     }
 

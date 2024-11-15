@@ -13,7 +13,7 @@ const init = function() {
   const container = query("td.tabletextarea");
   const textarea = query("textarea#advancedsettings");
   const table = d.getElementById("advconf");
-  const infohelp = query("#advconf td.infohelp");
+  const infohelp = query("#advconf thead td.infohelp");
   const header = query("h3#advancedconfig");
   const items = textarea.value.split("\n");
   const parentRow = container.parentNode;
@@ -37,9 +37,6 @@ const init = function() {
       return a[0].localeCompare(b[0]);
     });
 
-  const saveCancelRow = table.query("#advconf tr:last-child");
-  saveCancelRow.id = "saveConfig";
-  saveCancelRow.query("td").setAttribute("colspan", "3");
   let lastConfigRow = null;
 
   configItems.forEach(function(item) {
@@ -62,7 +59,8 @@ const init = function() {
     fragment.appendChild(valueCell);
     fragment.appendChild(delCell);
     row.appendChild(fragment);
-    lastConfigRow ? lastConfigRow.insertAdjacentElement("afterend", row) : saveCancelRow.insertAdjacentElement("beforebegin", row);
+    lastConfigRow = table.query("#advconf tbody tr:last-child");
+    lastConfigRow.insertAdjacentElement("afterend", row);
     lastConfigRow = row;
   });
 
@@ -84,7 +82,6 @@ const init = function() {
 
   const firstConfigRow = table.query(".configline");
   if (firstConfigRow) {firstConfigRow.insertAdjacentElement("beforebegin", addNewRow);}
-  else {saveCancelRow.insertAdjacentElement("beforebegin", addNewRow);}
 
   const observer = new MutationObserver(function(mutationsList) {
     mutationsList.forEach(function(mutation) {
@@ -117,6 +114,7 @@ const init = function() {
         let removedKey = row.query("td:first-child").textContent;
         row.remove();
         updateTextarea();
+        table.query("thead").removeAttribute("hidden");
         infohelp.id = "removeKey";
         infohelp.innerHTML = msgKeyRemove.replace("{0}", removedKey);
         header.scrollIntoView();
@@ -194,24 +192,6 @@ const init = function() {
   })();
 
   const advForm = query("#advancedconfig+form");
-
-  function stickyButtons() {
-    let buttonwrap;
-    const saveConfig = table.querySelector("#saveConfig");
-    if (saveConfig) {
-      buttonwrap = d.createElement("div");
-      buttonwrap.id = "saveConfig";
-      buttonwrap.classList.add("optionsave");
-      buttonwrap.innerHTML = saveConfig.innerHTML;
-      saveConfig.parentNode.removeChild(saveConfig);
-      const fragment = d.createDocumentFragment();
-      fragment.appendChild(buttonwrap);
-      table.parentNode.insertBefore(fragment, table.nextSibling);
-    }
-  }
-
-  if (theme === "dark") {stickyButtons();}
-
   const saveButton = query("#saveConfig input[type=submit]");
   const cancelButton = query("#saveConfig input.cancel");
 
@@ -226,8 +206,8 @@ const init = function() {
   }
 
   d.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") { doSave(event); } // save when Return is pressed
-    else if (event.key === "Escape") { resetForm(event); } // reset when Escape is pressed
+    if (event.key === "Enter") { event.preventDefault(); doSave(event); } // save when Return is pressed
+    else if (event.key === "Escape") { event.preventDefault(); resetForm(event); } // reset when Escape is pressed
   });
 
   function resetForm(event) {
@@ -240,13 +220,6 @@ const init = function() {
   saveButton.addEventListener("click", (event) => { event.preventDefault(); doSave(event); });
 
   if (theme === "dark") {
-    function wrapTable() {
-      const wrap = d.createElement("div");
-      wrap.id = "advconfwrapper";
-      table.parentNode.insertBefore(wrap, table);
-      wrap.appendChild(table);
-    }
-
     let statusAdded = false
     function floodfillStatus() {
       const h3ff = query("#ffconf");
@@ -261,18 +234,12 @@ const init = function() {
       statusAdded = true;
     }
 
-    requestAnimationFrame(() => {
-      wrapTable();
-      floodfillStatus();
-    });
+    requestAnimationFrame(() => { floodfillStatus(); });
 
     query("#ffconf").addEventListener("click", floodfillStatus);
     window.addEventListener("resize", floodfillStatus);
-
   }
 
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  init();
-});
+document.addEventListener("DOMContentLoaded", () => { init(); });
