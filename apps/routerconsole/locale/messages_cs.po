@@ -4788,7 +4788,7 @@ msgstr "Podíl v síti"
 msgid "Share"
 msgstr "Sdílet"
 
-msgid "NOTE"
+msgid "Note"
 msgstr "POZNÁMKA"
 
 #, java-format
@@ -4838,7 +4838,7 @@ msgstr "Prosadit"
 msgid "Disable"
 msgstr "Zakázat"
 
-msgid "Advanced I2P Configuration"
+msgid "Advanced I2P+ Configuration"
 msgstr "Pokročilá konfigurace I2P"
 
 msgid "Some changes may require a restart to take effect."

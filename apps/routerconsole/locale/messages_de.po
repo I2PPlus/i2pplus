@@ -4770,7 +4770,7 @@ msgstr "Netzwerkfreigabe"
 msgid "Share"
 msgstr "für andere zur Benutzung freigegeben"
 
-msgid "NOTE"
+msgid "Note"
 msgstr "HINWEIS"
 
 #, java-format
@@ -4820,7 +4820,7 @@ msgstr "Erzwingen ein"
 msgid "Disable"
 msgstr "Deaktivieren"
 
-msgid "Advanced I2P Configuration"
+msgid "Advanced I2P+ Configuration"
 msgstr "Erweiterte I2P-Konfiguration"
 
 msgid "Some changes may require a restart to take effect."

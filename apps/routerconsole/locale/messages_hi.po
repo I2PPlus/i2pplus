@@ -4770,7 +4770,7 @@ msgstr "नेटवर्क शेयर"
 msgid "Share"
 msgstr "शेयर करें"
 
-msgid "NOTE"
+msgid "Note"
 msgstr "टिप्पणी"
 
 #, java-format
@@ -4820,7 +4820,7 @@ msgstr "कमांड चलाएं"
 msgid "Disable"
 msgstr "अक्षम करें"
 
-msgid "Advanced I2P Configuration"
+msgid "Advanced I2P+ Configuration"
 msgstr "विस्तृत I2P सेटिंग"
 
 msgid "Some changes may require a restart to take effect."

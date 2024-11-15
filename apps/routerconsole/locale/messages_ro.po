@@ -4788,7 +4788,7 @@ msgstr "Partajare în rețea"
 msgid "Share"
 msgstr "Partajare"
 
-msgid "NOTE"
+msgid "Note"
 msgstr "NOTĂ"
 
 #, java-format
@@ -4838,7 +4838,7 @@ msgstr "Forțează pornirea"
 msgid "Disable"
 msgstr "Dezactivează"
 
-msgid "Advanced I2P Configuration"
+msgid "Advanced I2P+ Configuration"
 msgstr "Configurare avansată I2P"
 
 msgid "Some changes may require a restart to take effect."

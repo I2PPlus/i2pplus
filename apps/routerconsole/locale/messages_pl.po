@@ -4788,7 +4788,7 @@ msgstr "Udział sieciowy"
 msgid "Share"
 msgstr "Udostępnij"
 
-msgid "NOTE"
+msgid "Note"
 msgstr "UWAGA"
 
 #, java-format
@@ -4838,7 +4838,7 @@ msgstr "Wymuś"
 msgid "Disable"
 msgstr "Wyłącz"
 
-msgid "Advanced I2P Configuration"
+msgid "Advanced I2P+ Configuration"
 msgstr "Zaawansowana konfiguracja I2P"
 
 msgid "Some changes may require a restart to take effect."

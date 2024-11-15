@@ -4842,7 +4842,7 @@ msgstr "حصة الشبكة"
 msgid "Share"
 msgstr "شارك"
 
-msgid "NOTE"
+msgid "Note"
 msgstr "ملاحظة"
 
 #, java-format
@@ -4892,7 +4892,7 @@ msgstr "تمكن"
 msgid "Disable"
 msgstr "ألغي"
 
-msgid "Advanced I2P Configuration"
+msgid "Advanced I2P+ Configuration"
 msgstr "اعدادات I2P متقدمة"
 
 msgid "Some changes may require a restart to take effect."

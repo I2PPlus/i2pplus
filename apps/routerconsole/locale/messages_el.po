@@ -4770,7 +4770,7 @@ msgstr "Κοινή χρήση δικτύου"
 msgid "Share"
 msgstr "Κοινή χρήση"
 
-msgid "NOTE"
+msgid "Note"
 msgstr "ΣΗΜΕΙΩΣΗ"
 
 #, java-format
@@ -4820,7 +4820,7 @@ msgstr "Ενεργοποιημένη με δύναμη"
 msgid "Disable"
 msgstr "Απενεργοποίηση"
 
-msgid "Advanced I2P Configuration"
+msgid "Advanced I2P+ Configuration"
 msgstr "Προηγμένη διαμόρφωση I2P"
 
 msgid "Some changes may require a restart to take effect."

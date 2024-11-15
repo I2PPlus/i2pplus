@@ -4752,7 +4752,7 @@ msgstr "Berbagi Jaringan"
 msgid "Share"
 msgstr "Share "
 
-msgid "NOTE"
+msgid "Note"
 msgstr "CATATAN"
 
 #, java-format
@@ -4802,8 +4802,8 @@ msgstr "Force On "
 msgid "Disable"
 msgstr "Matikan"
 
-msgid "Advanced I2P Configuration"
-msgstr "Advanced I2P Configuration "
+msgid "Advanced I2P+ Configuration"
+msgstr "Advanced I2P+ Configuration "
 
 msgid "Some changes may require a restart to take effect."
 msgstr "Beberapa perubahan akan memerlukan restart untuk bekerja."

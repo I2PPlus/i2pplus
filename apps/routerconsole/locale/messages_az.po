@@ -4770,7 +4770,7 @@ msgstr "Şəbəkə Paylaşımı"
 msgid "Share"
 msgstr "Paylaş"
 
-msgid "NOTE"
+msgid "Note"
 msgstr "QEYD"
 
 #, java-format
@@ -4820,7 +4820,7 @@ msgstr "Məcbur edin"
 msgid "Disable"
 msgstr "Söndür"
 
-msgid "Advanced I2P Configuration"
+msgid "Advanced I2P+ Configuration"
 msgstr "Qabaqcıl I2P Konfiqurasiyası"
 
 msgid "Some changes may require a restart to take effect."

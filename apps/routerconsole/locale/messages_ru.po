@@ -4788,7 +4788,7 @@ msgstr "Сеть обмена"
 msgid "Share"
 msgstr "Доля транзитного трафика"
 
-msgid "NOTE"
+msgid "Note"
 msgstr "ПРИМЕЧАНИЕ"
 
 #, java-format
@@ -4838,7 +4838,7 @@ msgstr "Включить принудительно"
 msgid "Disable"
 msgstr "Отключить"
 
-msgid "Advanced I2P Configuration"
+msgid "Advanced I2P+ Configuration"
 msgstr "Дополнительные настройки I2P"
 
 msgid "Some changes may require a restart to take effect."

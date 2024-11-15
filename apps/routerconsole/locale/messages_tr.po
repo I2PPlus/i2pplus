@@ -4770,7 +4770,7 @@ msgstr "Ağ Paylaşımı"
 msgid "Share"
 msgstr "Paylaşım"
 
-msgid "NOTE"
+msgid "Note"
 msgstr "NOT"
 
 #, java-format
@@ -4820,7 +4820,7 @@ msgstr "Açılmaya Zorlansın"
 msgid "Disable"
 msgstr "Devre Dışı"
 
-msgid "Advanced I2P Configuration"
+msgid "Advanced I2P+ Configuration"
 msgstr "Gelişmiş I2P Yapılandırması"
 
 msgid "Some changes may require a restart to take effect."

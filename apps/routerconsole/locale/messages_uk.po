@@ -4788,7 +4788,7 @@ msgstr "Мережевий ресурс"
 msgid "Share"
 msgstr "Поділитися"
 
-msgid "NOTE"
+msgid "Note"
 msgstr "ПРИМІТКА"
 
 #, java-format
@@ -4838,7 +4838,7 @@ msgstr "Примусово"
 msgid "Disable"
 msgstr "Вимкнути"
 
-msgid "Advanced I2P Configuration"
+msgid "Advanced I2P+ Configuration"
 msgstr "Розширена конфігурація I2P"
 
 msgid "Some changes may require a restart to take effect."

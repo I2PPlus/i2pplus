@@ -4770,7 +4770,7 @@ msgstr "Partage réseau"
 msgid "Share"
 msgstr "Partager"
 
-msgid "NOTE"
+msgid "Note"
 msgstr "NOTE"
 
 #, java-format
@@ -4820,7 +4820,7 @@ msgstr "Forcer l’activation"
 msgid "Disable"
 msgstr "Désactiver"
 
-msgid "Advanced I2P Configuration"
+msgid "Advanced I2P+ Configuration"
 msgstr "Configuration avancée d’I2P"
 
 msgid "Some changes may require a restart to take effect."

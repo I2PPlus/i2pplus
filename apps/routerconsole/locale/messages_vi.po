@@ -4752,7 +4752,7 @@ msgstr "Chia sẻ mạng"
 msgid "Share"
 msgstr "Chia sẻ"
 
-msgid "NOTE"
+msgid "Note"
 msgstr "GHI CHÚ"
 
 #, java-format
@@ -4802,7 +4802,7 @@ msgstr "Buộc vào"
 msgid "Disable"
 msgstr "Tắt"
 
-msgid "Advanced I2P Configuration"
+msgid "Advanced I2P+ Configuration"
 msgstr "Cấu hình I2P nâng cao"
 
 msgid "Some changes may require a restart to take effect."

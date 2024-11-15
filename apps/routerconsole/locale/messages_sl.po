@@ -4806,7 +4806,7 @@ msgstr "Delenje omrežja"
 msgid "Share"
 msgstr "Deli"
 
-msgid "NOTE"
+msgid "Note"
 msgstr "OPOMBA"
 
 #, java-format
@@ -4856,7 +4856,7 @@ msgstr "Prisili ON"
 msgid "Disable"
 msgstr "Onemogoči"
 
-msgid "Advanced I2P Configuration"
+msgid "Advanced I2P+ Configuration"
 msgstr "Napredna konfiguracija I2P"
 
 msgid "Some changes may require a restart to take effect."

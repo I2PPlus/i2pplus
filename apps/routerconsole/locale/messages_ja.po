@@ -4752,7 +4752,7 @@ msgstr "ネットワーク共有"
 msgid "Share"
 msgstr "共有"
 
-msgid "NOTE"
+msgid "Note"
 msgstr "注意"
 
 #, java-format
@@ -4802,7 +4802,7 @@ msgstr "強制オン"
 msgid "Disable"
 msgstr "無効"
 
-msgid "Advanced I2P Configuration"
+msgid "Advanced I2P+ Configuration"
 msgstr "高度な I2P 構成"
 
 msgid "Some changes may require a restart to take effect."

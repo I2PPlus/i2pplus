@@ -4771,7 +4771,7 @@ msgstr "Võrgujagamine"
 msgid "Share"
 msgstr "jagamiseks"
 
-msgid "NOTE"
+msgid "Note"
 msgstr "NB"
 
 #, java-format
@@ -4821,7 +4821,7 @@ msgstr "Jõustama"
 msgid "Disable"
 msgstr "Keela"
 
-msgid "Advanced I2P Configuration"
+msgid "Advanced I2P+ Configuration"
 msgstr "I2P peenhäälestus"
 
 msgid "Some changes may require a restart to take effect."

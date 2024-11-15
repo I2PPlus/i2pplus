@@ -4770,7 +4770,7 @@ msgstr "Nätverksdelning"
 msgid "Share"
 msgstr "Dela"
 
-msgid "NOTE"
+msgid "Note"
 msgstr "OBSERVERA"
 
 #, java-format
@@ -4820,7 +4820,7 @@ msgstr "Tvingande På"
 msgid "Disable"
 msgstr "Avaktivera"
 
-msgid "Advanced I2P Configuration"
+msgid "Advanced I2P+ Configuration"
 msgstr "Avancerad I2P-konfiguration"
 
 msgid "Some changes may require a restart to take effect."

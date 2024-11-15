@@ -4770,7 +4770,7 @@ msgstr "Hálózati megosztás"
 msgid "Share"
 msgstr "Megoszt"
 
-msgid "NOTE"
+msgid "Note"
 msgstr "MEGJEGYZÉS"
 
 #, java-format
@@ -4820,7 +4820,7 @@ msgstr "Bekapcsolás"
 msgid "Disable"
 msgstr "Kikapcsol"
 
-msgid "Advanced I2P Configuration"
+msgid "Advanced I2P+ Configuration"
 msgstr "Haladó I2P Beállítások"
 
 msgid "Some changes may require a restart to take effect."
