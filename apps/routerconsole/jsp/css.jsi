@@ -29,7 +29,7 @@
 <% } %>
 <noscript><style>.script{display:none!important}</style></noscript>
 <link rel=icon href="<%=themePath%>images/favicon.svg">
-<script nonce="<%=cspNonce%>">if (top.location != location) {top.location.href = location.href;}</script>
+<script nonce="<%=cspNonce%>">if (top.location.href !== location.href) top.location.href = location.href;</script>
 <link href="<%=themePath%>console.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet title="<%=theme%>">
 <link href="/themes/console/images/images.css" rel=stylesheet>
 <link href="<%=themePath%>images/images.css" rel=stylesheet>

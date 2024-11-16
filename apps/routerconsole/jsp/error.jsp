@@ -48,7 +48,7 @@
     }
 %>
 <%=intl.title("Page Not Found")%>
-<script nonce=<%=cspNonce%>>if (window.location !== window.top.location) {window.top.location = window.location;}</script>
+<script nonce=<%=cspNonce%>>if (top.location.href !== location.href) top.location.href = location.href;</script>
 </head>
 <body id=console_404>
 <script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
