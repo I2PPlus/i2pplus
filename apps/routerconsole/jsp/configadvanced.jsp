@@ -77,9 +77,9 @@
 <thead hidden><tr><td class=infohelp></td></tr></thead>
 <tbody>
 <%      if (theme.equals("dark") || theme.equals("light") || theme.equals("classic")) { %>
-<tr><td class=tabletextarea id=text_advconfig><textarea id=advancedsettings rows=32 cols=60 name="nofilter_config" wrap=off spellcheck=false hidden><%=advConfig%></textarea></td></tr>
+<tr id=text_advconfig hidden><td class=tabletextarea><textarea id=advancedsettings name="nofilter_config" wrap=off spellcheck=false><%=advConfig%></textarea></td></tr>
 <%      } else {  %>
-<tr><td class=tabletextarea id=text_advconfig><textarea id=advancedsettings rows=32 cols=60 name="nofilter_config" wrap=off spellcheck=false><%=advConfig%></textarea></td></tr>
+<tr id=text_advconfig><td class=tabletextarea><textarea id=advancedsettings rows=32 cols=60 name="nofilter_config" wrap=off spellcheck=false><%=advConfig%></textarea></td></tr>
 </tbody>
 <%      } %>
 </table>

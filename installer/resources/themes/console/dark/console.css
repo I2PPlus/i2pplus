@@ -423,15 +423,16 @@ div[id^="config_"].main{padding-bottom:14px}
 #debug .confignav{margin-bottom:-4px;z-index:999}
 
 /* notifications */
-.main:not(#config_update):not(#graphs) .messages,#config_update #messages{margin-left:-11px;margin-right:-11px;width:calc(100% - 60px);position:absolute;top:-13px;z-index:100;animation:2s hide-up 8s ease-out forwards;box-shadow:inset 0 0 1px 0 #f00,0 0 2px 2px #000;background:var(--infohelp) no-repeat 15px center/28px,var(--close) no-repeat right 7px top 6px/14px,var(--msg);background-blend-mode:normal,luminosity,normal,normal,normal}
+.main:not(#config_update):not(#graphs) .messages{margin-left:-11px;margin-right:-11px;width:calc(100% - 60px);position:absolute;top:-13px;z-index:100;animation:2s hide-up 8s ease-out forwards;box-shadow:inset 0 0 1px 0 #f00,0 0 2px 2px #000;background:var(--infohelp) no-repeat 15px center/28px,var(--close) no-repeat right 7px top 6px/14px,var(--msg);background-blend-mode:normal,luminosity,normal,normal,normal}
 .messages{margin:12px 0 -1px 0;padding:20px 10px 20px 50px;border:var(--border);font-weight:700;font-size:9.5pt;box-shadow:var(--highlight),inset 0 0 2px 0 #393;background:var(--infohelp) no-repeat 15px center/28px,var(--msg)}
 .messages span.error{color:#d90}
 .messages span.notice{font-style:italic}
 .messages li{margin:0 5px 0 0;padding:0 10px 0 0;text-align:justify;font-weight:700;list-style:none;border:0}
-.main:not(#config_update) div.messages:hover,#config_update #messages:hover{background:var(--infohelp) no-repeat 15px center,var(--close_hover) right 7px top 6px no-repeat,repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px,rgba(0,32,0,.3) 4px),var(--hat) right 2px bottom -2px no-repeat,var(--msg);background-size:28px,14px,100% 4px,auto 93%,100%;background-blend-mode:normal,normal,normal,normal,normal;cursor:crosshair}
+.main:not(#config_update) div.messages:hover{background:var(--infohelp) no-repeat 15px center,var(--close_hover) right 7px top 6px no-repeat,repeating-linear-gradient(180deg,rgba(0,0,0,.6) 2px,rgba(0,32,0,.3) 4px),var(--hat) right 2px bottom -2px no-repeat,var(--msg);background-size:28px,14px,100% 4px,auto 93%,100%;background-blend-mode:normal,normal,normal,normal,normal;cursor:crosshair}
 #messages,.error,.notice{color:var(--ink)}
 #events .messages{margin-top:26px;margin-bottom:-13px;box-shadow:inset 0 0 0 1px #700}
 #graphs .messages{top:-16px;z-index:999}
+#messages.closed {animation:.15s fade 0s ease-in forwards}
 
 /* forms */
 .optionlist,.optionsingle,#reseedssl{padding:1px 2px;border:var(--border_soft);box-shadow:inset 0 0 0 2px #000;column-gap:1px;transition:ease box-shadow .2s;background:repeating-linear-gradient(180deg,#000 1px,#000800 2px,#000800 3px)}
@@ -1835,7 +1836,6 @@ tr.addnew,tr.addnew:hover{border-top:var(--border);background:#000800}
 #consolepass .delete{float:left}
 
 /* family */
-
 #netconfig th,#config_family th{padding:10px}
 #config_family tr:first-child{background:var(--h1)}
 #config_family th{word-spacing:.1em;letter-spacing:.1em;text-transform:uppercase;background:none}
@@ -1943,7 +1943,6 @@ input[type=hidden]+p+p{margin-top:20px;margin-bottom:-21px;padding:10px;border:v
 #advconf .configline td:focus,#advconf #addNew td:focus{font-weight:700;color:var(--hover);box-shadow:var(--bevel),0 0 0 2px #f608 inset,var(--btn_shadow_active);background:#020}
 #advconf .configline td.delete,#advconf #addNew td.delete{padding:0;width:1%;text-align:center;vertical-align:middle;font-size:0}
 #advconf .configline:focus-within td:not(:focus):not(.delete){background:#030}
-#advconf .newKey:empty:not(:focus)::before{display:inline;font-style:italic;color:#ee8a;content:"Add New..."}
 #advconf .newKey:empty:not(:focus)::before{width:12px;height:12px;display:inline-block;vertical-align:middle;background:var(--star) no-repeat center center/12px;content:""}
 #advconf .delete::after{width:48px;height:32px;display:inline-block;vertical-align:middle;background:var(--nuke) no-repeat center center/14px;opacity:.75;content:"";filter:grayscale(.6)}
 #advconf .delete:hover::after{opacity:1;filter:none;cursor:pointer;transform:scale(1.1)}
@@ -1951,6 +1950,9 @@ input[type=hidden]+p+p{margin-top:20px;margin-bottom:-21px;padding:10px;border:v
 #advconf .newKey,#advconf .key{width:1%;min-width:400px;white-space:nowrap;font-weight:500}
 #advconf .newKey{min-width:384px}
 #advconf .key::before,#advconf #addNew .newKey:focus::before,#advconf #addNew .newKey:not(:empty)::before{margin-right:6px;display:inline-block;width:12px;height:12px;vertical-align:middle;background:var(--key) no-repeat center center/12px;content:""}
+#advconf #addNew .newKey:focus::before{background:var(--star) no-repeat center center/12px}
+#advconf .key:not(:focus)::before{filter:saturate(.75) opacity(.8)}
+#advconf .key:focus::before{filter:drop-shadow(2px 2px 2px #000)}
 #advconf #addNew td{border-top:0}
 #advconf #addNew .newKey:focus,#advconf #addNew .newKey:not(:empty){padding-left:24px}
 #advconf #addNew .newKey:focus::before,#advconf #addNew .newKey:not(:empty)::before{margin: 0 6px 0 -16px}
@@ -1963,7 +1965,7 @@ input[type=hidden]+p+p{margin-top:20px;margin-bottom:-21px;padding:10px;border:v
 #advfilter input[type=text]:focus{width:200px;border-color:var(--hover);color:var(--hover);box-shadow:var(--highlight),5px 5px 3px #0008 inset;background-color:#010;opacity:.85}
 #advconf #removeKey b{color:#f00}
 #config_advanced #advconfwrapper{overflow:hidden;max-height:calc(100vh - 281px);scrollbar-color:#373 #0000}
-.hasExpandedElement #config_advanced #advconfwrapper{max-height:calc(100vh - 446px)}
+.hasExpandedElement #config_advanced #advconfwrapper{max-height:calc(100vh - 447px)}
 #config_advanced #advconfwrapper:hover{overflow-y:auto}
 #ffconf.toggle:hover{color:var(--hover);cursor:pointer}
 #ffconf.toggle::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:""}

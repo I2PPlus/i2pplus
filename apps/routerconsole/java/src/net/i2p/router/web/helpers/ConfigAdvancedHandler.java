@@ -28,7 +28,7 @@ public class ConfigAdvancedHandler extends FormHandler {
         if (_shouldSave) {
             if ("ff".equals(_action) && _ff != null) {saveFF();}
             else if (isAdvanced()) {saveChanges();}
-            else {addFormError("Save disabled, edit the router.config file to make changes");}
+            else {addFormError(_t("Save disabled, edit the router.config file to make changes"), true);}
         } else {} // no-op
     }
 
@@ -61,7 +61,7 @@ public class ConfigAdvancedHandler extends FormHandler {
             } catch (IOException ioe) {
                 _log.error("Config error", ioe);
                 addFormError(ioe.toString());
-                addFormError(_t("Error updating the configuration - please see the error logs"));
+                addFormError(_t("Error updating the configuration - please see the error logs"), true);
                 return;
             }
 
@@ -90,12 +90,12 @@ public class ConfigAdvancedHandler extends FormHandler {
 
             // Add appropriate form notices or errors based on the result
             if (noChange) {
-                addFormNotice(_t("No changes made to the configuration"));
+                addFormNotice(_t("No changes made to the configuration"), true);
             } else if (saved) {
                 addFormNoticeNoEscape(_t("Configuration saved successfully") + "<br>" +
-                                      _t("Note") + ": " + _t("Some changes may require a restart to take effect."));
+                                      _t("Note") + ": " + _t("Some changes may require a restart to take effect."), true);
             } else {
-                addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"));
+                addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"), true);
             }
 
             // Optionally, perform a soft restart if required
@@ -116,8 +116,8 @@ public class ConfigAdvancedHandler extends FormHandler {
             // this will rebuild the RI, log in the event log, etc.
             fndf.setFloodfillEnabled(isFF);
         }
-        if (saved) {addFormNotice(_t("Configuration saved successfully"));}
-        else {addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"));}
+        if (saved) {addFormNotice(_t("Configuration saved successfully"), true);}
+        else {addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"), true);}
     }
 
 }
