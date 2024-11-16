@@ -33,15 +33,15 @@ public abstract class FormHandler {
     private String _nonce, _nonce1, _nonce2;
     protected String _action;
     protected String _method;
-    private final List<String> _errors;
-    private final List<String> _notices;
+    private final List<Message> _errors;
+    private final List<Message> _notices;
     private boolean _processed;
     private boolean _valid;
     protected Writer _out;
 
     public FormHandler() {
-        _errors = new ArrayList<String>();
-        _notices = new ArrayList<String>();
+        _errors = new ArrayList<>();
+        _notices = new ArrayList<>();
         _valid = true;
     }
 
@@ -55,13 +55,11 @@ public abstract class FormHandler {
         try {
             _context = ContextHelper.getContext(contextId);
             _log = _context.logManager().getLog(getClass());
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }
+        } catch (Throwable t) {t.printStackTrace();}
     }
 
-    public void setNonce(String val) { _nonce = val == null ? null : DataHelper.stripHTML(val); }
-    public void setAction(String val) { _action = val == null ? null : DataHelper.stripHTML(val); }
+    public void setNonce(String val) {_nonce = val == null ? null : DataHelper.stripHTML(val);}
+    public void setAction(String val) {_action = val == null ? null : DataHelper.stripHTML(val);}
 
     /**
      * For many forms, it's easiest just to put all the parameters here.
@@ -69,24 +67,20 @@ public abstract class FormHandler {
      * @since 0.9.4 consolidated from numerous FormHandlers
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public void setSettings(Map settings) { _settings = new HashMap(settings); }
+    public void setSettings(Map settings) {_settings = new HashMap<>(settings);}
 
     /**
      *  Only set by formhandler.jsi for multipart/form-data
      *
      *  @since 0.9.19
      */
-    public void setRequestWrapper(RequestWrapper rw) {
-        _requestWrapper = rw;
-    }
+    public void setRequestWrapper(RequestWrapper rw) {_requestWrapper = rw;}
 
     /**
      *  Same as HelperBase
      *  @since 0.9.14.1
      */
-    public boolean isAdvanced() {
-        return _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
-    }
+    public boolean isAdvanced() {return _context.getBooleanProperty(HelperBase.PROP_ADVANCED);}
 
     /**
      * setSettings() must have been called previously
@@ -96,11 +90,9 @@ public abstract class FormHandler {
      * @return trimmed string or null
      */
     protected String getJettyString(String key) {
-        if (_settings == null)
-            return null;
+        if (_settings == null) {return null;}
         String[] arr = (String[]) _settings.get(key);
-        if (arr == null)
-            return null;
+        if (arr == null) {return null;}
         return arr[0].trim();
     }
 
@@ -110,12 +102,12 @@ public abstract class FormHandler {
      * @param val the request method
      * @since 0.8.2
      */
-    public void storeMethod(String val) { _method = val; }
+    public void storeMethod(String val) {_method = val;}
 
     /**
      * @since 0.9.38
      */
-    public void storeWriter(Writer out) { _out = out; }
+    public void storeWriter(Writer out) {_out = out;}
 
     /**
      * The old nonces from the session
@@ -140,8 +132,18 @@ public abstract class FormHandler {
      * Escapes '&lt;' and '&gt;' before queueing
      */
     protected void addFormError(String errorMsg) {
-        if (errorMsg == null) return;
-        _errors.add(DataHelper.escapeHTML(errorMsg));
+        addFormError(errorMsg, false);
+    }
+
+    /**
+     * Add an error message to display
+     * Use if it does not include a link.
+     * Escapes '&lt;' and '&gt;' before queueing
+     * @param canClose If true, the message can be closed by the user.
+     */
+    protected void addFormError(String errorMsg, boolean canClose) {
+        if (errorMsg == null) {return;}
+        _errors.add(new Message(DataHelper.escapeHTML(errorMsg), canClose));
     }
 
     /**
@@ -150,8 +152,18 @@ public abstract class FormHandler {
      * Escapes '&lt;' and '&gt;' before queueing
      */
     protected void addFormNotice(String msg) {
-        if (msg == null) return;
-        _notices.add(DataHelper.escapeHTML(msg));
+        addFormNotice(msg, false);
+    }
+
+    /**
+     * Add a non-error message to display
+     * Use if it does not include a link.
+     * Escapes '&lt;' and '&gt;' before queueing
+     * @param canClose If true, the message can be closed by the user.
+     */
+    protected void addFormNotice(String msg, boolean canClose) {
+        if (msg == null) {return;}
+        _notices.add(new Message(DataHelper.escapeHTML(msg), canClose));
     }
 
     /**
@@ -161,8 +173,19 @@ public abstract class FormHandler {
      * @since 0.9.14.1
      */
     protected void addFormNoticeNoEscape(String msg) {
-        if (msg == null) return;
-        _notices.add(msg);
+        addFormNoticeNoEscape(msg, false);
+    }
+
+    /**
+     * Add a non-error message to display
+     * Use if it includes a link or other formatting.
+     * Does not escape '&lt;' and '&gt;' before queueing
+     * @param canClose If true, the message can be closed by the user.
+     * @since 0.9.14.1
+     */
+    protected void addFormNoticeNoEscape(String msg, boolean canClose) {
+        if (msg == null) {return;}
+        _notices.add(new Message(msg, canClose));
     }
 
     /**
@@ -172,8 +195,19 @@ public abstract class FormHandler {
      * @since 0.9.19
      */
     protected void addFormErrorNoEscape(String msg) {
-        if (msg == null) return;
-        _errors.add(msg);
+        addFormErrorNoEscape(msg, false);
+    }
+
+    /**
+     * Add an error message to display
+     * Use if it includes a link or other formatting.
+     * Does not escape '&lt;' and '&gt;' before queueing
+     * @param canClose If true, the message can be closed by the user.
+     * @since 0.9.19
+     */
+    protected void addFormErrorNoEscape(String msg, boolean canClose) {
+        if (msg == null) {return;}
+        _errors.add(new Message(msg, canClose));
     }
 
     /**
@@ -183,22 +217,27 @@ public abstract class FormHandler {
     public String getAllMessages() {
         validate();
         process();
-        if (_errors.isEmpty() && _notices.isEmpty())
-            return "";
+        if (_errors.isEmpty() && _notices.isEmpty()) {return "";}
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<div class=messages id=messages>");
+
+        // Determine if any message can be closed
+        boolean canClose = _errors.stream().anyMatch(Message::isCanClose) || _notices.stream().anyMatch(Message::isCanClose);
+
+        buf.append("<div class=\"messages");
+        if (canClose) {
+            buf.append(" canClose");
+        }
+        buf.append("\" id=\"messages\">");
+
         if (!_errors.isEmpty()) {
-            buf.append("<div class=error>");
-            buf.append(render(_errors));
-            buf.append("</div>");
+            buf.append("<div class=\"error\">").append(render(_errors)).append("</div>");
         }
+
         if (!_notices.isEmpty()) {
-            buf.append("<div class=notice>");
-            buf.append(render(_notices));
-            buf.append("</div>");
+            buf.append("<div class=\"notice\">").append(render(_notices)).append("</div>");
         }
-        buf.append("</div>");
-        buf.append("<script nonce=" + _nonce + " src=\"/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>\"></script>");
+
+        buf.append("</div>\n").append("<script src=\"/js/clickToClose.js\"></script>\n");
         return buf.toString();
     }
 
@@ -231,7 +270,7 @@ public abstract class FormHandler {
      *
      */
     private void validate() {
-        if (_processed) return;
+        if (_processed) {return;}
 
         _valid = true;
         if (_action == null) {
@@ -257,36 +296,29 @@ public abstract class FormHandler {
         }
 
         String sharedNonce = CSSHelper.getNonce();
-        if (sharedNonce.equals(_nonce)) {
-            return;
-        }
+        if (sharedNonce.equals(_nonce)) {return;}
 
         if (!_nonce.equals(_nonce1) && !_nonce.equals(_nonce2)) {
-                addFormError(_t("Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit.")
-                             + ' ' +
-                             _t("If the problem persists, verify that you have cookies enabled in your browser."));
-                _valid = false;
+            addFormError(_t("Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit.") + ' ' +
+                         _t("If the problem persists, verify that you have cookies enabled in your browser."));
+            _valid = false;
         }
     }
 
     private void process() {
         if (!_processed) {
-            if (_valid)
-                processForm();
+            if (_valid) {processForm();}
             _processed = true;
         }
     }
 
-    private static String render(List<String> source) {
-        if (source.isEmpty()) {
-            return "";
-        } else {
+    private static String render(List<Message> source) {
+        if (source.isEmpty()) {return "";}
+        else {
             StringBuilder buf = new StringBuilder(512);
             buf.append("<ul>\n");
-            for (int i = 0; i < source.size(); i++) {
-                buf.append("<li>");
-                buf.append(source.get(i));
-                buf.append("</li>\n");
+            for (Message message : source) {
+                buf.append("<li>").append(message.getText()).append("</li>\n");
             }
             buf.append("</ul>\n");
             return buf.toString();
@@ -305,9 +337,7 @@ public abstract class FormHandler {
     }
 
     /** translate a string */
-    public String _t(String s) {
-        return Messages.getString(s, _context);
-    }
+    public String _t(String s) {return Messages.getString(s, _context);}
 
     /**
      *  translate a string with a parameter
@@ -321,14 +351,10 @@ public abstract class FormHandler {
      *    Do not double the single quotes in the parameter.
      *    Use autoboxing to call with ints, longs, floats, etc.
      */
-    public String _t(String s, Object o) {
-        return Messages.getString(s, o, _context);
-    }
+    public String _t(String s, Object o) {return Messages.getString(s, o, _context);}
 
     /** two params @since 0.8.2 */
-    public String _t(String s, Object o, Object o2) {
-        return Messages.getString(s, o, o2, _context);
-    }
+    public String _t(String s, Object o, Object o2) {return Messages.getString(s, o, o2, _context);}
 
     /**
      *  Mark a string for extraction by xgettext and translation.
@@ -336,7 +362,26 @@ public abstract class FormHandler {
      *  It does not translate!
      *  @return s
      */
-    public static String _x(String s) {
-        return s;
+    public static String _x(String s) {return s;}
+
+    /**
+     * Message class to encapsulate the message text and the canClose flag
+     */
+    public static class Message {
+        private String text;
+        private boolean canClose;
+
+        public Message(String text, boolean canClose) {
+            this.text = text;
+            this.canClose = canClose;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public boolean isCanClose() {
+            return canClose;
+        }
     }
 }
