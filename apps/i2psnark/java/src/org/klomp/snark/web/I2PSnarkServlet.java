@@ -3294,12 +3294,10 @@ public class I2PSnarkServlet extends BasicServlet {
 /* configuration */
 
         StringBuilder buf = new StringBuilder(16*1024);
-        buf.append("<form action=\"").append(_contextPath).append("/configure\" method=POST>")
+        buf.append("<form id=mainconfig action=\"").append(_contextPath).append("/configure\" method=POST>\n")
            .append("<div class=\"configPanel lang_").append(lang).append("\"><div class=snarkConfig>\n");
         writeHiddenInputs(buf, req, "Save");
-        buf.append("<span class=configTitle>")
-           .append(_t("Configuration"))
-           .append("</span><hr>\n")
+        buf.append("<span class=configTitle>").append(_t("Configuration")).append("</span><hr>\n")
            .append("<table border=0 id=configs>\n");
 
 /* user interface */
@@ -3308,11 +3306,9 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(_t("User Interface"));
         if (_context.isRouterContext()) {
             buf.append("&nbsp;&nbsp;<a href=/torrentmgr target=_top class=script id=embed>")
-               .append(_t("Switch to Embedded Mode"))
-               .append("</a>")
+               .append(_t("Switch to Embedded Mode")).append("</a>")
                .append("<a href=\"").append(_contextPath).append("/configure\" target=_top class=script id=fullscreen>")
-               .append(_t("Switch to Fullscreen Mode"))
-               .append("</a>");
+               .append(_t("Switch to Fullscreen Mode")).append("</a>");
         }
         buf.append("</th></tr>\n<tr><td>\n<div class=optionlist>\n")
            .append("<span class=configOption><b>")
