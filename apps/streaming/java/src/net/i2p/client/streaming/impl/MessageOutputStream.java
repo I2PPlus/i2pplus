@@ -11,6 +11,7 @@ import net.i2p.data.ByteArray;
 import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
+import net.i2p.util.SystemVersion;
 
 /**
  * A stream that we can shove data into that fires off those bytes
@@ -43,24 +44,13 @@ class MessageOutputStream extends OutputStream {
      * size
      */
     private volatile int _nextBufferSize;
-    // rate calc helpers
-    //private long _sendPeriodBeginTime;
-    //private long _sendPeriodBytes;
-    //private int _sendBps;
 
     /**
      *  Since this is less than i2ptunnel's i2p.streaming.connectDelay default of 1000,
      *  we only wait 250 at the start. Guess that's ok, 1000 is too long anyway.
      */
-//    private static final int DEFAULT_PASSIVE_FLUSH_DELAY = 175;
-    private static final int DEFAULT_PASSIVE_FLUSH_DELAY = 125;
+    private static final int DEFAULT_PASSIVE_FLUSH_DELAY = SystemVersion.isSlow() ? 160 : 80;
     private static final String PROP_PASSIVE_FLUSH_DELAY = "router.passiveFlushDelay";
-
-/****
-    public MessageOutputStream(I2PAppContext ctx, DataReceiver receiver) {
-        this(ctx, receiver, Packet.MAX_PAYLOAD_SIZE);
-    }
-****/
 
     /** */
     public MessageOutputStream(I2PAppContext ctx, SimpleTimer2 timer,
@@ -204,22 +194,6 @@ class MessageOutputStream extends OutputStream {
         throwAnyError();
         //updateBps(len);
     }
-
-/****
-    private void updateBps(int len) {
-        long now = _context.clock().now();
-        int periods = (int)Math.floor((now - _sendPeriodBeginTime) / 1000d);
-        if (periods > 0) {
-            // first term decays on slow transmission
-            _sendBps = (int)((0.9f*((float)_sendBps/(float)periods)) + (0.1f*((float)_sendPeriodBytes/(float)periods)));
-            _sendPeriodBytes = len;
-            _sendPeriodBeginTime = now;
-            _context.statManager().addRateData("stream.sendBps", _sendBps, 0);
-        } else {
-            _sendPeriodBytes += len;
-        }
-    }
-****/
 
     /** */
     public void write(int b) throws IOException {
