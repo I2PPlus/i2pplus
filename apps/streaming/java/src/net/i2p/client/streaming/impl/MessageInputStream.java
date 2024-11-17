@@ -367,7 +367,7 @@ class MessageInputStream extends InputStream {
                 if (_locallyClosed) {
                     if (_log.shouldInfo())
                         _log.info("[MsgID " + messageId + "] received on closed stream");
-                    // dont need the payload, just the msgId in order
+                    // Don't need the payload, just the msgId in order
                     _notYetReadyBlocks.put(Long.valueOf(messageId), DUMMY_BA);
                 } else {
                     if (_log.shouldInfo())

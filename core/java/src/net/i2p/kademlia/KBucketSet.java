@@ -545,7 +545,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
                 variance = variance.or(BigInteger.valueOf(fixedBits).shiftLeft(begin - fixed));
             }
         } else {
-            // dont span main bucket boundaries with depth > 1
+            // Don't span main bucket boundaries with depth > 1
             if (fixed > 0) {throw new IllegalStateException("??? " + bucket);}
             BigInteger nonz;
             if (numNonZero <= 62) {

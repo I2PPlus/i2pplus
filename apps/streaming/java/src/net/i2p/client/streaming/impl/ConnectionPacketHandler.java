@@ -563,7 +563,7 @@ class ConnectionPacketHandler {
                         con.setRemoteTransientSPK(spk);
                     return true;
                 } else {
-                    // neither RST nor SYN and we dont have the stream id yet?
+                    // neither RST nor SYN and we don't have the stream id yet?
                     if (packet.getSequenceNum() < MAX_INITIAL_PACKETS) {
                         return true;
                     } else {

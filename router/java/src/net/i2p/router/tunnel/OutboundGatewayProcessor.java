@@ -51,7 +51,7 @@ class OutboundGatewayProcessor {
      *               Should always be 1024 bytes.
      */
     private void decrypt(TunnelCreatorConfig cfg, byte orig[], int offset, int length) {
-        // dont include hop 0, since that is the creator
+        // Don't include hop 0, since that is the creator
         for (int i = cfg.getLength() - 1; i >= 1; i--) {
             decrypt(_context, orig, offset, length, cfg.getConfig(i));
             //if (_log.shouldDebug()) {

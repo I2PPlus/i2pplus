@@ -28,10 +28,8 @@ import net.i2p.router.util.MaskedIPSet;
 import net.i2p.util.Log;
 
 /**
- * Send a netDb lookup to a floodfill peer - If it is found, great,
- * but if they reply back saying they dont know it, queue up a store of the
- * key to a random floodfill peer again (via FloodfillStoreJob)
- *
+ * Send a netDb lookup to a floodfill peer - If it is found, great, but if they reply back saying
+ * they don't know it, queue up a store of the key to a random floodfill peer again (via FloodfillStoreJob)
  */
 class FloodfillVerifyStoreJob extends JobImpl {
     private final Log _log;

@@ -76,7 +76,7 @@ public class MessageValidator {
     /**
      * Note that we've received the message (which has the expiration given).
      * This functionality will need to be reworked for I2P 3.0 when we take into
-     * consideration messages with significant user specified delays (since we dont
+     * consideration messages with significant user specified delays (since we don't
      * want to keep an infinite number of messages in RAM, etc)
      *
      * @return true if we HAVE already seen this message, false if not

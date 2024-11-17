@@ -1445,7 +1445,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             Properties opts = new Properties();
             //opts.setProperty("i2p.streaming.inactivityTimeout", ""+120*1000);
             // 1 == disconnect.  see ConnectionOptions in the new streaming lib, which i
-            // dont want to hard link to here
+            // Don't want to hard link to here
             //opts.setProperty("i2p.streaming.inactivityTimeoutAction", ""+1);
             I2PSocketOptions sktOpts;
             try {sktOpts = getDefaultOptions(opts);}

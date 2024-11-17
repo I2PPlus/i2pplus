@@ -721,22 +721,18 @@ public class I2PAppContext {
     }
 
     /**
-     * Ok, I'll admit it.  there is no good reason for having a context specific
-     * AES engine.  We dont really keep stats on it, since its just too fast to
-     * matter.  Though for the crazy people out there, we do expose a way to
-     * disable it.
+     * Ok, I'll admit it, there is no good reason for having a context specific AES engine.
+     * We don't really keep stats on it, since its just too fast to matter.
+     * Though for the crazy people out there, we do expose a way to disable it.
      */
     public AESEngine aes() {
-        if (!_AESEngineInitialized)
-            initializeAESEngine();
+        if (!_AESEngineInitialized) {initializeAESEngine();}
         return _AESEngine;
     }
 
     private void initializeAESEngine() {
         synchronized (_lock7) {
-            if (_AESEngine == null) {
-                _AESEngine = new CryptixAESEngine(this);
-            }
+            if (_AESEngine == null) {_AESEngine = new CryptixAESEngine(this);}
             _AESEngineInitialized = true;
         }
     }

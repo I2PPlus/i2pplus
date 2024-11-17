@@ -390,7 +390,7 @@ class SAMv2StreamSession extends SAMStreamSession
 
 									if ( forceFlush )
 									{
-										// i dont like doing this, but it clears the buffer issues
+										// I don't like doing this, but it clears the buffer issues
 										_out.flush();
 									}
 								}

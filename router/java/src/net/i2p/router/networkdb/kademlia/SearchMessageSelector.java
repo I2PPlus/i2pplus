@@ -47,7 +47,7 @@ class SearchMessageSelector implements MessageSelector {
         boolean expired = _context.clock().now() > _exp;
         if (expired) return false;
 
-        // so we dont drop outstanding replies after receiving the value
+        // So we don't drop outstanding replies after receiving the value
         // > 1 to account for the 'current' match
         if (_state.getPending().size() > 1)
             return true;

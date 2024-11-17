@@ -589,7 +589,7 @@ public class NTCPTransport extends TransportImpl {
         }
 
         //if ( (_myAddress != null) && (_myAddress.equals(addr)) )
-        //    return null; // dont talk to yourself
+        //    return null; // Don't talk to yourself
 
         //if (_log.shouldDebug())
         //    _log.debug("slow bid when trying to send to " + peer);

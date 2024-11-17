@@ -127,7 +127,7 @@ abstract class BuildMessageGenerator {
             if (isOutEnd || (cfg.isInbound() && (hop + 2 >= cfg.getLength())) ) {
                 nextMsgId = cfg.getReplyMessageId();
             } else {
-                // dont care about these intermediary hops
+                // Don't care about these intermediary hops
                 nextMsgId = ctx.random().nextLong(I2NPMessage.MAX_ID_VALUE);
             }
             BuildRequestRecord rec;

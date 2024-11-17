@@ -48,8 +48,7 @@ public class BandwidthLimitedInputStream extends FilterInputStream {
         else
             _currentRequest = _context.bandwidthLimiter().requestInbound(1, _peerSource);
 
-        // since its only a single byte, we dont need to loop
-        // or check how much was allocated
+        // since its only a single byte, we don't need to loop or check how much was allocated
         _currentRequest.waitForNextAllocation();
         synchronized (this) {
             _currentRequest = null;

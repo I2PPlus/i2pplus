@@ -611,8 +611,7 @@ public class TunnelController implements Logging {
     }
 
     /**
-     * Note the fact that we are using some sessions, so that they dont get
-     * closed by some other tunnels
+     * Note the fact that we are using some sessions, so that they don't get closed by some other tunnels
      */
     private void acquire() {
         List<I2PSession> sessions = _tunnel.getSessions();

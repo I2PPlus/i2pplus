@@ -202,7 +202,7 @@ public class OutboundMessageRegistry {
         if (sel == null) throw new IllegalArgumentException("No reply selector? Impossible?");
 
         if (!_activeMessages.add(msg))
-            return; // dont add dups
+            return; // don't add dups
 
         synchronized (_selectorToMessage) {
             Object oldMsg = _selectorToMessage.put(sel, msg);

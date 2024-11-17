@@ -80,7 +80,7 @@ public class FIFOBandwidthLimiter {
     private float _recvBps15s;
 
     public /* static */ long now() {
-        // dont use the clock().now(), since that may jump
+        // Don't use the clock().now(), since that may jump
         return System.currentTimeMillis();
     }
 
@@ -552,7 +552,7 @@ public class FIFOBandwidthLimiter {
             SimpleRequest req = _pendingInboundRequests.get(i);
             long waited = now() - req.getRequestTime();
             if (req.getAborted()) {
-                // connection decided they dont want the data anymore
+                // connection decided they don't want the data anymore
                 if (_log.shouldDebug())
                      _log.debug("Aborting inbound request to "
                                 + req
@@ -675,7 +675,7 @@ public class FIFOBandwidthLimiter {
             SimpleRequest req = _pendingOutboundRequests.get(i);
             long waited = now() - req.getRequestTime();
             if (req.getAborted()) {
-                // connection decided they dont want the data anymore
+                // connection decided they don't want the data anymore
                 if (_log.shouldDebug())
                      _log.debug("Aborting outbound request to "
                                 + req

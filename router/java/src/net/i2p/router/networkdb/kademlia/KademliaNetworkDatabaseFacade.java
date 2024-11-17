@@ -1583,7 +1583,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (!_initialized) {return;}
         DatabaseEntry o = _ds.get(dbEntry);
         if (o == null) {
-            if (_kb != null) {_kb.remove(dbEntry);} // if we dont know the key, let's make sure it isn't a now-dead peer
+            if (_kb != null) {_kb.remove(dbEntry);} // if we don't know the key, let's make sure it isn't a now-dead peer
             _context.peerManager().removeCapabilities(dbEntry);
             return;
         }

@@ -172,7 +172,7 @@ class ConnectionHandler {
                     }
                 } else {
                     long remaining = expiration - _context.clock().now();
-                    // (dont think this applies anymore for LinkedBlockingQueue)
+                    // (Don't think this applies anymore for LinkedBlockingQueue)
                     // BUGFIX
                     // The specified amount of real time has elapsed, more or less.
                     // If timeout is zero, however, then real time is not taken into consideration

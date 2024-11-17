@@ -54,7 +54,7 @@ class ExpireJob extends JobImpl {
             requeue(timeToDrop);
         } else {
             // Second run - already removed/refreshed, but now let's make it
-            // so we dont even honor the tunnel anymore
+            // so we don't even honor the tunnel anymore
             getContext().tunnelDispatcher().remove(_cfg);
         }
     }

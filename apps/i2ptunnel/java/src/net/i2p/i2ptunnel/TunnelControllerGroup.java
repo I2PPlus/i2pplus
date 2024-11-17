@@ -547,8 +547,7 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
-     * Stop and remove reference to all known tunnels (but dont delete any config
-     * file or do other silly things)
+     * Stop and remove reference to all known tunnels (but don't delete any config file or do other silly things)
      *
      */
     public synchronized void unloadControllers() {
@@ -569,9 +568,7 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
-     * Add the given tunnel to the set of known controllers (but dont add it to
-     * a config file or start it or anything)
-     *
+     * Add the given tunnel to the set of known controllers (but don't add it to a config file or start it or anything)
      */
     public synchronized void addController(TunnelController controller) {
         _controllersLock.writeLock().lock();

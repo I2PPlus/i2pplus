@@ -1037,7 +1037,7 @@ class Connection {
 
     private void congestionOccurred() {
         // if we hit congestion and e.g. 5 packets are resent,
-        // dont set the size to (winSize >> 4).  only set the
+        // Don't set the size to (winSize >> 4).  only set the
         if (_ackSinceCongestion.compareAndSet(true,false)) {
             _lastCongestionTime = _context.clock().now();
             _lastCongestionHighestUnacked = _lastSendId.get();

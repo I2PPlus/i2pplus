@@ -753,7 +753,7 @@ public class LogManager implements Flushable {
             rv.setProperty(PROP_FILESIZE,  (_fileSize / (1024))+ "k");
         else if (_fileSize > 0)
             rv.setProperty(PROP_FILESIZE, Integer.toString(_fileSize));
-        // if <= 0, dont specify
+        // if <= 0, don't specify
 
         rv.setProperty(PROP_ROTATIONLIMIT, Integer.toString(_rotationLimit));
         rv.setProperty(PROP_DEFAULTLEVEL, Log.toLevelString(_defaultLimit));

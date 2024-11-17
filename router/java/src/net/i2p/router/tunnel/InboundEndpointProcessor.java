@@ -99,7 +99,7 @@ class InboundEndpointProcessor {
      *               Should always be 1024 bytes.
      */
     private void decrypt(RouterContext ctx, TunnelCreatorConfig cfg, byte orig[], int offset, int length) {
-        // dont include the endpoint, since that is the creator
+        // Don't include the endpoint, since that is the creator
         for (int i = cfg.getLength() - 2; i >= 0; i--) {
             OutboundGatewayProcessor.decrypt(ctx, orig, offset, length, cfg.getConfig(i));
             //if (_log.shouldDebug()) {

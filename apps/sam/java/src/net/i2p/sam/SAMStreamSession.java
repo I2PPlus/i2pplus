@@ -886,7 +886,7 @@ class SAMStreamSession implements SAMMessageSess {
                         try {
                             _out.write(data.getData(), 0, data.getValid());
                             if (forceFlush) {
-                                // i dont like doing this, but it clears the buffer issues
+                                // I don't like doing this, but it clears the buffer issues
                                 _out.flush();
                             }
                         } catch (IOException ioe) {

@@ -35,7 +35,7 @@ class ClientWriterRunner implements Runnable {
     }
 
     /**
-     * No more messages - dont even try to send what we have
+     * No more messages - don't even try to send what we have
      *
      */
     public void stopWriting() {

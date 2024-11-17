@@ -673,9 +673,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                                                                                tagsRequired, sessKey, tags,
                                                                                wantACK, replyLeaseSet, callback);
         if (msg == null) {
-            // set to null if there are no tunnels to ack the reply back through
-            // (should we always fail for this? or should we send it anyway, even if
-            // we dont receive the reply? hmm...)
+            // Set to null if there are no tunnels to ack the reply back through (should we always fail for this?
+            // or should we send it anyway, even if we don't receive the reply? hmm...)
             if (_log.shouldWarn()) {
                 _log.warn("Unable to create garlic message to " + _toString + " -> No available tunnels or too lagged");
             }

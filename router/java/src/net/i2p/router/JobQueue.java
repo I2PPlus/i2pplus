@@ -360,7 +360,7 @@ public class JobQueue {
      */
     public synchronized void runQueue(int numThreads) {
         // we're still starting up [serially] and we've got at least one runner,
-        // so dont do anything
+        // so don't do anything
         if ((!_queueRunners.isEmpty()) && (!_allowParallelOperation)) {return;}
 
         // we've already enabled parallel operation, so grow to however many are specified

@@ -68,7 +68,7 @@ class SearchReplyJob extends JobImpl {
             RouterInfo info = getContext().netDb().lookupRouterInfoLocally(peer);
             if (info == null) {
                 // if the peer is giving us lots of bad peer references,
-                // dont try to fetch them.
+                // Don't try to fetch them.
 
                 boolean sendsBadInfo = getContext().profileOrganizer().peerSendsBadReplies(_peer);
                 if (!sendsBadInfo) {

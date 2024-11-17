@@ -1039,7 +1039,7 @@ public class POP3MailBox implements NewMailListener {
 	 */
 	private void sendCmd1aNoWait(String cmd) throws IOException {
 		/*
-		 * dont log password
+		 * don't log password
 		 */
 		String msg = cmd;
 		if (msg.startsWith("PASS"))
