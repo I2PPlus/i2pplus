@@ -1956,6 +1956,7 @@ input[type=hidden]+p+p{margin-top:20px;margin-bottom:-21px;padding:10px;border:v
 #advconf #addNew td{border-top:0}
 #advconf #addNew .newKey:focus,#advconf #addNew .newKey:not(:empty){padding-left:24px}
 #advconf #addNew .newKey:focus::before,#advconf #addNew .newKey:not(:empty)::before{margin: 0 6px 0 -16px}
+#advconf .configline+#addNew{display:none}
 #advconf .value{word-break:break-all}
 #advancedconfig{position:relative}
 #advfilter{display:inline-block;position:absolute;right:52px;top:5px}
@@ -1977,6 +1978,13 @@ input[type=hidden]+p+p{margin-top:20px;margin-bottom:-21px;padding:10px;border:v
 .expanded #ffstatus,#ffconf:hover #ffstatus{opacity:0}
 .hasExpandedElement #floodfillconfig{margin-bottom:-1px;display:table!important}
 #saveConfig{margin-bottom:-2px;padding:6px 10px;z-index:99999;text-align:right;border:var(--border);box-shadow:var(--bevel_cell);background:var(--h3),var(--footer);background-size:2px,100%}
+
+/*"OK" modal dialog */
+#modal{padding:8px 16px 16px;width:420px;position:absolute;z-index:99999;font-size:110%;box-shadow:0 0 0 1px #131,0 0 0 2px #000,0 0 0 5px #252;background:#000}
+#modal button{padding:9px 16px;min-width:108px;font-size:100%}
+#modal p{margin:4px -16px 16px;padding:24px 24px 24px 76px;line-height:1.7;font-weight:500;border-bottom:1px solid #131;background:var(--warning) no-repeat 16px center / 46px}
+#modal p b{color:#f00}
+#overlay{position:absolute;top:0;left:0;bottom:0;right:0;z-index:99998;background:#000a}
 
 /* configtunnels */
 #config_tunnels hr{display:none}

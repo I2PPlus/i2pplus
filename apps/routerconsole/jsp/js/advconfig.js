@@ -136,11 +136,6 @@ const init = () => {
     const newKey = newKeyCell.textContent.trim();
     const existingKey = configItems.some(item => item[0] === newKey);
     const newValue = newValueCell.textContent.trim();
-
-    if (existingKey) {
-      alert(`Duplicate key '${newKey}' detected. Please modify the existing key.`);
-      return;
-    }
     if (newKey) {
       const newRow = createRow(newKey, newValue);
       addNewRow.insertAdjacentElement("beforebegin", newRow);
@@ -182,19 +177,44 @@ const init = () => {
   addFilter();
 
   const doSave = event => {
+    const modalActive = query("#modalActive");
+    if (modalActive) {return;}
     updateTextarea();
     const newKey = newKeyCell.textContent.trim();
+    const newValue = newValueCell.textContent.trim();
+
+    if (newValue && !newKey) {
+      if (theme === "dark") {
+        modal("No keyname provided for the submitted value.<br>Please supply a keyname.");
+      } else {
+        alert("No keyname provided for the submitted value.<br>Please supply a keyname.");
+      }
+      newKeyCell.focus();
+      return;
+    }
 
     if (newKey) {
+      const existingKey = configItems.some(item => item[0] === newKey);
+      if (existingKey) {
+        if (theme === "dark") {
+          modal(`Duplicate key <b>${newKey}</b> submitted. Please modify the existing key.`);
+        } else {
+          alert(`Duplicate key <b>${newKey}</b> submitted. Please modify the existing key.`);
+        }
+        newKeyCell.textContent = "";
+        newValueCell.textContent = "";
+        const filterInput = query("#advfilter input");
+        filterInput.value = newKey;
+        filterInput.dispatchEvent(new Event("input", { bubbles: true }));
+        return;
+      }
       submitNewKeyValue();
     }
 
     if (event.key === "Enter") {
       event.preventDefault();
       saveButton.click();
-    } else {
-      advForm.requestSubmit(saveButton);
-    }
+    } else {advForm.requestSubmit(saveButton);}
   };
 
   d.addEventListener("keydown", event => {
@@ -227,7 +247,6 @@ const init = () => {
       info.id = "ffstatus";
       const ffstatus = query("#floodfillconfig .infohelp").textContent.match(/\(.*?\)/)[0].replace(/[\(\).]/g, "");
       info.textContent = ffstatus;
-
       if (!statusAdded) h3ff.appendChild(info);
       statusAdded = true;
     };
