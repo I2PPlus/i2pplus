@@ -5,8 +5,7 @@
 <%
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null)
-        lang = ctx.getProperty("routerconsole.lang");
+    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
 %>
 <html lang="<%=lang%>">
 <head>
@@ -20,6 +19,7 @@
 <h1 class=netwrk><%=intl._t("Network Database Router Map")%></h1>
 <div class=main id=netdbRouterMap>
 <div id=netdbmap>
+<div id=info class=hidden></div>
 <%@ include file="/viewnetdbmap.jsp" %>
 <div id=netdbmapLegend>
 <span id=legend_500><span class=legend_color></span>500</span>

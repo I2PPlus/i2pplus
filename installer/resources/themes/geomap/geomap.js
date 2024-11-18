@@ -4,8 +4,12 @@
 (function () {
 
   const geomap = document.querySelector("#geomap");
+  const infobox = document.querySelector("#netdbmap #info");
+  const currentRouterClass = getQueryParameter("class") || "countries";
+  let debugging = false;
+  let verbose = false;
   const parser = new DOMParser();
-  const STORE_INTERVAL = 30000, DEBOUNCE_DELAY = 5, TIMEOUT = 15000;
+  const STORE_INTERVAL = 30000, DEBOUNCE_DELAY = 0, TIMEOUT = 15000;
   const width = 720, height = 475;
 
   // Calculate the inverse of the screen coordinate transformation matrix for geomap
@@ -127,7 +131,7 @@
         Mauritius: { region: "Africa", code: "mu" },
         Mexico: { region: "Americas", code: "mx" },
         "Micronesia (Federated States of)": { region: "Oceania", code: "fm" },
-        "Moldova": { region: "Europe", code: "md" },
+        Moldova: { region: "Europe", code: "md" },
         Mongolia: { region: "Asia", code: "mn" },
         Montenegro: { region: "Europe", code: "me" },
         Morocco: { region: "Africa", code: "ma" },
@@ -184,7 +188,7 @@
         Syria: { region: "Asia", code: "sy" },
         Taiwan: { region: "Asia", code: "tw" },
         Tajikistan: { region: "Asia", code: "tj" },
-        "Tanzania": { region: "Africa", code: "tz" },
+        Tanzania: { region: "Africa", code: "tz" },
         Thailand: { region: "Asia", code: "th" },
         Tibet: { region: "Asia", code: "cn" },
         "Timor-Leste": { region: "Asia", code: "tl" },
@@ -211,61 +215,94 @@
       },
     },
 
-    tooltips: {
-      countries: '<div id="mapTooltip"><div>\n' +
-                 '<span><b>Country: </b> <img class=mapflag width=9 height=6 src="/flags.jsp?c=${data.code}"> ${shapeId} (${data.code})</span><br>' +
-                 "<span><b>Region: </b>${data.region}</span><br>\n" +
-                 "<span><b>Routers: 0</b></span>\n" + "</div>\n </div>",
+    infoboxHTML: {
+      countries: '<span><b>Country: </b> <img class=mapflag width=9 height=6 src="/flags.jsp?c=${data.code}"> ${shapeId} (${data.code})</span><br>' +
+        "<span><b>Region: </b>${data.region}</span><br>\n" + "<span><b>Routers: 0</b></span>\n",
     },
   };
 
-  // Prepare the tooltip object and element
-  let routerCount = 0;
   let routerCounts = {};
-  const tooltipInfo = { shapeId: null, element: null };
-  const fragment = document.createDocumentFragment();
-  tooltipInfo.element = createTooltip({}, "", 1, 1);
-  fragment.appendChild(tooltipInfo.element);
-  geomap.appendChild(fragment);
-  fragment.textContent = "";
-  tooltipInfo.element.style.display = "none";
 
   async function storeRouterCounts() {
     const url = "/netdb";
     try {
       const response = await fetch(url);
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      const doc = new DOMParser().parseFromString(await response.text(), 'text/html');
-      const rows = doc.querySelectorAll("tr");
-      routerCounts = {};
+      const doc = new DOMParser().parseFromString(await response.text(), "text/html");
+      const rows = doc.querySelectorAll("#cclist tr");
+      routerCounts = JSON.parse(localStorage.getItem("routerCounts")) || { countries: {}, floodfill: {}, tierX: {} };
+
       rows.forEach(row => {
+        const processRow = (type, selector, countSelector) => {
+          const link = row.querySelector(selector);
+          const count = row.querySelector(countSelector)?.textContent.trim();
+          if (link && count) {
+            const cc = link.href.match(/cc=([a-zA-Z]{2})/)?.[1];
+            if (cc) routerCounts[type][cc] = parseInt(count, 10); // Convert count to integer
+          }
+        };
+
+        processRow("tierX", 'td.countX a', 'td.countX');
+        processRow("floodfill", 'td.countFF a', 'td.countFF');
+
         const country = row.querySelector('a[href^="/netdb?c="]');
         if (country && row.children[3]) {
-          const code = country.href.split("=")[1];
-          routerCounts[code] = row.children[3].textContent.trim();
+          const cc = country.href.split("=")[1];
+          routerCounts.countries[cc] = parseInt(row.children[3].textContent.trim(), 10); // Convert count to integer
         }
       });
+
+      const totals = {
+        countries: Object.values(routerCounts.countries).reduce((sum, count) => sum + count, 0),
+        floodfill: Object.values(routerCounts.floodfill).reduce((sum, count) => sum + count, 0),
+        tierX: Object.values(routerCounts.tierX).reduce((sum, count) => sum + count, 0)
+      };
+
+      routerCounts.totals = totals;
+
+      if (debugging) console.log(routerCounts);
       localStorage.setItem("routerCounts", JSON.stringify(routerCounts));
-      Object.keys(m.data.countries).forEach(updateShapeClass);
+      localStorage.setItem("currentRouterClass", currentRouterClass);
+      updateShapeClasses(currentRouterClass);
+
+      if (!storeRouterCounts.intervalId) {
+        storeRouterCounts.intervalId = setInterval(() => {
+          storeRouterCounts();
+          updateShapeClasses(currentRouterClass);
+        }, STORE_INTERVAL);
+      }
     } catch (error) {
+      if (debugging) console.error("Error fetching or processing data:", error);
       localStorage.removeItem("routerCounts");
+      localStorage.removeItem("currentRouterClass");
       setTimeout(storeRouterCounts, TIMEOUT);
     }
   }
 
-  function getRouterCount(shapeId) {
-    var code = (m.data.countries[shapeId] && m.data.countries[shapeId].code) || "";
-    const count = routerCounts[code] || "0";
-    updateShapeClass(shapeId, count);
-    return routerCounts[code] || "0";
+  function getRouterCount(shapeId, routerClass = "countries") {
+    const code = (m.data.countries[shapeId]?.code) || "";
+    const count = routerCounts[routerClass]?.[code] || 0;
+    return count;
+  }
+
+  function getRouterTotalByClass(routerClass) {
+    const routerCounts = JSON.parse(localStorage.getItem("routerCounts")) || {};
+    return routerCounts.totals ? routerCounts.totals[routerClass] : 0;
+  }
+
+  function getQueryParameter(name) { return new URLSearchParams(window.location.search).get(name); }
+
+  function changeRouterClass(routerClass) {
+    localStorage.setItem("currentRouterClass", routerClass);
+    window.location.href = `${window.location.pathname}?routerClass=${routerClass}`;
   }
 
   function updateShapeClass(shapeId, count) {
     const svgElement = document.getElementById(shapeId);
-    if (!svgElement) {return;}
+    if (!svgElement) return;
 
-    const code = (m.data.countries[shapeId] && m.data.countries[shapeId].code) || "";
-    count = routerCounts[code] || "0";
+    if (debugging && verbose) console.log(`Updating shapeId: ${shapeId}, count: ${count}`);
+
     const countThresholds = [
       { threshold: 1, className: "count_1" },
       { threshold: 10, className: "count_10" },
@@ -277,141 +314,68 @@
       { threshold: 500, className: "count_500" },
     ];
 
-    // Remove existing count classes
-    countThresholds.forEach(({ className }) => svgElement.classList.remove(className));
+    const highestThreshold = countThresholds.reverse().find(({ threshold }) => count >= threshold);
 
-    // Find the highest threshold that is met and apply the corresponding class
-    let highestThreshold = null;
-    countThresholds.forEach(({ threshold, className }) => {
-      if (parseInt(count) >= threshold) {highestThreshold = { threshold, className }; }
-    });
-
-    if (highestThreshold) { svgElement.classList.add(highestThreshold.className); }
+    svgElement.classList.remove(...Array.from(svgElement.classList).filter(cls => cls.startsWith('count_')));
+    if (highestThreshold) svgElement.classList.add(highestThreshold.className);
   }
 
-  function createTooltip(data, tooltipTemplate, shapeId) {
-    if (!data) return;
+  function updateShapeClasses(routerClass) {
+    if (routerCounts[routerClass]) {
+      Object.keys(m.data.countries).forEach(shapeId => {
+        updateShapeClass(shapeId, getRouterCount(shapeId, routerClass));
+      });
+    }
+  }
 
-    const routerCount = getRouterCount(shapeId);
-    const tooltipHTML = tooltipTemplate
+  function createInfobox(data, infoboxTemplate, shapeId, routerClass = "countries") {
+    if (!data) return;
+    const routerCount = getRouterCount(shapeId, routerClass);
+    const tierName = routerClass !== "countries" ? routerClass.replace("tier", "Bandwidth tier ").replace("floodfill", "Floodfills") : "";
+    infobox.innerHTML = infoboxTemplate
       .replace(/\$\{shapeId\}/g, shapeId)
       .replace(/\$\{data\.code\}/g, data.code)
       .replace(/\$\{data\.region\}/g, data.region)
-      .replace(/<b>Routers: 0<\/b>/g, `<b>Routers: ${routerCount}</b>`);
-
-    const foreignObject = document.createElementNS("http://www.w3.org/2000/svg", "foreignObject");
-    foreignObject.setAttribute("width", "1");
-    foreignObject.setAttribute("height", "1");
-    foreignObject.style.overflow = "visible";
-
-    const tooltipElement = document.createElement('div');
-    tooltipElement.innerHTML = tooltipHTML;
-    tooltipElement.style.background = "none";
-    tooltipElement.style.pointerEvents = "none";
-    tooltipElement.style.position = "fixed";
-
-    foreignObject.appendChild(tooltipElement);
-    return foreignObject;
+      .replace(/<b>Routers: 0<\/b>/g, `<b>${tierName || "Routers"}: ${routerCount}</b>`)
+      .replace("United States of America", "USA");
+    infobox.classList.remove("hidden");
   }
 
-  function hideTooltip() {
-    const tooltip = document.querySelector("#mapTooltip");
-    tooltip?.classList.add("hidden");
-  }
-
-  function debounce(func, wait, immediate) {
-    let timeout;
-    return function() {
-      const context = this, args = arguments;
-      const later = function () {
-        timeout = null;
-        if (!immediate) {func.apply(context, args);}
-      };
-      const callNow = immediate && !timeout;
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-      if (callNow) {func.apply(context, args);}
-    };
-  };
-
-  const containerRect = geomap.getBoundingClientRect();
-  const scaleWidth = width / containerRect.width;
-  const scaleHeight = height / containerRect.height;
-
-  const handleEvent = debounce(function(event) {
+  const handleEvent = debounce(event => {
     const target = event.target;
-    const targetParent = target.parentNode;
-
-    // Check if the target is a path element and has an ID
-    if (target && target.matches && target.matches("path[id]")) {
-      const shapeId = target.getAttribute("id");
-      const sectionId = targetParent.getAttribute("id");
-
-      // Calculate position for the tooltip
-      let xPosition = (event.clientX - containerRect.left + 10) * scaleWidth;
-      let yPosition = (event.clientY - containerRect.top + 10) * scaleHeight;
-
-      // Adjust tooltip position
-      const adjustedPositions = adjustTooltipPosition(event, containerRect, xPosition, yPosition, shapeId, sectionId);
-      xPosition = adjustedPositions.xPosition;
-      yPosition = adjustedPositions.yPosition;
-
-      // Update the tooltip content and position if sectionId is valid
-      if (sectionId in m.data) {
+    if (target?.matches("path[id]")) {
+      const shapeId = target.id;
+      const sectionId = target.parentNode.id;
+      if (m.data[sectionId]?.[shapeId]) {
         const data = m.data[sectionId][shapeId];
-        if (!data) {
-          hideTooltip();
-          return;
-        }
-
-        const routerCount = getRouterCount(shapeId);
-        const newElement = createTooltip(data, m.tooltips[sectionId], shapeId, scaleWidth, scaleHeight);
-        replaceTooltipElement(newElement, shapeId, xPosition, yPosition);
+        createInfobox(data, m.infoboxHTML[sectionId], shapeId, currentRouterClass);
       }
     } else {
-      hideTooltip();
+      const totalCountries = getRouterTotalByClass("countries");
+      const totalFloodfill = getRouterTotalByClass("floodfill");
+      const totalTierX = getRouterTotalByClass("tierX");
+      if (currentRouterClass === "floodfill") { infobox.innerHTML = "<b>Floodfills by country:<b> " + totalFloodfill; }
+      else if (currentRouterClass === "tierX") { infobox.innerHTML = "<b>X tier routers by country:<b> " + totalTierX; }
+      else { infobox.innerHTML = "<b>Routers by country:<b> " + totalCountries; }
     }
   }, DEBOUNCE_DELAY);
 
-  function adjustTooltipPosition(event, containerRect, xPosition, yPosition, shapeId, sectionId) {
-    const shapeRect = tooltipInfo.element.firstChild?.firstChild?.getBoundingClientRect();
-    if (shapeRect && shapeRect.width > 0) {
-      if (containerRect.right - shapeRect.width < xPosition + 10) {
-        xPosition = (event.clientX - containerRect.left - shapeRect.width - 20) * scaleWidth;
-      }
-      if (containerRect.top + shapeRect.height + 120 > event.clientY + 10) {
-        yPosition = (event.clientY + containerRect.top + shapeRect.height + 20) * scaleHeight;
-      } else if (containerRect.bottom - shapeRect.height < event.clientY + 10) {
-        yPosition = (event.clientY - containerRect.top - shapeRect.height - 20) * scaleHeight;
-      }
-    }
-    return { xPosition, yPosition };
-  }
-
-  async function replaceTooltipElement(newElement, shapeId, x, y) {
-    if (tooltipInfo.element) {tooltipInfo.element.replaceWith(newElement);}
-    else {geomap.appendChild(newElement);}
-    Object.assign(tooltipInfo, { element: newElement, shapeId });
-    Object.assign(newElement.style, { opacity: 1, display: "block" });
-    newElement.setAttribute("x", x);
-    newElement.setAttribute("y", y);
-  }
-
-  function findPathIndex(path, container) {
-    return Array.from(container.children).indexOf(path);
-  }
-
-  function movePathToBack(path, container) {container.appendChild(path);}
-
-  function restorePathPosition(path, previousPos, container) {
-    container.insertBefore(path, container.children[previousPos]);
+  function debounce(func, wait, immediate = false) {
+    let timeout;
+    return function () {
+      const context = this, args = arguments;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => { if (!immediate) { func.apply(context, args); } }, wait);
+      if (immediate && !timeout) { func.apply(context, args); }
+    };
   }
 
   let preloadedFlags = [];
 
   function preloadFlags(codes) {
     const flagContainer = document.createElement("div");
-    flagContainer.style.display = "none";
+    flagContainer.id = "preloadFlags";
+    flagContainer.hidden = true;
     document.body.appendChild(flagContainer);
 
     codes.forEach(code => {
@@ -424,52 +388,40 @@
     });
   }
 
-  const codes = Object.values(m.data.countries).map(country => country.code);
-  preloadFlags(codes);
-
-  setInterval(storeRouterCounts, STORE_INTERVAL);
-  storeRouterCounts();
+  preloadFlags(Object.values(m.data.countries).map(country => country.code));
 
   geomap.addEventListener("mouseenter", handleEvent);
   geomap.addEventListener("mouseout", (event) => {
-    hideTooltip(event);
     if (event.target.previousPos) {
       const previousPos = event.target.previousPos;
       const container = event.target.parentNode;
-      restorePathPosition(event.target, previousPos, container);
+      container.insertBefore(event.target, container.children[previousPos]);
     }
   });
 
   geomap.addEventListener("mousemove", (event) => {
     handleEvent(event);
-    const container = event.target.parentNode;
-    if (event.target.tagName === "path" && container.tagName === "g") {
-      const currentPathIndex = findPathIndex(event.target, container);
-      if (!event.target.previousPos) {event.target.previousPos = currentPathIndex;}
-      if (event.target !== container.lastElementChild) {movePathToBack(event.target, container);}
+    const { target } = event;
+    const container = target.parentNode;
+    if (target.tagName === "path" && container.tagName === "g") {
+      const currentPathIndex = Array.from(container.children).indexOf(target);
+      target.previousPos = target.previousPos || currentPathIndex;
+      if (target !== container.lastElementChild) { container.appendChild(target); }
     }
   });
 
-  function destroyTooltipHandling() {
-    geomap.removeEventListener("mouseenter", handleEvent);
-    geomap.removeEventListener("mouseout", (event) => {
-      hideTooltip(event);
-      if (event.target.previousPos) {
-        const previousPos = event.target.previousPos;
-        const container = event.target.parentNode;
-        restorePathPosition(event.target, previousPos, container);
-      }
-    });
-  }
-
   document.addEventListener("DOMContentLoaded", () => {
-    Object.keys(m.data.countries).forEach((shapeId) => {
-      const code = m.data.countries[shapeId].code || "";
-      const routerCount = getRouterCount(shapeId);
-      updateShapeClass(shapeId, routerCount);
-    });
+    const routerClassFromURL = getQueryParameter("class") || "countries";
+    const geomap = document.getElementById("geomap");
+    localStorage.setItem("currentRouterClass", routerClassFromURL);
+    storeRouterCounts();
+    console.log("Current routerClass is " + routerClassFromURL);
+    updateShapeClasses(routerClassFromURL);
+    setTimeout(() => { geomap.querySelector("#countries").removeAttribute("style"); }, 300);
   });
 
-  window.addEventListener("beforeunload", destroyTooltipHandling);
+  window.addEventListener("beforeunload", () => {
+    if (storeRouterCounts.intervalId) clearInterval(storeRouterCounts.intervalId);
+  });
 
 })();
