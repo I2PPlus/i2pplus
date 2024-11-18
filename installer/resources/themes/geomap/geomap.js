@@ -4,26 +4,12 @@
 (function () {
 
   const geomap = document.querySelector("#geomap");
-
-  // Initialize DOMParser for potential future parsing needs
   const parser = new DOMParser();
-
-  const STORE_INTERVAL = 30000;
-  const DEBOUNCE_DELAY = 60;
-  const TIMEOUT = 15000;
-
-  // Define constants for dimensions
-  const width = 720;
-  const height = 475;
+  const STORE_INTERVAL = 30000, DEBOUNCE_DELAY = 5, TIMEOUT = 15000;
+  const width = 720, height = 475;
 
   // Calculate the inverse of the screen coordinate transformation matrix for geomap
   const screenCTMInverse = geomap.getScreenCTM().inverse();
-
-  // Prepare the tooltip object and element
-  const tooltipInfo = { shapeId: null, element: null };
-  tooltipInfo.element = createTooltip({}, "", 1, 1);
-  geomap.appendChild(tooltipInfo.element);
-  tooltipInfo.element.style.display = "none";
 
   const m = {
     data: {
@@ -233,42 +219,38 @@
     },
   };
 
+  // Prepare the tooltip object and element
   let routerCount = 0;
   let routerCounts = {};
+  const tooltipInfo = { shapeId: null, element: null };
+  const fragment = document.createDocumentFragment();
+  tooltipInfo.element = createTooltip({}, "", 1, 1);
+  fragment.appendChild(tooltipInfo.element);
+  geomap.appendChild(fragment);
+  fragment.textContent = "";
+  tooltipInfo.element.style.display = "none";
 
-  function storeRouterCounts() {
-    var url = "/netdb";
-    var geoxhr = new XMLHttpRequest();
-    geoxhr.responseType = "document";
-    geoxhr.open("GET", url, true);
-    geoxhr.onreadystatechange = function () {
-      if (geoxhr.readyState === 4) {
-        if (geoxhr.status === 200) {
-          var rows = geoxhr.responseXML.querySelectorAll("tr");
-          rows.forEach(function (row) {
-            var country = row.querySelector('a[href^="/netdb?c="]');
-            if (country) {
-              var code = country.getAttribute("href").split("=")[1];
-              // Get the total count, not floodfills or X tier for now
-              // TODO: enable toggle for X and floodfill count
-              if (row.children[3]) {
-                routerCounts[code] = row.children[3].textContent.trim();
-              }
-            }
-          });
-
-          localStorage.setItem("routerCounts", JSON.stringify(routerCounts));
-          Object.keys(m.data.countries).forEach((shapeId) => {
-            updateShapeClass(shapeId);
-          });
-        } else {
-          // Clear local storage on error and schedule another check
-          localStorage.removeItem("routerCounts");
-          setTimeout(storeRouterCounts, TIMEOUT);
+  async function storeRouterCounts() {
+    const url = "/netdb";
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const doc = new DOMParser().parseFromString(await response.text(), 'text/html');
+      const rows = doc.querySelectorAll("tr");
+      routerCounts = {};
+      rows.forEach(row => {
+        const country = row.querySelector('a[href^="/netdb?c="]');
+        if (country && row.children[3]) {
+          const code = country.href.split("=")[1];
+          routerCounts[code] = row.children[3].textContent.trim();
         }
-      }
-    };
-    geoxhr.send();
+      });
+      localStorage.setItem("routerCounts", JSON.stringify(routerCounts));
+      Object.keys(m.data.countries).forEach(updateShapeClass);
+    } catch (error) {
+      localStorage.removeItem("routerCounts");
+      setTimeout(storeRouterCounts, TIMEOUT);
+    }
   }
 
   function getRouterCount(shapeId) {
@@ -301,43 +283,40 @@
     // Find the highest threshold that is met and apply the corresponding class
     let highestThreshold = null;
     countThresholds.forEach(({ threshold, className }) => {
-      if (parseInt(count) >= threshold) {
-        highestThreshold = { threshold, className };
-      }
+      if (parseInt(count) >= threshold) {highestThreshold = { threshold, className }; }
     });
 
-    if (highestThreshold) {
-      svgElement.classList.add(highestThreshold.className);
-    }
+    if (highestThreshold) { svgElement.classList.add(highestThreshold.className); }
   }
 
   function createTooltip(data, tooltipTemplate, shapeId) {
     if (!data) return;
+
+    const routerCount = getRouterCount(shapeId);
+    const tooltipHTML = tooltipTemplate
+      .replace(/\$\{shapeId\}/g, shapeId)
+      .replace(/\$\{data\.code\}/g, data.code)
+      .replace(/\$\{data\.region\}/g, data.region)
+      .replace(/<b>Routers: 0<\/b>/g, `<b>Routers: ${routerCount}</b>`);
+
     const foreignObject = document.createElementNS("http://www.w3.org/2000/svg", "foreignObject");
     foreignObject.setAttribute("width", "1");
     foreignObject.setAttribute("height", "1");
     foreignObject.style.overflow = "visible";
 
-    // Generate the tooltip HTML using the template string and eval statement
-    const tooltipHTML = eval("`" + tooltipTemplate + "`");
-    const htmlDoc = new DOMParser().parseFromString(tooltipHTML, "text/html");
-    const tooltipElement = htmlDoc.querySelector("body");
+    const tooltipElement = document.createElement('div');
+    tooltipElement.innerHTML = tooltipHTML;
     tooltipElement.style.background = "none";
     tooltipElement.style.pointerEvents = "none";
+    tooltipElement.style.position = "fixed";
 
-    // Set the tooltip element's style properties and append it to the foreignObject element
-    requestAnimationFrame(() => {
-      tooltipElement.style.position = "fixed";
-      foreignObject.appendChild(tooltipElement);
-    });
-
+    foreignObject.appendChild(tooltipElement);
     return foreignObject;
   }
 
   function hideTooltip() {
     const tooltip = document.querySelector("#mapTooltip");
-    if (!tooltip) {return;}
-    tooltip.classList.add("hidden");
+    tooltip?.classList.add("hidden");
   }
 
   function debounce(func, wait, immediate) {
@@ -346,91 +325,83 @@
       const context = this, args = arguments;
       const later = function () {
         timeout = null;
-        if (!immediate) func.apply(context, args);
+        if (!immediate) {func.apply(context, args);}
       };
       const callNow = immediate && !timeout;
       clearTimeout(timeout);
       timeout = setTimeout(later, wait);
-      if (callNow) func.apply(context, args);
+      if (callNow) {func.apply(context, args);}
     };
   };
+
+  const containerRect = geomap.getBoundingClientRect();
+  const scaleWidth = width / containerRect.width;
+  const scaleHeight = height / containerRect.height;
 
   const handleEvent = debounce(function(event) {
     const target = event.target;
     const targetParent = target.parentNode;
 
     // Check if the target is a path element and has an ID
-    if (target && target.matches && target.hasAttribute && target.matches("path") && target.hasAttribute("id")) {
-      const containerRect = geomap.getBoundingClientRect();
-      const scaleWidth = width / containerRect.width;
-      const scaleHeight = height / containerRect.height;
-      const shapeRect = tooltipInfo.element.firstChild?.firstChild?.getBoundingClientRect();
-
-      let xPosition = (event.clientX - containerRect.left + 10) * scaleWidth;
-      let yPosition = (event.clientY - containerRect.top + 10) * scaleHeight;
-      let opacity = 1;
-
+    if (target && target.matches && target.matches("path[id]")) {
       const shapeId = target.getAttribute("id");
       const sectionId = targetParent.getAttribute("id");
 
-      if (shapeRect?.width > 0) {
-        if (containerRect.right - shapeRect.width < event.clientX + 10) {
-          xPosition = (event.clientX - containerRect.left - shapeRect.width - 20) * scaleWidth;
-        }
-        if (containerRect.top + shapeRect.height + 120 > event.clientY + 10) {
-          yPosition = (event.clientY + containerRect.top + shapeRect.height + 20) * scaleHeight;
-        } else if (containerRect.bottom - shapeRect.height < event.clientY + 10) {
-          yPosition = (event.clientY - containerRect.top - shapeRect.height - 20) * scaleHeight;
-        }
-      } else if (shapeId && sectionId in m.data) {
-        opacity = 0;
-        setTimeout(() => {handleEvent(event);}, 0);
-      }
+      // Calculate position for the tooltip
+      let xPosition = (event.clientX - containerRect.left + 10) * scaleWidth;
+      let yPosition = (event.clientY - containerRect.top + 10) * scaleHeight;
 
+      // Adjust tooltip position
+      const adjustedPositions = adjustTooltipPosition(event, containerRect, xPosition, yPosition, shapeId, sectionId);
+      xPosition = adjustedPositions.xPosition;
+      yPosition = adjustedPositions.yPosition;
+
+      // Update the tooltip content and position if sectionId is valid
       if (sectionId in m.data) {
-        if (shapeId && tooltipInfo.shapeId === shapeId) {
-          updateShapePosition(tooltipInfo.element, xPosition, yPosition, opacity);
-        } else {
-          const data = m.data[sectionId][shapeId];
-          const routerCount = getRouterCount(shapeId);
-          if (!data) {
-            tooltipInfo.element.style.display = "none";
-            return;
-          }
-
-          const newElement = createTooltip(data, m.tooltips[sectionId].replace(/<b>Routers: 0<\/b>/g, "<b>Routers: </b>" + routerCount + "</span>"),
-                                           shapeId, scaleWidth, scaleHeight);
-          requestAnimationFrame(() => {replaceAndSetNewElement(tooltipInfo.element, newElement, shapeId, xPosition, yPosition, opacity);});
+        const data = m.data[sectionId][shapeId];
+        if (!data) {
+          hideTooltip();
+          return;
         }
+
+        const routerCount = getRouterCount(shapeId);
+        const newElement = createTooltip(data, m.tooltips[sectionId], shapeId, scaleWidth, scaleHeight);
+        replaceTooltipElement(newElement, shapeId, xPosition, yPosition);
       }
-    } else {hideTooltip();}
+    } else {
+      hideTooltip();
+    }
   }, DEBOUNCE_DELAY);
 
-  function updateShapePosition(element, x, y, opacity) {
-    element.setAttribute("x", x);
-    element.setAttribute("y", y);
-    element.firstChild.style.position = "absolute";
-    setTimeout(() => {element.firstChild.style.position = "fixed";}, 0);
-    element.style.display = "block";
-    element.style.opacity = opacity;
+  function adjustTooltipPosition(event, containerRect, xPosition, yPosition, shapeId, sectionId) {
+    const shapeRect = tooltipInfo.element.firstChild?.firstChild?.getBoundingClientRect();
+    if (shapeRect && shapeRect.width > 0) {
+      if (containerRect.right - shapeRect.width < xPosition + 10) {
+        xPosition = (event.clientX - containerRect.left - shapeRect.width - 20) * scaleWidth;
+      }
+      if (containerRect.top + shapeRect.height + 120 > event.clientY + 10) {
+        yPosition = (event.clientY + containerRect.top + shapeRect.height + 20) * scaleHeight;
+      } else if (containerRect.bottom - shapeRect.height < event.clientY + 10) {
+        yPosition = (event.clientY - containerRect.top - shapeRect.height - 20) * scaleHeight;
+      }
+    }
+    return { xPosition, yPosition };
   }
 
-  function replaceAndSetNewElement(oldElement, newElement, shapeId, x, y, opacity) {
-    oldElement.replaceWith(newElement);
-    tooltipInfo.element = newElement;
-    tooltipInfo.shapeId = shapeId;
-    tooltipInfo.element.setAttribute("x", x);
-    tooltipInfo.element.setAttribute("y", y);
-    tooltipInfo.element.style.opacity = opacity;
+  async function replaceTooltipElement(newElement, shapeId, x, y) {
+    if (tooltipInfo.element) {tooltipInfo.element.replaceWith(newElement);}
+    else {geomap.appendChild(newElement);}
+    Object.assign(tooltipInfo, { element: newElement, shapeId });
+    Object.assign(newElement.style, { opacity: 1, display: "block" });
+    newElement.setAttribute("x", x);
+    newElement.setAttribute("y", y);
   }
 
   function findPathIndex(path, container) {
     return Array.from(container.children).indexOf(path);
   }
 
-  function movePathToBack(path, container) {
-    container.appendChild(path);
-  }
+  function movePathToBack(path, container) {container.appendChild(path);}
 
   function restorePathPosition(path, previousPos, container) {
     container.insertBefore(path, container.children[previousPos]);
