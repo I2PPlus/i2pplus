@@ -15,7 +15,7 @@
 #geomap #countries{animation:fadein .3s ease 1s both}
 
 /* infobox */
-#netdbmap #info{padding:12px 16px 10px;height:fit-content;width:max-content;position:absolute;top:20px;right:30px;z-index:999999;line-height:1.5;font-weight:500;color:#111;box-shadow:0 0 0 2px #710,3px 3px 3px #0008,0 0 0 1px #fff inset,0 0 0 2px #900 inset;background:linear-gradient(180deg,#fff,#eee)}
+#netdbmap #info{padding:12px 16px 10px;height:fit-content;width:max-content;position:absolute;top:26px;right:26px;z-index:999999;line-height:1.5;font-weight:500;color:#111;box-shadow:0 0 0 2px #710,3px 3px 3px #0008,0 0 0 1px #fff inset,0 0 0 2px #900 inset;background:linear-gradient(180deg,#fff,#eee)}
 #netdbmap #info:empty{display:none}
 #netdbmap #info.hidden{animation:fadeout 40ms ease 0s both}
 #netdbmap #info .mapflag {width:16px!important;height:12px!important;margin:-1px 0 0 2px}
@@ -34,6 +34,13 @@
 #netdbmap{position:relative}
 #netdbRouterMap{padding:0;position:relative}
 #netdbmapLegend{position:absolute;bottom:20px;left:20px;display:inline-block}
+
+/* nav */
+#netdbmap #nav {margin:16px auto 0;padding 8px;width:calc(100% - 16px);display:block;position:absolute;z-index:99999999;text-align:center;transform:translateY(-200px);transition:ease-out transform .5s}
+#netdbmap:hover #nav {transform:translateY(0);transition:ease-in transform .5s;}
+#netdbmap #nav span {margin:0 -1px;padding:4px 16px 6px;vertical-align:middle;border:1px solid #222;background:#fff;opacity:.7;}
+#netdbmap #nav span:hover {opacity:1;}
+#netdbmap #nav a {margin:0;padding:0;display:inline-block;vertical-align:middle;color:#222}
 
 @keyframes fadein{from{opacity:0}to{opacity:1}}
 @keyframes fadeout{from{opacity:1}to{opacity:0}}

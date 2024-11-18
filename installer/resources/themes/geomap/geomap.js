@@ -221,8 +221,31 @@
     },
   };
 
-  let routerCounts = {};
+  const preloadedFlags = new Set();
+  function preloadFlags(codes) {
+    const flagContainer = document.createElement("div");
+    flagContainer.id = "preloadFlags";
+    flagContainer.hidden = true;
+    document.body.appendChild(flagContainer);
+    const newImages = codes
+      .filter(code => !preloadedFlags.has(code))
+      .map(code => {
+        const img = new Image();
+        img.src = `/flags.jsp?c=${code}`;
+        const errorMessage = `Failed to load flag for code: ${code}`;
+        flagContainer.appendChild(img);
+        return new Promise((resolve) => {
+          img.onload = () => {
+            preloadedFlags.add(code);
+            resolve();
+          };
+        });
+      });
+    Promise.all(newImages).then(() => { document.body.removeChild(flagContainer); }).catch();
+  }
+  preloadFlags(Object.values(m.data.countries).map(country => country.code));
 
+  let routerCounts = {};
   async function storeRouterCounts() {
     const url = "/netdb";
     try {
@@ -238,17 +261,16 @@
           const count = row.querySelector(countSelector)?.textContent.trim();
           if (link && count) {
             const cc = link.href.match(/cc=([a-zA-Z]{2})/)?.[1];
-            if (cc) routerCounts[type][cc] = parseInt(count, 10); // Convert count to integer
+            if (cc) routerCounts[type][cc] = parseInt(count, 10);
           }
         };
-
         processRow("tierX", 'td.countX a', 'td.countX');
         processRow("floodfill", 'td.countFF a', 'td.countFF');
 
         const country = row.querySelector('a[href^="/netdb?c="]');
         if (country && row.children[3]) {
           const cc = country.href.split("=")[1];
-          routerCounts.countries[cc] = parseInt(row.children[3].textContent.trim(), 10); // Convert count to integer
+          routerCounts.countries[cc] = parseInt(row.children[3].textContent.trim(), 10);
         }
       });
 
@@ -341,25 +363,6 @@
     infobox.classList.remove("hidden");
   }
 
-  const handleEvent = debounce(event => {
-    const target = event.target;
-    if (target?.matches("path[id]")) {
-      const shapeId = target.id;
-      const sectionId = target.parentNode.id;
-      if (m.data[sectionId]?.[shapeId]) {
-        const data = m.data[sectionId][shapeId];
-        createInfobox(data, m.infoboxHTML[sectionId], shapeId, currentRouterClass);
-      }
-    } else {
-      const totalCountries = getRouterTotalByClass("countries");
-      const totalFloodfill = getRouterTotalByClass("floodfill");
-      const totalTierX = getRouterTotalByClass("tierX");
-      if (currentRouterClass === "floodfill") { infobox.innerHTML = "<b>Known Floodfills:<b> " + totalFloodfill; }
-      else if (currentRouterClass === "tierX") { infobox.innerHTML = "<b>Known X tier Routers:<b> " + totalTierX; }
-      else { infobox.innerHTML = "<b>Known Routers:<b> " + totalCountries; }
-    }
-  }, DEBOUNCE_DELAY);
-
   function debounce(func, wait, immediate = false) {
     let timeout;
     return function () {
@@ -370,49 +373,48 @@
     };
   }
 
-  let preloadedFlags = [];
-
-  function preloadFlags(codes) {
-    const flagContainer = document.createElement("div");
-    flagContainer.id = "preloadFlags";
-    flagContainer.hidden = true;
-    document.body.appendChild(flagContainer);
-
-    codes.forEach(code => {
-      if (!preloadedFlags.includes(code)) {
-        const img = new Image();
-        img.src = `/flags.jsp?c=${code}`;
-        flagContainer.appendChild(img);
-        preloadedFlags.push(code);
-      }
-    });
-  }
-
-  preloadFlags(Object.values(m.data.countries).map(country => country.code));
+  const handleEvent = debounce(event => {
+    const target = event.target;
+    const sectionId = target?.parentNode.id;
+      if (target?.matches("path[id]")) {
+      const shapeId = target.id;
+      target.classList.add("hover");
+        const data = m.data[sectionId]?.[shapeId];
+      if (data) {createInfobox(data, m.infoboxHTML[sectionId], shapeId, currentRouterClass);}
+    } else {
+      const totalCounts = {
+        countries: getRouterTotalByClass("countries"),
+        floodfill: getRouterTotalByClass("floodfill"),
+        tierX: getRouterTotalByClass("tierX")
+      };
+      infobox.innerHTML = `<b>Known ${currentRouterClass === "floodfill" ? "Floodfills" :
+                                      currentRouterClass === "tierX" ? "X tier Routers" :
+                                      "Routers"}:</b> ${totalCounts[currentRouterClass]}`;
+    }
+  }, DEBOUNCE_DELAY);
 
   geomap.addEventListener("mouseenter", handleEvent);
-  geomap.addEventListener("mouseout", (event) => {
-    if (event.target.previousPos) {
-      const previousPos = event.target.previousPos;
-      const container = event.target.parentNode;
-      container.insertBefore(event.target, container.children[previousPos]);
+
+  geomap.addEventListener("mouseout", ({ target }) => {
+    if (target.previousPos) {
+      const container = target.parentNode;
+      container.insertBefore(target, container.children[target.previousPos]);
     }
   });
 
-  geomap.addEventListener("mousemove", (event) => {
-    handleEvent(event);
+  geomap.addEventListener("mousemove", event => {
     const { target } = event;
     const container = target.parentNode;
+    handleEvent(event);
     if (target.tagName === "path" && container.tagName === "g") {
       const currentPathIndex = Array.from(container.children).indexOf(target);
-      target.previousPos = target.previousPos || currentPathIndex;
-      if (target !== container.lastElementChild) { container.appendChild(target); }
+      target.previousPos = target.previousPos ?? currentPathIndex;
+      if (target !== container.lastElementChild) {container.appendChild(target);}
     }
   });
 
   document.addEventListener("DOMContentLoaded", () => {
     const routerClassFromURL = getQueryParameter("class") || "countries";
-    const geomap = document.getElementById("geomap");
     localStorage.setItem("currentRouterClass", routerClassFromURL);
     storeRouterCounts();
     console.log("Current routerClass is " + routerClassFromURL);
