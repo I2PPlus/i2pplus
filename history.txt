@@ -1,3 +1,11 @@
+2024-11-18 dr|z3d
+ * Console: Add query paramater support to /netdbmap to allow display of
+   all / floodfills / X tier by country: ?class={countries|floodfill|tierX}
+
+2024-11-16 dr|z3d
+ * Console: Add ok.js to provide simple, themeable alert boxes and implement
+   on /configadvanced
+
 2024-11-13 dr|z3d
  * I2PSnark: More robust toggle magnets / links and copy magnet to
    clipboard functionality
