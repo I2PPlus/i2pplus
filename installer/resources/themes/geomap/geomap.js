@@ -354,9 +354,9 @@
       const totalCountries = getRouterTotalByClass("countries");
       const totalFloodfill = getRouterTotalByClass("floodfill");
       const totalTierX = getRouterTotalByClass("tierX");
-      if (currentRouterClass === "floodfill") { infobox.innerHTML = "<b>Floodfills by country:<b> " + totalFloodfill; }
-      else if (currentRouterClass === "tierX") { infobox.innerHTML = "<b>X tier routers by country:<b> " + totalTierX; }
-      else { infobox.innerHTML = "<b>Routers by country:<b> " + totalCountries; }
+      if (currentRouterClass === "floodfill") { infobox.innerHTML = "<b>Known Floodfills:<b> " + totalFloodfill; }
+      else if (currentRouterClass === "tierX") { infobox.innerHTML = "<b>Known X tier Routers:<b> " + totalTierX; }
+      else { infobox.innerHTML = "<b>Known Routers:<b> " + totalCountries; }
     }
   }, DEBOUNCE_DELAY);
 
