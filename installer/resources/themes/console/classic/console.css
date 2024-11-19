@@ -2216,6 +2216,7 @@ span.b32:active{box-shadow:0 0 0 1px var(--border_color),var(--btn_shadow_active
 #events tr:hover td:last-child{border-right:1px solid #393;background:linear-gradient(to left,#393 2px,rgba(0,0,0,.02) 2px)}
 
 /* lazy loading */
+body:not(.ready) .lazy{display:none}
 .lazy.lazyhide,.lazy.lazyhide td:not(.rih){opacity:0;contain:strict}
 .lazy.lazyshow,.lazy.lazyshow td:not(.rih),#peers .lazy:not(.lazyhide){opacity:1}
 .newsentry.lazyhide{contain:none}

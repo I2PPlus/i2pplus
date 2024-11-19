@@ -2483,6 +2483,7 @@ p+.twocol,div[lang="de"] p+.twocol{margin:10px 25px}
 #console #eepsites,#console #eepsites~h3{margin-top:18px}
 
 /* lazy loading */
+body:not(.ready) .lazy{display:none}
 .lazy.lazyhide,.lazy.lazyhide td{opacity:0;contain:strict}
 .lazy.lazyshow,.lazy.lazyshow td,#peers .lazy:not(.lazyhide){opacity:1}
 .newsentry.lazyhide{contain:none}

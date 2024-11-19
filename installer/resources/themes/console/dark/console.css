@@ -2655,6 +2655,7 @@ ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 #webhosting #guides li a{padding-left:22px}
 
 /* lazy loading */
+body:not(.ready) .lazy{display:none}
 .lazy.lazyhide,.lazy.lazyhide td{opacity:0;contain:strict}
 .newsentry.lazyhide{contain:none}
 .newsentry.lazyshow{transition:ease opacity .15s}

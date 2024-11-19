@@ -3,8 +3,8 @@
 /* License: AGPL3 or later */
 
 (function initLazyload() {
-  const parentSelectors = [ ".leasesets_container", ".main", ".tunneldisplay", "#ffProfiles", "#host_list", "#profilelist" ];
 
+  const parentSelectors = [ ".leasesets_container", ".main", ".tunneldisplay", "#ffProfiles", "#host_list", "#profilelist" ];
   const parentSelector = parentSelectors.join(", ");
   const lazyElementsSet = new Set();
 
@@ -52,7 +52,7 @@
   const throttledLazyLoad = throttle(() => requestAnimationFrame(lazyload), 180);
 
   document.addEventListener("DOMContentLoaded", () => {
-    lazyload();
+    document.body.classList.add("ready");
     window.addEventListener("scroll", throttledLazyLoad);
     window.addEventListener("resize", throttledLazyLoad);
 
