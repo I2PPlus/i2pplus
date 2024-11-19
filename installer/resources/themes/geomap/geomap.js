@@ -9,13 +9,10 @@
   let debugging = false;
   let verbose = false;
   const parser = new DOMParser();
-  const STORE_INTERVAL = 30000, DEBOUNCE_DELAY = 0, TIMEOUT = 15000;
+  const STORE_INTERVAL = 15000, DEBOUNCE_DELAY = 30, TIMEOUT = 15000;
   const width = 720, height = 475;
 
-  // Calculate the inverse of the screen coordinate transformation matrix for geomap
-  const screenCTMInverse = geomap.getScreenCTM().inverse();
-
-  const m = {
+  const map = {
     data: {
       countries: {
         Afghanistan: { region: "Asia", code: "af" },
@@ -243,7 +240,7 @@
       });
     Promise.all(newImages).then(() => { document.body.removeChild(flagContainer); }).catch();
   }
-  preloadFlags(Object.values(m.data.countries).map(country => country.code));
+  preloadFlags(Object.values(map.data.countries).map(country => country.code));
 
   let routerCounts = {};
   async function storeRouterCounts() {
@@ -302,7 +299,7 @@
   }
 
   function getRouterCount(shapeId, routerClass = "countries") {
-    const code = (m.data.countries[shapeId]?.code) || "";
+    const code = (map.data.countries[shapeId]?.code) || "";
     const count = routerCounts[routerClass]?.[code] || 0;
     return count;
   }
@@ -351,7 +348,7 @@
 
   function updateShapeClasses(routerClass) {
     if (routerCounts[routerClass]) {
-      Object.keys(m.data.countries).forEach(shapeId => {
+      Object.keys(map.data.countries).forEach(shapeId => {
         updateShapeClass(shapeId, getRouterCount(shapeId, routerClass));
       });
     }
@@ -365,9 +362,22 @@
       .replace(/\$\{shapeId\}/g, shapeId)
       .replace(/\$\{data\.code\}/g, data.code)
       .replace(/\$\{data\.region\}/g, data.region)
-      .replace(/<b>Routers: 0<\/b>/g, `<b>${tierName || "Routers"}: ${routerCount}</b>`)
+      .replace(/<b>Routers: 0<\/b>/g, `<b>${tierName || "Routers"}:</b> ${routerCount}`)
       .replace("United States of America", "USA");
     infobox.classList.remove("hidden");
+  }
+
+  function renderTotals() {
+    const totalCounts = {
+      countries: getRouterTotalByClass("countries"),
+      floodfill: getRouterTotalByClass("floodfill"),
+      tierX: getRouterTotalByClass("tierX")
+    };
+    requestAnimationFrame(() => {
+      infobox.innerHTML = `<b>Known ${currentRouterClass === "floodfill" ? "Floodfills" :
+                                      currentRouterClass === "tierX" ? "X tier Routers" :
+                                      "Routers"}:</b> ${totalCounts[currentRouterClass]}`;
+    });
   }
 
   function debounce(func, wait, immediate = false) {
@@ -384,20 +394,11 @@
     const target = event.target;
     const sectionId = target?.parentNode.id;
       if (target?.matches("path[id]")) {
-      const shapeId = target.id;
-      target.classList.add("hover");
-        const data = m.data[sectionId]?.[shapeId];
-      if (data) {createInfobox(data, m.infoboxHTML[sectionId], shapeId, currentRouterClass);}
-    } else {
-      const totalCounts = {
-        countries: getRouterTotalByClass("countries"),
-        floodfill: getRouterTotalByClass("floodfill"),
-        tierX: getRouterTotalByClass("tierX")
-      };
-      infobox.innerHTML = `<b>Known ${currentRouterClass === "floodfill" ? "Floodfills" :
-                                      currentRouterClass === "tierX" ? "X tier Routers" :
-                                      "Routers"}:</b> ${totalCounts[currentRouterClass]}`;
-    }
+        const shapeId = target.id;
+        target.classList.add("hover");
+        const data = map.data[sectionId]?.[shapeId];
+      if (data) {createInfobox(data, map.infoboxHTML[sectionId], shapeId, currentRouterClass);}
+    } else {renderTotals();}
   }, DEBOUNCE_DELAY);
 
   geomap.addEventListener("mouseenter", handleEvent);
@@ -407,7 +408,10 @@
       const container = target.parentNode;
       container.insertBefore(target, container.children[target.previousPos]);
     }
+    debounce(renderTotals, DEBOUNCE_DELAY);
   });
+
+  geomap.addEventListener("mouseleave", () => { renderTotals(); });
 
   geomap.addEventListener("mousemove", event => {
     const { target } = event;
