@@ -19,7 +19,7 @@
 <h1 class=netwrk><%=intl._t("Network Database Router Map")%></h1>
 <div class=main id=netdbRouterMap>
 <div id=netdbmap>
-<div id=info></div><div id=nav><span><a href=/netdbmap>Routers by Country</a></span><span><a href="/netdbmap?class=floodfill">Floodfills by Country</a></span><span><a href="/netdbmap?class=tierX">X Tier by Country</a></span></div>
+<div id=info></div><div id=nav><span id=bycc><a href=/netdbmap>Routers by Country</a></span><span id=byff><a href="/netdbmap?class=floodfill">Floodfills by Country</a></span><span id=byX><a href="/netdbmap?class=tierX">X Tier by Country</a></span></div>
 <div id=info class=hidden></div>
 <%@ include file="/viewnetdbmap.jsp" %>
 <div id=netdbmapLegend>

@@ -282,7 +282,7 @@
 
       routerCounts.totals = totals;
 
-      if (debugging) console.log(routerCounts);
+      if (debugging) {console.log(routerCounts);}
       localStorage.setItem("routerCounts", JSON.stringify(routerCounts));
       localStorage.setItem("currentRouterClass", currentRouterClass);
       updateShapeClasses(currentRouterClass);
@@ -319,10 +319,18 @@
     window.location.href = `${window.location.pathname}?routerClass=${routerClass}`;
   }
 
+  function setNavButtonActive() {
+    const active = getQueryParameter("class");
+    const navButtons = document.querySelectorAll("#nav span");
+    navButtons.forEach(btn => btn.classList.remove("active"));
+    const activeIdMap = {floodfill: "byff", tierX: "byX"};
+    const activeId = activeIdMap[active] || "bycc";
+    document.getElementById(activeId).classList.add("active");
+  }
+
   function updateShapeClass(shapeId, count) {
     const svgElement = document.getElementById(shapeId);
     if (!svgElement) return;
-
     if (debugging && verbose) console.log(`Updating shapeId: ${shapeId}, count: ${count}`);
 
     const countThresholds = [
@@ -337,7 +345,6 @@
     ];
 
     const highestThreshold = countThresholds.reverse().find(({ threshold }) => count >= threshold);
-
     svgElement.classList.remove(...Array.from(svgElement.classList).filter(cls => cls.startsWith('count_')));
     if (highestThreshold) svgElement.classList.add(highestThreshold.className);
   }
@@ -419,6 +426,7 @@
     storeRouterCounts();
     console.log("Current routerClass is " + routerClassFromURL);
     updateShapeClasses(routerClassFromURL);
+    setNavButtonActive();
     setTimeout(() => { geomap.querySelector("#countries").removeAttribute("style"); }, 300);
   });
 
