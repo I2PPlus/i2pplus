@@ -26,8 +26,8 @@ function sectionToggler() {
 
   function toggle_updatesection() {
     if (sb_updatesection !== null) {
-      if (document.getElementById("toggle_sb_updatesection").checked !== true) {hide_updatesection();}
-      else {show_updatesection();}
+      if (document.getElementById("toggle_sb_updatesection").checked !== true) { hide_updatesection(); }
+      else { show_updatesection(); }
     }
   }
 
@@ -54,8 +54,8 @@ function sectionToggler() {
   }
 
   function toggle_general() {
-    if (document.getElementById("toggle_sb_general").checked !== true) {hide_general();}
-    else {show_general();}
+    if (document.getElementById("toggle_sb_general").checked !== true) { hide_general(); }
+    else { show_general(); }
   }
 
   function hide_general() {
@@ -79,8 +79,8 @@ function sectionToggler() {
   }
 
   function toggle_advancedgeneral() {
-    if (document.getElementById("toggle_sb_advancedgeneral").checked !== true) {hide_advancedgeneral();}
-    else {show_advancedgeneral();}
+    if (document.getElementById("toggle_sb_advancedgeneral").checked !== true) { hide_advancedgeneral(); }
+    else { show_advancedgeneral(); }
   }
 
   function hide_advancedgeneral() {
@@ -104,8 +104,8 @@ function sectionToggler() {
   }
 
   function toggle_bandwidth() {
-    if (document.getElementById("toggle_sb_bandwidth").checked !== true) {hide_bandwidth();}
-    else {show_bandwidth();}
+    if (document.getElementById("toggle_sb_bandwidth").checked !== true) { hide_bandwidth(); }
+    else { show_bandwidth(); }
   }
 
   function hide_bandwidth() {
@@ -133,8 +133,8 @@ function sectionToggler() {
   }
 
   function toggle_services() {
-    if (document.getElementById("toggle_sb_services").checked !== true) {hide_services();}
-    else {show_services();}
+    if (document.getElementById("toggle_sb_services").checked !== true) { hide_services(); }
+    else { show_services(); }
   }
 
   function hide_services() {
@@ -159,8 +159,8 @@ function sectionToggler() {
   }
 
   function toggle_internals() {
-    if (document.getElementById("toggle_sb_internals").checked !== true) {hide_internals()}
-    else {show_internals();}
+    if (document.getElementById("toggle_sb_internals").checked !== true) { hide_internals() }
+    else { show_internals(); }
   }
 
   function hide_internals() {
@@ -185,8 +185,8 @@ function sectionToggler() {
   }
 
   function toggle_advanced() {
-    if (document.getElementById("toggle_sb_advanced").checked !== true) {hide_advanced()}
-    else {show_advanced();}
+    if (document.getElementById("toggle_sb_advanced").checked !== true) { hide_advanced() }
+    else { show_advanced(); }
   }
 
   function hide_advanced() {
@@ -211,8 +211,8 @@ function sectionToggler() {
   }
 
   function toggle_help() {
-    if (document.getElementById("toggle_sb_help").checked !== true) {hide_help()}
-    else {show_help();}
+    if (document.getElementById("toggle_sb_help").checked !== true) { hide_help() }
+    else { show_help(); }
   }
 
   function hide_help() {
@@ -237,8 +237,8 @@ function sectionToggler() {
   }
 
   function toggle_queue() {
-    if (document.getElementById("toggle_sb_queue").checked !== true) {hide_queue()}
-    else {show_queue();}
+    if (document.getElementById("toggle_sb_queue").checked !== true) { hide_queue() }
+    else { show_queue(); }
   }
 
   function hide_queue() {
@@ -246,7 +246,7 @@ function sectionToggler() {
       sb_queue.hidden = true;
       sb.querySelector("#sb_queue + hr").hidden = true;
       document.getElementById("toggle_sb_queue").checked = false;
-      if (jobBadge) {jobBadge.hidden = null;}
+      if (jobBadge) { jobBadge.hidden = null; }
       localStorage["section_queue"] = "hide";
     }
   }
@@ -256,14 +256,14 @@ function sectionToggler() {
       sb_queue.hidden = null;
       sb.querySelector("#sb_queue + hr").hidden = null;
       document.getElementById("toggle_sb_queue").checked = true;
-      if (jobBadge) {jobBadge.hidden = true;}
+      if (jobBadge) { jobBadge.hidden = true; }
       localStorage.removeItem("section_queue");
     }
   }
 
   function toggle_tunnels() {
-    if (document.getElementById("toggle_sb_tunnels").checked !== true && sb_tunnels !== null) {hide_tunnels()}
-    else {show_tunnels();}
+    if (document.getElementById("toggle_sb_tunnels").checked !== true && sb_tunnels !== null) { hide_tunnels() }
+    else { show_tunnels(); }
   }
 
   function hide_tunnels() {
@@ -272,7 +272,7 @@ function sectionToggler() {
       sb_tunnels_condensed.hidden = null;
       document.getElementById("toggle_sb_tunnels").checked = null;
       localStorage["section_tunnels"] = "hide";
-      if (tunnelsBadge) {tunnelsBadge.hidden = null;}
+      if (tunnelsBadge) { tunnelsBadge.hidden = null; }
     }
   }
 
@@ -282,13 +282,13 @@ function sectionToggler() {
       sb_tunnels_condensed.hidden = true;
       document.getElementById("toggle_sb_tunnels").checked = true;
       localStorage.removeItem("section_tunnels");
-      if (tunnelsBadge) {tunnelsBadge.hidden = true;}
+      if (tunnelsBadge) { tunnelsBadge.hidden = true; }
     }
   }
 
   function toggle_peers() {
-    if (document.getElementById("toggle_sb_peers").checked !== true) {hide_peers()}
-    else {show_peers();}
+    if (document.getElementById("toggle_sb_peers").checked !== true) { hide_peers() }
+    else { show_peers(); }
   }
 
   function hide_peers() {
@@ -312,8 +312,8 @@ function sectionToggler() {
   }
 
   function toggle_newsheadings() {
-    if (document.getElementById("toggle_sb_newsheadings").checked !== true) {hide_newsheadings()}
-    else {show_newsheadings();}
+    if (document.getElementById("toggle_sb_newsheadings").checked !== true) { hide_newsheadings() }
+    else { show_newsheadings(); }
   }
 
   function hide_newsheadings() {
@@ -337,8 +337,8 @@ function sectionToggler() {
   }
 
   function toggle_localtunnels() {
-    if (document.getElementById("toggle_sb_localtunnels").checked !== true) {hide_localtunnels()}
-    else {show_localtunnels();}
+    if (document.getElementById("toggle_sb_localtunnels").checked !== true) { hide_localtunnels() }
+    else { show_localtunnels(); }
   }
 
   function hide_localtunnels() {
@@ -367,26 +367,39 @@ function sectionToggler() {
   }
 
   function show_localtunnels() {
-    if (localtunnelSummary !== null) {localtunnelSummary.hidden = true;}
-    if (sb_localtunnels !== null) {sb_localtunnels.hidden = null;}
+    if (localtunnelSummary !== null) { localtunnelSummary.hidden = true; }
+    if (sb_localtunnels !== null) { sb_localtunnels.hidden = null; }
     document.getElementById("toggle_sb_localtunnels").checked = true;
     localStorage.removeItem("section_localtunnels");
   }
 
   function checkToggleStatus() {
-    if (localStorage.getItem("section_advancedgeneral") !== null) {hide_advancedgeneral();} else {show_advancedgeneral();}
-    if (localStorage.getItem("section_advanced") !== null) {hide_advanced();} else {show_advanced();}
-    if (localStorage.getItem("section_bandwidth") !== null) {hide_bandwidth();} else {show_bandwidth();}
-    if (localStorage.getItem("section_general") !== null) {hide_general();} else {show_general();}
-    if (localStorage.getItem("section_help") !== null) {hide_general();} else {show_general();}
-    if (localStorage.getItem("section_internals") !== null) {hide_internals();} else {show_internals();}
-    if (localStorage.getItem("section_localtunnels") !== null) {hide_localtunnels();} else {show_localtunnels();}
-    if (localStorage.getItem("section_peers") !== null) {hide_peers();} else {show_peers();}
-    if (localStorage.getItem("section_queue") !== null) {hide_queue();} else {show_queue();}
-    if (localStorage.getItem("section_services") !== null) {hide_services();} else {show_services();}
-    if (localStorage.getItem("section_tunnels") !== null) {hide_tunnels();} else {show_tunnels();}
-    if (localStorage.getItem("section_updatesection") !== null) {hide_updatesection();} else {show_updatesection();}
-    if (localStorage.getItem("section_newsheadings") !== null) {hide_newsheadings();} else {show_newsheadings();}
+    const sections = [
+      "section_advancedgeneral", "section_advanced", "section_bandwidth", "section_general",
+      "section_help", "section_internals", "section_localtunnels", "section_peers", "section_queue",
+      "section_services", "section_tunnels", "section_updatesection", "section_newsheadings"
+    ];
+
+    const sectionFunctions = {
+      section_advancedgeneral: [show_advancedgeneral, hide_advancedgeneral],
+      section_advanced: [show_advanced, hide_advanced],
+      section_bandwidth: [show_bandwidth, hide_bandwidth],
+      section_general: [show_general, hide_general],
+      section_help: [show_general, hide_general],
+      section_internals: [show_internals, hide_internals],
+      section_localtunnels: [show_localtunnels, hide_localtunnels],
+      section_peers: [show_peers, hide_peers],
+      section_queue: [show_queue, hide_queue],
+      section_services: [show_services, hide_services],
+      section_tunnels: [show_tunnels, hide_tunnels],
+      section_updatesection: [show_updatesection, hide_updatesection],
+      section_newsheadings: [show_newsheadings, hide_newsheadings]
+    };
+
+    sections.forEach(section => {
+      const [show, hide] = sectionFunctions[section];
+      localStorage.getItem(section) !== null ? hide() : show();
+    });
   }
 
   function addToggleListeners() {
@@ -421,13 +434,13 @@ function countNewsItems() {
   const sbNewsHeadings = document.getElementById("sb_newsheadings");
   const newsBadge = document.getElementById("newsCount");
   const doubleCount = sb.querySelector("#newsCount+#newsCount");
-  if (!sbNewsHeadings || !newsBadge) {return;}
-  if (doubleCount) {doubleCount.remove();}
+  if (!sbNewsHeadings || !newsBadge) { return; }
+  if (doubleCount) { doubleCount.remove(); }
   const newsItemsLength = sbNewsHeadings.querySelectorAll("table tr").length;
   if (newsItemsLength > 0) {
     newsBadge.hidden = false;
-    if (newsBadge.innerHTML !== newsItemsLength.toString()) {newsBadge.innerHTML = newsItemsLength;}
-  } else {newsBadge.hidden = true;}
+    if (newsBadge.innerHTML !== newsItemsLength.toString()) { newsBadge.innerHTML = newsItemsLength; }
+  } else { newsBadge.hidden = true; }
 }
 
-export {sectionToggler, countNewsItems};
+export { sectionToggler, countNewsItems };

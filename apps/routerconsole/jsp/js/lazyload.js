@@ -3,19 +3,10 @@
 /* License: AGPL3 or later */
 
 (function initLazyload() {
-
-  const parentSelectors = [
-    ".leasesets_container",
-    ".main",
-    ".tunneldisplay",
-    "#ffProfiles",
-    "#host_list",
-    "#profilelist"
-  ];
+  const parentSelectors = [ ".leasesets_container", ".main", ".tunneldisplay", "#ffProfiles", "#host_list", "#profilelist" ];
 
   const parentSelector = parentSelectors.join(", ");
   const lazyElementsSet = new Set();
-  const main = document.querySelector(".main") || document.querySelector("#page");
 
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
@@ -34,19 +25,20 @@
     if (lazyElementsSet.size === 0) {
       observer.disconnect();
     }
-  }, { root: null, rootMargin: "10px", threshold: 0 });
+  }, { root: null, rootMargin: "10px", threshold: 0.5 });
 
-  function debounce(fn, delay) {
-    let timeoutId;
-    return function() {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        fn.apply(this, arguments);
-      }, delay);
+  const throttle = (fn, limit) => {
+    let inThrottle = false;
+    return (...args) => {
+      if (!inThrottle) {
+        fn.apply(this, args);
+        inThrottle = true;
+        setTimeout(() => inThrottle = false, limit);
+      }
     };
-  }
+  };
 
-  function lazyload() {
+  const lazyload = () => {
     const lazyElements = document.querySelectorAll(".lazy");
     lazyElements.forEach(lazyElement => {
       if (!lazyElementsSet.has(lazyElement)) {
@@ -55,18 +47,19 @@
         lazyElementsSet.add(lazyElement);
       }
     });
-  }
+  };
 
-  const debouncedLazyLoad = debounce(() => {
-    requestAnimationFrame(lazyload);
-  }, 180);
-
-  function checkView() {lazyload();}
+  const throttledLazyLoad = throttle(() => requestAnimationFrame(lazyload), 180);
 
   document.addEventListener("DOMContentLoaded", () => {
-    checkView();
-    window.addEventListener("scroll", debouncedLazyLoad);
-    window.addEventListener("resize", debouncedLazyLoad);
+    lazyload();
+    window.addEventListener("scroll", throttledLazyLoad);
+    window.addEventListener("resize", throttledLazyLoad);
+
+    window.addEventListener("beforeunload", () => {
+      window.removeEventListener("scroll", throttledLazyLoad);
+      window.removeEventListener("resize", throttledLazyLoad);
+    });
   });
 
 })();
