@@ -114,6 +114,7 @@ function sectionToggler() {
       if (sb.querySelector("#sb_bandwidth + hr") !== null) {
         sb.querySelector("#sb_bandwidth + hr").hidden = true;
         sb.querySelector("#sb_bandwidth + hr").style.display = null;
+        sb.querySelector("#sb_graphstats").style.opacity = "1";
       }
       document.getElementById("toggle_sb_bandwidth").checked = false;
       localStorage["section_bandwidth"] = "hide";
@@ -126,6 +127,7 @@ function sectionToggler() {
       if (sb.querySelector("#sb_bandwidth + hr") !== null) {
         sb.querySelector("#sb_bandwidth + hr").hidden = null;
         sb.querySelector("#sb_bandwidth + hr").style.display = "block";
+        sb.querySelector("#sb_graphstats").removeAttribute("style");
       }
       document.getElementById("toggle_sb_bandwidth").checked = true;
       localStorage.removeItem("section_bandwidth");
