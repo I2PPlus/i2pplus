@@ -1,3 +1,7 @@
+2024-11-20 dr|z3d
+ * Console: Add filter feature to /tunnelpeercount to allow selective display
+   of peers based on filter input or query paramaters
+
 2024-11-18 dr|z3d
  * Console: Add query parameter support to /netdbmap to allow display of
    all / floodfills / X tier by country: ?class={countries|floodfill|tierX}
