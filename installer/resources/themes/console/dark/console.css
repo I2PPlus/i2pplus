@@ -1008,8 +1008,8 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #participating img,#peercount img{width:0;height:0}
 #participating,#participating~h3{padding-bottom:8px}
 #participatingtunnels .statusnotes:last-of-type{margin-bottom:10px}
+#peercount{margin-bottom:-3px;position:relative;background:var(--hardhat) no-repeat 8px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 #peercount img,#participating img{margin:0 0 -2px;padding:8px 6px 6px;vertical-align:middle;border:0}
-#peercount{margin-bottom:-3px;background:var(--hardhat) no-repeat 8px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 #refreshPage{cursor:pointer}
 #thresholds th{font-weight:inherit}
 #transitbypeer .infohelp{margin:12px 0 10px}
@@ -1960,11 +1960,12 @@ input[type=hidden]+p+p{margin-top:20px;margin-bottom:-21px;padding:10px;border:v
 #advconf .configline+#addNew{display:none}
 #advconf .value{word-break:break-all}
 #advancedconfig{position:relative}
-#advfilter{display:inline-block;position:absolute;right:52px;top:5px}
-#advfilter button{margin:0 0 0 -24px;padding:5px;display:inline-block;width:24px;height:26px;min-width:0;font-size:0;border:0;box-shadow:none;background:var(--no) no-repeat center center/10px;mix-blend-mode:luminosity}
-#advfilter button:hover,#advfilter input:focus+button{mix-blend-mode:normal}
-#advfilter input[type=text]{margin:0;padding:4px 24px 3px;width:160px;font-size:85%;background:#0008 var(--filter) no-repeat 7px center/12px;opacity:.75;filter:none}
-#advfilter input[type=text]:focus{width:200px;border-color:var(--hover);color:var(--hover);box-shadow:var(--highlight),5px 5px 3px #0008 inset;background-color:#010;opacity:.85}
+#advfilter,#tnlfilter{display:inline-block;position:absolute;right:52px;top:5px}
+#advfilter button,#tnlfilter button{margin:0 0 0 -24px;padding:5px;display:inline-block;width:24px;height:26px;min-width:0;font-size:0;border:0;box-shadow:none;background:var(--no) no-repeat center center/10px;mix-blend-mode:luminosity}
+#advfilter button:hover,#advfilter input:focus+button,#tnlfilter button:hover,#tnlfilter input:focus+button{mix-blend-mode:normal}
+#advfilter input[type=text],#tnlfilter input[type=text]{margin:0;padding:4px 24px 3px;width:160px;font-size:85%;background:#0008 var(--filter) no-repeat 7px center/12px;opacity:.75;filter:none}
+#advfilter input[type=text]:focus,#tnlfilter input[type=text]:focus{width:200px;border-color:var(--hover);color:var(--hover);box-shadow:var(--highlight),5px 5px 3px #0008 inset;background-color:#010;opacity:.85}
+#tnlfilter{top:6px;right:46px}
 #advconf #removeKey b{color:#f00}
 #config_advanced #advconfwrapper{overflow:hidden;max-height:calc(100vh - 281px);scrollbar-color:#373 #0000}
 .hasExpandedElement #config_advanced #advconfwrapper{max-height:calc(100vh - 447px)}
