@@ -194,7 +194,11 @@ function addFilterListener() {
   if (filterInput) {
     filterInput.addEventListener("input", event => {
       const filterValue = event.target.value;
-      localStorage.setItem("filterValue", filterValue);
+      if (filterValue === "") {
+        localStorage.removeItem("filterValue");
+      } else {
+        localStorage.setItem("filterValue", filterValue);
+      }
       applyFilter(filterValue);
       updateURLWithFilter(filterValue);
     });
@@ -209,7 +213,7 @@ function applyQueryParamsFilter() {
   if (filterParam) {
     const filterInput = d.getElementById("filterInput");
     if (filterInput) {
-      if (typeParam && ["tier", "cc", "country", "hash", "hostname", "host", "ip"].includes(typeParam)) {
+      if (typeParam && ["tier", "cc", "country", "hash", "id", "h", "hostname", "host", "ip", "v", "version"].includes(typeParam)) {
         filterInput.value = `${typeParam}=${filterParam}`;
         localStorage.setItem("filterValue", `${typeParam}=${filterParam}`);
         applyFilter(`${typeParam}=${filterParam}`);
@@ -239,7 +243,7 @@ function updateURLWithFilter(filterValue) {
     const filterKey = filterParts[0].trim();
     const filterTerm = filterParts.length > 1 ? filterParts[1].trim() : filterValue.trim();
 
-    if (["tier", "cc", "country", "hash", "hostname", "host", "ip"].includes(filterKey)) {
+    if (["tier", "cc", "country", "hash", "id", "h", "hostname", "host", "ip", "v", "version"].includes(filterKey)) {
       urlParams.set('filter', filterTerm);
       urlParams.set('type', filterKey);
     } else {
