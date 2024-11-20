@@ -339,9 +339,6 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js?").append(CoreVersion.VERSION).append("\" id=iframeResizer></script>\n")
                .append("<script src=\"/js/iframeResizer/updatedEvent.js?").append(CoreVersion.VERSION).append("\"></script>\n");
         }
-        if (theme.equals("ubergine")) {
-            buf.append("<script nonce=").append(cspNonce).append(" src=").append(resourcePath).append("js/click.js></script>");
-        }
         buf.append("<meta name=viewport content=\"width=device-width\">\n");
         if (!isStandalone() && useSoraFont()) {
             buf.append("<link rel=preload href=/themes/fonts/Sora.css as=style>\n")
@@ -543,6 +540,9 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("src=" + resourcePath + "js/toggleLinks.js></script>\n");
         }
         out.write("<script nonce=" + cspNonce + " src=" + resourcePath + "js/setFilterQuery.js></script>\n");
+        if (theme.equals("ubergine")) {
+            out.write("<script nonce=" + cspNonce + " src=" + resourcePath + "js/click.js></script>\n");
+        }
         if (!isStandalone()) {
             out.write(FOOTER);
         } else {
