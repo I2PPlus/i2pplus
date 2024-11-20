@@ -2773,6 +2773,8 @@ public class I2PSnarkServlet extends BasicServlet {
                     else if ("LVhE".equals(ch)) {client = "XD";}
                     else if (ch.startsWith("LV")) {client = "Transmission";} // LVCS 1.0.2?; LVRS 1.0.4
                     else if ("LUtU".equals(ch)) {client = "KTorrent";}
+                    else if ("LUVU".equals(ch)) {client = "EepTorrent";}
+
                     // libtorrent and downstreams
                     // https://www.libtorrent.org/projects.html
                     else if ("LURF".equals(ch)) {client = "Deluge";} // DL
