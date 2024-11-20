@@ -222,23 +222,20 @@ public class I2PSnarkServlet extends BasicServlet {
 
         // in-war icons etc.
         if (path != null && path.startsWith(WARBASE)) {
-            if (method.equals("GET") || method.equals("HEAD")) {
-                super.doGet(req, resp);
-            } else {  // no POST either
-                resp.sendError(405);
-            }
+            if (method.equals("GET") || method.equals("HEAD")) {super.doGet(req, resp);}
+            else {resp.sendError(405);} // no POST either
             return;
         }
 
-        if (_context.isRouterContext())
-            _themePath = "/themes/snark/" + _manager.getTheme() + '/';
-        else
-            _themePath = _contextPath + WARBASE + "themes/snark/" + _manager.getTheme() + '/';
+        if (_context.isRouterContext()) {_themePath = "/themes/snark/" + _manager.getTheme() + '/';}
+        else {_themePath = _contextPath + WARBASE + "themes/snark/" + _manager.getTheme() + '/';}
         _imgPath = _themePath + "images/";
         req.setCharacterEncoding("UTF-8");
 
         String pOverride = _manager.util().connected() ? null : "";
         String peerString = getQueryString(req, pOverride, null, null, "");
+        String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
+        String jsPfx = _context.isRouterContext() ? "" : ".res";
 
         // AJAX for mainsection
         if ("/.ajax/xhr1.html".equals(path)) {
@@ -246,9 +243,7 @@ public class I2PSnarkServlet extends BasicServlet {
             PrintWriter out = resp.getWriter();
             out.write("<!DOCTYPE HTML>\n<html>\n<body id=snarkxhr>\n<div id=mainsection>\n");
             boolean canWrite;
-            synchronized(this) {
-                canWrite = _resourceBase.canWrite();
-            }
+            synchronized(this) {canWrite = _resourceBase.canWrite();}
             writeTorrents(out, req, canWrite);
             out.write("\n</div>\n</body>\n</html>\n");
             out.flush();
@@ -262,9 +257,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("<!DOCTYPE HTML>\n<html>\n<body id=snarkxhrlogs>\n");
             writeMessages(out, false, peerString);
             boolean canWrite;
-            synchronized(this) {
-                canWrite = _resourceBase.canWrite();
-            }
+            synchronized(this) {canWrite = _resourceBase.canWrite();}
             out.write("</body>\n</html>\n");
             out.flush();
             return;
@@ -280,9 +273,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 String pathInfo = req.getPathInfo();
                 String pathInContext = addPaths(path, pathInfo);
                 File resource = getResource(pathInContext);
-                if (resource == null) {
-                    resp.sendError(404);
-                } else if (req.getParameter("playlist") != null) {
+                if (resource == null) {resp.sendError(404);}
+                else if (req.getParameter("playlist") != null) {
                     String base = addPaths(req.getRequestURI(), "/");
                     String listing = getPlaylist(req.getRequestURL().toString(), base, req.getParameter("sort"));
                     if (listing != null) {
@@ -291,9 +283,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         resp.setContentType("audio/mpegurl; charset=UTF-8; name=\"playlist.m3u\"");
                         resp.addHeader("Content-Disposition", "attachment; filename=\"playlist.m3u\"");
                         resp.getWriter().write(listing);
-                    } else {
-                        resp.sendError(404);
-                    }
+                    } else {resp.sendError(404);}
                 } else {
                     String base = addPaths(req.getRequestURI(), "/");
                     String listing = getListHTML(resource, base, true, method.equals("POST") ? req.getParameterMap() : null,
@@ -304,18 +294,13 @@ public class I2PSnarkServlet extends BasicServlet {
                     } else if (listing != null) {
                         setHTMLHeaders(resp, cspNonce, true);
                         resp.getWriter().write(listing);
-                    } else { // shouldn't happen
-                        resp.sendError(404);
-                    }
+                    } else {resp.sendError(404);} // shouldn't happen
                 }
             } else {
                 // local completed files in torrent directories
-                if (method.equals("GET") || method.equals("HEAD"))
-                    super.doGet(req, resp);
-                else if (method.equals("POST"))
-                    super.doPost(req, resp);
-                else
-                    resp.sendError(405);
+                if (method.equals("GET") || method.equals("HEAD")) {super.doGet(req, resp);}
+                else if (method.equals("POST")) {super.doPost(req, resp);}
+                else {resp.sendError(405);}
             }
             return;
         }
@@ -324,10 +309,8 @@ public class I2PSnarkServlet extends BasicServlet {
 
         String nonce = req.getParameter("nonce");
         if (nonce != null) {
-            if (nonce.equals(String.valueOf(_nonce)))
-                processRequest(req);
-            else  // nonce is constant, shouldn't happen
-                _manager.addMessage("Please retry form submission (bad nonce)");
+            if (nonce.equals(String.valueOf(_nonce))) {processRequest(req);}
+            else {_manager.addMessage("Please retry form submission (bad nonce)");} // nonce is constant, shouldn't happen
             // P-R-G (or G-R-G to hide the params from the address bar)
             sendRedirect(req, resp, peerString);
             return;
@@ -340,9 +323,8 @@ public class I2PSnarkServlet extends BasicServlet {
         StringBuilder buf = new StringBuilder(4*1024);
         String theme = _manager.getTheme();
         String pageBackground = "#fff";
-        if (theme.equals("dark")) {
-          pageBackground = "#000";
-        } else if (theme.equals("midnight")) {
+        if (theme.equals("dark")) {pageBackground = "#000";}
+        else if (theme.equals("midnight")) {
             pageBackground = "repeating-linear-gradient(180deg,rgba(0,0,24,.75) 2px,rgba(0,0,0,.7) 4px)/100% 4px," +
                              "var(--tile)/171px 148px,var(--offline)/0,#000010";
         } else if (theme.equals("ubergine")) {
@@ -393,8 +375,6 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("</title>\n");
 
         int delay = _manager.getRefreshDelaySeconds();
-        String jsPfx = _context.isRouterContext() ? "" : ".res";
-        String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         String pageSize = String.valueOf(_manager.getPageSize());
         if (!isConfigure) {
             buf.append("<script nonce=").append(cspNonce).append(">\n")
