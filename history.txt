@@ -1,5 +1,5 @@
 2024-11-18 dr|z3d
- * Console: Add query paramater support to /netdbmap to allow display of
+ * Console: Add query parameter support to /netdbmap to allow display of
    all / floodfills / X tier by country: ?class={countries|floodfill|tierX}
 
 2024-11-16 dr|z3d

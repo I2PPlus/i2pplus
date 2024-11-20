@@ -111,6 +111,6 @@
 <% } %>
 <noscript><style>#advconf.readonly tr.section{pointer-events:none}#advconf.readonly tr.section th::after{display:none}#floodfillconfig{display:table!important}</style></noscript>
 <% if (!isAdvanced) { %><script nonce=<%=cspNonce%> src=/js/tableSectionToggler.js type=module></script><% } %>
-<% if (!theme.equals("dark")) { %><script src=/js/ok.js></script><% } %>
+<% if (theme.equals("dark")) { %><script src=/js/ok.js></script><% } %>
 </body>
 </html>

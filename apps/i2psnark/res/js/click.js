@@ -1,4 +1,4 @@
-/* I2P+ click.js by dr|z3d for I2PSnark */
+/* I2P+ click.js for I2PSnark by dr|z3d */
 /* Simulate longer button clicks by adding .depress class to inputs */
 /* License: AGPL3 or later */
 
