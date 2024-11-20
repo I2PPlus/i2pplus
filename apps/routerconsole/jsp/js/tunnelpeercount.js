@@ -90,9 +90,7 @@ function checkForCachedFilter() {
   const filterInput = d.getElementById("filterInput");
   if (filterInput) {
     filterInput.value = localStorage.getItem("filterValue") || "";
-    if (filterInput.value) {
-      applyFilter(filterInput.value);
-    }
+    if (filterInput.value) { applyFilter(filterInput.value); }
   }
   displayPeerCount();
 }
@@ -125,14 +123,20 @@ function applyFilter(filterValue) {
         shouldDisplay = country.includes(filterTerm.toUpperCase());
         break;
       case "hash":
+      case "id":
         shouldDisplay = routerId.includes(filterTerm);
         break;
       case "hostname":
       case "host":
+      case "h":
         shouldDisplay = rlookup.includes(filterTerm);
         break;
       case "ip":
         shouldDisplay = ipAddress.includes(filterTerm);
+        break;
+      case "v":
+      case "version":
+        shouldDisplay = version.includes(filterTerm);
         break;
       default:
         shouldDisplay = country.includes(filterTerm) || routerId.includes(filterTerm) ||
