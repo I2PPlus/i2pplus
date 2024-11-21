@@ -1,19 +1,9 @@
-function removeNotify() {
-  function initNotifications() {
-    var buttons = document.getElementsByClassName("notifications");
-    for(index = 0; index < buttons.length; index++) {
-      var button = buttons[index];
-      addClickHandler6(button);
-    }
-  }
-
-  function addClickHandler6(elem) {
-    elem.addEventListener("click", function() {
-      elem.remove();
+(function removeNotify() {
+  document.addEventListener("DOMContentLoaded", () => {
+    const notice = document.getElementById("notify");
+    notice.addEventListener("click", () => {
+      notice.remove();
+      console.log("Notification nuked!");
     });
-  }
-
-  document.addEventListener("DOMContentLoaded", initNotifications);
-}
-
-export {removeNotify};
+  });
+})();

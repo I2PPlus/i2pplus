@@ -2548,7 +2548,7 @@ public class WebMail extends HttpServlet
                 out.print("<noscript><style>.script{display:none!important}</style></noscript>\n");
                 out.print("<script src=/js/iframeResizer/iframeResizer.contentWindow.js></script>\n");
                 out.print("<script src=\"/js/iframeResizer/updatedEvent.js?" + CoreVersion.VERSION + "\"></script>\n");
-//                out.print("<script src=\"/susimail/js/notifications.js?" + CoreVersion.VERSION + "\"></script>\n");
+                out.print("<script src=\"/susimail/js/notifications.js?" + CoreVersion.VERSION + "\"></script>\n");
                 out.print("<style>body{display:none;pointer-events:none}</style>\n");
                 out.print("</head>\n");
                 if (state == State.LIST)
@@ -2559,7 +2559,7 @@ public class WebMail extends HttpServlet
                 sessionObject.addNonce(nonce);
                 out.print(
                     // TODO we don't need the form below
-                    "<div class=page>\n<span class=header></span>\n" +
+                    "<div id=page>\n<span class=header></span>\n" +
                     "<form method=POST enctype=\"multipart/form-data\" action=\"" + myself + "\" accept-charset=utf-8>\n" +
                     "<input type=hidden name=\"" + SUSI_NONCE + "\" value=\"" + nonce + "\">\n" +
                     // we use this to know if the user thought he was logged in at the time

@@ -27,7 +27,7 @@ div.header,.iframed .header{display:none}
 .mailbody p.info{margin:10px 0;padding:20px 10px;width:calc(100% - 40px);display:block;font-weight:700;color:#900;border:1px solid #000;border-radius:2px;box-shadow:var(--highlight),inset 0 0 2px 1px #d00;background:#000}
 .mailbody td{padding:0;width:100%;word-break:normal;word-wrap:normal;box-shadow:var(--highlight),inset 0 0 2px 1px #030}
 .noborder{margin-left:0;margin-top:0;margin-right:0}
-.page{margin:0;padding:10px;min-width:600px;line-height:1.6;text-align:center;color:var(--ink);box-shadow:var(--highlight);border:var(--border);border-radius:1px}
+#page{margin:0;padding:10px;min-width:600px;line-height:1.6;text-align:center;color:var(--ink);box-shadow:var(--highlight);border:var(--border);border-radius:1px}
 .pagenav,.sort,.topbuttons,h3,.footer,.bottombuttons,.topbuttons,th img,h3,#dologin,th,#loading{user-select:none}
 p{margin-left:15px;margin-right:15px;color:var(--ink)}
 p.error{color:#c00}
@@ -55,7 +55,7 @@ tr.mailbody,#message_full tr:first-child{background:#000800}
 .iframed form{margin-bottom:8px;border:0;box-shadow:none}
 .iframed .footer{display:none}
 .iframed .header+form{margin-bottom:-10px;padding-bottom:17px}
-.iframed .page{margin:0;padding:1px;min-width:620px;border:0;border-radius:0}
+.iframed #page{margin:0;padding:1px;min-width:620px;border:0;border-radius:0}
 
 /* message view */
 .debugHeader{display:table-row}

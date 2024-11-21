@@ -4,7 +4,7 @@ body{
   margin:0;
 }
 
-.page{
+#page{
   min-width:560px;
   padding:5px 5px 0!important;
   border-radius:0;

@@ -85,7 +85,7 @@ tr.spacer{display:none}
 .noborder{margin-left:0;margin-top:0;margin-right:0}
 td:first-child{font-weight:700}
 pre{font:9pt var(--monospaced);margin-left:1cm;margin-right:1cm}
-.page{margin:0;padding:0;min-width:700px;text-align:center;font-size:9pt}
+#page{margin:0;padding:0;min-width:700px;text-align:center;font-size:9pt}
 table{width:100%}
 th{padding:7px;font-size:9pt;font-weight:700;border-bottom:var(--border_inner);border-top:var(--border_inner);background:linear-gradient(180deg,#080818,#001)}
 form{margin:0;padding-bottom:0;line-height:1.6;border:var(--border_inner);background:#000010}
@@ -130,8 +130,8 @@ input[name="pass"]:focus{background:var(--key) no-repeat 6px center/14px,var(--t
 input[name="host"],input[name="pop3"],input[name="smtp"]{margin-top:3px;display:inline;font-family:var(--monospaced);color:#652787;border-radius:0;box-shadow:none;background:none}
 input[type=submit]:active,input.cancel:active,#settings:active,#settings:visited:active,.fakebutton:active,#expand:active,#collapse:active,#pageRefresh:active{background-color:#652787}
 input.delete{margin-left:2px}
-.page td[colspan="2"]{padding:0 0 10px 0;text-align:left}
-.page td[colspan="2"] hr{display:none}
+#page td[colspan="2"]{padding:0 0 10px 0;text-align:left}
+#page td[colspan="2"] hr{display:none}
 #dologin input[name="user"]{background:#000 var(--user) no-repeat 6px center/14px}
 #dologin input[name="pass"]{background:#000 var(--key) no-repeat 6px center/14px}
 #dologin input[type=password],#dologin input[type=text]{width:60%}

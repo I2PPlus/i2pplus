@@ -1,35 +1,37 @@
-import {removeNotify} from "/susimail/js/notifications.js";
+/* I2P+ refreshInbox.js for SusiMail by dr|z3d */
+/* Perform an ajax fetch and handle page refresh when checkign mails */
+/* License: AGPLv3 or later */
 
-var mailbox = document.getElementById("mailbox");
-var main = document.getElementById("main");
-var serverRefresh = document.getElementById("serverRefresh");
-var notify = document.getElementById("notify");
-var autorefresh = document.getElementById("autorefresh");
+const form = document.querySelector('form[action="/susimail/"]');
+const mailboxControls = document.getElementById("mailboxcontrols");
+const mailbox = document.getElementById("mailbox");
+const notify = document.getElementById("notify");
+const pageRefresh = document.getElementById("pageRefresh");
+const serverRefresh = document.getElementById("serverRefresh");
 
-var interval = setInterval(function() {
-  if (mailbox && !serverRefresh) {
-    var xhrmail = new XMLHttpRequest();
-    xhrmail.open("GET", "/susimail?" + new Date().getTime(), true);
-    xhrmail.responseType = "document";
-    xhrmail.onreadystatechange = function() {
-      if (xhrmail.readyState==4 && xhrmail.status==200 && main && serverRefresh) {
-        var mailboxResponse = xhrmail.responseXML.getElementById("mailbox");
-        main.innerHTML = xhrmail.responseXML.getElementById("main").innerHTML;
-      }
-    }
-    removeNotify();
-    xhrmail.send();
-  } else if (notify) {
-    setTimeout(clearNotify, 10000);
-  }
-}, 5000);
+if (notify) { setTimeout(() => { notify.remove(); }, 4000); }
 
-removeNotify();
-
-function clearNotify() {
-  clearInterval(interval);
-  notify.style.display = "none";
-  notify.remove();
-  autorefresh.remove();
-  //window.location.reload(true);
+if (mailbox && pageRefresh) {
+  const interval = setInterval(() => {
+    if (document.getElementById("serverRefresh")) {
+      clearInterval(interval);
+      return;
+    } else if (pageRefresh) {pageRefresh.classList.add("checking");}
+    fetch(`/susimail?${new Date().getTime()}`)
+      .then(response => response.text())
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
+        const refresh = doc.getElementById("pageRefresh") || doc.getElementById("serverRefresh");
+        const newMailbox = doc.getElementById("mailbox");
+        const newNotify = doc.getElementById("notify");
+        if (pageRefresh.outerHTML !== refresh.outerHTML) { pageRefresh.outerHTML = refresh.outerHTML;}
+        if (mailbox.innerHTML !== newMailbox.innerHTML) {mailbox.innerHTML = newMailbox.innerHTML;}
+        if (newNotify && (notify.innerHTML !== newNotify.innerHTML || !notify)) {
+          if (notify) {notify.remove();}
+          form.appendChild(newNotify);
+        }
+      })
+      .catch(() => {});
+  }, 5000);
 }

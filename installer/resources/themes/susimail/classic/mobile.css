@@ -2,7 +2,7 @@
 
 body{margin:-1px 0 0}
 form{margin-bottom:5px}
-.page{min-width:560px;padding:0 5px 12px;border-radius:0;border-left:1px solid #0000;border-right:1px solid #0000}
+#page{min-width:560px;padding:0 5px 12px;border-radius:0;border-left:1px solid #0000;border-right:1px solid #0000}
 .notifications{margin:-1px 5px}
 .topbuttons{margin:-1px -6px;border-left:0;border-right:0}
 .header,.footer{display:none}

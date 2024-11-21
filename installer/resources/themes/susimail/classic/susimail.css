@@ -38,7 +38,7 @@ img.sort.selected{border-radius:1px;box-shadow:0 0 0 1px var(--border_soft),inse
 .mailListSender{padding-left:18px;background:var(--user) no-repeat 2px center/12px}
 .mailListSubject{text-align:left}
 #messagenav{padding-bottom:3px}
-.page{margin:0;padding:0 10px 10px;min-width:800px;line-height:1.6;text-align:center;font-size:9pt;border:var(--border);box-shadow:0 0 0 1px #eee;background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.2)),url(/themes/console/classic/images/bg2.png) var(--bg3);background-size:100% 100%,120px 120px}
+#page{margin:0;padding:0 10px 10px;min-width:800px;line-height:1.6;text-align:center;font-size:9pt;border:var(--border);box-shadow:0 0 0 1px #eee;background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.2)),url(/themes/console/classic/images/bg2.png) var(--bg3);background-size:100% 100%,120px 120px}
 #pagenavbottom{display:none}
 #pagenavbottom td{border-top:var(--border)}
 #pagenavbottom td table td{border-top:0}
@@ -288,7 +288,7 @@ tr:hover .listDate{opacity:.9}
 .iframed #message_full{margin-bottom:-1px}
 .iframed #messagenav{padding-bottom:0}
 .iframed #nukemail{top:230px}
-.iframed .page{margin:-6px 1px 11px;min-width:580px;border:0;box-shadow:none;background:#0000}
+.iframed #page{margin:-6px 1px 11px;min-width:580px;border:0;box-shadow:none;background:#0000}
 .iframed p.mailbody{margin:0;padding:15px 20px}
 .iframed .topbuttons,.iframed p.error,.iframed p.info{margin:-1px -11px;border:var(--border);border-left:0;border-right:0}
 .iframed .topbuttons{margin:0 0 -2px;padding:6px 0 1px}
@@ -303,6 +303,6 @@ tr:hover .listDate{opacity:.9}
 @supports not (-moz-appearance:none){table#mailbox{margin-top:1px}div#prefsave{border-bottom:var(--border)}}
 
 @media (max-width:1500px){.debugHeader pre{font-size:8.5pt}}
-@media (max-width:1024px){.page{min-width:600px}#composemail textarea,#newmail input[type=text]{min-width:400px;width:100%}}
+@media (max-width:1024px){#page{min-width:600px}#composemail textarea,#newmail input[type=text]{min-width:400px;width:100%}}
 @media (min-width:1300px){.iframed body,.iframed td,.iframed textarea,.iframed input,.iframed div,.iframed p.mailbody,.iframed p.error{font-size:10pt}}
 @media (min-width:1500px){body,td,textarea,input,div,p.mailbody,p.error,#settings,select{font-size:10pt}}

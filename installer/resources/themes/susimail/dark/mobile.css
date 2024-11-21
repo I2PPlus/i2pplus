@@ -2,7 +2,7 @@
 /* Author:(c) dr|z3d 2022 */
 
 body{margin:0}
-.page{min-width:560px;padding:5px 5px 0;border-radius:0}
+#page{min-width:560px;padding:5px 5px 0;border-radius:0}
 form{margin-bottom:5px}
 #dologin{width:500px}
 .header,.footer{display:none}
