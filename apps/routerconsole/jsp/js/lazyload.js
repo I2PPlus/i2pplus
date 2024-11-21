@@ -25,7 +25,7 @@
     if (lazyElementsSet.size === 0) {
       observer.disconnect();
     }
-  }, { root: null, rootMargin: "10px", threshold: 0.5 });
+  }, { root: null, rootMargin: "10px", threshold: 0.2 });
 
   const throttle = (fn, limit) => {
     let inThrottle = false;
@@ -40,14 +40,18 @@
 
   const lazyload = () => {
     const lazyElements = document.querySelectorAll(".lazy");
-    lazyElements.forEach(lazyElement => {
-      if (!lazyElementsSet.has(lazyElement)) {
-        const parentElement = lazyElement.closest(parentSelector) || document.documentElement;
-        observer.observe(lazyElement);
-        lazyElementsSet.add(lazyElement);
-      }
-    });
-  };
+    if (lazyElements.length < 10) {
+      lazyElements.forEach(lazyElement => { lazyElement.classList.remove("lazy"); });
+    } else {
+      lazyElements.forEach(lazyElement => {
+        if (!lazyElementsSet.has(lazyElement)) {
+          const parentElement = lazyElement.closest(parentSelector) || document.documentElement;
+          observer.observe(lazyElement);
+          lazyElementsSet.add(lazyElement);
+        }
+      });
+    }
+  });
 
   const throttledLazyLoad = throttle(() => requestAnimationFrame(lazyload), 180);
 
