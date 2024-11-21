@@ -12,49 +12,40 @@ let snarkCount;
 function showBadge() {
   filterbar = document.getElementById("torrentDisplay");
   if (!filterbar) {return;}
-  const query = new URLSearchParams(window.location.search);
-  const filterQuery = query.get("filter");
-  const searchQuery = query.get("search");
+  const query = new URLSearchParams(window.location.search), filterQuery = query.get("filter"), searchQuery = query.get("search");
   const allFilters = filterbar.querySelectorAll(".filter");
+  const filterId = searchQuery !== null ? "search" : filterQuery || "all";
+  const activeFilter = document.getElementById(filterId);
   const filterAll = document.getElementById("all");
-  let activeFilter;
-
-  if (searchQuery !== null) {activeFilter = document.querySelector(".filter#search");}
-  else {activeFilter = document.querySelector(".filter[id='" + (filterQuery !== null ? filterQuery : "all") + "']");}
 
   allFilters.forEach(filter => {
-    const badges = filter.querySelectorAll(".badge");
+    const badges = filter.querySelectorAll(".filter:not(#all) .badge");
     if (filter !== activeFilter) {
       filter.classList.remove("enabled");
       badges.forEach(badge => {
-        if (!filterAll) {badge.innerText = "";}
         badge.hidden = true;
+        badge.textContent = "";
       });
     } else {badges.forEach(badge => badge.hidden = false);}
   });
 
   if (activeFilter) {
     if (!activeFilter.classList.contains("enabled")) {
-      console.log(activeFilter);
       activeFilter.classList.add("enabled");
       const activeBadge = activeFilter.querySelector(".badge");
       activeBadge.id = "filtercount";
-      snarkCount = torrents.querySelectorAll("#snarkTbody tr.volatile:not(.peerinfo)").length;
-      if (activeFilter.id !== "all") {document.getElementById("filtercount").textContent = snarkCount}
+      snarkCount = countSnarks();
+      if (filterId !== "all") {document.getElementById("filtercount").textContent = snarkCount}
       window.localStorage.setItem("snarkFilter", activeFilter.id);
     }
 
-    if (filterAll) {
-      const allBadge = filterAll.querySelector("#filtercount.badge");
-      if (filterAll.classList.contains("enabled")) {allBadge?.removeAttribute("hidden");}
-      else {allBadge?.setAttribute("hidden", "");}
-    }
+    const allBadge = filterAll.querySelector("#filtercount.badge");
+    if (filterAll.classList.contains("enabled")) {allBadge?.removeAttribute("hidden");}
+    else {allBadge?.setAttribute("hidden", "");}
   }
 }
 
-function countSnarks() {
-  return torrents.querySelectorAll("#snarkTbody tr.volatile:not(.peerinfo)").length;
-}
+function countSnarks() { return torrents.querySelectorAll("#snarkTbody tr.volatile:not(.peerinfo)").length; }
 
 function updateURLs() {
   var xhrURL = "/i2psnark/.ajax/xhr1.html" + window.location.search;
@@ -84,6 +75,7 @@ function filterNav() {
     const filterElement = event.target.closest(".filter");
     if (filterElement) {
       event.preventDefault();
+      if (!filterElement.classList.contains("enabled")) {filterElement.classList.add("enabled");}
       const filterURL = new URL(filterElement.href), xhrURL = "/i2psnark/.ajax/xhr1.html" + filterURL.search; history.replaceState({}, "", filterURL);
       doRefresh(xhrURL, updateURLs);
       if (pagenavtop) { pagenavtop.hidden = filterElement.id !== "all"; }
