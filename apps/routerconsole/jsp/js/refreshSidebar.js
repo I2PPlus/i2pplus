@@ -277,8 +277,9 @@ function refreshSidebar() {
       const [minigraphWidth, minigraphHeight] = [245, 50];
       if (ctx) { Object.assign(ctx, { imageSmoothingEnabled: false, globalCompositeOperation: "copy", globalAlpha: 1 }); }
       const refreshGraph = async () => {
-        if (graphContainer.hidden) {graphContainer.hidden = graphContainerHR.hidden = false;}
+        if (graphContainer && graphContainer.hidden) {graphContainer.hidden = graphContainerHR.hidden = false;}
         const response = await fetch(`/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=${Date.now()}`);
+        if (!response.ok) {return;}
         const image = new Image(minigraphWidth, minigraphHeight);
         image.src = URL.createObjectURL(await response.blob());
         return new Promise((resolve) => {
