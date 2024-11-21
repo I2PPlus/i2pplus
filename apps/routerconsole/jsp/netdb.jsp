@@ -70,6 +70,7 @@
         } else if (f.equals("4")) {
 %>
 <h1 class=netwrk><%=intl._t("Network Database")%> &ndash; <%=intl._t("Advanced Lookup")%></h1>
+<script src=/js/netdbLookup.js></script>
 <%
         }
     } else if (f == null) {
