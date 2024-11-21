@@ -4,8 +4,7 @@
 <%
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null)
-        lang = ctx.getProperty("routerconsole.lang");
+    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
 %>
 <html lang="<%=lang%>">
 <head>
@@ -46,12 +45,14 @@
 </form>
 </div>
 </div>
+<script nonce=<%=cspNonce%> src=/js/refreshOnClick.js></script>
 <script nonce=<%=cspNonce%>>
   const webappsForm = document.getElementById("form_webapps");
   const processForm = document.getElementById("processForm");
   window.addEventListener("DOMContentLoaded", progressx.hide);
   webappsForm.addEventListener("submit", progressx.show);
   processForm.addEventListener("load", progressx.hide);
+  refreshOnClick("#webappconfig button.control", ".main");
 </script>
 </body>
 </html>
