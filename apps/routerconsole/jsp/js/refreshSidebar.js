@@ -9,6 +9,7 @@ import { onVisible } from "/js/onVisible.js";
 
 let isDown = false;
 let isDownTimer = null;
+let refreshTimeout;
 const sb = document.querySelector("#sidebar");
 
 const elements = {
@@ -46,22 +47,28 @@ const elements = {
 
 sb.addEventListener("loaded", () => { initSidebar(); });
 
+function requestIdleOrAnimationFrame(callback) {
+  if (typeof requestIdleCallback === "function") { requestIdleCallback(callback); }
+  else { requestAnimationFrame(callback); }
+}
+
 function tangoDown() {
   elements.statusPanel.forEach(panel => panel.classList.add("statusDown"));
   elements.digits.forEach(digit => digit.innerHTML = "---&nbsp;");
   if (elements.clock) elements.clock.textContent = "--:--:--";
   if (elements.graphStats) elements.graphStats.textContent = " --- / ---";
   elements.badges.forEach(badge => badge.textContent = "");
-  if (elements.localtunnelSummary) elements.localtunnelSummary.classList.add("statusDown");
-  document.querySelector("body").classList.add("isDown");
-  if (elements.shutdownStatus) elements.shutdownStatus.setAttribute("hidden", "hidden");
+  ["localtunnelSummary", "shutdownStatus"].forEach(section => {
+    if (elements[section]) {
+      if (section === "localtunnelSummary") { elements[section].innerHTML = "<tr id=routerdown><td colspan=3 height=10 style=padding:0></td></tr>"; }
+      elements[section].classList.add("statusDown");
+    }
+  });
   if (elements.localtunnels) {
     elements.localtunnels.innerHTML = "<tr id=routerdown><td colspan=3 height=10></td></tr>";
     if (elements.tunnelCount) elements.tunnelCount.innerHTML = "";
   }
-  if (elements.localtunnelSummary) {
-    elements.localtunnelSummary.innerHTML = "<tr id=routerdown><td colspan=3 height=10></td></tr>";
-  }
+  document.body.classList.add("isDown");
   isDown = true;
   onVisible(sb, () => requestIdleOrAnimationFrame(refreshSidebar));
 }
@@ -79,7 +86,9 @@ function refreshSidebar() {
     if (xhrsb.status === 200) {
       isDown = false;
       if (isDownTimer !== null) location.reload();
-      document.querySelector("body").classList.remove("isDown");
+      document.body.classList.remove("isDown");
+      if (refreshTimeout) clearTimeout(refreshTimeout);
+      refreshTimeout = setTimeout(refreshSidebar, refreshInterval);
     } else if (xhrsb.status === 404 || xhrsb.status === 500) {requestIdleOrAnimationFrame(tangoDown);}
 
     const responseElements = {
@@ -246,7 +255,7 @@ function refreshSidebar() {
           }
         }
         resolve();
-      });
+      }).catch(() => {});
     }
 
     (function checkSections() {
@@ -289,7 +298,8 @@ function refreshSidebar() {
             ctx?.drawImage(image, 0, 0);
             resolve();
           };
-        });
+          image.onerror = () => {reject();};
+        }).catch(() => {});
       };
       const scheduleRefresh = async (callback) => { try {await callback();} catch {} };
       refreshGraph().then(() => { requestIdleOrAnimationFrame(() => scheduleRefresh(refreshGraph)); });
@@ -305,11 +315,6 @@ function refreshSidebar() {
     forms.forEach(form => form.onsubmit = () => handleFormSubmit());
     function handleFormSubmit() { setTimeout(refreshAll, 3000); }
   };
-
-  function requestIdleOrAnimationFrame(callback) {
-    if (typeof requestIdleCallback === "function") { requestIdleCallback(callback); }
-    else { requestAnimationFrame(callback); }
-  }
 
   function ready() {
     xhrsb.send();
