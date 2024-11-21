@@ -16,33 +16,44 @@ function showBadge() {
   const filterQuery = query.get("filter");
   const searchQuery = query.get("search");
   const allFilters = filterbar.querySelectorAll(".filter");
+  const filterAll = document.getElementById("all");
   let activeFilter;
 
   if (searchQuery !== null) {activeFilter = document.querySelector(".filter#search");}
   else {activeFilter = document.querySelector(".filter[id='" + (filterQuery !== null ? filterQuery : "all") + "']");}
+
   allFilters.forEach(filter => {
-    const badges = filter.querySelectorAll(".filter:not(.enabled):not(#all) .badge");
+    const badges = filter.querySelectorAll(".badge");
     if (filter !== activeFilter) {
       filter.classList.remove("enabled");
-      badges.forEach(badge => badge.innerText = "");
-      badges.forEach(badge => badge.hidden = true);
-    } else {badges.forEach(badge => badge.hidden = "");}
+      badges.forEach(badge => {
+        if (!filterAll) {badge.innerText = "";}
+        badge.hidden = true;
+      });
+    } else {badges.forEach(badge => badge.hidden = false);}
   });
 
   if (activeFilter) {
     if (!activeFilter.classList.contains("enabled")) {
+      console.log(activeFilter);
       activeFilter.classList.add("enabled");
+      const activeBadge = activeFilter.querySelector(".badge");
+      activeBadge.id = "filtercount";
+      snarkCount = torrents.querySelectorAll("#snarkTbody tr.volatile:not(.peerinfo)").length;
+      if (activeFilter.id !== "all") {document.getElementById("filtercount").textContent = snarkCount}
       window.localStorage.setItem("snarkFilter", activeFilter.id);
     }
-    snarkCount = xhrsnark.responseXML?.querySelectorAll("#snarkTbody tr.volatile:not(.peerinfo)").length;
-    const activeBadge = activeFilter.querySelector(".badge");
-    const filterAll = torrentDisplay.querySelector(".filter#all");
-    activeBadge.id = "filtercount";
-    if (!filterAll.classList.contains("enabled")) {
-      filterAll.querySelector(".badge").setAttribute("hidden", "");
-      activeBadge.textContent = snarkCount;
-    } else {filterAll.querySelector(".badge").removeAttribute("hidden");}
+
+    if (filterAll) {
+      const allBadge = filterAll.querySelector("#filtercount.badge");
+      if (filterAll.classList.contains("enabled")) {allBadge?.removeAttribute("hidden");}
+      else {allBadge?.setAttribute("hidden", "");}
+    }
   }
+}
+
+function countSnarks() {
+  return torrents.querySelectorAll("#snarkTbody tr.volatile:not(.peerinfo)").length;
 }
 
 function updateURLs() {
@@ -51,50 +62,32 @@ function updateURLs() {
   const sortIcon = document.querySelectorAll(".sorter");
 
   sortIcon.forEach((item) => {
-    item.addEventListener("click", () => {
-      setQuery();
-    });
+    item.addEventListener("click", () => { setQuery(); });
   });
 
   function setQuery() {
     const params = window.location.search;
     if (params) {const storage = window.localStorage.setItem("queryString", params);}
   }
-
 }
 
 function checkIfVisible() {
   const torrentform = document.getElementById("torrentlist");
-  if (torrentform !== null) {
-    onVisible(torrentform, () => {updateURLs();});
-  }
+  if (torrentform !== null) { onVisible(torrentform, () => {updateURLs();}); }
 }
 
 function filterNav() {
-  filterbar = document.getElementById("torrentDisplay")
-  if (!filterbar) {setTimeout(() => {filterNav();}, 1000); return;}
-  const torrents = document.getElementById("torrents");
-  const torrentForm = document.getElementById("torrentlist");
-  const pagenavtop = document.getElementById("pagenavtop");
-  let filterURL;
-  let xhrURL;
+  const filterbar = document.getElementById("torrentDisplay");
+  if (!filterbar) {setTimeout(filterNav, 1000); return;}
+  const torrents = document.getElementById("torrents"), torrentForm = document.getElementById("torrentlist"), pagenavtop = document.getElementById("pagenavtop");
   filterbar.addEventListener("click", function(event) {
-    if (event.target.closest(".filter")) {
+    const filterElement = event.target.closest(".filter");
+    if (filterElement) {
       event.preventDefault();
-      const clickedElement = event.target;
-      filterURL = new URL(event.target.closest(".filter").href);
-      xhrURL = "/i2psnark/.ajax/xhr1.html" + filterURL.search;
-      history.replaceState({}, "", filterURL);
+      const filterURL = new URL(filterElement.href), xhrURL = "/i2psnark/.ajax/xhr1.html" + filterURL.search; history.replaceState({}, "", filterURL);
       doRefresh(xhrURL, updateURLs);
-      if (pagenavtop) {
-        if (event.target.closest(".filter").id === "all") {
-          pagenavtop.classList.remove("hidden");
-          pagenavtop.removeAttribute("hidden");
-        } else if (!pagenavtop.hasAttribute("hidden")) {
-          pagenavtop.setAttribute("hidden", "");
-          pagenavtop.classList.add("hidden");
-        }
-      }
+      if (pagenavtop) { pagenavtop.hidden = filterElement.id !== "all"; }
+      showBadge();
     }
   });
 }
@@ -102,6 +95,7 @@ function filterNav() {
 document.addEventListener("DOMContentLoaded", function() {
   checkIfVisible();
   filterNav();
+  showBadge();
 });
 
 export {updateURLs, showBadge};

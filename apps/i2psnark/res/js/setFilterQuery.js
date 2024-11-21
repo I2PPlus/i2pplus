@@ -3,32 +3,25 @@
 /* License: AGPL3 or later */
 
 const navbar = document.getElementById("navbar");
-const filterLinks = document.querySelectorAll("#torrentDisplay .filter");
+const navMain = navbar.querySelector(".nav_main");
+const cancelSearch = navbar.querySelector("#searchwrap a");
 
 function setFilterQuery() {
-  if (!navbar || !filterLinks) {return;}
+  if (!navbar || !navMain || !cancelSearch) return;
 
-  const navMain = document.querySelector(".nav_main");
-  const cancelSearch = document.querySelector("#searchwrap a");
+  function updateHref(element) {
+    const filter = new URLSearchParams(window.location.search).get("filter") || localStorage.getItem("snarkFilter");
+    if (filter && filter !== "all" && filter !== "search" && filter !== "") {
+      element.href = `/i2psnark/?filter=${filter}`;
+    }
+  }
+
   navbar.addEventListener("click", (event) => {
-    if (event.target.classList.contains("nav_main")) {
-      const filter = localStorage.getItem("snarkFilter");
-      if (filter && filter !== "all" && filter !== "") {
-        navMain.href = "/i2psnark/?filter=" + filter;
-      }
-    }
+    if (event.target.classList.contains("nav_main")) {updateHref(navMain);}
   });
-
-  if (!cancelSearch) {return;}
   cancelSearch.addEventListener("click", (event) => {
-    if (event.target.href.includes("i2psnark")) {
-      const filter = localStorage.getItem("snarkFilter");
-      if (filter && filter !== "all" && filter !== "") {
-        cancelSearch.href = "/i2psnark/?filter=" + filter;
-      }
-    }
+    if (event.target.href.includes("i2psnark")) {updateHref(cancelSearch);}
   });
-
 }
 
 document.addEventListener("DOMContentLoaded", setFilterQuery);

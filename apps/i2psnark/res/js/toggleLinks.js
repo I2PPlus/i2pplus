@@ -86,7 +86,10 @@ function initLinkToggler() {
 
   setLinkMode();
   page.addEventListener("click", copyMagnetHandler);
-  page.addEventListener("change", doToggle);
+  page.addEventListener("change", (event) => {
+    if (event.target.id === "linkswitch") { doToggle(); }
+  });
+
 }
 
 d.addEventListener("DOMContentLoaded", () => {

@@ -29,6 +29,11 @@ let snarkRefreshTimeoutId;
 let debugging = false;
 let initialized = false;
 
+function requestIdleOrAnimationFrame(callback) {
+  if (typeof requestIdleCallback === "function") { requestIdleCallback(callback); }
+  else { requestAnimationFrame(callback); }
+}
+
 function refreshTorrents(callback) {
   const complete = document.getElementsByClassName("completed");
   const control = document.getElementById("torrentInfoControl");
@@ -41,11 +46,7 @@ function refreshTorrents(callback) {
     if (!document.getElementById("ourDest")) {
       const childElems = torrents.querySelectorAll("#snarkHead th:not(.torrentAction)>*");
       snarkHead.classList.add("initializing");
-      //childElems.forEach(elem => elem.style.opacity = "0");
-      setTimeout(() => {
-        snarkHead.classList.remove("initializing");
-        //childElems.forEach(elem => elem.style.opacity = "");
-      }, 3*1000);
+      setTimeout(() => { snarkHead.classList.remove("initializing"); }, 3*1000);
     }
   }
 
@@ -53,8 +54,8 @@ function refreshTorrents(callback) {
 
   setLinks(query);
 
-  if (files || torrents) {requestAnimationFrame(updateVolatile);}
-  else if (down) {requestAnimationFrame(refreshAll);}
+  if (files || torrents) {requestIdleOrAnimationFrame(updateVolatile);}
+  else if (down) {requestIdleOrAnimationFrame(refreshAll);}
 
   async function refreshAll() {
     try {
@@ -62,9 +63,9 @@ function refreshTorrents(callback) {
       if (mainsection && mainsectionResponse && mainsection.innerHTML !== mainsectionResponse.innerHTML) {
         const torrentsResponse = xhrsnark.responseXML.getElementById("torrents");
         if (torrents) {
-          requestAnimationFrame(() => torrents.innerHTML = torrentsResponse.innerHTML);
+          requestIdleOrAnimationFrame(() => torrents.innerHTML = torrentsResponse.innerHTML);
         } else {
-          requestAnimationFrame(() => mainsection.innerHTML = mainsectionResponse.innerHTML);
+          requestIdleOrAnimationFrame(() => mainsection.innerHTML = mainsectionResponse.innerHTML);
         }
       } else if (files) {
         const dirlistResponse = xhrsnark.responseXML?.getElementById("dirlist");
@@ -85,7 +86,7 @@ function refreshTorrents(callback) {
     const updating = torrents.querySelectorAll("#snarkTbody tr, #dhtDebug .dht");
     const updatingResponse = xhrsnark.responseXML.querySelectorAll("#snarkTbody tr, #dhtDebug .dht");
 
-    const updates = []; // Store updates to apply later
+    const updates = [];
 
     if (torrents) {
 
@@ -118,7 +119,7 @@ function refreshTorrents(callback) {
           }
         });
       } else if (requireFullRefresh && updatingResponse) {
-        requestAnimationFrame(refreshAll);
+        requestIdleOrAnimationFrame(refreshAll);
         updated = true;
         requireFullRefresh = false;
       }
@@ -143,7 +144,7 @@ function refreshTorrents(callback) {
     if (updates.length > 0) {
       const fragment = document.createDocumentFragment();
       updates.forEach(update => {update(fragment);});
-      requestAnimationFrame(() => {document.body.appendChild(fragment);});
+      requestIdleOrAnimationFrame(() => {document.body.appendChild(fragment);});
     }
 
   }
@@ -213,12 +214,12 @@ function refreshScreenLog(callback) {
 function getURL() { return window.location.href.replace("/i2psnark/", "/i2psnark/.ajax/xhr1.html"); }
 
 function initHandlers() {
-  requestAnimationFrame(() => {
+  requestIdleOrAnimationFrame(() => {
     setLinks();
     if (screenlog) initSnarkAlert();
     if (document.getElementById("pagenavtop")) pageNav();
-    if (filterbar) showBadge();
     if (torrents) snarkSort();
+    if (filterbar) showBadge();
     if (debugMode) toggleDebug();
     if (debugging) console.log("initHandlers()");
   });
@@ -244,6 +245,7 @@ async function initSnarkRefresh() {
           await doRefresh();
           await refreshScreenLog();
           await initToggleLog();
+          await showBadge();
         } catch (error) {if (debugging) console.error(error);}
       }, getRefreshInterval());
 
@@ -272,7 +274,7 @@ function doRefresh(url, callback) {
   xhrsnark.responseType = "document";
   xhrsnark.onload = () => {
     if (debugging) isXHRSynced();
-    requestAnimationFrame(refreshTorrents);
+    requestIdleOrAnimationFrame(refreshTorrents);
     initHandlers();
   };
   xhrsnark.onerror = () => {
@@ -297,6 +299,4 @@ function isXHRSynced() {
   }
 }
 
-function countSnarks() {return torrents.querySelectorAll("tr.volatile").length;}
-
-export { countSnarks, doRefresh, getURL, initSnarkRefresh, refreshScreenLog, refreshTorrents, snarkRefreshIntervalId, xhrsnark };
+export { doRefresh, getURL, initSnarkRefresh, refreshScreenLog, refreshTorrents, snarkRefreshIntervalId, xhrsnark };
