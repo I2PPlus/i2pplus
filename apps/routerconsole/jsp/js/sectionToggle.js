@@ -61,7 +61,7 @@ function sectionToggler() {
   function hide_general() {
     if (sb_general !== null) {
       sb_general.hidden = true;
-      sb.querySelector("#sb_general + hr").hidden = true;
+      sb.querySelector("#sb_general+hr").hidden = true;
       document.getElementById("toggle_sb_general").checked = false;
       sb.querySelector("h3 a[href=\"/info\"] .badge").hidden = null;
       localStorage["section_general"] = "hide";
@@ -71,7 +71,7 @@ function sectionToggler() {
   function show_general() {
     if (sb_general !== null) {
       sb_general.hidden = null;
-      sb.querySelector("#sb_general + hr").hidden = null;
+      sb.querySelector("#sb_general+hr").hidden = null;
       document.getElementById("toggle_sb_general").checked = true;
       sb.querySelector("h3 a[href=\"/info\"] .badge").hidden = true;
       localStorage.removeItem("section_general");
@@ -86,7 +86,7 @@ function sectionToggler() {
   function hide_advancedgeneral() {
     if (sb_advancedgeneral !== null) {
       sb_advancedgeneral.hidden = true;
-      sb.querySelector("#sb_advancedgeneral + hr").hidden = true;
+      sb.querySelector("#sb_advancedgeneral+hr").hidden = true;
       document.getElementById("toggle_sb_advancedgeneral").checked = false;
       sb.querySelector("h3 a[href=\"/info\"] .badge").hidden = null;
       localStorage["section_advancedgeneral"] = "hide";
@@ -96,7 +96,7 @@ function sectionToggler() {
   function show_advancedgeneral() {
     if (sb_advancedgeneral !== null) {
       sb_advancedgeneral.hidden = null;
-      sb.querySelector("#sb_advancedgeneral + hr").hidden = null;
+      sb.querySelector("#sb_advancedgeneral+hr").hidden = null;
       document.getElementById("toggle_sb_advancedgeneral").checked = true;
       sb.querySelector("h3 a[href=\"/info\"] .badge").hidden = true;
       localStorage.removeItem("section_advancedgeneral");
@@ -111,9 +111,9 @@ function sectionToggler() {
   function hide_bandwidth() {
     if (sb_bandwidth !== null) {
       sb_bandwidth.hidden = true;
-      if (sb.querySelector("#sb_bandwidth + hr") !== null) {
-        sb.querySelector("#sb_bandwidth + hr").hidden = true;
-        sb.querySelector("#sb_bandwidth + hr").style.display = null;
+      if (sb.querySelector("#sb_bandwidth+hr") !== null) {
+        sb.querySelector("#sb_bandwidth+hr").hidden = true;
+        sb.querySelector("#sb_bandwidth+hr").style.display = null;
         sb.querySelector("#sb_graphstats").style.opacity = "1";
       }
       document.getElementById("toggle_sb_bandwidth").checked = false;
@@ -124,9 +124,9 @@ function sectionToggler() {
   function show_bandwidth() {
     if (sb_bandwidth !== null) {
       sb_bandwidth.hidden = null;
-      if (sb.querySelector("#sb_bandwidth + hr") !== null) {
-        sb.querySelector("#sb_bandwidth + hr").hidden = null;
-        sb.querySelector("#sb_bandwidth + hr").style.display = "block";
+      if (sb.querySelector("#sb_bandwidth+hr") !== null) {
+        sb.querySelector("#sb_bandwidth+hr").hidden = null;
+        sb.querySelector("#sb_bandwidth+hr").style.display = "block";
         sb.querySelector("#sb_graphstats").removeAttribute("style");
       }
       document.getElementById("toggle_sb_bandwidth").checked = true;
@@ -151,8 +151,8 @@ function sectionToggler() {
   function show_services() {
     if (sb_services !== null) {
       sb_services.hidden = null;
-      if (sb.querySelector("#sb_services.collapsed + hr") !== null) {
-        sb.querySelector("#sb_services.collapsed + hr").hidden = null;
+      if (sb.querySelector("#sb_services.collapsed+hr") !== null) {
+        sb.querySelector("#sb_services.collapsed+hr").hidden = null;
       }
       document.getElementById("sb_services").classList.remove("collapsed");
       document.getElementById("toggle_sb_services").checked = true;
@@ -177,8 +177,8 @@ function sectionToggler() {
   function show_internals() {
     if (sb_internals !== null) {
       sb_internals.hidden = null;
-      if (sb.querySelector("#sb_internals.collapsed + hr") !== null) {
-        sb.querySelector("#sb_internals.collapsed + hr").hidden = null;
+      if (sb.querySelector("#sb_internals.collapsed+hr") !== null) {
+        sb.querySelector("#sb_internals.collapsed+hr").hidden = null;
       }
       document.getElementById("sb_internals").classList.remove("collapsed");
       document.getElementById("toggle_sb_internals").checked = true;
@@ -203,8 +203,8 @@ function sectionToggler() {
   function show_advanced() {
     if (sb_advanced !== null) {
       sb_advanced.hidden = null;
-      if (sb.querySelector("#sb_advanced.collapsed + hr") !== null) {
-        sb.querySelector("#sb_advanced.collapsed + hr").hidden = null;
+      if (sb.querySelector("#sb_advanced.collapsed+hr") !== null) {
+        sb.querySelector("#sb_advanced.collapsed+hr").hidden = null;
       }
       document.getElementById("sb_advanced").classList.remove("collapsed");
       document.getElementById("toggle_sb_advanced").checked = true;
@@ -229,8 +229,8 @@ function sectionToggler() {
   function show_help() {
     if (sb_help !== null) {
       sb_help.hidden = null;
-      if (sb.querySelector("#sb_help.collapsed + hr") !== null) {
-        sb.querySelector("#sb_help.collapsed + hr").hidden = null;
+      if (sb.querySelector("#sb_help.collapsed+hr") !== null) {
+        sb.querySelector("#sb_help.collapsed+hr").hidden = null;
       }
       document.getElementById("sb_help").classList.remove("collapsed");
       document.getElementById("toggle_sb_help").checked = true;
@@ -246,7 +246,7 @@ function sectionToggler() {
   function hide_queue() {
     if (sb_queue !== null) {
       sb_queue.hidden = true;
-      sb.querySelector("#sb_queue + hr").hidden = true;
+      sb.querySelector("#sb_queue+hr").hidden = true;
       document.getElementById("toggle_sb_queue").checked = false;
       if (jobBadge) { jobBadge.hidden = null; }
       localStorage["section_queue"] = "hide";
@@ -256,7 +256,7 @@ function sectionToggler() {
   function show_queue() {
     if (sb_queue !== null) {
       sb_queue.hidden = null;
-      sb.querySelector("#sb_queue + hr").hidden = null;
+      sb.querySelector("#sb_queue+hr").hidden = null;
       document.getElementById("toggle_sb_queue").checked = true;
       if (jobBadge) { jobBadge.hidden = true; }
       localStorage.removeItem("section_queue");
@@ -322,7 +322,7 @@ function sectionToggler() {
     if (sb_newsheadings !== null) {
       sb_newsheadings.hidden = true;
       sb_newsH3.classList.add("collapsed");
-      sb.querySelector("#sb_newsheadings + hr").hidden = true;
+      sb.querySelector("#sb_newsheadings+hr").hidden = true;
       document.getElementById("toggle_sb_newsheadings").checked = false;
       localStorage["section_newsheadings"] = "hide";
     }
@@ -332,7 +332,7 @@ function sectionToggler() {
     if (sb_newsheadings !== null) {
       sb_newsheadings.hidden = null;
       sb_newsH3.classList.remove("collapsed");
-      sb.querySelector("#sb_newsheadings + hr").hidden = null;
+      sb.querySelector("#sb_newsheadings+hr").hidden = null;
       document.getElementById("toggle_sb_newsheadings").checked = true;
       localStorage.removeItem("section_newsheadings");
     }

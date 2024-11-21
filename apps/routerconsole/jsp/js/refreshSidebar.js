@@ -41,7 +41,7 @@ const elements = {
   updateForm: document.getElementById("sb_updateform"),
   updateStatus: document.getElementById("sb_updateprogress"),
   updateSection: document.getElementById("sb_updatesection"),
-  updateSectionHR: sb.querySelector("#sb_updatesection + hr")
+  updateSectionHR: sb.querySelector("#sb_updatesection+hr")
 };
 
 sb.addEventListener("loaded", () => { initSidebar(); });
@@ -63,7 +63,7 @@ function tangoDown() {
     elements.localtunnelSummary.innerHTML = "<tr id=routerdown><td colspan=3 height=10></td></tr>";
   }
   isDown = true;
-  onVisible(sb, () => requestAnimationFrame(refreshSidebar));
+  onVisible(sb, () => requestIdleOrAnimationFrame(refreshSidebar));
 }
 
 function refreshSidebar() {
@@ -80,9 +80,7 @@ function refreshSidebar() {
       isDown = false;
       if (isDownTimer !== null) location.reload();
       document.querySelector("body").classList.remove("isDown");
-    } else if (xhrsb.status === 404 || xhrsb.status === 500) {
-      requestAnimationFrame(tangoDown);
-    }
+    } else if (xhrsb.status === 404 || xhrsb.status === 500) {requestIdleOrAnimationFrame(tangoDown);}
 
     const responseElements = {
       badges: xhrsb.responseXML.querySelectorAll(".badge"),
@@ -263,61 +261,38 @@ function refreshSidebar() {
       if (sb && xhrsb.responseXML) {
         const sbResponse = xhrsb.responseXML.getElementById("sb");
         if (sbResponse && sb.innerHTML !== sbResponse.innerHTML) {
-          requestAnimationFrame(() => {
+          requestIdleOrAnimationFrame(() => {
             xhrContainer.innerHTML = sbResponse.innerHTML;
             initSidebar();
           });
         }
-      } else if ("requestIdleCallback" in window) { requestIdleCallback(tangoDown); }
-      else { requestAnimationFrame(tangoDown);}
+      } else {requestIdleOrAnimationFrame(tangoDown);}
     }
 
-    const graphCanvas = document.getElementById("minigraph");
-    const ctx = graphCanvas?.getContext("2d");
-
-    if (ctx) {
-      ctx.imageSmoothingEnabled = false;
-      ctx.globalCompositeOperation = "copy";
-      ctx.globalAlpha = 1;
-    }
-
-    async function refreshGraph() {
+    (() => {
+      const graphCanvas = document.getElementById("minigraph");
+      const ctx = graphCanvas?.getContext("2d");
       const graphContainer = document.getElementById("sb_graphcontainer");
-      const graphContainerHR = sb.querySelector("#sb_graphcontainer + hr");
-      const minigraph = document.getElementById("minigraph");
-      const minigraphHeight = 50;
-      const minigraphWidth = 245;
-      const image = new Image();
-
-      if (graphContainer.hidden) {
-        graphContainer.hidden = null;
-        graphContainerHR.hidden = null;
-      }
-
-      const response = await fetch(`/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=${Date.now()}`);
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      image.src = url;
-
-      return new Promise((resolve) => {
-        image.onload = () => {
-          minigraph.width = minigraphWidth;
-          minigraph.height = minigraphHeight;
-          if (ctx) ctx.drawImage(image, 0, 0, minigraphWidth, minigraphHeight);
-          resolve();
-        };
-      });
-    }
-
-    if ("requestIdleCallback" in window) {
-      requestIdleCallback(async () => {
-        try { await refreshGraph(); } catch (error) {}
-      });
-    } else {
-      requestAnimationFrame(async () => {
-        try { await refreshGraph(); } catch (error) {}
-      });
-    }
+      const graphContainerHR = document.querySelector("#sb_graphcontainer+hr");
+      const [minigraphWidth, minigraphHeight] = [245, 50];
+      if (ctx) { Object.assign(ctx, { imageSmoothingEnabled: false, globalCompositeOperation: "copy", globalAlpha: 1 }); }
+      const refreshGraph = async () => {
+        if (graphContainer.hidden) {graphContainer.hidden = graphContainerHR.hidden = false;}
+        const response = await fetch(`/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=${Date.now()}`);
+        const image = new Image(minigraphWidth, minigraphHeight);
+        image.src = URL.createObjectURL(await response.blob());
+        return new Promise((resolve) => {
+          image.onload = () => {
+            graphCanvas.width = minigraphWidth;
+            graphCanvas.height = minigraphHeight;
+            ctx?.drawImage(image, 0, 0);
+            resolve();
+          };
+        });
+      };
+      const scheduleRefresh = async (callback) => { try {await callback();} catch {} };
+      refreshGraph().then(() => { requestIdleOrAnimationFrame(() => scheduleRefresh(refreshGraph)); });
+    })();
 
     async function initSidebar() {
       sectionToggler();
@@ -327,9 +302,13 @@ function refreshSidebar() {
 
     const forms = ["form_reseed", "form_sidebar", "form_updates"].map(id => document.getElementById(id)).filter(form => form);
     forms.forEach(form => form.onsubmit = () => handleFormSubmit());
-
     function handleFormSubmit() { setTimeout(refreshAll, 3000); }
   };
+
+  function requestIdleOrAnimationFrame(callback) {
+    if (typeof requestIdleCallback === "function") { requestIdleCallback(callback); }
+    else { requestAnimationFrame(callback); }
+  }
 
   function ready() {
     xhrsb.send();
