@@ -227,17 +227,17 @@ public abstract class FormHandler {
         if (canClose) {
             buf.append(" canClose");
         }
-        buf.append("\" id=\"messages\">");
+        buf.append("\" id=messages>");
 
         if (!_errors.isEmpty()) {
-            buf.append("<div class=\"error\">").append(render(_errors)).append("</div>");
+            buf.append("<div class=error>").append(render(_errors)).append("</div>");
         }
 
         if (!_notices.isEmpty()) {
-            buf.append("<div class=\"notice\">").append(render(_notices)).append("</div>");
+            buf.append("<div class=notice>").append(render(_notices)).append("</div>");
         }
 
-        buf.append("</div>\n").append("<script src=\"/js/clickToClose.js\"></script>\n");
+        buf.append("</div>\n").append("<script src=/js/clickToClose.js></script>\n");
         return buf.toString();
     }
 
