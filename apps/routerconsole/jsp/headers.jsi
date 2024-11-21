@@ -32,9 +32,7 @@
   }
   String defaultCSP = "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; script-src 'self' 'nonce-" + cspNonce + "'; font-src 'self'; object-src 'none'; media-src 'none';";
   response.setHeader("Accept-Ranges", "bytes");
-  if (uri.contains("netdbmap")) {
-      response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; script-src 'self' 'unsafe-eval' 'nonce-" + cspNonce + "'; font-src 'self'; object-src 'none'; media-src 'none';");
-  } else if (needsCSP) {response.setHeader("Content-Security-Policy", defaultCSP);}
+  if (needsCSP) {response.setHeader("Content-Security-Policy", defaultCSP);}
   response.setHeader("X-XSS-Protection", "1; mode=block");
   response.setHeader("X-Content-Type-Options", "nosniff");
   response.setHeader("Referrer-Policy", "same-origin");
