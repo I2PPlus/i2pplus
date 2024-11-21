@@ -51,7 +51,7 @@
         }
       });
     }
-  });
+  };
 
   const throttledLazyLoad = throttle(() => requestAnimationFrame(lazyload), 180);
 
