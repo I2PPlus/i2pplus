@@ -8,25 +8,37 @@ import {onVisible} from "./onVisible.js";
 
 let filterbar;
 let snarkCount;
+const torrents = document.getElementById("torrents");
 
 function showBadge() {
   filterbar = document.getElementById("torrentDisplay");
   if (!filterbar) {return;}
-  const query = new URLSearchParams(window.location.search), filterQuery = query.get("filter"), searchQuery = query.get("search");
-  const allFilters = filterbar.querySelectorAll(".filter");
-  const filterId = searchQuery !== null ? "search" : filterQuery || "all";
-  const activeFilter = document.getElementById(filterId);
-  const filterAll = document.getElementById("all");
+  const urlParams = new URLSearchParams(window.location.search), filterQuery = urlParams.get("filter"), searchQuery = urlParams.get("search");
+  const filterId = searchQuery !== null ? "search" : (filterQuery || "all");
+  const allFilters = filterbar.querySelectorAll(".filter"), activeFilter = document.getElementById(filterId), filterAll = document.getElementById("all");
 
   allFilters.forEach(filter => {
-    const badges = filter.querySelectorAll(".filter:not(#all) .badge");
+    const isFilterAll = filter.id === "all";
+    const badges = filter.querySelectorAll(".badge");
     if (filter !== activeFilter) {
       filter.classList.remove("enabled");
+      if (!isFilterAll) {
+        badges.forEach(badge => {
+          Object.assign(badge, {hidden: true, textContent: "", id: ""});
+        });
+      } else {filter.querySelector(".badge").hidden = true;}
+    } else if (!isFilterAll) {
       badges.forEach(badge => {
-        badge.hidden = true;
-        badge.textContent = "";
+        setTimeout(() => {
+          requestAnimationFrame(() => {
+            Object.assign(badge, {textContent: countSnarks(), hidden: false, id: "filtercount"});
+          });
+        }, 1000);
       });
-    } else {badges.forEach(badge => badge.hidden = false);}
+    } else {
+      const badge = filterAll.querySelector(".badge");
+      Object.assign(badge, {hidden: false, id: "filtercount"});
+    }
   });
 
   if (activeFilter) {
@@ -35,7 +47,7 @@ function showBadge() {
       const activeBadge = activeFilter.querySelector(".badge");
       activeBadge.id = "filtercount";
       snarkCount = countSnarks();
-      if (filterId !== "all") {document.getElementById("filtercount").textContent = snarkCount}
+      if (filterId !== "all") {activeBadge.textContent = snarkCount}
       window.localStorage.setItem("snarkFilter", activeFilter.id);
     }
 
@@ -45,7 +57,9 @@ function showBadge() {
   }
 }
 
-function countSnarks() { return torrents.querySelectorAll("#snarkTbody tr.volatile:not(.peerinfo)").length; }
+function countSnarks() {
+  return torrents?.querySelectorAll("#snarkTbody tr.volatile:not(.peerinfo)").length;
+}
 
 function updateURLs() {
   var xhrURL = "/i2psnark/.ajax/xhr1.html" + window.location.search;
@@ -64,22 +78,22 @@ function updateURLs() {
 
 function checkIfVisible() {
   const torrentform = document.getElementById("torrentlist");
-  if (torrentform !== null) { onVisible(torrentform, () => {updateURLs();}); }
+  if (torrentform) { onVisible(torrentform, () => {updateURLs();}); }
 }
 
 function filterNav() {
   const filterbar = document.getElementById("torrentDisplay");
   if (!filterbar) {setTimeout(filterNav, 1000); return;}
-  const torrents = document.getElementById("torrents"), torrentForm = document.getElementById("torrentlist"), pagenavtop = document.getElementById("pagenavtop");
+  const pagenavtop = document.getElementById("pagenavtop");
   filterbar.addEventListener("click", function(event) {
     const filterElement = event.target.closest(".filter");
     if (filterElement) {
       event.preventDefault();
       if (!filterElement.classList.contains("enabled")) {filterElement.classList.add("enabled");}
       const filterURL = new URL(filterElement.href), xhrURL = "/i2psnark/.ajax/xhr1.html" + filterURL.search; history.replaceState({}, "", filterURL);
+      showBadge();
       doRefresh(xhrURL, updateURLs);
       if (pagenavtop) { pagenavtop.hidden = filterElement.id !== "all"; }
-      showBadge();
     }
   });
 }
@@ -87,6 +101,7 @@ function filterNav() {
 document.addEventListener("DOMContentLoaded", function() {
   checkIfVisible();
   filterNav();
+  countSnarks();
   showBadge();
 });
 

@@ -140,13 +140,6 @@ function refreshTorrents(callback) {
         }
       }
     }
-
-    if (updates.length > 0) {
-      const fragment = document.createDocumentFragment();
-      updates.forEach(update => {update(fragment);});
-      requestIdleOrAnimationFrame(() => {document.body.appendChild(fragment);});
-    }
-
   }
 
   function refreshHeaderAndFooter() {
@@ -243,9 +236,9 @@ async function initSnarkRefresh() {
       snarkRefreshIntervalId = setInterval(async () => {
         try {
           await doRefresh();
+          await showBadge();
           await refreshScreenLog();
           await initToggleLog();
-          await showBadge();
         } catch (error) {if (debugging) console.error(error);}
       }, getRefreshInterval());
 
