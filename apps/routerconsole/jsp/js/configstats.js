@@ -54,9 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const checkedItems = Array.from(checkboxes).filter(cb => cb.checked).length;
 
       const thElement = row.previousElementSibling.querySelector("th");
-      if (thElement) {
-        updateCountSpan(thElement, checkedItems, totalItems, false);
-      }
+      if (thElement) {updateCountSpan(thElement, checkedItems, totalItems, false);}
       const sectionId = thElement.textContent.trim();
       initialState[sectionId] = getCheckboxState(checkboxes);
 
@@ -85,22 +83,23 @@ document.addEventListener("DOMContentLoaded", function () {
     tableBody.appendChild(fragment);
   }
 
-  const initialState = initialize();
-
-  const sections = [];
+  const initialState = initialize(), sections = [];
   let currentSection = null;
+
   document.querySelectorAll(".statgroup, .graphableStat").forEach(element => {
     if (element.classList.contains("statgroup")) {
-      if (currentSection) sections.push(currentSection);
+      if (currentSection) {sections.push(currentSection);}
       currentSection = { header: element, content: [] };
-    } else {
-      currentSection.content.push(element);
-    }
+    } else {currentSection.content.push(element);}
   });
 
   if (currentSection) sections.push(currentSection);
-
   sections.sort((a, b) => naturalSort(a.header.querySelector("th").textContent.trim(), b.header.querySelector("th").textContent.trim()));
-
   renderSortedSections(sections);
+
+  document.querySelector("#configstats .optionsave>.cancel").addEventListener("click", (event) => {
+    event.preventDefault();
+    location.reload();
+  });
+
 });
