@@ -1044,6 +1044,12 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnelPeerCount th:first-child,#transitSummary th:first-child{font-size:0}
 #tunnelPeerCount th:first-child::before,#transitSummary th:first-child::before{width:12px;height:10px;display:inline-block;vertical-align:middle;background:url(/themes/console/images/planet.svg) no-repeat left center/10px;content:""}
 #tunnelPeerCount tr:last-child td:not(.rih):not(.rbw),#transitSummary tr:last-child td:not(.rih):not(.rbw){border-bottom:var(--border)}
+.noresults #peercount{margin-bottom:42px}
+.noresults #refreshPage{pointer-events:none;opacity:.5}
+.noresults #tunnelPeerCount thead{opacity:0}
+.noresults #tunnelPeerCount .tablefooter{margin:10px auto;padding:0 6px;display:block;width:fit-content;position:absolute;bottom:0;left:0;right:0;text-align:center;border:var(--border);box-shadow:0 0 0 1px #000,0 0 0 3px #252,0 0 0 4px #131;background:#000}
+.noresults #tunnelPeerCount .tablefooter td{display:inline-block;padding:8px 12px;vertical-align:text-bottom;font-size:120%;border:0!important}
+.noresults #tunnelPeerCount .tablefooter td:empty{display:none}
 #tunnels #exploratory{padding-left:35px;background:var(--globe) no-repeat 9px center/18px,var(--title)}
 #tunnels #exploratory a,#tunnels h3.server a,#tunnels h3.client a{margin:-8px 0 -8px 0;padding:7px 4px 14px 10px}
 #tunnels h3 a{float:right}

@@ -173,14 +173,12 @@ function displayPeerCount() {
       filterCount.id = "filterCount";
       if (displayed > 0) {
         filterCount.textContent = ` (${displayed})`;
-        if (!navTab.querySelector("#filterCount")) {
-          navTab.appendChild(filterCount);
-        }
+        if (!navTab.querySelector("#filterCount")) {navTab.appendChild(filterCount);}
+        document.body.classList.remove("noresults");
       } else {
         filterCount.textContent = "";
-        if (navTab.querySelector("#filterCount")) {
-          navTab.removeChild(filterCount);
-        }
+        if (navTab.querySelector("#filterCount")) {navTab.removeChild(filterCount);}
+        document.body.classList.add("noresults");
       }
     } else {
       filterCount.textContent = ` (${totalCount})`;
