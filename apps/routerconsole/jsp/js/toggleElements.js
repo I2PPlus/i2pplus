@@ -55,11 +55,13 @@ function setupToggles(toggleSelector, hiddenSelector, displayStyle, collapseByDe
         if (!toggleElement.classList.contains("expanded")) {
           hiddenElement.style.display = displayStyle;
           toggleElement.classList.add("expanded");
+          document.documentElement.classList.remove("hasCollapsedElement");
           document.documentElement.classList.add("hasExpandedElement");
         } else {
           hiddenElement.style.display = "none";
           toggleElement.classList.remove("expanded");
           document.documentElement.classList.remove("hasExpandedElement");
+          document.documentElement.classList.add("hasCollapsedElement");
         }
       });
       toggleElement.classList.add("toggle");

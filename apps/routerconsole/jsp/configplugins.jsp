@@ -37,6 +37,7 @@
 <a href="configwebapps" title="<%=intl._t("WebApp Configuration")%>">WebApps</a>
 </span>
 </h3>
+<div id=pluginstall>
 <form action="configplugins" method=POST>
 <table id=plugininstall class=configtable>
 <tr hidden>
@@ -73,6 +74,7 @@
 </tr>
 </table>
 </form>
+</div>
 <form action="configplugins" method=POST enctype="multipart/form-data" accept-charset=utf-8>
 <table id=plugininstall2 class=configtable>
 <tr>
@@ -110,6 +112,7 @@
        if (clientshelper.isPluginUpdateEnabled()) {
 %>
 <h3 id=pconfig><%=intl._t("Plugin Manager")%></h3>
+<div id=plugmanage>
 <form action="configplugins" method=POST>
 <p id=pluginconfigtext>
 <%=intl._t("The plugins listed below are started by the webConsole client.")%>
@@ -127,12 +130,16 @@
 </div>
 </form>
 </div>
+</div>
 <%
        } // pluginUpdateEnabled
    } // showPlugins
 %>
 </div>
 </div>
-
+<% if (theme.equals("dark")) { %>
+<script src=/js/toggleElements.js></script>
+<script nonce=<%=cspNonce%> type=module>setupToggles("#pconfig", "#plugmanage", "block");</script>
+<% } %>
 </body>
 </html>

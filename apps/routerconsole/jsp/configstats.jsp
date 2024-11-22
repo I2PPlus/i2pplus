@@ -37,12 +37,12 @@
  (<%=intl._t("change requires restart to take effect").replace("change requires restart to take effect", "restart required") %>)</label></td><td class=right><input type=submit name="shouldsave" class=accept value="<%=intl._t("Save changes")%>"></td></tr>
 </table>
 <h3 class=tabletitle id=graphchoice><%=intl._t("Select Stats for Graphing")%></h3>
-<table id=configstats>
+<table id=configstats><tbody>
 <%
     while (statshelper.hasMoreStats()) {
         while (statshelper.groupRequired()) {
 %>
-<tr><th align=left colspan=2 id=<%=statshelper.getCurrentGroupName().replace(" ", "_").replace("[", "").replace("]", "")%>><b><%=statshelper.getCurrentGroupName()%></b></th></tr>
+<tr class=statgroup><th align=left colspan=2 id=<%=statshelper.getCurrentGroupName().replace(" ", "_").replace("[", "").replace("]", "")%>><b><%=statshelper.getCurrentGroupName()%></b></th></tr>
 <tr class=graphableStat><td colspan=2>
 <%
         } // end iterating over required groups for the current stat
@@ -68,14 +68,17 @@
     }
 %>
 </td></tr>
-<tr class=tablefooter><td colspan=2 align=right class=optionsave>
+</tbody>
+<tfoot><tr class=tablefooter><td colspan=2 align=right class=optionsave>
 <input type=reset class=cancel value="<%=intl._t("Cancel")%>">
 <input type=submit name="shouldsave" class=accept value="<%=intl._t("Save changes")%>">
-</td></tr>
+</td></tr></tfoot>
 </table>
 </form>
 </div>
 </div>
-
+<script src=/js/configstats.js type=module></script>
+<script src=/js/toggleElements.js></script>
+<script nonce=<%=cspNonce%> type=module>setupToggles(".statgroup", ".statgroup+graphableStat", "table-row", true, false);</script>
 </body>
 </html>

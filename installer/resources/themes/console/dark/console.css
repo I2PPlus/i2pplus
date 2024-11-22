@@ -1257,7 +1257,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #netdblookup td.subheading b{font-size:10pt}
 #netdblookup td.optionsave{padding:10px}
 #netdblookup td b{font-size:90%}
-#netdblookup .optbox{margin:10px }
+#netdblookup .optbox{margin:10px}
 #netdblookup input[type=text]{width:calc(100% - 12px)}
 #netdblookup select{width:calc(100% - 11px)}
 #netdbRouterMap::before,#netdbRouterMap::after{display:inline-block;top:0;right:0;bottom:0;left:0;content:"";z-index:0;background:repeating-linear-gradient(to bottom,#0000,#0000 20px,#000 21px,#0000 22px),repeating-linear-gradient(to right,#0000,#0000 20px,#000 21px,#0000 22px) center center;position:absolute;box-shadow:0 0 0 2px #000 inset,0 0 0 6px #005 inset;pointer-events:none}
@@ -1619,7 +1619,7 @@ td.optionsave,.buckets,.formaction,#certs h4,#certs p,#certs textarea,#config_ad
 .configtable th{word-spacing:0;letter-spacing:0;text-transform:none}
 #config_advanced td.optionsave,#config_bandwidth td.optionsave,#config_clients .formaction,#config_homepage .formaction,#config_i2cp td.optionsave,#config_keyring .optionsave,#config_logging td.optionsave,#config_network td.optionsave,#config_peers .configtable tr:last-child td,#config_peers .configtable tr:nth-child(4) td,#config_service .formaction,#configstats tr.tablefooter,#config_summarybar .formaction,#config_ui .formaction,#graphing.formaction,#config_update tr:nth-child(2),#config_update tr.tablefooter,#pluginconfigactions.formaction,#reseedconfig td.optionsave,#sidebarconf tr:last-child,#sybilTask .optionsave,#tunnelconfigsave.formaction,#webappconfigactions.formaction{background:var(--h3),var(--footer);background-size:2px,100%}
 #externali2cp tr,#config_update tr,#joinfamily tr,#manualreseed tr,#netconfig tr,#newfamily tr:last-child,#plugininstall,#plugininstall2,#reseedconfig tr{box-shadow:var(--bevel_cell);background:none}
-#configstats tr.tablefooter td.optionsave,#sidebarconf tr:last-child td,#config_update tr.tablefooter td{background:#0000 }
+#configstats tr.tablefooter td.optionsave,#sidebarconf tr:last-child td,#config_update tr.tablefooter td{background:#0000}
 #externali2cp input[name="port"]{margin-left:6px}
 #externali2cp td{padding:5px}
 #netconfig .suboption,#externali2cp .suboption{padding-top:3px;padding-bottom:3px}
@@ -1630,6 +1630,50 @@ td.optionsave,.buckets,.formaction,#certs h4,#certs p,#certs textarea,#config_ad
 #updateHelper .nowrap::after,#updateProxyHostPort .nowrap::after,#config_update .nowrap::after,#bandwidthconfig .optionsingle::after,.optionlist label::before,#netconfig label::before,#externali2cp .optionlist label::before,#externali2cp .optionlist .nowrap::before,#reseedconfig .nowrap::before,#manualreseed .nowrap::before,#reseed_urlselection label::before,#reseedproxytype label::before,#graphs .nowrap::before{content:"";display:inline-block;vertical-align:middle}
 #updatehelper .optionlist:hover,#updateProxyHostPort.optionlist:hover{background:#000;transition:ease box-shadow .2s;box-shadow:var(--option_highlight)}
 #bandwidthconfig .optionsave .accept,#config_advanced .optionsave .accept{margin-right:0}
+
+/* configstats */
+#configstats{margin-bottom:-2px;contain:paint}
+#config_stats h3 a,#config_logging h3 a{float:right;letter-spacing:normal;text-transform:none;font-size:9pt}
+#config_stats .tabletitle{margin:15px 0 -1px}
+#configstats tr{border-top:1px inset #131}
+#configstats th{padding:8px 10px;text-align:left}
+#configstats .tablefooter td{padding:5px 10px}
+#configstats th a{float:right;text-transform:capitalize;font-size:9pt}
+#configstats th b{word-spacing:.1em;letter-spacing:.08em;text-transform:uppercase;font-size:10pt}
+#configstats td{padding:6px 5px}
+#configstats td{color:#bb7;border:0}
+#configstats td:first-child{padding:8px;width:1%;white-space:nowrap}
+#configstats td:first-child:empty+td>label{pointer-events:none}
+#configstats td:last-child{border-right:var(--border)}
+#configstats .tablefooter td{padding:5px 10px}
+#configstats .tablefooter:last-child td{text-align:right;background:#000}
+#configstats td b{color:var(--ink)}
+#configstats input.optbox{display:none}
+#config_stats #graphchoice{margin-bottom:-2px}
+#enablefullstats{margin-top:5px;padding:20px 24px 20px 58px;border:var(--border);background:var(--stats) no-repeat 15px center/28px,var(--msg)}
+#enablefull td{background:var(--th)}
+#enablefull td:last-child{width:1%;white-space:nowrap}
+#enablefull td:first-child{width:99%;white-space:normal}
+#enablefull label{margin:8px 0 8px 2px;width:calc(100% - 20px);display:inline-block}
+#configstats .graphableStat td{padding:4px 6px;white-space:normal}
+#configstats label{position:relative;font-size:90%}
+#configstats label::after{padding:4px 8px;position:absolute;top:-26px;left:-20px;z-index:10;display:none;white-space:nowrap;font-size:110%;color:#eeb;border:var(--border_badge);border-radius:1px;box-shadow:0 0 1px 1px #000;background:#000;content:attr(data-tooltip)}
+#configstats label:hover::after{display:inline-block}
+#statconfig{margin:0 auto 10px}
+#configstats .graphableStat td{padding:5px 4px;display:flex;flex-wrap:wrap;width:100%}
+#configstats label{margin:-1px 1px}
+#configstats label::after{font-size:95%}
+
+.statgroup:hover{color:var(--hover);cursor:pointer}
+.statgroup:hover .statcount{color:var(--ink)}
+.statgroup th::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:""}
+.statgroup:hover th::after{background:var(--dropdown_hover);content:""}
+.statgroup:not(.expanded) th::after{background:var(--dropdown);content:"";transform:rotate(-90deg)}
+.statgroup:not(.expanded):hover th::after{background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
+.statgroup .statcount{margin:-1px 0 -2px 8px;padding:5px 8px;min-width:24px;display:inline-block;line-height:1;word-spacing:.1em;vertical-align:middle;text-align:center;font-weight:500;font-size:80%;box-shadow:var(--bevel);background:var(--badge)}
+#configstats th{padding:8px 10px}
+#configstats th b{margin-bottom:-2px;display:inline-block;vertical-align:middle}
+#configstats th b::before{margin:-4px 6px 0 0;width:16px;height:16px;display:inline-block;vertical-align:middle;background:var(--star) no-repeat center center / 16px;content:""}
 
 /* infohelp/warn */
 form[action="events"]{padding:10px 10px 10px 50px;background:var(--logs) no-repeat 15px center/28px,var(--msg)}
@@ -2096,6 +2140,13 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 #plugininstall .infohelp{padding:20px 24px 20px 58px;background:var(--plugin) no-repeat 15px center/28px,var(--msg)}
 #pluginconfigtext{padding:20px 18px 20px 58px;background:var(--pluginconfig) no-repeat 15px center/28px,var(--msg_nohat)}
 #pluginconfigtext input{margin:-5px -6px 0 0;float:right}
+#pconfig::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:""}
+#pconfig:hover{color:var(--hover);cursor:pointer}
+#pconfig:hover::after{background:var(--dropdown_hover);content:""}
+#pconfig:not(.expanded){margin-bottom:-3px}
+#pconfig:not(.expanded)::after{background:var(--dropdown);content:"";transform:rotate(-90deg)}
+#pconfig:not(.expanded):hover::after{background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
+html.hasCollapsedElement #plugmanage{display:none}
 
 /* stats */
 .stattograph{margin:3px 1px;padding:6px 8px 6px 12px;width:220px;position:relative;display:inline-block;font-size:90%;text-align:left;color:#252;border:1px solid #020;border-left-width:3px;border-radius:1px;box-sizing:border-box;background:#000}
@@ -2111,37 +2162,6 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 .stattograph:active,.optbox:checked+label>.stattograph:active{background:var(--hover);box-shadow:var(--highlight),inset 4px 4px 4px rgba(0,0,0,.6)}
 .stattograph:active b,.optbox:checked+label>.stattograph:active b{color:var(--ink)}
 .statdesc{display:none}
-#configstats{margin-bottom:-2px;contain:paint}
-#config_stats h3 a,#config_logging h3 a{float:right;letter-spacing:normal;text-transform:none;font-size:9pt}
-#config_stats .tabletitle{margin:15px 0 -1px}
-#configstats tr{border-top:1px inset #131}
-#configstats th{padding:8px 10px;text-align:left}
-#configstats .tablefooter td{padding:5px 10px}
-#configstats th a{float:right;text-transform:capitalize;font-size:9pt}
-#configstats th b{word-spacing:.1em;letter-spacing:.08em;text-transform:uppercase;font-size:10pt}
-#configstats td{padding:6px 5px}
-#configstats td{color:#bb7;border:0}
-#configstats td:first-child{padding:8px;width:1%;white-space:nowrap}
-#configstats td:first-child:empty+td>label{pointer-events:none}
-#configstats td:last-child{border-right:var(--border)}
-#configstats .tablefooter td{padding:5px 10px}
-#configstats .tablefooter:last-child td{text-align:right;background:#000}
-#configstats td b{color:var(--ink)}
-#configstats input.optbox{display:none}
-#config_stats #graphchoice{margin-bottom:-2px}
-#enablefullstats{margin-top:5px;padding:20px 24px 20px 58px;border:var(--border);background:var(--stats) no-repeat 15px center/28px,var(--msg)}
-#enablefull td{background:var(--th)}
-#enablefull td:last-child{width:1%;white-space:nowrap}
-#enablefull td:first-child{width:99%;white-space:normal}
-#enablefull label{margin:8px 0 8px 2px;width:calc(100% - 20px);display:inline-block}
-#configstats .graphableStat td{padding:4px 6px;white-space:normal}
-#configstats label{position:relative;font-size:90%}
-#configstats label::after{padding:4px 8px;position:absolute;top:-26px;left:-20px;z-index:10;display:none;white-space:nowrap;font-size:110%;color:#eeb;border:var(--border_badge);border-radius:1px;box-shadow:0 0 1px 1px #000;background:#000;content:attr(data-tooltip)}
-#configstats label:hover::after{display:inline-block}
-#statconfig{margin:0 auto 10px}
-#configstats .graphableStat td{padding:5px 4px;display:flex;flex-wrap:wrap;width:100%}
-#configstats label{margin:-1px 1px}
-#configstats label::after{font-size:95%}
 
 /* bandwidth */
 .bw_title{margin:2px -13px 0 -38px;padding:2px 5px 4px 8px;display:block;text-align:left;font-size:11pt;font-weight:700;background:linear-gradient(90deg,#000,#010)}
