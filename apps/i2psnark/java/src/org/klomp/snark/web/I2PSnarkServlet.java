@@ -213,12 +213,8 @@ public class I2PSnarkServlet extends BasicServlet {
      *
      */
     private void doGetAndPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //if (_log.shouldDebug())
-        //    _log.debug("Service " + req.getMethod() + " \"" + req.getContextPath() + "\" \"" + req.getServletPath() + "\" \"" + req.getPathInfo() + '"');
-        // since we are not overriding handle*(), do this here
-        String method = req.getMethod();
-        // this is the part after /i2psnark
-        String path = req.getServletPath();
+        String method = req.getMethod(); // since we are not overriding handle*(), do this here
+        String path = req.getServletPath(); // this is the part after /i2psnark
 
         // in-war icons etc.
         if (path != null && path.startsWith(WARBASE)) {
@@ -405,7 +401,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (delay > 0) {
                 String downMsg = _context.isRouterContext() ? _t("Router is down") : _t("I2PSnark has stopped");
                 // fallback to metarefresh when javascript is disabled
-                buf.append("<noscript><meta http-equiv=refresh content=\"").append(delay < 10 ? 10 : delay).append(";")
+                buf.append("<noscript><meta http-equiv=refresh content=\"").append(delay < 60 ? 60 : delay).append(";")
                    .append(_contextPath).append("/").append(peerString).append("\"></noscript>\n");
             }
         } else {delay = 0;}
@@ -431,14 +427,13 @@ public class I2PSnarkServlet extends BasicServlet {
         // larger fonts for cjk translations
         String lang = (Translate.getLanguage(_manager.util().getContext()));
         long now = _context.clock().now();
-        if (lang.equals("zh") || lang.equals("ja") || lang.equals("ko"))
+        if (lang.equals("zh") || lang.equals("ja") || lang.equals("ko")) {
             buf.append(HEADER_A).append(_themePath).append(HEADER_D).append("\n");
+        }
 
         //  ...and inject CSS to display panels uncollapsed
-        if (noCollapse || !collapsePanels) {
-            buf.append(HEADER_A).append(_themePath).append(HEADER_C).append("\n");
-        }
-        // add placeholders filterbar, toggleLog css
+        if (noCollapse || !collapsePanels) {buf.append(HEADER_A).append(_themePath).append(HEADER_C).append("\n");}
+        // add placeholders for filterbar, toggleLog css
         buf.append("<style id=cssfilter></style>\n").append("<style id=toggleLogCss></style>\n");
 
         if (!isStandalone() && delay <= 0) {
@@ -446,7 +441,8 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160")
                .append("&hideLegend=true&hideTitle=true&hideGrid=true&t=").append(now).append("\')}\"</style>\n");
         }
-        buf.append("</head>\n<body style=display:none;pointer-events:none id=snarkxhr class=\"").append(_manager.getTheme())
+        buf.append("<script src=" + resourcePath + "js/click.js></script>\n")
+           .append("</head>\n<body style=display:none;pointer-events:none id=snarkxhr class=\"").append(_manager.getTheme())
            .append(" lang_").append(lang).append("\">\n")
            .append("<span id=toast hidden></span>\n").append("<center>\n").append(IFRAME_FORM);
         List<Tracker> sortedTrackers = null;
@@ -513,9 +509,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         } else {
             boolean canWrite;
-            synchronized(this) {
-                canWrite = _resourceBase.canWrite();
-            }
+            synchronized(this) {canWrite = _resourceBase.canWrite();}
             boolean pageOne = writeTorrents(out, req, canWrite);
             boolean enableAddCreate = _manager.util().enableAddCreate();
             // end of mainsection div
@@ -540,14 +534,8 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("src=" + resourcePath + "js/toggleLinks.js></script>\n");
         }
         out.write("<script nonce=" + cspNonce + " src=" + resourcePath + "js/setFilterQuery.js></script>\n");
-        if (theme.equals("ubergine")) {
-            out.write("<script nonce=" + cspNonce + " src=" + resourcePath + "js/click.js></script>\n");
-        }
-        if (!isStandalone()) {
-            out.write(FOOTER);
-        } else {
-            out.write(FOOTER_STANDALONE);
-        }
+        if (!isStandalone()) {out.write(FOOTER);}
+        else {out.write(FOOTER_STANDALONE);}
         out.flush();
     }
 
@@ -562,12 +550,10 @@ public class I2PSnarkServlet extends BasicServlet {
         headers.append("Accept-Ranges: bytes\r\n");
         String mimeType = resp.getContentType();
         if (mimeType != null && (mimeType.equals("image/png") || mimeType.equals("image/jpeg") || mimeType.equals("font/woff2") ||
-            mimeType.equals("image/gif") ||  mimeType.equals("image/webp") || mimeType.equals("image/svg+xml") ||
-            mimeType.equals("text/css"))) {
+            mimeType.equals("image/gif") || mimeType.equals("image/webp") || mimeType.equals("image/svg+xml") ||
+            mimeType.equals("text/css") || mimeType.endsWith("/javascript"))) {
             headers.append("Cache-Control: private, max-age=2628000, immutable\r\n");
-        } else {
-            headers.append("Cache-Control: private, no-cache, max-age=2628000\r\n");
-        }
+        } else {headers.append("Cache-Control: private, no-cache, max-age=2628000\r\n");}
         StringBuilder csp = new StringBuilder("default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; ");
         csp.append("script-src 'self' 'nonce-").append(cspNonce).append("'; ");
         csp.append("object-src 'none'; media-src '").append(allowMedia ? "self" : "none").append("'");
@@ -593,12 +579,6 @@ public class I2PSnarkServlet extends BasicServlet {
         StringBuilder headers = new StringBuilder(1024);
         headers.append("Cache-Control: private, no-cache, max-age=60\r\n");
         headers.append("Content-Security-Policy: default-src 'none'\r\n");
-        //headers.append("Referrer-Policy: same-origin\r\n");
-        //headers.append("X-Content-Type-Options: nosniff\r\n");
-        //headers.append("X-XSS-Protection: 1; mode=block\r\n");
-        //headers.append("Accept-Ranges: bytes\r\n");
-        //headers.append("X-Snark-Pagesize: ").append(pageSize).append("\r\n");
-        //headers.append("X-Snark-Refresh-Interval: ").append(refresh).append("\r\n");
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html; charset=utf-8");
         String[] headerLines = headers.toString().split("\r\n");
@@ -4022,11 +4002,9 @@ public class I2PSnarkServlet extends BasicServlet {
                     else if (postParams.get("editTorrent") != null) {saveTorrentEdit(snark, postParams);}
                     else if (postParams.get("setInOrderEnabled") != null) {
                         _manager.saveTorrentStatus(snark);
-                        _manager.addMessage("Sequential piece or file order not saved - feature currently broken.");
-                    } else {_manager.addMessage("Unknown command");}
-                } else {
-                    _manager.addMessage("Please retry form submission (bad nonce)");
-                }
+                        _manager.addMessage(_t("Sequential piece or file order not saved - feature currently broken."));
+                    } else {_manager.addMessage(_t("Unknown command"));}
+                } else {_manager.addMessage(_t("Please retry form submission (bad nonce)"));}
             }
             return null;
         }
@@ -4036,18 +4014,10 @@ public class I2PSnarkServlet extends BasicServlet {
             Storage storage = snark.getStorage();
             if (storage != null) {
                 File sbase = storage.getBase();
-                if (pathInTorrent.equals("/"))
-                    r = sbase;
-                else
-                    r = new File(sbase, pathInTorrent);
-            } else {
-                // magnet, dummy
-                r = new File("");
-            }
-        } else {
-            // dummy
-            r = new File("");
-        }
+                if (pathInTorrent.equals("/")) {r = sbase;}
+                else {r = new File(sbase, pathInTorrent);}
+            } else {r = new File("");} // magnet, dummy}
+        } else {r = new File("");} // dummy
 
         boolean showStopStart = snark != null;
         Storage storage = snark != null ? snark.getStorage() : null;
@@ -4059,7 +4029,7 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js?").append(CoreVersion.VERSION)
                .append("\" id=iframeResizer></script>\n");
         }
-        buf.append("<title>");
+        buf.append("<script src=" + resourcePath + "js/click.js></script>\n").append("<title>");
         if (title.endsWith("/")) {title = title.substring(0, title.length() - 1);}
         final String directory = title;
         final int dirSlash = directory.indexOf('/');
@@ -4069,13 +4039,10 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("</title>\n").append(HEADER_A).append(_themePath).append(HEADER_B).append("\n");
         // uncollapse panels
         boolean collapsePanels = _manager.util().collapsePanels();
-        if (!collapsePanels) {
-            buf.append(HEADER_A + _themePath + HEADER_C).append("\n");
-        }
-        // larger fonts for cjk translations
+        if (!collapsePanels) {buf.append(HEADER_A + _themePath + HEADER_C).append("\n");}
         String lang = (Translate.getLanguage(_manager.util().getContext()));
         if (lang.equals("zh") || lang.equals("ja") || lang.equals("ko")) {
-            buf.append(HEADER_A).append(_themePath).append(HEADER_D);
+            buf.append(HEADER_A).append(_themePath).append(HEADER_D); // larger fonts for cjk translations
         }
         buf.append(HEADER_A + _themePath + HEADER_I).append("\n"); // images.css
         String themeBase = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() +
