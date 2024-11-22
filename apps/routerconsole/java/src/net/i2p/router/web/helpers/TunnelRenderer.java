@@ -450,36 +450,30 @@ class TunnelRenderer {
 
         if (!participating.isEmpty() || tunnelCount > 0) {
             StringBuilder sb = new StringBuilder(peerCount*640+1024);
-            sb.append("<h3 class=tabletitle id=peercount>").append(_t("All Tunnels by Peer"))
+            sb.append("<h3 class=tabletitle id=peercount>").append(_t("All Tunnels by Peer")).append("<span hidden id=counter></span>")
               .append("&nbsp;&nbsp;<a id=refreshPage class=refreshpage style=float:right href=\"/tunnelpeercount\">")
               .append(_t("Refresh")).append("</a></h3>\n")
               .append("<table id=tunnelPeerCount data-sortable>")
-              .append("<thead>\n<tr>")
+              .append("<thead class=lazy>\n<tr>")
               .append("<th id=country data-sortable>").append(_t("Country")).append("</th>")
               .append("<th id=router data-sortable data-sort-method=natural>").append(_t("Router")).append("</th>")
               .append("<th id=version data-sortable data-sort-method=dotsep>").append(_t("Version")).append("</th>")
               .append("<th id=tier data-sortable data-sort=LMNOPX>").append(_t("Tier")).append("</th>")
               .append("<th id=address data-sortable title=\"").append(_t("Primary IP address")).append("\">")
               .append(_t("Address")).append("</th>");
-            if (enableReverseLookups()) {
-                sb.append("<th id=domain data-sortable>").append(_t("Domain")).append("</th>");
-            }
+            if (enableReverseLookups()) {sb.append("<th id=domain data-sortable>").append(_t("Domain")).append("</th>");}
             sb.append("<th class=tcount colspan=2 title=\"Client and Exploratory Tunnels\" ")
               .append("data-sortable data-sort-method=natural data-sort-column-key=localCount>")
               .append(_t("Local")).append("</th>");
             if (!participating.isEmpty()) {
                 sb.append("<th class=tcount colspan=2 data-sortable data-sort-method=natural data-sort-column-key=transitCount>")
                   .append(_t("Transit")).append("</th>");
-            } else {
-                sb.append("<th></th>");
-            }
-            sb.append("<th id=edit data-sort-method=none>").append(_t("Edit")).append("</th>");
-            sb.append("</tr>\n</thead>\n<tbody id=allPeers>\n");
+            } else {sb.append("<th></th>");}
+            sb.append("<th id=edit data-sort-method=none>").append(_t("Edit")).append("</th>")
+              .append("</tr>\n</thead>\n<tbody id=allPeers>\n");
             for (Hash h : peerList) {
                 RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
-                if (info == null) {
-                    continue;
-                }
+                if (info == null) {continue;}
                 int localTunnelCount = localCount.count(h);
                 byte[] direct = TransportImpl.getIP(h);
                 String directIP = "";
@@ -488,16 +482,9 @@ class TunnelRenderer {
                 String v = info.getOption("router.version");
                 String truncHash = h.toBase64().substring(0,4);
                 String rl = "";
-                if (ip != null && enableReverseLookups() && uptime > 30 * 1000) {
-                    rl = _context.commSystem().getCanonicalHostName(ip);
-                }
-                sb.append("<tr class=lazy><td>")
-                  .append(peerFlag(h))
-                  .append("</td><td><span class=routerHash><a href=\"netdb?r=")
-                  .append(h.toBase64())
-                  .append("\">")
-                  .append(truncHash)
-                  .append("</a></span></td><td>");
+                if (ip != null && enableReverseLookups() && uptime > 30 * 1000) {rl = _context.commSystem().getCanonicalHostName(ip);}
+                sb.append("<tr class=lazy><td>").append(peerFlag(h)).append("</td><td><span class=routerHash><a href=\"netdb?r=")
+                  .append(h.toBase64()).append("\">").append(truncHash).append("</a></span></td><td>");
                 if (v != null) {
                     sb.append("<span class=version title=\"Show all routers with this version in the NetDb\">")
                       .append("<a href=\"/netdb?v=").append(DataHelper.stripHTML(v)).append("\">")
@@ -507,30 +494,22 @@ class TunnelRenderer {
                   .append(_context.commSystem().renderPeerCaps(h, false))
                   .append("</td><td><span class=ipaddress>");
                 if (ip != null && !ip.isEmpty()) {
-                    if (ip.contains(":")) {
-                        sb.append("<span hidden>[IPv6]</span>");
-                    }
+                    if (ip.contains(":")) {sb.append("<span hidden>[IPv6]</span>");}
                     sb.append(ip);
-                } else {
-                    sb.append("&ndash;");
-                }
+                } else {sb.append("&ndash;");}
                 sb.append("</span>");
                 if (enableReverseLookups() && rl != null && !rl.isEmpty() && !ip.equals(rl)) {
                     sb.append(String.format("</td><td><span class=rlookup title=\"%s\">", rl))
                       .append(CommSystemFacadeImpl.getDomain(rl))
                       .append("</span>");
-                } else if (enableReverseLookups()) {
-                    sb.append("<td></td>");
-                }
+                } else if (enableReverseLookups()) {sb.append("<td></td>");}
                 sb.append(String.format("<td class=tcount data-sort-column-key=localCount>%d</td><td class=bar data-sort-column-key=localCount>", localTunnelCount));
                 if (localTunnelCount > 0) {
                     sb.append(String.format("<span class=percentBarOuter><span class=percentBarInner style=\"width:%s%%\">" +
                                             "<span class=percentBarText>%d%%</span></span></span>",
                                             fmt.format(localTunnelCount * 100 / tunnelCount).replace(".00", ""),
                                             localTunnelCount * 100 / tunnelCount));
-                } else {
-                    sb.append("<span hidden>&ndash;</span>");
-                }
+                } else {sb.append("<span hidden>&ndash;</span>");}
                 sb.append("</td>");
                 if (!participating.isEmpty()) {
                     int transitTunnelCount = transitCount.count(h);
@@ -541,27 +520,19 @@ class TunnelRenderer {
                                                 fmt.format(transitTunnelCount * 100 / partCount).replace(".00", ""),
                                                 transitTunnelCount * 100 / partCount));
                         sb.append("</td>");
-                    } else {
-                        sb.append("<td></td><td></td>");
-                    }
-                } else {
-                    sb.append("<td></td>");
-                }
+                    } else {sb.append("<td></td><td></td>");}
+                } else {sb.append("<td></td>");}
                 sb.append(String.format("<td><a class=configpeer href=\"/configpeer?peer=%s\" title=\"" +
                   _t("Configure peer") + "\">%s</a></td></tr>\n", info.getHash(), _t("Edit")));
             }
-            sb.append("</tbody>\n<tfoot><tr class=tablefooter data-sort-method=none>")
+            sb.append("</tbody>\n<tfoot class=lazy><tr class=tablefooter data-sort-method=none>")
               .append("<td colspan=4><b>").append(peerCount).append(" ").append(_t("unique peers")).append("</b></td>")
               .append("<td></td>");
-            if (enableReverseLookups()) {
-                sb.append("<td></td>");
-            }
+            if (enableReverseLookups()) {sb.append("<td></td>");}
             sb.append("<td colspan=2><b>").append(tunnelCount).append(" ").append(_t("local")).append("</b></td>");
             if (!participating.isEmpty()) {
                 sb.append("<td colspan=2><b>").append(partCount).append(" ").append(_t("transit")).append("</b></td>");
-            } else {
-              sb.append("<td></td>");
-            }
+            } else {sb.append("<td></td>");}
             sb.append("<td></td></tr>\n</tfoot>\n</table>\n");
             out.write(sb.toString());
             out.flush();

@@ -56,7 +56,8 @@
   const throttledLazyLoad = throttle(() => requestAnimationFrame(lazyload), 180);
 
   document.addEventListener("DOMContentLoaded", () => {
-    document.body.classList.add("ready");
+    const b = document.body;
+    b.classList.add("ready");
     window.addEventListener("scroll", throttledLazyLoad);
     window.addEventListener("resize", throttledLazyLoad);
 
