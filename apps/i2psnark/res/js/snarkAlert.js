@@ -6,12 +6,9 @@ import {initSnarkRefresh, refreshTorrents, refreshScreenLog} from "./refreshTorr
 
 "use strict";
 
-const addNotify = document.getElementById("addNotify");
-const addTorrent = document.getElementById("addForm");
-const createNotify = document.getElementById("createNotify");
-const createTorrent = document.getElementById("createForm");
-const inputAddFile = document.querySelector("input[name='nofilter_newURL']");
-const inputNewFile = document.querySelector("input[name='nofilter_baseFile']");
+const addNotify = document.getElementById("addNotify"), createNotify = document.getElementById("createNotify");
+const addTorrent = document.getElementById("addForm"), createTorrent = document.getElementById("createForm");
+const inputAddFile = document.querySelector("input[name='nofilter_newURL']"), inputNewFile = document.querySelector("input[name='nofilter_baseFile']");
 const notify = document.getElementById("notify");
 const processForm = document.getElementById("processForm");
 const xhrsnarklog = new XMLHttpRequest();

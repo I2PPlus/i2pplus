@@ -43,8 +43,10 @@ function refreshTorrents(callback) {
 
   if (!initialized && !down) {
     initialized = true;
-    if (!document.getElementById("ourDest")) {
-      const childElems = torrents.querySelectorAll("#snarkHead th:not(.torrentAction)>*");
+    if (window.top !== parent.window.top && !document.documentElement.classList.contains("iframed")) {
+      document.documentElement.classList.add("iframed");
+    }
+    if (!document.getElementById("tnlInCount")) {
       snarkHead.classList.add("initializing");
       setTimeout(() => { snarkHead.classList.remove("initializing"); }, 3*1000);
     }
@@ -77,19 +79,16 @@ function refreshTorrents(callback) {
     } catch (error) { if (debugging) console.error(error); }
   }
 
-  let updated = false;
-  let requireFullRefresh = true;
+  let updated = false, requireFullRefresh = true;
 
   function updateVolatile() {
     if (!xhrsnark.responseXML) return;
 
-    const updating = torrents.querySelectorAll("#snarkTbody tr, #dhtDebug .dht");
-    const updatingResponse = xhrsnark.responseXML.querySelectorAll("#snarkTbody tr, #dhtDebug .dht");
-
-    const updates = [];
+    const updating = torrents.querySelectorAll("#snarkTbody tr, #dhtDebug .dht"),
+          updatingResponse = xhrsnark.responseXML.querySelectorAll("#snarkTbody tr, #dhtDebug .dht"),
+          updates = [];
 
     if (torrents) {
-
       if (filterbar) {
         const activeBadge = filterbar.querySelector(".filter .badge:not(:empty)");
         const activeBadgeResponse = xhrsnark.responseXML.querySelector("#torrentDisplay .filter.enabled .badge:not(:empty)");
@@ -97,13 +96,11 @@ function refreshTorrents(callback) {
           updates.push(() => activeBadge.textContent = activeBadgeResponse.textContent);
         }
 
-        const pagenavtop = document.getElementById("pagenavtop");
-        const pagenavtopResponse = xhrsnark.responseXML.getElementById("pagenavtop");
+        const pagenavtop = document.getElementById("pagenavtop"), pagenavtopResponse = xhrsnark.responseXML.getElementById("pagenavtop");
         const filterbarResponse = xhrsnark.responseXML.getElementById("torrentDisplay");
 
         if ((!filterbar && filterbarResponse) || (!pagenavtop && pagenavtopResponse)) {
-          const torrentForm = document.getElementById("torrentlist");
-          const torrentFormResponse = xhrsnark.responseXML.getElementById("torrentlist");
+          const torrentForm = document.getElementById("torrentlist"), torrentFormResponse = xhrsnark.responseXML.getElementById("torrentlist");
           updates.push(() => torrentForm.innerHTML = torrentFormResponse.innerHTML);
           initHandlers();
         } else if (pagenavtop && pagenavtopResponse && pagenavtop.outerHTML !== pagenavtopResponse.outerHTML) {
@@ -114,9 +111,8 @@ function refreshTorrents(callback) {
 
       if (updatingResponse.length === updating.length && !requireFullRefresh) {
         updating.forEach((item, i) => {
-          if (item.innerHTML !== updatingResponse[i].innerHTML) {
-            updates.push(() => item.outerHTML = updatingResponse[i].outerHTML);
-          }
+          const newContent = updatingResponse[i].outerHTML;
+          if (item.outerHTML !== newContent) {updates.push(() => item.outerHTML = newContent);}
         });
       } else if (requireFullRefresh && updatingResponse) {
         requestIdleOrAnimationFrame(refreshAll);
@@ -127,26 +123,28 @@ function refreshTorrents(callback) {
       if (control) {
         const controlResponse = xhrsnark.responseXML.getElementById("torrentInfoControl");
         if (controlResponse && control.innerHTML !== controlResponse.innerHTML) {
-          updates.push(() => {control.replaceWith(controlResponse);});
+          updates.push(() => control.replaceWith(controlResponse));
         }
       }
+
       if (complete.length && dirlist?.responseXML) {
         const completeResponse = xhrsnark.responseXML.getElementsByClassName("completed");
-
         for (let i = 0; i < complete.length && completeResponse.length; i++) {
-          if (complete[i].innerHTML !== completeResponse[i].innerHTML) {
-            updates.push(() => complete[i].innerHTML = completeResponse[i].innerHTML);
-          }
+          const currentContent = complete[i].innerHTML, newContent = completeResponse[i].innerHTML;
+          if (currentContent !== newContent) {updates.push(() => complete[i].innerHTML = newContent);}
         }
       }
+    }
+
+    if (updates.length > 0) {
+      requestIdleOrAnimationFrame(() => { updates.forEach(update => update()); });
     }
   }
 
   function refreshHeaderAndFooter() {
     if (!xhrsnark.responseXML) return;
 
-    const snarkFoot = document.getElementById("snarkFoot");
-    const snarkFootResponse = xhrsnark.responseXML.getElementById("snarkFoot");
+    const snarkFoot = document.getElementById("snarkFoot"), snarkFootResponse = xhrsnark.responseXML.getElementById("snarkFoot");
     const snarkHeadResponse = xhrsnark.responseXML.getElementById("snarkHead");
 
     if (snarkHead && snarkHeadResponse && snarkHead.innerHTML !== snarkHeadResponse.innerHTML) {
@@ -177,8 +175,7 @@ function refreshScreenLog(callback) {
 
   const xhrsnarklog = new XMLHttpRequest();
   const lowerSection = document.getElementById("lowersection");
-  const addNotify = lowerSection.querySelector("#addNotify");
-  const createNotify = lowerSection.querySelector("#createNotify");
+  const addNotify = lowerSection.querySelector("#addNotify"), createNotify = lowerSection.querySelector("#createNotify");
 
   xhrsnarklog.open("GET", "/i2psnark/.ajax/xhrscreenlog.html");
   xhrsnarklog.responseType = "document";
@@ -190,12 +187,8 @@ function refreshScreenLog(callback) {
     }
     if (xhrsnarklog.readyState === 4 && xhrsnarklog.status === 200) {
       setTimeout(() => {
-        if (addNotify.innerHTML !== notifyResponse.innerHTML) {
-          addNotify.innerHTML = notifyResponse.innerHTML;
-        }
-        if (createNotify.innerHTML !== notifyResponse.innerHTML) {
-          createNotify.innerHTML = notifyResponse.innerHTML;
-        }
+        if (addNotify.innerHTML !== notifyResponse.innerHTML) {addNotify.innerHTML = notifyResponse.innerHTML;}
+        if (createNotify.innerHTML !== notifyResponse.innerHTML) {createNotify.innerHTML = notifyResponse.innerHTML;}
       }, 500);
       if (callback) callback();
     }
