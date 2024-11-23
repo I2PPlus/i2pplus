@@ -1,4 +1,7 @@
 2024-11-20 dr|z3d
+ * Console: Add collapsible sections on /configstats and /configplugins
+
+2024-11-20 dr|z3d
  * Console: Add filter feature to /tunnelpeercount to allow selective display
    of peers based on filter input or query paramaters
 
