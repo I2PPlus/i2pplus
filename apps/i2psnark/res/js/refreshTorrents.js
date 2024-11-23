@@ -210,53 +210,57 @@ async function refreshTorrents(callback) {
   let updated = false, requireFullRefresh = true;
 
   async function updateVolatile() {
-    const url = await getURL();
-    const responseDoc = await fetchHTMLDocument(url);
+    try {
+      const url = await getURL();
+      const responseDoc = await fetchHTMLDocument(url);
 
-    const updating = torrents.querySelectorAll("#snarkTbody tr, #dhtDebug .dht"),
-          updatingResponse = Array.from(responseDoc.querySelectorAll("#snarkTbody tr, #dhtDebug .dht"));
+      const updating = torrents.querySelectorAll("#snarkTbody tr, #dhtDebug .dht"),
+            updatingResponse = Array.from(responseDoc.querySelectorAll("#snarkTbody tr, #dhtDebug .dht"));
 
-    if (torrents) {
-      if (filterbar) {
-        const activeBadge = filterbar.querySelector("#torrentDisplay .filter#all .badge");
-        const activeBadgeResponse = responseDoc.querySelector("#torrentDisplay .filter#all.enabled .badge");
-        await updateElementTextContent(activeBadge, activeBadgeResponse);
+      if (torrents) {
+        if (filterbar) {
+          const activeBadge = filterbar.querySelector("#torrentDisplay .filter#all .badge"),
+                activeBadgeResponse = responseDoc.querySelector("#torrentDisplay .filter#all.enabled .badge");
+          await updateElementTextContent(activeBadge, activeBadgeResponse);
 
-        const pagenavtop = document.getElementById("pagenavtop"),
-              pagenavtopResponse = responseDoc.querySelector("#pagenavtop"),
-              filterbarResponse = responseDoc.querySelector("#torrentDisplay");
+          const pagenavtop = document.getElementById("pagenavtop"),
+                pagenavtopResponse = responseDoc.querySelector("#pagenavtop"),
+                filterbarResponse = responseDoc.querySelector("#torrentDisplay");
 
-        if ((!filterbar && filterbarResponse) || (!pagenavtop && pagenavtopResponse)) {
-          const torrentFormResponse = responseDoc.querySelector("#torrentlist");
-          await updateElementInnerHTML(torrentForm, torrentFormResponse);
-          await initHandlers();
-        } else if (pagenavtop && pagenavtopResponse && pagenavtop.outerHTML !== pagenavtopResponse.outerHTML) {
-          pagenavtop.outerHTML = pagenavtopResponse.outerHTML;
-          requireFullRefresh = true;
+          if ((!filterbar && filterbarResponse) || (!pagenavtop && pagenavtopResponse)) {
+            const torrentFormResponse = responseDoc.querySelector("#torrentlist");
+            await updateElementInnerHTML(torrentForm, torrentFormResponse);
+            await initHandlers();
+          } else if (pagenavtop && pagenavtopResponse && pagenavtop.outerHTML !== pagenavtopResponse.outerHTML) {
+            pagenavtop.outerHTML = pagenavtopResponse.outerHTML;
+            requireFullRefresh = true;
+          }
+        }
+
+        if (updatingResponse.length === updating.length && !requireFullRefresh) {
+          updating.forEach(async (item, i) => {
+            await updateElementInnerHTML(item, updatingResponse[i]);
+          });
+        } else if (requireFullRefresh && updatingResponse) {
+          await requestIdleOrAnimationFrame(async () => await refreshAll());
+          updated = true;
+          requireFullRefresh = false;
+        }
+      } else if (dirlist?.responseDoc) {
+        if (control) {
+          const controlResponse = responseDoc.querySelector("#torrentInfoControl");
+          await updateElementInnerHTML(control, controlResponse);
+        }
+
+        if (complete.length && dirlist?.responseDoc) {
+          const completeResponse = Array.from(responseDoc.querySelectorAll(".completed"));
+          for (let i = 0; i < complete.length && completeResponse.length; i++) {
+            await updateElementInnerHTML(complete[i], completeResponse[i]);
+          }
         }
       }
-
-      if (updatingResponse.length === updating.length && !requireFullRefresh) {
-        updating.forEach(async (item, i) => {
-          await updateElementInnerHTML(item, updatingResponse[i]);
-        });
-      } else if (requireFullRefresh && updatingResponse) {
-        await requestIdleOrAnimationFrame(async () => await refreshAll());
-        updated = true;
-        requireFullRefresh = false;
-      }
-    } else if (dirlist?.responseDoc) {
-      if (control) {
-        const controlResponse = responseDoc.querySelector("#torrentInfoControl");
-        await updateElementInnerHTML(control, controlResponse);
-      }
-
-      if (complete.length && dirlist?.responseDoc) {
-        const completeResponse = Array.from(responseDoc.querySelectorAll(".completed"));
-        for (let i = 0; i < complete.length && completeResponse.length; i++) {
-          await updateElementInnerHTML(complete[i], completeResponse[i]);
-        }
-      }
+    } catch (error) {
+      if (debugging) console.error(error);
     }
   }
 
