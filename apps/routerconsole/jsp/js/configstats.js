@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function updateCountSpan(thElement, checkedItems, totalItems, needsSaving) {
     let countSpan = thElement.querySelector("span") || document.createElement("span");
     countSpan.classList.add("statcount");
-    countSpan.textContent = (needsSaving ? '* ' : '') + `${checkedItems} / ${totalItems}`;
+    countSpan.textContent = (needsSaving ? "* " : "") + `${checkedItems} / ${totalItems}`;
     thElement.appendChild(countSpan);
   }
 
@@ -96,6 +96,12 @@ document.addEventListener("DOMContentLoaded", function () {
   if (currentSection) sections.push(currentSection);
   sections.sort((a, b) => naturalSort(a.header.querySelector("th").textContent.trim(), b.header.querySelector("th").textContent.trim()));
   renderSortedSections(sections);
+
+  document.querySelectorAll("tr.statgroup th b").forEach(b => {
+    b.textContent = b.textContent.replace(/([a-z])([A-Z])/g, "$1 $2");
+    b.textContent = b.textContent.replace("Co Del", "CoDel");
+    b.innerHTML = b.innerHTML.replace(/\[([^\]]+)\]/g, "<span class=subcat>$1</span>");
+  });
 
   document.querySelector("#configstats .optionsave>.cancel").addEventListener("click", (event) => {
     event.preventDefault();

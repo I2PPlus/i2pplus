@@ -274,15 +274,15 @@ p:empty+.sb_notice{margin-top:9px}
 #sidebar .tunnelBuildStatus{color:#ee9}
 #sidebar .tunnelBuildStatus::before{margin:0 1px 0 -5px;width:16px;height:16px;display:inline-block;vertical-align:middle;border-radius:50%;content:"";transform:scale(.7) translateY(-1px)}
 #sidebar .tunnelBuildStatus.accepting{color:#507750}
-#sidebar .tunnelBuildStatus.accepting::before{background:var(--tunn_ready) var(--center)/15px}
+#sidebar .tunnelBuildStatus.accepting::before{background:var(--tunn_ready) var(--center)/14px}
 #sidebar .tunnelBuildStatus.active{color:#58ce3a}
-#sidebar .tunnelBuildStatus.active::before,.ok,#ntcpconnections td.queue:empty::before{background:var(--tunn_active) var(--center)/15px}
+#sidebar .tunnelBuildStatus.active::before,.ok,#ntcpconnections td.queue:empty::before{background:var(--tunn_active) var(--center)/14px}
 #sidebar .tunnelBuildStatus.starting{color:#aa0}
-#sidebar .tunnelBuildStatus.starting::before{background:var(--tunn_starting) var(--center)/15px}
+#sidebar .tunnelBuildStatus.starting::before{background:var(--tunn_starting) var(--center)/14px}
 #sidebar .tunnelBuildStatus.rejecting{color:#933}
-#sidebar .tunnelBuildStatus.rejecting::before{background:var(--tunn_reject) var(--center)/15px}
+#sidebar .tunnelBuildStatus.rejecting::before{background:var(--tunn_reject) var(--center)/14px}
 #sidebar .tunnelBuildStatus.hidden{color:#999}
-#sidebar .tunnelBuildStatus.hidden::before{background:var(--tunn_hidden) var(--center)/15px}
+#sidebar .tunnelBuildStatus.hidden::before{background:var(--tunn_hidden) var(--center)/14px}
 
 /* section toggler */
 .sidebarlogo{text-align:center}
@@ -1665,13 +1665,14 @@ td.optionsave,.buckets,.formaction,#certs h4,#certs p,#certs textarea,#config_ad
 #configstats label::after{font-size:95%}
 
 .statgroup:hover{color:var(--hover);cursor:pointer}
-.statgroup:hover .statcount{color:var(--ink)}
+.statgroup:hover .statcount,.statgroup:hover .subcat{color:var(--ink)}
 .statgroup th::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:""}
 .statgroup:hover th::after{background:var(--dropdown_hover);content:""}
 .statgroup:not(.expanded) th::after{background:var(--dropdown);content:"";transform:rotate(-90deg)}
 .statgroup:not(.expanded):hover th::after{background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
 .statgroup:not(.expanded)+.graphableStat{display:none}
 .statgroup .statcount{margin:-1px 22px -2px 8px;padding:5px 8px 5px 24px;min-width:38px;display:inline-block;float:right;line-height:1;word-spacing:.3em;vertical-align:middle;text-align:left;font-weight:500;font-size:80%;box-shadow:var(--bevel);background:var(--yes) no-repeat 8px center / 9px,var(--badge)}
+.statgroup .subcat{padding:3px 8px 4px 18px;letter-spacing:0;word-spacing:0;text-transform:none;font-weight:500;box-shadow:var(--bevel);background:var(--tunn_active) no-repeat 6px center/8px,var(--badge)}
 #configstats th{padding:8px 10px}
 #configstats th b{margin-bottom:-2px;display:inline-block;vertical-align:middle}
 #configstats th b::before{margin:-4px 6px 0 0;width:16px;height:16px;display:inline-block;vertical-align:middle;background:var(--star) no-repeat center center / 16px;content:""}
