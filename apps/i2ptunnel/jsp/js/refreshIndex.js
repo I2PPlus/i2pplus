@@ -1,241 +1,152 @@
-import {initToggleInfo} from "/i2ptunnel/js/toggleTunnelInfo.js";
+/* I2P+ refreshIndex.js for I2PTunnel Manager by dr|z3d */
+/* Periodically refresh the index and update status counts */
+/* License: AGPL3 or later */
 
-var control = document.getElementById("globalTunnelControl");
-var countClient = document.getElementById("countClient");
-var countServer = document.getElementById("countServer");
-var globalControl = document.getElementById("globalTunnelControl");
-var messages = document.getElementById("tunnelMessages");
-var notReady = document.getElementById("notReady");
-var toggle = document.getElementById("toggleInfo");
-var tunnelIndex = document.getElementById("page");
-var url = window.location.pathname;
-var xhrtunnman = new XMLHttpRequest();
+import { initToggleInfo } from "/i2ptunnel/js/toggleTunnelInfo.js";
 
-function refreshTunnelStatus() {
-  var isDown = document.getElementById("down");
-  xhrtunnman.open('GET', url, true);
-  xhrtunnman.responseType = "document";
-  xhrtunnman.setRequestHeader("Cache-Control", "no-cache");
-  xhrtunnman.onreadystatechange = function() {
-    if (xhrtunnman.readyState == 4) {
-      if (xhrtunnman.status == 200) {
-        if (isDown && xhrtunnman.responseXML.getElementById("globalTunnelControl")) {
-          reloadPage();
-        } else if (notReady) {
-          var notReadyResponse = xhrtunnman.responseXML.getElementById("notReady");
-          if (notReadyResponse) {refreshAll();}
-          else {reloadPage();}
-        } else {
-          updateVolatile();
-        }
-      } else {
-        setTimeout(noRouter, 10000);
-        function noRouter() {
-          var down = "<div id=down class=notReady><b><span>Router is down</span></b></div>";
-          tunnelIndex.innerHTML = down;
-          if (isDown && xhrtunnman.responseXML.getElementById("globalTunnelControl")) {
-            reloadPage();
-          }
-        }
-      }
-    }
+const control = document.getElementById("globalTunnelControl");
+const countClient = document.getElementById("countClient");
+const countServer = document.getElementById("countServer");
+const messages = document.getElementById("tunnelMessages");
+const notReady = document.getElementById("notReady");
+const toggle = document.getElementById("toggleInfo");
+const tunnelIndex = document.getElementById("page");
+const url = window.location.pathname;
+
+function updateElementContent(element, responseElement) {
+  if (responseElement && element.innerHTML !== responseElement.innerHTML) {
+    element.innerHTML = responseElement.innerHTML;
   }
+}
+
+async function refreshTunnelStatus() {
+  const isDown = document.getElementById("down");
+  try {
+    const response = await fetch(url, { method: "GET", headers: { "Cache-Control": "no-cache" } });
+    if (response.ok) {
+      const doc = new DOMParser().parseFromString(await response.text(), "text/html");
+      if (isDown && doc.getElementById("globalTunnelControl")) reloadPage();
+      if (notReady) {
+        const notReadyResponse = doc.getElementById("notReady");
+        if (notReadyResponse) {refreshAll(doc);}
+        else {reloadPage();}
+      } else {updateVolatile(doc);}
+    } else {
+      setTimeout(() => {
+        tunnelIndex.innerHTML = "<div id='down' class='notReady'><b><span>Router is down</span></b></div>";
+        if (isDown && doc.getElementById("globalTunnelControl")) reloadPage();
+      }, 10000);
+    }
+  } catch {}
   countServices();
-  xhrtunnman.send();
 }
 
 function countServices() {
-  const runningClientCount = document.querySelector("#countClient .running");
-  const runningClient = document.querySelectorAll(".cli.statusRunning");
-  const runningServerCount = document.querySelector("#countServer .running");
-  const runningServer = document.querySelectorAll(".svr.statusRunning");
-  const standbyClientCount = document.querySelector("#countClient .standby");
-  const standbyClient = document.querySelectorAll(".cli.statusStandby");
-  const standbyServerCount = document.querySelector("#countServer .standby");
-  const standbyServer = document.querySelectorAll(".svr.statusStandby");
-  const startingClientCount = document.querySelector("#countClient .starting");
-  const startingClient = document.querySelectorAll(".cli.statusStarting");
-  const startingServerCount = document.querySelector("#countServer .starting");
-  const startingServer = document.querySelectorAll(".svr.statusStarting");
-  const stoppedClientCount = document.querySelector("#countClient .stopped");
-  const stoppedClient = document.querySelectorAll(".cli.statusNotRunning");
-  const stoppedServerCount = document.querySelector("#countServer .stopped");
-  const stoppedServer = document.querySelectorAll(".svr.statusNotRunning");
+  const statuses = [
+    { clientSelector: ".cli.statusRunning", serverSelector: ".svr.statusRunning", status: "running" },
+    { clientSelector: ".cli.statusStandby", serverSelector: ".svr.statusStandby", status: "standby" },
+    { clientSelector: ".cli.statusStarting", serverSelector: ".svr.statusStarting", status: "starting" },
+    { clientSelector: ".cli.statusNotRunning", serverSelector: ".svr.statusNotRunning", status: "stopped" }
+  ];
 
-  // Helper function to set the status class on the parent <tr>
-  function setStatusClass(parentTr, status) {
-    parentTr.classList.remove("running", "standby", "starting", "stopped");
+  const setStatusClass = (parentTr, status) => {
+    const statusClasses = statuses.map(s => s.status);
+    statusClasses.forEach(s => parentTr.classList.remove(s));
     parentTr.classList.add(status);
-  }
+  };
+
+  const updateCount = (element, selector, status) => {
+    const elements = document.querySelectorAll(selector);
+    element.textContent = elements.length > 0 ? ` x ${elements.length}` : "";
+
+    elements.forEach(el => {
+      const parentTr = el.closest("tr");
+      if (parentTr) setStatusClass(parentTr, status);
+    });
+  };
 
   if (control) {
-    if (runningClient && runningClient.length > 0) {
-      runningClientCount.textContent = " x " + runningClient.length;
-      runningClient.forEach(client => {
-        const parentTr = client.closest("tr");
-        if (parentTr) {setStatusClass(parentTr, "running");}
-      });
-    } else if (runningClient && runningClientCount) {runningClientCount.textContent = "";}
-
-    if (runningServer && runningServer.length > 0) {
-      runningServerCount.textContent = " x " + runningServer.length;
-      runningServer.forEach(server => {
-        const parentTr = server.closest("tr");
-        if (parentTr) {setStatusClass(parentTr, "running");}
-      });
-    } else if (runningServer && runningServerCount) {runningServerCount.textContent = "";}
-
-    if (standbyClient && standbyClient.length > 0) {
-      standbyClientCount.textContent = " x " + standbyClient.length;
-      standbyClient.forEach(client => {
-        const parentTr = client.closest("tr");
-        if (parentTr) {setStatusClass(parentTr, "standby");}
-      });
-    } else if (standbyClient && standbyClientCount) {standbyClientCount.textContent = "";}
-
-    if (startingClient && startingClient.length > 0) {
-      startingClientCount.textContent = " x " + startingClient.length;
-      startingClient.forEach(client => {
-        const parentTr = client.closest("tr");
-        if (parentTr) {setStatusClass(parentTr, "starting");}
-      });
-    } else if (startingClient && startingClientCount) {startingClientCount.textContent = "";}
-
-    if (startingServer && startingServer.length > 0) {
-      startingServerCount.textContent = " x " + startingServer.length;
-      startingServer.forEach(server => {
-        const parentTr = server.closest("tr");
-        if (parentTr) {setStatusClass(parentTr, "starting");}
-      });
-    } else if (startingServer && startingServerCount) {startingServerCount.textContent = "";}
-
-    if (stoppedClient && stoppedClient.length > 0) {
-      stoppedClientCount.textContent = " x " + stoppedClient.length;
-      stoppedClient.forEach(client => {
-        const parentTr = client.closest("tr");
-        if (parentTr) {setStatusClass(parentTr, "stopped");}
-      });
-    } else if (stoppedClient && stoppedClientCount) {stoppedClientCount.textContent = "";}
-
-    if (stoppedServer && stoppedServer.length > 0) {
-      stoppedServerCount.textContent = " x " + stoppedServer.length;
-      stoppedServer.forEach(server => {
-        const parentTr = server.closest("tr");
-        if (parentTr) {setStatusClass(parentTr, "stopped");}
-      });
-    } else if (stoppedServer && stoppedServerCount) {stoppedServerCount.textContent = "";}
+    statuses.forEach(({ clientSelector, serverSelector, status }) => {
+      updateCount(countClient.querySelector(`.${status}`), clientSelector, status);
+      updateCount(countServer.querySelector(`.${status}`), serverSelector, status);
+    });
   }
 }
 
-function updateVolatile() {
-  var updating = document.querySelectorAll(".tunnelProperties .volatile");
-  var updatingResponse = xhrtunnman?.responseXML.querySelectorAll(".tunnelProperties .volatile");
-  var messagesResponse = xhrtunnman?.responseXML.getElementById("tunnelMessages");
-  updateLog();
-  var i;
-  for (i = 0; i < updating.length; i++) {
-    if (updatingResponse && !Object.is(updating[i].innerHTML, updatingResponse[i].innerHTML)) {
-      updating[i].innerHTML = updatingResponse[i].innerHTML;
-    } else if (updatingResponse && updating.length != updatingResponse.length) {
-      refreshPanels();
-    }
-  }
+function updateVolatile(responseDoc) {
+  const updating = document.querySelectorAll(".tunnelProperties .volatile");
+  const updatingResponse = responseDoc.querySelectorAll(".tunnelProperties .volatile");
+  updateLog(responseDoc);
+  if (updating.length !== updatingResponse.length) {refreshPanels(responseDoc);}
+  else {updating.forEach((el, i) => updateElementContent(el, updatingResponse[i]));}
 }
 
-function updateLog() {
-  if (messages) {
-    var messagesResponse = xhrtunnman.responseXML.getElementById("tunnelMessages");
-    if (messagesResponse && !Object.is(messages.innerHTML, messagesResponse.innerHTML)) {
-      messages.innerHTML = messagesResponse.innerHTML;
-    }
-  } else if (xhrtunnman.responseXML) {
-    var messagesResponse = xhrtunnman.responseXML.getElementById("tunnelMessages");
-    if (messagesResponse && !messages) {refreshAll();}
-  }
+function updateLog(responseDoc) {
+  const messagesResponse = responseDoc?.getElementById("tunnelMessages");
+  updateElementContent(messages, messagesResponse);
+  if (messagesResponse && !messages) {refreshAll(responseDoc);}
 }
 
-function refreshPanels() {
-  var servers = document.getElementById("serverTunnels");
-  var serversResponse = xhrtunnman.responseXML.getElementById("serverTunnels");
-  var clients = document.getElementById("clientTunnels");
-  var clientsResponse = xhrtunnman.responseXML.getElementById("clientTunnels");
-  updateLog();
-  if (!Object.is(servers.innerHTML, serversResponse.innerHTML)) {
-    servers.innerHTML = serversResponse.innerHTML;
-  }
-  if (!Object.is(clients.innerHTML, clientsResponse.innerHTML)) {
-    clients.innerHTML = clientsResponse.innerHTML;
-  }
+function refreshPanels(responseDoc) {
+  updateLog(responseDoc);
+  ["serverTunnels", "clientTunnels"].forEach(id => {
+    const element = document.getElementById(id);
+    const responseElement = responseDoc.getElementById(id);
+    updateElementContent(element, responseElement);
+  });
 }
 
-function refreshAll() {
-  if (xhrtunnman.responseXML) {
-    var tunnelIndexResponse = xhrtunnman.responseXML.getElementById("page");
-    if (typeof tunnelIndexResponse != "undefined" && !Object.is(tunnelIndex.innerHTML, tunnelIndexResponse.innerHTML)) {
-      tunnelIndex.innerHTML = tunnelIndexResponse.innerHTML;
-    }
-    initTunnelControl();
-    bindToggle();
-  }
+function refreshAll(responseDoc) {
+  const tunnelIndexResponse = responseDoc?.getElementById("page");
+  updateElementContent(tunnelIndex, tunnelIndexResponse);
+  initTunnelControl();
+  bindToggle();
 }
 
 function reloadPage() {location.reload(true);}
 
 function bindToggle() {
-  if (toggle) {
-    if (!globalControl.classList.contains("listener")) {
-      toggle.addEventListener("click", initToggleInfo, false);
-      globalControl.classList.add("listener");
-    }
+  if (toggle && !control.classList.contains("listener")) {
+    toggle.addEventListener("click", initToggleInfo);
+    control.classList.add("listener");
   }
 }
 
 function refreshIndex() {
   refreshTunnelStatus();
-  if (!globalControl) {
-    setTimeout(function() {refreshIndex();}, 500);
+  if (!control) {
+    setTimeout(refreshIndex, 500);
     return;
   }
-  if (!globalControl.classList.contains("listener")) {bindToggle();}
+  bindToggle();
   if (!tunnelIndex.classList.contains("listener")) {initTunnelControl();}
 }
 
 function initTunnelControl() {
-  var startButtons = document.querySelectorAll(".control.start");
-  var stopButtons = document.querySelectorAll(".control.stop");
-  var startAll = document.querySelector(".control.startall");
-  var stopAll = document.querySelector(".control.stopall");
-  var restartAll = document.querySelector(".control.restartall");
-  var xhrcontrol = new XMLHttpRequest();
-
   if (!tunnelIndex.classList.contains("listener")) {
-    tunnelIndex.addEventListener("click", function(event) {
-      var target = event.target;
-      if (target.classList.contains("control.start") ||
-          target.classList.contains("control.stop") ||
-          target.classList.contains("control.startall") ||
-          target.classList.contains("control.stopall") ||
-          target.classList.contains("control.restartall")) {
+    tunnelIndex.addEventListener("click", async event => {
+      const target = event.target;
+      if (target.classList.contains("control")) {
         event.preventDefault();
-        tunnelControl(target.href, target);
+        await tunnelControl(target.href, target);
         tunnelIndex.classList.add("listener");
       }
     });
   }
 
-  function tunnelControl(url, target) {
-    xhrcontrol.onreadystatechange = function() {
-      if (xhrcontrol.readyState === 4 && xhrcontrol.status === 200) {
+  async function tunnelControl(url, target) {
+    try {
+      const response = await fetch(url, { method: "GET", headers: { "Cache-Control": "no-cache" } });
+      if (response.ok) {
+        const doc = new DOMParser().parseFromString(await response.text(), "text/html");
         countServices();
-        updateVolatile();
+        updateVolatile(doc);
       }
-    };
-    xhrcontrol.open("GET", url, true);
-    xhrcontrol.send();
+    } catch {}
   }
 }
 
-if (toggle) {bindToggle();}
-if (globalControl) {initTunnelControl();}
+if (toggle) bindToggle();
+if (control) initTunnelControl();
 setInterval(refreshIndex, 5000);
 document.addEventListener("DOMContentLoaded", countServices);
