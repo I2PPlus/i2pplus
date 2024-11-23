@@ -1670,6 +1670,7 @@ td.optionsave,.buckets,.formaction,#certs h4,#certs p,#certs textarea,#config_ad
 .statgroup:hover th::after{background:var(--dropdown_hover);content:""}
 .statgroup:not(.expanded) th::after{background:var(--dropdown);content:"";transform:rotate(-90deg)}
 .statgroup:not(.expanded):hover th::after{background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
+.statgroup:not(.expanded)+.graphableStat{display:none}
 .statgroup .statcount{margin:-1px 22px -2px 8px;padding:5px 8px 5px 24px;min-width:38px;display:inline-block;float:right;line-height:1;word-spacing:.3em;vertical-align:middle;text-align:left;font-weight:500;font-size:80%;box-shadow:var(--bevel);background:var(--yes) no-repeat 8px center / 9px,var(--badge)}
 #configstats th{padding:8px 10px}
 #configstats th b{margin-bottom:-2px;display:inline-block;vertical-align:middle}
