@@ -47,9 +47,9 @@ const elements = {
 
 sb.addEventListener("loaded", () => { initSidebar(); });
 
-function requestIdleOrAnimationFrame(callback) {
-  if (typeof requestIdleCallback === "function") { requestIdleCallback(callback); }
-  else { requestAnimationFrame(callback); }
+function requestIdleOrAnimationFrame(callback, timeout = 1000) {
+  if (typeof requestIdleCallback === "function") {requestIdleCallback(callback, { timeout });}
+  else {requestAnimationFrame(callback);}
 }
 
 function tangoDown() {
@@ -73,65 +73,59 @@ function tangoDown() {
   onVisible(sb, () => requestIdleOrAnimationFrame(refreshSidebar));
 }
 
-function refreshSidebar() {
-  const xhrsb = new XMLHttpRequest();
+async function refreshSidebar() {
   const uri = location.pathname;
   const xhrContainer = document.getElementById("xhr");
-  xhrsb.open("GET", `/xhr1.jsp?requestURI=${uri}`, true);
-  xhrsb.responseType = "document";
-  xhrsb.overrideMimeType("text/html");
-  xhrsb.setRequestHeader("Accept", "text/html");
 
-  xhrsb.onload = function () {
-    if (xhrsb.status === 200) {
+  try {
+    const response = await fetch(`/xhr1.jsp?requestURI=${uri}`, { method: 'GET', headers: { 'Accept': 'text/html' } });
+    if (response.ok) {
       isDown = false;
+      const responseText = await response.text(), parser = new DOMParser(), responseDoc = parser.parseFromString(responseText, "text/html");
+
       if (isDownTimer !== null) location.reload();
       document.body.classList.remove("isDown");
       if (refreshTimeout) clearTimeout(refreshTimeout);
       refreshTimeout = setTimeout(refreshSidebar, refreshInterval);
-    } else if (xhrsb.status === 404 || xhrsb.status === 500) {requestIdleOrAnimationFrame(tangoDown);}
 
-    const responseElements = {
-      badges: xhrsb.responseXML.querySelectorAll(".badge"),
-      advancedGeneral: xhrsb.responseXML.getElementById("sb_advancedgeneral"),
-      bandwidth: xhrsb.responseXML.getElementById("sb_bandwidth"),
-      clock: xhrsb.responseXML.getElementById("clock"),
-      cpuBar: xhrsb.responseXML.getElementById("sb_CPUBar"),
-      general: xhrsb.responseXML.getElementById("sb_general"),
-      graphStats: xhrsb.responseXML.getElementById("sb_graphstats"),
-      internals: xhrsb.responseXML.getElementById("sb_internals"),
-      localtunnels: xhrsb.responseXML.getElementById("sb_localtunnels"),
-      memBar: xhrsb.responseXML.getElementById("sb_memoryBar"),
-      netStatus: xhrsb.responseXML.getElementById("sb_netstatus"),
-      notice: xhrsb.responseXML.getElementById("sb_notice"),
-      peers: xhrsb.responseXML.getElementById("sb_peers"),
-      queue: xhrsb.responseXML.getElementById("sb_queue"),
-      routerControl: xhrsb.responseXML.getElementById("sb_routerControl"),
-      services: xhrsb.responseXML.getElementById("sb_services"),
-      shortGeneral: xhrsb.responseXML.getElementById("sb_shortgeneral"),
-      shutdownStatus: xhrsb.responseXML.getElementById("sb_shutdownStatus"),
-      tunnelBuildStatus: xhrsb.responseXML.getElementById("sb_tunnelstatus"),
-      tunnels: xhrsb.responseXML.getElementById("sb_tunnels"),
-      updateForm: xhrsb.responseXML.getElementById("sb_updateform"),
-      updateStatus: xhrsb.responseXML.getElementById("sb_updateprogress")
-    };
+      const responseElements = {
+        badges: responseDoc.querySelectorAll(".badge"),
+        advancedGeneral: responseDoc.getElementById("sb_advancedgeneral"),
+        bandwidth: responseDoc.getElementById("sb_bandwidth"),
+        clock: responseDoc.getElementById("clock"),
+        cpuBar: responseDoc.getElementById("sb_CPUBar"),
+        general: responseDoc.getElementById("sb_general"),
+        graphStats: responseDoc.getElementById("sb_graphstats"),
+        internals: responseDoc.getElementById("sb_internals"),
+        localtunnels: responseDoc.getElementById("sb_localtunnels"),
+        memBar: responseDoc.getElementById("sb_memoryBar"),
+        netStatus: responseDoc.getElementById("sb_netstatus"),
+        notice: responseDoc.getElementById("sb_notice"),
+        peers: responseDoc.getElementById("sb_peers"),
+        queue: responseDoc.getElementById("sb_queue"),
+        routerControl: responseDoc.getElementById("sb_routerControl"),
+        services: responseDoc.getElementById("sb_services"),
+        shortGeneral: responseDoc.getElementById("sb_shortgeneral"),
+        shutdownStatus: responseDoc.getElementById("sb_shutdownStatus"),
+        tunnelBuildStatus: responseDoc.getElementById("sb_tunnelstatus"),
+        tunnels: responseDoc.getElementById("sb_tunnels"),
+        updateForm: responseDoc.getElementById("sb_updateform"),
+        updateStatus: responseDoc.getElementById("sb_updateprogress")
+      };
 
-    elements.statusPanel.forEach(panel => panel.classList.remove("statusDown"));
+      elements.statusPanel.forEach(panel => panel.classList.remove("statusDown"));
 
-    function updateVolatile() {
-      initSidebar();
-
-      const updateElement = (elem, respElem) => {
+      function updateElementInnerHTML(elem, respElem) {
         if (elem && respElem && elem.innerHTML !== respElem.innerHTML) {
           elem.innerHTML = respElem.innerHTML;
         }
-      };
+      }
 
-      const updateTextContent = (elem, respElem) => {
+      function updateElementTextContent(elem, respElem) {
         if (elem && respElem && elem.textContent !== respElem.textContent) {
           elem.textContent = respElem.textContent;
         }
-      };
+      }
 
       const updateIfNotHidden = (elem, respElem) => {
         if (elem && !elem.hasAttribute("hidden") && respElem && elem.innerHTML !== respElem.innerHTML) {
@@ -159,176 +153,177 @@ function refreshSidebar() {
         }
       };
 
-      updateTextContent(elements.clock, responseElements.clock);
-      updateElement(elements.netStatus, responseElements.netStatus);
-      updateElement(elements.bandwidth, responseElements.bandwidth);
-      updateTextContent(elements.graphStats, responseElements.graphStats);
-      updateIfNotHidden(elements.advancedGeneral, responseElements.advancedGeneral);
-      updateIfNotHidden(elements.shortGeneral, responseElements.shortGeneral);
-      updateIfNotHidden(elements.general, responseElements.general);
-      updateIfNotHidden(elements.tunnels, responseElements.tunnels);
-      updateElement(elements.localtunnels, responseElements.localtunnels);
-      updateIfNotHidden(elements.tunnelCount, responseElements.tunnelCount);
-      updateIfNotHidden(elements.peers, responseElements.peers);
-      updateIfNotHidden(elements.queue, responseElements.queue);
-      updateElement(elements.memBar, responseElements.memBar);
-      updateElement(elements.cpuBar, responseElements.cpuBar);
-      updateIfNotCollapsed(elements.updateSection, responseElements.updateSection);
-      updateElement(elements.updateForm, responseElements.updateForm);
-      updateElement(elements.updateStatus, responseElements.updateStatus);
-      updateIfStatusDown(elements.tunnelBuildStatus, responseElements.tunnelBuildStatus);
-      updateElement(elements.notice, responseElements.notice);
-      updateIfNotRemoved(elements.shutdownStatus, responseElements.shutdownStatus);
-      updateIfStatusDown(elements.routerControl, responseElements.routerControl);
-      updateElement(elements.internals, responseElements.internals);
-      updateElement(elements.services, responseElements.services);
+      const updateVolatile = () => {
+        initSidebar();
 
-      if (elements.badges && responseElements.badges) {
-        for (let i = 0; i < Math.min(elements.badges.length, responseElements.badges.length); i++) {
-          if (elements.badges[i].textContent !== responseElements.badges[i].textContent) {
-            elements.badges[i].textContent = responseElements.badges[i].textContent;
+        updateElementTextContent(elements.clock, responseElements.clock);
+        updateElementInnerHTML(elements.netStatus, responseElements.netStatus);
+        updateElementInnerHTML(elements.bandwidth, responseElements.bandwidth);
+        updateElementTextContent(elements.graphStats, responseElements.graphStats);
+        updateIfNotHidden(elements.advancedGeneral, responseElements.advancedGeneral);
+        updateIfNotHidden(elements.shortGeneral, responseElements.shortGeneral);
+        updateIfNotHidden(elements.general, responseElements.general);
+        updateIfNotHidden(elements.tunnels, responseElements.tunnels);
+        updateElementInnerHTML(elements.localtunnels, responseElements.localtunnels);
+        updateIfNotHidden(elements.tunnelCount, responseElements.tunnelCount);
+        updateIfNotHidden(elements.peers, responseElements.peers);
+        updateIfNotHidden(elements.queue, responseElements.queue);
+        updateElementInnerHTML(elements.memBar, responseElements.memBar);
+        updateElementInnerHTML(elements.cpuBar, responseElements.cpuBar);
+        updateIfNotCollapsed(elements.updateSection, responseElements.updateSection);
+        updateElementInnerHTML(elements.updateForm, responseElements.updateForm);
+        updateElementInnerHTML(elements.updateStatus, responseElements.updateStatus);
+        updateIfStatusDown(elements.tunnelBuildStatus, responseElements.tunnelBuildStatus);
+        updateElementInnerHTML(elements.notice, responseElements.notice);
+        updateIfNotRemoved(elements.shutdownStatus, responseElements.shutdownStatus);
+        updateIfStatusDown(elements.routerControl, responseElements.routerControl);
+        updateElementInnerHTML(elements.internals, responseElements.internals);
+        updateElementInnerHTML(elements.services, responseElements.services);
+
+        if (elements.badges && responseElements.badges) {
+          for (let i = 0; i < Math.min(elements.badges.length, responseElements.badges.length); i++) {
+            if (elements.badges[i].textContent !== responseElements.badges[i].textContent) {
+              elements.badges[i].textContent = responseElements.badges[i].textContent;
+            }
           }
         }
-      }
 
-      const updateInProgress = sb.querySelector(".sb_update.inProgress");
-      if (updateInProgress && responseElements.updateInProgress && updateInProgress.innerHTML !== responseElements.updateInProgress.innerHTML) {
-        updateInProgress.innerHTML = responseElements.updateInProgress.innerHTML;
-      }
-
-      if (elements.updateForm && responseElements.updateForm && elements.updateForm.innerHTML !== responseElements.updateForm.innerHTML) {
-        elements.updateForm.innerHTML = responseElements.updateForm.innerHTML;
-        if (elements.updateSectionHR.hidden) elements.updateSectionHR.hidden = null;
-      }
-
-      const doubleCount = sb.querySelector("#tunnelCount + #tunnelCount");
-      if (doubleCount) doubleCount.remove();
-    }
-
-    function updateLocalTunnels() {
-      return new Promise((resolve) => {
-        if (elements.localtunnelSummary) {
-          const localtunnels = elements.localtunnels;
-          const localtunnelsHeading = document.getElementById("sb_localTunnelsHeading");
-          const localtunnelsHeadingResponse = responseElements.localtunnels?.querySelector("#sb_localTunnelsHeading");
-          if (localtunnels && localtunnelsHeading && localtunnelsHeadingResponse && localtunnels.innerHTML !== responseElements.localtunnels.innerHTML) {
-            const cachedLocalTunnelsHTML = localStorage.getItem('cachedLocalTunnelsHTML');
-            let cachedData = null;
-            if (cachedLocalTunnelsHTML) {cachedData = JSON.parse(cachedLocalTunnelsHTML);}
-            const responseHTML = {
-              headingHTML: localtunnelsHeadingResponse.innerHTML,
-              summaryHTML: responseElements.localtunnels.innerHTML
-            };
-            if (cachedData && cachedData.headingHTML === responseHTML.headingHTML && cachedData.summaryHTML === responseHTML.summaryHTML) {
-              localtunnelsHeading.innerHTML = cachedData.headingHTML;
-              elements.localtunnelSummary.innerHTML = cachedData.summaryHTML;
-            } else if (localtunnelsHeadingResponse.innerHTML && responseElements.localtunnels.innerHTML) {
-              const counts = ["client", "i2pchat", "ping", "server", "snark"].reduce((acc, type) => {
-                acc[type] = localtunnels.querySelectorAll(`img[src="/themes/console/images/${type}.svg"]`).length;
-                return acc;
-              }, {});
-
-              counts.server -= counts.snark + counts.i2pchat;
-
-              const summary = Object.keys(counts).map(type =>
-                `<span id="${type}Count" class="count_${counts[type]}">${counts[type]} x <img src="/themes/console/images/${type}.svg"></span>`
-              ).join(" ");
-
-              const summaryTable = `<tr id="localtunnelsActive"><td>${summary}</td></tr>`;
-              const fragment = document.createDocumentFragment();
-              const headingElement = document.createElement('div');
-              headingElement.innerHTML = localtunnelsHeadingResponse.innerHTML;
-              fragment.appendChild(headingElement.firstChild);
-              const summaryElement = document.createElement('div');
-              summaryElement.innerHTML = summaryTable;
-              fragment.appendChild(summaryElement.firstChild);
-              localtunnelsHeading.innerHTML = '';
-              elements.localtunnelSummary.innerHTML = '';
-              localtunnelsHeading.appendChild(fragment.firstChild.cloneNode(true));
-              elements.localtunnelSummary.appendChild(fragment.firstChild.cloneNode(true));
-              const newLocalTunnelsHTML = {
-                headingHTML: localtunnelsHeading.innerHTML,
-                summaryHTML: elements.localtunnelSummary.innerHTML
-              };
-              localStorage.setItem('cachedLocalTunnelsHTML', JSON.stringify(newLocalTunnelsHTML));
-            } else {localStorage.removeItem('cachedLocalTunnelsHTML');}
-          }
+        const updateInProgress = sb.querySelector(".sb_update.inProgress");
+        if (updateInProgress && responseElements.updateInProgress && updateInProgress.innerHTML !== responseElements.updateInProgress.innerHTML) {
+          updateInProgress.innerHTML = responseElements.updateInProgress.innerHTML;
         }
-        resolve();
-      }).catch(() => {});
-    }
 
-    (function checkSections() {
-      if (!xhrsb.responseXML) return;
-      const updating = sb.querySelectorAll("#xhr .volatile");
-      const updatingResponse = xhrsb.responseXML.querySelectorAll("#sb .volatile");
-      if (updating.length !== updatingResponse.length) {refreshAll();}
-      else { updateLocalTunnels().then(() => { updateVolatile(); }); }
-    })();
-
-    function refreshAll() {
-      if (sb && xhrsb.responseXML) {
-        const sbResponse = xhrsb.responseXML.getElementById("sb");
-        if (sbResponse && sb.innerHTML !== sbResponse.innerHTML) {
-          requestIdleOrAnimationFrame(() => {
-            xhrContainer.innerHTML = sbResponse.innerHTML;
-            initSidebar();
-          });
+        if (elements.updateForm && responseElements.updateForm && elements.updateForm.innerHTML !== responseElements.updateForm.innerHTML) {
+          elements.updateForm.innerHTML = responseElements.updateForm.innerHTML;
+          if (elements.updateSectionHR.hidden) elements.updateSectionHR.hidden = null;
         }
-      } else {requestIdleOrAnimationFrame(tangoDown);}
-    }
 
-    (() => {
-      const graphCanvas = document.getElementById("minigraph");
-      const ctx = graphCanvas?.getContext("2d");
-      const graphContainer = document.getElementById("sb_graphcontainer");
-      const graphContainerHR = document.querySelector("#sb_graphcontainer+hr");
-      const [minigraphWidth, minigraphHeight] = [245, 50];
-      if (ctx) { Object.assign(ctx, { imageSmoothingEnabled: false, globalCompositeOperation: "copy", globalAlpha: 1 }); }
-      const refreshGraph = async () => {
-        if (graphContainer && graphContainer.hidden) {graphContainer.hidden = graphContainerHR.hidden = false;}
-        const response = await fetch(`/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=${Date.now()}`);
-        if (!response.ok) {return;}
-        const image = new Image(minigraphWidth, minigraphHeight);
-        image.src = URL.createObjectURL(await response.blob());
+        const doubleCount = sb.querySelector("#tunnelCount + #tunnelCount");
+        if (doubleCount) doubleCount.remove();
+      }
+
+      function updateLocalTunnels() {
         return new Promise((resolve) => {
-          image.onload = () => {
-            graphCanvas.width = minigraphWidth;
-            graphCanvas.height = minigraphHeight;
-            ctx?.drawImage(image, 0, 0);
-            resolve();
-          };
-          image.onerror = () => {reject();};
+          if (elements.localtunnelSummary) {
+            const localtunnels = elements.localtunnels;
+            const localtunnelsHeading = document.getElementById("sb_localTunnelsHeading");
+            const localtunnelsHeadingResponse = responseElements.localtunnels?.querySelector("#sb_localTunnelsHeading");
+            if (localtunnels && localtunnelsHeading && localtunnelsHeadingResponse && localtunnels.innerHTML !== responseElements.localtunnels.innerHTML) {
+              const cachedLocalTunnelsHTML = localStorage.getItem('cachedLocalTunnelsHTML');
+              let cachedData = null;
+              if (cachedLocalTunnelsHTML) {cachedData = JSON.parse(cachedLocalTunnelsHTML);}
+              const responseHTML = {
+                headingHTML: localtunnelsHeadingResponse.innerHTML,
+                summaryHTML: responseElements.localtunnels.innerHTML
+              };
+              if (cachedData && cachedData.headingHTML === responseHTML.headingHTML && cachedData.summaryHTML === responseHTML.summaryHTML) {
+                localtunnelsHeading.innerHTML = cachedData.headingHTML;
+                elements.localtunnelSummary.innerHTML = cachedData.summaryHTML;
+              } else if (localtunnelsHeadingResponse.innerHTML && responseElements.localtunnels.innerHTML) {
+                const counts = ["client", "i2pchat", "ping", "server", "snark"].reduce((acc, type) => {
+                  acc[type] = localtunnels.querySelectorAll(`img[src="/themes/console/images/${type}.svg"]`).length;
+                  return acc;
+                }, {});
+
+                counts.server -= counts.snark + counts.i2pchat;
+
+                const summary = Object.keys(counts).map(type =>
+                  `<span id="${type}Count" class="count_${counts[type]}">${counts[type]} x <img src="/themes/console/images/${type}.svg"></span>`
+                ).join(" ");
+
+                const summaryTable = `<tr id="localtunnelsActive"><td>${summary}</td></tr>`;
+                const fragment = document.createDocumentFragment();
+                const headingElement = document.createElement('div');
+                headingElement.innerHTML = localtunnelsHeadingResponse.innerHTML;
+                fragment.appendChild(headingElement.firstChild);
+                const summaryElement = document.createElement('div');
+                summaryElement.innerHTML = summaryTable;
+                fragment.appendChild(summaryElement.firstChild);
+                localtunnelsHeading.innerHTML = '';
+                elements.localtunnelSummary.innerHTML = '';
+                localtunnelsHeading.appendChild(fragment.firstChild.cloneNode(true));
+                elements.localtunnelSummary.appendChild(fragment.firstChild.cloneNode(true));
+                const newLocalTunnelsHTML = {
+                  headingHTML: localtunnelsHeading.innerHTML,
+                  summaryHTML: elements.localtunnelSummary.innerHTML
+                };
+                localStorage.setItem('cachedLocalTunnelsHTML', JSON.stringify(newLocalTunnelsHTML));
+              } else {localStorage.removeItem('cachedLocalTunnelsHTML');}
+            }
+          }
+          resolve();
         }).catch(() => {});
-      };
-      const scheduleRefresh = async (callback) => { try {await callback();} catch {} };
-      refreshGraph().then(() => { requestIdleOrAnimationFrame(() => scheduleRefresh(refreshGraph)); });
-    })();
+      }
 
-    async function initSidebar() {
-      sectionToggler();
-      await updateLocalTunnels();
-      countNewsItems();
+      (function checkSections() {
+        const updating = sb.querySelectorAll("#xhr .volatile");
+        const updatingResponse = responseDoc.querySelectorAll("#sb .volatile");
+        if (updating.length !== updatingResponse.length) {refreshAll();}
+        else { updateLocalTunnels().then(() => { updateVolatile(); }); }
+      })();
+
+      function refreshAll() {
+        if (sb && responseDoc) {
+          const sbResponse = responseDoc.getElementById("sb");
+          if (sbResponse && sb.innerHTML !== sbResponse.innerHTML) {
+            requestIdleOrAnimationFrame(() => {
+              xhrContainer.innerHTML = sbResponse.innerHTML;
+              initSidebar();
+            });
+          }
+        } else {requestIdleOrAnimationFrame(tangoDown, Math.min(refreshInterval*2, 10*1000));}
+      }
+
+      (() => {
+        const graphCanvas = document.getElementById("minigraph");
+        const ctx = graphCanvas?.getContext("2d");
+        const graphContainer = document.getElementById("sb_graphcontainer");
+        const graphContainerHR = document.querySelector("#sb_graphcontainer+hr");
+        const [minigraphWidth, minigraphHeight] = [245, 50];
+        if (ctx) { Object.assign(ctx, { imageSmoothingEnabled: false, globalCompositeOperation: "copy", globalAlpha: 1 }); }
+        const refreshGraph = async () => {
+          if (graphContainer && graphContainer.hidden) {graphContainer.hidden = graphContainerHR.hidden = false;}
+          const response = await fetch(`/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=${Date.now()}`);
+          if (!response.ok) {return;}
+          const image = new Image(minigraphWidth, minigraphHeight);
+          image.src = URL.createObjectURL(await response.blob());
+          return new Promise((resolve) => {
+            image.onload = () => {
+              graphCanvas.width = minigraphWidth;
+              graphCanvas.height = minigraphHeight;
+              ctx?.drawImage(image, 0, 0);
+              resolve();
+            };
+            image.onerror = () => {reject();};
+          }).catch(() => {});
+        };
+        const scheduleRefresh = async (callback) => { try {await callback();} catch {} };
+        refreshGraph().then(() => { requestIdleOrAnimationFrame(() => scheduleRefresh(refreshGraph)); });
+      })();
+
+      async function initSidebar() {
+        sectionToggler();
+        await updateLocalTunnels();
+        countNewsItems();
+      }
+
+      const forms = ["form_reseed", "form_sidebar", "form_updates"].map(id => document.getElementById(id)).filter(form => form);
+      forms.forEach(form => form.onsubmit = () => handleFormSubmit());
+      function handleFormSubmit() { setTimeout(refreshAll, 3000); }
     }
-
-    const forms = ["form_reseed", "form_sidebar", "form_updates"].map(id => document.getElementById(id)).filter(form => form);
-    forms.forEach(form => form.onsubmit = () => handleFormSubmit());
-    function handleFormSubmit() { setTimeout(refreshAll, 3000); }
-  };
-
-  function ready() {
-    xhrsb.send();
-    stickySidebar();
-    isDown = false;
-  }
-
-  onVisible(sb, ready);
-
-  xhrsb.onerror = function (error) {
-    isDownTimer = setTimeout(tangoDown, 5000);
+  } catch (error) {
     isDown = true;
-  };
-
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    await tangoDown();
+  }
 }
+
+function ready() {
+  refreshSidebar().then(() => {stickySidebar();})
+  .catch(error => {isDown = true;})
+  .finally(() => { if (isDown) {setTimeout(tangoDown, 3000);} });
+}
+
+onVisible(sb, ready);
 
 export { refreshSidebar };
