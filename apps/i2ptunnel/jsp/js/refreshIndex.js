@@ -7,6 +7,7 @@ import { initToggleInfo } from "/i2ptunnel/js/toggleTunnelInfo.js";
 const control = document.getElementById("globalTunnelControl");
 const countClient = document.getElementById("countClient");
 const countServer = document.getElementById("countServer");
+const isDown = document.getElementById("down");
 const messages = document.getElementById("tunnelMessages");
 const notReady = document.getElementById("notReady");
 const toggle = document.getElementById("toggleInfo");
@@ -20,7 +21,6 @@ function updateElementContent(element, responseElement) {
 }
 
 async function refreshTunnelStatus() {
-  const isDown = document.getElementById("down");
   try {
     const response = await fetch(url, { method: "GET", headers: { "Cache-Control": "no-cache" } });
     if (response.ok) {
@@ -31,14 +31,21 @@ async function refreshTunnelStatus() {
         if (notReadyResponse) {refreshAll(doc);}
         else {reloadPage();}
       } else {updateVolatile(doc);}
-    } else {
-      setTimeout(() => {
-        tunnelIndex.innerHTML = "<div id='down' class='notReady'><b><span>Router is down</span></b></div>";
-        if (isDown && doc.getElementById("globalTunnelControl")) reloadPage();
-      }, 10000);
-    }
-  } catch {}
+    } else {handleDownState();}
+  } catch (error) {handleDownState();}
   countServices();
+}
+
+function handleDownState() {
+  if (!isDown) {
+    const downElement = document.createElement("div");
+    downElement.id = "down";
+    downElement.className = "notReady";
+    downElement.innerHTML = "<b><span>Router is down</span></b>";
+    const styles = {position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)"};
+    Object.assign(downElement.style, styles);
+    tunnelIndex.replaceWith(downElement);
+  }
 }
 
 function countServices() {
@@ -114,10 +121,7 @@ function bindToggle() {
 
 function refreshIndex() {
   refreshTunnelStatus();
-  if (!control) {
-    setTimeout(refreshIndex, 500);
-    return;
-  }
+  if (!control) { setTimeout(refreshIndex, 500); return; }
   bindToggle();
   if (!tunnelIndex.classList.contains("listener")) {initTunnelControl();}
 }
