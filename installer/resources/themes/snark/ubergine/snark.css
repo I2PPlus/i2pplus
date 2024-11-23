@@ -151,7 +151,7 @@ html:not(.iframed) #navbar {transition:width .5s ease-in-out .5s;will-change:tra
 #snarkSearch input[type="submit"]:active{background-size:22px;filter:none}
 #snarkSearch:hover input[type="submit"],#snarkSearch:focus-within input[type="submit"]{opacity:1}
 #searchwrap{position:relative}
-#searchwrap a[href="/i2psnark"]{padding:3px;height:14px;width:14px;position:absolute;top:calc(50% - 16px);right:4px;font-size:0;background:#000 var(--close) no-repeat center center/10px;border:1px solid #303;box-shadow:none;opacity:0;filter:none}
+#searchwrap a[href="/i2psnark"],#searchwrap a[href="/i2psnark"]:hover,#searchwrap a[href="/i2psnark"]:active{padding:3px;height:14px;width:14px;position:absolute;top:calc(50% - 16px);right:4px;font-size:0!important;background:#000 var(--close) no-repeat center center/10px;border:1px solid #303;box-shadow:none;opacity:0;filter:none}
 #snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"],#snarkSearch:hover input[type=search]:not(:placeholder-shown)+a[href="/i2psnark"]{opacity:.5}
 #snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"]:hover, #snarkSearch input[type=search][value]+a[href="/i2psnark"]{opacity:1}
 .iframed #snarkSearch{top:9px}
@@ -206,7 +206,7 @@ td.status img{margin:-2px 3px -2px 1px;height:23px;width:auto;display:inline-blo
 .noneLoaded td{text-align:center;color:var(--ink)}
 .noneLoaded,.noneLoaded:hover td{font-weight:700;border-radius:0 0 2px 2px;background:linear-gradient(180deg,#313,#101)}
 .noneLoaded i{padding:10px;display:inline-block}
-.rowOdd.filtered:hover td,.rowEven.filtered:hover td{border-bottom:1px solid #414}
+.rowOdd.filtered:hover td,.rowEven.filtered:hover td,.peerinfo:hover td{border-bottom:1px solid #414}
 .rateDown,.rateUp,.snarkFileName,.snarkFileSize,.rxd,.txd{padding:0 3px;line-height:1;font-weight:700}
 .rateDown,.rateUp,.ETA,.txd{width:4%;min-width:40px;white-space:nowrap;text-align:center!important}
 .rateDown{color:#76a}
@@ -1044,7 +1044,7 @@ hr.debug{display:none}
 .debuginfo br{line-height:1px}
 .debuginfo .from,.debuginfo .to{font-weight:700;font-size:14pt}
 .debuginfo td:first-child{background:var(--debuginfo) no-repeat center center;background-size:14px}
-.debuginfo:hover b,.peerinfo:hover b,{color:var(--ink);color:#b9b}
+.debuginfo:hover b,.peerinfo:hover b{color:var(--ink);color:#b9b}
 .debuginfo:hover td:nth-child(2),.peerinfo:hover td:nth-child(2){color:var(--ink)}
 #debugMode{margin-top:1px;padding:12px;display:inline-block;font-size:0;border:1px solid #414;border-radius:50%;box-shadow:var(--highlight);opacity:0;background:var(--debug) no-repeat center center,var(--link)}
 #debugMode:hover{opacity:1}
