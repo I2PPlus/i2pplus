@@ -1,35 +1,27 @@
-/* I2PTunnel Throttler Toggle by dr|z3d 2024 */
+/* I2P+ toggleThrottler.js for I2PTunnel Manager by dr|z3d */
+/* Toggle server throttler section and remember toggle status */
+/* License: AGPL3 or later */
 
-var toggleThrottler = document.getElementById("toggleThrottler");
-var throttleHeader = document.getElementById("throttleHeader");
-var tunnelThrottler = document.getElementById("tunnelThrottler");
+(() => {
+  const toggleThrottler = document.getElementById("toggleThrottler");
+  const throttleHeader = document.getElementById("throttleHeader");
+  const tunnelThrottler = document.getElementById("tunnelThrottler");
 
-if (toggleThrottler.hasAttribute("hidden")) {
-  toggleThrottler.removeAttribute("hidden");
-}
+  if (toggleThrottler.hidden) toggleThrottler.hidden = false;
+  if (!throttleHeader.classList.length) tunnelThrottler.style.display = "none";
 
-if (throttleHeader.classList.length === 0) {
-  tunnelThrottler.style.display = "none";
-}
+  const toggleElement = () => {
+    const isDisplayed = tunnelThrottler.style.display === "none";
+    tunnelThrottler.style.display = isDisplayed ? "table-row" : "none";
+    throttleHeader.classList.toggle("isDisplayed", isDisplayed);
+    localStorage.setItem("toggleState", tunnelThrottler.style.display);
+  };
 
-function toggleElement() {
-  if (tunnelThrottler.style.display === "none") {
-    tunnelThrottler.style.display = "table-row";
-    if (!throttleHeader.classList.contains("isDisplayed")) {
-      throttleHeader.classList.add("isDisplayed");
-    }
-  } else {
-    tunnelThrottler.style.display = "none";
-    if (throttleHeader.classList.contains("isDisplayed")) {
-      throttleHeader.classList.remove("isDisplayed");
-    }
+  const toggleState = localStorage.getItem("toggleState");
+  if (toggleState) {
+    tunnelThrottler.style.display = toggleState;
+    throttleHeader.classList.toggle("isDisplayed", toggleState === "table-row");
   }
-  localStorage.setItem("toggleState", tunnelThrottler.style.display);
-}
 
-if (localStorage.getItem("toggleState")) {
-  var toggleState = localStorage.getItem("toggleState");
-  tunnelThrottler.style.display = toggleState;
-}
-
-throttleHeader.addEventListener("click", toggleElement);
+  throttleHeader.addEventListener("click", toggleElement);
+})();
