@@ -3,7 +3,7 @@
 /* based on status and load filtered content via AJAX calls */
 /* License: AGPL3 or later */
 
-import {refreshTorrents, xhrsnark, doRefresh} from "./refreshTorrents.js";
+import {refreshTorrents, doRefresh} from "./refreshTorrents.js";
 import {onVisible} from "./onVisible.js";
 
 let filterbar;

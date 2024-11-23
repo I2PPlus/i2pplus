@@ -11,6 +11,7 @@ import {initToggleLog} from "./toggleLog.js";
 import {Lightbox} from "./lightbox.js";
 import {initSnarkAlert} from "./snarkAlert.js";
 
+const cache = new Map(), cacheDuration = 5000;
 const debugMode = document.getElementById("debugMode");
 const files = document.getElementById("dirInfo");
 const filterbar = document.getElementById("torrentDisplay");
@@ -21,20 +22,150 @@ const screenlog = document.getElementById("screenlog");
 const snarkHead = document.getElementById("snarkHead");
 const storageRefresh = localStorage.getItem("snarkRefresh");
 const torrents = document.getElementById("torrents");
-const xhrsnark = new XMLHttpRequest();
+const torrentForm = document.getElementById("torrentlist");
 
 let snarkRefreshIntervalId;
 let screenLogIntervalId;
-let snarkRefreshTimeoutId;
 let debugging = false;
 let initialized = false;
 
-function requestIdleOrAnimationFrame(callback) {
-  if (typeof requestIdleCallback === "function") { requestIdleCallback(callback); }
-  else { requestAnimationFrame(callback); }
+async function requestIdleOrAnimationFrame(callback, timeout = 1000) {
+  if (typeof requestIdleCallback === "function") {
+    await new Promise(resolve => requestIdleCallback(() => {
+      callback();
+      resolve();
+    }, { timeout }));
+  } else {
+    await new Promise(resolve => requestAnimationFrame(() => {
+      callback();
+      resolve();
+    }));
+  }
 }
 
-function refreshTorrents(callback) {
+async function getRefreshInterval() {
+  const refreshInterval = snarkRefreshDelay || parseInt(localStorage.getItem("snarkRefreshDelay")) || 5;
+  localStorage.setItem("snarkRefresh", refreshInterval);
+  return refreshInterval * 1000;
+}
+
+async function getURL() {
+  return window.location.href.replace("/i2psnark/", "/i2psnark/.ajax/xhr1.html");
+}
+
+async function setLinks(query) {
+  if (home) {
+    home.href = query ? `/i2psnark/${query}` : "/i2psnark/";
+  }
+}
+
+async function noAjax(delay) {
+  const failMessage = "<div class=routerdown id=down><span>Router is down</span></div>";
+  const targetElement = mainsection || document.getElementById("snarkInfo");
+  await new Promise(resolve => setTimeout(() => {
+    targetElement.innerHTML = failMessage;
+    resolve();
+  }, delay));
+}
+
+async function initHandlers() {
+  await requestIdleOrAnimationFrame(async () => {
+    await setLinks();
+    if (screenlog) await initSnarkAlert();
+    if (document.getElementById("pagenavtop")) await pageNav();
+    if (torrents) await snarkSort();
+    if (filterbar) await showBadge();
+    if (debugMode) await toggleDebug();
+    if (debugging) console.log("initHandlers()");
+  });
+}
+
+async function updateElementInnerHTML(elem, respElem) {
+  if (elem && respElem && elem.innerHTML !== respElem.innerHTML) {
+    elem.innerHTML = respElem.innerHTML;
+  }
+}
+
+async function updateElementTextContent(elem, respElem) {
+  if (elem && respElem && elem.textContent !== respElem.textContent) {
+    elem.textContent = respElem.textContent;
+  }
+}
+
+async function refreshScreenLog(callback) {
+  try {
+    const screenlog = document.getElementById("messages");
+    if (screenlog.hidden) return;
+
+    let responseDoc;
+    if (!callback && cache.has("screenlog")) {
+      const [doc, expiry] = cache.get("screenlog");
+      if (expiry > Date.now()) {
+        responseDoc = doc;
+      } else {
+        cache.delete("screenlog");
+      }
+    }
+
+    if (!responseDoc) {
+      responseDoc = await fetchHTMLDocument("/i2psnark/.ajax/xhrscreenlog.html");
+      cache.set("screenlog", [responseDoc, Date.now() + cacheDuration * 3]);
+      setTimeout(() => cache.delete("screenlog"), cacheDuration * 3);
+    }
+
+    const notifyResponse = responseDoc.querySelector("#notify");
+    const screenlogResponse = responseDoc.querySelector("#messages");
+    await updateElementInnerHTML(screenlog, screenlogResponse);
+
+    await new Promise(resolve => setTimeout(() => {
+      const lowerSection = document.getElementById("lowersection");
+      const [addNotify, createNotify] = [
+        lowerSection.querySelector("#addNotify"),
+        lowerSection.querySelector("#createNotify")
+      ];
+      updateElementInnerHTML(addNotify, notifyResponse);
+      updateElementInnerHTML(createNotify, notifyResponse);
+      resolve();
+    }, 500));
+
+    if (callback) callback();
+  } catch {}
+}
+
+const parser = new DOMParser();
+const container = document.createElement("div");
+async function fetchHTMLDocument(url) {
+  try {
+    const cachedDocument = cache.get(url);
+    if (cachedDocument && Date.now() - cachedDocument.timestamp < cacheDuration) {
+      container.innerHTML = cachedDocument.html;
+      return container;
+    }
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error("Network error: No response from server");
+    }
+    const htmlString = await response.text();
+    container.innerHTML = parser.parseFromString(htmlString, "text/html").body.innerHTML;
+    cache.set(url, {html: container.innerHTML, timestamp: Date.now()});
+    setTimeout(() => cache.delete(url), cacheDuration);
+    return container;
+  } catch (error) {
+    if (debugging) {
+      console.error(error);
+      throw error;
+    }
+  }
+}
+
+async function doRefresh(url) {
+  const responseDoc = await fetchHTMLDocument(url || (await getURL()));
+  if (debugging) isXHRSynced(responseDoc);
+  await requestIdleOrAnimationFrame(async () => await refreshTorrents(responseDoc));
+  await initHandlers();
+}
+
+async function refreshTorrents(callback) {
   const complete = document.getElementsByClassName("completed");
   const control = document.getElementById("torrentInfoControl");
   const dirlist = document.getElementById("dirlist");
@@ -48,183 +179,104 @@ function refreshTorrents(callback) {
     }
     if (!document.getElementById("tnlInCount")) {
       snarkHead.classList.add("initializing");
-      setTimeout(() => { snarkHead.classList.remove("initializing"); }, 3*1000);
+      await new Promise(resolve => setTimeout(() => {
+        snarkHead.classList.remove("initializing");
+        resolve();
+      }, 3 * 1000));
     }
   }
 
-  if (!storageRefresh) {localStorage.setItem("snarkRefresh", getRefreshInterval());}
+  if (!storageRefresh) {
+    localStorage.setItem("snarkRefresh", await getRefreshInterval());
+  }
 
-  setLinks(query);
+  await setLinks(query);
 
-  if (files || torrents) {requestIdleOrAnimationFrame(updateVolatile);}
-  else if (down) {requestIdleOrAnimationFrame(refreshAll);}
+  if (files || torrents) {
+    await requestIdleOrAnimationFrame(async () => await updateVolatile());
+  } else if (down) {
+    await requestIdleOrAnimationFrame(async () => await refreshAll());
+  }
 
   async function refreshAll() {
     try {
-      const mainsectionResponse = xhrsnark.responseXML?.getElementById("mainsection");
-      if (mainsection && mainsectionResponse && mainsection.innerHTML !== mainsectionResponse.innerHTML) {
-        const torrentsResponse = xhrsnark.responseXML.getElementById("torrents");
-        if (torrents) {
-          requestIdleOrAnimationFrame(() => torrents.innerHTML = torrentsResponse.innerHTML);
-        } else {
-          requestIdleOrAnimationFrame(() => mainsection.innerHTML = mainsectionResponse.innerHTML);
-        }
-      } else if (files) {
-        const dirlistResponse = xhrsnark.responseXML?.getElementById("dirlist");
-        if (dirlistResponse && dirlist.innerHTML !== dirlistResponse.innerHTML && !down) {
-          dirlist.innerHTML = dirlistResponse.innerHTML;
-        }
-      }
+      const mainsectionContainer = await fetchHTMLDocument(await getURL());
+      const newTorrents = mainsectionContainer.querySelector('#torrents');
+      await updateElementInnerHTML(torrents, newTorrents);
       if (debugging) console.log("refreshAll()");
-    } catch (error) { if (debugging) console.error(error); }
+    } catch (error) {
+      if (debugging) console.error(error);
+    }
   }
 
   let updated = false, requireFullRefresh = true;
 
-  function updateVolatile() {
-    if (!xhrsnark.responseXML) return;
+  async function updateVolatile() {
+    const url = await getURL();
+    const responseDoc = await fetchHTMLDocument(url);
 
     const updating = torrents.querySelectorAll("#snarkTbody tr, #dhtDebug .dht"),
-          updatingResponse = xhrsnark.responseXML.querySelectorAll("#snarkTbody tr, #dhtDebug .dht"),
-          updates = [];
+          updatingResponse = Array.from(responseDoc.querySelectorAll("#snarkTbody tr, #dhtDebug .dht"));
 
     if (torrents) {
       if (filterbar) {
-        const activeBadge = filterbar.querySelector(".filter .badge:not(:empty)");
-        const activeBadgeResponse = xhrsnark.responseXML.querySelector("#torrentDisplay .filter.enabled .badge:not(:empty)");
-        if (activeBadge && activeBadgeResponse && activeBadge.textContent !== activeBadgeResponse.textContent) {
-          updates.push(() => activeBadge.textContent = activeBadgeResponse.textContent);
-        }
+        const activeBadge = filterbar.querySelector("#torrentDisplay .filter#all .badge");
+        const activeBadgeResponse = responseDoc.querySelector("#torrentDisplay .filter#all.enabled .badge");
+        await updateElementTextContent(activeBadge, activeBadgeResponse);
 
-        const pagenavtop = document.getElementById("pagenavtop"), pagenavtopResponse = xhrsnark.responseXML.getElementById("pagenavtop");
-        const filterbarResponse = xhrsnark.responseXML.getElementById("torrentDisplay");
+        const pagenavtop = document.getElementById("pagenavtop"),
+              pagenavtopResponse = responseDoc.querySelector("#pagenavtop"),
+              filterbarResponse = responseDoc.querySelector("#torrentDisplay");
 
         if ((!filterbar && filterbarResponse) || (!pagenavtop && pagenavtopResponse)) {
-          const torrentForm = document.getElementById("torrentlist"), torrentFormResponse = xhrsnark.responseXML.getElementById("torrentlist");
-          updates.push(() => torrentForm.innerHTML = torrentFormResponse.innerHTML);
-          initHandlers();
+          const torrentFormResponse = responseDoc.querySelector("#torrentlist");
+          await updateElementInnerHTML(torrentForm, torrentFormResponse);
+          await initHandlers();
         } else if (pagenavtop && pagenavtopResponse && pagenavtop.outerHTML !== pagenavtopResponse.outerHTML) {
-          updates.push(() => pagenavtop.outerHTML = pagenavtopResponse.outerHTML);
+          pagenavtop.outerHTML = pagenavtopResponse.outerHTML;
           requireFullRefresh = true;
         }
       }
 
       if (updatingResponse.length === updating.length && !requireFullRefresh) {
-        updating.forEach((item, i) => {
-          const newContent = updatingResponse[i].outerHTML;
-          if (item.outerHTML !== newContent) {updates.push(() => item.outerHTML = newContent);}
+        updating.forEach(async (item, i) => {
+          await updateElementInnerHTML(item, updatingResponse[i]);
         });
       } else if (requireFullRefresh && updatingResponse) {
-        requestIdleOrAnimationFrame(refreshAll);
+        await requestIdleOrAnimationFrame(async () => await refreshAll());
         updated = true;
         requireFullRefresh = false;
       }
-    } else if (dirlist?.responseXML) {
+    } else if (dirlist?.responseDoc) {
       if (control) {
-        const controlResponse = xhrsnark.responseXML.getElementById("torrentInfoControl");
-        if (controlResponse && control.innerHTML !== controlResponse.innerHTML) {
-          updates.push(() => control.replaceWith(controlResponse));
-        }
+        const controlResponse = responseDoc.querySelector("#torrentInfoControl");
+        await updateElementInnerHTML(control, controlResponse);
       }
 
-      if (complete.length && dirlist?.responseXML) {
-        const completeResponse = xhrsnark.responseXML.getElementsByClassName("completed");
+      if (complete.length && dirlist?.responseDoc) {
+        const completeResponse = Array.from(responseDoc.querySelectorAll(".completed"));
         for (let i = 0; i < complete.length && completeResponse.length; i++) {
-          const currentContent = complete[i].innerHTML, newContent = completeResponse[i].innerHTML;
-          if (currentContent !== newContent) {updates.push(() => complete[i].innerHTML = newContent);}
+          await updateElementInnerHTML(complete[i], completeResponse[i]);
         }
       }
     }
-
-    if (updates.length > 0) {
-      requestIdleOrAnimationFrame(() => { updates.forEach(update => update()); });
-    }
   }
 
-  function refreshHeaderAndFooter() {
-    if (!xhrsnark.responseXML) return;
-
-    const snarkFoot = document.getElementById("snarkFoot"), snarkFootResponse = xhrsnark.responseXML.getElementById("snarkFoot");
-    const snarkHeadResponse = xhrsnark.responseXML.getElementById("snarkHead");
-
-    if (snarkHead && snarkHeadResponse && snarkHead.innerHTML !== snarkHeadResponse.innerHTML) {
-      snarkHead.innerHTML = snarkHeadResponse.innerHTML;
-      snarkSort();
-    }
-    if (snarkFoot && snarkFootResponse && snarkFoot.innerHTML !== snarkFootResponse.innerHTML) {
-      snarkFoot.innerHTML = snarkFootResponse.innerHTML;
-    }
+  async function refreshHeaderAndFooter() {
+    const url = await getURL();
+    const responseDoc = await fetchHTMLDocument(url);
+    const snarkFoot = document.getElementById("snarkFoot"),
+          snarkFootResponse = responseDoc.querySelector("#snarkFoot");
+    const snarkHeadResponse = responseDoc.querySelector("#snarkHead");
+    await updateElementInnerHTML(snarkFoot, snarkFootResponse);
+    await updateElementInnerHTML(snarkHead, snarkHeadResponse);
   }
-
-  xhrsnark.onerror = error => {
-    noAjax(5000);
-    clearTimeout(snarkRefreshTimeoutId);
-    snarkRefreshTimeoutId = setTimeout(() => refreshTorrents(initHandlers), 1000);
-  };
-}
-
-function getRefreshInterval() {
-  const refreshInterval = parseInt(localStorage.getItem("snarkRefreshDelay")) || 5;
-  localStorage.setItem("snarkRefresh", refreshInterval);
-  return refreshInterval * 1000;
-}
-
-function refreshScreenLog(callback) {
-  const screenlog = document.getElementById("messages");
-  if (!screenlog || screenlog.hidden) return;
-
-  const xhrsnarklog = new XMLHttpRequest();
-  const lowerSection = document.getElementById("lowersection");
-  const addNotify = lowerSection.querySelector("#addNotify"), createNotify = lowerSection.querySelector("#createNotify");
-
-  xhrsnarklog.open("GET", "/i2psnark/.ajax/xhrscreenlog.html");
-  xhrsnarklog.responseType = "document";
-  xhrsnarklog.onload = () => {
-    const notifyResponse = xhrsnarklog.responseXML.getElementById("notify");
-    const screenlogResponse = xhrsnarklog.responseXML.getElementById("messages");
-    if (screenlog && screenlogResponse && screenlog.innerHTML !== screenlogResponse.innerHTML) {
-      screenlog.innerHTML = screenlogResponse.innerHTML;
-    }
-    if (xhrsnarklog.readyState === 4 && xhrsnarklog.status === 200) {
-      setTimeout(() => {
-        if (addNotify.innerHTML !== notifyResponse.innerHTML) {addNotify.innerHTML = notifyResponse.innerHTML;}
-        if (createNotify.innerHTML !== notifyResponse.innerHTML) {createNotify.innerHTML = notifyResponse.innerHTML;}
-      }, 500);
-      if (callback) callback();
-    }
-  };
-  xhrsnarklog.send();
-  if (debugging) console.log("Updated screenlog");
-}
-
-function getURL() { return window.location.href.replace("/i2psnark/", "/i2psnark/.ajax/xhr1.html"); }
-
-function initHandlers() {
-  requestIdleOrAnimationFrame(() => {
-    setLinks();
-    if (screenlog) initSnarkAlert();
-    if (document.getElementById("pagenavtop")) pageNav();
-    if (torrents) snarkSort();
-    if (filterbar) showBadge();
-    if (debugMode) toggleDebug();
-    if (debugging) console.log("initHandlers()");
-  });
-}
-
-function setLinks(query) {
-  if (home) { home.href = query ? `/i2psnark/${query}` : "/i2psnark/"; }
-}
-
-function noAjax(delay) {
-  const failMessage = "<div class=routerdown id=down><span>Router is down</span></div>";
-  const targetElement = mainsection || document.getElementById("snarkInfo");
-  setTimeout(() => targetElement.innerHTML = failMessage, delay);
 }
 
 async function initSnarkRefresh() {
   clearInterval(snarkRefreshIntervalId);
-  onVisible(mainsection, () => {
-    const screenLogInterval = 3000;
+  onVisible(mainsection, async () => {
+    const screenLogInterval = 5000;
     try {
       snarkRefreshIntervalId = setInterval(async () => {
         try {
@@ -232,8 +284,10 @@ async function initSnarkRefresh() {
           await showBadge();
           await refreshScreenLog();
           await initToggleLog();
-        } catch (error) {if (debugging) console.error(error);}
-      }, getRefreshInterval());
+        } catch (error) {
+          if (debugging) console.error(error);
+        }
+      }, await getRefreshInterval());
 
       if (files && document.getElementById("lightbox")) {
         const lightbox = new Lightbox();
@@ -243,46 +297,10 @@ async function initSnarkRefresh() {
       const events = document._events?.click || [];
       events.forEach(event => document.removeEventListener("click", event));
       refreshOnSubmit();
-    } catch (error) {if (debugging) console.error(error);}
-  });
-}
-
-function refreshOnSubmit() {
-  document.addEventListener("click", event => {
-    if (event.target.tagName === "INPUT" && event.target.type === "submit") {refreshScreenLog();}
-  });
-}
-
-const REQUEST_TIMEOUT = 5000;
-function doRefresh(url, callback) {
-  xhrsnark.open("GET", url || getURL(), true);
-  xhrsnark.timeout = REQUEST_TIMEOUT;
-  xhrsnark.responseType = "document";
-  xhrsnark.onload = () => {
-    if (debugging) isXHRSynced();
-    requestIdleOrAnimationFrame(refreshTorrents);
-    initHandlers();
-  };
-  xhrsnark.onerror = () => {
-    if (xhrsnark.readyState === 4 && xhrsnark.status === 0) {
-      setTimeout(() => doRefresh(url, callback), REQUEST_TIMEOUT);
+    } catch (error) {
+      if (debugging) console.error(error);
     }
-  };
-  xhrsnark.send();
+  });
 }
 
-function isXHRSynced() {
-  if (!debugging) return;
-  const updating = torrents.querySelectorAll("#snarkTbody tr, #torrents #snarkFoot th");
-  const updatingResponse = xhrsnark.responseXML.querySelectorAll("#snarkTbody tr, #torrents #snarkFoot th");
-  console.log(`html elements: ${updating.length} / xhr elements: ${updatingResponse.length}`);
-  if (updating.length !== updatingResponse.length) {
-    updating.forEach((item, i) => {
-      if (item && item.outerHTML !== updatingResponse[i].outerHTML) {
-        console.log(`Missing element: Class: ${item.className}, ID: ${item.id}`);
-      }
-    });
-  }
-}
-
-export { doRefresh, getURL, initSnarkRefresh, refreshScreenLog, refreshTorrents, snarkRefreshIntervalId, xhrsnark };
+export { doRefresh, getURL, initSnarkRefresh, refreshScreenLog, refreshTorrents, snarkRefreshIntervalId };
