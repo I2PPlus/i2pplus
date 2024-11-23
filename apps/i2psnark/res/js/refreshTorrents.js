@@ -29,7 +29,7 @@ let screenLogIntervalId;
 let debugging = false;
 let initialized = false;
 
-async function requestIdleOrAnimationFrame(callback, timeout = 1000) {
+async function requestIdleOrAnimationFrame(callback, timeout = 240) {
   if (typeof requestIdleCallback === "function") {
     await new Promise(resolve => requestIdleCallback(() => {
       callback();
@@ -132,27 +132,41 @@ async function refreshScreenLog(callback) {
 
 const parser = new DOMParser();
 const container = document.createElement("div");
+let abortController = new AbortController();
+
 async function fetchHTMLDocument(url) {
+  cleanupCache();
   try {
     const cachedDocument = cache.get(url);
-    if (cachedDocument && Date.now() - cachedDocument.timestamp < cacheDuration) {
-      container.innerHTML = cachedDocument.html;
+    const now = Date.now();
+    if (cachedDocument && (now - cachedDocument.timestamp < cacheDuration)) {
+      if (container.innerHTML !== cachedDocument.html) {container.innerHTML = cachedDocument.html;}
       return container;
     }
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error("Network error: No response from server");
-    }
+    abortController.abort();
+    abortController = new AbortController();
+    const { signal } = abortController;
+    const response = await fetch(url, { signal });
+
+    if (!response.ok) {throw new Error("Network error: No response from server");}
     const htmlString = await response.text();
-    container.innerHTML = parser.parseFromString(htmlString, "text/html").body.innerHTML;
-    cache.set(url, {html: container.innerHTML, timestamp: Date.now()});
-    setTimeout(() => cache.delete(url), cacheDuration);
+    const parsedDocument = parser.parseFromString(htmlString, "text/html").body.innerHTML;
+    container.innerHTML = parsedDocument;
+    cache.set(url, { html: container.innerHTML, timestamp: Date.now() });
     return container;
   } catch (error) {
     if (debugging) {
-      console.error(error);
+      if (error.name === "AbortError") {console.log("Fetch aborted");}
+      else {console.error(error);}
       throw error;
     }
+  }
+}
+
+function cleanupCache() {
+  const now = Date.now();
+  for (const [key, value] of cache.entries()) {
+    if (now - value.timestamp >= cacheDuration) {cache.delete(key);}
   }
 }
 
