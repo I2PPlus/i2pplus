@@ -54,9 +54,7 @@ async function getURL() {
 }
 
 async function setLinks(query) {
-  if (home) {
-    home.href = query ? `/i2psnark/${query}` : "/i2psnark/";
-  }
+  if (home) {home.href = query ? `/i2psnark/${query}` : "/i2psnark/";}
 }
 
 async function noAjax(delay) {
