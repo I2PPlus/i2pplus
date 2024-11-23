@@ -1377,39 +1377,35 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @since 0.9.58
      */
     private static String getQueryString(HttpServletRequest req, String p, String st, String so, String search) {
+        String url = req.getRequestURL().toString();
+        String filter = req.getParameter("filter");
+        StringBuilder buf = new StringBuilder(64);
+
+        // Create a map with parameter names and their corresponding variable references
         Map<String, String> params = new HashMap<>();
         params.put("p", p);
+        params.put("sort", so);
         params.put("st", st);
-        params.put("so", so);
         params.put("search", search);
 
-        StringBuilder buf = new StringBuilder();
-
         for (Map.Entry<String, String> entry : params.entrySet()) {
-            String key = entry.getKey();
+            String paramName = entry.getKey();
             String value = entry.getValue();
             if (value == null) {
-                value = req.getParameter(key);
+                value = req.getParameter(paramName);
                 if (value != null) {
-                    if (key.equals("search")) {
-                        value = DataHelper.escapeHTML(value);
-                    } else {value = DataHelper.stripHTML(value);}
+                    if ("p".equals(paramName) || "sort".equals(paramName) || "st".equals(paramName)) {
+                        value = DataHelper.stripHTML(value);
+                    } else if ("search".equals(paramName)) {value = DataHelper.escapeHTML(value);}
                 }
             }
             if (isValidNumeric(value) && value != null && !value.isEmpty()) {
-                if (buf.length() > 0) {buf.append("&amp;");}
-                buf.append(key).append("=").append(value);
+                if (buf.length() <= 0) {buf.append("?" + paramName + "=");}
+                else {buf.append("&" + paramName + "=");}
+                buf.append(value);
             }
         }
-
-        String filter = req.getParameter("filter");
-        if (filter != null && !filter.isEmpty()) {
-            if (buf.length() > 0) {buf.append("&amp;");}
-            buf.append("filter=").append(filter);
-        }
-
-        if (buf.length() > 0) {return "?" + buf.toString();}
-        else {return "";}
+        return buf.toString();
     }
 
     /**
