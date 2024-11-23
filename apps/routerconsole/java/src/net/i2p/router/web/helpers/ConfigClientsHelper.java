@@ -271,11 +271,12 @@ public class ConfigClientsHelper extends HelperBase {
     /** plugins */
     public String getForm3() {
         StringBuilder buf = new StringBuilder(1024);
-        buf.append("<table id=pluginconfig>\n" +
-                   "<tr><th class=right>").append(_t("Plugin")).append("</th><th class=center>")
-           .append(_t("Run at Startup?").replace("?", "")).append("</th><th class=center>")
-           .append(_t("Control")).append("</th><th class=left>")
-           .append(_t("Description")).append("</th></tr>\n");
+        buf.append("<table id=pluginconfig>\n").append("<tr>")
+           .append("<th class=right>").append(_t("Plugin")).append("</th>")
+           .append("<th class=center>").append(_t("Run at Startup?").replace("?", "")).append("</th>")
+           .append("<th class=center>").append(_t("Control")).append("</th>")
+           .append("<th class=left>").append(_t("Description")).append("</th>")
+           .append("</tr>\n");
         Properties props = PluginStarter.pluginProperties();
         Set<String> keys = new TreeSet<String>(Collator.getInstance());
         keys.addAll(props.stringPropertyNames());
@@ -283,20 +284,18 @@ public class ConfigClientsHelper extends HelperBase {
             if (name.startsWith(PluginStarter.PREFIX) && name.endsWith(PluginStarter.ENABLED)) {
                 String app = name.substring(PluginStarter.PREFIX.length(), name.lastIndexOf(PluginStarter.ENABLED));
                 String val = props.getProperty(name);
-                if (val.equals(PluginStarter.DELETED))
-                    continue;
+                if (val.equals(PluginStarter.DELETED)) {continue;}
                 Properties appProps = PluginStarter.pluginProperties(_context, app);
-                if (appProps.isEmpty())
-                    continue;
+                if (appProps.isEmpty()) {continue;}
                 StringBuilder desc = new StringBuilder(256);
-                desc.append("\n<table border=0>\n")
-                    .append("<tr><td class=right><b>").append(_t("Version")).append("</b></td><td class=left>").append(stripHTML(appProps, "version"));
+                desc.append("\n<table border=0>\n").append("<tr>")
+                    .append("<td class=right><b>").append(_t("Version")).append("</b></td>")
+                    .append("<td class=left>").append(stripHTML(appProps, "version"));
                 String s = stripHTML(appProps, "date");
                 if (s != null) {
                     long ms = 0;
-                    try {
-                        ms = Long.parseLong(s);
-                    } catch (NumberFormatException nfe) {}
+                    try {ms = Long.parseLong(s);}
+                    catch (NumberFormatException nfe) {}
                     if (ms > 0) {
                         String date = DataHelper.formatTime(ms);
                         desc.append(" (").append(date).append(")");
@@ -304,11 +303,9 @@ public class ConfigClientsHelper extends HelperBase {
                 }
                 desc.append("</td></tr>\n");
                 s = stripHTML(appProps, "description_" + Messages.getLanguage(_context));
-                if (s == null)
-                    s = stripHTML(appProps, "description");
+                if (s == null) {s = stripHTML(appProps, "description");}
                 if (s != null) {
-                    desc.append("<tr><td class=right><b>")
-                        .append(_t("Description")).append("</b></td><td class=left>").append(s);
+                    desc.append("<tr><td class=right><b>").append(_t("Description")).append("</b></td><td class=left>").append(s);
                 }
                 desc.append("</td></tr>\n");
                 s = stripHTML(appProps, "author");
@@ -316,48 +313,42 @@ public class ConfigClientsHelper extends HelperBase {
                     String[] authors = DataHelper.split(s, "[,; \r\n\t]");
                     Matcher m = VALID_EMAIL_ADDRESS_REGEX.matcher(s);
                     String author = m.find() ? m.group() : null;
-                    desc.append("<tr><td class=right><b>")
-                        .append(_t("Author")).append("</b></td><td class=left>");
-                    if (author != null)
+                    desc.append("<tr><td class=right><b>").append(_t("Author")).append("</b></td><td class=left>");
+                    if (author != null) {
                         desc.append("<a href=\"mailto:").append(author).append("\">").append(s).append("</a>");
-                    else
-                        desc.append(s);
+                    }
+                    else {desc.append(s);}
                     desc.append("</td></tr>\n");
                 }
                 desc.append("<tr><td class=right><b>").append(_t("Signed by")).append("</b></td><td class=left>");
                 s = stripHTML(appProps, "signer");
                 if (s != null) {
-                    if (s.indexOf('@') > 0)
+                    if (s.indexOf('@') > 0) {
                         desc.append("<a href=\"mailto:").append(s).append("\">").append(s).append("</a>");
-                    else
-                        desc.append(s);
+                    } else {desc.append(s);}
                     desc.append("</td></tr>\n");
                 }
                 String updateURL = stripHTML(appProps, "updateURL.su3");
-                if (updateURL == null)
-                    updateURL = stripHTML(appProps, "updateURL");
+                if (updateURL == null) {updateURL = stripHTML(appProps, "updateURL");}
                 if (updateURL != null) {
-                    desc.append("<tr><td class=right><b>")
-                        .append(_t("Update link")).append("</b></td><td class=left><a href=\"")
-                        .append(updateURL).append("\">").append(updateURL).append("</a></td></tr>\n");
+                    desc.append("<tr><td class=right><b>").append(_t("Update link")).append("</b></td>")
+                        .append("<td class=left><a href=\"").append(updateURL).append("\">").append(updateURL).append("</a></td></tr>\n");
                 }
                 s = stripHTML(appProps, "websiteURL");
                 if (s != null) {
-                    desc.append("<tr><td class=right><b>")
-                        .append(_t("Website")).append("</b></td><td class=left><a href=\"")
-                        .append(s).append("\" target=_blank>").append(s).append("</a></td></tr>\n");
+                    desc.append("<tr><td class=right><b>").append(_t("Website")).append("</b></td>")
+                        .append("<td class=left><a href=\"").append(s).append("\" target=_blank>").append(s).append("</a></td></tr>\n");
                 }
                 s = stripHTML(appProps, "license");
                 if (s != null) {
-                    desc.append("<tr><td class=right><b>")
-                        .append(_t("License")).append("</b></td><td class=left>").append(s).append("</td></tr>\n");
+                    desc.append("<tr><td class=right><b>").append(_t("License")).append("</b></td>")
+                        .append("<td class=left>").append(s).append("</td></tr>\n");
                 }
                 desc.append("\n</table>\n");
                 boolean isRunning = PluginStarter.isPluginRunning(app, _context);
                 boolean enableStop = isRunning && !Boolean.parseBoolean(appProps.getProperty("disableStop"));
                 boolean enableStart = !isRunning;
-                renderForm(buf, app, app, false,
-                           "true".equals(val), false, false, desc.toString(), false, false,
+                renderForm(buf, app, app, false, "true".equals(val), false, false, desc.toString(), false, false,
                            updateURL != null, enableStop, true, enableStart);
             }
         }
@@ -372,34 +363,28 @@ public class ConfigClientsHelper extends HelperBase {
      *  @param ro trumps edit and showEditButton
      *  @param escapedDesc description, must be HTML escaped, except for plugins
      */
-    private void renderForm(StringBuilder buf, String index, String name, boolean urlify,
-                            boolean enabled, boolean ro, boolean preventDisable, String escapedDesc, boolean edit,
-                            boolean showEditButton, boolean showUpdateButton, boolean showStopButton,
-                            boolean showDeleteButton, boolean showStartButton) {
+    private void renderForm(StringBuilder buf, String index, String name, boolean urlify, boolean enabled, boolean ro,
+                            boolean preventDisable, String escapedDesc, boolean edit, boolean showEditButton, boolean showUpdateButton,
+                            boolean showStopButton, boolean showDeleteButton, boolean showStartButton) {
         String escapedName = DataHelper.escapeHTML(name);
-        buf.append("<tr><td class=right>");
+        buf.append("<tr class=module><td class=right>");
         if (urlify) {
             String link = "/";
-            if (! RouterConsoleRunner.ROUTERCONSOLE.equals(name)) {
-                link += escapedName + "/\" target=\"_blank";
-            }
+            if (! RouterConsoleRunner.ROUTERCONSOLE.equals(name)) {link += escapedName + "/\" target=\"_blank";}
             buf.append("<a href=\"").append(link).append("\">").append(_t(escapedName)).append("</a>");
         } else if (edit && !ro) {
             buf.append("<input type=text name=\"nofilter_name").append(index).append("\" value=\"");
-            if (name.length() > 0)
-                buf.append(_t(escapedName));
+            if (name.length() > 0) {buf.append(_t(escapedName));}
             buf.append("\" >");
         } else {
-            if (name.length() > 0)
+            if (name.length() > 0) {
                 buf.append("<label for=\"").append("client_").append(index).append("\">").append(_t(escapedName)).append("</label>");
+            }
         }
         buf.append("</td><td class=center><input type=checkbox class=\"optbox slider\" id=\"client_")
            .append(index).append("\" name=\"").append(index).append(".enabled\"");
-        if (enabled) {
-            buf.append(CHECKED);
-        }
-        if (ro || preventDisable)
-            buf.append("disabled=disabled ");
+        if (enabled) {buf.append(CHECKED);}
+        if (ro || preventDisable) {buf.append("disabled=disabled ");}
         buf.append("></td><td class=center>");
 
         if (showStartButton && (!ro) && !edit) {
@@ -434,9 +419,7 @@ public class ConfigClientsHelper extends HelperBase {
             buf.append("<input type=text size=80 spellcheck=false name=\"nofilter_desc").append(index).append("\" value=\"");
             buf.append(escapedDesc);
             buf.append("\" >");
-        } else {
-            buf.append(escapedDesc);
-        }
+        } else {buf.append(escapedDesc);}
         buf.append("</td></tr>\n");
     }
 

@@ -2143,10 +2143,15 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 #pconfig::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:""}
 #pconfig:hover{color:var(--hover);cursor:pointer}
 #pconfig:hover::after{background:var(--dropdown_hover);content:""}
+#pconfig:hover #pluginTotals{color:var(--ink)}
 #pconfig:not(.expanded){margin-bottom:-3px}
 #pconfig:not(.expanded)::after{background:var(--dropdown);content:"";transform:rotate(-90deg)}
 #pconfig:not(.expanded):hover::after{background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
 html.hasCollapsedElement #plugmanage{display:none}
+#pluginTotals{margin:-2px 24px -2px 8px;padding:3px 8px;display:inline-block;float:right;vertical-align:middle;text-align:center;font-size:90%;box-shadow:var(--bevel);background:var(--badge)}
+#pluginTotals span{margin:0 6px;display:inline-block;padding:0 0 0 16px}
+#pluginTotals #started{background:var(--start) no-repeat left center/10px}
+#pluginTotals #stopped{margin-left:0;background:var(--stop) no-repeat left center/10px}
 
 /* stats */
 .stattograph{margin:3px 1px;padding:6px 8px 6px 12px;width:220px;position:relative;display:inline-block;font-size:90%;text-align:left;color:#252;border:1px solid #020;border-left-width:3px;border-radius:1px;box-sizing:border-box;background:#000}
