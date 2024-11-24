@@ -546,7 +546,7 @@ public class I2PSnarkServlet extends BasicServlet {
             mimeType.equals("text/css") || mimeType.endsWith("/javascript"))) {
             headers.append("Cache-Control: private, max-age=2628000, immutable\r\n");
         } else {headers.append("Cache-Control: private, no-cache, max-age=2628000\r\n");}
-        StringBuilder csp = new StringBuilder("default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; ");
+        StringBuilder csp = new StringBuilder("default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; ");
         csp.append("script-src 'self' 'nonce-").append(cspNonce).append("'; ");
         csp.append("object-src 'none'; media-src '").append(allowMedia ? "self" : "none").append("'");
         headers.append("Accept-Ranges: bytes\r\n");
