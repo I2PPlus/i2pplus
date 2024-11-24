@@ -719,6 +719,10 @@ form[action^="/i2psnark/configure"]{display:block}
 #msg{border-bottom:1px solid #bbb;background:url(/i2psnark/.res/icons/warn.svg) no-repeat 20px center/48px,linear-gradient(180deg,#ccc,#ddd)}
 #msg .hr{border-top:1px solid #888}
 
+/* router down */
+#circle::before{border:#d23!important;box-shadow:0 0 0 8px #fff,0 0 0 8px #d23 inset!important;filter:saturate(0);mix-blend-mode:luminosity}
+#offline{background:#fff3!important}
+
 /* animations */
 @keyframes disappear{from{visibility:visible}to{visibility:collapse}}
 @keyframes progress{from{background-position:0}to{background-position:-12px}}
