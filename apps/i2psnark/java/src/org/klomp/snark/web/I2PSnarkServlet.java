@@ -538,29 +538,31 @@ public class I2PSnarkServlet extends BasicServlet {
      */
 
     private void setHTMLHeaders(HttpServletResponse resp, String cspNonce, boolean allowMedia) {
-        StringBuilder headers = new StringBuilder(1024);
-        headers.append("Accept-Ranges: bytes\r\n");
+        StringBuilder headers = new StringBuilder(2048);
+        // use \t: for header key termination so we don't split the values with colons e.g. data:, blob:
+        headers.append("Accept-Ranges\t: bytes\r\n");
         String mimeType = resp.getContentType();
         if (mimeType != null && (mimeType.equals("image/png") || mimeType.equals("image/jpeg") || mimeType.equals("font/woff2") ||
             mimeType.equals("image/gif") || mimeType.equals("image/webp") || mimeType.equals("image/svg+xml") ||
             mimeType.equals("text/css") || mimeType.endsWith("/javascript"))) {
-            headers.append("Cache-Control: private, max-age=2628000, immutable\r\n");
-        } else {headers.append("Cache-Control: private, no-cache, max-age=2628000\r\n");}
-        StringBuilder csp = new StringBuilder("default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; ");
+            headers.append("Cache-Control\t: private, max-age=2628000, immutable\r\n");
+        } else {headers.append("Cache-Control\t: private, no-cache, max-age=2628000\r\n");}
+        StringBuilder csp = new StringBuilder("default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; ");
         csp.append("script-src 'self' 'nonce-").append(cspNonce).append("'; ");
         csp.append("object-src 'none'; media-src '").append(allowMedia ? "self" : "none").append("'");
-        headers.append("Accept-Ranges: bytes\r\n");
-        headers.append("Content-Security-Policy: ").append(csp).append("\r\n");
-        headers.append("Permissions-Policy: fullscreen=(self)\r\n");
-        headers.append("Referrer-Policy: same-origin\r\n");
-        headers.append("X-Content-Type-Options: nosniff\r\n");
-        headers.append("X-XSS-Protection: 1; mode=block\r\n");
+        headers.append("Content-Security-Policy\t: ").append(csp).append("\r\n");
+        headers.append("Permissions-Policy\t: fullscreen=(self)\r\n");
+        headers.append("Referrer-Policy\t: same-origin\r\n");
+        headers.append("X-Content-Type-Options\t: nosniff\r\n");
+        headers.append("X-XSS-Protection\t: 1; mode=block\r\n");
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html; charset=utf-8");
         String[] headerLines = headers.toString().split("\r\n");
         for (String line : headerLines) {
-            String[] headerParts = line.split(": ");
-            resp.setHeader(headerParts[0], headerParts[1]);
+            String[] headerParts = line.split("\t:");
+            String headerName = headerParts[0].trim();
+            String headerValue = headerParts[1].trim().replace('\t', ':');
+            resp.setHeader(headerName, headerValue);
         }
         headers.setLength(0);
     }
@@ -586,9 +588,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private String getLastMessage() {
         UIMessages.Message lastMessage = null;
         List<UIMessages.Message> msgs = _manager.getMessages();
-        if (!msgs.isEmpty()) {
-            lastMessage = msgs.get(msgs.size() - 1);
-        }
+        if (!msgs.isEmpty()) {lastMessage = msgs.get(msgs.size() - 1);}
         return lastMessage != null ? lastMessage.message : null;
     }
 
@@ -602,9 +602,7 @@ public class I2PSnarkServlet extends BasicServlet {
             String lastMessage = getLastMessage();
             int index = lastMessage.indexOf("&nbsp; ");
             displayText = lastMessage.substring(index + 7);
-        } else {
-            displayText = "";
-        }
+        } else {displayText = "";}
         out.write("<span id=notify hidden=hidden><table><tr><td>");
         out.write(displayText);
         out.write("</td></tr></table></span>\n");
