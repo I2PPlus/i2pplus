@@ -113,10 +113,8 @@
     </condition>
   </target>
 
-  <!-- Ideally we would include
-      -  only include the servlet, everything else is in the jar.
-      -  However, the wrapper.config classpath in existing installs
-      -  does not include i2psnark.jar.
+  <!-- Ideally we would include only include the servlet, everything else is in the jar.
+      -  However, the wrapper.config classpath in existing installs does not include i2psnark.jar.
       -  So we must continue to duplicate everything in the war.
           <classes dir="./build/obj" includes="**/I2PSnarkServlet*.class" />
      -->
@@ -197,11 +195,6 @@
   </target>
 
   <target name="standalone" depends="standalone_prep">
-    <!-- doesn't support file permissions
-        <zip destfile="i2psnark-standalone.zip">
-          <zipfileset dir="./i2psnark/" />
-        </zip>
-       -->
     <exec executable="zip" failifexecutionfails="true" failonerror="true">
       <arg value="-r" />
       <arg value="i2psnark-standalone.zip" />
@@ -236,11 +229,7 @@
       <zipfileset src="../../streaming/java/build/streaming.jar" />
       <zipfileset src="../../systray/java/build/systray.jar" />
       <zipfileset src="../../../build/jbigi.jar" />
-      <!-- Countries translations. The i2psnark translations are in the war but it's easier to put these here -->
-      <!-- 300KB just to translate "Brazil", but why not... -->
-      <!--
-        <fileset dir="../../routerconsole/java/build/obj" includes="net/i2p/router/countries/*.class" />
-       -->
+
       <manifest>
         <attribute name="Main-Class" value="org.klomp.snark.standalone.RunStandalone" />
         <attribute name="Implementation-Version" value="${full.version}" />
@@ -368,23 +357,20 @@
       value="">
       <include name="**/*.css" />
     </replace>
-
     <mkdir dir="build/standalone-resources/.res/js" />
-    <!--<copy file="../../routerconsole/jsp/js/ajax.js" todir="build/standalone-resources/.res/js" />-->
     <copy file="../../routerconsole/jsp/js/onVisible.js" todir="build/standalone-resources/.res/js" />
-    <!--
-        <copy file="../res/js/previewTheme.js" todir="build/standalone-resources/.res/js" />
-        <replace dir="build/standalone-resources/.res/js"
-            summary="true"
-            token="/themes/"
-            value="/i2psnark/.res/themes/" >
-            <include name="previewTheme.js" />
-        </replace>
--->
+    <copy file="../../i2psnark/res/js/refreshTorrents.js" todir="build/standalone-resources/.res/js" />
+    <replace dir="build/standalone-resources/.res/js"
+      summary="true"
+      token="/themes/snark/"
+      value="/i2psnark/.res/themes/snark/">
+      <include name="**/refreshTorrents.js" />
+    </replace>
     <zip destfile="../i2psnark.war" update="true" duplicate="preserve">
       <fileset dir="build/standalone-resources" />
     </zip>
   </target>
+
 
   <target name="standalone_prep" depends="standalone_jar, standalone_war">
     <delete dir="./i2psnark" />
