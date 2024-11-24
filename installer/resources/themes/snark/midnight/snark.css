@@ -868,6 +868,9 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 #msg.deleting{background:url(/i2psnark/.res/icons/processing.svg) no-repeat 20px center/48px,linear-gradient(180deg,#000,#001)}
 #msg .hr{border-top:1px solid #113}
 
+/* connection down */
+#circle::before{border:0!important;box-shadow:0 0 0 10px #000,0 0 0 12px #225 inset,0 0 0 14px #000 inset!important;transform:scale(.8) translateX(28px)!important;filter:sepia(1) hue-rotate(180deg) saturate(1.8)}
+
 /* animations */
 @keyframes active{from{background:linear-gradient(to left,#0000 1px,#f5f 3px,#0000 3px)}}
 @keyframes disappear{from{visibility:visible}to{visibility:collapse}}

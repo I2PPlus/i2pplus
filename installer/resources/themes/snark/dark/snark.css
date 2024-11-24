@@ -859,6 +859,9 @@ form[action^="/i2psnark/configure"]{display:block}
 #msg.deleting{background:url(/i2psnark/.res/icons/processing.svg) no-repeat 20px center/48px,linear-gradient(180deg,#0008,#0108)}
 #msg .hr{border-top:1px solid #131}
 
+/* connection down */
+#circle::before{border:0!important;box-shadow:0 0 0 10px #000,0 0 0 12px #252 inset,0 0 0 14px #000 inset!important;transform:scale(.8) translateX(28px)!important;filter:sepia(1) hue-rotate(60deg) saturate(1.8)}
+
 /* animation */
 @keyframes bar{from{width:100%}}
 @keyframes disappear{from{visibility:visible}to{visibility:collapse}}
