@@ -112,12 +112,10 @@ public class I2PSnarkServlet extends BasicServlet {
         // in case you named your war "router.war"
         // We don't handle bad characters in the context path. Don't do that.
         String configName = _contextName;
-        if (!configName.equals(DEFAULT_NAME))
-            configName = DEFAULT_NAME + '_' + _contextName;
+        if (!configName.equals(DEFAULT_NAME)) {configName = DEFAULT_NAME + '_' + _contextName;}
         _manager = new SnarkManager(_context, _contextPath, configName);
         String configFile = _context.getProperty(PROP_CONFIG_FILE);
-        if ((configFile == null) || (configFile.trim().length() <= 0) )
-            configFile = configName + ".config";
+        if ((configFile == null) || (configFile.trim().length() <= 0)) {configFile = configName + ".config";}
         _manager.loadConfig(configFile);
         _manager.start();
         loadMimeMap("org/klomp/snark/web/mime");
@@ -127,8 +125,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
     @Override
     public void destroy() {
-        if (_manager != null)
-            _manager.stop();
+        if (_manager != null) {_manager.stop();}
         super.destroy();
     }
 
@@ -139,20 +136,16 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @param pathInContext should always start with /
      */
     @Override
-    public File getResource(String pathInContext)
-    {
+    public File getResource(String pathInContext) {
         if (pathInContext == null || pathInContext.equals("/") || pathInContext.equals("/index.jsp") ||
             !pathInContext.startsWith("/") || pathInContext.length() == 0 ||
             pathInContext.equals("/index.html") || pathInContext.startsWith(WARBASE))
             return super.getResource(pathInContext);
-        // files in the i2psnark/ directory
-        // get top level
+        // files in the i2psnark/ directory - get top level
         pathInContext = pathInContext.substring(1);
         File top = new File(pathInContext);
         File parent;
-        while ((parent = top.getParentFile()) != null) {
-            top = parent;
-        }
+        while ((parent = top.getParentFile()) != null) {top = parent;}
         Snark snark = _manager.getTorrentByBaseName(top.getPath());
         if (snark != null) {
             Storage storage = snark.getStorage();
@@ -183,9 +176,7 @@ public class I2PSnarkServlet extends BasicServlet {
         doGetAndPost(request, response);
     }
 
-    public boolean isAdvanced() {
-        return _context.getBooleanProperty(PROP_ADVANCED);
-    }
+    public boolean isAdvanced() {return _context.getBooleanProperty(PROP_ADVANCED);}
 
     public boolean useSoraFont() {
         return _context.getBooleanProperty(RC_PROP_ENABLE_SORA_FONT) || !_context.isRouterContext();
@@ -717,7 +708,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     activeQuery.setLength(activeQuery.length() - 1);
                     String buttonUrl = activeQuery.toString();
                     int pageSizeConf = _manager.getPageSize();
-                    buttonUrl += (buttonUrl.contains("=") ? "&amp;filter=" : "?filter=");
+                    buttonUrl += (buttonUrl.contains("=") ? "&filter=" : "?filter=");
                     buf.append("<div id=torrentDisplay>")
                        .append("<a class=filter id=search href=\"").append(buttonUrl).append("all\"")
                        .append(searchActive ? "" : " hidden").append("><span>").append(_t("Search"))
@@ -840,8 +831,9 @@ public class I2PSnarkServlet extends BasicServlet {
             hbuf.append("</a></span>");
         }
         hbuf.append("</th><th class=peerCount>");
+
+        boolean hasPeers = false;
         if (_manager.util().connected() && !snarks.isEmpty()) {
-            boolean hasPeers = false;
             int end = Math.min(start + pageSize, snarks.size());
             for (int i = start; i < end; i++) {
                 if (snarks.get(i).getPeerList().size() >= 1) {
@@ -849,19 +841,22 @@ public class I2PSnarkServlet extends BasicServlet {
                     break;
                 }
             }
-            String queryString = peerParam != null ? getQueryString(req, "", null, null) : getQueryString(req, "1", null, null);
-            String link = _contextPath + '/' + queryString + filterQuery;
-            tx = peerParam != null ? _t("Hide Peers") : _t("Show Peers");
-            String img = peerParam != null ? "hidepeers" : "showpeers";
             if (hasPeers) {
-                if (peerParam == null) {
-                    hbuf.append(" <a class=\"sorter showPeers" + (!hasPeers ? " noPeers" : "") + "\" href=\"" + link.replace("filter", "&filter") + "\">");
-                } else {
-                    hbuf.append(" <a class=\"sorter hidePeers" + (!hasPeers ? " noPeers" : "") + "\" href=\"" + link.replace("filter", "?filter") + "\">");
-                }
-                hbuf.append(toThemeImg(img, tx, tx)).append("</a>\n");
+                String queryString = peerParam != null ? getQueryString(req, "", null, null) : getQueryString(req, "1", null, null);
+                String link = _contextPath + '/' + queryString + filterQuery;
+                tx = peerParam != null ? _t("Hide Peers") : _t("Show Peers");
+                String img = peerParam != null ? "hidepeers" : "showpeers";
+                String filterParam = peerParam == null ? "&filter=" : "?filter=";
+                if (link.contains("filter=")) {
+                    int index = link.indexOf("filter=");
+                    link = link.substring(0, index) + link.substring(index).replaceFirst("filter=", filterParam);
+                } else {link += filterParam;}
+                hbuf.append(" <a class=\"sorter ").append(peerParam == null ? "showPeers" : "hidePeers")
+                    .append(!hasPeers ? " noPeers" : "").append("\" href=\"").append(link).append("\">")
+                    .append(toThemeImg(img, tx, tx)).append("</a>\n");
             }
         }
+
         hbuf.append("<th class=torrentLink colspan=2><input id=linkswitch class=optbox type=checkbox hidden=hidden></th>");
         hbuf.append("<th id=torrentSort>");
         // cycle through sort by name or type
@@ -1203,7 +1198,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (_manager.util().connected() && total > 0) {
                 ftr.append("<th class=ETA>");
                 if (_manager.util().connected() && !snarks.isEmpty()) {
-                    boolean hasPeers = false;
+                    hasPeers = false;
                     long remainingSeconds = 0;
                     long totalETA = 0;
                     int end = Math.min(start + pageSize, snarks.size());
@@ -5654,21 +5649,17 @@ public class I2PSnarkServlet extends BasicServlet {
         if (alist != null && !alist.isEmpty()) {
             for (List<String> alist2 : alist) { // strip non-i2p trackers
                 for (String s : alist2) {
-                    if (isI2PTracker(s))
-                        annlist.add(s);
+                    if (isI2PTracker(s)) {annlist.add(s);}
                 }
             }
         }
-        if (oldPrimary != null) {
-            annlist.add(oldPrimary);
-        }
+        if (oldPrimary != null) {annlist.add(oldPrimary);}
         List<Tracker> newTrackers = _manager.getSortedTrackers();
         for (Integer i : toDel) {
             int hc = i.intValue();
             for (Iterator<String> iter = annlist.iterator(); iter.hasNext(); ) {
                 String s = iter.next();
-                if (s.hashCode() == hc)
-                    iter.remove();
+                if (s.hashCode() == hc) {iter.remove();}
             }
         }
         for (Integer i : toAdd) {
@@ -5745,21 +5736,15 @@ public class I2PSnarkServlet extends BasicServlet {
         try {
             a = a.getCanonicalFile();
             b = b.getCanonicalFile();
-        } catch (IOException ioe) {
-            return false;
-        }
-        if (a.equals(b))
-            return true;
-        if (!a.isDirectory())
-            return false;
+        } catch (IOException ioe) {return false;}
+        if (a.equals(b)) {return true;}
+        if (!a.isDirectory()) {return false;}
         // easy case
-        if (!b.getPath().startsWith(a.getPath()))
-            return false;
+        if (!b.getPath().startsWith(a.getPath())) {return false;}
         // dir by dir
         while (!a.equals(b)) {
             b = b.getParentFile();
-            if (b == null)
-                return false;
+            if (b == null) {return false;}
         }
         return true;
     }
@@ -5770,11 +5755,8 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @since 0.9.54+
      */
     private boolean isStandalone() {
-        if (_context.isRouterContext())
-            return false;
-        else
-            return true;
+        if (_context.isRouterContext()) {return false;}
+        else {return true;}
     }
 
 }
-
