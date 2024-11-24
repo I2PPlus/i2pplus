@@ -29,19 +29,32 @@ let screenLogIntervalId;
 let debugging = false;
 let initialized = false;
 
-async function requestIdleOrAnimationFrame(callback, timeout = 240) {
-  if (typeof requestIdleCallback === "function") {
-    await new Promise(resolve => requestIdleCallback(() => {
-      callback();
-      resolve();
-    }, { timeout }));
-  } else {
-    await new Promise(resolve => requestAnimationFrame(() => {
-      callback();
-      resolve();
-    }));
-  }
-}
+const requestIdleOrAnimationFrame = (callback, timeout = 180) => {
+  return new Promise(resolve => {
+    let id;
+    if (typeof requestIdleCallback === "function") {
+      id = setTimeout(() => {
+        cancelIdleCallback(id);
+        requestAnimationFrame(() => {
+          callback();
+          resolve();
+        });
+      }, timeout);
+      requestIdleCallback(() => {
+        cancelIdleCallback(id);
+        callback();
+        resolve();
+      });
+    } else {
+      setTimeout(() => {
+        requestAnimationFrame(() => {
+          callback();
+          resolve();
+        });
+      }, timeout);
+    }
+  });
+};
 
 async function getRefreshInterval() {
   const refreshInterval = snarkRefreshDelay || parseInt(localStorage.getItem("snarkRefreshDelay")) || 5;
