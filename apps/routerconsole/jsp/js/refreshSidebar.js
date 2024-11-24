@@ -47,10 +47,32 @@ const elements = {
 
 sb.addEventListener("loaded", () => { initSidebar(); });
 
-function requestIdleOrAnimationFrame(callback, timeout = 1000) {
-  if (typeof requestIdleCallback === "function") {requestIdleCallback(callback, { timeout });}
-  else {requestAnimationFrame(callback);}
-}
+const requestIdleOrAnimationFrame = (callback, timeout = 180) => {
+  return new Promise(resolve => {
+    let id;
+    if (typeof requestIdleCallback === "function") {
+      id = setTimeout(() => {
+        cancelIdleCallback(id);
+        requestAnimationFrame(() => {
+          callback();
+          resolve();
+        });
+      }, timeout);
+      requestIdleCallback(() => {
+        cancelIdleCallback(id);
+        callback();
+        resolve();
+      });
+    } else {
+      setTimeout(() => {
+        requestAnimationFrame(() => {
+          callback();
+          resolve();
+        });
+      }, timeout);
+    }
+  });
+};
 
 function tangoDown() {
   elements.statusPanel.forEach(panel => panel.classList.add("statusDown"));
