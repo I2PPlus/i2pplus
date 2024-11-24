@@ -27,7 +27,7 @@ const torrentForm = document.getElementById("torrentlist");
 let noConnection = false;
 let snarkRefreshIntervalId;
 let screenLogIntervalId;
-let debugging = true;
+let debugging = false;
 let initialized = false;
 
 const requestIdleOrAnimationFrame = (callback, timeout = 180) => {
@@ -63,13 +63,9 @@ async function getRefreshInterval() {
   return refreshInterval * 1000;
 }
 
-async function getURL() {
-  return window.location.href.replace("/i2psnark/", "/i2psnark/.ajax/xhr1.html");
-}
+async function getURL() { return window.location.href.replace("/i2psnark/", "/i2psnark/.ajax/xhr1.html"); }
 
-async function setLinks(query) {
-  if (home) {home.href = query ? `/i2psnark/${query}` : "/i2psnark/";}
-}
+async function setLinks(query) { if (home) {home.href = query ? `/i2psnark/${query}` : "/i2psnark/";} }
 
 async function initHandlers() {
   await requestIdleOrAnimationFrame(async () => {
@@ -95,11 +91,13 @@ async function updateElementTextContent(elem, respElem) {
   }
 }
 
+const worker = new Worker("./snarkWork.js");
 const parser = new DOMParser();
 const container = document.createElement("div");
 let abortController = new AbortController();
 
 async function fetchHTMLDocument(url) {
+  worker.postMessage({ debugging });
   cleanupCache();
   try {
     const cachedDocument = cache.get(url);
@@ -114,7 +112,6 @@ async function fetchHTMLDocument(url) {
 
     if (!response.ok) {throw new Error("Network error: No response from server");}
     const htmlString = await response.text();
-    const parser = new DOMParser();
     const doc = parser.parseFromString(htmlString, "text/html");
     cache.set(url, { doc, timestamp: Date.now() });
     return doc;
