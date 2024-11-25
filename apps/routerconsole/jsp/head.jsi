@@ -1,7 +1,7 @@
 <%@page trimDirectiveWhitespaces="true"%>
 <%@include file="headers.jsi"%>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width">
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width">
 <%
 String fontPath = useSoraFont ? "/themes/fonts/Sora/" : "/themes/fonts/DroidSans/";
 String fontStyle = useSoraFont ? "/themes/fonts/Sora.css" : "/themes/fonts/DroidSans.css";
@@ -12,16 +12,13 @@ boolean isConfigPage = uri.contains("config") && !uri.contains("/help/");
 boolean isHelpPage = uri.contains("/help/") && !uri.endsWith("/");
 boolean hasWizardStyles = uri.endsWith("wizard") || uri.endsWith("wizard.jsp");
 %>
-<% if (theme.contains("dark") || theme.contains("night")) { %>
-<style>html{background:#000}</style>
-<% } %>
+<link rel=preload href=<%=fontFile%> as=font type=font/woff2 crossorigin>
 <link rel=preload href="<%=themePath%>global.css?version=<%=v%>" as=style>
 <link rel=preload href="<%=themePath%>console.css?version=<%=v%>" as=style>
-<link rel=preload href=<%=fontFile%> as=font type=font/woff2 crossorigin>
-<link rel=stylesheet href=<%=fontStyle%>>
 <link rel=preload href=<%=themePath%>images/i2plogo.png as=image>
 <link rel=preload href=/themes/console/images/images.css as=style>
 <link rel=preload href=<%=themePath%>images/images.css as=style>
+<link rel=stylesheet href=<%=fontStyle%>>
 <% if (isConfigPage) { %>
 <link rel=preload href=/themes/console/confignav.css as=style>
 <% } %>
@@ -37,7 +34,6 @@ boolean hasWizardStyles = uri.endsWith("wizard") || uri.endsWith("wizard.jsp");
 <% if (hasWizardStyles) { %>
 <link rel=preload href=<%=themePath%>wizard.css as=style>
 <% } %>
-<noscript><style>.script{display:none!important}</style></noscript>
 <link rel=icon href=<%=themePath%>images/favicon.svg>
 <link href="<%=themePath%>console.css?version=<%=v%>" rel=stylesheet title="<%=theme%>">
 <link href=/themes/console/images/images.css rel=stylesheet>
@@ -57,3 +53,4 @@ boolean hasWizardStyles = uri.endsWith("wizard") || uri.endsWith("wizard.jsp");
 </script>
 <script src=/js/progressx.js></script>
 <script src=/js/initSidebar.js type=module async></script>
+<noscript><style>.script{display:none!important}</style></noscript>
