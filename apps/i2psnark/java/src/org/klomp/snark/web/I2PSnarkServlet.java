@@ -3484,7 +3484,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<input type=checkbox class=\"optbox slider\" name=varyOutbound id=varyOutbound ")
            .append(varyOutbound ? "checked " : "").append("> <span>").append(_t("Outbound")).append("</span></label>")
            .append("</span><br>\n")
-           .append("<script src=\"" + resourcePath + "js/toggleVaryTunnelLength.js?" + CoreVersion.VERSION + "\"></script>\n")
+           .append("<script src=\"" + resourcePath + "js/toggleVaryTunnelLength.js?" + CoreVersion.VERSION + "\" defer></script>\n")
            .append("<noscript><style>#hopVariance .optbox.slider{pointer-events:none!important;opacity:.4!important}</style></noscript>\n");
 
         if (!_context.isRouterContext()) {
@@ -3995,7 +3995,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
 /** TODO event delegation so it works with ajax refresh
         if (showPriority)
-            buf.append("<script nonce=" + cspNonce + " src=\"").append(_contextPath + WARBASE + "js/setPriority.js?" + CoreVersion.VERSION + "\" async></script>\n");
+            buf.append("<script nonce=" + cspNonce + " src=\"").append(_contextPath + WARBASE + "js/setPriority.js?" + CoreVersion.VERSION + "\"></script>\n");
             buf.append("<script nonce=" + cspNonce + " src=\"/themes/setPriority.js?" + CoreVersion.VERSION + "\"></script>\n"); // debugging
 **/
 
@@ -4815,7 +4815,7 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean enableLightbox = _manager.util().enableLightbox();
         if (enableLightbox) {
             buf.append("<link rel=stylesheet href=").append(resourcePath).append("lightbox.css>\n")
-               .append("<script nonce=").append(cspNonce).append(" src=").append(resourcePath).append("js/lightbox.js type=module>\n")
+               .append("<script nonce=").append(cspNonce).append(" src=").append(resourcePath).append("js/lightbox.js type=module defer>\n")
                .append("  import {Lightbox} from \"").append(resourcePath).append("js/lightbox.js\";\n")
                .append("  var lightbox = new Lightbox();lightbox.load();\n")
                .append("</script>\n");
