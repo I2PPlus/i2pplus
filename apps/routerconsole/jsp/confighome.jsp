@@ -9,8 +9,7 @@
 %>
 <html lang="<%=lang%>">
 <head>
-<%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
+<%@include file="head.jsi" %>
 <%=intl.title("config home")%>
 <style>input.default{width:1px;height:1px;visibility:hidden}</style>
 </head>

@@ -15,8 +15,7 @@
 %>
 <html lang="<%=lang%>">
 <head>
-<%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
+<%@include file="head.jsi" %>
 <%=intl.title("Debug")%>
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>

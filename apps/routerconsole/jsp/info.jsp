@@ -9,8 +9,7 @@
 %>
 <html lang="<%=lang%>">
 <head>
-<%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
+<%@include file="head.jsi" %>
 <%=intl.title("router information")%>
 </head>
 <body>
@@ -48,7 +47,7 @@
 <h3 class=tabletitle><%=intl._t("Router Information")%></h3>
 <jsp:getProperty name="infohelper" property="console" />
 </div>
-<script nonce=<%=cspNonce%> src="/js/refreshElements.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/refreshElements.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce=<%=cspNonce%>>refreshElements(".ajax", "/info", 30000);</script>
 </body>
 </html>

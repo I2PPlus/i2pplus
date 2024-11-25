@@ -10,8 +10,7 @@
 %>
 <html lang="<%=lang%>">
 <head>
-<%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
+<%@include file="head.jsi" %>
 <%=intl.title("network database")%>
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
@@ -123,9 +122,9 @@
 </div>
 <style>#netdbwrap{height:unset!important;opacity:1!important}#netdb::before{display:none}</style>
 <%  } %>
-<script nonce=<%=cspNonce%> src=/js/lazyload.js></script>
-<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.js></script>
-<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.number.js></script>
-<script nonce=<%=cspNonce%> src=/js/netdb.js></script>
+<script src=/js/lazyload.js></script>
+<script src=/js/tablesort/tablesort.js></script>
+<script src=/js/tablesort/tablesort.number.js></script>
+<script src=/js/netdb.js></script>
 </body>
 </html>

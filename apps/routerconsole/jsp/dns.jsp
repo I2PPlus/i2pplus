@@ -9,7 +9,7 @@
 %>
 <jsp:setProperty name="tester" property="contextId" value="<%=i2pcontextId1%>" />
 <%
-    // CSSHelper is also pulled in by css.jsi below...
+    // CSSHelper is also pulled in by head.jsi below...
     boolean testIFrame = tester.allowIFrame(request.getHeader("User-Agent"));
     if (!testIFrame) {
         response.setStatus(307);
@@ -28,11 +28,8 @@
 %>
 <html lang="<%=lang%>">
 <head>
-<%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
+<%@include file="head.jsi" %>
 <%=intl.title("addressbook")%>
-<script src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script src="/js/iframeResizer/initResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <style>iframe{display:none;pointer-events:none}</style>
 </head>
 <body>
@@ -45,6 +42,8 @@
 <%=intl._t("Your browser does not support iFrames.")%>&nbsp;<a href="/susidns/addressbook?book=router&amp;filter=none"><%=intl._t("Click here to continue.")%></a>
 </iframe>
 </div>
+<script src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/iframeResizer/initResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce=<%=cspNonce%>>document.addEventListener("updated", function() {initResizer("susidnsframe");});</script>
 <style>iframe{display:block;pointer-events:auto}#dns::before{width:100%;animation:fade .3s linear .7s both}</style>
 </body>

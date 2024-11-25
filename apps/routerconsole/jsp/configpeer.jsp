@@ -9,10 +9,9 @@
 %>
 <html lang="<%=lang%>">
 <head>
-<%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
+<%@include file="head.jsi" %>
 <%=intl.title("config peers")%>
-<script nonce=<%=cspNonce%> src=/js/lazyload.js></script>
+<script src=/js/lazyload.js></script>
 </head>
 <body>
 <script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
@@ -90,7 +89,7 @@
 <h3 id=ipbans class=tabletitle><%=intl._t("Banned IP Addresses")%></h3>
 <jsp:getProperty name="peerhelper" property="blocklistSummary" />
 </div>
-<script nonce=<%=cspNonce%> src=/js/toggleElements.js></script>
+<script src=/js/toggleElements.js></script>
 <script nonce=<%=cspNonce%>>document.addEventListener("DOMContentLoaded", () => setupToggles("#ipbans", "#bannedips", "table"));</script>
 <noscript><style>#bannedips{display:table!important}</style></noscript>
 </body>

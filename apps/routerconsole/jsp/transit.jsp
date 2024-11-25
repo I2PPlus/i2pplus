@@ -9,8 +9,7 @@
 %>
 <html lang="<%=lang%>" id=participatingTunnels>
 <head>
-<%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
+<%@include file="head.jsi" %>
 <%=intl.title("Most Recent Transit Tunnels")%>
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
@@ -31,11 +30,11 @@
 <% tunnelParticipatingHelper.storeWriter(out); %>
 <jsp:getProperty name="tunnelParticipatingHelper" property="tunnelsParticipating" />
 </div>
-<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.js></script>
-<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.number.js></script>
-<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.natural.js></script>
-<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.dotsep.js></script>
-<script nonce=<%=cspNonce%> src=/js/lazyload.js></script>
+<script src=/js/tablesort/tablesort.js></script>
+<script src=/js/tablesort/tablesort.number.js></script>
+<script src=/js/tablesort/tablesort.natural.js></script>
+<script src=/js/tablesort/tablesort.dotsep.js></script>
+<script src=/js/lazyload.js></script>
 <script nonce=<%=cspNonce%> type=module src=/js/transit.js></script>
 </body>
 </html>

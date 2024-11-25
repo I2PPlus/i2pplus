@@ -10,8 +10,7 @@
 %>
 <html lang="<%=lang%>">
 <head>
-<%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
+<%@include file="head.jsi" %>
 <%=intl.title("config update")%>
 </head>
 <body>
@@ -197,8 +196,8 @@
 </table>
 </form>
 </div>
-<script nonce=<%=cspNonce%> src=/js/formsubmit.js></script>
-<script nonce=<%=cspNonce%> src="/js/refreshElements.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src=/js/formsubmit.js></script>
+<script src="/js/refreshElements.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce=<%=cspNonce%>>refreshElements("#statusNews", "/configupdate", 10000);</script>
 </body>
 </html>

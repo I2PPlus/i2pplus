@@ -15,7 +15,7 @@
 %>
 <html lang="<%=lang%>">
 <head>
-<%@include file="../css.jsi" %>
+<%@include file="../head.jsi" %>
 <title><%=pageTitlePrefix%> <%=intl._t("Frequently Asked Questions")%> - I2P+</title>
 </head>
 <body>
@@ -151,7 +151,7 @@
 </div>
 </div>
 <% if (theme.equals("dark")) { %>
-<script nonce=<%=cspNonce%> src=/js/toggleElements.js></script>
+<script src=/js/toggleElements.js></script>
 <script nonce=<%=cspNonce%>>setupToggles("#faq h3", "#faq h3~*:not(h3)", "block");</script>
 <noscript><style>#faq h3{margin-bottom:10px!important;cursor:default!important}#faq h3::after{display:none!important}</style></noscript>
 <% } %>

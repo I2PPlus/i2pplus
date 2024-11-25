@@ -9,8 +9,7 @@
 %>
 <html lang="<%=lang%>" id=count>
 <head>
-<%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
+<%@include file="head.jsi" %>
 <%=intl.title("tunnel peer count")%>
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
@@ -31,10 +30,10 @@
 <% tunnelPeerCountHelper.storeWriter(out); %>
 <jsp:getProperty name="tunnelPeerCountHelper" property="tunnelPeerCount" />
 </div>
-<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.js></script>
-<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.number.js></script>
-<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.natural.js></script>
-<script nonce=<%=cspNonce%> src=/js/lazyload.js></script>
+<script src=/js/tablesort/tablesort.js></script>
+<script src=/js/tablesort/tablesort.number.js></script>
+<script src=/js/tablesort/tablesort.natural.js></script>
+<script src=/js/lazyload.js></script>
 <script nonce=<%=cspNonce%> type=module src=/js/tunnelpeercount.js></script>
 </body>
 </html>

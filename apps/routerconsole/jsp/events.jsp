@@ -10,8 +10,7 @@
 %>
 <html lang="<%=lang%>">
 <head>
-<%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
+<%@include file="head.jsi" %>
 <%=intl.title("events")%>
 <jsp:useBean class="net.i2p.router.web.helpers.EventLogHelper" id="eventHelper" scope="request" />
 <jsp:setProperty name="eventHelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -37,11 +36,11 @@
 </div>
 </div>
 </div>
-<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.js></script>
-<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.number.js></script>
-<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.date.js></script>
+<script src=/js/tablesort/tablesort.js></script>
+<script src=/js/tablesort/tablesort.number.js></script>
+<script src=/js/tablesort/tablesort.date.js></script>
 <script nonce=<%=cspNonce%>>new Tablesort(document.getElementById("eventlog"));</script>
-<script nonce=<%=cspNonce%> src=/js/lazyload.js></script>
+<script src=/js/lazyload.js></script>
 
 </body>
 </html>

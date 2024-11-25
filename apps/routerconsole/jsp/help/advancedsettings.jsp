@@ -13,7 +13,7 @@
 %>
 <html lang="<%=lang%>">
 <head>
-<%@include file="../css.jsi" %>
+<%@include file="../head.jsi" %>
 <title><%=pageTitlePrefix%> <%=intl._t("Advanced Configuration Help - I2P+")%></title>
 </head>
 <body>
@@ -275,7 +275,7 @@
 </div>
 </div>
 <% if (theme.equals("dark") || theme.equals("light")) { %>
-<script nonce=<%=cspNonce%> src=/js/toggleElements.js></script>
+<script src=/js/toggleElements.js></script>
 <script nonce=<%=cspNonce%>>setupToggles("#configinfo tr.config", "#configinfo tr:not(.config):not(.section)", "table-row");</script>
 <noscript><style>#configinfo tr.config th{cursor:default}#configinfo tr.config th::after{display:none!important}#configinfo td{border-bottom-width:1px!important}</style></noscript>
 <% } %>

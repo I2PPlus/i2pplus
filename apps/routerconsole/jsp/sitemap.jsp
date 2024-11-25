@@ -16,8 +16,7 @@
 <html lang="<%=lang%>">
 <head>
 <title><%=pageTitlePrefix%> Sitemap - I2P+</title>
-<%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
+<%@include file="head.jsi" %>
 </head>
 <body class="<%=lang%>" id=map>
 <script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>

@@ -9,8 +9,7 @@
 %>
 <html lang="<%=lang%>">
 <head>
-<%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
+<%@include file="head.jsi" %>
 <%=intl.title("statistics")%>
 </head>
 <body>
@@ -24,6 +23,6 @@
 <div class=main id=stats>
 <jsp:getProperty name="oldhelper" property="stats" />
 </div>
-<script nonce=<%=cspNonce%> src=/js/stats.js></script>
+<script src=/js/stats.js></script>
 </body>
 </html>

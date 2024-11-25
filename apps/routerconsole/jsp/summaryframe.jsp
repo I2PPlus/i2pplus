@@ -16,8 +16,7 @@
 %>
 <html lang="<%=lang%>">
 <head>
-<%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
+<%@include file="head.jsi" %>
 <title>Sidebar - I2P+</title>
 <%
     // try hard to avoid an error page in the iframe after shutdown

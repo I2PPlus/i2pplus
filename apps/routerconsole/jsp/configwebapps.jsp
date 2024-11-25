@@ -8,8 +8,7 @@
 %>
 <html lang="<%=lang%>">
 <head>
-<%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
+<%@include file="head.jsi" %>
 <%=intl.title("config webapps")%>
 <style>button span.hide{display:none}input.default{width:1px;height:1px;visibility:hidden}</style>
 </head>
@@ -45,11 +44,10 @@
 </form>
 </div>
 </div>
-<script nonce=<%=cspNonce%> src=/js/refreshOnClick.js></script>
+<script src=/js/refreshOnClick.js></script>
 <script nonce=<%=cspNonce%>>
   const webappsForm = document.getElementById("form_webapps");
   const processForm = document.getElementById("processForm");
-  window.addEventListener("DOMContentLoaded", progressx.hide);
   webappsForm.addEventListener("submit", progressx.show);
   processForm.addEventListener("load", progressx.hide);
   refreshOnClick("#webappconfig button.control", ".main");

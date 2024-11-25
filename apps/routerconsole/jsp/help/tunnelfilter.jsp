@@ -15,7 +15,7 @@
 %>
 <html lang="<%=lang%>">
 <head>
-<%@include file="../css.jsi" %>
+<%@include file="../head.jsi" %>
 <title><%=pageTitlePrefix%> <%=intl._t("Tunnel Filtering")%> - I2P+</title>
 </head>
 <body>

@@ -10,8 +10,7 @@
 %>
 <html lang="<%=lang%>">
 <head>
-<%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
+<%@include file="head.jsi" %>
 <link rel=stylesheet href=/themes/console/tunnels.css>
 <%=intl.title("local tunnels")%>
 </head>
@@ -43,6 +42,6 @@
 </span>
 </div>
 <noscript><style>#toggleTunnels,#toggleTunnelIds{display:none}#tunnelsContainer{display:block}</style></noscript>
-<script nonce=<%=cspNonce%> src=/js/tunnels.js type=module></script>
+<script src=/js/tunnels.js type=module></script>
 </body>
 </html>

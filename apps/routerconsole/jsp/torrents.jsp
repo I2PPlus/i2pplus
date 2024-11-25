@@ -9,7 +9,7 @@
 %>
 <jsp:setProperty name="tester" property="contextId" value="<%=i2pcontextId1%>" />
 <%
-    // CSSHelper is also pulled in by css.jsi below...
+    // CSSHelper is also pulled in by head.jsi below...
     boolean testIFrame = tester.allowIFrame(request.getHeader("User-Agent"));
     boolean embedApp = tester.embedApps();
     String now = String.valueOf(net.i2p.I2PAppContext.getGlobalContext().clock().now());
@@ -30,11 +30,8 @@
 %>
 <html lang="<%=lang%>">
 <head>
-<%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
+<%@include file="head.jsi" %>
 <%=intl.title("torrents")%>
-<script src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script src="/js/iframeResizer/initResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <style>iframe{display:none;pointer-events:none}</style>
 </head>
 <body>
@@ -47,6 +44,8 @@
 <%=intl._t("Your browser does not support iFrames.")%> &nbsp;<a href="/i2psnark/"><%=intl._t("Click here to continue.")%></a>
 </iframe>
 </div>
+<script src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/iframeResizer/initResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce=<%=cspNonce%>>document.addEventListener("updated", function() {initResizer("i2psnarkframe");});</script>
 <style>iframe{display:block;pointer-events:auto}#torrents::before{width:100%;animation:fade .3s linear .7s both}</style>
 </body>

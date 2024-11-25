@@ -5,13 +5,11 @@
 <%
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null)
-        lang = ctx.getProperty("routerconsole.lang");
+    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
 %>
 <html lang="<%=lang%>">
 <head>
-<%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
+<%@include file="head.jsi" %>
 <style id=gwrap></style>
 <%=intl.title("graphs")%>
 <jsp:useBean class="net.i2p.router.web.helpers.GraphHelper" id="graphHelper" scope="request" />
@@ -23,9 +21,10 @@
     graphHelper.storeMethod(request.getMethod());
     boolean allowRefresh = intl.allowIFrame(request.getHeader("User-Agent")); // meta must be inside the head
     if (allowRefresh) {out.print(graphHelper.getRefreshMeta());}
+    out.print("\n");
 %>
 <script nonce=<%=cspNonce%>>
-  var graphRefreshInterval = <% out.print(graphHelper.getRefreshValue() * 1000); %>;
+  window.graphRefreshInterval = <% out.print(graphHelper.getRefreshValue() * 1000); %>;
   var graphCount = <% out.print(graphHelper.countGraphs()); %>;
 </script>
 </head>
@@ -42,8 +41,8 @@
 <span id=graphConfigs hidden><jsp:getProperty name="graphHelper" property="form" /></span>
 </div>
 </div>
-<script nonce=<%=cspNonce%> src=/js/lazyload.js></script>
-<script nonce=<%=cspNonce%> src="/js/graphs.js?<%=net.i2p.CoreVersion.VERSION%>" type=module></script>
+<script src=/js/lazyload.js></script>
+<script src="/js/graphs.js?<%=net.i2p.CoreVersion.VERSION%>" type=module></script>
 <noscript><style>#allgraphs,#gform,#graphConfigs{display:block!important}#graphdisplay{margin-bottom:15px!important;color:var(--ink)!important;cursor:default!important}</style></noscript>
 </body>
 </html>

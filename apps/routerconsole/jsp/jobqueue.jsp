@@ -10,8 +10,7 @@
 %>
 <html lang="<%=lang%>">
 <head>
-<%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
+<%@include file="head.jsi" %>
 <%=intl.title("job queue stats")%>
 </head>
 <body id=routerjobqueue>
@@ -27,7 +26,7 @@
 <% jobQueueHelper.storeWriter(out); %>
 <jsp:getProperty name="jobQueueHelper" property="jobQueueSummary" />
 </div>
-<script nonce=<%=cspNonce%> src="/js/refreshElements.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/refreshElements.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce=<%=cspNonce%>>refreshElements("#jobs", "/jobqueue", 15000);</script>
 </body>
 </html>

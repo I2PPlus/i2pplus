@@ -9,8 +9,7 @@
 %>
 <html lang="<%=lang%>">
 <head>
-<%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
+<%@include file="head.jsi" %>
 <%=intl.title("config reseeding")%>
 </head>
 <body>
@@ -252,6 +251,6 @@
 </tr>
 </table>
 </div>
-<script nonce=<%=cspNonce%> src=/js/formsubmit.js></script>
+<script src=/js/formsubmit.js></script>
 </body>
 </html>

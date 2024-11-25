@@ -9,8 +9,7 @@
 %>
 <html lang="<%=lang%>" id=participatingTunnels>
 <head>
-<%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
+<%@include file="head.jsi" %>
 <%=intl.title("Transit Tunnels by Peer")%>
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
@@ -31,13 +30,13 @@
 <% transitSummaryHelper.storeWriter(out); %>
 <jsp:getProperty name="transitSummaryHelper" property="transitSummary" />
 </div>
-<script nonce=<%=cspNonce%> src=/js/lazyload.js></script>
-<script nonce=<%=cspNonce%> src=/js/convertKBtoMB.js></script>
-<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.js></script>
-<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.dotsep.js></script>
-<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.natural.js></script>
-<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.number.js></script>
-<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.filesize.js></script>
+<script src=/js/lazyload.js></script>
+<script src=/js/convertKBtoMB.js></script>
+<script src=/js/tablesort/tablesort.js></script>
+<script src=/js/tablesort/tablesort.dotsep.js></script>
+<script src=/js/tablesort/tablesort.natural.js></script>
+<script src=/js/tablesort/tablesort.number.js></script>
+<script src=/js/tablesort/tablesort.filesize.js></script>
 <script nonce=<%=cspNonce%> type=module src=/js/transitsummary.js></script>
 </body>
 </html>

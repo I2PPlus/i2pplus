@@ -10,8 +10,7 @@
 %>
 <html lang="<%=lang%>">
 <head>
-<%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
+<%@include file="head.jsi" %>
 <%=intl.title("config advanced")%>
 </head>
 <body>
@@ -100,17 +99,17 @@
 </div>
 </div>
 <% if (!theme.equals("dark")) { %><style>#floodfillconfig{display:table!important}</style><% } else { %>
-<script nonce=<%=cspNonce%> src=/js/toggleElements.js></script>
+<script src=/js/toggleElements.js></script>
 <script nonce=<%=cspNonce%>>document.addEventListener("DOMContentLoaded", () => { setupToggles("#ffconf", "#ffconf+form", "block"); });</script>
 <% } %>
 <% if (theme.equals("dark") || theme.equals("light") || theme.equals("classic") && isAdvanced) { %>
-<script nonce=<%=cspNonce%> src=/js/advconfig.js type=module></script>
+<script src=/js/advconfig.js type=module></script>
 <noscript><style>#advancedsettings{display:block!important}</style></noscript>
 <% } else { %>
 <style>#advancedsettings{display:block!important}</style>
 <% } %>
 <noscript><style>#advconf.readonly tr.section{pointer-events:none}#advconf.readonly tr.section th::after{display:none}#floodfillconfig{display:table!important}</style></noscript>
-<% if (!isAdvanced) { %><script nonce=<%=cspNonce%> src=/js/tableSectionToggler.js type=module></script><% } %>
+<% if (!isAdvanced) { %><script src=/js/tableSectionToggler.js type=module></script><% } %>
 <% if (theme.equals("dark")) { %><script src=/js/ok.js></script><% } %>
 </body>
 </html>

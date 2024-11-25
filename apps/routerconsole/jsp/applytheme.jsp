@@ -8,8 +8,7 @@
         lang = ctx.getProperty("routerconsole.lang"); %>
 <html lang="<%=lang%>">
 <head>
-<%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
+<%@include file="head.jsi" %>
 <%=intl.title("config UI")%>
 <style>input.default{width:1px;height:1px;visibility:hidden}.confignav{display:none!important}</style>
 <meta http-equiv="Refresh" content= "0;URL=/configui">

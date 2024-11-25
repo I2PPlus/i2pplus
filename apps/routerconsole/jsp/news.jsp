@@ -9,8 +9,7 @@
 %>
 <html lang="<%=lang%>">
 <head>
-<%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
+<%@include file="head.jsi" %>
 <%=intl.title("News")%>
 </head>
 <body>
@@ -25,7 +24,7 @@
 <jsp:getProperty name="feedHelper" property="entries" />
 </div>
 </div>
-<script nonce=<%=cspNonce%> src=/js/lazyload.js></script>
+<script src=/js/lazyload.js></script>
 
 </body>
 </html>

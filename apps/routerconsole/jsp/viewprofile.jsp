@@ -13,8 +13,7 @@
 <html lang="<%=lang%>">
 <head>
 <link href=/themes/console/viewprofile.css rel=stylesheet>
-<%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
+<%@include file="head.jsi" %>
 <%=intl.title("Peer Profile")%>
 <%  if (!isValid) { %>
 <meta http-equiv=refresh content="5;url=/profiles?f=1" />
@@ -62,7 +61,7 @@
 </table>
 <%  } %>
 </div>
-<script nonce=<%=cspNonce%> src=/js/viewprofile.js></script>
+<script src=/js/viewprofile.js></script>
 <noscript><style>#viewprofile{display:table!important}#viewprofile:empty::before,#viewprofile:empty::after{display:none!important}</style></noscript>
 </body>
 </html>

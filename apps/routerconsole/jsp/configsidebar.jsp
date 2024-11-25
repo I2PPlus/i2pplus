@@ -10,8 +10,7 @@
 %>
 <html lang="<%=lang%>">
 <head>
-<%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
+<%@include file="head.jsi" %>
 <%=intl.title("config sidebar")%>
 <style>input.default {width: 1px; height: 1px; visibility: hidden;}</style>
 </head>
@@ -73,7 +72,6 @@
 <script nonce=<%=cspNonce%>>
   const sidebarForm = document.getElementById("form_sidebar");
   const processForm = document.getElementById("processForm");
-  window.addEventListener("DOMContentLoaded", progressx.hide);
   sidebarForm.addEventListener("submit", progressx.show);
   processForm.addEventListener("load", progressx.hide);
 </script>

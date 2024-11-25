@@ -4,13 +4,11 @@
 <%
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null)
-        lang = ctx.getProperty("routerconsole.lang");
+    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
 %>
 <html lang="<%=lang%>">
 <head>
-<%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
+<%@include file="head.jsi" %>
 <%=intl.title("graph")%>
 <jsp:useBean class="net.i2p.router.web.helpers.GraphHelper" id="graphHelper" scope="request" />
 <jsp:setProperty name="graphHelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -24,15 +22,13 @@
     if (allowRefresh) {out.print(graphHelper.getRefreshMeta());}
 %>
 <script nonce="<%=cspNonce%>">var graphRefreshInterval = <% out.print(graphHelper.getRefreshValue() * 1000); %>;</script>
-<script nonce="<%=cspNonce%>" src="/js/progressx.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce="<%=cspNonce%>" src="/js/graphSingle.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 </head>
 <body id=perfgraphs>
 <script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %>
 <%
-    // needs to be after the summary bar is rendered, so
-    // that the restart button is processed
+    // needs to be after the summary bar is rendered, so that the restart button is processed
     String stat = request.getParameter("stat");
     if (stat == null) {
         // probably because restart or shutdown was clicked

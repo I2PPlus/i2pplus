@@ -13,7 +13,7 @@
 %>
 <html lang="<%=lang%>">
 <head>
-<%@include file="../css.jsi" %>
+<%@include file="../head.jsi" %>
 <title><%=pageTitlePrefix%> <%=intl._t("Change Log")%> - I2P+</title>
 </head>
 <body>
@@ -47,7 +47,7 @@
 <p id=fullhistory><a href="/history.txt" target="_blank" rel="noreferrer"><%=intl._t("View the full change log")%></a></p>
 </div>
 </div>
-<script nonce=<%=cspNonce%> src=/js/lazyload.js></script>
+<script src=/js/lazyload.js></script>
 <script nonce=<%=cspNonce%>>
   (function spanify() {
     const content = document.querySelector("#changelog pre");

@@ -1,49 +1,40 @@
 <%@page trimDirectiveWhitespaces="true"%>
 <jsp:useBean class="net.i2p.router.web.NewsHelper" id="newshelper" scope="request" />
 <jsp:setProperty name="newshelper" property="contextId" value="<%=i2pcontextId%>" />
-<%
-    java.io.File newspath = new java.io.File(net.i2p.I2PAppContext.getGlobalContext().getRouterDir(), "docs/news.xml");
-%>
+<% java.io.File newspath = new java.io.File(net.i2p.I2PAppContext.getGlobalContext().getRouterDir(), "docs/news.xml"); %>
 <jsp:setProperty name="newshelper" property="page" value="<%=newspath.getAbsolutePath()%>" />
 <jsp:setProperty name="newshelper" property="maxLines" value="300" />
 <div id=sb_wrap class="" style=width:200px;float:left;margin-right:20px>
 <%
-    // The refresh delay, 0 to disable
-    String d = "0";
-    boolean allowIFrame = intl.allowIFrame(request.getHeader("User-Agent"));
-    if (allowIFrame) {
-        // skip the iframe if refresh disabled
-        d = request.getParameter("refresh");
-        String newDelay = "";
-        if (d == null || "".equals(d))
-            d = intl.getRefresh();
-        else {
-            long delay;
-            try {
-                delay = Long.parseLong(d);
-            } catch (NumberFormatException nfe) {
-                delay = 60;
-            }
-            // pass the new delay parameter to the iframe
-            newDelay = "?refresh=" + delay;
-            // update disable boolean
-            intl.setDisableRefresh(d);
-        }
+  String d = "0"; // The refresh delay, 0 to disable
+  boolean allowIFrame = intl.allowIFrame(request.getHeader("User-Agent"));
+  if (allowIFrame) {
+    d = request.getParameter("refresh"); // skip the iframe if refresh disabled
+    String newDelay = "";
+    if (d == null || "".equals(d)) {d = intl.getRefresh();}
+    else {
+      long delay;
+      try {delay = Long.parseLong(d);}
+      catch (NumberFormatException nfe) {delay = 60;}
+      // pass the new delay parameter to the iframe
+      newDelay = "?refresh=" + delay;
+      // update disable boolean
+      intl.setDisableRefresh(d);
     }
+  }
 %>
 <div class=sb id=sidebar>
 <%
-    if (allowIFrame) {
-        // Display the whole summary bar
+  if (allowIFrame) { // Display the whole summary bar
 %>
 <%@include file="summarynoframe.jsi" %>
 <%
-    } else {
-        // Text browsers don't render the two divs side-by-side, so just provide a link
-        out.print("<a href=/summaryframe>");
-        out.print(intl._t("Sidebar"));
-        out.print("</a>");
-    }
-    out.print("</div>\n");
+  } else {
+    // Text browsers don't render the two divs side-by-side, so just provide a link
+    out.print("<a href=/summaryframe>");
+    out.print(intl._t("Sidebar"));
+    out.print("</a>");
+  }
+  out.print("</div>\n");
 %>
 </div>
