@@ -23,6 +23,5 @@
 <%=intl._t("The requested web application is not running.")%>
 <%=intl._t("Please visit the {0}config clients page{1} to start it.", "<a href=\"/configwebapps.jsp#webapp\" target=_top>", "</a>")%>
 </div>
-
 </body>
 </html>

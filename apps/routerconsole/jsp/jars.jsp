@@ -21,6 +21,5 @@
 <jsp:setProperty name="dumpHelper" property="contextId" value="<%=i2pcontextId%>" />
 <jsp:getProperty name="dumpHelper" property="fileSummary" />
 </div>
-
 </body>
 </html>
