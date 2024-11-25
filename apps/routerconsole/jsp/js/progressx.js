@@ -155,3 +155,5 @@ function initProgressX(window, document) {
 }
 
 initProgressX(window, document);
+
+document.addEventListener("DOMContentLoaded", progressx.hide);

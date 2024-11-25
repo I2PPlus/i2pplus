@@ -348,4 +348,4 @@ function ready() {
 
 onVisible(sb, ready);
 
-export { refreshSidebar };
+export { refreshSidebar, requestIdleOrAnimationFrame };

@@ -8,8 +8,6 @@ import { onVisible, onHidden } from "/js/onVisible.js";
   const d = document;
   const $ = id => d.getElementById(id);
   const query = selector => d.querySelector(selector);
-  const queryAll = selector => d.querySelectorAll(selector);
-  Element.prototype.hasClass = function(className) { return this.classList.contains(className); };
 
   const form = $("gform");
   const configs = $("graphConfigs");
@@ -20,15 +18,18 @@ import { onVisible, onHidden } from "/js/onVisible.js";
   let longestLoadTime = 500;
   let lastRefreshTime = 0;
   let previousRefreshInterval = 0;
-  let debugging = false;
+  let debugging = true;
 
   if (configs) configs.hidden = true;
 
   const updateGraphs = async () => {
     if (graphRefreshInterval <= 0) return;
+    progressx.show(theme);
+    progressx.progress(0.5);
     clearInterval(graphsTimerId);
     graphsTimerId = setInterval(updateGraphs, graphRefreshInterval);
-    const images = [...queryAll(".statimage")];
+
+    const images = [...d.querySelectorAll(".statimage")];
     images.forEach(img => img.classList.add("lazy"));
     const now = Date.now();
     const timeSinceLastRefresh = now - lastRefreshTime;
@@ -49,53 +50,37 @@ import { onVisible, onHidden } from "/js/onVisible.js";
 
     lastRefreshTime = now;
     const startTime = Date.now();
-    const visibleImages = images.filter(image => !image.hasClass("lazyhide"));
-    const lazyImages = images.filter(image => image.hasClass("lazyhide"));
+    const visibleImages = images.filter(image => !image.classList.contains("lazyhide"));
+    const lazyImages = images.filter(image => image.classList.contains("lazyhide"));
 
-    try {
-      await Promise.all(visibleImages.map(async (image, index) => {
-        const imageSrc = image.src.replace(/time=\d+/, `time=${now}`);
-        const response = await fetch(imageSrc);
-        if (response.ok) {
-          const progress = 0.5 + ((index + 1) / visibleImages.length * 0.5);
-          image.src = imageSrc;
-          progressx.show(theme);
-          progressx.progress(progress);
-        }
-      }));
+    await Promise.all(visibleImages.map(async image => {
+      const imageSrc = image.src.replace(/time=\d+/, `time=${now}`);
+      const response = await fetch(imageSrc);
+      if (response.ok) {image.src = imageSrc;}
+    }));
 
-      progressx.progress(1);
-      progressx.hide();
-
-      const endTime = Date.now();
-      const totalTime = endTime - startTime;
-      longestLoadTime = Math.max(longestLoadTime, totalTime);
-      if (debugging) {
-        console.log(`Total load time for all visible images: ${totalTime}ms`);
-      }
-
-      await new Promise(resolve => setTimeout(resolve, endTime + 5000));
-
-      await Promise.all(lazyImages.map(async (image, index) => {
-        const lazyImageSrc = image.src.replace(/time=\d+/, `time=${Date.now()}`);
-        const lazyResponse = await fetch(lazyImageSrc);
-        if (lazyResponse.ok) {
-          image.src = lazyImageSrc;
-        }
-      }));
-
-    } catch (error) {
-      if (debugging) { console.error("Error updating graphs:", error); }
-    }
     progressx.hide();
+    const endTime = Date.now();
+    const totalTime = endTime - startTime;
+    longestLoadTime = Math.max(longestLoadTime, totalTime);
+    if (debugging) {console.log(`Total load time for all visible images: ${totalTime}ms`);}
+
+    await new Promise(resolve => setTimeout(resolve, 5000));
+
+    await Promise.all(lazyImages.map(async image => {
+      const lazyImageSrc = image.src.replace(/time=\d+/, "time=" + Date.now());
+      const lazyResponse = await fetch(lazyImageSrc);
+      if (lazyResponse.ok) { image.src = lazyImageSrc; }
+    }));
   };
 
   const stopRefresh = () => clearInterval(graphsTimerId);
 
   const isDown = () => {
-    const images = [...queryAll(".statimage")];
+    const images = [...d.querySelectorAll(".statimage")];
     if (!images.length) {
       allgraphs.innerHTML = "<span id=nographs><b>No connection to Router</b></span>";
+      progressx.hide();
     }
     setTimeout(initCss, 5000);
   };
@@ -133,7 +118,7 @@ import { onVisible, onHidden } from "/js/onVisible.js";
     graph.addEventListener("load", () => {
       const gwrap = query("style#gwrap");
       if (!gwrap) return;
-      if (!d.body.hasClass("loaded")) {
+      if (!d.body.classList.contains("loaded")) {
         const widepanel = query(".widepanel");
         const delay = Math.max(graphCount * 5, 120);
         widepanel.id = "nographs";
@@ -164,6 +149,7 @@ import { onVisible, onHidden } from "/js/onVisible.js";
     toggleView();
     const toggle = $("toggleSettings");
     toggle?.addEventListener("click", toggleView);
+    progressx.hide();
   });
 
   setTimeout(isDown, 60000);

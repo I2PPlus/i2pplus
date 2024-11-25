@@ -72,7 +72,7 @@ function initFilter() {
     clearFilter.addEventListener("click", () => {
       filterInput.value = "";
       localStorage.removeItem("filterValue");
-      history.replaceState({}, document.title, window.location.pathname);
+      history.replaceState({}, d.title, window.location.pathname);
       table.querySelectorAll(".lazy").forEach(row => row.style.display = "table-row");
       applyFilter("");
       displayPeerCount();
@@ -146,18 +146,13 @@ function applyFilter(filterValue) {
     }
 
     row.style.display = shouldDisplay ? "table-row" : "none";
-    if (shouldDisplay) {
-      displayed++;
-    }
+    if (shouldDisplay) {displayed++;}
   });
 
-  if (filterValue === "") {
-    displayPeerCount();
-  } else {
+  if (filterValue === "") {displayPeerCount();}
+  else {
     clearTimeout(debounceTimeout);
-    debounceTimeout = setTimeout(() => {
-      displayPeerCount();
-    }, 500);
+    debounceTimeout = setTimeout(() => { displayPeerCount(); }, 500);
   }
 }
 
@@ -174,15 +169,13 @@ function displayPeerCount() {
       if (displayed > 0) {
         filterCount.textContent = ` (${displayed})`;
         if (!navTab.querySelector("#filterCount")) {navTab.appendChild(filterCount);}
-        document.body.classList.remove("noresults");
+        d.body.classList.remove("noresults");
       } else {
         filterCount.textContent = "";
         if (navTab.querySelector("#filterCount")) {navTab.removeChild(filterCount);}
-        document.body.classList.add("noresults");
+        d.body.classList.add("noresults");
       }
-    } else {
-      filterCount.textContent = ` (${totalCount})`;
-    }
+    } else {filterCount.textContent = ` (${totalCount})`;}
   }
 }
 
@@ -192,11 +185,8 @@ function addFilterListener() {
   if (filterInput) {
     filterInput.addEventListener("input", event => {
       const filterValue = event.target.value;
-      if (filterValue === "") {
-        localStorage.removeItem("filterValue");
-      } else {
-        localStorage.setItem("filterValue", filterValue);
-      }
+      if (filterValue === "") {localStorage.removeItem("filterValue");}
+      else {localStorage.setItem("filterValue", filterValue);}
       applyFilter(filterValue);
       updateURLWithFilter(filterValue);
     });
@@ -206,8 +196,8 @@ function addFilterListener() {
 
 function applyQueryParamsFilter() {
   const urlParams = new URLSearchParams(window.location.search);
-  const filterParam = urlParams.get('filter');
-  const typeParam = urlParams.get('type');
+  const filterParam = urlParams.get("filter");
+  const typeParam = urlParams.get("type");
   if (filterParam) {
     const filterInput = d.getElementById("filterInput");
     if (filterInput) {
@@ -242,17 +232,17 @@ function updateURLWithFilter(filterValue) {
     const filterTerm = filterParts.length > 1 ? filterParts[1].trim() : filterValue.trim();
 
     if (["tier", "cc", "country", "hash", "id", "h", "hostname", "host", "ip", "v", "version"].includes(filterKey)) {
-      urlParams.set('filter', filterTerm);
-      urlParams.set('type', filterKey);
+      urlParams.set("filter", filterTerm);
+      urlParams.set("type", filterKey);
     } else {
-      urlParams.set('filter', filterValue);
-      urlParams.delete('type');
+      urlParams.set("filter", filterValue);
+      urlParams.delete("type");
     }
   } else {
-    urlParams.delete('filter');
-    urlParams.delete('type');
+    urlParams.delete("filter");
+    urlParams.delete("type");
   }
-  history.replaceState({}, document.title, `${window.location.pathname}${urlParams.toString() ? `?${urlParams.toString()}` : ''}`);
+  history.replaceState({}, d.title, `${window.location.pathname}${urlParams.toString() ? `?${urlParams.toString()}` : ""}`);
 }
 
 (function init() {
@@ -260,25 +250,12 @@ function updateURLWithFilter(filterValue) {
     progressx.hide();
     initRefresh();
     initFilter();
-    if (!filterListener) {
-      addFilterListener();
-    }
-    refreshButton?.addEventListener("click", async () => {
-      await updateTunnels();
-    });
-    refreshButton?.addEventListener("mouseenter", () => {
-      refreshButton?.removeAttribute("href");
-    });
+    if (!filterListener) {addFilterListener();}
+    refreshButton?.addEventListener("click", async () => { await updateTunnels(); });
+    refreshButton?.addEventListener("mouseenter", () => { refreshButton?.removeAttribute("href"); });
     onVisible(tunnels, updateTunnels);
-    tunnels?.addEventListener("beforeSort", () => {
-      progressx.show(theme);
-    });
-    tunnels?.addEventListener("afterSort", () => {
-      progressx.hide();
-      checkForCachedFilter();
-    });
-    if (d.visibilityState === "hidden") {
-      clearInterval(refreshId);
-    }
+    tunnels?.addEventListener("beforeSort", () => { progressx.show(theme); });
+    tunnels?.addEventListener("afterSort", () => { progressx.hide(); checkForCachedFilter(); });
+    if (d.visibilityState === "hidden") { clearInterval(refreshId); }
   });
 })();
