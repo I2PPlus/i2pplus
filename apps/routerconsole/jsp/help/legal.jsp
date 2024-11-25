@@ -38,7 +38,5 @@
 <span class=tab><a href="/help/changelog"><%=intl._t("Change Log")%></a></span>
 </div>
 <div id=legal><%@include file="../help-legal.jsi" %></div>
-</div>
-<%@include file="../summaryajax.jsi" %>
-</body>
+</div></body>
 </html>

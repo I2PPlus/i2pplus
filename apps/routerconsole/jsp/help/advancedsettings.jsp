@@ -17,9 +17,7 @@
 <title><%=pageTitlePrefix%> <%=intl._t("Advanced Configuration Help - I2P+")%></title>
 </head>
 <body>
-<%@include file="../summary.jsi" %>
-<%@include file="../summaryajax.jsi" %>
-<h1 class=hlp><%=intl._t("Advanced Configuration Help")%></h1>
+<%@include file="../summary.jsi" %><h1 class=hlp><%=intl._t("Advanced Configuration Help")%></h1>
 <div class=main id=help>
 <div class=confignav>
 <span class=tab><a href="/help/configuration" title="<%=intl._t("Configuration")%>"><%=intl._t("Configuration")%></a></span>

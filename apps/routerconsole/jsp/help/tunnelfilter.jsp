@@ -158,7 +158,5 @@ deny file /path/enemies.txt<br>
 </div>
 
 </div>
-
-<%@include file="../summaryajax.jsi" %>
 </body>
 </html>

@@ -109,7 +109,5 @@
 
 </div>
 </div>
-
-<%@include file="../summaryajax.jsi" %>
 </body>
 </html>

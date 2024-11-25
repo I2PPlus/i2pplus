@@ -89,7 +89,5 @@
 <p><%=intl._t("You may also try <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> on I2P's IRC network.")%></p>
 </div>
 </div>
-
-<%@include file="../summaryajax.jsi" %>
 </body>
 </html>

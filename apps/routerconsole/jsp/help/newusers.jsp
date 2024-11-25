@@ -47,7 +47,5 @@
  <jsp:getProperty name="contenthelper" property="content" />
 </div>
 </div>
-
-<%@include file="../summaryajax.jsi" %>
 </body>
 </html>
