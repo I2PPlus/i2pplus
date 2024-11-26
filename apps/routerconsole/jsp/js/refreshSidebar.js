@@ -4,12 +4,14 @@
 import { sectionToggler, countNewsItems } from "/js/sectionToggle.js";
 import { stickySidebar } from "/js/stickySidebar.js";
 import { onVisible } from "/js/onVisible.js";
+import { refreshInterval } from "/js/initSidebar.js";
 
 "use strict";
 
 let isDown = false;
 let isDownTimer = null;
 let refreshTimeout;
+let throttleTimer;
 const sb = document.querySelector("#sidebar");
 
 const elements = {
@@ -47,32 +49,15 @@ const elements = {
 
 sb.addEventListener("loaded", () => { initSidebar(); });
 
-const requestIdleOrAnimationFrame = (callback, timeout = 180) => {
-  return new Promise(resolve => {
-    let id;
-    if (typeof requestIdleCallback === "function") {
-      id = setTimeout(() => {
-        cancelIdleCallback(id);
-        requestAnimationFrame(() => {
-          callback();
-          resolve();
-        });
-      }, timeout);
-      requestIdleCallback(() => {
-        cancelIdleCallback(id);
-        callback();
-        resolve();
-      });
-    } else {
-      setTimeout(() => {
-        requestAnimationFrame(() => {
-          callback();
-          resolve();
-        });
-      }, timeout);
-    }
-  });
-};
+const requestIdleOrAnimationFrame = (callback, timeout = refreshInterval) => {
+  clearTimeout(throttleTimer);
+  throttleTimer = setTimeout(() => {
+    const request = typeof requestIdleCallback === "function" ? requestIdleCallback : requestAnimationFrame;
+    request(() => {
+      try { callback(); } catch {}
+    });
+  }, timeout);
+}
 
 function tangoDown() {
   elements.statusPanel.forEach(panel => panel.classList.add("statusDown"));
@@ -295,33 +280,6 @@ async function refreshSidebar() {
           }
         } else {requestIdleOrAnimationFrame(tangoDown, Math.min(refreshInterval*2, 10*1000));}
       }
-
-      (() => {
-        const graphCanvas = document.getElementById("minigraph");
-        const ctx = graphCanvas?.getContext("2d");
-        const graphContainer = document.getElementById("sb_graphcontainer");
-        const graphContainerHR = document.querySelector("#sb_graphcontainer+hr");
-        const [minigraphWidth, minigraphHeight] = [245, 50];
-        if (ctx) { Object.assign(ctx, { imageSmoothingEnabled: false, globalCompositeOperation: "copy", globalAlpha: 1 }); }
-        const refreshGraph = async () => {
-          if (graphContainer && graphContainer.hidden) {graphContainer.hidden = graphContainerHR.hidden = false;}
-          const response = await fetch(`/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=${Date.now()}`);
-          if (!response.ok) {return;}
-          const image = new Image(minigraphWidth, minigraphHeight);
-          image.src = URL.createObjectURL(await response.blob());
-          return new Promise((resolve) => {
-            image.onload = () => {
-              graphCanvas.width = minigraphWidth;
-              graphCanvas.height = minigraphHeight;
-              ctx?.drawImage(image, 0, 0);
-              resolve();
-            };
-            image.onerror = () => {reject();};
-          }).catch(() => {});
-        };
-        const scheduleRefresh = async (callback) => { try {await callback();} catch {} };
-        refreshGraph().then(() => { requestIdleOrAnimationFrame(() => scheduleRefresh(refreshGraph)); });
-      })();
 
       async function initSidebar() {
         sectionToggler();
