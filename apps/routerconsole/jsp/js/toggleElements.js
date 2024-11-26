@@ -6,6 +6,9 @@ function setupToggles(toggleSelector, hiddenSelector, displayStyle, collapseByDe
   const toggleElements = document.querySelectorAll(toggleSelector);
   const hiddenElements = document.querySelectorAll(hiddenSelector);
 
+  if (toggleElements && hiddenElements) {document.body.classList.add("toggleElementsActive");}
+  else {return;}
+
   hiddenElements.forEach(function(hiddenElement) {
     if (!hiddenElement.classList.contains("config")) {
       if (collapseByDefault) {hiddenElement.style.display = "none";}
@@ -57,6 +60,7 @@ function setupToggles(toggleSelector, hiddenSelector, displayStyle, collapseByDe
           toggleElement.classList.add("expanded");
           document.documentElement.classList.remove("hasCollapsedElement");
           document.documentElement.classList.add("hasExpandedElement");
+          toggleElement.scrollIntoView();
         } else {
           hiddenElement.style.display = "none";
           toggleElement.classList.remove("expanded");
