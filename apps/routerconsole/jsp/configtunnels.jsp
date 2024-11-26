@@ -55,9 +55,10 @@
 <jsp:getProperty name="tunnelshelper" property="form" />
 <hr><div class=formaction id=tunnelconfigsave>
 <input type=reset class=cancel value="<%=intl._t("Cancel")%>" >
-<input type=submit name="shouldsave" class=accept value="<%=intl._t("Save changes")%>" >
+<input type=submit name="shouldsave" class=accept value="<%=intl._t("Save changes")%>">
 </div>
 </form>
 </div>
+<% if (theme.equals("dark")) { %><script src=/js/toggleElements.js></script><% } %>
 </body>
 </html>
