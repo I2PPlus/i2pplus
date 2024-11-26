@@ -428,7 +428,7 @@
     const routerClassFromURL = getQueryParameter("class") || "countries";
     localStorage.setItem("currentRouterClass", routerClassFromURL);
     storeRouterCounts();
-    console.log("Current routerClass is " + routerClassFromURL);
+    if (debugging) {console.log("Current routerClass is " + routerClassFromURL);}
     updateShapeClasses(routerClassFromURL);
     setNavButtonActive();
     setTimeout(() => { geomap.querySelector("#countries").removeAttribute("style"); }, 300);
