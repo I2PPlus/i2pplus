@@ -239,7 +239,7 @@ public class ConfigTunnelsHelper extends HelperBase {
         buf.append("</select></td>\n").append("<td class=spacer></td>\n</tr>\n");
 
         // tunnel depth variance
-        if (advanced && (in.getVariance() > 0 || out.getVariance() > 0 )) {
+        if (advanced && (in.getLengthVariance() > 0 || out.getLengthVariance() > 0 )) {
             buf.append("<tr class=options><td><b>").append(_t("Randomization")).append(":</b></td>\n")
                .append("<td><select name=\"").append(index).append(".varianceInbound\">\n");
             now = in.getLengthVariance();
