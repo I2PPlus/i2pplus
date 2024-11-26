@@ -2054,6 +2054,23 @@ input[type=hidden]+p+p{margin-top:20px;margin-bottom:-21px;padding:10px;border:v
 #tunnelconfig td:first-child{text-align:right;font-weight:700;white-space:nowrap}
 #tunnelconfig input[type=text]{margin:6px 16px 6px 0;width:calc(100% - 4px)}
 #tunnelconfigsave{margin-top:0;border-top:var(--border)}
+.tIn{background:url(/themes/console/images/inbound.svg) no-repeat 6px center/16px,var(--badge)}
+.tOut{background:url(/themes/console/images/outbound.svg) no-repeat 6px center/16px,var(--badge)}
+.toggleElementsActive .tIn,.toggleElementsActive .tOut{margin:-3px 0;padding:4px 6px 4px 26px;display:inline-block;box-shadow:var(--bevel)}
+.toggleElementsActive #tunnelconfigsave{margin-top:1px}
+body:not(.toggleElementsActive) .tIn,body:not(.toggleElementsActive) .toggleElementsActive .tOut{display:none}
+#tunnelconfig th span{vertical-align:middle}
+#tunnelconfig .toggle{cursor:pointer}
+#tunnelconfig .toggle th{position:relative}
+#tunnelconfig .toggle .right span{margin-right:26px}
+#tunnelconfig .toggle .right::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:""}
+#tunnelconfig .toggle:hover .right::after{background:var(--dropdown_hover);content:""}
+#tunnelconfig .toggle:hover .tunnelName{color:var(--hover);cursor:pointer}
+#tunnelconfig .toggle:not(.expanded){margin-bottom:-1px}
+#tunnelconfig .toggle:not(.expanded) .right::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
+#tunnelconfig .toggle:not(.expanded):hover .right::after{background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
+#tunnelconfig .tunnelName{margin-right:6px;display:inline-block}
+#tunnelconfig .tunnelName::before{margin:-4px 6px -4px 0;width:20px;height:20px;display:inline-block;vertical-align:middle;background:url(/themes/console/images/hardhat.svg) no-repeat center center/20px;content:""}
 
 /* configlogging */
 #config_logging p{margin:3px 0 5px;text-align:left}
