@@ -193,64 +193,50 @@ public class ConfigTunnelsHelper extends HelperBase {
            .append("<td><select name=\"").append(index).append(".quantityInbound\"");
         if (!advanced && prefix != "exploratory") {buf.append(" disabled");}
         buf.append(">\n");
-        now = in.getQuantity();
+        int now = in.getQuantity();
         renderOptions(buf, 1, maxQuantity, now, "", TUNNEL);
-        if (now > maxQuantity)
-            renderOptions(buf, now, now, now, "", TUNNEL);
+        if (now > maxQuantity) {renderOptions(buf, now, now, now, "", TUNNEL);}
         buf.append("</select></td>\n");
 
         buf.append("<td><select name=\"").append(index).append(".quantityOutbound\"");
-        if (!advanced && prefix != "exploratory")
-            buf.append(" disabled");
+        if (!advanced && prefix != "exploratory") {buf.append(" disabled");}
         buf.append(">\n");
         now = out.getQuantity();
         renderOptions(buf, 1, maxQuantity, now, "", TUNNEL);
-        if (now > maxQuantity)
-            renderOptions(buf, now, now, now, "", TUNNEL);
-        buf.append("</select></td>\n")
-           .append("<td class=spacer></td>\n</tr>\n");
+        if (now > maxQuantity) {renderOptions(buf, now, now, now, "", TUNNEL);}
+        buf.append("</select></td>\n").append("<td class=spacer></td>\n</tr>\n");
 
         // tunnel backup quantity
-        if (advanced && (in.getBackupQuantity() > 0 || out.getBackupQuantity() > 0) {
+        if (advanced && (in.getBackupQuantity() > 0 || out.getBackupQuantity() > 0)) {
             int maxBQuantity = advanced ? MAX_ADVANCED_BACKUP_QUANTITY : MAX_BACKUP_QUANTITY;
             buf.append("<tr class=\"options lastrow\"><td><b>").append(_t("Backup quantity")).append(":</b></td>\n")
                .append("<td><select name=\"").append(index).append(".backupInbound\">\n");
             now = in.getBackupQuantity();
             renderOptions(buf, 0, maxBQuantity, now, "", TUNNEL);
-            if (now > maxBQuantity)
-                renderOptions(buf, now, now, now, "", TUNNEL);
-            buf.append("</select></td>\n")
-               .append("<td><select name=\"").append(index).append(".backupOutbound\">\n");
+            if (now > maxBQuantity) {renderOptions(buf, now, now, now, "", TUNNEL);}
+            buf.append("</select></td>\n").append("<td><select name=\"").append(index).append(".backupOutbound\">\n");
             now = out.getBackupQuantity();
             renderOptions(buf, 0, maxBQuantity, now, "", TUNNEL);
-            if (now > maxBQuantity)
-                renderOptions(buf, now, now, now, "", TUNNEL);
-            buf.append("</select></td>\n")
-               .append("<td class=spacer></td>\n</tr>\n");
+            if (now > maxBQuantity) {renderOptions(buf, now, now, now, "", TUNNEL);}
+            buf.append("</select></td>\n").append("<td class=spacer></td>\n</tr>\n");
         }
 
         // tunnel depth
         int maxLength = advanced ? MAX_ADVANCED_LENGTH : MAX_LENGTH;
         buf.append("<tr class=options><td><b>").append(_t("Length")).append(":</b></td>\n")
            .append("<td><select name=\"").append(index).append(".depthInbound\"");
-        if (!advanced && prefix != "exploratory")
-            buf.append(" disabled");
+        if (!advanced && prefix != "exploratory") {buf.append(" disabled");}
         buf.append(">\n");
-        int now = in.getLength();
+        now = in.getLength();
         renderOptions(buf, 0, maxLength, now, "", HOP);
-        if (now > maxLength)
-            renderOptions(buf, now, now, now, "", HOP);
-        buf.append("</select></td>\n")
-           .append("<td><select name=\"").append(index).append(".depthOutbound\"");
-        if (!advanced && prefix != "exploratory")
-            buf.append(" disabled");
+        if (now > maxLength) {renderOptions(buf, now, now, now, "", HOP);}
+        buf.append("</select></td>\n").append("<td><select name=\"").append(index).append(".depthOutbound\"");
+        if (!advanced && prefix != "exploratory") {buf.append(" disabled");}
         buf.append(">\n");
         now = out.getLength();
         renderOptions(buf, 0, maxLength, now, "", HOP);
-        if (now > maxLength)
-            renderOptions(buf, now, now, now, "", HOP);
-        buf.append("</select></td>\n")
-           .append("<td class=spacer></td>\n</tr>\n");
+        if (now > maxLength) {renderOptions(buf, now, now, now, "", HOP);}
+        buf.append("</select></td>\n").append("<td class=spacer></td>\n</tr>\n");
 
         // tunnel depth variance
         if (advanced) {
@@ -260,22 +246,16 @@ public class ConfigTunnelsHelper extends HelperBase {
             renderOptions(buf, 0, 0, now, "", HOP);
             renderOptions(buf, 1, MAX_VARIANCE, now, "+ 0-", HOP);
             renderOptions(buf, MIN_NEG_VARIANCE, -1, now, "+/- 0", HOP);
-            if (now > MAX_VARIANCE)
-                renderOptions(buf, now, now, now, "+ 0-", HOP);
-            else if (now < MIN_NEG_VARIANCE)
-                renderOptions(buf, now, now, now, "+/- 0", HOP);
-            buf.append("</select></td>\n")
-               .append("<td><select name=\"").append(index).append(".varianceOutbound\">\n");
+            if (now > MAX_VARIANCE) {renderOptions(buf, now, now, now, "+ 0-", HOP);}
+            else if (now < MIN_NEG_VARIANCE) {renderOptions(buf, now, now, now, "+/- 0", HOP);}
+            buf.append("</select></td>\n").append("<td><select name=\"").append(index).append(".varianceOutbound\">\n");
             now = out.getLengthVariance();
             renderOptions(buf, 0, 0, now, "", HOP);
             renderOptions(buf, 1, MAX_VARIANCE, now, "+ 0-", HOP);
             renderOptions(buf, MIN_NEG_VARIANCE, -1, now, "+/- 0", HOP);
-            if (now > MAX_VARIANCE)
-                renderOptions(buf, now, now, now, "+ 0-", HOP);
-            else if (now < MIN_NEG_VARIANCE)
-                renderOptions(buf, now, now, now, "+/- 0", HOP);
-            buf.append("</select></td>\n")
-               .append("<td class=spacer></td>\n</tr>\n");
+            if (now > MAX_VARIANCE) {renderOptions(buf, now, now, now, "+ 0-", HOP);}
+            else if (now < MIN_NEG_VARIANCE) {renderOptions(buf, now, now, now, "+/- 0", HOP);}
+            buf.append("</select></td>\n").append("<td class=spacer></td>\n</tr>\n");
         }
 
         // custom options
