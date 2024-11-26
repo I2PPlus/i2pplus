@@ -2058,7 +2058,7 @@ input[type=hidden]+p+p{margin-top:20px;margin-bottom:-21px;padding:10px;border:v
 .tOut{background:url(/themes/console/images/outbound.svg) no-repeat 6px center/16px,var(--badge)}
 .toggleElementsActive .tIn,.toggleElementsActive .tOut{margin:-3px 0;padding:4px 6px 4px 26px;display:inline-block;box-shadow:var(--bevel)}
 .toggleElementsActive #tunnelconfigsave{margin-top:1px}
-body:not(.toggleElementsActive) .tIn,body:not(.toggleElementsActive) .toggleElementsActive .tOut{display:none}
+body:not(.toggleElementsActive) .tIn,body:not(.toggleElementsActive) .tOut{display:none}
 #tunnelconfig th span{vertical-align:middle}
 #tunnelconfig .toggle{cursor:pointer}
 #tunnelconfig .toggle th{position:relative}
