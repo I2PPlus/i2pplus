@@ -3,8 +3,8 @@
 
 import { sectionToggler, countNewsItems } from "/js/sectionToggle.js";
 import { stickySidebar } from "/js/stickySidebar.js";
-import { onVisible } from "/js/onVisible.js";
-import { refreshInterval } from "/js/initSidebar.js";
+import { onVisible, onHidden } from "/js/onVisible.js";
+import { refreshInterval, isDocumentVisible } from "/js/initSidebar.js";
 
 "use strict";
 
@@ -81,6 +81,10 @@ function tangoDown() {
 }
 
 async function refreshSidebar() {
+  if (!isDocumentVisible) {
+    setTimeout(refreshSidebar, refreshInterval);
+    return;
+  }
   const uri = location.pathname;
   const xhrContainer = document.getElementById("xhr");
 
@@ -299,7 +303,7 @@ async function refreshSidebar() {
 }
 
 function ready() {
-  refreshSidebar().then(() => {stickySidebar();})
+  refreshSidebar(isDocumentVisible).then(() => {stickySidebar();})
   .catch(error => {isDown = true;})
   .finally(() => { if (isDown) {setTimeout(tangoDown, 3000);} });
 }

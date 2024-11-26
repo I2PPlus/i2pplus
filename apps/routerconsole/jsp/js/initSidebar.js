@@ -1,47 +1,69 @@
-/* I2P+ initSidebar.js by dr|z3d */
-/* Initialize console sidebar */
-/* License: AGPL3 or later */
-
-import {refreshSidebar, requestIdleOrAnimationFrame} from "/js/refreshSidebar.js";
-import {miniGraph} from "/js/miniGraph.js";
-import {sectionToggler, countNewsItems} from "/js/sectionToggle.js";
-import {stickySidebar} from "/js/stickySidebar.js";
-import {onVisible} from "/js/onVisible.js";
-
+import { refreshSidebar, requestIdleOrAnimationFrame } from "/js/refreshSidebar.js";
+import { miniGraph } from "/js/miniGraph.js";
+import { sectionToggler, countNewsItems } from "/js/sectionToggle.js";
+import { stickySidebar } from "/js/stickySidebar.js";
+import { onVisible, onHidden } from "/js/onVisible.js";
 export let refreshInterval = refresh * 1000;
+export let isDocumentVisible = document.visibilityState === "visible";
 
-const setupSidebar = () => {
-  sectionToggler();
-  stickySidebar();
-  miniGraph();
-};
+(() => {
 
-const initSidebarRefresh = () => {
+  const setupSidebar = () => {
+    sectionToggler();
+    stickySidebar();
+    miniGraph();
+  };
+
+  let refreshQueue = [];
   let isRefreshing = false;
-  const refreshSidebarThrottled = () => {
-    if (!isRefreshing) {
+  let refreshTimeout;
+  let sbRefreshTimerId;
+
+  const processQueue = () => {
+    if (refreshQueue.length > 0) {
       isRefreshing = true;
+      const nextRefresh = refreshQueue.shift();
       requestIdleOrAnimationFrame(() => {
         refreshSidebar();
         miniGraph();
         isRefreshing = false;
+        processQueue();
       });
     }
   };
-  clearInterval(window.sbRefreshTimerId);
-  window.sbRefreshTimerId = setInterval(refreshSidebarThrottled, refreshInterval);
-}
 
-const stopSidebarRefresh = () => {clearInterval(window.sbRefreshTimerId);}
+  window.refreshSidebarThrottled = () => {
+    if (isRefreshing) { refreshQueue.push(Date.now()); }
+    else { processQueue(); }
+    clearTimeout(refreshTimeout);
+    refreshTimeout = setTimeout(() => {
+      if (!isRefreshing && refreshQueue.length > 0) { processQueue(); }
+    }, refreshInterval);
+    if (isDocumentVisible) {startSidebarRefresh();}
+  };
 
-const onDomContentLoaded = () => {
-  setupSidebar();
-  const sb = document.querySelector("#sidebar");
-  if (sb) {onVisible(sb, initSidebarRefresh, stopSidebarRefresh);}
-  if (refresh > 0) {initSidebarRefresh();}
-}
+  const startSidebarRefresh = () => { sbRefreshTimerId = setInterval(window.refreshSidebarThrottled, refreshInterval); };
+  const stopSidebarRefresh = () => {
+    clearInterval(sbRefreshTimerId);
+    clearTimeout(refreshTimeout);
+  };
 
-if (refresh > 0) {onVisible(document.body, onDomContentLoaded, onDomContentLoaded);}
-else {document.addEventListener("DOMContentLoaded", onDomContentLoaded);}
+  const onDomContentLoaded = () => { setupSidebar(); };
 
-window.addEventListener("resize", stickySidebar);
+  document.addEventListener("visibilitychange", () => {
+    isDocumentVisible = !document.hidden;
+    const sb = document.getElementById("sidebar");
+    if (sb) {
+      if (isDocumentVisible) {
+        onVisible(sb, startSidebarRefresh);
+      } else {
+        onHidden(sb, stopSidebarRefresh);
+      }
+    }
+  });
+
+  if (refresh > 0) { onVisible(document.body, onDomContentLoaded, onDomContentLoaded); }
+  else { document.addEventListener("DOMContentLoaded", onDomContentLoaded); }
+  onDomContentLoaded();
+  window.addEventListener("resize", stickySidebar);
+})();
