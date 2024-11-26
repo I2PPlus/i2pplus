@@ -57,7 +57,7 @@ import { onVisible, onHidden } from "/js/onVisible.js";
       const imageSrc = image.src.replace(/time=\d+/, `time=${now}`);
       const response = await fetch(imageSrc);
       if (response.ok) {image.src = imageSrc;}
-    }));
+    })).catch(error) {};
 
     progressx.hide();
     const endTime = Date.now();
@@ -71,7 +71,7 @@ import { onVisible, onHidden } from "/js/onVisible.js";
       const lazyImageSrc = image.src.replace(/time=\d+/, "time=" + Date.now());
       const lazyResponse = await fetch(lazyImageSrc);
       if (lazyResponse.ok) { image.src = lazyImageSrc; }
-    }));
+    })).catch(error) {};
   };
 
   const stopRefresh = () => clearInterval(graphsTimerId);
