@@ -48,7 +48,7 @@
 <%=intl._t("To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>.")%>
 <%  // } %>
 <% } %>
- </p>
+</p>
 <form method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <input type=hidden name=action value="blah" >
@@ -59,6 +59,9 @@
 </div>
 </form>
 </div>
-<% if (theme.equals("dark")) { %><script src=/js/toggleElements.js></script><% } %>
+<% if (theme.equals("dark")) { %>
+<script src=/js/toggleElements.js></script>
+<script src=/js/configtunnels.js></script>
+<% } %>
 </body>
 </html>
