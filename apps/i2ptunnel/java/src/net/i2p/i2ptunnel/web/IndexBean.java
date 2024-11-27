@@ -96,8 +96,6 @@ public class IndexBean {
         String error;
         try {
             tcg = TunnelControllerGroup.getInstance();
-//            error = tcg == null ? "• " + _t("Tunnels are not initialized yet, please reload in two minutes.")
-//                                : null;
             error = tcg == null ? "" : null;
 
         } catch (IllegalArgumentException iae) {
@@ -183,11 +181,11 @@ public class IndexBean {
         if (_group == null)
             return "Error - tunnels are not initialized yet";
         // If passwords are turned on, all is assumed good
-        if (!_context.getBooleanProperty(PROP_PW_ENABLE) &&
-            !haveNonce(_curNonce))
-            return "• " + _t("Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit.")
-                   + ' ' +
-                   _t("If the problem persists, verify that you have cookies enabled in your browser.");
+/**
+        if (!_context.getBooleanProperty(PROP_PW_ENABLE) && !haveNonce(_curNonce))
+            return "• " + _t("Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit.") +
+                   ' ' + _t("If the problem persists, verify that you have cookies enabled in your browser.");
+**/
         // for any of these that call getMessage(msgs),
         // we return "", as getMessage() will add them to the returned string.
         if ("Stop all".equals(_action)) {

@@ -85,7 +85,12 @@ function updateVolatile(responseDoc) {
   const updatingResponse = responseDoc.querySelectorAll(".tunnelProperties .volatile");
   updateLog(responseDoc);
   if (updating.length !== updatingResponse.length) {refreshPanels(responseDoc);}
-  else {updating.forEach((el, i) => updateElementContent(el, updatingResponse[i]));}
+  else {
+    updating.forEach((el, i) => {
+      const responseEl = updatingResponse[i];
+      if (el.textContent.trim() !== responseEl.textContent.trim()) {updateElementContent(el, responseEl);}
+    });
+  }
 }
 
 function updateLog(responseDoc) {
