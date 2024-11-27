@@ -2,7 +2,6 @@ import { refreshSidebar, requestIdleOrAnimationFrame } from "/js/refreshSidebar.
 import { miniGraph } from "/js/miniGraph.js";
 import { sectionToggler, countNewsItems } from "/js/sectionToggle.js";
 import { stickySidebar } from "/js/stickySidebar.js";
-import { onVisible, onHidden } from "/js/onVisible.js";
 export let refreshInterval = refresh * 1000;
 export let isDocumentVisible = document.visibilityState === "visible";
 
@@ -25,7 +24,6 @@ export let isDocumentVisible = document.visibilityState === "visible";
       const nextRefresh = refreshQueue.shift();
       requestIdleOrAnimationFrame(() => {
         refreshSidebar();
-        miniGraph();
         isRefreshing = false;
         processQueue();
       });
@@ -48,22 +46,12 @@ export let isDocumentVisible = document.visibilityState === "visible";
     clearTimeout(refreshTimeout);
   };
 
-  const onDomContentLoaded = () => { setupSidebar(); };
-
   document.addEventListener("visibilitychange", () => {
     isDocumentVisible = !document.hidden;
-    const sb = document.getElementById("sidebar");
-    if (sb) {
-      if (isDocumentVisible) {
-        onVisible(sb, startSidebarRefresh);
-      } else {
-        onHidden(sb, stopSidebarRefresh);
-      }
-    }
+    if (isDocumentVisible) {startSidebarRefresh();}
+    else {stopSidebarRefresh();}
   });
 
-  if (refresh > 0) { onVisible(document.body, onDomContentLoaded, onDomContentLoaded); }
-  else { document.addEventListener("DOMContentLoaded", onDomContentLoaded); }
-  onDomContentLoaded();
+  document.addEventListener("DOMContentLoaded", setupSidebar);
   window.addEventListener("resize", stickySidebar);
 })();
