@@ -3,10 +3,13 @@
 /* Requires I2P+, doesn't work with standalone I2PSnark */
 /* License: AGPL3 or later */
 
+import {isDocumentVisible} from "./refreshTorrents.js";
+
 const cachedTunnelCounts = { timestamp: 0, data: null };
 let inLabel = "", outLabel = "";
 
 async function fetchTunnelData(url = "/configtunnels", timeout = 10000) {
+  if (!isDocumentVisible) {return;}
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeout);
   try {

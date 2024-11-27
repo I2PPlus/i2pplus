@@ -2,7 +2,6 @@
 /* Selective refresh torrents and other volatile elements in the I2PSnark UI */
 /* License: AGPL3 or later */
 
-import {onVisible} from "./onVisible.js";
 import {pageNav} from "./pageNav.js";
 import {showBadge} from "./filterBar.js";
 import {snarkSort} from "./snarkSort.js";
@@ -23,12 +22,21 @@ const snarkHead = document.getElementById("snarkHead");
 const storageRefresh = localStorage.getItem("snarkRefresh");
 const torrents = document.getElementById("torrents");
 const torrentForm = document.getElementById("torrentlist");
+const MESSAGE_TYPES = {
+  FETCH_HTML_DOCUMENT: "FETCH_HTML_DOCUMENT",
+  FETCH_HTML_DOCUMENT_RESPONSE: "FETCH_HTML_DOCUMENT_RESPONSE",
+  CANCELLED: "CANCELLED",
+  ERROR: "ERROR",
+  ABORT: "ABORT",
+  ABORTED: "ABORTED"
+};
 
 let noConnection = false;
 let snarkRefreshIntervalId;
 let screenLogIntervalId;
 let debugging = false;
 let initialized = false;
+export let isDocumentVisible = true;
 
 const requestIdleOrAnimationFrame = (callback, timeout = 180) => {
   return new Promise(resolve => {
@@ -312,40 +320,43 @@ function refreshOnSubmit() {
 async function initSnarkRefresh() {
   let serverOKIntervalId = setInterval(checkIfUp, 5000);
   clearInterval(snarkRefreshIntervalId);
-  onVisible(mainsection, async () => {
-    const screenLogInterval = 5000;
-    try {
-      snarkRefreshIntervalId = setInterval(async () => {
-        try {
+  try {
+    snarkRefreshIntervalId = setInterval(async () => {
+      try {
+        if (isDocumentVisible) {
           await doRefresh();
           await showBadge();
           await refreshScreenLog();
           await initToggleLog();
-        } catch (error) {
-          if (debugging) console.error(error);
         }
-      }, await getRefreshInterval());
-
-
-      if (files && document.getElementById("lightbox")) {
-        const lightbox = new Lightbox();
-        lightbox.load();
+      } catch (error) {
+        if (debugging) console.error(error);
       }
+    }, await getRefreshInterval());
 
-      const events = document._events?.click || [];
-      events.forEach(event => document.removeEventListener("click", event));
-      refreshOnSubmit();
-    } catch (error) {
-      if (debugging) console.error(error);
+    if (files && document.getElementById("lightbox")) {
+      const lightbox = new Lightbox();
+      lightbox.load();
     }
-  });
+
+    const events = document._events?.click || [];
+    events.forEach(event => document.removeEventListener("click", event));
+    refreshOnSubmit();
+  } catch (error) {
+    if (debugging) console.error(error);
+  }
+}
+
+function stopSnarkRefresh() {
+  clearInterval(snarkRefreshIntervalId);
 }
 
 async function checkIfUp() {
+  if (!isDocumentVisible) {return;}
   try {
     const overlay = document.getElementById("offline");
     const offlineStylesheet = document.getElementById("offlineCss");
-    const response = await fetch(window.location.href, { method: 'HEAD', cache: 'no-cache' });
+    const response = await fetch(window.location.href, { method: "HEAD" });
     if (response.ok) {
       if (overlay) {overlay.remove();}
       if (offlineStylesheet) {offlineStylesheet.remove();}
@@ -374,5 +385,11 @@ function isDown() {
     screenlog.querySelectorAll(".msg").forEach(li => {li.textContent = "";});
   }
 }
+
+document.addEventListener("visibilitychange", () => {
+  isDocumentVisible = !document.hidden;
+  if (isDocumentVisible) {initSnarkRefresh();}
+  else {stopSnarkRefresh();}
+});
 
 export { doRefresh, getURL, initSnarkRefresh, refreshScreenLog, refreshTorrents, snarkRefreshIntervalId };
