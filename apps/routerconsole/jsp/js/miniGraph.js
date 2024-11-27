@@ -4,22 +4,15 @@
 
 let isDocumentVisible = !document.hidden;
 let refreshInterval = refresh !== null ? refresh * 1000 : 5000;
-let minigraphRefreshInterval = Math.min(((refreshInterval * 3) / 2) - 500, 9500);
-let minigraphRefreshIntervalId;
-let lastRefreshTime = 0;
-let refreshCount = 0;
+let minigraphRefreshIntervalId, minigraphRefreshInterval = Math.min(((refreshInterval * 3) / 2) - 500, 9500);
+let lastRefreshTime = 0, refreshCount = 0;
 
 function miniGraph() {
-  if (!isDocumentVisible) {
-    console.log("Document not visible, not rendering graph!");
+  if (!isDocumentVisible && refreshCount > 3) {
     if (minigraphRefreshIntervalId) {clearInterval(minigraphRefreshIntervalId);}
     return;
   }
-
   if (!minigraphRefreshIntervalId) {minigraphRefreshIntervalId = setInterval(refreshGraph, minigraphRefreshInterval);}
-
-  refreshGraph();
-  refreshCount++;
 }
 
 async function refreshGraph() {
@@ -40,6 +33,7 @@ async function refreshGraph() {
     Object.assign(ctx, {imageSmoothingEnabled: false, globalCompositeOperation: "source-out", globalAlpha: 1});
 
     return new Promise(resolve => {
+      refreshCount++;
       image.onload = () => {
         graphCanvas.width = minigraphWidth;
         graphCanvas.height = minigraphHeight;
@@ -52,11 +46,12 @@ async function refreshGraph() {
   } catch (error) {}
 }
 
-document.addEventListener("DOMContentLoaded", miniGraph);
+miniGraph();
+
 document.addEventListener("visibilitychange", () => {
   isDocumentVisible = !document.hidden;
-  if (!isDocumentVisible && minigraphRefreshIntervalId) {clearInterval(minigraphRefreshIntervalId);}
-  else {miniGraph();}
+  clearInterval(minigraphRefreshIntervalId);
+  if (isDocumentVisible) {minigraphRefreshIntervalId = setInterval(refreshGraph, minigraphRefreshInterval);}
 });
 
 export { miniGraph };

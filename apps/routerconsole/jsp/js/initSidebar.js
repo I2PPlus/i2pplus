@@ -3,7 +3,7 @@ import { miniGraph } from "/js/miniGraph.js";
 import { sectionToggler, countNewsItems } from "/js/sectionToggle.js";
 import { stickySidebar } from "/js/stickySidebar.js";
 export let refreshInterval = refresh * 1000;
-export let isDocumentVisible = document.visibilityState === "visible";
+export let isDocumentVisible = true;
 
 (() => {
 
