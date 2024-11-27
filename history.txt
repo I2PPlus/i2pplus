@@ -1,3 +1,17 @@
+2024-11-27 dr|z3d
+ * I2PSnark: Migrate network request to use fetch instead of XHR; ensure that
+   network requests are stopped when page isn't visible in the browser
+
+2024-11-26 dr|z3d
+ * Console: Refactor sidebar refresh to use a more robust refresh mechanism and
+   improve detection of page visibility to stop network requests when tab isn't
+   active
+
+2024-11-25 dr|z3d
+ * Console: Add collapsible sections on /configtunnels; only show randomization
+   dropdowns for exploratory tunnels or if already configured in the tunnel
+   manager and advanced mode is active
+
 2024-11-20 dr|z3d
  * Console: Add collapsible sections on /configstats and /configplugins
 
