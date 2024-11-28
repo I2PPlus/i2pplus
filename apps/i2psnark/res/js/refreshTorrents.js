@@ -39,30 +39,42 @@ let initialized = false;
 export let isDocumentVisible = true;
 
 const requestIdleOrAnimationFrame = (callback, timeout = 180) => {
-  return new Promise(resolve => {
-    let id;
-    if (typeof requestIdleCallback === "function") {
-      id = setTimeout(() => {
-        cancelIdleCallback(id);
-        requestAnimationFrame(() => {
-          callback();
-          resolve();
-        });
-      }, timeout);
-      requestIdleCallback(() => {
-        cancelIdleCallback(id);
-        callback();
-        resolve();
-      });
-    } else {
-      setTimeout(() => {
-        requestAnimationFrame(() => {
-          callback();
-          resolve();
-        });
-      }, timeout);
+  let requestId, timeoutId;
+
+  const execCallback = () => {
+    try {callback();}
+    catch (error) {
+      if (debugging) console.error(error);
+    } finally {
+      clearTimeout(timeoutId);
+      if (requestId) cancelIdleCallback(requestId);
     }
+  };
+
+  const scheduleExecution = () => {
+    timeoutId = setTimeout(() => {
+      if (requestId) cancelIdleCallback(requestId);
+      requestAnimationFrame(execCallback);
+    }, timeout);
+  };
+
+  if (typeof requestIdleCallback === "function") {
+    requestId = requestIdleCallback(execCallback);
+    scheduleExecution();
+  } else {scheduleExecution();}
+
+  const promise = new Promise(resolve => {
+    const clear = () => {
+      clearTimeout(timeoutId);
+      if (requestId) cancelIdleCallback(requestId);
+      resolve();
+    };
+
+    if (!requestIdleOrAnimationFrame.cancel) {requestIdleOrAnimationFrame.cancel = clear;}
+    return clear;
   });
+
+  return promise;
 };
 
 async function getRefreshInterval() {
