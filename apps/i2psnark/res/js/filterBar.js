@@ -3,8 +3,7 @@
 /* based on status and load filtered content via AJAX calls */
 /* License: AGPL3 or later */
 
-import {refreshTorrents, doRefresh} from "./refreshTorrents.js";
-import {onVisible} from "./onVisible.js";
+import {refreshTorrents, doRefresh, isDocumentVisible} from "./refreshTorrents.js";
 
 let filterbar;
 let snarkCount;
@@ -78,7 +77,7 @@ function updateURLs() {
 
 function checkIfVisible() {
   const torrentform = document.getElementById("torrentlist");
-  if (torrentform) { onVisible(torrentform, () => {updateURLs();}); }
+  if (torrentform && isDocumentVisible) {updateURLs();}
 }
 
 function filterNav() {
