@@ -116,32 +116,28 @@ const parser = new DOMParser();
 const container = document.createElement("div");
 let abortController = new AbortController();
 
-async function fetchHTMLDocument(url) {
-  worker.postMessage({ debugging });
+async function fetchHTMLDocument(url, forceFetch = false) {
   cleanupCache();
   try {
-    const cachedDocument = cache.get(url);
-    const now = Date.now();
-    if (cachedDocument && (now - cachedDocument.timestamp < cacheDuration)) {
-      return cachedDocument.doc;
+    if (!forceFetch) {
+      const cachedDocument = cache.get(url);
+      const now = Date.now();
+      if (cachedDocument && (now - cachedDocument.timestamp < cacheDuration)) { return cachedDocument.doc; }
     }
-    abortController.abort();
-    abortController = new AbortController();
     const { signal } = abortController;
     const response = await fetch(url, { signal });
-
-    if (!response.ok) {throw new Error("Network error: No response from server");}
+    if (!response.ok) { throw new Error(`Network error: ${response.status} ${response.statusText}`); }
     const htmlString = await response.text();
     const doc = parser.parseFromString(htmlString, "text/html");
     cache.set(url, { doc, timestamp: Date.now() });
     return doc;
   } catch (error) {
     if (debugging) {
-      if (error.name === "AbortError") {console.log("Fetch aborted");}
-      else {console.error(error);}
-      throw error;
+      if (error.name === "AbortError") { console.log("Fetch aborted"); }
+      else { console.error(error); }
     }
-  }
+    throw error;
+  } finally { abortController = new AbortController(); }
 }
 
 function cleanupCache() {
@@ -151,15 +147,33 @@ function cleanupCache() {
   }
 }
 
-async function doRefresh(url = window.location.href) {
+async function doRefresh({ url = window.location.href, forceFetch = false } = {}) {
   let defaultUrl;
   try {
     defaultUrl = await getURL();
-    const responseDoc = await fetchHTMLDocument(url || defaultUrl);
+    const responseDoc = await fetchHTMLDocument(url || defaultUrl, forceFetch);
     await requestIdleOrAnimationFrame(async () => await refreshTorrents(responseDoc));
     await initHandlers();
-  } catch (error) {}
+    setTimeout(showBadge, 1000);
+  } catch (error) { resolve(); }
 }
+
+/**
+async function doRefresh({ url = window.location.href, forceFetch = false } = {}) {
+  let defaultUrl;
+  return new Promise(async (resolve) => {
+    try {
+      defaultUrl = await getURL();
+      const responseDoc = await fetchHTMLDocument(url || defaultUrl, forceFetch);
+      await requestIdleOrAnimationFrame(async () => await refreshTorrents(responseDoc));
+      await initHandlers();
+      resolve();
+    } catch (error) {
+      resolve();
+    }
+  });
+}
+**/
 
 async function refreshTorrents(callback) {
   try {
@@ -211,9 +225,9 @@ async function refreshTorrents(callback) {
       }
     }
 
-    let updated = false, requireFullRefresh = true;
 
     async function updateVolatile() {
+      let updated = false, requireFullRefresh = true;
       try {
         const url = await getURL();
         const responseDoc = await fetchHTMLDocument(url);

@@ -206,15 +206,7 @@ class Lightbox {
     this.currImages = Array.from(document.querySelectorAll(`[${this._const_dataattr}-group="${this.currGroup}"]`));
     const currImageStyles = {
       display: "block",
-      maxWidth: "auto",
-      maxHeight: "80%",
-      margin: "0 auto",
-      padding: "0",
       boxSizing: "border-box",
-      backgroundColor: "transparent",
-      border: "none",
-      outline: "none",
-      boxShadow: "none",
       opacity: 1,
       transition: "opacity 0.3s ease-in-out"
     };

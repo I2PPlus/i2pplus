@@ -3,13 +3,13 @@
 /* based on status and load filtered content via AJAX calls */
 /* License: AGPL3 or later */
 
-import {refreshTorrents, doRefresh, isDocumentVisible} from "./refreshTorrents.js";
+import {refreshTorrents, doRefresh} from "./refreshTorrents.js";
 
 let filterbar;
 let snarkCount;
 const torrents = document.getElementById("torrents");
 
-function showBadge() {
+async function showBadge() {
   filterbar = document.getElementById("torrentDisplay");
   if (!filterbar) {return;}
   const urlParams = new URLSearchParams(window.location.search), filterQuery = urlParams.get("filter"), searchQuery = urlParams.get("search");
@@ -45,11 +45,13 @@ function showBadge() {
       activeFilter.classList.add("enabled");
       const activeBadge = activeFilter.querySelector(".badge");
       activeBadge.id = "filtercount";
-      snarkCount = countSnarks();
-      if (filterId !== "all") {activeBadge.textContent = snarkCount}
+      await countSnarks();
+      requestAnimationFrame(async () => {
+        const snarkCount = await countSnarks();
+        if (filterId !== "all") {activeBadge.textContent = snarkCount}
+      });
       window.localStorage.setItem("snarkFilter", activeFilter.id);
     }
-
     const allBadge = filterAll.querySelector("#filtercount.badge");
     if (filterAll.classList.contains("enabled")) {allBadge?.removeAttribute("hidden");}
     else {allBadge?.setAttribute("hidden", "");}
@@ -61,6 +63,8 @@ function countSnarks() {
 }
 
 function updateURLs() {
+  const torrentform = document.getElementById("torrentlist");
+  if (!torrentform) {return;}
   var xhrURL = "/i2psnark/.ajax/xhr1.html" + window.location.search;
   const noload = document.getElementById("noload");
   const sortIcon = document.querySelectorAll(".sorter");
@@ -75,30 +79,36 @@ function updateURLs() {
   }
 }
 
-function checkIfVisible() {
-  const torrentform = document.getElementById("torrentlist");
-  if (torrentform && isDocumentVisible) {updateURLs();}
-}
-
-function filterNav() {
+async function filterNav() {
   const filterbar = document.getElementById("torrentDisplay");
-  if (!filterbar) {setTimeout(filterNav, 1000); return;}
+  if (!filterbar) {
+    setTimeout(filterNav, 1000);
+    return;
+  }
   const pagenavtop = document.getElementById("pagenavtop");
-  filterbar.addEventListener("click", function(event) {
+  filterbar.addEventListener("click", async function(event) {
     const filterElement = event.target.closest(".filter");
     if (filterElement) {
       event.preventDefault();
-      if (!filterElement.classList.contains("enabled")) {filterElement.classList.add("enabled");}
-      const filterURL = new URL(filterElement.href), xhrURL = "/i2psnark/.ajax/xhr1.html" + filterURL.search; history.replaceState({}, "", filterURL);
+      if (!filterElement.classList.contains("enabled")) {
+        filterElement.classList.add("enabled");
+      }
+      const filterURL = new URL(filterElement.href);
+      const xhrURL = "/i2psnark/.ajax/xhr1.html" + filterURL.search;
+      history.replaceState({}, "", filterURL);
       showBadge();
-      doRefresh(xhrURL, updateURLs);
-      if (pagenavtop) { pagenavtop.hidden = filterElement.id !== "all"; }
+      try {
+        await doRefresh(filterURL, true);
+      } catch {}
+      if (pagenavtop) {
+        pagenavtop.hidden = filterElement.id !== "all";
+      }
     }
   });
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-  checkIfVisible();
+  updateURLs();
   filterNav();
   countSnarks();
   showBadge();

@@ -2,11 +2,12 @@
 .iframed #lb{height:100vh;position:absolute;overflow:hidden}
 #lb-close{display:none}
 #lb-imgwrap{margin:auto;visibility:hidden;border-radius:5px;background:#fff}
-#lb-imgwrap>img{margin-left:auto;margin-right:auto;padding:.5em;max-width:auto;object-fit:contain;display:none;border:5px solid #fff;border-radius:5px;box-shadow:0 0 3px 3px rgba(128,128,128,0.5);background:#fff;opacity:0;animation:fade .3s ease .05s both}
+#lb-imgwrap>img{margin:0 auto;padding:2px;max-width:auto;object-fit:contain;object-position:center;display:none;border:0;border-radius:5px;background:#fff;clip-path:inset(4px);animation:fade .3s ease .05s both}
 #lb-next,#lb-prev{max-width:6%;max-height:250px;display:none;position:fixed;top:50%;font-size:0;border-left:0;border-right:0;background:none;cursor:pointer;opacity:0.8;filter:drop-shadow(0 .2px #930)}
 #lb-next{right:30px}
 #lb-prev{left:30px}
 #lb-next:hover,#lb-prev:hover{opacity:1;filter:drop-shadow(0 .2px #930)}
+#lb-next:active,#lb-prev:active{transform:scale(.8)}
 #lb-next,#lb-prev{border-top:50px solid transparent;border-bottom:50px solid transparent}
 #lb-next{border-left:50px solid #fff}
 #lb-next:hover{border-left-color:#f60}

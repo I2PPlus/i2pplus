@@ -97,9 +97,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private boolean debug = false;
 
     String cspNonce = Integer.toHexString(_context.random().nextInt());
-    public I2PSnarkServlet() {
-        super();
-    }
+    public I2PSnarkServlet() {super();}
 
     @Override
     public void init(ServletConfig cfg) throws ServletException {
@@ -4715,12 +4713,12 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append("<img alt=\"\" border=0 class=thumb src=\"")
                        .append(ppath).append("\" data-lb data-lb-caption=\"")
                        .append(item.getName()).append("\" data-lb-group=\"allInDir\"></a>");
+                   imgCount++;
                 } else if (mime.startsWith("image/") && ppath.endsWith(".ico")) {
                     // favicon without scaling
                     buf.append("<img alt=\"\" width=16 height=16 class=favicon border=0 src=\"")
                        .append(ppath).append("\" data-lb data-lb-caption=\"")
                        .append(item.getName()).append("\" data-lb-group=\"allInDir\"></a>");
-                   imgCount++;
                 } else if (fai.isDirectory) {buf.append(toSVG(icon, _t("Open"))).append("</a>");}
                 else {buf.append(toSVG(icon, _t("Open"))).append("</a>");}
                 if (isAudio) {buf.append("</audio>");}
