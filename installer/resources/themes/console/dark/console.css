@@ -2716,6 +2716,8 @@ body:not(.ready) .lazy{display:none}
 #tunnelPeerCount .lazy{contain:none}
 
 /* iframes */
+.lightbox,.lightbox .main{min-height:100%;position:absolute!important;top:0;left:0;bottom:0;right:0;border:0;margin:0;background:#000!important}
+.lightbox h1 {display:none}
 #dns{padding:0;min-width:650px}
 #i2psnarkframe{margin-bottom:-2px}
 #i2ptunnelframe{margin:1px auto -1px 3px;width:calc(100% - 4px)}

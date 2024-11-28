@@ -1,9 +1,11 @@
+body.lightbox{height:100%;overflow:hidden}
 #lb.active{width:100%;height:100%;position:fixed;left:0;top:0;z-index:999999;background:#000d;backdrop-filter:blur(3px) saturate(.3);cursor:crosshair}
-.iframed #lb{height:100vh;position:absolute;overflow:hidden}
 #lb-close{display:none}
 #lb-wrap{margin:5% auto;padding:20px;position:relative;box-sizing;border-box;border-radius:5px;background:#fff;animation:fadeAndBlur .1s ease-in-out .15s both}
+.iframed #lb-wrap{margin:calc(5% - 10px) auto 0}
 #lb-wrap>img{margin:0 auto;padding:2px;height:auto;max-width:100%;max-height:100%;box-sizing;border-box;border:0;background:#fff;clip-path:inset(4px);animation:fadeAndBlur .1s ease-in-out .2s both}
-#lb-next,#lb-prev{max-width:6%;max-height:250px;display:none;position:fixed;top:50%;font-size:0;border-left:0;border-right:0;background:none;cursor:pointer;opacity:.8;filter:drop-shadow(0 .2px #930)}
+#lb-next,#lb-prev{max-width:6%;max-height:250px;display:none;position:fixed;top:calc(50% - 30px);font-size:0;border-left:0;border-right:0;background:none;cursor:pointer;opacity:.8;filter:drop-shadow(0 .2px #930)}
+.iframed #lb-next,.iframed #lb-prev{top:calc(50% - 70px)}
 #lb-next{right:30px}
 #lb-prev{left:30px}
 #lb-next:hover,#lb-prev:hover{opacity:1;filter:drop-shadow(0 .2px #930)}
