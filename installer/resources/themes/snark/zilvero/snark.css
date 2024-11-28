@@ -134,11 +134,11 @@ textarea[name="nofilter_newComment"]:focus{min-height:64px;box-shadow:inset 0 0 
 .info_tracker a[href*=".b32"]{max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
 /* option sliders */
-#configs .slider{margin-left:5px;width:40px;height:21px;position:relative;border:0;border-radius:0;box-shadow:0 0 0 1px #999,var(--highlight),inset 3px 3px 3px rgba(0,0,0,.2);background:linear-gradient(180deg,#b33,#c44);outline:none;appearance:none;transition:ease-in left .15s}
+#configs .slider{margin-left:5px;width:40px;height:21px;position:relative;border:0;border-radius:0;box-shadow:0 0 0 1px #999,var(--highlight),inset 3px 3px 3px #0003;background:linear-gradient(180deg,#b33,#c44);outline:none;appearance:none;transition:ease-in left .15s}
 #configs .slider:checked{box-shadow:0 0 0 1px #999,var(--highlight),inset 3px 3px 3px rgba(0,16,0,.4);background:linear-gradient(180deg,#5a5,#6b6)}
 #configs .slider:not(:checked):active{background:linear-gradient(180deg,#272,#383)}
 #configs .slider:checked:active{background:linear-gradient(180deg,#cf0f00,#f00)}
-#configs .slider:hover,.#configs .slider:focus{box-shadow:0 0 0 1px #777,var(--highlight),inset 3px 3px 3px rgba(0,0,0,.2)}
+#configs .slider:hover,.#configs .slider:focus{box-shadow:0 0 0 1px #777,var(--highlight),inset 3px 3px 3px #0003}
 #configs .slider::before,#configs .slider:hover::before,#configs .slider:focus::before,#configs .slider:active::before{width:20px;height:100%;position:absolute;top:0;left:0;box-shadow:inset 0 0 0 1px #bbb,0 2px 5px #0004;background:linear-gradient(#fff,#eee);content:"";transform:scale(.85);transition:ease-in left .15s}
 #configs .slider:checked::before{left:19px}
 #configs .slider:disabled,#configs .slider:disabled+label{opacity:.45;pointer-events:none}
@@ -240,7 +240,7 @@ td.details img:not([src$="rateme.svg"]),.dirInfo td:first-child img:not(.thumb){
 td.rxd{width:1%;text-align:center}
 td.trackerLink a{width:20px;height:20px;display:inline-block;background:var(--link) no-repeat center center;background-size:16px}
 td.trackerLink a:hover{box-shadow:var(--highlight),0 0 0 1px #b32;background-color:#eee}
-td.trackerLink a:active{box-shadow:var(--highlight),inset 3px 3px 3px rgba(0,0,0,.4),0 0 0 1px #b32}
+td.trackerLink a:active{box-shadow:var(--highlight),inset 3px 3px 3px #0006,0 0 0 1px #b32}
 tr:hover .magnetLabel{opacity:1}
 .torrentLink{text-align:center}
 .active.downloading .tAction,.active.downloading:hover .tAction,.active.RX .tAction,.active.RX:hover .tAction{background:var(--td_dl);animation:ease-in-out downloading .5s 3s forwards}
@@ -531,7 +531,7 @@ body.debug #dhtDebug{display:table-row;box-shadow:var(--highlight);background:li
 #dhtDebug b,#dhtDebug .dbug,#dhtDebug .stat{margin:2px 0;padding:0 8px;display:inline-block;color:#fff}
 #dhtDebug b{border-radius:2px 0 0 2px}
 #dhtDebug .dbug{margin:-2px -1px -2px -4px;padding:2px 10px;min-width:24px;color:#444;text-shadow:none;box-shadow:0 0 0 1px #fff inset;background:#fff}
-#dhtDebug .stat{margin:3px 2px;padding:0;text-shadow:1px 1px 1px rgba(0,0,0,.4);box-shadow:0 0 0 1px #888,0 0 0 1px #fff inset;background:linear-gradient(180deg,#999,#888);contain:paint}
+#dhtDebug .stat{margin:3px 2px;padding:0;text-shadow:1px 1px 1px #0006;box-shadow:0 0 0 1px #888,0 0 0 1px #fff inset;background:linear-gradient(180deg,#999,#888);contain:paint}
 #dhtDebug .volatile{margin:1px 0 -1px;width:100%;display:inline-block}
 #noDHTPeers{margin:6px 0}
 
@@ -566,7 +566,7 @@ body.debug #dhtDebug{display:table-row;box-shadow:var(--highlight);background:li
 
 /* tooltip */
 .tooltipped{display:inline-block;position:relative;z-index:99;content:""}
-.tooltipped:hover{filter:drop-shadow(0 0 1px rgba(0,0,0,.2))}
+.tooltipped:hover{filter:drop-shadow(0 0 1px #0003)}
 .tooltipped:hover::before,.tooltipped:active::before,.tooltipped:hover::after,.tooltipped:active::after{position:absolute;display:inline-block}
 .tooltipped:hover::after,.tooltipped:active::after{padding:3px 6px;top:0;left:32px;font-weight:600;border:1px solid #cca;border-radius:2px;box-shadow:var(--highlight);background:linear-gradient(180deg,#fff,#ffd);content:attr(data-tooltip);animation:fade .1s ease 3s reverse both}
 .tooltipped:hover::before,.tooltipped:active::before{margin-left:-10px;top:calc(50% - 4px);left:30px;border-width:6px;border-style:solid;border-color:#0000 #cca #0000 #0000;content:"";animation:fade .1s ease 3s reverse both}

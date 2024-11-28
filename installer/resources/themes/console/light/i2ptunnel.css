@@ -202,7 +202,7 @@ th.tunnelControl{text-align:center}
 #screenlog span{margin:0;height:calc(100% + 2px);display:flex;align-items:stretch;position:absolute;top:-1px;bottom:-1px;right:-1px;vertical-align:middle}
 #screenlog .iconize{margin:0;padding:20px;min-width:unset;display:inline-block;vertical-align:middle;font-size:0;box-shadow:var(--highlight),inset 0 0 1px 1px #ddf}
 #screenlog .iconize:hover,#screenlog .iconize:focus{box-shadow:var(--highlight),inset 0 0 1px 1px #f60}
-#screenlog .iconize:active{box-shadow:var(--highlight),inset 5px 5px 5px rgba(0,0,0,.2)}
+#screenlog .iconize:active{box-shadow:var(--highlight),inset 5px 5px 5px #0003}
 #screenlog .clearlog{border-left:var(--border_inner);background:rgba(255,255,255,.3) var(--close) no-repeat center center/16px}
 #screenlog .clearlog:hover{background:rgba(255,255,255.5) var(--close_hover) no-repeat center center/16px}
 #screenlog .clearlog:active{background:#f2f2f2 var(--close) no-repeat center center/14px}
@@ -318,7 +318,7 @@ span.starting:not([hidden]){background-image:var(--local_inprogress),var(--badge
 span.stopped:not([hidden]){background-image:var(--local_down),var(--badge)}
 
 /* initializing */
-#notReady,#notFound,#down{margin:60px auto 25px;padding:30px;width:400px;text-align:center;font-size:11pt;font-weight:700;border:5px solid #900;border-image:repeating-linear-gradient(135deg,#dd0 0px,#dd0 20px,#900 20px,#900 40px,#dd0 40px) 5 repeat repeat;border-image-width:5px;border-image-outset:1px;box-shadow:inset 0 0 0 1px #113,inset 0 0 2px 2px rgba(0,0,0,.4),0 0 0 2px #113,0 0 3px 3px rgba(0,0,0,.4);background:#ffd;background:repeating-linear-gradient(180deg,#dd9 2px,#eeb 4px)}
+#notReady,#notFound,#down{margin:60px auto 25px;padding:30px;width:400px;text-align:center;font-size:11pt;font-weight:700;border:5px solid #900;border-image:repeating-linear-gradient(135deg,#dd0 0px,#dd0 20px,#900 20px,#900 40px,#dd0 40px) 5 repeat repeat;border-image-width:5px;border-image-outset:1px;box-shadow:inset 0 0 0 1px #113,inset 0 0 2px 2px #0006,0 0 0 2px #113,0 0 3px 3px #0006;background:#ffd;background:repeating-linear-gradient(180deg,#dd9 2px,#eeb 4px)}
 #down b{color:#500}
 #notReady{border-image:repeating-linear-gradient(135deg,#ee9 0px,#ee9 20px,#d50 20px,#d50 40px,#ee9 40px) 5 repeat repeat;border-image-width:5px;border-image-outset:1px;background:repeating-linear-gradient(180deg,#ffd 2px,#eeb 4px)}
 #notReady b{color:#733}

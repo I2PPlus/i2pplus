@@ -159,10 +159,10 @@ input.delete{margin-left:2px}
 #dologin td[colspan="2"],#dologin td[colspan="2"] input{vertical-align:middle}
 #dologin td[colspan="2"]{padding:3px 3px 5px;text-align:center}
 #dologin tr:last-child td{padding-bottom:7px}
-#dologin hr{display:block;background:rgba(0,0,68,.8);box-shadow:0 1px 0 1px rgba(0,0,0,.6);margin:10px 0 7px;opacity:.5}
+#dologin hr{display:block;background:rgba(0,0,68,.8);box-shadow:0 1px 0 1px #0009;margin:10px 0 7px;opacity:.5}
 #dologin tr:last-child hr{margin-top:6px;margin-bottom:5px}
 .iframed #dologin tr:nth-child(6) hr{margin-top:5px}
-#dologin tr:last-child a,#dologin tr:last-child a:visited{margin:8px -2px 6px;padding:2px 10px;min-width:140px;display:inline-block;color:var(--a);font-size:8.5pt;border:1px solid #003;border-radius:25px;box-shadow:0 0 1px rgba(0,0,0,.8),var(--highlight);background:#002}
+#dologin tr:last-child a,#dologin tr:last-child a:visited{margin:8px -2px 6px;padding:2px 10px;min-width:140px;display:inline-block;color:var(--a);font-size:8.5pt;border:1px solid #003;border-radius:25px;box-shadow:0 0 1px #000c,var(--highlight);background:#002}
 #dologin tr:last-child a:hover{color:var(--a_hover);border:var(--border_hover);box-shadow:var(--highlight),var(--btn_hover_radial),0 0 0 1px var(--a_hover);background:var(--btn_hover);transition:ease all .2s}
 #dologin tr:last-child a:active{color:#337;box-shadow:var(--btn_shadow_active);background:#000020;transition:ease box-shadow .1s}
 #dologin tr:last-child td{color:#0000}

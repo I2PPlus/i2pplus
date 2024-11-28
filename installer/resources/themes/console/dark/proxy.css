@@ -17,7 +17,7 @@
 html,body{min-height:100%;background:var(--bg_dots) #010}
 body{background:none}
 body#proxy_error{margin:5px 0 0 0;padding:0;text-align:center;font:8.5pt/130% var(--bodyfont)}
-body::before{width:0;height:4px;display:inline-block;position:absolute;left:0;top:0;box-shadow:0 2px 2px rgba(0,0,0,.8);background:linear-gradient(180deg,rgba(255,255,255,.1) 50%,rgba(0,0,0,.3) 50%),linear-gradient(90deg,#d30,#f60);content:""}
+body::before{width:0;height:4px;display:inline-block;position:absolute;left:0;top:0;box-shadow:0 2px 2px #000c;background:linear-gradient(180deg,rgba(255,255,255,.1) 50%,rgba(0,0,0,.3) 50%),linear-gradient(90deg,#d30,#f60);content:""}
 body,button,select{font-family:var(--bodyfont)}
 button,select{font-size:9pt}
 h2,h3{background:var(--h3),var(--h3_fade);background-size:4px 100%,100%}
@@ -48,7 +48,7 @@ hr:last-child{margin-top:20px;margin-bottom:20px}
 #jumplinks #reg{background:url(../images/eepsites/reg.svg) no-repeat 10px center/20px,var(--badge)}
 #jumplinks #stats{background:url(../images/stats.svg) no-repeat 10px center/20px,var(--badge)}
 #proxy_error #jumplinks a:hover,#proxy_error #jumplinks a:focus{box-shadow:var(--badge_shadow_hover);background:url(../images/arrow_right.svg) no-repeat 10px center/20px,var(--badge_hover)!important}
-#proxy_error #jumplinks a:active{padding:10px 11px 8px 35px;text-shadow:0 1px 1px rgba(0,0,0,.8);box-shadow:var(--badge_shadow_hover),var(--btn_shadow_active);background:url(../images/arrow_right.svg) no-repeat 12px calc(50% + 1px)/19px,var(--badge_active)!important;background-blend-mode:luminosity}
+#proxy_error #jumplinks a:active{padding:10px 11px 8px 35px;text-shadow:0 1px 1px #000c;box-shadow:var(--badge_shadow_hover),var(--btn_shadow_active);background:url(../images/arrow_right.svg) no-repeat 12px calc(50% + 1px)/19px,var(--badge_active)!important;background-blend-mode:luminosity}
 
 .option{padding:10px 20px 0;border:1px solid #252;box-shadow:var(--fatshadow);background:linear-gradient(180deg,rgba(0,32,0,.5),rgba(0,16,0,.5))}
 .option:last-of-type{margin-bottom:11px}
@@ -99,7 +99,7 @@ hr:last-child{margin-top:20px;margin-bottom:20px}
 #destConflict th{padding:5px 0 20px}
 
 /* console error pages */
-h1+.sorry,#console_404 .sorry{margin:-1px 5px 10px 226px;padding:20px 20px 20px 70px;min-width:595px;word-wrap:break-word;text-align:justify;font-size:10pt;border:var(--border);border-radius:0 0 4px 4px;box-shadow:var(--highlight),inset 0 0 0 2px #600,inset 0 0 0 3px #000;background:var(--err) no-repeat 15px 45%,linear-gradient(180deg,rgba(255,255,255,.05),rgba(0,0,0,.4)),repeating-linear-gradient(180deg,rgba(0,0,0,.4) 2px,rgba(0,48,0,.7) 4px);background-size:44px,100%,4px 4px}
+h1+.sorry,#console_404 .sorry{margin:-1px 5px 10px 226px;padding:20px 20px 20px 70px;min-width:595px;word-wrap:break-word;text-align:justify;font-size:10pt;border:var(--border);border-radius:0 0 4px 4px;box-shadow:var(--highlight),inset 0 0 0 2px #600,inset 0 0 0 3px #000;background:var(--err) no-repeat 15px 45%,linear-gradient(180deg,rgba(255,255,255,.05),#0006),repeating-linear-gradient(180deg,#0006 2px,rgba(0,48,0,.7) 4px);background-size:44px,100%,4px 4px}
 .sorry hr{margin:10px 0;height:1px;color:var(--ink);border-top:1px solid var(--ink);background:var(--ink);opacity:.7}
 .sorry p{line-height:1.3}
 #error500 h1.err{margin-top:-10px}

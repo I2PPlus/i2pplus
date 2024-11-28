@@ -51,7 +51,7 @@ th{padding:5px 10px;text-align:left;color:var(--ink);font-size:8.5pt}
 #page{margin:10px 0;padding:0 5px;position:relative;color:var(--ink);font-size:9pt}
 
 /* topnav */
-#navi{margin:-16px auto 24px;padding:5px 3px;position:sticky;top:-1px;z-index:999;text-align:center;border:var(--border_hard);border-radius:0 1px 2px 2px;box-shadow:var(--bevel),0 2px 2px 2px rgba(0,0,0,.4);background:var(--topnav)}
+#navi{margin:-16px auto 24px;padding:5px 3px;position:sticky;top:-1px;z-index:999;text-align:center;border:var(--border_hard);border-radius:0 1px 2px 2px;box-shadow:var(--bevel),0 2px 2px 2px #0006;background:var(--topnav)}
 .iframed #navi{margin:-6px -15px 27px;padding:5px 0;border:var(--border_hard);border-right:0;border-left:0;border-radius:0}
 #navi a:link{text-transform:capitalize}
 #navi a:first-child{border-radius:2px 0 0 2px}
@@ -172,15 +172,15 @@ td.destinations{max-width:50px;padding:1px 8px}
 #booksearch{padding:6px;text-align:center}
 #booksearch input{vertical-align:middle;line-height:1.3}
 #filter{margin-top:-1px;padding:15px 5px;border:var(--border);text-align:center;background:#001000}
-#filter a,#activefilter{margin:1px 0 2px;padding:2px 8px;min-width:12px;display:inline-block;line-height:1.6;white-space:nowrap;text-transform:capitalize;font-size:105%;box-shadow:0 0 0 1px #030,0 0 2px 1px rgba(0,0,0,.8),var(--highlight);background:var(--th)}
-#filter a:hover,#filter a:focus{text-decoration:none;color:#f60;text-shadow:0 1px 1px rgba(0,0,0,.8);box-shadow:0 0 0 1px #030,var(--highlight),inset 0 0 0 2px #930;background:#030;transform:scale(1.15)}
+#filter a,#activefilter{margin:1px 0 2px;padding:2px 8px;min-width:12px;display:inline-block;line-height:1.6;white-space:nowrap;text-transform:capitalize;font-size:105%;box-shadow:0 0 0 1px #030,0 0 2px 1px #000c,var(--highlight);background:var(--th)}
+#filter a:hover,#filter a:focus{text-decoration:none;color:#f60;text-shadow:0 1px 1px #000c;box-shadow:0 0 0 1px #030,var(--highlight),inset 0 0 0 2px #930;background:#030;transform:scale(1.15)}
 #filter a:active{color:#930;box-shadow:0 0 0 1px #252,var(--btn_shadow_active);transform:scale(.95)}
 #filter span a{padding:2px 6px;display:inline-block;font-size:8.5pt}
 #filter p:first-child{padding-bottom:0}
 #filter p{margin:8px 0 -8px;padding:0 10px;line-height:2.1;word-spacing:.1em;font-weight:700;text-align:center;text-transform:capitalize}
-p#filtered{margin:-27px 0 10px;padding:12px 10px 8px 20px;font-size:10pt;box-shadow:var(--highlight),inset 0 0 2px 1px #030;background:repeating-linear-gradient(180deg,rgba(0,0,0,.8),rgba(0,16,0,.6) 1px,rgba(0,16,0,.6) 2px),url(/themes/console/dark/images/camotile2.png)}
+p#filtered{margin:-27px 0 10px;padding:12px 10px 8px 20px;font-size:10pt;box-shadow:var(--highlight),inset 0 0 2px 1px #030;background:repeating-linear-gradient(180deg,#000c,rgba(0,16,0,.6) 1px,rgba(0,16,0,.6) 2px),url(/themes/console/dark/images/camotile2.png)}
 #activefilter,.selected{font-weight:700;color:#999;box-shadow:var(--btn_shadow_active)!important}
-#activefilter{margin:1px 1px 2px;padding:3px 10px 2px;color:var(--ink);text-shadow:0 -1px 1px rgba(0,0,0,.8);box-shadow:0 0 0 1px #252,var(--btn_shadow_active)!important;background:#030}
+#activefilter{margin:1px 1px 2px;padding:3px 10px 2px;color:var(--ink);text-shadow:0 -1px 1px #000c;box-shadow:0 0 0 1px #252,var(--btn_shadow_active)!important;background:#030}
 
 /* add/import/export */
 #add,#import{margin-top:23px;padding:0 0 10px;border:var(--border);box-shadow:var(--bevel);background:var(--th)}
@@ -247,7 +247,7 @@ td>img[width="320"],td>img[src^="/imagegen"],#visualid .identicon{margin:10px 3p
 #visualid td:first-child{text-align:right}
 #visualid td[colspan="2"]{padding:15px 3px;border-top:var(--border)}
 #visualid tr:last-child{background:#000}
-#visualid tr td,#visualid tr:hover td{border-left:0;border-right:0;border-bottom:var(--border);box-shadow:none;background:#010;background:repeating-linear-gradient(180deg,rgba(0,0,0,.8),rgba(0,16,0,.5) 1px,rgba(0,16,0,.5) 2px),url(/themes/console/dark/images/camotile2.png)}
+#visualid tr td,#visualid tr:hover td{border-left:0;border-right:0;border-bottom:var(--border);box-shadow:none;background:#010;background:repeating-linear-gradient(180deg,#000c,rgba(0,16,0,.5) 1px,rgba(0,16,0,.5) 2px),url(/themes/console/dark/images/camotile2.png)}
 #visualid tr:first-child td{padding:15px 5px}
 #visualid tr:last-child td{padding:18px 6px;border:0}
 

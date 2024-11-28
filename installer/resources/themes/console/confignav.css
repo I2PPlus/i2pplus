@@ -3,10 +3,10 @@
 .tab,.tab2{margin:0 -1px -1px;padding:0!important;height:40px;font-size:0;flex:1 1 0!important;min-width:unset!important;position:relative;contain:paint}
 .tab a{padding:0!important;width:100%;height:100%;min-width:unset!important;max-width:unset!important;position:absolute;top:0;left:0;font-size:0}
 .tab::before,.tab2::before{display:block;width:100%;height:100%;vertical-align:middle;text-align:center;background-size:17px!important;background-position:calc(50% + 1px) center!important;background-repeat:no-repeat!important;content:"";pointer-events:none}
-.tab:not(:hover)::before{filter:saturate(0) drop-shadow(1px 1px rgba(0,0,0,.8))}
+.tab:not(:hover)::before{filter:saturate(0) drop-shadow(1px 1px #000c)}
 .tab:hover::before{transform:scale(1.2)}
 .tab:active::before{transform:scale(.95)}
-.tab2::before{filter:drop-shadow(1px 1px rgba(0,0,0,.4))}
+.tab2::before{filter:drop-shadow(1px 1px #0006)}
 #nav_advanced::before{background:var(--configure)}
 #nav_bandwidth::before{background:var(--speed)}
 #nav_clients::before{background:url(/themes/console/images/editclient.svg)}

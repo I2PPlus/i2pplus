@@ -8,7 +8,7 @@
   border-radius:0;
 }
 ::-webkit-scrollbar-track:hover{
-  background:rgba(0,0,0,.2);
+  background:#0003;
 }
 ::-webkit-scrollbar-thumb{
   border-radius:1px;

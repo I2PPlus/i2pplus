@@ -142,7 +142,7 @@ h4.sb_info{margin-top:-11px}
 #sidebar form button.download:hover,#sidebar form button.download:focus{background:var(--download_hover) no-repeat 6px center/15px,var(--btn_hover)}
 #sidebar h3{margin:-9px -7px -3px;padding:2px 0;letter-spacing:.04em;text-transform:uppercase;font-size:9.5pt;border:1px solid #afafcf;border-left:0;border-right:0;border-radius:0;box-shadow:var(--highlight);background:#e7e7ff var(--h3);filter:none}
 #sidebar h3:hover{background:#fff linear-gradient(180deg,#fff 50%,rgba(255,232,191,.6) 50%,rgba(239,217,179,.4) 100%)}
-#sidebar h3:active{box-shadow:var(--highlight),inset 3px 3px 3px rgba(0,0,0,.4);background:var(--hover);transition:ease box-shadow .05s}
+#sidebar h3:active{box-shadow:var(--highlight),inset 3px 3px 3px #0006;background:var(--hover);transition:ease box-shadow .05s}
 #sidebar h3 a,#sidebar h3 a:visited{padding:3px 0 2px;display:inline-block;width:calc(100% - 4px);line-height:1.1;word-spacing:-.12em;text-transform:uppercase;text-decoration:none;color:var(--a)}
 #sidebar h3:hover a,#sidebar h3 a:hover{color:var(--hover);text-shadow:var(--txt_shadow)}
 #sidebar h3:active a,#sidebar h3 a:active{color:#ffecdf;text-shadow:0 1px 1px #5f2d0c}
@@ -398,7 +398,7 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 .tab:hover a{color:var(--hover)}
 .tab{box-shadow:var(--highlight);background:linear-gradient(180deg,#fff 50%,rgba(255,255,255,.6) 50%,rgba(240,240,240,.4)) #e7e7ff}
 .tab:hover{position:relative;z-index:60;box-shadow:inset 0 0 0 1px rgba(255,96,0,.7);background:#fff linear-gradient(180deg,#fff 50%,rgba(255,232,191,.6) 50%,rgba(239,217,179,.4) 100%)}
-.tab:active{box-shadow:inset 0 0 0 1px rgba(255,96,0,.4),inset 4px 4px 2px rgba(0,0,0,.4);background:linear-gradient(180deg,#e50,var(--hover))}
+.tab:active{box-shadow:inset 0 0 0 1px rgba(255,96,0,.4),inset 4px 4px 2px #0006;background:linear-gradient(180deg,#e50,var(--hover))}
 .tab:active a,.tab a:active{color:#ffecdf;text-shadow:none}
 .tab2{padding:5px 12px;position:relative;z-index:50;color:#fafaff;text-shadow:0 1px 1px #113;box-shadow:0 0 0 1px rgba(255,255,255,.8) inset,3px 3px 3px rgba(0,0,16,.5) inset;background:radial-gradient(at center bottom,rgba(128,128,172,.6) 0,#0000 50%),linear-gradient(180deg,rgba(31,43,63,.7),rgba(31,43,63,.5)),linear-gradient( 90deg,#6288cb,#7fadff,#6288cb);pointer-events:none}
 div[id^="config_"] .tab:not(:hover)::before{filter:saturate(.3)!important}
@@ -745,7 +745,7 @@ div[id^="config"] tr:last-child td,#events tr:last-child td,#profiles tr:last-ch
 .applink,.applabel,.sitemapLink,.sitemapLabel,#sitemap .applink,.themechoice,.themelabel,.langselect,.ui_lang{border-color:#c4c4d4}
 .applink{margin:3px;padding:0;position:relative;float:left;width:160px;text-align:center;border:var(--border_inner);box-shadow:var(--highlight),inset 0 0 2px 1px #eef,0 0 1px #ddf;background:#f8f8ff}
 .applink:active .applabel a,.sitemapLink:active .sitemapLabel{color:#fff}
-.applink:active .applabel,.sitemapLink:active .sitemapLabel{box-shadow:var(--highlight),inset 3px 3px 3px rgba(0,0,0,.2);background:var(--hover)}
+.applink:active .applabel,.sitemapLink:active .sitemapLabel{box-shadow:var(--highlight),inset 3px 3px 3px #0003;background:var(--hover)}
 .applink:active img{transform:scale(.9)}
 .applink:hover a:link,.applink:hover a:visited{color:var(--hover)}
 .applink:hover .appicon .extlink::after,.sitemapLink.extlink:hover::after{position:absolute;top:-1px;right:-1px;content:"";display:inline-block;width:21px;height:18px;border:1px solid #f50;border-radius:0 2px 0 2px;background:url(images/newtab.png) no-repeat 4.5px center/12.5px 10px;opacity:.75}
@@ -1174,7 +1174,7 @@ h3+.statusnotes{margin-top:2px}
 .ptcp::after{background:var(--ptcp) no-repeat center center}
 .ipaddress a{line-height:1}
 .peerFlag{position:relative;z-index:10;display:inline-block;vertical-align:middle}
-.peerFlag::before{display:inline-block;position:absolute;top:0;left:0;bottom:0;right:0;z-index:20;width:100%;border-radius:3px;background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(0,0,0,.2));content:"";pointer-events:none}
+.peerFlag::before{display:inline-block;position:absolute;top:0;left:0;bottom:0;right:0;z-index:20;width:100%;border-radius:3px;background:linear-gradient(180deg,rgba(255,255,255,.2),#0003);content:"";pointer-events:none}
 .rif .peerFlag::before{display:none}
 .rih,.rih a,.routerHash,.routerHash a{font-weight:600;user-select:all}
 .routerHash,.version{margin:0;padding:1px 3px;min-width:44px;display:inline-block;line-height:1.3;vertical-align:middle;text-align:center;font-weight:700;border:1px solid #bbc;box-shadow:var(--highlight);background:var(--badge)}
@@ -2048,7 +2048,7 @@ select[name="newlogclass"]{margin-left:3px}
 .optbox:not(:checked)+label>.stattograph b{font-style:italic}
 .stattograph:hover b{color:var(--hover)}
 .statdesc{display:none}
-.optbox:checked+label>.stattograph:active,.optbox:not(:checked)+label>.stattograph:active{box-shadow:inset 0 0 0 1px #930,inset 3px 3px 3px rgba(0,0,0,.4);background:var(--hover)}
+.optbox:checked+label>.stattograph:active,.optbox:not(:checked)+label>.stattograph:active{box-shadow:inset 0 0 0 1px #930,inset 3px 3px 3px #0006;background:var(--hover)}
 .stattograph:active b{color:#fff}
 #configstats{margin-bottom:0}
 #configstats .graphableStat td{padding:4px 6px;white-space:normal;columns:auto}
@@ -2143,7 +2143,7 @@ select[name="newlogclass"]{margin-left:3px}
 .langselect .optbox:checked~.langflag::after{padding:2px;width:16px;height:16px;display:inline-block;position:absolute;right:-14px;bottom:calc(50% - 10px);z-index:20;border-radius:50%;box-shadow:0 0 0 2px #bbc,0 0 0 5px #fff;background:#f2f2ff var(--yes) no-repeat center center/10px;content:""}
 .langselect .optbox:checked~.ui_lang{z-index:2;font-weight:700;color:#338;background:#e2e2ff}
 .langselect .optbox:focus~.ui_lang{color:var(--hover);box-shadow:var(--highlight);background:linear-gradient(90deg,#eef,#fff,#eef)}
-.langselect .optbox:active~.ui_lang{color:#fff;box-shadow:var(--highlight),inset 3px 3px 3px rgba(0,0,0,.2);background:var(--hover)}
+.langselect .optbox:active~.ui_lang{color:#fff;box-shadow:var(--highlight),inset 3px 3px 3px #0003;background:var(--hover)}
 .langselect .optbox:checked:active~.ui_lang{color:var(--hover);box-shadow:var(--highlight);background:linear-gradient(90deg,#eef,#fff,#eef)}
 .themechoice .optbox{vertical-align:text-bottom}
 .themechoice .optbox{margin-top:0;margin-left:-38px;min-height:88px;min-width:123px;position:absolute;z-index:999;opacity:0}
@@ -2160,7 +2160,7 @@ select[name="newlogclass"]{margin-left:3px}
 .themechoice .optbox:hover+img~.themelabel{color:var(--hover);font-weight:700}
 .themechoice .optbox:checked+img~.themelabel{color:#338;font-weight:700;background:#e2e2ff}
 .themechoice .optbox:focus+img~.themelabel{color:var(--hover);box-shadow:var(--highlight);background:linear-gradient(90deg,#eef,#fff,#eef)}
-.themechoice .optbox:active+img~.themelabel{color:#fff;box-shadow:var(--highlight),inset 3px 3px 3px rgba(0,0,0,.2);background:var(--hover)}
+.themechoice .optbox:active+img~.themelabel{color:#fff;box-shadow:var(--highlight),inset 3px 3px 3px #0003;background:var(--hover)}
 .themechoice .optbox:checked:active+img~.themelabel{color:var(--hover);box-shadow:var(--highlight);background:linear-gradient(90deg,#eef,#fff,#eef)}
 .themelabel{margin:-24px -4px 0;padding:3px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:9pt;border-top:var(--border_inner);box-shadow:var(--highlight);background:#f8f8ff}
 .ui_lang{margin:0 -4px;padding:3px 2px 4px;white-space:nowrap;text-align:center;overflow:hidden;text-overflow:ellipsis;font-size:9pt;text-transform:capitalize;border-top:var(--border_inner);border-top:var(--border_inner);border-radius:0 0 2px 2px;box-shadow:var(--highlight);background:#f8f8ff}

@@ -24,7 +24,7 @@
 --row_filtered:var(--bg3);
 --section:linear-gradient(180deg,var(--bg2),var(--bg3));
 --title_shadow:var(--highlight),inset 0 0 0 0 var(--bg),0 1px 1px var(--bg4);
---label_shadow_active:1px 1px 1px rgba(0,0,0,.2) inset,2px 2px 2px rgba(255,255,255,.1) inset;
+--label_shadow_active:1px 1px 1px #0003 inset,2px 2px 2px rgba(255,255,255,.1) inset;
 --snarkGraph:url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true");
 }
 
@@ -629,7 +629,7 @@ td.commentAuthor{padding-left:5px}
 
 /* tooltip */
 .tooltipped{display:inline-block;position:relative;z-index:99;content:""}
-.tooltipped:hover{filter:drop-shadow(0 0 1px rgba(0,0,0,.4))}
+.tooltipped:hover{filter:drop-shadow(0 0 1px #0006)}
 .tooltipped:hover::before,.tooltipped:active::before{margin-left:-10px;top:calc(50% - 6px);left:30px;border-width:6px;border-style:solid;border-color:#0000 #bbc #0000 #0000;content:"";animation:fade .1s ease 3s reverse both}
 .tooltipped:hover::after,.tooltipped:active::after{padding:3px 6px;top:0;left:32px;font-weight:600;border:1px solid #bbc;border-radius:2px;box-shadow:var(--highlight);background:linear-gradient(180deg,#fff,#eef);content:attr(data-tooltip);animation:fade .1s ease 3s reverse both}
 .tooltipped:hover::before,.tooltipped:active::before,.tooltipped:hover::after,.tooltipped:active::after{position:absolute;display:inline-block}
