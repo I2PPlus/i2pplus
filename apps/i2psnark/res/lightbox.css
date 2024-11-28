@@ -1,36 +1,16 @@
-.lightbox{width:100%;height:100%;position:fixed;left:0;top:0;z-index:2000;overflow:auto;visibility:hidden;color:transparent;background-color:transparent;cursor:crosshair}
-.lightbox-caption{margin:-45px auto;display:block;text-align:center;font-size:11pt;color:#fff;text-shadow:0 1px 1px #000;opacity:0}
-.lightbox-active .lightbox-caption{display:block;animation:fade-in .5s ease-in .5s forwards}
-.lightbox-caption span{padding:0 6px;display:inline-block;color:#333;text-shadow:none;border-radius:4px;background:#fff}
-.lightbox-caption span #caption{padding:0 8px;font-weight:700}
-.lightbox-caption #dimensions{padding:0;font-weight:400;border:0;box-shadow:none}
-.lightbox-close{display:none}
-.lightbox-contentwrapper{margin:auto;visibility:hidden}
-.lightbox-contentwrapper>img{margin-left:auto;margin-right:auto;padding:.5em;height:auto;display:none;border:5px solid #fff;border-radius:5px;box-shadow:0 .0 1px rgba(128,128,128,0.5);background:#fff;opacity:0}
-.lightbox-contentwrapper>img.lightbox-animate-init{opacity:1}
-.lightbox-contentwrapper>img.lightbox-animate-transition{cursor:pointer;transition:opacity .2s ease-in-out}
-.lightbox-contentwrapper>img.lightbox-animating-next{opacity:1}
-.lightbox-contentwrapper>img.lightbox-animating-prev{opacity:1}
-.lightbox-contentwrapper.lightbox-animate>img{opacity:0}
-.lightbox-contentwrapper.lightbox-wrapper-active{visibility:visible}
-.lightbox-contentwrapper.lightbox-wrapper-active>img{display:block;opacity:1}
-.lightbox.lightbox-active{width:100%;height:100%;width:calc(100% - 20px);height:calc(100% - 20px);visibility:visible;border:10px solid #fff;background-color:rgba(24,24,24,0.9)}
-.lightbox.lightbox-loading .lightbox-loading-animation{display:block}
-.lightbox-loading-animation{margin-top:-60px;margin-left:-60px;width:120px;height:120px;display:none;position:absolute;top:50%;left:50%;z-index:-1}
-.lightbox-loading-animation>span{margin:5px;width:20px;height:20px;display:inline-block;border-radius:20px;background-color:#fff;transition:all .3s ease-in-out}
-.lightbox-loading-animation>span.lightbox-active{margin-bottom:60px}
-.lightbox-next,.lightbox-prev{max-width:6%;max-height:250px;display:none;position:fixed;top:50%;cursor:pointer;opacity:0.8;filter:drop-shadow(0 .2px #930)}
-.lightbox-next{right:30px}
-.lightbox-prev{left:30px}
-.lightbox-next:hover,.lightbox-prev:hover{opacity:1;filter:drop-shadow(0 .2px #930)}
-.lightbox-next:active,.lightbox-prev:active{transform:scale(0.8);filter:drop-shadow(0 .3px #f00)}
-.lightbox-next.lightbox-active,.lightbox-prev.lightbox-active{display:block}
-.lightbox-next>img,.lightbox-prev>img{width:100%}
-.lightbox-next.lightbox-no-img,.lightbox-prev.lightbox-no-img{border-top:50px solid transparent;border-bottom:50px solid transparent}
-.lightbox-next.lightbox-no-img{border-left:50px solid #fff}
-.lightbox-next.lightbox-no-img:hover{border-left-color:#f60}
-.lightbox-prev.lightbox-no-img{border-right:50px solid #fff}
-.lightbox-prev.lightbox-no-img:hover{border-right-color:#f60}
-.lightbox-nooverflow{overflow:hidden !important}
-@keyframes fade-in{from{opacity:0}to{opacity:1}}
-@media screen and (-webkit-min-device-pixel-ratio:0){.lightbox.lightbox-active{width:100%; height:100%; border:none}}
+#lb{width:100%;height:100%;position:fixed;left:0;top:0;z-index:999999;overflow:auto;visibility:hidden;color:transparent;background:#000d;backdrop-filter:blur(3px) saturate(0.3);cursor:crosshair}
+.iframed #lb{height:100vh;position:absolute;overflow:hidden}
+#lb-close{display:none}
+#lb-imgwrap{margin:auto;visibility:hidden;border-radius:5px;background:#fff}
+#lb-imgwrap>img{margin-left:auto;margin-right:auto;padding:.5em;max-width:auto;object-fit:contain;display:none;border:5px solid #fff;border-radius:5px;box-shadow:0 0 3px 3px rgba(128,128,128,0.5);background:#fff;opacity:0;animation:fade .3s ease .05s both}
+#lb-next,#lb-prev{max-width:6%;max-height:250px;display:none;position:fixed;top:50%;font-size:0;border-left:0;border-right:0;background:none;cursor:pointer;opacity:0.8;filter:drop-shadow(0 .2px #930)}
+#lb-next{right:30px}
+#lb-prev{left:30px}
+#lb-next:hover,#lb-prev:hover{opacity:1;filter:drop-shadow(0 .2px #930)}
+#lb-next,#lb-prev{border-top:50px solid transparent;border-bottom:50px solid transparent}
+#lb-next{border-left:50px solid #fff}
+#lb-next:hover{border-left-color:#f60}
+#lb-prev{border-right:50px solid #fff}
+#lb-prev:hover{border-right-color:#f60}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@media screen and (-webkit-min-device-pixel-ratio:0){.lb.lb-active{width:100%;height:100%;border:none}}

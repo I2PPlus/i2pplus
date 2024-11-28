@@ -380,15 +380,13 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("  window.snarkRefreshDelay = snarkRefreshDelay;\n")
                .append("  window.totalSnarks = totalSnarks;\n</script>\n");
             if (!isStandalone()) {
-                buf.append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath).append("js/tunnelCounter.js?")
-                   .append(CoreVersion.VERSION).append("\" type=module></script>\n");
+                buf.append("<script src=\"").append(resourcePath).append("js/tunnelCounter.js?").append(CoreVersion.VERSION)
+                   .append("\" type=module></script>\n");
             }
             buf.append("<script nonce=").append(cspNonce).append(" type=module>\n")
                .append("  import {initSnarkRefresh} from \"").append(resourcePath).append("js/refreshTorrents.js").append("\";\n")
                .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n")
-               .append("<script nonce=").append(cspNonce).append(" type=module src=").append(resourcePath).append("js/onVisible.js></script>\n")
-               .append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath).append("js/confirm.js?")
-               .append(CoreVersion.VERSION).append("\"></script>\n");
+               .append("<script src=\"").append(resourcePath).append("js/confirm.js?").append(CoreVersion.VERSION).append("\"></script>\n");
 
             if (delay > 0) {
                 String downMsg = _context.isRouterContext() ? _t("Router is down") : _t("I2PSnark has stopped");
@@ -644,19 +642,19 @@ public class I2PSnarkServlet extends BasicServlet {
         } else {mbuf.append("<div id=screenlog hidden><ul id=messages></ul>");}
         mbuf.append("</div>\n");
         if (isConfigure) {
-            mbuf.append("<script nonce=").append(cspNonce).append(" type=module defer>\n")
+            mbuf.append("<script nonce=").append(cspNonce).append(" type=module>\n")
                 .append("  import {initToggleLog} from \"").append(resourcePath).append("js/toggleLog.js").append("\";\n")
                 .append("  initToggleLog();\n")
                 .append("</script>\n");
         } else {
             mbuf.append("<script nonce=").append(cspNonce).append(" src=").append(resourcePath)
-                .append("js/toggleLog.js type=module defer></script>\n");
+                .append("js/toggleLog.js type=module></script>\n");
         }
         int delay = 0;
         delay = _manager.getRefreshDelaySeconds();
         if (delay > 0 && _context.isRouterContext()) {
-            mbuf.append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath)
-                .append("js/graphRefresh.js?").append(CoreVersion.VERSION).append("\" defer></script>\n");
+            mbuf.append("<script src=\"").append(resourcePath).append("js/graphRefresh.js?")
+                .append(CoreVersion.VERSION).append("\" defer></script>\n");
         }
         out.write(mbuf.toString());
         out.flush();
@@ -4463,8 +4461,8 @@ public class I2PSnarkServlet extends BasicServlet {
                         buf.append("</audio>");
                     } else {
                         buf.append("</video>")
-                           .append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath)
-                           .append("js/getMetadata.js?").append(CoreVersion.VERSION).append("\"></script>\n");
+                           .append("<script src=\"").append(resourcePath).append("js/getMetadata.js?")
+                           .append(CoreVersion.VERSION).append("\"></script>\n");
                     }
                     buf.append("</td></tr>\n</table>\n</div>\n");
                 }
@@ -4686,6 +4684,7 @@ public class I2PSnarkServlet extends BasicServlet {
             boolean isAudio = isAudio(mime);
             boolean isVideo = !isAudio && isVideo(mime);
             int videoCount = 0;
+            int imgCount = 0;
             buf.append("<td class=\"fileIcon");
             if (!complete) {buf.append(" volatile");}
             buf.append("\">");
@@ -4714,19 +4713,23 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (mime.startsWith("image/") && !ppath.endsWith(".ico")) {
                     // thumbnail
                     buf.append("<img alt=\"\" border=0 class=thumb src=\"")
-                       .append(ppath).append("\" data-lightbox data-lightbox-caption=\"")
-                       .append(item.getName()).append("\" data-lightbox-group=\"allInDir\"></a>");
+                       .append(ppath).append("\" data-lb data-lb-caption=\"")
+                       .append(item.getName()).append("\" data-lb-group=\"allInDir\"></a>");
                 } else if (mime.startsWith("image/") && ppath.endsWith(".ico")) {
                     // favicon without scaling
                     buf.append("<img alt=\"\" width=16 height=16 class=favicon border=0 src=\"")
-                       .append(ppath).append("\" data-lightbox data-lightbox-caption=\"")
-                       .append(item.getName()).append("\" data-lightbox-group=\"allInDir\"></a>");
+                       .append(ppath).append("\" data-lb data-lb-caption=\"")
+                       .append(item.getName()).append("\" data-lb-group=\"allInDir\"></a>");
+                   imgCount++;
                 } else if (fai.isDirectory) {buf.append(toSVG(icon, _t("Open"))).append("</a>");}
                 else {buf.append(toSVG(icon, _t("Open"))).append("</a>");}
                 if (isAudio) {buf.append("</audio>");}
                 else if (isVideo) {buf.append("</video>");}
                 if (videoCount == 1) {
                     buf.append("<script src=\"" + resourcePath + "js/getMetadata.js?" + CoreVersion.VERSION + "\"></script>\n");
+                }
+                if (imgCount > 0) {
+                    buf.append("<script src=" + resourcePath + "js/getImgDimensions.js></script>\n");
                 }
             } else {buf.append(toSVG(icon));}
             buf.append("</td><td class=\"snarkFileName");
@@ -4815,7 +4818,7 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean enableLightbox = _manager.util().enableLightbox();
         if (enableLightbox) {
             buf.append("<link rel=stylesheet href=").append(resourcePath).append("lightbox.css>\n")
-               .append("<script nonce=").append(cspNonce).append(" src=").append(resourcePath).append("js/lightbox.js type=module defer>\n")
+               .append("<script nonce=").append(cspNonce).append(" type=module>\n")
                .append("  import {Lightbox} from \"").append(resourcePath).append("js/lightbox.js\";\n")
                .append("  var lightbox = new Lightbox();lightbox.load();\n")
                .append("</script>\n");

@@ -1,919 +1,394 @@
-'use strict';
+/* I2P+ Lightbox for I2PSnark by dr|z3d */
+/* Based on jsOnlyLightbox by Felix Hagspiel */
+/* https://github.com/felixhagspiel/jsOnlyLightbox */
 
-var snarkFiles = document.getElementById('snarkFiles');
-
-/**
- * jsOnlyLightbox 0.5.6
- * Copyright © 2014 Felix Hagspiel - http://jslightbox.felixhagspiel.de
- *
- * @license MIT
- * - Free for use in both personal and commercial projects
- */
-/* exported Lightbox */
-function Lightbox() {
-  if (!snarkFiles) {return;}
-
-  /**
-   * Constants
-   */
-  var _const_name = 'lightbox';
-  var _const_class_prefix = _const_name;
-  var _const_id_prefix = _const_name;
-  var _const_dataattr = 'data-' + _const_name;
-  /**
-   * Private vars
-   */
-  var CTX = this,
-    body = document.getElementsByTagName('body')[0],
-    template = '<div class="' + _const_name + '-contentwrapper" id="' + _const_name + '-contentwrapper" ></div>',
-    imgRatio = false, // ratio of current image
-    currGroup = false, // current group
-    currThumbnail = false, // first clicked thumbnail
-    currImage = {}, // currently shown image
-    currImages = [], // images belonging to current group
-    isOpen = false, // check if box is open
-    animationEl, // reference to animation-element
-    animationInt, // animation-interval
-    animationChildren = [], // childs to animate
-    animationTimeout, // timeout until animation starts
-    // controls
-    nextBtn = false,
-    prevBtn = false,
-    // resize-vars
-    maxWidth,
-    maxHeight,
-    newImgWidth,
-    newImgHeight;
-
-  /*
-   *   Public attributes
-   */
-  CTX.opt = {};
-  CTX.box = false;
-  CTX.wrapper = false;
-  CTX.thumbnails = [];
-
-  /**
-   * Extends thumbnails.push to add click handlers to dynamically loaded thumbs
-   */
-  CTX.thumbnails.push = function () {
-    for (var i = 0, l = arguments.length; i < l; i++) {
-      clckHlpr(arguments[i]);
-    }
-    return Array.prototype.push.apply(this, arguments);
-  };
-
-  /**
-   * Private methods
-   */
-
-  /**
-   * @return {number}
-   */
-  function getHeight() {
-    return window.innerHeight || document.documentElement.offsetHeight;
+class Lightbox {
+  constructor() {
+    if (!snarkFiles) return;
+    this._const_name = "lb";
+    this._const_dataattr = "data-" + this._const_name;
+    this.body = document.body;
+    this.currGroup = null;
+    this.currThumbnail = null;
+    this.currImages = [];
+    this.isOpen = false;
+    this.currImage = {};
+    this.opt = {};
+    this.box = document.createElement("div");
+    this.wrapper = document.createElement("div");
+    this.thumbnails = [];
+    this.resizeObserver = null;
   }
 
-  /**
-   * @return {number}
-   */
-  function getWidth() {
-    return window.innerWidth || document.documentElement.offsetWidth;
-  }
-
-  /**
-   * Adds eventlisteners cross browser
-   * @param {Object}   el       The element which gets the listener
-   * @param {String}   e        The event type
-   * @param {Function} callback The action to execute on event
-   * @param {Boolean}  capture      The capture mode
-   */
-  function addEvent(el, e, callback, capture) {
-    if (el.addEventListener) {
-      el.addEventListener(e, callback, capture || false);
-    }
-    else
-      if (el.attachEvent) {
-        el.attachEvent('on' + e, callback);
+  initTemplate() {
+    this.box.id = this._const_name;
+    this.wrapper.id = this._const_name + "-imgwrap";
+    this.box.appendChild(this.wrapper);
+    this.body.appendChild(this.box);
+    if (this.opt.controls) {
+      const prevBtn = document.createElement("button");
+      prevBtn.textContent = "<";
+      prevBtn.id = this._const_name + "-prev";
+      prevBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        this.prev();
+      });
+      if (!document.getElementById("lb-prev")) {
+        this.box.appendChild(prevBtn);
       }
-  }
-
-  /**
-   * Checks if element has a specific class
-   * @param  {Object}  el        [description]
-   * @param  {String}  className [description]
-   * @return {Boolean}           [description]
-   */
-  function hasClass(el, className) {
-    if (!el || !className) {
-      return;
-    }
-    return (new RegExp('(^|\\s)' + className + '(\\s|$)').test(el.className));
-  }
-
-  /**
-   * Removes class from element
-   * @param  {Object} el
-   * @param  {String} className
-   * @return {Object}
-   */
-  function removeClass(el, className) {
-    if (!el || !className) {
-      return;
-    }
-    el.className = el.className.replace(new RegExp('(?:^|\\s)' + className + '(?!\\S)'), '');
-    return el;
-  }
-
-  /**
-   * Adds class to element
-   * @param  {Object} el
-   * @param  {String} className
-   * @return {Object}
-   */
-  function addClass(el, className) {
-    if (!el || !className) {
-      return;
-    }
-    if (!hasClass(el, className)) {
-      el.className += ' ' + className;
-    }
-    return el;
-  }
-
-  /**
-   * Checks if obj is set
-   * @param  {Object} obj
-   * @return {Boolean}
-   */
-  function isset(obj) {
-    return typeof obj !== 'undefined';
-
-  }
-
-  /**
-   * Get attribute value cross-browser. Returns the attribute as string if found,
-   * otherwise returns false
-   * @param  {Object} obj
-   * @param  {String} attr
-   * @return {boolean || string}
-   */
-  function getAttr(obj, attr) {
-    if (!obj || !isset(obj)) {
-      return false;
-    }
-    var ret;
-    if (obj.getAttribute) {
-      ret = obj.getAttribute(attr);
-    }
-    else
-      if (obj.getAttributeNode) {
-        ret = obj.getAttributeNode(attr).value;
-      }
-    if (isset(ret) && ret !== '') {
-      return ret;
-    }
-    return false;
-  }
-
-  /**
-   * Checks if element has attribute cross-browser
-   * @param  {Object}  obj
-   * @param  {String}  attr
-   * @return {Boolean}
-   */
-  function hasAttr(obj, attr) {
-    if (!obj || !isset(obj)) {
-      return false;
-    }
-    var ret;
-    if (obj.getAttribute) {
-      ret = obj.getAttribute(attr);
-    }
-    else
-      if (obj.getAttributeNode) {
-        ret = obj.getAttributeNode(attr).value;
-      }
-    return typeof ret === 'string';
-
-  }
-
-  /**
-   * Adds clickhandlers to thumbnails
-   * @param  {Object} i
-   */
-  function clckHlpr(i) {
-    addEvent(i, 'click', function (e) {
-      stopPropagation(e);
-      preventDefault(e);
-      currGroup = getAttr(i, _const_dataattr + '-group') || false;
-      currThumbnail = i;
-      openBox(i, false, false, false);
-    }, false);
-  }
-
-  /**
-   * Stop event propagation cross browser
-   * @param  {Object} e
-   */
-  function stopPropagation(e) {
-    if (e.stopPropagation) {
-      e.stopPropagation();
-    }
-    else {
-      e.returnValue = false;
-    }
-  }
-
-  /**
-   * Prevent default cross browser
-   * @param  {Object} e
-   */
-  function preventDefault(e) {
-    if (e.preventDefault) {
-      e.preventDefault();
-    }
-    else {
-      e.returnValue = false;
-    }
-  }
-
-
-  /**
-   * Get thumbnails by group
-   * @param  {String} group
-   * @return {Object}       Array containing the thumbnails
-   */
-  function getByGroup(group) {
-    var arr = [];
-    for (var i = 0; i < CTX.thumbnails.length; i++) {
-      if (getAttr(CTX.thumbnails[i], _const_dataattr + '-group') === group) {
-        arr.push(CTX.thumbnails[i]);
+      const nextBtn = document.createElement("button");
+      nextBtn.textContent = ">";
+      nextBtn.id = this._const_name + "-next";
+      nextBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        this.next();
+      });
+      if (!document.getElementById("lb-next")) {
+        this.box.appendChild(nextBtn);
       }
     }
-    return arr;
-  }
-
-  /**
-   * Get the position of thumbnail in group-array
-   * @param  {Object} thumbnail
-   * @param  {String} group
-   * @return {number}
-   */
-  function getPos(thumbnail, group) {
-    var arr = getByGroup(group);
-    for (var i = 0; i < arr.length; i++) {
-      // compare elements
-      if (getAttr(thumbnail, 'src') === getAttr(arr[i], 'src') &&
-        getAttr(thumbnail, _const_dataattr + '-index') === getAttr(arr[i], _const_dataattr + '-index') &&
-        getAttr(thumbnail, _const_dataattr) === getAttr(arr[i], _const_dataattr)) {
-
-        return i;
+    if (!this.opt.hideCloseBtn) {
+      const closeBtn = document.createElement("button");
+      closeBtn.textContent = "X";
+      closeBtn.id = this._const_name + "-close";
+      closeBtn.addEventListener("click", () => {
+        this.close();
+      });
+      if (!document.getElementById("lb-close")) {
+        this.box.appendChild(closeBtn);
       }
     }
-  }
-
-  /**
-   * Preloads next and prev images
-   */
-  function preload() {
-    if (!currGroup) {
-      return;
-    }
-    var prev = new Image();
-    var next = new Image();
-    var pos = getPos(currThumbnail, currGroup);
-    if (pos === (currImages.length - 1)) {
-      // last image in group, preload first image and the one before
-      prev.src = getAttr(currImages[currImages.length - 1], _const_dataattr) || currImages[currImages.length - 1].src;
-      next.src = getAttr(currImages[0].src, _const_dataattr) || currImages[0].src;
-    }
-    else
-      if (pos === 0) {
-        // first image in group, preload last image and the next one
-        prev.src = getAttr(currImages[currImages.length - 1], _const_dataattr) || currImages[currImages.length - 1].src;
-        next.src = getAttr(currImages[1], _const_dataattr) || currImages[1].src;
-      }
-      else {
-        // in between, preload prev & next image
-        prev.src = getAttr(currImages[pos - 1], _const_dataattr) || currImages[pos - 1].src;
-        next.src = getAttr(currImages[pos + 1], _const_dataattr) || currImages[pos + 1].src;
-      }
-  }
-
-  /**
-   * Starts the loading animation
-   */
-  function startAnimation() {
-    // stop any already running animations
-    stopAnimation();
-    var fnc = function () {
-      addClass(CTX.box, _const_class_prefix + '-loading');
-      if (typeof CTX.opt.loadingAnimation === 'number') {
-        var index = 0;
-        animationInt = setInterval(function () {
-          addClass(animationChildren[index], _const_class_prefix + '-active');
-          setTimeout(function () {
-            removeClass(animationChildren[index], _const_class_prefix + '-active');
-          }, CTX.opt.loadingAnimation);
-          index = index >= animationChildren.length ? 0 : index += 1;
-        }, CTX.opt.loadingAnimation);
-      }
+    const boxStyles = {
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      zIndex: 9999999,
+      display: "none",
+      opacity: 0,
+      transition: "opacity 0.3s ease-in-out"
     };
-    // set timeout to not show loading animation on fast connections
-    animationTimeout = setTimeout(fnc, 500);
+    Object.assign(this.box.style, boxStyles);
   }
 
-  /**
-   * Stops the animation
-   */
-  function stopAnimation() {
-    // hide animation-element
-    removeClass(CTX.box, _const_class_prefix + '-loading');
-    // stop animation
-    if (typeof CTX.opt.loadingAnimation !== 'string' && CTX.opt.loadingAnimation) {
-      clearInterval(animationInt);
-      for (var i = 0; i < animationChildren.length; i++) {
-        removeClass(animationChildren[i], _const_class_prefix + '-active');
+  loadEventListeners() {
+    document.addEventListener("DOMContentLoaded", () => {
+      if (snarkFiles) {
+        this.load();
       }
-    }
+    });
   }
 
-  /**
-   * Initializes the control arrows
-   */
-  function initControls() {
-    if (!nextBtn) {
-      // create & append next-btn
-      nextBtn = document.createElement('span');
-      addClass(nextBtn, _const_class_prefix + '-next');
-
-      // add custom images
-      if (CTX.opt.nextImg) {
-        var nextBtnImg = document.createElement('img');
-        nextBtnImg.setAttribute('src', CTX.opt.nextImg);
-        nextBtn.appendChild(nextBtnImg);
-      }
-      else {
-        addClass(nextBtn, _const_class_prefix + '-no-img');
-      }
-      addEvent(nextBtn, 'click', function (e) {
-        stopPropagation(e); // prevent closing of lightbox
-        CTX.next();
-      }, false);
-      CTX.box.appendChild(nextBtn);
-    }
-    addClass(nextBtn, _const_class_prefix + '-active');
-    if (!prevBtn) {
-      // create & append next-btn
-      prevBtn = document.createElement('span');
-      addClass(prevBtn, _const_class_prefix + '-prev');
-
-      // add custom images
-      if (CTX.opt.prevImg) {
-        var prevBtnImg = document.createElement('img');
-        prevBtnImg.setAttribute('src', CTX.opt.prevImg);
-        prevBtn.appendChild(prevBtnImg);
-      }
-      else {
-        addClass(prevBtn, _const_class_prefix + '-no-img');
-      }
-      addEvent(prevBtn, 'click', function (e) {
-        stopPropagation(e); // prevent closing of lightbox
-        CTX.prev();
-      }, false);
-      CTX.box.appendChild(prevBtn);
-    }
-    addClass(prevBtn, _const_class_prefix + '-active');
+  load(opt = {}) {
+    this.setOpt(opt);
+    this.initTemplate();
+    this.addResizeEventListener();
+    const thumbnails = document.querySelectorAll(".thumb");
+    thumbnails.forEach((thumbnail, index) => {
+      thumbnail.setAttribute(`${this._const_dataattr}-index`, index);
+      this.thumbnails.push(thumbnail);
+      this.addThumbnailClickHandler(thumbnail);
+    });
   }
 
-  /**
-   * Moves controls to correct position
-   */
-  function repositionControls() {
-    if (CTX.opt.responsive && nextBtn && prevBtn) {
-      var btnTop = (getHeight() / 2) - (nextBtn.offsetHeight / 2);
-      nextBtn.style.top = btnTop + 'px';
-      prevBtn.style.top = btnTop + 'px';
+  repositionControls() {
+    if (this.opt.responsive && this.box.querySelector(".lb-prev") && this.box.querySelector(".lb-next")) {
+      const btns = this.box.querySelectorAll(".lb-prev, .lb-next");
+      const btnTop = (this.isIframed() ? window.parent.innerHeight : window.innerHeight) / 2 - (btns[0].offsetHeight / 2);
+      btns.forEach(btn => { btn.style.top = `${btnTop}px`; });
     }
   }
 
-  /**
-   * Sets options and defaults
-   * @param {Object} opt
-   */
-  function setOpt(opt) {
-    // set options
-    if (!opt) {
-      opt = {};
-    }
-
-    /**
-     * Sets the passed value per default to true if not given
-     * @param {Object || String || Number || Boolean || ...} val
-     * @returns {Boolean}
-     */
-    function setTrueDef(val) {
-      return typeof val === 'boolean' ? val : true;
-    }
-
-    CTX.opt = {
-      // options
+  setOpt(opt) {
+    this.opt = {
       boxId: opt.boxId || false,
-      controls: setTrueDef(opt.controls),
-      dimensions: setTrueDef(opt.dimensions),
-      captions: setTrueDef(opt.captions),
-      prevImg: typeof opt.prevImg === 'string' ? opt.prevImg : false,
-      nextImg: typeof opt.nextImg === 'string' ? opt.nextImg : false,
+      controls: opt.controls !== undefined ? opt.controls : true,
+      prevImg: typeof opt.prevImg === "string" ? opt.prevImg : false,
+      nextImg: typeof opt.nextImg === "string" ? opt.nextImg : false,
       hideCloseBtn: opt.hideCloseBtn || false,
-      closeOnClick: typeof opt.closeOnClick === 'boolean' ? opt.closeOnClick : true,
-      nextOnClick: setTrueDef(opt.nextOnClick),
-      loadingAnimation: opt.loadingAnimation === undefined ? true : opt.loadingAnimation,
+      closeOnClick: typeof opt.closeOnClick === "boolean" ? opt.closeOnClick : true,
+      nextOnClick: opt.nextOnClick !== undefined ? opt.nextOnClick : true,
+      loadingAnimation: opt.loadingAnimation !== undefined ? opt.loadingAnimation : true,
       animElCount: opt.animElCount || 4,
-      preload: setTrueDef(opt.preload),
-      carousel: setTrueDef(opt.carousel),
-      animation: typeof opt.animation === 'number' || opt.animation === false ? opt.animation : 400,
-      responsive: setTrueDef(opt.responsive),
+      preload: opt.preload !== undefined ? opt.preload : true,
+      carousel: opt.carousel !== undefined ? opt.carousel : true,
+      animation: typeof opt.animation === "number" || opt.animation === false ? opt.animation : 400,
+      responsive: opt.responsive !== undefined ? opt.responsive : true,
       maxImgSize: opt.maxImgSize || 0.8,
-      keyControls: setTrueDef(opt.keyControls),
-      hideOverflow: opt.hideOverflow || true,
-      // callbacks
+      keyControls: opt.keyControls !== undefined ? opt.keyControls : true,
+      hideOverflow: opt.hideOverflow !== undefined ? opt.hideOverflow : true,
       onopen: opt.onopen || false,
       onclose: opt.onclose || false,
       onload: opt.onload || false,
       onresize: opt.onresize || false,
       onloaderror: opt.onloaderror || false,
-      onimageclick: typeof opt.onimageclick === 'function' ? opt.onimageclick : false
+      onimageclick: typeof opt.onimageclick === "function" ? opt.onimageclick : false,
     };
-
-    // load box in custom element
-    if (CTX.opt.boxId) {
-      CTX.box = document.getElementById(CTX.opt.boxId);
-      // set class if missing
-      var classes = CTX.box.getAttribute('class');
-      if (classes.search(_const_class_prefix + ' ') < 0) {
-        CTX.box.setAttribute('class', classes + ' ' + _const_class_prefix);
+    if (this.opt.boxId) {
+      this.box = document.getElementById(this.opt.boxId) || this.box;
+    }
+    if (!this.opt.hideCloseBtn) {
+      const closeBtn = document.createElement("span");
+      closeBtn.className = "lb-close";
+      closeBtn.id = this._const_name + "-close";
+      closeBtn.textContent = "X";
+      closeBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        this.close();
+      });
+      if (!document.getElementById("lb-close")) {
+        this.box.appendChild(closeBtn);
       }
     }
-    // create box element if no ID is given and element is not there
-    else
-      if (!CTX.box && snarkFiles) {
-        // check if there already exists a jslghtbx-div
-        var newEl = document.getElementById(_const_id_prefix);
-        if (!newEl) {
-          newEl = document.createElement('div');
-        }
-        newEl.setAttribute('id', _const_id_prefix);
-        newEl.setAttribute('class', _const_class_prefix);
-        CTX.box = newEl;
-        body.appendChild(CTX.box);
-      }
-    CTX.box.innerHTML = template;
-    CTX.wrapper = document.getElementById(_const_id_prefix + '-contentwrapper');
-
-    // init regular closebutton
-    if (!CTX.opt.hideCloseBtn) {
-      var closeBtn = document.createElement('span');
-      closeBtn.setAttribute('id', _const_id_prefix + '-close');
-      closeBtn.setAttribute('class', _const_class_prefix + '-close');
-      closeBtn.innerHTML = 'X';
-      CTX.box.appendChild(closeBtn);
-      addEvent(closeBtn, 'click', function (e) {
-        stopPropagation(e);
-        CTX.close();
-      }, false);
-    }
-
-    // close lightbox on background-click by default / if true
-    if (CTX.opt.closeOnClick) {
-      addEvent(CTX.box, 'click', function (e) {
-        stopPropagation(e);
-        CTX.close();
-      }, false);
-    }
-
-    // set loading animation
-    if (typeof CTX.opt.loadingAnimation === 'string') {
-      // set loading GIF
-      animationEl = document.createElement('img');
-      animationEl.setAttribute('src', CTX.opt.loadingAnimation);
-      addClass(animationEl, _const_class_prefix + '-loading-animation');
-      CTX.box.appendChild(animationEl);
-    }
-    else
-      if (CTX.opt.loadingAnimation) {
-        // set default animation time
-        CTX.opt.loadingAnimation = typeof CTX.opt.loadingAnimation === 'number' ? CTX.opt.loadingAnimation : 200;
-        // create animation elements
-        animationEl = document.createElement('div');
-        addClass(animationEl, _const_class_prefix + '-loading-animation');
-        var i = 0;
-        while (i < CTX.opt.animElCount) {
-          animationChildren.push(animationEl.appendChild(document.createElement('span')));
-          i++;
-        }
-        CTX.box.appendChild(animationEl);
-      }
-
-    // add resize-eventhandlers
-    if (CTX.opt.responsive) {
-      addEvent(window, 'resize', function () {
-        CTX.resize();
-      }, false);
-      addClass(CTX.box, _const_class_prefix + '-nooverflow'); // hide scrollbars on prev/next
-    }
-    else {
-      removeClass(CTX.box, _const_class_prefix + '-nooverflow');
-    }
-
-    // add keyboard event handlers
-    if (CTX.opt.keyControls) {
-      addEvent(document, 'keydown', function (e) {
-        if (isOpen) {
-          stopPropagation(e); // prevent closing of lightbox
-          if (e.keyCode === 39) {
-            // show next img on right cursor
-            CTX.next();
-          }
-          else
-            if (e.keyCode === 37) {
-              // show prev img on left cursor
-              CTX.prev();
-            }
-            else
-              if (e.keyCode === 27) {
-                // close lightbox on ESC
-                CTX.close();
-              }
-        }
-      }, false);
+    if (this.opt.closeOnClick) {
+      this.box.addEventListener("click", (e) => {
+        e.stopPropagation();
+        this.close();
+      });
     }
   }
 
-  /**
-   * Opens the lightbox. Either @param el and @param group must be given,
-   * but not both together!
-   * @param  {Object || String}   el      an image element or a link to an image
-   * @param  {String}   group       the name of an image group
-   * @param  {Function} cb          A private callback
-   * @param  {Object} event
-   */
-  function openBox(el, group, cb, event) {
-    if (!el && !group) {
-      return false;
-    }
-    // save images from group
-    currGroup = group || currGroup || getAttr(el, _const_dataattr + '-group');
-    if (currGroup) {
-      currImages = getByGroup(currGroup);
-      if (typeof el === 'boolean' && !el) {
-        // el is set to false, load first image of group
-        el = currImages[0];
-      }
-    }
-
-    // create new img-element
-    currImage.img = new Image();
-
-    // set el as current thumbnail
-    currThumbnail = el;
-
-    // get correct image-source
-    var src;
-    if (typeof el === 'string') {
-      // string with img-src given
-      src = el;
-    }
-    else
-      if (getAttr(el, _const_dataattr)) {
-        // image-source given
-        src = getAttr(el, _const_dataattr);
-      }
-      else {
-        // no image-source given
-        src = getAttr(el, 'src');
-      }
-    // clear old image ratio for proper resize-values
-    imgRatio = false;
-
-    // add init-class on opening, but not at prev/next
-    if (!isOpen) {
-      if (typeof CTX.opt.animation === 'number') {
-        addClass(currImage.img, _const_class_prefix + '-animate-transition ' + _const_class_prefix + '-animate-init');
-      }
-      isOpen = true;
-
-      // execute open callback
-      if (CTX.opt.onopen) {
-        CTX.opt.onopen(currImage);
-      }
-    }
-
-    // hide overflow by default / if set
-    if (!CTX.opt || !isset(CTX.opt.hideOverflow) || CTX.opt.hideOverflow) {
-      body.setAttribute('style', 'overflow:hidden');
-    }
-
-    CTX.box.setAttribute('style', 'padding-top:0');
-    CTX.wrapper.innerHTML = '';
-    CTX.wrapper.appendChild(currImage.img);
-    // set animation class
-    if (CTX.opt.animation) {
-      addClass(CTX.wrapper, _const_class_prefix + '-animate');
-    }
-    // set caption
-    var captionText = getAttr(el, _const_dataattr + '-caption');
-    if (captionText && CTX.opt.captions) {
-      var caption = document.createElement('p');
-      caption.setAttribute('class', _const_class_prefix + '-caption');
-      // add dimensions to caption
-      var dimensions;
-      var currIndex = currImages.indexOf(el);
-      if (currImage.img.naturalWidth) {
-        dimensions = currImage.img.naturalWidth + ' x ' + currImage.img.naturalHeight;
-      } else {
-        if (currIndex === 0) {
-          dimensions = (getWidth(currImage.img) + ' x ' + getHeight(currImage.img));
-        } else {
-          dimensions = currImage.originalWidth + ' x ' + currImage.originalHeight;
-        }
-      }
-      caption.innerHTML = ('<span id=caption>' + captionText + ' &nbsp;<span id=dimensions>' +
-                           (!dimensions.includes("undefined") ? dimensions : "") + '</span></span>');
-      CTX.wrapper.appendChild(caption);
-    }
-
-    addClass(CTX.box, _const_class_prefix + '-active');
-
-    if (CTX.opt.controls && currImages.length > 1) {
-      initControls();
-      repositionControls();
-    }
-
-    /**
-     * Onerror-handler for the image
-     */
-    currImage.img.onerror = function (imageErrorEvent) {
-      if (CTX.opt.onloaderror) {
-        // if `event` is false, error happened on opening the box
-        imageErrorEvent._happenedWhile = event ? event : false;
-        CTX.opt.onloaderror(imageErrorEvent);
-      }
-    };
-    /**
-     * Onload-handler for the image
-     */
-    currImage.img.onload = function () {
-      // store original width here
-      currImage.originalWidth = this.naturalWidth || this.width;
-      currImage.originalHeight = this.naturalHeight || this.height;
-      // interval to check if image is ready to show
-      var checkClassInt = setInterval(function () {
-        if (hasClass(CTX.box, _const_class_prefix + '-active')) {
-          addClass(CTX.wrapper, _const_class_prefix + '-wrapper-active');
-          // set animation
-          if (typeof CTX.opt.animation === 'number') {
-            addClass(currImage.img, _const_class_prefix + '-animate-transition');
-          }
-          if (cb) {
-            cb();
-          }
-          // stop Animation
-          stopAnimation();
-          // clear animation timeout
-          clearTimeout(animationTimeout);
-          // preload previous and next image
-          if (CTX.opt.preload) {
-            preload();
-          }
-          // set clickhandler on image to show next image
-          if (CTX.opt.nextOnClick) {
-            // add cursor pointer
-            addClass(currImage.img, _const_class_prefix + '-next-on-click');
-            addEvent(currImage.img, 'click', function (e) {
-              stopPropagation(e);
-              CTX.next();
-            }, false);
-          }
-          // set custom clickhandler on image
-          if (CTX.opt.onimageclick) {
-            addEvent(currImage.img, 'click', function (e) {
-              stopPropagation(e);
-              CTX.opt.onimageclick(currImage);
-            }, false);
-          }
-          // execute onload callback
-          if (CTX.opt.onload) {
-            CTX.opt.onload(event);
-          }
-          // stop current interval
-          clearInterval(checkClassInt);
-          // resize the image
-          CTX.resize();
-        }
-      }, 10);
-    };
-
-    // set src
-    currImage.img.setAttribute('src', src);
-
-    // start loading animation
-    startAnimation();
+  addThumbnailClickHandler(thumbnail) {
+    if (!thumbnail) {return;}
+    thumbnail.addEventListener("click", (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      this.currGroup = thumbnail.getAttribute(`${this._const_dataattr}-group`) || false;
+      this.currThumbnail = thumbnail;
+      this.openBox(thumbnail);
+    });
   }
 
-  /*
-   *   Public methods
-   */
+  openBox(el) {
+    if (!el) return;
 
-  /**
-   * Init-function, must be called once
-   * @param  {Object} opt Custom options
-   */
-  CTX.load = function (opt) {
+    if (this.wrapper.firstChild) {
+      this.wrapper.removeChild(this.wrapper.firstChild);
+    }
 
-    // set options
-    setOpt(opt);
+    this.currImage.img = new Image();
+    this.currThumbnail = el;
+    const src = el.getAttribute(this._const_dataattr) || el.src;
+    this.currImage.img.src = src;
 
-    // Find all elements with `data-jslghtbx` attribute & add clickhandlers
-    var arr = document.querySelectorAll('[' + _const_dataattr + ']');
-    for (var i = 0; i < arr.length; i++) {
-      if (hasAttr(arr[i], _const_dataattr)) {
-        // set index to get proper position in getPos()
-        arr[i].setAttribute(_const_dataattr + '-index', i);
-        CTX.thumbnails.push(arr[i]);
+    const wrapperStyles = {
+      position: "relative",
+      width: "auto",
+      height: "auto",
+      maxWidth: "80%",
+      maxHeight: "100%",
+      margin: "0 auto",
+      padding: "20px",
+      boxSizing: "border-box",
+      opacity: 1,
+      transition: "opacity 0.3s ease-in-out",
+      visibility: "visible"
+    };
+    Object.assign(this.wrapper.style, wrapperStyles);
+
+    const boxStyles = {
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      zIndex: 9999999,
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      opacity: 1,
+      transition: "opacity 0.3s ease-in-out",
+      visibility: "visible"
+    };
+    Object.assign(this.box.style, boxStyles);
+
+    this.currImages = Array.from(document.querySelectorAll(`[${this._const_dataattr}-group="${this.currGroup}"]`));
+    const currImageStyles = {
+      display: "block",
+      maxWidth: "auto",
+      maxHeight: "80%",
+      margin: "0 auto",
+      padding: "0",
+      boxSizing: "border-box",
+      backgroundColor: "transparent",
+      border: "none",
+      outline: "none",
+      boxShadow: "none",
+      opacity: 1,
+      transition: "opacity 0.3s ease-in-out"
+    };
+    Object.assign(this.currImage.img.style, currImageStyles);
+
+    this.currImage.img.onload = () => {
+      this.isOpen = true;
+      this.resize();
+      this.box.style.opacity = 1;
+      this.wrapper.style.opacity = 1;
+      this.currImage.img.style.opacity = 1;
+
+      if (this.currImages.length > 1) {
+        const prev = document.getElementById("lb-prev");
+        const next = document.getElementById("lb-next");
+        prev.style.display = "inline-block";
+        next.style.display = "inline-block";
       }
+
+      this.repositionControls();
+
+      if (this.opt.onload) this.opt.onload();
+      this.preload();
+    };
+
+    this.wrapper.appendChild(this.currImage.img);
+    this.addImageClickHandler();
+
+    this.isIframed();
+    if (this.isIframed()) {
+      this.adjustForIframe();
     }
 
-  };
+    this.resizeObserver = new ResizeObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.target === (this.isIframed() ? window.parent.document.body : document.body)) {
+          if (this.isOpen) {
+            this.resize();
+            this.repositionControls();
+          }
+        }
+      });
+    });
+    this.resizeObserver.observe(this.isIframed() ? window.parent.document.body : document.body);
+  }
 
-  /**
-   * Public caller for openBox()
-   * @param  {Object || string} el  Image element or a link
-   * @param  {String} group
-   */
-  CTX.open = function (el, group) {
-    // if image and group are given, set group to false
-    // to prevent errors
-    if (el && group) {
-      group = false;
+  addImageClickHandler() {
+    if (this.opt.onimageclick) {
+      this.currImage.img.addEventListener("click", (e) => {
+        e.stopPropagation();
+        this.opt.onimageclick(this.currImage);
+      });
     }
-    openBox(el, group, false, false);
-  };
+  }
 
-  /**
-   * Calculates the new image size and resizes it
-   */
-  CTX.resize = function () {
-    if (!currImage.img) {
+  preload() {
+    if (!this.currGroup) return;
+    const currIndex = this.thumbnails.findIndex((thumbnail) => thumbnail === this.currThumbnail);
+    const nextIndex = (currIndex + 1) % this.thumbnails.length;
+    const prevIndex = (currIndex - 1 + this.thumbnails.length) % this.thumbnails.length;
+    const nextThumbnail = this.thumbnails[nextIndex];
+    const prevThumbnail = this.thumbnails[prevIndex];
+    const nextSrc = nextThumbnail.getAttribute(this._const_dataattr) || nextThumbnail.src;
+    const prevSrc = prevThumbnail.getAttribute(this._const_dataattr) || prevThumbnail.src;
+    const nextImg = new Image();
+    const prevImg = new Image();
+    nextImg.src = nextSrc;
+    prevImg.src = prevSrc;
+  }
+
+  resize() {
+    if (!this.currImage.img) return;
+
+    const maxWidth = window.innerWidth * this.opt.maxImgSize;
+    const maxHeight = window.innerHeight * this.opt.maxImgSize;
+    const imgRatio = this.currImage.img.naturalWidth / this.currImage.img.naturalHeight;
+
+    let newImgWidth = maxWidth;
+    let newImgHeight = maxWidth / imgRatio;
+
+    if (newImgHeight > maxHeight) {
+      newImgHeight = maxHeight;
+      newImgWidth = maxHeight * imgRatio;
+    }
+
+    const currImgStyles = {
+      width: `auto`,
+      height: `${Math.min(Math.floor(newImgHeight), 600)}px`,
+      maxWidth: `${maxWidth}px`,
+      maxHeight: `${maxHeight}px`,
+    };
+    Object.assign(this.currImage.img.style, currImgStyles);
+
+    if (this.opt.onresize) this.opt.onresize(this.currImage);
+  }
+
+  close() {
+    this.isOpen = false;
+    this.box.classList.remove("lb-active");
+    this.box.style.display = "none";
+    this.wrapper.innerHTML = "";
+    if (this.opt.onclose) this.opt.onclose();
+    this.body.style.overflow = "auto";
+
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+      this.resizeObserver = null;
+    }
+  }
+
+  next() {
+    if (!this.currGroup) return;
+    const pos = this.currImages.findIndex((thumbnail) => thumbnail === this.currThumbnail) + 1;
+    if (this.currImages[pos]) {
+      this.currThumbnail = this.currImages[pos];
+    } else if (this.opt.carousel) {
+      this.currThumbnail = this.currImages[0];
+    } else {
       return;
     }
-    maxWidth = getWidth();
-    maxHeight = getHeight();
-    var boxWidth = CTX.box.offsetWidth;
-    var boxHeight = CTX.box.offsetHeight;
-    if (!imgRatio && currImage.img && currImage.img.offsetWidth && currImage.img.offsetHeight) {
-      imgRatio = currImage.img.offsetWidth / currImage.img.offsetHeight;
-    }
+    this.openBox(this.currThumbnail);
+  }
 
-    // Height of image is too big to fit in viewport
-    if (Math.floor(boxWidth / imgRatio) > boxHeight) {
-      newImgWidth = boxHeight * imgRatio;
-      newImgHeight = boxHeight;
-    }
-    // Width of image is too big to fit in viewport
-    else {
-      newImgWidth = boxWidth;
-      newImgHeight = boxWidth / imgRatio;
-    }
-    // decrease size with modifier
-    newImgWidth = Math.floor(newImgWidth * CTX.opt.maxImgSize);
-    newImgHeight = Math.floor(newImgHeight * CTX.opt.maxImgSize);
-
-    // check if image exceeds maximum size
-    if (CTX.opt.dimensions && newImgHeight > currImage.originalHeight ||
-      CTX.opt.dimensions && newImgWidth > currImage.originalWidth) {
-      newImgHeight = currImage.originalHeight;
-      newImgWidth = currImage.originalWidth;
-    }
-    currImage.img.setAttribute('width', newImgWidth);
-    currImage.img.setAttribute('height', newImgHeight);
-    currImage.img.setAttribute('style', 'margin-top:' + ((getHeight() - newImgHeight) / 2) + 'px');
-
-    // reposition controls after timeout
-    setTimeout(repositionControls, 200);
-
-    // execute resize callback
-    if (CTX.opt.onresize) {
-      CTX.opt.onresize(currImage);
-    }
-  };
-
-  /**
-   * Loads the next image
-   */
-  CTX.next = function () {
-    if (!currGroup) {
+  prev() {
+    if (!this.currGroup) return;
+    const pos = this.currImages.findIndex((thumbnail) => thumbnail === this.currThumbnail) - 1;
+    if (this.currImages[pos]) {
+      this.currThumbnail = this.currImages[pos];
+    } else if (this.opt.carousel) {
+      this.currThumbnail = this.currImages[this.currImages.length - 1];
+    } else {
       return;
     }
-    // get position of next image
-    var pos = getPos(currThumbnail, currGroup) + 1;
-    if (currImages[pos]) {
-      currThumbnail = currImages[pos];
-    }
-    else
-      if (CTX.opt.carousel) {
-        currThumbnail = currImages[0];
+    this.openBox(this.currThumbnail);
+  }
+
+  getPos(thumbnail) {
+    return this.thumbnails.findIndex((t) => t === thumbnail);
+  }
+
+  addResizeEventListener() {
+    window.addEventListener("resize", () => {
+      if (this.isOpen) {
+        this.resize();
+        this.repositionControls();
       }
-      else {
-        return;
-      }
-    if (typeof CTX.opt.animation === 'number') {
-      removeClass(currImage.img, _const_class_prefix + '-animating-next');
-      setTimeout(function () {
-        var cb = function () {
-          setTimeout(function () {
-            addClass(currImage.img, _const_class_prefix + '-animating-next');
-          }, CTX.opt.animation / 2);
-        };
-        openBox(currThumbnail, false, cb, 'next');
-      }, CTX.opt.animation / 2);
-    }
-    else {
-      openBox(currThumbnail, false, false, 'next');
-    }
-  };
+    });
+  }
 
-  /**
-   * Loads the prev image
-   */
-  CTX.prev = function () {
-    if (!currGroup) {
-      return;
+  isIframed() {
+    if (document.documentElement.classList.contains("iframed") || window.top !== window.self) {
+      return true;
     }
-    // get position of prev image
-    var pos = getPos(currThumbnail, currGroup) - 1;
-    if (currImages[pos]) {
-      currThumbnail = currImages[pos];
-    }
-    else
-      if (CTX.opt.carousel) {
-        currThumbnail = currImages[currImages.length - 1];
-      }
-      else {
-        return;
-      }
-    // animation stuff
-    if (typeof CTX.opt.animation === 'number') {
-      removeClass(currImage.img, _const_class_prefix + '-animating-prev');
-      setTimeout(function () {
-        var cb = function () {
-          setTimeout(function () {
-            addClass(currImage.img, _const_class_prefix + '-animating-next');
-          }, CTX.opt.animation / 2);
-        };
-        openBox(currThumbnail, false, cb, 'prev');
-      }, CTX.opt.animation / 2);
-    }
-    else {
-      openBox(currThumbnail, false, false, 'prev');
-    }
-  };
+    return false;
+  }
 
-  /**
-   * Closes the box
-   */
-  CTX.close = function () {
-    // restore Defaults
-    currGroup = false;
-    currThumbnail = false;
-    var _currImage = currImage;
-    currImage = {};
-    currImages = [];
-    isOpen = false;
-    removeClass(CTX.box, _const_class_prefix + '-active');
-    removeClass(CTX.wrapper, _const_class_prefix + '-wrapper-active');
-    removeClass(nextBtn, _const_class_prefix + '-active');
-    removeClass(prevBtn, _const_class_prefix + '-active');
-    CTX.box.setAttribute('style', 'padding-top: 0px');
-
-    // stop animtation
-    stopAnimation();
-
-    // show overflow by default / if set
-    if (!CTX.opt || !isset(CTX.opt.hideOverflow) || CTX.opt.hideOverflow) {
-      body.setAttribute('style', 'overflow: auto');
-    }
-
-    // execute close callback
-    if (CTX.opt.onclose) {
-      CTX.opt.onclose(_currImage);
-    }
-  };
+  adjustForIframe() {
+    const parentDocument = window.parent.document;
+    this.box.style.height = `${window.parent.innerHeight}px`;
+    parentDocument.body.style.overflow = "hidden";
+    parentDocument.documentElement.style.overflow = "hidden";
+    parentDocument.body.style.contain = "paint";
+  }
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-  if (!snarkFiles) {return;}
-  var lightbox = new Lightbox();lightbox.load();
+document.addEventListener("DOMContentLoaded", () => {
+  [...document.querySelectorAll(".thumb")].forEach((thumb, i) => {
+    const span = document.createElement("span");
+    span.classList.add("dimensions");
+    span.textContent = `${thumb.naturalWidth}x${thumb.naturalHeight}`;
+    const fileNameTd = document.querySelectorAll(".snarkFileName")[i];
+    const link = fileNameTd.querySelector("a");
+    fileNameTd.insertBefore(span, link.nextSibling);
+  });
 });
 
-export {Lightbox};
+export { Lightbox };
