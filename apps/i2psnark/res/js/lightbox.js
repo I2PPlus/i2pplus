@@ -22,7 +22,7 @@ class Lightbox {
 
   initTemplate() {
     this.box.id = this._const_name;
-    this.wrapper.id = this._const_name + "-imgwrap";
+    this.wrapper.id = this._const_name + "-wrap";
     this.box.appendChild(this.wrapper);
     this.body.appendChild(this.box);
     if (this.opt.controls) {
@@ -33,7 +33,7 @@ class Lightbox {
         e.stopPropagation();
         this.prev();
       });
-      if (!document.getElementById("lb-prev")) {
+      if (!document.getElementById(this._const_name + "-prev")) {
         this.box.appendChild(prevBtn);
       }
       const nextBtn = document.createElement("button");
@@ -43,7 +43,7 @@ class Lightbox {
         e.stopPropagation();
         this.next();
       });
-      if (!document.getElementById("lb-next")) {
+      if (!document.getElementById(this._const_name + "-next")) {
         this.box.appendChild(nextBtn);
       }
     }
@@ -54,20 +54,12 @@ class Lightbox {
       closeBtn.addEventListener("click", () => {
         this.close();
       });
-      if (!document.getElementById("lb-close")) {
+      if (!document.getElementById(this._const_name + "-close")) {
         this.box.appendChild(closeBtn);
       }
     }
     const boxStyles = {
-      position: "fixed",
-      top: 0,
-      left: 0,
-      width: "100%",
-      height: "100%",
-      zIndex: 9999999,
       display: "none",
-      opacity: 0,
-      transition: "opacity 0.3s ease-in-out"
     };
     Object.assign(this.box.style, boxStyles);
   }
@@ -137,7 +129,7 @@ class Lightbox {
         e.stopPropagation();
         this.close();
       });
-      if (!document.getElementById("lb-close")) {
+      if (!document.getElementById(this._const_name + "-close")) {
         this.box.appendChild(closeBtn);
       }
     }
@@ -163,65 +155,36 @@ class Lightbox {
   openBox(el) {
     if (!el) return;
 
-    if (this.wrapper.firstChild) {
-      this.wrapper.removeChild(this.wrapper.firstChild);
-    }
+    if (this.wrapper.firstChild) {this.wrapper.removeChild(this.wrapper.firstChild);}
+    window.scrollTo(0,0);
 
     this.currImage.img = new Image();
     this.currThumbnail = el;
     const src = el.getAttribute(this._const_dataattr) || el.src;
     this.currImage.img.src = src;
 
-    const wrapperStyles = {
-      position: "relative",
-      width: "auto",
-      height: "auto",
-      maxWidth: "80%",
-      maxHeight: "100%",
-      margin: "0 auto",
-      padding: "20px",
-      boxSizing: "border-box",
-      opacity: 1,
-      transition: "opacity 0.3s ease-in-out",
-      visibility: "visible"
-    };
-    Object.assign(this.wrapper.style, wrapperStyles);
-
     const boxStyles = {
-      position: "fixed",
-      top: 0,
-      left: 0,
-      width: "100%",
-      height: "100%",
-      zIndex: 9999999,
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      opacity: 1,
-      transition: "opacity 0.3s ease-in-out",
-      visibility: "visible"
     };
     Object.assign(this.box.style, boxStyles);
 
     this.currImages = Array.from(document.querySelectorAll(`[${this._const_dataattr}-group="${this.currGroup}"]`));
     const currImageStyles = {
-      display: "block",
-      boxSizing: "border-box",
-      opacity: 1,
-      transition: "opacity 0.3s ease-in-out"
+      display: "block"
     };
     Object.assign(this.currImage.img.style, currImageStyles);
 
     this.currImage.img.onload = () => {
       this.isOpen = true;
       this.resize();
-      this.box.style.opacity = 1;
-      this.wrapper.style.opacity = 1;
-      this.currImage.img.style.opacity = 1;
+      this.box.id = `${this._const_name}`;
+      this.box.classList.add("active");
 
       if (this.currImages.length > 1) {
-        const prev = document.getElementById("lb-prev");
-        const next = document.getElementById("lb-next");
+        const prev = document.getElementById(this._const_name + "-prev");
+        const next = document.getElementById(this._const_name + "-next");
         prev.style.display = "inline-block";
         next.style.display = "inline-block";
       }
@@ -305,12 +268,16 @@ class Lightbox {
 
   close() {
     this.isOpen = false;
-    this.box.classList.remove("lb-active");
     this.box.style.display = "none";
+    this.box.classList.remove("active");
     this.wrapper.innerHTML = "";
     if (this.opt.onclose) this.opt.onclose();
     this.body.style.overflow = "auto";
-
+    this.removeEventListeners();
+    if (this.isIframed()) {
+      window.parent.document.body.removeAttribute("style");
+      window.parent.document.documentElement.removeAttribute("style");
+    }
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
       this.resizeObserver = null;
@@ -352,14 +319,23 @@ class Lightbox {
       if (this.isOpen) {
         this.resize();
         this.repositionControls();
+        this.adjustForIframe();
       }
     });
   }
 
+  removeEventListeners() {
+    const prevBtn = this.box.querySelector("#lb-prev");
+    if (prevBtn) {prevBtn.removeEventListener("click", this.prev.bind(this));}
+    const nextBtn = this.box.querySelector("#lb-next");
+    if (nextBtn) {nextBtn.removeEventListener("click", this.next.bind(this));}
+    const closeBtn = this.box.querySelector("#lb-close");
+    if (closeBtn) {closeBtn.removeEventListener("click", this.close.bind(this));}
+    this.box.removeEventListener("click", this.close.bind(this));
+  }
+
   isIframed() {
-    if (document.documentElement.classList.contains("iframed") || window.top !== window.self) {
-      return true;
-    }
+    if (document.documentElement.classList.contains("iframed") || window.top !== window.self) {return true;}
     return false;
   }
 
@@ -369,6 +345,7 @@ class Lightbox {
     parentDocument.body.style.overflow = "hidden";
     parentDocument.documentElement.style.overflow = "hidden";
     parentDocument.body.style.contain = "paint";
+    window.parent.scrollTo(0,0);
   }
 }
 
