@@ -4624,6 +4624,8 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean showSaveButton = false;
         boolean rowEven = true;
         boolean inOrder = storage != null && storage.getInOrder();
+        int videoCount = 0;
+        int imgCount = 0;
         for (Sorters.FileAndIndex fai : fileList) {
             // String encoded = encodePath(ls[i].getName());
             // bugfix for I2P - Backport from Jetty 6 (zero file lengths and last-modified times)
@@ -4683,8 +4685,6 @@ public class I2PSnarkServlet extends BasicServlet {
             if (mime == null) {mime = "";}
             boolean isAudio = isAudio(mime);
             boolean isVideo = !isAudio && isVideo(mime);
-            int videoCount = 0;
-            int imgCount = 0;
             buf.append("<td class=\"fileIcon");
             if (!complete) {buf.append(" volatile");}
             buf.append("\">");
@@ -4725,12 +4725,6 @@ public class I2PSnarkServlet extends BasicServlet {
                 else {buf.append(toSVG(icon, _t("Open"))).append("</a>");}
                 if (isAudio) {buf.append("</audio>");}
                 else if (isVideo) {buf.append("</video>");}
-                if (videoCount == 1) {
-                    buf.append("<script src=\"" + resourcePath + "js/getMetadata.js?" + CoreVersion.VERSION + "\"></script>\n");
-                }
-                if (imgCount > 0) {
-                    buf.append("<script src=" + resourcePath + "js/getImgDimensions.js></script>\n");
-                }
             } else {buf.append(toSVG(icon));}
             buf.append("</td><td class=\"snarkFileName");
             if (!complete) {buf.append(" volatile");}
@@ -4800,6 +4794,8 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("\" name=\"savepri\">\n").append("</th></tr></thead>\n");
         }
         buf.append("</table>\n</div>\n");
+        if (videoCount == 1) {buf.append("<script src=\"" + resourcePath + "js/getMetadata.js?" + CoreVersion.VERSION + "\"></script>\n");}
+        if (imgCount > 0) {buf.append("<script src=" + resourcePath + "js/getImgDimensions.js></script>\n");}
 
 // Comment section
 
