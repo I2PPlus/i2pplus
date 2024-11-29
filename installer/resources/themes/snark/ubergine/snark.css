@@ -36,6 +36,7 @@
 --shadow_inset:inset 3px 3px 3px #0009;
 --shadow_table:0 0 0 1px rgba(119,102,119,.9),0 0 0 2px #212,0 0 2px 2px rgba(8,0,8,.3);
 --snarkGraph:url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true");
+--snarkGraph:url();
 --tabicon:linear-gradient(180deg,#767 50%,#323 50%,#212);
 --th:linear-gradient(180deg,#202,#101);
 --th_sub:url(/i2psnark/.res/icons/favicon.svg) no-repeat 7px center/20px,linear-gradient(135deg,rgba(16,0,16,.6),rgba(16,0,16,.3),rgba(16,0,16,.7)),var(--th2_bg);
@@ -950,9 +951,9 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 .choked .left,.choked .right{display:none!important}
 .inactivity{margin-left:14px;max-width:400px;min-width:5px;height:5px;display:inline-block;vertical-align:middle;border-radius:3px;box-shadow:0 0 0 1px #200,0 0 0 1px #fff3 inset;background:repeating-linear-gradient(90deg,#0000,#0000 15px,rgba(0,0,0,.5) 15px,rgba(0,0,0,.5) 16px,#0000 16px),linear-gradient(180deg,#fff3 50%,#0003 50%),linear-gradient(90deg,#770 50px,#900)}
 .inactivity[style="width:0px"],.inactivity[style="width:1px"],.inactivity[style="width:2px"],.inactivity[style="width:3px"],.inactivity[style="width:4px"],.inactivity[style="width:5px"]{display:none}
-.peerinfo .rateDown .left,.peerinfo .rateDown .right,.peerinfo .rateUp .left,.peerinfo .rateUp .right{opacity:.5;text-shadow:0 0 1px #000}
-.peerinfo .rateDown.ten .left,.peerinfo .rateDown.ten .right,.peerinfo .rateUp.ten .left,.peerinfo .rateUp.ten .right{opacity:.75}
-.rateDown.hundred .left,.rateDown.hundred .right,.rateUp.hundred .left,.rateUp.hundred .right{opacity:1}
+.peerinfo .rateDown, .peerinfo .rateUp{opacity:.5;text-shadow:0 0 1px #000}
+.peerinfo .rateDown.ten,.peerinfo .rateUp.ten{opacity:.75}
+.rateDown.hundred,.rateUp.hundred{opacity:1}
 .rateDown .left,.rateUp .left,.txd .left,.rateDown .right,.rateUp .right,.txd .right{min-width:22px;display:inline-block;text-align:left}
 .rateDown,.rateUp,.txd{text-align:center}
 .rateDown .right,.rateUp .right,.txd .right{min-width:40px;text-align:right}
