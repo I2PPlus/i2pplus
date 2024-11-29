@@ -882,7 +882,7 @@ th .commentAuthorName{margin-right:-10px;padding-right:6px;font-size:90%}
 #torrentDisplay{margin:1px 0 -1px;padding:2px;display:flex;position:relative;z-index:500;border-bottom:var(--border_inner);border-radius:4px 4px 0 0;background:var(--th);filter:drop-shadow(0 1px 1px #101)}
 .iframed #torrentDisplay{padding:0 0 1px}
 #torrentDisplay .filter.enabled{color:#dad;text-shadow:var(--txt_shadow);box-shadow:var(--highlight),3px 3px 3px rgba(0,0,0,.45) inset;background:radial-gradient(at center bottom,rgba(255,32,160,.25),rgba(128,64,128,.15) 80%,#0000),linear-gradient(180deg,#180818,#280828);pointer-events:none}
-#torrentDisplay .filter{margin:0;padding:3px 2px;display:flex;justify-content:center;flex-grow:.5;font-size:95%;font-weight:700;color:#969;text-shadow:0 0 1px #000;-webkit-text-stroke:1px rgba(45,30,45,.3);border:var(--border_inner);border-right:0;border-radius:0;box-shadow:inset 0 0 0 1px #0006;background:linear-gradient(180deg,#313,#202 50%,#101 50%)}
+#torrentDisplay .filter{margin:0;padding:3px 2px;display:flex;justify-content:center;flex-grow:.5;font-size:95%;font-weight:700;color:#969;text-shadow:0 0 1px #000;-webkit-text-stroke:1px rgba(45,30,45,.3);border:var(--border_inner);border-right:0;border-radius:0;box-shadow:inset 0 0 0 1px #0006;background:linear-gradient(180deg,#313,#202 50%,#101 50%);transition:opacity ease .15s}
 html:not(.iframed) #torrentDisplay .filter:first-of-type{border-radius:3px 0 0 3px}
 html:not(.iframed) #torrentDisplay #stopped{border-radius:0 3px 3px 0}
 #torrentDisplay .filter:last-child{border-right:var(--border_inner)}
