@@ -21,6 +21,10 @@ async function showBadge() {
     const badges = filter.querySelectorAll(".badge");
     if (filter !== activeFilter) {
       filter.classList.remove("enabled");
+      const tempDisabled = {pointerEvents: "none", opacity: ".5"};
+      Object.assign(filter, tempDisabled);
+      filter.style.pointerEvents = "none";
+      filter.style.opacity = ".5";
       if (!isFilterAll) {
         badges.forEach(badge => {
           Object.assign(badge, {hidden: true, textContent: "", id: ""});
@@ -31,13 +35,21 @@ async function showBadge() {
         setTimeout(() => {
           requestAnimationFrame(() => {
             Object.assign(badge, {textContent: countSnarks(), hidden: false, id: "filtercount"});
+           const activeBadge = document.getElementById("filtercount");
+           if (activeBadge?.textContent !== countSnarks()) {activeBadge.textContent = countSnarks();}
           });
-        }, 1000);
+        }, 1500);
       });
     } else {
       const badge = filterAll.querySelector(".badge");
       Object.assign(badge, {hidden: false, id: "filtercount"});
     }
+    if (filter !== activeFilter) {
+      setTimeout(() => {
+       filter.style.pointerEvents = "";
+       filter.style.opacity = "";
+     }, 1800);
+   }
   });
 
   if (activeFilter) {
@@ -82,7 +94,7 @@ function updateURLs() {
 async function filterNav() {
   const filterbar = document.getElementById("torrentDisplay");
   if (!filterbar) {
-    setTimeout(filterNav, 1000);
+    setTimeout(filterNav, 1500);
     return;
   }
   const pagenavtop = document.getElementById("pagenavtop");
