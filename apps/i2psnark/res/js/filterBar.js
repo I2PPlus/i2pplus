@@ -48,7 +48,7 @@ async function showBadge() {
       setTimeout(() => {
        filter.style.pointerEvents = "";
        filter.style.opacity = "";
-     }, 1800);
+     }, 2000);
    }
   });
 
@@ -110,7 +110,7 @@ async function filterNav() {
       history.replaceState({}, "", filterURL);
       showBadge();
       try {
-        await doRefresh(filterURL, true);
+        await doRefresh(xhrURL, true);
       } catch {}
       if (pagenavtop) {
         pagenavtop.hidden = filterElement.id !== "all";
