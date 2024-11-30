@@ -22,8 +22,6 @@ class Lightbox {
 
   initialize() {
     this.box = this.createEl('div', this.prefix);
-    this.wrap = this.createEl('div', `${this.prefix}-wrap`);
-    this.box.appendChild(this.wrap);
     this.body.appendChild(this.box);
     this.playPauseContainer = this.createControls();
     this.addEventListeners();
@@ -83,20 +81,12 @@ class Lightbox {
 
   setOpt(opt) {
     const defaults = {
-      controls: true,
-      closeOnClick: true,
-      nextOnClick: true,
       preload: true,
-      carousel: true,
-      responsive: true,
-      maxImgSize: 0.8,
-      onimageclick: false,
+      maxImgSize: 0.75,
     };
 
     this.opt = { ...defaults, ...opt };
-    if (this.opt.closeOnClick) {
-      this.box.addEventListener("click", this.close.bind(this));
-    }
+    this.box.addEventListener("click", this.close.bind(this));
   }
 
   addThumbnailClickHandler(thumbnail) {
@@ -111,19 +101,18 @@ class Lightbox {
   openBox(el) {
     if (!el) return;
     document.body.classList.add("lightbox");
-    this.wrap.innerHTML = '';
     window.scrollTo(0, 0);
     this.currImage.img = new Image();
     const src = el.getAttribute(this.data_attr) || el.src;
-
     this.currImage.img.src = src;
     this.box.style.display = "flex";
     this.currImages = Array.from(document.querySelectorAll(`[${this.data_attr}-group="${this.currGroup}"]`));
     this.currImage.img.onload = () => this.onImageLoad();
-    this.wrap.appendChild(this.currImage.img);
+    this.box.appendChild(this.currImage.img);
+    if (this.currImages[0] === el && !this.currImages[0].classList.contains("first")) {
+      this.currImage.img.classList.add("first");
+    }
     if (this.isIframed()) { this.adjustForIframe(); }
-
-    this.addImageClickHandler();
     this.setupResizeObserver();
   }
 
@@ -159,7 +148,7 @@ class Lightbox {
     if (!this.currImage.img) return;
 
     const maxWidth = window.innerWidth * this.opt.maxImgSize;
-    const maxHeight = window.innerHeight * this.opt.maxImgSize;
+    const maxHeight = this.isIframed() ? parent.window.innerHeight * this.opt.maxImgSize : window.innerHeight * this.opt.maxImgSize;
     const imgRatio = this.currImage.img.naturalWidth / this.currImage.img.naturalHeight;
     let newImgWidth = maxWidth;
     let newImgHeight = maxWidth / imgRatio;
@@ -170,8 +159,7 @@ class Lightbox {
     }
 
     Object.assign(this.currImage.img.style, {
-      width: "auto",
-      height: `${Math.min(Math.floor(newImgHeight), 600)}px`,
+      height: `${newImgHeight}px`,
       maxWidth: `${maxWidth}px`,
       maxHeight: `${maxHeight}px`,
     });
@@ -182,8 +170,7 @@ class Lightbox {
     this.body.classList.remove("lightbox");
     this.box.classList.remove("active");
     this.box.style.display = "none";
-    this.wrap.innerHTML = '';
-
+    this.currImage.img.remove();
     this.resetParentStyles();
     this.cleanupObserversAndListeners();
     this.pause();
@@ -192,10 +179,9 @@ class Lightbox {
   adjustForIframe() {
     const parentDocument = window.parent.document;
     this.box.style.height = `${window.parent.innerHeight}px`;
-    this.wrap.style.marginTop = "-60px";
     parentDocument.body.style.overflow = "hidden";
-    parentDocument.documentElement.style.overflow = "hidden";
     parentDocument.body.style.contain = "paint";
+    parentDocument.documentElement.style.overflow = "hidden";
     parentDocument.documentElement.classList.add("lightbox");
     window.parent.scrollTo(0, 0);
   }
@@ -239,18 +225,7 @@ class Lightbox {
     if (this.nextBtn) this.nextBtn.classList.toggle("active", !isPaused);
   }
 
-  addImageClickHandler() {
-    if (this.opt.onimageclick) {
-      this.currImage.img.addEventListener("click", (e) => {
-        e.stopPropagation();
-        this.opt.onimageclick(this.currImage);
-      });
-    }
-  }
-
-  addEventListeners() {
-    this.addResizeEventListener();
-  }
+  addEventListeners() { this.addResizeEventListener(); }
 
   addResizeEventListener() {
     window.addEventListener("resize", () => {
@@ -264,19 +239,19 @@ class Lightbox {
 
   next() {
     if (!this.currGroup) return;
+    this.currImage.img.remove();
     const pos = this.currImages.findIndex((thumbnail) => thumbnail === this.currThumbnail) + 1;
     if (this.currImages[pos]) { this.currThumbnail = this.currImages[pos]; }
-    else if (this.opt.carousel) { this.currThumbnail = this.currImages[0]; }
-    else { return; }
+    else { this.currThumbnail = this.currImages[0]; }
     this.openBox(this.currThumbnail);
   }
 
   prev() {
     if (!this.currGroup) return;
+    this.currImage.img.remove();
     const pos = this.currImages.findIndex((thumbnail) => thumbnail === this.currThumbnail) - 1;
     if (this.currImages[pos]) { this.currThumbnail = this.currImages[pos]; }
-    else if (this.opt.carousel) { this.currThumbnail = this.currImages[this.currImages.length - 1]; }
-    else { return; }
+    else { this.currThumbnail = this.currImages[this.currImages.length - 1]; }
     this.openBox(this.currThumbnail);
   }
 
@@ -299,7 +274,7 @@ class Lightbox {
   }
 
   repositionControls() {
-    if (this.opt.responsive && this.prevBtn && this.nextBtn) {
+    if (this.prevBtn && this.nextBtn) {
       const btnTop = (this.isIframed() ? window.parent.innerHeight : window.innerHeight) / 2 - (this.prevBtn.offsetHeight / 2);
       [this.prevBtn, this.nextBtn].forEach(btn => {
         btn.style.position = "absolute";

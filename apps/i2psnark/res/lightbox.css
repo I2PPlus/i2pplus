@@ -6,17 +6,18 @@
 }
 
 body.lightbox{height:100%;overflow:hidden}
-#lb.active{width:100%;height:100%;justify-content:center;align-items:center;position:fixed;left:0;top:0;z-index:999999;background:#000d;backdrop-filter:blur(3px) saturate(.3);cursor:crosshair}
+#lb.active{width:100%;height:100%;justify-content:center;align-items:center;position:fixed;left:0;top:0;z-index:999999;background:#000e;backdrop-filter:blur(3px) saturate(.3);cursor:crosshair}
 #lb-close{display:none}
-#lb-wrap{margin:5% auto;padding:20px;position:relative;box-sizing;border-box;border-radius:5px;background:#fff;animation:fadeAndBlur .1s ease-in-out .15s both}
-.iframed #lb-wrap{margin:calc(5% - 10px) auto 0}
-#lb-wrap>img{margin:0 auto;padding:2px;height:auto;max-width:100%;max-height:100%;box-sizing;border-box;border:0;background:#fff;clip-path:inset(4px);animation:fadeAndBlur .1s ease-in-out .2s both}
-#lb-next,#lb-prev{max-width:6%;max-height:250px;position:fixed;top:calc(50% - 30px);font-size:0;border-left:0;border-right:0;background:none;cursor:pointer;opacity:.8;filter:drop-shadow(0 .2px #930)}
+#lb>img{margin:0 auto;padding:8px;width:auto;max-width:100%;max-height:100%;box-sizing;border-box;border:10px solid #fff;border-radius:10px;background:#fff;animation:fadeAndBlur .1s ease-in-out .4s both}
+#lb-next,#lb-prev{width:200px;max-width:6%;max-height:250px;position:fixed;top:calc(50% - 30px);text-align:center;font-size:0;border-left:0;border-right:0;background:none;cursor:pointer;opacity:.8;filter:drop-shadow(0 .2px #930);animation:fadeAndBlur 0s ease-in-out 2s both}
 .iframed #lb-next,.iframed #lb-prev{top:calc(50% - 70px)}
 #lb-next,#lb-prev,#lb-play,#lb-pause,.slideshow #lb.active:not(:hover) #lb-next,.slideshow #lb.active:not(:hover) #lb-prev{display:none}
 #lb-next.active,#lb-prev.active,#lb-play.active,#lb-pause.active,#lb.active:hover #lb-next,#lb.active:hover #lb-prev{display:inline-block}
 #lb-next{right:30px}
 #lb-prev{left:30px}
+#lb-next::before,#lb-prev::after{width:100px;height:100px;display:inline-block;position:absolute;top:-49px;content:""}
+#lb-next::before{left:-150px}
+#lb-prev::after{left:115px}
 #lb-next:hover,#lb-prev:hover{opacity:1;filter:drop-shadow(0 0 2px #930)}
 #lb-next:active,#lb-prev:active{transform:scale(.8)}
 #lb-next:active{margin-right:-10px}
