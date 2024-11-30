@@ -92,7 +92,7 @@ tfoot td:first-child{padding-left:0;text-align:left}
 .newTab{margin:1px 4px -2px;float:right;filter:sepia(1) saturate(0) invert(1)}
 .newTab:hover,.newTab:focus{filter:sepia(1) saturate(0) invert(1) drop-shadow(0 0 2px var(--hover))}
 .noPointer{filter:saturate(0) opacity(.5);pointer-events:none}
-.notify td{background:linear-gradient(to bottom,rgba(72,0,72,.2),rgba(24,0,24,.3))}
+.notify td{text-shadow:1px 1px 1px #0008;background:linear-gradient(to bottom,rgba(72,0,72,.2),rgba(24,0,24,.3))}
 #page{margin:5px 0 0 0;padding:10px 10px 0;border:var(--border_hard);border-radius:4px;box-shadow:inset 0 0 3px 0 #101,0 0 2px 2px rgba(16,0,16,.4);background:repeating-linear-gradient(180deg,#2b172f 2px,#1f081f 4px);background-size:100% 4px}
 .routerdown{padding:15px 10px;vertical-align:middle;color:#ee9;font-size:10pt;border:1px solid #202;border-radius:3px;box-shadow:inset 0 0 0 1px #313,inset 0 0 6px 4px #101,inset 0 0 0 8px rgba(0,0,0,.7);background:var(--isDown)}
 .routerdown::after,#snarkHead.initializing::after{display:inline-block;width:40px;height:40px;vertical-align:middle;background:var(--offline) no-repeat center center;background-size:40px;content:"";mix-blend-mode:difference;animation:linear spin 5s reverse infinite}
