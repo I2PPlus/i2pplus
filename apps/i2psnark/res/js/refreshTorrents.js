@@ -36,7 +36,8 @@ let snarkRefreshIntervalId;
 let screenLogIntervalId;
 let debugging = false;
 let initialized = false;
-export let isDocumentVisible = true;
+let isDocumentVisible = true;
+let requireFullRefresh = true;
 
 const requestIdleOrAnimationFrame = (callback, timeout = 180) => {
   let requestId, timeoutId;
@@ -88,13 +89,14 @@ async function getURL() { return window.location.href.replace("/i2psnark/", "/i2
 async function setLinks(query) { if (home) {home.href = query ? `/i2psnark/${query}` : "/i2psnark/";} }
 
 async function initHandlers() {
+  if (torrents) {
+    snarkSort();
+    if (debugMode) {toggleDebug();}
+  }
+  setLinks();
   await requestIdleOrAnimationFrame(async () => {
-    await setLinks();
-    if (screenlog) await initSnarkAlert();
     if (document.getElementById("pagenavtop")) await pageNav();
-    if (torrents) await snarkSort();
     if (filterbar) await showBadge();
-    if (debugMode) await toggleDebug();
     if (debugging) console.log("initHandlers()");
   });
 }
@@ -154,26 +156,9 @@ async function doRefresh({ url = window.location.href, forceFetch = false } = {}
     const responseDoc = await fetchHTMLDocument(url || defaultUrl, forceFetch);
     await requestIdleOrAnimationFrame(async () => await refreshTorrents(responseDoc));
     await initHandlers();
-    setTimeout(showBadge, 1000);
+    showBadge;
   } catch (error) { resolve(); }
 }
-
-/**
-async function doRefresh({ url = window.location.href, forceFetch = false } = {}) {
-  let defaultUrl;
-  return new Promise(async (resolve) => {
-    try {
-      defaultUrl = await getURL();
-      const responseDoc = await fetchHTMLDocument(url || defaultUrl, forceFetch);
-      await requestIdleOrAnimationFrame(async () => await refreshTorrents(responseDoc));
-      await initHandlers();
-      resolve();
-    } catch (error) {
-      resolve();
-    }
-  });
-}
-**/
 
 async function refreshTorrents(callback) {
   try {
@@ -203,11 +188,8 @@ async function refreshTorrents(callback) {
 
     await setLinks(query);
 
-    if (files || torrents) {
-      await requestIdleOrAnimationFrame(async () => await updateVolatile());
-    } else if (down) {
-      await requestIdleOrAnimationFrame(async () => await refreshAll());
-    }
+    if (files || torrents) { await requestIdleOrAnimationFrame(async () => await updateVolatile()); }
+    else if (down) { await requestIdleOrAnimationFrame(async () => await refreshAll()); }
 
     async function refreshAll() {
       try {
@@ -219,15 +201,14 @@ async function refreshTorrents(callback) {
           const newMainsection = mainsectionContainer.querySelector("#mainsection");
           await updateElementInnerHTML(mainsection, newMainsection);
         }
-        if (debugging) console.log("refreshAll()");
+        if (debugging) {console.log("refreshAll()");}
       } catch (error) {
         if (debugging) console.error(error);
       }
     }
 
-
     async function updateVolatile() {
-      let updated = false, requireFullRefresh = true;
+      let updated = false;
       try {
         const url = await getURL();
         const responseDoc = await fetchHTMLDocument(url);
@@ -262,7 +243,6 @@ async function refreshTorrents(callback) {
           } else if (requireFullRefresh && updatingResponse) {
             await requestIdleOrAnimationFrame(async () => await refreshAll());
             updated = true;
-            requireFullRefresh = false;
           }
         } else if (dirlist?.responseDoc) {
           if (control) {
@@ -297,49 +277,44 @@ async function refreshTorrents(callback) {
   } catch (error) {}
 }
 
-async function refreshScreenLog(callback) {
-  try {
-    const screenlog = document.getElementById("messages");
-    if (screenlog.hidden) return;
-
-    let responseDoc;
-    if (!callback && cache.has("screenlog")) {
-      const [doc, expiry] = cache.get("screenlog");
-      if (expiry > Date.now()) {
-        responseDoc = doc;
-      } else {
-        cache.delete("screenlog");
+async function refreshScreenLog(callback, forceFetch = false) {
+  return new Promise(async (resolve) => {
+    try {
+      const screenlog = document.getElementById("messages");
+      if (!screenlog || (screenlog.hidden && screenlog.textContent.trim() === "")) {
+        resolve();
+        return;
       }
-    }
-
-    if (!responseDoc) {
-      responseDoc = await fetchHTMLDocument("/i2psnark/.ajax/xhrscreenlog.html");
-      cache.set("screenlog", [responseDoc, Date.now() + cacheDuration * 3]);
-      setTimeout(() => cache.delete("screenlog"), cacheDuration * 3);
-    }
-
-    const notifyResponse = responseDoc.querySelector("#notify");
-    const screenlogResponse = responseDoc.querySelector("#messages");
-    await updateElementInnerHTML(screenlog, screenlogResponse);
-
-    await new Promise(resolve => setTimeout(() => {
-      const lowerSection = document.getElementById("lowersection");
-      const [addNotify, createNotify] = [
-        lowerSection.querySelector("#addNotify"),
-        lowerSection.querySelector("#createNotify")
-      ];
-      updateElementInnerHTML(addNotify, notifyResponse);
-      updateElementInnerHTML(createNotify, notifyResponse);
+      screenlog.removeAttribute("hidden");
+      let responseDoc;
+      if (!callback && !forceFetch && cache.has("screenlog")) {
+        const [doc, expiry] = cache.get("screenlog");
+        if (expiry > Date.now()) {responseDoc = doc;}
+        else {cache.delete("screenlog");}
+      }
+      if (!responseDoc || forceFetch) {
+        responseDoc = await fetchHTMLDocument("/i2psnark/.ajax/xhrscreenlog.html", forceFetch);
+        if (!responseDoc) {
+          resolve();
+          return;
+        }
+        cache.set("screenlog", [responseDoc, Date.now() + cacheDuration * 3]);
+      }
+      const screenlogResponse = responseDoc.getElementById("messages");
+      if (!screenlogResponse) {
+        resolve();
+        return;
+      }
+      await updateElementInnerHTML(screenlog, screenlogResponse);
+      if (callback) callback();
       resolve();
-    }, 500));
-
-    if (callback) callback();
-  } catch (error) {}
+    } catch (error) {resolve();}
+  });
 }
 
 function refreshOnSubmit() {
   document.addEventListener("click", function(event) {
-    if (event.target.tagName === "INPUT" && event.target.type === "submit") {refreshScreenLog();}
+    if (event.target.tagName === "INPUT" && event.target.type === "submit") {refreshScreenLog(null, true);}
   });
 }
 
@@ -418,4 +393,4 @@ document.addEventListener("visibilitychange", () => {
   else {stopSnarkRefresh();}
 });
 
-export { doRefresh, getURL, initSnarkRefresh, refreshScreenLog, refreshTorrents, snarkRefreshIntervalId };
+export { doRefresh, getURL, initSnarkRefresh, refreshScreenLog, refreshTorrents, snarkRefreshIntervalId, isDocumentVisible };

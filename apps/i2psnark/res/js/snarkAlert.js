@@ -2,70 +2,81 @@
 /* Author: dr|z3d */
 /* License: AGPL3 or later */
 
-import {initSnarkRefresh, refreshTorrents, refreshScreenLog} from "./refreshTorrents.js";
+import { initSnarkRefresh, refreshTorrents, refreshScreenLog } from "./refreshTorrents.js";
 
 "use strict";
 
-const addNotify = document.getElementById("addNotify"), createNotify = document.getElementById("createNotify");
-const addTorrent = document.getElementById("addForm"), createTorrent = document.getElementById("createForm");
-const inputAddFile = document.querySelector("input[name='nofilter_newURL']"), inputNewFile = document.querySelector("input[name='nofilter_baseFile']");
-const notify = document.getElementById("notify");
-const processForm = document.getElementById("processForm");
-const xhrsnarklog = new XMLHttpRequest();
+const elements = {
+  addNotify: document.getElementById("addNotify"),
+  createNotify: document.getElementById("createNotify"),
+  addTorrent: document.getElementById("addForm"),
+  createTorrent: document.getElementById("createForm"),
+  inputAddFile: document.getElementById("addTorrentURL"),
+  inputNewFile: document.getElementById("createTorrentFile"),
+  processForm: document.getElementById("processForm")
+};
+
 let hideAlertTimeoutId;
 
-function addTorrentNotify() {
-  if (notify) {
-    setTimeout(function() { refreshScreenLog(() => showNotification(addNotify, inputAddFile)); }, 1000);
-  }
-}
-
-function createTorrentNotify() {
-  if (notify) {
-    setTimeout(function() { refreshScreenLog(() => showNotification(createNotify, inputNewFile)); }, 1000);
+async function handleTorrentNotify(event, notificationElement, inputElement, form) {
+  event.preventDefault();
+  if (elements.addNotify || elements.createNotify) {
+    try {
+      await submitForm(form);
+      await refreshScreenLog(() => { showNotification(notificationElement, inputElement); }, true);
+    } catch (error) {}
   }
 }
 
 function showNotification(notificationElement, inputElement) {
-  if (hideAlertTimeoutId) { clearTimeout(hideAlertTimeoutId); }
+  if (hideAlertTimeoutId) {clearTimeout(hideAlertTimeoutId);}
+  const screenlog = document.getElementById("messages");
+  const lastMessage = screenlog.querySelector("li.msg");
+  let displayText = "";
+  if (lastMessage) {
+    const messageText = lastMessage.innerHTML.trim();
+    const index = messageText.indexOf("&nbsp; ");
+    displayText = index !== -1 ? messageText.substring(index + 7) : messageText;
+  }
+  notificationElement.querySelector("td").textContent = displayText;
   notificationElement.removeAttribute("hidden");
-  setTimeout(() => {
-    hideAlert();
+  hideAlertTimeoutId = setTimeout(() => {
+    hideAlert(notificationElement);
     inputElement.value = "";
     inputElement.focus();
   }, 5000);
 }
 
-function hideAlert() {
-  if (hideAlertTimeoutId !== null) {clearTimeout(hideAlertTimeoutId);}
-  hideAlertTimeoutId = setTimeout(() => {
-    if (addNotify && createNotify) {
-      addNotify.setAttribute("hidden", "");
-      createNotify.setAttribute("hidden", "");
-      notify.setAttribute("hidden", "");
-    }
-  }, 10000);
+function hideAlert(notificationElement) {
+  if (notificationElement) {notificationElement.setAttribute("hidden", "");}
 }
 
-function injectCss() {
-  const alertCss = document.head.querySelector("#snarkAlert");
-  if (!alertCss) {
-    const link = document.createElement("link");
-    link.id = "snarkAlert";
-    link.rel = "stylesheet";
-    link.href = "/i2psnark/.res/snarkAlert.css";
-    if (document.head.firstChild) {document.head.insertBefore(link, document.head.firstChild);}
-    else {document.head.appendChild(link);}
-  }
+async function submitForm(form) {
+  try {
+    const formData = new FormData(form);
+    const action = form.getAttribute("action");
+    const response = await fetch(action, { method: form.method, body: formData });
+    if (!response.ok) { throw new Error(`Form submission failed with status ${response.status}`); }
+  } catch (error) {}
 }
 
 function initSnarkAlert() {
-  if (!addNotify) {return;}
-  addTorrent?.removeEventListener("submit", addTorrentNotify);
-  createTorrent?.removeEventListener("submit", createTorrentNotify);
-  addTorrent?.addEventListener("submit", addTorrentNotify);
-  createTorrent?.addEventListener("submit", createTorrentNotify);
-  injectCss();
+  document.addEventListener("DOMContentLoaded", () => {
+    if (!elements.addNotify) {return;}
+    [elements.addTorrent, elements.createTorrent].forEach(form => {
+      if (form) {
+        form.removeEventListener("submit", handleTorrentNotify);
+        form.addEventListener("submit", (event) => {
+          handleTorrentNotify(event,
+            form === elements.addTorrent ? elements.addNotify : elements.createNotify,
+            form === elements.addTorrent ? elements.inputAddFile : elements.inputNewFile, form
+          );
+        });
+      }
+    });
+  });
 }
 
-export {initSnarkAlert};
+initSnarkAlert();
+
+export { initSnarkAlert };

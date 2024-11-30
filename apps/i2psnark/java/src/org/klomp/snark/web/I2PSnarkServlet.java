@@ -384,7 +384,9 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<script nonce=").append(cspNonce).append(" type=module>\n")
                .append("  import {initSnarkRefresh} from \"").append(resourcePath).append("js/refreshTorrents.js").append("\";\n")
                .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n")
-               .append("<script src=\"").append(resourcePath).append("js/confirm.js?").append(CoreVersion.VERSION).append("\"></script>\n");
+               .append("<script src=\"").append(resourcePath).append("js/confirm.js?").append(CoreVersion.VERSION).append("\"></script>\n")
+               .append("<script src=").append(resourcePath).append("js/snarkAlert.js type=module></script>\n")
+               .append("<link rel=stylesheet href=").append(resourcePath).append("snarkAlert.css>\n");
 
             if (delay > 0) {
                 String downMsg = _context.isRouterContext() ? _t("Router is down") : _t("I2PSnark has stopped");
@@ -518,10 +520,9 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("</div>\n");
         }
         if (!isConfigure) {
-            out.write("<script nonce=" + cspNonce + " type=module ");
-            out.write("src=" + resourcePath + "js/toggleLinks.js></script>\n");
+            out.write("<script src=" + resourcePath + "js/toggleLinks.js type=module></script>\n");
         }
-        out.write("<script nonce=" + cspNonce + " src=" + resourcePath + "js/setFilterQuery.js></script>\n");
+        out.write("<script src=" + resourcePath + "js/setFilterQuery.js></script>\n");
         if (!isStandalone()) {out.write(FOOTER);}
         else {out.write(FOOTER_STANDALONE);}
         out.flush();
@@ -592,16 +593,6 @@ public class I2PSnarkServlet extends BasicServlet {
         String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         List<UIMessages.Message> msgs = _manager.getMessages();
         int entries = msgs.size();
-
-        String displayText;
-        if (getLastMessage() != null) {
-            String lastMessage = getLastMessage();
-            int index = lastMessage.indexOf("&nbsp; ");
-            displayText = lastMessage.substring(index + 7);
-        } else {displayText = "";}
-        out.write("<span id=notify hidden=hidden><table><tr><td>");
-        out.write(displayText);
-        out.write("</td></tr></table></span>\n");
         StringBuilder mbuf = new StringBuilder(entries*256);
         if (!msgs.isEmpty()) {
             mbuf.append("<div id=screenlog").append(isConfigure ? " class=configpage" : "").append(" tabindex=0>\n");
@@ -645,8 +636,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 .append("  initToggleLog();\n")
                 .append("</script>\n");
         } else {
-            mbuf.append("<script nonce=").append(cspNonce).append(" src=").append(resourcePath)
-                .append("js/toggleLog.js type=module></script>\n");
+            mbuf.append("<script src=").append(resourcePath).append("js/toggleLog.js type=module></script>\n");
         }
         int delay = 0;
         delay = _manager.getRefreshDelaySeconds();
@@ -851,7 +841,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         }
 
-        hbuf.append("<th class=torrentLink colspan=2><input id=linkswitch class=optbox type=checkbox hidden=hidden></th>");
+        hbuf.append("<th class=torrentLink colspan=2><input id=linkswitch class=optbox type=checkbox hidden></th>");
         hbuf.append("<th id=torrentSort>");
         // cycle through sort by name or type
         boolean isTypeSort = false;
@@ -3024,48 +3014,49 @@ public class I2PSnarkServlet extends BasicServlet {
 
     private void writeAddForm(PrintWriter out, HttpServletRequest req) throws IOException {
         // display incoming parameter if a GET so links will work
-        StringBuilder fbuf = new StringBuilder(1024);
+        StringBuilder buf = new StringBuilder(1024);
         String newURL = req.getParameter("nofilter_newURL");
         if (newURL == null || newURL.trim().length() <= 0 || req.getMethod().equals("POST"))
             newURL = "";
         else
             newURL = DataHelper.stripHTML(newURL); // XSS
 
-        fbuf.append("<div id=add class=snarkNewTorrent>\n");
-        fbuf.append("<form id=addForm action=\"_post\" method=POST enctype=\"multipart/form-data\" accept-charset=\"UTF-8\" target=processForm>\n");
-        fbuf.append("<div class=sectionPanel id=addSection>\n");
-        writeHiddenInputs(fbuf, req, "Add");
-        fbuf.append("<input hidden class=toggle_input id=toggle_addtorrent type=checkbox");
+        buf.append("<div id=add class=snarkNewTorrent>\n");
+        buf.append("<form id=addForm action=\"_post\" method=POST enctype=\"multipart/form-data\" accept-charset=\"UTF-8\" target=processForm>\n");
+        buf.append("<div class=sectionPanel id=addSection>\n");
+        writeHiddenInputs(buf, req, "Add");
+        buf.append("<input hidden class=toggle_input id=toggle_addtorrent type=checkbox");
         if (newURL.length() > 0) {
-            fbuf.append(" checked=checked>"); // force toggle open
+            buf.append(" checked=checked>"); // force toggle open
         } else {
-            fbuf.append('>');
+            buf.append('>');
         }
-        fbuf.append("<label id=tab_addtorrent class=toggleview for=\"toggle_addtorrent\"><span class=tab_label>")
-            .append(_t("Add Torrent"))
-            .append("</span></label>")
-            .append("<hr>\n<table border=0><tr><td>")
-            .append(_t("From URL"))
-            .append(":<td><input type=text name=nofilter_newURL size=85 value=\"" + newURL + "\" spellcheck=false")
-            .append(" title=\"")
-            .append(_t("Enter the torrent file download URL (I2P only), magnet link, or info hash"))
-            .append("\" required>\n")
-            .append("<input type=submit class=add value=\"")
-            .append(_t("Add torrent"))
-            .append("\" name=foo><br>\n<tr hidden><td>")
-            .append(_t("Torrent file"))
-            .append(":<td><input type=\"file\" name=\"newFile\" accept=\".torrent\"/><tr><td>")
-            .append(_t("Data dir"))
-            .append(":<td><input type=text name=nofilter_newDir size=85 value=\"")
-            .append(_manager.getDataDir().getAbsolutePath()).append("\" spellcheck=false")
-            .append(" title=\"")
-            .append(_t("Enter the directory to save the data in (default {0})", _manager.getDataDir().getAbsolutePath()))
-            .append("\"></td></tr>\n")
-            .append("</table>\n<span id=addNotify class=notify hidden></span>\n")
-            .append("</div>\n</form>\n</div>\n");
-        out.write(fbuf.toString());
+        buf.append("<label id=tab_addtorrent class=toggleview for=\"toggle_addtorrent\"><span class=tab_label>")
+           .append(_t("Add Torrent"))
+           .append("</span></label>")
+           .append("<hr>\n<table border=0><tr><td>")
+           .append(_t("From URL"))
+           .append(":<td><input id=addTorrentURL type=text name=nofilter_newURL size=85 value=\"" + newURL + "\" spellcheck=false")
+           .append(" title=\"")
+           .append(_t("Enter the torrent file download URL (I2P only), magnet link, or info hash"))
+           .append("\" required>\n")
+           .append("<input type=submit class=add value=\"")
+           .append(_t("Add torrent"))
+           .append("\" name=foo><br>\n<tr hidden><td>")
+           .append(_t("Torrent file"))
+           .append(":<td><input type=\"file\" name=\"newFile\" accept=\".torrent\"/><tr><td>")
+           .append(_t("Data dir"))
+           .append(":<td><input type=text name=nofilter_newDir size=85 value=\"")
+           .append(_manager.getDataDir().getAbsolutePath()).append("\" spellcheck=false")
+           .append(" title=\"")
+           .append(_t("Enter the directory to save the data in (default {0})", _manager.getDataDir().getAbsolutePath()))
+           .append("\"></td></tr>\n</table>\n")
+           .append("<div id=addNotify class=notify hidden><table><tr><td></td></tr></table></div>\n")
+           .append("</div>\n</form>\n</div>\n");
+
+        out.write(buf.toString());
         out.flush();
-        fbuf.setLength(0);
+        buf.setLength(0);
     }
 
     private void writeSeedForm(PrintWriter out, HttpServletRequest req, List<Tracker> sortedTrackers, List<TorrentCreateFilter> sortedFilters) throws IOException {
@@ -3081,7 +3072,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("</span></label><hr>\n<table border=0>")
         //buf.append("From file: <input type=file name=\"newFile\" size=50 value=\"" + newFile + "\" /><br>\n");
            .append("<tr><td>").append(_t("Data to seed")).append(":</td>")
-           .append("<td><input type=text name=nofilter_baseFile size=85 value=\"").append("\" spellcheck=false title=\"")
+           .append("<td><input id=createTorrentFile type=text name=nofilter_baseFile size=85 value=\"").append("\" spellcheck=false title=\"")
            .append(_t("File or directory to seed (full path or within the directory {0} )",
                    _manager.getDataDir().getAbsolutePath() + File.separatorChar))
            .append("\" required> <input type=submit class=create value=\"").append(_t("Create torrent"))
@@ -3121,35 +3112,24 @@ public class I2PSnarkServlet extends BasicServlet {
             String homeURL = t.baseURL;
             buf.append("<tr><td><span class=trackerName>")
                .append("<a href=\"").append(homeURL).append("\" target=_blank>").append(name).append("</a>")
-               .append("</span></td><td><input type=radio class=optbox name=announceURL value=\"")
-               .append(announceURL)
-               .append("\"");
-            if (announceURL.equals(_lastAnnounceURL)) {
-                buf.append(" checked");
-            }
+               .append("</span></td><td><input type=radio class=optbox name=announceURL value=\"").append(announceURL).append("\"");
+            if (announceURL.equals(_lastAnnounceURL)) {buf.append(" checked");}
             buf.append("></td><td><input type=checkbox class=\"optbox slider\" name=\"backup_")
-               .append(announceURL)
-               .append("\" value=\"foo\"></td><td>");
+               .append(announceURL).append("\" value=\"foo\"></td><td>");
 
-            if (!(isOpen || isPrivate)) {
-                buf.append(_t("Standard"));
-            }
-            if (isOpen) {
-                buf.append(_t("Open"));
-            }
-            if (isPrivate) {
-                buf.append(_t("Private"));
-            }
+            if (!(isOpen || isPrivate)) {buf.append(_t("Standard"));}
+            if (isOpen) {buf.append(_t("Open"));}
+            if (isPrivate) {buf.append(_t("Private"));}
             buf.append("</td></tr>\n");
         }
         buf.append("<tr><td><i>").append(_t("none"))
            .append("</i></td><td><input type=radio class=optbox name=announceURL value=\"none\"");
-        if (_lastAnnounceURL == null) {
-            buf.append(" checked");
-        }
+        if (_lastAnnounceURL == null) {buf.append(" checked");}
         buf.append("></td><td></td><td></td></tr>\n</table>\n")
-           .append("</td></tr>\n</table>\n</form>\n</div>\n<span id=createNotify class=notify hidden></span>\n</div>\n")
-           .append("<script nonce=" + cspNonce + " src=" + resourcePath + "js/snarkAlert.js type=module></script>\n");
+           .append("</td></tr>\n</table>\n</form>\n</div>\n")
+           .append("<div id=createNotify class=notify hidden><table><tr><td></td></tr></table></div>\n")
+           .append("</div>\n");
+
         out.write(buf.toString());
         out.flush();
         buf.setLength(0);
@@ -3950,7 +3930,7 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js?").append(CoreVersion.VERSION)
                .append("\" id=iframeResizer></script>\n");
         }
-        buf.append("<script src=" + resourcePath + "js/click.js></script>\n").append("<title>");
+        buf.append("<script src=" + resourcePath + "js/click.js type=module></script>\n").append("<title>");
         if (title.endsWith("/")) {title = title.substring(0, title.length() - 1);}
         final String directory = title;
         final int dirSlash = directory.indexOf('/');
@@ -3991,8 +3971,8 @@ public class I2PSnarkServlet extends BasicServlet {
 
 /** TODO event delegation so it works with ajax refresh
         if (showPriority)
-            buf.append("<script nonce=" + cspNonce + " src=\"").append(_contextPath + WARBASE + "js/setPriority.js?" + CoreVersion.VERSION + "\"></script>\n");
-            buf.append("<script nonce=" + cspNonce + " src=\"/themes/setPriority.js?" + CoreVersion.VERSION + "\"></script>\n"); // debugging
+            buf.append("<script src=\"").append(_contextPath + WARBASE + "js/setPriority.js?" + CoreVersion.VERSION + "\"></script>\n");
+            buf.append("<script src=\"/themes/setPriority.js?" + CoreVersion.VERSION + "\"></script>\n"); // debugging
 **/
 
         buf.append("</head>\n<body style=display:none;pointer-events:none class=lang_").append(lang).append(">\n");
