@@ -373,10 +373,9 @@ tr:hover .barText{opacity:1}
 .peerinfo.active .barOuter{background:repeating-linear-gradient(90deg,#0000,#0000 7px,rgba(0,32,0,.6) 7px,rgba(0,32,0,.6) 8px,#0000 8px),linear-gradient(90deg,#000400,#010)}
 .peerinfo.inactive .barInner{background:#030}
 .peerinfo .barOuter,.peerinfo .barInner{height:10px}
-.peerinfo .rateDown .left,.peerinfo .rateDown .right,.peerinfo .rateUp .left,.peerinfo .rateUp .right{opacity:.5;text-shadow:0 0 1px #000}
-.peerinfo .rateDown.ten .left,.peerinfo .rateDown.ten .right,.peerinfo .rateUp.ten .left,.peerinfo .rateUp.ten .right{opacity:.75}
-.rateDown.hundred .left,.rateDown.hundred .right,.rateUp.hundred .left,.rateUp.hundred .right{opacity:1}
-.peerinfo .rateDown.hundred .left,.peerinfo .rateDown.hundred .right,.peerinfo .rateUp.hundred .left,.peerinfo .rateUp.hundred .right{opacity:1}
+.rateDown,.rateUp{opacity:.5;text-shadow:0 0 1px #000}
+.rateDown.ten,.rateUp.ten{opacity:.75}
+.rateDown.hundred,.rateUp.hundred{opacity:1}
 .peerSeed img{font-size:0;opacity:.7;transform:scale(1)}
 .rowOdd:not(.peerinfo) .rxd .barInner,.rowEven:not(.peerinfo) .rxd .barInner,.rowOdd:not(.peerinfo) .rxd .barOuter,.rowEven:not(.peerinfo) .rxd .barOuter{max-height:15px;max-width:84px}
 .rowOdd:not(.peerinfo) .rxd .barText,.rowEven:not(.peerinfo) .rxd .barText{padding:3px 10px;width:auto;min-width:100px;display:inline-block;position:relative;top:-18px;left:-18px;border-radius:2px;background:#000;filter:drop-shadow(0 0 1px #151)}
@@ -749,7 +748,7 @@ input.trackerhome,input.trackerannounce{width:210px}
 .iframed #configSection{border-radius:0 0 4px 4px}
 .iframed #mainsection+#lowersection{margin-top:-11px}
 #mainsection+#lowersection>#configSection{margin-top:-1px}
-#mainsection+#lowersection #createSection+#configSection{margin-top:-11px;padding-bottom:14px}
+#mainsection+#lowersection #createSection+#configSection{padding-bottom:14px}
 #navbar,#createSection,#addSection,#configSection,.configPanel,.optionlist{box-shadow:var(--highlight),0 0 2px 1px #252 inset}
 
 /* torrent edit */
