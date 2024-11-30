@@ -1,3 +1,7 @@
+2024-11-29 dr|z3d
+ * I2PSnark: Rewrite and optimize lightbox.js; add slideshow feature,
+   fullscreen in iframe
+
 2024-11-27 dr|z3d
  * I2PSnark: Migrate network request to use fetch instead of XHR; ensure that
    network requests are stopped when page isn't visible in the browser

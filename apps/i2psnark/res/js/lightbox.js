@@ -121,6 +121,7 @@ class Lightbox {
     this.currImages = Array.from(document.querySelectorAll(`[${this.data_attr}-group="${this.currGroup}"]`));
     this.currImage.img.onload = () => this.onImageLoad();
     this.wrap.appendChild(this.currImage.img);
+    if (this.isIframed()) { this.adjustForIframe(); }
 
     this.addImageClickHandler();
     this.setupResizeObserver();
@@ -188,6 +189,17 @@ class Lightbox {
     this.pause();
   }
 
+  adjustForIframe() {
+    const parentDocument = window.parent.document;
+    this.box.style.height = `${window.parent.innerHeight}px`;
+    this.wrap.style.marginTop = "-60px";
+    parentDocument.body.style.overflow = "hidden";
+    parentDocument.documentElement.style.overflow = "hidden";
+    parentDocument.body.style.contain = "paint";
+    parentDocument.documentElement.classList.add("lightbox");
+    window.parent.scrollTo(0, 0);
+  }
+
   resetParentStyles() {
     if (this.isIframed()) {
       const parentDoc = window.parent.document;
@@ -245,6 +257,7 @@ class Lightbox {
       if (this.isOpen) {
         this.resize();
         this.repositionControls();
+        if (this.isIframed()) {this.adjustForIframe();}
       }
     });
   }
