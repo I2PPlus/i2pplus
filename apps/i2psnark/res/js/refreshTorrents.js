@@ -313,8 +313,23 @@ async function refreshScreenLog(callback, forceFetch = false) {
 }
 
 function refreshOnSubmit() {
-  document.addEventListener("click", function(event) {
-    if (event.target.tagName === "INPUT" && event.target.type === "submit") {refreshScreenLog(null, true);}
+  document.addEventListener("click", async (event) => {
+    if (event.target.matches("input[type=submit]")) {
+      const form = event.target.form;
+      const iframe = document.getElementById("processForm");
+      if (form && iframe) {
+        const formSubmitted = new Promise((resolve) => {
+          const loadHandler = () => {
+            iframe.removeEventListener("load", loadHandler);
+            resolve();
+          };
+          iframe.addEventListener("load", loadHandler);
+        });
+        form.requestSubmit();
+        await formSubmitted;
+        await refreshScreenLog(undefined, true);
+      }
+    }
   });
 }
 
