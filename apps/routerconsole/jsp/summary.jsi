@@ -4,37 +4,27 @@
 <% java.io.File newspath = new java.io.File(net.i2p.I2PAppContext.getGlobalContext().getRouterDir(), "docs/news.xml"); %>
 <jsp:setProperty name="newshelper" property="page" value="<%=newspath.getAbsolutePath()%>" />
 <jsp:setProperty name="newshelper" property="maxLines" value="300" />
-<div id=sb_wrap class="" style=width:200px;float:left;margin-right:20px>
 <%
-  String d = "0"; // The refresh delay, 0 to disable
+  String refreshDelay = "0";
   boolean allowIFrame = intl.allowIFrame(request.getHeader("User-Agent"));
   if (allowIFrame) {
-    d = request.getParameter("refresh"); // skip the iframe if refresh disabled
-    String newDelay = "";
-    if (d == null || "".equals(d)) {d = intl.getRefresh();}
+    refreshDelay = request.getParameter("refresh");
+    if (refreshDelay == null || refreshDelay.isEmpty()) { refreshDelay = intl.getRefresh(); }
     else {
-      long delay;
-      try {delay = Long.parseLong(d);}
-      catch (NumberFormatException nfe) {delay = 60;}
-      // pass the new delay parameter to the iframe
-      newDelay = "?refresh=" + delay;
-      // update disable boolean
-      intl.setDisableRefresh(d);
+      try {
+        long delay = Long.parseLong(refreshDelay);
+        refreshDelay = "?refresh=" + delay;
+      } catch (NumberFormatException nfe) { refreshDelay = "?refresh=60"; }
+      intl.setDisableRefresh(refreshDelay);
     }
   }
 %>
-<div class=sb id=sidebar>
-<%
-  if (allowIFrame) { // Display the whole summary bar
-%>
-<%@include file="summarynoframe.jsi" %>
-<%
-  } else {
-    // Text browsers don't render the two divs side-by-side, so just provide a link
-    out.print("<a href=/summaryframe>");
-    out.print(intl._t("Sidebar"));
-    out.print("</a>");
-  }
-  out.print("</div>\n");
-%>
+<div id=sb_wrap style=width:200px;float:left;margin-right:20px>
+<div id=sidebar class=sb>
+<% if (allowIFrame) { %>
+     <%@include file="summarynoframe.jsi" %>
+<% } else { %>
+     <a href="/summaryframe"><%=intl._t("Sidebar")%></a>
+<% } %>
+</div>
 </div>
