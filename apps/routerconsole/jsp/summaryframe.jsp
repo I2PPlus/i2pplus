@@ -1,7 +1,7 @@
 <%@page contentType="text/html"%>
 <%@page trimDirectiveWhitespaces="true"%>
 <%@page pageEncoding="UTF-8"%>
-<%@ page buffer="32kb" %>
+<%@ page buffer="16kb" %>
 <!DOCTYPE HTML>
 <%
 /*

@@ -1,3 +1,5 @@
+<%@page trimDirectiveWhitespaces="true"%>
+<%@ page buffer="16kb" %>
 <%
 /*
  * USE CAUTION WHEN EDITING

@@ -1,6 +1,6 @@
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
-<%@ page buffer="32kb" %>
+<%@ page buffer="16kb" %>
 <%@page trimDirectiveWhitespaces="true"%>
 <%
   // http://www.crazysquirrel.com/computing/general/form-encoding.jspx
