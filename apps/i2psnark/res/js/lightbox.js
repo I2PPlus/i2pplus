@@ -10,6 +10,7 @@ class Lightbox {
     this.prefix = "lb";
     this.data_attr = `data-${this.prefix}`;
     this.body = document.body;
+    this.parentDoc = window.parent.document;
     this.currGroup = this.currThumbnail = null;
     this.currImages = [];
     this.isOpen = false;
@@ -21,11 +22,10 @@ class Lightbox {
   }
 
   initialize() {
-    this.box = this.createEl('div', this.prefix);
+    this.box = this.createEl("div", this.prefix);
     this.body.appendChild(this.box);
     this.playPauseContainer = this.createControls();
     this.addEventListeners();
-    this.box.style.display = "none";
   }
 
   createEl(tag, id) {
@@ -35,7 +35,7 @@ class Lightbox {
   }
 
   createButton(text, id, callback) {
-    const btn = this.createEl('button', id);
+    const btn = this.createEl("span", id);
     btn.textContent = text;
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
@@ -45,7 +45,7 @@ class Lightbox {
   }
 
   createControls() {
-    const container = this.createEl('div', `${this.prefix}-playpause`);
+    const container = this.createEl("div", `${this.prefix}-playpause`);
     const controls = [
       { text: "<", id: `${this.prefix}-prev`, action: this.prev.bind(this) },
       { text: ">", id: `${this.prefix}-next`, action: this.next.bind(this) },
@@ -55,11 +55,8 @@ class Lightbox {
 
     controls.forEach(({ text, id, action }) => {
       const btn = this.createButton(text, id, action);
-      if (id === `${this.prefix}-prev` || id === `${this.prefix}-next`) {
-        this.box.appendChild(btn);
-      } else {
-        container.appendChild(btn);
-      }
+      if (id === `${this.prefix}-prev` || id === `${this.prefix}-next`) { this.box.appendChild(btn); }
+      else { container.appendChild(btn); }
       if (id === `${this.prefix}-prev`) this.prevBtn = btn;
       if (id === `${this.prefix}-next`) this.nextBtn = btn;
       if (id === `${this.prefix}-play`) this.playBtn = btn;
@@ -80,11 +77,7 @@ class Lightbox {
   }
 
   setOpt(opt) {
-    const defaults = {
-      preload: true,
-      maxImgSize: 0.75,
-    };
-
+    const defaults = { preload: true, maxImgSize: .75 };
     this.opt = { ...defaults, ...opt };
     this.box.addEventListener("click", this.close.bind(this));
   }
@@ -92,7 +85,7 @@ class Lightbox {
   addThumbnailClickHandler(thumbnail) {
     thumbnail.addEventListener("click", (e) => {
       e.preventDefault();
-      this.currGroup = thumbnail.getAttribute(`${this.data_attr}-group`) || '';
+      this.currGroup = thumbnail.getAttribute(`${this.data_attr}-group`) || "";
       this.currThumbnail = thumbnail;
       this.openBox(thumbnail);
     });
@@ -109,10 +102,7 @@ class Lightbox {
     this.currImages = Array.from(document.querySelectorAll(`[${this.data_attr}-group="${this.currGroup}"]`));
     this.currImage.img.onload = () => this.onImageLoad();
     this.box.appendChild(this.currImage.img);
-    if (this.currImages[0] === el && !this.currImages[0].classList.contains("first")) {
-      this.currImage.img.classList.add("first");
-    }
-    if (this.isIframed()) { this.adjustForIframe(); }
+    this.adjustPosition();
     this.setupResizeObserver();
   }
 
@@ -120,9 +110,7 @@ class Lightbox {
     this.isOpen = true;
     this.resize();
     this.box.classList.add("active");
-    if (this.currImages.length > 1) {
-      this.toggleControlButtons();
-    }
+    if (this.currImages.length > 1) { this.toggleControlButtons(); }
     this.repositionControls();
   }
 
@@ -137,27 +125,23 @@ class Lightbox {
   preload() {
     if (!this.currGroup) return;
     const currIndex = this.thumbnails.findIndex((thumb) => thumb === this.currThumbnail);
-    const nextThumbnail = this.thumbnails[(currIndex + 1) % this.thumbnails.length];
-    const prevThumbnail = this.thumbnails[(currIndex - 1 + this.thumbnails.length) % this.thumbnails.length];
-
-    new Image().src = nextThumbnail.getAttribute(this.data_attr) || nextThumbnail.src;
-    new Image().src = prevThumbnail.getAttribute(this.data_attr) || prevThumbnail.src;
+    const nextThumb = this.thumbnails[(currIndex + 1) % this.thumbnails.length];
+    const prevThumb = this.thumbnails[(currIndex - 1 + this.thumbnails.length) % this.thumbnails.length];
+    new Image().src = nextThumb.getAttribute(this.data_attr) || nextThumb.src;
+    new Image().src = prevThumb.getAttribute(this.data_attr) || prevThumb.src;
   }
 
   resize() {
     if (!this.currImage.img) return;
-
     const maxWidth = window.innerWidth * this.opt.maxImgSize;
-    const maxHeight = this.isIframed() ? parent.window.innerHeight * this.opt.maxImgSize : window.innerHeight * this.opt.maxImgSize;
+    const maxHeight = window.innerHeight * this.opt.maxImgSize;
     const imgRatio = this.currImage.img.naturalWidth / this.currImage.img.naturalHeight;
     let newImgWidth = maxWidth;
     let newImgHeight = maxWidth / imgRatio;
-
     if (newImgHeight > maxHeight) {
       newImgHeight = maxHeight;
       newImgWidth = maxHeight * imgRatio;
     }
-
     Object.assign(this.currImage.img.style, {
       height: `${newImgHeight}px`,
       maxWidth: `${maxWidth}px`,
@@ -169,29 +153,28 @@ class Lightbox {
     this.isOpen = false;
     this.body.classList.remove("lightbox");
     this.box.classList.remove("active");
-    this.box.style.display = "none";
     this.currImage.img.remove();
     this.resetParentStyles();
     this.cleanupObserversAndListeners();
     this.pause();
   }
 
-  adjustForIframe() {
-    const parentDocument = window.parent.document;
-    this.box.style.height = `${window.parent.innerHeight}px`;
-    parentDocument.body.style.overflow = "hidden";
-    parentDocument.body.style.contain = "paint";
-    parentDocument.documentElement.style.overflow = "hidden";
-    parentDocument.documentElement.classList.add("lightbox");
-    window.parent.scrollTo(0, 0);
+  adjustPosition() {
+    if (this.isIframed()) {
+      this.parentDoc.body.style.overflow = "hidden";
+      this.parentDoc.body.style.contain = "paint";
+      this.parentDoc.documentElement.style.overflow = "hidden";
+      this.parentDoc.documentElement.classList.add("lightbox");
+      this.box.style.height = `${window.parent.innerHeight}px`;
+    } else {this.box.style.height = "100vh";}
+    window.scrollTo(0,0);
   }
 
   resetParentStyles() {
     if (this.isIframed()) {
-      const parentDoc = window.parent.document;
-      parentDoc.documentElement.classList.remove("lightbox");
-      parentDoc.body.removeAttribute("style");
-      parentDoc.documentElement.removeAttribute("style");
+     this.parentDoc.documentElement.classList.remove("lightbox");
+     this.parentDoc.body.removeAttribute("style");
+     this.parentDoc.documentElement.removeAttribute("style");
     }
   }
 
@@ -232,7 +215,6 @@ class Lightbox {
       if (this.isOpen) {
         this.resize();
         this.repositionControls();
-        if (this.isIframed()) {this.adjustForIframe();}
       }
     });
   }
@@ -255,8 +237,6 @@ class Lightbox {
     this.openBox(this.currThumbnail);
   }
 
-  getPos(thumbnail) { return this.thumbnails.findIndex((t) => t === thumbnail); }
-
   isIframed() {
     return document.documentElement.classList.contains("iframed") || window.top !== window.self;
   }
@@ -264,23 +244,20 @@ class Lightbox {
   setupResizeObserver() {
     this.resizeObserver = new ResizeObserver(entries => {
       entries.forEach(entry => {
-        if (entry.target === (this.isIframed() ? window.parent.document.body : document.body) && this.isOpen) {
+        if (entry.target === (this.isIframed() ? this.parentDoc.body : document.body) && this.isOpen) {
           this.resize();
           this.repositionControls();
         }
       });
     });
-    this.resizeObserver.observe(this.isIframed() ? window.parent.document.body : document.body);
+    this.resizeObserver.observe(this.isIframed() ? this.parentDoc.body : document.body);
   }
 
   repositionControls() {
     if (this.prevBtn && this.nextBtn) {
       const btnTop = (this.isIframed() ? window.parent.innerHeight : window.innerHeight) / 2 - (this.prevBtn.offsetHeight / 2);
       [this.prevBtn, this.nextBtn].forEach(btn => {
-        btn.style.position = "absolute";
         btn.style.top = `${btnTop}px`;
-        btn.style.left = btn === this.prevBtn ? "10px" : "auto";
-        btn.style.right = btn === this.nextBtn ? "10px" : "auto";
       });
     }
   }
