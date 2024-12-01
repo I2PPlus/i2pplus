@@ -1,6 +1,7 @@
 <%@page contentType="text/html"%>
 <%@page trimDirectiveWhitespaces="true"%>
 <%@page pageEncoding="UTF-8"%>
+<%@ page buffer="32kb" %>
 <jsp:useBean class="net.i2p.router.web.helpers.WizardHelper" id="wizhelper" scope="session" />
 <%
     // note that for the helper we use a session scope, not a request scope,

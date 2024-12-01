@@ -1,4 +1,5 @@
 <%@page pageEncoding="UTF-8"%>
+<%@ page buffer="32kb" %>
 <%@page trimDirectiveWhitespaces="true"%>
 <%@ page import="java.io.File" %>
 <%@ page import="java.io.IOException" %>

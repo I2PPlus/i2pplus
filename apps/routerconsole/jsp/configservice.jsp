@@ -1,5 +1,6 @@
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
+<%@ page buffer="32kb" %>
 <jsp:useBean class="net.i2p.router.web.CSSHelper" id="tester" scope="request" />
 <jsp:setProperty name="tester" property="contextId" value="<%=(String)session.getAttribute(\"i2p.contextId\")%>" />
 <% boolean embedApps = tester.embedApps(); %>

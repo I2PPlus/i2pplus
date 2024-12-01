@@ -1,4 +1,5 @@
-<%@page pageEncoding="UTF-8"%><%
+<%@page pageEncoding="UTF-8"%>
+<%@ page buffer="32kb" %><%
 /*
  * USE CAUTION WHEN EDITING
  * Trailing whitespace OR NEWLINE on the last line will cause

@@ -26,6 +26,7 @@
 %>
 <%@page trimDirectiveWhitespaces="true"%>
 <%@page pageEncoding="UTF-8"%>
+<%@ page buffer="32kb" %>
 <%@page contentType="text/plain"%>
 <%@include file="headers.jsi"%>
 <jsp:useBean id="book" class="i2p.susi.dns.NamingServiceBean" scope="session" />

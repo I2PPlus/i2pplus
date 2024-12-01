@@ -1,4 +1,5 @@
 <%@page pageEncoding="UTF-8"%>
+<%@ page buffer="32kb" %>
 <%@page trimDirectiveWhitespaces="true"%>
 <%@page contentType="text/html" import="net.i2p.i2ptunnel.web.EditBean"%>
 <%@include file="headers.jsi"%>

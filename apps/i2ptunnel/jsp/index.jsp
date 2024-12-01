@@ -2,6 +2,7 @@
 <%@ page import="java.net.URLConnection" %>
 <%@ page import="java.io.IOException" %>
 <%@page pageEncoding="UTF-8"%>
+<%@ page buffer="32kb" %>
 <%@page trimDirectiveWhitespaces="true"%>
 <%@include file="headers.jsi"%>
 <%@page contentType="text/html" import="net.i2p.i2ptunnel.web.IndexBean"%>

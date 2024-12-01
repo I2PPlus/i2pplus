@@ -1,6 +1,7 @@
 <%@page contentType="text/html"%>
 <%@page trimDirectiveWhitespaces="true"%>
 <%@page pageEncoding="UTF-8"%>
+<%@ page buffer="32kb" %>
 <jsp:useBean class="net.i2p.router.web.CSSHelper" id="tester" scope="request" />
 <%
    String i2pcontextId1 = null;

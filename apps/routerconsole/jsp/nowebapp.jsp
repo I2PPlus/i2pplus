@@ -1,5 +1,6 @@
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
+<%@ page buffer="32kb" %>
 <!DOCTYPE HTML>
 <%
     response.setStatus(404);

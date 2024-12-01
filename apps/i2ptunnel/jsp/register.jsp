@@ -1,5 +1,6 @@
 <%@page trimDirectiveWhitespaces="true"%>
 <%@page pageEncoding="UTF-8"%>
+<%@ page buffer="32kb" %>
 <%@page contentType="text/html"%> <%@page import="java.io.InputStream,net.i2p.i2ptunnel.web.EditBean,net.i2p.servlet.RequestWrapper,net.i2p.client.I2PSessionException,net.i2p.client.naming.HostTxtEntry,net.i2p.data.PrivateKeyFile,net.i2p.data.SigningPrivateKey,net.i2p.util.OrderedProperties"
 %>
 <%@include file="headers.jsi"%>

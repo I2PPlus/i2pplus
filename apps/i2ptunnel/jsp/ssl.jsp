@@ -1,4 +1,5 @@
 <%@page pageEncoding="UTF-8"%>
+<%@ page buffer="32kb" %>
 <%@page contentType="text/html" import="java.io.File,java.io.IOException,net.i2p.crypto.KeyStoreUtil,net.i2p.data.DataHelper,net.i2p.jetty.JettyXmlConfigurationParser"%>
 <%@page trimDirectiveWhitespaces="true"%>
 <%@include file="headers.jsi"%>
