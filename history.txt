@@ -1,5 +1,6 @@
 2024-12-02 dr|z3d
  * Console: Streamline sidebar refresh javascript
+ * I2PSnark: Add inline text viewer with open in new tab links in file view
 
 2024-11-29 dr|z3d
  * I2PSnark: Rewrite and optimize lightbox.js; add slideshow feature,

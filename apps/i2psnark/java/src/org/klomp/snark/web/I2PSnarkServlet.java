@@ -4576,6 +4576,7 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean inOrder = storage != null && storage.getInOrder();
         int videoCount = 0;
         int imgCount = 0;
+        int txtCount = 0;
         for (Sorters.FileAndIndex fai : fileList) {
             // String encoded = encodePath(ls[i].getName());
             // bugfix for I2P - Backport from Jetty 6 (zero file lengths and last-modified times)
@@ -4583,16 +4584,14 @@ public class I2PSnarkServlet extends BasicServlet {
             // See resource.diff attachment
             // Resource item = addPath(encoded);
             File item = fai.file;
-
             // Get completeness and status string
             boolean complete = false;
             String status = "";
             long length = item.length();
             int fileIndex = fai.index;
             int priority = 0;
-            if (fai.isDirectory) {
-                complete = true;
-            } else {
+            if (fai.isDirectory) {complete = true;}
+            else {
                 if (storage == null) {
                     // Assume complete, perhaps he removed a completed torrent but kept a bookmark
                     complete = true;
@@ -4635,8 +4634,15 @@ public class I2PSnarkServlet extends BasicServlet {
             if (mime == null) {mime = "";}
             boolean isAudio = isAudio(mime);
             boolean isVideo = !isAudio && isVideo(mime);
+            boolean isImage = mime.startsWith("image/");
+            boolean isText = mime.startsWith("text/") || mime.equals("application/javascript");
+            boolean isPDF = mime.equals("application/pdf");
             buf.append("<td class=\"fileIcon");
             if (!complete) {buf.append(" volatile");}
+            else if (isText) {
+              buf.append(" text");
+              txtCount++;
+            }
             buf.append("\">");
             String preview = null;
             if (isVideo && complete) {videoCount++;}
@@ -4682,9 +4688,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (complete) {
                 buf.append("<a href=\"").append(path).append("\"");
                 // send browser-viewable files to new tab to avoid potential display in iframe
-                if (isAudio || isVideo || mime.startsWith("text/") || mime.startsWith("image/") || mime.equals("application/pdf")) {
-                    buf.append(" target=_blank");
-                }
+                if (isAudio || isVideo || isText || isImage || isPDF) {buf.append(" target=_blank");}
                 if (mime.equals("audio/mpeg")) {buf.append(" class=targetfile");}
                 buf.append(">");
             }
@@ -4746,6 +4750,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("</table>\n</div>\n");
         if (videoCount == 1) {buf.append("<script src=\"" + resourcePath + "js/getMetadata.js?" + CoreVersion.VERSION + "\"></script>\n");}
         if (imgCount > 0) {buf.append("<script src=" + resourcePath + "js/getImgDimensions.js></script>\n");}
+        if (txtCount > 0) {buf.append("<script src=" + resourcePath + "js/textView.js></script>\n");}
 
 // Comment section
 

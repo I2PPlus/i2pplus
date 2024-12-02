@@ -1,0 +1,9 @@
+.snarkFileName a:first-of-type{width:auto!important;padding-right:12px}
+.snarkFileName .newtab a:hover{transform:scale(1.2)}
+.snarkFileName .newtab a:active{transform:scale(.9)}
+.snarkFileName .newtab a,tr:hover .snarkFileName .newtab a:hover{margin-left:-12px;display:inline-block!important;width:20px!important;height:16px;font-size:0;background:url(/i2psnark/.res/icons/link.svg) no-repeat center center/16px}
+tr:hover .snarkFileName a:hover+.newtab a:not(:hover){margin-left:-2px}
+#textview-content{padding:20px;width:80%;max-width:1024px;max-height:85%;position:relative;line-height:1.5;white-space:pre-wrap;overflow-y:auto;font-size:110%;color:#333;box-shadow:0 0 0 10px #ddd;background:#fff;cursor:text;scrollbar-color:#999 #0000}
+#textview-content.pre{font-family:var(--monospaced);font-size:100%;font-weight:550;color:#555}
+#textview{width:100%;height:100%;display:flex;justify-content:center;align-items:center;position:fixed;top:0;left:0;z-index:9999999;box-shadow:0 0 0 10px #ddd;background:#000d;backdrop-filter:blur(3px);cursor:crosshair}
+#textview[hidden]{display:none}
