@@ -1473,7 +1473,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
             }
             if (action == null) {
-                _manager.addMessage("No action specified");
+                // confirm.js will generate this error when a remove/delete is cancelled, so suppress it.
+                //_manager.addMessage("No action specified");
                 return;
             }
         }
@@ -1490,25 +1491,20 @@ public class I2PSnarkServlet extends BasicServlet {
             String newURL = reqw.getParameter("nofilter_newURL");
             String newFile = reqw.getFilename("newFile");
             if (newFile != null && newFile.trim().length() > 0) {
-                if (!newFile.endsWith(".torrent"))
-                    newFile += ".torrent";
+                if (!newFile.endsWith(".torrent")) {newFile += ".torrent";}
                 File local = new File(dd, newFile);
                 String newFile2 = Storage.filterName(newFile);
                 File local2;
-                if (!newFile.equals(newFile2)) {
-                    local2 = new File(dd, newFile2);
-                } else {
-                    local2 = null;
-                }
+                if (!newFile.equals(newFile2)) {local2 = new File(dd, newFile2);}
+                else {local2 = null;}
                 if (local.exists() || (local2 != null && local2.exists())) {
                     try {
                         String canonical = local.getCanonicalPath();
                         String canonical2 = local2 != null ? local2.getCanonicalPath() : null;
                         if (_manager.getTorrent(canonical) != null ||
-                            (canonical2 != null && _manager.getTorrent(canonical2) != null))
+                            (canonical2 != null && _manager.getTorrent(canonical2) != null)) {
                             _manager.addMessage(_t("Torrent already running: {0}", canonical));
-                         else
-                            _manager.addMessage(_t("Torrent already in the queue: {0}", canonical));
+                         } else {_manager.addMessage(_t("Torrent already in the queue: {0}", canonical));}
                     } catch (IOException ioe) {}
                 } else {
                     File tmp = new File(_manager.util().getTempDir(), "newTorrent-" + _manager.util().getContext().random().nextLong() + ".torrent");
@@ -1531,24 +1527,19 @@ public class I2PSnarkServlet extends BasicServlet {
                             _manager.addMessage(_t("Torrent with this info hash is already running: {0}", snark.getBaseName()));
                             return;
                         }
-                        if (local2 != null)
-                            local = local2;
+                        if (local2 != null) {local = local2;}
                         String canonical = local.getCanonicalPath();
                         // This may take a LONG time to create the storage.
                         boolean ok = _manager.copyAndAddTorrent(tmp, canonical, dd);
-                        if (!ok)
-                            throw new IOException("Unknown error - check logs");
+                        if (!ok) {throw new IOException("Unknown error - check logs");}
                         snark = _manager.getTorrentByInfoHash(fileInfoHash);
-                        if (snark != null)
-                            snark.startTorrent();
-                        else
-                            throw new IOException("Not found: " + canonical);
+                        if (snark != null) {snark.startTorrent();}
+                        else {throw new IOException("Not found: " + canonical);}
                     } catch (IOException ioe) {
                         _manager.addMessageNoEscape(_t("Torrent at {0} was not valid", DataHelper.escapeHTML(newFile)) + ": " + DataHelper.stripHTML(ioe.getMessage()));
                         tmp.delete();
                         local.delete();
-                        if (local2 != null)
-                            local2.delete();
+                        if (local2 != null) {local2.delete();}
                         return;
                     } catch (OutOfMemoryError oom) {
                         _manager.addMessageNoEscape(_t("ERROR - Out of memory, cannot create torrent from {0}",
@@ -1579,8 +1570,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         Collection<Snark> snarks = _manager.getTorrents();
                         for (Snark s : snarks) {
                             Storage storage = s.getStorage();
-                            if (storage == null)
-                                continue;
+                            if (storage == null) {continue;}
                             File sbase = storage.getBase();
                             if (isParentOf(sbase, dir)) {
                                 _manager.addMessage(_t("Cannot add torrent {0} inside another torrent: {1}",
@@ -1594,10 +1584,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     if (isI2PTracker(newURL)) {
                         FetchAndAdd fetch = new FetchAndAdd(_context, _manager, newURL, dir);
                         _manager.addDownloader(fetch);
-                    } else {
-                        // TODO
-                        _manager.addMessageNoEscape(_t("Download from non-I2P location {0} is not supported", urlify(newURL)));
-                    }
+                    } else {_manager.addMessageNoEscape(_t("Download from non-I2P location {0} is not supported", urlify(newURL)));} // TODO
                 } else if (newURL.startsWith(MagnetURI.MAGNET) || newURL.startsWith(MagnetURI.MAGGOT)) {
                     addMagnet(newURL, dir);
                 } else if (newURL.length() == 40 && newURL.replaceAll("[a-fA-F0-9]", "").length() == 0) {
@@ -1615,8 +1602,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     //addMagnet(MagnetURI.MAGNET_FULL_V2 + newURL, dir);
                 } else {
                     // try as file path, hopefully we're on the same box
-                    if (newURL.startsWith("file://"))
-                        newURL = newURL.substring(7);
+                    if (newURL.startsWith("file://")) {newURL = newURL.substring(7);}
                     File file = new File(newURL);
                     if (file.isAbsolute() && file.exists()) {
                         if (!newURL.endsWith(".torrent")) {
@@ -1644,20 +1630,18 @@ public class I2PSnarkServlet extends BasicServlet {
                             File torrentFile = new File(dd, name);
                             String canonical = torrentFile.getCanonicalPath();
                             if (torrentFile.exists()) {
-                                if (_manager.getTorrent(canonical) != null)
+                                if (_manager.getTorrent(canonical) != null) {
                                     _manager.addMessage(_t("Torrent already running: {0}", name));
-                                else
+                                } else {
                                     _manager.addMessage(_t("Torrent already in the queue: {0}", name));
+                                }
                             } else {
                                 // This may take a LONG time to create the storage.
                                 boolean ok = _manager.copyAndAddTorrent(file, canonical, dd);
-                                if (!ok)
-                                    throw new IOException("Unknown error - check logs");
+                                if (!ok) {throw new IOException("Unknown error - check logs");}
                                 snark = _manager.getTorrentByInfoHash(fileInfoHash);
-                                if (snark != null)
-                                    snark.startTorrent();
-                                else
-                                    throw new IOException("Unknown error - check logs");
+                                if (snark != null) {snark.startTorrent();}
+                                else {throw new IOException("Unknown error - check logs");}
                             }
                         } catch (IOException ioe) {
                             _manager.addMessageNoEscape(_t("Torrent at {0} was not valid", DataHelper.escapeHTML(newURL)) + ": " +
@@ -1673,10 +1657,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                                "http://", MagnetURI.MAGNET));
                     }
                 }
-            } else {
-                // no file or URL specified
-                _manager.addMessage(_t("Enter URL or select torrent file"));
-            }
+            } else {_manager.addMessage(_t("Enter URL or select torrent file"));} // no file or URL specified
         } else if (action.startsWith("Stop_")) {
             String torrent = action.substring(5);
             if (torrent != null) {
@@ -1719,11 +1700,11 @@ public class I2PSnarkServlet extends BasicServlet {
                             boolean canDelete = dd.canWrite() || !f.exists();
                             _manager.stopTorrent(snark, canDelete);
                             // TODO race here with the DirMonitor, could get re-added
-                            if (f.delete()) {
-                                _manager.addMessage(_t("Torrent file deleted: {0}", f.getAbsolutePath()));
-                            } else if (f.exists()) {
-                                if (!canDelete)
+                            if (f.delete()) {_manager.addMessage(_t("Torrent file deleted: {0}", f.getAbsolutePath()));}
+                            else if (f.exists()) {
+                                if (!canDelete) {
                                     _manager.addMessage(_t("No write permissions for data directory") + ": " + dd);
+                                }
                                 _manager.addMessage(_t("Torrent file could not be deleted: {0}", f.getAbsolutePath()));
                             }
                             break;
@@ -1744,10 +1725,8 @@ public class I2PSnarkServlet extends BasicServlet {
                                 // magnet - remove and delete are the same thing
                                 name = name.replace("Magnet ", "");
                                 _manager.deleteMagnet(snark);
-                                if (snark instanceof FetchAndAdd)
-                                    _manager.addMessage(_t("Download deleted: {0}", name));
-                                else
-                                    _manager.addMessage(_t("Magnet deleted: {0}", name));
+                                if (snark instanceof FetchAndAdd) {_manager.addMessage(_t("Download deleted: {0}", name));}
+                                else {_manager.addMessage(_t("Magnet deleted: {0}", name));}
                                 return;
                             }
                             File f = new File(name);
@@ -1755,25 +1734,24 @@ public class I2PSnarkServlet extends BasicServlet {
                             boolean canDelete = dd.canWrite() || !f.exists();
                             _manager.stopTorrent(snark, canDelete);
                             // TODO race here with the DirMonitor, could get re-added
-                            if (f.delete()) {
-                                _manager.addMessage(_t("Torrent file deleted: {0}", f.getAbsolutePath()));
-                            } else if (f.exists()) {
+                            if (f.delete()) {_manager.addMessage(_t("Torrent file deleted: {0}", f.getAbsolutePath()));}
+                            else if (f.exists()) {
                                 if (!canDelete)
                                     _manager.addMessage(_t("No write permissions for data directory") + ": " + dd);
                                 _manager.addMessage(_t("Torrent file could not be deleted: {0}", f.getAbsolutePath()));
                                 return;
                             }
                             Storage storage = snark.getStorage();
-                            if (storage == null)
-                                break;
+                            if (storage == null) {break;}
                             List<List<String>> files = meta.getFiles();
                             if (files == null) { // single file torrent
                                 for (File df : storage.getFiles()) {
                                     // should be only one
-                                    if (df.delete())
+                                    if (df.delete()) {
                                         _manager.addMessage(_t("Data file deleted: {0}", df.getAbsolutePath()));
-                                    else if (df.exists())
+                                    } else if (df.exists()) {
                                         _manager.addMessage(_t("Data file could not be deleted: {0}", df.getAbsolutePath()));
+                                    }
                                     // else already gone
                                 }
                                 break;
@@ -1789,10 +1767,8 @@ public class I2PSnarkServlet extends BasicServlet {
                             }
                             // step 2 delete dirs bottom-up
                             Set<File> dirs = storage.getDirectories();
-                            if (dirs == null)
-                                break;  // directory deleted out from under us
-                            if (_log.shouldInfo())
-                                _log.info("Dirs to delete: " + DataHelper.toString(dirs));
+                            if (dirs == null) {break;}  // directory deleted out from under us
+                            if (_log.shouldInfo()) {_log.info("Dirs to delete: " + DataHelper.toString(dirs));}
                             boolean ok = false;
                             for (File df : dirs) {
                                 if (df.delete()) {
@@ -1801,8 +1777,9 @@ public class I2PSnarkServlet extends BasicServlet {
                                 } else if (df.exists()) {
                                     ok = false;
                                     _manager.addMessage(_t("Directory could not be deleted: {0}", df.getAbsolutePath()));
-                                    if (_log.shouldWarn())
+                                    if (_log.shouldWarn()) {
                                         _log.warn("[I2PSnark] Could not delete directory: " + df);
+                                    }
                                 // else already gone
                                 }
                             }
@@ -1854,18 +1831,15 @@ public class I2PSnarkServlet extends BasicServlet {
             catch (ServletException se) {}
         } else if ("Save2".equals(action)) {
             String taction = req.getParameter("taction");
-            if (taction != null)
-                processTrackerForm(taction, req);
+            if (taction != null) {processTrackerForm(taction, req);}
         } else if ("Save3".equals(action)) {
             String raction = req.getParameter("raction");
-            if (raction != null)
-                processTorrentCreateFilterForm(raction, req);
+            if (raction != null) {processTorrentCreateFilterForm(raction, req);}
         } else if ("Create".equals(action)) {
             String baseData = req.getParameter("nofilter_baseFile");
             if (baseData != null && baseData.trim().length() > 0) {
                 File baseFile = new File(baseData.trim());
-                if (!baseFile.isAbsolute())
-                    baseFile = new File(_manager.getDataDir(), baseData);
+                if (!baseFile.isAbsolute()) {baseFile = new File(_manager.getDataDir(), baseData);}
                 String announceURL = req.getParameter("announceURL");
                 String comment = req.getParameter("comment");
 
@@ -1894,8 +1868,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     Collection<Snark> snarks = _manager.getTorrents();
                     for (Snark s : snarks) {
                         Storage storage = s.getStorage();
-                        if (storage == null)
-                            continue;
+                        if (storage == null) {continue;}
                         File sbase = storage.getBase();
                         if (isParentOf(sbase, baseFile)) {
                             _manager.addMessage(_t("Cannot add torrent {0} inside another torrent: {1}",
@@ -1919,8 +1892,7 @@ public class I2PSnarkServlet extends BasicServlet {
                          String k = (String) o;
                         if (k.startsWith("backup_")) {
                             String url = k.substring(7);
-                            if (!url.equals(announceURL))
-                                backupURLs.add(DataHelper.stripHTML(url));
+                            if (!url.equals(announceURL)) {backupURLs.add(DataHelper.stripHTML(url));}
                         }
                     }
                     List<List<String>> announceList = null;

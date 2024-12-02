@@ -21,7 +21,7 @@
   background: var(--notify);
   clip-path:inset(1px);
   user-select: none;
-  animation: wipe 1s ease .5s both, hideAlert 1s ease-out 5s both;
+  animation: wipe 1.5s ease .15s both, hideAlert 1.5s ease-out 5s both;
 }
 
 .notify[hidden] {
@@ -41,10 +41,6 @@
   height: 48px;
   background: var(--loading) no-repeat center center / 32px;
   animation: wait 2s linear .5s both;
-}
-
-#createNotify:not([hidden]) {
-  animation: wipe 1s ease .5s both, hideAlert 2s ease-out 5s both;
 }
 
 #addSection #addNotify td, #createSection #createNotify td {
