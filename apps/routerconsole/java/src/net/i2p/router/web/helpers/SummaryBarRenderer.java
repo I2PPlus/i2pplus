@@ -683,7 +683,7 @@ class SummaryBarRenderer {
            .append("<td><b>")
            .append(_t("Uptime"))
            .append("</b></td>")
-           .append("<td class=digits><span>")
+           .append("<td class=digits><span class=volatile>")
            .append(_helper.getUptime())
            .append("</span></td></tr>\n</table>\n");
         return buf.toString();
