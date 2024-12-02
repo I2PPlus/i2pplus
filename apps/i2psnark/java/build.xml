@@ -116,7 +116,7 @@
   <!-- Ideally we would include only include the servlet, everything else is in the jar.
       -  However, the wrapper.config classpath in existing installs does not include i2psnark.jar.
       -  So we must continue to duplicate everything in the war.
-          <classes dir="./build/obj" includes="**/I2PSnarkServlet*.class" />
+         <classes dir="./build/obj" includes="**/I2PSnarkServlet*.class" />
      -->
   <target name="war" depends="jar, bundle, warUpToDate, listChangedFiles" unless="war.uptodate">
     <!-- set if unset -->
@@ -237,6 +237,8 @@
         <attribute name="Build-Date" value="${build.timestamp}" />
         <attribute name="Base-Revision" value="${workspace.version}" />
         <attribute name="Workspace-Changes" value="${workspace.changes.tr}" />
+        <!-- Suppress JNI warning in JRE 24+, and eventual restriction (https://openjdk.org/jeps/472) -->
+        <attribute name="Enable-Native-Access" value="ALL-UNNAMED" />
         <!-- this is so Jetty will report its version correctly -->
         <section name="org/eclipse/jetty/server/">
           <attribute name="Implementation-Vendor" value="Eclipse.org - Jetty" />
