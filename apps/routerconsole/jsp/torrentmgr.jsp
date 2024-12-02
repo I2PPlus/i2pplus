@@ -1,7 +1,4 @@
-<%@page contentType="text/html"%>
-<%@page trimDirectiveWhitespaces="true"%>
-<%@page pageEncoding="UTF-8"%>
-<%@ page buffer="32kb" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
 <%
     String now = String.valueOf(net.i2p.I2PAppContext.getGlobalContext().clock().now());
 %>
@@ -9,8 +6,7 @@
 <%
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null)
-        lang = ctx.getProperty("routerconsole.lang");
+    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
 %>
 <html lang="<%=lang%>">
 <head>

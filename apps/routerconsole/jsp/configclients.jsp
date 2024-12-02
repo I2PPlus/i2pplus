@@ -1,7 +1,4 @@
-<%@page contentType="text/html"%>
-<%@page trimDirectiveWhitespaces="true"%>
-<%@page pageEncoding="UTF-8"%>
-<%@ page buffer="32kb" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
 <!DOCTYPE HTML>
 <%  net.i2p.I2PAppContext context = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";

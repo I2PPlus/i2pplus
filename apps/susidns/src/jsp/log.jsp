@@ -23,9 +23,7 @@
  * $Revision: 1.1 $
  */
 %>
-<%@page trimDirectiveWhitespaces="true"%>
-<%@page pageEncoding="UTF-8"%>
-<%@ page buffer="32kb" %>
+<%@page trimDirectiveWhitespaces="true" buffer="32kb" %>
 <%@ page contentType="text/html" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@include file="headers.jsi"%>
