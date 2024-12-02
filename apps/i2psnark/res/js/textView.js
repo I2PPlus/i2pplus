@@ -12,46 +12,74 @@ document.addEventListener("DOMContentLoaded", function () {
     'td.snarkFileName>a[href$=".txt"]',
   ];
 
-  const fileLinks = document.querySelectorAll(":where(" + viewLinks.join(",") + ")");
-  const snarkFileNameLinks = document.querySelectorAll(":where(" + viewLinks.slice(1).join(",") + ")");
+  const iframedStyles = ".textviewer,.textviewer #torrents.main,.textviewer #i2psnarkframe" +
+                     "{margin:0!important;width:100%;height:100%!important;position:absolute;top:0;left:0;overflow:hidden;contain:paint;clip-path:inset(1px)}" +
+                     ".textviewer h1{display:none}";
+
+  const doc = document;
+  const parentDoc = window.parent.document;
+  const isIframed = doc.documentElement.classList.contains("iframed") || window.parent;
+  const fileLinks = doc.querySelectorAll(":where(" + viewLinks.join(",") + ")");
+  const snarkFileNameLinks = doc.querySelectorAll(":where(" + viewLinks.slice(1).join(",") + ")");
+
+  let listenersActive = false;
 
   snarkFileNameLinks.forEach((link) => {
-    const newTabLink = document.createElement("a");
+    const fragment = doc.createDocumentFragment();
+    const newTabLink = doc.createElement("a");
+    const newTabSpan = doc.createElement("span");
     newTabLink.href = link.href;
     newTabLink.target = "_blank";
     newTabLink.title = "Open in new tab";
-    const newTabSpan = document.createElement("span");
     newTabSpan.className = "newtab";
     newTabSpan.appendChild(newTabLink);
-    link.parentNode.insertBefore(newTabSpan, link.nextSibling);
+    fragment.appendChild(newTabSpan);
+    link.parentNode.insertBefore(fragment, link.nextSibling);
   });
 
   function loadCSS(href) {
-    const snarkTheme = document.getElementById("snarkTheme");
-    var css = document.createElement("link");
-    css.type = "text/css";
+    const snarkTheme = doc.getElementById("snarkTheme");
+    const css = doc.createElement("link");
     css.rel = "stylesheet";
     css.href = href;
     snarkTheme.parentNode.insertBefore(css, snarkTheme);
   }
 
-  function createTextViewer() {
-    const viewerWrapper = document.createElement("div");
-    const viewerContent = document.createElement("div");
-    const viewerFilename = document.createElement("div");
-    viewerWrapper.id = "textview";
-    viewerWrapper.setAttribute("hidden", "");
-    viewerContent.id = "textview-content";
-    viewerContent.style.position = "relative";
-    viewerFilename.id = "viewerFilename";
-    viewerWrapper.appendChild(viewerContent);
-    viewerWrapper.appendChild(viewerFilename);
-    document.body.appendChild(viewerWrapper);
-    loadCSS("/i2psnark/.res/textView.css");
-    return { viewerWrapper, viewerContent };
+  function loadIframeCSS() {
+    if (!isIframed) {return;}
+    const cssIframed = doc.createElement("style");
+    cssIframed.id = "textviewCss";
+    cssIframed.innerHTML = iframedStyles;
+    parentDoc.body.appendChild(cssIframed);
   }
 
-  const { viewerWrapper, viewerContent } = createTextViewer();
+  let viewerWrapper, viewerContent;
+
+  function createTextViewer() {
+    if (!viewerWrapper) {
+      viewerWrapper = doc.createElement("div");
+      viewerContent = doc.createElement("div");
+      const viewerFilename = doc.createElement("div");
+      viewerWrapper.id = "textview";
+      viewerWrapper.setAttribute("hidden", "");
+      viewerContent.id = "textview-content";
+      viewerFilename.id = "viewerFilename";
+      viewerWrapper.appendChild(viewerContent);
+      viewerWrapper.appendChild(viewerFilename);
+      doc.body.appendChild(viewerWrapper);
+      loadCSS("/i2psnark/.res/textView.css");
+    }
+    return { viewerWrapper, viewerContent, viewerFilename };
+  }
+
+  ({ viewerWrapper, viewerContent, viewerFilename } = createTextViewer());
+
+  function verticalAlign() {
+    const contentHeight = viewerContent.offsetHeight;
+    const windowHeight = window.innerHeight;
+    const marginTop = Math.max(0, (windowHeight - contentHeight) / 2);
+    viewerWrapper.style.paddingTop = `${marginTop}px`;
+  }
 
   function displayWithLineNumbers(text) {
     const lines = text.split("\n");
@@ -64,32 +92,47 @@ document.addEventListener("DOMContentLoaded", function () {
     return htmlString;
   }
 
-  fileLinks.forEach((link) => {
-    link.addEventListener("click", function (event) {
-      const filename = decodeURIComponent(link.href.split("/").pop());
-      const lastDotIndex = filename.lastIndexOf(".");
-      if (lastDotIndex !== -1) {
-        const fileExt = filename.substring(lastDotIndex + 1).toLowerCase();
-        if (fileExt !== "txt" && fileExt !== "srt") { viewerContent.classList.add("pre"); }
-        if (["nfo", "txt", "css", "srt"].includes(fileExt)) {
-          event.preventDefault();
-          fetch(link.href).then((response) => response.text()).then((data) => {
-            viewerContent.innerHTML = fileExt === "css" ? displayWithLineNumbers(data) : data;
-            viewerFilename.textContent = filename;
-            viewerContent.appendChild(viewerFilename);
-            if (fileExt === "css") {viewerContent.classList.add("lines");}
-            viewerWrapper.removeAttribute("hidden");
-          }).catch((error) => { });
+  function addListeners() {
+    if (listenersActive) {return;}
+    snarkFileNameLinks.forEach((link) => {
+      link.addEventListener("click", function (event) {
+        event.preventDefault();
+        if (!doc.body.classList.contains("textviewer")) {doc.body.classList.add("textviewer");}
+        if (isIframed && !parentDoc.body.classList.contains("textviewer")) {parentDoc.body.classList.add("textviewer");}
+        if (isIframed && !document.getElementById("textviewCss")) { loadIframeCSS(); }
+        viewerWrapper.removeAttribute("hidden");
+        viewerFilename.textContent = "";
+        viewerContent.scrollTo(0,0);
+        const fileName = decodeURIComponent(link.href.split("/").pop());
+        const lastDotIndex = fileName.lastIndexOf(".");
+        if (lastDotIndex !== -1) {
+          const fileExt = fileName.substring(lastDotIndex + 1).toLowerCase();
+          if (fileExt !== "txt" && fileExt !== "srt") { viewerContent.classList.add("pre"); }
+          if (["nfo", "txt", "css", "srt"].includes(fileExt)) {
+            fetch(link.href).then((response) => response.text()).then((data) => {
+              viewerContent.innerHTML = fileExt === "css" ? displayWithLineNumbers(data) : data;
+              viewerContent.appendChild(viewerFilename);
+              viewerFilename.textContent = fileName;
+              if (fileExt === "css") {viewerContent.classList.add("lines");}
+              verticalAlign();
+            }).catch((error) => {});
+          }
         }
+      });
+    });
+
+    window.addEventListener("resize", verticalAlign);
+    viewerContent.addEventListener("click", function (event) { event.stopPropagation(); });
+    viewerWrapper.addEventListener("click", function () {
+      viewerWrapper.setAttribute("hidden", "");
+      doc.body.classList.remove("textviewer");
+      if (isIframed) {
+        parentDoc.body.classList.remove("textviewer");
+        parentDoc.getElementById("textviewCss").remove();
       }
     });
-  });
+    listenersActive = true;
+  }
+  addListeners();
 
-  viewerContent.addEventListener("click", function (event) {
-    event.stopPropagation();
-  });
-
-  viewerWrapper.addEventListener("click", function () {
-    if (event.target !== viewerContent) { viewerWrapper.setAttribute("hidden", ""); }
-  });
 });
