@@ -7,7 +7,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const viewLinks = [
     'td.fileIcon>a',
     'td.snarkFileName>a[href$=".css"]',
+    'td.snarkFileName>a[href$=".js"]',
     'td.snarkFileName>a[href$=".nfo"]',
+    'td.snarkFileName>a[href$=".sh"]',
     'td.snarkFileName>a[href$=".srt"]',
     'td.snarkFileName>a[href$=".txt"]',
   ];
@@ -105,10 +107,13 @@ document.addEventListener("DOMContentLoaded", function () {
         if (lastDotIndex !== -1) {
           const fileExt = fileName.substring(lastDotIndex + 1).toLowerCase();
           if (fileExt !== "txt" && fileExt !== "srt") { viewerContent.classList.add("pre"); }
-          if (["nfo", "txt", "css", "srt"].includes(fileExt)) {
+          if (["css", "js", "nfo", "txt", "sh", "srt"].includes(fileExt)) {
             fetch(link.href).then((response) => response.text()).then((data) => {
-              viewerContent.innerHTML = fileExt === "css" ? displayWithLineNumbers(data) : data;
-              if (fileExt === "css") {viewerContent.classList.add("lines");}
+              const parser = new DOMParser();
+              const requestDoc = parser.parseFromString(data, "text/html");
+              const escaped = requestDoc.documentElement.textContent || data;
+              viewerContent.innerHTML = (fileExt === "css" || fileExt === "js" || fileExt === "sh") ? displayWithLineNumbers(escaped) : escaped;
+              if (fileExt === "css" || fileExt === "js") {viewerContent.classList.add("lines");}
               viewerFilename.textContent = fileName;
               viewerContent.appendChild(viewerFilename);
               viewerWrapper.removeAttribute("hidden");

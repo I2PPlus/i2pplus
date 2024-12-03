@@ -903,10 +903,10 @@ form[action^="/i2psnark/configure"]{display:block}
 body.textview{height:100vh}
 #textview-content{padding-top:44px;color:var(--ink);text-shadow:none;box-shadow:0 0 0 10px #e5d8d0,0 0 0 11px #1f1400;background:linear-gradient(180deg,#efe6e0,#eae9e8);scrollbar-color:#cf0f00 #0000}
 #textview-content.pre{color:var(--ink)}
-#textview-content.lines{padding-top:20px;box-shadow:0 0 0 10px #e5d8d0,0 0 0 11px #1f1400,var(--highlight)}
-#textview-content li{border-bottom:1px solid #000}
+#textview-content.lines{padding-top:20px;box-shadow:0 0 0 10px #e5d8d0,0 0 0 11px #1f1400}
+#textview-content li{border:1px solid #e5d8d0;border-top:0}
 #textview-content li{padding:2px 8px}
-#textview-content li::marker{color:#e4d3d7aa}
+#textview-content li::marker{color:var(--ink)}
 #textview-content li{background:#0001}
 #textview-content li:nth-child(odd){background:#fff1}
 #textview-content ol{margin:-20px -24px -22px 26px;box-shadow:0 0 0 1px #1f1400 inset}
