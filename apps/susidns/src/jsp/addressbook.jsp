@@ -23,12 +23,12 @@
  * $Revision: 1.3 $
  */
 %>
-<%@page trimDirectiveWhitespaces="true" buffer="32kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
 <%@page contentType="text/html"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page import="net.i2p.servlet.RequestWrapper" %>
-<%@ page import="java.util.regex.Pattern" %>
-<%@ page import="java.util.regex.Matcher" %>
+<%@page import="net.i2p.servlet.RequestWrapper" %>
+<%@page import="java.util.regex.Pattern" %>
+<%@page import="java.util.regex.Matcher" %>
 <%@include file="headers.jsi"%>
 <jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session" />
 <jsp:useBean id="book" class="i2p.susi.dns.NamingServiceBean" scope="session" />

@@ -23,8 +23,7 @@
  * $Revision: 1.1 $
  */
 %>
-<%@page trimDirectiveWhitespaces="true" buffer="32kb" %>
-<%@page contentType="text/html" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
 <%@include file="headers.jsi"%>
 <jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application"/>
 <jsp:useBean id="cfg" class="i2p.susi.dns.ConfigBean" scope="session"/>

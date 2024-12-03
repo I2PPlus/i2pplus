@@ -1,9 +1,4 @@
-<%@ page import="java.net.URL" %>
-<%@ page import="java.net.URLConnection" %>
-<%@ page import="java.io.IOException" %>
-<%@page pageEncoding="UTF-8"%>
-<%@ page buffer="32kb" %>
-<%@page trimDirectiveWhitespaces="true"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" import="java.net.URL" import="java.net.URLConnection" import="java.io.IOException" %>
 <%@include file="headers.jsi"%>
 <%@page contentType="text/html" import="net.i2p.i2ptunnel.web.IndexBean"%>
 <jsp:useBean class="net.i2p.i2ptunnel.web.IndexBean" id="indexBean" scope="request" />

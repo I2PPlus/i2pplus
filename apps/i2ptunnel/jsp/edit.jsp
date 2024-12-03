@@ -1,7 +1,4 @@
-<%@page pageEncoding="UTF-8"%>
-<%@ page buffer="32kb" %>
-<%@page trimDirectiveWhitespaces="true"%>
-<%@page contentType="text/html" import="net.i2p.i2ptunnel.web.EditBean"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" import="net.i2p.i2ptunnel.web.EditBean"%>
 <%@include file="headers.jsi"%>
 <%
 boolean __isClient = false;

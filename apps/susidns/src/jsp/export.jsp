@@ -24,8 +24,7 @@
 <%
     response.setHeader("Content-Disposition", "attachment; filename=exported_hosts.txt");
 %>
-<%@page trimDirectiveWhitespaces="true" buffer="32kb" %>
-<%@page contentType="text/plain"%>
+<%@page contentType="text/plain" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
 <%@include file="headers.jsi"%>
 <jsp:useBean id="book" class="i2p.susi.dns.NamingServiceBean" scope="session" />
 <jsp:setProperty name="book" property="*" />

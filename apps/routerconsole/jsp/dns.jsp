@@ -1,4 +1,4 @@
-<%@ page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
 <jsp:useBean class="net.i2p.router.web.CSSHelper" id="tester" scope="request" />
 <%
    String i2pcontextId1 = null;

@@ -1,7 +1,4 @@
-<%@page pageEncoding="UTF-8"%>
-<%@ page buffer="32kb" %>
-<%@page contentType="text/html" import="java.io.File,java.io.IOException,net.i2p.crypto.KeyStoreUtil,net.i2p.data.DataHelper,net.i2p.jetty.JettyXmlConfigurationParser"%>
-<%@page trimDirectiveWhitespaces="true"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" import="java.io.File,java.io.IOException,net.i2p.crypto.KeyStoreUtil,net.i2p.data.DataHelper,net.i2p.jetty.JettyXmlConfigurationParser"%>
 <%@include file="headers.jsi"%>
 <!DOCTYPE html>
 <%
