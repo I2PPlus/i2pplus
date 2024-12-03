@@ -13,8 +13,8 @@ document.addEventListener("DOMContentLoaded", function () {
   ];
 
   const iframedStyles = ".textviewer,.textviewer #torrents.main,.textviewer #i2psnarkframe" +
-                        "{margin:0!important;width:100%;height:100%!important;position:absolute;top:0;left:0;" +
-                        "overflow:hidden;contain:paint;clip-path:inset(1px)}" +
+                        "{margin:0!important;padding:0!important;width:100%;height:100%!important;position:absolute;top:0;left:0;" +
+                        "bottom:0;right:0;overflow:hidden;border:0!important;contain:paint}" +
                         ".textviewer h1{display:none}";
 
   const doc = document;
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let listenersActive = false;
 
-  snarkFileNameLinks.forEach((link) => {
+  const fragments = Array.from(snarkFileNameLinks).map((link) => {
     const fragment = doc.createDocumentFragment();
     const newTabLink = doc.createElement("a");
     const newTabSpan = doc.createElement("span");
@@ -35,7 +35,11 @@ document.addEventListener("DOMContentLoaded", function () {
     newTabSpan.className = "newtab";
     newTabSpan.appendChild(newTabLink);
     fragment.appendChild(newTabSpan);
-    link.parentNode.insertBefore(fragment, link.nextSibling);
+    return fragment;
+  });
+
+  Array.from(snarkFileNameLinks).forEach((link, index) => {
+    link.parentNode.insertBefore(fragments[index], link.nextSibling);
   });
 
   function loadCSS(href) {
@@ -54,13 +58,14 @@ document.addEventListener("DOMContentLoaded", function () {
     parentDoc.body.appendChild(cssIframed);
   }
 
-  let viewerWrapper, viewerContent;
+  let viewerWrapper, viewerContent, viewerFilename;
 
   function createTextViewer() {
     if (!viewerWrapper) {
+      loadCSS("/i2psnark/.res/textView.css");
       viewerWrapper = doc.createElement("div");
       viewerContent = doc.createElement("div");
-      const viewerFilename = doc.createElement("div");
+      viewerFilename = doc.createElement("div");
       viewerWrapper.id = "textview";
       viewerWrapper.setAttribute("hidden", "");
       viewerContent.id = "textview-content";
@@ -68,7 +73,6 @@ document.addEventListener("DOMContentLoaded", function () {
       viewerWrapper.appendChild(viewerContent);
       viewerWrapper.appendChild(viewerFilename);
       doc.body.appendChild(viewerWrapper);
-      loadCSS("/i2psnark/.res/textView.css");
     }
     return { viewerWrapper, viewerContent, viewerFilename };
   }

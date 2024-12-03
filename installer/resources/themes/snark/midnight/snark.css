@@ -868,6 +868,21 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 #msg.deleting{background:url(/i2psnark/.res/icons/processing.svg) no-repeat 20px center/48px,linear-gradient(180deg,#000,#001)}
 #msg .hr{border-top:1px solid #113}
 
+/* text viewer */
+body.textview{height:100vh}
+#textview-content{padding-top:44px;color:var(--ink);text-shadow:1px 1px 1px #0008;box-shadow:0 0 0 10px #003,0 0 0 11px #115,var(--highlight),0 0 0 2px #115 inset;background:linear-gradient(180deg,#040418,#002);scrollbar-color:#115 #0000}
+#textview-content.pre{color:var(--ink)}
+#textview-content.lines{padding-top:20px;box-shadow:0 0 0 10px #003,0 0 0 11px #000,var(--highlight)}
+#textview-content li{border-bottom:1px solid #000}
+#textview-content li{padding:2px 8px}
+#textview-content li::marker{color:#e4d3d7aa}
+#textview-content li{background:#0001}
+#textview-content li:nth-child(odd){background:#fff1}
+#textview-content ol{margin:-20px -24px -22px 26px;box-shadow:0 0 0 1px #001 inset}
+#viewerFilename{margin-left:-24px;font-weight:700;border-bottom:1px solid #001;background:#003}
+#viewerFilename::after{width:100%;height:1px;display:block;position:absolute;bottom:-2px;background:#115;content:""}
+#textview-content.lines #viewerFilename::after{display:none}
+
 /* connection down */
 #circle::before{border:0!important;box-shadow:0 0 0 10px #000,0 0 0 12px #225 inset,0 0 0 14px #000 inset!important;transform:scale(.8) translateX(28px)!important;filter:sepia(1) hue-rotate(180deg) saturate(1.8)}
 
