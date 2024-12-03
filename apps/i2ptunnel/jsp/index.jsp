@@ -1,6 +1,5 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" import="java.net.URL" import="java.net.URLConnection" import="java.io.IOException" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" import="java.net.URL" import="java.net.URLConnection" import="java.io.IOException" import="net.i2p.i2ptunnel.web.IndexBean"%>
 <%@include file="headers.jsi"%>
-<%@page contentType="text/html" import="net.i2p.i2ptunnel.web.IndexBean"%>
 <jsp:useBean class="net.i2p.i2ptunnel.web.IndexBean" id="indexBean" scope="request" />
 <jsp:useBean class="net.i2p.i2ptunnel.web.EditBean" id="editBean" scope="request" />
 <jsp:setProperty name="indexBean" property="tunnel" /><%-- must be set before key1-4 --%>
