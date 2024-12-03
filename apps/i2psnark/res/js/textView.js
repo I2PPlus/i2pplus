@@ -12,39 +12,32 @@ document.addEventListener("DOMContentLoaded", function () {
     'td.snarkFileName>a[href$=".nfo"]',
     'td.snarkFileName>a[href$=".sh"]',
     'td.snarkFileName>a[href$=".srt"]',
-    'td.snarkFileName>a[href$=".txt"]',
+    'td.snarkFileName>a[href$=".txt"]'
   ];
 
-  const iframedStyles = ".textviewer,.textviewer #torrents.main,.textviewer #i2psnarkframe" +
-                        "{margin:0!important;padding:0!important;width:100%;height:100%!important;position:absolute;top:0;left:0;" +
-                        "bottom:0;right:0;overflow:hidden;border:0!important;contain:paint}" +
-                        ".textviewer h1{display:none}";
+  const iframedStyles = ".textviewer,.textviewer #torrents.main,.textviewer #i2psnarkframe{margin:0!important;padding:0!important;width:100%;height:100%!important;position:absolute;top:0;left:0;bottom:0;right:0;overflow:hidden;border:0!important;contain:paint}.textviewer h1{display:none}";
 
   const doc = document;
-  const parentDoc = window.parent.document;
   const isIframed = doc.documentElement.classList.contains("iframed") || window.parent;
-  const fileLinks = doc.querySelectorAll(":where(" + viewLinks.join(",") + ")");
   const snarkFileNameLinks = doc.querySelectorAll(":where(" + viewLinks.slice(1).join(",") + ")");
-  const supportedFileTypes = ["css", "csv", "js", "json", "nfo", "txt", "sh", "srt"];
-  const numberedFileExts = ["css", "js", "sh"];
+  const supportedFileTypes = new Set(["css", "csv", "js", "json", "nfo", "txt", "sh", "srt"]);
+  const numberedFileExts = new Set(["css", "js", "sh"]);
+  const cssHref = "/i2psnark/.res/textView.css";
 
-  let listenersActive = false;
+  const responseCache = new Map();
+  let listenersActive = false, viewerWrapper, viewerContent, viewerFilename;
 
-  const fragments = Array.from(snarkFileNameLinks).map((link) => {
-    const fragment = doc.createDocumentFragment();
-    const newTabLink = doc.createElement("a");
+  const fragment = doc.createDocumentFragment();
+  snarkFileNameLinks.forEach(link => {
     const newTabSpan = doc.createElement("span");
+    newTabSpan.className = "newtab";
+    const newTabLink = doc.createElement("a");
     newTabLink.href = link.href;
     newTabLink.target = "_blank";
     newTabLink.title = "Open in new tab";
-    newTabSpan.className = "newtab";
     newTabSpan.appendChild(newTabLink);
     fragment.appendChild(newTabSpan);
-    return fragment;
-  });
-
-  Array.from(snarkFileNameLinks).forEach((link, index) => {
-    link.parentNode.insertBefore(fragments[index], link.nextSibling);
+    link.parentNode.insertBefore(newTabSpan, link.nextSibling);
   });
 
   function loadCSS(href) {
@@ -55,89 +48,99 @@ document.addEventListener("DOMContentLoaded", function () {
     snarkTheme.parentNode.insertBefore(css, snarkTheme);
   }
 
-  function loadIframeCSS() {
-    if (!isIframed) {return;}
+  const loadIframeCSS = () => {
+    if (!isIframed) return;
     const cssIframed = doc.createElement("style");
     cssIframed.id = "textviewCss";
     cssIframed.innerHTML = iframedStyles;
-    parentDoc.body.appendChild(cssIframed);
-  }
-
-  let viewerWrapper, viewerContent, viewerFilename;
+    window.parent.document.body.appendChild(cssIframed);
+  };
 
   function createTextViewer() {
     if (!viewerWrapper) {
-      loadCSS("/i2psnark/.res/textView.css");
+      loadCSS(cssHref);
       viewerWrapper = doc.createElement("div");
       viewerContent = doc.createElement("div");
       viewerFilename = doc.createElement("div");
       viewerWrapper.id = "textview";
-      viewerWrapper.setAttribute("hidden", "");
+      viewerWrapper.hidden = true;
       viewerContent.id = "textview-content";
       viewerFilename.id = "viewerFilename";
+      viewerContent.appendChild(viewerFilename);
       viewerWrapper.appendChild(viewerContent);
-      viewerWrapper.appendChild(viewerFilename);
       doc.body.appendChild(viewerWrapper);
+      return { viewerWrapper, viewerContent, viewerFilename };
     }
-    return { viewerWrapper, viewerContent, viewerFilename };
   }
 
   ({ viewerWrapper, viewerContent, viewerFilename } = createTextViewer());
 
-  function displayWithLineNumbers(text) {
-    const lines = text.split("\n");
-    let htmlString = "<ol>";
-    lines.forEach((line, index) => {
-      const trimmedLine = line.trim();
-      htmlString += `<li>${trimmedLine}</li>`;
-    });
-    htmlString += "</ol>";
-    return htmlString;
-  }
+  const displayWithLineNumbers = text => {
+    const lines = text.split("\n").map(line => `<li>${line}</li>`);
+    return `<ol>${lines.join("")}</ol>`;
+  };
 
-  function addListeners() {
-    if (listenersActive) {return;}
-    snarkFileNameLinks.forEach((link) => {
-      link.addEventListener("click", function (event) {
+  const displayText = (fileName, fileExt, linkHref) => {
+    if (responseCache.has(linkHref)) {
+      const cachedData = responseCache.get(linkHref);
+      renderContent(fileName, fileExt, cachedData);
+      return;
+    }
+
+    fetch(linkHref)
+      .then(response => response.text())
+      .then(data => {
+        responseCache.set(linkHref, data);
+        renderContent(fileName, fileExt, data);
+      })
+      .catch(() => {});
+  };
+
+  const renderContent = (fileName, fileExt, data) => {
+    if (fileExt !== "txt" && fileExt !== "srt") { viewerContent.classList.add("pre"); }
+    const escaped = new DOMParser().parseFromString(data, "text/html").documentElement.textContent || data;
+    const needsHardSpaces = numberedFileExts.has(fileExt) || viewerContent.classList.contains("pre");
+    const encoded = escaped.replace(/ /g, needsHardSpaces ? " " : " ");
+
+    viewerContent.innerHTML = numberedFileExts.has(fileExt) ? displayWithLineNumbers(encoded) : encoded;
+    viewerContent.classList.toggle("lines", numberedFileExts.has(fileExt));
+    viewerFilename.textContent = fileName;
+    viewerContent.insertBefore(viewerFilename, viewerContent.firstChild);
+    viewerWrapper.hidden = false;
+  };
+
+  const addListeners = () => {
+    if (listenersActive) return;
+    snarkFileNameLinks.forEach(link => {
+      link.addEventListener("click", event => {
         event.preventDefault();
-        if (!doc.body.classList.contains("textviewer")) {doc.body.classList.add("textviewer");}
-        if (isIframed && !parentDoc.body.classList.contains("textviewer")) {parentDoc.body.classList.add("textviewer");}
-        if (isIframed && !doc.getElementById("textviewCss")) { loadIframeCSS(); }
-        viewerFilename.textContent = "";
-        viewerContent.scrollTo(0,0);
-        const fileName = decodeURIComponent(link.href.split("/").pop());
-        const lastDotIndex = fileName.lastIndexOf(".");
-        if (lastDotIndex !== -1) {
-          const fileExt = fileName.substring(lastDotIndex + 1).toLowerCase();
-          if (fileExt !== "txt" && fileExt !== "srt") { viewerContent.classList.add("pre"); }
-          if (supportedFileTypes.includes(fileExt)) {
-            fetch(link.href).then((response) => response.text()).then((data) => {
-              const parser = new DOMParser();
-              const requestDoc = parser.parseFromString(data, "text/html");
-              const escaped = requestDoc.documentElement.textContent || data;
-              const numbered = numberedFileExts.includes(fileExt);
-              viewerContent.innerHTML = numbered ? displayWithLineNumbers(escaped) : escaped;
-              if (numbered) {viewerContent.classList.add("lines");}
-              viewerFilename.textContent = fileName;
-              viewerContent.appendChild(viewerFilename);
-              viewerWrapper.removeAttribute("hidden");
-            }).catch((error) => {});
-          }
+        doc.body.classList.add("textviewer");
+        if (isIframed && !window.parent.document.body.classList.contains("textviewer")) {
+          window.parent.document.body.classList.add("textviewer");
+          if (!doc.getElementById("textviewCss")) loadIframeCSS();
         }
+        viewerFilename.textContent = "";
+        viewerContent.scrollTo(0, 0);
+        const fileName = decodeURIComponent(link.href.split("/").pop());
+        const fileExt = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+        if (supportedFileTypes.has(fileExt)) displayText(fileName, fileExt, link.href);
       });
     });
 
-    viewerContent.addEventListener("click", function (event) { event.stopPropagation(); });
-    viewerWrapper.addEventListener("click", function () {
-      viewerWrapper.setAttribute("hidden", "");
+    viewerContent.addEventListener("click", event => event.stopPropagation());
+    viewerWrapper.addEventListener("click", () => {
+      viewerWrapper.hidden = true;
       doc.body.classList.remove("textviewer");
       if (isIframed) {
+        const parentDoc = window.parent.document;
         parentDoc.body.classList.remove("textviewer");
-        parentDoc.getElementById("textviewCss").remove();
+        const textviewCss = parentDoc.getElementById("textviewCss");
+        if (textviewCss) textviewCss.remove();
       }
     });
     listenersActive = true;
-  }
+  };
+
   addListeners();
 
 });

@@ -1,11 +1,13 @@
 body.textview{height:100vh}
-.snarkFileName a, .snarkFileName .newtab{display:inline-block!important;vertical-align:middle}
-.snarkFileName a:first-of-type{padding-right:12px!important;width:auto!important}
-.snarkFileName .newtab a{margin-left:8px}
-.snarkFileName .newtab a:hover{transform:scale(1.2)}
-.snarkFileName .newtab a:active{transform:scale(.9)}
-td.snarkFileName .newtab a,tr:hover td.snarkFileName .newtab a:hover,tr:hover td.snarkFileName .newtab a:active{margin-left:-6px;width:20px!important;height:16px;font-size:0;border:none!important;box-shadow:none!important;background:url(/i2psnark/.res/icons/link.svg) no-repeat center center/16px!important}
-tr:hover .snarkFileName a:hover+.newtab a:not(:hover){margin-left:-2px}
+.text+.snarkFileName a,.snarkFileName .newtab,.snarkFileName .newtab a{display:inline-block!important;vertical-align:middle}
+.text+.snarkFileName a:first-of-type{padding-right:12px!important;width:auto!important}
+.snarkFileName .newtab{width:20px;height:16px}
+.snarkFileName .newtab:not(:hover){margin-left:-6px}
+.snarkFileName .newtab:hover{margin-left:2px;transform:scale(1.2)}
+.snarkFileName .newtab:active{transform:scale(.9)}
+.snarkFileName .newtab{background:url(/i2psnark/.res/icons/link.svg) no-repeat center center/16px!important}
+.snarkFileName .newtab a,tr:hover .snarkFileName .newtab a:hover,tr:hover .snarkFileName .newtab a:active{font-size:0;border:none!important;box-shadow:none!important;background:none!important}
+.snarkFileName a:hover+.newtab{margin-left:2px}
 #textview{width:100%;height:100%;height:100vh;display:flex;justify-content:center;align-items:center;position:fixed;top:0;left:0;z-index:9999999;overflow:hidden;background:#000d;backdrop-filter:blur(3px);cursor:crosshair}
 #textview-content{padding:38px 24px 22px;height:auto;max-height:80%;width:auto;max-width:80%;position:relative;line-height:1.5;white-space:pre-wrap;overflow:hidden;overflow-y:auto;word-break:break-all;font-size:110%;color:#333;box-shadow:0 0 0 10px #ddd,0 0 0 1px #000,0 0 0 1px #999 inset;background:#fff;cursor:text;scrollbar-color:#999 #0000;animation:fade .15s ease .2s both;will-change:transform}
 #textview-content.pre{font-family:var(--monospaced);font-size:100%;font-weight:550;color:#555}
