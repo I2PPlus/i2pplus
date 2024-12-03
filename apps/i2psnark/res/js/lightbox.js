@@ -24,7 +24,6 @@ class Lightbox {
   initialize() {
     this.box = this.createEl("div", this.prefix);
     this.body.appendChild(this.box);
-    this.playPauseContainer = this.createControls();
     this.addEventListeners();
   }
 
@@ -74,6 +73,9 @@ class Lightbox {
       thumbnail.setAttribute(`${this.data_attr}-index`, index);
       this.addThumbnailClickHandler(thumbnail);
     });
+    if (this.thumbnails.length > 1) {
+      this.playPauseContainer = this.createControls();
+    }
   }
 
   setOpt(opt) {
