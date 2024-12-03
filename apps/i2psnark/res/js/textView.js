@@ -13,8 +13,9 @@ document.addEventListener("DOMContentLoaded", function () {
   ];
 
   const iframedStyles = ".textviewer,.textviewer #torrents.main,.textviewer #i2psnarkframe" +
-                     "{margin:0!important;width:100%;height:100%!important;position:absolute;top:0;left:0;overflow:hidden;contain:paint;clip-path:inset(1px)}" +
-                     ".textviewer h1{display:none}";
+                        "{margin:0!important;width:100%;height:100%!important;position:absolute;top:0;left:0;" +
+                        "overflow:hidden;contain:paint;clip-path:inset(1px)}" +
+                        ".textviewer h1{display:none}";
 
   const doc = document;
   const parentDoc = window.parent.document;
@@ -74,13 +75,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   ({ viewerWrapper, viewerContent, viewerFilename } = createTextViewer());
 
-  function verticalAlign() {
-    const contentHeight = viewerContent.offsetHeight;
-    const windowHeight = window.innerHeight;
-    const marginTop = Math.max(0, (windowHeight - contentHeight) / 2);
-    viewerWrapper.style.paddingTop = `${marginTop}px`;
-  }
-
   function displayWithLineNumbers(text) {
     const lines = text.split("\n");
     let htmlString = "<ol>";
@@ -99,8 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
         event.preventDefault();
         if (!doc.body.classList.contains("textviewer")) {doc.body.classList.add("textviewer");}
         if (isIframed && !parentDoc.body.classList.contains("textviewer")) {parentDoc.body.classList.add("textviewer");}
-        if (isIframed && !document.getElementById("textviewCss")) { loadIframeCSS(); }
-        viewerWrapper.removeAttribute("hidden");
+        if (isIframed && !doc.getElementById("textviewCss")) { loadIframeCSS(); }
         viewerFilename.textContent = "";
         viewerContent.scrollTo(0,0);
         const fileName = decodeURIComponent(link.href.split("/").pop());
@@ -111,17 +104,16 @@ document.addEventListener("DOMContentLoaded", function () {
           if (["nfo", "txt", "css", "srt"].includes(fileExt)) {
             fetch(link.href).then((response) => response.text()).then((data) => {
               viewerContent.innerHTML = fileExt === "css" ? displayWithLineNumbers(data) : data;
-              viewerContent.appendChild(viewerFilename);
-              viewerFilename.textContent = fileName;
               if (fileExt === "css") {viewerContent.classList.add("lines");}
-              verticalAlign();
+              viewerFilename.textContent = fileName;
+              viewerContent.appendChild(viewerFilename);
+              viewerWrapper.removeAttribute("hidden");
             }).catch((error) => {});
           }
         }
       });
     });
 
-    window.addEventListener("resize", verticalAlign);
     viewerContent.addEventListener("click", function (event) { event.stopPropagation(); });
     viewerWrapper.addEventListener("click", function () {
       viewerWrapper.setAttribute("hidden", "");
