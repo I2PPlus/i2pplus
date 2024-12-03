@@ -4635,7 +4635,8 @@ public class I2PSnarkServlet extends BasicServlet {
             boolean isAudio = isAudio(mime);
             boolean isVideo = !isAudio && isVideo(mime);
             boolean isImage = mime.startsWith("image/");
-            boolean isText = mime.startsWith("text/") || mime.equals("application/javascript");
+            boolean isText = mime.startsWith("text/") || mime.equals("application/javascript") ||
+                             mime.equals("application/json") || mime.equals("application/xml");
             boolean isPDF = mime.equals("application/pdf");
             buf.append("<td class=\"fileIcon");
             if (!complete) {buf.append(" volatile");}

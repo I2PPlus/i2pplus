@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
     'td.fileIcon>a',
     'td.snarkFileName>a[href$=".css"]',
     'td.snarkFileName>a[href$=".js"]',
+    'td.snarkFileName>a[href$=".json"]',
     'td.snarkFileName>a[href$=".nfo"]',
     'td.snarkFileName>a[href$=".sh"]',
     'td.snarkFileName>a[href$=".srt"]',
@@ -24,6 +25,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const isIframed = doc.documentElement.classList.contains("iframed") || window.parent;
   const fileLinks = doc.querySelectorAll(":where(" + viewLinks.join(",") + ")");
   const snarkFileNameLinks = doc.querySelectorAll(":where(" + viewLinks.slice(1).join(",") + ")");
+  const supportedFileTypes = ["css", "csv", "js", "json", "nfo", "txt", "sh", "srt"];
+  const numberedFileExts = ["css", "js", "sh"];
 
   let listenersActive = false;
 
@@ -107,13 +110,14 @@ document.addEventListener("DOMContentLoaded", function () {
         if (lastDotIndex !== -1) {
           const fileExt = fileName.substring(lastDotIndex + 1).toLowerCase();
           if (fileExt !== "txt" && fileExt !== "srt") { viewerContent.classList.add("pre"); }
-          if (["css", "js", "nfo", "txt", "sh", "srt"].includes(fileExt)) {
+          if (supportedFileTypes.includes(fileExt)) {
             fetch(link.href).then((response) => response.text()).then((data) => {
               const parser = new DOMParser();
               const requestDoc = parser.parseFromString(data, "text/html");
               const escaped = requestDoc.documentElement.textContent || data;
-              viewerContent.innerHTML = (fileExt === "css" || fileExt === "js" || fileExt === "sh") ? displayWithLineNumbers(escaped) : escaped;
-              if (fileExt === "css" || fileExt === "js") {viewerContent.classList.add("lines");}
+              const numbered = numberedFileExts.includes(fileExt);
+              viewerContent.innerHTML = numbered ? displayWithLineNumbers(escaped) : escaped;
+              if (numbered) {viewerContent.classList.add("lines");}
               viewerFilename.textContent = fileName;
               viewerContent.appendChild(viewerFilename);
               viewerWrapper.removeAttribute("hidden");
