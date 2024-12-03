@@ -11,7 +11,7 @@ class Lightbox {
     this.data_attr = `data-${this.prefix}`;
     this.body = document.body;
     this.parentDoc = window.parent.document;
-    this.currGroup = this.currThumbnail = null;
+    this.currGroup = this.currThumb = null;
     this.currImages = [];
     this.isOpen = false;
     this.currImage = {};
@@ -86,7 +86,7 @@ class Lightbox {
     thumbnail.addEventListener("click", (e) => {
       e.preventDefault();
       this.currGroup = thumbnail.getAttribute(`${this.data_attr}-group`) || "";
-      this.currThumbnail = thumbnail;
+      this.currThumb = thumbnail;
       this.openBox(thumbnail);
     });
   }
@@ -124,7 +124,7 @@ class Lightbox {
 
   preload() {
     if (!this.currGroup) return;
-    const currIndex = this.thumbnails.findIndex((thumb) => thumb === this.currThumbnail);
+    const currIndex = this.thumbnails.findIndex((thumb) => thumb === this.currThumb);
     const nextThumb = this.thumbnails[(currIndex + 1) % this.thumbnails.length];
     const prevThumb = this.thumbnails[(currIndex - 1 + this.thumbnails.length) % this.thumbnails.length];
     new Image().src = nextThumb.getAttribute(this.data_attr) || nextThumb.src;
@@ -222,19 +222,19 @@ class Lightbox {
   next() {
     if (!this.currGroup) return;
     this.currImage.img.remove();
-    const pos = this.currImages.findIndex((thumbnail) => thumbnail === this.currThumbnail) + 1;
-    if (this.currImages[pos]) { this.currThumbnail = this.currImages[pos]; }
-    else { this.currThumbnail = this.currImages[0]; }
-    this.openBox(this.currThumbnail);
+    const pos = this.currImages.findIndex((thumbnail) => thumbnail === this.currThumb) + 1;
+    if (this.currImages[pos]) { this.currThumb = this.currImages[pos]; }
+    else { this.currThumb = this.currImages[0]; }
+    this.openBox(this.currThumb);
   }
 
   prev() {
     if (!this.currGroup) return;
     this.currImage.img.remove();
-    const pos = this.currImages.findIndex((thumbnail) => thumbnail === this.currThumbnail) - 1;
-    if (this.currImages[pos]) { this.currThumbnail = this.currImages[pos]; }
-    else { this.currThumbnail = this.currImages[this.currImages.length - 1]; }
-    this.openBox(this.currThumbnail);
+    const pos = this.currImages.findIndex((thumbnail) => thumbnail === this.currThumb) - 1;
+    if (this.currImages[pos]) { this.currThumb = this.currImages[pos]; }
+    else { this.currThumb = this.currImages[this.currImages.length - 1]; }
+    this.openBox(this.currThumb);
   }
 
   isIframed() {
