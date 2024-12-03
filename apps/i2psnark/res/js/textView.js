@@ -15,14 +15,16 @@ document.addEventListener("DOMContentLoaded", function () {
     'td.snarkFileName>a[href$=".txt"]'
   ];
 
-  const iframedStyles = ".textviewer,.textviewer #torrents.main,.textviewer #i2psnarkframe{margin:0!important;padding:0!important;width:100%;height:100%!important;position:absolute;top:0;left:0;bottom:0;right:0;overflow:hidden;border:0!important;contain:paint}.textviewer h1{display:none}";
+  const iframedStyles = ".textviewer,.textviewer body,.textviewer #torrents.main,.textviewer #i2psnarkframe{margin:0!important;padding:0!important;width:100%;height:100%!important;height:100vh!important;position:absolute;top:0;left:0;bottom:0;right:0;overflow:hidden;border:0!important;contain:paint}.textviewer h1{display:none}";
 
   const doc = document;
+  const parentDoc = window.parent.document;
   const isIframed = doc.documentElement.classList.contains("iframed") || window.parent;
   const snarkFileNameLinks = doc.querySelectorAll(":where(" + viewLinks.slice(1).join(",") + ")");
   const supportedFileTypes = new Set(["css", "csv", "js", "json", "nfo", "txt", "sh", "srt"]);
   const numberedFileExts = new Set(["css", "js", "sh"]);
   const cssHref = "/i2psnark/.res/textView.css";
+  const textviewContent = document.getElementById("textview-content");
 
   const responseCache = new Map();
   let listenersActive = false, viewerWrapper, viewerContent, viewerFilename;
@@ -53,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const cssIframed = doc.createElement("style");
     cssIframed.id = "textviewCss";
     cssIframed.innerHTML = iframedStyles;
-    window.parent.document.body.appendChild(cssIframed);
+    parentDoc.body.appendChild(cssIframed);
   };
 
   function createTextViewer() {
@@ -82,8 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const displayText = (fileName, fileExt, linkHref) => {
     if (responseCache.has(linkHref)) {
-      const cachedData = responseCache.get(linkHref);
-      renderContent(fileName, fileExt, cachedData);
+      renderContent(fileName, fileExt, responseCache.get(linkHref));
       return;
     }
 
@@ -91,22 +92,29 @@ document.addEventListener("DOMContentLoaded", function () {
       .then(response => response.text())
       .then(data => {
         responseCache.set(linkHref, data);
+        viewerFilename.textContent = fileName;
         renderContent(fileName, fileExt, data);
       })
       .catch(() => {});
   };
+
+  const resetScrollPosition = () => {
+    const txtContent = document.getElementById("textview-content");
+    if (txtContent && txtContent.innerHTML !== "") { txtContent.scrollTop = 0; }
+    else { setTimeout(resetScrollPosition, 100); }
+  }
 
   const renderContent = (fileName, fileExt, data) => {
     if (fileExt !== "txt" && fileExt !== "srt") { viewerContent.classList.add("pre"); }
     const escaped = new DOMParser().parseFromString(data, "text/html").documentElement.textContent || data;
     const needsHardSpaces = numberedFileExts.has(fileExt) || viewerContent.classList.contains("pre");
     const encoded = escaped.replace(/ /g, needsHardSpaces ? " " : " ");
-
     viewerContent.innerHTML = numberedFileExts.has(fileExt) ? displayWithLineNumbers(encoded) : encoded;
     viewerContent.classList.toggle("lines", numberedFileExts.has(fileExt));
     viewerFilename.textContent = fileName;
     viewerContent.insertBefore(viewerFilename, viewerContent.firstChild);
     viewerWrapper.hidden = false;
+    requestAnimationFrame(resetScrollPosition);
   };
 
   const addListeners = () => {
@@ -114,13 +122,12 @@ document.addEventListener("DOMContentLoaded", function () {
     snarkFileNameLinks.forEach(link => {
       link.addEventListener("click", event => {
         event.preventDefault();
-        doc.body.classList.add("textviewer");
-        if (isIframed && !window.parent.document.body.classList.contains("textviewer")) {
-          window.parent.document.body.classList.add("textviewer");
+        doc.documentElement.classList.add("textviewer");
+        if (isIframed && !parentDoc.documentElement.classList.contains("textviewer")) {
+          parentDoc.documentElement.classList.add("textviewer");
           if (!doc.getElementById("textviewCss")) loadIframeCSS();
         }
         viewerFilename.textContent = "";
-        viewerContent.scrollTo(0, 0);
         const fileName = decodeURIComponent(link.href.split("/").pop());
         const fileExt = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
         if (supportedFileTypes.has(fileExt)) displayText(fileName, fileExt, link.href);
@@ -130,10 +137,9 @@ document.addEventListener("DOMContentLoaded", function () {
     viewerContent.addEventListener("click", event => event.stopPropagation());
     viewerWrapper.addEventListener("click", () => {
       viewerWrapper.hidden = true;
-      doc.body.classList.remove("textviewer");
+      doc.documentElement.classList.remove("textviewer");
       if (isIframed) {
-        const parentDoc = window.parent.document;
-        parentDoc.body.classList.remove("textviewer");
+        parentDoc.documentElement.classList.remove("textviewer");
         const textviewCss = parentDoc.getElementById("textviewCss");
         if (textviewCss) textviewCss.remove();
       }

@@ -1092,7 +1092,7 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 #textview-content{padding-top:44px;color:var(--ink);text-shadow:1px 1px 1px #0008;box-shadow:0 0 0 10px #404,0 0 0 11px #000,var(--highlight),0 0 0 2px #505 inset;background:linear-gradient(180deg,#280828,#303);scrollbar-color:#505 #0000}
 #textview-content.pre{color:var(--ink)}
 #textview-content.lines{padding-top:20px;box-shadow:0 0 0 10px #404,0 0 0 11px #000,var(--highlight)}
-#textview-content li{border-bottom:1px solid #101}
+#textview-content li{border-bottom:1px solid #202}
 #textview-content li{padding:2px 8px}
 #textview-content li::marker{color:#e4d3d7aa}
 #textview-content li{background:#0001}
