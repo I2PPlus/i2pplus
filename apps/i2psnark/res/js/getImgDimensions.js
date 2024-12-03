@@ -1,10 +1,20 @@
 document.addEventListener("DOMContentLoaded", () => {
-  [...document.querySelectorAll(".thumb")].forEach((thumb, i) => {
+  [...document.querySelectorAll(".thumb")].forEach(thumb => {
     const span = document.createElement("span");
     span.classList.add("dimensions");
     span.textContent = `${thumb.naturalWidth}x${thumb.naturalHeight}`;
-    const fileNameTd = document.querySelectorAll(".snarkFileName")[i];
-    const link = fileNameTd.querySelector("a");
-    fileNameTd.insertBefore(span, link.nextSibling);
+    const fileIconTd = thumb.closest('.fileIcon');
+    if (fileIconTd) {
+      const parentRow = fileIconTd.closest('tr');
+      const snarkFileNameTd = Array.from(parentRow.cells).find(cell =>
+        cell.classList.contains('snarkFileName')
+      );
+      if (snarkFileNameTd) {
+        const link = snarkFileNameTd.querySelector("a");
+        if (link) {
+          snarkFileNameTd.insertBefore(span, link.nextSibling);
+        }
+      }
+    }
   });
 });
