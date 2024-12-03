@@ -456,8 +456,8 @@ html:not(.iframed) #snarkInfo~#commentSection{margin-top:4px}
 .iframed input:not(:checked)+#tab_files{margin-bottom:-13px}
 .iframed input:not(:checked)+#tab_torrentedit{margin-bottom:-13px}
 .iframed #snarkInfo~#snarkFiles{margin:5px 0 -7px}
-.snarkFilename .targetfile,.snarkFilename:hover .tags,.snarkFileName a:empty{display:none}
-.snarkFilename:hover .targetfile{display:inline-block}
+.snarkFileName .targetfile,.snarkFileName:hover .tags,.snarkFileName a:empty{display:none}
+.snarkFileName:hover .targetfile{display:inline-block}
 #addSection,#createSection,#configSection,.configPanel{border:var(--border)}
 #addSection,#createSection,#configSection,.configPanel,.snarkConfig,#navbar,#screenlog,#torrentDisplay,.pagenavcontrols{box-shadow:var(--highlight);background:#eee;background:var(--noise),linear-gradient(180deg,#fff,#f8f8f8);background-size:248px,100%;background-blend-mode:multiply,normal}
 #addSection,#createSection{padding-bottom:5px;transition:ease box-shadow .3s;user-select:none}

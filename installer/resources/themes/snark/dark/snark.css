@@ -500,8 +500,8 @@ audio::-webkit-media-controls-enclosure{border-radius:0;filter:invert(1)}
 video::-webkit-media-controls-panel{display:none}
 video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-panel{display:flex}
 .audioPreview{padding:0 4px;white-space:nowrap;border-radius:3px;background:#001800}
-.snarkFilename .targetfile,.snarkFilename:hover .tags,.snarkFileName a:empty{display:none}
-.snarkFilename:hover .targetfile{display:inline-block}
+.snarkFileName .targetfile,.snarkFileName:hover .tags,.snarkFileName a:empty{display:none}
+.snarkFileName:hover .targetfile{display:inline-block}
 .thumb{width:48px;height:48px;object-fit:cover;box-shadow:0 0 0 1px #030;background:#000}
 .thumb:hover,tr:hover .thumb{box-shadow:0 0 0 1px #930;filter:none}
 #mediaContainer{margin-top:-1px}

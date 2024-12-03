@@ -728,8 +728,8 @@ th #nameRequired,th .commentAuthorName{vertical-align:middle}
 .mainsection input:checked+.toggleview{margin-bottom:-10px}
 .mainsection input:not(:checked)+.toggleview{margin-bottom:-6px}
 .mainsection table,.mainsection#mainsection{border-bottom:0}
-.snarkFilename:hover .targetfile{display:inline-block}
-.snarkFilename .targetfile,.snarkFilename:hover .tags,.snarkFileName a:empty{display:none}
+.snarkFileName:hover .targetfile{display:inline-block}
+.snarkFileName .targetfile,.snarkFileName:hover .tags,.snarkFileName a:empty{display:none}
 #completion:hover #metainfo{display:inline-block;position:absolute;top:28px;left:-120px}
 #completion:not(:hover) #metainfo{display:none}
 #completion{position:relative}

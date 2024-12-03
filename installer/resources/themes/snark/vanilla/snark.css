@@ -806,8 +806,8 @@ form[action^="/i2psnark/configure"]{display:block}
 .configOption .optbox[type=checkbox]:checked::before,#commentsToggle .optbox[type=checkbox]:checked::before{left:19px}
 .configOption .optbox[type=checkbox]:disabled,.configOption .optbox[type=checkbox]:disabled+label{opacity:.45;pointer-events:none}
 
-.snarkFilename .targetfile,.snarkFilename:hover .tags,.snarkFileName a:empty{display:none}
-.snarkFilename:hover .targetfile{display:inline-block}
+.snarkFileName .targetfile,.snarkFileName:hover .tags,.snarkFileName a:empty{display:none}
+.snarkFileName:hover .targetfile{display:inline-block}
 #snarkFiles .toggleview img{margin-right:0}
 #snarkInfo+#commentSection,.iframed #snarkInfo+#commentSection{margin-top:-1px}
 #completion{position:relative}

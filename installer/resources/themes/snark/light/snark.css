@@ -708,8 +708,8 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 tfoot .rateDown,tfoot .rateUp{text-align:right}
 tfoot .rateDown::after,tfoot .rateUp::after{width:6px;display:inline-block;vertical-align:middle;content:""}
 .filetype{position:relative;vertical-align:middle}
-.snarkFilename:hover .targetfile{display:inline-block}
-.snarkFilename .targetfile,.snarkFilename:hover .tags,.snarkFileName a:empty{display:none}
+.snarkFileName:hover .targetfile{display:inline-block}
+.snarkFileName .targetfile,.snarkFileName:hover .tags,.snarkFileName a:empty{display:none}
 #completion:hover #metainfo{display:inline-block;position:absolute;top:24px;left:-120px}
 #completion:not(:hover) #metainfo{display:none}
 #completion{position:relative}
