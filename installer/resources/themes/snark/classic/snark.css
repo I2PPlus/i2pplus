@@ -793,7 +793,7 @@ form[action^="/i2psnark/configure"]{display:block}
 #confirmOverlay{background:#000c}
 #confirmYes,#confirmNo{color:#0000;border:1px solid #888;background:#fff url(/i2psnark/.res/icons/tick.svg) no-repeat center center/20px;cursor:pointer;opacity:.7}
 #confirmNo{background:#fff url(/i2psnark/.res/icons/cross.svg) no-repeat center center/17px}
-#confirmButtons button:hover{;border:1px solid #555;opacity:1}
+#confirmButtons button:hover{border:1px solid #555;opacity:1}
 #confirmYes:hover{box-shadow:0 0 0 4px #0f0}
 #confirmNo:hover{box-shadow:0 0 0 4px #f00}
 #confirmYes:active{box-shadow:var(--btn_shadow_active),0 0 0 4px #0f0}
