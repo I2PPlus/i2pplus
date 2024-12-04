@@ -627,7 +627,7 @@ input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-b
 #hopVariance label+label{margin-left:12px}
 #hopVariance .optbox{margin-right:4px}
 #hopVariance .optbox+span{width:22px;height:22px;display:inline-block;font-size:0;vertical-align:middle;background:var(--inbound) no-repeat center center/22px}
-#hopVariance #varyOutbound+span {background:var(--outbound) no-repeat center center/22px}
+#hopVariance #varyOutbound+span{background:var(--outbound) no-repeat center center/22px}
 #hopVariance .optbox:not(:checked)+span{filter:saturate(0)}
 #i2cpOptions{display:block;column-span:all}
 #trackerconfig{margin-top:11px}
@@ -699,7 +699,7 @@ form[action^="/i2psnark/configure"]{display:block}
 #fileFilter th:first-child,#fileFilter td:first-child{border-left:var(--border)}
 #fileFilter th:last-child,#fileFilter td:last-child{border-right:var(--border)}
 #fileFilter tr:not(:last-child).spacer td{padding:4px 0;font-size:0;border-bottom:var(--border)}
-#fileFilter tr:last-child, #fileFilter tr.spacer{display:none}
+#fileFilter tr:last-child,#fileFilter tr.spacer{display:none}
 #fileFilter tr:nth-last-child(2),#fileFilter tr:nth-last-child(2) td{padding:4px 0;border-left:0;border-right:0;box-shadow:none;background:none}
 #fileFilter input[type=submit]{margin:6px}
 #fileFilter input.accept[type=submit]{margin:6px 0 6px 3px}
@@ -743,7 +743,7 @@ th img{max-height:20px}
 td.status{background-size:24px auto}
 .commented{top:-1px;right:1px}
 .peerclient{width:90px}
-.peerCount .left,.peerCount .right{padding:4px 3px 3px;}
+.peerCount .left,.peerCount .right{padding:4px 3px 3px}
 #torrents .infohash{width:60px}
 #torrents .magnetlink img{width:18px;height:18px}
 #torrents .txd{padding-left:0;padding-right:0}
@@ -752,9 +752,9 @@ td.status{background-size:24px auto}
 
 @media (max-width:1200px){
 .magnetLabel{padding-left:12px;max-width:250px;background-size:11px}
-.trackerhome, .trackerannounce, .knownTracker a{min-width:180px;max-width:180px;box-sizing:border-box}
+.trackerhome,.trackerannounce,.knownTracker a{min-width:180px;max-width:180px;box-sizing:border-box}
 #screenlog{font-size:8.5pt}
-#torrents td:empty, #torrents th:empty{padding:0}
+#torrents td:empty,#torrents th:empty{padding:0}
 #torrents .infohash{width:64px}
 #torrents .magnet,#torrents .trackerLink,#torrents #snarkHead .torrentLink{width:0;min-width:0;padding:0;font-size:0}
 #torrents .magnet>*,#torrents .trackerLink>*,#torrents #snarkHead .torrentLink>*{display:none}
@@ -792,7 +792,7 @@ tr:hover td.trackerLink,tr:hover td.details,tr:hover td.tName,tr:hover td.rxd,tr
 #torrents .tName a{max-width:250px}
 }
 
-@media (min-width:1100px) {
+@media (min-width:1100px){
 .peerSeed img{width:18px;height:18px}
 }
 

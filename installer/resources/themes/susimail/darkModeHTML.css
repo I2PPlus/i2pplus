@@ -5,7 +5,7 @@
 html{filter:saturate(.75)}
 a:link,a:link span,p>a{font-weight:600!important;color:#f30!important;text-decoration:none!important}
 a:hover{text-decoration:underline!important}
-body,h1,h2,h3,h4,h5,h6,p,ol,td,ul{font-family:Open Sans,Segoe UI,Noto Sans, Roboto Sans, sans-serif!important}
+body,h1,h2,h3,h4,h5,h6,p,ol,td,ul{font-family:Open Sans,Segoe UI,Noto Sans,Roboto Sans,sans-serif!important}
 body,html,div,footer,section,table,td{background:#000!important}
 div,ol,ul,p,table{line-height:1.3}
 img{min-width:16px!important}

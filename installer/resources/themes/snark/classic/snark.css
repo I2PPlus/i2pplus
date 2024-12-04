@@ -540,7 +540,7 @@ input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_
 #hopVariance label+label{margin-left:12px}
 #hopVariance .optbox{margin-right:4px}
 #hopVariance .optbox+span{width:22px;height:22px;display:inline-block;font-size:0;vertical-align:middle;background:var(--inbound) no-repeat center center/22px}
-#hopVariance #varyOutbound+span {background:var(--outbound) no-repeat center center/22px}
+#hopVariance #varyOutbound+span{background:var(--outbound) no-repeat center center/22px}
 #hopVariance .optbox:not(:checked)+span{filter:saturate(0)}
 #i2cpOptions{display:block;column-span:all}
 #trackerconfig input{margin:3px}
@@ -687,10 +687,10 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 #dhtDebug .bullet{display:none}
 #dhtDebug b,#dhtDebug .dbug,#dhtDebug .stat{margin:2px 0;padding:0 8px;display:inline-block}
 #dhtDebug b{color:var(--ink);border-radius:2px 0 0 2px}
-#dhtDebug .stat{margin:3px 2px;padding:0;box-shadow:0 0 0 1px #d3d3ff, 0 0 0 1px #fff inset;background:#eaeaff;contain:paint}
+#dhtDebug .stat{margin:3px 2px;padding:0;box-shadow:0 0 0 1px #d3d3ff,0 0 0 1px #fff inset;background:#eaeaff;contain:paint}
 #dhtDebug .dbug{margin:-2px -1px -2px -4px;padding:2px 10px;min-width:24px;color:var(--ink);background:#f8f8ff}
 #noDHTPeers{margin:6px 0}
-#dhtDebug .volatile {margin:1px 0 0;width:100%;display:inline-block}
+#dhtDebug .volatile{margin:1px 0 0;width:100%;display:inline-block}
 
 /* debug panel */
 #dhtDebug th{text-align:center;font-weight:400}
@@ -771,7 +771,7 @@ form[action^="/i2psnark/configure"]{display:block}
 #fileFilter tr:nth-last-child(2) td{border:0}
 #fileFilter th,#fileFilter td{padding:4px;text-align:left;border-top:var(--border_soft)}
 #fileFilter th{padding:3px 4px;min-width:50px;white-space:nowrap;font-size:85%;border-bottom:0}
-#fileFilter th:first-child {width:32px;background: var(--nuke) no-repeat center center/14px,var(--th)}
+#fileFilter th:first-child{width:32px;background: var(--nuke) no-repeat center center/14px,var(--th)}
 #fileFilter th:last-child,#fileFilter td:last-child{width:1%;text-align:center}
 #fileFilter td{border-top:var(--border_softer)}
 #fileFilter #addFileFilter td{padding-top:6px;padding-bottom:6px;border-bottom:var(--border_soft)}
@@ -780,7 +780,7 @@ form[action^="/i2psnark/configure"]{display:block}
 #fileFilter .accept,#fileFilter .reload{margin-left:5px}
 #fileFilter .accept{margin-right:2px}
 #fileFilter .add{margin-left:2px}
-#fileFilter tr:last-child, #fileFilter tr.spacer{display:none}
+#fileFilter tr:last-child,#fileFilter tr.spacer{display:none}
 #fileFilter tr:nth-last-child(2){border-top:var(--border);background:rgba(240,240,255,.5)}
 #fileFilter tr:nth-last-child(2) td{padding:8px}
 #fileFilter input{margin:3px}
@@ -817,7 +817,7 @@ form[action^="/i2psnark/configure"]{display:block}
 .status img{width:auto;height:20px}
 .trackerLink img{height:16px;width:16px}
 #actionStopAll,#actionStartAll{padding:10px 17px}
-#pagenavtop.pagenavcontrols {margin:-30px 0 0;padding:6px 0 3px}
+#pagenavtop.pagenavcontrols{margin:-30px 0 0;padding:6px 0 3px}
 #torrents .infohash{max-width:56px}
 }
 

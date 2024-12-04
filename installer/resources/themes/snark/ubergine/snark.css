@@ -136,7 +136,7 @@ tfoot td:first-child{padding-left:0;text-align:left}
 .nav_search:hover,.nav_search:focus{background:var(--search_hover) no-repeat 11px center/16px,var(--nav_hover)}
 .nav_search:active,.nav_search.depress{background:var(--search_active) no-repeat 11px center/16px,var(--nav_active)}
 #navbar{margin:-11px 0 10px 0;padding:7px 10px 5px;min-width:600px;width:80%;position:sticky;top:-3px;z-index:99999;text-align:center;border:var(--border_hard);border-radius:0 0 4px 4px;box-shadow:inset 0 0 0 1px rgba(169,61,169,.2),inset 0 0 0 2px #101,inset 0 0 3px 1px #212,0 0 0 1px rgba(0,0,0,.7);background:linear-gradient(180deg,#535,#202 55%,#101,#080008);filter:drop-shadow(0 2px 4px #101)}
-html:not(.iframed) #navbar {transition:width .5s ease-in-out .5s;will-change:transform}
+html:not(.iframed) #navbar{transition:width .5s ease-in-out .5s;will-change:transform}
 #navbar a{display:inline-block;font:700 10.5pt/1.3 var(--bodyfont);letter-spacing:.11em;text-decoration:none;text-transform:uppercase;color:#f70;text-shadow:1px 0 1px #0009,-1px 0 1px rgba(255,240,255,.2);-webkit-text-stroke:.5px rgba(0,0,0,.3);outline:none;border-radius:0;box-shadow:0 0 1px #000,inset 0 0 0 1px rgba(16,0,16,.7),inset 0 0 2px 0 rgba(255,128,0,.5)}
 #navbar a:hover,#navbar a:focus{color:#d2baff;border:1px solid #820b64;box-shadow:0 0 1px #000,inset 0 0 0 1px rgba(16,0,16,.9),inset 0 0 2px 0 #515;transition:ease-in-out box-shadow .01s}
 #navbar a:active,#navbar a.depress{color:#fff;text-shadow:none;border:1px solid #730;box-shadow:0 0 1px 0 #000,var(--highlight),inset 3px 3px 3px 2px #3f1900;transition:box-shadow ease .01s}
@@ -157,7 +157,7 @@ html:not(.iframed) #navbar {transition:width .5s ease-in-out .5s;will-change:tra
 #searchwrap{position:relative}
 #searchwrap a[href="/i2psnark"],#searchwrap a[href="/i2psnark"]:hover,#searchwrap a[href="/i2psnark"]:active{padding:3px;height:14px;width:14px;position:absolute;top:calc(50% - 16px);right:4px;font-size:0!important;background:#000 var(--close) no-repeat center center/10px;border:1px solid #303;box-shadow:none;opacity:0;filter:none}
 #snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"],#snarkSearch:hover input[type=search]:not(:placeholder-shown)+a[href="/i2psnark"]{opacity:.5}
-#snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"]:hover, #snarkSearch input[type=search][value]+a[href="/i2psnark"]{opacity:1}
+#snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"]:hover,#snarkSearch input[type=search][value]+a[href="/i2psnark"]{opacity:1}
 .iframed #snarkSearch{top:9px}
 
 /* screenlog */
@@ -394,7 +394,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .snarkFileName:hover .targetfile{display:inline-block}
 .snarkFileName{padding:4px 2px;vertical-align:middle;line-height:1.2;text-align:left}
 .snarkFileName .tags,.snarkFileName .targetfile{margin-left:5px;line-height:1.4}
-.snarkFileName .tags {color:var(--ink);font-weight:500!important;pointer-events:none}
+.snarkFileName .tags{color:var(--ink);font-weight:500!important;pointer-events:none}
 .snarkFileName .targetfile,.snarkFileName:hover .tags,.snarkFileName a:empty{display:none}
 .snarkFileName .snarkFileName:hover .targetfile{display:inline-block}
 .fileSize{padding:4px 8px 4px 2px;width:1%;white-space:nowrap;font-weight:700;color:#b6b}
@@ -425,7 +425,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 #torrentInfoStats td{animation:ease active .3s forwards}
 #torrentInfoStats .nowrap{display:inline-block;line-height:2;white-space:nowrap}
 #torrentOrderControl{float:right;line-height:1}
-#snarkTbody tr:hover, #snarkTbody tr.peerinfo:hover,.dirInfo tbody tr:hover{background:linear-gradient(90deg,#f60 2px,#0000 2px),linear-gradient(180deg,#58165e,#4a0d56)}
+#snarkTbody tr:hover,#snarkTbody tr.peerinfo:hover,.dirInfo tbody tr:hover{background:linear-gradient(90deg,#f60 2px,#0000 2px),linear-gradient(180deg,#58165e,#4a0d56)}
 #snarkTbody tr:last-child td{border-bottom:var(--border_hard)}
 #torrents .commented{width:9px;height:9px;display:inline-block;position:absolute;top:-7px;right:2px;z-index:20}
 #torrents .commented img{padding:0;margin:0;width:9px;height:9px;border:0;filter:drop-shadow(0 0 1px #101) drop-shadow(0 0 2px rgba(128,128,0,.3))}
@@ -586,7 +586,7 @@ a.controld img{display:none}
 #i2cpOptions{display:block;column-span:all}
 #hopVariance .optbox+span{width:22px;height:22px;display:inline-block;font-size:0;vertical-align:middle;background:var(--inbound) no-repeat center center/22px}
 #hopVariance .optbox:not(:checked)+span{filter:saturate(0)}
-#hopVariance #varyOutbound+span {background:var(--outbound) no-repeat center center/22px}
+#hopVariance #varyOutbound+span{background:var(--outbound) no-repeat center center/22px}
 .depress{transition:ease all .2s;border}
 .inert{transition:border ease-out .15s,background ease-out .15s}
 .tempDisabled{filter:opacity(.3);pointer-events:none;transition:filter ease .5s}
@@ -1031,10 +1031,10 @@ html:not(.iframed) #torrentEdit :not(tfoot) tr:first-child td:last-child{border-
 #fileFilter th{padding:5px 4px;border-top:1px solid #212}
 #fileFilter tr:not(:last-child).spacer td{padding:4px 0;font-size:0;border-bottom:var(--border)}
 #fileFilter input[type=submit]{margin:2px 6px}
-#fileFilter input.accept[type=submit] {float:right;margin-right:1px}
+#fileFilter input.accept[type=submit]{float:right;margin-right:1px}
 #fileFilter .delete,#fileFilter .reload{margin:6px 12px 6px -3px;float:left}
 #fileFilter input.delete[type=submit]{margin-left:0}
-#fileFilter tr:last-child, #fileFilter tr.spacer{display:none}
+#fileFilter tr:last-child,#fileFilter tr.spacer{display:none}
 #fileFilter tr:nth-last-child(4) td{padding:7px 4px}
 #fileFilter tr:nth-last-child(3) td{border-bottom:1px solid #212}
 #fileFilter tr:nth-last-child(2) td{border-top:1px solid #212}
@@ -1270,7 +1270,7 @@ td.peerCount a,td.peerCount a:hover,td.peerCount a:active,.peerCount span{color:
 th a img{max-height:16px}
 th.peerCount img{display:none}
 .barComplete{line-height:1.05;min-width:78px}
-.barOuter, .barText{width:72px}
+.barOuter,.barText{width:72px}
 .clientid{width:44px;padding:4px}
 .commentRating img{width:14px;height:14px}
 .configPanel .configTitle{min-width:400px;font-size:9.5pt;font-variant:normal;text-transform:uppercase}

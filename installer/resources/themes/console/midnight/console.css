@@ -1373,7 +1373,7 @@ table[id$="logs"] ul{margin:1px 17px -6px -12px}
 #logFilterInput{margin:-1px -2px -1px 0;padding-left:30px;width:160px;min-width:0;background:#000 var(--filter) no-repeat 8px center/16px;background-blend-mode:luminosity}
 #logRefreshInterval{margin:-2px 7px -1px 0;padding-left:28px;width:80px;appearance:textfield;background:#000 var(--refresh) no-repeat 6px center/16px}
 #logRefreshInterval:focus,#logFilterInput:focus{box-shadow:var(--btn_shadow_active);filter:none!important;caret-color:auto}
-#logRefreshInterval:focus{background:var(--refresh) no-repeat 6px center / 16px,var(--text_focus);background-blend-mode:normal}
+#logRefreshInterval:focus{background:var(--refresh) no-repeat 6px center/16px,var(--text_focus);background-blend-mode:normal}
 
 /* Override error log colors */
 .log_omitted{font-weight:700}

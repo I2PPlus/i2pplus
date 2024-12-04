@@ -31,7 +31,7 @@ td{text-align:right}
 #debug h2{background:var(--bug) no-repeat 6px center,linear-gradient(180deg,#fcfcff 50%,rgba(255,255,255,.6) 50%,rgba(240,240,255,.4)),linear-gradient(to left,#fcfcff 5%,rgba(231,231,255,.8) 25%);background-size:20px,100%,100%}
 #help pre,#logs li,#proof textarea{text-align:left;direction:ltr}
 #portmapper th:last-child,#portmapper td:last-child,#sockets td:last-child{text-align:center}
-#tunnels .cells, #tunnel_defs td:nth-child(n+3), .cells, .cells td, #profilelist tbody td:not(:first-child), #profile_defs td:not(:first-child), #floodfills td:not(:first-child), #debug td:not(:first-child), #jardump td:not(:first-child), #jobstats td:not(:first-child), #eventlog td:not(:first-child), #webappconfig td:not(:first-child), #tunnelconfig td:not(:first-child), #sidebarconf td:not(:first-child), #configstats td:not(:first-child), #loggingoptions td:not(:first-child), #addkeyring td:not(:first-child), .homelinkedit td:not(:first-child), #clientconfig td:not(:first-child), .netdbentry td:not(:first-child), #netdblookup td:not(:first-child), #peerdefs td:not(:first-child), #help td:not(.infohelp):not(.infowarn), #pluginconfig td:not(:first-child), #thresholds td:not(:first-child), #leasesetdebug td:not(:first-child), #enviro td:not(:first-child), #routerinformation td:not(:first-child), #udpconnections tbody td:nth-child(n+2) {border-left:var(--border_inner)}
+#tunnels .cells,#tunnel_defs td:nth-child(n+3),.cells,.cells td,#profilelist tbody td:not(:first-child),#profile_defs td:not(:first-child),#floodfills td:not(:first-child),#debug td:not(:first-child),#jardump td:not(:first-child),#jobstats td:not(:first-child),#eventlog td:not(:first-child),#webappconfig td:not(:first-child),#tunnelconfig td:not(:first-child),#sidebarconf td:not(:first-child),#configstats td:not(:first-child),#loggingoptions td:not(:first-child),#addkeyring td:not(:first-child),.homelinkedit td:not(:first-child),#clientconfig td:not(:first-child),.netdbentry td:not(:first-child),#netdblookup td:not(:first-child),#peerdefs td:not(:first-child),#help td:not(.infohelp):not(.infowarn),#pluginconfig td:not(:first-child),#thresholds td:not(:first-child),#leasesetdebug td:not(:first-child),#enviro td:not(:first-child),#routerinformation td:not(:first-child),#udpconnections tbody td:nth-child(n+2){border-left:var(--border_inner)}
 
 /* page headings */
 h1{margin:0 212px -15px 0;padding:16px 20px 15px 10px;background:var(--h1_network) no-repeat 8px center,var(--ht_rtl)}
@@ -98,7 +98,7 @@ th a.script{float:left}
 #sb_newsheadings td,#sb_newsheadings tr:hover td{background-position:right center;padding-right:18px;padding-left:8px;text-align:right}
 #sb_newsheadings td a{font-size:9pt}
 #sb_internals td,#sb_advanced td{text-align:center}
-#sb_localtunnels td{vertical-align:top;}
+#sb_localtunnels td{vertical-align:top}
 #sb_localtunnels td:last-child{padding-left:1px;text-align:left}
 
 .graphspanel form{text-align:right}
@@ -232,7 +232,7 @@ td.optionsave,#peerdefs td:first-child{text-align:left}
 #config_logging form,#config_update form{margin:0 10px -18px -20px}
 #config_network .infohelp{margin:1px -16px -2px 16px}
 #config_update form{margin-bottom:0}
-#config_logging h3 a::before, #webappconfiguration a::before, #routerinformation #version a::before, #i2pclientconfig a::before, #pluginmanage a::before {background-position:right center}
+#config_logging h3 a::before,#webappconfiguration a::before,#routerinformation #version a::before,#i2pclientconfig a::before,#pluginmanage a::before{background-position:right center}
 #config_plugins{overflow:hidden}
 #config_plugins .wideload{margin-bottom:22px}
 #config_reseed .confignav+.infohelp+form{margin-left:-16px;margin-right:16px}
@@ -246,7 +246,7 @@ td.optionsave,#peerdefs td:first-child{text-align:left}
 #config_service form{margin:0 12px 12px -19px}
 #config_stats form{margin:0 16px 0 -16px}
 #config_stats .tabletitle{margin-left:16px;margin-right:-16px}
-#statconfig {margin:0 -16px}
+#statconfig{margin:0 -16px}
 #configstats td:first-child{text-align:center}
 #configstats td:nth-child(2){padding-right:10px;direction:ltr}
 #config_summarybar table.configtable{margin-right:0}
@@ -282,7 +282,7 @@ h3#advancedconfig a,h3#bwlimiter a,h3.tabletitle a,h3.ptitle a,th a.script,th#up
 #plugininstall,#plugininstall2{margin:0 0 0 -16px}
 #plugininstall,#plugininstall2{margin-right:0}
 #reseedurl input[type=text],#reseedzip input[type="file"],#reseedcreatefile p{width:calc(100% - 20px)}
-#routerinformation .h3navlinks a, #config_logging .h3navlinks a{padding:12px}
+#routerinformation .h3navlinks a,#config_logging .h3navlinks a{padding:12px}
 #sidebarconf td:last-child{text-align:right;padding-left:10px}
 #sidebarconf td:nth-last-child(2){text-align:left}
 #sidebarconf th:last-child{text-align:center}

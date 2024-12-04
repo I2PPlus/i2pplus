@@ -658,7 +658,7 @@ pre#activetransports{margin:-11px 0 0;padding:15px 15px 0;width:calc(100% - 32px
 #configinfo{margin-top:18px;border:0}
 #configinfo th,#configinfo td{border:var(--border)}
 #configinfo th{text-align:left;font-family:var(--monospaced);font-weight:600;padding:7px 10px;color:#050}
-#configinfo .section{margin:0 0 -1px -1px;padding-left:5px;display:inline-block;border:var(--border);box-shadow:var(--highlight);background:linear-gradient(90deg, #bfc3d9 5px,#0000 5px),var(--th)}
+#configinfo .section{margin:0 0 -1px -1px;padding-left:5px;display:inline-block;border:var(--border);box-shadow:var(--highlight);background:linear-gradient(90deg,#bfc3d9 5px,#0000 5px),var(--th)}
 #configinfo .section~.section{margin-top:12px}
 #configinfo .section th{border:0}
 #configinfo .section th{padding:8px 12px 6px;text-transform:uppercase;letter-spacing:.08em;font-family:var(--bodyfont);color:var(--ink);font-size:120%}
@@ -869,7 +869,7 @@ td,#externali2cp td,#config_keyring td,#config_logging td,#config_network td,#co
 #sessionBanned{margin:11px auto 9px}
 #sessionBanned th,#sessionBanned td{padding:6px 12px}
 #sessionBanned thead th{font-size:90%;text-align:left}
-#sessionBanned th:nth-child(2),#sessionBanned td:nth-child(2){font-size:0;}
+#sessionBanned th:nth-child(2),#sessionBanned td:nth-child(2){font-size:0}
 #sessionBanned td:first-child::before{width:26px;height:20px;display:inline-block;vertical-align:middle;background:var(--client) no-repeat left center/18px;content:""}
 #sessionBanned .banFF td:first-child::before{background:var(--floodfill) no-repeat left center/18px}
 #sessionBanned .b64{padding:5px 8px;display:inline-block;vertical-align:middle;line-height:1;font-family:var(--monospaced);font-size:90%;font-weight:500;box-shadow:var(--bevel);background:var(--badge);user-select:all}
@@ -1443,7 +1443,7 @@ img.unknownflag{opacity:.8}
 #netdbcongestion td a,#netdbtiers td a{margin-right:6px}
 #netdbcongestion td a:hover,#netdbtiers td a:hover{box-shadow:var(--highlight),0 0 0 1px var(--hover)}
 #netdbcongestion td a:active,#netdbtiers td a:active{box-shadow:var(--btn_shadow_active),0 0 0 1px var(--hover)}
-#netdbcongestion td a:hover b, #netdbtiers td a:hover b{color:var(--hover)}
+#netdbcongestion td a:hover b,#netdbtiers td a:hover b{color:var(--hover)}
 
 /* stats */
 .statsViewGraphs{margin-left:20px}
@@ -2159,7 +2159,7 @@ span.b32:active{box-shadow:0 0 0 1px var(--border_color),var(--btn_shadow_active
 .tunnelsHidden .statusnotes{margin:0 0 -15px}
 #routertunnels.tunnelsHidden #tunnels{padding-bottom:30px}
 #tunnels .lsview{margin:1px 4px 0}
-#tunnels h3 a:not(.lsview), #logs h3 a{margin:-1px 2px 0}
+#tunnels h3 a:not(.lsview),#logs h3 a{margin:-1px 2px 0}
 
 /* transit summary */
 #tunnels #transitSummary th{position:relative}

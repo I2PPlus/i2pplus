@@ -107,7 +107,7 @@ body{font-size:10pt}
 p,td,h3,h4,#b64,a{font-size:90%}
 .logo{display:none}
 .logo hr ~ a{margin:-8px -3px 12px;padding:6px 8px;min-width:110px;position:relative;background:#225}
-.warning{margin-left:20px;padding-left:25px;background:#000;}
+.warning{margin-left:20px;padding-left:25px;background:#000}
 .warning h3{margin:-10px -39px 10px -24px;padding:7px 14px}
 }
 

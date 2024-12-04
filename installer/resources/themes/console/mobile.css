@@ -37,7 +37,7 @@ table[id^="sb_"] td,#sidebar #sb_localtunnels td{padding:2px 6px 0}
 #sidebar table,table[id^="sb_"],#sidebar #sb_services,#sidebar #sb_internals,#sidebar #sb_advanced,#sidebar #sb_help{width:calc(100% - 4px);margin:-9px 0 -7px 2px;border-radius:4px;border-collapse:separate;border-spacing:0}
 #sb_wrap{position:absolute;z-index:10000;top:8px;right:0;overflow:hidden}
 #sb_wrap #sidebar{width:120px;overflow:hidden;text-align:right;border:0;box-shadow:none;background:none}
-#stats .confignav, #stats .togglestat,#stats .toggle_input{display:none}
+#stats .confignav,#stats .togglestat,#stats .toggle_input{display:none}
 #xhr{margin-top:9px}
 
 @media (min-width:640px){

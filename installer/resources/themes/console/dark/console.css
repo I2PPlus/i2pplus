@@ -433,7 +433,7 @@ div[id^="config_"].main{padding-bottom:14px}
 #messages,.error,.notice{color:var(--ink)}
 #events .messages{margin-top:26px;margin-bottom:-13px;box-shadow:inset 0 0 0 1px #700}
 #graphs .messages{top:-16px;z-index:999}
-#messages.closed {animation:.15s fade 0s ease-in forwards}
+#messages.closed{animation:.15s fade 0s ease-in forwards}
 
 /* forms */
 .optionlist,.optionsingle,#reseedssl{padding:1px 2px;border:var(--border_soft);box-shadow:inset 0 0 0 2px #000;column-gap:1px;transition:ease box-shadow .2s;background:repeating-linear-gradient(180deg,#000 1px,#000800 2px,#000800 3px)}
@@ -1261,7 +1261,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #netdblookup input[type=text]{width:calc(100% - 12px)}
 #netdblookup select{width:calc(100% - 11px)}
 #netdbRouterMap::before,#netdbRouterMap::after{display:inline-block;top:0;right:0;bottom:0;left:0;content:"";z-index:0;background:repeating-linear-gradient(to bottom,#0000,#0000 20px,#000 21px,#0000 22px),repeating-linear-gradient(to right,#0000,#0000 20px,#000 21px,#0000 22px) center center;position:absolute;box-shadow:0 0 0 2px #000 inset,0 0 0 6px #005 inset;pointer-events:none}
-#netdbRouterMap::after{background:none;position:absolute;z-index:999;box-shadow:0 0 0 4px #000 inset,0 0 0 6px #252 inset, 0 0 0 7px #000 inset,0 0 0 8px #fff3 inset;pointer-events:none}
+#netdbRouterMap::after{background:none;position:absolute;z-index:999;box-shadow:0 0 0 4px #000 inset,0 0 0 6px #252 inset,0 0 0 7px #000 inset,0 0 0 8px #fff3 inset;pointer-events:none}
 
 /* leasesets */
 .addtobook{text-align:right}
@@ -1342,7 +1342,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .leaseset .expiry{margin-left:4px;padding-left:15px;background:var(--clock) no-repeat left calc(50% + 1px)/12px}
 .leaseset .stype{background:var(--lock) no-repeat left center/12px}
 .leaseset .ekey b,.leaseset .stype b,.leaseset .expiry b,.leaseset .ekey .bullet,.leaseset .expiry .bullet,.leaseset .stype .bullet{display:none}
-#netdb .leasesets_container p, #netdb .leasesets_container .confignav{column-span:all}
+#netdb .leasesets_container p,#netdb .leasesets_container .confignav{column-span:all}
 #netdb .leasesets_container .confignav{margin-bottom:11px}
 
 /* sybils */
@@ -1672,11 +1672,11 @@ td.optionsave,.buckets,.formaction,#certs h4,#certs p,#certs textarea,#config_ad
 .statgroup:not(.expanded) th::after{background:var(--dropdown);content:"";transform:rotate(-90deg)}
 .statgroup:not(.expanded):hover th::after{background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
 .statgroup:not(.expanded)+.graphableStat{display:none}
-.statgroup .statcount{margin:-1px 22px -2px 8px;padding:5px 8px 5px 24px;min-width:38px;float:right;line-height:1;word-spacing:.3em;vertical-align:middle;text-align:left;font-weight:500;font-size:80%;box-shadow:var(--bevel);background:var(--yes) no-repeat 8px center / 9px,var(--badge)}
+.statgroup .statcount{margin:-1px 22px -2px 8px;padding:5px 8px 5px 24px;min-width:38px;float:right;line-height:1;word-spacing:.3em;vertical-align:middle;text-align:left;font-weight:500;font-size:80%;box-shadow:var(--bevel);background:var(--yes) no-repeat 8px center/9px,var(--badge)}
 .statgroup .subcat{padding:3px 8px 4px 18px;letter-spacing:0;word-spacing:0;text-transform:none;font-weight:500;box-shadow:var(--bevel);background:var(--tunn_active) no-repeat 6px center/8px,var(--badge)}
 #configstats th{padding:8px 10px}
 #configstats th b{margin-bottom:-2px;display:inline-block;vertical-align:middle}
-#configstats th b::before{margin:-4px 6px 0 0;width:16px;height:16px;display:inline-block;vertical-align:middle;background:var(--star) no-repeat center center / 16px;content:""}
+#configstats th b::before{margin:-4px 6px 0 0;width:16px;height:16px;display:inline-block;vertical-align:middle;background:var(--star) no-repeat center center/16px;content:""}
 
 /* infohelp/warn */
 form[action="events"]{padding:10px 10px 10px 50px;background:var(--logs) no-repeat 15px center/28px,var(--msg)}
@@ -2037,7 +2037,7 @@ input[type=hidden]+p+p{margin-top:20px;margin-bottom:-21px;padding:10px;border:v
 /*"OK" modal dialog */
 #modal{padding:8px 16px 16px;width:420px;position:absolute;z-index:99999;font-size:110%;box-shadow:0 0 0 1px #131,0 0 0 2px #000,0 0 0 5px #252;background:#000}
 #modal button{padding:9px 16px;min-width:108px;font-size:100%}
-#modal p{margin:4px -16px 16px;padding:24px 24px 24px 76px;line-height:1.7;font-weight:500;border-bottom:1px solid #131;background:var(--warning) no-repeat 16px center / 46px}
+#modal p{margin:4px -16px 16px;padding:24px 24px 24px 76px;line-height:1.7;font-weight:500;border-bottom:1px solid #131;background:var(--warning) no-repeat 16px center/46px}
 #modal p b{color:#f00}
 #overlay{position:absolute;top:0;left:0;bottom:0;right:0;z-index:99998;background:#000a}
 
@@ -2503,7 +2503,7 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #logFilterInput{margin:-1px -2px -1px 0;padding-left:30px;width:160px;min-width:0;background:#000 var(--filter) no-repeat 8px center/16px;background-blend-mode:luminosity}
 #logRefreshInterval{margin:-1px -2px -1px 0;padding-left:28px;width:50px;background:#000 var(--refresh) no-repeat 6px center/16px}
 #logRefreshInterval:focus,#logFilterInput:focus{box-shadow:var(--btn_shadow_active);filter:none!important;caret-color:#225;background-blend-mode:normal}
-#logRefreshInterval:focus{background:var(--refresh) no-repeat 6px center / 16px,var(--input_txt)}
+#logRefreshInterval:focus{background:var(--refresh) no-repeat 6px center/16px,var(--input_txt)}
 
 #logs font[color]::before{margin-left:0;margin-right:5px;content:"";display:inline-block;width:6px;height:6px;vertical-align:calc(1px);color:#777;border-radius:50%;filter:saturate(1);transform:none;animation:linear ping .1s}
 /* critical */
@@ -2648,7 +2648,7 @@ ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 #browserconfig ol{margin:-10px 20px -5px -20px;display:inline-block}
 
 /* help headings */
-.confignav a[href="/help/glossary"], .tab2#terms span{background-image:var(--ask)!important}
+.confignav a[href="/help/glossary"],.tab2#terms span{background-image:var(--ask)!important}
 #help h2,#help h3,#help #faq h3,#help #webhosting h3{background-repeat:no-repeat,repeat,repeat,no-repeat,repeat;background-blend-mode:normal,exclusion,overlay}
 #browserconfig h2{padding-left:38px;background:var(--firefox) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 #changelog h2{padding-left:38px;background:var(--changelog) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
@@ -2717,7 +2717,7 @@ body:not(.ready) .lazy{display:none}
 
 /* iframes */
 .lightbox,.lightbox .main{min-height:100%;position:absolute!important;top:0;left:0;bottom:0;right:0;border:0;margin:0;background:#000!important}
-.lightbox h1 {display:none}
+.lightbox h1{display:none}
 #dns{padding:0;min-width:650px}
 #i2psnarkframe{margin-bottom:-2px}
 #i2ptunnelframe{margin:1px auto -1px 3px;width:calc(100% - 4px)}
@@ -2893,7 +2893,7 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 #profiles_overview{margin:5px 0 -5px}
 #profiles,#peers{padding:5px 5px 0}
 #profiles #thresholds+h3{margin-top:-5px}
-#stats .tab, #stats .tab2{padding:5px 6px}
+#stats .tab,#stats .tab2{padding:5px 6px}
 #tunnels .tab,#tunnels .tab2{margin-top:5px}
 #upnpscan{margin-bottom:5px}
 #upnpstatus,#peers .infohelp{margin:0}

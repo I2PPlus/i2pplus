@@ -18,11 +18,11 @@
 #netdbmap #info{padding:12px 16px 10px;height:fit-content;width:max-content;position:absolute;top:24px;right:26px;z-index:999999;line-height:1.5;font-weight:500;color:#111;box-shadow:0 0 0 2px #710,3px 3px 3px #0008,0 0 0 1px #fff inset,0 0 0 2px #900 inset;background:linear-gradient(180deg,#fff,#eee)}
 #netdbmap #info:empty{display:none}
 #netdbmap #info.hidden{animation:fadeout 40ms ease 0s both}
-#netdbmap #info .mapflag {width:16px!important;height:12px!important;margin:-1px 0 0 2px}
+#netdbmap #info .mapflag{width:16px!important;height:12px!important;margin:-1px 0 0 2px}
 
 /* console elements */
 [id^="legend_"]{margin:4px;padding:4px 8px 4px 34px;width:30px;display:block;position:relative;text-align:right;font-weight:600;color:#222;border:1px solid #222;background:#ffec}
-.legend_color {width:24px;display:inline-block;position:absolute;left:1px;top:1px;bottom:1px}
+.legend_color{width:24px;display:inline-block;position:absolute;left:1px;top:1px;bottom:1px}
 #legend_1 .legend_color{background:#630}
 #legend_10 .legend_color{background:#840}
 #legend_50 .legend_color{background:#a60}
@@ -36,16 +36,16 @@
 #netdbmapLegend{position:absolute;bottom:20px;left:20px;display:inline-block}
 
 /* nav */
-#netdbmap #nav {margin:16px auto 0;padding 8px;width:calc(100% - 16px);display:block;position:absolute;top:0;z-index:99999999;text-align:center;transform:translateY(-200px);transition:ease-out transform .5s}
-#netdbmap:hover #nav {transform:translateY(0);transition:ease-in transform .5s}
+#netdbmap #nav{margin:16px auto 0;padding 8px;width:calc(100% - 16px);display:block;position:absolute;top:0;z-index:99999999;text-align:center;transform:translateY(-200px);transition:ease-out transform .5s}
+#netdbmap:hover #nav{transform:translateY(0);transition:ease-in transform .5s}
 #bycc{background:#fff url(/themes/console/images/planet.svg) no-repeat center center/20px}
 #byff{background:#fff var(--floodfill) no-repeat center center/22px}
 #byX{background:#fff var(--fast) no-repeat center center/22px}
-#netdbmap #nav span {margin:0 -1px;padding:20px;position:relative;vertical-align:middle;font-size:0;border:1px solid #222}
+#netdbmap #nav span{margin:0 -1px;padding:20px;position:relative;vertical-align:middle;font-size:0;border:1px solid #222}
 #netdbmap #nav span.active{margin:0;box-shadow:0 0 0 1px #fff inset,2px 2px 2px inset #0006;pointer-events:none}
-#netdbmap #nav span:hover {background-size:26px}
-#netdbmap #nav #bcc:hover {background-size:24px}
-#netdbmap #nav a {margin:0;padding:0;display:inline-block;position:absolute;top:0;left:0;bottom:0;right:0;vertical-align:middle;color:#222}
+#netdbmap #nav span:hover{background-size:26px}
+#netdbmap #nav #bcc:hover{background-size:24px}
+#netdbmap #nav a{margin:0;padding:0;display:inline-block;position:absolute;top:0;left:0;bottom:0;right:0;vertical-align:middle;color:#222}
 
 @keyframes fadein{from{opacity:0}to{opacity:1}}
 @keyframes fadeout{from{opacity:1}to{opacity:0}}

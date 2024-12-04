@@ -8,7 +8,7 @@
 :root{
 --ahelp:url(/themes/console/images/addressbook.svg);
 --create:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%234d5f80' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A");
---create_hover:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23f60' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A");}
+--create_hover:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23f60' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A")}
 
 body{margin:2.5% 2%;padding:0;display:block!important;text-align:center;background:#eef url(images/bg0.png) scroll center center/90px;background-size:90px;image-rendering:-webkit-optimize-contrast;pointer-events:auto!important}
 .iframed body{margin:0 0 9px}

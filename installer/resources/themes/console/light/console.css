@@ -366,7 +366,7 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 .sb_netstatus:hover #ffenabled{margin:2px;display:inline-block;white-space:nowrap}
 
 /* netstatus tooltip */
-.sb_netstatus #netstatus{display:none;line-height:1;}
+.sb_netstatus #netstatus{display:none;line-height:1}
 .sb_netstatus:hover #netstatus{margin:0 auto;padding:2px 5px;width:fit-content;display:block;position:absolute;z-index:99999;top:-16px;left:0;right:0;box-shadow:var(--highlight),0 0 0 1px #bbc;background:var(--badge);animation:fade .15s ease .15s reverse both}
 .sb_netstatus:hover #netstatus::after{width:0;height:0;display:inline-block;position:absolute;bottom:-6px;left:calc(50% - 3px);border-style:solid;border-color:#bbc #0000 #0000;border-width:6px 6px 0;content:""}
 
@@ -862,7 +862,7 @@ h1::first-letter{font-size:112%}
 /* bans */
 .banperiod{margin:1px 0 0 1px;display:inline-block;vertical-align:middle}
 #bannedips{margin:1px auto 10px}
-#bannedips th, #bannedips table th{border-top:var(--border_inner);border-bottom:var(--border_inner);}
+#bannedips th,#bannedips table th{border-top:var(--border_inner);border-bottom:var(--border_inner)}
 #bannedips td{vertical-align:top;padding:0;width:50%}
 #bannedips table{margin:-1px 0;border:0;border-bottom:var(--border_inner)}
 #bannedips table th,#bannedips table td{text-align:center;border-left:0;border-right:0}
@@ -882,7 +882,7 @@ h1::first-letter{font-size:112%}
 #permabanned td:first-child{padding-right:10px;width:49%;text-align:right}
 #permabanned td:last-child{padding-left:10px;width:49%;text-align:left}
 #permabanned td:nth-child(2){width:2%}
-#profiles #sessionBanned th, #profiles #sessionBanned td{padding:6px 12px;text-align:left}
+#profiles #sessionBanned th,#profiles #sessionBanned td{padding:6px 12px;text-align:left}
 #profiles #sessionBanned th:nth-child(4),#profiles #sessionBanned td:nth-child(4){text-align:right}
 #sessionBanned .b64{padding:5px 8px;display:inline-block;vertical-align:middle;line-height:1;font-family:var(--monospaced);font-size:90%;font-weight:500;box-shadow:var(--bevel);background:var(--badge);user-select:all}
 #sessionBanned .banFF td:first-child::before{background:var(--floodfill) no-repeat left center/18px}
@@ -1237,8 +1237,8 @@ h3+.statusnotes{margin-top:2px}
 #tunnels .percentBarOuter:hover .percentBarInner{box-shadow:none;background:#0000}
 #tunnels .tab,#tunnels .tab2{min-width:140px}
 #participatingTunnels #tunnels th{position:relative}
-.tunnelsHidden #tunnels {padding-bottom:11px}
-.tunnelsHidden #tunnels h3[id]:nth-child(n+2) {margin-top:-6px}
+.tunnelsHidden #tunnels{padding-bottom:11px}
+.tunnelsHidden #tunnels h3[id]:nth-child(n+2){margin-top:-6px}
 .tunnelsHidden table+.statusnotes{margin-top:2px;border-top:1px solid var(--border_inner)}
 
 /* transit summary */
@@ -2802,7 +2802,7 @@ h1[class],#wizardpage h1{padding:20px 15px 17px 55px;font-size:19pt;background-s
 .main,#news.news,h1,.sorry{margin-left:252px}
 .netdb_header img[src^="/flags"]{width:32px}
 .netdb_header .peerFlag{transform:translateY(1px)}
-.netdb_header .unknownflag {margin-right:2px;margin-top:-1px}
+.netdb_header .unknownflag{margin-right:2px;margin-top:-1px}
 .newsAuthor{padding:0 0 0 14px;font-size:9.5pt;background-size:12px;background-position:left center}
 .percentBarText{margin-top:-1px}
 .sitemapLabel{min-height:16px}
@@ -2946,7 +2946,7 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 #ipbans.toggle.expanded::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:none}
 #ipbans.toggle.expanded:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:none}
 
-@media (min-width:1600px) {
+@media (min-width:1600px){
 #changelog pre{overflow:hidden;overflow-x:auto}
 #changelog pre span{margin:0 10px -10px 0;padding:0 8px 8px;width:calc(100% - 32px);display:inline-block;box-sizing:border-box;border-bottom:1px dotted #559;break-inside:avoid}
 #changelog pre span::first-line{line-height:1.75;font-weight:700}

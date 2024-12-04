@@ -100,7 +100,7 @@ th{padding:5px 10px;text-align:left;color:var(--ink);font-size:8.5pt}
 
 /* headings */
 h3{padding:7px 10px;letter-spacing:.18em;word-spacing:.1em;font-size:10pt;font-weight:700;text-transform:uppercase;text-shadow:0 0 2px #001100;color:var(--ink);border:var(--border);box-shadow:var(--bevel);-webkit-text-stroke:var(--stroke)}
-h4{display:none;}
+h4{display:none}
 .headline{margin-top:-16px}
 .headline h3{padding:10px 5px 10px 35px;text-transform:uppercase;font-size:11.5pt;background:var(--addressbook) no-repeat 9px center/20px,var(--title)}
 .headline h3{margin-top:-10px}
@@ -165,7 +165,7 @@ td.destinations{max-width:50px;padding:1px 8px}
 #search{margin:-25px 0 0;padding:0 10px;border:var(--border);box-shadow:var(--bevel)}
 #booksearch input[type=text],#booksearch input[type=submit]{animation:fade-in .5s ease 1s both}
 #booksearch input[type=text]{padding:7px 8px;min-width:280px;border-radius:1px 0 0 1px;box-shadow:none}
-#booksearch input[type=text]:focus{border:1px solid var(--hover);filter:none;}
+#booksearch input[type=text]:focus{border:1px solid var(--hover);filter:none}
 #booksearch input[type=submit]{margin-left:-16px;width:40px;min-width:0;position:relative;z-index:10;overflow:hidden;color:#0000;text-shadow:none;-webkit-text-stroke:0;border:0;border-radius:0 1px 1px 0;background:#000 var(--search) no-repeat center center/14px}
 #booksearch input[type=submit]:hover,#booksearch input[type=submit]:focus,#booksearch input[type=text]:focus~input[type=submit]{border:0;box-shadow:inset 0 0 0 1px var(--hover),inset 0 0 0 2px #000,inset 0 0 3px 1px rgba(255,96,0,.8),inset 0 0 5px 0 rgba(255,96,0,.8),inset 0 0 0 4px #000}
 #booksearch input[type=submit]:active{box-shadow:inset 0 0 0 1px var(--hover),inset 0 0 0 2px #000,var(--btn_shadow_active);background:var(--hover) var(--search) no-repeat center center/14px;background-blend-mode:luminosity}
@@ -235,7 +235,7 @@ p#filtered{margin:-27px 0 10px;padding:12px 10px 8px 20px;font-size:10pt;box-sha
 
 /* imagegen */
 img[src="/imagegen/id?s=256&c="],img[src="/imagegen/id?s=20&c="]{opacity:0}
-.identicon {margin:0 1px;padding:1px;vertical-align:middle;box-shadow:0 0 0 1px #000,0 0 0 2px #252;background:#000}
+.identicon{margin:0 1px;padding:1px;vertical-align:middle;box-shadow:0 0 0 1px #000,0 0 0 2px #252;background:#000}
 .identicon>path{transform-origin:center center;animation:scaledown .2s ease .15s both}
 .info a:hover .identicon{box-shadow:0 0 0 1px #000,0 0 0 3px var(--hover),var(--highlight)}
 .info a:active .identicon{box-shadow:0 0 0 1px #000,0 0 0 3px var(--hover),var(--btn_shadow_active);background:linear-gradient(180deg,#9307,#b307);transform:scale(0.9)}
@@ -365,9 +365,9 @@ textarea,pre{font-size:9.5pt}
 }
 
 /* add/import panel toggles */
-main {position:relative}
+main{position:relative}
 .displayPanels main::after{display:block;position:absolute;top:0;left:0;bottom:0;right:0;z-index:1000;background:linear-gradient(180deg,#0005,#000a 200px);content:"";pointer-events:none;will-change:transform}
-.displayPanels #add, .displayPanels #import{margin:0;position:absolute;z-index:1500;top:-13px;left:0;right:0;filter:drop-shadow(0 4px 5px #000);animation:slideDown 1s ease-out 0s both;will-change:transform}
+.displayPanels #add,.displayPanels #import{margin:0;position:absolute;z-index:1500;top:-13px;left:0;right:0;filter:drop-shadow(0 4px 5px #000);animation:slideDown 1s ease-out 0s both;will-change:transform}
 .iframed .displayPanels #add,.iframed .displayPanels #import{top:-9px;left:-13px;right:-13px}
 #navi{position:relative;z-index:2000}
 #paginate{margin-right:68px}

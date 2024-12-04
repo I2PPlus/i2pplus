@@ -239,9 +239,9 @@ input[type=text].username:focus,input[type=password].password:focus,input[type=t
 #tunnelOpts table tr:nth-child(even) td:nth-child(n+2){border-left:var(--border_inner)}
 #tunnelOpts table tr:nth-child(odd) td{padding-left:5px;font-size:90%;border-bottom:var(--border_inner)}
 #tunnelOpts table tr:nth-child(2) td{border-bottom:var(--border_inner)}
-#tunnelOpts table tr:nth-child(3)td {border-top:var(--border_inner)}
+#tunnelOpts table tr:nth-child(3)td{border-top:var(--border_inner)}
 #tunnelOpts table tr:last-child td{border-bottom:0}
-#tunnelOpts table td select {margin:0;width:100%}
+#tunnelOpts table td select{margin:0;width:100%}
 
 /* throttler */
 td.blankColumn{width:20%}

@@ -1,10 +1,10 @@
 body.js #tunnelsContainer{display:block!important}
 .idsHidden #tunnels .tunnel_id,.tunnelsHidden #tunnels table,.tunnelsHidden #tunnels h3:not([id]),.tunnelsHidden #tunnels .building,.tunnelsHidden #toggleTunnelIds{display:none!important}
-#toggleTunnelIds{width:20px;height:20px;display:inline-block;position:absolute;top:calc(50% - 10px);right:40px;background:url(/themes/console/images/off.svg) no-repeat center center/20px, url(/themes/console/images/hardhat.svg) no-repeat center center/16px;opacity:.7}
+#toggleTunnelIds{width:20px;height:20px;display:inline-block;position:absolute;top:calc(50% - 10px);right:40px;background:url(/themes/console/images/off.svg) no-repeat center center/20px,url(/themes/console/images/hardhat.svg) no-repeat center center/16px;opacity:.7}
 #toggleTunnelIds:hover{cursor:pointer;opacity:1;transform:scale(1.2)}
 #toggleTunnelIds:active{transform:scale(.9)}
 #toggleTunnels.off{background:url(/themes/console/images/inout.svg) no-repeat center center/20px}
-#toggleTunnels{width:20px;height:20px;display:inline-block;position:absolute;top:calc(50% - 10px);right:12px;background:url(/themes/console/images/off.svg) no-repeat center center/20px, url(/themes/console/images/inout.svg) no-repeat center center/16px;opacity:.7}
+#toggleTunnels{width:20px;height:20px;display:inline-block;position:absolute;top:calc(50% - 10px);right:12px;background:url(/themes/console/images/off.svg) no-repeat center center/20px,url(/themes/console/images/inout.svg) no-repeat center center/16px;opacity:.7}
 #toggleTunnels:hover{cursor:pointer;opacity:1;transform:scale(1.2)}
 #toggleTunnels:active{transform:scale(.9)}
 #toggleTunnelIds.off{background:url(/themes/console/images/hardhat.svg) no-repeat center center/20px}

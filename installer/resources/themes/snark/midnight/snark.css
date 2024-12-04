@@ -515,7 +515,7 @@ form:last-child>.configPanel{margin-bottom:-1px}
 #hopVariance label+label{margin-left:12px}
 #hopVariance .optbox{margin-right:4px}
 #hopVariance .optbox+span{width:22px;height:22px;display:inline-block;font-size:0;vertical-align:middle;background:var(--inbound) no-repeat center center/22px}
-#hopVariance #varyOutbound+span {background:var(--outbound) no-repeat center center/22px}
+#hopVariance #varyOutbound+span{background:var(--outbound) no-repeat center center/22px}
 #hopVariance .optbox:not(:checked)+span{filter:saturate(0)}
 #i2cpOptions{display:block;column-span:all}
 .createFilterToggle{margin:0 4px 4px 0;padding:2px 8px;display:inline-block;display:flex;flex-grow:.01;justify-content:center;position:relative;vertical-align:middle;text-align:center;font-size:95%;font-style:italic;border:var(--border_soft)}
@@ -843,7 +843,7 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 #dhtDebug .stat{margin:3px 2px;padding:0;text-shadow:1px 1px 1px #0006;box-shadow:0 0 0 1px #113,var(--highlight);background:#113;contain:paint}
 #dhtDebug .dbug{margin:-2px -1px -2px -4px;padding:2px 10px;min-width:24px;color:var(--ink);background:#000}
 #noDHTPeers{margin:6px 0}
-#dhtDebug .volatile {margin:1px 0 0;width:100%;display:inline-block}
+#dhtDebug .volatile{margin:1px 0 0;width:100%;display:inline-block}
 
 /* Resource Errors */
 .resourceError{margin-bottom:0;border:0}
@@ -1036,7 +1036,7 @@ thead img,thead img:hover{max-height:22px}
 .iframed #torrents{margin-top:0}
 #torrents td{padding-top:4px;padding-bottom:4px}
 #torrents td.details img,.dirInfo td:first-child img:not(.thumb){margin:-2px 0;width:24px;height:24px;max-width:24px;max-height:24px}
-#torrents td.trackerLink img, #torrents td.magnet img{margin:0 1px;padding:2px;width:18px;height:18px;max-height:18px}
+#torrents td.trackerLink img,#torrents td.magnet img{margin:0 1px;padding:2px;width:18px;height:18px;max-height:18px}
 #torrents .details img[src$="rateme.svg"]{margin-top:-3px;margin-right:-3px;width:12px;height:12px}
 #torrents code{font-size:9pt}
 #torrentDisplay{margin-top:9px}

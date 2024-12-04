@@ -11,7 +11,7 @@ button.search{margin-right:30px}
 .configtable td.infohelp,p.infohelp,td.infohelp,p#debugmode,p#sybilinfo,p.infowarn,td.infowarn,p#keyringhelp,h3#shutdownrouter+p,h3#restartrouter+p,h3#servicedebug+p,h3#browseronstart+p,h3#runonstartup+p,h3#systray+p{padding:15px 45px 15px 15px;background:#000 var(--infohelp) no-repeat right 8px center/28px}
 div.joblog li{text-align:left;direction:ltr}
 div[lang="ar"] ul,div[lang="ar"] p{margin:10px}
-div[lang="ar"] ul li{list-style-position:outside;margin:10px 15px 0 0;padding-left:0;margin-top:15px;}
+div[lang="ar"] ul li{list-style-position:outside;margin:10px 15px 0 0;padding-left:0;margin-top:15px}
 div[lang="ar"] ul{margin-right:20px}
 div[lang="ar"] ul ul{margin-right:-10px}
 div.main li{margin:5px 20px;text-align:right;line-height:150%}
@@ -136,7 +136,7 @@ td{text-align:right}
 #sidebar td:last-child{text-align:left;margin-left:3px}
 #sidebar td{text-align:right}
 #sybilnav ul li a{padding-right:0}
-#themeoptions input, #enablefull input{margin:1px 2px 1px 10px}
+#themeoptions input,#enablefull input{margin:1px 2px 1px 10px}
 #tunnelconfig th{text-align:right}
 #tunnels.main h3 a{float:left}
 #updateHelper b,#updateProxyHostPort b,#config_update b{text-align:left}

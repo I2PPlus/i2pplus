@@ -389,7 +389,7 @@ input.switchto,input.moveto{padding:5px 7px 5px 24px;background:var(--folder) no
 #toggle.showpass{background:var(--show) no-repeat center center/20px}
 #mailbox,#page{position:relative}
 #privacywarn td{border-top:var(--border_inner);box-shadow:var(--highlight),0 0 1px 2px #a55 inset}
-#privacywarn .info{margin:8px;padding:4px 16px 4px 48px;display:inline-block;line-height:1.5;font-weight:800;font-size:110%;color:#d00;background:var(--warning) no-repeat 6px center / 32px}
+#privacywarn .info{margin:8px;padding:4px 16px 4px 48px;display:inline-block;line-height:1.5;font-weight:800;font-size:110%;color:#d00;background:var(--warning) no-repeat 6px center/32px}
 #iframeSusiHtmlView{margin:10px 10px 5px;width:calc(100% - 20px);border-radius:10px;box-shadow:0 0 0 1px #bbc,0 2px 2px #0003}
 .iframed #iframeSusiHtmlView{margin:5px 10px 0}
 #toggleHeaders,#toggleViewMode{margin:-5px 0}
