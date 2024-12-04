@@ -4407,9 +4407,8 @@ public class I2PSnarkServlet extends BasicServlet {
                     }
                     // strip trailing slash
                     buf.append("<source src=\"").append(path).append("\" type=\"").append(mime).append("\">");
-                    if (isAudio) {
-                        buf.append("</audio>");
-                    } else {
+                    if (isAudio) {buf.append("</audio>");}
+                    else {
                         buf.append("</video>")
                            .append("<script src=\"").append(resourcePath).append("js/getMetadata.js?")
                            .append(CoreVersion.VERSION).append("\"></script>\n");
@@ -4421,23 +4420,16 @@ public class I2PSnarkServlet extends BasicServlet {
                 CommentSet comments = snark.getComments();
                 buf.append("<div class=mainsection id=commentSection>")
                    .append("<input hidden class=toggle_input id=toggle_comments type=checkbox");
-                if (comments != null && !comments.isEmpty()) {
-                    buf.append(" checked");
-                }
+                if (comments != null && !comments.isEmpty()) {buf.append(" checked");}
                 buf.append(">\n<label id=tab_comments class=toggleview for=\"toggle_comments\"><span class=tab_label>")
                    .append(_t("Comments &amp; Ratings"))
                    .append("</span></label><hr>\n");
                 displayComments(snark, er, ec, esc, buf);
                 buf.append("</div>\n");
             }
-            if (includeForm) {
-                buf.append("</form>\n");
-            }
-            if (!isStandalone()) {
-                buf.append(FOOTER);
-            } else {
-                buf.append(FOOTER_STANDALONE);
-            }
+            if (includeForm) {buf.append("</form>\n");}
+            if (!isStandalone()) {buf.append(FOOTER);}
+            else {buf.append(FOOTER_STANDALONE);}
             return buf.toString();
         }
 
@@ -4453,9 +4445,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 // Storage now will not create padding files, but
                 // may have been created by an old version or other client.
                 String n = f.getName();
-                if ((n.equals(".pad") || n.equals("_pad")) && f.isDirectory()) {
-                    continue;
-                }
+                if ((n.equals(".pad") || n.equals("_pad")) && f.isDirectory()) {continue;}
             }
             fileList.add(new Sorters.FileAndIndex(f, storage, remainingArray, previewArray));
         }
@@ -4464,9 +4454,8 @@ public class I2PSnarkServlet extends BasicServlet {
         if (showSort) {
             int sort = 0;
             if (sortParam != null) {
-                try {
-                    sort = Integer.parseInt(sortParam);
-                } catch (NumberFormatException nfe) {}
+                try {sort = Integer.parseInt(sortParam);}
+                catch (NumberFormatException nfe) {}
             }
             DataHelper.sort(fileList, Sorters.getFileComparator(sort, this));
         }
@@ -4477,9 +4466,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<input hidden class=toggle_input id=toggle_files type=checkbox");
         // don't collapse file view if not in torrent root
         String up = "";
-        if (!isTopLevel || fileList.size() <= 10 || sortParam != null || getQueryString(up) != null) {
-            buf.append(" checked");
-        }
+        if (!isTopLevel || fileList.size() <= 10 || sortParam != null || getQueryString(up) != null) {buf.append(" checked");}
         buf.append(">")
            .append("<label id=tab_files class=toggleview for=\"toggle_files\"><span class=tab_label>")
            .append(_t("Files"))
@@ -4491,23 +4478,14 @@ public class I2PSnarkServlet extends BasicServlet {
         String sort;
         boolean isTypeSort = false;
         if (showSort) {
-            if (sortParam == null || "0".equals(sortParam) || "1".equals(sortParam)) {
-                sort = "-1";
-            } else if ("-1".equals(sortParam)) {
-                sort = "12";
-                isTypeSort = true;
-            } else if ("12".equals(sortParam)) {
-                sort = "-12";
-                isTypeSort = true;
-            } else {
-                sort = "";
-            }
+            if (sortParam == null || "0".equals(sortParam) || "1".equals(sortParam)) {sort = "-1";}
+            else if ("-1".equals(sortParam)) {sort = "12"; isTypeSort = true;}
+            else if ("12".equals(sortParam)) {sort = "-12"; isTypeSort = true;}
+            else {sort = "";}
             buf.append("<a href=\"").append(base).append(getQueryString(sort)).append("\">");
         }
         toThemeImg(buf, "file", tx, showSort ? _t("Sort by {0}", (isTypeSort ? _t("File type") : _t("Name"))) : tx + ": " + directory);
-        if (showSort) {
-            buf.append("</a>");
-        }
+        if (showSort) {buf.append("</a>");}
         if (!isTopLevel) {
             buf.append("&nbsp;").append(DataHelper.escapeHTML(directory.substring(dirSlash + 1)));
         }
@@ -4518,9 +4496,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         tx = _t("Size");
         toThemeImg(buf, "size", tx, showSort ? _t("Sort by {0}", tx) : tx);
-        if (showSort) {
-            buf.append("</a>");
-        }
+        if (showSort) {buf.append("</a>");}
         buf.append("</th><th class=fileStatus>");
         boolean showRemainingSort = showSort && showPriority;
         if (showRemainingSort) {
@@ -4539,8 +4515,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             tx = _t("Download Priority");
             toThemeImg(buf, "priority", tx, showSort ? _t("Sort by {0}", tx) : tx);
-            if (showSort)
-                buf.append("</a>");
+            if (showSort) {buf.append("</a>");}
         }
         buf.append("</th></tr></thead>\n<tbody id=dirInfo>");
         if (!isTopLevel || hasCompleteAudio(fileList, storage, remainingArray)) { // don't show row if top level or no playlist
@@ -4564,8 +4539,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (sortParam != null && !"0".equals(sortParam) && !"1".equals(sortParam)) {
                     buf.append("&amp;sort=").append(sortParam);
                 }
-                buf.append("\">").append(toSVG("playlist"))
-                   .append(' ').append(_t("Audio Playlist")).append("</a>");
+                buf.append("\">").append(toSVG("playlist")).append(' ').append(_t("Audio Playlist")).append("</a>");
             }
             buf.append("</td></tr>\n");
         }
@@ -4836,11 +4810,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 File[] ls = fai.file.listFiles();
                 if (ls != null && ls.length > 0) {
                     List<Sorters.FileAndIndex> fl2 = new ArrayList<Sorters.FileAndIndex>(ls.length);
-                    for (int i = 0; i < ls.length; i++) {
-                         fl2.add(new Sorters.FileAndIndex(ls[i], storage, remainingArray));
-                    }
-                    if (hasCompleteAudio(fl2, storage, remainingArray))
-                        return true;
+                    for (int i = 0; i < ls.length; i++) {fl2.add(new Sorters.FileAndIndex(ls[i], storage, remainingArray));}
+                    if (hasCompleteAudio(fl2, storage, remainingArray)) {return true;}
                 }
                 continue;
             }
@@ -4892,9 +4863,7 @@ public class I2PSnarkServlet extends BasicServlet {
         List<Sorters.FileAndIndex> fileList = new ArrayList<Sorters.FileAndIndex>(ls.length);
         // precompute remaining for all files for efficiency
         long[] remainingArray = (storage != null) ? storage.remaining() : null;
-        for (int i = 0; i < ls.length; i++) {
-            fileList.add(new Sorters.FileAndIndex(ls[i], storage, remainingArray));
-        }
+        for (int i = 0; i < ls.length; i++) {fileList.add(new Sorters.FileAndIndex(ls[i], storage, remainingArray));}
 
         boolean showSort = fileList.size() > 1;
         int sort = 0;
@@ -4920,21 +4889,15 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param reqURL encoded, WITH trailing slash
      * @since 0.9.44
      */
-    private void getPlaylist(StringBuilder buf, List<Sorters.FileAndIndex> fileList,
-                             String reqURL, int sort,
-                             Storage storage, long[] remainingArray) {
+    private void getPlaylist(StringBuilder buf, List<Sorters.FileAndIndex> fileList, String reqURL, int sort, Storage storage, long[] remainingArray) {
         for (Sorters.FileAndIndex fai : fileList) {
             if (fai.isDirectory) {
                 // recurse
                 File[] ls = fai.file.listFiles();
                 if (ls != null && ls.length > 0) {
                     List<Sorters.FileAndIndex> fl2 = new ArrayList<Sorters.FileAndIndex>(ls.length);
-                    for (int i = 0; i < ls.length; i++) {
-                         fl2.add(new Sorters.FileAndIndex(ls[i], storage, remainingArray));
-                    }
-                    if (ls.length > 1) {
-                        DataHelper.sort(fl2, Sorters.getFileComparator(sort, this));
-                    }
+                    for (int i = 0; i < ls.length; i++) {fl2.add(new Sorters.FileAndIndex(ls[i], storage, remainingArray));}
+                    if (ls.length > 1) {DataHelper.sort(fl2, Sorters.getFileComparator(sort, this));}
                     String name = fai.file.getName();
                     String url2 = reqURL + encodePath(name) + '/';
                     getPlaylist(buf, fl2, url2, sort, storage, remainingArray);
@@ -4944,9 +4907,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (fai.remaining != 0) {continue;}
             String name = fai.file.getName();
             String mime = getMimeType(name);
-            if (mime != null && isAudio(mime)) {
-                buf.append(reqURL).append(encodePath(name)).append('\n'); // TODO Extended M3U
-            }
+            if (mime != null && isAudio(mime)) {buf.append(reqURL).append(encodePath(name)).append('\n');} // TODO Extended M3U
         }
     }
 
@@ -4957,145 +4918,129 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9.31
      */
     private void displayComments(Snark snark, boolean er, boolean ec, boolean esc, StringBuilder buf) {
-            Iterator<Comment> iter = null;
-            int myRating = 0;
-            CommentSet comments = snark.getComments();
-            boolean canRate = esc && _manager.util().getCommentsName().length() > 0;
+        Iterator<Comment> iter = null;
+        int myRating = 0;
+        CommentSet comments = snark.getComments();
+        boolean canRate = esc && _manager.util().getCommentsName().length() > 0;
 
-            buf.append("<table id=commentInfo>\n<tr><th colspan=3>")
-               .append(_t("Ratings and Comments").replace("and", "&amp;"))
-               .append("&nbsp;&nbsp;&nbsp;");
-            if (esc && !canRate) {
-                buf.append("<span id=nameRequired>")
-                   .append(_t("Author name required to rate or comment"))
-                   .append("&nbsp;&nbsp;<a href=\"").append(_contextPath).append("/configure#configureAuthor\">[")
-                   .append(_t("Configure"))
-                   .append("]</a></span>");
-            } else if (esc) {
-                buf.append("<span id=nameRequired><span class=commentAuthorName title=\"")
-                   .append(_t("Your author name for published comments and ratings"))
-                   .append("\">")
-                   .append(DataHelper.escapeHTML(_manager.util().getCommentsName()))
-                   .append("</span></span>");
-            }
-            buf.append("</th></tr>\n");
+        buf.append("<table id=commentInfo>\n<tr><th colspan=3>")
+           .append(_t("Ratings and Comments").replace("and", "&amp;"))
+           .append("&nbsp;&nbsp;&nbsp;");
+        if (esc && !canRate) {
+            buf.append("<span id=nameRequired>")
+               .append(_t("Author name required to rate or comment"))
+               .append("&nbsp;&nbsp;<a href=\"").append(_contextPath).append("/configure#configureAuthor\">[")
+               .append(_t("Configure"))
+               .append("]</a></span>");
+        } else if (esc) {
+            buf.append("<span id=nameRequired><span class=commentAuthorName title=\"")
+               .append(_t("Your author name for published comments and ratings"))
+               .append("\">")
+               .append(DataHelper.escapeHTML(_manager.util().getCommentsName()))
+               .append("</span></span>");
+        }
+        buf.append("</th></tr>\n");
 
-            // new rating / comment form
-            if (canRate) {
-                buf.append("<tr id=newRating>\n");
-                if (er) {
-                    buf.append("<td>\n<select name=myRating>\n");
-                    for (int i = 5; i >= 0; i--) {
-                        buf.append("<option value=\"").append(i).append("\" ");
-                        if (i == myRating) {buf.append("selected=selected");}
-                        buf.append('>');
-                        if (i != 0) {
-                            for (int j = 0; j < i; j++) {buf.append("★");}
-                            buf.append(' ').append(ngettext("1 star", "{0} stars", i));
-                        } else {buf.append("☆ ").append(_t("No rating"));}
-                        buf.append("</option>\n");
-                    }
-                    buf.append("</select>\n</td>");
-                } else {buf.append("<td></td>");}
-                if (esc) {buf.append("<td id=addCommentText><textarea name=nofilter_newComment cols=44 rows=4></textarea></td>");}
-                else {buf.append("<td></td>");}
-                buf.append("<td class=commentAction><input type=submit name=addComment value=\"");
-                if (er && esc) {buf.append(_t("Rate and Comment"));}
-                else if (er) {buf.append(_t("Rate Torrent"));}
-                else {buf.append(_t("Add Comment"));}
-                buf.append("\" class=accept></td>");
-                buf.append("</tr>\n");
-            }
-
-            if (comments != null) {
-                synchronized(comments) {
-                    // current rating
-                    if (er) {
-                        buf.append("<tr id=myRating><td>");
-                        myRating = comments.getMyRating();
-                        if (myRating > 0) {
-                            buf.append(_t("My Rating")).append(":</td><td colspan=2 class=commentRating>");
-                            String img = toSVG("rateme", "★", "");
-                            for (int i = 0; i < myRating; i++) {buf.append(img);}
-                        }
-                        buf.append("</td></tr>");
-                    }
-                    if (er) {
-                        buf.append("<tr id=showRatings><td>");
-                        int rcnt = comments.getRatingCount();
-                        if (rcnt > 0) {
-                            double avg = comments.getAverageRating();
-                            buf.append(_t("Average Rating")).append(":</td><td colspan=2>").append((new DecimalFormat("0.0")).format(avg));
-                        } else {
-                            buf.append(_t("Average Rating")).append(":</td><td colspan=2>");
-                            buf.append(_t("No community ratings currently available"));
-                        }
-                        buf.append("</td></tr>\n");
-                    }
-                    if (ec) {
-                        int sz = comments.size();
-                        if (sz > 0) {iter = comments.iterator();}
-                    }
+        // new rating / comment form
+        if (canRate) {
+            buf.append("<tr id=newRating>\n");
+            if (er) {
+                buf.append("<td>\n<select name=myRating>\n");
+                for (int i = 5; i >= 0; i--) {
+                    buf.append("<option value=\"").append(i).append("\" ");
+                    if (i == myRating) {buf.append("selected=selected");}
+                    buf.append('>');
+                    if (i != 0) {
+                        for (int j = 0; j < i; j++) {buf.append("★");}
+                        buf.append(' ').append(ngettext("1 star", "{0} stars", i));
+                    } else {buf.append("☆ ").append(_t("No rating"));}
+                    buf.append("</option>\n");
                 }
-            }
-
-            buf.append("</table>\n");
-            // TODO  disable / enable comments for this torrent
-            // existing ratings / comments table
-            int ccount = 0;
-            if (iter != null) {
-                SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
-                buf.append("<table id=userComments>\n");
-
-                while (iter.hasNext()) {
-                    Comment c = iter.next();
-                    buf.append("<tr><td class=commentAuthor>");
-                    // (c.isMine())
-                    //  buf.append(_t("me"));
-                    //else if (c.getName() != null)
-                    // TODO can't be hidden... hide if comments are hidden?
-                    if (c.getName() != null) {
-                        buf.append("<span class=commentAuthorName title=\"" + DataHelper.escapeHTML(c.getName()) + "\">");
-                        buf.append(DataHelper.escapeHTML(c.getName()));
-                        buf.append("</span>");
+                buf.append("</select>\n</td>");
+            } else {buf.append("<td></td>");}
+            if (esc) {buf.append("<td id=addCommentText><textarea name=nofilter_newComment cols=44 rows=4></textarea></td>");}
+            else {buf.append("<td></td>");}
+            buf.append("<td class=commentAction><input type=submit name=addComment value=\"");
+            if (er && esc) {buf.append(_t("Rate and Comment"));}
+            else if (er) {buf.append(_t("Rate Torrent"));}
+            else {buf.append(_t("Add Comment"));}
+            buf.append("\" class=accept></td>");
+            buf.append("</tr>\n");
+        }
+        if (comments != null) {
+            synchronized(comments) {
+                // current rating
+                if (er) {
+                    buf.append("<tr id=myRating><td>");
+                    myRating = comments.getMyRating();
+                    if (myRating > 0) {
+                        buf.append(_t("My Rating")).append(":</td><td colspan=2 class=commentRating>");
+                        String img = toSVG("rateme", "★", "");
+                        for (int i = 0; i < myRating; i++) {buf.append(img);}
                     }
-                    buf.append("</td><td class=commentRating>");
-                    if (er) {
-                        int rt = c.getRating();
-                        if (rt > 0) {
-                            String img = toSVG("rateme", "★", "");
-                            for (int i = 0; i < rt; i++) {
-                                buf.append(img);
-                            }
-                        }
-                    }
-                    buf.append("</td><td class=commentText>");
-                    if (esc) {
-                        if (c.getText() != null) {
-                            buf.append("<div class=commentWrapper title=\"").append(_t("Submitted")).append(": ")
-                               .append(fmt.format(new Date(c.getTime()))).append("\">")
-                               .append(DataHelper.escapeHTML(c.getText()))
-                               .append("</div></td><td class=commentDelete><input type=checkbox class=optbox name=\"cdelete.")
-                               .append(c.getID()).append("\" title=\"").append(_t("Mark for deletion")).append("\">");
-                            ccount++;
-                        } else {
-                            buf.append("</td><td class=commentDelete>"); // insert empty named columns to maintain table layout
-                        }
+                    buf.append("</td></tr>");
+                }
+                if (er) {
+                    buf.append("<tr id=showRatings><td>");
+                    int rcnt = comments.getRatingCount();
+                    if (rcnt > 0) {
+                        double avg = comments.getAverageRating();
+                        buf.append(_t("Average Rating")).append(":</td><td colspan=2>").append((new DecimalFormat("0.0")).format(avg));
                     } else {
-                        buf.append("</td><td class=commentDelete>"); // insert empty named columns to maintain table layout
+                        buf.append(_t("Average Rating")).append(":</td><td colspan=2>");
+                        buf.append(_t("No community ratings currently available"));
                     }
                     buf.append("</td></tr>\n");
                 }
-                if (esc && ccount > 0) {
-                    // TODO format better
-                    buf.append("<tr id=commentDeleteAction><td colspan=4 class=commentAction>")
-                       .append("<input type=submit name=deleteComments value=\"")
-                       .append(_t("Delete Selected"))
-                       .append("\" class=delete></td></tr>\n");
+                if (ec) {
+                    int sz = comments.size();
+                    if (sz > 0) {iter = comments.iterator();}
                 }
-                buf.append("</table>\n");
-            } else if (esc) {}
+            }
+        }
+
+        buf.append("</table>\n");
+        int ccount = 0;
+        if (iter != null) {
+            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
+            buf.append("<table id=userComments>\n");
+            while (iter.hasNext()) {
+                Comment c = iter.next();
+                buf.append("<tr><td class=commentAuthor>");
+                if (c.getName() != null) {
+                    buf.append("<span class=commentAuthorName title=\"" + DataHelper.escapeHTML(c.getName()) + "\">")
+                       .append(DataHelper.escapeHTML(c.getName())).append("</span>");
+                }
+                buf.append("</td><td class=commentRating>");
+                if (er) {
+                    int rt = c.getRating();
+                    if (rt > 0) {
+                        String img = toSVG("rateme", "★", "");
+                        for (int i = 0; i < rt; i++) {buf.append(img);}
+                    }
+                }
+                buf.append("</td><td class=commentText>");
+                if (esc) {
+                    if (c.getText() != null) {
+                        buf.append("<div class=commentWrapper title=\"").append(_t("Submitted")).append(": ")
+                           .append(fmt.format(new Date(c.getTime()))).append("\">")
+                           .append(DataHelper.escapeHTML(c.getText()))
+                           .append("</div></td><td class=commentDelete><input type=checkbox class=optbox name=\"cdelete.")
+                           .append(c.getID()).append("\" title=\"").append(_t("Mark for deletion")).append("\">");
+                        ccount++;
+                    } else {buf.append("</td><td class=commentDelete>");} // insert empty named columns to maintain table layout
+                } else {buf.append("</td><td class=commentDelete>");} // insert empty named columns to maintain table layout
+                buf.append("</td></tr>\n");
+            }
+            if (esc && ccount > 0) {
+                buf.append("<tr id=commentDeleteAction><td colspan=4 class=commentAction>")
+                   .append("<input type=submit name=deleteComments value=\"")
+                   .append(_t("Delete Selected"))
+                   .append("\" class=delete></td></tr>\n");
+            }
+            buf.append("</table>\n");
+        } else if (esc) {}
     }
 
     /**
