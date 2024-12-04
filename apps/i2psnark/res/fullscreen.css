@@ -1,0 +1,22 @@
+.fullscreen,
+.fullscreen body,
+.fullscreen #torrents.main,
+.fullscreen #i2psnarkframe {
+  margin:0!important;
+  padding:0!important;
+  width:100%;
+  height:100%!important;
+  height:100vh!important;
+  position:absolute;
+  top:0;
+  left:0;
+  bottom:0;
+  right:0;
+  overflow:hidden;
+  border:0!important;
+  contain:paint;
+}
+
+.fullscreen h1 {
+  display:none
+}

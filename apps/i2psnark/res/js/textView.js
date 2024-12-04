@@ -15,11 +15,6 @@ document.addEventListener("DOMContentLoaded", function () {
     'td.snarkFileName>a[href$=".txt"]'
   ];
 
-  const iframedStyles = ".textviewer,.textviewer body,.textviewer #torrents.main,.textviewer #i2psnarkframe" +
-                        "{margin:0!important;padding:0!important;width:100%;height:100%!important;height:100vh!important;" +
-                        "position:absolute;top:0;left:0;bottom:0;right:0;overflow:hidden;border:0!important;contain:paint}" +
-                        ".textviewer h1{display:none}";
-
   const doc = document;
   const parentDoc = window.parent.document;
   const isIframed = doc.documentElement.classList.contains("iframed") || window.parent;
@@ -27,6 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const supportedFileTypes = new Set(["css", "csv", "js", "json", "nfo", "txt", "sh", "srt"]);
   const numberedFileExts = new Set(["css", "js", "sh"]);
   const cssHref = "/i2psnark/.res/textView.css";
+  const iframeCssHref = "/i2psnark/.res/fullscreen.css";
   const textviewContent = doc.getElementById("textview-content");
   const responseCache = new Map();
   const parser = new DOMParser();
@@ -52,21 +48,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const css = doc.createElement("link");
     css.rel = "stylesheet";
     css.href = href;
-    snarkTheme.parentNode.insertBefore(css, snarkTheme);
+    if (href.includes("fullscreen")) {
+      css.id = "fullscreen";
+      parentDoc.body.appendChild(css);
+    } else {snarkTheme.parentNode.insertBefore(css, snarkTheme);}
   }
-
-  const loadIframeCSS = () => {
-    if (!isIframed) return;
-    const cssIframed = doc.createElement("style");
-    cssIframed.id = "textviewCss";
-    cssIframed.innerHTML = iframedStyles;
-    parentDoc.body.appendChild(cssIframed);
-    preventScroll("window.parent.document.documentElement, window.parent.document.body", true);
-  };
 
   function createTextViewer() {
     if (!viewerWrapper) {
       loadCSS(cssHref);
+      if (isIframed) {loadCSS(iframeCssHref);}
       viewerWrapper = doc.createElement("div");
       viewerContent = doc.createElement("div");
       viewerFilename = doc.createElement("div");
@@ -95,7 +86,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     viewerFilename.innerHTML = "";
-    while (viewerFilename.firstChild) { viewerFilename.removeChild(viewerFilename.firstChild); }
     const fileIconTd = link.closest("tr").querySelector("td.fileIcon");
     if (fileIconTd) {
       const fileIcon = fileIconTd.querySelector("img");
@@ -152,9 +142,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const fileIconLink = link.closest("tr").querySelector("td.fileIcon > a");
         if (fileIconLink) {
           doc.documentElement.classList.add("textviewer");
-          if (isIframed && !parentDoc.documentElement.classList.contains("textviewer")) {
-            parentDoc.documentElement.classList.add("textviewer");
-            if (!doc.getElementById("textviewCss")) { loadIframeCSS(); }
+          if (isIframed && !parentDoc.documentElement.classList.contains("fullscreen")) {
+            parentDoc.documentElement.classList.add("textviewer", "fullscreen");
+            if (!doc.getElementById("fullscreenCss")) { loadCSS(iframeCssHref); }
           }
           const fileName = decodeURIComponent(fileIconLink.href.split("/").pop());
           const fileExt = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
@@ -166,12 +156,12 @@ document.addEventListener("DOMContentLoaded", function () {
     viewerContent.addEventListener("click", event => event.stopPropagation());
     viewerWrapper.addEventListener("click", () => {
       viewerWrapper.hidden = true;
-      doc.documentElement.classList.remove("textviewer");
+      doc.documentElement.classList.remove("textviewer", "fullscreen");
       preventScroll("document.documentElement, document.body", false);
       if (isIframed) {
-        parentDoc.documentElement.classList.remove("textviewer");
-        const textviewCss = parentDoc.getElementById("textviewCss");
-        if (textviewCss) { textviewCss.remove(); }
+        parentDoc.documentElement.classList.remove("textviewer", "fullscreen");
+        const fullscreenCss = parentDoc.getElementById("fullscreenCss");
+        if (fullscreenCss) { fullscreenCss.remove(); }
         preventScroll("window.parent.document.documentElement, window.parent.document.body", false);
       }
     });

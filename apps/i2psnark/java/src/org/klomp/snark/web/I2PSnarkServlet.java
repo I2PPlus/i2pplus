@@ -5347,7 +5347,7 @@ public class I2PSnarkServlet extends BasicServlet {
                    .append("</td><td>").append(s).append("</td><td>")
                    .append("<input type=radio class=optbox name=primary");
                 if (s.equals(announce)) {buf.append(" checked=checked ");}
-                buf.append("value=\"").append(hc).append("\"");
+                buf.append(" value=\"").append(hc).append("\"");
                 if (isRunning) {buf.append(" disabled=disabled");}
                 buf.append("></td><td>")
                    .append("<input type=checkbox class=optbox name=\"removeTracker-")
