@@ -208,7 +208,7 @@ td.status img{margin:-2px 3px -2px 1px;height:23px;width:auto;display:inline-blo
 .noneLoaded,.noneLoaded:hover td{font-weight:700;border-radius:0 0 2px 2px;background:linear-gradient(180deg,#313,#101)}
 .noneLoaded i{padding:10px;display:inline-block}
 .rowOdd.filtered:hover td,.rowEven.filtered:hover td,.peerinfo:hover td{border-bottom:1px solid #414}
-.rateDown,.rateUp,.snarkFileName,.snarkFileSize,.rxd,.txd{padding:0 3px;line-height:1;font-weight:700}
+.rateDown,.rateUp,.snarkFileName,.fileSize,.rxd,.txd{padding:0 3px;line-height:1;font-weight:700}
 .rateDown,.rateUp,.ETA,.txd{width:4%;min-width:40px;white-space:nowrap;text-align:center!important}
 .rateDown{color:#76a}
 .rateUp,.txd{color:#b9b}
@@ -347,7 +347,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .dirInfo th:last-child{border-right:var(--border_hard)}
 .dirInfo input[type=submit],.dirInfo a.control{margin:2px 3px}
 .dirInfo input.disabled,.dirInfo a.controld{display:none}
-.dirInfo td,.SnarkDirInfo th{min-width:0;border-bottom:1px solid #202}
+.dirInfo td,.dirInfo th{min-width:0;border-bottom:1px solid #202}
 .dirInfo thead th{padding-top:2px;padding-bottom:2px}
 .dirInfo th a:hover img{opacity:.9;filter:drop-shadow(0 0 1px var(--hover))}
 .dirInfo th a img{opacity:.7}
@@ -355,6 +355,8 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .dirInfo thead th:first-child img{margin-left:2px}
 .dirInfo th img,.dirInfo th img:hover{opacity:.6;filter:none}
 .dirInfo tr:nth-last-child(1) td{border-bottom:var(--border_hard);border-bottom:0}
+.dirInfo .fileSize{text-align:right}
+.dirInfo th.fileSize{text-align:center}
 .dirInfo .fileStatus img{margin:0 3px}
 .dirInfo .fileStatus .iconStatus[src$="warn.svg"]{width:20px;height:20px}
 .dirInfo .barText{padding:0}
@@ -392,7 +394,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .snarkFileName .tags {color:var(--ink);font-weight:500!important;pointer-events:none}
 .snarkFileName .targetfile,.snarkFileName:hover .tags,.snarkFileName a:empty{display:none}
 .snarkFileName .snarkFileName:hover .targetfile{display:inline-block}
-.snarkFileSize{padding:4px 8px 4px 2px;width:1%;white-space:nowrap;font-weight:700;color:#b6b}
+.fileSize{padding:4px 8px 4px 2px;width:1%;white-space:nowrap;font-weight:700;color:#b6b}
 .torrentLink{padding:0;text-align:right}
 #enableInOrder{margin-left:4px;margin-right:8px}
 #mediaContainer th{padding:8px 5px 8px 30px;background:url(/i2psnark/.res/icons/video.png) no-repeat 8px center/16px,var(--th)}
@@ -1089,7 +1091,7 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 #msg .hr{margin-bottom:11px;border-top:1px solid #270527;border-bottom:1px solid #414}
 
 /* text viewer */
-#textview-content{padding-top:44px;color:var(--ink);text-shadow:1px 1px 1px #0008;box-shadow:0 0 0 10px #404,0 0 0 11px #000,var(--highlight),0 0 0 2px #505 inset;background:linear-gradient(180deg,#280828,#303);scrollbar-color:#505 #0000}
+#textview-content{padding-top:44px;color:var(--ink);text-shadow:1px 1px 1px #0008;box-shadow:0 0 0 10px #404,0 0 0 11px #505,0 0 0 12px #101,var(--highlight),0 0 0 2px #505 inset;background:linear-gradient(180deg,#280828,#303);scrollbar-color:#505 #0000}
 #textview-content.pre{color:var(--ink)}
 #textview-content.lines{padding-top:20px;box-shadow:0 0 0 10px #404,0 0 0 11px #000,var(--highlight)}
 #textview-content li{border-bottom:1px solid #202}
@@ -1099,7 +1101,7 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 #textview-content li:nth-child(odd){background:#fff1}
 #textview-content ol{margin:-20px -24px -22px 26px;box-shadow:0 0 0 1px #101 inset}
 #viewerFilename{margin-left:-24px;font-weight:700;border-bottom:1px solid #101;background:#404}
-#viewerFilename::after{width:100%;height:1px;display:block;position:absolute;bottom:-2px;background:#505;content:""}
+#viewerFilename::after{width:calc(100% - 2px);height:1px;display:block;position:absolute;left:1px;bottom:-2px;background:#505;content:""}
 #textview-content.lines #viewerFilename::after{display:none}
 
 /* animations */

@@ -193,7 +193,7 @@ th.peerCount img{margin-left:6px}
 .commentDetails,.details,.trackerLink{padding-left:0;padding-right:0;width:1%;text-align:center;font-weight:700}
 .rowOdd,.createFilterString:nth-child(even),.knownTracker:nth-child(even),#torrentEdit tr:nth-last-child(even){background:#efe6e0}
 .snarkFileName{padding:4px 0;text-align:left;font-size:8pt;font-weight:700}
-.snarkFileSize{padding:4px 2px;width:1%;white-space:nowrap;font-weight:700;color:#727}
+.fileSize{padding:4px 2px;width:1%;white-space:nowrap;font-weight:700;color:#727}
 .tooltipped{display:inline-block;position:relative;z-index:99;content:""}
 .tooltipped:hover{filter:drop-shadow(0 0 1px #0003)}
 .tooltipped:hover::before,.tooltipped:active::before,.tooltipped:hover::after,.tooltipped:active::after{position:absolute;display:inline-block}

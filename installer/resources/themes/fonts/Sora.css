@@ -4,7 +4,7 @@
 }
 *{-webkit-text-stroke:0!important}
 
-a,a.control,a:link,a:visited,a#settings,b,button,h3,h4,h5,input[type="reset"],input[type="submit"],pre,select,textarea,th,.control,.control:link,.control:visited,.dirInfo .snarkFileName a,.fakebutton,.fakebutton:visited,label.tabletitle,.panel th,.rih,.rih a,td a:link,.snarkFileSize,.statvalue,.tab,.torrentDownloaded,.torrentName a,.tunnelConfig th,a#expand,#logs li,#logs pre,#navbar a,#navi a.selected,#ourDest,#sb_localtunnels a,#screenlog li,#sidebar a,#statusMessages,#statusMessages:active,#statusMessages:focus,#torrents .percentBarComplete,#torrents .txBarText,#torrentDisplay label,#torrents tfoot tr:first-child th,#torrentEdit .info_tracker,#trackerselect tr:first-child td{font-weight:600!important}
+a,a.control,a:link,a:visited,a#settings,b,button,h3,h4,h5,input[type="reset"],input[type="submit"],pre,select,textarea,th,.control,.control:link,.control:visited,.dirInfo .snarkFileName a,.fakebutton,.fakebutton:visited,label.tabletitle,.panel th,.rih,.rih a,td a:link,.fileSize,.statvalue,.tab,.torrentDownloaded,.torrentName a,.tunnelConfig th,a#expand,#logs li,#logs pre,#navbar a,#navi a.selected,#ourDest,#sb_localtunnels a,#screenlog li,#sidebar a,#statusMessages,#statusMessages:active,#statusMessages:focus,#torrents .percentBarComplete,#torrents .txBarText,#torrentDisplay label,#torrents tfoot tr:first-child th,#torrentEdit .info_tracker,#trackerselect tr:first-child td{font-weight:600!important}
 h1{font-weight:800}
 h2,.headline h3,.tab2,#sidebar h3,#sidebar h3 a,.main h3,.main h4{font-weight:700}
 .infohash,.infohelp,.infowarn,.listDate,#navi a,#torrents .infohash,.names a[href$=".i2p/"],#host_list td.b32link a,#host_list td.helper a,.lightbox-caption #caption{font-weight:500!important}

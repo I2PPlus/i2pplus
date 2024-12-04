@@ -145,7 +145,7 @@ th a img:hover{filter:drop-shadow(0 0 1px var(--hover)) drop-shadow(0 0 2px #d30
 th.status{text-align:center}
 th.peerCount img{margin-left:-4px}
 th.peerCount{text-align:center}
-th.snarkFileSize{text-align:center}
+th.fileSize{text-align:center}
 td.peerCount{width:1%;white-space:nowrap;text-align:center;font-weight:700;color:var(--ink_light)}
 tfoot .rateUp,tfoot .rateDown,td.rateUp,td.rateDown,tfoot .txd,td.txd{text-align:center}
 .choked{color:#a00}
@@ -174,7 +174,7 @@ tfoot .rateUp,tfoot .rateDown,td.rateUp,td.rateDown,tfoot .txd,td.txd{text-align
 .seeding.active:hover td:last-child{background:linear-gradient(to left,#f64384,#f64384 3px,#0000 3px)}
 .seeding.active td:last-child{background:linear-gradient(to left,#f64384,#f64384 3px,#0000 3px)}
 .snarkFileName{padding:4px 0;text-align:left}
-.snarkFileSize{padding:4px 10px;width:1%;white-space:nowrap;text-align:right;font-weight:400}
+.fileSize{padding:4px 10px;width:1%;white-space:nowrap;text-align:right;font-weight:400}
 .tAction img{margin:0 2px;opacity:1}
 .tAction{padding:2px;width:1%;white-space:nowrap;text-align:center}
 .tAction img:hover{box-shadow:0 0 1px 1px #f90;opacity:1}

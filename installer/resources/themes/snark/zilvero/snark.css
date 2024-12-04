@@ -388,7 +388,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .dirInfo{margin-top:-1px}
 .dirInfo th{background:#fff}
 .dirInfo th:first-child,.dirInfo td:first-child{padding-left:10px;text-align:left}
-.dirInfo th.snarkFileSize{text-align:right;padding-right:10px}
+.dirInfo th.fileSize{text-align:right;padding-right:10px}
 .dirInfo img[src$="priority.png"]{margin:0}
 .fileIcon{width:1%}
 .fileStatus{min-width:40px;text-align:center}

@@ -4511,7 +4511,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (!isTopLevel) {
             buf.append("&nbsp;").append(DataHelper.escapeHTML(directory.substring(dirSlash + 1)));
         }
-        buf.append("</th><th class=snarkFileSize>");
+        buf.append("</th><th class=fileSize>");
         if (showSort) {
             sort = ("-5".equals(sortParam)) ? "5" : "-5";
             buf.append("<a href=\"").append(base).append(getQueryString(sort)).append("\">");
@@ -4704,7 +4704,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append("</a>");
                 }
             } else if (preview != null) {buf.append(preview);}
-            buf.append("</td><td class=snarkFileSize>");
+            buf.append("</td><td class=fileSize>");
             if (!fai.isDirectory) {buf.append(formatSize(length));}
             buf.append("</td><td class=\"fileStatus volatile\">").append(status).append("</td>");
             if (showPriority) {

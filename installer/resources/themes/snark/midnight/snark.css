@@ -358,7 +358,7 @@ tr.priority:last-child{border-bottom:0}
 #setPriority input:disabled[type=submit]{display:none}
 .fileStatus{padding:0 10px;width:1%;font-size:8pt;text-align:center;white-space:nowrap}
 .snarkFileName{font-size:9pt;padding:4px 0;text-align:left}
-.snarkFileSize{font-weight:400;padding:4px 10px 4px 5px;color:#7670c2;width:1%;white-space:nowrap}
+.fileSize{font-weight:400;padding:4px 10px 4px 5px;color:#7670c2;width:1%;white-space:nowrap}
 .priorityIndicator,.dirInfo .barOuter{display:inline-block}
 .priorityIndicator{display:none}
 .fileIcon{padding:0;width:16px;text-align:center}
