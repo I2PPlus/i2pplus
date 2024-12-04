@@ -5,7 +5,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 
   const viewLinks = [
-    'td.fileIcon>a',
+    'td.fileIcon.text>a',
     'td.snarkFileName>a[href$=".css"]',
     'td.snarkFileName>a[href$=".js"]',
     'td.snarkFileName>a[href$=".json"]',
@@ -15,31 +15,36 @@ document.addEventListener("DOMContentLoaded", function () {
     'td.snarkFileName>a[href$=".txt"]'
   ];
 
-  const iframedStyles = ".textviewer,.textviewer body,.textviewer #torrents.main,.textviewer #i2psnarkframe{margin:0!important;padding:0!important;width:100%;height:100%!important;height:100vh!important;position:absolute;top:0;left:0;bottom:0;right:0;overflow:hidden;border:0!important;contain:paint}.textviewer h1{display:none}";
+  const iframedStyles = ".textviewer,.textviewer body,.textviewer #torrents.main,.textviewer #i2psnarkframe" +
+                        "{margin:0!important;padding:0!important;width:100%;height:100%!important;height:100vh!important;" +
+                        "position:absolute;top:0;left:0;bottom:0;right:0;overflow:hidden;border:0!important;contain:paint}" +
+                        ".textviewer h1{display:none}";
 
   const doc = document;
   const parentDoc = window.parent.document;
   const isIframed = doc.documentElement.classList.contains("iframed") || window.parent;
-  const snarkFileNameLinks = doc.querySelectorAll(":where(" + viewLinks.slice(1).join(",") + ")");
+  const snarkFileNameLinks = doc.querySelectorAll(":where(" + viewLinks.join(",") + ")");
   const supportedFileTypes = new Set(["css", "csv", "js", "json", "nfo", "txt", "sh", "srt"]);
   const numberedFileExts = new Set(["css", "js", "sh"]);
   const cssHref = "/i2psnark/.res/textView.css";
-  const textviewContent = document.getElementById("textview-content");
-
+  const textviewContent = doc.getElementById("textview-content");
   const responseCache = new Map();
+  const parser = new DOMParser();
   let listenersActive = false, viewerWrapper, viewerContent, viewerFilename;
 
   const fragment = doc.createDocumentFragment();
   snarkFileNameLinks.forEach(link => {
-    const newTabSpan = doc.createElement("span");
-    newTabSpan.className = "newtab";
-    const newTabLink = doc.createElement("a");
-    newTabLink.href = link.href;
-    newTabLink.target = "_blank";
-    newTabLink.title = "Open in new tab";
-    newTabSpan.appendChild(newTabLink);
-    fragment.appendChild(newTabSpan);
-    link.parentNode.insertBefore(newTabSpan, link.nextSibling);
+    if (link.closest("td.snarkFileName")) {
+      const newTabSpan = doc.createElement("span");
+      newTabSpan.className = "newtab";
+      const newTabLink = doc.createElement("a");
+      newTabLink.href = link.href;
+      newTabLink.target = "_blank";
+      newTabLink.title = "Open in new tab";
+      newTabSpan.appendChild(newTabLink);
+      fragment.appendChild(newTabSpan);
+      link.parentNode.insertBefore(newTabSpan, link.nextSibling);
+    }
   });
 
   function loadCSS(href) {
@@ -56,6 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
     cssIframed.id = "textviewCss";
     cssIframed.innerHTML = iframedStyles;
     parentDoc.body.appendChild(cssIframed);
+    preventScroll("window.parent.document.documentElement, window.parent.document.body", true);
   };
 
   function createTextViewer() {
@@ -82,55 +88,76 @@ document.addEventListener("DOMContentLoaded", function () {
     return `<ol>${lines.join("")}</ol>`;
   };
 
-  const displayText = (fileName, fileExt, linkHref) => {
+  const displayText = (link, fileName, fileExt, linkHref) => {
     if (responseCache.has(linkHref)) {
       renderContent(fileName, fileExt, responseCache.get(linkHref));
       return;
     }
 
-    fetch(linkHref)
-      .then(response => response.text())
-      .then(data => {
-        responseCache.set(linkHref, data);
-        viewerFilename.textContent = fileName;
-        renderContent(fileName, fileExt, data);
-      })
-      .catch(() => {});
+    while (viewerFilename.firstChild) { viewerFilename.removeChild(viewerFilename.firstChild); }
+
+    const fileIconTd = link.closest("tr").querySelector("td.fileIcon");
+    if (fileIconTd) {
+      const fileIcon = fileIconTd.querySelector("img");
+      if (fileIcon) { viewerFilename.prepend(fileIcon.cloneNode(true)); }
+    }
+
+    fetch(linkHref).then(response => response.text()).then(data => {
+      responseCache.set(linkHref, data);
+      renderContent(fileName, fileExt, data);
+    }).catch(() => {});
+
+    const fileNameSpan = doc.createElement("span");
+    fileNameSpan.textContent = fileName;
+    viewerFilename.appendChild(fileNameSpan);
   };
 
   const resetScrollPosition = () => {
-    const txtContent = document.getElementById("textview-content");
+    const txtContent = doc.getElementById("textview-content");
     if (txtContent && txtContent.innerHTML !== "") { txtContent.scrollTop = 0; }
     else { setTimeout(resetScrollPosition, 100); }
   }
 
+  function preventScroll(selectors, prevent) {
+    selectors.forEach(selector => {
+      const elements = document.querySelectorAll(selector);
+      elements.forEach(element => {
+        const handleScroll = (event) => { prevent ? event.preventDefault() : null; };
+        prevent ? element.addEventListener("scroll", handleScroll) : element.removeEventListener("scroll", handleScroll);
+      });
+    });
+  }
+
   const renderContent = (fileName, fileExt, data) => {
     if (fileExt !== "txt" && fileExt !== "srt") { viewerContent.classList.add("pre"); }
-    const escaped = new DOMParser().parseFromString(data, "text/html").documentElement.textContent || data;
+    const escaped = parser.parseFromString(data, "text/html").body.textContent || data;
     const needsHardSpaces = numberedFileExts.has(fileExt) || viewerContent.classList.contains("pre");
-    const encoded = escaped.replace(/ /g, needsHardSpaces ? " " : " ");
+    const encoded = escaped.replace(/ /g, needsHardSpaces ? " " : " ");
     viewerContent.innerHTML = numberedFileExts.has(fileExt) ? displayWithLineNumbers(encoded) : encoded;
     viewerContent.classList.toggle("lines", numberedFileExts.has(fileExt));
-    viewerFilename.textContent = fileName;
     viewerContent.insertBefore(viewerFilename, viewerContent.firstChild);
     viewerWrapper.hidden = false;
     requestAnimationFrame(resetScrollPosition);
+    preventScroll("document.documentElement, document.body", true);
   };
 
   const addListeners = () => {
     if (listenersActive) return;
     snarkFileNameLinks.forEach(link => {
       link.addEventListener("click", event => {
+        if (event.target.classList.contains("newtab")) return;
         event.preventDefault();
-        doc.documentElement.classList.add("textviewer");
-        if (isIframed && !parentDoc.documentElement.classList.contains("textviewer")) {
-          parentDoc.documentElement.classList.add("textviewer");
-          if (!doc.getElementById("textviewCss")) loadIframeCSS();
+        const fileIconLink = link.closest("tr").querySelector("td.fileIcon > a");
+        if (fileIconLink) {
+          doc.documentElement.classList.add("textviewer");
+          if (isIframed && !parentDoc.documentElement.classList.contains("textviewer")) {
+            parentDoc.documentElement.classList.add("textviewer");
+            if (!doc.getElementById("textviewCss")) { loadIframeCSS(); }
+          }
+          const fileName = decodeURIComponent(fileIconLink.href.split("/").pop());
+          const fileExt = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+          if (supportedFileTypes.has(fileExt)) { displayText(fileIconLink, fileName, fileExt, fileIconLink.href); }
         }
-        viewerFilename.textContent = "";
-        const fileName = decodeURIComponent(link.href.split("/").pop());
-        const fileExt = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
-        if (supportedFileTypes.has(fileExt)) displayText(fileName, fileExt, link.href);
       });
     });
 
@@ -138,10 +165,12 @@ document.addEventListener("DOMContentLoaded", function () {
     viewerWrapper.addEventListener("click", () => {
       viewerWrapper.hidden = true;
       doc.documentElement.classList.remove("textviewer");
+      preventScroll("document.documentElement, document.body", false);
       if (isIframed) {
         parentDoc.documentElement.classList.remove("textviewer");
         const textviewCss = parentDoc.getElementById("textviewCss");
-        if (textviewCss) textviewCss.remove();
+        if (textviewCss) { textviewCss.remove(); }
+        preventScroll("window.parent.document.documentElement, window.parent.document.body", false);
       }
     });
     listenersActive = true;
