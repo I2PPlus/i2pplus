@@ -119,11 +119,13 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function preventScroll(selectors, prevent) {
+    if (typeof selectors === "string") { selectors = [selectors]; }
     selectors.forEach(selector => {
       const elements = document.querySelectorAll(selector);
+      const handleScroll = (event) => { event.preventDefault(); };
       elements.forEach(element => {
-        const handleScroll = (event) => { prevent ? event.preventDefault() : null; };
-        prevent ? element.addEventListener("scroll", handleScroll) : element.removeEventListener("scroll", handleScroll);
+        if (prevent) {element.addEventListener("scroll", handleScroll);}
+        else {element.removeEventListener("scroll", handleScroll);}
       });
     });
   }
