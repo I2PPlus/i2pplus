@@ -94,8 +94,8 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
+    viewerFilename.innerHTML = "";
     while (viewerFilename.firstChild) { viewerFilename.removeChild(viewerFilename.firstChild); }
-
     const fileIconTd = link.closest("tr").querySelector("td.fileIcon");
     if (fileIconTd) {
       const fileIcon = fileIconTd.querySelector("img");
