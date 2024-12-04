@@ -480,8 +480,9 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         buf.append("</div>\n");
         String newURL = req.getParameter("newURL");
-        if (newURL != null && newURL.trim().length() > 0 && req.getMethod().equals("GET"))
+        if (newURL != null && newURL.trim().length() > 0 && req.getMethod().equals("GET")) {
             _manager.addMessage(_t("Click \"Add torrent\" button to fetch torrent"));
+        }
         buf.append("<div id=page>\n<div id=mainsection class=mainsection>\n");
         out.write(buf.toString());
         buf.setLength(0);
@@ -766,9 +767,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("<div class=pagenavcontrols id=pagenavtop hidden>");
             writePageNav(out, req, start, pageSize, total, filter, noThinsp);
             out.write("</div>");
-        } else {
-            out.write("<div class=pagenavcontrols id=pagenavtop hidden></div>");
-        }
+        } else {out.write("<div class=pagenavcontrols id=pagenavtop hidden></div>");}
 
         out.write(TABLE_HEADER);
 
@@ -788,24 +787,17 @@ public class I2PSnarkServlet extends BasicServlet {
             hbuf.append("<span class=sortIcon>");
             if (currentSort == null || "-2".equals(currentSort)) {
                 sort = "2";
-                if ( "-2".equals(currentSort)) {
-                    hbuf.append("<span class=ascending></span>");
-                }
+                if ( "-2".equals(currentSort)) {hbuf.append("<span class=ascending></span>");}
             } else if ("2".equals(currentSort)) {
                 sort = "-2";
                 hbuf.append("<span class=descending></span>");
-            } else {
-                sort = "2";
-            }
-            hbuf.append("<a class=sorter href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
-            hbuf.append(separator).append(filterQuery);
-            hbuf.append("\">");
+            } else {sort = "2";}
+            hbuf.append("<a class=sorter href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort))
+                .append(separator).append(filterQuery).append("\">");
         }
         String tx = _t("Status");
         hbuf.append(toThemeImg("status", tx, showSort ? _t("Sort by {0}", tx) : tx));
-        if (showSort) {
-            hbuf.append("</a></span>");
-        }
+        if (showSort) {hbuf.append("</a></span>");}
         hbuf.append("</th><th class=peerCount>");
 
         boolean hasPeers = false;
@@ -841,8 +833,7 @@ public class I2PSnarkServlet extends BasicServlet {
             hbuf.append("<span class=sortIcon>");
             if (currentSort == null || "0".equals(currentSort) || "1".equals(currentSort)) {
                 sort = "-1";
-                if ("1".equals(currentSort) || currentSort == null)
-                    hbuf.append("<span class=ascending></span>");
+                if ("1".equals(currentSort) || currentSort == null) {hbuf.append("<span class=ascending></span>");}
             } else if ("-1".equals(currentSort)) {
                 sort = "12";
                 isTypeSort = true;
@@ -851,9 +842,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 sort = "-12";
                 isTypeSort = true;
                 hbuf.append("<span class=ascending></span>");
-            } else {
-                sort = "1";
-            }
+            } else {sort = "1";}
             hbuf.append("<a class=sorter href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
             hbuf.append(separator).append(filterQuery);
             hbuf.append("\">");
@@ -861,9 +850,7 @@ public class I2PSnarkServlet extends BasicServlet {
         tx = _t("Torrent");
         if (!snarks.isEmpty()) {
             hbuf.append(toThemeImg("torrent", tx, showSort ? _t("Sort by {0}", (isTypeSort ? _t("File type") : _t("Torrent name"))) : tx));
-            if (showSort) {
-                hbuf.append("</a></span>");
-            }
+            if (showSort) {hbuf.append("</a></span>");}
         }
         hbuf.append("</th><th class=tName></th><th class=ETA>");
         // FIXME: only show icon when actively downloading, not uploading
@@ -881,8 +868,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     hbuf.append("<span class=sortIcon>");
                     if (currentSort == null || "-4".equals(currentSort)) {
                         sort = "4";
-                        if ("-4".equals(currentSort))
-                            hbuf.append("<span class=descending></span>");
+                        if ("-4".equals(currentSort)) {hbuf.append("<span class=descending></span>");}
                     } else if ("4".equals(currentSort)) {
                         sort = "-4";
                         hbuf.append("<span class=ascending></span>");
@@ -893,11 +879,9 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
             tx = _t("ETA");
             hbuf.append(toThemeImg("eta", tx, showSort ? _t("Sort by {0}", _t("Estimated time remaining")) : _t("Estimated time remaining")));
-                if (showSort) {
-                    hbuf.append("</a></span>");
-                }
+                if (showSort) {hbuf.append("</a></span>");}
             }
-         }
+        }
         hbuf.append("</th><th class=rxd>");
         // cycle through sort by size or downloaded
         boolean isDlSort = false;
@@ -919,18 +903,13 @@ public class I2PSnarkServlet extends BasicServlet {
                     sort = "-5";
                     isDlSort = true;
                     hbuf.append("<span class=ascending></span>");
-                } else {
-                    sort = "-5";
-                }
-                hbuf.append("<a class=sorter href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
-                hbuf.append(separator).append(filterQuery);
-                hbuf.append("\">");
+                } else {sort = "-5";}
+                hbuf.append("<a class=sorter href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort))
+                    .append(separator).append(filterQuery).append("\">");
             }
             tx = _t("RX");
             hbuf.append(toThemeImg("head_rx", tx, showSort ? _t("Sort by {0}", (isDlSort ? _t("Downloaded") : _t("Size"))) : _t("Downloaded")));
-            if (showSort) {
-                hbuf.append("</a></span>");
-            }
+            if (showSort) {hbuf.append("</a></span>");}
         }
         hbuf.append("</th>");
         hbuf.append("<th class=rateDown>");
@@ -949,14 +928,11 @@ public class I2PSnarkServlet extends BasicServlet {
                     hbuf.append("<span class=sortIcon>");
                     if (currentSort == null || "8".equals(currentSort)) {
                         sort = "-8";
-                        if ("8".equals(currentSort))
-                            hbuf.append("<span class=descending></span>");
+                        if ("8".equals(currentSort)) {hbuf.append("<span class=descending></span>");}
                     } else if ("-8".equals(currentSort)) {
                         sort = "8";
                         hbuf.append("<span class=ascending></span>");
-                    } else {
-                        sort = "-8";
-                    }
+                    } else {sort = "-8";}
                     if (peerParam != null) {
                         hbuf.append("<a class=sorter href=\"" + _contextPath + '/' + getQueryString(req, "1", sort, filter, null));
                     } else {
@@ -966,9 +942,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     hbuf.append("\">");
                     tx = _t("RX Rate");
                     hbuf.append(toThemeImg("head_rxspeed", tx, showSort ? _t("Sort by {0}", _t("Down Rate")) : _t("Down Rate")));
-                    if (showSort) {
-                        hbuf.append("</a></span>");
-                    }
+                    if (showSort) {hbuf.append("</a></span>");}
                 }
             }
         }
@@ -994,17 +968,14 @@ public class I2PSnarkServlet extends BasicServlet {
                 sort = "-7";
                 isRatSort = true;
                 hbuf.append("<span class=ascending></span>");
-            } else {
-                sort = "-7";
-            }
+            } else {sort = "-7";}
             hbuf.append("<a class=sorter href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort))
                 .append(separator).append(filterQuery).append("\">");
         }
         tx = _t("TX");
         hbuf.append(toThemeImg("head_tx", tx, showSort ? _t("Sort by {0}", (nextRatSort ? _t("Upload ratio") : _t("Uploaded"))) : _t("Uploaded")));
         if (showSort) {hbuf.append("</a></span>");}
-        hbuf.append("</th>")
-            .append("<th class=rateUp>");
+        hbuf.append("</th>").append("<th class=rateUp>");
         // FIXME only show icon when total up rate > 0 and no choked peers
         if (_manager.util().connected() && !snarks.isEmpty()) {
             boolean isUploading = false;
@@ -1020,14 +991,11 @@ public class I2PSnarkServlet extends BasicServlet {
                     hbuf.append("<span class=sortIcon>");
                     if (currentSort == null || "9".equals(currentSort)) {
                         sort = "-9";
-                        if ("9".equals(currentSort))
-                            hbuf.append("<span class=ascending></span>");
+                        if ("9".equals(currentSort)) {hbuf.append("<span class=ascending></span>");}
                     } else if ("-9".equals(currentSort)) {
                         sort = "9";
                         hbuf.append("<span class=descending></span>");
-                    } else {
-                        sort = "-9";
-                    }
+                    } else {sort = "-9";}
                     hbuf.append("<a class=sorter href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort))
                         .append(separator).append(filterQuery).append("\">");
                 }
@@ -1036,11 +1004,9 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (showSort) {hbuf.append("</a></span>");}
             }
         }
-        hbuf.append("</th>")
-            .append("<th class=tAction>");
-        if (_manager.isStopping()) {
-            hbuf.append("");
-        } else if (_manager.util().connected()) {
+        hbuf.append("</th>").append("<th class=tAction>");
+        if (_manager.isStopping()) {hbuf.append("");}
+        else if (_manager.util().connected()) {
             hbuf.append("<input type=submit id=actionStopAll name=action_StopAll value=\"")
                 .append(_t("Stop All") + "\" title=\"" + _t("Stop all torrents and the I2P tunnel") + "\">");
             for (Snark s : snarks) {
@@ -1053,7 +1019,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         } else if ((!_manager.util().isConnecting()) && !snarks.isEmpty()) {
             hbuf.append("<input type=submit id=actionStartAll name=action_StartAll value=\"" +
-                      _t("Start All") + "\" title=\"" + _t("Start all torrents and the I2P tunnel") + "\">");
+                        _t("Start All") + "\" title=\"" + _t("Start all torrents and the I2P tunnel") + "\">");
         }
         hbuf.append("</th></tr></thead>\n<tbody id=snarkTbody>");
         out.write(hbuf.toString());
@@ -1083,11 +1049,8 @@ public class I2PSnarkServlet extends BasicServlet {
                     ftr.append(_t("Unreadable") + ": " + DataHelper.escapeHTML(dd.toString()));
                 } else if (!canWrite) {
                     ftr.append(_t("No write permissions for data directory") + ": " + DataHelper.escapeHTML(dd.toString()));
-                } else if (isSearch) {
-                    ftr.append(_t("No torrents found."));
-                } else {
-                    ftr.append(_t("No torrents loaded."));
-                }
+                } else if (isSearch) {ftr.append(_t("No torrents found."));}
+                else {ftr.append(_t("No torrents loaded."));}
             }
             ftr.append("</i></td></tr></tbody>\n").append("<tfoot id=\"snarkFoot");
             if (_manager.util().isConnecting()) {ftr.append("\" class=\"initializing");}
@@ -1123,8 +1086,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
             // connected peers
             ftr.append("<span id=peerCount class=counter title=\"")
-               .append(ngettext("1 connected peer", "{0} connected peers", (int) stats[4])
-               .replace("connected peers", "peer connections"));
+               .append(ngettext("1 connected peer", "{0} peer connections", (int) stats[4]));
             DHT dht = _manager.util().getDHT();
             if (dht != null) {
                 int dhts = dht.size();
@@ -1162,9 +1124,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
                 ftr.append("<span id=tnlInCount class=counter title=\"").append(_t("Active Inbound tunnels")).append("\" hidden>");
                 toThemeSVG(ftr, "inbound", "", "");
-                ftr.append("<span class=badge>").append("</span></span>");
-
-                ftr.append("<span id=tnlOutCount class=counter title=\"").append(_t("Active Outbound tunnels")).append("\" hidden>");
+                ftr.append("<span class=badge>").append("</span></span>")
+                   .append("<span id=tnlOutCount class=counter title=\"").append(_t("Active Outbound tunnels")).append("\" hidden>");
                 toThemeSVG(ftr, "outbound", "", "");
                 ftr.append("<span class=badge>").append("</span></span>");
             }
@@ -1254,15 +1215,11 @@ public class I2PSnarkServlet extends BasicServlet {
         for (int i = 0; i < terms.length; i++) {
             String term = terms[i];
             if (term.length() > 0) {
-                if (searchList == null) {
-                    searchList = new ArrayList<String>(4);
-                }
+                if (searchList == null) {searchList = new ArrayList<String>(4);}
                 searchList.add(Normalizer.normalize(term.toLowerCase(Locale.US), Normalizer.Form.NFKD));
             }
         }
-        if (searchList == null || searchList.isEmpty()) {
-            return new ArrayList<Snark>(0); // empty list
-        }
+        if (searchList == null || searchList.isEmpty()) {return new ArrayList<Snark>(0);} // empty list
         List<Snark> matches = new ArrayList<Snark>(32);
         for (Snark snark : snarks) {
             String lcname = Normalizer.normalize(snark.getBaseName().toLowerCase(Locale.US), Normalizer.Form.NFKD);
@@ -1387,61 +1344,35 @@ public class I2PSnarkServlet extends BasicServlet {
         StringBuilder buf = new StringBuilder(1024);
 
         // First
-        buf.append("<a href=\"")
-           .append(_contextPath)
-           .append(getQueryString(req, null, "", null, null))
-           .append("\"")
-           .append(start > 0 ? "" : " class=disabled")
-           .append("><span id=first>")
-           .append(toThemeSVG("first", _t("First"), _t("First page")))
-           .append("</span></a>");
+        buf.append("<a href=\"").append(_contextPath).append(getQueryString(req, null, "", null, null)).append("\"")
+           .append(start > 0 ? "" : " class=disabled").append("><span id=first>")
+           .append(toThemeSVG("first", _t("First"), _t("First page"))).append("</span></a>");
 
         // Back
         int prev = Math.max(0, start - pageSize);
-        buf.append("<a href=\"")
-           .append(_contextPath)
-           .append(getQueryString(req, null, String.valueOf(prev), null, null))
-           .append("\"")
-           .append(prev > 0 ? "" : " class=disabled")
-           .append("><span id=previous>")
-           .append(toThemeSVG("previous", _t("Prev"), _t("Previous page")))
-           .append("</span></a>");
+        buf.append("<a href=\"").append(_contextPath).append(getQueryString(req, null, String.valueOf(prev), null, null)).append("\"")
+           .append(prev > 0 ? "" : " class=disabled").append("><span id=previous>")
+           .append(toThemeSVG("previous", _t("Prev"), _t("Previous page"))).append("</span></a>");
 
         // Page count
         int pages = 1 + ((total - 1) / pageSize);
-        if (pages == 1 && start > 0) {
-            pages = 2;
-        }
+        if (pages == 1 && start > 0) {pages = 2;}
         if (pages > 1) {
             int page = (start + pageSize >= total) ? pages : (1 + (start / pageSize));
-            buf.append("<span id=pagecount>")
-               .append(page)
-               .append(thinsp(noThinsp))
-               .append(pages)
-               .append("</span>");
+            buf.append("<span id=pagecount>").append(page).append(thinsp(noThinsp)).append(pages).append("</span>");
         }
 
         // Next
         int next = start + pageSize;
-        buf.append("<a href=\"")
-           .append(_contextPath)
-           .append(getQueryString(req, null, String.valueOf(next), null, null))
-           .append("\"")
-           .append(next + pageSize < total ? "" : " class=disabled")
-           .append("><span id=next>")
-           .append(toThemeSVG("next", _t("Next"), _t("Next page")))
-           .append("</span></a>");
+        buf.append("<a href=\"").append(_contextPath).append(getQueryString(req, null, String.valueOf(next), null, null)).append("\"")
+           .append(next + pageSize < total ? "" : " class=disabled").append("><span id=next>")
+           .append(toThemeSVG("next", _t("Next"), _t("Next page"))).append("</span></a>");
 
         // Last
         int last = ((total - 1) / pageSize) * pageSize;
-        buf.append("<a href=\"")
-           .append(_contextPath)
-           .append(getQueryString(req, null, String.valueOf(last), null, null))
-           .append("\"")
-           .append(start + pageSize < total ? "" : " class=disabled")
-           .append("><span id=last>")
-           .append(toThemeSVG("last", _t("Last"), _t("Last page")))
-           .append("</span></a>");
+        buf.append("<a href=\"").append(_contextPath).append(getQueryString(req, null, String.valueOf(last), null, null)).append("\"")
+           .append(start + pageSize < total ? "" : " class=disabled").append("><span id=last>")
+           .append(toThemeSVG("last", _t("Last"), _t("Last page"))).append("</span></a>");
 
         out.write(buf.toString());
         buf.setLength(0);
