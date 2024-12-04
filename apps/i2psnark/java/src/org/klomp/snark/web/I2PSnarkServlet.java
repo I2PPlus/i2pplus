@@ -450,9 +450,8 @@ public class I2PSnarkServlet extends BasicServlet {
             if (_contextName.equals(DEFAULT_NAME)) {buf.append(_t("I2PSnark"));}
             else {buf.append(_contextName);}
             buf.append("</a>\n");
-            //buf.append("<a href=\"").append(_contextPath).append("/configure")
-            //   .append("\" title=\"").append(_t("Configuration")).append("\" class=\"snarkNav nav_config\">")
-            //   .append(_t("Settings")).append("</a>");
+            buf.append("<a href=\"").append(_contextPath).append("/configure\" class=\"snarkNav nav_config\">")
+               .append(_t("Configure")).append("</a>");
             sortedTrackers = _manager.getSortedTrackers();
             sortedFilters = _manager.getSortedTorrentCreateFilterStrings();
             buf.append("<a href=\"http://discuss.i2p/\" class=\"snarkNav nav_forum\" target=_blank title=\"")
@@ -502,22 +501,15 @@ public class I2PSnarkServlet extends BasicServlet {
             synchronized(this) {canWrite = _resourceBase.canWrite();}
             boolean pageOne = writeTorrents(out, req, canWrite);
             boolean enableAddCreate = _manager.util().enableAddCreate();
-            // end of mainsection div
+            out.write("</div>\n"); // end of mainsection div
             if (pageOne || enableAddCreate) {
-                out.write("</div>\n<div id=lowersection>\n");
                 if (canWrite) {
+                    out.write("<div id=lowersection>\n");
                     writeAddForm(out, req);
                     writeSeedForm(out, req, sortedTrackers, sortedFilters);
-                }
-                writeConfigLink(out);
-                // end of lowersection div
-            } else {
-                // end of mainsection div
-                out.write("</div>\n<div id=lowersection>\n");
-                writeConfigLink(out);
-                // end of lowersection div
+                    out.write("</div>\n");
+                } // end of lowersection div
             }
-            out.write("</div>\n");
         }
         if (!isConfigure) {
             out.write("<script src=" + resourcePath + "js/toggleLinks.js type=module></script>\n");
@@ -3641,18 +3633,6 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("#fileFilter .configTitle::after,#trackers .configTitle::after{display:none!important}")
            .append("</style></noscript>\n")
            .append("<script src=\"" + resourcePath + "js/toggleConfigs.js?" + CoreVersion.VERSION + "\"></script>\n");
-        out.write(buf.toString());
-        out.flush();
-        buf.setLength(0);
-    }
-
-    private void writeConfigLink(PrintWriter out) throws IOException {
-        StringBuilder buf = new StringBuilder(192);
-        buf.append("<div id=configSection>\n<span class=snarkConfig>")
-           .append("<span id=tab_config class=configTitle><a href=\"")
-           .append(_contextPath).append("/configure\"><span class=tab_label>")
-           .append(_t("Configuration"))
-           .append("</span></a></span></span>\n</div>\n");
         out.write(buf.toString());
         out.flush();
         buf.setLength(0);

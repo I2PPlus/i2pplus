@@ -54,7 +54,7 @@ tfoot tr:first-child th{vertical-align:middle;color:var(--ink_light)}
 tfoot td:first-child{padding-left:0;text-align:left}
 tfoot th{padding-bottom:4px}
 tr,.navbar,.lowersection{contain:layout}
-.iframed #navbar,.iframed .mainsection,.iframed #addSection,.iframed #createSection,.iframed #configSection,.iframed .configPanel{border-right:0;border-left:0;border-radius:0}
+.iframed #navbar,.iframed .mainsection,.iframed #addSection,.iframed #createSection,.iframed .configPanel{border-right:0;border-left:0;border-radius:0}
 #torrentDisplay .filter,#addTracker,#addTracker + tr,.toggleview,.configTitle,#navbar,img,input{user-select:none}
 #noload td{text-align:center}
 
@@ -99,12 +99,15 @@ a.control img{margin:-1px 3px 1px 2px;height:14px;width:14px}
 a.controld{display:none}
 
 /* top nav */
-.nav_forum:active{background:var(--forum_active) no-repeat 7px center,var(--btn_active)}
-.nav_forum{background:var(--forum) no-repeat 7px center,var(--nav),var(--forum_hover),var(--forum_active)}
-.nav_forum:hover,.nav_forum:focus{background:var(--forum_hover) no-repeat 7px center,var(--btn_hover2)}
 .nav_main{border-radius:3px 0 0 3px;background:var(--snark) no-repeat 7px center,var(--nav),var(--snark_hover),var(--snark_active)}
 .nav_main:hover,.nav_main:focus{background:var(--snark_hover) no-repeat 7px center,var(--btn_hover2)}
 .nav_main:active{background:var(--snark_active) no-repeat 7px center,var(--btn_active)}
+.nav_config{background:var(--nav_config) no-repeat 7px center,var(--nav),var(--nav_config_hover),var(--nav_config_active)}
+.nav_config:hover,.nav_config:focus{background:var(--nav_config_hover) no-repeat 7px center,var(--btn_hover2)}
+.nav_config:active{background:var(--nav_config_active) no-repeat 7px center,var(--btn_active)}
+.nav_forum{background:var(--forum) no-repeat 7px center,var(--nav),var(--forum_hover),var(--forum_active)}
+.nav_forum:hover,.nav_forum:focus{background:var(--forum_hover) no-repeat 7px center,var(--btn_hover2)}
+.nav_forum:active{background:var(--forum_active) no-repeat 7px center,var(--btn_active)}
 .nav_search{border-radius:0 3px 3px 0;background:var(--search) no-repeat 7px center,var(--nav),var(--search_hover),var(--search_active)}
 .nav_search:hover,.nav_search:focus{background:var(--search_hover) no-repeat 7px center,var(--btn_hover2)}
 .nav_search:active{background:var(--search_active) no-repeat 7px center,var(--btn_active)}
@@ -113,7 +116,7 @@ a.controld{display:none}
 .nav_tracker:active{background:var(--tracker_active) no-repeat 7px center,var(--btn_active)}
 .snarkNav,.snarkNav:visited{margin:-1px -2px -1px -3px;padding:5px 7px 5px 23px;display:inline-block;line-height:1.1;letter-spacing:.1em;text-transform:uppercase;font-size:9pt;font-weight:700;text-decoration:none;color:var(--nav_a);border:var(--border);opacity:.85}
 .snarkNav{box-shadow:var(--highlight),0 0 1px rgba(200,200,200,.6)}
-.snarkNav,.snarkNav:hover,.snarkNav:focus{background-size:16px,100%}
+.snarkNav,.snarkNav:hover,.snarkNav:focus,.snarkNav:active{background-size:16px,100%}
 .snarkNav:hover,.snarkNav:focus{color:var(--nav_hover);border:1px solid var(--nav_hover);opacity:1;position:relative;z-index:999}
 .snarkNav:active{text-decoration:none;color:var(--bg);text-shadow:none;box-shadow:var(--btn_shadow_active);transition:linear box-shadow .05s}
 .snarkNav:last-child{border-radius:0 3px 3px 0}
@@ -218,7 +221,7 @@ td.status{padding-left:5px}
 .peerinfo{background:var(--bodybg)}
 .snarkFileName{padding:4px 0;text-align:left;font-weight:700}
 .snarkFileName a{font-weight:700}
-.fileSize{padding:4px 2px;width:1%;white-space:nowrap;font-weight:400}
+.snarkFileSize{padding:4px 2px;width:1%;white-space:nowrap;font-weight:400}
 .fileStatus{padding:4px 8px;width:1%;text-align:center;font-size:9pt;font-style:italic}
 .ETA{font-style:italic}
 .routerdown{padding:10px;color:#363759;font-size:120%;border-bottom:var(--border);box-shadow:var(--highlight);background:linear-gradient(90deg,rgba(160,48,48,.1),rgba(255,255,255,.5),rgba(160,48,48,.1))}
@@ -443,22 +446,21 @@ input:checked + #tab_files{margin-top:-4px}
 
 /* section panels */
 .configPanel{margin:9px 0 0 0;padding:0;background:linear-gradient(180deg,var(--bg),var(--bg3) 40px,var(--bg))}
-.mainsection,#createSection,#addSection,#configSection,.configPanel{word-wrap:break-word;text-align:center;border:var(--border);background:var(--bg)}
+.mainsection,#createSection,#addSection,.configPanel{word-wrap:break-word;text-align:center;border:var(--border);background:var(--bg)}
 .mainsection{margin:0;padding:0;border-bottom:0;background:none}
 .mainsection + .mainsection{margin:-1px 0}
 .snarkAddInfo code{animation:fade .5s ease-out}
 .toggleview{position:relative;z-index:10}
 .iframed #addSection,.iframed #new,.iframed #addSection,.iframed #createSection{margin:-1px 0}
 .iframed #addSection table,.iframed #createSection table:not(#trackerselect){animation:fade .2s ease-out;will-change:transform}
-.iframed #createSection,.iframed #addSection,.iframed #configSection{border-radius:0}
-.iframed #new,.iframed #new + #configSection{margin-top:-11px}
-#addSection,#createSection,#configSection{border-radius:3px;box-shadow:var(--highlight);background-blend-mode:luminosity}
+.iframed #createSection,.iframed #addSection{border-radius:0}
+.iframed #new{margin-top:-11px}
+#addSection,#createSection{border-radius:3px;box-shadow:var(--highlight);background-blend-mode:luminosity}
 #addSection{margin:9px 0;padding:0 10px;background:var(--bg3);background:var(--section)}
 #addSection table,#createSection table{margin-top:-5px}
 #addSection table,#createSection table:not(#trackerselect){animation:slide-in .1s ease-out,fade .5s linear;position:relative;will-change:transform}
 #addtracker td{border-top:var(--border);background:linear-gradient(180deg,var(--bg2),#e7e8ff)}
-#configSection{margin:0;padding:0 10px 12px 10px;background:var(--bg3);background:var(--section)}
-#createSection{margin:0 0 9px 0;padding:0 10px;background:var(--bg3);background:var(--section)}
+#createSection{margin:0 0 9px -3px;padding:0 10px;background:var(--bg3);background:var(--section)}
 #createSection td:first-child,#addSection td:first-child{padding-right:5px;padding-left:5px;width:120px;white-space:nowrap;font-weight:700}
 #createSection td:nth-child(n+2),#addSection td:nth-child(n+2){text-align:left}
 #createSection td:first-child{text-align:right}
@@ -714,7 +716,7 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 #commentstoggle{margin-left:10px;display:inline-block;vertical-align:middle}
 #commentstoggle input{margin-left:4px;margin-right:0;display:inline-block}
 th #nameRequired,th .commentAuthorName{vertical-align:middle}
-.iframed #configSection,.iframed #trackers,.iframed .mainsection#snarkInfo{margin-bottom:-6px}
+.iframed #trackers,.iframed .mainsection#snarkInfo{margin-bottom:-6px}
 .iframed #torrentInfoControl td{border-left:0;border-right:0}
 
 /* comment indicator */
@@ -728,8 +730,8 @@ th #nameRequired,th .commentAuthorName{vertical-align:middle}
 .mainsection input:checked+.toggleview{margin-bottom:-10px}
 .mainsection input:not(:checked)+.toggleview{margin-bottom:-6px}
 .mainsection table,.mainsection#mainsection{border-bottom:0}
-.snarkFileName:hover .targetfile{display:inline-block}
-.snarkFileName .targetfile,.snarkFileName:hover .tags,.snarkFileName a:empty{display:none}
+.snarkFilename:hover .targetfile{display:inline-block}
+.snarkFilename .targetfile,.snarkFilename:hover .tags,.snarkFileName a:empty{display:none}
 #completion:hover #metainfo{display:inline-block;position:absolute;top:28px;left:-120px}
 #completion:not(:hover) #metainfo{display:none}
 #completion{position:relative}
@@ -850,14 +852,14 @@ body{margin:3px}
 .dirInfo .barText,.dirInfo .barOuter{width:60px}
 .dirInfoComplete{display:none}
 .dirInfo th a img,.dirInfo th img{max-height:18px;width:auto}
-.iframed #new,.iframed #new + #configSection{margin-top:-5px}
+.iframed #new{margin-top:-5px}
 .logshim{margin-top:-5px}
 .nav_main{padding-left:22px}
 #page{padding:4px}
 .snarkNav,.snarkNav:hover,.snarkNav:focus{background-size:14px,100%}
 .toggleview,.configTitle{font-size:9.5pt}
-#addSection,#createSection,#configSection,.configPanel{margin-top:4px;margin-bottom:4px}
-#configSection,.configPanel:last-child{margin-bottom:0}
+#addSection,#createSection,.configPanel{margin-top:4px;margin-bottom:4px}
+.configPanel:last-child{margin-bottom:0}
 }
 
 @media (max-width:1000px){

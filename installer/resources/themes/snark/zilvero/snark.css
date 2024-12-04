@@ -151,6 +151,9 @@ textarea[name="nofilter_newComment"]:focus{min-height:64px;box-shadow:inset 0 0 
 .nav_main:link,.nav_main:hover,.nav_main:focus,.nav_main:active{background:var(--b_snark) no-repeat 10px center/16px,var(--btn)}
 .nav_main:hover,.nav_main:focus{background:var(--b_snark_hover) no-repeat 10px center/16px,var(--btn_hover)}
 .nav_main:active{background:var(--b_snark_active) no-repeat 10px center/16px,var(--btn_active)}
+.nav_config:link{background:var(--b_config) no-repeat 10px center/16px,var(--btn)}
+.nav_config:hover,.nav_config:focus{background:var(--b_config_hover) no-repeat 10px center/16px,var(--btn_hover)}
+.nav_config:active{background:var(--b_config_active) no-repeat 10px center/16px,var(--btn_active)}
 .nav_search:link{background:var(--b_search) no-repeat 10px center/16px,var(--btn)}
 .nav_search:hover,.nav_search:focus{background:var(--b_search_hover) no-repeat 10px center/16px,var(--btn_hover)}
 .nav_search:active{background:var(--b_search_active) no-repeat 10px center/16px,var(--btn_active)}
@@ -388,7 +391,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .dirInfo{margin-top:-1px}
 .dirInfo th{background:#fff}
 .dirInfo th:first-child,.dirInfo td:first-child{padding-left:10px;text-align:left}
-.dirInfo th.fileSize{text-align:right;padding-right:10px}
+.dirInfo th.snarkFileSize{text-align:right;padding-right:10px}
 .dirInfo img[src$="priority.png"]{margin:0}
 .fileIcon{width:1%}
 .fileStatus{min-width:40px;text-align:center}
@@ -456,10 +459,10 @@ html:not(.iframed) #snarkInfo~#commentSection{margin-top:4px}
 .iframed input:not(:checked)+#tab_files{margin-bottom:-13px}
 .iframed input:not(:checked)+#tab_torrentedit{margin-bottom:-13px}
 .iframed #snarkInfo~#snarkFiles{margin:5px 0 -7px}
-.snarkFileName .targetfile,.snarkFileName:hover .tags,.snarkFileName a:empty{display:none}
-.snarkFileName:hover .targetfile{display:inline-block}
-#addSection,#createSection,#configSection,.configPanel{border:var(--border)}
-#addSection,#createSection,#configSection,.configPanel,.snarkConfig,#navbar,#screenlog,#torrentDisplay,.pagenavcontrols{box-shadow:var(--highlight);background:#eee;background:var(--noise),linear-gradient(180deg,#fff,#f8f8f8);background-size:248px,100%;background-blend-mode:multiply,normal}
+.snarkFilename .targetfile,.snarkFilename:hover .tags,.snarkFileName a:empty{display:none}
+.snarkFilename:hover .targetfile{display:inline-block}
+#addSection,#createSection,.configPanel{border:var(--border)}
+#addSection,#createSection,.configPanel,.snarkConfig,#navbar,#screenlog,#torrentDisplay,.pagenavcontrols{box-shadow:var(--highlight);background:#eee;background:var(--noise),linear-gradient(180deg,#fff,#f8f8f8);background-size:248px,100%;background-blend-mode:multiply,normal}
 #addSection,#createSection{padding-bottom:5px;transition:ease box-shadow .3s;user-select:none}
 #addSection:hover,#createSection:hover,#addSection:hover .toggleview,#createSection:hover .toggleview,#tab_config:hover,#torrentDisplay .filter:hover,.mainsection:hover .toggleview{box-shadow:inset 0 0 0 1px rgba(200,32,48,.5),inset 0 0 0 2px #fff;transition:ease box-shadow .3s}
 #addSection{margin-top:-1px}
@@ -468,7 +471,7 @@ html:not(.iframed) #snarkInfo~#commentSection{margin-top:4px}
 #addSection hr,#createSection hr{margin:-6px 0}
 #addSection input[type=submit],#createSection input[type=submit]{margin-right:0;min-width:110px;float:none;vertical-align:middle}
 #addSection input[type=text],#createSection input[type=text]{width:calc(100% - 126px);vertical-align:middle}
-#addSection table,#createSection table,#configSection table,.configPanel table{border:0;background:none}
+#addSection table,#createSection table,.configPanel table{border:0;background:none}
 #addSection table{margin-bottom:6px}
 #addSection td:first-child,#createSection td:first-child{white-space:nowrap;min-width:120px}
 #addSection td:first-child{padding-right:10px;text-align:right;font-weight:700}
@@ -481,8 +484,7 @@ body:not(.lang_en) #addSection input[type=text],#createSection input[type=text]{
 #completion:hover #metainfo{display:inline-block;position:absolute;top:24px;left:-120px}
 #completion:not(:hover) #metainfo{display:none}
 #completion{position:relative}
-#configSection,#createSection{margin-top:5px}
-#configSection #tab_config:active a{color:#bbb}
+#createSection{margin-top:5px}
 #createSection table tr:first-child td:first-child{font-weight:700}
 #createSection td:first-child{padding-right:10px;text-align:right;font-weight:700}
 #createSection td:nth-child(2) td:first-child{text-align:left}
@@ -733,7 +735,7 @@ form[action^="/i2psnark/configure"]{display:block}
 
 @supports (-moz-user-select:all){
 #torrentSort img{margin-right:-3px}
-#addSection,#configSection,#createSection{margin-top:-1px}
+#addSection,#createSection{margin-top:-1px}
 }
 
 @media (max-width:1499px){

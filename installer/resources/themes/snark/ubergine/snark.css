@@ -124,6 +124,9 @@ tfoot td:first-child{padding-left:0;text-align:left}
 .snarkNav:last-child[href="/i2psnark/"]{display:inline-block;border-radius:2px}
 .nav_main:hover,.nav_main:focus{background:var(--snark_hover) no-repeat 11px center/18px,var(--nav_hover)}
 .nav_main:active,.nav_main:hover:active,.snarkNav:last-child[href="/i2psnark/"]:active,.nav_main.depress,.nav_main:hover.depress,.snarkNav:last-child[href="/i2psnark/"].depress{background:var(--snark_active) no-repeat 11px center/18px,var(--nav_active)}
+.nav_config{background:var(--nav_config) no-repeat 10px calc(50% + 1px)/16px,var(--nav),var(--nav_config_hover) no-repeat 10px calc(50% + 1px)/0,var(--nav_config_active) no-repeat 10px calc(50% + 1px)/0}
+.nav_config:hover,.nav_config:focus{background:var(--nav_config_hover) no-repeat 10px calc(50% + 1px)/16px,var(--nav_hover)}
+.nav_config:active,.nav_config.depress{background:var(--nav_config_active) no-repeat 10px calc(50% + 1px)/16px,var(--nav_active)}
 .nav_forum{background:var(--forum) no-repeat 11px center/16px,var(--nav),var(--forum_hover) no-repeat 11px center/16px,var(--forum_active) no-repeat 11px center/16px}
 .nav_forum:hover,.nav_forum:focus{background:var(--forum_hover) no-repeat 11px center/16px,var(--nav_hover)}
 .nav_forum:active,.nav_forum.depress{background:var(--forum_active) no-repeat 11px center/16px,var(--nav_active)}
@@ -484,7 +487,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 #tab_comments{margin-top:-1px}
 .iframed .configPanel .configTitle{border:1px solid #878;box-shadow:inset 0 0 1px #868}
 .iframed #tab_config,.iframed .toggleview{border:1px solid #878;border-bottom:1px solid #767;border-top:0;box-shadow:inset 0 0 1px #868,inset 0 -2px 0 2px rgba(0,0,0,.3);filter:drop-shadow(0 1px 2px #101);transition:none}
-.iframed #configSection,.iframed .configPanel#trackers,.iframed .mainsection#snarkInfo{margin-bottom:0}
+.iframed .configPanel#trackers,.iframed .mainsection#snarkInfo{margin-bottom:0}
 .iframed #tab_config:hover,.iframed .toggleview:hover,.iframed input:focus+.toggleview{box-shadow:inset 0 0 1px #434,inset 0 -2px 0 2px rgba(0,0,0,.5)}
 .iframed #tab_config:active,.iframed .toggleview:active,.iframed #tab_config.depress,.iframed .toggleview.depress{box-shadow:inset 0 0 1px #838,inset 4px 4px 3px 2px #101}
 
@@ -635,26 +638,26 @@ td.tAction input[type=submit]{margin-top:1px}
 #trackerselect td:first-child{font-weight:400}
 #trackerselect td:nth-child(n+2){text-align:center}
 #trackerselect td:nth-child(2),#trackerselect td:nth-child(3){max-width:60px;overflow:hidden;text-overflow:ellipsis}
+.configPanel,.section,.mainsection,#addSection,#createSection{margin:0 0 10px 0;word-wrap:break-word;color:var(--ink);border:var(--border_hard);border-radius:4px;box-shadow:var(--bevel);background:var(--panel)}
 .configPanel{padding:0 10px}
 .configPanel input[type=checkbox],.configPanel input[type=text],.configPanel select,.configPanel input.r,.configPanel input[name="nofilter_dataDir"]{margin-left:0}
 .configPanel tr:last-child{display:none}
 .configPanel tr:nth-last-child(2) td{padding-top:10px;text-align:right;border-top:1px solid #57415f}
+#addSection form,#createSection form{margin-top:1px;color:var(--ink)}
 #addSection input[type=text],#createSection input[type=text]{width:80%}
 #addSection table,#createSection table:not(#trackerselect){animation:fade .05s linear,slide-in .05s linear;will-change:transform}
 #addSection td:first-child,#createSection td:first-child{width:10%;white-space:nowrap}
 #commentSection>input:not(:checked)+.toggleview{margin-bottom:-1px}
-#configSection{padding:0 10px 13px}
-#createSection,#addSection,#configSection,.configPanel,.section,.mainsection{margin:0 0 10px 0;word-wrap:break-word;color:var(--ink);border:var(--border_hard);border-radius:4px;box-shadow:var(--bevel);background:var(--panel)}
-#createSection form,#configSection form,#addSection form{margin-top:1px;color:var(--ink)}
-#createSection:hover,#addSection:hover,#configSection:hover,.iframed #createSection:hover,.iframed #addSection:hover,.iframed #configSection:hover{background-blend-mode:normal}
+#createSection:hover,#addSection:hover,.iframed #addSection:hover,.iframed #createSection:hover{background-blend-mode:normal}
 #editSection hr{margin-bottom:0}
 #mainsection{padding-bottom:9px}
-.iframed .configPanel,.iframed .mainsection#commentSection,.iframed #addSection,.iframed #configSection,.iframed #createSection{margin-top:-11px}
-.iframed .mainsection,.iframed #createSection,.iframed #addSection,.iframed #commentSection,.iframed #configSection,.iframed .configPanel{border-radius:0;box-shadow:inset 0 0 1px 0 #ffeffd;filter:none;background-blend-mode:luminosity,normal}
+.iframed .configPanel,.iframed .mainsection#commentSection,.iframed #addSection,.iframed #createSection{margin-top:-11px}
+.iframed .mainsection,.iframed #createSection,.iframed #addSection,.iframed #commentSection,.iframed .configPanel{border-radius:0;box-shadow:inset 0 0 1px 0 #ffeffd;filter:none;background-blend-mode:luminosity,normal}
 .iframed .mainsection .toggleview{margin-top:-10px}
+.iframed #addSection,.iframed #createSection{padding-bottom:3px}
 .iframed #addSection table{animation:fade .05s linear,slide-in .05s ease-out;animation:none}
 .iframed #commentSection,.iframed #editSection{margin:-1px 0 0}
-.iframed #createSection,.iframed #addSection{padding-bottom:3px}
+.iframed #createSection{margin-bottom:-3px}
 .iframed #createSection table:not(#trackerselect){animation:fade .05s linear;animation:none}
 .iframed #editSection+#commentSection{margin-top:-1px}
 .iframed .mainsection#commentSection,.iframed #editSection{margin-bottom:0}
@@ -1209,7 +1212,7 @@ td.status img{margin-left:1px;height:20px;width:auto}
 .knownTracker a,#trackerselect td a{display:inline-block;max-width:230px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .knownTracker td:nth-child(3) a{max-width:190px}
 .logshim{margin-top:-6px}
-.mainsection,#addSection,#createSection,#configSection,.configPanel,.mainsection#snarkInfo,.iframed .mainsection#snarkInfo,#fileFilter{margin-bottom:6px}
+.mainsection,#addSection,#createSection,.configPanel,.mainsection#snarkInfo,.iframed .mainsection#snarkInfo,#fileFilter{margin-bottom:6px}
 .iframed #fileFilter{margin-bottom:10px}
 #page{padding:6px 6px 0}
 .peerinfo td:first-child{background-position:right 3px center}
