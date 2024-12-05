@@ -16,6 +16,7 @@
 --border:1px solid #bbb;
 --border_filtered:none;
 --border_hard:1px solid #777;
+--btn:linear-gradient(180deg,#fff,#f8f8f8);
 --btn_active:linear-gradient(180deg,#f2f2f2,#f8f8f8);
 --btn_hover:linear-gradient(180deg,#fff,#ddd);
 --btn:linear-gradient(180deg,#f8f8f8,#eaeaea);
@@ -439,6 +440,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .toggleview{position:relative;z-index:10}
 .toggleview:hover{text-decoration:none;cursor:pointer}
 .toggleview:hover,#tab_config:hover{background:var(--btn_hover)}
+.toggleview:active,.toggleview.depress,#tab_config:active,#tab_config.depress{background:var(--btn_active)}
 .toggleview img{display:none}
 .toggle_input{position:absolute;opacity:0}
 input.toggle_input+label+hr+table{display:none}
@@ -462,11 +464,9 @@ html:not(.iframed) #snarkInfo~#commentSection{margin-top:4px}
 .snarkFilename:hover .targetfile{display:inline-block}
 #addSection,#createSection,.configPanel{border:var(--border)}
 #addSection,#createSection,.configPanel,.snarkConfig,#navbar,#screenlog,#torrentDisplay,.pagenavcontrols{box-shadow:var(--highlight);background:#eee;background:var(--noise),linear-gradient(180deg,#fff,#f8f8f8);background-size:248px,100%;background-blend-mode:multiply,normal}
-#addSection,#createSection{padding-bottom:5px;transition:ease box-shadow .3s;user-select:none}
-#addSection:hover,#createSection:hover,#addSection:hover .toggleview,#createSection:hover .toggleview,#tab_config:hover,#torrentDisplay .filter:hover,.mainsection:hover .toggleview{box-shadow:inset 0 0 0 1px rgba(200,32,48,.5),inset 0 0 0 2px #fff;transition:ease box-shadow .3s}
+#addSection,#createSection{padding-bottom:5px;user-select:none}
+#addSection:hover,#createSection:hover,#addSection:hover .toggleview,#createSection:hover .toggleview,#tab_config:hover,#torrentDisplay .filter:hover,.mainsection:hover .toggleview{box-shadow:inset 0 0 0 1px rgba(200,32,48,.5),inset 0 0 0 2px #fff}
 #addSection{margin-top:-1px}
-#addSection:hover .toggleview:active,#createSection:hover .toggleview:active,.toggleview:hover,.toggleview:active,.toggleview.depress,.toggleview.inert{color:#bbb}
-#addSection:hover .toggleview,#createSection:hover .toggleview,.mainsection:hover .toggleview,#tab_config a:hover,#tab_config a:focus{color:var(--hover)}
 #addSection hr,#createSection hr{margin:-6px 0}
 #addSection input[type=submit],#createSection input[type=submit]{margin-right:0;min-width:110px;float:none;vertical-align:middle}
 #addSection input[type=text],#createSection input[type=text]{width:calc(100% - 126px);vertical-align:middle}
@@ -474,7 +474,7 @@ html:not(.iframed) #snarkInfo~#commentSection{margin-top:4px}
 #addSection table{margin-bottom:6px}
 #addSection td:first-child,#createSection td:first-child{white-space:nowrap;min-width:120px}
 #addSection td:first-child{padding-right:10px;text-align:right;font-weight:700}
-#addSection .toggleview:active,#addSection .toggleview.depress,#createSection .toggleview:active,#createSection .toggleview.depress,#tab_config:active,#tab_config.depress{box-shadow:var(--highlight),inset 3px 3px 3px #bbb}
+#addSection .toggleview:active,#addSection .toggleview.depress,#createSection .toggleview:active,#createSection .toggleview.depress,#tab_config:active,#tab_config.depress{box-shadow:var(--highlight),inset 3px 3px 3px #bbb;background:}
 body:not(.lang_en) #addSection input[type=text],#createSection input[type=text]{width:calc(100% - 172px)}
 #commentSection #commentInfo{margin-top:-7px}
 #commentSection table:last-child{margin-bottom:0}
@@ -727,8 +727,8 @@ form[action^="/i2psnark/configure"]{display:block}
 .tempDisabled{filter:opacity(.3);pointer-events:none;transition:filter ease .5s}
 
 /* router down */
-#circle::before{border:#d23!important;box-shadow:0 0 0 8px #fff,0 0 0 8px #d23 inset!important;filter:saturate(0);mix-blend-mode:luminosity}
-#offline{background:#fff3!important}
+#circle::before{border:#d23!important;box-shadow:0 0 0 8px #000,0 0 0 8px #d23 inset!important;filter:sepia(1) hue-rotate(-60deg) saturate(1.5)}
+#offline{background:#200e!important}
 
 /* animations */
 @keyframes disappear{from{visibility:visible}to{visibility:collapse}}
