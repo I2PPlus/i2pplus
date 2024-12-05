@@ -1158,4 +1158,14 @@
   addEventListener(window, 'readystatechange', chkLateLoaded)
   chkLateLoaded()
 
+  document.addEventListener('DOMContentLoaded', () => {
+    const endOfPage = document.getElementById('endOfPage');
+    if (!endOfPage) {
+      const newElement = document.createElement('span');
+      newElement.id = 'endOfPage';
+      newElement.setAttribute('data-iframe-height', '');
+      document.body.appendChild(newElement);
+    }
+  });
+
 })()
