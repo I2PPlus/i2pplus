@@ -48,20 +48,18 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
         // add to the defaults for every 128MB of RAM, up to 512MB
         long maxMemory = SystemVersion.getMaxMemory();
         int factor = (int) Math.max(1l, Math.min(4l, 1 + (maxMemory / (128*1024*1024l))));
-        if (SystemVersion.isSlow())
-            factor *= 2;
+        if (SystemVersion.isSlow()) {factor *= 2;}
         int defaultMin = DEFAULT_DH_PRECALC_MIN * factor;
         int defaultMax = DEFAULT_DH_PRECALC_MAX * factor;
         _minSize = ctx.getProperty(PROP_DH_PRECALC_MIN, defaultMin);
         _maxSize = ctx.getProperty(PROP_DH_PRECALC_MAX, defaultMax);
         _calcDelay = ctx.getProperty(PROP_DH_PRECALC_DELAY, DEFAULT_DH_PRECALC_DELAY);
 
-        if (_log.shouldDebug())
-            _log.debug("XDH Precalc (minimum: " + _minSize + " max: " + _maxSize + ", delay: "
-                       + _calcDelay + ")");
+        if (_log.shouldDebug()) {
+            _log.debug("XDH Precalc (minimum: " + _minSize + " max: " + _maxSize + ", delay: " + _calcDelay + ")");
+        }
         _keys = new LinkedBlockingQueue<KeyPair>(_maxSize);
-        if (!SystemVersion.isWindows())
-            setPriority(Thread.NORM_PRIORITY - 1);
+        if (!SystemVersion.isWindows()) {setPriority(Thread.NORM_PRIORITY - 1);}
     }
 
     /**
@@ -76,11 +74,9 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
     }
 
     public void run() {
-        try {
-            run2();
-        } catch (IllegalStateException ise) {
-            if (_isRunning)
-                throw ise;
+        try {run2();}
+        catch (IllegalStateException ise) {
+            if (_isRunning) {throw ise;}
             // else ignore, thread can be slow to shutdown on Android,
             // PRNG gets stopped first and throws ISE
         }
@@ -91,32 +87,25 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
         while (_isRunning) {
             int startSize = getSize();
             // Adjust delay
-            if (startSize <= (_minSize * 2 / 3) && _checkDelay > 1000)
-                _checkDelay -= 1000;
-            else if (startSize > (_minSize * 3 / 2) && _checkDelay < 60*1000)
-                _checkDelay += 1000;
+            if (startSize <= (_minSize * 2 / 3) && _checkDelay > 1000) {_checkDelay -= 1000;}
+            else if (startSize > (_minSize * 3 / 2) && _checkDelay < 60*1000) {_checkDelay += 1000;}
             if (startSize < _minSize) {
                 // fill all the way up, do the check here so we don't
                 // throw away one when full in addValues()
                 while (getSize() < _maxSize && _isRunning) {
                     long curStart = System.currentTimeMillis();
-                    if (!addKeys(precalc()))
-                        break;
+                    if (!addKeys(precalc())) {break;}
                     long curCalc = System.currentTimeMillis() - curStart;
                     // for some relief...
                     if (!interrupted()) {
-                        try {
-                            Thread.sleep(Math.min(200, Math.max(10, _calcDelay + (curCalc * 3))));
-                        } catch (InterruptedException ie) {}
+                        try {Thread.sleep(Math.min(200, Math.max(10, _calcDelay + (curCalc * 3))));}
+                        catch (InterruptedException ie) {}
                     }
                 }
             }
-            if (!_isRunning)
-                break;
-            try {
-                Thread.sleep(_checkDelay);
-            } catch (InterruptedException ie) { // nop
-            }
+            if (!_isRunning) {break;}
+            try {Thread.sleep(_checkDelay);}
+            catch (InterruptedException ie) {} // no-op
         }
     }
 
@@ -142,8 +131,9 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
         long end = System.currentTimeMillis();
         long diff = end - start;
         _context.statManager().addRateData("crypto.XDHGenerateTime", diff);
-        if (_log.shouldDebug())
+        if (_log.shouldDebug()) {
             _log.debug("Took " + diff + "ms to generate local DH value");
+        }
         return rv;
     }
 
@@ -152,17 +142,12 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
      * to be put back onto the queue for reuse.
      */
     public void returnUnused(KeyPair kp) {
-        if (_keys.offer(kp))
-            _context.statManager().addRateData("crypto.XDHReused", 1);
+        if (_keys.offer(kp)) {_context.statManager().addRateData("crypto.XDHReused", 1);}
     }
 
     /** @return true if successful, false if full */
-    private final boolean addKeys(KeyPair kp) {
-        return _keys.offer(kp);
-    }
+    private final boolean addKeys(KeyPair kp) {return _keys.offer(kp);}
 
-    private final int getSize() {
-        return _keys.size();
-    }
+    private final int getSize() {return _keys.size();}
 
 }
