@@ -454,14 +454,14 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(_t("Configure")).append("</a>");
             sortedTrackers = _manager.getSortedTrackers();
             sortedFilters = _manager.getSortedTorrentCreateFilterStrings();
-            buf.append("<a href=\"http://discuss.i2p/\" class=\"snarkNav nav_forum\" target=_blank title=\"")
+            buf.append("<a href=http://discuss.i2p/ class=\"snarkNav nav_forum\" target=_blank title=\"")
                .append(_t("Torrent &amp; filesharing forum")).append("\">").append(_t("Forum")).append("</a>");
             for (Tracker t : sortedTrackers) {
                 if (t.baseURL == null || !t.baseURL.startsWith("http")) {continue;}
                 if (_manager.util().isKnownOpenTracker(t.announceURL)) {continue;}
                 buf.append("\n<a href=\"").append(t.baseURL).append("\" class=\"snarkNav nav_tracker\" target=_blank>").append(t.name).append("</a>");
             }
-            buf.append("\n<a href=\"http://btdigg.i2p/\" class=\"snarkNav nav_search\" target=_blank title=\"")
+            buf.append("\n<a href=http://btdigg.i2p/ class=\"snarkNav nav_search\" target=_blank title=\"")
                .append(_t("I2P-based search engine for clearnet-hosted torrents")).append("\">").append(_t("BTDigg")).append("</a>");
         }
         if (_manager.getTorrents().size() > 1) {
