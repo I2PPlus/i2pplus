@@ -14,7 +14,7 @@ body.textview{height:100vh}
 #textview-content.lines{margin:-20px -24px -22px;contain:paint}
 #textview[hidden]{display:none;z-index:-1;pointer-events:none}
 #viewerFilename{margin-left:-24px;padding:0 0 8px;width:100%;position:absolute;top:0;font-family:var(--bodyfont);font-size:700;border-bottom:1px solid #999;background:#ddd}
-#viewerFilename img{margin-right:5px}
+#viewerFilename img{margin-right:5px;vertical-align:middle}
 #textview-content ol{margin:-18px -23px 8px 24px;padding:29px 0 0}
 #textview-content li::marker{content:counter(list-item) "  ";counter-increment:list-item}
 #textview-content li:nth-child(odd){background:#0001}
