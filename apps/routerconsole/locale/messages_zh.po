@@ -6312,7 +6312,7 @@ msgid "I2P+"
 msgstr "I2P+"
 
 msgid "A soft fork of the Java I2P software which retains full compatibility, providing an enhanced user interface and improvements to network performance. See <a href=http://skank.i2p/ class=sitelink target=_blank rel=noreferrer>http://skank.i2p/</a> or <a href=https://i2pplus.github.io class='sitelink external' target=_blank rel=noreferrer>https://i2pplus.github.io</a>for more information."
-msgstr "Java I2P 软件的软分支，保留了完全的兼容性以及增强的用户界面和网络性能的改进。 查看 <a href=\"http://skank.i2p/static/i2p+.html\" class=\"sitelink\" target=\"_blank\">http://skank.i2p/static/i2p+.html</a> 了解更多。"
+msgstr "Java I2P 软件的软分支，保留了完全的兼容性以及增强的用户界面和网络性能的改进。 查看 <a href=http://skank.i2p/index_zh.html class=sitelink target=_blank>skank.i2p/index_zh.html</a> 了解更多。"
 
 msgid "I2PBote (plugin)"
 msgstr "I2PBote (插件)"
