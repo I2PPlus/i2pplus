@@ -339,8 +339,8 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{margin-right:0;
 #torrentSort .ascending,th#torrentSort .descending{right:-11px}
 
 /* prolonged button press */
-.depress{transition:ease all .2s;border}
-.inert{transition:border ease-out .1s,background ease-out .1s}
+.depress,.depress+.tab_label::after{transition:all ease .15s;border;pointer-events:none}
+.inert,.inert+.tab_label::after{transition:all ease-out .15s}
 .tempDisabled{filter:opacity(.3);pointer-events:none;transition:filter ease .5s}
 
 /* action buttons */
@@ -572,7 +572,7 @@ td.subHeaderPriority{padding:0 1px;font-size:7.5pt;font-weight:700;background-im
 .magnetlink:hover,.magnetlink:focus,#torrentInfo .torrentlink:hover,#torrentInfo .torrentlink:focus{box-shadow:var(--outline),inset 0 0 0 1px rgba(255,96,0,.5)}
 .torrentlink img:hover,.magnetlink img:hover{filter:none}
 th.torrentlink{text-align:left}
-#torrentInfo{border-bottom:var(--border);background:url(/themes/console/dark/images/camotile2.png) repeat scroll center bottom #010}
+#torrentInfo{margin:5px 0 10px;border-bottom:var(--border);background:url(/themes/console/dark/images/camotile2.png) repeat scroll center bottom #010}
 #torrentInfo b{margin-right:3px}
 #torrentInfo img{margin:1px 0 1px 2px;max-height:16px;vertical-align:text-bottom}
 #torrentInfo input[type=submit]{min-width:85px}
@@ -777,6 +777,7 @@ input.trackerhome,input.trackerannounce{width:210px}
 
 /* toggle panels */
 .configTitle,.toggleview{margin:0 0 -3px;min-width:300px;display:inline-block;font-size:0;border:var(--border);border-radius:0 0 3px 3px;border-top:0;box-shadow:var(--highlight),inset 0 0 0 2px rgba(0,0,0,.1),0 1px 1px #000;background:linear-gradient(180deg,#001800,#000800 50%,#000);contain:paint}
+.toggleview{background:radial-gradient(circle at center -200%,#1514,#0000 55%),linear-gradient(180deg,#001800,#000800 50%,#000)}
 .configTitle{margin-bottom:-2px}
 .iframed .configTitle,.iframed .toggleview{border-radius:0}
 .configTitle a:visited,.toggleview{color:#7c7}
@@ -786,9 +787,10 @@ input:not(:checked)+.toggleview+hr+table,input:not(:checked)+.toggleview+hr+tabl
 .toggleview:hover,input.toggle_input:focus+.toggleview{color:var(--hover);cursor:pointer}
 
 /* tabs */
-input:checked+.toggleview:active .tab_label::after{box-shadow:0 0 0 2px rgb(153,51,0,.7);filter:drop-shadow(0 0 1px #930);transform:rotate(-90deg) scale(.9);transition:linear transform .01s}
 .configTitle a{display:inline-block;width:100%}
-.tab_label::after{margin:3px;padding:3px;width:18px;height:18px;display:inline-block;vertical-align:middle;border:2px solid #000;border-radius:50%;box-shadow:0 0 1px 1px rgba(32,0,48,.5);background-size:16px,100%;content:"";mix-blend-mode:luminosity;pointer-events:none;will-change:transform}
+.tab_label::after{margin:3px;padding:3px;width:18px;height:18px;display:inline-block;vertical-align:middle;border:2px solid #000;border-radius:50%;box-shadow:0 0 1px 1px rgba(32,0,48,.5);background-size:16px,100%;content:"";mix-blend-mode:luminosity;pointer-events:none;will-change:transform;transition:all ease .1s}
+.toggleview .tab_label::after,.toggleview.depress .tab_label::after{transition:all ease .1s}
+input:checked+.toggleview:active .tab_label::after,input:checked+.toggleview.depress .tab_label::after{box-shadow:0 0 0 2px rgb(153,51,0,.7);filter:drop-shadow(0 0 1px #930);transform:rotate(-90deg) scale(.9)}
 .toggleview,#tab_config{min-width:340px;text-align:center;will-change:transform}
 .toggleview,#tab_config a{font-size:0}
 .toggleview:hover .tab_label::after,#tab_config:hover .tab_label::after{mix-blend-mode:normal;filter:drop-shadow(0 0 1px #f30)}
