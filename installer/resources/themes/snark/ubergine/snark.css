@@ -1096,7 +1096,7 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 /* text viewer */
 #textview-content{padding-top:44px;color:var(--ink);text-shadow:1px 1px 1px #0008;box-shadow:0 0 0 10px #404,0 0 0 11px #505,0 0 0 12px #101,var(--highlight),0 0 0 2px #505 inset;background:linear-gradient(180deg,#280828,#303);scrollbar-color:#505 #0000}
 #textview-content.pre{color:var(--ink)}
-#textview-content.lines{padding-top:20px;box-shadow:0 0 0 10px #404,0 0 0 11px #000,var(--highlight)}
+#textview-content.lines{padding-top:20px}
 #textview-content li{border-bottom:1px solid #202}
 #textview-content li{padding:2px 8px}
 #textview-content li::marker{color:#e4d3d7aa}
@@ -1105,7 +1105,6 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 #textview-content ol{margin:-20px -24px -22px 26px;box-shadow:0 0 0 1px #101 inset}
 #viewerFilename{margin-left:-24px;font-weight:700;border-bottom:1px solid #101;background:#404}
 #viewerFilename::after{width:calc(100% - 2px);height:1px;display:block;position:absolute;left:1px;bottom:-2px;background:#505;content:""}
-#textview-content.lines #viewerFilename::after{display:none}
 
 /* animations */
 @keyframes active{from{background:linear-gradient(to left,#dd0 1px,rgba(255,255,0,0) 1px)}}

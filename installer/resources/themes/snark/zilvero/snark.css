@@ -514,6 +514,7 @@ body:not(.lang_en) #addSection input[type=text],#createSection input[type=text]{
 #torrentEdit th,#torrentEdit td{text-align:center;width:25%}
 #torrentEdit tr:first-child td{padding-top:12px}
 #torrentEdit tr:not(.header)+tr:not(.header) td{border-top:1px solid #ddd}
+#trackers{margin-top:-5px}
 #trackerselect td:first-child{padding-left:5px}
 #trackerselect td:first-child,#trackerselect td:last-child{width:30%}
 #trackerselect tr:first-child td:first-child{border-radius:4px 0 0 0}
@@ -688,7 +689,7 @@ form[action^="/i2psnark/configure"]{display:block}
 #contentFilter{width:100%;margin:2px 0 -4px 2px;display:flex;flex-wrap:wrap}
 #contentFilter input[type=checkbox]{display:none}
 #createTorrentFilters{display:table-row}
-#fileFilter{width:calc(100% - 2px);margin:0 auto;display:block}
+#fileFilter{width:calc(100% - 2px);margin:-1px auto 0;display:block}
 #fileFilter table{margin:0 auto 4px;width:calc(100% - 20px);border:0}
 #fileFilter th,#fileFilter td{text-align:left}
 #fileFilter th{font-size:85%;white-space:nowrap;border-bottom:0}

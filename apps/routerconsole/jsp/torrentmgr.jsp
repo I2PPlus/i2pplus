@@ -13,6 +13,7 @@
 <%@include file="head.jsi" %>
 <%=intl.title("torrents")%>
 <style>iframe{display:none;pointer-events:none}</style>
+<link rel=stylesheet href=/i2psnark/.res/fullscreen.css>
 </head>
 <body>
 <script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>

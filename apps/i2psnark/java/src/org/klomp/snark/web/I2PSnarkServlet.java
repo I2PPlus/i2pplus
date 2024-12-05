@@ -323,8 +323,7 @@ public class I2PSnarkServlet extends BasicServlet {
                            .append("<head>\n").append("<meta charset=utf-8>\n");
         if (!isStandalone()) {
             buf.append("<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js?").append(CoreVersion.VERSION).append("\" id=iframeResizer></script>\n")
-               .append("<script src=\"/js/iframeResizer/updatedEvent.js?").append(CoreVersion.VERSION).append("\"></script>\n")
-               .append("<link rel=stylesheet href=/i2psnark/.res/fullscreen.css>\n");
+               .append("<script src=\"/js/iframeResizer/updatedEvent.js?").append(CoreVersion.VERSION).append("\"></script>\n");
         }
         buf.append("<meta name=viewport content=\"width=device-width\">\n");
         if (!isStandalone() && useSoraFont()) {
@@ -3813,8 +3812,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append(DOCTYPE).append("<html>\n<head>\n<meta charset=utf-8>\n");
         if (!isStandalone()) {
             buf.append("<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js?").append(CoreVersion.VERSION)
-               .append("\" id=iframeResizer></script>\n")
-               .append("<link rel=stylesheet href=/i2psnark/.res/fullscreen.css>\n");
+               .append("\" id=iframeResizer></script>\n");
         }
         buf.append("<script src=" + resourcePath + "js/click.js type=module></script>\n").append("<title>");
         if (title.endsWith("/")) {title = title.substring(0, title.length() - 1);}
@@ -3862,10 +3860,10 @@ public class I2PSnarkServlet extends BasicServlet {
 **/
 
         buf.append("</head>\n<body style=display:none;pointer-events:none class=lang_").append(lang).append(">\n");
-        buf.append("<center>\n<div id=navbar><a href=\"").append(_contextPath).append("/\" title=Torrents class=\"snarkNav nav_main\">");
-        if (_contextName.equals(DEFAULT_NAME)) {buf.append(_t("I2PSnark"));}
-        else {buf.append(_contextName);}
-        buf.append("</a>\n</div>\n");
+        buf.append("<center>\n<div id=navbar><a href=\"").append(_contextPath).append("/\" title=").append(_t("Torrents"))
+           .append(" class=\"snarkNav nav_main\">").append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName).append("</a>\n")
+           .append("<a href=\"").append(_contextPath).append("/configure\" class=\"snarkNav nav_config\">").append(_t("Configure")).append("</a>")
+           .append("</div>\n");
 
         if (parent) {buf.append("<div class=page id=dirlist>\n");} // always true
          // for stop/start/check
