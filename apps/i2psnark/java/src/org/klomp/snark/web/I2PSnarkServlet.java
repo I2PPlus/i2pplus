@@ -320,7 +320,7 @@ public class I2PSnarkServlet extends BasicServlet {
             pageBackground = "repeating-linear-gradient(180deg,#6f5b4c 1px,#a9927e 1px,#bfa388 4px),#cab39b";
         }
         buf.append(DOCTYPE).append("<html style=\"background:").append(pageBackground).append("\">\n")
-           .append("<head>\n").append("<meta charset=utf-8>\n");
+                           .append("<head>\n").append("<meta charset=utf-8>\n");
         if (!isStandalone()) {
             buf.append("<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js?").append(CoreVersion.VERSION).append("\" id=iframeResizer></script>\n")
                .append("<script src=\"/js/iframeResizer/updatedEvent.js?").append(CoreVersion.VERSION).append("\"></script>\n")
@@ -702,23 +702,24 @@ public class I2PSnarkServlet extends BasicServlet {
                         buf.append(Math.max(pageSizeConf, 10)).append(" / ").append(total);
                     } else {buf.append(total);}
                     buf.append("</span></span></a>")
-                        .append("<a class=filter id=active href=\"").append(buttonUrl).append("active\"><span>")
-                        .append(_t("Active")).append("<span class=badge></span></span></a>")
-                        .append("<a class=filter id=inactive href=\"").append(buttonUrl).append("inactive\"><span>")
-                        .append(_t("Inactive")).append("<span class=badge></span></span></a>")
-                        .append("<a class=filter id=connected href=\"").append(buttonUrl).append("connected\"><span>")
-                        .append(_t("Connected")).append("<span class=badge></span></span></a>")
-                        .append("<a class=filter id=downloading href=\"").append(buttonUrl).append("downloading\"><span>")
-                        .append(_t("Downloading")).append("<span class=badge></span></span></a>")
-                        .append("<a class=filter id=seeding href=\"").append(buttonUrl).append("seeding\"><span>")
-                        .append(_t("Seeding")).append("<span class=badge></span></span></a>")
-                        .append("<a class=filter id=complete href=\"").append(buttonUrl).append("complete\"><span>")
-                        .append(_t("Complete")).append("<span class=badge></span></span></a>")
-                        .append("<a class=filter id=incomplete href=\"").append(buttonUrl).append("incomplete\"><span>")
-                        .append(_t("Incomplete")).append("<span class=badge></span></span></a>")
-                        .append("<a class=filter id=stopped href=\"").append(buttonUrl).append("stopped\"><span>")
-                        .append(_t("Stopped")).append("<span class=badge></span></span></a>")
-                        .append("</div>\n");
+                       .append("<a class=filter id=active href=\"").append(buttonUrl).append("active\"><span>")
+                       .append(_t("Active")).append("<span class=badge></span></span></a>")
+                       .append("<a class=filter id=inactive href=\"").append(buttonUrl).append("inactive\"><span>")
+                       .append(_t("Inactive")).append("<span class=badge></span></span></a>")
+                       .append("<a class=filter id=connected href=\"").append(buttonUrl).append("connected\"><span>")
+                       .append(_t("Connected")).append("<span class=badge></span></span></a>")
+                       .append("<a class=filter id=downloading href=\"").append(buttonUrl).append("downloading\"><span>")
+                       .append(_t("Downloading")).append("<span class=badge></span></span></a>")
+                       .append("<a class=filter id=seeding href=\"").append(buttonUrl).append("seeding\"><span>")
+                       .append(_t("Seeding")).append("<span class=badge></span></span></a>")
+                       .append("<a class=filter id=complete href=\"").append(buttonUrl).append("complete\"><span>")
+                       .append(_t("Complete")).append("<span class=badge></span></span></a>")
+                       .append("<a class=filter id=incomplete href=\"").append(buttonUrl).append("incomplete\"><span>")
+                       .append(_t("Incomplete")).append("<span class=badge></span></span></a>")
+                       .append("<a class=filter id=stopped href=\"").append(buttonUrl).append("stopped\"><span>")
+                       .append(_t("Stopped")).append("<span class=badge></span></span></a>")
+                       .append("</div>\n")
+                       .append("<script src=/i2psnark/.res/js/filterBar.js type=module></script>\n");
                 }
             }
             out.write(buf.toString());
