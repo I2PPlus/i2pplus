@@ -10,18 +10,21 @@ import {initToggleLog} from "./toggleLog.js";
 import {Lightbox} from "./lightbox.js";
 import {initSnarkAlert} from "./snarkAlert.js";
 
+const doc = document;
+const parentDoc = window.parent.document;
 const cache = new Map(), cacheDuration = 5000;
-const debugMode = document.getElementById("debugMode");
-const files = document.getElementById("dirInfo");
-const filterbar = document.getElementById("torrentDisplay");
-const home = document.querySelector("#navbar .nav_main");
-const mainsection = document.getElementById("mainsection");
+const debugMode = doc.getElementById("debugMode");
+const files = doc.getElementById("dirInfo");
+const filterbar = doc.getElementById("torrentDisplay");
+const home = doc.querySelector("#navbar .nav_main");
+const mainsection = doc.getElementById("mainsection");
 const query = window.location.search;
-const screenlog = document.getElementById("screenlog");
-const snarkHead = document.getElementById("snarkHead");
+const screenlog = doc.getElementById("screenlog");
+const snarkHead = doc.getElementById("snarkHead");
 const storageRefresh = localStorage.getItem("snarkRefresh");
-const torrents = document.getElementById("torrents");
-const torrentForm = document.getElementById("torrentlist");
+const torrents = doc.getElementById("torrents");
+const torrentForm = doc.getElementById("torrentlist");
+const isIframed = doc.documentElement.classList.contains("iframed") || window.parent;
 const MESSAGE_TYPES = {
   FETCH_HTML_DOCUMENT: "FETCH_HTML_DOCUMENT",
   FETCH_HTML_DOCUMENT_RESPONSE: "FETCH_HTML_DOCUMENT_RESPONSE",
@@ -95,7 +98,7 @@ async function initHandlers() {
   }
   setLinks();
   await requestIdleOrAnimationFrame(async () => {
-    if (document.getElementById("pagenavtop")) await pageNav();
+    if (doc.getElementById("pagenavtop")) await pageNav();
     if (filterbar) await showBadge();
     if (debugging) console.log("initHandlers()");
   });
@@ -115,7 +118,7 @@ async function updateElementTextContent(elem, respElem) {
 
 const worker = new Worker("/i2psnark/.res/js/snarkWork.js");
 const parser = new DOMParser();
-const container = document.createElement("div");
+const container = doc.createElement("div");
 let abortController = new AbortController();
 
 async function fetchHTMLDocument(url, forceFetch = false) {
@@ -124,7 +127,7 @@ async function fetchHTMLDocument(url, forceFetch = false) {
     if (!forceFetch) {
       const cachedDocument = cache.get(url);
       const now = Date.now();
-      if (cachedDocument && (now - cachedDocument.timestamp < cacheDuration)) { return cachedDocument.doc; }
+      if (cachedDocument && (now - cacheddoc.timestamp < cacheDuration)) { return cacheddoc.doc; }
     }
     const { signal } = abortController;
     const response = await fetch(url, { signal });
@@ -162,18 +165,18 @@ async function doRefresh({ url = window.location.href, forceFetch = false } = {}
 
 async function refreshTorrents(callback) {
   try {
-    const complete = document.getElementsByClassName("completed");
-    const control = document.getElementById("torrentInfoControl");
-    const dirlist = document.getElementById("dirlist");
-    const down = document.getElementById("NotFound") || document.getElementById("down");
+    const complete = doc.getElementsByClassName("completed");
+    const control = doc.getElementById("torrentInfoControl");
+    const dirlist = doc.getElementById("dirlist");
+    const down = doc.getElementById("NotFound") || doc.getElementById("down");
     const filterEnabled = localStorage.hasOwnProperty("snarkFilter");
 
     if (!initialized && !down) {
       initialized = true;
-      if (window.top !== parent.window.top && !document.documentElement.classList.contains("iframed")) {
-        document.documentElement.classList.add("iframed");
+      if (window.top !== parent.window.top && !doc.documentElement.classList.contains("iframed")) {
+        doc.documentElement.classList.add("iframed");
       }
-      if (!document.getElementById("tnlInCount")) {
+      if (!doc.getElementById("tnlInCount")) {
         snarkHead.classList.add("initializing");
         await new Promise(resolve => setTimeout(() => {
           snarkHead.classList.remove("initializing");
@@ -182,9 +185,7 @@ async function refreshTorrents(callback) {
       }
     }
 
-    if (!storageRefresh) {
-      localStorage.setItem("snarkRefresh", await getRefreshInterval());
-    }
+    if (!storageRefresh) { localStorage.setItem("snarkRefresh", await getRefreshInterval()); }
 
     await setLinks(query);
 
@@ -222,7 +223,7 @@ async function refreshTorrents(callback) {
                   activeBadgeResponse = responseDoc.querySelector("#torrentDisplay .filter#all.enabled .badge");
             await updateElementTextContent(activeBadge, activeBadgeResponse);
 
-            const pagenavtop = document.getElementById("pagenavtop"),
+            const pagenavtop = doc.getElementById("pagenavtop"),
                   pagenavtopResponse = responseDoc.querySelector("#pagenavtop"),
                   filterbarResponse = responseDoc.querySelector("#torrentDisplay");
 
@@ -257,16 +258,14 @@ async function refreshTorrents(callback) {
             }
           }
         }
-      } catch (error) {
-        if (debugging) console.error(error);
-      }
+      } catch (error) { if (debugging) console.error(error); }
     }
 
     async function refreshHeaderAndFooter() {
       try {
         const url = await getURL();
         const responseDoc = await fetchHTMLDocument(url);
-        const snarkFoot = document.getElementById("snarkFoot"),
+        const snarkFoot = doc.getElementById("snarkFoot"),
               snarkFootResponse = responseDoc.querySelector("#snarkFoot");
         const snarkHeadResponse = responseDoc.querySelector("#snarkHead");
         await updateElementInnerHTML(snarkFoot, snarkFootResponse);
@@ -274,17 +273,14 @@ async function refreshTorrents(callback) {
       } catch(error) {}
     }
 
-  } catch (error) {}
+  } catch (error) { if (debugging) console.error(error); }
 }
 
 async function refreshScreenLog(callback, forceFetch = false) {
   return new Promise(async (resolve) => {
     try {
-      const screenlog = document.getElementById("messages");
-      if (!screenlog || (screenlog.hidden && screenlog.textContent.trim() === "")) {
-        resolve();
-        return;
-      }
+      const screenlog = doc.getElementById("messages");
+      if (!screenlog || (screenlog.hidden && screenlog.textContent.trim() === "")) { resolve(); return; }
       screenlog.removeAttribute("hidden");
       let responseDoc;
       if (!callback && !forceFetch && cache.has("screenlog")) {
@@ -294,29 +290,23 @@ async function refreshScreenLog(callback, forceFetch = false) {
       }
       if (!responseDoc || forceFetch) {
         responseDoc = await fetchHTMLDocument("/i2psnark/.ajax/xhrscreenlog.html", forceFetch);
-        if (!responseDoc) {
-          resolve();
-          return;
-        }
+        if (!responseDoc) { resolve(); return; }
         cache.set("screenlog", [responseDoc, Date.now() + cacheDuration * 3]);
       }
       const screenlogResponse = responseDoc.getElementById("messages");
-      if (!screenlogResponse) {
-        resolve();
-        return;
-      }
+      if (!screenlogResponse) { resolve(); return; }
       await updateElementInnerHTML(screenlog, screenlogResponse);
-      if (callback) callback();
+      if (callback) {callback();}
       resolve();
     } catch (error) {resolve();}
   });
 }
 
 function refreshOnSubmit() {
-  document.addEventListener("click", async (event) => {
+  doc.addEventListener("click", async (event) => {
     if (event.target.matches("input[type=submit]")) {
       const form = event.target.form;
-      const iframe = document.getElementById("processForm");
+      const iframe = doc.getElementById("processForm");
       if (form && iframe) {
         const formSubmitted = new Promise((resolve) => {
           const loadHandler = () => {
@@ -345,37 +335,32 @@ async function initSnarkRefresh() {
           await refreshScreenLog();
           await initToggleLog();
         }
-      } catch (error) {
-        if (debugging) console.error(error);
-      }
+      } catch (error) { if (debugging) console.error(error); }
     }, await getRefreshInterval());
 
-    if (files && document.getElementById("lightbox")) {
+    if (files && doc.getElementById("lightbox")) {
       const lightbox = new Lightbox();
       lightbox.load();
     }
 
-    const events = document._events?.click || [];
-    events.forEach(event => document.removeEventListener("click", event));
+    const events = doc._events?.click || [];
+    events.forEach(event => doc.removeEventListener("click", event));
     refreshOnSubmit();
-  } catch (error) {
-    if (debugging) console.error(error);
-  }
+  } catch (error) { if (debugging) console.error(error); }
 }
 
-function stopSnarkRefresh() {
-  clearInterval(snarkRefreshIntervalId);
-}
+function stopSnarkRefresh() { clearInterval(snarkRefreshIntervalId); }
 
 async function checkIfUp() {
   if (!isDocumentVisible) {return;}
   try {
-    const overlay = document.getElementById("offline");
-    const offlineStylesheet = document.getElementById("offlineCss");
+    const overlay = doc.getElementById("offline");
+    const offlineStylesheet = doc.getElementById("offlineCss");
     const response = await fetch(window.location.href, { method: "HEAD" });
     if (response.ok) {
       if (overlay) {overlay.remove();}
       if (offlineStylesheet) {offlineStylesheet.remove();}
+      if (isIframed) {parentDoc.documentElement.classList.remove("isDown");}
     }
   } catch (error) {
     if (debugging) {console.error(error);}
@@ -386,24 +371,23 @@ async function checkIfUp() {
 
 function isDown() {
   const offlineStyles = `:root{--chimp:url(/themes/snark/midnight/images/chimp.webp);--spinner:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cg%3E%3Cpath d='M78.75 16.18V1.56a64.1 64.1 0 0 1 47.7 47.7H111.8a49.98 49.98 0 0 0-33.07-33.08zM16.43 49.25H1.8a64.1 64.1 0 0 1 47.7-47.7V16.2a49.98 49.98 0 0 0-33.07 33.07zm33.07 62.32v14.62A64.1 64.1 0 0 1 1.8 78.5h14.63a49.98 49.98 0 0 0 33.07 33.07zm62.32-33.07h14.62a64.1 64.1 0 0 1-47.7 47.7v-14.63a49.98 49.98 0 0 0 33.08-33.07z' fill='%23dd5500bb'/%3E%3CanimateTransform attributeName='transform' type='rotate' from='0 64 64' to='-90 64 64' dur='1200ms' repeatCount='indefinite'/%3E%3C/g%3E%3C/svg%3E")}*{user-select:none}body,html,#circle,#offline{margin:0;padding:0;height:100vh;min-height:100%;position:relative;overflow:hidden}#circle,#offline{position:absolute;top:0;left:0;bottom:0;right:0}#offline{z-index:99999999;background:#000d;backdrop-filter:blur(2px)}#circle::before{content:"";width:230px;height:230px;border-radius:50%;border:28px solid #303;box-shadow:0 0 0 8px #000,0 0 0 8px #000 inset;display:block;position:absolute;top:calc(50% - 132px);left:calc(50% - 135px);background:radial-gradient(circle at center,rgba(0,0,0,0),70%,#313 75%),var(--spinner) no-repeat center center/240px,var(--chimp) no-repeat calc(50% + 5px) calc(50% + 10px)/250px,#000;transform:scale(.8);will-change:transform}`;
-  const offlineCss = document.createElement("style");
+  const offlineCss = doc.createElement("style");
   offlineCss.id = "offlineCss";
   offlineCss.textContent = offlineStyles;
-  const offline = document.createElement("div");
-  const spinner = document.createElement("div");
+  const offline = doc.createElement("div");
+  const spinner = doc.createElement("div");
   offline.id = "offline";
   spinner.id = "circle";
   offline.appendChild(spinner);
-  if (!document.getElementById("offline")) {
-    document.head.appendChild(offlineCss);
-    document.body.appendChild(offline);
-    torrents.querySelectorAll("td, th").forEach(cell => {cell.textContent = "";});
-    screenlog.querySelectorAll(".msg").forEach(li => {li.textContent = "";});
+  if (!doc.getElementById("offline")) {
+    doc.head.appendChild(offlineCss);
+    doc.body.appendChild(offline);
   }
+  if (isIframed) {parentDoc.documentElement.classList.add("isDown");}
 }
 
-document.addEventListener("visibilitychange", () => {
-  isDocumentVisible = !document.hidden;
+doc.addEventListener("visibilitychange", () => {
+  isDocumentVisible = !doc.hidden;
   if (isDocumentVisible) {initSnarkRefresh();}
   else {stopSnarkRefresh();}
 });

@@ -323,7 +323,8 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<head>\n").append("<meta charset=utf-8>\n");
         if (!isStandalone()) {
             buf.append("<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js?").append(CoreVersion.VERSION).append("\" id=iframeResizer></script>\n")
-               .append("<script src=\"/js/iframeResizer/updatedEvent.js?").append(CoreVersion.VERSION).append("\"></script>\n");
+               .append("<script src=\"/js/iframeResizer/updatedEvent.js?").append(CoreVersion.VERSION).append("\"></script>\n")
+               .append("<link rel=stylesheet href=/i2psnark/.res/fullscreen.css>\n");
         }
         buf.append("<meta name=viewport content=\"width=device-width\">\n");
         if (!isStandalone() && useSoraFont()) {
@@ -3811,7 +3812,8 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append(DOCTYPE).append("<html>\n<head>\n<meta charset=utf-8>\n");
         if (!isStandalone()) {
             buf.append("<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js?").append(CoreVersion.VERSION)
-               .append("\" id=iframeResizer></script>\n");
+               .append("\" id=iframeResizer></script>\n")
+               .append("<link rel=stylesheet href=/i2psnark/.res/fullscreen.css>\n");
         }
         buf.append("<script src=" + resourcePath + "js/click.js type=module></script>\n").append("<title>");
         if (title.endsWith("/")) {title = title.substring(0, title.length() - 1);}

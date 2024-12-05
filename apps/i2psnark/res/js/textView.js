@@ -22,7 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const supportedFileTypes = new Set(["css", "csv", "js", "json", "nfo", "txt", "sh", "srt"]);
   const numberedFileExts = new Set(["css", "js", "sh"]);
   const cssHref = "/i2psnark/.res/textView.css";
-  const iframeCssHref = "/i2psnark/.res/fullscreen.css";
   const textviewContent = doc.getElementById("textview-content");
   const responseCache = new Map();
   const parser = new DOMParser();
@@ -48,16 +47,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const css = doc.createElement("link");
     css.rel = "stylesheet";
     css.href = href;
-    if (href.includes("fullscreen")) {
-      css.id = "fullscreen";
-      parentDoc.body.appendChild(css);
-    } else {snarkTheme.parentNode.insertBefore(css, snarkTheme);}
+    snarkTheme.parentNode.insertBefore(css, snarkTheme);
   }
 
   function createTextViewer() {
     if (!viewerWrapper) {
       loadCSS(cssHref);
-      if (isIframed) {loadCSS(iframeCssHref);}
       viewerWrapper = doc.createElement("div");
       viewerContent = doc.createElement("div");
       viewerFilename = doc.createElement("div");
@@ -144,7 +139,6 @@ document.addEventListener("DOMContentLoaded", function () {
           doc.documentElement.classList.add("textviewer");
           if (isIframed && !parentDoc.documentElement.classList.contains("fullscreen")) {
             parentDoc.documentElement.classList.add("textviewer", "fullscreen");
-            if (!doc.getElementById("fullscreenCss")) { loadCSS(iframeCssHref); }
           }
           const fileName = decodeURIComponent(fileIconLink.href.split("/").pop());
           const fileExt = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
@@ -160,8 +154,6 @@ document.addEventListener("DOMContentLoaded", function () {
       preventScroll("document.documentElement, document.body", false);
       if (isIframed) {
         parentDoc.documentElement.classList.remove("textviewer", "fullscreen");
-        const fullscreenCss = parentDoc.getElementById("fullscreenCss");
-        if (fullscreenCss) { fullscreenCss.remove(); }
         preventScroll("window.parent.document.documentElement, window.parent.document.body", false);
       }
     });

@@ -166,11 +166,6 @@ class Lightbox {
       this.parentDoc.body.style.overflow = "hidden";
       this.parentDoc.body.style.contain = "paint";
       this.parentDoc.documentElement.style.overflow = "hidden";
-      this.css = document.createElement("link");
-      this.css.rel = "stylesheet";
-      this.css.href = "/i2psnark/.res/fullscreen.css";
-      this.css.id = "fullscreen";
-      this.parentDoc.body.appendChild(this.css);
       this.parentDoc.documentElement.classList.add("lightbox", "fullscreen");
       this.box.style.height = `${window.parent.innerHeight}px`;
     } else {this.box.style.height = "100vh";}
