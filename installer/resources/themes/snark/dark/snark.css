@@ -37,7 +37,7 @@ input.default{width:1px;height:1px;visibility:hidden}
 input.disabled,a.controld{opacity:.5;cursor:not-allowed}
 input[type=submit],input.disabled:hover,a.control{padding:8px 12px;min-width:95px;font-size:8.5pt;font-weight:700;text-align:center;color:#494;border:1px solid #000;border-radius:2px;background:var(--btn);filter:none}
 input[type=submit]:hover,input[type=submit]:focus,a.control:hover,a.control:focus{color:var(--hover);border:1px solid var(--hover);box-shadow:var(--btn_shadow_hover);background-color:#000}
-input[type=submit]:active,a.control:active{color:var(--ink);text-shadow:none;border:1px solid var(--hover);box-shadow:var(--btn_shadow_active);background:var(--hover)}
+input[type=submit]:active,a.control:active,input[type=submit].depress,a.control.depress{color:var(--ink);text-shadow:none;border:1px solid var(--hover);box-shadow:var(--btn_shadow_active);background:var(--hover)}
 input.disabled{color:#494;border:1px solid #000;box-shadow:var(--btn_shadow);pointer-events:none}
 input[type=text],input[type=password],textarea,select{box-sizing:border-box;line-height:1.3;font-size:8.5pt}
 input[type=text],textarea[name="nofilter_newComment"]{padding:6px 7px;transition:ease box-shadow .1s}
@@ -87,26 +87,26 @@ select{margin:2px 4px 2px 0;padding:7px 24px 7px 12px;min-width:120px;font-size:
 #navbar a:not(:hover):not(:focus):not(:active){color:#32ff32}
 .nav_main{border-radius:1px 0 0 1px;padding-left:24px;background:#000 var(--snark) no-repeat 7px center}
 .nav_main:hover,.nav_main:focus{background-image:var(--snark_hover),var(--nav_hover)}
-.nav_main:active{background:var(--snark_active) no-repeat 7px center,var(--nav_active)}
+.nav_main:active,.nav_main.depress{background:var(--snark_active) no-repeat 7px center,var(--nav_active)}
 .nav_config{background:#000 var(--nav_config) no-repeat 7px center}
 .nav_config:hover,.nav_config:focus{background-image:var(--nav_config_hover),var(--nav_hover)}
-.nav_config:active{background:var(--nav_config_active) no-repeat 7px center,var(--nav_active)}
+.nav_config:active,.nav_config.depress{background:var(--nav_config_active) no-repeat 7px center,var(--nav_active)}
 .nav_forum{background:#000 var(--forum) no-repeat 7px center}
 .nav_forum:hover,.nav_forum:focus{background-image:var(--forum_hover),var(--nav_hover)}
-.nav_forum:active{background:var(--forum_active) no-repeat 7px center,var(--nav_active)}
+.nav_forum:active,.nav_depress{background:var(--forum_active) no-repeat 7px center,var(--nav_active)}
 .nav_search{background:#000 var(--search) no-repeat 7px center}
 .nav_search:hover,.nav_search:focus{background-image:var(--search_hover),var(--nav_hover)}
-.nav_search:active{background:var(--search_active) no-repeat 7px center,var(--nav_active)}
+.nav_search:active,.nav_search.depress{background:var(--search_active) no-repeat 7px center,var(--nav_active)}
 .nav_tracker{background:#000 var(--tracker) no-repeat 7px center}
 .nav_tracker:hover,.nav_tracker:focus{background-image:var(--tracker_hover),var(--nav_hover)}
-.nav_tracker:active{background:var(--tracker_active) no-repeat 7px center,var(--nav_active)}
+.nav_tracker:active,.nav_tracker.depress{background:var(--tracker_active) no-repeat 7px center,var(--nav_active)}
 .nav_main.snarkNav:last-child{border-radius:1px}
 .snarkNav{margin:-1px -2px 0;padding:4px 7px 5px 23px;display:inline-block;position:relative;line-height:1.2;letter-spacing:.1em;text-transform:uppercase;font-size:10pt;font-weight:700;text-shadow:0 0 1px #000;border:1px solid #4a4;border-radius:0;box-shadow:var(--highlight),inset 0 0 1px 1px #0f0;opacity:.5}
-.snarkNav,.snarkNav:hover,.snarkNav:focus{color:#177d17;background-size:15px,100%;background-position:7px center,center center,center center;background-repeat:no-repeat,repeat}
+.snarkNav,.snarkNav:hover,.snarkNav:focus,.snarkNav.depress{color:#177d17;background-size:15px,100%;background-position:7px center,center center,center center;background-repeat:no-repeat,repeat}
 .nav_config,.nav_config:hover,.nav_config:focus,.nav_config:active{background-size:13px,100%}
 .snarkNav:hover,.snarkNav:focus{z-index:10;color:var(--hover);border:1px solid #930;border-radius:0;box-shadow:var(--highlight),inset 0 0 0 2px rgba(255,96,0,.2);opacity:1}
 .snarkNav:last-child{border-radius:0 1px 1px 0}
-.snarkNav:active,.snarkNav:active{box-shadow:var(--highlight),inset 2px 2px 2px 1px rgba(0,0,0,.6);text-shadow:none;color:#fff;background-size:14px,100%,100%;background-repeat:no-repeat;filter:none;transition:ease box-shadow .05s}
+.snarkNav:active,.snarkNav.depress{box-shadow:var(--highlight),inset 2px 2px 2px 1px rgba(0,0,0,.6);text-shadow:none;color:#fff;background-size:14px,100%,100%;background-repeat:no-repeat;filter:none;transition:ease box-shadow .05s}
 .iframed .nav_main,.iframed .nav_main.snarkNav:last-child,.iframed .snarkNav:last-child{border-radius:0}
 .iframed .snarkNav:last-child[href="/i2psnark/"]{margin-top:0}
 
@@ -337,6 +337,11 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{margin-right:0;
 .sortIcon:hover .descending{top:-2px;border-color:var(--hover) #0000 #0000 #0000}
 #torrentSort .ascending,th#torrentSort .descending{right:-11px}
 
+/* prolonged button press */
+.depress{transition:ease all .2s;border}
+.inert{transition:border ease-out .1s,background ease-out .1s}
+.tempDisabled{filter:opacity(.3);pointer-events:none;transition:filter ease .5s}
+
 /* action buttons */
 #torrents .tAction{padding:1px;width:1%;white-space:nowrap;text-align:center}
 #torrents .tAction input{margin:1px 2px;padding:11px;min-width:0;min-height:0;float:none;vertical-align:middle;font-size:0;border:1px solid #262;border-radius:1px;box-shadow:var(--highlight);background-position:center center;opacity:.75;cursor:pointer;will-change:transform}
@@ -354,7 +359,7 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{margin-right:0;
 #torrents #actionStartAll:hover,#torrents #actionStartAll:focus{background:var(--startall_hover) no-repeat center center/auto 14px,var(--btnAction_hover)}
 #torrents #actionStopAll:hover,#torrents #actionStopAll:focus{background:var(--stopall_hover) no-repeat center center/auto 14px,var(--btnAction_hover)}
 #torrents .tAction input:hover,#torrents .tAction input:focus{border:1px solid var(--hover);opacity:1;transition:ease box-shadow .1s;background-blend-mode:normal}
-#torrents .tAction input:active{box-shadow:var(--highlight),inset 3px 3px 3px #000;transform:scale(0.9);transition:ease transform .05s;filter:none}
+#torrents .tAction input:active,#torrents .tAction input.depress{box-shadow:var(--highlight),inset 3px 3px 3px #000;transform:scale(0.9);transition:ease transform .05s;filter:none}
 
 /* percent bars */
 tr:hover .barText{opacity:1}
@@ -630,7 +635,7 @@ input.trackerhome,input.trackerannounce{width:210px}
 .snarkConfig tr:nth-last-child(2),.snarkConfig tr:hover:nth-last-child(2){background:none}
 .snarkConfig tr:nth-last-child(2) td,#configs td[colspan="5"]{text-align:right;padding:11px 15px 0;border-top:var(--border)}
 .configTitle:hover a,.configTitle a:focus{color:var(--hover);transition:ease all .1s}
-.configTitle:active,.toggleview:active{background:var(--th);box-shadow:var(--btn_shadow_active);transition:linear box-shadow .1s}
+.configTitle:active,.toggleview:active,.configTitle.depress,.toggleview.depress{background:var(--th);box-shadow:var(--btn_shadow_active);transition:linear box-shadow .1s}
 .configPanel .configTitle{margin:-2px -1px -16px;padding:8px;display:block;letter-spacing:0.2em;text-align:left;text-transform:uppercase;font-variant:normal;font-size:10.5pt;font-weight:700;border-top:var(--border);box-shadow:var(--highlight);background:linear-gradient(135deg,#000,#000800);mix-blend-mode:normal;filter:none;pointer-events:none}
 .iframed .configPanel .configTitle{margin:-2px 0 -16px;border-left:0;border-right:0}
 #configs input[type=submit],#trackerconfig input[type=submit],input[name="savepri"]{text-transform:capitalize}
@@ -735,7 +740,7 @@ input.trackerhome,input.trackerannounce{width:210px}
 #torrentDisplay .filter{padding:2px 10px;min-width:80px;box-sizing:border-box;display:inline-block;font-weight:700;font-size:9pt;color:#494;text-shadow:0 1px 1px #000;border-right:var(--border);box-shadow:var(--highlight);background:var(--btnAction)}
 #torrentDisplay .filter#all,#torrentDisplay .filter#search{border-left:var(--border)}
 #torrentDisplay .filter:hover{color:#d50;background:radial-gradient(at center bottom,rgba(255,96,0,.2),#0000 80%),var(--btnAction_hover)}
-#torrentDisplay .filter:active,#torrentDisplay .filter.enabled{color:#b40;text-shadow:none;box-shadow:var(--highlight),inset 2px 2px 2px rgba(0,0,0,.7);background:radial-gradient(at center bottom,rgba(255,96,0,.2),#0000 40%),linear-gradient(180deg,#100800,#200800)}
+#torrentDisplay .filter:active,#torrentDisplay .filter.depress,#torrentDisplay .filter.enabled{color:#b40;text-shadow:none;box-shadow:var(--highlight),inset 2px 2px 2px rgba(0,0,0,.7);background:radial-gradient(at center bottom,rgba(255,96,0,.2),#0000 40%),linear-gradient(180deg,#100800,#200800)}
 #torrentDisplay .filter.enabled{color:#3b3;text-shadow:0 0 1px #000,0 1px 2px #010;background:radial-gradient(at center bottom,rgba(16,72,16,.3),#0000 50%),linear-gradient(180deg,#000a00,#020);pointer-events:none}
 #torrentDisplay .filter[hidden]{display:none!important}
 
@@ -857,7 +862,7 @@ body.textview{height:100vh}
 #textview-content li:nth-child(odd){background:#fff1}
 #textview-content ol{margin:-20px -24px -22px 26px;box-shadow:0 0 0 1px #010 inset}
 #viewerFilename{margin-left:-24px;font-weight:700;border-bottom:1px solid #010;background:#040}
-#viewerFilename::after{width:100%;height:1px;display:block;position:absolute;bottom:-2px;background:#151;content:""}
+#viewerFilename::after{width:calc(100% - 2px);height:1px;display:block;position:absolute;left:1px;bottom:-2px;background:#151;content:""}
 #textview-content.lines #viewerFilename::after{display:none}
 
 /* custom confirm dialogs */
@@ -1103,7 +1108,7 @@ th.peerCount a img{margin-left:-20px}
 .routerdown{margin-bottom:10px}
 .snarkNav{margin-top:0;font-size:11pt}
 .snarkNav,.snarkNav:hover,.snarkNav:focus,.snarkNav:active{background-size:17px,100%}
-.nav_config,.nav_config:hover,.nav_config:focus,.nav_config:active{background-size:15px,100%}
+.nav_config,.nav_config:hover,.nav_config:focus,.nav_config:active{background-size:14px,100%}
 .tName:active a,.snarkFileName:active a{box-shadow:inset 4px 4px 4px rgba(0,8,0,.8)}
 .tName a,.snarkFileName a,.tName:hover a,.snarkFileName:hover a{margin:-2px 0;border-radius:2px 20px 20px 2px;background:linear-gradient(90deg,#0000,rgba(0,16,0,.3))}
 .txd,.rateDown,.rateUp{min-width:76px;text-align:center}
