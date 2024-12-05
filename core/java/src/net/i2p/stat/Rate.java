@@ -478,36 +478,34 @@ public class Rate {
         PersistenceHelper.add(buf, addComments, prefix, ".lastTotalValue", "Total value of data points in most recent period (coalesced): " + _lastTotalValue, _lastTotalValue);
         PersistenceHelper.add(buf, addComments, prefix, ".extremeTotalValue", "Total value of data points in most extreme period: " + _extremeTotalValue, _extremeTotalValue);
         PersistenceHelper.add(buf, addComments, prefix, ".lifetimeTotalValue", "Total value of data points since this stat was created: " + _lifetimeTotalValue, _lifetimeTotalValue);
-        //PersistenceHelper.addDate(buf, addComments, prefix, ".currentDate", "Data written:", now());
-        //PersistenceHelper.addTime(buf, addComments, prefix, ".period", "Length of period:", _period);
+        PersistenceHelper.add(buf, addComments, prefix, ".tunnelCreateResponseTime", "Time for tunnel create response from peer (ms): " + _currentTotalValue, _currentTotalValue);
     }
 
     /**
-     * Load this rate from the properties, taking data from the data points
-     * underneath the given prefix.
+     * Load this rate from the properties, taking data from the data points underneath the given prefix.
      *
      * @param prefix prefix to the property entries (should NOT end with a period)
-     * @param treatAsCurrent if true, we'll treat the loaded data as if no time has
-     *                       elapsed since it was written out, but if it is false, we'll
-     *                       treat the data with as much freshness (or staleness) as appropriate.
+     * @param treatAsCurrent if true, we'll treat the loaded data as if no time has elapsed since it was
+                             written out, but if it is false, we'll treat the data with as much freshness
+                             (or staleness) as appropriate.
      * @throws IllegalArgumentException if the data was formatted incorrectly
      */
     public synchronized void load(Properties props, String prefix, boolean treatAsCurrent) throws IllegalArgumentException {
         _period = PersistenceHelper.getInt(props, prefix, ".period");
         _creationDate = PersistenceHelper.getLong(props, prefix, ".creationDate");
-        _lastCoalesceDate = PersistenceHelper.getLong(props, prefix, ".lastCoalesceDate");
-        _currentTotalValue = (float)PersistenceHelper.getDouble(props, prefix, ".currentTotalValue");
         _currentEventCount = PersistenceHelper.getInt(props, prefix, ".currentEventCount");
         _currentTotalEventTime = (int)PersistenceHelper.getLong(props, prefix, ".currentTotalEventTime");
-        _lastTotalValue = (float)PersistenceHelper.getDouble(props, prefix, ".lastTotalValue");
-        _lastEventCount = PersistenceHelper.getInt(props, prefix, ".lastEventCount");
-        _lastTotalEventTime = (int)PersistenceHelper.getLong(props, prefix, ".lastTotalEventTime");
-        _extremeTotalValue = (float)PersistenceHelper.getDouble(props, prefix, ".extremeTotalValue");
+        _currentTotalValue = (float)PersistenceHelper.getDouble(props, prefix, ".currentTotalValue");
         _extremeEventCount = PersistenceHelper.getInt(props, prefix, ".extremeEventCount");
         _extremeTotalEventTime = (int)PersistenceHelper.getLong(props, prefix, ".extremeTotalEventTime");
-        _lifetimeTotalValue = (float)PersistenceHelper.getDouble(props, prefix, ".lifetimeTotalValue");
+        _extremeTotalValue = (float)PersistenceHelper.getDouble(props, prefix, ".extremeTotalValue");
+        _lastCoalesceDate = PersistenceHelper.getLong(props, prefix, ".lastCoalesceDate");
+        _lastEventCount = PersistenceHelper.getInt(props, prefix, ".lastEventCount");
+        _lastTotalEventTime = (int)PersistenceHelper.getLong(props, prefix, ".lastTotalEventTime");
+        _lastTotalValue = (float)PersistenceHelper.getDouble(props, prefix, ".lastTotalValue");
         _lifetimeEventCount = PersistenceHelper.getLong(props, prefix, ".lifetimeEventCount");
         _lifetimeTotalEventTime = PersistenceHelper.getLong(props, prefix, ".lifetimeTotalEventTime");
+        _lifetimeTotalValue = (float)PersistenceHelper.getDouble(props, prefix, ".lifetimeTotalValue");
 
         if (treatAsCurrent) {_lastCoalesceDate = now();}
 
@@ -566,8 +564,7 @@ public class Rate {
 
     private final static long now() {
         // "event time" is in the stat log (and uses Clock).
-        // we just want sequential and stable time here, so use the OS time, since it doesn't
-        // skew periodically
-        return System.currentTimeMillis(); //Clock.getInstance().now();
+        // we just want sequential and stable time here, so use the OS time, since it doesn't skew periodically
+        return System.currentTimeMillis();
     }
 }
