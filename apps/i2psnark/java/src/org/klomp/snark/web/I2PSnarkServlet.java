@@ -4323,9 +4323,9 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append("<source src=\"").append(path).append("\" type=\"").append(mime).append("\">");
                     if (isAudio) {buf.append("</audio>");}
                     else {
-                        buf.append("</video>")
-                           .append("<script src=\"").append(resourcePath).append("js/getMetadata.js?")
-                           .append(CoreVersion.VERSION).append("\"></script>\n");
+                        buf.append("</video>");
+                           //.append("<script src=\"").append(resourcePath).append("js/getMetadata.js?")
+                           //.append(CoreVersion.VERSION).append("\"></script>\n");
                     }
                     buf.append("</td></tr>\n</table>\n</div>\n");
                 }
@@ -4637,7 +4637,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("\" name=\"savepri\">\n").append("</th></tr></thead>\n");
         }
         buf.append("</table>\n</div>\n");
-        if (videoCount == 1) {buf.append("<script src=\"" + resourcePath + "js/getMetadata.js?" + CoreVersion.VERSION + "\"></script>\n");}
+        //if (videoCount == 1) {buf.append("<script src=\"" + resourcePath + "js/getMetadata.js?" + CoreVersion.VERSION + "\"></script>\n");}
         if (imgCount > 0) {buf.append("<script src=" + resourcePath + "js/getImgDimensions.js></script>\n");}
         if (txtCount > 0) {buf.append("<script src=" + resourcePath + "js/textView.js></script>\n");}
 
