@@ -444,7 +444,6 @@ textarea{margin-top:2px;padding:4px;height:26px;resize:none;font-size:8pt;color:
 #tab_config{margin-top:0;padding:3px 1px}
 #tab_config:hover,.toggleview:hover,input.toggle_input:focus+.toggleview{background:var(--tab_section_hover)}
 .configPanel .configTitle,.configPanel .configTitle:hover,.configPanel .configTitle:active,.configPanel .configTitle:focus{margin:0 -11px;padding:5px 8px 5px 29px;display:block;letter-spacing:.15em;text-align:left;text-transform:uppercase;font-size:11pt;font-weight:700;color:#4d2200;border:1px solid #1f1400;border-top:0;border-radius:2px 2px 0 0;box-shadow:var(--highlight);background:var(--snark) no-repeat 8px center,radial-gradient(circle at left bottom,#f9f8f2,#f7f6ee 400px);background-size:18px,100%;background-blend-mode:luminosity}
-.configTitle a{width:100%;display:inline-block}
 .snarkConfig{width:100%;font-size:8pt}
 .toggleview img,.snarkConfig .configTitle img{display:none;opacity:0}
 .toggleview:hover::after,.toggleview:focus::after,#tab_config a:hover::after,#tab_config a:focus::after{mix-blend-mode:normal}
@@ -520,9 +519,9 @@ input:not(checked)+label+hr+table,input:not(checked)+label+hr+table+table{displa
 input:checked+label+hr+table,input:checked+label+hr+table+table{display:table}
 .mainsection input:not(checked)+.toggleview{margin-bottom:-12px}
 .mainsection input:checked+.toggleview{margin-bottom:-5px}
-.toggleview,.configTitle a:visited{color:#930}
-.toggleview:active,.configTitle a:active{color:#603110}
-.toggleview img:active,.toggleview:active img,.configTitle a:active img{transform:rotate(90deg);transition:ease transform .3s 0s}
+.toggleview{color:#930}
+.toggleview:active{color:#603110}
+.toggleview img:active,.toggleview:active img{transform:rotate(90deg);transition:transform ease .3s}
 
 /* debug */
 hr.debug{margin:5px 0;width:100%;height:1px;display:none;position:relative;z-index:10}
@@ -1103,7 +1102,6 @@ td.status img{width:auto;height:23px}
 textarea,#torrents code,#screenlog{font-size:9pt}
 thead a img,thead img{max-height:22px}
 .barComplete{margin-top:-1px;padding:2px 0 1px;line-height:1.4}
-.configTitle a{padding:1px 0}
 .configTitle,.configTitle:hover,.configPanel .configTitle,.configPanel .configTitle:hover,.configPanel .configTitle:active,.toggleview,#tab_config{min-width:400px}
 .details img[src$="rateme.svg"]{margin-top:-4px;margin-right:-3px;width:11px;height:11px}
 .dirInfoComplete{margin-right:4px}

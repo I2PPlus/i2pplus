@@ -408,7 +408,6 @@ video::-webkit-media-controls-timeline{padding:0 16px 16px}
 .configPanel .configTitle{padding-bottom:4px}
 .configPanel .configTitle{margin:-1px -1px -17px;padding:8px;display:block;text-align:left;text-transform:uppercase;font-variant:normal;font-size:11pt}
 .iframed .configPanel .configTitle{margin:-1px 0 -17px;border-left:0;border-right:0}
-.configTitle a{display:inline-block;width:100%}
 .tab_label::after{margin:1px;padding:2px;width:18px;height:18px;display:inline-block;vertical-align:middle;background:#f00;content:"";border:2px solid #000;border-radius:50%;box-shadow:0 0 1px 1px rgba(32,0,48,.5);background-size:16px,100%;filter:drop-shadow(0 0 1px #652787);mix-blend-mode:luminosity;pointer-events:none;will-change:transform}
 input:checked+.toggleview:active .tab_label::after{transform:rotate(-90deg);transition:linear transform .01s}
 #tab_addtorrent .tab_label::after{background:var(--add) no-repeat scroll center center/16px,linear-gradient(180deg,#002,#000 50%,#1f1e32 50%,#191729)}
@@ -425,8 +424,6 @@ input:checked+.toggleview:active .tab_label::after{transform:rotate(-90deg);tran
 input:checked+.toggleview:active .tab_label::after{transform:scale(.9) rotate(-90deg);transition:linear transform .01s}
 .toggleview,#tab_config{min-width:300px;text-align:center}
 .toggleview,#tab_config a{font-size:0}
-.snarkConfig .configTitle a{display:inline-block;width:100%}
-
 #configs td:first-child,#commentInfo td:first-child,#userComments td:first-child{text-align:right}
 .snarkConfig{width:100%;font-size:10pt}
 form{margin-bottom:0}
@@ -555,7 +552,7 @@ input.trackername{width:100px}
 .spacer{display:none}
 
 /* toggle create/add panel view */
-.toggleview:hover,input.toggle_input:focus+.toggleview,.configTitle a:focus{cursor:pointer}
+.toggleview:hover,input.toggle_input:focus+.toggleview{cursor:pointer}
 input:not(checked)+label+hr+table,input:not(checked)+label+hr+table+table{display:none}
 input:checked+label+hr+table,input:checked+label+hr+table+table{display:table}
 
@@ -1006,7 +1003,6 @@ label b,.configOption b,#trackerconfig th{font-size:9pt}
 td.status img{margin-left:1px;height:24px}
 thead img,thead img:hover{max-height:22px}
 .configPanel .configTitle{font-size:12.5pt}
-.configTitle a{margin-bottom:0}
 .configTitle,.toggleview,#tab_config{min-width:400px}
 .dirInfo{margin-bottom:0}
 .dirInfo tr:nth-child(n+2) td:first-child img:not(.thumb){margin-top:-2px;margin-bottom:-1px;width:22px;max-width:22px;height:22px;max-height:22px}

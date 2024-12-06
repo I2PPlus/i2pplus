@@ -638,7 +638,6 @@ input.trackerhome,input.trackerannounce{width:210px}
 .snarkConfig tr:nth-last-child(2),.snarkConfig tr:hover:nth-last-child(2){background:none}
 .snarkConfig tr:nth-last-child(2) td,#configs td[colspan="5"]{text-align:right;padding:11px 15px 0;border-top:var(--border)}
 #tab_config:hover,.toggleview:hover,input.toggle_input:focus+.toggleview{background:linear-gradient(180deg,#030,#010 50%,#000);transition:ease all .1s}
-.configTitle:hover a,.configTitle a:focus{color:var(--hover);transition:ease all .1s}
 .configTitle:active,.toggleview:active,.configTitle.depress,.toggleview.depress{background:linear-gradient(180deg,#000,#020);box-shadow:var(--btn_shadow_active);transition:linear box-shadow .1s}
 .configPanel .configTitle{margin:-2px -1px -16px;padding:8px;display:block;letter-spacing:0.2em;text-align:left;text-transform:uppercase;font-variant:normal;font-size:10.5pt;font-weight:700;border-top:var(--border);box-shadow:var(--highlight);background:linear-gradient(135deg,#000,#000800);mix-blend-mode:normal;filter:none;pointer-events:none}
 .iframed .configPanel .configTitle{margin:-2px 0 -16px;border-left:0;border-right:0}
@@ -781,14 +780,13 @@ input.trackerhome,input.trackerannounce{width:210px}
 .toggleview{background:radial-gradient(circle at center -200%,#1514,#0000 55%),linear-gradient(180deg,#001800,#000800 50%,#000)}
 .configTitle{margin-bottom:-2px}
 .iframed .configTitle,.iframed .toggleview{border-radius:0}
-.configTitle a:visited,.toggleview{color:#7c7}
+.toggleview{color:#7c7}
 input.toggle_input{position:absolute;opacity:0;z-index:-1;height:0;width:0}
 input:checked+.toggleview+hr+table,input:checked+.toggleview+hr+table+table{display:table}
 input:not(:checked)+.toggleview+hr+table,input:not(:checked)+.toggleview+hr+table+table{display:none}
 .toggleview:hover,input.toggle_input:focus+.toggleview{color:var(--hover);cursor:pointer}
 
 /* tabs */
-.configTitle a{display:inline-block;width:100%}
 .tab_label::after{margin:3px;padding:3px;width:18px;height:18px;display:inline-block;vertical-align:middle;border:2px solid #000;border-radius:50%;box-shadow:0 0 1px 1px rgba(32,0,48,.5);background-size:16px,100%;content:"";mix-blend-mode:luminosity;pointer-events:none;will-change:transform;transition:all ease .1s}
 .toggleview .tab_label::after,.toggleview.depress .tab_label::after{transition:all ease .1s}
 input:checked+.toggleview:active .tab_label::after,input:checked+.toggleview.depress .tab_label::after{box-shadow:0 0 0 2px rgb(153,51,0,.7);filter:drop-shadow(0 0 1px #930);transform:rotate(-90deg) scale(.9)}
