@@ -122,8 +122,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      */
     public static ConsoleUpdateManager getInstance() {
         ClientAppManager cmgr = I2PAppContext.getGlobalContext().clientAppManager();
-        if (cmgr == null)
-            return null;
+        if (cmgr == null) {return null;}
         return (ConsoleUpdateManager) cmgr.getRegisteredApp(APP_NAME);
     }
 
@@ -132,9 +131,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     /**
      *  UpdateManager interface
      */
-    public void start() {
-        startup();
-    }
+    public void start() {startup();}
 
     /**
      *  ClientApp interface
@@ -148,16 +145,14 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         notifyInstalled(ROUTER_DEV_SU3, "", RouterVersion.FULL_VERSION);
         notifyInstalled(API, "", CoreVersion.PUBLISHED_VERSION);
         String blist = _context.getProperty(NewsFetcher.PROP_BLOCKLIST_TIME);
-        if (blist != null)
-            notifyInstalled(BLOCKLIST, Blocklist.ID_FEED, blist);
+        if (blist != null) {notifyInstalled(BLOCKLIST, Blocklist.ID_FEED, blist);}
         // hack to init from the current news file... do this before we register Updaters
         // This will not kick off any Updaters as none are yet registered
         (new NewsFetcher(_context, this, Collections.<URI> emptyList())).checkForUpdates();
         for (String plugin : PluginStarter.getPlugins()) {
             Properties props = PluginStarter.pluginProperties(_context, plugin);
             String ver = props.getProperty("version");
-            if (ver != null)
-                notifyInstalled(PLUGIN, plugin, ver);
+            if (ver != null) {notifyInstalled(PLUGIN, plugin, ver);}
         }
 
         DummyHandler dh = new DummyHandler(_context, this);
@@ -211,9 +206,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                     newVA = new VersionAvailable(newVersion, "", HTTP, updateSources);
                     _available.put(new UpdateItem(ROUTER_DEV_SU3, ""), newVA);
                 }
-            } else {
-                _context.router().saveConfig(PROP_DEV_SU3_AVAILABLE, null);
-            }
+            } else {_context.router().saveConfig(PROP_DEV_SU3_AVAILABLE, null);}
         }
 
         PluginUpdateHandler puh = new PluginUpdateHandler(_context, this);
@@ -226,16 +219,13 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         new NewsTimerTask(_context, this);
         _context.simpleTimer2().addPeriodicEvent(new TaskCleaner(), TASK_CLEANER_TIME);
         changeState(RUNNING);
-        if (_cmgr != null)
-            _cmgr.register(this);
+        if (_cmgr != null) {_cmgr.register(this);}
     }
 
     /**
      *  UpdateManager interface
      */
-    public void shutdown() {
-        shutdown(null);
-    }
+    public void shutdown() {shutdown(null);}
 
     /**
      *  ClientApp interface
@@ -243,8 +233,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  @since 0.9.12
      */
     public synchronized void shutdown(String[] args) {
-        if (_state == STOPPED)
-            return;
+        if (_state == STOPPED) {return;}
         changeState(STOPPING);
         stopChecks();
         stopUpdates();
@@ -257,35 +246,26 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /** @since 0.9.12 */
-    public ClientAppState getState() {
-        return _state;
-    }
+    public ClientAppState getState() {return _state;}
 
     /** @since 0.9.12 */
-    public String getName() {
-        return APP_NAME;
-    }
+    public String getName() {return APP_NAME;}
 
     /** @since 0.9.12 */
-    public String getDisplayName() {
-        return "Console Update Manager";
-    }
+    public String getDisplayName() {return "Console Update Manager";}
 
     /////// end ClientApp methods
 
     private synchronized void changeState(ClientAppState state) {
         _state = state;
-        if (_cmgr != null)
-            _cmgr.notify(this, state, null, null);
+        if (_cmgr != null) {_cmgr.notify(this, state, null, null);}
     }
 
     /**
      *  The status on any update current or last finished.
      *  @return status or ""
      */
-    public String getStatus() {
-        return _status;
-    }
+    public String getStatus() {return _status;}
 
     /**
      *  Is an update available?
@@ -295,9 +275,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  @return new version or null if nothing newer is available
      *  @since 0.9.21
      */
-    public String checkAvailable(UpdateType type) {
-        return checkAvailable(type, "", DEFAULT_CHECK_TIME);
-    }
+    public String checkAvailable(UpdateType type) {return checkAvailable(type, "", DEFAULT_CHECK_TIME);}
 
     /**
      *  Is an update available?
@@ -307,9 +285,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  @param maxWait max time to block
      *  @return new version or null if nothing newer is available
      */
-    public String checkAvailable(UpdateType type, long maxWait) {
-        return checkAvailable(type, "", maxWait);
-    }
+    public String checkAvailable(UpdateType type, long maxWait) {return checkAvailable(type, "", maxWait);}
 
     /**
      *  Is an update available?
@@ -322,8 +298,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      */
     public String checkAvailable(UpdateType type, String id, long maxWait) {
         if (isCheckInProgress(type, id) || isUpdateInProgress(type, id)) {
-            if (_log.shouldWarn())
+            if (_log.shouldWarn()) {
                 _log.warn("Check or update already in progress for: " + type + ' ' + id);
+            }
             return null;
         }
         for (RegisteredChecker r : _registeredCheckers) {
@@ -333,17 +310,15 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 synchronized(_activeCheckers) {
                     t = r.checker.check(type, r.method, id, current, maxWait);
                     if (t != null) {
-                         if (_log.shouldInfo())
-                             _log.info("Starting " + r, new Exception());
+                         if (_log.shouldInfo()) {_log.info("Starting " + r, new Exception());}
                         _activeCheckers.add(t);
                         t.start();
                     }
                 }
                 if (t != null) {
                     synchronized(t) {
-                        try {
-                            t.wait(maxWait);
-                        } catch (InterruptedException ie) {}
+                        try {t.wait(maxWait);}
+                        catch (InterruptedException ie) {}
                     }
                     return getUpdateAvailable(type, id);
                 }
@@ -356,9 +331,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  Fire off a checker task
      *  Non-blocking.
      */
-    public void check(UpdateType type) {
-        check(type, "");
-    }
+    public void check(UpdateType type) {check(type, "");}
 
     /**
      *  Fire off a checker task
@@ -366,8 +339,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      */
     public void check(UpdateType type, String id) {
         if (isCheckInProgress(type, id)) {
-            if (_log.shouldWarn())
-                _log.warn("Check already in progress for: " + type + ' ' + id);
+            if (_log.shouldWarn()) {_log.warn("Check already in progress for: " + type + ' ' + id);}
             return;
         }
         for (RegisteredChecker r : _registeredCheckers) {
@@ -376,8 +348,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 synchronized(_activeCheckers) {
                     UpdateTask t = r.checker.check(type, r.method, id, current, DEFAULT_CHECK_TIME);
                     if (t != null) {
-                         if (_log.shouldInfo())
-                             _log.info("Starting " + r, new Exception());
+                         if (_log.shouldInfo()) {_log.info("Starting " + r, new Exception());}
                         _activeCheckers.add(t);
                         t.start();
                         break;
@@ -393,9 +364,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  An available update may still have a constraint or lack sources.
      *  @return new version or null if nothing newer is available
      */
-    public String getUpdateAvailable(UpdateType type) {
-        return getUpdateAvailable(type, "");
-    }
+    public String getUpdateAvailable(UpdateType type) {return getUpdateAvailable(type, "");}
 
     /**
      *  Is an update available?
@@ -405,8 +374,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      */
     public String getUpdateAvailable(UpdateType type, String id) {
         Version v = _available.get(new UpdateItem(type, id));
-        if (v == null)
-            return null;
+        if (v == null) {return null;}
         return v.version;
     }
 
@@ -415,9 +383,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  Non-blocking, returns result of last download
      *  @return new version or null if nothing was downloaded
      */
-    public String getUpdateDownloaded(UpdateType type) {
-        return getUpdateDownloaded(type, "");
-    }
+    public String getUpdateDownloaded(UpdateType type) {return getUpdateDownloaded(type, "");}
 
     /**
      *  Is an update downloaded?
@@ -426,8 +392,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      */
     public String getUpdateDownloaded(UpdateType type, String id) {
         Version v = _downloaded.get(new UpdateItem(type, id));
-        if (v == null)
-            return null;
+        if (v == null) {return null;}
         return v.version;
     }
 
@@ -440,8 +405,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         Version vi = _installed.get(ui);
         Version vd = _downloaded.get(ui);
         if (vi != null) {
-            if (vd != null)
-                return (vi.compareTo(vd) > 0) ? vi.version : vd.version;
+            if (vd != null) {return (vi.compareTo(vd) > 0) ? vi.version : vd.version;}
             return vi.version;
         }
         return vd != null ? vd.version : null;
@@ -451,24 +415,19 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  Is any download in progress?
      *  Does not include checks.
      */
-    public boolean isUpdateInProgress() {
-        return !_downloaders.isEmpty();
-    }
+    public boolean isUpdateInProgress() {return !_downloaders.isEmpty();}
 
     /**
      *  Is a download in progress?
      */
-    public boolean isUpdateInProgress(UpdateType type) {
-        return isUpdateInProgress(type, "");
-    }
+    public boolean isUpdateInProgress(UpdateType type) {return isUpdateInProgress(type, "");}
 
     /**
      *  Is a download in progress?
      */
     public boolean isUpdateInProgress(UpdateType type, String id) {
         for (UpdateTask t : _downloaders.keySet()) {
-            if (t.getType() == type && id.equals(t.getID()))
-                return true;
+            if (t.getType() == type && id.equals(t.getID())) {return true;}
         }
         return false;
     }
@@ -477,18 +436,14 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  Stop all downloads in progress
      */
     public void stopUpdates() {
-        for (UpdateTask t : _downloaders.keySet()) {
-            t.shutdown();
-        }
+        for (UpdateTask t : _downloaders.keySet()) {t.shutdown();}
         _downloaders.clear();
     }
 
     /**
      *  Stop this download
      */
-    public void stopUpdate(UpdateType type) {
-        stopUpdate(type, "");
-    }
+    public void stopUpdate(UpdateType type) {stopUpdate(type, "");}
 
     /**
      *  Stop this download
@@ -507,24 +462,19 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  Is any check in progress?
      *  Does not include updates.
      */
-    public boolean isCheckInProgress() {
-        return !_activeCheckers.isEmpty();
-    }
+    public boolean isCheckInProgress() {return !_activeCheckers.isEmpty();}
 
     /**
      *  Is a check in progress?
      */
-    public boolean isCheckInProgress(UpdateType type) {
-        return isCheckInProgress(type, "");
-    }
+    public boolean isCheckInProgress(UpdateType type) {return isCheckInProgress(type, "");}
 
     /**
      *  Is a check in progress?
      */
     public boolean isCheckInProgress(UpdateType type, String id) {
         for (UpdateTask t : _activeCheckers) {
-            if (t.getType() == type && id.equals(t.getID()))
-                return true;
+            if (t.getType() == type && id.equals(t.getID())) {return true;}
         }
         return false;
     }
@@ -534,9 +484,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      */
     public void stopChecks() {
         synchronized(_activeCheckers) {
-            for (UpdateTask t : _activeCheckers) {
-                t.shutdown();
-            }
+            for (UpdateTask t : _activeCheckers) {t.shutdown();}
             _activeCheckers.clear();
         }
     }
@@ -544,9 +492,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     /**
      *  Stop this check
      */
-    public void stopCheck(UpdateType type) {
-        stopCheck(type, "");
-    }
+    public void stopCheck(UpdateType type) {stopCheck(type, "");}
 
     /**
      *  Stop this check
@@ -567,9 +513,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *
      *  @since 0.9.51
      */
-    public boolean isExternalRestartPending() {
-        return _externalRestartPending;
-    }
+    public boolean isExternalRestartPending() {return _externalRestartPending;}
 
     /**
      *  Install a plugin. Non-blocking.
@@ -581,8 +525,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         // We must have a name and install it in _available or else
         // update_fromCheck() will fail.
         // It's not removed from _available on success, as we lose the name.
-        if (name == null)
-            name = Long.toString(_context.random().nextLong());
+        if (name == null) {name = Long.toString(_context.random().nextLong());}
         List<URI> uris = Collections.singletonList(uri);
         UpdateItem item = new UpdateItem(PLUGIN, name);
         VersionAvailable va = _available.get(item);
@@ -591,8 +534,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             va = new VersionAvailable("", "", method, uris);
             _available.putIfAbsent(item, va);
         }
-        if (_log.shouldWarn())
-            _log.warn("Install plugin: " + name + ' ' + va);
+        if (_log.shouldWarn()) {_log.warn("Install plugin: " + name + ' ' + va);}
         return update(PLUGIN, name);
     }
 
@@ -602,9 +544,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  Max time 3 hours by default but not honored by all Updaters
      *  @return true if task started
      */
-    public boolean update(UpdateType type) {
-        return update(type, "", DEFAULT_MAX_TIME);
-    }
+    public boolean update(UpdateType type) {return update(type, "", DEFAULT_MAX_TIME);}
 
     /**
      *  Non-blocking. Does not check.
@@ -612,9 +552,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  If returns true, then call isUpdateInProgress() in a loop
      *  @return true if task started
      */
-    public boolean update(UpdateType type, String id) {
-        return update(type, id, DEFAULT_MAX_TIME);
-    }
+    public boolean update(UpdateType type, String id) {return update(type, id, DEFAULT_MAX_TIME);}
 
     /**
      *  Non-blocking. Does not check.
@@ -622,9 +560,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  @param maxTime not honored by all Updaters
      *  @return true if task started
      */
-    public boolean update(UpdateType type, long maxTime) {
-        return update(type, "", maxTime);
-    }
+    public boolean update(UpdateType type, long maxTime) {return update(type, "", maxTime);}
 
     /**
      *  Non-blocking. Does not check.
@@ -635,8 +571,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      */
     public boolean update(UpdateType type, String id, long maxTime) {
         if (isCheckInProgress(type, id)) {
-            if (_log.shouldWarn())
-                _log.warn("Check already in progress for: " + type + ' ' + id);
+            if (_log.shouldWarn()) {_log.warn("Check already in progress for: " + type + ' ' + id);}
             return false;
         }
         return update_fromCheck(type, id, maxTime);
@@ -651,35 +586,30 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      */
     private boolean update_fromCheck(UpdateType type, String id, long maxTime) {
         if (isUpdateInProgress(type, id)) {
-            if (_log.shouldWarn())
-                _log.warn("Update already in progress for: " + type + ' ' + id);
+            if (_log.shouldWarn()) {_log.warn("Update already in progress for: " + type + ' ' + id);}
             return false;
         }
         UpdateItem ui = new UpdateItem(type, id);
         VersionAvailable va = _available.get(ui);
         if (va == null) {
-            if (_log.shouldWarn())
-                _log.warn("No version available for: " + type + ' ' + id);
+            if (_log.shouldWarn()) {_log.warn("No version available for: " + type + ' ' + id);}
             return false;
         }
         List<RegisteredUpdater> sorted = new ArrayList<RegisteredUpdater>(4);
         for (RegisteredUpdater ru : _registeredUpdaters) {
-            if (ru.type == type)
-                sorted.add(ru);
+            if (ru.type == type) {sorted.add(ru);}
         }
         Collections.sort(sorted);
         return retry(ui, va.sourceMap, sorted, maxTime) != null;
     }
 
-    private UpdateTask retry(UpdateItem ui,
-                             Map<UpdateMethod, List<URI>> sourceMap,
+    private UpdateTask retry(UpdateItem ui, Map<UpdateMethod, List<URI>> sourceMap,
                              List<RegisteredUpdater> toTry, long maxTime) {
         for (Iterator<RegisteredUpdater> iter = toTry.iterator(); iter.hasNext(); ) {
             RegisteredUpdater r = iter.next();
             iter.remove();
             // check in case unregistered later
-            if (!_registeredUpdaters.contains(r))
-                continue;
+            if (!_registeredUpdaters.contains(r)) {continue;}
             VersionAvailable va = _available.get(ui);
             String newVer = va != null ? va.version : "";
             for (Map.Entry<UpdateMethod, List<URI>> e : sourceMap.entrySet()) {
@@ -690,22 +620,20 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                     if (t != null) {
                         // race window here
                         //  store the remaining ones for retrying
-                        if (_log.shouldInfo())
-                            _log.info("Starting " + r, new Exception());
+                        if (_log.shouldInfo()) {_log.info("Starting " + r, new Exception());}
                         _downloaders.put(t, toTry);
                         t.start();
                         return t;
                     } else {
-                        if (_log.shouldWarn())
+                        if (_log.shouldWarn()) {
                             _log.warn("Updater refused: " + r + " for " + meth + ' ' + e.getValue());
+                        }
                     }
                 }
             }
-            if (_log.shouldWarn())
-                _log.warn("Nothing left to try for: " + r);
+            if (_log.shouldWarn()) {_log.warn("Nothing left to try for: " + r);}
         }
-        if (_log.shouldWarn())
-            _log.warn("Nothing left to try for: " + ui);
+        if (_log.shouldWarn()) {_log.warn("Nothing left to try for: " + ui);}
         return null;
     }
 
@@ -718,51 +646,46 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         if ((type == ROUTER_SIGNED || type == ROUTER_UNSIGNED ||
              type == ROUTER_SIGNED_SU3 || type == ROUTER_DEV_SU3) &&
             NewsHelper.dontInstall(_context)) {
-            if (_log.shouldWarn())
+            if (_log.shouldWarn()) {
                 _log.warn("Ignoring registration for " + type + ", router updates disabled");
+            }
             return;
         }
         if (type == ROUTER_SIGNED_SU3 && !ConfigUpdateHandler.USE_SU3_UPDATE) {
-            if (_log.shouldWarn())
+            if (_log.shouldWarn()) {
                 _log.warn("Ignoring registration for " + type + ", SU3 updates disabled");
+            }
             return;
         }
         boolean enableTorrentUpdates = _context.getProperty(PROP_ENABLE_TORRENT_UPDATES, DEFAULT_ENABLE_TORRENT_UPDATES);
         if (method == TORRENT && (!_allowTorrent || !enableTorrentUpdates)) {
-            if (_log.shouldWarn())
-                _log.warn("Ignoring torrent registration");
+            if (_log.shouldWarn()) {_log.warn("Ignoring torrent registration");}
             return;
         }
         RegisteredUpdater ru = new RegisteredUpdater(updater, type, method, priority);
-        if (_log.shouldInfo())
-            _log.info("Registering " + ru);
+        if (_log.shouldInfo()) {_log.info("Registering " + ru);}
         if (!_registeredUpdaters.add(ru)) {
-            if (_log.shouldWarn())
-                _log.warn("Duplicate registration " + ru);
+            if (_log.shouldWarn()) {_log.warn("Duplicate registration " + ru);}
         }
     }
 
     public void unregister(Updater updater, UpdateType type, UpdateMethod method) {
         RegisteredUpdater ru = new RegisteredUpdater(updater, type, method, 0);
-        if (_log.shouldInfo())
-            _log.info("Unregistering " + ru);
+        if (_log.shouldInfo()) {_log.info("Unregistering " + ru);}
         _registeredUpdaters.remove(ru);
     }
 
     public void register(Checker updater, UpdateType type, UpdateMethod method, int priority) {
         RegisteredChecker rc = new RegisteredChecker(updater, type, method, priority);
-        if (_log.shouldInfo())
-            _log.info("Registering " + rc);
+        if (_log.shouldInfo()) {_log.info("Registering " + rc);}
         if (!_registeredCheckers.add(rc)) {
-            if (_log.shouldWarn())
-                _log.warn("Duplicate registration " + rc);
+            if (_log.shouldWarn()) {_log.warn("Duplicate registration " + rc);}
         }
     }
 
     public void unregister(Checker updater, UpdateType type, UpdateMethod method) {
         RegisteredChecker rc = new RegisteredChecker(updater, type, method, 0);
-        if (_log.shouldInfo())
-            _log.info("Unregistering " + rc);
+        if (_log.shouldInfo()) {_log.info("Unregistering " + rc);}
         _registeredCheckers.remove(rc);
     }
 
@@ -776,8 +699,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     public void register(UpdatePostProcessor upp, UpdateType type, int fileType) {
         Integer key = Integer.valueOf(type.toString().hashCode() ^ fileType);
         UpdatePostProcessor old = _registeredPostProcessors.put(key, upp);
-        if (old != null && _log.shouldWarn())
-            _log.warn("Duplicate registration " + upp);
+        if (old != null && _log.shouldWarn()) {_log.warn("Duplicate registration " + upp);}
     }
 
     /**
@@ -829,61 +751,59 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
             VersionAvailable newVA = new VersionAvailable(newVersion, minVersion, method, updateSources);
             Version old = _installed.get(ui);
-            if (_log.shouldInfo())
+            if (_log.shouldInfo()) {
                 _log.info("notifyVersionAvailable " + ui + ' ' + newVA + " old: " + old);
+            }
             if (old != null && old.compareTo(newVA) >= 0) {
-                if (_log.shouldWarn())
-                    _log.warn(ui.toString() + ' ' + old + " already installed");
-                // don't bother updating sources
-                return false;
+                if (_log.shouldWarn()) {_log.warn(ui.toString() + ' ' + old + " already installed");}
+                return false; // don't bother updating sources
             }
             old = _downloaded.get(ui);
             if (old != null && old.compareTo(newVA) >= 0) {
                 if (_log.shouldWarn())
                     _log.warn(ui.toString() + ' ' + old + " already downloaded");
-                // don't bother updating sources
-                return false;
+                return false; // don't bother updating sources
             }
             VersionAvailable oldVA = _available.get(ui);
             if (oldVA != null)  {
                 int comp = oldVA.compareTo(newVA);
                 if (comp > 0) {
-                    if (_log.shouldWarn())
+                    if (_log.shouldWarn()) {
                         _log.warn(ui.toString() + ' ' + oldVA + " already available");
+                    }
                     continue;
                 } else if (comp == 0) {
                     List<URI> oldSources = oldVA.sourceMap.putIfAbsent(method, updateSources);
                     if (oldSources == null) {
                         // merge with existing VersionAvailable
                         // new method
-                        if (_log.shouldWarn())
+                        if (_log.shouldWarn()) {
                             _log.warn(ui.toString() + ' ' + oldVA + " updated with new source method");
+                        }
                     } else if (!oldSources.containsAll(updateSources)) {
                         // merge with existing VersionAvailable
                         // new sources to existing method
                         for (URI uri : updateSources) {
                             if (!oldSources.contains(uri)) {
-                                if (_log.shouldWarn())
+                                if (_log.shouldWarn()) {
                                     _log.warn(ui.toString() + ' ' + oldVA + " adding " + uri + " to method " + method);
-                                try {
-                                    oldSources.add(uri);
-                                } catch (UnsupportedOperationException uoe) {
+                                }
+                                try {oldSources.add(uri);}
+                                catch (UnsupportedOperationException uoe) {
                                     // rare case, changed URL but it's a singleton list, replace old list
                                     oldVA.sourceMap.put(method, Collections.singletonList(uri));
                                 }
                             }
                         }
                     } else {
-                        if (_log.shouldWarn())
-                            _log.warn(ui.toString() + ' ' + oldVA + " already available");
+                        if (_log.shouldWarn()) {_log.warn(ui.toString() + ' ' + oldVA + " already available");}
                     }
                     continue;
                 }  // else new version is newer
             }
 
             // Use the new VersionAvailable
-            if (_log.shouldInfo())
-                _log.info(ui.toString() + ' ' + newVA + " now available");
+            if (_log.shouldInfo()) {_log.info(ui.toString() + ' ' + newVA + " now available");}
             _available.put(ui, newVA);
             shouldUpdate = true;
         }
@@ -895,8 +815,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             _context.router().saveConfig(PROP_DEV_SU3_AVAILABLE, newVersion);
         }
 
-        if (!shouldUpdate)
-            return false;
+        if (!shouldUpdate) {return false;}
 
         if (type == ROUTER_SIGNED_SU3 && _cmgr != null) {
             NotificationService ns = (NotificationService) _cmgr.getRegisteredApp("desktopgui");
@@ -922,12 +841,12 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                       isUpdateInProgress(ROUTER_SIGNED_SU3) ||
                       isUpdateInProgress(ROUTER_DEV_SU3) ||
                       isUpdateInProgress(ROUTER_UNSIGNED))) {
-                    if (_log.shouldInfo())
-                        _log.info("Updating " + ui + " after notify");
+                    if (_log.shouldInfo()) {_log.info("Updating " + ui + " after notify");}
                     update_fromCheck(type, id, DEFAULT_MAX_TIME);
                 } else {
-                    if (_log.shouldInfo())
+                    if (_log.shouldInfo()) {
                         _log.info("Not updating " + ui + ", update disabled or in progress");
+                    }
                 }
                 // ConfigUpdateHandler, SummaryHelper, SummaryBarRenderer handle status display
                 break;
@@ -939,8 +858,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             default:
                 break;
         }
-        if (msg != null)
-            finishStatus(msg);
+        if (msg != null) {finishStatus(msg);}
         return true;
     }
 
@@ -961,33 +879,26 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         UpdateItem ui = new UpdateItem(type, id);
         Version old = _installed.get(ui);
         VersionAvailable newVA = new VersionAvailable(newVersion, message);
-        if (_log.shouldInfo())
-            _log.info("notifyVersionConstraint " + ui + ' ' + newVA + " old: " + old);
+        if (_log.shouldInfo()) {_log.info("notifyVersionConstraint " + ui + ' ' + newVA + " old: " + old);}
         if (old != null && old.compareTo(newVA) >= 0) {
-            if (_log.shouldWarn())
-                _log.warn(ui.toString() + ' ' + old + " already installed");
+            if (_log.shouldWarn()) {_log.warn(ui.toString() + ' ' + old + " already installed");}
             return;
         }
         old = _downloaded.get(ui);
         if (old != null && old.compareTo(newVA) >= 0) {
-            if (_log.shouldWarn())
-                _log.warn(ui.toString() + ' ' + old + " already downloaded");
+            if (_log.shouldWarn()) {_log.warn(ui.toString() + ' ' + old + " already downloaded");}
             return;
         }
         VersionAvailable oldVA = _available.get(ui);
         if (oldVA != null)  {
-            if (_log.shouldWarn())
-                _log.warn(ui.toString() + ' ' + oldVA + " already available");
-            if (oldVA.compareTo(newVA) >= 0)
-                return;
+            if (_log.shouldWarn()) {_log.warn(ui.toString() + ' ' + oldVA + " already available");}
+            if (oldVA.compareTo(newVA) >= 0) {return;}
             // don't replace an unconstrained version with a constrained one
-            if (oldVA.constraint == null)
-                return;
+            if (oldVA.constraint == null) {return;}
             // replace constrained one
         }
         // Use the new VersionAvailable
-        if (_log.shouldInfo())
-            _log.info(ui.toString() + ' ' + newVA + " now available");
+        if (_log.shouldInfo()) {_log.info(ui.toString() + ' ' + newVA + " now available");}
         _available.put(ui, newVA);
     }
 
@@ -995,11 +906,8 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  Called by the Updater after check() was called and all notifyVersionAvailable() callbacks are finished
      */
     public void notifyCheckComplete(UpdateTask task, boolean newer, boolean success) {
-        if (_log.shouldInfo())
-            _log.info("Checker " + task + " for " + task.getType() + " complete");
-        synchronized(_activeCheckers) {
-            _activeCheckers.remove(task);
-        }
+        if (_log.shouldInfo()) {_log.info("Checker " + task + " for " + task.getType() + " complete");}
+        synchronized(_activeCheckers) {_activeCheckers.remove(task);}
         String msg = null;
         switch (task.getType()) {
             case NEWS:
@@ -1026,30 +934,23 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             default:
                 break;
         }
-        if (msg != null) {
-            finishStatus(msg);
-        } else {
-            if (success && _t("HTTP client proxy tunnel must be running").equals(_status))
+        if (msg != null) {finishStatus(msg);}
+        else {
+            if (success && _t("HTTP client proxy tunnel must be running").equals(_status)) {
                 _status = "";
+            }
         }
-        synchronized(task) {
-            task.notifyAll();
-        }
+        synchronized(task) {task.notifyAll();}
     }
 
     public void notifyProgress(UpdateTask task, String status, long downloaded, long totalSize) {
         StringBuilder buf = new StringBuilder(64);
-        buf.append("<div id=sb_updateprogress class=\"sb_updatestatus volatile\">");
-        buf.append(status).append("</div>");
+        buf.append("<div id=sb_updateprogress class=\"sb_updatestatus volatile\">").append(status).append("</div>");
         double pct = ((double)downloaded) / ((double)totalSize);
         synchronized (_pct) {
-            buf.append("<div id=sb_updatebar class=\"percentBarOuter volatile\"><div class=percentBarText>");
-            buf.append(DataHelper.formatSize2(downloaded));
-            buf.append("B / ");
-            buf.append(DataHelper.formatSize2(totalSize));
-            buf.append("B</div><div class=percentBarInner style=\"width: ");
-            buf.append(_pct.format(pct));
-            buf.append("\"></div></div>");
+            buf.append("<div id=sb_updatebar class=\"percentBarOuter volatile\"><div class=percentBarText>")
+               .append(DataHelper.formatSize2(downloaded)).append("B / ").append(DataHelper.formatSize2(totalSize))
+               .append("B</div><div class=percentBarInner style=\"width: ").append(_pct.format(pct)).append("\"></div></div>");
         }
         updateStatus(buf.toString());
     }
@@ -1057,17 +958,13 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     /**
      *  @param task may be null
      */
-    public void notifyProgress(UpdateTask task, String status) {
-        updateStatus(status);
-    }
+    public void notifyProgress(UpdateTask task, String status) {updateStatus(status);}
 
     /**
      *  An expiring status
      *  @param task may be null
      */
-    public void notifyComplete(UpdateTask task, String status) {
-        finishStatus(status);
-    }
+    public void notifyComplete(UpdateTask task, String status) {finishStatus(status);}
 
     /**
      *  Not necessarily the end if there are more URIs to try.
@@ -1075,9 +972,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  @param t may be null
      */
     public void notifyAttemptFailed(UpdateTask task, String reason, Throwable t) {
-        if (_log.shouldWarn())
-//            _log.warn("Attempt failed " + task + " for " + task.getType() + ": " + reason, t);
+        if (_log.shouldWarn()) {
             _log.warn("[" + task.getType() + "] Update or check failed " + reason, t);
+        }
     }
 
     /**
@@ -1087,9 +984,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      */
     public void notifyTaskFailed(UpdateTask task, String reason, Throwable t) {
         int level = task.getType() == TYPE_DUMMY ? Log.WARN : Log.ERROR;
-        if (_log.shouldLog(level))
-//            _log.log(level, "Failed " + task + " for " + task.getType() + ": " + reason, t);
-            _log.log(level, "[" + task.getType() + "] Update or check failed " + reason, t);
+        if (_log.shouldLog(level)) {_log.log(level, "[" + task.getType() + "] Update or check failed " + reason, t);}
         List<RegisteredUpdater> toTry = _downloaders.get(task);
         if (toTry != null) {
             UpdateItem ui = new UpdateItem(task.getType(), task.getID());
@@ -1097,8 +992,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             if (va != null) {
                 UpdateTask next = retry(ui, va.sourceMap, toTry, DEFAULT_MAX_TIME);  // fixme old maxtime lost
                 if (next != null) {
-                   if (_log.shouldWarn())
-                       _log.warn("Retrying with " + next + "...");
+                   if (_log.shouldWarn()) {_log.warn("Retrying with " + next + "...");}
                 }
             }
         }
@@ -1112,17 +1006,13 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             if (uri.startsWith("file:") || task.getMethod() == FILE) {
                 uri = DataHelper.stripHTML(task.getURI().getPath());
                 buf.append(_t("Install failed:{0}", "<br>" + uri).replace("http://", ""));
-            } else {
-                buf.append(_t("Transfer failed:{0}", "<br>" + uri).replace("http://", ""));
-            }
+            } else {buf.append(_t("Transfer failed:{0}", "<br>" + uri).replace("http://", ""));}
             if (reason != null && reason.length() > 0) {
                 String trimmed = reason.replace("http://", "").replace("java.io.IOException", _t("Error")).replaceAll("for content.*", "");
-                buf.append("<br>");
-                buf.append(trimmed);
+                buf.append("<br>").append(trimmed);
             }
             if (t != null && t.getMessage() != null && t.getMessage().length() > 0) {
-                buf.append("<br>");
-                buf.append(DataHelper.stripHTML(t.getMessage()));
+                buf.append("<br>").append(DataHelper.stripHTML(t.getMessage()));
             }
             buf.append("</b>");
             finishStatus(buf.toString());
@@ -1143,8 +1033,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  @return true if valid, false if corrupt
      */
     public boolean notifyComplete(UpdateTask task, String actualVersion, File file) {
-        if (_log.shouldInfo())
-            _log.info("Updater " + task + " for " + task.getType() + " complete");
+        if (_log.shouldInfo()) {_log.info("Updater " + task + " for " + task.getType() + " complete");}
         boolean rv = false;
         UpdateType utype = task.getType();
         switch (utype) {
@@ -1188,8 +1077,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 notifyInstalled(task.getType(), task.getID(), actualVersion);
                 break;
         }
-        if (rv)
-            _downloaders.remove(task);
+        if (rv) {_downloaders.remove(task);}
         return rv;
     }
 
@@ -1203,20 +1091,16 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         UpdateItem ui = new UpdateItem(type, id);
         if (version == null) {
             _installed.remove(ui);
-            if (_log.shouldInfo())
-                _log.info(ui + " removed");
+            if (_log.shouldInfo()) {_log.info(ui + " removed");}
             return;
         }
         Version ver = new Version(version);
-        if (_log.shouldInfo())
-            _log.info(ui + " " + ver + " installed");
+        if (_log.shouldInfo()) {_log.info(ui + " " + ver + " installed");}
         _installed.put(ui, ver);
         Version old = _downloaded.get(ui);
-        if (old != null && old.compareTo(ver) <= 0)
-            _downloaded.remove(ui);
+        if (old != null && old.compareTo(ver) <= 0) {_downloaded.remove(ui);}
         old = _available.get(ui);
-        if (old != null && old.compareTo(ver) <= 0)
-            _available.remove(ui);
+        if (old != null && old.compareTo(ver) <= 0) {_available.remove(ui);}
     }
 
     ///////// End UpdateManager interface
@@ -1227,8 +1111,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     private void notifyDownloaded(UpdateType type, String id, String version) {
         UpdateItem ui = new UpdateItem(type, id);
         Version ver = new Version(version);
-        if (_log.shouldInfo())
-            _log.info(ui + " " + ver + " downloaded");
+        if (_log.shouldInfo()) {_log.info(ui + " " + ver + " downloaded");}
         _downloaded.put(ui, ver);
         // one trumps the other
         if (type == ROUTER_SIGNED) {
@@ -1238,8 +1121,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             // remove available from other type
             UpdateItem altui = new UpdateItem(ROUTER_SIGNED_SU3, id);
             Version old = _available.get(altui);
-            if (old != null && old.compareTo(ver) <= 0)
-                _available.remove(altui);
+            if (old != null && old.compareTo(ver) <= 0) {_available.remove(altui);}
             // ... and declare the alt downloaded as well
             _downloaded.put(altui, ver);
         } else if (type == ROUTER_SIGNED_SU3) {
@@ -1249,8 +1131,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             // remove available from other type
             UpdateItem altui = new UpdateItem(ROUTER_SIGNED, id);
             Version old = _available.get(altui);
-            if (old != null && old.compareTo(ver) <= 0)
-                _available.remove(altui);
+            if (old != null && old.compareTo(ver) <= 0) {_available.remove(altui);}
             // ... and declare the alt downloaded as well
             _downloaded.put(altui, ver);
         } else if (type == ROUTER_UNSIGNED) {
@@ -1263,16 +1144,13 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             _downloaded.remove(new UpdateItem(ROUTER_UNSIGNED, ""));
         }
         Version old = _available.get(ui);
-        if (old != null && old.compareTo(ver) <= 0)
-            _available.remove(ui);
+        if (old != null && old.compareTo(ver) <= 0) {_available.remove(ui);}
     }
 
     /** from NewsFetcher */
     boolean shouldInstall() {
         String policy = _context.getProperty(ConfigUpdateHandler.PROP_UPDATE_POLICY);
-        if ("notify".equals(policy) || NewsHelper.dontInstall(_context))
-            return false;
-//////////////////
+        if ("notify".equals(policy) || NewsHelper.dontInstall(_context)) {return false;}
         File zip = new File(_context.getRouterDir(), Router.UPDATE_FILE);
         return !zip.exists();
     }
@@ -1285,8 +1163,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         VersionAvailable va = _available.get(new UpdateItem(type, id));
         if (va != null) {
             List<URI> rv = va.sourceMap.get(method);
-            if (rv != null)
-                return rv;
+            if (rv != null) {return rv;}
         }
 
         switch (type) {
@@ -1301,9 +1178,8 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 StringTokenizer tok = new StringTokenizer(URLs, " ,\r\n");
                 List<URI> rv = new ArrayList<URI>();
                 while (tok.hasMoreTokens()) {
-                    try {
-                        rv.add(new URI(tok.nextToken().trim()));
-                    } catch (URISyntaxException use) {}
+                    try {rv.add(new URI(tok.nextToken().trim()));}
+                    catch (URISyntaxException use) {}
                 }
                 Collections.shuffle(rv, _context.random());
                 return rv;
@@ -1316,18 +1192,16 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             case ROUTER_UNSIGNED:
                 String url = _context.getProperty(ConfigUpdateHandler.PROP_ZIP_URL);
                 if (url != null) {
-                    try {
-                        return Collections.singletonList(new URI(url));
-                    } catch (URISyntaxException use) {}
+                    try {return Collections.singletonList(new URI(url));}
+                    catch (URISyntaxException use) {}
                 }
                 break;
 
             case ROUTER_DEV_SU3:
                 String url3 = _context.getProperty(ConfigUpdateHandler.PROP_DEV_SU3_URL);
                 if (url3 != null) {
-                    try {
-                        return Collections.singletonList(new URI(url3));
-                    } catch (URISyntaxException use) {}
+                    try {return Collections.singletonList(new URI(url3));}
+                    catch (URISyntaxException use) {}
                 }
                 break;
 
@@ -1335,9 +1209,8 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 Properties props = PluginStarter.pluginProperties(_context, id);
                 String xpi2pURL = props.getProperty("updateURL");
                 if (xpi2pURL != null) {
-                    try {
-                        return Collections.singletonList(new URI(xpi2pURL));
-                    } catch (URISyntaxException use) {}
+                    try {return Collections.singletonList(new URI(xpi2pURL));}
+                    catch (URISyntaxException use) {}
                 }
                 break;
 
@@ -1354,8 +1227,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      */
     public String getUpdateConstraint(UpdateType type, String id) {
         VersionAvailable va = _available.get(new UpdateItem(type, id));
-        if (va != null)
-            return va.constraint;
+        if (va != null) {return va.constraint;}
         return null;
     }
 
@@ -1397,12 +1269,8 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                             if (upp != null) {
                                 upp.updateDownloadedandVerified(updateType, ftype, actualVersion, temp);
                                 _externalRestartPending = true;
-                            } else {
-                                err = "Unsupported su3 file type " + ftype + " " + key;
-                            }
-                        } else {
-                            err = "Unsupported su3 file type " + ftype;
-                        }
+                            } else {err = "Unsupported su3 file type " + ftype + " " + key;}
+                        } else {err = "Unsupported su3 file type " + ftype;}
                     }
                 } else {
                     err = "Signature failed, signer " + DataHelper.stripHTML(up.getSignerString()) +
@@ -1411,9 +1279,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             } catch (IOException ioe) {
                 _log.error("SU3 extract error", ioe);
                 err = DataHelper.stripHTML(ioe.toString());
-            } finally {
-                temp.delete();
-            }
+            } finally {temp.delete();}
         } else {
             TrustedUpdate up = new TrustedUpdate(_context);
             err = up.migrateVerified(RouterVersion.VERSION, f, to);
@@ -1453,16 +1319,15 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         String url = uri.toString();
         String policy = _context.getProperty(ConfigUpdateHandler.PROP_UPDATE_POLICY);
         if (FileUtil.verifyZip(updFile) && (!isExternalRestartPending() || !("install".equals(policy)))) {
-            if (url.contains("skank"))
-                updateStatus("<b class=volatile>" + _t("Update downloaded").replace("Update", "I2P+ Update") + "</b>");
-            else
-                updateStatus("<b class=volatile>" + _t("Update downloaded") + "</b>");
+            if (url.contains("skank")) {updateStatus("<b class=volatile>" + _t("Update downloaded").replace("Update", "I2P+ Update") + "</b>");}
+            else {updateStatus("<b class=volatile>" + _t("Update downloaded") + "</b>");}
         } else {
             updFile.delete();
-            if (url.contains("skank"))
+            if (url.contains("skank")) {
                 updateStatus("<b class=volatile>" + _t("Unsigned update file from {0} is corrupt", url).replace("Unsigned update file", "I2P+ Update") + "</b>");
-            else
+            } else {
                 updateStatus("<b class=volatile>" + _t("Unsigned update file from {0} is corrupt", url) + "</b>");
+            }
             _log.log(Log.CRIT, "Corrupt unsigned update from: " + url);
             return false;
         }
@@ -1472,29 +1337,19 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             updFile.delete();
             long modtime = 0;
             if (lastmod != null) {
-                try {
-                    modtime = Long.parseLong(lastmod);
-                } catch (NumberFormatException nfe) {}
+                try {modtime = Long.parseLong(lastmod);}
+                catch (NumberFormatException nfe) {}
             }
-            if (modtime <= 0)
-                modtime = _context.clock().now();
+            if (modtime <= 0) {modtime = _context.clock().now();}
             _context.router().saveConfig(NewsHelper.PROP_LAST_UPDATE_TIME, Long.toString(modtime));
             if ("install".equals(policy)) {
-                if (url.contains("skank")) {
-                    _log.log(Log.CRIT, "I2P+ update downloaded, restarting to install it...");
-//                    updateStatus("<b>" + _t("Update downloaded").replace("Update", "I2P+ Update") + "</b><br>" + _t("Restarting") + "&hellip;");
-                } else {
-                    _log.log(Log.CRIT, "Update was downloaded, restarting to install it...");
-//                    updateStatus("<b class=volatile>" + _t("Update downloaded") + "</b><br>" + _t("Restarting") + "&hellip;");
-                }
+                if (url.contains("skank")) {_log.log(Log.CRIT, "I2P+ update downloaded, restarting to install it...");}
+                else {_log.log(Log.CRIT, "Update was downloaded, restarting to install it...");}
                 restart();
             } else {
-                if (url.contains("skank"))
-                    _log.logAlways(Log.CRIT, "I2P+ update downloaded - will be installed at next restart");
-                else
-                    _log.logAlways(Log.CRIT, "Update was downloaded - will be installed at next restart");
-                // SummaryHelper will display restart info separately
-                updateStatus("");
+                if (url.contains("skank")) {_log.logAlways(Log.CRIT, "I2P+ update downloaded - will be installed at next restart");}
+                else {_log.logAlways(Log.CRIT, "Update was downloaded - will be installed at next restart");}
+                updateStatus(""); // SummaryHelper will display restart info separately
             }
         } else {
             _log.log(Log.CRIT, "Failed copy to " + to);
@@ -1506,51 +1361,38 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     /**
      *  @return success
      */
-    private boolean handlePluginFile(URI uri, String actualVersion, File sudFile) {
-       //////////////// handled elsewhere?
-        return false;
-    }
+    private boolean handlePluginFile(URI uri, String actualVersion, File sudFile) {return false;} //handled elsewhere?
 
     private void restart() {
-        if (_context.hasWrapper())
+        if (_context.hasWrapper()) {
             ConfigServiceHandler.registerWrapperNotifier(_context, Router.EXIT_GRACEFUL_RESTART, false);
+        }
         _context.router().shutdownGracefully(Router.EXIT_GRACEFUL_RESTART);
     }
 
     static String linkify(String url) {
         String durl = url;
-        if (durl.startsWith("http://"))
-            durl = durl.substring(7);
-        else if (durl.startsWith("https://"))
-            durl = durl.substring(8);
-        if (durl.length() > 28)
-            durl = durl.substring(0, 25) + "&hellip;";
+        if (durl.startsWith("http://")) {durl = durl.substring(7);}
+        else if (durl.startsWith("https://")) {durl = durl.substring(8);}
+        if (durl.length() > 28) {durl = durl.substring(0, 25) + "&hellip;";}
         return "<a target=_blank href=\"" + url + "\"/>" + durl + "</a>";
     }
 
     /** translate a string */
-    public String _t(String s) {
-        return Messages.getString(s, _context);
-    }
+    public String _t(String s) {return Messages.getString(s, _context);}
 
     /**
      *  translate a string with a parameter
      */
-    public String _t(String s, Object o) {
-        return Messages.getString(s, o, _context);
-    }
+    public String _t(String s, Object o) {return Messages.getString(s, o, _context);}
 
     /**
      *  translate a string with parameters
      *  @since 0.9.9
      */
-    public String _t(String s, Object o, Object o2) {
-        return Messages.getString(s, o, o2, _context);
-    }
+    public String _t(String s, Object o, Object o2) {return Messages.getString(s, o, o2, _context);}
 
-    private void updateStatus(String s) {
-        _status = s;
-    }
+    private void updateStatus(String s) {_status = s;}
 
     private void finishStatus(String msg) {
         updateStatus(msg);
@@ -1559,12 +1401,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
     private class StatusCleaner implements SimpleTimer.TimedEvent {
         private final String _msg;
-        public StatusCleaner(String msg) {
-            _msg = msg;
-        }
+        public StatusCleaner(String msg) {_msg = msg;}
         public void timeReached() {
-            if (_msg.equals(getStatus()))
-                updateStatus("");
+            if (_msg.equals(getStatus())) {updateStatus("");}
         }
     }
 
@@ -1578,8 +1417,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                     for (Iterator<UpdateTask> iter = _activeCheckers.iterator(); iter.hasNext(); ) {
                         UpdateTask t = iter.next();
                         if (!t.isRunning()) {
-                            if (_log.shouldWarn())
-                                _log.warn("Failsafe remove checker " + t);
+                            if (_log.shouldWarn()) {_log.warn("Failsafe remove checker " + t);}
                             iter.remove();
                         }
                     }
@@ -1589,8 +1427,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 for (Iterator<UpdateTask> iter = _downloaders.keySet().iterator(); iter.hasNext(); ) {
                     UpdateTask t = iter.next();
                     if (!t.isRunning()) {
-                        if (_log.shouldWarn())
-                            _log.warn("Failsafe remove downloader " + t);
+                        if (_log.shouldWarn()) {_log.warn("Failsafe remove downloader " + t);}
                         iter.remove();
                     }
                 }
@@ -1614,23 +1451,18 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         /** reverse, highest priority first, ensure different ones are different */
         public int compareTo(RegisteredUpdater r) {
             int p = r.priority - priority;
-            if (p != 0)
-                return p;
+            if (p != 0) {return p;}
             return hashCode() - r.hashCode();
         }
 
         @Override
-        public int hashCode() {
-            return updater.hashCode() ^ type.hashCode() ^ method.hashCode();
-        }
+        public int hashCode() {return updater.hashCode() ^ type.hashCode() ^ method.hashCode();}
 
         @Override
         public boolean equals(Object o) {
-            if (!(o instanceof RegisteredUpdater))
-                return false;
+            if (!(o instanceof RegisteredUpdater)) {return false;}
             RegisteredUpdater r = (RegisteredUpdater) o;
-            return type == r.type && method == r.method &&
-                   updater.equals(r.updater);
+            return type == r.type && method == r.method && updater.equals(r.updater);
         }
 
         @Override
@@ -1655,23 +1487,18 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         /** reverse, highest priority first, ensure different ones are different */
         public int compareTo(RegisteredChecker r) {
             int p = r.priority - priority;
-            if (p != 0)
-                return p;
+            if (p != 0) {return p;}
             return hashCode() - r.hashCode();
         }
 
         @Override
-        public int hashCode() {
-            return checker.hashCode() ^ type.hashCode() ^ method.hashCode();
-        }
+        public int hashCode() {return checker.hashCode() ^ type.hashCode() ^ method.hashCode();}
 
         @Override
         public boolean equals(Object o) {
-            if (!(o instanceof RegisteredChecker))
-                return false;
+            if (!(o instanceof RegisteredChecker)) {return false;}
             RegisteredChecker r = (RegisteredChecker) o;
-            return type == r.type && method == r.method &&
-                   checker.equals(r.checker);
+            return type == r.type && method == r.method && checker.equals(r.checker);
         }
 
         @Override
@@ -1693,22 +1520,18 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
 
         @Override
-        public int hashCode() {
-            return type.hashCode() ^ id.hashCode();
-        }
+        public int hashCode() {return type.hashCode() ^ id.hashCode();}
 
         @Override
         public boolean equals(Object o) {
-            if (!(o instanceof UpdateItem))
-                return false;
+            if (!(o instanceof UpdateItem)) {return false;}
             UpdateItem r = (UpdateItem) o;
             return type == r.type && id.equals(r.id);
         }
 
         @Override
         public String toString() {
-            if ("".equals(id))
-                return type.toString();
+            if ("".equals(id)) {return type.toString();}
             return type.toString() + ' ' + id;
         }
     }
@@ -1716,26 +1539,21 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     private static class Version implements Comparable<Version> {
         public final String version;
 
-        public Version(String version) {
-            this.version = version;
-        }
+        public Version(String version) {this.version = version;}
 
-        public int compareTo(Version r) {
-            return VersionComparator.comp(version, r.version);
-        }
+        public int compareTo(Version r) {return VersionComparator.comp(version, r.version);}
 
         @Override
-        public int hashCode() { return version.hashCode(); }
+        public int hashCode() {return version.hashCode();}
 
         @Override
-        public boolean equals(Object o) { return (o instanceof Version) && version.equals(((Version)o).version); }
+        public boolean equals(Object o) {return (o instanceof Version) && version.equals(((Version)o).version);}
 
         @Override
         public String toString() {
             if (version.length() == 13) {
-                try {
-                    return "Version " + version + " (" + DataHelper.formatTime(Long.parseLong(version)) + ')';
-                } catch (NumberFormatException nfe) {}
+                try {return "Version " + version + " (" + DataHelper.formatTime(Long.parseLong(version)) + ')';}
+                catch (NumberFormatException nfe) {}
             }
             return "Version " + version;
         }
@@ -1768,15 +1586,10 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
 
         @Override
-        public boolean equals(Object o) {
-            return super.equals(o) && (o instanceof VersionAvailable);
-        }
+        public boolean equals(Object o) {return super.equals(o) && (o instanceof VersionAvailable);}
 
         @Override
-        public int hashCode() {
-            // findbugs
-            return super.hashCode();
-        }
+        public int hashCode() {return super.hashCode();} // findbugs
 
         @Override
         public String toString() {
@@ -1785,21 +1598,15 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             for (Map.Entry<UpdateMethod, List<URI>> e : sourceMap.entrySet()) {
                 buf.append(e.getKey());
                 List<URI> u = e.getValue();
-                if (u.isEmpty()) {
-                    buf.append(' ');
-                } else {
+                if (u.isEmpty()) {buf.append(' ');}
+                else {
                     buf.append('=');
-                    if (u.size() > 1)
-                        buf.append('[');
-                    for (URI uri : u) {
-                        buf.append(uri).append(' ');
-                    }
-                    if (u.size() > 1)
-                        buf.append(']');
+                    if (u.size() > 1) {buf.append('[');}
+                    for (URI uri : u) {buf.append(uri).append(' ');}
+                    if (u.size() > 1) {buf.append(']');}
                 }
             }
-            if (constraint != null)
-                buf.append(" \"").append(constraint).append('"');
+            if (constraint != null) {buf.append(" \"").append(constraint).append('"');}
             return buf.toString();
         }
     }
@@ -1807,45 +1614,35 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     /** debug */
     public void renderStatusHTML(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
-        buf.append("<h2>Update Manager</h2>");
-        buf.append("<h3>Installed</h3>");
-        buf.append("<div class=debug_container>");
+        buf.append("<h2>Update Manager</h2>\n").append("<h3>Installed</h3>\n").append("<div class=debug_container>");
         toString(buf, _installed);
-        buf.append("</div>");
-        buf.append("<h3>Available</h3>");
-        buf.append("<div class=debug_container>");
+        buf.append("</div>\n").append("<h3>Available</h3>\n").append("<div class=debug_container>");
         toString(buf, _available);
-        buf.append("</div>");
+        buf.append("</div>\n");
         if (_downloaded != null) {
-            buf.append("<h3>Downloaded</h3>");
-            buf.append("<div class=debug_container>");
+            buf.append("<h3>Downloaded</h3>\n").append("<div class=debug_container>");
             toString(buf, _downloaded);
-            buf.append("</div>");
+            buf.append("</div>\n");
         }
-        buf.append("<h3>Registered Checkers</h3>");
-        buf.append("<div class=debug_container>");
+        buf.append("<h3>Registered Checkers</h3>\n").append("<div class=debug_container>\n");
         toString(buf, _registeredCheckers);
-        buf.append("</div>");
-        buf.append("<h3>Registered Updaters</h3>");
+        buf.append("</div>\n").append("<h3>Registered Updaters</h3>\n");
         buf.append("<div class=debug_container>");
         toString(buf, _registeredUpdaters);
-        buf.append("</div>");
-        buf.append("<h3>Registered PostProcessors</h3>");
+        buf.append("</div>\n").append("<h3>Registered PostProcessors</h3>");
         buf.append("<div class=debug_container>");
         toString(buf, _registeredPostProcessors.values());
-        buf.append("</div>");
-        buf.append("<h3>Active Checkers</h3>");
+        buf.append("</div>\n").append("<h3>Active Checkers</h3>\n");
         if (_activeCheckers != null) {
-            buf.append("<h3>Active Checkers</h3>");
+            buf.append("<h3>Active Checkers</h3>\n");
             buf.append("<div class=debug_container>");
             toString(buf, _activeCheckers);
-            buf.append("</div>");
+            buf.append("</div>\n");
         }
         if (_downloaders != null) {
-            buf.append("<h3>Active Updaters</h3>");
-            buf.append("<div class=debug_container>");
+            buf.append("<h3>Active Updaters</h3>\n").append("<div class=debug_container>");
             toString(buf, _downloaders);
-            buf.append("</div>");
+            buf.append("</div>\n");
         }
         out.write(buf.toString());
     }
@@ -1853,13 +1650,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     /** debug */
     private static void toString(StringBuilder buf, Collection<?> col) {
         List<String> list = new ArrayList<String>(col.size());
-        for (Object o : col) {
-            list.add(o.toString());
-        }
+        for (Object o : col) {list.add(o.toString());}
         Collections.sort(list);
-        for (String e : list) {
-            buf.append(e).append("<br>");
-        }
+        for (String e : list) {buf.append(e).append("<br>");}
     }
 
     /** debug */
@@ -1871,8 +1664,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             list.add("<b>" + key + ":</b> " + val + "<br>");
         }
         Collections.sort(list);
-        for (String e : list) {
-            buf.append(e);
-        }
+        for (String e : list) {buf.append(e);}
     }
+
 }
