@@ -26,9 +26,7 @@ async function showBadge() {
       filter.style.pointerEvents = "none";
       filter.style.opacity = ".5";
       if (!isFilterAll) {
-        badges.forEach(badge => {
-          Object.assign(badge, {hidden: true, textContent: "", id: ""});
-        });
+        badges.forEach(badge => { Object.assign(badge, {hidden: true, textContent: "", id: ""}); });
       } else {filter.querySelector(".badge").hidden = true;}
     } else if (!isFilterAll) {
       badges.forEach(badge => {
@@ -81,9 +79,7 @@ function updateURLs() {
   const noload = document.getElementById("noload");
   const sortIcon = document.querySelectorAll(".sorter");
 
-  sortIcon.forEach((item) => {
-    item.addEventListener("click", () => { setQuery(); });
-  });
+  sortIcon.forEach((item) => { item.addEventListener("click", () => { setQuery(); }); });
 
   function setQuery() {
     const params = window.location.search;
@@ -93,37 +89,24 @@ function updateURLs() {
 
 async function filterNav() {
   const filterbar = document.getElementById("torrentDisplay");
-  if (!filterbar) {
-    setTimeout(filterNav, 1500);
-    return;
-  }
+  if (!filterbar) { setTimeout(filterNav, 1500); return; }
   const pagenavtop = document.getElementById("pagenavtop");
   filterbar.addEventListener("click", async function(event) {
     const filterElement = event.target.closest(".filter");
     if (filterElement) {
       event.preventDefault();
-      if (!filterElement.classList.contains("enabled")) {
-        filterElement.classList.add("enabled");
-      }
+      if (!filterElement.classList.contains("enabled")) {filterElement.classList.add("enabled");}
       const filterURL = new URL(filterElement.href);
       const xhrURL = "/i2psnark/.ajax/xhr1.html" + filterURL.search;
       history.replaceState({}, "", filterURL);
       showBadge();
-      try {
-        await doRefresh(xhrURL, true);
-      } catch {}
-      if (pagenavtop) {
-        pagenavtop.hidden = filterElement.id !== "all";
-      }
+      try {await doRefresh(xhrURL, true);}
+      catch {}
+      if (pagenavtop) {pagenavtop.hidden = filterElement.id !== "all";}
     }
   });
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-  updateURLs();
-  filterNav();
-  countSnarks();
-  showBadge();
-});
+document.addEventListener("DOMContentLoaded", function() { updateURLs(); filterNav(); countSnarks(); showBadge(); });
 
 export {updateURLs, showBadge};

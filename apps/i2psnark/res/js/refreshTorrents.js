@@ -116,36 +116,46 @@ const worker = new Worker("/i2psnark/.res/js/snarkWork.js");
 const parser = new DOMParser();
 const container = document.createElement("div");
 let abortController = new AbortController();
+const ongoingRequests = new Map();
 
 async function fetchHTMLDocument(url, forceFetch = false) {
   cleanupCache();
+  if (!forceFetch && ongoingRequests.has(url)) {return ongoingRequests.get(url);}
   try {
     if (!forceFetch) {
-      const cachedDocument = cache.get(url);
-      const now = Date.now();
-      if (cachedDocument && (now - cachedDocument.timestamp < cacheDuration)) { return cachedDocument.doc; }
+      const cachedDocument = cache.get(url), now = Date.now();
+      if (cachedDocument && (now - cachedDocument.timestamp < cacheDuration)) {return cachedDocument.doc;}
     }
-    const { signal } = abortController;
-    const response = await fetch(url, { signal });
-    if (!response.ok) { throw new Error(`Network error: ${response.status} ${response.statusText}`); }
-    const htmlString = await response.text();
-    const doc = parser.parseFromString(htmlString, "text/html");
-    cache.set(url, { doc, timestamp: Date.now() });
-    return doc;
+    const { signal } = abortController, promise = (async () => {
+      const response = await fetch(url, { signal });
+      if (!response.ok) {throw new Error(`Network error: ${response.status} ${response.statusText}`);}
+      const htmlString = await response.text(), doc = parser.parseFromString(htmlString, 'text/html');
+      cache.set(url, { doc, timestamp: Date.now() });
+      return doc;
+    })();
+    ongoingRequests.set(url, promise);
+    const result = await promise;
+    ongoingRequests.delete(url);
+    return result;
   } catch (error) {
-    if (debugging) {
-      if (error.name === "AbortError") { console.log("Fetch aborted"); }
-      else { console.error(error); }
-    }
+    if (debugging && error.name !== 'AbortError') {console.error(error);}
     throw error;
-  } finally { abortController = new AbortController(); }
+  } finally {abortController = new AbortController();}
 }
+
+const staleCacheKeys = new Set();
 
 function cleanupCache() {
   const now = Date.now();
   for (const [key, value] of cache.entries()) {
-    if (now - value.timestamp >= cacheDuration) {cache.delete(key);}
+    if (now - value.timestamp >= cacheDuration) {staleCacheKeys.add(key);}
   }
+  removeStaleCacheKeys();
+}
+
+function removeStaleCacheKeys() {
+  for (const key of staleCacheKeys) {cache.delete(key);}
+  staleCacheKeys.clear();
 }
 
 async function doRefresh({ url = window.location.href, forceFetch = false } = {}) {
@@ -209,22 +219,26 @@ async function refreshTorrents(callback) {
         const url = await getURL();
         const responseDoc = await fetchHTMLDocument(url);
 
-        const updating = torrents.querySelectorAll("#snarkTbody tr, #dhtDebug .dht"),
-              updatingResponse = Array.from(responseDoc.querySelectorAll("#snarkTbody tr, #dhtDebug .dht"));
+        const updating = torrents.querySelectorAll("#snarkTbody tr, #dhtDebug .dht");
+        const updatingResponse = [...responseDoc.querySelectorAll("#snarkTbody tr, #dhtDebug .dht")];
 
         if (torrents) {
           if (filterbar) {
             const activeBadge = filterbar.querySelector("#torrentDisplay .filter#all .badge"),
                   activeBadgeResponse = responseDoc.querySelector("#torrentDisplay .filter#all.enabled .badge");
-            await updateElementTextContent(activeBadge, activeBadgeResponse);
+            if (activeBadge && activeBadgeResponse && activeBadge.textContent !== activeBadgeResponse.textContent) {
+              await updateElementTextContent(activeBadge, activeBadgeResponse);
+            }
 
             const pagenavtop = document.getElementById("pagenavtop"),
                   pagenavtopResponse = responseDoc.querySelector("#pagenavtop"),
                   filterbarResponse = responseDoc.querySelector("#torrentDisplay");
 
-            if ((!filterbar && filterbarResponse) || (!pagenavtop && pagenavtopResponse)) {
+            if ((filterbar && !filterbarResponse) || (!pagenavtop && pagenavtopResponse)) {
               const torrentFormResponse = responseDoc.querySelector("#torrentlist");
-              await updateElementInnerHTML(torrentForm, torrentFormResponse);
+              if (torrentFormResponse) {
+                await updateElementInnerHTML(torrentForm, torrentFormResponse);
+              }
               await initHandlers();
             } else if (pagenavtop && pagenavtopResponse && pagenavtop.outerHTML !== pagenavtopResponse.outerHTML) {
               pagenavtop.outerHTML = pagenavtopResponse.outerHTML;
@@ -234,7 +248,9 @@ async function refreshTorrents(callback) {
 
           if (updatingResponse.length === updating.length && !requireFullRefresh) {
             updating.forEach(async (item, i) => {
-              await updateElementInnerHTML(item, updatingResponse[i]);
+              if (item.innerHTML !== updatingResponse[i].innerHTML) {
+                await updateElementInnerHTML(item, updatingResponse[i]);
+              }
             });
           } else if (requireFullRefresh && updatingResponse) {
             await requestIdleOrAnimationFrame(async () => await refreshAll());
@@ -243,13 +259,17 @@ async function refreshTorrents(callback) {
         } else if (dirlist?.responseDoc) {
           if (control) {
             const controlResponse = responseDoc.querySelector("#torrentInfoControl");
-            await updateElementInnerHTML(control, controlResponse);
+            if (control.innerHTML !== controlResponse.innerHTML) {
+              await updateElementInnerHTML(control, controlResponse);
+            }
           }
 
           if (complete.length && dirlist?.responseDoc) {
             const completeResponse = Array.from(responseDoc.querySelectorAll(".completed"));
             for (let i = 0; i < complete.length && completeResponse.length; i++) {
-              await updateElementInnerHTML(complete[i], completeResponse[i]);
+              if (complete[i].innerHTML !== completeResponse[i].innerHTML) {
+                await updateElementInnerHTML(complete[i], completeResponse[i]);
+              }
             }
           }
         }
