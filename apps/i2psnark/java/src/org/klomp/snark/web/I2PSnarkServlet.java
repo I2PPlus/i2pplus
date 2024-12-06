@@ -623,10 +623,7 @@ public class I2PSnarkServlet extends BasicServlet {
             mbuf.append("</ul>");
         } else {mbuf.append("<div id=screenlog hidden><ul id=messages></ul>");}
         mbuf.append("</div>\n");
-        mbuf.append("<script nonce=").append(cspNonce).append(" type=module>\n")
-            .append("  import {initToggleLog} from \"").append(resourcePath).append("js/toggleLog.js").append("\";\n")
-            .append("  initToggleLog();\n")
-            .append("</script>\n");
+        mbuf.append("<script src=").append(resourcePath).append("js/toggleLog.js type=module></script>\n");
         int delay = 0;
         delay = _manager.getRefreshDelaySeconds();
         if (delay > 0 && _context.isRouterContext()) {

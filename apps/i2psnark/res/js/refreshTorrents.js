@@ -6,7 +6,6 @@ import {pageNav} from "./pageNav.js";
 import {showBadge} from "./filterBar.js";
 import {snarkSort} from "./snarkSort.js";
 import {toggleDebug} from "./toggleDebug.js";
-import {initToggleLog} from "./toggleLog.js";
 import {Lightbox} from "./lightbox.js";
 import {initSnarkAlert} from "./snarkAlert.js";
 
@@ -340,7 +339,6 @@ async function initSnarkRefresh() {
           await doRefresh();
           await showBadge();
           await refreshScreenLog();
-          await initToggleLog();
         }
       } catch (error) {
         if (debugging) console.error(error);
