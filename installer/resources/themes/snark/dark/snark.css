@@ -396,6 +396,7 @@ tr:hover .barText{opacity:1}
 .txBarInner[style="width:calc(100% - 2px)"]{box-shadow:var(--outline),inset 0 7px 7px 1px rgba(255,255,255,.15)}
 .txBarText{position:relative;z-index:5;font-weight:700;text-shadow:0 1px 1px #000}
 .tx{padding:2px 2px 0;min-width:68px;display:inline-block;position:relative;text-align:center;line-height:1.3;border:1px solid #141;border-left-width:5px;box-shadow:var(--highlight),inset 0 3px 3px rgba(0,0,0,.6);background:repeating-linear-gradient(90deg,#000,#000 10%,#020 10%,#020 20%)}
+#snarkFileName a{display:inline-block;vertical-align:middle}
 
 /* diskSpace */
 #diskSpace,#diskSpaceInner{width:80px;height:13px;display:inline-block;vertical-align:middle;text-align:left;border-color:#494a}
@@ -543,7 +544,7 @@ td.subHeaderPriority{padding:0 1px;font-size:7.5pt;font-weight:700;background-im
 .dirInfo th:first-child{padding-left:8px;text-align:left}
 .dirInfo th img{margin:0;max-height:20px;padding-top:3px;padding-bottom:3px}
 .dirInfo th:nth-child(2){text-align:center;width:32px}
-.dirInfo td{min-width:0}
+.dirInfo td{min-width:0;border-bottom:var(--border_softer)}
 .dirInfo td:first-child{padding:4px 6px 4px 4px;text-align:left}
 .dirInfo td:first-child a:hover img:not(.thumb),.dirInfo td:first-child a:focus img:not(.thumb){box-shadow:var(--outline),inset 0 0 0 1px #930;filter:none}
 .dirInfo td:first-child img{margin:0 2px}
@@ -748,7 +749,7 @@ input.trackerhome,input.trackerannounce{width:210px}
 
 /* sections */
 .mainsection~.mainsection{contain:paint}
-.page #snarkInfo~.mainsection{margin:10px 0;border-bottom:var(--border)}
+.page #snarkInfo~.mainsection{margin:10px 0;border-bottom:var(--border);background:linear-gradient(180deg,#010,#000)}
 .page #snarkInfo~.mainsection:not(#commentSection):last-child{margin-bottom:-7px}
 .page #snarkInfo~#commentSection{margin-bottom:0}
 .iframed .page #snarkInfo~#snarkFiles,.iframed .page #snarkInfo~#commentSection{margin:-11px 0 10px;border-bottom:var(--border)}
