@@ -214,8 +214,6 @@ input[type=submit]:active,input[type=submit].depress,a.control:active,a.control.
 .pagenavcontrols{padding:5px;border:var(--border);border-bottom:0}
 .pagenavcontrols:empty,.pagenavcontrols.hidden{display:none}
 .pagenavcontrols img{margin:0 3px;display:none}
-.pagenavcontrols span:not(#pagecount){margin:0 3px;border:var(--border);border-radius:1px;box-shadow:var(--highlight);background-size:16px;background-repeat:no-repeat;background-position:center center;background-color:#fff}
-.pagenavcontrols span:not(#pagecount):hover{border:1px solid var(--hover)}
 .pagenavcontrols .disabled{opacity:.5;pointer-events:none}
 .pagenavcontrols #first{width:20px;height:20px;display:inline-block;vertical-align:middle;background:var(--first),var(--btn)}
 .pagenavcontrols #first:hover,.pagenavcontrols a:focus #first{background:var(--first_hover)}
@@ -225,7 +223,9 @@ input[type=submit]:active,input[type=submit].depress,a.control:active,a.control.
 .pagenavcontrols #next:hover,.pagenavcontrols a:focus #next{background:var(--next_hover)}
 .pagenavcontrols #last{width:20px;height:20px;display:inline-block;vertical-align:middle;background:var(--last),var(--btn)}
 .pagenavcontrols #last:hover,.pagenavcontrols a:focus #last{background:var(--last_hover)}
-.pagenavcontrols span:not(#pagecount):active{border:var(--border_hard);box-shadow:var(--btn_shadow_active);background-size:14px;background-color:#fff;background-repeat:no-repeat;background-position:center center;background-blend-mode:luminosity}
+.pagenavcontrols a span{margin:0 3px;border:var(--border);border-radius:1px;box-shadow:var(--highlight);background-size:16px;background-repeat:no-repeat;background-position:center center;background-color:#fff}
+.pagenavcontrols a:hover span{border:1px solid var(--hover)}
+.pagenavcontrols a:active span,.pagenavcontrols span.depress{border:var(--border_hard);box-shadow:var(--btn_shadow_active);background-size:14px!important;background-color:#fff;background-repeat:no-repeat!important;background-position:center center!important;background-blend-mode:luminosity}
 #pagecount{margin:0 8px;font-weight:700;font-size:110%;display:inline-block;vertical-align:middle;letter-spacing:.1em}
 #pagenavbottom{text-align:center}
 #torrents #pagenavbottom td{padding:0}
@@ -435,7 +435,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 #torrentInfoControl .stoptorrent{float:left}
 
 /* sections */
-.configTitle,.toggleview{margin:-1px;padding:8px 5px;display:block;text-transform:uppercase;font-weight:700;border:var(--border);display:block;transition:ease box-shadow .3s}
+.configTitle,.toggleview{margin:-1px;padding:8px 5px;display:block;text-transform:uppercase;font-weight:700;border:var(--border);display:block}
 .tab_label,.toggleview{font-weight:800}
 .toggleview{position:relative;z-index:10}
 .toggleview:hover{text-decoration:none;cursor:pointer}

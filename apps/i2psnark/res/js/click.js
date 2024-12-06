@@ -7,7 +7,8 @@
 /* License: AGPL3 or later */
 
 document.addEventListener("DOMContentLoaded", () => {
-  const inputs = ["input[type=submit]", "input[type=reset]", "input[class^='action']", ".control", ".filter", ".snarkNav", ".toggleview", "#tab_config"];
+  const inputs = ["input[type=submit]", "input[type=reset]", "input[class^='action']", ".control", ".filter",
+                  ".snarkNav", ".toggleview", "#tab_config", ".pagenavcontrols a span"];
   const iframe = document.getElementById("processForm");
 
   const handleInputClick = (clickTarget) => {
@@ -19,10 +20,10 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
       clickTarget.classList.replace("depress", "inert");
       nonClickedSubmitElements.forEach((el) => el.classList.remove("tempDisabled"));
-    }, 500);
+    }, 400);
   };
 
-    let delay = 600;
+    let delay = 400;
     const isAction = clickTarget.matches("input[class^='action']");
     if (iframe && isAction) {
       const formTarget = clickTarget.form.target;
