@@ -109,9 +109,10 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                         // only update if RI is newer and non-ff
                         if (oldri != null && oldri.getPublished() < ri.getPublished() &&
                             !FloodfillNetworkDatabaseFacade.isFloodfill(ri)) {
-                            if (_log.shouldWarn())
+                            if (_log.shouldWarn()) {
                                 _log.warn("Updating capabilities for [" + key.toBase64().substring(0,6) + "] from \"" +
                                           oldri.getCapabilities() + "\" to \"" + ri.getCapabilities() + '"');
+                            }
                             _context.peerManager().setCapabilities(key, ri.getCapabilities());
                         }
                         return;
@@ -197,18 +198,17 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
             TunnelInfo out = _context.tunnelManager().selectOutboundTunnel(_client, target);
             if (out == null) {
                 if (_log.shouldLog(Log.WARN)) {
-                    _log.warn("No outbound tunnel to send the client message for [" + _client.toBase64().substring(0,6) + "] \n* Message: " + msg);
+                    _log.warn("No Outbound tunnel to send the client message for [" + _client.toBase64().substring(0,6) + "] \n* Message: " + msg);
                 }
                 return;
             }
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("distributing IB tunnel msg type " + type + " back out " + out
-                          + " targetting " + target);
+                _log.debug("Distributing Inbound tunnel msg type " + type + " back out " + out + " targeting " + target);
             TunnelId outId = out.getSendTunnelId(0);
             if (outId == null) {
-                if (_log.shouldLog(Log.ERROR))
-                    _log.error("strange? outbound tunnel has no outboundId? " + out
-                               + " failing to distribute " + msg);
+                if (_log.shouldLog(Log.ERROR)) {
+                    _log.error("Strange? Outbound tunnel has no OutboundId? " + out + " failing to distribute " + msg);
+                }
                 return;
             }
             long exp = _context.clock().now() + 20*1000;
@@ -261,21 +261,21 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
 
                         // ... and inject it.
                         ((LeaseSet)dsm.getEntry()).setReceivedBy(_client);
-                                if (_log.shouldLog(Log.INFO))
-                                        _log.info("Storing garlic LS down tunnel for: " + dsm.getKey() + " sent to: "
-                                                  + _clientNickname + " ("
-                                                  + (_client != null ? _client.toBase32() : ") router"));
-                            _context.inNetMessagePool().add(dsm, null, null, _msgIDBloomXor);
-                        } else {
-                            if (_client != null) {
-                                // drop it, since the data we receive shouldn't include router
-                                // references, as that might get us to talk to them (and therefore
-                                // open an attack vector)
-                                _context.statManager().addRateData("tunnel.dropDangerousClientTunnelMessage", 1,
-                                                                   DatabaseStoreMessage.MESSAGE_TYPE);
-                                _log.error("Dropping DANGEROUS message (" + dsm + ") sent down a tunnel for " + _clientNickname + " [" + truncDest + "]",
-                                           new Exception("cause"));
-                                return;
+                        if (_log.shouldLog(Log.INFO)) {
+                            _log.info("Storing garlic LS down tunnel for: " + dsm.getKey() + "\n* Sent to: " +
+                                      _clientNickname + " (" + (_client != null ? _client.toBase32() : ") router"));
+                        }
+                        _context.inNetMessagePool().add(dsm, null, null, _msgIDBloomXor);
+                    } else {
+                        if (_client != null) {
+                            // drop it, since the data we receive shouldn't include router
+                            // references, as that might get us to talk to them (and therefore
+                            // open an attack vector)
+                            _context.statManager().addRateData("tunnel.dropDangerousClientTunnelMessage", 1,
+                                                               DatabaseStoreMessage.MESSAGE_TYPE);
+                            _log.error("Dropping DANGEROUS message (" + dsm + ") sent down a tunnel for " + _clientNickname + " [" + truncDest + "]",
+                                       new Exception("cause"));
+                            return;
                         }
                         // Case 3:
                         // Store of an RI (ours or somebody else's)
@@ -284,8 +284,9 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                         // and the search marked as successful.
                         // note that encrypted replies to RI lookups is currently disabled in ISJ, we won't get here.
                         // ... and inject it.
-                        if (_log.shouldInfo())
+                        if (_log.shouldInfo()) {
                             _log.info("Received DBStoreMessage from " +  _clientNickname + " tunnel for RouterInfo [" + dsm.getKey() + "]");
+                        }
                         _context.inNetMessagePool().add(dsm, null, null, _msgIDBloomXor);
                     }
                     break;
@@ -298,17 +299,6 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                     // in a reply to a LS lookup over client tunnels.
                     // ILJ would also have to follow references via client tunnels
                     DatabaseSearchReplyMessage orig = (DatabaseSearchReplyMessage) data;
-                  /****
-                    if (orig.getNumReplies() > 0) {
-                        if (_log.shouldInfo())
-                            _log.info("Removing replies from a garlic DSRM down a tunnel for client [" + _client.toString().substring(0,12) +
-                                      "...] " + data);
-                        DatabaseSearchReplyMessage newMsg = new DatabaseSearchReplyMessage(_context);
-                        newMsg.setFromHash(orig.getFromHash());
-                        newMsg.setSearchKey(orig.getSearchKey());
-                        orig = newMsg;
-                     }
-                   ****/
                     _context.inNetMessagePool().add(orig, null, null, _msgIDBloomXor);
                     break;
 
@@ -334,8 +324,7 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                             _log.error("Dropping DANGEROUS message (" + data + ") down a tunnel for client [" +
                                        _client.toString().substring(0,12) + "...]", new Exception("cause"));
                         } else {
-                            _log.error("Dropped dangerous message received down an expl. tunnel "
-                                       + data, new Exception("cause"));
+                            _log.error("Dropped dangerous message received down an expl. tunnel " + data, new Exception("cause"));
                         }
                         break;
 
@@ -346,11 +335,13 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                     Hash to = instructions.getDestination();
                     // Can we route UnknownI2NPMessages to a destination too?
                     if (type != DataMessage.MESSAGE_TYPE) {
-                        if (_log.shouldError())
+                        if (_log.shouldError()) {
                             _log.error("Cannot send a " + data.getClass().getSimpleName() + " to a destination");
+                        }
                     } else if (_client != null && _client.equals(to)) {
-                        if (_log.shouldDebug())
-                            _log.debug("Data message came down a tunnel for client [" + _client.toString().substring(0,12) + "...]");
+                        if (_log.shouldDebug()) {
+                            _log.debug("Received data message for client [" + _client.toString().substring(0,12) + "...]");
+                        }
                         DataMessage dm = (DataMessage)data;
                         Payload payload = new Payload();
                         payload.setEncryptedData(dm.getData());
@@ -361,22 +352,25 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                         TunnelPoolSettings tgt = _context.tunnelManager().getInboundSettings(to);
                         if (tgt != null && _client.equals(tgt.getAliasOf())) {
                             // same as above, just different log
-                            if (_log.shouldDebug())
-                                _log.debug("Data message came down a tunnel for client ["+ _client.toString().substring(0,12) +
+                            if (_log.shouldDebug()) {
+                                _log.debug("Received data message for client ["+ _client.toString().substring(0,12) +
                                            "...] targeting Shared Client destination [" + to.toString().substring(0,12) + "]");
+                            }
                             DataMessage dm = (DataMessage)data;
                             Payload payload = new Payload();
                             payload.setEncryptedData(dm.getData());
                             ClientMessage m = new ClientMessage(to, payload);
                             _context.clientManager().messageReceived(m);
                         } else {
-                            if (_log.shouldError())
-                                _log.error("Data message came down a tunnel for client [" + _client.toString().substring(0,12) +
-                                           "...] but targeted [" + to.toString().substring(0,12) + "]");
+                            if (_log.shouldError()) {
+                                _log.error("Received data message for client [" + _client.toString().substring(0,12) +
+                                           "...] -> Wrong target: [" + to.toString().substring(0,12) + "]");
+                            }
                         }
                     } else {
-                        if (_log.shouldError())
-                            _log.error("Data message came down an Exploratory tunnel targeting destination [" + to.toString().substring(0,12) + "]");
+                        if (_log.shouldError()) {
+                            _log.error("Received data message via Exploratory tunnel targeting destination [" + to.toString().substring(0,12) + "]");
+                        }
                     }
                     return;
 
