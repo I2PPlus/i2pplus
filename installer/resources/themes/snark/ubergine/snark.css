@@ -211,7 +211,7 @@ td.status img{margin:-2px 3px -2px 1px;height:23px;width:auto;display:inline-blo
 .noneLoaded td{text-align:center;color:var(--ink)}
 .noneLoaded,.noneLoaded:hover td{font-weight:700;border-radius:0 0 2px 2px;background:linear-gradient(180deg,#313,#101)}
 .noneLoaded i{padding:10px;display:inline-block}
-.rowOdd.filtered:hover td,.rowEven.filtered:hover td,.peerinfo:hover td{border-bottom:1px solid #414}
+.peerinfo:hover td{border-bottom:1px solid #414}
 .rateDown,.rateUp,.snarkFileName,.fileSize,.rxd,.txd{padding:0 3px;line-height:1;font-weight:700}
 .rateDown,.rateUp,.ETA,.txd{width:4%;min-width:40px;white-space:nowrap;text-align:center!important}
 .rateDown{color:#76a}

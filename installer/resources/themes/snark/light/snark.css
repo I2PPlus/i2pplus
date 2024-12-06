@@ -157,8 +157,6 @@ tfoot .rateUp,tfoot .rateDown,td.rateUp,td.rateDown,tfoot .txd,td.txd{text-align
 .downloading.active:hover td:last-child{background:linear-gradient(to left,#3c3,#3c3 3px,#0000 3px)}
 .downloading.active td:last-child{background:linear-gradient(to left,#3c3,#3c3 3px,#0000 3px)}
 .fileStatus{padding:2px 10px;width:1%;white-space:nowrap;font-style:italic;text-align:center}
-.filtered{border-top:var(--border_soft);background:var(--row)}
-.filtered~.filtered{border-top:var(--border_softer)}
 .status{width:1%;max-width:32px;white-space:nowrap;text-align:center}
 .status img{padding-top:3px;padding-bottom:3px;width:auto}
 .noneLoaded i{padding:10px;display:inline-block}
@@ -174,7 +172,7 @@ tfoot .rateUp,tfoot .rateDown,td.rateUp,td.rateDown,tfoot .txd,td.txd{text-align
 #down{margin:20px 10px 10px;padding:15px;font-size:0;color:#001;border:1px solid #bbc;border-radius:3px;box-shadow:var(--highlight),inset 5px 5px 3px #88a;background:repeating-linear-gradient(45deg,#fff,#eef 20px,#eef 20px,#fff 40px) right top,repeating-linear-gradient(135deg,#ddf,#eef 20px,#fff 20px,#eef 40px) left top;background-size:200%,200%;animation:linear down 60s forwards infinite reverse;background-blend-mode:multiply,normal}
 .iframed #down{margin:11px 11px 12px}
 .rowEven+.rowEven td:nth-child(2),.rowOdd td+.rowOdd td:nth-child(2){padding:4px 0;text-align:left}
-.rowOdd:not(.filtered),.rowEven:not(.filtered),#commentInfo tr,#userComments tr{border-top:var(--border_softer);background:var(--row)}
+.rowOdd,.rowEven,#commentInfo tr,#userComments tr{border-top:var(--border_softer);background:var(--row)}
 .seeding.active:hover td:last-child{background:linear-gradient(to left,#f64384,#f64384 3px,#0000 3px)}
 .seeding.active td:last-child{background:linear-gradient(to left,#f64384,#f64384 3px,#0000 3px)}
 .snarkFileName{padding:4px 0;text-align:left}
