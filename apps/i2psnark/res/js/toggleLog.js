@@ -7,7 +7,7 @@ let isScreenlogExpanded = false;
 function initToggleLog() {
   const screenlog = document.getElementById("screenlog");
   const toggleLogCss = document.getElementById("toggleLogCss");
-  const exCss = "#screenlog.xpanded{height:auto!important;max-height:300px!important;min-height:56px;transition:max-height .1s linear,min-height .1s linear;will-change:transform}" +
+  const exCss = "#screenlog.xpanded{height:auto!important;max-height:300px!important;min-height:56px;will-change:transform}" +
                 "#screenlog:hover,#screenlog:focus{overflow-y:auto}" +
                 "@media (min-width:1500px){#screenlog.xpanded{min-height:60px!important}}";
   const shCss = "#screenlog.collapsed{max-height:56px!important;min-height:56px}" +

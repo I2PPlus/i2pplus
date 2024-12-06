@@ -198,7 +198,8 @@ input[type=submit]:active,input[type=submit].depress,a.control:active,a.control.
 
 /* screenlog */
 #closelog,#expand,#shrink{margin-right:5px;position:sticky;top:0;display:block;float:right;mix-blend-mode:luminosity;cursor:pointer}
-#shrink{display:none}
+#expand,#shrink{display:inline-block}
+#expand[hidden],#shrink[hidden]{display:none}
 #closelog:hover,#expand:hover,#shrink:hover{mix-blend-mode:normal}
 #closelog img,#expand img,#shrink img{height:12px;width:12px;padding:3px;margin-right:-6px;margin-top:-1px;border:var(--border);box-shadow:var(--highlight);background:#f8f8f8}
 #closelog img:hover,#expand img:hover,#shrink img:hover{background:#fff}

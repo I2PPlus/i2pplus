@@ -182,7 +182,8 @@ html:not(.iframed) #navbar{transition:width .5s ease-in-out .5s;will-change:tran
 #closelog img{border-radius:0 3px 0 0}
 #closelog:hover img,#expand:hover img,#shrink:hover img{box-shadow:inset 0 0 0 1px rgba(128,96,128,.3);background:#000;mix-blend-mode:normal;filter:none}
 #closelog:active img,#expand:active img,#shrink:active img{box-shadow:inset 0 0 0 1px #310;opacity:1;mix-blend-mode:overlay}
-#shrink{display:none}
+#expand,#shrink{display:inline-block}
+#expand[hidden],#shrink[hidden]{display:none}
 .iframed .logshim{margin-top:-2px}
 .iframed #closelog img{border-radius:0}
 .iframed #screenlog,.iframed #torrents{border-radius:0}

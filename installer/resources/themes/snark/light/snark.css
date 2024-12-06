@@ -135,7 +135,8 @@ td{padding:3px 4px;color:var(--ink_light);opacity:1;font-size:9pt}
 #screenlog li::before{margin:-1px 0 1px;display:inline-block;width:14px;height:10px;vertical-align:middle;background:var(--bullet) no-repeat left bottom/9px;content:""}
 #closelog,#expand,#shrink{margin:0;padding:0;display:block;position:sticky;top:0;z-index:999;float:right;cursor:pointer}
 #closelog{margin-right:-2px}
-#shrink{display:none}
+#expand,#shrink{display:inline-block}
+#expand[hidden],#shrink[hidden]{display:none}
 #closelog img,#expand img,#shrink img{margin:0;padding:3px;width:12px;opacity:.8;border:1px solid #77b;background:linear-gradient(180deg,rgba(255,255,255,.8) 50%,rgba(220,220,255,.8) 50%)}
 #expand img,#shrink img{margin-right:-1px}
 #closelog img:hover,#expand img:hover,#shrink img:hover{border:1px solid #77b;background:#fff;opacity:1}

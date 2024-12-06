@@ -161,7 +161,8 @@ a.controld{display:none}
 #closelog img,#closelog img:hover,#expand img,#expand img:hover,#shrink img,#shrink img:hover{margin:-6px -6px 4px 5px;opacity:1;border:var(--border);border-top:0}
 #closelog img,#expand img,#shrink img{width:12px;padding:3px;background:var(--bg);opacity:.7}
 #closelog img:hover,#closelog img:focus,#expand img:hover,#expand img:focus,#shrink img:hover,#shrink img:focus{opacity:1}
-#shrink{display:none}
+#expand,#shrink{display:inline-block}
+#expand[hidden],#shrink[hidden]{display:none}
 .logshim{margin-top:1px}
 
 /* pagenav */

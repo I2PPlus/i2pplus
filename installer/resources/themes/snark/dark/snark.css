@@ -145,7 +145,8 @@ select{margin:2px 4px 2px 0;padding:7px 24px 7px 12px;min-width:120px;font-size:
 #screenlog li:hover{opacity:1}
 #screenlog li::before{width:16px;height:11px;display:inline-block;background:var(--bullet) no-repeat 2px bottom/9px;filter:drop-shadow(0 0 1px #000);content:""}
 #closelog,#expand,#shrink{position:sticky;top:-2px;z-index:999;float:right;font-size:0;cursor:pointer}
-#shrink{display:none}
+#expand,#shrink{display:inline-block}
+#expand[hidden],#shrink[hidden]{display:none}
 #closelog img,#expand img,#shrink img{margin:-5px -5px 4px 5px;padding:4px;width:11px;border:var(--border);border-right:1px solid #0000;border-top:0;box-shadow:var(--highlight),inset 0 0 2px 1px #030;background:rgba(0,0,0,.3);opacity:.7}
 #closelog img{border-right:var(--border)}
 #screenlog:focus #closelog img,#screenlog:focus #expand img,#screenlog:focus #shrink img{background:#000;opacity:1}
