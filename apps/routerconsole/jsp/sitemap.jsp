@@ -11,8 +11,6 @@
         pageTitlePrefix = ctx.getProperty("routerconsole.pageTitlePrefix");
     }
 %>
-<html lang="<%=lang%>">
-<head>
 <title><%=pageTitlePrefix%> Sitemap - I2P+</title>
 <%@include file="head.jsi" %>
 </head>

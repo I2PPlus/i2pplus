@@ -1,5 +1,7 @@
 <%@page trimDirectiveWhitespaces="true"%>
 <%@include file="headers.jsi"%>
+<html lang="<%=lang%>" <%= theme.equals("dark") || theme.equals("midnight") ? "style=background:#000" : "" %>>
+<head>
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width, initial-scale=1">
 <%

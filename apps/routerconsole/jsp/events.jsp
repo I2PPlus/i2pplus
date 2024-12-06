@@ -5,8 +5,6 @@
     String lang = "en";
     if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
 %>
-<html lang="<%=lang%>">
-<head>
 <%@include file="head.jsi" %>
 <%=intl.title("events")%>
 <jsp:useBean class="net.i2p.router.web.helpers.EventLogHelper" id="eventHelper" scope="request" />

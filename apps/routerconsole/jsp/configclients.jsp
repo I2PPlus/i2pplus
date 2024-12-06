@@ -2,16 +2,12 @@
 <!DOCTYPE HTML>
 <%  net.i2p.I2PAppContext context = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";
-    if (context.getProperty("routerconsole.lang") != null)
-        lang = context.getProperty("routerconsole.lang"); %>
-<html lang="<%=lang%>">
-<head>
+    if (context.getProperty("routerconsole.lang") != null) {lang = context.getProperty("routerconsole.lang");}
+%>
 <%@include file="head.jsi" %>
 <%=intl.title("config clients")%>
 <style>button span.hide{display:none}input.default{width:1px;height:1px;visibility:hidden}</style>
-<script nonce=<%=cspNonce%>>
-  var deleteMessage = "<%=intl._t("Are you sure you want to delete {0}?")%>";
-</script>
+<script nonce=<%=cspNonce%>>var deleteMessage = "<%=intl._t("Are you sure you want to delete {0}?")%>";</script>
 <script src="/js/configclients.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 </head>
 <body>

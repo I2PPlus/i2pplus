@@ -5,8 +5,6 @@
     String lang = "en";
     if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
 %>
-<html lang="<%=lang%>">
-<head>
 <%@include file="head.jsi" %>
 <%=intl.title("config i2cp")%>
 <style>button span.hide{display:none}input.default{width:1px;height:1px;visibility:hidden}</style>

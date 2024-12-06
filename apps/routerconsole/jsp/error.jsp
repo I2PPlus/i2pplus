@@ -29,8 +29,6 @@
         lang = ctx.getProperty("routerconsole.lang");
     }
 %>
-<html lang="<%=lang%>">
-<head>
 <%@include file="head.jsi" %>
 <link rel=stylesheet href="<%=intl.getTheme(request.getHeader("User-Agent"))%>proxy.css">
 <%

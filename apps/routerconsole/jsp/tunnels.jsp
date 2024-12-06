@@ -5,8 +5,6 @@
     String lang = "en";
     if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
 %>
-<html lang="<%=lang%>">
-<head>
 <%@include file="head.jsi" %>
 <link rel=stylesheet href=/themes/console/tunnels.css>
 <%=intl.title("local tunnels")%>

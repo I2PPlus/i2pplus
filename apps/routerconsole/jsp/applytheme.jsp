@@ -3,8 +3,6 @@
 <%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";
     if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");} %>
-<html lang="<%=lang%>">
-<head>
 <%@include file="head.jsi" %>
 <%=intl.title("config UI")%>
 <style>input.default{width:1px;height:1px;visibility:hidden}.confignav{display:none!important}</style>

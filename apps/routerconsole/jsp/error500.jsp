@@ -9,26 +9,18 @@
     String ERROR_URI = (String) request.getAttribute("javax.servlet.error.request_uri");
     String ERROR_MESSAGE = (String) request.getAttribute("javax.servlet.error.message");
     final Throwable ERROR_THROWABLE = (Throwable) request.getAttribute("javax.servlet.error.exception");
-    if (ERROR_CODE != null)
-        response.setStatus(ERROR_CODE.intValue());
-    else
-        ERROR_CODE = Integer.valueOf(0);
-    if (ERROR_URI != null)
-        ERROR_URI = net.i2p.data.DataHelper.escapeHTML(ERROR_URI);
-    else
-        ERROR_URI = "";
-    if (ERROR_MESSAGE != null)
-        ERROR_MESSAGE = net.i2p.data.DataHelper.escapeHTML(ERROR_MESSAGE);
-    else
-        ERROR_MESSAGE = "";
+    if (ERROR_CODE != null) {response.setStatus(ERROR_CODE.intValue());}
+    else {ERROR_CODE = Integer.valueOf(0);}
+    if (ERROR_URI != null) {ERROR_URI = net.i2p.data.DataHelper.escapeHTML(ERROR_URI);}
+    else {ERROR_URI = "";}
+    if (ERROR_MESSAGE != null) {ERROR_MESSAGE = net.i2p.data.DataHelper.escapeHTML(ERROR_MESSAGE);}
+    else {ERROR_MESSAGE = "";}
 %>
 <%
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";
     if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
 %>
-<html lang="<%=lang%>">
-<head>
 <%@include file="head.jsi" %>
 <link rel=stylesheet href="<%=intl.getTheme(request.getHeader("User-Agent"))%>proxy.css">
 <%=intl.title("Internal Error")%>

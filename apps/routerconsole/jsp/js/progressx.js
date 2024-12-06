@@ -156,4 +156,7 @@ function initProgressX(window, document) {
 
 initProgressX(window, document);
 
-document.addEventListener("DOMContentLoaded", progressx.hide);
+document.addEventListener("DOMContentLoaded", () => {
+  document.documentElement.removeAttribute("style");
+  progressx.hide();
+});

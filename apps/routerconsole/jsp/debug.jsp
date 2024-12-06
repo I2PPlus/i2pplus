@@ -11,8 +11,6 @@
     if (context.getProperty("routerconsole.lang") != null)
         lang = context.getProperty("routerconsole.lang");
 %>
-<html lang="<%=lang%>">
-<head>
 <%@include file="head.jsi" %>
 <%=intl.title("Debug")%>
 <link href=/themes/console/tablesort.css rel=stylesheet>

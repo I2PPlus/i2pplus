@@ -11,8 +11,6 @@
     String lang = "en";
     if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
 %>
-<html lang="<%=lang%>">
-<head>
 <%@include file="head.jsi" %>
 <title>Sidebar - I2P+</title>
 <%

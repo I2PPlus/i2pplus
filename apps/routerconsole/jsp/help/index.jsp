@@ -11,8 +11,6 @@
         pageTitlePrefix = ctx.getProperty("routerconsole.pageTitlePrefix");
     }
 %>
-<html lang="<%=lang%>">
-<head>
 <%@include file="../head.jsi" %>
 <title><%=pageTitlePrefix%> <%=intl._t("Help Section")%> - I2P+</title>
 </head>

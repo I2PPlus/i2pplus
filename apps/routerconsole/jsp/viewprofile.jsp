@@ -8,8 +8,6 @@
     String peerB64 = request.getParameter("peer");
     if (peerB64 == null || peerB64.length() <= 0 || peerB64.replaceAll("[a-zA-Z0-9~=-]", "").length() != 0) {isValid = false;}
 %>
-<html lang="<%=lang%>">
-<head>
 <link href=/themes/console/viewprofile.css rel=stylesheet>
 <%@include file="head.jsi" %>
 <%=intl.title("Peer Profile")%>
