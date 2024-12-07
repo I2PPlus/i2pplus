@@ -32,9 +32,6 @@ public class SVGImageWorker extends ImageWorker {
         imgWidth = width;
         imgHeight = height;
         setG2d(g2d);
-        //setAntiAliasing(false);
-        //setTextAntiAliasing(true);
-        //g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
     }
 
     protected void reset(Graphics2D g2d) {
@@ -55,6 +52,16 @@ public class SVGImageWorker extends ImageWorker {
     double getStringWidth(String text, Font font) {
         // strip leading spaces caused by %x.y format
         return super.getStringWidth(text.trim(), font);
+    }
+
+    /* @return the width of the SVG image. */
+    public int getWidth() {
+        return imgWidth;
+    }
+
+    /* @return the height of the SVG image. */
+    public int getHeight() {
+        return imgHeight;
     }
 
 }

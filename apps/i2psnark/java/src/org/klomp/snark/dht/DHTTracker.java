@@ -14,7 +14,6 @@ import net.i2p.data.Hash;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
-import org.klomp.snark.SnarkManager;
 
 /**
  * The tracker stores peers, i.e. Dest hashes (not nodes).

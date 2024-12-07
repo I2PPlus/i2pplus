@@ -8,9 +8,7 @@ package net.i2p.router;
  *
  */
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.io.Writer;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;

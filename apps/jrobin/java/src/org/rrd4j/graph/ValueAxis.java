@@ -1,6 +1,5 @@
 package org.rrd4j.graph;
 
-import java.awt.BasicStroke;
 import java.awt.Font;
 import java.awt.Paint;
 import java.math.BigDecimal;

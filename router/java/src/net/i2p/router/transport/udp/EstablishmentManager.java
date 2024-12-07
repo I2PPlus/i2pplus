@@ -33,20 +33,16 @@ import net.i2p.data.SessionKey;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.data.i2np.DatabaseLookupMessage;
 import net.i2p.data.i2np.DatabaseStoreMessage;
-import net.i2p.data.i2np.DeliveryStatusMessage;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.router.Banlist;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.TransportUtil;
-import net.i2p.router.transport.crypto.DHSessionKeyBuilder;
 import static net.i2p.router.transport.udp.InboundEstablishState.InboundState.*;
 import static net.i2p.router.transport.udp.OutboundEstablishState.OutboundState.*;
 import static net.i2p.router.transport.udp.OutboundEstablishState2.IntroState.*;
 import static net.i2p.router.transport.udp.SSU2Util.*;
-import net.i2p.router.util.DecayingHashSet;
-import net.i2p.router.util.DecayingBloomFilter;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;
 import net.i2p.stat.RateStat;
@@ -58,7 +54,6 @@ import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
-import net.i2p.util.VersionComparator;
 
 /**
  * Coordinate the establishment of new sessions - both inbound and outbound.
