@@ -3,18 +3,16 @@ package org.rrd4j.graph;
 import java.awt.*;
 import java.io.IOException;
 import java.io.OutputStream;
-
 import org.jfree.svg.SVGGraphics2D;
 
 /**
- *  I2P adapter for jfreesvg
+ * I2P adapter for jfreesvg.
+ * Requires: https://github.com/jfree/jfreesvg
+ * Requires: rrd4j custom_Graphics2D branch patch https://github.com/rrd4j/rrd4j/commit/225c06b245377e2995ea39c885548e8ef0514630
+ * Ref: https://github.com/rrd4j/rrd4j/issues/165
  *
- *  Requires: https://github.com/jfree/jfreesvg
- *  Requires: rrd4j custom_Graphics2D branch patch https://github.com/rrd4j/rrd4j/commit/225c06b245377e2995ea39c885548e8ef0514630
- *  Ref: https://github.com/rrd4j/rrd4j/issues/165
- *
- *  @since 2024-05-04
- *  @author zzz
+ * @since 2024-05-04
+ * @author zzz
  */
 public class SVGImageWorker extends ImageWorker {
     private SVGGraphics2D g2d;
@@ -22,6 +20,10 @@ public class SVGImageWorker extends ImageWorker {
     private int imgHeight;
 
     public SVGImageWorker(int width, int height) {
+        initGraphics(width, height);
+    }
+
+    private void initGraphics(int width, int height) {
         imgWidth = width;
         imgHeight = height;
         g2d = new SVGGraphics2D(imgWidth, imgHeight);
@@ -29,9 +31,9 @@ public class SVGImageWorker extends ImageWorker {
     }
 
     void resize(int width, int height) {
-        imgWidth = width;
-        imgHeight = height;
-        setG2d(g2d);
+        if (width != imgWidth || height != imgHeight) {
+            initGraphics(width, height);
+        }
     }
 
     protected void reset(Graphics2D g2d) {
@@ -39,29 +41,17 @@ public class SVGImageWorker extends ImageWorker {
     }
 
     void makeImage(OutputStream os) throws IOException {
-        os.write(g2d.getSVGElement().getBytes("UTF-8"));
+       byte[] svgBytes = g2d.getSVGElement().getBytes(java.nio.charset.StandardCharsets.UTF_8);
+       os.write(svgBytes);
     }
 
     @Override
     void drawString(String text, int x, int y, Font font, Paint paint) {
-        // strip leading spaces caused by %x.y format
         super.drawString(text.trim(), x, y, font, paint);
     }
 
     @Override
     double getStringWidth(String text, Font font) {
-        // strip leading spaces caused by %x.y format
         return super.getStringWidth(text.trim(), font);
     }
-
-    /* @return the width of the SVG image. */
-    public int getWidth() {
-        return imgWidth;
-    }
-
-    /* @return the height of the SVG image. */
-    public int getHeight() {
-        return imgHeight;
-    }
-
 }

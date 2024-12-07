@@ -196,13 +196,15 @@ public final class SVGGraphics2D extends Graphics2D {
      * The number of decimal places to use when writing the matrix values
      * for transformations.
      */
-    private int transformDP = 6;
+    //private int transformDP = 6;
+    private int transformDP = 0;
 
     /**
      * The number of decimal places to use when writing coordinates for
      * geometrical shapes.
      */
-    private int geometryDP = 4;
+    //private int geometryDP = 4;
+    private int geometryDP = 0;
 
     /** The buffer that accumulates the SVG output. */
     private final StringBuilder sb;
