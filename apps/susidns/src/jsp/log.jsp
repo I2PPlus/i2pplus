@@ -65,11 +65,11 @@
 <h3><%=intl._t("Subscription Log")%>&nbsp;<span><%=intl._t("Most recent (excluding bad domains)")%></span></h3>
 <h4><%=intl._t("File location")%>: <span class=storage>${log.logName}</span></h4>
 </div>
-<div id=messages>${log.messages}</div>
+<div id=messages class=canClose>${log.messages}</div>
 <div id=config><ul>${log.logged}</ul></div>
 </div>
 <span data-iframe-height></span>
-<script nonce="<%=cspNonce%>" src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script nonce="<%=cspNonce%>" src="/js/clickToClose.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <style>body{display:block!important;pointer-events:auto!important}</style>
 </body>
 </html>

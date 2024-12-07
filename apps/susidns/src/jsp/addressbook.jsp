@@ -23,12 +23,8 @@
  * $Revision: 1.3 $
  */
 %>
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
-<%@page contentType="text/html"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" import="net.i2p.servlet.RequestWrapper" import="java.util.regex.Pattern" import="java.util.regex.Matcher" buffer="128kb"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@page import="net.i2p.servlet.RequestWrapper" %>
-<%@page import="java.util.regex.Pattern" %>
-<%@page import="java.util.regex.Matcher" %>
 <%@include file="headers.jsi"%>
 <jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session" />
 <jsp:useBean id="book" class="i2p.susi.dns.NamingServiceBean" scope="session" />
@@ -78,7 +74,7 @@
 <script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/scrollTo.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/clickToClose.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce="<%=cspNonce%>">window.jdenticon_config = { padding: 0, saturation: {color: 1, grayscale: 0} };</script>
 <script nonce="<%=cspNonce%>" src="/js/jdenticon.js"></script>
 </head>
@@ -130,7 +126,7 @@
 </h3>
 </div>
 <% /* need this whether book is empty or not to display the form messages */ %>
-<div id=messages><%=formMessages%>
+<div id=messages class=canClose><%=formMessages%>
 <%
    if (importMessages != null) {
 %>

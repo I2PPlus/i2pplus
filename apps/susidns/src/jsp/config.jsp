@@ -64,8 +64,8 @@
 <h3><%=intl._t("Configuration")%></h3>
 <h4><%=intl._t("File location")%>: <span class=storage>${cfg.fileName}</span></h4>
 </div>
-<script src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<div id=messages>${cfg.messages}</div>
+<script src="/js/clickToClose.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<div id=messages class=canClose>${cfg.messages}</div>
 <form method=POST action="config#navi">
 <div id=config>
 <input type=hidden name="serial" value="${cfg.serial}" >
