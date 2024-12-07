@@ -16,8 +16,8 @@ th.suboption{font-weight:500}
 .snarkAddInfo code,#pagenav{font-size:9.5pt}
 .snarkAddInfo{font-size:10pt}
 .snarkNav{font-weight:700}
-#torrentInfo th,.dirInfo th,#totals,#commentInfo th,#configs th{font-size:11pt}
-.tName a,.dirInfo td.snarkFileName a{font-weight:400}
+#torrentInfo th,#dirInfo th,#totals,#commentInfo th,#configs th{font-size:11pt}
+.tName a,#dirInfo td.snarkFileName a{font-weight:400}
 #configs input[name="nofilter_dataDir"],input[name="i2cpOpts"],input[name="nofilter_commentsName"]{width:calc(100% - 200px)}
 #configs td b{letter-spacing:.08em;min-width:180px}
 #configs td{line-height:200%;padding-top:4px;padding-bottom:4px}

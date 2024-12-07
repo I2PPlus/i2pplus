@@ -10,7 +10,7 @@ th.rxd,th.txd,th.rateDown,th.rateUp,td.rxd,td.txd,td.rateDown,td.rateUp,.tName a
 .configOption::after{content:"";display:inline-block;height:40px;vertical-align:middle}
 .configPanel .configTitle{padding-top:8px;font-size:14pt;text-transform:uppercase;font-variant:normal;pointer-events:none}
 .configPanel .configTitle img{margin-top:-2px;display:inline-block;height:24px;width:24px;mix-blend-mode:hard-light}
-.dirInfo .percentbartext{line-height:12px}
+#dirInfo .percentbartext{line-height:12px}
 .knownTracker a{max-width:220px;overflow:hidden;text-overflow:ellipsis;display:inline-block;white-space:nowrap}
 .optionlist{columns:500px auto;column-gap:5px}
 .percentbartext{font-size:8.5pt}
@@ -18,7 +18,7 @@ th.rxd,th.txd,th.rateDown,th.rateUp,td.rxd,td.txd,td.rateDown,td.rateUp,.tName a
 .snarkNav{font-weight:700}
 .snarkNav:link{padding-top:3px}
 .snarkNewTorrent #trackerselect tr:first-child td,.snarkNewTorrent td{font-size:10pt}
-.tName a,.dirInfo .snarkFileName a{font-weight:400;padding-top:2px;padding-bottom:2px}
+.tName a,#dirInfo .snarkFileName a{font-weight:400;padding-top:2px;padding-bottom:2px}
 #configs input[name="nofilter_dataDir"],input[name="i2cpOpts"],input[name="nofilter_commentsName"]{width:calc(100% - 215px)}
 #configs td b{letter-spacing:.08em;min-width:180px}
 #configs td{line-height:200%;padding-top:4px;padding-bottom:4px}
@@ -28,7 +28,7 @@ th.rxd,th.txd,th.rateDown,th.rateUp,td.rxd,td.txd,td.rateDown,td.rateUp,.tName a
 #screenlog li::before{margin-right:2px;background-size:11px 11px}
 #torrentDisplay .filter{padding-top:9px;line-height:1.5}
 #torrentDisplay .filter span{margin:-1px 0 1px 4px}
-#torrentInfo th,.dirInfo th,#totals,#commentInfo th,#configs th{font-size:11pt}
+#torrentInfo th,#dirInfo th,#totals,#commentInfo th,#configs th{font-size:11pt}
 #torrents code{font-size:9.5pt}
 #trackerselect td:first-child,#trackerselect td:last-child{width:20%}
 #trackerselect td:nth-child(2),#trackerselect td:nth-child(3){width:15%}

@@ -4376,7 +4376,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<label id=tab_files class=toggleview for=\"toggle_files\"><span class=tab_label>")
            .append(_t("Files"))
            .append("</span></label><hr>\n")
-           .append("<table class=dirInfo>\n<thead>\n<tr>\n<th colspan=2>");
+           .append("<table id=dirInfo>\n<thead>\n<tr>\n<th colspan=2>");
         String tx = _t("Directory");
         // cycle through sort by name or type
         // TODO: add "(ascending") or "(descending") suffix to tooltip to indicate direction of sort
@@ -4422,7 +4422,7 @@ public class I2PSnarkServlet extends BasicServlet {
             toThemeImg(buf, "priority", tx, showSort ? _t("Sort by {0}", tx) : tx);
             if (showSort) {buf.append("</a>");}
         }
-        buf.append("</th></tr></thead>\n<tbody id=dirInfo>");
+        buf.append("</th></tr></thead>\n<tbody>");
         if (!isTopLevel || hasCompleteAudio(fileList, storage, remainingArray)) { // don't show row if top level or no playlist
             buf.append("<tr><td colspan=\"" + (showPriority ? '3' : '2') + "\" class=ParentDir>");
             if (!isTopLevel) { // don't show parent dir link if top level
@@ -4654,11 +4654,12 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("  var lightbox = new Lightbox();lightbox.load();\n")
                .append("</script>\n");
         }
+        int delay = _manager.getRefreshDelaySeconds();
         buf.append("<script nonce=").append(cspNonce).append(" type=module>\n")
+           .append("  window.snarkRefreshDelay = ").append(delay).append(";\n")
            .append("  import {initSnarkRefresh} from \"").append(resourcePath).append("js/refreshTorrents.js\";\n")
            .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh, true);\n")
            .append("</script>\n");
-        int delay = _manager.getRefreshDelaySeconds();
         if (!isStandalone()) {buf.append(FOOTER);}
         else {buf.append(FOOTER_STANDALONE);}
         return buf.toString();

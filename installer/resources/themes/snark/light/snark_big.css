@@ -14,7 +14,7 @@ a.control,input[type=submit],input.accept,th,#trackerselect tr:first-child td{fo
 .configPanel .configTitle,.configPanel .configTitle:hover,.configPanel .configTitle:active{padding-top:4px;padding-bottom:2px;font-size:14pt;text-transform:uppercase;font-variant:normal}
 #tab_config a img{margin-left:6px}
 .configPanel .configTitle img{margin-top:-4px;margin-bottom:0;display:inline-block;height:20px;width:20px;mix-blend-mode:hard-light}
-#torrentInfo th,.dirInfo th,#totals,#commentInfo th,#configs th{font-size:11pt;font-weight:400}
+#torrentInfo th,#dirInfo th,#totals,#commentInfo th,#configs th{font-size:11pt;font-weight:400}
 #torrents code{font-size:9.5pt}
 #configs td{line-height:200%;padding-top:4px;padding-bottom:4px}
 #embed,#fullscreen{margin:-3px -4px -4px;padding:8px 9px 7px 10px;font-size:9.5pt}

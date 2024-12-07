@@ -101,13 +101,13 @@ async function initHandlers() {
 }
 
 async function updateElementInnerHTML(elem, respElem) {
-  if (elem && respElem && elem.innerHTML !== respElem.innerHTML) {
+  if (elem && respElem && elem.innerHTML.trim() !== respElem.innerHTML.trim()) {
     elem.innerHTML = respElem.innerHTML;
   }
 }
 
 async function updateElementTextContent(elem, respElem) {
-  if (elem && respElem && elem.textContent !== respElem.textContent) {
+  if (elem && respElem && elem.textContent.trim() !== respElem.textContent.trim()) {
     elem.textContent = respElem.textContent;
   }
 }
@@ -194,7 +194,8 @@ async function refreshTorrents(callback) {
 
     await setLinks(query);
 
-    if (files || torrents) { await requestIdleOrAnimationFrame(async () => await updateVolatile()); }
+    if (torrents) { await requestIdleOrAnimationFrame(async () => await updateVolatile()); }
+    else if (dirlist) {await requestIdleOrAnimationFrame(async () => await updateFiles()); }
     else if (down) { await requestIdleOrAnimationFrame(async () => await refreshAll()); }
 
     async function refreshAll() {
@@ -226,7 +227,7 @@ async function refreshTorrents(callback) {
           if (filterbar) {
             const activeBadge = filterbar.querySelector("#torrentDisplay .filter#all .badge"),
                   activeBadgeResponse = responseDoc.querySelector("#torrentDisplay .filter#all.enabled .badge");
-            if (activeBadge && activeBadgeResponse && activeBadge.textContent !== activeBadgeResponse.textContent) {
+            if (activeBadge && activeBadgeResponse) {
               await updateElementTextContent(activeBadge, activeBadgeResponse);
             }
 
@@ -240,7 +241,7 @@ async function refreshTorrents(callback) {
                 await updateElementInnerHTML(torrentForm, torrentFormResponse);
               }
               await initHandlers();
-            } else if (pagenavtop && pagenavtopResponse && pagenavtop.outerHTML !== pagenavtopResponse.outerHTML) {
+            } else if (pagenavtop && pagenavtopResponse && pagenavtop.outerHTML.trim() !== pagenavtopResponse.outerHTML.trim()) {
               pagenavtop.outerHTML = pagenavtopResponse.outerHTML;
               requireFullRefresh = true;
             }
@@ -248,34 +249,35 @@ async function refreshTorrents(callback) {
 
           if (updatingResponse.length === updating.length && !requireFullRefresh) {
             updating.forEach(async (item, i) => {
-              if (item.innerHTML !== updatingResponse[i].innerHTML) {
-                await updateElementInnerHTML(item, updatingResponse[i]);
-              }
+            await updateElementInnerHTML(item, updatingResponse[i]);
             });
           } else if (requireFullRefresh && updatingResponse) {
             await requestIdleOrAnimationFrame(async () => await refreshAll());
             updated = true;
           }
-        } else if (dirlist?.responseDoc) {
-          if (control) {
-            const controlResponse = responseDoc.querySelector("#torrentInfoControl");
-            if (control.innerHTML !== controlResponse.innerHTML) {
-              await updateElementInnerHTML(control, controlResponse);
-            }
-          }
-
-          if (complete.length && dirlist?.responseDoc) {
-            const completeResponse = Array.from(responseDoc.querySelectorAll(".completed"));
-            for (let i = 0; i < complete.length && completeResponse.length; i++) {
-              if (complete[i].innerHTML !== completeResponse[i].innerHTML) {
-                await updateElementInnerHTML(complete[i], completeResponse[i]);
-              }
-            }
-          }
         }
       } catch (error) {
         if (debugging) console.error(error);
       }
+    }
+
+    async function updateFiles() {
+      try {
+        const url = window.location.href;
+        const responseDoc = await fetchHTMLDocument(url);
+        const selectors = ["#dirInfo tbody td", "#torrentInfoStats .nowrap"];
+        for (const selector of selectors) {
+          const elements = document.querySelectorAll(selector);
+          const responseElements = responseDoc.querySelectorAll(selector);
+          if (responseElements.length === elements.length) {
+            for (let index = 0; index < elements.length; index++) {
+              const element = elements[index];
+              const responseElement = responseElements[index];
+              if (responseElement) {updateElementInnerHTML(element, responseElement);}
+            }
+          }
+        }
+      } catch (error) { if (debugging) console.error(error); }
     }
 
     async function refreshHeaderAndFooter() {
@@ -384,8 +386,13 @@ function stopSnarkRefresh() {
 
 const isIframed = document.documentElement.classList.contains("iframed") || window.parent;
 const parentDoc = window.parent.document;
+let lastCheckTime = 0;
 
-async function checkIfUp() {
+async function checkIfUp(minDelay = 14000) {
+  const currentTime = Date.now();
+  if (currentTime - lastCheckTime < minDelay) {return;}
+  lastCheckTime = currentTime;
+
   if (!isDocumentVisible) {return;}
   try {
     const overlay = document.getElementById("offline");

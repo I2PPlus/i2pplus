@@ -15,7 +15,7 @@ a.control,input[type=submit],input.reload[name="recheck"],input.disabled[name="r
 select,a.control,input[type=submit],input.accept,th,#trackerselect tr:first-child td{font-weight:400;font-size:12pt}
 .configPanel .configTitle,.configPanel .configTitle:hover,.configPanel .configTitle:active{padding-top:8px;font-size:14pt;text-transform:uppercase;font-variant:normal}
 .configPanel .configTitle img{margin-top:-2px;display:inline-block;height:24px;width:24px;mix-blend-mode:hard-light}
-#torrentInfo th,.dirInfo th,#totals,#commentInfo th,#configs th{font-size:11pt}
+#torrentInfo th,#dirInfo th,#totals,#commentInfo th,#configs th{font-size:11pt}
 #torrents code{font-size:9.5pt}
 #configs td{line-height:200%;padding-top:4px;padding-bottom:4px}
 #embed,#fullscreen{margin:-42px -4px -8px;padding:0 0 0 10px;font-size:9pt}

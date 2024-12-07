@@ -13,7 +13,7 @@ input[type],select,select option,td,td a,#screenlog li,#screenlog li a,textarea,
 .snarkNav{font-weight:700}
 th.rxd,th.txd,th.rateDown,th.rateUp,td.rxd,td.txd,td.rateDown,td.rateUp,.tName a:link,th#pagenav{font-size:10pt}
 .rxd,th.txd,.rateDown,th.rateUp,.barComplete{font-weight:700}
-#torrentInfo th,.dirInfo th,#totals,#commentInfo th,#configs th{font-size:11pt}
+#torrentInfo th,#dirInfo th,#totals,#commentInfo th,#configs th{font-size:11pt}
 #configs input[name="nofilter_dataDir"],input[name="i2cpOpts"],input[name="nofilter_commentsName"]{width:calc(100% - 200px)}
 #configs td b{letter-spacing:.08em;min-width:180px}
 #configs td{line-height:2;padding-top:4px;padding-bottom:4px}

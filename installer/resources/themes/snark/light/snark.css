@@ -191,8 +191,8 @@ tfoot .rateUp,tfoot .rateDown,td.rateUp,td.rateDown,tfoot .txd,td.txd{text-align
 .txd:empty{text-align:center}
 .txd,.rateUp{font-style:italic}
 .trackerLink,.magnet{padding:0 4px;width:1%;text-align:center}
-.trackerLink a:hover img,.trackerLink a:focus img,.details a:hover img[src^="/i2psnark/.res/icons/"]:not([src$="rateme.svg"]),.details a:focus img[src^="/i2psnark/.res/icons/"]:not([src$="rateme.svg"]),.dirInfo tr:first-child td:first-child a:hover img,.dirInfo tr:first-child td:first-child a:focus img{border:1px solid var(--hover);border-radius:2px;background:var(--btnAction);filter:none;mix-blend-mode:normal}
-.trackerLink a:active img,.details a:active img,.dirInfo td:first-child a:active img{box-shadow:inset 2px 2px 2px #adadeb;transform:scale(.9)}
+.trackerLink a:hover img,.trackerLink a:focus img,.details a:hover img[src^="/i2psnark/.res/icons/"]:not([src$="rateme.svg"]),.details a:focus img[src^="/i2psnark/.res/icons/"]:not([src$="rateme.svg"]),#dirInfo tr:first-child td:first-child a:hover img,#dirInfo tr:first-child td:first-child a:focus img{border:1px solid var(--hover);border-radius:2px;background:var(--btnAction);filter:none;mix-blend-mode:normal}
+.trackerLink a:active img,.details a:active img,#dirInfo td:first-child a:active img{box-shadow:inset 2px 2px 2px #adadeb;transform:scale(.9)}
 .trackerLink img,.details img,.commentDetails img{margin:0;padding:3px;height:19px;width:auto;border:1px solid #0000;filter:none}
 .peerinfo:nth-child(even),.peerinfo:nth-child(odd),#torrentEdit tr:nth-child(even){border-top:var(--border_softer);background:repeating-linear-gradient(90deg,rgba(255,255,255,.5) 2px,rgba(192,192,255,.5) 4px),#fff;background-size:4px}
 .unchoked{color:#070}
@@ -201,8 +201,8 @@ tfoot .rateUp,tfoot .rateDown,td.rateUp,td.rateDown,tfoot .txd,td.txd{text-align
 #torrentEdit tr:nth-child(odd){border-top:var(--border_softer);background:repeating-linear-gradient(90deg,rgba(192,192,255,.3) 2px,rgba(255,255,255,.5) 4px),#fff;background-size:4px}
 #torrents a:not(#debugMode){opacity:.95}
 #torrents{margin:-1px 0;background:#fff}
-#torrents tr,#torrentInfo tr,.dirInfo tr{box-shadow:var(--highlight)}
-#torrents tr:hover,.dirInfo tr:hover{color:#292b2f;box-shadow:none;background:#ffd}
+#torrents tr,#torrentInfo tr,#dirInfo tr{box-shadow:var(--highlight)}
+#torrents tr:hover,#dirInfo tr:hover{color:#292b2f;box-shadow:none;background:#ffd}
 #torrents thead th{padding-top:2px;padding-bottom:2px}
 #torrents thead th:nth-child(6){text-align:center}
 #torrents th img{max-height:22px}
@@ -225,9 +225,9 @@ tfoot .rateUp,tfoot .rateDown,td.rateUp,td.rateDown,tfoot .txd,td.txd{text-align
 
 /* download bars */
 .active .peerSeed img{opacity:1;animation:scale .2s linear 3s 2 forwards}
-.dirInfo .fileStatus img{margin:0 3px}
-.dirInfo .barInner{background:linear-gradient(90deg,rgba(255,255,0,.1) 40px,rgba(0,255,0,.1)),linear-gradient(180deg,rgba(255,255,255,.6) 0%,rgba(238,238,255,.6) 50%,rgba(200,200,255,.7) 50%,rgba(160,160,255,.7) 100%)}
-.dirInfo .barOuter{display:inline-block}
+#dirInfo .fileStatus img{margin:0 3px}
+#dirInfo .barInner{background:linear-gradient(90deg,rgba(255,255,0,.1) 40px,rgba(0,255,0,.1)),linear-gradient(180deg,rgba(255,255,255,.6) 0%,rgba(238,238,255,.6) 50%,rgba(200,200,255,.7) 50%,rgba(160,160,255,.7) 100%)}
+#dirInfo .barOuter{display:inline-block}
 .downloading.active .barOuter,.peerinfo.active .barOuter{animation:downloadbar 1s linear 3s both;opacity:1}
 .fileStatus img[src*="clock"]{margin-top:2px}
 .barComplete{margin-bottom:-1px;padding:3px 0;width:84px;max-width:84px;display:inline-block;line-height:1;text-align:center;font-weight:700;color:var(--ink_lighter);border:1px solid #ccd;border-radius:15px;box-shadow:var(--highlight),inset 0 0 1px 2px #e6e6ff;background:radial-gradient(at center bottom,#ddf,#0000 70%),linear-gradient(180deg,#f8f8ff,#ddf)}
@@ -247,7 +247,7 @@ tr:hover .barComplete{color:var(--ink_light);border:1px solid #bbc;box-shadow:in
 .barText:hover,.barText:focus{transition:ease opacity .01s}
 .barOuterComplete .barText{opacity:1}
 .rxd .barText,.rxd .barOuter{width:84px}
-.dirInfo .barText,.dirInfo .barOuter,.peerinfo .barText,.peerinfo .barOuter{width:84px}
+#dirInfo .barText,#dirInfo .barOuter,.peerinfo .barText,.peerinfo .barOuter{width:84px}
 
 /* alternative download bar popup bar text just for our downloads in #torrents*/
 .rowOdd:not(.peerinfo) .rxd .barText,.rowEven:not(.peerinfo) .rxd .barText{padding:3px;position:relative;top:-18px;left:-32px;min-width:140px;background:#fff;border-radius:2px;filter:drop-shadow(0 0 1px #77f)}
@@ -282,9 +282,9 @@ body:not(.framed) #torrentInfo{margin-top:8px}
 .configTitle:active,.toggleview:active{box-shadow:var(--highlight),inset 2px 2px 3px #7f756f}
 .configTitle{color:#446}
 .configPanel .configTitle{padding:6px 0;min-width:400px;line-height:1.3;letter-spacing:2px;font-size:110%;color:var(--ink_light);background:linear-gradient(180deg,#fcfcff,#fafaff 51%,#f6f6ff 100%);pointer-events:none}
-.dirInfo,#torrentInfo{margin:10px 0 0 0;background:#fff;border-bottom:var(--border_soft)}
-.dirInfo thead img{margin:0;padding:0 2px}
-.dirInfo td:first-child{padding-left:2px;width:1%}
+#dirInfo,#torrentInfo{margin:10px 0 0 0;background:#fff;border-bottom:var(--border_soft)}
+#dirInfo thead img{margin:0;padding:0 2px}
+#dirInfo td:first-child{padding-left:2px;width:1%}
 .headerpriority br{display:none}
 .magnetLabel{display:inline-block;vertical-align:middle;position:relative;font-style:italic}
 .magnetlink,.torrentlink{margin:0 2px;padding:3px;vertical-align:middle;border:1px solid #ccf;border-radius:1px;background:linear-gradient(180deg,#fff 50%,rgba(255,255,255,.6) 50%,rgba(240,240,255,.4)) #e7e7ff}
@@ -476,7 +476,7 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 #NotFound{border:0;border-top:var(--border_soft)}
 
 /* Downloading Priorities */
-.dirInfo input[type=radio],.dirInfo input[type=radio]:checked{margin:4px;padding:0;min-height:16px;min-width:16px;vertical-align:middle}
+#dirInfo input[type=radio],#dirInfo input[type=radio]:checked{margin:4px;padding:0;min-height:16px;min-width:16px;vertical-align:middle}
 .priority{width:1%;white-space:nowrap;text-align:center}
 .priority::after{min-height:28px;display:inline-block;vertical-align:middle;content:""}
 .priorityHigh,.priorityNormal,.prioritySkip{margin:3px;width:44px;display:inline-block;overflow:hidden;vertical-align:middle;text-align:left;font-size:0;color:#0000;background-size:18px}
@@ -720,7 +720,7 @@ tfoot .rateDown::after,tfoot .rateUp::after{width:6px;display:inline-block;verti
 #metacomment .commentWrapper{margin:6px;padding:9px 10px 10px;background:#eef}
 #metainfo{padding:2px 8px 2px 4px;border:1px solid #99a;box-shadow:var(--highlight);background:#f2f2ff}
 #snarkFiles input + .toggleview,#commentSection input + .toggleview{margin-bottom:-3px}
-#snarkInfo~.mainsection .dirInfo,#snarkInfo~.mainsection #commentInfo{margin-top:0}
+#snarkInfo~.mainsection #dirInfo,#snarkInfo~.mainsection #commentInfo{margin-top:0}
 .iframed #commentSection{padding-bottom:5px}
 
 /* table sort indicators */
@@ -847,7 +847,7 @@ img[src$="magnet.png"]{margin-top:-2px;margin-bottom:-2px;display:inline-block;v
 }
 
 @media (max-width:1200px){
-.dirInfoComplete{display:none}
+#dirInfoComplete{display:none}
 .magnet,.trackerLink,#torrents #snarkHead th.torrentLink{width:0!important;padding:0!important}
 .magnet>*,.trackerLink>*,#torrents #snarkHead th.torrentLink>*{display:none!important}
 .nav_main,.snarkNav:not(.nav_tracker){padding-left:22px}
@@ -997,7 +997,7 @@ label b,.configOption b,#trackerconfig th{font-size:9pt}
 .rxd,.txd,.rateDown,.rateUp{min-width:76px}
 .snarkNav:link,.snarkNav:hover,.snarkNav:focus{background-size:16px,100%}
 .snarkNav:link,.snarkNav:visited{font-size:11pt}
-td.details img,.dirInfo td:first-child img:not(.thumb){width:22px;height:22px;max-width:22px;max-height:22px}
+td.details img,#dirInfo td:first-child img:not(.thumb){width:22px;height:22px;max-width:22px;max-height:22px}
 th.rateDown,th.rateUp,th.rxd,th.ETA,th.txd,td.rateDown,td.rateUp,td.rxd,td.ETA,td.txd{min-width:80px;text-align:center}
 .toggleview,#tab_config{padding:4px 1px 3px;min-width:400px}
 .trackerLink img{height:18px}
