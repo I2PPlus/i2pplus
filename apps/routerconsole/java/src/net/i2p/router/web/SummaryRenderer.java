@@ -30,6 +30,7 @@ import org.rrd4j.data.Variable;
 import org.rrd4j.graph.ElementsNames;
 import org.rrd4j.graph.RrdGraph;
 import org.rrd4j.graph.RrdGraphDef;
+import org.rrd4j.graph.RrdGraphInfo;
 import org.rrd4j.graph.SVGImageWorker;
 
 import eu.bengreen.data.utility.LargestTriangleThreeBucketsTime;
@@ -274,42 +275,6 @@ class SummaryRenderer {
                     DEFAULT_FONT_NAME = "Monospaced";
                     DEFAULT_LEGEND_FONT_NAME = "Monospaced";
                 }
-/**
-            // if we offer a png output option, this may still be useful
-            } else if (fontlist.contains("Droid Sans")) {
-                DEFAULT_TITLE_FONT_NAME = "Droid Sans";
-            } else if (fontlist.contains("Open Sans")) {
-                DEFAULT_TITLE_FONT_NAME = "Open Sans";
-            } else if (fontlist.contains("Noto Sans")) {
-                DEFAULT_TITLE_FONT_NAME = "Noto Sans";
-            } else if (fontlist.contains("Segoe UI")) {
-                DEFAULT_TITLE_FONT_NAME = "Segoe UI";
-            } else if (fontlist.contains("Bitstream Vera Sans")) {
-                DEFAULT_TITLE_FONT_NAME = "Bitstream Vera Sans";
-            } else if (fontlist.contains("DejaVu Sans")) {
-                DEFAULT_TITLE_FONT_NAME = "DejaVu Sans";
-            } else if (fontlist.contains("Verdana")) {
-                DEFAULT_TITLE_FONT_NAME = "Verdana";
-            } else if (fontlist.contains("Lucida Grande")) {
-                DEFAULT_TITLE_FONT_NAME = "Lucida Grande";
-            } else if (fontlist.contains("Helvetica")) {
-                DEFAULT_TITLE_FONT_NAME = "Helvetica";
-            } else {
-                DEFAULT_TITLE_FONT_NAME = "Dialog";
-            }
-            if  (fontlist.contains("Droid Sans Mono")) {
-                DEFAULT_FONT_NAME = "Droid Sans Mono";
-                DEFAULT_LEGEND_FONT_NAME = "Droid Sans Mono";
-            } else if (fontlist.contains("Noto Mono")) {
-                DEFAULT_FONT_NAME = "Noto Mono";
-                DEFAULT_LEGEND_FONT_NAME = "Noto Mono";
-            } else if (fontlist.contains("DejaVu Sans Mono")) {
-                DEFAULT_FONT_NAME = "DejaVu Sans Mono";
-                DEFAULT_LEGEND_FONT_NAME = "DejaVu Sans Mono";
-            } else if (fontlist.contains("Lucida Console")) {
-                DEFAULT_FONT_NAME = "Lucida Console";
-                DEFAULT_LEGEND_FONT_NAME = "Lucida Console";
-**/
             } else {
                 // let's handle the fonts in the svg file
                 DEFAULT_FONT_NAME = "Monospaced";
@@ -386,14 +351,7 @@ class SummaryRenderer {
                 def.setBase(1024);
                 singleDecimalPlace = false;
             }
-/**
-            else if ((name.toLowerCase().indexOf("peers") >= 0 || (name.toLowerCase().indexOf("concurrent") >= 0) ||
-                     (name.toLowerCase().indexOf("retries") >= 0)) && !showEvents) {
-                noDecimalPlace = true;
-                def.setUnit("");
-                def.setUnitsExponent(0);
-            }
-**/
+
             if (titleOverride != null) {
                 def.setTitle(titleOverride);
             } else if (!hideTitle) {
@@ -421,23 +379,14 @@ class SummaryRenderer {
             String plotName;
             String descr;
             if (showEvents) {
-                // include the average event count on the plot
-                plotName = dsNames[1];
+                plotName = dsNames[1]; // include the average event count on the plot
                 descr = _t("Events per period");
             } else {
-                // include the average value
-                plotName = dsNames[0];
-                // The descriptions are not tagged in the createRateStat calls
-                // (there are over 500 of them)
-                // but the descriptions for the default graphs are tagged in
-                // Strings.java
+                plotName = dsNames[0]; // include the average value
+                // The descriptions are not tagged in the createRateStat calls (there are over 500 of them)
+                // but the descriptions for the default graphs are tagged in Strings.java
                 descr = _t(_listener.getRate().getRateStat().getDescription());
             }
-
-            //long started = ((RouterContext)_context).router().getWhenStarted();
-            //if (started > start && started < end)
-            //    def.vrule(started / 1000, RESTART_BAR_COLOR, _t("Restart"), 4.0f);
-
             def.datasource(plotName, path, plotName, SummaryListener.CF, _listener.getBackendFactory());
             if (width == 2000 && height == 160 && hideTitle && hideLegend && hideGrid) {
                 def.area(plotName, AREA_COLOR_NEUTRAL);
@@ -455,19 +404,6 @@ class SummaryRenderer {
             String numberFormat = noDecimalPlace ? "%.0f%s" : singleDecimalPlace ? "%.1f%s" : "%.2f%s";
 
             if (!hideLegend) {
-/*
-                if (descr != null && !descr.equals("") &&
-                    (descr.toLowerCase().indexOf("peers") >= 0 ||
-                    descr.toLowerCase().indexOf("councurrent") >= 0 ||
-                    descr.toLowerCase().indexOf("retries") >= 0 ||
-                    descr.toLowerCase().indexOf("queries") >= 0 ||
-                    descr.toLowerCase().indexOf("lookups") >= 0 ||
-                    descr.toLowerCase().indexOf("number of") >= 0) && !showEvents) {
-                    noDecimalPlace = true;
-                    def.setUnit("");
-                    def.setUnitsExponent(0);
-                }
-*/
                 Variable var = new Variable.MIN();
                 def.datasource("min", plotName, var);
                 def.gprint("min", " " + _t("Min") + ": " + numberFormat);
@@ -538,14 +474,6 @@ class SummaryRenderer {
                 if (height > 65) {def.setSignature("    " + sdf.format(new Date(end)) + " UTC");}
                 else {def.setSignature(sdf.format(new Date(end)) + " UTC");}
             }
-            /*
-            // these four lines set up a graph plotting both values and events on the same chart
-            // (but with the same coordinates, so the values may look pretty skewed)
-                def.datasource(dsNames[0], path, dsNames[0], "AVERAGE", "MEMORY");
-                def.datasource(dsNames[1], path, dsNames[1], "AVERAGE", "MEMORY");
-                def.area(dsNames[0], AREA_COLOR, _listener.getRate().getRateStat().getDescription());
-                def.line(dsNames[1], LINE_COLOR, "Events per period");
-            */
             if (hideLegend) {def.setNoLegend(true);}
             if (hideGrid) {
                 def.setDrawXGrid(false);
@@ -572,16 +500,12 @@ class SummaryRenderer {
                 def.setColor(RrdGraphDef.COLOR_CANVAS, TRANSPARENT);
                 def.setColor(RrdGraphDef.COLOR_BACK, TRANSPARENT);
             }
-            RrdGraph bitmapGraph;
-            RrdGraph graph;
-            try {
-                // NPE here if system is missing fonts - see ticket #915
-                //graph = new RrdGraph(def); // png
-                bitmapGraph = new RrdGraph(def); // png
-                int totalWidth = bitmapGraph.getRrdGraphInfo().getWidth();
-                int totalHeight = bitmapGraph.getRrdGraphInfo().getHeight();
-                graph = new RrdGraph(def, new SVGImageWorker(totalWidth + 10, totalHeight)); // svg
-            } catch (NullPointerException npe) {
+            RrdGraph graph = new RrdGraph(def);
+            RrdGraphInfo info = graph.getRrdGraphInfo();
+            int totalWidth = info.getWidth();
+            int totalHeight = info.getHeight();
+            try {graph = new RrdGraph(def, new SVGImageWorker(totalWidth + 8, totalHeight));} // svg
+            catch (NullPointerException npe) {
                 _log.error("Error rendering graph", npe);
                 StatSummarizer.setDisabled(_context);
                 throw new IOException("Error rendering - disabling graph generation.");
@@ -591,15 +515,6 @@ class SummaryRenderer {
                 StatSummarizer.setDisabled(_context);
                 throw new IOException("Error rendering - disabling graph generation.");
             }
-/* PNG
-            int totalWidth = graph.getRrdGraphInfo().getWidth();
-            int totalHeight = graph.getRrdGraphInfo().getHeight();
-            BufferedImage img = new BufferedImage(totalWidth, totalHeight, BufferedImage.TYPE_4BYTE_ABGR);
-            Graphics gfx = img.getGraphics();
-            graph.render(gfx);
-            ios = new MemoryCacheImageOutputStream(out);
-            ImageIO.write(img, "png", ios);
-*/
             out.write(graph.getRrdGraphInfo().getBytes());
             _context.statManager().addRateData("graph.renderTime", System.currentTimeMillis() - begin);
         } catch (RrdException re) {
