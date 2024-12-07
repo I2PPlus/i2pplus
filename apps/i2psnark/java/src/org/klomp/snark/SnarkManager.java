@@ -208,6 +208,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
        "Postman", "http://tracker2.postman.i2p/announce.php=http://tracker2.postman.i2p/"
        ,"DgTrack", "http://opentracker.dg2.i2p/a=http://opentracker.dg2.i2p/"
        ,"R4SAS", "http://opentracker.r4sas.i2p/a=http://opentracker.r4sas.i2p/stats"
+       ,"Simp", "http://opentracker.simp.i2p/a=http://opentracker.simp.i2p/tracker"
        ,"Skank", "http://opentracker.skank.i2p/a=http://opentracker.skank.i2p/tracker"
 //       ,"OmiTracker", "http://omitracker.i2p/announce.php=http://omitracker.i2p/"
 //       ,"Lyoko", "http://lyoko.i2p/a=http://lyoko.i2p/tracker"
@@ -232,6 +233,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private static final String DEFAULT_OPENTRACKERS =
         "http://opentracker.dg2.i2p/a," +
         "http://opentracker.r4sas.i2p/a," +
+        "http://opentracker.simp.i2p/a," +
         "http://opentracker.skank.i2p/a,";
 //        "http://omitracker.i2p/announce.php," +
 //        "http://lyoko.i2p/a," +
@@ -252,6 +254,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     static final Set<String> KNOWN_OPENTRACKERS = new HashSet<String>(Arrays.asList(new String[] {
         "opentracker.dg2.i2p", "w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p",
         "opentracker.r4sas.i2p", "punzipidirfqspstvzpj6gb4tkuykqp6quurj6e23bgxcxhdoe7q.b32.i2p",
+        "opentracker.simp.i2p", "wc4sciqgkceddn6twerzkfod6p2npm733p7z3zwsjfzhc4yulita.b32.i2p",
         "opentracker.skank.i2p", "by7luzwhx733fhc5ug2o75dcaunblq2ztlshzd7qvptaoa73nqua.b32.i2p",
 //        "omitracker.i2p", "a5ruhsktpdhfk5w46i6yf6oqovgdlyzty7ku6t5yrrpf4qedznjq.b32.i2p",
 //        "lyoko.i2p", "afuuortfaqejkesne272krqvmafn65mhls6nvcwv3t7l2ic2p4kq.b32.i2p",
