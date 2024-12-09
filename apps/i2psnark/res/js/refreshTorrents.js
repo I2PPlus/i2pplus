@@ -12,7 +12,7 @@ import {initSnarkAlert} from "./snarkAlert.js";
 const cache = new Map(), cacheDuration = 5000;
 const debugMode = document.getElementById("debugMode");
 const files = document.getElementById("dirInfo");
-const filterbar = document.getElementById("torrentDisplay");
+const filterbar = document.getElementById("filterBar");
 const home = document.querySelector("#navbar .nav_main");
 const mainsection = document.getElementById("mainsection");
 const query = window.location.search;
@@ -225,15 +225,15 @@ async function refreshTorrents(callback) {
 
         if (torrents) {
           if (filterbar) {
-            const activeBadge = filterbar.querySelector("#torrentDisplay .filter#all .badge"),
-                  activeBadgeResponse = responseDoc.querySelector("#torrentDisplay .filter#all.enabled .badge");
+            const activeBadge = filterbar.querySelector("#filterBar .filter#all .badge"),
+                  activeBadgeResponse = responseDoc.querySelector("#filterBar .filter#all.enabled .badge");
             if (activeBadge && activeBadgeResponse) {
               await updateElementTextContent(activeBadge, activeBadgeResponse);
             }
 
             const pagenavtop = document.getElementById("pagenavtop"),
                   pagenavtopResponse = responseDoc.querySelector("#pagenavtop"),
-                  filterbarResponse = responseDoc.querySelector("#torrentDisplay");
+                  filterbarResponse = responseDoc.querySelector("#filterBar");
 
             if ((filterbar && !filterbarResponse) || (!pagenavtop && pagenavtopResponse)) {
               const torrentFormResponse = responseDoc.querySelector("#torrentlist");

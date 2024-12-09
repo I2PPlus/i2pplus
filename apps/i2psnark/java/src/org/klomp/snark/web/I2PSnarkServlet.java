@@ -657,65 +657,14 @@ public class I2PSnarkServlet extends BasicServlet {
         filterEnabled = filterParam != null && !filterParam.equals("all") && !filterParam.equals("");
         boolean searchActive = (search != null && !search.equals("") && search.length() > 0);
         if (isForm) {
-            StringBuilder buf = new StringBuilder(1280);
-            if (showStatusFilter && !snarks.isEmpty() && _manager.util().connected()) {
-                buf.append("<form id=torrentlist class=filterbarActive action=\"_post\" method=POST target=processForm>\n");
-            } else {buf.append("<form id=torrentlist action=\"_post\" method=POST target=processForm>\n");}
-
-            // selective display of torrents based on status
             if (showStatusFilter) {
-                if (!snarks.isEmpty() && _manager.util().connected()) {
-                    StringBuilder activeQuery = new StringBuilder("/i2psnark/?");
-                    if (peerParam != null) {activeQuery.append("p=" + peerParam + "&");}
-                    if (srt != null) {activeQuery.append("sort=" + srt + "&");}
-                    if (searchActive) {activeQuery.append("search=" + search + "&");}
-                    if (psize != null) {activeQuery.append("ps=" + psize + "&");}
-                    if (filterEnabled) {
-                        String existingFilter = "filter=" + filterParam;  // remove existing filter parameter
-                        int filterIndex = activeQuery.indexOf(existingFilter);
-                        if (filterIndex >= 0) {activeQuery.delete(filterIndex, filterIndex + existingFilter.length());}
-                    }
-                    activeQuery.setLength(activeQuery.length() - 1);
-                    String buttonUrl = activeQuery.toString();
-                    int pageSizeConf = _manager.getPageSize();
-                    buttonUrl += (buttonUrl.contains("=") ? "&filter=" : "?filter=");
-                    buf.append("<div id=torrentDisplay>")
-                       .append("<a class=filter id=search href=\"").append(buttonUrl).append("all\"")
-                       .append(searchActive ? "" : " hidden").append("><span>").append(_t("Search"))
-                       .append("<span class=badge").append(searchActive ? "" : " hidden").append(">");
-                    if (searchResults > Math.max(pageSizeConf, 10)) {
-                        buf.append(Math.max(pageSizeConf, 10)).append(" / ").append(searchResults);
-                    } else if (searchActive) {buf.append(searchResults);}
-                    buf.append("</span></span></a>")
-                       .append("<a class=filter id=all href=\"").append(buttonUrl).append("all\"")
-                       .append(!searchActive ? "" : " hidden").append("><span>").append(_t("Show All"))
-                       .append("<span class=badge hidden>");
-                    if (Math.max(pageSizeConf, 10) < total) {
-                        buf.append(Math.max(pageSizeConf, 10)).append(" / ").append(total);
-                    } else {buf.append(total);}
-                    buf.append("</span></span></a>")
-                       .append("<a class=filter id=active href=\"").append(buttonUrl).append("active\"><span>")
-                       .append(_t("Active")).append("<span class=badge></span></span></a>")
-                       .append("<a class=filter id=inactive href=\"").append(buttonUrl).append("inactive\"><span>")
-                       .append(_t("Inactive")).append("<span class=badge></span></span></a>")
-                       .append("<a class=filter id=connected href=\"").append(buttonUrl).append("connected\"><span>")
-                       .append(_t("Connected")).append("<span class=badge></span></span></a>")
-                       .append("<a class=filter id=downloading href=\"").append(buttonUrl).append("downloading\"><span>")
-                       .append(_t("Downloading")).append("<span class=badge></span></span></a>")
-                       .append("<a class=filter id=seeding href=\"").append(buttonUrl).append("seeding\"><span>")
-                       .append(_t("Seeding")).append("<span class=badge></span></span></a>")
-                       .append("<a class=filter id=complete href=\"").append(buttonUrl).append("complete\"><span>")
-                       .append(_t("Complete")).append("<span class=badge></span></span></a>")
-                       .append("<a class=filter id=incomplete href=\"").append(buttonUrl).append("incomplete\"><span>")
-                       .append(_t("Incomplete")).append("<span class=badge></span></span></a>")
-                       .append("<a class=filter id=stopped href=\"").append(buttonUrl).append("stopped\"><span>")
-                       .append(_t("Stopped")).append("<span class=badge></span></span></a>")
-                       .append("</div>\n")
-                       .append("<script src=/i2psnark/.res/js/filterBar.js type=module></script>\n");
-                }
+                renderFilterBar(out, req);
+            } else {
+                StringBuilder buf = new StringBuilder(1280);
+                buf.append("<form id=torrentlist action=\"_post\" method=POST target=processForm>\n");
+                out.write(buf.toString());
+                buf.setLength(0);
             }
-            out.write(buf.toString());
-            buf.setLength(0);
             writeHiddenInputs(out, req, null);
             out.flush();
         }
@@ -1193,6 +1142,70 @@ public class I2PSnarkServlet extends BasicServlet {
             out.flush();
 
             return start == 0;
+    }
+
+    private void renderFilterBar(PrintWriter out, HttpServletRequest req) throws IOException {
+        String filter = req.getParameter("filter") != null ? req.getParameter("filter") : "";
+        String peerParam = req.getParameter("p");
+        String psize = req.getParameter("ps");
+        String search = req.getParameter("search");
+        String srt = req.getParameter("sort");
+        String stParam = req.getParameter("st");
+        int pageSizeConf = _manager.getPageSize();
+        List<Snark> snarks = getSortedSnarks(req);
+        int total = snarks.size();
+        boolean searchActive = (search != null && !search.equals("") && search.length() > 0);
+
+        StringBuilder buf = new StringBuilder(1280);
+        buf.append("<form id=torrentlist action=\"_post\" method=POST target=processForm>\n");
+        StringBuilder activeQuery = new StringBuilder("/i2psnark/?");
+        if (peerParam != null) {activeQuery.append("p=" + peerParam + "&");}
+        if (srt != null) {activeQuery.append("sort=" + srt + "&");}
+        if (searchActive) {activeQuery.append("search=" + search + "&");}
+        if (psize != null) {activeQuery.append("ps=" + psize + "&");}
+        if (filter != null && !filter.equals("all")) {
+            String existingFilter = "filter=" + filter;  // remove existing filter parameter
+            int filterIndex = activeQuery.indexOf(existingFilter);
+            if (filterIndex >= 0) {activeQuery.delete(filterIndex, filterIndex + existingFilter.length());}
+        }
+        activeQuery.setLength(activeQuery.length() - 1);
+        String buttonUrl = activeQuery.toString();
+        buttonUrl += (buttonUrl.contains("=") ? "&filter=" : "?filter=");
+        buf.append("<div id=filterBar>")
+           .append("<a class=filter id=search href=\"").append(buttonUrl).append("all\"")
+           .append(searchActive ? "" : " hidden").append("><span>").append(_t("Search"))
+           .append("<span class=badge").append(searchActive ? "" : " hidden").append(">");
+        if (searchResults > Math.max(pageSizeConf, 10)) {
+            buf.append(Math.max(pageSizeConf, 10)).append(" / ").append(searchResults);
+        } else if (searchActive) {buf.append(searchResults);}
+        buf.append("</span></span></a>")
+           .append("<a class=filter id=all href=\"").append(buttonUrl).append("all\"")
+           .append(!searchActive ? "" : " hidden").append("><span>").append(_t("Show All"))
+           .append("<span class=badge hidden>");
+        if (Math.max(pageSizeConf, 10) < total) {
+            buf.append(Math.max(pageSizeConf, 10)).append(" / ").append(total);
+        } else {buf.append(total);}
+        buf.append("</span></span></a>")
+           .append("<a class=filter id=active href=\"").append(buttonUrl).append("active\"><span>")
+           .append(_t("Active")).append("<span class=badge></span></span></a>")
+           .append("<a class=filter id=inactive href=\"").append(buttonUrl).append("inactive\"><span>")
+           .append(_t("Inactive")).append("<span class=badge></span></span></a>")
+           .append("<a class=filter id=connected href=\"").append(buttonUrl).append("connected\"><span>")
+           .append(_t("Connected")).append("<span class=badge></span></span></a>")
+           .append("<a class=filter id=downloading href=\"").append(buttonUrl).append("downloading\"><span>")
+           .append(_t("Downloading")).append("<span class=badge></span></span></a>")
+           .append("<a class=filter id=seeding href=\"").append(buttonUrl).append("seeding\"><span>")
+           .append(_t("Seeding")).append("<span class=badge></span></span></a>")
+           .append("<a class=filter id=complete href=\"").append(buttonUrl).append("complete\"><span>")
+           .append(_t("Complete")).append("<span class=badge></span></span></a>")
+           .append("<a class=filter id=incomplete href=\"").append(buttonUrl).append("incomplete\"><span>")
+           .append(_t("Incomplete")).append("<span class=badge></span></span></a>")
+           .append("<a class=filter id=stopped href=\"").append(buttonUrl).append("stopped\"><span>")
+           .append(_t("Stopped")).append("<span class=badge></span></span></a>")
+           .append("</div>\n")
+           .append("<script src=/i2psnark/.res/js/filterBar.js type=module></script>\n");
+        out.write(buf.toString());
+        buf.setLength(0);
     }
 
     /**

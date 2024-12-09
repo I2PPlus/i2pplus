@@ -55,7 +55,7 @@ tfoot td:first-child{padding-left:0;text-align:left}
 tfoot th{padding-bottom:4px}
 tr,.navbar,.lowersection{contain:layout}
 .iframed #navbar,.iframed .mainsection,.iframed #addSection,.iframed #createSection,.iframed .configPanel{border-right:0;border-left:0;border-radius:0}
-#torrentDisplay .filter,#addTracker,#addTracker + tr,.toggleview,.configTitle,#navbar,img,input{user-select:none}
+#filterBar .filter,#addTracker,#addTracker + tr,.toggleview,.configTitle,#navbar,img,input{user-select:none}
 #noload td{text-align:center}
 
 /* infohash */
@@ -655,14 +655,14 @@ td.commentAuthor{padding-left:5px}
 .lang_ru #configs input[name="nofilter_dataDir"],.lang_ru input[name="i2cpOpts"],.lang_ru input[name="nofilter_commentsName"]{width:calc(100% - 320px)}
 
 /* filter bar */
-#torrentDisplay{margin:-1px 0 0;display:block;position:sticky;top:42px;z-index:500;background:var(--th);border-top:var(--border);border-bottom:var(--border);contain:paint}
-.iframed #torrentDisplay{position:static}
-#torrentDisplay input{position:absolute;opacity:0;z-index:-1;height:0;width:0}
-#torrentDisplay .filter{margin:0;padding:4px 8px 4px;display:inline-block;min-width:92px;font-weight:700;font-size:90%;color:var(--nav_a);border-left:var(--border);box-shadow:var(--highlight);background:var(--nav);contain:paint}
-#torrentDisplay .filter:last-child{border-right:var(--border)}
-#torrentDisplay .filter:hover,#torrentDisplay .filter:focus{color:var(--hover);background:var(--btn_hover2)}
-#torrentDisplay .filter:active{color:var(--bg);box-shadow:var(--btn_shadow_active);background:var(--btn_active)}
-#torrentDisplay .filter.enabled{color:#88c;box-shadow:var(--label_shadow_active);background:linear-gradient(180deg,var(--bg2),var(--bg2));pointer-events:none}
+#filterBar{margin:-1px 0 0;display:block;position:sticky;top:42px;z-index:500;background:var(--th);border-top:var(--border);border-bottom:var(--border);contain:paint}
+.iframed #filterBar{position:static}
+#filterBar input{position:absolute;opacity:0;z-index:-1;height:0;width:0}
+#filterBar .filter{margin:0;padding:4px 8px 4px;display:inline-block;min-width:92px;font-weight:700;font-size:90%;color:var(--nav_a);border-left:var(--border);box-shadow:var(--highlight);background:var(--nav);contain:paint}
+#filterBar .filter:last-child{border-right:var(--border)}
+#filterBar .filter:hover,#filterBar .filter:focus{color:var(--hover);background:var(--btn_hover2)}
+#filterBar .filter:active{color:var(--bg);box-shadow:var(--btn_shadow_active);background:var(--btn_active)}
+#filterBar .filter.enabled{color:#88c;box-shadow:var(--label_shadow_active);background:linear-gradient(180deg,var(--bg2),var(--bg2));pointer-events:none}
 #filtercount:not(:empty){margin-left:4px;padding:0 3px;min-width:18px;display:inline-block!important;line-height:1.1;font-size:90%;border-radius:1px;box-shadow:0 0 0 1px #ddf;background:var(--bg2)}
 .filter[hidden],.filter:not(.enabled) .badge,.filter:not(.enabled) #filtercount{display:none!important}
 
@@ -840,7 +840,7 @@ form[action^="/i2psnark/configure"]{display:block}
 #commentSection{margin-bottom:0}
 #configs td:first-child::before{min-height:30px;content:""}
 #snarkInfo{margin-bottom:-9px}
-#torrentDisplay{top:39px}
+#filterBar{top:39px}
 #torrents tfoot tr:first-child{line-height:1}
 }
 
@@ -883,7 +883,7 @@ td#bwHelp{background:url(images/details.svg) no-repeat left 10px center/14px}
 }
 
 @media (max-width:900px){
-#torrentDisplay .filter{min-width:60px}
+#filterBar .filter{min-width:60px}
 }
 
 @media (max-width:800px){
@@ -966,7 +966,7 @@ label b,.configOption b,#trackerconfig th{font-size:9pt}
 #screenlog{height:60px;min-height:60px}
 #screenlog li,#torrents code,code,#ourDest code{font-size:9pt}
 #screenlog.xpanded{height:300px}
-#torrentDisplay .filter{min-width:120px}
+#filterBar .filter{min-width:120px}
 #torrentInfo .infohash{padding:1px 0 1px 22px;max-width:140px;background:var(--hash) no-repeat 6px center/14px,var(--btn)}
 #torrentInfo th:first-child img,#torrentinfostats img,#trackers img{margin:-3px 4px 0;max-height:18px}
 #torrentInfoStats .nowrap{margin-right:6px}

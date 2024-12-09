@@ -3979,7 +3979,7 @@
 
 2020-05-19 dr|z3d
  * I2PTunnel: Make tunnel info toggle CSP compliant
- * I2PSnark: Male toggleLog and torrentDisplay CSP compliant
+ * I2PSnark: Make toggleLog and torrentDisplay CSP compliant
 
 2020-05-19 zzz
  * Util: Speed up zero compression
