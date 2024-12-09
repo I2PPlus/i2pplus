@@ -102,13 +102,13 @@ async function initHandlers() {
 
 async function updateElementInnerHTML(elem, respElem) {
   if (elem && respElem && elem.innerHTML.trim() !== respElem.innerHTML.trim()) {
-    elem.innerHTML = respElem.innerHTML;
+    requestIdleOrAnimationFrame(() => {elem.innerHTML = respElem.innerHTML;});
   }
 }
 
 async function updateElementTextContent(elem, respElem) {
   if (elem && respElem && elem.textContent.trim() !== respElem.textContent.trim()) {
-    elem.textContent = respElem.textContent;
+    requestIdleOrAnimationFrame(() => {elem.textContent = respElem.textContent;});
   }
 }
 
@@ -227,9 +227,7 @@ async function refreshTorrents(callback) {
           if (filterbar) {
             const activeBadge = filterbar.querySelector("#filterBar .filter#all .badge"),
                   activeBadgeResponse = responseDoc.querySelector("#filterBar .filter#all.enabled .badge");
-            if (activeBadge && activeBadgeResponse) {
-              await updateElementTextContent(activeBadge, activeBadgeResponse);
-            }
+            await updateElementTextContent(activeBadge, activeBadgeResponse);
 
             const pagenavtop = document.getElementById("pagenavtop"),
                   pagenavtopResponse = responseDoc.querySelector("#pagenavtop"),
