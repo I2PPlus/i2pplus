@@ -5,6 +5,7 @@
 let lastSnarkGraphRefresh = 0;
 let graphEnabled = true;
 let refreshCache = new Map();
+let refreshCount = 0;
 const noload = document.getElementById("noload");
 
 function refreshGraph() {
@@ -13,7 +14,7 @@ function refreshGraph() {
   const graphUrlBase = "/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&" +
                        "period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&" +
                        "hideTitle=true&hideGrid=true&";
-  if (now - lastSnarkGraphRefresh < 5 * 60 * 1000 || !graphEnabled) {return;}
+  if ((now - lastSnarkGraphRefresh < 5 * 60 * 1000 && refreshCount !== 0) || !graphEnabled) {return;}
   lastSnarkGraphRefresh = now;
   const graphUrl = graphUrlBase + "t=" + now;
   if (refreshCache.has(graphUrl)) {
@@ -26,12 +27,13 @@ function refreshGraph() {
       graphEnabled = false;
       throw new Error("400 Bad Request");
     }
-    throw new Error('Network response was not ok');
+    throw new Error("Network response was not ok");
   }).then(blob => {
     const graphDataUrl = URL.createObjectURL(blob);
     graphcss.innerText = ":root{--snarkGraph:url('" + graphDataUrl + "')}";
     refreshCache.set(graphUrl, `url("${graphDataUrl}")`);
     setTimeout(() => refreshCache.delete(graphUrl), 5*60*1000);
+    refreshCount++;
   }).catch(error => {
     if (error.message === "400 Bad Request" || !graphEnabled) {
       if (graphcss) {graphcss.textContent = "";}

@@ -426,7 +426,7 @@ public class I2PSnarkServlet extends BasicServlet {
         // add placeholders for filterbar, toggleLog css
         buf.append("<style id=cssfilter></style>\n").append("<style id=toggleLogCss></style>\n");
 
-        if (!isStandalone() && delay <= 0) {
+        if (!isStandalone()) {
             buf.append("<style id=graphcss>:root{--snarkGraph:url('/viewstat.jsp")
                .append("?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160")
                .append("&hideLegend=true&hideTitle=true&hideGrid=true&t=").append(now).append("\')}\"</style>\n");
