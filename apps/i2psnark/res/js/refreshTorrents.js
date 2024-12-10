@@ -330,8 +330,10 @@ async function refreshScreenLog(callback, forceFetch = false) {
 
 function refreshOnSubmit() {
   document.addEventListener("click", async (event) => {
-    if (event.target.matches("input[type=submit]")) {
-      const form = event.target.form;
+    const clickTarget = event.target;
+    if (clickTarget.matches("input[type=submit]")) {
+      event.stopPropagation();
+      const form = clickTarget.form;
       const iframe = document.getElementById("processForm");
       if (form && iframe) {
         const formSubmitted = new Promise((resolve) => {

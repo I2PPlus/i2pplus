@@ -17,29 +17,28 @@ const elements = {
 };
 
 let hideAlertTimeoutId;
+let lastMessage = "";
 
 async function handleTorrentNotify(event, notificationElement, inputElement, form) {
   event.preventDefault();
   if (elements.addNotify || elements.createNotify) {
     try {
       await submitForm(form);
-      await refreshScreenLog(() => { showNotification(notificationElement, inputElement); }, true);
+      await refreshScreenLog(() => {
+        setTimeout(() => {
+          showNotification(notificationElement, inputElement, getLastMessage());
+        }, 1000);
+      }, true);
     } catch (error) {}
   }
 }
 
-function showNotification(notificationElement, inputElement) {
+function showNotification(notificationElement, inputElement, displayText) {
   if (hideAlertTimeoutId) {clearTimeout(hideAlertTimeoutId);}
-  const screenlog = document.getElementById("messages");
-  const lastMessage = screenlog.querySelector("li.msg");
-  let displayText = "";
-  if (lastMessage) {
-    const messageText = lastMessage.innerHTML.trim();
-    const index = messageText.indexOf("&nbsp; ");
-    displayText = index !== -1 ? messageText.substring(index + 7) : messageText;
-  }
-  notificationElement.querySelector("td").textContent = displayText;
+
+  notificationElement.querySelector("td").innerHTML = displayText;
   notificationElement.removeAttribute("hidden");
+
   hideAlertTimeoutId = setTimeout(() => {
     hideAlert(notificationElement);
     inputElement.value = "";
@@ -58,6 +57,14 @@ async function submitForm(form) {
     const response = await fetch(action, { method: form.method, body: formData });
     if (!response.ok) { throw new Error(`Form submission failed with status ${response.status}`); }
   } catch (error) {}
+}
+
+function getLastMessage() {
+  const screenlog = document.getElementById("messages");
+  const messageText = screenlog.querySelector("li.msg").innerHTML.trim();
+  const index = messageText.indexOf("&nbsp; ");
+  lastMessage = index !== -1 ? messageText.substring(index + 7) : messageText;
+  return lastMessage;
 }
 
 function initSnarkAlert() {

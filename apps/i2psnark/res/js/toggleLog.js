@@ -13,6 +13,8 @@
                   "@media (min-width:1500px){#screenlog.xpanded{min-height:60px!important}}";
     const shCss = "#screenlog.collapsed{max-height:56px!important;min-height:56px}" +
                   "@media (min-width:1500px){#screenlog.collapsed{height:60px!important;min-height:60px}}";
+    const expand = document.getElementById("expand");
+    const collapse = document.getElementById("collapse");
 
     if (!screenlog) return;
 
@@ -23,22 +25,22 @@
 
     document.documentElement.addEventListener("click", e => {
       const target = e.target.closest("#expand, #shrink");
-      if (!target) return;
+      if (!target || !expand || !collapse) return;
       requestAnimationFrame(() => {
         clean();
         toggleLogCss.innerHTML = target.id === "expand" ? exCss : shCss;
         screenlog.classList.toggle("xpanded", target.id === "expand");
         screenlog.classList.toggle("collapsed", target.id === "shrink");
         isScreenlogExpanded = target.id === "expand";
-        document.querySelector("#expand").hidden = isScreenlogExpanded;
-        document.querySelector("#shrink").hidden = !isScreenlogExpanded;
+        if (expand) {expand.hidden = isScreenlogExpanded;}
+        if (collapse) {collapse.hidden = !isScreenlogExpanded;}
       });
     });
 
     clean();
     toggleLogCss.innerHTML = shCss;
     screenlog.classList.add("collapsed");
-    document.querySelector("#expand").hidden = false;
+    if (expand) {expand.hidden = false;}
   }
 
   initToggleLog();
