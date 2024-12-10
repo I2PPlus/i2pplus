@@ -35,11 +35,13 @@ import net.i2p.router.ClientMessage;
 import net.i2p.router.JobImpl;
 import net.i2p.router.LeaseSetKeys;
 import net.i2p.router.MessageSelector;
+import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.ReplyJob;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.crypto.ratchet.ReplyCallback;
+import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
 import net.i2p.util.Log;
 
 /**
@@ -115,29 +117,22 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     private final Destination _from;
     private final Destination _to;
     private final String _toString;
-    /** target destination's leaseSet, if known */
-    private LeaseSet _leaseSet;
-    /** Actual lease the message is being routed through */
-    private Lease _lease;
-    /** Actual target encryption key from the LS being used */
-    private PublicKey _encryptionKey;
+    private LeaseSet _leaseSet; /** Target destination's leaseSet, if known */
+    private Lease _lease; /** Actual lease the message is being routed through */
+    private PublicKey _encryptionKey; /** Actual target encryption key from the LS being used */
     private final long _start;
-    /** note we can succeed after failure, but not vice versa */
-    private enum Result {NONE, FAIL, SUCCESS}
+    private enum Result {NONE, FAIL, SUCCESS} /** Note we can succeed after failure, but not vice versa */
     private Result _finished = Result.NONE;
     private long _leaseSetLookupBegin;
     private TunnelInfo _outTunnel;
     private TunnelInfo _inTunnel;
     private boolean _wantACK;
 
-    /**
-     * Key used to cache things with, based on source + dest
-     */
+    /** Key used to cache things with, based on source + dest */
     private final OutboundCache.HashPair _hashPair;
 
-
     /**
-     * final timeout (in milliseconds) that the outbound message will fail in.
+     * Final timeout (in milliseconds) that the outbound message will fail in.
      * This can be overridden in the router.config or the client's session config
      * (the client's session config takes precedence)
      */
@@ -292,30 +287,30 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         }
 
         SendJob success = new SendJob(getContext());
+        KademliaNetworkDatabaseFacade kndf = (KademliaNetworkDatabaseFacade) getContext().clientNetDb(_from.calculateHash());
         // set in constructor
         if (_leaseSet != null) {
-            if (!_leaseSet.getReceivedAsReply()) {
+            if (!kndf.isClientDb() && !_leaseSet.getReceivedAsReply()) {
                 boolean shouldFetch = true;
                 if (_leaseSet.getType() != DatabaseEntry.KEY_TYPE_LEASESET) {
                     LeaseSet2 ls2 = (LeaseSet2) _leaseSet;
                     shouldFetch = !ls2.isUnpublished() || ls2.isBlindedWhenPublished();
                 }
                 if (shouldFetch) {
-                    if (_log.shouldInfo())
+                    if (_log.shouldInfo()) {
                         _log.info("RAP LeaseSet, initiating search: " + _leaseSet.getHash().toBase32());
+                    }
                     LookupLeaseSetFailedJob failed = new LookupLeaseSetFailedJob(getContext());
-                    getContext().clientNetDb(_from.calculateHash()).lookupLeaseSetRemotely(_leaseSet.getHash(), success, failed,
-                                                                LS_LOOKUP_TIMEOUT, _from.calculateHash());
-                } else {
-                    dieFatal(MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET);
-                }
+                    kndf.lookupLeaseSetRemotely(_leaseSet.getHash(), success, failed,
+                                                LS_LOOKUP_TIMEOUT, _from.calculateHash());
+                } else {dieFatal(MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET);}
                 return;
             }
             if (_log.shouldDebug())
                 _log.debug("Send Outbound client message - LeaseSet for " + _toString + " found locally");
             if (!_leaseSet.isCurrent(Router.CLOCK_FUDGE_FACTOR / 4)) {
-                // If it's about to expire, refetch in the background, we'll
-                // probably need it again. This will prevent stalls later.
+                // If it's about to expire, refetch in the background, we'll probably need it again.
+                // This will prevent stalls later.
                 boolean shouldFetch = true;
                 if (_leaseSet.getType() != DatabaseEntry.KEY_TYPE_LEASESET) {
                     // For LS2, we have a bit that tells us if it is published.
@@ -328,7 +323,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                         _log.info("LeaseSet expired " + DataHelper.formatDuration(exp) +
                                   " ago, initiating search for: " + _leaseSet.getHash().toBase32());
                     }
-                    getContext().clientNetDb(_from.calculateHash()).lookupLeaseSetRemotely(_leaseSet.getHash(), _from.calculateHash());
+                    kndf.lookupLeaseSetRemotely(_leaseSet.getHash(), _from.calculateHash());
                 }
             }
             success.runJob();
@@ -340,7 +335,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             }
             LookupLeaseSetFailedJob failed = new LookupLeaseSetFailedJob(getContext());
             Hash key = _to.calculateHash();
-            getContext().clientNetDb(_from.calculateHash()).lookupLeaseSet(key, success, failed, LS_LOOKUP_TIMEOUT, _from.calculateHash());
+            kndf.lookupLeaseSet(key, success, failed, LS_LOOKUP_TIMEOUT, _from.calculateHash());
         }
     }
 
@@ -421,15 +416,19 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      */
     private int getNextLease() {
         // set in runJob if found locally
-        if (_leaseSet == null || !_leaseSet.getReceivedAsReply()) {
-            _leaseSet = getContext().clientNetDb(_from.calculateHash()).lookupLeaseSetLocally(_to.calculateHash());
+        KademliaNetworkDatabaseFacade kndf = (KademliaNetworkDatabaseFacade) getContext().clientNetDb(_from.calculateHash());
+        if (_leaseSet == null || (!kndf.isClientDb() && _leaseSet.getReceivedAsPublished())) {
             if (_leaseSet == null) {
                 // shouldn't happen
-                if (_log.shouldWarn()) {
-                    _log.warn("Router LeaseSet " + _toString + " not found via local lookup");
+                _leaseSet = kndf.lookupLeaseSetLocally(_to.calculateHash());
+                if (_leaseSet == null) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Router LeaseSet " + _toString + " not found via local lookup");
+                    }
+                    return MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET;
                 }
-                return MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET;
-            } else if (_leaseSet.getReceivedAsPublished()) {
+            }
+            if (!kndf.isClientDb() && _leaseSet.getReceivedAsPublished()) {
                 if (_log.shouldWarn()) {
                     _log.warn(getJobId() + ": Only have ReceivedAsPublished LeaseSet for " + _toString);
                 }
@@ -509,20 +508,17 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             return MessageStatusMessage.STATUS_SEND_FAILURE_BAD_LEASESET;
         }
 
-        // randomize the ordering (so leases with equal # of failures per next
-        // sort are randomly ordered)
+        // randomize the ordering (so leases with equal # of failures per next sort are randomly ordered)
         if (leases.size() > 1) {Collections.shuffle(leases, getContext().random());}
 
         // Avoid a lease on a gateway we think is unreachable, if possible
         for (int i = 0; i < leases.size(); i++) {
             Lease l = leases.get(i);
-/***
- ***  Anonymity concerns with this, as the dest could act unreachable just to us, then
- ***  look at our lease selection.
- ***  Let's just look at whether the gw thinks it is unreachable instead -
- ***  unfortunately the "U" is rarely seen.
-            if (!getContext().commSystem().wasUnreachable(l.getGateway())) {
-***/
+            /*
+             *  Anonymity concerns with this, as the dest could act unreachable just to us, then look at our lease selection.
+             *  Let's just look at whether the gw thinks it is unreachable instead - unfortunately the "U" is rarely seen.
+             *  if (!getContext().commSystem().wasUnreachable(l.getGateway())) {
+             */
             RouterInfo ri = getContext().netDb().lookupRouterInfoLocally(l.getGateway());
             if (ri == null || ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) < 0) {
                 _lease = l;

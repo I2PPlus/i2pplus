@@ -126,8 +126,9 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                  *  receive in response to our own lookups.
                  *  See ../HDLMJ for more info
                  */
-                if (!ls.getReceivedAsReply()) {ls.setReceivedAsPublished();}
-                if (_facade.isClientDb()) {
+                if (!_facade.isClientDb()) {
+                    if (!ls.getReceivedAsReply()) {ls.setReceivedAsPublished();}
+                } else {
                     /**
                      *  This is where we deal with what happens if a client subDB tries to store
                      *  a leaseSet which it is the owner/publisher of.
