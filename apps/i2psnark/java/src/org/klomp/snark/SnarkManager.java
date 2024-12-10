@@ -495,13 +495,24 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public BandwidthListener getBandwidthListener() {return _bwManager;}
 
+    /* @since 0.9.64+ */
+    private long lastAddedMessageTimestamp;
+    /* @since 0.9.64+ */
+    private String lastAddedMessage;
+
     /**
      *  Use if it does not include a link.
      *  Escapes '&lt;' and '&gt;' before queueing
      */
     public void addMessage(String message) {
-        addMessageNoEscape(message.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-                                  .replace("&amp;nbsp", "&nbsp;"));
+        long currentTime = System.currentTimeMillis() / 1000;
+        if (lastAddedMessageTimestamp != currentTime || !lastAddedMessage.equals(message)) {
+            addMessageNoEscape(message.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+                                      .replace("&amp;nbsp", "&nbsp;"));
+        }
+        lastAddedMessageTimestamp = currentTime;
+        lastAddedMessage = message;
+        if (_log.shouldInfo()) {_log.info(message);}
     }
 
     /**
@@ -510,7 +521,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @since 0.9.14.1
      */
     public void addMessageNoEscape(String message) {
-        _messages.addMessageNoEscape(getTime() + "&nbsp; " + message.replace("%20", " "));
+        long currentTime = System.currentTimeMillis() / 1000;
+        if (lastAddedMessageTimestamp != currentTime || !lastAddedMessage.equals(message)) {
+            _messages.addMessageNoEscape(getTime() + "&nbsp; " + message.replace("%20", " "));
+        }
+        lastAddedMessageTimestamp = currentTime;
+        lastAddedMessage = message;
         if (_log.shouldInfo()) {_log.info(message);}
     }
 
