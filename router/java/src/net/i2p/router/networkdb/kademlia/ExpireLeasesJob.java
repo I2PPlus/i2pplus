@@ -10,22 +10,18 @@ package net.i2p.router.networkdb.kademlia;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
-import net.i2p.data.router.RouterKeyGenerator;
 import net.i2p.router.JobImpl;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.util.Log;
-import net.i2p.util.SystemVersion;
 
 /**
  * Periodically search through all leases to find expired ones, failing those
@@ -37,8 +33,6 @@ class ExpireLeasesJob extends JobImpl {
     private final Log _log;
     private final KademliaNetworkDatabaseFacade _facade;
     private final static long RERUN_DELAY_MS = 3*60*1000;
-    private static final int LIMIT_LEASES_FF = 1250;
-    private static final int LIMIT_LEASES_CLIENT = SystemVersion.isSlow() ? 750 : 300;
 
     public ExpireLeasesJob(RouterContext ctx, KademliaNetworkDatabaseFacade facade) {
         super(ctx);
@@ -52,8 +46,20 @@ class ExpireLeasesJob extends JobImpl {
         long uptime = getContext().router().getUptime();
         List<Hash> toExpire = selectKeysToExpire();
         if (!toExpire.isEmpty() && uptime >= 10*60*1000) {
-            for (Hash key : toExpire) {_facade.fail(key);}
-            if (_log.shouldInfo()) {_log.info("Leases expired: " + toExpire.size());}
+            StringBuilder buf = new StringBuilder(toExpire.size()*16);
+            if (_log.shouldLog(Log.DEBUG)) {buf.append("Leases to expire (" + toExpire.size() + "): ");}
+            for (Hash h : toExpire) {
+                _facade.fail(h);
+                if (_log.shouldLog(Log.DEBUG)) {
+                    buf.append("[").append(h.toBase32().substring(0,8)).append("]"); buf.append(" ");
+                }
+            }
+            if (_log.shouldLog(Log.INFO)) {
+                _log.info("Adding " + toExpire.size() + " expired " +
+                          (toExpire.size() > 1 ? "LeaseSets" : "LeaseSet") + " to the explore queue...");
+            }
+            if (_log.shouldLog(Log.DEBUG)) {_log.info(buf.toString());}
+            _facade.queueForExploration(toExpire); // don't do explicit searches, just explore passively
         }
         requeue(RERUN_DELAY_MS);
     }
@@ -66,75 +72,33 @@ class ExpireLeasesJob extends JobImpl {
     private List<Hash> selectKeysToExpire() {
         RouterContext ctx = getContext();
         long now = ctx.clock().now();
-        boolean isClient = _facade.isClientDb();
-        boolean isFFDB = _facade.floodfillEnabled() && !isClient;
-        Set<Map.Entry<Hash, DatabaseEntry>> entries =  _facade.getDataStore().getMapEntries();
-        List<LeaseSet> current = new ArrayList<LeaseSet>(isFFDB ? 512 : (isClient ? entries.size() : 128)); // clientdb only has leasesets
-        List<Hash> toExpire = new ArrayList<Hash>(Math.min(entries.size(), 128));
-        int sz = 0;
+        List<Hash> toExpire = new ArrayList<Hash>();
+        List<Hash> current = new ArrayList<Hash>();
         String tunnelName = "";
-        for (Map.Entry<Hash, DatabaseEntry> entry : entries) {
+        for (Map.Entry<Hash, DatabaseEntry> entry : _facade.getDataStore().getMapEntries()) {
             DatabaseEntry obj = entry.getValue();
             if (obj != null && obj.isLeaseSet()) {
                 LeaseSet ls = (LeaseSet) obj;
                 Hash h = entry.getKey();
-                boolean isLocal = ctx.clientManager().isLocal(h);
                 if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
                     toExpire.add(h);
-                    if (isLocal) {
+                    if (ctx.clientManager().isLocal(h)) {
                         tunnelName = ls != null && getTunnelName(ls.getDestination()) != null ?
                                      " for \'" + getTunnelName(ls.getDestination()) + "\'" : "";
                         _log.logAlways(Log.ERROR, "LOCAL LeaseSet" + tunnelName + " [" + h.toBase32().substring(0,8) + "] has expired");
                     }
-                } else if (!isLocal) { // do not aggressively expire RAR LS but still count them
-                    sz++;
-                    if (!ls.getReceivedAsReply()) {current.add(ls);}
-                }
+                } else if (!ls.isCurrent(90*1000)) {current.add(h);} // if we're expiring in < 90s, queue for exploration
             }
         }
-        int origsz = sz;
-        int limit = isFFDB ? LIMIT_LEASES_FF : LIMIT_LEASES_CLIENT;
-        if (sz > limit) {
-            // aggressive drop strategy
-            if (isFFDB) {
-                RouterKeyGenerator gen = ctx.routerKeyGenerator();
-                byte[] ourRKey = ctx.routerHash().getData();
-                for (LeaseSet ls : current) {
-                    Hash h = ls.getHash();
-                    // don't drop very close to us
-                    byte[] rkey = gen.getRoutingKey(h).getData();
-                    int distance = (((rkey[0] ^ ourRKey[0]) & 0xff) << 8) |
-                                    ((rkey[1] ^ ourRKey[1]) & 0xff);
-                    // they have to be within 1/256 of the keyspace
-                    if (distance >= 256) {
-                         toExpire.add(h);
-                         if (--sz <= limit) {break;}
-                    }
-                }
-            } else {
-                Collections.sort(current, new LeaseSetComparator());
-                for (LeaseSet ls : current) {
-                     toExpire.add(ls.getHash());
-                     if (_log.shouldInfo()) {_log.info("Aggressively expiring LeaseSets for " + _facade + "\n*" + ls);}
-                     if (--sz <= limit) {break;}
-                }
+        if (!current.isEmpty()) {
+            if (_log.shouldLog(Log.INFO)) {
+                _log.info("Adding " + current.size() + " soon-to-expire " + (current.size() > 1 ? "LeaseSets" : "LeaseSet") + " to the explore queue...");
             }
+            if (current.size() > 2) {Collections.shuffle(current);}
+            _facade.queueForExploration(current); // passively explore non-expired keys
+            current.clear();
         }
         return toExpire;
-    }
-
-    /**
-     *  Oldest first
-     *  @since 0.9.65
-     */
-    private static class LeaseSetComparator implements Comparator<LeaseSet> {
-         public int compare(LeaseSet l, LeaseSet r) {
-             long dl = l.getLatestLeaseDate();
-             long dr = r.getLatestLeaseDate();
-             if (dl < dr) return -1;
-             if (dl > dr) return 1;
-             return 0;
-        }
     }
 
     public String getTunnelName(Destination d) {

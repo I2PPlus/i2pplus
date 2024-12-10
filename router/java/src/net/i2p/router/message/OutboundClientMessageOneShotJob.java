@@ -35,13 +35,11 @@ import net.i2p.router.ClientMessage;
 import net.i2p.router.JobImpl;
 import net.i2p.router.LeaseSetKeys;
 import net.i2p.router.MessageSelector;
-import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.ReplyJob;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.crypto.ratchet.ReplyCallback;
-import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
 import net.i2p.util.Log;
 
 /**
@@ -423,19 +421,15 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      */
     private int getNextLease() {
         // set in runJob if found locally
-        KademliaNetworkDatabaseFacade kndf = (KademliaNetworkDatabaseFacade) getContext().clientNetDb(_from.calculateHash());
-        if (_leaseSet == null || (!kndf.isClientDb() && _leaseSet.getReceivedAsPublished())) {
+        if (_leaseSet == null || !_leaseSet.getReceivedAsReply()) {
+            _leaseSet = getContext().clientNetDb(_from.calculateHash()).lookupLeaseSetLocally(_to.calculateHash());
             if (_leaseSet == null) {
                 // shouldn't happen
-                _leaseSet = kndf.lookupLeaseSetLocally(_to.calculateHash());
-                if (_leaseSet == null) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Router LeaseSet " + _toString + " not found via local lookup");
-                    }
-                    return MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET;
+                if (_log.shouldWarn()) {
+                    _log.warn("Router LeaseSet " + _toString + " not found via local lookup");
                 }
-            }
-            if (!kndf.isClientDb() && _leaseSet.getReceivedAsPublished()) {
+                return MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET;
+            } else if (_leaseSet.getReceivedAsPublished()) {
                 if (_log.shouldWarn()) {
                     _log.warn(getJobId() + ": Only have ReceivedAsPublished LeaseSet for " + _toString);
                 }
