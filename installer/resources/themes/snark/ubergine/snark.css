@@ -538,11 +538,11 @@ input[type=submit],input[type=reset]{padding:4px 6px 4px 22px;color:var(--ink_bt
 input[type=submit]:hover,input[type=submit]:focus{background-blend-mode:luminosity}
 input[type=submit]:hover,input[type=submit]:focus,a.control:hover,a.control:focus{color:#fff;border:1px outset #bbb;filter:drop-shadow(0 0 1px #515)}
 input[type=submit]:focus,input[type=reset]:focus,a.control:focus{filter:drop-shadow(0 0 1px var(--hover))}
-input.accept,input.accept:active{padding:4px 6px 4px 23px;background:var(--confirm) no-repeat 6px center/13px,var(--btn)}
+input.accept,input.accept:active{background:var(--confirm) no-repeat 6px center/13px,var(--btn)}
 input.accept:hover,input.accept:focus{background:var(--confirm) no-repeat 6px center/13px,var(--btn_hover)}
-input.add,input.add:active,input.add.depress{padding:4px 6px 4px 23px;background:var(--add) no-repeat 6px center/13px,var(--btn)}
+input.add,input.add:active,input.add.depress{background:var(--add) no-repeat 6px center/13px,var(--btn)}
 input.add:hover,input.add:focus{background:var(--add) no-repeat 6px center/13px,var(--btn_hover)}
-input.create,input.create:active,input.create.depress{background:var(--create) no-repeat 6px calc(50% - 2px)/16px,var(--btn)}
+input.create,input.create:active,input.create.depress{padding:4px 8px 4px 23px;background:var(--create) no-repeat 6px calc(50% - 2px)/16px,var(--btn)}
 input.create:hover,input.create:focus{background:var(--create) no-repeat 6px calc(50% - 2px)/16px,var(--btn_hover)}
 input.delete,input.delete:active,input.delete.depress{background:var(--nuke) no-repeat 6px center/13px,var(--btn)}
 input.delete:hover,input.delete:focus{background:var(--nuke) no-repeat 6px center/13px,var(--btn_hover)}
@@ -582,6 +582,7 @@ a.controld img{display:none}
 .optionlist:hover{box-shadow:inset 0 0 0 1px #646;transition:ease-in-out .5s box-shadow}
 .script .control{padding-left:0}
 .script .control img{margin-right:1px}
+#addSection input.add,#createSection input.create{padding:6px 8px 6px 23px}
 #hopVariance label+label{margin-left:12px}
 #hopVariance .optbox{margin-right:4px}
 #i2cpOptions{display:block;column-span:all}
