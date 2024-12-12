@@ -2644,6 +2644,7 @@ public final class SVGGraphics2D extends Graphics2D {
                 .append("<stop offset=\"100%\" style=\"stop-color:#0050b3d0\"/>")
                 .append("</linearGradient>");
         }
+        defs.append("<link xmlns=\"http://www.w3.org/1999/xhtml\" rel=\"stylesheet\" type=\"text/css\" href=\"/themes/fonts/OpenSans.css\"/>");
         defs.append("<link xmlns=\"http://www.w3.org/1999/xhtml\" rel=\"stylesheet\" type=\"text/css\" href=\"/themes/fonts/FiraCode.css\"/>");
         defs.append("<style>text{font-weight:600;text-rendering:optimizeLegibility;white-space:pre}")
             .append("line,path,rect{shape-rendering:crispEdges;vector-effect:non-scaling-stroke}")
