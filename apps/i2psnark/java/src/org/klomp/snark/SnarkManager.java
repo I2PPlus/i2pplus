@@ -509,6 +509,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (lastAddedMessageTimestamp != currentTime || !lastAddedMessage.equals(message)) {
             addMessageNoEscape(message.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
                                       .replace("&amp;nbsp", "&nbsp;"));
+        } else if (lastAddedMessage.startsWith(_t("Download already running: ")) &&
+                   lastAddedMessage.contains(_t("Downloading"))) {
+            lastAddedMessage.replace(_t("Download already running: "), "");
         }
         lastAddedMessageTimestamp = currentTime;
         lastAddedMessage = message;

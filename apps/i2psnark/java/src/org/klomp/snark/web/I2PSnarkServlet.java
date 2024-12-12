@@ -312,13 +312,9 @@ public class I2PSnarkServlet extends BasicServlet {
         if (theme.equals("dark")) {pageBackground = "#000";}
         else if (theme.equals("midnight")) {
             pageBackground = "repeating-linear-gradient(180deg,rgba(0,0,24,.75) 2px,rgba(0,0,0,.7) 4px)/100% 4px," +
-                             "var(--tile)/171px 148px,var(--offline)/0,#000010";
-        } else if (theme.equals("ubergine")) {
-            pageBackground = "repeating-linear-gradient(90deg,rgba(0,0,0,.5) 2px,rgba(48,0,48,.5) 4px)," +
-                             "repeating-linear-gradient(180deg,#080008 2px,#212 4px),var(--offline) no-repeat,#130313";
-        } else if (theme.equals("vanilla")) {
-            pageBackground = "repeating-linear-gradient(180deg,#6f5b4c 1px,#a9927e 1px,#bfa388 4px),#cab39b";
-        }
+                             "var(--tile)/171px 148px,#000010";
+        } else if (theme.equals("ubergine")) {pageBackground = "#101";}
+        else if (theme.equals("vanilla")) {pageBackground = "repeating-linear-gradient(180deg,#6f5b4c 1px,#a9927e 1px,#bfa388 4px),#cab39b";}
         buf.append(DOCTYPE).append("<html style=\"background:").append(pageBackground).append("\">\n")
                            .append("<head>\n").append("<meta charset=utf-8>\n");
         if (!isStandalone()) {
@@ -332,10 +328,10 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("<link rel=preload href=/themes/fonts/Sora/Sora-Italic.woff2 as=font type=font/woff2 crossorigin>\n")
                .append("<link rel=stylesheet href=/themes/fonts/Sora.css>\n");
         } else if (!isStandalone()) {
-            buf.append("<link rel=preload href=/themes/fonts/DroidSans.css as=style>\n")
-               .append("<link rel=preload href=/themes/fonts/DroidSans/DroidSans.woff2 as=font type=font/woff2 crossorigin>\n")
-               .append("<link rel=preload href=/themes/fonts/DroidSans/DroidSans-Bold.woff2 as=font type=font/woff2 crossorigin>\n")
-               .append("<link rel=stylesheet href=/themes/fonts/DroidSans.css>\n");
+            buf.append("<link rel=preload href=/themes/fonts/OpenSans.css as=style>\n")
+               .append("<link rel=preload href=/themes/fonts/OpenSans/OpenSans.woff2 as=font type=font/woff2 crossorigin>\n")
+               .append("<link rel=preload href=/themes/fonts/OpenSans/OpenSans-Bold.woff2 as=font type=font/woff2 crossorigin>\n")
+               .append("<link rel=stylesheet href=/themes/fonts/OpenSans.css>\n");
         } else {
             buf.append("<link rel=preload href=/i2psnark/.res/themes/fonts/Sora.css as=style>\n")
                .append("<link rel=preload href=/i2psnark/.res/themes/fonts/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>\n")
@@ -3847,10 +3843,10 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("<link rel=preload href=/themes/fonts/Sora/Sora-Italic.woff2 as=font type=font/woff2 crossorigin>\n")
                .append("<link rel=stylesheet href=/themes/fonts/Sora.css>\n");
         } else {
-            buf.append("<link rel=preload href=/themes/fonts/DroidSans.css as=style>\n")
-               .append("<link rel=preload href=/themes/fonts/DroidSans/DroidSans.woff2 as=font type=font/woff2 crossorigin>\n")
-               .append("<link rel=preload href=/themes/fonts/DroidSans/DroidSans-Bold.woff2 as=font type=font/woff2 crossorigin>\n")
-               .append("<link rel=stylesheet href=/themes/fonts/DroidSans.css>\n");
+            buf.append("<link rel=preload href=/themes/fonts/OpenSans.css as=style>\n")
+               .append("<link rel=preload href=/themes/fonts/OpenSans/OpenSans.woff2 as=font type=font/woff2 crossorigin>\n")
+               .append("<link rel=preload href=/themes/fonts/OpenSans/OpenSans-Bold.woff2 as=font type=font/woff2 crossorigin>\n")
+               .append("<link rel=stylesheet href=/themes/fonts/OpenSans.css>\n");
         }
         if (!isStandalone() && override.exists()) {
             buf.append(HEADER_A).append(_themePath).append(HEADER_Z).append("\n"); // optional override.css for version-persistent user edits

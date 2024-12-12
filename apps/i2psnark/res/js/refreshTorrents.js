@@ -354,6 +354,7 @@ function refreshOnSubmit() {
 async function initSnarkRefresh() {
   let serverOKIntervalId = setInterval(checkIfUp, 5000);
   clearInterval(snarkRefreshIntervalId);
+  document.documentElement.removeAttribute("style");
   try {
     snarkRefreshIntervalId = setInterval(async () => {
       try {
