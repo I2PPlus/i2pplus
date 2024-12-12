@@ -1,5 +1,5 @@
 :root{
---bodyfont:Sora,Droid Sans,Open Sans,Segoe UI,Noto Sans,sans-serif;
+--bodyfont:Sora,Open Sans,Segoe UI,Noto Sans,sans-serif;
 --monospaced:FiraCode,Noto Mono,DejaVu Sans Mono,Lucida Console,monospace;
 }
 *{-webkit-text-stroke:0!important}

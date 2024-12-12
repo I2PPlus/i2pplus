@@ -1,3 +1,2 @@
 * FireCode & Sora typefaces are licensed under the Open Font License: https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL
-* Droid Sans fonts licensed under the Apache License, version 2
-  - A copy of the Apache license is located in the licenses directory in the I2P application directory
+* Open Sans fonts icensed under the SIL Open Font License, Version 1.1: https://openfontlicense.org/open-font-license-official-text/
