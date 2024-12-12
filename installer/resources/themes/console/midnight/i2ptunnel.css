@@ -22,8 +22,6 @@ br{clear:left}
 div{box-sizing:border-box}
 form{margin:0}
 hr{display:none}
-h2,h3{-webkit-text-stroke:1px rgba(179,186,255,.3)}
-h2 a,h3 a{-webkit-text-stroke:0}
 h2,h3,th,.buttons,.newTunnel,.control,label,.infohelp,.infowarn,.nowrap,b,#throttler td{user-select:none}
 h2,h3{margin:12px 0 -1px;padding:8px 10px 8px 30px;position:relative;z-index:10;text-transform:uppercase;letter-spacing:.08em;word-spacing:.1em;font-size:11pt;border:var(--border);box-shadow:var(--bevel);background-size:16px,4px 100%,100%;background-blend-mode:luminosity,normal}
 .iframed h2,.iframed h3{margin:14px 0 -1px}
@@ -149,7 +147,7 @@ a.control,input.control{white-space:nowrap;vertical-align:middle}
 .control:hover,.control:focus,button:hover,button:focus{text-decoration:none;color:var(--a_hover);background:var(--btn_hover)}
 .control:active,button:active{text-decoration:none;background:var(--hover)}
 #serverTunnels .iconize,#clientTunnels .iconize{min-width:80px}
-.control.start,.control.start:hover,.control.start:focus,.control.start:active,.control.stop,.control.stop:hover,.control.stop:focus,.control.stop:active,.control.preview,.control.preview:hover,.control.preview:focus,.control.preview:active,.control.create,.control.create:hover,.control.create:focus,.control.create:active{color:#0000;text-shadow:none;background:var(--start) no-repeat center center/15px,var(--btn),var(--start_hover),var(--start_active);-webkit-text-stroke:0}
+.control.start,.control.start:hover,.control.start:focus,.control.start:active,.control.stop,.control.stop:hover,.control.stop:focus,.control.stop:active,.control.preview,.control.preview:hover,.control.preview:focus,.control.preview:active,.control.create,.control.create:hover,.control.create:focus,.control.create:active{color:#0000;text-shadow:none;background:var(--start) no-repeat center center/15px,var(--btn),var(--start_hover),var(--start_active)}
 .control.stop{background:var(--stop) no-repeat center center/14px,var(--btn),var(--stop_hover),var(--start_active)}
 .control.preview{background:var(--eye) no-repeat center center/19px,var(--btn),var(--eye_hover),var(--eye_active)}
 .control.create{background:var(--create) no-repeat center center/15px,var(--btn),var(--create_hover),var(--create_active)}
@@ -162,7 +160,7 @@ a.control,input.control{white-space:nowrap;vertical-align:middle}
 .control.preview:active{background:var(--hover) var(--eye_active) no-repeat center center/18px}
 .control.create:active{background:var(--hover) var(--create_active) no-repeat center center/14px}
 a.control{display:inline-block}
-input[type=text],input[type=password],textarea{font-weight:700;color:var(--ink_darker);-webkit-text-stroke:0}
+input[type=text],input[type=password],textarea{font-weight:700;color:var(--ink_darker)}
 input[type=text]:focus,textarea:focus{color:var(--ink)}
 textarea{margin-left:4px;margin-right:4px;resize:none;box-sizing:border-box;font:700 9pt var(--monospaced);border:1px solid #302b74;background:#001}
 textarea:focus{color:var(--ink);border:1px solid #6466a5;box-shadow:0 0 0 1px rgba(101,39,135,.5),0 0 2px 2px #202;background:#000;transition:ease filter .3s 0s}

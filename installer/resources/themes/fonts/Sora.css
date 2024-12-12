@@ -2,7 +2,6 @@
 --bodyfont:Sora,Open Sans,Segoe UI,Noto Sans,sans-serif;
 --monospaced:FiraCode,Noto Mono,DejaVu Sans Mono,Lucida Console,monospace;
 }
-*{-webkit-text-stroke:0!important}
 
 a,a.control,a:link,a:visited,a#settings,b,button,h3,h4,h5,input[type="reset"],input[type="submit"],pre,select,textarea,th,.control,.control:link,.control:visited,.dirInfo .snarkFileName a,.fakebutton,.fakebutton:visited,label.tabletitle,.panel th,.rih,.rih a,td a:link,.fileSize,.statvalue,.tab,.torrentDownloaded,.torrentName a,.tunnelConfig th,a#expand,#logs li,#logs pre,#navbar a,#navi a.selected,#ourDest,#sb_localtunnels a,#screenlog li,#sidebar a,#statusMessages,#statusMessages:active,#statusMessages:focus,#torrents .percentBarComplete,#torrents .txBarText,#torrentDisplay label,#torrents tfoot tr:first-child th,#torrentEdit .info_tracker,#trackerselect tr:first-child td{font-weight:600!important}
 h1{font-weight:800}

@@ -4,16 +4,18 @@
 --monospaced:FiraCode,Noto Mono,DejaVu Sans Mono,Lucida Console,monospace;
 }
 
-a,a:link,a:visited,#logs li,#logs pre,.tab,.statvalue,select,input[type="submit"],input[type="reset"],button,.control,.fakebutton,.fakebutton:visited,#sidebar a,#sb_localtunnels a,#torrents tfoot tr:first-child th,#screenlog li,.txBarText,.torrentDownloaded{font-weight:500}
+html,body,.configtable td.infohelp, p.infohelp, td.infohelp, p.infowarn, td.infowarn, #debugmode, .sybilinfo{font-weight:500!important}
+a,a:link,a:visited,#logs li,#logs pre,.tab,.statvalue,select,input[type="submit"],input[type="reset"],button,.control,.fakebutton,.fakebutton:visited,#sidebar a,#sb_localtunnels a,#torrents tfoot tr:first-child th,#screenlog li,.txBarText,.torrentDownloaded{font-weight:650!important}
 b,h2,h3,h4,h5,strong{font-weight:700}
-button,input[type="reset"],input[type="submit"],select,.control,.fakebutton,.fakebutton:visited{font-weight:620;font-variation-settings:'wdth' 90}
+button,input[type="reset"],input[type="submit"],select,.control,.fakebutton,.fakebutton:visited{font-weight:620;font-variation-settings:'wdth' 95}
 input[type=password],input[type=text],pre,select,textarea,.routerid tt,.routerid tt a,#statusMessages,#statusMessages:active,#statusMessages:focus{font-weight:500}
-label{font-variation-settings:'wdth' 90}
+label{font-weight:500!important;font-variation-settings:'wdth' 90}
 .infohash{font-weight:500}
 .main b,.main td a,.main td b,.page td a,.panel td a,.panel td b,li b,.tunnelName a{font-weight:650}
 .main,#sidebar{contain:paint}
 .tab,.tab a,.tab2{font-weight:650;font-variation-settings:'wdth' 95}
 .tunnelLocation font{font-variation-settings:'wdth' 90}
+#sb_graphstats{padding:1px 8px 5px!important}
 #sidebar h3,#sidebar h3 a{font-weight:700}
 #sidebar h3,#sidebar h3 a,.tab2{font-weight:700}
 #sidebar td a,#sidebar td b{font-weight:650}
@@ -24,8 +26,13 @@ label{font-variation-settings:'wdth' 90}
 #statusMessages{font-weight:600}
 
 /* i2psnark */
+.peerCount b .left,.peerCount b .right{padding-top:1px!important}
+.snarkNav{padding-top:3px!important}
 #torrents tfoot .RateDown:not(:empty)::before,tfoot .torrentDownloaded:not(:empty)::before,tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before{margin-right:2px}
 #torrents tfoot tr:first-child th{min-width:80px}
+#filterBar .badge{padding:0 3px!important;line-height:1.2!important}
+
+@media (min-width:1600px){#clock{padding-bottom:10px!important}}
 
 @font-face{font-family:Open Sans;font-style:normal;font-weight:300,400,500,600,700,800;src:url(/themes/fonts/OpenSans/OpenSans.woff2);format("woff2");font-display:swap}
 @font-face{font-family:Open Sans;font-style:italic;font-weight:300,400,500,600,700,800;src:url(/themes/fonts/OpenSans/OpenSans-Italic.woff2);format("woff2");font-display:swap}

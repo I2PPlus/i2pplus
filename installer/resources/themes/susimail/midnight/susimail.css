@@ -144,7 +144,7 @@ input.delete{margin-left:2px}
 /* login + misc mods */
 .notifications{text-align:center;padding:0 0 20px}
 #dologin{border:var(--border);margin:60px auto;width:600px;padding:0 0 10px;box-shadow:var(--bevel);background:var(--panel);filter:opacity(0);animation:linear fade-in .15s .6s forwards}
-#dologin h1{margin:-1px -1px 15px -1px;padding:10px 16px;position:relative;text-transform:uppercase;font-size:14pt;text-align:left;letter-spacing:.08em;word-spacing:.1em;color:#bbbbcf;text-shadow:0 1px 1px #000;border:var(--border);box-shadow:var(--bevel);background:var(--title);-webkit-text-stroke:1px rgba(0,0,0,.3)}
+#dologin h1{margin:-1px -1px 15px -1px;padding:10px 16px;position:relative;text-transform:uppercase;font-size:14pt;text-align:left;letter-spacing:.08em;word-spacing:.1em;color:#bbbbcf;text-shadow:0 1px 1px #000;border:var(--border);box-shadow:var(--bevel);background:var(--title)}
 #dologin h1::before,#dologin h1::after{display:inline-block;content:""}
 #dologin h1::before{margin:-2px 9px 1px 0;width:26px;height:26px;vertical-align:middle;background:url(images/favicon.svg) no-repeat center center/24px;filter:saturate(.1) brightness(5) drop-shadow(0 0 1px #c9ceff);opacity:.6}
 #dologin h1::after{position:absolute;top:0;bottom:0;left:0;right:0;background:#c9ceff;opacity:.5;mix-blend-mode:overlay}

@@ -99,7 +99,7 @@ th{padding:5px 10px;text-align:left;color:var(--ink);font-size:8.5pt}
 #showing{margin-left:6px}
 
 /* headings */
-h3{padding:7px 10px;letter-spacing:.18em;word-spacing:.1em;font-size:10pt;font-weight:700;text-transform:uppercase;text-shadow:0 0 2px #001100;color:var(--ink);border:var(--border);box-shadow:var(--bevel);-webkit-text-stroke:var(--stroke)}
+h3{padding:7px 10px;letter-spacing:.18em;word-spacing:.1em;font-size:10pt;font-weight:700;text-transform:uppercase;text-shadow:0 0 2px #001100;color:var(--ink);border:var(--border);box-shadow:var(--bevel)}
 h4{display:none}
 .headline{margin-top:-16px}
 .headline h3{padding:10px 5px 10px 35px;text-transform:uppercase;font-size:11.5pt;background:var(--addressbook) no-repeat 9px center/20px,var(--title)}
@@ -166,7 +166,7 @@ td.destinations{max-width:50px;padding:1px 8px}
 #booksearch input[type=text],#booksearch input[type=submit]{animation:fade-in .5s ease 1s both}
 #booksearch input[type=text]{padding:7px 8px;min-width:280px;border-radius:1px 0 0 1px;box-shadow:none}
 #booksearch input[type=text]:focus{border:1px solid var(--hover);filter:none}
-#booksearch input[type=submit]{margin-left:-16px;width:40px;min-width:0;position:relative;z-index:10;overflow:hidden;color:#0000;text-shadow:none;-webkit-text-stroke:0;border:0;border-radius:0 1px 1px 0;background:#000 var(--search) no-repeat center center/14px}
+#booksearch input[type=submit]{margin-left:-16px;width:40px;min-width:0;position:relative;z-index:10;overflow:hidden;color:#0000;text-shadow:none;border:0;border-radius:0 1px 1px 0;background:#000 var(--search) no-repeat center center/14px}
 #booksearch input[type=submit]:hover,#booksearch input[type=submit]:focus,#booksearch input[type=text]:focus~input[type=submit]{border:0;box-shadow:inset 0 0 0 1px var(--hover),inset 0 0 0 2px #000,inset 0 0 3px 1px rgba(255,96,0,.8),inset 0 0 5px 0 rgba(255,96,0,.8),inset 0 0 0 4px #000}
 #booksearch input[type=submit]:active{box-shadow:inset 0 0 0 1px var(--hover),inset 0 0 0 2px #000,var(--btn_shadow_active);background:var(--hover) var(--search) no-repeat center center/14px;background-blend-mode:luminosity}
 #booksearch{padding:6px;text-align:center}

@@ -22,7 +22,7 @@ html{background:var(--bodybg),#000800}
 body{margin:5px 0 0 0;padding:0;text-align:center;font:8.5pt/1.3 var(--bodyfont);background:none}
 code{text-align:left;font:500 9pt var(--monospaced);color:#dd0}
 h1,#applinks,#sitelinks,#news h3,.main h3,label.tabletitle{position:relative;z-index:10;text-shadow:var(--textshadow);box-shadow:var(--highlight);background:var(--h1);background-size:2px,100% 4px,100%,256px;background-repeat:repeat,repeat,no-repeat,repeat}
-h1,.main h2,.main h3,label.tabletitle,#applinks,#sitelinks{-webkit-text-stroke:var(--stroke);box-shadow:var(--bevel)}
+h1,.main h2,.main h3,label.tabletitle,#applinks,#sitelinks{box-shadow:var(--bevel)}
 h1,.sb,#sb_wrap{contain:layout}
 h2 a:hover{color:var(--hover)}
 h2 a:visited{color:#191}
@@ -60,7 +60,6 @@ h3 .b32{margin:0 4px 0 0;display:inline-block;vertical-align:middle;border:var(-
 .formaction{text-align:right;margin-bottom:-5px}
 .hide,.hideme,#hideme{display:none}
 .main{scrollbar-color:rgba(16,48,16,.4) #0000}
-.main h3 a{-webkit-text-stroke:0}
 .main li{margin:2px 0 2px 30px;padding:2px 10px 2px 0;word-wrap:break-word;text-align:left}
 .main ul{list-style:square}
 .mediumtags{font-size:9pt}
@@ -89,7 +88,7 @@ p:empty+.sb_notice{margin-top:9px}
 .sb table{margin:-5px auto -6px -1px;width:calc(100% + 1px);position:relative;overflow:hidden;text-align:center;font-size:8pt;border:0;border-collapse:collapse;box-shadow:var(--bevel_hard)}
 .sb table:not(#sb_localtunnels):not(#sb_services):not(#sb_advanced) tr::before{width:calc(100% - 3px);transform:scaleX(0);height:1px;position:absolute;top:-3px;left:1px;z-index:0;display:block;background:linear-gradient(to right,rgba(255,96,0,.3),#f50,rgba(255,96,0,.3));opacity:.25;content:"";animation:bar .03s steps(3) reverse;backface-visibility:hidden;will-change:transform}
 .warntext{color:#b00}
-#clock{margin:-7px 0 -9px -1px;padding:8px 0;position:relative;line-height:1;letter-spacing:.1em;font-size:18pt;font-weight:700;color:#ffa;text-shadow:var(--textshadow);box-shadow:var(--bevel);background:repeating-linear-gradient(180deg,rgba(255,255,255,.05) 2px,rgba(0,16,0,.2) 4px),linear-gradient(90deg,#010,#000,#010);-webkit-text-stroke:1px rgba(220,220,128,.5);opacity:.9}
+#clock{margin:-7px 0 -9px -1px;padding:8px 0;position:relative;line-height:1;letter-spacing:.1em;font-size:18pt;font-weight:700;color:#ffa;text-shadow:var(--textshadow);box-shadow:var(--bevel);background:repeating-linear-gradient(180deg,rgba(255,255,255,.05) 2px,rgba(0,16,0,.2) 4px),linear-gradient(90deg,#010,#000,#010);opacity:.9}
 #clock::after{margin-left:3px;content:"UTC";display:inline-block;font-size:50%;vertical-align:middle}
 #clock::before{content:"";position:absolute;top:0;left:0;height:100%;width:100%;box-shadow:var(--bevel);background:repeating-linear-gradient(90deg,rgba(0,0,0,.3) 2px,rgba(0,16,0,.2) 4px)}
 #processSidebarForm{display:none!important}
@@ -162,8 +161,7 @@ p:empty+.sb_notice{margin-top:9px}
 #sidebar table:not(#sb_localtunnels) tr:first-child td b,#sidebar tr:first-child td span{margin:0 0 1px}
 #sidebar table:not(#sb_localtunnels) tr:last-child td b,#sidebar tr:last-child td span{margin:-2px 0 3px}
 #sidebar td a:active{box-shadow:0 0 0 2px rgba(0,0,0,.3),inset 2px 2px 2px rgba(0,0,0,.7)}
-#sidebar td a{-webkit-text-stroke:0}
-#sidebar td b:not(::selection),.infohelp b:not(::selection){color:#ffffa8;-webkit-text-stroke:1px #0006}
+#sidebar td b:not(::selection),.infohelp b:not(::selection){color:#ffffa8}
 #sidebar td:first-child{overflow:hidden;text-transform:capitalize}
 #sidebar td:first-child,#sb_localtunnels td:nth-child(2){text-align:left}
 #sidebar td:last-child{text-align:right}
@@ -563,7 +561,7 @@ input[type=file]::file-selector-button{font-size:8.5pt}
 #graph_single .graphspanel{margin-top:16px}
 #graphs .nowrap{text-align:left;line-height:3}
 #graphdisplay:not(.visible){margin-bottom:-18px;border-radius:0 0 4px 4px}
-#graphdisplay:hover,#graphdisplay:focus{color:var(--hover);-webkit-text-stroke:0}
+#graphdisplay:hover,#graphdisplay:focus{color:var(--hover)}
 
 /* jobs */
 .joblog{margin-top:15px;text-align:justify;border-radius:4px 4px 0 0}
@@ -2056,6 +2054,7 @@ input[type=hidden]+p+p{margin-top:20px;margin-bottom:-21px;padding:10px;border:v
 #tunnelconfigsave{margin-top:0;border-top:var(--border)}
 .tIn{background:url(/themes/console/images/inbound.svg) no-repeat 6px center/16px,var(--badge)}
 .tOut{background:url(/themes/console/images/outbound.svg) no-repeat 6px center/16px,var(--badge)}
+.toggle:not(.expanded) .tIn,.toggle:not(.expanded) .tOut{display:inline-block!important}
 .toggleElementsActive .tIn,.toggleElementsActive .tOut{margin:-3px 0;padding:4px 6px 4px 26px;display:inline-block;box-shadow:var(--bevel)}
 .toggleElementsActive #tunnelconfigsave{margin-top:1px}
 body:not(.toggleElementsActive) .tIn,body:not(.toggleElementsActive) .tOut{display:none}
@@ -2069,7 +2068,7 @@ body:not(.toggleElementsActive) .tIn,body:not(.toggleElementsActive) .tOut{displ
 #tunnelconfig .toggle:not(.expanded){margin-bottom:-1px}
 #tunnelconfig .toggle:not(.expanded) .right::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
 #tunnelconfig .toggle:not(.expanded):hover .right::after{background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
-#tunnelconfig .tunnelName{margin-right:6px;display:inline-block}
+#tunnelconfig .tunnelName{margin-right:6px;min-width:240px;display:inline-block}
 #tunnelconfig .tunnelName::before{margin:-4px 6px -4px 0;width:20px;height:20px;display:inline-block;vertical-align:middle;background:url(/themes/console/images/hardhat.svg) no-repeat center center/20px;content:""}
 
 /* configlogging */

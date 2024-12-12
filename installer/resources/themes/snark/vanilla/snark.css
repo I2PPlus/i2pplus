@@ -132,7 +132,7 @@ th a:hover,th a:visited:hover,th a:focus,th a:visited:focus,td a:hover,td a:visi
 
 /* screenlog */
 .logshim{margin-top:-14px}
-#screenlog{margin:2px 1px 11px;padding:0 3px;height:56px;width:calc(100% - 14px);display:inline-block;overflow:hidden;text-align:left;font:700 8.5pt var(--bodyfont);-webkit-text-stroke:2px rgba(78,69,63,.35);color:#f8f1ed;border:1px solid #523d2e;box-shadow:0 0 0 2px #efe6e0,0 0 0 3px #3f3833;background:repeating-linear-gradient(180deg,rgba(77,69,62,.5) 2px,rgba(111,96,90,.3) 4px),url(images/whippy.webp) no-repeat scroll,var(--snarkGraph) no-repeat,linear-gradient(180deg,#5f554d,#3f3833);background-size:100%,60px auto,cover,100%;background-position:center center,right -4px bottom -10px,right 60px bottom -8px,center center;background-blend-mode:darken,normal,luminosity,normal,normal}
+#screenlog{margin:2px 1px 11px;padding:0 3px;height:56px;width:calc(100% - 14px);display:inline-block;overflow:hidden;text-align:left;font:700 8.5pt var(--bodyfont);color:#f8f1ed;border:1px solid #523d2e;box-shadow:0 0 0 2px #efe6e0,0 0 0 3px #3f3833;background:repeating-linear-gradient(180deg,rgba(77,69,62,.5) 2px,rgba(111,96,90,.3) 4px),url(images/whippy.webp) no-repeat scroll,var(--snarkGraph) no-repeat,linear-gradient(180deg,#5f554d,#3f3833);background-size:100%,60px auto,cover,100%;background-position:center center,right -4px bottom -10px,right 60px bottom -8px,center center;background-blend-mode:darken,normal,luminosity,normal,normal}
 #screenlog.configpage{width:calc(100% - 10px)}
 #screenlog:hover,#screenlog:focus{overflow:auto}
 #screenlog:focus{box-shadow:0 0 0 1px #ff1a85,0 0 0 3px rgba(70,62,57,.5)}
@@ -397,8 +397,8 @@ input.r{text-align:right;background:#efe6e0}
 input.r,input[type=text],select{min-width:120px}
 input[name="nofilter_commentsName"]{width:250px}
 input[type=submit]{color:#4d2200;border:var(--btn_border)}
-input[type=submit]:hover,input[type=submit]:focus,a.control:hover,a.control:focus{color:#4d2100;border:var(--btn_border_hover);box-shadow:var(--highlight)7ef,inset 0 0 0 2px #d50;-webkit-text-stroke:1px rgba(77,34,0,.1);background-blend-mode:luminosity}
-input[type=submit]:active,a.control:active{color:#70645c;box-shadow:var(--highlight),inset 3px 3px 3px rgba(0,0,0,.5);-webkit-text-stroke:0}
+input[type=submit]:hover,input[type=submit]:focus,a.control:hover,a.control:focus{color:#4d2100;border:var(--btn_border_hover);box-shadow:var(--highlight)7ef,inset 0 0 0 2px #d50;background-blend-mode:luminosity}
+input[type=submit]:active,a.control:active{color:#70645c;box-shadow:var(--highlight),inset 3px 3px 3px rgba(0,0,0,.5)}
 input[type=text],input.r,textarea,input[name="nofilter_dataDir"]{padding:5px 8px;vertical-align:middle;box-shadow:var(--highlight),inset 2px 2px 2px rgba(16,12,0,.3)}
 input[name="i2cpOpts"],input[name="nofilter_dataDir"]{font-size:90%}
 input[type=text]:focus,input[type=text]:focus,input.r:focus,textarea:focus,input[name="nofilter_dataDir"]:focus{background:#fffcdf;color:#5f1227;text-shadow:none;border:var(--btn_border_hover);box-shadow:var(--highlight),inset 3px 3px 3px rgba(16,12,0,.4);transition:ease box-shadow .15s}
@@ -1070,7 +1070,7 @@ thead a img,thead img{max-height:21px}
 .nopeers .peerCount b,.nopeers .peerCount b .left,.nopeers .peerCount b .right{color:#333;text-shadow:0 1px 1px #aaa}
 .nopeers.incomplete .peerCount b{text-shadow:0 1px 1px #aaa;background:#aaa}
 .nopeers.incomplete .peerCount b::before{border-color:#0000 #aaa #0000 #0000}
-.peerCount b{padding:4px 3px;min-width:103px;display:inline-block;position:relative;line-height:1;text-align:center;font-size:95%;color:#ddd;text-shadow:0 1px 1px #000;-webkit-text-stroke:0;border-radius:2px;background:#ac5390;filter:drop-shadow(0 0 1px #000)}
+.peerCount b{padding:4px 3px;min-width:103px;display:inline-block;position:relative;line-height:1;text-align:center;font-size:95%;color:#ddd;text-shadow:0 1px 1px #000;border-radius:2px;background:#ac5390;filter:drop-shadow(0 0 1px #000)}
 .peerCount b::before{width:0;height:0;position:absolute;top:calc(50% - 5px);left:-10px;border-width:5px;border-style:solid;border-color:#0000 #ac5390 #0000 #0000;content:""}
 .peerCount b .left,.peerCount b .right{margin:0 1px;padding:2px 3px 1px;min-width:38px;display:inline-block;text-align:center;color:#eee;border-radius:1px;box-shadow:0 0 0 1px #0004,1px 1px 1px 1px #0003 inset;background:linear-gradient(180deg,rgba(128,128,180,.2),rgba(192,192,220,.2))}
 .peerCount b .left{margin-right:0}

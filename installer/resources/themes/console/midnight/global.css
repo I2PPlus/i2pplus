@@ -61,28 +61,25 @@ html,body{min-height:100%;color:var(--ink);scrollbar-color:#225 #001}
 body{font:9pt var(--bodyfont);color:var(--ink)}
 .iframed body{background:none;overflow:hidden}
 a,input,button,select,textarea{outline:none}
-a,button,input{-webkit-text-stroke:1px rgba(0,0,0,.3)}
 :-moz-focusring{outline:none}
 ::selection{color:#fff;background:rgba(34,41,111,.9)}
 a{text-decoration:none;font-weight:700;word-wrap:break-word}
 a,a:link,a:visited{color:var(--a);outline:none}
 a:hover,a:focus,a:visited:hover,a:visited:focus{color:var(--hover)}
 a:active{color:var(--active)}
-a:active,button:active,input:active{-webkit-text-stroke:0}
 .left{text-align:left}
 .right{text-align:right}
 .center{text-align:center}
 input,button{cursor:pointer}
 input[type=text],textarea{cursor:text}
 input[disabled]{pointer-events:none}
-a:not(:hover):not(:focus),button:not(:hover):not(:focus),input:not(:hover):not(:focus),.control:not(:hover):not(:focus){-webkit-text-stroke:.5px rgba(0,0,0,.3)}
 ::placeholder,input::placeholder{font-size:90%;font-weight:700;font-style:italic;color:#aaf;opacity:.4}
 :focus::placeholder{opacity:0}
 input{margin:3px;font:700 9pt var(--bodyfont)}
 input[type=hidden]{display:none}
 input[type=image]{min-width:0}
 label{cursor:pointer}
-input[type=text],input[type=number],input[type=password],textarea{padding:6px 8px;box-sizing:border-box;color:var(--ink_darker);-webkit-text-stroke:0;border:1px solid #27235c;box-shadow:var(--highlight),0 0 0 1px #000;background:#000;cursor:text}
+input[type=text],input[type=number],input[type=password],textarea{padding:6px 8px;box-sizing:border-box;color:var(--ink_darker);border:1px solid #27235c;box-shadow:var(--highlight),0 0 0 1px #000;background:#000;cursor:text}
 input[type=text],input[type=number],input[type=password]{margin:5px 10px;padding:6px 8px;text-decoration:none;font:700 9pt var(--bodyfont);border:var(--border_input)}
 textarea{margin:10px;padding:3px 8px;width:calc(100% - 15px);min-height:100px;text-align:left;font:9pt var(--monospaced);box-shadow:inset 1px 1px 1px 0 #000;resize:none;scrollbar-color:rgba(24,24,80,.8) #0000;scrollbar-width:thin;will-change:transform}
 input[type=number]{appearance:textfield}

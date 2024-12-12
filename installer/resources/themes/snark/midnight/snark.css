@@ -62,7 +62,7 @@ th img,td img,#closelog,#expand,#shrink{font-size:0}
 #navbar{margin:0 0 -6px;padding:10px 0;position:sticky;top:-1px;z-index:999;word-spacing:1px;letter-spacing:.15em;text-align:center;border:var(--border);border-radius:2px 2px 0 0;background:var(--panel);background-size:4px 100%,100%;will-change:transform}
 #navbar a,#navbar a:visited{line-height:1.6;color:#89f}
 #navbar a:hover,#navbar a:visited:hover,#navbar a:focus,#navbar a:visited:focus{z-index:999;text-decoration:none;color:#fff;text-shadow:none;border-color:#652787}
-#navbar a:active,#navbar a:visited:active{color:#8634b2;text-shadow:none;-webkit-text-stroke:0;box-shadow:var(--btn_shadow_active);transition:ease box-shadow .1s}
+#navbar a:active,#navbar a:visited:active{color:#8634b2;text-shadow:none;box-shadow:var(--btn_shadow_active);transition:ease box-shadow .1s}
 .iframed #navbar{margin:-1px 0 5px;position:static;border:0;border-bottom:var(--border);border-radius:0}
 .snarkNav{margin:0 -2px;padding:4px 9px 4px 26px;position:relative;font-size:9pt;font-weight:700;text-decoration:none;text-transform:uppercase;text-shadow:0 0 1px #000;border:var(--border_btn);border-radius:0;box-shadow:var(--highlight),inset 0 0 1px 0 #446;background:var(--tracker) no-repeat 9px center,var(--nav),var(--tracker_hover),var(--tracker_active);transition:ease box-shadow .1s;animation:fade .5s ease .5s both;will-change:transform}
 .snarkNav:hover,.snarkNav:focus,.snarkNav:active{background:var(--tracker_hover),var(--btn_hover_radial),var(--nav_hover);background-repeat:no-repeat,repeat,repeat;background-position:9px center,center center,center center}
@@ -93,7 +93,7 @@ th img,td img,#closelog,#expand,#shrink{font-size:0}
 /* search */
 #snarkSearch{display:block;position:absolute;right:8px;top:10px}
 #snarkSearch input[type=search],#snarkSearch input[type=submit]{padding:8px;border:0;box-shadow:none;background:#0000}
-#snarkSearch input[type=search]{padding:4px 6px;font-weight:600;color:var(--ink);-webkit-text-stroke:0;border-bottom:1px solid #26235c;cursor:text;transform:translateY(-2px);-webkit-appearance:none}
+#snarkSearch input[type=search]{padding:4px 6px;font-weight:600;color:var(--ink);border-bottom:1px solid #26235c;cursor:text;transform:translateY(-2px);-webkit-appearance:none}
 #snarkSearch input[type=search]:not(:focus){opacity:0}
 #snarkSearch:hover input[type=search],#snarkSearch input[type=search]:focus,#snarkSearch input[type=search][value]{opacity:1}
 #snarkSearch input[type=search][value]:not(:focus){color:#c9ceffbb}

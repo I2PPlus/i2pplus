@@ -1,5 +1,5 @@
 @media (min-width:0) and (max-width:4000px){
-input,button,textarea,select,a{font-weight:400;font-family:Noto Sans,Segoe UI,Lucida Grande,Helvetica,Arial,Verdana,sans-serif;line-height:1.2}
+input,button,textarea,select,a{font-weight:400;font-family:Noto Sans,Segoe UI,Open Sans,Lucida Grande,sans-serif;line-height:1.2}
 a.control,input[type=submit],input.accept{text-transform:uppercase;letter-spacing:.05em}
 a.control,input[type=submit],input.accept,th,#trackerselect tr:first-child td{font-weight:400;font-size:12pt}
 input[type],select,a.control{line-height:1.3}

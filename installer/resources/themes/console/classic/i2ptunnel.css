@@ -182,7 +182,7 @@ textarea[name="accessList"],.clientKey,.clientName,.proxyList,#customOptions,#de
 .required{display:none}
 .username,.password{width:200px}
 a.control,.control,.control:link,.control:visited,button{margin:2px 4px;padding:6px 8px;min-width:100px;box-sizing:border-box;overflow:hidden;white-space:nowrap;vertical-align:middle;line-height:1.25;text-align:center;text-decoration:none;font-style:normal;font-weight:400;color:#5e626e;border:var(--border);border-radius:3px;background:var(--btn)}
-.control.start,.control.start:hover,.control.start:focus,.control.start:active,.control.stop,.control.stop:hover,.control.stop:focus,.control.stop:active,.control.preview,.control.preview:hover,.control.preview:focus,.control.preview:active,.control.create,.control.create:hover,.control.create:focus,.control.create:active{color:#0000;text-shadow:none;background:var(--start) no-repeat center center/15px,var(--btn),var(--start_hover);-webkit-text-stroke:0}
+.control.start,.control.start:hover,.control.start:focus,.control.start:active,.control.stop,.control.stop:hover,.control.stop:focus,.control.stop:active,.control.preview,.control.preview:hover,.control.preview:focus,.control.preview:active,.control.create,.control.create:hover,.control.create:focus,.control.create:active{color:#0000;text-shadow:none;background:var(--start) no-repeat center center/15px,var(--btn),var(--start_hover)}
 .control:hover,.control:focus,button:hover,button:focus{text-decoration:none;color:var(--ink);border:var(--border);box-shadow:var(--btn_shadow_hover);background:var(--btn_hover)}
 .control:active,button:active{border:var(--border);box-shadow:var(--btn_shadow_active)}
 .control.create{min-width:78px;background:var(--create) no-repeat center center/15px,var(--btn),var(--create_hover)}

@@ -394,7 +394,7 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 /* top navigation */
 .confignav,#help .confignav,#tunnels .confignav{margin:-1px -15px 5px;padding:8px;text-align:center;font-size:9pt;font-weight:700;color:var(--ink);border:var(--border_inner);border-left:0;border-right:0;border-bottom:var(--border);box-shadow:var(--bevel);background:var(--nav);backface-visibility:hidden;will-change:transform}
 .tab,.tab2{margin:0 -2px -1px;padding:1px 0;display:inline-block;min-width:60px;box-sizing:border-box;border:var(--border_inner);background:#fff;filter:var(--filter_shadow);position:relative}
-.tab a{padding:3px 14px;display:inline-block;-webkit-text-stroke:1px rgba(255,255,255,.1)}
+.tab a{padding:3px 14px;display:inline-block}
 .tab:hover a{color:var(--hover)}
 .tab{box-shadow:var(--highlight);background:linear-gradient(180deg,#fff 50%,rgba(255,255,255,.6) 50%,rgba(240,240,240,.4)) #e7e7ff}
 .tab:hover{position:relative;z-index:60;box-shadow:inset 0 0 0 1px rgba(255,96,0,.7);background:#fff linear-gradient(180deg,#fff 50%,rgba(255,232,191,.6) 50%,rgba(239,217,179,.4) 100%)}

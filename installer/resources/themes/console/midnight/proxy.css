@@ -68,7 +68,7 @@ button.go:active,button.accept:active{background:var(--yes) no-repeat 8px center
 #jumplinks{margin-bottom:50px}
 #jumplinks h4{margin:0 0 15px;padding:0 0 10px}
 #jumplinks br{display:none}
-#jumplinks a{margin:3px 0 3px 6px;padding:9px 12px 9px 35px;float:left;text-shadow:var(--txt_shadow);-webkit-text-stroke:0;box-shadow:var(--outline),var(--bevel);background:url(../images/arrow_right.svg) no-repeat 10px center/20px,var(--badge);animation:fade .5s ease 3s both}
+#jumplinks a{margin:3px 0 3px 6px;padding:9px 12px 9px 35px;float:left;text-shadow:var(--txt_shadow);box-shadow:var(--outline),var(--bevel);background:url(../images/arrow_right.svg) no-repeat 10px center/20px,var(--badge);animation:fade .5s ease 3s both}
 #jumplinks a:first-of-type{margin-left:19px}
 #jumplinks #linuxfarm{background:url(../images/eepsites/linuxfarm.svg) no-repeat 10px center/20px,var(--badge)!important;display:none}
 #jumplinks #notbob{background:url(../images/eepsites/notbob.png) no-repeat 10px center/20px,var(--badge)}

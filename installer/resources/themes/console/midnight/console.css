@@ -210,7 +210,7 @@ button.download.control:active{background:var(--download) no-repeat center cente
 #sidebar .stop:active{padding:7px 5px;background:var(--shutdown) no-repeat center center/14px,var(--btn_active)}
 #sidebar .cancel{padding:7px 9px 7px 25px;background:var(--no) no-repeat 10px center/10px,var(--btn_sidebar)}
 #sidebar #sb_downloadUnsignedDevUpdate,#sidebar #sb_downloadSignedDevUpdate,#sidebar #sb_downloadReleaseUpdate{padding:6px 16px 6px 30px;margin:4px 0 6px;font-size:110%;border-radius:15px;background-position:12px center}
-#sidebar #sb_downloadUnsignedDevUpdate:active,#sidebar #sb_downloadSignedDevUpdate:active,#sidebar #sb_downloadReleaseUpdate:active{color:#7171d1;text-shadow:none;-webkit-text-stroke:0}
+#sidebar #sb_downloadUnsignedDevUpdate:active,#sidebar #sb_downloadSignedDevUpdate:active,#sidebar #sb_downloadReleaseUpdate:active{color:#7171d1;text-shadow:none}
 
 /* Show text on context specific buttons (eg deferred shutdown) */
 #sidebar .reload[value="restartImmediate"],#sidebar .stop[value="shutdownImmediate"],#sb_manualReseed,#sidebar .cancel{padding:6px 9px 6px 25px;min-width:0;text-indent:0;text-align:left;text-transform:capitalize}
@@ -652,7 +652,7 @@ form[action="graphs"],form[action="/updategraphs"]{margin-top:-11px;margin-botto
 #updategraphs .messages{margin-bottom:10px}
 #graphing{border-top:0!important}
 #graphdisplay:not(.visible){margin-bottom:10px}
-#graphdisplay:hover,#graphdisplay:focus{color:var(--hover);-webkit-text-stroke:0}
+#graphdisplay:hover,#graphdisplay:focus{color:var(--hover)}
 
 .smallhead th,#ntcpconnections th{font-size:8pt}
 .smallhead th a:hover{text-decoration:none}
@@ -1534,7 +1534,7 @@ h3[id="udpcon"]{width:auto}
 .applink:hover .applabel{color:var(--hover);border-top:1px solid var(--hover);background:var(--label_hover)}
 .applink:active img{transform:scale(0.9)}
 .applink:active .applabel{box-shadow:var(--btn_shadow_active);background:var(--hover);transition:ease box-shadow .05s}
-.applink:active .applabel a{color:var(--ink_btn_active);-webkit-text-stroke:0}
+.applink:active .applabel a{color:var(--ink_btn_active)}
 .applink a,.sitemapcontainer a{text-transform:capitalize}
 .applink a:link,.applink a:hover,.applink a:active{outline:none;font-size:8.5pt}
 .applink a:link,.applink a:visited,.version a:not(:hover),.version a:not(:hover):visited{width:100%;display:inline-block;color:var(--a)}
@@ -2315,8 +2315,6 @@ h1::first-letter{font-size:107%}
 #logs .tabletitle,#jobs h3,#tunnels h3[id]{position:relative;overflow:hidden}
 #logs #enviro~.tabletitle::after,#jobs h3::after,#tunnels h3[id]::after{content:"";display:inline-block;width:0;height:1px;background:linear-gradient(90deg,#d30,#f60);position:absolute;bottom:0;left:0;animation:ease-out reloader 1s forwards;opacity:.4}
 #sb_localtunnels td[colspan="3"]{line-height:20px;font-size:0;background:repeating-linear-gradient(135deg,#001 1px,#001 5px,#003 6px,#003 11px)}
-h1,.main h2,#applinks,#sitelinks,.main h3{-webkit-text-stroke:1px rgba(179,186,255,.3)}
-.main h3 a{-webkit-text-stroke:0}
 
 /* highlight linked leaseset */
 .leaseset:target{border:1px solid #737}

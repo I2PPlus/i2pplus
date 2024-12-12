@@ -217,7 +217,6 @@ select{margin:2px 4px 2px 0;padding:7px 24px 7px 12px;min-width:120px;font-size:
 
 /* torrents */
 tr:hover .trackerLink img{opacity:1}
-tr:not(:hover) .tName a,tr:not(:hover) .snarkFileName a{-webkit-text-stroke:2px rgba(0,0,0,.3)}
 td.status img{margin-top:-3px;margin-bottom:-3px;width:auto;height:21px;display:inline-block;vertical-align:middle}
 th.peerCount a img{margin-left:-5px}
 .choked,.unchoked{font-weight:700;font-style:italic;text-align:center}
@@ -1040,7 +1039,7 @@ body,#torrents td,.snarkAddInfo,th,td,code,textarea,input,input[type=submit],inp
 }
 
 @media (min-width:1200px){
-.peerCount b{margin:4px 0;padding:4px 3px;min-width:100px;display:inline-block;position:relative;vertical-align:middle;line-height:1;text-align:center;font-size:95%;color:#eee;text-shadow:0 1px 1px #000;-webkit-text-stroke:0;border-radius:2px;background:#ac5390;filter:drop-shadow(0 0 1px #000)}
+.peerCount b{margin:4px 0;padding:4px 3px;min-width:100px;display:inline-block;position:relative;vertical-align:middle;line-height:1;text-align:center;font-size:95%;color:#eee;text-shadow:0 1px 1px #000;border-radius:2px;background:#ac5390;filter:drop-shadow(0 0 1px #000)}
 .peerCount b a{color:#fff}
 .peerCount b a[href*="?p="]:hover::after{top:calc(50% - 2px);border-color:#fff #0000 #0000 #0000}
 .peerCount b::before{width:0;height:0;position:absolute;top:calc(50% - 5px);left:-10px;border-width:5px;border-style:solid;border-color:#0000 #ac5390 #0000 #0000;content:""}

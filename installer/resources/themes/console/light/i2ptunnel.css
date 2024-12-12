@@ -108,7 +108,7 @@ a.control:hover{color:var(--ink)}
 .control:hover,.control:focus,button:hover,button:focus{text-decoration:none;color:var(--ink);border:1px solid #f60;box-shadow:var(--btn_shadow_hover);background:linear-gradient(180deg,#eee,#fff);filter:drop-shadow(0 0 1px rgba(204,204,204,.8));transition:ease border .7s}
 .control:active,button:active{box-shadow:var(--highlight),inset 2px 2px 2px #555;color:#4c526f}
 .control.iconize:active{background-blend-mode:luminosity}
-.control.start,.control.start:hover,.control.start:focus,.control.start:active,.control.stop,.control.stop:hover,.control.stop:focus,.control.stop:active,.control.preview,.control.preview:hover,.control.preview:focus,.control.preview:active,.control.create,.control.create:hover,.control.create:focus,.control.create:active{color:#0000!important;text-shadow:none;background:var(--start) no-repeat center center/15px,var(--btn),var(--start_hover);-webkit-text-stroke:0}
+.control.start,.control.start:hover,.control.start:focus,.control.start:active,.control.stop,.control.stop:hover,.control.stop:focus,.control.stop:active,.control.preview,.control.preview:hover,.control.preview:focus,.control.preview:active,.control.create,.control.create:hover,.control.create:focus,.control.create:active{color:#0000!important;text-shadow:none;background:var(--start) no-repeat center center/15px,var(--btn),var(--start_hover)}
 .control.create{background:var(--create) no-repeat center center/15px,var(--btn),var(--create_hover)}
 .control.create:hover,.control.create:focus{background:var(--create_hover) no-repeat center center/15px,var(--btn_hover)}
 .control.start:hover,.control.start:focus{background:var(--start_hover) no-repeat center center/15px,var(--btn_hover)}
