@@ -1,11 +1,11 @@
 /* I2P Imagegen Theme */
 /* Author: dr|z3d */
-@import url(/themes/fonts/DroidSans.css);
+@import url(/themes/fonts/OpenSans.css);
 
 :root{
 --dropdown:url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%235e626e' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E");
 --dropdown_hover:url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%2341444d' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E");
---bodyfont:Droid Sans,Open Sans,Segoe UI,Noto Sans,Ubuntu,DejaVu Sans,sans-serif;
+--bodyfont:Open Sans,Segoe UI,Noto Sans,DejaVu Sans,sans-serif;
 --highlight:inset 0 0 0 1px #fff;
 --th:linear-gradient(90deg,#efefff,#fff 10%,#fff 90%,#efefff);
 --btn:linear-gradient(180deg,#fff,#f2f2ff);

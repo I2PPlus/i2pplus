@@ -43,7 +43,7 @@ html {
 	margin: 2.5% auto;
 	min-width: 500px;
 	max-width: 1200px;
-	font-family: Open Sans, Segoe UI, Noto Sans, Ubuntu, sans-serif;
+	font-family: Open Sans, Segoe UI, Noto Sans,  sans-serif;
 	font-size: 10.5pt;
 	color: var(--ink);
 	border: none;

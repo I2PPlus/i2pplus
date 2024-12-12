@@ -28,4 +28,4 @@ th.suboption{font-weight:500}
 #trackerselect td:nth-child(2),#trackerselect td:nth-child(3){width:15%}
 #trackerselect tr:first-child td{font-size:9pt}
 @media (max-width:1400px){.iframed #torrents td.tName a{max-width:400px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
-@media (min-width:0) and (max-width:4000px){input,button,textarea,select,a{font-weight:400;font-family:Open Sans,Segoe UI,Noto Sans,Droid Sans,Roboto Sans,Ubuntu,sans-serif;line-height:120%}}
+@media (min-width:0) and (max-width:4000px){input,button,textarea,select,a{font-weight:400;font-family:Open Sans,Segoe UI,Noto Sans,sans-serif;line-height:120%}}

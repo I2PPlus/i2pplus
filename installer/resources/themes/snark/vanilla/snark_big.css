@@ -25,7 +25,7 @@ select,a.control,input[type=submit],input.accept,th,#trackerselect tr:first-chil
 .configOption::after{content:"";display:inline-block;height:40px;vertical-align:middle}
 #configs td b{letter-spacing:.08em;min-width:180px}
 #configs input[name="nofilter_dataDir"],input[name="i2cpOpts"],input[name="nofilter_commentsName"]{width:calc(100% - 200px)}
-input,button,textarea,select,a{font-weight:400;font-family:Noto Sans,Open Sans,Segoe UI,Droid Sans,Roboto Sans,Ubuntu,Lucida Grande,Helvetica,Arial,Verdana,sans-serif;line-height:120%}
+input,button,textarea,select,a{font-weight:400;font-family:Noto Sans,Open Sans,Segoe UI,sans-serif;line-height:120%}
 }
 
 @media (max-width:1400px){

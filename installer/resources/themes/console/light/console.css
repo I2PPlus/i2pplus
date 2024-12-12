@@ -1196,6 +1196,7 @@ h3+.statusnotes{margin-top:2px}
 .tunnels_participating td.cells:first-child{font-size:0}
 #country,#router,th#version,#tier,#edit,.tcount{width:2%;white-space:nowrap}
 #refreshPage{cursor:pointer}
+#transitbypeer #tunnels th{position:relative}
 #tunnel_defs b{color:#fff}
 #tunnel_defs td:first-child,#tunnel_defs td:last-child{padding:0;width:0;font-size:0;display:none}
 #tunnel_defs td:nth-child(3){border-right:var(--border_soft)}
@@ -1236,7 +1237,6 @@ h3+.statusnotes{margin-top:2px}
 #tunnels .percentBarInner{width:inherit;background:#77a}
 #tunnels .percentBarOuter:hover .percentBarInner{box-shadow:none;background:#0000}
 #tunnels .tab,#tunnels .tab2{min-width:140px}
-#participatingTunnels #tunnels th{position:relative}
 .tunnelsHidden #tunnels{padding-bottom:11px}
 .tunnelsHidden #tunnels h3[id]:nth-child(n+2){margin-top:-6px}
 .tunnelsHidden table+.statusnotes{margin-top:2px;border-top:1px solid var(--border_inner)}

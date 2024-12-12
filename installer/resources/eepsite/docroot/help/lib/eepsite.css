@@ -33,7 +33,7 @@ body {
 }
 
 body, h1, h2, h3, h4, p, ul, ol, li, dl, dt, dd, td, th, address, blockquote {
-  font-family: Open Sans, Ubuntu, Segoe UI, sans-serif;
+  font-family: Open Sans,  Segoe UI, sans-serif;
   text-shadow: 0 1px 1px rgba(0,0,0,.5);
 }
 

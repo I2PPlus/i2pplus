@@ -1,6 +1,6 @@
 @media (min-width:0){
 a.control,input[type=submit],input.accept{padding-top:5px;padding-bottom:4px;text-transform:uppercase;letter-spacing:.05em;display:inline-block}
-input,button,textarea,select,a{font-weight:400;font-family:Noto Sans,Open Sans,Segoe UI,Droid Sans,Roboto Sans,Ubuntu,Lucida Grande,Helvetica,Arial,Verdana,sans-serif;line-height:1.2}
+input,button,textarea,select,a{font-weight:400;font-family:Noto Sans,Open Sans,Segoe UI,sans-serif;line-height:1.2}
 input[type],a.control{line-height:1.3}
 input[type],select,#configs select,select option,#configs select option,td,td a,#screenlog li,#screenlog li a,textarea,input.r,input[name="nofilter_dataDir"],.configPanel,.configPanel td,#configs td,#trackerconfig td{font-size:10.5pt}
 select,a.control,input[type=submit],input.accept,th,#trackerselect tr:first-child td{font-weight:400;font-size:12pt}

@@ -1,7 +1,7 @@
 @media (min-width:0) and (max-width:4000px){
 a.control,input[type=submit],input.accept{padding-top:2px;padding-bottom:2px;text-transform:uppercase;letter-spacing:.05em}
 a.control,input[type=submit],input.accept,th{font-weight:400;font-size:12pt}
-input,button,textarea,select,a{font-weight:400;font-family:Noto Sans,Droid Sans,Roboto Sans,Ubuntu,Segoe UI,Lucida Grande,Helvetica,Arial,Verdana,sans-serif;line-height:1.2}
+input,button,textarea,select,a{font-weight:400;font-family:Noto Sans,Segoe UI,Open Sans,Lucida Grande,Helvetica,Arial,Verdana,sans-serif;line-height:1.2}
 input[type],select,a.control{line-height:1.3}
 input[type],select,select option,td,td a,#screenlog li,#screenlog li a,textarea,input.r,input[name="nofilter_dataDir"],.configPanel,.configPanel td,.snarkNewTorrent,.snarkNewTorrent td,.snarkAddInfo,#configs td,#trackerconfig td{font-size:10.5pt}
 select{padding-top:4px;padding-bottom:4px}

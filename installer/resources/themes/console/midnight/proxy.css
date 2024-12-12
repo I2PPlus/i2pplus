@@ -3,11 +3,11 @@
 
 @import url(global.css);
 @import url(../images/itooplus.css);
-@import url(/themes/fonts/DroidSans.css);
+@import url(/themes/fonts/OpenSans.css);
 
 :root{
 --title:repeating-linear-gradient(90deg,rgba(0,0,48,.4) 2px,#000 4px),linear-gradient(180deg,#003,#002 50%,#001 50%,#000);
---bodyfont:Droid Sans,Open Sans,Noto Sans,Ubuntu,Segoe UI,Bitstream Vera Sans,DejaVu Sans,Verdana,Lucida Grande,Helvetica,sans-serif;
+--bodyfont:Open Sans,Segoe UI,Noto Sans,sans-serif;
 --monospaced:FiraCode,Noto Mono,DejaVu Sans Mono,Lucida Console,monospace;
 --button:linear-gradient(180deg,#11101c 50%,#000010 50%);
 --button_hover:linear-gradient(180deg,#202 50%,#000 50%);

@@ -1,4 +1,4 @@
-:root{--bodyfont:Sora,Droid Sans,Open Sans,Noto Sans,Ubuntu,Segoe UI,Bitstream Vera Sans,DejaVu Sans,Verdana,Lucida Grande,Helvetica,sans-serif;--monospaced:FiraCode,Noto Mono,DejaVu Sans Mono,Lucida Console,monospace}
+:root{--bodyfont:Sora,Open Sans,Segoe UI,Noto Sans,sans-serif;--monospaced:FiraCode,Noto Mono,DejaVu Sans Mono,Lucida Console,monospace}
 a,a:link,a:visited,b,h2,h3,h4,h5,#logs li,#logs pre,.tab,.statvalue,select,input[type="submit"],input[type="reset"],button,.control,.fakebutton,.fakebutton:visited,#sidebar a,#sb_localtunnels a,#torrents tfoot tr:first-child th,#screenlog li,.txBarText,.torrentDownloaded{font-weight:500}
 .infohash{font-weight:500}.tab a{padding:4px 12px}
 .main,#sidebar{contain:paint}

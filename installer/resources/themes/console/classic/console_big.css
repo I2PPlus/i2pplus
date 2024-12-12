@@ -7,7 +7,7 @@ a:hover code{color:#f60}
 b{font-weight:400}
 b,a,input,button,submit,i,th,thead,tfoot,h1,h2,h3,h4,.messages{font-style:normal;font-weight:400;text-shadow:none}
 b.tunnel_cap,.tunnel_cap b{color:#fff;font-size:10pt;min-width:18px;text-shadow:0 1px 1px #555}
-body,.main{font:11pt Open Sans,Noto Sans,Segoe UI,Droid Sans,Lucida Grande,Verdana,Bitstream Vera Sans,Helvetica,Sans,sans-serif}
+body,.main{font:11pt Open Sans,Noto Sans,Segoe UI,Open Sans,Lucida Grande,Verdana,Bitstream Vera Sans,Helvetica,Sans,sans-serif}
 button.control{font-size:0}
 code,tt{font-size:10.5pt}
 div.main,div.main p,div.news p{line-height:140%}

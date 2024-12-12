@@ -4,8 +4,7 @@
 @import url(global.css);
 
 .wizardbuttons{margin-bottom:10px}
-html#consolewizard{background:var(--vstripe) #000}
-body#wizardpage{background:none}
+body#wizardpage{background:var(--vstripe) #000}
 #bandwidthTestRunning{margin:10px 0;padding:10px;width:100%;text-align:center;font-style:italic;font-weight:700;border:var(--border);box-shadow:inset 0 0 0 1px #000,inset 0 3px 3px rgba(0,0,0,.7);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(0,0,0,.3)),repeating-linear-gradient(90deg,rgba(0,0,0,.3),rgba(0,0,0,.1) 10px,rgba(0,32,0,.3) 10px,rgba(0,32,0,.3) 20px) #010;background-size:400%;animation:progress 360s 3s linear infinite both}
 #config_ui + .wizardbuttons{margin:-14px 0 10px}
 #setupwizard input[name="skipbw"],#setupwizard input[name="cancelbw"]{float:left}

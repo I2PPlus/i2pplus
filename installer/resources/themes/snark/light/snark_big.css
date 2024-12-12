@@ -1,5 +1,5 @@
 @media (min-width:0) and (max-width:4000px){
-input,button,textarea,select,a{font-weight:400;font-family:Noto Sans,Open Sans,Segoe UI,Droid Sans,Roboto Sans,Ubuntu,Lucida Grande,Helvetica,Arial,Verdana,sans-serif;line-height:1.2}
+input,button,textarea,select,a{font-weight:400;font-family:Noto Sans,Open Sans,Segoe UI,sans-serif;line-height:1.2}
 .snarkNav:link,.iframed .snarkNav:link{font-weight:700;padding-bottom:5px}
 .iframed .snarkNav:link{padding-top:3px}
 #screenlog li::before{width:15px;background-size:11px}

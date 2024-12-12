@@ -1,6 +1,6 @@
 /* I2PControl theme by dr|z3d */
 
-@import url(/themes/fonts/DroidSans.css);
+@import url(/themes/fonts/OpenSans.css);
 
 html{
   background:#000002;
@@ -15,7 +15,7 @@ body{
   min-width:700px;
   max-width:800px;
   color:#fff;
-  font-family:Droid Sans,Open Sans,Noto Sans,Ubuntu,Segoe UI,Lucida Grande,Bitstream Vera Sans,Verdana,sans-serif;
+  font-family:Open Sans,Segoe UI,Noto Sans,sans-serif;
   font-size:12pt;
   border:1px solid #225;
   box-shadow:0 0 2px 1px #000,inset 0 0 0 1px #300,0 0 0 1px #000,0 0 0 5px #113,0 0 0 6px #282855;
@@ -25,7 +25,7 @@ body{
 
 code{
   white-space:nowrap;
-  font-family:Droid Sans Mono,Noto Mono,Lucida Console,DejaVu Sans Mono,monospace;
+  font-family:FiraCode,Noto Mono,Lucida Console,DejaVu Sans Mono,monospace;
   color:#000;
   border-radius:2px;
   background:#070;
