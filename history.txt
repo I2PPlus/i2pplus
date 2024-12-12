@@ -1,3 +1,6 @@
+2024-12-12 dr|z3d
+ * Console / Webapps: Migrate display font from Droid Sans to Open Sans
+
 2024-12-02 dr|z3d
  * Console: Streamline sidebar refresh javascript
  * I2PSnark: Add inline text viewer with open in new tab links in file view
