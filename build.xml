@@ -1842,16 +1842,9 @@
   </target>
 
   <target name="zipit" depends="getReleaseNumber">
-    <!--
-             As of release 0.8.8, the router will enforce a zipfile comment equal to the
-             version number in the sud/su2 header, since the version in the header is NOT
-             covered by the signature.
-        -->
+    <!-- As of release 0.8.8, the router will enforce a zipfile comment equal to the version number
+         in the sud/su2 header, since the version in the header is NOT covered by the signature. -->
     <zip destfile="i2pupdate.zip" basedir="pkg-temp" whenempty="fail" comment="${release.number}" />
-    <!-- just a test, makes almost no difference
-        <tar destfile="i2pupdate.tgz" basedir="pkg-temp" compression="gzip" />
-        <tar destfile="i2pupdate.tbz" basedir="pkg-temp" compression="bzip2" />
-        -->
   </target>
 
   <target name="zipit200" depends="getReleaseNumber">
@@ -1860,10 +1853,7 @@
 
   <target name="pack200">
     <!-- pack200 will only pack to a .pack file, and only from a .jar file, so we put another .jar on the end -->
-    <!--
-             can't pack an empty jar or one without classes, it will fail to unpack on Java 5;
-             - see http://bugs.sun.com/view_bug.do?bug_id=6712743
-        -->
+    <!-- can't pack an empty jar or one without classes, it will fail to unpack on Java 5 - see http://bugs.sun.com/view_bug.do?bug_id=6712743 -->
     <!-- *nix here -->
     <exec executable="sh" osfamily="unix" failonerror="true">
       <arg value="-c" />
@@ -1920,11 +1910,6 @@
     <copy file="build/susidns.war" todir="pkg-temp/webapps/" />
     <copy file="build/imagegen.war" todir="pkg-temp/webapps/" />
     <copy file="build/jsonrpc.war" todir="pkg-temp/webapps/" />
-    <!-- as of 0.7.12; last changed in 0.9; removed from update in 0.9.26 -->
-    <!--
-        <copy file="apps/susidns/src/lib/jstl.jar" todir="pkg-temp/lib/" />
-        <copy file="apps/susidns/src/lib/standard.jar" todir="pkg-temp/lib/" />
-        -->
     <copy file="build/i2psnark.war" todir="pkg-temp/webapps/" />
     <copy file="installer/resources/deletelist.txt" todir="pkg-temp/" />
     <copy file="installer/resources/blocklist.txt" todir="pkg-temp/" />
@@ -1933,15 +1918,6 @@
     <copy file="installer/resources/eepget" todir="pkg-temp/" />
     <copy file="installer/resources/eephead" todir="pkg-temp/" />
     <copy file="installer/resources/graceful_update" todir="pkg-temp/" />
-    <!-- will overwrite existing instances, resetting i2p path
-        <copy file="installer/resources/windows/eephead.bat" todir="pkg-temp/" />
-        -->
-    <!-- are these ever used in java installs ?? -->
-    <!--
-        <copy todir="pkg-temp/man/">
-            <fileset dir="installer/resources/man/" />
-        </copy>
-        -->
     <copy file="installer/resources/windows/fixperms2.bat" todir="pkg-temp/scripts/" />
   </target>
 
@@ -1972,9 +1948,6 @@
     <!-- decapitalized the file in 0.7.8 -->
     <copy file="installer/resources/countries.txt" todir="pkg-temp/geoip/" />
     <copy file="installer/resources/continents.txt" todir="pkg-temp/geoip/" />
-    <!--
-        <copy file="installer/resources/public-suffix-list.txt" todir="pkg-temp/geoip/" />
-        -->
   </target>
 
   <target name="prepupdateEssential" depends="buildSmall, prepupdateRouter, prepjupdatefixes, prepthemeupdates">
@@ -1990,12 +1963,6 @@
     <copy file="build/routerconsole.war" todir="pkg-temp/webapps/" />
     <copy file="build/addressbook.jar" todir="pkg-temp/lib/" />
     <copy file="build/addressbook.war" todir="pkg-temp/webapps/" />
-    <!-- decapitalized the file in 0.7.8 -->
-    <!--
-        <copy file="installer/resources/countries.txt" todir="pkg-temp/geoip/" />
-        <copy file="installer/resources/continents.txt" todir="pkg-temp/geoip/" />
-        <copy file="installer/resources/public-suffix-list.txt" todir="pkg-temp/geoip/" />
-        -->
   </target>
 
   <target name="prepupdatecompact" depends="build2, prepupdateEssential, prepProxyDocs, prepCertificates, prep-script-translation, truncatehistory">
@@ -2035,33 +2002,23 @@
   <target name="prepgeoupdate" depends="prepgeoupdate-unlesspkg">
     <copy file="installer/resources/countries.txt" todir="pkg-temp/geoip/" />
     <copy file="installer/resources/continents.txt" todir="pkg-temp/geoip/" />
-    <!--
-        <copy file="installer/resources/public-suffix-list.txt" todir="pkg-temp/geoip/" />
-        -->
   </target>
 
   <!-- GeoIP files, set withGeoIPDatabase=true in override.properties to prevent -->
   <!-- As of 0.9.26, the files are not included in Debian/Ubuntu builds. -->
   <target name="prepgeoupdate-unlesspkg" unless="${with-geoip-database}">
     <mkdir dir="pkg-temp/geoip" />
-    <!--
-        <copy file="installer/resources/geoip.txt" todir="pkg-temp/geoip/" />
-        <copy file="installer/resources/geoipv6.dat.gz" todir="pkg-temp/geoip/" />
-        -->
     <gunzip src="installer/resources/GeoLite2-Country.mmdb.gz" dest="pkg-temp/geoip/GeoLite2-Country.mmdb" />
   </target>
 
-  <!--
-        All jetty jars required for update.
-        TODO do we need to bother updating jasper?
-    -->
+  <!-- All jetty jars required for update. (TODO do we need to bother updating jasper?) -->
   <target name="prepjupdate" depends="prepupdate, buildWEB">
     <copy todir="pkg-temp/lib">
       <fileset dir="build" includes="commons*.jar jasper*.jar javax*.jar jetty*.jar jsp*.jar org.mortbay.*.jar" />
     </copy>
     <!--  We have to package the new eepsite files for MigrateJetty.java, but we
-              can't overwrite an existing eepsite dir in a non-split configuration.
-          -->
+          can't overwrite an existing eepsite dir in a non-split configuration.
+     -->
     <copy todir="pkg-temp/eepsite-jetty9">
       <fileset dir="installer/resources/eepsite" includes="*.xml contexts/* etc/*" />
     </copy>
@@ -2294,86 +2251,98 @@
   <target name="buildCoreTest" depends="buildProperties">
     <ant dir="core/java/" target="jarTest" />
   </target>
+
   <target name="buildRouterTest" depends="buildCoreTest">
     <ant dir="router/java/" target="jarTest" />
   </target>
+
   <target name="buildTest" depends="buildRouterTest, buildMinistreaming">
     <copy file="core/java/build/i2ptest.jar" todir="build" />
     <copy file="router/java/build/routertest.jar" todir="build" />
-    <!-- broken -->
-    <!--
-        <ant dir="apps/ministreaming/java/" target="junit.compileTest" />
-        <ant dir="apps/streaming/java/" target="junit.compileTest" />
-        -->
     <ant dir="apps/i2ptunnel/java/" target="compileTest" />
   </target>
+
   <target name="prepTest" depends="prepupdate, buildTest">
     <!-- overwrite i2p.jar and router.jar with the test versions -->
     <copy file="build/i2ptest.jar" tofile="pkg-temp/lib/i2p.jar" overwrite="true" />
     <copy file="build/routertest.jar" tofile="pkg-temp/lib/router.jar" overwrite="true" />
   </target>
+
   <target name="updateTest" depends="prepTest, zipit" />
+
   <target name="junit.test" depends="buildProperties, jbigi">
     <ant dir="core/java/" target="junit.test" />
     <ant dir="router/java/" target="junit.test" />
     <ant dir="apps/ministreaming/java/" target="junit.test" />
     <ant dir="apps/streaming/java/" target="junit.test" />
   </target>
+
   <target name="scalatest.test" depends="buildProperties, jbigi">
     <ant dir="core/java/" target="scalatest.test" />
     <!-- note there are no router scala tests yet -->
     <ant dir="router/java/" target="scalatest.test" />
   </target>
+
   <!-- both junit and scala -->
   <target name="test" depends="testCore, testRouter, testMinistreaming, testStreaming, testI2PTunnel" />
+
   <target name="testCore" depends="buildProperties, jbigi">
     <ant dir="core/java/" target="test" />
   </target>
+
   <target name="testRouter" depends="buildProperties, jbigi">
     <ant dir="router/java/" target="test" />
   </target>
+
   <target name="testMinistreaming" depends="buildProperties, jbigi">
     <ant dir="apps/ministreaming/java/" target="test" />
   </target>
+
   <target name="testStreaming" depends="buildProperties">
     <ant dir="apps/streaming/java/" target="test" />
   </target>
+
   <target name="testI2PTunnel" depends="buildStreaming">
     <ant dir="apps/i2ptunnel/java/" target="test" />
   </target>
+
   <target name="scalatest.report" depends="buildProperties">
     <ant dir="core/java/" target="scalatest.report" />
     <ant dir="router/java/" target="scalatest.report" />
   </target>
+
   <target name="junit.report" depends="buildProperties">
     <ant dir="core/java/" target="junit.report" />
     <ant dir="router/java/" target="junit.report" />
     <ant dir="apps/ministreaming/java/" target="junit.report" />
     <ant dir="apps/streaming/java/" target="junit.report" />
   </target>
+
   <target name="clover.report" depends="buildProperties" if="with.clover">
     <ant dir="core/java/" target="clover.report" />
     <ant dir="router/java/" target="clover.report" />
     <ant dir="apps/ministreaming/java" target="clover.report" />
     <ant dir="apps/streaming/java" target="clover.report" />
   </target>
+
   <target name="cobertura.report" depends="buildProperties" if="with.cobertura">
     <ant dir="core/java/" target="cobertura.report" />
     <ant dir="router/java/" target="cobertura.report" />
     <ant dir="apps/ministreaming/java" target="cobertura.report" />
     <ant dir="apps/streaming/java" target="cobertura.report" />
   </target>
+
   <target name="test.report" depends="junit.report, scalatest.report, clover.report, cobertura.report" />
+
   <target name="fulltest" depends="buildProperties, jbigi">
     <ant dir="core/java/" target="fulltest" />
     <ant dir="router/java/" target="fulltest" />
     <ant dir="apps/ministreaming/java" target="fulltest" />
     <ant dir="apps/streaming/java" target="fulltest" />
   </target>
+
   <target name="jenkins.cobertura.report" depends="cobertura.report">
-    <!--
-             The jenkins cobertura plugin couldn't find the source files.
-        -->
+    <!-- The jenkins cobertura plugin couldn't find the source files. -->
     <replaceregexp byline="true" file="reports/core/cobertura/coverage.xml"
       match='filename="net' replace='filename="core/java/src/net' />
     <replaceregexp byline="true" file="reports/core/cobertura/coverage.xml"
@@ -2404,7 +2373,6 @@
     <exec executable="tests/scripts/checkscripts.sh" failonerror="true" />
   </target>
 
-
   <target name="testscripts-net">
     <exec executable="tests/scripts/checkremotecerts.sh" failonerror="true" />
   </target>
@@ -2415,21 +2383,8 @@
     <ant dir="core/java/" target="bench.jar" />
   </target>
 
-  <!--
-    <target name="syndie" >
-        <ant dir="apps/syndie/java/" target="standalone" />
-        <copy file="apps/syndie/java/syndie-standalone.zip" todir="." />
-    </target>
-    -->
-
   <!-- standalone i2psnark zip -->
   <target name="i2psnark" depends="buildStreaming, buildJetty, buildSystray, jbigi">
-    <!--
-        <replace file="apps/i2psnark/java/src/org/klomp/snark/SnarkManager.java">
-            <replacetoken>###commitid###</replacetoken>
-            <replacevalue>${workspace.version}</replacevalue>
-        </replace>
-        -->
     <ant dir="apps/i2psnark/java" target="standalone" />
     <copy file="apps/i2psnark/java/i2psnark-standalone.zip" todir="." />
   </target>
@@ -2501,12 +2456,6 @@
       <arg value="build/utility.jar" />
     </exec>
     <echo message="Findbugs output written to findbugs.html" />
-    <!--
-        <echo message="Findbugs output stored in i2p.fba" />
-        -->
-    <!--
-        <echo message="Now run: findbugs i2p.fba" />
-        -->
   </target>
 
   <!-- this is the same dependency as pkg, but with updater200 in the middle,
