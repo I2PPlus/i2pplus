@@ -41,9 +41,9 @@
 <link rel=preload href=/themes/fonts/Sora/Sora-Italic.woff2 as=font type=font/woff2 crossorigin>
 <link rel=stylesheet href=/themes/fonts/Sora.css>
 <%  } else { %>
-<link rel=preload href=/themes/fonts/DroidSans/DroidSans.woff2 as=font type=font/woff2 crossorigin>
-<link rel=preload href=/themes/fonts/DroidSans/DroidSans-Bold.woff2 as=font type=font/woff2 crossorigin>
-<link rel=stylesheet href=/themes/fonts/DroidSans.css>
+<link rel=preload href=/themes/fonts/OpenSans/OpenSans.woff2 as=font type=font/woff2 crossorigin>
+<link rel=preload href=/themes/fonts/OpenSans/OpenSans-Bold.woff2 as=font type=font/woff2 crossorigin>
+<link rel=stylesheet href=/themes/fonts/OpenSans.css>
 <%  } %>
 <link rel=stylesheet href="<%=book.getTheme()%>override.css">
 <script nonce="<%=cspNonce%>" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>

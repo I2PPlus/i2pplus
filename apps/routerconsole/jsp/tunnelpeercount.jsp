@@ -5,8 +5,6 @@
     String lang = "en";
     if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
 %>
-<html lang="<%=lang%>" id=count>
-<head>
 <%@include file="head.jsi" %>
 <%=intl.title("tunnel peer count")%>
 <link href=/themes/console/tablesort.css rel=stylesheet>

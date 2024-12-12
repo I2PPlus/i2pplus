@@ -1,19 +1,19 @@
 <%@page trimDirectiveWhitespaces="true"%>
 <%@include file="headers.jsi"%>
-<html lang="<%=lang%>" <%= theme.equals("dark") || theme.equals("midnight") ? "style=\"background:var(--bodybg, #000)\"" : "" %>>
-<head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width, initial-scale=1">
 <%
-String fontPath = useSoraFont ? "/themes/fonts/Sora/" : "/themes/fonts/DroidSans/";
-String fontStyle = useSoraFont ? "/themes/fonts/Sora.css" : "/themes/fonts/DroidSans.css";
-String fontFile = useSoraFont ? fontPath + "Sora.woff2" : fontPath + "DroidSans.woff2";
+String fontPath = useSoraFont ? "/themes/fonts/Sora/" : "/themes/fonts/OpenSans/";
+String fontStyle = useSoraFont ? "/themes/fonts/Sora.css" : "/themes/fonts/OpenSans.css";
+String fontFile = useSoraFont ? fontPath + "Sora.woff2" : fontPath + "OpenSans.woff2";
 String v = net.i2p.CoreVersion.VERSION;
 boolean isMobile = !intl.allowIFrame(UA);
 boolean isConfigPage = uri.contains("config") && !uri.contains("/help/");
 boolean isHelpPage = uri.contains("/help/") && !uri.endsWith("/");
 boolean hasWizardStyles = uri.endsWith("wizard") || uri.endsWith("wizard.jsp");
 %>
+<html lang="<%=lang%>" <%= useSoraFont ? "class=sora" : "" %> <%= theme.equals("dark") || theme.equals("midnight") ? "style=\"background:var(--bodybg, #000)\"" : "" %>>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width, initial-scale=1">
 <link rel=preload href=<%=fontFile%> as=font type=font/woff2 crossorigin>
 <link rel=preload href="<%=themePath%>global.css?version=<%=v%>" as=style>
 <link rel=preload href="<%=themePath%>console.css?version=<%=v%>" as=style>
