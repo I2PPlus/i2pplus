@@ -33,14 +33,16 @@
     </init-param>
   </servlet>
 
+  <!-- precompiled servlets -->
+
   <servlet-mapping>
     <servlet-name>org.klomp.snark.web.I2PSnarkServlet</servlet-name>
-    <url-pattern>/*</url-pattern>
+    <url-pattern>/</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>
     <servlet-name>net.i2p.servlet.ErrorServlet</servlet-name>
-    <url-pattern>/*error*</url-pattern>
+    <url-pattern>/.error</url-pattern>
   </servlet-mapping>
 
   <error-page>

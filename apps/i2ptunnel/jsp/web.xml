@@ -8,7 +8,6 @@
     <filter-name>XSSFilter</filter-name>
     <filter-class>net.i2p.servlet.filters.XSSFilter</filter-class>
   </filter>
-
   <filter-mapping>
     <filter-name>XSSFilter</filter-name>
     <url-pattern>/*</url-pattern>
@@ -23,6 +22,15 @@
     </init-param>
   </servlet>
 
+  <!-- precompiled servlets -->
+
+  <!-- yeah we could do this in a handler but this is easier -->
+  <servlet-mapping>
+    <servlet-name>net.i2p.i2ptunnel.jsp.index_jsp</servlet-name>
+    <!-- empty pattern handles the root -->
+    <url-pattern></url-pattern>
+  </servlet-mapping>
+
   <servlet-mapping>
     <servlet-name>net.i2p.i2ptunnel.jsp.index_jsp</servlet-name>
     <url-pattern>/index</url-pattern>
@@ -35,6 +43,7 @@
 
   <servlet-mapping>
     <servlet-name>net.i2p.i2ptunnel.jsp.index_jsp</servlet-name>
+    <!-- POST target -->
     <url-pattern>/list</url-pattern>
   </servlet-mapping>
 
@@ -72,15 +81,12 @@
     <error-code>403</error-code>
     <location>/error</location>
   </error-page>
-
   <error-page>
     <error-code>404</error-code>
     <location>/error</location>
   </error-page>
-
   <error-page>
     <error-code>500</error-code>
     <location>/error</location>
   </error-page>
-
 </web-app>
