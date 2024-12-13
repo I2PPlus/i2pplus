@@ -1524,7 +1524,7 @@
     <delete dir="pkg-temp" />
     <ant target="preppkg-linux" />
     <zip destfile="i2p-linux.zip">
-      <fileset dir="pkg-temp"/>
+      <fileset dir="pkg-temp" />
     </zip>
   </target>
 
@@ -1532,7 +1532,7 @@
     <delete dir="pkg-temp" />
     <ant target="preppkg-windows" />
     <zip destfile="i2p-windows.zip">
-      <fileset dir="pkg-temp"/>
+      <fileset dir="pkg-temp" />
     </zip>
   </target>
 
@@ -1540,7 +1540,7 @@
     <delete dir="pkg-temp" />
     <ant target="preppkg-osx" />
     <zip destfile="i2p-macos.zip">
-      <fileset dir="pkg-temp"/>
+      <fileset dir="pkg-temp" />
     </zip>
   </target>
 
@@ -1548,7 +1548,7 @@
     <delete dir="pkg-temp" />
     <ant target="preppkg-freebsd" />
     <zip destfile="i2p-freebsd.zip">
-      <fileset dir="pkg-temp"/>
+      <fileset dir="pkg-temp" />
     </zip>
   </target>
 
@@ -1852,50 +1852,61 @@
   </target>
 
   <target name="pack200">
-    <!-- pack200 will only pack to a .pack file, and only from a .jar file, so we put another .jar on the end -->
-    <!-- can't pack an empty jar or one without classes, it will fail to unpack on Java 5 - see http://bugs.sun.com/view_bug.do?bug_id=6712743 -->
-    <!-- *nix here -->
-    <exec executable="sh" osfamily="unix" failonerror="true">
-      <arg value="-c" />
-      <arg value="for i in pkg-temp/lib/*.jar pkg-temp/webapps/*war; do if [ $i = pkg-temp/lib/commons-logging.jar -o $i = pkg-temp/lib/jasper-compiler.jar -o $i = pkg-temp/lib/jbigi.jar -o $i = pkg-temp/lib/jetty-java5-threadpool.jar -o $i = pkg-temp/lib/jetty-sslengine.jar -o $i = pkg-temp/webapps/addressbook.war -o $i = pkg-temp/lib/pack200.jar ]; then continue; fi; echo pack200 $i; mv $i $i.jar; pack200 --effort=6 --modification-time=latest --segment-limit=-1 -g $i.pack $i.jar; rm -f $i.jar; done" />
-    </exec>
-    <exec executable="sh" osfamily="mac" failonerror="true">
-      <arg value="-c" />
-      <arg value="for i in pkg-temp/lib/*.jar pkg-temp/webapps/*war; do if [ $i = pkg-temp/lib/commons-logging.jar -o $i = pkg-temp/lib/jasper-compiler.jar -o $i = pkg-temp/lib/jbigi.jar -o $i = pkg-temp/lib/jetty-java5-threadpool.jar -o $i = pkg-temp/lib/jetty-sslengine.jar -o $i = pkg-temp/webapps/addressbook.war -o $i = pkg-temp/lib/pack200.jar ]; then continue; fi; echo pack200 $i; mv $i $i.jar; pack200 --effort=6 --modification-time=latest --segment-limit=-1 -g $i.pack $i.jar; rm -f $i.jar; done" />
-    </exec>
-    <!-- windoz here : i admit, i hate escaped symbols in xml, indeed = =! -->
-    <exec executable="cmd" osfamily="windows" failonerror="true">
-      <arg value="/c" />
-      <!-- TODO implement fix above -->
-      <arg value="for %i in (pkg-temp\webapps\*.war) do move %i %i.jar &amp;&amp; pack200 -g pkg-temp\webapps\%~ni.war.pack %i.jar &amp;&amp; del %i.jar" />
-    </exec>
-    <exec executable="cmd" osfamily="windows" failonerror="true">
-      <arg value="/c" />
-      <arg value="for %i in (pkg-temp\lib\*.jar) do pack200 --effort=9 --modification-time=latest --segment-limit=-1 -g %i.pack %i &amp;&amp; del %i" />
-    </exec>
+    <parallel threadcount="8">
+      <!-- Unix and friends -->
+      <exec executable="sh" osfamily="unix" failonerror="true">
+        <arg value="-c" />
+        <arg value="for i in pkg-temp/lib/*.jar pkg-temp/webapps/*war; do echo 'Pack200 compression for:' $i;
+                    mv $i $i.jar &amp;&amp; pack200 --effort=6 --modification-time=latest --segment-limit=-1 -g $i.pack $i.jar &amp;&amp;
+                    rm -f $i.jar &amp; done; wait" />
+      </exec>
+
+      <!-- macOS -->
+      <exec executable="sh" osfamily="mac" failonerror="true">
+        <arg value="-c" />
+        <arg value="for i in pkg-temp/lib/*.jar pkg-temp/webapps/*war; do echo 'Pack200 compression for:' $i;
+                mv $i $i.jar &amp;&amp; pack200 --effort=6 --modification-time=latest --segment-limit=-1 -g $i.pack $i.jar &amp;&amp;
+                rm -f $i.jar &amp; done; wait" />
+      </exec>
+
+      <!-- Windows -->
+      <exec executable="cmd" osfamily="windows" failonerror="true">
+        <arg value="/c" />
+        <arg value="for %i in (pkg-temp\webapps\*.war) do (move %i %i.jar &amp;&amp;
+                    pack200 -g pkg-temp\webapps\%~ni.war.pack %i.jar &amp;&amp; del %i.jar) &amp;
+                    for %i in (pkg-temp\lib\*.jar) do
+                    (pack200 --effort=6 --modification-time=latest --segment-limit=-1 -g %i.pack %i &amp;&amp; del %i)" />
+      </exec>
+    </parallel>
   </target>
 
-  <!-- saves about 1% on average (more on jars with multiple compiled po files since they have lots of common strings) -->
   <target name="repack200">
-    <!-- pack200 will only repack a .jar file, so we put another .jar on the end -->
-    <!-- *nix here -->
-    <exec executable="sh" osfamily="unix" failonerror="true">
-      <arg value="-c" />
-      <arg value="for i in pkg-temp/lib/*.jar pkg-temp/webapps/*war; do echo pack200 -r $i; mv $i $i.jar; pack200 -r $i.jar; mv $i.jar $i; done" />
-    </exec>
-    <exec executable="sh" osfamily="mac" failonerror="true">
-      <arg value="-c" />
-      <arg value="for i in pkg-temp/lib/*.jar pkg-temp/webapps/*war; do echo pack200 -r $i; mv $i $i.jar; pack200 -r $i.jar; mv $i.jar $i; done" />
-    </exec>
-    <!-- windoz here : i admit, i hate escaped symbols in xml, indeed = =! -->
-    <exec executable="cmd" osfamily="windows" failonerror="true">
-      <arg value="/c" />
-      <arg value="for %i in (pkg-temp\webapps\*.war) do move %i %i.jar &amp;&amp; pack200 -r %i.jar &amp;&amp; move %i.jar %i" />
-    </exec>
-    <exec executable="cmd" osfamily="windows" failonerror="true">
-      <arg value="/c" />
-      <arg value="for %i in (pkg-temp\lib\*.jar) do pack200 -r %i" />
-    </exec>
+    <parallel threadcount="8">
+      <!-- Unix and friends -->
+      <exec executable="sh" osfamily="unix" failonerror="true">
+        <arg value="-c" />
+        <arg value="for i in pkg-temp/lib/*.jar pkg-temp/webapps/*war; do echo 'Repacking' $i;
+                    mv $i $i.jar &amp;&amp; pack200 -r $i.jar &amp;&amp; mv $i.jar $i &amp; done; wait" />
+      </exec>
+
+      <!-- macOS -->
+      <exec executable="sh" osfamily="mac" failonerror="true">
+        <arg value="-c" />
+        <arg value="for i in pkg-temp/lib/*.jar pkg-temp/webapps/*war; do echo 'Repacking' $i;
+                    mv $i $i.jar &amp;&amp; pack200 -r $i.jar &amp;&amp; mv $i.jar $i &amp; done; wait" />
+      </exec>
+
+      <!-- Windows -->
+      <exec executable="cmd" osfamily="windows" failonerror="true">
+        <arg value="/c" />
+        <arg value="for %i in (pkg-temp\webapps\*.war) do (move %i %i.jar &amp;&amp; pack200 -r %i.jar &amp;&amp; move %i.jar %i)" />
+      </exec>
+
+      <exec executable="cmd" osfamily="windows" failonerror="true">
+        <arg value="/c" />
+        <arg value="for %i in (pkg-temp\lib\*.jar) do (pack200 -r %i)" />
+      </exec>
+    </parallel>
   </target>
 
   <target name="prepupdate" depends="build2, prepupdateSmall, prepConsoleDocUpdates, prepCertificates, prep-script-translation, truncatehistory">
@@ -2085,9 +2096,9 @@
          we do it this way because jaring them up and adding a pathelement to izpack5.lib.path doesn't work.
          See installer/install5.xml for details.
      -->
-     <mkdir dir="com/izforge/izpack/bin/langpacks/" />
-     <copy toDir="com/izforge/izpack/bin/langpacks/" >
-       <fileset dir="installer/lib/izpack5/patches/resources" />
+    <mkdir dir="com/izforge/izpack/bin/langpacks/" />
+    <copy toDir="com/izforge/izpack/bin/langpacks/">
+      <fileset dir="installer/lib/izpack5/patches/resources" />
     </copy>
   </target>
 
