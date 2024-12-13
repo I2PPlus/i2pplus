@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -173,7 +174,7 @@ class EstablishmentManager {
 //    private static final int MIN_TOKENS = 128;
 //    private static final int MAX_TOKENS = 2048;
     private static final int MIN_TOKENS = SystemVersion.isSlow() ? 128 : 256;
-    private static final int MAX_TOKENS = SystemVersion.isSlow() ? 1024 : 2048;
+    private static final int MAX_TOKENS = SystemVersion.isSlow() ? 1024 : 4096;
     public static final long IB_TOKEN_EXPIRATION = 60*60*1000L;
     private static final long MAX_SKEW = 2*60*1000;
     private static final String TOKEN_FILE = "ssu2tokens.txt";
@@ -2506,11 +2507,92 @@ class EstablishmentManager {
      *  @since 0.9.55
      */
     private void saveTokens() {
+        PrintWriter out = null;
+        try {
+            File f = new File(_context.getConfigDir(), TOKEN_FILE);
+            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(f), "UTF-8")));
+            out.println("# SSU2 tokens, format: IPv4/IPv6/In/Out Address Port Token Expiration");
+            RouterAddress addr = _transport.getCurrentExternalAddress(false);
+            if (addr != null) {
+                String us = addr.getHost();
+                if (us != null) {
+                    out.println("4 " + us + ' ' + _transport.getExternalPort(false));
+                }
+            }
+            addr = _transport.getCurrentExternalAddress(true);
+            if (addr != null) {
+                String us = addr.getHost();
+                if (us != null) {
+                    out.println("6 " + us + ' ' + _transport.getExternalPort(true));
+                }
+            }
+            long now = _context.clock().now();
+            int count = 0;
+            TokenComparator comp = new TokenComparator();
+            List<Map.Entry<RemoteHostId, Token>> tmp;
+            synchronized (_inboundTokens) {
+                tmp = new ArrayList<>(_inboundTokens.entrySet());
+            }
+            Collections.sort(tmp, comp);
+            for (Map.Entry<RemoteHostId, Token> e : tmp) {
+                Token token = e.getValue();
+                long exp = token.getExpiration();
+                if (exp <= now) {
+                    continue;
+                }
+                RemoteHostId id = e.getKey();
+                out.println("I " + Addresses.toString(id.getIP()) + ' ' + id.getPort() + ' ' + token.getToken() + ' ' + exp);
+                count++;
+            }
+            tmp.clear();
+            synchronized (_outboundTokens) {
+                tmp.addAll(_outboundTokens.entrySet());
+            }
+            Collections.sort(tmp, comp);
+            for (Map.Entry<RemoteHostId, Token> e : tmp) {
+                Token token = e.getValue();
+                long exp = token.getExpiration();
+                if (exp <= now) {
+                    continue;
+                }
+                RemoteHostId id = e.getKey();
+                out.println("O " + Addresses.toString(id.getIP()) + ' ' + id.getPort() + ' ' + token.getToken() + ' ' + exp);
+                count++;
+            }
+            if (out.checkError()) {
+                throw new IOException("Failed write ssu2 tokens to: " + f);
+            }
+            if (_log.shouldDebug()) {
+                _log.debug("[SSU2] Stored tokens to: " + f);
+            }
+        } catch (IOException ioe) {
+            if (_log.shouldWarn()) {
+                _log.warn("[SSU2] Error writing tokens to config directory, attempting to write to temp directory (" + ioe.getMessage() + ")");
+            }
+            try {
+                File tempDir = new File(System.getProperty("java.io.tmpdir"));
+                File tempFile = new File(tempDir, TOKEN_FILE);
+                out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(tempFile), "UTF-8")));
+                _log.warn("[SSU2] Writing to the temporary file: " + tempFile.getAbsolutePath());
+            } catch (IOException ex) {
+                if (_log.shouldWarn()) {
+                    _log.warn("[SSU2] Error writing tokens to the temporary directory (" + ex.getMessage() + ")");
+                }
+            }
+        } finally {
+            if (out != null) {
+                out.close();
+            }
+        }
+    }
+
+/**
+    private void saveTokens() {
         File f = new File(_context.getConfigDir(), TOKEN_FILE);
         PrintWriter out = null;
         try {
-            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(f), "ISO-8859-1")));
-            out.println("# SSU2 tokens, format: IPv4/IPv6/In/Out addr port token expiration");
+            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(f), "UTF-8")));
+            out.println("# SSU2 tokens, format: IPv4/IPv6/In/Out Address Port Token Expiration");
             RouterAddress addr = _transport.getCurrentExternalAddress(false);
             if (addr != null) {
                 String us = addr.getHost();
@@ -2523,9 +2605,8 @@ class EstablishmentManager {
             }
             long now = _context.clock().now();
             int count = 0;
-            // Roughly speaking, the LHMCache will iterate newest-first, so when we add them back in
-            // loadTokens(), the oldest would be at the head of the map and the newest would be purged first.
-            // Sort them by expiration oldest-first so loadTokens() will put them in the LHMCache in the right order.
+            // Roughly speaking, the LHMCache will iterate oldest-first, but to be sure, sort them
+            // by expiration oldest-first so loadTokens() will put them in the LHMCache in the right order.
             TokenComparator comp = new TokenComparator();
             List<Map.Entry<RemoteHostId, Token>> tmp;
             synchronized(_inboundTokens) {
@@ -2551,14 +2632,23 @@ class EstablishmentManager {
                 out.println("O " + Addresses.toString(id.getIP()) + ' ' + id.getPort() + ' ' + token.getToken() + ' ' + exp);
                 count++;
             }
-            if (out.checkError()) {throw new IOException("Failed write to " + f);}
+            if (out.checkError()) {throw new IOException("Failed write ssu2 tokens to: " + f);}
             if (_log.shouldDebug()) {_log.debug("[SSU2] Stored " + count + " tokens to " + f);}
         } catch (IOException ioe) {
-            if (_log.shouldWarn()) {_log.warn("[SSU2] Error writing the tokens file", ioe);}
+                 if (_log.shouldWarn()) {_log.warn("[SSU2] Error writing the tokens file to config directory", ioe);}
+            try { // Attempt to write to the system temporary directory as a fallback
+                File tempDir = new File(System.getProperty("java.io.tmpdir"));
+                File tempFile = new File(tempDir, TOKEN_FILE);
+                out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(tempFile), "UTF-8")));
+                if (_log.shouldWarn()) {_log.warn("[SSU2] Falling back to writing tokens to the system temporary directory: " + tempFile.getAbsolutePath());}
+            } catch (IOException ex) {
+                if (_log.shouldWarn()) {_log.warn("[SSU2] Error writing the tokens file to the system temporary directory", ex);}
+            }
         } finally {
-            if (out != null) out.close();
+            if (out != null) {out.close();}
         }
     }
+**/
 
     /**
      * Soonest expiration first
@@ -2591,7 +2681,7 @@ class EstablishmentManager {
                 long lifetime = _context.clock().now() - eldest.getValue().getWhenAdded();
                 _context.statManager().addRateData("udp.inboundTokenLifetime", lifetime);
                 if (_log.shouldDebug())
-                    _log.debug("[SSU2] Remove oldest Inbound " + eldest.getValue() + " for " + eldest.getKey());
+                    _log.debug("[SSU2] Removing oldest Inbound token " + eldest.getValue() + " for " + eldest.getKey());
             }
             return rv;
         }
@@ -2830,7 +2920,7 @@ class EstablishmentManager {
             case 18: return "Token error";
             case 19: return "Limit reached";
             case 20: return "Incompatible Version";
-            case 21: return "BAD Netid";
+            case 21: return "BAD NetId";
             case 22: return "Replaced connection";
             default: return "Unknown error";
         }
