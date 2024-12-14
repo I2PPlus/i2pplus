@@ -2518,14 +2518,16 @@ public class WebMail extends HttpServlet
                               "<link rel=stylesheet href=\"" + sessionObject.themePath + "mobile.css?" + CoreVersion.VERSION + "\" />\n");
                 }
                 if (enableSoraFont) {
-                    out.print("<link rel=stylesheet href=\"" + sessionObject.themePath + "../../fonts/Sora.css?" + CoreVersion.VERSION + "\">\n");
+                    out.print("<link rel=stylesheet href=\"" + sessionObject.themePath + "../../fonts/Sora.css\">\n");
+                } else {
+                    out.print("<link rel=stylesheet href=\"" + sessionObject.themePath + "../../fonts/OpenSans.css\">\n");
                 }
-                if (state == State.LIST)
+                if (state == State.LIST) {
                     out.print("<link rel=stylesheet href=\"/susimail/css/print.css?" + CoreVersion.VERSION + "\" media=\"print\" />\n");
-                if (state == State.NEW || state == State.CONFIG) {
-                    // TODO cancel if to and body are empty
-                    out.print("<script src=\"/susimail/js/compose.js?" + CoreVersion.VERSION + "\"></script>\n");
-                } else if (state == State.LIST) {
+                }
+                // TODO cancel if to and body are empty
+                if (state == State.NEW || state == State.CONFIG) {out.print("<script src=\"/susimail/js/compose.js?" + CoreVersion.VERSION + "\"></script>\n");}
+                else if (state == State.LIST) {
                     out.print("<script src=\"/susimail/js/folder.js?" + CoreVersion.VERSION + "\"></script>\n");
                     out.print("<script src=\"/js/scrollTo.js?" + CoreVersion.VERSION + "\"></script>\n");
                 } else if (state == State.LOADING) {

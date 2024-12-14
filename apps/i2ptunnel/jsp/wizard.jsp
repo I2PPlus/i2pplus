@@ -53,13 +53,8 @@
 <link href="<%=editBean.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
 <link href="<%=editBean.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
 <link href="<%=editBean.getTheme()%>../images/i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
-<%
-    if (indexBean.useSoraFont()) {
-%>
-<link href="<%=indexBean.getTheme()%>../../fonts/Sora.css" rel=stylesheet>
-<%
-    }
-%>
+<% if (indexBean.useSoraFont()) { %><link href="<%=editBean.getTheme()%>../../fonts/Sora.css" rel=stylesheet> <% } else { %>
+<link href="<%=editBean.getTheme()%>../../fonts/OpenSans.css" rel=stylesheet><% } %>
 <link href="<%=editBean.getTheme()%>override.css" rel=stylesheet>
 <style>body{display:none;pointer-events:none}</style>
 </head>

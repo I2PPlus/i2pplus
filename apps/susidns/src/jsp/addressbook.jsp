@@ -62,13 +62,8 @@
 <link rel=preload href="<%=book.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
 <link rel=stylesheet href="<%=book.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
 <link rel="icon shortcut" href=/themes/console/images/addressbook.svg type=image/svg+xml>
-<%
-    if (base.useSoraFont()) {
-%>
-<link href="<%=base.getTheme()%>../../fonts/Sora.css" rel=stylesheet>
-<%
-    }
-%>
+<%  if (base.useSoraFont()) { %><link href="<%=base.getTheme()%>../../fonts/Sora.css" rel=stylesheet><% } else { %>
+<link href="<%=base.getTheme()%>../../fonts/OpenSans.css" rel=stylesheet><% } %>
 <link rel=stylesheet href="<%=book.getTheme()%>override.css">
 <script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>

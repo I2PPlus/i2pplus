@@ -28,12 +28,9 @@
 <link href="<%=activeTheme%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
 <link href="<%=activeTheme%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
 <link href="<%=activeTheme%>../images/i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
+<% if (indexBean.useSoraFont()) { %><link href="<%=activeTheme%>../../fonts/Sora.css" rel=stylesheet> <% } else { %>
+<link href="<%=activeTheme%>../../fonts/OpenSans.css" rel=stylesheet><% } %>
 <%
-  if (indexBean.useSoraFont()) {
-%>
-<link href="<%=activeTheme%>../../fonts/Sora.css" rel=stylesheet>
-<%
-  }
   String overrideURL = activeTheme + "override.css";
   boolean overrideEnabled = false;
   try {

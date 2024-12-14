@@ -36,15 +36,8 @@
 <meta charset=utf-8>
 <title>${book.book} <%=intl._t("addressbook")%> - susidns</title>
 <link rel=stylesheet href="<%=book.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
-<%  if (base.useSoraFont()) { %>
-<link rel=preload href=/themes/fonts/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>
-<link rel=preload href=/themes/fonts/Sora/Sora-Italic.woff2 as=font type=font/woff2 crossorigin>
-<link rel=stylesheet href=/themes/fonts/Sora.css>
-<%  } else { %>
-<link rel=preload href=/themes/fonts/OpenSans/OpenSans.woff2 as=font type=font/woff2 crossorigin>
-<link rel=preload href=/themes/fonts/OpenSans/OpenSans-Bold.woff2 as=font type=font/woff2 crossorigin>
-<link rel=stylesheet href=/themes/fonts/OpenSans.css>
-<%  } %>
+<%  if (base.useSoraFont()) { %><link href="<%=base.getTheme()%>../../fonts/Sora.css" rel=stylesheet><% } else { %>
+<link href="<%=base.getTheme()%>../../fonts/OpenSans.css" rel=stylesheet><% } %>
 <link rel=stylesheet href="<%=book.getTheme()%>override.css">
 <script nonce="<%=cspNonce%>" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
