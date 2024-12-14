@@ -28,6 +28,9 @@
   <!-- You probably don't want to change anything from here down -->
   <target name="help" depends="all" />
   <target name="all">
+    <echo message="Ant: ${ant.version}" />
+    <echo message="JDK: ${java.vendor} ${java.version} (${java.runtime.name} ${java.runtime.version})" />
+    <echo message="&#8199;"/>
     <echo message="Useful targets:" />
     <echo message=" bench                                        Build benchmarks" />
     <echo message=" buildAddressbook                             Build Addressbook .jar component &#10140; ./build/addressbook.jar" />
@@ -58,6 +61,7 @@
     <echo message=" dist                                         Run &apos;pkg&apos; and &apos;javadoc&apos;" />
     <echo message=" dist200                                      Run &apos;pkg&apos;, &apos;updater200&apos; and &apos;javadoc&apos;" />
     <echo message=" distclean                                    Clean up all derived and temporary files in workspace" />
+    <echo message=" distcleanWebapp                              Clean up all webapp-related derived and temporary files in workspace" />
     <echo message=" i2psnark                                     Build standalone I2PSnark install &#10140; ./i2psnark-standalone.zip" />
     <echo message=" installer / installer5                       Build GUI installer (IzPack4 / IzPack5) &#10140; ./i2pinstall.exe" />
     <echo message=" installer-freebsd                            Build FreeBSD GUI installer &#10140; ./i2pinstall&#8230;freebsd-only.jar" />
@@ -117,25 +121,18 @@
   </target>
 
   <target name="debianhowto">
-    <echo message="To build debian packages, you must make sure that you have" />
-    <echo message="the necessary build-dependencies installed." />
-    <echo message="The packages required to build can be found in the file " />
-    <echo message="&apos;debian/control&apos; in the &apos;Build-Depends&apos; field." />
-    <echo message="In addition to those packages, be sure to install &apos;fakeroot&apos;," />
-    <echo message="&apos;quilt&apos; and &apos;build-essential&apos;!" />
-    <echo message="" />
-    <echo message="This is recent for Debian Bullseye" />
-    <echo message="The following command will install the build dependencies for you:" />
-    <echo message=" " />
-    <echo message="sudo apt-get install debhelper ant debconf default-jdk gettext libgmp-dev po-debconf fakeroot \" />
-    <echo message="  build-essential quilt dh-apparmor libservice-wrapper-java libjson-simple-java \" />
-    <echo message="  devscripts libjetty9-java libtomcat9-java libtaglibs-standard-jstlel-java libgetopt-java" />
-    <echo message=" " />
-    <echo message="The following command will install the additional runtime dependencies:" />
-    <echo message="sudo apt-get install geoip-database famfamfam-flag-png" />
-    <echo message=" " />
-    <echo message="Once the dependencies are installed, run &apos;ant debian&apos;" />
-    <echo message="to patch the source and Build packages." />
+    <echo message="To build debian packages, ensure that you have the necessary build-dependencies installed, " />
+    <echo message="indicated in the file &apos;debian/control&apos; in the &apos;Build-Depends&apos; field." />
+    <echo message="&#8199;" />
+    <echo message="The following command will install the build dependencies:" />
+    <echo message="sudo apt install debhelper ant debconf default-jdk gettext libgmp-dev po-debconf fakeroot \" />
+    <echo message="  build-essential quilt dh-apparmor libservice-wrapper-java libjson-simple-java devscripts \" />
+    <echo message="  libjetty9-java libtomcat9-java libtaglibs-standard-jstlel-java libgetopt-java" />
+    <echo message="&#8199;" />
+    <echo message="Additionally, for runtime dependencies (console flags and geoip database):" />
+    <echo message="sudo apt install geoip-database famfamfam-flag-png" />
+    <echo message="&#8199;" />
+    <echo message="Once the dependencies are installed, run &apos;ant debian&apos; to patch the source and Build packages." />
   </target>
 
   <property name="gpg" value="gpg" />
@@ -334,18 +331,16 @@
          <ant dir="apps/i2psnark/java/" target="standalone" />
     -->
   </target>
+
   <target name="build2" depends="builddep, jar, buildWEB, bundleTranslationReport" />
   <target name="buildSmall" depends="builddepSmall, jarSmall, buildWEB" />
   <target name="buildclean" depends="distclean, build" />
-
   <target name="builddep" depends="builddepSmall, buildSAM, buildSusiMail, buildSusiDNS, buildI2PSnark, buildI2PControl" />
-
   <target name="builddepSmall" depends="buildrouter, buildSystray, buildDesktopGui, buildRouterConsole, buildStreaming, buildI2PTunnel, buildAddressbook, buildPack200" />
 
   <!--
          start of buildX, one for each sub-build.xml.
-         Do not put ant tasks in the sub-build.xmls anymore,
-         so the build will go faster.
+         Do not put ant tasks in the sub-build.xmls anymore, so the build will go faster.
     -->
 
   <target name="-setepoch">
@@ -868,23 +863,27 @@
     <echo message="will restrict language update to the language you specified, leaving other languages unchanged." />
     <!-- set if unset -->
     <property name="lg2" value="" />
-    <ant dir="core/java/" target="poupdate" />
-    <ant dir="router/java/" target="poupdate" />
-    <ant dir="apps/routerconsole/java/">
-      <target name="poupdate" />
-      <target name="poupdate-news" />
-      <target name="poupdate-countries" />
-    </ant>
-    <ant dir="apps/i2psnark/java/" target="poupdate" />
-    <ant dir="apps/i2ptunnel/java/">
-      <target name="poupdate" />
-      <target name="poupdate-proxy" />
-    </ant>
-    <ant dir="apps/susidns/src/" target="poupdate" />
-    <ant dir="apps/susimail/" target="poupdate" />
-    <ant dir="apps/desktopgui" target="poupdate" />
-    <ant dir="installer/resources/locale" target="poupdate" />
-    <ant dir="apps/ministreaming/java" target="poupdate" />
+
+    <parallel>
+      <ant dir="core/java/" target="poupdate" />
+      <ant dir="router/java/" target="poupdate" />
+      <ant dir="apps/routerconsole/java/">
+        <target name="poupdate" />
+        <target name="poupdate-news" />
+        <target name="poupdate-countries" />
+      </ant>
+      <ant dir="apps/i2psnark/java/" target="poupdate" />
+      <ant dir="apps/i2ptunnel/java/">
+        <target name="poupdate" />
+        <target name="poupdate-proxy" />
+      </ant>
+      <ant dir="apps/susidns/src/" target="poupdate" />
+      <ant dir="apps/susimail/" target="poupdate" />
+      <ant dir="apps/desktopgui" target="poupdate" />
+      <ant dir="installer/resources/locale" target="poupdate" />
+      <ant dir="apps/ministreaming/java" target="poupdate" />
+    </parallel>
+
   </target>
 
   <condition property="no.bundle">
@@ -1023,9 +1022,9 @@
         <pathelement location="${hamcrest.home}/hamcrest-all.jar" />
       </classpath>
       <!--
-                 These variables are stored in build.properties.
-                 End-users can override by creating the file override.properties
-            -->
+         These variables are stored in build.properties.
+         End-users can override by creating the file override.properties
+        -->
       <link offline="true" href="${javasedocs.url}" packagelistLoc="installer/resources/package-lists/java/" />
       <link offline="true" href="${junitdocs.url}" packagelistLoc="installer/resources/package-lists/junit/" />
       <link offline="true" href="${i2pdocs.url}" packagelistLoc="build/javadoc/" />
@@ -1157,12 +1156,12 @@
   <target name="-pre-sign">
     <!-- if you're distributing su3 files to others, at a minimum you should set this -->
     <!--
-            <fail message="javac.compilerargs must contain a -bootclasspath option in override.properties">
-                <condition>
-                    <not><contains string="${javac.compilerargs}" substring="-bootclasspath"/></not>
-                </condition>
-            </fail>
--->
+    <fail message="javac.compilerargs must contain a -bootclasspath option in override.properties">
+      <condition>
+      <not><contains string="${javac.compilerargs}" substring="-bootclasspath"/></not>
+      </condition>
+    </fail>
+    -->
     <fail message="build.built-by must be set in override.properties">
       <condition>
         <equals arg1="${build.built-by}" arg2="unknown" />
@@ -1198,98 +1197,102 @@
   </target>
 
   <target name="clean" depends="pkgclean">
-    <delete dir="./build" />
-    <delete dir="./reports" />
-    <delete file="installer/lib/izpack/patches.jar" failonerror="false" quiet="true" />
-    <delete dir="installer/lib/izpack5/patches/java/build" quiet="true" />
-    <delete file="syndie-standalone.zip" failonerror="false" quiet="true" />
-    <delete file="i2psnark-standalone.zip" failonerror="false" quiet="true" />
-    <delete file="core/java/cobertura.ser" />
-    <delete file="javadoc.zip" />
-    <delete file="i2p.fba" />
-    <delete file="${sloccount.report.file}" />
-    <delete file="mavencentral-i2p.jar" />
-    <delete file="mavencentral-router.jar" />
-    <delete file="mavencentral-mstreaming.jar" />
-    <delete file="mavencentral-streaming.jar" />
-    <delete file="mavencentral-servlet-i2p.jar" />
+    <parallel>
+      <delete dir="./build" />
+      <delete dir="./reports" />
+      <delete file="installer/lib/izpack/patches.jar" failonerror="false" quiet="true" />
+      <delete dir="installer/lib/izpack5/patches/java/build" quiet="true" />
+      <delete file="syndie-standalone.zip" failonerror="false" quiet="true" />
+      <delete file="i2psnark-standalone.zip" failonerror="false" quiet="true" />
+      <delete file="core/java/cobertura.ser" />
+      <delete file="javadoc.zip" />
+      <delete file="i2p.fba" />
+      <delete file="${sloccount.report.file}" />
+      <delete file="mavencentral-i2p.jar" />
+      <delete file="mavencentral-router.jar" />
+      <delete file="mavencentral-mstreaming.jar" />
+      <delete file="mavencentral-streaming.jar" />
+      <delete file="mavencentral-servlet-i2p.jar" />
+    </parallel>
   </target>
 
   <target name="distclean" depends="clean">
-    <delete failonerror="false" quiet="true">
-      <fileset dir="." includes="i2pinstall* *.deb i2p_*.bz2 i2pupdate* i2psource* *.sig *.torrent" />
-    </delete>
-    <ant dir="core/java/" target="distclean" />
-    <ant dir="router/java/" target="distclean" />
-    <ant dir="installer/java" target="distclean" />
-    <ant dir="apps/ministreaming/java/" target="distclean" />
-    <ant dir="apps/streaming/java/" target="distclean" />
-    <ant dir="apps/i2ptunnel/java/" target="distclean" />
-    <ant dir="apps/sam/java/" target="distclean" />
-    <ant dir="apps/desktopgui" target="clean" />
-    <ant dir="apps/routerconsole/java/" target="distclean" />
-    <ant dir="apps/addressbook/" target="distclean" />
-    <ant dir="apps/susimail/" target="distclean" />
-    <ant dir="apps/susidns/src/" target="distclean" />
-    <ant dir="apps/systray/java/" target="distclean" />
-    <ant dir="apps/i2psnark/java/" target="distclean" />
-    <ant dir="apps/jetty/" target="distclean" />
-    <ant dir="apps/imagegen/" target="distclean" />
-    <ant dir="apps/jrobin/java" target="distclean" />
-    <delete dir="core/c/jbigi/bin" />
-    <delete dir="core/c/jbigi/lib" />
-    <delete dir="core/c/jcpuid/lib" />
-    <ant dir="installer/resources/locale" target="distclean" />
-    <ant dir="installer/tools/java" target="distclean" />
-    <delete dir="installer/lib/izpack5/patches/java/build" quiet="true" />
-    <delete dir="reproducible/build" />
-    <!-- custom langpacks -->
-    <delete dir="com" />
-    <!--
-             NOTE! We need to turn off the default excludes for these patterns to work.
-             These are the defaultexcludes in Ant as seen on
-             http://ant.apache.org/manual/CoreTasks/defaultexcludes.html
-                     **/*~
-                     **/#*#
-                     **/.#*
-                     **/%*%
-                     **/._*
-                     **/CVS
-                     **/CVS/**
-                     **/.cvsignore
-                     **/SCCS
-                     **/SCCS/**
-                     **/vssver.scc
-                     **/.svn
-                     **/.svn/**
-                     **/.DS_Store
-             The only recourse is to remove the offending ones.
-             We do this here, as we only need one change, and then put it
-             back after we are done with it.
-        -->
-    <defaultexcludes remove="**/*~" />
-
-    <delete>
-      <fileset dir="." includes="**/*.class **/*.java~ **/*.txt~ **/*.xml~ **/*.sh~ **/*.SlackBuild~ **/*.*~" />
+    <parallel>
+      <delete failonerror="false" quiet="true">
+        <fileset dir="." includes="i2pinstall* *.deb i2p_*.bz2 i2pupdate* i2psource* *.sig *.torrent" />
+      </delete>
+      <ant dir="core/java/" target="distclean" />
+      <ant dir="router/java/" target="distclean" />
+      <ant dir="installer/java" target="distclean" />
+      <ant dir="apps/ministreaming/java/" target="distclean" />
+      <ant dir="apps/streaming/java/" target="distclean" />
+      <ant dir="apps/i2ptunnel/java/" target="distclean" />
+      <ant dir="apps/sam/java/" target="distclean" />
+      <ant dir="apps/desktopgui" target="clean" />
+      <ant dir="apps/routerconsole/java/" target="distclean" />
+      <ant dir="apps/addressbook/" target="distclean" />
+      <ant dir="apps/susimail/" target="distclean" />
+      <ant dir="apps/susidns/src/" target="distclean" />
+      <ant dir="apps/systray/java/" target="distclean" />
+      <ant dir="apps/i2psnark/java/" target="distclean" />
+      <ant dir="apps/jetty/" target="distclean" />
+      <ant dir="apps/imagegen/" target="distclean" />
+      <ant dir="apps/jrobin/java" target="distclean" />
+      <delete dir="core/c/jbigi/bin" />
+      <delete dir="core/c/jbigi/lib" />
+      <delete dir="core/c/jcpuid/lib" />
+      <ant dir="installer/resources/locale" target="distclean" />
+      <ant dir="installer/tools/java" target="distclean" />
+      <delete dir="installer/lib/izpack5/patches/java/build" quiet="true" />
+      <delete dir="reproducible/build" />
+      <!-- custom langpacks -->
+      <delete dir="com" />
       <!--
-                 Less common, but they pollute my workspace here, so we
-                 might as well nuke these as well. Are there any others?
-                 !!??? Why don't we just nuke "**/*~" ???!!
-                 ++Sponge
-            -->
-    </delete>
-    <!-- Now we put the defaults back -->
-    <defaultexcludes default="true" />
+               NOTE! We need to turn off the default excludes for these patterns to work.
+               These are the defaultexcludes in Ant as seen on
+               http://ant.apache.org/manual/CoreTasks/defaultexcludes.html
+                       **/*~
+                       **/#*#
+                       **/.#*
+                       **/%*%
+                       **/._*
+                       **/CVS
+                       **/CVS/**
+                       **/.cvsignore
+                       **/SCCS
+                       **/SCCS/**
+                       **/vssver.scc
+                       **/.svn
+                       **/.svn/**
+                       **/.DS_Store
+               The only recourse is to remove the offending ones.
+               We do this here, as we only need one change, and then put it
+               back after we are done with it.
+          -->
+      <defaultexcludes remove="**/*~" />
+
+      <delete>
+        <fileset dir="." includes="**/*.class **/*.java~ **/*.txt~ **/*.xml~ **/*.sh~ **/*.SlackBuild~ **/*.*~" />
+        <!--
+           Less common, but they pollute my workspace here, so we might as well nuke these as well.
+           Are there any others?!!??? Why don't we just nuke "**/*~" ???!! ++Sponge
+          -->
+      </delete>
+      <!-- Now we put the defaults back -->
+      <defaultexcludes default="true" />
+    </parallel>
   </target>
 
-  <target name="webappDistclean">
-    <ant dir="apps/i2ptunnel/java/" target="distclean" />
-    <ant dir="apps/routerconsole/java/" target="distclean" />
-    <ant dir="apps/addressbook/" target="distclean" />
-    <ant dir="apps/susimail/" target="distclean" />
-    <ant dir="apps/susidns/src/" target="distclean" />
-    <ant dir="apps/i2psnark/java/" target="distclean" />
-    <ant dir="apps/imagegen/" target="distclean" />
+  <target name="distcleanWebapp">
+    <parallel>
+      <ant dir="apps/i2ptunnel/java/" target="distclean" />
+      <ant dir="apps/routerconsole/java/" target="distclean" />
+      <ant dir="apps/addressbook/" target="distclean" />
+      <ant dir="apps/susimail/" target="distclean" />
+      <ant dir="apps/susidns/src/" target="distclean" />
+      <ant dir="apps/i2psnark/java/" target="distclean" />
+      <ant dir="apps/imagegen/" target="distclean" />
+    </parallel>
   </target>
 
   <target name="pkg" depends="distclean, updaterWithGeoIP, preppkg, installer" />
@@ -1308,13 +1311,11 @@
       <fileset dir="installer/lib/wrapper/solaris/" excludes="*.txt" />
     </copy>
     <!--
-             Force using the new wrapper.jar.
-             The new jar with the old Windows binaries will *fail to work* on windows, so we'll copy
-             the correct version of the wrapper.jar file for windows and rename it so the user can
-             use it to replace the existing wrapper.jar file.
-             We do not generate release files from this target.
-             See preppkg-windows-only target below.
-        -->
+       Force using the new wrapper.jar.
+       The new jar with the old Windows binaries will *fail to work* on windows, so we'll copy the correct
+       version of the wrapper.jar file for windows and rename it so the user can use it to replace the existing
+       wrapper.jar file. We do not generate release files from this target. See preppkg-windows-only target below.
+      -->
     <copy overwrite="true" file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib" />
     <copy file="installer/lib/wrapper/win-all/wrapper.jar" tofile="pkg-temp/lib/wrapper-windows.jar" />
   </target>
@@ -1429,25 +1430,27 @@
   </target>
 
   <target name="preppkg-windows" depends="preppkg-base, preplicenses-windows, buildUtilityJar, buildexe">
+    <parallel>
     <copy file="build/i2p.exe" todir="pkg-temp/" failonerror="false" />
-    <copy file="installer/resources/windows/eepget.bat" todir="pkg-temp/" />
-    <copy file="installer/resources/windows/eephead.bat" todir="pkg-temp/" />
-    <copy file="installer/resources/windows/i2prouter.bat" todir="pkg-temp/" />
-    <copy file="installer/resources/windows/fixperms.bat" todir="pkg-temp/" />
-    <copy file="installer/resources/windows/install_i2p_service_winnt.bat" todir="pkg-temp/" />
-    <copy file="installer/resources/windows/set_config_dir_for_nt_service.bat" todir="pkg-temp/" />
-    <copy file="installer/resources/windows/uninstall_i2p_service_winnt.bat" todir="pkg-temp/" />
-    <copy file="installer/resources/windows/StartI2P+Service.bat" todir="pkg-temp/" />
-    <copy file="installer/resources/windows/StopI2P+Service.bat" todir="pkg-temp/" />
-    <copy file="installer/resources/windows/EnableI2P+Service.bat" todir="pkg-temp/" />
-    <copy file="installer/resources/windows/DisableI2P+Service.bat" todir="pkg-temp/" />
-    <copy file="build/utility.jar" todir="pkg-temp" />
-    <copy todir="pkg-temp/lib/wrapper/win32/">
-      <fileset dir="installer/lib/wrapper/win32/" excludes="*.txt" />
-    </copy>
-    <copy todir="pkg-temp/lib/wrapper/win64/">
-      <fileset dir="installer/lib/wrapper/win64/" excludes="*.txt" />
-    </copy>
+      <copy file="installer/resources/windows/eepget.bat" todir="pkg-temp/" />
+      <copy file="installer/resources/windows/eephead.bat" todir="pkg-temp/" />
+      <copy file="installer/resources/windows/i2prouter.bat" todir="pkg-temp/" />
+      <copy file="installer/resources/windows/fixperms.bat" todir="pkg-temp/" />
+      <copy file="installer/resources/windows/install_i2p_service_winnt.bat" todir="pkg-temp/" />
+      <copy file="installer/resources/windows/set_config_dir_for_nt_service.bat" todir="pkg-temp/" />
+      <copy file="installer/resources/windows/uninstall_i2p_service_winnt.bat" todir="pkg-temp/" />
+      <copy file="installer/resources/windows/StartI2P+Service.bat" todir="pkg-temp/" />
+      <copy file="installer/resources/windows/StopI2P+Service.bat" todir="pkg-temp/" />
+      <copy file="installer/resources/windows/EnableI2P+Service.bat" todir="pkg-temp/" />
+      <copy file="installer/resources/windows/DisableI2P+Service.bat" todir="pkg-temp/" />
+      <copy file="build/utility.jar" todir="pkg-temp" />
+      <copy todir="pkg-temp/lib/wrapper/win32/">
+        <fileset dir="installer/lib/wrapper/win32/" excludes="*.txt" />
+      </copy>
+      <copy todir="pkg-temp/lib/wrapper/win64/">
+        <fileset dir="installer/lib/wrapper/win64/" excludes="*.txt" />
+      </copy>
+    </parallel>
   </target>
 
   <target name="preppkg-windows-only" depends="preppkg-windows, jbigi-windows-only">
@@ -1464,60 +1467,76 @@
 
   <!-- see targets below for conditional copying -->
   <target name="preppkg-base" depends="build, preplicenses, prepConsoleDocs, prepthemeupdates, prepCertificates, prepRouterInfos, copyjetty, copytomcat-unlesspkg, copyjstl-unlesspkg, copystandard-unlesspkg, copyflags, truncatehistory">
-    <!-- if updater200 was run previously, it left *.pack files in pkg-temp -->
-    <!-- Also remove deletelist.txt used for updater only -->
-    <!-- And empty jars and wars used only in the updater -->
+
+    <!-- Delete operations -->
     <delete>
       <fileset dir="pkg-temp" includes="**/*.jar.pack **/*.war.pack deletelist.txt" />
       <fileset dir="pkg-temp/lib" includes="commons-logging.jar jasper-compiler.jar jetty-java5-threadpool.jar jetty-sslengine.jar" />
       <fileset dir="pkg-temp" includes="webapps/addressbook.war" />
     </delete>
-    <copy file="build/i2p.jar" todir="pkg-temp/lib/" />
-    <copy file="build/pack200.jar" todir="pkg-temp/lib/" />
-    <copy file="build/i2ptunnel.jar" todir="pkg-temp/lib/" />
-    <copy file="build/mstreaming.jar" todir="pkg-temp/lib/" />
-    <copy file="build/streaming.jar" todir="pkg-temp/lib/" />
-    <copy file="build/router.jar" todir="pkg-temp/lib/" />
-    <copy file="build/desktopgui.jar" todir="pkg-temp/lib/" />
-    <copy file="build/routerconsole.jar" todir="pkg-temp/lib/" />
-    <!-- Updated in 0.9.28; name without version so we can overwrite if we upgrade  -->
-    <copy file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar" />
-    <copy file="build/sam.jar" todir="pkg-temp/lib/" />
-    <copy file="build/systray.jar" todir="pkg-temp/lib" />
-    <copy file="build/i2psnark.jar" todir="pkg-temp/lib/" />
-    <copy file="build/i2ptunnel.war" todir="pkg-temp/webapps/" />
-    <copy file="build/routerconsole.war" todir="pkg-temp/webapps/" />
-    <copy file="build/addressbook.jar" todir="pkg-temp/lib/" />
-    <copy file="build/susimail.war" todir="pkg-temp/webapps/" />
-    <copy file="build/susidns.war" todir="pkg-temp/webapps/" />
-    <copy file="build/imagegen.war" todir="pkg-temp/webapps/" />
-    <copy file="build/jsonrpc.war" todir="pkg-temp/webapps/" />
-    <copy file="build/i2psnark.war" todir="pkg-temp/webapps/" />
-    <copy file="apps/i2psnark/i2psnark.config" todir="pkg-temp/" />
-    <copy file="installer/resources/blocklist.txt" todir="pkg-temp/" />
-    <copy file="installer/resources/blocklist_tor.txt" todir="pkg-temp/" />
-    <copy file="installer/resources/clients.config" todir="pkg-temp/" />
-    <copy file="installer/resources/i2ptunnel.config" todir="pkg-temp/" />
-    <copy file="installer/resources/wrapper.config" todir="pkg-temp/" />
-    <copy file="installer/resources/wrapper.config.commented" todir="pkg-temp/" />
-    <copy file="installer/resources/hosts.txt" todir="pkg-temp/" />
-    <copy file="INSTALL-headless.txt" todir="pkg-temp/" />
-    <mkdir dir="pkg-temp/scripts" />
-    <copy file="apps/proxyscript/i2pProxy.pac" todir="pkg-temp/scripts/" />
-    <copy file="installer/resources/startconsole.html" todir="pkg-temp/docs/" />
-    <copy file="installer/resources/windows/start.ico" todir="pkg-temp/docs/" />
-    <copy file="installer/resources/windows/stop.ico" todir="pkg-temp/docs/" />
-    <copy file="installer/resources/windows/console.ico" todir="pkg-temp/docs/" />
-    <copy file="installer/resources/windows/uninstall.ico" todir="pkg-temp/docs/" />
-    <!-- Eepsite stuff here -->
+
+    <!-- Create temp folders -->
+    <mkdir dir="pkg-temp" />
+    <mkdir dir="pkg-temp/docs" />
+    <mkdir dir="pkg-temp/lib" />
     <mkdir dir="pkg-temp/eepsite" />
-    <copy todir="pkg-temp/eepsite/">
-      <fileset dir="installer/resources/eepsite/" excludes="**/.placeholder" />
-    </copy>
-    <copy todir="pkg-temp/eepsite-jetty9.3">
-      <fileset dir="installer/resources/eepsite-jetty9.3" />
-    </copy>
-    <copy file="installer/resources/themes/console/light/images/favicon.svg" tofile="pkg-temp/eepsite/docroot/favicon.svg" />
+    <mkdir dir="pkg-temp/eepsite-jetty9.3" />
+    <mkdir dir="pkg-temp/eepsite/docroot" />
+    <mkdir dir="pkg-temp/scripts" />
+    <mkdir dir="pkg-temp/webapps" />
+
+    <parallel>
+     <!-- Copy wars and jars -->
+     <copy file="build/i2p.jar" todir="pkg-temp/lib/" />
+     <copy file="build/pack200.jar" todir="pkg-temp/lib/" />
+     <copy file="build/i2ptunnel.jar" todir="pkg-temp/lib/" />
+     <copy file="build/mstreaming.jar" todir="pkg-temp/lib/" />
+     <copy file="build/streaming.jar" todir="pkg-temp/lib/" />
+     <copy file="build/router.jar" todir="pkg-temp/lib/" />
+     <copy file="build/desktopgui.jar" todir="pkg-temp/lib/" />
+     <copy file="build/routerconsole.jar" todir="pkg-temp/lib/" />
+     <copy file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar" />
+     <copy file="build/sam.jar" todir="pkg-temp/lib/" />
+     <copy file="build/systray.jar" todir="pkg-temp/lib" />
+     <copy file="build/i2psnark.jar" todir="pkg-temp/lib/" />
+     <copy file="build/i2ptunnel.war" todir="pkg-temp/webapps/" />
+     <copy file="build/routerconsole.war" todir="pkg-temp/webapps/" />
+     <copy file="build/addressbook.jar" todir="pkg-temp/lib/" />
+     <copy file="build/susimail.war" todir="pkg-temp/webapps/" />
+     <copy file="build/susidns.war" todir="pkg-temp/webapps/" />
+     <copy file="build/imagegen.war" todir="pkg-temp/webapps/" />
+     <copy file="build/jsonrpc.war" todir="pkg-temp/webapps/" />
+     <copy file="build/i2psnark.war" todir="pkg-temp/webapps/" />
+
+     <!-- Copy configs and misc files -->
+     <copy file="apps/i2psnark/i2psnark.config" todir="pkg-temp/" />
+     <copy file="installer/resources/blocklist.txt" todir="pkg-temp/" />
+     <copy file="installer/resources/blocklist_tor.txt" todir="pkg-temp/" />
+     <copy file="installer/resources/clients.config" todir="pkg-temp/" />
+     <copy file="installer/resources/i2ptunnel.config" todir="pkg-temp/" />
+     <copy file="installer/resources/wrapper.config" todir="pkg-temp/" />
+     <copy file="installer/resources/wrapper.config.commented" todir="pkg-temp/" />
+     <copy file="installer/resources/hosts.txt" todir="pkg-temp/" />
+     <copy file="INSTALL-headless.txt" todir="pkg-temp/" />
+
+     <!-- Proxy script, windows icons etc -->
+     <copy file="apps/proxyscript/i2pProxy.pac" todir="pkg-temp/scripts/" />
+     <copy file="installer/resources/startconsole.html" todir="pkg-temp/docs/" />
+     <copy file="installer/resources/windows/start.ico" todir="pkg-temp/docs/" />
+     <copy file="installer/resources/windows/stop.ico" todir="pkg-temp/docs/" />
+     <copy file="installer/resources/windows/console.ico" todir="pkg-temp/docs/" />
+     <copy file="installer/resources/windows/uninstall.ico" todir="pkg-temp/docs/" />
+
+      <!-- Eepsite stuff here -->
+      <copy todir="pkg-temp/eepsite/">
+        <fileset dir="installer/resources/eepsite/" excludes="**/.placeholder" />
+      </copy>
+      <copy todir="pkg-temp/eepsite-jetty9.3">
+        <fileset dir="installer/resources/eepsite-jetty9.3" />
+      </copy>
+      <copy file="installer/resources/themes/console/light/images/favicon.svg" tofile="pkg-temp/eepsite/docroot/favicon.svg" />
+    </parallel>
+
   </target>
 
   <target name="zip-linux">
@@ -1852,21 +1871,20 @@
   </target>
 
   <target name="pack200">
-    <parallel threadcount="8">
-      <!-- Unix and friends -->
+    <!-- Unix and friends -->
       <exec executable="sh" osfamily="unix" failonerror="true">
         <arg value="-c" />
-        <arg value="for i in pkg-temp/lib/*.jar pkg-temp/webapps/*war; do echo 'Pack200 compression for:' $i;
-                    mv $i $i.jar &amp;&amp; pack200 --effort=6 --modification-time=latest --segment-limit=-1 -g $i.pack $i.jar &amp;&amp;
-                    rm -f $i.jar &amp; done; wait" />
+            <arg value="find pkg-temp/lib/*.jar pkg-temp/webapps/*war -type f | parallel 'echo Pack200 compression for: {} &amp;&amp;
+                        mv {} {}.jar &amp;&amp; pack200 --effort=6 --modification-time=latest --segment-limit=-1 -g {}.pack {}.jar &amp;&amp;
+                        rm -f {}.jar'" />
       </exec>
 
       <!-- macOS -->
       <exec executable="sh" osfamily="mac" failonerror="true">
         <arg value="-c" />
         <arg value="for i in pkg-temp/lib/*.jar pkg-temp/webapps/*war; do echo 'Pack200 compression for:' $i;
-                mv $i $i.jar &amp;&amp; pack200 --effort=6 --modification-time=latest --segment-limit=-1 -g $i.pack $i.jar &amp;&amp;
-                rm -f $i.jar &amp; done; wait" />
+                    mv $i $i.jar &amp;&amp; pack200 --effort=6 --modification-time=latest --segment-limit=-1 -g $i.pack $i.jar &amp;&amp;
+                    rm -f $i.jar &amp; done; wait" />
       </exec>
 
       <!-- Windows -->
@@ -1877,59 +1895,58 @@
                     for %i in (pkg-temp\lib\*.jar) do
                     (pack200 --effort=6 --modification-time=latest --segment-limit=-1 -g %i.pack %i &amp;&amp; del %i)" />
       </exec>
-    </parallel>
   </target>
 
   <target name="repack200">
-    <parallel threadcount="8">
-      <!-- Unix and friends -->
-      <exec executable="sh" osfamily="unix" failonerror="true">
-        <arg value="-c" />
-        <arg value="for i in pkg-temp/lib/*.jar pkg-temp/webapps/*war; do echo 'Repacking' $i;
-                    mv $i $i.jar &amp;&amp; pack200 -r $i.jar &amp;&amp; mv $i.jar $i &amp; done; wait" />
-      </exec>
+    <!-- Unix and friends -->
+    <exec executable="sh" osfamily="unix" failonerror="true">
+      <arg value="-c" />
+      <arg value="for i in pkg-temp/lib/*.jar pkg-temp/webapps/*war; do echo 'Repacking' $i;
+                  mv $i $i.jar &amp;&amp; pack200 -r $i.jar &amp;&amp; mv $i.jar $i &amp; done; wait" />
+    </exec>
 
-      <!-- macOS -->
-      <exec executable="sh" osfamily="mac" failonerror="true">
-        <arg value="-c" />
-        <arg value="for i in pkg-temp/lib/*.jar pkg-temp/webapps/*war; do echo 'Repacking' $i;
-                    mv $i $i.jar &amp;&amp; pack200 -r $i.jar &amp;&amp; mv $i.jar $i &amp; done; wait" />
-      </exec>
+    <!-- macOS -->
+    <exec executable="sh" osfamily="mac" failonerror="true">
+      <arg value="-c" />
+      <arg value="for i in pkg-temp/lib/*.jar pkg-temp/webapps/*war; do echo 'Repacking' $i;
+                  mv $i $i.jar &amp;&amp; pack200 -r $i.jar &amp;&amp; mv $i.jar $i &amp; done; wait" />
+    </exec>
 
-      <!-- Windows -->
-      <exec executable="cmd" osfamily="windows" failonerror="true">
-        <arg value="/c" />
-        <arg value="for %i in (pkg-temp\webapps\*.war) do (move %i %i.jar &amp;&amp; pack200 -r %i.jar &amp;&amp; move %i.jar %i)" />
-      </exec>
+    <!-- Windows -->
+    <exec executable="cmd" osfamily="windows" failonerror="true">
+      <arg value="/c" />
+      <arg value="for %i in (pkg-temp\webapps\*.war) do (move %i %i.jar &amp;&amp; pack200 -r %i.jar &amp;&amp; move %i.jar %i)" />
+    </exec>
 
-      <exec executable="cmd" osfamily="windows" failonerror="true">
-        <arg value="/c" />
-        <arg value="for %i in (pkg-temp\lib\*.jar) do (pack200 -r %i)" />
-      </exec>
-    </parallel>
+    <exec executable="cmd" osfamily="windows" failonerror="true">
+      <arg value="/c" />
+      <arg value="for %i in (pkg-temp\lib\*.jar) do (pack200 -r %i)" />
+    </exec>
   </target>
 
   <target name="prepupdate" depends="build2, prepupdateSmall, prepConsoleDocUpdates, prepCertificates, prep-script-translation, truncatehistory">
-    <copy file="build/sam.jar" todir="pkg-temp/lib/" />
-    <copy file="build/i2psnark.jar" todir="pkg-temp/lib" />
-    <!-- include systray changes in 0.7.5 -->
-    <copy file="build/systray.jar" todir="pkg-temp/lib/" />
-    <!-- removed from updater in 0.9, added back in 0.9.26 -->
-    <copy file="build/desktopgui.jar" todir="pkg-temp/lib/" />
-    <copy file="build/pack200.jar" todir="pkg-temp/lib" />
-    <copy file="build/susimail.war" todir="pkg-temp/webapps/" />
-    <copy file="build/susidns.war" todir="pkg-temp/webapps/" />
-    <copy file="build/imagegen.war" todir="pkg-temp/webapps/" />
-    <copy file="build/jsonrpc.war" todir="pkg-temp/webapps/" />
-    <copy file="build/i2psnark.war" todir="pkg-temp/webapps/" />
-    <copy file="installer/resources/deletelist.txt" todir="pkg-temp/" />
-    <copy file="installer/resources/blocklist.txt" todir="pkg-temp/" />
-    <copy file="installer/resources/blocklist_tor.txt" todir="pkg-temp/" />
-    <copy file="installer/resources/i2ping" todir="pkg-temp/" />
-    <copy file="installer/resources/eepget" todir="pkg-temp/" />
-    <copy file="installer/resources/eephead" todir="pkg-temp/" />
-    <copy file="installer/resources/graceful_update" todir="pkg-temp/" />
-    <copy file="installer/resources/windows/fixperms2.bat" todir="pkg-temp/scripts/" />
+    <parallel>
+      <copy file="build/sam.jar" todir="pkg-temp/lib/" />
+      <copy file="build/i2psnark.jar" todir="pkg-temp/lib" />
+      <!-- include systray changes in 0.7.5 -->
+      <copy file="build/systray.jar" todir="pkg-temp/lib/" />
+      <!-- removed from updater in 0.9, added back in 0.9.26 -->
+      <copy file="build/desktopgui.jar" todir="pkg-temp/lib/" />
+      <copy file="build/pack200.jar" todir="pkg-temp/lib" />
+      <copy file="build/susimail.war" todir="pkg-temp/webapps/" />
+      <copy file="build/susidns.war" todir="pkg-temp/webapps/" />
+      <copy file="build/imagegen.war" todir="pkg-temp/webapps/" />
+      <copy file="build/jsonrpc.war" todir="pkg-temp/webapps/" />
+      <copy file="build/i2psnark.war" todir="pkg-temp/webapps/" />
+      <copy file="installer/resources/deletelist.txt" todir="pkg-temp/" />
+      <copy file="installer/resources/blocklist.txt" todir="pkg-temp/" />
+      <copy file="installer/resources/blocklist_tor.txt" todir="pkg-temp/" />
+      <copy file="installer/resources/i2ping" todir="pkg-temp/" />
+      <copy file="installer/resources/eepget" todir="pkg-temp/" />
+      <copy file="installer/resources/eephead" todir="pkg-temp/" />
+      <copy file="installer/resources/graceful_update" todir="pkg-temp/" />
+      <copy file="installer/resources/windows/fixperms2.bat" todir="pkg-temp/scripts/" />
+    </parallel>
   </target>
 
   <target name="truncatehistory">
@@ -1944,55 +1961,57 @@
   </target>
 
   <target name="prepupdateSmall" depends="buildSmall, prepupdateRouter, prepjupdatefixes, prepthemeupdates">
-    <copy file="build/i2ptunnel.jar" todir="pkg-temp/lib/" />
-    <copy file="build/mstreaming.jar" todir="pkg-temp/lib/" />
-    <copy file="build/streaming.jar" todir="pkg-temp/lib/" />
-    <copy file="build/routerconsole.jar" todir="pkg-temp/lib/" />
-    <!-- Updated in 0.9.28 -->
-    <!-- name without version so we can overwrite if we upgrade  -->
-    <copy file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar" />
-    <copy file="build/i2ptunnel.war" todir="pkg-temp/webapps/" />
-    <copy file="build/pack200.jar" todir="pkg-temp/lib" />
-    <copy file="build/routerconsole.war" todir="pkg-temp/webapps/" />
-    <copy file="build/addressbook.jar" todir="pkg-temp/lib/" />
-    <copy file="build/addressbook.war" todir="pkg-temp/webapps/" />
-    <!-- decapitalized the file in 0.7.8 -->
-    <copy file="installer/resources/countries.txt" todir="pkg-temp/geoip/" />
-    <copy file="installer/resources/continents.txt" todir="pkg-temp/geoip/" />
+    <parallel>
+      <copy file="build/i2ptunnel.jar" todir="pkg-temp/lib/" />
+      <copy file="build/mstreaming.jar" todir="pkg-temp/lib/" />
+      <copy file="build/streaming.jar" todir="pkg-temp/lib/" />
+      <copy file="build/routerconsole.jar" todir="pkg-temp/lib/" />
+      <!-- Updated in 0.9.28 -->
+      <!-- name without version so we can overwrite if we upgrade  -->
+      <copy file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar" />
+      <copy file="build/i2ptunnel.war" todir="pkg-temp/webapps/" />
+      <copy file="build/pack200.jar" todir="pkg-temp/lib" />
+      <copy file="build/routerconsole.war" todir="pkg-temp/webapps/" />
+      <copy file="build/addressbook.jar" todir="pkg-temp/lib/" />
+      <copy file="build/addressbook.war" todir="pkg-temp/webapps/" />
+      <!-- decapitalized the file in 0.7.8 -->
+      <copy file="installer/resources/countries.txt" todir="pkg-temp/geoip/" />
+      <copy file="installer/resources/continents.txt" todir="pkg-temp/geoip/" />
+    </parallel>
   </target>
 
   <target name="prepupdateEssential" depends="buildSmall, prepupdateRouter, prepjupdatefixes, prepthemeupdates">
-    <copy file="build/i2ptunnel.jar" todir="pkg-temp/lib/" />
-    <copy file="build/mstreaming.jar" todir="pkg-temp/lib/" />
-    <copy file="build/streaming.jar" todir="pkg-temp/lib/" />
-    <copy file="build/routerconsole.jar" todir="pkg-temp/lib/" />
-    <copy file="build/pack200.jar" todir="pkg-temp/lib" />
-    <!-- Updated in 0.9.28 -->
-    <!-- name without version so we can overwrite if we upgrade  -->
-    <copy file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar" />
-    <copy file="build/i2ptunnel.war" todir="pkg-temp/webapps/" />
-    <copy file="build/routerconsole.war" todir="pkg-temp/webapps/" />
-    <copy file="build/addressbook.jar" todir="pkg-temp/lib/" />
-    <copy file="build/addressbook.war" todir="pkg-temp/webapps/" />
+    <parallel>
+      <copy file="build/i2ptunnel.jar" todir="pkg-temp/lib/" />
+      <copy file="build/mstreaming.jar" todir="pkg-temp/lib/" />
+      <copy file="build/streaming.jar" todir="pkg-temp/lib/" />
+      <copy file="build/routerconsole.jar" todir="pkg-temp/lib/" />
+      <copy file="build/pack200.jar" todir="pkg-temp/lib" />
+      <!-- Updated in 0.9.28 -->
+      <!-- name without version so we can overwrite if we upgrade  -->
+      <copy file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar" />
+      <copy file="build/i2ptunnel.war" todir="pkg-temp/webapps/" />
+      <copy file="build/routerconsole.war" todir="pkg-temp/webapps/" />
+      <copy file="build/addressbook.jar" todir="pkg-temp/lib/" />
+      <copy file="build/addressbook.war" todir="pkg-temp/webapps/" />
+    </parallel>
   </target>
 
   <target name="prepupdatecompact" depends="build2, prepupdateEssential, prepProxyDocs, prepCertificates, prep-script-translation, truncatehistory">
-    <copy file="build/i2psnark.jar" todir="pkg-temp/lib" />
-    <copy file="build/i2psnark.war" todir="pkg-temp/webapps/" />
-    <copy file="build/pack200.jar" todir="pkg-temp/lib" />
-    <copy file="build/susidns.war" todir="pkg-temp/webapps/" />
-    <copy file="build/susimail.war" todir="pkg-temp/webapps/" />
-    <copy file="installer/resources/deletelist.txt" todir="pkg-temp/" />
-    <copy file="installer/resources/blocklist.txt" todir="pkg-temp/" />
-    <copy file="installer/resources/blocklist_tor.txt" todir="pkg-temp/" />
-    <copy file="installer/resources/i2ping" todir="pkg-temp/" />
-    <copy file="installer/resources/eepget" todir="pkg-temp/" />
-    <copy file="installer/resources/eephead" todir="pkg-temp/" />
-    <!--<copy file="build/imagegen.war" todir="pkg-temp/webapps/" />-->
-    <!--<copy file="installer/resources/graceful_update" todir="pkg-temp/" />-->
-    <!--<copy file="installer/resources/windows/fixperms2.bat" todir="pkg-temp/scripts/" />-->
+    <parallel>
+      <copy file="build/i2psnark.jar" todir="pkg-temp/lib" />
+      <copy file="build/i2psnark.war" todir="pkg-temp/webapps/" />
+      <copy file="build/pack200.jar" todir="pkg-temp/lib" />
+      <copy file="build/susidns.war" todir="pkg-temp/webapps/" />
+      <copy file="build/susimail.war" todir="pkg-temp/webapps/" />
+      <copy file="installer/resources/deletelist.txt" todir="pkg-temp/" />
+      <copy file="installer/resources/blocklist.txt" todir="pkg-temp/" />
+      <copy file="installer/resources/blocklist_tor.txt" todir="pkg-temp/" />
+      <copy file="installer/resources/i2ping" todir="pkg-temp/" />
+      <copy file="installer/resources/eepget" todir="pkg-temp/" />
+      <copy file="installer/resources/eephead" todir="pkg-temp/" />
+    </parallel>
   </target>
-
 
   <target name="prepupdateRouter" depends="buildrouter, deletepkg-temp">
     <copy file="build/i2p.jar" todir="pkg-temp/lib/" />
@@ -2427,7 +2446,7 @@
 
   <target name="findbugs" depends="build2, buildUtilityJar">
     <echo message="Starting findbugs, this will take a while..." />
-    <!-- ref: https://github.com/spotbugs/spotbugs/issues/148 -->
+    <!-- ref: https://github.com/spotbugs/spotbugs/issues/148-->
     <echo message="If this doesn't work with Java 9+. try Java 8" />
     <exec executable="nice" failonerror="true">
       <arg value="findbugs" />
@@ -2905,7 +2924,7 @@
     <move todir=".">
       <fileset dir=".." includes="libjbigi*${release.number}*.deb i2p*${release.number}*.deb" />
     </move>
-    <echo message="" />
+    <echo message="&#8199;" />
     <echo message="====================" />
     <echo message="Packages have been built and moved to ${basedir}" />
     <echo message="====================" />
