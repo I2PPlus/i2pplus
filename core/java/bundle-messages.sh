@@ -22,13 +22,13 @@ fi
 
 if [ "$1" = "-p" ]
 then
-	POUPDATE=1
+  POUPDATE=1
 fi
 
 # on windows, one must specify the path of command find
 # since windows has its own version of find.
 if which find|grep -q -i windows ; then
-	export PATH=.:/bin:/usr/local/bin:$PATH
+  export PATH=.:/bin:/usr/local/bin:$PATH
 fi
 # Fast mode - update ondemond
 # set LG2 to the language you need in environment variables to enable this
@@ -38,63 +38,63 @@ fi
 JPATHS="../java/src/net/i2p"
 for i in ../locale/messages_*.po
 do
-	# get language
-	LG=${i#../locale/messages_}
-	LG=${LG%.po}
+  # get language
+  LG=${i#../locale/messages_}
+  LG=${LG%.po}
 
-	# skip, if specified
-	if [ $LG2 ]; then
-		[ $LG != $LG2 ] && continue || echo INFO: Language update is set to [$LG2] only.
-	fi
+  # skip, if specified
+  if [ $LG2 ]; then
+    [ $LG != $LG2 ] && continue || echo INFO: Language update is set to [$LG2] only.
+  fi
 
-	if [ "$POUPDATE" = "1" ]
-	then
-		# make list of java files newer than the .po file
-		find $JPATHS -name *.java -newer $i > $TMPFILE
-	fi
+  if [ "$POUPDATE" = "1" ]
+  then
+    # make list of java files newer than the .po file
+    find $JPATHS -name *.java -newer $i > $TMPFILE
+  fi
 
-	if [ -s build/obj/net/i2p/util/messages_$LG.class -a \
-	     build/obj/net/i2p/util/messages_$LG.class -nt $i -a \
-	     ! -s $TMPFILE ]
-	then
-		continue
-	fi
+  if [ -s build/obj/net/i2p/util/messages_$LG.class -a \
+       build/obj/net/i2p/util/messages_$LG.class -nt $i -a \
+       ! -s $TMPFILE ]
+  then
+    continue
+  fi
 
-	if [ "$POUPDATE" = "1" ]
-	then
-	 	echo "Updating the $i file from the tags..."
-		# extract strings from java and jsp files, and update messages.po files
-		# translate calls must be one of the forms:
-		# _t("foo")
-		# _x("foo")
-		# intl._t("foo")
-		# intl.title("foo")
-		# In a jsp, you must use a helper or handler that has the context set.
-		# To start a new translation, copy the header from an old translation to the new .po file,
-		# then ant distclean updater.
-		find $JPATHS -name *.java > $TMPFILE
-		xgettext -f $TMPFILE -F -L java --from-code=UTF-8 --width=0 --no-wrap --add-comments \
-	                 --keyword=_t --keyword=_x --keyword=intl._ --keyword=intl.title \
-		         -o ${i}t
-		if [ $? -ne 0 ]
-		then
-			echo "ERROR - xgettext failed on ${i}, not updating translations"
-			rm -f ${i}t
-			RC=1
-			break
-		fi
-		msgmerge -U -N --backup=none $i ${i}t
-		if [ $? -ne 0 ]
-		then
-			echo "ERROR - msgmerge failed on ${i}, not updating translations"
-			rm -f ${i}t
-			RC=1
-			break
-		fi
-		rm -f ${i}t
-		# so we don't do this again
-		touch $i
-	fi
+  if [ "$POUPDATE" = "1" ]
+  then
+     echo "Updating the $i file from the tags..."
+    # extract strings from java and jsp files, and update messages.po files
+    # translate calls must be one of the forms:
+    # _t("foo")
+    # _x("foo")
+    # intl._t("foo")
+    # intl.title("foo")
+    # In a jsp, you must use a helper or handler that has the context set.
+    # To start a new translation, copy the header from an old translation to the new .po file,
+    # then ant distclean updater.
+    find $JPATHS -name *.java > $TMPFILE
+    xgettext -f $TMPFILE -F -L java --from-code=UTF-8 --width=0 --no-wrap --add-comments \
+                   --keyword=_t --keyword=_x --keyword=intl._ --keyword=intl.title \
+             -o ${i}t
+    if [ $? -ne 0 ]
+    then
+      echo "ERROR - xgettext failed on ${i}, not updating translations"
+      rm -f ${i}t
+      RC=1
+      break
+    fi
+    msgmerge -U -N --backup=none $i ${i}t
+    if [ $? -ne 0 ]
+    then
+      echo "ERROR - msgmerge failed on ${i}, not updating translations"
+      rm -f ${i}t
+      RC=1
+      break
+    fi
+    rm -f ${i}t
+    # so we don't do this again
+    touch $i
+  fi
 
     if [ "$LG" != "en" ]
     then
