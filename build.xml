@@ -30,7 +30,7 @@
   <target name="all">
     <echo message="Ant: ${ant.version}" />
     <echo message="JDK: ${java.vendor} ${java.version} (${java.runtime.name} ${java.runtime.version})" />
-    <echo message="&#8199;"/>
+    <echo message="&#8199;" />
     <echo message="Useful targets:" />
     <echo message=" bench                                        Build benchmarks" />
     <echo message=" buildAddressbook                             Build Addressbook .jar component &#10140; ./build/addressbook.jar" />
@@ -1431,7 +1431,7 @@
 
   <target name="preppkg-windows" depends="preppkg-base, preplicenses-windows, buildUtilityJar, buildexe">
     <parallel>
-    <copy file="build/i2p.exe" todir="pkg-temp/" failonerror="false" />
+      <copy file="build/i2p.exe" todir="pkg-temp/" failonerror="false" />
       <copy file="installer/resources/windows/eepget.bat" todir="pkg-temp/" />
       <copy file="installer/resources/windows/eephead.bat" todir="pkg-temp/" />
       <copy file="installer/resources/windows/i2prouter.bat" todir="pkg-temp/" />
@@ -1486,46 +1486,46 @@
     <mkdir dir="pkg-temp/webapps" />
 
     <parallel>
-     <!-- Copy wars and jars -->
-     <copy file="build/i2p.jar" todir="pkg-temp/lib/" />
-     <copy file="build/pack200.jar" todir="pkg-temp/lib/" />
-     <copy file="build/i2ptunnel.jar" todir="pkg-temp/lib/" />
-     <copy file="build/mstreaming.jar" todir="pkg-temp/lib/" />
-     <copy file="build/streaming.jar" todir="pkg-temp/lib/" />
-     <copy file="build/router.jar" todir="pkg-temp/lib/" />
-     <copy file="build/desktopgui.jar" todir="pkg-temp/lib/" />
-     <copy file="build/routerconsole.jar" todir="pkg-temp/lib/" />
-     <copy file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar" />
-     <copy file="build/sam.jar" todir="pkg-temp/lib/" />
-     <copy file="build/systray.jar" todir="pkg-temp/lib" />
-     <copy file="build/i2psnark.jar" todir="pkg-temp/lib/" />
-     <copy file="build/i2ptunnel.war" todir="pkg-temp/webapps/" />
-     <copy file="build/routerconsole.war" todir="pkg-temp/webapps/" />
-     <copy file="build/addressbook.jar" todir="pkg-temp/lib/" />
-     <copy file="build/susimail.war" todir="pkg-temp/webapps/" />
-     <copy file="build/susidns.war" todir="pkg-temp/webapps/" />
-     <copy file="build/imagegen.war" todir="pkg-temp/webapps/" />
-     <copy file="build/jsonrpc.war" todir="pkg-temp/webapps/" />
-     <copy file="build/i2psnark.war" todir="pkg-temp/webapps/" />
+      <!-- Copy wars and jars -->
+      <copy file="build/i2p.jar" todir="pkg-temp/lib/" />
+      <copy file="build/pack200.jar" todir="pkg-temp/lib/" />
+      <copy file="build/i2ptunnel.jar" todir="pkg-temp/lib/" />
+      <copy file="build/mstreaming.jar" todir="pkg-temp/lib/" />
+      <copy file="build/streaming.jar" todir="pkg-temp/lib/" />
+      <copy file="build/router.jar" todir="pkg-temp/lib/" />
+      <copy file="build/desktopgui.jar" todir="pkg-temp/lib/" />
+      <copy file="build/routerconsole.jar" todir="pkg-temp/lib/" />
+      <copy file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar" />
+      <copy file="build/sam.jar" todir="pkg-temp/lib/" />
+      <copy file="build/systray.jar" todir="pkg-temp/lib" />
+      <copy file="build/i2psnark.jar" todir="pkg-temp/lib/" />
+      <copy file="build/i2ptunnel.war" todir="pkg-temp/webapps/" />
+      <copy file="build/routerconsole.war" todir="pkg-temp/webapps/" />
+      <copy file="build/addressbook.jar" todir="pkg-temp/lib/" />
+      <copy file="build/susimail.war" todir="pkg-temp/webapps/" />
+      <copy file="build/susidns.war" todir="pkg-temp/webapps/" />
+      <copy file="build/imagegen.war" todir="pkg-temp/webapps/" />
+      <copy file="build/jsonrpc.war" todir="pkg-temp/webapps/" />
+      <copy file="build/i2psnark.war" todir="pkg-temp/webapps/" />
 
-     <!-- Copy configs and misc files -->
-     <copy file="apps/i2psnark/i2psnark.config" todir="pkg-temp/" />
-     <copy file="installer/resources/blocklist.txt" todir="pkg-temp/" />
-     <copy file="installer/resources/blocklist_tor.txt" todir="pkg-temp/" />
-     <copy file="installer/resources/clients.config" todir="pkg-temp/" />
-     <copy file="installer/resources/i2ptunnel.config" todir="pkg-temp/" />
-     <copy file="installer/resources/wrapper.config" todir="pkg-temp/" />
-     <copy file="installer/resources/wrapper.config.commented" todir="pkg-temp/" />
-     <copy file="installer/resources/hosts.txt" todir="pkg-temp/" />
-     <copy file="INSTALL-headless.txt" todir="pkg-temp/" />
+      <!-- Copy configs and misc files -->
+      <copy file="apps/i2psnark/i2psnark.config" todir="pkg-temp/" />
+      <copy file="installer/resources/blocklist.txt" todir="pkg-temp/" />
+      <copy file="installer/resources/blocklist_tor.txt" todir="pkg-temp/" />
+      <copy file="installer/resources/clients.config" todir="pkg-temp/" />
+      <copy file="installer/resources/i2ptunnel.config" todir="pkg-temp/" />
+      <copy file="installer/resources/wrapper.config" todir="pkg-temp/" />
+      <copy file="installer/resources/wrapper.config.commented" todir="pkg-temp/" />
+      <copy file="installer/resources/hosts.txt" todir="pkg-temp/" />
+      <copy file="INSTALL-headless.txt" todir="pkg-temp/" />
 
-     <!-- Proxy script, windows icons etc -->
-     <copy file="apps/proxyscript/i2pProxy.pac" todir="pkg-temp/scripts/" />
-     <copy file="installer/resources/startconsole.html" todir="pkg-temp/docs/" />
-     <copy file="installer/resources/windows/start.ico" todir="pkg-temp/docs/" />
-     <copy file="installer/resources/windows/stop.ico" todir="pkg-temp/docs/" />
-     <copy file="installer/resources/windows/console.ico" todir="pkg-temp/docs/" />
-     <copy file="installer/resources/windows/uninstall.ico" todir="pkg-temp/docs/" />
+      <!-- Proxy script, windows icons etc -->
+      <copy file="apps/proxyscript/i2pProxy.pac" todir="pkg-temp/scripts/" />
+      <copy file="installer/resources/startconsole.html" todir="pkg-temp/docs/" />
+      <copy file="installer/resources/windows/start.ico" todir="pkg-temp/docs/" />
+      <copy file="installer/resources/windows/stop.ico" todir="pkg-temp/docs/" />
+      <copy file="installer/resources/windows/console.ico" todir="pkg-temp/docs/" />
+      <copy file="installer/resources/windows/uninstall.ico" todir="pkg-temp/docs/" />
 
       <!-- Eepsite stuff here -->
       <copy todir="pkg-temp/eepsite/">
@@ -1871,30 +1871,30 @@
   </target>
 
   <target name="pack200">
-    <!-- Unix and friends -->
-      <exec executable="sh" osfamily="unix" failonerror="true">
-        <arg value="-c" />
-            <arg value="find pkg-temp/lib/*.jar pkg-temp/webapps/*war -type f | parallel 'echo Pack200 compression for: {} &amp;&amp;
+    <!-- Unix and friends (requires gnu parallel) -->
+    <exec executable="sh" osfamily="unix" failonerror="true">
+      <arg value="-c" />
+      <arg value="find pkg-temp/lib/*.jar pkg-temp/webapps/*war -type f | parallel 'echo Pack200 compression for: {} &amp;&amp;
                         mv {} {}.jar &amp;&amp; pack200 --effort=6 --modification-time=latest --segment-limit=-1 -g {}.pack {}.jar &amp;&amp;
                         rm -f {}.jar'" />
-      </exec>
+    </exec>
 
-      <!-- macOS -->
-      <exec executable="sh" osfamily="mac" failonerror="true">
-        <arg value="-c" />
-        <arg value="for i in pkg-temp/lib/*.jar pkg-temp/webapps/*war; do echo 'Pack200 compression for:' $i;
+    <!-- macOS -->
+    <exec executable="sh" osfamily="mac" failonerror="true">
+      <arg value="-c" />
+      <arg value="for i in pkg-temp/lib/*.jar pkg-temp/webapps/*war; do echo 'Pack200 compression for:' $i;
                     mv $i $i.jar &amp;&amp; pack200 --effort=6 --modification-time=latest --segment-limit=-1 -g $i.pack $i.jar &amp;&amp;
                     rm -f $i.jar &amp; done; wait" />
-      </exec>
+    </exec>
 
-      <!-- Windows -->
-      <exec executable="cmd" osfamily="windows" failonerror="true">
-        <arg value="/c" />
-        <arg value="for %i in (pkg-temp\webapps\*.war) do (move %i %i.jar &amp;&amp;
+    <!-- Windows -->
+    <exec executable="cmd" osfamily="windows" failonerror="true">
+      <arg value="/c" />
+      <arg value="for %i in (pkg-temp\webapps\*.war) do (move %i %i.jar &amp;&amp;
                     pack200 -g pkg-temp\webapps\%~ni.war.pack %i.jar &amp;&amp; del %i.jar) &amp;
                     for %i in (pkg-temp\lib\*.jar) do
                     (pack200 --effort=6 --modification-time=latest --segment-limit=-1 -g %i.pack %i &amp;&amp; del %i)" />
-      </exec>
+    </exec>
   </target>
 
   <target name="repack200">
