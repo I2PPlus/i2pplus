@@ -1928,9 +1928,7 @@
     <parallel>
       <copy file="build/sam.jar" todir="pkg-temp/lib/" />
       <copy file="build/i2psnark.jar" todir="pkg-temp/lib" />
-      <!-- include systray changes in 0.7.5 -->
       <copy file="build/systray.jar" todir="pkg-temp/lib/" />
-      <!-- removed from updater in 0.9, added back in 0.9.26 -->
       <copy file="build/desktopgui.jar" todir="pkg-temp/lib/" />
       <copy file="build/pack200.jar" todir="pkg-temp/lib" />
       <copy file="build/susimail.war" todir="pkg-temp/webapps/" />
@@ -2043,21 +2041,21 @@
 
   <!-- All jetty jars required for update. (TODO do we need to bother updating jasper?) -->
   <target name="prepjupdate" depends="prepupdate, buildWEB">
-    <copy todir="pkg-temp/lib">
-      <fileset dir="build" includes="commons*.jar jasper*.jar javax*.jar jetty*.jar jsp*.jar org.mortbay.*.jar" />
-    </copy>
-    <!--  We have to package the new eepsite files for MigrateJetty.java, but we
-          can't overwrite an existing eepsite dir in a non-split configuration.
-     -->
-    <copy todir="pkg-temp/eepsite-jetty9">
-      <fileset dir="installer/resources/eepsite" includes="*.xml contexts/* etc/*" />
-    </copy>
-    <copy todir="pkg-temp/eepsite/docroot">
-      <fileset dir="installer/resources/eepsite/docroot" includes="*.html *.ico .resources/* help/*" />
-    </copy>
-    <copy todir="pkg-temp/eepsite-jetty9.3">
-      <fileset dir="installer/resources/eepsite-jetty9.3" />
-    </copy>
+    <parallel>
+      <copy todir="pkg-temp/lib">
+        <fileset dir="build" includes="commons*.jar jasper*.jar javax*.jar jetty*.jar jsp*.jar org.mortbay.*.jar" />
+      </copy>
+      <!--  We have to package the new eepsite files for MigrateJetty.java, but we can't overwrite an existing eepsite dir in a non-split configuration. -->
+      <copy todir="pkg-temp/eepsite-jetty9">
+        <fileset dir="installer/resources/eepsite" includes="*.xml contexts/* etc/*" />
+      </copy>
+      <copy todir="pkg-temp/eepsite/docroot">
+        <fileset dir="installer/resources/eepsite/docroot" includes="*.html *.ico .resources/* help/*" />
+      </copy>
+      <copy todir="pkg-temp/eepsite-jetty9.3">
+        <fileset dir="installer/resources/eepsite-jetty9.3" />
+      </copy>
+    </parallel>
   </target>
 
   <target name="delete-j6-update">
@@ -2127,8 +2125,7 @@
   </target>
 
   <!-- This makes i2pinstall.exe from install.jar using the bundled launch4j.
-         Warning: launch4j-created files CANNOT be Windows-signed.
-         They will be corrupted.
+       Warning: launch4j-created files CANNOT be Windows-signed - they will be corrupted.
     -->
   <target name="installerexe" depends="launch4j" unless="noExe">
     <echo message="See the file &apos;build.properties&apos; if this step fails." />
@@ -2146,22 +2143,19 @@
     <chmod type="file" file="${izpack5.home}/utils/wrappers/izpack2exe/7za" perm="+x" />
     <chmod type="file" file="${izpack5.home}/utils/wrappers/izpack2exe/izpack2exe.py" perm="+x" />
     <!--
-             Note that we must specify the 7za path to use the one from IzPack, which is very old.
-             Either 7zr (from Debian package p7zip) or 7za (from Debian package p7zip-full)
-             will work, but ONLY if the 7za/7zr command line is changed in izpack2exe.py
-             as follows, because their default is LZMA2, which dosn't work on Windows.
-             So we don't want any Debian 7za picked up in the PATH.
-             See /usr/share/doc/p7zip/DOC/MANUAL/cmdline/switches/method.htm
-             old:
-             p7zcmd = '"%s" a -mmt -t7z -mx=9 installer.7z "%s"' % (p7z, files)
-             new:
-             p7zcmd = '"%s" a -mmt -t7z -mx=9 -m0=LZMA installer.7z "%s"' % (p7z, files)
+       Note that we must specify the 7za path to use the one from IzPack, which is very old.
+       Either 7zr (from Debian package p7zip) or 7za (from Debian package p7zip-full)
+       will work, but ONLY if the 7za/7zr command line is changed in izpack2exe.py
+       as follows, because their default is LZMA2, which dosn't work on Windows.
 
-             We also use IzPack's customized 7zS.sfx file, which uses a customized icon
-             (but not our icon, sadly)
+       So we don't want any Debian 7za picked up in the PATH.
+       See /usr/share/doc/p7zip/DOC/MANUAL/cmdline/switches/method.htm
+       old: p7zcmd = '"%s" a -mmt -t7z -mx=9 installer.7z "%s"' % (p7z, files)
+       new: p7zcmd = '"%s" a -mmt -t7z -mx=9 -m0=LZMA installer.7z "%s"' % (p7z, files)
 
-             More info: https://izpack.atlassian.net/wiki/spaces/IZPACK/pages/491541/IzPack+Utilities
-        -->
+       We also use IzPack's customized 7zS.sfx file, which uses a customized icon (but not our icon, sadly)
+       More info: https://izpack.atlassian.net/wiki/spaces/IZPACK/pages/491541/IzPack+Utilities
+    -->
 
     <exec executable="${izpack5.home}/utils/wrappers/izpack2exe/izpack2exe.py" failonerror="true">
       <arg value="--file=${basedir}/install.jar" />
@@ -2447,7 +2441,7 @@
   <target name="findbugs" depends="build2, buildUtilityJar">
     <echo message="Starting findbugs, this will take a while..." />
     <!-- ref: https://github.com/spotbugs/spotbugs/issues/148-->
-    <echo message="If this doesn't work with Java 9+. try Java 8" />
+    <echo message="If this doesn't work with Java 9 or later, try Java 8" />
     <exec executable="nice" failonerror="true">
       <arg value="findbugs" />
       <arg value="-textui" />
@@ -2488,8 +2482,17 @@
     <echo message="Findbugs output written to findbugs.html" />
   </target>
 
-  <!-- this is the same dependency as pkg, but with updater200 in the middle,
-         since preppkg puts too much stuff in pkg-temp -->
+  <target name="spotbugs" depends="jar">
+    <taskdef resource="edu/umd/cs/findbugs/anttask/tasks.properties" classpath="/usr/share/ant/lib/spotbugs-ant.jar" />
+    <property name="spotbugs.home" value="/usr/share/ant/lib/" />
+    <spotbugs home="${spotbugs.home}" output="html" outputFile="spotbugs.html" effort="max" debug="true" reportLevel="high">
+      <auxAnalyzepath path="./build" />
+      <auxClasspath path="build/commons-el.jar:build/jasper-runtime.jar:build/javax.servlet.jar:build/org.mortbay.jetty.jar:build/jrobin.jar:installer/lib/wrapper/all/wrapper.jar:apps/susidns/src/lib/standard.jar:apps/susidns/src/lib/jstl.jar" />
+    </spotbugs>
+    <echo message="Spotbugs output written to spotbugs.html" />
+  </target>
+
+  <!-- this is the same dependency as pkg, but with updater200 in the middle, since preppkg puts too much stuff in pkg-temp -->
 
   <!-- Release targets - pick one: with Jbigi, GeoIP, or neither -->
   <target name="release">
