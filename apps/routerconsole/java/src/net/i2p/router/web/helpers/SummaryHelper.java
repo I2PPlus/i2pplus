@@ -658,7 +658,6 @@ public class SummaryHelper extends HelperBase {
         DecimalFormat fmt;
         if ((in >= 1000 || out >= 1000) && mega) {fmt = new DecimalFormat("#0.00");}
         else if ((in >= 10 || out >= 10) && mega) {fmt = new DecimalFormat("#0.0");}
-        else if (!mega || in <= 10 * 1000 || out <= 10 * 1000) {fmt = new DecimalFormat("#0.0");}
         else {fmt = new DecimalFormat("#0.0");}
         return fmt.format(in) + THINSP + fmt.format(out) + "&nbsp;" + (mega ? 'M' : 'K');
     }

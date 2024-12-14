@@ -36,20 +36,13 @@ public class TunnelPoolSettings {
     private int _priority;
     private final Set<Hash> _aliases;
     private Hash _aliasOf;
-
-    /** prefix used to override the router's defaults for clients */
-    // unimplemented
-    //public static final String  PREFIX_DEFAULT = "router.defaultPool.";
-
     /** prefix used to configure the inbound exploratory pool */
     public static final String      PREFIX_INBOUND_EXPLORATORY = "router.inboundPool.";
     /** prefix used to configure the outbound exploratory pool */
     public static final String      PREFIX_OUTBOUND_EXPLORATORY = "router.outboundPool.";
-
     public static final String      PROP_NICKNAME = "nickname";
     public static final String      PROP_QUANTITY = "quantity";
     public static final String      PROP_BACKUP_QUANTITY = "backupQuantity";
-    // public static final String      PROP_REBUILD_PERIOD = "rebuildPeriod";
     public static final String      PROP_DURATION = "duration";
     public static final String      PROP_LENGTH = "length";
     public static final String      PROP_LENGTH_VARIANCE = "lengthVariance";
@@ -59,35 +52,24 @@ public class TunnelPoolSettings {
     public static final String      PROP_PRIORITY = "priority";
     /** @since 0.9.17 */
     public static final String      PROP_RANDOM_KEY = "randomKey";
-
-//    public static final int         DEFAULT_QUANTITY = 2;
     public static final int         DEFAULT_QUANTITY = 3;
     public static final int         DEFAULT_BACKUP_QUANTITY = 0;
-    // public static final int         DEFAULT_REBUILD_PERIOD = 60*1000;
     public static final int         DEFAULT_DURATION = 10*60*1000;
-    // public static final int         DEFAULT_LENGTH = SystemVersion.isAndroid() ? 2 : 3;
-
     private static final boolean    isSlow = SystemVersion.isSlow();
-
     /** client only */
     private static final int        DEFAULT_IB_LENGTH = 3;
     private static final int        DEFAULT_OB_LENGTH = 3;
     private static final int        DEFAULT_LENGTH_VARIANCE = 0;
     /** expl only */
-//    private static final int        DEFAULT_IB_EXPL_LENGTH = 2;
-    private static final int        DEFAULT_IB_EXPL_LENGTH = 3;
+    private static final int        DEFAULT_IB_EXPL_LENGTH = isSlow ? 2 : 3;
     private static final int        DEFAULT_OB_EXPL_LENGTH = isSlow ? 2 : 3;
-    // private static final int        DEFAULT_OB_EXPL_LENGTH = 2;
-    private static final int        DEFAULT_IB_EXPL_LENGTH_VARIANCE = isSlow ? 0 : 0;
-    private static final int        DEFAULT_OB_EXPL_LENGTH_VARIANCE = 0;
-    // private static final int        DEFAULT_OB_EXPL_LENGTH_VARIANCE = isSlow ? 0 : 1;
-
+    private static final int        DEFAULT_IB_EXPL_LENGTH_VARIANCE = isSlow ? 0 : 1;
+    private static final int        DEFAULT_OB_EXPL_LENGTH_VARIANCE = isSlow ? 0 : 1;
     public static final boolean     DEFAULT_ALLOW_ZERO_HOP = false;
     public static final int         DEFAULT_IP_RESTRICTION = 1;    // class A (/8)
     private static final int        MIN_PRIORITY = -25;
     private static final int        MAX_PRIORITY = 25;
     private static final int        EXPLORATORY_PRIORITY = 30;
-
     private final long _msgIDBloomXor;
 
     /**

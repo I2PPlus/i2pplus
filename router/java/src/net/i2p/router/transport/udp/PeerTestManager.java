@@ -223,7 +223,13 @@ class PeerTestManager {
         PeerTestState test = new PeerTestState(ALICE, bob, bobIP instanceof Inet6Address,
                                                _context.random().nextLong(MAX_NONCE),
                                                _context.clock().now());
- 
+
+        if (!(bob instanceof PeerState2)) {
+            if (_log.shouldWarn())
+                _log.warn("Bob is not an instance of PeerState2, cannot proceed with the test.");
+            return false;
+        }
+
         PeerState2 b2 = (PeerState2) bob;
         // We test our current address, NOT the IP we have with Bob, which may have changed since,
         // especially with IPv6 transient addresses,

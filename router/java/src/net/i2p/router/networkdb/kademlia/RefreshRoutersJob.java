@@ -22,20 +22,20 @@ import net.i2p.util.VersionComparator;
  * Go through all the routers once, after startup, and refetch their router infos.
  * This should be run once after startup (and preferably after any reseed is complete,
  * but we don't have any indication when that is).
- * This will help routers that start after being shutdown for many days or weeks,
- * as well as newly-reseeded routers, since
- * validate() in KNDF doesn't start failing and refetching until the router has been
- * up for an hour.
- * To improve integration even more, we fetch the floodfills first.
- * Ideally this should complete within the first half-hour of uptime.
  *
- * As of 0.9.45, periodically rerun, to maintain a minimum number of
- * floodfills, primarily for hidden mode. StartExplorersJob will get us
- * to about 100 ffs and maintain that for a while, but they will eventually
- * start to expire. Use this to get us to 300 or more. Each pass of this
- * will gain us about 150 ffs. If we have more than 300 ffs, we just
- * requeue to check later. Otherwise this will grow our netdb
- * almost unbounded, as it prevents most normal expiration.
+ * This will help routers that start after being shutdown for many days or weeks, as well
+ * as newly-reseeded routers, since validate() in KNDF doesn't start failing and refetching
+ * until the router has been up for an hour.
+ *
+ * To improve integration even more, we fetch the floodfills first. Ideally this should
+ * complete within the first half-hour of uptime.
+ *
+ * As of 0.9.45, periodically rerun, to maintain a minimum number of floodfills, primarily
+ * for hidden mode. StartExplorersJob will get us to about 100 ffs and maintain that for a
+ * while, but they will eventually start to expire. Use this to get us to 300 or more.
+ *
+ * Each pass will gain us about 150 ffs. If we have more than 300 ffs, we requeue to check later.
+ * Otherwise this will grow our netdb almost unbounded, as it prevents most normal expiration.
  *
  * @since 0.8.8
  */
@@ -158,7 +158,7 @@ class RefreshRoutersJob extends JobImpl {
                     if (refreshUninteresting || !weAreFF) {routerAge = 15*60*1000;}
                     else if (netDbCount > 6000) {routerAge = 8*60*60*1000;}
                     else if (netDbCount > 4000) {routerAge = 6*60*60*1000;}
-                } else {routerAge = Integer.valueOf(freshness)*60*60*1000;}
+                } else {routerAge = Integer.parseInt(freshness)*60*60*1000;}
 //                if (ri.getPublished() < older) {
                 if (older > routerAge) {
                     if (_log.shouldInfo())
@@ -167,7 +167,7 @@ class RefreshRoutersJob extends JobImpl {
                                       "\n* Published: " + new Date(ri.getPublished()));
                         else
                             _log.info("Refreshing Router [" + h.toBase64().substring(0,6) + "] - " +
-                                      Integer.valueOf(refreshTimeout) + "s timeout" +
+                                      Integer.parseInt(refreshTimeout) + "s timeout" +
                                       "\n* Published: " + new Date(ri.getPublished()));
 //                    _facade.search(h, null, null, 15*1000, false);
 //                    Job DropLookupFoundJob = new _facade.DropLookupFoundJob();
@@ -179,7 +179,7 @@ class RefreshRoutersJob extends JobImpl {
                     else if (refreshTimeout == null && uptime > 8*60*60*1000)
                         _facade.search(h, null, null, 10*1000, false);
                     else
-                        _facade.search(h, null, null, Integer.valueOf(refreshTimeout)*1000, false);
+                        _facade.search(h, null, null, Integer.parseInt(refreshTimeout)*1000, false);
                     break;
                 } else {
                     if (_log.shouldDebug()) {
@@ -218,7 +218,7 @@ class RefreshRoutersJob extends JobImpl {
             if (_log.shouldDebug())
                 _log.debug("Next RouterInfo check in " + randomDelay + "ms");
         } else {
-            requeue(Integer.valueOf(refresh));
+            requeue(Integer.parseInt(refresh));
             if (_log.shouldDebug())
                 _log.debug("Next RouterInfo check in " + refresh + "ms");
         }

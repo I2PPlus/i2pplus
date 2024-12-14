@@ -155,12 +155,9 @@ class NetDbRenderer {
                 ri = (RouterInfo) netdb.lookupLocallyWithoutValidation(hash);
                 if (ri != null) {renderRouterInfo(buf, ri, false, true);}
                 else {
-                    buf.append("<div class=netdbnotfound>");
-                    if (routerPrefix != null) {
-                        buf.append(_t("Router")).append(' ').append(routerPrefix)
-                           .append(' ').append(banned ? _t("is banned") : _t("not found in network database")).append(".");
-                    } else {buf.append(_t("No results"));}
-                    buf.append("</div>");
+                    buf.append("<div class=netdbnotfound>").append(_t("Router")).append(' ')
+                       .append(routerPrefix).append(' ').append(banned ? _t("is banned") : _t("not found in network database"))
+                       .append(".").append("</div>");
                 }
             } else {
                 buf.append("<div class=netdbnotfound>").append(_t("Bad Base64 Router hash")).append(' ')
@@ -1373,19 +1370,9 @@ class NetDbRenderer {
                                                .replace("O", "<a href=\"/netdb?caps=O\"><span class=tier>O</span></a>")
                                                .replace("P", "<a href=\"/netdb?caps=P\"><span class=tier>P</span></a>")
                                                .replace("X", "<a href=\"/netdb?caps=X\"><span class=tier>X</span></a>");
-        if (hasD) {
-            if (isU) {caps = caps.replace("D","").replace("class=tier", "class=\"tier isD\"").replace("\"><span class", "D\"><span class");}
-            else if (isR) {caps = caps.replace("D","").replace("class=tier", "class=\"tier isD\"").replace("\"><span class", "D\"><span class");}
-            else {caps = caps.replace("D","").replace("class=tier", "class=\"tier isD\"").replace("\"><span class", "D\"><span class");}
-        } else if (hasE) {
-            if (isU) {caps = caps.replace("E","").replace("class=tier", "class=\"tier isE\"").replace("\"><span class", "E\"><span class");}
-            else if (isR) {caps = caps.replace("E","").replace("class=tier", "class=\"tier isE\"").replace("\"><span class", "E\"><span class");}
-            else {caps = caps.replace("E","").replace("class=tier", "class=\"tier isE\"").replace("\"><span class", "E\"><span class");}
-        } else if (hasG) {
-            if (isU) {caps = caps.replace("G","").replace("class=tier", "class=\"tier isG\"").replace("\"><span class", "G\"><span class");}
-            else if (isR) {caps = caps.replace("G","").replace("class=tier", "class=\"tier isG\"").replace("\"><span class", "G\"><span class");}
-            else {caps = caps.replace("G","").replace("class=tier", "class=\"tier isG\"").replace("\"><span class", "G\"><span class");}
-        }
+        if (hasD) {caps = caps.replace("D","").replace("class=tier", "class=\"tier isD\"").replace("\"><span class", "D\"><span class");}
+        else if (hasE) {caps = caps.replace("E","").replace("class=tier", "class=\"tier isE\"").replace("\"><span class", "E\"><span class");}
+        else if (hasG) {caps = caps.replace("G","").replace("class=tier", "class=\"tier isG\"").replace("\"><span class", "G\"><span class");}
         if (hasD) {
             if (isR) {
                 caps = caps.replace("caps=KD", "caps=KRD")

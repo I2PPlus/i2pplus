@@ -647,7 +647,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         // yikes2 don't do this either - deadlock! // getKnownRouters() < MIN_REMAINING_ROUTERS ||
         long uptime = _context.router().getUptime();
         String nofail = _context.getProperty("router.noFailGracePeriod");
-        if (nofail != null) {DONT_FAIL_PERIOD = Long.valueOf(nofail)*60*1000;}
+        if (nofail != null) {DONT_FAIL_PERIOD = Long.parseLong(nofail)*60*1000;}
         int knownRouters = getKBucketSetSize();
         if (info.getNetworkId() == _networkID && (knownRouters < MIN_REMAINING_ROUTERS ||(uptime < DONT_FAIL_PERIOD && knownRouters < 2000) ||
             _context.commSystem().countActivePeers() <= MIN_ACTIVE_PEERS) || _context.commSystem().getStatus() == Status.DISCONNECTED) {

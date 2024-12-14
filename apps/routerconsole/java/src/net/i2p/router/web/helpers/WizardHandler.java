@@ -48,7 +48,6 @@ public class WizardHandler extends FormHandler {
                 synchronized (_helper) {
                     if (_helper.isNDTSuccessful()) {addFormNotice(_t("Bandwidth test completed successfully"));}
                     else if (_helper.isNDTComplete()) {addFormError(_t("Bandwidth test failed"));}
-                    else if (_helper.isNDTRunning()) {addFormError(_t("Bandwidth test did not complete"));}
                     else {addFormError(_t("Bandwidth test did not complete"));} // didn't run at all?
                 }
             } else if ("5".equals(page)) {

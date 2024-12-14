@@ -602,8 +602,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public static String rdnsCacheSize() {
         synchronized (rdnslock) {
             File cache = new File(RDNS_CACHE_FILE);
-            long fileSize = cache != null ? cache.length() / 1024 : 0;
-            return cache != null ? String.valueOf(fileSize) + "KB" : "Cache file not found";
+            long fileSize = cache.length() / 1024;
+            return String.valueOf(fileSize) + "KB";
         }
     }
 
@@ -1011,7 +1011,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             String v = ri.getVersion();
             String ip = net.i2p.util.Addresses.toString(getValidIP(ri));
             buf.append("<table class=rid><tr><td class=rif>");
-            if (ri != null && c != null) {
+            if (c != null) {
                 String countryName = getCountryName(c);
                 if (countryName.length() > 2) {countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);}
                 buf.append("<a href=\"/netdb?c=").append(c).append("\"><img width=20 height=15 alt=\"")
@@ -1024,20 +1024,16 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 buf.append("\" src=\"/flags.jsp?c=").append(c).append("\"></a>");
             } else {
                 buf.append("<img width=20 height=15 alt=\"??\"").append(" src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown"));
-                if (ri != null && ip != null) {buf.append(" &bullet; ").append(ip);}
+                if (ip != null) {buf.append(" &bullet; ").append(ip);}
                 buf.append("\">");
             }
             buf.append("</td><td class=rih>");
-            if (ri != null) {
-                buf.append("<a title=\"");
-                if (caps.contains("f") && !extended) {buf.append(_t("Floodfill"));}
-                if (v != null) {
-                    if (!extended) {buf.append(" &bullet; ");}
-                }
-                buf.append(v).append("\" href=\"netdb?r=").append(h.substring(0,10)).append("\">");
-            }
+            buf.append("<a title=\"");
+            if (caps.contains("f") && !extended) {buf.append(_t("Floodfill"));}
+            if (v != null) {if (!extended) {buf.append(" &bullet; ");}}
+            buf.append(v).append("\" href=\"netdb?r=").append(h.substring(0,10)).append("\">");
             buf.append(h.substring(0,4));
-            if (ri != null) {buf.append("</a>");}
+            buf.append("</a>");
             if (extended) {buf.append("</td>").append(renderPeerCaps(peer, true));}
         } else {
             buf.append("<table class=rid><tr><td class=rif>").append(renderPeerFlag(peer))

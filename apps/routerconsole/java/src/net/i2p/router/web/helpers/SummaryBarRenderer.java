@@ -1108,7 +1108,7 @@ class SummaryBarRenderer {
            .append(_helper.getInboundTunnels()).append(" / ").append(_helper.getOutboundTunnels())
            .append("</span></td></tr>\n");
 
-            if ((maxTunnels == null || partTunnels > 0 || Integer.valueOf(maxTunnels) > 0) &&
+            if ((maxTunnels == null || partTunnels > 0 || Integer.parseInt(maxTunnels) > 0) &&
                 !_context.router().isHidden() && ri != null && !ri.getBandwidthTier().equals("K") && partTunnels > 0) {
                 buf.append("<tr title=\"")
                    .append(_t("Tunnels we are participating in, directly contributing bandwidth to the network"))
@@ -1131,7 +1131,7 @@ class SummaryBarRenderer {
                    .append("%</span></td></tr>\n");
             }
 
-            if ((maxTunnels == null || Integer.valueOf(maxTunnels) > 0) && !_context.router().isHidden() && ri != null &&
+            if ((maxTunnels == null || Integer.parseInt(maxTunnels) > 0) && !_context.router().isHidden() && ri != null &&
                  !ri.getBandwidthTier().equals("K") && !_helper.getShareRatio().toString().equals("0")) {
                 buf.append("<tr title=\"")
                    .append(_t("The ratio of tunnel hops we provide to tunnel hops we use - a value greater than 1.00 indicates a positive contribution to the network"))

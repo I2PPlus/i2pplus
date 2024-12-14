@@ -94,7 +94,7 @@ class StartExplorersJob extends JobImpl {
                     if (getContext().jobQueue().getMaxLag() > 500 || getContext().throttle().getMessageDelay() > 1000 || highload)
                         num = 1;
                 } else {
-                    num = Integer.valueOf(exploreBuckets);
+                    num = Integer.parseInt(exploreBuckets);
                 }
                 Set<Hash> toExplore = selectKeysToExplore(num);
                 if (_log.shouldInfo())
@@ -174,7 +174,7 @@ class StartExplorersJob extends JobImpl {
             else if ((uptime < STARTUP_TIME && netDbSize < MIN_ROUTERS) || isHidden || isSlow) {return MIN_RERUN_DELAY_MS;}
             else if (netDbSize > MAX_ROUTERS) {return MAX_RERUN_DELAY_MS * 4;} // 40mins if over 5,000 known peers
             else {return delay;}
-        } else {return Integer.valueOf(exploreDelay) * 1000;}
+        } else {return Integer.parseInt(exploreDelay) * 1000;}
     }
 
     /**

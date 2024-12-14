@@ -146,15 +146,18 @@ class TransientDataStore implements DataStore {
         } else if (DatabaseEntry.isLeaseSet(type)) {
             LeaseSet ls = (LeaseSet)data;
             String receivedAs = ls.getReceivedAsPublished() ? " -> Published via peer" : ls.getReceivedAsReply() ? " -> In response to query" : "";
+
             if (old != null) {
                 LeaseSet ols = (LeaseSet) old;
                 long oldDate, newDate;
                 if (type != DatabaseEntry.KEY_TYPE_LEASESET &&
-                    ols.getType() != DatabaseEntry.KEY_TYPE_LEASESET) {
-                    LeaseSet2 ls2 = (LeaseSet2) ls;
-                    LeaseSet2 ols2 = (LeaseSet2) ols;
-                    oldDate = ols2.getPublished();
-                    newDate = ls2.getPublished();
+                ols.getType() != DatabaseEntry.KEY_TYPE_LEASESET) {
+                    if (ls instanceof LeaseSet2 && ols instanceof LeaseSet2) {
+                        LeaseSet2 ls2 = (LeaseSet2) ls;
+                        LeaseSet2 ols2 = (LeaseSet2) ols;
+                        oldDate = ols2.getPublished();
+                        newDate = ls2.getPublished();
+                    } else {throw new IllegalArgumentException("Expected LeaseSet2 but got a different type");}
                 } else {
                     oldDate = ols.getEarliestLeaseDate();
                     newDate = ls.getEarliestLeaseDate();

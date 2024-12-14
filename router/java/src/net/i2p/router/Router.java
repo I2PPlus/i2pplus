@@ -1596,7 +1596,7 @@ public class Router implements RouterClock.ClockShiftListener {
             //Runtime.getRuntime().halt(exitCode);
             // allow the Runtime shutdown hooks to execute
             Runtime.getRuntime().exit(exitCode);
-        } else if (SystemVersion.isAndroid()) {Runtime.getRuntime().gc();}
+        }
         changeState(State.STOPPED);
     }
 

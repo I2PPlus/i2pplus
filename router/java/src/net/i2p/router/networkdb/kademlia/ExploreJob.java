@@ -179,7 +179,7 @@ class ExploreJob extends SearchJob {
             if (_log.shouldInfo()) {
                 _log.info("Initiating Exploratory Search -> Max " + exploreBredth + " concurrent (custom configuration)");
             }
-            return Integer.valueOf(exploreBredth);
+            return Integer.parseInt(exploreBredth);
         } else {
             if (_log.shouldInfo()) {
                 _log.info("Initiating Exploratory Search -> Max " + EXPLORE_BREDTH + " concurrent");

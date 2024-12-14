@@ -1285,7 +1285,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (str == null || str.isEmpty()) {return false;}
         String regex = "^-?[0-9]\\d*$";
         if (!str.matches(regex)) {return false;}
-        int num = Integer.valueOf(str);
+        int num = Integer.parseInt(str);
         return true;
     }
 
@@ -4503,8 +4503,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append("<img alt=\"\" width=16 height=16 class=favicon border=0 src=\"")
                        .append(ppath).append("\" data-lb data-lb-caption=\"")
                        .append(item.getName()).append("\" data-lb-group=\"allInDir\"></a>");
-                } else if (fai.isDirectory) {buf.append(toSVG(icon, _t("Open"))).append("</a>");}
-                else {buf.append(toSVG(icon, _t("Open"))).append("</a>");}
+                } else {buf.append(toSVG(icon, _t("Open"))).append("</a>");}
                 if (isAudio) {buf.append("</audio>");}
                 else if (isVideo) {buf.append("</video>");}
             } else {buf.append(toSVG(icon));}

@@ -1239,7 +1239,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         long uptime = _context.router().getUptime();
         boolean upLongEnough = uptime > 20*60*1000;
         boolean dontFail = _context.router().getUptime() < DONT_FAIL_PERIOD;
-        if (validateUptime != null) {upLongEnough = _context.router().getUptime() > Integer.valueOf(validateUptime)*60*1000;}
+        if (validateUptime != null) {upLongEnough = _context.router().getUptime() > Integer.parseInt(validateUptime)*60*1000;}
         // Once we're over MIN_ROUTERS routers, reduce the expiration time down from the default,
         // as a crude way of limiting memory usage.
         // i.e. at 2*MIN_ROUTERS routers the expiration time will be about half the default, etc.
@@ -1290,7 +1290,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                     return "Invalid NTCP address";
                 }
             }
-            if (expireRI != null) {adjustedExpiration = Integer.valueOf(expireRI)*60*60*1000;}
+            if (expireRI != null) {adjustedExpiration = Integer.parseInt(expireRI)*60*60*1000;}
             else if (floodfillEnabled()) {adjustedExpiration = ROUTER_INFO_EXPIRATION_FLOODFILL;}
             else {
                 adjustedExpiration = existing > 4000 ? ROUTER_INFO_EXPIRATION / 3 :
@@ -1432,7 +1432,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             }
 
             if (expireRI != null && !isUs) {
-                if (upLongEnough && (routerInfo.getPublished() < now - Long.valueOf(expireRI)*60*60*1000l) ) {
+                if (upLongEnough && (routerInfo.getPublished() < now - Long.parseLong(expireRI)*60*60*1000l) ) {
                     long age = now - routerInfo.getPublished();
                     return caps + " Router [" + routerId + "] -> Published " + DataHelper.formatDuration(age) + " ago";
                 }
