@@ -226,6 +226,10 @@ class ConnectionHandler {
      *  check to see if it has a home now, else drop it ...
      */
     private void reReceivePacket(Packet packet) {
+        if (packet == null) {
+            if (_log.shouldWarn()) {_log.warn("Received null packet, ignoring...");}
+            return;
+        }
         Connection con = _manager.getConnectionByOutboundId(packet.getReceiveStreamId());
         if (con != null) {
             // Send it through the packet handler again
@@ -242,7 +246,7 @@ class ConnectionHandler {
             }
             // goodbye
             if (_log.shouldWarn()) {
-                _log.warn("Connection not found for queued non-SYN packet, dropping" + (packet != null ? ": " + packet : "..."));
+                _log.warn("Connection not found for queued non-SYN packet, dropping... " + packet);
             }
             packet.releasePayload();
         }
@@ -255,13 +259,15 @@ class ConnectionHandler {
      *  @param packet the incoming packet we're responding to
      */
     private void sendReset(Packet packet) {
+        if (packet == null) {
+            if (_log.shouldWarn()) {_log.warn("Received NULL packet, cannot send RESET...");}
+            return;
+        }
         ByteArray ba = _cache.acquire();
         boolean ok = packet.verifySignature(_context, ba.getData());
         _cache.release(ba);
         if (!ok) {
-            if (_log.shouldWarn()) {
-                _log.warn("Can't send RESET in response to unverifiable packet" + (packet != null ? ": " + packet : "..."));
-            }
+            if (_log.shouldWarn()) {_log.warn("Can't send RESET in response to unverifiable packet: " + packet);}
             return;
         }
         PacketLocal reply = new PacketLocal(_context, packet.getOptionalFrom(), packet.getSession());

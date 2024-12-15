@@ -109,9 +109,9 @@ class TransientDataStore implements DataStore {
      *  @return success
      */
     public boolean put(Hash key, DatabaseEntry data) {
+        if (data == null) return false;
         int type = data.getType();
         boolean isRI = type == DatabaseEntry.KEY_TYPE_ROUTERINFO;
-        if (data == null) return false;
         if (_log.shouldDebug()) {
             _log.debug("Saving " + (isRI ? "RouterInfo" : "LeaseSet") + " [" +
                        (isRI ? key.toBase64().substring(0,6) : key.toBase32().substring(0,8)) + "] to persistent datastore...");

@@ -80,26 +80,6 @@ class UDPEndpoint implements SocketListener {
     }
 
     public void setListenPort(int newPort) { _listenPort = newPort; }
-
-/*******
-    public void updateListenPort(int newPort) {
-        if (newPort == _listenPort) return;
-        try {
-            if (_bindAddress == null)
-                _socket = new DatagramSocket(_listenPort);
-            else
-                _socket = new DatagramSocket(_listenPort, _bindAddress);
-            _sender.updateListeningPort(_socket, newPort);
-            // note: this closes the old socket, so call this after the sender!
-            _receiver.updateListeningPort(_socket, newPort);
-            _listenPort = newPort;
-        } catch (SocketException se) {
-            if (_log.shouldError())
-                _log.error("Unable to bind on " + _listenPort);
-        }
-    }
-********/
-
     private static final int MAX_PORT_RETRIES = 20;
 
     /**

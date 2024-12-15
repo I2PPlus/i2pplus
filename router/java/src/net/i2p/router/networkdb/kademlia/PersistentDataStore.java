@@ -290,6 +290,11 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
     private void write(Hash key, DatabaseEntry data) {
+        if (data == null) {
+            if (_log.shouldWarn()) {_log.warn("Attempted to write NULL data for key: " + key);}
+            return;
+        }
+
         RouterInfo ri = (RouterInfo) data;
         boolean isHidden = _context.router().isHidden();
         boolean isUs = key.equals(_context.routerHash());
