@@ -5,24 +5,23 @@
 import {refreshScreenLog} from "./refreshTorrents.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  const inputs = [
-    "input[type=submit]",
-    "input[type=reset]",
-    "input[class^='action']",
-    ".control",
-    ".filter",
-    ".snarkNav",
-    ".toggleview",
-    "#tab_config",
-    ".pagenavcontrols a span"
-  ];
-  const iframe = document.getElementById("processForm");
   const page = document.getElementById("page");
+
+  page.addEventListener("click", (event) => {
+    const clickTarget = event.target;
+
+    if ((clickTarget.matches("input.add") || clickTarget.matches("input.create"))) {
+      event.preventDefault();
+      event.stopPropagation();
+      clickTarget.form.requestSubmit();
+      console.log("create or add button clicked");
+      handleInputClick(clickTarget);
+    }
+  });
 
   const handleInputClick = async (clickTarget) => {
     let delay = 400;
     const isAction = clickTarget.matches("input[class^='action']");
-    const isAddOrCreate = clickTarget.matches("input.add") || clickTarget.matches("input.create");
     const currentForm = clickTarget.closest("form");
     const nonClickedSubmitElements = currentForm && currentForm.id === "torrentslist"
       ? currentForm.querySelectorAll("input[type=submit][class^='action']:not(.depress)")
@@ -30,27 +29,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     clickTarget.classList.add("depress");
 
-    if (isAddOrCreate) {
-      event.preventDefault();
-      await refreshScreenLog(undefined, true);
-    }
-    else if (iframe && isAction) {
-      const formTarget = clickTarget.form.target;
-      if (formTarget === "processForm" && isAction) {delay = 4000;}
-    } else {
+    if (isAction) {
+      const iframe = document.getElementById("processForm");
+      if (iframe) {
+        const formTarget = clickTarget.form.target;
+        if (formTarget === "processForm" && isAction) {delay = 4000;}
+      }
       nonClickedSubmitElements.forEach((el) => el.classList.add("tempDisabled"));
     }
+
+    await refreshScreenLog(undefined, true);
+
     setTimeout(() => {
       clickTarget.classList.replace("depress", "inert");
       nonClickedSubmitElements.forEach((el) => el.classList.remove("tempDisabled"));
     }, delay);
   };
-
-  page.addEventListener("click", (event) => {
-    const clickTarget = event.target;
-    if (inputs.some((selector) => clickTarget.matches(selector))) {
-      if (clickTarget.matches("input[class='actionRemove']") || clickTarget.matches("input[class='actionDelete']")) {return;}
-      handleInputClick(clickTarget);
-    }
-  });
 });

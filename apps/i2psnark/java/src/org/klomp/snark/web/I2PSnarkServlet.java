@@ -2660,15 +2660,14 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append("\">");
                 if (isValid && pct < 100.0) {
                     if (peer.isInterested() && !peer.isChoking() && peer.getUploadRate() > 0) {
-                        buf.append("<span class=unchoked>");
-                        String sizeStr = formatSize(peer.getUploadRate())
-                                                        .replace("iB","")
-                                                        .replace("B", "<span class=left>B")
-                                                        .replace("K", "<span class=left>K")
-                                                        .replace("M", "<span class=left>M")
-                                                        .replace("G", "<span class=left>G");
-                        buf.append("<span class=right>").append(sizeStr).append("</span>");
-                        buf.append("</span>");
+                        buf.append("<span class=unchoked><span class=right>");
+                        buf.append(formatSize(peer.getUploadRate())
+                                                  .replace("iB","")
+                                                  .replace("B", "</span><span class=left>B")
+                                                  .replace("K", "</span><span class=left>K")
+                                                  .replace("M", "</span><span class=left>M")
+                                                  .replace("G", "</span><span class=left>G"));
+                        buf.append("/s</span></span>");
                     } else if (peer.isInterested() && !peer.isChoking()) {
                         buf.append("<span class=\"unchoked idle\" title=\"")
                            .append(_t("Peer is interested but currently idle")).append("\">")
@@ -2681,14 +2680,14 @@ public class I2PSnarkServlet extends BasicServlet {
                             buf.append(_t("Choking (We are not allowing the peer to request pieces)"));
                         }
                         buf.append("\">");
-                        String sizeStr = formatSize(peer.getUploadRate())
+                        buf.append("<span class=unchoked><span class=right>");
+                        buf.append(formatSize(peer.getUploadRate())
                                                   .replace("iB","")
-                                                  .replace("B", "<span class=left>B")
-                                                  .replace("K", "<span class=left>K")
-                                                  .replace("M", "<span class=left>M")
-                                                  .replace("G", "<span class=left>G");
-                        buf.append("<span class=right>").append(sizeStr).append("</span>");
-                        buf.append("</span>");
+                                                  .replace("B", "</span><span class=left>B")
+                                                  .replace("K", "</span><span class=left>K")
+                                                  .replace("M", "</span><span class=left>M")
+                                                  .replace("G", "</span><span class=left>G"));
+                        buf.append("/s</span></span>");
                     }
                 }
 

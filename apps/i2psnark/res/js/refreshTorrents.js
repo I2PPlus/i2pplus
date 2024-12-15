@@ -343,8 +343,10 @@ function refreshOnSubmit() {
           };
           iframe.addEventListener("load", loadHandler);
         });
-        form.requestSubmit();
-        await formSubmitted;
+        if (!clickTarget.classList.includes("add") && !clickTarget.classList.includes("create")) {
+          form.requestSubmit();
+          await formSubmitted;
+        }
         await refreshScreenLog(undefined, true);
       }
     }
