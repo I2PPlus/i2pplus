@@ -67,12 +67,8 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     private NTCP2Options _hisPadding;
 
     // same as I2PTunnelRunner
-//    private static final int BUFFER_SIZE = 4*1024;
     private static final int BUFFER_SIZE = 8*1024;
-//    private static final int MAX_DATA_READ_BUFS = 32;
     private static final int MAX_DATA_READ_BUFS = 64;
-//    private static final int BUFFER_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 4*1024 : 5*1024;
-//    private static final int MAX_DATA_READ_BUFS = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 32 : 36;
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
 
     // 287 - 64 = 223
@@ -485,7 +481,6 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 NTCP2Payload.processPayload(_context, this, payload, 0, _msg3p2len - MAC_SIZE, true);
             } catch (IOException ioe) {
                 if (_log.shouldInfo())
-//                    _log.warn("BAD msg 3 payload", ioe);
                     _log.info("BAD Establishment handshake message #3 payload \n* IO Error:" + ioe.getMessage());
                 // probably payload frame/block problems
                 // setDataPhase() will send termination
@@ -493,7 +488,6 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                     _msg3p2FailReason = NTCPConnection.REASON_FRAMING;
             } catch (DataFormatException dfe) {
                 if (_log.shouldInfo())
-//                    _log.warn("BAD msg 3 payload", dfe);
                     _log.info("BAD Establishment handshake message #3 payload \n* Data Format Exception: " + dfe.getMessage());
                 // probably RI signature failure
                 // setDataPhase() will send termination
@@ -510,7 +504,6 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             } catch (I2NPMessageException ime) {
                 // shouldn't happen, no I2NP msgs in msg3p2
                 if (_log.shouldInfo())
-//                    _log.warn("BAD msg 3 payload", ime);
                     _log.info("BAD Establishment handshake message #3 payload \n* I2NP Message Exception: " + ime.getMessage());
                 // setDataPhase() will send termination
                 if (_msg3p2FailReason < 0)
@@ -546,13 +539,11 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             boolean gseNotNull = gse.getMessage() != null && gse.getMessage() != "null";
             // buffer length error
             if (!_log.shouldWarn())
-//                _log.error("BAD msg 2 out", gse);
                 _log.warn("BAD Outbound Establishment handshake message #2 \n* General Security Exception: " + gse.getMessage());
             fail("BAD Establishment handshake message #2 out", gse);
             return;
         } catch (RuntimeException re) {
             if (!_log.shouldWarn())
-//                _log.error("BAD msg 2 out", re);
                 _log.error("BAD Outbound Establishment handshake message #2 \n* Runtime Exception: " + re.getMessage());
             fail("BAD Establishment handshake message #2 out", re);
             return;
