@@ -25,7 +25,7 @@ class TunnelGatewayPumper implements Runnable {
     private final List<Thread> _threads;
     private volatile boolean _stop;
     private static final int MIN_PUMPERS = 1;
-    private static final int MAX_PUMPERS = SystemVersion.isSlow() ? 4 : 8;
+    private static final int MAX_PUMPERS = SystemVersion.isSlow() ? 2 : 4;
     private static final int QUEUE_BUFFER = SystemVersion.isSlow() ? 16 : 32;
     private final int _pumpers;
 

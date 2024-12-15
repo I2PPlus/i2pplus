@@ -31,11 +31,8 @@ class Reader {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
         _pendingConnections = new LinkedHashSet<NTCPConnection>(16);
-//        _runners = new ArrayList<Runner>(8);
         _runners = new ArrayList<Runner>(16);
-//        _liveReads = new HashSet<NTCPConnection>(8);
         _liveReads = new HashSet<NTCPConnection>(16);
-//        _readAfterLive = new HashSet<NTCPConnection>(8);
         _readAfterLive = new HashSet<NTCPConnection>(16);
     }
 
@@ -79,8 +76,7 @@ class Reader {
         synchronized (_pendingConnections) {
             _readAfterLive.remove(con);
             _pendingConnections.remove(con);
-            // necessary?
-            _pendingConnections.notify();
+            _pendingConnections.notify(); // necessary?
         }
     }
 
@@ -98,16 +94,14 @@ class Reader {
                 try {
                     synchronized (_pendingConnections) {
                         boolean keepReading = (con != null) && _readAfterLive.remove(con);
-                        if (keepReading) {
-                            // keep on reading the same one
-                        } else {
+                        if (keepReading) {} // keep on reading the same one
+                        else {
                             if (con != null) {
                                 _liveReads.remove(con);
                                 con = null;
                             }
-                            if (_pendingConnections.isEmpty()) {
-                                _pendingConnections.wait();
-                            } else {
+                            if (_pendingConnections.isEmpty()) {_pendingConnections.wait();}
+                            else {
                                 Iterator<NTCPConnection> iter = _pendingConnections.iterator();
                                 con = iter.next();
                                 iter.remove();
@@ -133,16 +127,12 @@ class Reader {
                         // at net.i2p.router.transport.ntcp.NTCPConnection$NTCP2ReadState.receive(NTCPConnection.java:2054)
                         // at net.i2p.router.transport.ntcp.NTCPConnection.recvEncryptedI2NP(NTCPConnection.java:1383)
                         // at net.i2p.router.transport.ntcp.Reader.processRead(Reader.java:170)
-                        if (_log.shouldWarn())
-                            _log.warn("Error in the NTCP reader", iae);
-                    } catch (RuntimeException re) {
-                        _log.error("Error in the NTCP Reader", re);
-                    }
-                    if (_log.shouldDebug())
-                        _log.debug("End read for " + con);
+                        if (_log.shouldWarn()) {_log.warn("Error in the NTCP reader", iae);}
+                    } catch (RuntimeException re) {_log.error("Error in the NTCP Reader", re);}
+                    if (_log.shouldDebug()) {_log.debug("End read for " + con);}
                 }
             }
-            if (_log.shouldInfo()) _log.info("Stopping NTCP Reader...");
+            if (_log.shouldInfo()) {_log.info("Stopping NTCP Reader...");}
         }
     }
 
@@ -154,19 +144,16 @@ class Reader {
         ByteBuffer buf = null;
         while(true) {
             synchronized(con) {
-                if (con.isClosed())
-                    return;
-                if (con.isEstablished())
-                    break;
+                if (con.isClosed()) {return;}
+                if (con.isEstablished()) {break;}
             }
-            if ((buf = con.getNextReadBuf()) == null)
-                return;
+            if ((buf = con.getNextReadBuf()) == null) {return;}
             EstablishState est = con.getEstablishState();
 
             if (est.isComplete()) {
                 // why is it complete yet !con.isEstablished?
-                _log.error("Establishment state [" + est + "] is complete, yet the connection isn't established? "
-                        + con.isEstablished() + " (inbound? " + con.isInbound() + " " + con + ")");
+                _log.error("Establishment state [" + est + "] is complete, yet the connection isn't established? " +
+                           con.isEstablished() + " (inbound? " + con.isInbound() + " " + con + ")");
                 EventPumper.releaseBuf(buf);
                 break;
             }

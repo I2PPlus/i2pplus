@@ -71,11 +71,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         int cores = SystemVersion.getCores();
         Boolean isSlow = SystemVersion.isSlow();
         int share = TunnelDispatcher.getShareBandwidth(ctx);
-        if (!isSlow) {
-            _numHandlerThreads = ctx.getProperty("router.buildHandlerThreads", Math.max(cores / 2, 8));
-        } else {
-            _numHandlerThreads = ctx.getProperty("router.buildHandlerThreads", Math.max(cores / 2, 6));
-        }
+        _numHandlerThreads = ctx.getProperty("router.buildHandlerThreads", isSlow ? 2 : 4);
 
         // The following are for TestJob
         long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };

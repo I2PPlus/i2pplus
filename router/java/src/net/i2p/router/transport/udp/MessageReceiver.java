@@ -32,8 +32,8 @@ class MessageReceiver {
     //private ByteCache _cache;
 
     private static final int cores = SystemVersion.getCores();
-    private static final int MIN_THREADS = SystemVersion.isSlow() ? 2 : 4;
-    private static final int MAX_THREADS = SystemVersion.isSlow() ? 6 : Math.max(cores / 2 , 8);
+    private static final int MIN_THREADS = SystemVersion.isSlow() ? 1 : 2;
+    private static final int MAX_THREADS = SystemVersion.isSlow() ? 2 : 4;
     private static final int MIN_QUEUE_SIZE =  SystemVersion.isSlow() ? 32 : 64;
     private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 128 : 256;
     private final int _threadCount;

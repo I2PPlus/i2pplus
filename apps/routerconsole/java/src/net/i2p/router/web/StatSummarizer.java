@@ -98,7 +98,8 @@ public class StatSummarizer implements Runnable, ClientApp {
         if (isPersistent) {
             String spec = _context.getProperty("stat.summaries", DEFAULT_DATABASES);
             String[] rates = DataHelper.split(spec, ",");
-            syncThreads = Math.min(rates.length, SystemVersion.isSlow() ? 4 : Math.max(SystemVersion.getCores(), 6));
+            //syncThreads = Math.min(rates.length, SystemVersion.isSlow() ? 4 : Math.max(SystemVersion.getCores(), 6));
+            syncThreads = SystemVersion.isSlow() ? 2 : 4;
             // delete files for unconfigured rates
             Set<String> configured = new HashSet<String>(rates.length);
             for (String r : rates) {configured.add(SummaryListener.createName(_context, r));}

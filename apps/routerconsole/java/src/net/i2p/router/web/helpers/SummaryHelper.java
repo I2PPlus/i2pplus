@@ -38,7 +38,6 @@ import net.i2p.util.SystemVersion;
 
 import net.i2p.router.web.ConfigUpdateHandler;
 
-
 /**
  * Simple helper to query the appropriate router for data necessary to render
  * the summary sections on the router console.

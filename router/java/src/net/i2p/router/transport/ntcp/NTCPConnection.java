@@ -174,8 +174,7 @@ public class NTCPConnection implements Closeable {
     private static final long NTCP2_TERMINATION_CLOSE_DELAY = 50;
     // don't make combined messages too big, to minimize latency
     // Tunnel data msgs are 1024 + 4 + 9 + 3 = 1040, allow 5
-//    private static final int NTCP2_PREFERRED_PAYLOAD_MAX = 5 * 1040;
-    private static final int NTCP2_PREFERRED_PAYLOAD_MAX = SystemVersion.isSlow() ? 5*1040 : 8*1040;
+    private static final int NTCP2_PREFERRED_PAYLOAD_MAX = 5 * 1040;
     static final int REASON_UNSPEC = 0;
     static final int REASON_TERMINATION = 1;
     static final int REASON_TIMEOUT = 2;
@@ -1306,9 +1305,7 @@ public class NTCPConnection implements Closeable {
     }
 
 
-//    private static final int MAX_HANDLERS = 8;
-    private static final int MAX_HANDLERS = (SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ||
-                                             SystemVersion.getMaxMemory() < 512*1024*1024) ? 4 : Math.max(SystemVersion.getCores(), 8);
+    private static final int MAX_HANDLERS = SystemVersion.isSlow() ? 2 : 4;
 
     /**
      *  FIXME static queue mixes handlers from different contexts in multirouter JVM
@@ -1912,7 +1909,7 @@ public class NTCPConnection implements Closeable {
         } else {
             fromIP = null;
         }
-        return (_isInbound ? ("From: " + fromIP + ":" + _chan.socket().getPort() + ' ')
+        return (_isInbound ? ("\n* From: " + fromIP + ":" + _chan.socket().getPort() + ' ')
                            : ("Target: " + _remAddr.getHost() + ":" + _remAddr.getPort() + ' ')) + "[" +
                (_remotePeer == null ? "Unknown" : _remotePeer.calculateHash().toBase64().substring(0,6)) + "]" +
                (isEstablished() ? "" : " -> Not established ") +
