@@ -3,7 +3,7 @@ package net.i2p.router.transport.udp;
 import java.util.concurrent.BlockingQueue;
 
 import net.i2p.router.RouterContext;
-import net.i2p.router.util.CoDelBlockingQueue;
+import net.i2p.router.util.CoDelPriorityBlockingQueue;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
@@ -34,7 +34,7 @@ class PacketHandler {
     private static final int MIN_QUEUE_SIZE = SystemVersion.isSlow() ? 32 : 64;
     private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 192 : 384;
     private static final int MIN_NUM_HANDLERS = 1;  // if < 128MB
-    private static final int MAX_NUM_HANDLERS = SystemVersion.isSlow() ? 4 : Math.max(SystemVersion.getCores(), 8);
+    private static final int MAX_NUM_HANDLERS = SystemVersion.isSlow() ? 4 : Math.min(SystemVersion.getCores(), 8);
 
     PacketHandler(RouterContext ctx, UDPTransport transport, boolean enableSSU1, boolean enableSSU2, EstablishmentManager establisher,
                   InboundMessageFragments inbound, PeerTestManager testManager, IntroductionManager introManager) {
@@ -49,7 +49,7 @@ class PacketHandler {
         int cores = SystemVersion.getCores();
         boolean isSlow = SystemVersion.isSlow();
         int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (2*1024*1024)));
-        _inboundQueue = new CoDelBlockingQueue<UDPPacket>(ctx, "UDP-Receiver", qsize);
+        _inboundQueue = new CoDelPriorityBlockingQueue<UDPPacket>(ctx, "UDP-Receiver", qsize);
         int num_handlers;
         if (maxMemory < 128*1024*1024) {num_handlers = 1;}
         else {num_handlers = MAX_NUM_HANDLERS;}
@@ -90,9 +90,9 @@ class PacketHandler {
      * @since IPv6 moved from UDPReceiver
      */
     public void queueReceived(UDPPacket packet) throws InterruptedException {
+        if (_log.shouldDebug()) {_log.debug("Adding packet to queue: " + packet);}
         _inboundQueue.put(packet);
     }
-
 
     /**
      * Blocking for a while
@@ -107,10 +107,8 @@ class PacketHandler {
             _inboundQueue.offer(poison);
         }
         for (int i = 1; i <= 5 && !_inboundQueue.isEmpty(); i++) {
-            try {
-//                Thread.sleep(i * 50);
-                Thread.sleep(i * 10);
-            } catch (InterruptedException ie) {}
+            try {Thread.sleep(i * 50);}
+            catch (InterruptedException ie) {}
         }
         _inboundQueue.clear();
     }
@@ -141,8 +139,7 @@ class PacketHandler {
                 if (packet == null) {break;} // keepReading is probably false, or bind failed...
 
                 packet.received();
-                //if (_log.shouldDebug())
-                //    _log.debug("Received packet from " + packet);
+                if (_log.shouldDebug()) {_log.debug("Received packet from " + packet);}
                 try {handlePacket(packet);}
                 catch (RuntimeException e) {
                     if (_log.shouldError()) {

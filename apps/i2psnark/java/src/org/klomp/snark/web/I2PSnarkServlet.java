@@ -135,25 +135,27 @@ public class I2PSnarkServlet extends BasicServlet {
      */
     @Override
     public File getResource(String pathInContext) {
+        synchronized(this) {
         if (pathInContext == null || pathInContext.equals("/") || pathInContext.equals("/index.jsp") ||
-            !pathInContext.startsWith("/") || pathInContext.length() == 0 ||
-            pathInContext.equals("/index.html") || pathInContext.startsWith(WARBASE))
-            return super.getResource(pathInContext);
-        // files in the i2psnark/ directory - get top level
-        pathInContext = pathInContext.substring(1);
-        File top = new File(pathInContext);
-        File parent;
-        while ((parent = top.getParentFile()) != null) {top = parent;}
-        Snark snark = _manager.getTorrentByBaseName(top.getPath());
-        if (snark != null) {
-            Storage storage = snark.getStorage();
-            if (storage != null) {
-                File sbase = storage.getBase();
-                String child = pathInContext.substring(top.getPath().length());
-                return new File(sbase, child);
+                !pathInContext.startsWith("/") || pathInContext.length() == 0 ||
+                pathInContext.equals("/index.html") || pathInContext.startsWith(WARBASE))
+                return super.getResource(pathInContext);
+            // files in the i2psnark/ directory - get top level
+            pathInContext = pathInContext.substring(1);
+            File top = new File(pathInContext);
+            File parent;
+            while ((parent = top.getParentFile()) != null) {top = parent;}
+            Snark snark = _manager.getTorrentByBaseName(top.getPath());
+            if (snark != null) {
+                Storage storage = snark.getStorage();
+                if (storage != null) {
+                    File sbase = storage.getBase();
+                    String child = pathInContext.substring(top.getPath().length());
+                    return new File(sbase, child);
+                }
             }
+            return new File(_resourceBase, pathInContext);
         }
-        return new File(_resourceBase, pathInContext);
     }
 
     /**
@@ -569,12 +571,14 @@ public class I2PSnarkServlet extends BasicServlet {
         headers.setLength(0);
     }
 
-    private UIMessages.Message lastMessage;
+    private transient UIMessages.Message lastMessage;
 
-    private String getLastMessage() {
-        UIMessages.Message lastMessage = null;
+    private synchronized String getLastMessage() {
         List<UIMessages.Message> msgs = _manager.getMessages();
-        if (!msgs.isEmpty()) {lastMessage = msgs.get(msgs.size() - 1);}
+        if (lastMessage == null || (msgs.size() > 0 && msgs.get(msgs.size() - 1) != lastMessage)) {
+            if (!msgs.isEmpty()) {lastMessage = msgs.get(msgs.size() - 1);}
+            else {lastMessage = null;}
+        }
         return lastMessage != null ? lastMessage.message : null;
     }
 
@@ -759,8 +763,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     link = link.substring(0, index) + link.substring(index).replaceFirst("filter=", filterParam);
                 } else {link += filterParam;}
                 hbuf.append(" <a class=\"sorter ").append(peerParam == null ? "showPeers" : "hidePeers")
-                    .append(!hasPeers ? " noPeers" : "").append("\" href=\"").append(link).append("\">")
-                    .append(toThemeImg(img, tx, tx)).append("</a>\n");
+                    .append("\" href=\"").append(link).append("\">").append(toThemeImg(img, tx, tx)).append("</a>\n");
             }
         }
 
@@ -881,7 +884,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     hbuf.append("\">");
                     tx = _t("RX Rate");
                     hbuf.append(toThemeImg("head_rxspeed", tx, showSort ? _t("Sort by {0}", _t("Down Rate")) : _t("Down Rate")));
-                    if (showSort) {hbuf.append("</a></span>");}
+                    hbuf.append("</a></span>");
                 }
             }
         }
@@ -2282,9 +2285,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     statusString = toSVGWithDataTooltip(img, "", tooltip) + "</td>" +
                                    "<td class=peerCount><b><span class=right>" + curPeers +
                                    "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
-                    if (upBps > 0 && curPeers > 0) {snarkStatus = "active seeding complete connected";}
-                    else if (upBps <= 0 && curPeers > 0) {snarkStatus = "inactive seeding complete connected";}
-                    else {snarkStatus = "inactive seeding complete";}
+                    snarkStatus = "inactive seeding complete";
                 }
             } else {
                 statusString = toSVGWithDataTooltip("complete", "", _t("Complete")) + "</td>" + "<td class=peerCount><b>‒";
@@ -3927,31 +3928,26 @@ public class I2PSnarkServlet extends BasicServlet {
 
             if (meta != null) {
                 announce = meta.getAnnounce();
-                if (announce == null)
-                    announce = snark.getTrackerURL();
-                if (announce != null) {
-                    announce = DataHelper.stripHTML(announce)
-                       .replace(postmanb64, "tracker2.postman.i2p")
-                       .replace(postmanb64_new, "tracker2.postman.i2p")
-                       .replace(postmanb32_new, "tracker2.postman.i2p")
-                       .replaceAll(chudob32, "tracker.chudo.i2p")
-                       .replaceAll(cryptb32, "tracker.crypthost.i2p")
-                       .replaceAll(freedomb32, "torrfreedom.i2p")
-                       .replaceAll(icu812b32, "tracker.icu812.i2p")
-                       .replaceAll(lodikonb32, "tracker.lodikon.i2p")
-                       .replaceAll(lyokob32, "lyoko.i2p")
-                       .replaceAll(odiftb32, "opendiftracker.i2p")
-                       .replaceAll(omitrackb32, "omitracker.i2p")
-                       .replaceAll(otdgb32, "opentracker.dg2.i2p")
-                       .replaceAll(r4sasb32, "opentracker.r4sas.i2p")
-                       .replaceAll(skankb32, "opentracker.skank.i2p")
-                       .replaceAll(simpb32, "opentracker.simp.i2p")
-                       .replaceAll(theblandb32, "tracker.thebland.i2p");
-                }
-
-                if (meta != null || !meta.isPrivate()) {
-                    buf.append("<a class=magnetlink href=\"")
-                       .append(MagnetURI.MAGNET_FULL).append(hex);
+                if (announce == null) {announce = snark.getTrackerURL();}
+                announce = DataHelper.stripHTML(announce)
+                                     .replace(postmanb64, "tracker2.postman.i2p")
+                                     .replace(postmanb64_new, "tracker2.postman.i2p")
+                                     .replace(postmanb32_new, "tracker2.postman.i2p")
+                                     .replaceAll(chudob32, "tracker.chudo.i2p")
+                                     .replaceAll(cryptb32, "tracker.crypthost.i2p")
+                                     .replaceAll(freedomb32, "torrfreedom.i2p")
+                                     .replaceAll(icu812b32, "tracker.icu812.i2p")
+                                     .replaceAll(lodikonb32, "tracker.lodikon.i2p")
+                                     .replaceAll(lyokob32, "lyoko.i2p")
+                                     .replaceAll(odiftb32, "opendiftracker.i2p")
+                                     .replaceAll(omitrackb32, "omitracker.i2p")
+                                     .replaceAll(otdgb32, "opentracker.dg2.i2p")
+                                     .replaceAll(r4sasb32, "opentracker.r4sas.i2p")
+                                     .replaceAll(skankb32, "opentracker.skank.i2p")
+                                     .replaceAll(simpb32, "opentracker.simp.i2p")
+                                     .replaceAll(theblandb32, "tracker.thebland.i2p");
+                if (!meta.isPrivate()) {
+                    buf.append("<a class=magnetlink href=\"").append(MagnetURI.MAGNET_FULL).append(hex);
                     if (announce != null) {buf.append("&amp;tr=").append(announce);}
                     if (baseName != null) {
                         buf.append("&amp;dn=").append(DataHelper.escapeHTML(baseName).replace(".torrent", "")
@@ -4145,9 +4141,6 @@ public class I2PSnarkServlet extends BasicServlet {
                         buf.append("</td></tr>\n");
                     }
                 }
-            }
-
-            if (meta != null) {
                 String com = meta.getComment();
                 if (com != null && com.length() > 0) {
                     if (com.length() > 5000) {com = com.substring(0, 5000) + "&hellip;";}
@@ -4713,7 +4706,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (ls == null) {return null;}
         List<Sorters.FileAndIndex> fileList = new ArrayList<Sorters.FileAndIndex>(ls.length);
         // precompute remaining for all files for efficiency
-        long[] remainingArray = (storage != null) ? storage.remaining() : null;
+        long[] remainingArray = storage.remaining();
         for (int i = 0; i < ls.length; i++) {fileList.add(new Sorters.FileAndIndex(ls[i], storage, remainingArray));}
 
         boolean showSort = fileList.size() > 1;
@@ -4891,7 +4884,7 @@ public class I2PSnarkServlet extends BasicServlet {
                    .append("\" class=delete></td></tr>\n");
             }
             buf.append("</table>\n");
-        } else if (esc) {}
+        }
     }
 
     /**

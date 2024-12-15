@@ -532,7 +532,8 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         if (va == null) {
             UpdateMethod method = "file".equals(uri.getScheme()) ? FILE : HTTP;
             va = new VersionAvailable("", "", method, uris);
-            _available.putIfAbsent(item, va);
+            VersionAvailable existingVa = _available.putIfAbsent(item, va);
+            if (existingVa != null) {va = existingVa;}
         }
         if (_log.shouldWarn()) {_log.warn("Install plugin: " + name + ' ' + va);}
         return update(PLUGIN, name);

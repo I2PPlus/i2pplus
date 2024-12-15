@@ -19,19 +19,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
-
 package com.vuze.plugins.mlab.tools.ndt.swingemu;
 
 public class BoxLayout {
-	public static int X_AXIS = 1;
-	public static int Y_AXIS = 2;
-
-	public
-	BoxLayout(
-		Component	c,
-		int			i )
-	{
-
-	}
+    public static final int X_AXIS = 1;
+    public static final int Y_AXIS = 2;
+    public BoxLayout(Component c, int i ) {}
 }

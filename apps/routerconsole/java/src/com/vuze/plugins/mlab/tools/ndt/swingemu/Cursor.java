@@ -19,17 +19,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
-
 package com.vuze.plugins.mlab.tools.ndt.swingemu;
 
 public class Cursor {
-	public static Cursor HAND_CURSOR = null;
-
-	public
-	Cursor(
-		Cursor c )
-	{
-
-	}
+    public static final Cursor HAND_CURSOR = null;
+    public Cursor(Cursor c) {}
 }

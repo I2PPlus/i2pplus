@@ -131,7 +131,7 @@ class StartExplorersJob extends JobImpl {
             long laggedDelay = 3*60*1000;
             if (exploreDelay != null && !highload) {
                 if (_log.shouldInfo()) {_log.info("Next Peer Exploration run in " + Integer.valueOf(exploreDelay) + "s");}
-                requeue(Integer.valueOf(exploreDelay) * 1000);
+                requeue(Integer.parseInt(exploreDelay) * 1000);
             } else if (getContext().jobQueue().getMaxLag() > 500 || getContext().throttle().getMessageDelay() > 750 || highload) {
                 if (_log.shouldInfo()) {_log.info("Next Peer Exploration run in " + (laggedDelay / 1000) + "s (router is under load)");}
                 requeue(laggedDelay);
@@ -172,7 +172,6 @@ class StartExplorersJob extends JobImpl {
             // Also if hidden or K/L/U, as nobody will be connecting to us
             // Use DataStore.size() which includes leasesets because it's faster
             else if ((uptime < STARTUP_TIME && netDbSize < MIN_ROUTERS) || isHidden || isSlow) {return MIN_RERUN_DELAY_MS;}
-            else if (netDbSize > MAX_ROUTERS) {return MAX_RERUN_DELAY_MS * 4;} // 40mins if over 5,000 known peers
             else {return delay;}
         } else {return Integer.parseInt(exploreDelay) * 1000;}
     }

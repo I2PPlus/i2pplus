@@ -9,7 +9,5 @@
     response.setHeader("Accept-Ranges", "none");
     if (uri.contains("addressbook") || uri.contains("index") || uri.endsWith("subscriptions") || uri.endsWith("config")) {
         response.setHeader("Cache-Control", "private, no-cache, max-age=2628000");
-    } else {
-        response.setHeader("Cache-Control", "private, immutable, max-age=2628000");
-    }
+    } else {response.setHeader("Cache-Control", "private, immutable, max-age=2628000");}
 %>

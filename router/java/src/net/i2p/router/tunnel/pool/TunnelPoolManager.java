@@ -98,8 +98,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         TunnelInfo info = _inboundExploratory.selectTunnel();
         if (info == null) {
             _inboundExploratory.buildFallback();
-            // still can be null, but probably not
-            info = _inboundExploratory.selectTunnel();
+            info = _inboundExploratory.selectTunnel(); // still can be null, but probably not
         }
         return info;
     }
@@ -114,11 +113,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     public TunnelInfo selectInboundTunnel(Hash destination) {
         if (destination == null) return selectInboundTunnel();
         TunnelPool pool = _clientInboundPools.get(destination);
-        if (pool != null) {
-            return pool.selectTunnel();
-        }
-        if (_log.shouldWarn())
-            _log.warn("Want the Inbound tunnel for " + destination.toBase32() + " but there isn't a pool?");
+        if (pool != null) {return pool.selectTunnel();}
+        if (_log.shouldWarn()) {_log.warn("No pool available for Inbound tunnel for " + destination.toBase32());}
         return null;
     }
 
@@ -132,8 +128,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         TunnelInfo info = _outboundExploratory.selectTunnel();
         if (info == null) {
             _outboundExploratory.buildFallback();
-            // still can be null, but probably not
-            info = _outboundExploratory.selectTunnel();
+            info = _outboundExploratory.selectTunnel(); // still can be null, but probably not
         }
         return info;
     }
@@ -168,8 +163,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         TunnelInfo info = _inboundExploratory.selectTunnel(closestTo);
         if (info == null) {
             _inboundExploratory.buildFallback();
-            // still can be null, but probably not
-            info = _inboundExploratory.selectTunnel();
+            info = _inboundExploratory.selectTunnel(); // still can be null, but probably not
         }
         return info;
     }
@@ -192,9 +186,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (pool != null) {
             return pool.selectTunnel(closestTo);
         }
-        if (_log.shouldWarn())
-            _log.warn("Want the Inbound tunnel for " + destination.toBase32() +
-                     " but there isn't a pool?");
+        if (_log.shouldWarn()) {_log.warn("No pool available for Inbound tunnel for " + destination.toBase32());}
         return null;
     }
 
@@ -212,8 +204,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         TunnelInfo info = _outboundExploratory.selectTunnel(closestTo);
         if (info == null) {
             _outboundExploratory.buildFallback();
-            // still can be null, but probably not
-            info = _outboundExploratory.selectTunnel();
+            info = _outboundExploratory.selectTunnel(); // still can be null, but probably not
         }
         return info;
     }
@@ -248,25 +239,20 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         TunnelInfo info = null;
         for (TunnelPool pool : _clientInboundPools.values()) {
             info = pool.getTunnel(id);
-            if (info != null)
-                return info;
+            if (info != null) {return info;}
         }
         info = _inboundExploratory.getTunnel(id);
-        if (info != null) return info;
+        if (info != null) {return info;}
         info = _outboundExploratory.getTunnel(id);
-        if (info != null) return info;
+        if (info != null) {return info;}
         return null;
     }
 
     /** @return number of inbound exploratory tunnels */
-    public int getFreeTunnelCount() {
-        return _inboundExploratory.size();
-    }
+    public int getFreeTunnelCount() {return _inboundExploratory.size();}
 
     /** @return number of outbound exploratory tunnels */
-    public int getOutboundTunnelCount() {
-        return _outboundExploratory.size();
-    }
+    public int getOutboundTunnelCount() {return _outboundExploratory.size();}
 
     public int getInboundClientTunnelCount() {
         int count = 0;
@@ -290,8 +276,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      */
     public int getOutboundClientTunnelCount(Hash destination)  {
         TunnelPool pool = _clientOutboundPools.get(destination);
-        if (pool != null)
-            return pool.getTunnelCount();
+        if (pool != null) {return pool.getTunnelCount();}
         return 0;
     }
 
@@ -306,8 +291,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      */
     public double getShareRatio() {
         int part = getParticipatingCount();
-        if (part <= 0)
-            return 0d;
+        if (part <= 0) {return 0d;}
         List<TunnelPool> pools = new ArrayList<TunnelPool>();
         listPools(pools);
         int count = 0;
@@ -315,23 +299,17 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             TunnelPool pool = pools.get(i);
             count += pool.size() * pool.getSettings().getLength();
         }
-        if (count <= 0)
-            return MAX_SHARE_RATIO;
+        if (count <= 0) {return MAX_SHARE_RATIO;}
         return Math.min(part / (double) count, MAX_SHARE_RATIO);
     }
 
     public boolean isValidTunnel(Hash client, TunnelInfo tunnel) {
-        if (tunnel.getTunnelFailed())
-            return false;
-        if (tunnel.getExpiration() < _context.clock().now())
-            return false;
+        if (tunnel.getTunnelFailed()) {return false;}
+        if (tunnel.getExpiration() < _context.clock().now()) {return false;}
         TunnelPool pool;
-        if (tunnel.isInbound())
-            pool = _clientInboundPools.get(client);
-        else
-            pool = _clientOutboundPools.get(client);
-        if (pool == null)
-            return false;
+        if (tunnel.isInbound()) {pool = _clientInboundPools.get(client);}
+        else {pool = _clientOutboundPools.get(client);}
+        if (pool == null) {return false;}
         return pool.listTunnels().contains(tunnel);
     }
 
@@ -349,18 +327,14 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     public TunnelPoolSettings getInboundSettings(Hash client) {
         TunnelPool pool = _clientInboundPools.get(client);
-        if (pool != null)
-            return pool.getSettings();
-        else
-            return null;
+        if (pool != null) {return pool.getSettings();}
+        else {return null;}
     }
 
     public TunnelPoolSettings getOutboundSettings(Hash client) {
         TunnelPool pool = _clientOutboundPools.get(client);
-        if (pool != null)
-            return pool.getSettings();
-        else
-            return null;
+        if (pool != null) {return pool.getSettings();}
+        else {return null;}
     }
 
     public void setInboundSettings(Hash client, TunnelPoolSettings settings) {
@@ -373,9 +347,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     private static void setSettings(Map<Hash, TunnelPool> pools, Hash client, TunnelPoolSettings settings) {
         TunnelPool pool = pools.get(client);
-        if (pool != null) {
-            pool.setSettings(settings);
-        }
+        if (pool != null) {pool.setSettings(settings);}
     }
 
     public synchronized void restart() {
@@ -392,8 +364,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      */
     public void buildTunnels(Destination client, ClientTunnelSettings settings) {
         Hash dest = client.calculateHash();
-        if (_log.shouldDebug())
+        if (_log.shouldDebug()) {
             _log.debug("Building tunnels for client " + client.toBase32() + ": " + settings);
+        }
         TunnelPool inbound = null;
         TunnelPool outbound = null;
 
@@ -405,26 +378,20 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                 inbound = new TunnelPool(_context, this, settings.getInboundSettings(),
                                          _clientPeerSelector);
                 _clientInboundPools.put(dest, inbound);
-            } else {
-                inbound.setSettings(settings.getInboundSettings());
-            }
+            } else {inbound.setSettings(settings.getInboundSettings());}
             outbound = _clientOutboundPools.get(dest);
             if (outbound == null) {
                 outbound = new TunnelPool(_context, this, settings.getOutboundSettings(),
                                           _clientPeerSelector);
                 _clientOutboundPools.put(dest, outbound);
                 delayOutbound = true;
-            } else {
-                outbound.setSettings(settings.getOutboundSettings());
-            }
+            } else {outbound.setSettings(settings.getOutboundSettings());}
         }
         inbound.startup();
-        // don't delay the outbound if it already exists, as this opens up a large
+        // Don't delay the outbound if it already exists, as this opens up a large
         // race window with removeTunnels() below
-        if (delayOutbound)
-            _context.simpleTimer2().addEvent(new DelayedStartup(outbound), 1000);
-        else
-            outbound.startup();
+        if (delayOutbound) {_context.simpleTimer2().addEvent(new DelayedStartup(outbound), 1000);}
+        else {outbound.startup();}
     }
 
     /**
@@ -435,25 +402,25 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  @since 0.9.21
      */
     public boolean addAlias(Destination dest, ClientTunnelSettings settings, Destination existingClient) {
-        if (dest.getSigningPublicKey().equals(existingClient.getSigningPublicKey()))
+        if (dest.getSigningPublicKey().equals(existingClient.getSigningPublicKey())) {
             throw new IllegalArgumentException("signing key must differ");
-        if (!dest.getPublicKey().equals(existingClient.getPublicKey()))
+        }
+        if (!dest.getPublicKey().equals(existingClient.getPublicKey())) {
             throw new IllegalArgumentException("encryption key mismatch");
+        }
         Hash h = dest.calculateHash();
         Hash e = existingClient.calculateHash();
         synchronized(this) {
             TunnelPool inbound = _clientInboundPools.get(h);
             TunnelPool outbound = _clientOutboundPools.get(h);
             if (inbound != null || outbound != null) {
-                if (_log.shouldWarn())
-                    _log.warn("Already have alias " + dest.toBase32());
+                if (_log.shouldWarn()) {_log.warn("Already have alias " + dest.toBase32());}
                 return false;
             }
             TunnelPool eInbound = _clientInboundPools.get(e);
             TunnelPool eOutbound = _clientOutboundPools.get(e);
             if (eInbound == null || eOutbound == null) {
-                if (_log.shouldWarn())
-                    _log.warn("Primary not found " + existingClient);
+                if (_log.shouldWarn()) {_log.warn("Primary not found " + existingClient);}
                 return false;
             }
             eInbound.getSettings().getAliases().add(h);
@@ -469,8 +436,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             inbound.startup();
             outbound.startup();
         }
-        if (_log.shouldWarn())
+        if (_log.shouldWarn()) {
             _log.warn("Added " + dest.toBase32() + " as alias for " + existingClient.toBase32() +  settings);
+        }
         return true;
     }
 
@@ -488,8 +456,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                     TunnelPool pri = _clientInboundPools.get(p);
                     if (pri != null) {
                         Set<Hash> aliases = pri.getSettings().getAliases();
-                        if (aliases != null)
-                            aliases.remove(h);
+                        if (aliases != null) {aliases.remove(h);}
                     }
                 }
             }
@@ -500,8 +467,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                     TunnelPool pri = _clientOutboundPools.get(p);
                     if (pri != null) {
                         Set<Hash> aliases = pri.getSettings().getAliases();
-                        if (aliases != null)
-                            aliases.remove(h);
+                        if (aliases != null) {aliases.remove(h);}
                     }
                 }
             }
@@ -512,13 +478,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private static class DelayedStartup implements SimpleTimer.TimedEvent {
         private final TunnelPool pool;
 
-        public DelayedStartup(TunnelPool p) {
-            this.pool = p;
-        }
+        public DelayedStartup(TunnelPool p) {this.pool = p;}
 
-        public void timeReached() {
-            this.pool.startup();
-        }
+        public void timeReached() {this.pool.startup();}
     }
 
     /**
@@ -539,20 +501,20 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      */
     public synchronized void removeTunnels(Hash destination) {
         if (destination == null) return;
-        if (_log.shouldDebug())
+        if (_log.shouldDebug()) {
             _log.debug("Removing tunnels for client " + destination.toBase32());
+        }
         if (_context.clientManager().isLocal(destination)) {
             // race with buildTunnels() on restart of a client
-            if (_log.shouldWarn())
+            if (_log.shouldWarn()) {
                 _log.warn("Not removing pool still registered with client manager: " + destination.toBase32());
+            }
             return;
         }
         TunnelPool inbound = _clientInboundPools.remove(destination);
         TunnelPool outbound = _clientOutboundPools.remove(destination);
-        if (inbound != null)
-            inbound.shutdown();
-        if (outbound != null)
-            outbound.shutdown();
+        if (inbound != null) {inbound.shutdown();}
+        if (outbound != null) {outbound.shutdown();}
     }
 
     /** queue a recurring test job if appropriate */
@@ -567,10 +529,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     public boolean disableTunnelTesting() {
-        if (_context.getProperty(PROP_DISABLE_TUNNEL_TESTING) == null)
-            return false;
-        else
-            return _context.getBooleanProperty(PROP_DISABLE_TUNNEL_TESTING);
+        if (_context.getProperty(PROP_DISABLE_TUNNEL_TESTING) == null) {return false;}
+        else {return _context.getBooleanProperty(PROP_DISABLE_TUNNEL_TESTING);}
     }
 
     public synchronized void startup() {
@@ -658,8 +618,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                     tunnelCount++;
                     for (int j = 0; j < info.getLength(); j++) {
                         Hash peer = info.getPeer(j);
-                        if (!_context.routerHash().equals(peer))
+                        if (!_context.routerHash().equals(peer)) {
                             lc.increment(peer);
+                        }
                     }
                 }
             }
@@ -766,8 +727,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         for (TunnelInfo tun : pool.listTunnels()) {
             int len = tun.getLength();
             if (len > 1 && tun.getPeer(1).equals(peer)) {
-                if (_log.shouldWarn())
+                if (_log.shouldWarn()) {
                     _log.warn("Removing Outbound tunnel as first hop [" + peer.toBase64().substring(0,6) + "] is banlisted \n* " + tun);
+                }
                 pool.tunnelFailed(tun, peer);
             }
         }
@@ -782,8 +744,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         for (TunnelInfo tun : pool.listTunnels()) {
             int len = tun.getLength();
             if (len > 1 && tun.getPeer(len - 2).equals(peer)) {
-                if (_log.shouldWarn())
+                if (_log.shouldWarn()) {
                     _log.warn("Removing Inbound tunnel as previous hop [" + peer.toBase64().substring(0,6) + "] is banlisted \n* " + tun);
+                }
                 pool.tunnelFailed(tun, peer);
             }
         }

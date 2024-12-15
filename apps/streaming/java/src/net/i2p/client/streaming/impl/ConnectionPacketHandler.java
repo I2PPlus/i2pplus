@@ -57,7 +57,7 @@ class ConnectionPacketHandler {
         if (!ok) {
             boolean isTooFast = con.getSendStreamId() <= 0;
             // Apparently an i2pd bug... see verifyPacket()
-            if ( (!packet.isFlagSet(Packet.FLAG_RESET)) && (!isTooFast) && (_log.shouldWarn()) )
+            if ((!packet.isFlagSet(Packet.FLAG_RESET)) && (!isTooFast) && (_log.shouldWarn()))
                 _log.warn("Received packet that does NOT verify: " + packet + " on " + con);
             packet.releasePayload();
             return;
@@ -65,8 +65,8 @@ class ConnectionPacketHandler {
 
         final long seqNum = packet.getSequenceNum();
         if (con.getHardDisconnected()) {
-            if ( (seqNum > 0) || (packet.getPayloadSize() > 0) ||
-                 (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE | Packet.FLAG_CLOSE)) ) {
+            if ((seqNum > 0) || (packet.getPayloadSize() > 0) ||
+                 (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE | Packet.FLAG_CLOSE))) {
                 if (_log.shouldWarn())
                     _log.warn("Received a data packet after hard disconnect: " + packet + " on " + con);
                 // the following will send a RESET
@@ -79,7 +79,7 @@ class ConnectionPacketHandler {
             return;
         }
 
-        if ( (con.getCloseSentOn() > 0) && (con.getUnackedPacketsSent() <= 0) &&
+        if ((con.getCloseSentOn() > 0) && (con.getUnackedPacketsSent() <= 0) &&
              (seqNum > 0) && (packet.getPayloadSize() > 0)) {
             if (_log.shouldInfo())
                 _log.info("Received new data when we've sent them data and all of our data is ACKed: "
@@ -171,9 +171,7 @@ class ConnectionPacketHandler {
         // multiple packets before he gets the first ACK back.
         // If we want to limit the number of packets we receive without a
         // SendStreamID, do it in PacketHandler.receiveUnknownCon().
-        if ( (!isSYN) &&
-             (packet.getReceiveStreamId() <= 0) )
-            allowAck = false;
+        if ((!isSYN) && (packet.getReceiveStreamId() <= 0)) {allowAck = false;}
 
         // Receive the message.
         // Note that this is called even for empty packets, including CLOSE packets, so the
@@ -181,11 +179,8 @@ class ConnectionPacketHandler {
         // But not ack-only packets!
         boolean isNew;
         if (seqNum > 0 || isSYN) {
-            isNew = con.getInputStream().messageReceived(seqNum, packet.getPayload()) &&
-                    allowAck;
-        } else {
-            isNew = false;
-        }
+            isNew = con.getInputStream().messageReceived(seqNum, packet.getPayload()) && allowAck;
+        } else {isNew = false;}
 
         if (isNew && packet.getPayloadSize() > 1500) {
             // don't clear choking unless it was new, and a big packet
@@ -195,22 +190,12 @@ class ConnectionPacketHandler {
             con.setChoking(false);
         }
 
-        //if ( (packet.getSequenceNum() == 0) && (packet.getPayloadSize() > 0) ) {
-        //    if (_log.shouldDebug())
-        //        _log.debug("seq=0 && size=" + packet.getPayloadSize() + ": isNew? " + isNew
-        //                   + " packet: " + packet + " con: " + con);
-        //}
-
         if (_log.shouldDebug()) {
             String type;
-            if (!allowAck)
-                type = "Non-SYN before SYN";
-            else if (isNew)
-                type = "New";
-            else if (packet.getPayloadSize() <= 0)
-                type = "ACK-only";
-            else
-                type = "DUP";
+            if (!allowAck) {type = "Non-SYN before SYN";}
+            else if (isNew) {type = "New";}
+            else if (packet.getPayloadSize() <= 0) {type = "ACK-only";}
+            else {type = "DUP";}
             _log.debug(type + " Inbound packet: " + packet + " on " + con);
         }
 
@@ -241,7 +226,7 @@ class ConnectionPacketHandler {
                     _log.debug("Scheduling ACK in " + delay + "ms for received packet " + packet);
             }
         } else {
-            if ( (seqNum > 0) || (packet.getPayloadSize() > 0) || isSYN) {
+            if ((seqNum > 0) || (packet.getPayloadSize() > 0) || isSYN) {
                 _context.statManager().addRateData("stream.con.receiveDuplicateSize", packet.getPayloadSize());
                 con.incrementDupMessagesReceived(1);
 
@@ -273,7 +258,6 @@ class ConnectionPacketHandler {
 
             } else {
                 if (isSYN) {
-                    //con.incrementUnackedPacketsReceived();
                     con.setNextSendTime(_context.clock().now() + con.getOptions().getSendAckDelay());
                 } else {
                     if (_log.shouldDebug())
@@ -284,7 +268,7 @@ class ConnectionPacketHandler {
         }
 
         boolean fastAck;
-        if (isSYN && (packet.getSendStreamId() <= 0) ) {
+        if (isSYN && (packet.getSendStreamId() <= 0)) {
             // don't honor the ACK 0 in SYN packets received when the other side
             // has obviously not seen our messages
             // and ignore NACKs
@@ -323,9 +307,6 @@ class ConnectionPacketHandler {
             if (isNew)
                 con.updateShareOpts();
         }
-
-        //if (choke)
-        //    con.fastRetransmit();
     }
 
     /**
@@ -336,30 +317,27 @@ class ConnectionPacketHandler {
      */
     private boolean ack(Connection con, long ackThrough, long nacks[], Packet packet, boolean isNew, boolean choke) {
         if (ackThrough < 0) return false;
-        //if ( (nacks != null) && (nacks.length > 0) )
-        //    con.getOptions().setRTT(con.getOptions().getRTT() + nacks.length*1000);
 
         boolean firstAck = isNew && con.getHighestAckedThrough() < 0;
-
         int numResends = 0;
         List<PacketLocal> acked = null;
         // if we don't know the streamIds for both sides of the connection, there's no way we
         // could actually be acking data (this fixes the buggered up ack of packet 0 problem).
         // this is called after packet verification, which places the stream IDs as necessary if
         // the SYN verifies (so if we're acking w/out stream IDs, no SYN has been received yet)
-        if ( (packet != null) && (packet.getSendStreamId() > 0) && (packet.getReceiveStreamId() > 0) &&
+        if ((packet != null) && (packet.getSendStreamId() > 0) && (packet.getReceiveStreamId() > 0) &&
              (con != null) && (con.getSendStreamId() > 0) && (con.getReceiveStreamId() > 0) &&
              (packet.getSendStreamId() != Packet.STREAM_ID_UNKNOWN) &&
              (packet.getReceiveStreamId() != Packet.STREAM_ID_UNKNOWN) &&
              (con.getSendStreamId() != Packet.STREAM_ID_UNKNOWN) &&
-             (con.getReceiveStreamId() != Packet.STREAM_ID_UNKNOWN) )
+             (con.getReceiveStreamId() != Packet.STREAM_ID_UNKNOWN))
             acked = con.ackPackets(ackThrough, nacks);
         else
             return false;
 
         boolean lastPacketAcked = false;
         final boolean receivedAck = con.getOptions().receivedAck();
-        if ( (acked != null) && (!acked.isEmpty()) ) {
+        if ((acked != null) && (!acked.isEmpty())) {
             if (_log.shouldDebug())
                 _log.debug(acked.size() + " of our packets ACKed with " + packet);
             // use the highest RTT, since these would likely be bunched together,
@@ -380,8 +358,8 @@ class ConnectionPacketHandler {
                 _context.statManager().addRateData("stream.sendsBeforeAck", numSends, ackTime);
 
                 // ACK the tags we delivered so we can use them
-                //if ( (p.getKeyUsed() != null) && (p.getTagsSent() != null)
-                //      && (p.getTagsSent().size() > 0) ) {
+                //if ((p.getKeyUsed() != null) && (p.getTagsSent() != null)
+                //      && (p.getTagsSent().size() > 0)) {
                 //    _context.sessionKeyManager().tagsDelivered(p.getTo().getPublicKey(),
                 //                                               p.getKeyUsed(),
                 //                                               p.getTagsSent());
@@ -461,7 +439,7 @@ class ConnectionPacketHandler {
 
             //_context.statManager().addRateData("stream.trend", trend, newWindowSize);
 
-            if ( (!congested) && (acked > 0) ) {
+            if ((!congested) && (acked > 0)) {
                 int ssthresh = con.getSSThresh();
                 if (newWindowSize < ssthresh) {
                     // slow start - exponential growth

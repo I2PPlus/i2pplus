@@ -2487,7 +2487,25 @@
     <property name="spotbugs.home" value="/usr/share/ant/lib/" />
     <spotbugs home="${spotbugs.home}" output="html" outputFile="spotbugs.html" effort="max" debug="true" reportLevel="high">
       <auxAnalyzepath path="./build" />
-      <auxClasspath path="build/commons-el.jar:build/jasper-runtime.jar:build/javax.servlet.jar:build/org.mortbay.jetty.jar:build/jrobin.jar:installer/lib/wrapper/all/wrapper.jar:apps/susidns/src/lib/standard.jar:apps/susidns/src/lib/jstl.jar" />
+      <auxClasspath path="build/commons-el.jar:build/commons-logging.jar:build/jasper-compiler.jar:build/jasper-runtime.jar:build/jetty-continuation.jar:build/jetty-deploy.jar:build/jetty-http.jar:build/jetty-i2p.jar:build/jetty-io.jar:build/jetty-java5-threadpool.jar:build/jetty-rewrite-handler.jar:build/jetty-security.jar:build/jetty-servlet.jar:build/jetty-servlets.jar:build/jetty-sslengine.jar:build/jetty-start.jar:build/jetty-util.jar:build/jetty-webapp.jar:build/jetty-xml.jar:build/javax.servlet.jar:build/jo.jsonrpc.war:build/jrobin.jar:build/org.mortbay.jetty.jar:build/org.mortbay.jmx.jar:build/pack200.jar:build/systray.jar:build/tools.jar" />
+      <class location="./build/addressbook.jar"/>
+      <class location="./build/addressbook.war"/>
+      <class location="./build/desktopgui.jar"/>
+      <class location="./build/i2p.jar"/>
+      <class location="./build/i2psnark.jar"/>
+      <class location="./build/i2psnark.war"/>
+      <class location="./build/i2ptunnel.jar"/>
+      <class location="./build/i2ptunnel.war"/>
+      <class location="./build/imagegen.war"/>
+      <class location="./build/mstreaming.jar"/>
+      <class location="./build/router.jar"/>
+      <class location="./build/routerconsole.jar"/>
+      <class location="./build/routerconsole.war"/>
+      <class location="./build/sam.jar"/>
+      <class location="./build/susidns.war"/>
+      <class location="./build/susimail.war"/>
+      <class location="./build/streaming.jar"/>
+      <sourcePath path="./apps/**.*java:./router/**.*java:./core/**.*java" />
     </spotbugs>
     <echo message="Spotbugs output written to spotbugs.html" />
   </target>

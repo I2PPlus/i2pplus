@@ -41,16 +41,16 @@ public class HashCash implements Comparable<HashCash> {
     myToken = cash;
     String[] parts = cash.split(":");
     myVersion = Integer.parseInt(parts[0]);
-    if(myVersion < 0 || myVersion > 1)
+    if (myVersion < 0 || myVersion > 1)
       throw new IllegalArgumentException("Only supported versions are 0 and 1");
       
-    if((myVersion == 0 && parts.length != 6) ||
+    if ((myVersion == 0 && parts.length != 6) ||
        (myVersion == 1 && parts.length != 7))
       throw new IllegalArgumentException("Improperly formed HashCash");
 
   	try {
   	    int index = 1;
-  	    if(myVersion == 1)
+  	    if (myVersion == 1)
   	      myValue = Integer.parseInt(parts[index++]);
   	    else
   	      myValue = 0;
@@ -67,7 +67,7 @@ public class HashCash implements Comparable<HashCash> {
   	    byte[] tempBytes = md.digest();
   	    int tempValue = numberOfLeadingZeros(tempBytes);
   	    
-  	    if(myVersion == 0)
+  	    if (myVersion == 0)
   	      myValue = tempValue;
   	    else if (myVersion == 1)
   	      myValue = (tempValue > myValue ? myValue : tempValue);
@@ -165,13 +165,13 @@ public class HashCash implements Comparable<HashCash> {
        */
   public static HashCash mintCash(String resource, Map<String, List<String> > extensions, Calendar date, int value, int version) 
   throws NoSuchAlgorithmException {
-    if(version < 0 || version > 1)
+    if (version < 0 || version > 1)
       throw new IllegalArgumentException("Only supported versions are 0 and 1");
       
-    if(value < 0 || value > hashLength)
+    if (value < 0 || value > hashLength)
       throw new IllegalArgumentException("Value must be between 0 and " + hashLength);
 
-    if(resource.contains(":"))
+    if (resource.contains(":"))
         throw new IllegalArgumentException("Resource may not contain a colon.");
     
 	HashCash result = new HashCash();
@@ -216,7 +216,7 @@ public class HashCash implements Comparable<HashCash> {
        */
   @Override
   public boolean equals(Object obj) {
-    if(obj instanceof HashCash)
+    if (obj instanceof HashCash)
       return toString().equals(obj.toString());
     else
       return super.equals(obj);
@@ -332,7 +332,7 @@ private static long bytesToLong(byte[] b) {
    * Serializes the extensions with (key, value) seperated by semi-colons and values seperated by commas
    */
   private static String serializeExtensions(Map<String, List<String> > extensions) {
-    if(null == extensions || extensions.isEmpty())
+    if (null == extensions || extensions.isEmpty())
       return "";
       
     StringBuilder result = new StringBuilder();
@@ -341,20 +341,20 @@ private static long bytesToLong(byte[] b) {
     
     for(Map.Entry<String, List<String>> entry: extensions.entrySet()) {
       String key = entry.getKey();
-      if(key.contains(":") || key.contains(";") || key.contains("="))
+      if (key.contains(":") || key.contains(";") || key.contains("="))
           throw new IllegalArgumentException("Extension key contains an illegal character. " + key);
-      if(!first)
+      if (!first)
         result.append(";");
       first = false;
       result.append(key);
       tempList = entry.getValue();
       
-      if(null != tempList) {
+      if (null != tempList) {
         result.append("=");
         for(int i = 0; i < tempList.size(); i++) {
-          if(tempList.get(i).contains(":") || tempList.get(i).contains(";") || tempList.get(i).contains(","))
+          if (tempList.get(i).contains(":") || tempList.get(i).contains(";") || tempList.get(i).contains(","))
               throw new IllegalArgumentException("Extension value contains an illegal character. " + tempList.get(i));
-          if(i > 0)
+          if (i > 0)
             result.append(",");
           result.append(tempList.get(i));
         }
@@ -368,14 +368,14 @@ private static long bytesToLong(byte[] b) {
        */
   private static Map<String, List<String> > deserializeExtensions(String extensions) {
     Map<String, List<String> > result = new HashMap<String, List<String> >();
-    if(null == extensions || extensions.length() == 0)
+    if (null == extensions || extensions.length() == 0)
         return result;
     
     String[] items = extensions.split(";");
     
     for(int i = 0; i < items.length; i++) {
       String[] parts = items[i].split("=", 2);
-      if(parts.length == 1)
+      if (parts.length == 1)
         result.put(parts[0], null);
       else
         result.put(parts[0], Arrays.asList(parts[1].split(",")));
@@ -395,7 +395,7 @@ private static long bytesToLong(byte[] b) {
       temp = numberOfLeadingZeros(values[i]);
       
       result += temp;
-      if(temp != 8)
+      if (temp != 8)
         break;
     }
     
@@ -406,9 +406,9 @@ private static long bytesToLong(byte[] b) {
    * Returns the number of leading zeros in a bytes binary represenation
    */
   private static int numberOfLeadingZeros(byte value) {
-    if(value < 0)
+    if (value < 0)
       return 0;
-    if(value < 1)
+    if (value < 1)
       return 8;
     else if (value < 2)
       return  7;
@@ -468,7 +468,7 @@ private static long bytesToLong(byte[] b) {
        * @throws NoSuchAlgorithmException If SHA1 is not a supported Message Digest
        */
   private static void initEstimates() throws NoSuchAlgorithmException {
-    if(milliFor16 == -1) {
+    if (milliFor16 == -1) {
       long duration;
       duration = Calendar.getInstance().getTimeInMillis();
       for(int i = 0; i < 11; i++) {
@@ -484,10 +484,9 @@ private static long bytesToLong(byte[] b) {
    * @param other
    * @see java.lang.Comparable#compareTo(Object)
    */
-  public int compareTo(HashCash other) {
-      if(null == other)
-          throw new NullPointerException();
-      
-      return Integer.valueOf(getValue()).compareTo(Integer.valueOf(other.getValue()));
-  }
+    public int compareTo(HashCash other) {
+        if (other == null) {throw new NullPointerException("Cannot compare to a null HashCash object");}
+        return Integer.compare(this.getValue(), other.getValue());
+    }
+
 }

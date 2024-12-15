@@ -558,7 +558,6 @@ public abstract class SystemVersion {
      * @since 0.9.57+
      */
     public static int getCPULoad() {
-        DecimalFormat integerFormatter = new DecimalFormat("###,###,##0");
         int cores = SystemVersion.getCores();
         OperatingSystemMXBean osmxb = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
         double cpuLoadAvg = osmxb.getProcessCpuLoad() * 100;
@@ -597,7 +596,6 @@ public abstract class SystemVersion {
     public static int getSystemLoad() {
         if (I2PAppContext.getGlobalContext().statManager() == null) {return 0;}
         else {
-            DecimalFormat integerFormatter = new DecimalFormat("###,###,##0");
             int cores = SystemVersion.getCores();
             OperatingSystemMXBean osmxb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
             double systemLoadAvg = (osmxb.getSystemLoadAverage() / cores) * 100;

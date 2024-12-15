@@ -240,12 +240,9 @@ class EventPumper implements Runnable {
                 //int known = _context.netDbSegmentor().getKnownRouters();
                 int known = _context.netDb().getKnownRouters();
                 int loopFreq = FAILSAFE_ITERATION_FREQ;
-                if (known > 2000)
-                    loopFreq = FAILSAFE_ITERATION_FREQ * 2;
-                else if (known < 2000)
-                    loopFreq = FAILSAFE_ITERATION_FREQ / 2;
-                else if (known < 1000)
-                    loopFreq = FAILSAFE_ITERATION_FREQ / 4;
+                if (known > 2000) {loopFreq = FAILSAFE_ITERATION_FREQ * 2;}
+                else if (known < 1000) {loopFreq = FAILSAFE_ITERATION_FREQ / 4;}
+                else {loopFreq = FAILSAFE_ITERATION_FREQ / 2;}
                 if (lastFailsafeIteration + loopFreq < now) {
                     // in the *cough* unthinkable possibility that there are bugs in
                     // the code, let's periodically pass over all NTCP connections and

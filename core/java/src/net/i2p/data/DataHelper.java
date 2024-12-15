@@ -1572,8 +1572,7 @@ public class DataHelper {
      */
     public static String formatSize2(long bytes, boolean nonBreaking) {
         String space = nonBreaking ? "&#8239;" : " ";
-        if (bytes < 1024)
-            return bytes + space;
+        if (bytes < 1024) {return bytes + space;}
         double val = bytes;
         int scale = 0;
         while (val >= 1024) {
@@ -1583,25 +1582,12 @@ public class DataHelper {
 
         DecimalFormat fmt = new DecimalFormat("##0.#");
 
-        if (bytes <= 1 * 1024 * 1024) // 1MiB
-            fmt.setMaximumFractionDigits(0);
-        else if (bytes <= 1 * 1024 * 1024 * 1024 * 1024) // 1TiB
-            fmt.setMaximumFractionDigits(1);
-        else
-            fmt.setMaximumFractionDigits(2);
-
-/*
-        if (val >= 200) {
-            fmt.setMaximumFractionDigits(0);
-        } else if (val >= 20) {
-            fmt.setMaximumFractionDigits(1);
-        }
-*/
-        // Replace &nbsp; with thin non-breaking space &#8239; (more consistent/predictable width between fonts & point sizes)
+        if (bytes <= 1 * 1024 * 1024) {fmt.setMaximumFractionDigits(0);} // 1MiB
+        else if (bytes <= 1 * 1024 * 1024 * 1024 * 1024) {fmt.setMaximumFractionDigits(1);} // 1TiB
+        else {fmt.setMaximumFractionDigits(2);}
 
         String str = fmt.format(val) + space;
         switch (scale) {
-
             case 1: return str + "Ki";
             case 2: return str + "Mi";
             case 3: return str + "Gi";
@@ -2120,13 +2106,18 @@ public class DataHelper {
     public static String[] split(String s, String regex, int limit) {
         Pattern p = patterns.get(regex);
         if (p == null) {
-            // catches easy mistake, and also swapping the args by mistake
-            if (regex.length() > 1 && !regex.startsWith("[") && !regex.equals("\r\n") && !regex.startsWith("\\")) {
-                //(new Exception("Warning: Split on regex: \"" + regex + "\" should probably be enclosed with []")).printStackTrace();
-                System.out.println("Warning: Split on regex: \"" + regex + "\" should probably be enclosed with []");
+            // Double-checked locking pattern
+            synchronized (DataHelper.class) {
+                p = patterns.get(regex);
+                if (p == null) {
+                    // catches easy mistake, and also swapping the args by mistake
+                    if (regex.length() > 1 && !regex.startsWith("[") && !regex.equals("\r\n") && !regex.startsWith("\\")) {
+                        System.out.println("Warning: Split on regex: \"" + regex + "\" should probably be enclosed with []");
+                    }
+                    p = Pattern.compile(regex);
+                    patterns.put(regex, p);
+                }
             }
-            p = Pattern.compile(regex);
-            patterns.putIfAbsent(regex, p);
         }
         return p.split(s, limit);
     }

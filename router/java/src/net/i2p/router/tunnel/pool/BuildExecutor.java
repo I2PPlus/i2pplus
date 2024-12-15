@@ -153,10 +153,13 @@ class BuildExecutor implements Runnable {
             PooledTunnelCreatorConfig cfg = iter.next();
             if (cfg.getExpiration() <= expireBefore) {
                 // save them for another minute
-                _recentlyBuildingMap.putIfAbsent(Long.valueOf(cfg.getReplyMessageId()), cfg);
-                iter.remove();
-                if (expired == null) {expired = new ArrayList<PooledTunnelCreatorConfig>();}
-                expired.add(cfg);
+                PooledTunnelCreatorConfig existingCfg = _recentlyBuildingMap.putIfAbsent(Long.valueOf(cfg.getReplyMessageId()), cfg);
+                if (existingCfg == null) {
+                    // An insertion occurred
+                    iter.remove();
+                    if (expired == null) {expired = new ArrayList<PooledTunnelCreatorConfig>();}
+                    expired.add(cfg);
+                }
             }
         }
         concurrent = _currentlyBuildingMap.size();

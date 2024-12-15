@@ -758,7 +758,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             boolean isG = ri.getCapabilities().indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0;
             boolean noCountry = true;
             String country = "unknown";
-            if (caps != null && caps.contains("F")) {isFF = true;}
+            if (caps != null && !caps.isEmpty() && caps.contains("F")) {isFF = true;}
             country = _context.commSystem().getCountry(key);
             if (country != null && country != "unknown") {noCountry = false;}
             String myCountry = _context.getProperty(PROP_IP_COUNTRY);
@@ -768,24 +768,21 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             boolean isStrict = _context.commSystem().isInStrictCountry(); // us
             boolean shouldRemove = false;
 
-            if (isStrict && _context.commSystem().isInStrictCountry(key)) {
+            if (_context.commSystem().isInStrictCountry(key)) {
                 if (!_context.banlist().isBanlisted(key)) {
                     if (_log.shouldWarn()) {
                         _log.warn("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> " +
-                        (isHidden  ? "Hidden mode active and router is in same country" :
-                         isStrict ? "Our router is in a strict country" :
-                         "i2np.hideMyCountry=true"));
+                                  (isHidden ? "Hidden mode active and router is in same country" :
+                                  blockMyCountry ? "i2np.hideMyCountry=true" : "Our router is in a strict country"));
                     }
                     if (_log.shouldWarn()) {
-                        _log.warn("Banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
+                        _log.warn("Banning " + (caps != null && !caps.isEmpty() ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
                                   " [" + key.toBase64().substring(0,6) + "] for duration of session -> Router is in our country");
                     }
                     if (blockMyCountry) {
                         _context.banlist().banlistRouterForever(key, " <b>➜</b> In our country (banned via config)");
-                    } else if (isStrict) {
-                        _context.banlist().banlistRouterForever(key, " <b>➜</b> In our country (we are in a strct country)");
                     } else {
-                        _context.banlist().banlistRouterForever(key, " <b>➜</b> In our country (we are in Hidden mode)");
+                        _context.banlist().banlistRouterForever(key, " <b>➜</b> In our country (we are in a strict country)");
                     }
                 }
             } else if (blockedCountries.contains(country) && !_context.banlist().isBanlisted(key)) {
@@ -801,7 +798,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                         _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> X tier and G Cap, neither R nor U");
                     }
                     if (_log.shouldWarn() && !_context.banlist().isBanlisted(key)) {
-                        _log.warn("Banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
+                        _log.warn("Banning " + (caps != null && !caps.isEmpty() ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
                                   " [" + key.toBase64().substring(0,6) + "] for 4h -> XG and older than 0.9.61 (using proxy?)");
                     }
                     _context.banlist().banlistRouter(key, " <b>➜</b> XG Router, neither R nor U (proxied?)", null, null, _context.clock().now() + 4*60*60*1000);
@@ -813,7 +810,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                         _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> LU and older than 0.9.61");
                     }
                     if (_log.shouldWarn() && !_context.banlist().isBanlisted(key)) {
-                        _log.warn("Banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
+                        String capsMessage = (caps == null || caps.isEmpty()) ? "" : caps;
+                        _log.warn("Banning " + capsMessage + ' ' + (isFF ? "Floodfill" : "Router") +
                                   " [" + key.toBase64().substring(0,6) + "] for 4h -> LU and older than 0.9.61");
                     }
                     _context.banlist().banlistRouter(key, " <b>➜</b> LU and older than 0.9.61", null, null, _context.clock().now() + 4*60*60*1000);
@@ -1284,7 +1282,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 if (i != null && i.length() != 24) {
                     _context.banlist().banlistRouter(routerInfo.getIdentity().calculateHash(), " <b>➜</b> Invalid NTCP address", null, null, now + 24*60*60*1000L);
                     if (_log.shouldWarn() && !isBanned) {
-                        _log.warn("Banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
+                        _log.warn("Banning " + (!caps.isEmpty() ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
                                   " [" + routerId + "] for 24h -> Invalid NTCP address");
                     }
                     return "Invalid NTCP address";
@@ -1319,7 +1317,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                          "i2np.hideMyCountry=true"));
                     }
                     if (_log.shouldWarn()) {
-                        _log.warn("Banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
+                        _log.warn("Banning " + (!caps.isEmpty() ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
                                   " [" + h.toBase64().substring(0,6) + "] for duration of session -> Router is in our country");
                     }
                     if (blockMyCountry) {
@@ -1344,7 +1342,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                         _log.info("Dropping RouterInfo [" + h.toBase64().substring(0,6) + "] -> X tier and G Cap, neither R nor U");
                     }
                     if (_log.shouldWarn() && !_context.banlist().isBanlisted(h)) {
-                        _log.warn("Banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
+                        _log.warn("Banning " + (!caps.isEmpty() ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
                                   " [" + h.toBase64().substring(0,6) + "] for 4h -> XG and older than 0.9.61 (using proxy?)");
                     }
                     _context.banlist().banlistRouter(h, " <b>➜</b> XG Router, neither R nor U (proxied?)", null, null, _context.clock().now() + 4*60*60*1000);
@@ -1377,7 +1375,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             } else if (isLTier && isUnreachable && isOld) {
                 if (!isBanned) {
                     if (_log.shouldWarn() && !_context.banlist().isBanlisted(h)) {
-                        _log.warn("Banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
+                        _log.warn("Banning " + (!caps.isEmpty() ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
                                   " [" + routerId + "] for 4h -> LU and older than 0.9.61");
                     }
                 }

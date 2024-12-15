@@ -208,7 +208,7 @@ public class ConfigTunnelsHelper extends HelperBase {
 
         // tunnel backup quantity
         if (advanced && (in.getBackupQuantity() > 0 || out.getBackupQuantity() > 0)) {
-            int maxBQuantity = advanced ? MAX_ADVANCED_BACKUP_QUANTITY : MAX_BACKUP_QUANTITY;
+            int maxBQuantity = MAX_ADVANCED_BACKUP_QUANTITY;
             buf.append("<tr class=\"options lastrow\"><td><b>").append(_t("Backup quantity")).append(":</b></td>\n")
                .append("<td><select name=\"").append(index).append(".backupInbound\">\n");
             now = in.getBackupQuantity();

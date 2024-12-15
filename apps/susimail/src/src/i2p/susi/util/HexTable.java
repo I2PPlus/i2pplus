@@ -27,45 +27,32 @@ package i2p.susi.util;
  * @author susi
  */
 public class HexTable {
-	
-	/**
-	 *  Three character strings, upper case, e.g. "=0A"
-	 */
-	public static final String[] table = new String[256];
-	
-	static {
-		for( int i = 0; i < 256; i++ ) {
-			String str = intToHex( i );
-			if( str.length() == 1 )
-				str = "0" + str;
-			table[i] = "=" + str;
-		}
-	}
+    /**
+     *  Three character strings, upper case, e.g. "=0A"
+     */
+    public static final String[] table = new String[256];
+    
+    static {
+        for(int i = 0; i < 256; i++) {
+            String str = intToHex(i);
+            if (str.length() == 1) {str = "0" + str;}
+            table[i] = "=" + str;
+        }
+    }
 
-	private static String intToHex( int b )
-	{
-		if( b == 0 )
-			return "0";
-		else {
-			String str = "";
-			while( b > 0 ) {
-				byte c = (byte)(b % 16);
-				if( c < 10 )
-					c += '0';
-				else
-					c += 'A' - 10;
-				str = "" + (char)c + str;
-				b = (byte)(b / 16);
-			}
-			return str;
-		}
-	}
+    private static String intToHex(int b) {
+        if (b == 0) {return "0";}
+        else {
+            String str = "";
+            while(b > 0) {
+                byte c = (byte)(b % 16);
+                if (c < 10) {c += '0';}
+                else {c += 'A' - 10;}
+                str = "" + (char)c + str;
+                b = (byte) (b / 16);
+            }
+            return str;
+        }
+    }
 
-/****
-	public static void main(String[] args) {
-		for( int i = 0; i < 256; i++ ) {
-			System.out.println(i + ": " + table[i]);
-		}
-	}
-****/
 }

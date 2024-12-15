@@ -3425,23 +3425,21 @@ public class WebMail extends HttpServlet
                   "\" size=32 autocomplete=\"current-password\" name=\"pass\" value=\"" + "\">\n<button type=\"button\" class=script id=toggle" +
                   " title=\"" + _t("Toggle password visibility") + "\">Show password</button></td>" +
                   "</tr>\n");
-        // which is better?
         if (!fixed) {
-        //if (true) {
             out.print("<tr>" +
                       "<td width=30%>" + _t("Host") + "</td>" +
                       "<td width=40%><input type=text size=32 name=\"" + HOST +"\" value=\"" +
-                      quoteHTML(host) + "\"" + (fixed ? " disabled" : "") + "></td>" +
+                      quoteHTML(host) + "\"></td>" +
                       "</tr>\n" +
                       "<tr>" +
                       "<td width=30%>" + _t("POP3 Port") + "</td>" +
                       "<td width=40%><input type=text style=text-align:right size=5 name=\"" + POP3 +"\" value=\"" +
-                      quoteHTML(pop3) + "\"" + (fixed ? " disabled" : "") + "></td>" +
+                      quoteHTML(pop3) + "\"></td>" +
                       "</tr>\n" +
                       "<tr>" +
                       "<td width=30%>" + _t("SMTP Port") + "</td>" +
                       "<td width=40%><input type=text style=text-align:right size=5 name=\"" + SMTP +"\" value=\"" +
-                      quoteHTML(smtp) + "\"" + (fixed ? " disabled" : "") + "></td>" +
+                      quoteHTML(smtp) + "\"></td>" +
                       "</tr>\n");
         }
         out.print("<tr><td colspan=2><hr></td></tr>\n" +

@@ -41,19 +41,16 @@ import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
 /**
- * Handle the received tunnel build message requests and replies,
- * including sending responses to requests, updating the
- * lists of our tunnels and participating tunnels,
- * and updating stats.
+ * Handle the received tunnel build message requests and replies, including sending responses
+ * to requests, updating the lists of our tunnels and participating tunnels, and updating stats.
  *
- * Replies are handled immediately on reception; requests are queued.
- * As of 0.8.11 the request queue is handled in a separate thread,
- * it used to be called from the BuildExecutor thread loop.
+ * Replies are handled immediately on reception; requests are queued. As of 0.8.11 the request queue
+ * is handled in a separate thread, it used to be called from the  BuildExecutor thread loop.
  *
  * Note that 10 minute tunnel expiration is hardcoded in here.
  *
- * There is only one of these objects but there may be multiple
- * threads running it. Instantiated and started by TunnelPoolManager.
+ * There is only one of these objects but there may be multiple threads running it.
+ * Instantiated and started by TunnelPoolManager.
  *
  */
 class BuildHandler implements Runnable {
@@ -251,7 +248,7 @@ class BuildHandler implements Runnable {
             _context.statManager().addRateData("tunnel.dropLoadDelay", now - state.recvTime);
             if (maxTunnels > 0) {
                 _context.throttle().setTunnelStatus("[rejecting/overload]" + _x("Dropping Tunnel Requests: Too slow")
-                                    .replace("tunnel requests:", "requests:"));
+                                   .replace("tunnel requests:", "requests:"));
             }
             return;
         }
@@ -548,15 +545,15 @@ class BuildHandler implements Runnable {
                                                   new TimeoutReq(_context, state, req, nextPeer), NEXT_HOP_LOOKUP_TIMEOUT);
             } else {
                 String status = "\n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]" + req;
-                if (lucky) {_currentLookups.decrementAndGet();}
-                else if (!lucky) {
+                if (highload) {_log.info("Dropping next hop lookup -> System is under load" + status);}
+                else if (lucky) {_currentLookups.decrementAndGet();}
+                else {
                     if (numTunnels > 2000) {_currentLookups.incrementAndGet();} // increment counter even though we dropped the lookup
                     if (_log.shouldInfo()) {
                         _log.info("Dropping next hop lookup -> " + (numTunnels < 800 ? "40" : (numTunnels < 3000 ? "70" : "90")) +
                                   "% chance of drop" + status);
                     }
-                } else if (highload) {_log.info("Dropping next hop lookup -> System is under load" + status);}
-                else {_log.info("Dropping next hop lookup -> Limit: " + limit + " / " + PERCENT_LOOKUP_LIMIT + "%" + status);}
+                }
                 _context.statManager().addRateData("tunnel.dropLookupThrottle", 1);
                 if (from != null) {_context.commSystem().mayDisconnect(from);}
             }

@@ -318,7 +318,6 @@ public class Blocklist {
                 _blocklist = allocate(_files);
                 if (_blocklist == null) {return;}
                 int ccount = process();
-                if (_blocklist == null) {return;}
                 if (ccount <= 0) {disable(); return;}
                 _blocklistSize = merge(_blocklist, ccount);
                 // we're done with _peerBlocklist, but leave it in case we need it for a later readin

@@ -568,7 +568,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
                 if (_log.shouldDebug()) {_log.debug("[HTTPServer] Incoming request for: " + hostname + "\n* Client: " + peerB32);}
                 if (hostname != null && !hostname.endsWith(".i2p") && !hostname.endsWith(".onion")) {
-                    InetAddress address = hostname != null ? InetAddress.getByName(hostname) : null;
+                    InetAddress address = InetAddress.getByName(hostname);
                     if (address != null) {
                         if (address.isLinkLocalAddress() || address.isLoopbackAddress() || address.isSiteLocalAddress()) {
                             if (_log.shouldWarn()) {
@@ -995,12 +995,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     if (url.startsWith("http://")) {url = url.replace("http://", "");}
                     if (url.length() > 100) {url = url.substring(0, 48) + "..." + url.substring(url.length() - 48);}
                     String[] urlParts = url.split("/");
+                    StringBuilder hostBuilder = new StringBuilder(urlParts[0]);
                     if (urlParts.length > 0) {
-                        host = urlParts[0];
                         for (int i = 1; i < urlParts.length; i++) {
-                            if (!urlParts[i].trim().isEmpty()) {host += "/" + urlParts[i];}
+                            if (!urlParts[i].trim().isEmpty()) {hostBuilder.append('/').append(urlParts[i]);}
                         }
                     }
+                    host = hostBuilder.toString();
                 }
                 if (host != null && host.contains("b32.i2p")) {host = host.substring(0, 12) + "...b32.i2p";}
                 req = host != null ? host : "Unknown request";

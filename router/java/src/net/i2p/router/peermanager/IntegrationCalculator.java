@@ -16,8 +16,6 @@ class IntegrationCalculator {
             val += 24 * profile.getDbIntroduction().getRate(60*60*1000l).getLastEventCount();
             val += 24 * profile.getDbIntroduction().getRate(60*60*1000l).getCurrentEventCount() * 2;
             val /= 16;
-            if (val > 0 && val < 1)
-                val = 1;
         }
         val += profile.getIntegrationBonus();
         return val;

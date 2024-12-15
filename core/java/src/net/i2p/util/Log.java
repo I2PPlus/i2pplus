@@ -18,9 +18,7 @@ import net.i2p.I2PAppContext;
  * instantiated and kept as a variable for each class it is used by, e.g.
  *  <code>private final Log _log = context.logManager().getLog(MyClassName.class);</code>
  *
- * If there is anything in here that doesn't make sense, turn off your computer
- * and go fly a kite.
- *
+ * If there is anything in here that doesn't make sense, turn off your computer and go fly a kite.
  *
  * @author jrandom
  */
@@ -219,9 +217,7 @@ public class Log {
      * @since 0.9.8
      */
     public void logCloseLoop(int level, Object... desc) {
-        if (!shouldLog(level))
-            return;
-
+        if (!shouldLog(level)) {return;}
         // catenate all toString()s
         StringBuilder builder = new StringBuilder();
         builder.append("close() loop in");
@@ -229,14 +225,12 @@ public class Log {
             builder.append(" ");
             builder.append(String.valueOf(o));
         }
-
         Exception e = new Exception("check stack trace");
         log(level,builder.toString(),e);
     }
 
     public String getName() {
-        if (_className != null) return _className;
-
+        if (_className != null) {return _className;}
         return _name;
     }
 
@@ -244,36 +238,26 @@ public class Log {
     public Object getScope() { return _scope; }
 
     static String getScope(String name, Class<?> cls) {
-        if ( (name == null) && (cls == null) ) return "f00";
-        if (cls == null) return name;
-        if (name == null) return cls.getName();
+        if ( (name == null) && (cls == null) ) {return "f00";}
+        if (cls == null) {return name;}
+        if (name == null) {return cls.getName();}
         return name + "" + cls.getName();
     }
 
     private static final class LogScope {
         private final String _scopeCache;
 
-        public LogScope(String name, Class<?> cls) {
-            _scopeCache = getScope(name, cls);
-        }
+        public LogScope(String name, Class<?> cls) {_scopeCache = getScope(name, cls);}
 
         @Override
-        public int hashCode() {
-            return _scopeCache.hashCode();
-        }
+        public int hashCode() {return _scopeCache.hashCode();}
 
         @Override
         public boolean equals(Object obj) {
-            if (obj == null)
-                return false;
-            if (obj instanceof LogScope) {
-                LogScope s = (LogScope)obj;
-                return s._scopeCache.equals(_scopeCache);
-            } else if (obj instanceof String) {
-                return obj.equals(_scopeCache);
-            }
-
-            return false;
+            if (this == obj) {return true;}
+            if (obj == null || getClass() != obj.getClass()) {return false;}
+            LogScope other = (LogScope) obj;
+            return _scopeCache.equals(other._scopeCache);
         }
     }
 }

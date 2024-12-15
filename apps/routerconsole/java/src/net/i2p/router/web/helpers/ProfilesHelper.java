@@ -85,7 +85,6 @@ public class ProfilesHelper extends HelperBase {
     public String getBanlistCompact() {
         try {
             BanlistRenderer rend = new BanlistRenderer(_context);
-            StringBuilder buf = new StringBuilder(1024);
             rend.renderBanlistCompact(_out);
         } catch (IOException ioe) {ioe.printStackTrace();}
         return "";

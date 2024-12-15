@@ -31,20 +31,19 @@ class MessageReceiver {
     private volatile boolean _alive;
     //private ByteCache _cache;
 
+    private static final int cores = SystemVersion.getCores();
     private static final int MIN_THREADS = SystemVersion.isSlow() ? 2 : 4;
-    private static final int MAX_THREADS = SystemVersion.isSlow() ? 6 : Math.max(SystemVersion.getCores(), 12);
+    private static final int MAX_THREADS = SystemVersion.isSlow() ? 6 : Math.max(cores / 2 , 8);
     private static final int MIN_QUEUE_SIZE =  SystemVersion.isSlow() ? 32 : 64;
     private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 128 : 256;
     private final int _threadCount;
     private static final long POISON_IMS = -99999999999l;
-    private static final int cores = SystemVersion.getCores();
 
     public MessageReceiver(RouterContext ctx, UDPTransport transport) {
         _context = ctx;
         _log = ctx.logManager().getLog(MessageReceiver.class);
         _transport = transport;
         long maxMemory = SystemVersion.getMaxMemory();
-        int cores = SystemVersion.getCores();
         boolean isSlow = SystemVersion.isSlow();
         _threadCount = MAX_THREADS;
         int qsize = (int) MAX_QUEUE_SIZE;
@@ -89,11 +88,8 @@ class MessageReceiver {
      */
     public void receiveMessage(InboundMessageState state) {
         if (_alive) {
-            try {
-                _completeMessages.put(state);
-            } catch (InterruptedException ie) {
-                _alive = false;
-            }
+            try {_completeMessages.put(state);}
+            catch (InterruptedException ie) {_alive = false;}
         }
     }
 

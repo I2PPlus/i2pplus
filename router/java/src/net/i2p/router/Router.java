@@ -418,10 +418,12 @@ public class Router implements RouterClock.ClockShiftListener {
         // (we could look for the wrapper.config file and parse it I guess...)
         // If we don't have a wrapper, RouterLaunch does this for us.
         if (_context.hasWrapper()) {
-            File f = new File(System.getProperty("java.io.tmpdir"), "wrapper.log");
+            String tmpDir = System.getProperty("java.io.tmpdir");
+            File f = new File(tmpDir, "wrapper.log");
             if (!f.exists()) {f = new File(_context.getBaseDir(), "wrapper.log");}
-            else {SecureFileOutputStream.setPerms(f);}
+            SecureFileOutputStream.setPerms(f);
         }
+
         CryptoChecker.warnUnavailableCrypto(_context);
 
         _routerInfo = null;
