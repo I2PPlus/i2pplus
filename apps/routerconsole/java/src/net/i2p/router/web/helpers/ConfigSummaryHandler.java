@@ -32,10 +32,8 @@ public class ConfigSummaryHandler extends FormHandler {
         if (_action.equals(_t("Save")) && "0".equals(group)) {
             try {
                 int refreshInterval = Integer.parseInt(getJettyString("refreshInterval"));
-                if (refreshInterval < 0)
-                    refreshInterval = 0;
-                else if (refreshInterval > 0 && refreshInterval < CSSHelper.MIN_REFRESH)
-                    refreshInterval = CSSHelper.MIN_REFRESH;
+                if (refreshInterval < 0) {refreshInterval = 0;}
+                else if (refreshInterval < CSSHelper.MIN_REFRESH) {refreshInterval = CSSHelper.MIN_REFRESH;}
                 Map<String, String> toAdd = new HashMap<String, String>(2);
                 if (refreshInterval == 0) {
                     toAdd.put(CSSHelper.PROP_DISABLE_REFRESH, "true");

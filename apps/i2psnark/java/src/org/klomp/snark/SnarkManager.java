@@ -511,7 +511,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                       .replace("&amp;nbsp", "&nbsp;"));
         } else if (lastAddedMessage.startsWith(_t("Download already running: ")) &&
                    lastAddedMessage.contains(_t("Downloading"))) {
-            lastAddedMessage.replace(_t("Download already running: "), "");
+            lastAddedMessage = lastAddedMessage.replace(_t("Download already running: "), "");
         }
         lastAddedMessageTimestamp = currentTime;
         lastAddedMessage = message;
@@ -2594,7 +2594,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (torrent != null) {
             boolean wasStopped = torrent.isStopped();
             torrent.stopTorrent();
-            if (remaining == 0) {} // should we disconnect/reconnect here (taking care to deal with the other thread's
             if (shouldRemove) {removeTorrentStatus(torrent);}
             if (!wasStopped) {
                 addMessageNoEscape(_t("Torrent stopped: {0}", linkify(torrent).replace("Magnet ", "")));

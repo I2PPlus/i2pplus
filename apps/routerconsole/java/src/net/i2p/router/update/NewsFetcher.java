@@ -142,8 +142,7 @@ class NewsFetcher extends UpdateRunner {
             String newsURL = _currentURI.toString();
             String newsHost = _currentURI.getHost().substring(0,6) + "...b32.i2p";
 
-            if (_tempFile.exists())
-                _tempFile.delete();
+            if (_tempFile.exists()) {_tempFile.delete();}
 
             try {
                 EepGet get;
@@ -176,35 +175,23 @@ class NewsFetcher extends UpdateRunner {
                             // from checkForUpdates()
                             _mgr.notifyComplete(this, "<b>" + _failMsg + "</b>");
                         } else if (_showStatus) {
-                            if (status == 200)
-                                _mgr.notifyComplete(this, "News updated from " + newsHost);
-                            else if (status == 304)
-                                _mgr.notifyComplete(this, "No news updates from " + newsHost);
-                            else
-                                _mgr.notifyComplete(this, "Could not connect to news host [" + status + "]");
+                            if (status == 200) {_mgr.notifyComplete(this, "News updated from " + newsHost);}
+                            else {_mgr.notifyComplete(this, "No news updates from " + newsHost);}
                         }
                         return;
-                    }
+                    } else {_mgr.notifyComplete(this, "Could not connect to news host [" + status + "]");}
                 } else {
                     int status = get.getStatusCode();
                     String msg;
-                    if (status == 504 || status <= 0)
-                        msg = "Unable to connect to news server " + newsHost;
-                    else if (status == 500)
-                        msg = "News server " + _currentURI.getHost() + " not found in address book";
-                    else if (status == 404)
-                        msg = "News file not found on news server at " + newsURL;
-                    else
-                        msg = status + " " + DataHelper.stripHTML(get.getStatusText());
+                    if (status == 504 || status <= 0) {msg = "Unable to connect to news server " + newsHost;}
+                    else if (status == 500) {msg = "News server " + _currentURI.getHost() + " not found in address book";}
+                    else if (status == 404) {msg = "News file not found on news server at " + newsURL;}
+                    else {msg = status + " " + DataHelper.stripHTML(get.getStatusText());}
                     // only display if manually initiated
-                    if (_showStatus)
-                        updateStatus("<b>" + msg + "</b>");
-                    if (_log.shouldWarn())
-                        _log.warn(msg);
+                    if (_showStatus) {updateStatus("<b>" + msg + "</b>");}
+                    if (_log.shouldWarn()) {_log.warn(msg);}
                 }
-            } catch (Throwable t) {
-                _log.error("Error fetching the news", t);
-            }
+            } catch (Throwable t) {_log.error("Error fetching the news", t);}
         }
     }
 

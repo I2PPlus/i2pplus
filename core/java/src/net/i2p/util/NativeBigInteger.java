@@ -874,19 +874,17 @@ public class NativeBigInteger extends BigInteger {
         long javaTime = 0;
 
         int runsProcessed = 0;
+
+        // Warm up the JIT
         for (int i = 0; i < 1000; i++) {
-            // JIT warmup
             BigInteger bi;
-            do {
-                bi = new BigInteger(16, rand);
-            } while (bi.signum() == 0);
-            if (mode == 1)
-                jg.modPow(bi, jp);
-            else if (mode == 2)
-                ng.modPowCT(bi, jp);
-            else
-                bi.modInverse(jp);
+            do {bi = new BigInteger(16, rand);}
+            while (bi.signum() == 0);
+            if (mode == 1) {jg.modPow(bi, jp);}
+            else if (mode == 2) {ng.modPowCT(bi, jp);}
+            else {bi.modInverse(jp);}
         }
+
         BigInteger myValue = null, jval;
         final NativeBigInteger g = CryptoConstants.elgg;
         final NativeBigInteger p = CryptoConstants.elgp;

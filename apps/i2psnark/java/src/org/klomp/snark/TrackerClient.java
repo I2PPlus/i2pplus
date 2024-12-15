@@ -687,7 +687,7 @@ public class TrackerClient implements Runnable {
                 }
             } else {
                 if (_log.shouldInfo())
-                    _log.info("Not requesting PEX peers for [" + snark.getInfoHash() + "]");
+                    _log.info("Not requesting PEX peers for [" + infoHash + "]");
             }
             return rv;
     }
