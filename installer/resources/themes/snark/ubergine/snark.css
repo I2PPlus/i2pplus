@@ -1019,10 +1019,10 @@ html:not(.iframed) #torrentEdit :not(tfoot) tr:first-child td:last-child{border-
 .createFilterToggle.starts_with{border-left-width:5px}
 .createFilterToggle.contains{border-left-width:5px;border-right-width:5px}
 .createFilterToggle.ends_with{border-right-width:5px}
+#contentFilter{margin:0;width:80%;display:flex;flex-wrap:wrap;align-items:center}
 #contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:2px 5px 2px 18px;font-style:normal;color:#ef27aa;text-shadow:1px 1px 1px #0008;border-color:#bd0f80cc;box-shadow:0 0 0 1px #0004 inset,var(--shadow_inset);background:var(--delete) no-repeat 5px center/10px,linear-gradient(180deg,#313,#515);background-blend-mode:hard-light}
 .createFilterToggle:hover,#contentFilter input[type=checkbox]:checked+.createFilterToggle:hover{color:var(--hover);text-shadow:1px 1px 1px #0008;border-color:var(--hover);box-shadow:0 0 0 1px #0008,var(--highlight);background:linear-gradient(180deg,#818,#616)}
 #contentFilter input[type=checkbox]:checked+.createFilterToggle:hover{background:var(--delete_hover) no-repeat 5px center/10px,linear-gradient(180deg,#818,#616);background-blend-mode:normal}
-#contentFilter{margin:0;width:80%;display:flex;flex-wrap:wrap;align-items:center}
 #contentFilter input[type=checkbox]{display:none}
 #fileFilter{margin:0 auto;display:block;margin-bottom:10px}
 .iframed #fileFilter{margin-top:-11px}
@@ -1427,7 +1427,8 @@ th.radio{width:96px}
 .trackerhome,.trackerannounce,.knownTracker a{width:400px;max-width:400px}
 #dirInfoComplete{margin-right:3px}
 #addFileFilter input[type=text],#trackerconfig input[type=text]{width:220px;max-width:220px}
-#addSection td:first-child span,#createSection tr:first-child td:first-child span:not(.trackerName){margin-right:-16px;padding:6px 10px 6px 14px;min-width:80px;display:inline-block;position:relative;z-index:2;vertical-align:middle;text-align:right;border-radius:15px 0 0 15px;box-shadow:0 0 0 1px #110011b2;background:linear-gradient(180deg,#434,#212)}
+#addSection td:first-child span,#createSection tr:first-child td:first-child span:not(.trackerName),#createSection tr:nth-child(2) td:first-child span:not(.trackerName){margin-right:-16px;padding:6px 10px 6px 14px;min-width:80px;display:inline-block;position:relative;z-index:2;vertical-align:middle;text-align:right;border-radius:15px 0 0 15px;box-shadow:0 0 0 1px #110011b2;background:linear-gradient(180deg,#434,#212)}
+#createSection tr:nth-child(2) td:first-child span:not(.trackerName){margin-right:-20px;padding:7.5px 10px}
 #trackerconfig input.trackerannounce,#trackerconfig input.trackerhome{width:280px;max-width:80%}
 #trackerconfig input.trackerhome{margin-left:6px}
 #addSection td:first-child,#createSection td:first-child{width:200px}
@@ -1435,6 +1436,7 @@ th.radio{width:96px}
 #configs td{padding-top:3px;padding-bottom:3px}
 #configs td:first-child{padding-right:10px}
 #configs td:last-child{padding-right:0}
+#contentFilter{margin:0;padding:4px 6px;width:calc(80% - 5px);display:flex;flex-wrap:wrap;align-items:center;box-shadow:0 0 0 1px #231323 inset;background:#180018}
 #fileFilter td,#trackerconfig td,#trackerconfig td label{font-size:10pt}
 #navbar{padding:11px 10px 10px}
 .iframed #navbar{padding:12px 10px 10px}
