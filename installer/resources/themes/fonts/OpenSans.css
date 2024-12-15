@@ -9,7 +9,7 @@ a,a:link,a:visited,#logs li,#logs pre,.tab,.statvalue,select,input[type="submit"
 b,h2,h3,h4,h5,strong{font-weight:700}
 button,input[type="reset"],input[type="submit"],select,.control,.fakebutton,.fakebutton:visited{font-weight:620;font-variation-settings:'wdth' 95}
 input[type=password],input[type=text],pre,select,textarea,.routerid tt,.routerid tt a,#statusMessages,#statusMessages:active,#statusMessages:focus{font-weight:500}
-label{font-weight:500!important;font-variation-settings:'wdth' 90}
+label:not(.createFilterToggle){font-weight:500!important;font-variation-settings:'wdth' 90}
 .infohash{font-weight:500}
 .main b,.main td a,.main td b,.page td a,.panel td a,.panel td b,li b,.tunnelName a{font-weight:650}
 .main,#sidebar{contain:paint}

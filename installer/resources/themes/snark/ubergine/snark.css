@@ -38,6 +38,7 @@
 --snarkGraph:url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true");
 --snarkGraph:url();
 --tabicon:linear-gradient(180deg,#767 50%,#323 50%,#212);
+--txtInputBevel:inset 0 0 0 1px #280028,inset 2px 2px 2px 1px #101;
 --th:linear-gradient(180deg,#202,#101);
 --th_sub:url(/i2psnark/.res/icons/favicon.svg) no-repeat 7px center/20px,linear-gradient(135deg,rgba(16,0,16,.6),rgba(16,0,16,.3),rgba(16,0,16,.7)),var(--th2_bg);
 --th2:linear-gradient(180deg,#1018,#101b),var(--th2_bg);
@@ -516,7 +517,7 @@ input[type=text],textarea,select{box-sizing:border-box}
 input.r{text-align:right;background:#101 var(--tile)}
 input[type=submit]:disabled:active,a.control:disabled:active{filter:drop-shadow(0 0 1px #101)}
 input,input[type=submit] textarea,select,input[type=text],input.r,input[name="nofilter_dataDir"]{font-weight:700}
-input[type=text],input.r,input[name="nofilter_dataDir"]{padding:6px 8px;box-shadow:inset 0 0 0 1px #280028,inset 2px 2px 2px 1px #101;letter-spacing:.03em;background:#101 var(--tile);transition:box-shadow ease .05s,ease color .05s}
+input[type=text],input.r,input[name="nofilter_dataDir"]{padding:6px 8px;box-shadow:var(--txtInputBevel);letter-spacing:.03em;background:#101 var(--tile);transition:box-shadow ease .05s,ease color .05s}
 input[type=text]:disabled{color:rgba(192,160,192,.5);box-shadow:inset 1px 1px 2px 1px #101;background:#101 var(--tile);cursor:not-allowed}
 input[name="nofilter_commentsName"]:focus::placeholder{opacity:0}
 input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_dataDir"]{width:calc(100% - 166px)}
@@ -562,7 +563,7 @@ select:hover,select:focus,select:active{color:#fff;text-shadow:0 1px 1px #101;bo
 select[disabled],select[disabled]:hover,select[disabled]:focus{color:var(--hover);background:var(--dropdown) no-repeat right 10px center/10px,var(--tile) #101;opacity:.5;cursor:not-allowed}
 select option{padding:2px 2px 2px 1px;font-size:8.5pt;font-weight:700;color:#fff;box-shadow:inset 0 0 20px 20px #f50;background:#f50}
 select option:hover{box-shadow:inset 0 0 20px 20px #212;filter:drop-shadow(0 0 1px rgba(255,0,0,.5))}
-textarea{padding:6px 8px;font-weight:700;font-size:8pt;color:var(--hover);border:1px solid #000;border-radius:2px;box-shadow:inset 0 0 0 1px #280028,inset 2px 2px 2px 1px #101;background:#101 var(--tile);transition:box-shadow ease .15s}
+textarea{padding:6px 8px;font-weight:700;font-size:8pt;color:var(--hover);border:1px solid #000;border-radius:2px;box-shadow:var(--txtInputBevel);background:#101 var(--tile);transition:box-shadow ease .15s}
 a.control,a.controld,a.control:active,a.control.depress{padding:3px 6px 2px 6px;display:inline-block;white-space:nowrap;vertical-align:middle;color:var(--ink_btn);font-weight:700;border:1px inset #bbb;border-radius:2px;box-shadow:0 0 1px 1px rgba(48,16,48,.7);background:var(--btn);background-size:100%;filter:drop-shadow(0 0 1px #313)}
 a.controld{font-weight:400;color:#6e5e6e}
 a.control img{margin:-2px 0 0 -4px;padding:0;height:14px}
@@ -644,8 +645,10 @@ td.tAction input[type=submit]{margin-top:1px}
 .configPanel tr:last-child{display:none}
 .configPanel tr:nth-last-child(2) td{padding-top:10px;text-align:right;border-top:1px solid #57415f}
 #addSection form,#createSection form{margin-top:1px;color:var(--ink)}
+#addSection input[type=submit],#addSection td:first-child,#createSection input[type=submit],#createSection td:first-child{animation:fade .3s linear .15s both}
+#createSection #trackerselect td:first-child{animation:none}
 #addSection input[type=text],#createSection input[type=text]{width:80%}
-#addSection table,#createSection table:not(#trackerselect){animation:fade .05s linear,slide-in .05s linear;will-change:transform}
+#addSection table,#createSection table:not(#trackerselect){animation:fade .15s linear,slide-in .15s linear;will-change:transform}
 #addSection td:first-child,#createSection td:first-child{width:10%;white-space:nowrap}
 #commentSection>input:not(:checked)+.toggleview{margin-bottom:-1px}
 #createSection:hover,#addSection:hover,.iframed #addSection:hover,.iframed #createSection:hover{background-blend-mode:normal}
@@ -655,10 +658,10 @@ td.tAction input[type=submit]{margin-top:1px}
 .iframed .mainsection,.iframed #createSection,.iframed #addSection,.iframed #commentSection,.iframed .configPanel{border-radius:0;box-shadow:inset 0 0 1px 0 #ffeffd;filter:none;background-blend-mode:luminosity,normal}
 .iframed .mainsection .toggleview{margin-top:-10px}
 .iframed #addSection,.iframed #createSection{padding-bottom:3px}
-.iframed #addSection table{animation:fade .05s linear,slide-in .05s ease-out;animation:none}
+.iframed #addSection table{animation:fade .2s linear both}
 .iframed #commentSection,.iframed #editSection{margin:-1px 0 0}
 .iframed #createSection{margin-bottom:-3px}
-.iframed #createSection table:not(#trackerselect){animation:fade .05s linear;animation:none}
+.iframed #createSection table:not(#trackerselect){animation:fade .2s linear both}
 .iframed #editSection+#commentSection{margin-top:-1px}
 .iframed .mainsection#commentSection,.iframed #editSection{margin-bottom:0}
 .iframed .mainsection#commentSection{margin-bottom:1px}
@@ -960,9 +963,9 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 .inactivity{margin-left:14px;max-width:400px;min-width:5px;height:5px;display:inline-block;vertical-align:middle;border-radius:3px;box-shadow:0 0 0 1px #200,0 0 0 1px #fff3 inset;background:repeating-linear-gradient(90deg,#0000,#0000 15px,rgba(0,0,0,.5) 15px,rgba(0,0,0,.5) 16px,#0000 16px),linear-gradient(180deg,#fff3 50%,#0003 50%),linear-gradient(90deg,#770 50px,#900)}
 .inactivity[style="width:0px"],.inactivity[style="width:1px"],.inactivity[style="width:2px"],.inactivity[style="width:3px"],.inactivity[style="width:4px"],.inactivity[style="width:5px"]{display:none}
 .rateDown span,.rateUp span{text-shadow:1px 1px 1px #000}
-.peerinfo .rateDown span.left,.peerinfo .rateDown span.right,.peerinfo .rateUp span.left,.peerinfo .rateUp span.right{opacity:.5}
-.rateDown.ten span,.rateUp.ten span{opacity:.75}
-.rateDown.hundred span,.rateUp.hundred span{opacity:1}
+.peerinfo .rateDown .left,.peerinfo .rateDown .right,.peerinfo .rateUp .left,.peerinfo .rateUp .right{opacity:.5}
+.peerinfo .rateDown.ten .left,.peerinfo .rateDown.ten .right,.peerinfo .rateUp.ten .left,.peerinfo .rateUp.ten .right{opacity:.75}
+.peerinfo .rateDown.hundred .left,.peerinfo .rateDown.hundred .right,.peerinfo .rateUp.hundred .left,.peerinfo .rateUp.hundred .right{opacity:1}
 .rateDown .left,.rateUp .left,.txd .left,.rateDown .right,.rateUp .right,.txd .right{min-width:22px;display:inline-block;text-align:left}
 .rateDown,.rateUp,.txd{text-align:center}
 .rateDown .right,.rateUp .right,.txd .right{min-width:40px;text-align:right}
@@ -1424,6 +1427,7 @@ th.radio{width:96px}
 .trackerhome,.trackerannounce,.knownTracker a{width:400px;max-width:400px}
 #dirInfoComplete{margin-right:3px}
 #addFileFilter input[type=text],#trackerconfig input[type=text]{width:220px;max-width:220px}
+#addSection td:first-child span,#createSection tr:first-child td:first-child span:not(.trackerName){margin-right:-16px;padding:6px 10px 6px 14px;min-width:80px;display:inline-block;position:relative;z-index:2;vertical-align:middle;text-align:right;border-radius:15px 0 0 15px;box-shadow:0 0 0 1px #110011b2;background:linear-gradient(180deg,#434,#212)}
 #trackerconfig input.trackerannounce,#trackerconfig input.trackerhome{width:280px;max-width:80%}
 #trackerconfig input.trackerhome{margin-left:6px}
 #addSection td:first-child,#createSection td:first-child{width:200px}
