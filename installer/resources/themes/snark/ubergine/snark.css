@@ -959,8 +959,8 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 .choked .left,.choked .right{display:none!important}
 .inactivity{margin-left:14px;max-width:400px;min-width:5px;height:5px;display:inline-block;vertical-align:middle;border-radius:3px;box-shadow:0 0 0 1px #200,0 0 0 1px #fff3 inset;background:repeating-linear-gradient(90deg,#0000,#0000 15px,rgba(0,0,0,.5) 15px,rgba(0,0,0,.5) 16px,#0000 16px),linear-gradient(180deg,#fff3 50%,#0003 50%),linear-gradient(90deg,#770 50px,#900)}
 .inactivity[style="width:0px"],.inactivity[style="width:1px"],.inactivity[style="width:2px"],.inactivity[style="width:3px"],.inactivity[style="width:4px"],.inactivity[style="width:5px"]{display:none}
-.rateDown span,.rateUp span{text-shadow:0 0 1px #000}
-.peerinfo .rateDown span,.peerinfo .rateUp span{opacity:.5}
+.rateDown span,.rateUp span{text-shadow:1px 1px 1px #000}
+.peerinfo .rateDown span.left,.peerinfo .rateDown span.right,.peerinfo .rateUp span.left,.peerinfo .rateUp span.right{opacity:.5}
 .rateDown.ten span,.rateUp.ten span{opacity:.75}
 .rateDown.hundred span,.rateUp.hundred span{opacity:1}
 .rateDown .left,.rateUp .left,.txd .left,.rateDown .right,.rateUp .right,.txd .right{min-width:22px;display:inline-block;text-align:left}
