@@ -944,7 +944,7 @@ public class Blocklist {
      * is a sorted array of longs. The array is sorted in signed order, but we don't care.
      * Each long is ((from << 32) | to)
      */
-    private boolean isBlocklisted(int ip) {
+    private synchronized boolean isBlocklisted(int ip) {
         if (isOnSingleList(ip)) {return true;}
         if (_countryBlocklist != null) {
             if (isPermanentlyBlocklisted(ip, _countryBlocklist, _countryBlocklistSize)) {return true;}

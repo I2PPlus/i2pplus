@@ -151,8 +151,7 @@ public class InNetMessagePool implements Service {
      * @param fromRouterHash may be null, calculated from fromRouter if null
      * @param msgIDBloomXor constant value to XOR with the messageID before passing to the bloom filter.
      *
-     * @return -1 for some types of errors but not all; 0 otherwise
-     *         (was queue length, long ago)
+     * @return -1 for some types of errors but not all; 0 otherwise (was queue length, long ago)
      */
     public int add(I2NPMessage messageBody,
                    RouterIdentity fromRouter,
@@ -168,11 +167,6 @@ public class InNetMessagePool implements Service {
                            " [MsgID " + messageBody.getUniqueId() + "] " +
                            " [XOR MsgID " + messageBody.getUniqueId(msgIDBloomXor) + "]" +
                            "\n* Expires: " + new Date(exp));
-
-        //if (messageBody instanceof DataMessage) {
-        //    _context.statManager().getStatLog().addData(fromRouterHash.toBase64().substring(0,6), "udp.floodDataReceived", 1, 0);
-        //    return 0;
-        //}
 
         int type = messageBody.getType();
         String invalidReason = null;
@@ -334,7 +328,6 @@ public class InNetMessagePool implements Service {
                         if (_log.shouldWarn())
                             _log.warn("Message expiring on " + messageBody.getMessageExpiration() +
                                       " was not handled by a HandlerJobBuilder -> DROPPING: " + messageBody);
-//                                      new Exception("f00!"));
                         _context.statManager().addRateData("inNetPool.dropped", 1);
                         break;
                     }  // switch

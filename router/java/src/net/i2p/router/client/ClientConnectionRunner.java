@@ -422,7 +422,7 @@ class ClientConnectionRunner {
         if (id == null)
             return;
         boolean isPrimary = false;
-        for (Iterator<SessionParams> iter = _sessions.values().iterator(); iter.hasNext(); ) {
+        for (Iterator<SessionParams> iter = _sessions.values().iterator(); iter.hasNext();) {
             SessionParams sp = iter.next();
             if (id.equals(sp.sessionId)) {
                 if (_log.shouldInfo())
@@ -645,8 +645,7 @@ class ClientConnectionRunner {
     void leaseSetCreated(LeaseSet ls) {
         Hash h = ls.getDestination().calculateHash();
         SessionParams sp = _sessions.get(h);
-        if (sp == null)
-            return;
+        if (sp == null) {return;}
         LeaseRequestState state;
         synchronized (this) {
             if (ls.getType() == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
@@ -674,8 +673,9 @@ class ClientConnectionRunner {
                 }
             }
         }
-        if ( (state != null) && (state.getOnGranted() != null) )
+        if (state.getOnGranted() != null) {
             _context.jobQueue().addJob(state.getOnGranted());
+        }
     }
 
     /**
@@ -912,8 +912,8 @@ class ClientConnectionRunner {
                 LeaseSet requested = state.getRequested();
                 LeaseSet granted = state.getGranted();
                 long ours = set.getEarliestLeaseDate();
-                if ( ( (requested != null) && (requested.getEarliestLeaseDate() > ours) ) ||
-                     ( (granted != null) && (granted.getEarliestLeaseDate() > ours) ) ) {
+                if (((requested != null) && (requested.getEarliestLeaseDate() > ours)) ||
+                     ((granted != null) && (granted.getEarliestLeaseDate() > ours))) {
                     // theirs is newer
                     if (_log.shouldDebug())
                         _log.debug("Already requesting, theirs is newer -> Doing nothing... " + state);
@@ -1000,8 +1000,6 @@ class ClientConnectionRunner {
         stopRunning();
     }
 
-    ////
-    ////
     boolean getIsDead() { return _dead; }
 
     /**
@@ -1009,17 +1007,10 @@ class ClientConnectionRunner {
      *  ClientWriterRunner thread is the only caller.
      *  Others must use doSend().
      */
-    void writeMessage(I2CPMessage msg) {
-        //long before = _context.clock().now();
+    synchronized void writeMessage(I2CPMessage msg) {
         try {
-            // We don't need synchronization here, ClientWriterRunner is the only writer.
-            //synchronized (_out) {
-                msg.writeMessage(_out);
-                _out.flush();
-            //}
-            //if (_log.shouldDebug())
-            //    _log.debug("after writeMessage("+ msg.getClass().getName() + "): "
-            //               + (_context.clock().now()-before) + "ms");
+            msg.writeMessage(_out);
+            _out.flush();
         } catch (I2CPMessageException ime) {
             _log.error("Error sending I2CP message to client (" + ime.getMessage() + ")");
             stopRunning();
@@ -1035,14 +1026,6 @@ class ClientConnectionRunner {
         } catch (Throwable t) {
             _log.log(Log.CRIT, "Unhandled exception sending I2CP message to client", t);
             stopRunning();
-        //} finally {
-        //    long after = _context.clock().now();
-        //    long lag = after - before;
-        //    if (lag > 300) {
-        //        if (_log.shouldWarn())
-        //            _log.warn("synchronization on the i2cp message send took too long (" + lag
-        //                      + "ms): " + msg);
-        //    }
         }
     }
 
@@ -1050,28 +1033,10 @@ class ClientConnectionRunner {
      * Actually send the I2CPMessage to the peer through the socket
      *
      */
-    void doSend(I2CPMessage msg) throws I2CPMessageException {
+    synchronized void doSend(I2CPMessage msg) throws I2CPMessageException {
         if (_out == null) throw new I2CPMessageException("Output stream is not initialized");
         if (msg == null) throw new I2CPMessageException("Null message?!");
-        //if (_log.shouldDebug()) {
-        //    if ( (_config == null) || (_config.getDestination() == null) )
-        //        _log.debug("before doSend of a "+ msg.getClass().getName()
-        //                   + " message on for establishing i2cp con");
-        //    else
-        //        _log.debug("before doSend of a "+ msg.getClass().getName()
-        //                   + " message on for "
-        //                   + _config.getDestination().calculateHash().toBase64());
-        //}
         _writer.addMessage(msg);
-        //if (_log.shouldDebug()) {
-        //    if ( (_config == null) || (_config.getDestination() == null) )
-        //        _log.debug("after doSend of a "+ msg.getClass().getName()
-        //                   + " message on for establishing i2cp con");
-        //    else
-        //        _log.debug("after doSend of a "+ msg.getClass().getName()
-        //                   + " message on for "
-        //                   + _config.getDestination().calculateHash().toBase64());
-        //}
     }
 
     public int getNextMessageId() {
