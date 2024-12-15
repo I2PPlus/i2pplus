@@ -324,21 +324,16 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("<script src=\"/js/iframeResizer/updatedEvent.js?").append(CoreVersion.VERSION).append("\"></script>\n");
         }
         buf.append("<meta name=viewport content=\"width=device-width\">\n");
-        if (!isStandalone() && useSoraFont()) {
-            buf.append("<link rel=preload href=/themes/fonts/Sora.css as=style>\n")
-               .append("<link rel=preload href=/themes/fonts/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>\n")
-               .append("<link rel=preload href=/themes/fonts/Sora/Sora-Italic.woff2 as=font type=font/woff2 crossorigin>\n")
-               .append("<link rel=stylesheet href=/themes/fonts/Sora.css>\n");
-        } else if (!isStandalone()) {
+
+        String fontPath = isStandalone() ? "/i2psnark/.res/themes/fonts" : "/themes/fonts";
+        if (isStandalone() || useSoraFont()) {
+            buf.append("<link rel=preload href=").append(fontPath).append("/Sora/Sora.css as=style>\n")
+               .append("<link rel=preload href=").append(fontPath).append("/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>\n")
+               .append("<link rel=stylesheet href=").append(fontPath).append("/Sora.css>\n");
+        } else {
             buf.append("<link rel=preload href=/themes/fonts/OpenSans.css as=style>\n")
                .append("<link rel=preload href=/themes/fonts/OpenSans/OpenSans.woff2 as=font type=font/woff2 crossorigin>\n")
-               .append("<link rel=preload href=/themes/fonts/OpenSans/OpenSans-Bold.woff2 as=font type=font/woff2 crossorigin>\n")
                .append("<link rel=stylesheet href=/themes/fonts/OpenSans.css>\n");
-        } else {
-            buf.append("<link rel=preload href=/i2psnark/.res/themes/fonts/Sora.css as=style>\n")
-               .append("<link rel=preload href=/i2psnark/.res/themes/fonts/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>\n")
-               .append("<link rel=preload href=/i2psnark/.res/themes/fonts/Sora/Sora-Italic.woff2 as=font type=font/woff2 crossorigin>\n")
-               .append("<link rel=stylesheet href=/i2psnark/.res/themes/fonts/Sora.css>\n");
         }
         buf.append("<link rel=preload href=\"").append(_themePath).append("snark.css?").append(CoreVersion.VERSION).append("\" as=style>\n")
            .append("<link rel=preload href=\"").append(_themePath).append("images/images.css?").append(CoreVersion.VERSION).append("\" as=style>\n")
@@ -3826,15 +3821,14 @@ public class I2PSnarkServlet extends BasicServlet {
                            java.io.File.separatorChar + "snark" + java.io.File.separatorChar + _manager.getTheme() +
                            java.io.File.separatorChar;
         File override = new File(themeBase + "override.css");
-        if (!isStandalone() && useSoraFont()) {
-            buf.append("<link rel=preload href=/themes/fonts/Sora.css as=style>\n")
-               .append("<link rel=preload href=/themes/fonts/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>\n")
-               .append("<link rel=preload href=/themes/fonts/Sora/Sora-Italic.woff2 as=font type=font/woff2 crossorigin>\n")
-               .append("<link rel=stylesheet href=/themes/fonts/Sora.css>\n");
+        String fontPath = isStandalone() ? "/i2psnark/.res/themes/fonts" : "/themes/fonts";
+        if (isStandalone() || useSoraFont()) {
+            buf.append("<link rel=preload href=").append(fontPath).append("/Sora/Sora.css as=style>\n")
+               .append("<link rel=preload href=").append(fontPath).append("/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>\n")
+               .append("<link rel=stylesheet href=").append(fontPath).append("/Sora.css>\n");
         } else {
             buf.append("<link rel=preload href=/themes/fonts/OpenSans.css as=style>\n")
                .append("<link rel=preload href=/themes/fonts/OpenSans/OpenSans.woff2 as=font type=font/woff2 crossorigin>\n")
-               .append("<link rel=preload href=/themes/fonts/OpenSans/OpenSans-Bold.woff2 as=font type=font/woff2 crossorigin>\n")
                .append("<link rel=stylesheet href=/themes/fonts/OpenSans.css>\n");
         }
         if (!isStandalone() && override.exists()) {
