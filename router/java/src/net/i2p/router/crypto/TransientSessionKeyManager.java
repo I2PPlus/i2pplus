@@ -1196,30 +1196,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
          */
         public boolean getAcked() { return _acked; }
 
-/******    this will return a dup if two in the same ms, so just use java
-        @Override
-        public int hashCode() {
-            long rv = 0;
-            if (_key != null) rv = _key.hashCode();
-            rv = rv * 7 + _date;
-            // no need to hashCode the tags, key + date should be enough
-            return (int) rv;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if ((o == null) || !(o instanceof TagSet)) return false;
-            TagSet ts = (TagSet) o;
-            return DataHelper.eq(ts.getAssociatedKey(), _key)
-                   //&& DataHelper.eq(ts.getTags(), getTags())
-                   && ts.getDate() == _date;
-        }
-******/
-
         /** @since 0.9 for debugging */
-        public int getID() {
-            return _id;
-        }
+        public int getID() {return _id;}
 
         @Override
         public String toString() {

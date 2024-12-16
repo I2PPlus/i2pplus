@@ -1913,7 +1913,7 @@ public class NTCPConnection implements Closeable {
                            : ("Target: " + _remAddr.getHost() + ":" + _remAddr.getPort() + ' ')) + "[" +
                (_remotePeer == null ? "Unknown" : _remotePeer.calculateHash().toBase64().substring(0,6)) + "]" +
                (isEstablished() ? "" : " -> Not established ") +
-               (_log.shouldInfo() ? "\n* [NTCP" + _version + "] Connection [ID " + _connID + "]\n* " +
+               (_log.shouldInfo() ? "\n* [NTCP" + _version + "] Connection [ID " + _connID + "]" +
                "\n* Created: " + DataHelper.formatDuration(getTimeSinceCreated()) + " ago;" +
                " Last message sent: " + DataHelper.formatDuration(getTimeSinceSend()) + " ago;" +
                " Last message received: " + DataHelper.formatDuration(getTimeSinceReceive()) + " ago" +
