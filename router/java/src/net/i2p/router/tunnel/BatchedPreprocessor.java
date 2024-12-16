@@ -7,35 +7,31 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
- * Batching preprocessor that will briefly delay the sending of a message
- * if it doesn't fill up a full tunnel message, in which case it queues up
- * an additional flush task.  This is a very simple threshold algorithm -
- * as soon as there is enough data for a full tunnel message, it is sent.  If
- * after the delay there still isn't enough data, what is available is sent
- * and padded.
+ * Batching preprocessor that will briefly delay the sending of a message if it
+ * doesn't fill up a full tunnel message, in which case it queues up an additional
+ * flush task.  This is a very simple threshold algorithm - as soon as there is
+ * enough data for a full tunnel message, it is sent. If after the delay there still
+ * isn't enough data, what is available is sent and padded.
  *
- * As explained in the tunnel document, the preprocessor has a lot of
- * potential flexibility in delay, padding, or even reordering.
- * We keep things relatively simple for now.
+ * As explained in the tunnel document, the preprocessor has a lot of potential
+ * flexibility in delay, padding, or even reordering. We keep things relatively
+ * simple for now.
  *
- * However much of the efficiency results from the clients selecting
- * the correct MTU in the streaming lib such that the maximum-size
- * streaming lib message fits in an integral number of tunnel messages.
+ * However much of the efficiency results from the clients selecting the correct MTU
+ * in the streaming lib such that the maximum-size streaming lib message fits in an
+ * integral number of tunnel messages.
  * See ConnectionOptions in the streaming lib for details.
  *
- * Aside from obvious goals of minimizing delay and padding, we also
- * want to minimize the number of tunnel messages a message occupies,
- * to minimize the impact of a router dropping a tunnel message.
- * So there is some benefit in starting a message in a new tunnel message,
- * especially if it will fit perfectly if we do that (a 964 or 1956 byte
+ * Aside from obvious goals of minimizing delay and padding, we also want to minimize
+ * the number of tunnel messages a message occupies, to minimize the impact of a router
+ * dropping a tunnel message. So there is some benefit in starting a message in a new
+ * tunnel message, especially if it will fit perfectly if we do that (a 964 or 1956 byte
  * message, for example).
  *
  * An idea for the future...
  *
- * If we are in the middle of a tunnel msg and starting a new i2np msg,
- * and this one won't fit,
- * let's look to see if we have somthing that would fit instead
- * by reordering:
+ * If we are in the middle of a tunnel msg and starting a new i2np msg, and this one won't
+ * fit, let's look to see if we have somthing that would fit instead by reordering:
  *   if (allocated &gt; 0 &amp;&amp; msg.getFragment == 0) {
  *       for (j = i+1, j &lt; pending.size(); j++) {
  *           if it will fit and it is fragment 0 {
@@ -66,7 +62,6 @@ class BatchedPreprocessor extends TrivialPreprocessor {
     //private static final boolean DISABLE_BATCHING = false;
 
     /* not final or private so the test code can adjust */
-//    static long DEFAULT_DELAY = 100;
     static long DEFAULT_DELAY = SystemVersion.isSlow() ? 100 : 50;
     /**
      *  Wait up to this long before sending (flushing) a small tunnel message
@@ -359,15 +354,13 @@ class BatchedPreprocessor extends TrivialPreprocessor {
             buf.append(title);
             buf.append("\n* Allocated: ").append(allocated);
             buf.append("; Pending: ").append(pending.size());
-            if (_pendingSince > 0)
-                buf.append("; Delay: ").append(getDelayAmount(false));
+            if (_pendingSince > 0) {buf.append("; Delay: ").append(getDelayAmount(false));}
             for (int i = 0; i < pending.size(); i++) {
                 PendingGatewayMessage curPending = pending.get(i);
                 buf.append("; [").append(i).append("] - ");
-                buf.append(curPending.getOffset()).append('/').append(curPending.getData().length).append('/');
+                buf.append(curPending.getOffset()).append(" / ").append(curPending.getData().length).append(" / ");
                 buf.append(curPending.getLifetime());
-                if (curPending.getLifetime() > highestDelay)
-                    highestDelay = curPending.getLifetime();
+                if (curPending.getLifetime() > highestDelay) {highestDelay = curPending.getLifetime();}
             }
             _log.info(buf.toString());
         }
