@@ -3,16 +3,13 @@
 /* License: AGPL3 or later */
 
 function clickToClose(element) {
-  if (!element || !(element instanceof HTMLElement)) {
-    console.log(element + " not found");
-    return;
-  }
+  if (!element || !(element instanceof HTMLElement)) {return;}
   element.classList.add("closed");
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
       setTimeout(() => {
-        if (element.parentNode) {element.parentNode.removeChild(element); }
-      }, 500);
+        if (element.parentNode) {element.parentNode.removeChild(element);}
+      }, 250);
     });
   });
 }

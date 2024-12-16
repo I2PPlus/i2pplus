@@ -273,7 +273,7 @@ public abstract class FormHandler {
         }
         // To prevent actions with GET, jsps must call storeMethod()
         if (_method != null && !"POST".equals(_method)) {
-            addFormError("Invalid form submission, requires POST");
+            addFormError(_t("Invalid form submission, requires POST"), true);
             _valid = false;
             return;
         }
@@ -293,7 +293,7 @@ public abstract class FormHandler {
 
         if (!_nonce.equals(_nonce1) && !_nonce.equals(_nonce2)) {
             addFormError(_t("Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit.") + ' ' +
-                         _t("If the problem persists, verify that you have cookies enabled in your browser."));
+                         _t("If the problem persists, verify that you have cookies enabled in your browser."), true);
             _valid = false;
         }
     }

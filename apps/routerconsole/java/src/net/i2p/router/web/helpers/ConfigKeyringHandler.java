@@ -29,7 +29,7 @@ public class ConfigKeyringHandler extends FormHandler {
     protected void processForm() {
         if (_action.equals(_t("Add key"))) {
             if (_peer == null) {
-                addFormError(_t("You must enter a destination"));
+                addFormError(_t("You must enter a destination"), true);
                 return;
             }
             Hash h = null;
