@@ -91,17 +91,17 @@ public class ConfigLoggingHandler extends FormHandler {
                 if (!props.equals(mgr.getLimits())) {
                     shouldSave = true;
                     mgr.setLimits(props);
-                    addFormNotice(_t("Log overrides updated"));
+                    addFormNotice(_t("Log overrides updated"), true);
                 }
             } catch (IOException ioe) {
                 // shouldn't ever happen (BAIS shouldnt cause an IOE)
                 mgr.getLog(ConfigLoggingHandler.class).error("Error reading from the props?", ioe);
-                addFormError("Error updating the log limits - levels not valid");
+                addFormError(_t("Error updating the log limits - levels not valid"), true);
             }
         } else if (!mgr.getLimits().isEmpty()) {
             mgr.setLimits(null);
             shouldSave = true;
-            addFormNotice("Log limits cleared");
+            addFormNotice(_t("Log limits cleared"), true);
         }
 
         if (_defaultLevel != null) {
@@ -111,7 +111,7 @@ public class ConfigLoggingHandler extends FormHandler {
             } else {
                 shouldSave = true;
                 mgr.setDefaultLimit(_defaultLevel);
-                addFormNotice("Default log level updated from " + oldDefault + " to " + _defaultLevel);
+                addFormNotice(_t("Default log level updated from {0} to {1}", oldDefault, _defaultLevel), true);
             }
         }
 
@@ -119,9 +119,9 @@ public class ConfigLoggingHandler extends FormHandler {
             boolean valid = mgr.setDateFormat(_dateFormat);
             if (valid) {
                 shouldSave = true;
-                addFormNotice("Date format updated");
+                addFormNotice(_t("Date format updated"), true);
             } else {
-                addFormError("Specified date format is not valid (" + _dateFormat + ") - not updated");
+                addFormError(_t("Specified date format is not valid ({0}) - not updated", _dateFormat), true);
             }
         }
 
@@ -132,57 +132,36 @@ public class ConfigLoggingHandler extends FormHandler {
                 if (oldBytes != newBytes) {
                     mgr.setFileSize(newBytes);
                     shouldSave = true;
-                    addFormNotice("File size updated");
+                    addFormNotice(_t("File size updated"), true);
                 }
-            } else {
-                addFormError("Specified file size limit is not valid (" + _fileSize + ") - not updated");
-            }
+            } else {addFormError(_t("Specified file size limit is not valid ({0}) - not updated", _fileSize), true);}
         }
 
         if (_logCompress != mgr.shouldGzip()) {
             mgr.setGzip(_logCompress);
-            addFormNotice("Compression setting updated");
+            addFormNotice(_t("Compression setting updated"), true);
             shouldSave = true;
         }
 
-        
-     /*** disable
-        if ( (_filename != null) && (_filename.trim().length() > 0) ) {
-            _filename = _filename.trim();
-            String old = mgr.getBaseLogfilename();
-            if ( (old != null) && (_filename.equals(old)) ) {
-                // noop - don't update since its the same
-            } else {
-                shouldSave = true;
-                mgr.setBaseLogfilename(_filename);
-                addFormNotice("Log file name pattern updated to " + _filename
-                              + " (note: will not take effect until next rotation)");
-            }
-        }
-      ***/
-
-        if ( (_recordFormat != null) && (_recordFormat.trim().length() > 0) ) {
+        if ((_recordFormat != null) && (_recordFormat.trim().length() > 0)) {
             _recordFormat = _recordFormat.trim();
             String old = new String(mgr.getFormat());
             if (_recordFormat.equalsIgnoreCase(old)) {
                 // noop - no change
             } else {
                 char fmt[] = new char[_recordFormat.length()];
-                for (int i = 0; i < fmt.length; i++)
-                    fmt[i] = _recordFormat.charAt(i);
+                for (int i = 0; i < fmt.length; i++) {fmt[i] = _recordFormat.charAt(i);}
                 mgr.setFormat(fmt);
                 shouldSave = true;
-                addFormNotice("Log record format updated");
+                addFormNotice(_t("Log record format updated"), true);
             }
         }
 
         if (shouldSave) {
             boolean saved = mgr.saveConfig();
 
-            if (saved)
-                addFormNotice(_t("Log configuration saved"));
-            else
-                addFormError("Error saving the configuration (applied but not saved) - please see the error logs");
+            if (saved) {addFormNotice(_t("Log configuration saved"), true);}
+            else {addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"), true);}
         }
     }
 }

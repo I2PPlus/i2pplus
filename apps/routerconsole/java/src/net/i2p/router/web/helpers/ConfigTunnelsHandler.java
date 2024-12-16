@@ -62,7 +62,7 @@ public class ConfigTunnelsHandler extends FormHandler {
                 try {
                     client.fromBase64(poolName);
                 } catch (DataFormatException dfe) {
-                    addFormError("Internal error (pool name could not resolve - " + poolName + ").");
+                    addFormError(_t("Internal error: could not resolve pool name {0}.", poolName), true);
                     continue;
                 }
                 in = mgr.getInboundSettings(client);
@@ -70,7 +70,7 @@ public class ConfigTunnelsHandler extends FormHandler {
             }
 
             if ( (in == null) || (out == null) ) {
-                addFormError("Internal error (pool settings cound not be found for " + poolName + ").");
+                addFormError(_t("Internal error: could not find pool settings for {0}.", poolName), true);
                 continue;
             }
 
@@ -125,16 +125,14 @@ public class ConfigTunnelsHandler extends FormHandler {
         }
 
         if (updated > 0)
-            // the count isn't really correct anyway, since we don't check for actual changes
-            //addFormNotice("Updated settings for " + updated + " pools.");
-            addFormNotice(_t("Updated settings for all pools."));
+            addFormNotice(_t("Updated settings for all pools."), true);
 
         if (saveRequired) {
             boolean saved = _context.router().saveConfig(changes, null);
             if (saved)
-                addFormNotice(_t("Exploratory tunnel configuration saved successfully."));
+                addFormNotice(_t("Exploratory tunnel configuration saved successfully."), true);
             else
-                addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs."));
+                addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs."), true);
         }
     }
 

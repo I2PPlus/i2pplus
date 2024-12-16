@@ -156,13 +156,6 @@ public class ConfigNetHandler extends FormHandler {
         _ipv6Mode = mode;
     }
 
-/****
-    private void recheckReachability() {
-        _context.commSystem().recheckReachability();
-        addFormNotice(_t("Rechecking router reachability..."));
-    }
-****/
-
     /**
      * The user made changes to the network config and wants to save them, so
      * lets go ahead and do so.
@@ -248,7 +241,7 @@ public class ConfigNetHandler extends FormHandler {
                     ch = true;
                 }
                 if (ch)
-                    addFormNotice(_t("Updating IPv6 setting") + "...");
+                    addFormNotice(_t("Updating IPv6 setting") + "...", true);
             }
 
             // NTCP Settings
@@ -271,16 +264,16 @@ public class ConfigNetHandler extends FormHandler {
                     valid = verifyAddress(_ntcpHostname);
                     if (valid) {
                         changes.put(ConfigNetHelper.PROP_I2NP_NTCP_HOSTNAME, _ntcpHostname);
-                        addFormNotice(_t("Updating TCP address to {0}", _ntcpHostname));
+                        addFormNotice(_t("Updating TCP address to {0}", _ntcpHostname), true);
                     } else {
                         error = true;
                     }
                 } else {
                     removes.add(ConfigNetHelper.PROP_I2NP_NTCP_HOSTNAME);
                     if ("false".equals(_ntcpAutoIP))
-                        addFormNotice(_t("Disabling inbound TCP") + "...");
+                        addFormNotice(_t("Disabling inbound TCP") + "...", true);
                     else
-                        addFormNotice(_t("Updating inbound TCP address to auto") + "..."); // true or always
+                        addFormNotice(_t("Updating inbound TCP address to auto") + "...", true); // true or always
                 }
                 if (valid) {
                     changes.put(ConfigNetHelper.PROP_I2NP_NTCP_AUTO_IP, _ntcpAutoIP);
@@ -296,9 +289,9 @@ public class ConfigNetHandler extends FormHandler {
                     int port = Addresses.getPort(_ntcpPort);
                     if (port != 0) {
                         changes.put(ConfigNetHelper.PROP_I2NP_NTCP_PORT, _ntcpPort);
-                        addFormNotice(_t("Updating TCP port to {0}", _ntcpPort) + "...");
+                        addFormNotice(_t("Updating TCP port to {0}", _ntcpPort) + "...", true);
                         if (port < 1024) {
-                            addFormError(_t("Warning - ports less than 1024 are not recommended"));
+                            addFormError(_t("Warning - ports less than 1024 are not recommended"), true);
                             error = true;
                         }
                     } else {
@@ -307,7 +300,7 @@ public class ConfigNetHandler extends FormHandler {
                     }
                 } else {
                     removes.add(ConfigNetHelper.PROP_I2NP_NTCP_PORT);
-                    addFormNotice(_t("Updating inbound TCP port to auto") + "...");
+                    addFormNotice(_t("Updating inbound TCP port to auto") + "...", true);
                 }
                 changes.put(ConfigNetHelper.PROP_I2NP_NTCP_AUTO_PORT, Boolean.toString(_ntcpAutoPort));
                 restartRequired = true;
@@ -323,13 +316,13 @@ public class ConfigNetHandler extends FormHandler {
                         changes.put(UDPTransport.PROP_EXTERNAL_PORT, _udpPort);
                         addFormNotice(_t("Updating UDP port to {0}", _udpPort));
                         if (port < 1024) {
-                            addFormError(_t("Warning - ports less than 1024 are not recommended"));
+                            addFormError(_t("Warning - ports less than 1024 are not recommended"), true);
                             error = true;
                         } else {
                             restartRequired = true;
                         }
                     } else {
-                        addFormError(_t("Invalid port") + ": " + _udpPort);
+                        addFormError(_t("Invalid port") + ": " + _udpPort, true);
                         error = true;
                     }
                 }
@@ -346,9 +339,9 @@ public class ConfigNetHandler extends FormHandler {
             if (switchRequired) {
                 changes.put(PROP_HIDDEN, Boolean.toString(_hiddenMode));
                 if (_hiddenMode)
-                    addFormError(_t("Gracefully restarting into Hidden Router Mode") + "...");
+                    addFormError(_t("Gracefully restarting into Hidden Router Mode") + "...", true);
                 else
-                    addFormError(_t("Gracefully restarting to exit Hidden Router Mode") + "...");
+                    addFormError(_t("Gracefully restarting to exit Hidden Router Mode") + "...", true);
             }
 
             changes.put(Router.PROP_REBUILD_KEYS, Boolean.toString(switchRequired));
@@ -358,9 +351,9 @@ public class ConfigNetHandler extends FormHandler {
                 _upnp) {
                 // This is minor, don't set restartRequired
                 if (_upnp)
-                    addFormNotice(_t("Enabling UPnP") + "...");
+                    addFormNotice(_t("Enabling UPnP") + "...", true);
                 else
-                    addFormNotice(_t("Disabling UPnP") + "...");
+                    addFormNotice(_t("Disabling UPnP") + "...", true);
                 fullRestartRequired = true;
             }
             changes.put(TransportManager.PROP_ENABLE_UPNP, Boolean.toString(_upnp));
@@ -369,18 +362,18 @@ public class ConfigNetHandler extends FormHandler {
                 _laptop) {
                 // This is minor, don't set restartRequired
                 if (_laptop)
-                    addFormNotice(_t("Enabling laptop mode") + "...");
+                    addFormNotice(_t("Enabling laptop mode") + "...", true);
                 else
-                    addFormNotice(_t("Disabling laptop mode") + "...");
+                    addFormNotice(_t("Disabling laptop mode") + "...", true);
             }
             changes.put(UDPTransport.PROP_LAPTOP_MODE, Boolean.toString(_laptop));
 
             if (Boolean.parseBoolean(_context.getProperty(TransportUtil.PROP_IPV4_FIREWALLED)) !=
                 _ipv4Firewalled) {
                 if (_ipv4Firewalled)
-                    addFormNotice(_t("Disabling inbound IPv4") + "...");
+                    addFormNotice(_t("Disabling inbound IPv4") + "...", true);
                 else
-                    addFormNotice(_t("Enabling inbound IPv4") + "...");
+                    addFormNotice(_t("Enabling inbound IPv4") + "...", true);
                 restartRequired = true;
             }
             changes.put(TransportUtil.PROP_IPV4_FIREWALLED, Boolean.toString(_ipv4Firewalled));
@@ -388,9 +381,9 @@ public class ConfigNetHandler extends FormHandler {
             if (Boolean.parseBoolean(_context.getProperty(TransportUtil.PROP_IPV6_FIREWALLED)) !=
                 _ipv6Firewalled) {
                 if (_ipv6Firewalled)
-                    addFormNotice(_t("Disabling inbound IPv6") + "...");
+                    addFormNotice(_t("Disabling inbound IPv6") + "...", true);
                 else
-                    addFormNotice(_t("Enabling inbound IPv6") + "...");
+                    addFormNotice(_t("Enabling inbound IPv6") + "...", true);
                 restartRequired = true;
             }
             changes.put(TransportUtil.PROP_IPV6_FIREWALLED, Boolean.toString(_ipv6Firewalled));
@@ -398,9 +391,9 @@ public class ConfigNetHandler extends FormHandler {
             if (_context.getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_UDP) !=
                 !_udpDisabled) {
                 if (_udpDisabled)
-                    addFormNotice(_t("Disabling UDP") + "...");
+                    addFormNotice(_t("Disabling UDP") + "...", true);
                 else
-                    addFormNotice(_t("Enabling UDP") + "...");
+                    addFormNotice(_t("Enabling UDP") + "...", true);
                 fullRestartRequired = true;
             }
             changes.put(TransportManager.PROP_ENABLE_UDP, Boolean.toString(!_udpDisabled));
@@ -418,9 +411,9 @@ public class ConfigNetHandler extends FormHandler {
 
         boolean saved = _context.router().saveConfig(changes, removes);
         if (saved)
-            addFormNotice(_t("Configuration saved successfully"));
+            addFormNotice(_t("Configuration saved successfully"), true);
         else
-            addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"));
+            addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"), true);
 
         // this has to be after the save
         if (ratesUpdated)
@@ -430,11 +423,11 @@ public class ConfigNetHandler extends FormHandler {
             if (switchRequired) {
                 hiddenSwitch();
             } else if (fullRestartRequired) {
-                addFormNotice(_t("Restart required to take effect"));
+                addFormNotice(_t("Restart required to take effect"), true);
             } else if (restartRequired) {
               //if (_context.hasWrapper()) {
                 // Wow this dumps all conns immediately and really isn't nice
-                addFormNotice(_t("Performing a soft restart") + "...");
+                addFormNotice(_t("Performing a soft restart") + "...", true);
                 _context.router().restart();
                 // restart() returns immediately now
                 //addFormNotice("Soft restart complete");
@@ -467,13 +460,13 @@ public class ConfigNetHandler extends FormHandler {
             return false;
         byte[] iab = Addresses.getIP(addr);
         if (iab == null) {
-            addFormError(_t("Invalid address") + ": " + addr);
+            addFormError(_t("Invalid address") + ": " + addr, true);
             return false;
         }
         // TODO set IPv6 arg based on configuration?
         boolean rv = TransportUtil.isPubliclyRoutable(iab, true);
         if (!rv)
-            addFormError(_t("The hostname or IP {0} is not publicly routable", addr));
+            addFormError(_t("The hostname or IP {0} is not publicly routable", addr), true);
         return rv;
     }
 
@@ -498,7 +491,7 @@ public class ConfigNetHandler extends FormHandler {
             String old = _context.router().getConfigSetting(Router.PROP_BANDWIDTH_SHARE_PERCENTAGE);
             if ( (old == null) || (!old.equals(_sharePct)) ) {
                 changes.put(Router.PROP_BANDWIDTH_SHARE_PERCENTAGE, _sharePct);
-                addFormNotice(_t("Updating bandwidth share percentage") + "...");
+                addFormNotice(_t("Updating bandwidth share percentage") + "...", true);
                 updated = true;
             }
         }
@@ -533,66 +526,15 @@ public class ConfigNetHandler extends FormHandler {
                 changes.put(FIFOBandwidthRefiller.PROP_OUTBOUND_BANDWIDTH, Integer.toString(Math.round(rate)));
             bwUpdated = true;
             } catch (NumberFormatException nfe) {
-                addFormError(_t("Invalid bandwidth"));
+                addFormError(_t("Invalid bandwidth"), true);
             }
         }
 
         if (bwUpdated) {
-            addFormNotice(_t("Updated bandwidth limits"));
+            addFormNotice(_t("Updated bandwidth limits"), true);
             updated = true;
         }
-
-/******* These aren't in the GUI for now
-
-        if ( (_inboundBurstRate != null) && (_inboundBurstRate.length() > 0) &&
-            !_inboundBurstRate.equals(_context.getProperty(FIFOBandwidthRefiller.PROP_INBOUND_BURST_BANDWIDTH, "" + FIFOBandwidthRefiller.DEFAULT_INBOUND_BURST_BANDWIDTH))) {
-            changes.put(FIFOBandwidthRefiller.PROP_INBOUND_BURST_BANDWIDTH, _inboundBurstRate);
-            updated = true;
-        }
-        if ( (_outboundBurstRate != null) && (_outboundBurstRate.length() > 0) &&
-            !_outboundBurstRate.equals(_context.getProperty(FIFOBandwidthRefiller.PROP_OUTBOUND_BURST_BANDWIDTH, "" + FIFOBandwidthRefiller.DEFAULT_OUTBOUND_BURST_BANDWIDTH))) {
-            changes.put(FIFOBandwidthRefiller.PROP_OUTBOUND_BURST_BANDWIDTH, _outboundBurstRate);
-            updated = true;
-        }
-
-        String inBurstRate = _context.router().getConfigSetting(FIFOBandwidthRefiller.PROP_INBOUND_BURST_BANDWIDTH);
-
-        if (_inboundBurst != null) {
-            int rateKBps = 0;
-            int burstSeconds = 0;
-            try {
-                rateKBps = Integer.parseInt(inBurstRate);
-                burstSeconds = Integer.parseInt(_inboundBurst);
-            } catch (NumberFormatException nfe) {
-                // ignore
-            }
-            if ( (rateKBps > 0) && (burstSeconds > 0) ) {
-                int kb = rateKBps * burstSeconds;
-                changes.put(FIFOBandwidthRefiller.PROP_INBOUND_BANDWIDTH_PEAK, "" + kb);
-                updated = true;
-            }
-        }
-
-        String outBurstRate = _context.router().getConfigSetting(FIFOBandwidthRefiller.PROP_OUTBOUND_BURST_BANDWIDTH);
-
-        if (_outboundBurst != null) {
-            int rateKBps = 0;
-            int burstSeconds = 0;
-            try {
-                rateKBps = Integer.parseInt(outBurstRate);
-                burstSeconds = Integer.parseInt(_outboundBurst);
-            } catch (NumberFormatException nfe) {
-                // ignore
-            }
-            if ( (rateKBps > 0) && (burstSeconds > 0) ) {
-                int kb = rateKBps * burstSeconds;
-                changes.put(FIFOBandwidthRefiller.PROP_OUTBOUND_BANDWIDTH_PEAK, "" + kb);
-                updated = true;
-            }
-        }
-
-***********/
-
         return updated;
     }
+
 }

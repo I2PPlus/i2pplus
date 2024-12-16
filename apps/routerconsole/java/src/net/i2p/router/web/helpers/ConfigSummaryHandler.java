@@ -39,15 +39,15 @@ public class ConfigSummaryHandler extends FormHandler {
                     toAdd.put(CSSHelper.PROP_DISABLE_REFRESH, "true");
                     toAdd.put(CSSHelper.PROP_REFRESH, CSSHelper.DEFAULT_REFRESH);
                     _context.router().saveConfig(toAdd, null);
-                    addFormNotice(_t("Refresh disabled").replace("Refresh", "Sidebar refresh"));
+                    addFormNotice(_t("Sidebar refresh disabled"), true);
                 } else {
                     toAdd.put(CSSHelper.PROP_DISABLE_REFRESH, "false");
                     toAdd.put(CSSHelper.PROP_REFRESH, Integer.toString(refreshInterval));
                     _context.router().saveConfig(toAdd, null);
-                    addFormNotice(_t("Refresh interval changed").replace("Refresh", "Sidebar refresh"));
+                    addFormNotice(_t("Sidebar refresh interval changed"), true);
                 }
             } catch (java.lang.NumberFormatException e) {
-                addFormError(_t("Refresh interval must be a number"));
+                addFormError(_t("Refresh interval must be a number"), true);
                 return;
             }
         } else if (_action.equals(_t("Restore full default"))) {
@@ -56,12 +56,10 @@ public class ConfigSummaryHandler extends FormHandler {
             } else {
             _context.router().saveConfig(SummaryHelper.PROP_SUMMARYBAR + "default", isAdvanced() ? SummaryHelper.DEFAULT_FULL_ADVANCED : SummaryHelper.DEFAULT_FULL);
             }
-            addFormNotice(_t("Full summary bar default restored.") + " " +
-                          _t("Summary bar will refresh shortly.").replace("Summary bar", "Sidebar"));
+            addFormNotice(_t("Full sidebar defaults restored.") + " " + _t("Sidebar will refresh shortly."), true);
         } else if (_action.equals(_t("Restore minimal default"))) {
             _context.router().saveConfig(SummaryHelper.PROP_SUMMARYBAR + "default", isAdvanced() ? SummaryHelper.DEFAULT_MINIMAL_ADVANCED : SummaryHelper.DEFAULT_MINIMAL);
-            addFormNotice(_t("Minimal summary bar default restored.") + " " +
-                          _t("Summary bar will refresh shortly.").replace("Summary bar", "Sidebar"));
+            addFormNotice(_t("Minimal sidebar defaults restored.") + " " + _t("Sidebar will refresh shortly."), true);
         } else if (adding || deleting || saving || moving) {
             Map<Integer, String> sections = new TreeMap<Integer, String>();
             for (Object o : _settings.keySet()) {
@@ -77,19 +75,19 @@ public class ConfigSummaryHandler extends FormHandler {
                     int order = Integer.parseInt(v);
                     sections.put(order, k);
                 } catch (java.lang.NumberFormatException e) {
-                    addFormError(_t("Order must be an integer"));
+                    addFormError(_t("Order must be an integer"), true);
                     return;
                 }
             }
             if (adding) {
                 String name = getJettyString("name");
                 if (name == null || name.length() <= 0) {
-                    addFormError(_t("No section selected"));
+                    addFormError(_t("No section selected"), true);
                     return;
                 }
                 String order = getJettyString("order");
                 if (order == null || order.length() <= 0) {
-                    addFormError(_t("No order entered"));
+                    addFormError(_t("No order entered"), true);
                     return;
                 }
                 name = DataHelper.escapeHTML(name).replace(",", "&#44;");
@@ -99,7 +97,7 @@ public class ConfigSummaryHandler extends FormHandler {
                     sections.put(ki, name);
                     addFormNotice(_t("Added") + ": " + name);
                 } catch (java.lang.NumberFormatException e) {
-                    addFormError(_t("Order must be an integer"));
+                    addFormError(_t("Order must be an integer"), true);
                     return;
                 }
             } else if (deleting) {
@@ -124,7 +122,7 @@ public class ConfigSummaryHandler extends FormHandler {
                     if (toDelete.contains(i)) {
                         String removedName = e.getValue();
                         iter.remove();
-                        addFormNotice(_t("Removed") + ": " + removedName);
+                        addFormNotice(_t("Removed") + ": " + removedName, true);
                     }
                 }
             } else if (moving) {
@@ -146,17 +144,14 @@ public class ConfigSummaryHandler extends FormHandler {
                         sections.put(i + n, sections.get(i));
                         sections.put(i, temp);
                     }
-                    addFormNotice(_t("Moved") + ": " + sections.get(to));
+                    addFormNotice(_t("Moved") + ": " + sections.get(to), true);
                 } catch (java.lang.NumberFormatException e) {
-                    addFormError(_t("Order must be an integer"));
+                    addFormError(_t("Order must be an integer"), true);
                     return;
                 }
             }
             SummaryHelper.saveSummaryBarSections(_context, "default", sections);
-            addFormNotice(_t("Saved order of sections.") + " " +
-                          _t("Summary bar will refresh shortly."));
-        } else {
-            //addFormError(_t("Unsupported"));
+            addFormNotice(_t("Saved order of sections.") + " " + _t("Sidebar will refresh shortly."), true);
         }
     }
 

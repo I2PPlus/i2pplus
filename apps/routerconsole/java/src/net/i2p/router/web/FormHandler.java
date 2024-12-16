@@ -224,18 +224,11 @@ public abstract class FormHandler {
         boolean canClose = _errors.stream().anyMatch(Message::isCanClose) || _notices.stream().anyMatch(Message::isCanClose);
 
         buf.append("<div class=\"messages");
-        if (canClose) {
-            buf.append(" canClose");
-        }
+        if (canClose) {buf.append(" canClose");}
         buf.append("\" id=messages>");
 
-        if (!_errors.isEmpty()) {
-            buf.append("<div class=error>").append(render(_errors)).append("</div>");
-        }
-
-        if (!_notices.isEmpty()) {
-            buf.append("<div class=notice>").append(render(_notices)).append("</div>");
-        }
+        if (!_errors.isEmpty()) {buf.append("<div class=error>").append(render(_errors)).append("</div>");}
+        if (!_notices.isEmpty()) {buf.append("<div class=notice>").append(render(_notices)).append("</div>");}
 
         buf.append("</div>\n").append("<script src=/js/clickToClose.js></script>\n");
         return buf.toString();

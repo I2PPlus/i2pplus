@@ -72,11 +72,11 @@ public class ConfigFamilyHandler extends FormHandler {
                 List<X509Certificate> certs = CertUtil.loadCerts(in);
                 String family = CertUtil.getSubjectValue(certs.get(0), "CN");
                 if (family == null) {
-                    addFormError("Bad certificate - No Subject CN");
+                    addFormError(_t("Bad certificate - No Subject CN"), true);
                     return;
                 }
                 if (family.contains("/") || family.contains("\\")) {
-                    addFormError("Bad characters in Family: " + family);
+                    addFormError(_t("Bad characters in Family: " + family), true);
                     return;
                 }
                 if (family.endsWith(FamilyKeyCrypto.CN_SUFFIX) && family.length() > FamilyKeyCrypto.CN_SUFFIX.length())
@@ -87,7 +87,7 @@ public class ConfigFamilyHandler extends FormHandler {
                     ks.mkdirs();
                 ks = new File(ks, FamilyKeyCrypto.KEYSTORE_PREFIX + family + FamilyKeyCrypto.KEYSTORE_SUFFIX);
                 if (ks.exists()) {
-                    addFormError("Keystore for family " + family + " already exists! Delete or rename it first: " + ks);
+                    addFormError(_t("Keystore {0} already exists for family {1}! Delete or rename it first.", ks, family), true);
                     return;
                 }
                 String keypw = KeyStoreUtil.randomString();
@@ -108,15 +108,15 @@ public class ConfigFamilyHandler extends FormHandler {
                 changes.put(FamilyKeyCrypto.PROP_KEY_PASSWORD, keypw);
                 changes.put(FamilyKeyCrypto.PROP_KEYSTORE_PASSWORD, KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD);
                 if (_context.router().saveConfig(changes, null)) {
-                    addFormNotice("Family key configured for router family: " + family);
-                    addFormError(_t("Restart required to take effect"));
+                    addFormNotice(_t("Family key configured for router family: " + family), true);
+                    addFormError(_t("Restart required to take effect"), true);
                 } else {
-                    addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"));
+                    addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"), true);
                 }
             } catch (GeneralSecurityException gse) {
-                addFormError(_t("Load from file failed") + " - " + gse);
+                addFormError(_t("Load from file failed") + " - " + gse.getMessage(), true);
             } catch (IOException ioe) {
-                addFormError(_t("Load from file failed") + " - " + ioe);
+                addFormError(_t("Load from file failed") + " - " + ioe.getMessage(), true);
             } finally {
                 // it's really a ByteArrayInputStream but we'll play along...
                 try { in.close(); } catch (IOException ioe) {}
@@ -127,10 +127,10 @@ public class ConfigFamilyHandler extends FormHandler {
             removes.add(FamilyKeyCrypto.PROP_KEY_PASSWORD);
             removes.add(FamilyKeyCrypto.PROP_KEYSTORE_PASSWORD);
             if (_context.router().saveConfig(null, removes)) {
-                addFormNotice(_t("Configuration saved successfully."));
-                addFormError(_t("Restart required to take effect"));
+                addFormNotice(_t("Configuration saved successfully."), true);
+                addFormError(_t("Restart required to take effect"), true);
             } else {
-                addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"));
+                addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"), true);
             }
         }
         //addFormError(_t("Unsupported") + ' ' + _action + '.');

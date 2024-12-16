@@ -41,30 +41,30 @@ public class ConfigKeyringHandler extends FormHandler {
             byte[] b = null;
             if (_mode == 1 || _mode == 4 || _mode == 5) {
                 if (_key == null) {
-                    addFormError(_t("You must enter a key"));
+                    addFormError(_t("You must enter a key"), true);
                     return;
                 }
                 b = Base64.decode(_key);
                 if (b == null || b.length != 32) {
-                    addFormError(_t("Invalid key"));
+                    addFormError(_t("Invalid key"), true);
                     return;
                 }
             }
             if (_mode == 1) {
                 // LS1
                 if (h == null || h.getData() == null) {
-                    addFormError(_t("Invalid destination"));
+                    addFormError(_t("Invalid destination"), true);
                 } else if (_context.clientManager().isLocal(h)) {
                     // don't bother translating
-                    addFormError("Cannot add key for local destination. Enable encryption in the Tunnel Manager.");
+                    addFormError(_t("Cannot add key for local destination. Enable encryption in the Tunnel Manager."), true);
                 } else {
                     SessionKey sk = new SessionKey(b);
                     _context.keyRing().put(h, sk);
-                    addFormNotice(_t("Key for {0} added to keyring", h.toBase32()));
+                    addFormNotice(_t("Key for {0} added to keyring", h.toBase32()), true);
                 }
             } else {
                 if ((_mode == 3 || _mode == 5 || _mode == 7) && _secret == null) {
-                    addFormError(_t("Lookup password required"));
+                    addFormError(_t("Lookup password required"), true);
                     return;
                 }
                 // b33 if supplied as hostname
@@ -85,7 +85,7 @@ public class ConfigKeyringHandler extends FormHandler {
                     spk = bdin.getUnblindedPubKey();
                 }
                 if (spk == null) {
-                    addFormError(_t("Requires hostname, destination, or blinded Base32"));
+                    addFormError(_t("Requires hostname, destination, or blinded Base32"), true);
                     return;
                 }
                 BlindData bdold = _context.netDb().getBlindData(spk);
@@ -93,8 +93,7 @@ public class ConfigKeyringHandler extends FormHandler {
                     d = bdold.getDestination();
                 if (d != null && _context.clientManager().isLocal(d)) {
                     // don't bother translating
-                    addFormError(
-                            "Cannot add key for local destination. Enable encryption in the Hidden Services Manager.");
+                    addFormError(_t("Cannot add key for local destination. Enable encryption in the Hidden Services Manager."), true);
                     return;
                 }
 
@@ -129,19 +128,19 @@ public class ConfigKeyringHandler extends FormHandler {
                 if (bdin != null) {
                     // more checks based on supplied b33
                     if (bdin.getSecretRequired() && _secret == null) {
-                        addFormError(_t("Destination requires lookup password"));
+                        addFormError(_t("Destination requires lookup password"), true);
                         return;
                     }
                     if (!bdin.getSecretRequired() && _secret != null) {
-                        addFormError(_t("Destination does not require lookup password"));
+                        addFormError(_t("Destination does not require lookup password"), true);
                         return;
                     }
                     if (bdin.getAuthRequired() && pk == null) {
-                        addFormError(_t("Destination requires encryption key"));
+                        addFormError(_t("Destination requires encryption key"), true);
                         return;
                     }
                     if (!bdin.getAuthRequired() && pk != null) {
-                        addFormError(_t("Destination does not require encryption key"));
+                        addFormError(_t("Destination does not require encryption key"), true);
                         return;
                     }
                 }
@@ -159,12 +158,12 @@ public class ConfigKeyringHandler extends FormHandler {
                 }
                 try {
                     _context.netDb().setBlindData(bdout);
-                    addFormNotice(_t("Key for {0} added to keyring", bdout.toBase32()));
+                    addFormNotice(_t("Key for {0} added to keyring", bdout.toBase32()), true);
                     if (_mode == 6 || _mode == 7) {
-                        addFormNotice(_t("Send key to server operator.") + ' ' + pk.toPublic().toBase64());
+                        addFormNotice(_t("Send key to server operator.") + ' ' + pk.toPublic().toBase64(), true);
                     }
                 } catch (IllegalArgumentException iae) {
-                    addFormError(_t("Invalid destination") + ": " + iae.getLocalizedMessage());
+                    addFormError(_t("Invalid destination") + ": " + iae.getLocalizedMessage(), true);
                 }
             }
         } else if (_action.equals(_t("Delete key")) && _revokes != null) {
@@ -177,8 +176,7 @@ public class ConfigKeyringHandler extends FormHandler {
                     if (h != null) {
                         if (_context.clientManager().isLocal(h)) {
                             // don't bother translating
-                            addFormError(
-                                    "Cannot remove key for local destination. Disable encryption in the Tunnel Manager.");
+                            addFormError(_t("Cannot remove key for local destination. Disable encryption in the Tunnel Manager."), true);
                         } else if (_context.keyRing().remove(h) != null) {
                             removed = true;
                         }
@@ -193,12 +191,12 @@ public class ConfigKeyringHandler extends FormHandler {
                     } catch (IllegalArgumentException iae) {
                     }
                 } else {
-                    addFormError(_t("Invalid destination") + ": " + p);
+                    addFormError(_t("Invalid destination") + ": " + p, true);
                 }
                 if (removed) {
-                    addFormNotice(_t("Key for {0} removed from keyring", p));
+                    addFormNotice(_t("Key for {0} removed from keyring", p), true);
                 } else {
-                    addFormError(_t("Key for {0} not found in keyring", p));
+                    addFormError(_t("Key for {0} not found in keyring", p), true);
                 }
             }
         } else {

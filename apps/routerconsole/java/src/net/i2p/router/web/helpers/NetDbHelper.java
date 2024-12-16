@@ -276,12 +276,12 @@ public class NetDbHelper extends FormHandler {
                 String nonff = getJettyString("nonff");
                 toSave.put(Analysis.PROP_NONFF, Boolean.toString(nonff != null));
                 if (_context.router().saveConfig(toSave, null)) {
-                    addFormNotice(_t("Configuration saved successfully."));
+                    addFormNotice(_t("Configuration saved successfully."), true);
                 } else {
-                    addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"));
+                    addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"), true);
                 }
                 Analysis.getInstance(_context).schedule();
-            } catch (NumberFormatException nfe) {addFormError("Bad value");}
+            } catch (NumberFormatException nfe) {addFormError(_t("Bad value supplied, please check and try again."), true);}
         }
     }
 

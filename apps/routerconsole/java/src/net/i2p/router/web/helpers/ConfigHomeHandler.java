@@ -34,14 +34,14 @@ public class ConfigHomeHandler extends FormHandler {
                 prop = SearchHelper.PROP_ENGINES;
                 dflt = SearchHelper.ENGINES_DEFAULT;
             } else {
-                addFormError("Bad group");
+                addFormError(_t("Bad group detected, please retry"), true);
                 return;
             }
             if (restoring) {
                 //_context.router().saveConfig(prop, dflt);
                 // remove config so user will see updates
                 _context.router().saveConfig(prop, null);
-                addFormNotice(_t("Restored default settings"));
+                addFormNotice(_t("Restored default settings"), true);
                 return;
             }
             String config = _context.getProperty(prop, dflt);
@@ -51,12 +51,12 @@ public class ConfigHomeHandler extends FormHandler {
             if (adding) {
                 String name = getJettyString("nofilter_name");
                 if (name == null || name.length() <= 0) {
-                    addFormError(_t("No name entered"));
+                    addFormError(_t("No name entered"), true);
                     return;
                 }
                 String url = getJettyString("nofilter_url");
                 if (url == null || url.length() <= 0) {
-                    addFormError(_t("No URL entered"));
+                    addFormError(_t("No URL entered"), true);
                     return;
                 }
                 name = name.replace(",", ".");
@@ -66,7 +66,7 @@ public class ConfigHomeHandler extends FormHandler {
                 else if ("2".equals(group)) {app = new App(name, "", url, "/themes/console/images/package.svg");}
                 else {app = new App(name, "", url, "/themes/console/images/helplink.svg");}
                 apps.add(app);
-                addFormNotice(_t("Added") + ": " + app.name);
+                addFormNotice(_t("Added") + ": " + app.name, true);
             } else {
                 // deleting
                 Set<String> toDelete = new HashSet<String>();

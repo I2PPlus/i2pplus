@@ -23,21 +23,21 @@ public class ConfigPeerHandler extends FormHandler {
             if (h != null) {
                 _context.banlist().banlistRouterForever(h, " <b>➜</b> " + _t("Manually banned via {0}"), "<a href=\"configpeer\">configpeer</a>");
                 _context.commSystem().forceDisconnect(h);
-                addFormNotice(_t("Peer") + " " + _peer + " " + _t("banned until restart") );
+                addFormNotice(_t("Peer") + " " + _peer + " " + _t("banned until restart"), true);
                 return;
             }
-            addFormError(_t("Invalid peer"));
+            addFormError(_t("Invalid peer"), true);
         } else if (_action.equals(_t("Unban peer"))) {
             Hash h = getHash();
             if (h != null) {
                 if (_context.banlist().isBanlisted(h)) {
                     _context.banlist().unbanlistRouter(h);
-                    addFormNotice(_t("Peer") + " " + _peer + " " + _t("unbanned") );
+                    addFormNotice(_t("Peer") + " " + _peer + " " + _t("unbanned"), true);
                 } else
-                    addFormNotice(_t("Peer") + " " + _peer + " " + _t("is not currently banned") );
+                    addFormNotice(_t("Peer") + " " + _peer + " " + _t("is not currently banned"), true);
                 return;
             }
-            addFormError(_t("Invalid peer"));
+            addFormError(_t("Invalid peer"), true);
         } else if (_action.equals(_t("Adjust peer bonuses"))) {
             Hash h = getHash();
             if (h != null) {
@@ -46,23 +46,21 @@ public class ConfigPeerHandler extends FormHandler {
                     try {
                         prof.setSpeedBonus(Integer.parseInt(_speed));
                     } catch (NumberFormatException nfe) {
-                        addFormError(_t("Bad speed value"));
+                        addFormError(_t("Bad speed value"), true);
                     }
                     try {
                         prof.setCapacityBonus(Integer.parseInt(_capacity));
                     } catch (NumberFormatException nfe) {
-                        addFormError(_t("Bad capacity value"));
+                        addFormError(_t("Bad capacity value"), true);
                     }
-                    addFormNotice("Bonuses adjusted for " + _peer);
+                    addFormNotice(_t("Bonuses adjusted for: ") + _peer, true);
                 } else
-                    addFormError("No profile exists for " + _peer);
+                    addFormError(_t("No profile exists for: ") + _peer, true);
                 return;
             }
-            addFormError(_t("Invalid peer"));
+            addFormError(_t("Invalid peer"), true);
         } else if (_action.startsWith("Check")) {
-            addFormError(_t("Unsupported"));
-        } else {
-            //addFormError(_t("Unsupported") + ' ' + _action + '.');
+            addFormError(_t("Unsupported"), true);
         }
     }
 

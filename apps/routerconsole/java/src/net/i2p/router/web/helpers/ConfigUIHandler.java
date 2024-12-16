@@ -51,7 +51,7 @@ public class ConfigUIHandler extends FormHandler {
         if (_config == null || _config.length() <= 0)
             return;
         if (_config.replaceAll("[a-zA-Z0-9_-]", "").length() != 0) {
-            addFormError("Bad theme name");
+            addFormError(_t("Cannot save theme choice, theme name has illegal characters"), true);
             return;
         }
         Map<String, String> changes = new HashMap<String, String>();
@@ -81,39 +81,33 @@ public class ConfigUIHandler extends FormHandler {
         boolean ok = _context.router().saveConfig(changes, removes);
         if (ok) {
             if (!oldTheme.equals(_config))
-                addFormNoticeNoEscape(_t("Theme change saved.") +
-                              " <a href=\"configui\">" +
-                              _t("Refresh the page to view.") +
-                              "</a>");
+                addFormNoticeNoEscape(_t("Theme change saved."), true);
             if (oldForceMobileConsole != _forceMobileConsole)
-                addFormNoticeNoEscape(_t("Mobile console option saved.") +
-                              " <a href=\"configui\">" +
-                              _t("Refresh the page to view.") +
-                              "</a>");
+                addFormNoticeNoEscape(_t("Mobile console option saved."), true);
         } else {
-            addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs."));
+            addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs."), true);
         }
     }
 
     private void addUser() {
         String name = getJettyString("name");
         if (name == null || name.length() <= 0) {
-            addFormError(_t("No user name entered"));
+            addFormError(_t("No user name entered"), true);
             return;
         }
         // XSS filters # and ; but not =
         // We store the username as the part of an option key, so we can't handle '='
         if (name.contains("=")) {
-            addFormError("User name may not contain '='");
+            addFormError(_t("User name may not contain '='"), true) ;
             return;
         }
         byte[] b1 = DataHelper.getUTF8(name);
         byte[] b2 = DataHelper.getASCII(name);
         if (!DataHelper.eq(b1, b2))
-            addFormError(_t("Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."));
+            addFormError(_t("Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."), true);
         String pw = getJettyString("nofilter_pw");
         if (pw == null || pw.length() <= 0) {
-            addFormError(_t("No password entered"));
+            addFormError(_t("No password entered"), true);
             return;
         }
         ConsolePasswordManager mgr = new ConsolePasswordManager(_context);
@@ -121,12 +115,12 @@ public class ConfigUIHandler extends FormHandler {
         if (mgr.saveMD5(RouterConsoleRunner.PROP_CONSOLE_PW, RouterConsoleRunner.JETTY_REALM, name, pw)) {
             if (!_context.getBooleanProperty(RouterConsoleRunner.PROP_PW_ENABLE))
                 _context.router().saveConfig(RouterConsoleRunner.PROP_PW_ENABLE, "true");
-            addFormNotice(_t("Added user {0}", name));
+            addFormNotice(_t("Added user {0}", name), true);
             addFormNotice(_t("To recover from a forgotten or non-working password, stop I2P, edit the file {0}, delete the line {1}, and restart I2P.",
-                             _context.router().getConfigFilename(), RouterConsoleRunner.PROP_PW_ENABLE + "=true"));
-            addFormError(_t("Restart required to take effect"));
+                             _context.router().getConfigFilename(), RouterConsoleRunner.PROP_PW_ENABLE + "=true"), true);
+            addFormError(_t("Restart required to take effect"), true);
         } else {
-            addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs."));
+            addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs."), true);
         }
     }
 
@@ -141,13 +135,13 @@ public class ConfigUIHandler extends FormHandler {
                 continue;
             k = k.substring(7);
             if (mgr.remove(RouterConsoleRunner.PROP_CONSOLE_PW, k)) {
-                addFormNotice(_t("Removed user {0}", k));
+                addFormNotice(_t("Removed user {0}", k), true);
                 success = true;
             } else {
-                addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs."));
+                addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs."), true);
             }
         }
         if (success)
-            addFormError(_t("Restart required to take effect"));
+            addFormError(_t("Restart required to take effect"), true);
     }
 }

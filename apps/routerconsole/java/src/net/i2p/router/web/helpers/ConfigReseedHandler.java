@@ -28,11 +28,11 @@ public class ConfigReseedHandler extends FormHandler {
         if (_action.equals(_t("Reseed now"))) {
             //saveChanges();
             if (!checker.requestReseed()) {
-                addFormError(_t("Reseeding is already in progress") + "!");
+                addFormError(_t("Reseeding is already in progress") + "!", true);
                 addCheckerStatus(checker);
             } else {
                 // skip the nonce checking in ReseedHandler
-                addFormNotice(_t("Starting reseed process") + ", " + _t("check sidebar for status."));
+                addFormNotice(_t("Starting reseed process") + ", " + _t("check sidebar for status."), true);
             }
         } else if (_action.equals(_t("Reseed from URL"))) {
             // threaded
@@ -40,19 +40,19 @@ public class ConfigReseedHandler extends FormHandler {
             if (val != null)
                 val = val.trim();
             if (val == null || val.length() == 0) {
-                addFormError(_t("No URL specified. Please supply a valid reseed URL."));
+                addFormError(_t("No URL specified. Please supply a valid reseed URL."), true);
                 return;
             }
             URI url;
             try {
                 url = new URI(val);
             } catch (URISyntaxException mue) {
-                addFormError(_t("Bad URL {0}", val));
+                addFormError(_t("Bad URL {0}", val), true);
                 return;
             }
             try {
                 if (!checker.requestReseed(url)) {
-                    addFormError(_t("Reseeding is already in progress") + "!");
+                    addFormError(_t("Reseeding is already in progress") + "!", true);
                     addCheckerStatus(checker);
                 } else {
                     // wait a while for completion but not forever
@@ -65,9 +65,9 @@ public class ConfigReseedHandler extends FormHandler {
                     }
                     if (!addCheckerStatus(checker)) {
                         if (checker.inProgress()) {
-                            addFormNotice(_t("Reseed in progress, check summary bar for status").replace("summary bar", "sidebar") + ".");
+                            addFormNotice(_t("Reseed in progress, check summary bar for status").replace("summary bar", "sidebar") + ".", true);
                         } else {
-                            addFormNotice(_t("Reseed complete, check summary bar for status").replace("summary bar", "sidebar") + ".");
+                            addFormNotice(_t("Reseed complete, check summary bar for status").replace("summary bar", "sidebar") + ".", true);
                         }
                     }
                 }
@@ -80,20 +80,20 @@ public class ConfigReseedHandler extends FormHandler {
             try {
                 // non-null but zero bytes if no file entered, don't know why
                 if (in == null || in.available() <= 0) {
-                    addFormError(_t("No file specified. Please select a valid .zip or .su3 file to reseed from."));
+                    addFormError(_t("No file specified. Please select a valid .zip or .su3 file to reseed from."), true);
                     return;
                 }
                 int count = checker.requestReseed(in);
                 if (count <= 0) {
-                    addFormError(_t("Reseed from file failed"));
+                    addFormError(_t("Reseed from file failed"), true);
                     addCheckerStatus(checker);
                 } else {
                     addFormNotice(ngettext("Reseed successful, loaded {0} router info from file" + ".",
                                            "Reseed successful, loaded {0} router infos from file" + ".",
-                                           count));
+                                           count), true);
                 }
             } catch (IOException ioe) {
-                addFormError(_t("Reseed from file failed") + " - " + ioe);
+                addFormError(_t("Reseed from file failed") + " - " + ioe.getMessage(), true);
                 addCheckerStatus(checker);
             } finally {
                 // it's really a ByteArrayInputStream but we'll play along...
@@ -105,7 +105,6 @@ public class ConfigReseedHandler extends FormHandler {
         } else if (_action.equals(_t("Reset URL list"))) {
             resetUrlList();
         }
-        //addFormError(_t("Unsupported") + ' ' + _action + '.');
     }
 
     /**
@@ -128,9 +127,9 @@ public class ConfigReseedHandler extends FormHandler {
 
     private void resetUrlList() {
         if (_context.router().saveConfig(Reseeder.PROP_RESEED_URL, null))
-            addFormNotice(_t("URL list reset successfully"));
+            addFormNotice(_t("URL list reset successfully"), true);
         else
-            addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"));
+            addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"), true);
     }
 
     /** @since 0.8.9 */
@@ -184,7 +183,7 @@ public class ConfigReseedHandler extends FormHandler {
         if (_context.router().saveConfig(changes, removes))
             addFormNotice(_t("Configuration saved successfully."));
         else
-            addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"));
+            addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"), true);
     }
 
     /** translate (ngettext) @since 0.9.19 */
