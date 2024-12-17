@@ -49,8 +49,7 @@ function injectCss() {
   var s = document.createElement("style");
   s.setAttribute("id", "graphcss");
   var w = graphWidth !== 0 ? graphWidth + 4 : graphImage.width + 4;
-  var h = graphHeight !== 0 ? graphHeight + 4 : graphImage.height + 4;
-  s.innerHTML = ".graphContainer{width:" + w + "px;height:" + h + "px}";
+  s.innerHTML = ".graphContainer{width:" + w + "px}";
   document.head.appendChild(s);
 }
 

@@ -614,7 +614,7 @@ p#upnpconfig,p#ipchange,p#ipv6config,p#tcpconfig,p#confignotes,p#defaultswork{ma
 form[action="graphs"],form[action="/updategraphs"]{margin-top:-11px;margin-bottom:10px;padding:10px 10px 0;border:var(--border_inner);background:var(--panel)}
 .graphspanel{padding:0;margin:15px 0 -15px 0;width:100%;text-align:center;overflow:auto;background:none}
 .graphspanel a{font-size:0}
-.graphspanel a img{text-align:center;opacity:.9;transition:ease border .1s}
+.graphspanel a img{max-width:100%;text-align:center;opacity:.9;transition:ease border .1s}
 .graphspanel a img:hover{box-shadow:var(--highlight),inset 0 0 2px 1px var(--ink_btn_active);background:#000;opacity:1;cursor:zoom-in;transition:ease border .2s}
 .graphspanel form{margin-bottom:25px;padding:0 15px 0 15px;text-align:left}
 .graphspanel p{margin-top:10px;padding:10px 10px 15px;text-align:center;text-transform:capitalize;border-top:var(--border_inner)}

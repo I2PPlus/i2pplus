@@ -18,7 +18,7 @@ import { onVisible, onHidden } from "/js/onVisible.js";
   let longestLoadTime = 500;
   let lastRefreshTime = 0;
   let previousRefreshInterval = 0;
-  let debugging = true;
+  let debugging = false;
 
   if (configs) configs.hidden = true;
 
