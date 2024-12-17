@@ -29,8 +29,6 @@ class MessageReceiver {
     /** list of messages (InboundMessageState) fully received but not interpreted yet */
     private final BlockingQueue<InboundMessageState> _completeMessages;
     private volatile boolean _alive;
-    //private ByteCache _cache;
-
     private static final int cores = SystemVersion.getCores();
     private static final int MIN_THREADS = SystemVersion.isSlow() ? 1 : 2;
     private static final int MAX_THREADS = SystemVersion.isSlow() ? 2 : 4;
@@ -114,15 +112,13 @@ class MessageReceiver {
                 }
             } catch (InterruptedException ie) {}
 
-            if (expired > 0)
-                _context.statManager().addRateData("udp.inboundExpired", expired, expiredLifetime);
+            if (expired > 0) {_context.statManager().addRateData("udp.inboundExpired", expired, expiredLifetime);}
 
             if (message != null) {
                 int size = message.getCompleteSize();
                 try {
                     I2NPMessage msg = readMessage(buf, message, handler);
-                    if (msg != null)
-                        _transport.messageReceived(msg, null, message.getFrom(), message.getLifetime(), size);
+                    if (msg != null) {_transport.messageReceived(msg, null, message.getFrom(), message.getLifetime(), size);}
                 } catch (RuntimeException re) {
                     _log.error("b0rked receiving a message.. wazza huzza hmm?", re);
                     continue;
@@ -155,8 +151,7 @@ class MessageReceiver {
                     off += len;
                 }
                 if (off != sz) {
-                    if (_log.shouldWarn())
-                        _log.warn("Hmm, offset of the fragments = " + off + " while the state says " + sz);
+                    if (_log.shouldWarn()) {_log.warn("Hmm, offset of the fragments = " + off + " while the state says " + sz);}
                     return null;
                 }
                 m = I2NPMessageImpl.fromRawByteArray(_context, data, 0, sz, handler);
@@ -169,16 +164,11 @@ class MessageReceiver {
         } catch (I2NPMessageException ime) {
             if (_log.shouldWarn()) {
                 ByteArray ba;
-                if (state.getFragmentCount() > 1)
-                    ba = buf;
-                else
-                    ba = state.getFragments()[0];
+                if (state.getFragmentCount() > 1) {ba = buf;}
+                else {ba = state.getFragments()[0];}
                 byte[] data = ba.getData();
-                _log.warn("Message invalid: " + state +
-                          " PeerState: " + _transport.getPeerState(state.getFrom()) +
-                          "\nDUMP:\n" + HexDump.dump(data, 0, sz) +
-                          "\nRAW:\n" + Base64.encode(data, 0, sz),
-                          ime);
+                _log.warn("Message invalid: " + state + " PeerState: " + _transport.getPeerState(state.getFrom()) +
+                          "\n* DUMP:\n" + HexDump.dump(data, 0, sz) + "\n* RAW:\n" + Base64.encode(data, 0, sz), ime);
             }
             if (state.getFragments()[0].getData()[0] == DatabaseStoreMessage.MESSAGE_TYPE) {
                 PeerState ps = _transport.getPeerState(state.getFrom());
@@ -187,19 +177,19 @@ class MessageReceiver {
                     _transport.sendDestroy(ps, SSU2Util.REASON_BANNED);
                     _transport.dropPeer(ps, true, "Corrupt DSM");
                     _context.banlist().banlistRouterForever(state.getFrom(),
-                                                            " <b>➜</b> " + "Sent corrupt message");  // don't bother translating
+                        " <b>➜</b> " + "Sent corrupt message");  // don't bother translating
                 }
             }
-            _context.messageHistory().droppedInboundMessage(state.getMessageId(), state.getFrom(), "error: " + ime.toString() + ": " + state.toString());
+            _context.messageHistory().droppedInboundMessage(state.getMessageId(), state.getFrom(),
+                "error: " + ime.toString() + ": " + state.toString());
             return null;
         } catch (RuntimeException e) {
             // e.g. AIOOBE
-            if (_log.shouldWarn())
-                _log.warn("Error handling a message: " + state, e);
-            _context.messageHistory().droppedInboundMessage(state.getMessageId(), state.getFrom(), "error: " + e.toString() + ": " + state.toString());
+            if (_log.shouldWarn()) {_log.warn("Error handling a message: " + state, e);}
+            _context.messageHistory().droppedInboundMessage(state.getMessageId(), state.getFrom(),
+                "error: " + e.toString() + ": " + state.toString());
             return null;
-        } finally {
-            state.releaseResources();
-        }
+        } finally {state.releaseResources();}
     }
+
 }
