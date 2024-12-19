@@ -4,9 +4,7 @@
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";
     String pageTitlePrefix = "";
-    if (ctx.getProperty("routerconsole.lang") != null) {
-        lang = ctx.getProperty("routerconsole.lang");
-    }
+    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
     if (ctx.getProperty("routerconsole.pageTitlePrefix") != null) {
         pageTitlePrefix = ctx.getProperty("routerconsole.pageTitlePrefix");
     }
@@ -18,9 +16,7 @@
 <script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %>
 
-<%
-    String consoleNonce = net.i2p.router.web.CSSHelper.getNonce();
-%>
+<% String consoleNonce = net.i2p.router.web.CSSHelper.getNonce(); %>
 
 <h1 class=home><%=intl._t("Router Sitemap")%></h1>
 
@@ -59,9 +55,7 @@
 </span>
 </a>
 
-<%
-    boolean embedApps = ctx.getBooleanProperty("routerconsole.embedApps");
-%>
+<% boolean embedApps = ctx.getBooleanProperty("routerconsole.embedApps"); %>
 
 <% if (!embedApps) { %>
 <a href="/torrents" target=_blank rel=noreferrer>
@@ -385,9 +379,7 @@
 </span>
 </a>
 
-<%
-    if (version.equals(firstVersion)) {
-%>
+<% if (version.equals(firstVersion)) { %>
 
 <h3><%=intl._t("Help &amp; Support")%></h3>
 
@@ -468,9 +460,7 @@
 </span>
 </a>
 
-<%  } // first version %>
-
-<%
+<% } /* first version */
     boolean sitemapSites = ctx.getBooleanProperty("routerconsole.sitemapSites");
     if (sitemapSites) {
 %>
@@ -478,9 +468,7 @@
 <jsp:useBean class="net.i2p.router.web.helpers.HomeHelper" id="homehelper" scope="request" />
 <jsp:setProperty name="homehelper" property="contextId" value="<%=i2pcontextId%>" />
 <jsp:getProperty name="homehelper" property="favorites" />
-<%
-    }
-%>
+<% } %>
 
 </div>
 </div>
