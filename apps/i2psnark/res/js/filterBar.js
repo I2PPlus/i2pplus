@@ -60,7 +60,7 @@ async function showBadge() {
       setTimeout(() => {
         filter.style.pointerEvents = "";
         filter.style.opacity = "";
-      }, 2000);
+      }, 1000);
     }
   });
 
