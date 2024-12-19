@@ -865,10 +865,10 @@ class SummaryBarRenderer {
     public String renderUpdateStatusHTML() {
         String updateStatus = _helper.getUpdateStatus();
         StringBuilder buf = new StringBuilder(512);
-        if (_helper == null || "".equals(updateStatus)) {
-            buf.append("<div id=sb_updatesection class=\"hide volatile\" hidden></div>\n");
+        if (_helper == null || updateStatus.isEmpty()) {
+            buf.append("<div id=sb_updatesection class=\"volatile hide\" hidden></div>\n");
         } else {
-            buf.append("<div id=sb_updatesection class=\"volatile collapse\">\n")
+            buf.append("<div id=sb_updatesection class=collapse>\n")
                .append("<h3><a href=\"/configupdate\" target=_top title=\"")
                .append(_t("Configure I2P Updates"))
                .append("\">")

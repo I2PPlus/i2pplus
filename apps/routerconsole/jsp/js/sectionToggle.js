@@ -23,10 +23,11 @@ function sectionToggler() {
   const sb_tunnels = document.getElementById("sb_tunnels");
   const sb_tunnels_condensed = document.getElementById("sb_tunnels_condensed");
   const sb_updatesection = document.getElementById("sb_updatesection");
+  const sb_wrap = document.getElementById("sb_wrap");
 
   function toggle_updatesection() {
     if (sb_updatesection !== null) {
-      if (document.getElementById("toggle_sb_updatesection").checked !== true) { hide_updatesection(); }
+      if (document.getElementById("toggle_sb_updatesection").checked == false) { hide_updatesection(); }
       else { show_updatesection(); }
     }
   }
@@ -35,7 +36,7 @@ function sectionToggler() {
     if (sb_updatesection !== null && document.getElementById("toggle_sb_updatesection") !== null) {
       if (sb_updatesection.hidden !== true) {
         sb_updatesection.classList.add("collapsed");
-        sb.querySelector("#sb_updatesection > h3").classList.add("collapsed");
+        sb_updatesection.querySelector("h3").classList.add("collapsed");
       }
       document.getElementById("toggle_sb_updatesection").checked = false;
       localStorage["section_updatesection"] = "hide";
@@ -45,8 +46,8 @@ function sectionToggler() {
   function show_updatesection() {
     if (sb_updatesection !== null && document.getElementById("toggle_sb_updatesection") !== null) {
       sb_updatesection.classList.remove("collapsed");
-      if (sb.querySelector("#sb_updatesection > h3") !== null) {
-        sb.querySelector("#sb_updatesection > h3").classList.remove("collapsed");
+      if (sb_updatesection.querySelector("h3") !== null) {
+        sb_updatesection.querySelector("h3").classList.remove("collapsed");
       }
       document.getElementById("toggle_sb_updatesection").checked = true;
       localStorage.removeItem("section_updatesection");
@@ -347,18 +348,18 @@ function sectionToggler() {
     if (sb_localtunnels !== null) {
       sb_localtunnels.hidden = true;
       sb_localtunnels.classList.add("collapsed");
-      const clients = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/client.svg"]').length;
-      const clientSpan = '<span id=clientCount class="count_' + clients + '">' + clients + ' x <img src="/themes/console/images/client.svg"></span>';
-      const i2pchats = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/i2pchat.svg"]').length;
-      const i2pchatSpan = '<span id=i2pchatCount class="count_' + i2pchats + '">' + i2pchats + ' x <img src="/themes/console/images/i2pchat.svg"></span>';
-      const pings = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/ping.svg"]').length;
-      const pingSpan = '<span id=pingCount class="count_' + pings + '">' + pings + ' x <img src="/themes/console/images/ping.svg"></span>';
-      const servers = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/server.svg"]').length;
-      const serverSpan = '<span id=serverCount class="count_' + servers + '">' + servers + ' x <img src="/themes/console/images/server.svg"></span>';
-      const snarks = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/snark.svg"]').length;
-      const snarkSpan = '<span id=snarkCount class="count_' + snarks + '">' + snarks + ' x <img src="/themes/console/images/snark.svg"></span>';
-      const summary = serverSpan + " " + clientSpan + " " + snarkSpan + " " + i2pchatSpan + " " + pingSpan;
-      const summaryTable = '<table id=localtunnelSummary><tr id=localtunnelsActive><td>' + summary + '</td></tr></table>';
+      const clients = document.querySelectorAll("#sb_localtunnels img[src='/themes/console/images/client.svg']").length;
+      const clientSpan = "<span id=clientCount class='count_" + clients + "'>" + clients + " x <img src='/themes/console/images/client.svg'></span>";
+      const i2pchats = document.querySelectorAll("#sb_localtunnels img[src='/themes/console/images/i2pchat.svg']").length;
+      const i2pchatSpan = "<span id=i2pchatCount class='count_" + i2pchats + "'>" + i2pchats + " x <img src='/themes/console/images/i2pchat.svg'></span>";
+      const pings = document.querySelectorAll("#sb_localtunnels img[src='/themes/console/images/ping.svg']").length;
+      const pingSpan = "<span id=pingCount class='count_" + pings + "'>" + pings + " x <img src='/themes/console/images/ping.svg'></span>";
+      const servers = document.querySelectorAll("#sb_localtunnels img[src='/themes/console/images/server.svg']").length;
+      const serverSpan = "<span id=serverCount class='count_" + servers + "'>" + servers + " x <img src='/themes/console/images/server.svg'></span>";
+      const snarks = document.querySelectorAll("#sb_localtunnels img[src='/themes/console/images/snark.svg']").length;
+      const snarkSpan = "<span id=snarkCount class='count_" + snarks + "'>" + snarks + " x <img src='/themes/console/images/snark.svg'></span>";
+      const summary = serverSpan + ' ' + clientSpan + ' ' + snarkSpan + ' ' + i2pchatSpan + ' ' + pingSpan;
+      const summaryTable = "<table id=localtunnelSummary><tr id=localtunnelsActive><td>" + summary + "</td></tr></table>";
       if (localtunnelSummary !== null) {
         localtunnelSummary.hidden = null;
         localtunnelSummary.outerHTML = summaryTable;
@@ -405,26 +406,26 @@ function sectionToggler() {
   }
 
   function addToggleListeners() {
-    const toggleElements = {
-      "toggle_sb_advancedgeneral": toggle_advancedgeneral,
-      "toggle_sb_advanced": toggle_advanced,
-      "toggle_sb_bandwidth": toggle_bandwidth,
-      "toggle_sb_general": toggle_general,
-      "toggle_sb_help": toggle_help,
-      "toggle_sb_internals": toggle_internals,
-      "toggle_sb_localtunnels": toggle_localtunnels,
-      "toggle_sb_newsheadings": toggle_newsheadings,
-      "toggle_sb_peers": toggle_peers,
-      "toggle_sb_queue": toggle_queue,
-      "toggle_sb_services": toggle_services,
-      "toggle_sb_tunnels": toggle_tunnels,
-      "toggle_sb_updatesection": toggle_updatesection
-    };
-
-    for (const id in toggleElements) {
-      const el = document.getElementById(id);
-      if (el) { el.addEventListener("click", toggleElements[id]); }
-    }
+    sb_wrap.addEventListener("click", function(event) {
+      const toggleElements = {
+        "toggle_sb_advancedgeneral": toggle_advancedgeneral,
+        "toggle_sb_advanced": toggle_advanced,
+        "toggle_sb_bandwidth": toggle_bandwidth,
+        "toggle_sb_general": toggle_general,
+        "toggle_sb_help": toggle_help,
+        "toggle_sb_internals": toggle_internals,
+        "toggle_sb_localtunnels": toggle_localtunnels,
+        "toggle_sb_newsheadings": toggle_newsheadings,
+        "toggle_sb_peers": toggle_peers,
+        "toggle_sb_queue": toggle_queue,
+        "toggle_sb_services": toggle_services,
+        "toggle_sb_tunnels": toggle_tunnels,
+        "toggle_sb_updatesection": toggle_updatesection
+      };
+      if (event.target.id in toggleElements) {
+        toggleElements[event.target.id]();
+      }
+    });
   }
 
   checkToggleStatus();

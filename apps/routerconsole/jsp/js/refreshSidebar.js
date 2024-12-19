@@ -19,10 +19,6 @@ const elements = {
   volatileElements: sb.querySelectorAll(".volatile:not(.badge)"),
 };
 
-sb.addEventListener("loaded", () => {
-  initSidebar();
-});
-
 const requestIdleOrAnimationFrame = (callback, timeout = refreshInterval) => {
   clearTimeout(throttleTimer);
   throttleTimer = setTimeout(() => {
@@ -30,6 +26,8 @@ const requestIdleOrAnimationFrame = (callback, timeout = refreshInterval) => {
     request(callback);
   }, timeout);
 };
+
+sb.addEventListener("loaded", () => { requestIdleOrAnimationFrame(initSidebar); });
 
 function tangoDown() {
   document.body.classList.add("isDown");
@@ -135,9 +133,7 @@ async function refreshSidebar() {
 
       const forms = ["form_reseed", "form_sidebar", "form_updates"].map((id) => document.getElementById(id)).filter((form) => form);
       forms.forEach((form) => (form.onsubmit = () => handleFormSubmit()));
-      function handleFormSubmit() {
-        setTimeout(refreshAll, 3000);
-      }
+      function handleFormSubmit() {requestIdleOrAnimationFrame(refreshAll);}
     }
   } catch (error) {
     isDown = true;
@@ -148,17 +144,10 @@ async function refreshSidebar() {
 
 function ready() {
   refreshSidebar(isDocumentVisible)
-    .then(() => {
-      stickySidebar();
-    })
-    .catch((error) => {
-      isDown = true;
-    })
-    .finally(() => {
-      if (isDown) {
-        setTimeout(tangoDown, 10000);
-      }
-    });
+  .catch((error) => {isDown = true;})
+  .finally(() => {
+    if (isDown) {setTimeout(tangoDown, 10000);}
+  });
 }
 
 onVisible(sb, ready);
