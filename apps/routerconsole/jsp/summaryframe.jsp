@@ -1,11 +1,6 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="16kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
 <!DOCTYPE HTML>
-<%
-/*
- * All links in the summary bar must have target=_top
- * so they don't load in the iframe
- */
-%>
+<% /* All links in the summary bar must have target=_top so they don't load in the iframe */ %>
 <%
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";
@@ -14,7 +9,7 @@
 <%@include file="head.jsi" %>
 <title>Sidebar - I2P+</title>
 <%
-    // try hard to avoid an error page in the iframe after shutdown
+    // Try hard to avoid an error page in the iframe after shutdown
     String action = request.getParameter("action");
     String d = request.getParameter("refresh");
     // Normal browsers send value, IE sends button label
@@ -23,35 +18,28 @@
                            "shutdownImmediate".equals(action) || "restartImmediate".equals(action) ||
                            "Shutdown immediately".equals(action) || "Restart immediately".equals(action);
     if (!shutdownSoon) {
-        if (d == null || "".equals(d)) {
-            // set below
-        } else if (net.i2p.router.web.CSSHelper.getNonce().equals(conNonceParam)) {
-            d = net.i2p.data.DataHelper.stripHTML(d);  // XSS
+        if (d == null || "".equals(d)) {} // set below
+        else if (net.i2p.router.web.CSSHelper.getNonce().equals(conNonceParam)) {
+            d = net.i2p.data.DataHelper.stripHTML(d); // XSS
             intl.setRefresh(d);
             intl.setDisableRefresh(d);
         }
         d = intl.getRefresh();
-        // we probably don't get here if d == "0" since caught in summary.jsi, but just
-        // to be sure...
+        // we probably don't get here if d == "0" since caught in summary.jsi, but just to be sure...
         if (!intl.getDisableRefresh()) {
-            // doesn't work for restart or shutdown with no expl. tunnels,
-            // since the call to ConfigRestartBean.renderStatus() hasn't happened yet...
-            // So we delay slightly
-            if (action != null &&
-                ("restart".equals(action.toLowerCase(java.util.Locale.US)) || "shutdown".equals(action.toLowerCase(java.util.Locale.US)))) {
+            // doesn't work for restart or shutdown with no expl. tunnels, since the call to
+            // ConfigRestartBean.renderStatus() hasn't happened yet... So we delay slightly
+            if (action != null && ("restart".equals(action.toLowerCase(java.util.Locale.US)) || "shutdown".equals(action.toLowerCase(java.util.Locale.US)))) {
                 synchronized(this) {
-                    try {
-                        wait(1000);
-                    } catch(InterruptedException ie) {}
+                    try {wait(1000);}
+                    catch(InterruptedException ie) {}
                 }
             }
             long timeleft = net.i2p.router.web.helpers.ConfigRestartBean.getRestartTimeRemaining();
             long delay = 60;
             try { delay = Long.parseLong(d); } catch (NumberFormatException nfe) {}
-            if (delay*1000 < timeleft + 5000)
-                out.print("<meta http-equiv=\"refresh\" content=\"" + delay + ";url=/summaryframe.jsp\" >\n");
-            else
-                shutdownSoon = true;
+            if (delay*1000 < timeleft + 5000) {out.print("<meta http-equiv=\"refresh\" content=\"" + delay + ";url=/summaryframe.jsp\" >\n");}
+            else {shutdownSoon = true;}
         }
     }
 %>
@@ -60,9 +48,7 @@
 <div class=sb id=sidebar>
 <jsp:useBean class="net.i2p.router.web.NewsHelper" id="newshelper" scope="request" />
 <jsp:setProperty name="newshelper" property="contextId" value="<%=i2pcontextId%>" />
-<%
-    java.io.File newspath = new java.io.File(net.i2p.I2PAppContext.getGlobalContext().getRouterDir(), "docs/news.xml");
-%>
+<% java.io.File newspath = new java.io.File(net.i2p.I2PAppContext.getGlobalContext().getRouterDir(), "docs/news.xml"); %>
 <jsp:setProperty name="newshelper" property="page" value="<%=newspath.getAbsolutePath()%>" />
 <jsp:setProperty name="newshelper" property="maxLines" value="300" />
 <%@include file="summarynoframe.jsi" %>

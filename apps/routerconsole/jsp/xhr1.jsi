@@ -1,5 +1,4 @@
-<%@page import="net.i2p.router.web.helpers.SummaryHelper" %>
-<%@page trimDirectiveWhitespaces="true"%>
+<%@page import="net.i2p.router.web.helpers.SummaryHelper" trimDirectiveWhitespaces="true"%>
 <% /* Note: This is included on every refresh, so keep whitespace etc. to a minimum. */ %>
 <jsp:useBean class="net.i2p.router.web.helpers.SummaryHelper" id="helper" scope="request" />
 <jsp:setProperty name="helper" property="contextId" value="<%=i2pcontextId%>" />
@@ -10,23 +9,13 @@
 String reqURI = request.getRequestURI();
 if (reqURI.contains("/xhr1")) {reqURI = request.getParameter("requestURI");}
 helper.setRequestURI(reqURI);
+helper.storeWriter(out);
+helper.storeNewsHelper(newshelper);
 %>
-<% helper.storeWriter(out); %>
-<% helper.storeNewsHelper(newshelper); %>
-<%
-/*
- * The following is required for the reseed button to work, although we probably
- * only need the reseedNonce property.
- */
-%>
+<% /* The following is required for the reseed button to work, although we probably only need the reseedNonce property. */ %>
 <jsp:useBean class="net.i2p.router.web.helpers.ReseedHandler" id="reseed" scope="request" />
 <jsp:setProperty name="reseed" property="*" />
-<%
-/*
- * The following is required for the update buttons to work, although we probably
- * only need the updateNonce property.
- */
-%>
+<% /* The following is required for the update buttons to work, although we probably only need the updateNonce property. */ %>
 <jsp:useBean class="net.i2p.router.web.UpdateHandler" id="update" scope="request" />
 <jsp:setProperty name="update" property="*" />
 <jsp:setProperty name="update" property="contextId" value="<%=i2pcontextId%>" />

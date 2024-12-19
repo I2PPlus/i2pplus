@@ -25,7 +25,7 @@ public class CSSHelper extends HelperBase {
     private static final String FORCE = "classic";
     public static final String PROP_REFRESH = "routerconsole.summaryRefresh";
     public static final String DEFAULT_REFRESH = "3";
-    public static final int MIN_REFRESH = 1;
+    public static final int MIN_REFRESH = 0;
     public static final String PROP_DISABLE_REFRESH = "routerconsole.summaryDisableRefresh";
     private static final String PROP_XFRAME = "routerconsole.disableXFrame";
     public static final String PROP_FORCE_MOBILE_CONSOLE = "routerconsole.forceMobileConsole";
@@ -127,6 +127,7 @@ public class CSSHelper extends HelperBase {
     /** change refresh and save it */
     public void setRefresh(String r) {
         try {
+            if (r.equals("0")) {_context.router().saveConfig(PROP_DISABLE_REFRESH, "true");}
             if (Integer.parseInt(r) < MIN_REFRESH) {r = Integer.toString(MIN_REFRESH);}
             _context.router().saveConfig(PROP_REFRESH, r);
         } catch (RuntimeException e) {}
@@ -135,12 +136,11 @@ public class CSSHelper extends HelperBase {
     /** @return refresh time in seconds, as a string */
     public String getRefresh() {
         String r = _context.getProperty(PROP_REFRESH, DEFAULT_REFRESH);
-        try {
-            if (Integer.parseInt(r) < MIN_REFRESH) {r = Integer.toString(MIN_REFRESH);}
-        } catch (RuntimeException e) {r = Integer.toString(MIN_REFRESH);}
-        if (SystemVersion.getCPULoadAvg() > 90 && Integer.parseInt(r) < 5 && Integer.parseInt(r) != 0) {
-            return "5";
-        } else {return r;}
+        if (r.equals("0")) {r = "3600";}
+        try { if (Integer.parseInt(r) < MIN_REFRESH) {r = Integer.toString(MIN_REFRESH);} }
+        catch (RuntimeException e) {r = Integer.toString(MIN_REFRESH);}
+        if (SystemVersion.getCPULoadAvg() > 90 && Integer.parseInt(r) < 5 && Integer.parseInt(r) != 0) {return "5";}
+        else {return r;}
     }
 
     /**

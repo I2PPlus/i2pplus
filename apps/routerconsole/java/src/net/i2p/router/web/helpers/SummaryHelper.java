@@ -50,7 +50,6 @@ public class SummaryHelper extends HelperBase {
     private static final char S = ',';
     static final String PROP_SUMMARYBAR = "routerconsole.summaryBar.";
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    boolean oldHome = ctx.getBooleanProperty("routerconsole.oldHomePage");
     String firstVersion = ctx.getProperty("router.firstVersion");
     String version = net.i2p.CoreVersion.VERSION;
     private static final String PROP_ADVANCED = "routerconsole.advanced";
@@ -93,45 +92,6 @@ public class SummaryHelper extends HelperBase {
         "Destinations" + S +
         "";
 
-    static final String DEFAULT_FULL_OLDHOME_NEWUSER =
-        "RouterInfo" + S +
-        "CPUBar" + S +
-        "MemoryBar" + S +
-        "UpdateStatus" + S +
-        "Bandwidth" + S +
-        "BandwidthGraph" + S +
-        "NetworkReachability" + S +
-        "FirewallAndReseedStatus" + S +
-        "I2PServices" + S +
-        "I2PInternals" + S +
-        "HelpAndFAQ" + S +
-        "Peers" + S +
-        "Tunnels" + S +
-        "TunnelStatus" + S +
-        "NewsHeadings" + S +
-        "RestartStatus" + S +
-        "Destinations" + S +
-        "";
-
-    static final String DEFAULT_FULL_OLDHOME =
-        "RouterInfo" + S +
-        "CPUBar" + S +
-        "MemoryBar" + S +
-        "UpdateStatus" + S +
-        "Bandwidth" + S +
-        "BandwidthGraph" + S +
-        "NetworkReachability" + S +
-        "FirewallAndReseedStatus" + S +
-        "I2PServices" + S +
-        "I2PInternals" + S +
-        "Peers" + S +
-        "Tunnels" + S +
-        "TunnelStatus" + S +
-        "NewsHeadings" + S +
-        "RestartStatus" + S +
-        "Destinations" + S +
-         "";
-
     static final String DEFAULT_FULL_ADVANCED =
         "AdvancedRouterInfo" + S +
         "CPUBar" + S +
@@ -148,27 +108,6 @@ public class SummaryHelper extends HelperBase {
         "Tunnels" + S +
         "TunnelStatus" + S +
         "Congestion" + S +
-        "RestartStatus" + S +
-        "Destinations" + S +
-        "";
-
-    static final String DEFAULT_FULL_ADVANCED_OLDHOME =
-        "AdvancedRouterInfo" + S +
-        "CPUBar" + S +
-        "MemoryBar" + S +
-        "UpdateStatus" + S +
-        "Bandwidth" + S +
-        "BandwidthGraph" + S +
-        "NetworkReachability" + S +
-        "FirewallAndReseedStatus" + S +
-        "I2PServices" + S +
-        "I2PInternals" + S +
-        "Advanced" + S +
-        "Peers" + S +
-        "Tunnels" + S +
-        "TunnelStatus" + S +
-        "Congestion" + S +
-        "NewsHeadings" + S +
         "RestartStatus" + S +
         "Destinations" + S +
         "";
@@ -1247,14 +1186,6 @@ public class SummaryHelper extends HelperBase {
         String config;
         if ("home".equals(page)) {
             config = _context.getProperty(PROP_SUMMARYBAR + page, isAdvanced() ? DEFAULT_MINIMAL_ADVANCED : DEFAULT_MINIMAL);
-        } else if (oldHome) {
-            config = _context.getProperty(PROP_SUMMARYBAR + page);
-            if (config == null)
-                if (version.equals(firstVersion)) {
-                    config = _context.getProperty(PROP_SUMMARYBAR + "default", isAdvanced() ? DEFAULT_FULL_ADVANCED_OLDHOME : DEFAULT_FULL_OLDHOME_NEWUSER);
-                } else {
-                    config = _context.getProperty(PROP_SUMMARYBAR + "default", isAdvanced() ? DEFAULT_FULL_ADVANCED_OLDHOME : DEFAULT_FULL_OLDHOME);
-                }
         } else {
             config = _context.getProperty(PROP_SUMMARYBAR + page);
             if (config == null) {

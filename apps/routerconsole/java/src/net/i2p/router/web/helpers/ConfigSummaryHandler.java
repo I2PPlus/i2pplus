@@ -23,7 +23,6 @@ public class ConfigSummaryHandler extends FormHandler {
     protected void processForm() {
         if (_action == null) return;
         net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-        boolean oldHome = ctx.getBooleanProperty("routerconsole.oldHomePage");
         String group = getJettyString("group");
         boolean deleting = _action.equals(_t("Delete selected"));
         boolean adding = _action.equals(_t("Add item"));
@@ -51,11 +50,7 @@ public class ConfigSummaryHandler extends FormHandler {
                 return;
             }
         } else if (_action.equals(_t("Restore full default"))) {
-            if (oldHome) {
-            _context.router().saveConfig(SummaryHelper.PROP_SUMMARYBAR + "default", isAdvanced() ? SummaryHelper.DEFAULT_FULL_ADVANCED_OLDHOME : SummaryHelper.DEFAULT_FULL_OLDHOME);
-            } else {
             _context.router().saveConfig(SummaryHelper.PROP_SUMMARYBAR + "default", isAdvanced() ? SummaryHelper.DEFAULT_FULL_ADVANCED : SummaryHelper.DEFAULT_FULL);
-            }
             addFormNotice(_t("Full sidebar defaults restored.") + " " + _t("Sidebar will refresh shortly."), true);
         } else if (_action.equals(_t("Restore minimal default"))) {
             _context.router().saveConfig(SummaryHelper.PROP_SUMMARYBAR + "default", isAdvanced() ? SummaryHelper.DEFAULT_MINIMAL_ADVANCED : SummaryHelper.DEFAULT_MINIMAL);

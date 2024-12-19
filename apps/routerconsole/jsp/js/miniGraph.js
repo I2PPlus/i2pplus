@@ -20,9 +20,11 @@ async function refreshGraph() {
   if (refreshCount > 0 && currentTime - lastRefreshTime < refreshInterval) return;
   lastRefreshTime = currentTime;
 
-  const graphCanvas = document.getElementById("minigraph"),
-        ctx = graphCanvas.getContext("2d"),
-        [minigraphWidth, minigraphHeight] = [245, 50];
+  const graphCanvas = document.getElementById("minigraph");
+  if (!graphCanvas) {return;}
+
+  const ctx = graphCanvas.getContext("2d"),
+  [minigraphWidth, minigraphHeight] = [245, 50];
 
   try {
     const response = await fetch(`/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=${Date.now()}`);

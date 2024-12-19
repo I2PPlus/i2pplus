@@ -2054,7 +2054,7 @@ input[type=hidden]+p+p{margin-top:20px;margin-bottom:-21px;padding:10px;border:v
 #tunnelconfigsave{margin-top:0;border-top:var(--border)}
 .tIn{background:url(/themes/console/images/inbound.svg) no-repeat 6px center/16px,var(--badge)}
 .tOut{background:url(/themes/console/images/outbound.svg) no-repeat 6px center/16px,var(--badge)}
-.toggle:not(.expanded) .tIn,.toggle:not(.expanded) .tOut{display:inline-block!important}
+.toggle:not(.expanded) .tIn,.toggle:not(.expanded) .tOut{min-width:40px;display:inline-block!important}
 .toggleElementsActive .tIn,.toggleElementsActive .tOut{margin:-3px 0;padding:4px 6px 4px 26px;display:inline-block;box-shadow:var(--bevel)}
 .toggleElementsActive #tunnelconfigsave{margin-top:1px}
 body:not(.toggleElementsActive) .tIn,body:not(.toggleElementsActive) .tOut{display:none}

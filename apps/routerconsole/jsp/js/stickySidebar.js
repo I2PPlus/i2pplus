@@ -13,32 +13,31 @@ function stickySidebar() {
   var iframe = document.querySelector(".embed");
   let debug = false;
 
+  if (!sbWrap) {return;}
+
   function calcHeight() {
-    if (sbWrap) {
-      if ((sbHeight + 5 < viewportHeight && (htmlHeight > viewportHeight) && viewportHeight > 700) ||
-          (iframe !== null && iframe.getBoundingClientRect().height > viewportHeight && viewportHeight > 700)) {
-        sbWrap.style.position = "sticky";
-        sbWrap.style.top = "5px";
-        sbWrap.classList.add("sticky");
-      } else {
-        sbWrap.style.position = null;
-        sbWrap.style.top = null;
-        sbWrap.classList.remove("sticky");
-      }
-      if (debug) {
-        if (iframe !== null && iframe.getBoundingClientRect().height > viewportHeight) {
-          console.log("Iframe height currently reported as:" + iframe.getBoundingClientRect().height);
-        }
+    if ((sbHeight + 5 < viewportHeight && (htmlHeight > viewportHeight) && viewportHeight > 700) ||
+        (iframe !== null && iframe.getBoundingClientRect().height > viewportHeight && viewportHeight > 700)) {
+      sbWrap.style.position = "sticky";
+      sbWrap.style.top = "5px";
+      sbWrap.classList.add("sticky");
+    } else {
+      sbWrap.style.position = null;
+      sbWrap.style.top = null;
+      sbWrap.classList.remove("sticky");
+    }
+    if (debug) {
+      if (iframe !== null && iframe.getBoundingClientRect().height > viewportHeight) {
+        console.log("Iframe height currently reported as:" + iframe.getBoundingClientRect().height);
       }
     }
   }
   calcHeight();
 
   sbWrap.addEventListener("click", function(element) {
-    if (element.target.className === "toggleSection") {
-      calcHeight();
-    }
+    if (element.target.className === "toggleSection") {calcHeight();}
   });
+
 }
 
 export {stickySidebar};

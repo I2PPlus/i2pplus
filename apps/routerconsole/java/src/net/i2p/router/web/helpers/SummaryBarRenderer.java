@@ -94,6 +94,7 @@ class SummaryBarRenderer {
      */
     public void renderSummaryHTML(Writer out) throws IOException {
         String requestURI = _helper.getRequestURI();
+        boolean isXHR = requestURI.contains("/xhr1");
         String page = requestURI.replace("/", "").replace(".jsp", "");
         List<String> sections = _helper.getSummaryBarSections(page);
 
@@ -152,19 +153,17 @@ class SummaryBarRenderer {
                 buf.append(renderClockHTML());
 
             // Only output section if there's more than the <hr> to print
-            if (buf.length() > 5)
-                out.write(buf.toString());
+            if (buf.length() > 5) {out.write(buf.toString());}
         }
     }
 
     public String renderHelpAndFAQHTML() {
         StringBuilder buf = new StringBuilder(512);
         buf.append("<h3 id=helpfaq><a href=\"/help/\" target=_top title=\"")
-           .append(_t("I2P Router Help &amp; FAQ"))
-           .append("\">")
-           .append(_t("Help &amp; FAQ"))
-           .append("</a><input type=checkbox id=toggle_sb_help class=\"toggleSection script\" checked hidden></h3><hr class=b>\n" +
-                   "<table id=sb_help>\n<tr><td>");
+           .append(_t("I2P Router Help &amp; FAQ")).append("\">")
+           .append(_t("Help &amp; FAQ")).append("</a>")
+           .append("<input type=checkbox id=toggle_sb_help class=\"toggleSection script\" checked hidden></h3><hr class=b>\n")
+           .append("<table id=sb_help>\n<tr><td>");
 
         // Store all items in map so they are sorted by translated name, then output
         Map<String, String> svcs = new TreeMap<String, String>(Collator.getInstance());

@@ -23,7 +23,7 @@ function sectionToggler() {
   const sb_tunnels = document.getElementById("sb_tunnels");
   const sb_tunnels_condensed = document.getElementById("sb_tunnels_condensed");
   const sb_updatesection = document.getElementById("sb_updatesection");
-  const sb_wrap = document.getElementById("sb_wrap");
+  const sb_wrap = document.getElementById("sb_wrap") || sb;
 
   function toggle_updatesection() {
     if (sb_updatesection !== null) {
