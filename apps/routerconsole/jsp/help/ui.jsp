@@ -8,7 +8,7 @@
         lang = ctx.getProperty("routerconsole.lang");
     }
     if (ctx.getProperty("routerconsole.pageTitlePrefix") != null) {
-        pageTitlePrefix = ctx.getProperty("routerconsole.pageTitlePrefix");
+        pageTitlePrefix = ctx.getProperty("routerconsole.pageTitlePrefix") + ' ';
     }
 %>
 <%@include file="../head.jsi" %>
