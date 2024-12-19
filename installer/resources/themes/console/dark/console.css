@@ -321,15 +321,14 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 #lsCount.badge{animation:none}
 #sidebar #sb_status #lsCount.badge,#sidebar .net_status:hover #sb_status #lsCount.badge{padding:2px 3px 1px;margin:0 0 0 3px;line-height:1;vertical-align:middle;color:#494}
 #lsCount.badge{margin-top:1px;font-size:8pt!important}
-#sb_updatesection h3.collapsed:not(.updating) a::after{content:"*"}
 #sidebar h3{position:relative;contain:paint}
 #console_404 #sidebar h3 a .badge{display:none}
 #sidebar h3 a[href="/info"] .badge{text-transform:none}
 #sidebar h3:hover a .badge,h3:hover #tunnelCount,h3:hover #newsCount{color:var(--hover);box-shadow:0 0 0 1px var(--hover),0 0 0 1px #000 inset}
 #sidebar h3 .badge:empty,#sidebar #newsCount:empty,#sidebar #tunnelCount:empty,#sidebar .badge[hidden]{display:none}
 #sidebar td .badge:empty::after{display:inline;content:"---"}
-#tunnelCount+#tunnelCount,#newsCount+#newsCount{display:none}
 #sidebar #tunnelCount{animation:none}
+#sb_updatesection h3.collapsed:not(.updating) a::after{content:"*"}
 #sb_updatesection.collapsed>*:not(h3){display:none}
 #updatespinner{display:inline-block;height:20px;width:20px;background:var(--update) no-repeat fixed center center/20px;animation:spin 3s ease 0s both}
 #sidebar #localtunnelsActive,#sidebar #localtunnelsActive td{text-align:center;background:none;padding:3px 0;line-height:16px;vertical-align:middle;text-align:center}
@@ -361,6 +360,7 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 #sb_peers_condensed .badge,#sb_tunnels_condensed .badge{margin:0;position:absolute;right:-2px;top:2px;display:inline-block;line-height:1;background:rgba(0,0,0,.35);text-align:center;padding:1px 3px 2px;min-width:20px;border-radius:0 0 0 2px;pointer-events:none}
 #sb_tunnels_condensed .badge{top:1px}
 #tunnelCount{animation:none}
+#tunnelCount+#tunnelCount,#newsCount+#newsCount{display:none}
 
 /* main section */
 .sb,.main,h1,#news,.confignav,.tab,.tab2,table.search,.applink,.sitemapLink,.sitemapLabel{border:var(--border_hard)}
