@@ -589,7 +589,7 @@ a.controld img{display:none}
 #hopVariance .optbox:not(:checked)+span{filter:saturate(0)}
 #hopVariance #varyOutbound+span{background:var(--outbound) no-repeat center center/22px}
 .depress{transition:ease all .2s;border}
-.inert{transition:border ease-out .15s,background ease-out .15s}
+.inert{transition:border ease-out .5s,background ease .5s}
 .tempDisabled{filter:opacity(.3);pointer-events:none;transition:filter ease .5s}
 
 /* action buttons */
@@ -1097,6 +1097,9 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 #msg.deleting{background:url(/i2psnark/.res/icons/processing.svg) no-repeat 20px center/48px,linear-gradient(180deg,#303,#400040)}
 #msg .hr{margin-bottom:11px;border-top:1px solid #270527;border-bottom:1px solid #414}
 
+/* add/create notifications */
+#addNotify td,#createNotify td{box-shadow:0 0 0 2px #404 inset;border-radius:3px}
+
 /* text viewer */
 #textview-content{padding-top:44px;color:var(--ink);text-shadow:1px 1px 1px #0008;box-shadow:0 0 0 10px #404,0 0 0 11px #505,0 0 0 12px #101,var(--highlight),0 0 0 2px #505 inset;background:linear-gradient(180deg,#280828,#303);scrollbar-color:#505 #0000}
 #textview-content.pre{color:var(--ink)}
@@ -1437,7 +1440,7 @@ th.radio{width:96px}
 #configs td{padding-top:3px;padding-bottom:3px}
 #configs td:first-child{padding-right:10px}
 #configs td:last-child{padding-right:0}
-#contentFilter{margin:0;padding:4px 6px;width:calc(80% - 6px);display:flex;flex-wrap:wrap;align-items:center;box-shadow:var(--txtInputBevel);background:#180018;background:#101 var(--tile)}
+#contentFilter{margin:0;padding:4px 6px;width:calc(80% - 6px);display:flex;flex-wrap:wrap;align-items:center;box-shadow:var(--txtInputBevel);background:#101 var(--tile)}
 #fileFilter td,#trackerconfig td,#trackerconfig td label{font-size:10pt}
 #navbar{padding:11px 10px 10px}
 .iframed #navbar{padding:12px 10px 10px}

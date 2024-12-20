@@ -25,9 +25,7 @@ async function handleTorrentNotify(event, notificationElement, inputElement, for
     try {
       await submitForm(form);
       await refreshScreenLog(() => {
-        setTimeout(() => {
-          showNotification(notificationElement, inputElement, getLastMessage());
-        }, 1000);
+        requestAnimationFrame(() => { showNotification(notificationElement, inputElement, getLastMessage()); });
       }, true);
     } catch (error) {}
   }
@@ -43,11 +41,11 @@ function showNotification(notificationElement, inputElement, displayText) {
     hideAlert(notificationElement);
     inputElement.value = "";
     inputElement.focus();
-  }, 5000);
+  }, 6000);
 }
 
 function hideAlert(notificationElement) {
-  if (notificationElement) {notificationElement.setAttribute("hidden", "");}
+  if (notificationElement) { requestAnimationFrame(() => {notificationElement.setAttribute("hidden", "");}) }
 }
 
 async function submitForm(form) {
