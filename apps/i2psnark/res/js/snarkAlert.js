@@ -24,6 +24,7 @@ async function handleTorrentNotify(event, notificationElement, inputElement, for
   if (elements.addNotify || elements.createNotify) {
     try {
       await submitForm(form);
+      await new Promise(resolve => setTimeout(resolve, 1500));
       await refreshScreenLog(() => {
         requestAnimationFrame(() => { showNotification(notificationElement, inputElement, getLastMessage()); });
       }, true);

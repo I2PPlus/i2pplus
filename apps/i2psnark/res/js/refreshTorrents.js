@@ -353,9 +353,15 @@ function refreshOnSubmit() {
 
   document.addEventListener("click", (event) => {
     const clickTarget = event.target;
+    const form = clickTarget.closest("form");
+    const stopAllOrStartAllInactive = document.querySelector('input[id^="action"]:not(.depress)')
     if (clickTarget.matches("input[type=submit]")) {
       event.stopPropagation();
       clickTarget.form.requestSubmit();
+      if (clickTarget.matches('input[id^="action"]')) {
+        stopAllOrStartAllInactive.classList.add("tempDisabled");
+        setTimeout(() => {stopAllOrStartAll.classList.remove("tempDisabled")}, 4000);
+      }
     }
   });
 }
