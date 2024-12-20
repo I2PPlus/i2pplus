@@ -61,7 +61,7 @@
     <echo message=" dist                                         Run &apos;pkg&apos; and &apos;javadoc&apos;" />
     <echo message=" dist200                                      Run &apos;pkg&apos;, &apos;updater200&apos; and &apos;javadoc&apos;" />
     <echo message=" distclean                                    Clean up all derived and temporary files in workspace" />
-    <echo message=" distcleanWebapp                              Clean up all webapp-related derived and temporary files in workspace" />
+    <echo message=" distcleanWebapps                             Clean up all webapp-related derived and temporary files in workspace" />
     <echo message=" i2psnark                                     Build standalone I2PSnark install &#10140; ./i2psnark-standalone.zip" />
     <echo message=" installer / installer5                       Build GUI installer (IzPack4 / IzPack5) &#10140; ./i2pinstall.exe" />
     <echo message=" installer-freebsd                            Build FreeBSD GUI installer &#10140; ./i2pinstall&#8230;freebsd-only.jar" />
@@ -1283,7 +1283,7 @@
     </parallel>
   </target>
 
-  <target name="distcleanWebapp">
+  <target name="distcleanWebapps">
     <parallel>
       <ant dir="apps/i2ptunnel/java/" target="distclean" />
       <ant dir="apps/routerconsole/java/" target="distclean" />
