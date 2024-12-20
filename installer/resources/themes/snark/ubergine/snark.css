@@ -1454,6 +1454,7 @@ th.radio{width:96px}
 #torrents .commented{width:12px;height:12px;right:2px}
 #torrents .commented img{margin-top:-2px;width:12px;height:12px}
 #torrents .infohash{padding-left:16px;max-width:100px;vertical-align:text-top;background-size:13px,100%}
+#torrents .status{min-width:32px}
 }
 
 @media (min-width:1500px){
