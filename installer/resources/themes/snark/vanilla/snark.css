@@ -440,24 +440,22 @@ textarea{margin-top:2px;padding:4px;height:26px;resize:none;font-size:8pt;color:
 
 /* panel titles */
 .toggleview,#config{will-change:transform}
-.toggleview,#tab_config{margin:-1px auto -3px;padding:5px 1px 4px;min-width:360px;display:inline-block;vertical-align:middle;text-shadow:0 0 1px #fff5ef;color:#444039;border:1px solid #111;border-top:0;box-shadow:0 0 2px rgba(77,69,62,.3),var(--highlight);background:var(--tab_section)}
-#tab_config{margin-top:0;padding:3px 1px}
-#tab_config:hover,.toggleview:hover,input.toggle_input:focus+.toggleview{background:var(--tab_section_hover)}
+.toggleview{margin:-1px auto -3px;padding:5px 1px 4px;min-width:360px;display:inline-block;vertical-align:middle;text-shadow:0 0 1px #fff5ef;color:#444039;border:1px solid #111;border-top:0;box-shadow:0 0 2px rgba(77,69,62,.3),var(--highlight);background:var(--tab_section)}
+.toggleview:hover,input.toggle_input:focus+.toggleview{background:var(--tab_section_hover)}
 .configPanel .configTitle,.configPanel .configTitle:hover,.configPanel .configTitle:active,.configPanel .configTitle:focus{margin:0 -11px;padding:5px 8px 5px 29px;display:block;letter-spacing:.15em;text-align:left;text-transform:uppercase;font-size:11pt;font-weight:700;color:#4d2200;border:1px solid #1f1400;border-top:0;border-radius:2px 2px 0 0;box-shadow:var(--highlight);background:var(--snark) no-repeat 8px center,radial-gradient(circle at left bottom,#f9f8f2,#f7f6ee 400px);background-size:18px,100%;background-blend-mode:luminosity}
 .snarkConfig{width:100%;font-size:8pt}
 .toggleview img,.snarkConfig .configTitle img{display:none;opacity:0}
-.toggleview:hover::after,.toggleview:focus::after,#tab_config a:hover::after,#tab_config a:focus::after{mix-blend-mode:normal}
-.toggleview,#tab_config{font-size:0}
-.toggleview::after,#tab_config a::after{padding:3px;width:18px;height:18px;display:inline-block;vertical-align:middle;border:1px solid #a39375;border-radius:50%;background:var(--add) no-repeat center center,var(--tab);background-size:18px,100%;opacity:1;content:"";mix-blend-mode:luminosity}
+.toggleview:hover::after,.toggleview:focus::after{mix-blend-mode:normal}
+.toggleview{font-size:0}
+.toggleview::after{padding:3px;width:18px;height:18px;display:inline-block;vertical-align:middle;border:1px solid #a39375;border-radius:50%;background:var(--add) no-repeat center center,var(--tab);background-size:18px,100%;opacity:1;content:"";mix-blend-mode:luminosity}
 .toggleview:hover::after{mix-blend-mode:normal}
 .toggleview[for="toggle_files"]::after{box-shadow:none;background:var(--folder) no-repeat center center,var(--tab);background-size:14px,100%}
 .toggleview[for="toggle_comments"]::after{box-shadow:none;background:var(--chat) no-repeat center center,var(--tab);background-size:14px,100%}
 .toggleview[for="toggle_torrentedit"]::after{box-shadow:none;background:var(--edit) no-repeat center center,var(--tab);background-size:14px,100%}
 .iframed .configPanel .configTitle,.iframed .configPanel .configTitle:hover,.iframed .configPanel .configTitle:active{border-radius:0}
 #tab_newtorrent::after{box-shadow:inset 0 0 0 2px #ffeadf;background:var(--wizard) no-repeat center center,var(--tab);background-size:18px,100%}
-#tab_config a::after{box-shadow:inset 0 0 0 2px #ffeadf;background:var(--configure) no-repeat center center,var(--tab);background-size:16px,100%}
-#tab_config:active,.toggleview:active{box-shadow:0 0 2px #4d453e,inset 0 0 0 1px #f0e9e4,inset 2px 2px 3px 1px #59513b;background:var(--tab_section_active)}
-#tab_config a:active::after,.toggleview:active::after{transform:rotate(90deg) scale(.9);transition:ease transform .15s}
+.toggleview:active{box-shadow:0 0 2px #4d453e,inset 0 0 0 1px #f0e9e4,inset 2px 2px 3px 1px #59513b;background:var(--tab_section_active)}
+.toggleview:active::after{transform:rotate(90deg) scale(.9);transition:ease transform .15s}
 input:checked+.toggleview:active::after{transform:rotate(-90deg) scale(.9);transition:ease transform .15s}
 
 /* panels */
@@ -1102,7 +1100,7 @@ td.status img{width:auto;height:23px}
 textarea,#torrents code,#screenlog{font-size:9pt}
 thead a img,thead img{max-height:22px}
 .barComplete{margin-top:-1px;padding:2px 0 1px;line-height:1.4}
-.configTitle,.configTitle:hover,.configPanel .configTitle,.configPanel .configTitle:hover,.configPanel .configTitle:active,.toggleview,#tab_config{min-width:400px}
+.configTitle,.configTitle:hover,.configPanel .configTitle,.configPanel .configTitle:hover,.configPanel .configTitle:active,.toggleview{min-width:400px}
 .details img[src$="rateme.svg"]{margin-top:-4px;margin-right:-3px;width:11px;height:11px}
 #dirInfoComplete{margin-right:4px}
 #dirInfo td:nth-child(n+2){padding-left:10px;padding-right:10px}

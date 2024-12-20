@@ -400,7 +400,7 @@ video::-webkit-media-controls-timeline{padding:0 16px 16px}
 /* section headings */
 .snarkNewTorrent{font-size:9pt}
 .configTitle,.toggleview{margin:-1px 0 -5px 0;padding:4px 1px;min-width:300px;display:inline-block;letter-spacing:.15em;font-size:10pt;font-weight:700;text-align:center;text-shadow:0 0 1px #000;border:var(--border);border-radius:0 0 2px 2px;box-shadow:var(--highlight),inset 0 0 1px 1px #224;background:var(--tab)}
-#tab_config,.toggleview{font-size:0}
+.toggleview{font-size:0}
 .configTitle:hover,.toggleview:hover,input.toggle_input:focus+.toggleview{box-shadow:inset 0 0 0 1px #101;background:var(--tab_hover)}
 .configTitle:active,.toggleview:active{box-shadow:var(--highlight),inset 0 0 0 1px #000,inset 3px 3px 3px 3px #000;background:var(--tab_active);transition:ease all .01s}
 .configPanel .configTitle{box-shadow:var(--highlight);background:var(--title);background-size:4px 100%,100%;pointer-events:none}
@@ -412,18 +412,15 @@ video::-webkit-media-controls-timeline{padding:0 16px 16px}
 input:checked+.toggleview:active .tab_label::after{transform:rotate(-90deg);transition:linear transform .01s}
 #tab_addtorrent .tab_label::after{background:var(--add) no-repeat scroll center center/16px,linear-gradient(180deg,#002,#000 50%,#1f1e32 50%,#191729)}
 #tab_newtorrent .tab_label::after{background:var(--create) no-repeat scroll right 2px top 2px/16px,linear-gradient(180deg,#002,#000 50%,#1f1e32 50%,#191729)}
-#tab_config .tab_label::after{background:var(--config) no-repeat scroll center center/16px,linear-gradient(180deg,#002,#000 50%,#1f1e32 50%,#191729)}
 #tab_files .tab_label::after{background:var(--folder) no-repeat scroll center center/16px,linear-gradient(180deg,#002,#000 50%,#1f1e32 50%,#191729)}
 #tab_comments .tab_label::after{background:var(--comment) no-repeat scroll center center/16px,linear-gradient(180deg,#002,#000 50%,#1f1e32 50%,#191729)}
 #tab_torrentedit .tab_label::after{background:var(--edit) no-repeat scroll center center/16px,linear-gradient(180deg,#002,#000 50%,#1f1e32 50%,#191729)}
-.toggleview:hover .tab_label::after,#tab_config:hover .tab_label::after{border:2px solid #101;box-shadow:0 0 1px 1px rgba(255,128,255,.2);filter:drop-shadow(0 0 1px #000) drop-shadow(0 0 2px #652787);mix-blend-mode:normal}
+.toggleview:hover .tab_label::after{border:2px solid #101;box-shadow:0 0 1px 1px rgba(255,128,255,.2);filter:drop-shadow(0 0 1px #000) drop-shadow(0 0 2px #652787);mix-blend-mode:normal}
 #tab_addtorrent:hover .tab_label::after,input:focus+.toggleview .tab_label::after{background:var(--add) no-repeat scroll center center/16px,linear-gradient(180deg,#003,#000 50%,#3f3f4a 50%,#31313a)}
 #tab_newtorrent:hover .tab_label::after{background:var(--create) no-repeat scroll right 2px top 2px/16px,linear-gradient(180deg,#003,#000 50%,#3f3f4a 50%,#31313a)}
-#tab_config .tab_label:hover::after{background:var(--config) no-repeat scroll center center/16px,linear-gradient(180deg,#003,#000 50%,#3f3f4a 50%,#31313a)}
-.toggleview:active .tab_label::after,#tab_config:active .tab_label::after{box-shadow:0 0 0 2px #321343;filter:drop-shadow(0 0 1px #461b5e);transform:rotate(90deg) scale(.9);transition:ease transform .01s}
+.toggleview:active .tab_label::after{box-shadow:0 0 0 2px #321343;filter:drop-shadow(0 0 1px #461b5e);transform:rotate(90deg) scale(.9);transition:ease transform .01s}
 input:checked+.toggleview:active .tab_label::after{transform:scale(.9) rotate(-90deg);transition:linear transform .01s}
-.toggleview,#tab_config{min-width:300px;text-align:center}
-.toggleview,#tab_config a{font-size:0}
+.toggleview{min-width:300px;text-align:center;font-size:0}
 #configs td:first-child,#commentInfo td:first-child,#userComments td:first-child{text-align:right}
 .snarkConfig{width:100%;font-size:10pt}
 form{margin-bottom:0}
@@ -987,7 +984,7 @@ a,th,thead th,tfoot th,td,select,select option,.snarkAddInfo,.snarkFileName,code
 .percentDownloaded{pointer-events:none}
 .peerSeed img{width:18px;height:18px}
 .snarkNav{font-size:10.5pt}
-.toggleview,#tab_config{min-width:340px}
+.toggleview{min-width:340px}
 #closelog img,#expand img,#shrink img{margin-top:-2px;width:13px}
 #pagenavcontrols{transform:translateX(52px)}
 .iframed #pagenavcontrols{transform:translateX(46px)}
@@ -1003,7 +1000,7 @@ label b,.configOption b,#trackerconfig th{font-size:9pt}
 td.status img{margin-left:1px;height:24px}
 thead img,thead img:hover{max-height:22px}
 .configPanel .configTitle{font-size:12.5pt}
-.configTitle,.toggleview,#tab_config{min-width:400px}
+.configTitle,.toggleview{min-width:400px}
 #dirInfo{margin-bottom:0}
 #dirInfo tr:nth-child(n+2) td:first-child img:not(.thumb){margin-top:-2px;margin-bottom:-1px;width:22px;max-width:22px;height:22px;max-height:22px}
 .iframed #page{background:none}

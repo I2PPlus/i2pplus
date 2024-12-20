@@ -482,23 +482,21 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .configTitle,.toggleview{margin:0 0 -3px;display:inline-block}
 .mainsection .configTitle{margin:-11px 0 -5px;padding:7px 15px 6px;font-size:120%}
 .mainsection .toggleview{margin-top:-10px;display:block}
-#tab_config,.toggleview{padding:3px 1px;width:320px;min-width:0;vertical-align:middle;line-height:0;font-size:0;color:#0000;font-size:0;border:1px solid #212;border-bottom:var(--border_hard);border-top:0;border-radius:0 0 3px 3px;box-shadow:inset 0 0 1px #545;background:linear-gradient(180deg,#434,#212 51%,#150015 51%,#000);filter:drop-shadow(0 1px 1px rgba(17,0,17,.6))}
-#tab_config:hover,.toggleview:hover,input:focus+.toggleview{background:linear-gradient(180deg,#656,#323 51%,#202 51%,#101);box-shadow:inset 0 0 1px #939}
-#tab_config:active,.toggleview:active,#tab_config.depress,.toggleview.depress{box-shadow:inset 0 0 1px #7f2f7f,inset 4px 4px 3px 3px #0009;background:linear-gradient(0deg,#212,#101)}
+.toggleview{padding:3px 1px;width:320px;min-width:0;vertical-align:middle;line-height:0;font-size:0;color:#0000;font-size:0;border:1px solid #212;border-bottom:var(--border_hard);border-top:0;border-radius:0 0 3px 3px;box-shadow:inset 0 0 1px #545;background:linear-gradient(180deg,#434,#212 51%,#150015 51%,#000);filter:drop-shadow(0 1px 1px rgba(17,0,17,.6))}
+.toggleview:hover,input:focus+.toggleview{background:linear-gradient(180deg,#656,#323 51%,#202 51%,#101);box-shadow:inset 0 0 1px #939}
+.toggleview:active,.toggleview.depress{box-shadow:inset 0 0 1px #7f2f7f,inset 4px 4px 3px 3px #0009;background:linear-gradient(0deg,#212,#101)}
 #tab_comments{margin-top:-1px}
 .iframed .configPanel .configTitle{border:1px solid #878;box-shadow:inset 0 0 1px #868}
-.iframed #tab_config,.iframed .toggleview{border:1px solid #878;border-bottom:1px solid #767;border-top:0;box-shadow:inset 0 0 1px #868,inset 0 -2px 0 2px rgba(0,0,0,.3);filter:drop-shadow(0 1px 2px #101);transition:none}
+.iframed .toggleview{border:1px solid #878;border-bottom:1px solid #767;border-top:0;box-shadow:inset 0 0 1px #868,inset 0 -2px 0 2px rgba(0,0,0,.3);filter:drop-shadow(0 1px 2px #101);transition:none}
 .iframed .configPanel#trackers,.iframed .mainsection#snarkInfo{margin-bottom:0}
-.iframed #tab_config:hover,.iframed .toggleview:hover,.iframed input:focus+.toggleview{box-shadow:inset 0 0 1px #434,inset 0 -2px 0 2px rgba(0,0,0,.5)}
-.iframed #tab_config:active,.iframed .toggleview:active,.iframed #tab_config.depress,.iframed .toggleview.depress{box-shadow:inset 0 0 1px #838,inset 4px 4px 3px 2px #101}
+.iframed .toggleview:hover,.iframed input:focus+.toggleview{box-shadow:inset 0 0 1px #434,inset 0 -2px 0 2px rgba(0,0,0,.5)}
+.iframed .toggleview:active,.iframed .toggleview.depress{box-shadow:inset 0 0 1px #838,inset 4px 4px 3px 2px #101}
 
 /* panel icons */
 .tab_label::after{margin:0;padding:2px;width:18px;height:18px;display:inline-block;vertical-align:middle;border:2px solid #101;border-radius:50%;box-shadow:none;content:"";mix-blend-mode:luminosity;filter:none;background-size:16px,100%;pointer-events:none;will-change:transform}
-.toggleview:hover .tab_label::after,#tab_config:hover .tab_label::after{box-shadow:0 0 1px 2px rgba(255,96,0,.4),0 0 2px 1px rgba(192,80,0,.3);mix-blend-mode:normal;transition:box-shadow ease .05s}
-.toggleview:active .tab_label::after,#tab_config:active .tab_label::after,.toggleview.depress .tab_label::after,#tab_config.depress .tab_label::after{transform:scale(.9) rotate(90deg);filter:drop-shadow(0 0 1px #000) drop-shadow(0 0 2px #730);transition:ease transform .01s}
+.toggleview:hover .tab_label::after{box-shadow:0 0 1px 2px rgba(255,96,0,.4),0 0 2px 1px rgba(192,80,0,.3);mix-blend-mode:normal;transition:box-shadow ease .05s}
+.toggleview:active .tab_label::after,.toggleview.depress .tab_label::after{transform:scale(.9) rotate(90deg);filter:drop-shadow(0 0 1px #000) drop-shadow(0 0 2px #730);transition:ease transform .01s}
 input:checked+.toggleview:active .tab_label::after,input:checked+.toggleview.depress .tab_label::after{transform:scale(.9) rotate(-90deg);transition:linear transform .01s}
-#tab_config .tab_label::after{background:var(--config) no-repeat center center/16px,var(--tabicon)}
-#tab_config .tab_label:hover::after{background:var(--config) no-repeat center center/16px,linear-gradient(180deg,#767,#989 50%,#434 50%,#323)}
 #tab_comments .tab_label::after{background:var(--comment) no-repeat center center/16px,var(--tabicon)}
 #tab_addtorrent .tab_label::after{background:var(--add) no-repeat center center/16px,var(--tabicon)}
 #tab_addtorrent:hover .tab_label::after,input:focus+.toggleview .tab_label::after{background:var(--add) no-repeat center center/16px,linear-gradient(180deg,#767,#989 50%,#434 50%,#323)}
@@ -1182,17 +1180,15 @@ td.peerCount:empty::after{display:none}
 .iframed #pagenavtop{margin:1px 0 -2px}
 .iframed #filterBar~#pagenavtop{margin:1px 0 2px}
 .snarkNav.nav_main,.snarkNav:last-child[href="/i2psnark/"]{padding-left:32px}
-.tab_label::after,#tab_addtorrent .tab_label::after,#tab_newtorrent .tab_label::after,#tab_config .tab_label::after,#tab_comments .tab_label::after,#tab_files .tab_label::after,#tab_torrentedit .tab_label::after,#tab_addtorrent:hover .tab_label::after,#tab_newtorrent:hover .tab_label::after,#tab_config:hover .tab_label::after,#tab_comments:hover .tab_label::after,#tab_torrentedit:hover .tab_label::after{width:15px;height:15px;background-size:13px}
+.tab_label::after,#tab_addtorrent .tab_label::after,#tab_newtorrent .tab_label::after,#tab_comments .tab_label::after,#tab_files .tab_label::after,#tab_torrentedit .tab_label::after,#tab_addtorrent:hover .tab_label::after,#tab_newtorrent:hover .tab_label::after,#tab_comments:hover .tab_label::after,#tab_torrentedit:hover .tab_label::after{width:15px;height:15px;background-size:13px}
 .tName a{max-width:320px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #commentDeleteAction td{padding-top:4px}
-#tab_config,.iframed .toggleview{padding:0 5px 3px}
+.iframed .toggleview{padding:0 5px 3px}
 #navbar a,#navbar a:hover,#navbar a:focus,#navbar a:active{padding:4px 8px 4px 24px;background-size:15px auto,100%;background-position:7px center}
 #navbar a,#navbar a:hover,#navbar a:focus,#navbar a:active{padding:4px 8px;background-size:15px auto,100%;background-position:center center}
 #navbar a:not(.nav_tracker){padding-top:12px;padding-bottom:12px;width:36px;font-size:0}
 #navbar a.nav_tracker{padding-left:24px;background-position:7px center}
 #navbar{margin-bottom:6px;width:calc(100% - 22px);min-width:600px;transition:ease width .5s .5s}
-#tab_config{margin-top:4px}
-.iframed #tab_config{margin-top:0}
 #totals{margin-left:4px;white-space:nowrap}
 #trackerselect td{font-size:9pt}
 .magnet,.trackerLink,#torrents #snarkHead th.torrentLink{width:0!important;padding:0!important}
@@ -1295,7 +1291,7 @@ th.peerCount img{display:none}
 .status img{height:17px}
 .tName a{max-width:240px}
 .toggleview img,.configTitle img{margin-right:0;height:14px}
-.toggleview,#tab_config{width:260px;min-width:260px}
+.toggleview{width:260px;min-width:260px}
 .txd,.rateUp,.debuginfo,.alwaysShow{display:none}
 #addSection input[type=text],#createSection input[type=text]{width:65%}
 #addSection td:first-child,#createSection td:first-child{width:20%}
@@ -1358,9 +1354,8 @@ select[name$=".quantity"],select[name$=".length"]{min-width:95px}
 }
 
 @media (min-width:1050px){
-.iframed #page{margin-bottom:0}
-.iframed #tab_config{margin-bottom:0}
 .mainsection td{padding-top:3px;padding-bottom:3px}
+.iframed #page{margin-bottom:0}
 #torrents a:not(#debugMode),th,td{font-size:9pt}
 }
 
@@ -1436,7 +1431,7 @@ th.radio{width:96px}
 #trackerconfig input.trackerannounce,#trackerconfig input.trackerhome{width:280px;max-width:80%}
 #trackerconfig input.trackerhome{margin-left:6px}
 #addSection td:first-child,#createSection td:first-child{width:200px}
-#tab_config,.toggleview{width:400px;padding:3px 0}
+.toggleview{width:400px;padding:3px 0}
 #configs td{padding-top:3px;padding-bottom:3px}
 #configs td:first-child{padding-right:10px}
 #configs td:last-child{padding-right:0}
@@ -1474,7 +1469,7 @@ th.radio{width:96px}
 }
 
 @media (-webkit-min-device-pixel-ratio:1.2){
-#tab_config,.toggleview{padding-bottom:2px}
+.toggleview{padding-bottom:2px}
 }
 
 @media (forced-colors:active){*{forced-color-adjust:none}}

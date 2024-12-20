@@ -442,7 +442,6 @@ input:checked + #tab_files{margin-top:0}
 input:active + .toggleview{color:#f90}
 .toggleview:hover,.toggleview:hover .tab_label,.toggleview:focus,.toggleview:focus .tab_label{color:var(--hover);text-shadow:none;transition:ease box-shadow .05s}
 .configTitle:active .tab_label,.configTitle.depress .tab_label,.toggleview:active .tab_label,.toggleview.depress .tab_label,.configTitle .tab_label:active,.configTitle .tab_label.depress,.toggleview .tab_label:active,.toggleview .tab_label.depress{display:inline-block;color:#f93;text-shadow:0 0 1px var(--bg);transform:scale(.95) translateY(1px)}
-#tab_config{margin-bottom:-2px}
 
 /* section panels */
 .configPanel{margin:9px 0 0 0;padding:0;background:linear-gradient(180deg,var(--bg),var(--bg3) 40px,var(--bg))}

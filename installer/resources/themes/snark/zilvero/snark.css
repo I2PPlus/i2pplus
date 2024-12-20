@@ -84,7 +84,7 @@ code{margin:0 2px}
 .snarkNav,.toggleview,.configTitle,.suboption,input[type=submit],a.control{font-weight:700;box-shadow:var(--highlight);background:var(--btn)}
 #torrentInfo td{padding-top:5px;padding-bottom:5px}
 #torrentInfo tr:last-child td{border-top:var(--border)}
-#navbar a,#tab_config a:not(:hover):not(:focus):not(:active),#tab_config a:not(:hover):not(:focus):not(:active):visited,.toggleview,a.control,a.control:visited{color:#777}
+#navbar a,.toggleview,a.control,a.control:visited{color:#777}
 #torrents #snarkTbody tr:hover,#dirInfo tr:hover,#trackerselect tr:nth-child(n+2):hover,.knownTracker:hover,.createFilterString:hover{background:var(--tr_hover)}
 #snarkTbody tr:not(.peerinfo):not(#pagenavbottom):nth-child(even){background:var(--tr_snark)}
 #snarkTbody tr:not(.peerinfo):not(#pagenavbottom):nth-child(odd){background:var(--tr_snark_odd)}
@@ -440,8 +440,8 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .tab_label,.toggleview{font-weight:800}
 .toggleview{position:relative;z-index:10}
 .toggleview:hover{text-decoration:none;cursor:pointer}
-.toggleview:hover,#tab_config:hover{background:var(--btn_hover)}
-.toggleview:active,.toggleview.depress,#tab_config:active,#tab_config.depress{background:var(--btn_active)}
+.toggleview:hover{background:var(--btn_hover)}
+.toggleview:active,.toggleview.depress{background:var(--btn_active)}
 .toggleview img{display:none}
 .toggle_input{position:absolute;opacity:0}
 input.toggle_input+label+hr+table{display:none}
@@ -466,7 +466,7 @@ html:not(.iframed) #snarkInfo~#commentSection{margin-top:4px}
 #addSection,#createSection,.configPanel{border:var(--border)}
 #addSection,#createSection,.configPanel,.snarkConfig,#navbar,#screenlog,#filterBar,.pagenavcontrols{box-shadow:var(--highlight);background:#eee;background:var(--noise),linear-gradient(180deg,#fff,#f8f8f8);background-size:248px,100%;background-blend-mode:multiply,normal}
 #addSection,#createSection{padding-bottom:5px;user-select:none}
-#addSection:hover,#createSection:hover,#addSection:hover .toggleview,#createSection:hover .toggleview,#tab_config:hover,#filterBar .filter:hover,.mainsection:hover .toggleview{box-shadow:inset 0 0 0 1px rgba(200,32,48,.5),inset 0 0 0 2px #fff}
+#addSection:hover,#createSection:hover,#addSection:hover .toggleview,#createSection:hover .toggleview,#filterBar .filter:hover,.mainsection:hover .toggleview{box-shadow:inset 0 0 0 1px rgba(200,32,48,.5),inset 0 0 0 2px #fff}
 #addSection{margin-top:-1px}
 #addSection hr,#createSection hr{margin:-6px 0}
 #addSection input[type=submit],#createSection input[type=submit]{margin-right:0;min-width:110px;float:none;vertical-align:middle}
@@ -475,7 +475,7 @@ html:not(.iframed) #snarkInfo~#commentSection{margin-top:4px}
 #addSection table{margin-bottom:6px}
 #addSection td:first-child,#createSection td:first-child{white-space:nowrap;min-width:120px}
 #addSection td:first-child{padding-right:10px;text-align:right;font-weight:700}
-#addSection .toggleview:active,#addSection .toggleview.depress,#createSection .toggleview:active,#createSection .toggleview.depress,#tab_config:active,#tab_config.depress{box-shadow:var(--highlight),inset 3px 3px 3px #bbb;background:}
+#addSection .toggleview:active,#addSection .toggleview.depress,#createSection .toggleview:active,#createSection .toggleview.depress{box-shadow:var(--highlight),inset 3px 3px 3px #bbb;background:}
 body:not(.lang_en) #addSection input[type=text],#createSection input[type=text]{width:calc(100% - 172px)}
 #commentSection #commentInfo{margin-top:-7px}
 #commentSection table:last-child{margin-bottom:0}
