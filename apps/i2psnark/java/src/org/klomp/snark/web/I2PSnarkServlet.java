@@ -77,10 +77,8 @@ import java.util.regex.*;
 public class I2PSnarkServlet extends BasicServlet {
 
     private static final long serialVersionUID = 1L;
-    /** generally "/i2psnark" */
-    private String _contextPath;
-    /** generally "i2psnark" */
-    private String _contextName;
+    private String _contextPath; /** generally "/i2psnark" */
+    private String _contextName; /** generally "i2psnark" */
     private transient SnarkManager _manager;
     private long _nonce;
     private String _themePath;
@@ -137,24 +135,28 @@ public class I2PSnarkServlet extends BasicServlet {
     public File getResource(String pathInContext) {
         synchronized(this) {
         if (pathInContext == null || pathInContext.equals("/") || pathInContext.equals("/index.jsp") ||
-                !pathInContext.startsWith("/") || pathInContext.length() == 0 ||
-                pathInContext.equals("/index.html") || pathInContext.startsWith(WARBASE))
-                return super.getResource(pathInContext);
-            // files in the i2psnark/ directory - get top level
-            pathInContext = pathInContext.substring(1);
-            File top = new File(pathInContext);
-            File parent;
-            while ((parent = top.getParentFile()) != null) {top = parent;}
-            Snark snark = _manager.getTorrentByBaseName(top.getPath());
-            if (snark != null) {
-                Storage storage = snark.getStorage();
-                if (storage != null) {
-                    File sbase = storage.getBase();
-                    String child = pathInContext.substring(top.getPath().length());
-                    return new File(sbase, child);
-                }
+            !pathInContext.startsWith("/") || pathInContext.length() == 0 || pathInContext.equals("/index.html") ||
+            pathInContext.startsWith(WARBASE)) {
+            return super.getResource(pathInContext);
+        }
+
+        pathInContext = pathInContext.substring(1); // files in the i2psnark/ directory - get top level
+        File top = new File(pathInContext);
+        File parent;
+
+        while ((parent = top.getParentFile()) != null) {top = parent;}
+        Snark snark = _manager.getTorrentByBaseName(top.getPath());
+        if (snark != null) {
+            Storage storage = snark.getStorage();
+            if (storage != null) {
+                File sbase = storage.getBase();
+                String child = pathInContext.substring(top.getPath().length());
+                return new File(sbase, child);
             }
-            return new File(_resourceBase, pathInContext);
+        }
+
+        return new File(_resourceBase, pathInContext);
+
         }
     }
 
@@ -193,13 +195,7 @@ public class I2PSnarkServlet extends BasicServlet {
       // ------------------------------------------------------------------------
       // Licensed under the Apache License, Version 2.0 (the "License");
       // you may not use this file except in compliance with the License.
-      // You may obtain a copy of the License at
-      // http://www.apache.org/licenses/LICENSE-2.0
-      // Unless required by applicable law or agreed to in writing, software
-      // distributed under the License is distributed on an "AS IS" BASIS,
-      // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-      // See the License for the specific language governing permissions and
-      // limitations under the License.
+      // See: http://www.apache.org/licenses/LICENSE-2.0
       // ========================================================================
      * </pre>
      *
@@ -254,7 +250,7 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean isConfigure = "/configure".equals(path);
         // index.jsp doesn't work, it is grabbed by the war handler before here
         if (!(path == null || path.equals("/") || path.equals("/index.jsp") ||
-              path.equals("/index.html") || path.equals("/_post") || isConfigure)) {
+            path.equals("/index.html") || path.equals("/_post") || isConfigure)) {
             if (path.endsWith("/")) {
                 // Listing of a torrent (torrent detail page)
                 // bypass the horrid Resource.getListHTML()
@@ -276,10 +272,8 @@ public class I2PSnarkServlet extends BasicServlet {
                     String base = addPaths(req.getRequestURI(), "/");
                     String listing = getListHTML(resource, base, true, method.equals("POST") ? req.getParameterMap() : null,
                                                  req.getParameter("sort"));
-                    if (method.equals("POST")) {
-                        // P-R-G
-                        sendRedirect(req, resp, "");
-                    } else if (listing != null) {
+                    if (method.equals("POST")) {sendRedirect(req, resp, "");} // P-R-G
+                    else if (listing != null) {
                         setHTMLHeaders(resp, cspNonce, true);
                         resp.getWriter().write(listing);
                     } else {resp.sendError(404);} // shouldn't happen
@@ -313,21 +307,21 @@ public class I2PSnarkServlet extends BasicServlet {
         String pageBackground = "#fff";
         if (theme.equals("dark")) {pageBackground = "#000";}
         else if (theme.equals("midnight")) {
-            pageBackground = "repeating-linear-gradient(180deg,rgba(0,0,24,.75) 2px,rgba(0,0,0,.7) 4px)/100% 4px," +
-                             "var(--tile)/171px 148px,#000010";
+            pageBackground = "#001";
         } else if (theme.equals("ubergine")) {pageBackground = "#101";}
-        else if (theme.equals("vanilla")) {pageBackground = "repeating-linear-gradient(180deg,#6f5b4c 1px,#a9927e 1px,#bfa388 4px),#cab39b";}
+        else if (theme.equals("vanilla")) {pageBackground = "#cab39b";}
         buf.append(DOCTYPE).append("<html style=\"background:").append(pageBackground).append("\">\n")
-                           .append("<head>\n").append("<meta charset=utf-8>\n");
+           .append("<head>\n").append("<meta charset=utf-8>\n");
         if (!isStandalone()) {
-            buf.append("<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js?").append(CoreVersion.VERSION).append("\" id=iframeResizer></script>\n")
+            buf.append("<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js?")
+               .append(CoreVersion.VERSION).append("\" id=iframeResizer></script>\n")
                .append("<script src=\"/js/iframeResizer/updatedEvent.js?").append(CoreVersion.VERSION).append("\"></script>\n");
         }
         buf.append("<meta name=viewport content=\"width=device-width\">\n");
 
         String fontPath = isStandalone() ? "/i2psnark/.res/themes/fonts" : "/themes/fonts";
         if (isStandalone() || useSoraFont()) {
-            buf.append("<link rel=preload href=").append(fontPath).append("/Sora/Sora.css as=style>\n")
+            buf.append("<link rel=preload href=").append(fontPath).append("/Sora.css as=style>\n")
                .append("<link rel=preload href=").append(fontPath).append("/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>\n")
                .append("<link rel=stylesheet href=").append(fontPath).append("/Sora.css>\n");
         } else {
@@ -3823,7 +3817,7 @@ public class I2PSnarkServlet extends BasicServlet {
         File override = new File(themeBase + "override.css");
         String fontPath = isStandalone() ? "/i2psnark/.res/themes/fonts" : "/themes/fonts";
         if (isStandalone() || useSoraFont()) {
-            buf.append("<link rel=preload href=").append(fontPath).append("/Sora/Sora.css as=style>\n")
+            buf.append("<link rel=preload href=").append(fontPath).append("/Sora.css as=style>\n")
                .append("<link rel=preload href=").append(fontPath).append("/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>\n")
                .append("<link rel=stylesheet href=").append(fontPath).append("/Sora.css>\n");
         } else {
