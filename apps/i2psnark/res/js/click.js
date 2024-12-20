@@ -46,7 +46,6 @@ document.addEventListener("DOMContentLoaded", () => {
       event.preventDefault();
       event.stopPropagation();
       clickTarget.form.requestSubmit();
-      console.log("create or add button clicked");
       handleInputClick(clickTarget);
     } else {handleInputClick(clickTarget);}
     eventListenerActive = true;
