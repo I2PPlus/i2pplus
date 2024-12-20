@@ -329,26 +329,33 @@ async function refreshScreenLog(callback, forceFetch = false) {
 }
 
 function refreshOnSubmit() {
-  document.addEventListener("click", async (event) => {
+  const forms = document.querySelectorAll("form");
+  forms.forEach((form) => {
+    const iframe = document.getElementById("processForm");
+    if (form && iframe) {
+      const formSubmitted = new Promise((resolve) => {
+        const loadHandler = () => {
+          iframe.removeEventListener("load", loadHandler);
+          resolve();
+        };
+        iframe.addEventListener("load", loadHandler);
+      });
+
+      form.onsubmit = async (event) => {
+        const submitter = event.submitter;
+        if (!(submitter instanceof HTMLInputElement && submitter.classList) && submitter !== null) {return;}
+        await formSubmitted;
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        await refreshScreenLog(undefined, true);
+      };
+    }
+  });
+
+  document.addEventListener("click", (event) => {
     const clickTarget = event.target;
     if (clickTarget.matches("input[type=submit]")) {
       event.stopPropagation();
-      const form = clickTarget.form;
-      const iframe = document.getElementById("processForm");
-      if (form && iframe) {
-        const formSubmitted = new Promise((resolve) => {
-          const loadHandler = () => {
-            iframe.removeEventListener("load", loadHandler);
-            resolve();
-          };
-          iframe.addEventListener("load", loadHandler);
-        });
-        if (!clickTarget.classList.includes("add") && !clickTarget.classList.includes("create")) {
-          form.requestSubmit();
-          await formSubmitted;
-        }
-        await refreshScreenLog(undefined, true);
-      }
+      clickTarget.form.requestSubmit();
     }
   });
 }

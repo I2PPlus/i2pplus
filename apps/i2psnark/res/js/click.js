@@ -38,7 +38,10 @@ document.addEventListener("DOMContentLoaded", () => {
       nonClickedSubmitElements.forEach((el) => el.classList.add("tempDisabled"));
     }
 
-    await refreshScreenLog(undefined, true);
+    currentForm.onsubmit = async (event) => {
+      await refreshScreenLog(undefined, true);
+      nonClickedSubmitElements.forEach((el) => el.classList.remove("tempDisabled"));
+    };
 
     setTimeout(() => {
       clickTarget.classList.replace("depress", "inert");
