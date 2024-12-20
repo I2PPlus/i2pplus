@@ -55,8 +55,7 @@ class Sorters {
           case 1:
           default:
               rv = new TorrentNameComparator(lang);
-              if (rev)
-                  rv = Collections.reverseOrder(rv);
+              if (rev) {rv = Collections.reverseOrder(rv);}
               break;
 
           case -2:
@@ -130,30 +129,22 @@ class Sorters {
         private static final Collator _c = Collator.getInstance();
 
         /** @param lang may be null */
-        private TorrentNameComparator(String lang) {
-            _p = getPattern(lang);
-        }
+        private TorrentNameComparator(String lang) {_p = getPattern(lang);}
 
-        public int compare(Snark l, Snark r) {
-            return comp(l, r, _p);
-        }
+        public int compare(Snark l, Snark r) {return comp(l, r, _p);}
 
         /** @param p may be null */
         public static int comp(Snark l, Snark r, Pattern p) {
             // put downloads and magnets first
-            if (l.getStorage() == null && r.getStorage() != null)
-                return -1;
-            if (l.getStorage() != null && r.getStorage() == null)
-                return 1;
+            if (l.getStorage() == null && r.getStorage() != null) {return -1;}
+            if (l.getStorage() != null && r.getStorage() == null) {return 1;}
             String ls = l.getBaseName();
             String rs = r.getBaseName();
             if (p != null) {
                 Matcher m = p.matcher(ls);
-                if (m.matches())
-                    ls = ls.substring(m.group(1).length());
+                if (m.matches()) {ls = ls.substring(m.group(1).length());}
                 m = p.matcher(rs);
-                if (m.matches())
-                    rs = rs.substring(m.group(1).length());
+                if (m.matches()) {rs = rs.substring(m.group(1).length());}
             }
             return _c.compare(ls, rs);
         }
@@ -174,86 +165,76 @@ class Sorters {
 
         public int compare(Snark l, Snark r) {
             int rv = compareIt(l, r);
-            if (rv != 0)
-                return _rev ? 0 - rv : rv;
+            if (rv != 0) {return _rev ? 0 - rv : rv;}
             return TorrentNameComparator.comp(l, r, _p);
         }
 
         protected abstract int compareIt(Snark l, Snark r);
 
         protected static int compLong(long l, long r) {
-            if (l < r)
-                return -1;
-            if (l > r)
-                return 1;
+            if (l < r) {return -1;}
+            if (l > r) {return 1;}
             return 0;
         }
     }
 
+    private static final int STATUS_MAGNET = 10;
+    private static final int STATUS_UNKNOWN = 20;
+    private static final int STATUS_ALLOCATION = 30;
+    private static final int STATUS_CHECKING = 40;
+    private static final int STATUS_STARTING = 50;
+    private static final int STATUS_DOWNLOADING = 60;
+    private static final int STATUS_STALLED = 70;
+    private static final int STATUS_NO_ACTIVE_PEERS = 80;
+    private static final int STATUS_NO_PEERS = 90;
+    private static final int STATUS_SEEDING_ACTIVE = 100;
+    private static final int STATUS_SEEDING_INACTIVE = 110;
+    private static final int STATUS_SEEDING_IDLE = 120;
+    private static final int STATUS_STOPPED_OFFSET = 150;
 
     private static class StatusComparator extends Sort {
 
-        private StatusComparator(boolean rev, String lang) { super(rev, lang); }
+        private StatusComparator(boolean rev, String lang) {super(rev, lang);}
 
         public int compareIt(Snark l, Snark r) {
             int rv = getStatus(l) - getStatus(r);
-            if (rv != 0)
-                return rv;
-            else if ((getStatus(l) == 100 && getStatus(r) == 100)||
-                     (getStatus(l) == 98 && getStatus(r) == 98) ||
-                     (getStatus(l) == 40 && getStatus(r) == 40) ||
-                     (getStatus(l) == 10 && getStatus(r) == 10))
-
-                // first tie break by swarm size
-                return compLong(r.getTrackerSeenPeers(), l.getTrackerSeenPeers());
-            else
-                // tie break by active peer count
-                return compLong(r.getPeerCount(), l.getPeerCount());
+            if (rv != 0) {return rv;}
+            else if ((getStatus(l) == STATUS_SEEDING_IDLE && getStatus(r) == STATUS_SEEDING_IDLE)||
+                     (getStatus(l) == STATUS_SEEDING_INACTIVE && getStatus(r) == STATUS_SEEDING_INACTIVE) ||
+                     (getStatus(l) == STATUS_MAGNET && getStatus(r) == STATUS_MAGNET) ||
+                     (getStatus(l) == STATUS_NO_ACTIVE_PEERS && getStatus(r) == STATUS_NO_ACTIVE_PEERS)) {
+                return compLong(r.getTrackerSeenPeers(), l.getTrackerSeenPeers()); // first tie break by swarm size
+            } else {return compLong(r.getPeerCount(), l.getPeerCount());} // tie break by active peer count
         }
 
         private static int getStatus(Snark snark) {
+            boolean isMagnet = snark.getRemainingLength() < 0;
+            if (snark.isStopped() && !isMagnet) {return STATUS_STOPPED_OFFSET + getStatusImpl(snark);}
+            else {return getStatusImpl(snark);}
+        }
+
+        private static int getStatusImpl(Snark snark) {
             long remaining = snark.getRemainingLength();
             int activePeers = snark.getPeerCount();
             int peers = snark.getTrackerSeenPeers();
             long downBps = snark.getDownloadRate();
-            if (snark.isStopped()) {
-                if (remaining < 0) // magnet
-                    return 50;
-                if (remaining > 0)
-                    return 46;
-                else
-                    return 60;
-            } else {
-                if (downBps > 0)
-                    return 3;
-                if (snark.isStarting())
-                    return 15;
-                if (snark.isAllocating())
-                    return 20;
-                if (remaining < 0)
-                    return 45; // magnet
-                if (remaining == 0) { //seeding
-                    if (activePeers > 0)
-                        return 65; // active
-                    else if (peers > 0) // inactive with swarm members
-                        return 98;
-                    else
-                        return 100;
-                }
-                if (snark.isChecking())
-                    return 95;
-                if (snark.getNeededLength() <= 0)
-                    return 90;
-                if (peers <= 0) // no peers in swarm
-                    return 35;
-                if (activePeers <= 0) // no active peers
-                    return 10;
-                if (downBps <= 0) // stalled
-                    return 7;
-                else
-                    return 5;
-             }
-         }
+            boolean isMagnet = remaining < 0;
+            if (snark.isStarting()) {return STATUS_STARTING;}
+            if (snark.isAllocating()) {return STATUS_ALLOCATION;}
+            if (snark.isChecking()) {return STATUS_CHECKING;}
+            if (downBps > 0) {return STATUS_DOWNLOADING;}
+            else if (downBps <= 0) {return STATUS_STALLED;}
+            if (isMagnet) {return STATUS_MAGNET;}
+            else if (remaining == 0) {
+                if (activePeers > 0) {return STATUS_SEEDING_ACTIVE;}
+                else if (peers > 0) {return STATUS_SEEDING_INACTIVE;}
+                else {return STATUS_SEEDING_IDLE;}
+            }
+            if (snark.getNeededLength() <= 0) {return STATUS_UNKNOWN;}
+            if (peers <= 0) {return STATUS_NO_PEERS;}
+            if (activePeers <= 0) {return STATUS_NO_ACTIVE_PEERS;}
+            else {return STATUS_UNKNOWN;}
+        }
     }
 
     private static class PeersComparator extends Sort {
@@ -267,7 +248,7 @@ class Sorters {
 
     private static class RemainingComparator extends Sort {
 
-        public RemainingComparator(boolean rev, String lang) { super(rev, lang); }
+        public RemainingComparator(boolean rev, String lang) {super(rev, lang);}
 
         public int compareIt(Snark l, Snark r) {
             return compLong(l.getNeededLength(), r.getNeededLength());
@@ -276,11 +257,10 @@ class Sorters {
 
     private static class ETAComparator extends Sort {
 
-        public ETAComparator(boolean rev, String lang) { super(rev, lang); }
+        public ETAComparator(boolean rev, String lang) {super(rev, lang);}
 
         public int compareIt(Snark l, Snark r) {
-            // TODO For completed torrents, sort by date of completion
-            return compLong(eta(l), eta(r));
+            return compLong(eta(l), eta(r)); // TODO For completed torrents, sort by date of completion
         }
 
         private static long eta(Snark snark) {
@@ -290,37 +270,25 @@ class Sorters {
             int activePeers = snark.getPeerCount();
             int peers = snark.getTrackerSeenPeers();
             if (snark.isStopped()) {
-                if (remaining == 0)
-                    return Long.MAX_VALUE - 9;
-                if (remaining < 0) // magnet
-                    return Long.MAX_VALUE - 10;
-                else
-                    return Long.MAX_VALUE - 11;
+                if (remaining == 0) {return Long.MAX_VALUE - 9;}
+                if (remaining < 0) {return Long.MAX_VALUE - 10;} // magnet
+                else {return Long.MAX_VALUE - 11;}
             } else {
-                if (remaining < 0) // magnet
-                    return Long.MAX_VALUE - 12;
+                if (remaining < 0) {return Long.MAX_VALUE - 12;} // magnet
                 else if (remaining == 0) {
-                    if (upBps > 0)
-                        return Long.MAX_VALUE - 8;
-                    if (activePeers > 0)
-                        return Long.MAX_VALUE - 7;
-                    if (peers > 0)
-                        return Long.MAX_VALUE - 6;
+                    if (upBps > 0) {return Long.MAX_VALUE - 8;}
+                    if (activePeers > 0) {return Long.MAX_VALUE - 7;}
+                    if (peers > 0) {return Long.MAX_VALUE - 6;}
                 }
                 if (needed > 0 && snark.getDownloadRate() <= 0) {
-                    if (activePeers <= 0)
-                        return Long.MAX_VALUE - 16;
-                    else
-                        return Long.MAX_VALUE - 17;
+                    if (activePeers <= 0) {return Long.MAX_VALUE - 16;}
+                    else {return Long.MAX_VALUE - 17;}
                 }
                 long total = snark.getTotalLength();
-                if (needed > total)
-                   needed = total;
+                if (needed > total) {needed = total;}
                 long downBps = snark.getDownloadRate();
-                if (downBps > 0)
-                    return needed / downBps;
-                else
-                    return Long.MAX_VALUE - 19;
+                if (downBps > 0) {return needed / downBps;}
+                else {return Long.MAX_VALUE - 19;}
             }
         }
     }
@@ -381,10 +349,8 @@ class Sorters {
             double ld = lt > 0 ? (l.getUploaded() / lt) : 0d;
             double rt = r.getTotalLength();
             double rd = rt > 0 ? (r.getUploaded() / rt) : 0d;
-            if (ld < rd)
-                return -1;
-            if (ld > rd)
-                return 1;
+            if (ld < rd) {return -1;}
+            if (ld > rd) {return 1;}
             return 0;
         }
     }
@@ -406,20 +372,16 @@ class Sorters {
 
         private String toName(Snark snark) {
             MetaInfo meta = snark.getMetaInfo();
-            if (meta == null)
-                return "0";
-            if (meta.getFiles() != null)
-                return "1";
-            // arbitrary sort based on icon name
-            return servlet.toIcon(meta.getName());
+            if (meta == null) {return "0";}
+            if (meta.getFiles() != null) {return "1";}
+            return servlet.toIcon(meta.getName()); // arbitrary sort based on icon name
         }
     }
 
     ////////////// Comparators for details page below
 
     /**
-     *  Class to precompute and efficiently sort data
-     *  on a torrent file entry.
+     *  Class to precompute and efficiently sort data on a torrent file entry.
      */
     public static class FileAndIndex {
         public final File file;
@@ -514,23 +476,18 @@ class Sorters {
     }
 
     /**
-     *  Sort alphabetically in current locale, ignore case,
-     *  directories first
+     *  Sort alphabetically in current locale, ignore case, directories first
      *  @since 0.9.6 moved from I2PSnarkServlet in 0.9.16
      */
     private static class FileNameComparator implements Comparator<FileAndIndex>, Serializable {
 
-        public int compare(FileAndIndex l, FileAndIndex r) {
-            return comp(l, r);
-        }
+        public int compare(FileAndIndex l, FileAndIndex r) {return comp(l, r);}
 
         public static int comp(FileAndIndex l, FileAndIndex r) {
             boolean ld = l.isDirectory;
             boolean rd = r.isDirectory;
-            if (ld && !rd)
-                return -1;
-            if (rd && !ld)
-                return 1;
+            if (ld && !rd) {return -1;}
+            if (rd && !ld) {return 1;}
             return Collator.getInstance().compare(l.file.getName(), r.file.getName());
         }
     }
@@ -542,24 +499,19 @@ class Sorters {
 
         private final boolean _rev;
 
-        public FAISort(boolean rev) {
-            _rev = rev;
-        }
+        public FAISort(boolean rev) {_rev = rev;}
 
         public int compare(FileAndIndex l, FileAndIndex r) {
             int rv = compareIt(l, r);
-            if (rv != 0)
-                return _rev ? 0 - rv : rv;
+            if (rv != 0) {return _rev ? 0 - rv : rv;}
             return FileNameComparator.comp(l, r);
         }
 
         protected abstract int compareIt(FileAndIndex l, FileAndIndex r);
 
         protected static int compLong(long l, long r) {
-            if (l < r)
-                return -1;
-            if (l > r)
-                return 1;
+            if (l < r) {return -1;}
+            if (l > r) {return 1;}
             return 0;
         }
     }
@@ -616,53 +568,20 @@ class Sorters {
     }
 
     /*
-     *  Match an indefinite or definite article in the language,
-     *  followed by one or more whitespace, '.', or '_'.
+     *  Match an indefinite or definite article in the language, followed by one or more spaces, '.', or '_'.
      *  Does not match "partitive" articles.
      *
      *  https://en.wikipedia.org/wiki/Article_%28grammar%29
      *  http://www.loc.gov/marc/bibliographic/bdapndxf.html
      */
     static {
-        PATTERN_DE = Pattern.compile(
-            // can't make the non-capturing innner group work
-            //"^((?:" +
-            "^((" +
-            "der|die|das|des|dem|den|ein|eine|einer|eines|einem|einen" +
-            ")[\\s\\._]+).*",
-            Pattern.CASE_INSENSITIVE);
-        PATTERN_EN = Pattern.compile(
-            "^((" +
-            "a|an|the" +
-            ")[\\s\\._]+).*",
-            Pattern.CASE_INSENSITIVE);
-        PATTERN_ES = Pattern.compile(
-            "^((" +
-            "el|la|lo|los|las|un|una|unos|unas" +
-            ")[\\s\\._]+).*",
-            Pattern.CASE_INSENSITIVE);
-        PATTERN_FR = Pattern.compile(
-            // note l' doesn't require whitespace after
-            "^(l'|((" +
-            "le|la|les|un|une|des" +
-            ")[\\s\\._]+)).*",
-            Pattern.CASE_INSENSITIVE);
-        PATTERN_IT = Pattern.compile(
-            // note l' and un' don't require whitespace after
-            "^(l'|un'|((" +
-            "il|lo|la|i|gli|le|uno|una|un" +
-            ")[\\s\\._]+)).*",
-            Pattern.CASE_INSENSITIVE);
-        PATTERN_NL = Pattern.compile(
-            "^((" +
-            "de|het|het'n|een|een'n" +
-            ")[\\s\\._]+).*",
-            Pattern.CASE_INSENSITIVE);
-        PATTERN_PT = Pattern.compile(
-            "^((" +
-            "o|a|os|as|um|uma|uns|umas" +
-            ")[\\s\\._]+).*",
-            Pattern.CASE_INSENSITIVE);
+        PATTERN_DE = Pattern.compile("^((der|die|das|des|dem|den|ein|eine|einer|eines|einem|einen)[\\s\\._]+).*", Pattern.CASE_INSENSITIVE);
+        PATTERN_EN = Pattern.compile("^((a|an|the)[\\s\\._]+).*", Pattern.CASE_INSENSITIVE);
+        PATTERN_ES = Pattern.compile("^((el|la|lo|los|las|un|una|unos|unas)[\\s\\._]+).*", Pattern.CASE_INSENSITIVE);
+        PATTERN_FR = Pattern.compile("^(l'|((le|la|les|un|une|des)[\\s\\._]+)).*", Pattern.CASE_INSENSITIVE);
+        PATTERN_IT = Pattern.compile("^(l'|un'|((il|lo|la|i|gli|le|uno|una|un)[\\s\\._]+)).*", Pattern.CASE_INSENSITIVE);
+        PATTERN_NL = Pattern.compile("^((de|het|het'n|een|een'n)[\\s\\._]+).*", Pattern.CASE_INSENSITIVE);
+        PATTERN_PT = Pattern.compile("^((o|a|os|as|um|uma|uns|umas)[\\s\\._]+).*", Pattern.CASE_INSENSITIVE);
     }
 
     /**
@@ -672,46 +591,16 @@ class Sorters {
      */
     private static Pattern getPattern(String lang) {
         Pattern p;
-        if (lang == null)
-            p = null;
-        else if (lang.equals("de"))
-            p = PATTERN_DE;
-        else if (lang.equals("en"))
-            p = PATTERN_EN;
-        else if (lang.equals("es"))
-            p = PATTERN_ES;
-        else if (lang.equals("fr"))
-            p = PATTERN_FR;
-        else if (lang.equals("it"))
-            p = PATTERN_IT;
-        else if (lang.equals("nl"))
-            p = PATTERN_NL;
-        else if (lang.equals("pt"))
-            p = PATTERN_PT;
-        else
-            p = null;
+        if (lang == null) {p = null;}
+        else if (lang.equals("de")) {p = PATTERN_DE;}
+        else if (lang.equals("en")) {p = PATTERN_EN;}
+        else if (lang.equals("es")) {p = PATTERN_ES;}
+        else if (lang.equals("fr")) {p = PATTERN_FR;}
+        else if (lang.equals("it")) {p = PATTERN_IT;}
+        else if (lang.equals("nl")) {p = PATTERN_NL;}
+        else if (lang.equals("pt")) {p = PATTERN_PT;}
+        else {p = null;}
         return p;
     }
 
-/****
-    public static final void main(String[] args) {
-        if (args.length != 2) {
-            System.out.println("Usage: Sorters lang 'string'");
-            System.exit(1);
-        }
-        String lang = args[0];
-        setPattern(lang);
-        if (_pattern == null) {
-            System.out.println("Unsupported " + lang);
-            System.exit(1);
-        }
-        String s = args[1];
-        Matcher m = _pattern.matcher(s);
-        if (m.matches()) {
-            System.out.println("Match is \"" + m.group(1) + '"');
-        } else {
-            System.out.println("No match for \"" + s + '"');
-        }
-    }
-****/
 }
