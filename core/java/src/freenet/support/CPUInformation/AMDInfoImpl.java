@@ -24,6 +24,7 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
     private static boolean isExcavatorCompatible;
     private static boolean isZenCompatible;
     private static boolean isZen2Compatible;
+    private static boolean isZen5Compatible;
     public boolean IsK6Compatible() {return isK6Compatible;}
     public boolean IsK6_2_Compatible() {return isK6_2_Compatible;}
     public boolean IsK6_3_Compatible() {return isK6_3_Compatible;}
@@ -54,12 +55,11 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
     public String getCPUModelString() throws UnknownCPUException {
         String smodel = identifyCPU();
         if (smodel != null) {return smodel;}
-        throw new UnknownCPUException("Unknown AMD CPU; Family="+CPUID.getCPUFamily() + '/' + CPUID.getCPUExtendedFamily() +
-                                      ", Model="+CPUID.getCPUModel() + '/' + CPUID.getCPUExtendedModel());
+        throw new UnknownCPUException("Unknown AMD CPU; Family=" + CPUID.getCPUFamily() + '/' + CPUID.getCPUExtendedFamily() +
+                                      ", Model=" + CPUID.getCPUModel() + '/' + CPUID.getCPUExtendedModel());
     }
 
-    private String identifyCPU()
-    {
+    private String identifyCPU() {
         // http://en.wikipedia.org/wiki/Cpuid
         // #include "llvm/Support/Host.h", http://llvm.org/docs/doxygen/html/Host_8cpp_source.html
         String modelString = null;
@@ -421,21 +421,21 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
               modelString = "Bulldozer";
               break;
             }
-          if (model >= 0x50 && model <= 0x5F) {
-            isPiledriverCompatible = true;
-            isSteamrollerCompatible = true;
-            isExcavatorCompatible = true;
-              modelString = "Excavator";
-          } else if (model >= 0x30 && model <= 0x3F) {
-            isPiledriverCompatible = true;
-            isSteamrollerCompatible = true;
-              modelString = "Steamroller";
-          } else if ((model >= 0x10 && model <= 0x1F) || hasTBM()) {
-            isPiledriverCompatible = true;
-            modelString = "Piledriver";
-          } else {
-            modelString = "Bulldozer";
-          }
+            if (model >= 0x50 && model <= 0x5F) {
+              isPiledriverCompatible = true;
+              isSteamrollerCompatible = true;
+              isExcavatorCompatible = true;
+                modelString = "Excavator";
+            } else if (model >= 0x30 && model <= 0x3F) {
+              isPiledriverCompatible = true;
+              isSteamrollerCompatible = true;
+                modelString = "Steamroller";
+            } else if ((model >= 0x10 && model <= 0x1F) || hasTBM()) {
+              isPiledriverCompatible = true;
+              modelString = "Piledriver";
+            } else {
+              modelString = "Bulldozer";
+            }
           }
           break;
 
@@ -519,7 +519,25 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
             modelString = "Hygon Dhyana model " + model;
           }
           break;
+
+          // zen5
+          case 26: {
+            isK6Compatible = true;
+            isK6_2_Compatible = true;
+            isK6_3_Compatible = true;
+            isAthlonCompatible = true;
+            isAthlon64Compatible = true;
+            isPiledriverCompatible = true;
+            isSteamrollerCompatible = true;
+            isExcavatorCompatible = true;
+            isBulldozerCompatible = true;
+            isZenCompatible = true;
+            isZen5Compatible = true;
+            modelString = "Ryzen 9000 Series (Zen5)";
+          }
+          break;
         }
+
         return modelString;
     }
 }
