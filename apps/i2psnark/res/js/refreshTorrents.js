@@ -263,7 +263,7 @@ async function refreshTorrents(callback) {
       try {
         const url = window.location.href;
         const responseDoc = await fetchHTMLDocument(url);
-        const selectors = ["#dirInfo tbody td", "#torrentInfoStats .nowrap"];
+        const selectors = ["#dirInfo tbody tr.incomplete td", "#torrentInfoStats .nowrap"];
         for (const selector of selectors) {
           const elements = document.querySelectorAll(selector);
           const responseElements = responseDoc.querySelectorAll(selector);

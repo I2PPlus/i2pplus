@@ -4196,8 +4196,7 @@ public class I2PSnarkServlet extends BasicServlet {
         File[] ls = null;
         if (r.isDirectory()) {ls = r.listFiles();} // if r is not a directory, we are only showing torrent info section
         if (ls == null) {
-            // We are only showing the torrent info section
-            // unless audio or video...
+            // We are only showing the torrent info section unless audio or video...
             if (storage != null && storage.complete()) {
                 String mime = getMimeType(r.getName());
                 boolean isAudio = mime != null && isAudio(mime);
@@ -4205,34 +4204,23 @@ public class I2PSnarkServlet extends BasicServlet {
                 String path = base.substring(0, base.length() - 1);
                 String newTab = "<img src=/themes/console/light/images/newtab.png width=16 height=auto class=newTab>";
                 if (isAudio || isVideo) {
-                    buf.append("<div class=mainsection id=media>")
-                       .append("<table id=mediaContainer>\n<tr>");
+                    buf.append("<div class=mainsection id=media>\n").append("<table id=mediaContainer>\n<tr>");
                     // HTML5
                     if (isAudio) {
                         buf.append("<th class=audio>").append(_t("Audio file: "))
-                           .append(DataHelper.escapeHTML(tName))
-                           .append("<a href=\"").append(path)
-                           .append("\" title=\"Open in new tab\" target=_blank>")
-                           .append(newTab)
-                           .append("</a>").append("</th></tr>\n<tr><td>")
-                           .append("<audio controls>");
+                           .append(DataHelper.escapeHTML(tName)).append("<a href=\"").append(path)
+                           .append("\" title=\"Open in new tab\" target=_blank>").append(newTab)
+                           .append("</a>").append("</th></tr>\n<tr><td>").append("<audio controls>");
                     } else {
                         buf.append("<th id=videoTitle class=video>").append(_t("Video file: "))
-                           .append(DataHelper.escapeHTML(tName))
-                           .append("<a href=\"").append(path)
-                           .append("\" title=\"Open in new tab\" target=_blank>")
-                           .append(newTab)
-                           .append("</a>").append("</th></tr>\n<tr><td>")
-                           .append("<video id=embedVideo controls>");
+                           .append(DataHelper.escapeHTML(tName)).append("<a href=\"").append(path)
+                           .append("\" title=\"Open in new tab\" target=_blank>").append(newTab)
+                           .append("</a>").append("</th></tr>\n<tr><td>").append("<video id=embedVideo controls>");
                     }
                     // strip trailing slash
                     buf.append("<source src=\"").append(path).append("\" type=\"").append(mime).append("\">");
                     if (isAudio) {buf.append("</audio>");}
-                    else {
-                        buf.append("</video>");
-                           //.append("<script src=\"").append(resourcePath).append("js/getMetadata.js?")
-                           //.append(CoreVersion.VERSION).append("\"></script>\n");
-                    }
+                    else {buf.append("</video>");}
                     buf.append("</td></tr>\n</table>\n</div>\n");
                 }
             }
