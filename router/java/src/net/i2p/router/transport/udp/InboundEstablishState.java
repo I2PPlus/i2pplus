@@ -22,40 +22,31 @@ import net.i2p.util.SystemVersion;
 class InboundEstablishState {
     protected final RouterContext _context;
     protected final Log _log;
-    // SessionRequest message
-    private byte _receivedX[];
+    private byte _receivedX[]; // SessionRequest message
     protected byte _bobIP[];
     protected final int _bobPort;
-    // SessionCreated message
-    protected final byte _aliceIP[];
+    protected final byte _aliceIP[]; // SessionCreated message
     protected final int _alicePort;
     protected long _sentRelayTag;
     private long _sentSignedOnTime;
-    // SessionConfirmed messages - fragmented in theory but not in practice - see below
-    private byte _receivedIdentity[][];
+    private byte _receivedIdentity[][]; // SessionConfirmed messages - fragmented in theory but not in practice - see below
     private long _receivedSignedOnTime;
     private byte _receivedSignature[];
-    // sig not verified
-    protected RouterIdentity _receivedUnconfirmedIdentity;
-    // identical to uncomfirmed, but sig now verified
-    protected RouterIdentity _receivedConfirmedIdentity;
-    // general status
-    protected final long _establishBegin;
+    protected RouterIdentity _receivedUnconfirmedIdentity; // sig not verified
+    protected RouterIdentity _receivedConfirmedIdentity; // identical to uncomfirmed, but sig now verified
+    protected final long _establishBegin; // general status
     //private long _lastReceive;
     protected long _lastSend;
     protected long _nextSend;
     protected final RemoteHostId _remoteHostId;
     protected InboundState _currentState;
     private final Queue<OutNetMessage> _queuedMessages;
-    // count for backoff
-    protected int _createdSentCount;
-    // default true for SSU 1, false for SSU 2
-    protected boolean _introductionRequested;
-
+    protected int _createdSentCount; // count for backoff
+    protected boolean _introductionRequested; // default true for SSU 1, false for SSU 2
     protected int _rtt;
 
     public enum InboundState {
-        IB_STATE_UNKNOWN, /** nothin known yet */
+        IB_STATE_UNKNOWN, /** nothin' known yet */
         IB_STATE_REQUEST_RECEIVED, /** we have received an initial request */
         IB_STATE_CREATED_SENT, /** we have sent a signed creation packet */
         IB_STATE_CONFIRMED_PARTIALLY, /** we have received one but not all the confirmation packets - never happens in practice - see below. */
@@ -91,7 +82,6 @@ class InboundEstablishState {
      *  This should be a little shorter than for outbound.
      */
     protected static final long MAX_DELAY = EstablishmentManager.MAX_IB_ESTABLISH_TIME;
-
 
     /**
      *  For SSU2
@@ -134,7 +124,7 @@ class InboundEstablishState {
     public void addMessage(OutNetMessage msg) {
         // chance of a duplicate here in a race, that's ok
         if (!_queuedMessages.contains(msg)) {_queuedMessages.offer(msg);}
-        else if (_log.shouldWarn()) {_log.warn("Attempt to add duplicate msg to queue: " + msg);}
+        else if (_log.shouldWarn()) {_log.warn("Attempt to add duplicate messsage to queue: " + msg);}
    }
 
     /**
@@ -142,9 +132,7 @@ class InboundEstablishState {
      *  @return null if none
      *  @since 0.9.2
      */
-    public OutNetMessage getNextQueuedMessage() {
-        return _queuedMessages.poll();
-   }
+    public OutNetMessage getNextQueuedMessage() {return _queuedMessages.poll();}
 
     public synchronized boolean sessionRequestReceived() {return _receivedX != null;}
     public synchronized byte[] getReceivedX() {return _receivedX;}
@@ -214,7 +202,7 @@ class InboundEstablishState {
         if (_receivedIdentity != null) {
             for (int i = 0; i < _receivedIdentity.length; i++) {
                 if (_receivedIdentity[i] == null) {return false;}
-           }
+            }
             return true;
        } else {return false;}
    }

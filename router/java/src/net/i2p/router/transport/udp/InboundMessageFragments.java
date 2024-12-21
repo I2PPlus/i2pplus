@@ -25,7 +25,7 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
     private final MessageReceiver _messageReceiver;
     private volatile boolean _alive;
 
-    /** decay the recently completed every 20 seconds */
+    /** decay the recently completed every 10 seconds */
     private static final int DECAY_PERIOD = 10*1000;
 
     public InboundMessageFragments(RouterContext ctx, OutboundMessageFragments outbound, UDPTransport transport) {
@@ -35,37 +35,34 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
         _outbound = outbound;
         _transport = transport;
         _messageReceiver = new MessageReceiver(_context, _transport);
-        _context.statManager().createRateStat("udp.receivedCompleteTime", "Time to receive a full message (ms)", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.receivedCompleteFragments", "How many fragments go in a fully received message", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.receivedACKs", "How many messages were ACKed at a time", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.ignoreRecentDuplicate", "Take note that we received a packet for a recently completed message", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.receivedACKs", "How many messages were ACKed at a time", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.receivedCompleteFragments", "How many fragments go in a fully received message", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.receivedCompleteTime", "Time to receive a full message (ms)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.receivePiggyback", "How many acks were included in a packet with data fragments (time = # data fragments)", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.receiveMessagePeriod", "Time to pull the message fragments out of a packet", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.receiveACKPeriod", "Time to pull the ACKs out of a packet", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.receivePiggyback", "How many acks were included in a packet with data fragments (time = # data fragments)", "Transport [UDP]", UDPTransport.RATES);
     }
 
     public synchronized void startup() {
         _alive = true;
-        // may want to extend the DecayingBloomFilter so we can use a smaller
-        // array size (currently its tuned for 10 minute rates for the
-        // messageValidator)
+        // may want to extend the DecayingBloomFilter so we can use a smaller array size
+        // (currently its tuned for 10 minute rates for the messageValidator)
         _recentlyCompletedMessages = new DecayingHashSet(_context, DECAY_PERIOD, 4, "UDPIMF");
         _messageReceiver.startup();
     }
 
     public synchronized void shutdown() {
         _alive = false;
-        if (_recentlyCompletedMessages != null)
-            _recentlyCompletedMessages.stopDecaying();
+        if (_recentlyCompletedMessages != null) {_recentlyCompletedMessages.stopDecaying();}
         _recentlyCompletedMessages = null;
         _messageReceiver.shutdown();
     }
 
-    public boolean isAlive() { return _alive; }
+    public boolean isAlive() {return _alive;}
 
     /**
-     * This message was received.
-     * SSU 2 only.
+     * This message was received - SSU 2 only.
      * No stats updated here, caller should handle stats.
      *
      * @return true if this message was a duplicate
@@ -77,8 +74,7 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
     }
 
     /**
-     * Was this message recently received?
-     * SSU 2 only.
+     * Was this message recently received? SSU 2 only.
      * No stats updated here, caller should handle stats.
      *
      * @return true if this message was recently received.
