@@ -29,7 +29,10 @@ html[lang="zh"] #sidebar h3,html[lang="zh"] #sidebar h3 a{font-weight:500!import
 #configs input[type=text],#configs input.r,#dhtDebug .dbug,#torrents .tName,#fileFilter td:nth-child(2),#trackerconfig td:nth-child(2){font-weight:500}
 #configs input[type=text][name^="nofilter"],#configs input#i2cpOpts{font-weight:600}
 .createFilterToggle,#torrents .barComplete,#torrents #totals{font-weight:600}
-@media (min-width: 1500px) {.ubergine #createSection tr:nth-child(2) td:first-child span:not(.trackerName){padding:7px 10px}}
+@media (min-width: 1500px) {
+.ubergine #createSection tr:nth-child(2) td:first-child span:not(.trackerName){padding:7px 10px}
+.ubergine #metacomment .commentWrapper{height:35px;min-height:35px}
+}
 
 @font-face{font-display:swap;font-family:Sora;font-style:normal;font-weight:100,200,300,400,500,600,700,800;src:url(/themes/fonts/Sora/Sora.woff2);format("woff2")}
 @font-face{font-display:swap;font-family:Sora;font-style:italic;font-weight:100,200,300,400,500,600,700,800;src:url(/themes/fonts/Sora/Sora-Italic.woff2);format("woff2")}

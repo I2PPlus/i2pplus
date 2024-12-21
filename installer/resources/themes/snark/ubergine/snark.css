@@ -257,19 +257,17 @@ th.peerCount:empty::after{min-width:100px;display:inline-block;content:""}
 th.peerCount img{margin-left:-4px}
 td.peerCount{padding-left:0;padding-right:3px;width:1%;white-space:nowrap;font-weight:700}
 td.peerCount:empty{text-align:center}
-.peerCount b{padding:4px 3px;min-width:102px;display:inline-block;position:relative;line-height:1;vertical-align:middle;text-align:center;font-size:95%;text-shadow:var(--txt_shadow);border-radius:2px;background:#ac5390;filter:drop-shadow(0 0 1px #000)}
+.peerCount b{padding:4px 3px;min-width:100px;display:inline-block;position:relative;line-height:1;vertical-align:middle;text-align:center;font-size:95%;text-shadow:var(--txt_shadow);border-radius:2px;background:#ac5390;filter:drop-shadow(0 0 1px #000)}
 .peerCount b::before{width:0;height:0;position:absolute;top:calc(50% - 5px);left:-10px;border-width:5px;border-style:solid;border-color:#0000 #ac5390 #0000 #0000;content:""}
 .peerCount b a{color:var(--ink)}
 .peerCount b a:hover,.peerCount b a:focus{color:var(--hover)}
-.peerCount b .left,.peerCount b .right{margin:0 1px;padding:2px 3px 1px;min-width:36px;display:inline-block;text-align:center;color:#eee;border-radius:1px;box-shadow:0 0 0 1px rgba(16,0,16,.5),inset 2px 2px 2px rgba(0,0,0,.3);background:linear-gradient(180deg,rgba(32,0,32,.3),rgba(16,0,16,.3))}
+.peerCount b .left,.peerCount b .right{margin:0 1px;padding:2px 3px 1px;min-width:36px;display:inline-block;text-align:center;color:#eee;border-radius:1px;box-shadow:0 0 0 1px #0009,2px 2px 2px #0003 inset,0 0 0 1px #fff2 inset;background:linear-gradient(180deg,rgba(32,0,32,.3),rgba(16,0,16,.3))}
 .peerCount b .left{margin-right:0}
 .peerCount b .right{margin-left:0}
 .peerCount b a:hover .left,.peerCount b a:hover .right{min-width:30px;color:var(--hover);background:linear-gradient(180deg,rgba(220,80,0,.3),rgba(255,96,0,.3))}
 .peerCount b a:hover .right{margin-left:-9px}
-.peerCount b a[href*="?p="]:hover::after{top:calc(50% - 2px);border-color:#fff #0000 #0000 #0000}
 .peerCount b:hover a:hover::after,.peerCount b:hover a:focus::after{border-color:#0000 #0000 var(--hover) #0000}
 .peerCount b a:hover::after{width:0;height:0;position:absolute;right:5px;bottom:calc(50% - 2px);border-color:#0000 #0000 #fff #0000;border-style:solid;border-width:3px;content:""}
-.peerCount b:hover a[href*="?p="]:hover::after,.peerCount b:hover a[href*="?p="]:focus::after{border-color:var(--hover) #0000 #0000 #0000}
 .active.downloading .peerCount b{background:repeating-linear-gradient(135deg,#252,#252 8px,#141 9px,#141 17px)}
 .active.downloading .peerCount b::before{border-color:#0000 #252 #0000 #0000}
 .active.seeding.complete .peerCount b{background:repeating-linear-gradient(135deg,#937,#937 8px,#826 9px,#826 17px)}
@@ -1416,6 +1414,7 @@ th.radio{width:96px}
 .peerclient code{display:inline-block}
 .priority{padding:4px 10px;width:1%;white-space:nowrap;vertical-align:middle;text-align:center;font-size:8pt}
 .rateDown:not(:empty),.rateUp:not(:empty){min-width:70px}
+.peerCount b .left, .peerCount b .right{padding:2.5px 3px 1px;background:linear-gradient(180deg,#0006,#fff1)}
 .starting .peerCount b{height:12px}
 .tAction{padding-right:3px}
 .rxd,.txd,.rateDown,.rateUp{min-width:76px}

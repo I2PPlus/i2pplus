@@ -3838,8 +3838,8 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<script src=\"/themes/setPriority.js?" + CoreVersion.VERSION + "\"></script>\n"); // debugging
 **/
 
-        buf.append("</head>\n<body style=display:none;pointer-events:none class=lang_").append(lang).append(">\n");
-        buf.append("<center>\n<div id=navbar><a href=\"").append(_contextPath).append("/\" title=").append(_t("Torrents"))
+        buf.append("</head>\n<body style=display:none;pointer-events:none class=\"").append(_manager.getTheme()).append(" lang_").append(lang).append("\">\n")
+           .append("<center>\n<div id=navbar><a href=\"").append(_contextPath).append("/\" title=").append(_t("Torrents"))
            .append(" class=\"snarkNav nav_main\">").append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName).append("</a>\n")
            .append("<a href=\"").append(_contextPath).append("/configure\" class=\"snarkNav nav_config\">").append(_t("Configure")).append("</a>")
            .append("</div>\n");
