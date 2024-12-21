@@ -3134,6 +3134,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("</span><br>\n");
         }
 
+/**
         buf.append("<span class=configOption><label for=\"smartSort\"><b>")
            .append(_t("Smart torrent sorting"))
            .append("</b> </label><input type=checkbox class=\"optbox slider\" ")
@@ -3142,7 +3143,9 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("title=\"")
            .append(_t("Ignore words such as 'a' and 'the' when sorting"))
            .append("\" ></span><br>\n")
-           .append("<span class=configOption><label for=\"collapsePanels\"><b>")
+**/
+
+        buf.append("<span class=configOption><label for=\"collapsePanels\"><b>")
            .append(_t("Collapsible panels"))
            .append("</b> </label><input type=checkbox class=\"optbox slider\" ")
            .append("name=collapsePanels id=collapsePanels ")
