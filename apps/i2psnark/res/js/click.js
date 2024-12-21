@@ -36,7 +36,10 @@ document.addEventListener("DOMContentLoaded", () => {
         targetElement.classList.replace("depress", "inert");
         nonClickedActionButtons.forEach((input) => input.classList.remove("tempDisabled"));
       };
-    } else { setTimeout(() => { clickTarget.classList.replace("depress", "inert"); }, delay); }
+    } else { setTimeout(() => {
+      await refreshScreenLog(undefined, true);
+      clickTarget.classList.replace("depress", "inert"); }, delay);
+    }
     setTimeout(() => { targetElement.classList.remove("inert"); }, 1000);
   };
 
