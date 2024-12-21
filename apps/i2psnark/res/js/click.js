@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const targetElement = clickTarget.matches(clickable) ? clickTarget : clickTarget.closest(clickable);
     if (!targetElement) {return;}
     let delay = 400;
-    const isAction = targetElement.matches("input[class^='action']");
+    const isAction = targetElement.matches("input[class^='action'], input[id^='action']");
     const currentForm = targetElement.closest("form");
     const isUIElement = targetElement.closest(".toggleview, .snarkNav, .filter");
 
