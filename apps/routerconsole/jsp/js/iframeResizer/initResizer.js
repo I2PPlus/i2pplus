@@ -20,12 +20,19 @@ function initResizer(frameId) {
         window.parent.scrollTo(0, 0);
       });
 
-      // Add listener for scrolling inside the iframe
+      // Add listener for scrolling and resizing inside the iframe
       window.addEventListener("message", function(event) {
-        if (event.data.command === "scrollToElement") {
-          const element = iframeChild.document.getElementById(event.data.id);
-          scrollToElement(element, iframeChild);
-        }
+        if (typeof event.data === "object" && event.data.origin === "parent") {
+          switch (event.data.command) {
+            case "scrollToElement":
+              const element = iframeChild.document.getElementById(event.data.id);
+              scrollToElement(element, iframeChild);
+              break;
+            case "resize":
+              iFrameResize();
+              break;
+            }
+          }
       }, false);
     }
   });

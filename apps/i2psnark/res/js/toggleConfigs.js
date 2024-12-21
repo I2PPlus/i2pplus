@@ -4,18 +4,17 @@
 
 const filterConfigTable = document.querySelector("#fileFilter table");
 const trackerConfigTable = document.querySelector("#trackers table");
+const isIframed = document.documentElement.classList.contains("iframed") || window.self != window.top;
 
 function toggleConfig(table, title) {
   if (table.style.display === "none" || table.style.display === "") {
     table.style.display = "table";
     title.classList.add("expanded");
 
-    // Check if the script is running inside an iframe
-    if (window !== parent.window) {
-      parent.postMessage({ command: "scrollToElement", id: title.id }, "*");
-    } else {
-      scrollToElement(title);
-    }
+    if (isIframed) {
+      parent.postMessage({ command: "scrollToElement", id: title.id }, location.origin);
+      parent.postMessage({ action: 'resize', iframeId: 'i2psnarkframe' }, location.origin);
+    } else {scrollToElement(title);}
   } else {
     table.style.display = "none";
     title.classList.remove("expanded");
@@ -30,21 +29,15 @@ function scrollToElement(element, windowObj = window) {
 
 document.addEventListener("DOMContentLoaded", () => {
   const configTitles = document.querySelectorAll(".configTitle");
-  configTitles.forEach((title) => {
-    title.classList.remove("expanded");
-  });
+  configTitles.forEach((title) => { title.classList.remove("expanded"); });
 
   document.getElementById("fileFilter").addEventListener("click", (e) => {
     const clickedTitle = e.target.closest(".configTitle");
-    if (clickedTitle) {
-      toggleConfig(filterConfigTable, clickedTitle);
-    }
+    if (clickedTitle) {toggleConfig(filterConfigTable, clickedTitle);}
   });
 
   document.getElementById("trackers").addEventListener("click", (e) => {
     const clickedTitle = e.target.closest(".configTitle");
-    if (clickedTitle) {
-      toggleConfig(trackerConfigTable, clickedTitle);
-    }
+    if (clickedTitle) {toggleConfig(trackerConfigTable, clickedTitle);}
   });
 });
