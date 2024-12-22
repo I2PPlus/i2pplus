@@ -17,8 +17,8 @@ public class ConfigRestartBean {
     /** all these are tagged below so no need to _x them here.
      *  order is: form value, form class, display text.
      */
-    private static final String[] SET1 = {"shutdownImmediate", "stop", "Shutdown immediately", "cancelShutdown", "cancel", "Cancel shutdown"};
-    private static final String[] SET2 = {"restartImmediate", "reload", "Restart immediately", "cancelShutdown", "cancel", "Cancel restart"};
+    private static final String[] SET1 = {"shutdownImmediate", "stop now", "Shutdown immediately", "cancelShutdown", "cancel", "Cancel shutdown"};
+    private static final String[] SET2 = {"restartImmediate", "reload now", "Restart immediately", "cancelShutdown", "cancel", "Cancel restart"};
     private static final String[] SET3 = {"restart", "reload", "Restart", "shutdown", "stop", "Shutdown"};
     private static final String[] SET4 = {"shutdown", "stop", "Shutdown"};
 
