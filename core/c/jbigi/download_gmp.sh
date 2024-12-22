@@ -1,15 +1,14 @@
 #!/bin/sh
 #
-#       This script downloads gmp-6.x.x.tar.bz2 to this directory
-#       (if a different version, change the GMP_VER= line below)
+#  This script downloads gmp-6.x.x.tar.bz2 to this directory
+#  (if a different version, change the GMP_VER= line below)
 #
-#       If you do not want any patches applied comment out the 
-#       PATCH_GMP line.
+#  If you do not want any patches applied comment out the PATCH_GMP line.
 #
 
 PATCH_GMP=true
 
-export GMP_VER=6.2.0
+export GMP_VER=6.3.0
 export GMP_TARVER=${GMP_VER}
 export GMP_DIR="gmp-$GMP_VER"
 export GMP_TAR="gmp-$GMP_TARVER.tar.bz2"

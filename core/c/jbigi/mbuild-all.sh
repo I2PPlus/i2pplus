@@ -52,7 +52,7 @@ TRANSLATE_NAME_aarch64="armv8"
 # Note! these build on 32bit as 32bit when operating as 32bit...
 # starting with k10 added for 6.0.0
 # As of GMP 6.0.0, libgmp 3,
-X86_64_PLATFORMS="zen2 zen silvermont goldmont skylake coreisbr coreihwl coreibwl bobcat jaguar bulldozer piledriver steamroller excavator atom athlon64 core2 corei nano pentium4 k10 x86_64"
+X86_64_PLATFORMS="zen5 zen2 zen silvermont goldmont skylake coreisbr coreihwl coreibwl bobcat jaguar bulldozer piledriver steamroller excavator atom athlon64 core2 corei nano pentium4 k10 x86_64"
 TRANSLATE_NAME_x86_64="none" # Rename x86_64 to none_64, since that is what NativeBigInteger refers to it as
 
 # Note! these are 32bit _ONLY_ (after the 64 bit ones)
@@ -342,7 +342,7 @@ make_static () {
         echo "Attempting .${4} creation for ${3}${5}${2}${6}"
         ../../build_jbigi.sh static || return 1
         PLATFORM="${2}"
-        
+
         # Some platforms have different build-time names from
         # what java and NativeBigInteger refers to them as.
         # Translate to the proper name here
@@ -350,7 +350,7 @@ make_static () {
         if [ -n "$TRANSLATED_NAME" ]; then
             PLATFORM="${TRANSLATED_NAME}"
         fi
-        
+
         cp ${3}.${4} ../../lib/net/i2p/util/${3}${5}${PLATFORM}${6}.${4}
         return 0
 }
@@ -378,7 +378,7 @@ configure_file () {
         (cd ../../gmp-${1}; make clean)
         if [ "$TARGET" != "$BUILD_OS" ]; then
             # We're cross-compiling, supply a --host flag
-            
+
             # Here we're making sure that the platform we're target is injected into
             # the HOST_CONFIGURE_FLAG string. The string looks somehing like this
             # before the eval: "$2_VENDOR_OS"
@@ -394,7 +394,7 @@ configure_file () {
         fi
 
         cd ..
-        
+
         rm -R "$2"
         printf "\n\nSorry, ${3}${5}${2} is not supported on your build environment.\a"
         sleep 10
