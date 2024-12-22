@@ -1,8 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
-<%@page import="java.io.File" %>
-<%@page import="java.io.IOException" %>
-<%@page import="java.nio.file.Files" %>
-<%@page import="java.nio.charset.StandardCharsets" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" import="java.io.File" import="java.io.IOException" import="java.nio.file.Files" import="java.nio.charset.StandardCharsets"%>
 <%
 /*
  * USE CAUTION WHEN EDITING
