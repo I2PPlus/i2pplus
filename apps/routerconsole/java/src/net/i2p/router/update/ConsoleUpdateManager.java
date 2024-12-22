@@ -1046,14 +1046,12 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
             case ROUTER_SIGNED:
                 rv = handleRouterFile(task.getURI(), actualVersion, file, utype);
-                if (rv)
-                    notifyDownloaded(task.getType(), task.getID(), actualVersion);
+                if (rv) {notifyDownloaded(task.getType(), task.getID(), actualVersion);}
                 break;
 
             case ROUTER_SIGNED_SU3:
                 rv = handleRouterFile(task.getURI(), actualVersion, file, utype);
-                if (rv)
-                    notifyDownloaded(task.getType(), task.getID(), actualVersion);
+                if (rv) {notifyDownloaded(task.getType(), task.getID(), actualVersion);}
                 break;
 
             case ROUTER_UNSIGNED:

@@ -25,8 +25,7 @@ class UnsignedUpdateChecker extends UpdateRunner {
     private final long _ms;
     private boolean _unsignedUpdateAvailable;
 
-    public UnsignedUpdateChecker(RouterContext ctx, ConsoleUpdateManager mgr,
-                                 List<URI> uris, long lastUpdateTime) {
+    public UnsignedUpdateChecker(RouterContext ctx, ConsoleUpdateManager mgr, List<URI> uris, long lastUpdateTime) {
         super(ctx, mgr, UpdateType.ROUTER_UNSIGNED, uris);
         _ms = lastUpdateTime;
     }
@@ -35,24 +34,20 @@ class UnsignedUpdateChecker extends UpdateRunner {
     public void run() {
         _isRunning = true;
         boolean success = false;
-        try {
-            success = fetchUnsignedHead();
-        } catch (Throwable t) {
-            _mgr.notifyTaskFailed(this, "", t);
-        } finally {
+        try {success = fetchUnsignedHead();}
+        catch (Throwable t) {_mgr.notifyTaskFailed(this, "", t);}
+        finally {
             _mgr.notifyCheckComplete(this, _unsignedUpdateAvailable, success);
             _isRunning = false;
         }
     }
-
 
     /**
      * HEAD the update url, and if the last-mod time is newer than the last update we
      * downloaded, as stored in the properties, then we download it using eepget.
      */
     private boolean fetchUnsignedHead() {
-        if (_urls.isEmpty())
-            return false;
+        if (_urls.isEmpty()) {return false;}
         _currentURI = _urls.get(0);
         String url = _currentURI.toString();
         // assume always proxied for now
@@ -68,56 +63,51 @@ class UnsignedUpdateChecker extends UpdateRunner {
             return false;
         }
 
-        //updateStatus("<b>" + _t("Checking for development build update") + "</b>");
-        //try {
-            EepHead get = new EepHead(_context, proxyHost, proxyPort, 0, url);
-            if (get.fetch()) {
-                String lastmod = get.getLastModified();
-                if (lastmod != null) {
-                    long modtime = RFC822Date.parse822Date(lastmod);
-                    if (modtime <= 0) return false;
-                    if (_ms <= 0) return false;
-                    if (modtime > _ms) {
-                        String newVersion = Long.toString(modtime);
-                        if (SystemVersion.isJava7()) {
-                            _unsignedUpdateAvailable = true;
-                            _mgr.notifyVersionAvailable(this, _urls.get(0), getType(), "", getMethod(), _urls,
-                                                        newVersion, "");
-                        } else {
-                            String ourJava = System.getProperty("java.version");
-                            String msg = _mgr._t("Requires Java version {0} but installed Java version is {1}", "1.8", ourJava);
-                            _log.logAlways(Log.WARN, "Cannot update to version " + newVersion + ": " + msg);
-                            _mgr.notifyVersionConstraint(this, _urls.get(0), getType(), "", newVersion, msg);
-                        }
+        EepHead get = new EepHead(_context, proxyHost, proxyPort, 0, url);
+        if (get.fetch()) {
+            String lastmod = get.getLastModified();
+            if (lastmod != null) {
+                long modtime = RFC822Date.parse822Date(lastmod);
+                if (modtime <= 0) return false;
+                if (_ms <= 0) return false;
+                if (modtime > _ms) {
+                    String newVersion = Long.toString(modtime);
+                    if (SystemVersion.isJava7()) {
+                        _unsignedUpdateAvailable = true;
+                        _mgr.notifyVersionAvailable(this, _urls.get(0), getType(), "", getMethod(), _urls,
+                                                    newVersion, "");
+                    } else {
+                        String ourJava = System.getProperty("java.version");
+                        String msg = _mgr._t("Requires Java version {0} but installed Java version is {1}", "1.8", ourJava);
+                        _log.logAlways(Log.WARN, "Cannot update to version " + newVersion + ": " + msg);
+                        _mgr.notifyVersionConstraint(this, _urls.get(0), getType(), "", newVersion, msg);
                     }
                 }
-                return true;
-            } else {
-                int status = get.getStatusCode();
-                String msg;
-                if (status == 504 || status <= 0) {
-                    msg = _mgr._t("Unable to connect to update server ") + _currentURI.getHost();
-                    if (url.contains("skank.i2p")) {
-                        msg = msg.replace("update", "I2P+ update");
-                    }
-                } else if (status == 500) {
-                    msg = _mgr._t("Update server {0} not found in address book", _currentURI.getHost());
-                    if (url.contains("skank.i2p")) {
-                        msg = msg.replace("Update", "I2P+ Update");
-                    }
-                } else if (status == 404) {
-                    msg = _mgr._t("Update not found:<br>{0}", url);
-                    if (url.contains("skank.i2p")) {
-                        msg = msg.replace("Update", "I2P+ update");
-                    }
-                } else {
-                    msg = status + " " + DataHelper.stripHTML(get.getStatusText().replace("http://", ""));
-                }
-                updateStatus("<b>" + msg + "</b>");
             }
-        //} catch (Throwable t) {
-        //    _log.error("Error fetching the update", t);
-        //}
+            return true;
+        } else {
+            int status = get.getStatusCode();
+            String msg;
+            if (status == 504 || status <= 0) {
+                msg = _mgr._t("Unable to connect to update server ") + _currentURI.getHost();
+                if (url.contains("skank.i2p")) {
+                    msg = msg.replace("update", "I2P+ update");
+                }
+            } else if (status == 500) {
+                msg = _mgr._t("Update server {0} not found in address book", _currentURI.getHost());
+                if (url.contains("skank.i2p")) {
+                    msg = msg.replace("Update", "I2P+ Update");
+                }
+            } else if (status == 404) {
+                msg = _mgr._t("Update not found:<br>{0}", url);
+                if (url.contains("skank.i2p")) {
+                    msg = msg.replace("Update", "I2P+ update");
+                }
+            } else {
+                msg = status + " " + DataHelper.stripHTML(get.getStatusText().replace("http://", ""));
+            }
+            updateStatus("<b>" + msg + "</b>");
+        }
         return false;
     }
 }

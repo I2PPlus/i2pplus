@@ -96,6 +96,7 @@ public class ConfigRestartBean {
             buf.append("</span></h4><hr>");
             buttons(ctx, buf, urlBase, systemNonce, SET2);
         } else {
+            buf.append("<h4 id=sb_shutdownStatus class=\"volatile inactive\" hidden><span></h4><hr hidden>");
             if (ctx.hasWrapper() || NewsHelper.isExternalRestartPending()) {buttons(ctx, buf, urlBase, systemNonce, SET3);}
             else {buttons(ctx, buf, urlBase, systemNonce, SET4);}
         }

@@ -1107,7 +1107,7 @@ public class SummaryHelper extends HelperBase {
                     buf.append("</button><br>\n");
                 }
                 buf.append("</form>\n");
-        }
+        } else {buf.append("<form id=sb_updateform class=inactive hidden></form>");}
         return buf.toString();
     }
 

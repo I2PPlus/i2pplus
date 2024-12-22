@@ -22,55 +22,47 @@ class UnsignedUpdateRunner extends UpdateRunner {
 
     public UnsignedUpdateRunner(RouterContext ctx, ConsoleUpdateManager mgr, List<URI> uris) {
         super(ctx, mgr, ROUTER_UNSIGNED, uris);
-        if (!uris.isEmpty())
-            _currentURI = uris.get(0);
+        if (!uris.isEmpty()) {_currentURI = uris.get(0);}
     }
 
-
-        /** Get the file */
-        @Override
+    /** Get the file */
+    @Override
         protected void update() {
-            // always proxy for now
-            //boolean shouldProxy = Boolean.valueOf(_context.getProperty(ConfigUpdateHandler.PROP_SHOULD_PROXY, ConfigUpdateHandler.DEFAULT_SHOULD_PROXY)).booleanValue();
-            String proxyHost = _context.getProperty(ConfigUpdateHandler.PROP_PROXY_HOST, ConfigUpdateHandler.DEFAULT_PROXY_HOST);
-            int proxyPort = ConfigUpdateHandler.proxyPort(_context);
-            if (proxyPort == ConfigUpdateHandler.DEFAULT_PROXY_PORT_INT &&
-                proxyHost.equals(ConfigUpdateHandler.DEFAULT_PROXY_HOST) &&
-                _context.portMapper().getPort(PortMapper.SVC_HTTP_PROXY) < 0) {
-                String msg = _t("HTTP client proxy tunnel must be running");
-                if (_log.shouldWarn())
-                    _log.warn(msg);
-                updateStatus("<b>" + msg + "</b>");
-                _mgr.notifyTaskFailed(this, msg, null);
-                return;
-            }
-            String zipURL = _currentURI.toString();
-            if (_log.shouldDebug())
-                _log.debug("Attemping unsigned update from URL: " + zipURL);
-            try {
-                // 40 retries!!
-                _get = new EepGet(_context, proxyHost, proxyPort, 40, _updateFile, zipURL, false);
-                _get.addStatusListener(UnsignedUpdateRunner.this);
-                _get.fetch(CONNECT_TIMEOUT, -1, INACTIVITY_TIMEOUT);
-            } catch (Throwable t) {
-                _log.error("Error updating", t);
-                updateStatus("<b>" + _t("Update failed") + ": " + t.getMessage() + "</b>");
-            }
-            if (!this.done)
-                _mgr.notifyTaskFailed(this, "", null);
+        // always proxy for now
+        //boolean shouldProxy = Boolean.valueOf(_context.getProperty(ConfigUpdateHandler.PROP_SHOULD_PROXY, ConfigUpdateHandler.DEFAULT_SHOULD_PROXY)).booleanValue();
+        String proxyHost = _context.getProperty(ConfigUpdateHandler.PROP_PROXY_HOST, ConfigUpdateHandler.DEFAULT_PROXY_HOST);
+        int proxyPort = ConfigUpdateHandler.proxyPort(_context);
+        if (proxyPort == ConfigUpdateHandler.DEFAULT_PROXY_PORT_INT &&
+            proxyHost.equals(ConfigUpdateHandler.DEFAULT_PROXY_HOST) &&
+            _context.portMapper().getPort(PortMapper.SVC_HTTP_PROXY) < 0) {
+            String msg = _t("HTTP client proxy tunnel must be running");
+            if (_log.shouldWarn()) {_log.warn(msg);}
+            updateStatus("<b>" + msg + "</b>");
+            _mgr.notifyTaskFailed(this, msg, null);
+            return;
         }
+        String zipURL = _currentURI.toString();
+        if (_log.shouldDebug()) {_log.debug("Attemping unsigned update from URL: " + zipURL);}
+        try {
+            _get = new EepGet(_context, proxyHost, proxyPort, 40, _updateFile, zipURL, false);  // 40 retries!!
+            _get.addStatusListener(UnsignedUpdateRunner.this);
+            _get.fetch(CONNECT_TIMEOUT, -1, INACTIVITY_TIMEOUT);
+        } catch (Throwable t) {
+            _log.error("Error updating", t);
+            updateStatus("<b>" + _t("Update failed") + ": " + t.getMessage() + "</b>");
+        }
+        if (!this.done) {_mgr.notifyTaskFailed(this, "", null);}
+    }
 
-        /** eepget listener callback Overrides */
-        @Override
-        public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified) {
-            String lastmod = _get.getLastModified();
-            File tmp = new File(_updateFile);
-            long modtime = RFC822Date.parse822Date(lastmod);
-            if (modtime <= 0)
-                modtime = _context.clock().now();
-            if (_mgr.notifyComplete(this, Long.toString(modtime), tmp))
-                this.done = true;
-            else
-                tmp.delete();  // corrupt
-        }
+    /** eepget listener callback Overrides */
+    @Override
+    public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified) {
+        String lastmod = _get.getLastModified();
+        File tmp = new File(_updateFile);
+        long modtime = RFC822Date.parse822Date(lastmod);
+        if (modtime <= 0) {modtime = _context.clock().now();}
+        if (_mgr.notifyComplete(this, Long.toString(modtime), tmp)) {this.done = true;}
+        else {tmp.delete();} // corrupt
+    }
+
 }
