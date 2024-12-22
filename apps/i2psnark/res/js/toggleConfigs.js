@@ -31,11 +31,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const configTitles = document.querySelectorAll(".configTitle");
   configTitles.forEach((title) => title.classList.remove("expanded"));
 
-  const setupClickListener = (elementId, configTable) => {
-    document.getElementById(elementId).addEventListener("click", (e) => {
+  const setupClickListener = async (elementId, configTable) => {
+    const button = document.getElementById(elementId);
+    button.addEventListener("click", async (e) => {
       const clickedTitle = e.target.closest(".configTitle");
-      if (clickedTitle) {toggleConfig(configTable, clickedTitle);}
-      clickedTitle.scrollIntoView({block: "center", inline: "center"});
+      if (clickedTitle) {
+        await toggleConfig(configTable, clickedTitle);
+        setTimeout(() => {
+          requestAnimationFrame(() => {
+            clickedTitle.scrollIntoView({block: "center", inline: "center", behavior: "smooth"});
+          });
+        }, 60);
+      }
     });
   };
 
