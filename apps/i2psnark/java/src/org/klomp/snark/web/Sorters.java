@@ -219,12 +219,12 @@ class Sorters {
             int peers = snark.getTrackerSeenPeers();
             long downBps = snark.getDownloadRate();
             boolean isMagnet = remaining < 0;
+            if (isMagnet) {return STATUS_MAGNET;}
             if (snark.isStarting()) {return STATUS_STARTING;}
             if (snark.isAllocating()) {return STATUS_ALLOCATION;}
             if (snark.isChecking()) {return STATUS_CHECKING;}
             if (downBps > 0) {return STATUS_DOWNLOADING;}
-            else if (downBps <= 0) {return STATUS_STALLED;}
-            if (isMagnet) {return STATUS_MAGNET;}
+            else if (downBps <= 0 && remaining > 0) {return STATUS_STALLED;}
             else if (remaining == 0) {
                 if (activePeers > 0) {return STATUS_SEEDING_ACTIVE;}
                 else if (peers > 0) {return STATUS_SEEDING_INACTIVE;}
