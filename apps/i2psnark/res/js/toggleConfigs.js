@@ -29,15 +29,16 @@ function scrollToElement(element, windowObj = window) {
 
 document.addEventListener("DOMContentLoaded", () => {
   const configTitles = document.querySelectorAll(".configTitle");
-  configTitles.forEach((title) => { title.classList.remove("expanded"); });
+  configTitles.forEach((title) => title.classList.remove("expanded"));
 
-  document.getElementById("fileFilter").addEventListener("click", (e) => {
-    const clickedTitle = e.target.closest(".configTitle");
-    if (clickedTitle) {toggleConfig(filterConfigTable, clickedTitle);}
-  });
+  const setupClickListener = (elementId, configTable) => {
+    document.getElementById(elementId).addEventListener("click", (e) => {
+      const clickedTitle = e.target.closest(".configTitle");
+      if (clickedTitle) {toggleConfig(configTable, clickedTitle);}
+      clickedTitle.scrollIntoView({block: "center", inline: "center"});
+    });
+  };
 
-  document.getElementById("trackers").addEventListener("click", (e) => {
-    const clickedTitle = e.target.closest(".configTitle");
-    if (clickedTitle) {toggleConfig(trackerConfigTable, clickedTitle);}
-  });
+  setupClickListener("fileFilter", filterConfigTable);
+  setupClickListener("trackers", trackerConfigTable);
 });
