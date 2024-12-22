@@ -161,17 +161,25 @@ async function refreshSidebar() {
             const shutdownNoticeResponse = responseDoc.getElementById("sb_shutdownStatus");
             const updateForm = document.getElementById("sb_updateform");
             const updateFormResponse = responseDoc.getElementById("sb_updateform");
-            if (shutdownNoticeResponse.classList.contains("inactive")) {
+            if (shutdownNoticeResponse && shutdownNoticeResponse.classList.contains("inactive")) {
               shutdownNotice.hidden = true;
               shutdownNoticeHR.hidden = true;
-            } else if (shutdownNotice.innerHTML !== shutdownNoticeResponse.innerHTML) {
+            } else if (shutdownNoticeResponse && shutdownNotice.innerHTML !== shutdownNoticeResponse.innerHTML) {
               shutdownNotice.hidden = false;
               shutdownNoticeHR.hidden = false;
               shutdownNotice.outerHTML = shutdownNoticeResponse.outerHTML;
             }
-            if (updateFormResponse.classList.contains("inactive")) {updateForm.hidden = true;}
-            else if (updateForm.innerHTML !== updateFormResponse.innerHTML) {
+            if (updateFormResponse && updateFormResponse.classList.contains("inactive")) {
+              updateForm.hidden = true;
+            } else if (updateFormResponse && updateForm.innerHTML !== updateFormResponse.innerHTML) {
               updateForm.outerHTML = updateFormResponse.outerHTML;
+            }
+            if (form.id === "sb_routerControl") {
+              const tunnelStatus = document.getElementById("sb_tunnelstatus");
+              const tunnelStatusResponse = responseDoc.getElementById("sb_tunnelstatus");
+              if (tunnelStatusResponse && tunnelStatus.innerHTML !== tunnelStatusResponse.innerHTML) {
+                tunnelStatus.outerHTML = tunnelStatusResponse.outerHTML;
+              }
             }
           } else {refreshAll();}
         }
