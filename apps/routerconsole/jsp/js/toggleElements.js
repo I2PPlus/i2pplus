@@ -59,14 +59,14 @@ function setupToggles(toggleSelector, hiddenSelector, displayStyle, collapseByDe
           hiddenElement.style.display = displayStyle;
           toggleElement.classList.add("expanded");
           document.documentElement.classList.remove("hasCollapsedElement");
-          document.documentElement.classList.add("hasExpandedElement");
-          toggleElement.scrollIntoView();
+          toggleElement.scrollIntoView({block: "center", inline: "center"});
         } else {
           hiddenElement.style.display = "none";
           toggleElement.classList.remove("expanded");
-          document.documentElement.classList.remove("hasExpandedElement");
           document.documentElement.classList.add("hasCollapsedElement");
         }
+        if ([...toggleElements].some(element => element.classList.contains('expanded'))) {document.body.classList.add("hasExpandedElement");}
+        else {document.body.classList.remove("hasExpandedElement");}
       });
       toggleElement.classList.add("toggle");
     }

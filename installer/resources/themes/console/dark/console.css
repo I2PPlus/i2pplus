@@ -2554,7 +2554,7 @@ h1[class],h1{margin:0 5px 0 226px;position:relative;z-index:999;white-space:norm
 
 /* help */
 p+.twocol{margin:10px 25px}
-.plus{margin-right:6px;padding:1px 2px;float:left;font-size:95%;font-weight:700;color:#000;border-radius:2px;background:#770}
+.plus{margin:1px 6px 0 0;float:left;font-size:0;width:16px;height:16px;vertical-align:middle;background:url(/themes/console/dark/images/favicon.svg) no-repeat center center}
 .sitelink,.chatlink,.consolelink{padding:0 3px 0 18px;white-space:nowrap;border-radius:1px;box-shadow:var(--outline)}
 .sitelink:active,.chatlink:active,.consolelink:active{box-shadow:0 0 0 1px rgba(200,48,0,.5),inset 3px 3px 3px #000;background-color:#010}
 .chatlink{background:rgba(0,64,0,.3) var(--chat) no-repeat 3px center/12px}
@@ -2584,13 +2584,13 @@ ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 #configinfo{margin-bottom:5px;width:100%;border:0;border-collapse:separate;border-spacing:0}
 #configinfo td{padding:12px;line-height:1.4;text-align:justify;background:#000}
 #configinfo th{text-align:left;padding:10px 0 5px;letter-spacing:.05em;font:500 9pt var(--monospaced);color:#dd0;background:#000;border:0}
-#configinfo tr.config.expanded th{border:2px solid #131;border-left-width:5px;box-shadow:var(--highlight)}
+#configinfo tr.config.expanded th{color:#dd0;border:2px solid #131;border-left-width:5px;box-shadow:var(--highlight)}
 #configinfo tr.config.expanded+tr td{border-bottom:1px solid #131}
-#configinfo tr.config th{padding:8px 12px;border:1px solid #131;background:var(--th);cursor:pointer}
+#configinfo tr.config th{padding:8px 12px;border:1px solid #131;color:#aa0;background:var(--th);cursor:pointer;transition:ease color .2s}
 #configinfo tr.config th::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:""}
 #configinfo tr.config:hover th::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:""}
 #configinfo tr.config:not(.expanded):hover th::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
-#configinfo tr.config:not(.expanded) th{color:#dd0b}
+body.hasExpandedElement #configinfo tr.config:not(.expanded) th{color:#770;transition:ease all .2s}
 #configinfo tr.config:not(.expanded) th::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
 #configinfo tr.config:hover th{color:var(--hover)}
 #configinfo tr:not(.config) td{border:1px solid #131;border-bottom-width:0;border-top:0}
@@ -3045,6 +3045,7 @@ span#newtab{margin-top:4px}
 .log_debug,.log_info,.log_warn,.log_error,.log_crit,.log_omitted{margin-bottom:-3px;min-width:42px;max-width:42px}
 .main,#news,h1,h1[class],.sorry,h1+.sorry,#console_404 .sorry{margin-left:272px}
 .newsAuthor{padding-left:18px;background-size:13px}
+.plus{margin:2px 8px 0 0}
 .sb_info .percentBarText{margin-top:-1px}
 .sb_info.sb_update{padding:5px 5px 6px}
 .sb_netstatus::before,.tunnelBuildStatus::before{margin:0 2px}
