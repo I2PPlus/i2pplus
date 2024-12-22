@@ -864,17 +864,14 @@ class SummaryBarRenderer {
     public String renderUpdateStatusHTML() {
         String updateStatus = _helper.getUpdateStatus();
         StringBuilder buf = new StringBuilder(512);
-        if (_helper == null || updateStatus.isEmpty()) {
-            buf.append("<div id=sb_updatesection class=\"volatile hide\" hidden></div>\n");
-        } else {
-            buf.append("<div id=sb_updatesection class=collapse>\n")
+        if (_helper == null || updateStatus.isEmpty()) {return "";}
+        else {
+            buf.append("<div id=sb_updatesection class=collapse>")
                .append("<h3><a href=\"/configupdate\" target=_top title=\"")
-               .append(_t("Configure I2P Updates"))
-               .append("\">")
-               .append(_t("Update Status"))
-               .append("</a><input type=checkbox id=toggle_sb_updatesection class=\"toggleSection script\" checked hidden></h3>\n<hr class=b>\n")
+               .append(_t("Configure I2P Updates")).append("\">").append(_t("Update Status"))
+               .append("</a><input type=checkbox id=toggle_sb_updatesection class=\"toggleSection script\" checked hidden></h3><hr class=b>")
                .append(updateStatus)
-               .append("\n</div>\n");
+               .append("</div>\n");
         }
         return buf.toString();
     }
@@ -888,13 +885,11 @@ class SummaryBarRenderer {
         if (_helper == null) {return "";}
         StringBuilder buf = new StringBuilder(512);
         int active = _helper.getActivePeers();
-        buf.append("<h3><a href=\"/peers\" target=_top title=\"")
-           .append(_t("Show all current peer connections"))
-           .append("\">")
-           .append(_t("Peers"))
-           .append(" <span class=\"badge volatile\" hidden title=\"").append(_t("Peers active in the last minute")).append(" / ")
+        buf.append("<h3><a href=\"/peers\" target=_top title=\"").append(_t("Show all current peer connections")).append("\">")
+           .append(_t("Peers")).append(" <span class=\"badge volatile\" hidden title=\"")
+           .append(_t("Peers active in the last minute")).append(" / ")
            .append(_t("Total peers in NetDb")).append("\">").append(active).append (" / ").append(_helper.getAllPeers()).append("</span>")
-           .append("</a><input type=checkbox id=toggle_sb_peers class=\"toggleSection script\" checked hidden></h3>\n<hr class=b>\n")
+           .append("</a><input type=checkbox id=toggle_sb_peers class=\"toggleSection script\" checked hidden></h3><hr class=b>")
            .append("<table id=sb_peers>\n")
            .append("<tr title=\"");
         if (isAdvanced())

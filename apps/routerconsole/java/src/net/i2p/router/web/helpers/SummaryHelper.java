@@ -995,7 +995,7 @@ public class SummaryHelper extends HelperBase {
             if (NewsHelper.isUpdateInProgress()) {buf.append(" inProgress");}
             buf.append("\">").append(status).append("</h4>\n");
             needSpace = true;
-        }
+        } else {buf.append("<h4 class=\"sb_info sb_update inactive volatile\" hidden></h4><hr hidden>");}
         String dver = NewsHelper.updateVersionDownloaded();
         if (dver == null) {
             dver = NewsHelper.devSU3VersionDownloaded();
@@ -1016,7 +1016,7 @@ public class SummaryHelper extends HelperBase {
                 buf.append(_t("Update downloaded")).append("<br>")
                    .append("[").append(_t("{0}", DataHelper.escapeHTML(dver))).append("]")
                    .append("</b></h4>");
-            }
+            } else {buf.append("<h4 id=restartRequired class=\"sb_info sb_update volatile inactive\" hidden></h4>");}
         } else if (dver != null && _context.router().gracefulShutdownInProgress() &&
                    !NewsHelper.isUpdateInProgress() &&
                    (_context.getProperty("router.updatePolicy") != null &&
