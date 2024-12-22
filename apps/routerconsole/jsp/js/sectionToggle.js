@@ -115,6 +115,8 @@ function sectionToggler() {
       if (sb.querySelector("#sb_bandwidth+hr") !== null) {
         sb.querySelector("#sb_bandwidth+hr").hidden = true;
         sb.querySelector("#sb_bandwidth+hr").style.display = null;
+      }
+      if (sb.querySelector("#sb_graphstats") !== null) {
         sb.querySelector("#sb_graphstats").style.opacity = "1";
       }
       document.getElementById("toggle_sb_bandwidth").checked = false;
@@ -128,6 +130,8 @@ function sectionToggler() {
       if (sb.querySelector("#sb_bandwidth+hr") !== null) {
         sb.querySelector("#sb_bandwidth+hr").hidden = null;
         sb.querySelector("#sb_bandwidth+hr").style.display = "block";
+      }
+      if (sb.querySelector("#sb_graphstats") !== null) {
         sb.querySelector("#sb_graphstats").removeAttribute("style");
       }
       document.getElementById("toggle_sb_bandwidth").checked = true;
