@@ -585,7 +585,7 @@ a.controld img{display:none}
 #hopVariance .optbox:not(:checked)+span{filter:saturate(0)}
 #hopVariance #varyOutbound+span{background:var(--outbound) no-repeat center center/22px}
 .depress{transition:ease all .2s;border}
-.inert{transition:border ease-out .5s,background ease .5s}
+.inert{transition:ease-out all .5s, ease-out box-shadow .1s}
 .tempDisabled{filter:opacity(.3);pointer-events:none;transition:filter ease .5s}
 
 /* action buttons */
@@ -705,7 +705,7 @@ input.trackername{width:100px}
 #configs th.suboption{padding-top:9px;position:relative}
 #configs td{text-align:left;font-weight:400;vertical-align:middle;padding:4px 0;min-width:0;width:50%}
 #configs tr:nth-last-child(2) td{padding:10px 0 2px;text-align:right}
-#configs td b,#torrentOrderControl b{margin-right:5px;padding:5px 10px 6px;display:inline-block;min-width:150px;color:rgba(255,240,255,.8);text-align:right;border-radius:15px 5px 5px 15px;box-shadow:0 0 0 1px rgba(17,0,17,.7);background:linear-gradient(180deg,rgba(32,16,32,.2),rgba(16,0,16,.7));opacity:.9;transition:ease width .2s}
+#configs td b,#torrentOrderControl b{margin-right:5px;padding:5px 10px 6px;min-width:150px;display:inline-block;vertical-align:middle;color:rgba(255,240,255,.8);text-align:right;border-radius:15px 5px 5px 15px;box-shadow:0 0 0 1px rgba(17,0,17,.7);background:linear-gradient(180deg,rgba(32,16,32,.2),rgba(16,0,16,.7));opacity:.9;transition:ease width .2s}
 #configs td label:hover b,#torrentOrderControl b:hover{color:#fff}
 #configs td:nth-child(2){white-space:nowrap}
 #configs td:first-child{min-width:220px;width:25%;font-weight:700}

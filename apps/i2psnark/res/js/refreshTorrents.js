@@ -20,6 +20,7 @@ const screenlog = document.getElementById("screenlog");
 const snarkHead = document.getElementById("snarkHead");
 const storageRefresh = localStorage.getItem("snarkRefresh");
 const torrents = document.getElementById("torrents");
+const torrentsBody = document.getElementById("snarkTbody");
 const torrentForm = document.getElementById("torrentlist");
 
 const MESSAGE_TYPES = {
@@ -163,7 +164,7 @@ async function doRefresh({ url = window.location.href, forceFetch = false } = {}
   const responseDoc = await fetchHTMLDocument(url || defaultUrl, forceFetch);
   await requestIdleOrAnimationFrame(async () => await refreshTorrents(responseDoc));
   await initHandlers();
-  showBadge;
+  await showBadge();
 }
 
 async function refreshTorrents(callback) {
@@ -202,13 +203,19 @@ async function refreshTorrents(callback) {
       try {
         const url = await getURL();
         const mainsectionContainer = await fetchHTMLDocument(url);
-        const newTorrents = mainsectionContainer.querySelector("#torrents");
-        if (newTorrents) {await updateElementInnerHTML(torrents, newTorrents);}
+        const newTorrentsBody = mainsectionContainer.querySelector("#snarkTbody");
+        if (newTorrentsBody) {
+          await requestIdleOrAnimationFrame(async () => {
+            updateElementInnerHTML(torrentsBody, newTorrentsBody);
+            refreshHeaderAndFooter();
+            refreshScreenLog(undefined);
+            if (debugging) {console.log("refreshAll()");}
+          });
+        }
         else {
           const newMainsection = mainsectionContainer.querySelector("#mainsection");
           await updateElementInnerHTML(mainsection, newMainsection);
         }
-        if (debugging) {console.log("refreshAll()");}
       } catch (error) {
         if (debugging) console.error(error);
       }
@@ -246,8 +253,18 @@ async function refreshTorrents(callback) {
           }
 
           if (updatingResponse.length === updating.length && !requireFullRefresh) {
-            updating.forEach(async (item, i) => {
-            await updateElementInnerHTML(item, updatingResponse[i]);
+            updating.forEach(async (currentRow, rowIndex) => {
+              const currentRowTds = currentRow.querySelectorAll("td");
+              const responseRowTds = updatingResponse[rowIndex].querySelectorAll("td");
+              if (currentRowTds.length === responseRowTds.length) {
+                currentRowTds.forEach((currentTd, tdIndex) => {
+                  currentTd.textContent = responseRowTds[tdIndex].textContent;
+                });
+
+                if (currentRow.classList.toString() !== updatingResponse[rowIndex].classList.toString()) {
+                  currentRow.classList = updatingResponse[rowIndex].classList;
+                }
+              }
             });
           } else if (requireFullRefresh && updatingResponse) {
             await requestIdleOrAnimationFrame(async () => await refreshAll());
@@ -282,12 +299,33 @@ async function refreshTorrents(callback) {
       try {
         const url = await getURL();
         const responseDoc = await fetchHTMLDocument(url);
-        const snarkFoot = document.getElementById("snarkFoot"),
-              snarkFootResponse = responseDoc.querySelector("#snarkFoot");
-        const snarkHeadResponse = responseDoc.querySelector("#snarkHead");
-        await updateElementInnerHTML(snarkFoot, snarkFootResponse);
-        await updateElementInnerHTML(snarkHead, snarkHeadResponse);
-      } catch(error) {}
+        const snarkFooter = document.getElementById("snarkFoot");
+        const snarkFooterResponse = responseDoc.querySelector("#snarkFoot");
+        const snarkHeader = document.getElementById("snarkHead");
+        const snarkHeaderResponse = responseDoc.querySelector("#snarkHead");
+
+        if (snarkFooter && snarkFooterResponse) {
+          const thElements = snarkFooter.querySelectorAll("th");
+          const thElementsResponse = snarkFooterResponse.querySelectorAll("th");
+
+          if (thElements.length === thElementsResponse.length) {
+            thElements.forEach((th, index) => {
+              th.innerHTML = thElementsResponse[index].innerHTML;
+            });
+          }
+        }
+
+        if (snarkHeader && snarkHeaderResponse) {
+          const thElements = snarkHeader.querySelectorAll("th");
+          const thElementsResponse = snarkHeaderResponse.querySelectorAll("th");
+
+          if (thElements.length === thElementsResponse.length) {
+            thElements.forEach((th, index) => {
+              th.innerHTML = thElementsResponse[index].innerHTML;
+            });
+          }
+        }
+      } catch (error) {}
     }
 
   } catch (error) {}

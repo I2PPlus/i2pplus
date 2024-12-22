@@ -15,8 +15,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const clickable = ".toggleview, .snarkNav, .filter, input[class^='action'], input.add, input.create";
     const targetElement = clickTarget.matches(clickable) ? clickTarget : clickTarget.closest(clickable);
     if (!targetElement) {return;}
-    let delay = 400;
+    let delay = 360;
     const isAction = targetElement.matches("input[class^='action'], input[id^='action']");
+    const isFormButton = targetElement.matches("input[type=submit]");
     const currentForm = targetElement.closest("form");
     const isUIElement = targetElement.closest(".toggleview, .snarkNav, .filter");
 
@@ -37,14 +38,19 @@ document.addEventListener("DOMContentLoaded", () => {
         targetElement.classList.replace("depress", "inert");
         nonClickedActionButtons.forEach((input) => input.classList.remove("tempDisabled"));
       };
-    } else {
+    } else if (isFormButton) {
       setTimeout(async () => {
         await new Promise(resolve => setTimeout(resolve, 1000));
         await refreshScreenLog(undefined, true);
         clickTarget.classList.replace("depress", "inert");
       }, delay);
+    } else {
+      setTimeout(async() => { clickTarget.classList.replace("depress", "inert"); }, delay);
     }
-    setTimeout(() => { targetElement.classList.remove("inert"); }, 1000);
+    setTimeout(async () => {
+      targetElement.classList.remove("depress");
+      targetElement.classList.remove("inert");
+    }, delay);
   };
 
   page.addEventListener("click", (event) => {
