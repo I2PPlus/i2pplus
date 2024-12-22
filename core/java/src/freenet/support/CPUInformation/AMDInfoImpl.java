@@ -525,7 +525,7 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
                 isBulldozerCompatible = true;
                 isZenCompatible = true;
                 isZen5Compatible = true;
-                else if (model <= 31) {modelString = "AMD Epyc 9005 Series (Zen5 / Turin)";}
+                if (model <= 31) {modelString = "AMD Epyc 9005 Series (Zen5 / Turin)";}
                 else if (model == 32) {modelString = "AMD Ryzen 8000 Series (Zen5 / Strix Point)";}
                 else if (model == 36) {modelString = "AMD Ryzen AI 9 Series (Zen5)";}
                 else {modelString = "AMD Ryzen 9000 Series (Zen5 / Granite Ridge)";}
