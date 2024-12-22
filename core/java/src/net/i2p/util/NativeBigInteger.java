@@ -39,8 +39,7 @@ import net.i2p.data.DataHelper;
 
 /**
  * <p>BigInteger that takes advantage of the jbigi library for the modPow operation,
- * which accounts for a massive segment of the processing cost of asymmetric
- * crypto.
+ * which accounts for a massive segment of the processing cost of asymmetric crypto.
  *
  * The jbigi library itself is basically just a JNI wrapper around the
  * GMP library - a collection of insanely efficient routines for dealing with
@@ -71,13 +70,13 @@ import net.i2p.data.DataHelper;
  * We then use that, combined with the OS, to build an optimized resource name - e.g.
  * "net/i2p/util/libjbigi-freebsd-pentium4.so" or "net/i2p/util/jbigi-windows-k623.dll".
  * If that resource exists, we use it.  If it doesn't (or the jcpuid component fails),
- * we try a generic native implementation using "none" for the CPU (ala
- * "net/i2p/util/jbigi-windows-none.dll").</p>
+ * we try a generic native implementation using "none" for the CPU e.g.
+ * "net/i2p/util/jbigi-windows-none.dll".</p>
  *
  * <p>Running this class by itself does a basic unit test and benchmarks the
  * NativeBigInteger.modPow vs. the BigInteger.modPow by running a 2Kbit op 100
- * times.  At the end of each test, if the native implementation is loaded this will output
- * something like:</p>
+ * times.  At the end of each test, if the native implementation is loaded this will
+ * output something like:</p>
  * <pre>
  *  native run time:        6090ms (60ms each)
  *  java run time:          68067ms (673ms each)
@@ -85,14 +84,10 @@ import net.i2p.data.DataHelper;
  * </pre>
  *
  * <p>If the native implementation is not loaded, it will start by saying:</p>
- * <pre>
- *  WARN: Native BigInteger library jbigi not loaded - using pure java
- * </pre>
+ * <pre>WARN: Native BigInteger library jbigi not loaded - using pure java</pre>
  * <p>Then go on to run the test, finally outputting:</p>
- * <pre>
- *  java run time:  64653ms (640ms each)
- *  However, we couldn't load the native library, so this doesn't test much
- * </pre>
+ * <pre>java run time:  64653ms (640ms each)
+ * However, we couldn't load the native library, so this doesn't test much</pre>
  *
  */
 public class NativeBigInteger extends BigInteger {
@@ -365,10 +360,10 @@ public class NativeBigInteger extends BigInteger {
                     //System.out.println("CPUModel: " + _cpuModel.toString());
                 } catch (UnknownCPUException e) {}
                 if (c instanceof VIACPUInfo) {
-                	VIACPUInfo viacpu = (VIACPUInfo) c;
-                	if (viacpu.IsNanoCompatible())
-                	    return JBIGI_OPTIMIZATION_NANO;
-                	return JBIGI_OPTIMIZATION_VIAC3;
+                    VIACPUInfo viacpu = (VIACPUInfo) c;
+                    if (viacpu.IsNanoCompatible())
+                        return JBIGI_OPTIMIZATION_NANO;
+                    return JBIGI_OPTIMIZATION_VIAC3;
                 } else if (c instanceof AMDCPUInfo) {
                     AMDCPUInfo amdcpu = (AMDCPUInfo) c;
                     if (amdcpu.IsZen2Compatible())
