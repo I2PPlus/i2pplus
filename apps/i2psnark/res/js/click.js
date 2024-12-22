@@ -31,13 +31,15 @@ document.addEventListener("DOMContentLoaded", () => {
       const nonClickedActionButtons = currentForm.querySelectorAll("input[type=submit][class^='action']:not(.depress), input[type=submit][id^='action']:not(.depress)");
       nonClickedActionButtons.forEach((el) => el.classList.add("tempDisabled"));
       currentForm.onsubmit = async (event) => {
+        await new Promise(resolve => setTimeout(resolve, 1000));
         await refreshScreenLog(undefined, true);
-        await new Promise(resolve => setTimeout(resolve, 4000));
+        await new Promise(resolve => setTimeout(resolve, 3000));
         targetElement.classList.replace("depress", "inert");
         nonClickedActionButtons.forEach((input) => input.classList.remove("tempDisabled"));
       };
     } else {
       setTimeout(async () => {
+        await new Promise(resolve => setTimeout(resolve, 1000));
         await refreshScreenLog(undefined, true);
         clickTarget.classList.replace("depress", "inert");
       }, delay);
