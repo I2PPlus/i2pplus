@@ -125,21 +125,17 @@ class EstablishmentManager {
 
     /** max outbound in progress - max inbound is half of this */
     private final int DEFAULT_MAX_CONCURRENT_ESTABLISH;
-//    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 20 : 40;
-//    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = 150;
-    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 32 : 64;
-    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 128 : 256;
+    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 32 : 96;
+    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 128 : 384;
     private static final String PROP_MAX_CONCURRENT_ESTABLISH = "i2np.udp.maxConcurrentEstablish";
     private static final float DEFAULT_THROTTLE_FACTOR = SystemVersion.isSlow() ? 1.5f : 3f;
     private static final String PROP_THROTTLE_FACTOR = "router.throttleFactor";
 
     /** max pending outbound connections (waiting because we are at MAX_CONCURRENT_ESTABLISH) */
-//    private static final int MAX_QUEUED_OUTBOUND = 50;
     private static final int MAX_QUEUED_OUTBOUND = SystemVersion.isSlow() ? 32 : 64;
 
     /** max queued msgs per peer while the peer connection is queued */
-//    private static final int MAX_QUEUED_PER_PEER = 16;
-    private static final int MAX_QUEUED_PER_PEER = SystemVersion.isSlow() ? 15 : 32;
+    private static final int MAX_QUEUED_PER_PEER = SystemVersion.isSlow() ? 16 : 32;
 
     private static final long MAX_NONCE = 0xFFFFFFFFl;
 
@@ -170,10 +166,8 @@ class EstablishmentManager {
     private static final int IB_BAN_TIME = 15*60*1000;
 
     // SSU 2
-//    private static final int MIN_TOKENS = 128;
-//    private static final int MAX_TOKENS = 2048;
-    private static final int MIN_TOKENS = SystemVersion.isSlow() ? 128 : 256;
-    private static final int MAX_TOKENS = SystemVersion.isSlow() ? 1024 : 2048;
+    private static final int MIN_TOKENS = SystemVersion.isSlow() ? 128 : 512;
+    private static final int MAX_TOKENS = SystemVersion.isSlow() ? 1024 : 4096;
     public static final long IB_TOKEN_EXPIRATION = 60*60*1000L;
     private static final long MAX_SKEW = 2*60*1000;
     private static final String TOKEN_FILE = "ssu2tokens.txt";
@@ -2509,8 +2503,8 @@ class EstablishmentManager {
         File f = new File(_context.getConfigDir(), TOKEN_FILE);
         PrintWriter out = null;
         try {
-            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(f), "ISO-8859-1")));
-            out.println("# SSU2 tokens, format: IPv4/IPv6/In/Out addr port token expiration");
+            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(f), "UTF-8")));
+            out.println("# SSU2 tokens, format: IPv4/IPv6/In/Out Address Port Token Expiration");
             RouterAddress addr = _transport.getCurrentExternalAddress(false);
             if (addr != null) {
                 String us = addr.getHost();
@@ -2523,9 +2517,8 @@ class EstablishmentManager {
             }
             long now = _context.clock().now();
             int count = 0;
-            // Roughly speaking, the LHMCache will iterate newest-first, so when we add them back in
-            // loadTokens(), the oldest would be at the head of the map and the newest would be purged first.
-            // Sort them by expiration oldest-first so loadTokens() will put them in the LHMCache in the right order.
+            // Roughly speaking, the LHMCache will iterate oldest-first, but to be sure, sort them
+            // by expiration oldest-first so loadTokens() will put them in the LHMCache in the right order.
             TokenComparator comp = new TokenComparator();
             List<Map.Entry<RemoteHostId, Token>> tmp;
             synchronized(_inboundTokens) {
@@ -2551,12 +2544,12 @@ class EstablishmentManager {
                 out.println("O " + Addresses.toString(id.getIP()) + ' ' + id.getPort() + ' ' + token.getToken() + ' ' + exp);
                 count++;
             }
-            if (out.checkError()) {throw new IOException("Failed write to " + f);}
+            if (out.checkError()) {throw new IOException("Failed write SSUS2 tokens to: " + f);}
             if (_log.shouldDebug()) {_log.debug("[SSU2] Stored " + count + " tokens to " + f);}
         } catch (IOException ioe) {
             if (_log.shouldWarn()) {_log.warn("[SSU2] Error writing the tokens file", ioe);}
         } finally {
-            if (out != null) out.close();
+            if (out != null) {out.close();}
         }
     }
 
@@ -2591,7 +2584,7 @@ class EstablishmentManager {
                 long lifetime = _context.clock().now() - eldest.getValue().getWhenAdded();
                 _context.statManager().addRateData("udp.inboundTokenLifetime", lifetime);
                 if (_log.shouldDebug())
-                    _log.debug("[SSU2] Remove oldest Inbound " + eldest.getValue() + " for " + eldest.getKey());
+                    _log.debug("[SSU2] Removed oldest Inbound " + eldest.getValue() + " for " + eldest.getKey());
             }
             return rv;
         }
@@ -2830,7 +2823,7 @@ class EstablishmentManager {
             case 18: return "Token error";
             case 19: return "Limit reached";
             case 20: return "Incompatible Version";
-            case 21: return "BAD Netid";
+            case 21: return "BAD NetId";
             case 22: return "Replaced connection";
             default: return "Unknown error";
         }
