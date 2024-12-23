@@ -995,7 +995,7 @@ public class SummaryHelper extends HelperBase {
             if (NewsHelper.isUpdateInProgress()) {buf.append(" inProgress");}
             buf.append("\">").append(status).append("</h4>\n");
             needSpace = true;
-        } else {buf.append("<h4 class=\"sb_info sb_update inactive volatile\" hidden></h4><hr hidden>");}
+        }
         String dver = NewsHelper.updateVersionDownloaded();
         if (dver == null) {
             dver = NewsHelper.devSU3VersionDownloaded();
@@ -1107,7 +1107,7 @@ public class SummaryHelper extends HelperBase {
                     buf.append("</button><br>\n");
                 }
                 buf.append("</form>\n");
-        } else {buf.append("<form id=sb_updateform class=inactive hidden></form>");}
+        }
         return buf.toString();
     }
 
