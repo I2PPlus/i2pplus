@@ -131,8 +131,9 @@ td.checkbox{padding:3px 10px;width:1%}
 #book+#buttons{margin:3px 0 -2px;padding:0 0 10px;border:var(--border)}
 .iframe #book+#buttons{margin-bottom:-2px}
 #book,#emptybook{margin:-29px 0 -5px;padding:0}
-#empty{margin-top:-4px;width:100%;border-bottom:var(--border)}
+#empty{margin:-8px auto 4px;width:100%;border-bottom:var(--border)}
 #emptybook{margin-bottom:-7px}
+#noentries{margin:20px auto 16px;padding:16px 14px 16px 54px;border:var(--border);box-shadow:var(--highlight),0 0 0 3px #131 inset;background:#000 var(--infohelp) no-repeat 20px center/24px}
 #book input[type=checkbox]{margin:0}
 #book p,p.messages{font-size:10pt}
 #book table{width:100%;border:var(--border);border-collapse:separate}
