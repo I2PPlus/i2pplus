@@ -77,11 +77,12 @@ import java.util.regex.*;
 public class I2PSnarkServlet extends BasicServlet {
 
     private static final long serialVersionUID = 1L;
-    private String _contextPath; /** generally "/i2psnark" */
+    private static String _contextPath; /** generally "/i2psnark" */
     private String _contextName; /** generally "i2psnark" */
     private transient SnarkManager _manager;
     private long _nonce;
     private String _themePath;
+    private String _resourcePath;
     private String _imgPath;
     private String _lastAnnounceURL;
 
@@ -92,8 +93,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String PROP_ADVANCED = "routerconsole.advanced";
     private static final String RC_PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
     private int searchResults;
-    private boolean debug = false;
-
+    private static boolean debug = false;
     String cspNonce = Integer.toHexString(_context.random().nextInt());
     public I2PSnarkServlet() {super();}
 
@@ -218,7 +218,6 @@ public class I2PSnarkServlet extends BasicServlet {
 
         String pOverride = _manager.util().connected() ? null : "";
         String peerString = getQueryString(req, pOverride, null, null, "");
-        String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         String jsPfx = _context.isRouterContext() ? "" : ".res";
 
         // AJAX for mainsection
@@ -306,18 +305,12 @@ public class I2PSnarkServlet extends BasicServlet {
         String theme = _manager.getTheme();
         String pageBackground = "#fff";
         if (theme.equals("dark")) {pageBackground = "#000";}
-        else if (theme.equals("midnight")) {
-            pageBackground = "#001";
-        } else if (theme.equals("ubergine")) {pageBackground = "#101";}
+        else if (theme.equals("midnight")) {pageBackground = "#001";}
+        else if (theme.equals("ubergine")) {pageBackground = "#101";}
         else if (theme.equals("vanilla")) {pageBackground = "#cab39b";}
         buf.append(DOCTYPE).append("<html style=\"background:").append(pageBackground).append("\">\n")
-           .append("<head>\n").append("<meta charset=utf-8>\n");
-        if (!isStandalone()) {
-            buf.append("<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js?")
-               .append(CoreVersion.VERSION).append("\" id=iframeResizer></script>\n")
-               .append("<script src=\"/js/iframeResizer/updatedEvent.js?").append(CoreVersion.VERSION).append("\"></script>\n");
-        }
-        buf.append("<meta name=viewport content=\"width=device-width\">\n");
+           .append("<head>\n").append("<meta charset=utf-8>\n")
+           .append("<meta name=viewport content=\"width=device-width, initial-scale=1\">\n");
 
         String fontPath = isStandalone() ? "/i2psnark/.res/themes/fonts" : "/themes/fonts";
         if (isStandalone() || useSoraFont()) {
@@ -344,8 +337,10 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         buf.append("</title>\n");
 
+        _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         int delay = _manager.getRefreshDelaySeconds();
         String pageSize = String.valueOf(_manager.getPageSize());
+
         if (!isConfigure) {
             buf.append("<script nonce=").append(cspNonce).append(">\n")
                .append("  const deleteMsg = \"")
@@ -365,15 +360,12 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("  window.snarkRefreshDelay = snarkRefreshDelay;\n")
                .append("  window.totalSnarks = totalSnarks;\n</script>\n");
             if (!isStandalone()) {
-                buf.append("<script src=\"").append(resourcePath).append("js/tunnelCounter.js?").append(CoreVersion.VERSION)
+                buf.append("<script src=\"").append(_resourcePath).append("js/tunnelCounter.js?").append(CoreVersion.VERSION)
                    .append("\" type=module></script>\n");
             }
             buf.append("<script nonce=").append(cspNonce).append(" type=module>\n")
-               .append("  import {initSnarkRefresh} from \"").append(resourcePath).append("js/refreshTorrents.js").append("\";\n")
-               .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n")
-               .append("<script src=\"").append(resourcePath).append("js/confirm.js?").append(CoreVersion.VERSION).append("\"></script>\n")
-               .append("<script src=").append(resourcePath).append("js/snarkAlert.js type=module></script>\n")
-               .append("<link rel=stylesheet href=").append(resourcePath).append("snarkAlert.css>\n");
+               .append("  import {initSnarkRefresh} from \"").append(_resourcePath).append("js/refreshTorrents.js").append("\";\n")
+               .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n");
 
             if (delay > 0) {
                 String downMsg = _context.isRouterContext() ? _t("Router is down") : _t("I2PSnark has stopped");
@@ -418,7 +410,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160")
                .append("&hideLegend=true&hideTitle=true&hideGrid=true&t=").append(now).append("\')}\"</style>\n");
         }
-        buf.append("<script src=" + resourcePath + "js/click.js type=module></script>\n")
+        buf.append("<script src=" + _resourcePath + "js/click.js type=module></script>\n")
            .append("</head>\n<body style=display:none;pointer-events:none id=snarkxhr class=\"").append(_manager.getTheme())
            .append(" lang_").append(lang).append("\">\n")
            .append("<span id=toast hidden></span>\n").append("<center>\n").append(IFRAME_FORM);
@@ -463,7 +455,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             buf.append("><a href=").append(_contextPath).append(" title=\"").append(_t("Clear search"))
                .append("\" hidden>x</a></span><input type=submit value=\"Search\">\n").append("</form>\n");
-            //buf.append("<script src=\"" + resourcePath + "js/search.js?" + CoreVersion.VERSION + "\"></script>");
+            //buf.append("<script src=\"" + _resourcePath + "js/search.js?" + CoreVersion.VERSION + "\"></script>");
         }
         buf.append("</div>\n");
         String newURL = req.getParameter("newURL");
@@ -500,9 +492,9 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         }
         if (!isConfigure) {
-            out.write("<script src=" + resourcePath + "js/toggleLinks.js type=module></script>\n");
+            out.write("<script src=" + _resourcePath + "js/toggleLinks.js type=module></script>\n");
         }
-        out.write("<script src=" + resourcePath + "js/setFilterQuery.js></script>\n");
+        out.write("<script src=" + _resourcePath + "js/setFilterQuery.js></script>\n");
         if (!isStandalone()) {out.write(FOOTER);}
         else {out.write(FOOTER_STANDALONE);}
         out.flush();
@@ -524,7 +516,7 @@ public class I2PSnarkServlet extends BasicServlet {
             mimeType.equals("text/css") || mimeType.endsWith("/javascript"))) {
             headers.append("Cache-Control\t: private, max-age=2628000, immutable\r\n");
         } else {headers.append("Cache-Control\t: private, no-cache, max-age=2628000\r\n");}
-        StringBuilder csp = new StringBuilder("default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; ");
+        StringBuilder csp = new StringBuilder("default-src 'self'; base-uri 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; ");
         csp.append("script-src 'self' 'nonce-").append(cspNonce).append("'; ");
         csp.append("object-src 'none'; media-src '").append(allowMedia ? "self" : "none").append("'");
         headers.append("Content-Security-Policy\t: ").append(csp).append("\r\n");
@@ -572,7 +564,7 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     private void writeMessages(PrintWriter out, boolean isConfigure, String peerString) throws IOException {
-        String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
+        _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         List<UIMessages.Message> msgs = _manager.getMessages();
         int entries = msgs.size();
         StringBuilder mbuf = new StringBuilder(entries*256);
@@ -612,11 +604,11 @@ public class I2PSnarkServlet extends BasicServlet {
             mbuf.append("</ul>");
         } else {mbuf.append("<div id=screenlog hidden><ul id=messages></ul>");}
         mbuf.append("</div>\n");
-        mbuf.append("<script src=").append(resourcePath).append("js/toggleLog.js type=module></script>\n");
+        mbuf.append("<script src=").append(_resourcePath).append("js/toggleLog.js type=module></script>\n");
         int delay = 0;
         delay = _manager.getRefreshDelaySeconds();
         if (delay > 0 && _context.isRouterContext()) {
-            mbuf.append("<script src=\"").append(resourcePath).append("js/graphRefresh.js?")
+            mbuf.append("<script src=\"").append(_resourcePath).append("js/graphRefresh.js?")
                 .append(CoreVersion.VERSION).append("\" defer></script>\n");
         }
         out.write(mbuf.toString());
@@ -1052,7 +1044,7 @@ public class I2PSnarkServlet extends BasicServlet {
             ftr.append("<span class=badge>").append(uploads).append("</span></span>");
 
             if (!isStandalone()) {
-                String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
+                _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
                 ftr.append("<span id=tnlInCount class=counter title=\"").append(_t("Active Inbound tunnels")).append("\" hidden>");
                 toThemeSVG(ftr, "inbound", "", "");
                 ftr.append("<span class=badge>").append("</span></span>")
@@ -2940,7 +2932,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
     private void writeSeedForm(PrintWriter out, HttpServletRequest req, List<Tracker> sortedTrackers, List<TorrentCreateFilter> sortedFilters) throws IOException {
         StringBuilder buf = new StringBuilder(3*1024);
-        String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
+        _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         buf.append("<div class=sectionPanel id=createSection>\n<div>\n");
         // *not* enctype="multipart/form-data", so that the input type=file sends the filename, not the file
         buf.append("<form id=createForm action=\"_post\" method=POST target=processForm>\n");
@@ -3303,7 +3295,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("</div></td></tr>\n");
 
 /* i2cp/tunnel configuration */
-        String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
+        _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         String IPString = _manager.util().getOurIPString();
         Map<String, String> options = new TreeMap<String, String>(_manager.util().getI2CPOptions());
 
@@ -3339,7 +3331,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<input type=checkbox class=\"optbox slider\" name=varyOutbound id=varyOutbound ")
            .append(varyOutbound ? "checked " : "").append("> <span>").append(_t("Outbound")).append("</span></label>")
            .append("</span><br>\n")
-           .append("<script src=\"" + resourcePath + "js/toggleVaryTunnelLength.js?" + CoreVersion.VERSION + "\" defer></script>\n")
+           .append("<script src=\"" + _resourcePath + "js/toggleVaryTunnelLength.js?" + CoreVersion.VERSION + "\" defer></script>\n")
            .append("<noscript><style>#hopVariance .optbox.slider{pointer-events:none!important;opacity:.4!important}</style></noscript>\n");
 
         if (!_context.isRouterContext()) {
@@ -3517,7 +3509,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             buf.append("></td><td>").append(urlify(announceURL, 64)).append("</td></tr>\n");
         }
-        String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
+        _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         buf.append("<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n")  // spacer
            .append("<tr id=addtracker><td><b>")
            .append(_t("Add")).append(":</b></td>")
@@ -3547,7 +3539,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("#fileFilter table,#trackers table{display:table!important}")
            .append("#fileFilter .configTitle::after,#trackers .configTitle::after{display:none!important}")
            .append("</style></noscript>\n")
-           .append("<script src=\"" + resourcePath + "js/toggleConfigs.js?" + CoreVersion.VERSION + "\"></script>\n");
+           .append("<script src=\"" + _resourcePath + "js/toggleConfigs.js?" + CoreVersion.VERSION + "\"></script>\n");
         out.write(buf.toString());
         out.flush();
         buf.setLength(0);
@@ -3707,8 +3699,16 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String HEADER_Z = "override.css\" rel=stylesheet>";
     private static final String TABLE_HEADER = "<table id=torrents width=100% border=0>\n" + "<thead id=snarkHead>";
     private static final String FOOTER = "</div>\n</center>\n<span id=endOfPage data-iframe-height></span>\n" +
-                                         "<script src=/js/setupIframe.js></script>\n" + "</body>\n</html>";
-    private static final String FOOTER_STANDALONE = "</div>\n</center></body>\n</html>";
+        "<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\" id=iframeResizer></script>\n" +
+        "<script src=\"/js/iframeResizer/updatedEvent.js?" + CoreVersion.VERSION + "\"></script>\n" +
+        "<script src=/js/setupIframe.js></script>\n" +
+        "<script src=\"/i2psnark/.res/js/confirm.js?" + CoreVersion.VERSION + "\"></script>\n" +
+        "<script src=/i2psnark/.res/js/snarkAlert.js type=module></script>\n" +
+        "<link rel=stylesheet href=/i2psnark/.res/snarkAlert.css>\n" +
+        "</body>\n</html>";
+    private static final String FOOTER_STANDALONE = "</div>\n</center>\n<script src=/i2psnark/.res/js/confirm.js></script>\n" +
+        "<script src=/i2psnark/.res/js/snarkAlert.js type=module></script>\n" +
+        "<link rel=stylesheet href=/i2psnark/.res/snarkAlert.css>\n" + "</body>\n</html>";
     private static final String IFRAME_FORM = "<iframe name=processForm id=processForm hidden></iframe>\n";
 
     /**
@@ -3734,7 +3734,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.7.14
      */
     private String getListHTML(File xxxr, String base, boolean parent, Map<String, String[]> postParams, String sortParam) throws IOException {
-        String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
+        _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         String decodedBase = decodePath(base);
         String title = decodedBase;
         String cpath = _contextPath + '/';
@@ -3797,7 +3797,7 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js?").append(CoreVersion.VERSION)
                .append("\" id=iframeResizer></script>\n");
         }
-        buf.append("<script src=" + resourcePath + "js/click.js type=module></script>\n").append("<title>");
+        buf.append("<script src=" + _resourcePath + "js/click.js type=module></script>\n").append("<title>");
         if (title.endsWith("/")) {title = title.substring(0, title.length() - 1);}
         final String directory = title;
         final int dirSlash = directory.indexOf('/');
@@ -4534,9 +4534,9 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("\" name=\"savepri\">\n").append("</th></tr></thead>\n");
         }
         buf.append("</table>\n</div>\n");
-        //if (videoCount == 1) {buf.append("<script src=\"" + resourcePath + "js/getMetadata.js?" + CoreVersion.VERSION + "\"></script>\n");}
-        if (imgCount > 0) {buf.append("<script src=" + resourcePath + "js/getImgDimensions.js></script>\n");}
-        if (txtCount > 0) {buf.append("<script src=" + resourcePath + "js/textView.js></script>\n");}
+        //if (videoCount == 1) {buf.append("<script src=\"" + _resourcePath + "js/getMetadata.js?" + CoreVersion.VERSION + "\"></script>\n");}
+        if (imgCount > 0) {buf.append("<script src=" + _resourcePath + "js/getImgDimensions.js></script>\n");}
+        if (txtCount > 0) {buf.append("<script src=" + _resourcePath + "js/textView.js></script>\n");}
 
 // Comment section
 
@@ -4554,16 +4554,16 @@ public class I2PSnarkServlet extends BasicServlet {
         if (includeForm) {buf.append("</form>\n");}
         boolean enableLightbox = _manager.util().enableLightbox();
         if (enableLightbox) {
-            buf.append("<link rel=stylesheet href=").append(resourcePath).append("lightbox.css>\n")
+            buf.append("<link rel=stylesheet href=").append(_resourcePath).append("lightbox.css>\n")
                .append("<script nonce=").append(cspNonce).append(" type=module>\n")
-               .append("  import {Lightbox} from \"").append(resourcePath).append("js/lightbox.js\";\n")
+               .append("  import {Lightbox} from \"").append(_resourcePath).append("js/lightbox.js\";\n")
                .append("  var lightbox = new Lightbox();lightbox.load();\n")
                .append("</script>\n");
         }
         int delay = _manager.getRefreshDelaySeconds();
         buf.append("<script nonce=").append(cspNonce).append(" type=module>\n")
            .append("  window.snarkRefreshDelay = ").append(delay).append(";\n")
-           .append("  import {initSnarkRefresh} from \"").append(resourcePath).append("js/refreshTorrents.js\";\n")
+           .append("  import {initSnarkRefresh} from \"").append(_resourcePath).append("js/refreshTorrents.js\";\n")
            .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh, true);\n")
            .append("</script>\n");
         if (!isStandalone()) {buf.append(FOOTER);}

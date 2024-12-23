@@ -37,7 +37,8 @@ function initToggleLog() {
   clean();
   toggleLogCss.innerHTML = shCss;
   screenlog.classList.add("collapsed");
-  document.querySelector("#expand").hidden = false;
+  const expand = document.getElementById("expand");
+  if (expand) {expand.hidden = false;}
 }
 
 document.addEventListener("DOMContentLoaded", initToggleLog);
