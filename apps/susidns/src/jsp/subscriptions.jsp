@@ -31,6 +31,7 @@
 <jsp:useBean id="subs" class="i2p.susi.dns.SubscriptionsBean" scope="session" />
 <jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application" />
 <jsp:setProperty name="subs" property="*" />
+<% boolean overrideCssActive = base.isOverrideCssActive(); %>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -40,7 +41,7 @@
 <link rel=stylesheet href="<%=subs.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
 <%  if (base.useSoraFont()) { %><link href="<%=base.getTheme()%>../../fonts/Sora.css" rel=stylesheet><% } else { %>
 <link href="<%=base.getTheme()%>../../fonts/OpenSans.css" rel=stylesheet><% } %>
-<link rel=stylesheet href="<%=subs.getTheme()%>override.css">
+<% if (overrideCssActive) { %><link rel=stylesheet href="<%=base.getTheme()%>override.css"><% } %>
 <script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <style>body{display:none;pointer-events:none}</style>

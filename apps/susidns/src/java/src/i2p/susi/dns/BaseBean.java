@@ -151,6 +151,18 @@ public class BaseBean {
     }
 
     /**
+     * Determine if a user-provided override.css file is active
+     * @since 0.9.65+
+     */
+    public boolean isOverrideCssActive() {
+        String slash = String.valueOf(java.io.File.separatorChar);
+        String themeBase = _context.getBaseDir().getAbsolutePath() + slash + "docs" + slash + "themes" +
+                           slash + "susidns" + slash + getThemeName() + slash;
+        File overrideCss = new File(themeBase + "override.css");
+        return overrideCss.exists();
+    }
+
+    /**
      * @since 0.9.13 moved from subclasses
      */
     public String getAction() {return action;}
