@@ -9,7 +9,7 @@ let eventListenerActive = false;
 document.addEventListener("DOMContentLoaded", () => {
   if (eventListenerActive) {return;}
 
-  const page = document.getElementById("page");
+  const page = document.getElementById("page") || document.querySelector(".page");
 
   const handleInputClick = async (clickTarget) => {
     const clickable = ".toggleview, .snarkNav, .filter, input[class^='action'], input.add, input.create";
