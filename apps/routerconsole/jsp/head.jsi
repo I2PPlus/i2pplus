@@ -1,4 +1,3 @@
-<%@page trimDirectiveWhitespaces="true"%>
 <%@include file="headers.jsi"%>
 <%
 String fontPath = useSoraFont ? "/themes/fonts/Sora/" : "/themes/fonts/OpenSans/";
@@ -16,10 +15,10 @@ boolean hasWizardStyles = uri.endsWith("wizard") || uri.endsWith("wizard.jsp");
 <meta name=viewport content="width=device-width, initial-scale=1">
 <link rel=preload href=<%=fontFile%> as=font type=font/woff2 crossorigin>
 <link rel=preload href="<%=themePath%>console.css?version=<%=v%>" as=style>
-<link rel=preload href="<%=themePath%>global.css?version=<%=v%>" as=style>
 <link rel=preload href=<%=themePath%>images/i2plogo.png as=image>
 <link rel=preload href=/themes/console/images/images.css as=style>
 <link rel=preload href=<%=themePath%>images/images.css as=style>
+<link rel=stylesheet href="<%=themePath%>global.css?version=<%=v%>">
 <link rel=stylesheet href=<%=fontStyle%>>
 <% if (isConfigPage) { %> <link rel=preload href=/themes/console/confignav.css as=style> <% } %>
 <% if (isHelpPage) { %> <link rel=stylesheet href=/themes/console/helpnav.css> <% } %>
