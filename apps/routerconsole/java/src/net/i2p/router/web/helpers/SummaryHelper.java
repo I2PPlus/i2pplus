@@ -1256,7 +1256,7 @@ public class SummaryHelper extends HelperBase {
         }
 
         String theme = _context.getProperty(CSSHelper.PROP_THEME_NAME, CSSHelper.DEFAULT_THEME);
-        String imgPath = CSSHelper.BASE_THEME_PATH + theme + "../images/";
+        String imgPath = CSSHelper.BASE_THEME_PATH + "/images/";
 
         StringBuilder buf = new StringBuilder(2048);
         buf.append("<table id=sidebarconf><tr><th title=\"Mark section for removal from the sidebar\">")
