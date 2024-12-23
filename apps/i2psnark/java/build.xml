@@ -320,6 +320,8 @@
     </replace>
 
     <!-- Rather than pulling in all the console theme images, let's just specify the ones we need -->
+    <copy file="../../../installer/resources/themes/console/images/newtab.svg"
+      todir="build/standalone-resources/.res/icons" />
     <copy file="../../../installer/resources/themes/console/dark/images/camotile2.png"
       todir="build/standalone-resources/.res/themes/snark/dark/images" />
     <copy file="../../../installer/resources/themes/console/classic/images/bg0.png"

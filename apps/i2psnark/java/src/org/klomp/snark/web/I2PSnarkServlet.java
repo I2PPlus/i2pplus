@@ -4205,7 +4205,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 boolean isAudio = mime != null && isAudio(mime);
                 boolean isVideo = !isAudio && mime != null && isVideo(mime);
                 String path = base.substring(0, base.length() - 1);
-                String newTab = "<img src=/themes/console/light/images/newtab.png width=16 height=auto class=newTab>";
+                String imgPath = isStandalone() ? "/i2psnark/.res/icons/" : "/themes/console/images/";
+                String newTab = "<img src=" + imgPath + "newtab.svg width=16 height=auto class=newTab>";
                 if (isAudio || isVideo) {
                     buf.append("<div class=mainsection id=media>\n").append("<table id=mediaContainer>\n<tr>");
                     // HTML5

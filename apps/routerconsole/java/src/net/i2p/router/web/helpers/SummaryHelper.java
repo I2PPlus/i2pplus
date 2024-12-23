@@ -1256,7 +1256,7 @@ public class SummaryHelper extends HelperBase {
         }
 
         String theme = _context.getProperty(CSSHelper.PROP_THEME_NAME, CSSHelper.DEFAULT_THEME);
-        String imgPath = CSSHelper.BASE_THEME_PATH + theme + "/images/";
+        String imgPath = CSSHelper.BASE_THEME_PATH + theme + "../images/";
 
         StringBuilder buf = new StringBuilder(2048);
         buf.append("<table id=sidebarconf><tr><th title=\"Mark section for removal from the sidebar\">")
@@ -1290,7 +1290,7 @@ public class SummaryHelper extends HelperBase {
                    .append(_t("Top"))
                    .append("\" src=\"")
                    .append(imgPath)
-                   .append("move_top.png")
+                   .append("move_top.svg")
                    .append("\" title=\"")
                    .append(_t("Move to top"))
                    .append("\"/></button>")
@@ -1300,7 +1300,7 @@ public class SummaryHelper extends HelperBase {
                    .append(_t("Up"))
                    .append("\" src=\"")
                    .append(imgPath)
-                   .append("move_up.png")
+                   .append("move_up.svg")
                    .append("\" title=\"")
                    .append(_t("Move up"))
                    .append("\"/></button>");
@@ -1313,7 +1313,7 @@ public class SummaryHelper extends HelperBase {
                    .append(_t("Down"))
                    .append("\" src=\"")
                    .append(imgPath)
-                   .append("move_down.png")
+                   .append("move_down.svg")
                    .append("\" title=\"")
                    .append(_t("Move down"))
                    .append("\"/></button>")
@@ -1323,7 +1323,7 @@ public class SummaryHelper extends HelperBase {
                    .append(_t("Bottom"))
                    .append("\" src=\"")
                    .append(imgPath)
-                   .append("move_bottom.png")
+                   .append("move_bottom.svg")
                    .append("\" title=\"")
                    .append(_t("Move to bottom"))
                    .append("\"/></button>");

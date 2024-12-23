@@ -23,7 +23,7 @@ p{margin:20px;line-height:1.4;text-align:justify;font-size:105%}
 a:link,a:visited{color:#338;text-decoration:none;outline:none}
 a:hover,a:focus{color:#f60}
 a:active{color:#f90;text-decoration:underline}
-.reference{padding-right:14px;background:url(/themes/console/classic/images/newtab.png) no-repeat top 2px right/12px 10px}
+.reference{padding-right:14px;background:url(/themes/console/images/newtab.svg) no-repeat top 2px right/12px 10px}
 img{margin:5px;padding:1px;border:var(--border);border-radius:2px;box-shadow:var(--highlight),0 0 1px #ccc;background:#fff;animation:fade-in .3s ease .7s both}
 table{margin:0 auto;border-collapse:separate;border-spacing:10px}
 th{height:16px;text-align:center;font-weight:400;border:var(--border);border-radius:2px;box-shadow:var(--highlight),0 0 1px #ccc;background:#fff}

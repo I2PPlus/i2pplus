@@ -995,7 +995,7 @@ h4#updateplugins{margin-top:-13px}
 .applink td{margin:0;padding:0;vertical-align:middle;border:0;background:none}
 .appicon{min-height:42px}
 .appicon a{width:100%;display:inline-block}
-.applink:hover .appicon .extlink::after{width:21px;height:18px;display:inline-block;position:absolute;top:-1px;right:-1px;border:1px solid #f50;background:url(images/newtab.png) no-repeat 4.5px center/12.5px 10px;opacity:.75;content:""}
+.applink:hover .appicon .extlink::after{width:21px;height:18px;display:inline-block;position:absolute;top:-1px;right:-1px;border:1px solid #f50;background:url(../images/newtab.svg) no-repeat 4.5px center/12.5px 10px;opacity:.75;content:""}
 .applabel{margin:0;padding:3px 2px;width:136px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;text-transform:lowercase;font-size:8pt;border-top:var(--border)}
 .applabel:hover{box-shadow:none}
 .applabel a{margin:0;padding:1px;display:inline-block;width:calc(100% - 2px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}

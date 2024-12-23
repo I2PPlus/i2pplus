@@ -748,7 +748,7 @@ div[id^="config"] tr:last-child td,#events tr:last-child td,#profiles tr:last-ch
 .applink:active .applabel,.sitemapLink:active .sitemapLabel{box-shadow:var(--highlight),inset 3px 3px 3px #0003;background:var(--hover)}
 .applink:active img{transform:scale(.9)}
 .applink:hover a:link,.applink:hover a:visited{color:var(--hover)}
-.applink:hover .appicon .extlink::after,.sitemapLink.extlink:hover::after{position:absolute;top:-1px;right:-1px;content:"";display:inline-block;width:21px;height:18px;border:1px solid #f50;border-radius:0 2px 0 2px;background:url(images/newtab.png) no-repeat 4.5px center/12.5px 10px;opacity:.75}
+.applink:hover .appicon .extlink::after,.sitemapLink.extlink:hover::after{position:absolute;top:-1px;right:-1px;content:"";display:inline-block;width:21px;height:18px;border:1px solid #f50;border-radius:0 2px 0 2px;background:url(../images/newtab.svg) no-repeat 4.5px center/12.5px 10px;opacity:.75}
 .applink:hover .applabel,.sitemapLink:hover .sitemapLabel{border-color:var(--hover);background:linear-gradient(180deg,#fff 50%,#ffe8bf 50%,#efd9b3);box-shadow:var(--highlight)}
 .applink:hover,.sitemapLink:hover{border:1px solid var(--hover);background:#fff;box-shadow:none;cursor:pointer}
 .applink.js:hover::before{padding:1px 3px 5px;display:inline-block;position:absolute;top:-1px;left:-1px;line-height:1;border:1px solid var(--hover);content:"*js"}

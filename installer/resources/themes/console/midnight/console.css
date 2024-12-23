@@ -1530,7 +1530,7 @@ h3[id="udpcon"]{width:auto}
 .applink:hover{color:var(--hover);border:1px solid var(--hover);box-shadow:none;background:var(--radial_glow_top) #000;opacity:1}
 .applink:hover a:link,.applink:hover a:visited,.applink a:focus{color:var(--hover)}
 .applink:hover img,.applink:focus img{filter:drop-shadow(0 0 3px var(--ink_btn_active))}
-.applink:hover .appicon .extlink::after{position:absolute;top:0;right:0;content:"";display:inline-block;width:21px;height:18px;border:1px solid #743C93;border-top:0;border-right:0;opacity:.75;background:url(images/newtab.png) no-repeat 4px center;background-size:12.5px 10px}
+.applink:hover .appicon .extlink::after{position:absolute;top:0;right:0;content:"";display:inline-block;width:21px;height:18px;border:1px solid #743C93;border-top:0;border-right:0;opacity:.75;background:url(../images/newtab.svg) no-repeat 4px center;background-size:12.5px 10px}
 .applink:hover .applabel{color:var(--hover);border-top:1px solid var(--hover);background:var(--label_hover)}
 .applink:active img{transform:scale(0.9)}
 .applink:active .applabel{box-shadow:var(--btn_shadow_active);background:var(--hover);transition:ease box-shadow .05s}
