@@ -48,8 +48,7 @@ async function refreshGraph() {
   } catch (error) {}
 }
 
-miniGraph();
-
+document.addEventListener("DOMContentLoaded", () => { refreshGraph(); miniGraph(); });
 document.addEventListener("visibilitychange", () => {
   isDocumentVisible = !document.hidden;
   clearInterval(minigraphRefreshIntervalId);
