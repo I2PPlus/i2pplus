@@ -1,6 +1,6 @@
 <%
 /*
- *  This file is part of susidns project, see http://susi.i2p/
+ *  This file is part of SusiDNS project for I2P
  *
  *  Copyright (C) 2005 <susi23@mail.i2p>
  *
