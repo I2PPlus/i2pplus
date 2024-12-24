@@ -2178,12 +2178,10 @@ public class WebMail extends HttpServlet
                                "form-action 'none'; frame-ancestors " + me + myself + "; object-src 'none'; media-src 'none'; img-src 'self' " +
                                me + myself + " data:; font-src 'self'; frame-src 'none'; worker-src 'none'");
         } else {
-            response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'nonce-" + cspNonce + "'; " +
+            response.setHeader("Content-Security-Policy", "default-src 'self'; base-uri 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'nonce-" + cspNonce + "'; " +
                                "form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src 'none'; img-src 'self' data:;");
             response.setCharacterEncoding("UTF-8");
         }
-        //response.setHeader("X-Frame-Options", "SAMEORIGIN");
-        //response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; media-src 'none'");
         response.setHeader("X-XSS-Protection", "1; mode=block");
         response.setHeader("X-Content-Type-Options", "nosniff");
         response.setHeader("Referrer-Policy", "no-referrer");
