@@ -6,7 +6,6 @@
  */
 %>
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
-<%@page contentType="text/html"%>
 <%@include file="headers.jsi"%>
 <jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session" />
 <jsp:useBean id="book" class="i2p.susi.dns.NamingServiceBean" scope="session" />
@@ -29,10 +28,7 @@
 <script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce="<%=cspNonce%>" src="/js/textareaResize.js"></script>
 <script nonce="<%=cspNonce%>">
-window.jdenticon_config = {
-  padding: 0,
-  saturation: {color: 1, grayscale: 0}
-};
+window.jdenticon_config = { padding: 0, saturation: {color: 1, grayscale: 0} };
 document.addEventListener("DOMContentLoaded", function() {
   const myTextarea = document.getElementById("addNotes");
   addResizeListener(addNotes);
