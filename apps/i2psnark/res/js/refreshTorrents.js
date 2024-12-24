@@ -404,6 +404,8 @@ function refreshOnSubmit() {
   });
 }
 
+let chimpIsCached = false;
+
 async function initSnarkRefresh() {
   let serverOKIntervalId = setInterval(checkIfUp, 5000);
   clearInterval(snarkRefreshIntervalId);
@@ -432,6 +434,9 @@ async function initSnarkRefresh() {
   } catch (error) {
     if (debugging) console.error(error);
   }
+
+  if (!chimpIsCached) {preloadImage("/themes/snark/midnight/images/chimp.webp");}
+  chimpIsCached = true;
 }
 
 function stopSnarkRefresh() {
@@ -463,6 +468,11 @@ async function checkIfUp(minDelay = 14000) {
     setTimeout(isDown, 3000);
     await refreshTorrents();
   }
+}
+
+function preloadImage(src) {
+  const img = new Image();
+  img.src = src;
 }
 
 function isDown() {
