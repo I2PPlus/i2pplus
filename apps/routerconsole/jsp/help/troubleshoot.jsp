@@ -15,7 +15,7 @@
 <title><%=pageTitlePrefix%> <%=intl._t("Troubleshooting")%> - I2P+</title>
 </head>
 <body>
-<%@include file="../summary.jsi" %>
+<%@include file="../sidebar.jsi" %>
 <h1 class=hlp><%=intl._t("Troubleshooting")%></h1>
 <div class=main id=help>
 <div class=confignav>

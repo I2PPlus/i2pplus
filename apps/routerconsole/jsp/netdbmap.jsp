@@ -10,7 +10,7 @@
 <link href=/themes/geomap/geomap.css rel=stylesheet>
 </head>
 <body>
-<%@include file="summary.jsi" %>
+<%@include file="sidebar.jsi" %>
 <h1 class=netwrk><%=intl._t("Network Database Router Map")%></h1>
 <div class=main id=netdbRouterMap>
 <div id=netdbmap>

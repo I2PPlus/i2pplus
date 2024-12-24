@@ -29,7 +29,7 @@
 </head>
 <body>
 <script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
-<%@include file="summary.jsi" %>
+<%@include file="sidebar.jsi" %>
 <h1 class=addbook><%=intl._t("Addressbook")%> <a href="/susidns/addressbook?book=router&amp;filter=none" target=_blank title="<%=intl._t("Open in new tab")%>"><span id=newtab><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>../images/newtab.svg" alt="<%=intl._t("Open in new tab")%>"></span></a></h1>
 <div class=main id=dns>
 <noscript><p class=infohelp id=jsRequired style=margin:10px>Javascript is required to view <a href="/susidns/addressbook?book=router&amp;filter=none" target=_blank rel=noreferrer>the Addressbook</a> in embedded mode.</p></noscript>

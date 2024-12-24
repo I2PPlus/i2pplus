@@ -9,7 +9,7 @@
 <meta http-equiv="Refresh" content= "0;URL=/configui">
 </head>
 <body>
-<%@include file="summary.jsi" %>
+<%@include file="sidebar.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigUIHelper" id="uihelper" scope="request" />
 <jsp:setProperty name="uihelper" property="contextId" value="<%=(String)session.getAttribute(\"i2p.contextId\")%>" />
 <h1 class=conf><%=uihelper._t("User Interface Configuration")%></h1>

@@ -11,7 +11,7 @@
 </head>
 <body id=transit>
 <script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
-<%@include file="summary.jsi" %>
+<%@include file="sidebar.jsi" %>
 <h1 class=netwrk><%=intl._t("Most Recent Transit Tunnels")%></h1>
 <div class=main id=tunnels>
 <div class=confignav>

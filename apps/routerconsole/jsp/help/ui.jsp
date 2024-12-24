@@ -15,7 +15,7 @@
 <title><%=pageTitlePrefix%> <%=intl._t("User Interface Help")%> - I2P+</title>
 </head>
 <body>
-<%@include file="../summary.jsi" %>
+<%@include file="../sidebar.jsi" %>
 <h1 class=hlp><%=intl._t("User Interface Help")%></h1>
 <div class=main id=help>
 <div class=confignav>

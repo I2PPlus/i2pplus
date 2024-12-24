@@ -15,7 +15,7 @@
 <title><%=pageTitlePrefix%> <%=intl._t("Help Section")%> - I2P+</title>
 </head>
 <body>
-<%@include file="../summary.jsi" %>
+<%@include file="../sidebar.jsi" %>
 <h1 class=hlp><%=intl._t("Help &amp; Support")%></h1>
 <div class=main id=help>
 <ul id=helptoc>

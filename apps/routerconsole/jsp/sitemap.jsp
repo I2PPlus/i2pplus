@@ -9,12 +9,12 @@
         pageTitlePrefix = ctx.getProperty("routerconsole.pageTitlePrefix");
     }
 %>
-<title><%=pageTitlePrefix%> Sitemap - I2P+</title>
 <%@include file="head.jsi" %>
+<title><%=pageTitlePrefix%> Sitemap - I2P+</title>
 </head>
 <body class="<%=lang%>" id=map>
 <script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
-<%@include file="summary.jsi" %>
+<%@include file="sidebar.jsi" %>
 
 <% String consoleNonce = net.i2p.router.web.CSSHelper.getNonce(); %>
 

@@ -13,7 +13,7 @@
 </head>
 <body>
 <script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
-<%@include file="summary.jsi" %>
+<%@include file="sidebar.jsi" %>
 <h1 class=conf><%=intl._t("Router Service")%></h1>
 
 <div class=main id=config_service>

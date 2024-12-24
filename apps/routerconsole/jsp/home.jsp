@@ -23,7 +23,7 @@
 <div id=sb_logo style=height:36px>
 <a href="/sitemap"><img width=200 src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/i2plogo.png" alt="<%=intl._t("I2P Router Console").replace("I2P", "I2P+")%>" title="<%=intl._t("I2P Router Console").replace("I2P", "I2P+")%>"></a>
 </div>
-<% if (!intl.allowIFrame(request.getHeader("User-Agent"))) { %><a href="/summaryframe"><%=intl._t("Sidebar")%></a><% } %>
+<% if (!intl.allowIFrame(request.getHeader("User-Agent"))) { %><a href="/sidebar"><%=intl._t("Sidebar")%></a><% } %>
 <div id=xhr>
 <%@include file="xhr1.jsi" %>
 </div>

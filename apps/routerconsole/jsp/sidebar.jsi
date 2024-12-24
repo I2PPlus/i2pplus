@@ -1,4 +1,3 @@
-<%@page trimDirectiveWhitespaces="true"%>
 <jsp:useBean class="net.i2p.router.web.NewsHelper" id="newshelper" scope="request" />
 <jsp:setProperty name="newshelper" property="contextId" value="<%=i2pcontextId%>" />
 <% java.io.File newspath = new java.io.File(net.i2p.I2PAppContext.getGlobalContext().getRouterDir(), "docs/news.xml"); %>
@@ -21,7 +20,7 @@
 %>
 <div id=sb_wrap style=width:200px;float:left;margin-right:20px>
 <div id=sidebar class=sb>
-<% if (allowIFrame) { %><%@include file="summarynoframe.jsi" %>
-<% } else { %><a href="/summaryframe"><%=intl._t("Sidebar")%></a><% } %>
+<% if (allowIFrame) { %><%@include file="sidebar_noframe.jsi" %>
+<% } else { %><a href="/sidebar"><%=intl._t("Sidebar")%></a><% } %>
 </div>
 </div>

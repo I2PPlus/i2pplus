@@ -29,7 +29,7 @@
 </head>
 <body id=console_404>
 <script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
-<%@include file="summary.jsi" %>
+<%@include file="sidebar.jsi" %>
 <h1 class=err><%=ERROR_CODE%>&nbsp;<%=ERROR_MESSAGE%></h1>
 <div class="sorry console" id=warning>
 <%=intl._t("Sorry! You appear to be requesting a non-existent Router Console page or resource.")%>

@@ -25,7 +25,7 @@
             intl.setDisableRefresh(d);
         }
         d = intl.getRefresh();
-        // we probably don't get here if d == "0" since caught in summary.jsi, but just to be sure...
+        // we probably don't get here if d == "0" since caught in sidebar.jsi, but just to be sure...
         if (!intl.getDisableRefresh()) {
             // doesn't work for restart or shutdown with no expl. tunnels, since the call to
             // ConfigRestartBean.renderStatus() hasn't happened yet... So we delay slightly
@@ -38,7 +38,7 @@
             long timeleft = net.i2p.router.web.helpers.ConfigRestartBean.getRestartTimeRemaining();
             long delay = 60;
             try { delay = Long.parseLong(d); } catch (NumberFormatException nfe) {}
-            if (delay*1000 < timeleft + 5000) {out.print("<meta http-equiv=\"refresh\" content=\"" + delay + ";url=/summaryframe.jsp\" >\n");}
+            if (delay*1000 < timeleft + 5000) {out.print("<meta http-equiv=\"refresh\" content=\"" + delay + ";url=/sidebar.jsp\" >\n");}
             else {shutdownSoon = true;}
         }
     }
@@ -51,7 +51,7 @@
 <% java.io.File newspath = new java.io.File(net.i2p.I2PAppContext.getGlobalContext().getRouterDir(), "docs/news.xml"); %>
 <jsp:setProperty name="newshelper" property="page" value="<%=newspath.getAbsolutePath()%>" />
 <jsp:setProperty name="newshelper" property="maxLines" value="300" />
-<%@include file="summarynoframe.jsi" %>
+<%@include file="sidebar_noframe.jsi" %>
 </div>
 </body>
 </html>

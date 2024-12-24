@@ -10,7 +10,7 @@
 </head>
 <body>
 <script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
-<%@include file="summary.jsi" %>
+<%@include file="sidebar.jsi" %>
 <h1 class=nfo><%=intl._t("Router Summary")%></h1>
 <div class=main id=routerinformation>
 <h3 class=tabletitle id=version><%=intl._t("I2P Version and Running Environment")%><span class=h3navlinks style=float:right><a title="View Router Logs" href="/logs">View Logs</a></span></h3>

@@ -18,7 +18,7 @@
 <meta http-equiv="Refresh" content= "0;URL=/graphs">
 </head>
 <body id=updategraphs>
-<%@include file="summary.jsi" %>
+<%@include file="sidebar.jsi" %>
 <h1 class=perf><%=intl._t("Performance Graphs")%></h1>
 <div class=main id=graphs>
 <div class=widepanel>

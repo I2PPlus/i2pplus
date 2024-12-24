@@ -17,7 +17,7 @@
 </head>
 <body>
 <script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
-<%@include file="summary.jsi" %>
+<%@include file="sidebar.jsi" %>
 <h1 class=netwrk><%=intl._t("Peer Profile")%></h1>
 <div class=main id=view_profile>
 <div class=confignav id=confignav>

@@ -10,7 +10,7 @@
 </head>
 <body>
 <script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
-<%@include file="summary.jsi" %>
+<%@include file="sidebar.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.OldConsoleHelper" id="oldhelper" scope="request" />
 <jsp:setProperty name="oldhelper" property="contextId" value="<%=i2pcontextId%>" />
 <% oldhelper.storeWriter(out); %>

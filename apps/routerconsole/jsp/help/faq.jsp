@@ -15,7 +15,7 @@
 <title><%=pageTitlePrefix%> <%=intl._t("Frequently Asked Questions")%> - I2P+</title>
 </head>
 <body>
-<%@include file="../summary.jsi" %><h1 class=hlp><%=intl._t("Frequently Asked Questions")%></h1>
+<%@include file="../sidebar.jsi" %><h1 class=hlp><%=intl._t("Frequently Asked Questions")%></h1>
 <div class=main id=help>
 <div class=confignav>
 <span class=tab><a href="/help/configuration" title="<%=intl._t("Configuration")%>"><%=intl._t("Configuration")%></a></span>

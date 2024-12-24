@@ -96,7 +96,7 @@ public class ConfigRestartBean {
             buf.append("</span></h4><hr>");
             buttons(ctx, buf, urlBase, systemNonce, SET2);
         } else {
-            buf.append("<h4 id=sb_shutdownStatus class=\"volatile inactive\" hidden><span></h4><hr hidden>");
+            buf.append("<h4 id=sb_shutdownStatus class=\"volatile inactive\" hidden><span></span></h4><hr hidden>");
             if (ctx.hasWrapper() || NewsHelper.isExternalRestartPending()) {buttons(ctx, buf, urlBase, systemNonce, SET3);}
             else {buttons(ctx, buf, urlBase, systemNonce, SET4);}
         }
@@ -106,7 +106,8 @@ public class ConfigRestartBean {
     /** @param s value,class,label,... triplets */
     private static void buttons(RouterContext ctx, StringBuilder buf, String url, String nonce, String[] s) {
         buf.append("<iframe name=\"processSidebarForm\" id=processSidebarForm hidden></iframe>\n")
-           .append("<form id=sb_routerControl class=\"volatile collapse\" action=\"").append(url).append("\" method=POST target=\"processSidebarForm\">\n")
+           .append("<form id=sb_routerControl class=\"volatile collapse\" action=\"")
+           .append(url).append("\" method=POST target=\"processSidebarForm\">\n")
            .append("<input type=hidden name=\"consoleNonce\" value=\"").append(nonce).append("\" >\n");
         for (int i = 0; i < s.length; i+= 3) {
             buf.append("<button type=submit name=action value=\"")
@@ -128,11 +129,11 @@ public class ConfigRestartBean {
         return Router.EXIT_GRACEFUL_RESTART == code || Router.EXIT_HARD_RESTART == code;
     }
 
-    /** this is for summaryframe.jsp */
+    /** this is for sidebar.jsp */
     public static long getRestartTimeRemaining() {
         RouterContext ctx = ContextHelper.getContext(null);
         if (ctx.router().gracefulShutdownInProgress()) {return ctx.router().getShutdownTimeRemaining();}
-        return Long.MAX_VALUE/2; // summaryframe.jsp adds a safety factor so we don't want to overflow...
+        return Long.MAX_VALUE/2; // sidebar.jsp adds a safety factor so we don't want to overflow...
     }
 
     private static String _t(String s, RouterContext ctx) {
