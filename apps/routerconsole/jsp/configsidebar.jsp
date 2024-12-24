@@ -1,9 +1,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
 <!DOCTYPE HTML>
 <%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+  String lang = "en";
+  if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
 %>
 <%@include file="head.jsi" %>
 <%=intl.title("config sidebar")%>
@@ -17,9 +17,7 @@
 <%@include file="confignav.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigSidebarHandler" id="formhandler" scope="request" />
 <%@include file="formhandler.jsi" %>
-<%
-    formhandler.setMovingAction();
-%>
+<% formhandler.setMovingAction(); %>
 <jsp:useBean class="net.i2p.router.web.helpers.SidebarHelper" id="sidebarhelper" scope="request" />
 <jsp:setProperty name="sidebarhelper" property="contextId" value="<%=i2pcontextId%>" />
 <h3 class=tabletitle><%=intl._t("Refresh Interval")%></h3>
@@ -31,21 +29,13 @@
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <input type=hidden name="group" value="0">
 <%
-    String rval;
-    if (intl.getDisableRefresh())
-        rval = "0";
-    else
-        rval = intl.getRefresh();
+  String rval;
+  if (intl.getDisableRefresh()) {rval = "0";}
+  else {rval = intl.getRefresh();}
 %>
 <input type=text name="refreshInterval" maxlength=4 pattern="[0-9]{1,4}" required value="<%=rval%>">
 <%=intl._t("seconds")%>
-<%
-    if (!rval.equals("0")) {
-%>
-(<%=intl._t("0 to disable")%>)
-<%
-    }
-%>
+<% if (!rval.equals("0")) {%>(<%=intl._t("0 to disable")%>)<% } %>
 </td>
 <td class=optionsave>
 <input type=submit name=action class=accept value="<%=intl._t("Save")%>" >
