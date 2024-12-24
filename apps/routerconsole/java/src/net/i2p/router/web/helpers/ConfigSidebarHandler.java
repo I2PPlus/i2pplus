@@ -17,7 +17,7 @@ import net.i2p.router.web.FormHandler;
  *
  *  @since 0.9.1
  */
-public class ConfigSummaryHandler extends FormHandler {
+public class ConfigSidebarHandler extends FormHandler {
 
     @Override
     protected void processForm() {
@@ -50,10 +50,10 @@ public class ConfigSummaryHandler extends FormHandler {
                 return;
             }
         } else if (_action.equals(_t("Restore full default"))) {
-            _context.router().saveConfig(SummaryHelper.PROP_SUMMARYBAR + "default", isAdvanced() ? SummaryHelper.DEFAULT_FULL_ADVANCED : SummaryHelper.DEFAULT_FULL);
+            _context.router().saveConfig(SidebarHelper.PROP_SUMMARYBAR + "default", isAdvanced() ? SidebarHelper.DEFAULT_FULL_ADVANCED : SidebarHelper.DEFAULT_FULL);
             addFormNotice(_t("Full sidebar defaults restored.") + " " + _t("Sidebar will refresh shortly."), true);
         } else if (_action.equals(_t("Restore minimal default"))) {
-            _context.router().saveConfig(SummaryHelper.PROP_SUMMARYBAR + "default", isAdvanced() ? SummaryHelper.DEFAULT_MINIMAL_ADVANCED : SummaryHelper.DEFAULT_MINIMAL);
+            _context.router().saveConfig(SidebarHelper.PROP_SUMMARYBAR + "default", isAdvanced() ? SidebarHelper.DEFAULT_MINIMAL_ADVANCED : SidebarHelper.DEFAULT_MINIMAL);
             addFormNotice(_t("Minimal sidebar defaults restored.") + " " + _t("Sidebar will refresh shortly."), true);
         } else if (adding || deleting || saving || moving) {
             Map<Integer, String> sections = new TreeMap<Integer, String>();
@@ -145,7 +145,7 @@ public class ConfigSummaryHandler extends FormHandler {
                     return;
                 }
             }
-            SummaryHelper.saveSummaryBarSections(_context, "default", sections);
+            SidebarHelper.saveSummaryBarSections(_context, "default", sections);
             addFormNotice(_t("Saved order of sections.") + " " + _t("Sidebar will refresh shortly."), true);
         }
     }

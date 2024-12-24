@@ -44,7 +44,7 @@ import net.i2p.router.web.ConfigUpdateHandler;
  *
  * For the full summary bar use renderSummaryBar()
  */
-public class SummaryHelper extends HelperBase {
+public class SidebarHelper extends HelperBase {
 
     static final String THINSP = " / ";
     private static final char S = ',';
@@ -982,7 +982,7 @@ public class SummaryHelper extends HelperBase {
 
     /**
      *  The update status and buttons
-     *  @since 0.8.13 moved from SummaryBarRenderer
+     *  @since 0.8.13 moved from SidebarRenderer
      */
     public String getUpdateStatus() {
         StringBuilder buf = new StringBuilder(512);
@@ -1113,7 +1113,7 @@ public class SummaryHelper extends HelperBase {
 
     /**
      *  The restart status and buttons
-     *  @since 0.8.13 moved from SummaryBarRenderer
+     *  @since 0.8.13 moved from SidebarRenderer
      */
     public String getRestartStatus() {
         return ConfigRestartBean.renderStatus(getRequestURI(), getAction(), getConsoleNonce());
@@ -1121,7 +1121,7 @@ public class SummaryHelper extends HelperBase {
 
     /**
      *  The firewall status and reseed status/buttons
-     *  @since 0.9 moved from SummaryBarRenderer
+     *  @since 0.9 moved from SidebarRenderer
      */
     public String getFirewallAndReseedStatus() {
         StringBuilder buf = new StringBuilder(256);
@@ -1208,11 +1208,11 @@ public class SummaryHelper extends HelperBase {
 
     /** output the summary bar to _out */
     public void renderSummaryBar() throws IOException {
-        SummaryBarRenderer renderer = new SummaryBarRenderer(_context, this);
+        SidebarRenderer renderer = new SidebarRenderer(_context, this);
         renderer.renderSummaryHTML(_out);
     }
 
-    /* below here is stuff we need to get from summarynoframe.jsp to SummaryBarRenderer */
+    /* below here is stuff we need to get from summarynoframe.jsp to SidebarRenderer */
 
     private String _action;
     public void setAction(String s) {_action = s == null ? null : DataHelper.stripHTML(s);}
@@ -1235,8 +1235,8 @@ public class SummaryHelper extends HelperBase {
     public String getRequestURI() {return _requestURI != null ? _requestURI : "/home";}
 
     public String getConfigTable() {
-        String[] allSections = SummaryBarRenderer.ALL_SECTIONS;
-        Map<String, String> sectionNames = SummaryBarRenderer.SECTION_NAMES;
+        String[] allSections = SidebarRenderer.ALL_SECTIONS;
+        Map<String, String> sectionNames = SidebarRenderer.SECTION_NAMES;
         List<String> sections = getSummaryBarSections("default");
         // translated section name to section id
         TreeMap<String, String> sortedSections = new TreeMap<String, String>(Collator.getInstance());

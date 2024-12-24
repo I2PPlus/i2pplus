@@ -320,7 +320,7 @@ public class HomeHelper extends HelperBase {
         for (App app : apps) {
             String url;
             if (app.name.equals(website) && app.url.equals("http://127.0.0.1:7658/")) {
-                url = SummaryBarRenderer.getEepsiteURL(pm);
+                url = SidebarRenderer.getEepsiteURL(pm);
                 if (url == null) {continue;}
                 else {url = app.url + "\" target=_blank class=\"extlink";}
             } else if ((!embedApps && (app.url.contains("webmail") || app.url.contains("torrents") || app.url.contains("outproxy") ||

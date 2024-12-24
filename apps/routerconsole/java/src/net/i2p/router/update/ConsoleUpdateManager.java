@@ -849,7 +849,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                         _log.info("Not updating " + ui + ", update disabled or in progress");
                     }
                 }
-                // ConfigUpdateHandler, SummaryHelper, SummaryBarRenderer handle status display
+                // ConfigUpdateHandler, SidebarHelper, SidebarRenderer handle status display
                 break;
 
             case PLUGIN:
@@ -917,7 +917,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             case ROUTER_SIGNED_SU3:
             case ROUTER_UNSIGNED:
             case ROUTER_DEV_SU3:
-                // ConfigUpdateHandler, SummaryHelper, SummaryBarRenderer handle status display
+                // ConfigUpdateHandler, SidebarHelper, SidebarRenderer handle status display
                 break;
 
             case PLUGIN:
@@ -1298,7 +1298,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 restart();
             } else {
                 _log.logAlways(Log.CRIT, "I2P Update was downloaded and verified, will be installed at next restart");
-                // SummaryHelper will display restart info separately
+                // SidebarHelper will display restart info separately
                 updateStatus("");
             }
         } else {
@@ -1348,7 +1348,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             } else {
                 if (url.contains("skank")) {_log.logAlways(Log.CRIT, "I2P+ update downloaded - will be installed at next restart");}
                 else {_log.logAlways(Log.CRIT, "Update was downloaded - will be installed at next restart");}
-                updateStatus(""); // SummaryHelper will display restart info separately
+                updateStatus(""); // SidebarHelper will display restart info separately
             }
         } else {
             _log.log(Log.CRIT, "Failed copy to " + to);

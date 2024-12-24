@@ -36,7 +36,7 @@ import net.i2p.util.SystemVersion;
  *  Refactored from summarynoframe.jsp to save ~100KB
  *
  */
-class SummaryBarRenderer {
+class SidebarRenderer {
 
     static final String ALL_SECTIONS[] =
         {"HelpAndFAQ", "I2PServices", "I2PInternals", "RouterInfo", "ShortRouterInfo", "AdvancedRouterInfo", "MemoryBar", "NetworkReachability",
@@ -72,10 +72,10 @@ class SummaryBarRenderer {
     }
 
     private final RouterContext _context;
-    private final SummaryHelper _helper;
+    private final SidebarHelper _helper;
     private static final String PROP_ADVANCED = "routerconsole.advanced";
 
-    public SummaryBarRenderer(RouterContext context, SummaryHelper helper) {
+    public SidebarRenderer(RouterContext context, SidebarHelper helper) {
         _context = context;
         _helper = helper;
     }
@@ -804,7 +804,7 @@ class SummaryBarRenderer {
     public String renderNetworkReachabilityHTML() {
         if (_helper == null) {return "";}
         StringBuilder buf = new StringBuilder(512);
-        SummaryHelper.NetworkStateMessage reachability = _helper.getReachability();
+        SidebarHelper.NetworkStateMessage reachability = _helper.getReachability();
         RouterContext ctx = ContextHelper.getContext(null);
         boolean shuttingDown = ConfigRestartBean.isShuttingDown(ctx);
         boolean restarting = ConfigRestartBean.isRestarting(ctx);
@@ -903,7 +903,7 @@ class SummaryBarRenderer {
            .append("</b></a></td><td class=digits><span class=volatile>");
         buf.append(active);
         if (isAdvanced()) {
-            buf.append(SummaryHelper.THINSP).append(Math.max(active, _helper.getActiveProfiles()));
+            buf.append(SidebarHelper.THINSP).append(Math.max(active, _helper.getActiveProfiles()));
         }
         buf.append("</span></td></tr>\n")
            .append("<tr title=\"")
@@ -1026,7 +1026,7 @@ class SummaryBarRenderer {
            .append(_helper.getInboundTransferred().replace("KiB", "K").replace("MiB", "M").replace("GiB", "G")
                                                   .replace("TiB", "T").replace("PiB", "P").replace("EiB", "E")
                                                   .replace("ZiB", "Z").replace("YiB", "Y"))
-           .append(SummaryHelper.THINSP)
+           .append(SidebarHelper.THINSP)
            .append(_helper.getOutboundTransferred().replace("KiB", "K").replace("MiB", "M").replace("GiB", "G")
                                                     .replace("TiB", "T").replace("PiB", "P").replace("EiB", "E")
                                                     .replace("ZiB", "Z").replace("YiB", "Y"))

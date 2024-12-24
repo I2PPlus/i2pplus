@@ -19,19 +19,8 @@ import java.util.Map;
 
 /*
  *  Copyright 2011 hottuna (dev@robertfoss.se)
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *
+ *  Licensed under the Apache License, Version 2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  */
 
 public class RouterInfoHandler implements RequestHandler {
@@ -42,7 +31,6 @@ public class RouterInfoHandler implements RequestHandler {
         _helper = helper;
         _context = ctx;
     }
-
 
     // Reports the method names of the handled requests
     public String[] handledRequests() {
@@ -139,7 +127,8 @@ public class RouterInfoHandler implements RequestHandler {
         }
 
         if (inParams.containsKey("i2p.router.netdb.isreseeding")) {
-            outParams.put("i2p.router.netdb.isreseeding", Boolean.valueOf(System.getProperty("net.i2p.router.web.ReseedHandler.reseedInProgress")).booleanValue());
+            outParams.put("i2p.router.netdb.isreseeding",
+            Boolean.valueOf(System.getProperty("net.i2p.router.web.ReseedHandler.reseedInProgress")).booleanValue());
         }
         return new JSONRPC2Response(outParams, req.getID());
     }
@@ -162,7 +151,7 @@ public class RouterInfoHandler implements RequestHandler {
         ERROR_UDP_DISABLED_AND_TCP_UNSET,
     };
 
-    // Ripped out of SummaryHelper.java
+    // Ripped out of SidebarHelper.java
     private NETWORK_STATUS getNetworkStatus() {
         if (_context.router().getUptime() > 60 * 1000
                 && (!_context.router().gracefulShutdownInProgress())
@@ -219,7 +208,8 @@ public class RouterInfoHandler implements RequestHandler {
             if (ra == null && _context.router().getUptime() > 5 * 60 * 1000) {
                 if (_context.commSystem().countActivePeers() <= 0)
                     return NETWORK_STATUS.ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL;
-                else if (_context.getProperty(NTCPTransport.PROP_I2NP_NTCP_HOSTNAME) == null || _context.getProperty(NTCPTransport.PROP_I2NP_NTCP_PORT) == null)
+                else if (_context.getProperty(NTCPTransport.PROP_I2NP_NTCP_HOSTNAME) == null ||
+                    _context.getProperty(NTCPTransport.PROP_I2NP_NTCP_PORT) == null)
                     return NETWORK_STATUS.ERROR_UDP_DISABLED_AND_TCP_UNSET;
                 else
                     return NETWORK_STATUS.WARN_FIREWALLED_WITH_UDP_DISABLED;
