@@ -282,6 +282,7 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 #sb_peers_condensed .badge,#sb_tunnels_condensed .badge{margin:0;padding:1px 3px 2px;min-width:20px;position:absolute;right:-3px;top:-1px;left:auto;display:inline-block;line-height:1;text-align:center;font-weight:600;text-shadow:var(--txt_shadow);border-radius:0 0 2px 0;background:rgba(228,228,255,.45);pointer-events:none}
 #sb_peers_condensed .sb_icon:active .badge,#sb_tunnels_condensed .sb_icon:active .badge{background:none}
 #updatespinner{display:inline-block;height:20px;width:20px;background:var(--update) no-repeat fixed center center/20px;animation:spin 3s ease 0s both}
+#xhr,#xhr.fadein{animation:fade .1s ease 0s reverse both}
 
 /* collapsed section icons */
 .sb_icon#fast{background:var(--fast) no-repeat 25% center/19px,var(--btn)}

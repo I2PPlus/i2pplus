@@ -26,6 +26,7 @@ function sectionToggler() {
   const sb_tunnels_condensed = document.getElementById("sb_tunnels_condensed");
   const sb_updatesection = document.getElementById("sb_updatesection");
   const sb_wrap = document.getElementById("sb_wrap") || sb;
+  const xhr = document.getElementById("xhr");
 
   const toggleElements = {
     "toggle_sb_advancedgeneral": sb_advancedgeneral,
@@ -66,6 +67,9 @@ function sectionToggler() {
         }
       });
     }
+    setTimeout(() => {
+      xhr.classList.remove("fadein");
+    }, 120);
   }
 
   function addToggleListeners() {
@@ -174,7 +178,6 @@ function sectionToggler() {
   function handleTunnelsVisibility(isVisible) {
     if (tunnelsBadge) {tunnelsBadge.hidden = isVisible;}
   }
-
   restoreToggleStates();
   addToggleListeners();
 }
@@ -193,5 +196,7 @@ function countNewsItems() {
     newsBadge.innerHTML = newsItemsLength;
   }
 }
+
+document.addEventListener("DOMContentLoaded", () => {xhr.classList.add("fadein");});
 
 export { sectionToggler, countNewsItems };
