@@ -44,36 +44,63 @@ function sectionToggler() {
     "toggle_sb_updatesection": sb_updatesection
   };
 
-  function saveToggleStates() {
-    const toggleState = {};
-    Object.keys(toggleElements).forEach(id => {
-      const toggleInput = document.getElementById(id);
-      if (toggleInput) {
-        const key = id.replace("toggle_sb_", "");
-        toggleState[key] = toggleInput.checked;
+  function initializeLocalStorage() {
+    const defaultState = {
+      advancedgeneral: false,
+      advanced: false,
+      bandwidth: false,
+      general: false,
+      help: false,
+      internals: false,
+      localtunnels: false,
+      newsheadings: false,
+      peers: false,
+      queue: false,
+      services: false,
+      tunnels: false,
+      updatesection: false
+    };
+
+    Object.keys(defaultState).forEach(key => {
+      const oldKey = `sb_${key}`;
+      const value = localStorage.getItem(oldKey);
+      if (value !== null) {
+        defaultState[key] = JSON.parse(value);
+        localStorage.removeItem(oldKey);
       }
     });
-    localStorage.setItem("sidebarSections", JSON.stringify(toggleState));
+
+    if (!localStorage.getItem("sidebarSections")) {
+      localStorage.setItem("sidebarSections", JSON.stringify(defaultState));
+    }
+  }
+
+  function saveToggleStates() {
+    const toggleInput = document.activeElement;
+    if (toggleInput && toggleInput.id.startsWith("toggle_sb_")) {
+      const key = toggleInput.id.replace("toggle_sb_", "");
+      const sidebarSections = JSON.parse(localStorage.getItem("sidebarSections"));
+      sidebarSections[key] = toggleInput.checked;
+      localStorage.setItem("sidebarSections", JSON.stringify(sidebarSections));
+    }
   }
 
   function restoreToggleStates() {
-    const toggleStates = JSON.parse(localStorage.getItem("sidebarSections"));
-    if (toggleStates) {
-      Object.entries(toggleStates).forEach(([id, checked]) => {
-        const toggleInput = document.getElementById("toggle_sb_" + id);
+    const sidebarSections = JSON.parse(localStorage.getItem("sidebarSections"));
+
+    if (sidebarSections) {
+      Object.entries(sidebarSections).forEach(([id, checked]) => {
+        const toggleInput = document.getElementById(`toggle_sb_${id}`);
         if (toggleInput) {
           toggleInput.checked = checked;
           toggleElementVisibility(toggleInput, checked);
         }
       });
     }
-    setTimeout(() => {
-      xhr.classList.remove("fadein");
-    }, 120);
   }
 
   function addToggleListeners() {
-    sb_wrap.addEventListener("click", function(event) {
+    sb_wrap.addEventListener("click", function (event) {
       if (event.target.id in toggleElements) {
         const currentState = event.target.checked;
         toggleElementVisibility(event.target, currentState);
@@ -84,102 +111,123 @@ function sectionToggler() {
 
   function toggleElementVisibility(toggleInput, isVisible) {
     const element = toggleElements[toggleInput.id];
+    if (!element) { return; }
+    element.hidden = !isVisible;
     const hr = sb.querySelector(`#${element.id}+hr`);
 
-    if (element) {
-      element.hidden = !isVisible;
-      if (isVisible) {
-        if (hr && element !== sb_services) {
-          hr.hidden = false;
-          hr.style.display = null;
-        }
-        toggleInput.checked = true;
-        if (element.classList) element.classList.remove("collapsed");
-      } else {
-        if (hr && element !== sb_services) {
-          hr.hidden = true;
-          hr.style.display = "none";
-        }
-        toggleInput.checked = false;
-        if (element.classList) element.classList.add("collapsed");
-      }
-      if (toggleInput.id === "toggle_sb_localtunnels") {
-        handleLocalTunnelsVisibility(isVisible);
-      } else if (toggleInput.id === "toggle_sb_queue") {
-        handleQueueVisibility(isVisible);
-      } else if (toggleInput.id === "toggle_sb_tunnels") {
-        handleTunnelsVisibility(isVisible);
-      }
-      if (element === sb_bandwidth && sb_graphstats) {
-        if (sb_bandwidth.hidden === true) {sb_graphstats.style.opacity = "1";}
-        else {sb_graphstats.style.opacity = null;}
-      } else if (element === sb_services) {
-        if (sb_services.hidden === true) {sb_services.classList.add("collapsed");}
-        else {sb_services.classList.remove("collapsed");}
-      } else if (element === sb_help) {
-        if (sb_help.hidden === true) {sb_help.classList.add("collapsed");}
-        else {sb_help.classList.remove("collapsed");}
-      } else if (element === sb_internals) {
-        if (sb_internals.hidden === true) {sb_internals.classList.add("collapsed");}
-        else {sb_internals.classList.remove("collapsed");}
-      }
-      if (element === sb_internals || element === sb_advanced) {
+    if (element === sb_updatesection) { handleUpdateSectionVisibility(isVisible); }
+    else if (element === sb_services) { handleServicesVisibility(isVisible); }
+    else if (isVisible) {
+      if (hr) {
         hr.hidden = false;
         hr.style.display = null;
       }
-    }
-  }
-
-  function hide_internals() {
-    if (sb_internals !== null) {
-      sb_internals.hidden = true;
-      document.getElementById("sb_internals").classList.add("collapsed");
-      document.getElementById("toggle_sb_internals").checked = false;
-    }
-  }
-
-  function show_internals() {
-    if (sb_internals !== null) {
-      sb_internals.hidden = null;
-      if (sb.querySelector("#sb_internals.collapsed+hr") !== null) {
-        sb.querySelector("#sb_internals.collapsed+hr").hidden = null;
+      toggleInput.checked = true;
+      if (element.classList) element.classList.remove("collapsed");
+    } else {
+      if (hr) {
+        hr.hidden = true;
+        hr.style.display = "none";
       }
-      document.getElementById("sb_internals").classList.remove("collapsed");
-      document.getElementById("toggle_sb_internals").checked = true;
+      toggleInput.checked = false;
+      if (element.classList) element.classList.add("collapsed");
+    }
+
+    if (toggleInput.id === "toggle_sb_localtunnels") {
+      handleLocalTunnelsVisibility(isVisible);
+    } else if (toggleInput.id === "toggle_sb_queue") {
+      handleQueueVisibility(isVisible);
+    } else if (toggleInput.id === "toggle_sb_tunnels") {
+      handleTunnelsVisibility(isVisible);
+    }
+
+    if (element === sb_bandwidth && sb_graphstats) {
+      sb_graphstats.style.opacity = sb_bandwidth.hidden ? "1" : null;
+    }
+
+    if (element === sb_internals || element === sb_advanced) {
+      hr.hidden = false;
+      hr.style.display = null;
+    }
+  }
+
+  function handleServicesVisibility(isVisible) {
+    if (sb_services !== null) {
+      const hr = sb.querySelector("#sb_services.collapsed+hr");
+      const toggleInput = document.getElementById("toggle_sb_services");
+      const icons = sb_services.querySelectorAll(".sb_icon");
+      const textLinks = sb_services.querySelectorAll("a:not(.sb_icon)");
+      if (isVisible) {
+        icons.forEach(icon => { icon.hidden = true });
+        textLinks.forEach(link => { link.hidden = null });
+        toggleInput.checked = true;
+        sb_services.classList.remove("collapsed");
+        toggleInput.closest("h3").classList.remove("collapsed");
+        if (hr !== null) { hr.hidden = null; }
+      } else {
+        icons.forEach(icon => { icon.hidden = null });
+        textLinks.forEach(link => { link.hidden = true })
+        toggleInput.checked = false;
+        sb_services.classList.add("collapsed");
+        toggleInput.closest("h3").classList.add("collapsed");
+        if (hr !== null) { hr.hidden = true; }
+      }
+    }
+  }
+
+  function handleUpdateSectionVisibility(isVisible) {
+    if (sb_updatesection !== null) {
+      sb_updatesection.hidden = false;
+      const toggleInput = document.getElementById("toggle_sb_updatesection");
+      if (isVisible) {
+        toggleInput.checked = true;
+        sb_updatesection.classList.remove("collapsed");
+        sb_updatesection.querySelector("h3").classList.remove("collapsed");
+      } else {
+        toggleInput.checked = false;
+        sb_updatesection.classList.add("collapsed");
+        sb_updatesection.querySelector("h3").classList.add("collapsed");
+      }
     }
   }
 
   function handleLocalTunnelsVisibility(isVisible) {
-      const clients = document.querySelectorAll("#sb_localtunnels img[src='/themes/console/images/client.svg']").length;
-      const clientSpan = `<span id="clientCount" class="count_${clients}">${clients} x <img src='/themes/console/images/client.svg'></span>`;
-      const i2pchats = document.querySelectorAll("#sb_localtunnels img[src='/themes/console/images/i2pchat.svg']").length;
-      const i2pchatSpan = `<span id="i2pchatCount" class="count_${i2pchats}">${i2pchats} x <img src='/themes/console/images/i2pchat.svg'></span>`;
-      const pings = document.querySelectorAll("#sb_localtunnels img[src='/themes/console/images/ping.svg']").length;
-      const pingSpan = `<span id="pingCount" class="count_${pings}">${pings} x <img src='/themes/console/images/ping.svg'></span>`;
-      const servers = document.querySelectorAll("#sb_localtunnels img[src='/themes/console/images/server.svg']").length;
-      const serverSpan = `<span id="serverCount" class="count_${servers}">${servers} x <img src='/themes/console/images/server.svg'></span>`;
-      const snarks = document.querySelectorAll("#sb_localtunnels img[src='/themes/console/images/snark.svg']").length;
-      const snarkSpan = `<span id="snarkCount" class="count_${snarks}">${snarks} x <img src='/themes/console/images/snark.svg'></span>`;
-      const summary = `${serverSpan} ${clientSpan} ${snarkSpan} ${i2pchatSpan} ${pingSpan}`;
-      const summaryTable = `<table id="localtunnelSummary"><tr id="localtunnelsActive"><td>${summary}</td></tr></table>`;
-      if (localtunnelSummary !== null) {
-          if (isVisible) {localtunnelSummary.hidden = true;}
-          else {
-              localtunnelSummary.hidden = false;
-              localtunnelSummary.outerHTML = summaryTable;
-          }
+    const clients = document.querySelectorAll("#sb_localtunnels img[src='/themes/console/images/client.svg']").length;
+    const clientSpan = `<span id="clientCount" class="count_${clients}">${clients} x <img src='/themes/console/images/client.svg'></span>`;
+    const i2pchats = document.querySelectorAll("#sb_localtunnels img[src='/themes/console/images/i2pchat.svg']").length;
+    const i2pchatSpan = `<span id="i2pchatCount" class="count_${i2pchats}">${i2pchats} x <img src='/themes/console/images/i2pchat.svg'></span>`;
+    const pings = document.querySelectorAll("#sb_localtunnels img[src='/themes/console/images/ping.svg']").length;
+    const pingSpan = `<span id="pingCount" class="count_${pings}">${pings} x <img src='/themes/console/images/ping.svg'></span>`;
+    const servers = document.querySelectorAll("#sb_localtunnels img[src='/themes/console/images/server.svg']").length;
+    const serverSpan = `<span id="serverCount" class="count_${servers}">${servers} x <img src='/themes/console/images/server.svg'></span>`;
+    const snarks = document.querySelectorAll("#sb_localtunnels img[src='/themes/console/images/snark.svg']").length;
+    const snarkSpan = `<span id="snarkCount" class="count_${snarks}">${snarks} x <img src='/themes/console/images/snark.svg'></span>`;
+    const summary = `${serverSpan} ${clientSpan} ${snarkSpan} ${i2pchatSpan} ${pingSpan}`;
+    const summaryTable = `<table id="localtunnelSummary"><tr id="localtunnelsActive"><td>${summary}</td></tr></table>`;
+    if (localtunnelSummary !== null) {
+      if (isVisible) { localtunnelSummary.hidden = true; }
+      else {
+        localtunnelSummary.hidden = false;
+        localtunnelSummary.outerHTML = summaryTable;
       }
+    }
   }
 
   function handleQueueVisibility(isVisible) {
-    if (jobBadge) {jobBadge.hidden = isVisible;}
+    if (jobBadge) { jobBadge.hidden = isVisible; }
   }
 
   function handleTunnelsVisibility(isVisible) {
-    if (tunnelsBadge) {tunnelsBadge.hidden = isVisible;}
+    if (tunnelsBadge) { tunnelsBadge.hidden = isVisible; }
   }
   restoreToggleStates();
   addToggleListeners();
+
+  document.addEventListener("DOMContentLoaded", () => {
+    xhr.classList.add("fadein");
+    initializeLocalStorage();
+  });
+
 }
 
 function countNewsItems() {
@@ -196,7 +244,5 @@ function countNewsItems() {
     newsBadge.innerHTML = newsItemsLength;
   }
 }
-
-document.addEventListener("DOMContentLoaded", () => {xhr.classList.add("fadein");});
 
 export { sectionToggler, countNewsItems };
