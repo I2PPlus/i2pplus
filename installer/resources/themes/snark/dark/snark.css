@@ -256,7 +256,7 @@ tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before,tfoot .rateUp
 tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before{margin-right:-2px;content:"\27A4";transform:rotate(90deg) scaleX(0.6)}
 tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{margin-right:0;content:"\27A4";transform:rotate(-90deg) scaleX(0.6) translateX(-1px)}
 .tooltipped{display:inline-block;position:relative;z-index:99;white-space:nowrap;content:""}
-.tooltipped:hover::after,.tooltipped:active::after{padding:3px 6px;top:-3px;left:32px;border:1px solid #000;border-radius:3px;box-shadow:var(--highlight);background:#000;content:attr(data-tooltip);animation:fade .1s ease 3s reverse both}
+.tooltipped:hover::after,.tooltipped:active::after{padding:4px 6px;top:-4px;left:32px;border:1px solid #000;border-radius:3px;box-shadow:var(--highlight);background:#000;content:attr(data-tooltip);animation:fade .1s ease 3s reverse both}
 .tooltipped:hover::before,.tooltipped:active::before{margin-left:-10px;top:calc(50% - 6px);left:30px;border-width:6px;border-style:solid;border-color:#0000 #000 #0000 #0000;content:"";animation:fade .1s ease 3s reverse both}
 .tooltipped:hover::before,.tooltipped:active::before,.tooltipped:hover::after,.tooltipped:active::after{position:absolute;display:inline-block}
 .ETA{padding-right:2px;font-style:italic;color:#dd7}
@@ -1037,11 +1037,11 @@ body,#torrents td,.snarkAddInfo,th,td,code,textarea,input,input[type=submit],inp
 }
 
 @media (min-width:1200px){
-.peerCount b{margin:4px 0;padding:4px 3px;min-width:100px;display:inline-block;position:relative;vertical-align:middle;line-height:1;text-align:center;font-size:95%;color:#eee;text-shadow:0 1px 1px #000;border-radius:2px;background:#ac5390;filter:drop-shadow(0 0 1px #000)}
+.peerCount b{margin:4px 0;padding:4px 3px;min-width:98px;display:inline-block;position:relative;vertical-align:middle;line-height:1;text-align:center;font-size:95%;color:#eee;text-shadow:0 1px 1px #000;border-radius:2px;background:#ac5390;filter:drop-shadow(0 0 1px #000)}
 .peerCount b a{color:#fff}
 .peerCount b a[href*="?p="]:hover::after{top:calc(50% - 2px);border-color:#fff #0000 #0000 #0000}
 .peerCount b::before{width:0;height:0;position:absolute;top:calc(50% - 5px);left:-10px;border-width:5px;border-style:solid;border-color:#0000 #ac5390 #0000 #0000;content:""}
-.peerCount b .left,.peerCount b .right{margin:0 1px;padding:2px 3px 1px;min-width:38px;display:inline-block;text-align:center;color:#eee;border-radius:1px;box-shadow:0 0 0 1px rgba(16,0,16,.5),inset 2px 2px 2px rgba(0,0,0,.3);background:linear-gradient(180deg,rgba(32,0,32,.3),rgba(16,0,16,.3))}
+.peerCount b .left,.peerCount b .right{margin:-1px 1px 1px;padding:0 3px;min-width:38px;display:inline-block;vertical-align:middle;line-height:1.35;text-align:center;color:#eee;border-radius:1px;box-shadow:0 0 0 1px #0008,0 0 0 1px inset #fff2,inset 2px 2px 3px #0008;background:linear-gradient(180deg,#0004,#fff1);transform:translateY(1px);}
 .peerCount b .left{margin-right:0}
 .peerCount b .right{margin-left:0}
 .peerCount b:hover a:hover::after,.peerCount b:hover a:focus::after{border-color:#0000 #0000 var(--hover) #0000}
@@ -1099,7 +1099,7 @@ th.peerCount a img{margin-left:-20px}
 .iframed #screenlog{margin:0;position:static}
 .iframed #snarkInfo+#snarkFiles{margin-top:-11px}
 .optionlist{margin-bottom:-28px}
-.peerCount b{min-width:104px}
+.peerCount b{min-width:100px}
 .peerCount .left,.peerCount .right{text-align:center!important}
 .peerCount .left{margin-left:2px}
 .peerCount .right{margin-right:2px}
