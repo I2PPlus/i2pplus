@@ -135,7 +135,7 @@ function initTunnelControl() {
   if (!tunnelIndex.classList.contains("listener")) {
     tunnelIndex.addEventListener("click", async event => {
       const target = event.target;
-      if (target.classList.contains("control")) {
+      if (target.classList.contains("control") && !target.classList.contains("create")) {
         event.preventDefault();
         await tunnelControl(target.href, target);
         tunnelIndex.classList.add("listener");

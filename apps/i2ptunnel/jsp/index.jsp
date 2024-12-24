@@ -7,23 +7,11 @@
 <jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request" />
 <% String activeTheme = indexBean.getTheme(); %>
 <!DOCTYPE html>
-<%
-  if (activeTheme.contains("dark") || activeTheme.contains("midnight")) {
-%>
-<html id=tman style=background:#000>
-<%
-  } else {
-%>
-<html id=tman>
-<%
-  }
-%>
+<% if (activeTheme.contains("dark") || activeTheme.contains("midnight")) { %><html id=tman style=background:#000>
+<% } else { %><html id=tman><% } %>
 <head>
-<script src=/js/setupIframe.js></script>
 <meta charset=utf-8>
 <title><%=intl._t("Tunnel Manager")%></title>
-<script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <link href="<%=activeTheme%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet> 
 <link href="<%=activeTheme%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
 <link href="<%=activeTheme%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
@@ -38,9 +26,7 @@
     URLConnection connection = url.openConnection();
     connection.connect();
     overrideEnabled = true;
-  } catch (IOException e) {
-    overrideEnabled = false;
-  }
+  } catch (IOException e) {overrideEnabled = false;}
   if (overrideEnabled) {
 %>
 <link href="<%=activeTheme%>override.css" rel=stylesheet>
@@ -56,9 +42,7 @@
 <%
   boolean isInitialized = indexBean.isInitialized();
   String nextNonce = isInitialized ? net.i2p.i2ptunnel.web.IndexBean.getNextNonce() : null;
-
-  // not synced, oh well
-  int lastID = indexBean.getLastMessageID();
+  int lastID = indexBean.getLastMessageID(); // not synced, oh well
   String msgs = indexBean.getMessages();
   if (msgs.length() > 0) {
 %>
@@ -625,8 +609,11 @@ ElGamal-2048
   }  // !isInitialized()
 %>
 </div>
-<script src="js/refreshIndex.js?<%=net.i2p.CoreVersion.VERSION%>" type=module></script>
 <span data-iframe-height></span>
+<script src="js/refreshIndex.js?<%=net.i2p.CoreVersion.VERSION%>" type=module></script>
+<script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src=/js/setupIframe.js></script>
 <noscript><style>.script{display:none!important}.tunnelInfo{display:table-row!important}#screenlog_buttons{display:table-row!important}</style></noscript>
 </body>
 </html>
