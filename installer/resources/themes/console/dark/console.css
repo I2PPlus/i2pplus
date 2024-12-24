@@ -317,7 +317,7 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 .sb_icon#utility:active{background:var(--hardhat) no-repeat calc(50% - 3px) calc(50% + 2px)/14px,var(--configure) no-repeat 20% center/19px,var(--badge_active)}
 .sb_icon#transit:active{background:var(--share) no-repeat 25% center/19px,var(--badge_active)}
 .sb_icon#tcount:active{background:var(--hardhat) no-repeat 25% center/19px,var(--badge_active)}
-#lsCount.badge,#newsCount,#sidebar h3 a .badge,#tunnelCount{padding:2px 5px 1px;display:inline-block;position:relative;z-index:999;white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;font-size:80%;font-weight:700;box-shadow:0 0 0 1px #141,var(--highlight);background:var(--badge);animation:fade .25s ease .5s reverse both}
+#lsCount.badge,#newsCount,#sidebar h3 a .badge,#tunnelCount{padding:2px 5px 1px;display:inline-block;position:relative;z-index:999;white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;font-size:80%;font-weight:700;box-shadow:0 0 0 1px #141,var(--highlight);background:var(--badge);animation:fade .2s ease .1s reverse both}
 #lsCount.badge{animation:none}
 #sidebar #sb_status #lsCount.badge,#sidebar .net_status:hover #sb_status #lsCount.badge{padding:2px 3px 1px;margin:0 0 0 3px;line-height:1;vertical-align:middle;color:#494}
 #lsCount.badge{margin-top:1px;font-size:8pt!important}
