@@ -55,9 +55,8 @@ function start() {
       progressx.show(theme);
       progressx.progress(0.3);
 
-      if (!criticallogs && criticallogsResponse) {
-          mainLogs.innerHTML = mainLogsResponse.innerHTML;
-      } else if (criticallogs && criticallogsResponse) {
+      if (!criticallogs && criticallogsResponse) { mainLogs.innerHTML = mainLogsResponse.innerHTML; }
+      else if (criticallogs && criticallogsResponse) {
           if (criticallogsResponse.innerHTML !== criticallogs.innerHTML) {
             criticallogs.innerHTML = criticallogsResponse.innerHTML;
           }
@@ -273,15 +272,8 @@ function start() {
     linkifyLeaseSets();
     linkifyIPv4();
     linkifyIPv6();
-    if ("requestIdleCallback" in window) {
-      onVisible(mainLogs, () => {
-        window.requestIdleCallback(initRefresh);
-      });
-    } else {
-      onVisible(mainLogs, () => {
-        window.requestAnimationFrame(initRefresh);
-      });
-    }
+    if ("requestIdleCallback" in window) { onVisible(mainLogs, () => { requestIdleCallback(initRefresh); }); }
+    else { onVisible(mainLogs, () => { requestAnimationFrame(initRefresh); }); }
     onHidden(mainLogs, stopRefresh);
     updateInterval();
     addFilterInput();
