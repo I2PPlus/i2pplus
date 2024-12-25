@@ -305,7 +305,7 @@ svg #arrow stop:last-child{stop-color:#010}
 .iframed #helpconfig,.iframed #helpsubs{margin:13px 0 -1px}
 .iframed #page{margin:0;padding:0 12px;background:#0000}
 .iframed #page::after{content:"";display:inline-block;width:100%;height:14px;vertical-align:bottom}
-.iframed #visualid{margin-top:16px;margin-bottom:16px}
+.iframed #visualid{margin-top:16px;margin-bottom:1px}
 
 @keyframes fade-in{from{filter:opacity(0)}to{filter:opacity(1)}}
 @keyframes scaledown{from{transform:scale(3)}to{transform:scale(1)}}

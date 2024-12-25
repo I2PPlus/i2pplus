@@ -547,6 +547,7 @@ td.subHeaderPriority{padding:0 1px;font-size:7.5pt;font-weight:700;background-im
 #dirInfo td:first-child{padding:4px 6px 4px 4px;text-align:left}
 #dirInfo td:first-child a:hover img:not(.thumb),#dirInfo td:first-child a:focus img:not(.thumb){box-shadow:var(--outline),inset 0 0 0 1px #930;filter:none}
 #dirInfo td:first-child img{margin:0 2px}
+#dirInfo #setPriority th{text-align:right}
 .fileIcon{padding:0;width:16px}
 .fileStatusIcon{padding:0 4px 0 0;width:24px;text-align:center}
 .fileStatus img[src*="clock"]{mix-blend-mode:normal}
