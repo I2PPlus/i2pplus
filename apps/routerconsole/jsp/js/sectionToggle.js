@@ -27,6 +27,8 @@ function sectionToggler() {
   const sb_updatesection = document.getElementById("sb_updatesection");
   const sb_wrap = document.getElementById("sb_wrap") || sb;
   const xhr = document.getElementById("xhr");
+  const savedConfigs = localStorage.getItem("sidebarSections");
+  const sidebarSections = savedConfigs !== null ? JSON.parse(localStorage.getItem("sidebarSections")) : null;
 
   const toggleElements = {
     "toggle_sb_advancedgeneral": sb_advancedgeneral,
@@ -45,6 +47,7 @@ function sectionToggler() {
   };
 
   function initializeLocalStorage() {
+    if (savedConfigs) {return;}
     const defaultState = {
       advancedgeneral: false,
       advanced: false,
@@ -61,25 +64,14 @@ function sectionToggler() {
       updatesection: false
     };
 
-    Object.keys(defaultState).forEach(key => {
-      const oldKey = `sb_${key}`;
-      const value = localStorage.getItem(oldKey);
-      if (value !== null) {
-        defaultState[key] = JSON.parse(value);
-        localStorage.removeItem(oldKey);
-      }
-    });
-
-    if (!localStorage.getItem("sidebarSections")) {
-      localStorage.setItem("sidebarSections", JSON.stringify(defaultState));
-    }
+    localStorage.setItem("sidebarSections", JSON.stringify(defaultState));
   }
 
   function saveToggleStates() {
     const toggleInput = document.activeElement;
     if (toggleInput && toggleInput.id.startsWith("toggle_sb_")) {
       const key = toggleInput.id.replace("toggle_sb_", "");
-      const sidebarSections = JSON.parse(localStorage.getItem("sidebarSections"));
+      if (!savedConfigs) {initializeLocalStorage();}
       sidebarSections[key] = toggleInput.checked;
       localStorage.setItem("sidebarSections", JSON.stringify(sidebarSections));
     }
@@ -87,7 +79,6 @@ function sectionToggler() {
 
   function restoreToggleStates() {
     const sidebarSections = JSON.parse(localStorage.getItem("sidebarSections"));
-
     if (sidebarSections) {
       Object.entries(sidebarSections).forEach(([id, checked]) => {
         const toggleInput = document.getElementById(`toggle_sb_${id}`);
@@ -225,7 +216,7 @@ function sectionToggler() {
 
   document.addEventListener("DOMContentLoaded", () => {
     xhr.classList.add("fadein");
-    initializeLocalStorage();
+    setTimeout(() => { xhr.classList.remove("fadein"); }, 120);
   });
 
 }
