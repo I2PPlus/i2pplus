@@ -2075,7 +2075,6 @@ body:not(.toggleElementsActive) .tIn,body:not(.toggleElementsActive) .tOut{displ
 
 /* configlogging */
 #config_logging p{margin:3px 0 5px;text-align:left}
-#config_logging tr,#tunnelconfig tr,#config_summarybar tr,.homelinkedit tr,#config_bandwidth tr,#bandwidthconfig tr,#config_clients tr,#config_webapps tr,#config_peers #bannedips td:first-child tr:nth-child(n+3):not(#ipv6),#configstats tr:not(.tablefooter){box-shadow:var(--highlight),inset 0 -1px 0 1px #000,inset -1px 0 0 1px #000,inset 0 0 2px 0 #020,inset 0 -1px 2px 0 #020,inset -1px 0 2px 0 #020}
 input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],input[name="logfilesize"],select[name="defaultloglevel"],select[name="newloglevel"]{width:125px}
 #loggingoptions td{padding:6px}
 #loggingoptions td:first-child{padding-right:3px}
