@@ -19,13 +19,12 @@
 <head>
 <script src=/js/setupIframe.js></script>
 <meta charset=utf-8>
+<meta name=viewport content="width=device-width, initial-scale=1">
 <title><%=intl._t("subscriptions")%> - susidns</title>
 <link rel=stylesheet href="<%=subs.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
 <%  if (base.useSoraFont()) { %><link href="<%=base.getTheme()%>../../fonts/Sora.css" rel=stylesheet><% } else { %>
 <link href="<%=base.getTheme()%>../../fonts/OpenSans.css" rel=stylesheet><% } %>
 <% if (overrideCssActive) { %><link rel=stylesheet href="<%=base.getTheme()%>override.css"><% } %>
-<script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <style>body{display:none;pointer-events:none}</style>
 </head>
 <body id=sbs>
@@ -66,6 +65,8 @@
 </div>
 <span data-iframe-height></span>
 <style>body{display:block;pointer-events:auto}</style>
+<script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce="<%=cspNonce%>" src="/js/clickToClose.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 </body>
 </html>

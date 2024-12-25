@@ -18,6 +18,7 @@
 <script src=/js/setupIframe.js></script>
 <link rel=preload href="images/how.svg" as="object">
 <meta charset=utf-8>
+<meta name=viewport content="width=device-width, initial-scale=1">
 <title><%=intl._t("Introduction")%> - SusiDNS</title>
 <link rel=stylesheet href="<%=base.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
 <%  if (base.useSoraFont()) { %><link href="<%=base.getTheme()%>../../fonts/Sora.css" rel=stylesheet><% } else { %>

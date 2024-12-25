@@ -35,8 +35,8 @@
 <!DOCTYPE HTML>
 <html<c:if test="${book.isEmpty}"> class=emptybook</c:if>>
 <head>
-<script src=/js/setupIframe.js></script>
 <meta charset=utf-8>
+<meta name=viewport content="width=device-width, initial-scale=1">
 <title>${book.book} <%=intl._t("address book")%> - susidns</title>
 <link rel=preload href="<%=book.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
 <link rel=preload href="<%=book.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
@@ -45,13 +45,6 @@
 <% if (base.useSoraFont()) { %><link href="<%=base.getTheme()%>../../fonts/Sora.css" rel=stylesheet><% } else { %>
 <link href="<%=base.getTheme()%>../../fonts/OpenSans.css" rel=stylesheet><% } %>
 <% if (overrideCssActive) { %><link rel=stylesheet href="<%=base.getTheme()%>override.css"><% } %>
-<script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script src="/js/scrollTo.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script src="/js/clickToClose.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script nonce="<%=cspNonce%>">window.jdenticon_config = { padding: 0, saturation: {color: 1, grayscale: 0} };</script>
-<script nonce="<%=cspNonce%>" src="/js/jdenticon.js"></script>
 </head>
 <body id=bk class="<%=book.getThemeName()%>" style=display:none;pointer-events:none>
 <div id=page>
@@ -239,5 +232,13 @@
 <style>body{display:block!important;pointer-events:auto!important}</style>
 <script src=/js/lazyload.js></script>
 <script src=/susidns/js/togglePanels.js></script>
+<script src=/js/setupIframe.js></script>
+<script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/scrollTo.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/clickToClose.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script nonce="<%=cspNonce%>">window.jdenticon_config = { padding: 0, saturation: {color: 1, grayscale: 0} };</script>
+<script nonce="<%=cspNonce%>" src="/js/jdenticon.js"></script>
 </body>
 </html>
