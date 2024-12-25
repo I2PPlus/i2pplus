@@ -2212,11 +2212,8 @@ public class WebMail extends HttpServlet
                         // so translate with that bundle.
                         sessionObject.error += consoleGetString(
                             "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit.",
-                            ctx)
-                            + '\n' +
-                            consoleGetString("If the problem persists, verify that you have cookies enabled in your browser.",
-                            ctx)
-                            + '\n';
+                            ctx) + '\n' + consoleGetString("If the problem persists, verify that you have cookies enabled in your browser.",
+                            ctx) + '\n';
                         isPOST = false;
                     }
                 } catch (IllegalStateException ise) {
@@ -2229,9 +2226,8 @@ public class WebMail extends HttpServlet
             //// Start state determination and button processing
 
             State state = null;
-            if (sessionObject.mailbox == null) {
-                state = State.AUTH;
-            } else if (isPOST) {
+            if (sessionObject.mailbox == null) {state = State.AUTH;}
+            else if (isPOST) {
                 // This must be called to add the attachment before
                 // processStateChangeButtons() sends the message
                 state = processComposeButtons(sessionObject, request);
@@ -2250,15 +2246,15 @@ public class WebMail extends HttpServlet
             if (state == State.LOADING) {
                 if (isPOST) {
                     String q = null;
-                    if (buttonPressed(request, SAVE_AS_DRAFT)) {
-                        q = '?' + CURRENT_FOLDER + '=' + DIR_DRAFTS;
-                    } else {
+                    if (buttonPressed(request, SAVE_AS_DRAFT)) {q = '?' + CURRENT_FOLDER + '=' + DIR_DRAFTS;}
+                    else {
                         String str = request.getParameter(NEW_FOLDER);
                         if (str == null) {
                             str = request.getParameter(CURRENT_FOLDER);
-                            if (str != null && !str.equals(DIR_FOLDER) &&
-                                (buttonPressed(request, SWITCH_TO) || buttonPressed(request, MOVE_TO)))
+                            if (str != null && !str.equals(DIR_FOLDER) && (buttonPressed(request, SWITCH_TO) ||
+                                buttonPressed(request, MOVE_TO))) {
                                 q = '?' + CURRENT_FOLDER + '=' + str;
+                            }
                         }
                     }
                     sendRedirect(httpRequest, response, q);
@@ -2275,8 +2271,7 @@ public class WebMail extends HttpServlet
             //}
 
             if (state != State.AUTH) {
-                if (isPOST)
-                       state = processGenericButtons(sessionObject, request, state);
+                if (isPOST) {state = processGenericButtons(sessionObject, request, state);}
             }
 
             if (state == State.LIST) {
@@ -2284,9 +2279,8 @@ public class WebMail extends HttpServlet
                     int page = 1;
                     String sp = request.getParameter(CUR_PAGE);
                     if (sp != null) {
-                        try {
-                            page = Integer.parseInt(sp);
-                        } catch (NumberFormatException nfe) {}
+                        try {page = Integer.parseInt(sp);}
+                        catch (NumberFormatException nfe) {}
                     }
                     int newPage = processFolderButtons(sessionObject, page, request);
                     // LIST is from SHOW page, SEND and CANCEL are from NEW page
@@ -2301,16 +2295,18 @@ public class WebMail extends HttpServlet
                         String q = '?' + CUR_PAGE + '=' + newPage;
                         // CURRENT_SORT is only in page POSTs
                         String str = request.getParameter(CURRENT_SORT);
-                        if (str != null && !str.equals(SORT_DEFAULT) && VALID_SORTS.contains(str))
+                        if (str != null && !str.equals(SORT_DEFAULT) && VALID_SORTS.contains(str)) {
                             q += '&' + SORT + '=' + str;
+                        }
                         str = null;
-                        if (buttonPressed(request, SWITCH_TO) || buttonPressed(request, MOVE_TO))
+                        if (buttonPressed(request, SWITCH_TO) || buttonPressed(request, MOVE_TO)) {
                             str = request.getParameter(NEW_FOLDER);
-                        if (str == null)
-                            str = request.getParameter(CURRENT_FOLDER);
+                        }
+                        if (str == null) {str = request.getParameter(CURRENT_FOLDER);}
                         // always go to inbox after SEND
-                        if (str != null && !str.equals(DIR_FOLDER) && !buttonPressed(request, SEND))
+                        if (str != null && !str.equals(DIR_FOLDER) && !buttonPressed(request, SEND)) {
                             q += '&' + CURRENT_FOLDER + '=' + str;
+                        }
                         sendRedirect(httpRequest, response, q);
                         return;
                     }
@@ -2330,11 +2326,8 @@ public class WebMail extends HttpServlet
                             newUIDL = Base64.encode(newUIDL);
                             sessionObject.draftUIDL = null;
                         }
-                    } else {
-                        newUIDL = request.getParameter(NEW_UIDL);
-                    }
-                    if (newUIDL != null)
-                        q += '=' + newUIDL;
+                    } else {newUIDL = request.getParameter(NEW_UIDL);}
+                    if (newUIDL != null) {q += '=' + newUIDL;}
                     sendRedirect(httpRequest, response, q);
                     return;
                 }
@@ -2347,8 +2340,7 @@ public class WebMail extends HttpServlet
             // ?show= links - this forces State.SHOW
             String b64UIDL = request.getParameter(SHOW);
             // attachment links, images, next/prev/delete on show form
-            if (b64UIDL == null)
-                b64UIDL = request.getParameter(B64UIDL);
+            if (b64UIDL == null) {b64UIDL = request.getParameter(B64UIDL);}
             String showUIDL = Base64.decodeToString(b64UIDL);
             if (state == State.SHOW) {
                 if (isPOST) {
@@ -2356,31 +2348,21 @@ public class WebMail extends HttpServlet
                     if (newShowUIDL == null) {
                         state = State.LIST;
                         showUIDL = null;
-                    } else if (!newShowUIDL.equals(showUIDL) ||
-                           buttonPressed(request, SEND) || buttonPressed(request, CANCEL)) {
+                    } else if (!newShowUIDL.equals(showUIDL) || buttonPressed(request, SEND) || buttonPressed(request, CANCEL)) {
                         // SEND and CANCEL are from NEW page
                         // P-R-G
                         String q;
-                        if (newShowUIDL.equals(DELETE))
-                            q = '?' + DELETE + "=1&" + SHOW + '=' + Base64.encode(showUIDL);
-                        else
-                            q = '?' + SHOW + '=' + Base64.encode(newShowUIDL);
+                        if (newShowUIDL.equals(DELETE)) {q = '?' + DELETE + "=1&" + SHOW + '=' + Base64.encode(showUIDL);}
+                        else {q = '?' + SHOW + '=' + Base64.encode(newShowUIDL);}
                         String str = request.getParameter(CURRENT_FOLDER);
-                        if (str != null && !str.equals(DIR_FOLDER))
-                            q += '&' + CURRENT_FOLDER + '=' + str;
+                        if (str != null && !str.equals(DIR_FOLDER)) {q += '&' + CURRENT_FOLDER + '=' + str;}
                         sendRedirect(httpRequest, response, q);
                         return;
                     }
                 }
                 // ?download=nnn&amp;b64uidl link (same for ?att) should be valid in any state
-                if (showUIDL != null && processDownloadLink(sessionObject, showUIDL, request, response)) {
-                    // download or raw view sent, or 404
-                    return;
-                }
-                if (isPOST && showUIDL != null && processSaveAsLink(sessionObject, showUIDL, request, response)) {
-                    // download sent, or 404
-                    return;
-                }
+                if (showUIDL != null && processDownloadLink(sessionObject, showUIDL, request, response)) {return;} // download or raw view sent, or 404
+                if (isPOST && showUIDL != null && processSaveAsLink(sessionObject, showUIDL, request, response)) {return;} // download sent, or 404
                 // If the last message has just been deleted then
                 // state = State.LIST and
                 // sessionObject.showUIDL = null
@@ -2411,20 +2393,18 @@ public class WebMail extends HttpServlet
                     boolean ok = mc.loadFromDisk(new LoadWaiter(sessionObject, mc));
                     // wait a little while so we avoid the loading page if we can
                     if (ok) {
-                        try {
-                            sessionObject.wait(5000);
-                        } catch (InterruptedException ie) {
+                        try {sessionObject.wait(5000);}
+                        catch (InterruptedException ie) {
                             if (_log.shouldDebug()) _log.debug("Interrupted waiting for load", ie);
                         }
                     }
-                    if ((state == State.LIST || state == State.SHOW) && mc.isLoading())
-                        state = State.LOADING;
+                    if ((state == State.LIST || state == State.SHOW) && mc.isLoading()) {state = State.LOADING;}
                 }
             }
             Folder<String> folder = mc != null ? mc.getFolder() : null;
 
             //// End state determination, state will not change after here
-            if (_log.shouldDebug()) _log.debug("Final state is " + state);
+            if (_log.shouldDebug()) {_log.debug("Final state is " + state);}
 
             if (state == State.LIST || state == State.SHOW) {
                 // mc non-null
@@ -2460,232 +2440,226 @@ public class WebMail extends HttpServlet
 
             //// Begin output
 
-                PrintWriter out = response.getWriter();
-
-                /*
-                 * build subtitle
-                 */
-                if (state == State.AUTH) {
-                    subtitle = _t("Login");
-                } else if (state == State.LOADING) {
-                    subtitle = _t("Loading messages, please wait...");
-                } else if (state == State.LIST) {
-                    // mailbox.getNumMails() forces a connection, don't use it
-                    // Not only does it slow things down, but a failure causes all our messages to "vanish"
-                    //subtitle = ngettext("1 Message", "{0} Messages", sessionObject.mailbox.getNumMails());
-                    int sz = folder.getSize();
-                    subtitle = mc.getTranslatedName() + " - ";
-                    if (sz > 0)
-                        subtitle += ngettext("1 message", "{0} messages", folder.getSize());
-                    else
-                        subtitle += _t("No messages");
-                } else if (state == State.SHOW) {
-                    // mc non-null
-                    Mail mail = showUIDL != null ? mc.getMail(showUIDL, MailCache.FetchMode.HEADER) : null;
-                    if (mail != null && mail.hasHeader()) {
-                        if (mail.shortSubject != null)
-                            subtitle = mail.shortSubject; // already HTML encoded
-                        else
-                            subtitle = _t("Show Message");
-                    } else {
-                        subtitle = _t("Message not found.");
-                    }
-                } else if (state == State.NEW) {
-                    subtitle = _t("New Message");
-                } else if (state == State.CONFIG) {
-                    subtitle = _t("Configuration");
-                }
-
-                response.setContentType("text/html");
-
-                /*
-                 * write header
-                 */
-                out.print("<!DOCTYPE HTML>\n<html>\n" +
-                          "<head>\n" +
-                          "<script src=/js/setupIframe.js></script>" +
-                          "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n" +
-                          "<title>" + _t("I2PMail") + " - " + subtitle + "</title>\n" +
-                          "<link rel=preload as=style href=\"" + sessionObject.themePath + "../images/images.css?" + CoreVersion.VERSION + "\">\n" +
-                          "<link rel=preload as=style href=\"" + sessionObject.themePath + "images/images.css?" + CoreVersion.VERSION + "\">\n" +
-                          "<link rel=stylesheet href=\"" + sessionObject.themePath + "susimail.css?" + CoreVersion.VERSION + "\">\n" +
-                          "<link rel=stylesheet href=\"" + sessionObject.themePath + "override.css?" + CoreVersion.VERSION + "\">\n" + 
-                          "<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"" + sessionObject.themePath + "images/favicon.svg\">\n");
-                if (sessionObject.isMobile) {
-                    out.print("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes\" />\n" +
-                              "<link rel=stylesheet href=\"" + sessionObject.themePath + "mobile.css?" + CoreVersion.VERSION + "\" />\n");
-                }
-                if (enableSoraFont) {
-                    out.print("<link rel=stylesheet href=\"" + sessionObject.themePath + "../../fonts/Sora.css\">\n");
-                } else {
-                    out.print("<link rel=stylesheet href=\"" + sessionObject.themePath + "../../fonts/OpenSans.css\">\n");
-                }
-                if (state == State.LIST) {
-                    out.print("<link rel=stylesheet href=\"/susimail/css/print.css?" + CoreVersion.VERSION + "\" media=\"print\" />\n");
-                }
-                // TODO cancel if to and body are empty
-                if (state == State.NEW || state == State.CONFIG) {out.print("<script src=\"/susimail/js/compose.js?" + CoreVersion.VERSION + "\"></script>\n");}
-                else if (state == State.LIST) {
-                    out.print("<script src=\"/susimail/js/folder.js?" + CoreVersion.VERSION + "\"></script>\n");
-                    out.print("<script src=\"/js/scrollTo.js?" + CoreVersion.VERSION + "\"></script>\n");
-                } else if (state == State.LOADING) {
-                    // TODO JS?
-                    out.print("<noscript><meta http-equiv=\"refresh\" content=\"5;url=" + myself + "\"></noscript>\n");
-                    // TODO we don't need the form below
-                } else if (state == State.SHOW) {
-                    //out.print("<link rel=stylesheet type=text/css href=\"" + sessionObject.themePath + "markdown.css?" + CoreVersion.VERSION + "\">\n");
-                    out.print("<script src=\"/susimail/js/markdown.js?" + CoreVersion.VERSION + "\"></script>\n");
-                    out.print("<script src=\"/susimail/js/Markdown.Converter.js?" + CoreVersion.VERSION + "\"></script>\n");
-                    out.print("<script src=\"/js/iframeResizer/iframeResizer.js?" + CoreVersion.VERSION + "\"></script>\n");
-                    out.print("<script nonce='" + cspNonce + "'>\n" +
-                              "  document.addEventListener('DOMContentLoaded', function(event) {\n" +
-                              "    const htmlView = iFrameResize({interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#iframeSusiHtmlView');\n" +
-                              "  });\n" +
-                              "</script>\n");
-                }
-
-                // setup noscript style so we can hide js buttons when js is disabled
-                out.print("<noscript><style>.script{display:none!important}</style></noscript>\n");
-                out.print("<script src=/js/iframeResizer/iframeResizer.contentWindow.js></script>\n");
-                out.print("<script src=\"/js/iframeResizer/updatedEvent.js?" + CoreVersion.VERSION + "\"></script>\n");
-                out.print("<script src=\"/susimail/js/notifications.js?" + CoreVersion.VERSION + "\"></script>\n");
-                out.print("<style>body{display:none;pointer-events:none}</style>\n");
-                out.print("</head>\n");
-                if (state == State.LIST)
-                    out.print("<body id=main>\n");
+            /*
+             * build subtitle
+             */
+            if (state == State.AUTH) {
+                subtitle = _t("Login");
+            } else if (state == State.LOADING) {
+                subtitle = _t("Loading messages, please wait...");
+            } else if (state == State.LIST) {
+                // mailbox.getNumMails() forces a connection, don't use it
+                // Not only does it slow things down, but a failure causes all our messages to "vanish"
+                //subtitle = ngettext("1 Message", "{0} Messages", sessionObject.mailbox.getNumMails());
+                int sz = folder.getSize();
+                subtitle = mc.getTranslatedName() + " - ";
+                if (sz > 0)
+                    subtitle += ngettext("1 message", "{0} messages", folder.getSize());
                 else
-                    out.print("<body>\n");
-                String nonce = state == State.AUTH ? LOGIN_NONCE : Long.toString(ctx.random().nextLong());
-                sessionObject.addNonce(nonce);
-                out.print(
-                    // TODO we don't need the form below
-                    "<div id=page>\n<span class=header></span>\n" +
-                    "<form method=POST enctype=\"multipart/form-data\" action=\"" + myself + "\" accept-charset=utf-8>\n" +
-                    "<input type=hidden name=\"" + SUSI_NONCE + "\" value=\"" + nonce + "\">\n" +
-                    // we use this to know if the user thought he was logged in at the time
-                    "<input type=hidden name=\"" + DEBUG_STATE + "\" value=\"" + state + "\">\n");
-                if (state == State.NEW) {
-                    String newUIDL = request.getParameter(NEW_UIDL);
-                    if (newUIDL == null || newUIDL.length() <= 0)
-                        newUIDL = Base64.encode(ctx.random().nextLong() + "drft");
-                    out.print("<input type=hidden name=\"" + NEW_UIDL + "\" value=\"" + newUIDL + "\">\n");
+                    subtitle += _t("No messages");
+            } else if (state == State.SHOW) {
+                // mc non-null
+                Mail mail = showUIDL != null ? mc.getMail(showUIDL, MailCache.FetchMode.HEADER) : null;
+                if (mail != null && mail.hasHeader()) {
+                    if (mail.shortSubject != null)
+                        subtitle = mail.shortSubject; // already HTML encoded
+                    else
+                        subtitle = _t("Show Message");
+                } else {
+                    subtitle = _t("Message not found.");
                 }
-                if (state == State.SHOW || state == State.NEW) {
-                    // Store the reference UIDL on the compose form also
-                    if (showUIDL != null) {
-                        // reencode, as showUIDL may have changed, and also for XSS
-                        b64UIDL = Base64.encode(showUIDL);
-                        out.print("<input type=hidden name=\"" + B64UIDL + "\" value=\"" + b64UIDL + "\">\n");
-                    } else if (state == State.NEW) {
-                        // for NEW, try to get back to the current page if we weren't replying
-                        int page = 1;
-                        String sp = request.getParameter(CUR_PAGE);
-                        if (sp != null) {
-                            try {
-                                page = Integer.parseInt(sp);
-                            } catch (NumberFormatException nfe) {}
-                        }
-                        out.print("<input type=hidden name=\"" + CUR_PAGE + "\" value=\"" + page + "\">\n");
+            } else if (state == State.NEW) {
+                subtitle = _t("New Message");
+            } else if (state == State.CONFIG) {
+                subtitle = _t("Configuration");
+            }
+  
+            response.setContentType("text/html");
+
+            /*
+             * write header
+             */
+
+            StringBuilder buf = new StringBuilder(16384);
+
+            buf.append("<!DOCTYPE HTML>\n<html>\n")
+               .append("<head>\n")
+               .append("<script src=\"/js/setupIframe.js\"></script>\n")
+               .append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n")
+               .append("<meta name=viewport content=\"width=device-width, initial-scale=1\">\n")
+               .append("<title>").append(_t("I2PMail")).append(" - ").append(subtitle).append("</title>\n")
+               .append("<link rel=preload as=style href=\"").append(sessionObject.themePath).append("../images/images.css?").append(CoreVersion.VERSION).append("\">\n")
+               .append("<link rel=preload as=style href=\"").append(sessionObject.themePath).append("images/images.css?").append(CoreVersion.VERSION).append("\">\n")
+               .append("<link rel=stylesheet href=\"").append(sessionObject.themePath).append("susimail.css?").append(CoreVersion.VERSION).append("\">\n")
+               .append("<link rel=stylesheet href=\"").append(sessionObject.themePath).append("override.css?").append(CoreVersion.VERSION).append("\">\n")
+               .append("<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"").append(sessionObject.themePath).append("images/favicon.svg\">\n");
+
+            if (sessionObject.isMobile) {
+                buf.append("<link rel=stylesheet href=\"").append(sessionObject.themePath).append("mobile.css?").append(CoreVersion.VERSION).append("\" />\n");
+            }
+
+            if (enableSoraFont) {
+                buf.append("<link rel=stylesheet href=\"").append(sessionObject.themePath).append("../../fonts/Sora.css\">\n");
+            } else {
+                buf.append("<link rel=stylesheet href=\"").append(sessionObject.themePath).append("../../fonts/OpenSans.css\">\n");
+            }
+
+            if (state == State.LIST) {
+                buf.append("<link rel=stylesheet href=\"/susimail/css/print.css?").append(CoreVersion.VERSION).append("\" media=\"print\" />\n");
+            }
+
+            if (state == State.NEW || state == State.CONFIG) {
+                buf.append("<script src=\"/susimail/js/compose.js?").append(CoreVersion.VERSION).append("\"></script>\n");
+            } else if (state == State.LIST) {
+                buf.append("<script src=\"/susimail/js/folder.js?").append(CoreVersion.VERSION).append("\"></script>\n")
+                   .append("<script src=\"/js/scrollTo.js?").append(CoreVersion.VERSION).append("\"></script>\n");
+            } else if (state == State.LOADING) {
+                buf.append("<noscript><meta http-equiv=\"refresh\" content=\"5;url=").append(myself).append("\"></noscript>\n");
+            } else if (state == State.SHOW) {
+                buf.append("<script src=\"/susimail/js/markdown.js?").append(CoreVersion.VERSION).append("\"></script>\n")
+                   .append("<script src=\"/susimail/js/Markdown.Converter.js?").append(CoreVersion.VERSION).append("\"></script>\n")
+                   .append("<script src=\"/js/iframeResizer/iframeResizer.js?").append(CoreVersion.VERSION).append("\"></script>\n")
+                   .append("<script nonce='").append(cspNonce).append("'>\n")
+                   .append("  document.addEventListener('DOMContentLoaded', function(event) {\n")
+                   .append("    const htmlView = iFrameResize({interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#iframeSusiHtmlView');\n")
+                   .append("  });\n")
+                   .append("</script>\n");
+            }
+
+            // setup noscript style so we can hide js buttons when js is disabled
+            buf.append("<noscript><style>.script{display:none!important}</style></noscript>\n")
+               .append("<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js\"></script>\n")
+               .append("<script src=\"/js/iframeResizer/updatedEvent.js?").append(CoreVersion.VERSION).append("\"></script>\n")
+               .append("<script src=\"/susimail/js/notifications.js?").append(CoreVersion.VERSION).append("\"></script>\n")
+               .append("<style>body{display:none;pointer-events:none}</style>\n")
+               .append("</head>\n");
+
+            PrintWriter out = response.getWriter();
+            out.print(buf.toString());
+            buf.setLength(0);
+
+            if (state == State.LIST) {buf.append("<body id=main>\n");}
+            else {buf.append("<body>\n");}
+            String nonce = state == State.AUTH ? LOGIN_NONCE : Long.toString(ctx.random().nextLong());
+            sessionObject.addNonce(nonce);
+            // TODO we don't need the form below
+            buf.append("<div id=page>\n<span class=header></span>\n")
+                .append("<form method=POST enctype=\"multipart/form-data\" action=\"" + myself + "\" accept-charset=utf-8>\n")
+                .append("<input type=hidden name=\"" + SUSI_NONCE + "\" value=\"" + nonce + "\">\n")
+                .append("<input type=hidden name=\"" + DEBUG_STATE + "\" value=\"" + state + "\">\n"); // is the user logged in?
+            if (state == State.NEW) {
+                String newUIDL = request.getParameter(NEW_UIDL);
+                if (newUIDL == null || newUIDL.length() <= 0) {newUIDL = Base64.encode(ctx.random().nextLong() + "drft");}
+                buf.append("<input type=hidden name=\"").append(NEW_UIDL).append("\" value=\"").append(newUIDL).append("\">\n");
+            }
+            if (state == State.SHOW || state == State.NEW) {
+                // Store the reference UIDL on the compose form also
+                if (showUIDL != null) {
+                    // reencode, as showUIDL may have changed, and also for XSS
+                    b64UIDL = Base64.encode(showUIDL);
+                    buf.append("<input type=hidden name=\"").append(B64UIDL).append("\" value=\"").append(b64UIDL).append("\">\n");
+                } else if (state == State.NEW) {
+                    int page = 1; // for NEW, try to get back to the current page if we weren't replying
+                    String sp = request.getParameter(CUR_PAGE);
+                    if (sp != null) {
+                        try {page = Integer.parseInt(sp);}
+                        catch (NumberFormatException nfe) {}
                     }
+                    buf.append("<input type=hidden name=\"").append(CUR_PAGE).append("\" value=\"").append(page).append("\">\n");
                 }
-                if (state == State.SHOW || state == State.NEW || state == State.LIST) {
-                    // Save sort order in case it changes later
-                    String curSort = folder.getCurrentSortBy();
-                    SortOrder curOrder = folder.getCurrentSortingDirection();
-                    // UP is reverse (descending) sort. DOWN is normal (ascending) sort.
-                    String fullSort = curOrder == SortOrder.UP ? '-' + curSort : curSort;
-                    out.print("<input type=hidden name=\"" + CURRENT_SORT + "\" value=\"" + fullSort + "\">\n");
-                    out.print("<input type=hidden name=\"" + CURRENT_FOLDER + "\" value=\"" + mc.getFolderName() + "\">\n");
+            }
+            if (state == State.SHOW || state == State.NEW || state == State.LIST) {
+                // Save sort order in case it changes later
+                String curSort = folder.getCurrentSortBy();
+                SortOrder curOrder = folder.getCurrentSortingDirection();
+                // UP is reverse (descending) sort. DOWN is normal (ascending) sort.
+                String fullSort = curOrder == SortOrder.UP ? '-' + curSort : curSort;
+                buf.append("<input type=hidden name=\"").append(CURRENT_SORT).append("\" value=\"").append(fullSort).append("\">\n");
+                buf.append("<input type=hidden name=\"").append(CURRENT_FOLDER).append("\" value=\"").append(mc.getFolderName()).append("\">\n");
+            }
+
+            boolean showRefresh = false;
+            if ((mc != null && mc.isLoading()) || sessionObject.isFetching) {showRefresh = true;}
+            else if (state != State.LOADING && state != State.AUTH && state != State.CONFIG) {
+                String error = sessionObject.connectError;
+                if (error != null && error.length() > 0) {
+                    sessionObject.error += error + '\n';
+                    sessionObject.connectError = null;
                 }
-                boolean showRefresh = false;
-                if (mc != null && mc.isLoading()) {
-                    showRefresh = true;
-                } else if (sessionObject.isFetching) {
-                    showRefresh = true;
-                } else if (state != State.LOADING && state != State.AUTH && state != State.CONFIG) {
-                    String error = sessionObject.connectError;
-                    if (error != null && error.length() > 0) {
-                        sessionObject.error += error + '\n';
-                        sessionObject.connectError = null;
+                int added = sessionObject.newMails;
+                if (added > 0) {
+                    sessionObject.info += ngettext("{0} new message", "{0} new messages", added) + '\n';
+                    sessionObject.newMails = -1;
+                } else if (added == 0) {
+                    sessionObject.info += _t("No new messages") + '\n';
+                    sessionObject.newMails = -1;
+                }
+            }
+            if (showRefresh || sessionObject.error.length() > 0 || sessionObject.info.length() > 0) {
+                buf.append("<div id=notify class=\"notifications ");
+                if (sessionObject.newMails > 0) {buf.append("newmail ");}
+                else if (sessionObject.error.length() > 0) {
+                    buf.append("msgerror\"><p class=error>").append(quoteHTML(sessionObject.error).replace("\n", "<br>")).append("</p>");
+                }
+                if (sessionObject.info.length() > 0 || showRefresh) {
+                    buf.append("msginfo\"><p class=info><b>");
+                    if (mc != null && mc.isLoading()) {
+                        buf.append(_t("Loading messages, please wait...").replace("...", "&hellip;")).append("<br>");
                     }
-                    int added = sessionObject.newMails;
-                    if (added > 0) {
-                        sessionObject.info += ngettext("{0} new message", "{0} new messages", added) + '\n';
-                        sessionObject.newMails = -1;
-                    } else if (added == 0) {
-                        sessionObject.info += _t("No new messages") + '\n';
-                        sessionObject.newMails = -1;
-                    }
+                    if (sessionObject.isFetching) {buf.append(_t("Checking for new messages on server")).append("&hellip;<br>");}
+                    if (showRefresh) {buf.append("<noscript>" + _t("Refresh the page for updates")).append("<br></noscript>");}
+                    if (sessionObject.info.length() > 0) {buf.append(quoteHTML(sessionObject.info).replace("\n", "<br>"));}
+                    buf.append("</b></p>");
                 }
-                if (showRefresh || sessionObject.error.length() > 0 || sessionObject.info.length() > 0) {
-                    out.println("<div id=notify class=\"notifications ");
-                    if (sessionObject.newMails > 0)
-                        out.print("newmail ");
-                    else if (sessionObject.error.length() > 0)
-                        out.println("msgerror\"><p class=error>" + quoteHTML(sessionObject.error).replace("\n", "<br>") + "</p>");
-                    if (sessionObject.info.length() > 0 || showRefresh) {
-                        out.println("msginfo\"><p class=info><b>");
-                        if (mc != null && mc.isLoading())
-                            out.println(_t("Loading messages, please wait...").replace("...", "&hellip;") + "<br>");
-                        if (sessionObject.isFetching)
-                            out.println(_t("Checking for new messages on server") + "&hellip;<br>");
-                        if (showRefresh)
-                            out.println("<noscript>" + _t("Refresh the page for updates") + "<br></noscript>");
-                        if (sessionObject.info.length() > 0)
-                            out.println(quoteHTML(sessionObject.info).replace("\n", "<br>"));
-                        out.println("</b></p>");
-                    }
-                    out.println("</div>");
-                }
-                /*
-                 * now write body
-                 */
-                if (state == State.AUTH)
-                    showLogin(out);
+                buf.append("</div>");
+            }
+            out.print(buf.toString());
+            buf.setLength(0);
+  
+            /*
+             * now write body
+             */
+            if (state == State.AUTH) {showLogin(out);}
+            else if (state == State.LOADING) {showLoading(out, sessionObject, request);}
+            else if (state == State.LIST) {showFolder(out, sessionObject, mc, request);}
+            else if (state == State.SHOW) {
+                // Determine what HtmlMode we're going to show the mail in
+                boolean disable = isMobile || !CSPDetector.supportsCSP(httpRequest.getHeader("User-Agent"));
+                boolean link = !disable;
+                String hp = httpRequest.getParameter(HTML);
+                boolean allow = link && ("1".equals(hp)) || (!"0".equals(hp) && Boolean.parseBoolean(Config.getProperty(CONFIG_HTML_ALLOWED, "true")));
+                boolean prefer = allow && ("1".equals(hp)) || (!"0".equals(hp) && Boolean.parseBoolean(Config.getProperty(CONFIG_HTML_PREFERRED, "true")));
+                HtmlMode allowHTML = prefer ? HtmlMode.PREFER : allow ? HtmlMode.ALLOW : link ? HtmlMode.LINK : HtmlMode.NONE;
+                showMessage(out, sessionObject, mc, showUIDL, buttonPressed(request, DELETE), allowHTML);
+                buf.append("<script src=\"/susimail/js/toggleHeaders.js?").append(CoreVersion.VERSION).append("\"></script>\n")
+                   .append("<script src=/susimail/js/htmlView.js></script>\n")
+                   .append("<script src=\"/susimail/js/markdown.js?").append(CoreVersion.VERSION).append("\"></script>\n")
+                   .append("<script src=\"/susimail/js/Markdown.Converter.js?").append(CoreVersion.VERSION).append("\"></script>\n");
+            }
+            else if (state == State.NEW) {showCompose(out, sessionObject, request);}
+            else if (state == State.CONFIG) {showConfig(out, folder);}
+  
+            if (state == State.AUTH) {
+                buf.append("\n<div class=footer>\n<script src=\"/js/togglePassword.js?")
+                   .append(CoreVersion.VERSION).append("\"></script>")
+                   .append("<p class=footer>")
+                   .append(_t("{0} is an I2P-exclusive service provided by {1}.", "<b>I2PMail</b>",
+                           "<a href=\"http://hq.postman.i2p/\" target=_blank>Postman</a>")).append(' ')
+                   .append(_t("{0} webmail client &copy Susi 2004-2005.", "<b>SusiMail</b>")
+                   .replace("&copy", "&copy;")).append("</p>\n</div>\n");
+            }
+            buf.append("</form>\n</div>\n<span data-iframe-height></span>\n");
+            if (sessionObject.isFetching) {
+                buf.append("<script id=autorefresh type=module src=\"/susimail/js/refreshInbox.js?")
+                   .append(CoreVersion.VERSION).append("\"></script>\n");
+            }
+            buf.append("<style>body{display:block;pointer-events:auto}</style>\n");
+            buf.append("</body>\n</html>");
 
-                else if (state == State.LOADING)
-                    showLoading(out, sessionObject, request);
-
-                else if (state == State.LIST)
-                    showFolder(out, sessionObject, mc, request);
-
-                else if (state == State.SHOW) {
-                    // Determine what HtmlMode we're going to show the mail in
-                    boolean disable = isMobile || !CSPDetector.supportsCSP(httpRequest.getHeader("User-Agent"));
-                    boolean link = !disable;
-                    String hp = httpRequest.getParameter(HTML);
-                    boolean allow = link && ("1".equals(hp)) || (!"0".equals(hp) && Boolean.parseBoolean(Config.getProperty(CONFIG_HTML_ALLOWED, "true")));
-                    boolean prefer = allow && ("1".equals(hp)) || (!"0".equals(hp) && Boolean.parseBoolean(Config.getProperty(CONFIG_HTML_PREFERRED, "true")));
-                    HtmlMode allowHTML = prefer ? HtmlMode.PREFER : allow ? HtmlMode.ALLOW : link ? HtmlMode.LINK : HtmlMode.NONE;
-                    showMessage(out, sessionObject, mc, showUIDL, buttonPressed(request, DELETE), allowHTML);
-                    out.print("<script src=\"/susimail/js/toggleHeaders.js?" + CoreVersion.VERSION + "\"></script>\n");
-                    out.print("<script src=/susimail/js/htmlView.js></script>\n");
-                    //out.print("<script src=\"/themes/toggleHeaders.js?" + CoreVersion.VERSION + "\"></script>\n"); // debug
-                    out.print("<script src=\"/susimail/js/markdown.js?" + CoreVersion.VERSION + "\"></script>\n");
-                    out.print("<script src=\"/susimail/js/Markdown.Converter.js?" + CoreVersion.VERSION + "\"></script>\n");
-                }
-
-                else if (state == State.NEW)
-                    showCompose(out, sessionObject, request);
-
-                else if (state == State.CONFIG)
-                    showConfig(out, folder);
-
-                if (state == State.AUTH) {
-                    out.print("\n<div class=footer>\n<script src=\"/js/togglePassword.js?" + CoreVersion.VERSION + "\"></script>" +
-                              "<p class=footer>" +
-                              _t("{0} is an I2P-exclusive service provided by {1}.", "<b>I2PMail</b>", "<a href=\"http://hq.postman.i2p/\" target=_blank>Postman</a>") + ' ' +
-                              _t("{0} webmail client &copy Susi 2004-2005.", "<b>SusiMail</b>").replace("&copy", "&copy;") +
-                              "</p>\n</div>\n");
-                }
-                out.print("</form>\n</div>\n<span data-iframe-height></span>\n");
-                if (sessionObject.isFetching) {
-                    out.print("<script id=autorefresh type=module src=\"/susimail/js/refreshInbox.js?" + CoreVersion.VERSION + "\"></script>\n");
-                }
-                out.print("<style>body{display:block;pointer-events:auto}</style>\n");
-                out.print("</body>\n</html>");
-                out.flush();
-            }  // synch sessionObject
+            out.print(buf.toString());
+            buf.setLength(0);
+            out.flush();
+        } // sync sessionObject
     }
 
     /**
@@ -3228,11 +3202,9 @@ public class WebMail extends HttpServlet
      * @param request
      */
     private static void showCompose(PrintWriter out, SessionObject sessionObject, RequestWrapper request) {
-        out.println("<div class=topbuttons>");
-        out.println(button(SEND, _t("Send")) +
-                button(SAVE_AS_DRAFT, _t("Save as Draft")) +
-                button(CANCEL, _t("Cancel")));
-        out.println("</div>");
+        out.print("<div class=topbuttons>");
+        out.print(button(SEND, _t("Send")) + button(SAVE_AS_DRAFT, _t("Save as Draft")) + button(CANCEL, _t("Cancel")));
+        out.print("</div>\n");
 
         Draft draft = null;
         String from = "";
@@ -3257,8 +3229,7 @@ public class WebMail extends HttpServlet
             String newUIDL = Base64.decodeToString(b64UIDL);
             Log log = sessionObject.log;
             if (log.shouldDebug()) log.debug("Show draft: " + newUIDL);
-            if (newUIDL != null)
-                draft = (Draft) drafts.getMail(newUIDL, MailCache.FetchMode.CACHE_ONLY);
+            if (newUIDL != null) {draft = (Draft) drafts.getMail(newUIDL, MailCache.FetchMode.CACHE_ONLY);}
             if (draft != null) {
                 // populate from saved draft
                 from = draft.sender;
@@ -3270,29 +3241,22 @@ public class WebMail extends HttpServlet
                 try {
                     Buffer ob = new OutputStreamBuffer(new DecodingOutputStream(body, "UTF-8"));
                     draft.getPart().decode(0, ob);
-                } catch (IOException ioe) {
-                    sessionObject.error += "Draft decode error: " + ioe.getMessage() + '\n';
-                }
+                } catch (IOException ioe) {sessionObject.error += "Draft decode error: " + ioe.getMessage() + '\n';}
                 text = body.toString();
                 List<Attachment> a = draft.getAttachments();
                 if (!a.isEmpty()) {
-                    if (sessionObject.attachments == null)
+                    if (sessionObject.attachments == null) {
                         sessionObject.attachments = new ArrayList<Attachment>(a.size());
-                    else
-                        sessionObject.attachments.clear();
+                    } else {sessionObject.attachments.clear();}
                     sessionObject.attachments.addAll(a);
-                } else if (sessionObject.attachments != null) {
-                    sessionObject.attachments.clear();
-                }
+                } else if (sessionObject.attachments != null) {sessionObject.attachments.clear();}
                 // needed when processing the CANCEL button
                 out.println("<input type=hidden name=\"" + DRAFT_EXISTS + "\" value=1>");
             }
 
         boolean fixed = Boolean.parseBoolean(Config.getProperty(CONFIG_SENDER_FIXED, "true"));
 
-        if (from.length() <= 0 || !fixed) {
-            from = getDefaultSender(sessionObject);
-        }
+        if (from.length() <= 0 || !fixed) {from = getDefaultSender(sessionObject);}
 
         out.print("<div id=composemail>" +
                    "<table id=newmail width=100%>\n" +
@@ -3326,9 +3290,7 @@ public class WebMail extends HttpServlet
                 if (!wroteHeader) {
                     out.print("<tr><td class=right>" + _t("Attachments") + "</td>");
                     wroteHeader = true;
-                } else {
-                    out.print("<tr><td>&nbsp;</td>");
-                }
+                } else {out.print("<tr><td>&nbsp;</td>");}
                 out.print("<td id=attachedfile class=left><label><input type=checkbox class=optbox name=\"check" +
                           attachment.hashCode() + "\" value=1>&nbsp;" + quoteHTML(attachment.getFileName()));
                 out.print(" <span class=attachSize>(" + attachSize + ")</span></label>");
@@ -3336,27 +3298,19 @@ public class WebMail extends HttpServlet
                 String iconDir = "/themes/susimail/images/";
                 if (type != null) {
                     out.print("<span class=thumbnail><img alt=\"\" src=\"");
-                    if (type.startsWith("image/")) {
-                        out.print(myself + '?' + DRAFT_ATTACHMENT + '=' + attachment.hashCode());
-                    } else if (type.startsWith("audio/")) {
-                        out.print(iconDir + "audio.svg");
-                    } else if (type.startsWith("text/")) {
-                        out.print(iconDir + "text.svg");
-                    } else if (type.startsWith("video/")) {
-                        out.print(iconDir + "video.svg");
-                    } else if (type.contains("pgp")) {
-                        out.print(iconDir + "sig.svg");
-                    } else if (type.equals("application/zip") || type.equals("application/x-gtar") ||
+                    if (type.startsWith("image/")) {out.print(myself + '?' + DRAFT_ATTACHMENT + '=' + attachment.hashCode());}
+                    else if (type.startsWith("audio/")) {out.print(iconDir + "audio.svg");}
+                    else if (type.startsWith("text/")) {out.print(iconDir + "text.svg");}
+                    else if (type.startsWith("video/")) {out.print(iconDir + "video.svg");}
+                    else if (type.contains("pgp")) {out.print(iconDir + "sig.svg");}
+                    else if (type.equals("application/zip") || type.equals("application/x-gtar") ||
                                type.equals("application/x-zip-compressed") || type.equals("application/compress") ||
                                type.equals("application/gzip") || type.equals("application/x-7z-compressed") ||
                                type.equals("application/x-rar-compressed") || type.equals("application/x-tar") ||
                                type.equals("application/x-bzip2")) {
                         out.print(iconDir + "compress.svg");
-                    } else if (type.equals("application/pdf")) {
-                        out.print(iconDir + "pdf.svg");
-                    } else {
-                        out.print(iconDir + "generic.svg");
-                    }
+                    } else if (type.equals("application/pdf")) {out.print(iconDir + "pdf.svg");}
+                    else {out.print(iconDir + "generic.svg");}
                     out.print("\" hidden></span>");
                 }
                 out.print("</td></tr>\n");
