@@ -4,23 +4,18 @@
 <jsp:setProperty name="newshelper" property="page" value="<%=newspath.getAbsolutePath()%>" />
 <jsp:setProperty name="newshelper" property="maxLines" value="300" />
 <%
-  String refreshDelay = "0";
   boolean allowIFrame = intl.allowIFrame(request.getHeader("User-Agent"));
-  if (allowIFrame) {
-    refreshDelay = request.getParameter("refresh");
-    if (refreshDelay == null || refreshDelay.isEmpty()) { refreshDelay = intl.getRefresh(); }
-    else {
-      try {
-        long delay = Long.parseLong(refreshDelay);
-        refreshDelay = "?refresh=" + delay;
-      } catch (NumberFormatException nfe) { refreshDelay = "?refresh=60"; }
-      intl.setDisableRefresh(refreshDelay);
-    }
+  String refreshDelay = "0";
+  refreshDelay = request.getParameter("refresh");
+  if (refreshDelay == null || refreshDelay.isEmpty()) { refreshDelay = intl.getRefresh(); }
+  else {
+    try {
+      long delay = Long.parseLong(refreshDelay);
+      refreshDelay = "?refresh=" + delay;
+    } catch (NumberFormatException nfe) { refreshDelay = "?refresh=60"; }
+    intl.setDisableRefresh(refreshDelay);
   }
 %>
 <div id=sb_wrap style=width:200px;float:left;margin-right:20px>
-<div id=sidebar class=sb>
-<% if (allowIFrame) { %><%@include file="sidebar_noframe.jsi" %>
-<% } else { %><a href="/sidebar"><%=intl._t("Sidebar")%></a><% } %>
-</div>
+<div id=sidebar class=sb><%@include file="sidebar_noframe.jsi" %></div>
 </div>

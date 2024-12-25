@@ -1,6 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
 <!DOCTYPE HTML>
-<% /* All links in the summary bar must have target=_top so they don't load in the iframe */ %>
 <%
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";
@@ -9,13 +8,10 @@
 <%@include file="head.jsi" %>
 <title>Sidebar - I2P+</title>
 <%
-    // Try hard to avoid an error page in the iframe after shutdown
     String action = request.getParameter("action");
     String d = request.getParameter("refresh");
-    // Normal browsers send value, IE sends button label
     boolean allowIFrame = intl.allowIFrame(request.getHeader("User-Agent"));
-    boolean shutdownSoon = (!allowIFrame) ||
-                           "shutdownImmediate".equals(action) || "restartImmediate".equals(action) ||
+    boolean shutdownSoon = (!allowIFrame) || "shutdownImmediate".equals(action) || "restartImmediate".equals(action) ||
                            "Shutdown immediately".equals(action) || "Restart immediately".equals(action);
     if (!shutdownSoon) {
         if (d == null || "".equals(d)) {} // set below
@@ -37,8 +33,9 @@
             }
             long timeleft = net.i2p.router.web.helpers.ConfigRestartBean.getRestartTimeRemaining();
             long delay = 60;
-            try { delay = Long.parseLong(d); } catch (NumberFormatException nfe) {}
-            if (delay*1000 < timeleft + 5000) {out.print("<meta http-equiv=\"refresh\" content=\"" + delay + ";url=/sidebar.jsp\" >\n");}
+            try {delay = Long.parseLong(d);}
+            catch (NumberFormatException nfe) {}
+            if (delay*1000 < timeleft + 5000) {out.print("<meta http-equiv=refresh content=" + delay + ">\n");}
             else {shutdownSoon = true;}
         }
     }

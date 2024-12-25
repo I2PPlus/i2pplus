@@ -33,7 +33,7 @@ import net.i2p.util.PortMapper;
 import net.i2p.util.SystemVersion;
 
 /**
- *  Refactored from summarynoframe.jsp to save ~100KB
+ *  Refactored from sidebar_noframe.jsp to save ~100KB
  *
  */
 class SidebarRenderer {
@@ -429,11 +429,10 @@ class SidebarRenderer {
 
     public String renderI2PInternalsHTML() {
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<h3><a href=\"/sitemap\" target=_top title=\"")
-           .append(_t("I2P+ Router Sitemap"))
-           .append("\">")
-           .append(_t("Internals"))
-           .append("</a><input type=checkbox id=toggle_sb_internals class=\"toggleSection script\" checked hidden></h3>\n<hr class=b>\n")
+        buf.append("<h3><a href=\"/sitemap\" target=_top title=\"").append(_t("I2P+ Router Sitemap"))
+           .append("\">").append(_t("Internals")).append("</a>")
+           .append("<input type=checkbox id=toggle_sb_internals class=\"toggleSection script\" checked hidden>")
+           .append("</h3>\n<hr class=b>\n")
            .append("<table id=sb_internals class=collapse>\n<tr><td>");
 
         // Store all items in map so they are sorted by translated name, then output
@@ -441,99 +440,67 @@ class SidebarRenderer {
         StringBuilder rbuf = new StringBuilder(128);
 
         String tx = _t("Certs");
-        rbuf.append("<a target=_top title=\"")
-            .append(_t("Review active encryption certificates used in console"))
-            .append("\" href=\"/certs\">")
-            .append(nbsp(tx))
-            .append("</a>\n");
-            //.append("<a class=sb_icon target=_top href=/certs title=\"").append(tx)
-            //.append("\" hidden><span><img src=/themes/console/images/certs.svg></span></a>\n");
+        rbuf.append("<a target=_top title=\"").append(_t("Review active encryption certificates used in console"))
+            .append("\" href=\"/certs\">").append(nbsp(tx)).append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("Events");
         rbuf.setLength(0);
         // 7 days
         rbuf.append("<a href=\"/events?from=604800\" target=_top title=\"")
-            .append(_t("View historical log of router events"))
-            .append("\">")
-            .append(nbsp(tx))
-            .append("</a>\n");
-            //.append("<a class=sb_icon target=_top href=\"/events?from=604800\" title=\"").append(tx)
-            //.append("\" hidden><span><img src=/themes/console/images/textstats.svg></span></a>\n");
+            .append(_t("View historical log of router events")).append("\">").append(nbsp(tx)).append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
         if (!StatSummarizer.isDisabled(_context)) {
             tx = _t("Graphs");
             rbuf.setLength(0);
-            rbuf.append("<a href=\"/graphs\" target=_top title=\"")
-                .append(_t("Graph router performance"))
-                .append("\">")
-                .append(nbsp(tx))
-                .append("</a>\n")
-            .append("<a class=sb_icon target=_top href=/graphs title=\"").append(tx)
-            .append("\" hidden><span><img src=/themes/console/images/graphs.svg></span></a>\n");
+            rbuf.append("<a href=\"/graphs\" target=_top title=\"").append(_t("Graph router performance")).append("\">")
+                .append(nbsp(tx)).append("</a>\n")
+                .append("<a class=sb_icon target=_top href=/graphs title=\"").append(tx)
+                .append("\" hidden><span><img src=/themes/console/images/graphs.svg></span></a>\n");
             svcs.put(tx, rbuf.toString());
         }
 
         tx = _t("Help");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/help/\" target=_top title=\"")
-            .append(_t("Router Help and FAQ"))
-            .append("\">")
-            .append(nbsp(tx))
-            .append("</a>\n");
+        rbuf.append("<a href=\"/help/\" target=_top title=\"").append(_t("Router Help and FAQ")).append("\">")
+            .append(nbsp(tx)).append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("Info");
         rbuf.setLength(0);
         rbuf.append("<a href=\"/info\" target=_top title=\"")
-            .append(_t("Router information including transport addresses and UPnP scan"))
-            .append("\">")
-            .append(nbsp(tx))
-            .append("</a>\n");
+            .append(_t("Router information including transport addresses and UPnP scan")).append("\">")
+            .append(nbsp(tx)).append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("Jobs");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/jobs\" target=_top title=\"")
-            .append(_t("Show the router's workload, and how it's performing"))
-            .append("\">")
-            .append(nbsp(tx))
-            .append("</a>\n")
+        rbuf.append("<a href=\"/jobs\" target=_top title=\"").append(_t("Show the router's workload, and how it's performing"))
+            .append("\">").append(nbsp(tx)).append("</a>\n")
             .append("<a class=sb_icon target=_top href=/jobs title=\"").append(tx)
             .append("\" hidden><span><img src=/themes/console/images/jobs.svg></span></a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("Logs");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/logs\" target=_top title=\"")
-            .append(_t("Health Report"))
-            .append("\">")
-            .append(nbsp(tx))
-            .append("</a>\n")
-            .append("<a class=sb_icon target=_top href=/logs title=\"").append(tx)
+        rbuf.append("<a href=\"/logs\" target=_top title=\"").append(_t("Health Report")).append("\">")
+            .append(nbsp(tx)).append("</a>\n").append("<a class=sb_icon target=_top href=/logs title=\"").append(tx)
             .append("\" hidden><span><img src=/themes/console/images/logs.svg></span></a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("NetDb");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/netdb\" target=_top title=\"")
-            .append(_t("Show list of all known I2P routers"))
-            .append("\">")
-            .append(nbsp(tx))
-            .append("</a>\n")
+        rbuf.append("<a href=\"/netdb\" target=_top title=\"").append(_t("Show list of all known I2P routers")).append("\">")
+            .append(nbsp(tx)).append("</a>\n")
             .append("<a class=sb_icon target=_top href=/netdb title=\"").append(tx)
             .append("\" hidden><span><img src=/themes/console/images/globe.svg></span></a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("Peers");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/peers\" target=_top title=\"")
-            .append(_t("Show all current peer connections"))
-            .append("\">")
-            .append(nbsp(tx))
-            .append("</a>\n")
-            .append("<a class=sb_icon target=_top href=/peers title=\"").append(tx)
+        rbuf.append("<a href=\"/peers\" target=_top title=\"").append(_t("Show all current peer connections")).append("\">")
+            .append(nbsp(tx)).append("</a>\n").append("<a class=sb_icon target=_top href=/peers title=\"").append(tx)
             .append("\" hidden><span><img src=/themes/console/images/peers.svg></span></a>\n");
         svcs.put(tx, rbuf.toString());
 
@@ -1038,13 +1005,11 @@ class SidebarRenderer {
     /** @since 0.9.32 */
     public String renderBandwidthGraphHTML() {
         if (_helper == null) {return "";}
-        if (StatSummarizer.isDisabled(_context))
-            return "";
+        if (StatSummarizer.isDisabled(_context)) {return "";}
         String r = _context.getProperty(CSSHelper.PROP_REFRESH, CSSHelper.DEFAULT_REFRESH);
         int refreshPeriod = 3;
-        try {
-          refreshPeriod = Integer.parseInt(r);
-        } catch (NumberFormatException nfe) {}
+        try {refreshPeriod = Integer.parseInt(r);}
+        catch (NumberFormatException nfe) {}
         StringBuilder buf = new StringBuilder(512);
         buf.append("<div id=sb_graphcontainer class=collapse title=\"")
            .append(_t("Our inbound &amp; outbound traffic for the last 20 minutes"))

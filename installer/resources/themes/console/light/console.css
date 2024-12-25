@@ -989,7 +989,7 @@ button.download.control{background:var(--download) no-repeat center center/14px,
 button.download.control:hover,button.download.control:focus{background:var(--download_hover) no-repeat center center/14px,var(--btn_hover)}
 
 /* sidebar buttons */
-#updateAvailable{margin:-4px 0 7px;width:100%;display:inline-block;line-height:1.2;font-size:9pt;opacity:.9}
+#updateAvailable{margin:0 0 7px;width:100%;display:inline-block;line-height:1.2;font-size:9pt;opacity:.9}
 #updateAvailable+br+button+br+#updateAvailable::before{margin:2px 0 4px;width:calc(100% - 20px);height:1px;display:inline-block;background:#ddf;content:""}
 #updateAvailable+br+button+br+#updateAvailable{margin-top:8px}
 #sidebar button{margin:0 1px -3px;min-width:87px}
@@ -2874,7 +2874,7 @@ h4#updateplugins,#news p{font-size:10pt}
 #sidebar .cancel[value="cancelShutdown"]{margin-top:12px}
 #sidebar form{margin-bottom:0;padding-bottom:5px}
 #sidebar #sb_updateform{padding-bottom:1px}
-#homepage #sidebar #sb_updateform{padding-bottom:6px}
+#homepage #sidebar #sb_updateform{padding-bottom:3px}
 #sidebar h3 a .badge,#tunnelCount,#newsCount{transform:translateY(-1px)}
 #sidebar h3::after{min-height:19px;display:inline-block;vertical-align:middle;box-sizing:border-box;content:""}
 #sidebar h3 a{padding:4px 0 2px;font-size:11pt}

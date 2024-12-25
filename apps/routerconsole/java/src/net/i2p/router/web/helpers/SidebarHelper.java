@@ -1212,7 +1212,7 @@ public class SidebarHelper extends HelperBase {
         renderer.renderSummaryHTML(_out);
     }
 
-    /* below here is stuff we need to get from summarynoframe.jsp to SidebarRenderer */
+    /* below here is stuff we need to get from sidebar_noframe.jsp to SidebarRenderer */
 
     private String _action;
     public void setAction(String s) {_action = s == null ? null : DataHelper.stripHTML(s);}

@@ -32,10 +32,16 @@ boolean hasWizardStyles = uri.endsWith("wizard") || uri.endsWith("wizard.jsp");
 <% if (lang.equals("zh")) { %> <link href="<%=themePath%>console_big.css?version=<%=v%>" rel=stylesheet> <% }
    else if (lang.equals("ar") || lang.equals("fa")) { %> <link href="<%=themePath%>console_ar.css?version=<%=v%>" rel=stylesheet> <% } %>
 <% if (hasOverride) { %> <link href=<%=themePath%>override.css rel=stylesheet> <% } %>
+<script src=/js/snowflakes.js type=module></script>
 <script nonce=<%=cspNonce %>>
   if (top.location.href !== location.href) top.location.href = location.href;
   const refresh = parseInt(<%=intl.getRefresh()%>, 10);
   const theme = "<%=theme%>";
+  if (Math.random(3) === 0) {
+    document.addEventListener("DOMContentLoaded", () => {
+      new Snowflakes({ container: document.querySelector('#magic') })
+    });
+  }
 </script>
 <script src=/js/progressx.js></script>
 <script src=/js/initSidebar.js type=module></script>
