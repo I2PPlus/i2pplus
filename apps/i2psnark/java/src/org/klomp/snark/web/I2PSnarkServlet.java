@@ -4423,7 +4423,7 @@ public class I2PSnarkServlet extends BasicServlet {
             boolean isImage = mime.startsWith("image/");
             boolean isText = mime.startsWith("text/") || mime.equals("application/javascript") ||
                              mime.equals("application/json") || mime.equals("application/xml") ||
-                             mime.endsWith(".url");
+                             path.toLowerCase().endsWith(".url");
             boolean isPDF = mime.equals("application/pdf");
             buf.append("<td class=\"fileIcon");
             if (!complete) {buf.append(" volatile");}
@@ -4890,7 +4890,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String plc = path.toLowerCase(Locale.US);
         String mime = getMimeType(path);
         if (mime == null) {mime = "";}
-        if (mime.equals("text/html") || plc.endsWith(".jsp")) {icon = "html";}
+        if (mime.equals("text/html") || plc.endsWith(".jsp") || plc.endsWith(".url")) {icon = "html";}
 
         else if (plc.endsWith(".srt")) {icon = "srt";}
 

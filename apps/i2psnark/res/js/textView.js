@@ -12,14 +12,15 @@ document.addEventListener("DOMContentLoaded", function () {
     'td.snarkFileName>a[href$=".nfo"]',
     'td.snarkFileName>a[href$=".sh"]',
     'td.snarkFileName>a[href$=".srt"]',
-    'td.snarkFileName>a[href$=".txt"]'
+    'td.snarkFileName>a[href$=".txt"]',
+    'td.snarkFileName>a[href$=".url"]'
   ];
 
   const doc = document;
   const parentDoc = window.parent.document;
   const isIframed = doc.documentElement.classList.contains("iframed") || window.parent;
   const snarkFileNameLinks = doc.querySelectorAll(":where(" + viewLinks.join(",") + ")");
-  const supportedFileTypes = new Set(["css", "csv", "js", "json", "nfo", "txt", "sh", "srt"]);
+  const supportedFileTypes = new Set(["css", "csv", "js", "json", "nfo", "txt", "sh", "srt", "url"]);
   const numberedFileExts = new Set(["css", "js", "sh"]);
   const cssHref = "/i2psnark/.res/textView.css";
   const textviewContent = doc.getElementById("textview-content");
