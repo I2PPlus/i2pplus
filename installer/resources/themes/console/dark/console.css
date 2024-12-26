@@ -631,44 +631,44 @@ h3.stats{border:var(--border);border-radius:0}
 .graphstat{margin:0 1px;padding:0 8px 2px;line-height:1}
 .joblog li{padding:2px 20px 2px 0;margin:2px 0 2px 30px;line-height:1.2;word-wrap:break-word}
 .joblog ul{margin:5px 0 -10px;word-wrap:break-word}
-#statlist{margin:-11px 0 -31px;padding:10px 0 0;color:#bb7;border:var(--border);background:#000}
-#statlist a[name],#statlist b,#statlist li b,#statlist a[name]:hover{letter-spacing:normal;text-decoration:none;color:#bb3}
-#statlist .bullet{display:none}
-#statlist:last-of-type{margin-bottom:-13px}
-#statlist li{margin-left:10px;line-height:1.6;list-style:none}
-#statlist li b{color:#994}
-#statlist li::before{line-height:.5;vertical-align:baseline;font-size:14pt;color:#bb3;content:"\2B26\00A0"}
-#statlist li b{font-size:110%}
-#statlist li br,#statlist li li br{display:inline-block}
-#statlist li i{margin-left:6px;opacity:.8}
-#statlist li li{margin:10px -20px -10px 16px;line-height:1.4;list-style:none}
-#statlist li li::before,#statlist li li:last-child::before{margin-top:2px;margin-bottom:-12px;vertical-align:bottom;display:inline-block;color:#994;content:"\279F\00A0"}
-#statlist li li b{font-size:100%}
-#statlist li li:last-child{margin-bottom:-12px}
-#statlist li li:last-child::before{margin-top:3px;vertical-align:top;color:#994;content:"\27A1\00A0"}
-#statlist li li:last-child::after{margin-top:6px;margin-bottom:-12px;display:block;content:""}
-#statlist li li:not(.noevents):first-child{margin-top:-10px}
-#statlist li li:not(.noevents):last-child{margin-top:30px;padding-bottom:0}
-#statlist li.statsName:first-child{margin-top:0}
-#statlist li.statsName b{padding-left:20px;background:var(--star) left top 1px no-repeat;background-size:14px}
-#statlist li.statsName ul li b{background:none}
-#statlist ul li:last-child b{padding-left:0;width:auto}
+.statlist{margin:-11px 0 -31px;padding:10px 0 0;color:#bb7;border:var(--border);background:#000}
+.statlist a[name],.statlist b,.statlist li b,.statlist a[name]:hover{letter-spacing:normal;text-decoration:none;color:#bb3}
+.statlist .bullet{display:none}
+.statlist:last-of-type{margin-bottom:-13px}
+.statlist li{margin-left:10px;line-height:1.6;list-style:none}
+.statlist li b{color:#994}
+.statlist li::before{line-height:.5;vertical-align:baseline;font-size:14pt;color:#bb3;content:"\2B26\00A0"}
+.statlist li b{font-size:110%}
+.statlist li br,.statlist li li br{display:inline-block}
+.statlist li i{margin-left:6px;opacity:.8}
+.statlist li li{margin:10px -20px -10px 16px;line-height:1.4;list-style:none}
+.statlist li li::before,.statlist li li:last-child::before{margin-top:2px;margin-bottom:-12px;vertical-align:bottom;display:inline-block;color:#994;content:"\279F\00A0"}
+.statlist li li b{font-size:100%}
+.statlist li li:last-child{margin-bottom:-12px}
+.statlist li li:last-child::before{margin-top:3px;vertical-align:top;color:#994;content:"\27A1\00A0"}
+.statlist li li:last-child::after{margin-top:6px;margin-bottom:-12px;display:block;content:""}
+.statlist li li:not(.noevents):first-child{margin-top:-10px}
+.statlist li li:not(.noevents):last-child{margin-top:30px;padding-bottom:0}
+.statlist li.statsName:first-child{margin-top:0}
+.statlist li.statsName b{padding-left:20px;background:var(--star) left top 1px no-repeat;background-size:14px}
+.statlist li.statsName ul li b{background:none}
+.statlist ul li:last-child b{padding-left:0;width:auto}
 .statsLongName{margin-left:15px;margin-bottom:-24px;padding-bottom:8px;width:calc(100% - 27px);display:block;line-height:1.2;font-weight:700;color:#dd0;border-bottom:var(--border_soft)}
 .statsViewGraphs{margin:8px 0 -12px -4px;width:100%;display:block;font-size:90%}
 .statvalue{padding:0 2px 0 0;font-weight:700;font-style:italic;color:var(--ink)}
 #stats form{margin:-13px 0 -11px;padding:10px;border:var(--border);background:#000}
-#stats form,#stats .toggle_input,#stats input:not(:checked)+h3,#stats input:not(:checked)+h3+#statlist,#stats input:not(:checked)+h3+#statlist+br{display:none}
+#stats form,#stats .toggle_input,#stats input:not(:checked)+h3,#stats input:not(:checked)+h3+.statlist,#stats input:not(:checked)+h3+.statlist+br{display:none}
 #stats form>*{vertical-align:middle}
 #stats h3{border-width:1px;border-radius:0}
 #stats h3 a:hover{color:var(--ink)}
-#stats input:checked+h3+#statlist{margin-bottom:-13px;display:block}
+#stats input:checked+h3+.statlist{margin-bottom:-13px;display:block}
 #stats label{display:inline-block}
 #stats .confignav{display:flex;position:sticky;top:-1px;z-index:999;flex-wrap:wrap}
-#stats .noevents,#statlist li li:last-child::after{margin-bottom:0}
+#stats .noevents,.statlist li li:last-child::after{margin-bottom:0}
 #stats .noevents{margin-bottom:5px;padding:5px 0 20px}
-#stats .noevents::after,#statlist li li:last-child::after{margin-bottom:0;padding-bottom:0;border-bottom-color:#0000}
+#stats .noevents::after,.statlist li li:last-child::after{margin-bottom:0;padding-bottom:0;border-bottom-color:#0000}
 #stats .noevents::after{margin-top:6px;margin-bottom:0;margin-right:20px;padding-bottom:10px}
-#stats #statlist{margin:0 0 50px;padding:0;border:0;background:none}
+#stats .statlist{margin:0 0 50px;padding:0;border:0;background:none}
 #stats .statsName{margin:0 6px 10px 0;padding:10px 10px 0 10px;width:calc(100% - 22px);display:inline-block;border:var(--border);box-shadow:var(--highlight),inset 0 0 2px 1px #030;background:#000800}
 #stats .statsName::before{content:none}
 #stats .statsName b,.statsName i{display:inline-block}
@@ -2761,8 +2761,8 @@ iframe.iframed{margin:15px 0 0}
   html{background:repeating-linear-gradient(180deg,#010 2px,#000 4px) #000;background-size:100% 4px}
   .optionlist{columns:500px 2}
   .tunnelBuildStatus,.tunnelBuildStatus::before{vertical-align:middle}
-  #statlist li li:last-child::after{margin-bottom:-6px}
-  #statlist{margin:-11px 0 -25px}
+  .statlist li li:last-child::after{margin-bottom:-6px}
+  .statlist{margin:-11px 0 -25px}
   #config_summarybar,#config_summarybar div.messages,#config_homepage,#config_homepage div.messages{position:static}
   #config_summarybar div.messages,#config_homepage div.messages{margin-left:0;margin-right:0;width:auto;top:initial;animation:none}
   #homepage #applinks,#homepage #sitelinks{padding-top:7px;padding-bottom:7px}
@@ -2865,7 +2865,7 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 @media (max-width:1399px){
 .revision,.sha256{display:inline-block;max-width:100px;overflow:hidden;text-overflow:ellipsis}
 .revision:hover,.sha256:hover{overflow:auto;text-overflow:clip}
-#statlist{padding:10px;columns:auto 520px;column-gap:10px;text-align:center}
+.statlist{padding:10px;columns:auto 520px;column-gap:10px;text-align:center}
 }
 
 @media (max-width:1240px){
@@ -3009,7 +3009,7 @@ th{font-size:8pt}
 
 @media (min-width:1400px){
 .statsName{border:1px solid #131}
-#statlist{padding:10px;columns:auto 540px;column-gap:10px;text-align:center}
+.statlist{padding:10px;columns:auto 540px;column-gap:10px;text-align:center}
 #changelog pre span{width:calc(100% - 28px)}
 #help .confignav,#debug .confignav{position:sticky;top:0}
 #profiles #banlist{margin:3px -5px 0;padding:10px 5px;border:0}
@@ -3017,7 +3017,7 @@ th{font-size:8pt}
 }
 
 @media (min-width:1500px){
-body,code,input[type=file]::file-selector-button,select,textarea,th,th code,tt,.confignav,.main,.main button,.main input,.main td,.main textarea,#statlist a[name],#statlist a[name]:hover,#statlist b,#statlist li b,#changelog pre,#configinfo th,#news,#news p,#sidebar button,#warning2 p{font-size:10pt}
+body,code,input[type=file]::file-selector-button,select,textarea,th,th code,tt,.confignav,.main,.main button,.main input,.main td,.main textarea,.statlist a[name],.statlist a[name]:hover,.statlist b,.statlist li b,#changelog pre,#configinfo th,#news,#news p,#sidebar button,#warning2 p{font-size:10pt}
 button.control{font-size:0}
 .leaseset th,#newsDisplay a,#updateAvailable{font-size:9.5pt}
 h1[class],h1,h1.conf.adv{padding:14px 15px 14px 65px;font-size:20pt;background-size:40px,2px,100% 4px,100%,164px;background-position:15px center}

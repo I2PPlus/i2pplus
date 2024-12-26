@@ -1090,9 +1090,9 @@ h3#scheduledjobs+ol li::before{background:var(--timer) no-repeat 6px center/12px
 .joblog hr{margin:15px 0}
 .joblog p{line-height:1.3}
 .joblog table{margin-top:15px}
-#statlist ul{word-wrap:break-word;text-align:justify;line-height:1;margin-top:-5px}
-#statlist li{word-wrap:break-word;line-height:1.5;padding:0;break-inside:avoid}
-#statlist li a{font-size:90%}
+.statlist ul{word-wrap:break-word;text-align:justify;line-height:1;margin-top:-5px}
+.statlist li{word-wrap:break-word;line-height:1.5;padding:0;break-inside:avoid}
+.statlist li a{font-size:90%}
 
 /* peers */
 h3#ntcpcon,h3#udpcon{margin-bottom:-2px;text-transform:capitalize;letter-spacing:0;word-spacing:0;border-width:1px;border-radius:0;filter:none}
@@ -1763,29 +1763,29 @@ a[href^="configpeer?peer"]:hover::after{background:var(--edit_hover) no-repeat c
 .statvalue{padding:0 2px 0 0;color:var(--ink_light);font-weight:700;font-style:italic}
 .statsViewGraphs{margin:5px 0 -5px;width:100%;display:block;font-size:90%}
 #gatherstats{margin:15px 0 12px}
-#statlist{margin:-9px 0 -5px;padding:0;width:100%;display:block;text-align:center;columns:auto 540px;column-gap:10px;border:0;box-shadow:none;background:none}
-#statlist li{margin-right:5px;padding-top:6px;padding-bottom:0;line-height:1.5;list-style:none}
-#statlist .noevents{padding-top:0;padding-bottom:15px}
-#statlist li li{font-size:95%}
-#statlist>li::after{margin-top:-5px;display:block;width:100%;height:1px;content:""}
-#statlist li::before,#statlist li a[href^="graph"]::before{margin-top:-4px;margin-right:10px;margin-left:-17px;height:4px;width:4px;display:inline-block;vertical-align:middle;opacity:.8;content:"";transform:rotate(45deg)}
-#statlist li b{font-size:110%}
-#statlist li br{display:none}
-#statlist li i{margin-left:6px;opacity:.8}
-#statlist>li:last-child::after{display:none}
-#statlist li li:last-child+br{display:block}
-#statlist b a:hover{color:var(--ink_light)}
+.statlist{margin:-9px 0 -5px;padding:0;width:100%;display:block;text-align:center;columns:auto 540px;column-gap:10px;border:0;box-shadow:none;background:none}
+.statlist li{margin-right:5px;padding-top:6px;padding-bottom:0;line-height:1.5;list-style:none}
+.statlist .noevents{padding-top:0;padding-bottom:15px}
+.statlist li li{font-size:95%}
+.statlist>li::after{margin-top:-5px;display:block;width:100%;height:1px;content:""}
+.statlist li::before,.statlist li a[href^="graph"]::before{margin-top:-4px;margin-right:10px;margin-left:-17px;height:4px;width:4px;display:inline-block;vertical-align:middle;opacity:.8;content:"";transform:rotate(45deg)}
+.statlist li b{font-size:110%}
+.statlist li br{display:none}
+.statlist li i{margin-left:6px;opacity:.8}
+.statlist>li:last-child::after{display:none}
+.statlist li li:last-child+br{display:block}
+.statlist b a:hover{color:var(--ink_light)}
 #stats form{display:none}
-#statlist .bullet{display:none}
-#statlist .statsName{margin:5px 6px 5px 0;padding:12px 10px 0;width:calc(100% - 22px);min-width:540px;display:inline-block;border:var(--border_inner);box-shadow:var(--highlight),inset 0 0 2px 1px #ddf,0 0 1px #ddf;background:rgba(248,248,255,.6)}
-#statlist .statsName::before{content:none}
-#statlist .statsName>b:first-child{padding-left:19px;background:var(--stats) no-repeat left top/15px}
-#statlist .statsName b,#statlist .statsName i{display:inline-block}
-#statlist .statsName b{width:100%}
-#statlist .statsName i{font-weight:700;color:#004f28}
-#statlist .statsName li i{color:inherit;font-weight:400}
+.statlist .bullet{display:none}
+.statlist .statsName{margin:5px 6px 5px 0;padding:12px 10px 0;width:calc(100% - 22px);min-width:540px;display:inline-block;border:var(--border_inner);box-shadow:var(--highlight),inset 0 0 2px 1px #ddf,0 0 1px #ddf;background:rgba(248,248,255,.6)}
+.statlist .statsName::before{content:none}
+.statlist .statsName>b:first-child{padding-left:19px;background:var(--stats) no-repeat left top/15px}
+.statlist .statsName b,.statlist .statsName i{display:inline-block}
+.statlist .statsName b{width:100%}
+.statlist .statsName i{font-weight:700;color:#004f28}
+.statlist .statsName li i{color:inherit;font-weight:400}
 #stats h3{margin:2px 0 14px;position:relative;z-index:10;border-width:1px;border-radius:0}
-#stats input:not(:checked)+h3,#stats input:not(:checked)+h3+ul#statlist,#stats input:not(:checked)+h3+ul#statlist+br{display:none}
+#stats input:not(:checked)+h3,#stats input:not(:checked)+h3+ul.statlist,#stats input:not(:checked)+h3+ul.statlist+br{display:none}
 #stats label{display:inline-block}
 #stats{padding-bottom:15px}
 #stats .tab,#stats .tab2{margin:0 -1px -1px 0;padding:4px 6px 6px;flex-grow:.1}
@@ -2780,7 +2780,7 @@ th.queue{white-space:nowrap}
 }
 
 @media (min-width:1400px){
-#statlist li#statlist .statsName:first-child{margin-top:0}
+.statlist li.statlist .statsName:first-child{margin-top:0}
 #changelog pre{margin-left:-10px;padding-left:10px;padding-bottom:5px;columns:550px auto;column-gap:25px;column-rule:1px solid rgba(64,64,128,.5)}
 #profiles .tab:first-child,#profiles .tab2:first-child,#help .tab:first-child,#help .tab2:first-child,#netdb .tab:first-child,#netdb .tab2:first-child,#debug .tab:first-child,#debug .tab2:first-child{border-radius:2px 0 0 2px}
 #profiles .tab:last-child,#profiles .tab2:last-child,#help .tab:last-child,#help .tab2:last-child,#netdb .tab:last-child,#netdb .tab2:last-child,#debug .tab:last-child,#debug .tab2:last-child{border-radius:0 2px 2px 0}
@@ -2901,14 +2901,14 @@ body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_int
 #sidebar #sb_shutdownStatus{padding:8px 4px 9px;line-height:1.2}
 #sidebar table[id^="sb_"],#sidebar #localtunnelSummary{width:238px}
 #sidebar #localtunnelSummary{margin-left:-5px}
-#statlist li a[href^="graph"]::before,#statlist li::before{margin:0 10px -30px -17px;height:6px;width:6px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.8)}
-#statlist li{padding:0 10px}
-#statlist>li>ul b{margin:0;display:block!important}
-#statlist .noevents::after{margin-bottom:-22px}
-#statlist .noevents::before{margin:-4px 10px 0 -17px}
-#statlist .noevents{margin:20px 0 0 10px;display:inline-block}
-#statlist .statsName::before,#statlist li br{display:none}
-#statlist .statsName>b{margin:0 0 0 3px}
+.statlist li a[href^="graph"]::before,.statlist li::before{margin:0 10px -30px -17px;height:6px;width:6px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.8)}
+.statlist li{padding:0 10px}
+.statlist>li>ul b{margin:0;display:block!important}
+.statlist .noevents::after{margin-bottom:-22px}
+.statlist .noevents::before{margin:-4px 10px 0 -17px}
+.statlist .noevents{margin:20px 0 0 10px;display:inline-block}
+.statlist .statsName::before,.statlist li br{display:none}
+.statlist .statsName>b{margin:0 0 0 3px}
 #sybilTask th{font-size:12pt}
 #udpconnections .cells td{border-left:0;border-right:0}
 #updateHelper .nowrap::after,#updateProxyHostPort .nowrap::after,#config_update .nowrap::after{min-height:60px}
