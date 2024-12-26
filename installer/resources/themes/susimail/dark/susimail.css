@@ -236,7 +236,7 @@ img.sort:active{box-shadow:var(--highlight),inset 2px 2px 2px #000}
 .sort.selected,.sort.selected:active{box-shadow:inset 1px 1px 1px #000;opacity:.8;mix-blend-mode:luminosity}
 
 /* login */
-#dologin{margin:50px auto;padding:10px 10px 1px;width:600px;border:var(--border);border-radius:2px;box-shadow:var(--bevel);background:var(--mainbg);animation:linear fade-in .15s 1.35s both}
+#dologin{margin:50px auto;padding:10px 10px 1px;width:600px;border:var(--border);border-radius:2px;box-shadow:var(--bevel);background:var(--mainbg);animation:fade-in .2s linear .2s both}
 .iframed #dologin{margin:60px auto 50px}
 #dologin td{padding:3px;font-weight:700;color:var(--ink)}
 #dologin td:first-child{width:25%;white-space:nowrap}
