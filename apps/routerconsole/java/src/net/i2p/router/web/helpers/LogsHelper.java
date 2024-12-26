@@ -26,15 +26,11 @@ import java.util.regex.*;
 public class LogsHelper extends HelperBase {
 
     private static final String _jstlVersion = jstlVersion();
-
-//    private static final int MAX_WRAPPER_LINES = 250;
     private static final int MAX_WRAPPER_LINES = 500;
     private static final String PROP_LAST_WRAPPER = "routerconsole.lastWrapperLogEntry";
 
     /** @since 0.8.12 */
-    public String getJettyVersion() {
-        return RouterConsoleRunner.jettyVersion();
-    }
+    public String getJettyVersion() {return RouterConsoleRunner.jettyVersion();}
 
     /** @since 0.9.15 */
     public String getUnavailableCrypto() {
@@ -51,9 +47,7 @@ public class LogsHelper extends HelperBase {
      * @return non-null, "n/a" on failure
      * @since 0.9.26
      */
-    public String getJstlVersion() {
-        return _jstlVersion;
-    }
+    public String getJstlVersion() {return _jstlVersion;}
 
     /**
      * @return non-null, "n/a" on failure
@@ -67,9 +61,6 @@ public class LogsHelper extends HelperBase {
             // returns "standard-taglib 1.2.0"
             Object version = getVersion.invoke(null, (Object[]) null);
             rv = (String) version;
-            //int sp = rv.indexOf(' ');
-            //if (sp >= 0 && rv.length() > sp + 1)
-            //    rv = rv.substring(sp + 1);
         } catch (Exception e) {}
         return rv;
     }
@@ -80,7 +71,7 @@ public class LogsHelper extends HelperBase {
     public String getLogs() {
         String str = formatMessages(_context.logManager().getBuffer().getMostRecentMessages());
         boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
-        return "<p>" + _t("File location") + ": <a href=\"/router.log\" target=_blank>" +
+        return "<p>" + _t("File location") + ": <a href=/router.log target=_blank>" +
                 DataHelper.escapeHTML(_context.logManager().currentFile()) + "</a></p>" +
                 "<span id=refreshPeriod style=display:none title=\"" + _t("Refresh interval (seconds)") +
                 "\"><input type=number id=logRefreshInterval></span>" + str;
@@ -101,8 +92,7 @@ public class LogsHelper extends HelperBase {
      */
     public int getLastMessageNumber() {
         UIMessages msgs = _context.logManager().getBuffer().getUIMessages();
-        if (msgs.isEmpty())
-            return -1;
+        if (msgs.isEmpty()) {return -1;}
         return msgs.getLastMessageID();
     }
 
@@ -116,8 +106,7 @@ public class LogsHelper extends HelperBase {
     public int getLastCriticalMessageNumber() {
         _context.logManager().flush();
         UIMessages msgs = _context.logManager().getBuffer().getCriticalUIMessages();
-        if (msgs.isEmpty())
-            return -1;
+        if (msgs.isEmpty()) {return -1;}
         return msgs.getLastMessageID();
     }
 
@@ -128,17 +117,15 @@ public class LogsHelper extends HelperBase {
      *  @since 0.9.46
      */
     public void clearThrough(int n, int crit, long wn, long wts, String wf, String consoleNonce) {
-        if (!CSSHelper.getNonce().equals(consoleNonce))
-            return;
-        if (n >= 0)
-            _context.logManager().getBuffer().getUIMessages().clearThrough(n);
-        if (crit >= 0)
-            _context.logManager().getBuffer().getCriticalUIMessages().clearThrough(crit);
+        if (!CSSHelper.getNonce().equals(consoleNonce)) {return;}
+        if (n >= 0) {_context.logManager().getBuffer().getUIMessages().clearThrough(n);}
+        if (crit >= 0) {_context.logManager().getBuffer().getCriticalUIMessages().clearThrough(crit);}
         if (wn >= 0 && wts > 0 && wf != null) {
             // timestamp, last line number, filename
             String val = wts + "," + wn + "," + wf;
-            if (!val.equals(_context.getProperty(PROP_LAST_WRAPPER)))
+            if (!val.equals(_context.getProperty(PROP_LAST_WRAPPER))) {
                 _context.router().saveConfig(PROP_LAST_WRAPPER, val);
+            }
         }
     }
 
@@ -163,10 +150,7 @@ public class LogsHelper extends HelperBase {
                 if (vals[2].equals(f.getName())) {
                     try { lastMod = Long.parseLong(vals[0]); } catch (NumberFormatException nfe) {}
                     try { toSkip = Long.parseLong(vals[1]); } catch (NumberFormatException nfe) {}
-                } else {
-                    // file rotated
-                    lastMod = 0;
-                }
+                } else {lastMod = 0;} // file rotated
             }
         }
         if (lastMod > 0 && flastMod <= lastMod) {
@@ -178,16 +162,9 @@ public class LogsHelper extends HelperBase {
             StringBuilder buf = new StringBuilder(MAX_WRAPPER_LINES * 80);
             long ntoSkip = readTextFile(f, utf8, MAX_WRAPPER_LINES, toSkip, buf);
             if (ntoSkip < toSkip) {
-                if (ntoSkip < 0) {
-                    // error
-                    str = null;
-                } else {
-                    // truncated?
-                    str = "";
-                }
-                // remove old setting
-                if (prop != null)
-                    _context.router().saveConfig(PROP_LAST_WRAPPER, null);
+                if (ntoSkip < 0) {str = null;} // error
+                else {str = "";} // truncated?
+                if (prop != null) {_context.router().saveConfig(PROP_LAST_WRAPPER, null);} // remove old setting
             } else {
                 str = buf.toString().replace("| |", "|")
                                     .replace("| INFO   | INFO:", "| INFO   |")
@@ -274,9 +251,7 @@ public class LogsHelper extends HelperBase {
         Attributes att = FileDumpHelper.attributes(f);
         if (att != null) {
             String s = FileDumpHelper.getAtt(att, "Built-By");
-            if (s != null) {
-                return s;
-            }
+            if (s != null) {return s;}
         }
         return "Undefined";
     }
@@ -306,22 +281,16 @@ public class LogsHelper extends HelperBase {
 
     /** formats in forward order */
     private String formatMessages(List<String> msgs) {
-        if (msgs.isEmpty())
-            return "</td></tr><tr><td><p class=nologs><i>" + _t("No log messages") + "</i></p>";
+        if (msgs.isEmpty()) {return "</td></tr><tr><td><p class=nologs><i>" + _t("No log messages") + "</i></p>";}
         boolean colorize = _context.getBooleanPropertyDefaultTrue("routerconsole.logs.color");
         StringBuilder buf = new StringBuilder(16*1024);
         buf.append("</td></tr><tr><td><ul>");
         boolean displayed = false;
         // newest first
         for (int i = msgs.size() - 1; i >= 0; i--) {
-        // oldest first
-        // for (int i = 0; i < msgs.size(); i++) {
             String msg = msgs.get(i);
-            // don't display the dup message if it is last
-            //if (i == 0 && msg.contains("&darr;"))
             // don't display the dup message if it is first
-            if (!displayed && msg.contains("&uarr;") || !displayed && msg.contains("&darr;"))
-                continue;
+            if (!displayed && msg.contains("&uarr;") || !displayed && msg.contains("&darr;")) {continue;}
             displayed = true;
             msg = msg.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
             msg = msg.replace("&amp;darr;", "&darr;");  // hack - undo the damage (LogWriter) BUFFER_DISPLAYED_REVERSE = true;
@@ -341,10 +310,8 @@ public class LogsHelper extends HelperBase {
             msg = msg.replace("[Thread-", "[ Thread-");
             msg = msg.replace("[Timestamper]", "[Timestamper ]");
             msg = msg.replace("[DHT Explore]", "[DHT Explore ]");
-            //msg = msg.replace("false", "no");
             msg = msg.replace("false", "[&#10008;]"); // no (cross)
             msg = msg.replace("[&#10008;] positives", "false positives");
-            //msg = msg.replace("true", "yes");
             msg = msg.replace("true", "[&#10004;]"); // yes (tick)
             msg = msg.replace("[[&#10004;]]", "[&#10004;]");
             msg = msg.replace("[[&#10008;]]", "[&#10008;]");
@@ -369,37 +336,22 @@ public class LogsHelper extends HelperBase {
             msg = msg.replace("| &darr;&darr;&darr; ", " <span class=\"log_omitted\">&darr;&darr;&darr;</span> "); // LogWriter BUFFER_DISPLAYED_REVERSE = true;
             msg = msg.replace("| &uarr;&uarr;&uarr; ", " <span class=\"log_omitted\">&uarr;&uarr;&uarr;</span> ");
             // remove  last \n that LogRecordFormatter added
-            if (msg.endsWith(NL))
-                msg = msg.substring(0, msg.length() - NL.length());
+            if (msg.endsWith(NL)) {msg = msg.substring(0, msg.length() - NL.length());}
             // replace \n so that exception stack traces will format correctly and will paste nicely into pastebin
             msg = msg.replace("\n", "<br>&nbsp;&nbsp;&nbsp;&nbsp;\n");
-            if (msg.contains("Sending client")) {
-                msg = msg.replace("<br>&nbsp;&nbsp;&nbsp;&nbsp;\n", ""); // SAM client
-            }
+            if (msg.contains("Sending client")) {msg = msg.replace("<br>&nbsp;&nbsp;&nbsp;&nbsp;\n", "");} // SAM client
             buf.append("<li>");
             if (colorize) {
-                // TODO this would be a lot easier if LogConsoleBuffer stored LogRecords instead of formatted strings
                 String color;
-                // Homeland Security Advisory System
-                // http://www.dhs.gov/xinfoshare/programs/Copy_of_press_release_0046.shtm
-                // but pink instead of yellow for WARN
-                if (msg.contains(_c("CRIT")))
-                    color = "#cc0000";
-                else if (msg.contains(_c("ERROR")))
-                    color = "#ff3300";
-                else if (msg.contains(_c("WARN")))
-                   // color = "#ff00cc"; poor legibility on light backgrounds
-                    color = "#bf00df";
-                else if (msg.contains(_c("INFO")))
-                    color = "#000099";
-                else
-                    color = "#006600";
+                if (msg.contains(_c("CRIT"))) {color = "#cc0000";}
+                else if (msg.contains(_c("ERROR"))) {color = "#ff3300";}
+                else if (msg.contains(_c("WARN"))) {color = "#bf00df";}
+                else if (msg.contains(_c("INFO"))) {color = "#000099";}
+                else {color = "#006600";}
                 buf.append("<font color=\"").append(color).append("\">");
                 buf.append(msg);
                 buf.append("</font>");
-            } else {
-                buf.append(msg);
-            }
+            } else {buf.append(msg);}
             buf.append("</li>\n");
         }
         buf.append("</ul>\n");

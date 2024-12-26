@@ -1,4 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="64kb" %>
 <!DOCTYPE HTML>
 <%
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
@@ -34,7 +34,7 @@
 <div class=graphspanel id=allgraphs hidden>
 <jsp:getProperty name="graphHelper" property="images" />
 </div>
-<span id=graphConfigs hidden><jsp:getProperty name="graphHelper" property="form" /></span>
+<div id=graphConfigs hidden><jsp:getProperty name="graphHelper" property="form" /></div>
 </div>
 </div>
 <script src=/js/lazyload.js></script>

@@ -371,8 +371,8 @@ p:empty+.sb_notice{margin-top:10px}
 #sidebar #minigraph{margin:-19px -1px 0;width:198px;height:40px}
 #xhr,#xhr.fadein{animation:fade .1s ease 0s reverse both}
 #xhr>hr+#sb_graphcontainer>span+a>#minigraph{height:40px}
-#sidebar #minigraphcontainer{margin-top:-43px;margin-left:1px;width:204px;height:39px;background-repeat:no-repeat;background-size:204px 40px}
-#homepage #minigraphcontainer{margin-top:-42px;height:38px}
+#sidebar #minigraphcontainer,#sidebar #minigraphcontainer_noscript{margin-top:-43px;margin-left:1px;width:204px;height:39px;background-repeat:no-repeat;background-size:204px 40px}
+#homepage #minigraphcontainer,#homepage #minigraphcontainer_noscript{margin-top:-42px;height:38px}
 #sb_graphcontainer::before{position:absolute;top:2px;left:-1px;width:100%;height:40px;content:"";display:inline-block;background:linear-gradient(180deg,#0000,#0000,rgba(0,0,0,.3));pointer-events:none;will-change:transform}
 
 /* status bar */
@@ -2757,11 +2757,11 @@ h4#updateplugins{margin-top:-15px}
 #help .confignav{padding:0;position:sticky;top:0;z-index:999}
 #help .tab{margin-top:-1px;margin-bottom:-1px;padding:2px 0}
 #help .tab,#help .tab2{margin-top:-1px}
-#homepage #minigraphcontainer{height:38px}
+#homepage #minigraphcontainer,#homepage #minigraphcontainer_noscript{height:38px}
 #logs h3.tabletitle{padding:12px 2px 10px 12px}
 #loggingoptions tr:nth-last-child(n+3) input[type=text],#loggingoptions tr:nth-last-child(n+3) select{min-width:250px}
 #sidebar h4.sb_update{font-size:9pt}
-#sidebar #minigraphcontainer{margin:-43px -4px 0 1px;width:260px;height:39px;background-size:260px 40px;background-position:right bottom}
+#sidebar #minigraphcontainer,#sidebar #minigraphcontainer_noscript{margin:-43px -4px 0 1px;width:260px;height:39px;background-size:260px 40px;background-position:right bottom}
 #sidebar #minigraph{margin-top:-21px;margin-left:-4px;height:40px;width:260px}
 #netdbcountrylist img{width:28px;height:auto}
 #netdboverview table th,#netdboverview table td{padding:7px 8px}
@@ -2862,7 +2862,7 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 #sidebar button,#sidebar .stop,#sidebar .reload{min-width:121px}
 #sidebar form{margin-bottom:-8px}
 #sidebar h3 a{margin-top:3px;display:inline-block;font-size:10.5pt}
-#sidebar #minigraphcontainer{width:264px;background-size:256px 40px}
+#sidebar #minigraphcontainer,#sidebar #minigraphcontainer_noscript{width:264px;background-size:256px 40px}
 #sidebar #minigraph{margin-left:-1px;width:252px}
 #sidebar #sb_internals,#sidebar #sb_advanced,#sidebar #sb_help{margin:-3px 0 -9px -7px;width:255px}
 #sb_logo{margin-top:1px;height:48px!important}

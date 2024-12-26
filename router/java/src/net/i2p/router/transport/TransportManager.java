@@ -1033,13 +1033,13 @@ public class TransportManager implements TransportEventListener {
      */
     public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException {
         if (SystemVersion.isAndroid()) {
-            // newer androids crash w/ network on IO thread
-        } else if (_upnpManager != null) {
-            out.write(_upnpManager.renderStatusHTML());
-        } else {
-            out.write("<span id=upnp><p class=infohelp id=upnpstatus>" + _t("UPnP is not enabled")
+            out.write("<div id=upnp><p class=infohelp id=upnpstatus>" + _t("Cannot enumerate UPnP devices on Android.") +
+                      "</p></div>\n");
+        } else if (_upnpManager != null) {out.write(_upnpManager.renderStatusHTML());}
+        else {
+            out.write("<div id=upnp><p class=infohelp id=upnpstatus>" + _t("UPnP is not enabled")
                       .replace("not enabled", "not enabled on this router. To enable UPnP, see the <a href=\"/confignet#ipv4config\">network configuration page</a>.") +
-                      "</p></span>\n");
+                      "</p></div>\n");
         }
     }
 

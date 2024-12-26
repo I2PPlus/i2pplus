@@ -1022,7 +1022,7 @@ class SidebarRenderer {
            .append("&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;")
            .append("hideTitle=true&amp;time=").append(_context.clock().now() / 1000).append(")\"></div>")
            .append("</canvas>\n")
-           .append("<noscript><div id=minigraphcontainer style=\"background-image: url(/viewstat.jsp?stat=bw.combined")
+           .append("<noscript><div id=minigraphcontainer_noscript style=\"background-image: url(/viewstat.jsp?stat=bw.combined")
            .append("&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;")
            .append("hideTitle=true&amp;time=").append(_context.clock().now() / 1000).append(")\"></div></noscript>")
            .append("</a>\n</div>\n");

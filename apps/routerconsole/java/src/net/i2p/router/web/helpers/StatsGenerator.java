@@ -73,11 +73,12 @@ public class StatsGenerator {
             if (group.equals(_t("Router"))) {buf.append(" checked=checked");}
             buf.append(" hidden>\n");
             buf.append("<h3>").append(group).append("</h3>\n");
-            buf.append("<ul id=statlist>");
+            buf.append("<ul class=statlist>");
             out.write(buf.toString());
             buf.setLength(0);
             for (String stat : stats) {
-                buf.append("<li class=statsName id=\"").append(stat).append("\"><b>").append(stat).append("</b> ");
+                buf.append("<li class=statsName id=\"").append(stat.replace(" ", "_").replace("[", "").replace("]", ""))
+                   .append("\"><b>").append(stat).append("</b> ");
                 if (_context.statManager().isFrequency(stat)) {renderFrequency(stat, buf);}
                 else {renderRate(stat, buf, showAll);}
                 out.write(buf.toString());
@@ -151,6 +152,7 @@ public class StatsGenerator {
                     buf.append(" &bullet; ").append(_t("Highest total in a period")).append(": <span class=statvalue>")
                        .append(num(curRate.getExtremeTotalValue())).append("</span>");
                 }
+                buf.append("</span>");
 
                 // Saturation stats, which nobody understands, even when it isn't meaningless
                 // Don't bother to translate
@@ -182,9 +184,9 @@ public class StatsGenerator {
             } else {buf.append(" <i>").append(_t("No events")).append(" </i>");}
 
             if (curRate.getSummaryListener() != null) {
-                buf.append("<br><span class=statsViewGraphs><a class=graphstat href=\"graph?stat=").append(name)
+                buf.append("<br><span class=statsViewGraphs><a class=graphstat href=\"graph?stat=").append(name.replace(" ", "%20"))
                    .append('.').append(periods[i]).append("&amp;w=600&amp;h=200\">").append(_t("Graph Data")).append("</a> ")
-                   .append(" <a class=graphstat href=\"graph?stat=").append(name).append('.').append(periods[i])
+                   .append(" <a class=graphstat href=\"graph?stat=").append(name.replace(" ", "%20")).append('.').append(periods[i])
                    .append("&amp;w=600&amp;h=200&amp;showEvents=true\">").append(_t("Graph Event Count")).append("</a> ")
                    .append(" <a class=graphstat href=\"/viewstat.jsp?stat=").append(name).append("&amp;period=").append(periods[i])
                    .append("&amp;format=xml\" download=\"graphdata.xml\">").append(_t("Export Data as XML")).append("</a>")

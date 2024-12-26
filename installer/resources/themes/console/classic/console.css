@@ -200,7 +200,7 @@ p:empty+.sb_notice{margin-top:7px}
 /* mini sidebar graph */
 #minigraph{margin-top:-22px;height:40px;width:250px;position:relative;z-index:0}
 #minigraph:hover{cursor:zoom-in}
-#minigraphcontainer{margin-top:-57px;margin-left:1px;width:240px;height:38px;contain:paint;background-size:239px 40px;background-repeat:no-repeat}
+#minigraphcontainer,#minigraphcontainer_noscript{margin-top:-57px;margin-left:1px;width:240px;height:38px;contain:paint;background-size:239px 40px;background-repeat:no-repeat}
 #sb_graphcontainer{margin:-5px 1px -6px 1px;padding:0 5px 0 0;height:38px;overflow:hidden;contain:paint;border:var(--border);box-shadow:var(--highlight);background:var(--grid),var(--bg);background-position:left 0 top -2px;background-size:200px 36px;background-repeat:no-repeat}
 #sb_graphcontainer:hover #sb_graphstats,#sb_graphstats.show{opacity:1;transition:ease opacity .3s}
 #sb_bandwidthgraph{margin:-20px 0 0 0;padding:0;width:202px;border-collapse:separate;border-spacing:0;border:var(--border);will-change:transform}
@@ -2320,7 +2320,7 @@ table[id*="connections"] td,#floodfills td:not(.rif):not(.rih):not(.rbw),#jobsta
 #jobs h3{margin-top:0}
 #jobs h3+ol:empty+h3{margin-top:-16px}
 #jobstats{margin-bottom:0}
-#minigraphcontainer{margin-top:-57px;margin-left:1px;width:249px;height:38px;background-size:248px 38px;background-position:left 51px bottom}
+#minigraphcontainer,#minigraphcontainer_noscript{margin-top:-57px;margin-left:1px;width:249px;height:38px;background-size:248px 38px;background-position:left 51px bottom}
 #minigraph{margin-left:-50px;height:42px}
 #netconfig label,#externali2cp td label,#externali2cp .optionlist .nowrap,#reseedconfig .nowrap{width:calc(100% - 10px)}
 #netdb h3.tabletitle,h3.sybils{font-size:10pt}

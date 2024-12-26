@@ -109,9 +109,9 @@ public class FileDumpHelper extends HelperBase {
            .append("<td>").append(f.length()).append("</td><td title=\"UTC\">");
         long mod = f.lastModified();
         if (mod > 0) {buf.append((new Date(mod)).toString().replace(" GMT", ""));}
-        else {buf.append("<font color=red>Not found</font>");}
+        else {buf.append("<span class=warn style=color:red>Not found</span>");}
         buf.append("</td><td>");
-        if (mod > 0 && !FileUtil.verifyZip(f)) {buf.append("<font color=red>CORRUPT</font><br>");}
+        if (mod > 0 && !FileUtil.verifyZip(f)) {buf.append("<span class=warn style=color:red>CORRUPT</span><br>");}
         byte[] hash = sha256(f);
         if (hash != null) {
             byte[] hh = new byte[16];
@@ -162,9 +162,9 @@ public class FileDumpHelper extends HelperBase {
         s = getAtt(att, "Workspace-Changes");
         if (s != null && s != "") {
             // Encase each mod in a span so we can single click select individual mods
-            buf.append("<font color=red><span class=\"unsignedmod\">")
-               .append(s.replace(",", "</span></font><hr><font color=red><span class=unsignedmod>"))
-               .append("</span></font>");
+            buf.append("<span class=warn style=color:red><span class=\"unsignedmod\">")
+               .append(s.replace(",", "</span></span><hr><span class=warn style=color:red><span class=unsignedmod>"))
+               .append("</span></span>");
         }
         buf.append("</td></tr>\n");
     }
