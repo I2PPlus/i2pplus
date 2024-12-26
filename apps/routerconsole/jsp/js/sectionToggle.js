@@ -85,6 +85,18 @@ function sectionToggler() {
         if (toggleInput) {
           toggleInput.checked = checked;
           toggleElementVisibility(toggleInput, checked);
+          const h3Element = toggleInput.closest("h3");
+          const badge = toggleInput.parentElement.querySelector("a .badge");
+          if (h3Element) {
+            if (checked) {
+              h3Element.classList.remove("collapsed");
+              if (badge) {requestAnimationFrame(() => { badge.hidden = true;} )};
+            }
+            else {
+              h3Element.classList.add("collapsed");
+              if (badge) {badge.removeAttribute("hidden");}
+            }
+          }
         }
       });
     }
@@ -102,6 +114,8 @@ function sectionToggler() {
 
   function toggleElementVisibility(toggleInput, isVisible) {
     const element = toggleElements[toggleInput.id];
+    const titleH3 = element.parentElement.querySelector("h3");
+    const badge = element.parentElement.querySelector("a .badge");
     if (!element) { return; }
     element.hidden = !isVisible;
     const hr = sb.querySelector(`#${element.id}+hr`);
@@ -124,13 +138,9 @@ function sectionToggler() {
       if (element.classList) element.classList.add("collapsed");
     }
 
-    if (toggleInput.id === "toggle_sb_localtunnels") {
-      handleLocalTunnelsVisibility(isVisible);
-    } else if (toggleInput.id === "toggle_sb_queue") {
-      handleQueueVisibility(isVisible);
-    } else if (toggleInput.id === "toggle_sb_tunnels") {
-      handleTunnelsVisibility(isVisible);
-    }
+    if (toggleInput.id === "toggle_sb_localtunnels") { handleLocalTunnelsVisibility(isVisible); }
+    else if (toggleInput.id === "toggle_sb_queue") { handleQueueVisibility(isVisible); }
+    else if (toggleInput.id === "toggle_sb_tunnels") { handleTunnelsVisibility(isVisible); }
 
     if (element === sb_bandwidth && sb_graphstats) {
       sb_graphstats.style.opacity = sb_bandwidth.hidden ? "1" : null;

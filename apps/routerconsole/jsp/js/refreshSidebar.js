@@ -97,15 +97,19 @@ async function refreshSidebar() {
     }
   };
 
-  const updateVolatile = () => {
+  (function checkSections() {
+    const updating = xhrContainer.querySelectorAll(".volatile");
+    const updatingResponse = responseDoc.querySelectorAll(".volatile");
+    if (updating.length !== updatingResponse.length) {refreshAll();}
+    else {updateVolatile();}
+  })();
+
+  function updateVolatile() {
     Array.from(elements.volatileElements).forEach((elem, index) => {
       const respElem = responseElements.volatileElements[index];
       if (elem && respElem) {
-        if (elem.classList.contains("statusDown")) {
-          updateIfStatusDown(elem, respElem);
-        } else {
-          updateElementInnerHTML(elem, respElem);
-        }
+        if (elem.classList.contains("statusDown")) {updateIfStatusDown(elem, respElem);}
+        else {updateElementInnerHTML(elem, respElem);}
       }
     });
 
@@ -116,13 +120,6 @@ async function refreshSidebar() {
       });
     }
   };
-
-  (function checkSections() {
-    const updating = xhrContainer.querySelectorAll(".volatile");
-    const updatingResponse = responseDoc.querySelectorAll(".volatile");
-    if (updating.length !== updatingResponse.length) {refreshAll();}
-    else {updateVolatile();}
-  })();
 
   function refreshAll() {
     doFetch();
