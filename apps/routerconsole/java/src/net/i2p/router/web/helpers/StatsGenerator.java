@@ -189,8 +189,8 @@ public class StatsGenerator {
                    .append(" <a class=graphstat href=\"graph?stat=").append(name.replace(" ", "%20")).append('.').append(periods[i])
                    .append("&amp;w=600&amp;h=200&amp;showEvents=true\">").append(_t("Graph Event Count")).append("</a> ")
                    .append(" <a class=graphstat href=\"/viewstat.jsp?stat=").append(name).append("&amp;period=").append(periods[i])
-                   .append("&amp;format=xml\" download=\"graphdata.xml\">").append(_t("Export Data as XML")).append("</a>")
-                   .append("</span>");
+                   .append("&amp;format=xml\" download=\"graphdata_").append(name.replace(".", "_").replace(" ", "_")).append(".xml\">")
+                   .append(_t("Export Data as XML")).append("</a>").append("</span>");
             }
             buf.append("</li>\n");
         }
