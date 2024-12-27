@@ -196,8 +196,7 @@ class Mail {
     /** @since 0.9.62+ */
     public synchronized String getAttachmentType() {
         if (contentType == null) {return "none";}
-        else if (contentType.contains("text/html") ||
-                         contentType.contains("multipart/alternative")) {return "html";}
+        else if (contentType.contains("text/html") || contentType.contains("multipart/alternative")) {return "html";}
 /* TODO: support mailPart to determine attachment mimetype
         else if (mailPart.type.contains("image/")) {return "image";}
         else if (mailPart.type.contains("video/")) {return "video";}
@@ -224,9 +223,7 @@ class Mail {
         String[] tokens = DataHelper.split(address, "[ \t]+");
         int addresses = 0;
         for (int i = 0; i < tokens.length; i++) {
-            if (PATTERN1.matcher(tokens[i]).matches() || PATTERN2.matcher(tokens[i]).matches()) {
-                addresses++;
-            }
+            if (PATTERN1.matcher(tokens[i]).matches() || PATTERN2.matcher(tokens[i]).matches()) {addresses++;}
         }
         return addresses > 0;
     }
@@ -446,8 +443,8 @@ class Mail {
                             // copied external emails to the cache
                             if (!uidl.equals(line.substring(7).trim()) && _log.shouldWarn()) {
                                 _log.warn("UIDL mismatch, may be unable to load body later. Original: " + uidl +
-                                                    " b64: " + Base64.encode(uidl) +
-                                                    " header: " + line.substring(7).trim());
+                                          " b64: " + Base64.encode(uidl) +
+                                          " header: " + line.substring(7).trim());
                             }
                         }
                     }

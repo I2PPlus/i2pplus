@@ -26,9 +26,7 @@ public class EscapeHTMLWriter extends FilterWriter {
     private static final String SP4 = "&nbsp;&nbsp;&nbsp; ";
 
 
-    public EscapeHTMLWriter(Writer out) {
-        super(out);
-    }
+    public EscapeHTMLWriter(Writer out) {super(out);}
 
     @Override
     public void write(int c) throws IOException {
@@ -71,16 +69,12 @@ public class EscapeHTMLWriter extends FilterWriter {
 
     @Override
     public void write(char[] cbuf, int off, int len) throws IOException {
-        for (int i = off; i < off + len; i++) {
-            write(cbuf[i]);
-        }
+        for (int i = off; i < off + len; i++) {write(cbuf[i]);}
     }
 
     @Override
     public void write(String str, int off, int len) throws IOException {
-        for (int i = off; i < off + len; i++) {
-            write(str.charAt(i));
-        }
+        for (int i = off; i < off + len; i++) {write(str.charAt(i));}
     }
 
     /**

@@ -44,8 +44,6 @@ import java.net.URISyntaxException;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -55,6 +53,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+
+
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -551,9 +551,9 @@ public class WebMail extends HttpServlet {
 
             if (html && allowHtml != HtmlMode.NONE && showBody && "text/html".equals(mailPart.type) && showHTMLWarning) {
                 buf.append("<tr id=privacywarn><td colspan=2><p class=info>")
-                    .append(_t("To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."))
-                    .append("<noscript><br>").append(_t("Enable Javascript for enhanced presentation and additional features.")).append("</noscript>")
-                    .append("</p></td></tr>\n");
+                   .append(_t("To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."))
+                   .append("<noscript><br>").append(_t("Enable Javascript for enhanced presentation and additional features.")).append("</noscript>")
+                   .append("</p></td></tr>\n");
             }
 
             if (html) {
@@ -585,7 +585,8 @@ public class WebMail extends HttpServlet {
                     Buffer ob = new OutputStreamBuffer(new DecodingOutputStream(escaper, charset));
                     mailPart.decode(0, ob);
                     ob.writeComplete(true);
-                    buf.append(sw.toString());
+                    String content = sw.toString();
+                    buf.append(content);
                 }
                 catch(UnsupportedEncodingException uee) {
                     showBody = false;
@@ -3708,20 +3709,19 @@ public class WebMail extends HttpServlet {
      * @return String[] -- Array of all the themes found.
      */
     private static String[] getThemes(I2PAppContext ctx) {
-            String[] themes;
-            File dir = new File(ctx.getBaseDir(), "docs/themes/susimail");
-            FileFilter fileFilter = new FileFilter() { public boolean accept(File file) { return file.isDirectory(); } };
-            File[] dirnames = dir.listFiles(fileFilter);
-            if (dirnames != null) {
-                List<String> th = new ArrayList<String>(dirnames.length);
-                for (int i = 0; i < dirnames.length; i++) {
-                    String name = dirnames[i].getName();
-                    th.add(name);
-                }
-                themes = th.toArray(new String[th.size()]);
-            } else {
-                themes = new String[0];
+        String[] themes;
+        File dir = new File(ctx.getBaseDir(), "docs/themes/susimail");
+        FileFilter fileFilter = new FileFilter() { public boolean accept(File file) { return file.isDirectory(); } };
+        File[] dirnames = dir.listFiles(fileFilter);
+        if (dirnames != null) {
+            List<String> th = new ArrayList<String>(dirnames.length);
+            for (int i = 0; i < dirnames.length; i++) {
+                String name = dirnames[i].getName();
+                th.add(name);
             }
-            return themes;
+            themes = th.toArray(new String[th.size()]);
+        } else {themes = new String[0];}
+        return themes;
     }
+
 }
