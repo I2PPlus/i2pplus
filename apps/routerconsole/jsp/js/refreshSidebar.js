@@ -158,17 +158,19 @@ async function refreshSidebar() {
             const shutdownNoticeResponse = responseDoc.getElementById("sb_shutdownStatus");
             const updateForm = document.getElementById("sb_updateform");
             const updateFormResponse = responseDoc.getElementById("sb_updateform");
-            if (shutdownNoticeResponse && shutdownNoticeResponse.classList.contains("inactive")) {
-              shutdownNotice.hidden = true;
-              shutdownNoticeHR.hidden = true;
-            } else if (shutdownNoticeResponse && shutdownNotice.innerHTML !== shutdownNoticeResponse.innerHTML) {
-              shutdownNotice.hidden = false;
-              shutdownNoticeHR.hidden = false;
-              shutdownNotice.outerHTML = shutdownNoticeResponse.outerHTML;
+            if (shutdownNotice) {
+              if (shutdownNoticeResponse && shutdownNoticeResponse.classList.contains("inactive")) {
+                shutdownNotice.hidden = true;
+                shutdownNoticeHR.hidden = true;
+              } else if (shutdownNoticeResponse && shutdownNotice.innerHTML !== shutdownNoticeResponse.innerHTML) {
+                shutdownNotice.hidden = false;
+                shutdownNoticeHR.hidden = false;
+                shutdownNotice.outerHTML = shutdownNoticeResponse.outerHTML;
+              }
             }
-            if (updateFormResponse && updateFormResponse.classList.contains("inactive")) {
+            if (updateForm && updateFormResponse && updateFormResponse.classList.contains("inactive")) {
               updateForm.hidden = true;
-            } else if (updateFormResponse && updateForm.innerHTML !== updateFormResponse.innerHTML) {
+            } else if (updateForm && updateFormResponse && updateForm.innerHTML !== updateFormResponse.innerHTML) {
               updateForm.outerHTML = updateFormResponse.outerHTML;
             }
             if (form.id === "sb_routerControl") {
