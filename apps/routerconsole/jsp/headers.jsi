@@ -31,7 +31,7 @@
           needsCSP = false;
       }
   }
-  String defaultCSP = "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; script-src 'self' 'nonce-" + cspNonce + "'; font-src 'self'; object-src 'none'; media-src 'none';";
+  String defaultCSP = "default-src 'self'; base-uri 'self'; frame-ancestors 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; script-src 'self' 'nonce-" + cspNonce + "'; font-src 'self'; object-src 'none'; media-src 'none'";
   response.setHeader("Accept-Ranges", "bytes");
   if (needsCSP) {response.setHeader("Content-Security-Policy", defaultCSP);}
   response.setHeader("X-XSS-Protection", "1; mode=block");
