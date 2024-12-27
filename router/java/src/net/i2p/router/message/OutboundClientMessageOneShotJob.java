@@ -35,7 +35,6 @@ import net.i2p.router.ClientMessage;
 import net.i2p.router.JobImpl;
 import net.i2p.router.LeaseSetKeys;
 import net.i2p.router.MessageSelector;
-import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.ReplyJob;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;

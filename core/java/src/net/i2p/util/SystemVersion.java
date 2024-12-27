@@ -6,7 +6,6 @@ package net.i2p.util;
 
 import com.sun.management.OperatingSystemMXBean;
 import java.lang.management.ManagementFactory;
-import java.text.DecimalFormat;
 
 import java.lang.reflect.Field;
 import java.util.TimeZone;
