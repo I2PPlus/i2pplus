@@ -314,8 +314,9 @@ div:not(#pagesize).topbuttons,.iframed div:not(#pagesize).topbuttons{border-bott
 .pagenavcontrols td:first-child{text-align:right}
 .pagenavcontrols td:last-child{text-align:left}
 .pagenavcontrols input,.pagenavcontrols input:disabled,.pagenavcontrols input:hover:disabled,.pagenavcontrols input:focus:disabled{padding:5px}
-.debugHeader td{color:#cc3;border-bottom:var(--border_inner);box-shadow:var(--highlight),inset 0 0 2px 1px #991;background:repeating-linear-gradient(180deg,#000 2px,#003 4px);background-size:100% 4px}
-.debugHeader pre{margin:10px 20px;line-height:1.55;white-space:pre-wrap}
+.debugHeader table td{border:var(--border_softer)}
+.debugHeader table td:first-child{background:#001!important}
+.debugHeader table td:last-child{background:#002!important}
 #mailhead,.iframed #mailhead{margin:-11px 0}
 
 /* animations */
