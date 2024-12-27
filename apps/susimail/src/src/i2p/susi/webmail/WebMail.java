@@ -53,8 +53,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-
-
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -234,7 +232,7 @@ public class WebMail extends HttpServlet {
     private static final String CONFIG_THEME = "theme";
     private static final String DEFAULT_THEME = "dark";
     private static final String spacer = ""; /* this is best done with css */
-    private static final String thSpacer = "<th>&nbsp;</th>\n";
+    private static final String thSpacer = "<th>&nbsp;</th>";
     private static final String CONSOLE_BUNDLE_NAME = "net.i2p.router.web.messages";
     static {Config.setPrefix("susimail");}
 
@@ -455,10 +453,8 @@ public class WebMail extends HttpServlet {
             headerEntries.sort(Map.Entry.comparingByKey(String.CASE_INSENSITIVE_ORDER));
 
             for (Map.Entry<String, String> entry : headerEntries) {
-                buf.append("<tr>");
-                buf.append("<td>").append(entry.getKey()).append("</td>");
-                buf.append("<td>").append(entry.getValue()).append("</td>");
-                buf.append("</tr>");
+                buf.append("<tr><td>").append(entry.getKey()).append("</td>");
+                buf.append("<td>").append(entry.getValue()).append("</td></tr>\n");
             }
             buf.append("</table></td></tr>\n");
         }
@@ -3190,12 +3186,6 @@ public class WebMail extends HttpServlet {
     private static void showFolder(PrintWriter out, SessionObject sessionObject, MailCache mc, RequestWrapper request) {
         out.println("<div class=topbuttons>\n<span id=mailboxcontrols>");
         out.println(button(NEW, _t("New")) + spacer);
-            // In theory, these are valid and will apply to the first checked message,
-            // but that's not obvious and did it work?
-            //button(REPLY, _t("Reply")) +
-            //button(REPLYALL, _t("Reply All")) +
-            //button(FORWARD, _t("Forward")) + spacer +
-            //button(DELETE, _t("Delete")) + spacer +
         String folderName = mc.getFolderName();
         String floc;
         floc = "";
@@ -3204,14 +3194,9 @@ public class WebMail extends HttpServlet {
             if (folderName.equals(DIR_FOLDER)) {
                 out.println(button(REFRESH, _t("Check Mail")) + spacer);
                 floc = "";
-            } else if (folderName.equals(DIR_DRAFTS)) {
-                floc = "";
-            } else {
-                floc = '&' + CURRENT_FOLDER + '=' + folderName;
-            }
-        } else {
-            out.println("<a id=pageRefresh class=fakebutton href=\"\">" + _t("Refresh Page") + "</a>");
-        }
+            } else if (folderName.equals(DIR_DRAFTS)) {floc = "";}
+            else {floc = '&' + CURRENT_FOLDER + '=' + folderName;}
+        } else {out.println("<a id=pageRefresh class=fakebutton href=\"\">" + _t("Refresh Page") + "</a>");}
 
         boolean isSpamFolder = folderName.equals(DIR_SPAM);
         boolean showToColumn = folderName.equals(DIR_DRAFTS) || folderName.equals(DIR_SENT);
@@ -3228,9 +3213,8 @@ public class WebMail extends HttpServlet {
         if (folder.getPages() > 1) {
             String sp = request.getParameter(CUR_PAGE);
             if (sp != null) {
-                try {
-                    page = Integer.parseInt(sp);
-                } catch (NumberFormatException nfe) {}
+                try {page = Integer.parseInt(sp);}
+                catch (NumberFormatException nfe) {}
             }
             folder.setCurrentPage(page);
         }
@@ -3240,31 +3224,25 @@ public class WebMail extends HttpServlet {
         SortOrder curOrder = folder.getCurrentSortingDirection();
         out.print("</div>\n<table id=mailbox width=100%>\n" +
                   "<tr class=spacer><td colspan=7><hr></td></tr>\n<tr>\n" +
-                  "<th class=\"mailListDate left\">" + sortHeader(SORT_DATE, _t("Date"), sessionObject.imgPath, curSort, curOrder, page, folderName) + "</th>\n" +
-                  "<th class=\"mailListSender left\">" + sortHeader(SORT_SENDER, showToColumn ? _t("To") : _t("From"), sessionObject.imgPath, curSort, curOrder, page, folderName) + "</th>\n" +
-                  "<th class=\"mailListAttachment center\"></th>\n" +
-                  "<th class=\"mailListSubject left\">" + sortHeader(SORT_SUBJECT, _t("Subject"), sessionObject.imgPath, curSort, curOrder, page, folderName) + "</th>\n" +
-                  "<th class=\"mailListFlagged center\"></th>\n" +
-                  "<th class=\"mailListSize right\">" + sortHeader(SORT_SIZE, _t("Size"), sessionObject.imgPath, curSort, curOrder, page, folderName) + "</th>\n" +
-                  "<th class=\"mailListDelete center\" title=\"" + _t("Mark for deletion") + "\"></th>\n" +
+                  "<th class=\"mailListDate left\">" + sortHeader(SORT_DATE, _t("Date"), sessionObject.imgPath, curSort, curOrder, page, folderName) + "</th>" +
+                  "<th class=\"mailListSender left\">" + sortHeader(SORT_SENDER, showToColumn ? _t("To") : _t("From"), sessionObject.imgPath, curSort, curOrder, page, folderName) + "</th>" +
+                  "<th class=\"mailListAttachment center\"></th>" +
+                  "<th class=\"mailListSubject left\">" + sortHeader(SORT_SUBJECT, _t("Subject"), sessionObject.imgPath, curSort, curOrder, page, folderName) + "</th>" +
+                  "<th class=\"mailListFlagged center\"></th>" +
+                  "<th class=\"mailListSize right\">" + sortHeader(SORT_SIZE, _t("Size"), sessionObject.imgPath, curSort, curOrder, page, folderName) + "</th>" +
+                  "<th class=\"mailListDelete center\" title=\"" + _t("Mark for deletion") + "\"></th>" +
                   "</tr>\n");
         int bg = 0;
         int i = 0;
         for (Iterator<String> it = folder.currentPageIterator(); it != null && it.hasNext();) {
             String uidl = it.next();
             Mail mail = mc.getMail(uidl, MailCache.FetchMode.HEADER_CACHE_ONLY);
-            if (mail == null || !mail.hasHeader()) {
-                continue;
-            }
+            if (mail == null || !mail.hasHeader()) {continue;}
             String type;
-            if (mail.isSpam())
-                type = "linkspam";
-            else if (mail.isNew())
-                type = "linknew";
-            else if (isSpamFolder)
-                type = "linkspam";
-            else
-                type = "linkold";
+            if (mail.isSpam()) {type = "linkspam";}
+            else if (mail.isNew()) {type = "linknew";}
+            else if (isSpamFolder) {type = "linkspam";}
+            else {type = "linkold";}
             // this is I2P Base64, not the encoder
             String b64UIDL = Base64.encode(uidl);
             String loc = myself + '?' + (folderName.equals(DIR_DRAFTS) ? NEW_UIDL : SHOW) + '=' + b64UIDL + floc;
@@ -3274,41 +3252,33 @@ public class WebMail extends HttpServlet {
             boolean idChecked = false;
             String checkId = sessionObject.pageChanged ? null : request.getParameter("check" + b64UIDL);
 
-            if (checkId != null && checkId.equals("1"))
-                idChecked = true;
+            if (checkId != null && checkId.equals("1")) {idChecked = true;}
 
-            if (sessionObject.markAll)
-                idChecked = true;
-            if (sessionObject.invert)
-                idChecked = !idChecked;
-            if (sessionObject.clear)
-                idChecked = false;
+            if (sessionObject.markAll) {idChecked = true;}
+            if (sessionObject.invert) {idChecked = !idChecked;}
+            if (sessionObject.clear) {idChecked = false;}
 
             String subj = mail.shortSubject;
-            if (subj.length() <= 0) {
-                subj = "<i>" + _t("no subject") + "</i>";
-            }
+            if (subj.length() <= 0) {subj = "<i>" + _t("no subject") + "</i>";}
             StringBuilder tbuf = new StringBuilder(2048);
             tbuf.append("<tr class=\"list" + bg + "\">\n")
                 .append("<td class=\"mailListDate " + jslink + ">")
                 .append("<span class=listDate title=\"").append(mail.dateOnly).append("\"><span>")
                 // let's format time and date so it aligns and wraps nicely (for mobile)
                 .append(mail.localFormattedDate
-                        .replace("/", "</span>&#8239;/&#8239;<span>")
-                        .replace(":", "&#8239;:&#8239;")
-                        .replaceFirst(" ", "</span></span>&nbsp;<span class=listTime>")
-                        .replace(" AM", "&#8239;<span class=listClock>AM</span>")
-                        .replace(" PM", "&#8239;<span class=listClock>PM</span>")
-                        .replace(",", "") + "</span></td>");
+                .replace("/", "</span>&#8239;/&#8239;<span>")
+                .replace(":", "&#8239;:&#8239;")
+                .replaceFirst(" ", "</span></span>&nbsp;<span class=listTime>")
+                .replace(" AM", "&#8239;<span class=listClock>AM</span>")
+                .replace(" PM", "&#8239;<span class=listClock>PM</span>")
+                .replace(",", "") + "</span></td>");
             if (showToColumn) {
                 if (mail.to != null) {
                     StringBuilder buf = new StringBuilder(mail.to.length * 16);
                     for (int j = 0; j < mail.to.length; j++) {
                         buf.append(mail.to[j]);
-                        if (j < mail.to.length - 1)
-                            buf.append(", ");
-                        if (buf.length() > 45)
-                            break;
+                        if (j < mail.to.length - 1) {buf.append(", ");}
+                        if (buf.length() > 45) {break;}
                     }
                     // remove angle brackets and trim to (consistent) name only so only name shown (with full address on tooltip)
                     String to = buf.toString().replace("&lt;", "").replace("&gt;", "").replace("@.*", "");
@@ -3317,62 +3287,50 @@ public class WebMail extends HttpServlet {
                       to = to.substring(0, index);
                     }
                     boolean trim = to.length() > 45;
-                    if (trim) {
-                        to = ServletUtil.truncate(to, 42);
-                    }
+                    if (trim) {to = ServletUtil.truncate(to, 42);}
                     to = quoteHTML(to);
                     tbuf.append("<td class=\"mailListSender ").append(jslink).append(" title=\"")
                         .append(buildRecipientLine(mail.to).replace("\"", "") + "\">")
                         .append(link).append(to);
-                    if (trim) {
-                        tbuf.append("&hellip;");  // must be after html encode
-                    }
-                    tbuf.append("</a></td>\n");
-                } else {
-                    tbuf.append("<td class=\"mailListSender ").append(jslink).append("></td>\n");
-                }
+                    if (trim) {tbuf.append("&hellip;");}  // must be after html encode
+                    tbuf.append("</a></td>");
+                } else {tbuf.append("<td class=\"mailListSender ").append(jslink).append("></td>");}
             } else {
                 // mail.shortSender and mail.shortSubject already html encoded
                 tbuf.append("<td class=\"mailListSender ").append(jslink).append(" title=\"").append(mail.sender.replace("\"", "") + "\">");
-                    // remove angle brackets and trim to (consistent) name only so only name shown (with full address on tooltip)
+                // remove angle brackets and trim to (consistent) name only so only name shown (with full address on tooltip)
                 if (mail.shortSender.contains("(")) {
                     int index = mail.shortSender.indexOf("(");
                     mail.shortSender = mail.shortSender.substring(0, index);
                 }
-                tbuf.append(link).append(mail.shortSender.replace("&lt;", "").replace("&gt;", "").replaceAll("@.*", "")).append("</a></td>\n");
+                tbuf.append(link).append(mail.shortSender.replace("&lt;", "").replace("&gt;", "").replaceAll("@.*", "")).append("</a></td>");
                 // TODO: add name of attachment(s) to tooltip
             }
             boolean isHTML = mail.getAttachmentType().equals("html");
             tbuf.append("<td ").append(isHTML ? "title=\"" + _t("Message contains HTML") + "\"" : "").append(" class=\"mailListAttachment ")
-                .append(mail.hasAttachment() || mail.getAttachmentType().equals("html") ? "isAttached " : "").append(isHTML ? "htmlMessage " : "").append(jslink).append("></td>\n")
+                .append(mail.hasAttachment() || mail.getAttachmentType().equals("html") ? "isAttached " : "")
+                .append(isHTML ? "htmlMessage " : "").append(jslink).append("></td>")
                 // TODO: show mail fragment on tooltip or hover span
-                .append("<td class=\"mailListSubject ").append(jslink).append(">").append(link).append(subj).append("</a></td>\n")
+                .append("<td class=\"mailListSubject ").append(jslink).append(">").append(link).append(subj).append("</a></td>")
                 .append("<td class=\"mailListFlagged ");
-            if (mail.isNew() && !mail.isSpam()) {
-                tbuf.append("new ");
-            } else if (mail.isSpam()) {
-                tbuf.append("spam ");
-            }
+            if (mail.isNew() && !mail.isSpam()) {tbuf.append("new ");}
+            else if (mail.isSpam()) {tbuf.append("spam ");}
             tbuf.append(jslink).append(">");
             if (mail.isNew() && !mail.isSpam()) {
                 tbuf.append("<img src=/susimail/icons/flag_green.png alt=\"\" title=\"" + _t("Message is new") + "\">\n");
             } else if (isSpamFolder || mail.isSpam()) {
                 tbuf.append("<img src=/susimail/icons/flag_red.png alt=\"\" title=\"" + _t("Message is spam") + "\">\n");
             }
+
             tbuf.append("<td class=\"mailListSize ").append(jslink).append("><span class=listSize>");
             String mailSize = mail.getSize() > 0 ? DataHelper.formatSize2(mail.getSize()) + "B" : "???";
-            if (mail.getSize() > 0) {
-                // truncate the unit to B/K/M to optimize presentation/alignment
-                mailSize = mailSize.replace("&#8239;KiB", " <span class=listSizeUnit>K")
-                                   .replace("&#8239;MiB", " <span class=listSizeUnit>M")
-                                   .replace("&#8239;GiB", " <span class=listSizeUnit>G")
-                                   .replace("&#8239;B", " <span class=listSizeUnit>B");
-            } else {
-                mailSize = "<span class=unknown title=\"" + _t("Message body not downloaded") + "\">???";
-            }
-            tbuf.append(mailSize).append("</span></span></td>\n")
-                .append("<td class=mailListDelete><input type=checkbox class=\"optbox delete1\" name=\"check").append(b64UIDL).append("\" value=1")
-                .append(' ').append(idChecked ? "checked" : "").append("></td>\n</tr>\n");
+            // truncate the unit to B/K/M to optimize presentation/alignment
+            if (mail.getSize() > 0) {mailSize = mailSize.replace("&#8239;", "<span class=listSizeUnit>").replace("iB", "");}
+            else {mailSize = "<span class=unknown title=\"" + _t("Message body not downloaded") + "\">???";}
+            tbuf.append(mailSize).append("</span></span></td>")
+                .append("<td class=mailListDelete><input type=checkbox class=\"optbox delete1\" name=\"check")
+                .append(b64UIDL).append("\" value=1").append(' ').append(idChecked ? "checked" : "")
+                .append("></td></tr>\n");
             bg = 1 - bg;
             i++;
             out.print(tbuf.toString());
@@ -3380,39 +3338,29 @@ public class WebMail extends HttpServlet {
             tbuf.setLength(0);
         }
         if (i == 0) {
-            out.print("<tr>\n" +
-                      "<td colspan=7>\n<div id=emptymailbox><i>" + _t("No messages") + "</i>\n</div>\n</td>\n" +
-                      "</tr>\n");
+            out.print("<tr><td colspan=7>\n<div id=emptymailbox><i>" + _t("No messages") + "</i>\n</div>\n</td></tr>\n");
         }
-        out.print("<tr class=\"bottombuttons spacer\">\n" +
-                  "<td colspan=7></td>\n" +
-                  "</tr>\n");
+        out.print("<tr class=\"bottombuttons spacer\"><td colspan=7></td></tr>\n");
         if (folder.getPages() > 1 && i > 30) {
             // show the buttons again if page is big
-            out.println("<tr id=pagenavbottom>\n<td colspan=7>");
+            out.println("<tr id=pagenavbottom><td colspan=7>");
             showPageButtons(out, folderName, page, folder.getPages(), false);
         }
         if (i > 0) {
             // TODO do this in js
             if (sessionObject.reallyDelete) {
-                if (i > 25) {
-                    out.print("<tr class=\"bottombuttons floating\" ");
-                } else {
-                    out.print("<tr class=bottombuttons ");
-                }
-                out.print("id=confirmdelete>\n<td colspan=7>");
-                if (i > 25) {
-                    out.print("<p class=\"error floating\" ");
-                } else {
-                    out.print("<p class=error ");
-                }
+                if (i > 25) {out.print("<tr class=\"bottombuttons floating\" ");}
+                else {out.print("<tr class=bottombuttons ");}
+                out.print("id=confirmdelete><td colspan=7>");
+                if (i > 25) {out.print("<p class=\"error floating\" ");}
+                else {out.print("<p class=error ");}
                 // TODO ngettext
                 out.print("id=nukemail><span>" + _t("Really delete the marked messages?") + "</span><br>" +
                           button(REALLYDELETE, _t("Yes, really delete them!")) + "&nbsp;" + button(CLEAR, _t("Cancel")));
-                out.print("</p></td>\n");
+                out.print("</p></td>");
             } else {
                 out.print("<tr class=bottombuttons>\n" +
-                          "<td class=left colspan=3>" + (button(CONFIGURE, _t("Settings"))) + "</td>\n" +
+                          "<td class=left colspan=3>" + (button(CONFIGURE, _t("Settings"))) + "</td>" +
                           "<td class=right colspan=4>" + (button(DELETE, _t("Delete Selected"))) +
                           "<span class=script>" + button(MARKALL, _t("Mark All")) + "&nbsp;" +
                           (button(CLEAR, _t("Clear All"))) + "</span></td>");
@@ -3432,7 +3380,7 @@ public class WebMail extends HttpServlet {
         showFolderSelect(out, folderName, false);
         out.println("</div>");
         out.println("<div class=pagenavcontainer><table class=pagenav width=100%>\n" +
-                    "<tr class=pagenavcontrols>\n<td>");
+                    "<tr class=pagenavcontrols><td>");
         if (pages > 1) {
             if (outputHidden)
                 out.println("<input type=hidden name=\"" + CUR_PAGE + "\" value=\"" + page + "\">");
@@ -3583,7 +3531,7 @@ public class WebMail extends HttpServlet {
             String subj = mail.subject;
             if (subj.length() > 0) {subj = quoteHTML(subj);}
             else {subj = "<i>" + _t("no subject") + "</i>";}
-            buf.append("<tr>\n<td colspan=2>\n<table id=mailhead>\n")
+            buf.append("<tr><td colspan=2>\n<table id=mailhead>\n")
                .append("<tr><td colspan=2><hr></td></tr>\n")
                .append("<tr><td class=right>").append(_t("Date")).append(":</td>")
                .append("<td class=left title=\"").append(mail.dateOnly).append("\">").append(mail.quotedDate).append("</td></tr>\n")
@@ -3595,13 +3543,13 @@ public class WebMail extends HttpServlet {
             if (mail.cc != null) {
                 buf.append("<tr><td class=right>").append(_t("Cc")).append(":</td><td class=left>").append(buildRecipientLine(mail.cc)).append("</td></tr>\n");
             }
-            buf.append("<tr><td class=right>").append(_t("Subject")).append(":</td>\n")
+            buf.append("<tr><td class=right>").append(_t("Subject")).append(":</td>")
                .append("<td class=left>").append(subj).append("<span id=toggleViewMode class=script style=float:right hidden>")
                .append("<a id=switchViewMode></a><a id=newTabHtmlView hidden>").append(_t("View message in new tab")).append("</a></span> ")
                .append("<span id=toggleHeaders class=script style=float:right>")
                .append("<a href=\"#\" class=\"script fakebutton\" id=expand>Show Headers</a> ")
                .append("<a href=\"#\" class=\"script fakebutton\" id=collapse style=display:none>Hide Headers</a> ")
-               .append("</span></td></tr>\n<tr><td colspan=2 class=spacer><hr></td></tr>\n</table>\n</td>\n</tr>\n");
+               .append("</span></td></tr>\n<tr><td colspan=2 class=spacer><hr></td></tr>\n</table>\n</td></tr>\n");
             if (mail.hasPart()) {
                 mail.setNew(false);
                 StringWriter writer = new StringWriter(8*1024);
@@ -3611,14 +3559,14 @@ public class WebMail extends HttpServlet {
                 buf.append(writer.toString());
             }
             else {
-                buf.append("<tr class=mailbody>\n<td class=center colspan=2>")
+                buf.append("<tr class=mailbody><td> class=center colspan=2>")
                    .append("<p class=error>").append(_t("Could not fetch mail body.")).append("</p>")
-                   .append("</td>\n</tr>\n");
+                   .append("</td></tr>\n");
             }
         } else {
-            buf.append("<tr class=mailbody>\n<td class=center colspan=2>")
+            buf.append("<tr class=mailbody><td> class=center colspan=2>")
                .append("<p class=error>").append(_t("Message not found.")).append("</p>")
-               .append("</td>\n</tr>\n");
+               .append("</td></tr>\n");
         }
         buf.append("</table>\n</div>\n");
 

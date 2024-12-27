@@ -167,7 +167,7 @@ h3#config{border:var(--border_inner);padding:5px;margin:9px auto 18px auto;width
 #mailheader table{min-width:300px}
 #mailheader table td{font-size:10pt}
 #mailheader table td:first-child{white-space:nowrap;width:20px}
-p.mailbody{margin:0;background:#000010;padding:20px}
+p.mailbody{margin:0;padding:20px;word-break:break-all;background:#000010}
 .mailbody+hr,#attached+hr{display:none}
 div.attached{margin:0 -1px -1px;padding:10px 10px 10px 30px;border:var(--border_inner);border-radius:0 0 2px 2px;background:#020019 var(--attach) no-repeat 5px center/20px}
 .iframed div.attached{border-left:0;border-right:0;border-radius:0}
@@ -314,10 +314,12 @@ div:not(#pagesize).topbuttons,.iframed div:not(#pagesize).topbuttons{border-bott
 .pagenavcontrols td:first-child{text-align:right}
 .pagenavcontrols td:last-child{text-align:left}
 .pagenavcontrols input,.pagenavcontrols input:disabled,.pagenavcontrols input:hover:disabled,.pagenavcontrols input:focus:disabled{padding:5px}
-.debugHeader table td{border:var(--border_softer)}
+.debugHeader table{margin:0}
+.debugHeader table td{border:var(--border_soft)}
 .debugHeader table td:first-child{background:#001!important}
-.debugHeader table td:last-child{background:#002!important}
+.debugHeader table td:last-child{background:#000818!important}
 #mailhead,.iframed #mailhead{margin:-11px 0}
+#mailhead tr:last-child td{border-bottom:var(--border_soft)}
 
 /* animations */
 @keyframes fade-in{0%,80%{filter:opacity(0)}100%{filter:opacity(1)}}
@@ -342,6 +344,8 @@ div:not(#pagesize).topbuttons,.iframed div:not(#pagesize).topbuttons{border-bott
 
 @media (min-width:1500px){
 body,td,textarea,div,p.mailbody,input,input[type=submit],input[type="reset"],p.error,#settings,.fakebutton{font-size:10pt}
-#dologin tr:last-child a{font-size:9pt}
+.moveToFolder{padding-top:6px}
 .pagenav input{font-size:0}
+.topbuttons input.next,.topbuttons input.prev{padding-top:7px}
+#dologin tr:last-child a{font-size:9pt}
 }
