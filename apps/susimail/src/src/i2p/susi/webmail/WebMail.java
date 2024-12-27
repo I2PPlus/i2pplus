@@ -1,25 +1,9 @@
 /*
+ * This file is part of SusiMail project for I2P
  * Created on 04.11.2004
- * 
- *  This file is part of susimail project, see http://susi.i2p/
- *  
- *  Copyright (C) 2004-2005  <susi23@mail.i2p>
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *  
  * $Revision: 1.2 $
+ * Copyright (C) 2004-2005 <susi23@mail.i2p>
+ * License: GPL2 or later
  */
 package i2p.susi.webmail;
 
@@ -98,17 +82,13 @@ import net.i2p.util.Translate;
 /**
  * @author susi23
  */
-public class WebMail extends HttpServlet
-{
+public class WebMail extends HttpServlet {
     private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(WebMail.class);
-
     private static final long serialVersionUID = 1L;
     private static final String LOGIN_NONCE = Long.toString(I2PAppContext.getGlobalContext().random().nextLong());
-
     private static final String DEFAULT_HOST = "127.0.0.1";
     private static final int DEFAULT_POP3PORT = 7660;
     private static final int DEFAULT_SMTPPORT = 7659;
-
     private enum State { AUTH, LOADING, LIST, SHOW, NEW, CONFIG }
 
     /** @since 0.9.62 */
@@ -160,8 +140,7 @@ public class WebMail extends HttpServlet
     private static final String SAVE = "save";
     private static final String SAVE_AS = "saveas";
     private static final String REFRESH = "refresh";
-    // also a GET param
-    private static final String CONFIGURE = "configure";
+    private static final String CONFIGURE = "configure"; // also a GET param
     private static final String NEW = "new";
     private static final String REPLY = "reply";
     private static final String REPLYALL = "replyall";
@@ -170,30 +149,25 @@ public class WebMail extends HttpServlet
     private static final String REALLYDELETE = "really_delete";
     private static final String MOVE_TO = "moveto";
     private static final String SWITCH_TO = "switchto";
-    // also a GET param
-    private static final String SHOW = "show";
+    private static final String SHOW = "show"; // also a GET param
     private static final String DOWNLOAD = "download";
     private static final String RAW_ATTACHMENT = "att";
     private static final String CID_ATTACHMENT = "cid";
     private static final String DRAFT_ATTACHMENT = "datt";
     private static final String HTML = "html";
-
     private static final String MARKALL = "markall";
     private static final String CLEAR = "clearselection";
     private static final String INVERT = "invertselection";
-
     private static final String PREVPAGE = "prevpage";
     private static final String NEXTPAGE = "nextpage";
     private static final String FIRSTPAGE = "firstpage";
     private static final String LASTPAGE = "lastpage";
     private static final String PAGESIZE = "pagesize";
     private static final String SETPAGESIZE = "setpagesize";
-
     private static final String SEND = "send";
     private static final String SAVE_AS_DRAFT = "saveasdraft";
     private static final String CANCEL = "cancel";
     private static final String DELETE_ATTACHMENT = "delete_attachment";
-
     private static final String NEW_FROM = "new_from";
     private static final String NEW_SUBJECT = "new_subject";
     private static final String NEW_TO = "new_to";
@@ -202,13 +176,10 @@ public class WebMail extends HttpServlet
     private static final String NEW_TEXT = "new_text";
     private static final String NEW_FILENAME = "new_filename";
     private static final String NEW_UPLOAD = "new_upload";
-
     private static final String LIST = "list";
     private static final String PREV = "prev";
     private static final String NEXT = "next";
-
-    // SORT is a GET or POST param, SORT_XX are the values, possibly prefixed by '-'
-    private static final String SORT = "sort";
+    private static final String SORT = "sort"; // SORT is a GET or POST param, SORT_XX are the values, possibly prefixed by '-'
     static final String SORT_ID = "id";
     static final String SORT_SENDER = "sender";
     static final String SORT_SUBJECT = "subject";
@@ -216,23 +187,19 @@ public class WebMail extends HttpServlet
     static final String SORT_SIZE = "size";
     static final String SORT_DEFAULT = SORT_DATE;
     static final SortOrder SORT_ORDER_DEFAULT = SortOrder.UP;
-    // for XSS
-    private static final List<String> VALID_SORTS = Arrays.asList(new String[] {
-                             SORT_ID, SORT_SENDER, SORT_SUBJECT, SORT_DATE, SORT_SIZE,
-                             '-' + SORT_ID, '-' + SORT_SENDER, '-' + SORT_SUBJECT, '-' + SORT_DATE, '-' + SORT_SIZE });
-
+    private static final List<String> VALID_SORTS = Arrays.asList(new String[] { // for XSS
+                                          SORT_ID, SORT_SENDER, SORT_SUBJECT, SORT_DATE, SORT_SIZE,
+                                          '-' + SORT_ID, '-' + SORT_SENDER, '-' + SORT_SUBJECT, '-' +
+                                          SORT_DATE, '-' + SORT_SIZE
+                                      });
     static final String DIR_FOLDER = "cur"; // MailDir-like
     public static final String DIR_DRAFTS = _x("Drafts"); // MailDir-like
     public static final String DIR_SENT = _x("Sent"); // MailDir-like
     private static final String DIR_TRASH = _x("Trash"); // MailDir-like
     private static final String DIR_SPAM = _x("Bulk Mail"); // MailDir-like
-    // internal/on-disk names
-    private static final String[] DIRS = { DIR_FOLDER, DIR_DRAFTS, DIR_SENT, DIR_TRASH, DIR_SPAM };
-    // untranslated, translate on use
-    private static final String[] DISPLAY_DIRS = { _x("Inbox"), DIR_DRAFTS, DIR_SENT, DIR_TRASH, DIR_SPAM };
-
+    private static final String[] DIRS = { DIR_FOLDER, DIR_DRAFTS, DIR_SENT, DIR_TRASH, DIR_SPAM }; // internal/on-disk names
+    private static final String[] DISPLAY_DIRS = { _x("Inbox"), DIR_DRAFTS, DIR_SENT, DIR_TRASH, DIR_SPAM }; // untranslated, translate on use
     private static final String CONFIG_TEXT = "config_text";
-
     private static final boolean SHOW_HTML = true;
     private static final boolean TEXT_ONLY = false;
 
@@ -240,33 +207,25 @@ public class WebMail extends HttpServlet
      * name of configuration properties
      */
     private static final String CONFIG_HOST = "host";
-
     private static final String CONFIG_PORTS_FIXED = "ports.fixed";
     private static final String CONFIG_PORTS_POP3 = "ports.pop3";
     private static final String CONFIG_PORTS_SMTP = "ports.smtp";
-
     private static final String CONFIG_SENDER_FIXED = "sender.fixed";
     private static final String CONFIG_SENDER_DOMAIN = "sender.domain";
     private static final String CONFIG_SENDER_NAME = "sender.name";
-
     private static final String CONFIG_COMPOSER_COLS = "composer.cols";
     private static final String CONFIG_COMPOSER_ROWS = "composer.rows";
-
     private static final String CONFIG_HTML_ALLOWED = "view.html.allowed";
     private static final String CONFIG_HTML_PREFERRED = "view.html.preferred";
     private static final String CONFIG_HTML_SHOW_WARNING = "view.html.warning";
     private static final String CONFIG_HTML_ENABLE_DARKMODE = "view.html.darkMode";
     private static final String CONFIG_HTML_SHOW_BLOCKED_IMAGES = "view.html.blockedImages";
-
     private static final String CONFIG_COPY_TO_SENT = "composer.copy.to.sent";
     static final String CONFIG_LEAVE_ON_SERVER = "pop3.leave.on.server";
     public static final String CONFIG_BACKGROUND_CHECK = "pop3.check.enable";
     public static final String CONFIG_CHECK_MINUTES = "pop3.check.interval.minutes";
     public static final String CONFIG_IDLE_SECONDS = "pop3.idle.timeout.seconds";
     private static final String CONFIG_DEBUG = "debug";
-
-    //public static final String SHOW_FULL_HEADERS = "display.full.headers";
-
     private static final String RC_PROP_THEME = "routerconsole.theme";
     private static final String RC_PROP_UNIVERSAL_THEMING = "routerconsole.universal.theme";
     private static final String RC_PROP_FORCE_MOBILE_CONSOLE = "routerconsole.forceMobileConsole";
@@ -340,8 +299,7 @@ public class WebMail extends HttpServlet
          *  @since 0.9.13
          */
         public void foundNewMail(boolean yes) {
-            if (!yes)
-                return;
+            if (!yes) {return;}
             MailCache mc = caches.get(DIR_FOLDER);
             if (mc != null) {
                 String[] uidls = mc.getUIDLs();
@@ -353,19 +311,14 @@ public class WebMail extends HttpServlet
         public void addNonce(String nonce) {
             synchronized(nonces) {
                 nonces.add(0, nonce);
-                if (nonces.size() > MAX_NONCES) {
-                    nonces.remove(MAX_NONCES);
-                }
+                if (nonces.size() > MAX_NONCES) {nonces.remove(MAX_NONCES);}
             }
         }
 
         /** @since 0.9.27 */
         public boolean isValidNonce(String nonce) {
-            if (mailbox == null && LOGIN_NONCE.equals(nonce))
-                return true;
-            synchronized(nonces) {
-                return nonces.contains(nonce);
-            }
+            if (mailbox == null && LOGIN_NONCE.equals(nonce)) {return true;}
+            synchronized(nonces) {return nonces.contains(nonce);}
         }
 
         /**
@@ -373,9 +326,7 @@ public class WebMail extends HttpServlet
          * @since 0.9.33
          */
         public void clearAttachments() {
-            if (attachments != null) {
-                attachments.clear();
-            }
+            if (attachments != null) {attachments.clear();}
         }
 
         /**
@@ -384,9 +335,7 @@ public class WebMail extends HttpServlet
          */
         public void deleteAttachments() {
             if (attachments != null) {
-                for (Attachment a : attachments) {
-                    a.deleteData();
-                }
+                for (Attachment a : attachments) {a.deleteData();}
                 attachments.clear();
             }
         }
@@ -401,24 +350,19 @@ public class WebMail extends HttpServlet
      */
     private static String button(String name, String label) {
         StringBuilder buf = new StringBuilder(128);
-        buf.append("<input type=submit name=\"")
-           .append(name).append("\" value=\"").append(label).append('"');
-        buf.append(" class=\"").append(name);
+        buf.append("<input type=submit name=\"").append(name).append("\" value=\"").append(label).append('"')
+           .append(" class=\"").append(name);
         if (name.equals(SEND) || name.equals(CANCEL) || name.equals(DELETE_ATTACHMENT) ||
             name.equals(NEW_UPLOAD) || name.equals(SAVE_AS_DRAFT) ||  // compose page
-            name.equals(SETPAGESIZE) || name.equals(SAVE))  // config page
+            name.equals(SETPAGESIZE) || name.equals(SAVE))  { // config page
             buf.append(" beforePopup\"");
-        // scroll to top of non-embedded page if delete clicked to ensure confirmation dialog is visible
-        //else if (name.equals(DELETE))
-        //buf.append(" onclick=\"smoothScroll(document.getElementById(\'mailbox\'))\"");
-        else if (name.equals(REFRESH))
-            buf.append("\" id=serverRefresh");
-        else
-            buf.append('"');
+        } else if (name.equals(REFRESH)) {buf.append("\" id=serverRefresh");}
+        else {buf.append('"');}
         // These are icons only now, via the CSS, so add a tooltip
         if (name.equals(FIRSTPAGE) || name.equals(PREVPAGE) || name.equals(NEXTPAGE) || name.equals(LASTPAGE) ||
-            name.equals(PREV) || name.equals(LIST) || name.equals(NEXT))
+            name.equals(PREV) || name.equals(LIST) || name.equals(NEXT)) {
             buf.append(" title=\"").append(label).append('"');
+        }
         buf.append('>');
         return buf.toString();
     }
@@ -522,6 +466,7 @@ public class WebMail extends HttpServlet
             buf.append("</pre></td></tr>\n");
         }
         out.write(buf.toString());
+        out.flush();
         buf.setLength(0);
 
         if (mailPart.multipart) {
@@ -709,6 +654,7 @@ public class WebMail extends HttpServlet
         }
 
         out.print(buf.toString());
+        out.flush();
         buf.setLength(0);
     }
 
@@ -2032,17 +1978,21 @@ public class WebMail extends HttpServlet
         boolean enableSoraFont = ctx.getBooleanProperty(RC_PROP_ENABLE_SORA_FONT);
         boolean isMobile = (forceMobileConsole || isMobile(httpRequest.getHeader("User-Agent")));
 
+        // we don't even let the iframe get to the console, it must be within /susimail/
+        String host = "127.0.0.1";
+        String me = "127.0.0.1:7657";
+        String requrl = httpRequest.getRequestURL().toString();
+        try {
+            URI uri = new URI(requrl);
+            host = uri.getHost();
+            me = uri.getHost() + ':' + uri.getPort();
+        } catch(URISyntaxException use) {}
+
         httpRequest.setCharacterEncoding("UTF-8");
+
         if (httpRequest.getParameter(RAW_ATTACHMENT) != null ||
             httpRequest.getParameter(CID_ATTACHMENT) != null ||
             httpRequest.getParameter(DRAFT_ATTACHMENT) != null) {
-            // we don't even let the iframe get to the console, it must be within /susimail/
-            String me = "127.0.0.1:7657";
-            String requrl = httpRequest.getRequestURL().toString();
-            try {
-                URI uri = new URI(requrl);
-                me = uri.getHost() + ':' + uri.getPort();
-            } catch(URISyntaxException use) {}
             // img-src allows for cid: urls that were fixed up by RegexOutputStream
             // character encoding will be set in sendAttachment()
             response.setHeader("Content-Security-Policy", "default-src 'none'; style-src 'self' 'unsafe-inline'; " + "script-src " +
@@ -2052,8 +2002,9 @@ public class WebMail extends HttpServlet
                                "form-action 'none'; frame-ancestors " + me + myself + "; object-src 'none'; media-src 'none'; img-src 'self' " +
                                me + myself + " data:; font-src 'self'; frame-src 'none'; worker-src 'none'");
         } else {
-            response.setHeader("Content-Security-Policy", "default-src 'self'; base-uri 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'nonce-" + cspNonce + "'; " +
-                               "form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src 'none'; img-src 'self' data:;");
+            response.setHeader("Content-Security-Policy", "default-src 'self' " + host + "; base-uri 'self' " + host +
+                               "; style-src 'self' 'unsafe-inline'; script-src 'self' 'nonce-" + cspNonce + "'; " +
+                               "form-action 'self'; frame-ancestors 'self' " + host + "; object-src 'none'; media-src 'none'; img-src 'self' data:;");
             response.setCharacterEncoding("UTF-8");
         }
         response.setHeader("X-XSS-Protection", "1; mode=block");
@@ -2413,6 +2364,7 @@ public class WebMail extends HttpServlet
 
             PrintWriter out = response.getWriter();
             out.print(buf.toString());
+            out.flush();
             buf.setLength(0);
 
             if (state == State.LIST) {buf.append("<body id=main>\n");}
@@ -2491,6 +2443,7 @@ public class WebMail extends HttpServlet
                 buf.append("</div>");
             }
             out.print(buf.toString());
+            out.flush();
             buf.setLength(0);
   
             /*
@@ -2534,8 +2487,8 @@ public class WebMail extends HttpServlet
             buf.append("</body>\n</html>");
 
             out.print(buf.toString());
-            buf.setLength(0);
             out.flush();
+            buf.setLength(0);
         } // sync sessionObject
     }
 
@@ -3079,8 +3032,7 @@ public class WebMail extends HttpServlet
         if (arr != null) {
             for (int i = 0; i < arr.length; i++) {
                 buf.append(arr[i]);
-                if (i < arr.length - 1)
-                    buf.append(", ");
+                if (i < arr.length - 1) {buf.append(", ");}
             }
         }
         return buf.toString();
@@ -3095,9 +3047,9 @@ public class WebMail extends HttpServlet
     private static void showCompose(PrintWriter out, SessionObject sessionObject, RequestWrapper request) {
         StringBuilder buf = new StringBuilder(1024);
 
-        buf.append("<div class=topbuttons>");
-        buf.append(button(SEND, _t("Send"))).append(button(SAVE_AS_DRAFT, _t("Save as Draft"))).append(button(CANCEL, _t("Cancel")));
-        buf.append("</div>\n");
+        buf.append("<div class=topbuttons>")
+           .append(button(SEND, _t("Send"))).append(button(SAVE_AS_DRAFT, _t("Save as Draft"))).append(button(CANCEL, _t("Cancel")))
+           .append("</div>\n");
 
         Draft draft = null;
         String from = "";
@@ -3216,6 +3168,7 @@ public class WebMail extends HttpServlet
         }
         buf.append("</table>\n</div>");
         out.print(buf.toString());
+        out.flush();
         buf.setLength(0);
     }
 
@@ -3259,51 +3212,41 @@ public class WebMail extends HttpServlet
         String pop3 = Config.getProperty(CONFIG_PORTS_POP3, Integer.toString(DEFAULT_POP3PORT));
         String smtp = Config.getProperty(CONFIG_PORTS_SMTP, Integer.toString(DEFAULT_SMTPPORT));
 
-        out.print("<div id=dologin>\n" +
-                  "<h1>" + _t("I2PMail Login") + "</h1>\n" +
-                  "<table width=100%>\n" +
+        StringBuilder buf = new StringBuilder(3*1024);
+
                   // current postman hq length limits 16/12, new postman version 32/32
-                  "<tr>" +
-                  "<td width=30% class=right>" + _t("User") + "</td>" +
-                  "<td width=40% class=left><input type=text required placeholder=\"" + _t("Username") +
-                  "\" size=32 autocomplete=\"username\" name=\"" + USER + "\" value=\"" + "\"> @mail.i2p</td>" +
-                  "</tr>\n" +
-                  "<tr>" +
-                  "<td width=30% class=right>" + _t("Password") + "</td>" +
-                  "<td width=40% class=left><input type=password id=password required placeholder=\"" + _t("Password") +
-                  "\" size=32 autocomplete=\"current-password\" name=\"pass\" value=\"" + "\">\n<button type=\"button\" class=script id=toggle" +
-                  " title=\"" + _t("Toggle password visibility") + "\">Show password</button></td>" +
-                  "</tr>\n");
+        buf.append("<div id=dologin>\n").append("<h1>").append(_t("I2PMail Login")).append("</h1>\n")
+           .append("<table width=100%>\n").append("<tr>")
+           .append("<td width=30% class=right>").append(_t("User")).append("</td>")
+           .append("<td width=40% class=left><input type=text required placeholder=\"").append(_t("Username"))
+           .append("\" size=32 autocomplete=\"username\" name=\"").append(USER).append("\" value=\"").append("\"> @mail.i2p</td></tr>\n")
+           .append("<tr><td width=30% class=right>").append(_t("Password")).append("</td>")
+           .append("<td width=40% class=left><input type=password id=password required placeholder=\"").append(_t("Password"))
+           .append("\" size=32 autocomplete=\"current-password\" name=\"pass\" value=\"").append("\">\n")
+           .append("<button type=\"button\" class=script id=toggle").append(" title=\"").append(_t("Toggle password visibility"))
+           .append("\">Show password</button></td>").append("</tr>\n");
         if (!fixed) {
-            out.print("<tr>" +
-                      "<td width=30%>" + _t("Host") + "</td>" +
-                      "<td width=40%><input type=text size=32 name=\"" + HOST +"\" value=\"" +
-                      quoteHTML(host) + "\"></td>" +
-                      "</tr>\n" +
-                      "<tr>" +
-                      "<td width=30%>" + _t("POP3 Port") + "</td>" +
-                      "<td width=40%><input type=text style=text-align:right size=5 name=\"" + POP3 +"\" value=\"" +
-                      quoteHTML(pop3) + "\"></td>" +
-                      "</tr>\n" +
-                      "<tr>" +
-                      "<td width=30%>" + _t("SMTP Port") + "</td>" +
-                      "<td width=40%><input type=text style=text-align:right size=5 name=\"" + SMTP +"\" value=\"" +
-                      quoteHTML(smtp) + "\"></td>" +
-                      "</tr>\n");
+            buf.append("<tr>").append("<td width=30%>").append(_t("Host")).append("</td>")
+               .append("<td width=40%><input type=text size=32 name=\"").append(HOST).append("\" value=\"")
+               .append(quoteHTML(host)).append("\"></td></tr>\n")
+               .append("<tr>").append("<td width=30%>").append(_t("POP3 Port")).append("</td>")
+               .append("<td width=40%><input type=text style=text-align:right size=5 name=\"").append(POP3).append("\" value=\"")
+               .append(quoteHTML(pop3)).append("\"></td></tr>\n")
+               .append("<tr>").append("<td width=30%>").append(_t("SMTP Port")).append("</td>")
+               .append("<td width=40%><input type=text style=text-align:right size=5 name=\"").append(SMTP).append("\" value=\"")
+               .append(quoteHTML(smtp)).append("\"></td></tr>\n");
         }
-        out.print("<tr><td colspan=2><hr></td></tr>\n" +
-                  "<tr>" +
-                  "<td colspan=2>" +
-                  button(LOGIN, _t("Login")) + spacer + button(OFFLINE, _t("Read Mail Offline")) + spacer +
-                  "<a href=\"/susimail/?configure\" id=settings class=fakebutton>" + _t("Settings") + "</a>" +
-                  "</td>" +
-                  "</tr>\n" +
-                  "<tr>" +
-                  "<td colspan=2><hr>" +
-                  "<a href=\"http://hq.postman.i2p/?page_id=14\" target=_blank>" + _t("Learn about I2PMail") + "</a> | " +
-                  "<a href=\"http://hq.postman.i2p/?page_id=16\" target=_blank>" + _t("Create Account") + "</a></td>" +
-                  "</tr>\n" +
-                  "</table>\n</div>\n");
+        buf.append("<tr><td colspan=2><hr></td></tr>\n<tr><td colspan=2>").append(button(LOGIN, _t("Login")))
+           .append(spacer).append(button(OFFLINE, _t("Read Mail Offline")))
+           .append(spacer).append("<a href=\"/susimail/?configure\" id=settings class=fakebutton>").append(_t("Settings"))
+           .append("</a></td></tr>\n<tr><td colspan=2><hr>")
+           .append("<a href=\"http://hq.postman.i2p/?page_id=14\" target=_blank>").append(_t("Learn about I2PMail")).append("</a> | ")
+           .append("<a href=\"http://hq.postman.i2p/?page_id=16\" target=_blank>").append(_t("Create Account")).append("</a></td>")
+           .append("</tr>\n</table>\n</div>\n");
+
+        out.print(buf.toString());
+        out.flush();
+        buf.setLength(0);
     }
 
     /**
@@ -3511,6 +3454,7 @@ public class WebMail extends HttpServlet
             i++;
             out.print(tbuf.toString());
             out.flush();
+            tbuf.setLength(0);
         }
         if (i == 0) {
             out.print("<tr>\n" +

@@ -11,14 +11,10 @@ public class Messages {
     private static final String BUNDLE_NAME = "i2p.susi.webmail.messages";
     private final I2PAppContext _context;
 
-    public Messages() {
-        _context = I2PAppContext.getGlobalContext();
-    }
+    public Messages() {_context = I2PAppContext.getGlobalContext();}
 
     /** lang in routerconsole.lang property, else current locale */
-    public String _t(String key) {
-        return Translate.getString(key, _context, BUNDLE_NAME);
-    }
+    public String _t(String key) {return Translate.getString(key, _context, BUNDLE_NAME);}
 
     public static String getString(String s) {
         return Translate.getString(s, I2PAppContext.getGlobalContext(), BUNDLE_NAME);
