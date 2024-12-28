@@ -219,11 +219,12 @@ public class ErrorServlet extends HttpServlet {
             out.println("<b>Charset:</b> " + Charset.defaultCharset().name());
             out.println("</p><p>");
             out.println(_t("Note that system information, log timestamps, and log messages may provide clues to your location; please review everything you include in a bug report."));
-            out.println("</p>\n");
+            out.println("</p>");
         } else {
-            out.println("<link href=\"" + themePath + PROXY_CSS + "\" rel=stylesheet>\n");
-            out.println("<p>Unsupported error " + errorCode + "</p>\n");
+            out.println("<link href=\"" + themePath + PROXY_CSS + "\" rel=stylesheet>");
+            out.println("<p>Unsupported error " + errorCode + "</p>");
         }
+        out.println("<style>#xhr{opacity:1!important}</style>");
     }
 
     /** translate a string, with webapp bundle */
