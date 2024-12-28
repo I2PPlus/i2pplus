@@ -1,3 +1,6 @@
+2024-12-28 dr|z3d
+ * Console: Add GeoIP build information to /info page
+
 2024-12-18 zzz
  * NetDB: Aggressive expire for leasesets when over limits
 
