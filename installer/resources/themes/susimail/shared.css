@@ -1,6 +1,10 @@
 /* I2P+ Susmail shared styles by dr|z3d */
-body.modal{position:relative}
-body.modal::before{display:block;position:absolute;top:0;left:0;bottom:0;right:0;z-index:999;background:#000d;content:"";pointer-events:none}
+
+body.modal{position:relative;overflow:hidden}
+body.modal::before{display:block;position:absolute;top:0;left:0;bottom:0;right:0;z-index:10;background:#000;content:""}
+#overlay {display:none;position:absolute;top:5px;left:5px;bottom:0;right:5px;z-index:9999;border-image:repeating-linear-gradient(135deg,#a00,#a00 20px,#990 20px,#990 40px,#a00 40px) 5 repeat repeat;border-image-outset:0;border-image-width:1;border-image-width:5px;border-image-outset:1px;box-shadow:var(--shadow_warn);background:#300;}
+.modal #overlay{display:block}
+.modal #nukemail,.iframed .modal #nukemail.modal #nukemail.floating,.iframed .modal #nukemail.floating{z-index:99999}
 .debugHeader td{padding:0!important}
 .debugHeader table{border-collapse:collapse}
 .debugHeader table td{padding:2px 6px!important;font-size:90%;box-shadow:none}

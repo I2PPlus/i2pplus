@@ -10,7 +10,6 @@ function initButtons() {
     const buttons = document.getElementsByClassName(className);
     Array.from(buttons).forEach(button => handler(button, button.form));
   }
-
   const form = document.forms[0];
   deleteboxclicked(form);
 }
@@ -44,6 +43,7 @@ function setupToggleSelectionHandler(selectAll) {
         const row = checkbox.closest("tr");
         return !row || row.style.display !== "none" && checkbox.checked;
       });
+      if (!form.delete) {return;}
       form.delete.disabled = !hasOne;
       form.markall.disabled = hasAll;
       form.clearselection.disabled = !hasOne;
