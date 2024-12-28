@@ -12,6 +12,7 @@ import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.transport.CommSystemFacadeImpl;
+import net.i2p.router.transport.GeoIP;
 import net.i2p.router.transport.Transport;
 import net.i2p.router.transport.udp.UDPTransport;
 import net.i2p.router.web.HelperBase;
@@ -126,6 +127,11 @@ public class InfoHelper extends HelperBase {
         else {return null;}
     }
 
+    public String getGeoIPBuildInfo() {
+      GeoIP db = new GeoIP(_context);
+      return db.getGeoIPBuildInfo();
+    }
+
     private void renderStatusHTML(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(4*1024);
         RouterInfo ri = _context.router().getRouterInfo();
@@ -183,6 +189,7 @@ public class InfoHelper extends HelperBase {
         if (isRouterSlow()) {buf.append(" <span class=\"yes\">").append(_t("Yes")).append("</span>");}
         else {buf.append(" <span class=\"no\">").append(_t("No")).append("</span>");}
         buf.append("</td></tr>\n");
+        buf.append("<tr><td><b>").append(_t("GeoIP Db")).append(":</b></td><td>").append(getGeoIPBuildInfo()).append("</td></tr>");
         if (isAdvanced) {
             buf.append("<tr><td><b>CoDel:</b></td><td><b>").append(_t("Target")).append(":</b> ").append(codelTarget())
                .append("ms &ensp;<b>").append(_t("Interval")).append(":</b> ").append(codelInterval()).append("ms</td></tr>\n");

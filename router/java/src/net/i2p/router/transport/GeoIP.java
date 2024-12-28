@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -490,11 +492,32 @@ public class GeoIP {
         DatabaseReader.Builder b = new DatabaseReader.Builder(geoFile);
         b.withCache(new CHMCache(256));
         DatabaseReader rv = b.build();
-        if (_log.shouldDebug())
-            _log.debug("Opened GeoIP2 Database, Metadata: " + rv.getMetadata());
+        if (_log.shouldDebug()) {_log.debug("Opened GeoIP2 Database, Metadata: " + rv.getMetadata());}
         long time = rv.getMetadata().getBuildDate().getTime();
         notifyVersion("GeoIP2", time);
         return rv;
+    }
+
+   /**
+    * Return the current GeoIP database version
+    * @since 0.9.65+
+    */
+    public String getGeoIPBuildInfo() {
+        File geoFile = getGeoIP2();
+        if (geoFile == null) {return "GeoIP Db not found";}
+
+        long fileSize = geoFile.length();
+        double fileSizeMB = fileSize / (1024.0 * 1024.0);
+        DecimalFormat df = new DecimalFormat("#.0");
+        String formattedFileSize = df.format(fileSizeMB);
+        String filePath = geoFile.getAbsolutePath();
+
+        try (DatabaseReader reader = openGeoIP2(geoFile)) {
+            long buildTime = reader.getMetadata().getBuildDate().getTime();
+            Date buildDate = new Date(buildTime);
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy");
+            return "<b>Built:</b> " + sdf.format(buildDate) + "&ensp;<b>Size:</b> " + formattedFileSize + "MB&ensp;<b>Location:</b> " + filePath;
+        } catch (Exception e) {return "Unknown GeoIP Db version";}
     }
 
    /**
@@ -891,14 +914,14 @@ public class GeoIP {
 
     public static void main(String args[]) {
         if (args.length <= 0) {
-            System.out.println("Usage: GeoIP ip...");
+            System.out.println("Usage: GeoIP {IP ADDRESS}...");
             System.exit(1);
         }
         GeoIP g = new GeoIP(I2PAppContext.getGlobalContext());
         for (int i = 0; i < args.length; i++) {g.add(args[i]);}
         long start = System.currentTimeMillis();
         g.blockingLookup();
-        System.out.println("Lookup took " + (System.currentTimeMillis() - start));
+        System.out.println("Lookup took " + (System.currentTimeMillis() - start) + "ms");
         for (int i = 0; i < args.length; i++) {System.out.println(args[i] + " : " + g.get(args[i]));}
     }
 }
