@@ -2234,7 +2234,7 @@ public class WebMail extends HttpServlet {
                .append("<link rel=preload as=style href=\"").append(sessionObject.themePath).append("../images/images.css?").append(CoreVersion.VERSION).append("\">\n")
                .append("<link rel=preload as=style href=\"").append(sessionObject.themePath).append("images/images.css?").append(CoreVersion.VERSION).append("\">\n")
                .append("<link rel=stylesheet href=\"").append(sessionObject.themePath).append("susimail.css?").append(CoreVersion.VERSION).append("\">\n")
-               .append("<link rel=stylesheet href=\"").append(sessionObject.themePath).append("../headers.css?").append(CoreVersion.VERSION).append("\">\n")
+               .append("<link rel=stylesheet href=\"").append(sessionObject.themePath).append("../shared.css?").append(CoreVersion.VERSION).append("\">\n")
                .append("<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"").append(sessionObject.themePath).append("images/favicon.svg\">\n");
 
             if (sessionObject.isMobile) {
@@ -2348,8 +2348,7 @@ public class WebMail extends HttpServlet {
                 if (sessionObject.newMails > 0) {buf.append("newmail ");}
                 else if (sessionObject.error.length() > 0) {
                     buf.append("msgerror\"><p class=error>").append(quoteHTML(sessionObject.error).replace("\n", "<br>")).append("</p>");
-                }
-                if (sessionObject.info.length() > 0 || showRefresh) {
+                } else if (sessionObject.info.length() > 0 || showRefresh) {
                     buf.append("msginfo\"><p class=info><b>");
                     if (mc != null && mc.isLoading()) {
                         buf.append(_t("Loading messages, please wait...").replace("...", "&hellip;")).append("<br>");
@@ -2384,8 +2383,7 @@ public class WebMail extends HttpServlet {
                    .append("<script src=/susimail/js/htmlView.js></script>\n")
                    .append("<script src=\"/susimail/js/markdown.js?").append(CoreVersion.VERSION).append("\"></script>\n")
                    .append("<script src=\"/susimail/js/Markdown.Converter.js?").append(CoreVersion.VERSION).append("\"></script>\n");
-            }
-            else if (state == State.NEW) {showCompose(out, sessionObject, request);}
+            } else if (state == State.NEW) {showCompose(out, sessionObject, request);}
             else if (state == State.CONFIG) {showConfig(out, folder);}
 
             if (state == State.AUTH) {
@@ -2402,6 +2400,7 @@ public class WebMail extends HttpServlet {
                 buf.append("<script id=autorefresh type=module src=\"/susimail/js/refreshInbox.js?")
                    .append(CoreVersion.VERSION).append("\"></script>\n");
             }
+            buf.append("<script src=\"/susimail/js/deleteMail.js?").append(CoreVersion.VERSION).append("\"></script>\n");
             buf.append("<style>body{display:block;pointer-events:auto}</style>\n");
             buf.append("</body>\n</html>");
 
