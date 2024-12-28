@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Set the custom Java executable path or use the system default if unset
-CUSTOM_JAVA_PATH="/usr/lib/jvm/java-22-openjdk-amd64/bin/java"
+CUSTOM_JAVA_PATH="/usr/lib/jvm/java-21-openjdk-amd64/bin/java"
 
 # Check if the custom Java path is set, otherwise use the system default
 if [ -n "$CUSTOM_JAVA_PATH" ]; then
