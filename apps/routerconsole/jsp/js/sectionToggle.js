@@ -47,31 +47,32 @@ function sectionToggler() {
   };
 
   function initializeLocalStorage() {
-    if (savedConfigs) {return;}
-    const defaultState = {
-      advancedgeneral: false,
-      advanced: false,
-      bandwidth: false,
-      general: false,
-      help: false,
-      internals: false,
-      localtunnels: false,
-      newsheadings: false,
-      peers: false,
-      queue: false,
-      services: false,
-      tunnels: false,
-      updatesection: false
-    };
-
-    localStorage.setItem("sidebarSections", JSON.stringify(defaultState));
+    return new Promise((resolve) => {
+      const defaultState = {
+        advancedgeneral: false,
+        advanced: false,
+        bandwidth: false,
+        general: false,
+        help: false,
+        internals: false,
+        localtunnels: false,
+        newsheadings: false,
+        peers: false,
+        queue: false,
+        services: false,
+        tunnels: false,
+        updatesection: false
+      };
+      localStorage.setItem("sidebarSections", JSON.stringify(defaultState));
+      resolve(defaultState);
+    });
   }
 
-  function saveToggleStates() {
+  async function saveToggleStates() {
     const toggleInput = document.activeElement;
     if (toggleInput && toggleInput.id.startsWith("toggle_sb_")) {
       const key = toggleInput.id.replace("toggle_sb_", "");
-      if (!savedConfigs) {initializeLocalStorage();}
+      if (!savedConfigs) {await initializeLocalStorage();}
       sidebarSections[key] = toggleInput.checked;
       localStorage.setItem("sidebarSections", JSON.stringify(sidebarSections));
     }
