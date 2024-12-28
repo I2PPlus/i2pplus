@@ -86,17 +86,14 @@ public class ConfigServiceHandler extends FormHandler {
                             if (tmout != null) {
                                 try {
                                     int cwait = Integer.parseInt(tmout) * 1000;
-                                    if (cwait > wait)
-                                        wait = cwait;
+                                    if (cwait > wait) {wait = cwait;}
                                 } catch (NumberFormatException nfe) {}
                             }
                         } catch (Throwable t) {}
                     }
                     WrapperManager.signalStopping(wait);
                 }
-            } catch (Throwable t) {
-                t.printStackTrace();
-            }
+            } catch (Throwable t) {t.printStackTrace();}
         }
 
         /**
@@ -104,9 +101,7 @@ public class ConfigServiceHandler extends FormHandler {
          *  and we don't want dups
          */
         @Override
-        public int hashCode() {
-            return HASHCODE;
-        }
+        public int hashCode() {return HASHCODE;}
 
         /**
          *  Make them all look the same since the hooks are stored in a set
@@ -127,16 +122,11 @@ public class ConfigServiceHandler extends FormHandler {
         private final int _exitCode;
         private static final int HASHCODE = 123999871;
 
-        public FinalWrapperTask(int exitCode) {
-            _exitCode = exitCode;
-        }
+        public FinalWrapperTask(int exitCode) {_exitCode = exitCode;}
 
         public void run() {
-            try {
-                WrapperManager.signalStopped(_exitCode);
-            } catch (Throwable t) {
-                t.printStackTrace();
-            }
+            try {WrapperManager.signalStopped(_exitCode);}
+            catch (Throwable t) {t.printStackTrace();}
         }
 
         /**
@@ -144,18 +134,14 @@ public class ConfigServiceHandler extends FormHandler {
          *  and we don't want dups
          */
         @Override
-        public int hashCode() {
-            return HASHCODE;
-        }
+        public int hashCode() {return HASHCODE;}
 
         /**
          *  Make them all look the same since the hooks are stored in a set
          *  and we don't want dups
          */
         @Override
-        public boolean equals(Object o) {
-            return (o != null) && (o instanceof FinalWrapperTask);
-        }
+        public boolean equals(Object o) {return (o != null) && (o instanceof FinalWrapperTask);}
     }
 
     /**
@@ -168,9 +154,8 @@ public class ConfigServiceHandler extends FormHandler {
         if (ctx.hasWrapper() && _wrapperListener == null) {
             String wv = System.getProperty("wrapper.version");
             if (wv != null && VersionComparator.comp(wv, LISTENER_AVAILABLE) >= 0) {
-                try {
-                   _wrapperListener = new WrapperListener(ctx);
-                } catch (Throwable t) {}
+                try {_wrapperListener = new WrapperListener(ctx);}
+                catch (Throwable t) {}
             }
         }
     }
@@ -192,9 +177,7 @@ public class ConfigServiceHandler extends FormHandler {
      *
      *  @since 0.9.19
      */
-    public boolean shouldShowCancelGraceful() {
-        return _context.router().gracefulShutdownInProgress();
-    }
+    public boolean shouldShowCancelGraceful() {return _context.router().gracefulShutdownInProgress();}
 
     /**
      *  Should we show the systray controls?
@@ -203,14 +186,13 @@ public class ConfigServiceHandler extends FormHandler {
      */
     public boolean shouldShowSystray() {
         try {
-            if (!SystemTray.isSupported())
-                return false;
-        } catch (Throwable t) {
-            // java.lang.NoClassDefFoundError: Could not initialize class java.awt.Toolkit
-            return false;
-        }
+            if (!SystemTray.isSupported()) {return false;}
+        } catch (Throwable t) {return false;} // java.lang.NoClassDefFoundError: Could not initialize class java.awt.Toolkit
+
         return !SystemVersion.isService() &&
-               !(SystemVersion.isWindows() && _context.hasWrapper() && WrapperManager.isLaunchedAsService());
+               !(SystemVersion.isWindows() &&
+               _context.hasWrapper() &&
+               WrapperManager.isLaunchedAsService());
     }
 
     /**
@@ -218,87 +200,78 @@ public class ConfigServiceHandler extends FormHandler {
      *
      *  @since 0.9.26
      */
-    public boolean isSystrayEnabled() {
-        return RouterConsoleRunner.isSystrayEnabled(_context);
-    }
+    public boolean isSystrayEnabled() {return RouterConsoleRunner.isSystrayEnabled(_context);}
 
     /**
      *  @since 0.9.33
      */
-    public String getConsoleURL() {
-        return _context.portMapper().getConsoleURL();
-    }
+    public String getConsoleURL() {return _context.portMapper().getConsoleURL();}
 
     @Override
     protected void processForm() {
         if (_t("Shutdown gracefully").equals(_action)) {
-            if (_context.hasWrapper())
-                registerWrapperNotifier(Router.EXIT_GRACEFUL, false);
+            if (_context.hasWrapper()) {registerWrapperNotifier(Router.EXIT_GRACEFUL, false);}
             _context.router().shutdownGracefully();
-            addFormNotice(_t("Graceful shutdown initiated"));
+            addFormNotice(_t("Graceful shutdown initiated"), true);
         } else if (_t("Shutdown immediately").equals(_action)) {
-            if (_context.hasWrapper())
-                registerWrapperNotifier(Router.EXIT_HARD, false);
+            if (_context.hasWrapper()) {registerWrapperNotifier(Router.EXIT_HARD, false);}
             _context.router().shutdown(Router.EXIT_HARD);
-            addFormNotice(_t("Shutdown immediately"));
+            addFormNotice(_t("Shutdown immediately"), true);
         } else if (_t("Cancel graceful shutdown").equals(_action)) {
             _context.router().cancelGracefulShutdown();
-            addFormNotice(_t("Graceful shutdown cancelled"));
-        } else if (_t("Graceful restart").equals(_action)) {
-            // should have wrapper if restart button is visible
-            if (_context.hasWrapper())
+            addFormNotice(_t("Graceful shutdown cancelled"), true);
+        } else if (_t("Graceful restart").equals(_action)) { // should have wrapper if restart button is visible
+            if (_context.hasWrapper()) {
                 registerWrapperNotifier(Router.EXIT_GRACEFUL_RESTART, false);
+            }
             _context.router().shutdownGracefully(Router.EXIT_GRACEFUL_RESTART);
-            addFormNotice(_t("Graceful restart requested"));
+            addFormNotice(_t("Graceful restart requested"), true);
         } else if (_t("Hard restart").equals(_action)) {
             // should have wrapper if restart button is visible
-            if (_context.hasWrapper())
-                registerWrapperNotifier(Router.EXIT_HARD_RESTART, false);
+            if (_context.hasWrapper()) {registerWrapperNotifier(Router.EXIT_HARD_RESTART, false);}
             _context.router().shutdown(Router.EXIT_HARD_RESTART);
-            addFormNotice(_t("Hard restart requested"));
+            addFormNotice(_t("Hard restart requested"), true);
         } else if (_t("Rekey and Restart").equals(_action)) {
-            addFormNotice(_t("Rekeying after graceful restart"));
+            addFormNotice(_t("Rekeying after graceful restart"), true);
             registerWrapperNotifier(Router.EXIT_GRACEFUL_RESTART, true);
             _context.router().shutdownGracefully(Router.EXIT_GRACEFUL_RESTART);
         } else if (_t("Rekey and Shutdown").equals(_action)) {
-            addFormNotice(_t("Rekeying after graceful shutdown"));
+            addFormNotice(_t("Rekeying after graceful shutdown"), true);
             registerWrapperNotifier(Router.EXIT_GRACEFUL, true);
             _context.router().shutdownGracefully(Router.EXIT_GRACEFUL);
         } else if (_t("Install I2P service").equals(_action)) {
             enableService();
-            addFormNotice(_t("I2P+ Service now enabled on system start"));
+            addFormNotice(_t("I2P+ Service now enabled on system start"), true);
         } else if (_t("Enable I2P service").equals(_action)) {
             enableService();
-            addFormNotice(_t("I2P+ Service now enabled on system start"));
+            addFormNotice(_t("I2P+ Service now enabled on system start"), true);
         } else if (_t("Disable I2P service").equals(_action)) {
             disableService();
-            addFormNotice(_t("I2P+ Service now disabled on system start"));
+            addFormNotice(_t("I2P+ Service now disabled on system start"), true);
         } else if (_t("Dump threads").equals(_action)) {
-            try {
-                WrapperManager.requestThreadDump();
-            } catch (Throwable t) {
-                addFormError("Warning: unable to contact the Service Manager - " + t.getLocalizedMessage());
-            }
+            try {WrapperManager.requestThreadDump();}
+            catch (Throwable t) {addFormError("Warning: Unable to contact the Service Manager - " + t.getLocalizedMessage());}
             File wlog = wrapperLogFile(_context);
             addFormNotice(_t("Threads dumped to {0}", wlog.getAbsolutePath()));
             boolean deadlock = DeadlockDetector.detect(_context);
-            if (deadlock)
-                addFormErrorNoEscape("Deadlock detected!<br><a href=\"/logs\">Please report using the information on the logs page!</a><br>After reporting, please restart your router!");
+            if (deadlock) {
+                addFormErrorNoEscape("Deadlock detected!<br><a href=\"/logs\">" +
+                                     "Please report using the information on the logs page!</a><br>" +
+                                     "After reporting, please restart your router!");
+            }
         } else if (_t("Open console on startup").equals(_action)) {
             browseOnStartup(true);
-            addFormNotice(_t("Console is to be shown on startup"));
+            addFormNotice(_t("Console is to be shown on startup"), true);
         } else if (_t("No console on startup").equals(_action)) {
             browseOnStartup(false);
-            addFormNotice(_t("Console is not to be shown on startup"));
+            addFormNotice(_t("Console is not to be shown on startup"), true);
         } else if (_t("Force garbage collection").equals(_action)) {
             Runtime.getRuntime().gc();
-            addFormNotice(_t("Full garbage collection requested"));
+            addFormNotice(_t("Full garbage collection requested"), true);
         } else if (_t("Show systray icon").equals(_action)) {
             changeSystray(true);
         } else if (_t("Hide systray icon").equals(_action)) {
             changeSystray(false);
-        } else {
-            //addFormNotice("Blah blah blah.  whatever.  I'm not going to " + _action);
         }
     }
 
@@ -313,22 +286,18 @@ public class ConfigServiceHandler extends FormHandler {
         if (ctx.hasWrapper()) {
             String wv = System.getProperty("wrapper.version");
             if (wv != null && VersionComparator.comp(wv, LOCATION_AVAILABLE) >= 0) {
-                try {
-                   f = WrapperManager.getWrapperLogFile();
-                } catch (Throwable t) {}
+                try {f = WrapperManager.getWrapperLogFile();}
+                catch (Throwable t) {}
             }
         }
         if (f == null || !f.exists()) {
             // RouterLaunch puts the location here if no wrapper
             String path = System.getProperty("wrapper.logfile");
-            if (path != null) {
-                f = new File(path);
-            } else {
-                // look in new and old places
+            if (path != null) {f = new File(path);}
+            else { // look in new and old places
                 f = new File(System.getProperty("java.io.tmpdir"), "wrapper.log");
-                if (!f.exists())
-                    f = new File(ctx.getBaseDir(), "wrapper.log");
-            }
+                if (!f.exists()) {f = new File(ctx.getBaseDir(), "wrapper.log");}
+             }
         }
         return f;
     }
@@ -380,18 +349,18 @@ public class ConfigServiceHandler extends FormHandler {
         // releases <= 0.6.5 deleted the entry completely
         if (shouldLaunchBrowser && ca == null) {
             String url = _context.portMapper().getConsoleURL();
-            ca = new ClientAppConfig(UrlLauncher.class.getName(), "consoleBrowser",
-                                     url, 5, false);
+            ca = new ClientAppConfig(UrlLauncher.class.getName(), "consoleBrowser", url, 5, false);
             clients.add(ca);
         }
         try {
             if (ca != null) {
-                if (ClientAppConfig.isSplitConfig(_context))
+                if (ClientAppConfig.isSplitConfig(_context)) {
                     ClientAppConfig.writeClientAppConfig(_context, ca);
-                else
+                } else {
                     ClientAppConfig.writeClientAppConfig(_context, clients);
+                }
             }
-            addFormNotice(_t("Configuration saved successfully"));
+            addFormNotice(_t("Configuration saved successfully"), true);
         } catch (IOException ioe) {
             addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"));
             addFormError(ioe.getLocalizedMessage());
@@ -412,22 +381,22 @@ public class ConfigServiceHandler extends FormHandler {
                     if (enable) {
                         if (dtg.getState() == ClientAppState.STOPPED) {
                             dtg.startup();
-                            addFormNotice(_t("Enabled system tray"));
+                            addFormNotice(_t("Enabled system tray"), true);
                         }
                     } else {
                         if (dtg.getState() == ClientAppState.RUNNING) {
                             dtg.shutdown(null);
-                            addFormNotice(_t("Disabled system tray"));
+                            addFormNotice(_t("Disabled system tray"), true);
                         }
                     }
                 } else if (enable) {
                     // already set to true, GraphicsEnvironment initialized, can't change it now
                     if (Boolean.parseBoolean(System.getProperty("java.awt.headless"))) {
-                        addFormError(_t("Restart required to take effect"));
+                        addFormError(_t("Restart required to take effect"), true);
                     } else {
                         dtg = new net.i2p.desktopgui.Main(_context, mgr, null);
                         dtg.startup();
-                        addFormNotice(_t("Enabled system tray"));
+                        addFormNotice(_t("Enabled system tray"), true);
                     }
                 }
             } catch (Throwable t) {
@@ -439,9 +408,8 @@ public class ConfigServiceHandler extends FormHandler {
         }
 
         boolean saved = _context.router().saveConfig(RouterConsoleRunner.PROP_DTG_ENABLED, Boolean.toString(enable));
-        if (saved)
-            addFormNotice(_t("Configuration saved successfully"));
-        else
-            addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"));
+        if (saved) {addFormNotice(_t("Configuration saved successfully"), true);}
+        else {addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"));}
     }
+
 }
