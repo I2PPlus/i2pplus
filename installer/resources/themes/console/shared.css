@@ -1,0 +1,31 @@
+/* I2P+ shared css rules for Router Console themes */
+/* Author: dr|z3d */
+
+.expanded #ffstatus,#ffconf:hover #ffstatus{opacity:0}
+.hasExpandedElement #floodfillconfig{margin-bottom:-1px;display:table!important}
+#advfilter,#tnlfilter{display:inline-block;position:absolute}
+#advfilter button,#tnlfilter button{margin:0 0 0 -24px;padding:5px;display:inline-block;width:24px;height:26px;min-width:0;font-size:0;border:0;box-shadow:none;background:var(--no) no-repeat center center/10px;mix-blend-mode:luminosity}
+#advfilter button:hover,#advfilter input:focus+button,#tnlfilter button:hover,#tnlfilter input:focus+button{mix-blend-mode:normal}
+#advfilter input[type=text],#tnlfilter input[type=text]{margin:0;padding:4px 24px 3px;width:160px;font-size:85%;background:#0008 var(--filter) no-repeat 7px center/12px;opacity:.75;filter:none}
+#advfilter input[type=text]:focus,#tnlfilter input[type=text]:focus{width:200px;opacity:.85}
+#advconf td.delete{padding:5px 0;width:1%;min-width:35px;text-align:center;vertical-align:middle;font-size:0}
+#advconf .delete::after{width:32px;height:16px;display:inline-block;vertical-align:middle;background:var(--nuke) no-repeat center center/14px;opacity:.8;content:"";filter:grayscale(.5)}
+#advconf .delete:hover::after{opacity:1;filter:none;cursor:pointer}
+#advconf .newKey,#advconf .key{width:1%;min-width:340px;white-space:nowrap;font-weight:500}
+#advconf .newKey:empty:not(:focus)::before{width:12px;height:12px;display:inline-block;vertical-align:middle;background:var(--star) no-repeat center center/12px;content:""}
+#advconf .value{word-break:break-all}
+#advancedconfig{position:relative}
+#config_advanced #advconfwrapper:hover{overflow-y:auto}
+#config_advanced #advconfwrapper{overflow:hidden}
+#ffconf.toggle::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:""}
+#ffconf.toggle:hover{color:var(--hover);cursor:pointer}
+#ffconf.toggle:hover::after{background:var(--dropdown_hover);content:""}
+#ffconf.toggle:not(.expanded){margin-bottom:-1px}
+#ffconf.toggle:not(.expanded)::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
+#ffconf.toggle:not(.expanded):hover::after{background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
+#ffstatus{float:right;font-size:85%;margin:2px 20px 0 0;letter-spacing:0;text-transform:none;opacity:1;transition:ease .2s opacity}
+#pluginTotals{margin:-2px 24px -2px 8px;padding:3px 8px;float:right;vertical-align:middle;text-align:center;font-size:90%}
+#pluginTotals span{margin:0 6px;display:inline-block;padding:0 0 0 16px}
+#pluginTotals #started{background:var(--start) no-repeat left center/10px}
+#pluginTotals #stopped{margin-left:0;background:var(--stop) no-repeat left center/10px}
+#pconfig:hover #pluginTotals{color:var(--ink)}
