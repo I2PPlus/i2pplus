@@ -24,38 +24,38 @@ import net.i2p.router.Job;
 import net.i2p.router.LeaseSetKeys;
 import net.i2p.router.MessageSelector;
 import net.i2p.router.OutNetMessage;
+import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.ReplyJob;
+import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.util.MaskedIPSet;
 import net.i2p.router.util.RandomIterator;
+import net.i2p.stat.Rate;
+import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 import net.i2p.util.NativeBigInteger;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
-import net.i2p.router.Router;
-
 /**
- * A traditional Kademlia search that continues to search
- * when the initial lookup fails, by iteratively searching the
- * closer-to-the-key peers returned by the query in a DSRM.
+ * A traditional Kademlia search that continues to search when the initial lookup fails,
+ * by iteratively searching the closer-to-the-key peers returned by the query in a DSRM.
  *
- * Unlike traditional Kad, it doesn't stop when there are no
- * closer keys, it keeps going until the timeout or max number
- * of searches is reached.
+ * Unlike traditional Kad, it doesn't stop when there are no closer keys, it keeps going
+ * until the timeout or max number of searches is reached.
  *
  * Differences from FloodOnlySearchJob:
- * Chases peers in DSRM's immediately.
- * FOSJ searches the two closest in parallel and then stops.
- * There is no per-search timeout, only a total timeout.
+ * - Chases peers in DSRM's immediately.
+ * - FOSJ searches the two closest in parallel and then stops.
+ * - There is no per-search timeout, only a total timeout.
  * Here, we search one at a time, and must have a separate per-search timeout.
  *
- * Advantages: Much more robust than FOSJ, especially in a large network
- * where not all floodfills are known. Longer total timeout.
- * Halves search traffic for successful searches, as this doesn't do
- * two searches in parallel like FOSJ does.
+ * Advantages:
+ * - Much more robust than FOSJ, especially in a large network where not all floodfills are known.
+ * - Longer total timeout.
+ * - Halves search traffic for successful searches, as this doesn't do two searches in parallel like FOSJ does.
  *
  * Public only for JobQueue, not a public API, not for external use.
  *
@@ -82,20 +82,14 @@ public class IterativeSearchJob extends FloodSearchJob {
     private final MaskedIPSet _ipSet;
     private final Set<Hash> _skippedPeers;
 
-//    private static final int MAX_NON_FF = 3;
     private static final int MAX_NON_FF = SystemVersion.isSlow() ? 6 : 8;
     /** Max number of peers to query */
-//    private static final int TOTAL_SEARCH_LIMIT = 5;
     private static final int TOTAL_SEARCH_LIMIT = SystemVersion.isSlow() ? 16 : 24;
     /** Max number of peers to query if we are ff */
-//    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 2;
-    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = SystemVersion.isSlow() ? 2 : 4;
+    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = SystemVersion.isSlow() ? 4 : 8;
     /** Extra peers to get from peer selector, as we may discard some before querying */
-//    private static final int EXTRA_PEERS = 1;
     private static final int EXTRA_PEERS = 2;
     private static final int IP_CLOSE_BYTES = 3;
-    /** TOTAL_SEARCH_LIMIT * SINGLE_SEARCH_TIME, plus some extra */
-//    private static final int MAX_SEARCH_TIME = 30*1000;
     private static final int MAX_SEARCH_TIME = SystemVersion.isSlow() ? 20*1000 : 15*1000;
     /**
      *  The time before we give up and start a new search - much shorter than the message's expire time
@@ -106,8 +100,8 @@ public class IterativeSearchJob extends FloodSearchJob {
     /**
      * The default single search time
      */
-//   private static final long SINGLE_SEARCH_TIME = 3;
     private static final long SINGLE_SEARCH_TIME = SystemVersion.isSlow() ? 3*1000 : 2*1000;
+    private static final long MIN_SINGLE_SEARCH_TIME = 500;
     /** the actual expire time for a search message */
     private static final long SINGLE_SEARCH_MSG_TIME = 10*1000;
     /**
@@ -391,246 +385,248 @@ public class IterativeSearchJob extends FloodSearchJob {
      *  @since 0.9.53 added previouslyTried param
      */
     private void sendQuery(Hash peer, int previouslyTried) {
-            final RouterContext ctx = getContext();
-            TunnelManagerFacade tm = ctx.tunnelManager();
-            RouterInfo ri = ctx.netDb().lookupRouterInfoLocally(peer);
-            if (ri != null && ctx.commSystem().getStatus() != Status.DISCONNECTED) {
-                // Now that most of the netdb is Ed RIs and EC LSs, don't even bother
-                // querying old floodfills that don't know about those sig types.
-                // This is also more recent than the version that supports encrypted replies,
-                // so we won't request unencrypted replies anymore either.
-                if (!StoreJob.shouldStoreTo(ri)) {
-                    failed(peer, false);
-                    if (_log.shouldDebug())
-                        _log.debug("Not sending query to old Router [" + ri.toBase64().substring(0,6) + "]");
-                    return;
+        final RouterContext ctx = getContext();
+        TunnelManagerFacade tm = ctx.tunnelManager();
+        RouterInfo ri = ctx.netDb().lookupRouterInfoLocally(peer);
+        if (ri != null && ctx.commSystem().getStatus() != Status.DISCONNECTED) {
+            // Now that most of the netdb is Ed RIs and EC LSs, don't even bother
+            // querying old floodfills that don't know about those sig types.
+            // This is also more recent than the version that supports encrypted replies,
+            // so we won't request unencrypted replies anymore either.
+            if (!StoreJob.shouldStoreTo(ri)) {
+                failed(peer, false);
+                if (_log.shouldDebug()) {
+                    _log.debug("Not sending query to old Router [" + ri.toBase64().substring(0,6) + "]");
                 }
-            }
-            TunnelInfo outTunnel;
-            TunnelInfo replyTunnel;
-            boolean isClientReplyTunnel;
-            boolean isDirect;
-            boolean supportsRatchet = false;
-            boolean supportsElGamal = true;
-            if (_fromLocalDest != null) {
-                // For all tunnel selections, the first time we pick the tunnel with the far-end closest
-                // to the target. After that we pick a random tunnel, or else we'd pick the
-                // same tunnels every time.
-                if (previouslyTried <= 0)
-                    outTunnel = tm.selectOutboundTunnel(_fromLocalDest, peer);
-                else
-                    outTunnel = tm.selectOutboundTunnel(_fromLocalDest);
-                if (outTunnel == null) {
-                    if (previouslyTried <= 0)
-                        outTunnel = tm.selectOutboundExploratoryTunnel(peer);
-                    else
-                        outTunnel = tm.selectOutboundTunnel();
-                }
-                LeaseSetKeys lsk = ctx.keyManager().getKeys(_fromLocalDest);
-                supportsRatchet = lsk != null &&
-                                  lsk.isSupported(EncType.ECIES_X25519) &&
-                                  DatabaseLookupMessage.supportsRatchetReplies(ri);
-                supportsElGamal = !supportsRatchet &&
-                                  lsk != null &&
-                                  lsk.isSupported(EncType.ELGAMAL_2048);
-                if (supportsElGamal || supportsRatchet) {
-                    // garlic encrypt to dest SKM
-                    if (previouslyTried <= 0)
-                        replyTunnel = tm.selectInboundTunnel(_fromLocalDest, peer);
-                    else
-                        replyTunnel = tm.selectInboundTunnel(_fromLocalDest);
-                    isClientReplyTunnel = replyTunnel != null;
-                    if (!isClientReplyTunnel) {
-                        if (previouslyTried <= 0)
-                            replyTunnel = tm.selectInboundExploratoryTunnel(peer);
-                        else
-                            replyTunnel = tm.selectInboundTunnel();
-                    }
-                } else {
-                    // We don't have a way to request/get a ECIES-tagged reply,
-                    // so send it to the router SKM
-                    isClientReplyTunnel = false;
-                    if (previouslyTried <= 0)
-                        replyTunnel = tm.selectInboundExploratoryTunnel(peer);
-                    else
-                        replyTunnel = tm.selectInboundTunnel();
-                }
-                isDirect = false;
-            } else if ((!_isLease) && ri != null && ctx.commSystem().isEstablished(peer)) {
-                // If it's a RI lookup, not from a client, and we're already connected, just ask directly
-                // This also saves the ElG encryption for us and the decryption for the ff
-                // There's no anonymity reason to use an expl. tunnel... the main reason
-                // is to limit connections to the ffs. But if we're already connected,
-                // do it the fast and easy way.
-                outTunnel = null;
-                replyTunnel = null;
-                isClientReplyTunnel = false;
-                isDirect = true;
-                if (_facade.isClientDb() && _log.shouldLog(Log.WARN))
-                    _log.warn("Warning! Direct search selected in a client NetDb context!" +
-                              "\n* DbId: " + _facade);
-                ctx.statManager().addRateData("netDb.RILookupDirect", 1);
-            } else {
-                if (previouslyTried <= 0) {
-                    outTunnel = tm.selectOutboundExploratoryTunnel(peer);
-                    replyTunnel = tm.selectInboundExploratoryTunnel(peer);
-                } else {
-                    outTunnel = tm.selectOutboundTunnel();
-                    replyTunnel = tm.selectInboundTunnel();
-                }
-                isClientReplyTunnel = false;
-                isDirect = false;
-                ctx.statManager().addRateData("netDb.RILookupDirect", 0);
-            }
-            if ((!isDirect) && (replyTunnel == null || outTunnel == null)) {
-                failed();
                 return;
             }
-
-            // As explained above, it's hard to keep the key itself out of the ff list,
-            // so let's just skip it for now if the outbound tunnel is zero-hop.
-            // Yes, that means we aren't doing double-lookup for a floodfill
-            // if it happens to be closest to itself and we are using zero-hop exploratory tunnels.
-            // If we don't, the OutboundMessageDistributor ends up logging erors for
-            // not being able to send to the floodfill, if we don't have an older netdb entry.
-            if (outTunnel != null && outTunnel.getLength() <= 1) {
-                if (peer != null && peer.equals(_key)) {
-                    failed(peer, false);
-                    if (_log.shouldLog(Log.WARN))
-                        _log.warn("Not sending zero-hop self-lookup of [" + peer.toBase64().substring(0,6) + "]");
-                    return;
-                }
-                if (peer != null && _facade.lookupLocallyWithoutValidation(peer) == null) {
-                    failed(peer, false);
-                    if (_log.shouldLog(Log.WARN))
-                        _log.warn("Not sending zero-hop lookup to UNKNOWN [" + peer.toBase64().substring(0,6) + "]");
-                    return;
-                }
+        }
+        TunnelInfo outTunnel;
+        TunnelInfo replyTunnel;
+        boolean isClientReplyTunnel;
+        boolean isDirect;
+        boolean supportsRatchet = false;
+        boolean supportsElGamal = true;
+        if (_fromLocalDest != null) {
+            // For all tunnel selections, the first time we pick the tunnel with the far-end closest
+            // to the target. After that we pick a random tunnel, or else we'd pick the
+            // same tunnels every time.
+            if (previouslyTried <= 0) {outTunnel = tm.selectOutboundTunnel(_fromLocalDest, peer);}
+            else {outTunnel = tm.selectOutboundTunnel(_fromLocalDest);}
+            if (outTunnel == null) {
+                if (previouslyTried <= 0) {outTunnel = tm.selectOutboundExploratoryTunnel(peer);}
+                else {outTunnel = tm.selectOutboundTunnel();}
             }
-
-            DatabaseLookupMessage dlm = new DatabaseLookupMessage(ctx, true);
-            if (isDirect) {
-                dlm.setFrom(ctx.routerHash());
+            LeaseSetKeys lsk = ctx.keyManager().getKeys(_fromLocalDest);
+            supportsRatchet = lsk != null &&
+                              lsk.isSupported(EncType.ECIES_X25519) &&
+                              DatabaseLookupMessage.supportsRatchetReplies(ri);
+            supportsElGamal = !supportsRatchet &&
+                              lsk != null &&
+                              lsk.isSupported(EncType.ELGAMAL_2048);
+            if (supportsElGamal || supportsRatchet) {
+                // garlic encrypt to dest SKM
+                if (previouslyTried <= 0) {replyTunnel = tm.selectInboundTunnel(_fromLocalDest, peer);}
+                else {replyTunnel = tm.selectInboundTunnel(_fromLocalDest);}
+                isClientReplyTunnel = replyTunnel != null;
+                if (!isClientReplyTunnel) {
+                    if (previouslyTried <= 0) {replyTunnel = tm.selectInboundExploratoryTunnel(peer);}
+                    else {replyTunnel = tm.selectInboundTunnel();}
+                }
             } else {
-                dlm.setFrom(replyTunnel.getPeer(0));
-                dlm.setReplyTunnel(replyTunnel.getReceiveTunnelId(0));
+                // We don't have a way to request/get a ECIES-tagged reply,
+                // so send it to the router SKM
+                isClientReplyTunnel = false;
+                if (previouslyTried <= 0) {replyTunnel = tm.selectInboundExploratoryTunnel(peer);}
+                else {replyTunnel = tm.selectInboundTunnel();}
             }
-            long now = ctx.clock().now();
-            dlm.setMessageExpiration(now + SINGLE_SEARCH_MSG_TIME);
-            dlm.setSearchKey(_key);
-            dlm.setSearchType(_isLease ? DatabaseLookupMessage.Type.LS : DatabaseLookupMessage.Type.RI);
-
-            if (_log.shouldDebug()) {
-                int tries;
-                synchronized(this) {
-                    tries = _unheardFrom.size() + _failedPeers.size();
-                }
-                if (_key != null && peer != null) {
-                    _log.debug("IterativeSearch for " + (_isLease ? "LeaseSet " : "Router ") +
-                              " [" + _key.toBase64().substring(0,6) + "] (attempt " + tries + ")" +
-                              "\n* Querying: [" + peer.toBase64().substring(0,6) + "]" +
-                              "; Direct? " + isDirect + "; Reply via client tunnel? " + isClientReplyTunnel);
-                }
+            isDirect = false;
+        } else if ((!_isLease) && ri != null && ctx.commSystem().isEstablished(peer)) {
+            /**
+             * If it's a RI lookup, not from a client, and we're already connected, just ask directly
+             * This also saves the ElG encryption for us and the decryption for the ff
+             *
+             * There's no anonymity reason to use an expl. tunnel... the main reason is to limit
+             * connections to the ffs. But if we're already connected, do it the fast and easy way.
+             */
+            outTunnel = null;
+            replyTunnel = null;
+            isClientReplyTunnel = false;
+            isDirect = true;
+            if (_facade.isClientDb() && _log.shouldLog(Log.WARN)) {
+                _log.warn("Warning! Direct search selected in a client NetDb context!" +
+                          "\n* DbId: " + _facade);
             }
-            if (peer != null)
-                _sentTime.put(peer, Long.valueOf(now));
+            ctx.statManager().addRateData("netDb.RILookupDirect", 1);
+        } else {
+            if (previouslyTried <= 0) {
+                outTunnel = tm.selectOutboundExploratoryTunnel(peer);
+                replyTunnel = tm.selectInboundExploratoryTunnel(peer);
+            } else {
+                outTunnel = tm.selectOutboundTunnel();
+                replyTunnel = tm.selectInboundTunnel();
+            }
+            isClientReplyTunnel = false;
+            isDirect = false;
+            ctx.statManager().addRateData("netDb.RILookupDirect", 0);
+        }
+        if ((!isDirect) && (replyTunnel == null || outTunnel == null)) {
+            failed();
+            return;
+        }
 
-            EncType type = ri != null ? ri.getIdentity().getPublicKey().getType() : null;
-            boolean encryptElG = ctx.getProperty(PROP_ENCRYPT_RI, DEFAULT_ENCRYPT_RI);
-            I2NPMessage outMsg = null;
-            if (isDirect) {
-                // never wrap
-            } else if (_isLease ||
-                       (encryptElG && type == EncType.ELGAMAL_2048 && ctx.jobQueue().getMaxLag() < 300) ||
-                       type == EncType.ECIES_X25519) {
-                // Full ElG is fairly expensive so only do it for LS lookups
-                // and for RI lookups on fast boxes.
-                // if we have the ff RI, garlic encrypt it
-                if (ri != null) {
-                    // request encrypted reply
-                    // now covered by version check above, which is more recent
-                    //if (DatabaseLookupMessage.supportsEncryptedReplies(ri)) {
-                    if (!(type == EncType.ELGAMAL_2048 || (type == EncType.ECIES_X25519 && DatabaseLookupMessage.USE_ECIES_FF))) {
+        // As explained above, it's hard to keep the key itself out of the ff list,
+        // so let's just skip it for now if the outbound tunnel is zero-hop.
+        // Yes, that means we aren't doing double-lookup for a floodfill
+        // if it happens to be closest to itself and we are using zero-hop exploratory tunnels.
+        // If we don't, the OutboundMessageDistributor ends up logging erors for
+        // not being able to send to the floodfill, if we don't have an older netdb entry.
+        if (outTunnel != null && outTunnel.getLength() <= 1) {
+            if (peer != null && peer.equals(_key)) {
+                failed(peer, false);
+                if (_log.shouldLog(Log.WARN)) {
+                    _log.warn("Not sending zero-hop self-lookup of [" + peer.toBase64().substring(0,6) + "]");
+                }
+                return;
+            }
+            if (peer != null && _facade.lookupLocallyWithoutValidation(peer) == null) {
+                failed(peer, false);
+                if (_log.shouldLog(Log.WARN)) {
+                    _log.warn("Not sending zero-hop lookup to UNKNOWN [" + peer.toBase64().substring(0,6) + "]");
+                }
+                return;
+            }
+        }
+
+        DatabaseLookupMessage dlm = new DatabaseLookupMessage(ctx, true);
+        if (isDirect) {dlm.setFrom(ctx.routerHash());}
+        else {
+            dlm.setFrom(replyTunnel.getPeer(0));
+            dlm.setReplyTunnel(replyTunnel.getReceiveTunnelId(0));
+        }
+        long now = ctx.clock().now();
+        dlm.setMessageExpiration(now + SINGLE_SEARCH_MSG_TIME);
+        dlm.setSearchKey(_key);
+        dlm.setSearchType(_isLease ? DatabaseLookupMessage.Type.LS : DatabaseLookupMessage.Type.RI);
+
+        if (_log.shouldDebug()) {
+            int tries;
+            synchronized(this) {tries = _unheardFrom.size() + _failedPeers.size();}
+            if (_key != null && peer != null) {
+                _log.debug("IterativeSearch for " + (_isLease ? "LeaseSet " : "Router ") +
+                           " [" + _key.toBase64().substring(0,6) + "] (attempt " + tries + ")" +
+                           "\n* Querying: [" + peer.toBase64().substring(0,6) + "]" +
+                           "; Direct? " + isDirect + "; Reply via client tunnel? " + isClientReplyTunnel);
+            }
+        }
+        if (peer != null) {_sentTime.put(peer, Long.valueOf(now));}
+
+        EncType type = ri != null ? ri.getIdentity().getPublicKey().getType() : null;
+        boolean encryptElG = ctx.getProperty(PROP_ENCRYPT_RI, DEFAULT_ENCRYPT_RI);
+        I2NPMessage outMsg = null;
+        if (isDirect) {} // never wrap
+        else if (_isLease || (encryptElG && type == EncType.ELGAMAL_2048 && ctx.jobQueue().getMaxLag() < 300) ||
+                 type == EncType.ECIES_X25519) {
+            // Full ElG is fairly expensive so only do it for LS lookups and for RI lookups on fast boxes.
+            // if we have the ff RI, garlic encrypt it
+            if (ri != null) {
+                // request encrypted reply
+                // now covered by version check above, which is more recent
+                //if (DatabaseLookupMessage.supportsEncryptedReplies(ri)) {
+                if (!(type == EncType.ELGAMAL_2048 || (type == EncType.ECIES_X25519 && DatabaseLookupMessage.USE_ECIES_FF))) {
+                    failed(peer, false);
+                    if (_log.shouldLog(Log.WARN))
+                        _log.warn("Can't do encrypted lookup to [" + peer.toBase64().substring(0,6) + "] with EncType " + type);
+                    return;
+                }
+
+                MessageWrapper.OneTimeSession sess;
+                if (isClientReplyTunnel) {
+                    sess = MessageWrapper.generateSession(ctx, _fromLocalDest, SINGLE_SEARCH_MSG_TIME, !supportsRatchet);
+                } else {
+                    EncType ourType = ctx.keyManager().getPublicKey().getType();
+                    boolean ratchet1 = ourType.equals(EncType.ECIES_X25519);
+                    boolean ratchet2 = DatabaseLookupMessage.supportsRatchetReplies(ri);
+                    if (ratchet1 && !ratchet2) {
                         failed(peer, false);
                         if (_log.shouldLog(Log.WARN))
-                            _log.warn("Can't do encrypted lookup to [" + peer.toBase64().substring(0,6) + "] with EncType " + type);
+                            _log.warn("Can't do encrypted lookup to [" + peer.toBase64().substring(0,6) +
+                                      "] -> Router does not support AEAD replies");
                         return;
                     }
-
-                    MessageWrapper.OneTimeSession sess;
-                    if (isClientReplyTunnel) {
-                        sess = MessageWrapper.generateSession(ctx, _fromLocalDest, SINGLE_SEARCH_MSG_TIME, !supportsRatchet);
-                    } else {
-                        EncType ourType = ctx.keyManager().getPublicKey().getType();
-                        boolean ratchet1 = ourType.equals(EncType.ECIES_X25519);
-                        boolean ratchet2 = DatabaseLookupMessage.supportsRatchetReplies(ri);
-                        if (ratchet1 && !ratchet2) {
-                            failed(peer, false);
-                            if (_log.shouldLog(Log.WARN))
-                                _log.warn("Can't do encrypted lookup to [" + peer.toBase64().substring(0,6) +
-                                          "] -> Router does not support AEAD replies");
-                            return;
-                        }
-                        supportsRatchet = ratchet1 && ratchet2;
-                        sess = MessageWrapper.generateSession(ctx, ctx.sessionKeyManager(), SINGLE_SEARCH_MSG_TIME, !supportsRatchet);
-                    }
-                    if (sess != null) {
-                        if (sess.tag != null) {
-                            if (_log.shouldDebug())
-                                _log.debug("Requesting AES reply from [" + peer.toBase64().substring(0,6) + "]"
-                                + "\n* Session key: [" + sess.key.toBase64().substring(0,6) + "] Tag: [" + sess.tag.toString() + "]");
-                            dlm.setReplySession(sess.key, sess.tag);
-                        } else {
-                            if (_log.shouldDebug())
-                                _log.debug("Requesting AEAD reply from [" + peer.toBase64().substring(0,6) + "]"
-                                + "\n* Session key: [" + sess.key.toBase64().substring(0,6) + "] Tag: [" + sess.rtag.toString() + "]");
-                            dlm.setReplySession(sess.key, sess.rtag);
-                        }
-                    } else {
-                        if (_log.shouldLog(Log.WARN))
-                            _log.warn("Failed encrypt to " + ri);
-                        // client went away, but send it anyway
-                    }
-
-                    outMsg = MessageWrapper.wrap(ctx, dlm, ri);
-                    // ElG can take a while so do a final check before we send it,
-                    // a response may have come in.
-                    if (_dead) {
+                    supportsRatchet = ratchet1 && ratchet2;
+                    sess = MessageWrapper.generateSession(ctx, ctx.sessionKeyManager(), SINGLE_SEARCH_MSG_TIME, !supportsRatchet);
+                }
+                if (sess != null) {
+                    if (sess.tag != null) {
                         if (_log.shouldDebug())
-                            _log.debug("Aborting send - finished while wrapping message to [" + peer.toBase64().substring(0,6) + "]");
-                        return;
+                            _log.debug("Requesting AES reply from [" + peer.toBase64().substring(0,6) + "]"
+                            + "\n* Session key: [" + sess.key.toBase64().substring(0,6) + "] Tag: [" + sess.tag.toString() + "]");
+                        dlm.setReplySession(sess.key, sess.tag);
+                    } else {
+                        if (_log.shouldDebug())
+                            _log.debug("Requesting AEAD reply from [" + peer.toBase64().substring(0,6) + "]"
+                            + "\n* Session key: [" + sess.key.toBase64().substring(0,6) + "] Tag: [" + sess.rtag.toString() + "]");
+                        dlm.setReplySession(sess.key, sess.rtag);
                     }
+                } else {
+                    if (_log.shouldLog(Log.WARN))
+                        _log.warn("Failed encrypt to " + ri);
+                    // client went away, but send it anyway
+                }
+
+                outMsg = MessageWrapper.wrap(ctx, dlm, ri);
+                // ElG can take a while so do a final check before we send it,
+                // a response may have come in.
+                if (_dead) {
                     if (_log.shouldDebug())
-                        _log.debug("Encrypted DbLookupMsg for [" + _key.toBase64().substring(0,6) +
-                                   "] sent to [" + peer.toBase64().substring(0,6) + "]");
+                        _log.debug("Aborting send - finished while wrapping message to [" + peer.toBase64().substring(0,6) + "]");
+                    return;
+                }
+                if (_log.shouldDebug())
+                    _log.debug("Encrypted DbLookupMsg for [" + _key.toBase64().substring(0,6) +
+                               "] sent to [" + peer.toBase64().substring(0,6) + "]");
+            }
+        }
+        if (outMsg == null) {outMsg = dlm;}
+        if (isDirect) {
+            if (_facade.isClientDb() && _log.shouldLog(Log.WARN)) {
+                _log.warn("Warning! Sending direct search message in a client netDb context! " +
+                          "\n* DbId: " + _facade + outMsg);
+            }
+            OutNetMessage m = new OutNetMessage(ctx, outMsg, outMsg.getMessageExpiration(),
+                                                OutNetMessage.PRIORITY_MY_NETDB_LOOKUP, ri);
+            ctx.commSystem().processMessage(m);
+        } else {
+            ctx.tunnelDispatcher().dispatchOutbound(outMsg, outTunnel.getSendTunnelId(0), peer);
+        }
+
+        // The timeout job is always run (never cancelled)
+        // Note that the timeout is much shorter than the message expiration (see above)
+        Job j = new IterativeTimeoutJob(ctx, peer, this);
+
+        // set timeout based on resp. time from profile
+        PeerProfile prof = getContext().profileOrganizer().getProfileNonblocking(peer);
+        long exp = _singleSearchTime;
+        if (prof != null && prof.getIsExpandedDB()) {
+            RateStat dbrt = prof.getDbResponseTime();
+            if (dbrt != null) {
+                Rate r = dbrt.getRate(60*60*1000L);
+                if (r != null) {
+                    long avg = (long) r.getAvgOrLifetimeAvg();
+                    if (avg > 0) {
+                        // We don't calculate RTO so just use a multiple of the RTT
+                        exp = Math.min(exp, Math.max(MIN_SINGLE_SEARCH_TIME, (isDirect ? 2 : 3) * avg));
+                        //if (_log.shouldInfo())
+                        //    _log.info("lookup from " + peer.toBase64() + " avg resp time " + avg + " expires " + exp);
+                    }
                 }
             }
-            if (outMsg == null)
-                outMsg = dlm;
-            if (isDirect) {
-                if (_facade.isClientDb() && _log.shouldLog(Log.WARN))
-                    _log.warn("Warning! Sending direct search message in a client netDb context! " +
-                              "\n* DbId: " + _facade + outMsg);
-                OutNetMessage m = new OutNetMessage(ctx, outMsg, outMsg.getMessageExpiration(),
-                                                    OutNetMessage.PRIORITY_MY_NETDB_LOOKUP, ri);
-                // Should always succeed, we are connected already
-                //m.setOnFailedReplyJob(onFail);
-                //m.setOnFailedSendJob(onFail);
-                //m.setOnReplyJob(onReply);
-                //m.setReplySelector(selector);
-                //getContext().messageRegistry().registerPending(m);
-                ctx.commSystem().processMessage(m);
-            } else {
-                ctx.tunnelDispatcher().dispatchOutbound(outMsg, outTunnel.getSendTunnelId(0), peer);
-            }
+        }
 
-            // The timeout job is always run (never cancelled)
-            // Note that the timeout is much shorter than the message expiration (see above)
-            Job j = new IterativeTimeoutJob(ctx, peer, this);
-            long expire = Math.min(_expiration, now + _singleSearchTime);
-            j.getTiming().setStartAfter(expire);
-            getContext().jobQueue().addJob(j);
-
+        long expire = Math.min(_expiration, now + exp);
+        j.getTiming().setStartAfter(expire);
+        getContext().jobQueue().addJob(j);
     }
 
     @Override
