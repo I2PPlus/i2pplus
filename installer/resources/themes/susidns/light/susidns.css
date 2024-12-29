@@ -167,7 +167,7 @@ tr:hover .destaddress{color:#333}
 .iframed #page{margin:1px;padding:10px 10px 0;min-width:520px;overflow:hidden;background-color:#0000}
 .iframed #add p.buttons{margin-bottom:0;border-bottom:0}
 .iframed #book,.iframed #emptybook{margin-bottom:0}
-.iframed #book+#buttons{margin:-61px 0 -2px}
+.iframed #book+#buttons{margin:-61px 0 8px}
 .iframed #content h3{margin-top:3px}
 .iframed #content{padding:0;overflow:hidden;border:0;background:none}
 .iframed #content textarea{margin:0;border:var(--border_inner)}
@@ -272,7 +272,7 @@ input.download:hover,input.download:focus,input.update:hover,input.update:focus{
 input.reload{padding:5px 7px 5px 22px;background:var(--refresh) no-repeat 6px center/14px,var(--btn)}
 input.reload:hover,input.reload:focus{background:var(--refresh_hover) no-repeat 6px center,var(--btn_hover);background-size:14px,100%}
 input.search[type=submit]{margin-left:3px;padding:6px 5px;width:44px;vertical-align:middle;color:#0000;text-shadow:none;border-radius:0 2px 2px 0;background:var(--search) no-repeat center center/14px,var(--btn);background-blend-mode:luminosity}
-html:not(iframed) input.search[type=submit]{margin-top:4px}
+html:not(.iframed) input.search[type=submit]{margin-top:4px}
 input.search[type=submit]:hover,input.search[type=submit]:focus{background:var(--search) no-repeat center center/14px,var(--btn_hover);background-blend-mode:normal}
 input.search[type=text]{margin:1px -10px 0 0;padding:6px 8px;vertical-align:middle;border-radius:2px 0 0 2px;transition:none}
 input.search[type=text]:focus,input.search[type=text]:focus-within~input.search[type=submit]{border:1px solid var(--hover);filter:none;transition:none}
