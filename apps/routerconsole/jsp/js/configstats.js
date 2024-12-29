@@ -3,7 +3,6 @@
 /* License: AGPL3 or later */
 
 document.addEventListener("DOMContentLoaded", function () {
-  if (theme !== "dark") return;
 
   function updateCountSpan(thElement, checkedItems, totalItems, needsSaving) {
     let countSpan = thElement.querySelector("span") || document.createElement("span");

@@ -3,6 +3,7 @@
 /* Author: dr|z3d */
 
 @import url(global.css);
+@import url(../shared.css);
 
 :root{
 --bgpos_info:no-repeat 15px center/28px;
@@ -892,7 +893,7 @@ td,#externali2cp td,#config_keyring td,#config_logging td,#config_network td,#co
 #advconf.readonly td:nth-child(2){word-break:break-all}
 #advconf.readonly .section+tr td{border-top:var(--border)}
 #advconf .configline:hover td:not(:focus):not(.delete),#advconf #addNew td:hover td:not(:focus):not(.delete){background:#ffe}
-#advconf .configline td,#advconf #addNew td{padding:5px 8px;line-height:1.2;vertical-align:top;border:var(--border_soft);;box-shadow:var(--highlight),3px 3px 3px #0002 inset;background:#fff;outline:none}
+#advconf .configline td,#advconf #addNew td{padding:5px 8px;line-height:1.2;vertical-align:top;border:var(--border_soft);box-shadow:var(--highlight),2px 2px 2px #0002 inset;background:#fff;outline:none}
 #advconf .configline td:first-child,#advconf #addNew td:first-child{border-left:var(--border)}
 #advconf .configline td:last-child,#advconf #addNew td:last-child{border-right:var(--border)}
 #advconf .configline:nth-child(even) td{background:#f0f0ff}

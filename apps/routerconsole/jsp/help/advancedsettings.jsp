@@ -268,10 +268,8 @@
 
 </div>
 </div>
-<% if (theme.equals("dark") || theme.equals("light")) { %>
 <script src=/js/toggleElements.js></script>
 <script nonce=<%=cspNonce%>>setupToggles("#configinfo tr.config", "#configinfo tr:not(.config):not(.section)", "table-row");</script>
 <noscript><style>#configinfo tr.config th{cursor:default}#configinfo tr.config th::after{display:none!important}#configinfo td{border-bottom-width:1px!important}</style></noscript>
-<% } %>
 </body>
 </html>

@@ -3,14 +3,21 @@
 /* License: AGPL3 or later */
 
 document.addEventListener("DOMContentLoaded", () => {
-  if (theme !== "dark") {return;}
   function showHideTunnelCounts() {
     const table = document.querySelector("#tunnelconfig");
     if (!table) return;
     setupToggles("#tunnelconfig thead", "#tunnelconfig thead+tbody", "table-row-group");
+
     table.addEventListener("click", function(event) {
-      const toggle = event.target.closest(".toggle");
-      if (!toggle) return;
+      const clickTarget = event.target;
+      const toggle = clickTarget.closest(".toggle");
+      const headerLink =  clickTarget.closest(".toggle a");
+      if (headerLink) {
+        event.stopPropagation();
+        headerLink.click();
+      }
+      if (!toggle || headerLink) {return;}
+      console.log("closest clickTarget is: ", clickTarget);
       const tIn = toggle.querySelector(".th_title.left .tIn");
       const tOut = toggle.querySelector(".th_title.left .tOut");
 
@@ -21,6 +28,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (tIn) tIn.removeAttribute("style");
         if (tOut) tOut.removeAttribute("style");
       }
+    });
+
+    const toggle =  document.querySelector(".toggle");
+    const headerLink =  document.querySelector(".toggle a");
+    headerLink.addEventListener("mouseenter", function(event) {
+      headerlink.style.zIndex = "99999";
     });
   }
   showHideTunnelCounts();

@@ -29,15 +29,8 @@
 <tr>
 <td class=infohelp>
 <%=intl._t("Floodfill participation helps the network, but may use more of your computer's resources.")%>
-<%
-    if (advancedhelper.isFloodfill()) {
-%> (<%=intl._t("This router is currently a floodfill participant.")%>)
-<%
-    } else {
-%> (<%=intl._t("This router is not currently a floodfill participant.")%>)
-<%
-    }
-%>
+<% if (advancedhelper.isFloodfill()) { %>(<%=intl._t("This router is currently a floodfill participant.")%>)
+<% } else { %>(<%=intl._t("This router is not currently a floodfill participant.")%>)<% } %>
 </td>
 </tr>
 <tr>
@@ -70,12 +63,7 @@
 <table class=configtable id=advconf>
 <thead hidden><tr><td class=infohelp></td></tr></thead>
 <tbody>
-<%      if (theme.equals("dark") || theme.equals("light") || theme.equals("classic")) { %>
 <tr id=text_advconfig hidden><td class=tabletextarea><textarea id=advancedsettings name="nofilter_config" wrap=off spellcheck=false><%=advConfig%></textarea></td></tr>
-<%      } else {  %>
-<tr id=text_advconfig><td class=tabletextarea><textarea id=advancedsettings rows=32 cols=60 name="nofilter_config" wrap=off spellcheck=false><%=advConfig%></textarea></td></tr>
-</tbody>
-<%      } %>
 </table>
 </div>
 <div id=saveConfig class=optionsave><input type=reset class=cancel value="<%=intl._t("Cancel")%>"><input type=submit name="shouldsave" class=accept value="<%=intl._t("Save changes")%>"></div>
@@ -93,11 +81,9 @@
 </div>
 </div>
 </div>
-<% if (!theme.equals("dark")) { %><style>#floodfillconfig{display:table!important}</style><% } else { %>
 <script src=/js/toggleElements.js></script>
 <script nonce=<%=cspNonce%>>document.addEventListener("DOMContentLoaded", () => { setupToggles("#ffconf", "#ffconf+form", "block"); });</script>
-<% } %>
-<% if (theme.equals("dark") || theme.equals("light") || theme.equals("classic") && isAdvanced) { %>
+<% if (isAdvanced) { %>
 <script src=/js/advconfig.js type=module></script>
 <noscript><style>#advancedsettings{display:block!important}</style></noscript>
 <% } else { %>
@@ -105,6 +91,6 @@
 <% } %>
 <noscript><style>#advconf.readonly tr.section{pointer-events:none}#advconf.readonly tr.section th::after{display:none}#floodfillconfig{display:table!important}</style></noscript>
 <% if (!isAdvanced) { %><script src=/js/tableSectionToggler.js type=module></script><% } %>
-<% if (theme.equals("dark")) { %><script src=/js/ok.js></script><% } %>
+<script src=/js/ok.js></script>
 </body>
 </html>

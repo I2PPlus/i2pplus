@@ -144,10 +144,8 @@
 </table>
 </div>
 </div>
-<% if (theme.equals("dark")) { %>
 <script src=/js/toggleElements.js></script>
 <script nonce=<%=cspNonce%>>setupToggles("#faq h3", "#faq h3~*:not(h3)", "block");</script>
 <noscript><style>#faq h3{margin-bottom:10px!important;cursor:default!important}#faq h3::after{display:none!important}</style></noscript>
-<% } %>
 </body>
 </html>

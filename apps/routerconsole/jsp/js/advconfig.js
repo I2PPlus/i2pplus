@@ -2,7 +2,7 @@
 /* Enhance /configadvanced in advanced mode */
 /* License: AGPL3 or later */
 
-const init = () => {
+const advConfigInit = () => {
   const d = document;
 
   // Extend Element prototype
@@ -184,11 +184,7 @@ const init = () => {
     const newValue = newValueCell.textContent.trim();
 
     if (newValue && !newKey) {
-      if (theme === "dark") {
-        modal("No keyname provided for the submitted value.<br>Please supply a keyname.");
-      } else {
-        alert("No keyname provided for the submitted value.<br>Please supply a keyname.");
-      }
+      modal("No keyname provided for the submitted value.<br>Please supply a keyname.");
       newKeyCell.focus();
       return;
     }
@@ -196,11 +192,7 @@ const init = () => {
     if (newKey) {
       const existingKey = configItems.some(item => item[0] === newKey);
       if (existingKey) {
-        if (theme === "dark") {
-          modal(`Duplicate key <b>${newKey}</b> submitted. Please modify the existing key.`);
-        } else {
-          alert(`Duplicate key <b>${newKey}</b> submitted. Please modify the existing key.`);
-        }
+        modal(`Duplicate key <b>${newKey}</b> submitted. Please modify the existing key.`);
         newKeyCell.textContent = "";
         newValueCell.textContent = "";
         const filterInput = query("#advfilter input");
@@ -239,22 +231,23 @@ const init = () => {
     doSave(event);
   });
 
-  if (theme === "dark") {
-    let statusAdded = false;
-    const floodfillStatus = () => {
-      const h3ff = query("#ffconf");
-      const info = d.createElement("span");
+  let statusAdded = false;
+  function floodfillStatus() {
+    const h3ff = document.querySelector("#ffconf");
+    if (h3ff) {
+      const info = document.createElement("span");
       info.id = "ffstatus";
-      const ffstatus = query("#floodfillconfig .infohelp").textContent.match(/\(.*?\)/)[0].replace(/[\(\).]/g, "");
-      info.textContent = ffstatus;
-      if (!statusAdded) h3ff.appendChild(info);
-      statusAdded = true;
-    };
-
-    requestAnimationFrame(floodfillStatus);
-    query("#ffconf").addEventListener("click", floodfillStatus);
-    window.addEventListener("resize", floodfillStatus);
-  }
+      const ffstatus = document.querySelector("#floodfillconfig .infohelp").textContent.match(/\(.*?\)/);
+      if (ffstatus && ffstatus.length > 0) {
+        info.textContent = ffstatus[0].replace(/[\(\).]/g, "");
+        if (!statusAdded) {
+          h3ff.appendChild(info);
+          statusAdded = true;
+        }
+      }
+    } else {setTimeout(floodfillStatus, 100);}
+  };
+  floodfillStatus();
 }
 
-document.addEventListener("DOMContentLoaded", init);
+document.addEventListener("DOMContentLoaded", advConfigInit);

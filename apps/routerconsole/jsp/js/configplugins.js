@@ -1,6 +1,5 @@
 (function() {
   "use strict";
-  if (theme !== "dark") return;
   document.addEventListener("DOMContentLoaded", () => {
     let total = 0, started = 0, stopped = 0;
     const header = document.getElementById("pconfig");

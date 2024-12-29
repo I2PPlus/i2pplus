@@ -57,7 +57,6 @@ const initRefresh = () => {
 };
 
 function initFilter() {
-  if (theme !== "dark") return;
   const table = tunnels;
   const addFilter = () => {
     const tnlFilter = d.createElement("span");
@@ -96,7 +95,6 @@ function checkForCachedFilter() {
 }
 
 function applyFilter(filterValue) {
-  if (theme !== "dark") return;
   const rows = peers.querySelectorAll(".lazy");
   displayed = 0;
 
@@ -180,7 +178,6 @@ function displayPeerCount() {
 }
 
 function addFilterListener() {
-  if (theme !== "dark") return;
   const filterInput = d.getElementById("filterInput");
   if (filterInput) {
     filterInput.addEventListener("input", event => {

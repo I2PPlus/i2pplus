@@ -132,10 +132,8 @@
 %>
 </div>
 </div>
-<% if (theme.equals("dark")) { %>
 <script src=/js/configplugins.js></script>
 <script src=/js/toggleElements.js></script>
 <script nonce=<%=cspNonce%> type=module>setupToggles("#pconfig", "#plugmanage", "block");</script>
-<% } %>
 </body>
 </html>
