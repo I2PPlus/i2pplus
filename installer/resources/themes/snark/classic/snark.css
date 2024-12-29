@@ -530,7 +530,7 @@ input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_
 #configs td b,#torrentOrderControl b{margin-right:5px;padding:5px 10px 6px;display:inline-block;min-width:160px;line-height:1.3;color:#47597f;text-align:right;border-radius:15px 5px 5px 15px;box-shadow:0 0 0 1px rgba(200,200,255,.7);background:linear-gradient(180deg,var(--bg),var(--bg4));opacity:.9}
 #configs td,#configs td:first-child{padding:0;padding-right:0}
 #configs td{padding-top:4px;padding-bottom:4px;width:50%;min-width:0;text-align:left;font-weight:400}
-#configs td:first-child{padding-left:15px;width:25%;min-width:180px}
+#configs td:first-child{width:25%;min-width:180px}
 #configs td:nth-child(2){white-space:nowrap}
 #configs tr:nth-last-child(2) td{padding:10px 8px 0;text-align:right}
 #configs td label b:hover,#torrentOrderControl b:hover{color:#3e4d6f;box-shadow:0 0 0 1px #bbf;opacity:1}

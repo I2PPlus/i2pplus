@@ -31,7 +31,7 @@
 #legend_300 .legend_color{background:#f50}
 #legend_400 .legend_color{background:#f30}
 #legend_500 .legend_color{background:#f00}
-#netdbmap{position:relative}
+#netdbmap{position:relative;contain:paint}
 #netdbRouterMap{padding:0;position:relative}
 #netdbmapLegend{position:absolute;bottom:20px;left:20px;display:inline-block}
 
