@@ -41,9 +41,9 @@ import eu.bengreen.data.utility.LargestTriangleThreeBucketsTime;
  *
  *  @since 0.6.1.13
  */
-class SummaryRenderer {
+class GraphRenderer {
     private final Log _log;
-    private final SummaryListener _listener;
+    private final GraphListener _listener;
     private final I2PAppContext _context;
     private static final String PROP_THEME_NAME = "routerconsole.theme";
     private static final String DEFAULT_THEME = "dark";
@@ -99,8 +99,8 @@ class SummaryRenderer {
     String[] sysfonts = e.getAvailableFontFamilyNames();
     List<String> fontlist = Arrays.asList(sysfonts);
 
-    public SummaryRenderer(I2PAppContext ctx, SummaryListener lsnr) {
-        _log = ctx.logManager().getLog(SummaryRenderer.class);
+    public GraphRenderer(I2PAppContext ctx, GraphListener lsnr) {
+        _log = ctx.logManager().getLog(GraphRenderer.class);
         _listener = lsnr;
         _context = ctx;
         ctx.statManager().createRateStat("graph.renderTime", "Time to render graphs (ms)", "Router", RATES);
@@ -138,10 +138,10 @@ class SummaryRenderer {
      *
      *  @param lsnr2 2nd data source to plot on same graph, or null. Not recommended for events.
      *  @param titleOverride If non-null, overrides the title
-     *  @since 0.9.6 consolidated from StatSummarizer for bw.combined
+     *  @since 0.9.6 consolidated from GraphSummarizer for bw.combined
      */
     public void render(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid, boolean hideTitle,
-                       boolean showEvents, int periodCount, int endp, boolean showCredit, SummaryListener lsnr2,
+                       boolean showEvents, int periodCount, int endp, boolean showCredit, GraphListener lsnr2,
                        String titleOverride) throws IOException {
         long begin = System.currentTimeMillis();
         // prevent NaNs if we are skewed ahead of system time
@@ -387,7 +387,7 @@ class SummaryRenderer {
                 // but the descriptions for the default graphs are tagged in Strings.java
                 descr = _t(_listener.getRate().getRateStat().getDescription());
             }
-            def.datasource(plotName, path, plotName, SummaryListener.CF, _listener.getBackendFactory());
+            def.datasource(plotName, path, plotName, GraphListener.CF, _listener.getBackendFactory());
             if (width == 2000 && height == 160 && hideTitle && hideLegend && hideGrid) {
                 def.area(plotName, AREA_COLOR_NEUTRAL);
             } else if (theme.equals("dark")) {
@@ -423,7 +423,7 @@ class SummaryRenderer {
                 plotName2 = dsNames2[0];
                 String path2 = lsnr2.getData().getPath();
                 String descr2 = _t(lsnr2.getRate().getRateStat().getDescription());
-                def.datasource(plotName2, path2, plotName2, SummaryListener.CF, lsnr2.getBackendFactory());
+                def.datasource(plotName2, path2, plotName2, GraphListener.CF, lsnr2.getBackendFactory());
                 int linewidth = 2;
                 // sidebar graph
                 if (width == 250 && height == 50 && hideTitle && hideLegend && hideGrid) {linewidth = 3;}
@@ -507,12 +507,12 @@ class SummaryRenderer {
             try {graph = new RrdGraph(def, new SVGImageWorker(totalWidth + 8, totalHeight));} // svg
             catch (NullPointerException npe) {
                 _log.error("Error rendering graph", npe);
-                StatSummarizer.setDisabled(_context);
+                GraphSummarizer.setDisabled(_context);
                 throw new IOException("Error rendering - disabling graph generation.");
             } catch (Error e) {
                 // Docker InternalError see Gitlab #383
                 _log.error("Error rendering graph", e);
-                StatSummarizer.setDisabled(_context);
+                GraphSummarizer.setDisabled(_context);
                 throw new IOException("Error rendering - disabling graph generation.");
             }
             out.write(graph.getRrdGraphInfo().getBytes());

@@ -29,7 +29,7 @@ import org.rrd4j.core.Sample;
  *
  *  @since 0.6.1.13
  */
-public class SummaryListener implements RateSummaryListener {
+public class GraphListener implements RateSummaryListener {
     /** @since public since 0.9.33, was package private */
     public static final String PROP_PERSISTENT = "routerconsole.graphPersistent";
     /** note that .jrb files are NOT compatible with .rrd files */
@@ -49,7 +49,7 @@ public class SummaryListener implements RateSummaryListener {
     private String _eventName;
     private RrdDb _db;
     private Sample _sample;
-    private SummaryRenderer _renderer;
+    private GraphRenderer _renderer;
     private int _rows;
 
     static final int PERIODS = 60 * 24;  // 1440
@@ -58,17 +58,16 @@ public class SummaryListener implements RateSummaryListener {
     public static final int MAX_ROWS = 91 * MIN_ROWS;
     private static final long THREE_MONTHS = 91l * 24 * 60 * 60 * 1000;
 
-    public SummaryListener(Rate r) {
+    public GraphListener(Rate r) {
         _context = I2PAppContext.getGlobalContext();
         _rate = r;
-        _log = _context.logManager().getLog(SummaryListener.class);
+        _log = _context.logManager().getLog(GraphListener.class);
         _isPersistent = _context.getBooleanPropertyDefaultTrue(PROP_PERSISTENT);
     }
 
     public void add(double totalValue, long eventCount, double totalEventTime, long period) {
         long now = now();
         long when = now / 1000;
-        //System.out.println("add to " + getRate().getRateStat().getName() + " on " + System.currentTimeMillis() + " / " + now + " / " + when);
         if (_db != null) {
             // add one value to the db (the average value for the period)
             try {
@@ -76,33 +75,21 @@ public class SummaryListener implements RateSummaryListener {
                 double val = eventCount > 0 ? (totalValue / eventCount) : 0d;
                 _sample.setValue(_name, val);
                 _sample.setValue(_eventName, eventCount);
-                //_sample.setValue(0, val);
-                //_sample.setValue(1, eventCount);
                 _sample.update();
-                //String names[] = _sample.getDsNames();
-                //System.out.println("Add " + val + " over " + eventCount + " for " + _name
-                //                   + " [" + names[0] + ", " + names[1] + "]");
             } catch (IllegalArgumentException iae) {
-                // ticket #1186
-                // apparently a corrupt file, thrown from update()
-                // With rrd4j, could be time skew:
-                // IllegalArgumentException: Bad sample time: 1670674936. Last update time was 1670694462, at least one second step is required
                 String msg = iae.getMessage();
                 if (msg != null && msg.startsWith("Bad sample time:")) {
-                    if (_log.shouldWarn())
-                        _log.warn("RRD time skew", iae);
+                    if (_log.shouldWarn()) {_log.warn("RRD time skew", iae);}
                 } else {
                     _log.error("RRD error", iae);
                     String path = _isPersistent ? _db.getPath() : null;
                     stopListening();
-                    if (path != null)
-                        (new File(path)).delete();
+                    if (path != null) {(new File(path)).delete();}
                 }
             } catch (RrdException re) {
                 // this can happen after the time slews backwards, so don't make it an error
                 // org.jrobin.core.RrdException: Bad sample timestamp 1264343107. Last update time was 1264343172, at least one second step is required
-                if (_log.shouldWarn())
-                    _log.warn("Error adding", re);
+                if (_log.shouldWarn()) {_log.warn("Error adding", re);}
             } catch (IOException ioe) {
                 _log.error("Error adding", ioe);
                 stopListening();
@@ -142,17 +129,14 @@ public class SummaryListener implements RateSummaryListener {
                 if (rrdFile.exists()) {
                     _db = RrdDb.getBuilder().setPath(rrdDefName).setBackendFactory(factory).build();
                     Archive arch = _db.getArchive(CF, STEPS);
-                    if (arch == null)
-                        throw new IOException("No average CF in " + rrdDefName);
+                    if (arch == null) {throw new IOException("No average CF in " + rrdDefName);}
                     _rows = arch.getRows();
-                    if (_log.shouldInfo())
-                        _log.info("Existing RRD " + baseName + " (" + rrdDefName + ") with " + _rows + " rows consuming " + _db.getRrdBackend().getLength() + " bytes");
-                } else {
-                    rrdDir.mkdir();
-                }
-            } else {
-                rrdDefName = _name;
-            }
+                    if (_log.shouldInfo()) {
+                        _log.info("Existing RRD " + baseName + " (" + rrdDefName + ") with " + _rows +
+                                  " rows consuming " + _db.getRrdBackend().getLength() + " bytes");
+                    }
+                } else {rrdDir.mkdir();}
+            } else {rrdDefName = _name;}
             if (_db == null) {
                 // not persistent or not previously existing
                 RrdDef def = new RrdDef(rrdDefName, now()/1000, period/1000);
@@ -161,37 +145,32 @@ public class SummaryListener implements RateSummaryListener {
                 long heartbeat = period*10/1000;
                 def.addDatasource(_name, DS, heartbeat, Double.NaN, Double.NaN);
                 def.addDatasource(_eventName, DS, heartbeat, 0, Double.NaN);
-                if (_isPersistent) {
-                    _rows = (int) Math.max(MIN_ROWS, Math.min(MAX_ROWS, THREE_MONTHS / period));
-                } else {
-                    _rows = MIN_ROWS;
-                }
+                if (_isPersistent) {_rows = (int) Math.max(MIN_ROWS, Math.min(MAX_ROWS, THREE_MONTHS / period));}
+                else {_rows = MIN_ROWS;}
                 def.addArchive(CF, XFF, STEPS, _rows);
                 _db = RrdDb.getBuilder().setRrdDef(def).setBackendFactory(factory).build();
-                if (_isPersistent)
-                    SecureFileOutputStream.setPerms(new File(rrdDefName));
-                if (_log.shouldInfo())
-                    _log.info("New RRD " + baseName + " (" + rrdDefName + ") with " + _rows + " rows consuming " + _db.getRrdBackend().getLength() + " bytes");
+                if (_isPersistent) {SecureFileOutputStream.setPerms(new File(rrdDefName));}
+                if (_log.shouldInfo()) {
+                    _log.info("New RRD " + baseName + " (" + rrdDefName + ") with " + _rows +
+                              " rows consuming " + _db.getRrdBackend().getLength() + " bytes");
+                }
             }
             _sample = _db.createSample();
-            _renderer = new SummaryRenderer(_context, this);
+            _renderer = new GraphRenderer(_context, this);
             _rate.setSummaryListener(this);
             return true;
-        } catch (OutOfMemoryError oom) {
-            _log.error("Error starting RRD for stat " + baseName, oom);
-        } catch (RrdException re) {
+        } catch (OutOfMemoryError oom) {_log.error("Error starting RRD for stat " + baseName, oom);}
+        catch (RrdException re) {
             _log.error("Error starting RRD for stat " + baseName, re);
             // corrupt file?
-            if (_isPersistent && rrdFile != null)
-                rrdFile.delete();
-        } catch (IOException ioe) {
-            _log.error("Error starting RRD for stat " + baseName, ioe);
-        } catch (IllegalArgumentException iae) {
+            if (_isPersistent && rrdFile != null) {rrdFile.delete();}
+        } catch (IOException ioe) {_log.error("Error starting RRD for stat " + baseName, ioe);}
+        catch (IllegalArgumentException iae) {
             // No backend from RrdBackendFactory
             _log.error("Error starting RRD for stat " + baseName, iae);
-            _log.log(Log.CRIT, "rrd4j backend error, graphs disabled");
-            System.out.println("rrd4j backend error, graphs disabled");
-            StatSummarizer.setDisabled(_context);
+            _log.log(Log.CRIT, "RRD4J backend error, graphs disabled");
+            System.out.println("RRD4J backend error, graphs disabled");
+            GraphSummarizer.setDisabled(_context);
         } catch (NoSuchMethodError nsme) {
             // Covariant fail Java 8/9/10
             // java.lang.NoSuchMethodError: java.nio.MappedByteBuffer.position(I)Ljava/nio/MappedByteBuffer;
@@ -203,20 +182,15 @@ public class SummaryListener implements RateSummaryListener {
                        "\nContact packager.";
             _log.log(Log.CRIT, s);
             System.out.println(s);
-            StatSummarizer.setDisabled(_context);
-        } catch (Throwable t) {
-            _log.error("Error starting RRD for stat " + baseName, t);
-        }
+            GraphSummarizer.setDisabled(_context);
+        } catch (Throwable t) {_log.error("Error starting RRD for stat " + baseName, t);}
         return false;
     }
 
     public void stopListening() {
         if (_db == null) return;
-        try {
-            _db.close();
-        } catch (IOException ioe) {
-            _log.error("Error closing", ioe);
-        }
+        try {_db.close();}
+        catch (IOException ioe) {_log.error("Error closing", ioe);}
         _rate.setSummaryListener(null);
         if (!_isPersistent) {
             // close() does not release resources for memory backend
@@ -246,57 +220,40 @@ public class SummaryListener implements RateSummaryListener {
      */
     public void renderPng(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
                           boolean hideTitle, boolean showEvents, int periodCount,
-                          int end, boolean showCredit, SummaryListener lsnr2, String titleOverride) throws IOException {
-        if (_renderer == null || _db == null)
-            throw new IOException("No RRD, check logs for previous errors");
+                          int end, boolean showCredit, GraphListener lsnr2, String titleOverride) throws IOException {
+        if (_renderer == null || _db == null) {throw new IOException("No RRD, check logs for previous errors");}
         _renderer.render(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
                          end, showCredit, lsnr2, titleOverride);
     }
 
     public void renderPng(OutputStream out) throws IOException {
-        if (_renderer == null || _db == null)
-            throw new IOException("No RRD, check logs for previous errors");
+        if (_renderer == null || _db == null) {throw new IOException("No RRD, check logs for previous errors");}
         _renderer.render(out);
     }
 
-    String getName() { return _name; }
-
+    String getName() {return _name;}
     String getEventName() { return _eventName; }
-
-    RrdDb getData() { return _db; }
-
-    long now() { return _context.clock().now(); }
+    RrdDb getData() {return _db;}
+    long now() {return _context.clock().now();}
 
     /** @since 0.9.46 */
-    RrdBackendFactory getBackendFactory() {
-        return getBackendFactory(_isPersistent);
-    }
+    RrdBackendFactory getBackendFactory() {return getBackendFactory(_isPersistent);}
 
     /** @since 0.9.46 */
     @SuppressWarnings("deprecation")
     private static RrdBackendFactory getBackendFactory(boolean isPersistent) {
-        // getFactory(String) is deprecated, but to avoid it
-        // we'd have to use findFactory(URI), but it only returns from the active factory list,
-        // so we'd have to call addActiveFactories(getFactory(String)) anyway.
-        //try {
-            return isPersistent ? RrdBackendFactory.getDefaultFactory()                   // NIO
-                                //: RrdBackendFactory.findFactory(new URI("memory:foo")); // MEMORY
-                                : RrdBackendFactory.getFactory("MEMORY");                 // MEMORY
-        //} catch (URISyntaxException use) {
-        //    throw new IllegalArgumentException(use);
-        //}
+        return isPersistent ? RrdBackendFactory.getDefaultFactory() // NIO
+                            : RrdBackendFactory.getFactory("MEMORY"); // MEMORY
     }
 
     /** @since 0.8.7 */
-    int getRows() {
-        return _rows;
-    }
+    int getRows() {return _rows;}
 
     @Override
     public boolean equals(Object obj) {
-        return ((obj instanceof SummaryListener) && ((SummaryListener)obj)._rate.equals(_rate));
+        return ((obj instanceof GraphListener) && ((GraphListener)obj)._rate.equals(_rate));
     }
 
     @Override
-    public int hashCode() { return _rate.hashCode(); }
+    public int hashCode() {return _rate.hashCode();}
 }

@@ -14,8 +14,8 @@ import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.FormHandler;
 import static net.i2p.router.web.GraphConstants.*;
 import net.i2p.router.web.HelperBase;
-import net.i2p.router.web.StatSummarizer;
-import net.i2p.router.web.SummaryListener;
+import net.i2p.router.web.GraphSummarizer;
+import net.i2p.router.web.GraphListener;
 import net.i2p.stat.Rate;
 
 
@@ -46,7 +46,7 @@ public class GraphHelper extends FormHandler {
     private static final int MIN_Y = 40;
     //private static final int MIN_C = 20;
     private static final int MIN_C = 5; // minimum period (minutes)
-    private static final int MAX_C = SummaryListener.MAX_ROWS;
+    private static final int MAX_C = GraphListener.MAX_ROWS;
     private static final int MIN_REFRESH = 5;
 
     /** set the defaults after we have a context */
@@ -135,18 +135,18 @@ public class GraphHelper extends FormHandler {
     }
 
     public String getImages() {
-        StatSummarizer ss = StatSummarizer.instance(_context);
+        GraphSummarizer ss = GraphSummarizer.instance(_context);
         if (ss == null)
             return "";
-        List<SummaryListener> listeners = ss.getListeners();
-        TreeSet<SummaryListener> ordered = new TreeSet<SummaryListener>(new AlphaComparator());
+        List<GraphListener> listeners = ss.getListeners();
+        TreeSet<GraphListener> ordered = new TreeSet<GraphListener>(new AlphaComparator());
         ordered.addAll(listeners);
         StringBuilder buf = new StringBuilder(512*listeners.size());
 
         // go to some trouble to see if we have the data for the combined bw graph
         boolean hasTx = false;
         boolean hasRx = false;
-        for (SummaryListener lsnr : ordered) {
+        for (GraphListener lsnr : ordered) {
             String title = lsnr.getRate().getRateStat().getName();
             if (title.equals("bw.sendRate")) hasTx = true;
             else if (title.equals("bw.recvRate")) hasRx = true;
@@ -155,8 +155,8 @@ public class GraphHelper extends FormHandler {
 
         if (hasTx && hasRx && !_showEvents) {
             // remove individual tx/rx graphs if displaying combined
-            for (Iterator<SummaryListener> iter = ordered.iterator(); iter.hasNext(); ) {
-                SummaryListener lsnr = iter.next();
+            for (Iterator<GraphListener> iter = ordered.iterator(); iter.hasNext(); ) {
+                GraphListener lsnr = iter.next();
                 String title = lsnr.getRate().getRateStat().getName();
                 if (title.equals("bw.sendRate") || title.equals("bw.recvRate")) {iter.remove();}
             }
@@ -178,7 +178,7 @@ public class GraphHelper extends FormHandler {
                .append("\" alt=\"").append(title).append("\" title=\"").append(title).append("\"></a></span>\n");
         }
 
-        for (SummaryListener lsnr : ordered) {
+        for (GraphListener lsnr : ordered) {
             Rate r = lsnr.getRate();
             // e.g. "statname for 60m"
             String title = _t("{0} for {1}", r.getRateStat().getName(), DataHelper.formatDuration2(_periodCount * r.getPeriod()));
@@ -199,7 +199,7 @@ public class GraphHelper extends FormHandler {
     }
 
     public int countGraphs() {
-        StatSummarizer ss = StatSummarizer.instance(_context);
+        GraphSummarizer ss = GraphSummarizer.instance(_context);
         if (ss == null) {return 0;}
         else {return ss.countGraphs();}
     }
@@ -212,7 +212,7 @@ public class GraphHelper extends FormHandler {
      */
     public String getSingleStat() {
         StringBuilder buf = new StringBuilder(2*1024);
-        StatSummarizer ss = StatSummarizer.instance(_context);
+        GraphSummarizer ss = GraphSummarizer.instance(_context);
         boolean hideLegend = false;
 
         if (ss == null) {return "";}
@@ -352,14 +352,14 @@ public class GraphHelper extends FormHandler {
     private static final int[] times = { 5, 10, 15, 30, 60, 2*60, 5*60, 10*60, 30*60, 60*60, -1 };
 
     public String getForm() {
-        StatSummarizer ss = StatSummarizer.instance(_context);
+        GraphSummarizer ss = GraphSummarizer.instance(_context);
         if (ss == null) {return "";}
         // too hard to use the standard formhandler.jsi / FormHandler.java session nonces
         // since graphs.jsp needs the refresh value in its <head>.
         // So just use the "shared/console nonce".
         String nonce = CSSHelper.getNonce();
         boolean hideLegend = _context.getProperty(PROP_HIDE_LEGEND, DEFAULT_HIDE_LEGEND);
-        boolean persistent = _context.getBooleanPropertyDefaultTrue(SummaryListener.PROP_PERSISTENT);
+        boolean persistent = _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT);
         StringBuilder buf = new StringBuilder(3*1024);
 
         buf.append("<br><input type=checkbox id=toggleSettings hidden>")
@@ -412,7 +412,7 @@ public class GraphHelper extends FormHandler {
      */
     @Override
     public String getAllMessages() {
-        if (StatSummarizer.isDisabled(_context)) {
+        if (GraphSummarizer.isDisabled(_context)) {
             addFormError("Either the router hasn't initialized yet, or graph generation is not supported with this JVM or OS.");
             addFormNotice("JVM: " + System.getProperty("java.vendor") + ' ' +
                                     System.getProperty("java.version") + " (" +
@@ -453,7 +453,7 @@ public class GraphHelper extends FormHandler {
             _refreshDelaySeconds != _context.getProperty(PROP_REFRESH, DEFAULT_REFRESH) ||
             _showEvents != _context.getBooleanProperty(PROP_EVENTS) ||
             _graphHideLegend != _context.getProperty(PROP_HIDE_LEGEND, DEFAULT_HIDE_LEGEND) ||
-            _persistent != _context.getBooleanPropertyDefaultTrue(SummaryListener.PROP_PERSISTENT)) {
+            _persistent != _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT)) {
             Map<String, String> changes = new HashMap<String, String>();
             changes.put(PROP_X, Integer.toString(_width));
             changes.put(PROP_Y, Integer.toString(_height));
@@ -461,16 +461,16 @@ public class GraphHelper extends FormHandler {
             changes.put(PROP_REFRESH, Integer.toString(_refreshDelaySeconds));
             changes.put(PROP_EVENTS, Boolean.toString(_showEvents));
             changes.put(PROP_HIDE_LEGEND, Boolean.toString(_graphHideLegend));
-            changes.put(SummaryListener.PROP_PERSISTENT, Boolean.toString(_persistent));
-            boolean warn = _persistent != _context.getBooleanPropertyDefaultTrue(SummaryListener.PROP_PERSISTENT);
+            changes.put(GraphListener.PROP_PERSISTENT, Boolean.toString(_persistent));
+            boolean warn = _persistent != _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT);
             _context.router().saveConfig(changes, null);
             addFormNotice(_t("Graph settings saved") + ".");
             if (warn) {addFormError(_t("Restart required to take effect"));}
         } else {addFormNotice(_t("Graph settings unchanged") + ".");}
     }
 
-    private static class AlphaComparator implements Comparator<SummaryListener>, Serializable {
-        public int compare(SummaryListener l, SummaryListener r) {
+    private static class AlphaComparator implements Comparator<GraphListener>, Serializable {
+        public int compare(GraphListener l, GraphListener r) {
             // sort by group name
             String lGName = l.getRate().getRateStat().getGroupName();
             String rGName = r.getRate().getRateStat().getGroupName();

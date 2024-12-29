@@ -29,7 +29,7 @@ public class Rate {
     private float _lifetimeTotalValue;
     private long _lifetimeEventCount;
     private long _lifetimeTotalEventTime;
-    private RateSummaryListener _summaryListener;
+    private RateSummaryListener _graphListener;
     private RateStat _stat;
 
     private long _lastCoalesceDate;
@@ -214,7 +214,7 @@ public class Rate {
     private static final int SLACK = 2000;
     public void coalesce() {
         long now = now();
-        double correctedTotalValue; // for summaryListener which divides by rounded EventCount
+        double correctedTotalValue; // for GraphListener which divides by rounded EventCount
         synchronized (this) {
             long measuredPeriod = now - _lastCoalesceDate;
             if (measuredPeriod < _period - SLACK) {
@@ -248,12 +248,12 @@ public class Rate {
             _currentEventCount = 0;
             _currentTotalEventTime = 0;
         }
-        if (_summaryListener != null)
-            _summaryListener.add(correctedTotalValue, _lastEventCount, _lastTotalEventTime, _period);
+        if (_graphListener != null)
+            _graphListener.add(correctedTotalValue, _lastEventCount, _lastTotalEventTime, _period);
     }
 
-    public void setSummaryListener(RateSummaryListener listener) { _summaryListener = listener; }
-    public RateSummaryListener getSummaryListener() { return _summaryListener; }
+    public void setSummaryListener(RateSummaryListener listener) { _graphListener = listener; }
+    public RateSummaryListener getSummaryListener() { return _graphListener; }
 
     /**
      * What was the average value across the events in the last period?
@@ -514,7 +514,7 @@ public class Rate {
     }
 
     /**
-     * This is used in StatSummarizer and SummaryListener.
+     * This is used in GraphSummarizer and GraphListener.
      * We base it on the stat we are tracking, not the stored data.
      */
     @Override

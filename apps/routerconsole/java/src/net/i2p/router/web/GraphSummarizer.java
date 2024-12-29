@@ -34,17 +34,17 @@ import net.i2p.util.SystemVersion;
  *  and adds or deletes RRDs as necessary.
  *
  *  This also contains methods to generate xml or png image output.
- *  The rendering for graphs is in SummaryRenderer.
+ *  The rendering for graphs is in GraphRenderer.
  *
  *  To control memory, the number of simultaneous renderings is limited.
  *
  *  @since 0.6.1.13
  */
-public class StatSummarizer implements Runnable, ClientApp {
+public class GraphSummarizer implements Runnable, ClientApp {
     private final RouterContext _context;
     private final Log _log;
-    /** list of SummaryListener instances */
-    private final List<SummaryListener> _listeners;
+    /** list of GraphListener instances */
+    private final List<GraphListener> _listeners;
     //private static final int MAX_CONCURRENT_PNG = SystemVersion.isARM() ? 2 : 3;
     private static final int MAX_CONCURRENT_PNG = SystemVersion.isARM() ? 2 :
                                                   SystemVersion.getMaxMemory() < 256*1024*1024 ? 8 :
@@ -55,12 +55,12 @@ public class StatSummarizer implements Runnable, ClientApp {
     private final Semaphore _sem;
     private volatile boolean _isRunning;
     private volatile Thread _thread;
-    private static final String NAME = "StatSummarizer";
+    private static final String NAME = "GraphSummarizer";
 
-    public StatSummarizer(RouterContext ctx) {
+    public GraphSummarizer(RouterContext ctx) {
         _context = ctx;
         _log = _context.logManager().getLog(getClass());
-        _listeners = new CopyOnWriteArrayList<SummaryListener>();
+        _listeners = new CopyOnWriteArrayList<GraphListener>();
         _sem = new Semaphore(MAX_CONCURRENT_PNG, true);
         _context.addShutdownTask(new Shutdown());
     }
@@ -68,7 +68,7 @@ public class StatSummarizer implements Runnable, ClientApp {
     /**
      * @return null if disabled
      */
-    public static StatSummarizer instance() {
+    public static GraphSummarizer instance() {
         return instance(I2PAppContext.getGlobalContext());
     }
 
@@ -76,9 +76,9 @@ public class StatSummarizer implements Runnable, ClientApp {
      * @return null if disabled
      * @since 0.9.38
      */
-    public static StatSummarizer instance(I2PAppContext ctx) {
+    public static GraphSummarizer instance(I2PAppContext ctx) {
         ClientApp app = ctx.clientAppManager().getRegisteredApp(NAME);
-        return (app != null) ? (StatSummarizer) app : null;
+        return (app != null) ? (GraphSummarizer) app : null;
     }
 
     public void run() {
@@ -93,7 +93,7 @@ public class StatSummarizer implements Runnable, ClientApp {
             return;
         }
         _isRunning = true;
-        boolean isPersistent = _context.getBooleanPropertyDefaultTrue(SummaryListener.PROP_PERSISTENT);
+        boolean isPersistent = _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT);
         int syncThreads;
         if (isPersistent) {
             String spec = _context.getProperty("stat.summaries", DEFAULT_DATABASES);
@@ -102,15 +102,15 @@ public class StatSummarizer implements Runnable, ClientApp {
             syncThreads = SystemVersion.isSlow() ? 2 : 4;
             // delete files for unconfigured rates
             Set<String> configured = new HashSet<String>(rates.length);
-            for (String r : rates) {configured.add(SummaryListener.createName(_context, r));}
-            File rrdDir = new File(_context.getRouterDir(), SummaryListener.RRD_DIR);
-            FileFilter filter = new FileSuffixFilter(SummaryListener.RRD_PREFIX, SummaryListener.RRD_SUFFIX);
+            for (String r : rates) {configured.add(GraphListener.createName(_context, r));}
+            File rrdDir = new File(_context.getRouterDir(), GraphListener.RRD_DIR);
+            FileFilter filter = new FileSuffixFilter(GraphListener.RRD_PREFIX, GraphListener.RRD_SUFFIX);
             File[] files = rrdDir.listFiles(filter);
             if (files != null) {
                 for (int i = 0; i < files.length; i++) {
                     File f = files[i];
                     String name = f.getName();
-                    String hash = name.substring(SummaryListener.RRD_PREFIX.length(), name.length() - SummaryListener.RRD_SUFFIX.length());
+                    String hash = name.substring(GraphListener.RRD_PREFIX.length(), name.length() - GraphListener.RRD_SUFFIX.length());
                     if (!configured.contains(hash)) {
                         f.delete();
                     }
@@ -146,18 +146,18 @@ public class StatSummarizer implements Runnable, ClientApp {
 
     /**
      * Disable graph generation until restart
-     * See SummaryRenderer.render()
+     * See GraphRenderer.render()
      * @since 0.9.6
      */
     static void setDisabled(I2PAppContext ctx) {
-        StatSummarizer ss = instance(ctx);
+        GraphSummarizer ss = instance(ctx);
         if (ss != null)
             ss.setDisabled();
     }
 
     /**
      * Disable graph generation until restart
-     * See SummaryRenderer.render()
+     * See GraphRenderer.render()
      * @since 0.9.38
      */
     synchronized void setDisabled() {
@@ -201,10 +201,10 @@ public class StatSummarizer implements Runnable, ClientApp {
     /////// End ClientApp methods
 
     /**
-     *  List of SummaryListener instances
+     *  List of GraphListener instances
      *  @since public since 0.9.33, was package private
      */
-    public List<SummaryListener> getListeners() { return _listeners; }
+    public List<GraphListener> getListeners() { return _listeners; }
 
     /**  @since public since 0.9.33, was package private */
     public static final String DEFAULT_DATABASES = "bw.sendRate.60000" +
@@ -269,7 +269,7 @@ public class StatSummarizer implements Runnable, ClientApp {
     }
 
     private void removeDb(Rate r) {
-        for (SummaryListener lsnr : _listeners) {
+        for (GraphListener lsnr : _listeners) {
             if (lsnr.getRate().equals(r)) {
                 // no iter.remove() in COWAL
                 _listeners.remove(lsnr);
@@ -279,7 +279,7 @@ public class StatSummarizer implements Runnable, ClientApp {
         }
     }
     private void addDb(Rate r) {
-        SummaryListener lsnr = new SummaryListener(r);
+        GraphListener lsnr = new GraphListener(r);
         boolean success = lsnr.startListening();
         if (success)
             _listeners.add(lsnr);
@@ -343,7 +343,7 @@ public class StatSummarizer implements Runnable, ClientApp {
             height = DEFAULT_Y;
         if (end < 0)
             end = 0;
-        for (SummaryListener lsnr : _listeners) {
+        for (GraphListener lsnr : _listeners) {
             if (lsnr.getRate().equals(rate)) {
                 lsnr.renderPng(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);
                 return true;
@@ -355,7 +355,7 @@ public class StatSummarizer implements Runnable, ClientApp {
     /** @deprecated unused */
     @Deprecated
     public boolean renderPng(OutputStream out, String templateFilename) throws IOException {
-        SummaryRenderer.render(_context, out, templateFilename);
+        GraphRenderer.render(_context, out, templateFilename);
         return true;
     }
 
@@ -371,7 +371,7 @@ public class StatSummarizer implements Runnable, ClientApp {
     }
 
     private boolean locked_getXML(Rate rate, OutputStream out) throws IOException {
-        for (SummaryListener lsnr : _listeners) {
+        for (GraphListener lsnr : _listeners) {
             if (lsnr.getRate().equals(rate)) {
                 lsnr.getData().exportXml(out);
                 out.write(DataHelper.getUTF8("<!-- Rate: " + lsnr.getRate().getRateStat().getName() + " for period " + lsnr.getRate().getPeriod() + " -->\n"));
@@ -422,9 +422,9 @@ public class StatSummarizer implements Runnable, ClientApp {
                                               int periodCount, int end, boolean showCredit) throws IOException {
 
         // go to some trouble to see if we have the data for the combined bw graph
-        SummaryListener txLsnr = null;
-        SummaryListener rxLsnr = null;
-        for (SummaryListener lsnr : getListeners()) {
+        GraphListener txLsnr = null;
+        GraphListener rxLsnr = null;
+        for (GraphListener lsnr : getListeners()) {
             String title = lsnr.getRate().getRateStat().getName();
             if (title.equals("bw.sendRate"))
                 txLsnr = lsnr;
@@ -488,7 +488,7 @@ public class StatSummarizer implements Runnable, ClientApp {
      *  @since 0.8.7
      */
     private void deleteOldRRDs() {
-        File rrdDir = new File(_context.getRouterDir(), SummaryListener.RRD_DIR);
+        File rrdDir = new File(_context.getRouterDir(), GraphListener.RRD_DIR);
         FileUtil.rmdir(rrdDir, false);
     }
 
@@ -510,7 +510,7 @@ public class StatSummarizer implements Runnable, ClientApp {
     private class Shutdown implements Runnable {
         public void run() {
             setDisabled();
-            for (SummaryListener lsnr : _listeners) {
+            for (GraphListener lsnr : _listeners) {
                 // FIXME could cause exceptions if rendering?
                 lsnr.stopListening();
             }

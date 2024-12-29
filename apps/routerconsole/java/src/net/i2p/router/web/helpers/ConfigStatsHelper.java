@@ -12,7 +12,7 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 import net.i2p.router.web.HelperBase;
-import net.i2p.router.web.StatSummarizer;
+import net.i2p.router.web.GraphSummarizer;
 import net.i2p.stat.FrequencyStat;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
@@ -69,8 +69,8 @@ public class ConfigStatsHelper extends HelperBase {
             _filters.add(tok.nextToken().trim());
 
         // create a local copy of the config. Querying r.getSummaryListener()
-        // lags behind, as StatSummarizer only runs once a minute.
-        String specs = _context.getProperty("stat.summaries", StatSummarizer.DEFAULT_DATABASES);
+        // lags behind, as GraphSummarizer only runs once a minute.
+        String specs = _context.getProperty("stat.summaries", GraphSummarizer.DEFAULT_DATABASES);
         tok = new StringTokenizer(specs, ",");
         while (tok.hasMoreTokens()) {
             _graphs.add(tok.nextToken().trim());
