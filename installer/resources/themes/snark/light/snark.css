@@ -265,7 +265,7 @@ tr:hover .txBarText{color:var(--ink_light)}
 
 /* diskSpace */
 #diskSpace,#diskSpaceInner{width:80px;height:12px;display:inline-block;vertical-align:middle;text-align:left}
-#diskSpace{margin:2px 3px 1px 5px;vertical-align:text-top;contain:paint}
+#diskSpace{margin:2px 3px 1px 5px;vertical-align:text-top;box-shadow:0 0 1px rgba(200,200,200,.8),inset 0 0 0 1px rgba(255,255,255,.6),inset 0 0 0 2px rgba(200,200,255,.6),inset 0 3px 3px 1px rgba(0,0,16,.25);background:linear-gradient(90deg,#00ff000d 50%,#ffff000d 75%,#ff80000d 90%,#ff00001a),repeating-linear-gradient(90deg,#b4b4ffb2 1px,#b4b4ffb2 2px,#ddddffb2 2px,#ddddffb2 4px);contain:paint}
 #diskSpaceInner{position:absolute}
 
 /* torrent info */
@@ -1006,7 +1006,6 @@ th.rateDown,th.rateUp,th.rxd,th.ETA,th.txd,td.rateDown,td.rateUp,td.rxd,td.ETA,t
 #torrentInfo .infohash{padding:4px 4px 5px 20px;background:#f8f8ff var(--hash) no-repeat 4px center/14px}
 #torrentInfoStats .nowrap{margin-right:6px}
 #torrentInfo th:first-child img,#torrentinfostats img,#trackers img{margin:-2px 5px 0;max-height:18px}
-#torrents th:empty,#torrents td:empty{min-width:4px!important}
 }
 
 @media (min-width:1600px){
