@@ -30,26 +30,23 @@ import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 
 /**
- *  This is where we implement semi-Kademlia with the floodfills, by
- *  selecting floodfills closest to a given key for
- *  searches and stores.
+ * This is where we implement semi-Kademlia with the floodfills, by selecting
+ * floodfills closest to a given key for searches and stores.
  *
- *  Warning - most methods taking a key as an argument require the routing key,
- *  not the original key.
+ * Warning - most methods taking a key as an argument require the routing key,
+ * not the original key.
  *
  */
 class FloodfillPeerSelector extends PeerSelector {
 
-    public FloodfillPeerSelector(RouterContext ctx) {
-        super(ctx);
-    }
+    public FloodfillPeerSelector(RouterContext ctx) {super(ctx);}
 
     /**
      * Pick out peers with the floodfill capacity set, returning them first, but then
      * after they're complete, sort via kademlia.
+     *
      * Puts the floodfill peers that are directly connected first in the list.
-     * List will not include our own hash.
-     * Returns new list, may be modified.
+     * List will not include our own hash. Returns new list, may be modified.
      *
      * @param key the ROUTING key (NOT the original key)
      * @param peersToIgnore can be null
@@ -63,9 +60,9 @@ class FloodfillPeerSelector extends PeerSelector {
     /**
      * Pick out peers with the floodfill capacity set, returning them first, but then
      * after they're complete, sort via kademlia.
+     *
      * Does not prefer the floodfill peers that are directly connected.
-     * List will not include our own hash.
-     * Returns new list, may be modified.
+     * List will not include our own hash. Returns new list, may be modified.
      *
      * @param key the ROUTING key (NOT the original key)
      * @param peersToIgnore can be null
@@ -79,21 +76,18 @@ class FloodfillPeerSelector extends PeerSelector {
     /**
      * Pick out peers with the floodfill capacity set, returning them first, but then
      * after they're complete, sort via kademlia.
-     * List will not include our own hash.
-     * Returns new list, may be modified.
+     * List will not include our own hash. Returns new list, may be modified.
      *
      * @param key the ROUTING key (NOT the original key)
      * @param peersToIgnore can be null
      * @return List of Hash for the peers selected
      */
     List<Hash> selectNearestExplicitThin(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets, boolean preferConnected) {
-        if (peersToIgnore == null)
-            peersToIgnore = Collections.singleton(_context.routerHash());
-        else
-            peersToIgnore.add(_context.routerHash());
+        if (peersToIgnore == null) {peersToIgnore = Collections.singleton(_context.routerHash());}
+        else {peersToIgnore.add(_context.routerHash());}
         // TODO this is very slow
         FloodfillSelectionCollector matches = new FloodfillSelectionCollector(key, peersToIgnore, maxNumRouters);
-        if (kbuckets == null) return new ArrayList<Hash>();
+        if (kbuckets == null) {return new ArrayList<Hash>();}
         kbuckets.getAll(matches);
         List<Hash> rv = matches.get(maxNumRouters, preferConnected);
         StringBuilder buf = new StringBuilder();
@@ -107,13 +101,7 @@ class FloodfillPeerSelector extends PeerSelector {
         for (Hash h : rv) {
             buf.append("[").append(h.toBase64().substring(0,6)).append("]").append(" ");
         }
-        if (_log.shouldDebug())
-            _log.debug(buf.toString());
-
-//            _log.debug("Searching for " + maxNumRouters + " peers close to [" + key.toBase64().substring(0,6) + "]"
-//                       + "\n* All Hashes: " + matches.size()
-//                       + "\n* Ignoring: " + peersToIgnore
-//                       + "\n* Matched: " + rv); //, new Exception("Search by"));
+        if (_log.shouldDebug()) {_log.debug(buf.toString());}
         return rv;
     }
 
@@ -140,63 +128,52 @@ class FloodfillPeerSelector extends PeerSelector {
      *  @return all floodfills not banlisted forever.
      */
     private List<Hash> selectFloodfillParticipants(Set<Hash> toIgnore, KBucketSet<Hash> kbuckets) {
-      /*****
-        if (kbuckets == null) return Collections.EMPTY_LIST;
-        // TODO this is very slow - use profile getPeersByCapability('f') instead
-        _context.statManager().addRateData("netDb.newFSC", 0, 0);
-        FloodfillSelectionCollector matches = new FloodfillSelectionCollector(null, toIgnore, 0);
-        kbuckets.getAll(matches);
-        return matches.getFloodfillParticipants();
-      *****/
         Set<Hash> set = _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL);
         List<Hash> rv = new ArrayList<Hash>(set.size());
         for (Hash h : set) {
-            if ((toIgnore != null && toIgnore.contains(h)) || _context.banlist().isBanlisted(h) ||
-                _context.banlist().isBanlistedForever(h) || _context.profileOrganizer().peerSendsBadReplies(h))
-               continue;
+            if ((toIgnore != null && toIgnore.contains(h)) ||
+                _context.banlist().isBanlisted(h) ||
+                _context.banlist().isBanlistedForever(h) ||
+                _context.profileOrganizer().peerSendsBadReplies(h)) {
+                continue;
+            }
             rv.add(h);
         }
         return rv;
     }
 
     /**
-     *  Sort the floodfills. The challenge here is to keep the good ones
-     *  at the front and the bad ones at the back. If they are all good or bad,
-     *  searches and stores won't work well.
-     *  List will not include our own hash.
-     *  Returns new list, may be modified.
+     * Sort the floodfills. The challenge here is to keep the good ones at the front
+     * and the bad ones at the back. If they are all good or bad, searches and stores won't work well.
      *
-     *  @return floodfills closest to the key that are not banlisted forever
-     *  @param key the ROUTING key (NOT the original key)
-     *  @param maxNumRouters max to return
-     *  @param kbuckets now unused
+     * List will not include our own hash. Returns new list, may be modified.
      *
-     *  Sorted by closest to the key if &gt; maxNumRouters, otherwise not
-     *  The list is in 3 groups - sorted by routing key within each group.
-     *  Group 1: No store or lookup failure in a long time, and
-    *            lookup fail rate no more than 1.5 * average
-     *  Group 2: No store or lookup failure in a little while or
-     *           success newer than failure
-     *  Group 3: All others
+     * @return floodfills closest to the key that are not banlisted forever
+     * @param key the ROUTING key (NOT the original key)
+     * @param maxNumRouters max to return
+     * @param kbuckets now unused
+     *
+     * Sorted by closest to the key if &gt; maxNumRouters, otherwise not
+     * The list is in 3 groups - sorted by routing key within each group.
+     * Group 1: No store or lookup failure in a long time, and
+     *          lookup fail rate no more than 1.5 * average
+     * Group 2: No store or lookup failure in a little while or
+     *          success newer than failure
+     * Group 3: All others
      */
     List<Hash> selectFloodfillParticipants(Hash key, int maxNumRouters, KBucketSet<Hash> kbuckets) {
         Set<Hash> ignore = Collections.singleton(_context.routerHash());
         return selectFloodfillParticipants(key, maxNumRouters, ignore, kbuckets);
     }
 
-    /** .5 * PublishLocalRouterInfoJob.PUBLISH_DELAY */
-//    private static final int NO_FAIL_STORE_OK = 10*60*1000;
     private static final int NO_FAIL_STORE_OK = 5*60*1000;
     private static final int NO_FAIL_STORE_GOOD = NO_FAIL_STORE_OK * 2;
     /** this must be longer than the max streaming timeout (60s) */
-    //private static final int NO_FAIL_LOOKUP_OK = 75*1000;
     private static final int NO_FAIL_LOOKUP_OK = 70*1000;
     private static final int NO_FAIL_LOOKUP_GOOD = NO_FAIL_LOOKUP_OK * 3;
-//    private static final int MAX_GOOD_RESP_TIME = 3500;
     private static final int MAX_GOOD_RESP_TIME = 2000;
     // TODO we need better tracking of floodfill first-heard-about times
     // before we can do this. Old profiles get deleted.
-    //private static final long HEARD_AGE = 60*60*1000L;
     private static final long HEARD_AGE = 45*60*1000L;
     private static final long INSTALL_AGE = HEARD_AGE + (60*60*1000L);
     private final static boolean DEFAULT_SHOULD_DISCONNECT = false;

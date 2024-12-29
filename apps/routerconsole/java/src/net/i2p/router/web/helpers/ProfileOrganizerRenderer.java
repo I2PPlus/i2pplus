@@ -92,7 +92,6 @@ class ProfileOrganizerRenderer {
         if (mode < 2) {
             buf.append("<p id=profiles_overview class=infohelp>");
             buf.append(ngettext("Showing {0} recent profile.", "Showing {0} recent profiles.", order.size())).append('\n');
-                                //.replace(".", " (" + _t("active in the last 20 minutes") + ").")).append('\n');
             if (older > 0) {
                 buf.append(ngettext("Hiding {0} older profile.", "Hiding {0} older profiles.", older)).append('\n');
             }
