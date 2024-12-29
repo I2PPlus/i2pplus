@@ -438,8 +438,8 @@ td.tabletextarea{padding:0;background:#fafaff}
 #tunnels h3 a[href^="/configtunnels#"]:hover,#logs a.configure:hover::after{background:var(--settings_hover) no-repeat center center/16px}
 #help h3{padding-left:10px}
 #newtab{float:right;letter-spacing:0;text-align:right;font-size:8pt}
-#newtabimg{margin-top:-1px;opacity:.65}
-#newtabimg:hover{opacity:.8;filter:drop-shadow(0 0 1px var(--hover))}
+#newtab img{margin-top:4px;width:24px;opacity:.65}
+#newtab img:hover{opacity:.8;filter:drop-shadow(0 0 1px var(--hover))}
 #udpconnections{margin-bottom:4px}
 #warning2{background:linear-gradient(180deg,rgba(248,248,255,.5),rgba(240,240,255,.5)),url(/themes/snark/ubergine/images/hat.webp) no-repeat right bottom/auto 160px,repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fff 4px) #f8f8ff}
 

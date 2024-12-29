@@ -4,8 +4,7 @@
 
 (function () {
   document.addEventListener("DOMContentLoaded", function () {
-    if (!document.body.classList.contains("dark")) {return;}
-
+    if (!body.classList.contains("light") || !body.classList.contains("dark")) {return;}
     const addContainer = document.getElementById("add");
     const addReset = document.querySelector("#add input[type=reset]");
     const addSubmits = document.querySelectorAll("#addDestForm input[type=submit]");
