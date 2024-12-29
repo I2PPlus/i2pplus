@@ -44,6 +44,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 import java.util.SortedSet;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
@@ -102,6 +103,10 @@ public class Storage implements Closeable {
 
     private static final int BUFSIZE = PeerState.PARTSIZE;
     private static final ByteCache _cache = ByteCache.getInstance(16, BUFSIZE);
+
+    private Properties _config;
+    public static final String PROP_SHOULD_PREALLOCATE_FILES = "i2psnark.preallocateFiles";
+    public static final boolean DEFAULT_SHOULD_PREALLOCATE_FILES = true;
 
     /**
      * Creates a new storage based on the supplied MetaInfo.
@@ -1162,8 +1167,7 @@ public class Storage implements Closeable {
 
     /**
      *  This creates a (presumably) sparse file so that reads won't fail with IOE.
-     *  Sets isSparse[nr] = true. balloonFile(nr) should be called later to
-     *  defrag the file.
+     *  Sets isSparse[nr] = true. balloonFile(nr) should be called later to defrag the file.
      *
      *  This calls OpenRAF(); caller must synchronize and call closeRAF().
      */
@@ -1179,8 +1183,8 @@ public class Storage implements Closeable {
 
 
     /**
-     * Closes the Storage and makes sure that all RandomAccessFiles are
-     * closed. The Storage is unusable after this.
+     * Closes the Storage and makes sure that all RandomAccessFiles are closed.
+     * The Storage is unusable after this.
      */
     public void close() throws IOException {
       for (TorrentFile tf : _torrentFiles) {
@@ -1199,7 +1203,7 @@ public class Storage implements Closeable {
 
       I2PAppContext ctx = I2PAppContext.getGlobalContext();
 
-      //Catch a common place for OOMs esp. on 1MB pieces
+      // Catch a common place for OOMs esp. on 1MB pieces
       ByteArray rv;
       byte[] bs;
       try {
@@ -1223,8 +1227,7 @@ public class Storage implements Closeable {
      * Warning - takes a LONG time if complete as it does the recheck here.
      * TODO thread the recheck?
      *
-     * @return true if the piece was correct (sha metainfo hash
-     * matches), otherwise false.
+     * @return true if the piece was correct (sha metainfo hash matches), otherwise false.
      * @throws IOException when some storage related error occurs.
      */
     public boolean putPiece(PartialPiece pp) throws IOException {
@@ -1240,8 +1243,7 @@ public class Storage implements Closeable {
             // to save another I/O pass
             boolean correctHash = metainfo.checkPiece(pp);
             if (!correctHash) {
-                if (listener != null)
-                    listener.storageChecked(this, piece, false);
+                if (listener != null) {listener.storageChecked(this, piece, false);}
                 return false;
             }
 
@@ -1265,11 +1267,12 @@ public class Storage implements Closeable {
                     try {
                         RandomAccessFile raf = tf.checkRAF();
                         if (tf.isSparse) {
-                            // If the file is a newly created sparse file,
-                            // AND we aren't skipping it, balloon it with all
-                            // zeros to un-sparse it by allocating the space.
-                            // Obviously this could take a while.
-                            // Once we have written to it, it isn't empty/sparse any more.
+                            /*
+                             * If the file is a newly created sparse file, AND we aren't skipping it,
+                             * balloon it with all zeros to un-sparse it by allocating the space.
+                             * Obviously this could take a while. Once we have written to it,
+                             * it isn't empty/sparse any more.
+                             */
                             if (tf.priority >= 0) {
                                 if (_log.shouldInfo()) {
                                      String msg = "Pre-allocating file: " + tf + "...";
@@ -1301,7 +1304,7 @@ public class Storage implements Closeable {
 
         setActivity();
 
-        // do this after the write, so we know it succeeded, and we don't set the
+        // Do this after the write, so we know it succeeded, and we don't set the
         // needed count to zero, which would cause checkRAF() to open the file readonly.
         boolean complete = false;
         synchronized(bitfield) {
@@ -1373,7 +1376,8 @@ public class Storage implements Closeable {
                     raf.seek(start);
                     raf.readFully(bs, read, len);
                 } catch (IOException ioe) {
-                    try { tf.closeRAF(); } catch (IOException ioe2) {}
+                    try {tf.closeRAF();}
+                    catch (IOException ioe2) {}
                     // get the file name in the logs
                     IOException ioe2 = new IOException("Error reading " + tf.RAFfile.getAbsolutePath());
                     ioe2.initCause(ioe);
@@ -1412,17 +1416,20 @@ public class Storage implements Closeable {
          * when was RAF last accessed, or 0 if closed
          * locking: this
          */
+
         private long RAFtime;
         /**
          * null when closed
          * locking: this
          */
+
         private RandomAccessFile raf;
         /**
          * is the file empty and sparse?
          * locking: this
          */
         public boolean isSparse;
+
         /** priority by file; default 0 */
         public volatile int priority;
 
@@ -1430,9 +1437,7 @@ public class Storage implements Closeable {
          * For new metainfo from files;
          * use base == f for single-file torrent
          */
-        public TorrentFile(File base, File f) {
-            this(base, f, f.length());
-        }
+        public TorrentFile(File base, File f) {this(base, f, f.length());}
 
         /**
          * For existing metainfo with specified file length;
@@ -1440,17 +1445,14 @@ public class Storage implements Closeable {
          */
         public TorrentFile(File base, File f, long len) {
             String n = f.getPath();
-            if (base.isDirectory() && n.startsWith(base.getPath())) {
-                n = n.substring(base.getPath().length() + 1);
-            }
+            if (base.isDirectory() && n.startsWith(base.getPath())) {n = n.substring(base.getPath().length() + 1);}
             name = n;
             length = len;
             RAFfile = f;
         }
 
         /*
-         * For each of the following,
-         * caller must synchronize on RAFlock[i]
+         * For each of the following, caller must synchronize on RAFlock[i]
          * ... except at the beginning if you're careful
          */
 
@@ -1503,8 +1505,7 @@ public class Storage implements Closeable {
 
         /**
          *  This creates a (presumably) sparse file so that reads won't fail with IOE.
-         *  Sets isSparse[nr] = true. balloonFile(nr) should be called later to
-         *  defrag the file.
+         *  Sets isSparse[nr] = true. balloonFile(nr) should be called later to defrag the file.
          *
          *  File MUST exist or will throw IOE
          *
@@ -1512,17 +1513,28 @@ public class Storage implements Closeable {
          */
         public synchronized void allocateFile() throws IOException {
             // caller synchronized
-            openRAF(false);  // RW
+            openRAF(false); // RW
             raf.setLength(length);
-            // don't bother ballooning later on Windows since there is no sparse file support
-            // until JDK7 using the JSR-203 interface.
-            // RAF seeks/writes do not create sparse files.
-            // Windows will zero-fill up to the point of the write, which
-            // will make the file fairly unfragmented, on average, at least until
-            // near the end where it will get exponentially more fragmented.
-            // Also don't ballon on ARM, as a proxy for solid state disk, where fragmentation doesn't matter too much.
-            // Actual detection of SSD is almost impossible.
-            if (!_isWindows && !_isARM) {isSparse = true;}
+            I2PAppContext ctx = I2PAppContext.getGlobalContext();
+            boolean shouldPreallocate = ctx.getProperty(PROP_SHOULD_PREALLOCATE_FILES, DEFAULT_SHOULD_PREALLOCATE_FILES);
+            /**
+             * Don't bother ballooning later on Windows since there is no sparse file support until
+             * JDK7 using the JSR-203 interface.
+             *
+             * RAF seeks/writes do not create sparse files.
+             *
+             * Windows will zero-fill up to the point of the write, which  will make the file fairly unfragmented,
+             * on average, at least until near the end where it will get exponentially more fragmented.
+             *
+             * Also don't ballon on ARM, as a proxy for solid state disk, where fragmentation doesn't matter too much.
+             * Actual detection of SSD is almost impossible.
+             */
+            if (!_isWindows && !_isARM && shouldPreallocate) {isSparse = true;}
+            else if (_log.shouldWarn()) {
+                if (!shouldPreallocate) {_log.warn("[I2PSnark] Not pre-allocating files -> Disabled by configuration");}
+                else if (_isWindows) {_log.warn("[I2PSnark] Not pre-allocating files -> Windows OS detected");}
+                else if (_isARM) {_log.warn("[I2PSnark] Not pre-allocating files -> ARM processor detected, assuming solid state storage");}
+            }
         }
 
         /**
@@ -1565,6 +1577,7 @@ public class Storage implements Closeable {
 
         @Override
         public String toString() {return name;}
+
     }
 
     /**
@@ -1632,15 +1645,15 @@ public class Storage implements Closeable {
             System.out.println("InfoHash: " + hex);
             String basename = base.getName().replace(" ", "%20");
             String magnet = MagnetURI.MAGNET_FULL + hex + "&dn=" + basename;
-            if (announce != null)
-                magnet += "&tr=" + announce;
+            if (announce != null) {magnet += "&tr=" + announce;}
             System.out.println("Magnet: " + magnet);
         } catch (IOException ioe) {
             if (file != null) {file.delete();}
             ioe.printStackTrace();
             System.exit(1);
         } finally {
-            try { if (out != null) out.close(); } catch (IOException ioe) {}
+            try {if (out != null) out.close();}
+            catch (IOException ioe) {}
         }
     }
 
