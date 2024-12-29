@@ -3,7 +3,7 @@
   <target name="all" depends="clean, build" />
   <target name="build" depends="builddep, jar, war" />
   <target name="builddep">
-    <!-- run from top level build.xml to get dependencies built -->
+    <!-- Run from top level build.xml to get dependencies built -->
   </target>
   <condition property="depend.available">
     <typefound name="depend" />
@@ -25,7 +25,7 @@
     </depend>
   </target>
 
-  <!-- only used if not set by a higher build.xml -->
+  <!-- Only used if not set by a higher build.xml -->
   <property name="javac.compilerargs" value="" />
   <property name="javac.version" value="1.8" />
   <property name="javac.release" value="8" />
@@ -55,7 +55,7 @@
         <pathelement location="../../jetty/jettylib/javax.servlet.jar" />
         <!-- jsp-api.jar only present for debian builds -->
         <pathelement location="../../jetty/jettylib/jsp-api.jar" />
-        <!-- following jars only for standalone builds -->
+        <!-- Following jars only for standalone builds -->
         <pathelement location="../../jetty/jettylib/jetty-i2p.jar" />
         <pathelement location="../../systray/java/build/systray.jar" />
         <pathelement location="../../jetty/jettylib/org.mortbay.jetty.jar" />
@@ -79,7 +79,7 @@
   </target>
 
   <target name="jar" depends="builddep, compile, jarUpToDate, listChangedFiles" unless="jar.uptodate">
-    <!-- set if unset -->
+    <!-- Set if unset -->
     <property name="workspace.changes.tr" value="" />
     <jar destfile="./build/i2psnark.jar" basedir="./build/obj" includes="**/*.class" excludes="**/web/* **/messages_*.class, **/standalone/*">
       <manifest>
@@ -114,12 +114,12 @@
   </target>
 
   <!-- Ideally we would include only include the servlet, everything else is in the jar.
-      -  However, the wrapper.config classpath in existing installs does not include i2psnark.jar.
-      -  So we must continue to duplicate everything in the war.
-         <classes dir="./build/obj" includes="**/I2PSnarkServlet*.class" />
+       However, the wrapper.config classpath in existing installs does not include i2psnark.jar.
+       So we must continue to duplicate everything in the war.
+       <classes dir="./build/obj" includes="**/I2PSnarkServlet*.class" />
      -->
   <target name="war" depends="jar, bundle, warUpToDate, listChangedFiles" unless="war.uptodate">
-    <!-- set if unset -->
+    <!-- Set if unset -->
     <property name="workspace.changes.tr" value="" />
     <copy todir="build/res/.res">
       <fileset dir="../res/" />
@@ -128,7 +128,7 @@
     <!-- mime.properties must be in with the classes -->
     <copy file="../mime.properties" todir="build/obj/org/klomp/snark/web" />
     <war destfile="../i2psnark.war" webxml="../web.xml">
-      <!-- include only the web stuff, as of 0.7.12 the router will add i2psnark.jar to the classpath for the war -->
+      <!-- Include only the web stuff, as of 0.7.12 the router will add i2psnark.jar to the classpath for the war -->
       <classes dir="./build/obj" includes="**/web/*" />
       <fileset dir="build/res/" />
       <manifest>
@@ -152,7 +152,7 @@
   <target name="bundle" depends="compile" unless="no.bundle">
     <mkdir dir="build/messages-src" />
     <!-- Update the messages_*.po files.
-             We need to supply the bat file for windows, and then change the fail property to true -->
+         We need to supply the bat file for windows, and then change the fail property to true -->
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="${require.gettext}">
       <env key="JAVA_HOME" value="${java.home}" />
       <arg value="./bundle-messages.sh" />
@@ -175,7 +175,7 @@
 
   <target name="poupdate" depends="builddep, compile">
     <!-- Update the messages_*.po files.  -->
-    <!-- set if unset -->
+    <!-- Set if unset -->
     <property name="lg2" value="" />
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}" />
@@ -202,15 +202,15 @@
     </exec>
   </target>
 
-  <!-- make a fat jar for standalone -->
+  <!-- Make a fat jar for standalone -->
   <target name="standalone_jar" depends="war">
-    <!-- set if unset -->
+    <!-- Set if unset -->
     <property name="workspace.changes.tr" value="" />
     <jar destfile="build/i2psnark-standalone.jar">
       <fileset dir="build/obj" includes="**/standalone/*.class" />
       <zipfileset src="build/i2psnark.jar" />
       <zipfileset src="../../../core/java/build/i2p.jar" />
-      <!-- without this we get a warning about 'no JSP support' but that's it
+      <!-- Without this we get a warning about 'no JSP support' but that's it
         <zipfileset src="../../jetty/jettylib/jasper-runtime.jar"  />
        -->
       <zipfileset src="../../jetty/jettylib/javax.servlet.jar" />
@@ -248,7 +248,7 @@
     </jar>
   </target>
 
-  <!-- add css, image, and js files for standalone snark to the war -->
+  <!-- Add css, image, and js files for standalone snark to the war -->
   <target name="standalone_war" depends="war">
     <mkdir dir="build/standalone-resources/.res/themes/snark" />
     <copy todir="build/standalone-resources/.res/themes/snark">
@@ -374,7 +374,6 @@
       <fileset dir="build/standalone-resources" />
     </zip>
   </target>
-
 
   <target name="standalone_prep" depends="standalone_jar, standalone_war">
     <delete dir="./i2psnark" />
