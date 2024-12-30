@@ -7,7 +7,7 @@ a:link,a:visited{text-decoration:none;color:#4A6782;font-weight:700}
 a[href]:hover,a[href]:focus{text-decoration:none;color:#337}
 a[name]{color:#353833}
 body,frame{padding:10px;width:calc(100% - 20px)}
-body{background-color:#eef;color:#353833;font-family:var(--bodyfont);font-size:15px;margin:0;padding:0;height:100%;width:100%;overflow-x:hidden}
+body{background-color:#eef;color:#353833;font-family:var(--bodyfont);font-size:15px;margin:0;padding:0 0 20px;height:100%;width:100%;overflow-x:hidden}
 body.class-declaration .summary h2,body.class-declaration .details h2,body.class-use h2,body.module-declaration .blockList h2{font-style:italic;padding:0;margin:15px 0}
 body.class-declaration .summary h3,body.class-declaration .details h3,body.class-declaration .summary .inheritedList h2{background-color:#dee3e9;border:1px solid #d0d9e0;margin:0 0 6px -8px;padding:7px 5px}
 button{font-family:var(--bodyfont);font-size:14px}
@@ -27,7 +27,7 @@ dt code{font-family:var(--monospaced);font-size:15px;padding-top:4px}
 h1,h2,h3,h4,h5,.indexHeader{padding:0 15px}
 .blockList h1,.blockList h2,.blockList h3,.blockList h4,.blockList h5{padding:0}
 h1.hidden{visibility:hidden;overflow:hidden;font-size:10px}
-h1.title{position:absolute;top:-3px;right:10px;color:#ddf}
+h1.title{position:absolute;top:-3px;right:0;color:#ddf;text-shadow:1px 1px 1px #0004}
 h1{font-size:22px}
 h2{font-size:20px}
 h3{font-size:18px}
@@ -66,7 +66,7 @@ table.striped>thead>tr>th,table.striped>thead>tr>td{border:1px solid black}
 table[class$="Summary"]{border:5px solid #003d66!important}
 tbody th:first-child{border-right:1px solid #bbc;width:25%;white-space:nowrap}
 tbody tr th,tbody tr td{border-bottom:1px solid #bbc}
-tbody tr:hover,tbody tr:hover th{background:#ffd}
+tbody tr:hover td{background:#ffd}
 td.colFirst a:link,td.colFirst a:visited,td.colSecond a:link,td.colSecond a:visited,th.colFirst a:link,th.colFirst a:visited,th.colSecond a:link,th.colSecond a:visited,th.colConstructorName a:link,th.colConstructorName a:visited,th.colDeprecatedItemName a:link,th.colDeprecatedItemName a:visited,.constantValuesContainer td a:link,.constantValuesContainer td a:visited,.allClassesContainer td a:link,.allClassesContainer td a:visited,.allPackagesContainer td a:link,.allPackagesContainer td a:visited{font-weight:bold}
 td.colFirst,th.colFirst{font-size:14px}
 td.colFirst{border-right:1px solid #bbc}
@@ -74,7 +74,7 @@ td.colLast a{padding-bottom:3px}
 td.colLast div{padding-top:0}
 td.colLast div.block{margin:0;padding:0}
 td.colSecond,th.colSecond,td.colLast,th.colConstructorName,th.colDeprecatedItemName,th.colLast{font-size:13px}
-th.colFirst,th.colSecond,th.colLast,th.colConstructorName,th.colDeprecatedItemName,.constantsSummary th,.packagesSummary th{background:#f2f2ff;text-align:left;padding:6px 3px 6px 7px}
+th.colFirst,th.colSecond,th.colLast,th.colConstructorName,th.colDeprecatedItemName,.constantsSummary th,.packagesSummary th{background:linear-gradient(to bottom,#fff,#e9edfd);text-align:left;padding:6px 8px}
 th.colFirst,th.colSecond,th.colLast,th.colConstructorName,th.colDeprecatedItemName,.useSummary th,.constantsSummary th,.packagesSummary th,td.colFirst,td.colSecond,td.colLast,.useSummary td,.constantsSummary td,.systemPropertiesSummary th{vertical-align:top;padding-right:0;padding-top:8px;padding-bottom:3px}
 thead tr:first-child th{background:linear-gradient(to bottom,#fff 50%,#eef3f7 50%);border-bottom:1px solid #bbc}
 ul.blockList li.blockList{list-style:none;margin:0 15px 15px;line-height:1.4}
@@ -82,10 +82,12 @@ ul.blockList{margin:10px 0 10px 0;padding:0}
 ul.horizontal li{display:inline;font-size:0.9em}
 ul.navList li{list-style:none;float:left;padding:5px 6px;text-transform:uppercase;font-weight:700}
 ul.navList,ul.subNavList{float:left;margin:0 25px 0 5px;padding:0}
+ul.navList + ul.navList{margin:0;float:right}
 ul.subNavList li{list-style:none;float:left;padding-top:10px}
 ul.ui-autocomplete  li{float:left;clear:both;width:100%}
 ul.ui-autocomplete{position:fixed;z-index:999999}
 ul{list-style-type:disc}
+h2+ul{margin-left:15px!important}
 li ul{list-style:none;margin-left:0;padding-left:0}
 li.blockList h3+code{margin:0 30px 0;display: inline-block;padding:0}
 .aboutLanguage{float:right;padding:0 21px;font-size:11px;z-index:200;margin-top:-9px}
@@ -127,7 +129,7 @@ li.blockList h3+code{margin:0 30px 0;display: inline-block;padding:0}
 .overviewSummary caption,.memberSummary caption,.typeSummary caption,.useSummary caption,.constantsSummary caption,.deprecatedSummary caption,.requiresSummary caption,.packagesSummary caption,.providesSummary caption,.usesSummary caption,.systemPropertiesSummary caption{position:relative;text-align:left;background-repeat:no-repeat;color:#253441;font-weight:bold;clear:none;overflow:hidden;padding:0;padding-top:10px;padding-left:1px;margin:0;white-space:pre}
 .overviewSummary table,.memberSummary table,.requiresSummary table,.packagesSummary table,.providesSummary table,.usesSummary table,.systemPropertiesSummary table{padding:0}
 .overviewSummary table,.memberSummary table,.typeSummary table,.useSummary table,.constantsSummary table,.deprecatedSummary table,.requiresSummary table,.packagesSummary table,.providesSummary table,.usesSummary table,.systemPropertiesSummary table{width:100%;border-spacing:0;border:1px solid #bbc;margin-top:15px}
-.overviewSummary td,.memberSummary td,.typeSummary td,.useSummary td,.constantsSummary td,.deprecatedSummary td,.requiresSummary td,.packagesSummary td,.providesSummary td,.usesSummary td,.systemPropertiesSummary td{text-align:left;padding:5px 10px}
+.overviewSummary td,.memberSummary td,.typeSummary td,.useSummary td,.constantsSummary td,.deprecatedSummary td,.requiresSummary td,.packagesSummary td,.providesSummary td,.usesSummary td,.systemPropertiesSummary td{text-align:left;padding:5px 10px;box-shadow:0 0 0 1px #fff inset}
 .overviewSummary td.colFirst,.overviewSummary th.colFirst,.requiresSummary td.colFirst,.requiresSummary th.colFirst,.packagesSummary td.colFirst,.packagesSummary td.colSecond,.packagesSummary th.colFirst,.packagesSummary th,.usesSummary td.colFirst,.usesSummary th.colFirst,.providesSummary td.colFirst,.providesSummary th.colFirst,.memberSummary td.colFirst,.memberSummary th.colFirst,.memberSummary td.colSecond,.memberSummary th.colSecond,.memberSummary th.colConstructorName,.typeSummary td.colFirst,.typeSummary th.colFirst{vertical-align:middle}
 .packagesSummary th.colLast,.packagesSummary td.colLast{white-space:normal}
 .providesSummary th.colFirst,.providesSummary th.colLast,.providesSummary td.colFirst,.providesSummary td.colLast{white-space:normal;font-size:13px}
@@ -144,7 +146,8 @@ li.blockList h3+code{margin:0 30px 0;display: inline-block;padding:0}
 .sourceLineNo{color:green;padding:0 30px 0 0}
 .subNav .navList{padding-top:5px}
 .subNav .navListSearch{float:right;margin:0 12px 2px 0;padding:5px 6px;clear:none}
-.subNav div{clear:left;float:left;padding:4px 0 5px 6px;text-transform:uppercase}
+.subNav div{border-top:1px solid #337;clear:left;float:left;padding:0 6px 6px;text-transform:uppercase}
+.subNav div:not([class]){display:none}
 .subNav{background-color:#0099ff;float:left;width:calc(100% - 10px);overflow:hidden;font-size:12px;border-bottom:1px solid #113;color:#fff}
 .subTitle{margin:5px 0 0 0;padding:0 16px 10px;font-size:120%;font-weight:700}
 .summary section[class$="Summary"],.details section[class$="Details"],.classUses .detail,.serializedClassDetails{padding:0 20px 20px 20px;border:1px solid #ccd;background-color:#f8f8f8;border-radius:4px}
@@ -152,11 +155,11 @@ li.blockList h3+code{margin:0 30px 0;display: inline-block;padding:0}
 .tableSubHeadingColor{background-color:#eef}
 .title{color:#2c4557;margin:10px 0}
 .topNav a:hover,.bottomNav a:hover{text-decoration:none;color:#337;text-transform:uppercase}
-.topNav a:link,.topNav a:active,.topNav a:visited,.bottomNav a:link,.bottomNav a:active,.bottomNav a:visited{color:#fff;text-decoration:none;text-transform:uppercase;font-weight:700 !important}
+.topNav a:link,.topNav a:active,.topNav a:visited,.bottomNav a:link,.bottomNav a:active,.bottomNav a:visited{color:#fff;text-decoration:none;text-transform:uppercase;font-weight:700!important}
 .topNav,.bottomNav,.subNav{margin-left:-10px}
 .topNav{padding:10px;width:calc(100% - 10px);float:left;clear:right;overflow:hidden;font-size:12px;color:#fff;border-bottom:1px solid #113;background-color:#007acc}
 .topNav+.subNav a:not(:hover):not(:focus){color:#fff}
-.topNav+.subNav{padding:3px 10px 0}
+.topNav+.subNav{padding:3px 10px 6px}
 .ui-autocomplete-category{font-weight:bold;font-size:15px;padding:7px 0 7px 3px;background-color:#007acc;color:#fff}
 .ui-autocomplete{max-height:85%;max-width:65%;overflow-y:scroll;overflow-x:scroll;white-space:nowrap;box-shadow:0 3px 6px rgba(0,0,0,0.16),0 3px 6px rgba(0,0,0,0.23)}
 .useSummary caption a:link,.useSummary caption a:visited{color:#ddf}
@@ -165,7 +168,7 @@ li.blockList h3+code{margin:0 30px 0;display: inline-block;padding:0}
 #nojs{padding:5px;text-align:right;animation:linear disappear .01s 5s forwards;background:#ffd;color:#900;font-weight:700;font-size:90%}
 #reset{background-color:rgb(255,255,255);background-image:url('resources/x.png');background-position:center;background-repeat:no-repeat;background-size:12px;border:0 none;width:16px;height:16px;position:relative;left:-4px;top:-5px;font-size:0}
 #search:focus{box-shadow:inset 0 0 0 1px #fff,inset 3px 3px 3px rgba(0,0,0,.4)}
-#search{background:#fff url(resources/glass.png);background-size:13px;background-repeat:no-repeat;background-position:6px center;padding:5px 10px 5px 24px;position:relative;right:-21px;width:200px;border:1px solid #bbc;border-radius:2px;color:#353833 !important}
+#search{background:#fff url(resources/glass.png);background-size:13px;background-repeat:no-repeat;background-position:6px center;padding:5px 10px 5px 24px;position:relative;right:-21px;width:200px;border:1px solid #bbc;border-radius:2px;color:#353833!important}
 
 @keyframes disappear{from{visibility:visible}to{visibility:hidden; padding:0; font-size:0}}
 
