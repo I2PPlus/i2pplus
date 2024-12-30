@@ -202,6 +202,7 @@ public class HomeHelper extends HelperBase {
         _x("SchneierOnSecurity") + S + _x("Internationally renowned security technologist") + S + "http://schneieronsecurity.i2p/" + S + I + "eepsites/schneier.png" + S +
         _x("ScienceDaily") + S + _x("Latest scientific research news") + S + "http://sciencedaily.i2p/" + S + I + "eepsites/science.svg" + S +
         "SoylentNews" + S + _x("Community-driven tech news") + S + "http://soylentnews.i2p/" + S + I + "news.svg" + S +
+        "Simp" + S + _x("Various services") + S + "http://simp.i2p/" + S + I + "eepsites/simp.svg" + S +
         "Slashdot" + S + _x("News for nerds") + S + "http://slashdot.i2p/" + S + I + "eepsites/slashdot.svg" + S +
         "SlashGear" + S + _x("Technology news &amp; reviews") + S + "http://slashgear.i2p/" + S + I + "eepsites/slashgear.svg" + S +
         "supchina.i2p" + S + _x("Reporting on China without fear or favor") + S + "http://supchina.i2p/" + S + I + "eepsites/supchina.svg" + S +
