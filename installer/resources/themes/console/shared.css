@@ -3,6 +3,10 @@
 
 .expanded #ffstatus,#ffconf:hover #ffstatus{opacity:0}
 .hasExpandedElement #floodfillconfig{margin-bottom:-1px;display:table!important}
+.tIn{background:url(/themes/console/images/inbound.svg) no-repeat 6px center/16px,var(--badge)}
+.tOut{background:url(/themes/console/images/outbound.svg) no-repeat 6px center/16px,var(--badge)}
+.toggle:not(.expanded) .tIn,.toggle:not(.expanded) .tOut{min-width:40px;display:inline-block!important}
+.toggleElementsActive .tIn,.toggleElementsActive .tOut{margin:-3px 0;padding:4px 6px 4px 26px;display:inline-block;box-shadow:var(--bevel)}
 #advfilter,#tnlfilter{display:inline-block;position:absolute}
 #advfilter button,#tnlfilter button{margin:0 0 0 -24px;padding:5px;display:inline-block;width:24px;height:26px;min-width:0;font-size:0;border:0;box-shadow:none;background:var(--no) no-repeat center center/10px;mix-blend-mode:luminosity}
 #advfilter button:hover,#advfilter input:focus+button,#tnlfilter button:hover,#tnlfilter input:focus+button{mix-blend-mode:normal}
@@ -29,9 +33,6 @@
 #pluginTotals #started{background:var(--start) no-repeat left center/10px}
 #pluginTotals #stopped{margin-left:0;background:var(--stop) no-repeat left center/10px}
 #pconfig:hover #pluginTotals{color:var(--ink)}#.tIn{background:url(/themes/console/images/inbound.svg) no-repeat 6px center/16px,var(--badge)}
-.tIn{background:url(/themes/console/images/inbound.svg) no-repeat 6px center/16px,var(--badge)}
-.tOut{background:url(/themes/console/images/outbound.svg) no-repeat 6px center/16px,var(--badge)}
-.toggle:not(.expanded) .tIn,.toggle:not(.expanded) .tOut{min-width:40px;display:inline-block!important}
-.toggleElementsActive .tIn,.toggleElementsActive .tOut{margin:-3px 0;padding:4px 6px 4px 26px;display:inline-block;box-shadow:var(--bevel)}
+#sidebar h3:hover .badge{margin:0;width:0;font-size:0;opacity:0}
 #tunnelconfig .tunnelName{margin-right:6px;min-width:240px;display:inline-block}
 #tunnelconfig .tunnelName::before{margin:-4px 6px -4px 0;width:20px;height:20px;display:inline-block;vertical-align:middle;background:url(/themes/console/images/hardhat.svg) no-repeat center center/20px;content:""}

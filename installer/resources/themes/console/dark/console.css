@@ -151,6 +151,7 @@ p:empty+.sb_notice{margin-top:9px}
 #sidebar h3 a,#sidebar h4 a{width:calc(100% - 5px);display:inline-block;white-space:normal}
 #sidebar h3 a{width:100%;vertical-align:middle;line-height:1;text-shadow:var(--textshadow)}
 #sidebar h3:hover a{color:var(--hover)}
+#sidebar h3:hover .badge{margin:0;width:0;font-size:0;opacity:0}
 #sidebar h4{margin:-7px -1px -9px;padding:6px 1px;width:calc(100% - 9px);line-height:1.2;font-size:8pt;text-decoration:none;color:#2b2;border:0;box-shadow:var(--bevel),inset 0 0 0 3px #000,inset 0 0 5px 5px rgba(0,0,0,.5);background:rgba(0,64,0,.3)}
 #sidebar hr:last-child{margin-top:5px;margin-bottom:-5px}
 #sidebar hr{margin:9px 0 7px -1px;height:1px;background:#252}
