@@ -2099,7 +2099,7 @@ select[name="newlogclass"]{margin-left:3px}
 #configstats td.optionsave{border-top:0;border-bottom:0}
 #config_stats .tabletitle{margin:15px 0 -1px}
 #configstats .graphableStat td{padding:4px 6px;white-space:normal;columns:auto}
-#configstats .statcount{margin-left:8px}
+#configstats .statcount{margin:-2px 30px -2px 0;padding:2px 6px;min-width:60px;float:right;text-align:center;border:var(--border_soft);box-shadow:var(--highlight);background:var(--badge)}
 #configstats .tablefooter b{font-size:90%}
 #configstats .tablefooter td{padding-top:6px;padding-bottom:6px}
 #configstats .toggle+tr{display:none}
