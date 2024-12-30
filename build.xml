@@ -1210,7 +1210,9 @@
 
   <target name="clean" depends="pkgclean">
     <parallel>
-      <delete dir="./build"/>
+      <delete includeEmptyDirs="true" excludes="./build">
+        <fileset dir="./build" includes="**/*"/>
+      </delete>
       <delete dir="./reports"/>
       <delete file="installer/lib/izpack/patches.jar" failonerror="false" quiet="true"/>
       <delete dir="installer/lib/izpack5/patches/java/build" quiet="true"/>
@@ -1770,7 +1772,9 @@
   </target>
 
   <target name="deletepkg-temp">
-    <delete dir="pkg-temp"/>
+      <delete includeEmptyDirs="true" excludes="./pkg-temp">
+        <fileset dir="./pkg-temp" includes="**/*"/>
+      </delete>
     <delete dir="./pkg-mavencentral"/>
   </target>
 
