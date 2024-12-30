@@ -15,8 +15,8 @@
          Include property files so that values can be easily overridden.
          Users should create an override.properties file to make changes.
     -->
-  <property file="override.properties"/>
   <property file="build.properties"/>
+  <property file="override.properties"/>
   <!--
          When changing, also change javadoc URL in build.properties,
          and checksum in apps/jetty/build.xml
@@ -73,6 +73,7 @@
     <echo message=" javadoc                                      Create javadocs for project &#10140; ./build/javadoc"/>
     <echo message=" javadoc-test                                 Javadocs for unit test classes &#10140; ./build/javadoc-test"/>
     <echo message=" javadoc-zip                                  Create javadocs zip for project &#10140; ./javadoc.zip"/>
+    <echo message=" jsdoc                                        Create jsdoc for project (requires jsdoc-toolkit) &#10140; ./build/jsdoc/"/>
     <echo message=" pkg                                          Run &apos;distclean&apos; then package everything up (updater, installer)"/>
     <echo message=" pkg-portable-win32                           Build a minimal, portable install for Win32 &#10140; ./portable-win32.zip"/>
     <echo message=" poupdate-source                              Update the .po files for translators (requires jsp files to be compiled first)"/>
@@ -911,6 +912,7 @@
   </target>
 
   <target name="javadoc" depends="getReleaseNumber, getBuildNumber">
+    <echo message="JDK: ${java.vendor} ${java.version} (${java.runtime.name} ${java.runtime.version})"/>
     <ant dir="apps/jetty" target="ensureJettylib"/>
     <mkdir dir="./build"/>
     <mkdir dir="./build/javadoc"/>
@@ -941,7 +943,7 @@
       <group title="Imagegen Application" packages="com.docuverse.identicon:com.google.zxing:com.google.zxing.*:net.i2p.imagegen"/>
       <group title="Installer Utilities" packages="net.i2p.installer"/>
       <group title="Jetty Utilities" packages="net.i2p.jetty:net.i2p.servlet:net.i2p.servlet.*"/>
-      <group title="RRD4J Library (jrobin.jar)" packages="org.rrd4j:org.rrd4j.*:com.tomgibara.crinch.hashing"/>
+      <group title="RRD4J Library (jrobin.jar)" packages="org.rrd4j:org.rrd4j.*:com.tomgibara.crinch.hashing:eu.bengreen.data.utility:org.jfree:org.jfree.*"/>
       <group title="SAM Bridge" packages="net.i2p.sam"/>
       <group title="SAM Demos" packages="net.i2p.sam.client"/>
       <group title="SusiDNS Application" packages="i2p.susi.dns:net.i2p.addressbook.servlet"/>
@@ -1058,6 +1060,7 @@
       <arg value="apps/routerconsole/jsp/js"/>
       <arg value="apps/susidns/src/js"/>
       <arg value="apps/susimail/src/js"/>
+      <arg value="installer/resources/themes/geomap"/>
     </exec>
   </target>
 
@@ -2641,11 +2644,12 @@
     <!-- make torrent files -->
     <copy file="i2pupdate.su3" tofile="i2pupdate-${release.number}.su3"/>
     <mktorrent file="i2pupdate-${release.number}.su3"/>
-    <echo message="Don't forget to sign i2pinstall_${release.number}_windows.exe on Windows and then:"/>
-    <echo message="    ${gpg} -u ${release.gpg.keyid} -b i2pinstall_${release.number}_windows.exe"/>
-    <echo message="    sha256sum i2pinstall_${release.number}_windows.exe"/>
-    <echo message="Don't forget to git tag -s i2p-${release.number}"/>
-    <echo message="         ...and git push origin tag i2p-${release.number}"/>
+    <echo message=" Don't forget to sign i2pinstall_${release.number}_windows.exe on Windows and then:"/>
+    <echo message="   ${gpg} -u ${release.gpg.keyid} -b i2pinstall_${release.number}_windows.exe"/>
+    <echo message="   sha256sum i2pinstall_${release.number}_windows.exe"/>
+    <echo message="&#8199;"/>
+    <echo message=" Don't forget to git tag -s i2p-${release.number}"/>
+    <echo message=" ...and git push origin tag i2p-${release.number}"/>
   </target>
 
   <target name="forceJava7">
