@@ -146,7 +146,7 @@ h4.sb_info{margin-top:-11px}
 #sidebar a:hover,#sidebar a:focus,#sidebar td:first-child a:hover b{color:var(--hover)}
 #sidebar a:active,#sidebar td:first-child a:active b{color:#d30}
 #sidebar form{margin:-2px -7px -4px;padding:0 0 3px}
-#sidebar form button.download{margin:-3px 0 -1px;padding:5px 7px 5px 22px;display:inline-block;vertical-align:middle;background:var(--download) no-repeat 6px center/15px,var(--btn)}
+#sidebar form button.download{margin:-3px 0 -1px;padding:5px 7px 5px 22px;display:inline-block;vertical-align:middle;font-size:110%;background:var(--download) no-repeat 6px center/15px,var(--btn)}
 #sidebar form button.download:hover,#sidebar form button.download:focus{background:var(--download_hover) no-repeat 6px center/15px,var(--btn_hover)}
 #sidebar h3{margin:-9px -7px -3px;padding:2px 0;letter-spacing:.04em;text-transform:uppercase;font-size:9.5pt;border:1px solid #afafcf;border-left:0;border-right:0;border-radius:0;box-shadow:var(--highlight);background:#e7e7ff var(--h3);filter:none}
 #sidebar h3:hover{background:#fff linear-gradient(180deg,#fff 50%,rgba(255,232,191,.6) 50%,rgba(239,217,179,.4) 100%)}
@@ -2894,7 +2894,7 @@ h4#updateplugins,#news p{font-size:10pt}
 #pluginconfig td:first-child label::before{height:20px}
 #plugininstall2{margin-top:-15px}
 #sb_advanced a,#sb_help a,#sb_internals a{max-width:232px}
-#sb_advancedgeneral.collapsed~#sb_updatesection.collapsed>h3.collapsed{margin-bottom:-10px}
+/*#sb_advancedgeneral.collapsed~#sb_updatesection.collapsed>h3.collapsed{margin-bottom:-10px}*/
 #sb_advancedgeneral:not([hidden])~#sb_peers{margin-bottom:-5px}
 #sb_advancedgeneral:not([hidden])~#sb_routerControl{margin-bottom:0}
 #sb_advancedgeneral,#sb_bandwidth,#sb_general,#sb_peers,#sb_peersadvanced,#sb_queue,#sb_shortgeneral,#sb_tunnels{margin-top:-12px;margin-bottom:-6px}
@@ -2915,7 +2915,7 @@ h4#updateplugins,#news p{font-size:10pt}
 #sidebar .cancel[value="cancelShutdown"]{margin-top:12px}
 #sidebar form{margin-bottom:0;padding-bottom:5px}
 #sidebar #sb_updateform{padding-bottom:1px}
-#homepage #sidebar #sb_updateform{padding-bottom:3px}
+#homepage #sidebar #sb_updateform{padding-bottom:6px}
 #sidebar h3 a .badge,#tunnelCount,#newsCount{transform:translateY(-1px)}
 #sidebar h3::after{min-height:19px;display:inline-block;vertical-align:middle;box-sizing:border-box;content:""}
 #sidebar h3 a{padding:4px 0 2px;font-size:11pt}

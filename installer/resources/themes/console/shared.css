@@ -28,4 +28,10 @@
 #pluginTotals span{margin:0 6px;display:inline-block;padding:0 0 0 16px}
 #pluginTotals #started{background:var(--start) no-repeat left center/10px}
 #pluginTotals #stopped{margin-left:0;background:var(--stop) no-repeat left center/10px}
-#pconfig:hover #pluginTotals{color:var(--ink)}
+#pconfig:hover #pluginTotals{color:var(--ink)}#.tIn{background:url(/themes/console/images/inbound.svg) no-repeat 6px center/16px,var(--badge)}
+.tIn{background:url(/themes/console/images/inbound.svg) no-repeat 6px center/16px,var(--badge)}
+.tOut{background:url(/themes/console/images/outbound.svg) no-repeat 6px center/16px,var(--badge)}
+.toggle:not(.expanded) .tIn,.toggle:not(.expanded) .tOut{min-width:40px;display:inline-block!important}
+.toggleElementsActive .tIn,.toggleElementsActive .tOut{margin:-3px 0;padding:4px 6px 4px 26px;display:inline-block;box-shadow:var(--bevel)}
+#tunnelconfig .tunnelName{margin-right:6px;min-width:240px;display:inline-block}
+#tunnelconfig .tunnelName::before{margin:-4px 6px -4px 0;width:20px;height:20px;display:inline-block;vertical-align:middle;background:url(/themes/console/images/hardhat.svg) no-repeat center center/20px;content:""}

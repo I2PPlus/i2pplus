@@ -10,6 +10,7 @@
 :root{
 --buttons_bg:linear-gradient(180deg,#fafaff 50%,rgba(220,220,255,.3)),repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fff 5px),#fff;
 --nav:linear-gradient(180deg,#fff 50%,#eef 50%,#ebebff);
+--nav_active:linear-gradient(180deg,#ebebff,#fff);
 }
 
 body{margin:0 5px;background:var(--bodybg) url(/themes/console/light/images/tile2.png) center center}
@@ -48,17 +49,17 @@ td{font-size:9pt}
 #navi a:active{color:#5a5a6f;box-shadow:var(--highlight),inset 3px 3px 2px #999}
 #navi .abook{background:var(--abook) no-repeat 6px center/14px,var(--nav),var(--abook_hover)}
 #navi .abook:hover,#navi .abook:focus{background:var(--abook_hover) no-repeat 6px center/14px,var(--nav)}
-#navi .abook:active{background:var(--abook_active) no-repeat 6px center/14px,var(--nav)}
+#navi .abook:active,#navi .abook.selected{background:var(--abook_active) no-repeat 6px center/14px,var(--nav_active)}
 #navi #subs{background:var(--subs) no-repeat 6px center/14px,var(--nav),var(--subs_hover)}
 #navi #subs:hover,#navi #subs:focus{background:var(--subs_hover) no-repeat 6px center/14px,var(--nav)}
-#navi #subs:active{background:var(--subs_active) no-repeat 6px center/14px,var(--nav)}
+#navi #subs:active,#navi #subs.selected{background:var(--subs_active) no-repeat 6px center/14px,var(--nav_active)}
 #navi #configlink{background:var(--configure) no-repeat 6px center/14px,var(--nav),var(--configure_hover)}
 #navi #configlink:hover,#navi #configlink:focus{background:var(--configure_hover) no-repeat 6px center/14px,var(--nav)}
-#navi #configlink:active{background:var(--configure_active) no-repeat 6px center/14px,var(--nav)}
+#navi #configlink:active,#navi #configlink.selected{background:var(--configure_active) no-repeat 6px center/14px,var(--nav_active)}
 #navi #overview{background:var(--overview) no-repeat 6px center/14px,var(--nav),var(--overview_hover)}
 #navi #overview:hover,#navi #overview:focus{background:var(--overview_hover) no-repeat 6px center/14px,var(--nav)}
-#navi #overview:active{background:var(--overview_active) no-repeat 6px center/14px,var(--nav)}
-#navi a.selected{z-index:5;box-shadow:var(--btn_shadow_active);pointer-events:none}
+#navi #overview:active,#navi #overview.selected{background:var(--overview_active) no-repeat 6px center/14px,var(--nav_active)}
+#navi a.selected{z-index:5;color:#5a5a6f;box-shadow:var(--btn_shadow_active);pointer-events:none}
 .iframed #navi{margin:-11px -11px 10px;padding:7px 5px 6px;border-radius:0;position:relative;z-index:9999999}
 
 div.help h3,#add h3,#import h3{margin:-1px -16px 0;padding:5px 10px;border:var(--border_inner);background:linear-gradient(180deg,#fcfcff 50%,rgba(255,255,255,.6) 50%,rgba(240,240,255,.4)),linear-gradient(135deg,#fcfcff 5%,rgba(231,231,255,.8) 15%)}
@@ -84,7 +85,7 @@ tr:hover .destaddress{color:#333}
 .book tr:first-child td,.book tr.head+.list1 td{border-top:0;border-bottom:var(--border_soft)}
 .book tr:nth-child(2) td{border-top:0}
 .book tr:hover td,#host_details tr:hover td{background:rgba(255,255,200,.4)}
-.headline h3{font-size:11.5pt;background:#fcfcff var(--addressbook) no-repeat 7px calc(50% + 2px)/20px}
+.headline h3{font-size:11.5pt;background:#fcfcff var(--addressbook) no-repeat 7px center/20px}
 .headline h4{margin:5px -6px 0;padding:8px 10px 0 33px;border-top:var(--border_inner);background:var(--files) no-repeat 9px 7px/16px}
 .headline{margin:-1px 0 -2px;padding:8px 5px;border:var(--border_inner);background:linear-gradient(135deg,#fafaff,#f2f2ff)}
 .help#helpsubs{padding:0 15px 0 45px;font-size:10pt;background:var(--infohelp) no-repeat 10px center/26px,linear-gradient(135deg,#fafaff,#f8f8ff)}
@@ -150,7 +151,7 @@ tr:hover .destaddress{color:#333}
 #filtered,#results{margin:-5px 6px -3px;padding:4px 12px;display:inline-block;float:none;vertical-align:middle;line-height:1.4;font-size:80%;border-radius:2px;box-shadow:0 0 0 1px #bbc8 inset,0 0 0 2px #fffd inset;background:#ddf8}
 #filtered:empty,#results:empty{display:none}
 #import input[type="file"]{width:calc(100% - 7px)}
-#messages{margin:0 3%;padding:5px 20px;top:0;left:0;right:0;position:fixed;z-index:999;line-height:150%;text-align:center;opacity:.9;border-radius:0 0 4px 4px;box-shadow:0 1px 2px rgba(100,100,200,.7);background:#113 var(--no) no-repeat right 8px top 8px/12px;cursor:crosshair;animation:2s hide-up 5s ease-out forwards}
+#messages{margin:0 3%;padding:10px 20px;top:0;left:0;right:0;position:fixed;z-index:9999999;line-height:150%;text-align:center;opacity:.9;border-radius:0 0 4px 4px;box-shadow:0 1px 2px rgba(100,100,200,.7);background:#224 var(--no) no-repeat right 8px top 8px/12px;cursor:crosshair;animation:2s hide-up 7s ease-out forwards}
 #messages:hover{background:#113 var(--no) no-repeat right 8px top 8px/12px}
 #messages:empty{display:none}
 #messages p{font-size:105%;color:#ff9;text-shadow:1px 1px 1px #000}
