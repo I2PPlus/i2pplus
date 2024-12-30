@@ -22,8 +22,10 @@ git.rev
 #override.properties
 
 # Temporary/build dirs
-build/
-pkg-temp/
+build/**/*
+!build/README.md
+pkg-temp/**/*
+!pkg-temp/README.md
 classes/
 dist/
 /installer/resources/locale/mo
