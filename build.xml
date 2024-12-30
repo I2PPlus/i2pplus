@@ -914,6 +914,7 @@
     <ant dir="apps/jetty" target="ensureJettylib"/>
     <mkdir dir="./build"/>
     <mkdir dir="./build/javadoc"/>
+    <copy file="./installer/resources/themes/console/light/images/favicon.svg" tofile="./build/javadoc/favicon.ico"/>
     <!-- set if unset -->
     <property name="javac.version" value="1.8"/>
     <javadoc access="package"

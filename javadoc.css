@@ -11,6 +11,7 @@ body{background-color:#eef;color:#353833;font-family:var(--bodyfont);font-size:1
 body.class-declaration .summary h2,body.class-declaration .details h2,body.class-use h2,body.module-declaration .blockList h2{font-style:italic;padding:0;margin:15px 0}
 body.class-declaration .summary h3,body.class-declaration .details h3,body.class-declaration .summary .inheritedList h2{background-color:#dee3e9;border:1px solid #d0d9e0;margin:0 0 6px -8px;padding:7px 5px}
 button{font-family:var(--bodyfont);font-size:10pt}
+caption{text-shadow: 1px 1px 1px #0004}
 code,tt{font-family:var(--monospaced);font-size:14px;padding-top:4px;margin-top:8px;line-height:1.4em}
 div.block div.deprecationComment,div.block div.block span.emphasizedPhrase,div.block div.block span.interfaceName{font-style:normal}
 div.block{font-size:14px;font-family:var(--bodyfont)}
@@ -29,9 +30,9 @@ h1.title{position:absolute;top:-3px;right:10px;color:#ddf}
 h1{font-size:20px}
 h2{font-size:18px}
 h3{font-size:16px}
-h4{font-size:13px}
-h5{font-size:12px}
-h6{font-size:11px}
+h4{font-size:14px}
+h5{font-size:13px}
+h6{font-size:12px}
 hr{margin:15px 0;height:1px;border:none;background:#aab}
 html{min-height:100%;background:#eef;scrollbar-color:#09f #0000}
 iframe{margin:0;padding:0;height:100%;width:100%;overflow-y:scroll;border:none}
@@ -41,7 +42,7 @@ main,nav,header,footer,section{display:block}
 pre{font-family:var(--monospaced);font-size:14px}
 section.description{line-height:1.4}
 sup{font-size:8px}
-table{width:100%}
+table{margin: 0 auto;width:calc(100% - 20px)}
 table tr td dl,table tr td dl dt,table tr td dl dd{margin-top:0;margin-bottom:1px}
 table tr td dt code{font-family:var(--monospaced);font-size:14px;vertical-align:top;padding-top:4px}
 table.borderless th,table.borderless td,table.plain th,table.plain td,table.striped th,table.striped td{padding:2px 5px}
@@ -59,6 +60,7 @@ table.striped>tbody>tr>th,table.striped>tbody>tr>td{border-left:1px solid black;
 table.striped>tbody>tr>th{font-weight:normal}
 table.striped>thead{background-color:#E3E3E3}
 table.striped>thead>tr>th,table.striped>thead>tr>td{border:1px solid black}
+table[class$="Summary"]{border:5px solid #003d66!important}
 tbody th:first-child{border-right:1px solid #bbc;width:25%;white-space:nowrap}
 tbody tr th,tbody tr td{border-bottom:1px solid #bbc}
 tbody tr:hover,tbody tr:hover th{background:#ffd}
@@ -71,19 +73,22 @@ td.colSecond,th.colSecond,td.colLast,th.colConstructorName,th.colDeprecatedItemN
 th.colFirst,th.colSecond,th.colLast,th.colConstructorName,th.colDeprecatedItemName,.constantsSummary th,.packagesSummary th{background:#f2f2ff;text-align:left;padding:6px 3px 6px 7px}
 th.colFirst,th.colSecond,th.colLast,th.colConstructorName,th.colDeprecatedItemName,.useSummary th,.constantsSummary th,.packagesSummary th,td.colFirst,td.colSecond,td.colLast,.useSummary td,.constantsSummary td,.systemPropertiesSummary th{vertical-align:top;padding-right:0;padding-top:8px;padding-bottom:3px}
 thead tr:first-child th{background:linear-gradient(to bottom,#fff 50%,#eef3f7 50%);border-bottom:1px solid #bbc}
-ul.blockList li.blockList{list-style:none;margin-bottom:15px;line-height:1.4}
+ul.blockList li.blockList{list-style:none;margin:0 15px 15px;line-height:1.4}
 ul.blockList{margin:10px 0 10px 0;padding:0}
 ul.horizontal li{display:inline;font-size:0.9em}
-ul.navList li{list-style:none;float:left;padding:5px 6px;text-transform:uppercase}
+ul.navList li{list-style:none;float:left;padding:5px 6px;text-transform:uppercase;font-weight:700}
 ul.navList,ul.subNavList{float:left;margin:0 25px 0 5px;padding:0}
 ul.subNavList li{list-style:none;float:left;padding-top:10px}
 ul.ui-autocomplete  li{float:left;clear:both;width:100%}
 ul.ui-autocomplete{position:fixed;z-index:999999}
 ul{list-style-type:disc}
-
+li ul{list-style:none;margin-left:0;padding-left:0}
+li.blockList h3+code{margin:0 30px 0;display: inline-block;padding:0}
 .aboutLanguage{float:right;padding:0 21px;font-size:11px;z-index:200;margin-top:-9px}
+.activeTableTab,.activeTableTab span{background-color:#5998db!important}
 .altColor,.altColor th{background-color:#fff}
 .block{display:block;margin:0 10px 5px 0;color:#474747}
+.block p{margin:15px}
 .bottomNav,.bottomNav+.subNav{display:none}
 .bottomNav{margin-top:10px;background-color:#007acc;color:#fff;float:left;padding:0;width:100%;clear:right;height:2.8em;padding-top:10px;overflow:hidden;font-size:12px;border-top:1px solid #113}
 .clear{clear:both;height:0;overflow:hidden}
@@ -96,10 +101,10 @@ ul{list-style-type:disc}
 .deprecatedLabel,.descfrmTypeLabel,.implementationLabel,.memberNameLabel,.memberNameLink,.moduleLabelInPackage,.moduleLabelInType,.overrideSpecifyLabel,.packageLabelInType,.packageHierarchyLabel,.paramLabel,.returnLabel,.seeLabel,.simpleTagLabel,.throwsLabel,.typeNameLabel,.typeNameLink,.searchTagLink{font-weight:bold}
 .deprecationBlock{margin:-20px 10px 0;padding:10px;display:inline-block;color:#900;line-height:1.2}
 .deprecationComment,.emphasizedPhrase,.interfaceName{font-style:italic}
-.description pre{margin-top:0}
+.description pre{margin-top:0;font-weight:500}
+.header{clear:both;margin:0 0 -11px;padding:20px 20px 0}
 .header ul li,.footer ul li{list-style:none;font-size:13px}
 .header ul{margin:0 0 15px 0;padding:0}
-.header{clear:both;margin:0;padding:12px 0 0 0}
 .inheritedList,section[class$="Details"] .detail{padding:0 0 5px 8px;background-color:#fff;border:none}
 .inheritedList{margin:10px 0 10px 0}
 .legalCopy{margin-left:.5em}
@@ -120,7 +125,6 @@ ul{list-style-type:disc}
 .overviewSummary table,.memberSummary table,.typeSummary table,.useSummary table,.constantsSummary table,.deprecatedSummary table,.requiresSummary table,.packagesSummary table,.providesSummary table,.usesSummary table,.systemPropertiesSummary table{width:100%;border-spacing:0;border:1px solid #bbc;margin-top:15px}
 .overviewSummary td,.memberSummary td,.typeSummary td,.useSummary td,.constantsSummary td,.deprecatedSummary td,.requiresSummary td,.packagesSummary td,.providesSummary td,.usesSummary td,.systemPropertiesSummary td{text-align:left;padding:5px 10px}
 .overviewSummary td.colFirst,.overviewSummary th.colFirst,.requiresSummary td.colFirst,.requiresSummary th.colFirst,.packagesSummary td.colFirst,.packagesSummary td.colSecond,.packagesSummary th.colFirst,.packagesSummary th,.usesSummary td.colFirst,.usesSummary th.colFirst,.providesSummary td.colFirst,.providesSummary th.colFirst,.memberSummary td.colFirst,.memberSummary th.colFirst,.memberSummary td.colSecond,.memberSummary th.colSecond,.memberSummary th.colConstructorName,.typeSummary td.colFirst,.typeSummary th.colFirst{vertical-align:middle}
-.overviewSummary,.memberSummary{border:5px solid #003d66!important;width:100%}
 .packagesSummary th.colLast,.packagesSummary td.colLast{white-space:normal}
 .providesSummary th.colFirst,.providesSummary th.colLast,.providesSummary td.colFirst,.providesSummary td.colLast{white-space:normal;font-size:13px}
 .resultHighlight{font-weight:bold}
