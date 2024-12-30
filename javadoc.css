@@ -1,20 +1,67 @@
 /* I2P+ javadoc css override theme by dr|z3d */
 
 :root {
+--a:#1f389c;
+--accent:#003d66;
+--accent_active:#5998db;
+--bodybg:#f5f4f9;
 --bodyfont:Open Sans,Segoe UI,Noto Sans,sans-serif;
+--border_hard:1px solid #113;
+--border_inner:1px solid #bbc;
+--hr:#aab;
+--hover:#339;
+--input_focus:inset 0 0 0 1px var(--white),inset 3px 3px 3px rgba(0,0,0,.4);
+--ink:#353833;
+--ink_nav:#ddf;
 --monospaced:Fira Code,Consolas,DejaVu Sans Mono,monospace;
+--scrollbar:#09f #0000;
+--subnav_bg:#0099ff;
+--th:linear-gradient(to bottom,var(--white),var(--row_odd));
+--txt_shadow:1px 1px 1px #0004;
+--row_hover:#ffd;
+--row_odd:#e9edfd;
+--row_even:#f9f9ff;
+--tab:var(--white);
+--ink_tab:#ccc;
+--white:#fff;
 }
 
-a:link,a:visited{text-decoration:none;color:#4A6782;font-weight:700}
-a[href]:hover,a[href]:focus{text-decoration:none;color:#337}
-a[name]{color:#353833}
-body,frame,html{background-color:#f5f4f9;color:#353833}
+@media (prefers-color-scheme:dark) {
+:root {
+--a:#6aadec;
+--accent:#1f389c;
+--accent_active:#db5959;
+--bodybg:#002;
+--border_hard:1px solid #369;
+--border_inner:1px solid #369;
+--hr:#ddf;
+--hover:#be30ff;
+--input_focus:none;
+--ink:#eef;
+--ink_nav:#fff;
+--scrollbar:#09f #0000;
+--subnav_bg:#202e64;
+--th:linear-gradient(to bottom,#003,#001);
+--txt_shadow:none;
+--row_hover:#112233;
+--row_odd:#001a2d;
+--row_even:#00131f;
+--tab:var(--ink);
+--tab_ink:#88a;
+--white:#001;
+}
+}
+
+a:link,a:visited{text-decoration:none;color:var(--a);font-weight:700}
+a[href]:hover,a[href]:focus{text-decoration:none;color:var(--hover)}
+a[name]{color:var(--ink)}
+body,frame,html{background-color:var(--bodybg);color:var(--ink)}
 body,frame{padding:10px;width:calc(100% - 20px);}
 body{font-family:var(--bodyfont);font-size:15px;margin:0;padding:0 0 20px;height:100%;width:100%;overflow-x:hidden}
 body.class-declaration .summary h2,body.class-declaration .details h2,body.class-use h2,body.module-declaration .blockList h2{font-style:italic;padding:0;margin:15px 0}
-body.class-declaration .summary h3,body.class-declaration .details h3,body.class-declaration .summary .inheritedList h2{background-color:#dee3e9;border:1px solid #d0d9e0;margin:0 0 6px -8px;padding:7px 5px}
+body.class-declaration .summary h3,body.class-declaration .details h3,body.class-declaration .summary .inheritedList h2{background-color:#dee3e9;border:var(--border_inner);margin:0 0 6px -8px;padding:7px 5px}
 button{font-family:var(--bodyfont);font-size:14px}
-caption{text-shadow: 1px 1px 1px #0004}
+caption{text-shadow: var(--txt_shadow)}
 code,tt{font-family:var(--monospaced);font-size:14px;font-weight:500;padding-top:4px;margin-top:8px;line-height:1.4em}
 div.block div.deprecationComment,div.block div.block span.emphasizedPhrase,div.block div.block span.interfaceName{font-style:normal}
 div.block{font-size:15px;font-family:var(--bodyfont)}
@@ -30,16 +77,16 @@ dt code{font-family:var(--monospaced);font-size:15px;padding-top:4px}
 h1,h2,h3,h4,h5,.indexHeader{padding:0 15px}
 .blockList h1,.blockList h2,.blockList h3,.blockList h4,.blockList h5{padding:0}
 h1.hidden{visibility:hidden;overflow:hidden;font-size:10px}
-h1.title{position:absolute;top:-3px;right:0;color:#ddf;text-shadow:1px 1px 1px #0004}
+h1.title{position:absolute;top:-3px;right:0;color:var(--ink_nav);text-shadow:var(--txt_shadow)}
 h1{font-size:22px}
 h2{font-size:20px}
 h3{font-size:18px}
 h4{font-size:17px}
 h5{font-size:16px}
 h6{font-size:15px}
-hr{margin:15px 0;height:1px;border:none;background:#aab}
-html{min-height:100%;scrollbar-color:#09f #0000}
-iframe{margin:0;padding:0;height:100%;width:100%;overflow-y:scroll;border:none}
+hr{margin:15px 0;height:1px;border:0;background:var(--hr)}
+html{min-height:100%;scrollbar-color:var(--scrollbar)}
+iframe{margin:0;padding:0;height:100%;width:100%;overflow-y:scroll;border:0}
 li.circle{list-style:circle}
 main a[href*="://"]::after{content:"";display:inline-block;background-image:url(resources/extlink.svg);background-size:100%;width:10px;height:10px;margin-left:2px}
 main,nav,header,footer,section{display:block}
@@ -52,37 +99,35 @@ table{margin: 0 auto;width:calc(100% - 20px)}
 table tr td dl,table tr td dl dt,table tr td dl dd{margin-top:0;margin-bottom:1px}
 table tr td dt code{font-family:var(--monospaced);font-size:15px;vertical-align:top;padding-top:4px}
 table.borderless th,table.borderless td,table.plain th,table.plain td,table.striped th,table.striped td{padding:2px 5px}
-table.borderless,table.borderless>thead>tr>th,table.borderless>tbody>tr>th,table.borderless>tr>th,table.borderless>thead>tr>td,table.borderless>tbody>tr>td,table.borderless>tr>td{border:none}
+table.borderless,table.borderless>thead>tr>th,table.borderless>tbody>tr>th,table.borderless>tr>th,table.borderless>thead>tr>td,table.borderless>tbody>tr>td,table.borderless>tr>td{border:0}
 table.borderless,table.plain,table.striped{margin-top:10px;margin-bottom:10px}
 table.borderless>caption,table.plain>caption,table.striped>caption{font-weight:bold;font-size:smaller}
 table.borderless>thead>tr,table.borderless>tbody>tr,table.borderless>tr{background-color:transparent}
-table.plain{border-collapse:collapse;border:1px solid black}
+table.plain{border-collapse:collapse;border:var(--border_inner)}
 table.plain>thead>tr,table.plain>tbody tr,table.plain>tr{background-color:transparent}
-table.plain>thead>tr>th,table.plain>tbody>tr>th,table.plain>tr>th,table.plain>thead>tr>td,table.plain>tbody>tr>td,table.plain>tr>td{border:1px solid black}
-table.striped{border-collapse:collapse;border:1px solid black}
-table.striped>tbody>tr:nth-child(even){background-color:#EEE}
-table.striped>tbody>tr:nth-child(odd){background-color:#FFF}
-table.striped>tbody>tr>th,table.striped>tbody>tr>td{border-left:1px solid black;border-right:1px solid black}
-table.striped>tbody>tr>th{font-weight:normal}
-table.striped>thead{background-color:#E3E3E3}
-table.striped>thead>tr>th,table.striped>thead>tr>td{border:1px solid black}
-table[class$="Summary"]{border:5px solid #003d66!important}
-tbody th:first-child{border-right:1px solid #bbc;width:25%;white-space:nowrap}
-tbody tr th,tbody tr td{border-bottom:1px solid #bbc}
-tbody tr:hover td{background:#ffd}
+table.plain>thead>tr>th,table.plain>tbody>tr>th,table.plain>tr>th,table.plain>thead>tr>td,table.plain>tbody>tr>td,table.plain>tr>td{border:var(--border_inner)}
+table[class$="Summary"]{border:5px solid var(--accent)!important}
+tbody th:first-child{border-right:var(--border_inner);width:25%;white-space:nowrap}
+tbody tr th,tbody tr td{border-bottom:var(--border_inner)}
+tbody tr:hover td{background:var(--row_hover)}
 td.colFirst a:link,td.colFirst a:visited,td.colSecond a:link,td.colSecond a:visited,th.colFirst a:link,th.colFirst a:visited,th.colSecond a:link,th.colSecond a:visited,th.colConstructorName a:link,th.colConstructorName a:visited,th.colDeprecatedItemName a:link,th.colDeprecatedItemName a:visited,.constantValuesContainer td a:link,.constantValuesContainer td a:visited,.allClassesContainer td a:link,.allClassesContainer td a:visited,.allPackagesContainer td a:link,.allPackagesContainer td a:visited{font-weight:bold}
 td.colFirst,th.colFirst{font-size:14px}
-td.colFirst{border-right:1px solid #bbc}
+td.colFirst{border-right:var(--border_inner)}
 td.colLast a{padding-bottom:3px}
 td.colLast div{padding-top:0}
 td.colLast div.block{margin:0;padding:0}
 td.colSecond,th.colSecond,td.colLast,th.colConstructorName,th.colDeprecatedItemName,th.colLast{font-size:13px}
-th.colFirst,th.colSecond,th.colLast,th.colConstructorName,th.colDeprecatedItemName,.constantsSummary th,.packagesSummary th{background:linear-gradient(to bottom,#fff,#e9edfd);text-align:left;padding:6px 8px}
+th{font-weight:600;background:var(--th)}
+th.colFirst,th.colSecond,th.colLast,th.colConstructorName,th.colDeprecatedItemName,.constantsSummary th,.packagesSummary th{background:var(--th);text-align:left;padding:6px 8px}
 th.colFirst,th.colSecond,th.colLast,th.colConstructorName,th.colDeprecatedItemName,.useSummary th,.constantsSummary th,.packagesSummary th,td.colFirst,td.colSecond,td.colLast,.useSummary td,.constantsSummary td,.systemPropertiesSummary th{vertical-align:top;padding-right:0;padding-top:8px;padding-bottom:3px}
-thead tr:first-child th{background:linear-gradient(to bottom,#fff 50%,#eef3f7 50%);border-bottom:1px solid #bbc}
+thead tr:first-child th{background:var(--th);border-bottom:var(--border_inner)}
+tr:nth-child(odd) td{background:var(--row_odd)}
+tr:nth-child(even) td{background:var(--row_even)}
 ul.blockList li.blockList{list-style:none;margin:0 15px 15px;line-height:1.4}
 ul.blockList{margin:10px 0 10px 0;padding:0}
 ul.horizontal li{display:inline;font-size:0.9em}
+ul.navList a{color:var(--tab)!important}
+ul.navList a:hover{color:var(--hover)!important}
 ul.navList li{list-style:none;float:left;padding:5px 6px;text-transform:uppercase;font-weight:700}
 ul.navList,ul.subNavList{float:left;margin:0 25px 0 5px;padding:0}
 ul.navList + ul.navList{margin:0;float:right}
@@ -94,14 +139,15 @@ h2+ul{margin-left:15px!important}
 li ul{list-style:none;margin-left:0;padding-left:0}
 li.blockList h3+code{margin:0 30px 0;display: inline-block;padding:0}
 .aboutLanguage{float:right;padding:0 21px;font-size:11px;z-index:200;margin-top:-9px}
-.activeTableTab,.activeTableTab span{background-color:#5998db!important}
-.altColor,.altColor th{background-color:#fff}
-.block{display:block;margin:0 10px 5px 0;color:#474747}
+.activeTableTab,.activeTableTab span{background-color:var(--accent_active)!important}
+.altColor,.altColor td{background-color:var(--row_even)}
+.altColor th{background-color:var(--th)}
+.block{display:block;margin:0 10px 5px 0;color:var(--ink)}
 .block p{margin:15px}
 .bottomNav,.bottomNav+.subNav{display:none}
-.bottomNav{margin-top:10px;background-color:#007acc;color:#fff;float:left;padding:0;width:100%;clear:right;height:2.8em;padding-top:10px;overflow:hidden;font-size:12px;border-top:1px solid #113}
+.bottomNav{margin-top:10px;background-color:var(--accent);color:var(--white);float:left;padding:0;width:100%;clear:right;height:2.8em;padding-top:10px;overflow:hidden;font-size:12px;border-top:var(--border_hard)}
 .clear{clear:both;height:0;overflow:hidden}
-.constantsSummary caption a:link,.constantsSummary caption a:visited{color:#1f389c}
+.constantsSummary caption a:link,.constantsSummary caption a:visited{color:var(--a)}
 .constantsSummary th,.packagesSummary th{font-size:13px}
 .contentContainer .description dl dd,.contentContainer .details dl dd,.serializedFormContainer dl dd{margin:5px 0 10px 0;font-size:15px;font-family:var(--bodyfont)}
 .contentContainer .description dl dt,.contentContainer .details dl dt,.serializedFormContainer dl dt{font-size:14px;font-weight:bold;margin:10px 0 0 0;color:#4E4E4E}
@@ -114,32 +160,30 @@ li.blockList h3+code{margin:0 30px 0;display: inline-block;padding:0}
 .header{clear:both;margin:0 0 -11px;padding:20px 20px 0}
 .header ul li,.footer ul li{list-style:none;font-size:13px}
 .header ul{margin:0 0 15px 0;padding:0}
-.inheritedList,section[class$="Details"] .detail{padding:0 0 5px 8px;background-color:#fff;border:none}
+.inheritedList,section[class$="Details"] .detail{padding:0 0 5px 8px;background-color:var(--bodybg);border:0}
 .inheritedList{margin:10px 0 10px 0}
 .legalCopy{margin-left:.5em}
 .moduleGraph span{display:none;position:absolute}
 .moduleGraph:hover span{display:block;margin:-100px 0 0 100px;z-index:1}
-.navBarCell1Rev{background-color:#003d66;color:#fff;margin:auto 5px;font-weight:900;border-radius:3px}
+.navBarCell1Rev{background-color:var(--accent);color:var(--tab);margin:auto 5px;font-weight:900;border-radius:3px}
 .navListSearch label{display:none}
 .navListSearch label{position:relative;right:-16px}
-.overviewSummary .tabEnd,.memberSummary .tabEnd,.typeSummary .tabEnd,.useSummary .tabEnd,.constantsSummary .tabEnd,.deprecatedSummary .tabEnd,.requiresSummary .tabEnd,.packagesSummary .tabEnd,.providesSummary .tabEnd,.usesSummary .tabEnd{display:none;width:5px;position:relative;float:left;background-color:#003d66}
-.overviewSummary [role=tablist] .activeTableTab,.memberSummary [role=tablist] .activeTableTab,.typeSummary [role=tablist] .activeTableTab,.packagesSummary [role=tablist] .activeTableTab{ background:#003d66; color:#fff; font-weight:900; pointer-events:none}
-.overviewSummary [role=tablist] .tableTab,.memberSummary [role=tablist] .tableTab,.typeSummary [role=tablist] .tableTab,.packagesSummary [role=tablist] .tableTab{ background:#007acc; color:#fff}
-.overviewSummary [role=tablist] button,.memberSummary [role=tablist] button,.typeSummary [role=tablist] button,.packagesSummary [role=tablist] button{ border:none; cursor:pointer; padding:5px 12px 7px 12px; font-weight:600; box-shadow:0 0 0 1px #334; margin-bottom:1px}
-.overviewSummary [role=tablist] button:hover{background:#80ccff;color:#337}
-.overviewSummary caption a:link,.memberSummary caption a:link,.typeSummary caption a:link,.deprecatedSummary caption a:link,.requiresSummary caption a:link,.packagesSummary caption a:link,.providesSummary caption a:link,.usesSummary caption a:link,.overviewSummary caption a:hover,.memberSummary caption a:hover,.typeSummary caption a:hover,.useSummary caption a:hover,.constantsSummary caption a:hover,.deprecatedSummary caption a:hover,.requiresSummary caption a:hover,.packagesSummary caption a:hover,.providesSummary caption a:hover,.usesSummary caption a:hover,.overviewSummary caption a:active,.memberSummary caption a:active,.typeSummary caption a:active,.useSummary caption a:active,.constantsSummary caption a:active,.deprecatedSummary caption a:active,.requiresSummary caption a:active,.packagesSummary caption a:active,.providesSummary caption a:active,.usesSummary caption a:active,.overviewSummary caption a:visited,.memberSummary caption a:visited,.typeSummary caption a:visited,.deprecatedSummary caption a:visited,.requiresSummary caption a:visited,.packagesSummary caption a:visited,.providesSummary caption a:visited,.usesSummary caption a:visited{color:#fff}
-.overviewSummary caption span,.memberSummary caption span,.typeSummary caption span,.useSummary caption span,.constantsSummary caption span,.deprecatedSummary caption span,.requiresSummary caption span,.packagesSummary caption span,.providesSummary caption span,.usesSummary caption span,.systemPropertiesSummary caption span{white-space:nowrap;padding:6px 10px 8px;display:inline-block;float:left;background-color:#003d66;border-bottom:none;color:#fff;margin-left:-2px;margin-bottom:-2px;min-width:200px;text-align:center}
+.overviewSummary .tabEnd,.memberSummary .tabEnd,.typeSummary .tabEnd,.useSummary .tabEnd,.constantsSummary .tabEnd,.deprecatedSummary .tabEnd,.requiresSummary .tabEnd,.packagesSummary .tabEnd,.providesSummary .tabEnd,.usesSummary .tabEnd{display:none;width:5px;position:relative;float:left;background-color:var(--accent)}
+.overviewSummary [role=tablist] .activeTableTab,.memberSummary [role=tablist] .activeTableTab,.typeSummary [role=tablist] .activeTableTab,.packagesSummary [role=tablist] .activeTableTab{background:var(--accent);color:var(--tab);font-weight:900;pointer-events:none}
+.overviewSummary [role=tablist] .tableTab,.memberSummary [role=tablist] .tableTab,.typeSummary [role=tablist] .tableTab,.packagesSummary [role=tablist] .tableTab{background:var(--accent);color:var(--tab)}
+.overviewSummary [role=tablist] button,.memberSummary [role=tablist] button,.typeSummary [role=tablist] button,.packagesSummary [role=tablist] button{border:0;cursor:pointer;padding:5px 12px 7px 12px;font-weight:600;box-shadow:0 0 0 1px #334;margin-bottom:1px}
+.overviewSummary [role=tablist] button:hover{background:var(--accent);color:var(--hover)}
+.overviewSummary caption a:link,.memberSummary caption a:link,.typeSummary caption a:link,.deprecatedSummary caption a:link,.requiresSummary caption a:link,.packagesSummary caption a:link,.providesSummary caption a:link,.usesSummary caption a:link,.overviewSummary caption a:hover,.memberSummary caption a:hover,.typeSummary caption a:hover,.useSummary caption a:hover,.constantsSummary caption a:hover,.deprecatedSummary caption a:hover,.requiresSummary caption a:hover,.packagesSummary caption a:hover,.providesSummary caption a:hover,.usesSummary caption a:hover,.overviewSummary caption a:active,.memberSummary caption a:active,.typeSummary caption a:active,.useSummary caption a:active,.constantsSummary caption a:active,.deprecatedSummary caption a:active,.requiresSummary caption a:active,.packagesSummary caption a:active,.providesSummary caption a:active,.usesSummary caption a:active,.overviewSummary caption a:visited,.memberSummary caption a:visited,.typeSummary caption a:visited,.deprecatedSummary caption a:visited,.requiresSummary caption a:visited,.packagesSummary caption a:visited,.providesSummary caption a:visited,.usesSummary caption a:visited{color:var(--white)}
+.overviewSummary caption span,.memberSummary caption span,.typeSummary caption span,.useSummary caption span,.constantsSummary caption span,.deprecatedSummary caption span,.requiresSummary caption span,.packagesSummary caption span,.providesSummary caption span,.usesSummary caption span,.systemPropertiesSummary caption span{white-space:nowrap;padding:6px 10px 8px;display:inline-block;float:left;background-color:var(--accent);border-bottom:none;color:var(--tab);margin-left:-2px;margin-bottom:-2px;min-width:200px;text-align:center}
 .overviewSummary caption,.memberSummary caption,.typeSummary caption,.useSummary caption,.constantsSummary caption,.deprecatedSummary caption,.requiresSummary caption,.packagesSummary caption,.providesSummary caption,.usesSummary caption,.systemPropertiesSummary caption{position:relative;text-align:left;background-repeat:no-repeat;color:#253441;font-weight:bold;clear:none;overflow:hidden;padding:0;padding-top:10px;padding-left:1px;margin:0;white-space:pre}
 .overviewSummary table,.memberSummary table,.requiresSummary table,.packagesSummary table,.providesSummary table,.usesSummary table,.systemPropertiesSummary table{padding:0}
-.overviewSummary table,.memberSummary table,.typeSummary table,.useSummary table,.constantsSummary table,.deprecatedSummary table,.requiresSummary table,.packagesSummary table,.providesSummary table,.usesSummary table,.systemPropertiesSummary table{width:100%;border-spacing:0;border:1px solid #bbc;margin-top:15px}
-.overviewSummary td,.memberSummary td,.typeSummary td,.useSummary td,.constantsSummary td,.deprecatedSummary td,.requiresSummary td,.packagesSummary td,.providesSummary td,.usesSummary td,.systemPropertiesSummary td{text-align:left;padding:5px 10px;box-shadow:0 0 0 1px #fff inset}
+.overviewSummary table,.memberSummary table,.typeSummary table,.useSummary table,.constantsSummary table,.deprecatedSummary table,.requiresSummary table,.packagesSummary table,.providesSummary table,.usesSummary table,.systemPropertiesSummary table{width:100%;border-spacing:0;border:var(--border_inner);margin-top:15px}
+.overviewSummary td,.memberSummary td,.typeSummary td,.useSummary td,.constantsSummary td,.deprecatedSummary td,.requiresSummary td,.packagesSummary td,.providesSummary td,.usesSummary td,.systemPropertiesSummary td{text-align:left;padding:5px 10px;box-shadow:0 0 0 1px var(--white) inset}
 .overviewSummary td.colFirst,.overviewSummary th.colFirst,.requiresSummary td.colFirst,.requiresSummary th.colFirst,.packagesSummary td.colFirst,.packagesSummary td.colSecond,.packagesSummary th.colFirst,.packagesSummary th,.usesSummary td.colFirst,.usesSummary th.colFirst,.providesSummary td.colFirst,.providesSummary th.colFirst,.memberSummary td.colFirst,.memberSummary th.colFirst,.memberSummary td.colSecond,.memberSummary th.colSecond,.memberSummary th.colConstructorName,.typeSummary td.colFirst,.typeSummary th.colFirst{vertical-align:middle}
 .packagesSummary th.colLast,.packagesSummary td.colLast{white-space:normal}
 .providesSummary th.colFirst,.providesSummary th.colLast,.providesSummary td.colFirst,.providesSummary td.colLast{white-space:normal;font-size:13px}
 .resultHighlight{font-weight:bold}
 .resultItem{font-size:13px}
-.rowColor th,.altColor th{font-weight:normal}
-.rowColor,.rowColor th{background-color:#e9edfd}
 .searchTagDescResult{font-style:italic;font-size:11px}
 .searchTagHolderResult{font-style:italic;font-size:12px}
 .searchTagResult:target{background-color:yellow}
@@ -147,33 +191,33 @@ li.blockList h3+code{margin:0 30px 0;display: inline-block;padding:0}
 .serializedFormContainer dl.nameValue dt{margin-left:1px;font-size:1.1em;display:inline;font-weight:bold}
 .skipNav{position:absolute;top:auto;left:-9999px;overflow:hidden}
 .sourceLineNo{color:green;padding:0 30px 0 0}
-.subNav .navList{padding-top:5px}
+.subNav .navList{padding:5px 0 0 5px}
 .subNav .navListSearch{float:right;margin:0 12px 2px 0;padding:5px 6px;clear:none}
-.subNav div{border-top:1px solid #337;clear:left;float:left;padding:0 6px 6px;text-transform:uppercase}
+.subNav div{border-top:1px solid var(--hover);clear:left;float:left;padding:0 6px 6px;text-transform:uppercase}
 .subNav div:not([class]){display:none}
-.subNav{background-color:#0099ff;float:left;width:calc(100% - 10px);overflow:hidden;font-size:12px;border-bottom:1px solid #113;color:#fff}
+.subNav{background-color:var(--subnav_bg);float:left;width:calc(100% - 10px);overflow:hidden;font-size:12px;border-bottom:var(--border_hard);color:var(--ink_tab)}
 .subTitle{margin:5px 0 0 0;padding:0 16px 10px;font-size:120%;font-weight:700}
-.summary section[class$="Summary"],.details section[class$="Details"],.classUses .detail,.serializedClassDetails{padding:0 20px 20px 20px;border:1px solid #ccd;background-color:#f8f8f8;border-radius:4px}
-.tab{background-color:#0066FF;color:#fff;padding:8px;width:5em;font-weight:bold}
+.summary section[class$="Summary"],.details section[class$="Details"],.classUses .detail,.serializedClassDetails{padding:0 20px 20px 20px;border:var(--border_inner);background-color:#f8f8f8;border-radius:4px}
+.tab{background-color:var(--accent);color:var(--white);padding:8px;width:5em;font-weight:bold}
 .tableSubHeadingColor{background-color:#eef}
-.title{color:#2c4557;margin:10px 0}
-.topNav a:hover,.bottomNav a:hover{text-decoration:none;color:#337;text-transform:uppercase}
-.topNav a:link,.topNav a:active,.topNav a:visited,.bottomNav a:link,.bottomNav a:active,.bottomNav a:visited{color:#fff;text-decoration:none;text-transform:uppercase;font-weight:700!important}
+.title{color:var(--ink);margin:10px 0}
+.topNav a:hover,.bottomNav a:hover{text-decoration:none;color:var(--hover);text-transform:uppercase}
+.topNav a:link,.topNav a:active,.topNav a:visited,.bottomNav a:link,.bottomNav a:active,.bottomNav a:visited{color:var(--tab);text-decoration:none;text-transform:uppercase;font-weight:700!important}
 .topNav,.bottomNav,.subNav{margin-left:-10px}
-.topNav{padding:10px;width:calc(100% - 10px);float:left;clear:right;overflow:hidden;font-size:12px;color:#fff;border-bottom:1px solid #113;background-color:#007acc}
-.topNav+.subNav a:not(:hover):not(:focus){color:#fff}
+.topNav{padding:10px;width:calc(100% - 10px);float:left;clear:right;overflow:hidden;font-size:12px;color:var(--tab);border-bottom:var(--border_hard);background-color:var(--accent)}
+.topNav+.subNav a:not(:hover):not(:focus){color:var(--white)}
 .topNav+.subNav{padding:3px 10px 6px}
-.ui-autocomplete-category{font-weight:bold;font-size:15px;padding:7px 0 7px 3px;background-color:#007acc;color:#fff}
+.ui-autocomplete-category{font-weight:bold;font-size:15px;padding:7px 0 7px 3px;background-color:var(--accent);color:var(--white)}
 .ui-autocomplete{max-height:85%;max-width:65%;overflow-y:scroll;overflow-x:scroll;white-space:nowrap;box-shadow:0 3px 6px rgba(0,0,0,0.16),0 3px 6px rgba(0,0,0,0.23)}
-.useSummary caption a:link,.useSummary caption a:visited{color:#ddf}
+.useSummary caption a:link,.useSummary caption a:visited{color:var(--ink_nav)}
 .verticalSeparator{padding:0 5px}
 .watermark{color:#545454}
-#nojs{padding:5px;text-align:right;animation:linear disappear .01s 5s forwards;background:#ffd;color:#900;font-weight:700;font-size:90%}
-#reset{background-color:rgb(255,255,255);background-image:url('resources/x.png');background-position:center;background-repeat:no-repeat;background-size:12px;border:0 none;width:16px;height:16px;position:relative;left:-4px;top:-5px;font-size:0}
-#search:focus{box-shadow:inset 0 0 0 1px #fff,inset 3px 3px 3px rgba(0,0,0,.4)}
-#search{background:#fff url(resources/glass.png);background-size:13px;background-repeat:no-repeat;background-position:6px center;padding:5px 10px 5px 24px;position:relative;right:-21px;width:200px;border:1px solid #bbc;border-radius:2px;color:#353833!important}
+#nojs{padding:5px;text-align:right;animation:linear disappear .01s 5s forwards;background:var(--row_hover);color:#900;font-weight:700;font-size:90%}
+#reset{background-color:var(--white);background-image:url('resources/x.png');background-position:center;background-repeat:no-repeat;background-size:12px;border:0 none;width:16px;height:16px;position:relative;left:-4px;top:-5px;font-size:0}
+#search:focus{box-shadow:var(--input_focus)}
+#search{background:var(--white) url(resources/glass.png);background-size:13px;background-repeat:no-repeat;background-position:6px center;padding:5px 10px 5px 24px;position:relative;right:-21px;width:200px;border:var(--border_inner);border-radius:2px;color:var(--ink)!important}
 
-@keyframes disappear{from{visibility:visible}to{visibility:hidden; padding:0; font-size:0}}
+@keyframes disappear{from{visibility:visible}to{visibility:hidden;padding:0;font-size:0}}
 
 @media screen {
 .flexBox{position:fixed;display:flex;flex-direction:column;height:100%;width:100%;min-width:800px}
@@ -190,7 +234,7 @@ h1.title{font-size:15px;top:0}
 }
 @media screen and (min-width:1200px){
 .contentContainer.indexed{columns:2 auto;column-rule:1px dotted #bbc;column-gap:50px}
-#indexnav{column-span:all;font-size:115%;border-top:1px solid #113;text-align:center;padding:10px 0;margin:10px -20px -20px;background:#0099ff;color:#fff;position:sticky;bottom:0}
-#indexnav a{color:#fff}
+#indexnav{column-span:all;font-size:115%;border-top:var(--border_hard);text-align:center;padding:10px 0;margin:10px -20px -20px;background:#0099ff;color:var(--white);position:sticky;bottom:0}
+#indexnav a{color:var(--white)}
 }
 @media print{ul.navList,div.subNav{display:none}}
