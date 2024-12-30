@@ -24,7 +24,8 @@ div.memberSignature{font-family:var(--monospaced);font-size:14px;margin:14px 0;w
 div[role=tablist]{text-align:center}
 dt+dd>.deprecationBlock{margin-top:-10px;margin-left:-50px}
 dt code{font-family:var(--monospaced);font-size:14px;padding-top:4px}
-h1,h2,h3,h5,h5,.indexHeader{padding:0 15px}
+h1,h2,h3,h4,h5,.indexHeader{padding:0 15px}
+.blockList h1,.blockList h2,.blockList h3,.blockList h4,.blockList h5{padding:0}
 h1.hidden{visibility:hidden;overflow:hidden;font-size:10px}
 h1.title{position:absolute;top:-3px;right:10px;color:#ddf}
 h1{font-size:20px}
@@ -69,6 +70,7 @@ td.colFirst,th.colFirst{font-size:13px}
 td.colFirst{border-right:1px solid #bbc}
 td.colLast a{padding-bottom:3px}
 td.colLast div{padding-top:0}
+td.colLast div.block{margin:0;padding:0}
 td.colSecond,th.colSecond,td.colLast,th.colConstructorName,th.colDeprecatedItemName,th.colLast{font-size:13px}
 th.colFirst,th.colSecond,th.colLast,th.colConstructorName,th.colDeprecatedItemName,.constantsSummary th,.packagesSummary th{background:#f2f2ff;text-align:left;padding:6px 3px 6px 7px}
 th.colFirst,th.colSecond,th.colLast,th.colConstructorName,th.colDeprecatedItemName,.useSummary th,.constantsSummary th,.packagesSummary th,td.colFirst,td.colSecond,td.colLast,.useSummary td,.constantsSummary td,.systemPropertiesSummary th{vertical-align:top;padding-right:0;padding-top:8px;padding-bottom:3px}
@@ -173,6 +175,7 @@ li.blockList h3+code{margin:0 30px 0;display: inline-block;padding:0}
 
 @media screen and (max-width:1000px){
 body,div.block,td.colFirst,th.colFirst,button{font-size:9.5pt}
+.overviewSummary caption span, .memberSummary caption span, .typeSummary caption span, .useSummary caption span, .constantsSummary caption span, .deprecatedSummary caption span, .requiresSummary caption span, .packagesSummary caption span, .providesSummary caption span, .usesSummary caption span, .systemPropertiesSummary caption span{min-width:140px}
 }
 @media screen and (max-width:880px){
 h1.title{font-size:15px;top:0}
