@@ -4,6 +4,7 @@
 @import url(/themes/console/dark/global.css);
 @import url(../images/images.css);
 @import url(images/images.css);
+@import url(../shared.css);
 @import url(../lazyload.css);
 
 :root{--nav_selected:radial-gradient(at center 115%,rgba(0,72,0,.4) 0,#0000 80%),linear-gradient(180deg,#010,#002900)}
@@ -366,11 +367,8 @@ textarea,pre{font-size:9.5pt}
 }
 
 /* add/import panel toggles */
-main{position:relative}
-.displayPanels main::after{display:block;position:absolute;top:0;left:0;bottom:0;right:0;z-index:1000;background:linear-gradient(180deg,#0005,#000a 200px);content:"";pointer-events:none;will-change:transform}
-.displayPanels #add,.displayPanels #import{margin:0;position:absolute;z-index:1500;top:-13px;left:0;right:0;filter:drop-shadow(0 4px 5px #000);animation:slideDown 1s ease-out 0s both;will-change:transform}
-.iframed .displayPanels #add,.iframed .displayPanels #import{top:-9px;left:-13px;right:-13px}
-#navi{position:relative;z-index:2000}
+.displayPanels main::after{position:absolute;top:0;left:0;bottom:0;right:0;background:linear-gradient(180deg,#0005,#000a 200px);content:"";pointer-events:none;will-change:transform}
+.displayPanels #add,.displayPanels #import{top:-4px;filter:drop-shadow(0 4px 5px #000)}
 #paginate{margin-right:68px}
 #export a{margin:7px 0 0 3px;padding:0;height:26px;width:26px;min-width:0;display:inline-block;vertical-align:middle;line-height:0;font-size:0}
 #export #addNewDest{background:var(--add) no-repeat center center/12px,var(--th)}
@@ -380,4 +378,3 @@ main{position:relative}
 input#exporthosts{background:var(--save) no-repeat center center/14px,var(--th)}
 input#exporthosts:hover,input#exporthosts:active{background:var(--save_hover) no-repeat center center/14px,var(--th)}
 #export input:active,#export .fakebutton:active{box-shadow:var(--btn_shadow_active);background-color:#050}
-@keyframes slideDown{from{transform:translateY(-800px)}to{transform:translateY(0)}}

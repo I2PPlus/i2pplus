@@ -5,6 +5,7 @@
 (function () {
   document.addEventListener("DOMContentLoaded", function () {
     if (!document.body.classList.contains("light") && !document.body.classList.contains("dark")) {return;}
+
     const addContainer = document.getElementById("add");
     const addReset = document.querySelector("#add input[type=reset]");
     const addSubmits = document.querySelectorAll("#addDestForm input[type=submit]");
@@ -33,8 +34,10 @@
     }
 
     function toggleBodyClass() {
-      const hidden = addContainer.hidden && importContainer.hidden;
-      document.body.classList.toggle("displayPanels", !hidden);
+      const shouldHide = addContainer.classList.contains("isHidden") || importContainer.classList.contains("isHidden");
+      const hidden = addContainer.hidden && importContainer.hidden || shouldHide;
+      if (!shouldHide) {document.body.classList.toggle("displayPanels", !hidden);}
+      else {setTimeout(() => {document.body.classList.remove("displayPanels");}, 240);}
     }
 
     function resetAddInputs() {
@@ -42,8 +45,12 @@
         input.removeAttribute("value");
         input.setAttribute("value", "");
       });
-      addContainer.hidden = true;
-      toggleBodyClass();
+      addContainer.classList.add("isHidden");
+      setTimeout(() => {
+        toggleBodyClass();
+        addContainer.hidden = true;
+        addContainer.classList.remove("isHidden");
+      }, 240);
     }
 
     addToggle.addEventListener("click", () =>
@@ -57,8 +64,12 @@
     addReset.addEventListener("click", resetAddInputs);
 
     importReset.addEventListener("click", () => {
-      importContainer.hidden = true;
+      importContainer.classList.add("isHidden");
       toggleBodyClass();
+      setTimeout(() => {
+        importContainer.hidden = true;
+        importContainer.classList.remove("isHidden");
+      }, 240);
     });
 
   });

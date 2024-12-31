@@ -1,9 +1,10 @@
 main{position:relative}
 .displayPanels main>*:not(#addDestForm):not(#importHostsForm){pointer-events:none}
 .displayPanels main::after{display:block;position:fixed;z-index:1000;content:"";pointer-events:none;will-change:transform}
-.displayPanels #add,.displayPanels #import{margin:0;position:absolute;z-index:1500;top:-13px;left:0;right:0;animation:slideDown .8s ease-out 0s both;will-change:transform}
+#add,#import{will-change:transform}
 .iframed .displayPanels #add,.iframed .displayPanels #import{top:-9px;left:-13px;right:-13px}
+.displayPanels #add,.displayPanels #import{margin:0;position:absolute;z-index:1500;top:-13px;left:0;right:0;animation:slideDown .8s ease-out 0s both}
+#add.isHidden,#import.isHidden{animation:slideUp 1s ease 0s both}
 #navi{position:relative;z-index:2000}
-#paginate{margin-right:68px}
-
 @keyframes slideDown{from{transform:translateY(-800px)}to{transform:translateY(0)}}
+@keyframes slideUp{from{transform:translateY(0)}to{transform:translateY(-800px)}}
