@@ -8,12 +8,14 @@
 --bodyfont:Open Sans,Segoe UI,Noto Sans,sans-serif;
 --border_hard:1px solid #113;
 --border_inner:1px solid #bbc;
+--box:#dee5fd;
 --hr:#aab;
 --hover:#36d;
 --input_focus:inset 0 0 0 1px var(--white),inset 3px 3px 3px rgba(0,0,0,.4);
 --ink:#353833;
 --ink_nav:#ddf;
 --monospaced:Fira Code,Consolas,DejaVu Sans Mono,monospace;
+--nav_hover:#a4ff20;
 --scrollbar:#09f #0000;
 --subnav_bg:#0099ff;
 --th:linear-gradient(to bottom,var(--white),var(--row_odd));
@@ -51,7 +53,7 @@ dt code{font-family:var(--monospaced);font-size:15px;padding-top:4px}
 h1,h2,h3,h4,h5,.indexHeader{padding:0 15px}
 .blockList h1,.blockList h2,.blockList h3,.blockList h4,.blockList h5{padding:0}
 h1.hidden{visibility:hidden;overflow:hidden;font-size:10px}
-h1.title{position:absolute;top:-3px;right:0;color:var(--ink_nav);text-shadow:var(--txt_shadow)}
+h1.title{position:absolute;top:-5px;right:0;color:var(--ink_nav);text-shadow:var(--txt_shadow)}
 h1{font-size:22px}
 h2{font-size:20px}
 h3{font-size:18px}
@@ -59,6 +61,7 @@ h4{font-size:17px}
 h5{font-size:16px}
 h6{font-size:15px}
 hr{margin:15px 0;height:1px;border:0;background:var(--hr)}
+hr+br,.description hr{display:none}
 html{min-height:100%;scrollbar-color:var(--scrollbar)}
 iframe{margin:0;padding:0;height:100%;width:100%;overflow-y:scroll;border:0}
 li.circle{list-style:circle}
@@ -81,27 +84,29 @@ table.plain{border-collapse:collapse;border:var(--border_inner)}
 table.plain>thead>tr,table.plain>tbody tr,table.plain>tr{background-color:transparent}
 table.plain>thead>tr>th,table.plain>tbody>tr>th,table.plain>tr>th,table.plain>thead>tr>td,table.plain>tbody>tr>td,table.plain>tr>td{border:var(--border_inner)}
 table[class$="Summary"]{border:5px solid var(--accent)!important}
-tbody th:first-child{border-right:var(--border_inner);width:25%;white-space:nowrap}
+th{font-weight:700;border-bottom-width:3px;background:var(--th)}
+tbody th.colFirst{border-right:var(--border_inner);width:25%;white-space:nowrap}
 tbody tr th,tbody tr td{border-bottom:var(--border_inner)}
 tbody tr:hover td{background:var(--row_hover)}
-td.colFirst a:link,td.colFirst a:visited,td.colSecond a:link,td.colSecond a:visited,th.colFirst a:link,th.colFirst a:visited,th.colSecond a:link,th.colSecond a:visited,th.colConstructorName a:link,th.colConstructorName a:visited,th.colDeprecatedItemName a:link,th.colDeprecatedItemName a:visited,.constantValuesContainer td a:link,.constantValuesContainer td a:visited,.allClassesContainer td a:link,.allClassesContainer td a:visited,.allPackagesContainer td a:link,.allPackagesContainer td a:visited{font-weight:bold}
+td.colFirst a:link,td.colFirst a:visited,td.colSecond a:link,td.colSecond a:visited,th.colFirst a:link,th.colFirst a:visited,th.colSecond a:link,th.colSecond a:visited,th.colConstructorName a:link,th.colConstructorName a:visited,th.colDeprecatedItemName a:link,th.colDeprecatedItemName a:visited,.constantValuesContainer td a:link,.constantValuesContainer td a:visited,.allClassesContainer td a:link,.allClassesContainer td a:visited,.allPackagesContainer td a:link,.allPackagesContainer td a:visited{font-weight:600}
 td.colFirst,th.colFirst{font-size:14px}
 td.colFirst{border-right:var(--border_inner)}
 td.colLast a{padding-bottom:3px}
 td.colLast div{padding-top:0}
 td.colLast div.block{margin:0;padding:0}
 td.colSecond,th.colSecond,td.colLast,th.colConstructorName,th.colDeprecatedItemName,th.colLast{font-size:13px}
-th{font-weight:600;background:var(--th)}
 th.colFirst,th.colSecond,th.colLast,th.colConstructorName,th.colDeprecatedItemName,.constantsSummary th,.packagesSummary th{background:var(--th);text-align:left;padding:6px 8px}
 th.colFirst,th.colSecond,th.colLast,th.colConstructorName,th.colDeprecatedItemName,.useSummary th,.constantsSummary th,.packagesSummary th,td.colFirst,td.colSecond,td.colLast,.useSummary td,.constantsSummary td,.systemPropertiesSummary th{vertical-align:top;padding-right:0;padding-top:8px;padding-bottom:3px}
 thead tr:first-child th{background:var(--th);border-bottom:var(--border_inner)}
 tr:nth-child(odd) td{background:var(--row_odd)}
 tr:nth-child(even) td{background:var(--row_even)}
+.blockList h3{border-bottom:1px solid var(--hr);padding-bottom:10px}
 .blockList li.blockList{list-style:none;margin:0 15px 15px;line-height:1.4}
 .blockList{margin:10px 0 10px 0;padding:0}
+.description{margin:20px auto;padding:10px 16px;width:calc(100% - 80px);border-radius:8px;background:var(--box)}
 .horizontal li{display:inline;font-size:0.9em}
-.navList a{color:var(--tab)!important}
-.navList a:hover{color:var(--hover)!important}
+.navList a{color:var(--tab)!important;text-shadow:var(--txt_shadow)}
+.navList a:hover{color:var(--nav_hover)!important}
 .navList li{list-style:none;float:left;padding:5px 6px;text-transform:uppercase;font-weight:700;color:#ccc;text-shadow:var(txt_shadow)}
 .topNav .navList li{padding:3px 8px}
 .navList,.subNavList{float:left;margin:0 25px 0 10px;padding:0}
@@ -140,7 +145,7 @@ li.blockList h3+code{margin:0 30px 0;display: inline-block;padding:0}
 .legalCopy{margin-left:.5em}
 .moduleGraph span{display:none;position:absolute}
 .moduleGraph:hover span{display:block;margin:-100px 0 0 100px;z-index:1}
-.navBarCell1Rev{background-color:var(--accent_active);color:var(--tab);margin:auto 5px;font-weight:900;border-radius:3px;text-shadow@var(--txt_shadow)}
+.navBarCell1Rev{background-color:var(--accent_active);color:var(--white)!important;margin:auto 5px;font-weight:900!important;border-radius:3px;text-shadow:var(--txt_shadow)}
 .navListSearch label{display:none}
 .navListSearch label{position:relative;right:-16px}
 .overviewSummary .tabEnd,.memberSummary .tabEnd,.typeSummary .tabEnd,.useSummary .tabEnd,.constantsSummary .tabEnd,.deprecatedSummary .tabEnd,.requiresSummary .tabEnd,.packagesSummary .tabEnd,.providesSummary .tabEnd,.usesSummary .tabEnd{display:none;width:5px;position:relative;float:left;background-color:var(--accent)}
@@ -223,7 +228,8 @@ h1.title{font-size:15px;top:0}
     --bodybg:#002;
     --border_hard:1px solid #369;
     --border_inner:1px solid var(--accent);
-    --hr:#ddf;
+    --box:#fff1;
+    --hr:var(--accent);
     --hover:#826;
     --input_focus:none;
     --ink:#cdf;
@@ -240,7 +246,7 @@ h1.title{font-size:15px;top:0}
     --white:#001;
   }
   h1.bar{margin-top:0;padding-bottom: 3px;background:var(--accent);text-shadow:1px 1px 1px #0005}
-  .navBarCell1Rev{box-shadow:0 0 0 1px #000,0 0 0 1px #fff6 inset, 2px 2px 2px #0004}
+  .navBarCell1Rev{box-shadow:0 0 0 1px #000,0 0 0 1px #fff6 inset, 2px 2px 2px #0004;color:var(--tab)!important}
   .subNav,.topNav{border-bottom-color:#000}
   .topNav{background:#201253}
   .navList li{color:#aaa}
