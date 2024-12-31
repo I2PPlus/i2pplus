@@ -633,7 +633,7 @@ td.infowarn,#help tr:hover td.infowarn{background:var(--infowarn) no-repeat 15px
 #logs table{position:relative}
 #logs table::before{width:calc(100% - 4px);height:2px;position:absolute;top:1px;left:2px;z-index:999;display:block;background:linear-gradient(to right,rgba(255,96,0,.3),#f50,rgba(255,96,0,.3));content:"";animation:bar .01s steps(2) reverse,fade .012s ease both;backface-visibility:hidden;will-change:transform}
 #logs table[id$="logs"] tr:first-child td,.subheading{background:linear-gradient(45deg,#fcfcff,#eef);box-shadow:var(--highlight)}
-#logs>.tabletitle{margin-top:15px}
+#logs>.tabletitle{margin:15px auto -3px;z-index:999}
 #logs ul{margin:-5px 0 -3px;width:100%;display:inline-block;word-break:break-all}
 #logs ul li{margin:0 0 -1px -4px;padding-left:0;width:calc(100% + 2px)}
 #logs a.configure,#logs a.delete,#logs a.configure:hover,#logs a.delete:hover,#logs a.configure:focus,#logs a.delete:focus,#logs a.active:hover,#logs a.active:hover{border-left:0;box-shadow:none;background:none;display:inline-block}
@@ -661,7 +661,7 @@ table[id$="logs"] ul li:last-child{margin-bottom:10px}
 #routerlogs li:last-child,#criticallogs li:last-child{margin-bottom:-2px}
 #routerlogs tr:first-child td,#wrapperlogs tr:first-child td{border-bottom:var(--border_inner)}
 #wrapperlogs,table#routerlogs{margin-bottom:10px;width:100%;table-layout:fixed}
-#wrapperlogs{margin-bottom:5px;border-bottom-width:2px}
+#wrapperlogs{margin-bottom:5px;border-bottom-width:3px}
 #wrapperlogs .nologs{padding:11px 12px}
 #wrapperlogs tr:last-child td{padding:0}
 #service_logs{margin:0 0 -1px;padding:3px 0 0 5px;width:calc(100% - 5px);max-height:500px;white-space:pre-wrap;word-wrap:break-word;overflow:auto;font-weight:500;will-change:transform}
@@ -675,7 +675,7 @@ table[id$="logs"] ul li:last-child{margin-bottom:10px}
 #refreshPeriod{margin:-10px 0}
 #routerlogs tr:first-child:hover #refreshPeriod,#refreshPeriod:focus-within{margin:-26px -14px -4px 0;display:block!important}
 #logFilter{margin:-5px -7px -6px 0;display:block}
-#logFilterInput{margin:-1px -2px -1px 0;padding-left:30px;width:160px;min-width:0;background:#fff var(--filter) no-repeat 8px center/16px;background-blend-mode:luminosity}
+#logFilterInput{margin:-1px;padding-left:30px;width:160px;min-width:0;background:#fff var(--filter) no-repeat 8px center/16px;background-blend-mode:luminosity}
 #logRefreshInterval{margin:1px 1px -1px 0;padding-left:28px;width:50px;border:0;background:#fff var(--refresh) no-repeat 6px center/16px}
 #logRefreshInterval:focus,#logFilterInput:focus{box-shadow:var(--btn_shadow_active);filter:none!important;caret-color:auto}
 #logRefreshInterval:focus{background-blend-mode:normal}
@@ -1811,7 +1811,7 @@ a[href^="configpeer?peer"]:hover::after{background:var(--edit_hover) no-repeat c
 .debug_container:empty{display:none}
 .debug_targetinfo{word-break:break-all}
 .debug_pubkey{max-width:300px;display:inline-block;vertical-align:bottom;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.skm_key td,.debug_outboundtarget td{background:linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%)}
+.debug_outboundtarget td,.skm_key td{background:linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%)}
 .debug_outboundtarget td:last-child,.skm_key td:last-child{width:1%;white-space:nowrap}
 .debug_outboundtarget:hover td,.debug_outboundtarget:hover+tr td,.skm_key:hover td,.skm_key:hover+tr td{background:#ffd}
 .debug_container.buckets{margin-bottom:5px;padding-bottom:0;word-break:break-all}
@@ -2886,7 +2886,7 @@ h4#updateplugins,#news p{font-size:10pt}
 #loggingoptions{margin-bottom:-3px}
 #logs font[color^="#"]::before{margin-right:6px;margin-left:5px;width:7px;height:7px}
 #minigraphcontainer,#minigraphcontainer_noscript{margin-top:-43px;margin-left:1px;width:234px;height:38px;background-size:248px 40px}
-#minigraph{margin-top:-20px;width:234px;height:44px}
+#minigraph{margin-top:-20px;width:234px;height:43px}
 #netdbcountrylist img{width:24px;height:auto}
 #netdb .leaseset:last-of-type{margin-bottom:2px}
 #peerprofiles.widescroll{padding-top:123px}
@@ -2894,7 +2894,6 @@ h4#updateplugins,#news p{font-size:10pt}
 #pluginconfig td:first-child label::before{height:20px}
 #plugininstall2{margin-top:-15px}
 #sb_advanced a,#sb_help a,#sb_internals a{max-width:232px}
-/*#sb_advancedgeneral.collapsed~#sb_updatesection.collapsed>h3.collapsed{margin-bottom:-10px}*/
 #sb_advancedgeneral:not([hidden])~#sb_peers{margin-bottom:-5px}
 #sb_advancedgeneral:not([hidden])~#sb_routerControl{margin-bottom:0}
 #sb_advancedgeneral,#sb_bandwidth,#sb_general,#sb_peers,#sb_peersadvanced,#sb_queue,#sb_shortgeneral,#sb_tunnels{margin-top:-12px;margin-bottom:-6px}
