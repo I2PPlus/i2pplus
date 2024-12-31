@@ -16,6 +16,7 @@
     const importSubmit = document.querySelector("#importHostsForm input[type=submit]");
     const importToggle = document.getElementById("importFromFile");
     const messages = document.querySelector("#messages p");
+    const isIframed = document.documentElement.classList.contains("iframed") || window.top !== window.parent.top;
 
     [addContainer, importContainer].forEach((container) => {container.hidden = true;});
 
@@ -31,13 +32,23 @@
       showContainer.hidden = false;
       hideContainer.hidden = true;
       toggleBodyClass();
+      if (!showContainer.hidden) {
+        document.documentElement.classList.add("noscroll");
+        if (isIframed) {window.parent.document.documentElement.style.overflow = "hidden";}
+      }
     }
 
     function toggleBodyClass() {
       const shouldHide = addContainer.classList.contains("isHidden") || importContainer.classList.contains("isHidden");
       const hidden = addContainer.hidden && importContainer.hidden || shouldHide;
       if (!shouldHide) {document.body.classList.toggle("displayPanels", !hidden);}
-      else {setTimeout(() => {document.body.classList.remove("displayPanels");}, 240);}
+      else {
+        setTimeout(() => {
+          document.body.classList.remove("displayPanels");
+          document.documentElement.classList.remove("noscroll");
+          if (isIframed) {window.parent.document.documentElement.style.overflow = null;}
+        }, 240);
+      }
     }
 
     function resetAddInputs() {

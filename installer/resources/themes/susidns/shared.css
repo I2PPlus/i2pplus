@@ -1,9 +1,10 @@
 main{position:relative}
-.displayPanels main>*:not(#addDestForm):not(#importHostsForm){pointer-events:none}
-.displayPanels main::after{display:block;position:fixed;z-index:1000;content:"";pointer-events:none;will-change:transform}
+.displayPanels #book,.displayPanels #buttons{pointer-events:none!important;user-select:none!important}
+.displayPanels main::after{display:block;position:fixed;z-index:1000;backdrop-filter:blur(2px) saturate(.5);content:"";pointer-events:none;will-change:transform}
 #add,#import{will-change:transform}
 .iframed .displayPanels #add,.iframed .displayPanels #import{top:-9px;left:-13px;right:-13px}
 .displayPanels #add,.displayPanels #import{margin:0;position:absolute;z-index:1500;top:-13px;left:0;right:0;animation:slideDown .8s ease-out 0s both}
+.noscroll{overflow-y:hidden;contain:paint}
 #add.isHidden,#import.isHidden{animation:slideUp 1s ease 0s both}
 #navi{position:relative;z-index:2000}
 @keyframes slideDown{from{transform:translateY(-800px)}to{transform:translateY(0)}}

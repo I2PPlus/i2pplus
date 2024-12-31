@@ -52,8 +52,9 @@ th{padding:5px 10px;text-align:left;color:var(--ink);font-size:8.5pt}
 #page{margin:10px 0;padding:0 5px;position:relative;color:var(--ink);font-size:9pt}
 
 /* topnav */
-#navi{margin:-16px auto 24px;padding:5px 3px;position:sticky;top:-1px;z-index:999;text-align:center;border:var(--border_hard);border-radius:0 1px 2px 2px;box-shadow:var(--bevel),0 2px 2px 2px #0006;background:var(--topnav)}
+#navi{margin:-16px auto 24px;padding:5px 3px;position:sticky;top:-1px;z-index:999999;text-align:center;border:var(--border_hard);border-radius:0 1px 2px 2px;box-shadow:var(--bevel),0 2px 2px 2px #0006;background:var(--topnav)}
 .iframed #navi{margin:-6px -15px 27px;padding:5px 0;border:var(--border_hard);border-right:0;border-left:0;border-radius:0}
+.displayPanels #navi{box-shadow:var(--bevel)}
 #navi a:link{text-transform:capitalize}
 #navi a:first-child{border-radius:2px 0 0 2px}
 #navi a:last-child{border-radius:0 2px 2px 0}
@@ -367,7 +368,7 @@ textarea,pre{font-size:9.5pt}
 }
 
 /* add/import panel toggles */
-.displayPanels main::after{position:absolute;top:0;left:0;bottom:0;right:0;background:linear-gradient(180deg,#0005,#000a 200px);content:"";pointer-events:none;will-change:transform}
+.displayPanels main::after{position:absolute;top:-60px;left:-16px;bottom:-16px;right:-16px;background:#000a;background:repeating-linear-gradient(180deg,#0108,#000 2px) repeat center center/100% 2px}
 .displayPanels #add,.displayPanels #import{top:-4px;filter:drop-shadow(0 4px 5px #000)}
 #paginate{margin-right:68px}
 #export a{margin:7px 0 0 3px;padding:0;height:26px;width:26px;min-width:0;display:inline-block;vertical-align:middle;line-height:0;font-size:0}

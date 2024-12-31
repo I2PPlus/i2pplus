@@ -137,8 +137,8 @@ tr:hover .destaddress{color:#333}
 #export input:hover,#export .fakebutton:hover{box-shadow:var(--btn_shadow_hover)}
 #export input:active,#export .fakebutton:active{box-shadow:var(--btn_shadow_active);background-color:#050}
 
-.displayPanels main::after{top:47px;right:7px;bottom:7px;left:7px;background:#eef9;backdrop-filter:blur(2px)}
-.iframed .displayPanels main::after{top:47px;right:1px;bottom:1px;left:1px;background:#eef9;backdrop-filter:blur(2px)}
+.displayPanels main::after{top:47px;right:7px;bottom:7px;left:7px;background:repeating-linear-gradient(180deg,#ddfa,#fffd 2px) repeat center center/100% 2px}
+.iframed .displayPanels main::after{right:1px;bottom:1px;left:1px}
 .displayPanels #add,.displayPanels #import{top:0px;z-index:10000}
 .iframed .displayPanels #add,.iframed .displayPanels #import{margin:13px auto 10px;width:80%;min-width:600px;top:-25px;box-shadow:0 0 3px 3px #0002}
 
