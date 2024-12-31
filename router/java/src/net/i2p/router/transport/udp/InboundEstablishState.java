@@ -13,13 +13,10 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
- * Data for a new connection being established, where the remote peer has
- * initiated the connection with us.  In other words, they are Alice and
- * we are Bob.
- *
- * TODO do all these methods need to be synchronized?
+ * Data for a new connection being established, where the remote peer has initiated
+ * the connection with us.  In other words, they are Alice and we are Bob.
  */
-class InboundEstablishState {
+class InboundEstablishState {  // TODO do all these methods need to be synchronized?
     protected final RouterContext _context;
     protected final Log _log;
     private byte _receivedX[]; // SessionRequest message
@@ -71,14 +68,14 @@ class InboundEstablishState {
         IB_STATE_RETRY_SENT,
    }
 
-    /** basic delay before backoff
-     *  Transmissions at 0, 1, 3, 7 sec
+    /** Basic delay before backoff
+     *  Transmissions at 0, 1, 3, 7 sec.
      *  This should be a little shorter than for outbound.
      */
     protected static final long RETRANSMIT_DELAY = SystemVersion.isSlow() ? 1000 : 750;
 
     /**
-     *  max delay including backoff
+     *  Max delay including backoff.
      *  This should be a little shorter than for outbound.
      */
     protected static final long MAX_DELAY = EstablishmentManager.MAX_IB_ESTABLISH_TIME;
@@ -137,6 +134,7 @@ class InboundEstablishState {
     public synchronized boolean sessionRequestReceived() {return _receivedX != null;}
     public synchronized byte[] getReceivedX() {return _receivedX;}
     public synchronized byte[] getReceivedOurIP() {return _bobIP;}
+
     /**
      *  True (default) if no extended options in session request,
      *  or value of flag bit in the extended options.
@@ -144,10 +142,10 @@ class InboundEstablishState {
      */
     public synchronized boolean isIntroductionRequested() {return _introductionRequested;}
 
-    /** what IP do they appear to be on? */
+    /** What IP do they appear to be on? */
     public byte[] getSentIP() {return _aliceIP;}
 
-    /** what port number do they appear to be coming from? */
+    /** What port number do they appear to be coming from? */
     public int getSentPort() {return _alicePort;}
 
     public synchronized void fail() {_currentState = InboundState.IB_STATE_FAILED;}
@@ -156,7 +154,7 @@ class InboundEstablishState {
     public synchronized void setSentRelayTag(long tag) {_sentRelayTag = tag;}
     public synchronized long getSentSignedOnTime() {return _sentSignedOnTime;}
 
-    /** note that we just sent a SessionCreated packet */
+    /** Note that we just sent a SessionCreated packet */
     public synchronized void createdPacketSent() {
         _lastSend = _context.clock().now();
         long delay;
@@ -171,12 +169,12 @@ class InboundEstablishState {
    }
 
     /**
-     * how long have we been trying to establish this session?
+     * How long have we been trying to establish this session?
      */
     public long getLifetime() {return getLifetime(_context.clock().now());}
 
     /**
-     * how long have we been trying to establish this session?
+     * How long have we been trying to establish this session?
      * @since 0.9.57
      */
     public long getLifetime(long now) {return now - _establishBegin;}
