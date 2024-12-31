@@ -47,8 +47,13 @@ document.addEventListener("DOMContentLoaded", () => {
   })();
 
   async function handleInputClick(clickTarget) {
-    const clickable = ".toggleview, .snarkNav, .filter, input[class^='action'], input.add, input.create";
+    const clickable = ".toggleview, .tab_label, .snarkNav, .filter, input[class^='action'], input.add, input.create";
+    if (!clickTarget.closest(clickable)) {
+      console.log("element not in list of clickables, bailing out...");
+      return;
+    }
     const targetElement = clickTarget.matches(clickable) ? clickTarget : clickTarget.closest(clickable);
+    console.log(targetElement);
     if (!targetElement) {return;}
     let delay = 360;
     const isAction = targetElement.matches("input[class^='action'], input[id^='action']");
@@ -96,11 +101,11 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   page.addEventListener("click", async (event) => {
+    eventListenerActive = true;
     const clickTarget = event.target;
     const form = document.getElementById("torrentlist");
-    if (!clickTarget.matches("input") || !form) return;
-
     const className = clickTarget.className;
+
     if (className === "actionRemove" || className === "actionDelete") {
       event.preventDefault();
       let torrent = clickTarget.getAttribute("data-name");
@@ -128,7 +133,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       handleInputClick(clickTarget);
     }
-    eventListenerActive = true;
   });
 
   async function showConfirmationDialog(targetElement, message, inputName, inputValue, inputAction) {
