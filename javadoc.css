@@ -2,14 +2,14 @@
 
 :root {
 --a:#1f389c;
---accent:#003d66;
+--accent:#1b3291;
 --accent_active:#5998db;
 --bodybg:#f5f4f9;
 --bodyfont:Open Sans,Segoe UI,Noto Sans,sans-serif;
 --border_hard:1px solid #113;
 --border_inner:1px solid #bbc;
 --hr:#aab;
---hover:#339;
+--hover:#36d;
 --input_focus:inset 0 0 0 1px var(--white),inset 3px 3px 3px rgba(0,0,0,.4);
 --ink:#353833;
 --ink_nav:#ddf;
@@ -24,32 +24,6 @@
 --tab:var(--white);
 --ink_tab:#ccc;
 --white:#fff;
-}
-
-@media (prefers-color-scheme:dark) {
-:root {
---a:#6aadec;
---accent:#1f389c;
---accent_active:#a80808;
---bodybg:#002;
---border_hard:1px solid #369;
---border_inner:1px solid #369;
---hr:#ddf;
---hover:#be30ff;
---input_focus:none;
---ink:#eef;
---ink_nav:#fff;
---scrollbar:#09f #0000;
---subnav_bg:#202e64;
---th:linear-gradient(to bottom,#003,#001);
---txt_shadow:none;
---row_hover:#112233;
---row_odd:#001a2d;
---row_even:#00131f;
---tab:var(--ink);
---tab_ink:#88a;
---white:#001;
-}
 }
 
 a:link,a:visited{text-decoration:none;color:var(--a);font-weight:700}
@@ -123,17 +97,18 @@ th.colFirst,th.colSecond,th.colLast,th.colConstructorName,th.colDeprecatedItemNa
 thead tr:first-child th{background:var(--th);border-bottom:var(--border_inner)}
 tr:nth-child(odd) td{background:var(--row_odd)}
 tr:nth-child(even) td{background:var(--row_even)}
-ul.blockList li.blockList{list-style:none;margin:0 15px 15px;line-height:1.4}
-ul.blockList{margin:10px 0 10px 0;padding:0}
-ul.horizontal li{display:inline;font-size:0.9em}
-ul.navList a{color:var(--tab)!important}
-ul.navList a:hover{color:var(--hover)!important}
-ul.navList li{list-style:none;float:left;padding:5px 6px;text-transform:uppercase;font-weight:700}
-ul.navList,ul.subNavList{float:left;margin:0 25px 0 5px;padding:0}
-ul.navList + ul.navList{margin:0;float:right}
-ul.subNavList li{list-style:none;float:left;padding-top:10px}
-ul.ui-autocomplete  li{float:left;clear:both;width:100%}
-ul.ui-autocomplete{position:fixed;z-index:999999}
+.blockList li.blockList{list-style:none;margin:0 15px 15px;line-height:1.4}
+.blockList{margin:10px 0 10px 0;padding:0}
+.horizontal li{display:inline;font-size:0.9em}
+.navList a{color:var(--tab)!important}
+.navList a:hover{color:var(--hover)!important}
+.navList li{list-style:none;float:left;padding:5px 6px;text-transform:uppercase;font-weight:700;color:#ccc;text-shadow:var(txt_shadow)}
+.topNav .navList li{padding:3px 8px}
+.navList,.subNavList{float:left;margin:0 25px 0 10px;padding:0}
+.navList + .navList{margin:0;float:right}
+.subNavList li{list-style:none;float:left;padding-top:10px}
+.ui-autocomplete  li{float:left;clear:both;width:100%}
+.ui-autocomplete{position:fixed;z-index:999999}
 ul{list-style-type:disc}
 h2+ul{margin-left:15px!important}
 li ul{list-style:none;margin-left:0;padding-left:0}
@@ -165,7 +140,7 @@ li.blockList h3+code{margin:0 30px 0;display: inline-block;padding:0}
 .legalCopy{margin-left:.5em}
 .moduleGraph span{display:none;position:absolute}
 .moduleGraph:hover span{display:block;margin:-100px 0 0 100px;z-index:1}
-.navBarCell1Rev{background-color:var(--accent);color:var(--tab);margin:auto 5px;font-weight:900;border-radius:3px}
+.navBarCell1Rev{background-color:var(--accent_active);color:var(--tab);margin:auto 5px;font-weight:900;border-radius:3px;text-shadow@var(--txt_shadow)}
 .navListSearch label{display:none}
 .navListSearch label{position:relative;right:-16px}
 .overviewSummary .tabEnd,.memberSummary .tabEnd,.typeSummary .tabEnd,.useSummary .tabEnd,.constantsSummary .tabEnd,.deprecatedSummary .tabEnd,.requiresSummary .tabEnd,.packagesSummary .tabEnd,.providesSummary .tabEnd,.usesSummary .tabEnd{display:none;width:5px;position:relative;float:left;background-color:var(--accent)}
@@ -191,7 +166,8 @@ li.blockList h3+code{margin:0 30px 0;display: inline-block;padding:0}
 .serializedFormContainer dl.nameValue dt{margin-left:1px;font-size:1.1em;display:inline;font-weight:bold}
 .skipNav{position:absolute;top:auto;left:-9999px;overflow:hidden}
 .sourceLineNo{color:green;padding:0 30px 0 0}
-.subNav .navList{padding:5px 0 0 5px}
+.subNav .navList{margin-bottom:-3px;padding:0 0 0 5px}
+.subNav .navList + .navList{margin-bottom:-3px}
 .subNav .navListSearch{float:right;margin:0 12px 2px 0;padding:5px 6px;clear:none}
 .subNav div{border-top:1px solid var(--hover);clear:left;float:left;padding:0 6px 6px;text-transform:uppercase}
 .subNav div:not([class]){display:none}
@@ -237,4 +213,35 @@ h1.title{font-size:15px;top:0}
 #indexnav{column-span:all;font-size:115%;border-top:var(--border_hard);text-align:center;padding:10px 0;margin:10px -20px -20px;background:#0099ff;color:var(--white);position:sticky;bottom:0}
 #indexnav a{color:var(--white)}
 }
-@media print{ul.navList,div.subNav{display:none}}
+@media print{.navList,div.subNav{display:none}}
+
+@media (prefers-color-scheme:dark) {
+  :root {
+    --a:#6aadec;
+    --accent:#1f389c;
+    --accent_active:#590588;
+    --bodybg:#002;
+    --border_hard:1px solid #369;
+    --border_inner:1px solid var(--accent);
+    --hr:#ddf;
+    --hover:#826;
+    --input_focus:none;
+    --ink:#cdf;
+    --ink_nav:#fff;
+    --scrollbar:#09f #0000;
+    --subnav_bg:#202e64;
+    --th:linear-gradient(to bottom,#003,#001);
+    --txt_shadow:none;
+    --row_hover:#202;
+    --row_odd:#002;
+    --row_even:#003;
+    --tab:var(--ink);
+    --tab_ink:#88a;
+    --white:#001;
+  }
+  h1.bar{margin-top:0;padding-bottom: 3px;background:var(--accent);text-shadow:1px 1px 1px #0005}
+  .navBarCell1Rev{box-shadow:0 0 0 1px #000,0 0 0 1px #fff6 inset, 2px 2px 2px #0004}
+  .subNav,.topNav{border-bottom-color:#000}
+  .topNav{background:#201253}
+  .navList li{color:#aaa}
+}
