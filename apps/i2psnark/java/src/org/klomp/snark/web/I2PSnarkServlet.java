@@ -410,8 +410,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160")
                .append("&hideLegend=true&hideTitle=true&hideGrid=true&t=").append(now).append("\')}\"</style>\n");
         }
-        buf.append("<script src=" + _resourcePath + "js/click.js type=module></script>\n")
-           .append("</head>\n<body style=display:none;pointer-events:none id=snarkxhr class=\"").append(_manager.getTheme())
+        buf.append("</head>\n<body style=display:none;pointer-events:none id=snarkxhr class=\"").append(_manager.getTheme())
            .append(" lang_").append(lang).append("\">\n")
            .append("<span id=toast hidden></span>\n").append("<center>\n").append(IFRAME_FORM);
         List<Tracker> sortedTrackers = null;
@@ -516,7 +515,7 @@ public class I2PSnarkServlet extends BasicServlet {
             mimeType.equals("text/css") || mimeType.endsWith("/javascript"))) {
             headers.append("Cache-Control\t: private, max-age=2628000, immutable\r\n");
         } else {headers.append("Cache-Control\t: private, no-cache, max-age=2628000\r\n");}
-        StringBuilder csp = new StringBuilder("default-src 'self'; base-uri 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; ");
+        StringBuilder csp = new StringBuilder("default-src 'self'; base-uri 'self'; worker-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; ");
         csp.append("script-src 'self' 'nonce-").append(cspNonce).append("'; ");
         csp.append("object-src 'none'; media-src '").append(allowMedia ? "self" : "none").append("'");
         headers.append("Content-Security-Policy\t: ").append(csp).append("\r\n");
@@ -541,7 +540,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String refresh = String.valueOf(_manager.getRefreshDelaySeconds());
         StringBuilder headers = new StringBuilder(1024);
         headers.append("Cache-Control: private, no-cache, max-age=60\r\n");
-        headers.append("Content-Security-Policy: default-src 'none'\r\n");
+        headers.append("Content-Security-Policy: default-src 'none'; child-src 'self'\r\n");
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html; charset=utf-8");
         String[] headerLines = headers.toString().split("\r\n");
@@ -638,9 +637,8 @@ public class I2PSnarkServlet extends BasicServlet {
         filterEnabled = filterParam != null && !filterParam.equals("all") && !filterParam.equals("");
         boolean searchActive = (search != null && !search.equals("") && search.length() > 0);
         if (isForm) {
-            if (showStatusFilter) {
-                renderFilterBar(out, req);
-            } else {
+            if (showStatusFilter) {renderFilterBar(out, req);}
+            else {
                 StringBuilder buf = new StringBuilder(1280);
                 buf.append("<form id=torrentlist action=\"_post\" method=POST target=processForm>\n");
                 out.write(buf.toString());
@@ -1131,6 +1129,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String search = req.getParameter("search");
         String srt = req.getParameter("sort");
         String stParam = req.getParameter("st");
+        String reqURL = req.getRequestURL().toString();
         int pageSizeConf = _manager.getPageSize();
         List<Snark> snarks = getSortedSnarks(req);
         int total = snarks.size();
@@ -1182,8 +1181,10 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(_t("Incomplete")).append("<span class=badge></span></span></a>")
            .append("<a class=filter id=stopped href=\"").append(buttonUrl).append("stopped\"><span>")
            .append(_t("Stopped")).append("<span class=badge></span></span></a>")
-           .append("</div>\n")
-           .append("<script src=/i2psnark/.res/js/filterBar.js type=module></script>\n");
+           .append("</div>\n");
+        if (!reqURL.contains("/.ajax")) {
+            buf.append("<script src=/i2psnark/.res/js/filterBar.js type=module></script>\n");
+        }
         out.write(buf.toString());
         buf.setLength(0);
     }
@@ -1383,7 +1384,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
             }
             if (action == null) {
-                // confirm.js will generate this error when a remove/delete is cancelled, so suppress it.
+                // click.js will generate this error when a remove/delete is cancelled, so suppress it.
                 //_manager.addMessage("No action specified");
                 return;
             }
@@ -3702,11 +3703,11 @@ public class I2PSnarkServlet extends BasicServlet {
         "<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\" id=iframeResizer></script>\n" +
         "<script src=\"/js/iframeResizer/updatedEvent.js?" + CoreVersion.VERSION + "\"></script>\n" +
         "<script src=/js/setupIframe.js></script>\n" +
-        "<script src=\"/i2psnark/.res/js/confirm.js?" + CoreVersion.VERSION + "\"></script>\n" +
+        "<script src=\"/i2psnark/.res/js/click.js?" + CoreVersion.VERSION + "\" type=module></script>\n" +
         "<script src=/i2psnark/.res/js/snarkAlert.js type=module></script>\n" +
         "<link rel=stylesheet href=/i2psnark/.res/snarkAlert.css>\n" +
         "</body>\n</html>";
-    private static final String FOOTER_STANDALONE = "</div>\n</center>\n<script src=/i2psnark/.res/js/confirm.js></script>\n" +
+    private static final String FOOTER_STANDALONE = "</div>\n</center>\n<script src=/i2psnark/.res/js/click.js type=module></script>\n" +
         "<script src=/i2psnark/.res/js/snarkAlert.js type=module></script>\n" +
         "<link rel=stylesheet href=/i2psnark/.res/snarkAlert.css>\n" + "</body>\n</html>";
     private static final String IFRAME_FORM = "<iframe name=processForm id=processForm hidden></iframe>\n";
@@ -3792,19 +3793,13 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean showPriority = storage != null && !storage.complete() && r.isDirectory();
 
         StringBuilder buf=new StringBuilder(6*1024);
-        buf.append(DOCTYPE).append("<html>\n<head>\n<meta charset=utf-8>\n");
-        if (!isStandalone()) {
-            buf.append("<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js?").append(CoreVersion.VERSION)
-               .append("\" id=iframeResizer></script>\n");
-        }
-        buf.append("<script src=" + _resourcePath + "js/click.js type=module></script>\n").append("<title>");
+        buf.append(DOCTYPE).append("<html>\n<head>\n<meta charset=utf-8>\n").append("<title>");
         if (title.endsWith("/")) {title = title.substring(0, title.length() - 1);}
         final String directory = title;
         final int dirSlash = directory.indexOf('/');
         final boolean isTopLevel = dirSlash <= 0;
         title = _t("I2PSnark") + " - [" + _t("Torrent") + ": " + DataHelper.escapeHTML(title) + "]";
-        buf.append(title);
-        buf.append("</title>\n").append(HEADER_A).append(_themePath).append(HEADER_B).append("\n");
+        buf.append(title).append("</title>\n").append(HEADER_A).append(_themePath).append(HEADER_B).append("\n");
         // uncollapse panels
         boolean collapsePanels = _manager.util().collapsePanels();
         if (!collapsePanels) {buf.append(HEADER_A + _themePath + HEADER_C).append("\n");}
@@ -3813,10 +3808,8 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append(HEADER_A).append(_themePath).append(HEADER_D); // larger fonts for cjk translations
         }
         buf.append(HEADER_A + _themePath + HEADER_I).append("\n"); // images.css
-        String themeBase = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() +
-                           java.io.File.separatorChar + "docs" + java.io.File.separatorChar + "themes" +
-                           java.io.File.separatorChar + "snark" + java.io.File.separatorChar + _manager.getTheme() +
-                           java.io.File.separatorChar;
+        String themeBase = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() + slash +
+                           "docs" + slash + "themes" + slash + "snark" + slash + _manager.getTheme() + slash;
         File override = new File(themeBase + "override.css");
         String fontPath = isStandalone() ? "/i2psnark/.res/themes/fonts" : "/themes/fonts";
         if (isStandalone() || useSoraFont()) {
