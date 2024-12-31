@@ -8,6 +8,7 @@
 --bodyfont:Open Sans,Segoe UI,Noto Sans,sans-serif;
 --border_hard:1px solid #113;
 --border_inner:1px solid #bbc;
+--border_inner_soft:var(--border_inner);
 --box:#dee5fd;
 --hr:#aab;
 --hover:#36d;
@@ -31,6 +32,7 @@
 a:link,a:visited{text-decoration:none;color:var(--a);font-weight:700}
 a[href]:hover,a[href]:focus{text-decoration:none;color:var(--hover)}
 a[name]{color:var(--ink)}
+.contentContainer a[href^="index-"]{margin:15px 0 10px;padding:1px 8px;display:inline-block;border:1px solid var(--accent)}
 body,frame,html{background-color:var(--bodybg);color:var(--ink)}
 body,frame{padding:10px;width:calc(100% - 20px);}
 body{font-family:var(--bodyfont);font-size:15px;margin:0;padding:0 0 20px;height:100%;width:100%;overflow-x:hidden}
@@ -48,7 +50,11 @@ div.memberSignature span.typeParameters{white-space:normal}
 div.memberSignature span.typeParametersLong,div.memberSignature span.arguments,div.memberSignature span.exceptions{display:inline-block;vertical-align:top;white-space:pre}
 div.memberSignature{font-family:var(--monospaced);font-size:15px;margin:15px 0;white-space:pre-wrap}
 div[role=tablist]{text-align:center}
+dl{margin:0 15px}
+dt{margin-top:10px;padding-top:10px;border-top:var(--border_inner_soft)}
+.description dt{padding-top:0;margin-top:0;border:0}
 dt+dd>.deprecationBlock{margin-top:-10px;margin-left:-50px}
+dt+dd>.block{margin-left:-40px}
 dt code{font-family:var(--monospaced);font-size:15px;padding-top:4px}
 h1,h2,h3,h4,h5,.indexHeader{padding:0 15px}
 .blockList h1,.blockList h2,.blockList h3,.blockList h4,.blockList h5{padding:0}
@@ -123,6 +129,7 @@ li.blockList h3+code{margin:0 30px 0;display: inline-block;padding:0}
 .altColor,.altColor td{background-color:var(--row_even)}
 .altColor th{background-color:var(--th)}
 .block{display:block;margin:0 10px 5px 0;color:var(--ink)}
+.blockList .block{margin:10px 15px 15px}
 .block p{margin:15px}
 .bottomNav,.bottomNav+.subNav{display:none}
 .bottomNav{margin-top:10px;background-color:var(--accent);color:var(--white);float:left;padding:0;width:100%;clear:right;height:2.8em;padding-top:10px;overflow:hidden;font-size:12px;border-top:var(--border_hard)}
@@ -136,7 +143,7 @@ li.blockList h3+code{margin:0 30px 0;display: inline-block;padding:0}
 .deprecatedLabel,.descfrmTypeLabel,.implementationLabel,.memberNameLabel,.memberNameLink,.moduleLabelInPackage,.moduleLabelInType,.overrideSpecifyLabel,.packageLabelInType,.packageHierarchyLabel,.paramLabel,.returnLabel,.seeLabel,.simpleTagLabel,.throwsLabel,.typeNameLabel,.typeNameLink,.searchTagLink{font-weight:bold}
 .deprecationBlock{margin:-20px 10px 0;padding:10px;display:inline-block;color:#900;line-height:1.2}
 .deprecationComment,.emphasizedPhrase,.interfaceName{font-style:italic}
-.description pre{margin-top:0;font-weight:500}
+.description pre{margin:10px 15px;font-weight:500}
 .header{clear:both;margin:0 0 -11px;padding:20px 20px 0}
 .header ul li,.footer ul li{list-style:none;font-size:13px}
 .header ul{margin:0 0 15px 0;padding:0}
@@ -228,6 +235,7 @@ h1.title{font-size:15px;top:0}
     --bodybg:#002;
     --border_hard:1px solid #369;
     --border_inner:1px solid var(--accent);
+    --border_inner_soft:1px solid #1f389c88;
     --box:#fff1;
     --hr:var(--accent);
     --hover:#826;
