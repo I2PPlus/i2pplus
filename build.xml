@@ -72,8 +72,10 @@
     <echo message=" installer-osx                                Build OS X GUI installer &#10140; dist/i2pinstall&#8230;osx.tar.bz2"/>
     <echo message=" installer-windows / installer5-windows       Build Windows GUI installer (IzPack4 / IzPack5) &#10140; dist/i2pinstall&#8230;windows.exe"/>
     <echo message=" javadoc                                      Create javadocs for project &#10140; dist/javadoc"/>
+    <echo message=" javadoc_nostylesheet                         Create javadocs for project without custom stylesheet &#10140; dist/javadoc"/>
     <echo message=" javadoc-test                                 Javadocs for unit test classes &#10140; ./build/javadoc-test"/>
     <echo message=" javadoc-zip                                  Create javadocs zip for project &#10140; dist/javadoc.zip"/>
+    <echo message=" javadoc-zip_nostylesheet                     Create javadocs zip without custom stylesheet for project &#10140; dist/javadoc.zip"/>
     <echo message=" jsdoc                                        Create jsdoc for project (requires jsdoc-toolkit) &#10140; dist/jsdoc"/>
     <echo message=" pkg                                          Run &apos;distclean&apos; then package everything up (updater, installer)"/>
     <echo message=" pkg-portable-win32                           Build a minimal, portable install for Win32 &#10140; ./portable-win32.zip"/>
@@ -1019,7 +1021,114 @@
     <echo message="javadoc creation complete, saved to dist/javadoc"/>
   </target>
 
+  <target name="javadoc_nostylesheet" depends="getReleaseNumber, getBuildNumber, distclean">
+    <echo message="JDK: ${java.vendor} ${java.version} (${java.runtime.name} ${java.runtime.version})"/>
+    <ant dir="apps/jetty" target="ensureJettylib"/>
+    <mkdir dir="./build"/>
+    <mkdir dir="./build/javadoc"/>
+    <copy file="./installer/resources/eepsite/docroot/favicon.ico" tofile="./build/javadoc/favicon.ico"/>
+    <!-- set if unset -->
+    <property name="javac.version" value="1.8"/>
+    <javadoc access="package"
+      source="${javac.version}"
+      destdir="./build/javadoc"
+      packagenames="*"
+      use="true"
+      splitindex="true"
+      failonerror="false"
+      charset="utf-8"
+      additionalparam="-notimestamp -quiet"
+      doctitle="I2P+ Javadocs [${release.number}-${i2p.build.number}${build.extra}]"
+      windowtitle="Javadocs [I2P+ ${release.number}+] - API Version ${api.version}+">
+      <group title="Core SDK (i2p.jar)" packages="net.i2p:net.i2p.*:net.i2p.client:net.i2p.client.*:net.i2p.internal:net.i2p.internal.*:freenet.support.CPUInformation:gnu.crypto.*:gnu.getopt:gnu.gettext:com.nettgryppa.security:net.i2p.apache.http.conn.ssl:net.i2p.apache.http.conn.util:net.i2p.apache.http.util:org.json.simple:com.southernstorm.noise.crypto.x25519:com.southernstorm.noise.crypto.chacha20:org.minidns:org.minidns.*"/>
+      <group title="Streaming Library" packages="net.i2p.client.streaming:net.i2p.client.streaming.impl"/>
+      <group title="Router" packages="net.i2p.router:net.i2p.router.*:net.i2p.data.i2np:net.i2p.data.router:org.cybergarage:org.cybergarage.*:org.freenetproject:org.xlattice.crypto.filters:com.maxmind.*:com.southernstorm.noise.*"/>
+      <group title="Router Console" packages="net.i2p.router.web:net.i2p.router.web.*:net.i2p.router.update:edu.internet2.ndt:net.i2p.router.news:com.vuze.*"/>
+      <!-- apps and bridges starting here, alphabetical please -->
+      <group title="Addressbook Application" packages="net.i2p.addressbook:net.i2p.router.naming:net.metanotion:net.metanotion.*"/>
+      <group title="Desktopgui Application" packages="net.i2p.desktopgui:net.i2p.desktopgui.*"/>
+      <group title="I2PControl Application" packages="net.i2p.i2pcontrol:net.i2p.i2pcontrol.*:org.mindrot.jbcrypt:com.thetransactioncompany.jsonrpc2:com.thetransactioncompany.jsonrpc2.*"/>
+      <group title="I2PSnark Application" packages="org.klomp.snark:org.klomp.snark.*"/>
+      <group title="I2PTunnel Application" packages="net.i2p.i2ptunnel:net.i2p.i2ptunnel.*"/>
+      <group title="Imagegen Application" packages="com.docuverse.identicon:com.google.zxing:com.google.zxing.*:net.i2p.imagegen"/>
+      <group title="Installer Utilities" packages="net.i2p.installer"/>
+      <group title="Jetty Utilities" packages="net.i2p.jetty:net.i2p.servlet:net.i2p.servlet.*"/>
+      <group title="RRD4J Library (jrobin.jar)" packages="org.rrd4j:org.rrd4j.*:com.tomgibara.crinch.hashing:eu.bengreen.data.utility:org.jfree:org.jfree.*"/>
+      <group title="SAM Bridge" packages="net.i2p.sam"/>
+      <group title="SAM Demos" packages="net.i2p.sam.client"/>
+      <group title="SusiDNS Application" packages="i2p.susi.dns:net.i2p.addressbook.servlet"/>
+      <group title="SusiMail Application" packages="i2p.susi.webmail:i2p.susi.webmail.*:i2p.susi.debug:i2p.susi.util"/>
+      <group title="Systray Application" packages="net.i2p.apps.systray"/>
+      <sourcepath>
+        <pathelement location="core/java/src"/>
+        <pathelement location="router/java/src"/>
+        <pathelement location="apps/ministreaming/java/src"/>
+        <pathelement location="apps/streaming/java/src"/>
+        <pathelement location="apps/i2ptunnel/java/src"/>
+        <pathelement location="apps/systray/java/src"/>
+        <pathelement location="apps/desktopgui/src"/>
+        <pathelement location="apps/routerconsole/java/src"/>
+        <pathelement location="apps/addressbook/java/src"/>
+        <pathelement location="apps/i2psnark/java/src"/>
+        <pathelement location="apps/sam/java/src"/>
+        <pathelement location="apps/susidns/src/java/src"/>
+        <pathelement location="apps/susimail/src/src"/>
+        <pathelement location="apps/jetty/java/src"/>
+        <pathelement location="apps/imagegen/imagegen/webapp/src/main/java"/>
+        <pathelement location="apps/imagegen/identicon/core/src/main/java"/>
+        <pathelement location="apps/imagegen/zxing/core/src/main/java"/>
+        <pathelement location="apps/imagegen/zxing/javase/src/main/java"/>
+        <pathelement location="apps/jrobin/java/src"/>
+        <pathelement location="installer/java/src"/>
+        <pathelement location="apps/i2pcontrol/java"/>
+      </sourcepath>
+      <classpath>
+        <!-- warning, some entries are needed for Debian builds only -->
+        <pathelement location="apps/jetty/jettylib/org.mortbay.jetty.jar"/>
+        <pathelement location="apps/jetty/jettylib/jasper-runtime.jar"/>
+        <pathelement location="apps/jetty/jettylib/javax.servlet.jar"/>
+        <pathelement location="apps/jetty/jettylib/jetty-deploy.jar"/>
+        <pathelement location="apps/jetty/jettylib/jetty-http.jar"/>
+        <pathelement location="apps/jetty/jettylib/jetty-security.jar"/>
+        <pathelement location="apps/jetty/jettylib/jetty-servlet.jar"/>
+        <pathelement location="apps/jetty/jettylib/jetty-servlets.jar"/>
+        <pathelement location="apps/jetty/jettylib/jetty-start.jar"/>
+        <pathelement location="apps/jetty/jettylib/jetty-util.jar"/>
+        <pathelement location="apps/jetty/jettylib/jetty-webapp.jar"/>
+        <pathelement location="apps/jetty/jettylib/jetty-xml.jar"/>
+        <pathelement location="apps/jetty/jettylib/tomcat-api.jar"/>
+        <pathelement location="installer/lib/wrapper/all/wrapper.jar"/>
+        <!-- following are only for debian builds -->
+        <pathelement location="core/java/build/libintl.jar"/>
+        <pathelement location="core/java/build/gnu-getopt.jar"/>
+        <pathelement location="core/java/build/json-simple.jar"/>
+      </classpath>
+      <!--
+         These variables are stored in build.properties.
+         End-users can override by creating the file override.properties
+      -->
+      <link offline="true" href="${javasedocs.url}" packagelistLoc="installer/resources/package-lists/java/"/>
+      <link offline="true" href="${javaeedocs.url}" packagelistLoc="installer/resources/package-lists/javaee/"/>
+      <link offline="true" href="${jettydocs.url}" packagelistLoc="installer/resources/package-lists/jetty/"/>
+      <link offline="true" href="${wrapperdocs.url}" packagelistLoc="installer/resources/package-lists/wrapper/"/>
+    </javadoc>
+    <!-- create an empty dejavu.css file to keep the browser happy -->
+    <mkdir dir="./build/javadoc/resources/fonts"/>
+    <echo message="/* intentionally empty */" file="build/javadoc/resources/fonts/dejavu.css"/>
+    <move todir="./dist/javadoc">
+      <fileset dir="./build/javadoc">
+        <include name="**/*"/>
+      </fileset>
+    </move>
+    <delete dir="./build/javadoc"/>
+    <echo message="javadoc creation complete, saved to dist/javadoc"/>
+  </target>
+
   <target name="javadoc-zip" depends="javadoc">
+    <zip destfile="dist/javadoc.zip" basedir="." level="9" includes="dist/javadoc\**"/>
+  </target>
+
+  <target name="javadoc-zip_nostylesheet" depends="javadoc_nostylesheet">
     <zip destfile="dist/javadoc.zip" basedir="." level="9" includes="dist/javadoc\**"/>
   </target>
 
@@ -2570,13 +2679,13 @@
   <!-- standalone i2psnark zip -->
   <target name="i2psnark" depends="buildStreaming, buildJetty, buildSystray, jbigi">
     <ant dir="apps/i2psnark/java" target="standalone"/>
-    <copy file="apps/i2psnark/java/i2psnark-standalone.zip" todir="."/>
+    <copy file="apps/i2psnark/java/i2psnark-standalone.zip" todir="./dist"/>
   </target>
 
   <!-- standalone i2psnark 7z archive -->
   <target name="i2psnark7zip" depends="buildStreaming, buildJetty, buildSystray, jbigi">
     <ant dir="apps/i2psnark/java" target="standalone"/>
-    <copy file="apps/i2psnark/java/i2psnark-standalone.7z" todir="."/>
+    <copy file="apps/i2psnark/java/i2psnark-standalone.7z" todir="./dist"/>
   </target>
 
   <target name="slackpkg">
@@ -3099,7 +3208,7 @@
       <arg value="clean"/>
     </exec>
     <delete dir=".pc"/>
-    <move todir=".">
+    <move todir=".dist">
       <fileset dir=".." includes="libjbigi*${release.number}*.deb i2p*${release.number}*.deb"/>
     </move>
     <echo message="&#8199;"/>
