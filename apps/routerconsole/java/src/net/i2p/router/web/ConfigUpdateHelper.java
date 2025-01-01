@@ -17,47 +17,35 @@ public class ConfigUpdateHelper extends HelperBase {
         _dontInstall = NewsHelper.dontInstall(_context);
     }
 
-    public boolean canInstall() {
-        return !_dontInstall;
-    }
+    public boolean canInstall() {return !_dontInstall;}
 
-    public boolean updateAvailable() {
-        return true;
-    }
+    public boolean updateAvailable() {return true;}
 
-    public String getNewsURL() {
-        return getNewsURL(_context);
-    }
+    public String getNewsURL() {return getNewsURL(_context);}
 
-    /** hack to replace the old news location with the new one, even if they have saved
+    /** Hack to replace the old news location with the new one, even if they have saved
         the update page at some point */
     public static String getNewsURL(I2PAppContext ctx) {
         String url = ctx.getProperty(ConfigUpdateHandler.PROP_NEWS_URL);
         if (url != null && !url.equals(ConfigUpdateHandler.OLD_DEFAULT_NEWS_URL) &&
             !url.equals(ConfigUpdateHandler.DEFAULT_NEWS_URL) &&
-            !url.equals(ConfigUpdateHandler.OLD_DEFAULT_NEWS_URL_SU3))
-            return url;
-        else
-            return ConfigUpdateHandler.DEFAULT_NEWS_URL_SU3;
+            !url.equals(ConfigUpdateHandler.OLD_DEFAULT_NEWS_URL_SU3)) {return url;}
+        else {return ConfigUpdateHandler.DEFAULT_NEWS_URL_SU3;}
     }
 
     public String getUpdateURL() {
         String url = _context.getProperty(ConfigUpdateHandler.PROP_UPDATE_URL);
-        if (url != null)
-            return url.replace(",", "\n");
-        else
-            return ConfigUpdateHandler.DEFAULT_UPDATE_URL;
+        if (url != null) {return url.replace(",", "\n");}
+        else {return ConfigUpdateHandler.DEFAULT_UPDATE_URL;}
     }
 
     public String getProxyHost() {
-        if (isInternal())
-            return _t("internal") + "\" readonly=\"readonly";
+        if (isInternal()) {return _t("internal") + "\" readonly=\"readonly";}
         return _context.getProperty(ConfigUpdateHandler.PROP_PROXY_HOST, ConfigUpdateHandler.DEFAULT_PROXY_HOST);
     }
 
     public String getProxyPort() {
-        if (isInternal())
-            return _t("internal") + "\" readonly=\"readonly";
+        if (isInternal()) {return _t("internal") + "\" readonly=\"readonly";}
         return Integer.toString(ConfigUpdateHandler.proxyPort(_context));
     }
 
@@ -75,18 +63,20 @@ public class ConfigUpdateHelper extends HelperBase {
     }
 
     public String getUpdateThroughProxy() {
-        if (_context.getProperty(ConfigUpdateHandler.PROP_SHOULD_PROXY, ConfigUpdateHandler.DEFAULT_SHOULD_PROXY))
+        if (_context.getProperty(ConfigUpdateHandler.PROP_SHOULD_PROXY, ConfigUpdateHandler.DEFAULT_SHOULD_PROXY)) {
             return "<input type=checkbox class=\"optbox slider\" value=true name=\"updateThroughProxy\" id=updateThroughProxy checked=checked >";
-        else
+        } else {
             return "<input type=checkbox class=\"optbox slider\" value=true name=\"updateThroughProxy\" id=updateThroughProxy >";
+        }
     }
 
     /** @since 0.9.9 */
     public String getNewsThroughProxy() {
-        if (_context.getProperty(ConfigUpdateHandler.PROP_SHOULD_PROXY_NEWS, ConfigUpdateHandler.DEFAULT_SHOULD_PROXY_NEWS))
+        if (_context.getProperty(ConfigUpdateHandler.PROP_SHOULD_PROXY_NEWS, ConfigUpdateHandler.DEFAULT_SHOULD_PROXY_NEWS)) {
             return "<input type=checkbox class=\"optbox slider\" value=true name=\"newsThroughProxy\" id=newsThroughProxy checked=checked >";
-        else
+        } else {
             return "<input type=checkbox class=\"optbox slider\" value=true name=\"newsThroughProxy\" id=newsThroughProxy >";
+        }
     }
 
     public String getUpdateUnsigned() {
@@ -100,10 +90,9 @@ public class ConfigUpdateHelper extends HelperBase {
                getChecked(ConfigUpdateHandler.PROP_UPDATE_DEV_SU3) + '>';
     }
 
-    private static final long PERIODS[] = new long[] { 8*60*60*1000l, 12*60*60*1000l, 24*60*60*1000l,
-                                                       36*60*60*1000l, 48*60*60*1000l,
-                                                       3*24*60*60*1000l, 7*24*60*60*1000l,
-                                                       -1l };
+    private static final long PERIODS[] = new long[] { 4*60*60*1000l, 8*60*60*1000l, 12*60*60*1000l,
+                                                       24*60*60*1000l, 36*60*60*1000l, 48*60*60*1000l,
+                                                       3*24*60*60*1000l, 7*24*60*60*1000l, -1l };
 
     public String getRefreshFrequencySelectBox() {
         String freq = _context.getProperty(ConfigUpdateHandler.PROP_REFRESH_FREQUENCY,
@@ -111,21 +100,17 @@ public class ConfigUpdateHelper extends HelperBase {
         long ms = ConfigUpdateHandler.DEFAULT_REFRESH_FREQ;
         try {
             ms = Long.parseLong(freq);
-            if (ms <= 0)
-                ms = -1;
+            if (ms <= 0) {ms = -1;}
         } catch (NumberFormatException nfe) {}
 
         StringBuilder buf = new StringBuilder(256);
         buf.append("<select name=\"refreshFrequency\">\n");
         for (int i = 0; i < PERIODS.length; i++) {
             buf.append("<option value=\"").append(PERIODS[i]).append("\"");
-            if (PERIODS[i] == ms)
-                buf.append(SELECTED);
+            if (PERIODS[i] == ms) {buf.append(SELECTED);}
             buf.append(">");
-            if (PERIODS[i] == -1)
-                buf.append(_t("Never"));
-            else
-                buf.append(_t("Every")).append(' ').append(DataHelper.formatDuration2(PERIODS[i]));
+            if (PERIODS[i] == -1) {buf.append(_t("Never"));}
+            else {buf.append(_t("Every")).append(' ').append(DataHelper.formatDuration2(PERIODS[i]));}
             buf.append("</option>\n");
         }
         buf.append("</select>\n");
@@ -139,26 +124,22 @@ public class ConfigUpdateHelper extends HelperBase {
         String policy = _context.getProperty(ConfigUpdateHandler.PROP_UPDATE_POLICY, ConfigUpdateHandler.DEFAULT_UPDATE_POLICY);
 
         StringBuilder buf = new StringBuilder(256);
+
         buf.append("<select name=\"updatePolicy\">");
 
         buf.append("<option value=\"notify\"");
-        if ("notify".equals(policy) || _dontInstall)
-            buf.append(SELECTED);
+        if ("notify".equals(policy) || _dontInstall) {buf.append(SELECTED);}
         buf.append('>').append(_t("Notify only")).append("</option>");
 
         buf.append("<option value=\"download\"");
-        if (_dontInstall)
-            buf.append(" disabled=disabled");
-        else if ("download".equals(policy))
-            buf.append(SELECTED);
+        if (_dontInstall) {buf.append(" disabled=disabled");}
+        else if ("download".equals(policy)) {buf.append(SELECTED);}
         buf.append('>').append(_t("Download and verify only")).append("</option>");
 
         if (_context.hasWrapper()) {
             buf.append("<option value=\"install\"");
-            if (_dontInstall)
-                buf.append(" disabled=disabled");
-            else if ("install".equals(policy))
-                buf.append(SELECTED);
+            if (_dontInstall) {buf.append(" disabled=disabled");}
+            else if ("install".equals(policy)) {buf.append(SELECTED);}
             buf.append('>').append(_t("Download, verify, and restart")).append("</option>");
         }
 
@@ -166,9 +147,7 @@ public class ConfigUpdateHelper extends HelperBase {
         return buf.toString();
     }
 
-    public String getTrustedKeys() {
-        return new TrustedUpdate(_context).getTrustedKeysString();
-    }
+    public String getTrustedKeys() {return new TrustedUpdate(_context).getTrustedKeysString();}
 
     public String getZipURL() {
         return _context.getProperty(ConfigUpdateHandler.PROP_ZIP_URL, "http://skank.i2p/i2pupdate.zip");
@@ -179,7 +158,6 @@ public class ConfigUpdateHelper extends HelperBase {
         return _context.getProperty(ConfigUpdateHandler.PROP_DEV_SU3_URL, "");
     }
 
-    public String getNewsStatus() {
-        return NewsHelper.status(_context);
-    }
+    public String getNewsStatus() {return NewsHelper.status(_context);}
+
 }

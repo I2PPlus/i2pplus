@@ -833,12 +833,11 @@ class SidebarRenderer {
         StringBuilder buf = new StringBuilder(512);
         if (_helper == null || updateStatus.isEmpty()) {return "";}
         else {
-            buf.append("<div id=sb_updatesection class=collapse>")
+            buf.append("<div id=sb_updatesection class=\"collapse volatile\">")
                .append("<h3><a href=\"/configupdate\" target=_top title=\"")
-               .append(_t("Configure I2P Updates")).append("\">").append(_t("Update Status"))
-               .append("</a><input type=checkbox id=toggle_sb_updatesection class=\"toggleSection script\" checked hidden></h3><hr class=b>")
-               .append(updateStatus)
-               .append("</div>\n");
+               .append(_t("Configure I2P Updates")).append("\">").append(_t("Update Status")).append("</a>")
+               .append("<input type=checkbox id=toggle_sb_updatesection class=\"toggleSection script\" checked hidden>")
+               .append("</h3><hr class=b>").append(updateStatus).append("</div>\n");
         }
         return buf.toString();
     }
@@ -859,10 +858,12 @@ class SidebarRenderer {
            .append("</a><input type=checkbox id=toggle_sb_peers class=\"toggleSection script\" checked hidden></h3><hr class=b>")
            .append("<table id=sb_peers>\n")
            .append("<tr title=\"");
-        if (isAdvanced())
-            buf.append(_t("Peers we've been talking to in the last few minutes/last hour").replace("last few minutes/last hour", "last minute / last hour"));
-        else {
-            buf.append(_t("Peers we've been talking to in the last few minutes/last hour").replace("last few minutes/last hour", "last minute"));
+        if (isAdvanced()) {
+            buf.append(_t("Peers we've been talking to in the last few minutes/last hour")
+               .replace("last few minutes/last hour", "last minute / last hour"));
+        } else {
+            buf.append(_t("Peers we've been talking to in the last few minutes/last hour")
+               .replace("last few minutes/last hour", "last minute"));
         }
         buf.append("\">")
            .append("<td><a href=\"/peers\"><b>")
@@ -934,41 +935,35 @@ class SidebarRenderer {
 
         if (_context.router().getUptime() > 6*60*1000) {
             buf.append("<tr><td><b>")
-           .append(DataHelper.formatDuration2(5 * 60 * 1000).replace("5&nbsp;min", _t("5 Min Average")))
-           .append("</b></td><td class=digits><span class=volatile>")
-           .append(_helper.getFiveMinuteKBps())
-           .append("Bps</span></td></tr>\n");
+               .append(DataHelper.formatDuration2(5 * 60 * 1000).replace("5&nbsp;min", _t("5 Min Average")))
+               .append("</b></td><td class=digits><span class=volatile>")
+               .append(_helper.getFiveMinuteKBps())
+               .append("Bps</span></td></tr>\n");
         } else {
             buf.append("<tr hidden><td><b>")
-           .append(DataHelper.formatDuration2(5 * 60 * 1000).replace("5&nbsp;min", _t("5 Min Average")))
-           .append("</b></td><td class=digits><span class=volatile>---")
-           .append("Bps</span></td></tr>\n");
+               .append(DataHelper.formatDuration2(5 * 60 * 1000).replace("5&nbsp;min", _t("5 Min Average")))
+               .append("</b></td><td class=digits><span class=volatile>---")
+               .append("Bps</span></td></tr>\n");
         }
 
         if (_context.router().getUptime() > 2*60*1000) {
             buf.append("<tr><td><b>")
-           .append(_t("Total").replace("Total", _t("Lifetime")))
-           .append("</b></td><td class=digits><span class=volatile>")
-           .append(_helper.getLifetimeKBps())
-           .append("Bps</span></td></tr>\n");
+               .append(_t("Total").replace("Total", _t("Lifetime")))
+               .append("</b></td><td class=digits><span class=volatile>")
+               .append(_helper.getLifetimeKBps())
+               .append("Bps</span></td></tr>\n");
         } else {
             buf.append("<tr hidden><td><b>")
-           .append(_t("Total").replace("Total", _t("Lifetime")))
-           .append("</b></td><td class=digits><span class=volatile>---")
-           .append("Bps</span></td></tr>\n");
+               .append(_t("Total").replace("Total", _t("Lifetime")))
+               .append("</b></td><td class=digits><span class=volatile>---")
+               .append("Bps</span></td></tr>\n");
         }
 
         buf.append("<tr><td><b>")
            .append(_t("Used").replace("Used", "Transferred"))
            .append("</b></td><td class=digits><span class=volatile>")
-           .append(_helper.getInboundTransferred().replace("KiB", "K").replace("MiB", "M").replace("GiB", "G")
-                                                  .replace("TiB", "T").replace("PiB", "P").replace("EiB", "E")
-                                                  .replace("ZiB", "Z").replace("YiB", "Y"))
-           .append(SidebarHelper.THINSP)
-           .append(_helper.getOutboundTransferred().replace("KiB", "K").replace("MiB", "M").replace("GiB", "G")
-                                                    .replace("TiB", "T").replace("PiB", "P").replace("EiB", "E")
-                                                    .replace("ZiB", "Z").replace("YiB", "Y"))
-           .append("</span></td></tr>\n")
+           .append(_helper.getInboundTransferred().replace("iB", "")).append(" / ")
+           .append(_helper.getOutboundTransferred().replace("iB", "")).append("</span>")
            .append("</table>\n");
         return buf.toString();
     }
