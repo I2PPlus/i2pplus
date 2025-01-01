@@ -27,7 +27,8 @@ build/**/*
 pkg-temp/**/*
 !pkg-temp/README.md
 classes/
-dist/
+dist/**/*
+!dist/README.md
 /installer/resources/locale/mo
 /tmp
 /apps/jetty/jettylib

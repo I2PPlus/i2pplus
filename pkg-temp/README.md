@@ -7,6 +7,7 @@ lines to your `/etc/fstab` file after running `ant distclean`:
 
 
 `tmpfs {path/to/i2pplus/build}         tmpfs defaults,mode=1777   0  0`\
+`tmpfs {path/to/i2pplus/dist}          tmpfs defaults,mode=1777   0  0`\
 `tmpfs {path/to/i2pplus/pkg-temp}      tmpfs defaults,mode=1777   0  0`
 
 You can now mount them without a restart with: `sudo mount -a`

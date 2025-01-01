@@ -1,7 +1,7 @@
 <launch4jConfig>
   <headerType>0</headerType>
-  <jar>../install.jar</jar>
-  <outfile>../i2pinstall.exe</outfile>
+  <jar>../dist/install.jar</jar>
+  <outfile>../dist/i2pinstall.exe</outfile>
   <errTitle>I2P+ Installer</errTitle>
   <chdir>.</chdir>
   <customProcName>false</customProcName>

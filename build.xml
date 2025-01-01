@@ -44,7 +44,7 @@
     <echo message=" buildJrobin                                  Build the JRobin (RRD4J) .jar component &#10140; ./build/jrobin.jar"/>
     <echo message=" buildMinistreaming                           Build MiniStreaming .jar component &#10140; ./build/mstreaming.jar"/>
     <echo message=" buildPack200                                 Build Pack200 .jar component &#10140; ./build/pack200.jar"/>
-    <echo message=" buildProperties                              Echo build properties for current build"/>
+    <echo message=" buildProperties                              Display build properties  and Ant / JDK versions for current build"/>
     <echo message=" buildRouter                                  Build Router .jar component &#10140; ./build/router.jar"/>
     <echo message=" buildRouterConsole                           Build required .jar components for RouterConsole &#10140; ./build/"/>
     <echo message=" buildSAM                                     Build SAM .jar component &#10140; ./build/sam.jar"/>
@@ -63,30 +63,30 @@
     <echo message=" dist200                                      Run &apos;pkg&apos;, &apos;updater200&apos; and &apos;javadoc&apos;"/>
     <echo message=" distclean                                    Clean up all derived and temporary files in workspace"/>
     <echo message=" distcleanWebapps                             Clean up all webapp-related derived and temporary files in workspace"/>
-    <echo message=" i2psnark                                     Build standalone I2PSnark install &#10140; ./i2psnark-standalone.zip"/>
-    <echo message=" i2psnark7zip                                 Build standalone I2PSnark 7zip install &#10140; ./i2psnark-standalone.7z"/>
-    <echo message=" installer / installer5                       Build GUI installer (IzPack4 / IzPack5) &#10140; ./i2pinstall.exe"/>
-    <echo message=" installer-freebsd                            Build FreeBSD GUI installer &#10140; ./i2pinstall&#8230;freebsd-only.jar"/>
+    <echo message=" i2psnark                                     Build standalone I2PSnark install &#10140; dist/i2psnark-standalone.zip"/>
+    <echo message=" i2psnark7zip                                 Build standalone I2PSnark 7zip install &#10140; dist/i2psnark-standalone.7z"/>
+    <echo message=" installer / installer5                       Build GUI installer (IzPack4 / IzPack5) &#10140; dist/i2pinstall.exe"/>
+    <echo message=" installer-freebsd                            Build FreeBSD GUI installer &#10140; dist/i2pinstall&#8230;freebsd-only.jar"/>
     <echo message=" installer-linux / installer5-linux           Build Linux GUI installer (IzPack4 / Izpack5) &#10140; i2pinstall&#8230;linux-only.jar"/>
     <echo message=" installer-nowindows / installer5-nowindows   Build GUI installer without Windows support (IzPack4 / IzPack5) &#10140; i2pinstall&#8230;.jar"/>
-    <echo message=" installer-osx                                Build OS X GUI installer &#10140; ./i2pinstall&#8230;osx.tar.bz2"/>
-    <echo message=" installer-windows / installer5-windows       Build Windows GUI installer (IzPack4 / IzPack5) &#10140; ./i2pinstall&#8230;windows.exe"/>
-    <echo message=" javadoc                                      Create javadocs for project &#10140; ./build/javadoc"/>
+    <echo message=" installer-osx                                Build OS X GUI installer &#10140; dist/i2pinstall&#8230;osx.tar.bz2"/>
+    <echo message=" installer-windows / installer5-windows       Build Windows GUI installer (IzPack4 / IzPack5) &#10140; dist/i2pinstall&#8230;windows.exe"/>
+    <echo message=" javadoc                                      Create javadocs for project &#10140; dist/javadoc"/>
     <echo message=" javadoc-test                                 Javadocs for unit test classes &#10140; ./build/javadoc-test"/>
-    <echo message=" javadoc-zip                                  Create javadocs zip for project &#10140; ./javadoc.zip"/>
-    <echo message=" jsdoc                                        Create jsdoc for project (requires jsdoc-toolkit) &#10140; ./build/jsdoc/"/>
+    <echo message=" javadoc-zip                                  Create javadocs zip for project &#10140; dist/javadoc.zip"/>
+    <echo message=" jsdoc                                        Create jsdoc for project (requires jsdoc-toolkit) &#10140; dist/jsdoc"/>
     <echo message=" pkg                                          Run &apos;distclean&apos; then package everything up (updater, installer)"/>
     <echo message=" pkg-portable-win32                           Build a minimal, portable install for Win32 &#10140; ./portable-win32.zip"/>
     <echo message=" poupdate-source                              Update the .po files for translators (requires jsp files to be compiled first)"/>
-    <echo message=" signed-updater                               Signed Updater &#10140; ./i2pupdate.su3 (Java14+ compatible)"/>
-    <echo message=" signed-updater200                            Signed Updater (pack200) &#10140; ./i2pupdate.su3"/>
-    <echo message=" signed-updater200WithJavadoc                 Signed Updater (pack200) + javadocs &#10140; ./i2pupdate.su3"/>
-    <echo message=" signed-updater200WithJavadocAndJetty         Signed Updater (pack200) + javadocs + Jetty &#10140; ./i2pupdate.su3"/>
+    <echo message=" signed-updater                               Signed Updater &#10140; dist/i2pupdate.su3 (Java14+ compatible)"/>
+    <echo message=" signed-updater200                            Signed Updater (pack200) &#10140; dist/i2pupdate.su3"/>
+    <echo message=" signed-updater200WithJavadoc                 Signed Updater (pack200) + javadocs &#10140; dist/i2pupdate.su3"/>
+    <echo message=" signed-updater200WithJavadocAndJetty         Signed Updater (pack200) + javadocs + Jetty &#10140; dist/i2pupdate.su3"/>
     <echo message=" signed-updater200withJetty                   Signed Updater (pack200) + Jetty"/>
     <echo message=" slackpkg                                     Build Slackware package in ./Slackware/i2p"/>
-    <echo message=" tarball                                      Create tar archive for clean install &#10140; ./i2p.tar.bz2"/>
-    <echo message=" updater                                      Build updater for existing installs &#10140; ./i2pupdate.zip"/>
-    <echo message=" updater200                                   Updater (pack200 - requires Java &lt; v14 or pre-existing lib/pack200.jar) &#10140; ./i2pupdate200.zip"/>
+    <echo message=" tarball                                      Create tar archive for clean install &#10140; dist/i2p.tar.bz2"/>
+    <echo message=" updater                                      Build updater for existing installs &#10140; dist/i2pupdate.zip"/>
+    <echo message=" updater200                                   Updater (pack200 - requires Java &lt; v14 or pre-existing lib/pack200.jar) &#10140; dist/i2pupdate200.zip"/>
     <echo message=" updater200Compact                            Updater (pack200) w/o SAM, DesktopGUI, systray, country/continent lists, docs/proxy, docs/readme"/>
     <echo message=" updater200CompactWithDocs                    Compact updater (pack200) with readme and proxy docs"/>
     <echo message=" updater200CompactWithGeoIP                   Compact updater (pack200) with GeoIP database"/>
@@ -114,10 +114,14 @@
     <echo message=" updaterWithJettyFixesAndGeoIP                Updater + local Jetty patches + GeoIP files"/>
     <echo message=" updaterWithJettyFixesAndJbigi                Updater + local Jetty patches + jBigi library"/>
     <echo message=" updateTorBlocklist                           Update Tor blocklist &#10140; installer/resources/blocklist_tor.txt"/>
-    <echo message=" zip-freebsd                                  Installation zip for FreeBSD without installer &#10140; ./i2p-freebsd.zip"/>
-    <echo message=" zip-linux                                    Installation zip for Linux without installer &#10140; ./i2p-linux.zip"/>
-    <echo message=" zip-macos                                    Installation zip for macOS without installer &#10140; ./i2p-macos.zip"/>
-    <echo message=" zip-windows                                  Installation zip for Windows without installer &#10140; ./i2p-windows.zip"/>
+    <echo message=" 7zip-freebsd                                 Installation 7zip for FreeBSD without installer &#10140; dist/i2p-freebsd.7z"/>
+    <echo message=" 7zip-linux                                   Installation 7zip for Linux without installer &#10140; dist/i2p-linux.7z"/>
+    <echo message=" 7zip-macos                                   Installation 7zip for macOS without installer &#10140; dist/i2p-macos.7z"/>
+    <echo message=" 7zip-windows                                 Installation 7zip for Windows without installer &#10140; dist/i2p-windows.7z"/>
+    <echo message=" zip-freebsd                                  Installation zip for FreeBSD without installer &#10140; dist/i2p-freebsd.zip"/>
+    <echo message=" zip-linux                                    Installation zip for Linux without installer &#10140; dist/i2p-linux.zip"/>
+    <echo message=" zip-macos                                    Installation zip for macOS without installer &#10140; dist/i2p-macos.zip"/>
+    <echo message=" zip-windows                                  Installation zip for Windows without installer &#10140; dist/i2p-windows.zip"/>
     <!-- <echo message=" translationReport                            Generate in-console translation status report"/> -->
     <!-- <echo message="  debianrepo                                   Build a Debian repository (reprepro required)"/> -->
     <!-- <echo message="  syndie                                       Generate a standalone syndie install"/> -->
@@ -508,7 +512,7 @@
     <property name="full.version" value="${release.number}-${i2p.build.number}${build.extra}"/>
     <echo message="Ant: ${ant.version}"/>
     <echo message="JDK: ${java.vendor} ${java.version} (${java.runtime.name} ${java.runtime.version})"/>
-    <echo message="Building I2P+ version ${full.version} (revision ${workspace.version}) ..."/>
+    <echo message="Build: I2P+ version ${full.version} (revision ${workspace.version})"/>
   </target>
 
   <target name="setBuildTimestamp" unless="${build.reproducible}">
@@ -1006,10 +1010,17 @@
     <!-- create an empty dejavu.css file to keep the browser happy -->
     <mkdir dir="./build/javadoc/resources/fonts"/>
     <echo message="/* intentionally empty */" file="build/javadoc/resources/fonts/dejavu.css"/>
+    <move todir="./dist/javadoc">
+      <fileset dir="./build/javadoc">
+        <include name="**/*"/>
+      </fileset>
+    </move>
+    <delete dir="./build/javadoc"/>
+    <echo message="javadoc creation complete, saved to dist/javadoc"/>
   </target>
 
   <target name="javadoc-zip" depends="javadoc">
-    <zip destfile="javadoc.zip" basedir="build" level="9" includes="javadoc\**"/>
+    <zip destfile="dist/javadoc.zip" basedir="." level="9" includes="dist/javadoc\**"/>
   </target>
 
   <target name="javadoc-test" depends="buildRouter, javadoc">
@@ -1044,7 +1055,7 @@
         -->
       <link offline="true" href="${javasedocs.url}" packagelistLoc="installer/resources/package-lists/java/"/>
       <link offline="true" href="${junitdocs.url}" packagelistLoc="installer/resources/package-lists/junit/"/>
-      <link offline="true" href="${i2pdocs.url}" packagelistLoc="build/javadoc/"/>
+      <link offline="true" href="${i2pdocs.url}" packagelistLoc="dist/javadoc/"/>
     </javadoc>
     <echo message="Warning, javadoc embeds timestamps in the output, run with 'TZ=UTC ant javadoc' if you plan to distribute"/>
   </target>
@@ -1052,7 +1063,7 @@
   <!-- sudo apt install jsdoc-toolkit -->
   <target name="jsdoc">
     <exec executable="jsdoc" failonerror="true">
-      <arg value="-d=build/jsdoc"/>
+      <arg value="-d=dist/jsdoc"/>
       <arg value="-P"/>
       <arg value="installer/resources/package.json"/>
       <arg value="-r"/>
@@ -1063,6 +1074,7 @@
       <arg value="apps/susimail/src/js"/>
       <arg value="installer/resources/themes/geomap"/>
     </exec>
+    <echo message="jsdoc written to dist/jsdoc"/>
   </target>
 
   <!-- sets release.number and api.version -->
@@ -1216,17 +1228,20 @@
 
   <target name="clean" depends="pkgclean">
     <parallel>
-      <delete includeEmptyDirs="true" excludes="./build">
+      <delete includeEmptyDirs="true">
+        <fileset dir="./dist" includes="**/*" excludes="README.md"/>
+      </delete>
+      <delete includeEmptyDirs="true">
         <fileset dir="./build" includes="**/*" excludes="README.md"/>
       </delete>
       <delete dir="./reports"/>
       <delete file="installer/lib/izpack/patches.jar" failonerror="false" quiet="true"/>
       <delete dir="installer/lib/izpack5/patches/java/build" quiet="true"/>
       <delete file="syndie-standalone.zip" failonerror="false" quiet="true"/>
-      <delete file="i2psnark-standalone.zip" failonerror="false" quiet="true"/>
+      <delete file="dist/i2psnark-standalone.zip" failonerror="false" quiet="true"/>
       <delete file="core/java/cobertura.ser"/>
       <delete file="javadoc.zip"/>
-      <delete file="i2p.fba"/>
+      <delete file="dist/i2p.fba"/>
       <delete file="${sloccount.report.file}"/>
       <delete file="mavencentral-i2p.jar"/>
       <delete file="mavencentral-router.jar"/>
@@ -1238,9 +1253,10 @@
 
   <target name="distclean" depends="clean">
     <parallel>
-      <delete failonerror="false" quiet="true">
-        <fileset dir="." includes="i2pinstall* *.deb i2p_*.bz2 i2pupdate* i2psource* *.sig *.torrent"/>
-      </delete>
+      <fileset dir="./dist">
+        <include name="**"/>
+        <exclude name="README.md"/>
+      </fileset>
       <ant dir="core/java/" target="distclean"/>
       <ant dir="router/java/" target="distclean"/>
       <ant dir="installer/java" target="distclean"/>
@@ -1322,6 +1338,7 @@
   <target name="pkgclean" depends="deletepkg-temp">
     <delete>
       <fileset dir="." includes="i2p.tar.bz2 install.jar i2pupdate.zip i2pupdate200.zip"/>
+      <fileset dir="./dist" includes="i2p.tar.bz2 install.jar i2pupdate.zip i2pupdate200.zip"/>
     </delete>
   </target>
 
@@ -1556,39 +1573,158 @@
       </copy>
       <copy file="installer/resources/themes/console/light/images/favicon.svg" tofile="pkg-temp/eepsite/docroot/favicon.svg"/>
     </parallel>
-
   </target>
 
   <target name="zip-linux">
-    <delete dir="pkg-temp"/>
+    <delete>
+      <fileset dir="pkg-temp" includes="**/*" excludes="README.md"/>
+    </delete>
     <ant target="preppkg-linux"/>
-    <zip destfile="i2p-linux.zip">
-      <fileset dir="pkg-temp"/>
+    <zip destfile="./dist/i2p-linux.zip" level="9">
+      <fileset dir="pkg-temp" excludes="README.md"/>
     </zip>
   </target>
 
   <target name="zip-windows">
-    <delete dir="pkg-temp"/>
+    <delete>
+      <fileset dir="pkg-temp" includes="**/*" excludes="README.md"/>
+    </delete>
     <ant target="preppkg-windows"/>
-    <zip destfile="i2p-windows.zip">
-      <fileset dir="pkg-temp"/>
+    <zip destfile="./dist/i2p-windows.zip" level="9">
+      <fileset dir="pkg-temp" excludes="README.md"/>
     </zip>
   </target>
 
   <target name="zip-macos">
-    <delete dir="pkg-temp"/>
+    <delete>
+      <fileset dir="pkg-temp" includes="**/*" excludes="README.md"/>
+    </delete>
     <ant target="preppkg-osx"/>
-    <zip destfile="i2p-macos.zip">
-      <fileset dir="pkg-temp"/>
+    <zip destfile="./dist/i2p-macos.zip" level="9">
+      <fileset dir="pkg-temp" excludes="README.md"/>
     </zip>
   </target>
 
   <target name="zip-freebsd">
-    <delete dir="pkg-temp"/>
+    <delete>
+      <fileset dir="pkg-temp" includes="**/*" excludes="README.md"/>
+    </delete>
     <ant target="preppkg-freebsd"/>
-    <zip destfile="i2p-freebsd.zip">
-      <fileset dir="pkg-temp"/>
+    <zip destfile="./dist/i2p-freebsd.zip" level="9">
+      <fileset dir="pkg-temp" excludes="README.md"/>
     </zip>
+  </target>
+
+  <target name="7zip-linux">
+    <delete>
+      <fileset dir="pkg-temp" includes="**/*" excludes="README.md"/>
+    </delete>
+    <delete>
+      <fileset dir="dist" includes="**/i2p-linux.7z" excludes="README.md"/>
+    </delete>
+    <ant target="preppkg-linux"/>
+    <delete>
+      <fileset dir="dist" includes="**/i2p-linux.7z"/>
+    </delete>
+    <ant target="preppkg-windows"/>
+    <mkdir dir="pkg-temp/i2p"/>
+    <move todir="pkg-temp/i2p">
+      <fileset dir="./pkg-temp" includes="**/*" excludes="README.md"/>
+    </move>
+    <exec executable="7z" failifexecutionfails="true" failonerror="true">
+      <arg value="a"/>
+      <arg value="-bt"/>
+      <arg value="-mx=9"/>
+      <arg value="-md=4m"/>
+      <arg value="-mmt2"/>
+      <arg value="-t7z"/>
+      <arg value="-ssw"/>
+      <arg value="-xr!pkg-temp"/>
+      <arg value="-xr!README.md"/>
+      <arg value="./dist/i2p-linux.7z"/>
+      <arg value="./pkg-temp/i2p"/>
+    </exec>
+  </target>
+
+  <target name="7zip-windows">
+    <delete>
+      <fileset dir="pkg-temp" includes="**/*" excludes="README.md"/>
+    </delete>
+    <delete>
+      <fileset dir="dist" includes="**/i2p-windows.7z" excludes="README.md"/>
+    </delete>
+    <ant target="preppkg-windows"/>
+    <mkdir dir="pkg-temp/i2p"/>
+    <move todir="pkg-temp/i2p">
+      <fileset dir="./pkg-temp" includes="**/*" excludes="README.md"/>
+    </move>
+    <exec executable="7z" failifexecutionfails="true" failonerror="true">
+      <arg value="a"/>
+      <arg value="-bt"/>
+      <arg value="-mx=9"/>
+      <arg value="-md=4m"/>
+      <arg value="-mmt2"/>
+      <arg value="-t7z"/>
+      <arg value="-ssw"/>
+      <arg value="-xr!pkg-temp"/>
+      <arg value="-xr!README.md"/>
+      <arg value="./dist/i2p-windows.7z"/>
+      <arg value="./pkg-temp/i2p"/>
+    </exec>
+  </target>
+
+  <target name="7zip-macos">
+    <delete>
+      <fileset dir="pkg-temp" includes="**/*" excludes="README.md"/>
+    </delete>
+    <delete>
+      <fileset dir="dist" includes="**/i2p-macos.7z" excludes="README.md"/>
+    </delete>
+    <ant target="preppkg-osx"/>
+    <mkdir dir="pkg-temp/i2p"/>
+    <move todir="pkg-temp/i2p">
+      <fileset dir="./pkg-temp" includes="**/*" excludes="README.md"/>
+    </move>
+    <exec executable="7z" failifexecutionfails="true" failonerror="true">
+      <arg value="a"/>
+      <arg value="-bt"/>
+      <arg value="-mx=9"/>
+      <arg value="-md=4m"/>
+      <arg value="-mmt2"/>
+      <arg value="-t7z"/>
+      <arg value="-ssw"/>
+      <arg value="-xr!pkg-temp"/>
+      <arg value="-xr!README.md"/>
+      <arg value="./dist/i2p-macos.7z"/>
+      <arg value="./pkg-temp/i2p"/>
+    </exec>
+  </target>
+
+  <target name="7zip-freebsd">
+    <delete>
+      <fileset dir="pkg-temp" includes="**/*" excludes="README.md"/>
+    </delete>
+    <delete>
+      <fileset dir="dist" includes="**/i2p-freebsd.7z" excludes="README.md"/>
+    </delete>
+    <ant target="preppkg-freebsd"/>
+    <mkdir dir="pkg-temp/i2p"/>
+    <move todir="pkg-temp/i2p">
+      <fileset dir="./pkg-temp" includes="**/*" excludes="README.md"/>
+    </move>
+    <exec executable="7z" failifexecutionfails="true" failonerror="true">
+      <arg value="a"/>
+      <arg value="-bt"/>
+      <arg value="-mx=9"/>
+      <arg value="-md=4m"/>
+      <arg value="-mmt2"/>
+      <arg value="-t7z"/>
+      <arg value="-ssw"/>
+      <arg value="-xr!pkg-temp"/>
+      <arg value="-xr!README.md"/>
+      <arg value="./dist/i2p-freebsd.7z"/>
+      <arg value="./pkg-temp/i2p"/>
+    </exec>
   </target>
 
   <target name="copyflags">
@@ -1737,10 +1873,10 @@
   </target>
 
   <target name="i2pseeds" depends="-setepoch, -areRouterInfosEnabled, prepRouterInfos">
-    <delete file="i2pseeds.zip"/>
-    <delete file="i2pseeds.su3"/>
-    <zip destfile="i2pseeds.zip" basedir="pkg-temp/netDb" whenempty="fail"/>
-    <su3sign infile="i2pseeds.zip" sigtype="RESEED" outfile="i2pseeds.su3" su3.ver="${epoch}"/>
+    <delete file="dist/i2pseeds.zip"/>
+    <delete file="dist/i2pseeds.su3"/>
+    <zip destfile="./dist/i2pseeds.zip" basedir="pkg-temp/netDb" whenempty="fail"/>
+    <su3sign infile="dist/i2pseeds.zip" sigtype="RESEED" outfile="dist/i2pseeds.su3" su3.ver="${epoch}"/>
   </target>
 
   <!-- text output -->
@@ -1772,15 +1908,15 @@
   <!-- this is no longer required, izpack 4.3.0 supports headless installs with java -jar i2pinstall.exe -console -->
   <!-- and this is no longer used by the SlackBuild -->
   <target name="tarball" depends="preppkg">
-    <tar compression="bzip2" destfile="i2p.tar.bz2">
-      <tarfileset dir="pkg-temp" includes="**/*" prefix="i2p"/>
+    <tar compression="bzip2" destfile="./dist/i2p.tar.bz2">
+      <tarfileset dir="pkg-temp" includes="**/*" excludes="README.md" prefix="i2p"/>
     </tar>
   </target>
 
   <target name="deletepkg-temp">
-      <delete includeEmptyDirs="true" excludes="./pkg-temp">
-        <fileset dir="./pkg-temp" includes="**/*" excludes="README.md"/>
-      </delete>
+    <delete includeEmptyDirs="true" excludes="./pkg-temp">
+      <fileset dir="./pkg-temp" includes="**/*" excludes="README.md"/>
+    </delete>
     <delete dir="./pkg-mavencentral"/>
   </target>
 
@@ -1811,7 +1947,11 @@
   </target>
 
   <target name="consoleDocs" depends="deletepkg-temp, prepConsoleDocs">
-    <zip destfile="docs.zip" basedir="pkg-temp" whenempty="fail"/>
+    <zip destfile="docs.zip" level="9" basedir="pkg-temp" excludes="README.md" whenempty="fail"/>
+  </target>
+
+  <target name="createThemesZip" depends="deletepkg-temp, prepthemeupdates">
+    <zip destfile="dist/themes.zip" level="9" basedir="pkg-temp" excludes="README.md" whenempty="fail"/>
   </target>
 
   <target name="copyJavadoc" depends="javadoc">
@@ -1866,7 +2006,7 @@
   <target name="updater200WithLicences" depends="prepupdate, preplicenses, pack200, zipit200"/>
 
   <target name="-sign-update" depends="buildrouter">
-    <su3sign infile="i2pupdate200.zip" sigtype="ROUTER" outfile="i2pupdate.su3" su3.ver="${full.version}"/>
+    <su3sign infile="dist/i2pupdate200.zip" sigtype="ROUTER" outfile="dist/i2pupdate.su3" su3.ver="${full.version}"/>
   </target>
 
   <target name="signed-updater" depends="-pre-sign, updater, -sign-update"/>
@@ -1878,18 +2018,18 @@
 
   <!-- just to test the torrent creation macro -->
   <target name="updater-torrent" depends="updater">
-    <copy file="i2pupdate.zip" tofile="i2pupdate-${full.version}.zip"/>
-    <mktorrent file="i2pupdate-${full.version}.zip"/>
+    <copy file="dist/i2pupdate.zip" tofile="dist/i2pupdate-${full.version}.zip"/>
+    <mktorrent file="dist/i2pupdate-${full.version}.zip"/>
   </target>
 
   <target name="zipit" depends="getReleaseNumber">
     <!-- As of release 0.8.8, the router will enforce a zipfile comment equal to the version number
          in the sud/su2 header, since the version in the header is NOT covered by the signature. -->
-    <zip destfile="i2pupdate.zip" basedir="pkg-temp" whenempty="fail" comment="${release.number}"/>
+    <zip destfile="./dist/i2pupdate.zip" level="9" basedir="pkg-temp" excludes="README.md" whenempty="fail" comment="${release.number}"/>
   </target>
 
   <target name="zipit200" depends="getReleaseNumber">
-    <zip destfile="i2pupdate200.zip" basedir="pkg-temp" whenempty="fail" comment="${release.number}"/>
+    <zip destfile="./dist/i2pupdate200.zip" level="9" basedir="pkg-temp" excludes="README.md" whenempty="fail" comment="${release.number}"/>
   </target>
 
   <target name="pack200">
@@ -1897,16 +2037,16 @@
     <exec executable="sh" osfamily="unix" failonerror="true">
       <arg value="-c"/>
       <arg value="find pkg-temp/lib/*.jar pkg-temp/webapps/*war -type f | parallel 'echo Pack200 compression for: {} &amp;&amp;
-                        mv {} {}.jar &amp;&amp; pack200 --effort=6 --modification-time=latest --segment-limit=-1 -g {}.pack {}.jar &amp;&amp;
-                        rm -f {}.jar'"/>
+                  mv {} {}.jar &amp;&amp; pack200 --effort=6 --modification-time=latest --segment-limit=-1 -g {}.pack {}.jar &amp;&amp;
+                  rm -f {}.jar'"/>
     </exec>
 
     <!-- macOS -->
     <exec executable="sh" osfamily="mac" failonerror="true">
       <arg value="-c"/>
       <arg value="for i in pkg-temp/lib/*.jar pkg-temp/webapps/*war; do echo 'Pack200 compression for:' $i;
-                    mv $i $i.jar &amp;&amp; pack200 --effort=6 --modification-time=latest --segment-limit=-1 -g $i.pack $i.jar &amp;&amp;
-                    rm -f $i.jar &amp; done; wait"/>
+                  mv $i $i.jar &amp;&amp; pack200 --effort=6 --modification-time=latest --segment-limit=-1 -g $i.pack $i.jar &amp;&amp;
+                  rm -f $i.jar &amp; done; wait"/>
     </exec>
 
     <!-- Windows -->
@@ -2102,7 +2242,7 @@
 
   <!-- IzPack 4 -->
   <target name="installer" depends="preppkg, buildProperties, izpack-patches, buildUtilityJar">
-    <izpack input="${basedir}/installer/install.xml" output="${basedir}/install.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack input="${basedir}/installer/install.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
     <ant target="installerexe"/>
   </target>
 
@@ -2142,7 +2282,7 @@
   </target>
 
   <target name="installer5" depends="izpack5-patches, preppkg, buildProperties, buildUtilityJar">
-    <izpack5 input="${basedir}/installer/install5.xml" output="${basedir}/install.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack5 input="${basedir}/installer/install5.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
     <ant target="installer5exe"/>
   </target>
 
@@ -2181,12 +2321,10 @@
 
     <exec executable="${izpack5.home}/utils/wrappers/izpack2exe/izpack2exe.py" failonerror="true">
       <arg value="--file=${basedir}/install.jar"/>
-      <!--
-            <arg value="-\-with-7z=${izpack5.home}/utils/wrappers/izpack2exe/7za"/>
-            -->
+      <!-- <arg value="-\-with-7z=${izpack5.home}/utils/wrappers/izpack2exe/7za"/> -->
       <arg value="--with-7z=/usr/bin/7zr"/>
       <arg value="--no-upx"/>
-      <arg value="--output=${basedir}/i2pinstall.exe"/>
+      <arg value="--output=${basedir}/dist/i2pinstall.exe"/>
     </exec>
 
   </target>
@@ -2195,36 +2333,36 @@
   <!-- IzPack 4 -->
   <target name="installer-nowindows" depends="clean, preppkg-nowindows, izpack-patches">
     <fixcrlf srcdir="pkg-temp" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
-    <izpack input="${basedir}/installer/install.xml" output="${basedir}/i2pinstall_${full.version}.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack input="${basedir}/installer/install.xml" output="${basedir}/dist/i2pinstall_${full.version}.jar" installerType="standard" basedir="${basedir}"/>
   </target>
 
   <!-- IzPack 5 -->
   <target name="installer5-nowindows" depends="clean, izpack5-patches, preppkg-nowindows">
     <fixcrlf srcdir="pkg-temp" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
-    <izpack5 input="${basedir}/installer/install5.xml" output="${basedir}/i2pinstall_${full.version}.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack5 input="${basedir}/installer/install5.xml" output="${basedir}/dist/i2pinstall_${full.version}.jar" installerType="standard" basedir="${basedir}"/>
   </target>
 
   <target name="installer-freebsd" depends="clean, preppkg-freebsd-only, izpack-patches">
     <fixcrlf srcdir="pkg-temp" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
-    <izpack input="${basedir}/installer/install.xml" output="${basedir}/i2pinstall_${full.version}_freebsd-only.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack input="${basedir}/installer/install.xml" output="${basedir}/dist/i2pinstall_${full.version}_freebsd-only.jar" installerType="standard" basedir="${basedir}"/>
   </target>
 
   <!-- IzPack 4 -->
   <target name="installer-linux" depends="clean, preppkg-linux-only, izpack-patches">
     <fixcrlf srcdir="pkg-temp" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
-    <izpack input="${basedir}/installer/install.xml" output="${basedir}/i2pinstall_${full.version}_linux-only.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack input="${basedir}/installer/install.xml" output="${basedir}/dist/i2pinstall_${full.version}_linux-only.jar" installerType="standard" basedir="${basedir}"/>
   </target>
 
   <!-- IzPack 5 -->
   <target name="installer5-linux" depends="clean, izpack5-patches, preppkg-linux-only">
     <fixcrlf srcdir="pkg-temp" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
-    <izpack5 input="${basedir}/installer/install5.xml" output="${basedir}/i2pinstall_${full.version}_linux-only.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack5 input="${basedir}/installer/install5.xml" output="${basedir}/dist/i2pinstall_${full.version}_linux-only.jar" installerType="standard" basedir="${basedir}"/>
   </target>
 
   <target name="installer-osx" depends="clean, checkForIzpack2App, preppkg-osx-only, izpack-patches">
     <fixcrlf srcdir="pkg-temp" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
     <mkdir dir="pkg-temp/osx"/>
-    <izpack input="${basedir}/installer/install.xml" output="${basedir}/i2pinstall_${full.version}_osx-only.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack input="${basedir}/installer/install.xml" output="${basedir}/dist/i2pinstall_${full.version}_osx-only.jar" installerType="standard" basedir="${basedir}"/>
     <ant target="installer2app"/>
     <delete dir="pkg-temp/osx"/>
   </target>
@@ -2232,7 +2370,7 @@
   <target name="installer5-osx" depends="clean, checkForIzpack2App, izpack5-patches, preppkg-osx-only">
     <fixcrlf srcdir="pkg-temp" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
     <mkdir dir="pkg-temp/osx"/>
-    <izpack5 input="${basedir}/installer/install5.xml" output="${basedir}/i2pinstall_${full.version}_osx-only.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack5 input="${basedir}/installer/install5.xml" output="${basedir}/dist/i2pinstall_${full.version}_osx-only.jar" installerType="standard" basedir="${basedir}"/>
     <ant target="installer2app"/>
     <delete dir="pkg-temp/osx"/>
   </target>
@@ -2274,19 +2412,19 @@
   <!-- IzPack 4 -->
   <target name="installer-windows" depends="clean, preppkg-windows-only, izpack-patches, buildUtilityJar">
     <fixcrlf srcdir="pkg-temp" includes="*.config *.bat *.cmd **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="crlf"/>
-    <izpack input="${basedir}/installer/install.xml" output="${basedir}/install.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack input="${basedir}/installer/install.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
     <ant target="installerexe"/>
     <delete file="${basedir}/install.jar"/>
-    <move file="${basedir}/i2pinstall.exe" tofile="${basedir}/i2pinstall_${full.version}_windows.exe"/>
+    <move file="${basedir}/i2pinstall.exe" tofile="${basedir}/dist/i2pinstall_${full.version}_windows.exe"/>
   </target>
 
   <!-- IzPack 5 -->
   <target name="installer5-windows" depends="clean, izpack5-patches, preppkg-windows-only, buildUtilityJar">
     <fixcrlf srcdir="pkg-temp" includes="*.config *.bat *.cmd **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="crlf"/>
-    <izpack5 input="${basedir}/installer/install5.xml" output="${basedir}/install.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack5 input="${basedir}/installer/install5.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
     <ant target="installer5exe"/>
     <delete file="${basedir}/install.jar"/>
-    <move file="${basedir}/i2pinstall.exe" tofile="${basedir}/i2pinstall_${full.version}_windows.exe"/>
+    <move file="${basedir}/i2pinstall.exe" tofile="${basedir}/dist/2pinstall_${full.version}_windows.exe"/>
   </target>
 
   <!-- this is broken as installer-xxx targets may delete (or not delete) things in pkg-temp -->
@@ -2478,7 +2616,7 @@
       <arg value="-sortByClass"/>
       <arg value="-html:./findbugs.xsl"/>
       <arg value="-output"/>
-      <arg value="findbugs.html"/>
+      <arg value="dist/findbugs.html"/>
       <arg value="-effort:max"/>
       <arg value="-auxclasspath"/>
       <arg value="build/commons-el.jar:build/jasper-runtime.jar:build/javax.servlet.jar:build/org.mortbay.jetty.jar:build/jrobin.jar:installer/lib/wrapper/all/wrapper.jar:apps/susidns/src/lib/standard.jar:apps/susidns/src/lib/jstl.jar"/>
@@ -2507,13 +2645,13 @@
       <arg value="build/systray.jar"/>
       <arg value="build/utility.jar"/>
     </exec>
-    <echo message="Findbugs output written to findbugs.html"/>
+    <echo message="Findbugs output written to dist/findbugs.html"/>
   </target>
 
-  <target name="spotbugs" depends="jar">
+  <target name="spotbugs" depends="jar, build2, buildUtilityJar">
     <taskdef resource="edu/umd/cs/findbugs/anttask/tasks.properties" classpath="/usr/share/ant/lib/spotbugs-ant.jar"/>
     <property name="spotbugs.home" value="/usr/share/ant/lib/"/>
-    <spotbugs home="${spotbugs.home}" output="html" outputFile="spotbugs.html" effort="max" debug="true" reportLevel="high">
+    <spotbugs home="${spotbugs.home}" output="html" outputFile="dist/spotbugs.html" effort="max" debug="true" reportLevel="high">
       <auxAnalyzepath path="./build"/>
       <auxClasspath path="build/commons-el.jar:build/commons-logging.jar:build/jasper-compiler.jar:build/jasper-runtime.jar:build/jetty-continuation.jar:build/jetty-deploy.jar:build/jetty-http.jar:build/jetty-i2p.jar:build/jetty-io.jar:build/jetty-java5-threadpool.jar:build/jetty-rewrite-handler.jar:build/jetty-security.jar:build/jetty-servlet.jar:build/jetty-servlets.jar:build/jetty-sslengine.jar:build/jetty-start.jar:build/jetty-util.jar:build/jetty-webapp.jar:build/jetty-xml.jar:build/javax.servlet.jar:build/jo.jsonrpc.war:build/jrobin.jar:build/org.mortbay.jetty.jar:build/org.mortbay.jmx.jar:build/pack200.jar:build/systray.jar:build/tools.jar"/>
       <class location="./build/addressbook.jar"/>
@@ -2535,7 +2673,7 @@
       <class location="./build/streaming.jar"/>
       <sourcePath path="./apps/**.*java:./router/**.*java:./core/**.*java"/>
     </spotbugs>
-    <echo message="Spotbugs output written to spotbugs.html"/>
+    <echo message="Spotbugs output written to dist/spotbugs.html"/>
   </target>
 
   <!-- this is the same dependency as pkg, but with updater200 in the middle, since preppkg puts too much stuff in pkg-temp -->
@@ -2571,19 +2709,19 @@
 
   <target name="-releaseit">
     <echo message="New version number is ${release.number}"/>
-    <copy file="i2pupdate.zip" tofile="i2pupdate_${release.number}.zip"/>
-    <copy file="i2pinstall_${full.version}.jar" tofile="i2pinstall_${release.number}.jar"/>
-    <copy file="i2pinstall_${full.version}_windows.exe" tofile="i2pinstall_${release.number}_windows.exe"/>
+    <copy file="dist/i2pupdate.zip" tofile="dist/i2pupdate_${release.number}.zip"/>
+    <copy file="dist/i2pinstall_${full.version}.jar" tofile="dist/i2pinstall_${release.number}.jar"/>
+    <copy file="dist/i2pinstall_${full.version}_windows.exe" tofile="dist/i2pinstall_${release.number}_windows.exe"/>
     <!-- remove these, we don't Buildm anymore -->
-    <delete file="i2pupdate.sud"/>
-    <delete file="i2pupdate.su2"/>
+    <delete file="dist/i2pupdate.sud"/>
+    <delete file="dist/i2pupdate.su2"/>
     <!-- make this a lot easier by putting release.privkey.su3=/path/to/su3keystore.ks in override.properties -->
 
     <!-- now build and verify the packed su3 from the packed zip -->
     <!-- TODO if i2pupdate200.zip is present zip it instead -->
-    <su3sign infile="i2pupdate.zip" sigtype="ROUTER" outfile="i2pupdate.su3" su3.ver="${release.number}"/>
+    <su3sign infile="dist/i2pupdate.zip" sigtype="ROUTER" outfile="dist/i2pupdate.su3" su3.ver="${release.number}"/>
     <!--
-        <su3sign infile="i2pupdate200.zip" sigtype="ROUTER" outfile="i2pupdate.su3" su3.ver="${release.number}"/>
+        <su3sign infile="dist/i2pupdate200.zip" sigtype="ROUTER" outfile="dist/i2pupdate.su3" su3.ver="${release.number}"/>
         -->
     <!-- this will use the monotonerc file in the current workspace -->
     <property name="checkoutDir" value="../i2p-${release.number}"/>
@@ -2609,30 +2747,24 @@
 
     <!-- the gpgsign macro sets the permission of signed files and the sigs themselves to 444 -->
     <!--
-        <gpgsign file="i2pinstall_${release.number}_windows.exe"/>
+        <gpgsign file="dist/i2pinstall_${release.number}_windows.exe"/>
         -->
-    <gpgsign file="i2pinstall_${release.number}.jar"/>
-    <gpgsign file="i2psource_${release.number}.tar.bz2"/>
-    <gpgsign file="i2pupdate_${release.number}.zip"/>
+    <gpgsign file="dist/i2pinstall_${release.number}.jar"/>
+    <gpgsign file="dist/i2psource_${release.number}.tar.bz2"/>
+    <gpgsign file="dist/i2pupdate_${release.number}.zip"/>
 
     <chmod perm="444" type="file">
-      <fileset dir="${basedir}">
+      <fileset dir="${basedir}/dist">
         <include name="i2pupdate.su3"/>
       </fileset>
     </chmod>
     <echo message="File sizes:"/>
     <exec executable="ls" failonerror="true">
       <arg value="-l"/>
-      <!--
-            <arg value="i2pinstall_${release.number}_windows.exe"/>
-            -->
       <arg value="i2pinstall_${release.number}.jar"/>
       <arg value="i2psource_${release.number}.tar.bz2"/>
       <arg value="i2pupdate_${release.number}.zip"/>
       <arg value="i2pupdate.su3"/>
-      <!--
-            <arg value="i2pinstall_${release.number}_windows.exe.sig"/>
-            -->
       <arg value="i2pinstall_${release.number}.jar.sig"/>
       <arg value="i2psource_${release.number}.tar.bz2.sig"/>
       <arg value="i2pupdate_${release.number}.zip.sig"/>
@@ -2640,17 +2772,14 @@
     <echo message="   TBD    i2pinstall_${release.number}_windows.exe"/>
     <echo message="   TBD    i2pinstall_${release.number}_windows.exe.sig"/>
     <echo message="SHA256 sums:"/>
-    <!--
-        <sha256sum file="i2pinstall_${release.number}_windows.exe"/>
-       -->
     <echo message="   TBD    i2pinstall_${release.number}_windows.exe"/>
-    <sha256sum file="i2pinstall_${release.number}.jar"/>
-    <sha256sum file="i2psource_${release.number}.tar.bz2"/>
-    <sha256sum file="i2pupdate_${release.number}.zip"/>
-    <sha256sum file="i2pupdate.su3"/>
+    <sha256sum file="dist/i2pinstall_${release.number}.jar"/>
+    <sha256sum file="dist/i2psource_${release.number}.tar.bz2"/>
+    <sha256sum file="dist/i2pupdate_${release.number}.zip"/>
+    <sha256sum file="dist/i2pupdate.su3"/>
     <!-- make torrent files -->
-    <copy file="i2pupdate.su3" tofile="i2pupdate-${release.number}.su3"/>
-    <mktorrent file="i2pupdate-${release.number}.su3"/>
+    <copy file="dist/i2pupdate.su3" tofile="dist/i2pupdate-${release.number}.su3"/>
+    <mktorrent file="dist/i2pupdate-${release.number}.su3"/>
     <echo message=" Don't forget to sign i2pinstall_${release.number}_windows.exe on Windows and then:"/>
     <echo message="   ${gpg} -u ${release.gpg.keyid} -b i2pinstall_${release.number}_windows.exe"/>
     <echo message="   sha256sum i2pinstall_${release.number}_windows.exe"/>
@@ -2724,7 +2853,7 @@
     <copy file="apps/streaming/java/build/streaming-${release.number}-sources.jar" todir="pkg-mavencentral/"/>
     <copy file="apps/jetty/build/servlet-i2p-${release.number}-sources.jar" todir="pkg-mavencentral/"/>
     <echo message="This requires the Maven Ant Tasks to be installed."/>
-    <echo message="If this fails, on Debian jessie or, Ubuntu trusty/xenial:"/>
+    <echo message="If this fails, on Debian jessie or, Ubuntu Trusty / Xenial:"/>
     <echo message="sudo apt-get install libmaven-ant-tasks-java"/>
     <echo message="Sorry, not available on more recent distributions"/>
     <!-- POMs -->
@@ -2949,7 +3078,6 @@
       <arg value="-p1"/>
     </exec>
   </target>
-
 
   <target name="debchange" depends="getExtendedVersion" unless="noAutoDebchange">
     <echo message="Debian version is ${Extended.Version}-1"/>
@@ -3302,17 +3430,8 @@
     <exec dir="debian" executable="./makerepo.sh" failonerror="true"/>
   </target>
 
-  <!--
-        the following are appened to help build barebone portable version,
-        none of the above is modified for this purpose
-    -->
-  <target name="pkg-portable-clean">
-    <delete dir="build/"/>
-    <delete dir="pkg-temp/"/>
-    <delete>
-      <fileset dir="." includes="portable-**.zip**"/>
-    </delete>
-  </target>
+  <target name="pkg-portable-clean" depends="distclean"/>
+
   <!-- build a portable archive -->
 
   <!--
@@ -3346,8 +3465,9 @@
     <copy file="installer/resources/initialNews/initialNews.xml" tofile="pkg-temp/docs/news.xml" overwrite="true"/>
     <copy file="installer/resources/readme/readme.html" tofile="pkg-temp/docs/readme/readme.html"/>
     <copy file="installer/resources/startconsole.html" todir="pkg-temp/docs/"/>
-    <copy file="installer/resources/start.ico" todir="pkg-temp/docs/"/>
-    <copy file="installer/resources/console.ico" todir="pkg-temp/docs/"/>
+    <copy file="installer/resources/windows/start.ico" todir="pkg-temp/docs/"/>
+    <copy file="installer/resources/windows/stop.ico" todir="pkg-temp/docs/"/>
+    <copy file="installer/resources/windows/console.ico" todir="pkg-temp/docs/"/>
     <!-- HTTP Header files, english only, if you need a different lang do it in a seperate target -->
     <copy todir="pkg-temp/docs/proxy/">
       <fileset dir="installer/resources/proxy/" includes="**-header.ht"/>
@@ -3359,10 +3479,6 @@
     <copy file="installer/resources/themes/console/light/console_big.css" todir="portable/docs/themes/console/light/"/>
     <copy todir="pkg-temp/docs/themes/console/images/">
       <fileset dir="installer/resources/themes/console/images/"/>
-    </copy>
-    <!-- FLAGs for language icon (not for ip)-->
-    <copy todir="pkg-temp/docs/icons">
-      <fileset dir="installer/resources/icons"/>
     </copy>
     <mkdir dir="pkg-temp/webapps"/>
     <copy todir="pkg-temp/webapps/">
@@ -3376,6 +3492,7 @@
     <!-- jrobin - without jobin , you lose graphs and get a lot of error entries in logs -->
     <copy file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar"/>
   </target>
+
   <!-- *3* os dependent procedure/commands -->
   <target name="preppkg-portable-win32" depends="preppkg-portable-win32-jbigi,preppkg-portable-basic">
     <!--wrapper - don't even think about it! i2p consumes apparently more mem without it on win32-->
@@ -3383,17 +3500,21 @@
     <copy file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib"/>
     <copy file="installer/lib/wrapper/win32/I2Psvc.exe" tofile="pkg-temp/i2psvc.ex_"/>
     <!--  copy the unpack/start batchfiles -->
-    <copy todir="pkg-temp">
+    <copy todir="pkg-temp/portable">
       <fileset dir="installer/resources/portable/win32/"/>
     </copy>
   </target>
+
   <!-- *4* command for windows package -->
   <target name="pkg-portable-win32" depends="preppkg-portable-win32, pack200">
     <!-- i need the portable\ folder in .zip so basedir is set to . -->
-    <move file="pkg-temp" tofile="portable"/>
-    <zip destfile="portable-win32.zip" basedir="." level="9" includes="portable\**"/>
-    <checksum file="portable-win32.zip" forceOverwrite="yes"/>
-    <move file="portable" tofile="pkg-temp"/>
+    <move file="pkg-temp/portable" tofile="dist/"/>
+    <zip destfile="dist/portable-win32.zip" basedir="." level="9" includes="portable\**"/>
+    <checksum file="dist/portable-win32.zip" forceOverwrite="yes"/>
+    <move todir="dist/portable-win32">
+      <fileset dir="./dist" includes="**/*" excludes="README.md"/>
+    </move>
+    <echo message="Note: This target is untested, references an obsolete Java6 in the batch file, and may not work as intended."/>
   </target>
 
   <target name="removeComments">
