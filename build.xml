@@ -64,6 +64,7 @@
     <echo message=" distclean                                    Clean up all derived and temporary files in workspace"/>
     <echo message=" distcleanWebapps                             Clean up all webapp-related derived and temporary files in workspace"/>
     <echo message=" i2psnark                                     Build standalone I2PSnark install &#10140; ./i2psnark-standalone.zip"/>
+    <echo message=" i2psnark7zip                                 Build standalone I2PSnark 7zip install &#10140; ./i2psnark-standalone.7z"/>
     <echo message=" installer / installer5                       Build GUI installer (IzPack4 / IzPack5) &#10140; ./i2pinstall.exe"/>
     <echo message=" installer-freebsd                            Build FreeBSD GUI installer &#10140; ./i2pinstall&#8230;freebsd-only.jar"/>
     <echo message=" installer-linux / installer5-linux           Build Linux GUI installer (IzPack4 / Izpack5) &#10140; i2pinstall&#8230;linux-only.jar"/>
@@ -2432,6 +2433,12 @@
   <target name="i2psnark" depends="buildStreaming, buildJetty, buildSystray, jbigi">
     <ant dir="apps/i2psnark/java" target="standalone"/>
     <copy file="apps/i2psnark/java/i2psnark-standalone.zip" todir="."/>
+  </target>
+
+  <!-- standalone i2psnark 7z archive -->
+  <target name="i2psnark7zip" depends="buildStreaming, buildJetty, buildSystray, jbigi">
+    <ant dir="apps/i2psnark/java" target="standalone"/>
+    <copy file="apps/i2psnark/java/i2psnark-standalone.7z" todir="."/>
   </target>
 
   <target name="slackpkg">

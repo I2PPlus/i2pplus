@@ -197,7 +197,23 @@
   <target name="standalone" depends="standalone_prep">
     <exec executable="zip" failifexecutionfails="true" failonerror="true">
       <arg value="-r" />
+      <arg value="-9" />
+      <arg value="-q" />
       <arg value="i2psnark-standalone.zip" />
+      <arg value="i2psnark" />
+    </exec>
+  </target>
+
+  <target name="standalone7zip" depends="standalone_prep">
+    <exec executable="7z" failifexecutionfails="true" failonerror="true">
+      <arg value="a" />
+      <arg value="-t7z" />
+      <arg value="-mx=9" /> <!-- Compression -->
+      <arg value="-md=4m" /> <!-- Dictionary size -->
+      <arg value="-mmt2" /> <!-- Use 2 threads -->
+      <arg value="-ssw" /> <!-- Compress shared files -->
+      <arg value="-bt" /> <!-- Show execution stats -->
+      <arg value="i2psnark-standalone.7z" />
       <arg value="i2psnark" />
     </exec>
   </target>
@@ -405,8 +421,8 @@
     <delete file="./i2psnark-standalone.zip" />
     <delete dir="./i2psnark" />
   </target>
-  <target name="cleandep" depends="clean">
-  </target>
-  <target name="distclean" depends="clean">
-  </target>
+
+  <target name="cleandep" depends="clean"/>
+
+  <target name="distclean" depends="clean"/>
 </project>
