@@ -1338,7 +1338,7 @@
   <target name="pkgclean" depends="deletepkg-temp">
     <delete>
       <fileset dir="." includes="i2p.tar.bz2 install.jar i2pupdate.zip i2pupdate200.zip"/>
-      <fileset dir="./dist" includes="i2p.tar.bz2 install.jar i2pupdate.zip i2pupdate200.zip"/>
+      <fileset dir="./dist" includes="i2p.tar.bz2 install.jar i2pupdate.zip i2pupdate200.zip" excludes="README.md"/>
     </delete>
   </target>
 
