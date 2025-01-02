@@ -883,7 +883,7 @@ public class RouterConsoleRunner implements RouterApp {
             }
         }
 
-        Thread t = new I2PAppThread(new GraphSummarizer(_context), "GraphSummarizer", true);
+        Thread t = new I2PAppThread(new GraphGenerator(_context), "GraphGenerator", true);
         t.setPriority(Thread.NORM_PRIORITY - 1);
         t.start();
 

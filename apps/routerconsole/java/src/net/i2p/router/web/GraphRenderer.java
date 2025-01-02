@@ -138,7 +138,7 @@ class GraphRenderer {
      *
      *  @param lsnr2 2nd data source to plot on same graph, or null. Not recommended for events.
      *  @param titleOverride If non-null, overrides the title
-     *  @since 0.9.6 consolidated from GraphSummarizer for bw.combined
+     *  @since 0.9.6 consolidated from GraphGenerator for bw.combined
      */
     public void render(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid, boolean hideTitle,
                        boolean showEvents, int periodCount, int endp, boolean showCredit, GraphListener lsnr2,
@@ -177,9 +177,7 @@ class GraphRenderer {
             if (theme.equals("midnight") || theme.equals("dark")) {
                     def.setColor(ElementsNames.back, BACK_COLOR_DARK);
                     def.setColor(ElementsNames.canvas,TRANSPARENT);
-            } else {
-                def.setColor(ElementsNames.back,   BACK_COLOR);
-            }
+            } else {def.setColor(ElementsNames.back, BACK_COLOR);}
             if (theme.equals("midnight") || theme.equals("dark")) {
                 def.setColor(ElementsNames.shadea, TRANSPARENT);
                 def.setColor(ElementsNames.shadeb, TRANSPARENT);
@@ -204,18 +202,15 @@ class GraphRenderer {
 
             if (width < 400 || height < 200 || periodCount < 120) {
                 def.setColor(ElementsNames.grid, GRID_COLOR_HIDDEN);
-                if (theme.equals("midnight"))
-                  def.setColor(ElementsNames.mgrid, GRID_COLOR_MIDNIGHT);
-                else if (theme.equals("dark"))
-                  def.setColor(ElementsNames.mgrid, GRID_COLOR_DARK);
-                else
-                  def.setColor(ElementsNames.mgrid, GRID_COLOR);
+                if (theme.equals("midnight")) {def.setColor(ElementsNames.mgrid, GRID_COLOR_MIDNIGHT);}
+                else if (theme.equals("dark")) {def.setColor(ElementsNames.mgrid, GRID_COLOR_DARK);}
+                else {def.setColor(ElementsNames.mgrid, GRID_COLOR);}
             }
 
-            // improve text legibility
             String lang = Messages.getLanguage(_context);
             if (lang == null) {lang = "en";}
 
+            // improve text legibility
             int smallSize = SIZE_MONO;
             int legendSize = SIZE_LEGEND;
             int largeSize = SIZE_TITLE;
@@ -287,10 +282,8 @@ class GraphRenderer {
             Font small = new Font(ssmall, Font.PLAIN, smallSize);
             Font legnd = new Font(slegend, Font.PLAIN, legendSize);
             Font large = new Font(stitle, Font.PLAIN, largeSize);
-            // DEFAULT is unused since we set all the others
-            def.setFont(RrdGraphDef.FONTTAG_DEFAULT, small);
-            // AXIS is unused, we do not set any axis labels
-            def.setFont(RrdGraphDef.FONTTAG_AXIS, small);
+            def.setFont(RrdGraphDef.FONTTAG_DEFAULT, small); // DEFAULT is unused since we set all the others
+            def.setFont(RrdGraphDef.FONTTAG_AXIS, small); // AXIS is unused, we do not set any axis labels
             // rrd4j sets UNIT = AXIS in RrdGraphConstants, may be bug, maybe not, no use setting them different here
             def.setFont(RrdGraphDef.FONTTAG_UNIT, small);
             def.setFont(RrdGraphDef.FONTTAG_LEGEND, legnd);
@@ -352,9 +345,8 @@ class GraphRenderer {
                 singleDecimalPlace = false;
             }
 
-            if (titleOverride != null) {
-                def.setTitle(titleOverride);
-            } else if (!hideTitle) {
+            if (titleOverride != null) {def.setTitle(titleOverride);}
+            else if (!hideTitle) {
                 String title;
                 String p;
 
@@ -388,9 +380,8 @@ class GraphRenderer {
                 descr = _t(_listener.getRate().getRateStat().getDescription());
             }
             def.datasource(plotName, path, plotName, GraphListener.CF, _listener.getBackendFactory());
-            if (width == 2000 && height == 160 && hideTitle && hideLegend && hideGrid) {
-                def.area(plotName, AREA_COLOR_NEUTRAL);
-            } else if (theme.equals("dark")) {
+            if (width == 2000 && height == 160 && hideTitle && hideLegend && hideGrid) {def.area(plotName, AREA_COLOR_NEUTRAL);}
+            else if (theme.equals("dark")) {
                 if (descr.length() > 0) {def.area(plotName, AREA_COLOR_DARK, descr + "\\l");}
                 else {def.area(plotName, AREA_COLOR_DARK);}
             } else if (theme.equals("midnight")) {
@@ -507,12 +498,12 @@ class GraphRenderer {
             try {graph = new RrdGraph(def, new SVGImageWorker(totalWidth + 8, totalHeight));} // svg
             catch (NullPointerException npe) {
                 _log.error("Error rendering graph", npe);
-                GraphSummarizer.setDisabled(_context);
+                GraphGenerator.setDisabled(_context);
                 throw new IOException("Error rendering - disabling graph generation.");
             } catch (Error e) {
                 // Docker InternalError see Gitlab #383
                 _log.error("Error rendering graph", e);
-                GraphSummarizer.setDisabled(_context);
+                GraphGenerator.setDisabled(_context);
                 throw new IOException("Error rendering - disabling graph generation.");
             }
             out.write(graph.getRrdGraphInfo().getBytes());
@@ -522,15 +513,17 @@ class GraphRenderer {
             throw new IOException("Error plotting: " + re.getLocalizedMessage());
         } catch (IOException ioe) {
             // typically org.mortbay.jetty.EofException extends java.io.EOFException
-            if (_log.shouldWarn())
-                _log.warn("Error rendering", ioe);
+            if (_log.shouldWarn()) {_log.warn("Error rendering", ioe);}
             throw ioe;
         } catch (OutOfMemoryError oom) {
             _log.error("Error rendering", oom);
             throw new IOException("Error plotting: " + oom.getLocalizedMessage());
         } finally {
             // this does not close the underlying stream
-            if (ios != null) try {ios.close();} catch (IOException ioe) {}
+            if (ios != null) {
+                try {ios.close();}
+                catch (IOException ioe) {}
+            }
         }
     }
 
@@ -538,8 +531,7 @@ class GraphRenderer {
     private String _t(String s) {
         // the RRD font doesn't have zh chars, at least on my system
         // Works on 1.5.9 except on windows
-        if (IS_WIN && "zh".equals(Messages.getLanguage(_context)))
-            return s;
+        if (IS_WIN && "zh".equals(Messages.getLanguage(_context))) {return s;}
         return Messages.getString(s, _context);
     }
 
@@ -549,8 +541,8 @@ class GraphRenderer {
     private String _t(String s, String o) {
         // the RRD font doesn't have zh chars, at least on my system
         // Works on 1.5.9 except on windows
-        if (IS_WIN && "zh".equals(Messages.getLanguage(_context)))
-            return s.replace("{0}", o);
+        if (IS_WIN && "zh".equals(Messages.getLanguage(_context))) {return s.replace("{0}", o);}
         return Messages.getString(s, o, _context);
     }
+
 }

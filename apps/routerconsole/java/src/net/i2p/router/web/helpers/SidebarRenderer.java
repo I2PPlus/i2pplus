@@ -28,7 +28,7 @@ import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.Messages;
 import net.i2p.router.web.NavHelper;
 import net.i2p.router.web.NewsHelper;
-import net.i2p.router.web.GraphSummarizer;
+import net.i2p.router.web.GraphGenerator;
 import net.i2p.util.PortMapper;
 import net.i2p.util.SystemVersion;
 
@@ -451,7 +451,7 @@ class SidebarRenderer {
             .append(_t("View historical log of router events")).append("\">").append(nbsp(tx)).append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
-        if (!GraphSummarizer.isDisabled(_context)) {
+        if (!GraphGenerator.isDisabled(_context)) {
             tx = _t("Graphs");
             rbuf.setLength(0);
             rbuf.append("<a href=\"/graphs\" target=_top title=\"").append(_t("Graph router performance")).append("\">")
@@ -971,7 +971,7 @@ class SidebarRenderer {
     /** @since 0.9.32 */
     public String renderBandwidthGraphHTML() {
         if (_helper == null) {return "";}
-        if (GraphSummarizer.isDisabled(_context)) {return "";}
+        if (GraphGenerator.isDisabled(_context)) {return "";}
         String r = _context.getProperty(CSSHelper.PROP_REFRESH, CSSHelper.DEFAULT_REFRESH);
         int refreshPeriod = 3;
         try {refreshPeriod = Integer.parseInt(r);}

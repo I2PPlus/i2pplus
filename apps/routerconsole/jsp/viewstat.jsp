@@ -15,7 +15,7 @@ if (lang == null)
     lang = "en";
 */
 
-net.i2p.router.web.GraphSummarizer ss = net.i2p.router.web.GraphSummarizer.instance(ctx);
+net.i2p.router.web.GraphGenerator ss = net.i2p.router.web.GraphGenerator.instance(ctx);
 if (ss == null) {
     response.sendError(403, "Stats disabled");
     return;

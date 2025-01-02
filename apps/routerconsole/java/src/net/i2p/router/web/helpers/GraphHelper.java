@@ -14,7 +14,7 @@ import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.FormHandler;
 import static net.i2p.router.web.GraphConstants.*;
 import net.i2p.router.web.HelperBase;
-import net.i2p.router.web.GraphSummarizer;
+import net.i2p.router.web.GraphGenerator;
 import net.i2p.router.web.GraphListener;
 import net.i2p.stat.Rate;
 
@@ -135,7 +135,7 @@ public class GraphHelper extends FormHandler {
     }
 
     public String getImages() {
-        GraphSummarizer ss = GraphSummarizer.instance(_context);
+        GraphGenerator ss = GraphGenerator.instance(_context);
         if (ss == null)
             return "";
         List<GraphListener> listeners = ss.getListeners();
@@ -199,7 +199,7 @@ public class GraphHelper extends FormHandler {
     }
 
     public int countGraphs() {
-        GraphSummarizer ss = GraphSummarizer.instance(_context);
+        GraphGenerator ss = GraphGenerator.instance(_context);
         if (ss == null) {return 0;}
         else {return ss.countGraphs();}
     }
@@ -212,7 +212,7 @@ public class GraphHelper extends FormHandler {
      */
     public String getSingleStat() {
         StringBuilder buf = new StringBuilder(2*1024);
-        GraphSummarizer ss = GraphSummarizer.instance(_context);
+        GraphGenerator ss = GraphGenerator.instance(_context);
         boolean hideLegend = false;
 
         if (ss == null) {return "";}
@@ -352,7 +352,7 @@ public class GraphHelper extends FormHandler {
     private static final int[] times = { 5, 10, 15, 30, 60, 2*60, 5*60, 10*60, 30*60, 60*60, -1 };
 
     public String getForm() {
-        GraphSummarizer ss = GraphSummarizer.instance(_context);
+        GraphGenerator ss = GraphGenerator.instance(_context);
         if (ss == null) {return "";}
         // too hard to use the standard formhandler.jsi / FormHandler.java session nonces
         // since graphs.jsp needs the refresh value in its <head>.
@@ -412,7 +412,7 @@ public class GraphHelper extends FormHandler {
      */
     @Override
     public String getAllMessages() {
-        if (GraphSummarizer.isDisabled(_context)) {
+        if (GraphGenerator.isDisabled(_context)) {
             addFormError("Either the router hasn't initialized yet, or graph generation is not supported with this JVM or OS.");
             addFormNotice("JVM: " + System.getProperty("java.vendor") + ' ' +
                                     System.getProperty("java.version") + " (" +

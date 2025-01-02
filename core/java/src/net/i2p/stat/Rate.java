@@ -514,7 +514,7 @@ public class Rate {
     }
 
     /**
-     * This is used in GraphSummarizer and GraphListener.
+     * This is used in GraphGenerator and GraphListener.
      * We base it on the stat we are tracking, not the stored data.
      */
     @Override

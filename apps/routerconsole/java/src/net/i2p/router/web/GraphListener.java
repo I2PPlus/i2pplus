@@ -170,7 +170,7 @@ public class GraphListener implements RateSummaryListener {
             _log.error("Error starting RRD for stat " + baseName, iae);
             _log.log(Log.CRIT, "RRD4J backend error, graphs disabled");
             System.out.println("RRD4J backend error, graphs disabled");
-            GraphSummarizer.setDisabled(_context);
+            GraphGenerator.setDisabled(_context);
         } catch (NoSuchMethodError nsme) {
             // Covariant fail Java 8/9/10
             // java.lang.NoSuchMethodError: java.nio.MappedByteBuffer.position(I)Ljava/nio/MappedByteBuffer;
@@ -182,7 +182,7 @@ public class GraphListener implements RateSummaryListener {
                        "\nContact packager.";
             _log.log(Log.CRIT, s);
             System.out.println(s);
-            GraphSummarizer.setDisabled(_context);
+            GraphGenerator.setDisabled(_context);
         } catch (Throwable t) {_log.error("Error starting RRD for stat " + baseName, t);}
         return false;
     }

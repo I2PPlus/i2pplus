@@ -29,35 +29,32 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
- *  A thread started by RouterConsoleRunner that
- *  checks the configuration for stats to be tracked via jrobin,
- *  and adds or deletes RRDs as necessary.
+ *  A thread started by RouterConsoleRunner that checks the configuration for
+ *  stats to be tracked via jrobin, and adds or deletes RRDs as necessary.
  *
- *  This also contains methods to generate xml or png image output.
+ *  This also contains methods to generate xml, png or svg image output.
  *  The rendering for graphs is in GraphRenderer.
  *
  *  To control memory, the number of simultaneous renderings is limited.
  *
  *  @since 0.6.1.13
  */
-public class GraphSummarizer implements Runnable, ClientApp {
+public class GraphGenerator implements Runnable, ClientApp {
     private final RouterContext _context;
     private final Log _log;
     /** list of GraphListener instances */
     private final List<GraphListener> _listeners;
-    //private static final int MAX_CONCURRENT_PNG = SystemVersion.isARM() ? 2 : 3;
-    private static final int MAX_CONCURRENT_PNG = SystemVersion.isARM() ? 2 :
-                                                  SystemVersion.getMaxMemory() < 256*1024*1024 ? 8 :
-                                                  SystemVersion.getMaxMemory() < 384*1024*1024 ? 12 :
-                                                  SystemVersion.getMaxMemory() < 512*1024*1024 ? 16 :
-                                                  SystemVersion.getMaxMemory() < 768*1024*1024 ? 24 : 32;
-
+    private static int cores = SystemVersion.getCores();
+    private static long maxMem = SystemVersion.getMaxMemory();
+    private static final int MAX_CONCURRENT_PNG = SystemVersion.isARM() ? Math.max(2, cores / 2) :
+                                                  maxMem < 256*1024*1024 ? Math.max(8, cores / 2) :
+                                                  Math.max(12, cores);
     private final Semaphore _sem;
     private volatile boolean _isRunning;
     private volatile Thread _thread;
-    private static final String NAME = "GraphSummarizer";
+    private static final String NAME = "GraphGenerator";
 
-    public GraphSummarizer(RouterContext ctx) {
+    public GraphGenerator(RouterContext ctx) {
         _context = ctx;
         _log = _context.logManager().getLog(getClass());
         _listeners = new CopyOnWriteArrayList<GraphListener>();
@@ -68,23 +65,20 @@ public class GraphSummarizer implements Runnable, ClientApp {
     /**
      * @return null if disabled
      */
-    public static GraphSummarizer instance() {
-        return instance(I2PAppContext.getGlobalContext());
-    }
+    public static GraphGenerator instance() {return instance(I2PAppContext.getGlobalContext());}
 
     /**
      * @return null if disabled
      * @since 0.9.38
      */
-    public static GraphSummarizer instance(I2PAppContext ctx) {
+    public static GraphGenerator instance(I2PAppContext ctx) {
         ClientApp app = ctx.clientAppManager().getRegisteredApp(NAME);
-        return (app != null) ? (GraphSummarizer) app : null;
+        return (app != null) ? (GraphGenerator) app : null;
     }
 
     public void run() {
         // JRobin 1.5.9 crashes these JVMs
-        if (SystemVersion.isApache() ||            // Harmony
-            SystemVersion.isGNU()) {               // JamVM or gij
+        if (SystemVersion.isApache() /* Harmony */ || SystemVersion.isGNU()) /* JamVM or gij */ {
             _log.logAlways(Log.WARN, "Graphing not supported with this JVM: " +
                                      System.getProperty("java.vendor") + ' ' +
                                      System.getProperty("java.version") + " (" +
@@ -98,7 +92,6 @@ public class GraphSummarizer implements Runnable, ClientApp {
         if (isPersistent) {
             String spec = _context.getProperty("stat.summaries", DEFAULT_DATABASES);
             String[] rates = DataHelper.split(spec, ",");
-            //syncThreads = Math.min(rates.length, SystemVersion.isSlow() ? 4 : Math.max(SystemVersion.getCores(), 6));
             syncThreads = SystemVersion.isSlow() ? 2 : 4;
             // delete files for unconfigured rates
             Set<String> configured = new HashSet<String>(rates.length);
@@ -111,9 +104,7 @@ public class GraphSummarizer implements Runnable, ClientApp {
                     File f = files[i];
                     String name = f.getName();
                     String hash = name.substring(GraphListener.RRD_PREFIX.length(), name.length() - GraphListener.RRD_SUFFIX.length());
-                    if (!configured.contains(hash)) {
-                        f.delete();
-                    }
+                    if (!configured.contains(hash)) {f.delete();}
                 }
             }
         } else {
@@ -127,11 +118,8 @@ public class GraphSummarizer implements Runnable, ClientApp {
         try {
             while (_isRunning && _context.router().isAlive()) {
                 specs = adjustDatabases(specs);
-                try {
-                    Thread.sleep(60*1000);
-                } catch (InterruptedException ie) {
-                    break;
-                }
+                try {Thread.sleep(60*1000);}
+                catch (InterruptedException ie) {break;}
             }
         } finally {
             _isRunning = false;
@@ -150,9 +138,8 @@ public class GraphSummarizer implements Runnable, ClientApp {
      * @since 0.9.6
      */
     static void setDisabled(I2PAppContext ctx) {
-        GraphSummarizer ss = instance(ctx);
-        if (ss != null)
-            ss.setDisabled();
+        GraphGenerator ss = instance(ctx);
+        if (ss != null) {ss.setDisabled();}
     }
 
     /**
@@ -164,8 +151,7 @@ public class GraphSummarizer implements Runnable, ClientApp {
         if (_isRunning) {
             _isRunning = false;
             Thread t = _thread;
-            if (t != null)
-                t.interrupt();
+            if (t != null) {t.interrupt();}
         }
     }
 
@@ -184,19 +170,13 @@ public class GraphSummarizer implements Runnable, ClientApp {
     public void shutdown(String[] args) {}
 
     /** @since 0.9.38 */
-    public ClientAppState getState() {
-        return ClientAppState.RUNNING;
-    }
+    public ClientAppState getState() {return ClientAppState.RUNNING;}
 
     /** @since 0.9.38 */
-    public String getName() {
-        return NAME;
-    }
+    public String getName() {return NAME;}
 
     /** @since 0.9.38 */
-    public String getDisplayName() {
-        return "Console stats summarizer";
-    }
+    public String getDisplayName() {return "Console Graph Generator";}
 
     /////// End ClientApp methods
 
@@ -216,53 +196,31 @@ public class GraphSummarizer implements Runnable, ClientApp {
                                                    ",tunnel.participatingTunnels.60000" +
                                                    ",tunnel.tunnelBuildSuccessAvg.60000" +
                                                    ",tunnel.testSuccessTime.60000";
-//                                                 ",udp.outboundActiveCount.60000" +
-//                                                 ",udp.receivePacketSize.60000" +
-//                                                 ",udp.receivePacketSkew.60000" +
-//                                                 ",udp.sendConfirmTime.60000" +
-//                                                 ",udp.sendPacketSize.60000" +
-//                                                 ",router.activeSendPeers.60000" +
-//                                                 ",tunnel.acceptLoad.60000" +
-//                                                 ",tunnel.dropLoadProactive.60000" +
-//                                                 ",tunnel.buildExploratorySuccess.60000" +
-//                                                 ",tunnel.buildExploratoryReject.60000" +
-//                                                 ",tunnel.buildExploratoryExpire.60000" +
-//                                                 ",client.sendAckTime.60000" +
-//                                                 ",client.dispatchNoACK.60000" +
-//                                                 ",ntcp.sendTime.60000" +
-//                                                 ",ntcp.transmitTime.60000" +
-//                                                 ",ntcp.sendBacklogTime.60000" +
-//                                                 ",ntcp.receiveTime.60000" +
-//                                                 ",transport.sendMessageFailureLifetime.60000" +
-//                                                 ",transport.sendProcessingTime.60000";
 
     /** @since 0.9.62+ */
     public int countGraphs() {return _listeners.size();}
 
     private String adjustDatabases(String oldSpecs) {
         String spec = _context.getProperty("stat.summaries", DEFAULT_DATABASES);
-        if ( ( (spec == null) && (oldSpecs == null) ) ||
-             ( (spec != null) && (oldSpecs != null) && (oldSpecs.equals(spec))) )
+        if (((spec == null) && (oldSpecs == null)) ||
+            ((spec != null) && (oldSpecs != null) && (oldSpecs.equals(spec)))) {
             return oldSpecs;
+        }
 
         Set<Rate> old = parseSpecs(oldSpecs);
         Set<Rate> newSpecs = parseSpecs(spec);
 
         // remove old ones
         for (Rate r : old) {
-            if (!newSpecs.contains(r))
-                removeDb(r);
+            if (!newSpecs.contains(r)) {removeDb(r);}
         }
         // add new ones
         StringBuilder buf = new StringBuilder();
         boolean comma = false;
         for (Rate r : newSpecs) {
-            if (!old.contains(r))
-                addDb(r);
-            if (comma)
-                buf.append(',');
-            else
-                comma = true;
+            if (!old.contains(r)) {addDb(r);}
+            if (comma) {buf.append(',');}
+            else {comma = true;}
             buf.append(r.getRateStat().getName()).append(".").append(r.getPeriod());
         }
         return buf.toString();
@@ -271,25 +229,22 @@ public class GraphSummarizer implements Runnable, ClientApp {
     private void removeDb(Rate r) {
         for (GraphListener lsnr : _listeners) {
             if (lsnr.getRate().equals(r)) {
-                // no iter.remove() in COWAL
-                _listeners.remove(lsnr);
+                _listeners.remove(lsnr); // no iter.remove() in COWAL
                 lsnr.stopListening();
                 return;
             }
         }
     }
+
     private void addDb(Rate r) {
         GraphListener lsnr = new GraphListener(r);
         boolean success = lsnr.startListening();
-        if (success)
-            _listeners.add(lsnr);
-        else
-            _log.error("Failed to add RRD for rate " + r.getRateStat().getName() + '.' + r.getPeriod());
+        if (success) {_listeners.add(lsnr);}
+        else {_log.error("Failed to add RRD for rate " + r.getRateStat().getName() + '.' + r.getPeriod());}
     }
 
     public boolean renderPng(Rate rate, OutputStream out) throws IOException {
-        return renderPng(rate, out, DEFAULT_X, DEFAULT_Y,
-                         false, false, false, false, -1, 0, true);
+        return renderPng(rate, out, DEFAULT_X, DEFAULT_Y, false, false, false, false, -1, 0, true);
     }
 
     /**
@@ -301,20 +256,15 @@ public class GraphSummarizer implements Runnable, ClientApp {
      *  @return success
      */
     public boolean renderPng(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
-                                          boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
-                                          int end, boolean showCredit) throws IOException {
+                                        boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
+                                        int end, boolean showCredit) throws IOException {
         try {
-            try {
-                _sem.acquire();
-            } catch (InterruptedException ie) {}
+            try {_sem.acquire();}
+            catch (InterruptedException ie) {}
             try {
                 return locked_renderPng(rate, out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
-                                    periodCount, end, showCredit);
+                                        periodCount, end, showCredit);
             } catch (NoClassDefFoundError ncdfe) {
-                //  java.lang.NoClassDefFoundError: Could not initialize class sun.awt.X11FontManager
-                //  at java.lang.Class.forName0(Native Method)
-                //  at java.lang.Class.forName(Class.java:270)
-                //  at sun.font.FontManagerFactory$1.run(FontManagerFactory.java:82)
                 setDisabled();
                 String s = "Error rendering - disabling graph generation.";
                 _log.logAlways(Log.WARN, s);
@@ -322,27 +272,20 @@ public class GraphSummarizer implements Runnable, ClientApp {
                 ioe.initCause(ncdfe);
                 throw ioe;
             }
-        } finally {
-            _sem.release();
-        }
+        } finally {_sem.release();}
     }
 
     /**
      *  @param end number of periods before now
      */
     private boolean locked_renderPng(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
-                                          boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
-                                          int end, boolean showCredit) throws IOException {
-        if (width > MAX_X)
-            width = MAX_X;
-        else if (width <= 0)
-            width = DEFAULT_X;
-        if (height > MAX_Y)
-            height = MAX_Y;
-        else if (height <= 0)
-            height = DEFAULT_Y;
-        if (end < 0)
-            end = 0;
+                                      boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
+                                      int end, boolean showCredit) throws IOException {
+        if (width > MAX_X) {width = MAX_X;}
+        else if (width <= 0) {width = DEFAULT_X;}
+        if (height > MAX_Y) {height = MAX_Y;}
+        else if (height <= 0) {height = DEFAULT_Y;}
+        if (end < 0) {end = 0;}
         for (GraphListener lsnr : _listeners) {
             if (lsnr.getRate().equals(rate)) {
                 lsnr.renderPng(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);
@@ -361,13 +304,10 @@ public class GraphSummarizer implements Runnable, ClientApp {
 
     public boolean getXML(Rate rate, OutputStream out) throws IOException {
         try {
-            try {
-                _sem.acquire();
-            } catch (InterruptedException ie) {}
+            try {_sem.acquire();}
+            catch (InterruptedException ie) {}
             return locked_getXML(rate, out);
-        } finally {
-            _sem.release();
-        }
+        } finally {_sem.release();}
     }
 
     private boolean locked_getXML(Rate rate, OutputStream out) throws IOException {
@@ -391,63 +331,47 @@ public class GraphSummarizer implements Runnable, ClientApp {
      *  @return success
      */
     public boolean renderRatePng(OutputStream out, int width, int height, boolean hideLegend,
-                                              boolean hideGrid, boolean hideTitle, boolean showEvents,
-                                              int periodCount, int end, boolean showCredit) throws IOException {
+                                 boolean hideGrid, boolean hideTitle, boolean showEvents,
+                                 int periodCount, int end, boolean showCredit) throws IOException {
         try {
-            try {
-                _sem.acquire();
-            } catch (InterruptedException ie) {}
-            try {
-                return locked_renderRatePng(out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
-                                        periodCount, end, showCredit);
-            } catch (NoClassDefFoundError ncdfe) {
-                //  java.lang.NoClassDefFoundError: Could not initialize class sun.awt.X11FontManager
-                //  at java.lang.Class.forName0(Native Method)
-                //  at java.lang.Class.forName(Class.java:270)
-                //  at sun.font.FontManagerFactory$1.run(FontManagerFactory.java:82)
+            try {_sem.acquire();}
+            catch (InterruptedException ie) {}
+            try {return locked_renderRatePng(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);}
+            catch (NoClassDefFoundError ncdfe) {
                 setDisabled();
-                String s = "Error rendering - disabling graph generation. Install fonts-open-sans font package?";
+                String s = "Error rendering - disabling graph generation.";
                 _log.logAlways(Log.WARN, s);
                 IOException ioe = new IOException(s);
                 ioe.initCause(ncdfe);
                 throw ioe;
             }
-        } finally {
-            _sem.release();
-        }
+        } finally {_sem.release();}
     }
 
     private boolean locked_renderRatePng(OutputStream out, int width, int height, boolean hideLegend,
-                                              boolean hideGrid, boolean hideTitle, boolean showEvents,
-                                              int periodCount, int end, boolean showCredit) throws IOException {
+                                         boolean hideGrid, boolean hideTitle, boolean showEvents,
+                                         int periodCount, int end, boolean showCredit) throws IOException {
 
         // go to some trouble to see if we have the data for the combined bw graph
         GraphListener txLsnr = null;
         GraphListener rxLsnr = null;
         for (GraphListener lsnr : getListeners()) {
             String title = lsnr.getRate().getRateStat().getName();
-            if (title.equals("bw.sendRate"))
-                txLsnr = lsnr;
-            else if (title.equals("bw.recvRate"))
-                rxLsnr = lsnr;
+            if (title.equals("bw.sendRate")) {txLsnr = lsnr;}
+            else if (title.equals("bw.recvRate")) {rxLsnr = lsnr;}
         }
-        if (txLsnr == null || rxLsnr == null)
-            throw new IOException("No rates for combined bandwidth graph");
+        if (txLsnr == null || rxLsnr == null) {throw new IOException("No rates for combined bandwidth graph");}
 
-        if (width > MAX_X)
-            width = MAX_X;
-        else if (width <= 0)
-            width = DEFAULT_X;
-        if (height > MAX_Y)
-            height = MAX_Y;
-        else if (height <= 0)
-            height = DEFAULT_Y;
+        if (width > MAX_X) {width = MAX_X;}
+        else if (width <= 0) {width = DEFAULT_X;}
+        if (height > MAX_Y) {height = MAX_Y;}
+        else if (height <= 0) {height = DEFAULT_Y;}
         if (hideTitle) {
             txLsnr.renderPng(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
-                         end, showCredit, rxLsnr, null);
+                             end, showCredit, rxLsnr, null);
         } else {
             txLsnr.renderPng(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
-                         end, showCredit, rxLsnr, "[" + _t("Router") + "] " + _t("Bandwidth usage").replace("usage", "Usage"));
+                             end, showCredit, rxLsnr, "[" + _t("Router") + "] " + _t("Bandwidth usage").replace("usage", "Usage"));
         }
         return true;
     }
@@ -458,15 +382,13 @@ public class GraphSummarizer implements Runnable, ClientApp {
      * @since public since 0.9.33, was package private
      */
     public Set<Rate> parseSpecs(String specs) {
-        if (specs == null)
-            return Collections.emptySet();
+        if (specs == null) {return Collections.emptySet();}
         StringTokenizer tok = new StringTokenizer(specs, ",");
         Set<Rate> rv = new HashSet<Rate>();
         while (tok.hasMoreTokens()) {
             String spec = tok.nextToken();
             int split = spec.lastIndexOf('.');
-            if ( (split <= 0) || (split + 1 >= spec.length()) )
-                continue;
+            if ((split <= 0) || (split + 1 >= spec.length())) {continue;}
             String name = spec.substring(0, split);
             String per = spec.substring(split+1);
             long period = -1;
@@ -475,8 +397,7 @@ public class GraphSummarizer implements Runnable, ClientApp {
                 RateStat rs = _context.statManager().getRate(name);
                 if (rs != null) {
                     Rate r = rs.getRate(period);
-                    if (r != null)
-                        rv.add(r);
+                    if (r != null) {rv.add(r);}
                 }
             } catch (NumberFormatException nfe) {}
         }
@@ -496,10 +417,9 @@ public class GraphSummarizer implements Runnable, ClientApp {
 
     /** translate a string */
     private String _t(String s) {
-        // the RRD font doesn't have zh chars, at least on my system
+        // The RRD font doesn't have zh chars, at least on my system
         // Works on 1.5.9 except on windows
-        if (IS_WIN && "zh".equals(Messages.getLanguage(_context)))
-            return s;
+        if (IS_WIN && "zh".equals(Messages.getLanguage(_context))) {return s;}
         return Messages.getString(s, _context);
     }
 
@@ -510,16 +430,12 @@ public class GraphSummarizer implements Runnable, ClientApp {
     private class Shutdown implements Runnable {
         public void run() {
             setDisabled();
-            for (GraphListener lsnr : _listeners) {
-                // FIXME could cause exceptions if rendering?
-                lsnr.stopListening();
-            }
+            for (GraphListener lsnr : _listeners) {lsnr.stopListening();} // FIXME could cause exceptions if rendering?
             _listeners.clear();
-            // stops the sync thread pool in NIO; noop if not persistent,
-            // we set num threads to zero in run() above
-            try {
-                RrdBackendFactory.getDefaultFactory().close();
-            } catch (IOException ioe) {}
+            // Stops the sync thread pool in NIO; noop if not persistent, we set num threads to zero in run() above
+            try {RrdBackendFactory.getDefaultFactory().close();}
+            catch (IOException ioe) {}
         }
     }
+
 }
