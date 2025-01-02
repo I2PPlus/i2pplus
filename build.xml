@@ -93,6 +93,7 @@
     <echo message=" updater200CompactWithDocs                    Compact updater (pack200) with readme and proxy docs"/>
     <echo message=" updater200CompactWithGeoIP                   Compact updater (pack200) with GeoIP database"/>
     <echo message=" updater200WithGeoIP                          Updater (pack200) + GeoIP files"/>
+    <echo message=" updater200WithGeoIPAndJbigi                  Updater (pack200) + GeoIP files + Jbigi"/>
     <echo message=" updater200WithJavadoc                        Updater (pack200) + javadocs (with console link)"/>
     <echo message=" updater200WithJavadocAndJetty                Updater (pack200) + javadocs (with console link) + Jetty"/>
     <echo message=" updater200WithJbigi                          Updater (pack200) + jBigi library"/>
@@ -105,6 +106,7 @@
     <echo message=" updaterCompactRouterConsoleNoThemes          Updater with RouterConsole only (no themes)"/>
     <echo message=" updaterCompactWithDocs                       Compact updater with readme and proxy docs"/>
     <echo message=" updaterCompactWithGeoIP                      Compact updater with GeoIP database"/>
+    <echo message=" updaterCompactWithGeoIPAndJbigi              Compact updater with GeoIP database and Jbigi"/>
     <echo message=" updaterRouter                                Updater with i2p.jar and router.jar only"/>
     <echo message=" updaterSmall                                 Updater with essentials (no SAM/I2PSnark/SusiMail/SusiDNS/history.txt)"/>
     <echo message=" updaterWithGeoIP                             Updater + GeoIP files"/>
@@ -2080,6 +2082,7 @@
   <target name="updaterRouter" depends="prepupdateRouter, zipit"/>
   <target name="updaterSmall" depends="prepupdateSmall, zipit"/>
   <target name="updaterWithGeoIP" depends="prepupdate, prepgeoupdate, zipit"/>
+  <target name="updaterWithGeoIPAndJbigi" depends="prepupdate, prepjbigiupdate, prepgeoupdate, zipit"/>
   <target name="updaterWithJavadocAndJetty" depends="prepjupdate, copyJavadoc, zipit"/>
   <target name="updaterWithJavadoc" depends="prepupdate, copyJavadoc, zipit"/>
   <target name="updaterWithJbigi" depends="prepupdate, prepjbigiupdate, zipit"/>
@@ -2101,6 +2104,7 @@
   <target name="updater200Small" depends="prepupdateSmall, pack200, zipit200"/>
   <target name="updater200Router" depends="prepupdateRouter, pack200, zipit200"/>
   <target name="updater200WithGeoIP" depends="prepupdate, prepgeoupdate, pack200, zipit200"/>
+  <target name="updater200WithGeoIPAndJbigi" depends="prepupdate, prepjbigiupdate, prepgeoupdate, pack200, zipit200"/>
   <target name="updater200WithJavadocAndJetty" depends="prepjupdate, copyJavadoc, pack200, zipit200"/>
   <target name="updater200WithJavadoc" depends="prepupdate, copyJavadoc, pack200, zipit200"/>
   <target name="updater200WithJbigi" depends="prepupdate, prepjbigiupdate, pack200, zipit200"/>
