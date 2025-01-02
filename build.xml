@@ -72,10 +72,10 @@
     <echo message=" installer-osx                                Build OS X GUI installer &#10140; dist/i2pinstall&#8230;osx.tar.bz2"/>
     <echo message=" installer-windows / installer5-windows       Build Windows GUI installer (IzPack4 / IzPack5) &#10140; dist/i2pinstall&#8230;windows.exe"/>
     <echo message=" javadoc                                      Create javadocs for project &#10140; dist/javadoc"/>
-    <echo message=" javadoc_nostylesheet                         Create javadocs for project without custom stylesheet &#10140; dist/javadoc"/>
+    <echo message=" javadoc-nostylesheet                         Create javadocs for project without custom stylesheet &#10140; dist/javadoc"/>
     <echo message=" javadoc-test                                 Javadocs for unit test classes &#10140; ./build/javadoc-test"/>
     <echo message=" javadoc-zip                                  Create javadocs zip for project &#10140; dist/javadoc.zip"/>
-    <echo message=" javadoc-zip_nostylesheet                     Create javadocs zip without custom stylesheet for project &#10140; dist/javadoc.zip"/>
+    <echo message=" javadoc-zip-nostylesheet                     Create javadocs zip without custom stylesheet for project &#10140; dist/javadoc.zip"/>
     <echo message=" jsdoc                                        Create jsdoc for project (requires jsdoc-toolkit) &#10140; dist/jsdoc"/>
     <echo message=" pkg                                          Run &apos;distclean&apos; then package everything up (updater, installer)"/>
     <echo message=" pkg-portable-win32                           Build a minimal, portable install for Win32 &#10140; ./portable-win32.zip"/>
@@ -141,7 +141,7 @@
     <echo message="Additionally, for runtime dependencies (console flags and geoip database):"/>
     <echo message="sudo apt install geoip-database famfamfam-flag-png"/>
     <echo message="&#8199;"/>
-    <echo message="Once the dependencies are installed, run &apos;ant debian&apos; to patch the source and Build packages."/>
+    <echo message="Once the dependencies are installed, run &apos;ant debian&apos; to patch the source and build packages."/>
   </target>
 
   <target name="buildRequirements">
@@ -1021,7 +1021,7 @@
     <echo message="javadoc creation complete, saved to dist/javadoc"/>
   </target>
 
-  <target name="javadoc_nostylesheet" depends="getReleaseNumber, getBuildNumber, distclean">
+  <target name="javadoc-nostylesheet" depends="getReleaseNumber, getBuildNumber, distclean">
     <echo message="JDK: ${java.vendor} ${java.version} (${java.runtime.name} ${java.runtime.version})"/>
     <ant dir="apps/jetty" target="ensureJettylib"/>
     <mkdir dir="./build"/>
@@ -1128,7 +1128,7 @@
     <zip destfile="dist/javadoc.zip" basedir="." level="9" includes="dist/javadoc\**"/>
   </target>
 
-  <target name="javadoc-zip_nostylesheet" depends="javadoc_nostylesheet">
+  <target name="javadoc-zip-nostylesheet" depends="javadoc-nostylesheet">
     <zip destfile="dist/javadoc.zip" basedir="." level="9" includes="dist/javadoc\**"/>
   </target>
 
@@ -2727,6 +2727,7 @@
       <arg value="-output"/>
       <arg value="dist/findbugs.html"/>
       <arg value="-effort:max"/>
+      <arg value="-high"/>
       <arg value="-auxclasspath"/>
       <arg value="build/commons-el.jar:build/jasper-runtime.jar:build/javax.servlet.jar:build/org.mortbay.jetty.jar:build/jrobin.jar:installer/lib/wrapper/all/wrapper.jar:apps/susidns/src/lib/standard.jar:apps/susidns/src/lib/jstl.jar"/>
       <arg value="-sourcepath"/>
