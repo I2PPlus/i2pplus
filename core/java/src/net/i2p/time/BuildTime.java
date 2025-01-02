@@ -34,7 +34,7 @@ public class BuildTime {
     private static final long _latestTime;
     private static final long YEARS_25 = 25L*365*24*60*60*1000;
     /** update this periodically */
-    private static final String EARLIEST = "2025-01-02 12:00:00 UTC";
+    private static final String EARLIEST = "2025-01-01 12:00:00 UTC";
     // fallback if parse fails ticket #1976
     // date -d 202x-xx-xx +%s
     private static final long EARLIEST_LONG = 1735776000 * 1000L;
