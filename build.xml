@@ -15,8 +15,8 @@
          Include property files so that values can be easily overridden.
          Users should create an override.properties file to make changes.
     -->
-  <property file="build.properties"/>
   <property file="override.properties"/>
+  <property file="build.properties"/>
   <!--
          When changing, also change javadoc URL in build.properties,
          and checksum in apps/jetty/build.xml
