@@ -2670,10 +2670,9 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
 
     /**
      *  "injected" message from the EstablishmentManager.
-     *  If you have multiple messages, use the list variant,
-     *  so the messages may be bundled efficiently.
+     *  If you have multiple messages, use the list variant, so the messages may be bundled efficiently.
      *
-     *  @param peer all messages MUST be going to this peer
+     *  @param peer the message MUST be going to this peer
      */
     void send(I2NPMessage msg, PeerState peer) {
         try {
@@ -2688,10 +2687,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     }
 
     /**
-     *  "injected" message from the EstablishmentManager,
-     *  plus pending messages to send,
-     *  so the messages may be bundled efficiently.
-     *  Called at end of outbound establishment.
+     *  "injected" message from the EstablishmentManager, plus pending messages to send,
+     *  so the messages may be bundled efficiently. Called at end of outbound establishment.
      *
      *  @param msg may be null if nothing to inject
      *  @param msgs non-null, may be empty
