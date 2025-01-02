@@ -6,7 +6,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-. Type: boolean
 #: ../i2p.templates:2001
 msgid "Should the I2P router be started at boot?"
 msgstr "Router I2P có nên được khởi động khi khởi động không?"
