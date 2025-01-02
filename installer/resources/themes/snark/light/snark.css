@@ -402,6 +402,7 @@ form:last-child .configPanel{margin-top:10px}
 .iframed #snarkInfo~.mainsection:last-child{margin-bottom:-5px}
 .iframed #trackerconfig tr:nth-last-child(2) td{padding-bottom:4px}
 .iframed #trackers,.iframed .mainsection#snarkInfo{margin-bottom:1px}
+.iframed #trackers{padding-bottom:4px}
 
 /* details */
 .headerstatus,.headerpriority{text-align:center}
@@ -651,10 +652,12 @@ th img{filter:none;opacity:.85}
 #tab_torrentedit .tab_label::after{background:var(--edit) no-repeat scroll center center/16px,var(--tabimg)}
 #torrents tfoot tr:first-child th.rateUp,#torrents tfoot tr:first-child th.txd{font-style:italic}
 #torrents tfoot tr:first-child,#torrents tfoot tr:first-child th,#torrents tfoot tr:first-child:hover,#torrents tfoot tr:first-child:hover th{border-top:var(--border_soft);border-bottom:var(--border_soft)}
-
+.iframed #trackersTitle:not(.expanded){margin-bottom:-5px}
+.iframed #trackersTitle:not(.expanded)+hr{margin-bottom:-3px}
 /* config section toggles */
 .configTitle[id]{padding:6px 30px;position:relative;cursor:pointer;color:var(--ink_btn);box-shadow: var(--btn_shadow)}
 .configTitle[id]:not(.expanded){margin-bottom:-3px}
+.iframed #trackersTitle:not(.expanded){margin-bottom:2px}
 .configTitle[id]:hover{color:var(--hover)}
 .configTitle[id]::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
 .configTitle[id]:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
