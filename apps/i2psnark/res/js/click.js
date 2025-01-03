@@ -10,7 +10,7 @@ let eventListenerActive = false;
 document.addEventListener("DOMContentLoaded", () => {
   if (eventListenerActive) {return;}
 
-  const page = document.getElementById("page");
+  const page = document.getElementById("page") || document.querySelector(".page");
   const htmlTag = document.documentElement;
 
   (function injectCss() {
