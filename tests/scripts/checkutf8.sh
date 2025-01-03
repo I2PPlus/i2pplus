@@ -34,45 +34,45 @@ DIRS="\
 
 for i in `find $DIRS -maxdepth 1 -type f`
 do
-	#echo "Checking $i ..."
-	iconv -f UTF8 -t UTF8 $i > /dev/null
+  #echo "Checking $i ..."
+  iconv -f UTF8 -t UTF8 $i > /dev/null
         if [ $? -ne 0 ]
-	then
-		echo "********* FAILED CHECK FOR $i *************"
-		FAIL=1
-	fi
+  then
+    echo "********* FAILED CHECK FOR $i *************"
+    FAIL=1
+  fi
 done
 
-echo "Checking all Java and Scala files ..."
+echo "> Checking all Java and Scala files ..."
 for i in `find . \( -name \*.java -o -name \*.scala \) -type f`
 do
-	#echo "Checking $i ..."
-	iconv -f UTF8 -t UTF8 $i > /dev/null
-	if [ $? -ne 0 ]
-	then
-		echo "********* FAILED CHECK FOR $i *************"
-		FAIL=1
-	fi
+  #echo "Checking $i ..."
+  iconv -f UTF8 -t UTF8 $i > /dev/null
+  if [ $? -ne 0 ]
+  then
+    echo "********* FAILED CHECK FOR $i *************"
+    FAIL=1
+  fi
 done
 
 # Java properties files (when not using our DataHelper methods) must be ISO-8859-1
 # https://docs.oracle.com/javase/6/docs/api/java/util/Properties.html
-echo "Checking getopt properties files ..."
+echo "> Checking getopt properties files ..."
 for i in `find core/java/src/gnu/getopt -name \*.properties -type f`
 do
-	#echo "Checking $i ..."
-	iconv -f ISO-8859-1 -t ISO-8859-1 $i > /dev/null
+  #echo "Checking $i ..."
+  iconv -f ISO-8859-1 -t ISO-8859-1 $i > /dev/null
         if [ $? -ne 0 ]
-	then
-		echo "********* FAILED CHECK FOR $i *************"
-		FAIL=1
-	fi
+  then
+    echo "********* FAILED CHECK FOR $i *************"
+    FAIL=1
+  fi
 done
 
 if [ "$FAIL" != "" ]
 then
-	echo "******** At least one file failed check *********"
+  echo "******** At least one file failed check *********"
 else
-	echo "All files passed"
+  echo "> All files passed"
 fi
 exit $FAIL

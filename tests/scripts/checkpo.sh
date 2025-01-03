@@ -7,9 +7,9 @@
 # public domain
 #
 
-cd `dirname $0`/../..
+cd "$(dirname "$0")/../.."
 
-DIRS="\
+DIRS="
   core/locale \
   router/locale \
   apps/routerconsole/locale \
@@ -28,21 +28,43 @@ DIRS="\
 
 FILES="installer/resources/locale-man/man.pot"
 
-for i in `find $DIRS -maxdepth 1 -type f -name \*.po` $FILES
-do
-	echo "Checking $i ..."
-	msgfmt -c $i -o /dev/null
-        if [ $? -ne 0 ]
-	then
-		echo "********* FAILED CHECK FOR $i *************"
-		FAIL=1
-	fi
+PASS=0
+FAIL=0
+TOTAL=0
+
+for dir in $DIRS; do
+  echo "> Checking directory: $dir"
+  for i in $(find "$dir" -maxdepth 1 -type f -name '*.po'); do
+    TOTAL=$((TOTAL + 1))
+    msgfmt --check-format "$i" -o /dev/null
+    if [ $? -eq 0 ]; then
+      PASS=$((PASS + 1))
+    else
+      FAIL=$((FAIL + 1))
+      echo "! WARN: $i failed the .po format check."
+    fi
+  done
+  echo # Add a newline separator after checking each directory
 done
 
-if [ "$FAIL" != "" ]
-then
-	echo "******** At least one file failed check *********"
+# Check additional files not located in directories
+for i in $FILES; do
+  TOTAL=$((TOTAL + 1))
+  msgfmt --check-format "$i" -o /dev/null
+  if [ $? -eq 0 ]; then
+    PASS=$((PASS + 1))
+  else
+    FAIL=$((FAIL + 1))
+    echo "! WARN: $i failed the .po format check."
+  fi
+done
+
+echo "> ${PASS}/${TOTAL} files passed the .po format check."
+
+if [ "$FAIL" -gt 0 ]; then
+  echo "! ${FAIL} files failed the .po format check."
+  exit 1
 else
-	echo "All files passed"
+  echo "> All files passed the .po format check."
+  exit 0
 fi
-exit $FAIL

@@ -9,7 +9,7 @@
 # public domain
 #
 
-cd `dirname $0`/../..
+cd $(dirname $0)/../..
 
 XMLFILES="\
 ./apps/addressbook/build.xml \
@@ -79,35 +79,30 @@ HTMLFILES="\
 ./router/java/src/net/i2p/router/util/package.html"
 
 echo 'Checking XML files....................'
-for i in $XMLFILES
-do
-	#echo "Checking $i ..."
-	xmllint --noout $i
-        if [ $? -ne 0 ]
-	then
-		echo "********* FAILED CHECK FOR $i *************"
-		FAIL=1
-	fi
+for i in $XMLFILES; do
+    #echo "Checking $i ..."
+    xmllint --noout $i
+    if [ $? -ne 0 ]; then
+        echo "********* FAILED CHECK FOR $i *************"
+        FAIL=1
+    fi
 done
 
 echo 'Checking HTML files....................'
-for i in $HTMLFILES
-do
-	#echo "Checking $i ..."
-	xmllint --html --noout $i
-	# FIXME html mode never exits with an error code
-	# ... but it does output errors
-        if [ $? -ne 0 ]
-	then
-		echo "********* FAILED CHECK FOR $i *************"
-		FAIL=1
-	fi
+for i in $HTMLFILES; do
+    #echo "Checking $i ..."
+    xmllint --html --noout $i
+    # FIXME html mode never exits with an error code
+    # ... but it does output errors
+    if [ $? -ne 0 ]; then
+        echo "********* FAILED CHECK FOR $i *************"
+        FAIL=1
+    fi
 done
 
-if [ "$FAIL" != "" ]
-then
-	echo "******** At least one file failed check *********"
+if [ "$FAIL" != "" ]; then
+    echo "******** At least one file failed check *********"
 else
-	echo "All files passed"
+    echo "All files passed"
 fi
 exit $FAIL
