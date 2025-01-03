@@ -33,4 +33,6 @@ ADDING RPC SUPPORT
 
 LICENSE
 =======
-I2PSnark is GPL'ed software, based on Snark (http://www.klomp.org/)
+
+* I2PSnark is licensed under the GPL v2 and is based on Snark (http://www.klomp.org/)
+* Jetty is licensed under Apache Software License v2.

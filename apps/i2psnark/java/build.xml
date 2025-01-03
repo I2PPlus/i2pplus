@@ -1,31 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="i2psnark">
 
-  <target name="disable-javascript" unless="java.version.lt('15')">
-    <script language="javascript">
-      project.getBuildListeners().firstElement().setMessageOutputLevel(2);
-    </script>
-  </target>
-
   <target name="all" depends="clean, build"/>
 
-  <!--<target name="build" depends="builddep, jar, war"/>-->
+  <target name="build" depends="builddep, jar, war"/>
 
-  <target name="build" depends="builddep">
-    <parallel>
-      <sequential>
-        <target name="compile"/>
-      </sequential>
-      <sequential>
-        <target name="bundle"/>
-      </sequential>
-      <sequential>
-        <target name="war"/>
-      </sequential>
-    </parallel>
-  </target>
-
-  <target name="builddep"><!-- Run from top level build.xml to get dependencies built --></target>
+  <!-- Run from top level build.xml to get dependencies built -->
+  <target name="builddep"/>
 
   <condition property="depend.available">
     <typefound name="depend"/>
@@ -146,12 +127,14 @@
   <target name="war" depends="jar, bundle, warUpToDate, listChangedFiles" unless="war.uptodate">
     <!-- Set if unset -->
     <property name="workspace.changes.tr" value=""/>
-    <copy todir="build/res/.res">
-      <fileset dir="../res/"/>
-    </copy>
-    <copy file="../../routerconsole/jsp/js/onVisible.js" todir="build/res/.res/js"/>
-    <!-- mime.properties must be in with the classes -->
-    <copy file="../mime.properties" todir="build/obj/org/klomp/snark/web"/>
+    <parallel>
+      <copy todir="build/res/.res">
+        <fileset dir="../res/"/>
+      </copy>
+      <copy file="../../routerconsole/jsp/js/onVisible.js" todir="build/res/.res/js"/>
+      <!-- mime.properties must be in with the classes -->
+      <copy file="../mime.properties" todir="build/obj/org/klomp/snark/web"/>
+    </parallel>
     <war destfile="../i2psnark.war" webxml="../web.xml">
       <!-- Include only the web stuff, as of 0.7.12 the router will add i2psnark.jar to the classpath for the war -->
       <classes dir="./build/obj" includes="**/web/*"/>
@@ -303,104 +286,45 @@
 
   <!-- Add css, image, and js files for standalone snark to the war -->
   <target name="standalone_war" depends="war">
-    <mkdir dir="build/standalone-resources/.res/themes/snark"/>
-    <copy quiet="true" todir="build/standalone-resources/.res/themes/snark">
-      <fileset dir="../../../installer/resources/themes/snark/"/>
-    </copy>
-    <mkdir dir="build/standalone-resources/.res/themes/snark/fonts"/>
-    <copy quiet="true" todir="build/standalone-resources/.res/themes/snark/fonts">
-      <fileset dir="../../../installer/resources/themes/fonts/"/>
-    </copy>
-    <replace dir="build/standalone-resources/.res/themes/snark" summary="true"
-        token="url(/themes/console/classic/images/"
-        value="url(/i2psnark/.res/themes/snark/classic/images/">
-      <include name="**/*.css"/>
-    </replace>
-    <replace dir="build/standalone-resources/.res/themes/snark" summary="true"
-        token="url(/themes/console/dark/images/"
-        value="url(/i2psnark/.res/themes/snark/dark/images/">
-      <include name="**/*.css"/>
-    </replace>
-    <replace dir="build/standalone-resources/.res/themes/snark" summary="true"
-        token="url(../../console/light/images/"
-        value="url(/i2psnark/.res/themes/snark/light/images/">
-      <include name="**/*.css"/>
-    </replace>
-    <replace dir="build/standalone-resources/.res/themes/snark" summary="true"
-        token="url(/themes/console/light/"
-        value="url(/i2psnark/.res/themes/snark/light/">
-      <include name="**/*.css"/>
-    </replace>
-    <replace dir="build/standalone-resources/.res/themes/snark" summary="true"
-        token="url(/themes/console/light/images/"
-        value="url(/i2psnark/.res/themes/snark/light/images/">
-      <include name="**/*.css"/>
-    </replace>
-    <replace dir="build/standalone-resources/.res/themes/snark" summary="true"
-        token="url(/themes/console/images/info/"
-        value="url(/i2psnark/.res/themes/snark/ubergine/images/">
-      <include name="**/*.css"/>
-    </replace>
-    <replace dir="build/standalone-resources/.res/themes/snark" summary="true"
-        token="url(/themes/console/classic/"
-        value="url(/i2psnark/.res/themes/snark/classic/">
-      <include name="**/*.css"/>
-    </replace>
-    <replace dir="build/standalone-resources/.res/themes/snark" summary="true"
-        token="url(/themes/console/dark/"
-        value="url(/i2psnark/.res/themes/snark/dark/">
-      <include name="**/*.css"/>
-    </replace>
-    <replace dir="build/standalone-resources/.res/themes/snark" summary="true"
-        token="url(/themes/console/light/"
-        value="url(/i2psnark/.res/themes/snark/light/">
-      <include name="**/*.css"/>
-    </replace>
-    <replace dir="build/standalone-resources/.res/themes/snark" summary="true"
-        token="url(/themes/console/midnight/"
-        value="url(/i2psnark/.res/themes/snark/midnight/">
-      <include name="**/*.css"/>
-    </replace>
-
-    <!-- Rather than pulling in all the console theme images, let's just specify the ones we need -->
-    <copy quiet="true" file="../../../installer/resources/themes/console/images/newtab.svg"
-      todir="build/standalone-resources/.res/icons"/>
-    <copy quiet="true" file="../../../installer/resources/themes/console/dark/images/camotile2.png"
-      todir="build/standalone-resources/.res/themes/snark/dark/images"/>
-    <copy quiet="true" file="../../../installer/resources/themes/console/classic/images/bg0.png"
-      todir="build/standalone-resources/.res/themes/snark/classic/images"/>
-    <copy quiet="true" file="../../../installer/resources/themes/console/light/global.css"
-      todir="build/standalone-resources/.res/themes/snark/light"/>
-    <copy quiet="true" file="../../../installer/resources/themes/console/classic/global.css"
-      todir="build/standalone-resources/.res/themes/snark/classic"/>
-    <copy quiet="true" file="../../../installer/resources/themes/console/dark/global.css"
-      todir="build/standalone-resources/.res/themes/snark/dark"/>
-    <copy quiet="true" file="../../../installer/resources/themes/console/dark/chromescroll.css"
-      todir="build/standalone-resources/.res/themes/snark/dark"/>
-    <copy quiet="true" file="../../../installer/resources/themes/console/midnight/global.css"
-       todir="build/standalone-resources/.res/themes/snark/midnight"/>
-    <copy quiet="true" file="../../../installer/resources/themes/console/midnight/images/tile.css"
-      todir="build/standalone-resources/.res/themes/snark/midnight/images"/>
-    <copy quiet="true" file="../../../installer/resources/themes/console/midnight/chromescroll.css"
-      todir="build/standalone-resources/.res/themes/snark/midnight"/>
-    <copy quiet="true" todir="build/standalone-resources/.res/themes/fonts">
-      <fileset dir="../../../installer/resources/themes/fonts/" includes="**/*"/>
-    </copy>
-    <replace dir="build/standalone-resources/.res/themes/fonts" summary="true" token="url(/themes/fonts/" value="url(/i2psnark/.res/themes/fonts/">
-      <include name="**/*.css"/>
-    </replace>
-    <replace dir="build/standalone-resources/.res/themes/snark" summary="true" token="@import url(../images/images.css);" value="">
-      <include name="**/*.css"/>
-    </replace>
-    <replace dir="build/standalone-resources/.res/themes/snark" summary="true" token="@import url(../images/itooplus.css);" value="">
-      <include name="**/*.css"/>
-    </replace>
-    <mkdir dir="build/standalone-resources/.res/js"/>
-    <copy file="../../routerconsole/jsp/js/onVisible.js" todir="build/standalone-resources/.res/js"/>
-    <copy file="../../i2psnark/res/js/refreshTorrents.js" todir="build/standalone-resources/.res/js"/>
-    <replace dir="build/standalone-resources/.res/js" summary="true" token="/themes/snark/" value="/i2psnark/.res/themes/snark/">
-      <include name="**/refreshTorrents.js"/>
-    </replace>
+    <parallel>
+      <mkdir dir="build/standalone-resources/.res/themes/snark"/>
+      <copy quiet="true" todir="build/standalone-resources/.res/themes/snark">
+        <fileset dir="../../../installer/resources/themes/snark/"/>
+      </copy>
+      <mkdir dir="build/standalone-resources/.res/themes/snark/fonts"/>
+      <copy quiet="true" todir="build/standalone-resources/.res/themes/snark/fonts">
+        <fileset dir="../../../installer/resources/themes/fonts/"/>
+      </copy>
+      <!-- Rather than pulling in all the console theme images, let's just specify the ones we need -->
+      <copy quiet="true" file="../../../installer/resources/themes/console/images/newtab.svg"
+            todir="build/standalone-resources/.res/icons"/>
+      <copy quiet="true" file="../../../installer/resources/themes/console/dark/images/camotile2.png"
+            todir="build/standalone-resources/.res/themes/snark/dark/images"/>
+      <copy quiet="true" todir="build/standalone-resources/.res/themes/fonts">
+        <fileset dir="../../../installer/resources/themes/fonts/" includes="**/*"/>
+      </copy>
+      <mkdir dir="build/standalone-resources/.res/js"/>
+      <copy file="../../routerconsole/jsp/js/onVisible.js" todir="build/standalone-resources/.res/js"/>
+      <copy file="../../i2psnark/res/js/refreshTorrents.js" todir="build/standalone-resources/.res/js"/>
+    </parallel>
+    <parallel>
+      <replace dir="build/standalone-resources/.res/themes/snark" summary="true"
+               token="url(/themes/console/classic/images/"
+               value="url(/i2psnark/.res/themes/snark/classic/images/">
+        <include name="**/*.css"/>
+      </replace>
+      <replace dir="build/standalone-resources/.res/themes/snark" summary="true"
+               token="url(/themes/console/dark/images/"
+               value="url(/i2psnark/.res/themes/snark/dark/images/">
+        <include name="**/*.css"/>
+      </replace>
+      <replace dir="build/standalone-resources/.res/themes/fonts" summary="true" token="url(/themes/fonts/" value="url(/i2psnark/.res/themes/fonts/">
+        <include name="**/*.css"/>
+      </replace>
+      <replace dir="build/standalone-resources/.res/js" summary="true" token="/themes/snark/" value="/i2psnark/.res/themes/snark/">
+        <include name="**/refreshTorrents.js"/>
+      </replace>
+    </parallel>
     <zip destfile="../i2psnark.war" update="true" duplicate="preserve">
       <fileset dir="build/standalone-resources"/>
     </zip>
@@ -410,53 +334,60 @@
   <target name="standalone_prep" depends="standalone_jar, standalone_war">
     <delete dir="./i2psnark"/>
     <mkdir dir="./i2psnark"/>
-    <copy file="../launch-i2psnark" todir="./i2psnark/"/>
+    <parallel>
+      <mkdir dir="./i2psnark/logs"/>
+      <mkdir dir="./i2psnark/webapps"/>
+      <mkdir dir="./i2psnark/docroot"/>
+      <mkdir dir="./i2psnark/contexts"/>
+      <parallel>
+        <copy file="../launch-i2psnark" todir="./i2psnark/" quiet="true"/>
+        <copy file="../launch-i2psnark.bat" todir="./i2psnark/" quiet="true"/>
+        <copy file="../standalone-context.xml" tofile="./i2psnark/contexts/context.xml" quiet="true"/>
+        <copy file="../standalone-index.html" tofile="./i2psnark/docroot/index.html" quiet="true"/>
+        <copy file="../i2psnark.war" tofile="./i2psnark/webapps/i2psnark.war" quiet="true"/>
+        <copy file="../jetty-i2psnark.xml" tofile="./i2psnark/jetty-i2psnark.xml" quiet="true"/>
+        <copy file="../i2psnark-appctx.config" tofile="./i2psnark/i2psnark-appctx.config" quiet="true"/>
+        <copy file="./build/i2psnark-standalone.jar" tofile="./i2psnark/i2psnark.jar" quiet="true"/>
+        <copy file="../readme-standalone.txt" tofile="./i2psnark/readme.txt" quiet="true"/>
+        <copy file="../../../installer/resources/hosts.txt" tofile="./i2psnark/hosts.txt" quiet="true"/>
+      </parallel>
+    </parallel>
     <chmod type="file" file="./i2psnark/launch-i2psnark" perm="+x"/>
-    <copy file="../launch-i2psnark.bat" todir="./i2psnark/"/>
-    <mkdir dir="./i2psnark/contexts"/>
-    <copy file="../standalone-context.xml" tofile="./i2psnark/contexts/context.xml"/>
-    <mkdir dir="./i2psnark/docroot"/>
-    <copy file="../standalone-index.html" tofile="./i2psnark/docroot/index.html"/>
-    <mkdir dir="./i2psnark/webapps"/>
-    <copy file="../i2psnark.war" tofile="./i2psnark/webapps/i2psnark.war"/>
-    <copy file="../jetty-i2psnark.xml" tofile="./i2psnark/jetty-i2psnark.xml"/>
-    <copy file="../i2psnark-appctx.config" tofile="./i2psnark/i2psnark-appctx.config"/>
-    <copy file="./build/i2psnark-standalone.jar" tofile="./i2psnark/i2psnark.jar"/>
-    <copy file="../readme-standalone.txt" tofile="./i2psnark/readme.txt"/>
-    <!-- temp so announces work -->
-    <copy file="../../../installer/resources/hosts.txt" tofile="./i2psnark/hosts.txt"/>
-    <copy todir="./i2psnark/licenses">
-      <fileset dir="../../../licenses" includes="LICENSE-GPLv2.txt, ABOUT-Jetty.html"/>
-    </copy>
-    <mkdir dir="./i2psnark/logs"/>
   </target>
 
   <target name="standalone_nozip" depends="standalone_jar, standalone_war">
     <delete dir="./i2psnark" quiet="true"/>
-    <mkdir dir="./i2psnark"/>
-    <copy file="../launch-i2psnark" todir="./i2psnark/" quiet="true"/>
-    <copy file="../launch-i2psnark.bat" todir="./i2psnark/" quiet="true"/>
-    <mkdir dir="./i2psnark/contexts"/>
-    <copy file="../standalone-context.xml" tofile="./i2psnark/contexts/context.xml" quiet="true"/>
-    <mkdir dir="./i2psnark/docroot"/>
-    <copy file="../standalone-index.html" tofile="./i2psnark/docroot/index.html" quiet="true"/>
-    <mkdir dir="./i2psnark/webapps"/>
-    <copy file="../i2psnark.war" tofile="./i2psnark/webapps/i2psnark.war" quiet="true"/>
-    <copy file="../jetty-i2psnark.xml" tofile="./i2psnark/jetty-i2psnark.xml" quiet="true"/>
-    <copy file="../i2psnark-appctx.config" tofile="./i2psnark/i2psnark-appctx.config" quiet="true"/>
-    <copy file="./build/i2psnark-standalone.jar" tofile="./i2psnark/i2psnark.jar" quiet="true"/>
-    <copy file="../readme-standalone.txt" tofile="./i2psnark/readme.txt" quiet="true"/>
-    <!-- temp so announces work -->
-    <copy file="../../../installer/resources/hosts.txt" tofile="./i2psnark/hosts.txt" quiet="true"/>
-    <mkdir dir="./i2psnark/logs"/>
+    <parallel>
+      <mkdir dir="./i2psnark"/>
+      <sequential>
+        <mkdir dir="./i2psnark/contexts"/>
+        <mkdir dir="./i2psnark/docroot"/>
+        <mkdir dir="./i2psnark/webapps"/>
+        <mkdir dir="./i2psnark/logs"/>
+      </sequential>
+      <parallel>
+        <copy file="../launch-i2psnark" todir="./i2psnark/" quiet="true"/>
+        <copy file="../launch-i2psnark.bat" todir="./i2psnark/" quiet="true"/>
+        <copy file="../standalone-context.xml" tofile="./i2psnark/contexts/context.xml" quiet="true"/>
+        <copy file="../standalone-index.html" tofile="./i2psnark/docroot/index.html" quiet="true"/>
+        <copy file="../i2psnark.war" tofile="./i2psnark/webapps/i2psnark.war" quiet="true"/>
+        <copy file="../jetty-i2psnark.xml" tofile="./i2psnark/jetty-i2psnark.xml" quiet="true"/>
+        <copy file="../i2psnark-appctx.config" tofile="./i2psnark/i2psnark-appctx.config" quiet="true"/>
+        <copy file="./build/i2psnark-standalone.jar" tofile="./i2psnark/i2psnark.jar" quiet="true"/>
+        <copy file="../readme-standalone.txt" tofile="./i2psnark/readme.txt" quiet="true"/>
+        <copy file="../../../installer/resources/hosts.txt" tofile="./i2psnark/hosts.txt" quiet="true"/>
+      </parallel>
+    </parallel>
     <echo message="I2PSnark standalone folder moved to ./dist/i2psnark_standalone"/>
   </target>
 
   <target name="clean">
-    <delete dir="./build"/>
-    <delete file="../i2psnark.war"/>
-    <delete file="./i2psnark-standalone.zip"/>
-    <delete dir="./i2psnark"/>
+    <parallel>
+      <delete dir="./build"/>
+      <delete file="../i2psnark.war"/>
+      <delete file="./i2psnark-standalone.zip"/>
+      <delete dir="./i2psnark"/>
+    </parallel>
   </target>
 
   <target name="cleandep" depends="clean"/>
