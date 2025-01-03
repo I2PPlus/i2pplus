@@ -5208,13 +5208,13 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9.53
      */
     private void displayTorrentEdit(Snark snark, String base, StringBuilder buf) {
+        if (snark == null) {return;}
         MetaInfo meta = snark.getMetaInfo();
         if (meta == null) {return;}
         buf.append("<div id=editSection class=mainsection>\n")
            .append("<input hidden class=toggle_input id=toggle_torrentedit type=checkbox>")
            .append("<label id=tab_torrentedit class=toggleview for=\"toggle_torrentedit\"><span class=tab_label>")
-           .append(_t("Edit Torrent"))
-           .append("</span></label><hr>\n")
+           .append(_t("Edit Torrent")).append("</span></label><hr>\n")
            .append("<table id=torrentEdit>\n");
         boolean isRunning = !snark.isStopped();
         String announce = meta.getAnnounce();
