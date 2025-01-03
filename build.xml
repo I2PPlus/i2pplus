@@ -2712,7 +2712,7 @@
   </target>
 
   <!-- standalone i2psnark no zip -->
-  <target name="i2psnark_nozip" depends="buildStreaming, buildJetty">
+  <target name="i2psnark_nozip" depends="buildStreaming, buildJetty, buildSystray, jbigi">
     <ant dir="apps/i2psnark/java" target="standalone_nozip"/>
     <delete dir="./dist/i2psnark_standalone" quiet="true"/>
     <move todir="./dist/i2psnark_standalone" quiet="true">

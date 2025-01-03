@@ -8,7 +8,23 @@
   </target>
 
   <target name="all" depends="clean, build"/>
-  <target name="build" depends="builddep, jar, war"/>
+
+  <!--<target name="build" depends="builddep, jar, war"/>-->
+
+  <target name="build" depends="builddep">
+    <parallel>
+      <sequential>
+        <target name="compile"/>
+      </sequential>
+      <sequential>
+        <target name="bundle"/>
+      </sequential>
+      <sequential>
+        <target name="war"/>
+      </sequential>
+    </parallel>
+  </target>
+
   <target name="builddep"><!-- Run from top level build.xml to get dependencies built --></target>
 
   <condition property="depend.available">
@@ -264,6 +280,7 @@
       <zipfileset src="../../jetty/jettylib/org.mortbay.jetty.jar"/>
       <zipfileset src="../../ministreaming/java/build/mstreaming.jar"/>
       <zipfileset src="../../streaming/java/build/streaming.jar"/>
+      <zipfileset src="../../systray/java/build/systray.jar"/>
       <zipfileset src="../../../build/jbigi.jar"/>
       <manifest>
         <attribute name="Main-Class" value="org.klomp.snark.standalone.RunStandalone"/>
