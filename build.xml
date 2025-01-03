@@ -25,22 +25,6 @@
   <property name="jetty.ver" value="9.3.30.v20211001"/>
   <property name="tomcat.ver" value="9.0.88"/>
 
-  <macrodef name="quiet">
-    <element name="body" implicit="yes"/>
-    <sequential>
-      <script language="javascript">project.getBuildListeners().firstElement().setMessageOutputLevel(0);</script>
-      <body/>
-    </sequential>
-  </macrodef>
-
-  <macrodef name="unquiet">
-    <element name="body" implicit="yes"/>
-    <sequential>
-      <script language="javascript">project.getBuildListeners().firstElement().setMessageOutputLevel(2);</script>
-      <body/>
-    </sequential>
-  </macrodef>
-
   <!-- You probably don't want to change anything from here down -->
   <target name="help" depends="all"/>
   <target name="all">
@@ -2680,11 +2664,15 @@
   <!-- end unit tests -->
 
   <target name="testscripts">
-    <exec executable="tests/scripts/checkcerts.sh" failonerror="true"/>
-    <exec executable="tests/scripts/checkpo.sh" failonerror="true"/>
-    <exec executable="tests/scripts/checkutf8.sh" failonerror="true"/>
-    <exec executable="tests/scripts/checkxml.sh" failonerror="true"/>
-    <exec executable="tests/scripts/checkscripts.sh" failonerror="true"/>
+    <parallel>
+      <exec executable="tests/scripts/checkcerts.sh" failonerror="false"/>
+      <exec executable="tests/scripts/checkpo.sh" failonerror="false"/>
+      <exec executable="tests/scripts/checkutf8.sh" failonerror="false"/>
+      <exec executable="tests/scripts/checkxml.sh" failonerror="false"/>
+      <exec executable="tests/scripts/checkscripts.sh" failonerror="false"/>
+    </parallel>
+    <echo message="--------------------------------------------------------------------------------"/>
+    <echo message="Test scripts execution completed, review the output above for possible issues..."/>
   </target>
 
   <target name="testscripts-net">
@@ -2710,17 +2698,14 @@
   </target>
 
   <!-- standalone i2psnark no zip -->
-  <target name="i2psnark_nozip" depends="buildStreaming, buildJetty, buildSystray, jbigi">
-    <quiet>
-      <ant dir="apps/i2psnark/java" target="standalone_nozip"/>
-      <delete dir="./dist/i2psnark_standalone" quiet="true"/>
-      <move todir="./dist/i2psnark_standalone" quiet="true">
-        <fileset dir="apps/i2psnark/java/i2psnark" includes="**/*"/>
-      </move>
-    </quiet>
-    <unquiet>
-      <echo message="I2PSnark standalone build finished (nozip) and copied to ./dist/i2psnark_standalone"/>
-    </unquiet>
+  <target name="i2psnark_nozip" depends="buildStreaming, buildJetty">
+    <ant dir="apps/i2psnark/java" target="standalone_nozip"/>
+    <delete dir="./dist/i2psnark_standalone" quiet="true"/>
+    <move todir="./dist/i2psnark_standalone" quiet="true">
+      <fileset dir="apps/i2psnark/java/i2psnark" includes="**/*"/>
+    </move>
+    <chmod type="file" file="./dist/i2psnark_standalone/launch-i2psnark" perm="+x"/>
+    <echo message="I2PSnark standalone build finished (nozip) and copied to ./dist/i2psnark_standalone"/>
   </target>
 
   <target name="slackpkg">

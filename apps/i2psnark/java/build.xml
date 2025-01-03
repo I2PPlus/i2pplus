@@ -1,21 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="i2psnark">
 
-  <macrodef name="quiet">
-    <element name="body" implicit="yes"/>
-    <sequential>
-      <script language="javascript">project.getBuildListeners().firstElement().setMessageOutputLevel(0);</script>
-      <body/>
-    </sequential>
-  </macrodef>
-
-  <macrodef name="unquiet">
-    <element name="body" implicit="yes"/>
-    <sequential>
-      <script language="javascript">project.getBuildListeners().firstElement().setMessageOutputLevel(2);</script>
-      <body/>
-    </sequential>
-  </macrodef>
+  <target name="disable-javascript" unless="java.version.lt('15')">
+    <script language="javascript">
+      project.getBuildListeners().firstElement().setMessageOutputLevel(2);
+    </script>
+  </target>
 
   <target name="all" depends="clean, build"/>
   <target name="build" depends="builddep, jar, war"/>
@@ -26,26 +16,21 @@
   </condition>
 
   <target name="depend" if="depend.available">
-    <quiet>
-      <depend
-        cache="../../../build"
-        srcdir="./src"
-        destdir="./build/obj">
-        <!-- Depend on classes instead of jars where available -->
-        <classpath>
-          <pathelement location="../../../core/java/build/obj"/>
-          <pathelement location="../../../core/java/build/gnu-getopt.jar"/>
-          <pathelement location="../../ministreaming/java/build/obj"/>
-          <pathelement location="../../jetty/jettylib/javax.servlet.jar"/>
-          <!-- jsp-api.jar only present for debian builds -->
-          <pathelement location="../../jetty/jettylib/jsp-api.jar"/>
-        </classpath>
-      </depend>
-    </quiet>
-    <unquiet>
-      <echo message="I2PSnark dependecies added"/>
-    </unquiet>
-
+    <depend
+      cache="../../../build"
+      srcdir="./src"
+      destdir="./build/obj">
+      <!-- Depend on classes instead of jars where available -->
+      <classpath>
+        <pathelement location="../../../core/java/build/obj"/>
+        <pathelement location="../../../core/java/build/gnu-getopt.jar"/>
+        <pathelement location="../../ministreaming/java/build/obj"/>
+        <pathelement location="../../jetty/jettylib/javax.servlet.jar"/>
+        <!-- jsp-api.jar only present for debian builds -->
+        <pathelement location="../../jetty/jettylib/jsp-api.jar"/>
+      </classpath>
+    </depend>
+    <echo message="I2PSnark dependecies added"/>
   </target>
 
   <!-- Only used if not set by a higher build.xml -->
@@ -60,36 +45,32 @@
   </condition>
 
   <target name="compile" depends="depend">
-    <quiet>
-      <mkdir dir="./build"/>
-      <mkdir dir="./build/obj"/>
-      <javac
-        srcdir="./src"
-        debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
-        release="${javac.release}"
-        destdir="./build/obj"
-        encoding="UTF-8"
-        includeAntRuntime="false">
-        <compilerarg line="${javac.compilerargs}"/>
-        <classpath>
-          <pathelement location="../../../core/java/build/i2p.jar"/>
-          <!-- gnu-getopt.jar only present for debian builds -->
-          <pathelement location="../../../core/java/build/gnu-getopt.jar"/>
-          <pathelement location="../../ministreaming/java/build/mstreaming.jar"/>
-          <pathelement location="../../jetty/jettylib/javax.servlet.jar"/>
-          <!-- jsp-api.jar only present for debian builds -->
-          <pathelement location="../../jetty/jettylib/jsp-api.jar"/>
-          <!-- Following jars only for standalone builds -->
-          <pathelement location="../../jetty/jettylib/jetty-i2p.jar"/>
-          <pathelement location="../../systray/java/build/systray.jar"/>
-          <pathelement location="../../jetty/jettylib/org.mortbay.jetty.jar"/>
-          <pathelement location="../../jetty/jettylib/jetty-util.jar"/>
-        </classpath>
-      </javac>
-    </quiet>
-    <unquiet>
-      <echo message="I2PSnark compilation completed"/>
-    </unquiet>
+    <mkdir dir="./build"/>
+    <mkdir dir="./build/obj"/>
+    <javac
+      srcdir="./src"
+      debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
+      release="${javac.release}"
+      destdir="./build/obj"
+      encoding="UTF-8"
+      includeAntRuntime="false">
+      <compilerarg line="${javac.compilerargs}"/>
+      <classpath>
+        <pathelement location="../../../core/java/build/i2p.jar"/>
+        <!-- gnu-getopt.jar only present for debian builds -->
+        <pathelement location="../../../core/java/build/gnu-getopt.jar"/>
+        <pathelement location="../../ministreaming/java/build/mstreaming.jar"/>
+        <pathelement location="../../jetty/jettylib/javax.servlet.jar"/>
+        <!-- jsp-api.jar only present for debian builds -->
+        <pathelement location="../../jetty/jettylib/jsp-api.jar"/>
+        <!-- Following jars only for standalone builds -->
+        <pathelement location="../../jetty/jettylib/jetty-i2p.jar"/>
+        <pathelement location="../../systray/java/build/systray.jar"/>
+        <pathelement location="../../jetty/jettylib/org.mortbay.jetty.jar"/>
+        <pathelement location="../../jetty/jettylib/jetty-util.jar"/>
+      </classpath>
+    </javac>
+    <echo message="I2PSnark compilation completed"/>
   </target>
 
   <target name="listChangedFiles" depends="jarUpToDate" if="shouldListChanges">
@@ -147,30 +128,28 @@
        <classes dir="./build/obj" includes="**/I2PSnarkServlet*.class"/>
      -->
   <target name="war" depends="jar, bundle, warUpToDate, listChangedFiles" unless="war.uptodate">
-    <quiet>
-      <!-- Set if unset -->
-      <property name="workspace.changes.tr" value=""/>
-      <copy todir="build/res/.res">
-        <fileset dir="../res/"/>
-      </copy>
-      <copy file="../../routerconsole/jsp/js/onVisible.js" todir="build/res/.res/js"/>
-      <!-- mime.properties must be in with the classes -->
-      <copy file="../mime.properties" todir="build/obj/org/klomp/snark/web"/>
-      <war destfile="../i2psnark.war" webxml="../web.xml">
-        <!-- Include only the web stuff, as of 0.7.12 the router will add i2psnark.jar to the classpath for the war -->
-        <classes dir="./build/obj" includes="**/web/*"/>
-        <fileset dir="build/res/"/>
-        <manifest>
-          <attribute name="Implementation-Version" value="${full.version}"/>
-          <attribute name="Built-By" value="${build.built-by}"/>
-          <attribute name="Build-Date" value="${build.timestamp}"/>
-          <attribute name="Base-Revision" value="${workspace.version}"/>
-          <attribute name="Workspace-Changes" value="${workspace.changes.tr}"/>
-          <attribute name="X-Compile-Source-JDK" value="${javac.version}"/>
-          <attribute name="X-Compile-Target-JDK" value="${javac.version}"/>
-        </manifest>
-      </war>
-    </quiet>
+    <!-- Set if unset -->
+    <property name="workspace.changes.tr" value=""/>
+    <copy todir="build/res/.res">
+      <fileset dir="../res/"/>
+    </copy>
+    <copy file="../../routerconsole/jsp/js/onVisible.js" todir="build/res/.res/js"/>
+    <!-- mime.properties must be in with the classes -->
+    <copy file="../mime.properties" todir="build/obj/org/klomp/snark/web"/>
+    <war destfile="../i2psnark.war" webxml="../web.xml">
+      <!-- Include only the web stuff, as of 0.7.12 the router will add i2psnark.jar to the classpath for the war -->
+      <classes dir="./build/obj" includes="**/web/*"/>
+      <fileset dir="build/res/"/>
+      <manifest>
+        <attribute name="Implementation-Version" value="${full.version}"/>
+        <attribute name="Built-By" value="${build.built-by}"/>
+        <attribute name="Build-Date" value="${build.timestamp}"/>
+        <attribute name="Base-Revision" value="${workspace.version}"/>
+        <attribute name="Workspace-Changes" value="${workspace.changes.tr}"/>
+        <attribute name="X-Compile-Source-JDK" value="${javac.version}"/>
+        <attribute name="X-Compile-Target-JDK" value="${javac.version}"/>
+      </manifest>
+    </war>
   </target>
 
   <target name="warUpToDate">
@@ -180,58 +159,50 @@
   </target>
 
   <target name="bundle" depends="compile" unless="no.bundle">
-      <quiet>
-      <mkdir dir="build/messages-src"/>
-      <!-- Update the messages_*.po files.
-           We need to supply the bat file for windows, and then change the fail property to true -->
-      <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="${require.gettext}">
-        <env key="JAVA_HOME" value="${java.home}"/>
-        <arg value="./bundle-messages.sh"/>
-      </exec>
-      <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="${require.gettext}">
-        <arg value="./bundle-messages.sh"/>
-      </exec>
-      <!-- multi-lang is optional -->
-      <exec executable="sh" osfamily="windows" failifexecutionfails="false">
-        <arg value="./bundle-messages.sh"/>
-      </exec>
-      <javac source="${javac.version}" target="${javac.version}"
-        release="${javac.release}"
-        includeAntRuntime="false"
-        encoding="UTF-8"
-        srcdir="build/messages-src" destdir="build/obj">
-        <compilerarg line="${javac.compilerargs}"/>
-      </javac>
-    </quiet>
-    <unquiet>
-      <echo message="I2PSnark translations added"/>
-    </unquiet>
+    <mkdir dir="build/messages-src"/>
+    <!-- Update the messages_*.po files.
+         We need to supply the bat file for windows, and then change the fail property to true -->
+    <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="${require.gettext}">
+      <env key="JAVA_HOME" value="${java.home}"/>
+      <arg value="./bundle-messages.sh"/>
+    </exec>
+    <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="${require.gettext}">
+      <arg value="./bundle-messages.sh"/>
+    </exec>
+    <!-- multi-lang is optional -->
+    <exec executable="sh" osfamily="windows" failifexecutionfails="false">
+      <arg value="./bundle-messages.sh"/>
+    </exec>
+    <javac source="${javac.version}" target="${javac.version}"
+      release="${javac.release}"
+      includeAntRuntime="false"
+      encoding="UTF-8"
+      srcdir="build/messages-src" destdir="build/obj">
+      <compilerarg line="${javac.compilerargs}"/>
+    </javac>
+    <echo message="I2PSnark translations added"/>
   </target>
 
   <target name="poupdate" depends="builddep, compile">
-    <quiet>
-      <!-- Update the messages_*.po files.  -->
-      <!-- Set if unset -->
-      <property name="lg2" value=""/>
-      <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true">
-        <env key="LG2" value="${lg2}"/>
-        <arg value="./bundle-messages.sh"/>
-        <arg value="-p"/>
-      </exec>
-      <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="true">
-        <env key="LG2" value="${lg2}"/>
-        <arg value="./bundle-messages.sh"/>
-        <arg value="-p"/>
-      </exec>
-      <exec executable="sh" osfamily="windows" failifexecutionfails="true" failonerror="true">
-        <env key="LG2" value="${lg2}"/>
-        <arg value="./bundle-messages.sh"/>
-        <arg value="-p"/>
-      </exec>
-    </quiet>
-    <unquiet>
-      <echo message="I2PSnark .po translation files updated"/>
-    </unquiet>
+    <!-- Update the messages_*.po files.  -->
+    <!-- Set if unset -->
+    <property name="lg2" value=""/>
+    <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true">
+      <env key="LG2" value="${lg2}"/>
+      <arg value="./bundle-messages.sh"/>
+      <arg value="-p"/>
+    </exec>
+    <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="true">
+      <env key="LG2" value="${lg2}"/>
+      <arg value="./bundle-messages.sh"/>
+      <arg value="-p"/>
+    </exec>
+    <exec executable="sh" osfamily="windows" failifexecutionfails="true" failonerror="true">
+      <env key="LG2" value="${lg2}"/>
+      <arg value="./bundle-messages.sh"/>
+      <arg value="-p"/>
+    </exec>
+    <echo message="I2PSnark .po translation files updated"/>
   </target>
 
   <target name="standalone" depends="standalone_prep">
@@ -270,237 +241,198 @@
 
   <!-- Make a fat jar for standalone -->
   <target name="standalone_jar" depends="war">
-    <quiet>
-      <!-- Set if unset -->
-      <property name="workspace.changes.tr" value=""/>
-      <jar destfile="build/i2psnark-standalone.jar">
-        <fileset dir="build/obj" includes="**/standalone/*.class"/>
-        <zipfileset src="build/i2psnark.jar"/>
-        <zipfileset src="../../../core/java/build/i2p.jar"/>
-        <!-- Without this we get a warning about 'no JSP support' but that's it
-          <zipfileset src="../../jetty/jettylib/jasper-runtime.jar" />
-         -->
-        <zipfileset src="../../jetty/jettylib/javax.servlet.jar"/>
-        <zipfileset src="../../jetty/jettylib/jetty-continuation.jar"/>
-        <zipfileset src="../../jetty/jettylib/jetty-deploy.jar"/>
-        <zipfileset src="../../jetty/jettylib/jetty-http.jar"/>
-        <zipfileset src="../../jetty/jettylib/jetty-i2p.jar"/>
-        <zipfileset src="../../jetty/jettylib/jetty-io.jar"/>
-        <zipfileset src="../../jetty/jettylib/jetty-security.jar"/>
-        <zipfileset src="../../jetty/jettylib/jetty-servlet.jar"/>
-        <zipfileset src="../../jetty/jettylib/jetty-util.jar"/>
-        <zipfileset src="../../jetty/jettylib/jetty-webapp.jar"/>
-        <zipfileset src="../../jetty/jettylib/jetty-xml.jar"/>
-        <zipfileset src="../../jetty/jettylib/org.mortbay.jetty.jar"/>
-        <zipfileset src="../../ministreaming/java/build/mstreaming.jar"/>
-        <zipfileset src="../../streaming/java/build/streaming.jar"/>
-        <zipfileset src="../../systray/java/build/systray.jar"/>
-        <zipfileset src="../../../build/jbigi.jar"/>
-
-        <manifest>
-          <attribute name="Main-Class" value="org.klomp.snark.standalone.RunStandalone"/>
-          <attribute name="Implementation-Version" value="${full.version}"/>
-          <attribute name="Built-By" value="${build.built-by}"/>
-          <attribute name="Build-Date" value="${build.timestamp}"/>
-          <attribute name="Base-Revision" value="${workspace.version}"/>
-          <attribute name="Workspace-Changes" value="${workspace.changes.tr}"/>
-          <!-- Suppress JNI warning in JRE 24+, and eventual restriction (https://openjdk.org/jeps/472) -->
-          <attribute name="Enable-Native-Access" value="ALL-UNNAMED"/>
-          <!-- this is so Jetty will report its version correctly -->
-          <section name="org/eclipse/jetty/server/">
-            <attribute name="Implementation-Vendor" value="Eclipse.org - Jetty"/>
-            <attribute name="Implementation-Version" value="${jetty.ver}"/>
-          </section>
-        </manifest>
-      </jar>
-    </quiet>
-    <unquiet>
-      <echo message="I2PSnark standalone fat .jar created"/>
-    </unquiet>
+    <!-- Set if unset -->
+    <property name="workspace.changes.tr" value=""/>
+    <jar destfile="build/i2psnark-standalone.jar">
+      <fileset dir="build/obj" includes="**/standalone/*.class"/>
+      <zipfileset src="build/i2psnark.jar"/>
+      <zipfileset src="../../../core/java/build/i2p.jar"/>
+      <!-- Without this we get a warning about 'no JSP support' but that's it
+        <zipfileset src="../../jetty/jettylib/jasper-runtime.jar" />
+       -->
+      <zipfileset src="../../jetty/jettylib/javax.servlet.jar"/>
+      <zipfileset src="../../jetty/jettylib/jetty-continuation.jar"/>
+      <zipfileset src="../../jetty/jettylib/jetty-deploy.jar"/>
+      <zipfileset src="../../jetty/jettylib/jetty-http.jar"/>
+      <zipfileset src="../../jetty/jettylib/jetty-i2p.jar"/>
+      <zipfileset src="../../jetty/jettylib/jetty-io.jar"/>
+      <zipfileset src="../../jetty/jettylib/jetty-security.jar"/>
+      <zipfileset src="../../jetty/jettylib/jetty-servlet.jar"/>
+      <zipfileset src="../../jetty/jettylib/jetty-util.jar"/>
+      <zipfileset src="../../jetty/jettylib/jetty-webapp.jar"/>
+      <zipfileset src="../../jetty/jettylib/jetty-xml.jar"/>
+      <zipfileset src="../../jetty/jettylib/org.mortbay.jetty.jar"/>
+      <zipfileset src="../../ministreaming/java/build/mstreaming.jar"/>
+      <zipfileset src="../../streaming/java/build/streaming.jar"/>
+      <zipfileset src="../../../build/jbigi.jar"/>
+      <manifest>
+        <attribute name="Main-Class" value="org.klomp.snark.standalone.RunStandalone"/>
+        <attribute name="Implementation-Version" value="${full.version}"/>
+        <attribute name="Built-By" value="${build.built-by}"/>
+        <attribute name="Build-Date" value="${build.timestamp}"/>
+        <attribute name="Base-Revision" value="${workspace.version}"/>
+        <attribute name="Workspace-Changes" value="${workspace.changes.tr}"/>
+        <!-- Suppress JNI warning in JRE 24+, and eventual restriction (https://openjdk.org/jeps/472) -->
+        <attribute name="Enable-Native-Access" value="ALL-UNNAMED"/>
+        <!-- this is so Jetty will report its version correctly -->
+        <section name="org/eclipse/jetty/server/">
+          <attribute name="Implementation-Vendor" value="Eclipse.org - Jetty"/>
+          <attribute name="Implementation-Version" value="${jetty.ver}"/>
+        </section>
+      </manifest>
+    </jar>
+    <echo message="I2PSnark standalone fat .jar created"/>
   </target>
 
   <!-- Add css, image, and js files for standalone snark to the war -->
   <target name="standalone_war" depends="war">
-    <quiet>
-      <mkdir dir="build/standalone-resources/.res/themes/snark"/>
-      <copy quiet="true" todir="build/standalone-resources/.res/themes/snark">
-        <fileset dir="../../../installer/resources/themes/snark/"/>
-      </copy>
-      <mkdir dir="build/standalone-resources/.res/themes/snark/fonts"/>
-      <copy quiet="true" todir="build/standalone-resources/.res/themes/snark/fonts">
-        <fileset dir="../../../installer/resources/themes/fonts/"/>
-      </copy>
-      <replace dir="build/standalone-resources/.res/themes/snark"
-        summary="true"
+    <mkdir dir="build/standalone-resources/.res/themes/snark"/>
+    <copy quiet="true" todir="build/standalone-resources/.res/themes/snark">
+      <fileset dir="../../../installer/resources/themes/snark/"/>
+    </copy>
+    <mkdir dir="build/standalone-resources/.res/themes/snark/fonts"/>
+    <copy quiet="true" todir="build/standalone-resources/.res/themes/snark/fonts">
+      <fileset dir="../../../installer/resources/themes/fonts/"/>
+    </copy>
+    <replace dir="build/standalone-resources/.res/themes/snark" summary="true"
         token="url(/themes/console/classic/images/"
         value="url(/i2psnark/.res/themes/snark/classic/images/">
-        <include name="**/*.css"/>
-      </replace>
-      <replace dir="build/standalone-resources/.res/themes/snark"
-        summary="true"
+      <include name="**/*.css"/>
+    </replace>
+    <replace dir="build/standalone-resources/.res/themes/snark" summary="true"
         token="url(/themes/console/dark/images/"
         value="url(/i2psnark/.res/themes/snark/dark/images/">
-        <include name="**/*.css"/>
-      </replace>
-      <replace dir="build/standalone-resources/.res/themes/snark"
-        summary="true"
+      <include name="**/*.css"/>
+    </replace>
+    <replace dir="build/standalone-resources/.res/themes/snark" summary="true"
         token="url(../../console/light/images/"
         value="url(/i2psnark/.res/themes/snark/light/images/">
-        <include name="**/*.css"/>
-      </replace>
-      <replace dir="build/standalone-resources/.res/themes/snark"
-        summary="true"
+      <include name="**/*.css"/>
+    </replace>
+    <replace dir="build/standalone-resources/.res/themes/snark" summary="true"
         token="url(/themes/console/light/"
         value="url(/i2psnark/.res/themes/snark/light/">
-        <include name="**/*.css"/>
-      </replace>
-      <replace dir="build/standalone-resources/.res/themes/snark"
-        summary="true"
+      <include name="**/*.css"/>
+    </replace>
+    <replace dir="build/standalone-resources/.res/themes/snark" summary="true"
         token="url(/themes/console/light/images/"
         value="url(/i2psnark/.res/themes/snark/light/images/">
-        <include name="**/*.css"/>
-      </replace>
-      <replace dir="build/standalone-resources/.res/themes/snark"
-        summary="true"
+      <include name="**/*.css"/>
+    </replace>
+    <replace dir="build/standalone-resources/.res/themes/snark" summary="true"
         token="url(/themes/console/images/info/"
         value="url(/i2psnark/.res/themes/snark/ubergine/images/">
-        <include name="**/*.css"/>
-      </replace>
-      <replace dir="build/standalone-resources/.res/themes/snark"
-        summary="true"
+      <include name="**/*.css"/>
+    </replace>
+    <replace dir="build/standalone-resources/.res/themes/snark" summary="true"
         token="url(/themes/console/classic/"
         value="url(/i2psnark/.res/themes/snark/classic/">
-        <include name="**/*.css"/>
-      </replace>
-      <replace dir="build/standalone-resources/.res/themes/snark"
-        summary="true"
+      <include name="**/*.css"/>
+    </replace>
+    <replace dir="build/standalone-resources/.res/themes/snark" summary="true"
         token="url(/themes/console/dark/"
         value="url(/i2psnark/.res/themes/snark/dark/">
-        <include name="**/*.css"/>
-      </replace>
-      <replace dir="build/standalone-resources/.res/themes/snark"
-        summary="true"
+      <include name="**/*.css"/>
+    </replace>
+    <replace dir="build/standalone-resources/.res/themes/snark" summary="true"
         token="url(/themes/console/light/"
         value="url(/i2psnark/.res/themes/snark/light/">
-        <include name="**/*.css"/>
-      </replace>
-      <replace dir="build/standalone-resources/.res/themes/snark"
-        summary="true"
+      <include name="**/*.css"/>
+    </replace>
+    <replace dir="build/standalone-resources/.res/themes/snark" summary="true"
         token="url(/themes/console/midnight/"
         value="url(/i2psnark/.res/themes/snark/midnight/">
-        <include name="**/*.css"/>
-      </replace>
+      <include name="**/*.css"/>
+    </replace>
 
-      <!-- Rather than pulling in all the console theme images, let's just specify the ones we need -->
-      <copy quiet="true" file="../../../installer/resources/themes/console/images/newtab.svg"
-        todir="build/standalone-resources/.res/icons"/>
-      <copy quiet="true" file="../../../installer/resources/themes/console/dark/images/camotile2.png"
-        todir="build/standalone-resources/.res/themes/snark/dark/images"/>
-      <copy quiet="true" file="../../../installer/resources/themes/console/classic/images/bg0.png"
-        todir="build/standalone-resources/.res/themes/snark/classic/images"/>
-      <copy quiet="true" file="../../../installer/resources/themes/console/light/global.css"
-        todir="build/standalone-resources/.res/themes/snark/light"/>
-      <copy quiet="true" file="../../../installer/resources/themes/console/classic/global.css"
-        todir="build/standalone-resources/.res/themes/snark/classic"/>
-      <copy quiet="true" file="../../../installer/resources/themes/console/dark/global.css"
-        todir="build/standalone-resources/.res/themes/snark/dark"/>
-      <copy quiet="true" file="../../../installer/resources/themes/console/dark/chromescroll.css"
-        todir="build/standalone-resources/.res/themes/snark/dark"/>
-      <copy quiet="true" file="../../../installer/resources/themes/console/midnight/global.css"
-        todir="build/standalone-resources/.res/themes/snark/midnight"/>
-      <copy quiet="true" file="../../../installer/resources/themes/console/midnight/images/tile.css"
-        todir="build/standalone-resources/.res/themes/snark/midnight/images"/>
-      <copy quiet="true" file="../../../installer/resources/themes/console/midnight/chromescroll.css"
-        todir="build/standalone-resources/.res/themes/snark/midnight"/>
-      <copy quiet="true" todir="build/standalone-resources/.res/themes/fonts">
-        <fileset dir="../../../installer/resources/themes/fonts/" includes="**/*"/>
-      </copy>
-      <replace dir="build/standalone-resources/.res/themes/fonts"
-        summary="true"
-        token="url(/themes/fonts/"
-        value="url(/i2psnark/.res/themes/fonts/">
-        <include name="**/*.css"/>
-      </replace>
-      <replace dir="build/standalone-resources/.res/themes/snark"
-        summary="true"
-        token="@import url(../images/images.css);"
-        value="">
-        <include name="**/*.css"/>
-      </replace>
-      <replace dir="build/standalone-resources/.res/themes/snark"
-        summary="true"
-        token="@import url(../images/itooplus.css);"
-        value="">
-        <include name="**/*.css"/>
-      </replace>
-      <mkdir dir="build/standalone-resources/.res/js"/>
-      <copy file="../../routerconsole/jsp/js/onVisible.js" todir="build/standalone-resources/.res/js"/>
-      <copy file="../../i2psnark/res/js/refreshTorrents.js" todir="build/standalone-resources/.res/js"/>
-      <replace dir="build/standalone-resources/.res/js"
-        summary="true"
-        token="/themes/snark/"
-        value="/i2psnark/.res/themes/snark/">
-        <include name="**/refreshTorrents.js"/>
-      </replace>
-      <zip destfile="../i2psnark.war" update="true" duplicate="preserve">
-        <fileset dir="build/standalone-resources"/>
-      </zip>
-    </quiet>
-    <unquiet>
-      <echo message="I2PSnark standalone .war file created"/>
-    </unquiet>
+    <!-- Rather than pulling in all the console theme images, let's just specify the ones we need -->
+    <copy quiet="true" file="../../../installer/resources/themes/console/images/newtab.svg"
+      todir="build/standalone-resources/.res/icons"/>
+    <copy quiet="true" file="../../../installer/resources/themes/console/dark/images/camotile2.png"
+      todir="build/standalone-resources/.res/themes/snark/dark/images"/>
+    <copy quiet="true" file="../../../installer/resources/themes/console/classic/images/bg0.png"
+      todir="build/standalone-resources/.res/themes/snark/classic/images"/>
+    <copy quiet="true" file="../../../installer/resources/themes/console/light/global.css"
+      todir="build/standalone-resources/.res/themes/snark/light"/>
+    <copy quiet="true" file="../../../installer/resources/themes/console/classic/global.css"
+      todir="build/standalone-resources/.res/themes/snark/classic"/>
+    <copy quiet="true" file="../../../installer/resources/themes/console/dark/global.css"
+      todir="build/standalone-resources/.res/themes/snark/dark"/>
+    <copy quiet="true" file="../../../installer/resources/themes/console/dark/chromescroll.css"
+      todir="build/standalone-resources/.res/themes/snark/dark"/>
+    <copy quiet="true" file="../../../installer/resources/themes/console/midnight/global.css"
+       todir="build/standalone-resources/.res/themes/snark/midnight"/>
+    <copy quiet="true" file="../../../installer/resources/themes/console/midnight/images/tile.css"
+      todir="build/standalone-resources/.res/themes/snark/midnight/images"/>
+    <copy quiet="true" file="../../../installer/resources/themes/console/midnight/chromescroll.css"
+      todir="build/standalone-resources/.res/themes/snark/midnight"/>
+    <copy quiet="true" todir="build/standalone-resources/.res/themes/fonts">
+      <fileset dir="../../../installer/resources/themes/fonts/" includes="**/*"/>
+    </copy>
+    <replace dir="build/standalone-resources/.res/themes/fonts" summary="true" token="url(/themes/fonts/" value="url(/i2psnark/.res/themes/fonts/">
+      <include name="**/*.css"/>
+    </replace>
+    <replace dir="build/standalone-resources/.res/themes/snark" summary="true" token="@import url(../images/images.css);" value="">
+      <include name="**/*.css"/>
+    </replace>
+    <replace dir="build/standalone-resources/.res/themes/snark" summary="true" token="@import url(../images/itooplus.css);" value="">
+      <include name="**/*.css"/>
+    </replace>
+    <mkdir dir="build/standalone-resources/.res/js"/>
+    <copy file="../../routerconsole/jsp/js/onVisible.js" todir="build/standalone-resources/.res/js"/>
+    <copy file="../../i2psnark/res/js/refreshTorrents.js" todir="build/standalone-resources/.res/js"/>
+    <replace dir="build/standalone-resources/.res/js" summary="true" token="/themes/snark/" value="/i2psnark/.res/themes/snark/">
+      <include name="**/refreshTorrents.js"/>
+    </replace>
+    <zip destfile="../i2psnark.war" update="true" duplicate="preserve">
+      <fileset dir="build/standalone-resources"/>
+    </zip>
+    <echo message="I2PSnark standalone .war file created"/>
   </target>
 
   <target name="standalone_prep" depends="standalone_jar, standalone_war">
-    <quiet>
-      <delete dir="./i2psnark"/>
-      <mkdir dir="./i2psnark"/>
-      <copy file="../launch-i2psnark" todir="./i2psnark/"/>
-      <chmod type="file" file="./i2psnark/launch-i2psnark" perm="+x"/>
-      <copy file="../launch-i2psnark.bat" todir="./i2psnark/"/>
-      <mkdir dir="./i2psnark/contexts"/>
-      <copy file="../standalone-context.xml" tofile="./i2psnark/contexts/context.xml"/>
-      <mkdir dir="./i2psnark/docroot"/>
-      <copy file="../standalone-index.html" tofile="./i2psnark/docroot/index.html"/>
-      <mkdir dir="./i2psnark/webapps"/>
-      <copy file="../i2psnark.war" tofile="./i2psnark/webapps/i2psnark.war"/>
-      <copy file="../jetty-i2psnark.xml" tofile="./i2psnark/jetty-i2psnark.xml"/>
-      <copy file="../i2psnark-appctx.config" tofile="./i2psnark/i2psnark-appctx.config"/>
-      <copy file="./build/i2psnark-standalone.jar" tofile="./i2psnark/i2psnark.jar"/>
-      <copy file="../readme-standalone.txt" tofile="./i2psnark/readme.txt"/>
-      <!-- temp so announces work -->
-      <copy file="../../../installer/resources/hosts.txt" tofile="./i2psnark/hosts.txt"/>
-      <copy todir="./i2psnark/licenses">
-        <fileset dir="../../../licenses" includes="LICENSE-GPLv2.txt, ABOUT-Jetty.html"/>
-      </copy>
-      <mkdir dir="./i2psnark/logs"/>
-    </quiet>
+    <delete dir="./i2psnark"/>
+    <mkdir dir="./i2psnark"/>
+    <copy file="../launch-i2psnark" todir="./i2psnark/"/>
+    <chmod type="file" file="./i2psnark/launch-i2psnark" perm="+x"/>
+    <copy file="../launch-i2psnark.bat" todir="./i2psnark/"/>
+    <mkdir dir="./i2psnark/contexts"/>
+    <copy file="../standalone-context.xml" tofile="./i2psnark/contexts/context.xml"/>
+    <mkdir dir="./i2psnark/docroot"/>
+    <copy file="../standalone-index.html" tofile="./i2psnark/docroot/index.html"/>
+    <mkdir dir="./i2psnark/webapps"/>
+    <copy file="../i2psnark.war" tofile="./i2psnark/webapps/i2psnark.war"/>
+    <copy file="../jetty-i2psnark.xml" tofile="./i2psnark/jetty-i2psnark.xml"/>
+    <copy file="../i2psnark-appctx.config" tofile="./i2psnark/i2psnark-appctx.config"/>
+    <copy file="./build/i2psnark-standalone.jar" tofile="./i2psnark/i2psnark.jar"/>
+    <copy file="../readme-standalone.txt" tofile="./i2psnark/readme.txt"/>
+    <!-- temp so announces work -->
+    <copy file="../../../installer/resources/hosts.txt" tofile="./i2psnark/hosts.txt"/>
+    <copy todir="./i2psnark/licenses">
+      <fileset dir="../../../licenses" includes="LICENSE-GPLv2.txt, ABOUT-Jetty.html"/>
+    </copy>
+    <mkdir dir="./i2psnark/logs"/>
   </target>
 
   <target name="standalone_nozip" depends="standalone_jar, standalone_war">
-    <quiet>
-      <delete dir="./i2psnark" quiet="true"/>
-      <mkdir dir="./i2psnark"/>
-      <copy file="../launch-i2psnark" todir="./i2psnark/" quiet="true"/>
-      <chmod type="file" file="./i2psnark/launch-i2psnark" perm="+x"/>
-      <copy file="../launch-i2psnark.bat" todir="./i2psnark/" quiet="true"/>
-      <mkdir dir="./i2psnark/contexts"/>
-      <copy file="../standalone-context.xml" tofile="./i2psnark/contexts/context.xml" quiet="true"/>
-      <mkdir dir="./i2psnark/docroot"/>
-      <copy file="../standalone-index.html" tofile="./i2psnark/docroot/index.html" quiet="true"/>
-      <mkdir dir="./i2psnark/webapps"/>
-      <copy file="../i2psnark.war" tofile="./i2psnark/webapps/i2psnark.war" quiet="true"/>
-      <copy file="../jetty-i2psnark.xml" tofile="./i2psnark/jetty-i2psnark.xml" quiet="true"/>
-      <copy file="../i2psnark-appctx.config" tofile="./i2psnark/i2psnark-appctx.config" quiet="true"/>
-      <copy file="./build/i2psnark-standalone.jar" tofile="./i2psnark/i2psnark.jar" quiet="true"/>
-      <copy file="../readme-standalone.txt" tofile="./i2psnark/readme.txt" quiet="true"/>
-      <!-- temp so announces work -->
-      <copy file="../../../installer/resources/hosts.txt" tofile="./i2psnark/hosts.txt" quiet="true"/>
-      <mkdir dir="./i2psnark/logs"/>
-    </quiet>
-    <unquiet>
-      <echo message="I2PSnark standalone folder moved to ./dist/i2psnark_standalone"/>
-    </unquiet>
+    <delete dir="./i2psnark" quiet="true"/>
+    <mkdir dir="./i2psnark"/>
+    <copy file="../launch-i2psnark" todir="./i2psnark/" quiet="true"/>
+    <copy file="../launch-i2psnark.bat" todir="./i2psnark/" quiet="true"/>
+    <mkdir dir="./i2psnark/contexts"/>
+    <copy file="../standalone-context.xml" tofile="./i2psnark/contexts/context.xml" quiet="true"/>
+    <mkdir dir="./i2psnark/docroot"/>
+    <copy file="../standalone-index.html" tofile="./i2psnark/docroot/index.html" quiet="true"/>
+    <mkdir dir="./i2psnark/webapps"/>
+    <copy file="../i2psnark.war" tofile="./i2psnark/webapps/i2psnark.war" quiet="true"/>
+    <copy file="../jetty-i2psnark.xml" tofile="./i2psnark/jetty-i2psnark.xml" quiet="true"/>
+    <copy file="../i2psnark-appctx.config" tofile="./i2psnark/i2psnark-appctx.config" quiet="true"/>
+    <copy file="./build/i2psnark-standalone.jar" tofile="./i2psnark/i2psnark.jar" quiet="true"/>
+    <copy file="../readme-standalone.txt" tofile="./i2psnark/readme.txt" quiet="true"/>
+    <!-- temp so announces work -->
+    <copy file="../../../installer/resources/hosts.txt" tofile="./i2psnark/hosts.txt" quiet="true"/>
+    <mkdir dir="./i2psnark/logs"/>
+    <echo message="I2PSnark standalone folder moved to ./dist/i2psnark_standalone"/>
   </target>
 
   <target name="clean">
