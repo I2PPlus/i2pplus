@@ -2693,6 +2693,15 @@
     <copy file="apps/i2psnark/java/i2psnark-standalone.7z" todir="./dist"/>
   </target>
 
+  <!-- standalone i2psnark no zip -->
+  <target name="i2psnark_nozip" depends="buildStreaming, buildJetty, buildSystray, jbigi">
+    <ant dir="apps/i2psnark/java" target="standalone_nozip"/>
+    <delete dir="./dist/i2psnark_standalone"/>
+    <move todir="./dist/i2psnark_standalone">
+      <fileset dir="apps/i2psnark/java/i2psnark" includes="**/*"/>
+    </move>
+  </target>
+
   <target name="slackpkg">
     <ant dir="Slackware/i2p/" target="slackpkg"/>
   </target>
