@@ -2785,7 +2785,8 @@ h4#updateplugins{margin-top:-15px}
 #loggingoptions tr:nth-last-child(n+3) input[type=text],#loggingoptions tr:nth-last-child(n+3) select{min-width:250px}
 #sidebar h4.sb_update{font-size:9pt}
 #sidebar #minigraphcontainer,#sidebar #minigraphcontainer_noscript{margin:-43px -4px 0 1px;width:260px;height:39px;background-size:260px 40px;background-position:right bottom}
-#sidebar #minigraph{margin-top:-21px;margin-left:-4px;height:40px;width:260px}
+#sidebar #minigraph{margin-top:-22px;margin-left:-4px;height:40px;width:260px}
+#homepage #sidebar #minigraph{margin-top:-21px}
 #netdbcountrylist img{width:28px;height:auto}
 #netdboverview table th,#netdboverview table td{padding:7px 8px}
 #newsStatus,#news #newsDisplay a,.newsAuthor{font-size:9pt}
