@@ -25,6 +25,22 @@
   <property name="jetty.ver" value="9.3.30.v20211001"/>
   <property name="tomcat.ver" value="9.0.88"/>
 
+  <macrodef name="quiet">
+    <element name="body" implicit="yes"/>
+    <sequential>
+      <script language="javascript">project.getBuildListeners().firstElement().setMessageOutputLevel(0);</script>
+      <body/>
+    </sequential>
+  </macrodef>
+
+  <macrodef name="unquiet">
+    <element name="body" implicit="yes"/>
+    <sequential>
+      <script language="javascript">project.getBuildListeners().firstElement().setMessageOutputLevel(2);</script>
+      <body/>
+    </sequential>
+  </macrodef>
+
   <!-- You probably don't want to change anything from here down -->
   <target name="help" depends="all"/>
   <target name="all">
@@ -2695,11 +2711,16 @@
 
   <!-- standalone i2psnark no zip -->
   <target name="i2psnark_nozip" depends="buildStreaming, buildJetty, buildSystray, jbigi">
-    <ant dir="apps/i2psnark/java" target="standalone_nozip"/>
-    <delete dir="./dist/i2psnark_standalone"/>
-    <move todir="./dist/i2psnark_standalone">
-      <fileset dir="apps/i2psnark/java/i2psnark" includes="**/*"/>
-    </move>
+    <quiet>
+      <ant dir="apps/i2psnark/java" target="standalone_nozip"/>
+      <delete dir="./dist/i2psnark_standalone" quiet="true"/>
+      <move todir="./dist/i2psnark_standalone" quiet="true">
+        <fileset dir="apps/i2psnark/java/i2psnark" includes="**/*"/>
+      </move>
+    </quiet>
+    <unquiet>
+      <echo message="I2PSnark standalone build finished (nozip) and copied to ./dist/i2psnark_standalone"/>
+    </unquiet>
   </target>
 
   <target name="slackpkg">
