@@ -282,8 +282,9 @@ audio::-webkit-media-controls-enclosure{border-radius:0;filter:invert(1)}
 ::-webkit-media-controls-panel,::-internal-media-controls-button-panel{position:relative;z-index:10}
 video::-webkit-media-controls-panel{display:none}
 video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-panel{display:flex}
-body:not(.framed) #torrentInfo{margin-top:8px}
 #dirInfo,#torrentInfo{margin:10px 0 0 0;background:#fff;border-bottom:var(--border_soft)}
+#torrentInfo{margin-top:8px}
+.iframed #torrentInfo{margin-top:-10px}
 #dirInfo thead img{margin:0;padding:0 2px}
 #dirInfo td:first-child{padding-left:2px;width:1%}
 .headerpriority br{display:none}
@@ -816,7 +817,7 @@ form[action^="/i2psnark/configure"]{display:block}
 #confirmButtons{border-top:1px solid #f6f6f6;background:linear-gradient(180deg,#dde,#ccd)}
 #confirmDialog{box-shadow:var(--highlight),0 0 0 1px #dde,0 0 0 2px #d40000,0 0 0 6px #eef,0 0 0 7px #ccd,3px 3px 3px #0008;background:#dde}
 #confirmOverlay{background:#000c}
-#confirmYes,#confirmNo{color:#0000;border:1px solid #888;background:#fff url(/i2psnark/.res/icons/tick.svg) no-repeat center center/20px;cursor:pointer;opacity:.7}
+#confirmYes,#confirmNo{color:#0000;text-shadow:none;border:1px solid #888;background:#fff url(/i2psnark/.res/icons/tick.svg) no-repeat center center/20px;cursor:pointer;opacity:.7}
 #confirmNo{background:#fff url(/i2psnark/.res/icons/cross.svg) no-repeat center center/17px}
 #confirmButtons button:hover{border:1px solid #555;opacity:1}
 #confirmYes:hover{box-shadow:0 0 0 4px #0f0}
