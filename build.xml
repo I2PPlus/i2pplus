@@ -45,6 +45,7 @@
     <echo message=" buildMinistreaming                           Build MiniStreaming .jar component &#10140; ./build/mstreaming.jar"/>
     <echo message=" buildPack200                                 Build Pack200 .jar component &#10140; ./build/pack200.jar"/>
     <echo message=" buildProperties                              Display build properties  and Ant / JDK versions for current build"/>
+    <echo message=" buildRequirements                            Information about requirements for building packages using ant"/>
     <echo message=" buildRouter                                  Build Router .jar component &#10140; ./build/router.jar"/>
     <echo message=" buildRouterConsole                           Build required .jar components for RouterConsole &#10140; ./build/"/>
     <echo message=" buildSAM                                     Build SAM .jar component &#10140; ./build/sam.jar"/>
@@ -53,7 +54,6 @@
     <echo message=" buildSusiMail                                Build SusiMail .war component &#10140; ./build/susimail.war"/>
     <echo message=" buildSusiMailJar                             Build SusiMail .jar component for testing &#10140; ./build/susimail.jar"/>
     <echo message=" buildWEB                                     Build required .jar &amp; .war components for RouterConsole &#10140; ./build/"/>
-    <echo message=" buildRequirements                            Information about requirements for building packages using ant"/>
     <echo message=" bump                                         Increment build (minor version) by 1"/>
     <echo message=" bumpBuildTime                                Update core/java/src/net/i2p/time/BuildTime.java with today's date"/>
     <echo message=" createThemesZip                              Create zip with all console and webapp themes and resources &#10140; ./dist/themes.zip"/>
@@ -64,6 +64,8 @@
     <echo message=" dist200                                      Run &apos;pkg&apos;, &apos;updater200&apos; and &apos;javadoc&apos;"/>
     <echo message=" distclean                                    Clean up all derived and temporary files in workspace"/>
     <echo message=" distcleanWebapps                             Clean up all webapp-related derived and temporary files in workspace"/>
+    <echo message=" getGitRev                                    Check current Git revision in workspace and print truncated revision hash"/>
+    <echo message=" getGitRevLong                                Check current Git revision in workspace and print full revision hash"/>
     <echo message=" i2psnark                                     Build standalone I2PSnark install &#10140; ./dist/i2psnark-standalone.zip"/>
     <echo message=" i2psnark7zip                                 Build standalone I2PSnark 7zip install &#10140; ./dist/i2psnark-standalone.7z"/>
     <echo message=" installer / installer5                       Build GUI installer (IzPack4 / IzPack5) &#10140; ./dist/i2pinstall.exe"/>
@@ -88,6 +90,7 @@
     <echo message=" signed-updater200withJetty                   Signed Updater (pack200) + Jetty"/>
     <echo message=" slackpkg                                     Build Slackware package in ./Slackware/i2p"/>
     <echo message=" tarball                                      Create tar archive for clean install &#10140; ./dist/i2p.tar.bz2"/>
+    <echo message=" testscripts                                  Run various scripts to check certificate validity, file integrity etc"/>
     <echo message=" updater                                      Build updater for existing installs &#10140; ./dist/i2pupdate.zip"/>
     <echo message=" updater200                                   Updater (pack200 - requires Java &lt; v14 or pre-existing lib/pack200.jar) &#10140; ./dist/i2pupdate200.zip"/>
     <echo message=" updater200Compact                            Updater (pack200) w/o SAM, DesktopGUI, systray, country/continent lists, docs/proxy, docs/readme"/>
@@ -555,6 +558,17 @@
       <arg value="--short=8"/>
       <arg value="HEAD"/>
     </exec>
+    <echo message="Current I2P+ Git revision in workspace: ${workspace.version}"/>
+    <echo message="Note: local workspace changes may vary from the latest revision"/>
+  </target>
+
+  <target name="getGitRevLong" depends="checkForGit" if="git.available">
+    <exec executable="git" outputproperty="workspace.version" errorproperty="git.error1" failifexecutionfails="false">
+      <arg value="rev-parse"/>
+      <arg value="HEAD"/>
+    </exec>
+    <echo message="Current I2P+ Git revision in workspace: ${workspace.version}"/>
+    <echo message="Note: local workspace changes may vary from the latest revision"/>
   </target>
 
   <target name="checkIfBumpedGit" depends="checkForGit" if="git.available">
