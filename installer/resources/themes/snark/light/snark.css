@@ -951,7 +951,7 @@ td.peerCount{padding-left:0;padding-right:3px;width:1%;white-space:nowrap;font-w
 .active.seeding.complete .peerCount b::before{border-color:#0000 #937 #0000 #0000}
 .active.starting .peerCount b::before,.inactive.downloading .peerCount b::before{border-color:#0000 #bb0 #0000 #0000}
 .active.starting .peerCount b:empty::after{display:inline;content:"..."}
-.active.starting .peerCount b,.inactive.downloading .peerCount b{color:#333;background:#bb0}
+.active.starting .peerCount b,.inactive.downloading .peerCount b{background:#bb0}
 .inactive.downloading .peerCount b,.peerCount b .right,.peerCount b .left{text-shadow:1px 1px 1px #0009}
 .nav_main:link,.nav_main:visited,.nav_main:hover,.nav_main:focus,.nav_main:active{padding-left:27px;background-size:17px,100%!important}
 .nopeers.incomplete .peerCount b::before{border-color:#0000 #aaa #0000 #0000}
