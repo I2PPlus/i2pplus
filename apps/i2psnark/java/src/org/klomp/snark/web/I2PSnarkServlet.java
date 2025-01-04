@@ -500,11 +500,13 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  The standard HTTP headers for all HTML pages
+     * Handles the standard HTTP headers for all HTML pages.
      *
-     *  @since 0.9.16 moved from doGetAndPost()
+     * @param resp the HttpServletResponse object to which headers will be added
+     * @param cspNonce the nonce value for Content Security Policy (CSP)
+     * @param allowMedia whether to allow media sources in CSP
+     * @since 0.9.16 moved from doGetAndPost()
      */
-
     private void setHTMLHeaders(HttpServletResponse resp, String cspNonce, boolean allowMedia) {
         StringBuilder headers = new StringBuilder(2048);
         // use \t: for header key termination so we don't split the values with colons e.g. data:, blob:
@@ -535,6 +537,14 @@ public class I2PSnarkServlet extends BasicServlet {
         headers.setLength(0);
     }
 
+    /**
+     * Sets Cross-Origin Resource Sharing (CORS) and Content Security Policy (CSP) headers
+     * for XMLHttpRequest (XHR) responses.
+     *
+     * @param resp the HttpServletResponse object to which headers will be added
+     * @param cspNonce the nonce value for the Content Security Policy (CSP)
+     * @param allowMedia indicates whether media sources should be allowed in CSP
+     */
     private void setXHRHeaders(HttpServletResponse resp, String cspNonce, boolean allowMedia) {
         String pageSize = String.valueOf(_manager.getPageSize());
         String refresh = String.valueOf(_manager.getRefreshDelaySeconds());
@@ -562,6 +572,14 @@ public class I2PSnarkServlet extends BasicServlet {
         return lastMessage != null ? lastMessage.message : null;
     }
 
+    /**
+     * Writes the logging messages to the HTML screenlog.
+     *
+     * @param out the PrintWriter to which the HTML output will be written
+     * @param isConfigure a boolean indicating whether the current page is the configuration page
+     * @param peerString a string containing the peer parameters for the URL
+     * @throws IOException if an I/O error occurs while writing to the output stream
+     */
     private void writeMessages(PrintWriter out, boolean isConfigure, String peerString) throws IOException {
         _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         List<UIMessages.Message> msgs = _manager.getMessages();
@@ -616,8 +634,16 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  @param canWrite is the data directory writable?
-     *  @return true if on first page
+     * Writes the HTML representation of the torrents to the output stream.
+     * This method generates the HTML structure for displaying torrents, including
+     * headers, sorting options, pagination controls, and the torrent list itself.
+     * It also updates the statistics array with aggregated torrent data.
+     *
+     * @param out the PrintWriter to which the HTML output will be written
+     * @param req the HttpServletRequest containing the request parameters
+     * @param canWrite a boolean indicating whether the data directory is writable
+     * @return true if the current page is the first page of the torrent list
+     * @throws IOException if an I/O error occurs while writing to the output stream
      */
     private boolean writeTorrents(PrintWriter out, HttpServletRequest req, boolean canWrite) throws IOException {
         /** dl, ul, down rate, up rate, peers, size */
@@ -1122,6 +1148,13 @@ public class I2PSnarkServlet extends BasicServlet {
             return start == 0;
     }
 
+    /**
+     * Renders the filter bar for filtering torrent displays based on various criteria.
+     *
+     * @param out the PrintWriter to which the generated HTML will be written
+     * @param req the HttpServletRequest object containing the current request parameters
+     * @throws IOException if an I/O error occurs while writing to the output stream
+     */
     private void renderFilterBar(PrintWriter out, HttpServletRequest req) throws IOException {
         String filter = req.getParameter("filter") != null ? req.getParameter("filter") : "";
         String peerParam = req.getParameter("p");
@@ -2148,6 +2181,11 @@ public class I2PSnarkServlet extends BasicServlet {
         }
     }
 
+    private String snarkStatus;
+    private String filterParam;
+    private boolean filterEnabled;
+    private String sortParam;
+    private boolean sortEnabled;
     /**
      *  Display one snark (one line in table, unless showPeers is true)
      *
@@ -2155,11 +2193,6 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @param statsOnly if true, output nothing, update stats only
      *  @param canWrite is the i2psnark data directory writable?
      */
-    private String snarkStatus;
-    private String filterParam;
-    private boolean filterEnabled;
-    private String sortParam;
-    private boolean sortEnabled;
     private void displaySnark(PrintWriter out, HttpServletRequest req,
                               Snark snark, String uri, int row, long stats[], boolean showPeers,
                               boolean isDegraded, boolean noThinsp, boolean showDebug, boolean statsOnly,
@@ -3399,7 +3432,14 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.setLength(0);
     }
 
-    /** @since 0.9.62+ */
+    /**
+     * Writes the HTML form for managing torrent creation file filters.
+     *
+     * @param out the PrintWriter to which the HTML output will be written
+     * @param req the HttpServletRequest containing the current request parameters
+     * @throws IOException if an I/O error occurs while writing to the output stream
+     * @since 0.9.62+ Added torrent creation filter management form
+     */
     private void writeTorrentCreateFilterForm(PrintWriter out, HttpServletRequest req) throws IOException {
         StringBuilder buf = new StringBuilder(5*1024);
         buf.append("<form action=\"").append(_contextPath).append("/configure#navbar\" method=POST>\n")
@@ -3456,7 +3496,14 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.setLength(0);
     }
 
-    /** @since 0.9 */
+    /**
+     * Writes the HTML form for managing trackers.
+     *
+     * @param out the PrintWriter to which the HTML output will be written
+     * @param req the HttpServletRequest containing the current request parameters
+     * @throws IOException if an I/O error occurs while writing to the output stream
+     * @since 0.9 Added tracker management form
+     */
     private void writeTrackerForm(PrintWriter out, HttpServletRequest req) throws IOException {
         StringBuilder buf = new StringBuilder(5*1024);
         buf.append("<form action=\"").append(_contextPath).append("/configure#navbar\" method=POST>\n")
@@ -3577,33 +3624,41 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String DUMMY0 = "{0} ";
     private static final String DUMMY1 = "1 ";
 
-    /** modded from ConfigTunnelsHelper @since 0.7.14 */
+   /**
+    * Generates HTML for a dropdown selection menu.
+    *
+    * @param min the minimum value for the dropdown options
+    * @param max the maximum value for the dropdown options
+    * @param dflt the default value for the dropdown
+    * @param strNow the string representation of the current selected option
+    * @param selName the name attribute for the select element
+    * @param name the base name of the option to be displayed in the dropdown
+    * @return a string representing the HTML for the dropdown selection menu
+    * @since 0.7.14 Modified from ConfigTunnelsHelper
+    */
     private String renderOptions(int min, int max, int dflt, String strNow, String selName, String name) {
-        int now = dflt;
-        try {
-            now = Integer.parseInt(strNow);
-        } catch (Throwable t) {}
-        StringBuilder buf = new StringBuilder(128);
-        buf.append("<select name=\"").append(selName);
-        if (selName.contains("quantity")) {
-            buf.append("\" title=\"")
-               .append(_t("This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"));
-        }
-        if (selName.contains("length")) {
-            buf.append("\" title=\"")
-               .append(_t("Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"));
-        }
-        buf.append("\">\n");
-        for (int i = min; i <= max; i++) {
-            buf.append("<option value=\"").append(i).append("\" ");
-            if (i == now)
-                buf.append("selected=selected ");
-            // constants to prevent tagging
-            buf.append(">").append(ngettext(DUMMY1 + name, DUMMY0 + name + 's', i))
-               .append("</option>\n");
-        }
-        buf.append("</select>\n");
-        return buf.toString();
+       int now = dflt;
+       try {now = Integer.parseInt(strNow);}
+       catch (Throwable t) {}
+       StringBuilder buf = new StringBuilder(128);
+       buf.append("<select name=\"").append(selName);
+       if (selName.contains("quantity")) {
+           buf.append("\" title=\"")
+              .append(_t("This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"));
+       }
+       if (selName.contains("length")) {
+           buf.append("\" title=\"")
+              .append(_t("Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"));
+       }
+       buf.append("\">\n");
+       for (int i = min; i <= max; i++) {
+           buf.append("<option value=\"").append(i).append("\" ");
+           if (i == now) {buf.append("selected=selected ");}
+           // constants to prevent tagging
+           buf.append(">").append(ngettext(DUMMY1 + name, DUMMY0 + name + 's', i)).append("</option>\n");
+       }
+       buf.append("</select>\n");
+       return buf.toString();
     }
 
     /** translate */

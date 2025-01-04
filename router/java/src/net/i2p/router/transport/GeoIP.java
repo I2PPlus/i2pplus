@@ -765,8 +765,16 @@ public class GeoIP {
     }
 
     /**
-     *  @param two-letter lower-case country code
-     *  @since 0.9.48
+     * Bans routers located in a specified country.
+     *
+     * This method iterates through all known routers in the network database
+     * and adds those located in the specified country to the banlist.
+     * Routers are banned indefinitely with a reason message that reflects
+     * whether the application is in 'block my country' mode or 'hidden' mode.
+     *
+     * @param ctx the RouterContext instance providing access to network database and banlist
+     * @param country the country code (ISO 3166-1 alpha-2 format) of the country whose routers should be banned
+     * @since 0.9.48 Introduced method for banning routers by country
      */
     public static void banCountry(RouterContext ctx, String country) {
         boolean blockMyCountry = ctx.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);

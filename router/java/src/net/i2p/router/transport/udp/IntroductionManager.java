@@ -575,14 +575,16 @@ class IntroductionManager {
     }
 
     /**
-     *  We are Charlie and we got this from Bob.
-     *  Send a HolePunch to Alice, who will soon be sending us a SessionRequest.
-     *  And send a RelayResponse to bob.
+     * Processes a relay introduction message received from another peer.
      *
-     *  SSU 2 only.
+     * This method is responsible for initiating a HolePunch to the specified
+     * destination peer ('Alice') and preparing a RelayResponse to be sent back
+     * to the originating peer ('Bob'). It is designed for use with the SSU 2 protocol.
      *
-     *  @return DELAYED if awaiting Alice RI, DROPPED on fatal error, or REPLIED if we replied to Bob with a RelayResponse
-     *  @since 0.9.55
+     * @param bob the PeerState2 instance representing the peer that sent the relay introduction message
+     * @param alice the Hash object identifying the destination peer ('Alice') to which a HolePunch will be initiated
+     * @param data the byte array containing the data payload of the relay introduction message
+     * @since 0.9.55 Method introduced for handling relay introduction messages in SSU 2
      */
     void receiveRelayIntro(PeerState2 bob, Hash alice, byte[] data) {
         receiveRelayIntro(bob, alice, data, 0);
