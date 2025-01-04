@@ -127,6 +127,7 @@
     <echo message=" 7zip-linux                                   Installation 7zip for Linux without installer &#10140; ./dist/i2p-linux.7z"/>
     <echo message=" 7zip-macos                                   Installation 7zip for macOS without installer &#10140; ./dist/i2p-macos.7z"/>
     <echo message=" 7zip-windows                                 Installation 7zip for Windows without installer &#10140; ./dist/i2p-windows.7z"/>
+    <echo message=" 7zip-multiplatform                           Installation 7zip for FreeBSD, macOS, Linux and Windows &#10140; ./dist/i2p-windows.7z"/>
     <echo message=" zip-freebsd                                  Installation zip for FreeBSD without installer &#10140; ./dist/i2p-freebsd.zip"/>
     <echo message=" zip-linux                                    Installation zip for Linux without installer &#10140; ./dist/i2p-linux.zip"/>
     <echo message=" zip-macos                                    Installation zip for macOS without installer &#10140; ./dist/i2p-macos.zip"/>
@@ -646,7 +647,7 @@
       <arg value="-c"/>
       <arg value="1-8"/>
     </exec>
-    <echo message="Short version is: ${shortHash}"/>
+    <echo message="Short Git revision is: ${shortHash}"/>
   </target>
 
   <target name="checkIfBumped" depends="failIfNoVCS, checkIfBumpedGit"/>
@@ -968,38 +969,37 @@
       <group title="Imagegen Application" packages="com.docuverse.identicon:com.google.zxing:com.google.zxing.*:net.i2p.imagegen"/>
       <group title="Installer Utilities" packages="net.i2p.installer"/>
       <group title="Jetty Utilities" packages="net.i2p.jetty:net.i2p.servlet:net.i2p.servlet.*"/>
-      <group title="RRD4J Library (jrobin.jar)" packages="org.rrd4j:org.rrd4j.*:com.tomgibara.crinch.hashing:eu.bengreen.data.utility:org.jfree:org.jfree.*"/>
+      <group title="RRD4J Library (jrobin.jar)" packages="org.rrd4j:org.rrd4j.*:com.tomgibara.crinch.hashing:eu.bengreen.data.utility"/>
       <group title="SAM Bridge" packages="net.i2p.sam"/>
       <group title="SAM Demos" packages="net.i2p.sam.client"/>
       <group title="SusiDNS Application" packages="i2p.susi.dns:net.i2p.addressbook.servlet"/>
       <group title="SusiMail Application" packages="i2p.susi.webmail:i2p.susi.webmail.*:i2p.susi.debug:i2p.susi.util"/>
       <group title="Systray Application" packages="net.i2p.apps.systray"/>
       <sourcepath>
-        <pathelement location="core/java/src"/>
-        <pathelement location="router/java/src"/>
-        <pathelement location="apps/ministreaming/java/src"/>
-        <pathelement location="apps/streaming/java/src"/>
-        <pathelement location="apps/i2ptunnel/java/src"/>
-        <pathelement location="apps/systray/java/src"/>
-        <pathelement location="apps/desktopgui/src"/>
-        <pathelement location="apps/routerconsole/java/src"/>
         <pathelement location="apps/addressbook/java/src"/>
+        <pathelement location="apps/desktopgui/src"/>
+        <pathelement location="apps/i2pcontrol/java"/>
         <pathelement location="apps/i2psnark/java/src"/>
-        <pathelement location="apps/sam/java/src"/>
-        <pathelement location="apps/susidns/src/java/src"/>
-        <pathelement location="apps/susimail/src/src"/>
-        <pathelement location="apps/jetty/java/src"/>
-        <pathelement location="apps/imagegen/imagegen/webapp/src/main/java"/>
+        <pathelement location="apps/i2ptunnel/java/src"/>
         <pathelement location="apps/imagegen/identicon/core/src/main/java"/>
+        <pathelement location="apps/imagegen/imagegen/webapp/src/main/java"/>
         <pathelement location="apps/imagegen/zxing/core/src/main/java"/>
         <pathelement location="apps/imagegen/zxing/javase/src/main/java"/>
+        <pathelement location="apps/jetty/java/src"/>
         <pathelement location="apps/jrobin/java/src"/>
+        <pathelement location="apps/ministreaming/java/src"/>
+        <pathelement location="apps/routerconsole/java/src"/>
+        <pathelement location="apps/sam/java/src"/>
+        <pathelement location="apps/streaming/java/src"/>
+        <pathelement location="apps/susidns/src/java/src"/>
+        <pathelement location="apps/susimail/src/src"/>
+        <pathelement location="apps/systray/java/src"/>
+        <pathelement location="core/java/src"/>
         <pathelement location="installer/java/src"/>
-        <pathelement location="apps/i2pcontrol/java"/>
+        <pathelement location="router/java/src"/>
       </sourcepath>
       <classpath>
         <!-- warning, some entries are needed for Debian builds only -->
-        <pathelement location="apps/jetty/jettylib/org.mortbay.jetty.jar"/>
         <pathelement location="apps/jetty/jettylib/jasper-runtime.jar"/>
         <pathelement location="apps/jetty/jettylib/javax.servlet.jar"/>
         <pathelement location="apps/jetty/jettylib/jetty-deploy.jar"/>
@@ -1011,19 +1011,20 @@
         <pathelement location="apps/jetty/jettylib/jetty-util.jar"/>
         <pathelement location="apps/jetty/jettylib/jetty-webapp.jar"/>
         <pathelement location="apps/jetty/jettylib/jetty-xml.jar"/>
+        <pathelement location="apps/jetty/jettylib/org.mortbay.jetty.jar"/>
         <pathelement location="apps/jetty/jettylib/tomcat-api.jar"/>
         <pathelement location="installer/lib/wrapper/all/wrapper.jar"/>
         <!-- following are only for debian builds -->
-        <pathelement location="core/java/build/libintl.jar"/>
         <pathelement location="core/java/build/gnu-getopt.jar"/>
         <pathelement location="core/java/build/json-simple.jar"/>
+        <pathelement location="core/java/build/libintl.jar"/>
       </classpath>
       <!--
          These variables are stored in build.properties.
          End-users can override by creating the file override.properties
       -->
-      <link offline="true" href="${javasedocs.url}" packagelistLoc="installer/resources/package-lists/java/"/>
       <link offline="true" href="${javaeedocs.url}" packagelistLoc="installer/resources/package-lists/javaee/"/>
+      <link offline="true" href="${javasedocs.url}" packagelistLoc="installer/resources/package-lists/java/"/>
       <link offline="true" href="${jettydocs.url}" packagelistLoc="installer/resources/package-lists/jetty/"/>
       <link offline="true" href="${wrapperdocs.url}" packagelistLoc="installer/resources/package-lists/wrapper/"/>
     </javadoc>
@@ -1059,9 +1060,9 @@
       doctitle="I2P+ Javadocs [${release.number}-${i2p.build.number}${build.extra}]"
       windowtitle="Javadocs [I2P+ ${release.number}+] - API Version ${api.version}+">
       <group title="Core SDK (i2p.jar)" packages="net.i2p:net.i2p.*:net.i2p.client:net.i2p.client.*:net.i2p.internal:net.i2p.internal.*:freenet.support.CPUInformation:gnu.crypto.*:gnu.getopt:gnu.gettext:com.nettgryppa.security:net.i2p.apache.http.conn.ssl:net.i2p.apache.http.conn.util:net.i2p.apache.http.util:org.json.simple:com.southernstorm.noise.crypto.x25519:com.southernstorm.noise.crypto.chacha20:org.minidns:org.minidns.*"/>
-      <group title="Streaming Library" packages="net.i2p.client.streaming:net.i2p.client.streaming.impl"/>
-      <group title="Router" packages="net.i2p.router:net.i2p.router.*:net.i2p.data.i2np:net.i2p.data.router:org.cybergarage:org.cybergarage.*:org.freenetproject:org.xlattice.crypto.filters:com.maxmind.*:com.southernstorm.noise.*"/>
       <group title="Router Console" packages="net.i2p.router.web:net.i2p.router.web.*:net.i2p.router.update:edu.internet2.ndt:net.i2p.router.news:com.vuze.*"/>
+      <group title="Router" packages="net.i2p.router:net.i2p.router.*:net.i2p.data.i2np:net.i2p.data.router:org.cybergarage:org.cybergarage.*:org.freenetproject:org.xlattice.crypto.filters:com.maxmind.*:com.southernstorm.noise.*"/>
+      <group title="Streaming Library" packages="net.i2p.client.streaming:net.i2p.client.streaming.impl"/>
       <!-- apps and bridges starting here, alphabetical please -->
       <group title="Addressbook Application" packages="net.i2p.addressbook:net.i2p.router.naming:net.metanotion:net.metanotion.*"/>
       <group title="Desktopgui Application" packages="net.i2p.desktopgui:net.i2p.desktopgui.*"/>
@@ -1071,38 +1072,37 @@
       <group title="Imagegen Application" packages="com.docuverse.identicon:com.google.zxing:com.google.zxing.*:net.i2p.imagegen"/>
       <group title="Installer Utilities" packages="net.i2p.installer"/>
       <group title="Jetty Utilities" packages="net.i2p.jetty:net.i2p.servlet:net.i2p.servlet.*"/>
-      <group title="RRD4J Library (jrobin.jar)" packages="org.rrd4j:org.rrd4j.*:com.tomgibara.crinch.hashing:eu.bengreen.data.utility:org.jfree:org.jfree.*"/>
+      <group title="RRD4J Library (jrobin.jar)" packages="org.rrd4j:org.rrd4j.*:com.tomgibara.crinch.hashing:eu.bengreen.data.utility"/>
       <group title="SAM Bridge" packages="net.i2p.sam"/>
       <group title="SAM Demos" packages="net.i2p.sam.client"/>
       <group title="SusiDNS Application" packages="i2p.susi.dns:net.i2p.addressbook.servlet"/>
       <group title="SusiMail Application" packages="i2p.susi.webmail:i2p.susi.webmail.*:i2p.susi.debug:i2p.susi.util"/>
       <group title="Systray Application" packages="net.i2p.apps.systray"/>
       <sourcepath>
-        <pathelement location="core/java/src"/>
-        <pathelement location="router/java/src"/>
-        <pathelement location="apps/ministreaming/java/src"/>
-        <pathelement location="apps/streaming/java/src"/>
-        <pathelement location="apps/i2ptunnel/java/src"/>
-        <pathelement location="apps/systray/java/src"/>
-        <pathelement location="apps/desktopgui/src"/>
-        <pathelement location="apps/routerconsole/java/src"/>
         <pathelement location="apps/addressbook/java/src"/>
+        <pathelement location="apps/desktopgui/src"/>
+        <pathelement location="apps/i2pcontrol/java"/>
         <pathelement location="apps/i2psnark/java/src"/>
-        <pathelement location="apps/sam/java/src"/>
-        <pathelement location="apps/susidns/src/java/src"/>
-        <pathelement location="apps/susimail/src/src"/>
-        <pathelement location="apps/jetty/java/src"/>
-        <pathelement location="apps/imagegen/imagegen/webapp/src/main/java"/>
+        <pathelement location="apps/i2ptunnel/java/src"/>
         <pathelement location="apps/imagegen/identicon/core/src/main/java"/>
+        <pathelement location="apps/imagegen/imagegen/webapp/src/main/java"/>
         <pathelement location="apps/imagegen/zxing/core/src/main/java"/>
         <pathelement location="apps/imagegen/zxing/javase/src/main/java"/>
+        <pathelement location="apps/jetty/java/src"/>
         <pathelement location="apps/jrobin/java/src"/>
+        <pathelement location="apps/ministreaming/java/src"/>
+        <pathelement location="apps/routerconsole/java/src"/>
+        <pathelement location="apps/sam/java/src"/>
+        <pathelement location="apps/streaming/java/src"/>
+        <pathelement location="apps/susidns/src/java/src"/>
+        <pathelement location="apps/susimail/src/src"/>
+        <pathelement location="apps/systray/java/src"/>
+        <pathelement location="core/java/src"/>
         <pathelement location="installer/java/src"/>
-        <pathelement location="apps/i2pcontrol/java"/>
+        <pathelement location="router/java/src"/>
       </sourcepath>
       <classpath>
         <!-- warning, some entries are needed for Debian builds only -->
-        <pathelement location="apps/jetty/jettylib/org.mortbay.jetty.jar"/>
         <pathelement location="apps/jetty/jettylib/jasper-runtime.jar"/>
         <pathelement location="apps/jetty/jettylib/javax.servlet.jar"/>
         <pathelement location="apps/jetty/jettylib/jetty-deploy.jar"/>
@@ -1114,12 +1114,13 @@
         <pathelement location="apps/jetty/jettylib/jetty-util.jar"/>
         <pathelement location="apps/jetty/jettylib/jetty-webapp.jar"/>
         <pathelement location="apps/jetty/jettylib/jetty-xml.jar"/>
+        <pathelement location="apps/jetty/jettylib/org.mortbay.jetty.jar"/>
         <pathelement location="apps/jetty/jettylib/tomcat-api.jar"/>
         <pathelement location="installer/lib/wrapper/all/wrapper.jar"/>
         <!-- following are only for debian builds -->
-        <pathelement location="core/java/build/libintl.jar"/>
         <pathelement location="core/java/build/gnu-getopt.jar"/>
         <pathelement location="core/java/build/json-simple.jar"/>
+        <pathelement location="core/java/build/libintl.jar"/>
       </classpath>
       <!--
          These variables are stored in build.properties.
@@ -1463,33 +1464,39 @@
   <target name="pkg200" depends="distclean, updater200, preppkg, installer"/>
 
   <target name="pkgclean" depends="deletepkg-temp">
-    <delete>
-      <fileset dir="." includes="i2p.tar.bz2 install.jar i2pupdate.zip i2pupdate200.zip"/>
-      <fileset dir="./dist" includes="i2p.tar.bz2 install.jar i2pupdate.zip i2pupdate200.zip" excludes="README.md"/>
-    </delete>
+    <parallel>
+      <delete>
+        <fileset dir="." includes="i2p.tar.bz2 install.jar i2pupdate.zip i2pupdate200.zip"/>
+        <fileset dir="./dist" includes="i2p.tar.bz2 install.jar i2pupdate.zip i2pupdate200.zip" excludes="README.md"/>
+      </delete>
+    </parallel>
   </target>
 
   <target name="preppkg" depends="preppkg-linux, preppkg-freebsd, preppkg-osx, preppkg-windows, jbigi">
-    <copy file="build/jbigi.jar" todir="pkg-temp/lib"/>
-    <copy todir="pkg-temp/lib/wrapper/solaris/">
-      <fileset dir="installer/lib/wrapper/solaris/" excludes="*.txt"/>
-    </copy>
-    <!--
-       Force using the new wrapper.jar.
-       The new jar with the old Windows binaries will *fail to work* on windows, so we'll copy the correct
-       version of the wrapper.jar file for windows and rename it so the user can use it to replace the existing
-       wrapper.jar file. We do not generate release files from this target. See preppkg-windows-only target below.
-      -->
-    <copy overwrite="true" file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib"/>
-    <copy file="installer/lib/wrapper/win-all/wrapper.jar" tofile="pkg-temp/lib/wrapper-windows.jar"/>
+    <parallel>
+      <copy file="build/jbigi.jar" todir="pkg-temp/lib"/>
+      <copy todir="pkg-temp/lib/wrapper/solaris/">
+        <fileset dir="installer/lib/wrapper/solaris/" excludes="*.txt README.md"/>
+      </copy>
+      <!--
+         Force using the new wrapper.jar.
+         The new jar with the old Windows binaries will *fail to work* on windows, so we'll copy the correct
+         version of the wrapper.jar file for windows and rename it so the user can use it to replace the existing
+         wrapper.jar file. We do not generate release files from this target. See preppkg-windows-only target below.
+        -->
+      <copy overwrite="true" file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib"/>
+      <copy file="installer/lib/wrapper/win-all/wrapper.jar" tofile="pkg-temp/lib/wrapper-windows.jar"/>
+    </parallel>
   </target>
 
   <target name="preppkg-nowindows" depends="preppkg-linux, preppkg-freebsd, preppkg-osx, jbigi-nowindows">
-    <copy file="build/jbigi.jar" todir="pkg-temp/lib"/>
-    <copy todir="pkg-temp/lib/wrapper/solaris/">
-      <fileset dir="installer/lib/wrapper/solaris/" excludes="*.txt"/>
-    </copy>
-    <copy file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib"/>
+    <parallel>
+      <copy file="build/jbigi.jar" todir="pkg-temp/lib"/>
+      <copy todir="pkg-temp/lib/wrapper/solaris/">
+        <fileset dir="installer/lib/wrapper/solaris/" excludes="*.txt README.md"/>
+      </copy>
+      <copy file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib"/>
+    </parallel>
   </target>
 
   <target name="preppkgRepack" depends="preppkg-linux, preppkg-freebsd, preppkg-osx, preppkg-windows, jbigi">
@@ -1497,17 +1504,19 @@
     <!-- no use doing repack200 on jbigi.jar -->
     <copy file="build/jbigi.jar" todir="pkg-temp/lib"/>
     <copy todir="pkg-temp/lib/wrapper/solaris/">
-      <fileset dir="installer/lib/wrapper/solaris/" excludes="*.txt"/>
+      <fileset dir="installer/lib/wrapper/solaris/" excludes="*.txt README.md"/>
     </copy>
   </target>
 
   <target name="preppkg-freebsd" depends="preppkg-unix">
-    <copy todir="pkg-temp/lib/wrapper/freebsd/">
-      <fileset dir="installer/lib/wrapper/freebsd/" excludes="*.txt"/>
-    </copy>
-    <copy todir="pkg-temp/lib/wrapper/freebsd64/">
-      <fileset dir="installer/lib/wrapper/freebsd64" excludes="*.txt"/>
-    </copy>
+    <parallel>
+      <copy todir="pkg-temp/lib/wrapper/freebsd/">
+        <fileset dir="installer/lib/wrapper/freebsd/" excludes="*.txt README.md"/>
+      </copy>
+      <copy todir="pkg-temp/lib/wrapper/freebsd64/">
+        <fileset dir="installer/lib/wrapper/freebsd64" excludes="*.txt README.md"/>
+      </copy>
+    </parallel>
   </target>
 
   <target name="preppkg-freebsd-only" depends="preppkg-freebsd, jbigi-freebsd-only">
@@ -1523,14 +1532,19 @@
 
   <!-- This is the target called by debian/rules -->
   <target name="preppkg-unix" depends="preppkg-base, prep-script-translation">
-    <copy file="installer/resources/runplain.sh" todir="pkg-temp/"/>
-    <copy file="installer/resources/eepget" todir="pkg-temp/"/>
-    <copy file="installer/resources/eephead" todir="pkg-temp/"/>
-    <copy file="installer/resources/i2ping" todir="pkg-temp/"/>
-    <copy file="installer/resources/graceful_update" todir="pkg-temp/"/>
-    <copy file="installer/resources/i2prouter" todir="pkg-temp/"/>
-    <copy file="installer/resources/osid" todir="pkg-temp/"/>
-    <copy file="installer/resources/postinstall.sh" todir="pkg-temp/"/>
+    <parallel>
+      <copy file="installer/resources/runplain.sh" todir="pkg-temp/"/>
+      <copy file="installer/resources/eepget" todir="pkg-temp/"/>
+      <copy file="installer/resources/eephead" todir="pkg-temp/"/>
+      <copy file="installer/resources/i2ping" todir="pkg-temp/"/>
+      <copy file="installer/resources/graceful_update" todir="pkg-temp/"/>
+      <copy file="installer/resources/i2prouter" todir="pkg-temp/"/>
+      <copy file="installer/resources/osid" todir="pkg-temp/"/>
+      <copy file="installer/resources/postinstall.sh" todir="pkg-temp/"/>
+      <copy todir="pkg-temp/man/">
+        <fileset dir="installer/resources/man/"/>
+      </copy>
+    </parallel>
     <chmod perm="+x" type="file" verbose="true">
       <fileset dir="pkg-temp/">
         <include name="eepget"/>
@@ -1539,53 +1553,48 @@
         <include name="graceful_update"/>
       </fileset>
     </chmod>
-    <copy todir="pkg-temp/man/">
-      <fileset dir="installer/resources/man/"/>
-    </copy>
   </target>
 
   <target name="preppkg-linux" depends="preppkg-linux-x86,preppkg-linux-nonx86"/>
 
   <target name="preppkg-linux-x86" depends="preppkg-unix">
     <copy todir="pkg-temp/lib/wrapper/linux/">
-      <fileset dir="installer/lib/wrapper/linux/" excludes="*.txt"/>
+      <fileset dir="installer/lib/wrapper/linux/" excludes="*.txt README.md"/>
     </copy>
     <copy todir="pkg-temp/lib/wrapper/linux64/">
-      <fileset dir="installer/lib/wrapper/linux64/" excludes="*.txt"/>
+      <fileset dir="installer/lib/wrapper/linux64/" excludes="*.txt README.md"/>
     </copy>
   </target>
 
   <target name="preppkg-linux-nonx86" depends="preppkg-unix">
-    <copy todir="pkg-temp/lib/wrapper/linux-ppc/">
-      <fileset dir="installer/lib/wrapper/linux-ppc/" excludes="*.txt"/>
-    </copy>
-    <copy todir="pkg-temp/lib/wrapper/linux-armv5/">
-      <fileset dir="installer/lib/wrapper/linux-armv5/" excludes="*.txt"/>
-    </copy>
-    <!--
-        <copy todir="pkg-temp/lib/wrapper/linux-armv6/">
-            <fileset dir="installer/lib/wrapper/linux-armv6/" excludes="*.txt"/>
-        </copy>
-        -->
-    <copy todir="pkg-temp/lib/wrapper/linux-armv7/">
-      <fileset dir="installer/lib/wrapper/linux-armv7/" excludes="*.txt"/>
-    </copy>
-    <copy todir="pkg-temp/lib/wrapper/linux64-armv8/">
-      <fileset dir="installer/lib/wrapper/linux64-armv8/" excludes="*.txt"/>
-    </copy>
+    <parallel>
+      <copy todir="pkg-temp/lib/wrapper/linux-ppc/">
+        <fileset dir="installer/lib/wrapper/linux-ppc/" excludes="*.txt README.md"/>
+      </copy>
+      <copy todir="pkg-temp/lib/wrapper/linux-armv5/">
+        <fileset dir="installer/lib/wrapper/linux-armv5/" excludes="*.txt README.md"/>
+      </copy>
+      <copy todir="pkg-temp/lib/wrapper/linux-armv7/">
+        <fileset dir="installer/lib/wrapper/linux-armv7/" excludes="*.txt README.md"/>
+      </copy>
+      <copy todir="pkg-temp/lib/wrapper/linux64-armv8/">
+        <fileset dir="installer/lib/wrapper/linux64-armv8/" excludes="*.txt README.md"/>
+      </copy>
+    </parallel>
   </target>
 
   <target name="preppkg-osx" depends="preppkg-unix">
-    <!--<copy file="installer/resources/I2P Router Console.webloc" todir="pkg-temp/"/>-->
-    <copy todir="pkg-temp/Start I2P Router.app">
-      <fileset dir="installer/resources/Start I2P Router.app"/>
-    </copy>
-    <copy todir="pkg-temp/lib/wrapper/macosx/">
-      <fileset dir="installer/lib/wrapper/macosx/" excludes="*.txt"/>
-    </copy>
-    <copy file="installer/resources/net.i2p.router.plist.template" todir="pkg-temp/"/>
-    <copy file="installer/resources/install_i2p_service_osx.command" todir="pkg-temp/"/>
-    <copy file="installer/resources/uninstall_i2p_service_osx.command" todir="pkg-temp/"/>
+    <parallel>
+      <copy todir="pkg-temp/Start I2P Router.app">
+        <fileset dir="installer/resources/Start I2P Router.app"/>
+      </copy>
+      <copy todir="pkg-temp/lib/wrapper/macosx/">
+        <fileset dir="installer/lib/wrapper/macosx/" excludes="*.txt README.md"/>
+      </copy>
+      <copy file="installer/resources/net.i2p.router.plist.template" todir="pkg-temp/"/>
+      <copy file="installer/resources/install_i2p_service_osx.command" todir="pkg-temp/"/>
+      <copy file="installer/resources/uninstall_i2p_service_osx.command" todir="pkg-temp/"/>
+    </parallel>
   </target>
 
   <target name="preppkg-osx-only" depends="preppkg-osx, jbigi-osx-only">
@@ -1609,10 +1618,10 @@
       <copy file="installer/resources/windows/DisableI2P+Service.bat" todir="pkg-temp/"/>
       <copy file="build/utility.jar" todir="pkg-temp"/>
       <copy todir="pkg-temp/lib/wrapper/win32/">
-        <fileset dir="installer/lib/wrapper/win32/" excludes="*.txt"/>
+        <fileset dir="installer/lib/wrapper/win32/" excludes="*.txt README.md"/>
       </copy>
       <copy todir="pkg-temp/lib/wrapper/win64/">
-        <fileset dir="installer/lib/wrapper/win64/" excludes="*.txt"/>
+        <fileset dir="installer/lib/wrapper/win64/" excludes="*.txt README.md"/>
       </copy>
     </parallel>
   </target>
@@ -1633,21 +1642,25 @@
   <target name="preppkg-base" depends="build, preplicenses, prepConsoleDocs, prepthemeupdates, prepCertificates, prepRouterInfos, copyjetty, copytomcat-unlesspkg, copyjstl-unlesspkg, copystandard-unlesspkg, copyflags, truncatehistory">
 
     <!-- Delete operations -->
-    <delete>
-      <fileset dir="pkg-temp" includes="**/*.jar.pack **/*.war.pack deletelist.txt"/>
-      <fileset dir="pkg-temp/lib" includes="commons-logging.jar jasper-compiler.jar jetty-java5-threadpool.jar jetty-sslengine.jar"/>
-      <fileset dir="pkg-temp" includes="webapps/addressbook.war"/>
-    </delete>
+    <parallel>
+      <delete>
+        <fileset dir="pkg-temp" includes="**/*.jar.pack **/*.war.pack deletelist.txt"/>
+        <fileset dir="pkg-temp/lib" includes="commons-logging.jar jasper-compiler.jar jetty-java5-threadpool.jar jetty-sslengine.jar"/>
+        <fileset dir="pkg-temp" includes="webapps/addressbook.war"/>
+      </delete>
+    </parallel>
 
     <!-- Create temp folders -->
-    <mkdir dir="pkg-temp"/>
-    <mkdir dir="pkg-temp/docs"/>
-    <mkdir dir="pkg-temp/lib"/>
-    <mkdir dir="pkg-temp/eepsite"/>
-    <mkdir dir="pkg-temp/eepsite-jetty9.3"/>
-    <mkdir dir="pkg-temp/eepsite/docroot"/>
-    <mkdir dir="pkg-temp/scripts"/>
-    <mkdir dir="pkg-temp/webapps"/>
+    <parallel>
+      <mkdir dir="pkg-temp"/>
+      <mkdir dir="pkg-temp/docs"/>
+      <mkdir dir="pkg-temp/lib"/>
+      <mkdir dir="pkg-temp/eepsite"/>
+      <mkdir dir="pkg-temp/eepsite-jetty9.3"/>
+      <mkdir dir="pkg-temp/eepsite/docroot"/>
+      <mkdir dir="pkg-temp/scripts"/>
+      <mkdir dir="pkg-temp/webapps"/>
+    </parallel>
 
     <parallel>
       <!-- Copy wars and jars -->
@@ -1705,6 +1718,7 @@
   <target name="zip-linux">
     <delete>
       <fileset dir="pkg-temp" includes="**/*" excludes="README.md"/>
+      <fileset dir="dist" includes="i2p-linux.zip" excludes="README.md"/>
     </delete>
     <ant target="preppkg-linux"/>
     <zip destfile="./dist/i2p-linux.zip" level="9">
@@ -1715,6 +1729,7 @@
   <target name="zip-windows">
     <delete>
       <fileset dir="pkg-temp" includes="**/*" excludes="README.md"/>
+      <fileset dir="dist" includes="i2p-windows.zip" excludes="README.md"/>
     </delete>
     <ant target="preppkg-windows"/>
     <zip destfile="./dist/i2p-windows.zip" level="9">
@@ -1725,6 +1740,7 @@
   <target name="zip-macos">
     <delete>
       <fileset dir="pkg-temp" includes="**/*" excludes="README.md"/>
+      <fileset dir="dist" includes="i2p-macos.zip" excludes="README.md"/>
     </delete>
     <ant target="preppkg-osx"/>
     <zip destfile="./dist/i2p-macos.zip" level="9">
@@ -1735,6 +1751,7 @@
   <target name="zip-freebsd">
     <delete>
       <fileset dir="pkg-temp" includes="**/*" excludes="README.md"/>
+      <fileset dir="dist" includes="i2p-freebsd.zip" excludes="README.md"/>
     </delete>
     <ant target="preppkg-freebsd"/>
     <zip destfile="./dist/i2p-freebsd.zip" level="9">
@@ -1743,17 +1760,13 @@
   </target>
 
   <target name="7zip-linux">
-    <delete>
-      <fileset dir="pkg-temp" includes="**/*" excludes="README.md"/>
-    </delete>
-    <delete>
-      <fileset dir="dist" includes="**/i2p-linux.7z" excludes="README.md"/>
-    </delete>
-    <ant target="preppkg-linux"/>
-    <delete>
-      <fileset dir="dist" includes="**/i2p-linux.7z"/>
-    </delete>
-    <ant target="preppkg-windows"/>
+    <parallel>
+      <delete>
+        <fileset dir="pkg-temp" includes="**/*" excludes="README.md"/>
+        <fileset dir="dist" includes="**/i2p-linux.7z" excludes="README.md"/>
+      </delete>
+      <ant target="preppkg-linux"/>
+    </parallel>
     <mkdir dir="pkg-temp/i2p"/>
     <move todir="pkg-temp/i2p">
       <fileset dir="./pkg-temp" includes="**/*" excludes="README.md"/>
@@ -1774,12 +1787,12 @@
   </target>
 
   <target name="7zip-windows">
-    <delete>
-      <fileset dir="pkg-temp" includes="**/*" excludes="README.md"/>
-    </delete>
-    <delete>
-      <fileset dir="dist" includes="**/i2p-windows.7z" excludes="README.md"/>
-    </delete>
+    <parallel>
+      <delete>
+        <fileset dir="pkg-temp" includes="**/*" excludes="README.md"/>
+        <fileset dir="dist" includes="**/i2p-windows.7z" excludes="README.md"/>
+      </delete>
+    </parallel>
     <ant target="preppkg-windows"/>
     <mkdir dir="pkg-temp/i2p"/>
     <move todir="pkg-temp/i2p">
@@ -1801,12 +1814,12 @@
   </target>
 
   <target name="7zip-macos">
-    <delete>
-      <fileset dir="pkg-temp" includes="**/*" excludes="README.md"/>
-    </delete>
-    <delete>
-      <fileset dir="dist" includes="**/i2p-macos.7z" excludes="README.md"/>
-    </delete>
+    <parallel>
+      <delete>
+        <fileset dir="pkg-temp" includes="**/*" excludes="README.md"/>
+        <fileset dir="dist" includes="**/i2p-macos.7z" excludes="README.md"/>
+      </delete>
+    </parallel>
     <ant target="preppkg-osx"/>
     <mkdir dir="pkg-temp/i2p"/>
     <move todir="pkg-temp/i2p">
@@ -1828,12 +1841,12 @@
   </target>
 
   <target name="7zip-freebsd">
-    <delete>
-      <fileset dir="pkg-temp" includes="**/*" excludes="README.md"/>
-    </delete>
-    <delete>
-      <fileset dir="dist" includes="**/i2p-freebsd.7z" excludes="README.md"/>
-    </delete>
+    <parallel>
+      <delete>
+        <fileset dir="pkg-temp" includes="**/*" excludes="README.md"/>
+        <fileset dir="dist" includes="**/i2p-freebsd.7z" excludes="README.md"/>
+      </delete>
+    </parallel>
     <ant target="preppkg-freebsd"/>
     <mkdir dir="pkg-temp/i2p"/>
     <move todir="pkg-temp/i2p">
@@ -1852,6 +1865,14 @@
       <arg value="./dist/i2p-freebsd.7z"/>
       <arg value="./pkg-temp/i2p"/>
     </exec>
+  </target>
+
+  <target name="7zip-multiplaform">
+    <ant target="7zip-freebsd"/>
+    <ant target="7zip-macos"/>
+    <ant target="7zip-linux"/>
+    <ant target="7zip-windows"/>
+    <echo message="7zip packages built for FreeBSD, macOS, Linux and Windows -> Copied to ./dist/"/>
   </target>
 
   <target name="copyflags">
