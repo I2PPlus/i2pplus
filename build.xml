@@ -127,7 +127,7 @@
     <echo message=" 7zip-linux                                   Installation 7zip for Linux without installer &#10140; ./dist/i2p-linux.7z"/>
     <echo message=" 7zip-macos                                   Installation 7zip for macOS without installer &#10140; ./dist/i2p-macos.7z"/>
     <echo message=" 7zip-windows                                 Installation 7zip for Windows without installer &#10140; ./dist/i2p-windows.7z"/>
-    <echo message=" 7zip-multiplatform                           Installation 7zip for FreeBSD, macOS, Linux and Windows &#10140; ./dist/i2p-windows.7z"/>
+    <echo message=" 7zip-multiplatform                           Installation 7zip for FreeBSD, macOS, Linux and Windows &#10140; ./dist/"/>
     <echo message=" zip-freebsd                                  Installation zip for FreeBSD without installer &#10140; ./dist/i2p-freebsd.zip"/>
     <echo message=" zip-linux                                    Installation zip for Linux without installer &#10140; ./dist/i2p-linux.zip"/>
     <echo message=" zip-macos                                    Installation zip for macOS without installer &#10140; ./dist/i2p-macos.zip"/>
