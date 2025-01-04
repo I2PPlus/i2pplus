@@ -68,6 +68,7 @@
     <echo message=" getGitRevLong                                Check current Git revision in workspace and print full revision hash"/>
     <echo message=" i2psnark                                     Build standalone I2PSnark install &#10140; ./dist/i2psnark-standalone.zip"/>
     <echo message=" i2psnark7zip                                 Build standalone I2PSnark 7zip install &#10140; ./dist/i2psnark-standalone.7z"/>
+    <echo message=" i2psnark_nozip                               Build standalone I2PSnark install, no zip file &#10140; ./dist/i2psnark-standalone"/>
     <echo message=" installer / installer5                       Build GUI installer (IzPack4 / IzPack5) &#10140; ./dist/i2pinstall.exe"/>
     <echo message=" installer-freebsd                            Build FreeBSD GUI installer &#10140; ./dist/i2pinstall&#8230;freebsd-only.jar"/>
     <echo message=" installer-linux / installer5-linux           Build Linux GUI installer (IzPack4 / Izpack5) &#10140; i2pinstall&#8230;linux-only.jar"/>
