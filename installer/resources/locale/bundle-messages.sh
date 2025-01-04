@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # Update messages_xx.po and .mo files
-# Requires installed programs xgettext, msgfmt, msgmerge, and find.
+# Requires installed programs xgettext, msgfmt, msgmerge -q, and find.
 #
 # usage:
 #    bundle-messages.sh (generates the resource bundle from the .po file)
@@ -59,9 +59,9 @@ for i in po/messages_*.po; do
       RC=1
       break
     fi
-    msgmerge -U -N --backup=none $i ${i}t
+    msgmerge -q -U -N --backup=none $i ${i}t
     if [ $? -ne 0 ]; then
-      echo "ERROR - msgmerge failed on ${i}, not updating translations"
+      echo "ERROR - msgmerge -q failed on ${i}, not updating translations"
       rm -f ${i}t
       RC=1
       break
@@ -77,7 +77,7 @@ for i in po/messages_*.po; do
 
     # convert to class files in build/obj
     mkdir -p mo/$LG/LC_MESSAGES
-    msgfmt --statistics -o mo/$LG/LC_MESSAGES/i2prouter.mo $i
+    msgfmt -o mo/$LG/LC_MESSAGES/i2prouter.mo $i
     if [ $? -ne 0 ]; then
       echo "ERROR - msgfmt failed on ${i}, not updating translations"
       # msgfmt leaves the class file there so the build would work the next time

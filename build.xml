@@ -380,70 +380,70 @@
 
   <target name="buildSAM" depends="buildMinistreaming">
     <ant dir="apps/sam/java/" target="jar"/>
-    <copy file="apps/sam/java/build/sam.jar" todir="build/"/>
+    <copy quiet="true" file="apps/sam/java/build/sam.jar" todir="build/"/>
   </target>
 
   <target name="buildSusiMail" depends="buildCore, buildJetty">
     <ant dir="apps/susimail/" target="war"/>
-    <copy file="apps/susimail/susimail.war" todir="build/"/>
+    <copy quiet="true" file="apps/susimail/susimail.war" todir="build/"/>
   </target>
 
   <!-- jar (not war) for testing only -->
   <target name="buildSusiMailJar" depends="buildCore, buildJetty">
     <ant dir="apps/susimail/" target="jar"/>
-    <copy file="apps/susimail/susimail.jar" todir="build/"/>
+    <copy quiet="true" file="apps/susimail/susimail.jar" todir="build/"/>
   </target>
 
   <target name="buildSusiDNS" depends="buildCore, buildJetty, buildImagegen, buildAddressbook">
     <ant dir="apps/susidns/src" target="all"/>
-    <copy file="apps/susidns/src/susidns.war" todir="build/"/>
+    <copy quiet="true" file="apps/susidns/src/susidns.war" todir="build/"/>
   </target>
 
   <target name="buildImagegen" depends="buildCore, buildJetty">
     <ant dir="apps/imagegen" target="build"/>
-    <copy file="apps/imagegen/imagegen/build/imagegen.war" todir="build/"/>
+    <copy quiet="true" file="apps/imagegen/imagegen/build/imagegen.war" todir="build/"/>
   </target>
 
   <target name="buildI2PControl" depends="buildRouter, buildJetty">
     <ant dir="apps/i2pcontrol" target="war"/>
-    <copy file="apps/i2pcontrol/build/jsonrpc.war" todir="build/"/>
+    <copy quiet="true" file="apps/i2pcontrol/build/jsonrpc.war" todir="build/"/>
   </target>
 
   <target name="buildI2PSnark" depends="buildMinistreaming, buildJetty, buildSystray">
     <ant dir="apps/i2psnark/java/" target="war"/>
-    <copy file="apps/i2psnark/i2psnark.war" todir="build/"/>
-    <copy file="apps/i2psnark/java/build/i2psnark.jar" todir="build/"/>
+    <copy quiet="true" file="apps/i2psnark/i2psnark.war" todir="build/"/>
+    <copy quiet="true" file="apps/i2psnark/java/build/i2psnark.jar" todir="build/"/>
   </target>
 
   <!-- jar (not war) for Android -->
   <target name="buildAddressbookJar" depends="buildCore">
     <ant dir="apps/addressbook/" target="jar"/>
-    <copy file="apps/addressbook/dist/addressbook.jar" todir="build/"/>
+    <copy quiet="true" file="apps/addressbook/dist/addressbook.jar" todir="build/"/>
   </target>
 
   <target name="buildAddressbook" depends="buildCore">
     <ant dir="apps/addressbook/" target="all"/>
-    <copy file="apps/addressbook/dist/addressbook.jar" todir="build/"/>
+    <copy quiet="true" file="apps/addressbook/dist/addressbook.jar" todir="build/"/>
     <!-- war is empty, only for updates -->
-    <copy file="apps/addressbook/dist/addressbook.war" todir="build/"/>
+    <copy quiet="true" file="apps/addressbook/dist/addressbook.war" todir="build/"/>
   </target>
 
   <!-- Both jars and no war, for Android -->
   <target name="buildI2PTunnelJars" depends="buildStreaming">
     <ant dir="apps/i2ptunnel/java/" target="uiJar"/>
-    <copy file="apps/i2ptunnel/java/build/i2ptunnel.jar" todir="build/"/>
-    <copy file="apps/i2ptunnel/java/build/i2ptunnel-ui.jar" todir="build/"/>
+    <copy quiet="true" file="apps/i2ptunnel/java/build/i2ptunnel.jar" todir="build/"/>
+    <copy quiet="true" file="apps/i2ptunnel/java/build/i2ptunnel-ui.jar" todir="build/"/>
   </target>
 
   <target name="buildI2PTunnel" depends="buildMinistreaming, buildJetty, buildImagegen">
     <ant dir="apps/i2ptunnel/java/" target="build"/>
-    <copy file="apps/i2ptunnel/java/build/i2ptunnel.jar" todir="build/"/>
-    <copy file="apps/i2ptunnel/java/build/i2ptunnel.war" todir="build/"/>
+    <copy quiet="true" file="apps/i2ptunnel/java/build/i2ptunnel.jar" todir="build/"/>
+    <copy quiet="true" file="apps/i2ptunnel/java/build/i2ptunnel.war" todir="build/"/>
   </target>
 
   <target name="buildDesktopGui" depends="buildCore, buildrouter, buildSystray">
     <ant dir="apps/desktopgui" target="jar"/>
-    <copy file="apps/desktopgui/dist/desktopgui.jar" todir="build/"/>
+    <copy quiet="true" file="apps/desktopgui/dist/desktopgui.jar" todir="build/"/>
   </target>
 
   <target name="buildRouterConsole" depends="buildrouter, buildSystray, buildDesktopGui, buildJetty, buildJrobin">
@@ -457,51 +457,51 @@
 
   <target name="buildJetty" depends="buildCore">
     <ant dir="apps/jetty" target="build"/>
-    <copy todir="build/">
+    <copy quiet="true" todir="build/">
       <fileset dir="apps/jetty/jettylib" excludes="ant.jar,jspc.jar"/>
     </copy>
   </target>
 
   <target name="buildSystray" depends="buildCore">
     <ant dir="apps/systray/java/" target="jar"/>
-    <copy file="apps/systray/java/build/systray.jar" todir="build/"/>
+    <copy quiet="true" file="apps/systray/java/build/systray.jar" todir="build/"/>
   </target>
 
   <target name="buildStreaming" depends="buildMinistreaming">
     <ant dir="apps/streaming/java/" target="jar"/>
-    <copy file="apps/streaming/java/build/streaming.jar" todir="build/"/>
+    <copy quiet="true" file="apps/streaming/java/build/streaming.jar" todir="build/"/>
   </target>
 
   <target name="buildMinistreaming" depends="buildCore">
     <ant dir="apps/ministreaming/java/" target="jar"/>
-    <copy file="apps/ministreaming/java/build/mstreaming.jar" todir="build/"/>
+    <copy quiet="true" file="apps/ministreaming/java/build/mstreaming.jar" todir="build/"/>
   </target>
 
   <target name="buildRouter" depends="buildrouter"/>
   <target name="buildrouter" depends="buildCore">
     <ant dir="router/java/" target="jar"/>
-    <copy file="router/java/build/router.jar" todir="build/"/>
+    <copy quiet="true" file="router/java/build/router.jar" todir="build/"/>
   </target>
 
   <target name="buildCore" depends="buildProperties">
     <ant dir="core/java/" target="jar"/>
-    <copy file="core/java/build/i2p.jar" todir="build/"/>
+    <copy quiet="true" file="core/java/build/i2p.jar" todir="build/"/>
   </target>
 
   <target name="buildJrobin" depends="buildProperties">
     <ant dir="apps/jrobin/java/" target="jar"/>
-    <copy file="apps/jrobin/java/build/jrobin.jar" todir="build/"/>
+    <copy quiet="true" file="apps/jrobin/java/build/jrobin.jar" todir="build/"/>
   </target>
 
   <!-- not required, jrobin handles this -->
   <target name="buildJFreeSVG" depends="buildProperties">
     <ant dir="apps/jrobin/java/src/org/jfree/svg/" target="jar"/>
-    <copy file="apps/jrobin/java/src/org/jfree/svg/build/jfreesvg.jar" todir="build/"/>
+    <copy quiet="true" file="apps/jrobin/java/src/org/jfree/svg/build/jfreesvg.jar" todir="build/"/>
   </target>
 
   <target name="buildPack200" depends="buildProperties">
     <ant dir="apps/pack200/java/" target="jar"/>
-    <copy file="apps/pack200/java/build/pack200.jar" todir="build/"/>
+    <copy quiet="true" file="apps/pack200/java/build/pack200.jar" todir="build/"/>
   </target>
 
   <target name="buildProperties" depends="getGitRev, getReleaseNumber, getBuildNumber, setBuildTimestamp, disableManifestClasspath">
@@ -537,13 +537,13 @@
   </target>
 
   <target name="buildWEB" depends="buildRouterConsole">
-    <copy file="apps/routerconsole/java/build/routerconsole.jar" todir="build/"/>
-    <copy file="apps/routerconsole/java/build/routerconsole.war" todir="build/"/>
+    <copy quiet="true" file="apps/routerconsole/java/build/routerconsole.jar" todir="build/"/>
+    <copy quiet="true" file="apps/routerconsole/java/build/routerconsole.war" todir="build/"/>
   </target>
 
   <target name="buildTools" depends="buildrouter">
     <ant dir="installer/tools/java" target="jar"/>
-    <copy file="installer/tools/java/build/tools.jar" todir="build/"/>
+    <copy quiet="true" file="installer/tools/java/build/tools.jar" todir="build/"/>
   </target>
 
   <!-- end of sub-build.xml targets -->
@@ -743,8 +743,8 @@
 
   <!-- Custom target to collect the jars that I2P-Bote needs to compile, so it can compile from source. -->
   <target name="jarBote" depends="buildRouter, buildStreaming, buildJetty">
-    <copy file="apps/susidns/src/lib/jstl.jar" todir="build/"/>
-    <copy file="apps/susidns/src/lib/standard.jar" todir="build/"/>
+    <copy quiet="true" file="apps/susidns/src/lib/jstl.jar" todir="build/"/>
+    <copy quiet="true" file="apps/susidns/src/lib/standard.jar" todir="build/"/>
   </target>
 
   <!-- jbigi targets -->
@@ -932,7 +932,7 @@
   <target name="prep-script-translation" unless="no.bundle">
     <!-- script translation added in 0.8.13, enabled in 0.9.5. -->
     <ant dir="installer/resources/locale" target="bundle"/>
-    <copy todir="pkg-temp/locale/">
+    <copy quiet="true" todir="pkg-temp/locale/">
       <fileset dir="installer/resources/locale/mo/"/>
     </copy>
   </target>
@@ -942,7 +942,7 @@
     <ant dir="apps/jetty" target="ensureJettylib"/>
     <mkdir dir="./build"/>
     <mkdir dir="./build/javadoc"/>
-    <copy file="./installer/resources/eepsite/docroot/favicon.ico" tofile="./build/javadoc/favicon.ico"/>
+    <copy quiet="true" file="./installer/resources/eepsite/docroot/favicon.ico" tofile="./build/javadoc/favicon.ico"/>
     <!-- Set if unset -->
     <property name="javac.version" value="1.8"/>
     <javadoc access="package"
@@ -1046,7 +1046,7 @@
     <ant dir="apps/jetty" target="ensureJettylib"/>
     <mkdir dir="./build"/>
     <mkdir dir="./build/javadoc"/>
-    <copy file="./installer/resources/eepsite/docroot/favicon.ico" tofile="./build/javadoc/favicon.ico"/>
+    <copy quiet="true" file="./installer/resources/eepsite/docroot/favicon.ico" tofile="./build/javadoc/favicon.ico"/>
     <!-- Set if unset -->
     <property name="javac.version" value="1.8"/>
     <javadoc access="package"
@@ -1359,8 +1359,6 @@
     <parallel>
       <delete includeEmptyDirs="true">
         <fileset dir="./dist" includes="**/*" excludes="README.md"/>
-      </delete>
-      <delete includeEmptyDirs="true">
         <fileset dir="./build" includes="**/*" excludes="README.md"/>
       </delete>
       <delete dir="./reports"/>
@@ -1444,8 +1442,8 @@
           -->
       </delete>
       <!-- Now we put the defaults back -->
-      <defaultexcludes default="true"/>
     </parallel>
+    <defaultexcludes default="true"/>
   </target>
 
   <target name="distcleanWebapps">
@@ -1475,8 +1473,8 @@
 
   <target name="preppkg" depends="preppkg-linux, preppkg-freebsd, preppkg-osx, preppkg-windows, jbigi">
     <parallel>
-      <copy file="build/jbigi.jar" todir="pkg-temp/lib"/>
-      <copy todir="pkg-temp/lib/wrapper/solaris/">
+      <copy quiet="true" file="build/jbigi.jar" todir="pkg-temp/lib"/>
+      <copy quiet="true" todir="pkg-temp/lib/wrapper/solaris/">
         <fileset dir="installer/lib/wrapper/solaris/" excludes="*.txt README.md"/>
       </copy>
       <!--
@@ -1486,63 +1484,63 @@
          wrapper.jar file. We do not generate release files from this target. See preppkg-windows-only target below.
         -->
       <copy overwrite="true" file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib"/>
-      <copy file="installer/lib/wrapper/win-all/wrapper.jar" tofile="pkg-temp/lib/wrapper-windows.jar"/>
+      <copy quiet="true" file="installer/lib/wrapper/win-all/wrapper.jar" tofile="pkg-temp/lib/wrapper-windows.jar"/>
     </parallel>
   </target>
 
   <target name="preppkg-nowindows" depends="preppkg-linux, preppkg-freebsd, preppkg-osx, jbigi-nowindows">
     <parallel>
-      <copy file="build/jbigi.jar" todir="pkg-temp/lib"/>
-      <copy todir="pkg-temp/lib/wrapper/solaris/">
+      <copy quiet="true" file="build/jbigi.jar" todir="pkg-temp/lib"/>
+      <copy quiet="true" todir="pkg-temp/lib/wrapper/solaris/">
         <fileset dir="installer/lib/wrapper/solaris/" excludes="*.txt README.md"/>
       </copy>
-      <copy file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib"/>
+      <copy quiet="true" file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib"/>
     </parallel>
   </target>
 
   <target name="preppkgRepack" depends="preppkg-linux, preppkg-freebsd, preppkg-osx, preppkg-windows, jbigi">
     <ant target="repack200"/>
     <!-- no use doing repack200 on jbigi.jar -->
-    <copy file="build/jbigi.jar" todir="pkg-temp/lib"/>
-    <copy todir="pkg-temp/lib/wrapper/solaris/">
+    <copy quiet="true" file="build/jbigi.jar" todir="pkg-temp/lib"/>
+    <copy quiet="true" todir="pkg-temp/lib/wrapper/solaris/">
       <fileset dir="installer/lib/wrapper/solaris/" excludes="*.txt README.md"/>
     </copy>
   </target>
 
   <target name="preppkg-freebsd" depends="preppkg-unix">
     <parallel>
-      <copy todir="pkg-temp/lib/wrapper/freebsd/">
+      <copy quiet="true" todir="pkg-temp/lib/wrapper/freebsd/">
         <fileset dir="installer/lib/wrapper/freebsd/" excludes="*.txt README.md"/>
       </copy>
-      <copy todir="pkg-temp/lib/wrapper/freebsd64/">
+      <copy quiet="true" todir="pkg-temp/lib/wrapper/freebsd64/">
         <fileset dir="installer/lib/wrapper/freebsd64" excludes="*.txt README.md"/>
       </copy>
     </parallel>
   </target>
 
   <target name="preppkg-freebsd-only" depends="preppkg-freebsd, jbigi-freebsd-only">
-    <copy file="build/jbigi.jar" todir="pkg-temp/lib"/>
-    <copy file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib"/>
+    <copy quiet="true" file="build/jbigi.jar" todir="pkg-temp/lib"/>
+    <copy quiet="true" file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib"/>
   </target>
 
   <!-- only what is needed for debian, etc. -->
   <target name="preppkg-linux-only" depends="preppkg-linux, jbigi-linux-only">
-    <copy file="build/jbigi.jar" todir="pkg-temp/lib"/>
-    <copy file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib"/>
+    <copy quiet="true" file="build/jbigi.jar" todir="pkg-temp/lib"/>
+    <copy quiet="true" file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib"/>
   </target>
 
   <!-- This is the target called by debian/rules -->
   <target name="preppkg-unix" depends="preppkg-base, prep-script-translation">
     <parallel>
-      <copy file="installer/resources/runplain.sh" todir="pkg-temp/"/>
-      <copy file="installer/resources/eepget" todir="pkg-temp/"/>
-      <copy file="installer/resources/eephead" todir="pkg-temp/"/>
-      <copy file="installer/resources/i2ping" todir="pkg-temp/"/>
-      <copy file="installer/resources/graceful_update" todir="pkg-temp/"/>
-      <copy file="installer/resources/i2prouter" todir="pkg-temp/"/>
-      <copy file="installer/resources/osid" todir="pkg-temp/"/>
-      <copy file="installer/resources/postinstall.sh" todir="pkg-temp/"/>
-      <copy todir="pkg-temp/man/">
+      <copy quiet="true" file="installer/resources/runplain.sh" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/eepget" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/eephead" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/i2ping" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/graceful_update" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/i2prouter" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/osid" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/postinstall.sh" todir="pkg-temp/"/>
+      <copy quiet="true" todir="pkg-temp/man/">
         <fileset dir="installer/resources/man/"/>
       </copy>
     </parallel>
@@ -1559,26 +1557,26 @@
   <target name="preppkg-linux" depends="preppkg-linux-x86,preppkg-linux-nonx86"/>
 
   <target name="preppkg-linux-x86" depends="preppkg-unix">
-    <copy todir="pkg-temp/lib/wrapper/linux/">
+    <copy quiet="true" todir="pkg-temp/lib/wrapper/linux/">
       <fileset dir="installer/lib/wrapper/linux/" excludes="*.txt README.md"/>
     </copy>
-    <copy todir="pkg-temp/lib/wrapper/linux64/">
+    <copy quiet="true" todir="pkg-temp/lib/wrapper/linux64/">
       <fileset dir="installer/lib/wrapper/linux64/" excludes="*.txt README.md"/>
     </copy>
   </target>
 
   <target name="preppkg-linux-nonx86" depends="preppkg-unix">
     <parallel>
-      <copy todir="pkg-temp/lib/wrapper/linux-ppc/">
+      <copy quiet="true" todir="pkg-temp/lib/wrapper/linux-ppc/">
         <fileset dir="installer/lib/wrapper/linux-ppc/" excludes="*.txt README.md"/>
       </copy>
-      <copy todir="pkg-temp/lib/wrapper/linux-armv5/">
+      <copy quiet="true" todir="pkg-temp/lib/wrapper/linux-armv5/">
         <fileset dir="installer/lib/wrapper/linux-armv5/" excludes="*.txt README.md"/>
       </copy>
-      <copy todir="pkg-temp/lib/wrapper/linux-armv7/">
+      <copy quiet="true" todir="pkg-temp/lib/wrapper/linux-armv7/">
         <fileset dir="installer/lib/wrapper/linux-armv7/" excludes="*.txt README.md"/>
       </copy>
-      <copy todir="pkg-temp/lib/wrapper/linux64-armv8/">
+      <copy quiet="true" todir="pkg-temp/lib/wrapper/linux64-armv8/">
         <fileset dir="installer/lib/wrapper/linux64-armv8/" excludes="*.txt README.md"/>
       </copy>
     </parallel>
@@ -1586,55 +1584,55 @@
 
   <target name="preppkg-osx" depends="preppkg-unix">
     <parallel>
-      <copy todir="pkg-temp/Start I2P Router.app">
+      <copy quiet="true" todir="pkg-temp/Start I2P Router.app">
         <fileset dir="installer/resources/Start I2P Router.app"/>
       </copy>
-      <copy todir="pkg-temp/lib/wrapper/macosx/">
+      <copy quiet="true" todir="pkg-temp/lib/wrapper/macosx/">
         <fileset dir="installer/lib/wrapper/macosx/" excludes="*.txt README.md"/>
       </copy>
-      <copy file="installer/resources/net.i2p.router.plist.template" todir="pkg-temp/"/>
-      <copy file="installer/resources/install_i2p_service_osx.command" todir="pkg-temp/"/>
-      <copy file="installer/resources/uninstall_i2p_service_osx.command" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/net.i2p.router.plist.template" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/install_i2p_service_osx.command" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/uninstall_i2p_service_osx.command" todir="pkg-temp/"/>
     </parallel>
   </target>
 
   <target name="preppkg-osx-only" depends="preppkg-osx, jbigi-osx-only">
-    <copy file="build/jbigi.jar" todir="pkg-temp/lib"/>
-    <copy file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib"/>
+    <copy quiet="true" file="build/jbigi.jar" todir="pkg-temp/lib"/>
+    <copy quiet="true" file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib"/>
   </target>
 
   <target name="preppkg-windows" depends="preppkg-base, preplicenses-windows, buildUtilityJar, buildexe">
     <parallel>
-      <copy file="build/i2p.exe" todir="pkg-temp/" failonerror="false"/>
-      <copy file="installer/resources/windows/eepget.bat" todir="pkg-temp/"/>
-      <copy file="installer/resources/windows/eephead.bat" todir="pkg-temp/"/>
-      <copy file="installer/resources/windows/i2prouter.bat" todir="pkg-temp/"/>
-      <copy file="installer/resources/windows/fixperms.bat" todir="pkg-temp/"/>
-      <copy file="installer/resources/windows/install_i2p_service_winnt.bat" todir="pkg-temp/"/>
-      <copy file="installer/resources/windows/set_config_dir_for_nt_service.bat" todir="pkg-temp/"/>
-      <copy file="installer/resources/windows/uninstall_i2p_service_winnt.bat" todir="pkg-temp/"/>
-      <copy file="installer/resources/windows/StartI2P+Service.bat" todir="pkg-temp/"/>
-      <copy file="installer/resources/windows/StopI2P+Service.bat" todir="pkg-temp/"/>
-      <copy file="installer/resources/windows/EnableI2P+Service.bat" todir="pkg-temp/"/>
-      <copy file="installer/resources/windows/DisableI2P+Service.bat" todir="pkg-temp/"/>
-      <copy file="build/utility.jar" todir="pkg-temp"/>
-      <copy todir="pkg-temp/lib/wrapper/win32/">
+      <copy quiet="true" file="build/i2p.exe" todir="pkg-temp/" failonerror="false"/>
+      <copy quiet="true" file="installer/resources/windows/eepget.bat" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/windows/eephead.bat" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/windows/i2prouter.bat" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/windows/fixperms.bat" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/windows/install_i2p_service_winnt.bat" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/windows/set_config_dir_for_nt_service.bat" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/windows/uninstall_i2p_service_winnt.bat" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/windows/StartI2P+Service.bat" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/windows/StopI2P+Service.bat" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/windows/EnableI2P+Service.bat" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/windows/DisableI2P+Service.bat" todir="pkg-temp/"/>
+      <copy quiet="true" file="build/utility.jar" todir="pkg-temp"/>
+      <copy quiet="true" todir="pkg-temp/lib/wrapper/win32/">
         <fileset dir="installer/lib/wrapper/win32/" excludes="*.txt README.md"/>
       </copy>
-      <copy todir="pkg-temp/lib/wrapper/win64/">
+      <copy quiet="true" todir="pkg-temp/lib/wrapper/win64/">
         <fileset dir="installer/lib/wrapper/win64/" excludes="*.txt README.md"/>
       </copy>
     </parallel>
   </target>
 
   <target name="preppkg-windows-only" depends="preppkg-windows, jbigi-windows-only">
-    <copy file="build/jbigi.jar" todir="pkg-temp/lib"/>
+    <copy quiet="true" file="build/jbigi.jar" todir="pkg-temp/lib"/>
     <!--
              Win binaries are down-rev from the others, so use the old jar.
              This will not overwrite, so preppkg (for all OSes) will get the new jar with
              the old binaries, which will probably work but will output a warning.
              The windows-only installer will get the correct jar.
-        <copy file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib"/>
+        <copy quiet="true" file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib"/>
         -->
     <copy overwrite="true" file="installer/lib/wrapper/win-all/wrapper.jar" todir="pkg-temp/lib"/>
   </target>
@@ -1665,54 +1663,54 @@
 
     <parallel>
       <!-- Copy wars and jars -->
-      <copy file="build/i2p.jar" todir="pkg-temp/lib/"/>
-      <copy file="build/pack200.jar" todir="pkg-temp/lib/"/>
-      <copy file="build/i2ptunnel.jar" todir="pkg-temp/lib/"/>
-      <copy file="build/mstreaming.jar" todir="pkg-temp/lib/"/>
-      <copy file="build/streaming.jar" todir="pkg-temp/lib/"/>
-      <copy file="build/router.jar" todir="pkg-temp/lib/"/>
-      <copy file="build/desktopgui.jar" todir="pkg-temp/lib/"/>
-      <copy file="build/routerconsole.jar" todir="pkg-temp/lib/"/>
-      <copy file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar"/>
-      <copy file="build/sam.jar" todir="pkg-temp/lib/"/>
-      <copy file="build/systray.jar" todir="pkg-temp/lib"/>
-      <copy file="build/i2psnark.jar" todir="pkg-temp/lib/"/>
-      <copy file="build/i2ptunnel.war" todir="pkg-temp/webapps/"/>
-      <copy file="build/routerconsole.war" todir="pkg-temp/webapps/"/>
-      <copy file="build/addressbook.jar" todir="pkg-temp/lib/"/>
-      <copy file="build/susimail.war" todir="pkg-temp/webapps/"/>
-      <copy file="build/susidns.war" todir="pkg-temp/webapps/"/>
-      <copy file="build/imagegen.war" todir="pkg-temp/webapps/"/>
-      <copy file="build/jsonrpc.war" todir="pkg-temp/webapps/"/>
-      <copy file="build/i2psnark.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="build/i2p.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="build/pack200.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="build/i2ptunnel.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="build/mstreaming.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="build/streaming.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="build/router.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="build/desktopgui.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="build/routerconsole.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar"/>
+      <copy quiet="true" file="build/sam.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="build/systray.jar" todir="pkg-temp/lib"/>
+      <copy quiet="true" file="build/i2psnark.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="build/i2ptunnel.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="build/routerconsole.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="build/addressbook.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="build/susimail.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="build/susidns.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="build/imagegen.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="build/jsonrpc.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="build/i2psnark.war" todir="pkg-temp/webapps/"/>
 
       <!-- Copy configs and misc files -->
-      <copy file="apps/i2psnark/i2psnark.config" todir="pkg-temp/"/>
-      <copy file="installer/resources/blocklist.txt" todir="pkg-temp/"/>
-      <copy file="installer/resources/blocklist_tor.txt" todir="pkg-temp/"/>
-      <copy file="installer/resources/clients.config" todir="pkg-temp/"/>
-      <copy file="installer/resources/i2ptunnel.config" todir="pkg-temp/"/>
-      <copy file="installer/resources/wrapper.config" todir="pkg-temp/"/>
-      <copy file="installer/resources/wrapper.config.commented" todir="pkg-temp/"/>
-      <copy file="installer/resources/hosts.txt" todir="pkg-temp/"/>
-      <copy file="INSTALL-headless.txt" todir="pkg-temp/"/>
+      <copy quiet="true" file="apps/i2psnark/i2psnark.config" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/blocklist.txt" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/blocklist_tor.txt" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/clients.config" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/i2ptunnel.config" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/wrapper.config" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/wrapper.config.commented" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/hosts.txt" todir="pkg-temp/"/>
+      <copy quiet="true" file="INSTALL-headless.txt" todir="pkg-temp/"/>
 
       <!-- Proxy script, windows icons etc -->
-      <copy file="apps/proxyscript/i2pProxy.pac" todir="pkg-temp/scripts/"/>
-      <copy file="installer/resources/startconsole.html" todir="pkg-temp/docs/"/>
-      <copy file="installer/resources/windows/start.ico" todir="pkg-temp/docs/"/>
-      <copy file="installer/resources/windows/stop.ico" todir="pkg-temp/docs/"/>
-      <copy file="installer/resources/windows/console.ico" todir="pkg-temp/docs/"/>
-      <copy file="installer/resources/windows/uninstall.ico" todir="pkg-temp/docs/"/>
+      <copy quiet="true" file="apps/proxyscript/i2pProxy.pac" todir="pkg-temp/scripts/"/>
+      <copy quiet="true" file="installer/resources/startconsole.html" todir="pkg-temp/docs/"/>
+      <copy quiet="true" file="installer/resources/windows/start.ico" todir="pkg-temp/docs/"/>
+      <copy quiet="true" file="installer/resources/windows/stop.ico" todir="pkg-temp/docs/"/>
+      <copy quiet="true" file="installer/resources/windows/console.ico" todir="pkg-temp/docs/"/>
+      <copy quiet="true" file="installer/resources/windows/uninstall.ico" todir="pkg-temp/docs/"/>
 
       <!-- Eepsite stuff here -->
-      <copy todir="pkg-temp/eepsite/">
+      <copy quiet="true" todir="pkg-temp/eepsite/">
         <fileset dir="installer/resources/eepsite/" excludes="**/.placeholder"/>
       </copy>
-      <copy todir="pkg-temp/eepsite-jetty9.3">
+      <copy quiet="true" todir="pkg-temp/eepsite-jetty9.3">
         <fileset dir="installer/resources/eepsite-jetty9.3"/>
       </copy>
-      <copy file="installer/resources/themes/console/light/images/favicon.svg" tofile="pkg-temp/eepsite/docroot/favicon.svg"/>
+      <copy quiet="true" file="installer/resources/themes/console/light/images/favicon.svg" tofile="pkg-temp/eepsite/docroot/favicon.svg"/>
     </parallel>
   </target>
 
@@ -1877,27 +1875,27 @@
   </target>
 
   <target name="copyflags">
-    <copy todir="pkg-temp/eepsite/docroot/help/lib/">
+    <copy quiet="true" todir="pkg-temp/eepsite/docroot/help/lib/">
       <fileset dir="apps/routerconsole/resources/icons/flags_svg" includes="az.svg cn.svg cz.svg de.svg dk.svg es.svg ee.svg fi.svg fr.svg gk.svg hu.svg id.svg in.svg ir.svg it.svg jp.svg kr.svg no.svg nl.svg pl.svg pt.svg ro.svg ru.svg se.svg si.svg tr.svg us.svg lang_ar.svg ua.svg vn.svg"/>
     </copy>
   </target>
 
   <target name="copyflags-unlesspkg" unless="${with-famfamfam-flag-png}">
-    <copy todir="pkg-temp/eepsite/docroot/help/lib/">
+    <copy quiet="true" todir="pkg-temp/eepsite/docroot/help/lib/">
       <fileset dir="apps/routerconsole/resources/icons/flags_svg" includes="az.svg cn.svg cz.svg de.svg dk.svg es.svg ee.svg fi.svg fr.svg gk.svg hu.svg id.svg in.svg ir.svg it.svg jp.svg kr.svg nl.svg no.svg pl.svg pt.svg ro.svg ru.svg se.svg si.svg tr.svg us.svg lang_ar.svg ua.svg vn.svg"/>
     </copy>
-    <copy todir="pkg-temp/docs/icons/flags">
+    <copy quiet="true" todir="pkg-temp/docs/icons/flags">
       <!-- base flags/ dir only. flags16x11/ and flags48x48/ dirs already copied by prepConsoleDocs target -->
       <fileset dir="installer/resources/icons/flags"/>
     </copy>
   </target>
 
   <target name="copyjetty" depends="copyjetty-unlesspkg">
-    <copy file="build/jetty-i2p.jar" todir="pkg-temp/lib"/>
+    <copy quiet="true" file="build/jetty-i2p.jar" todir="pkg-temp/lib"/>
   </target>
 
   <target name="copyjetty-unlesspkg" unless="${with-libjetty9-java}">
-    <copy todir="pkg-temp/lib">
+    <copy quiet="true" todir="pkg-temp/lib">
       <fileset dir="build" includes="javax.servlet.jar jetty*.jar org.mortbay.*.jar" excludes="jetty-i2p.jar"/>
     </copy>
   </target>
@@ -1914,7 +1912,7 @@
   </target>
 
   <target name="copytomcat-unlesspkg" depends="settomcatprop" unless="${with-libtomcat-java}">
-    <copy todir="pkg-temp/lib">
+    <copy quiet="true" todir="pkg-temp/lib">
       <fileset dir="build" includes="commons*.jar jasper*.jar javax*.jar"/>
     </copy>
   </target>
@@ -1926,7 +1924,7 @@
        so we only skip it with libtaglibs-standard
     -->
   <target name="copyjstl-unlesspkg" unless="${with-libtaglibs-standard}">
-    <copy file="apps/susidns/src/lib/jstl.jar" todir="pkg-temp/lib/"/>
+    <copy quiet="true" file="apps/susidns/src/lib/jstl.jar" todir="pkg-temp/lib/"/>
   </target>
 
   <!-- standard.jar -->
@@ -1942,21 +1940,21 @@
     </condition>
   </target>
   <target name="copystandard-unlesspkg2" unless="${with-any-standard-pkg}">
-    <copy file="apps/susidns/src/lib/standard.jar" todir="pkg-temp/lib/"/>
+    <copy quiet="true" file="apps/susidns/src/lib/standard.jar" todir="pkg-temp/lib/"/>
   </target>
 
   <!-- does NOT include launch4j licenses for Windows builds -->
   <target name="preplicenses" depends="preplicenses-unlesspkg">
-    <copy file="LICENSE.txt" todir="pkg-temp/"/>
-    <copy todir="pkg-temp/licenses/">
+    <copy quiet="true" file="LICENSE.txt" todir="pkg-temp/"/>
+    <copy quiet="true" todir="pkg-temp/licenses/">
       <fileset dir="licenses/"/>
     </copy>
-    <copy file="apps/imagegen/identicon/README.md" tofile="pkg-temp/licenses/LICENSE-Identicon.txt"/>
-    <copy file="apps/desktopgui/LICENSE" tofile="pkg-temp/licenses/LICENSE-DesktopGUI.txt"/>
+    <copy quiet="true" file="apps/imagegen/identicon/README.md" tofile="pkg-temp/licenses/LICENSE-Identicon.txt"/>
+    <copy quiet="true" file="apps/desktopgui/LICENSE" tofile="pkg-temp/licenses/LICENSE-DesktopGUI.txt"/>
   </target>
 
   <target name="preplicenses-unlesspkg" depends="settomcatprop" unless="${with-libtomcat-java}">
-    <copy file="apps/jetty/apache-tomcat-${tomcat.ver}/NOTICE" tofile="pkg-temp/licenses/NOTICE-Tomcat.txt"/>
+    <copy quiet="true" file="apps/jetty/apache-tomcat-${tomcat.ver}/NOTICE" tofile="pkg-temp/licenses/NOTICE-Tomcat.txt"/>
   </target>
 
   <!-- DOES include launch4j licenses for Windows builds -->
@@ -1966,11 +1964,11 @@
               The license in launch4j/head is a MIT license for the code that is actually wrapped around the jars
               So we include the MIT one in our binary package
         -->
-    <copy file="installer/lib/launch4j/head/LICENSE.txt" tofile="pkg-temp/licenses/LICENSE-Launch4j.txt"/>
+    <copy quiet="true" file="installer/lib/launch4j/head/LICENSE.txt" tofile="pkg-temp/licenses/LICENSE-Launch4j.txt"/>
   </target>
 
   <target name="prepthemeupdates">
-    <copy todir="pkg-temp/docs/themes/">
+    <copy quiet="true" todir="pkg-temp/docs/themes/">
       <fileset dir="installer/resources/themes/">
         <exclude name="**/*.*~"/>
       </fileset>
@@ -1979,7 +1977,7 @@
 
   <!-- SSL Certs -->
   <target name="prepCertificates" depends="buildCore">
-    <copy todir="pkg-temp/certificates/">
+    <copy quiet="true" todir="pkg-temp/certificates/">
       <fileset dir="installer/resources/certificates/"/>
     </copy>
     <java classname="net.i2p.crypto.CertUtil" fork="true" failonerror="true">
@@ -2071,7 +2069,7 @@
 
   <!-- readme and proxy error page files, initialNews.xml files, GeoIP files, and flag icons -->
   <target name="prepConsoleDocs" depends="prepConsoleDocUpdates, prepgeoupdate">
-    <copy todir="pkg-temp/docs/initialNews/">
+    <copy quiet="true" todir="pkg-temp/docs/initialNews/">
       <fileset dir="installer/resources/initialNews/"/>
     </copy>
     <!-- ensure the proxy files have the correct line endings -->
@@ -2080,17 +2078,17 @@
 
   <!-- readme and proxy error page files -->
   <target name="prepConsoleDocUpdates">
-    <copy todir="pkg-temp/docs/readme/">
+    <copy quiet="true" todir="pkg-temp/docs/readme/">
       <fileset dir="installer/resources/readme/" includes="readme*.html"/>
     </copy>
-    <copy todir="pkg-temp/docs/proxy/">
+    <copy quiet="true" todir="pkg-temp/docs/proxy/">
       <fileset dir="installer/resources/proxy/" includes="*.ht"/>
     </copy>
   </target>
 
   <!-- readme and proxy error page files -->
   <target name="prepProxyDocs">
-    <copy todir="pkg-temp/docs/proxy">
+    <copy quiet="true" todir="pkg-temp/docs/proxy">
       <fileset dir="installer/resources/proxy/" includes="*.ht"/>
     </copy>
   </target>
@@ -2104,7 +2102,7 @@
   </target>
 
   <target name="copyJavadoc" depends="javadoc">
-    <copy todir="pkg-temp/docs/javadoc">
+    <copy quiet="true" todir="pkg-temp/docs/javadoc">
       <fileset dir="build/javadoc/"/>
     </copy>
   </target>
@@ -2169,7 +2167,7 @@
 
   <!-- just to test the torrent creation macro -->
   <target name="updater-torrent" depends="updater">
-    <copy file="dist/i2pupdate.zip" tofile="dist/i2pupdate-${full.version}.zip"/>
+    <copy quiet="true" file="dist/i2pupdate.zip" tofile="dist/i2pupdate-${full.version}.zip"/>
     <mktorrent file="dist/i2pupdate-${full.version}.zip"/>
   </target>
 
@@ -2239,31 +2237,31 @@
 
   <target name="prepupdate" depends="build2, prepupdateSmall, prepConsoleDocUpdates, prepCertificates, prep-script-translation, truncatehistory">
     <parallel>
-      <copy file="build/sam.jar" todir="pkg-temp/lib/"/>
-      <copy file="build/i2psnark.jar" todir="pkg-temp/lib"/>
-      <copy file="build/systray.jar" todir="pkg-temp/lib/"/>
-      <copy file="build/desktopgui.jar" todir="pkg-temp/lib/"/>
-      <copy file="build/pack200.jar" todir="pkg-temp/lib"/>
-      <copy file="build/susimail.war" todir="pkg-temp/webapps/"/>
-      <copy file="build/susidns.war" todir="pkg-temp/webapps/"/>
-      <copy file="build/imagegen.war" todir="pkg-temp/webapps/"/>
-      <copy file="build/jsonrpc.war" todir="pkg-temp/webapps/"/>
-      <copy file="build/i2psnark.war" todir="pkg-temp/webapps/"/>
-      <copy file="installer/resources/deletelist.txt" todir="pkg-temp/"/>
-      <copy file="installer/resources/blocklist.txt" todir="pkg-temp/"/>
-      <copy file="installer/resources/blocklist_tor.txt" todir="pkg-temp/"/>
-      <copy file="installer/resources/i2ping" todir="pkg-temp/"/>
-      <copy file="installer/resources/eepget" todir="pkg-temp/"/>
-      <copy file="installer/resources/eephead" todir="pkg-temp/"/>
-      <copy file="installer/resources/graceful_update" todir="pkg-temp/"/>
-      <copy file="installer/resources/windows/fixperms2.bat" todir="pkg-temp/scripts/"/>
+      <copy quiet="true" file="build/sam.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="build/i2psnark.jar" todir="pkg-temp/lib"/>
+      <copy quiet="true" file="build/systray.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="build/desktopgui.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="build/pack200.jar" todir="pkg-temp/lib"/>
+      <copy quiet="true" file="build/susimail.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="build/susidns.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="build/imagegen.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="build/jsonrpc.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="build/i2psnark.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="installer/resources/deletelist.txt" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/blocklist.txt" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/blocklist_tor.txt" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/i2ping" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/eepget" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/eephead" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/graceful_update" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/windows/fixperms2.bat" todir="pkg-temp/scripts/"/>
     </parallel>
   </target>
 
   <target name="truncatehistory">
-    <copy file="history.txt" todir="pkg-temp/"/>
+    <copy quiet="true" file="history.txt" todir="pkg-temp/"/>
     <!-- the following overwrites history.txt on unix to shrink the update file -->
-    <copy file="history.txt" tofile="pkg-temp/history.txt" overwrite="true">
+    <copy quiet="true" file="history.txt" tofile="pkg-temp/history.txt" overwrite="true">
       <filterchain>
         <headfilter lines="1500"/>
       </filterchain>
@@ -2273,76 +2271,76 @@
 
   <target name="prepupdateSmall" depends="buildSmall, prepupdateRouter, prepjupdatefixes, prepthemeupdates">
     <parallel>
-      <copy file="build/i2ptunnel.jar" todir="pkg-temp/lib/"/>
-      <copy file="build/mstreaming.jar" todir="pkg-temp/lib/"/>
-      <copy file="build/streaming.jar" todir="pkg-temp/lib/"/>
-      <copy file="build/routerconsole.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="build/i2ptunnel.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="build/mstreaming.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="build/streaming.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="build/routerconsole.jar" todir="pkg-temp/lib/"/>
       <!-- Updated in 0.9.28 -->
       <!-- name without version so we can overwrite if we upgrade  -->
-      <copy file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar"/>
-      <copy file="build/i2ptunnel.war" todir="pkg-temp/webapps/"/>
-      <copy file="build/pack200.jar" todir="pkg-temp/lib"/>
-      <copy file="build/routerconsole.war" todir="pkg-temp/webapps/"/>
-      <copy file="build/addressbook.jar" todir="pkg-temp/lib/"/>
-      <copy file="build/addressbook.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar"/>
+      <copy quiet="true" file="build/i2ptunnel.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="build/pack200.jar" todir="pkg-temp/lib"/>
+      <copy quiet="true" file="build/routerconsole.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="build/addressbook.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="build/addressbook.war" todir="pkg-temp/webapps/"/>
       <!-- decapitalized the file in 0.7.8 -->
-      <copy file="installer/resources/countries.txt" todir="pkg-temp/geoip/"/>
-      <copy file="installer/resources/continents.txt" todir="pkg-temp/geoip/"/>
+      <copy quiet="true" file="installer/resources/countries.txt" todir="pkg-temp/geoip/"/>
+      <copy quiet="true" file="installer/resources/continents.txt" todir="pkg-temp/geoip/"/>
     </parallel>
   </target>
 
   <target name="prepupdateEssential" depends="buildSmall, prepupdateRouter, prepjupdatefixes, prepthemeupdates">
     <parallel>
-      <copy file="build/i2ptunnel.jar" todir="pkg-temp/lib/"/>
-      <copy file="build/mstreaming.jar" todir="pkg-temp/lib/"/>
-      <copy file="build/streaming.jar" todir="pkg-temp/lib/"/>
-      <copy file="build/routerconsole.jar" todir="pkg-temp/lib/"/>
-      <copy file="build/pack200.jar" todir="pkg-temp/lib"/>
+      <copy quiet="true" file="build/i2ptunnel.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="build/mstreaming.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="build/streaming.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="build/routerconsole.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="build/pack200.jar" todir="pkg-temp/lib"/>
       <!-- Updated in 0.9.28 -->
       <!-- name without version so we can overwrite if we upgrade  -->
-      <copy file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar"/>
-      <copy file="build/i2ptunnel.war" todir="pkg-temp/webapps/"/>
-      <copy file="build/routerconsole.war" todir="pkg-temp/webapps/"/>
-      <copy file="build/addressbook.jar" todir="pkg-temp/lib/"/>
-      <copy file="build/addressbook.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar"/>
+      <copy quiet="true" file="build/i2ptunnel.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="build/routerconsole.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="build/addressbook.jar" todir="pkg-temp/lib/"/>
+      <copy quiet="true" file="build/addressbook.war" todir="pkg-temp/webapps/"/>
     </parallel>
   </target>
 
   <target name="prepupdatecompact" depends="build2, prepupdateEssential, prepProxyDocs, prepCertificates, prep-script-translation, truncatehistory">
     <parallel>
-      <copy file="build/i2psnark.jar" todir="pkg-temp/lib"/>
-      <copy file="build/i2psnark.war" todir="pkg-temp/webapps/"/>
-      <copy file="build/pack200.jar" todir="pkg-temp/lib"/>
-      <copy file="build/susidns.war" todir="pkg-temp/webapps/"/>
-      <copy file="build/susimail.war" todir="pkg-temp/webapps/"/>
-      <copy file="installer/resources/deletelist.txt" todir="pkg-temp/"/>
-      <copy file="installer/resources/blocklist.txt" todir="pkg-temp/"/>
-      <copy file="installer/resources/blocklist_tor.txt" todir="pkg-temp/"/>
-      <copy file="installer/resources/i2ping" todir="pkg-temp/"/>
-      <copy file="installer/resources/eepget" todir="pkg-temp/"/>
-      <copy file="installer/resources/eephead" todir="pkg-temp/"/>
+      <copy quiet="true" file="build/i2psnark.jar" todir="pkg-temp/lib"/>
+      <copy quiet="true" file="build/i2psnark.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="build/pack200.jar" todir="pkg-temp/lib"/>
+      <copy quiet="true" file="build/susidns.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="build/susimail.war" todir="pkg-temp/webapps/"/>
+      <copy quiet="true" file="installer/resources/deletelist.txt" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/blocklist.txt" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/blocklist_tor.txt" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/i2ping" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/eepget" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/eephead" todir="pkg-temp/"/>
     </parallel>
   </target>
 
   <target name="prepupdateRouter" depends="buildrouter, deletepkg-temp">
-    <copy file="build/i2p.jar" todir="pkg-temp/lib/"/>
-    <copy file="build/router.jar" todir="pkg-temp/lib/"/>
+    <copy quiet="true" file="build/i2p.jar" todir="pkg-temp/lib/"/>
+    <copy quiet="true" file="build/router.jar" todir="pkg-temp/lib/"/>
   </target>
 
   <target name="prepupdateRouterConsole" depends="buildRouterConsole, deletepkg-temp">
-    <copy file="build/routerconsole.war" todir="pkg-temp/webapps/"/>
-    <copy file="build/routerconsole.jar" todir="pkg-temp/lib/"/>
+    <copy quiet="true" file="build/routerconsole.war" todir="pkg-temp/webapps/"/>
+    <copy quiet="true" file="build/routerconsole.jar" todir="pkg-temp/lib/"/>
   </target>
 
   <!-- jbigi.jar -->
   <target name="prepjbigiupdate" depends="jbigi">
-    <copy file="build/jbigi.jar" todir="pkg-temp/lib/"/>
+    <copy quiet="true" file="build/jbigi.jar" todir="pkg-temp/lib/"/>
   </target>
 
   <!-- GeoIP files -->
   <target name="prepgeoupdate" depends="prepgeoupdate-unlesspkg">
-    <copy file="installer/resources/countries.txt" todir="pkg-temp/geoip/"/>
-    <copy file="installer/resources/continents.txt" todir="pkg-temp/geoip/"/>
+    <copy quiet="true" file="installer/resources/countries.txt" todir="pkg-temp/geoip/"/>
+    <copy quiet="true" file="installer/resources/continents.txt" todir="pkg-temp/geoip/"/>
   </target>
 
   <!-- GeoIP files, set withGeoIPDatabase=true in override.properties to prevent -->
@@ -2355,17 +2353,17 @@
   <!-- All jetty jars required for update. (TODO do we need to bother updating jasper?) -->
   <target name="prepjupdate" depends="prepupdate, buildWEB">
     <parallel>
-      <copy todir="pkg-temp/lib">
+      <copy quiet="true" todir="pkg-temp/lib">
         <fileset dir="build" includes="commons*.jar jasper*.jar javax*.jar jetty*.jar jsp*.jar org.mortbay.*.jar"/>
       </copy>
       <!--  We have to package the new eepsite files for MigrateJetty.java, but we can't overwrite an existing eepsite dir in a non-split configuration. -->
-      <copy todir="pkg-temp/eepsite-jetty9">
+      <copy quiet="true" todir="pkg-temp/eepsite-jetty9">
         <fileset dir="installer/resources/eepsite" includes="*.xml contexts/* etc/*"/>
       </copy>
-      <copy todir="pkg-temp/eepsite/docroot">
+      <copy quiet="true" todir="pkg-temp/eepsite/docroot">
         <fileset dir="installer/resources/eepsite/docroot" includes="*.html *.ico .resources/* help/*"/>
       </copy>
-      <copy todir="pkg-temp/eepsite-jetty9.3">
+      <copy quiet="true" todir="pkg-temp/eepsite-jetty9.3">
         <fileset dir="installer/resources/eepsite-jetty9.3"/>
       </copy>
     </parallel>
@@ -2377,7 +2375,7 @@
 
   <!-- Jetty 6 I2P logging addons, not really fixes -->
   <target name="prepjupdatefixes" depends="buildWEB">
-    <copy file="build/jetty-i2p.jar" todir="pkg-temp/lib/"/>
+    <copy quiet="true" file="build/jetty-i2p.jar" todir="pkg-temp/lib/"/>
   </target>
 
   <target name="izpack-patches">
@@ -2427,7 +2425,7 @@
          See installer/install5.xml for details.
      -->
     <mkdir dir="com/izforge/izpack/bin/langpacks/"/>
-    <copy toDir="com/izforge/izpack/bin/langpacks/">
+    <copy quiet="true" toDir="com/izforge/izpack/bin/langpacks/">
       <fileset dir="installer/lib/izpack5/patches/resources"/>
     </copy>
   </target>
@@ -2592,15 +2590,15 @@
   </target>
 
   <target name="buildTest" depends="buildRouterTest, buildMinistreaming">
-    <copy file="core/java/build/i2ptest.jar" todir="build"/>
-    <copy file="router/java/build/routertest.jar" todir="build"/>
+    <copy quiet="true" file="core/java/build/i2ptest.jar" todir="build"/>
+    <copy quiet="true" file="router/java/build/routertest.jar" todir="build"/>
     <ant dir="apps/i2ptunnel/java/" target="compileTest"/>
   </target>
 
   <target name="prepTest" depends="prepupdate, buildTest">
     <!-- overwrite i2p.jar and router.jar with the test versions -->
-    <copy file="build/i2ptest.jar" tofile="pkg-temp/lib/i2p.jar" overwrite="true"/>
-    <copy file="build/routertest.jar" tofile="pkg-temp/lib/router.jar" overwrite="true"/>
+    <copy quiet="true" file="build/i2ptest.jar" tofile="pkg-temp/lib/i2p.jar" overwrite="true"/>
+    <copy quiet="true" file="build/routertest.jar" tofile="pkg-temp/lib/router.jar" overwrite="true"/>
   </target>
 
   <target name="updateTest" depends="prepTest, zipit"/>
@@ -2725,13 +2723,13 @@
   <!-- standalone i2psnark zip -->
   <target name="i2psnark" depends="buildStreaming, buildJetty, buildSystray, jbigi">
     <ant dir="apps/i2psnark/java" target="standalone"/>
-    <copy file="apps/i2psnark/java/i2psnark-standalone.zip" todir="./dist"/>
+    <copy quiet="true" file="apps/i2psnark/java/i2psnark-standalone.zip" todir="./dist"/>
   </target>
 
   <!-- standalone i2psnark 7z archive -->
   <target name="i2psnark7zip" depends="buildStreaming, buildJetty, buildSystray, jbigi">
     <ant dir="apps/i2psnark/java" target="standalone"/>
-    <copy file="apps/i2psnark/java/i2psnark-standalone.7z" todir="./dist"/>
+    <copy quiet="true" file="apps/i2psnark/java/i2psnark-standalone.7z" todir="./dist"/>
   </target>
 
   <!-- standalone i2psnark no zip -->
@@ -2742,7 +2740,7 @@
       <fileset dir="apps/i2psnark/java/i2psnark" includes="**/*"/>
     </move>
     <chmod type="file" file="./dist/i2psnark_standalone/launch-i2psnark" perm="+x"/>
-    <echo message="I2PSnark standalone build finished (nozip) and copied to ./dist/i2psnark_standalone"/>
+    <echo message="I2PSnark standalone (nozip) build finished and copied to ./dist/i2psnark_standalone"/>
   </target>
 
   <target name="slackpkg">
@@ -2878,9 +2876,9 @@
   <!-- Make this a lot easier by putting release.privkey.su3=/path/to/su3keystore.ks in override.properties -->
   <target name="-releaseit">
     <echo message="New version number is ${release.number}"/>
-    <copy file="dist/i2pupdate.zip" tofile="dist/i2pupdate_${release.number}.zip"/>
-    <copy file="dist/i2pinstall_${full.version}.jar" tofile="dist/i2pinstall_${release.number}.jar"/>
-    <copy file="dist/i2pinstall_${full.version}_windows.exe" tofile="dist/i2pinstall_${release.number}_windows.exe"/>
+    <copy quiet="true" file="dist/i2pupdate.zip" tofile="dist/i2pupdate_${release.number}.zip"/>
+    <copy quiet="true" file="dist/i2pinstall_${full.version}.jar" tofile="dist/i2pinstall_${release.number}.jar"/>
+    <copy quiet="true" file="dist/i2pinstall_${full.version}_windows.exe" tofile="dist/i2pinstall_${release.number}_windows.exe"/>
     <!-- Remove these, we don't build them anymore -->
     <delete file="dist/i2pupdate.sud"/>
     <delete file="dist/i2pupdate.su2"/>
@@ -2941,7 +2939,7 @@
     <sha256sum file="dist/i2pupdate_${release.number}.zip"/>
     <sha256sum file="dist/i2pupdate.su3"/>
     <!-- make torrent files -->
-    <copy file="dist/i2pupdate.su3" tofile="dist/i2pupdate-${release.number}.su3"/>
+    <copy quiet="true" file="dist/i2pupdate.su3" tofile="dist/i2pupdate-${release.number}.su3"/>
     <mktorrent file="dist/i2pupdate-${release.number}.su3"/>
     <echo message=" Don't forget to sign i2pinstall_${release.number}_windows.exe on Windows and then:"/>
     <echo message="   ${gpg} -u ${release.gpg.keyid} -b i2pinstall_${release.number}_windows.exe"/>
@@ -2998,23 +2996,23 @@
   <target name="mavenCentral" depends="verifyReleaseBuildNumbers, -pre-release, debcheckpatch, distclean, testscripts, mavenCentral.deps">
     <mkdir dir="./pkg-mavencentral"/>
     <!-- Libraries -->
-    <copy file="build/i2p.jar" tofile="pkg-mavencentral/i2p-${release.number}.jar"/>
-    <copy file="build/router.jar" tofile="pkg-mavencentral/router-${release.number}.jar"/>
-    <copy file="build/mstreaming.jar" tofile="pkg-mavencentral/mstreaming-${release.number}.jar"/>
-    <copy file="build/streaming.jar" tofile="pkg-mavencentral/streaming-${release.number}.jar"/>
-    <copy file="apps/jetty/build/servlet-i2p-${release.number}.jar" todir="pkg-mavencentral/"/>
+    <copy quiet="true" file="build/i2p.jar" tofile="pkg-mavencentral/i2p-${release.number}.jar"/>
+    <copy quiet="true" file="build/router.jar" tofile="pkg-mavencentral/router-${release.number}.jar"/>
+    <copy quiet="true" file="build/mstreaming.jar" tofile="pkg-mavencentral/mstreaming-${release.number}.jar"/>
+    <copy quiet="true" file="build/streaming.jar" tofile="pkg-mavencentral/streaming-${release.number}.jar"/>
+    <copy quiet="true" file="apps/jetty/build/servlet-i2p-${release.number}.jar" todir="pkg-mavencentral/"/>
     <!-- JavaDocs -->
-    <copy file="core/java/build/i2p-${release.number}-javadoc.jar" todir="pkg-mavencentral/"/>
-    <copy file="router/java/build/router-${release.number}-javadoc.jar" todir="pkg-mavencentral/"/>
-    <copy file="apps/ministreaming/java/build/mstreaming-${release.number}-javadoc.jar" todir="pkg-mavencentral/"/>
-    <copy file="apps/streaming/java/build/streaming-${release.number}-javadoc.jar" todir="pkg-mavencentral/"/>
-    <copy file="apps/jetty/build/servlet-i2p-${release.number}-javadoc.jar" todir="pkg-mavencentral/"/>
+    <copy quiet="true" file="core/java/build/i2p-${release.number}-javadoc.jar" todir="pkg-mavencentral/"/>
+    <copy quiet="true" file="router/java/build/router-${release.number}-javadoc.jar" todir="pkg-mavencentral/"/>
+    <copy quiet="true" file="apps/ministreaming/java/build/mstreaming-${release.number}-javadoc.jar" todir="pkg-mavencentral/"/>
+    <copy quiet="true" file="apps/streaming/java/build/streaming-${release.number}-javadoc.jar" todir="pkg-mavencentral/"/>
+    <copy quiet="true" file="apps/jetty/build/servlet-i2p-${release.number}-javadoc.jar" todir="pkg-mavencentral/"/>
     <!-- Sources -->
-    <copy file="core/java/build/i2p-${release.number}-sources.jar" todir="pkg-mavencentral/"/>
-    <copy file="router/java/build/router-${release.number}-sources.jar" todir="pkg-mavencentral/"/>
-    <copy file="apps/ministreaming/java/build/mstreaming-${release.number}-sources.jar" todir="pkg-mavencentral/"/>
-    <copy file="apps/streaming/java/build/streaming-${release.number}-sources.jar" todir="pkg-mavencentral/"/>
-    <copy file="apps/jetty/build/servlet-i2p-${release.number}-sources.jar" todir="pkg-mavencentral/"/>
+    <copy quiet="true" file="core/java/build/i2p-${release.number}-sources.jar" todir="pkg-mavencentral/"/>
+    <copy quiet="true" file="router/java/build/router-${release.number}-sources.jar" todir="pkg-mavencentral/"/>
+    <copy quiet="true" file="apps/ministreaming/java/build/mstreaming-${release.number}-sources.jar" todir="pkg-mavencentral/"/>
+    <copy quiet="true" file="apps/streaming/java/build/streaming-${release.number}-sources.jar" todir="pkg-mavencentral/"/>
+    <copy quiet="true" file="apps/jetty/build/servlet-i2p-${release.number}-sources.jar" todir="pkg-mavencentral/"/>
     <echo message="This requires the Maven Ant Tasks to be installed."/>
     <echo message="If this fails, on Debian jessie or, Ubuntu Trusty / Xenial:"/>
     <echo message="sudo apt-get install libmaven-ant-tasks-java"/>
@@ -3157,11 +3155,11 @@
     <mkdir dir="./dist/pkg-mavencentral"/>
     <!-- Libraries -->
     <parallel>
-      <copy file="build/i2p.jar" tofile="./dist/pkg-mavencentral/i2p-${release.number}.jar"/>
-      <copy file="build/router.jar" tofile="./dist/pkg-mavencentral/router-${release.number}.jar"/>
-      <copy file="build/mstreaming.jar" tofile="./dist/pkg-mavencentral/mstreaming-${release.number}.jar"/>
-      <copy file="build/streaming.jar" tofile="./dist/pkg-mavencentral/streaming-${release.number}.jar"/>
-      <copy file="apps/jetty/build/servlet-i2p-${release.number}.jar" todir="./dist/pkg-mavencentral/"/>
+      <copy quiet="true" file="build/i2p.jar" tofile="./dist/pkg-mavencentral/i2p-${release.number}.jar"/>
+      <copy quiet="true" file="build/router.jar" tofile="./dist/pkg-mavencentral/router-${release.number}.jar"/>
+      <copy quiet="true" file="build/mstreaming.jar" tofile="./dist/pkg-mavencentral/mstreaming-${release.number}.jar"/>
+      <copy quiet="true" file="build/streaming.jar" tofile="./dist/pkg-mavencentral/streaming-${release.number}.jar"/>
+      <copy quiet="true" file="apps/jetty/build/servlet-i2p-${release.number}.jar" todir="./dist/pkg-mavencentral/"/>
     </parallel>
   </target>
 
@@ -3176,27 +3174,27 @@
   <target name="buster" depends="disco"/>
 
   <target name="copy-precise">
-    <copy todir="debian" overwrite="true">
+    <copy quiet="true" todir="debian" overwrite="true">
       <fileset dir="debian-alt/precise/"/>
     </copy>
   </target>
   <target name="copy-trusty">
-    <copy todir="debian" overwrite="true">
+    <copy quiet="true" todir="debian" overwrite="true">
       <fileset dir="debian-alt/trusty/"/>
     </copy>
   </target>
   <target name="copy-xenial">
-    <copy todir="debian" overwrite="true">
+    <copy quiet="true" todir="debian" overwrite="true">
       <fileset dir="debian-alt/xenial/"/>
     </copy>
   </target>
   <target name="copy-bionic">
-    <copy todir="debian" overwrite="true">
+    <copy quiet="true" todir="debian" overwrite="true">
       <fileset dir="debian-alt/bionic/"/>
     </copy>
   </target>
   <target name="copy-disco">
-    <copy todir="debian" overwrite="true">
+    <copy quiet="true" todir="debian" overwrite="true">
       <fileset dir="debian-alt/disco/"/>
     </copy>
   </target>
@@ -3612,57 +3610,57 @@
   <target name="preppkg-portable-basic">
     <mkdir dir="pkg-temp"/>
     <!-- non OS dependent configurations only, don't add *nux/win stuff here -->
-    <copy todir="pkg-temp">
+    <copy quiet="true" todir="pkg-temp">
       <fileset dir="installer/resources/portable/configs/"/>
     </copy>
-    <copy file="installer/resources/blocklist.txt" todir="pkg-temp/"/>
-    <copy file="installer/resources/blocklist_tor.txt" todir="pkg-temp/"/>
-    <copy file="installer/resources/hosts.txt" todir="pkg-temp/"/>
-    <copy file="installer/resources/readme.license.txt" todir="pkg-temp/"/>
+    <copy quiet="true" file="installer/resources/blocklist.txt" todir="pkg-temp/"/>
+    <copy quiet="true" file="installer/resources/blocklist_tor.txt" todir="pkg-temp/"/>
+    <copy quiet="true" file="installer/resources/hosts.txt" todir="pkg-temp/"/>
+    <copy quiet="true" file="installer/resources/readme.license.txt" todir="pkg-temp/"/>
     <!--<mkdir dir="pkg-temp/addressbook"/>-->
-    <!--<copy file="apps/addressbook/subscriptions.txt" todir="pkg-temp/addressbook/"/>-->
-    <!--<copy file="apps/addressbook/myhosts.txt"  todir="pkg-temp/addressbook/"/>-->
+    <!--<copy quiet="true" file="apps/addressbook/subscriptions.txt" todir="pkg-temp/addressbook/"/>-->
+    <!--<copy quiet="true" file="apps/addressbook/myhosts.txt"  todir="pkg-temp/addressbook/"/>-->
     <!-- config.txt is in installer/resources/portable -->
     <mkdir dir="pkg-temp/docs"/>
-    <copy file="installer/resources/initialNews/initialNews.xml" tofile="pkg-temp/docs/news.xml" overwrite="true"/>
-    <copy file="installer/resources/readme/readme.html" tofile="pkg-temp/docs/readme/readme.html"/>
-    <copy file="installer/resources/startconsole.html" todir="pkg-temp/docs/"/>
-    <copy file="installer/resources/windows/start.ico" todir="pkg-temp/docs/"/>
-    <copy file="installer/resources/windows/stop.ico" todir="pkg-temp/docs/"/>
-    <copy file="installer/resources/windows/console.ico" todir="pkg-temp/docs/"/>
+    <copy quiet="true" file="installer/resources/initialNews/initialNews.xml" tofile="pkg-temp/docs/news.xml" overwrite="true"/>
+    <copy quiet="true" file="installer/resources/readme/readme.html" tofile="pkg-temp/docs/readme/readme.html"/>
+    <copy quiet="true" file="installer/resources/startconsole.html" todir="pkg-temp/docs/"/>
+    <copy quiet="true" file="installer/resources/windows/start.ico" todir="pkg-temp/docs/"/>
+    <copy quiet="true" file="installer/resources/windows/stop.ico" todir="pkg-temp/docs/"/>
+    <copy quiet="true" file="installer/resources/windows/console.ico" todir="pkg-temp/docs/"/>
     <!-- HTTP Header files, english only, if you need a different lang do it in a seperate target -->
-    <copy todir="pkg-temp/docs/proxy/">
+    <copy quiet="true" todir="pkg-temp/docs/proxy/">
       <fileset dir="installer/resources/proxy/" includes="**-header.ht"/>
     </copy>
     <!-- Theme light only -->
-    <copy todir="pkg-temp/docs/themes/console/light/" overwrite="true">
+    <copy quiet="true" todir="pkg-temp/docs/themes/console/light/" overwrite="true">
       <fileset dir="installer/resources/themes/console/light/" includes="**.css"/>
     </copy>
-    <copy file="installer/resources/themes/console/light/console_big.css" todir="portable/docs/themes/console/light/"/>
-    <copy todir="pkg-temp/docs/themes/console/images/">
+    <copy quiet="true" file="installer/resources/themes/console/light/console_big.css" todir="portable/docs/themes/console/light/"/>
+    <copy quiet="true" todir="pkg-temp/docs/themes/console/images/">
       <fileset dir="installer/resources/themes/console/images/"/>
     </copy>
     <mkdir dir="pkg-temp/webapps"/>
-    <copy todir="pkg-temp/webapps/">
+    <copy quiet="true" todir="pkg-temp/webapps/">
       <fileset dir="build/" includes="**.war"/>
     </copy>
     <mkdir dir="pkg-temp/lib"/>
-    <copy todir="pkg-temp/lib/">
+    <copy quiet="true" todir="pkg-temp/lib/">
       <fileset dir="build/" includes="**.jar"/>
     </copy>
     <!-- 3rd party jars from apps/  -->
     <!-- jrobin - without jobin , you lose graphs and get a lot of error entries in logs -->
-    <copy file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar"/>
+    <copy quiet="true" file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar"/>
   </target>
 
   <!-- *3* os dependent procedure/commands -->
   <target name="preppkg-portable-win32" depends="preppkg-portable-win32-jbigi,preppkg-portable-basic">
     <!--wrapper - Don't even think about it! I2P consumes apparently more mem without it on win32-->
-    <copy file="installer/lib/wrapper/win32/wrapper.dll" todir="pkg-temp/lib"/>
-    <copy file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib"/>
-    <copy file="installer/lib/wrapper/win32/I2Psvc.exe" tofile="pkg-temp/i2psvc.ex_"/>
+    <copy quiet="true" file="installer/lib/wrapper/win32/wrapper.dll" todir="pkg-temp/lib"/>
+    <copy quiet="true" file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib"/>
+    <copy quiet="true" file="installer/lib/wrapper/win32/I2Psvc.exe" tofile="pkg-temp/i2psvc.ex_"/>
     <!--  copy the unpack/start batchfiles -->
-    <copy todir="pkg-temp/portable">
+    <copy quiet="true" todir="pkg-temp/portable">
       <fileset dir="installer/resources/portable/win32/"/>
     </copy>
   </target>

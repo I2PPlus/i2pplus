@@ -2,7 +2,7 @@
 #
 # Update messages_xx.po and messages_xx.class files,
 # from both java and jsp sources.
-# Requires installed programs xgettext, msgfmt, msgmerge, and find.
+# Requires installed programs xgettext, msgfmt, msgmerge -q, and find.
 #
 # usage:
 #    bundle-messages.sh (generates the resource bundle from the .po file)
@@ -82,9 +82,9 @@ for i in locale/messages_*.po; do
       RC=1
       break
     fi
-    msgmerge -U -N --backup=none $i ${i}t
+    msgmerge -q -U -N --backup=none $i ${i}t
     if [ $? -ne 0 ]; then
-      echo "ERROR - msgmerge failed on ${i}, not updating translations"
+      echo "ERROR - msgmerge -q failed on ${i}, not updating translations"
       rm -f ${i}t
       RC=1
       break
@@ -96,13 +96,13 @@ for i in locale/messages_*.po; do
 
   if [ "$LG" != "en" ]; then
     # only generate for non-source language
-    echo "Generating ${CLASS}_$LG ResourceBundle..."
+    # echo "Generating ${CLASS}_$LG ResourceBundle..."
 
     msgfmt -V | grep -q -E ' 0\.((19)|[2-9])'
     if [ $? -ne 0 ]; then
       # slow way
       # convert to class files in build
-      msgfmt --java2 --statistics -r $CLASS -l $LG -d build $i
+      msgfmt --java2 -r $CLASS -l $LG -d build $i
       if [ $? -ne 0 ]; then
         echo "ERROR - msgfmt failed on ${i}, not updating translations"
         # msgfmt leaves the class file there so the build would work the next time
@@ -119,7 +119,7 @@ for i in locale/messages_*.po; do
       TDY=$TD2/net/i2p/desktopgui
       rm -rf $TD
       mkdir -p $TD $TDY
-      msgfmt --java2 --statistics --source -r $CLASS -l $LG -d $TD $i
+      msgfmt --java2 --source -r $CLASS -l $LG -d $TD $i
       if [ $? -ne 0 ]; then
         echo "ERROR - msgfmt failed on ${i}, not updating translations"
         # msgfmt leaves the class file there so the build would work the next time
