@@ -587,7 +587,7 @@
     </condition>
   </target>
 
-  <!-- if both present, only mtn will run -->
+  <!-- If both present, only mtn will run -->
   <target name="checkoutFromGit" depends="checkForGit" if="git.available" unless="mtn.available">
     <echo message="Checking out fresh copy into ${checkoutDir}"/>
     <delete dir="${checkoutDir}"/>
@@ -682,10 +682,10 @@
       match='(^\s+private\s+static\s+final\s+long\s+EARLIEST_LONG\s+=\s+)[0-9]+ \* 1000L;' replace='\1${new.today.secs} * 1000L;'/>
   </target>
 
-  <!-- if both present, only mtn will run -->
+  <!-- If both present, only mtn will run -->
   <target name="checkoutFromVCS" depends="failIfNoVCS, checkoutFromGit"/>
 
-  <!-- if both present, only mtn will run -->
+  <!-- If both present, only mtn will run -->
   <target name="revisions" depends="failIfNoVCS, revisionsGit"/>
 
   <!-- end combined mtn/git targets -->
@@ -750,7 +750,7 @@
   <!-- jbigi targets -->
 
   <target name="jbigi" depends="buildProperties">
-    <!-- set if unset -->
+    <!-- Set if unset -->
     <property name="workspace.changes.jbigi.tr" value=""/>
     <mkdir dir="./build"/>
     <jar destfile="build/jbigi.jar" whenmanifestonly="fail">
@@ -766,7 +766,7 @@
   </target>
 
   <target name="jbigi-nowindows" depends="buildProperties">
-    <!-- set if unset -->
+    <!-- Set if unset -->
     <property name="workspace.changes.jbigi.tr" value=""/>
     <delete file="build/jbigi.jar" failonerror="false" quiet="true"/>
     <jar destfile="build/jbigi.jar" whenmanifestonly="fail">
@@ -783,7 +783,7 @@
 
   <!-- Now system-specific jbigis in alphabetical order -->
   <target name="jbigi-freebsd-only" depends="buildProperties">
-    <!-- set if unset -->
+    <!-- Set if unset -->
     <property name="workspace.changes.jbigi.tr" value=""/>
     <jar destfile="build/jbigi.jar" whenmanifestonly="fail">
       <fileset dir="installer/lib/jbigi" includes="*bsd*.so"/>
@@ -798,7 +798,7 @@
   </target>
 
   <target name="jbigi-linux-only" depends="buildProperties">
-    <!-- set if unset -->
+    <!-- Set if unset -->
     <property name="workspace.changes.jbigi.tr" value=""/>
     <jar destfile="build/jbigi.jar" whenmanifestonly="fail">
       <fileset dir="installer/lib/jbigi" includes="*linux*.so"/>
@@ -813,7 +813,7 @@
   </target>
 
   <target name="jbigi-linux-x86-only" depends="buildProperties">
-    <!-- set if unset -->
+    <!-- Set if unset -->
     <property name="workspace.changes.jbigi.tr" value=""/>
     <jar destfile="build/jbigi.jar" whenmanifestonly="fail">
       <fileset dir="installer/lib/jbigi" includes="*linux*.so" excludes="*linux-arm*.so,*linux-ppc*.so"/>
@@ -828,7 +828,7 @@
   </target>
 
   <target name="jbigi-linux-x86-64-only" depends="buildProperties">
-    <!-- set if unset -->
+    <!-- Set if unset -->
     <property name="workspace.changes.jbigi.tr" value=""/>
     <jar destfile="build/jbigi.jar" whenmanifestonly="fail">
       <fileset dir="installer/lib/jbigi" includes="*linux*_64.so libjcpuid-x86_64-linux.so" excludes="*linux-arm*.so,*linux-ppc*.so"/>
@@ -843,7 +843,7 @@
   </target>
 
   <target name="jbigi-linux-nonx86-only" depends="buildProperties">
-    <!-- set if unset -->
+    <!-- Set if unset -->
     <property name="workspace.changes.jbigi.tr" value=""/>
     <jar destfile="build/jbigi.jar" whenmanifestonly="fail">
       <fileset dir="installer/lib/jbigi" includes="*linux-arm*.so,*linux-ppc*.so"/>
@@ -858,7 +858,7 @@
   </target>
 
   <target name="jbigi-osx-only" depends="buildProperties">
-    <!-- set if unset -->
+    <!-- Set if unset -->
     <property name="workspace.changes.jbigi.tr" value=""/>
     <jar destfile="build/jbigi.jar" whenmanifestonly="fail">
       <fileset dir="installer/lib/jbigi" includes="*.jnilib"/>
@@ -873,7 +873,7 @@
   </target>
 
   <target name="jbigi-windows-only" depends="buildProperties">
-    <!-- set if unset -->
+    <!-- Set if unset -->
     <property name="workspace.changes.jbigi.tr" value=""/>
     <delete file="build/jbigi.jar" failonerror="false" quiet="true"/>
     <jar destfile="build/jbigi.jar" whenmanifestonly="fail">
@@ -900,7 +900,7 @@
   <target name="poupdate" depends="buildRouter, buildStreaming, buildSystray, buildJetty, buildDesktopGui, buildJrobin">
     <echo message="Setting environment variable LG2 to a language code (e.g. de)"/>
     <echo message="will restrict language update to the language you specified, leaving other languages unchanged."/>
-    <!-- set if unset -->
+    <!-- Set if unset -->
     <property name="lg2" value=""/>
 
     <parallel>
@@ -943,7 +943,7 @@
     <mkdir dir="./build"/>
     <mkdir dir="./build/javadoc"/>
     <copy file="./installer/resources/eepsite/docroot/favicon.ico" tofile="./build/javadoc/favicon.ico"/>
-    <!-- set if unset -->
+    <!-- Set if unset -->
     <property name="javac.version" value="1.8"/>
     <javadoc access="package"
       source="${javac.version}"
@@ -1040,13 +1040,14 @@
     <echo message="javadoc creation complete, saved to dist/javadoc"/>
   </target>
 
+  <!-- Will use the native stylesheet - use this if the javadoc target looks broken, Java 11 or later? -->
   <target name="javadoc-nostylesheet" depends="getReleaseNumber, getBuildNumber, distclean">
     <echo message="JDK: ${java.vendor} ${java.version} (${java.runtime.name} ${java.runtime.version})"/>
     <ant dir="apps/jetty" target="ensureJettylib"/>
     <mkdir dir="./build"/>
     <mkdir dir="./build/javadoc"/>
     <copy file="./installer/resources/eepsite/docroot/favicon.ico" tofile="./build/javadoc/favicon.ico"/>
-    <!-- set if unset -->
+    <!-- Set if unset -->
     <property name="javac.version" value="1.8"/>
     <javadoc access="package"
       source="${javac.version}"
@@ -1131,7 +1132,7 @@
       <link offline="true" href="${jettydocs.url}" packagelistLoc="installer/resources/package-lists/jetty/"/>
       <link offline="true" href="${wrapperdocs.url}" packagelistLoc="installer/resources/package-lists/wrapper/"/>
     </javadoc>
-    <!-- create an empty dejavu.css file to keep the browser happy -->
+    <!-- Create an empty dejavu.css file to keep the browser happy -->
     <mkdir dir="./build/javadoc/resources/fonts"/>
     <echo message="/* intentionally empty */" file="build/javadoc/resources/fonts/dejavu.css"/>
     <move todir="./dist/javadoc">
@@ -1155,7 +1156,7 @@
     <mkdir dir="./build"/>
     <mkdir dir="./build/javadoc-test"/>
 
-    <!-- set junit home to the old default unless overridden elsewhere -->
+    <!-- Set junit home to the old default unless overridden elsewhere -->
     <property name="junit.home" value="${ant.home}/lib/"/>
     <javadoc access="package"
       destdir="./build/javadoc-test"
@@ -1312,7 +1313,7 @@
   </target>
 
   <target name="-pre-sign">
-    <!-- if you're distributing su3 files to others, at a minimum you should set this -->
+    <!-- If you're distributing su3 files to others, at a minimum you should set this -->
     <!--
     <fail message="javac.compilerargs must contain a -bootclasspath option in override.properties">
       <condition>
@@ -2398,7 +2399,7 @@
 
   <!-- IzPack 5 -->
   <target name="ensureIzpack5">
-    <!-- set if unset -->
+    <!-- Set if unset -->
     <property name="izpack5.home" value="${user.home}/IzPack"/>
     <condition property="izpack5.available">
       <available file="${izpack5.home}" type="dir"/>
@@ -2736,7 +2737,7 @@
   <!-- standalone i2psnark no zip -->
   <target name="i2psnark_nozip" depends="buildStreaming, buildJetty, buildSystray, jbigi">
     <ant dir="apps/i2psnark/java" target="standalone_nozip"/>
-    <delete dir="./dist/i2psnark_standalone" quiet="true"/>
+    <delete dir="./dist/i2psnark_standalone" quiet="true" excludes="README.md"/>
     <move todir="./dist/i2psnark_standalone" quiet="true">
       <fileset dir="apps/i2psnark/java/i2psnark" includes="**/*"/>
     </move>
@@ -2748,14 +2749,15 @@
     <ant dir="Slackware/i2p/" target="slackpkg"/>
   </target>
 
+  <!-- Requires sloccount package - https://dwheeler.com/sloccount/sloccount.html -->
   <target name="sloccount.report">
     <property name="sloccount.report.file" value="sloccount.sc"/>
-    <echo message="Generating sloccount report (this will take awhile)"/>
+    <echo message="Generating sloccount report..."/>
     <exec executable="sloccount" failonerror="true">
       <arg value="--details"/>
       <arg value="--wide"/>
       <arg value="${basedir}"/>
-      <redirector output="${sloccount.report.file}">
+      <redirector output="dist/${sloccount.report.file}">
         <outputfilterchain>
           <linecontainsregexp negate="true">
             <regexp pattern="(Warning: |lib/launch4j|_MTN|reports|pkg-temp|licenses|i2p\.fba|gmp-|WEB-INF)"/>
@@ -2766,7 +2768,7 @@
         </outputfilterchain>
       </redirector>
     </exec>
-    <echo message="sloccount report saved to the file &apos;${sloccount.report.file}&apos;"/>
+    <echo message="sloccount report saved to dist/${sloccount.report.file}"/>
   </target>
 
   <target name="findbugs" depends="build2, buildUtilityJar">
@@ -2811,7 +2813,7 @@
       <arg value="build/systray.jar"/>
       <arg value="build/utility.jar"/>
     </exec>
-    <echo message="Findbugs output written to dist/findbugs.html"/>
+    <echo message="Findbugs report written to dist/findbugs.html"/>
   </target>
 
   <target name="spotbugs" depends="jar, build2, buildUtilityJar">
@@ -2839,7 +2841,7 @@
       <class location="./build/streaming.jar"/>
       <sourcePath path="./apps/**.*java:./router/**.*java:./core/**.*java"/>
     </spotbugs>
-    <echo message="Spotbugs output written to dist/spotbugs.html"/>
+    <echo message="Spotbugs report written to dist/spotbugs.html"/>
   </target>
 
   <!-- this is the same dependency as pkg, but with updater200 in the middle, since preppkg puts too much stuff in pkg-temp -->
@@ -2873,23 +2875,20 @@
   <target name="releaseWithGeoIP200"
     depends="verifyReleaseBuildNumbers, -pre-release, debcheckpatch, distclean, testscripts, updaterWithJettyAndGeoIPRepack, updater200WithJettyAndGeoIP, delete-j6-update, installer5-nowindows, delete-nonwindows, installer5-windows, -releaseit"/>
 
+  <!-- Make this a lot easier by putting release.privkey.su3=/path/to/su3keystore.ks in override.properties -->
   <target name="-releaseit">
     <echo message="New version number is ${release.number}"/>
     <copy file="dist/i2pupdate.zip" tofile="dist/i2pupdate_${release.number}.zip"/>
     <copy file="dist/i2pinstall_${full.version}.jar" tofile="dist/i2pinstall_${release.number}.jar"/>
     <copy file="dist/i2pinstall_${full.version}_windows.exe" tofile="dist/i2pinstall_${release.number}_windows.exe"/>
-    <!-- remove these, we don't Buildm anymore -->
+    <!-- Remove these, we don't build them anymore -->
     <delete file="dist/i2pupdate.sud"/>
     <delete file="dist/i2pupdate.su2"/>
-    <!-- make this a lot easier by putting release.privkey.su3=/path/to/su3keystore.ks in override.properties -->
-
-    <!-- now build and verify the packed su3 from the packed zip -->
-    <!-- TODO if i2pupdate200.zip is present zip it instead -->
+    <!-- Now build and verify the packed su3 from the packed zip -->
+    <!-- TODO: If i2pupdate200.zip is present, zip it instead -->
     <su3sign infile="dist/i2pupdate.zip" sigtype="ROUTER" outfile="dist/i2pupdate.su3" su3.ver="${release.number}"/>
-    <!--
-        <su3sign infile="dist/i2pupdate200.zip" sigtype="ROUTER" outfile="dist/i2pupdate.su3" su3.ver="${release.number}"/>
-        -->
-    <!-- this will use the monotonerc file in the current workspace -->
+    <!-- <su3sign infile="dist/i2pupdate200.zip" sigtype="ROUTER" outfile="dist/i2pupdate.su3" su3.ver="${release.number}"/> -->
+    <!-- This will use the monotonerc file in the current workspace -->
     <property name="checkoutDir" value="../i2p-${release.number}"/>
     <ant target="checkoutFromVCS"/>
     <exec executable="tar" failonerror="true">
@@ -2911,10 +2910,8 @@
       </condition>
     </fail>
 
-    <!-- the gpgsign macro sets the permission of signed files and the sigs themselves to 444 -->
-    <!--
-        <gpgsign file="dist/i2pinstall_${release.number}_windows.exe"/>
-        -->
+    <!-- The gpgsign macro sets the permission of signed files and the sigs themselves to 444 -->
+    <!-- <gpgsign file="dist/i2pinstall_${release.number}_windows.exe"/> -->
     <gpgsign file="dist/i2pinstall_${release.number}.jar"/>
     <gpgsign file="dist/i2psource_${release.number}.tar.bz2"/>
     <gpgsign file="dist/i2pupdate_${release.number}.zip"/>
@@ -2955,7 +2952,7 @@
   </target>
 
   <target name="forceJava7">
-    <!-- must be set for Android -->
+    <!-- Must be set for Android -->
     <fail message="javac.version is set to ${javac.version} - must be 1.7 for Android">
       <condition>
         <and>
@@ -3156,13 +3153,16 @@
   <!-- See installer/resources/maven-dev-release.sh -->
   <target name="mavenLocal" depends="mavenLocal.deps">
     <delete dir="./pkg-mavencentral"/>
-    <mkdir dir="./pkg-mavencentral"/>
+    <delete dir="./dist/pkg-mavencentral" excludes="README.md"/>
+    <mkdir dir="./dist/pkg-mavencentral"/>
     <!-- Libraries -->
-    <copy file="build/i2p.jar" tofile="pkg-mavencentral/i2p-${release.number}.jar"/>
-    <copy file="build/router.jar" tofile="pkg-mavencentral/router-${release.number}.jar"/>
-    <copy file="build/mstreaming.jar" tofile="pkg-mavencentral/mstreaming-${release.number}.jar"/>
-    <copy file="build/streaming.jar" tofile="pkg-mavencentral/streaming-${release.number}.jar"/>
-    <copy file="apps/jetty/build/servlet-i2p-${release.number}.jar" todir="pkg-mavencentral/"/>
+    <parallel>
+      <copy file="build/i2p.jar" tofile="./dist/pkg-mavencentral/i2p-${release.number}.jar"/>
+      <copy file="build/router.jar" tofile="./dist/pkg-mavencentral/router-${release.number}.jar"/>
+      <copy file="build/mstreaming.jar" tofile="./dist/pkg-mavencentral/mstreaming-${release.number}.jar"/>
+      <copy file="build/streaming.jar" tofile="./dist/pkg-mavencentral/streaming-${release.number}.jar"/>
+      <copy file="apps/jetty/build/servlet-i2p-${release.number}.jar" todir="./dist/pkg-mavencentral/"/>
+    </parallel>
   </target>
 
   <target name="debian" depends="debian-clean, debchange, debian-binary"/>
@@ -3211,7 +3211,7 @@
         </or>
       </not>
     </condition>
-    <!-- if not set above we'll set it here -->
+    <!-- If not set above we'll set it here -->
     <property name="Extended.Version" value="${full.version}"/>
   </target>
 
@@ -3324,9 +3324,7 @@
       <!-- libjson-simple-java -->
       <fileset dir="../i2p-${Extended.Version}/core/java/src/org/json"/>
       <!-- libhttpclient-java and libhttpcore-java -->
-      <!--
-            <fileset dir="../i2p-${Extended.Version}/core/java/src/org/apache/http"/>
-            -->
+      <!-- <fileset dir="../i2p-${Extended.Version}/core/java/src/org/apache/http"/> -->
       <!-- geoip-database -->
       <file name="../i2p-${Extended.Version}/installer/resources/geoip.txt"/>
       <file name="../i2p-${Extended.Version}/installer/resources/geoipv6.dat.gz"/>
@@ -3339,17 +3337,15 @@
       <file name="../i2p-${Extended.Version}/apps/susidns/src/lib/jstl.jar"/>
       <!-- libjakarta-taglibs-standard-java or glassfish-javaee or libtaglibs-standard -->
       <file name="../i2p-${Extended.Version}/apps/susidns/src/lib/standard.jar"/>
-      <!--
-            <fileset dir="../i2p-${Extended.Version}/installer/resources/icons/flags"/>
-            -->
-      <!-- anything added above, add in debian-release-tarball also -->
+      <!-- <fileset dir="../i2p-${Extended.Version}/installer/resources/icons/flags"/> -->
+      <!-- Anything added above, add in debian-release-tarball also -->
     </delete>
     <tar longfile="gnu" destfile="../${debian.tarball.name}" compression="bzip2">
       <tarfileset dir="../i2p-${Extended.Version}" prefix="/i2p-${Extended.Version}">
         <include name="**/**"/>
         <exclude name="debian/**"/>
         <exclude name="**/*.sh"/>
-        <!-- anything added above, add in debian-release-tarball also -->
+        <!-- Anything added above, add in debian-release-tarball also -->
       </tarfileset>
       <tarfileset dir="../i2p-${Extended.Version}" prefix="/i2p-${Extended.Version}" filemode="755">
         <exclude name="debian/**"/>
@@ -3420,14 +3416,14 @@
       <!-- libjakarta-taglibs-standard-java or glassfish-javaee -->
       <file name="../i2p-${Extended.Version}/apps/susidns/src/lib/standard.jar"/>
       <!-- famfamfam-flag-png is in trusty but not precise, so leave them in the source package for both -->
-      <!-- anything added above, add in debian-release-tarball also -->
+      <!-- Anything added above, add in debian-release-tarball also -->
     </delete>
     <tar longfile="gnu" destfile="../${debian.tarball.name}" compression="bzip2">
       <tarfileset dir="../i2p-${Extended.Version}" prefix="/i2p-${Extended.Version}">
         <include name="**/**"/>
         <exclude name="debian/**"/>
         <exclude name="**/*.sh"/>
-        <!-- anything added above, add in debian-release-tarball also -->
+        <!-- Anything added above, add in debian-release-tarball also -->
       </tarfileset>
       <tarfileset dir="../i2p-${Extended.Version}" prefix="/i2p-${Extended.Version}" filemode="755">
         <exclude name="debian/**"/>
@@ -3495,14 +3491,14 @@
       <!--
             <fileset dir="../i2p-${Extended.Version}/installer/resources/icons/flags"/>
             -->
-      <!-- anything added above, add in debian-tarball also -->
+      <!-- Anything added above, add in debian-tarball also -->
     </delete>
     <tar longfile="gnu" destfile="../${debian.tarball.name}" compression="bzip2">
       <tarfileset dir="../i2p-${Extended.Version}" prefix="/i2p-${release.number}">
         <include name="**/**"/>
         <exclude name="debian/**"/>
         <exclude name="**/*.sh"/>
-        <!-- anything added above, add in debian-tarball also -->
+        <!-- Anything added above, add in debian-tarball also -->
       </tarfileset>
       <tarfileset dir="../i2p-${Extended.Version}" prefix="/i2p-${release.number}" filemode="755">
         <exclude name="debian/**"/>
@@ -3562,14 +3558,14 @@
       <!--
             <fileset dir="../i2p-${Extended.Version}/installer/resources/icons/flags"/>
             -->
-      <!-- anything added above, add in debian-tarball also -->
+      <!-- Anything added above, add in debian-tarball also -->
     </delete>
     <tar longfile="gnu" destfile="../${debian.tarball.name}" compression="bzip2">
       <tarfileset dir="../i2p-${Extended.Version}" prefix="/i2p-${release.number}">
         <include name="**/**"/>
         <exclude name="debian/**"/>
         <exclude name="**/*.sh"/>
-        <!-- anything added above, add in debian-tarball also -->
+        <!-- Anything added above, add in debian-tarball also -->
       </tarfileset>
       <tarfileset dir="../i2p-${Extended.Version}" prefix="/i2p-${release.number}" filemode="755">
         <exclude name="debian/**"/>
@@ -3661,7 +3657,7 @@
 
   <!-- *3* os dependent procedure/commands -->
   <target name="preppkg-portable-win32" depends="preppkg-portable-win32-jbigi,preppkg-portable-basic">
-    <!--wrapper - don't even think about it! i2p consumes apparently more mem without it on win32-->
+    <!--wrapper - Don't even think about it! I2P consumes apparently more mem without it on win32-->
     <copy file="installer/lib/wrapper/win32/wrapper.dll" todir="pkg-temp/lib"/>
     <copy file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib"/>
     <copy file="installer/lib/wrapper/win32/I2Psvc.exe" tofile="pkg-temp/i2psvc.ex_"/>
