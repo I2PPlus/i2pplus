@@ -349,7 +349,7 @@
         <copy file="../i2psnark-appctx.config" tofile="./i2psnark/i2psnark-appctx.config" quiet="true"/>
         <copy file="./build/i2psnark-standalone.jar" tofile="./i2psnark/i2psnark.jar" quiet="true"/>
         <copy file="../readme-standalone.txt" tofile="./i2psnark/readme.txt" quiet="true"/>
-        <copy file="../../../installer/resources/hosts.txt" tofile="./i2psnark/hosts.txt" quiet="true"/>
+        <copy file="../../../installer/resources/hosts_i2psnark.txt" tofile="./i2psnark/hosts.txt" quiet="true"/>
       </parallel>
     </parallel>
     <chmod type="file" file="./i2psnark/launch-i2psnark" perm="+x"/>
@@ -375,7 +375,7 @@
         <copy file="../i2psnark-appctx.config" tofile="./i2psnark/i2psnark-appctx.config" quiet="true"/>
         <copy file="./build/i2psnark-standalone.jar" tofile="./i2psnark/i2psnark.jar" quiet="true"/>
         <copy file="../readme-standalone.txt" tofile="./i2psnark/readme.txt" quiet="true"/>
-        <copy file="../../../installer/resources/hosts.txt" tofile="./i2psnark/hosts.txt" quiet="true"/>
+        <copy file="../../../installer/resources/hosts_i2psnark.txt" tofile="./i2psnark/hosts.txt" quiet="true"/>
       </parallel>
     </parallel>
     <echo message="I2PSnark standalone folder moved to ./dist/i2psnark_standalone"/>

@@ -3,9 +3,7 @@
 
 <!--
 Configure a custom context for the site.
-
-This context contains only a ServletContextHandler with a default servlet
-to serve static html files and images.
+This context contains only a ServletContextHandler with a default servlet to serve static html files and images.
 -->
 
 <Configure class="org.eclipse.jetty.servlet.ServletContextHandler">
@@ -20,4 +18,3 @@ to serve static html files and images.
     <Arg>/</Arg>
   </Call>
 </Configure>
-
