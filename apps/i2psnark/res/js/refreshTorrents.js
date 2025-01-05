@@ -14,6 +14,7 @@ const debugMode = document.getElementById("debugMode");
 const files = document.getElementById("dirInfo");
 const filterbar = document.getElementById("filterBar");
 const home = document.querySelector("#navbar .nav_main");
+const isStandalone = document.documentElement.classList.contains("standalone");
 const mainsection = document.getElementById("mainsection");
 const query = window.location.search;
 const screenlog = document.getElementById("screenlog");
@@ -32,6 +33,7 @@ const MESSAGE_TYPES = {
   ABORTED: "ABORTED"
 };
 
+let chimpIsCached = false;
 let noConnection = false;
 let snarkRefreshIntervalId;
 let screenLogIntervalId;
@@ -404,8 +406,6 @@ function refreshOnSubmit() {
   });
 }
 
-let chimpIsCached = false;
-
 async function initSnarkRefresh() {
   let serverOKIntervalId = setInterval(checkIfUp, 5000);
   clearInterval(snarkRefreshIntervalId);
@@ -435,8 +435,11 @@ async function initSnarkRefresh() {
     if (debugging) console.error(error);
   }
 
-  if (!chimpIsCached) {preloadImage("/themes/snark/midnight/images/chimp.webp");}
-  chimpIsCached = true;
+  if (!chimpIsCached) {
+    if (isStandalone) {preloadImage("/i2psnark/.res/themes/snark/midnight/images/chimp.webp");}
+    else {preloadImage("/themes/snark/midnight/images/chimp.webp");}
+    chimpIsCached = true;
+  }
 }
 
 function stopSnarkRefresh() {
@@ -476,7 +479,10 @@ function preloadImage(src) {
 }
 
 function isDown() {
-  const offlineStyles = `:root{--chimp:url(/themes/snark/midnight/images/chimp.webp);--spinner:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cg%3E%3Cpath d='M78.75 16.18V1.56a64.1 64.1 0 0 1 47.7 47.7H111.8a49.98 49.98 0 0 0-33.07-33.08zM16.43 49.25H1.8a64.1 64.1 0 0 1 47.7-47.7V16.2a49.98 49.98 0 0 0-33.07 33.07zm33.07 62.32v14.62A64.1 64.1 0 0 1 1.8 78.5h14.63a49.98 49.98 0 0 0 33.07 33.07zm62.32-33.07h14.62a64.1 64.1 0 0 1-47.7 47.7v-14.63a49.98 49.98 0 0 0 33.08-33.07z' fill='%23dd5500bb'/%3E%3CanimateTransform attributeName='transform' type='rotate' from='0 64 64' to='-90 64 64' dur='1200ms' repeatCount='indefinite'/%3E%3C/g%3E%3C/svg%3E")}*{user-select:none}body,html,#circle,#offline{margin:0;padding:0;height:100vh;min-height:100%;position:relative;overflow:hidden}#circle,#offline{position:absolute;top:0;left:0;bottom:0;right:0}#offline{z-index:99999999;background:#000d;backdrop-filter:blur(2px)}#circle::before{content:"";width:230px;height:230px;border-radius:50%;border:28px solid #303;box-shadow:0 0 0 8px #000,0 0 0 8px #000 inset;display:block;position:absolute;top:calc(50% - 132px);left:calc(50% - 135px);background:radial-gradient(circle at center,rgba(0,0,0,0),70%,#313 75%),var(--spinner) no-repeat center center/240px,var(--chimp) no-repeat calc(50% + 5px) calc(50% + 10px)/250px,#000;transform:scale(.8);will-change:transform}`;
+  let chimpSrc;
+  if (isStandalone) {chimpSrc = "/i2psnark/.res/themes/snark/midnight/images/chimp.webp";}
+  else {chimpSrc = "/themes/snark/midnight/images/chimp.webp";}
+  const offlineStyles = `:root{--chimp:url(${chimpSrc});--spinner:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cg%3E%3Cpath d='M78.75 16.18V1.56a64.1 64.1 0 0 1 47.7 47.7H111.8a49.98 49.98 0 0 0-33.07-33.08zM16.43 49.25H1.8a64.1 64.1 0 0 1 47.7-47.7V16.2a49.98 49.98 0 0 0-33.07 33.07zm33.07 62.32v14.62A64.1 64.1 0 0 1 1.8 78.5h14.63a49.98 49.98 0 0 0 33.07 33.07zm62.32-33.07h14.62a64.1 64.1 0 0 1-47.7 47.7v-14.63a49.98 49.98 0 0 0 33.08-33.07z' fill='%23dd5500bb'/%3E%3CanimateTransform attributeName='transform' type='rotate' from='0 64 64' to='-90 64 64' dur='1200ms' repeatCount='indefinite'/%3E%3C/g%3E%3C/svg%3E")}*{user-select:none}body,html,#circle,#offline{margin:0;padding:0;height:100vh;min-height:100%;position:relative;overflow:hidden}#circle,#offline{position:absolute;top:0;left:0;bottom:0;right:0}#offline{z-index:99999999;background:#000d;backdrop-filter:blur(2px)}#circle::before{content:"";width:230px;height:230px;border-radius:50%;border:28px solid #303;box-shadow:0 0 0 8px #000,0 0 0 8px #000 inset;display:block;position:absolute;top:calc(50% - 132px);left:calc(50% - 135px);background:radial-gradient(circle at center,rgba(0,0,0,0),70%,#313 75%),var(--spinner) no-repeat center center/240px,var(--chimp) no-repeat calc(50% + 5px) calc(50% + 10px)/250px,#000;transform:scale(.8);will-change:transform}`;
   const offlineCss = document.createElement("style");
   offlineCss.id = "offlineCss";
   offlineCss.textContent = offlineStyles;

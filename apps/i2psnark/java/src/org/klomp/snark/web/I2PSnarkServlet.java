@@ -308,7 +308,8 @@ public class I2PSnarkServlet extends BasicServlet {
         else if (theme.equals("midnight")) {pageBackground = "#001";}
         else if (theme.equals("ubergine")) {pageBackground = "#101";}
         else if (theme.equals("vanilla")) {pageBackground = "#cab39b";}
-        buf.append(DOCTYPE).append("<html style=\"background:").append(pageBackground).append("\">\n")
+        buf.append(DOCTYPE).append("<html").append(isStandalone() ? " class=\"standalone\"" : "")
+           .append(" style=\"background:").append(pageBackground).append("\">\n")
            .append("<head>\n").append("<meta charset=utf-8>\n")
            .append("<meta name=viewport content=\"width=device-width, initial-scale=1\">\n");
 
@@ -3848,7 +3849,8 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean showPriority = storage != null && !storage.complete() && r.isDirectory();
 
         StringBuilder buf=new StringBuilder(6*1024);
-        buf.append(DOCTYPE).append("<html>\n<head>\n<meta charset=utf-8>\n").append("<title>");
+        buf.append(DOCTYPE).append("<html").append(isStandalone() ? " class=\"standalone\"" : "").append(">\n")
+           .append("<head>\n<meta charset=utf-8>\n").append("<title>");
         if (title.endsWith("/")) {title = title.substring(0, title.length() - 1);}
         final String directory = title;
         final int dirSlash = directory.indexOf('/');
