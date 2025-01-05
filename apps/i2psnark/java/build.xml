@@ -138,9 +138,11 @@
     <if>
       <isset property="uglifyjs.present"/>
       <then>
-        <foreach target="compressJavascript" param="file">
-          <fileset dir="build/res/.res/js" includes="*.js"/>
-        </foreach>
+        <parallel>
+          <foreach target="compressJavascript" param="file">
+            <fileset dir="build/res/.res/js" includes="*.js"/>
+          </foreach>
+        </parallel>
       </then>
       <else>
         <echo message="UglifyJS not found, skipping Javascript file compression..."/>
