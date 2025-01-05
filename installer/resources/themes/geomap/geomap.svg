@@ -204,5 +204,5 @@
     <path id="Zimbabwe" d="M403 381h-1v-1h-2v-2h-1v-1l-1-1h-1l-1-2-1-1v-1h3l1-1 1-1 2-1v-1l1-1h2v1h2l1 1h1l1 1v7l-1 1v1l-2 3-1-1-1 1-1-1Z"/>
   </g>
   <link xmlns="http://www.w3.org/1999/xhtml" href="/themes/geomap/geomap.css" rel="stylesheet" type="text/css"/>
-  <script href="/themes/geomap/geomap.js"/>
+  <script href="/js/geomap.js"/>
 </svg>
