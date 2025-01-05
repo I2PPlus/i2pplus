@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="utility_jars">
-  <target name="all" depends="clean, build" />
-  <target name="build" depends="builddep, jar" />
+  <target name="all" depends="clean, build"/>
+  <target name="build" depends="builddep, jar"/>
   <target name="builddep">
     <!-- noop, since the core doesnt depend on anything -->
   </target>
   <condition property="depend.available">
-    <typefound name="depend" />
+    <typefound name="depend"/>
   </condition>
   <target name="depend" if="depend.available">
     <depend
@@ -17,57 +17,57 @@
   </target>
 
   <!-- only used if not set by a higher build.xml -->
-  <property name="javac.compilerargs" value="" />
-  <property name="javac.classpath" value="" />
-  <property name="javac.version" value="1.8" />
-  <property name="javac.release" value="8" />
+  <property name="javac.compilerargs" value=""/>
+  <property name="javac.classpath" value=""/>
+  <property name="javac.version" value="1.8"/>
+  <property name="javac.release" value="8"/>
 
   <target name="compile" depends="depend">
-    <mkdir dir="./build" />
-    <mkdir dir="./build/obj" />
+    <mkdir dir="./build"/>
+    <mkdir dir="./build/obj"/>
     <javac srcdir="./src" debug="true" source="${javac.version}" target="${javac.version}" deprecation="on"
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
       destdir="./build/obj" classpath="${javac.classpath}:../../core/java/build/obj">
-      <compilerarg line="${javac.compilerargs}" />
+      <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
 
   <target name="listChangedFiles" if="mtn.available">
     <exec executable="mtn" outputproperty="workspace.changes" errorproperty="mtn.error2" failifexecutionfails="false">
-      <arg value="list" />
-      <arg value="changed" />
-      <arg value="." />
+      <arg value="list"/>
+      <arg value="changed"/>
+      <arg value="."/>
     </exec>
     <!-- \n in an attribute value generates an invalid manifest -->
     <exec executable="tr" inputstring="${workspace.changes}" outputproperty="workspace.changes.tr" errorproperty="mtn.error2" failifexecutionfails="false">
-      <arg value="-s" />
-      <arg value="[:space:]" />
-      <arg value="," />
+      <arg value="-s"/>
+      <arg value="[:space:]"/>
+      <arg value=","/>
     </exec>
   </target>
 
   <target name="jar" depends="compile, listChangedFiles">
     <!-- set if unset -->
-    <property name="workspace.changes.util.tr" value="" />
+    <property name="workspace.changes.util.tr" value=""/>
     <jar destfile="../../build/utility.jar">
-      <fileset dir="../../core/java/build/obj" includes="**/FileUtil.class" />
-      <fileset dir="./build/obj" includes="**" />
+      <fileset dir="../../core/java/build/obj" includes="**/FileUtil.class"/>
+      <fileset dir="./build/obj" includes="**"/>
       <manifest>
-        <attribute name="Main-Class" value="net.i2p.installer.Main" />
-        <attribute name="Built-By" value="${build.built-by}" />
-        <attribute name="Build-Date" value="${build.timestamp}" />
-        <attribute name="Base-Revision" value="${workspace.version}" />
-        <attribute name="Workspace-Changes" value="${workspace.changes.util.tr}" />
-        <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
-        <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
+        <attribute name="Main-Class" value="net.i2p.installer.Main"/>
+        <attribute name="Built-By" value="${build.built-by}"/>
+        <attribute name="Build-Date" value="${build.timestamp}"/>
+        <attribute name="Base-Revision" value="${workspace.version}"/>
+        <attribute name="Workspace-Changes" value="${workspace.changes.util.tr}"/>
+        <attribute name="X-Compile-Source-JDK" value="${javac.version}"/>
+        <attribute name="X-Compile-Target-JDK" value="${javac.version}"/>
       </manifest>
     </jar>
   </target>
 
   <target name="clean">
-    <delete dir="./build" />
+    <delete dir="./build"/>
   </target>
   <target name="cleandep" depends="clean">
     <!-- noop, since the core doesn't depend on anything -->

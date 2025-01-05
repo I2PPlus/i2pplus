@@ -23,7 +23,7 @@
   <Call name="addConnector">
     <Arg>
       <New class="org.eclipse.jetty.server.ServerConnector">
-        <Arg><Ref id="Server" /></Arg>
+        <Arg><Ref id="Server"/></Arg>
         <Arg type="int">1</Arg>     <!-- number of acceptors -->
         <Arg type="int">0</Arg>     <!-- default number of selectors -->
         <Arg>
@@ -31,7 +31,7 @@
             <Item>
               <New class="org.eclipse.jetty.server.HttpConnectionFactory">
                 <Arg>
-                  <New class="org.eclipse.jetty.server.HttpConfiguration" />
+                  <New class="org.eclipse.jetty.server.HttpConfiguration"/>
                 </Arg>
               </New>
             </Item>
@@ -56,13 +56,13 @@
       <Set name="handlers">
         <Array type="org.eclipse.jetty.server.Handler">
           <Item>
-            <New id="HostChecker" class="org.klomp.snark.standalone.HostCheckHandler" />
+            <New id="HostChecker" class="org.klomp.snark.standalone.HostCheckHandler"/>
           </Item>
           <Item>
-            <New id="Contexts" class="org.eclipse.jetty.server.handler.ContextHandlerCollection" />
+            <New id="Contexts" class="org.eclipse.jetty.server.handler.ContextHandlerCollection"/>
           </Item>
           <Item>
-            <New id="DefaultHandler" class="org.eclipse.jetty.server.handler.DefaultHandler" />
+            <New id="DefaultHandler" class="org.eclipse.jetty.server.handler.DefaultHandler"/>
           </Item>
         </Array>
       </Set>
@@ -84,7 +84,7 @@
     <Arg>
       <New id="DeploymentManager" class="org.eclipse.jetty.deploy.DeploymentManager">
         <Set name="contexts">
-          <Ref id="Contexts" />
+          <Ref id="Contexts"/>
         </Set>
         <Call name="setContextAttribute">
           <Arg>org.eclipse.jetty.server.webapp.ContainerIncludeJarPattern</Arg>

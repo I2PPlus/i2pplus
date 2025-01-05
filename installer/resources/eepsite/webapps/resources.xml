@@ -19,7 +19,7 @@
     <Arg>
       <New class="org.eclipse.jetty.servlet.FilterHolder" >
         <Arg>
-          <New class="org.eclipse.jetty.servlets.GzipFilter" />
+          <New class="org.eclipse.jetty.servlets.GzipFilter"/>
         </Arg>
         <Call name="setInitParameter">
           <!-- minimum in Java is 1300 -->

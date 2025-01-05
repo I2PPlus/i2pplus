@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="i2p_sdk">
-  <target name="all" depends="clean, build" />
-  <target name="build" depends="builddep, jar" />
+  <target name="all" depends="clean, build"/>
+  <target name="build" depends="builddep, jar"/>
   <target name="builddep">
     <!-- noop, since the core doesnt depend on anything -->
   </target>
   <condition property="no.bundle">
-    <isfalse value="${require.gettext}" />
+    <isfalse value="${require.gettext}"/>
   </condition>
   <condition property="depend.available">
-    <typefound name="depend" />
+    <typefound name="depend"/>
   </condition>
   <target name="depend" if="depend.available">
     <depend
@@ -20,52 +20,52 @@
   </target>
 
   <!-- only used if not set by a higher build.xml -->
-  <property name="javac.compilerargs" value="" />
-  <property name="javac.classpath" value="" />
-  <property name="javac.version" value="1.8" />
-  <property name="javac.release" value="8" />
-  <property name="manifest.classpath.name" value="Class-Path" />
+  <property name="javac.compilerargs" value=""/>
+  <property name="javac.classpath" value=""/>
+  <property name="javac.version" value="1.8"/>
+  <property name="javac.release" value="8"/>
+  <property name="manifest.classpath.name" value="Class-Path"/>
 
   <!-- fixups if we're using libintl.jar for GettextResource.java -->
   <condition property="source.exclude1" value="gnu/gettext/GettextResource.java" else="NOTHING">
-    <istrue value="${with-gettext-base}" />
+    <istrue value="${with-gettext-base}"/>
   </condition>
   <condition property="javac.classpath.mod1" value="build/libintl.jar:" else="">
-    <istrue value="${with-gettext-base}" />
+    <istrue value="${with-gettext-base}"/>
   </condition>
   <!-- fixups if we're using gnu-getopt.jar for gnu/getopt/* -->
   <condition property="source.exclude2" value="gnu/getopt/**" else="NOTHING">
-    <istrue value="${with-libgetopt-java}" />
+    <istrue value="${with-libgetopt-java}"/>
   </condition>
   <condition property="javac.classpath.mod2" value="build/gnu-getopt.jar:" else="">
-    <istrue value="${with-libgetopt-java}" />
+    <istrue value="${with-libgetopt-java}"/>
   </condition>
   <condition property="translation.includes" value="NOTHING" else="gnu/getopt/*.properties">
-    <istrue value="${with-libgetopt-java}" />
+    <istrue value="${with-libgetopt-java}"/>
   </condition>
   <!-- fixups if we're using json-simple.jar for org.json.simple classes -->
   <condition property="source.exclude4" value="org/json/simple/**" else="NOTHING">
-    <istrue value="${with-libjson-simple-java}" />
+    <istrue value="${with-libjson-simple-java}"/>
   </condition>
   <condition property="javac.classpath.mod4" value="build/json-simple.jar:" else="">
-    <istrue value="${with-libjson-simple-java}" />
+    <istrue value="${with-libjson-simple-java}"/>
   </condition>
-  <property name="javac.classpath.mod" value="${javac.classpath.mod1}${javac.classpath.mod2}${javac.classpath.mod4}${javac.classpath}" />
+  <property name="javac.classpath.mod" value="${javac.classpath.mod1}${javac.classpath.mod2}${javac.classpath.mod4}${javac.classpath}"/>
 
   <!-- jar classpath fixups -->
   <condition property="gettext.jar" value="/usr/share/java/libintl.jar" else="">
-    <istrue value="${with-gettext-base}" />
+    <istrue value="${with-gettext-base}"/>
   </condition>
   <condition property="getopt.jar" value="/usr/share/java/gnu-getopt.jar" else="">
-    <istrue value="${with-libgetopt-java}" />
+    <istrue value="${with-libgetopt-java}"/>
   </condition>
   <condition property="json-simple.jar" value="/usr/share/java/json-simple.jar" else="">
-    <istrue value="${with-libjson-simple-java}" />
+    <istrue value="${with-libjson-simple-java}"/>
   </condition>
 
   <target name="compile" depends="depend">
-    <mkdir dir="./build" />
-    <mkdir dir="./build/obj" />
+    <mkdir dir="./build"/>
+    <mkdir dir="./build/obj"/>
     <!-- sourcepath="" necessary for excludes to work, see ant manual for javac -->
     <javac sourcepath="" srcdir="./src" debug="true" source="${javac.version}" target="${javac.version}" deprecation="on"
       release="${javac.release}"
@@ -73,112 +73,112 @@
       includeAntRuntime="false"
       encoding="UTF-8"
       destdir="./build/obj" classpath="${javac.classpath.mod}">
-      <compilerarg line="${javac.compilerargs}" />
-      <include name="**/*.java" />
-      <exclude name="${source.exclude1}" />
-      <exclude name="${source.exclude2}" />
-      <exclude name="${source.exclude4}" />
+      <compilerarg line="${javac.compilerargs}"/>
+      <include name="**/*.java"/>
+      <exclude name="${source.exclude1}"/>
+      <exclude name="${source.exclude2}"/>
+      <exclude name="${source.exclude4}"/>
     </javac>
   </target>
 
   <target name="listChangedFiles" if="mtn.available">
     <exec executable="mtn" outputproperty="workspace.changes" errorproperty="mtn.error2" failifexecutionfails="false">
-      <arg value="list" />
-      <arg value="changed" />
-      <arg value="." />
+      <arg value="list"/>
+      <arg value="changed"/>
+      <arg value="."/>
     </exec>
     <!-- \n in an attribute value generates an invalid manifest -->
     <exec executable="tr" inputstring="${workspace.changes}" outputproperty="workspace.changes.tr" errorproperty="mtn.error2" failifexecutionfails="false">
-      <arg value="-s" />
-      <arg value="[:space:]" />
-      <arg value="," />
+      <arg value="-s"/>
+      <arg value="[:space:]"/>
+      <arg value=","/>
     </exec>
   </target>
 
   <target name="jar" depends="compile, bundle, jarUpToDate, listChangedFiles" unless="jar.uptodate">
     <!-- set if unset -->
-    <property name="workspace.changes.tr" value="" />
+    <property name="workspace.changes.tr" value=""/>
     <jar destfile="./build/i2p.jar">
-      <fileset dir="./build/obj" includes="**/*.class" />
-      <fileset dir="./src" includes="net/i2p/util/resources/*" />
+      <fileset dir="./build/obj" includes="**/*.class"/>
+      <fileset dir="./src" includes="net/i2p/util/resources/*"/>
       <!-- the getopt translation files -->
-      <fileset dir="src" includes="${translation.includes}" />
+      <fileset dir="src" includes="${translation.includes}"/>
       <manifest>
-        <attribute name="${manifest.classpath.name}" value="${gettext.jar} ${getopt.jar}" />
-        <attribute name="Specification-Title" value="I2P Core API" />
-        <attribute name="Specification-Version" value="${api.version}" />
-        <attribute name="Specification-Vendor" value="The I2P Project https://geti2p.net/" />
-        <attribute name="Implementation-Title" value="I2P Java Core API" />
-        <attribute name="Implementation-Version" value="${full.version}" />
-        <attribute name="Implementation-Vendor" value="The I2P Project https://geti2p.net/" />
-        <attribute name="Built-By" value="${build.built-by}" />
-        <attribute name="Build-Date" value="${build.timestamp}" />
-        <attribute name="Base-Revision" value="${workspace.version}" />
-        <attribute name="Main-Class" value="net.i2p.util.CommandLine" />
-        <attribute name="Workspace-Changes" value="${workspace.changes.tr}" />
-        <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
-        <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
+        <attribute name="${manifest.classpath.name}" value="${gettext.jar} ${getopt.jar}"/>
+        <attribute name="Specification-Title" value="I2P Core API"/>
+        <attribute name="Specification-Version" value="${api.version}"/>
+        <attribute name="Specification-Vendor" value="The I2P Project https://geti2p.net/"/>
+        <attribute name="Implementation-Title" value="I2P Java Core API"/>
+        <attribute name="Implementation-Version" value="${full.version}"/>
+        <attribute name="Implementation-Vendor" value="The I2P Project https://geti2p.net/"/>
+        <attribute name="Built-By" value="${build.built-by}"/>
+        <attribute name="Build-Date" value="${build.timestamp}"/>
+        <attribute name="Base-Revision" value="${workspace.version}"/>
+        <attribute name="Main-Class" value="net.i2p.util.CommandLine"/>
+        <attribute name="Workspace-Changes" value="${workspace.changes.tr}"/>
+        <attribute name="X-Compile-Source-JDK" value="${javac.version}"/>
+        <attribute name="X-Compile-Target-JDK" value="${javac.version}"/>
         <!--
            Suppress JNI warning in JRE 24+, and eventual restriction (https://openjdk.org/jeps/472_
            This only works for CLI with this as the named -jar argument; for normal runtime it must
            be suppressed in wrapper.config
          -->
-        <attribute name="Enable-Native-Access" value="ALL-UNNAMED" />
+        <attribute name="Enable-Native-Access" value="ALL-UNNAMED"/>
       </manifest>
     </jar>
   </target>
 
   <target name="jarUpToDate">
     <uptodate property="jar.uptodate" targetfile="build/i2p.jar">
-      <srcfiles dir="build/obj" includes="**/*.class" />
+      <srcfiles dir="build/obj" includes="**/*.class"/>
     </uptodate>
   </target>
 
   <target name="bundle" unless="no.bundle">
-    <mkdir dir="build/messages-src" />
+    <mkdir dir="build/messages-src"/>
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="${require.gettext}">
-      <env key="JAVA_HOME" value="${java.home}" />
-      <arg value="./bundle-messages.sh" />
+      <env key="JAVA_HOME" value="${java.home}"/>
+      <arg value="./bundle-messages.sh"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="${require.gettext}">
-      <arg value="./bundle-messages.sh" />
+      <arg value="./bundle-messages.sh"/>
     </exec>
     <exec executable="sh" osfamily="windows" failifexecutionfails="false">
-      <arg value="./bundle-messages.sh" />
+      <arg value="./bundle-messages.sh"/>
     </exec>
     <javac source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
       srcdir="build/messages-src" destdir="build/obj">
-      <compilerarg line="${javac.compilerargs}" />
+      <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
 
   <target name="poupdate">
     <!-- Update the messages_*.po files.  -->
     <!-- set if unset -->
-    <property name="lg2" value="" />
+    <property name="lg2" value=""/>
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true">
-      <env key="LG2" value="${lg2}" />
-      <arg value="./bundle-messages.sh" />
-      <arg value="-p" />
+      <env key="LG2" value="${lg2}"/>
+      <arg value="./bundle-messages.sh"/>
+      <arg value="-p"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="true">
-      <env key="LG2" value="${lg2}" />
-      <arg value="./bundle-messages.sh" />
-      <arg value="-p" />
+      <env key="LG2" value="${lg2}"/>
+      <arg value="./bundle-messages.sh"/>
+      <arg value="-p"/>
     </exec>
     <exec executable="sh" osfamily="windows" failifexecutionfails="true" failonerror="true">
-      <env key="LG2" value="${lg2}" />
-      <arg value="./bundle-messages.sh" />
-      <arg value="-p" />
+      <env key="LG2" value="${lg2}"/>
+      <arg value="./bundle-messages.sh"/>
+      <arg value="-p"/>
     </exec>
   </target>
 
   <target name="javadoc">
-    <mkdir dir="./build" />
-    <mkdir dir="./build/javadoc" />
+    <mkdir dir="./build"/>
+    <mkdir dir="./build/javadoc"/>
     <javadoc access="package"
       source="${javac.version}"
       destdir="./build/javadoc"
@@ -189,109 +189,109 @@
       additionalparam="-notimestamp"
       doctitle="I2P Javadocs for Release ${release.number} Build ${i2p.build.number}${build.extra}"
       windowtitle="I2P Anonymous Network - Java Documentation - Version ${release.number}">
-      <group title="Core SDK (i2p.jar)" packages="*" />
+      <group title="Core SDK (i2p.jar)" packages="*"/>
       <sourcepath>
-        <pathelement location="./src" />
-        <pathelement location="./test/junit" />
+        <pathelement location="./src"/>
+        <pathelement location="./test/junit"/>
       </sourcepath>
       <classpath>
-        <pathelement location="${hamcrest.home}/hamcrest-core.jar" />
-        <pathelement location="${hamcrest.home}/hamcrest-library.jar" />
-        <pathelement location="${hamcrest.home}/hamcrest-integration.jar" />
-        <pathelement location="${hamcrest.home}/hamcrest-all.jar" />
-        <pathelement location="${mockito.home}/byte-buddy.jar" />
-        <pathelement location="${mockito.home}/objenesis.jar" />
-        <pathelement location="${mockito.home}/mockito-core.jar" />
-        <pathelement location="${junit.home}/junit4.jar" />
+        <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-integration.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
+        <pathelement location="${mockito.home}/byte-buddy.jar"/>
+        <pathelement location="${mockito.home}/objenesis.jar"/>
+        <pathelement location="${mockito.home}/mockito-core.jar"/>
+        <pathelement location="${junit.home}/junit4.jar"/>
         <!-- following are only for debian builds -->
-        <pathelement location="build/libintl.jar" />
-        <pathelement location="build/gnu-getopt.jar" />
-        <pathelement location="build/json-simple.jar" />
+        <pathelement location="build/libintl.jar"/>
+        <pathelement location="build/gnu-getopt.jar"/>
+        <pathelement location="build/json-simple.jar"/>
       </classpath>
       <!-- These variables are stored in build.properties.
                   End-users can override by creating the file override.properties -->
-      <link offline="true" href="${javasedocs.url}" packagelistLoc="../../installer/resources/package-lists/java/" />
-      <link offline="true" href="${javaeedocs.url}" packagelistLoc="../../installer/resources/package-lists/javaee/" />
-      <link offline="true" href="${jettydocs.url}" packagelistLoc="../../installer/resources/package-lists/jetty/" />
-      <link offline="true" href="${wrapperdocs.url}" packagelistLoc="../../installer/resources/package-lists/wrapper/" />
+      <link offline="true" href="${javasedocs.url}" packagelistLoc="../../installer/resources/package-lists/java/"/>
+      <link offline="true" href="${javaeedocs.url}" packagelistLoc="../../installer/resources/package-lists/javaee/"/>
+      <link offline="true" href="${jettydocs.url}" packagelistLoc="../../installer/resources/package-lists/jetty/"/>
+      <link offline="true" href="${wrapperdocs.url}" packagelistLoc="../../installer/resources/package-lists/wrapper/"/>
     </javadoc>
   </target>
 
   <!-- for Maven Central -->
   <target name="javadocJar" depends="javadoc">
     <jar jarfile="./build/i2p-${release.number}-javadoc.jar">
-      <fileset dir="./build/javadoc" />
+      <fileset dir="./build/javadoc"/>
       <manifest>
-        <attribute name="Specification-Title" value="I2P Core API" />
-        <attribute name="Specification-Version" value="${api.version}" />
-        <attribute name="Specification-Vendor" value="The I2P Project https://geti2p.net/" />
-        <attribute name="Implementation-Title" value="I2P Java Core API" />
-        <attribute name="Implementation-Version" value="${full.version}" />
-        <attribute name="Implementation-Vendor" value="The I2P Project https://geti2p.net/" />
-        <attribute name="Built-By" value="${build.built-by}" />
-        <attribute name="Build-Date" value="${build.timestamp}" />
-        <attribute name="Base-Revision" value="${workspace.version}" />
+        <attribute name="Specification-Title" value="I2P Core API"/>
+        <attribute name="Specification-Version" value="${api.version}"/>
+        <attribute name="Specification-Vendor" value="The I2P Project https://geti2p.net/"/>
+        <attribute name="Implementation-Title" value="I2P Java Core API"/>
+        <attribute name="Implementation-Version" value="${full.version}"/>
+        <attribute name="Implementation-Vendor" value="The I2P Project https://geti2p.net/"/>
+        <attribute name="Built-By" value="${build.built-by}"/>
+        <attribute name="Build-Date" value="${build.timestamp}"/>
+        <attribute name="Base-Revision" value="${workspace.version}"/>
       </manifest>
     </jar>
   </target>
 
   <target name="sourcesJar">
     <jar jarfile="./build/i2p-${release.number}-sources.jar">
-      <fileset dir="./src" />
+      <fileset dir="./src"/>
       <manifest>
-        <attribute name="Specification-Title" value="I2P Core API" />
-        <attribute name="Specification-Version" value="${api.version}" />
-        <attribute name="Specification-Vendor" value="The I2P Project https://geti2p.net/" />
-        <attribute name="Implementation-Title" value="I2P Java Core API" />
-        <attribute name="Implementation-Version" value="${full.version}" />
-        <attribute name="Implementation-Vendor" value="The I2P Project https://geti2p.net/" />
-        <attribute name="Built-By" value="${build.built-by}" />
-        <attribute name="Build-Date" value="${build.timestamp}" />
-        <attribute name="Base-Revision" value="${workspace.version}" />
+        <attribute name="Specification-Title" value="I2P Core API"/>
+        <attribute name="Specification-Version" value="${api.version}"/>
+        <attribute name="Specification-Vendor" value="The I2P Project https://geti2p.net/"/>
+        <attribute name="Implementation-Title" value="I2P Java Core API"/>
+        <attribute name="Implementation-Version" value="${full.version}"/>
+        <attribute name="Implementation-Vendor" value="The I2P Project https://geti2p.net/"/>
+        <attribute name="Built-By" value="${build.built-by}"/>
+        <attribute name="Build-Date" value="${build.timestamp}"/>
+        <attribute name="Base-Revision" value="${workspace.version}"/>
       </manifest>
     </jar>
   </target>
 
   <!-- scala paths -->
   <target name="scala.init">
-    <property name="scala-library.jar" value="${scalatest.libs}/scala-library.jar" />
-    <property name="scala-xml.jar" value="${scalatest.libs}/scala-xml.jar" />
-    <property name="scalactic.jar" value="${scalatest.libs}/scalactic.jar" />
-    <property name="scalatest.jar" value="${scalatest.libs}/scalatest.jar" />
+    <property name="scala-library.jar" value="${scalatest.libs}/scala-library.jar"/>
+    <property name="scala-xml.jar" value="${scalatest.libs}/scala-xml.jar"/>
+    <property name="scalactic.jar" value="${scalatest.libs}/scalactic.jar"/>
+    <property name="scalatest.jar" value="${scalatest.libs}/scalatest.jar"/>
     <taskdef resource="scala/tools/ant/antlib.xml">
       <classpath>
-        <pathelement location="${scalatest.libs}/scala-compiler.jar" />
-        <pathelement location="${scalatest.libs}/scala-reflect.jar" />
-        <pathelement location="${scala-library.jar}" />
+        <pathelement location="${scalatest.libs}/scala-compiler.jar"/>
+        <pathelement location="${scalatest.libs}/scala-reflect.jar"/>
+        <pathelement location="${scala-library.jar}"/>
       </classpath>
     </taskdef>
   </target>
 
   <!-- unit tests -->
   <target name="scalatest.compileTest" depends="compile, scala.init">
-    <mkdir dir="./build" />
-    <mkdir dir="./build/obj_scala" />
+    <mkdir dir="./build"/>
+    <mkdir dir="./build/obj_scala"/>
     <scalac srcdir="./test/scalatest" destdir="./build/obj_scala" deprecation="on">
       <classpath>
-        <pathelement path="${javac.classpath.mod}" />
-        <pathelement location="${scala-library.jar}" />
-        <pathelement location="${scalactic.jar}" />
-        <pathelement location="${scalatest.jar}" />
-        <pathelement location="./build/obj" />
+        <pathelement path="${javac.classpath.mod}"/>
+        <pathelement location="${scala-library.jar}"/>
+        <pathelement location="${scalactic.jar}"/>
+        <pathelement location="${scalatest.jar}"/>
+        <pathelement location="./build/obj"/>
       </classpath>
     </scalac>
   </target>
   <target name="junit.compileTest" depends="compile">
-    <mkdir dir="./build" />
-    <mkdir dir="./build/obj" />
+    <mkdir dir="./build"/>
+    <mkdir dir="./build/obj"/>
     <!-- set hamcrest and junit homes to the old default unless overridden elsewhere -->
-    <echo message="[DEBUG] ant home is ${ant.home}" />
-    <echo message="[DEBUG] junit home before override is ${junit.home}" />
-    <echo message="[DEBUG] hamcrest home before override is ${hamcrest.home}" />
-    <property name="hamcrest.home" value="${ant.home}/lib/" />
-    <property name="junit.home" value="${ant.home}/lib/" />
-    <echo message="[DEBUG] junit home after override is ${junit.home}" />
-    <echo message="[DEBUG] hamcrest home after override is ${hamcrest.home}" />
+    <echo message="[DEBUG] ant home is ${ant.home}"/>
+    <echo message="[DEBUG] junit home before override is ${junit.home}"/>
+    <echo message="[DEBUG] hamcrest home before override is ${hamcrest.home}"/>
+    <property name="hamcrest.home" value="${ant.home}/lib/"/>
+    <property name="junit.home" value="${ant.home}/lib/"/>
+    <echo message="[DEBUG] junit home after override is ${junit.home}"/>
+    <echo message="[DEBUG] hamcrest home after override is ${hamcrest.home}"/>
     <javac srcdir="./test/junit" debug="true" source="${javac.version}" target="${javac.version}" deprecation="on"
       release="${javac.release}"
       debuglevel="lines,vars,source"
@@ -300,46 +300,46 @@
       excludes="${source.exclude}"
       destdir="./build/obj">
       <classpath>
-        <pathelement path="${javac.classpath.mod}" />
-        <pathelement location="${hamcrest.home}/hamcrest-core.jar" />
-        <pathelement location="${hamcrest.home}/hamcrest-library.jar" />
-        <pathelement location="${hamcrest.home}/hamcrest-integration.jar" />
-        <pathelement location="${hamcrest.home}/hamcrest-all.jar" />
-        <pathelement location="${junit.home}/junit4.jar" />
+        <pathelement path="${javac.classpath.mod}"/>
+        <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-integration.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
+        <pathelement location="${junit.home}/junit4.jar"/>
       </classpath>
-      <compilerarg line="${javac.compilerargs}" />
+      <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
   <!-- jars with tests -->
   <target name="jarScalaTest" depends="scalatest.compileTest">
-    <mkdir dir="./build/obj_scala_jar" />
+    <mkdir dir="./build/obj_scala_jar"/>
     <copy todir="./build/obj_scala_jar">
       <fileset dir="./build/">
-        <include name="obj/**/*.class" />
+        <include name="obj/**/*.class"/>
       </fileset>
-      <mapper type="glob" from="obj/*" to="*" />
+      <mapper type="glob" from="obj/*" to="*"/>
     </copy>
     <copy todir="./build/obj_scala_jar">
       <fileset dir="./build/">
-        <include name="obj_scala/**/*.class" />
+        <include name="obj_scala/**/*.class"/>
       </fileset>
-      <mapper type="glob" from="obj_scala/*" to="*" />
+      <mapper type="glob" from="obj_scala/*" to="*"/>
     </copy>
     <jar destfile="./build/i2pscalatest.jar" basedir="./build/obj_scala_jar" includes="**/*.class">
       <manifest>
-        <attribute name="${manifest.classpath.name}" value="${gettext.jar} ${getopt.jar}" />
-        <attribute name="Specification-Title" value="I2P Core API" />
-        <attribute name="Specification-Version" value="${api.version}" />
-        <attribute name="Specification-Vendor" value="The I2P Project https://geti2p.net/" />
-        <attribute name="Implementation-Title" value="I2P Java Core API" />
-        <attribute name="Implementation-Version" value="${full.version}" />
-        <attribute name="Implementation-Vendor" value="The I2P Project https://geti2p.net/" />
-        <attribute name="Built-By" value="${build.built-by}" />
-        <attribute name="Build-Date" value="${build.timestamp}" />
-        <attribute name="Base-Revision" value="${workspace.version}" />
-        <attribute name="Main-Class" value="net.i2p.util.CommandLine" />
-        <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
-        <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
+        <attribute name="${manifest.classpath.name}" value="${gettext.jar} ${getopt.jar}"/>
+        <attribute name="Specification-Title" value="I2P Core API"/>
+        <attribute name="Specification-Version" value="${api.version}"/>
+        <attribute name="Specification-Vendor" value="The I2P Project https://geti2p.net/"/>
+        <attribute name="Implementation-Title" value="I2P Java Core API"/>
+        <attribute name="Implementation-Version" value="${full.version}"/>
+        <attribute name="Implementation-Vendor" value="The I2P Project https://geti2p.net/"/>
+        <attribute name="Built-By" value="${build.built-by}"/>
+        <attribute name="Build-Date" value="${build.timestamp}"/>
+        <attribute name="Base-Revision" value="${workspace.version}"/>
+        <attribute name="Main-Class" value="net.i2p.util.CommandLine"/>
+        <attribute name="X-Compile-Source-JDK" value="${javac.version}"/>
+        <attribute name="X-Compile-Target-JDK" value="${javac.version}"/>
       </manifest>
     </jar>
   </target>
@@ -348,198 +348,198 @@
     <!-- warning - The junit.test target below doesn't actually include i2ptest.jar in the classpath,
              only the build/obj directory.
           -->
-    <mkdir dir="build/obj/net/i2p/util/resources" />
+    <mkdir dir="build/obj/net/i2p/util/resources"/>
     <copy todir="build/obj/net/i2p/util/resources">
-      <fileset dir="../resources" />
+      <fileset dir="../resources"/>
     </copy>
     <jar destfile="./build/i2ptest.jar" basedir="./build/obj">
-      <fileset dir="test/resources" includes="**/test.data **/baseDblPrecmp **/basePrecmp" />
+      <fileset dir="test/resources" includes="**/test.data **/baseDblPrecmp **/basePrecmp"/>
       <!-- the getopt translation files -->
-      <fileset dir="src" includes="${translation.includes}" />
+      <fileset dir="src" includes="${translation.includes}"/>
       <manifest>
-        <attribute name="${manifest.classpath.name}" value="${gettext.jar} ${getopt.jar}" />
-        <attribute name="Specification-Title" value="I2P Core API" />
-        <attribute name="Specification-Version" value="${api.version}" />
-        <attribute name="Specification-Vendor" value="The I2P Project https://geti2p.net/" />
-        <attribute name="Implementation-Title" value="I2P Java Core API" />
-        <attribute name="Implementation-Version" value="${full.version}" />
-        <attribute name="Implementation-Vendor" value="The I2P Project https://geti2p.net/" />
-        <attribute name="Built-By" value="${build.built-by}" />
-        <attribute name="Build-Date" value="${build.timestamp}" />
-        <attribute name="Base-Revision" value="${workspace.version}" />
-        <attribute name="Main-Class" value="net.i2p.util.CommandLine" />
-        <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
-        <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
+        <attribute name="${manifest.classpath.name}" value="${gettext.jar} ${getopt.jar}"/>
+        <attribute name="Specification-Title" value="I2P Core API"/>
+        <attribute name="Specification-Version" value="${api.version}"/>
+        <attribute name="Specification-Vendor" value="The I2P Project https://geti2p.net/"/>
+        <attribute name="Implementation-Title" value="I2P Java Core API"/>
+        <attribute name="Implementation-Version" value="${full.version}"/>
+        <attribute name="Implementation-Vendor" value="The I2P Project https://geti2p.net/"/>
+        <attribute name="Built-By" value="${build.built-by}"/>
+        <attribute name="Build-Date" value="${build.timestamp}"/>
+        <attribute name="Base-Revision" value="${workspace.version}"/>
+        <attribute name="Main-Class" value="net.i2p.util.CommandLine"/>
+        <attribute name="X-Compile-Source-JDK" value="${javac.version}"/>
+        <attribute name="X-Compile-Target-JDK" value="${javac.version}"/>
       </manifest>
     </jar>
   </target>
   <!-- preparation of code coverage tool of choice -->
   <target name="prepareClover" depends="compile" if="with.clover">
-    <taskdef resource="clovertasks" />
-    <mkdir dir="../../reports/core/clover" />
-    <clover-setup initString="../../reports/core/clover/coverage.db" />
+    <taskdef resource="clovertasks"/>
+    <mkdir dir="../../reports/core/clover"/>
+    <clover-setup initString="../../reports/core/clover/coverage.db"/>
   </target>
   <target name="prepareCobertura" depends="compile" if="with.cobertura">
-    <taskdef classpath="${with.cobertura}" resource="tasks.properties" onerror="report" />
-    <mkdir dir="./build/obj_cobertura" />
-    <delete file="./cobertura.ser" />
+    <taskdef classpath="${with.cobertura}" resource="tasks.properties" onerror="report"/>
+    <mkdir dir="./build/obj_cobertura"/>
+    <delete file="./cobertura.ser"/>
     <cobertura-instrument todir="./build/obj_cobertura">
       <fileset dir="./build/obj">
-        <include name="**/*.class" />
+        <include name="**/*.class"/>
         <!-- exclude Test classes -->
-        <exclude name="**/*Test.class" />
-        <exclude name="**/*TestSuite.class" />
+        <exclude name="**/*Test.class"/>
+        <exclude name="**/*TestSuite.class"/>
         <!-- specific excludes -->
-        <exclude name="**/AllCoreTests.class" />
-        <exclude name="**/stat/SimpleStatDumper.class" />
-        <exclude name="**/stat/SizeMeasure.class" />
-        <exclude name="**/stat/StatLogSplitter.class" />
+        <exclude name="**/AllCoreTests.class"/>
+        <exclude name="**/stat/SimpleStatDumper.class"/>
+        <exclude name="**/stat/SizeMeasure.class"/>
+        <exclude name="**/stat/StatLogSplitter.class"/>
         <!-- exclude anything not in net.i2p.* -->
-        <exclude name="com/nettgryppa/**/*.class" />
-        <exclude name="freenet/**/*.class" />
-        <exclude name="gnu/**/*.class" />
-        <exclude name="net/metanotion/**/*.class" />
-        <exclude name="org/xlattice/**/*.class" />
+        <exclude name="com/nettgryppa/**/*.class"/>
+        <exclude name="freenet/**/*.class"/>
+        <exclude name="gnu/**/*.class"/>
+        <exclude name="net/metanotion/**/*.class"/>
+        <exclude name="org/xlattice/**/*.class"/>
       </fileset>
     </cobertura-instrument>
   </target>
-  <target name="prepareTest" depends="prepareClover, prepareCobertura" />
+  <target name="prepareTest" depends="prepareClover, prepareCobertura"/>
   <!-- end preparation of code coverage tool -->
   <target name="scalatest.test" depends="clean, scalatest.compileTest, prepareTest">
-    <mkdir dir="../../reports/core/scalatest/" />
+    <mkdir dir="../../reports/core/scalatest/"/>
     <delete>
       <fileset dir="../../reports/core/scalatest">
-        <include name="TEST-*.xml" />
+        <include name="TEST-*.xml"/>
       </fileset>
     </delete>
     <taskdef name="scalatest" classname="org.scalatest.tools.ScalaTestAntTask">
       <classpath>
-        <pathelement location="${scala-library.jar}" />
-        <pathelement location="${scala-xml.jar}" />
-        <pathelement location="${scalactic.jar}" />
-        <pathelement location="${scalatest.jar}" />
-        <pathelement location="./build/obj_cobertura" />
-        <pathelement location="./build/obj" />
-        <pathelement location="./test/resources" />
-        <pathelement location="../../build/jbigi.jar" />
-        <pathelement location="${with.clover}" />
-        <pathelement location="${with.cobertura}" />
+        <pathelement location="${scala-library.jar}"/>
+        <pathelement location="${scala-xml.jar}"/>
+        <pathelement location="${scalactic.jar}"/>
+        <pathelement location="${scalatest.jar}"/>
+        <pathelement location="./build/obj_cobertura"/>
+        <pathelement location="./build/obj"/>
+        <pathelement location="./test/resources"/>
+        <pathelement location="../../build/jbigi.jar"/>
+        <pathelement location="${with.clover}"/>
+        <pathelement location="${with.cobertura}"/>
       </classpath>
     </taskdef>
     <scalatest runpath="./build/obj_scala" fork="yes" maxmemory="384M">
       <tagsToExclude>
         SlowTests
       </tagsToExclude>
-      <reporter type="stdout" />
-      <reporter type="junitxml" directory="../../reports/core/scalatest/" />
+      <reporter type="stdout"/>
+      <reporter type="junitxml" directory="../../reports/core/scalatest/"/>
     </scalatest>
     <!-- set if unset -->
-    <property name="host.fakename" value="i2ptester" />
+    <property name="host.fakename" value="i2ptester"/>
     <!-- replace hostname that junit inserts into reports with fake one -->
     <replaceregexp byline="true"
       match="(hostname=)&quot;[^&quot;]+&quot;"
       replace="\1&quot;${host.fakename}&quot;">
-      <fileset dir="../../reports/core/scalatest/" />
+      <fileset dir="../../reports/core/scalatest/"/>
     </replaceregexp>
   </target>
   <target name="junit.test" depends="clean, junit.compileTest, prepareTest">
-    <property name="hamcrest.home" value="${ant.home}/lib/" />
-    <property name="junit.home" value="${ant.home}/lib/" />
-    <mkdir dir="../../reports/core/junit/" />
+    <property name="hamcrest.home" value="${ant.home}/lib/"/>
+    <property name="junit.home" value="${ant.home}/lib/"/>
+    <mkdir dir="../../reports/core/junit/"/>
     <delete>
       <fileset dir="../../reports/core/junit">
-        <include name="TEST-*.xml" />
+        <include name="TEST-*.xml"/>
       </fileset>
     </delete>
     <junit printsummary="withOutAndErr" fork="yes" maxmemory="384m" showoutput="yes">
-      <sysproperty key="net.sourceforge.cobertura.datafile" file="./cobertura.ser" />
+      <sysproperty key="net.sourceforge.cobertura.datafile" file="./cobertura.ser"/>
       <classpath>
-        <pathelement location="../../installer/resources/" />
-        <pathelement path="${javac.classpath.mod}" />
-        <pathelement location="${hamcrest.home}/hamcrest-core.jar" />
-        <pathelement location="${hamcrest.home}/hamcrest-library.jar" />
-        <pathelement location="${hamcrest.home}/hamcrest-integration.jar" />
-        <pathelement location="${hamcrest.home}/hamcrest-all.jar" />
-        <pathelement location="${junit.home}/junit4.jar" />
-        <pathelement location="./build/obj_cobertura" />
-        <pathelement location="./build/obj" />
-        <pathelement location="./test/resources" />
-        <pathelement location="../../build/jbigi.jar" />
-        <pathelement location="${with.clover}" />
-        <pathelement location="${with.cobertura}" />
+        <pathelement location="../../installer/resources/"/>
+        <pathelement path="${javac.classpath.mod}"/>
+        <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-integration.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
+        <pathelement location="${junit.home}/junit4.jar"/>
+        <pathelement location="./build/obj_cobertura"/>
+        <pathelement location="./build/obj"/>
+        <pathelement location="./test/resources"/>
+        <pathelement location="../../build/jbigi.jar"/>
+        <pathelement location="${with.clover}"/>
+        <pathelement location="${with.cobertura}"/>
       </classpath>
       <batchtest todir="../../reports/core/junit/">
         <fileset dir="./test/junit/">
-          <include name="**/*Test.java" />
-          <include name="**/*IT.java" if="runIntegrationTests" />
-          <exclude name="**/StructureTest.java" />
-          <exclude name="**/AbstractFieldElementTest.java" />
+          <include name="**/*Test.java"/>
+          <include name="**/*IT.java" if="runIntegrationTests"/>
+          <exclude name="**/StructureTest.java"/>
+          <exclude name="**/AbstractFieldElementTest.java"/>
           <!-- DataHelperTest is *very* slow with cobertura -->
           <!--
-                    <exclude name="**/DataHelperTest.java" />
+                    <exclude name="**/DataHelperTest.java"/>
                     -->
         </fileset>
       </batchtest>
-      <formatter type="xml" />
+      <formatter type="xml"/>
     </junit>
     <!-- set if unset -->
-    <property name="host.fakename" value="i2ptester" />
+    <property name="host.fakename" value="i2ptester"/>
     <!-- replace hostname that junit inserts into reports with fake one -->
     <replaceregexp byline="true"
       match="(hostname=)&quot;[^&quot;]+&quot;"
       replace="\1&quot;${host.fakename}&quot;">
-      <fileset dir="../../reports/core/junit/" />
+      <fileset dir="../../reports/core/junit/"/>
     </replaceregexp>
   </target>
-  <target name="test" depends="junit.test, scalatest.test" />
+  <target name="test" depends="junit.test, scalatest.test"/>
   <!-- test reports -->
   <target name="scalatest.report">
     <junitreport todir="../../reports/core/scalatest">
       <fileset dir="../../reports/core/scalatest">
-        <include name="TEST-*.xml" />
+        <include name="TEST-*.xml"/>
       </fileset>
-      <report format="frames" todir="../../reports/core/html/scalatest" />
+      <report format="frames" todir="../../reports/core/html/scalatest"/>
     </junitreport>
   </target>
   <target name="junit.report">
     <junitreport todir="../../reports/core/junit">
       <fileset dir="../../reports/core/junit">
-        <include name="TEST-*.xml" />
+        <include name="TEST-*.xml"/>
       </fileset>
-      <report format="frames" todir="../../reports/core/html/junit" />
+      <report format="frames" todir="../../reports/core/html/junit"/>
     </junitreport>
   </target>
   <target name="clover.report" depends="test" if="with.clover">
     <clover-report>
       <current outfile="../../reports/core/html/clover">
-        <format type="html" />
+        <format type="html"/>
       </current>
     </clover-report>
   </target>
   <target name="cobertura.report" depends="test" if="with.cobertura">
-    <mkdir dir="../../reports/core/cobertura" />
-    <cobertura-report format="xml" srcdir="./src" destdir="../../reports/core/cobertura" />
-    <mkdir dir="../../reports/core/html/cobertura" />
-    <cobertura-report format="html" srcdir="./src" destdir="../../reports/core/html/cobertura" />
-    <delete file="./cobertura.ser" />
+    <mkdir dir="../../reports/core/cobertura"/>
+    <cobertura-report format="xml" srcdir="./src" destdir="../../reports/core/cobertura"/>
+    <mkdir dir="../../reports/core/html/cobertura"/>
+    <cobertura-report format="html" srcdir="./src" destdir="../../reports/core/html/cobertura"/>
+    <delete file="./cobertura.ser"/>
   </target>
-  <target name="test.report" depends="junit.report, scalatest.report, clover.report, cobertura.report" />
+  <target name="test.report" depends="junit.report, scalatest.report, clover.report, cobertura.report"/>
   <!-- end test reports -->
-  <target name="fulltest" depends="test, test.report" />
+  <target name="fulltest" depends="test, test.report"/>
   <!-- end unit tests -->
 
   <!-- benchmarks -->
   <target name="jmhLibCheck">
     <!-- override to Ant home if not set -->
-    <property name="jmh.home" value="${ant.home}/lib" />
+    <property name="jmh.home" value="${ant.home}/lib"/>
     <fail message="Please set jmh.home to a directory containing the necessary JMH libraries. See build.properties for details.">
       <condition>
         <not>
           <and>
-            <available file="${jmh.home}/jmh-core.jar" />
-            <available file="${jmh.home}/jmh-generator-annprocess.jar" />
-            <available file="${jmh.home}/jopt-simple.jar" />
-            <available file="${jmh.home}/commons-math3.jar" />
+            <available file="${jmh.home}/jmh-core.jar"/>
+            <available file="${jmh.home}/jmh-generator-annprocess.jar"/>
+            <available file="${jmh.home}/jopt-simple.jar"/>
+            <available file="${jmh.home}/commons-math3.jar"/>
           </and>
         </not>
       </condition>
@@ -547,8 +547,8 @@
   </target>
 
   <target name="bench.compile" depends="compile, jmhLibCheck">
-    <mkdir dir="./build" />
-    <mkdir dir="./build/obj_bench" />
+    <mkdir dir="./build"/>
+    <mkdir dir="./build/obj_bench"/>
     <javac srcdir="./bench" debug="true" source="${javac.version}" target="${javac.version}" deprecation="on"
       release="${javac.release}"
       debuglevel="lines,vars,source"
@@ -556,42 +556,42 @@
       encoding="UTF-8"
       destdir="./build/obj_bench">
       <classpath>
-        <pathelement location="${jmh.home}/jmh-core.jar" />
-        <pathelement location="${jmh.home}/jmh-generator-annprocess.jar" />
-        <pathelement location="./build/obj" />
+        <pathelement location="${jmh.home}/jmh-core.jar"/>
+        <pathelement location="${jmh.home}/jmh-generator-annprocess.jar"/>
+        <pathelement location="./build/obj"/>
       </classpath>
-      <compilerarg line="${javac.compilerargs}" />
+      <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
 
   <target name="bench.jar" depends="bench.compile, bench.jarUpToDate, listChangedFiles" unless="bench.jar.uptodate">
     <!-- set if unset -->
-    <property name="workspace.changes.tr" value="" />
+    <property name="workspace.changes.tr" value=""/>
     <jar destfile="./build/i2p-benchmarks.jar" basedir="./build/obj_bench">
       <manifest>
-        <attribute name="Built-By" value="${build.built-by}" />
-        <attribute name="Build-Date" value="${build.timestamp}" />
-        <attribute name="Base-Revision" value="${workspace.version}" />
-        <attribute name="Main-Class" value="org.openjdk.jmh.Main" />
-        <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
-        <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
+        <attribute name="Built-By" value="${build.built-by}"/>
+        <attribute name="Build-Date" value="${build.timestamp}"/>
+        <attribute name="Base-Revision" value="${workspace.version}"/>
+        <attribute name="Main-Class" value="org.openjdk.jmh.Main"/>
+        <attribute name="X-Compile-Source-JDK" value="${javac.version}"/>
+        <attribute name="X-Compile-Target-JDK" value="${javac.version}"/>
       </manifest>
-      <zipfileset src="${jmh.home}/jmh-core.jar" excludes="**/META-INF/services/**" />
-      <zipfileset src="${jmh.home}/jopt-simple.jar" />
-      <zipfileset src="${jmh.home}/commons-math3.jar" />
-      <fileset dir="./build/obj" includes="**/*.class" />
+      <zipfileset src="${jmh.home}/jmh-core.jar" excludes="**/META-INF/services/**"/>
+      <zipfileset src="${jmh.home}/jopt-simple.jar"/>
+      <zipfileset src="${jmh.home}/commons-math3.jar"/>
+      <fileset dir="./build/obj" includes="**/*.class"/>
     </jar>
   </target>
 
   <target name="bench.jarUpToDate">
     <uptodate property="bench.jar.uptodate" targetfile="build/i2p-benchmarks.jar">
-      <srcfiles dir="build/obj" includes="**/*.class" />
-      <srcfiles dir="build/obj_bench" includes="**/*.class" />
+      <srcfiles dir="build/obj" includes="**/*.class"/>
+      <srcfiles dir="build/obj_bench" includes="**/*.class"/>
     </uptodate>
   </target>
 
   <target name="clean">
-    <delete dir="./build" />
+    <delete dir="./build"/>
   </target>
   <target name="cleandep" depends="clean">
     <!-- noop, since the core doesn't depend on anything -->

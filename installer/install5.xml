@@ -9,17 +9,17 @@
     <appversion>2.7.0+</appversion>
     <javaversion>1.8</javaversion>
     <!-- adding this element will make the installer attempt to launch itself with administrator permissions -->
-    <run-privileged condition="izpack.windowsinstall" />
+    <run-privileged condition="izpack.windowsinstall"/>
   </info>
   <guiprefs width="680" height="440" resizable="yes">
     <!-- full names, not iso3 codes -->
-    <modifier key="langDisplayType" value="native" />
+    <modifier key="langDisplayType" value="native"/>
     <!-- no icons on buttons -->
-    <modifier key="useButtonIcons" value="no" />
+    <modifier key="useButtonIcons" value="no"/>
     <!-- no icons in panel headers -->
-    <modifier key="useLabelIcons" value="no" />
-    <modifier key="headingFontSize" value="1.3" />
-    <modifier key="labelGap" value="5" />
+    <modifier key="useLabelIcons" value="no"/>
+    <modifier key="headingFontSize" value="1.3"/>
+    <modifier key="labelGap" value="5"/>
   </guiprefs>
 
   <!--
@@ -58,38 +58,38 @@
 
   <locale>
     <langpack iso3="eng">
-      <str id="installer.reversetitle" txt="I2P+ Installation Wizard" />
+      <str id="installer.reversetitle" txt="I2P+ Installation Wizard"/>
     </langpack>
-    <langpack iso3="por" />
-    <langpack iso3="cat" />
-    <langpack iso3="ces" />
-    <langpack iso3="zho" />
-    <langpack iso3="dan" />
-    <langpack iso3="deu" />
-    <langpack iso3="ell" />
+    <langpack iso3="por"/>
+    <langpack iso3="cat"/>
+    <langpack iso3="ces"/>
+    <langpack iso3="zho"/>
+    <langpack iso3="dan"/>
+    <langpack iso3="deu"/>
+    <langpack iso3="ell"/>
     <!-- fa not found in older JVMs, may generate warning, see above -->
-    <langpack iso3="fa" />
-    <langpack iso3="fin" />
-    <langpack iso3="fra" />
-    <langpack iso3="hun" />
-    <langpack iso3="ind" />
-    <langpack iso3="ita" />
-    <langpack iso3="jpn" />
-    <langpack iso3="kor" />
-    <langpack iso3="msa" />
-    <langpack iso3="nld" />
-    <langpack iso3="nor" />
-    <langpack iso3="pol" />
-    <langpack iso3="prt" />
-    <langpack iso3="ron" />
-    <langpack iso3="rus" />
-    <langpack iso3="slk" />
-    <langpack iso3="spa" />
-    <langpack iso3="srp" />
-    <langpack iso3="swe" />
-    <langpack iso3="tur" />
-    <langpack iso3="twn" />
-    <langpack iso3="ukr" />
+    <langpack iso3="fa"/>
+    <langpack iso3="fin"/>
+    <langpack iso3="fra"/>
+    <langpack iso3="hun"/>
+    <langpack iso3="ind"/>
+    <langpack iso3="ita"/>
+    <langpack iso3="jpn"/>
+    <langpack iso3="kor"/>
+    <langpack iso3="msa"/>
+    <langpack iso3="nld"/>
+    <langpack iso3="nor"/>
+    <langpack iso3="pol"/>
+    <langpack iso3="prt"/>
+    <langpack iso3="ron"/>
+    <langpack iso3="rus"/>
+    <langpack iso3="slk"/>
+    <langpack iso3="spa"/>
+    <langpack iso3="srp"/>
+    <langpack iso3="swe"/>
+    <langpack iso3="tur"/>
+    <langpack iso3="twn"/>
+    <langpack iso3="ukr"/>
     <!--
         At runtime, if the JVM does not have a locale:
         "WARNING: No locale for:"
@@ -100,25 +100,25 @@
 
   <!-- defaults to these files when no explicitly referenced -->
   <natives>
-    <native type="izpack" name="ShellLink.dll" />
-        <native type="izpack" name="ShellLink_x64.dll" /> https://izpack.atlassian.net/wiki/spaces/IZPACK/pages/491532/Advanced+Features <native type="izpack" name="WinSetupAPI.dll" /><native type="izpack" name="WinSetupAPI_x64.dll" /> https://izpack.atlassian.net/wiki/spaces/IZPACK/pages/491676/RegistryInstallerListener+RegistryUninstallerListener <native type="3rdparty" name="COIOSHelper.dll" /><native type="3rdparty" name="COIOSHelper_x64.dll" />
+    <native type="izpack" name="ShellLink.dll"/>
+        <native type="izpack" name="ShellLink_x64.dll"/> https://izpack.atlassian.net/wiki/spaces/IZPACK/pages/491532/Advanced+Features <native type="izpack" name="WinSetupAPI.dll"/><native type="izpack" name="WinSetupAPI_x64.dll"/> https://izpack.atlassian.net/wiki/spaces/IZPACK/pages/491676/RegistryInstallerListener+RegistryUninstallerListener <native type="3rdparty" name="COIOSHelper.dll"/><native type="3rdparty" name="COIOSHelper_x64.dll"/>
   </natives>
 
   <resources>
-    <res id="installer.langsel.img" src="installer/resources/i2plogo2.png" />
-    <res id="Installer.image" src="installer/resources/i2plogo.png" />
-    <res id="HTMLHelloPanel.info" src="installer/resources/welcome.html" />
-    <res id="shortcutSpec.xml" src="installer/resources/shortcutSpec.xml" />
-    <res id="XInfoPanel.info" src="installer/resources/start-i2p.txt" />
-    <res id="HTMLInfoPanel.winservice" src="installer/resources/windows_service_help.html" />
-    <res id="CustomLangPack.xml_eng" src="installer/resources/CustomLangPack.xml_eng" />
+    <res id="installer.langsel.img" src="installer/resources/i2plogo2.png"/>
+    <res id="Installer.image" src="installer/resources/i2plogo.png"/>
+    <res id="HTMLHelloPanel.info" src="installer/resources/welcome.html"/>
+    <res id="shortcutSpec.xml" src="installer/resources/shortcutSpec.xml"/>
+    <res id="XInfoPanel.info" src="installer/resources/start-i2p.txt"/>
+    <res id="HTMLInfoPanel.winservice" src="installer/resources/windows_service_help.html"/>
+    <res id="CustomLangPack.xml_eng" src="installer/resources/CustomLangPack.xml_eng"/>
   </resources>
   <variables>
     <!-- desktop shortcuts enabled by default in ShortcutPanel -->
-    <variable name="DesktopShortcutCheckboxEnabled" value="true" />
+    <variable name="DesktopShortcutCheckboxEnabled" value="true"/>
   </variables>
   <dynamicvariables>
-    <variable name="datamodel" value="${SYSTEM[sun.arch.data.model]}" />
+    <variable name="datamodel" value="${SYSTEM[sun.arch.data.model]}"/>
   </dynamicvariables>
   <conditions>
     <condition type="variable" id="is64bit">
@@ -127,21 +127,21 @@
     </condition>
   </conditions>
   <!-- XInfoConsolePanel -->
-  <jar src="installer/lib/izpack5/patches/java/build/izpack-i2p.jar" />
+  <jar src="installer/lib/izpack5/patches/java/build/izpack-i2p.jar"/>
   <panels>
-    <panel classname="HTMLHelloPanel" />
-    <panel classname="TargetPanel" />
+    <panel classname="HTMLHelloPanel"/>
+    <panel classname="TargetPanel"/>
     <!-- In 5.1.2, PacksPanel will NPE at install time if before TargetPanel -->
     <panel classname="PacksPanel">
-      <os family="windows" />
+      <os family="windows"/>
     </panel>
-    <panel classname="InstallPanel" />
+    <panel classname="InstallPanel"/>
     <!-- In 5.1.2, ShortcutPanel must be after InstallPanel, so the .ico files will be there,
              unless <lateShortcutInstall/> is set in shorcutSpec.xml.
              If you don't do this right, the shortcuts won't have our icons.
     -->
     <panel classname="ShortcutPanel">
-      <os family="windows" />
+      <os family="windows"/>
     </panel>
     <!--
          Using the condition this way, the panel is shown on everything *but* Windows.
@@ -151,15 +151,15 @@
          But isn't actually skipped when installing with -console:
            SEVERE: com.izforge.izpack.api.exception.IzPackException: Console implementation not found for panel: com.izforge.izpack.panels.xinfo.XInfoPanel
     -->
-    <panel classname="XInfoPanel" condition="!izpack.windowsinstall" />
-    <panel classname="HTMLInfoPanel" id="winservice" condition="izpack.windowsinstall" />
-    <panel classname="SimpleFinishPanel" />
+    <panel classname="XInfoPanel" condition="!izpack.windowsinstall"/>
+    <panel classname="HTMLInfoPanel" id="winservice" condition="izpack.windowsinstall"/>
+    <panel classname="SimpleFinishPanel"/>
   </panels>
   <packs>
     <pack name="Base" required="yes">
       <description>Base installation files</description>
       <!-- non-jars -->
-      <fileset dir="pkg-temp" excludes="**/*.jar" targetdir="$INSTALL_PATH" />
+      <fileset dir="pkg-temp" excludes="**/*.jar" targetdir="$INSTALL_PATH"/>
       <!-- pack200 jars -->
       <fileset dir="pkg-temp" includes="**/*.jar"
         excludes="lib/commons-logging.jar lib/jasper-compiler.jar lib/jetty-java5-threadpool.jar lib/jetty-sslengine.jar lib/jbigi.jar"
@@ -175,42 +175,42 @@
           http://www.javalobby.org/forums/thread.jspa?threadID=15967&tstart=0
           and the izpack docs for some guidance.
       -->
-      <parsable targetfile="$INSTALL_PATH/wrapper.config" type="plain" />
+      <parsable targetfile="$INSTALL_PATH/wrapper.config" type="plain"/>
       <parsable targetfile="$INSTALL_PATH/i2prouter" type="shell">
-        <os family="unix" />
+        <os family="unix"/>
       </parsable>
       <parsable targetfile="$INSTALL_PATH/eepget" type="shell">
-        <os family="unix" />
+        <os family="unix"/>
       </parsable>
       <parsable targetfile="$INSTALL_PATH/eephead" type="shell">
-        <os family="unix" />
+        <os family="unix"/>
       </parsable>
       <parsable targetfile="$INSTALL_PATH/i2ping" type="shell">
-        <os family="unix" />
+        <os family="unix"/>
       </parsable>
       <parsable targetfile="$INSTALL_PATH/eepget.bat" type="shell">
-        <os family="windows" />
+        <os family="windows"/>
       </parsable>
       <parsable targetfile="$INSTALL_PATH/eephead.bat" type="shell">
-        <os family="windows" />
+        <os family="windows"/>
       </parsable>
       <parsable targetfile="$INSTALL_PATH/runplain.sh" type="shell">
-        <os family="unix" />
+        <os family="unix"/>
       </parsable>
       <parsable targetfile="$INSTALL_PATH/Start I2P Router.app/Contents/MacOS/i2prouter" type="shell">
-        <os family="mac" />
+        <os family="mac"/>
       </parsable>
       <parsable targetfile="$INSTALL_PATH/StartI2P+Service.bat" type="shell">
-        <os family="windows" />
+        <os family="windows"/>
       </parsable>
       <parsable targetfile="$INSTALL_PATH/StopI2P+Service.bat" type="shell">
-        <os family="windows" />
+        <os family="windows"/>
       </parsable>
       <parsable targetfile="$INSTALL_PATH/EnableI2P+Service.bat" type="shell">
-        <os family="windows" />
+        <os family="windows"/>
       </parsable>
       <parsable targetfile="$INSTALL_PATH/DisableI2P+Service.bat" type="shell">
-        <os family="windows" />
+        <os family="windows"/>
       </parsable>
       <!-- postinstall stuff for windows -->
       <!-- Wrapper for 32bit Windows JVM -->
@@ -221,11 +221,11 @@
         keep="true"
         failure="warn"
         condition="!is64bit">
-        <os family="windows" />
+        <os family="windows"/>
         <args>
-          <arg value="copy" />
-          <arg value="$INSTALL_PATH\lib\wrapper\win32\I2Psvc.exe" />
-          <arg value="$INSTALL_PATH" />
+          <arg value="copy"/>
+          <arg value="$INSTALL_PATH\lib\wrapper\win32\I2Psvc.exe"/>
+          <arg value="$INSTALL_PATH"/>
         </args>
       </executable>
       <executable targetfile="$INSTALL_PATH/utility.jar"
@@ -235,11 +235,11 @@
         keep="true"
         failure="warn"
         condition="!is64bit">
-        <os family="windows" />
+        <os family="windows"/>
         <args>
-          <arg value="copy" />
-          <arg value="$INSTALL_PATH\lib\wrapper\win32\wrapper.dll" />
-          <arg value="$INSTALL_PATH\lib" />
+          <arg value="copy"/>
+          <arg value="$INSTALL_PATH\lib\wrapper\win32\wrapper.dll"/>
+          <arg value="$INSTALL_PATH\lib"/>
         </args>
       </executable>
       <!-- wrapper for 64bit Windows JVM -->
@@ -250,11 +250,11 @@
         keep="true"
         failure="warn"
         condition="is64bit">
-        <os family="windows" />
+        <os family="windows"/>
         <args>
-          <arg value="copy" />
-          <arg value="$INSTALL_PATH\lib\wrapper\win64\I2Psvc.exe" />
-          <arg value="$INSTALL_PATH" />
+          <arg value="copy"/>
+          <arg value="$INSTALL_PATH\lib\wrapper\win64\I2Psvc.exe"/>
+          <arg value="$INSTALL_PATH"/>
         </args>
       </executable>
       <executable targetfile="$INSTALL_PATH/utility.jar"
@@ -264,11 +264,11 @@
         keep="true"
         failure="warn"
         condition="is64bit">
-        <os family="windows" />
+        <os family="windows"/>
         <args>
-          <arg value="copy" />
-          <arg value="$INSTALL_PATH\lib\wrapper\win64\wrapper.dll" />
-          <arg value="$INSTALL_PATH\lib" />
+          <arg value="copy"/>
+          <arg value="$INSTALL_PATH\lib\wrapper\win64\wrapper.dll"/>
+          <arg value="$INSTALL_PATH\lib"/>
         </args>
       </executable>
       <!--
@@ -282,11 +282,11 @@
         keep="true"
         failure="warn"
         condition="is64bit">
-        <os family="windows" />
+        <os family="windows"/>
         <args>
-          <arg value="copy" />
-          <arg value="$INSTALL_PATH\lib\wrapper\win32\wrapper.dll" />
-          <arg value="$INSTALL_PATH\lib\wrapper-windows-x86-32.dll" />
+          <arg value="copy"/>
+          <arg value="$INSTALL_PATH\lib\wrapper\win32\wrapper.dll"/>
+          <arg value="$INSTALL_PATH\lib\wrapper-windows-x86-32.dll"/>
         </args>
       </executable>
       <!-- workaround for bad default path for wrapper.log in Windows. -->
@@ -294,10 +294,10 @@
         type="jar"
         class="net.i2p.installer.Main"
         stage="postinstall" keep="true">
-        <os family="windows" />
+        <os family="windows"/>
         <args>
-          <arg value="fixwinpaths" />
-          <arg value="$INSTALL_PATH\wrapper.config" />
+          <arg value="fixwinpaths"/>
+          <arg value="$INSTALL_PATH\wrapper.config"/>
         </args>
       </executable>
       <!-- Now we'll get rid of the UNIX-only stuff -->
@@ -305,33 +305,33 @@
         type="jar"
         class="net.i2p.installer.Main"
         stage="postinstall" keep="true" failure="warn">
-        <os family="windows" />
+        <os family="windows"/>
         <args>
-          <arg value="delete" />
-          <arg value="$INSTALL_PATH\i2prouter" />
-          <arg value="$INSTALL_PATH\install_i2p_service_unix" />
-          <arg value="$INSTALL_PATH\install-headless.txt" />
-          <arg value="$INSTALL_PATH\runplain.sh" />
-          <arg value="$INSTALL_PATH\osid" />
-          <arg value="$INSTALL_PATH\postinstall.sh" />
-          <arg value="$INSTALL_PATH\uninstall_i2p_service_unix" />
-          <arg value="$INSTALL_PATH\lib\wrapper" />
-          <arg value="$INSTALL_PATH\eepget" />
-          <arg value="$INSTALL_PATH/Start I2P Router.app" />
-          <arg value="$INSTALL_PATH/net.i2p.router.plist.template" />
-          <arg value="$INSTALL_PATH/install_i2p_service_osx.command" />
-          <arg value="$INSTALL_PATH/uninstall_i2p_service_osx.command" />
-          <arg value="$INSTALL_PATH/man" />
-          <arg value="$INSTALL_PATH/locale" />
+          <arg value="delete"/>
+          <arg value="$INSTALL_PATH\i2prouter"/>
+          <arg value="$INSTALL_PATH\install_i2p_service_unix"/>
+          <arg value="$INSTALL_PATH\install-headless.txt"/>
+          <arg value="$INSTALL_PATH\runplain.sh"/>
+          <arg value="$INSTALL_PATH\osid"/>
+          <arg value="$INSTALL_PATH\postinstall.sh"/>
+          <arg value="$INSTALL_PATH\uninstall_i2p_service_unix"/>
+          <arg value="$INSTALL_PATH\lib\wrapper"/>
+          <arg value="$INSTALL_PATH\eepget"/>
+          <arg value="$INSTALL_PATH/Start I2P Router.app"/>
+          <arg value="$INSTALL_PATH/net.i2p.router.plist.template"/>
+          <arg value="$INSTALL_PATH/install_i2p_service_osx.command"/>
+          <arg value="$INSTALL_PATH/uninstall_i2p_service_osx.command"/>
+          <arg value="$INSTALL_PATH/man"/>
+          <arg value="$INSTALL_PATH/locale"/>
         </args>
       </executable>
 
       <!-- change owner to %username% so updates will work -->
       <executable targetfile="$INSTALL_PATH/fixperms.bat" type="bin" stage="postinstall" keep="true" failure="warn"
         condition="!izpack.windowsinstall.xp+!izpack.windowsinstall.2003">
-        <os family="windows" />
+        <os family="windows"/>
         <args>
-          <arg value="$INSTALL_PATH" />
+          <arg value="$INSTALL_PATH"/>
         </args>
       </executable>
       <!-- else delete it -->
@@ -339,10 +339,10 @@
         type="jar"
         class="net.i2p.installer.Main"
         stage="postinstall" keep="true" failure="warn" condition="izpack.windowsinstall.xp|izpack.windowsinstall.2003">
-        <os family="windows" />
+        <os family="windows"/>
         <args>
-          <arg value="delete" />
-          <arg value="$INSTALL_PATH\fixperms.bat" />
+          <arg value="delete"/>
+          <arg value="$INSTALL_PATH\fixperms.bat"/>
         </args>
       </executable>
 
@@ -350,21 +350,21 @@
         type="jar"
         class="net.i2p.installer.Main"
         stage="postinstall" keep="false" failure="warn">
-        <os family="windows" />
+        <os family="windows"/>
         <args>
-          <arg value="delete" />
-          <arg value="$INSTALL_PATH/utility.jar" />
+          <arg value="delete"/>
+          <arg value="$INSTALL_PATH/utility.jar"/>
         </args>
       </executable>
       <!-- postinstall stuff for *nix -->
       <!-- stage=never means chmod a+x -->
       <executable targetfile="$INSTALL_PATH/postinstall.sh" type="bin" stage="never" keep="true" failure="warn">
-        <os family="unix" />
+        <os family="unix"/>
       </executable>
       <executable targetfile="$INSTALL_PATH/postinstall.sh" type="bin" stage="postinstall" keep="true" failure="warn">
-        <os family="unix" />
+        <os family="unix"/>
         <args>
-          <arg value="$INSTALL_PATH" />
+          <arg value="$INSTALL_PATH"/>
         </args>
       </executable>
       <!--
@@ -372,23 +372,23 @@
          the service manually it will still be removed when uninstalling.
       -->
       <executable targetfile="$INSTALL_PATH/uninstall_i2p_service_winnt.bat" stage="uninstall">
-        <os family="windows" />
+        <os family="windows"/>
       </executable>
     </pack>
     <!-- to disable by default, add preselected="no" -->
     <pack name="Windows Service" required="yes" preselected="yes">
       <description>Install I2P+ as a service and run automatically at startup</description>
-      <os family="windows" />
-      <executable targetfile="$INSTALL_PATH/set_config_dir_for_nt_service.bat" stage="postinstall" failure="warn" keep="true" />
-      <executable targetfile="$INSTALL_PATH/install_i2p_service_winnt.bat" stage="postinstall" failure="warn" keep="true" />
-      <executable targetfile="$INSTALL_PATH/StartI2P+Service.bat" stage="postinstall" failure="warn" keep="true" />
-      <executable targetfile="$INSTALL_PATH/StopI2P+Service.bat" stage="postinstall" failure="warn" keep="true" />
-      <executable targetfile="$INSTALL_PATH/EnableI2P+Service.bat" stage="postinstall" failure="warn" keep="true" />
-      <executable targetfile="$INSTALL_PATH/DisableI2P+Service.bat" stage="postinstall" failure="warn" keep="true" />
+      <os family="windows"/>
+      <executable targetfile="$INSTALL_PATH/set_config_dir_for_nt_service.bat" stage="postinstall" failure="warn" keep="true"/>
+      <executable targetfile="$INSTALL_PATH/install_i2p_service_winnt.bat" stage="postinstall" failure="warn" keep="true"/>
+      <executable targetfile="$INSTALL_PATH/StartI2P+Service.bat" stage="postinstall" failure="warn" keep="true"/>
+      <executable targetfile="$INSTALL_PATH/StopI2P+Service.bat" stage="postinstall" failure="warn" keep="true"/>
+      <executable targetfile="$INSTALL_PATH/EnableI2P+Service.bat" stage="postinstall" failure="warn" keep="true"/>
+      <executable targetfile="$INSTALL_PATH/DisableI2P+Service.bat" stage="postinstall" failure="warn" keep="true"/>
       <executable targetfile="$INSTALL_PATH/I2Psvc.exe" stage="postinstall" failure="warn" keep="true">
         <args>
-          <arg value="-t" />
-          <arg value="$INSTALL_PATH\wrapper.config" />
+          <arg value="-t"/>
+          <arg value="$INSTALL_PATH\wrapper.config"/>
         </args>
       </executable>
     </pack>

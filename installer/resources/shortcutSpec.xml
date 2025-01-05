@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <shortcuts>
- <programGroup defaultName="I2P+" location="startMenu" />
+ <programGroup defaultName="I2P+" location="startMenu"/>
  <shortcut name="Open I2P+ Profile Folder"
           target="explorer"
           commandLine="&quot;%programdata%\i2p&quot;"
@@ -10,7 +10,7 @@
           startMenu="no"
           programGroup="yes"
           desktop="no"
-          startup="no" />
+          startup="no"/>
 <!--
  <shortcut name="Start I2P+ (no window)"
            target="$INSTALL_PATH\I2P.exe"
@@ -21,7 +21,7 @@
 	   programGroup="yes"
 	   startMenu="no"
 	   desktop="yes"
-           startup="no" />
+           startup="no"/>
  <shortcut name="Start I2P+ (restartable)"
            target="$INSTALL_PATH\I2Psvc.exe"
            commandLine="-c wrapper.config"
@@ -31,7 +31,7 @@
 	   programGroup="yes"
 	   startMenu="no"
 	   desktop="yes"
-           startup="no" />
+           startup="no"/>
 -->
  <shortcut name="I2P+ Router Console"
            target="$INSTALL_PATH\docs\startconsole.html"
@@ -42,7 +42,7 @@
            programGroup="yes"
            startMenu="no"
 	   desktop="yes"
-           startup="no" />
+           startup="no"/>
 
  <shortcut name="Start I2P+ Service"
            target="$INSTALL_PATH\StartI2P+Service.bat"
@@ -53,7 +53,7 @@
            programGroup="yes"
            startMenu="no"
 	   desktop="yes"
-           startup="no" />
+           startup="no"/>
 
  <shortcut name="Stop I2P+ Service"
            target="$INSTALL_PATH\StopI2P+Service.bat"
@@ -64,7 +64,7 @@
            programGroup="yes"
            startMenu="no"
 	   desktop="yes"
-           startup="no" />
+           startup="no"/>
 
 <!--
  <shortcut name="Uninstall I2P+"
@@ -74,6 +74,6 @@
            initialState="noShow"
            startMenu="no"
            programGroup="yes"
-           startup="no" />
+           startup="no"/>
 -->
 </shortcuts>

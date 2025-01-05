@@ -1,32 +1,32 @@
 <?xml version="1.0"?>
 <project name="addressbook" default="all" basedir=".">
 
-  <property name="src" value="java/src" />
-  <property name="build" value="build" />
-  <property name="dist" location="dist" />
-  <property name="jar" value="addressbook.jar" />
-  <property name="war" value="addressbook.war" />
-  <property name="javac.compilerargs" value="" />
-  <property name="javac.version" value="1.8" />
-  <property name="javac.release" value="8" />
-  <property name="manifest.classpath.name" value="Class-Path" />
+  <property name="src" value="java/src"/>
+  <property name="build" value="build"/>
+  <property name="dist" location="dist"/>
+  <property name="jar" value="addressbook.jar"/>
+  <property name="war" value="addressbook.war"/>
+  <property name="javac.compilerargs" value=""/>
+  <property name="javac.version" value="1.8"/>
+  <property name="javac.release" value="8"/>
+  <property name="manifest.classpath.name" value="Class-Path"/>
 
-  <target name="all" depends="jar, emptyWar" />
+  <target name="all" depends="jar, emptyWar"/>
 
   <target name="init">
-    <mkdir dir="${build}" />
-    <mkdir dir="${dist}" />
+    <mkdir dir="${build}"/>
+    <mkdir dir="${dist}"/>
   </target>
 
   <target name="clean">
-    <delete dir="${build}" />
-    <delete dir="${dist}" />
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
   </target>
 
-  <target name="distclean" depends="clean" />
+  <target name="distclean" depends="clean"/>
 
   <condition property="depend.available">
-    <typefound name="depend" />
+    <typefound name="depend"/>
   </condition>
   <target name="depend" if="depend.available">
     <depend
@@ -35,7 +35,7 @@
       destdir="${build}">
       <!-- Depend on classes instead of jars where available -->
       <classpath>
-        <pathelement location="../../core/java/build/obj" />
+        <pathelement location="../../core/java/build/obj"/>
       </classpath>
     </depend>
   </target>
@@ -46,32 +46,32 @@
       includeAntRuntime="false"
       encoding="UTF-8"
       srcdir="${src}" destdir="${build}">
-      <compilerarg line="${javac.compilerargs}" />
+      <compilerarg line="${javac.compilerargs}"/>
       <classpath>
-        <pathelement location="../../core/java/build/i2p.jar" />
+        <pathelement location="../../core/java/build/i2p.jar"/>
       </classpath>
     </javac>
   </target>
 
   <target name="jar" depends="compile, changes">
     <!-- set if unset -->
-    <property name="workspace.changes.tr" value="" />
+    <property name="workspace.changes.tr" value=""/>
     <jar basedir="${build}" destfile="${dist}/${jar}">
       <manifest>
-        <attribute name="${manifest.classpath.name}" value="i2p.jar" />
-        <attribute name="Main-Class" value="net.i2p.addressbook.CommandLine" />
-        <attribute name="Specification-Title" value="I2P Address Book" />
-        <attribute name="Specification-Version" value="${api.version}" />
-        <attribute name="Specification-Vendor" value="The I2P Project https://geti2p.net/" />
-        <attribute name="Implementation-Title" value="I2P Java Address Book" />
-        <attribute name="Implementation-Version" value="${full.version}" />
-        <attribute name="Implementation-Vendor" value="The I2P Project https://geti2p.net/" />
-        <attribute name="Built-By" value="${build.built-by}" />
-        <attribute name="Build-Date" value="${build.timestamp}" />
-        <attribute name="Base-Revision" value="${workspace.version}" />
-        <attribute name="Workspace-Changes" value="${workspace.changes.tr}" />
-        <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
-        <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
+        <attribute name="${manifest.classpath.name}" value="i2p.jar"/>
+        <attribute name="Main-Class" value="net.i2p.addressbook.CommandLine"/>
+        <attribute name="Specification-Title" value="I2P Address Book"/>
+        <attribute name="Specification-Version" value="${api.version}"/>
+        <attribute name="Specification-Vendor" value="The I2P Project https://geti2p.net/"/>
+        <attribute name="Implementation-Title" value="I2P Java Address Book"/>
+        <attribute name="Implementation-Version" value="${full.version}"/>
+        <attribute name="Implementation-Vendor" value="The I2P Project https://geti2p.net/"/>
+        <attribute name="Built-By" value="${build.built-by}"/>
+        <attribute name="Build-Date" value="${build.timestamp}"/>
+        <attribute name="Base-Revision" value="${workspace.version}"/>
+        <attribute name="Workspace-Changes" value="${workspace.changes.tr}"/>
+        <attribute name="X-Compile-Source-JDK" value="${javac.version}"/>
+        <attribute name="X-Compile-Target-JDK" value="${javac.version}"/>
       </manifest>
     </jar>
   </target>
@@ -79,36 +79,36 @@
   <target name="emptyWar" depends="init">
     <jar destfile="${dist}/${war}">
       <manifest>
-        <attribute name="Note" value="Intentionally empty" />
+        <attribute name="Note" value="Intentionally empty"/>
       </manifest>
     </jar>
   </target>
 
   <target name="warUpToDate">
     <uptodate property="war.uptodate" targetfile="${dist}/${war}">
-      <srcfiles dir="." includes="${build}/**/*.class, web.xml" />
+      <srcfiles dir="." includes="${build}/**/*.class, web.xml"/>
     </uptodate>
     <condition property="shouldListChanges">
       <and>
         <not>
-          <isset property="war.uptodate" />
+          <isset property="war.uptodate"/>
         </not>
-        <isset property="mtn.available" />
+        <isset property="mtn.available"/>
       </and>
     </condition>
   </target>
 
   <target name="changes" depends="warUpToDate" if="shouldListChanges">
     <exec executable="mtn" outputproperty="workspace.changes" errorproperty="mtn.error2" failifexecutionfails="false">
-      <arg value="list" />
-      <arg value="changed" />
-      <arg value="." />
+      <arg value="list"/>
+      <arg value="changed"/>
+      <arg value="."/>
     </exec>
     <!-- \n in an attribute value generates an invalid manifest -->
     <exec executable="tr" inputstring="${workspace.changes}" outputproperty="workspace.changes.tr" errorproperty="mtn.error2" failifexecutionfails="false">
-      <arg value="-s" />
-      <arg value="[:space:]" />
-      <arg value="," />
+      <arg value="-s"/>
+      <arg value="[:space:]"/>
+      <arg value=","/>
     </exec>
   </target>
 </project>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="sam">
-  <target name="all" depends="clean, build" />
-  <target name="build" depends="builddep, jar" />
+  <target name="all" depends="clean, build"/>
+  <target name="build" depends="builddep, jar"/>
   <target name="builddep">
     <!-- run from top level build.xml to get dependencies built -->
   </target>
   <condition property="depend.available">
-    <typefound name="depend" />
+    <typefound name="depend"/>
   </condition>
   <target name="depend" if="depend.available">
     <depend
@@ -15,23 +15,23 @@
       destdir="./build/obj">
       <!-- Depend on classes instead of jars where available -->
       <classpath>
-        <pathelement location="../../../core/java/build/obj" />
-        <pathelement location="../../../core/java/build/gnu-getopt.jar" />
-        <pathelement location="../../ministreaming/java/build/obj" />
+        <pathelement location="../../../core/java/build/obj"/>
+        <pathelement location="../../../core/java/build/gnu-getopt.jar"/>
+        <pathelement location="../../ministreaming/java/build/obj"/>
       </classpath>
     </depend>
   </target>
 
   <!-- only used if not set by a higher build.xml -->
-  <property name="javac.compilerargs" value="" />
-  <property name="javac.version" value="1.8" />
-  <property name="javac.release" value="8" />
-  <property name="manifest.classpath.name" value="Class-Path" />
+  <property name="javac.compilerargs" value=""/>
+  <property name="javac.version" value="1.8"/>
+  <property name="javac.release" value="8"/>
+  <property name="manifest.classpath.name" value="Class-Path"/>
 
   <!-- compile everything including client classes -->
   <target name="compile" depends="depend">
-    <mkdir dir="./build" />
-    <mkdir dir="./build/obj" />
+    <mkdir dir="./build"/>
+    <mkdir dir="./build/obj"/>
     <javac
       srcdir="./src"
       debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
@@ -40,7 +40,7 @@
       encoding="UTF-8"
       destdir="./build/obj"
       classpath="../../../core/java/build/i2p.jar:../../../core/java/build/gnu-getopt.jar:../../ministreaming/java/build/mstreaming.jar">
-      <compilerarg line="${javac.compilerargs}" />
+      <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
 
@@ -53,88 +53,88 @@
       encoding="UTF-8"
       destdir="./build/obj"
       classpath="../../../core/java/build/i2p.jar:../../ministreaming/java/build/mstreaming.jar">
-      <compilerarg line="${javac.compilerargs}" />
+      <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
 
   <target name="listChangedFiles" depends="jarUpToDate" if="shouldListChanges">
     <exec executable="mtn" outputproperty="workspace.changes" errorproperty="mtn.error2" failifexecutionfails="false">
-      <arg value="list" />
-      <arg value="changed" />
-      <arg value="." />
+      <arg value="list"/>
+      <arg value="changed"/>
+      <arg value="."/>
     </exec>
     <!-- \n in an attribute value generates an invalid manifest -->
     <exec executable="tr" inputstring="${workspace.changes}" outputproperty="workspace.changes.tr" errorproperty="mtn.error2" failifexecutionfails="false">
-      <arg value="-s" />
-      <arg value="[:space:]" />
-      <arg value="," />
+      <arg value="-s"/>
+      <arg value="[:space:]"/>
+      <arg value=","/>
     </exec>
   </target>
 
   <!-- does not include client classes, moved to samclient.jar -->
   <target name="jar" depends="compile, jarUpToDate, listChangedFiles" unless="jar.uptodate">
     <!-- set if unset -->
-    <property name="workspace.changes.tr" value="" />
+    <property name="workspace.changes.tr" value=""/>
     <jar destfile="./build/sam.jar" basedir="./build/obj" includes="**/*.class" excludes="net/i2p/sam/client/*">
       <manifest>
-        <attribute name="Main-Class" value="net.i2p.sam.SAMBridge" />
-        <attribute name="${manifest.classpath.name}" value="i2p.jar mstreaming.jar streaming.jar" />
-        <attribute name="Implementation-Version" value="${full.version}" />
-        <attribute name="Built-By" value="${build.built-by}" />
-        <attribute name="Build-Date" value="${build.timestamp}" />
-        <attribute name="Base-Revision" value="${workspace.version}" />
-        <attribute name="Workspace-Changes" value="${workspace.changes.tr}" />
-        <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
-        <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
+        <attribute name="Main-Class" value="net.i2p.sam.SAMBridge"/>
+        <attribute name="${manifest.classpath.name}" value="i2p.jar mstreaming.jar streaming.jar"/>
+        <attribute name="Implementation-Version" value="${full.version}"/>
+        <attribute name="Built-By" value="${build.built-by}"/>
+        <attribute name="Build-Date" value="${build.timestamp}"/>
+        <attribute name="Base-Revision" value="${workspace.version}"/>
+        <attribute name="Workspace-Changes" value="${workspace.changes.tr}"/>
+        <attribute name="X-Compile-Source-JDK" value="${javac.version}"/>
+        <attribute name="X-Compile-Target-JDK" value="${javac.version}"/>
       </manifest>
     </jar>
   </target>
 
   <target name="clientjar" depends="compile, listChangedFiles">
     <!-- set if unset -->
-    <property name="workspace.changes.tr" value="" />
+    <property name="workspace.changes.tr" value=""/>
     <jar destfile="./build/samclient.jar" basedir="./build/obj" includes="net/i2p/sam/client/*.class">
       <manifest>
-        <attribute name="Main-Class" value="net.i2p.sam.SAMBridge" />
-        <attribute name="Class-Path" value="i2p.jar mstreaming.jar streaming.jar" />
-        <attribute name="Implementation-Version" value="${full.version}" />
-        <attribute name="Built-By" value="${build.built-by}" />
-        <attribute name="Build-Date" value="${build.timestamp}" />
-        <attribute name="Base-Revision" value="${workspace.version}" />
-        <attribute name="Workspace-Changes" value="${workspace.changes.tr}" />
+        <attribute name="Main-Class" value="net.i2p.sam.SAMBridge"/>
+        <attribute name="Class-Path" value="i2p.jar mstreaming.jar streaming.jar"/>
+        <attribute name="Implementation-Version" value="${full.version}"/>
+        <attribute name="Built-By" value="${build.built-by}"/>
+        <attribute name="Build-Date" value="${build.timestamp}"/>
+        <attribute name="Base-Revision" value="${workspace.version}"/>
+        <attribute name="Workspace-Changes" value="${workspace.changes.tr}"/>
       </manifest>
     </jar>
   </target>
 
   <target name="jarUpToDate">
     <uptodate property="jar.uptodate" targetfile="build/sam.jar">
-      <srcfiles dir="build/obj" includes="**/*.class" />
+      <srcfiles dir="build/obj" includes="**/*.class"/>
     </uptodate>
     <condition property="shouldListChanges">
       <and>
         <not>
-          <isset property="jar.uptodate" />
+          <isset property="jar.uptodate"/>
         </not>
-        <isset property="mtn.available" />
+        <isset property="mtn.available"/>
       </and>
     </condition>
   </target>
 
   <target name="jarTest" depends="jar, compileTest">
-    <jar destfile="./build/sam.jar" basedir="./build/obj" includes="**/*Test*.class" update="true" />
+    <jar destfile="./build/sam.jar" basedir="./build/obj" includes="**/*Test*.class" update="true"/>
   </target>
   <target name="javadoc">
-    <mkdir dir="./build" />
-    <mkdir dir="./build/javadoc" />
+    <mkdir dir="./build"/>
+    <mkdir dir="./build/javadoc"/>
     <javadoc
       sourcepath="./src:../../../core/java/src:../../ministreaming/java/src:../../streaming/java/src" destdir="./build/javadoc"
       packagenames="*"
       use="true"
       splitindex="true"
-      windowtitle="SAMBridge" />
+      windowtitle="SAMBridge"/>
   </target>
   <target name="clean">
-    <delete dir="./build" />
+    <delete dir="./build"/>
   </target>
   <target name="cleandep" depends="clean">
   </target>

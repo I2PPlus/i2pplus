@@ -107,7 +107,7 @@
     <Call name="addConnector">
       <Arg>
           <New class="org.eclipse.jetty.server.ServerConnector">
-            <Arg><Ref id="Server" /></Arg>
+            <Arg><Ref id="Server"/></Arg>
             <Arg type="int">1</Arg>     <!-- number of acceptors -->
             <Arg type="int">0</Arg>     <!-- default number of selectors -->
             <Arg>
@@ -187,7 +187,7 @@
       <Arg>
         <New id="DeploymentManager" class="org.eclipse.jetty.deploy.DeploymentManager">
           <Set name="contexts">
-            <Ref id="Contexts" />
+            <Ref id="Contexts"/>
           </Set>
           <Call name="setContextAttribute">
             <Arg>org.eclipse.jetty.server.webapp.ContainerIncludeJarPattern</Arg>
