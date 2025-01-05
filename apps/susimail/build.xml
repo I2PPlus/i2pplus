@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="susimail">
-  <target name="all" depends="clean, build" />
-  <target name="build" depends="builddep, jar" />
-  <target name="builddep">
-    <!-- run from top level build.xml to get dependencies built -->
-  </target>
 
-  <property name="javac.compilerargs" value="" />
-  <property name="javac.version" value="1.8" />
-  <property name="javac.release" value="8" />
-  <property name="require.gettext" value="true" />
+  <target name="all" depends="clean, build"/>
+  <target name="build" depends="builddep, jar"/>
+  <target name="builddep"/> <!-- run from top level build.xml to get dependencies built -->
+
+  <property name="javac.compilerargs" value=""/>
+  <property name="javac.version" value="1.8"/>
+  <property name="javac.release" value="8"/>
+  <property name="require.gettext" value="true"/>
+
+  <!-- Is uglifyjs installed? -->
+  <available file="/usr/bin/uglifyjs" property="uglifyjs.present"/>
 
   <condition property="no.bundle">
-    <isfalse value="${require.gettext}" />
+    <isfalse value="${require.gettext}"/>
   </condition>
   <condition property="depend.available">
-    <typefound name="depend" />
+    <typefound name="depend"/>
   </condition>
   <target name="depend" if="depend.available">
     <depend
@@ -24,19 +26,19 @@
       destdir="./src/WEB-INF/classes">
       <!-- Depend on classes instead of jars where available -->
       <classpath>
-        <pathelement location="../../core/java/build/obj" />
-        <pathelement location="../jetty/jettylib/javax.servlet.jar" />
+        <pathelement location="../../core/java/build/obj"/>
+        <pathelement location="../jetty/jettylib/javax.servlet.jar"/>
         <!-- jsp-api.jar only present for debian builds -->
-        <pathelement location="../jetty/jettylib/jsp-api.jar" />
+        <pathelement location="../jetty/jettylib/jsp-api.jar"/>
         <!-- tomcat-api.jar only present for debian builds -->
-        <pathelement location="../jetty/jettylib/tomcat-api.jar" />
-        <pathelement location="../jetty/jettylib/jetty-i2p.jar" />
+        <pathelement location="../jetty/jettylib/tomcat-api.jar"/>
+        <pathelement location="../jetty/jettylib/jetty-i2p.jar"/>
       </classpath>
     </depend>
   </target>
 
   <target name="compile" depends="depend">
-    <mkdir dir="./src/WEB-INF/classes" />
+    <mkdir dir="./src/WEB-INF/classes"/>
     <javac
       srcdir="./src/src"
       debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
@@ -44,15 +46,15 @@
       includeAntRuntime="false"
       encoding="UTF-8"
       destdir="./src/WEB-INF/classes">
-      <compilerarg line="${javac.compilerargs}" />
+      <compilerarg line="${javac.compilerargs}"/>
       <classpath>
-        <pathelement location="../../core/java/build/i2p.jar" />
-        <pathelement location="../jetty/jettylib/javax.servlet.jar" />
+        <pathelement location="../../core/java/build/i2p.jar"/>
+        <pathelement location="../jetty/jettylib/javax.servlet.jar"/>
         <!-- jsp-api.jar only present for debian builds -->
-        <pathelement location="../jetty/jettylib/jsp-api.jar" />
+        <pathelement location="../jetty/jettylib/jsp-api.jar"/>
         <!-- tomcat-api.jar only present for debian builds -->
-        <pathelement location="../jetty/jettylib/tomcat-api.jar" />
-        <pathelement location="../jetty/jettylib/jetty-i2p.jar" />
+        <pathelement location="../jetty/jettylib/tomcat-api.jar"/>
+        <pathelement location="../jetty/jettylib/jetty-i2p.jar"/>
       </classpath>
     </javac>
   </target>
@@ -60,130 +62,161 @@
   <!-- jar (not war) for testing only -->
   <target name="jar" depends="compile, bundle, warUpToDate, listChangedFiles">
     <!-- set if unset -->
-    <property name="workspace.changes.tr" value="" />
-    <copy file="src/susimail.properties" todir="src/WEB-INF/classes" />
+    <property name="workspace.changes.tr" value=""/>
+    <copy file="src/susimail.properties" todir="src/WEB-INF/classes"/>
     <jar destfile="susimail.jar"
       basedir="src/WEB-INF/classes">
       <manifest>
-        <attribute name="Class-Path" value="i2p.jar" />
-        <attribute name="Implementation-Version" value="${full.version}" />
-        <attribute name="Built-By" value="${build.built-by}" />
-        <attribute name="Build-Date" value="${build.timestamp}" />
-        <attribute name="Base-Revision" value="${workspace.version}" />
-        <attribute name="Workspace-Changes" value="${workspace.changes.tr}" />
-        <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
-        <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
+        <attribute name="Class-Path" value="i2p.jar"/>
+        <attribute name="Implementation-Version" value="${full.version}"/>
+        <attribute name="Built-By" value="${build.built-by}"/>
+        <attribute name="Build-Date" value="${build.timestamp}"/>
+        <attribute name="Base-Revision" value="${workspace.version}"/>
+        <attribute name="Workspace-Changes" value="${workspace.changes.tr}"/>
+        <attribute name="X-Compile-Source-JDK" value="${javac.version}"/>
+        <attribute name="X-Compile-Target-JDK" value="${javac.version}"/>
       </manifest>
     </jar>
   </target>
 
   <target name="listChangedFiles" depends="warUpToDate" if="shouldListChanges">
     <exec executable="mtn" outputproperty="workspace.changes" errorproperty="mtn.error2" failifexecutionfails="false">
-      <arg value="list" />
-      <arg value="changed" />
-      <arg value="." />
+      <arg value="list"/>
+      <arg value="changed"/>
+      <arg value="."/>
     </exec>
     <!-- \n in an attribute value generates an invalid manifest -->
     <exec executable="tr" inputstring="${workspace.changes}" outputproperty="workspace.changes.tr" errorproperty="mtn.error2" failifexecutionfails="false">
-      <arg value="-s" />
-      <arg value="[:space:]" />
-      <arg value="," />
+      <arg value="-s"/>
+      <arg value="[:space:]"/>
+      <arg value=","/>
     </exec>
   </target>
 
   <target name="war" depends="compile, bundle, warUpToDate, listChangedFiles" unless="war.uptodate">
     <!-- set if unset -->
-    <property name="workspace.changes.tr" value="" />
-    <copy file="src/susimail.properties" todir="src/WEB-INF/classes" />
-    <war destfile="susimail.war" webxml="src/WEB-INF/web.xml"
-      basedir="src/" excludes="WEB-INF/web.xml LICENSE src src/**/* susimail.properties">
+    <property name="workspace.changes.tr" value=""/>
+    <copy file="src/susimail.properties" todir="src/WEB-INF/classes"/>
+    <mkdir dir="build/js"/>
+    <copy todir="build/js">
+      <fileset dir="src/js/"/>
+    </copy>
+    <if>
+      <isset property="uglifyjs.present"/>
+      <then>
+        <parallel>
+          <foreach target="compressJavascript" param="file">
+            <fileset dir="build/js" includes="*.js"/>
+          </foreach>
+        </parallel>
+      </then>
+      <else>
+        <echo message="UglifyJS not found, skipping Javascript file compression..."/>
+      </else>
+    </if>
+    <war destfile="susimail.war" webxml="src/WEB-INF/web.xml" update="true" basedir="src/"
+         excludes="WEB-INF/web.xml LICENSE src src/**/* susimail.properties js/*.js">
+      <zipfileset dir="build/js" prefix="js"/>
       <manifest>
-        <attribute name="Implementation-Version" value="${full.version}" />
-        <attribute name="Built-By" value="${build.built-by}" />
-        <attribute name="Build-Date" value="${build.timestamp}" />
-        <attribute name="Base-Revision" value="${workspace.version}" />
-        <attribute name="Workspace-Changes" value="${workspace.changes.tr}" />
-        <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
-        <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
+        <attribute name="Implementation-Version" value="${full.version}"/>
+        <attribute name="Built-By" value="${build.built-by}"/>
+        <attribute name="Build-Date" value="${build.timestamp}"/>
+        <attribute name="Base-Revision" value="${workspace.version}"/>
+        <attribute name="Workspace-Changes" value="${workspace.changes.tr}"/>
+        <attribute name="X-Compile-Source-JDK" value="${javac.version}"/>
+        <attribute name="X-Compile-Target-JDK" value="${javac.version}"/>
       </manifest>
     </war>
   </target>
 
   <target name="warUpToDate">
     <uptodate property="war.uptodate" targetfile="susimail.war">
-      <srcfiles dir="src" excludes="LICENSE src/**/*" />
+      <srcfiles dir="src" excludes="LICENSE src/**/*"/>
     </uptodate>
     <condition property="shouldListChanges">
       <and>
         <not>
-          <isset property="war.uptodate" />
+          <isset property="war.uptodate"/>
         </not>
-        <isset property="mtn.available" />
+        <isset property="mtn.available"/>
       </and>
     </condition>
   </target>
 
   <target name="bundle" depends="compile" unless="no.bundle">
-    <mkdir dir="build/messages-src" />
+    <mkdir dir="build/messages-src"/>
     <!-- Update the messages_*.po files.
              We need to supply the bat file for windows, and then change the fail property to true -->
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="${require.gettext}">
-      <env key="JAVA_HOME" value="${java.home}" />
-      <arg value="./bundle-messages.sh" />
+      <env key="JAVA_HOME" value="${java.home}"/>
+      <arg value="./bundle-messages.sh"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="${require.gettext}">
-      <arg value="./bundle-messages.sh" />
+      <arg value="./bundle-messages.sh"/>
     </exec>
     <!-- multi-lang is optional -->
     <exec executable="sh" osfamily="windows" failifexecutionfails="false">
-      <arg value="./bundle-messages.sh" />
+      <arg value="./bundle-messages.sh"/>
     </exec>
     <javac source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
       srcdir="build/messages-src" destdir="src/WEB-INF/classes">
-      <compilerarg line="${javac.compilerargs}" />
+      <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
 
   <target name="poupdate" depends="builddep, compile">
     <!-- Update the messages_*.po files.  -->
     <!-- set if unset -->
-    <property name="lg2" value="" />
+    <property name="lg2" value=""/>
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true">
-      <env key="LG2" value="${lg2}" />
-      <arg value="./bundle-messages.sh" />
-      <arg value="-p" />
+      <env key="LG2" value="${lg2}"/>
+      <arg value="./bundle-messages.sh"/>
+      <arg value="-p"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="true">
-      <env key="LG2" value="${lg2}" />
-      <arg value="./bundle-messages.sh" />
-      <arg value="-p" />
+      <env key="LG2" value="${lg2}"/>
+      <arg value="./bundle-messages.sh"/>
+      <arg value="-p"/>
     </exec>
     <exec executable="sh" osfamily="windows" failifexecutionfails="true" failonerror="true">
-      <env key="LG2" value="${lg2}" />
-      <arg value="./bundle-messages.sh" />
-      <arg value="-p" />
+      <env key="LG2" value="${lg2}"/>
+      <arg value="./bundle-messages.sh"/>
+      <arg value="-p"/>
     </exec>
   </target>
 
   <target name="javadoc">
-    <mkdir dir="./build" />
-    <mkdir dir="./build/javadoc" />
+    <mkdir dir="./build"/>
+    <mkdir dir="./build/javadoc"/>
     <javadoc
       sourcepath="./src/src/" destdir="./build/javadoc"
       packagenames="*"
       use="true"
       splitindex="true"
-      windowtitle="susimail" />
+      windowtitle="susimail"/>
   </target>
+
   <target name="clean">
-    <delete dir="src/WEB-INF/classes" />
-    <delete file="susimail.war" />
-    <delete file="susimail.jar" />
-    <delete dir="build" />
+    <parallel>
+      <delete dir="src/WEB-INF/classes"/>
+      <delete file="susimail.war"/>
+      <delete file="susimail.jar"/>
+      <delete dir="build"/>
+    </parallel>
   </target>
-  <target name="cleandep" depends="clean" />
-  <target name="distclean" depends="clean" />
+
+  <target name="cleandep" depends="clean"/>
+  <target name="distclean" depends="clean"/>
+
+  <target name="compressJavascript">
+    <exec executable="uglifyjs">
+      <arg value="${file}"/>
+      <arg value="--compress"/>
+      <arg value="--in-situ"/>
+    </exec>
+  </target>
+
 </project>
