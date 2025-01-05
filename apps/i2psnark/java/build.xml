@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="i2psnark">
 
+  <!-- Is uglifyjs installed? -->
+  <available file="/usr/bin/uglifyjs" property="uglifyjs.present"/>
+
   <target name="all" depends="clean, build"/>
 
   <target name="build" depends="builddep, jar, war"/>
@@ -135,6 +138,20 @@
       <!-- mime.properties must be in with the classes -->
       <copy file="../mime.properties" todir="build/obj/org/klomp/snark/web"/>
     </parallel>
+    <if>
+      <isset property="uglifyjs.present"/>
+      <then>
+        <foreach target="compressJavascript" param="file">
+          <fileset dir="build/res/.res/js" includes="*.js"/>
+        </foreach>
+      </then>
+      <else>
+        <echo message="UglifyJS not found, skipping JS file compression..."/>
+      </else>
+    </if>
+    <replace dir="build/res/.res/js" summary="true" token="/themes/snark/" value="/i2psnark/.res/themes/snark/">
+      <include name="*.js"/>
+    </replace>
     <war destfile="../i2psnark.war" webxml="../web.xml">
       <!-- Include only the web stuff, as of 0.7.12 the router will add i2psnark.jar to the classpath for the war -->
       <classes dir="./build/obj" includes="**/web/*"/>
@@ -287,46 +304,39 @@
   <!-- Add css, image, and js files for standalone snark to the war -->
   <target name="standalone_war" depends="war">
     <parallel>
-      <mkdir dir="build/standalone-resources/.res/themes/snark"/>
-      <copy quiet="true" todir="build/standalone-resources/.res/themes/snark">
+      <copy quiet="true" todir="build/res/.res/themes/snark">
         <fileset dir="../../../installer/resources/themes/snark/"/>
       </copy>
-      <mkdir dir="build/standalone-resources/.res/themes/snark/fonts"/>
-      <copy quiet="true" todir="build/standalone-resources/.res/themes/snark/fonts">
+      <mkdir dir="build/res/.res/themes/snark/fonts"/>
+      <copy quiet="true" todir="build/res/.res/themes/snark/fonts">
         <fileset dir="../../../installer/resources/themes/fonts/"/>
       </copy>
       <!-- Rather than pulling in all the console theme images, let's just specify the ones we need -->
       <copy quiet="true" file="../../../installer/resources/themes/console/images/newtab.svg"
-            todir="build/standalone-resources/.res/icons"/>
+            todir="build/res/.res/icons"/>
       <copy quiet="true" file="../../../installer/resources/themes/console/dark/images/camotile2.png"
-            todir="build/standalone-resources/.res/themes/snark/dark/images"/>
-      <copy quiet="true" todir="build/standalone-resources/.res/themes/fonts">
+            todir="build/res/.res/themes/snark/dark/images"/>
+      <copy quiet="true" todir="build/res/.res/themes/fonts">
         <fileset dir="../../../installer/resources/themes/fonts/" includes="**/*"/>
       </copy>
-      <mkdir dir="build/standalone-resources/.res/js"/>
-      <copy file="../../routerconsole/jsp/js/onVisible.js" todir="build/standalone-resources/.res/js"/>
-      <copy file="../../i2psnark/res/js/refreshTorrents.js" todir="build/standalone-resources/.res/js"/>
     </parallel>
     <parallel>
-      <replace dir="build/standalone-resources/.res/themes/snark" summary="true"
+      <replace dir="build/res/.res/themes/snark" summary="true"
                token="url(/themes/console/classic/images/"
                value="url(/i2psnark/.res/themes/snark/classic/images/">
         <include name="**/*.css"/>
       </replace>
-      <replace dir="build/standalone-resources/.res/themes/snark" summary="true"
+      <replace dir="build/res/.res/themes/snark" summary="true"
                token="url(/themes/console/dark/images/"
                value="url(/i2psnark/.res/themes/snark/dark/images/">
         <include name="**/*.css"/>
       </replace>
-      <replace dir="build/standalone-resources/.res/themes/fonts" summary="true" token="url(/themes/fonts/" value="url(/i2psnark/.res/themes/fonts/">
+      <replace dir="build/res/.res/themes/fonts" summary="true" token="url(/themes/fonts/" value="url(/i2psnark/.res/themes/fonts/">
         <include name="**/*.css"/>
-      </replace>
-      <replace dir="build/standalone-resources/.res/js" summary="true" token="/themes/snark/" value="/i2psnark/.res/themes/snark/">
-        <include name="**/refreshTorrents.js"/>
       </replace>
     </parallel>
     <zip destfile="../i2psnark.war" update="true" duplicate="preserve">
-      <fileset dir="build/standalone-resources"/>
+      <fileset dir="build/res"/>
     </zip>
     <echo message="I2PSnark standalone .war file created"/>
   </target>
@@ -391,6 +401,15 @@
   </target>
 
   <target name="cleandep" depends="clean"/>
-
   <target name="distclean" depends="clean"/>
+
+  <target name="compressJavascript">
+    <exec executable="uglifyjs">
+      <arg value="${file}"/>
+      <arg value="-o"/>
+      <arg value="${file}"/>
+      <arg value="--compress"/>
+    </exec>
+  </target>
+
 </project>
