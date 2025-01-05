@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="i2psnark">
 
+  <!-- Is uglifyjs installed? -->
+  <available file="/usr/bin/uglifyjs" property="uglifyjs.present"/>
+
   <target name="all" depends="clean, build"/>
-
   <target name="build" depends="builddep, jar, war"/>
-
-  <!-- Run from top level build.xml to get dependencies built -->
-  <target name="builddep"/>
+  <target name="builddep"/> <!-- Run from top level build.xml to get dependencies built -->
 
   <condition property="depend.available">
     <typefound name="depend"/>
@@ -135,6 +135,17 @@
       <!-- mime.properties must be in with the classes -->
       <copy file="../mime.properties" todir="build/obj/org/klomp/snark/web"/>
     </parallel>
+    <if>
+      <isset property="uglifyjs.present"/>
+      <then>
+        <foreach target="compressJavascript" param="file">
+          <fileset dir="build/res/.res/js" includes="*.js"/>
+        </foreach>
+      </then>
+      <else>
+        <echo message="UglifyJS not found, skipping Javascript file compression..."/>
+      </else>
+    </if>
     <war destfile="../i2psnark.war" webxml="../web.xml">
       <!-- Include only the web stuff, as of 0.7.12 the router will add i2psnark.jar to the classpath for the war -->
       <classes dir="./build/obj" includes="**/web/*"/>
@@ -391,6 +402,14 @@
   </target>
 
   <target name="cleandep" depends="clean"/>
-
   <target name="distclean" depends="clean"/>
+
+  <target name="compressJavascript">
+    <exec executable="uglifyjs">
+      <arg value="${file}"/>
+      <arg value="--compress"/>
+      <arg value="--in-situ"/>
+    </exec>
+  </target>
+
 </project>
