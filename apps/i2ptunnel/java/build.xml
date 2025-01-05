@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="i2ptunnel">
-  <target name="all" depends="clean, build" />
-  <target name="build" depends="builddep, jar, war" />
-  <target name="builddep">
-    <!-- run from top level build.xml to get dependencies built -->
-  </target>
+
+  <target name="all" depends="clean, build"/>
+  <target name="build" depends="builddep, jar, war"/>
+  <target name="builddep"/> <!-- run from top level build.xml to get dependencies built -->
+
   <condition property="depend.available">
-    <typefound name="depend" />
+    <typefound name="depend"/>
   </condition>
+
+  <condition property="no.bundle">
+    <isfalse value="${require.gettext}"/>
+  </condition>
+
+  <!-- only used if not set by a higher build.xml -->
+  <property name="javac.compilerargs" value=""/>
+  <property name="javac.version" value="1.8"/>
+  <property name="javac.release" value="8"/>
+  <property name="require.gettext" value="true"/>
+  <property name="manifest.classpath.name" value="Class-Path"/>
+
+  <!-- Is uglifyjs installed? -->
+  <available file="/usr/bin/uglifyjs" property="uglifyjs.present"/>
+
   <target name="depend" if="depend.available">
     <depend
       cache="../../../build"
@@ -15,28 +30,17 @@
       destdir="./build/obj">
       <!-- Depend on classes instead of jars where available -->
       <classpath>
-        <pathelement location="../../../core/java/build/obj" />
-        <pathelement location="../../../core/java/build/gnu-getopt.jar" />
-        <pathelement location="../../ministreaming/java/build/obj" />
+        <pathelement location="../../../core/java/build/obj"/>
+        <pathelement location="../../../core/java/build/gnu-getopt.jar"/>
+        <pathelement location="../../ministreaming/java/build/obj"/>
       </classpath>
     </depend>
   </target>
 
-  <condition property="no.bundle">
-    <isfalse value="${require.gettext}" />
-  </condition>
-
-  <!-- only used if not set by a higher build.xml -->
-  <property name="javac.compilerargs" value="" />
-  <property name="javac.version" value="1.8" />
-  <property name="javac.release" value="8" />
-  <property name="require.gettext" value="true" />
-  <property name="manifest.classpath.name" value="Class-Path" />
-
   <!-- Compile includes ui/ classes but not web/ classes here -->
   <target name="compile" depends="depend">
-    <mkdir dir="./build" />
-    <mkdir dir="./build/obj" />
+    <mkdir dir="./build"/>
+    <mkdir dir="./build/obj"/>
     <javac
       srcdir="./src"
       excludes="net/i2p/i2ptunnel/web/**/*"
@@ -46,14 +50,14 @@
       includeAntRuntime="false"
       encoding="UTF-8"
       classpath="../../../core/java/build/i2p.jar:../../../core/java/build/gnu-getopt.jar:../../ministreaming/java/build/mstreaming.jar">
-      <compilerarg line="${javac.compilerargs}" />
+      <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
 
   <!-- Compile web/ classes only here. Not for Android. -->
   <target name="compileWeb" depends="jar">
-    <mkdir dir="./build" />
-    <mkdir dir="./build/obj" />
+    <mkdir dir="./build"/>
+    <mkdir dir="./build/obj"/>
     <javac
       srcdir="./src"
       includes="net/i2p/i2ptunnel/web/**/*"
@@ -63,24 +67,24 @@
       includeAntRuntime="false"
       encoding="UTF-8"
       classpath="../../../core/java/build/i2p.jar:build/i2ptunnel.jar:../../jetty/jettylib/jetty-i2p.jar:../../jetty/jettylib/jetty-util.jar:../../jetty/jettylib/jetty-xml.jar">
-      <compilerarg line="${javac.compilerargs}" />
+      <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
 
   <target name="listChangedFiles" depends="jarUpToDate" if="shouldListChanges">
     <exec executable="mtn" outputproperty="workspace.changes.j" errorproperty="mtn.error2"
       failifexecutionfails="false">
-      <arg value="list" />
-      <arg value="changed" />
-      <arg value="." />
+      <arg value="list"/>
+      <arg value="changed"/>
+      <arg value="."/>
     </exec>
     <!-- \n in an attribute value generates an invalid manifest -->
     <exec executable="tr" inputstring="${workspace.changes.j}"
       outputproperty="workspace.changes.j.tr" errorproperty="mtn.error2"
       failifexecutionfails="false">
-      <arg value="-s" />
-      <arg value="[:space:]" />
-      <arg value="," />
+      <arg value="-s"/>
+      <arg value="[:space:]"/>
+      <arg value=","/>
     </exec>
   </target>
 
@@ -89,19 +93,19 @@
   <target name="jar" depends="builddep, compile, bundle-proxy, jarUpToDate, listChangedFiles"
     unless="jar.uptodate">
     <!-- set if unset -->
-    <property name="workspace.changes.j.tr" value="" />
+    <property name="workspace.changes.j.tr" value=""/>
     <jar destfile="./build/i2ptunnel.jar" basedir="./build/obj" includes="**/*.class"
       excludes="**/ui/*.class **/web/*.class">
       <manifest>
-        <attribute name="Main-Class" value="net.i2p.i2ptunnel.I2PTunnel" />
-        <attribute name="${manifest.classpath.name}" value="i2p.jar mstreaming.jar" />
-        <attribute name="Implementation-Version" value="${full.version}" />
-        <attribute name="Built-By" value="${build.built-by}" />
-        <attribute name="Build-Date" value="${build.timestamp}" />
-        <attribute name="Base-Revision" value="${workspace.version}" />
-        <attribute name="Workspace-Changes" value="${workspace.changes.j.tr}" />
-        <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
-        <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
+        <attribute name="Main-Class" value="net.i2p.i2ptunnel.I2PTunnel"/>
+        <attribute name="${manifest.classpath.name}" value="i2p.jar mstreaming.jar"/>
+        <attribute name="Implementation-Version" value="${full.version}"/>
+        <attribute name="Built-By" value="${build.built-by}"/>
+        <attribute name="Build-Date" value="${build.timestamp}"/>
+        <attribute name="Base-Revision" value="${workspace.version}"/>
+        <attribute name="Workspace-Changes" value="${workspace.changes.j.tr}"/>
+        <attribute name="X-Compile-Source-JDK" value="${javac.version}"/>
+        <attribute name="X-Compile-Target-JDK" value="${javac.version}"/>
       </manifest>
     </jar>
   </target>
@@ -109,19 +113,19 @@
   <!-- web/ and ui/ classes that will go in the war. Not for Android. -->
   <target name="jarTempBeans" depends="builddep, compileWeb">
     <jar destfile="./build/temp-beans.jar" basedir="./build/obj"
-      includes="**/ui/*.class **/web/*.class" />
+      includes="**/ui/*.class **/web/*.class"/>
   </target>
 
   <target name="jarUpToDate">
     <uptodate property="jar.uptodate" targetfile="build/i2ptunnel.jar">
-      <srcfiles dir="build/obj" includes="**/*.class" />
+      <srcfiles dir="build/obj" includes="**/*.class"/>
     </uptodate>
     <condition property="shouldListChanges">
       <and>
         <not>
-          <isset property="jar.uptodate" />
+          <isset property="jar.uptodate"/>
         </not>
-        <isset property="mtn.available" />
+        <isset property="mtn.available"/>
       </and>
     </condition>
   </target>
@@ -130,156 +134,156 @@
   <!-- This is for Android only -->
   <target name="uiJar" depends="jar, uiJarUpToDate, listChangedFiles" unless="uiJar.uptodate">
     <!-- set if unset -->
-    <property name="workspace.changes.j.tr" value="" />
+    <property name="workspace.changes.j.tr" value=""/>
     <jar destfile="./build/i2ptunnel-ui.jar" basedir="./build/obj" includes="**/ui/*.class">
       <manifest>
-        <attribute name="Class-Path" value="i2p.jar mstreaming.jar i2ptunnel.jar" />
-        <attribute name="Implementation-Version" value="${full.version}" />
-        <attribute name="Built-By" value="${build.built-by}" />
-        <attribute name="Build-Date" value="${build.timestamp}" />
-        <attribute name="Base-Revision" value="${workspace.version}" />
-        <attribute name="Workspace-Changes" value="${workspace.changes.j.tr}" />
-        <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
-        <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
+        <attribute name="Class-Path" value="i2p.jar mstreaming.jar i2ptunnel.jar"/>
+        <attribute name="Implementation-Version" value="${full.version}"/>
+        <attribute name="Built-By" value="${build.built-by}"/>
+        <attribute name="Build-Date" value="${build.timestamp}"/>
+        <attribute name="Base-Revision" value="${workspace.version}"/>
+        <attribute name="Workspace-Changes" value="${workspace.changes.j.tr}"/>
+        <attribute name="X-Compile-Source-JDK" value="${javac.version}"/>
+        <attribute name="X-Compile-Target-JDK" value="${javac.version}"/>
       </manifest>
     </jar>
   </target>
 
   <target name="uiJarUpToDate">
     <uptodate property="uiJar.uptodate" targetfile="build/i2ptunnel-ui.jar">
-      <srcfiles dir="build/obj" includes="**/ui/*.class" />
+      <srcfiles dir="build/obj" includes="**/ui/*.class"/>
     </uptodate>
     <condition property="shouldListChanges">
       <and>
         <not>
-          <isset property="uiJar.uptodate" />
+          <isset property="uiJar.uptodate"/>
         </not>
-        <isset property="mtn.available" />
+        <isset property="mtn.available"/>
       </and>
     </condition>
   </target>
 
   <!-- servlet translations go in the war, not the jar -->
   <target name="bundle" depends="compile, precompilejsp" unless="no.bundle">
-    <mkdir dir="build/messages-src" />
+    <mkdir dir="build/messages-src"/>
     <!-- Update the messages_*.po files.
          We need to supply the bat file for windows, and then change the fail property to true -->
     <exec executable="sh" osfamily="unix" failifexecutionfails="true"
       failonerror="${require.gettext}">
-      <env key="JAVA_HOME" value="${java.home}" />
-      <arg value="./bundle-messages.sh" />
+      <env key="JAVA_HOME" value="${java.home}"/>
+      <arg value="./bundle-messages.sh"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true"
       failonerror="${require.gettext}">
-      <arg value="./bundle-messages.sh" />
+      <arg value="./bundle-messages.sh"/>
     </exec>
     <!-- multi-lang is optional -->
     <exec executable="sh" osfamily="windows" failifexecutionfails="false">
-      <arg value="./bundle-messages.sh" />
+      <arg value="./bundle-messages.sh"/>
     </exec>
     <javac source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
       srcdir="build/messages-src" destdir="../jsp/WEB-INF/classes">
-      <compilerarg line="${javac.compilerargs}" />
+      <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
 
   <target name="poupdate" depends="compile, precompilejsp">
     <!-- Update the messages_*.po files. -->
     <!-- set if unset -->
-    <property name="lg2" value="" />
+    <property name="lg2" value=""/>
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true">
-      <env key="LG2" value="${lg2}" />
-      <arg value="./bundle-messages.sh" />
-      <arg value="-p" />
+      <env key="LG2" value="${lg2}"/>
+      <arg value="./bundle-messages.sh"/>
+      <arg value="-p"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="true">
-      <env key="LG2" value="${lg2}" />
-      <arg value="./bundle-messages.sh" />
-      <arg value="-p" />
+      <env key="LG2" value="${lg2}"/>
+      <arg value="./bundle-messages.sh"/>
+      <arg value="-p"/>
     </exec>
     <exec executable="sh" osfamily="windows" failifexecutionfails="true" failonerror="true">
-      <env key="LG2" value="${lg2}" />
-      <arg value="./bundle-messages.sh" />
-      <arg value="-p" />
+      <env key="LG2" value="${lg2}"/>
+      <arg value="./bundle-messages.sh"/>
+      <arg value="-p"/>
     </exec>
   </target>
 
   <!-- proxy error page translations go in the jar, not the war -->
   <target name="bundle-proxy" unless="no.bundle">
-    <mkdir dir="build/messages-proxy-src" />
+    <mkdir dir="build/messages-proxy-src"/>
     <!-- Update the messages_*.po files.
          We need to supply the bat file for windows, and then change the fail property to true -->
     <exec executable="sh" osfamily="unix" failifexecutionfails="true"
       failonerror="${require.gettext}">
-      <env key="JAVA_HOME" value="${java.home}" />
-      <arg value="./bundle-messages-proxy.sh" />
+      <env key="JAVA_HOME" value="${java.home}"/>
+      <arg value="./bundle-messages-proxy.sh"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true"
       failonerror="${require.gettext}">
-      <arg value="./bundle-messages-proxy.sh" />
+      <arg value="./bundle-messages-proxy.sh"/>
     </exec>
     <!-- multi-lang is optional -->
     <exec executable="sh" osfamily="windows" failifexecutionfails="false">
-      <arg value="./bundle-messages-proxy.sh" />
+      <arg value="./bundle-messages-proxy.sh"/>
     </exec>
     <javac source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
       srcdir="build/messages-proxy-src" destdir="build/obj">
-      <compilerarg line="${javac.compilerargs}" />
+      <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
 
   <target name="extractProxyTags">
     <java classname="net.i2p.util.TranslateReader" fork="true" failonerror="true">
       <classpath>
-        <pathelement location="../../../build/i2p.jar" />
+        <pathelement location="../../../build/i2p.jar"/>
       </classpath>
-      <arg value="tag" />
-      <arg value="../../../installer/resources/proxy/" />
-      <arg value="build/Proxy.java" />
+      <arg value="tag"/>
+      <arg value="../../../installer/resources/proxy/"/>
+      <arg value="build/Proxy.java"/>
     </java>
   </target>
 
   <target name="poupdate-proxy" depends="extractProxyTags">
     <!-- Update the messages_*.po files. -->
     <!-- set if unset -->
-    <property name="lg2" value="" />
+    <property name="lg2" value=""/>
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true">
-      <env key="LG2" value="${lg2}" />
-      <arg value="./bundle-messages-proxy.sh" />
-      <arg value="-p" />
+      <env key="LG2" value="${lg2}"/>
+      <arg value="./bundle-messages-proxy.sh"/>
+      <arg value="-p"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="true">
-      <env key="LG2" value="${lg2}" />
-      <arg value="./bundle-messages-proxy.sh" />
-      <arg value="-p" />
+      <env key="LG2" value="${lg2}"/>
+      <arg value="./bundle-messages-proxy.sh"/>
+      <arg value="-p"/>
     </exec>
     <exec executable="sh" osfamily="windows" failifexecutionfails="true" failonerror="true">
-      <env key="LG2" value="${lg2}" />
-      <arg value="./bundle-messages-proxy.sh" />
-      <arg value="-p" />
+      <env key="LG2" value="${lg2}"/>
+      <arg value="./bundle-messages-proxy.sh"/>
+      <arg value="-p"/>
     </exec>
   </target>
 
   <target name="listChangedFiles2" depends="warUpToDate" if="shouldListChanges2">
     <exec executable="mtn" outputproperty="workspace.changes.w" errorproperty="mtn.error2"
       failifexecutionfails="false">
-      <arg value="list" />
-      <arg value="changed" />
-      <arg value="../jsp" />
+      <arg value="list"/>
+      <arg value="changed"/>
+      <arg value="../jsp"/>
     </exec>
     <!-- \n in an attribute value generates an invalid manifest -->
     <exec executable="tr" inputstring="${workspace.changes.w}"
       outputproperty="workspace.changes.w.tr" errorproperty="mtn.error2"
       failifexecutionfails="false">
-      <arg value="-s" />
-      <arg value="[:space:]" />
-      <arg value="," />
+      <arg value="-s"/>
+      <arg value="[:space:]"/>
+      <arg value=","/>
     </exec>
   </target>
 
@@ -287,157 +291,175 @@
   <target name="war" depends="compileWeb, precompilejsp, bundle, warUpToDate, listChangedFiles2"
     unless="war.uptodate">
     <!-- set if unset -->
-    <property name="workspace.changes.w.tr" value="" />
+    <property name="workspace.changes.w.tr" value=""/>
     <copy todir="../jsp/WEB-INF/classes/net/i2p/i2ptunnel/ui">
-      <fileset dir="build/obj/net/i2p/i2ptunnel/ui" />
+      <fileset dir="build/obj/net/i2p/i2ptunnel/ui"/>
     </copy>
     <copy todir="../jsp/WEB-INF/classes/net/i2p/i2ptunnel/web">
-      <fileset dir="build/obj/net/i2p/i2ptunnel/web" />
+      <fileset dir="build/obj/net/i2p/i2ptunnel/web"/>
     </copy>
+    <mkdir dir="build/js"/>
+    <copy todir="build/js">
+      <fileset dir="../jsp/js/"/>
+    </copy>
+    <if>
+      <isset property="uglifyjs.present"/>
+      <then>
+        <parallel>
+          <foreach target="compressJavascript" param="file">
+            <fileset dir="build/js" includes="*.js"/>
+          </foreach>
+        </parallel>
+      </then>
+      <else>
+        <echo message="UglifyJS not found, skipping Javascript file compression..."/>
+      </else>
+    </if>
     <war destfile="build/i2ptunnel.war" webxml="../jsp/web-out.xml"
-      basedir="../jsp/" excludes="web.xml, web-fragment.xml, web-out.xml, **/*.java, *.jsp, *.jsi">
+      basedir="../jsp/" excludes="web.xml, web-fragment.xml, web-out.xml, **/*.java, *.jsp, *.jsi, **/*.js">
+      <zipfileset dir="build/js" prefix="js"/>
       <manifest>
-        <attribute name="Implementation-Version" value="${full.version}" />
-        <attribute name="Built-By" value="${build.built-by}" />
-        <attribute name="Build-Date" value="${build.timestamp}" />
-        <attribute name="Base-Revision" value="${workspace.version}" />
-        <attribute name="Workspace-Changes" value="${workspace.changes.w.tr}" />
-        <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
-        <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
+        <attribute name="Implementation-Version" value="${full.version}"/>
+        <attribute name="Built-By" value="${build.built-by}"/>
+        <attribute name="Build-Date" value="${build.timestamp}"/>
+        <attribute name="Base-Revision" value="${workspace.version}"/>
+        <attribute name="Workspace-Changes" value="${workspace.changes.w.tr}"/>
+        <attribute name="X-Compile-Source-JDK" value="${javac.version}"/>
+        <attribute name="X-Compile-Target-JDK" value="${javac.version}"/>
       </manifest>
     </war>
   </target>
 
   <target name="warUpToDate">
     <uptodate property="war.uptodate" targetfile="build/i2ptunnel.war">
-      <srcfiles dir="../jsp" excludes="web.xml, web-fragment.xml, **/*.java, *.jsp, *.jsi" />
-      <srcfiles dir="build/obj" includes="**/ui/*.class **/web/*.class" />
+      <srcfiles dir="../jsp" excludes="web.xml, web-fragment.xml, **/*.java, *.jsp, *.jsi"/>
+      <srcfiles dir="build/obj" includes="**/ui/*.class **/web/*.class"/>
     </uptodate>
     <condition property="shouldListChanges2">
       <and>
         <not>
-          <isset property="war.uptodate" />
+          <isset property="war.uptodate"/>
         </not>
-        <isset property="mtn.available" />
+        <isset property="mtn.available"/>
       </and>
     </condition>
   </target>
 
   <target name="precompilejsp" depends="jarTempBeans" unless="precompilejsp.uptodate">
-    <delete dir="../jsp/WEB-INF/" />
-    <delete file="../jsp/web-fragment.xml" />
-    <delete file="../jsp/web-out.xml" />
-    <mkdir dir="../jsp/WEB-INF/" />
-    <mkdir dir="../jsp/WEB-INF/classes" />
+    <delete dir="../jsp/WEB-INF/"/>
+    <delete file="../jsp/web-fragment.xml"/>
+    <delete file="../jsp/web-out.xml"/>
+    <mkdir dir="../jsp/WEB-INF/"/>
+    <mkdir dir="../jsp/WEB-INF/classes"/>
     <!-- See apps/routerconsole/java/build.xml for important JspC build documentation -->
     <java classname="net.i2p.servlet.util.JspC" fork="true" failonerror="true">
       <!-- these are to detect tomcat version and reproducible build setting -->
-      <jvmarg value="-Dbuild.reproducible=${build.reproducible}" />
-      <jvmarg value="-Dwith-libtomcat8-java=${with-libtomcat8-java}" />
-      <jvmarg value="-Dwith-libtomcat9-java=${with-libtomcat9-java}" />
-      <jvmarg value="-Djasper.jar=../../jetty/jettylib/jasper-runtime.jar" />
+      <jvmarg value="-Dbuild.reproducible=${build.reproducible}"/>
+      <jvmarg value="-Dwith-libtomcat8-java=${with-libtomcat8-java}"/>
+      <jvmarg value="-Dwith-libtomcat9-java=${with-libtomcat9-java}"/>
+      <jvmarg value="-Djasper.jar=../../jetty/jettylib/jasper-runtime.jar"/>
       <classpath>
-        <pathelement location="../../jetty/jettylib/jasper-runtime.jar" />
-        <pathelement location="../../jetty/jettylib/javax.servlet.jar" />
+        <pathelement location="../../jetty/jettylib/jasper-runtime.jar"/>
+        <pathelement location="../../jetty/jettylib/javax.servlet.jar"/>
 
         <!-- following jars only present for debian builds -->
-        <pathelement location="../../jetty/jettylib/commons-logging.jar" />
-        <pathelement location="../../jetty/jettylib/jsp-api.jar" />
-        <pathelement location="../../jetty/jettylib/tomcat-api.jar" />
-        <pathelement location="../../jetty/jettylib/tomcat-util.jar" />
-        <pathelement location="../../jetty/jettylib/tomcat-util-scan.jar" />
+        <pathelement location="../../jetty/jettylib/commons-logging.jar"/>
+        <pathelement location="../../jetty/jettylib/jsp-api.jar"/>
+        <pathelement location="../../jetty/jettylib/tomcat-api.jar"/>
+        <pathelement location="../../jetty/jettylib/tomcat-util.jar"/>
+        <pathelement location="../../jetty/jettylib/tomcat-util-scan.jar"/>
 
-        <pathelement location="../../jetty/jettylib/jasper-el.jar" />
-        <pathelement location="../../jetty/jettylib/commons-el.jar" />
-        <pathelement location="../../jetty/jettylib/jetty-xml.jar" />
-        <pathelement location="../../jetty/jettylib/jetty-util.jar" />
-        <pathelement location="${ant.home}/lib/ant.jar" />
-        <pathelement location="build/i2ptunnel.jar" />
-        <pathelement location="build/temp-beans.jar" />
-        <pathelement location="../../../core/java/build/i2p.jar" />
+        <pathelement location="../../jetty/jettylib/jasper-el.jar"/>
+        <pathelement location="../../jetty/jettylib/commons-el.jar"/>
+        <pathelement location="../../jetty/jettylib/jetty-xml.jar"/>
+        <pathelement location="../../jetty/jettylib/jetty-util.jar"/>
+        <pathelement location="${ant.home}/lib/ant.jar"/>
+        <pathelement location="build/i2ptunnel.jar"/>
+        <pathelement location="build/temp-beans.jar"/>
+        <pathelement location="../../../core/java/build/i2p.jar"/>
         <!-- required for multipart form handling in register.jsp -->
-        <pathelement location="../../jetty/jettylib/jetty-i2p.jar" />
-        <pathelement location="../../jetty/jettylib/jspc.jar" />
+        <pathelement location="../../jetty/jettylib/jetty-i2p.jar"/>
+        <pathelement location="../../jetty/jettylib/jspc.jar"/>
       </classpath>
-      <arg value="-d" />
-      <arg value="../jsp/WEB-INF/classes" />
-      <arg value="-v" />
-      <arg value="-p" />
-      <arg value="net.i2p.i2ptunnel.jsp" />
-      <arg value="-webinc" />
-      <arg value="../jsp/web-fragment.xml" />
-      <arg value="-webapp" />
-      <arg value="../jsp/" />
-      <arg value="-die" />
+      <arg value="-d"/>
+      <arg value="../jsp/WEB-INF/classes"/>
+      <arg value="-v"/>
+      <arg value="-p"/>
+      <arg value="net.i2p.i2ptunnel.jsp"/>
+      <arg value="-webinc"/>
+      <arg value="../jsp/web-fragment.xml"/>
+      <arg value="-webapp"/>
+      <arg value="../jsp/"/>
+      <arg value="-die"/>
     </java>
     <javac debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
       destdir="../jsp/WEB-INF/classes/" srcdir="../jsp/WEB-INF/classes" includes="**/*.java">
-      <compilerarg line="${javac.compilerargs}" />
+      <compilerarg line="${javac.compilerargs}"/>
       <classpath>
-        <pathelement location="../../jetty/jettylib/jasper-runtime.jar" />
-        <pathelement location="../../jetty/jettylib/javax.servlet.jar" />
+        <pathelement location="../../jetty/jettylib/jasper-runtime.jar"/>
+        <pathelement location="../../jetty/jettylib/javax.servlet.jar"/>
 
         <!-- following jars only present for debian builds -->
-        <pathelement location="../../jetty/jettylib/jsp-api.jar" />
-        <pathelement location="../../jetty/jettylib/tomcat-api.jar" />
-        <pathelement location="../../jetty/jettylib/jasper-el.jar" />
-        <pathelement location="../../jetty/jettylib/tomcat-util.jar" />
-        <pathelement location="../../jetty/jettylib/tomcat-util-scan.jar" />
+        <pathelement location="../../jetty/jettylib/jsp-api.jar"/>
+        <pathelement location="../../jetty/jettylib/tomcat-api.jar"/>
+        <pathelement location="../../jetty/jettylib/jasper-el.jar"/>
+        <pathelement location="../../jetty/jettylib/tomcat-util.jar"/>
+        <pathelement location="../../jetty/jettylib/tomcat-util-scan.jar"/>
 
-        <pathelement location="../../jetty/jettylib/commons-el.jar" />
-        <pathelement location="../../jetty/jettylib/jetty-xml.jar" />
-        <pathelement location="../../jetty/jettylib/jetty-util.jar" />
-        <pathelement location="build/i2ptunnel.jar" />
-        <pathelement location="build/temp-beans.jar" />
-        <pathelement location="../../../core/java/build/i2p.jar" />
+        <pathelement location="../../jetty/jettylib/commons-el.jar"/>
+        <pathelement location="../../jetty/jettylib/jetty-xml.jar"/>
+        <pathelement location="../../jetty/jettylib/jetty-util.jar"/>
+        <pathelement location="build/i2ptunnel.jar"/>
+        <pathelement location="build/temp-beans.jar"/>
+        <pathelement location="../../../core/java/build/i2p.jar"/>
         <!-- required for multipart form handling in register.jsp -->
-        <pathelement location="../../jetty/jettylib/jetty-i2p.jar" />
+        <pathelement location="../../jetty/jettylib/jetty-i2p.jar"/>
       </classpath>
     </javac>
-    <copy file="../jsp/web.xml" tofile="../jsp/web-out.xml" />
-    <loadfile property="jspc.web.fragment" srcfile="../jsp/web-fragment.xml" />
+    <copy file="../jsp/web.xml" tofile="../jsp/web-out.xml"/>
+    <loadfile property="jspc.web.fragment" srcfile="../jsp/web-fragment.xml"/>
     <replace file="../jsp/web-out.xml">
-      <replacefilter token="&lt;!-- precompiled servlets --&gt;" value="${jspc.web.fragment}" />
+      <replacefilter token="&lt;!-- precompiled servlets --&gt;" value="${jspc.web.fragment}"/>
     </replace>
     <!-- Add multipart config to servlets that need them -->
-    <property name="__match1" value="&lt;servlet-class&gt;net.i2p.i2ptunnel.jsp." />
-    <property name="__match2" value="_jsp&lt;/servlet-class&gt;" />
-    <property name="__class1" value="${__match1}register${__match2}" />
+    <property name="__match1" value="&lt;servlet-class&gt;net.i2p.i2ptunnel.jsp."/>
+    <property name="__match2" value="_jsp&lt;/servlet-class&gt;"/>
+    <property name="__class1" value="${__match1}register${__match2}"/>
     <property name="__multipart"
       value="&#10;
      &lt;multipart-config&gt;&#10;
        &lt;max-file-size&gt;131072&lt;/max-file-size&gt;&#10;
        &lt;max-request-size&gt;131072&lt;/max-request-size&gt;&#10;
-     &lt;/multipart-config&gt;" />
+     &lt;/multipart-config&gt;"/>
     <replace file="../jsp/web-out.xml">
-      <replacefilter token="${__class1}" value="${__class1}${__multipart}" />
+      <replacefilter token="${__class1}" value="${__class1}${__multipart}"/>
     </replace>
   </target>
 
   <uptodate property="precompilejsp.uptodate" targetfile="../jsp/web-out.xml">
-    <srcfiles dir="../jsp" includes="*.jsp, *.jsi, *.html, web.xml" />
-    <srcfiles dir="src/net/i2p/i2ptunnel/web" includes="*.java" />
+    <srcfiles dir="../jsp" includes="*.jsp, *.jsi, *.html, web.xml"/>
+    <srcfiles dir="src/net/i2p/i2ptunnel/web" includes="*.java"/>
   </uptodate>
 
   <target name="javadoc">
-    <mkdir dir="./build" />
-    <mkdir dir="./build/javadoc" />
+    <mkdir dir="./build"/>
+    <mkdir dir="./build/javadoc"/>
     <javadoc
       sourcepath="./src:../../../core/java/src:../../ministreaming/java/src"
       destdir="./build/javadoc"
       packagenames="*"
       use="true"
       splitindex="true"
-      windowtitle="I2PTunnel" />
+      windowtitle="I2PTunnel"/>
   </target>
 
   <target name="compileTest">
-    <mkdir dir="./build" />
-    <mkdir dir="./build/obj" />
-    <property name="junit.home" value="${ant.home}/lib/" />
+    <mkdir dir="./build"/>
+    <mkdir dir="./build/obj"/>
+    <property name="junit.home" value="${ant.home}/lib/"/>
     <!-- We need the ant runtime, as it includes junit -->
     <javac srcdir="./src:./test/junit" debug="true" source="${javac.version}"
       target="${javac.version}"
@@ -445,12 +467,12 @@
       includeAntRuntime="true"
       encoding="UTF-8"
       deprecation="on" destdir="./build/obj">
-      <compilerarg line="${javac.compilerargs}" />
+      <compilerarg line="${javac.compilerargs}"/>
       <classpath>
-        <pathelement location="../../../core/java/build/i2p.jar" />
-        <pathelement location="../../../core/java/build/i2ptest.jar" />
-        <pathelement location="../../ministreaming/java/build/mstreaming.jar" />
-        <pathelement location="${junit.home}/junit4.jar" />
+        <pathelement location="../../../core/java/build/i2p.jar"/>
+        <pathelement location="../../../core/java/build/i2ptest.jar"/>
+        <pathelement location="../../ministreaming/java/build/mstreaming.jar"/>
+        <pathelement location="${junit.home}/junit4.jar"/>
       </classpath>
     </javac>
   </target>
@@ -458,49 +480,57 @@
   <target name="test" depends="clean, compileTest">
     <junit printsummary="on" fork="yes">
       <classpath>
-        <pathelement path="${classpath}" />
-        <pathelement location="./build/obj" />
-        <pathelement location="../../../core/java/build/i2p.jar" />
-        <pathelement location="../../../core/java/build/i2ptest.jar" />
-        <pathelement location="../../ministreaming/java/build/mstreaming.jar" />
-        <pathelement location="../../streaming/java/build/streaming.jar" />
-        <pathelement location="${junit.home}/junit4.jar" />
+        <pathelement path="${classpath}"/>
+        <pathelement location="./build/obj"/>
+        <pathelement location="../../../core/java/build/i2p.jar"/>
+        <pathelement location="../../../core/java/build/i2ptest.jar"/>
+        <pathelement location="../../ministreaming/java/build/mstreaming.jar"/>
+        <pathelement location="../../streaming/java/build/streaming.jar"/>
+        <pathelement location="${junit.home}/junit4.jar"/>
       </classpath>
       <batchtest>
         <fileset dir="./test/junit/">
-          <include name="**/*Test.java" />
+          <include name="**/*Test.java"/>
         </fileset>
       </batchtest>
-      <formatter type="xml" />
+      <formatter type="xml"/>
     </junit>
-    <mkdir dir="../../../reports/" />
-    <mkdir dir="../../../reports/i2ptunnel/" />
-    <mkdir dir="../../../reports/i2ptunnel/junit/" />
+    <mkdir dir="../../../reports/"/>
+    <mkdir dir="../../../reports/i2ptunnel/"/>
+    <mkdir dir="../../../reports/i2ptunnel/junit/"/>
     <delete>
       <fileset dir="../../../reports/i2ptunnel/junit">
-        <include name="TEST-*.xml" />
+        <include name="TEST-*.xml"/>
       </fileset>
     </delete>
     <copy todir="../../../reports/i2ptunnel/junit">
       <fileset dir=".">
-        <include name="TEST-*.xml" />
+        <include name="TEST-*.xml"/>
       </fileset>
     </copy>
     <delete>
       <fileset dir=".">
-        <include name="TEST-*.xml" />
+        <include name="TEST-*.xml"/>
       </fileset>
     </delete>
   </target>
 
   <target name="clean">
-    <delete dir="./build" />
-    <delete dir="../jsp/WEB-INF/" />
-    <delete file="../jsp/web-fragment.xml" />
-    <delete file="../jsp/web-out.xml" />
+    <delete dir="./build"/>
+    <delete dir="../jsp/WEB-INF/"/>
+    <delete file="../jsp/web-fragment.xml"/>
+    <delete file="../jsp/web-out.xml"/>
   </target>
-  <target name="cleandep" depends="clean">
+
+  <target name="cleandep" depends="clean"/>
+  <target name="distclean" depends="clean"/>
+
+  <target name="compressJavascript">
+    <exec executable="uglifyjs">
+      <arg value="${file}"/>
+      <arg value="--compress"/>
+      <arg value="--in-situ"/>
+    </exec>
   </target>
-  <target name="distclean" depends="clean">
-  </target>
+
 </project>
