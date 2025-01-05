@@ -1,3 +1,7 @@
+2025-01-05 dr|z3d
+ * Console/Webapps: Leverage uglifyjs during build process to compress
+   console and webapp javascript
+
 2024-12-28 dr|z3d
  * Console: Add GeoIP build information to /info page
 
