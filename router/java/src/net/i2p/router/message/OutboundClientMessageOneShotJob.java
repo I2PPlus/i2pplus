@@ -647,8 +647,15 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             }
         } else {clove = null;} // ratchet-layer acks
 
-        SessionKey sessKey = new SessionKey();
-        Set<SessionTag> tags = new HashSet<SessionTag>();
+        SessionKey sessKey;
+        Set<SessionTag> tags;
+        if (_encryptionKey.getType() == EncType.ECIES_X25519) {
+            sessKey = null;
+            tags = null;
+        } else {
+            sessKey = new SessionKey();
+            tags = new HashSet<SessionTag>();
+        }
 
         // Per-message flag > 0 overrides per-session option
         int tagsToSend = SendMessageOptions.getTagsToSend(sendFlags);
