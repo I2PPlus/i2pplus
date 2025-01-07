@@ -14,63 +14,55 @@ let refreshTimeout;
 let response;
 let responseDoc;
 let responseText;
-let throttleTimer;
 
+const hiddenIframe = document.getElementById("processSidebarForm");
 const parser = new DOMParser();
 const sb = document.querySelector("#sidebar");
+const shutdownNotice = document.getElementById("sb_shutdownStatus");
+const shutdownNoticeHR = sb.querySelector("#sb_shutdownStatus+hr");
+const tunnelStatus = document.getElementById("sb_tunnelstatus");
+const updateForm = document.getElementById("sb_updateform");
+const uri = location.pathname;
+const xhrContainer = document.getElementById("xhr");
 
 const elements = {
   badges: sb.querySelectorAll(".badge, #tunnelCount, #newsCount"),
   volatileElements: sb.querySelectorAll(".volatile:not(.badge)"),
 };
 
-const requestIdleOrAnimationFrame = (callback, timeout = refreshInterval) => {
-  clearTimeout(throttleTimer);
-  throttleTimer = setTimeout(() => {
-    const request = requestAnimationFrame;
-    request(callback);
-  }, timeout);
-};
+async function initSidebar() {
+  sectionToggler();
+  countNewsItems();
+  handleFormSubmit();
+}
 
-sb.addEventListener("loaded", () => { requestIdleOrAnimationFrame(initSidebar); });
-
-function tangoDown() {
-  setTimeout(() => { document.body.classList.add("isDown"); }, 3000);
+async function tangoDown() {
   isDown = true;
-  onVisible(sb, () => requestIdleOrAnimationFrame(refreshSidebar));
+  document.body.classList.add("isDown");
+  onVisible(sb, refreshSidebar);
+}
+
+async function doFetch() {
+  try {
+    response = await fetch(`/xhr1.jsp?requestURI=${uri}`, { method: "GET", headers: { Accept: "text/html" } });
+    if (response.ok) {
+      isDown = false;
+      responseText = await response.text(),
+      responseDoc = parser.parseFromString(responseText, "text/html");
+    }
+  } catch (error) {
+    isDown = true;
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    await tangoDown();
+  }
 }
 
 async function refreshSidebar() {
-  if (!isDocumentVisible) {
-    setTimeout(refreshSidebar, refreshInterval);
-    return;
-  }
-
-  const uri = location.pathname;
-  const xhrContainer = document.getElementById("xhr");
-
-  const doFetch = async () => {
-    const uri = location.pathname;
-    const xhrContainer = document.getElementById("xhr");
-    try {
-      response = await fetch(`/xhr1.jsp?requestURI=${uri}`, { method: "GET", headers: { Accept: "text/html" } });
-      if (response.ok) {
-        isDown = false;
-        responseText = await response.text(),
-        responseDoc = parser.parseFromString(responseText, "text/html");
-      } else {
-        isDown = true;
-        await new Promise((resolve) => setTimeout(resolve, 10000));
-        await tangoDown();
-      }
-    } catch (error) {}
-  };
+  if (!isDocumentVisible || !responseDoc) {return;}
 
   await doFetch();
-
   if (isDownTimer !== null) {location.reload();}
-
-  document.body.classList.remove("isDown");
+  if (!isDown) {document.body.classList.remove("isDown");}
   if (refreshTimeout) {clearTimeout(refreshTimeout);}
   refreshTimeout = setTimeout(refreshSidebar, refreshInterval);
 
@@ -80,19 +72,19 @@ async function refreshSidebar() {
   };
 
   const updateElementInnerHTML = (elem, respElem) => {
-    if (elem && respElem && elem.innerHTML !== respElem.innerHTML) {
+    if (elem && respElem && elem.innerHTML != respElem.innerHTML) {
       elem.innerHTML = respElem.innerHTML;
     }
   };
 
   const updateElementTextContent = (elem, respElem) => {
-    if (elem && respElem && elem.textContent !== respElem.textContent) {
+    if (elem && respElem && elem.textContent != respElem.textContent) {
       elem.textContent = respElem.textContent;
     }
   };
 
   const updateIfStatusDown = (elem, respElem) => {
-    if (elem && elem.classList.contains("statusDown") && respElem && elem.outerHTML !== respElem.outerHTML) {
+    if (elem && elem.classList.contains("statusDown") && respElem && elem.outerHTML != respElem.outerHTML) {
       elem.outerHTML = respElem.outerHTML;
     }
   };
@@ -108,6 +100,7 @@ async function refreshSidebar() {
     Array.from(elements.volatileElements).forEach((elem, index) => {
       const respElem = responseElements.volatileElements[index];
       if (elem && respElem) {
+        isDown = false;
         if (elem.classList.contains("statusDown")) {updateIfStatusDown(elem, respElem);}
         else {updateElementInnerHTML(elem, respElem);}
       }
@@ -122,41 +115,31 @@ async function refreshSidebar() {
   };
 
   function refreshAll() {
-    doFetch();
     if (sb && responseDoc) {
+      isDown = false;
       const sbResponse = responseDoc.getElementById("sb");
       if (sbResponse && sb.innerHTML !== sbResponse.innerHTML) {
-        requestIdleOrAnimationFrame(() => {
-          xhrContainer.innerHTML = sbResponse.innerHTML;
-        });
+        requestAnimationFrame(() => { xhrContainer.innerHTML = sbResponse.innerHTML; });
       }
     } else {tangoDown();}
   }
 
   await initSidebar();
+}
 
-  async function initSidebar() {
-    sectionToggler();
-    countNewsItems();
-    handleFormSubmit();
-  }
-
-  async function handleFormSubmit() {
-    document.addEventListener("submit", async function(event) {
-      const form = event.target.closest("form");
+async function handleFormSubmit() {
+  document.addEventListener("submit", async (event) => {
+    const form = event.target.closest("form");
+    if (form) {
       const formId = form.getAttribute("id");
-      const hiddenIframe = document.getElementById("processSidebarForm");
+      await doFetch();
 
-      hiddenIframe.addEventListener("load", async () => {
-        await doFetch();
-        const formResponse = responseDoc.querySelector("#" + formId);
+      hiddenIframe.addEventListener("load", () => {
+        const formResponse = responseDoc.querySelector(`#${formId}`);
         if (formResponse) {
           if (form.id !== "form_sidebar") {
             form.innerHTML = formResponse.innerHTML;
-            const shutdownNotice = document.getElementById("sb_shutdownStatus");
-            const shutdownNoticeHR = document.querySelector("#sb_shutdownStatus+hr");
             const shutdownNoticeResponse = responseDoc.getElementById("sb_shutdownStatus");
-            const updateForm = document.getElementById("sb_updateform");
             const updateFormResponse = responseDoc.getElementById("sb_updateform");
             if (shutdownNotice) {
               if (shutdownNoticeResponse && shutdownNoticeResponse.classList.contains("inactive")) {
@@ -174,7 +157,6 @@ async function refreshSidebar() {
               updateForm.outerHTML = updateFormResponse.outerHTML;
             }
             if (form.id === "sb_routerControl") {
-              const tunnelStatus = document.getElementById("sb_tunnelstatus");
               const tunnelStatusResponse = responseDoc.getElementById("sb_tunnelstatus");
               if (tunnelStatusResponse && tunnelStatus.innerHTML !== tunnelStatusResponse.innerHTML) {
                 tunnelStatus.outerHTML = tunnelStatusResponse.outerHTML;
@@ -183,19 +165,18 @@ async function refreshSidebar() {
           } else {refreshAll();}
         }
       });
-    });
-  }
-
+    }
+  });
 }
 
 async function ready() {
-  refreshSidebar(isDocumentVisible)
-  .catch((error) => {isDown = true;})
-  .finally(() => {
-    if (isDown) {setTimeout(tangoDown, 10000);}
-  });
+  try {await refreshSidebar();}
+  catch (error) {
+    isDown = true;
+    tangoDown();
+  }
 }
 
 onVisible(sb, ready);
 
-export { refreshSidebar, requestIdleOrAnimationFrame };
+export { refreshSidebar };
