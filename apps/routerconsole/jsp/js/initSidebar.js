@@ -1,5 +1,5 @@
+import { refreshSidebar, requestIdleOrAnimationFrame } from "/js/refreshSidebar.js";
 import { miniGraph } from "/js/miniGraph.js";
-import { refreshSidebar } from "/js/refreshSidebar.js";
 import { sectionToggler, countNewsItems } from "/js/sectionToggle.js";
 import { stickySidebar } from "/js/stickySidebar.js";
 export let refreshInterval = refresh * 1000;
@@ -22,7 +22,7 @@ export let isDocumentVisible = true;
     if (refreshQueue.length > 0) {
       isRefreshing = true;
       const nextRefresh = refreshQueue.shift();
-      requestAnimationFrame(() => {
+      requestIdleOrAnimationFrame(() => {
         refreshSidebar();
         isRefreshing = false;
         processQueue();
