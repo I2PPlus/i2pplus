@@ -27,7 +27,7 @@ const elements = {
 const requestIdleOrAnimationFrame = (callback, timeout = refreshInterval) => {
   clearTimeout(throttleTimer);
   throttleTimer = setTimeout(() => {
-    const request = typeof requestIdleCallback === "function" ? requestIdleCallback : requestAnimationFrame;
+    const request = requestAnimationFrame;
     request(callback);
   }, timeout);
 };
