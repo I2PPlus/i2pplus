@@ -107,8 +107,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     @Override
     public synchronized void receive(ByteBuffer src) {
         super.receive(src);
-        if (!src.hasRemaining())
-            return; // nothing to receive
+        if (!src.hasRemaining()) {return;} // nothing to receive
         receiveInbound(src);
     }
 
@@ -117,9 +116,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      *  @return 1, 2, or 0 if unknown
      *  @since 0.9.35
      */
-    public int getVersion() {
-            return 2;
-    }
+    public int getVersion() {return 2;}
 
     /**
      *  we are Bob, so receive these bytes as part of an inbound connection
@@ -271,7 +268,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     /**
      *  NTCP2 only. State must be one of IB_NTCP2_*
      *
-     *  we are Bob, so receive these bytes as part of an inbound connection
+     *  We are Bob, so receive these bytes as part of an inbound connection.
      *  This method receives messages 1 and 3, and sends message 2.
      *
      *  All data must be copied out of the buffer as Reader.processRead()
