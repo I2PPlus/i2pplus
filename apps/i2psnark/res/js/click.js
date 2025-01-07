@@ -48,10 +48,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function handleInputClick(clickTarget) {
     const clickable = ".toggleview, .tab_label, .snarkNav, .filter, input[class^='action'], input.add, input.create";
-    if (!clickTarget.closest(clickable)) {
-      console.log("element not in list of clickables, bailing out...");
-      return;
-    }
+    if (!clickTarget.closest(clickable)) {return;}
+
     const targetElement = clickTarget.matches(clickable) ? clickTarget : clickTarget.closest(clickable);
     console.log(targetElement);
     if (!targetElement) {return;}
