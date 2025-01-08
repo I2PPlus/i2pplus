@@ -1,7 +1,7 @@
 package edu.internet2.ndt;
 
-/* This class has code taken from
- *   http://nerds.palmdrive.net/useragent/code.html
+/* This class has code taken from:
+ * http://nerds.palmdrive.net/useragent/code.html
  *
  * Class used to obtain information about who is accessing a web-server.
  *
@@ -11,18 +11,15 @@ package edu.internet2.ndt;
  * these alone, currently, NDT uses this to get Browser OS only.
  *
  */
-
 public class UserAgentTools {
 
-	public static String[] getArray(String a, String b, String c) {
-		String[] res = new String[3];
-		res[0] = a;
-		res[1] = b;
-		res[2] = c;
-		return res;
-	}
+    public static String[] getArray(String a, String b, String c) {
+        String[] res = new String[3];
+        res[0] = a;
+        res[1] = b;
+        res[2] = c;
+        return res;
+    }
 
-	public static String[] getBrowser(String userAgent) {
-			return getArray("?", "?", "?");
-	}
+    public static String[] getBrowser(String userAgent) {return getArray("?", "?", "?");}
 }

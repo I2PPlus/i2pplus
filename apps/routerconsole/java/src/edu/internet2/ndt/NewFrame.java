@@ -12,10 +12,5 @@ import com.vuze.plugins.mlab.tools.ndt.swingemu.*;
  *
  */
 public class NewFrame extends JFrame {
-
-    /**
-     * Constructor
-     **/
-    public NewFrame(final JApplet parent) {
-	}
-} // class: NewFrame
+    public NewFrame(final JApplet parent) {}
+}

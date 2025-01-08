@@ -2,14 +2,12 @@ package edu.internet2.ndt;
 
 /*
  Copyright 2003 University of Chicago.  All rights reserved.
- The Web100 Network Diagnostic Tool (NDT) is distributed subject to
- the following license conditions:
+ The Web100 Network Diagnostic Tool (NDT) is distributed subject to the following license conditions:
  SOFTWARE LICENSE AGREEMENT
  Software: Web100 Network Diagnostic Tool (NDT)
 
- 1. The "Software", below, refers to the Web100 Network Diagnostic Tool (NDT)
-    (in either source code, or binary form and accompanying documentation).
-    Each licensee is addressed as "you" or "Licensee."
+ 1. The "Software", below, refers to the Web100 Network Diagnostic Tool (NDT) in either source code,
+    or binary form and accompanying documentation). Each licensee is addressed as "you" or "Licensee."
 
  2. The copyright holder shown above hereby grants Licensee a royalty-free non-exclusive license,
     subject to the limitations stated herein and U.S. Government license rights.
@@ -170,8 +168,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     private String _sCountry = "US";
     private String _sClient = "applet";
 
-    // these variables are self-explanatory. Do not follow naming convention,
-    // but left that way
+    // these variables are self-explanatory. Do not follow naming convention, but left that way
     int half_duplex, congestion, bad_cable, mismatch;
     double mylink;
     double loss, estimate, avgrtt, spd, waitsec, timesec, rttsec;
@@ -184,9 +181,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     String sHostName = null;
     InetAddress hostAddress = null;
     String _sTestResults, _sMidBoxTestResult;
-    byte _yTests = /* NDTConstants.TEST_MID | */ NDTConstants.TEST_C2S
-            | NDTConstants.TEST_S2C /* | NDTConstants.TEST_SFW */
-            | NDTConstants.TEST_STATUS | NDTConstants.TEST_META;
+    byte _yTests = NDTConstants.TEST_C2S | NDTConstants.TEST_S2C | NDTConstants.TEST_STATUS | NDTConstants.TEST_META;
     int _iC2sSFWResult = NDTConstants.SFW_NOTTESTED;
     int _iS2cSFWResult = NDTConstants.SFW_NOTTESTED;
 
@@ -269,7 +264,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
      * public static void main for invoking as an Application
      * @param args String array of command line arguments
      * @throws IllegalArgumentException on bad hostname
-     **/
+     */
     public static void main(String[] args) {
         Tcpbw100 test = mainSupport(args);
         test.runIt();
@@ -278,21 +273,18 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     /**
      *  bigly
      * @throws IllegalArgumentException on bad hostname
-     **/
+     */
     public static Tcpbw100 mainSupport(String[] args) {
         JFrame frame = new JFrame("ANL/Internet2 NDT (applet)");
         boolean useSSL = args.length > 0 && args[0].equals("-s");
-        if (useSSL)
-            args = Arrays.copyOfRange(args, 1, args.length);
+        if (useSSL) {args = Arrays.copyOfRange(args, 1, args.length);}
         if (args.length < 1 || args.length > 2) {
             System.out.println("Usage: java -jar Tcpbw100.jar [-s] <hostname> [client-id]");
             System.exit(0);
         }
         final Tcpbw100 applet = new Tcpbw100(useSSL);
         applet._bIsApplication = true;
-        if (args.length > 1) {
-                applet._sClient = args[1];
-        }
+        if (args.length > 1) {applet._sClient = args[1];}
         frame.getContentPane().add(applet);
         frame.setSize(700, 320);
         applet.init();
@@ -306,67 +298,21 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     // Accessor methods for public variables
     //
 
-    public String get_c2sspd() {
-        // Expressed as MiB using base 10
-        return Double.toString((pub_c2sspd));
-    }
-
-    public String get_s2cspd() {
-        // Expressed as MiB using base 10
-        return Double.toString(pub_s2cspd);
-    }
-
-    public String get_CurRwinRcvd() {
-        return Integer.toString(pub_CurRwinRcvd);
-    }
-
-    public String get_MaxRwinRcvd() {
-        return Integer.toString(pub_MaxRwinRcvd);
-    }
-
-    public String get_Ping() {
-        return Integer.toString(pub_MinRTT);
-    }
-
-    public String get_MaxRTT() {
-        return Integer.toString(pub_MaxRTT);
-    }
-
-    public String get_loss() {
-        return Double.toString(pub_loss);
-    }
-
-    public String get_avgrtt() {
-        return Double.toString(pub_avgrtt);
-    }
-
-    public String get_CurRTO() {
-        return Integer.toString(pub_CurRTO);
-    }
-
-    public String get_SACKsRcvd() {
-        return Integer.toString(pub_SACKsRcvd);
-    }
-
-    public String get_osVer() {
-        return pub_osVer;
-    }
-
-    public String get_pluginVer() {
-        return pub_pluginVer;
-    }
-
-    public String get_host() {
-        return pub_host;
-    }
-
-    public String get_osName() {
-        return pub_osName;
-    }
-
-    public String get_osArch() {
-        return pub_osArch;
-    }
+    public String get_c2sspd() {return Double.toString((pub_c2sspd));} // Expressed as MiB using base 10
+    public String get_s2cspd() {return Double.toString(pub_s2cspd);} // Expressed as MiB using base 10
+    public String get_CurRwinRcvd() {return Integer.toString(pub_CurRwinRcvd);}
+    public String get_MaxRwinRcvd() {return Integer.toString(pub_MaxRwinRcvd);}
+    public String get_Ping() {return Integer.toString(pub_MinRTT);}
+    public String get_MaxRTT() {return Integer.toString(pub_MaxRTT);}
+    public String get_loss() {return Double.toString(pub_loss);}
+    public String get_avgrtt() {return Double.toString(pub_avgrtt);}
+    public String get_CurRTO() {return Integer.toString(pub_CurRTO);}
+    public String get_SACKsRcvd() {return Integer.toString(pub_SACKsRcvd);}
+    public String get_osVer() {return pub_osVer;}
+    public String get_pluginVer() {return pub_pluginVer;}
+    public String get_host() {return pub_host;}
+    public String get_osName() {return pub_osName;}
+    public String get_osArch() {return pub_osArch;}
 
     public String get_mismatch() {
         String result;
@@ -389,86 +335,33 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         return result;
     }
 
-    public String get_cwndtime() {
-        return Double.toString(pub_cwndtime);
-    }
-
-    public String get_AccessTech() {
-        return pub_AccessTech;
-    }
-
-    public String get_rcvrLimiting() {
-        return Double.toString(pub_pctRcvrLimited);
-    }
+    public String get_cwndtime() {return Double.toString(pub_cwndtime);}
+    public String get_AccessTech() {return pub_AccessTech;}
+    public String get_rcvrLimiting() {return Double.toString(pub_pctRcvrLimited);}
 
     public String get_optimalRcvrBuffer() {
-        //buffer size in bits
-        return Integer.toString(pub_MaxRwinRcvd * NDTConstants.KILO_BITS);
+        return Integer.toString(pub_MaxRwinRcvd * NDTConstants.KILO_BITS); //buffer size in bits
     }
 
-    public String get_clientIP() {
-        return pub_clientIP;
-    }
-
-    public String get_natStatus() {
-        return pub_natBox;
-    }
-
-    public String get_DupAcksOut() {
-        return Integer.toString(pub_DupAcksOut);
-    }
-
-    public String get_DupAcksIn() {
-            return Integer.toString(pub_DupAcksIn);
-    }
+    public String get_clientIP() {return pub_clientIP;}
+    public String get_natStatus() {return pub_natBox;}
+    public String get_DupAcksOut() {return Integer.toString(pub_DupAcksOut);}
+    public String get_DupAcksIn() {return Integer.toString(pub_DupAcksIn);}
 
     public String get_TimeStamp() {
         String result = "unknown";
-        if (pub_TimeStamp != null) {
-            result = pub_TimeStamp.toString();
-        }
+        if (pub_TimeStamp != null) {result = pub_TimeStamp.toString();}
         return result;
     }
 
     // get PC buffer imposed throughput limit
-    public String get_PcBuffSpdLimit() {
-           return Double.toString(rwin / rttsec);
-    }
-
-    // commenting out unused method, but not removing in case of future use
-    /*
-     * public String isReady() {
-     *
-     * // if ((pub_isReady == null) || (pub_isReady.equals(""))) { //
-     * pub_isReady = "no"; // } // String result = "foo";
-     *
-     * //if (failed) { // pub_isReady = "failed1"; //} //result = pub_isReady;
-     * // return result; return pub_isReady; }
-     */
-
-    public String get_jitter() {
-        return Integer.toString((pub_MaxRTT - pub_MinRTT));
-    }
-
-    public String get_WaitSec() {
-        return Integer.toString((pub_CurRTO * pub_Timeouts) / 1000);
-    }
-
-    public String get_errmsg() {
-        return pub_errmsg;
-    }
-
-    public String get_diagnosis() {
-        return pub_diagnosis;
-    }
-
-    public String get_statistics() {
-        return pub_statistics;
-    }
-
-    public String get_status() {
-        return pub_status;
-    }
+    public String get_PcBuffSpdLimit() {return Double.toString(rwin / rttsec);}
+    public String get_jitter() {return Integer.toString((pub_MaxRTT - pub_MinRTT));}
+    public String get_WaitSec() {return Integer.toString((pub_CurRTO * pub_Timeouts) / 1000);}
+    public String get_errmsg() {return pub_errmsg;}
+    public String get_diagnosis() {return pub_diagnosis;}
+    public String get_statistics() {return pub_statistics;}
+    public String get_status() {return pub_status;}
 
     public String get_instSpeed() {
         //Get speed in bits, hence multiply by 8 for byte->bit conversion
@@ -481,56 +374,44 @@ public class Tcpbw100 extends JApplet implements ActionListener {
      *
      * @return String UserAgent details set locally
      * @see UserAgentTools
-     * */
-    public String getUserAgent() {
-        return _sUserAgent;
-    }
+     */
+    public String getUserAgent() {return _sUserAgent;}
 
     /**
      * Set UserAgent String.
      *
-     * @param paramStrUserAgent
-     *            UserAgent String to be set locally
+     * @param paramStrUserAgent UserAgent String to be set locally
      * @see UserAgentTools
-     * */
-    public void setUserAgent(String paramStrUserAgent) {
-        this._sUserAgent = paramStrUserAgent;
-    }
+     */
+    public void setUserAgent(String paramStrUserAgent) {this._sUserAgent = paramStrUserAgent;}
 
     /**
      * Get Client-&gt;Server fire-wall test results.
      *
      * @return integer indicating C-&gt;S test results
-     * */
-    public int getC2sSFWTestResults() {
-        return this._iC2sSFWResult;
-    }
+     */
+    public int getC2sSFWTestResults() {return this._iC2sSFWResult;}
 
     /**
      * Set Client-&gt;Server fire-wall test results.
      *
-     * @param iParamC2SRes
-     *            integer indicating C-&gt;S test results
-     * */
-    public void setC2sSFWTestResults(int iParamC2SRes) {
-        this._iC2sSFWResult = iParamC2SRes;
-    }
+     * @param iParamC2SRes integer indicating C-&gt;S test results
+     */
+    public void setC2sSFWTestResults(int iParamC2SRes) {this._iC2sSFWResult = iParamC2SRes;}
 
     /**
      * Get Server-&gt;Client fire-wall test results.
      *
      * @return integer indicating C-&gt;S test results
-     * */
-    public int getS2cSFWTestResults() {
-        return this._iS2cSFWResult;
-    }
+     */
+    public int getS2cSFWTestResults() {return this._iS2cSFWResult;}
 
     /**
      * Set server-&gt;Client fire-wall test results.
      *
-     * @param iParamS2CRes
-     *            integer indicating C-&gt;S test results
-     * */
+     * @param iParamS2CRes integer indicating C-&gt;S test results
+     *
+     */
     public void setS2cSFWTestResults(int iParamS2CRes) {
         this._iS2cSFWResult = iParamS2CRes;
     }
@@ -539,9 +420,9 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     // End of accessor methods
     //
 
-    /** I2P */
-    public boolean isTestInProgress() {
-        return _bTestInProgress.get();
+    /* I2P */
+
+    public boolean isTestInProgress() {return _bTestInProgress.get();
     }
 
     /**
@@ -555,14 +436,9 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         // I2P
         public void run() {
             if (_bTestInProgress.compareAndSet(false, true)) {
-                try {
-                    run2();
-                } finally {
-                    _bTestInProgress.set(false);
-                }
-            } else {
-                _log.warn("Test in progress, not running another one");
-            }
+                try {run2();}
+                finally {_bTestInProgress.set(false);}
+            } else {_log.warn("Test in progress, not running another one");}
         }
 
         private void run2() {
@@ -588,9 +464,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                 // number of tests
 
                 StatusPanel sPanel = new StatusPanel(testsNum, sTempEnable);
-                synchronized (Tcpbw100.this) {
-                    _sPanel = sPanel;
-                }
+                synchronized (Tcpbw100.this) {_sPanel = sPanel;}
                 getContentPane().add(BorderLayout.NORTH, sPanel);
                 getContentPane().validate();
                 getContentPane().repaint();
@@ -603,13 +477,11 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                         }
                         if (testsNum == 0) {
                             _resultsTxtPane.append("\n** "
-                                    + _resBundDisplayMsgs
-                                            .getString("startingTest") + " "
+                                    + _resBundDisplayMsgs.getString("startingTest") + " "
                                     + testNo + " **\n");
                         } else {
                             _resultsTxtPane.append("\n** "
-                                    + _resBundDisplayMsgs
-                                            .getString("startingTest") + " "
+                                    + _resBundDisplayMsgs.getString("startingTest") + " "
                                     + testNo + " "
                                     + _resBundDisplayMsgs.getString("of") + " "
                                     + testsNum + " **\n");
@@ -1223,43 +1095,35 @@ public class Tcpbw100 extends JApplet implements ActionListener {
      * @param msg String value of status
      * */
     public void showStatus(String msg) {
-        synchronized(this) {
-            _displayStatus = msg;
-        }
-        if (_log.shouldWarn())
-            _log.warn("NDT STATUS: " + msg);
+        synchronized(this) {_displayStatus = msg;}
+        if (_log.shouldWarn()) {_log.warn("NDT STATUS: " + msg);}
     }
 
     /**
-         *  I2P
+     *  I2P
      *  Translated status, not HTML escaped.
      */
-    public synchronized String getStatus() {
-        return _displayStatus;
-    }
+    public synchronized String getStatus() {return _displayStatus;}
 
     /**
      * MiddleBox testing is a throughput test from the Server to the Client to
      * check for duplex mismatch conditions. It determines if routers or
      * switches in the path may be making changes to some TCP parameters.
      *
-     * @param paramProtoObj
-     *            Protocol Object used to exchange messages
+     * @param paramProtoObj Protocol Object used to exchange messages
      * @return boolean value indicating test failure status true if test was not
      *         completed false if test was completed
      *
-     * @throws IOException
-     *             when sending/receiving messages from server fails
+     * @throws IOException when sending/receiving messages from server fails
      * @see Protocol#recv_msg(Message msgParam)
      * @see Protocol#send_json_msg(byte bParamType, byte[] baParamTab) These methods
      *      indicate more information about IOException
-     * */
-
+     *
+     */
     public boolean test_mid(Protocol paramProtoObj) throws IOException {
 
         // byte buff[] = new byte[8192];
         byte buff[] = new byte[NDTConstants.MIDDLEBOX_PREDEFINED_MSS];
-
         Message msg = new Message();
 
         if ((_yTests & NDTConstants.TEST_MID) == NDTConstants.TEST_MID) {
