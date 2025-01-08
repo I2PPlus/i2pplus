@@ -434,13 +434,10 @@
     <mkdir dir="../jsp/WEB-INF/classes"/>
 
     <!-- There are various jspc ant tasks, but they all seem a bit flakey.
-             Warning - jspC will fail on unknown options,
-             check oldest libtomcat8-java distro package version we use.
-             Jessie has 8.0.14; xenial has 8.0.32; we bundle for precise/trusty.
-             Add below to get supported options:
-                <arg value="-help"/>
-          -->
-    <!--
+         Warning - jspC will fail on unknown options, check oldest libtomcat8-java distro package version we use.
+         Jessie has 8.0.14; xenial has 8.0.32; we bundle for precise/trusty.
+         Add below to get supported options:
+         <arg value="-help"/>
            **     Usage: jspc <options> <jsp files>
            **     where jsp files is
            **         -webapp <dir>      A directory containing a web-app, whose JSP pages
@@ -475,8 +472,7 @@
            **         -threadCount <count>  Number of threads to use for compilation.
            **                               (default one per core)
            **                               ("2.0C" means two threads per core)
-        -->
-    <!--
+           **
            **  Simply call org.apache.jasper.JspC, then exit.
            **
            **  As of Tomcat 8.5.33, forking their JspC won't complete,
