@@ -169,7 +169,6 @@ public class NDTConstants {
      * Initializes a few constants
      *
      * @param paramLocale local Locale object
-     *
      */
     public static void initConstants(Locale paramLocale) {
         try {_rscBundleMessages = ResourceBundle.getBundle(TCPBW100_MSGS, paramLocale);}
@@ -184,7 +183,6 @@ public class NDTConstants {
      *
      * @param paramStrLang local Language String
      * @param paramStrCountry local country String
-     *
      */
     public static void initConstants(String paramStrLang, String paramStrCountry) {
         try {
