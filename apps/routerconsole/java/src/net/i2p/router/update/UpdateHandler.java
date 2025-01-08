@@ -12,13 +12,11 @@ import static net.i2p.update.UpdateMethod.*;
 /**
  * <p>Handles the request to update the router by firing one or more
  * {@link net.i2p.util.EepGet} calls to download the latest signed update file
- * and displaying the status to anyone who asks.
- * </p>
+ * and displaying the status to anyone who asks.</p>
  * <p>After the download completes the signed update file is verified with
  * {@link net.i2p.crypto.TrustedUpdate}, and if it's authentic the payload
  * of the signed update file is unpacked and the router is restarted to complete
- * the update process.
- * </p>
+ * the update process.</p>
  *
  * This does not do any checking, that is handled by the NewsFetcher.
  */
@@ -42,17 +40,17 @@ class UpdateHandler implements Updater {
     public UpdateTask update(UpdateType type, UpdateMethod method, List<URI> updateSources,
                              String id, String newVersion, long maxTime) {
         boolean shouldProxy = _context.getProperty(ConfigUpdateHandler.PROP_SHOULD_PROXY, ConfigUpdateHandler.DEFAULT_SHOULD_PROXY);
-        if ((type != ROUTER_SIGNED && type != ROUTER_SIGNED_SU3) ||
-            (shouldProxy && method != HTTP) ||
-            ((!shouldProxy) && method != HTTP_CLEARNET && method != HTTPS_CLEARNET) ||
-            updateSources.isEmpty())
+        if ((type != ROUTER_SIGNED && type != ROUTER_SIGNED_SU3) || (shouldProxy && method != HTTP) ||
+            ((!shouldProxy) && method != HTTP_CLEARNET && method != HTTPS_CLEARNET) || updateSources.isEmpty()) {
             return null;
+        }
         UpdateRunner update = new UpdateRunner(_context, _mgr, type, method, updateSources);
-        // set status before thread to ensure UI feedback
-        if (updateSources.toString().contains("skank") && type == ROUTER_UNSIGNED)
+        // Set status before thread to ensure UI feedback
+        if (updateSources.toString().contains("skank") && type == ROUTER_UNSIGNED) {
             _mgr.notifyProgress(update, "<b>" + _mgr._t("Updating I2P").replace("Updating I2P", "Downloading I2P+ update") + "&hellip;</b>");
-        else
+        } else {
             _mgr.notifyProgress(update, "<b>" + _mgr._t("Updating I2P").replace("Updating I2P", "Downloading update") + "&hellip;</b>");
+        }
         return update;
     }
 }

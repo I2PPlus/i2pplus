@@ -1076,7 +1076,7 @@ public class SidebarHelper extends HelperBase {
                 System.setProperty("net.i2p.router.web.UpdateHandler.nonce", nonce + "");
                 String uri = getRequestURI();
                 buf.append("<form id=sb_updateform action=\"").append(uri).append("\" method=POST class=volatile target=processSidebarForm>\n")
-                   .append("<input type=hidden name=\"updateNonce\" value=\"").append(nonce).append("\" >\n");
+                   .append("<input type=hidden name=\"updateNonce\" value=\"").append(nonce).append("\">\n");
 /*
                 if (avail) {
                     buf.append("<span id=updateAvailable class=volatile>").append(_t("Release update available")).append("<br><i>")
@@ -1167,7 +1167,7 @@ public class SidebarHelper extends HelperBase {
                 System.setProperty("net.i2p.router.web.ReseedHandler.nonce", nonce+"");
                 String uri = getRequestURI();
                 buf.append("<p class=volatile><form action=\"").append(uri).append("\" method=POST>\n");
-                buf.append("<input type=hidden name=\"reseedNonce\" value=\"").append(nonce).append("\" >\n");
+                buf.append("<input type=hidden name=\"reseedNonce\" value=\"").append(nonce).append("\">\n");
                 buf.append("<button type=submit title=\"").append(_t("Attempt to download router reference files (if automatic reseed has failed)"));
                 buf.append("\" id=sb_manualReseed class=reload value=\"Reseed\" >").append(_t("Reseed")).append("</button></form></p>\n");
             }
