@@ -46,6 +46,8 @@ function sectionToggler() {
     "toggle_sb_updatesection": sb_updatesection
   };
 
+  let listenersAdded = false;
+
   function initializeLocalStorage() {
     return new Promise((resolve) => {
       const defaultState = {
@@ -104,6 +106,7 @@ function sectionToggler() {
   }
 
   function addToggleListeners() {
+    if (listenersAdded) {return;}
     sb_wrap.addEventListener("click", function (event) {
       if (event.target.id in toggleElements) {
         const currentState = event.target.checked;
@@ -111,6 +114,7 @@ function sectionToggler() {
         saveToggleStates();
       }
     });
+    listenersAdded = true;
   }
 
   function toggleElementVisibility(toggleInput, isVisible) {
