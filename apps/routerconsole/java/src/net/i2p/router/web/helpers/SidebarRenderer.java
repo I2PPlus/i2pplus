@@ -833,7 +833,7 @@ class SidebarRenderer {
         StringBuilder buf = new StringBuilder(512);
         if (_helper == null || updateStatus.isEmpty()) {return "";}
         else {
-            buf.append("<div id=sb_updatesection class=\"collapse volatile\">")
+            buf.append("<div id=sb_updatesection class=\"collapse\">")
                .append("<h3><a href=\"/configupdate\" target=_top title=\"")
                .append(_t("Configure I2P Updates")).append("\">").append(_t("Update Status")).append("</a>")
                .append("<input type=checkbox id=toggle_sb_updatesection class=\"toggleSection script\" checked hidden>")

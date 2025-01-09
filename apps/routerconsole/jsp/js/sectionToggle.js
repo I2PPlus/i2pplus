@@ -119,41 +119,44 @@ function sectionToggler() {
 
   function toggleElementVisibility(toggleInput, isVisible) {
     const element = toggleElements[toggleInput.id];
-    const titleH3 = element.parentElement.querySelector("h3");
-    const badge = element.parentElement.querySelector("a .badge");
     if (!element) { return; }
-    element.hidden = !isVisible;
-    const hr = sb.querySelector(`#${element.id}+hr`);
 
-    if (element === sb_updatesection) { handleUpdateSectionVisibility(isVisible); }
-    else if (element === sb_services) { handleServicesVisibility(isVisible); }
-    else if (isVisible) {
-      if (hr) {
+    if (element.parentElement) {
+      const titleH3 = element.parentElement.querySelector("h3");
+      const badge = element.parentElement.querySelector("a .badge");
+      element.hidden = !isVisible;
+      const hr = sb.querySelector(`#${element.id}+hr`);
+
+      if (element === sb_updatesection) { handleUpdateSectionVisibility(isVisible); }
+      else if (element === sb_services) { handleServicesVisibility(isVisible); }
+      else if (isVisible) {
+        if (hr) {
+          hr.hidden = false;
+          hr.style.display = null;
+        }
+        toggleInput.checked = true;
+        if (element.classList) element.classList.remove("collapsed");
+      } else {
+        if (hr) {
+          hr.hidden = true;
+          hr.style.display = "none";
+        }
+        toggleInput.checked = false;
+        if (element.classList) element.classList.add("collapsed");
+      }
+
+      if (toggleInput.id === "toggle_sb_localtunnels") { handleLocalTunnelsVisibility(isVisible); }
+      else if (toggleInput.id === "toggle_sb_queue") { handleQueueVisibility(isVisible); }
+      else if (toggleInput.id === "toggle_sb_tunnels") { handleTunnelsVisibility(isVisible); }
+
+      if (element === sb_bandwidth && sb_graphstats) {
+        sb_graphstats.style.opacity = sb_bandwidth.hidden ? "1" : null;
+      }
+
+      if (element === sb_internals || element === sb_advanced) {
         hr.hidden = false;
         hr.style.display = null;
       }
-      toggleInput.checked = true;
-      if (element.classList) element.classList.remove("collapsed");
-    } else {
-      if (hr) {
-        hr.hidden = true;
-        hr.style.display = "none";
-      }
-      toggleInput.checked = false;
-      if (element.classList) element.classList.add("collapsed");
-    }
-
-    if (toggleInput.id === "toggle_sb_localtunnels") { handleLocalTunnelsVisibility(isVisible); }
-    else if (toggleInput.id === "toggle_sb_queue") { handleQueueVisibility(isVisible); }
-    else if (toggleInput.id === "toggle_sb_tunnels") { handleTunnelsVisibility(isVisible); }
-
-    if (element === sb_bandwidth && sb_graphstats) {
-      sb_graphstats.style.opacity = sb_bandwidth.hidden ? "1" : null;
-    }
-
-    if (element === sb_internals || element === sb_advanced) {
-      hr.hidden = false;
-      hr.style.display = null;
     }
   }
 

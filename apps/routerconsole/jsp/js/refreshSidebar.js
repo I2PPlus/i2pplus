@@ -9,11 +9,12 @@ import { refreshInterval, getRefreshTimerId } from "/js/initSidebar.js";
 ("use strict");
 
 let isDown = false;
+let noResponse = 0;
 let refreshTimeout;
+let refreshTimerActive = true;
 let response;
 let responseDoc;
 let responseText;
-let noResponse = 0;
 
 const hiddenIframe = document.getElementById("processSidebarForm");
 const parser = new DOMParser();
@@ -21,13 +22,14 @@ const sb = document.querySelector("#sidebar");
 const updateForm = document.getElementById("sb_updateform");
 const uri = location.pathname;
 const xhrContainer = document.getElementById("xhr");
+const worker = new Worker("/js/fetchWorker.js");
 
-let refreshTimerActive = true;
 
 const elements = {
   badges: sb.querySelectorAll(".badge, #tunnelCount, #newsCount"),
   volatileElements: sb.querySelectorAll(".volatile:not(.badge)"),
 };
+
 
 async function initSidebar() {
   sectionToggler();
@@ -50,88 +52,88 @@ async function doFetch() {
   checkTimer();
   if (!refreshTimerActive.isActive) {return;}
   try {
-    response = await fetch(`/xhr1.jsp?requestURI=${uri}`, { method: "GET", headers: { Accept: "text/html" } });
-    responseText = await response.text(),
-    responseDoc = parser.parseFromString(responseText, "text/html");
-    if (response.ok) {
-      isDown = false;
-      noResponse = 0;
-      document.body.classList.remove("isDown");
-    } else {noResponse++;}
+    worker.postMessage({ url: `/xhr1.jsp?requestURI=${uri}` });
+    if (refreshTimeout) {clearTimeout(refreshTimeout);}
+    refreshTimeout = setTimeout(doFetch, refreshInterval);
   } catch (error) {noResponse++;}
 }
+
+worker.addEventListener("message", async function(event) {
+  let { responseText, isDown } = event.data;
+  if (isDown) {
+    noResponse++;
+    tangoDown();
+  } else {
+    responseDoc = parser.parseFromString(responseText, "text/html");
+    isDown = false;
+    noResponse = 0;
+    document.body.classList.remove("isDown");
+  }
+});
 
 async function refreshSidebar() {
   try {
     await doFetch();
     if (refreshTimeout) {clearTimeout(refreshTimeout);}
     refreshTimeout = setTimeout(refreshSidebar, refreshInterval);
-    if (isDown && response.ok) {
-      isDown = false;
-      document.body.classList.remove("isDown");
-      if (location.pathname === uri) {location.reload();}
-    }
+    if (!isDown && responseDoc) {
+      const responseElements = {
+        volatileElements: responseDoc.querySelectorAll(".volatile:not(.badge)"),
+        badges: responseDoc.querySelectorAll(".badge"),
+      };
 
-    const responseElements = {
-      volatileElements: responseDoc.querySelectorAll(".volatile:not(.badge)"),
-      badges: responseDoc.querySelectorAll(".badge"),
-    };
-
-    const updateElementInnerHTML = (elem, respElem) => {
-      if (elem && respElem && elem.innerHTML != respElem.innerHTML) {
-        elem.innerHTML = respElem.innerHTML;
-      }
-    };
-
-    const updateElementTextContent = (elem, respElem) => {
-      if (elem && respElem && elem.textContent != respElem.textContent) {
-        elem.textContent = respElem.textContent;
-      }
-    };
-
-    const updateIfStatusDown = (elem, respElem) => {
-      if (elem && elem.classList.contains("statusDown") && respElem && elem.outerHTML != respElem.outerHTML) {
-        elem.outerHTML = respElem.outerHTML;
-      }
-    };
-
-    (function checkSections() {
-      const updating = xhrContainer.querySelectorAll(".volatile");
-      const updatingResponse = responseDoc.querySelectorAll(".volatile");
-      if (updating.length !== updatingResponse.length) {refreshAll();}
-      else {updateVolatile();}
-    })();
-
-    function updateVolatile() {
-      Array.from(elements.volatileElements).forEach((elem, index) => {
-        const respElem = responseElements.volatileElements[index];
-        if (elem && respElem) {
-          isDown = false;
-          if (elem.classList.contains("statusDown")) {updateIfStatusDown(elem, respElem);}
-          else {updateElementInnerHTML(elem, respElem);}
+      const updateElementInnerHTML = (elem, respElem) => {
+        if (elem && respElem && elem.innerHTML != respElem.innerHTML) {
+          elem.innerHTML = respElem.innerHTML;
         }
-      });
+      };
 
-      if (elements.badges && responseElements.badges) {
-        Array.from(elements.badges).forEach((elem, index) => {
-          const respElem = responseElements.badges[index];
-          updateElementTextContent(elem, respElem);
+      const updateElementTextContent = (elem, respElem) => {
+        if (elem && respElem && elem.textContent != respElem.textContent) {
+          elem.textContent = respElem.textContent;
+        }
+      };
+
+      const updateIfStatusDown = (elem, respElem) => {
+        if (elem && elem.classList.contains("statusDown") && respElem && elem.outerHTML != respElem.outerHTML) {
+          elem.outerHTML = respElem.outerHTML;
+        }
+      };
+
+      (function checkSections() {
+        const updating = xhrContainer.querySelectorAll(".volatile");
+        const updatingResponse = responseDoc.querySelectorAll(".volatile");
+        if (updating.length !== updatingResponse.length) {refreshAll();}
+        else {updateVolatile();}
+      })();
+
+      function updateVolatile() {
+        Array.from(elements.volatileElements).forEach((elem, index) => {
+          const respElem = responseElements.volatileElements[index];
+          if (elem && respElem) {
+            if (elem.classList.contains("statusDown")) {updateIfStatusDown(elem, respElem);}
+            else {updateElementInnerHTML(elem, respElem);}
+          }
         });
-      }
-    };
 
-    function refreshAll() {
-      if (sb && responseDoc) {
-        isDown = false;
-        const sbResponse = responseDoc.getElementById("sb");
-        if (sbResponse && sb.innerHTML !== sbResponse.innerHTML) {
-          xhrContainer.innerHTML = sbResponse.innerHTML;
+        if (elements.badges && responseElements.badges) {
+          Array.from(elements.badges).forEach((elem, index) => {
+            const respElem = responseElements.badges[index];
+            updateElementTextContent(elem, respElem);
+          });
         }
-        sectionToggler();
-      } else {tangoDown();}
-    }
+      };
 
-    await initSidebar();
+      function refreshAll() {
+        if (sb && responseDoc) {
+          const sbResponse = responseDoc.getElementById("sb");
+          if (sbResponse && sb.innerHTML !== sbResponse.innerHTML) {
+            xhrContainer.innerHTML = sbResponse.innerHTML;
+          }
+          sectionToggler();
+        } else {tangoDown();}
+      }
+    }
   } catch (error) {tangoDown();}
 }
 
@@ -145,7 +147,7 @@ async function handleFormSubmit() {
       form.dispatchEvent(new Event('submit'));
       function handleLoad(event) {
         setTimeout(async () => {
-          await doFetch();
+          await doFetch(true);
           const formResponse = responseDoc.querySelector(`#${formId}`);
           if (formResponse) {
             if (form.id !== "form_sidebar") {
