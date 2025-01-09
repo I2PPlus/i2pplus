@@ -42,7 +42,8 @@ async function tangoDown() {
     isDown = true;
     document.body.classList.add("isDown");
   }
-  if (noResponse > 10) {location.reload();}
+  // force page reload for every 8 noResponse events
+  if (noResponse % 8 === 0) {location.reload();}
 }
 
 async function checkTimer() {
