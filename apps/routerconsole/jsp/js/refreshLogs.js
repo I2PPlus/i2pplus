@@ -272,8 +272,7 @@ function start() {
     linkifyLeaseSets();
     linkifyIPv4();
     linkifyIPv6();
-    if ("requestIdleCallback" in window) { onVisible(mainLogs, () => { requestIdleCallback(initRefresh); }); }
-    else { onVisible(mainLogs, () => { requestAnimationFrame(initRefresh); }); }
+    onVisible(mainLogs, () => { requestAnimationFrame(initRefresh); });
     onHidden(mainLogs, stopRefresh);
     updateInterval();
     addFilterInput();

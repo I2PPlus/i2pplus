@@ -42,6 +42,7 @@ async function tangoDown() {
     isDown = true;
     document.body.classList.add("isDown");
   }
+  if (noResponse > 10) {location.reload();}
 }
 
 async function checkTimer() {
