@@ -1,3 +1,6 @@
+2025-01-09 dr|z3d
+ * Console: Run sidebar refresh (fetch) on background thread in browser
+
 2025-01-05 dr|z3d
  * Console/Webapps: Leverage uglifyjs during build process to compress
    console and webapp javascript
