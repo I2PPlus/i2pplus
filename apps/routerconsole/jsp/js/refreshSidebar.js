@@ -24,17 +24,16 @@ const uri = location.pathname;
 const xhrContainer = document.getElementById("xhr");
 const worker = new Worker("/js/fetchWorker.js");
 
-
 const elements = {
   badges: sb.querySelectorAll(".badge, #tunnelCount, #newsCount"),
   volatileElements: sb.querySelectorAll(".volatile:not(.badge)"),
 };
 
-
 async function initSidebar() {
   sectionToggler();
-  countNewsItems();
   handleFormSubmit();
+  countNewsItems();
+  checkTimer();
 }
 
 async function tangoDown() {
@@ -189,13 +188,11 @@ async function handleFormSubmit() {
 }
 
 const ready = async() => {
-  try {
-    await refreshSidebar();
-    isDown = false;
-  }
+  try { await refreshSidebar(); isDown = false; }
   catch (error) {isDown = true;}
 }
 
 onVisible(sb, ready);
+document.addEventListener("DOMContentLoaded", initSidebar);
 
 export { refreshSidebar };

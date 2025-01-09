@@ -246,12 +246,9 @@ function countNewsItems() {
   const doubleCount = sb.querySelector("#newsCount+#newsCount");
   if (!sbNewsHeadings || !newsBadge) return;
   if (doubleCount) doubleCount.remove();
-  const newsItemsLength = sbNewsHeadings.querySelectorAll("table tr").length;
-
-  newsBadge.hidden = newsItemsLength <= 0;
-  if (newsItemsLength > 0 && newsBadge.innerHTML !== newsItemsLength.toString()) {
-    newsBadge.innerHTML = newsItemsLength;
-  }
+  const newsCount = sbNewsHeadings.querySelectorAll("table tr").length;
+  newsBadge.hidden = newsCount <= 0;
+  if (newsCount > 0 && newsBadge.innerHTML !== newsCount.toString()) {newsBadge.innerHTML = newsCount;}
 }
 
 export { sectionToggler, countNewsItems };
