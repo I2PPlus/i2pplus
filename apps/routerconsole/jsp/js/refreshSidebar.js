@@ -41,8 +41,6 @@ async function tangoDown() {
     isDown = true;
     document.body.classList.add("isDown");
   }
-  // force page reload for every 8 noResponse events
-  if (noResponse % 8 === 0) {location.reload();}
 }
 
 async function checkTimer() {
@@ -106,6 +104,7 @@ async function refreshSidebar() {
         const updatingResponse = responseDoc.querySelectorAll(".volatile");
         if (updating.length !== updatingResponse.length) {refreshAll();}
         else {updateVolatile();}
+        countNewsItems();
       })();
 
       function updateVolatile() {
