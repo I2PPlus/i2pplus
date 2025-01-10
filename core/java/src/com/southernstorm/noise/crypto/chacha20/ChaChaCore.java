@@ -121,28 +121,9 @@ public final class ChaChaCore {
         output[15] = (int)(iv >> 32);
     }
 
-    /**
-     * Initializes the 64-bit initialization vector and counter in a ChaCha20 block.
-     *
-     * @param output The output block, which must consist of at
-     * least 16 words and must have been initialized by initKey256()
-     * or initKey128().
-     * @param iv The 64-bit initialization vector value.
-     * @param counter The 64-bit counter value.
-     */
-    public static void initIV(int[] output, long iv, long counter) {
-        output[12] = (int)counter;
-        output[13] = (int)(counter >> 32);
-        output[14] = (int)iv;
-        output[15] = (int)(iv >> 32);
-    }
-
     private static int leftRotate16(int v) {return v << 16 | (v >>> 16);}
-
     private static int leftRotate12(int v) {return v << 12 | (v >>> 20);}
-
     private static int leftRotate8(int v) {return v << 8 | (v >>> 24);}
-
     private static int leftRotate7(int v) {return v << 7 | (v >>> 25);}
 
     private static void quarterRound(int[] v, int a, int b, int c, int d) {
