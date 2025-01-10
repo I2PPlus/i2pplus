@@ -211,7 +211,7 @@ public class CSSHelper extends HelperBase {
                 capitalizeWord.append(afterfirst);
                 capitalizeWord.append(" ");
             }
-        return capitalizeWord.toString().trim();
+            return capitalizeWord.toString().trim();
         }
     }
 
