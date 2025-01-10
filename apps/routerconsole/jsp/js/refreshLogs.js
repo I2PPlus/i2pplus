@@ -19,6 +19,7 @@ function start() {
   const refreshInput = document.getElementById("logRefreshInterval");
   const refreshValue = localStorage.getItem("logsRefresh") || "30";
   const toggleRefresh = document.getElementById("toggleRefresh");
+  const updates = [];
   const visible = document.visibilityState;
   const xhrlogs = new XMLHttpRequest();
   let logsRefreshId;
@@ -58,7 +59,9 @@ function start() {
       if (!criticallogs && criticallogsResponse) { mainLogs.innerHTML = mainLogsResponse.innerHTML; }
       else if (criticallogs && criticallogsResponse) {
           if (criticallogsResponse.innerHTML !== criticallogs.innerHTML) {
-            criticallogs.innerHTML = criticallogsResponse.innerHTML;
+            updates.push(() => {
+              criticallogs.innerHTML = criticallogsResponse.innerHTML;
+            });
           }
       } else {
         critLogsHead?.remove();
@@ -70,31 +73,42 @@ function start() {
         const routerlogsFileInfoResponse = xhrlogs.responseXML.querySelector("#routerlogs tr:first-child td p");
         if (routerlogsList && routerlogsListResponse) {
           if (routerlogsList.innerHTML !== routerlogsListResponse.innerHTML) {
-            routerlogsList.innerHTML = routerlogsListResponse.innerHTML;
+            updates.push(() => {
+              routerlogsList.innerHTML = routerlogsListResponse.innerHTML;
+            });
           }
           if (routerlogsFileInfo.innerHTML !== routerlogsFileInfoResponse.innerHTML) {
-            routerlogsFileInfo.innerHTML = routerlogsFileInfoResponse.innerHTML;
+            updates.push(() => {
+              routerlogsFileInfo.innerHTML = routerlogsFileInfoResponse.innerHTML;
+            });
           }
         }
       } else if (routerlogs) {
         const routerlogsTr = routerlogs.querySelector("tr:nth-child(2)");
         const routerlogsTrResponse = xhrlogs.responseXML.querySelector("#routerlogs tr:nth-child(2)");
         if (routerlogsTr && routerlogsTrResponse && routerlogsTr !== routerlogsTrResponse) {
-          routerlogsTr.innerHTML = routerlogsTrResponse.innerHTML;
+          updates.push(() => {
+            routerlogsTr.innerHTML = routerlogsTrResponse.innerHTML;
+          });
         }
       }
+
       linkifyRouterIds();
       linkifyLeaseSets();
       linkifyIPv4();
       linkifyIPv6();
+
       if (servicelogs) {
         const servicelogsResponse = xhrlogs.responseXML.getElementById("wrapperlogs");
         if (servicelogs && servicelogsResponse) {
           if (servicelogsResponse.innerHTML !== servicelogs.innerHTML) {
-            servicelogs.innerHTML = servicelogsResponse.innerHTML;
+            updates.push(() => {
+              servicelogs.innerHTML = servicelogsResponse.innerHTML;
+            });
           }
         }
       }
+
       if (routerlogsList) {
         const liElements = routerlogsList.querySelectorAll("li");
         liElements.forEach((li) => {
@@ -105,6 +119,9 @@ function start() {
       }
       progressx.hide();
     };
+
+    requestAnimationFrame(() => { updates.forEach(update => update()); });
+
     xhrlogs.send();
     updateInterval();
     addFilterInput();
@@ -155,16 +172,18 @@ function start() {
       const matches = text.match(/\[([a-zA-Z0-9\~\-]{6})\]/g);
 
       if (matches) {
-        matches.forEach((match) => {
-          const linkText = match.substring(1, match.length - 1); // remove the square brackets
-          const linkHref = `/netdb?r=${linkText}`;
-          const link = document.createElement("a");
-          link.href = linkHref;
-          link.textContent = linkText;
+        requestAnimationFrame(() => {
+          matches.forEach((match) => {
+            const linkText = match.substring(1, match.length - 1); // remove the square brackets
+            const linkHref = `/netdb?r=${linkText}`;
+            const link = document.createElement("a");
+            link.href = linkHref;
+            link.textContent = linkText;
 
-          // Escape the linkText to ensure it is safe for the regex
-          const escapedLinkText = escapeRegExp(linkText);
-          li.innerHTML = li.innerHTML.replace(new RegExp(`\\[${escapedLinkText}\\]`, "g"), link.outerHTML);
+            // Escape the linkText to ensure it is safe for the regex
+            const escapedLinkText = escapeRegExp(linkText);
+            li.innerHTML = li.innerHTML.replace(new RegExp(`\\[${escapedLinkText}\\]`, "g"), link.outerHTML);
+          });
         });
       }
     });
@@ -180,17 +199,19 @@ function start() {
       const matches = text.match(/(?:key\s*)?\[([a-zA-Z0-9\~\-]{8})\]/g);
 
       if (matches) {
-        matches.forEach((match) => {
-          // Capture the link text correctly, ignoring any prefix matches
-          const linkedTextOnly = match.match(/([a-zA-Z0-9\~\-]{8})/)[0];
-          const linkHref = `/netdb?l=3#ls_${linkedTextOnly.substring(0,4)}`;
-          const link = document.createElement("a");
-          link.href = linkHref;
-          link.textContent = linkedTextOnly;
+        requestAnimationFrame(() => {
+          matches.forEach((match) => {
+            // Capture the link text correctly, ignoring any prefix matches
+            const linkedTextOnly = match.match(/([a-zA-Z0-9\~\-]{8})/)[0];
+            const linkHref = `/netdb?l=3#ls_${linkedTextOnly.substring(0,4)}`;
+            const link = document.createElement("a");
+            link.href = linkHref;
+            link.textContent = linkedTextOnly;
 
-          // Escape the link text to ensure it is safe for the regex
-          const escapedLinkText = escapeRegExp(linkedTextOnly);
-          li.innerHTML = li.innerHTML.replace(new RegExp(`(?:key\\s*)?\\[${escapedLinkText}\\]`, "g"), link.outerHTML);
+            // Escape the link text to ensure it is safe for the regex
+            const escapedLinkText = escapeRegExp(linkedTextOnly);
+            li.innerHTML = li.innerHTML.replace(new RegExp(`(?:key\\s*)?\\[${escapedLinkText}\\]`, "g"), link.outerHTML);
+          });
         });
       }
     });
@@ -206,15 +227,17 @@ function start() {
       const matches = text.match(ipv4Regex);
 
       if (matches) {
-        matches.forEach((match) => {
-          const linkText = match.trim();
-          if (!li.querySelector(`a[href*="${linkText}"]`)) {
-            const linkHref = `/netdb?ip=${linkText}`;
-            const link = document.createElement("a");
-            link.href = linkHref;
-            link.textContent = linkText;
-            li.innerHTML = li.innerHTML.replace(new RegExp(`\\b${escapeRegExp(linkText)}\\b`, "g"), ` ${link.outerHTML}`);
-          }
+        requestAnimationFrame(() => {
+          matches.forEach((match) => {
+            const linkText = match.trim();
+            if (!li.querySelector(`a[href*="${linkText}"]`)) {
+              const linkHref = `/netdb?ip=${linkText}`;
+              const link = document.createElement("a");
+              link.href = linkHref;
+              link.textContent = linkText;
+              li.innerHTML = li.innerHTML.replace(new RegExp(`\\b${escapeRegExp(linkText)}\\b`, "g"), ` ${link.outerHTML}`);
+            }
+          });
         });
       }
     });
@@ -230,15 +253,17 @@ function start() {
       const matches = text.match(ipv6Regex);
 
       if (matches) {
-        matches.forEach((match) => {
-          const linkText = match;
-          if (!li.querySelector(`a[href*="${linkText}"]`)) {
-            const linkHref = `/netdb?ipv6=${linkText}`;
-            const link = document.createElement("a");
-            link.href = linkHref;
-            link.textContent = linkText;
-            li.innerHTML = li.innerHTML.replace(new RegExp(`\\b${linkText}\\b`, "g"), ` ${link.outerHTML}`);
-          }
+        requestAnimationFrame(() => {
+          matches.forEach((match) => {
+            const linkText = match;
+            if (!li.querySelector(`a[href*="${linkText}"]`)) {
+              const linkHref = `/netdb?ipv6=${linkText}`;
+              const link = document.createElement("a");
+              link.href = linkHref;
+              link.textContent = linkText;
+              li.innerHTML = li.innerHTML.replace(new RegExp(`\\b${linkText}\\b`, "g"), ` ${link.outerHTML}`);
+            }
+          });
         });
       }
     });
@@ -248,23 +273,30 @@ function start() {
     const filterSpan = document.getElementById("logFilter");
     const filterInput = document.getElementById("logFilterInput");
 
-    if (!filterSpan.classList.contains("listening")) {
-      filterInput.addEventListener("input", () => {
-        const filterValue = filterInput.value.toLowerCase();
-        filterSpan.classList.add("listening");
-        if (routerlogsList) {
-          const liElements = routerlogsList.querySelectorAll("li");
-          liElements.forEach((li) => {
-            const text = li.textContent;
-            if (text.toLowerCase().indexOf(filterValue) !== -1) {li.style.display = "block";}
-            else {li.style.display = "none";}
-          });
-        }
-      });
-    }
-    // Store the filter value in local storage
+    const debounce = (func, delay) => {
+      let timeoutId;
+      return function (...args) {
+        if (timeoutId) clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          func.apply(null, args);
+        }, delay);
+      };
+    };
+
+    const filterLogs = () => {
+      const filterValue = filterInput.value.toLowerCase();
+      if (routerlogsList) {
+        const liElements = routerlogsList.querySelectorAll("li");
+        liElements.forEach((li) => {
+          const text = li.textContent;
+          li.style.display = text.toLowerCase().includes(filterValue) ? "block" : "none";
+        });
+      }
+    };
+
+    filterInput.addEventListener("input", debounce(filterLogs, 300)); // Debounce by 300ms
     const storedFilterValue = localStorage.getItem("logFilter");
-    if (storedFilterValue) {filterInput.value = storedFilterValue;}
+    if (storedFilterValue) { filterInput.value = storedFilterValue; }
   }
 
   document.addEventListener("DOMContentLoaded", function() {
@@ -272,6 +304,9 @@ function start() {
     linkifyLeaseSets();
     linkifyIPv4();
     linkifyIPv6();
+    requestAnimationFrame(() => {
+      updates.forEach(update => update());
+    });
     onVisible(mainLogs, () => { requestAnimationFrame(initRefresh); });
     onHidden(mainLogs, stopRefresh);
     updateInterval();
