@@ -3,57 +3,63 @@
 /* License: AGPLv3 or later */
 
 const MAX_CONCURRENT_REQUESTS = 8;
-const MIN_INTERVAL = 1000;
+const MIN_INTERVAL = 950;
+const DEBOUNCE_DELAY = 500;
+
 let activeRequests = 0;
 let fetchQueue = [];
 let noResponse = 0;
-const lastRequestTimeMap = new Map();
+const responseCountMap = new Map();
+let debounceTimeouts = new Map();
 
-self.addEventListener("message", async function(event) {
+self.addEventListener("message", (event) => {
   const { url, force = false } = event.data;
   const now = Date.now();
-  const lastRequestTime = lastRequestTimeMap.get(url);
+  const lastRequestTime = responseCountMap.get(url)?.lastRequestTime || 0;
 
-  if (!force && lastRequestTime !== undefined && now - lastRequestTime < MIN_INTERVAL) {return;}
+  if (!force && (now - lastRequestTime < MIN_INTERVAL)) {return;}
 
-  if (activeRequests < MAX_CONCURRENT_REQUESTS) {
-    activeRequests++;
-    processFetchRequest(url);
-  } else {fetchQueue.push(url);}
+  if (debounceTimeouts.has(url)) {
+    clearTimeout(debounceTimeouts.get(url));
+  }
+
+  debounceTimeouts.set(url, setTimeout(() => {
+    if (activeRequests < MAX_CONCURRENT_REQUESTS) {
+      activeRequests++;
+      processFetchRequest(url, now);
+    } else {fetchQueue.push({ url, now });}
+  }, DEBOUNCE_DELAY));
 });
 
-async function processFetchRequest(url) {
-  const now = Date.now();
+async function processFetchRequest(url, now) {
   try {
-    const response = await fetch(url, { method: "GET", headers: { Accept: "text/html, application/octet-stream" }, });
+    const response = await fetch(url);
+    let messagePayload = { responseBlob: null, isDown: false, noResponse: 0 };
 
     if (response.ok) {
-      if (response.headers.get("Content-Type").includes("text/html")) {
-        const responseText = await response.text();
-        self.postMessage({ responseText, isDown: false, noResponse: 0 });
-      } else {
-        const responseBlob = await response.blob();
-        self.postMessage({ responseBlob, isDown: false, noResponse: 0 });
-      }
-      noResponse = 0;
+      const contentType = response.headers.get("Content-Type");
+      if (contentType.includes("text/html")) {messagePayload.responseText = await response.text();}
+      else {messagePayload.responseBlob = await response.blob();}
+      responseCountMap.delete(url);
     } else {
-      self.postMessage({ responseBlob: null, isDown: true, noResponse: noResponse + 1 });
+      messagePayload.isDown = true;
       noResponse++;
     }
+    self.postMessage(messagePayload);
   } catch (error) {
-     setTimeout(() => { self.postMessage({ responseBlob: null, isDown: true, noResponse: noResponse + 1 }); }, 3000);
-     noResponse++;
+    self.postMessage({ responseBlob: null, isDown: true, noResponse: noResponse + 1 });
+    noResponse++;
   } finally {
     activeRequests--;
     processNextFetchRequest();
-    lastRequestTimeMap.set(url, now);
+    responseCountMap.set(url, { lastRequestTime: now });
   }
 }
 
 function processNextFetchRequest() {
-  if (fetchQueue.length > 0 && activeRequests < MAX_CONCURRENT_REQUESTS) {
-    const url = fetchQueue.shift();
+  while (activeRequests < MAX_CONCURRENT_REQUESTS && fetchQueue.length > 0) {
+    const { url, now } = fetchQueue.shift();
     activeRequests++;
-    processFetchRequest(url);
+    processFetchRequest(url, now);
   }
 }

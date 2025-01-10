@@ -42,7 +42,10 @@ async function checkIfDown() {
 }
 
 async function checkTimer() {
-  refreshTimerActive = await getRefreshTimerId();
+  try {
+    refreshTimerActive = await getRefreshTimerId();
+    return refreshTimerActive.isActive;
+  } catch (error) {return false;}
 }
 
 async function doFetch(force = false) {
@@ -50,10 +53,12 @@ async function doFetch(force = false) {
   if (!refreshTimerActive.isActive) {return;}
   try {
     worker.postMessage({ url: `/xhr1.jsp?requestURI=${uri}` });
-    if (refreshTimeout) {clearTimeout(refreshTimeout);}
-    refreshTimeout = setTimeout(doFetch, refreshInterval);
+    if (refreshTimeout) {
+      clearTimeout(refreshTimeout);
+      refreshTimeout = setTimeout(await doFetch, refreshInterval);
+    }
+    if (force) {await refreshSidebar();}
   } catch (error) {noResponse++;}
-  if (force) {refreshSidebar();}
 }
 
 worker.addEventListener("message", async function(event) {
@@ -72,12 +77,14 @@ worker.addEventListener("message", async function(event) {
 
 async function refreshSidebar() {
   const xhrContainer = document.getElementById("xhr");
+  const updates = [];
   try {
     await doFetch();
     if (refreshTimeout) {clearTimeout(refreshTimeout);}
     refreshTimeout = setTimeout(refreshSidebar, refreshInterval);
     if (responseDoc) {
       isDown = false;
+
       const responseElements = {
         volatileElements: responseDoc.querySelectorAll(".volatile:not(.badge)"),
         badges: responseDoc.querySelectorAll(".badge"),
@@ -113,18 +120,27 @@ async function refreshSidebar() {
         Array.from(elements.volatileElements).forEach((elem, index) => {
           const respElem = responseElements.volatileElements[index];
           if (elem && respElem) {
-            if (elem.classList.contains("statusDown")) {updateIfStatusDown(elem, respElem);}
-            else {updateElementInnerHTML(elem, respElem);}
+            updates.push(() => {
+              if (elem.classList.contains("statusDown")) {updateIfStatusDown(elem, respElem);}
+              else {updateElementInnerHTML(elem, respElem);}
+            });
           }
         });
 
         if (elements.badges && responseElements.badges) {
           Array.from(elements.badges).forEach((elem, index) => {
             const respElem = responseElements.badges[index];
-            updateElementTextContent(elem, respElem);
+            updates.push(() => {
+              updateElementTextContent(elem, respElem);
+            });
           });
         }
       };
+
+      requestAnimationFrame(() => {
+        updates.forEach(update => update());
+        updates.length = 0;
+      });
 
       function refreshAll() {
         if (sb && responseDoc) {
@@ -201,8 +217,10 @@ async function handleFormSubmit() {
 }
 
 const ready = async() => {
-  try {await refreshSidebar();}
-  catch (error) {}
+  try {
+    checkIfDown();
+    await refreshSidebar();
+  } catch (error) {}
 }
 
 onVisible(sb, ready);
