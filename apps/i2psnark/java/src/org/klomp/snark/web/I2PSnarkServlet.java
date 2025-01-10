@@ -299,6 +299,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         boolean noCollapse = noCollapsePanels(req);
         boolean collapsePanels = _manager.util().collapsePanels();
+        boolean showStatusFilter = _manager.util().showStatusFilter();
         setHTMLHeaders(resp, cspNonce, false);
         PrintWriter out = resp.getWriter();
         StringBuilder buf = new StringBuilder(4*1024);
@@ -312,6 +313,26 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(" style=\"background:").append(pageBackground).append("\">\n")
            .append("<head>\n").append("<meta charset=utf-8>\n")
            .append("<meta name=viewport content=\"width=device-width, initial-scale=1\">\n");
+
+        if (!isConfigure && !isStandalone()) {
+            buf.append("<link rel=modulepreload href=/js/iframeResizer/updatedEvent.js>")
+               .append("<link rel=modulepreload href=").append(_resourcePath).append("js/tunnelCounter.js").append(">")
+               .append("<link rel=modulepreload href=/js/iframeResizer/iframeResizer.contentWindow.js>")
+               .append("<link rel=modulepreload href=/js/setupIframe.js>");
+        }
+
+        if (!isConfigure) {
+            buf.append("<link rel=modulepreload href=").append(_resourcePath).append("js/refreshTorrents.js").append(">")
+               .append("<link rel=modulepreload href=").append(_resourcePath).append("js/snarkAlert.js").append(">")
+               .append("<link rel=modulepreload href=").append(_resourcePath).append("js/snarkSort.js").append(">")
+               .append("<link rel=modulepreload href=").append(_resourcePath).append("js/click.js").append(">")
+               .append("<link rel=modulepreload href=").append(_resourcePath).append("js/toggleLinks.js").append(">")
+               .append("<link rel=modulepreload href=").append(_resourcePath).append("js/toggleLog.js").append(">");
+            if (showStatusFilter) {
+               buf.append("<link rel=modulepreload href=").append(_resourcePath).append("js/filterBar.js").append(">")
+                  .append("<link rel=modulepreload href=").append(_resourcePath).append("js/setFilterQuery.js").append(">");
+            }
+        }
 
         String fontPath = isStandalone() ? "/i2psnark/.res/themes/fonts" : "/themes/fonts";
         if (isStandalone() || useSoraFont()) {
@@ -361,8 +382,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("  window.snarkRefreshDelay = snarkRefreshDelay;\n")
                .append("  window.totalSnarks = totalSnarks;\n</script>\n");
             if (!isStandalone()) {
-                buf.append("<script src=\"").append(_resourcePath).append("js/tunnelCounter.js?").append(CoreVersion.VERSION)
-                   .append("\" type=module></script>\n");
+                buf.append("<script src=").append(_resourcePath).append("js/tunnelCounter.js type=module></script>\n");
             }
             buf.append("<script nonce=").append(cspNonce).append(" type=module>\n")
                .append("  import {initSnarkRefresh} from \"").append(_resourcePath).append("js/refreshTorrents.js").append("\";\n")
@@ -494,7 +514,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (!isConfigure) {
             out.write("<script src=" + _resourcePath + "js/toggleLinks.js type=module></script>\n");
         }
-        out.write("<script src=" + _resourcePath + "js/setFilterQuery.js></script>\n");
+        out.write("<script src=" + _resourcePath + "js/setFilterQuery.js type=module></script>\n");
         if (!isStandalone()) {out.write(FOOTER);}
         else {out.write(FOOTER_STANDALONE);}
         out.flush();
@@ -3756,10 +3776,10 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String HEADER_Z = "override.css\" rel=stylesheet>";
     private static final String TABLE_HEADER = "<table id=torrents width=100% border=0>\n" + "<thead id=snarkHead>";
     private static final String FOOTER = "</div>\n</center>\n<span id=endOfPage data-iframe-height></span>\n" +
-        "<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\" id=iframeResizer></script>\n" +
-        "<script src=\"/js/iframeResizer/updatedEvent.js?" + CoreVersion.VERSION + "\"></script>\n" +
-        "<script src=/js/setupIframe.js></script>\n" +
-        "<script src=\"/i2psnark/.res/js/click.js?" + CoreVersion.VERSION + "\" type=module></script>\n" +
+        "<script src=/js/iframeResizer/iframeResizer.contentWindow.js id=iframeResizer type=module></script>\n" +
+        "<script src=/js/iframeResizer/updatedEvent.js type=module></script>\n" +
+        "<script src=/js/setupIframe.js type=module></script>\n" +
+        "<script src=/i2psnark/.res/js/click.js type=module></script>\n" +
         "<script src=/i2psnark/.res/js/snarkAlert.js type=module></script>\n" +
         "<link rel=stylesheet href=/i2psnark/.res/snarkAlert.css>\n" +
         "</body>\n</html>";

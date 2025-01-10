@@ -13,6 +13,12 @@ boolean isWizardPage = uri.endsWith("wizard") || uri.endsWith("wizard.jsp");
 <head>
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width, initial-scale=1">
+<link rel=modulepreload href=js/initSidebar.js>
+<link rel=modulepreload href=js/refreshSidebar.js>
+<link rel=modulepreload href=js/sectionToggle.js>
+<link rel=modulepreload href=js/miniGraph.js>
+<link rel=modulepreload href=js/stickySidebar.js>
+<link rel=modulepreload href=/js/iframeResizer/iframeResizer.js>
 <link rel=preload href=<%=fontFile%> as=font type=font/woff2 crossorigin>
 <link rel=preload href="<%=themePath%>console.css?version=<%=v%>" as=style>
 <link rel=preload href=<%=themePath%>images/i2plogo.png as=image>
@@ -29,7 +35,7 @@ boolean isWizardPage = uri.endsWith("wizard") || uri.endsWith("wizard.jsp");
 <link rel=stylesheet href=/themes/console/images/images.css>
 <link rel=stylesheet href=<%=themePath%>images/images.css>
 <% if (lang.equals("zh")) { %> <link href="<%=themePath%>console_big.css?version=<%=v%>" rel=stylesheet> <% }
-   else if (lang.equals("ar") || lang.equals("fa")) { %> <link rel=stylesheet href="<%=themePath%>console_ar.css?version=<%=v%>"> <% } %>
+else if (lang.equals("ar") || lang.equals("fa")) { %> <link rel=stylesheet href="<%=themePath%>console_ar.css?version=<%=v%>"> <% } %>
 <% if (hasOverride) { %> <link href=<%=themePath%>override.css rel=stylesheet> <% } %>
 <script nonce=<%=cspNonce %>>
   if (top.location.href !== location.href) top.location.href = location.href;
