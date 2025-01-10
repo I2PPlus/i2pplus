@@ -2,10 +2,11 @@
 /* A general purpose worker for background fetch requests */
 /* License: AGPLv3 or later */
 
-const MAX_CONCURRENT_REQUESTS = 32;
-const MIN_INTERVAL = 500;
+const MAX_CONCURRENT_REQUESTS = 8;
+const MIN_INTERVAL = 1000;
 let activeRequests = 0;
 let fetchQueue = [];
+let noResponse = 0;
 const lastRequestTimeMap = new Map();
 
 self.addEventListener("message", async function(event) {
@@ -29,14 +30,19 @@ async function processFetchRequest(url) {
     if (response.ok) {
       if (response.headers.get("Content-Type").includes("text/html")) {
         const responseText = await response.text();
-        self.postMessage({ responseText, isDown: false });
+        self.postMessage({ responseText, isDown: false, noResponse: 0 });
       } else {
         const responseBlob = await response.blob();
-        self.postMessage({ responseBlob, isDown: false });
+        self.postMessage({ responseBlob, isDown: false, noResponse: 0 });
       }
-    } else {self.postMessage({ responseBlob: null, isDown: true });}
+      noResponse = 0;
+    } else {
+      self.postMessage({ responseBlob: null, isDown: true, noResponse: noResponse + 1 });
+      noResponse++;
+    }
   } catch (error) {
-     setTimeout(() => { self.postMessage({ responseBlob: null, isDown: true }); }, 3000);
+     setTimeout(() => { self.postMessage({ responseBlob: null, isDown: true, noResponse: noResponse + 1 }); }, 3000);
+     noResponse++;
   } finally {
     activeRequests--;
     processNextFetchRequest();

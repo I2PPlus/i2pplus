@@ -16,12 +16,9 @@ let response;
 let responseDoc;
 let responseText;
 
-const hiddenIframe = document.getElementById("processSidebarForm");
 const parser = new DOMParser();
 const sb = document.querySelector("#sidebar");
-const updateForm = document.getElementById("sb_updateform");
 const uri = location.pathname;
-const xhrContainer = document.getElementById("xhr");
 const worker = new Worker("/js/fetchWorker.js");
 
 const elements = {
@@ -34,10 +31,11 @@ async function initSidebar() {
   handleFormSubmit();
   countNewsItems();
   checkTimer();
+  checkIfDown();
 }
 
-async function tangoDown() {
-  if (noResponse > 2) {
+async function checkIfDown() {
+  if (noResponse > 4) {
     isDown = true;
     document.body.classList.add("isDown");
   }
@@ -47,7 +45,7 @@ async function checkTimer() {
   refreshTimerActive = await getRefreshTimerId();
 }
 
-async function doFetch() {
+async function doFetch(force = false) {
   checkTimer();
   if (!refreshTimerActive.isActive) {return;}
   try {
@@ -55,27 +53,31 @@ async function doFetch() {
     if (refreshTimeout) {clearTimeout(refreshTimeout);}
     refreshTimeout = setTimeout(doFetch, refreshInterval);
   } catch (error) {noResponse++;}
+  if (force) {refreshSidebar();}
 }
 
 worker.addEventListener("message", async function(event) {
-  let { responseText, isDown } = event.data;
-  if (isDown) {
-    noResponse++;
-    tangoDown();
-  } else {
+  try {
+    let { responseText, isDown, noResponse: workerNoResponse } = event.data;
     responseDoc = parser.parseFromString(responseText, "text/html");
     isDown = false;
-    noResponse = 0;
+    noResponse = workerNoResponse;
     document.body.classList.remove("isDown");
+    checkIfDown();
+  } catch (error) {
+    noResponse++;
+    checkIfDown();
   }
 });
 
 async function refreshSidebar() {
+  const xhrContainer = document.getElementById("xhr");
   try {
     await doFetch();
     if (refreshTimeout) {clearTimeout(refreshTimeout);}
     refreshTimeout = setTimeout(refreshSidebar, refreshInterval);
-    if (!isDown && responseDoc) {
+    if (responseDoc) {
+      isDown = false;
       const responseElements = {
         volatileElements: responseDoc.querySelectorAll(".volatile:not(.badge)"),
         badges: responseDoc.querySelectorAll(".badge"),
@@ -131,10 +133,19 @@ async function refreshSidebar() {
             xhrContainer.innerHTML = sbResponse.innerHTML;
           }
           sectionToggler();
-        } else {tangoDown();}
+        } else {
+          noResponse++;
+          checkIfDown();
+        }
       }
+    } else {
+      noResponse++;
+      checkIfDown();
     }
-  } catch (error) {tangoDown();}
+  } catch (error) {
+    noResponse++;
+    checkIfDown();
+  }
 }
 
 async function handleFormSubmit() {
@@ -142,6 +153,7 @@ async function handleFormSubmit() {
     const form = event.target.closest("form");
     if (form) {
       const formId = form.getAttribute("id");
+      const hiddenIframe = document.getElementById("processSidebarForm");
       hiddenIframe.removeEventListener("load", handleLoad);
       hiddenIframe.addEventListener("load", handleLoad);
       form.dispatchEvent(new Event('submit'));
@@ -155,7 +167,9 @@ async function handleFormSubmit() {
               const shutdownNotice = document.getElementById("sb_shutdownStatus");
               const shutdownNoticeHR = sb.querySelector("#sb_shutdownStatus+hr");
               const shutdownNoticeResponse = responseDoc.getElementById("sb_shutdownStatus");
+              const updateForm = document.getElementById("sb_updateform");
               const updateFormResponse = responseDoc.getElementById("sb_updateform");
+
               if (shutdownNotice) {
                 if (shutdownNoticeResponse && shutdownNoticeResponse.classList.contains("inactive")) {
                   shutdownNotice.hidden = true;
@@ -187,8 +201,8 @@ async function handleFormSubmit() {
 }
 
 const ready = async() => {
-  try { await refreshSidebar(); isDown = false; }
-  catch (error) {isDown = true;}
+  try {await refreshSidebar();}
+  catch (error) {}
 }
 
 onVisible(sb, ready);
