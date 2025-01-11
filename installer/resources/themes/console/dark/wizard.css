@@ -5,7 +5,7 @@
 .wizardbuttons{margin-bottom:10px}
 body#wizardpage{background:none}
 #bandwidthTestRunning{margin:10px 0;padding:10px;width:100%;text-align:center;font-style:italic;font-weight:700;border:var(--border);box-shadow:inset 0 0 0 1px #000,inset 0 3px 3px rgba(0,0,0,.7);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(0,0,0,.3)),repeating-linear-gradient(90deg,rgba(0,0,0,.3),rgba(0,0,0,.1) 10px,rgba(0,32,0,.3) 10px,rgba(0,32,0,.3) 20px) #010;background-size:400%;animation:progress 360s 3s linear infinite both}
-#config_ui+.wizardbuttons{margin:-14px 0 10px}
+#config_ui+.wizardbuttons{margin:-14px 0 11px}
 #setupwizard input[name="skipbw"],#setupwizard input[name="cancelbw"]{float:left}
 #setupwizard .langselect{display:inline-block;float:none}
 #wizardpage h3+.configtable{margin-top:-11px}
@@ -21,10 +21,10 @@ body#wizardpage{background:none}
 #wizard h3{border-left-width:1px;border-radius:0}
 #wizard h3:first-of-type{margin-top:10px}
 #wizard p{margin:-10px 0;padding:10px 15px;font-size:110%;border-left:var(--border);border-right:var(--border)}
-#wizard p.infohelp,#wizard #bandwidthconfig tr:first-child .infohelp{padding:32px 24px 32px 86px;background-size:48px;background-position:20px center}
-#wizard p.infohelp{margin:10px 0 0}
-#wizard p:not(.infohelp):last-of-type{padding-bottom:20px}
-#wizard .infohelp{font-size:115%}
+#wizardpage .infohelp{font-size:115%}
+#wizardpage p.infohelp,#wizardpage #bandwidthconfig tr:first-child .infohelp,#wizardpage #config_ui p.infohelp{padding:20px 24px 20px 86px;background-size:48px;background-position:20px center}
+#wizardpage p.infohelp{margin:10px 0 0}
+#wizardpage p:not(.infohelp):last-of-type{padding-bottom:20px}
 #wizardpage #bandwidthconfig tr:nth-child(n+2) td:last-child:not(.infohelp){background:#000800}
 #wizardpage #langsettings{padding:7px 50px 6px 6px;background:url(/themes/console/images/bot.webp) no-repeat right 6px bottom/100px auto,var(--bg_dots)}
 #wizardpage #langsettings label[for="xx"]{display:none}
