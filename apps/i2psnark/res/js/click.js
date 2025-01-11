@@ -51,8 +51,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!clickTarget.closest(clickable)) {return;}
 
     const targetElement = clickTarget.matches(clickable) ? clickTarget : clickTarget.closest(clickable);
-    console.log(targetElement);
     if (!targetElement) {return;}
+
     let delay = 360;
     const isAction = targetElement.matches("input[class^='action'], input[id^='action']");
     const isDeleteOrRemoved = targetElement.matches("input[class='actionDelete'], input[class='actionRemove']");

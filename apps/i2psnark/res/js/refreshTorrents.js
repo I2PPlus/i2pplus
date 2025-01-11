@@ -2,6 +2,7 @@
 /* Selective refresh torrents and other volatile elements in the I2PSnark UI */
 /* License: AGPL3 or later */
 
+import {MESSAGE_TYPES} from "./messageTypes.js";
 import {pageNav} from "./pageNav.js";
 import {showBadge} from "./filterBar.js";
 import {snarkSort} from "./snarkSort.js";
@@ -14,8 +15,10 @@ const debugMode = document.getElementById("debugMode");
 const files = document.getElementById("dirInfo");
 const filterbar = document.getElementById("filterBar");
 const home = document.querySelector("#navbar .nav_main");
+const isIframed = document.documentElement.classList.contains("iframed") || window.parent;
 const isStandalone = document.documentElement.classList.contains("standalone");
 const mainsection = document.getElementById("mainsection");
+const parentDoc = window.parent.document;
 const query = window.location.search;
 const screenlog = document.getElementById("screenlog");
 const snarkHead = document.getElementById("snarkHead");
@@ -24,15 +27,6 @@ const torrents = document.getElementById("torrents");
 const torrentsBody = document.getElementById("snarkTbody");
 const torrentForm = document.getElementById("torrentlist");
 
-const MESSAGE_TYPES = {
-  FETCH_HTML_DOCUMENT: "FETCH_HTML_DOCUMENT",
-  FETCH_HTML_DOCUMENT_RESPONSE: "FETCH_HTML_DOCUMENT_RESPONSE",
-  CANCELLED: "CANCELLED",
-  ERROR: "ERROR",
-  ABORT: "ABORT",
-  ABORTED: "ABORTED"
-};
-
 let chimpIsCached = false;
 let noConnection = false;
 let snarkRefreshIntervalId;
@@ -40,6 +34,7 @@ let screenLogIntervalId;
 let debugging = false;
 let initialized = false;
 let isDocumentVisible = true;
+let lastCheckTime = 0;
 let requireFullRefresh = true;
 
 const requestAnimationFramePromise = (callback) => {
@@ -95,15 +90,11 @@ async function initHandlers() {
   });
 }
 
-async function updateElementInnerHTML(elem, respElem) {
-  if (elem && respElem && elem.innerHTML.trim() !== respElem.innerHTML.trim()) {
-    elem.innerHTML = respElem.innerHTML;
-  }
-}
-
-async function updateElementTextContent(elem, respElem) {
-  if (elem && respElem && elem.textContent.trim() !== respElem.textContent.trim()) {
-    elem.textContent = respElem.textContent;
+async function updateElement(elem, respElem, property = "innerHTML") {
+  if (elem && respElem) {
+    const currentContent = elem[property].trim();
+    const newContent = respElem[property].trim();
+    if (currentContent !== newContent) {elem[property] = newContent;}
   }
 }
 
@@ -124,7 +115,7 @@ async function fetchHTMLDocument(url, forceFetch = false) {
     const { signal } = abortController, promise = (async () => {
       const response = await fetch(url, { signal });
       if (!response.ok) {throw new Error(`Network error: ${response.status} ${response.statusText}`);}
-      const htmlString = await response.text(), doc = parser.parseFromString(htmlString, 'text/html');
+      const htmlString = await response.text(), doc = parser.parseFromString(htmlString, "text/html");
       cache.set(url, { doc, timestamp: Date.now() });
       return doc;
     })();
@@ -133,7 +124,7 @@ async function fetchHTMLDocument(url, forceFetch = false) {
     ongoingRequests.delete(url);
     return result;
   } catch (error) {
-    if (debugging && error.name !== 'AbortError') {console.error(error);}
+    if (debugging && error.name !== "AbortError") {console.error(error);}
     throw error;
   } finally {abortController = new AbortController();}
 }
@@ -200,15 +191,14 @@ async function refreshTorrents(callback) {
         const newTorrentsBody = mainsectionContainer.querySelector("#snarkTbody");
         if (newTorrentsBody) {
           await requestAnimationFramePromise(async () => {
-            updateElementInnerHTML(torrentsBody, newTorrentsBody);
+            updateElement(torrentsBody, newTorrentsBody);
             refreshHeaderAndFooter();
             refreshScreenLog(undefined);
             if (debugging) {console.log("refreshAll()");}
           });
-        }
-        else {
+        } else {
           const newMainsection = mainsectionContainer.querySelector("#mainsection");
-          await updateElementInnerHTML(mainsection, newMainsection);
+          if (newMainSection) {await updateElement(mainsection, newMainsection);}
         }
       } catch (error) {
         if (debugging) console.error(error);
@@ -228,7 +218,7 @@ async function refreshTorrents(callback) {
           if (filterbar) {
             const activeBadge = filterbar.querySelector("#filterBar .filter#all .badge"),
                   activeBadgeResponse = responseDoc.querySelector("#filterBar .filter#all.enabled .badge");
-            await updateElementTextContent(activeBadge, activeBadgeResponse);
+            await updateElement(activeBadge, activeBadgeResponse, "textContent");
 
             const pagenavtop = document.getElementById("pagenavtop"),
                   pagenavtopResponse = responseDoc.querySelector("#pagenavtop"),
@@ -237,7 +227,7 @@ async function refreshTorrents(callback) {
             if ((filterbar && !filterbarResponse) || (!pagenavtop && pagenavtopResponse)) {
               const torrentFormResponse = responseDoc.querySelector("#torrentlist");
               if (torrentFormResponse) {
-                await updateElementInnerHTML(torrentForm, torrentFormResponse);
+                await updateElement(torrentForm, torrentFormResponse);
               }
               await initHandlers();
             } else if (pagenavtop && pagenavtopResponse && pagenavtop.outerHTML.trim() !== pagenavtopResponse.outerHTML.trim()) {
@@ -282,7 +272,7 @@ async function refreshTorrents(callback) {
             for (let index = 0; index < elements.length; index++) {
               const element = elements[index];
               const responseElement = responseElements[index];
-              if (responseElement) {updateElementInnerHTML(element, responseElement);}
+              if (responseElement) {updateElement(element, responseElement);}
             }
           }
         }
@@ -353,7 +343,7 @@ async function refreshScreenLog(callback, forceFetch = false) {
         resolve();
         return;
       }
-      await updateElementInnerHTML(screenlog, screenlogResponse);
+      await updateElement(screenlog, screenlogResponse);
       if (callback) {callback();}
       resolve();
     } catch (error) {resolve();}
@@ -434,13 +424,7 @@ async function initSnarkRefresh() {
   }
 }
 
-function stopSnarkRefresh() {
-  clearInterval(snarkRefreshIntervalId);
-}
-
-const isIframed = document.documentElement.classList.contains("iframed") || window.parent;
-const parentDoc = window.parent.document;
-let lastCheckTime = 0;
+function stopSnarkRefresh() {clearInterval(snarkRefreshIntervalId);}
 
 async function checkIfUp(minDelay = 14000) {
   const currentTime = Date.now();

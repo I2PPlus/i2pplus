@@ -2,14 +2,7 @@
 /* Web worker for network requests */
 /* License: AGPL3 or later */
 
-const MESSAGE_TYPES = {
-  FETCH_HTML_DOCUMENT: "FETCH_HTML_DOCUMENT",
-  FETCH_HTML_DOCUMENT_RESPONSE: "FETCH_HTML_DOCUMENT_RESPONSE",
-  CANCELLED: "CANCELLED",
-  ERROR: "ERROR",
-  ABORT: "ABORT",
-  ABORTED: "ABORTED"
-};
+import {MESSAGE_TYPES} from "./messageTypes.js";
 
 let abortController = new AbortController();
 
