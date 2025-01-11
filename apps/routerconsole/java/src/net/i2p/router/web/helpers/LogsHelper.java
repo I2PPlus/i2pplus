@@ -157,7 +157,7 @@ public class LogsHelper extends HelperBase {
             str = "";
             toSkip = -1;
         } else {
-            // platform encoding or UTF8
+            // Platform encoding or UTF8
             boolean utf8 = !_context.hasWrapper();
             StringBuilder buf = new StringBuilder(MAX_WRAPPER_LINES * 80);
             long ntoSkip = readTextFile(f, utf8, MAX_WRAPPER_LINES, toSkip, buf);
@@ -180,7 +180,7 @@ public class LogsHelper extends HelperBase {
                                     .replace("   |", " |")
                                     .replace("| ERROR  |", "| ERR  |")
                                     .replace("| INFO | # V  [", "| INFO | # Source: [");
-                // remove lines containing unwanted strings
+                // Remove lines containing unwanted strings
                 StringBuilder filtered = new StringBuilder();
                 String[] logLines = str.split("\n");
                 for (String line : logLines) {
@@ -198,25 +198,19 @@ public class LogsHelper extends HelperBase {
                     }
                 }
 
-                // sort lines first by timestamp and then by content
+                // Sort lines first by timestamp and then by content
                 String[] lines = filtered.toString().split("\n");
                 Arrays.sort(lines, (a, b) -> {
                     String[] aParts = a.split(" ");
                     String[] bParts = b.split(" ");
-
-                    int result = aParts[0].compareTo(bParts[0]); // sort by timestamp
-                    if (result == 0) {
-                        result = a.compareTo(b); // if timestamps are equal, sort by content
-                    }
+                    int result = aParts[0].compareTo(bParts[0]); // Sort by timestamp
+                    if (result == 0) {result = a.compareTo(b);} // If timestamps are equal, sort by content
                     return result;
                 });
 
-                filtered = new StringBuilder(); // reset filtered StringBuilder
-                // append filtered lines to StringBuilder in reverse order
-                for (int i = lines.length - 1; i >= 0; i--) {
-                    filtered.append(lines[i]).append("\n");
-                }
-
+                filtered = new StringBuilder(); // Reset filtered StringBuilder
+                // Append filtered lines to StringBuilder in reverse order
+                for (int i = lines.length - 1; i >= 0; i--) {filtered.append(lines[i]).append("\n");}
                 str = filtered.toString();
             }
             toSkip = ntoSkip;
