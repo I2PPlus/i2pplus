@@ -31,7 +31,8 @@
 /* copy to clipboard "toast" notifications */
 #toast{top:-5px;padding:13px 8px 8px;height:50px;position:fixed;right:5px;left:5px;z-index:999999;text-align:center;line-height:25px;font-size:10pt;font-weight:600;animation:toastSlideIn .5s ease 0s both}
 #toast.dismiss{animation:toastSlideOut .75s ease .5s both}
-.iframed #toast,.iframed #toast.dismiss{left:0;right:0;border-radius:0;animation-timing-function:ease-out;animation-delay:.7s}
+.iframed #toast,.iframed #toast.dismiss{left:0;right:0;border-radius:0;animation-timing-function:ease-out}
+.iframed #toast:not(.dismiss){animation-delay:0}
 @keyframes toastSlideIn{from{transform:translateY(-120px)}to{transform:translateY(0)}}
 @keyframes toastSlideOut{from{transform:translateY(0)}to{transform:translateY(-120px)}}
 
