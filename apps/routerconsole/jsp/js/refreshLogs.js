@@ -10,17 +10,16 @@ function start() {
   const mainLogs = document.getElementById("logs");
   const criticallogs = document.getElementById("criticallogs");
   const critLogsHead = document.getElementById("critLogsHead");
-  const noCritLogs = document.querySelector("#criticallogs .nologs");
+  const noCritLogs = criticallogs?.querySelector(".nologs");
   const routerlogs = document.getElementById("routerlogs");
-  const routerlogsFileInfo = document.querySelector("#routerlogs tr:first-child td p");
-  const routerlogsList = document.querySelector("#routerlogs td ul");
+  const routerlogsList = routerlogs.querySelector("td ul");
+  const routerlogsFileInfo = routerlogs.querySelector("tr:first-child td p");
   const servicelogs = document.getElementById("wrapperlogs");
   const refreshSpan = document.getElementById("refreshPeriod");
   const refreshInput = document.getElementById("logRefreshInterval");
-  const refreshValue = localStorage.getItem("logsRefresh") || "30";
   const toggleRefresh = document.getElementById("toggleRefresh");
   const updates = [];
-  const visible = document.visibilityState;
+  const worker = new Worker("/js/fetchWorker.js");
   const xhrlogs = new XMLHttpRequest();
   let logsRefreshId;
   let intervalValue;
@@ -31,98 +30,85 @@ function start() {
       return;
     }
     stopRefresh();
-    logsRefreshId = setInterval(refreshLogs, refreshValue*1000);
-    if (!toggleRefresh.classList.contains("enabled")) {
-      toggleRefresh.classList.add("enabled");
-    }
+    logsRefreshId = setInterval(refreshLogs, (localStorage.getItem("logsRefresh") || 30) * 1000);
+    toggleRefresh.classList.add("enabled");
   }
 
   function stopRefresh() {
-    if (logsRefreshId) {clearInterval(logsRefreshId);}
+    clearInterval(logsRefreshId);
   }
 
-  function refreshLogs() {
-    const storedFilterValue = localStorage.getItem("logFilter");
-    const filterInput = document.getElementById("logFilterInput");
-    let filterValue = encodeURIComponent(filterInput.value.trim().toLowerCase()).replace(/%20/g, " ");
-    if (storedFilterValue) {filterValue = storedFilterValue;}
+  worker.onmessage = (event) => {
+    const { responseText, isDown, noResponse } = event.data;
 
-    xhrlogs.open("GET", "/logs", true);
-    xhrlogs.responseType = "document";
-    xhrlogs.onload = function () {
-      if (!xhrlogs.responseXML) {return;}
-      const mainLogsResponse = xhrlogs.responseXML.getElementById("logs");
-      const criticallogsResponse = criticallogs !== null ? xhrlogs.responseXML.getElementById("criticallogs") : null;
-      progressx.show(theme);
-      progressx.progress(0.3);
+    if (isDown) {return;}
 
-      if (!criticallogs && criticallogsResponse) { mainLogs.innerHTML = mainLogsResponse.innerHTML; }
-      else if (criticallogs && criticallogsResponse) {
-          if (criticallogsResponse.innerHTML !== criticallogs.innerHTML) {
-            updates.push(() => {
-              criticallogs.innerHTML = criticallogsResponse.innerHTML;
-            });
-          }
-      } else {
-        critLogsHead?.remove();
-        criticallogs?.remove();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(responseText, "text/html");
+
+    const mainLogsResponse = doc.getElementById("logs");
+    const criticallogsResponse = criticallogs ? doc.getElementById("criticallogs") : null;
+
+    if (!criticallogs && criticallogsResponse) {
+      mainLogs.innerHTML = mainLogsResponse.innerHTML;
+    } else if (criticallogs && criticallogsResponse) {
+      if (criticallogsResponse.innerHTML !== criticallogs.innerHTML) {
+        updates.push(() => { criticallogs.innerHTML = criticallogsResponse.innerHTML; });
       }
+    } else {
+      critLogsHead?.remove();
+      criticallogs?.remove();
+    }
 
-      if (routerlogsList) {
-        const routerlogsListResponse = xhrlogs.responseXML.querySelector("#routerlogs td ul");
-        const routerlogsFileInfoResponse = xhrlogs.responseXML.querySelector("#routerlogs tr:first-child td p");
-        if (routerlogsList && routerlogsListResponse) {
-          if (routerlogsList.innerHTML !== routerlogsListResponse.innerHTML) {
-            updates.push(() => {
-              routerlogsList.innerHTML = routerlogsListResponse.innerHTML;
-            });
-          }
-          if (routerlogsFileInfo.innerHTML !== routerlogsFileInfoResponse.innerHTML) {
-            updates.push(() => {
-              routerlogsFileInfo.innerHTML = routerlogsFileInfoResponse.innerHTML;
-            });
-          }
-        }
-      } else if (routerlogs) {
-        const routerlogsTr = routerlogs.querySelector("tr:nth-child(2)");
-        const routerlogsTrResponse = xhrlogs.responseXML.querySelector("#routerlogs tr:nth-child(2)");
-        if (routerlogsTr && routerlogsTrResponse && routerlogsTr !== routerlogsTrResponse) {
+    if (routerlogsList) {
+      const routerlogsListResponse = doc.querySelector("#routerlogs td ul");
+      const routerlogsFileInfoResponse = doc.querySelector("#routerlogs tr:first-child td p");
+      const fragment = document.createDocumentFragment();
+
+      if (routerlogsListResponse) {
+        if (routerlogsList.innerHTML !== routerlogsListResponse.innerHTML) {
+          routerlogsList.innerHTML = '';
+          routerlogsListResponse.querySelectorAll('li').forEach(li => {
+            fragment.appendChild(li.cloneNode(true));
+          });
           updates.push(() => {
-            routerlogsTr.innerHTML = routerlogsTrResponse.innerHTML;
+            routerlogsList.appendChild(fragment);
+          });
+        }
+
+        if (routerlogsFileInfo.innerHTML !== routerlogsFileInfoResponse.innerHTML) {
+          updates.push(() => {
+            routerlogsFileInfo.innerHTML = routerlogsFileInfoResponse.innerHTML;
           });
         }
       }
+    }
 
-      linkifyRouterIds();
-      linkifyLeaseSets();
-      linkifyIPv4();
-      linkifyIPv6();
-
-      if (servicelogs) {
-        const servicelogsResponse = xhrlogs.responseXML.getElementById("wrapperlogs");
-        if (servicelogs && servicelogsResponse) {
-          if (servicelogsResponse.innerHTML !== servicelogs.innerHTML) {
-            updates.push(() => {
-              servicelogs.innerHTML = servicelogsResponse.innerHTML;
-            });
-          }
-        }
-      }
-
-      if (routerlogsList) {
-        const liElements = routerlogsList.querySelectorAll("li");
-        liElements.forEach((li) => {
-          const text = li.textContent;
-          if (text.toLowerCase().indexOf(filterValue) !== -1) {li.style.display = "block";}
-          else {li.style.display = "none";}
+    if (servicelogs) {
+      const servicelogsResponse = doc.getElementById("wrapperlogs");
+      if (servicelogsResponse && servicelogsResponse.innerHTML !== servicelogs.innerHTML) {
+        updates.push(() => {
+          servicelogs.innerHTML = servicelogsResponse.innerHTML;
         });
       }
-      progressx.hide();
-    };
+    }
 
-    requestAnimationFrame(() => { updates.forEach(update => update()); });
+    if (routerlogsList) {
+      const liElements = routerlogsList.querySelectorAll("li");
+      liElements.forEach(li => {
+        li.style.display = li.textContent.toLowerCase().includes(filterValue) ? "block" : "none";
+      });
+    }
 
-    xhrlogs.send();
+    doUpdates();
+  };
+
+  function refreshLogs() {
+    const filterInput = document.getElementById("logFilterInput");
+    const storedFilterValue = localStorage.getItem("logFilter");
+    let filterValue = encodeURIComponent(filterInput.value.trim().toLowerCase()).replace(/%20/g, " ");
+    if (storedFilterValue) { filterValue = storedFilterValue; }
+    worker.postMessage({ url: "/logs" });
     updateInterval();
     addFilterInput();
   }
@@ -159,120 +145,100 @@ function start() {
     }
   }
 
+  function doUpdates() {
+    requestAnimationFrame(() => {
+      updates.forEach(update => update());
+      linkifyRouterIds();
+      linkifyLeaseSets();
+      linkifyIPv4();
+      linkifyIPv6();
+      applyFilter();
+    });
+  }
+
   function escapeRegExp(string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // Escape special characters
   }
 
-  function linkifyRouterIds() {
-    if (!routerlogsList) { return; }
-    const liElements = routerlogsList.querySelectorAll("li");
+  function linkifyPattern(list, pattern, linkFormatter) {
+    const liElements = list.querySelectorAll("li");
 
     liElements.forEach((li) => {
-      const text = li.textContent;
-      const matches = text.match(/\[([a-zA-Z0-9\~\-]{6})\]/g);
+      let newHTML = li.innerHTML;
+      const matches = li.textContent.match(pattern);
 
       if (matches) {
-        requestAnimationFrame(() => {
-          matches.forEach((match) => {
-            const linkText = match.substring(1, match.length - 1); // remove the square brackets
-            const linkHref = `/netdb?r=${linkText}`;
-            const link = document.createElement("a");
-            link.href = linkHref;
-            link.textContent = linkText;
-
-            // Escape the linkText to ensure it is safe for the regex
-            const escapedLinkText = escapeRegExp(linkText);
-            li.innerHTML = li.innerHTML.replace(new RegExp(`\\[${escapedLinkText}\\]`, "g"), link.outerHTML);
-          });
+        matches.forEach((match) => {
+          const linkText = match.replace(/\[|\]/g, ""); // Remove square brackets
+          const linkHref = linkFormatter(linkText);
+          newHTML = newHTML.replace(match, `<a href="${linkHref}">${linkText}</a>`);
         });
+        li.innerHTML = newHTML; // Update only once
       }
     });
+  }
+
+  function linkifyRouterIds() {
+    if (!routerlogsList) return;
+    const pattern = /\[([a-zA-Z0-9\~\-]{6})\]/g;
+    linkifyPattern(routerlogsList, pattern, (linkText) => `/netdb?r=${linkText}`);
   }
 
   function linkifyLeaseSets() {
-    if (!routerlogsList) { return; }
-    const liElements = routerlogsList.querySelectorAll("li");
-
-    liElements.forEach((li) => {
-      const text = li.textContent;
-      // The regex should match a possible prefix of "key " and then the brackets
-      const matches = text.match(/(?:key\s*)?\[([a-zA-Z0-9\~\-]{8})\]/g);
-
-      if (matches) {
-        requestAnimationFrame(() => {
-          matches.forEach((match) => {
-            // Capture the link text correctly, ignoring any prefix matches
-            const linkedTextOnly = match.match(/([a-zA-Z0-9\~\-]{8})/)[0];
-            const linkHref = `/netdb?l=3#ls_${linkedTextOnly.substring(0,4)}`;
-            const link = document.createElement("a");
-            link.href = linkHref;
-            link.textContent = linkedTextOnly;
-
-            // Escape the link text to ensure it is safe for the regex
-            const escapedLinkText = escapeRegExp(linkedTextOnly);
-            li.innerHTML = li.innerHTML.replace(new RegExp(`(?:key\\s*)?\\[${escapedLinkText}\\]`, "g"), link.outerHTML);
-          });
-        });
-      }
-    });
+    if (!routerlogsList) return;
+    const pattern = /(?:key\s*)?\[([a-zA-Z0-9\~\-]{8})\]/g;
+    linkifyPattern(routerlogsList, pattern, (linkText) => `/netdb?l=3#ls_${linkText.substring(0, 4)}`);
   }
 
   function linkifyIPv4() {
-    if (!routerlogsList) { return; }
+    if (!routerlogsList) return;
+    const pattern = /(?<!\bAddress:\s*)\b(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\b/g;
     const liElements = routerlogsList.querySelectorAll("li");
 
     liElements.forEach((li) => {
-      const text = li.textContent;
-      const ipv4Regex = /(?<!\bAddress:\s*)\b(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\b/g;
-      const matches = text.match(ipv4Regex);
+      let newHTML = li.innerHTML;
+      const matches = li.textContent.match(pattern);
 
       if (matches) {
-        requestAnimationFrame(() => {
-          matches.forEach((match) => {
-            const linkText = match.trim();
-            if (!li.querySelector(`a[href*="${linkText}"]`)) {
-              const linkHref = `/netdb?ip=${linkText}`;
-              const link = document.createElement("a");
-              link.href = linkHref;
-              link.textContent = linkText;
-              li.innerHTML = li.innerHTML.replace(new RegExp(`\\b${escapeRegExp(linkText)}\\b`, "g"), ` ${link.outerHTML}`);
-            }
-          });
+        matches.forEach((match) => {
+          const linkText = match.trim();
+          if (!li.querySelector(`a[href*="${linkText}"]`)) {
+            const linkHref = `/netdb?ip=${linkText}`;
+            newHTML = newHTML.replace(new RegExp(`\\b${escapeRegExp(linkText)}\\b`, "g"), ` <a href="${linkHref}">${linkText}</a>`);
+          }
         });
       }
+      li.innerHTML = newHTML;
     });
   }
 
   function linkifyIPv6() {
-    if (!routerlogsList) {return;}
+    if (!routerlogsList) return;
+    const pattern = /\b(?:(?<!\bAddress:)\s*|\baddress:\s*)([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b/gi;
     const liElements = routerlogsList.querySelectorAll("li");
 
     liElements.forEach((li) => {
-      const text = li.textContent;
-      const ipv6Regex = /\b(?:(?<!\bAddress:)\s*|\baddress:\s*)([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b/gi;
-      const matches = text.match(ipv6Regex);
+      let newHTML = li.innerHTML;
+      const matches = li.textContent.match(pattern);
 
       if (matches) {
-        requestAnimationFrame(() => {
-          matches.forEach((match) => {
-            const linkText = match;
-            if (!li.querySelector(`a[href*="${linkText}"]`)) {
-              const linkHref = `/netdb?ipv6=${linkText}`;
-              const link = document.createElement("a");
-              link.href = linkHref;
-              link.textContent = linkText;
-              li.innerHTML = li.innerHTML.replace(new RegExp(`\\b${linkText}\\b`, "g"), ` ${link.outerHTML}`);
-            }
-          });
+        matches.forEach((match) => {
+          const linkText = match;
+          if (!li.querySelector(`a[href*="${linkText}"]`)) {
+            const linkHref = `/netdb?ipv6=${linkText}`;
+            newHTML = newHTML.replace(new RegExp(`\\b${escapeRegExp(linkText)}\\b`, "g"), ` <a href="${linkHref}">${linkText}</a>`);
+          }
         });
       }
+      li.innerHTML = newHTML;
     });
   }
 
+  const filterInput = document.getElementById("logFilterInput");
+  let filterListener = false;
+
   function addFilterInput() {
     const filterSpan = document.getElementById("logFilter");
-    const filterInput = document.getElementById("logFilterInput");
-
     const debounce = (func, delay) => {
       let timeoutId;
       return function (...args) {
@@ -282,39 +248,32 @@ function start() {
         }, delay);
       };
     };
+    if (!filterListener) {filterInput.addEventListener("input", debounce(applyFilter, 300));}
+    filterListener = true;
+  }
 
-    const filterLogs = () => {
-      const filterValue = filterInput.value.toLowerCase();
-      if (routerlogsList) {
-        const liElements = routerlogsList.querySelectorAll("li");
-        liElements.forEach((li) => {
-          const text = li.textContent;
-          li.style.display = text.toLowerCase().includes(filterValue) ? "block" : "none";
-        });
-      }
-    };
-
-    filterInput.addEventListener("input", debounce(filterLogs, 300)); // Debounce by 300ms
-    const storedFilterValue = localStorage.getItem("logFilter");
-    if (storedFilterValue) { filterInput.value = storedFilterValue; }
+  function applyFilter() {
+    const filterValue = filterInput.value.toLowerCase();
+    if (routerlogsList) {
+      const liElements = routerlogsList.querySelectorAll("li");
+      liElements.forEach((li) => {
+        const text = li.textContent;
+        li.style.display = text.toLowerCase().includes(filterValue) ? "block" : "none";
+      });
+    }
   }
 
   document.addEventListener("DOMContentLoaded", function() {
-    linkifyRouterIds();
-    linkifyLeaseSets();
-    linkifyIPv4();
-    linkifyIPv6();
-    requestAnimationFrame(() => {
-      updates.forEach(update => update());
-    });
+    doUpdates();
     onVisible(mainLogs, () => { requestAnimationFrame(initRefresh); });
     onHidden(mainLogs, stopRefresh);
     updateInterval();
     addFilterInput();
+    applyFilter();
 
     document.addEventListener("click", function(event) {
       if (event.target === toggleRefresh) {
-        let isRefreshOn = toggleRefresh.classList.contains("enabled");
+        const isRefreshOn = toggleRefresh.classList.contains("enabled");
         if (isRefreshOn) {
           toggleRefresh.classList.remove("enabled");
           toggleRefresh.classList.add("disabled");
@@ -322,10 +281,7 @@ function start() {
         } else {
           toggleRefresh.classList.remove("disabled");
           toggleRefresh.classList.add("enabled");
-          if (intervalValue === 0) {
-            intervalValue = 30;
-            localStorage.setItem("logsRefresh", "30");
-          }
+          intervalValue = localStorage.getItem("logsRefresh") || "30";
           refreshLogs();
           initRefresh();
         }
