@@ -42,38 +42,30 @@ let initialized = false;
 let isDocumentVisible = true;
 let requireFullRefresh = true;
 
-const requestIdleOrAnimationFrame = (callback, timeout = 180) => {
-  let requestId, timeoutId;
+const requestAnimationFramePromise = (callback) => {
+  let requestId;
   const execCallback = () => {
-    try {callback();}
-    catch (error) {
+    try {
+      callback();
+    } catch (error) {
       if (debugging) console.error(error);
     } finally {
-      clearTimeout(timeoutId);
-      if (requestId) cancelIdleCallback(requestId);
+      cancelAnimationFrame(requestId);
     }
   };
 
-  const scheduleExecution = () => {
-    timeoutId = setTimeout(() => {
-      if (requestId) cancelIdleCallback(requestId);
-      requestAnimationFrame(execCallback);
-    }, timeout);
-  };
-
-  if (typeof requestIdleCallback === "function") {
-    requestId = requestIdleCallback(execCallback);
-    scheduleExecution();
-  } else {scheduleExecution();}
-
-  const promise = new Promise(resolve => {
+  const promise = new Promise((resolve) => {
     const clear = () => {
-      clearTimeout(timeoutId);
-      if (requestId) cancelIdleCallback(requestId);
+      cancelAnimationFrame(requestId);
       resolve();
     };
 
-    if (!requestIdleOrAnimationFrame.cancel) {requestIdleOrAnimationFrame.cancel = clear;}
+    requestId = requestAnimationFrame(execCallback);
+
+    if (!requestAnimationFramePromise.cancel) {
+      requestAnimationFramePromise.cancel = clear;
+    }
+
     return clear;
   });
 
@@ -96,7 +88,7 @@ async function initHandlers() {
     if (debugMode) {toggleDebug();}
   }
   setLinks();
-  await requestIdleOrAnimationFrame(async () => {
+  await requestAnimationFramePromise(async () => {
     if (document.getElementById("pagenavtop")) await pageNav();
     if (filterbar) await showBadge();
     if (debugging) console.log("initHandlers()");
@@ -105,13 +97,13 @@ async function initHandlers() {
 
 async function updateElementInnerHTML(elem, respElem) {
   if (elem && respElem && elem.innerHTML.trim() !== respElem.innerHTML.trim()) {
-    requestIdleOrAnimationFrame(() => {elem.innerHTML = respElem.innerHTML;});
+    elem.innerHTML = respElem.innerHTML;
   }
 }
 
 async function updateElementTextContent(elem, respElem) {
   if (elem && respElem && elem.textContent.trim() !== respElem.textContent.trim()) {
-    requestIdleOrAnimationFrame(() => {elem.textContent = respElem.textContent;});
+    elem.textContent = respElem.textContent;
   }
 }
 
@@ -164,7 +156,7 @@ function removeStaleCacheKeys() {
 async function doRefresh({ url = window.location.href, forceFetch = false } = {}) {
   const defaultUrl = await getURL();
   const responseDoc = await fetchHTMLDocument(url || defaultUrl, forceFetch);
-  await requestIdleOrAnimationFrame(async () => await refreshTorrents(responseDoc));
+  await requestAnimationFramePromise(async () => await refreshTorrents(responseDoc));
   await initHandlers();
   await showBadge();
 }
@@ -197,9 +189,9 @@ async function refreshTorrents(callback) {
 
     await setLinks(query);
 
-    if (torrents) { await requestIdleOrAnimationFrame(async () => await updateVolatile()); }
-    else if (dirlist) {await requestIdleOrAnimationFrame(async () => await updateFiles()); }
-    else if (down) { await requestIdleOrAnimationFrame(async () => await refreshAll()); }
+    if (torrents) { await requestAnimationFramePromise(async () => await updateVolatile()); }
+    else if (dirlist) {await requestAnimationFramePromise(async () => await updateFiles()); }
+    else if (down) { await requestAnimationFramePromise(async () => await refreshAll()); }
 
     async function refreshAll() {
       try {
@@ -207,7 +199,7 @@ async function refreshTorrents(callback) {
         const mainsectionContainer = await fetchHTMLDocument(url);
         const newTorrentsBody = mainsectionContainer.querySelector("#snarkTbody");
         if (newTorrentsBody) {
-          await requestIdleOrAnimationFrame(async () => {
+          await requestAnimationFramePromise(async () => {
             updateElementInnerHTML(torrentsBody, newTorrentsBody);
             refreshHeaderAndFooter();
             refreshScreenLog(undefined);
@@ -269,7 +261,7 @@ async function refreshTorrents(callback) {
               }
             });
           } else if (requireFullRefresh && updatingResponse) {
-            await requestIdleOrAnimationFrame(async () => await refreshAll());
+            refreshAll();
             updated = true;
           }
         }
@@ -362,7 +354,7 @@ async function refreshScreenLog(callback, forceFetch = false) {
         return;
       }
       await updateElementInnerHTML(screenlog, screenlogResponse);
-      if (callback) callback();
+      if (callback) {callback();}
       resolve();
     } catch (error) {resolve();}
   });
