@@ -6,7 +6,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const viewLinks = [
     'td.fileIcon.text>a',
+    'td.snarkFileName>a[href$=".bat"]',
     'td.snarkFileName>a[href$=".css"]',
+    'td.snarkFileName>a[href$=".ini"]',
     'td.snarkFileName>a[href$=".js"]',
     'td.snarkFileName>a[href$=".json"]',
     'td.snarkFileName>a[href$=".nfo"]',
@@ -20,8 +22,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const parentDoc = window.parent.document;
   const isIframed = doc.documentElement.classList.contains("iframed") || window.parent;
   const snarkFileNameLinks = doc.querySelectorAll(":where(" + viewLinks.join(",") + ")");
-  const supportedFileTypes = new Set(["css", "csv", "js", "json", "nfo", "txt", "sh", "srt", "url"]);
-  const numberedFileExts = new Set(["css", "js", "sh"]);
+  const supportedFileTypes = new Set(["bat", "css", "csv", "ini", "js", "json", "nfo", "txt", "sh", "srt", "url"]);
+  const numberedFileExts = new Set(["bat", "css", "ini", "js", "sh"]);
   const cssHref = "/i2psnark/.res/textView.css";
   const textviewContent = doc.getElementById("textview-content");
   const responseCache = new Map();
