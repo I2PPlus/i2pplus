@@ -272,9 +272,8 @@ class SidebarRenderer {
                 .append("</a>\n")
                 .append("<a class=sb_icon target=_top href=/dns title=\"").append(tx)
                 .append("\" hidden><span><img src=/themes/console/images/addressbook.svg>")
-                .append(" <a title=\"").append(_t("New hosts added to addressbook today")).append("\" ")
-                .append("href=/susidns/log.jsp target=_blank><span id=newHosts class=\"badge volatile\"></span>")
-                .append("</a></span></a>\n");
+                .append(" <span id=newHosts class=\"badge volatile\" title=\"").append(_t("New hosts added to addressbook today"))
+                .append("\"></span></span></a>");
             svcs.put(tx, rbuf.toString());
         }
 

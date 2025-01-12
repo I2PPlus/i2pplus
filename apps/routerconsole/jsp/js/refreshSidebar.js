@@ -45,14 +45,12 @@ async function checkTimer() {
   try {
     refreshTimerActive = await getRefreshTimerId();
     return refreshTimerActive.isActive;
-  } catch (error) {
-    return false;
-  }
+  } catch (error) {return false;}
 }
 
 async function doFetch(force = false) {
   checkTimer();
-  if (!refreshTimerActive.isActive) return;
+  if (!refreshTimerActive.isActive) {return;}
   try {
     worker.postMessage({ url: `/xhr1.jsp?requestURI=${uri}` });
     if (refreshTimeout) {
@@ -180,10 +178,10 @@ function newHosts() {
   function fetchNewHosts() {
     fetch("/susidns/log.jsp").then(response => response.text()).then(html => {
       const doc = parser.parseFromString(html, "text/html");
-      const count = doc.getElementById("newToday").innerText;
+      const count = doc.getElementById("newToday").textContent;
       const storedData = JSON.parse(localStorage.getItem("newHostsData") || "{}");
       const currentCount = storedData.count;
-      document.getElementById("newHosts").innerText = count;
+      if (newHostsBadge.textContent !== count) {newHostsBadge.textContent = count;}
       localStorage.setItem("newHostsData", JSON.stringify({ count, lastUpdated: Date.now() }));
     }).catch(error => {});
   }
@@ -193,7 +191,7 @@ function newHosts() {
     const storedData = JSON.parse(localStorage.getItem("newHostsData") || "{}");
     const { count, lastUpdated } = storedData;
     if (lastUpdated && count && (now - lastUpdated < period)) {
-      document.getElementById("newHosts").innerText = count;
+      if (newHostsBadge.textContent !== count) {newHostsBadge.textContent = count;}
     } else {fetchNewHosts();}
   }
   if (newHostsInterval) {clearInterval(newHostsInterval);}
