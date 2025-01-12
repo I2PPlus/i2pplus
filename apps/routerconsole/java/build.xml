@@ -24,17 +24,17 @@
       destdir="./build/obj">
       <!-- Depend on classes instead of jars where available -->
       <classpath>
-        <pathelement location="../../../core/java/build/obj"/>
         <pathelement location="../../../core/java/build/gnu-getopt.jar"/>
-        <pathelement location="../../../router/java/build/obj"/>
-        <pathelement location="../../jetty/jettylib/org.mortbay.jetty.jar"/>
-        <pathelement location="../../jetty/jettylib/jetty-util.jar"/>
-        <pathelement location="../../jetty/jettylib/javax.servlet.jar"/>
-        <pathelement location="../../jetty/jettylib/jetty-i2p.jar"/>
-        <pathelement location="../../systray/java/build/obj"/>
+        <pathelement location="../../../core/java/build/obj"/>
         <pathelement location="../../desktopgui/build"/>
         <pathelement location="../../../installer/lib/wrapper/all/wrapper.jar"/>
+        <pathelement location="../../jetty/jettylib/javax.servlet.jar"/>
+        <pathelement location="../../jetty/jettylib/jetty-i2p.jar"/>
+        <pathelement location="../../jetty/jettylib/jetty-util.jar"/>
+        <pathelement location="../../jetty/jettylib/org.mortbay.jetty.jar"/>
         <pathelement location="../../jrobin/java/build/jrobin.jar"/>
+        <pathelement location="../../../router/java/build/obj"/>
+        <pathelement location="../../systray/java/build/obj"/>
       </classpath>
     </depend>
   </target>
@@ -72,22 +72,22 @@
         <pathelement location="../../../core/java/build/i2p.jar"/>
         <!-- gnu-getopt.jar only present for debian builds -->
         <pathelement location="../../../core/java/build/gnu-getopt.jar"/>
-        <pathelement location="../../../router/java/build/router.jar"/>
-        <pathelement location="../../jetty/jettylib/org.mortbay.jetty.jar"/>
+        <pathelement location="../../desktopgui/dist/desktopgui.jar"/>
+        <pathelement location="../../../installer/lib/wrapper/all/wrapper.jar"/>
+        <pathelement location="../../jetty/jettylib/jasper-runtime.jar"/>
+        <pathelement location="../../jetty/jettylib/javax.servlet.jar"/>
         <pathelement location="../../jetty/jettylib/jetty-http.jar"/>
+        <pathelement location="../../jetty/jettylib/jetty-i2p.jar"/>
         <pathelement location="../../jetty/jettylib/jetty-io.jar"/>
         <pathelement location="../../jetty/jettylib/jetty-security.jar"/>
         <pathelement location="../../jetty/jettylib/jetty-servlet.jar"/>
         <pathelement location="../../jetty/jettylib/jetty-servlets.jar"/>
         <pathelement location="../../jetty/jettylib/jetty-util.jar"/>
         <pathelement location="../../jetty/jettylib/jetty-webapp.jar"/>
-        <pathelement location="../../jetty/jettylib/javax.servlet.jar"/>
-        <pathelement location="../../jetty/jettylib/jasper-runtime.jar"/>
-        <pathelement location="../../jetty/jettylib/jetty-i2p.jar"/>
-        <pathelement location="../../systray/java/build/systray.jar"/>
-        <pathelement location="../../desktopgui/dist/desktopgui.jar"/>
-        <pathelement location="../../../installer/lib/wrapper/all/wrapper.jar"/>
+        <pathelement location="../../jetty/jettylib/org.mortbay.jetty.jar"/>
         <pathelement location="../../jrobin/java/build/jrobin.jar"/>
+        <pathelement location="../../../router/java/build/router.jar"/>
+        <pathelement location="../../systray/java/build/systray.jar"/>
 
         <!-- following jars only present for debian builds -->
         <pathelement location="../../jetty/jettylib/tomcat-api.jar"/>
@@ -144,24 +144,15 @@
     <!-- set if unset -->
     <property name="workspace.changes.j.tr" value=""/>
     <!-- copy the NDT translations, strip the countries -->
-    <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_en_US.properties"
-      tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs.properties"/>
-    <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_ca_ES.properties"
-      tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_ca.properties"/>
-    <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_el_GR.properties"
-      tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_el.properties"/>
-    <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_fr_FR.properties"
-      tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_fr.properties"/>
-    <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_nb_NO.properties"
-      tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_nb.properties"/>
-    <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_nl_NL.properties"
-      tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_nl.properties"/>
-    <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_pt_BR.properties"
-      tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_pt.properties"/>
-    <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_ru_RU.properties"
-      tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_ru.properties"/>
-    <jar destfile="./build/routerconsole.jar" basedir="./build/obj"
-      excludes="net/i2p/router/web/helpers/* net/i2p/router/web/servlets/* net/i2p/router/web/resources/**/*">
+    <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_en_US.properties" tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs.properties"/>
+    <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_ca_ES.properties" tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_ca.properties"/>
+    <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_el_GR.properties" tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_el.properties"/>
+    <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_fr_FR.properties" tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_fr.properties"/>
+    <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_nb_NO.properties" tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_nb.properties"/>
+    <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_nl_NL.properties" tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_nl.properties"/>
+    <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_pt_BR.properties" tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_pt.properties"/>
+    <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_ru_RU.properties" tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_ru.properties"/>
+    <jar destfile="./build/routerconsole.jar" basedir="./build/obj" excludes="net/i2p/router/web/helpers/* net/i2p/router/web/servlets/* net/i2p/router/web/resources/**/*">
       <manifest>
         <!-- DTG added in 0.8.4, not in the classpath for very old installs, before we changed
         wrapper.config to specify * -->
@@ -193,13 +184,11 @@
     <mkdir dir="build/messages-src"/>
     <!-- Update the messages_*.po files.
              We need to supply the bat file for windows, and then change the fail property to true -->
-    <exec executable="sh" osfamily="unix" failifexecutionfails="true"
-      failonerror="${require.gettext}">
+    <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="${require.gettext}">
       <env key="JAVA_HOME" value="${java.home}"/>
       <arg value="./bundle-messages.sh"/>
     </exec>
-    <exec executable="sh" osfamily="mac" failifexecutionfails="true"
-      failonerror="${require.gettext}">
+    <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="${require.gettext}">
       <arg value="./bundle-messages.sh"/>
     </exec>
     <!-- multi-lang is optional -->
@@ -214,8 +203,7 @@
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
     <!-- jar again to get the latest messages_*.class files -->
-    <jar destfile="./build/routerconsole.jar" basedir="./build/obj" includes="**/messages_*.class"
-      update="true"/>
+    <jar destfile="./build/routerconsole.jar" basedir="./build/obj" includes="**/messages_*.class" update="true"/>
   </target>
 
   <target name="jarUpToDate">
@@ -256,13 +244,11 @@
 
   <target name="bundle-news" unless="no.bundle">
     <mkdir dir="build/messages-news-src"/>
-    <exec executable="sh" osfamily="unix" failifexecutionfails="true"
-      failonerror="${require.gettext}">
+    <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="${require.gettext}">
       <env key="JAVA_HOME" value="${java.home}"/>
       <arg value="./bundle-messages-news.sh"/>
     </exec>
-    <exec executable="sh" osfamily="mac" failifexecutionfails="true"
-      failonerror="${require.gettext}">
+    <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="${require.gettext}">
       <arg value="./bundle-messages-news.sh"/>
     </exec>
     <exec executable="sh" osfamily="windows" failifexecutionfails="false">
@@ -279,13 +265,11 @@
 
   <target name="bundle-countries" unless="no.bundle">
     <mkdir dir="build/messages-countries-src"/>
-    <exec executable="sh" osfamily="unix" failifexecutionfails="true"
-      failonerror="${require.gettext}">
+    <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="${require.gettext}">
       <env key="JAVA_HOME" value="${java.home}"/>
       <arg value="./bundle-messages-countries.sh"/>
     </exec>
-    <exec executable="sh" osfamily="mac" failifexecutionfails="true"
-      failonerror="${require.gettext}">
+    <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="${require.gettext}">
       <arg value="./bundle-messages-countries.sh"/>
     </exec>
     <exec executable="sh" osfamily="windows" failifexecutionfails="false">
@@ -352,8 +336,7 @@
   </target>
 
   <target name="listChangedFiles2" depends="warUpToDate" if="shouldListChanges2">
-    <exec executable="mtn" outputproperty="workspace.changes.w" errorproperty="mtn.error2"
-      failifexecutionfails="false">
+    <exec executable="mtn" outputproperty="workspace.changes.w" errorproperty="mtn.error2" failifexecutionfails="false">
       <arg value="list"/>
       <arg value="changed"/>
       <arg value="../jsp"/>
@@ -393,8 +376,7 @@
         <echo message="UglifyJS not found, skipping Javascript file compression..."/>
       </else>
     </if>
-    <war destfile="build/routerconsole.war" webxml="../jsp/web-out.xml"
-      basedir="build/jsp/"
+    <war destfile="build/routerconsole.war" webxml="../jsp/web-out.xml" basedir="build/jsp/"
       excludes="web.xml, *.css, **/*.java, *.jsp, *.jsi, web-fragment.xml, web-out.xml">
       <manifest>
         <attribute name="Implementation-Version" value="${full.version}"/>
@@ -405,8 +387,7 @@
         <attribute name="X-Compile-Source-JDK" value="${javac.version}"/>
         <attribute name="X-Compile-Target-JDK" value="${javac.version}"/>
       </manifest>
-      <classes dir="./build/obj"
-        includes="net/i2p/router/web/helpers/* net/i2p/router/web/servlets/* net/i2p/router/web/resources/**/*"/>
+      <classes dir="./build/obj" includes="net/i2p/router/web/helpers/* net/i2p/router/web/servlets/* net/i2p/router/web/resources/**/*"/>
     </war>
   </target>
 
@@ -594,8 +575,7 @@
   </target>
 
   <uptodate property="precompilejsp.uptodate" targetfile="../jsp/web-out.xml">
-    <srcfiles dir="../jsp"
-      includes="**/*.jsp, help/*.jsp, *.jsi, **/*.html, *.css, susimail/susimail, web.xml"/>
+    <srcfiles dir="../jsp" includes="**/*.jsp, help/*.jsp, *.jsi, **/*.html, *.css, susimail/susimail, web.xml"/>
     <!-- so the version is right on logs.jsp -->
     <srcfiles dir="../../../router/java/src/net/i2p/router" includes="RouterVersion.java"/>
   </uptodate>
@@ -638,15 +618,15 @@
     <mkdir dir="./build/obj_scala"/>
     <scalac srcdir="./test/scalatest" destdir="./build/obj_scala" deprecation="on">
       <classpath>
-        <pathelement location="${scala-library.jar}"/>
-        <pathelement location="${scalactic.jar}"/>
-        <pathelement location="${scalatest.jar}"/>
         <pathelement location="${mockito.home}/byte-buddy.jar"/>
-        <pathelement location="${mockito.home}/objenesis.jar"/>
         <pathelement location="${mockito.home}/mockito-core.jar"/>
+        <pathelement location="${mockito.home}/objenesis.jar"/>
+        <pathelement location="${scalactic.jar}"/>
+        <pathelement location="${scala-library.jar}"/>
+        <pathelement location="${scalatest.jar}"/>
+        <pathelement location="./build/obj"/>
         <pathelement location="../../../core/java/build/i2pscalatest.jar"/>
         <pathelement location="../../../router/java/build/routerscalatest.jar"/>
-        <pathelement location="./build/obj"/>
       </classpath>
     </scalac>
   </target>
@@ -682,14 +662,14 @@
     <taskdef name="scalatest" classname="org.scalatest.tools.ScalaTestAntTask">
       <classpath>
         <pathelement location="${classpath}"/>
-        <pathelement location="${scala-library.jar}"/>
-        <pathelement location="${scala-xml.jar}"/>
         <pathelement location="${scalactic.jar}"/>
+        <pathelement location="${scala-library.jar}"/>
         <pathelement location="${scalatest.jar}"/>
-        <pathelement location="./build/obj_cobertura"/>
-        <pathelement location="./build/obj"/>
+        <pathelement location="${scala-xml.jar}"/>
         <pathelement location="${with.clover}"/>
         <pathelement location="${with.cobertura}"/>
+        <pathelement location="./build/obj"/>
+        <pathelement location="./build/obj_cobertura"/>
       </classpath>
     </taskdef>
     <scalatest runpath="./build/obj_scala" fork="yes" maxmemory="384M">
@@ -704,8 +684,7 @@
     <!-- set if unset -->
     <property name="host.fakename" value="i2ptester"/>
     <!-- replace hostname that junit inserts into reports with fake one -->
-    <replace dir="../../../reports/apps/routerconsole/scalatest/" token="${host.name}"
-      value="${host.fakename}"/>
+    <replace dir="../../../reports/apps/routerconsole/scalatest/" token="${host.name}" value="${host.fakename}"/>
   </target>
 
   <target name="test" depends="scalatest.test"/>
@@ -730,11 +709,9 @@
 
   <target name="cobertura.report" depends="test" if="with.cobertura">
     <mkdir dir="../../../reports/apps/routerconsole/cobertura"/>
-    <cobertura-report format="xml" srcdir="./src"
-      destdir="../../../reports/apps/routerconsole/cobertura"/>
+    <cobertura-report format="xml" srcdir="./src" destdir="../../../reports/apps/routerconsole/cobertura"/>
     <mkdir dir="../../../reports/apps/routerconsole/html/cobertura"/>
-    <cobertura-report format="html" srcdir="./src"
-      destdir="../../../reports/apps/routerconsole/html/cobertura"/>
+    <cobertura-report format="html" srcdir="./src" destdir="../../../reports/apps/routerconsole/html/cobertura"/>
     <delete file="./cobertura.ser"/>
   </target>
 
