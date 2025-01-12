@@ -167,6 +167,7 @@ async function refreshSidebar() {
 
 function newHosts() {
   const newHostsBadge = document.getElementById("newHosts");
+  if (!newHostsBadge) {return;}
   if (theme !== "dark") {
     newHostsBadge.style.display = "none";
     return;
@@ -264,6 +265,7 @@ async function handleFormSubmit() {
 const ready = async () => {
   try {
     checkIfDown();
+    await doFetch();
     await refreshSidebar();
   } catch (error) {}
 }
