@@ -319,16 +319,17 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 .sb_icon#utility:active{background:var(--hardhat) no-repeat calc(50% - 3px) calc(50% + 2px)/14px,var(--configure) no-repeat 20% center/19px,var(--badge_active)}
 .sb_icon#transit:active{background:var(--share) no-repeat 25% center/19px,var(--badge_active)}
 .sb_icon#tcount:active{background:var(--hardhat) no-repeat 25% center/19px,var(--badge_active)}
-#lsCount.badge,#newsCount,#sidebar h3 a .badge,#tunnelCount{padding:2px 5px 1px;display:inline-block;position:relative;z-index:999;white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;font-size:80%;font-weight:700;box-shadow:0 0 0 1px #141,var(--highlight);background:var(--badge);animation:fade .2s ease .1s reverse both}
-#lsCount.badge{animation:none}
+#lsCount.badge,#newsCount,#newHosts,#sidebar h3 a .badge,#tunnelCount{padding:2px 5px 1px;display:inline-block;position:relative;z-index:999;white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;font-size:80%;font-weight:700;box-shadow:0 0 0 1px #141,var(--highlight);background:var(--badge);animation:fade .2s ease .1s reverse both}
+#lsCount.badge,#newHosts{animation:none}
 #sidebar #sb_status #lsCount.badge,#sidebar .net_status:hover #sb_status #lsCount.badge{padding:2px 3px 1px;margin:0 0 0 3px;line-height:1;vertical-align:middle;color:#494}
 #lsCount.badge{margin-top:1px;font-size:8pt!important}
+#newHosts{margin:2px 0 0 4px!important;padding:1px 3px;min-width:12px;min-height:10px;display:inline-block;vertical-align:middle;line-height:1;font-size:8pt!important;color:#494}
 #sidebar h3{position:relative;contain:paint}
 #console_404 #sidebar h3 a .badge{display:none}
 #sidebar h3 a[href="/info"] .badge{text-transform:none}
 #sidebar h3:hover a .badge,h3:hover #tunnelCount,h3:hover #newsCount{color:var(--hover);box-shadow:0 0 0 1px var(--hover),0 0 0 1px #000 inset}
 #sidebar h3 .badge:empty,#sidebar #newsCount:empty,#sidebar #tunnelCount:empty,#sidebar .badge[hidden]{display:none}
-#sidebar td .badge:empty::after{display:inline;content:"---"}
+#sidebar td .badge:not(#newHosts):empty::after{display:inline;content:"---"}
 #sidebar #tunnelCount{animation:none}
 #sb_updatesection h3.collapsed:not(.updating) a::after{content:"*"}
 #sb_updatesection.collapsed>*:not(h3){display:none}
@@ -3119,6 +3120,7 @@ span#newtab{margin-top:4px}
 #minigraphcontainer,#minigraphcontainer_noscript{margin-top:-40px;margin-left:1px;width:258px;height:39px;background-size:250px 40px}
 #netconfig label::before,#externali2cp td label::before,#externali2cp .nowrap::before,#reseedconfig .nowrap::before{min-height:50px}
 #news .newsentry p,.subheading b,h4#updateplugins{font-size:10.5pt}
+#newHosts{padding:2px 3px 0;min-height:11px;font-size:8.5pt!important}
 #participating a::after,#peercount a::after{margin:-8px 0 -13px -12px;padding:9px 6px 9px 0}
 #pconfig{margin-bottom:-15px}
 #peerprofiles.widescroll{margin-top:-12px;padding-top:116px}

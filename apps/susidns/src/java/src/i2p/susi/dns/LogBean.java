@@ -29,8 +29,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import net.i2p.data.DataHelper;
 
@@ -38,6 +45,7 @@ public class LogBean extends BaseBean
 {
     private String logName, logged;
     private static final String LOG_FILE = "log.txt";
+
     public String getLogName() {
         loadConfig();
         logName = logFile().toString();
@@ -113,4 +121,52 @@ public class LogBean extends BaseBean
         return logged;
     }
 
+    public int getTodayEntryCount() {
+        reloadLog();
+        return countTodayEntries();
+    }
+
+    private int countTodayEntries() {
+        File log = logFile();
+        int maxLines = 600;
+        int todayEntryCount = 0;
+
+        if (log.isFile()) {
+            BufferedReader br = null;
+            try {
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(log), "UTF-8"));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    if (!line.contains("Bad hostname")) {
+                        String[] parts = line.split(" -- ");
+                        String date = parts[0].replace("GMT", "UTC");
+                        if (isToday(date)) {
+                            todayEntryCount++;
+                        }
+                    }
+                }
+            } catch (IOException e) {e.printStackTrace();} // TODO Auto-generated catch block
+            finally {
+                if (br != null) {
+                    try {br.close();}
+                    catch (IOException ioe) {}
+                }
+            }
+        }
+        return todayEntryCount;
+    }
+
+    private boolean isToday(String dateStr) {
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        try {
+            Date date = sdf.parse(dateStr);
+            LocalDate logDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate today = LocalDate.now(ZoneId.systemDefault());
+            return logDate.equals(today);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

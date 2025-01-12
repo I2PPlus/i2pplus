@@ -46,6 +46,7 @@
 <div id=messages class=canClose>${log.messages}</div>
 <div id=config><ul>${log.logged}</ul></div>
 </div>
+<span id=newToday hidden><%= log.getTodayEntryCount() %></span>
 <span data-iframe-height></span>
 <script nonce="<%=cspNonce%>" src="/js/clickToClose.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>

@@ -22,7 +22,7 @@ const uri = location.pathname;
 const worker = new Worker("/js/fetchWorker.js");
 
 const elements = {
-  badges: sb.querySelectorAll(".badge, #tunnelCount, #newsCount"),
+  badges: sb.querySelectorAll(".badge:not(#newHosts), #tunnelCount, #newsCount"),
   volatileElements: sb.querySelectorAll(".volatile:not(.badge)"),
 };
 
@@ -91,18 +91,12 @@ async function refreshSidebar() {
 
       const responseElements = {
         volatileElements: responseDoc.querySelectorAll(".volatile:not(.badge)"),
-        badges: responseDoc.querySelectorAll(".badge"),
+        badges: responseDoc.querySelectorAll(".badge:not(#newHosts)"),
       };
 
-      const updateElementInnerHTML = (elem, respElem) => {
+      const updateElement = (elem, respElem, property = "innerHTML") => {
         if (elem && respElem && elem.innerHTML !== respElem.innerHTML) {
           elem.innerHTML = respElem.innerHTML;
-        }
-      };
-
-      const updateElementTextContent = (elem, respElem) => {
-        if (elem && respElem && elem.textContent !== respElem.textContent) {
-          elem.textContent = respElem.textContent;
         }
       };
 
@@ -126,13 +120,11 @@ async function refreshSidebar() {
         Array.from(elements.volatileElements).forEach((elem, index) => {
           const respElem = responseElements.volatileElements[index];
           if (elem && respElem) {
-            updates.push(() => {
-              if (elem.classList.contains("statusDown")) {
-                updateIfStatusDown(elem, respElem);
-              } else {
-                updateElementInnerHTML(elem, respElem);
-              }
-            });
+            if (elem.classList.contains("statusDown")) {
+              updates.push(() => { updateIfStatusDown(elem, respElem); });
+            } else {
+              updates.push(() => { updateElement(elem, respElem); });
+            }
           }
         });
 
@@ -140,7 +132,7 @@ async function refreshSidebar() {
           Array.from(elements.badges).forEach((elem, index) => {
             const respElem = responseElements.badges[index];
             updates.push(() => {
-              updateElementTextContent(elem, respElem);
+              updateElement(elem, respElem, "textContent");
             });
           });
         }
@@ -150,6 +142,7 @@ async function refreshSidebar() {
         updates.forEach(update => update());
         updates.length = 0;
         countNewsItems();
+        newHosts();
       });
 
       function refreshAll() {
@@ -172,6 +165,40 @@ async function refreshSidebar() {
     noResponse++;
     checkIfDown();
   }
+}
+
+function newHosts() {
+  const newHostsBadge = document.getElementById("newHosts");
+  if (theme !== "dark") {
+    newHostsBadge.style.display = "none";
+    return;
+  }
+
+  let newHostsInterval;
+  const period = 60000;
+
+  function fetchNewHosts() {
+    fetch("/susidns/log.jsp").then(response => response.text()).then(html => {
+      const doc = parser.parseFromString(html, "text/html");
+      const count = doc.getElementById("newToday").innerText;
+      const storedData = JSON.parse(localStorage.getItem("newHostsData") || "{}");
+      const currentCount = storedData.count;
+      document.getElementById("newHosts").innerText = count;
+      localStorage.setItem("newHostsData", JSON.stringify({ count, lastUpdated: Date.now() }));
+    }).catch(error => {});
+  }
+
+  function getNewHosts() {
+    const now = Date.now();
+    const storedData = JSON.parse(localStorage.getItem("newHostsData") || "{}");
+    const { count, lastUpdated } = storedData;
+    if (lastUpdated && count && (now - lastUpdated < period)) {
+      document.getElementById("newHosts").innerText = count;
+    } else {fetchNewHosts();}
+  }
+  if (newHostsInterval) {clearInterval(newHostsInterval);}
+  getNewHosts();
+  newHostsInterval = setInterval(fetchNewHosts, period);
 }
 
 async function handleFormSubmit() {
@@ -245,5 +272,6 @@ const ready = async () => {
 
 onVisible(sb, ready);
 document.addEventListener("DOMContentLoaded", initSidebar);
+document.addEventListener("DOMContentLoaded", newHosts);
 
 export { refreshSidebar };
