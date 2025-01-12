@@ -45,27 +45,31 @@ async function checkTimer() {
   try {
     refreshTimerActive = await getRefreshTimerId();
     return refreshTimerActive.isActive;
-  } catch (error) {return false;}
+  } catch (error) {
+    return false;
+  }
 }
 
 async function doFetch(force = false) {
   checkTimer();
-  if (!refreshTimerActive.isActive) {return;}
+  if (!refreshTimerActive.isActive) return;
   try {
     worker.postMessage({ url: `/xhr1.jsp?requestURI=${uri}` });
     if (refreshTimeout) {
       clearTimeout(refreshTimeout);
-      refreshTimeout = setTimeout(await doFetch, refreshInterval);
+      refreshTimeout = setTimeout(doFetch, refreshInterval);
     }
-    if (force) {await refreshSidebar();}
-  } catch (error) {noResponse++;}
+    if (force) await refreshSidebar();
+  } catch (error) {
+    noResponse++;
+  }
 }
 
 worker.addEventListener("message", async function(event) {
   try {
-    let { responseText, isDown, noResponse: workerNoResponse } = event.data;
+    const { responseText, isDown: workerIsDown, noResponse: workerNoResponse } = event.data;
     responseDoc = parser.parseFromString(responseText, "text/html");
-    isDown = false;
+    isDown = workerIsDown;
     noResponse = workerNoResponse;
     document.body.classList.remove("isDown");
     checkIfDown();
@@ -80,7 +84,7 @@ async function refreshSidebar() {
   const updates = [];
   try {
     await doFetch();
-    if (refreshTimeout) {clearTimeout(refreshTimeout);}
+    if (refreshTimeout) clearTimeout(refreshTimeout);
     refreshTimeout = setTimeout(refreshSidebar, refreshInterval);
     if (responseDoc) {
       isDown = false;
@@ -91,19 +95,19 @@ async function refreshSidebar() {
       };
 
       const updateElementInnerHTML = (elem, respElem) => {
-        if (elem && respElem && elem.innerHTML != respElem.innerHTML) {
+        if (elem && respElem && elem.innerHTML !== respElem.innerHTML) {
           elem.innerHTML = respElem.innerHTML;
         }
       };
 
       const updateElementTextContent = (elem, respElem) => {
-        if (elem && respElem && elem.textContent != respElem.textContent) {
+        if (elem && respElem && elem.textContent !== respElem.textContent) {
           elem.textContent = respElem.textContent;
         }
       };
 
       const updateIfStatusDown = (elem, respElem) => {
-        if (elem && elem.classList.contains("statusDown") && respElem && elem.outerHTML != respElem.outerHTML) {
+        if (elem && elem.classList.contains("statusDown") && respElem && elem.outerHTML !== respElem.outerHTML) {
           elem.outerHTML = respElem.outerHTML;
         }
       };
@@ -111,9 +115,11 @@ async function refreshSidebar() {
       (function checkSections() {
         const updating = xhrContainer.querySelectorAll(".volatile");
         const updatingResponse = responseDoc.querySelectorAll(".volatile");
-        if (updating.length !== updatingResponse.length) {refreshAll();}
-        else {updateVolatile();}
-        countNewsItems();
+        if (updating.length !== updatingResponse.length) {
+          refreshAll();
+        } else {
+          updateVolatile();
+        }
       })();
 
       function updateVolatile() {
@@ -121,8 +127,11 @@ async function refreshSidebar() {
           const respElem = responseElements.volatileElements[index];
           if (elem && respElem) {
             updates.push(() => {
-              if (elem.classList.contains("statusDown")) {updateIfStatusDown(elem, respElem);}
-              else {updateElementInnerHTML(elem, respElem);}
+              if (elem.classList.contains("statusDown")) {
+                updateIfStatusDown(elem, respElem);
+              } else {
+                updateElementInnerHTML(elem, respElem);
+              }
             });
           }
         });
@@ -135,11 +144,12 @@ async function refreshSidebar() {
             });
           });
         }
-      };
+      }
 
       requestAnimationFrame(() => {
         updates.forEach(update => update());
         updates.length = 0;
+        countNewsItems();
       });
 
       function refreshAll() {
@@ -167,56 +177,66 @@ async function refreshSidebar() {
 async function handleFormSubmit() {
   document.addEventListener("submit", async (event) => {
     const form = event.target.closest("form");
-    if (form) {
-      const formId = form.getAttribute("id");
-      const hiddenIframe = document.getElementById("processSidebarForm");
-      hiddenIframe.removeEventListener("load", handleLoad);
-      hiddenIframe.addEventListener("load", handleLoad);
-      form.dispatchEvent(new Event('submit'));
-      function handleLoad(event) {
-        setTimeout(async () => {
-          await doFetch(true);
-          const formResponse = responseDoc.querySelector(`#${formId}`);
-          if (formResponse) {
-            if (form.id !== "form_sidebar") {
-              form.innerHTML = formResponse.innerHTML;
-              const shutdownNotice = document.getElementById("sb_shutdownStatus");
-              const shutdownNoticeHR = sb.querySelector("#sb_shutdownStatus+hr");
-              const shutdownNoticeResponse = responseDoc.getElementById("sb_shutdownStatus");
-              const updateForm = document.getElementById("sb_updateform");
-              const updateFormResponse = responseDoc.getElementById("sb_updateform");
+    const clickTarget = event.submitter;
+    if (!form || !clickTarget) {return;}
+    await doFetch(true);
+    const formId = form.getAttribute("id");
+    const hiddenIframe = document.getElementById("processSidebarForm");
+    hiddenIframe.removeEventListener("load", handleLoad);
+    hiddenIframe.addEventListener("load", handleLoad);
+    form.dispatchEvent(new Event("submit"));
 
-              if (shutdownNotice) {
-                if (shutdownNoticeResponse && shutdownNoticeResponse.classList.contains("inactive")) {
-                  shutdownNotice.hidden = true;
-                  shutdownNoticeHR.hidden = true;
-                } else if (shutdownNoticeResponse && shutdownNotice.innerHTML !== shutdownNoticeResponse.innerHTML) {
-                  shutdownNotice.hidden = false;
-                  shutdownNoticeHR.hidden = false;
-                  shutdownNotice.outerHTML = shutdownNoticeResponse.outerHTML;
-                }
-              }
-              if (updateForm && updateFormResponse && updateFormResponse.classList.contains("inactive")) {
-                updateForm.hidden = true;
-              } else if (updateForm && updateFormResponse && updateForm.innerHTML !== updateFormResponse.innerHTML) {
-                updateForm.outerHTML = updateFormResponse.outerHTML;
-              }
-              if (form.id === "sb_routerControl") {
-                const tunnelStatus = document.getElementById("sb_tunnelstatus");
-                const tunnelStatusResponse = responseDoc.getElementById("sb_tunnelstatus");
-                if (tunnelStatusResponse && tunnelStatus.innerHTML !== tunnelStatusResponse.innerHTML) {
-                  tunnelStatus.outerHTML = tunnelStatusResponse.outerHTML;
-                }
-              }
-            } else {refreshAll();}
+    function handleLoad(event) {
+      const formResponse = responseDoc.querySelector(`#${formId}`);
+      if (!formResponse) return;
+
+      if (form.id !== "form_sidebar") {
+        form.innerHTML = formResponse.innerHTML;
+        form.classList.add("activated");
+        const shutdownNotice = document.getElementById("sb_shutdownStatus");
+        const shutdownNoticeHR = sb.querySelector("#sb_shutdownStatus+hr");
+        const shutdownNoticeResponse = responseDoc.getElementById("sb_shutdownStatus");
+        const updateForm = document.getElementById("sb_updateform");
+        const updateFormResponse = responseDoc.getElementById("sb_updateform");
+
+        if (shutdownNotice) {
+          if (shutdownNoticeResponse && shutdownNoticeResponse.classList.contains("inactive")) {
+            shutdownNotice.hidden = true;
+            shutdownNoticeHR.hidden = true;
+          } else if (shutdownNoticeResponse && shutdownNotice.innerHTML !== shutdownNoticeResponse.innerHTML) {
+            shutdownNotice.hidden = false;
+            shutdownNoticeHR.hidden = false;
+            shutdownNotice.outerHTML = shutdownNoticeResponse.outerHTML;
           }
-        }, 100);
-      }
+        }
+        if (updateForm && updateFormResponse && updateFormResponse.classList.contains("inactive")) {
+          updateForm.hidden = true;
+        } else if (updateForm && updateFormResponse && updateForm.innerHTML !== updateFormResponse.innerHTML) {
+          updateForm.outerHTML = updateFormResponse.outerHTML;
+        }
+
+        if (form.id === "sb_routerControl") {
+          const tunnelStatus = document.getElementById("sb_tunnelstatus");
+          const tunnelStatusResponse = responseDoc.getElementById("sb_tunnelstatus");
+          if (tunnelStatusResponse && tunnelStatus.innerHTML !== tunnelStatusResponse.innerHTML) {
+            tunnelStatus.outerHTML = tunnelStatusResponse.outerHTML;
+          }
+        }
+
+        const buttons = form.querySelectorAll("button");
+        if (buttons.length > 0) {
+          buttons.forEach(button => {
+            button.style.opacity = ".5";
+            button.style.pointerEvents = "none";
+          });
+        }
+
+      } else {refreshAll();}
     }
   });
 }
 
-const ready = async() => {
+const ready = async () => {
   try {
     checkIfDown();
     await refreshSidebar();
