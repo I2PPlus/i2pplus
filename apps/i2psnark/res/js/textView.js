@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const parentDoc = window.parent.document;
   const isIframed = doc.documentElement.classList.contains("iframed") || window.parent;
   const snarkFileNameLinks = doc.querySelectorAll(":where(" + viewLinks.join(",") + ")");
-  const supportedFileTypes = new Set(["bat", "css", "csv", "ini", "js", "json", "nfo", "txt", "sh", "srt", "url"]);
+  const supportedFileTypes = new Set(["asc", "bat", "css", "csv", "ini", "js", "json", "md5", "nfo", "txt", "sh", "srt", "url"]);
   const numberedFileExts = new Set(["bat", "css", "ini", "js", "sh"]);
   const cssHref = "/i2psnark/.res/textView.css";
   const textviewContent = doc.getElementById("textview-content");

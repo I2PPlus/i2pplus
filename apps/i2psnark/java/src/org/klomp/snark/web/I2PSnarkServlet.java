@@ -4493,8 +4493,9 @@ public class I2PSnarkServlet extends BasicServlet {
             boolean isImage = mime.startsWith("image/");
             boolean isText = mime.startsWith("text/") || mime.equals("application/javascript") ||
                              mime.equals("application/json") || mime.equals("application/xml") ||
-                             path.toLowerCase().endsWith(".url") || path.toLowerCase().endsWith(".ini") ||
-                             path.toLowerCase().endsWith(".bat") || path.toLowerCase().endsWith(".sh");
+                             path.toLowerCase().endsWith(".asc") || path.toLowerCase().endsWith(".bat")
+                             path.toLowerCase().endsWith(".ini") || path.toLowerCase().endsWith(".md5") ||
+                             path.toLowerCase().endsWith(".sh") || path.toLowerCase().endsWith(".url");
             boolean isPDF = mime.equals("application/pdf");
             buf.append("<td class=\"fileIcon");
             if (!complete) {buf.append(" volatile");}
