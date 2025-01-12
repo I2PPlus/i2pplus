@@ -58,8 +58,8 @@
   document.addEventListener("DOMContentLoaded", () => {
     const b = document.body;
     b.classList.add("ready");
-    window.addEventListener("scroll", throttledLazyLoad);
-    window.addEventListener("resize", throttledLazyLoad);
+    window.addEventListener("scroll", throttledLazyLoad, {passive: true});
+    window.addEventListener("resize", throttledLazyLoad, {passive: true});
 
     window.addEventListener("beforeunload", () => {
       window.removeEventListener("scroll", throttledLazyLoad);

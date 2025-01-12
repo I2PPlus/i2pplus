@@ -218,7 +218,7 @@ class Lightbox {
         this.resize();
         this.repositionControls();
       }
-    });
+    }, {passive: true});
   }
 
   next() {

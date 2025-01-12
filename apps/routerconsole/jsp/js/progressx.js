@@ -51,7 +51,7 @@ function initProgressX(window, document) {
     canvas.style.display = "none";
     document.body.appendChild(canvas);
     context = canvas.getContext("2d");
-    window.addEventListener("resize", repaint);
+    window.addEventListener("resize", repaint, {passive: true});
   }
 
   function repaint() {

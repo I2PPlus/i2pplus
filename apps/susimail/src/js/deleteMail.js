@@ -83,7 +83,7 @@
           parentDoc.body.classList.remove("modal");
         }
       }
-    });
+    }, {passive: true});
     document.addEventListener("DOMContentLoaded", toggleModalStyles);
   };
   toggleModalStyles();

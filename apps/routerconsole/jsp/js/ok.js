@@ -38,7 +38,7 @@ const modal = (msg, buttonText = "OK") => {
     };
 
     centerModal();
-    window.addEventListener("resize", centerModal);
+    window.addEventListener("resize", centerModal, {passive: true});
 
     const handleEnterKey = (event) => {
       if (event.target === okButton && event.key === "Enter") {

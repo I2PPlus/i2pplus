@@ -148,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
           handleResize();
       });
 
-      window.addEventListener("resize", handleResize);
+      window.addEventListener("resize", handleResize, {passive: true});
 
       overlay.addEventListener("click", event => event.stopPropagation());
 

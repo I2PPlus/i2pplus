@@ -64,7 +64,7 @@ let refreshActive = true;
   });
 
   document.addEventListener("DOMContentLoaded", setupSidebar);
-  window.addEventListener("resize", stickySidebar);
+  window.addEventListener("resize", stickySidebar, {passive: true});
 })();
 
 export async function getRefreshTimerId() {
