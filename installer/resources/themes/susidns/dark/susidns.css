@@ -296,9 +296,8 @@ svg #arrow stop:last-child{stop-color:#010}
 
 /* notifications */
 #messages:empty{display:none}
-#messages:hover{cursor:crosshair;background-blend-mode:normal}
-#messages{padding:18px 20px 20px;width:calc(100% - 42px);position:absolute;top:-14px;z-index:999;line-height:1.2;font-weight:700;border:var(--border_hard);box-shadow:var(--highlight),0 0 3px 2px #131 inset;background:#020 var(--close) no-repeat right 6px top 6px/12px;animation:slideDown .5s ease 10s reverse both}
-#messages:hover{background-image:var(--close_hover)}
+#messages{padding:10px 20px;width:calc(100% - 66px);position:absolute;top:0;z-index:999999;line-height:1.2;font-weight:700;border:var(--border_hard);box-shadow:var(--highlight),0 0 3px 2px #131 inset;background:#020 var(--close) no-repeat right 6px top 6px/12px;animation:slideDown 2s ease 10s reverse both}
+#messages.canClose:hover{cursor:crosshair;background-image:var(--close_hover);background-blend-mode:normal}
 #messages p{margin:0;padding:15px 15px 15px 50px;color:var(--ink);border-radius:0;background:var(--infohelp) no-repeat 6px center;background-size:32px}
 #messages p.fail{background-image:var(--err)}
 #messages+p,p.book{padding:20px 20px 20px 50px;border:var(--border);box-shadow:var(--highlight),inset 0 0 2px 1px #030;background:#000 var(--addressbook) no-repeat 10px center/20px}
