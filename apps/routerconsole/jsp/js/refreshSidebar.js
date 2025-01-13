@@ -167,35 +167,88 @@ async function refreshSidebar() {
 
 function newHosts() {
   const newHostsBadge = document.getElementById("newHosts");
-  if (!newHostsBadge) {return;}
+  if (!newHostsBadge) { return; }
   if (theme !== "dark") {
     newHostsBadge.style.display = "none";
     return;
   }
 
   let newHostsInterval;
-  const period = 60000;
+  const period = 300000;
 
   function fetchNewHosts() {
     fetch("/susidns/log.jsp").then(response => response.text()).then(html => {
+      const parser = new DOMParser();
       const doc = parser.parseFromString(html, "text/html");
-      const count = doc.getElementById("newToday").textContent;
+      const now = new Date();
+      const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+
+      const entries = Array.from(doc.querySelectorAll("li"));
+      const recentEntries = entries.filter(entry => {
+        const dateText = entry.querySelector(".date").textContent;
+        const entryDate = new Date(dateText);
+        return entryDate >= oneDayAgo;
+      });
+
+      const hostnames = recentEntries.flatMap(entry => {
+        const links = entry.querySelectorAll("a");
+        return Array.from(links).map(a => new URL(a.href).hostname);
+      }).sort();
+
+      const count = hostnames.length;
+
       const storedData = JSON.parse(localStorage.getItem("newHostsData") || "{}");
-      const currentCount = storedData.count;
-      if (newHostsBadge.textContent !== count) {newHostsBadge.textContent = count;}
-      localStorage.setItem("newHostsData", JSON.stringify({ count, lastUpdated: Date.now() }));
-    }).catch(error => {});
+      const storedCount = storedData.count;
+
+      localStorage.setItem("newHostsData", JSON.stringify({ count, lastUpdated: Date.now(), hostnames }));
+
+      if (count > 0) {
+        newHostsBadge.textContent = count;
+        newHostsBadge.hidden = false;
+      } else {
+        newHostsBadge.hidden = true;
+      }
+
+      updateTooltip(hostnames);
+    }).catch(error => {
+      console.error("Error fetching new hosts:", error);
+    });
   }
 
   function getNewHosts() {
+    if (!newHostsBadge) { return; }
     const now = Date.now();
     const storedData = JSON.parse(localStorage.getItem("newHostsData") || "{}");
-    const { count, lastUpdated } = storedData;
-    if (lastUpdated && count && (now - lastUpdated < period)) {
-      if (newHostsBadge.textContent !== count) {newHostsBadge.textContent = count;}
-    } else {fetchNewHosts();}
+    const { count, lastUpdated, hostnames } = storedData;
+
+    if (lastUpdated && count && (now - lastUpdated < 60000) || !lastUpdated) {
+      if (count > 0) {
+        newHostsBadge.textContent = count;
+        newHostsBadge.hidden = false;
+      } else {
+        newHostsBadge.hidden = true;
+      }
+
+      updateTooltip(hostnames);
+    } else {
+      fetchNewHosts();
+    }
   }
-  if (newHostsInterval) {clearInterval(newHostsInterval);}
+
+  function updateTooltip(hostnames) {
+    const hostsTooltip = document.getElementById("newHostsTooltip");
+    if (hostsTooltip) {hostTooltip.remove();}
+    const tooltipContent = hostnames.map(hostname => `<a href="http://${hostname}" target="_blank">${hostname.replace(".i2p","")}</a>`).join("");
+    const tooltip = document.createElement("div");
+    tooltip.id = "newHostsTooltip";
+    tooltip.hidden = true;
+    tooltip.innerHTML = tooltipContent;
+    newHostsBadge.closest("td").appendChild(tooltip);
+    newHostsBadge.addEventListener("mouseenter", () => {tooltip.hidden = false});
+    newHostsBadge.addEventListener("mouseleave", () => {tooltip.hidden = true;});
+  }
+
+  if (newHostsInterval) { clearInterval(newHostsInterval); }
   getNewHosts();
   newHostsInterval = setInterval(fetchNewHosts, period);
 }
