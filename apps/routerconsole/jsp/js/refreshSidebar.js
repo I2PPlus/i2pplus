@@ -35,7 +35,7 @@ async function initSidebar() {
 }
 
 async function checkIfDown() {
-  if (noResponse > 4) {
+  if (noResponse > 5) {
     isDown = true;
     document.body.classList.add("isDown");
   }
@@ -210,9 +210,7 @@ function newHosts() {
       }
 
       updateTooltip(hostnames);
-    }).catch(error => {
-      console.error("Error fetching new hosts:", error);
-    });
+    }).catch();
   }
 
   function getNewHosts() {
@@ -237,9 +235,9 @@ function newHosts() {
 
   function updateTooltip(hostnames) {
     const hostsTooltip = document.getElementById("newHostsTooltip");
-    if (hostsTooltip) {hostTooltip.remove();}
-    const tooltipContent = hostnames.map(hostname => `<a href="http://${hostname}" target="_blank">${hostname.replace(".i2p","")}</a>`).join("");
+    if (hostsTooltip !== null) {hostTooltip.remove();}
     const tooltip = document.createElement("div");
+    const tooltipContent = hostnames.map(hostname => `<a href="http://${hostname}" target="_blank">${hostname.replace(".i2p","")}</a>`).join("");
     tooltip.id = "newHostsTooltip";
     tooltip.hidden = true;
     tooltip.innerHTML = tooltipContent;

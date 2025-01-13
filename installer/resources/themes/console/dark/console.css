@@ -323,10 +323,10 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 #lsCount.badge,#newHosts{animation:none}
 #sidebar #sb_status #lsCount.badge,#sidebar .net_status:hover #sb_status #lsCount.badge{padding:2px 3px 1px;margin:0 0 0 3px;line-height:1;vertical-align:middle;color:#494}
 #lsCount.badge{margin-top:1px;font-size:8pt!important}
-#newHosts{margin:2px 0 0 4px!important;padding:1px 3px;min-width:12px;min-height:10px;display:inline-block;position:relative;z-index:999;vertical-align:middle;line-height:1;font-size:8pt!important;color:#494}
+#newHosts{margin:2px 0 0 4px!important;padding:1px 3px;min-width:12px;min-height:10px;display:inline-block;position:relative;z-index:999;vertical-align:middle;line-height:1;font-size:8pt!important;color:#494;animation:none!important}
 #newHosts[hidden],#newHostsTooltip[hidden]{display:none;z-index:-1;pointer-events:none}
-#newHostsTooltip{margin:-1px 0 0 -1px;padding:9px 5px;width:calc(100% - 10px);position:absolute;z-index:-1;box-shadow:var(--bevel);background:var(--badge);opacity:0;transition:all ease .5s}
-#newHostsTooltip:not([hidden]),#newHostsTooltip:hover,#newHostsTooltip[hidden]:hover{display:inline-block;z-index:99999;opacity:1;pointer-events:all;transition:all ease .5s}
+#newHostsTooltip{margin:-1px 0 0 -1px;padding:9px 5px;width:calc(100% - 10px);position:absolute;z-index:-1;box-shadow:var(--bevel),0 0 3px 3px #000a;background:var(--badge)}
+#newHostsTooltip:not([hidden]),#newHostsTooltip:hover,#newHostsTooltip[hidden]:hover{display:inline-block;z-index:99999;opacity:1;pointer-events:all}
 #newHostsTooltip a{display:inline-block!important;text-align:left;text-transform:none}
 #sidebar h3{position:relative;contain:paint}
 #console_404 #sidebar h3 a .badge{display:none}
