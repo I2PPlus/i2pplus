@@ -371,8 +371,8 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 #newHosts:not([hidden]):hover::after,#sb_services .tooltipped #newHosts:not([hidden])::after{margin:0 0 0 2px;height:10px;width:10px;display:inline-block;vertical-align:middle;background:var(--dropdown) no-repeat center calc(50% - 1px)/8px;content:"";}
 #newHostsTooltip{display:none;box-shadow:var(--bevel);box-shadow:0 0 0 2px #000 inset,0 0 0 3px #131 inset,0 0 0 4px #000 inset;background:var(--badge);opacity:0}
 #newHostsTooltip:not([hidden]),#newHostsTooltip:hover,#newHostsTooltip[hidden]:hover{display:table-row;opacity:1;pointer-events:all}
-#newHostsTooltip a{display:inline-block!important;text-transform:none}
-#newHostsTooltip td{padding:8px 5px!important;justify-content:center}
+#newHostsTooltip a{margin:0 3px;padding:0 2px;display:inline-block!important;line-height:1;text-transform:none}
+#newHostsTooltip td{padding:8px 5px!important;justify-content:center;flex-wrap:wrap}
 #sb_services .tooltipped{margin-bottom:-10px}
 #sb_services .tooltipped .volatile{margin-bottom:-3px}
 
