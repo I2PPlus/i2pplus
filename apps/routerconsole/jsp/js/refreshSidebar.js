@@ -235,7 +235,7 @@ function newHosts() {
 
   function updateTooltip(hostnames) {
     const hostsTooltip = document.getElementById("newHostsTooltip");
-    if (hostsTooltip !== null) {hostTooltip.remove();}
+    if (hostsTooltip !== null) {hostsTooltip.remove();}
     const tooltip = document.createElement("div");
     const tooltipContent = hostnames.map(hostname => `<a href="http://${hostname}" target="_blank">${hostname.replace(".i2p","")}</a>`).join("");
     tooltip.id = "newHostsTooltip";
