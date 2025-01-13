@@ -167,7 +167,7 @@ async function refreshSidebar() {
 
 function newHosts() {
   const newHostsBadge = document.getElementById("newHosts");
-  if (!newHostsBadge) { return; }
+  if (!newHostsBadge) {return;}
   if (theme !== "dark") {
     newHostsBadge.style.display = "none";
     return;
@@ -202,6 +202,7 @@ function newHosts() {
 
       localStorage.setItem("newHostsData", JSON.stringify({ count, lastUpdated: Date.now(), hostnames }));
 
+      if (!newHostsBadge) {return;}
       if (count > 0) {
         newHostsBadge.textContent = count;
         newHostsBadge.hidden = false;
@@ -214,7 +215,7 @@ function newHosts() {
   }
 
   function getNewHosts() {
-    if (!newHostsBadge) { return; }
+    if (!newHostsBadge) {return;}
     const now = Date.now();
     const storedData = JSON.parse(localStorage.getItem("newHostsData") || "{}");
     const { count, lastUpdated, hostnames } = storedData;
@@ -223,17 +224,14 @@ function newHosts() {
       if (count > 0) {
         newHostsBadge.textContent = count;
         newHostsBadge.hidden = false;
-      } else {
-        newHostsBadge.hidden = true;
-      }
+      } else {newHostsBadge.hidden = true;}
 
       updateTooltip(hostnames);
-    } else {
-      fetchNewHosts();
-    }
+    } else {fetchNewHosts();}
   }
 
   function updateTooltip(hostnames) {
+    if (!newHostsBadge) {return;}
     const hostsTooltip = document.getElementById("newHostsTooltip");
     if (hostsTooltip !== null) {hostsTooltip.remove();}
     const tooltip = document.createElement("div");
@@ -241,9 +239,9 @@ function newHosts() {
     tooltip.id = "newHostsTooltip";
     tooltip.hidden = true;
     tooltip.innerHTML = tooltipContent;
-    newHostsBadge.closest("td").appendChild(tooltip);
-    newHostsBadge.addEventListener("mouseenter", () => {tooltip.hidden = false});
-    newHostsBadge.addEventListener("mouseleave", () => {tooltip.hidden = true;});
+    newHostsBadge?.closest("td").appendChild(tooltip);
+    newHostsBadge?.addEventListener("mouseenter", () => {tooltip.hidden = false});
+    newHostsBadge?.addEventListener("mouseleave", () => {tooltip.hidden = true;});
   }
 
   if (newHostsInterval) { clearInterval(newHostsInterval); }
