@@ -174,7 +174,7 @@ function newHosts() {
   }
 
   let newHostsInterval;
-  const period = 300000;
+  const period = 300000; // Update every 5m
 
   function fetchNewHosts() {
     fetch("/susidns/log.jsp").then(response => response.text()).then(html => {
@@ -182,7 +182,6 @@ function newHosts() {
       const doc = parser.parseFromString(html, "text/html");
       const now = new Date();
       const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-
       const entries = Array.from(doc.querySelectorAll("li"));
       const recentEntries = entries.filter(entry => {
         const dateText = entry.querySelector(".date").textContent;
@@ -190,28 +189,30 @@ function newHosts() {
         return entryDate >= oneDayAgo;
       });
 
-      const hostnames = recentEntries.flatMap(entry => {
+      const newHostnames = recentEntries.flatMap(entry => {
         const links = entry.querySelectorAll("a");
         return Array.from(links).map(a => new URL(a.href).hostname);
-      }).sort();
-
-      const count = hostnames?.length;
+      });
 
       const storedData = JSON.parse(localStorage.getItem("newHostsData") || "{}");
-      const storedCount = storedData.count;
+      const storedHostnames = storedData.hostnames || [];
+      const allHostnames = [...new Set([...newHostnames, ...storedHostnames])]; // Combine new and stored hostnames
+      const timestampedHostnames = allHostnames.map(hostname => ({ hostname, timestamp: Date.now() })); // Timestamp
+      timestampedHostnames.sort((a, b) => b.timestamp - a.timestamp); // Sort by timestamp (newest first)
+      const limitedHostnames = timestampedHostnames.slice(0, 10).map(item => item.hostname); // Keep only the 10 most recent
+      const sortedHostnames = limitedHostnames.sort(); // Sort alphabetically
+      const count = sortedHostnames.length;
+      localStorage.setItem("newHostsData", JSON.stringify({ count, lastUpdated: Date.now(), hostnames: sortedHostnames }));
 
-      localStorage.setItem("newHostsData", JSON.stringify({ count, lastUpdated: Date.now(), hostnames }));
-
-      if (!newHostsBadge) {return;}
+      if (!newHostsBadge) { return; }
       if (count > 0) {
+        if (count > 10) {count = 10;}
         newHostsBadge.textContent = count;
         newHostsBadge.hidden = false;
-      } else {
-        newHostsBadge.hidden = true;
-      }
+      } else {newHostsBadge.hidden = true;}
 
-      if (hostnames !== null) {updateTooltip(hostnames);}
-    }).catch();
+      if (sortedHostnames !== null) { updateTooltip(sortedHostnames); }
+    }).catch(() => {});
   }
 
   function getNewHosts() {
@@ -234,7 +235,7 @@ function newHosts() {
     if (!newHostsBadge) {return;}
     const hostsTooltip = document.getElementById("newHostsTooltip");
     hostsTooltip?.remove();
-    const servicesTable = document.querySelector("#sb_services tbody");
+    const servicesTbody = document.querySelector("#sb_services tbody");
     const tooltip = document.createElement("tr");
     const tooltipTd = document.createElement("td");
     const tooltipContent = hostnames.map(hostname => `<a href="http://${hostname}" target="_blank">${hostname.replace(".i2p","")}</a>`).join("");
@@ -242,14 +243,14 @@ function newHosts() {
     tooltip.hidden = true;
     tooltip.appendChild(tooltipTd);
     tooltipTd.innerHTML = tooltipContent;
-    servicesTable.appendChild(tooltip);
+    servicesTbody.appendChild(tooltip);
     newHostsBadge?.addEventListener("mouseenter", () => {
-      tooltip.hidden = false
-      servicesTable.classList.add("tooltipped");
+      tooltip.hidden = false;
+      servicesTbody.classList.add("tooltipped");
     }, {passive: true});
-    servicesTable?.addEventListener("mouseleave", () => {
+    servicesTbody?.addEventListener("mouseleave", () => {
       tooltip.hidden = true;
-      servicesTable.classList.remove("tooltipped");
+      servicesTbody.classList.remove("tooltipped");
     }, {passive: true});
   }
 
