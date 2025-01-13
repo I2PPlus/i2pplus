@@ -328,7 +328,7 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 #console_404 #sidebar h3 a .badge{display:none}
 #sidebar h3 a[href="/info"] .badge{text-transform:none}
 #sidebar h3:hover a .badge,h3:hover #tunnelCount,h3:hover #newsCount{color:var(--hover);box-shadow:0 0 0 1px var(--hover),0 0 0 1px #000 inset}
-#sidebar h3 .badge:empty,#sidebar #newsCount:empty,#sidebar #tunnelCount:empty,#sidebar .badge[hidden]{display:none}
+#sidebar h3 .badge:empty,#sidebar #newsCount:empty,#sidebar #tunnelCount:empty,#sidebar .badge[hidden]{display:none!important}
 #sidebar td .badge:not(#newHosts):empty::after{display:inline;content:"---"}
 #sidebar #tunnelCount{animation:none}
 #sb_updatesection h3.collapsed:not(.updating) a::after{content:"*"}
