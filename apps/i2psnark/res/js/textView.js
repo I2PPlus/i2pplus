@@ -6,11 +6,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const viewLinks = [
     'td.fileIcon.text>a',
+    'td.snarkFileName>a[href$=".asc"]',
     'td.snarkFileName>a[href$=".bat"]',
     'td.snarkFileName>a[href$=".css"]',
     'td.snarkFileName>a[href$=".ini"]',
     'td.snarkFileName>a[href$=".js"]',
     'td.snarkFileName>a[href$=".json"]',
+    'td.snarkFileName>a[href$=".md5"]',
     'td.snarkFileName>a[href$=".nfo"]',
     'td.snarkFileName>a[href$=".sh"]',
     'td.snarkFileName>a[href$=".srt"]',
