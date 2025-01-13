@@ -195,7 +195,7 @@ function newHosts() {
         return Array.from(links).map(a => new URL(a.href).hostname);
       }).sort();
 
-      const count = hostnames.length;
+      const count = hostnames?.length;
 
       const storedData = JSON.parse(localStorage.getItem("newHostsData") || "{}");
       const storedCount = storedData.count;
@@ -209,7 +209,7 @@ function newHosts() {
         newHostsBadge.hidden = true;
       }
 
-      updateTooltip(hostnames);
+      if (hostnames !== null) {updateTooltip(hostnames);}
     }).catch();
   }
 
