@@ -272,7 +272,8 @@ class SidebarRenderer {
                 .append("</a>\n")
                 .append("<a class=sb_icon target=_top href=/dns title=\"").append(tx)
                 .append("\" hidden><span><img src=/themes/console/images/addressbook.svg>")
-                .append(" <span id=newHosts class=\"badge volatile\"></span></span></a>");
+                .append(" <span id=newHosts class=\"badge volatile\" title=\"")
+                .append(_t("New hosts in last 24h")).append("\"></span></span></a>");
             svcs.put(tx, rbuf.toString());
         }
 
@@ -374,11 +375,11 @@ class SidebarRenderer {
                .append("\">")
                .append(_t("Services"))
                .append("</a><input type=checkbox id=toggle_sb_services class=\"toggleSection script\" checked hidden></h3>\n<hr class=b>\n")
-               .append("<table id=sb_services class=collapse>\n<tr><td class=volatile>");
+               .append("<table id=sb_services class=collapse><tbody>\n<tr><td class=volatile>");
             for (String row : svcs.values()) {
                 buf.append(row);
             }
-            buf.append("</td></tr>\n</table>\n");
+            buf.append("</td></tr>\n</tbody></table>\n");
             return buf.toString();
         } else {
             return "";

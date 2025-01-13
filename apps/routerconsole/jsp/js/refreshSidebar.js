@@ -233,15 +233,24 @@ function newHosts() {
   function updateTooltip(hostnames) {
     if (!newHostsBadge) {return;}
     const hostsTooltip = document.getElementById("newHostsTooltip");
-    if (hostsTooltip !== null) {hostsTooltip.remove();}
-    const tooltip = document.createElement("div");
+    hostsTooltip?.remove();
+    const servicesTable = document.querySelector("#sb_services tbody");
+    const tooltip = document.createElement("tr");
+    const tooltipTd = document.createElement("td");
     const tooltipContent = hostnames.map(hostname => `<a href="http://${hostname}" target="_blank">${hostname.replace(".i2p","")}</a>`).join("");
     tooltip.id = "newHostsTooltip";
     tooltip.hidden = true;
-    tooltip.innerHTML = tooltipContent;
-    newHostsBadge?.closest("td").appendChild(tooltip);
-    newHostsBadge?.addEventListener("mouseenter", () => {tooltip.hidden = false});
-    newHostsBadge?.addEventListener("mouseleave", () => {tooltip.hidden = true;});
+    tooltip.appendChild(tooltipTd);
+    tooltipTd.innerHTML = tooltipContent;
+    servicesTable.appendChild(tooltip);
+    newHostsBadge?.addEventListener("mouseenter", () => {
+      tooltip.hidden = false
+      servicesTable.classList.add("tooltipped");
+    }, {passive: true});
+    servicesTable?.addEventListener("mouseleave", () => {
+      tooltip.hidden = true;
+      servicesTable.classList.remove("tooltipped");
+    }, {passive: true});
   }
 
   if (newHostsInterval) { clearInterval(newHostsInterval); }

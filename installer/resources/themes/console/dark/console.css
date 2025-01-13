@@ -130,6 +130,7 @@ p:empty+.sb_notice{margin-top:9px}
 #sb_logo:active img,#sb_logo img:active{filter:sepia(1) hue-rotate(45deg) saturate(2) opacity(.65) drop-shadow(0 0 1px rgba(156,32,0,.3));transform:scale(.97);transition:none}
 #sb_notice.hide+hr,#sb_updatesection.hide+hr,#sidebar hr[hidden]+hr{display:none}
 #sb_peersadvanced .separator td::after{min-height:0}
+#sb_services{position:relative}
 #sb_services a:link,#sb_internals a:link,#sb_advanced a:link,#sb_help a:link{max-width:192px;word-break:break-all;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #sb_services img{display:none}
 #sb_uptime{margin-bottom:-5px}
@@ -323,11 +324,6 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 #lsCount.badge,#newHosts{animation:none}
 #sidebar #sb_status #lsCount.badge,#sidebar .net_status:hover #sb_status #lsCount.badge{padding:2px 3px 1px;margin:0 0 0 3px;line-height:1;vertical-align:middle;color:#494}
 #lsCount.badge{margin-top:1px;font-size:8pt!important}
-#newHosts{margin:2px 0 0 4px!important;padding:1px 3px;min-width:12px;min-height:10px;display:inline-block;position:relative;z-index:999;vertical-align:middle;line-height:1;font-size:8pt!important;color:#494;animation:none!important}
-#newHosts[hidden],#newHostsTooltip[hidden]{display:none;z-index:-1;pointer-events:none}
-#newHostsTooltip{margin:-1px 0 0 -1px;padding:9px 5px;width:calc(100% - 10px);position:absolute;z-index:-1;box-shadow:var(--bevel),0 0 3px 3px #000a;background:var(--badge)}
-#newHostsTooltip:not([hidden]),#newHostsTooltip:hover,#newHostsTooltip[hidden]:hover{display:inline-block;z-index:99999;opacity:1;pointer-events:all}
-#newHostsTooltip a{display:inline-block!important;text-align:left;text-transform:none}
 #sidebar h3{position:relative;contain:paint}
 #console_404 #sidebar h3 a .badge{display:none}
 #sidebar h3 a[href="/info"] .badge{text-transform:none}
@@ -368,6 +364,17 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 #sb_tunnels_condensed .badge{top:1px}
 #tunnelCount{animation:none}
 #tunnelCount+#tunnelCount,#newsCount+#newsCount{display:none}
+
+/* new hosts count */
+#newHosts{margin:2px 0 0 4px!important;padding:1px 3px;min-width:12px;min-height:10px;display:inline-block;position:relative;z-index:999;vertical-align:middle;line-height:1;font-size:8pt!important;color:#494;animation:none!important}
+#newHosts[hidden],#newHostsTooltip[hidden]{display:none;z-index:-1;pointer-events:none}
+#newHosts:not([hidden]):hover::after,#sb_services .tooltipped #newHosts:not([hidden])::after{margin:0 0 0 2px;height:10px;width:10px;display:inline-block;vertical-align:middle;background:var(--dropdown) no-repeat center calc(50% - 1px)/8px;content:"";}
+#newHostsTooltip{display:none;box-shadow:var(--bevel);box-shadow:0 0 0 2px #000 inset,0 0 0 3px #131 inset,0 0 0 4px #000 inset;background:var(--badge);opacity:0}
+#newHostsTooltip:not([hidden]),#newHostsTooltip:hover,#newHostsTooltip[hidden]:hover{display:table-row;opacity:1;pointer-events:all}
+#newHostsTooltip a{display:inline-block!important;text-transform:none}
+#newHostsTooltip td{padding:8px 5px!important;justify-content:center}
+#sb_services .tooltipped{margin-bottom:-10px}
+#sb_services .tooltipped .volatile{margin-bottom:-3px}
 
 /* main section */
 .sb,.main,h1,#news,.confignav,.tab,.tab2,table.search,.applink,.sitemapLink,.sitemapLabel{border:var(--border_hard)}
@@ -2851,6 +2858,7 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 #netdboverview th[colspan="3"]{font-size:11pt}
 #netdb .version{line-height:1.45}
 #netdb th .version{padding:2px 8px}
+#newHosts{margin-top:0!important}
 #news li::before{height:8px;background-size:7px}
 #passwordheading{margin-top:12px}
 #pluginconfig{margin-top:-13px}
