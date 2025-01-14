@@ -2532,7 +2532,7 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #refreshPeriod{margin:-10px 0}
 #routerlogs tr:first-child:hover #refreshPeriod,#refreshPeriod:focus-within{margin:-26px -14px -4px 0;display:block!important}
 #logFilter{margin:-6px -10px -6px 0;display:block}
-#logFilterInput{margin:-1px -2px -1px 0;padding-left:30px;width:160px;min-width:0;background:#000 var(--filter) no-repeat 8px center/16px;background-blend-mode:luminosity}
+#logFilterInput{margin:-1px -2px -1px 0;padding-left:30px;width:160px;min-width:0;caret-color:var(--ink)!important;background:#000 var(--filter) no-repeat 8px center/16px;background-blend-mode:luminosity}
 #logRefreshInterval{margin:-1px -2px -1px 0;padding-left:28px;width:50px;background:#000 var(--refresh) no-repeat 6px center/16px}
 #logRefreshInterval:focus,#logFilterInput:focus{box-shadow:var(--btn_shadow_active);filter:none!important;caret-color:#225;background-blend-mode:normal}
 #logRefreshInterval:focus{background:var(--refresh) no-repeat 6px center/16px,var(--input_txt)}
