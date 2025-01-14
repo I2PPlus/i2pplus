@@ -303,7 +303,7 @@ svg #arrow stop:last-child{stop-color:#010}
 #messages+p,p.book{padding:20px 20px 20px 50px;border:var(--border);box-shadow:var(--highlight),inset 0 0 2px 1px #030;background:#000 var(--addressbook) no-repeat 10px center/20px}
 
 /* iframe */
-.iframed #helpconfig,.iframed #helpsubs{margin:11px 0 -3px}
+.iframed #helpconfig,.iframed #helpsubs{margin:11px 0 0}
 .iframed #page{margin:0;padding:0 12px;background:#0000}
 .iframed #page::after{content:"";display:inline-block;width:100%;height:14px;vertical-align:bottom}
 .iframed #visualid{margin-top:16px;margin-bottom:1px}
