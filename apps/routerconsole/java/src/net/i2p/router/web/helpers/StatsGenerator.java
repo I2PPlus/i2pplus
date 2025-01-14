@@ -113,7 +113,7 @@ public class StatsGenerator {
                .append(": <span class=statvalue>").append(num(curFreq.getAverageEventsPerPeriod())).append("</span> &bullet; ")
                .append("</span> <span class=nowrap>").append(_t("Highest events per period")).append(": <span class=statvalue>")
                .append(num(curFreq.getMaxAverageEventsPerPeriod()))
-               .append("</span></span> <span class=bullet>&bullet;</span> <br></span><span class=nowrap><span class=statvalue>")
+               .append("</span></span> <span class=bullet>&bullet;</span> <br><span class=nowrap><span class=statvalue>")
                .append(_t("Lifetime average events per period")).append(": ")
                .append(num(curFreq.getStrictAverageEventsPerPeriod()))
                .append("</span></span></li>\n");
@@ -172,7 +172,7 @@ public class StatsGenerator {
             if (numPeriods > 0) {
                 double avgFrequency = curRate.getLifetimeEventCount() / (double)numPeriods;
                 buf.append(" &bullet; ").append(_t("Average event count")).append(": <span class=statvalue>")
-                   .append(num(avgFrequency)).append("</span></span> <br><span class=nowrap>")
+                   .append(num(avgFrequency)).append("</span><br><span class=nowrap>")
                    .append(_t("Events in peak period")).append(": <span class=statvalue>")
                    .append(curRate.getExtremeEventCount()) // Not really the highest event count, but the event count during period with highest total value.
                    .append("</span> &bullet; ");
