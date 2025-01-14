@@ -57,6 +57,7 @@ async function doFetch(force = false) {
       clearTimeout(refreshTimeout);
       refreshTimeout = setTimeout(doFetch, refreshInterval);
     }
+    noResponse = 0;
     if (force) await refreshSidebar();
   } catch (error) {
     noResponse++;
@@ -325,6 +326,7 @@ const ready = async () => {
     checkIfDown();
     await doFetch();
     await refreshSidebar();
+    noResponse = 0;
   } catch (error) {}
 }
 

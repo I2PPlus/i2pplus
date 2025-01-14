@@ -26,12 +26,18 @@
             info.innerHTML = infoResponse.innerHTML;
           }
         }
-        const statlist = document.getElementById("statlist");
-        const statlistResponse = xhrstats.responseXML.getElementById("statlist");
-        const statlistParent = statlist.parentNode;
-        if (!Object.is(statlist.innerHTML, statlistResponse.innerHTML)) {
-          statlistParent.replaceChild(statlistResponse, statlist);
-        }
+        const statlistElements = document.querySelectorAll(".statlist");
+        const statlistResponseElements = xhrstats.responseXML.querySelectorAll(".statlist");
+        statlistResponseElements.forEach((statlistResponse, index) => {
+          if (index < statlistElements.length) {
+            const statlist = statlistElements[index];
+            const statlistParent = statlist.parentNode;
+            if (statlist.innerHTML !== statlistResponse.innerHTML) {
+              const newStatlist = document.importNode(statlistResponse, true);
+              statlistParent.replaceChild(newStatlist, statlist);
+            }
+          }
+        });
       }
     }
     xhrstats.send();
