@@ -102,7 +102,7 @@ public class IterativeSearchJob extends FloodSearchJob {
      * The default single search time
      */
     private static final long SINGLE_SEARCH_TIME = 4*1000;
-    private static final long MIN_SINGLE_SEARCH_TIME = 800;
+    private static final long MIN_SINGLE_SEARCH_TIME = 1250;
 
     /** The actual expire time for a search message */
     private static final long SINGLE_SEARCH_MSG_TIME = 20*1000;
@@ -427,8 +427,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             isClientReplyTunnel = false;
             isDirect = true;
             if (_facade.isClientDb() && _log.shouldLog(Log.WARN)) {
-                _log.warn("Warning! Direct search selected in a client NetDb context!" +
-                          "\n* DbId: " + _facade);
+                _log.warn("Warning! Direct search selected in a client NetDb context! (DbId: " + _facade + ")");
             }
             ctx.statManager().addRateData("netDb.RILookupDirect", 1);
         } else {
@@ -466,7 +465,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             if (peer != null && _facade.lookupLocallyWithoutValidation(peer) == null) {
                 failed(peer, false);
                 if (_log.shouldLog(Log.WARN)) {
-                    _log.warn("Not sending zero-hop lookup to UNKNOWN [" + peer.toBase64().substring(0,6) + "]");
+                    _log.warn("Not sending zero-hop lookup of [" + peer.toBase64().substring(0,6) + "] to UNKNOWN");
                 }
                 return;
             }
@@ -500,8 +499,10 @@ public class IterativeSearchJob extends FloodSearchJob {
         I2NPMessage outMsg = null;
         if (isDirect) {} // never wrap
         else if (_isLease || (encryptElG && type == EncType.ELGAMAL_2048 && ctx.jobQueue().getMaxLag() < 300) || type == EncType.ECIES_X25519) {
-            // Full ElG is fairly expensive so only do it for LS lookups and for RI lookups on fast boxes.
-            // if we have the ff RI, garlic encrypt it
+            /*
+             * Full ElG is fairly expensive so only do it for LS lookups and for RI lookups on fast boxes.
+             * If we have the ff RI, garlic encrypt it.
+             */
             if (ri != null) {
                 // Request encrypted reply - now covered by version check above, which is more recent
                 if (!(type == EncType.ELGAMAL_2048 || (type == EncType.ECIES_X25519 && DatabaseLookupMessage.USE_ECIES_FF))) {
@@ -544,14 +545,12 @@ public class IterativeSearchJob extends FloodSearchJob {
                         }
                         dlm.setReplySession(sess.key, sess.rtag);
                     }
-                } else {
+                } else { // client went away, but send it anyway
                     if (_log.shouldLog(Log.WARN)) {_log.warn("Failed encrypt to " + ri);}
-                    // client went away, but send it anyway
                 }
 
                 outMsg = MessageWrapper.wrap(ctx, dlm, ri);
-                // ElG can take a while so do a final check before we send it,
-                // a response may have come in.
+                // ElG can take a while so do a final check before we send it, a response may have come in.
                 if (_dead) {
                     if (_log.shouldDebug()) {
                         _log.debug("Aborting send - finished while wrapping message to [" + peer.toBase64().substring(0,6) + "]");
@@ -567,15 +566,12 @@ public class IterativeSearchJob extends FloodSearchJob {
         if (outMsg == null) {outMsg = dlm;}
         if (isDirect) {
             if (_facade.isClientDb() && _log.shouldLog(Log.WARN)) {
-                _log.warn("Warning! Sending direct search message in a client netDb context! " +
-                          "\n* DbId: " + _facade + outMsg);
+                _log.warn("Warning! Sending direct search message in a client NetDb context! (DbId: " + _facade + ")" + outMsg );
             }
             OutNetMessage m = new OutNetMessage(ctx, outMsg, outMsg.getMessageExpiration(),
                                                 OutNetMessage.PRIORITY_MY_NETDB_LOOKUP, ri);
             ctx.commSystem().processMessage(m);
-        } else {
-            ctx.tunnelDispatcher().dispatchOutbound(outMsg, outTunnel.getSendTunnelId(0), peer);
-        }
+        } else {ctx.tunnelDispatcher().dispatchOutbound(outMsg, outTunnel.getSendTunnelId(0), peer);}
 
         // The timeout job is always run (never cancelled)
         // Note that the timeout is much shorter than the message expiration (see above)
@@ -607,15 +603,14 @@ public class IterativeSearchJob extends FloodSearchJob {
     public String getName() {return "Start Iterative Search";}
 
     /**
-     *  Note that the peer did not respond with a DSM
-     *  (either a DSRM, timeout, or failure).
+     *  Note that the peer did not respond with a DSM (either a DSRM, timeout, or failure).
      *  This is not necessarily a total failure of the search.
      *  @param timedOut if true, will blame the peer's profile
      */
     void failed(Hash peer, boolean timedOut) {
         boolean isNewFail;
         synchronized (this) {
-            if (_dead) return;
+            if (_dead) {return;}
             _unheardFrom.remove(peer);
             isNewFail = _failedPeers.add(peer);
         }
@@ -623,9 +618,8 @@ public class IterativeSearchJob extends FloodSearchJob {
             if (timedOut) {
                 getContext().profileManager().dbLookupFailed(peer);
                 if (_log.shouldInfo()) {
-                    if (peer != null) {
-                        _log.info("IterativeSearch for Router [" + peer.toBase64().substring(0,6) + "] timed out");
-                    } else {_log.info("IterativeSearch for Router [unknown] timed out");}
+                    if (peer != null) {_log.info("IterativeSearch for Router [" + peer.toBase64().substring(0,6) + "] timed out");}
+                    else {_log.info("IterativeSearch for Router [unknown] timed out");}
                 }
             } else {
                 if (_log.shouldInfo()) {
@@ -643,8 +637,7 @@ public class IterativeSearchJob extends FloodSearchJob {
      */
     void newPeerToTry(Hash peer) {
         // don't ask ourselves or the target
-        if (peer.equals(getContext().routerHash()) ||
-            peer.equals(_key))
+        if (peer.equals(getContext().routerHash()) || peer.equals(_key))
             return;
         if (getContext().banlist().isBanlistedForever(peer)) {
             if (_log.shouldInfo()) {
@@ -683,9 +676,7 @@ public class IterativeSearchJob extends FloodSearchJob {
      *  @since 0.9.13
      */
     public boolean wasQueried(Hash peer) {
-        synchronized (this) {
-            return _unheardFrom.contains(peer) || _failedPeers.contains(peer);
-        }
+        synchronized (this) {return _unheardFrom.contains(peer) || _failedPeers.contains(peer);}
     }
 
     /**
@@ -710,7 +701,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     @Override
     void failed() {
         synchronized (this) {
-            if (_dead) return;
+            if (_dead) {return;}
             _dead = true;
         }
         _facade.complete(_key);
@@ -741,9 +732,11 @@ public class IterativeSearchJob extends FloodSearchJob {
 
     @Override
     void success() {
-        // Sadly, we don't know for sure which one replied.
-        // If the reply is after expiration (which moves the hash from _unheardFrom to _failedPeers),
-        // we will credit the wrong one.
+        /*
+         * Sadly, we don't know for sure which one replied.
+         * If the reply is after expiration (which moves the hash from _unheardFrom to _failedPeers),
+         * we will credit the wrong one.
+         */
         int tries;
         Hash peer = null;
 
