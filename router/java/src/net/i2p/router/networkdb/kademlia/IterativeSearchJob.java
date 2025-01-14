@@ -82,11 +82,11 @@ public class IterativeSearchJob extends FloodSearchJob {
     private final MaskedIPSet _ipSet;
     private final Set<Hash> _skippedPeers;
 
-    private static final int MAX_NON_FF = SystemVersion.isSlow() ? 6 : 8;
+    private static final int MAX_NON_FF = 8;
     /** Max number of peers to query */
     private static final int TOTAL_SEARCH_LIMIT = 16;
     /** Max number of peers to query if we are ff */
-    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = SystemVersion.isSlow() ? 4 : 8;
+    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 10;
     /** Extra peers to get from peer selector, as we may discard some before querying */
     private static final int EXTRA_PEERS = 2;
     private static final int IP_CLOSE_BYTES = 3;
@@ -102,7 +102,7 @@ public class IterativeSearchJob extends FloodSearchJob {
      * The default single search time
      */
     private static final long SINGLE_SEARCH_TIME = 4*1000;
-    private static final long MIN_SINGLE_SEARCH_TIME = 1000;
+    private static final long MIN_SINGLE_SEARCH_TIME = 750;
 
     /** The actual expire time for a search message */
     private static final long SINGLE_SEARCH_MSG_TIME = 20*1000;
@@ -312,8 +312,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                 failed();
                 return;
             }
-            // even if pend and todo are empty, we don't fail, as there may be more peers
-            // coming via newPeerToTry()
+            // Even if pend and todo are empty, we don't fail, as there may be more peers coming via newPeerToTry()
             if (done + pend >= _totalSearchLimit)
                 return;
             synchronized(this) {
