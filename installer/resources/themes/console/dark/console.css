@@ -1579,7 +1579,7 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 /* home search */
 #homesearch input.search::placeholder{opacity:0}
 #homesearch input.search:hover::placeholder{opacity:.7}
-#searchbar{margin:-24px 10px -16px;padding:8px 0 2px;width:auto;white-space:nowrap;text-align:center;animation:fade .1s .5s reverse both,slide .05s linear 1s both}
+#searchbar{margin:-24px 10px -16px;padding:8px 0 2px;width:auto;white-space:nowrap;text-align:center;animation:fade .15s ease .5s reverse both,slide .15s linear .5s both}
 #searchbar span{margin:5px 5px 0;padding:1px;display:inline-block;position:relative;overflow:hidden;border:1px solid #151;border-radius:2px;background:none}
 #searchbar span:focus-within{box-shadow:inset -38px 0 1px 2px #0009,inset 0 0 2px 2px rgba(0,0,0,.7),0 0 0 1px #000,0 0 2px 1px #f60,0 0 3px 1px rgba(255,96,0,.9);background:var(--input_txt);transition:linear box-shadow .15s}
 #searchbar table{margin:15px auto 13px;width:auto;border-radius:0 0 2px 2px;border-collapse:separate;border:1px solid #151;background:var(--panel);box-shadow:var(--bevel)}
