@@ -207,8 +207,8 @@ function newHosts() {
 
       if (!newHostsBadge) { return; }
       if (count > 0) {
-        if (count > 10) {count = 10;}
-        newHostsBadge.textContent = count;
+        if (count > 10) {newHostsBadge.textContent = "10+";}
+        else {newHostsBadge.textContent = count;}
         newHostsBadge.hidden = false;
       } else {newHostsBadge.hidden = true;}
 
@@ -222,9 +222,10 @@ function newHosts() {
     const storedData = JSON.parse(localStorage.getItem("newHostsData") || "{}");
     const { count, lastUpdated, hostnames } = storedData;
 
-    if (lastUpdated && count && (now - lastUpdated < 60000) || !lastUpdated) {
+    if (lastUpdated && count && (now - lastUpdated < 60000)) {
       if (count > 0) {
-        newHostsBadge.textContent = count;
+        if (count > 10) {newHostsBadge.textContent = "10+";}
+        else {newHostsBadge.textContent = count;}
         newHostsBadge.hidden = false;
         updateTooltip(hostnames);
       } else {newHostsBadge.hidden = true;}
@@ -233,25 +234,23 @@ function newHosts() {
 
   function updateTooltip(hostnames) {
     if (!newHostsBadge) {return;}
-    const hostsTooltip = document.getElementById("newHostsTooltip");
-    hostsTooltip?.remove();
-    const servicesTbody = document.querySelector("#sb_services tbody");
-    const tooltip = document.createElement("tr");
-    const tooltipTd = document.createElement("td");
-    const tooltipContent = hostnames.map(hostname => `<a href="http://${hostname}" target="_blank">${hostname.replace(".i2p","")}</a>`).join("");
-    tooltip.id = "newHostsTooltip";
-    tooltip.hidden = true;
-    tooltip.appendChild(tooltipTd);
-    tooltipTd.innerHTML = tooltipContent;
-    servicesTbody.appendChild(tooltip);
+    const services = document.getElementById("sb_services");
+    const newHosts =  document.getElementById("newHostsList");
+    const newHostsTd =  newHosts?.querySelector("td");
+    const newHostsList = hostnames.map(hostname => `<a href="http://${hostname}" target="_blank">${hostname.replace(".i2p","")}</a>`).join("");
+    newHosts.hidden = true;
+    if (hostnames.length > 0) {newHostsTd.innerHTML = newHostsList;}
+
     newHostsBadge?.addEventListener("mouseenter", () => {
-      tooltip.hidden = false;
-      servicesTbody.classList.add("tooltipped");
+      newHosts.hidden = false;
+      services.classList.add("tooltipped");
     }, {passive: true});
-    servicesTbody?.addEventListener("mouseleave", () => {
-      tooltip.hidden = true;
-      servicesTbody.classList.remove("tooltipped");
+
+    services.addEventListener("mouseleave", () => {
+      newHosts.hidden = true;
+      services.classList.remove("tooltipped");
     }, {passive: true});
+
   }
 
   if (newHostsInterval) { clearInterval(newHostsInterval); }

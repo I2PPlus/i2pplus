@@ -366,15 +366,15 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 #tunnelCount+#tunnelCount,#newsCount+#newsCount{display:none}
 
 /* new hosts count */
-#newHosts{margin:2px 0 0 4px!important;padding:1px 3px;min-width:12px;min-height:10px;display:inline-block;position:relative;z-index:999;vertical-align:middle;line-height:1;font-size:8pt!important;color:#494;animation:none!important}
-#newHosts[hidden],#newHostsTooltip[hidden]{display:none;z-index:-1;pointer-events:none}
-#newHosts:not([hidden]):hover::after,#sb_services .tooltipped #newHosts:not([hidden])::after{margin:0 0 0 2px;height:10px;width:10px;display:inline-block;vertical-align:middle;background:var(--dropdown) no-repeat center calc(50% - 1px)/8px;content:"";}
-#newHostsTooltip{display:none;box-shadow:var(--bevel);box-shadow:0 0 0 2px #000 inset,0 0 0 3px #131 inset,0 0 0 4px #000 inset;background:var(--badge);opacity:0}
-#newHostsTooltip:not([hidden]),#newHostsTooltip:hover,#newHostsTooltip[hidden]:hover{display:table-row;opacity:1;pointer-events:all}
-#newHostsTooltip a{margin:0 3px;padding:0 2px;display:inline-block!important;line-height:1;text-transform:none}
-#newHostsTooltip td{padding:8px 5px!important;justify-content:center;flex-wrap:wrap}
-#sb_services .tooltipped{margin-bottom:-10px}
-#sb_services .tooltipped .volatile{margin-bottom:-3px}
+#newHosts{margin:2px 0 0 1px!important;padding:1px 3px;min-width:12px;min-height:10px;display:inline-block;position:relative;z-index:999;vertical-align:middle;line-height:1;font-size:8pt!important;color:#494;animation:none!important}
+#newHosts[hidden],#newHostsList[hidden]{display:none;z-index:-1;pointer-events:none}
+#newHosts:not([hidden]):hover::after,#sb_services.tooltipped #newHosts:not([hidden])::after{margin:0 0 0 2px;height:10px;width:10px;display:inline-block;vertical-align:middle;background:var(--dropdown) no-repeat center calc(50% - 1px)/8px;content:"";}
+#newHostsList{display:none;box-shadow:var(--bevel);box-shadow:0 0 0 2px #000 inset,0 0 0 3px #131 inset,0 0 0 4px #000 inset;background:var(--badge);opacity:0}
+#newHostsList:not([hidden]),#newHostsList:hover,#newHostsList[hidden]:hover{display:table-row;opacity:1;pointer-events:all}
+#newHostsList a{margin:0 3px;padding:0 2px;display:inline-block!important;line-height:1;text-transform:none}
+#newHostsList td{padding:8px 5px!important;justify-content:center;flex-wrap:wrap}
+#sb_services.tooltipped{margin-bottom:-11px}
+#sb_services.tooltipped .volatile{margin-bottom:-3px}
 
 /* main section */
 .sb,.main,h1,#news,.confignav,.tab,.tab2,table.search,.applink,.sitemapLink,.sitemapLabel{border:var(--border_hard)}

@@ -313,11 +313,8 @@ class SidebarRenderer {
             String tx = _t("Torrents");
             rbuf.setLength(0);
             rbuf.append("<a href=\"/torrents\" ");
-            if (embedApps) {
-                rbuf.append("target=_top ");
-            } else {
-                rbuf.append("target=_blank ");
-            }
+            if (embedApps) {rbuf.append("target=_top ");}
+            else {rbuf.append("target=_blank ");}
             rbuf.append("title=\"")
                 .append(_t("Built-in anonymous BitTorrent Client"))
                 .append("\">")
@@ -346,28 +343,20 @@ class SidebarRenderer {
             String tx = _t("Web Server");
             String txtt = _t("Local Web Server");
             int sz = urls.size();
-            if (sz > 1)
-                Collections.sort(urls);
+            if (sz > 1) {Collections.sort(urls);}
             for (int i = 0; i < sz; i++) {
                 String url = urls.get(i);
                 String txp = sz > 1 ? tx + ' ' + (i + 1) : tx;
                 rbuf.setLength(0);
-                rbuf.append("<a href=\"")
-                    .append(url)
-                    .append("\" target=_blank title=\"")
-                    .append(txtt)
-                    .append("\">")
-                    .append(nbsp(txp))
-                    .append("</a>\n")
-                .append("<a class=sb_icon target=_blank href=\"").append(url).append("\" title=\"").append(tx)
-                .append("\" hidden><span><img src=/themes/console/images/webserver.svg></span></a>\n");
+                rbuf.append("<a href=\"").append(url).append("\" target=_blank title=\"").append(txtt).append("\">")
+                    .append(nbsp(txp)).append("</a>\n").append("<a class=sb_icon target=_blank href=\"").append(url)
+                    .append("\" title=\"").append(tx).append("\" hidden><span><img src=/themes/console/images/webserver.svg></span></a>\n");
                 svcs.put(txp, rbuf.toString());
             }
         }
 
         Map<String, String> apps = NavHelper.getInstance(_context).getClientAppLinks();
-        if (apps != null)
-            svcs.putAll(apps);
+        if (apps != null) {svcs.putAll(apps);}
         if (!svcs.isEmpty()) {
             StringBuilder buf = new StringBuilder(128 * svcs.size());
             buf.append("<h3><a href=\"/configwebapps\" target=_top title=\"")
@@ -376,14 +365,10 @@ class SidebarRenderer {
                .append(_t("Services"))
                .append("</a><input type=checkbox id=toggle_sb_services class=\"toggleSection script\" checked hidden></h3>\n<hr class=b>\n")
                .append("<table id=sb_services class=collapse><tbody>\n<tr><td class=volatile>");
-            for (String row : svcs.values()) {
-                buf.append(row);
-            }
-            buf.append("</td></tr>\n</tbody></table>\n");
+            for (String row : svcs.values()) {buf.append(row);}
+            buf.append("</td></tr>\n<tr id=newHostsList class=script><td></td></tr>\n</tbody></table>\n");
             return buf.toString();
-        } else {
-            return "";
-        }
+        } else {return "";}
     }
 
     /**
