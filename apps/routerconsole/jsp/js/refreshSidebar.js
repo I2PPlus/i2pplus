@@ -225,9 +225,8 @@ function newHosts() {
       if (count > 0) {
         newHostsBadge.textContent = count;
         newHostsBadge.hidden = false;
+        updateTooltip(hostnames);
       } else {newHostsBadge.hidden = true;}
-
-      updateTooltip(hostnames);
     } else {fetchNewHosts();}
   }
 
