@@ -82,15 +82,15 @@ public class IterativeSearchJob extends FloodSearchJob {
     private final MaskedIPSet _ipSet;
     private final Set<Hash> _skippedPeers;
 
-    private static final int MAX_NON_FF = 8;
+    private static final int MAX_NON_FF = 5;
     /** Max number of peers to query */
-    private static final int TOTAL_SEARCH_LIMIT = 16;
+    private static final int TOTAL_SEARCH_LIMIT = 10;
     /** Max number of peers to query if we are ff */
-    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 10;
+    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 8;
     /** Extra peers to get from peer selector, as we may discard some before querying */
     private static final int EXTRA_PEERS = 2;
     private static final int IP_CLOSE_BYTES = 3;
-    private static final int MAX_SEARCH_TIME = 20*1000;
+    private static final int MAX_SEARCH_TIME = 12*1000;
     /**
      *  The time before we give up and start a new search - much shorter than the message's expire time
      *  Longer than the typ. response time of 1.0 - 1.5 sec, but short enough that we move
@@ -102,10 +102,10 @@ public class IterativeSearchJob extends FloodSearchJob {
      * The default single search time
      */
     private static final long SINGLE_SEARCH_TIME = 4*1000;
-    private static final long MIN_SINGLE_SEARCH_TIME = 1250;
+    private static final long MIN_SINGLE_SEARCH_TIME = 1000;
 
     /** The actual expire time for a search message */
-    private static final long SINGLE_SEARCH_MSG_TIME = 20*1000;
+    private static final long SINGLE_SEARCH_MSG_TIME = 12*1000;
 
     /**
      *  Use instead of CONCURRENT_SEARCHES in super() which is final.
@@ -162,25 +162,13 @@ public class IterativeSearchJob extends FloodSearchJob {
         _skippedPeers = new HashSet<Hash>(4);
         _sentTime = new ConcurrentHashMap<Hash, Long>(_totalSearchLimit);
         _fromLocalDest = fromLocalDest;
-         _maxConcurrent = (ctx.router().getUptime() > 30*60*1000 || known > 1000) ? ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT) :
+        _timeoutMs = Math.min(timeoutMs, MAX_SEARCH_TIME);
+        _maxConcurrent = (ctx.router().getUptime() > 30*60*1000 || known > 1000) ? ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT) :
                           ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT + 1);
-        if (fromLocalDest != null && !isLease && _log.shouldLog(Log.WARN))
+        if (fromLocalDest != null && !isLease && _log.shouldLog(Log.WARN)) {
             _log.warn("IterativeSearch for RouterInfo [" + key.toBase64().substring(0,6) + "] down client tunnel " + fromLocalDest, new Exception());
-
+        }
         // All createRateStat in FNDF
-        // These override the settings in super
-        if (isLease) {
-            _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME * 2);
-            totalSearchLimit += 2;
-        } else {_timeoutMs = Math.min(timeoutMs, MAX_SEARCH_TIME);}
-        if (ctx.getProperty("netdb.maxConcurrent") != null) {_maxConcurrent = Integer.parseInt(ctx.getProperty("netdb.maxConcurrent"));}
-        else if (isLease && cpuLoadAvg < 80 && lag < 50) {ctx.getProperty("netdb.maxConcurrent", Math.min(MAX_CONCURRENT + 1, 2));}
-        else if ((known < 1000 && ctx.router().getUptime() < 30*60*1000 || isHidden) && !isSlow && !isSingleCore && cpuLoadAvg < 80) {
-            _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT + 2);
-        } else if (known > 1000 || ctx.router().getUptime() > 30*60*1000 && cpuLoadAvg < 80 && lag < 50) {
-            _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT);
-        } else if (cpuLoadAvg > 90 || isSlow || isSingleCore) {_maxConcurrent = 1;}
-        else {_maxConcurrent = ctx.getProperty("netdb.maxConcurrent", Math.max(MAX_CONCURRENT, 1));}
     }
 
     @Override
@@ -189,7 +177,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             if (_log.shouldDebug()) {
                 _log.debug("Not searching for negative cached key for Router [" + _key.toBase64().substring(0,6) + "]");
             }
-            failed();
+            cancelJob();
             return;
         }
 
@@ -210,6 +198,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                 if (_log.shouldInfo()) {
                     _log.info("Skipping search for uninteresting Router [" + _key.toBase64().substring(0,6) + "]");
                 }
+                cancelJob();
                 return;
             }
         }
@@ -239,13 +228,14 @@ public class IterativeSearchJob extends FloodSearchJob {
         if (floodfillPeers.isEmpty()) {
             // Ask anybody, they may not return the answer but they will return a few ff peers we can go look up,
             // so this situation should be temporary
-            if (_log.shouldLog(Log.WARN) && uptime > 60*1000) {
-                _log.warn("Running NetDb searches against the Floodfill peers, but we don't know any");
+            if (_log.shouldLog(Log.WARN) && uptime > 2*60*1000) {
+                _log.warn("Cannot query remote floodfills -> None known (this should resolve shortly)");
             }
             List<Hash> all = new ArrayList<Hash>(_facade.getAllRouters());
             if (all.isEmpty()) {
-                if (_log.shouldLog(Log.ERROR) && uptime > 3*60*1000)
-                    _log.error("No peers in NetDb - reseed required");
+                if (_log.shouldLog(Log.ERROR) && uptime > 3*60*1000) {
+                  _log.error("No peers in NetDb - reseed required");
+                }
                 failed();
                 return;
             }
@@ -255,7 +245,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             for (int i = 0; iter.hasNext() && i < MAX_NON_FF; i++) {floodfillPeers.add(iter.next());}
         }
         final boolean empty;
-        // outside sync to avoid deadlock
+        // Outside sync to avoid deadlock
         final Hash us = getContext().routerHash();
         synchronized(this) {
             _toTry.addAll(floodfillPeers);
@@ -267,7 +257,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         if (empty) {
             if (_log.shouldLog(Log.WARN)) {
                 _log.warn("IterativeSearch for " + (_isLease ? "LeaseSet " : "Router") +
-                          " [" + _key.toBase64().substring(0,6) + "] failed - no Floodfills in NetDb");
+                          " [" + _key.toBase64().substring(0,6) + "] failed -> No Floodfills in NetDb");
             }
             failed(); // No floodfill peers, fail
             return;
@@ -313,12 +303,10 @@ public class IterativeSearchJob extends FloodSearchJob {
                 return;
             }
             // Even if pend and todo are empty, we don't fail, as there may be more peers coming via newPeerToTry()
-            if (done + pend >= _totalSearchLimit)
-                return;
+            if (done + pend >= _totalSearchLimit) {return;}
             synchronized(this) {
-                if (_alwaysQueryHash != null &&
-                        !_unheardFrom.contains(_alwaysQueryHash) &&
-                        !_failedPeers.contains(_alwaysQueryHash)) {
+                if (_alwaysQueryHash != null && !_unheardFrom.contains(_alwaysQueryHash) &&
+                    !_failedPeers.contains(_alwaysQueryHash)) {
                     /*
                      * For testing or local networks... we will pretend that the specified router is floodfill,
                      * and always closest-to-the-key. May be set after startup but can't be changed or unset later.
@@ -636,30 +624,23 @@ public class IterativeSearchJob extends FloodSearchJob {
      *  @param peer may not actually be new
      */
     void newPeerToTry(Hash peer) {
-        // don't ask ourselves or the target
-        if (peer.equals(getContext().routerHash()) || peer.equals(_key))
-            return;
+        // Don't ask ourselves or the target
+        if (peer.equals(getContext().routerHash()) || peer.equals(_key)) {return;}
         if (getContext().banlist().isBanlistedForever(peer)) {
-            if (_log.shouldInfo()) {
-                _log.info("Banlisted peer from DbSearchReplyMsg [" + peer.toBase64().substring(0,6) + "]");
-            }
+            if (_log.shouldInfo()) {_log.info("Banlisted peer from DbSearchReplyMsg [" + peer.toBase64().substring(0,6) + "]");}
             return;
         }
         RouterInfo ri = getContext().netDb().lookupRouterInfoLocally(peer);
         if (ri != null && !FloodfillNetworkDatabaseFacade.isFloodfill(ri)) {
-            if (_log.shouldInfo()) {
-                _log.info("Non-Floodfill peer from DbSearchReplyMsg [" + peer.toBase64().substring(0,6) + "]");
-            }
+            if (_log.shouldInfo()) {_log.info("Non-Floodfill peer from DbSearchReplyMsg [" + peer.toBase64().substring(0,6) + "]");}
             return;
         }
         synchronized (this) {
-            if (_failedPeers.contains(peer) || _unheardFrom.contains(peer) || _skippedPeers.contains(peer)) {
-                return; // already tried or skipped
-            }
+            if (_failedPeers.contains(peer) || _unheardFrom.contains(peer) || _skippedPeers.contains(peer)) {return;} // already tried or skipped
             if (!_toTry.add(peer)) {return;} // already in the list
         }
         if (_log.shouldInfo()) {
-            _log.info("New Router [" + peer.toBase64().substring(0,6) + "] from DbSearchReplyMsg - Known? " + (ri != null));
+            _log.info("New Router [" + peer.toBase64().substring(0,6) + "] from DbSearchReplyMsg " + (ri != null ? " -> Already known" : ""));
         }
         retry();
     }
@@ -686,6 +667,18 @@ public class IterativeSearchJob extends FloodSearchJob {
     long timeSent(Hash peer) {
         Long rv = _sentTime.get(peer);
         return rv == null ? -1 : rv.longValue();
+    }
+
+    /**
+     * Cancels the job without performing full failure handling.
+     * @since 0.9.65+
+     */
+    void cancelJob() {
+        synchronized (this) {
+            if (_dead) {return;}
+            _dead = true;
+        }
+        _facade.complete(_key);
     }
 
     /**
