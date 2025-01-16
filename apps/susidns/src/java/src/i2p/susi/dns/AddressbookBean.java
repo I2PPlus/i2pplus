@@ -50,21 +50,13 @@ public class AddressbookBean extends BaseBean {
     protected final LinkedList<String> deletionMarks;
     protected static final Comparator<AddressBean> sorter;
     private static final int DISPLAY_SIZE = 100;
-
     static {sorter = new AddressByNameSorter();}
-
     public String getSearch() {return search;}
-
     public void setSearch(String search) {this.search = DataHelper.stripHTML(search).trim();} // XSS;
-
     public boolean isHasFilter() {return filter != null && filter.length() > 0;}
-
     public void setTrClass(int trClass) {this.trClass = trClass;}
-
     public int getTrClass() {trClass = 1 - trClass; return trClass;}
-
     public boolean isIsEmpty() {return !isNotEmpty();}
-
     public boolean isNotEmpty() {return addressbook != null && !addressbook.isEmpty();}
 
     public AddressbookBean() {
@@ -84,9 +76,7 @@ public class AddressbookBean extends BaseBean {
     }
 
     public String getDisplayName() {return getFileName();}
-
     protected AddressBean[] entries;
-
     public AddressBean[] getEntries() {return entries;}
 
     /**
@@ -296,13 +286,13 @@ public class AddressbookBean extends BaseBean {
                     if (changed) {
                         if (deleted == 1) {message = _t("Destination {0} deleted.", name);}
                         else {message = ngettext("1 destination deleted.", "{0} destinations deleted.", deleted);} // parameter will always be >= 2
-                    } else {message = _t("No entries selected to delete.");}
+                    } else {message = _t("No valid entries selected to delete.");}
                     if (action.equals(_t("Delete Entry"))) {search = null;}
                 } else if (action.equals(_t("Add Alternate"))) {message = "Unsupported";} // button won't be in UI
                 if (changed) {
                     try {
                         save();
-                        message += "<br>" + _t("Address book saved.") + "&nbsp;" + _t("Browse away from this addressbook and return to see update.");
+                        message += "<br>" + _t("Address book saved.");
                     } catch (IOException e) {
                         warn(e);
                         message += "<br>" + _t("ERROR: Could not write addressbook file.");
@@ -363,19 +353,12 @@ public class AddressbookBean extends BaseBean {
     }
 
     public String getDestination() {return destination;}
-
     public void setDestination(String destination) {this.destination = DataHelper.stripHTML(destination).trim();} // XSS
-
     public String getHostname() {return hostname;}
-
     public void setResetDeletionMarks(String dummy) {deletionMarks.clear();}
-
     public void setMarkedForDeletion(String name) {deletionMarks.addLast(DataHelper.stripHTML(name));} // XSS
-
     public void setHostname(String hostname) {this.hostname = DataHelper.stripHTML(hostname).trim();} // XSS
-
     protected int getBeginInt() {return Math.max(0, Math.min(resultSize() - 1, beginIndex));}
-
     public String getBegin() {return Integer.toString(getBeginInt());}
 
     /**
@@ -389,9 +372,7 @@ public class AddressbookBean extends BaseBean {
         catch (NumberFormatException nfe) {}
     }
 
-    protected int getEndInt() {
-        return Math.max(0, Math.max(getBeginInt(), Math.min(resultSize() - 1, endIndex)));
-    }
+    protected int getEndInt() {return Math.max(0, Math.max(getBeginInt(), Math.min(resultSize() - 1, endIndex)));}
 
     public String getEnd() {return Integer.toString(getEndInt());}
 
@@ -399,9 +380,7 @@ public class AddressbookBean extends BaseBean {
     *  @return ending index into results
     *  @since 0.8.7
     */
-    public String getResultEnd() {
-        return Integer.toString(isPrefiltered() ? resultSize() - 1 : getEndInt());
-    }
+    public String getResultEnd() {return Integer.toString(isPrefiltered() ? resultSize() - 1 : getEndInt());}
 
     public void setEnd(String s) {
         try {endIndex = Integer.parseInt(s);}

@@ -329,11 +329,11 @@ public class NamingServiceBean extends AddressbookBean {
                     if (changed) {
                         if (deleted == 1) {message += _t("Destination {0} deleted.", name);} // parameter is a host name
                         else {message = ngettext("1 destination deleted.", "{0} destinations deleted.", deleted);} // parameter will always be >= 2
-                    } else {message = _t("No entries selected to delete.");}
+                    } else {message = _t("No valid entries selected to delete.");}
                     if (action.equals(_t("Delete Entry"))) {search = null;} // clear search when deleting
                 }
                 if (changed) {
-                    message += "<br>" + _t("Address book saved.") + "&nbsp;" + _t("Browse away from this addressbook and return to see update.");
+                    message += "<br>" + _t("Address book saved.");
                 }
             }
             else {
