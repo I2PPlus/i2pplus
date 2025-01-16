@@ -157,7 +157,9 @@
     <echo message=" * Ensure your locale is set to UTF-8"/>
     <echo message=" * A Java JDK installation - Oracle, OpenJDK or Microsoft work well"/>
     <echo message=" * If you're building updates to be shared, building with Java 8 is recommended, though not required"/>
+    <echo message=" * The ant-contrib package is a required dependency which supports various ant extensions"/>
     <echo message=" * For translation support, GNU gettext is required, and can be installed from repos in most Linux distros"/>
+    <echo message=" * To enable Javascript compression of the console and webapp scripts, the uglifyjs package is required"/>
     <echo message=" * To build pack200 updates, Java 13 or earlier is required; on Linux, the GNU parallel package is also required"/>
     <echo message=" * On a Linux system with multiple Java installations, you can configure ant to use a specific version by setting"/>
     <echo message="   an alias in your ~/.bashrc file, e.g. alias ant8=&quot;JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64 ant&quot;"/>
