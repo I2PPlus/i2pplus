@@ -105,7 +105,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     private static final long MIN_SINGLE_SEARCH_TIME = 1000;
 
     /** The actual expire time for a search message */
-    private static final long SINGLE_SEARCH_MSG_TIME = 12*1000;
+    private static final long SINGLE_SEARCH_MSG_TIME = 20*1000;
 
     /**
      *  Use instead of CONCURRENT_SEARCHES in super() which is final.
@@ -145,10 +145,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         int totalSearchLimit = (facade.floodfillEnabled() && ctx.router().getUptime() > 30*60*1000) ?
                                 TOTAL_SEARCH_LIMIT_WHEN_FF : TOTAL_SEARCH_LIMIT;
         boolean isHidden = ctx.router().isHidden();
-        boolean isSingleCore = SystemVersion.getCores() < 2;
         boolean isSlow = SystemVersion.isSlow();
-        int cpuLoadAvg = SystemVersion.getCPULoadAvg();
-        int sysLoad = SystemVersion.getSystemLoad();
         long lag = ctx.jobQueue().getMaxLag();
         _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME);
         _expiration = _timeoutMs + ctx.clock().now();
@@ -176,6 +173,14 @@ public class IterativeSearchJob extends FloodSearchJob {
         if (_facade.isNegativeCached(_key)) {
             if (_log.shouldDebug()) {
                 _log.debug("Not searching for negative cached key for Router [" + _key.toBase64().substring(0,6) + "]");
+            }
+            cancelJob();
+            return;
+        }
+
+        if (getContext().banlist().isBanlisted(_key)) {
+            if (_log.shouldDebug()) {
+                _log.debug("Not searching for banlisted Router [" + _key.toBase64().substring(0,6) + "]");
             }
             cancelJob();
             return;
@@ -274,7 +279,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                       "\n* Querying: "  + DataHelper.toString(_toTry).substring(0,6) + "]" +
                       "; Routing key: [" + _rkey.toBase64().substring(0,6) + "]" +
                       "; Timeout: " + DataHelper.formatDuration(_timeoutMs) +
-                      "\n* DbId: " + _facade);
+                      " (DbId: " + _facade + ")");
         retry();
     }
 
@@ -284,10 +289,13 @@ public class IterativeSearchJob extends FloodSearchJob {
     private void retry() {
         long now = getContext().clock().now();
         if (_expiration < now) {
-            failed();
+            cancelJob();
             return;
         }
-        if (_expiration - 500 < now)  {return;} // not enough time left to bother
+        if (_expiration - MIN_SINGLE_SEARCH_TIME < now) { // not enough time left to bother
+          cancelJob();
+          return;
+        }
         if (_expiration - 1500 < now)  {_expiration = 1500;}
         while (true) {
             Hash peer = null;
@@ -299,7 +307,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                 done = _failedPeers.size();
             }
             if (done >= _totalSearchLimit) {
-                failed();
+                cancelJob();
                 return;
             }
             // Even if pend and todo are empty, we don't fail, as there may be more peers coming via newPeerToTry()
@@ -597,8 +605,9 @@ public class IterativeSearchJob extends FloodSearchJob {
      */
     void failed(Hash peer, boolean timedOut) {
         boolean isNewFail;
+        boolean isKnown = _facade.lookupLocallyWithoutValidation(peer) != null;
         synchronized (this) {
-            if (_dead) {return;}
+            if (_dead || getContext().banlist().isBanlisted(peer)) {return;}
             _unheardFrom.remove(peer);
             isNewFail = _failedPeers.add(peer);
         }
@@ -606,12 +615,12 @@ public class IterativeSearchJob extends FloodSearchJob {
             if (timedOut) {
                 getContext().profileManager().dbLookupFailed(peer);
                 if (_log.shouldInfo()) {
-                    if (peer != null) {_log.info("IterativeSearch for Router [" + peer.toBase64().substring(0,6) + "] timed out");}
+                    if (peer != null) {_log.info("IterativeSearch for " + (isKnown ? "known " : "") + "Router [" + peer.toBase64().substring(0,6) + "] timed out");}
                     else {_log.info("IterativeSearch for Router [unknown] timed out");}
                 }
             } else {
                 if (_log.shouldInfo()) {
-                    if (peer != null) {_log.info("IterativeSearch for Router [" + peer.toBase64().substring(0,6) + "] failed");}
+                    if (peer != null) {_log.info("IterativeSearch for " + (isKnown ? "known " : "") + "Router [" + peer.toBase64().substring(0,6) + "] failed");}
                     else {_log.info("IterativeSearch for Router [unknown] failed");}
                 }
             }
@@ -625,14 +634,15 @@ public class IterativeSearchJob extends FloodSearchJob {
      */
     void newPeerToTry(Hash peer) {
         // Don't ask ourselves or the target
-        if (peer.equals(getContext().routerHash()) || peer.equals(_key)) {return;}
-        if (getContext().banlist().isBanlistedForever(peer)) {
-            if (_log.shouldInfo()) {_log.info("Banlisted peer from DbSearchReplyMsg [" + peer.toBase64().substring(0,6) + "]");}
+        if (peer.equals(getContext().routerHash()) || peer.equals(_key) || getContext().banlist().isBanlisted(peer)) {
+            if (getContext().banlist().isBanlisted(peer) && _log.shouldInfo()) {
+                _log.info("Not querying banlisted peer [" + peer.toBase64().substring(0,6) + "] received from DbSearchReplyMsg");
+            }
             return;
         }
         RouterInfo ri = getContext().netDb().lookupRouterInfoLocally(peer);
         if (ri != null && !FloodfillNetworkDatabaseFacade.isFloodfill(ri)) {
-            if (_log.shouldInfo()) {_log.info("Non-Floodfill peer from DbSearchReplyMsg [" + peer.toBase64().substring(0,6) + "]");}
+            if (_log.shouldInfo()) {_log.info("Not querying non-Floodfill peer [" + peer.toBase64().substring(0,6) + "] received from DbSearchReplyMsg");}
             return;
         }
         synchronized (this) {
@@ -640,7 +650,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             if (!_toTry.add(peer)) {return;} // already in the list
         }
         if (_log.shouldInfo()) {
-            _log.info("New Router [" + peer.toBase64().substring(0,6) + "] from DbSearchReplyMsg " + (ri != null ? " -> Already known" : ""));
+            _log.info("Received new Router [" + peer.toBase64().substring(0,6) + "] from DbSearchReplyMsg " + (ri != null ? " -> Already known" : ""));
         }
         retry();
     }
