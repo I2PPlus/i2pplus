@@ -368,6 +368,7 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 /* new hosts count */
 #newHosts{margin:2px 0 0 1px!important;padding:1px 3px;min-width:12px;min-height:10px;display:inline-block;position:relative;z-index:999;vertical-align:middle;line-height:1;font-size:8pt!important;color:#494;animation:none!important}
 #newHosts[hidden],#newHostsList[hidden]{display:none;z-index:-1;pointer-events:none}
+#newHosts:empty{display:none!important}
 #newHosts:not([hidden]):hover::after,#sb_services.tooltipped #newHosts:not([hidden])::after{margin:0 0 0 2px;height:10px;width:10px;display:inline-block;vertical-align:middle;background:var(--dropdown) no-repeat center calc(50% - 1px)/8px;content:"";}
 #newHostsList{display:none;box-shadow:var(--bevel);box-shadow:0 0 0 2px #000 inset,0 0 0 3px #131 inset,0 0 0 4px #000 inset;background:var(--badge);opacity:0}
 #newHostsList:not([hidden]),#newHostsList:hover,#newHostsList[hidden]:hover{display:table-row;opacity:1;pointer-events:all}
@@ -781,6 +782,7 @@ td.ipv6{width:1%;max-width:24px}
 #peers .reachability{display:none}
 #peers #ntcpconnections .edit,#peers #udpconnections .edit{width:1%;white-space:nowrap}
 #peers #udpconnections tfoot .peer,#peers #ntcpconnections tfoot .peer{padding-left:8px;text-align:left}
+#ssuadv{display:inline-block}
 #topCount{display:inline-block;position:absolute;right:3px;top:3px}
 #topCount table{display:table;width:auto;margin:0!important;border-collapse:separate;border-spacing:2px;border:0}
 #topCount table,#topCount td{line-height:1}
