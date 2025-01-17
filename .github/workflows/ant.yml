@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: GetText
+      - name: PackageInstall
         run: |
-          echo "Installing gettext..."
-          sudo apt install -y gettext
+          echo "Installing gettext, ant-contrib, parallel and uglifyjs..."
+          sudo apt install -y gettext ant-contrib parallel uglifyjs
           echo "gettext installation completed."
 
       - uses: actions/checkout@main
