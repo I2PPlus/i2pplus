@@ -13,6 +13,7 @@
 <jsp:useBean id="subs" class="i2p.susi.dns.SubscriptionsBean" scope="session" />
 <jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application" />
 <jsp:setProperty name="subs" property="*" />
+<% subs.storeMethod(request.getMethod()); %>
 <% boolean overrideCssActive = base.isOverrideCssActive(); %>
 <!DOCTYPE HTML>
 <html>

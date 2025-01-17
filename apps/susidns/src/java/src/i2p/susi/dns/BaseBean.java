@@ -19,7 +19,7 @@ import net.i2p.util.OrderedProperties;
 public class BaseBean {
     protected final I2PAppContext _context;
     protected final Properties properties;
-    protected String action, lastSerial, serial;
+    protected String action, lastSerial, serial, method;
     private long configLastLoaded;
     private static final String PRIVATE_BOOK = "private_addressbook";
     private static final String DEFAULT_PRIVATE_BOOK = "../privatehosts.txt";
@@ -40,16 +40,12 @@ public class BaseBean {
     /**
      * @since 0.9.13 moved from ConfigBean.addressbookPrefix
      */
-    protected File addressbookDir() {
-        return new File(_context.getRouterDir(), ADDRESSBOOK_DIR);
-    }
+    protected File addressbookDir() {return new File(_context.getRouterDir(), ADDRESSBOOK_DIR);}
 
     /**
      * @since 0.9.13 moved from ConfigBean.configFileName
      */
-    protected File configFile() {
-        return new File(addressbookDir(), CONFIG_FILE);
-    }
+    protected File configFile() {return new File(addressbookDir(), CONFIG_FILE);}
 
     protected void loadConfig() {
         synchronized (BaseBean.class) {
@@ -146,9 +142,7 @@ public class BaseBean {
     }
 
     /** @since 0.9.59+ */
-    public boolean useSoraFont() {
-        return _context.getBooleanProperty(RC_PROP_ENABLE_SORA_FONT);
-    }
+    public boolean useSoraFont() {return _context.getBooleanProperty(RC_PROP_ENABLE_SORA_FONT);}
 
     /**
      * Determine if a user-provided override.css file is active
@@ -185,6 +179,11 @@ public class BaseBean {
      * @since 0.9.13 moved from subclasses
      */
     public void setSerial(String serial) {this.serial = DataHelper.stripHTML(serial);}
+
+    /**
+     * @since 0.9.65
+     */
+    public void storeMethod(String method) {this.method = method;}
 
     /**
      * Translate
