@@ -304,11 +304,28 @@
       <copy quiet="true" todir="build/standalone-resources/.res/themes/snark">
         <fileset dir="../../../installer/resources/themes/snark/"/>
       </copy>
+      <copy file="../../../installer/resources/themes/console/classic/global.css" todir="build/standalone-resources/.res/themes/snark/classic" quiet="true"/>
+      <copy file="../../../installer/resources/themes/console/dark/chromescroll.css" todir="build/standalone-resources/.res/themes/snark/dark" quiet="true"/>
+      <copy file="../../../installer/resources/themes/console/dark/global.css" todir="build/standalone-resources/.res/themes/snark/dark" quiet="true"/>
+      <copy file="../../../installer/resources/themes/console/light/global.css" todir="build/standalone-resources/.res/themes/snark/light" quiet="true"/>
+      <copy file="../../../installer/resources/themes/console/midnight/chromescroll.css" todir="build/standalone-resources/.res/themes/snark/midnight" quiet="true"/>
+      <copy file="../../../installer/resources/themes/console/midnight/global.css" todir="build/standalone-resources/.res/themes/snark/midnight" quiet="true"/>
+      <copy file="../../../installer/resources/themes/console/midnight/images/tile.css" todir="build/standalone-resources/.res/themes/snark/midnight/images" quiet="true"/>
+    </parallel>
+    <parallel>
+      <replace file="build/standalone-resources/.res/themes/snark/classic/global.css" summary="true" token="/themes/console/classic" value="/i2psnark/.res/themes/snark/classic"/>
+      <replace file="build/standalone-resources/.res/themes/snark/classic/snark.css" summary="true" token="/themes/console/classic" value="/i2psnark/.res/themes/snark/classic"/>
+      <replace file="build/standalone-resources/.res/themes/snark/dark/global.css" summary="true" token="/themes/console/dark" value="/i2psnark/.res/themes/snark/dark"/>
+      <replace file="build/standalone-resources/.res/themes/snark/dark/snark.css" summary="true" token="/themes/console/dark" value="/i2psnark/.res/themes/snark/dark"/>
+      <replace file="build/standalone-resources/.res/themes/snark/light/global.css" summary="true" token="/themes/console/light" value="/i2psnark/.res/themes/snark/light"/>
+      <replace file="build/standalone-resources/.res/themes/snark/light/snark.css" summary="true" token="/themes/console/light" value="/i2psnark/.res/themes/snark/light"/>
+      <replace file="build/standalone-resources/.res/themes/snark/midnight/global.css" summary="true" token="/themes/console/midnight" value="/i2psnark/.res/themes/snark/midnight"/>
+      <replace file="build/standalone-resources/.res/themes/snark/midnight/snark.css" summary="true" token="/themes/console/midnight" value="/i2psnark/.res/themes/snark/midnight"/>
       <mkdir dir="build/standalone-resources/.res/themes/snark/fonts"/>
       <copy quiet="true" todir="build/standalone-resources/.res/themes/snark/fonts">
         <fileset dir="../../../installer/resources/themes/fonts/"/>
       </copy>
-      <!-- Rather than pulling in all the console theme images, let's just specify the ones we need -->
+      <!-- Images and other resources pulled from the console themes/fonts dirs -->
       <copy quiet="true" file="../../../installer/resources/themes/console/images/newtab.svg"
             todir="build/standalone-resources/.res/icons"/>
       <copy quiet="true" file="../../../installer/resources/themes/console/dark/images/camotile2.png"
@@ -321,14 +338,10 @@
       <copy file="../../i2psnark/res/js/refreshTorrents.js" todir="build/standalone-resources/.res/js"/>
     </parallel>
     <parallel>
-      <replace dir="build/standalone-resources/.res/themes/snark" summary="true"
-               token="url(/themes/console/classic/images/"
-               value="url(/i2psnark/.res/themes/snark/classic/images/">
+      <replace dir="build/standalone-resources/.res/themes/snark" summary="true" token="url(/themes/console/classic/images/" value="url(/i2psnark/.res/themes/snark/classic/images/">
         <include name="**/*.css"/>
       </replace>
-      <replace dir="build/standalone-resources/.res/themes/snark" summary="true"
-               token="url(/themes/console/dark/images/"
-               value="url(/i2psnark/.res/themes/snark/dark/images/">
+      <replace dir="build/standalone-resources/.res/themes/snark" summary="true" token="url(/themes/console/dark/images/" value="url(/i2psnark/.res/themes/snark/dark/images/">
         <include name="**/*.css"/>
       </replace>
       <replace dir="build/standalone-resources/.res/themes/fonts" summary="true" token="url(/themes/fonts/" value="url(/i2psnark/.res/themes/fonts/">
