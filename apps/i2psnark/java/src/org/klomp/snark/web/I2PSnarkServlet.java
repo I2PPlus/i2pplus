@@ -290,7 +290,9 @@ public class I2PSnarkServlet extends BasicServlet {
 
         String nonce = req.getParameter("nonce");
         if (nonce != null) {
-            if (nonce.equals(String.valueOf(_nonce))) {processRequest(req);}
+            // the clear messages button is a GET
+            if ((method.equals("POST") || "Clear".equals(req.getParameter("action"))) &&
+                nonce.equals(String.valueOf(_nonce))) {processRequest(req);}
             else {_manager.addMessage("Please retry form submission (bad nonce)");} // nonce is constant, shouldn't happen
             // P-R-G (or G-R-G to hide the params from the address bar)
             sendRedirect(req, resp, peerString);
@@ -1022,7 +1024,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             ftr.append("</i></td></tr></tbody>\n").append("<tfoot id=\"snarkFoot");
             if (_manager.util().isConnecting()) {ftr.append("\" class=\"initializing");}
-            ftr.append("\"><tr><th id=torrentTotals align=left colspan=12></th></tr></tfoot>\n");
+            ftr.append("\"><tr><th id=torrentTotals class=left colspan=12></th></tr></tfoot>\n");
         } else if (snarks.size() > 0) {
             // Add a pagenav to bottom of table if we have 50+ torrents per page
             // TODO: disable on pages where torrents is < 50 e.g. last page
@@ -1037,7 +1039,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 ftr.append("<tr id=pagenavbottom hidden><td colspan=12><div class=pagenavcontrols></div></td></tr>\n");
             }
             ftr.append("</tbody>\n<tfoot id=snarkFoot><tr class=volatile>")
-               .append("<th id=torrentTotals align=left colspan=6><span id=totals>");
+               .append("<th id=torrentTotals class=left colspan=6><span id=totals>");
 
             // Disk usage
             ftr.append(_manager.getDiskUsage());
