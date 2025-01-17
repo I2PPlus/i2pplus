@@ -54,7 +54,7 @@ a,b,code,p,pre,tt,.applabel a,.configtable td.infohelp,div.error,.error ul li,.i
 #routerlogs li,#criticallogs li,pre#service_logs{font-size:9pt}
 #sb_warning{padding-top:10px;padding-bottom:10px}
 #sb_graphstats{padding:0 6px 2px;font-size:9pt}
-#searchbar span{margin:5px}
+#searchbar div{margin:5px}
 #sidebar a,#sidebar b{font-size:10pt;font-weight:400}
 #sidebar .badge{margin:-1px 0 2px 4px}
 #sidebar button{font-size:10.5pt;padding:5px 8px}

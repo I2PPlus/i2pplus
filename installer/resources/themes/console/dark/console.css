@@ -1582,8 +1582,8 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 #homesearch input.search::placeholder{opacity:0}
 #homesearch input.search:hover::placeholder{opacity:.7}
 #searchbar{margin:-24px 10px -16px;padding:8px 0 2px;width:auto;white-space:nowrap;text-align:center;animation:fade .15s ease .5s reverse both,slide .15s linear .5s both}
-#searchbar span{margin:5px 5px 0;padding:1px;display:inline-block;position:relative;overflow:hidden;border:1px solid #151;border-radius:2px;background:none}
-#searchbar span:focus-within{box-shadow:inset -38px 0 1px 2px #0009,inset 0 0 2px 2px rgba(0,0,0,.7),0 0 0 1px #000,0 0 2px 1px #f60,0 0 3px 1px rgba(255,96,0,.9);background:var(--input_txt);transition:linear box-shadow .15s}
+#searchbar div{margin:5px 5px 0;padding:1px;display:inline-block;position:relative;overflow:hidden;border:1px solid #151;border-radius:2px;background:none}
+#searchbar div:focus-within{box-shadow:inset -38px 0 1px 2px #0009,inset 0 0 2px 2px rgba(0,0,0,.7),0 0 0 1px #000,0 0 2px 1px #f60,0 0 3px 1px rgba(255,96,0,.9);background:var(--input_txt);transition:linear box-shadow .15s}
 #searchbar table{margin:15px auto 13px;width:auto;border-radius:0 0 2px 2px;border-collapse:separate;border:1px solid #151;background:var(--panel);box-shadow:var(--bevel)}
 #searchbar td{padding:0;border:0;box-shadow:none;background:none}
 #searchbar input[type=text]{margin:1px 0 -2px 198px;padding-left:10px;padding-right:42px;min-width:240px;height:calc(100% + 2px);border-radius:0;box-shadow:none;background:#000;border:0;filter:none}
@@ -2880,7 +2880,7 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 #sb_peers_condensed,#sb_tunnels_condensed{margin:-7px -1px -9px -3px;width:calc(100% + 8px)}
 #sb_tunnelstatus .tunnelBuildStatus::before{background-size:12px}
 #sb_wrap{position:absolute!important}
-#searchbar span{margin:3px 3px 0}
+#searchbar div{margin:3px 3px 0}
 #sidebar button.cancel{margin-top:10px}
 #sidebar .reload:hover,#sidebar .reload:focus{background-size:12px,12px,100%}
 #sidebar .reload[value="restartImmediate"],#sidebar .reload[value="restartImmediate"]:hover,#sidebar .reload[value="restartImmediate"]:focus{margin-bottom:-6px}

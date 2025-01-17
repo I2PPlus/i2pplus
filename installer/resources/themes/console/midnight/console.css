@@ -1590,7 +1590,7 @@ h3[id="udpcon"]{width:auto}
 
 /* home search */
 #searchbar{margin:-23px 10px -16px;padding:8px 0 2px;width:auto;white-space:nowrap;text-align:center;animation:fade .5s ease .7s reverse both,slide .5s ease .95s both}
-#searchbar span{margin:-1px 0 -5px;display:inline-block;position:relative;overflow:hidden;background:none}
+#searchbar div{margin:-1px 0 -5px;display:inline-block;position:relative;overflow:hidden;background:none}
 #searchbar table{margin:14px auto 12px;width:auto;border-collapse:collapse;border:var(--border);background:#000}
 #searchbar tr{box-shadow:none;border:0}
 #searchbar td{padding:3px 2px;border:0;box-shadow:var(--bevel);background:none}
@@ -2617,7 +2617,7 @@ input.check[value$="updates"],input.check[value$="updates"]:hover,input.check[va
 #sb_tunnelstatus .tunnelBuildStatus::before{margin:-2px 0;background-size:12px}
 #sb_wrap{position:absolute!important}
 #searchbar button{height:28px}
-#searchbar span{margin:-3px -2px -4px}
+#searchbar div{margin:-3px -2px -4px}
 #sidebarconf button img{width:10px;height:10px}
 #sidebar h3::before{height:14px}
 #sidebar h3{margin-bottom:-9px;padding:5px 0}
@@ -2907,12 +2907,12 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 
 @media (-webkit-min-device-pixel-ratio:1.1){
 #searchbar{margin-bottom:-14px;padding:8px 3px 2px}
-#searchbar span{padding-bottom:1px}
+#searchbar div{padding-bottom:1px}
 #searchbar input,#searchbar select{height:30px}
 #searchbar button{height:29px;border-bottom:var(--border)}
 }
 
-@supports not (-moz-appearance:none){#searchbar span{margin:-1px -1px -5px}}
+@supports not (-moz-appearance:none){#searchbar div{margin:-1px -1px -5px}}
 
 .rid,.rid td{margin:0;padding:2px 1px!important;line-height:0;vertical-align:middle;text-align:center;border:var(--border_badge)!important;box-shadow:var(--bevel)!important;background:var(--badge)}
 .rid{width:unset}

@@ -772,8 +772,8 @@ div.search+.linkcontainer{margin:-15px 0 0}
 #searchbar{margin:-24px 10px -16px;padding:8px 0 2px;width:auto;white-space:nowrap;text-align:center}
 #news.news+.main>#homepanel>#searchbar{margin-top:-19px}
 #searchbar form{margin:0 0 10px}
-#searchbar span{margin:-1px;display:inline-block;position:relative;background:none}
-#searchbar span:focus-within{box-shadow:inset 0 0 0 8px rgba(255,96,0,.6),0 0 0 8px rgba(255,96,0,.6)}
+#searchbar div{margin:-1px;display:inline-block;position:relative;background:none}
+#searchbar div:focus-within{box-shadow:inset 0 0 0 8px rgba(255,96,0,.6),0 0 0 8px rgba(255,96,0,.6)}
 #searchbar table{margin:15px auto 0;width:auto;border-radius:0 0 2px 2px;border-collapse:separate;border:var(--border);background:var(--bg);box-shadow:var(--bevel);animation:slide .1s ease 1s both;contain:paint}
 #searchbar td{padding:3px 2px;border:0;box-shadow:none;background:none}
 #searchbar button,#searchbar select{margin:0;box-shadow:0 2px 0 rgba(255,255,255,.85) inset,0 0 10px rgba(0,0,0,.1) inset}
@@ -2964,7 +2964,7 @@ th code{font-size:9pt}
 
 @media (-webkit-min-device-pixel-ratio:1.1){
 #searchbar{margin-bottom:-14px;padding:8px 3px 2px}
-#searchbar span{padding-bottom:1px}
+#searchbar div{padding-bottom:1px}
 #searchbar input,#searchbar select{height:30px}
 #searchbar button{height:29px;border-bottom:var(--border_input)}
 }
