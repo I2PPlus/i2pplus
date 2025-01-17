@@ -321,7 +321,7 @@ class TunnelRenderer {
             tbuf.append("<th class=tcount data-sortable data-sort-method=number data-sort-default>").append(_t("Tunnels")).append("</th>")
                 .append("<th id=data data-sortable data-sort-method=filesize>").append(_t("Data")).append("</th>")
                 //.append("<th data-sortable data-sort-method=number>").append(_t("Speed")).append("</th>")
-                .append("<th id=banned data-sortable hidden>" + _t("Banned")).append("</th>")
+                .append("<th id=isBanned data-sortable hidden>" + _t("Banned")).append("</th>")
                 .append("<th id=edit data-sort-method=none>" + _t("Edit")).append("</th>")
                 .append("</tr></thead>\n<tbody id=transitPeers>\n");
             out.write(tbuf.toString());
@@ -417,7 +417,6 @@ class TunnelRenderer {
                 sb.append("</td></tr>\n");
             }
             sb.append("</tbody>\n</table>\n");
-            //if (bannedCount == 0) {sb.append("<style>th#banned,td.isBanned{display:none!important}</style>\n");}
             out.write(sb.toString());
             out.flush();
             sb.setLength(0);

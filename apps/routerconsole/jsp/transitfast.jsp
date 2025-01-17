@@ -9,7 +9,7 @@
 <%=intl.title("Fastest Transit Tunnels")%>
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
-<body id=transit>
+<body id=transitFast>
 <script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="sidebar.jsi" %>
 <h1 class=netwrk><%=intl._t("Fastest Transit Tunnels")%></h1>
