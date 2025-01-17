@@ -81,7 +81,8 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
         this.location = null;
     }
 
-    static final long MAX_SUB_SIZE = 5 * 1024 * 1024l; //about 8,000 hosts
+    /** Maximum permitted size of a hosts subscription file - 5MB or around 8000 hosts */
+    static final long MAX_SUB_SIZE = 5 * 1024 * 1024l;
 
     /**
      * Construct an AddressBook from the Subscription subscription. If the
