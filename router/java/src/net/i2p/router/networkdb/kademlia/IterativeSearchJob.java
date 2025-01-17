@@ -84,13 +84,13 @@ public class IterativeSearchJob extends FloodSearchJob {
 
     private static final int MAX_NON_FF = 5;
     /** Max number of peers to query */
-    private static final int TOTAL_SEARCH_LIMIT = 16;
+    private static final int TOTAL_SEARCH_LIMIT = 14;
     /** Max number of peers to query if we are ff */
-    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 12;
+    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 10;
     /** Extra peers to get from peer selector, as we may discard some before querying */
     private static final int EXTRA_PEERS = 2;
     private static final int IP_CLOSE_BYTES = 3;
-    private static final int MAX_SEARCH_TIME = 12*1000;
+    private static final int MAX_SEARCH_TIME = 15*1000;
     /**
      *  The time before we give up and start a new search - much shorter than the message's expire time
      *  Longer than the typ. response time of 1.0 - 1.5 sec, but short enough that we move
@@ -102,10 +102,10 @@ public class IterativeSearchJob extends FloodSearchJob {
      * The default single search time
      */
     private static final long SINGLE_SEARCH_TIME = 4*1000;
-    private static final long MIN_SINGLE_SEARCH_TIME = 500;
+    private static final long MIN_SINGLE_SEARCH_TIME = 600;
 
     /** The actual expire time for a search message */
-    private static final long SINGLE_SEARCH_MSG_TIME = 18*1000;
+    private static final long SINGLE_SEARCH_MSG_TIME = 15*1000;
 
     /**
      *  Use instead of CONCURRENT_SEARCHES in super() which is final.
@@ -613,7 +613,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         if (isNewFail) {
             boolean isKnown = _facade.lookupLocallyWithoutValidation(peer) != null;
             if (timedOut) {
-                synchronized (this) {getContext().profileManager().dbLookupFailed(peer);}
+                getContext().profileManager().dbLookupFailed(peer);
                 if (_log.shouldInfo()) {
                     if (peer != null) {_log.info("IterativeSearch for " + (isKnown ? "known " : "") + "Router [" + peer.toBase64().substring(0,6) + "] timed out");}
                     else {_log.info("IterativeSearch for Router [unknown] timed out");}
