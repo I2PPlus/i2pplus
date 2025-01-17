@@ -57,7 +57,7 @@
 %>
 <input type=text size=60 name="pluginURL" required title="<%=intl._t("To install a plugin, enter the download URL:")%>" >
 </td>
-<td align=right>
+<td class=right>
 <input type=submit name=action class="default hideme" value="<%=intl._t("Install Plugin")%>" />
 <input type=submit class=cancel name=foo value="<%=intl._t("Cancel")%>" />
 <input type=submit name=action class=download value="<%=intl._t("Install Plugin")%>" />
@@ -93,7 +93,7 @@
    }
 %>
 </td>
-<td align=right>
+<td class=right>
 <input type=submit name=action class=download title="<%=intl._t("Please supply a valid plugin file")%>" value="<%=intl._t("Install Plugin from File")%>" />
 </td>
 </tr>

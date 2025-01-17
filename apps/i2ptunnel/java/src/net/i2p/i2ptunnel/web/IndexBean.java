@@ -443,14 +443,12 @@ public class IndexBean {
         if (tun != null && tun.getListenPort() != null) {
             String port = tun.getListenPort();
             if (port.length() == 0)
-                return "<font color=red>" + _t("Port not set") + "</font>";
+                return "<span class=ink_warn>" + _t("Port not set") + "</span>";
             int iport = Addresses.getPort(port);
             if (iport == 0)
-                return "<font color=red>" + _t("Invalid port") + ' ' + port + "</font>";
+                return "<span class=ink_warn>" + _t("Invalid port") + ' ' + port + "</span>";
             if (iport < 1024)
-                return "<font color=red title=\"" +
-                       _t("Warning - ports less than 1024 are not recommended") +
-                       "\">" + port + "</font>";
+                return "<span class=ink_warn title=\"" + _t("Warning - ports less than 1024 are not recommended") + "\">" + port + "</span>";
             // dup check, O(n**2)
             List<TunnelController> controllers = _group.getControllers();
             String ifc = tun.getListenOnInterface();
@@ -465,15 +463,15 @@ public class IndexBean {
                         "0.0.0.0".equals(ifc2) ||
                         "0:0:0:0:0:0:0:0".equals(ifc) ||
                         "0:0:0:0:0:0:0:0".equals(ifc2)) {
-                        return "<font color=red>" +
+                        return "<span class=ink_warn>" +
                                _t("Warning - duplicate port") +
-                               ": " + port + "</font>";
+                               ": " + port + "</span>";
                     }
                 }
             }
             return port;
         }
-        return "<font color=red>" + _t("Port not set") + "</font>";
+        return "<span class=ink_warn>" + _t("Port not set") + "</span>";
     }
 
     public String getTunnelType(int tunnel) {
@@ -553,15 +551,15 @@ public class IndexBean {
                 host = tun.getTargetHost();
             String port = tun.getTargetPort();
             if (host == null || host.length() == 0)
-                host = "<font color=red>" + _t("Host not set") + "</font>";
+                host = "<span class=ink_warn>" + _t("Host not set") + "</span>";
             else if (Addresses.getIP(host) == null)
-                host = "<font color=red>" + _t("Invalid address") + ' ' + host + "</font>";
+                host = "<span class=ink_warn>" + _t("Invalid address") + ' ' + host + "</span>";
             else if (host.indexOf(':') >= 0)
                 host = '[' + host + ']';
             if (port == null || port.length() == 0)
-                port = "<font color=red>" + _t("Port not set") + "</font>";
+                port = "<span class=ink_warn>" + _t("Port not set") + "</span>";
             else if (Addresses.getPort(port) == 0)
-                port = "<font color=red>" + _t("Invalid port") + ' ' + port + "</font>";
+                port = "<span class=ink_warn>" + _t("Invalid port") + ' ' + port + "</span>";
             return host + ':' + port;
        }  else
             return "";

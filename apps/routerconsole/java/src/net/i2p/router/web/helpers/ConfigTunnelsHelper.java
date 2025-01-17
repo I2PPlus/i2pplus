@@ -150,37 +150,37 @@ public class ConfigTunnelsHelper extends HelperBase {
             in.getLength() + in.getLengthVariance() <= 0 ||
             out.getLength() <= 0 ||
             out.getLength() + out.getLengthVariance() <= 0) {
-            buf.append("<tbody><tr class=tunnelwarn><th colspan=4><font color=#900>")
+            buf.append("<tbody><tr class=tunnelwarn><th colspan=4>")
                .append(_t("ANONYMITY WARNING - Settings include 0-hop tunnels."))
-               .append("</font></th></tr>\n");
+               .append("</th></tr>\n");
             if (TransportUtil.getIPv6Config(_context, "SSU") == TransportUtil.IPv6Config.IPV6_ONLY) {
-                buf.append("<tr class=tunnelwarn><th colspan=4><font color=#900>")
+                buf.append("<tr class=tunnelwarn><th colspan=4>")
                    .append(_t("WARNING - 0-hop tunnels not recommended for IPv6-only routers."))
-                   .append("</font></th></tr>\n");
+                   .append("</th></tr>\n");
             }
             if ((in.getLength() <= 0 || in.getLength() + in.getLengthVariance() <= 0) &&
                 _context.router().isHidden()) {
-                buf.append("<tr class=tunnelwarn><th colspan=4><font color=#900>")
+                buf.append("<tr class=tunnelwarn><th colspan=4>")
                    .append(_t("WARNING - Inbound 0-hop tunnels not recommended for hidden routers."))
-                   .append("</font></th></tr>\n");
+                   .append("</th></tr>\n");
             }
         } else if (in.getLength() <= 1 ||
             in.getLength() + in.getLengthVariance() <= 1 ||
             out.getLength() <= 1 ||
             out.getLength() + out.getLengthVariance() <= 1) {
-            buf.append("<tr class=tunnelwarn><th colspan=4><font color=#900>")
+            buf.append("<tr class=tunnelwarn><th colspan=4>")
                .append(_t("ANONYMITY WARNING - Settings include 1-hop tunnels."))
-               .append("</font></th></tr>\n");
+               .append("</th></tr>\n");
         }
         if (in.getLength() + Math.abs(in.getLengthVariance()) >= WARN_LENGTH ||
             out.getLength() + Math.abs(out.getLengthVariance()) >= WARN_LENGTH)
-            buf.append("<tr class=tunnelwarn><th colspan=4><font color=#900>")
+            buf.append("<tr class=tunnelwarn><th colspan=4>")
                .append(_t("PERFORMANCE WARNING - Settings include very long tunnels."))
-               .append("</font></th></tr>\n");
+               .append("</th></tr>\n");
         if (in.getTotalQuantity() >= WARN_QUANTITY || out.getTotalQuantity() >= WARN_QUANTITY)
-            buf.append("<tr class=tunnelwarn><th colspan=4><font color=#900>")
+            buf.append("<tr class=tunnelwarn><th colspan=4>")
                .append(_t("PERFORMANCE WARNING - Settings include high tunnel quantities."))
-               .append("</font></th></tr>\n");
+               .append("</th></tr>\n");
 
         buf.append("<tr class=heading><th></th><th class=inbound>").append(_t("Inbound")).append("</th><th class=outbound>")
            .append(_t("Outbound")).append("</th><th class=spacer></th>\n</tr>\n");

@@ -37,7 +37,7 @@
 <h3><%=intl._t("News Updates")%></h3>
 <table id=i2pupdates class=configtable>
 <tr>
-<td align=right>
+<td class=right>
 <b><%=intl._t("News Updates")%>:</b>
 </td>
 <%

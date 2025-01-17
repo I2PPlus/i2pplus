@@ -796,21 +796,21 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                         Hash h2 = ConvertToHash.getHash(ahelperKey);
                                         if (h1 != null && h2 != null) {
                                             String conURL = _context.portMapper().getConsoleURL();
-                                            out.write(("\n<table id=destConflict><tr><th align=center>" +
+                                            out.write(("\n<table id=destConflict><tr><th class=center>" +
                                                        "<a href=\"" + trustedURL + "\">").getBytes("UTF-8"));
                                             out.write(_t("Destination for {0} in addressbook", requestURI.getHost()).getBytes("UTF-8"));
-                                            out.write(("</a></th>\n<th align=center>" +
+                                            out.write(("</a></th>\n<th class=center>" +
                                                        "<a href=\"" + conflictURL + "\">").getBytes("UTF-8"));
                                             out.write(_t("Conflicting address helper destination").getBytes("UTF-8"));
                                             out.write(("</a></th></tr>\n").getBytes("UTF-8"));
                                             if (_context.portMapper().isRegistered(PortMapper.SVC_IMAGEGEN)) {
-                                                out.write(("<tr><td align=center>" +
+                                                out.write(("<tr><td class=center>" +
                                                        "<a href=\"" + trustedURL + "\">" +
                                                        "<img src=\"" +
                                                        conURL + "imagegen/id?s=160&amp;c=" +
                                                        h1.toBase64().replace("=", "%3d") +
                                                       "\" width=160 height=160></a>\n" +
-                                                      "</td>\n<td align=center>" +
+                                                      "</td>\n<td class=center>" +
                                                        "<a href=\"" + conflictURL + "\">" +
                                                        "<img src=\"" +
                                                        conURL + "imagegen/id?s=160&amp;c=" +
@@ -1541,15 +1541,15 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         Writer out = new BufferedWriter(new OutputStreamWriter(outs, "UTF-8"));
         String header = getErrorPage("ahelper-new", ERR_AHELPER_NEW);
         out.write(header);
-        out.write("<table id=proxyNewHost>\n<tr><td align=right>" + _t("Host") +
+        out.write("<table id=proxyNewHost>\n<tr><td class=right>" + _t("Host") +
                 "</td><td>" + idn + "</td></tr>\n");
         try {
             String b32 = Base32.encode(SHA256Generator.getInstance().calculateHash(Base64.decode(ahelperKey)).getData());
-            out.write("<tr><td align=right>" + _t("Base32") + "</td>" +
+            out.write("<tr><td class=right>" + _t("Base32") + "</td>" +
                       "<td><a href=\"http://" + b32 + ".b32.i2p/\">" + b32 + ".b32.i2p</a></td></tr>");
         } catch(Exception e) {}
 
-        out.write("<tr><td align=right>" + _t("Destination") + "</td><td><span id=b64 style=user-select:all>" + ahelperKey +
+        out.write("<tr><td class=right>" + _t("Destination") + "</td><td><span id=b64 style=user-select:all>" + ahelperKey +
                   "</span></td></tr>\n</table>\n" + "<hr>\n" +
 
                   // FIXME if there is a query remaining it is lost

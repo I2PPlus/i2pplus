@@ -37,6 +37,7 @@ td>b{margin-right:5px;display:inline-block;min-width:30px}
 .selectAll{user-select:all}
 .selectAll:hover{background:#003}
 .accesskey{display:none;text-decoration:underline}
+.ink_warn{font-weight:600;color:#d00}
 .nowrap{margin-right:15px;margin-left:10px;white-space:nowrap}
 .nowrap,.nowrap>*{vertical-align:middle}
 .optionsDisabled{cursor:not-allowed}

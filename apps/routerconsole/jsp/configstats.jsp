@@ -36,7 +36,7 @@
     while (statshelper.hasMoreStats()) {
         while (statshelper.groupRequired()) {
 %>
-<tr class=statgroup><th align=left colspan=2 id=<%=statshelper.getCurrentGroupName().replace(" ", "_").replace("[", "").replace("]", "")%>><b><%=statshelper.getCurrentGroupName()%></b></th></tr>
+<tr class=statgroup><th class=left colspan=2 id=<%=statshelper.getCurrentGroupName().replace(" ", "_").replace("[", "").replace("]", "")%>><b><%=statshelper.getCurrentGroupName()%></b></th></tr>
 <tr class=graphableStat><td colspan=2>
 <%
         } // end iterating over required groups for the current stat
@@ -63,7 +63,7 @@
 %>
 </td></tr>
 </tbody>
-<tfoot><tr class=tablefooter><td colspan=2 align=right class=optionsave>
+<tfoot><tr class=tablefooter><td colspan=2 class="optionsave right">
 <input type=reset class=cancel value="<%=intl._t("Cancel")%>">
 <input type=submit name="shouldsave" class=accept value="<%=intl._t("Save changes")%>">
 </td></tr></tfoot>

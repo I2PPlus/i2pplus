@@ -19,6 +19,7 @@ h2,h3,th,.buttons,.newTunnel,.control,label,.infohelp,.infowarn,.nowrap,b,#throt
 hr{display:none}
 ::selection{color:#000;background:#ff0}
 .accesskey{display:none;text-decoration:underline}
+.ink_warn{font-weight:600;color:#d00}
 .selectAll{user-select:all}
 .selectAll:hover{background:#020}
 .statusNotRunning{color:#d00;background:var(--tunnelStopped)}

@@ -38,11 +38,11 @@
 </td>
 </tr>
 <tr>
-<td align=right><b><%=intl._t("Full destination, name, Base32, or hash")%>:</b></td>
+<td class=right><b><%=intl._t("Full destination, name, Base32, or hash")%>:</b></td>
 <td><input type=text name="peer" size=55></td>
 </tr>
 <tr>
-<td align=right><b><%=intl._t("Type")%>:</b></td>
+<td class=right><b><%=intl._t("Type")%>:</b></td>
 <td>
 <select id=encryptMode name="encryptMode" class=selectbox>
 <option title="<%=intl._t("Enter key provided by server operator.")%>" value="1">
@@ -63,15 +63,15 @@
 </td>
 </tr>
 <tr>
-<td align=right><b><%=intl._t("Encryption Key")%>:</b></td>
+<td class=right><b><%=intl._t("Encryption Key")%>:</b></td>
 <td><input type=text size=55 name="key" title="<%=intl._t("Leave blank for DH, will be generated automatically")%>"></td>
 </tr>
 <tr>
-<td align=right><b><%=intl._t("Optional lookup password")%>:</b></td>
+<td class=right><b><%=intl._t("Optional lookup password")%>:</b></td>
 <td><input type=password name="nofilter_blindedPassword" title="<%=intl._t("Set password required to access this service")%>" class="freetext password" /></td>
 </tr>
 <tr>
-<td align=right colspan=2 class=optionsave>
+<td colspan=2 class="optionsave right">
 <input type=reset class=cancel value="<%=intl._t("Cancel")%>" >
 <input type=submit name=action class=add value="<%=intl._t("Add key")%>" >
 </td>

@@ -32,6 +32,7 @@ th{padding:6px 5px 6px 10px;text-align:left;font-size:9.5pt;color:var(--ink_ligh
 th::first-letter{text-transform:uppercase}
 td{padding:5px;vertical-align:middle;border-top:var(--border_softer)}
 td.infohelp{padding:10px 10px 10px 34px;box-shadow:var(--highlight),inset 0 0 1px 1px #ddf;border:var(--border_inner);background:var(--infohelp) no-repeat 8px center/20px}
+.ink_warn{font-weight:600;color:#d00}
 .nowrap,.nowrap>*{vertical-align:middle}
 .nowrap{margin-right:15px;margin-left:10px;white-space:nowrap}
 .required{display:none}

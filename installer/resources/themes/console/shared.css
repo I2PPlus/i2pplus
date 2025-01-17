@@ -7,6 +7,7 @@
 .tOut{background:url(/themes/console/images/outbound.svg) no-repeat 6px center/16px,var(--badge)}
 .toggle:not(.expanded) .tIn,.toggle:not(.expanded) .tOut{min-width:40px;display:inline-block!important}
 .toggleElementsActive .tIn,.toggleElementsActive .tOut{margin:-3px 0;padding:4px 6px 4px 26px;display:inline-block;box-shadow:var(--bevel)}
+.tunnelwarn th{color:#900}
 #advfilter,#tnlfilter{display:inline-block;position:absolute}
 #advfilter button,#tnlfilter button{margin:0 0 0 -24px;padding:5px;display:inline-block;width:24px;height:26px;min-width:0;font-size:0;border:0;box-shadow:none;background:var(--no) no-repeat center center/10px;mix-blend-mode:luminosity}
 #advfilter button:hover,#advfilter input:focus+button,#tnlfilter button:hover,#tnlfilter input:focus+button{mix-blend-mode:normal}

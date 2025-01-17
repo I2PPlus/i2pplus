@@ -31,10 +31,10 @@
 <span class=tab><a href="/tunnelpeercount">Tunnel Count by Peer</a></span>
 <span id=toggleTunnelIds title="<%=intl._t("Toggle Tunnel Ids")%>"></span><span id=toggleTunnels title="<%=intl._t("Toggle Tunnels")%>"></span>
 </div>
-<span id=tunnelsContainer hidden>
+<div id=tunnelsContainer hidden>
 <% tunnelHelper.storeWriter(out); %>
 <jsp:getProperty name="tunnelHelper" property="tunnelSummary" />
-</span>
+</div>
 </div>
 <noscript><style>#toggleTunnels,#toggleTunnelIds{display:none}#tunnelsContainer{display:block}</style></noscript>
 <script src=/js/tunnels.js type=module></script>

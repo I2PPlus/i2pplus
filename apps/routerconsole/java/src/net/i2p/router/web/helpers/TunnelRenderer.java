@@ -230,7 +230,7 @@ class TunnelRenderer {
                             sb.append("<td><span hidden>&ndash;</span></td>");
                         }
                     }
-                    if (from != null) {sb.append("<td><span class=tunnel_peer>").append(netDbLink(from)).append("</span></td>");}
+                    if (from != null) {sb.append("<td><div class=tunnel_peer>").append(netDbLink(from)).append("</div></td>");}
                     else {sb.append("<td><span hidden>&ndash;</span></td>");}
                     long send = cfg.getSendTunnelId();
                     if (isAdvanced) {
@@ -241,7 +241,7 @@ class TunnelRenderer {
                             sb.append("<td><span hidden>&ndash;</span></td>");
                         }
                     }
-                    if (to != null) {sb.append("<td><span class=tunnel_peer>").append(netDbLink(to)).append("</span></td>");}
+                    if (to != null) {sb.append("<td><div class=tunnel_peer>").append(netDbLink(to)).append("</div></td>");}
                     else {sb.append("<td><span hidden>&ndash;</span></td>");}
                     sb.append("</tr>\n");
                 }
@@ -746,7 +746,7 @@ class TunnelRenderer {
                     }
                     buf.append("</td>");
                 } else {
-                    buf.append(" <td><span class=tunnel_peer>").append(netDbLink(peer)).append("</span>");
+                    buf.append(" <td><div class=tunnel_peer>").append(netDbLink(peer)).append("</div>");
                     if (isAdvanced) {
                         buf.append("<span class=tunnel_id title=\"").append(_t("Tunnel identity")).append("\">")
                            .append((id == null ? "" : " " + id)).append("</span>");

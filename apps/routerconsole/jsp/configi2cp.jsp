@@ -101,7 +101,7 @@
     } // !isDisabled
 %>
 <tr>
-<td class=optionsave align=right>
+<td class="optionsave right">
 <input type=submit class=default name=action value="<%=intl._t("Save Interface Configuration")%>" />
 <input type=submit class=cancel name=foo value="<%=intl._t("Cancel")%>" />
 <input type=submit class=accept name=action value="<%=intl._t("Save Interface Configuration")%>" />
