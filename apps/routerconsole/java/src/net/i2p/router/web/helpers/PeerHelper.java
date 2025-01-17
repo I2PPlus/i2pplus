@@ -497,62 +497,56 @@ public class PeerHelper extends HelperBase {
                 appendSortLinks(buf, urlBase, sortFlags, _t("Sort by outbound rate"), FLAG_RATE_OUT);
             }
             buf.append("</th><th class=uptime title=\"").append(_t("Duration of connection to peer")).append("\">")
-               .append("<span class=peersort>").append(_t("Up"));
+               .append("<div class=peersort>").append(_t("Up"));
             if (debugmode) {
                 buf.append("<br>");
                 appendSortLinks(buf, urlBase, sortFlags, _t("Sort by connection uptime"), FLAG_UPTIME);
-                buf.append("</span>");
             }
-            buf.append("</th><th class=skew title=\"").append(_t("Peer's clockskew relative to our clock")).append("\">")
-               .append("<span class=peersort>").append(_t("Skew"));
+            buf.append("</div></th><th class=skew title=\"").append(_t("Peer's clockskew relative to our clock")).append("\">")
+               .append("<div class=peersort>").append(_t("Skew"));
             if (debugmode) {
                 buf.append("<br>");
                 appendSortLinks(buf, urlBase, sortFlags, _t("Sort by clock skew"), FLAG_SKEW);
-                buf.append("</span>");
             }
-            buf.append("</th><th class=tx title=\"").append(_t("Messages sent")).append("\">")
-               .append("<span class=peersort>").append(_t("TX"));
+            buf.append("</div></th><th class=tx title=\"").append(_t("Messages sent")).append("\">")
+               .append("<div class=peersort>").append(_t("TX"));
             if (debugmode) {
                 buf.append("<br>");
                appendSortLinks(buf, urlBase, sortFlags, _t("Sort by packets sent"), FLAG_SEND);
-               buf.append("</span>");
             }
-            buf.append("</th><th class=rx title=\"").append(_t("Messages received")).append("\">")
-               .append("<span class=peersort>").append(_t("RX"));
+            buf.append("</div></th><th class=rx title=\"").append(_t("Messages received")).append("\">")
+               .append("<div class=peersort>").append(_t("RX"));
             if (debugmode) {
                 buf.append("<br>");
                 appendSortLinks(buf, urlBase, sortFlags, _t("Sort by packets received"), FLAG_RECV);
-                buf.append("</span>");
             }
-            buf.append("</th><th class=duptx title=\"").append(_t("Retransmitted packets")).append("\">")
-               .append("<span class=peersort>").append(_t("Dup TX"));
+            buf.append("</div></th><th class=duptx title=\"").append(_t("Retransmitted packets")).append("\">")
+               .append("<div class=peersort>").append(_t("Dup TX"));
             if (debugmode) {
                 buf.append("<br>");
                 appendSortLinks(buf, urlBase, sortFlags, _t("Sort by packets retransmitted"), FLAG_RESEND);
-                buf.append("</span>");
             }
-            buf.append("</th><th class=duprx title=\"").append(_t("Received duplicate packets")).append("\">")
-               .append("<span class=peersort>").append(_t("Dup RX"));
+            buf.append("</div></th><th class=duprx title=\"").append(_t("Received duplicate packets")).append("\">")
+               .append("<div class=peersort>").append(_t("Dup RX"));
             if (debugmode) {
                 buf.append("<br>");
                 appendSortLinks(buf, urlBase, sortFlags, _t("Sort by packets received more than once"), FLAG_DUP);
-                buf.append("</span>");
             }
-            buf.append("</th>");
+            buf.append("</div></th>");
             if (debugmode) {
                 buf.append("<th class=cwnd title=\"").append(_t("Congestion window")).append("\">CWND<br>");
                 appendSortLinks(buf, urlBase, sortFlags, _t("Sort by congestion window"), FLAG_CWND);
                 buf.append("</th><th class=sst title=\"").append(_t("Slow start threshold")).append("\">")
-                   .append("<span class=peersort>SST<br>");
+                   .append("<div class=peersort>SST<br>");
                 appendSortLinks(buf, urlBase, sortFlags, _t("Sort by slow start threshold"), FLAG_SSTHRESH);
-                buf.append("</span></th>\n");
+                buf.append("</div></th>\n");
                 buf.append("<th class=rtt title=\"").append(_t("Round trip time")).append("\">")
-                   .append("<span class=peersort>RTT<br>");
+                   .append("<div class=peersort>RTT<br>");
                 appendSortLinks(buf, urlBase, sortFlags, _t("Sort by round trip time"), FLAG_RTT);
-                buf.append("</span></th><th class=rto title=\"").append(_t("Retransmission timeout")).append("\">")
-                   .append("<span class=peersort>RTO<br>");
+                buf.append("</div></th><th class=rto title=\"").append(_t("Retransmission timeout")).append("\">")
+                   .append("<div class=peersort>RTO<br>");
                 appendSortLinks(buf, urlBase, sortFlags, _t("Sort by retransmission timeout"), FLAG_RTO);
-                buf.append("</span></th>\n");
+                buf.append("</div></th>\n");
                 buf.append("<th class=mtu title=\"").append(_t("Maximum transmission unit")).append("\">MTU<br>");
                 appendSortLinks(buf, urlBase, sortFlags, _t("Sort by outbound maximum transmit unit"), FLAG_MTU);
                 buf.append("</th>");
