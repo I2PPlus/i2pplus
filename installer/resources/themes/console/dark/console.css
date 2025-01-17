@@ -2741,7 +2741,7 @@ body.hasExpandedElement #configinfo tr.config:not(.expanded) th{color:#770;trans
 #webhosting #guides li a{padding-left:22px}
 
 /* lazy loading */
-body:not(.ready) .lazy{display:none}
+body:not(#homepage):not(.ready) .lazy{display:none}
 .lazy.lazyhide,.lazy.lazyhide td{opacity:0;contain:strict}
 .newsentry.lazyhide{contain:none}
 .newsentry.lazyshow{transition:ease opacity .15s}

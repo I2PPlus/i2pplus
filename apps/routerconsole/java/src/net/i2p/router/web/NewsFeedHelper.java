@@ -26,17 +26,9 @@ public class NewsFeedHelper extends HelperBase {
     /**
      *  @param limit less than or equal to zero means all
      */
-    public void setLimit(int limit) {
-        _limit = limit;
-    }
-
-    public void setStart(int start) {
-        _start = start;
-    }
-
-    public String getEntries() {
-        return getEntries(_context, _start, _limit, 0);
-    }
+    public void setLimit(int limit) {_limit = limit;}
+    public void setStart(int start) {_start = start;}
+    public String getEntries() {return getEntries(_context, _start, _limit, 0);}
 
     /**
      *  @param max less than or equal to zero means all
@@ -44,8 +36,7 @@ public class NewsFeedHelper extends HelperBase {
      *  @return non-null, "" if none
      */
     static String getEntries(I2PAppContext ctx, int start, int max, long ageLimit) {
-        if (max <= 0)
-            max = Integer.MAX_VALUE;
+        if (max <= 0) {max = Integer.MAX_VALUE;}
         StringBuilder buf = new StringBuilder(512);
         List<NewsEntry> entries = Collections.emptyList();
         ClientAppManager cmgr = ctx.clientAppManager();
@@ -56,11 +47,10 @@ public class NewsFeedHelper extends HelperBase {
                 NewsEntry init = nmgr.getInitialNews();
                 if (init != null) {
                     // crude check to see if it's already in there
-                    if (entries.size() != 1 || !DataHelper.eq(entries.get(0).title, init.title))
-                        if (entries.isEmpty())
-                            entries = Collections.singletonList(init);  // in case it was an emtpyList
-                        else
-                            entries.add(init);
+                    if (entries.size() != 1 || !DataHelper.eq(entries.get(0).title, init.title)) {
+                        if (entries.isEmpty()) {entries = Collections.singletonList(init);} // in case of empty list
+                        else {entries.add(init);}
+                    }
                 }
             }
         }
@@ -70,36 +60,29 @@ public class NewsFeedHelper extends HelperBase {
             fmt.setTimeZone(SystemVersion.getSystemTimeZone(ctx));
             int i = 0;
             for (NewsEntry entry : entries) {
-                if (i < start)
-                    continue;
-                if (i > start && entry.updated > 0 && ageLimit > 0 &&
-                    entry.updated < ctx.clock().now() - ageLimit)
-                    break;
+                if (i < start) {continue;}
+                if (i > start && entry.updated > 0 && ageLimit > 0 && entry.updated < ctx.clock().now() - ageLimit) {break;}
                 buf.append("<div class=\"newsentry lazy\">\n<h3>");
                 if (entry.updated > 0) {
                     Date date = new Date(entry.updated);
-                    buf.append("<span class=\"newsDate\">")
-                       .append(fmt.format(date).replace("-", " "))
-                       .append("</span> ");
+                    buf.append("<span class=\"newsDate\">").append(fmt.format(date).replace("-", " ")).append("</span> ");
                 }
-                if (entry.link != null)
+                if (entry.link != null) {
                     buf.append("<a href=\"").append(DataHelper.escapeHTML(entry.link)).append("\" target=_blank>");
+                }
                 buf.append(entry.title);
-                if (entry.link != null)
-                    buf.append("</a>");
+                if (entry.link != null) {buf.append("</a>");}
                 if (entry.authorName != null) {
-                                                              // FIXME translate
                     buf.append(" <span class=\"newsAuthor\" title=\"Post author\"><i>")
-                       .append(DataHelper.escapeHTML(entry.authorName))
-                       .append("</i></span>\n");
+                       .append(DataHelper.escapeHTML(entry.authorName)).append("</i></span>\n");
                 }
                 buf.append("</h3>\n<div class=\"newscontent\">\n")
                    .append(entry.content.replace("<a href", "<a target=_blank href").replace("target=_blank>", ">"))
                    .append("\n</div>\n</div>\n");
-                if (++i >= start + max)
-                    break;
+                if (++i >= start + max) {break;}
             }
         }
         return buf.toString();
     }
+
 }
