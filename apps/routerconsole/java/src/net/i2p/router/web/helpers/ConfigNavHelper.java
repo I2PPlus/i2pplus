@@ -60,48 +60,30 @@ public class ConfigNavHelper extends HelperBase {
      */
     public void renderNavBar(String requestURI, boolean graphical) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
-        boolean span = graphical;
-        if (!span)
-            buf.append("<center>");
-        else {
-            buf.append("<link rel=stylesheet href=/themes/console/confignav.css>\n");
-        }
+        buf.append("<link rel=stylesheet href=/themes/console/confignav.css>\n");
         List<Tab> tabs = new ArrayList<Tab>(pages.length);
         boolean hidePlugins = !PluginStarter.pluginsEnabled(_context);
         for (int i = 0; i < pages.length; i++) {
-            if (hidePlugins && pages[i].equals("plugins"))
-                continue;
+            if (hidePlugins && pages[i].equals("plugins")) {continue;}
             tabs.add(new Tab(pages[i], _t(titles[i])));
         }
         Collections.sort(tabs, new TabComparator());
         for (int i = 0; i < tabs.size(); i++) {
             String page = "config" + tabs.get(i).page;
             String id = page;
-            if (id.equals("config")) {
-                id += "bandwidth";
-            }
+            if (id.equals("config")) {id += "bandwidth";}
             id = id.replace("config", "nav_");
-            if (requestURI.endsWith(page) || requestURI.endsWith(page + ".jsp")) {
-                // we are there
-                if (span)
-                    buf.append("<span id=" + id + " class=tab2>");
-                buf.append(tabs.get(i).title);
+            if (requestURI.endsWith(page) || requestURI.endsWith(page + ".jsp")) {// we are there
+                buf.append("<span id=" + id + " class=tab2>").append(tabs.get(i).title);
             } else {
                 // we are not there, make a link
-                if (span)
-                    buf.append("<span id=" + id + " class=tab title=\"" + tabs.get(i).title + "\">");
-                if (page.equals("configembed")) {
-                    page = "embed";
-                }
+                buf.append("<span id=" + id + " class=tab title=\"" + tabs.get(i).title + "\">");
+                if (page.equals("configembed")) {page = "embed";}
                 buf.append("<a href=\"").append(page).append("\">").append(tabs.get(i).title).append("</a>");
             }
-            if (span)
-                buf.append("</span>\n");
-            else if (i != pages.length - 1)
-                buf.append("&nbsp;&nbsp;\n");
+            buf.append("</span>\n");
         }
-        if (!span)
-            buf.append("</center>");
         _out.write(buf.toString());
     }
+
 }

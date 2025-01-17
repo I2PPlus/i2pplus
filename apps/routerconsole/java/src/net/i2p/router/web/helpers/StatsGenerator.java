@@ -25,9 +25,7 @@ import net.i2p.stat.RateStat;
 public class StatsGenerator {
     private final RouterContext _context;
 
-    public StatsGenerator(RouterContext context) {
-        _context = context;
-    }
+    public StatsGenerator(RouterContext context) {_context = context;}
 
     public void generateStatsPage(Writer out, boolean showAll) throws IOException {
         StringBuilder buf = new StringBuilder(16*1024);
@@ -178,9 +176,9 @@ public class StatsGenerator {
                    .append("</span> &bullet; ");
                 } else {buf.append("</span>");}
 
-                buf.append(_t("Events in this period")).append(" (").append(_t("ended {0} ago", DataHelper.formatDuration2(now - curRate.getLastCoalesceDate())));
-                buf.append("): <span class=statvalue>").append((int)curRate.getLastEventCount()).append("</span>");
-                buf.append("</span>");
+                buf.append(_t("Events in this period"))
+                   .append(" (").append(_t("ended {0} ago", DataHelper.formatDuration2(now - curRate.getLastCoalesceDate()))).append("): ")
+                   .append("<span class=statvalue>").append((int)curRate.getLastEventCount()).append("</span>").append("</span>");
             } else {buf.append(" <i>").append(_t("No events")).append(" </i>");}
 
             if (curRate.getSummaryListener() != null) {
@@ -188,8 +186,8 @@ public class StatsGenerator {
                    .append('.').append(periods[i]).append("&amp;w=600&amp;h=200\">").append(_t("Graph Data")).append("</a> ")
                    .append(" <a class=graphstat href=\"graph?stat=").append(name.replace(" ", "%20")).append('.').append(periods[i])
                    .append("&amp;w=600&amp;h=200&amp;showEvents=true\">").append(_t("Graph Event Count")).append("</a> ")
-                   .append(" <a class=graphstat href=\"/viewstat.jsp?stat=").append(name).append("&amp;period=").append(periods[i])
-                   .append("&amp;format=xml\" download=\"graphdata_").append(name.replace(".", "_").replace(" ", "_")).append(".xml\">")
+                   .append(" <a class=graphstat href=\"/viewstat.jsp?stat=").append(name.replace(" ", "%20")).append("&amp;period=").append(periods[i])
+                   .append("&amp;format=xml\" download=\"graphdata_").append(name.replace(".", "_").replace("%20", "s")).append(".xml\">")
                    .append(_t("Export Data as XML")).append("</a>").append("</span>");
             }
             buf.append("</li>\n");
@@ -221,7 +219,7 @@ public class StatsGenerator {
             String lname = _t(lhs);
             String rname = _t(rhs);
 
-            // put the router sections at the top of the page
+            // put the Router sections at the top of the page
             boolean lrouter = lname.equals("Router");
             boolean rrouter = rname.equals("Router");
             if (lrouter && !rrouter) {return -1;}

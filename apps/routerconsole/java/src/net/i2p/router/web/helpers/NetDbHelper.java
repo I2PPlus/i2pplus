@@ -354,8 +354,6 @@ public class NetDbHelper extends FormHandler {
     private void renderNavBar() throws IOException {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<div class=confignav id=confignav>");
-        boolean span = _graphical;
-        if (!span) {buf.append("<center>");}
         int tab = getTab();
         for (int i = 0; i < titles.length; i++) {
             if (i == 1) {
@@ -374,16 +372,13 @@ public class NetDbHelper extends FormHandler {
             }
             if (i == 10 || i == 11 || _context.netDb().getRouters().size() == 0) {continue;}
             if (i == tab) { // we are there
-                if (span) {buf.append("<span class=tab2>");}
-                buf.append(_t(titles[i]));
+                buf.append("<span class=tab2>").append(_t(titles[i]));
             } else { // we are not there, make a link
-                if (span) {buf.append("<span class=tab>");}
-                buf.append("<a href=\"netdb").append(links[i]).append("\">").append(_t(titles[i])).append("</a>");
+                buf.append("<span class=tab>").append("<a href=\"netdb")
+                   .append(links[i]).append("\">").append(_t(titles[i])).append("</a>");
             }
-            if (span) {buf.append("</span>\n");}
-            else if (i != titles.length - 1) {buf.append("&nbsp;&nbsp;\n");}
+            buf.append("</span>\n");
         }
-        if (!span) {buf.append("</center>");}
         buf.append("</div>\n");
         _out.write(buf.toString());
     }

@@ -107,21 +107,15 @@ public class ProfilesHelper extends HelperBase {
     private void renderNavBar() throws IOException {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<div class=confignav id=confignav>");
-        boolean span = _graphical;
-        if (!span) {buf.append("<center>");}
         int tab = getTab();
         for (int i = 0; i < titles.length; i++) {
-            if (i == tab) { // we are there
-                if (span) {buf.append("<span class=tab2>");}
-                buf.append(_t(titles[i]));
-            } else { // we are not there, make a link
-                if (span) {buf.append("<span class=tab>");}
-                buf.append("<a href=\"profiles").append(links[i]).append("\">").append(_t(titles[i])).append("</a>");
+            if (i == tab) {buf.append("<span class=tab2>").append(_t(titles[i]));} // we are there
+            else { // we are not there, make a link
+                buf.append("<span class=tab>").append("<a href=\"profiles")
+                   .append(links[i]).append("\">").append(_t(titles[i])).append("</a>");
             }
-            if (span) {buf.append("</span>\n");}
-            else if (i != titles.length - 1) {buf.append("&nbsp;&nbsp;\n");}
+            buf.append("</span>\n");
         }
-        if (!span) {buf.append("</center>");}
         buf.append("</div>\n");
         _out.write(buf.toString());
     }
