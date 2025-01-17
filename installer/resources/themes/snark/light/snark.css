@@ -3,6 +3,7 @@
 /* Author: dr|z3d */
 /* Thanks to http://www.luxphile.com/2011/01/creative-commons-cat.html for the kitty image */
 
+@import url(../shared.css);
 @import url(/themes/console/light/global.css);
 @import url(/i2psnark/.res/linkToggle.css);
 

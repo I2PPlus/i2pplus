@@ -1,6 +1,7 @@
 /* I2PSnark theme "Midnight" */
 /* Author: dr|z3d */
 
+@import url(../shared.css);
 @import url(/themes/console/midnight/global.css);
 @import url(/i2psnark/.res/linkToggle.css);
 

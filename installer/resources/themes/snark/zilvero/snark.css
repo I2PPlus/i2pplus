@@ -2,6 +2,7 @@
 /* Author: dr|z3d */
 /* Copyright 2018 and beyond */
 
+@import url(../shared.css);
 @import url(/i2psnark/.res/linkToggle.css);
 
 :root{
@@ -168,7 +169,7 @@ textarea[name="nofilter_newComment"]:focus{min-height:64px;box-shadow:inset 0 0 
 .nav_tracker:hover,.nav_tracker:focus{background:var(--b_tracker_hover) no-repeat 10px center/16px,var(--btn_hover)}
 .nav_tracker:active,.nav_tracker.depress{background:var(--b_tracker_active) no-repeat 10px center/16px,var(--btn_active)}
 #navbar,table,#screenlog{border:var(--border);background:#eee}
-#navbar{margin-bottom:-1px;padding:5px;font-size:11pt}
+#navbar{margin-bottom:-1px;padding:5px;text-align:center;font-size:11pt}
 .iframed #navbar{margin:0 -1px;padding:5px 5px 4px}
 #navbar a:hover{color:var(--a)}
 #navbar a:active,#navbar a.depress,.toggleview:active,.toggleview.depress,#filterBar .filter:active,#filterBar .filter.depress{color:#bbb}

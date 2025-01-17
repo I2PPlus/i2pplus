@@ -1,6 +1,7 @@
 /* I2PSnark theme "Camo" aka Dark */
 /* Author: dr|z3d */
 
+@import url(../shared.css);
 @import url(/themes/console/dark/global.css);
 @import url(/i2psnark/.res/linkToggle.css);
 
