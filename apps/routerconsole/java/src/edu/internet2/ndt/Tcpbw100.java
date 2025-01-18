@@ -117,7 +117,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     JButton _buttonDetailsCopy, _buttonStatsCopy;
     JButton _buttonDetails;
     JButton _buttonStatistics;
-    JButton _buttonMailTo;
     JButton _buttonOptions;
     JCheckBox _chkboxDefaultTest, _chkboxPreferIPv6;
     JSpinner _spinnerTestCount = new JSpinner();
@@ -144,8 +143,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     int _iPkts, _iLength = NDTConstants.PREDEFINED_BUFFER_SIZE, _iCurrentRTO;
     int _iC2sData, _iC2sAck, _iS2cData, _iS2cAck;
     String _sServerType = "web100"; // Lowercase string either web100 or web10g used to select Message based upon server type
-    protected URL _targetURL; // added for mailto url
-    String _sEmailText;
     double _dS2cspd, _dC2sspd, _dSc2sspd, _dSs2cspd;
     int _iSsndqueue;
     double _dSbytes;
@@ -435,7 +432,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             _buttonStartTest.setEnabled(false);
             _buttonDetails.setEnabled(false);
             _buttonStatistics.setEnabled(false);
-            _buttonMailTo.setEnabled(false);
             _buttonOptions.setEnabled(false);
             _spinnerTestCount.setEnabled(false);
 
@@ -483,14 +479,9 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                     // so that user can view details of results
                     _buttonDetails.setEnabled(true);
                     _buttonStatistics.setEnabled(true);
-                    _buttonMailTo.setEnabled(true);
                     _buttonOptions.setEnabled(true);
-                    _txtStatistics.append("\n** "
-                            + _resBundDisplayMsgs.getString("test") + " "
-                            + testNo + " **\n");
-                    _txtDiagnosis.append("\n** "
-                            + _resBundDisplayMsgs.getString("test") + " "
-                            + testNo + " **\n");
+                    _txtStatistics.append("\n** " + _resBundDisplayMsgs.getString("test") + " " + testNo + " **\n");
+                    _txtDiagnosis.append("\n** " + _resBundDisplayMsgs.getString("test") + " " + testNo + " **\n");
 
                     // Now, sleep for some time based on user's choice before running the next iteration of the test suite
                     try {
@@ -548,7 +539,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             // Enable all buttons. Continue activities to mark status as complete
             _buttonDetails.setEnabled(true);
             _buttonStatistics.setEnabled(true);
-            _buttonMailTo.setEnabled(true);
             _buttonOptions.setEnabled(true);
             _spinnerTestCount.setEnabled(true);
             showStatus(_resBundDisplayMsgs.getString("done2"));
@@ -640,18 +630,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         _buttonStatistics.addActionListener(this);
         if (getParameter("disableStatistics") == null) {buttonsPanel.add(_buttonStatistics);}
         _buttonStatistics.setEnabled(false);
-
-        // Add "Details" button
-        _buttonDetails = new JButton(_resBundDisplayMsgs.getString("moreDetails"));
-        _buttonDetails.addActionListener(this);
-        if (getParameter("disableDetails") == null) {buttonsPanel.add(_buttonDetails);}
-        _buttonDetails.setEnabled(false);
-
-        // Add "Report problem" button
-        _buttonMailTo = new JButton(_resBundDisplayMsgs.getString("reportProblem"));
-        _buttonMailTo.addActionListener(this);
-        if (getParameter("disableMailto") == null) {buttonsPanel.add(_buttonMailTo);}
-        _buttonMailTo.setEnabled(false);
 
         // Add "Options" button
         _buttonOptions = new JButton(_resBundDisplayMsgs.getString("options") + "...");
@@ -873,41 +851,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             // enable copy button only if there is statistics informations
             if (NDTUtils.isNotEmpty(_txtStatistics.getText())) {_buttonStatsCopy.setEnabled(true);}
         } else if (source == _chkboxPreferIPv6) {setsHostName(sHostName);} // prefer IPv6 checkbox
-        // mail to functionality
-        else if (source == _buttonMailTo) {
-            String sName, sHost;
-            showStatus(_resBundDisplayMsgs.getString("invokingMailtoFunction") + "..."); // invoke mailto: function
-            _resultsTxtPane.append(_resBundDisplayMsgs.getString("generatingReport") + "\n");
-            try {
-                // user
-                if ((sName = getParameter(NDTConstants.TARGET1)) == null) {
-                    throw new IllegalArgumentException("U parameter Required:");
-                }
-
-                // host name
-                if ((sHost = getParameter(NDTConstants.TARGET2)) == null) {
-                    throw new IllegalArgumentException("H parameter Required:");
-                }
-
-                String sSubject = getParameter("subject"); // get subject
-                if (sSubject == null) {
-                    sSubject = _resBundDisplayMsgs.getString("troubleReportFrom") + " " + getCodeBase().getHost();
-                }
-
-                String sBody = _resBundDisplayMsgs.getString("comments") + ":\n\n" + _sEmailText + "\n\n" + _resBundDisplayMsgs.getString("endOfEmail");
-                String sUrl = NDTUtils.mailTo(sName, sHost, sSubject, sBody);
-                _targetURL = new URL(sUrl);
-                getAppletContext().showDocument(_targetURL);
-            } catch (Exception e) {
-                String sMessage = NDTUtils.isEmpty(e.getMessage())
-                        ? _resBundDisplayMsgs.getString("withoutMessage")
-                        : e.getMessage();
-
-                _sErrMsg = _resBundDisplayMsgs.getString("unexpectedException") + " (" + e.getClass().getName() + "): " + sMessage + "\n";
-                _log.warn(_sErrMsg, e);
-                _resultsTxtPane.append(_sErrMsg);
-            }
-        } // end mail-to functionality
     } // actionPerformed()
 
     /**
@@ -973,7 +916,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             showStatus(_resBundDisplayMsgs.getString("middleboxTest"));
             _resultsTxtPane.append(_resBundDisplayMsgs.getString("checkingMiddleboxes") + "  ");
             _txtStatistics.append(_resBundDisplayMsgs.getString("checkingMiddleboxes") + "  ");
-            _sEmailText = _resBundDisplayMsgs.getString("checkingMiddleboxes") + "  ";
             pub_status = "checkingMiddleboxes";
 
             // If reading socket was not successful, then declare middlebox test
@@ -1139,7 +1081,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             // Report status as "complete"
             _resultsTxtPane.append(_resBundDisplayMsgs.getString("done") + "\n");
             _txtStatistics.append(_resBundDisplayMsgs.getString("done") + "\n");
-            _sEmailText += _resBundDisplayMsgs.getString("done") + "\n%0A";
 
             // interpret results
             middleboxResults(_sMidBoxTestResult);
@@ -1166,7 +1107,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             showStatus(_resBundDisplayMsgs.getString("sfwTest"));
             _resultsTxtPane.append(_resBundDisplayMsgs.getString("checkingFirewalls") + "  ");
             _txtStatistics.append(_resBundDisplayMsgs.getString("checkingFirewalls") + "  ");
-            _sEmailText = _resBundDisplayMsgs.getString("checkingFirewalls") + "  ";
             pub_status = "checkingFirewalls";
 
             // Message received in error?
@@ -1301,7 +1241,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             // Conclude by updatng status as "complete" on GUI window
             _resultsTxtPane.append(_resBundDisplayMsgs.getString("done") + "\n");
             _txtStatistics.append(_resBundDisplayMsgs.getString("done") + "\n");
-            _sEmailText += _resBundDisplayMsgs.getString("done") + "\n%0A";
         }
 
         // completed the SFW test, hence return false
@@ -1327,7 +1266,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             showStatus(_resBundDisplayMsgs.getString("outboundTest"));
             _resultsTxtPane.append(_resBundDisplayMsgs.getString("runningOutboundTest") + " ");
             _txtStatistics.append(_resBundDisplayMsgs.getString("runningOutboundTest") + " ");
-            _sEmailText += _resBundDisplayMsgs.getString("runningOutboundTest") + " ";
             pub_status = "runningOutboundTest";
 
             if (paramProtoObj.recv_msg(msg) != NDTConstants.PROTOCOL_MSG_READ_SUCCESS) { // msg receive/read error
@@ -1481,11 +1419,9 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             if (_dSc2sspd < 1.0) {
                 _resultsTxtPane.append(NDTUtils.prtdbl(_dSc2sspd * NDTConstants.KILO) + "kb/s\n");
                 _txtStatistics.append(NDTUtils.prtdbl(_dSc2sspd * NDTConstants.KILO) + "kb/s\n");
-                _sEmailText += NDTUtils.prtdbl(_dSc2sspd * NDTConstants.KILO) + "kb/s\n%0A";
             } else {
                 _resultsTxtPane.append(NDTUtils.prtdbl(_dSc2sspd) + "Mb/s\n");
                 _txtStatistics.append(NDTUtils.prtdbl(_dSc2sspd) + "Mb/s\n");
-                _sEmailText += NDTUtils.prtdbl(_dSc2sspd) + "Mb/s\n%0A";
             }
 
             // Expose upload speed to JavaScript clients
@@ -1527,7 +1463,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             showStatus(_resBundDisplayMsgs.getString("inboundTest"));
             _resultsTxtPane.append(_resBundDisplayMsgs.getString("runningInboundTest") + " ");
             _txtStatistics.append(_resBundDisplayMsgs.getString("runningInboundTest") + " ");
-            _sEmailText += _resBundDisplayMsgs.getString("runningInboundTest") + " ";
             pub_status = "runningInboundTest";
 
             // Server sends TEST_PREPARE with port to bind to as message body
@@ -1661,11 +1596,9 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             if (_dS2cspd < 1.0) {
                 _resultsTxtPane.append(NDTUtils.prtdbl(_dS2cspd * NDTConstants.KILO) + "kb/s\n");
                 _txtStatistics.append(NDTUtils.prtdbl(_dS2cspd * NDTConstants.KILO) + "kb/s\n");
-                _sEmailText += NDTUtils.prtdbl(_dS2cspd * NDTConstants.KILO) + "kb/s\n%0A";
             } else {
                 _resultsTxtPane.append(NDTUtils.prtdbl(_dS2cspd) + "Mb/s\n");
                 _txtStatistics.append(NDTUtils.prtdbl(_dS2cspd) + "Mb/s\n");
-                _sEmailText += NDTUtils.prtdbl(_dS2cspd) + "Mb/s\n%0A";
             }
 
             // Expose download speed to JavaScript clients
@@ -1744,7 +1677,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             showStatus(_resBundDisplayMsgs.getString("metaTest"));
             _resultsTxtPane.append(_resBundDisplayMsgs.getString("sendingMetaInformation") + " ");
             _txtStatistics.append(_resBundDisplayMsgs.getString("sendingMetaInformation") + " ");
-            _sEmailText += _resBundDisplayMsgs.getString("sendingMetaInformation") + " ";
             pub_status = "sendingMetaInformation";
 
             // Server starts with a TEST_PREPARE message.
@@ -1807,7 +1739,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             // Display status as "complete"
             _resultsTxtPane.append(_resBundDisplayMsgs.getString("done") + "\n");
             _txtStatistics.append(_resBundDisplayMsgs.getString("done") + "\n");
-            _sEmailText += _resBundDisplayMsgs.getString("done") + "\n%0A";
         }
 
         // completed tests
@@ -2276,12 +2207,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             _log.warn("Unable to obtain local IP address: using 127.0.0.1", e);
         }
 
-        try {
-            _sEmailText += _resBundDisplayMsgs.getString("client") + ": " + InetAddress.getLocalHost() + "\n%0A";
-        } catch (SecurityException e) {
-            _sEmailText += _resBundDisplayMsgs.getString("client") + ": " + "127.0.0.1" + "\n%0A";
-        }
-
         // Final cleanup steps after completion of tests
         protocolObj.close();
         ctlSocket.close();
@@ -2353,7 +2278,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             else {
                 sStrval = tokens.nextToken();
                 _txtDiagnosis.append(sSysvar + " " + sStrval + "\n");
-                _sEmailText += sSysvar + " " + sStrval + "\n%0A";
 
                 //check if it's save anywhere after parse
                 if (isValueSave(sSysvar)) {
@@ -2421,7 +2345,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
                     // Data collected was not sufficient to determine bottleneck type
                     _resultsTxtPane.append(_resBundDisplayMsgs.getString("unableToDetectBottleneck") + "\n");
-                    _sEmailText += "Server unable to determine bottleneck link type.\n%0A";
                     pub_AccessTech = "Connection type unknown";
 
                 } else {
@@ -2433,75 +2356,59 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                             + " "
                             + _resBundDisplayMsgs.getString("connectedTo")
                             + " ");
-                    _sEmailText += _resBundDisplayMsgs.getString("your") + " "
-                            + sClient + " "
-                            + _resBundDisplayMsgs.getString("connectedTo")
-                            + " ";
                     if (_iC2sData == NDTConstants.DATA_RATE_DIAL_UP) {
 
                         _resultsTxtPane.append(_resBundDisplayMsgs.getString("dialup") + "\n");
-                        _sEmailText += _resBundDisplayMsgs.getString("dialup") + "\n%0A";
                         mylink = .064; // 64 kbps speed
                         pub_AccessTech = "Dial-up Modem";
                     } else {
                         _resultsTxtPane.append(_resBundDisplayMsgs.getString("cabledsl") + "\n");
-                        _sEmailText += _resBundDisplayMsgs.getString("cabledsl") + "\n%0A";
                         mylink = 3;
                         pub_AccessTech = "Cable/DSL modem";
                     }
                 }
             } else {
                 _resultsTxtPane.append(_resBundDisplayMsgs.getString("theSlowestLink") + " ");
-                _sEmailText += _resBundDisplayMsgs.getString("theSlowestLink") + " ";
                 switch (_iC2sData) {
                 case NDTConstants.DATA_RATE_ETHERNET:
                     _resultsTxtPane.append(_resBundDisplayMsgs.getString("10mbps") + "\n");
-                    _sEmailText += _resBundDisplayMsgs.getString("10mbps") + "\n%0A";
                     mylink = 10;
                     pub_AccessTech = "10 Mbps Ethernet";
                     break;
                 case NDTConstants.DATA_RATE_T3:
                     _resultsTxtPane.append(_resBundDisplayMsgs.getString("45mbps") + "\n");
-                    _sEmailText += _resBundDisplayMsgs.getString("45mbps") + "\n%0A";
                     mylink = 45;
                     pub_AccessTech = "45 Mbps T3/DS3 subnet";
                     break;
                 case NDTConstants.DATA_RATE_FAST_ETHERNET:
                     _resultsTxtPane.append("100 Mbps ");
-                    _sEmailText += "100 Mbps ";
                     mylink = 100;
                     pub_AccessTech = "100 Mbps Ethernet";
 
                     //Fast Ethernet. Determine if half/full duplex link was found
                     if (half_duplex == 0) {
                         _resultsTxtPane.append(_resBundDisplayMsgs.getString("fullDuplex") + "\n");
-                        _sEmailText += _resBundDisplayMsgs.getString("fullDuplex") + "\n%0A";
                     } else {
                         _resultsTxtPane.append(_resBundDisplayMsgs.getString("halfDuplex") + "\n");
-                        _sEmailText += _resBundDisplayMsgs.getString("halfDuplex") + "\n%0A";
                     }
                     break;
                 case NDTConstants.DATA_RATE_OC_12:
                     _resultsTxtPane.append(_resBundDisplayMsgs.getString("622mbps") + "\n");
-                    _sEmailText += _resBundDisplayMsgs.getString("622mbps") + "\n%0A";
                     mylink = 622;
                     pub_AccessTech = "622 Mbps OC-12";
                     break;
                 case NDTConstants.DATA_RATE_GIGABIT_ETHERNET:
                     _resultsTxtPane.append(_resBundDisplayMsgs.getString("1gbps") + "\n");
-                    _sEmailText += _resBundDisplayMsgs.getString("1gbps") + "\n%0A";
                     mylink = 1000;
                     pub_AccessTech = "1.0 Gbps Gigabit Ethernet";
                     break;
                 case NDTConstants.DATA_RATE_OC_48:
                     _resultsTxtPane.append(_resBundDisplayMsgs.getString("2.4gbps") + "\n");
-                    _sEmailText += _resBundDisplayMsgs.getString("2.4gbps") + "\n%0A";
                     mylink = 2400;
                     pub_AccessTech = "2.4 Gbps OC-48";
                     break;
                 case NDTConstants.DATA_RATE_10G_ETHERNET:
                     _resultsTxtPane.append(_resBundDisplayMsgs.getString("10gbps") + "\n");
-                    _sEmailText += _resBundDisplayMsgs.getString("10gbps") + "\n%0A";
                     mylink = 10000;
                     pub_AccessTech = "10 Gigabit Ethernet/OC-192";
                     break;
@@ -2515,36 +2422,28 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             switch (mismatch) {
             case NDTConstants.DUPLEX_NOK_INDICATOR: //1
                 _resultsTxtPane.append(_resBundDisplayMsgs.getString("oldDuplexMismatch") + "\n");
-                _sEmailText += _resBundDisplayMsgs.getString("oldDuplexMismatch") + "\n%0A";
                 break;
             case NDTConstants.DUPLEX_SWITCH_FULL_HOST_HALF:
                 _resultsTxtPane.append(_resBundDisplayMsgs.getString("duplexFullHalf") + "\n");
-                _sEmailText += _resBundDisplayMsgs.getString("duplexFullHalf") + "\n%0A";
                 break;
             case NDTConstants.DUPLEX_SWITCH_HALF_HOST_FULL:
                 _resultsTxtPane.append(_resBundDisplayMsgs.getString("duplexHalfFull") + "\n");
-                _sEmailText += _resBundDisplayMsgs.getString("duplexHalfFull") + "\n%0A";
                 break;
             case NDTConstants.DUPLEX_SWITCH_FULL_HOST_HALF_POSS:
                 _resultsTxtPane.append(_resBundDisplayMsgs.getString("possibleDuplexFullHalf") + "\n");
-                _sEmailText += _resBundDisplayMsgs.getString("possibleDuplexFullHalf") + "\n%0A";
                 break;
             case NDTConstants.DUPLEX_SWITCH_HALF_HOST_FULL_POSS:
                 _resultsTxtPane.append(_resBundDisplayMsgs.getString("possibleDuplexHalfFull") + "\n");
-                _sEmailText += _resBundDisplayMsgs.getString("possibleDuplexHalfFull") + "\n%0A";
                 break;
             case NDTConstants.DUPLEX_SWITCH_HALF_HOST_FULL_WARN:
                 _resultsTxtPane.append(_resBundDisplayMsgs.getString("possibleDuplexHalfFullWarning") + "\n");
-                _sEmailText += _resBundDisplayMsgs.getString("possibleDuplexHalfFullWarning") + "\n%0A";
                 break;
             case NDTConstants.DUPLEX_OK_INDICATOR:
                 if (bad_cable == 1) {
                     _resultsTxtPane.append(_resBundDisplayMsgs.getString("excessiveErrors") + "\n");
-                    _sEmailText += _resBundDisplayMsgs.getString("excessiveErrors") + "\n%0A";
                 }
                 if (congestion == 1) {
                     _resultsTxtPane.append(_resBundDisplayMsgs.getString("otherTraffic") + "\n");
-                    _sEmailText += _resBundDisplayMsgs.getString("otherTraffic") + "\n%0A";
                 }
 
                 // We seem to be transmitting less than link speed possibly due
@@ -2565,11 +2464,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                                 + NDTUtils.prtdbl(j)
                                 + _resBundDisplayMsgs.getString("toMaximizeThroughput")
                                 + " \n");
-                        _sEmailText += _resBundDisplayMsgs.getString("receiveBufferShouldBe")
-                                + " "
-                                + NDTUtils.prtdbl(j)
-                                + _resBundDisplayMsgs.getString("toMaximizeThroughput")
-                                + "\n%0A";
                     }
                 }
                 break;
@@ -2675,117 +2569,69 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                 break;
             }
 
-            // Add decisions about duplex mode, congestion, duplex mismatch to
-            // Statistics pane
-            if (half_duplex == NDTConstants.DUPLEX_OK_INDICATOR)
+            // Add decisions about duplex mode, congestion, duplex mismatch to Statistics pane
+            if (half_duplex == NDTConstants.DUPLEX_OK_INDICATOR) {
                 _txtStatistics.append(_resBundDisplayMsgs.getString("linkFullDpx") + "\n");
-            else
+            } else {
                 _txtStatistics.append(_resBundDisplayMsgs.getString("linkHalfDpx") + "\n");
-
-            if (congestion == NDTConstants.CONGESTION_NONE)
-                _txtStatistics.append(_resBundDisplayMsgs.getString("congestNo") + "\n");
-            else
-                _txtStatistics.append(_resBundDisplayMsgs.getString("congestYes") + "\n");
-
-            if (bad_cable == NDTConstants.CABLE_STATUS_OK)
-                _txtStatistics.append(_resBundDisplayMsgs.getString("cablesOk")
-                        + "\n");
-            else
-                _txtStatistics.append(_resBundDisplayMsgs.getString("cablesNok") + "\n");
-
-            if (mismatch == NDTConstants.DUPLEX_OK_INDICATOR)
-                _txtStatistics.append(_resBundDisplayMsgs.getString("duplexOk")
-                        + "\n");
-            else if (mismatch == NDTConstants.DUPLEX_NOK_INDICATOR) {
-                _txtStatistics.append(_resBundDisplayMsgs.getString("duplexNok") + " ");
-                _sEmailText += _resBundDisplayMsgs.getString("duplexNok") + " ";
-            } else if (mismatch == NDTConstants.DUPLEX_SWITCH_FULL_HOST_HALF) {
-                _txtStatistics.append(_resBundDisplayMsgs.getString("duplexFullHalf") + "\n");
-                _sEmailText += _resBundDisplayMsgs.getString("duplexFullHalf")
-                        + "\n%0A ";
-            } else if (mismatch == NDTConstants.DUPLEX_SWITCH_HALF_HOST_FULL) {
-                _txtStatistics.append(_resBundDisplayMsgs.getString("duplexHalfFull") + "\n");
-                _sEmailText += _resBundDisplayMsgs.getString("duplexHalfFull")
-                        + "\n%0A ";
             }
 
-            _txtStatistics.append("\n"
-                    + _resBundDisplayMsgs.getString(_sServerType + "rtt") + " =  "
-                    + NDTUtils.prtdbl(avgrtt) + " " + "ms" + "; ");
-            _sEmailText += "\n%0A" + _resBundDisplayMsgs.getString(_sServerType + "rtt")
-                    + " = " + NDTUtils.prtdbl(avgrtt) + " " + "ms" + "; ";
+            if (congestion == NDTConstants.CONGESTION_NONE) {
+                _txtStatistics.append(_resBundDisplayMsgs.getString("congestNo") + "\n");
+            } else {
+                _txtStatistics.append(_resBundDisplayMsgs.getString("congestYes") + "\n");
+            }
 
-            _txtStatistics.append(_resBundDisplayMsgs.getString("packetsize")
-                    + " = " + _iCurrentMSS + " "
-                    + _resBundDisplayMsgs.getString("bytes") + "; "
-                    + _resBundDisplayMsgs.getString("and") + " \n");
-            _sEmailText += _resBundDisplayMsgs.getString("packetsize") + " = "
-                    + _iCurrentMSS + " "
-                    + _resBundDisplayMsgs.getString("bytes") + "; "
-                    + _resBundDisplayMsgs.getString("and") + " \n%0A";
+            if (bad_cable == NDTConstants.CABLE_STATUS_OK) {
+                _txtStatistics.append(_resBundDisplayMsgs.getString("cablesOk") + "\n");
+            } else {
+                _txtStatistics.append(_resBundDisplayMsgs.getString("cablesNok") + "\n");
+            }
 
-            // check packet retransmissions count, and update Statistics pane
-            // and email text data
+            if (mismatch == NDTConstants.DUPLEX_OK_INDICATOR) {
+                _txtStatistics.append(_resBundDisplayMsgs.getString("duplexOk") + "\n");
+            } else if (mismatch == NDTConstants.DUPLEX_NOK_INDICATOR) {
+                _txtStatistics.append(_resBundDisplayMsgs.getString("duplexNok") + " ");
+            } else if (mismatch == NDTConstants.DUPLEX_SWITCH_FULL_HOST_HALF) {
+                _txtStatistics.append(_resBundDisplayMsgs.getString("duplexFullHalf") + "\n");
+            } else if (mismatch == NDTConstants.DUPLEX_SWITCH_HALF_HOST_FULL) {
+                _txtStatistics.append(_resBundDisplayMsgs.getString("duplexHalfFull") + "\n");
+            }
+
+            _txtStatistics.append("\n" + _resBundDisplayMsgs.getString(_sServerType + "rtt") + " =  " +
+                                  NDTUtils.prtdbl(avgrtt) + " " + "ms" + "; ");
+
+            _txtStatistics.append(_resBundDisplayMsgs.getString("packetsize") +" = " +
+                                  _iCurrentMSS + " " +
+                                  _resBundDisplayMsgs.getString("bytes") + "; " +
+                                  _resBundDisplayMsgs.getString("and") + " \n");
+
+            // Check packet retransmissions count, and update Statistics pane
             if (_iPktsRetrans > 0) { // packet retransmissions found
-                _txtStatistics.append(_iPktsRetrans + " "
-                        + _resBundDisplayMsgs.getString("pktsRetrans"));
-                _txtStatistics.append(", " + _iDupAcksIn + " "
-                        + _resBundDisplayMsgs.getString("dupAcksIn"));
-                _txtStatistics.append(", "
-                        + _resBundDisplayMsgs.getString("and") + " "
-                        + _iSACKsRcvd + " "
-                        + _resBundDisplayMsgs.getString("sackReceived") + "\n");
-                _sEmailText += _iPktsRetrans + " "
-                        + _resBundDisplayMsgs.getString("pktsRetrans");
-                _sEmailText += ", " + _iDupAcksIn + " "
-                        + _resBundDisplayMsgs.getString("dupAcksIn");
-                _sEmailText += ", " + _resBundDisplayMsgs.getString("and")
-                        + " " + _iSACKsRcvd + " "
-                        + _resBundDisplayMsgs.getString("sackReceived")
-                        + "\n%0A";
+                _txtStatistics.append(_iPktsRetrans + " " + _resBundDisplayMsgs.getString("pktsRetrans"));
+                _txtStatistics.append(", " + _iDupAcksIn + " " + _resBundDisplayMsgs.getString("dupAcksIn"));
+                _txtStatistics.append(", " + _resBundDisplayMsgs.getString("and") + " " + _iSACKsRcvd + " " +
+                                      _resBundDisplayMsgs.getString("sackReceived") + "\n");
                 if (_iTimeouts > 0) {
-                    _txtStatistics.append(_resBundDisplayMsgs.getString("connStalled")
-                            + " "
-                            + _iTimeouts
-                            + " "
-                            + _resBundDisplayMsgs.getString("timesPktLoss")
-                            + "\n");
+                    _txtStatistics.append(_resBundDisplayMsgs.getString("connStalled") + " " + _iTimeouts + " " +
+                                          _resBundDisplayMsgs.getString("timesPktLoss") + "\n");
                 }
 
-                _txtStatistics.append(_resBundDisplayMsgs.getString("connIdle")
-                        + " " + NDTUtils.prtdbl(waitsec) + " "
-                        + _resBundDisplayMsgs.getString("seconds") + " ("
-                        + NDTUtils.prtdbl((waitsec / timesec) * NDTConstants.PERCENTAGE)
-                        + _resBundDisplayMsgs.getString("pctOfTime") + ")\n");
-                _sEmailText += _resBundDisplayMsgs.getString("connStalled")
-                        + " " + _iTimeouts + " "
-                        + _resBundDisplayMsgs.getString("timesPktLoss")
-                        + "\n%0A";
-                _sEmailText += _resBundDisplayMsgs.getString("connIdle") + " "
-                        + NDTUtils.prtdbl(waitsec) + " "
-                        + _resBundDisplayMsgs.getString("seconds") + " ("
-                        + NDTUtils.prtdbl((waitsec / timesec) * NDTConstants.PERCENTAGE)
-                        + _resBundDisplayMsgs.getString("pctOfTime") + ")\n%0A";
-            } else if (_iDupAcksIn > 0) { // No packets loss, but packets
-                                            // arrived out-of-order
+                _txtStatistics.append(_resBundDisplayMsgs.getString("connIdle") + " " + NDTUtils.prtdbl(waitsec) + " " +
+                                      _resBundDisplayMsgs.getString("seconds") + " (" +
+                                      NDTUtils.prtdbl((waitsec / timesec) * NDTConstants.PERCENTAGE) +
+                                      _resBundDisplayMsgs.getString("pctOfTime") + ")\n");
+            } else if (_iDupAcksIn > 0) { // No packet loss, but packets arrived out-of-order
                 _txtStatistics.append(_resBundDisplayMsgs.getString("noPktLoss1") + " - ");
                 _txtStatistics.append(_resBundDisplayMsgs.getString("ooOrder")
                         + " " + NDTUtils.prtdbl(order * NDTConstants.PERCENTAGE)
                         + _resBundDisplayMsgs.getString("pctOfTime") + "\n");
-                _sEmailText += _resBundDisplayMsgs.getString("noPktLoss1")
-                        + " - ";
-                _sEmailText += _resBundDisplayMsgs.getString("ooOrder") + " "
-                        + NDTUtils.prtdbl(order * NDTConstants.PERCENTAGE)
-                        + _resBundDisplayMsgs.getString("pctOfTime") + "\n%0A";
-            } else { // no packets transmissions found
+            } else { // No packets transmissions found
                 _txtStatistics.append(_resBundDisplayMsgs.getString("noPktLoss2") + ".\n");
-                _sEmailText += _resBundDisplayMsgs.getString("noPktLoss2")
-                        + ".\n%0A";
             }
 
             // Add Packet queuing details found during C2S throughput test to
             // the statistics pane. Data is displayed as a percentage
-
             if ((_yTests & NDTConstants.TEST_C2S) == NDTConstants.TEST_C2S) {
                 if (_dC2sspd > _dSc2sspd) {
                     if (_dSc2sspd < (_dC2sspd * (1.0 - NDTConstants.VIEW_DIFF))) {
@@ -2808,7 +2654,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
             // Add Packet queuing details found during S2C throughput test to
             // the statistics pane. Data is displayed as a percentage
-
             if ((_yTests & NDTConstants.TEST_S2C) == NDTConstants.TEST_S2C) {
                 if (_dSs2cspd > _dS2cspd) {
                     if (_dSs2cspd < (_dSs2cspd * (1.0 - NDTConstants.VIEW_DIFF))) {
@@ -2829,8 +2674,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                 }
             }
 
-            // Add connection details to statistics pane and email text
-
+            // Add connection details to statistics pane
             // Is the connection receiver limited?
             if (rwintime > NDTConstants.BUFFER_LIMITED) {
                 _txtStatistics.append(_resBundDisplayMsgs.getString("thisConnIs")
@@ -2839,10 +2683,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                         + " "
                         + NDTUtils.prtdbl(rwintime * NDTConstants.PERCENTAGE)
                         + _resBundDisplayMsgs.getString("pctOfTime") + ".\n");
-                _sEmailText += _resBundDisplayMsgs.getString("thisConnIs")
-                        + " " + _resBundDisplayMsgs.getString("limitRx") + " "
-                        + NDTUtils.prtdbl(rwintime * NDTConstants.PERCENTAGE)
-                        + _resBundDisplayMsgs.getString("pctOfTime") + ".\n%0A";
                 pub_pctRcvrLimited = rwintime * NDTConstants.PERCENTAGE;
 
                 // I think there is a bug here, it sometimes tells you to increase the buffer
@@ -2861,10 +2701,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                                       _resBundDisplayMsgs.getString("limitTx") + " " +
                                       NDTUtils.prtdbl(sendtime * NDTConstants.PERCENTAGE) +
                                       _resBundDisplayMsgs.getString("pctOfTime") + ".\n");
-                _sEmailText += _resBundDisplayMsgs.getString("thisConnIs") + " " +
-                               _resBundDisplayMsgs.getString("limitTx") + " " +
-                               NDTUtils.prtdbl(sendtime * NDTConstants.PERCENTAGE) +
-                               _resBundDisplayMsgs.getString("pctOfTime") + ".\n%0A";
 
                 if ((2 * (swin / rttsec)) < mylink) {
                     // divide by 2 to counter round-trip
@@ -2881,10 +2717,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                                       _resBundDisplayMsgs.getString("limitNet") + " " +
                                       NDTUtils.prtdbl(cwndtime * NDTConstants.PERCENTAGE) +
                                       _resBundDisplayMsgs.getString("pctOfTime") + ".\n");
-                _sEmailText += _resBundDisplayMsgs.getString("thisConnIs") + " " +
-                               _resBundDisplayMsgs.getString("limitNet") + " " +
-                               NDTUtils.prtdbl(cwndtime * NDTConstants.PERCENTAGE) +
-                               _resBundDisplayMsgs.getString("pctOfTime") + ".\n%0A";
             }
 
             // Is the loss excessive?
@@ -2944,7 +2776,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                 int iSFWResC2S = this.getC2sSFWTestResults();
 
                 switch (iSFWResC2S) {
-                // Update Statistics and email-text based on results
+                // Update Statistics based on results
                 case NDTConstants.SFW_NOFIREWALL:
                     _txtStatistics.append(_resBundDisplayMsgs.getString("server")
                             + " '"
@@ -2952,10 +2784,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                             + "' "
                             + _resBundDisplayMsgs.getString("firewallNo")
                             + "\n");
-                    _sEmailText += _resBundDisplayMsgs.getString("server")
-                            + " '" + sHostName + "' "
-                            + _resBundDisplayMsgs.getString("firewallNo")
-                            + "\n%0A";
                     break;
                 case NDTConstants.SFW_POSSIBLE:
                     _txtStatistics.append(_resBundDisplayMsgs.getString("server")
@@ -2964,10 +2792,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                             + "' "
                             + _resBundDisplayMsgs.getString("firewallYes")
                             + "\n");
-                    _sEmailText += _resBundDisplayMsgs.getString("server")
-                            + " '" + sHostName + "' "
-                            + _resBundDisplayMsgs.getString("firewallYes")
-                            + "\n%0A";
                     break;
                 case NDTConstants.SFW_UNKNOWN:
                 case NDTConstants.SFW_NOTTESTED:
@@ -2976,25 +2800,18 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                 // Results in the direction of Server to client
                 int iSFWResS2C = this.getS2cSFWTestResults();
                 switch (iSFWResS2C) {
-                // Update Statistics and email-text based on results
+                // Update Statistics based on results
                 case NDTConstants.SFW_NOFIREWALL:
                     _txtStatistics.append(_resBundDisplayMsgs.getString("client2")
                             + " "
                             + _resBundDisplayMsgs.getString("firewallNo")
                             + "\n");
-                    _sEmailText += _resBundDisplayMsgs.getString("client2")
-                            + " " + _resBundDisplayMsgs.getString("firewallNo")
-                            + "\n%0A";
                     break;
                 case NDTConstants.SFW_POSSIBLE:
                     _txtStatistics.append(_resBundDisplayMsgs.getString("client2")
                             + " "
                             + _resBundDisplayMsgs.getString("firewallYes")
                             + "\n");
-                    _sEmailText += _resBundDisplayMsgs.getString("client2")
-                            + " "
-                            + _resBundDisplayMsgs.getString("firewallYes")
-                            + "\n%0A";
                     break;
                 case NDTConstants.SFW_UNKNOWN:
                 case NDTConstants.SFW_NOTTESTED:
@@ -3008,40 +2825,24 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             // influencing throughput
 
             // Theoretical network limit
-            _txtDiagnosis.append(_resBundDisplayMsgs.getString("theoreticalLimit")
-                    + " "
-                    + NDTUtils.prtdbl(estimate)
-                    + " " + "Mbps\n");
-            _sEmailText += _resBundDisplayMsgs.getString("theoreticalLimit")
-                    + " " + NDTUtils.prtdbl(estimate) + " Mbps\n%0A";
+            _txtDiagnosis.append(_resBundDisplayMsgs.getString("theoreticalLimit") + " " +
+                                 NDTUtils.prtdbl(estimate) + " " + "Mbps\n");
 
             // NDT server buffer imposed limit
             // divide by 2 to counter "round-trip" time
-            _txtDiagnosis.append(_resBundDisplayMsgs.getString("ndtServerHas")
-                    + " " + NDTUtils.prtdbl(_iSndbuf / (2 * NDTConstants.KILO_BITS)) + " "
-                    + _resBundDisplayMsgs.getString("kbyteBufferLimits") + " "
-                    + NDTUtils.prtdbl(swin / rttsec) + " Mbps\n");
-            _sEmailText += _resBundDisplayMsgs.getString("ndtServerHas") + " "
-                    + NDTUtils.prtdbl(_iSndbuf / (2 * NDTConstants.KILO_BITS)) + " "
-                    + _resBundDisplayMsgs.getString("kbyteBufferLimits") + " "
-                    + NDTUtils.prtdbl(swin / rttsec) + " Mbps\n%0A";
+            _txtDiagnosis.append(_resBundDisplayMsgs.getString("ndtServerHas") + " " +
+                                 NDTUtils.prtdbl(_iSndbuf / (2 * NDTConstants.KILO_BITS)) + " " +
+                                 _resBundDisplayMsgs.getString("kbyteBufferLimits") + " " +
+                                 NDTUtils.prtdbl(swin / rttsec) + " Mbps\n");
 
             // PC buffer imposed throughput limit
-            _txtDiagnosis.append(_resBundDisplayMsgs.getString("yourPcHas")
-                    + " " + NDTUtils.prtdbl(_iMaxRwinRcvd / NDTConstants.KILO_BITS) + " "
-                    + _resBundDisplayMsgs.getString("kbyteBufferLimits") + " "
-                    + NDTUtils.prtdbl(rwin / rttsec) + " Mbps\n");
-            _sEmailText += _resBundDisplayMsgs.getString("yourPcHas") + " "
-                    + NDTUtils.prtdbl(_iMaxRwinRcvd / NDTConstants.KILO_BITS) + " "
-                    + _resBundDisplayMsgs.getString("kbyteBufferLimits") + " "
-                    + NDTUtils.prtdbl(rwin / rttsec) + " Mbps\n%0A";
+            _txtDiagnosis.append(_resBundDisplayMsgs.getString("yourPcHas") + " " +
+                                 NDTUtils.prtdbl(_iMaxRwinRcvd / NDTConstants.KILO_BITS) + " " +
+                                 _resBundDisplayMsgs.getString("kbyteBufferLimits") + " " +
+                                 NDTUtils.prtdbl(rwin / rttsec) + " Mbps\n");
 
             // Network based flow control limit imposed throughput limit
-            _txtDiagnosis.append(_resBundDisplayMsgs.getString("flowControlLimits")
-                    + " "
-                    + NDTUtils.prtdbl(cwin / rttsec) + " Mbps\n");
-            _sEmailText += _resBundDisplayMsgs.getString("flowControlLimits")
-                    + " " + NDTUtils.prtdbl(cwin / rttsec) + " Mbps\n%0A";
+            _txtDiagnosis.append(_resBundDisplayMsgs.getString("flowControlLimits") + " " + NDTUtils.prtdbl(cwin / rttsec) + " Mbps\n");
 
             // Client, Server data reports on link capacity
             _txtDiagnosis.append("\n"

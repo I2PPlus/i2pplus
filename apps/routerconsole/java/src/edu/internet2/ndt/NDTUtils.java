@@ -92,23 +92,6 @@ import java.util.ResourceBundle;
     public static boolean isNotEmpty(String str) {return !isEmpty(str);}
 
     /**
-     * Utility method to create mailTo link
-     *
-     * @param name user identifier
-     * @param host fully qualified domain name
-     * @param subject email subject
-     * @param body email body
-     * @return created mailTo link with the encoded parameters
-     */
-    public static String mailTo(final String name, final String host,
-                                final String subject, final String body) {
-        return String.format(
-                "mailto:%s@%s?subject=%s&body=%s",
-                new Object[] {urlEncode(name), urlEncode(host), urlEncode(subject), urlEncode(body)}
-        );
-    }
-
-    /**
      * Utility method to encode the given string using UTF-8 encoding
      *
      * @param str String to encode
