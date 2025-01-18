@@ -273,7 +273,7 @@ class SidebarRenderer {
                 .append("<a class=sb_icon target=_top href=/dns title=\"").append(tx)
                 .append("\" hidden><span><img src=/themes/console/images/addressbook.svg>")
                 .append(" <span id=newHosts class=\"badge volatile\" title=\"")
-                .append(_t("New hosts in last 24h")).append("\"></span></span></a>");
+                .append(_t("New hosts in last 24 hours")).append("\"></span></span></a>");
             svcs.put(tx, rbuf.toString());
         }
 

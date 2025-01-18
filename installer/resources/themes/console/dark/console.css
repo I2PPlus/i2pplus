@@ -377,7 +377,7 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 #newHostsList a:hover::before{mix-blend-mode:normal}
 #newHostsList td{padding:8px 5px!important;justify-content:center;align-items:center;flex-wrap:wrap}
 #sb_services.tooltipped{margin-bottom:-11px}
-#sb_services.tooltipped .volatile{margin-bottom:-3px}
+#sb_services.tooltipped tr:first-child td{margin-bottom:-3px}
 
 /* main section */
 .sb,.main,h1,#news,.confignav,.tab,.tab2,table.search,.applink,.sitemapLink,.sitemapLabel{border:var(--border_hard)}
@@ -2392,7 +2392,6 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 #jarfiles tr:hover hr{background:#0000}
 #jarfiles tr:hover tt{color:#dd0}
 #jarfiles a[href^="http://git.skank.i2p/i2pplus"]{margin:0 1px 0 -9px;padding-left:14px;vertical-align:middle;background:var(--gitlab) no-repeat left center;background-size:12px;user-select:all}
-#jarfiles font[color="red"]{color:#d00}
 #jarfiles hr{margin:1px 0;width:100%;height:1px;background:#131;display:block}
 #jarfiles .subheading{padding-top:6px;padding-bottom:6px;border-top-width:2px;border-bottom-width:2px}
 

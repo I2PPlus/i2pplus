@@ -259,20 +259,23 @@ function newHosts() {
   function updateTooltip(hostnames) {
     if (!newHostsBadge) { return; }
     const services = document.getElementById("sb_services");
+    const servicesTd = services?.querySelector("tr:first-child td");
     const newHosts = document.getElementById("newHostsList");
     const newHostsTd = newHosts?.querySelector("td");
-    const newHostsList = hostnames.map(hostname => `<a href="http://${hostname}" target="_blank">${hostname.replace(".i2p", "")}</a>`).join("");
+    const newHostsList = hostnames.map(hostname => `<a href="http://${hostname}" target=_blank>${hostname.replace(".i2p", "")}</a>`).join("");
     newHosts.hidden = true;
     if (hostnames.length > 0) { newHostsTd.innerHTML = newHostsList; }
 
     newHostsBadge?.addEventListener("mouseenter", () => {
       newHosts.hidden = false;
       services.classList.add("tooltipped");
+      servicesTd.classList.remove("volatile");
     }, { passive: true });
 
-    services.addEventListener("mouseleave", () => {
+    services?.addEventListener("mouseleave", () => {
       newHosts.hidden = true;
       services.classList.remove("tooltipped");
+      servicesTd.classList.add("volatile");
     }, { passive: true });
   }
 
