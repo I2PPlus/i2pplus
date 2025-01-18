@@ -767,7 +767,7 @@ class TunnelRenderer {
             List<?> pendingIn = in.listPending();
             List<?> pendingOut = outPool.listPending();
             if ((!pendingIn.isEmpty()) || (!pendingOut.isEmpty())) {
-                buf.append("<div class=\"statusnotes building\"><center><b>").append(_t("Build in progress")).append(":&nbsp;");
+                buf.append("<div class=\"statusnotes building center\"><b>").append(_t("Build in progress")).append(":&nbsp;");
                 if (in != null) {
                     // PooledTunnelCreatorConfig
                     if (!pendingIn.isEmpty()) {
@@ -784,17 +784,17 @@ class TunnelRenderer {
                         live += pendingOut.size();
                     }
                 }
-                buf.append("</b></center></div>\n");
+                buf.append("</b></div>\n");
             }
         }
         if (live <= 0) {
-            buf.append("<div class=statusnotes><center><b>").append(_t("none")).append("</b></center></div>\n");
+            buf.append("<div class=\"statusnotes center\"><b>").append(_t("none")).append("</b></div>\n");
         } else {
-        buf.append("<div class=statusnotes><center><b>").append(_t("Lifetime bandwidth usage")).append(":&nbsp;&nbsp;")
+        buf.append("<div class=\"statusnotes center\"><b>").append(_t("Lifetime bandwidth usage")).append(":&nbsp;&nbsp;")
            .append(DataHelper.formatSize2(processedIn*1024, true).replace("i", ""))
            .append("B ").append(_t("in")).append(", ")
            .append(DataHelper.formatSize2(processedOut*1024, true).replace("i", ""))
-           .append("B ").append(_t("out")).append("</b></center></div>\n");
+           .append("B ").append(_t("out")).append("</b></div>\n");
         }
         out.write(buf.toString());
         out.flush();

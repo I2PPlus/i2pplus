@@ -726,8 +726,8 @@ public class SidebarHelper extends HelperBase {
                .append(" <span id=tunnelCount class=\"badge volatile\" title=\"").append(_t("How many local service tunnels we're running"))
                .append("\">").append(clientCount).append("</span>").append("</a>")
                .append("<input type=checkbox id=toggle_sb_localtunnels class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n")
-               .append("<table id=sb_localtunnels class=\"volatile notunnels\">\n<tr><td colspan=3><center><i>")
-               .append(_t("none")).append("</i></center></td></tr>\n</table>\n");
+               .append("<table id=sb_localtunnels class=\"volatile notunnels\">\n<tr><td colspan=3 class=center><i>")
+               .append(_t("none")).append("</i></td></tr>\n</table>\n");
         }
         buf.append("<table id=localtunnelSummary hidden>\n<tr id=localtunnelsActive><td>")
            .append("<span id=snarkCount class=\"count_0\">0 x <img src=/themes/console/images/snark.svg></span>")
