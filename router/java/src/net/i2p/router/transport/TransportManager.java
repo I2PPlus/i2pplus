@@ -899,7 +899,7 @@ public class TransportManager implements TransportEventListener {
                     msg.transportFailed(t.getStyle());
                 else if ( (rv == null) || (rv.getLatencyMs() > bid.getLatencyMs()) )
                     rv = bid;
-                if (_log.shouldDebug())
+                if (_log.shouldDebug() && rv != null)
                     _log.debug("Transport [" + t.getStyle() + "] Bid: " + bid + " currently winning? " + (rv == bid)
                                + " (winning latency: " + rv.getLatencyMs() + " / " + rv + ")");
             } else {
