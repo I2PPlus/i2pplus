@@ -3156,58 +3156,46 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
         // MSS = 1456 = Ethernet MTU = 1500 - 24 -20 (bytes of IP header) =
         // 1456, thus preserved
-        if(_iTimestampsEnabled == NDTConstants.RFC_1323_ENABLED)
-            iMss += 12;
+        if (_iTimestampsEnabled == NDTConstants.RFC_1323_ENABLED) {iMss += 12;}
 
-        if (iMss == NDTConstants.ETHERNET_MTU_SIZE)
+        if (iMss == NDTConstants.ETHERNET_MTU_SIZE) {
             _txtStatistics.append(_resBundDisplayMsgs.getString("packetSizePreserved") + "\n");
-        else
+        } else {
             _txtStatistics.append(_resBundDisplayMsgs.getString("middleboxModifyingMss") + "\n");
+        }
 
         // server IP has been preserved end-to-end without changes
 
         boolean preserved = false;
         try {
-            preserved = InetAddress.getByName(sServerIp).equals(
-                    InetAddress.getByName(sClientSideServerIp));
-        } catch (UnknownHostException e) {
-            preserved = sServerIp.equals(sClientSideServerIp);
-        }
+            preserved = InetAddress.getByName(sServerIp).equals(InetAddress.getByName(sClientSideServerIp));
+        } catch (UnknownHostException e) {preserved = sServerIp.equals(sClientSideServerIp);}
+
         if (preserved) {
             _txtStatistics.append(_resBundDisplayMsgs.getString("serverIpPreserved") + "\n");
             pub_natBox = "no";
         } else {
             pub_natBox = "yes";
             _txtStatistics.append(_resBundDisplayMsgs.getString("serverIpModified") + "\n");
-            _txtStatistics.append("\t"
-                    + _resBundDisplayMsgs.getString("serverSays") + " ["
-                    + sServerIp + "], "
-                    + _resBundDisplayMsgs.getString("clientSays") + " ["
-                    + sClientSideServerIp + "]\n");
+            _txtStatistics.append("\t" + _resBundDisplayMsgs.getString("serverSays") + " [" +
+                                  sServerIp + "], " + _resBundDisplayMsgs.getString("clientSays") + " [" +
+                                  sClientSideServerIp + "]\n");
         }
 
         // Client side IP was never obtained
         if (sClientSideClientIp.equals(NDTConstants.LOOPBACK_ADDRS_STRING)) {
             _txtStatistics.append(_resBundDisplayMsgs.getString("clientIpNotFound") + "\n");
         } else { // try to find if client IP was changed
-            try {
-                preserved = InetAddress.getByName(sClientIp).equals(
-                        InetAddress.getByName(sClientSideClientIp));
-            } catch (UnknownHostException e) {
-                preserved = sClientIp.equals(sClientSideClientIp);
-            } catch (SecurityException e) {
-                preserved = sClientIp.equals(sClientSideClientIp);
-            }
+            try {preserved = InetAddress.getByName(sClientIp).equals(InetAddress.getByName(sClientSideClientIp));}
+            catch (UnknownHostException e) {preserved = sClientIp.equals(sClientSideClientIp);}
+            catch (SecurityException e) {preserved = sClientIp.equals(sClientSideClientIp);}
 
-            if (preserved)
-                _txtStatistics.append(_resBundDisplayMsgs.getString("clientIpPreserved") + "\n");
+            if (preserved) {_txtStatistics.append(_resBundDisplayMsgs.getString("clientIpPreserved") + "\n");}
             else {
                 _txtStatistics.append(_resBundDisplayMsgs.getString("clientIpModified") + "\n");
-                _txtStatistics.append("\t"
-                        + _resBundDisplayMsgs.getString("serverSays") + " ["
-                        + sClientIp + "], "
-                        + _resBundDisplayMsgs.getString("clientSays") + " ["
-                        + sClientSideClientIp + "]\n");
+                _txtStatistics.append("\t" + _resBundDisplayMsgs.getString("serverSays") + " [" +
+                                      sClientIp + "], " + _resBundDisplayMsgs.getString("clientSays") + " [" +
+                                      sClientSideClientIp + "]\n");
             }
         }
         pub_statistics = _txtStatistics.getText();
@@ -3237,39 +3225,27 @@ public class Tcpbw100 extends JApplet implements ActionListener {
      * @param dSysvalParam Value for this key name
      */
     public void save_dbl_values(String sSysvarParam, double dSysvalParam) {
-        if (sSysvarParam.equals("bw:"))
-            estimate = dSysvalParam;
+        if (sSysvarParam.equals("bw:")) {estimate = dSysvalParam;}
         else if (sSysvarParam.equals("loss:")) {
             loss = dSysvalParam;
             pub_loss = loss;
         } else if (sSysvarParam.equals("avgrtt:")) {
             avgrtt = dSysvalParam;
             pub_avgrtt = avgrtt;
-        } else if (sSysvarParam.equals("waitsec:"))
-            waitsec = dSysvalParam;
-        else if (sSysvarParam.equals("timesec:"))
-            timesec = dSysvalParam;
-        else if (sSysvarParam.equals("order:"))
-            order = dSysvalParam;
-        else if (sSysvarParam.equals("rwintime:"))
-            rwintime = dSysvalParam;
-        else if (sSysvarParam.equals("sendtime:"))
-            sendtime = dSysvalParam;
+        } else if (sSysvarParam.equals("waitsec:")) {waitsec = dSysvalParam;}
+        else if (sSysvarParam.equals("timesec:")) {timesec = dSysvalParam;}
+        else if (sSysvarParam.equals("order:")) {order = dSysvalParam;}
+        else if (sSysvarParam.equals("rwintime:")) {rwintime = dSysvalParam;}
+        else if (sSysvarParam.equals("sendtime:")) {sendtime = dSysvalParam;}
         else if (sSysvarParam.equals("cwndtime:")) {
             cwndtime = dSysvalParam;
             pub_cwndtime = cwndtime;
-        } else if (sSysvarParam.equals("rttsec:"))
-            rttsec = dSysvalParam;
-        else if (sSysvarParam.equals("rwin:"))
-            rwin = dSysvalParam;
-        else if (sSysvarParam.equals("swin:"))
-            swin = dSysvalParam;
-        else if (sSysvarParam.equals("cwin:"))
-            cwin = dSysvalParam;
-        else if (sSysvarParam.equals("spd:"))
-            spd = dSysvalParam;
-        else if (sSysvarParam.equals("aspd:"))
-            aspd = dSysvalParam;
+        } else if (sSysvarParam.equals("rttsec:")) {rttsec = dSysvalParam;}
+        else if (sSysvarParam.equals("rwin:")) {rwin = dSysvalParam;}
+        else if (sSysvarParam.equals("swin:")) {swin = dSysvalParam;}
+        else if (sSysvarParam.equals("cwin:")) {cwin = dSysvalParam;}
+        else if (sSysvarParam.equals("spd:")) {spd = dSysvalParam;}
+        else if (sSysvarParam.equals("aspd:")) {aspd = dSysvalParam;}
     } // save_dbl_values()
 
     /**
@@ -3297,101 +3273,59 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         // PktsRetrans SACKsRcvd DupAcksIn MaxRwinRcvd MaxRwinSent Sndbuf Rcvbuf
         // DataPktsOut SndLimTimeRwin SndLimTimeCwnd SndLimTimeSender
         //
-        if (sSysvarParam.equals("MSSSent:"))
-            MSSSent = iSysvalParam;
-        else if (sSysvarParam.equals("MSSRcvd:"))
-            MSSRcvd = iSysvalParam;
-        else if (sSysvarParam.equals("ECNEnabled:"))
-            _iECNEnabled = iSysvalParam;
-        else if (sSysvarParam.equals("NagleEnabled:"))
-            _iNagleEnabled = iSysvalParam;
-        else if (sSysvarParam.equals("SACKEnabled:"))
-            _iSACKEnabled = iSysvalParam;
-        else if (sSysvarParam.equals("TimestampsEnabled:"))
-            _iTimestampsEnabled = iSysvalParam;
-        else if (sSysvarParam.equals("WinScaleRcvd:"))
-            _iWinScaleRcvd = iSysvalParam;
-        else if (sSysvarParam.equals("WinScaleSent:"))
-            _iWinScaleSent = iSysvalParam;
-        else if (sSysvarParam.equals("SumRTT:"))
-            _iSumRTT = iSysvalParam;
-        else if (sSysvarParam.equals("CountRTT:"))
-            _iCountRTT = iSysvalParam;
-        else if (sSysvarParam.equals("CurMSS:"))
-            _iCurrentMSS = iSysvalParam;
-        else if (sSysvarParam.equals("Timeouts:"))
-            _iTimeouts = iSysvalParam;
-        else if (sSysvarParam.equals("PktsRetrans:"))
-            _iPktsRetrans = iSysvalParam;
+        if (sSysvarParam.equals("MSSSent:")) {MSSSent = iSysvalParam;}
+        else if (sSysvarParam.equals("MSSRcvd:")) {MSSRcvd = iSysvalParam;}
+        else if (sSysvarParam.equals("ECNEnabled:")) {_iECNEnabled = iSysvalParam;}
+        else if (sSysvarParam.equals("NagleEnabled:")) {_iNagleEnabled = iSysvalParam;}
+        else if (sSysvarParam.equals("SACKEnabled:")) {_iSACKEnabled = iSysvalParam;}
+        else if (sSysvarParam.equals("TimestampsEnabled:")) {_iTimestampsEnabled = iSysvalParam;}
+        else if (sSysvarParam.equals("WinScaleRcvd:")) {_iWinScaleRcvd = iSysvalParam;}
+        else if (sSysvarParam.equals("WinScaleSent:")) {_iWinScaleSent = iSysvalParam;}
+        else if (sSysvarParam.equals("SumRTT:")) {_iSumRTT = iSysvalParam;}
+        else if (sSysvarParam.equals("CountRTT:")) {_iCountRTT = iSysvalParam;}
+        else if (sSysvarParam.equals("CurMSS:")) {_iCurrentMSS = iSysvalParam;}
+        else if (sSysvarParam.equals("Timeouts:")) {_iTimeouts = iSysvalParam;}
+        else if (sSysvarParam.equals("PktsRetrans:")) {_iPktsRetrans = iSysvalParam;}
         else if (sSysvarParam.equals("SACKsRcvd:")) {
             _iSACKsRcvd = iSysvalParam;
             pub_SACKsRcvd = _iSACKsRcvd;
         } else if (sSysvarParam.equals("DupAcksIn:")) {
             _iDupAcksIn = iSysvalParam;
             pub_DupAcksIn = _iDupAcksIn;
-        }
-        else if (sSysvarParam.equals("MaxRwinRcvd:")) {
+        } else if (sSysvarParam.equals("MaxRwinRcvd:")) {
             _iMaxRwinRcvd = iSysvalParam;
             pub_MaxRwinRcvd = _iMaxRwinRcvd;
-        } else if (sSysvarParam.equals("MaxRwinSent:"))
-            _iMaxRwinSent = iSysvalParam;
-        else if (sSysvarParam.equals("Sndbuf:"))
-            _iSndbuf = iSysvalParam;
-        else if (sSysvarParam.equals("X_Rcvbuf:"))
-            _iRcvbuf = iSysvalParam;
-        else if (sSysvarParam.equals("DataPktsOut:"))
-            _iDataPktsOut = iSysvalParam;
-        else if (sSysvarParam.equals("FastRetran:"))
-            _iFastRetran = iSysvalParam;
-        else if (sSysvarParam.equals("AckPktsOut:"))
-            _iAckPktsOut = iSysvalParam;
-        else if (sSysvarParam.equals("SmoothedRTT:"))
-            _iSmoothedRTT = iSysvalParam;
-        else if (sSysvarParam.equals("CurCwnd:"))
-            _iCurrentCwnd = iSysvalParam;
-        else if (sSysvarParam.equals("MaxCwnd:"))
-            _iMaxCwnd = iSysvalParam;
-        else if (sSysvarParam.equals("SndLimTimeRwin:"))
-            _iSndLimTimeRwin = iSysvalParam;
-        else if (sSysvarParam.equals("SndLimTimeCwnd:"))
-            _iSndLimTimeCwnd = iSysvalParam;
-        else if (sSysvarParam.equals("SndLimTimeSender:"))
-            _iSndLimTimeSender = iSysvalParam;
-        else if (sSysvarParam.equals("AckPktsIn:"))
-            _iAckPktsIn = iSysvalParam;
-        else if (sSysvarParam.equals("SndLimTransRwin:"))
-            _iSndLimTransRwin = iSysvalParam;
-        else if (sSysvarParam.equals("SndLimTransCwnd:"))
-            _iSndLimTransCwnd = iSysvalParam;
-        else if (sSysvarParam.equals("SndLimTransSender:"))
-            _iSndLimTransSender = iSysvalParam;
-        else if (sSysvarParam.equals("MaxSsthresh:"))
-            _iMaxSsthresh = iSysvalParam;
+        } else if (sSysvarParam.equals("MaxRwinSent:")) {_iMaxRwinSent = iSysvalParam;}
+        else if (sSysvarParam.equals("Sndbuf:")) {_iSndbuf = iSysvalParam;}
+        else if (sSysvarParam.equals("X_Rcvbuf:")) {_iRcvbuf = iSysvalParam;}
+        else if (sSysvarParam.equals("DataPktsOut:")) {_iDataPktsOut = iSysvalParam;}
+        else if (sSysvarParam.equals("FastRetran:")) {_iFastRetran = iSysvalParam;}
+        else if (sSysvarParam.equals("AckPktsOut:")) {_iAckPktsOut = iSysvalParam;}
+        else if (sSysvarParam.equals("SmoothedRTT:")) {_iSmoothedRTT = iSysvalParam;}
+        else if (sSysvarParam.equals("CurCwnd:")) {_iCurrentCwnd = iSysvalParam;}
+        else if (sSysvarParam.equals("MaxCwnd:")) {_iMaxCwnd = iSysvalParam;}
+        else if (sSysvarParam.equals("SndLimTimeRwin:")) {_iSndLimTimeRwin = iSysvalParam;}
+        else if (sSysvarParam.equals("SndLimTimeCwnd:")) {_iSndLimTimeCwnd = iSysvalParam;}
+        else if (sSysvarParam.equals("SndLimTimeSender:")) {_iSndLimTimeSender = iSysvalParam;}
+        else if (sSysvarParam.equals("AckPktsIn:")) {_iAckPktsIn = iSysvalParam;}
+        else if (sSysvarParam.equals("SndLimTransRwin:")) {_iSndLimTransRwin = iSysvalParam;}
+        else if (sSysvarParam.equals("SndLimTransCwnd:")) {_iSndLimTransCwnd = iSysvalParam;}
+        else if (sSysvarParam.equals("SndLimTransSender:")) {_iSndLimTransSender = iSysvalParam;}
+        else if (sSysvarParam.equals("MaxSsthresh:")) {_iMaxSsthresh = iSysvalParam;}
         else if (sSysvarParam.equals("CurRTO:")) {
             _iCurrentRTO = iSysvalParam;
             pub_CurRTO = _iCurrentRTO;
-        } else if (sSysvarParam.equals("MaxRTO:")) {
-            pub_MaxRTO = iSysvalParam;
-        } else if (sSysvarParam.equals("MinRTO:")) {
-            pub_MinRTO = iSysvalParam;
-        } else if (sSysvarParam.equals("MinRTT:")) {
-            pub_MinRTT = iSysvalParam;
-        } else if (sSysvarParam.equals("MaxRTT:")) {
-            pub_MaxRTT = iSysvalParam;
-        } else if (sSysvarParam.equals("CurRwinRcvd:")) {
-            pub_CurRwinRcvd = iSysvalParam;
-        } else if (sSysvarParam.equals("Timeouts:")) {
-            pub_Timeouts = iSysvalParam;
-        } else if (sSysvarParam.equals("c2sData:"))
-            _iC2sData = iSysvalParam;
-        else if (sSysvarParam.equals("c2sAck:"))
-            _iC2sAck = iSysvalParam;
-        else if (sSysvarParam.equals("s2cData:"))
-            _iS2cData = iSysvalParam;
-        else if (sSysvarParam.equals("s2cAck:"))
-            _iS2cAck = iSysvalParam;
-        else if (sSysvarParam.equals("PktsOut:"))
-            _iPktsOut = iSysvalParam;
+        } else if (sSysvarParam.equals("MaxRTO:")) {pub_MaxRTO = iSysvalParam;}
+        else if (sSysvarParam.equals("MinRTO:")) {pub_MinRTO = iSysvalParam;}
+        else if (sSysvarParam.equals("MinRTT:")) {pub_MinRTT = iSysvalParam;}
+        else if (sSysvarParam.equals("MaxRTT:")) {pub_MaxRTT = iSysvalParam;}
+        else if (sSysvarParam.equals("CurRwinRcvd:")) {pub_CurRwinRcvd = iSysvalParam;}
+        else if (sSysvarParam.equals("Timeouts:")) {pub_Timeouts = iSysvalParam;}
+        else if (sSysvarParam.equals("c2sData:")) {_iC2sData = iSysvalParam;}
+        else if (sSysvarParam.equals("c2sAck:")) {_iC2sAck = iSysvalParam;}
+        else if (sSysvarParam.equals("s2cData:")) {_iS2cData = iSysvalParam;}
+        else if (sSysvarParam.equals("s2cAck:")) {_iS2cAck = iSysvalParam;}
+        else if (sSysvarParam.equals("PktsOut:")) {_iPktsOut = iSysvalParam;}
         else if (sSysvarParam.equals("mismatch:")) {
             mismatch = iSysvalParam;
             pub_mismatch = mismatch;
@@ -3401,15 +3335,11 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         } else if (sSysvarParam.equals("bad_cable:")) {
             bad_cable = iSysvalParam;
             pub_Bad_cable = bad_cable;
-        } else if (sSysvarParam.equals("half_duplex:"))
-            half_duplex = iSysvalParam;
-        else if (sSysvarParam.equals("CongestionSignals:"))
-            _iCongestionSignals = iSysvalParam;
+        } else if (sSysvarParam.equals("half_duplex:")) {half_duplex = iSysvalParam;}
+        else if (sSysvarParam.equals("CongestionSignals:")) {_iCongestionSignals = iSysvalParam;}
         else if (sSysvarParam.equals("RcvWinScale:")) {
-            if (_iRcvWinScale > 15)
-                _iRcvWinScale = 0;
-            else
-                _iRcvWinScale = iSysvalParam;
+            if (_iRcvWinScale > 15) {_iRcvWinScale = 0;}
+            else {_iRcvWinScale = iSysvalParam;}
         }
     } // save_int_values()
 
@@ -3423,143 +3353,73 @@ public class Tcpbw100 extends JApplet implements ActionListener {
      * */
     private boolean isValueSave(String sSysvarParam) {
         //is_save_int_values
-        if (sSysvarParam.equals("MSSSent:"))
-            return true;
-        else if (sSysvarParam.equals("MSSRcvd:"))
-            return true;
-        else if (sSysvarParam.equals("ECNEnabled:"))
-            return true;
-        else if (sSysvarParam.equals("NagleEnabled:"))
-            return true;
-        else if (sSysvarParam.equals("SACKEnabled:"))
-            return true;
-        else if (sSysvarParam.equals("TimestampsEnabled:"))
-            return true;
-        else if (sSysvarParam.equals("WinScaleRcvd:"))
-            return true;
-        else if (sSysvarParam.equals("WinScaleSent:"))
-            return true;
-        else if (sSysvarParam.equals("SumRTT:"))
-            return true;
-        else if (sSysvarParam.equals("CountRTT:"))
-            return true;
-        else if (sSysvarParam.equals("CurMSS:"))
-            return true;
-        else if (sSysvarParam.equals("Timeouts:"))
-            return true;
-        else if (sSysvarParam.equals("PktsRetrans:"))
-            return true;
-        else if (sSysvarParam.equals("SACKsRcvd:"))
-            return true;
-        else if (sSysvarParam.equals("DupAcksIn:"))
-            return true;
-        else if (sSysvarParam.equals("MaxRwinRcvd:"))
-            return true;
-        else if (sSysvarParam.equals("MaxRwinSent:"))
-            return true;
-        else if (sSysvarParam.equals("Sndbuf:"))
-            return true;
-        else if (sSysvarParam.equals("X_Rcvbuf:"))
-            return true;
-        else if (sSysvarParam.equals("DataPktsOut:"))
-            return true;
-        else if (sSysvarParam.equals("FastRetran:"))
-            return true;
-        else if (sSysvarParam.equals("AckPktsOut:"))
-            return true;
-        else if (sSysvarParam.equals("SmoothedRTT:"))
-            return true;
-        else if (sSysvarParam.equals("CurCwnd:"))
-            return true;
-        else if (sSysvarParam.equals("MaxCwnd:"))
-            return true;
-        else if (sSysvarParam.equals("SndLimTimeRwin:"))
-            return true;
-        else if (sSysvarParam.equals("SndLimTimeCwnd:"))
-            return true;
-        else if (sSysvarParam.equals("SndLimTimeSender:"))
-            return true;
-        else if (sSysvarParam.equals("AckPktsIn:"))
-            return true;
-        else if (sSysvarParam.equals("SndLimTransRwin:"))
-            return true;
-        else if (sSysvarParam.equals("SndLimTransCwnd:"))
-            return true;
-        else if (sSysvarParam.equals("SndLimTransSender:"))
-            return true;
-        else if (sSysvarParam.equals("MaxSsthresh:"))
-            return true;
-        else if (sSysvarParam.equals("CurRTO:"))
-            return true;
-        else if (sSysvarParam.equals("MaxRTO:"))
-            return true;
-        else if (sSysvarParam.equals("MinRTO:"))
-            return true;
-        else if (sSysvarParam.equals("MinRTT:"))
-            return true;
-        else if (sSysvarParam.equals("MaxRTT:"))
-            return true;
-        else if (sSysvarParam.equals("CurRwinRcvd:"))
-            return true;
-        else if (sSysvarParam.equals("Timeouts:"))
-            return true;
-        else if (sSysvarParam.equals("c2sData:"))
-            return true;
-        else if (sSysvarParam.equals("c2sAck:"))
-            return true;
-        else if (sSysvarParam.equals("s2cData:"))
-            return true;
-        else if (sSysvarParam.equals("s2cAck:"))
-            return true;
-        else if (sSysvarParam.equals("PktsOut:"))
-            return true;
-        else if (sSysvarParam.equals("mismatch:"))
-            return true;
-        else if (sSysvarParam.equals("congestion:"))
-            return true;
-        else if (sSysvarParam.equals("bad_cable:"))
-            return true;
-        else if (sSysvarParam.equals("half_duplex:"))
-            return true;
-        else if (sSysvarParam.equals("CongestionSignals:"))
-            return true;
-        else if (sSysvarParam.equals("RcvWinScale:"))
-            return true;
-            //is_save_long_values
-        else if (sSysvarParam.equals("DataBytesOut:"))
-            return true;
-            //is_save_dbl_values
-        else if (sSysvarParam.equals("bw:"))
-            return true;
-        else if (sSysvarParam.equals("loss:"))
-            return true;
-        else if (sSysvarParam.equals("avgrtt:"))
-            return true;
-        else if (sSysvarParam.equals("waitsec:"))
-            return true;
-        else if (sSysvarParam.equals("timesec:"))
-            return true;
-        else if (sSysvarParam.equals("order:"))
-            return true;
-        else if (sSysvarParam.equals("rwintime:"))
-            return true;
-        else if (sSysvarParam.equals("sendtime:"))
-            return true;
-        else if (sSysvarParam.equals("cwndtime:"))
-            return true;
-        else if (sSysvarParam.equals("rttsec:"))
-            return true;
-        else if (sSysvarParam.equals("rwin:"))
-            return true;
-        else if (sSysvarParam.equals("swin:"))
-            return true;
-        else if (sSysvarParam.equals("cwin:"))
-            return true;
-        else if (sSysvarParam.equals("spd:"))
-            return true;
-        else if (sSysvarParam.equals("aspd:"))
-            return true;
-
+        if (sSysvarParam.equals("MSSSent:")) {return true;}
+        else if (sSysvarParam.equals("MSSRcvd:")) {return true;}
+        else if (sSysvarParam.equals("ECNEnabled:")) {return true;}
+        else if (sSysvarParam.equals("NagleEnabled:")) {return true;}
+        else if (sSysvarParam.equals("SACKEnabled:")) {return true;}
+        else if (sSysvarParam.equals("TimestampsEnabled:")) {return true;}
+        else if (sSysvarParam.equals("WinScaleRcvd:")) {return true;}
+        else if (sSysvarParam.equals("WinScaleSent:")) {return true;}
+        else if (sSysvarParam.equals("SumRTT:")) {return true;}
+        else if (sSysvarParam.equals("CountRTT:")) {return true;}
+        else if (sSysvarParam.equals("CurMSS:")) {return true;}
+        else if (sSysvarParam.equals("Timeouts:")) {return true;}
+        else if (sSysvarParam.equals("PktsRetrans:")) {return true;}
+        else if (sSysvarParam.equals("SACKsRcvd:")) {return true;}
+        else if (sSysvarParam.equals("DupAcksIn:")) {return true;}
+        else if (sSysvarParam.equals("MaxRwinRcvd:")) {return true;}
+        else if (sSysvarParam.equals("MaxRwinSent:")) {return true;}
+        else if (sSysvarParam.equals("Sndbuf:")) {return true;}
+        else if (sSysvarParam.equals("X_Rcvbuf:")) {return true;}
+        else if (sSysvarParam.equals("DataPktsOut:")) {return true;}
+        else if (sSysvarParam.equals("FastRetran:")) {return true;}
+        else if (sSysvarParam.equals("AckPktsOut:")) {return true;}
+        else if (sSysvarParam.equals("SmoothedRTT:")) {return true;}
+        else if (sSysvarParam.equals("CurCwnd:")) {return true;}
+        else if (sSysvarParam.equals("MaxCwnd:")) {return true;}
+        else if (sSysvarParam.equals("SndLimTimeRwin:")) {return true;}
+        else if (sSysvarParam.equals("SndLimTimeCwnd:")) {return true;}
+        else if (sSysvarParam.equals("SndLimTimeSender:")) {return true;}
+        else if (sSysvarParam.equals("AckPktsIn:")) {return true;}
+        else if (sSysvarParam.equals("SndLimTransRwin:")) {return true;}
+        else if (sSysvarParam.equals("SndLimTransCwnd:")) {return true;}
+        else if (sSysvarParam.equals("SndLimTransSender:")) {return true;}
+        else if (sSysvarParam.equals("MaxSsthresh:")) {return true;}
+        else if (sSysvarParam.equals("CurRTO:")) {return true;}
+        else if (sSysvarParam.equals("MaxRTO:")) {return true;}
+        else if (sSysvarParam.equals("MinRTO:")) {return true;}
+        else if (sSysvarParam.equals("MinRTT:")) {return true;}
+        else if (sSysvarParam.equals("MaxRTT:")) {return true;}
+        else if (sSysvarParam.equals("CurRwinRcvd:")) {return true;}
+        else if (sSysvarParam.equals("Timeouts:")) {return true;}
+        else if (sSysvarParam.equals("c2sData:")) {return true;}
+        else if (sSysvarParam.equals("c2sAck:")) {return true;}
+        else if (sSysvarParam.equals("s2cData:")) {return true;}
+        else if (sSysvarParam.equals("s2cAck:")) {return true;}
+        else if (sSysvarParam.equals("PktsOut:")) {return true;}
+        else if (sSysvarParam.equals("mismatch:")) {return true;}
+        else if (sSysvarParam.equals("congestion:")) {return true;}
+        else if (sSysvarParam.equals("bad_cable:")) {return true;}
+        else if (sSysvarParam.equals("half_duplex:")) {return true;}
+        else if (sSysvarParam.equals("CongestionSignals:")) {return true;}
+        else if (sSysvarParam.equals("RcvWinScale:")) {return true;}
+        else if (sSysvarParam.equals("DataBytesOut:")) {return true;} // is_save_long_values
+        else if (sSysvarParam.equals("bw:")) {return true;} // is_save_dbl_values
+        else if (sSysvarParam.equals("loss:")) {return true;}
+        else if (sSysvarParam.equals("avgrtt:")) {return true;}
+        else if (sSysvarParam.equals("waitsec:")) {return true;}
+        else if (sSysvarParam.equals("timesec:")) {return true;}
+        else if (sSysvarParam.equals("order:")) {return true;}
+        else if (sSysvarParam.equals("rwintime:")) {return true;}
+        else if (sSysvarParam.equals("sendtime:")) {return true;}
+        else if (sSysvarParam.equals("cwndtime:")) {return true;}
+        else if (sSysvarParam.equals("rttsec:")) {return true;}
+        else if (sSysvarParam.equals("rwin:")) {return true;}
+        else if (sSysvarParam.equals("swin:")) {return true;}
+        else if (sSysvarParam.equals("cwin:")) {return true;}
+        else if (sSysvarParam.equals("spd:")) {return true;}
+        else if (sSysvarParam.equals("aspd:")) {return true;}
         return false;
     }
 
@@ -3602,54 +3462,30 @@ public class Tcpbw100 extends JApplet implements ActionListener {
      * @return {String} The value of the desired parameter.
      */
     public String getNDTvar(String varName) {
-        if (varName.equals("ClientToServerSpeed"))
-            return get_c2sspd();
-        else if (varName.equals("ServerToClientSpeed"))
-            return get_s2cspd();
-        else if (varName.equals("Jitter"))
-            return get_jitter();
-        else if (varName.equals("OperatingSystem"))
-            return get_osName() + " " + get_osVer();
-        else if (varName.equals("PluginVersion"))
-            return get_pluginVer();
-        else if (varName.equals("OsArchitecture"))
-            return get_osArch();
-        else if (varName.equals(NDTConstants.AVGRTT))
-            return get_avgrtt();
-        else if (varName.equals(NDTConstants.CURRWINRCVD))
-            return get_CurRwinRcvd();
-        else if (varName.equals(NDTConstants.MAXRWINRCVD))
-            return get_MaxRwinRcvd();
-        else if (varName.equals(NDTConstants.LOSS))
-            return get_loss();
-        else if (varName.equals(NDTConstants.MINRTT))
-            return get_Ping();
-        else if (varName.equals(NDTConstants.MAXRTT))
-            return get_MaxRTT();
-        else if (varName.equals(NDTConstants.WAITSEC))
-            return get_WaitSec();
-        else if (varName.equals(NDTConstants.CURRTO))
-            return get_CurRTO();
-        else if (varName.equals(NDTConstants.SACKSRCVD))
-            return get_SACKsRcvd();
-        else if (varName.equals(NDTConstants.MISMATCH))
-            return get_mismatch();
-        else if (varName.equals(NDTConstants.BAD_CABLE))
-            return get_Bad_cable();
-        else if (varName.equals(NDTConstants.CONGESTION))
-            return get_congestion();
-        else if (varName.equals(NDTConstants.CWNDTIME))
-            return get_cwndtime();
-        else if (varName.equals(NDTConstants.RWINTIME))
-            return get_rcvrLimiting();
-        else if (varName.equals(NDTConstants.OPTRCVRBUFF))
-            return get_optimalRcvrBuffer();
-        else if (varName.equals(NDTConstants.ACCESS_TECH))
-            return get_AccessTech();
-        else if (varName.equals(NDTConstants.DUPACKSIN))
-            return get_DupAcksIn();
-        else
-            return null;
+        if (varName.equals("ClientToServerSpeed")) {return get_c2sspd();}
+        else if (varName.equals("ServerToClientSpeed")) {return get_s2cspd();}
+        else if (varName.equals("Jitter")) {return get_jitter();}
+        else if (varName.equals("OperatingSystem")) {return get_osName() + " " + get_osVer();}
+        else if (varName.equals("PluginVersion")) {return get_pluginVer();}
+        else if (varName.equals("OsArchitecture")) {return get_osArch();}
+        else if (varName.equals(NDTConstants.AVGRTT)) {return get_avgrtt();}
+        else if (varName.equals(NDTConstants.CURRWINRCVD)) {return get_CurRwinRcvd();}
+        else if (varName.equals(NDTConstants.MAXRWINRCVD)) {return get_MaxRwinRcvd();}
+        else if (varName.equals(NDTConstants.LOSS)) {return get_loss();}
+        else if (varName.equals(NDTConstants.MINRTT)) {return get_Ping();}
+        else if (varName.equals(NDTConstants.MAXRTT)) {return get_MaxRTT();}
+        else if (varName.equals(NDTConstants.WAITSEC)) {return get_WaitSec();}
+        else if (varName.equals(NDTConstants.CURRTO)) {return get_CurRTO();}
+        else if (varName.equals(NDTConstants.SACKSRCVD)) {return get_SACKsRcvd();}
+        else if (varName.equals(NDTConstants.MISMATCH)) {return get_mismatch();}
+        else if (varName.equals(NDTConstants.BAD_CABLE)) {return get_Bad_cable();}
+        else if (varName.equals(NDTConstants.CONGESTION)) {return get_congestion();}
+        else if (varName.equals(NDTConstants.CWNDTIME)) {return get_cwndtime();}
+        else if (varName.equals(NDTConstants.RWINTIME)) {return get_rcvrLimiting();}
+        else if (varName.equals(NDTConstants.OPTRCVRBUFF)) {return get_optimalRcvrBuffer();}
+        else if (varName.equals(NDTConstants.ACCESS_TECH)) {return get_AccessTech();}
+        else if (varName.equals(NDTConstants.DUPACKSIN)) {return get_DupAcksIn();}
+        else {return null;}
     }
 
     /**
@@ -3730,39 +3566,26 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     }
 
     /** bigly */
-    public synchronized void
-    runIt()
-    {
-        //final AESemaphore sem = new AESemaphore("waiter");
-
+    public synchronized void runIt() {
         _thread_group = new
-            ThreadGroup("NDT")
-            {
-                @Override
-                public void
-                uncaughtException(
-                    Thread t,
-                    Throwable e)
-                {
-                    _log.warn("TG", e);
-                }
-            };
+        ThreadGroup("NDT") {
+            @Override public void uncaughtException(Thread t, Throwable e) {
+                _log.warn("TG", e);
+            }
+        };
 
         _thread_group.setDaemon(true);
-
         Thread t = new I2PAppThread(_thread_group, new Runnable() {
             @Override
             public void run() {
                 try {new TestWorker().run();}
                 catch(Throwable e) {
                     if (!(e instanceof ThreadDeath)) {_log.warn("TG", e);}
-                } finally {/*sem.reserve();*/}
+                } finally {}
             }
         }, "TestWorker");
-
         t.setDaemon(true);
         t.start();
-        //sem.reserve();
     }
 
     /**

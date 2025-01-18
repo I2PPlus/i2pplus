@@ -12,8 +12,7 @@ import java.util.ResourceBundle;
     /**
      * Utility method to print double value up to the hundredth place.
      *
-     * @param paramDblToFormat
-     *            Double numbers to format
+     * @param paramDblToFormat Double numbers to format
      * @return String value of double number
      */
     public static String prtdbl(double paramDblToFormat) {
@@ -90,9 +89,7 @@ import java.util.ResourceBundle;
      * @param str String to check
      * @return true is the given string is not empty; otherwise false
      */
-    public static boolean isNotEmpty(String str) {
-        return !isEmpty(str);
-    }
+    public static boolean isNotEmpty(String str) {return !isEmpty(str);}
 
     /**
      * Utility method to create mailTo link
@@ -107,10 +104,7 @@ import java.util.ResourceBundle;
                                 final String subject, final String body) {
         return String.format(
                 "mailto:%s@%s?subject=%s&body=%s",
-                new Object[]{
-                        urlEncode(name), urlEncode(host),
-                        urlEncode(subject), urlEncode(body)
-                }
+                new Object[] {urlEncode(name), urlEncode(host), urlEncode(subject), urlEncode(body)}
         );
     }
 
