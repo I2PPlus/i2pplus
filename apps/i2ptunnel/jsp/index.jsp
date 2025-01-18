@@ -276,7 +276,7 @@ ECDSA-P256
             } else if (currentSigType == 0) {
                 if (altDest == null || altDest.equals("")) {
 %>
-<font style="color:red">DSA-SHA1</font>
+<span style=font-weight:600;color:red>DSA-SHA1</span>
 <%
                 } else {
 %>
@@ -416,9 +416,9 @@ ElGamal-2048
                /* should only happen for streamr client */
                String cHost= indexBean.getClientInterface(curClient);
                if (cHost == null || "".equals(cHost)) {
-                   out.write("<font color=\"red\">");
+                   out.write("<span style=font-weight:600;color:red>");
                    out.write(intl._t("Host not set"));
-                   out.write("</font>");
+                   out.write("</span>");
                } else {
                    out.write(cHost);
                }
@@ -533,7 +533,7 @@ ECDSA-P256
 <%
                } else if (currentSigType == 0) {
 %>
-<font style="color:red">DSA-SHA1</font>
+<span style=font-weight:600;color:red>DSA-SHA1</span>
 <%
                }
                String clientB32 = indexBean.getDestHashBase32(curClient);

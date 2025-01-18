@@ -141,9 +141,9 @@
 <%
     String value = editBean.getTargetPort(curTunnel);
     if (value == null || "".equals(value.trim())) {
-        out.write(" <span class=required><font color=red>(");
+        out.write(" <span class=required style=font-weight:600;color:red>(");
         out.write(intl._t("required"));
-        out.write(")</font></span>");
+        out.write(")</span>");
     }
 %>
 <input type=text size=6 maxlength=5 id=targetPort name="targetPort" title="<%=intl._t("Specify the port the server is running on")%>" value="<%=editBean.getTargetPort(curTunnel)%>" class="freetext port" placeholder="<%=intl._t("required")%>" />
@@ -195,9 +195,9 @@
 <%
         String value4 = editBean.getClientPort(curTunnel);
         if (value4 == null || "".equals(value4.trim())) {
-            out.write(" <span class=required><font color=red>(");
+            out.write(" <span class=required style=font-weight:600;color:red>(");
             out.write(intl._t("required"));
-            out.write(")</font></span>");
+            out.write(")</span>");
         }
 %>
 <input type=text size=6 maxlength=5 name="port" title="<%=intl._t("Port required to access service (this can be a different port to the port the service is hosted on)")%>" value="<%=editBean.getClientPort(curTunnel)%>" class="freetext port" placeholder="<%=intl._t("required")%>" />
@@ -215,9 +215,9 @@
 <%
     String value3 = editBean.getPrivateKeyFile(curTunnel);
     if (value3 == null || "".equals(value3.trim())) {
-        out.write(" <span class=required><font color=\"#a00\">(");
+        out.write(" <span class=required style=font-weight:600;color:red>(");
         out.write(intl._t("required"));
-        out.write(")</font></span>");
+        out.write(")</span>");
     }
 %>
 <input type=text size=30 id=privKeyFile name="privKeyFile" title="<%=intl._t("Path to Private Key File")%>" value="<%=editBean.getPrivateKeyFile(curTunnel)%>" class="freetext filemanager" placeholder="<%=intl._t("required")%>" required />

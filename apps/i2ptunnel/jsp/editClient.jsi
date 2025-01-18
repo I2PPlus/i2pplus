@@ -135,9 +135,9 @@
 <%
       String value = editBean.getClientPort(curTunnel);
       if (value == null || "".equals(value.trim())) {
-          out.write(" <span class=required><font color=red>(");
+          out.write(" <span class=required style=font-weight:600;color:red>(");
           out.write(intl._t("required"));
-          out.write(")</font></span>");
+          out.write(")</span>");
       }
 %>
 <input type=text size="6" maxlength="5" name="port" title="<%=intl._t("Specify the local port this service should be accessible from")%>" value="<%=editBean.getClientPort(curTunnel)%>" class="freetext port"  placeholder="<%=intl._t("required")%>" />
@@ -148,9 +148,9 @@
 <%
       String targetHost = editBean.getTargetHost(curTunnel);
       if (targetHost == null || "".equals(targetHost.trim())) {
-          out.write(" <span class=required><font color=red>(");
+          out.write(" <span class=required style=font-weight:600;color:red>(");
           out.write(intl._t("required"));
-          out.write(")</font></span>");
+          out.write(")</span>");
       }
 %>
 <input type=text size="20" id="targetHost" name="targetHost" title="<%=intl._t("Hostname or IP address of the target server")%>" value="<%=targetHost%>" class="freetext host"  placeholder="<%=intl._t("required")%>" />
@@ -258,9 +258,9 @@
 <td>
 <%        String value2 = editBean.getClientDestination(curTunnel);
           if (value2 == null || "".equals(value2.trim())) {
-              out.write(" <span class=required><font color=red>(");
+              out.write(" <span class=required style=font-weight:600;color:red>(");
               out.write(intl._t("required"));
-              out.write(")</font></span>");
+              out.write(")</span>");
           }
 %>
 <input type=text size="30" id="targetDestination" name="targetDestination" title="<%=intl._t("Specify the .i2p address or destination (b32 or b64) of the tunnel here.")%>&nbsp;<%=intl._t("For a random selection from a pool, separate with commas e.g. server1.i2p,server2.i2p")%>" value="<%=editBean.getClientDestination(curTunnel)%>" class="freetext destination" placeholder="<%=intl._t("name, name:port, or destination")%>" />

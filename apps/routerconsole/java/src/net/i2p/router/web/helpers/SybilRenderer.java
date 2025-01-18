@@ -1231,11 +1231,9 @@ public class SybilRenderer {
     /** @since 0.9.28 */
     private static void writeDistance(Writer out, DecimalFormat fmt, BigInteger dist) throws IOException {
         double distance = biLog2(dist);
-        if (distance < MIN_CLOSE)
-            out.write("<font color=red>");
+        if (distance < MIN_CLOSE) {out.write("<span style=font-weight:600;color:red>");}
         out.write(fmt.format(distance));
-        if (distance < MIN_CLOSE)
-            out.write("</font>");
+        if (distance < MIN_CLOSE) {out.write("</span>");}
     }
 
     /** translate a string */
