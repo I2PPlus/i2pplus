@@ -854,78 +854,49 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
             pub_errmsg = "Test in progress.";
             runtest();
-        }
-        // show details of tests since that button was clicked
-        else if (source == _buttonDetails) {
+        } else if (source == _buttonDetails) { // show details of tests since that button was clicked
             _frameWeb100Vars.setResizable(true);
             _frameWeb100Vars.setVisible(true);
-
-            if (NDTUtils.isNotEmpty(_txtDiagnosis.getText())) {
-                // enable copy button only if there is details informations
-                _buttonDetailsCopy.setEnabled(true);
-            }
-        }
-        // "More Details" Web100 variables window to be closed
-        else if (source == _buttonDetailsDismiss) {
+            // enable copy button only if there is details informations
+            if (NDTUtils.isNotEmpty(_txtDiagnosis.getText())) {_buttonDetailsCopy.setEnabled(true);}
+        } else if (source == _buttonDetailsDismiss) { // "More Details" Web100 variables window to be closed
             _frameWeb100Vars.toBack();
             _frameWeb100Vars.dispose();
-        }
-        // "statistics" window to be closed
-        else if (source == _buttonStatsDismiss) {
+        } else if (source == _buttonStatsDismiss) { // "statistics" window to be closed
             _frameDetailedStats.toBack();
             _frameDetailedStats.dispose();
-        }
-        // "More details" copy button functionality
-        else if (source == _buttonDetailsCopy) {
-            copy(_txtDiagnosis);
-        }
-        // "Statistics" copy button functionality
-        else if (source == _buttonStatsCopy) {
-            copy(_txtStatistics);
-        }
-        // Show "statistics" window
-        else if (source == _buttonStatistics) {
+        } else if (source == _buttonDetailsCopy) {copy(_txtDiagnosis);} // "More details" copy button functionality
+        else if (source == _buttonStatsCopy) {copy(_txtStatistics);} // "Statistics" copy button functionality
+        else if (source == _buttonStatistics) { // Show "statistics" window
             _frameDetailedStats.setResizable(true);
             _frameDetailedStats.setVisible(true);
-
-            if (NDTUtils.isNotEmpty(_txtStatistics.getText())) {
-                // enable copy button only if there is statistics informations
-                _buttonStatsCopy.setEnabled(true);
-            }
-        }
-        // prefer IPv6 checkbox
-        else if (source == _chkboxPreferIPv6) {
-            setsHostName(sHostName);
-        }
+            // enable copy button only if there is statistics informations
+            if (NDTUtils.isNotEmpty(_txtStatistics.getText())) {_buttonStatsCopy.setEnabled(true);}
+        } else if (source == _chkboxPreferIPv6) {setsHostName(sHostName);} // prefer IPv6 checkbox
         // mail to functionality
         else if (source == _buttonMailTo) {
             String sName, sHost;
-
-            // invoke mailto: function
-            showStatus(_resBundDisplayMsgs.getString("invokingMailtoFunction") + "...");
+            showStatus(_resBundDisplayMsgs.getString("invokingMailtoFunction") + "..."); // invoke mailto: function
             _resultsTxtPane.append(_resBundDisplayMsgs.getString("generatingReport") + "\n");
             try {
                 // user
                 if ((sName = getParameter(NDTConstants.TARGET1)) == null) {
                     throw new IllegalArgumentException("U parameter Required:");
                 }
+
                 // host name
                 if ((sHost = getParameter(NDTConstants.TARGET2)) == null) {
                     throw new IllegalArgumentException("H parameter Required:");
                 }
 
                 String sSubject = getParameter("subject"); // get subject
-
                 if (sSubject == null) {
                     sSubject = _resBundDisplayMsgs.getString("troubleReportFrom") + " " + getCodeBase().getHost();
                 }
 
                 String sBody = _resBundDisplayMsgs.getString("comments") + ":\n\n" + _sEmailText + "\n\n" + _resBundDisplayMsgs.getString("endOfEmail");
-
                 String sUrl = NDTUtils.mailTo(sName, sHost, sSubject, sBody);
-
                 _targetURL = new URL(sUrl);
-
                 getAppletContext().showDocument(_targetURL);
             } catch (Exception e) {
                 String sMessage = NDTUtils.isEmpty(e.getMessage())
@@ -933,7 +904,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                         : e.getMessage();
 
                 _sErrMsg = _resBundDisplayMsgs.getString("unexpectedException") + " (" + e.getClass().getName() + "): " + sMessage + "\n";
-
                 _log.warn(_sErrMsg, e);
                 _resultsTxtPane.append(_sErrMsg);
             }
@@ -1178,8 +1148,8 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     }
 
     /**
-     * Fire-wall tests aiming to find out if one exists between Client and
-     * server. Tests are performed in both directions.
+     * Fire-wall tests aiming to find out if one exists between Client and server.
+     * Tests are performed in both directions.
      *
      * @param protocolObj Protocol Object used for message exchange
      * @return boolean, true if test was not completed, false if test was completed.
@@ -1187,8 +1157,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                            See the @see methods for more information on causes for Exception.
      * @see Protocol#recv_msg(Message msgParam)
      * @see Protocol#send_json_msg(byte bParamType, byte[] baParamTab)
-     *
-     *
      */
     public boolean test_sfw(Protocol protocolObj) throws IOException {
         Message msg = new Message();
