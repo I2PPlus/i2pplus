@@ -1529,73 +1529,67 @@ img.unknownflag{opacity:.8}
 #consolepass input[name="nofilter_pw"],#externali2cp input[name="nofilter_pw"]{background:var(--bg) var(--key) no-repeat 5px center/16px}
 
 /* logs */
-font[color="#cc0000"] span{color:var(--bg);background:#c00}
-font[color="#ff3300"] span{color:var(--bg);background:#f30}
-font[color="#bf00df"] span{color:var(--bg);background:#717}
-font[color="#000099"] span{color:var(--bg);background:#339}
-font[color="#006600"] span{color:var(--bg);background:#444}
 .embedlink{padding-left:5px;float:right;border-left:var(--border)}
-#logs h3 a.delete::after{margin-left:9px;background:var(--close) no-repeat center center/16px}
-#logs h3 a.delete:hover::after{background:var(--close_hover) no-repeat center center/16px}
-#logs h3 a.delete::before{margin:-6px 0 -6px 6px;width:1px;height:32px;display:inline-block;vertical-align:middle;background:var(--border_color);content:""}
-#logs #eventlogLink{margin:-9px 0 -14px;float:right;font-size:0;border-bottom:0;background:none}
+.log_critical.colorize::before,.log_critical .log_level{background:#c00}
+.log_critical.colorize{color:#c00}
+.log_debug.colorize::before,.log_debug .log_level,.log_omitted .log_level{background:#339}
+.log_debug.colorize{color:#339}
+.log_error.colorize::before,.log_error .log_level{background:#730}
+.log_error{color:#730}
+.log_info.colorize::before,.log_info.colorize .log_level{background:#363}
+.log_info.colorize{color:#363}
+.log_level{margin:0 -2px;min-width:50px;display:inline-block;line-height:1.1;text-align:center;vertical-align:middle;color:#fff;border-radius:2px;opacity:.7}
+.log_warn.colorize::before,.log_warn .log_level{background:#971197}
+.log_warn.colorize{color:#737}
+#criticallogs tr:first-child{display:none}
+#enviro td,#eventlogs td{padding:5px 10px}
+#enviro td:last-child b{margin-left:8px;margin-right:5px}
+#logFilter{margin:-6px -7px -6px 0;display:block}
+#logFilterInput{margin:2px -5px -1px 0;padding-left:30px;width:160px;min-width:0;background:#fff var(--filter) no-repeat 8px center/16px;background-blend-mode:luminosity}
+#logRefreshInterval:focus,#logFilterInput:focus{box-shadow:var(--btn_shadow_active);filter:none!important;caret-color:auto}
+#logRefreshInterval:focus{background-blend-mode:normal}
+#logRefreshInterval{margin:5px 3px -1px 0;padding:4px 4px 4px 28px;width:50px;border:0;background:#fff var(--refresh) no-repeat 8px center/16px}
+#logs .embedlink{margin-top:1px;font-size:85%}
+#logs .logtable p{margin:0;padding:0}
+#logs .logtable tr:first-child{border-bottom:var(--border);padding:5px 10px}
+#logs .logtable ul{margin-bottom:0}
+#logs #enviro td:first-child{padding-right:0;width:1%;text-align:right;white-space:nowrap}
+#logs #enviro:hover #cputype{background:none}
+#logs #enviro:hover tr,#logs #enviro:hover td{background:var(--row_hover);border-top:1px inset #0000;border-bottom:1px inset #0000}
+#logs #enviro{user-select:all;cursor:text}
 #logs #eventlogLink::after{width:19px;height:16px;padding:12px 8px 8px 4px;display:inline-block;background:url(/themes/console/images/logs.svg) no-repeat center center/16px;content:""}
 #logs #eventlogLink:hover::after{transform:scale(1.2)}
-#logs #enviro{user-select:all;cursor:text}
-#logs #enviro:hover tr,#logs #enviro:hover td{background:var(--row_hover);border-top:1px inset #0000;border-bottom:1px inset #0000}
-#enviro td,#eventlogs td{padding:5px 10px}
-#logs #enviro td:first-child{padding-right:0;width:1%;text-align:right;white-space:nowrap}
-#enviro td:last-child b{margin-left:8px;margin-right:5px}
-#logs #enviro:hover #cputype{background:none}
-#logs .embedlink{margin-top:1px;font-size:85%}
-#logs .logtable tr:first-child{border-bottom:var(--border);padding:5px 10px}
-#logs .logtable p{margin:0;padding:0}
+#logs #eventlogLink{margin:-9px 0 -14px;float:right;font-size:0;border-bottom:0;background:none}
 #logs code{font-size:8pt}
-#logs font[color^="#"]::before{margin-right:5px;margin-left:-17px;width:6px;height:6px;display:inline-block;vertical-align:calc(1px);border-radius:50%;background:var(--bg);content:""}
-#logs li font[color="#cc0000"]::before{background:#c00}
-#logs li font[color="#006600"]{color:#444}
-#logs li font[color="#006600"]::before{background:#444}
-#logs li font[color="#ff3300"]::before{background:#f30}
-#logs li font[color="#bf00df"]{color:#717}
-#logs li font[color="#bf00df"]::before{background:#717}
-#logs li font[color="#000099"]{color:#339}
-#logs li font[color="#000099"]::before{background:#339}
-#logs li a[href^="/netdb?l="]{white-space:nowrap}
-#logs li a:not(:hover){color:inherit}
+#logs h3 a.delete::after{margin-left:9px;background:var(--close) no-repeat center center/16px}
+#logs h3 a.delete::before{margin:-6px 0 -6px 6px;width:1px;height:32px;display:inline-block;vertical-align:middle;background:var(--border_color);content:""}
+#logs h3 a.delete:hover::after{background:var(--close_hover) no-repeat center center/16px}
+#logs li{margin-left:15px;padding:0 2px 4px 22px;width:calc(100% - 24px);vertical-align:middle;line-height:1.3;text-align:left;list-style:none;border-top:var(--border_softer);border-bottom:var(--border_softer);box-shadow:var(--highlight),inset 0 0 1px 1px #edefff;background:#0000;opacity:.85;animation:ease logupdate 1s}
+#logs li:first-child,#logs li:first-child:hover{border-top:0}
+#logs li:first-child{padding-top:0;margin-top :1px}
+#logs li:hover{position:relative;z-index:10;border-top:var(--border_soft);border-bottom:var(--border_soft);background:var(--row_hover);opacity:1;transition:ease all .15s}
+#logs li:nth-child(n+2){margin-top:-1px}
+#logs li:last-child{border-bottom:0}
+#logs li:last-child::after{border:0;margin:-4px}
+#logs li::after{margin:2px 0 -4px;width:100%;display:block;content:""}
+#logs li::before{margin-left:-15px;margin-right:5px;content:"";display:inline-block;width:6px;height:6px;vertical-align:calc(1px);color:#777;border-radius:50%;filter:saturate(1);transform:none}
 #logs li a::before{margin:0 3px 0 0;width:16px;height:16px;display:inline-block;vertical-align:text-bottom;content:""}
-#logs li a[href^="/netdb?r="]::before{background:var(--client) no-repeat center center/16px}
+#logs li a:not(:hover){color:inherit}
 #logs li a[href^="/netdb?ip"]::before{width:14px;background:url(/themes/console/images/globe.svg) no-repeat center center/14px}
 #logs li a[href^="/netdb?l="]::before{margin:0 1px 0 -3px;background:var(--key) no-repeat center center/12px}
-#logs li{vertical-align:middle}
-#logs ul{margin-left:-22px;margin-right:-28px;margin:-4px 0 0 -20px;display:inline-block;word-break:break-all}
-#logs .logtable ul{margin-bottom:0}
-#logs li{width:100%;line-height:1.3;text-align:left;list-style:none;box-shadow:var(--highlight),inset 0 0 1px 1px #edefff}
-#logs li::after{margin:2px 0 -4px;width:100%;display:block;content:""}
-#logs li:last-child::after{border:0;margin:-4px}
-#logs li:first-child{padding-top:0;margin-top :1px}
+#logs li a[href^="/netdb?l="]{white-space:nowrap}
+#logs li a[href^="/netdb?r="]::before{background:var(--client) no-repeat center center/16px}
 #logs ul{margin-left:-5px;margin-bottom:-3px;padding-left:0;padding-right:0;width:calc(100% + 10px);margin-right:-20px}
-#logs li{padding:0 2px 4px 22px;width:100%;width:calc(100% - 24px);border-top:var(--border_softer);border-bottom:var(--border_softer);background:#0000;opacity:.85;animation:ease logupdate 1s}
-#logs li:first-child,#logs li:first-child:hover{border-top:0}
-#logs li:nth-child(n+2){margin-top:-1px}
-#logs li:hover{position:relative;z-index:10;border-top:var(--border_soft);border-bottom:var(--border_soft);background:var(--row_hover);opacity:1;transition:ease all .15s}
-#logs li:last-child{border-bottom:0}
-#logs li span{margin:0 -2px;min-width:50px;display:inline-block;line-height:1.1;text-align:center;vertical-align:middle;border-radius:2px;opacity:.7}
-#criticallogs tr:first-child{display:none}
-#wrapperlogs tr:last-child td{padding:0 0 0 2px}
-#service_logs{white-space:pre-wrap;word-break:break-all;margin:0;padding:0;width:100%;max-height:500px;overflow:auto}
-#toggleRefresh{margin:-5px -3px -10px 0;width:24px;height:32px;float:right;border-left:var(--border_inner);background:var(--pause) no-repeat center center/14px}
-#toggleRefresh:hover{background:var(--pause_hover) no-repeat center center/16px}
-#toggleRefresh.disabled{background:var(--start) no-repeat center center/16px}
-#toggleRefresh:hover{cursor:pointer}
-
+#logs ul{margin-left:-22px;margin-right:-28px;margin:-4px 0 0 -20px;display:inline-block;word-break:break-all}
 #refreshPeriod,#logFilter{width:auto;display:none;float:right;transform:scale(80%)}
 #refreshPeriod{margin:-22px -12px -10px}
 #routerlogs tr:first-child:hover #refreshPeriod,#refreshPeriod:focus-within{margin:-26px -14px -4px 0;display:block!important}
-#logFilter{margin:-6px -7px -6px 0;display:block}
-#logFilterInput{margin:2px -5px -1px 0;padding-left:30px;width:160px;min-width:0;background:#fff var(--filter) no-repeat 8px center/16px;background-blend-mode:luminosity}
-#logRefreshInterval{margin:5px 3px -1px 0;padding:4px 4px 4px 28px;width:50px;border:0;background:#fff var(--refresh) no-repeat 8px center/16px}
-#logRefreshInterval:focus,#logFilterInput:focus{box-shadow:var(--btn_shadow_active);filter:none!important;caret-color:auto}
-#logRefreshInterval:focus{background-blend-mode:normal}
+#service_logs{white-space:pre-wrap;word-break:break-all;margin:0;padding:0 2px;width:calc(100% - 6px);max-height:500px;overflow:auto}
+#toggleRefresh:hover{background:var(--pause_hover) no-repeat center center/16px}
+#toggleRefresh:hover{cursor:pointer}
+#toggleRefresh.disabled{background:var(--start) no-repeat center center/16px}
+#toggleRefresh{margin:-5px -3px -10px 0;width:24px;height:32px;float:right;border-left:var(--border_inner);background:var(--pause) no-repeat center center/14px}
+#wrapperlogs tr:last-child td{padding:0 0 0 2px}
 
 /* debug */
 .debug_container{margin-top:-14px;padding:10px 15px;border:var(--border)}

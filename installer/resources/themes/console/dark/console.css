@@ -2473,8 +2473,18 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 #routerinformation h3#transports::before{background-image:url(/themes/console/images/globe.svg)}
 
 /* logs */
-.log_debug,.log_info,.log_warn,.log_error,.log_crit,.log_omitted{padding:1px 2px;min-width:36px;max-width:36px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;line-height:1;letter-spacing:.02em;text-align:center;font-weight:600;color:#000c;border-radius:2px}
-.log_info{background:#363}
+.log_level{opacity:.8}
+.log_level{padding:1px 2px;min-width:36px;max-width:36px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;line-height:1;letter-spacing:.02em;text-align:center;font-weight:600;color:#000c;border-radius:2px}
+.log_critical.colorize{color:#900}
+.log_critical.colorize::before,.log_critical .log_level{background:#900}
+.log_debug.colorize{color:#346}
+.log_debug.colorize::before,.log_debug .log_level,.log_omitted .log_level{background:#346}
+.log_error{color:#730}
+.log_error.colorize::before,.log_error .log_level{background:#730}
+.log_info.colorize{color:#363}
+.log_info.colorize::before,.log_info.colorize .log_level{background:#363}
+.log_warn.colorize{color:#737}
+.log_warn.colorize::before,.log_warn .log_level{background:#971197}
 .logtable ul li{margin-left:15px;list-style:none}
 table[id$="logs"] tr:first-child{background:#001000}
 table[id$="logs"] tr:nth-child(2){background:none}
@@ -2519,8 +2529,8 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #logs #wrapperlogs .nologs{padding:7px 18px}
 #routerlogs li,#criticallogs li{margin:0 -11px 0 -9px;padding:0 10px;line-height:1.7;width:calc(100% - 5px)}
 #routerlogs li::after,#criticallogs li::after{display:none}
-#routerlogs li:hover font[color],#criticallogs li:hover font[color="#cc0000"]{filter:saturate(120%)}
-#routerlogs li:hover font,#criticallogs li:hover font{filter:saturate(200%)}
+#routerlogs li:hover,#criticallogs li:hover{filter:saturate(200%)}
+#routerlogs li.log_critical:hover,#criticallogs li.log_critical:hover{filter:saturate(120%)}
 #routerlogs td p,#wrapperlogs td p{margin:0;width:fit-content}
 #routerlogs ul,#criticallogs ul{margin:-4px 0;border:0}
 #servicelogs{color:var(--ink)}
@@ -2540,28 +2550,7 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #logRefreshInterval{margin:-1px -2px -1px 0;padding-left:28px;width:50px;background:#000 var(--refresh) no-repeat 6px center/16px}
 #logRefreshInterval:focus,#logFilterInput:focus{box-shadow:var(--btn_shadow_active);filter:none!important;caret-color:#225;background-blend-mode:normal}
 #logRefreshInterval:focus{background:var(--refresh) no-repeat 6px center/16px,var(--input_txt)}
-
-#logs font[color]::before{margin-left:0;margin-right:5px;content:"";display:inline-block;width:6px;height:6px;vertical-align:calc(1px);color:#777;border-radius:50%;filter:saturate(1);transform:none;animation:linear ping .1s}
-/* critical */
-font[color="#cc0000"]{color:#900}
-#logs li font[color="#cc0000"]::before{background:#900}
-.log_crit{background:#900}
-/* warning */
-font[color="#bf00df"]{color:#737}
-#logs li font[color="#bf00df"]::before{background:#971197}
-.log_warn{background:#971197}
-/* error */
-font[color="#ff3300"]{color:#730}
-#logs li font[color="#ff3300"]::before{background:#730}
-.log_error{background:#730}
-/* debug */
-font[color="#006600"]{color:#346}
-#logs li font[color="#006600"]::before{background:#346}
-.log_debug,.log_omitted{background:#346}
-/* info */
-font[color="#000099"]{color:#363}
-#logs li font[color="#000099"]::before{background:#363}
-
+#logs li::before{margin-left:0;margin-right:5px;content:"";display:inline-block;width:6px;height:6px;vertical-align:calc(1px);color:#777;border-radius:50%;filter:saturate(1);transform:none;animation:linear ping .1s}
 #logs li a[href^="/netdb?l="]{white-space:nowrap}
 #logs li a:not(:hover){color:inherit}
 #logs li a::before{margin:0 3px 0 0;width:16px;height:16px;display:inline-block;vertical-align:text-bottom;content:"";mix-blend-mode:luminosity}
@@ -3079,7 +3068,7 @@ span#newtab{margin-top:4px}
 .h3navlinks a:last-child{margin-right:-1px}
 .joblog h3{margin-top:7px;padding-top:7px}
 .leaseset th{line-height:1}
-.log_debug,.log_info,.log_warn,.log_error,.log_crit,.log_omitted{margin-bottom:-3px;min-width:42px;max-width:42px}
+.log_level{margin-bottom:-3px;min-width:42px;max-width:42px}
 .main,#news,h1,h1[class],.sorry,h1+.sorry,#console_404 .sorry{margin-left:272px}
 .newsAuthor{padding-left:18px;background-size:13px}
 .plus{margin:2px 8px 0 0}

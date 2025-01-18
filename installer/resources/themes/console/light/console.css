@@ -98,6 +98,7 @@ h4.sb_info{margin-top:-11px}
 .sb table:not(#sb_localtunnels):not(#sb_services) tr::before{width:0;height:1px;position:absolute;z-index:99999;top:-1px;left:-1px;right:-1px;display:block;background:#f90;content:"";animation:bar .05s steps(3) reverse;will-change:transform}
 #clock{margin:-5px -5px -6px;padding:6px 0 5px;line-height:1;letter-spacing:.1em;font-size:17pt;font-weight:700;color:var(--ink);box-shadow:0 0 0 1px #a7a7be,var(--bevel);opacity:.9}
 #clock::after{margin-left:3px;content:"UTC";display:inline-block;font-size:50%;vertical-align:middle}
+#newHostsList{display:none}
 #error500 #sidebar img[src$="i2plogo.png"]{margin-bottom:-3px;width:186px}
 #sb_advanced,#sb_internals,#sb_help{margin:-9px -6px -6px;width:204px}
 #sb_advancedgeneral,#sb_bandwidth,#sb_general,#sb_peers,#sb_peersadvanced,#sb_queue,#sb_shortgeneral,#sb_tunnels{margin-top:-11px;margin-bottom:-7px;border-collapse:separate;border-spacing:1px}
@@ -618,7 +619,7 @@ td.infowarn,#help tr:hover td.infowarn{background:var(--infowarn) no-repeat 15px
 
 /* logs */
 .embedlink{margin:-5px -5px -5px 0;padding:5px;float:right;vertical-align:middle;font-size:85%}
-.log_debug,.log_info,.log_warn,.log_error,.log_crit,.log_omitted{margin:1px -3px -1px;padding:1px 2px;min-width:36px;max-width:36px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1;vertical-align:top;text-align:center;color:#fff;font-weight:700;font-size:95%;border-radius:2px;background:#55555f;opacity:.8}
+.log_level{margin:-4px -3px 0;padding:2px 2px 0;min-width:36px;max-width:36px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1;vertical-align:middle;text-align:center;color:#fff;font-weight:700;font-size:95%;border-radius:2px;background:#55555f;opacity:.8}
 .log_omitted{margin-right:1px}
 .nologs{padding:6px 8px}
 #logs font[color^="#"]::before{margin-right:5px;margin-left:-17px;margin:-2px 5px 0 -17px;width:6px;height:6px;display:inline-block;content:"";vertical-align:middle;border-radius:50%;background:#fff}
@@ -634,7 +635,7 @@ td.infowarn,#help tr:hover td.infowarn{background:var(--infowarn) no-repeat 15px
 #logs table[id$="logs"] tr:first-child td,.subheading{background:linear-gradient(45deg,#fcfcff,#eef);box-shadow:var(--highlight)}
 #logs>.tabletitle{margin:15px auto -3px;z-index:999}
 #logs ul{margin:-5px 0 -3px;width:100%;display:inline-block;word-break:break-all}
-#logs ul li{margin:0 0 -1px -4px;padding-left:0;width:calc(100% + 2px)}
+#logs ul li{margin:0 0 -1px -4px;padding-left:4px;width:calc(100% - 2px)}
 #logs a.configure,#logs a.delete,#logs a.configure:hover,#logs a.delete:hover,#logs a.configure:focus,#logs a.delete:focus,#logs a.active:hover,#logs a.active:hover{border-left:0;box-shadow:none;background:none;display:inline-block}
 #logs a.delete::after,#logs a.configure::after,#logs #eventlogLink::after{margin:-7px -8px -6px 0;padding:8px 4px 8px 20px;border-left:1px solid #aab}
 #logs a.configure::after{padding-left:23px;padding-right:6px}
@@ -679,29 +680,18 @@ table[id$="logs"] ul li:last-child{margin-bottom:10px}
 #logRefreshInterval:focus,#logFilterInput:focus{box-shadow:var(--btn_shadow_active);filter:none!important;caret-color:auto}
 #logRefreshInterval:focus{background-blend-mode:normal}
 
-/* critical */
-#logs li font[color="#cc0000"]::before{background:#c00}
-#logs li font[color="#cc0000"]{color:#c00}
-.log_crit{background:#c00}
+.log_critical.colorize::before,.log_critical .log_level{background:#c00}
+.log_critical.colorize{color:#c00}
+.log_debug.colorize::before,.log_debug .log_level,.log_omitted .log_level{background:#339}
+.log_debug.colorize{color:#339}
+.log_error.colorize::before,.log_error .log_level{background:#730}
+.log_error{color:#730}
+.log_info.colorize::before,.log_info.colorize .log_level{background:#363}
+.log_info.colorize{color:#363}
+.log_level{margin:0 -2px;min-width:50px;display:inline-block;line-height:1.1;text-align:center;vertical-align:middle;color:#fff;border-radius:2px;opacity:.7}
+.log_warn.colorize::before,.log_warn .log_level{background:#971197}
+.log_warn.colorize{color:#737}
 
-/* error */
-.log_error{background:#800}
-#logs li font[color="#ff3300"]::before{background:#800}
-#logs li font[color="#ff3300"]{color:#800}
-
-/* warn */
-.log_warn{background:#505}
-#logs li font[color="#bf00df"]::before{background:#505}
-#logs li font[color="#bf00df"]{color:#505}
-
-/* info */
-.log_info{background:var(--ink)}
-#logs li font[color="#000099"]::before{background:var(--ink)}
-#logs li font[color="#000099"]{color:var(--ink)}
-
-/* notice */
-#logs li font[color="#006600"]::before{background:#55555f}
-#logs li font[color="#006600"]{color:#55555f}
 #bugreports{margin-top:15px;padding:10px;font-size:9pt}
 #bugreports td{box-shadow:none}
 #enviro,table[id$="logs"]{font-size:9pt;padding:10px}
@@ -2636,7 +2626,7 @@ hr[hidden]+#sb_graphcontainer{margin-top:-9px}
 #help h2,#help #newuserguide h2{padding:9px 8px 7px 34px;font-size:12pt;background-size:20px,100%,100%,100%}
 #home h4 a::after{margin:-2px 10px 3px -6px}
 #logs li font[color]::before{display:none}
-#logs li span[class]{margin:2px 2px 0 -44px;float:left}
+#logs li span[class]{margin:2px 4px 0 -44px;float:left}
 #logs ul li{padding-left:46px;width:calc(100% - 44px);line-height:1.4}
 #pluginconfig{margin-top:-14px}
 p#pluginconfigtext{margin-top:11px}
@@ -2835,7 +2825,7 @@ pre,.footnote,div.news,.news,.links code,.main[id^="config_"] .encDests th,.sb_n
 form[action="configplugins"] input.reload{margin-top:1px;margin-right:4px}
 h1[class],#wizardpage h1{padding:20px 15px 17px 55px;font-size:19pt;background-size:38px auto,4px,100%,100%,100%}
 .homelinkedit th:first-child,#sidebarconf th:first-child,#consolepass th:first-child{font-size:0}
-.log_debug,.log_info,.log_warn,.log_error,.log_crit,.log_omitted{margin:2px -3px -2px;min-width:40px;max-width:40px}
+.log_level{margin:-2px -3px 0;min-width:40px;max-width:40px}
 .log_omitted{margin-right:1px}
 .leasesets_container{margin-bottom:7px}
 .leasesets_container a[href*=".i2p"]{font-size:9pt}

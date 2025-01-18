@@ -322,31 +322,29 @@ public class LogsHelper extends HelperBase {
             msg = msg.replace("</b>", "");
             msg = msg.replace("...", "&hellip;");
             // highlight log level indicators
-            msg = msg.replace("| DEBUG", " <span class=\"log_debug\">DEBUG</span> ");
-            msg = msg.replace("| INFO ", " <span class=\"log_info\">INFO</span> ");
-            msg = msg.replace("| WARN ", " <span class=\"log_warn\">WARN</span> ");
-            msg = msg.replace("| ERROR", " <span class=\"log_error\">ERROR</span> ");
-            msg = msg.replace("| CRIT ", " <span class=\"log_crit\">CRIT</span> ");
-            msg = msg.replace("| &darr;&darr;&darr; ", " <span class=\"log_omitted\">&darr;&darr;&darr;</span> "); // LogWriter BUFFER_DISPLAYED_REVERSE = true;
-            msg = msg.replace("| &uarr;&uarr;&uarr; ", " <span class=\"log_omitted\">&uarr;&uarr;&uarr;</span> ");
+            msg = msg.replace("| DEBUG", " <span class=log_level>DEBUG</span> ");
+            msg = msg.replace("| INFO ", " <span class=log_level>INFO</span> ");
+            msg = msg.replace("| WARN ", " <span class=log_level>WARN</span> ");
+            msg = msg.replace("| ERROR", " <span class=log_level>ERROR</span> ");
+            msg = msg.replace("| CRIT ", " <span class=log_level>CRIT</span> ");
+            msg = msg.replace("| &darr;&darr;&darr; ", " <span class=log_omitted>&darr;&darr;&darr;</span> "); // LogWriter BUFFER_DISPLAYED_REVERSE = true;
+            msg = msg.replace("| &uarr;&uarr;&uarr; ", " <span class=log_omitted>&uarr;&uarr;&uarr;</span> ");
             // remove  last \n that LogRecordFormatter added
             if (msg.endsWith(NL)) {msg = msg.substring(0, msg.length() - NL.length());}
             // replace \n so that exception stack traces will format correctly and will paste nicely into pastebin
-            msg = msg.replace("\n", "<br>&nbsp;&nbsp;&nbsp;&nbsp;\n");
-            if (msg.contains("Sending client")) {msg = msg.replace("<br>&nbsp;&nbsp;&nbsp;&nbsp;\n", "");} // SAM client
-            buf.append("<li>");
-            if (colorize) {
-                String color;
-                if (msg.contains(_c("CRIT"))) {color = "#cc0000";}
-                else if (msg.contains(_c("ERROR"))) {color = "#ff3300";}
-                else if (msg.contains(_c("WARN"))) {color = "#bf00df";}
-                else if (msg.contains(_c("INFO"))) {color = "#000099";}
-                else {color = "#006600";}
-                buf.append("<font color=\"").append(color).append("\">");
-                buf.append(msg);
-                buf.append("</font>");
-            } else {buf.append(msg);}
-            buf.append("</li>\n");
+            msg = msg.replace("\n", "<br>&nbsp;&nbsp;\n");
+            if (msg.contains("Sending client")) {msg = msg.replace("<br>&nbsp;&nbsp;\n", "");} // SAM client
+            String level;
+            String color;
+            if (msg.contains(_c("CRIT"))) {level = "log_critical";}
+            else if (msg.contains(_c("ERROR"))) {level = "log_error";}
+            else if (msg.contains(_c("WARN"))) {level = "log_warn";}
+            else if (msg.contains(_c("INFO"))) {level = "log_info";}
+            else if (msg.contains("&darr;") || msg.contains("&uarr;"))  {level = "log_omitted";}
+            else {level = "log_debug";}
+            buf.append("<li class=\"").append(level);
+            if (colorize) {buf.append(" colorize");}
+            buf.append("\">").append(msg).append("</li>\n");
         }
         buf.append("</ul>\n");
 
