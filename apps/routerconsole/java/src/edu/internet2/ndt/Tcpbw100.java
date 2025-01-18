@@ -636,6 +636,12 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         // If disableOptions is not set, then add button
         if (getParameter("disableOptions") == null) {buttonsPanel.add(_buttonOptions);}
 
+        // Add "Details" button
+        _buttonDetails = new JButton(_resBundDisplayMsgs.getString("moreDetails"));
+        _buttonDetails.addActionListener(this);
+        if (getParameter("disableDetails") == null) {buttonsPanel.add(_buttonDetails);}
+        _buttonDetails.setEnabled(false);
+
         // add buttons panel to the main window
         getContentPane().add(BorderLayout.SOUTH, buttonsPanel);
 
