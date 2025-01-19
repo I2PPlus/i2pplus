@@ -35,6 +35,7 @@ import org.json.simple.Jsoner;
 
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
+import net.i2p.util.Addresses;
 import net.i2p.util.EepGet;
 import net.i2p.util.SSLEepGet;
 import net.i2p.util.I2PAppThread;
@@ -169,11 +170,37 @@ public class MLabRunner {
                                 server_city = (String) map.get("city");
                                 server_country = (String) map.get("country");
                                 // ignore the returned port in the URL (7123) which is the applet, not the control port
-                                if (_log.shouldWarn())
-                                    _log.warn("Selected server: " + server_host);
+                                if (_log.shouldWarn()) {_log.warn("Selected server: " + server_host);}
+
+                                /*
+                                 * use provided IP instead to avoid another lookup,
+                                 * and also, mlab sometimes hands out hostnames that do not resolve with DNS
+                                 * but IPs won't work with ssl
+                                 */
+                                if (!useSSL) {
+                                    List<?> ips = (List<?>) map.get("ip");
+                                    if (ips != null) {
+                                        boolean ipv6 = !Addresses.isConnected();
+                                        for (Object o : ips) {
+                                            String ip = (String) o;
+                                            if (ipv6) {
+                                                if (ip.indexOf(':') >= 0) {
+                                                    server_host = ip;
+                                                    _log.warn("Using provided IP: " + server_host);
+                                                    break;
+                                                }
+                                            } else {
+                                                if (ip.indexOf('.') >= 0) {
+                                                    server_host = ip;
+                                                    _log.warn("Using provided IP: " + server_host);
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             } catch (Exception e) {
-                                if (_log.shouldWarn())
-                                    _log.warn("Failed to get server", e);
+                                if (_log.shouldWarn()) {_log.warn("Failed to get server", e);}
                             }
                         }
 
@@ -181,8 +208,9 @@ public class MLabRunner {
                             // fallback to old, discouraged approach
                             server_host = "ndt.iupui.donar.measurement-lab.org";
                             useSSL = false;
-                            if (_log.shouldWarn())
+                            if (_log.shouldWarn()) {
                                 _log.warn("Failed to select server, falling back to donar method");
+                            }
                         }
 
                         String[] args = useSSL ? new String[] { "-s", server_host } : new String[] { server_host };
