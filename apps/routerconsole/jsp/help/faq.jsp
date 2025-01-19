@@ -43,7 +43,7 @@
 <p><%=intl._t("If your router has 10 or more active peers, everything is fine. The router should maintain connections to a few peers at all times. The best way to stay \"better-connected\" to the network is to <a href=/config>share more bandwidth</a>.")%></p>
 
 <h3 id=addressbooksubs><%=intl._t("I'm missing lots of hosts in my addressbook. What are some good subscription links?")%></h3>
-<span>
+<div>
 <p><%=intl._t("The default subscription is to <code>http://i2p-projekt.i2p/hosts.txt</code> which is seldom updated. If you don't have another subscription, you may often have to use \"jump\" links which is much slower but ensures that your addressbook is only populated by sites you use (in addition to the default subscription addresses). To speed up browsing on I2P, it's a good idea to add some addressbook subscriptions.")%></p>
 
 <p><%=intl._t("Here are some other public addressbook subscription links. You may wish to add one or two to your <a href=/susidns/subscriptions target=_blank rel=noreferrer>susidns subscription list</a>. In the event that addresses conflict in the subscriptions, the lists placed at the top of your susidns configuration will take precedence over those placed further down.")%></p>
@@ -56,7 +56,7 @@
 </ul>
 
 <p><%=intl._t("Note that subscribing to a hosts.txt service is an act of trust, as a malicious subscription could give you incorrect addresses, so be careful subscribing to lists from unknown sources. The operators of these services may have various policies for listing hosts. Presence on this list does not imply endorsement.")%></p>
-</span>
+</div>
 
 <h3><%=intl._t("How do I access IRC, BitTorrent, or other services on the regular Internet?")%></h3>
 <p><%=intl._t("Unless an outproxy has been set up for the service you want to connect to, this is not possible, with the exception of BitTorrent (see below). There are only three types of outproxies running right now: HTTP, HTTPS, and email. Note that there is currently no publicly listed SOCKS outproxy. If this type of service is required, try <a href=https://torproject.org/ target=_blank rel=noreferrer class='sitelink external'>Tor</a>.")%></p>
@@ -77,7 +77,7 @@
 <p><%=intl._t("If you consider every eepsite that has ever been created, yes, most of them are down. People and eepsites come and go. A good way to get started in I2P is check out a list of eepsites that are currently up. <a href=http://notbob.i2p/ target=_blank rel=noreferrer class=sitelink>http://notbob.i2p</a> tracks active eepsites.")%></p>
 
 <h3><%=intl._t("Where are my I2P configuration files stored?")%></h3>
-<span>
+<div>
 <p><%=intl._t("Configuration files for the router, installed plugins, and router logs are stored in the following location:")%></p>
 <ul id=faqconfigfiles>
 <li><b><%=intl._t("Windows")%>:</b> <code>%APPDATA%\I2P\</code></li>
@@ -89,23 +89,29 @@
 </ul>
 </li>
 </ul>
-</span>
+</div>
 
 <h3><%=intl._t("How do I enable https:// access for the router console?")%></h3>
-<span>
+<div>
 <p><%=intl._t("Locate the configuration file: <code>00-net.i2p.router.web.RouterConsoleRunner-clients.config</code> in the <code>clients.config.d</code> folder in your I2P settings directory, and then edit accordingly:")%></p>
 <ul>
 <li><b><%=intl._t("For both non-SSL and SSL")%>:</b> <code>clientApp.0.args=7657 127.0.0.1 -s 7667 127.0.0.1 ./webapps/</code></li>
 <li><b><%=intl._t("For SSL only")%>:</b> <code>clientApp.0.args=-s 7667 127.0.0.1 ./webapps/</code></li>
 </ul>
-</span>
+</div>
+
+<h3><%=intl._t("How can I configure the console and web services to be accessible on my local network?")%></h3>
+<div>
+<p><%=intl._t("To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access.")%><br><%=intl._t("Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:")%>&nbsp;<code>clientApp.0.args=7657 127.0.0.1,192.168.1.10 -s 7667 127.0.0.1,192.168.1.10 ./webapps/</code></p>
+<p><%=intl._t("For most client services, change the listening address for the relevant service in the Tunnel Manager’s configuration section using the <i>reachable by</i> dropdown.")%></p>
+</div>
 
 <h3><%=intl._t("How do I connect to IRC within I2P?")%></h3>
-<span>
+<div>
 <p><%=intl._t("A tunnel to the main IRC server network within I2P, Irc2P, is created when I2P is installed (see the <a href=/i2ptunnelmgr>Tunnel Manager</a>), and is automatically started when the I2P router starts. To connect to it, tell your IRC client to connect to server: <code>127.0.0.1</code> port: <code>6668</code>.")%></p>
 
 <p><%=intl._t("XChat-like client users can create a new network with the server <code>127.0.0.1/6668</code> (remember to tick <i>Bypass proxy server</i> if you have a proxy server configured), or you can connect with the command <code>/server 127.0.0.1 6668</code>. Different IRC clients may vary the syntax.")%></p>
-</span>
+</div>
 
 <h3><%=intl._t("My IRC client keeps disconnecting from the network, is there anything I can do?")%></h3>
 
