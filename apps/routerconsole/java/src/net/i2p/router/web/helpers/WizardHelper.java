@@ -27,6 +27,8 @@ public class WizardHelper extends HelperBase {
     // session scope
     private TestListener _listener;
     private MLabRunner.ToolRun _runner;
+    private String _lastTestStatus;
+    private int _lastTestCount;
 
     /**
      * Overriden to only do this once.
@@ -50,8 +52,30 @@ public class WizardHelper extends HelperBase {
     public synchronized String getTestStatus() {
         String rv = "";
         if (_runner != null) {
+            /*
+             * NDT-translated string
+             * NDT has 200+ translated strings but only has 7 translations and we haven't put them up on Transifex.
+             * There's only a few commonly seen strings via showStatus(), so if they come through untranslated,
+             * try to translate those here in our bundle
+             */
             String s = _runner.getStatus();
-            if (s != null) {rv = DataHelper.escapeHTML(s);}
+            if (s != null) {
+                if (s.equals("ready")) {s = _t("ready");}
+                else if (s.equals("inbound test...")) {s = _t("inbound test") + "...";}
+                else if (s.equals("outbound test...")) {s = _t("outbound test") + "...";}
+                else if (s.equals("done")) {s = _t("done");}
+                rv = DataHelper.escapeHTML(s);
+                if (rv.equals(_lastTestStatus)) {
+                    _lastTestCount++;
+                    int mod = _lastTestCount & 0x03;
+                    if (mod == 1) {rv += ".";}
+                      else if (mod == 2) {rv += "..";}
+                      else if (mod == 3) {rv += "...";}
+                } else {
+                    _lastTestCount = 0;
+                    _lastTestStatus = rv;
+                }
+            }
         }
         return rv;
     }
