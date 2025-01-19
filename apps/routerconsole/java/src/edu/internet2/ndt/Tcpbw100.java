@@ -1283,8 +1283,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             // Client can send any number of such meta data in a TEST_MSG format, and signal the end of the transmission using an empty TEST_MSG
             paramProtoObj.send_json_msg(MessageType.TEST_MSG, new byte[0]);
 
-            // The server now closes the META test session by sending a
-            // TEST_FINALIZE message
+            // The server now closes the META test session by sending a TEST_FINALIZE message
             if (paramProtoObj.recv_msg(msg) != NDTConstants.PROTOCOL_MSG_READ_SUCCESS) { // error, message cannot be read/received properly
                 _sErrMsg = _resBundDisplayMsgs.getString("protocolError") + parseMsgBodyToInt(new String(msg.getBody()), 16) + " instead\n";
                 return true;
