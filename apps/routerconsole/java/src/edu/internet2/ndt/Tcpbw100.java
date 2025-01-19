@@ -2227,51 +2227,43 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
             // Is the loss excessive?
             // If the link speed is less than a T3, and loss is greater than 1 percent, loss is determined to be excessive.
-            if ((spd < 4) && (loss > .01)) {
-                _txtStatistics.append(_resBundDisplayMsgs.getString("excLoss") + "\n");
-            }
+            if ((spd < 4) && (loss > .01)) {_txtStatistics.append(_resBundDisplayMsgs.getString("excLoss") + "\n");}
 
             // Update statistics on TCP negotiated optional Performance Settings
             _txtStatistics.append("\n" + _resBundDisplayMsgs.getString(_sServerType + "tcpOpts") + " \n");
             _txtStatistics.append("RFC 2018 Selective Acknowledgment: ");
-            if (_iSACKEnabled != 0)
-                _txtStatistics.append(_resBundDisplayMsgs.getString("on") + "\n");
-            else
-                _txtStatistics.append(_resBundDisplayMsgs.getString("off") + "\n");
+            if (_iSACKEnabled != 0) {_txtStatistics.append(_resBundDisplayMsgs.getString("on") + "\n");}
+            else {_txtStatistics.append(_resBundDisplayMsgs.getString("off") + "\n");}
 
             _txtStatistics.append("RFC 896 Nagle Algorithm: ");
-            if (_iNagleEnabled != 0)
-                _txtStatistics.append(_resBundDisplayMsgs.getString("on") + "\n");
-            else
-                _txtStatistics.append(_resBundDisplayMsgs.getString("off") + "\n");
+            if (_iNagleEnabled != 0) {_txtStatistics.append(_resBundDisplayMsgs.getString("on") + "\n");}
+            else {_txtStatistics.append(_resBundDisplayMsgs.getString("off") + "\n");}
 
             _txtStatistics.append("RFC 3168 Explicit Congestion Notification: ");
-            if (_iECNEnabled != 0)
-                _txtStatistics.append(_resBundDisplayMsgs.getString("on") + "\n");
-            else
-                _txtStatistics.append(_resBundDisplayMsgs.getString("off") + "\n");
+            if (_iECNEnabled != 0) {_txtStatistics.append(_resBundDisplayMsgs.getString("on") + "\n");}
+            else {_txtStatistics.append(_resBundDisplayMsgs.getString("off") + "\n");}
 
             _txtStatistics.append("RFC 1323 Time Stamping: ");
-            if (_iTimestampsEnabled != 0)
-                _txtStatistics.append(_resBundDisplayMsgs.getString("on") + "\n");
-            else
-                _txtStatistics.append(_resBundDisplayMsgs.getString("off") + "\n");
+            if (_iTimestampsEnabled != 0) {_txtStatistics.append(_resBundDisplayMsgs.getString("on") + "\n");}
+            else {_txtStatistics.append(_resBundDisplayMsgs.getString("off") + "\n");}
 
+            /*
+             * Max rec window size lesser than TCP's max value, so, no scaling requested.
+             * According to RFC1323, Section 2.3 the max valid value of _iWinScaleRcvd is 14.
+             * Unclear why NDT uses 20 for this, but leaving for now in case this is a web100
+             * error value of some kind. (Revisit after Methodology document written.)
+             */
             _txtStatistics.append("RFC 1323 Window Scaling: ");
-            if (_iMaxRwinRcvd < NDTConstants.TCP_MAX_RECV_WIN_SIZE)
-                _iWinScaleRcvd = 0; // Max rec window size lesser than TCP's max value, so, no scaling requested
-                                    // According to RFC1323, Section 2.3 the max valid value of _iWinScaleRcvd is 14.
-                                    // Unclear why NDT uses 20 for this, but leaving for now in case this is a web100
-                                    // error value of some kind. (Revisit after Methodology document written.)
-            if ((_iWinScaleRcvd == 0) || (_iWinScaleRcvd > 20))
+            if (_iMaxRwinRcvd < NDTConstants.TCP_MAX_RECV_WIN_SIZE) {_iWinScaleRcvd = 0;}
+            if ((_iWinScaleRcvd == 0) || (_iWinScaleRcvd > 20)) {
                 _txtStatistics.append(_resBundDisplayMsgs.getString("off") + "\n");
-            else
+            } else {
                 _txtStatistics.append(_resBundDisplayMsgs.getString("on") + "; " +
                                       _resBundDisplayMsgs.getString("scalingFactors") + " -  " +
                                       _resBundDisplayMsgs.getString("server") + "=" +
                                       _iWinScaleRcvd + ", " + _resBundDisplayMsgs.getString("client") + "=" +
                                       _iWinScaleSent + "\n");
-
+            }
             _txtStatistics.append("\n");
             // End tcp negotiated performance settings
 
