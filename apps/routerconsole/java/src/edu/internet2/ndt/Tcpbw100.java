@@ -2157,7 +2157,8 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             rv = _sslFactory.createSocket(hostAddress, ctlPort);
             if (_log.shouldWarn()) {_log.warn("New SSL socket to " + hostAddress + ':' + ctlPort);}
         } else {
-            rv = new Socket(hostAddress, ctlPort);
+            rv = new Socket();
+            rv.connect(new InetSocketAddress(hostAddress, ctlPort), 30*1000);
             if (_log.shouldWarn()) {_log.warn("New non-SSL socket to " + hostAddress + ':' + ctlPort);}
         }
         return rv;
