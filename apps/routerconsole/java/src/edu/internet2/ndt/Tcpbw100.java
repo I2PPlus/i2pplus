@@ -1268,9 +1268,11 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                 return true;
             }
 
-            // As a response to the Server's TEST_START message, client responds with TEST_MSG.
-            // These messages may be used, as below, to send configuration data name-value pairs.
-            // Note that there are length constraints to keys- values: 64/256 characters respectively
+            /*
+             * As a response to the Server's TEST_START message, client responds with TEST_MSG.
+             * These messages may be used, as below, to send configuration data name-value pairs.
+             * Note that there are length constraints to keys- values: 64/256 characters respectively
+             */
             _log.warn("USERAGENT " + getUserAgent());
             paramProtoObj.send_json_msg(MessageType.TEST_MSG, (NDTConstants.META_CLIENT_OS + ":" + "Linux").getBytes());
             paramProtoObj.send_json_msg(MessageType.TEST_MSG, (NDTConstants.META_BROWSER_OS + ":" + UserAgentTools.getBrowser(getUserAgent())[2]).getBytes());
@@ -1711,30 +1713,24 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     }
 
     /**
-     * Method that interprets test results. This routine extracts the key-value
-     * pairs of results of various categories and assigns these to the correct
-     * variables.
+     * Method that interprets test results. This routine extracts the key-value pairs of results
+     * of various categories and assigns these to the correct variables.
      *
-     * These values are then interpreted to make decisions about various
-     * measurement items and written to the main results, statistics, web100 or
-     * mail-to panels.
+     * These values are then interpreted to make decisions about various measurement items and
+     * written to the main results, statistics or web100 panels.
      *
-     * @param sTestResParam
-     *            String containing all results
-     *
-     * */
+     * @param sTestResParam String containing all results
+     */
     public void testResults(String sTestResParam) {
         StringTokenizer tokens;
         int i = 0;
         String sSysvar, sStrval;
-        int iSysval, iZero = 0; // iBwdelay, iMinwin; // commented out unused
-                                // variables
+        int iSysval, iZero = 0;
         double dSysval2, j;
         long lSysval3;
         String sOsName, sOsArch, sOsVer, sJavaVer, sJavaVendor, sClient;
 
         // extract key-value pair results
-
         tokens = new StringTokenizer(sTestResParam);
         sSysvar = null;
         sStrval = null;
@@ -1745,11 +1741,10 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                 sStrval = tokens.nextToken();
                 _txtDiagnosis.append(sSysvar + " " + sStrval + "\n");
 
-                //check if it's save anywhere after parse
+                // Check if it's saved anywhere after parsing
                 if (isValueSave(sSysvar)) {
                     if (sSysvar.equals("DataBytesOut:")) {
-                        // long
-                        try {lSysval3 = Long.parseLong(sStrval);}
+                        try {lSysval3 = Long.parseLong(sStrval);} // long
                         catch (Exception e) {
                             _log.warn("Exception occured reading a web100 var " + sSysvar, e);
                             lSysval3 = -1;
@@ -1758,10 +1753,9 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                         save_long_values(sSysvar, lSysval3);
                     }
                     else if (sStrval.indexOf(".") == -1) { // no decimal point, hence
-                        // integer
-                        try{
-                            iSysval = Integer.parseInt(sStrval);
-                            // If it fails as an int it's probably to big since the values are often unsigned
+                        try {
+                            iSysval = Integer.parseInt(sStrval); // integer
+                            // If it fails as an int it's probably too big since the values are often unsigned
                         } catch (Exception e) {
                             _log.warn("Exception occured reading a web100 var " + sSysvar, e);
                             iSysval = -1;
@@ -1794,9 +1788,8 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         if (sOsArch.startsWith("x86") == true) {sClient = _resBundDisplayMsgs.getString("pc");}
         else {sClient = _resBundDisplayMsgs.getString("workstation");}
 
-        // Calculate some variables and determine path conditions
-        // Note: calculations now done in server and the results are shipped
-        // back to the client for printing.
+        // Calculate some variables and determine path conditions.
+        // Note: calculations now done in server and the results are shipped back to the client for printing.
 
         if (_iCountRTT > 0) {
 
@@ -1815,13 +1808,8 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
                 } else {
                     // get link speed
-
-                    _resultsTxtPane.append(_resBundDisplayMsgs.getString("your")
-                            + " "
-                            + sClient
-                            + " "
-                            + _resBundDisplayMsgs.getString("connectedTo")
-                            + " ");
+                    _resultsTxtPane.append(_resBundDisplayMsgs.getString("your") + " " + sClient + " " +
+                                           _resBundDisplayMsgs.getString("connectedTo") + " ");
                     if (_iC2sData == NDTConstants.DATA_RATE_DIAL_UP) {
 
                         _resultsTxtPane.append(_resBundDisplayMsgs.getString("dialup") + "\n");
@@ -1912,24 +1900,20 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                     _resultsTxtPane.append(_resBundDisplayMsgs.getString("otherTraffic") + "\n");
                 }
 
-                // We seem to be transmitting less than link speed possibly due
-                // a receiver window setting (i.e calculated bandwidth is greater
-                // than measured throughput). Advise appropriate size
+                /*
+                 * We seem to be transmitting less than link speed possibly due a receiver window setting
+                 * (i.e calculated bandwidth is greater than measured throughput). Advise appropriate size.
+                 *
+                 * Note: All comparisons henceforth of ((window size * 2/rttsec) < mylink) are along the same logic.
+                 */
 
-                // Note: All comparisons henceforth of ((window size * 2/rttsec) < mylink)
-                //  are along the same logic
+                if (((2 * rwin) / rttsec) < mylink) { // multiply by 2 to counter round-trip
 
-                if (((2 * rwin) / rttsec) < mylink) {  // multiply by 2 to counter round-trip
-
-                    // link speed is in Mbps. Convert it back to kbps (*1000),
-                    // and bytes (/8)
+                    // Link speed is in Mbps. Convert it back to kbps (*1000), and bytes (/8)
                     j = (float) ((mylink * avgrtt) * NDTConstants.KILO) / NDTConstants.EIGHT / NDTConstants.KILO_BITS;
                     if (j > (float) _iMaxRwinRcvd) {
-                        _resultsTxtPane.append(_resBundDisplayMsgs.getString("receiveBufferShouldBe")
-                                + " "
-                                + NDTUtils.prtdbl(j)
-                                + _resBundDisplayMsgs.getString("toMaximizeThroughput")
-                                + " \n");
+                        _resultsTxtPane.append(_resBundDisplayMsgs.getString("receiveBufferShouldBe") + " " + NDTUtils.prtdbl(j) +
+                                               _resBundDisplayMsgs.getString("toMaximizeThroughput") + " \n");
                     }
                 }
                 break;
@@ -2051,8 +2035,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             _txtStatistics.append("\n" + _resBundDisplayMsgs.getString(_sServerType + "rtt") + " =  " +
                                   NDTUtils.prtdbl(avgrtt) + " " + "ms" + "; ");
 
-            _txtStatistics.append(_resBundDisplayMsgs.getString("packetsize") +" = " +
-                                  _iCurrentMSS + " " +
+            _txtStatistics.append(_resBundDisplayMsgs.getString("packetsize") +" = " + _iCurrentMSS + " " +
                                   _resBundDisplayMsgs.getString("bytes") + "; " +
                                   _resBundDisplayMsgs.getString("and") + " \n");
 
@@ -2085,19 +2068,13 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             if ((_yTests & NDTConstants.TEST_C2S) == NDTConstants.TEST_C2S) {
                 if (_dC2sspd > _dSc2sspd) {
                     if (_dSc2sspd < (_dC2sspd * (1.0 - NDTConstants.VIEW_DIFF))) {
-                        _txtStatistics.append(_resBundDisplayMsgs.getString("c2s")
-                                + " "
-                                + _resBundDisplayMsgs.getString("eqSeen")
-                                + ": "
-                                + NDTUtils.prtdbl(NDTConstants.PERCENTAGE * (_dC2sspd - _dSc2sspd)
-                                        / _dC2sspd) + "%\n");
+                        _txtStatistics.append(_resBundDisplayMsgs.getString("c2s") + " " +
+                                              _resBundDisplayMsgs.getString("eqSeen") + ": " +
+                                              NDTUtils.prtdbl(NDTConstants.PERCENTAGE * (_dC2sspd - _dSc2sspd) / _dC2sspd) + "%\n");
                     } else {
-                        _txtStatistics.append(_resBundDisplayMsgs.getString("c2s")
-                                + " "
-                                + _resBundDisplayMsgs.getString("qSeen")
-                                + ": "
-                                + NDTUtils.prtdbl(NDTConstants.PERCENTAGE * (_dC2sspd - _dSc2sspd)
-                                        / _dC2sspd) + "%\n");
+                        _txtStatistics.append(_resBundDisplayMsgs.getString("c2s") + " " +
+                                              _resBundDisplayMsgs.getString("qSeen") + ": " +
+                                              NDTUtils.prtdbl(NDTConstants.PERCENTAGE * (_dC2sspd - _dSc2sspd) / _dC2sspd) + "%\n");
                     }
                 }
             }
@@ -2107,19 +2084,13 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             if ((_yTests & NDTConstants.TEST_S2C) == NDTConstants.TEST_S2C) {
                 if (_dSs2cspd > _dS2cspd) {
                     if (_dSs2cspd < (_dSs2cspd * (1.0 - NDTConstants.VIEW_DIFF))) {
-                        _txtStatistics.append(_resBundDisplayMsgs.getString("s2c")
-                                + " "
-                                + _resBundDisplayMsgs.getString("eqSeen")
-                                + ": "
-                                + NDTUtils.prtdbl(NDTConstants.PERCENTAGE * (_dSs2cspd - _dS2cspd)
-                                        / _dSs2cspd) + "%\n");
+                        _txtStatistics.append(_resBundDisplayMsgs.getString("s2c") + " " +
+                                              _resBundDisplayMsgs.getString("eqSeen") + ": " +
+                                              NDTUtils.prtdbl(NDTConstants.PERCENTAGE * (_dSs2cspd - _dS2cspd) / _dSs2cspd) + "%\n");
                     } else {
-                        _txtStatistics.append(_resBundDisplayMsgs.getString("s2c")
-                                + " "
-                                + _resBundDisplayMsgs.getString("qSeen")
-                                + ": "
-                                + NDTUtils.prtdbl(NDTConstants.PERCENTAGE * (_dSs2cspd - _dS2cspd)
-                                        / _dSs2cspd) + "%\n");
+                        _txtStatistics.append(_resBundDisplayMsgs.getString("s2c") + " " +
+                                              _resBundDisplayMsgs.getString("qSeen") + ": " +
+                                              NDTUtils.prtdbl(NDTConstants.PERCENTAGE * (_dSs2cspd - _dS2cspd) / _dSs2cspd) + "%\n");
                     }
                 }
             }
@@ -2127,12 +2098,10 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             // Add connection details to statistics pane
             // Is the connection receiver limited?
             if (rwintime > NDTConstants.BUFFER_LIMITED) {
-                _txtStatistics.append(_resBundDisplayMsgs.getString("thisConnIs")
-                        + " "
-                        + _resBundDisplayMsgs.getString("limitRx")
-                        + " "
-                        + NDTUtils.prtdbl(rwintime * NDTConstants.PERCENTAGE)
-                        + _resBundDisplayMsgs.getString("pctOfTime") + ".\n");
+                _txtStatistics.append(_resBundDisplayMsgs.getString("thisConnIs") + " " +
+                                      _resBundDisplayMsgs.getString("limitRx") + " " +
+                                      NDTUtils.prtdbl(rwintime * NDTConstants.PERCENTAGE) +
+                                      _resBundDisplayMsgs.getString("pctOfTime") + ".\n");
                 pub_pctRcvrLimited = rwintime * NDTConstants.PERCENTAGE;
 
                 // I think there is a bug here, it sometimes tells you to increase the buffer
