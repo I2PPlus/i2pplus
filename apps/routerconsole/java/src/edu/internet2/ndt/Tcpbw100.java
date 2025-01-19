@@ -114,7 +114,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     JButton _buttonStartTest;
     // TODO: Could use just one button for dismiss and copy. For later release
     JButton _buttonDetailsDismiss, _buttonStatsDismiss;
-    JButton _buttonDetailsCopy, _buttonStatsCopy;
     JButton _buttonDetails;
     JButton _buttonStatistics;
     JButton _buttonOptions;
@@ -410,12 +409,11 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     public boolean isTestInProgress() {return _bTestInProgress.get();}
 
     /**
-     * Class to start tests in a thread. Starts by disabling all buttons, and
-     * invokes the dottcp() method. This thread is stopped when the number of
-     * tests that was configured to be run have all completed, or if the user
-     * stops it by interrupting from the GUI. Once the tests have been run, the
-     * buttons are enabled so that results can be viewed in detail.
-     * */
+     * Class to start tests in a thread. Starts by disabling all buttons, and invokes the dottcp() method.
+     * This thread is stopped when the number of tests that was configured to be run have all completed,
+     * or if the user stops it by interrupting from the GUI. Once the tests have been run, the buttons are
+     * enabled so that results can be viewed in detail.
+     */
     class TestWorker implements Runnable {
         // I2P
         public void run() {
@@ -684,19 +682,13 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         _buttonDetailsDismiss = new JButton(_resBundDisplayMsgs.getString("close"));
         _buttonDetailsDismiss.addActionListener(this);
 
-        // Add "copy" button
-        _buttonDetailsCopy = new JButton(_resBundDisplayMsgs.getString("copy"));
-        _buttonDetailsCopy.addActionListener(this);
-
         // Create Text area for displaying results, add "Heading"
         _txtDiagnosis = new JTextArea(_resBundDisplayMsgs.getString(_sServerType + "KernelVar") + ":\n", 15, 70);
         _txtDiagnosis.setEditable(true);
         _buttonDetailsDismiss.setEnabled(true);
-        _buttonDetailsCopy.setEnabled(_bCanCopy);
 
         // Now place all the buttons
         buttons.add("West", _buttonDetailsDismiss);
-        buttons.add("East", _buttonDetailsCopy);
         _frameWeb100Vars.getContentPane().add(new JScrollPane(_txtDiagnosis));
         _frameWeb100Vars.pack();
     } // createDiagnoseWindow() ends
@@ -717,19 +709,13 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         _buttonStatsDismiss = new JButton(_resBundDisplayMsgs.getString("close"));
         _buttonStatsDismiss.addActionListener(this);
 
-        // Button for "copy"
-        _buttonStatsCopy = new JButton(_resBundDisplayMsgs.getString("copy"));
-        _buttonStatsCopy.addActionListener(this);
-
         // Text area for Statistics, add "heading"
         _txtStatistics = new JTextArea(_resBundDisplayMsgs.getString(_sServerType + "Stats") + ":\n", 25, 70);
         _txtStatistics.setEditable(false);
         _buttonStatsDismiss.setEnabled(true);
-        _buttonStatsCopy.setEnabled(_bCanCopy);
 
         // Place all components
         buttons.add("West", _buttonStatsDismiss);
-        buttons.add("East", _buttonStatsCopy);
         _frameDetailedStats.getContentPane().add(new JScrollPane(_txtStatistics));
         _frameDetailedStats.pack();
     } // createStatsWindow()
@@ -774,21 +760,15 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         } else if (source == _buttonDetails) { // show details of tests since that button was clicked
             _frameWeb100Vars.setResizable(true);
             _frameWeb100Vars.setVisible(true);
-            // enable copy button only if there is details informations
-            if (NDTUtils.isNotEmpty(_txtDiagnosis.getText())) {_buttonDetailsCopy.setEnabled(true);}
         } else if (source == _buttonDetailsDismiss) { // "More Details" Web100 variables window to be closed
             _frameWeb100Vars.toBack();
             _frameWeb100Vars.dispose();
         } else if (source == _buttonStatsDismiss) { // "statistics" window to be closed
             _frameDetailedStats.toBack();
             _frameDetailedStats.dispose();
-        } else if (source == _buttonDetailsCopy) {copy(_txtDiagnosis);} // "More details" copy button functionality
-        else if (source == _buttonStatsCopy) {copy(_txtStatistics);} // "Statistics" copy button functionality
-        else if (source == _buttonStatistics) { // Show "statistics" window
+        } else if (source == _buttonStatistics) { // Show "statistics" window
             _frameDetailedStats.setResizable(true);
             _frameDetailedStats.setVisible(true);
-            // enable copy button only if there is statistics informations
-            if (NDTUtils.isNotEmpty(_txtStatistics.getText())) {_buttonStatsCopy.setEnabled(true);}
         } else if (source == _chkboxPreferIPv6) {setsHostName(sHostName);} // prefer IPv6 checkbox
     } // actionPerformed()
 
