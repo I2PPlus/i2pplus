@@ -1,4 +1,3 @@
-<%@page trimDirectiveWhitespaces="true"%>
 <%
    if (request.getCharacterEncoding() == null) {request.setCharacterEncoding("UTF-8");}
    String i2pcontextId = request.getParameter("i2p.contextId");
