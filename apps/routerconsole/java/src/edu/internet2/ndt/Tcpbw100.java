@@ -524,7 +524,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
                 _bFailed = true;
                 _sErrMsg = _resBundDisplayMsgs.getString("unexpectedException") + " (" + e.getClass().getName() + "): " + sMessage + "\n";
-                _log.warn(_sErrMsg, e);
+                _log.error(_sErrMsg, e);
             }
 
             // If test failed due to any reason, mark failure reason too
@@ -672,9 +672,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
      * Create the "More details" window.
      */
     public void createDiagnoseWindow() {
-        if (_sServerType.compareTo("web100") == 0) {showStatus(_resBundDisplayMsgs.getString("getWeb100Var"));}
-        else {showStatus(_resBundDisplayMsgs.getString("getWeb10gVar"));}
-
         // create new frame
         if (_frameWeb100Vars == null) {_frameWeb100Vars = new NewFrame(this);}
 
@@ -708,8 +705,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
      * Create the "Statistics" window.
      */
     public void createStatsWindow() {
-        showStatus(_resBundDisplayMsgs.getString("printDetailedStats"));
-
         // create new frame
         if (_frameDetailedStats == null) {_frameDetailedStats = new NewFrame(this);}
         _frameDetailedStats.setTitle(_resBundDisplayMsgs.getString("detailedStats"));
@@ -1168,7 +1163,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                         NDTConstants.SOCKET_FREE_PORT_INDICATOR);
             } catch (Exception e) {
                 _sErrMsg = _resBundDisplayMsgs.getString("sfwSocketFail") + "\n";
-                _log.warn(_sErrMsg, e);
+                _log.error(_sErrMsg, e);
                 return true;
             }
 
@@ -1575,7 +1570,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                     _dSbytes = Double.parseDouble(JSONUtils.getValueFromJsonObj(tmpstr3, "TotalSentByte"));
                 } catch (Exception e) {
                     _sErrMsg = _resBundDisplayMsgs.getString("inboundWrongMessage") + "\n";
-                    _log.warn(_sErrMsg, e);
+                    _log.error(_sErrMsg, e);
                     return true;
                 }
             }
@@ -1589,7 +1584,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                     _dSbytes = Double.parseDouble(tmpstr3.substring(k1 + 1).substring(k2 + 1));
                 } catch (Exception e) {
                     _sErrMsg = _resBundDisplayMsgs.getString("inboundWrongMessage") + "\n";
-                    _log.warn(_sErrMsg, e);
+                    _log.error(_sErrMsg, e);
                     return true;
                 }
             }
@@ -1674,7 +1669,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         Message msg = new Message();
         // Start META tests
         if ((_yTests & NDTConstants.TEST_META) == NDTConstants.TEST_META) {
-            showStatus(_resBundDisplayMsgs.getString("metaTest"));
             _resultsTxtPane.append(_resBundDisplayMsgs.getString("sendingMetaInformation") + " ");
             _txtStatistics.append(_resBundDisplayMsgs.getString("sendingMetaInformation") + " ");
             pub_status = "sendingMetaInformation";
@@ -3264,7 +3258,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         _thread_group = new
         ThreadGroup("NDT") {
             @Override public void uncaughtException(Thread t, Throwable e) {
-                _log.warn("TG", e);
+                _log.warn("Bandwidth test error", e);
             }
         };
 
@@ -3274,7 +3268,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             public void run() {
                 try {new TestWorker().run();}
                 catch(Throwable e) {
-                    if (!(e instanceof ThreadDeath)) {_log.warn("TG", e);}
+                    if (!(e instanceof ThreadDeath)) {_log.warn("Bandwidth test error", e);}
                 } finally {}
             }
         }, "TestWorker");
