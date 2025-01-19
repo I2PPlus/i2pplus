@@ -1610,22 +1610,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             }
             int testId = Integer.parseInt(tokenizer.nextToken());
             switch (testId) {
-            case NDTConstants.TEST_MID:
-                sPanel.setText(_resBundDisplayMsgs.getString("middlebox"));
-                if (test_mid(protocolObj)) {
-                    _resultsTxtPane.append(_sErrMsg);
-                    _resultsTxtPane.append(_resBundDisplayMsgs.getString("middleboxFail2") + "\n");
-                    _yTests &= (~NDTConstants.TEST_MID);
-                }
-                break;
-            case NDTConstants.TEST_SFW:
-                sPanel.setText(_resBundDisplayMsgs.getString("simpleFirewall"));
-                if (test_sfw(protocolObj)) {
-                    _resultsTxtPane.append(_sErrMsg);
-                    _resultsTxtPane.append(_resBundDisplayMsgs.getString("sfwFail") + "\n");
-                    _yTests &= (~NDTConstants.TEST_SFW);
-                }
-                break;
             case NDTConstants.TEST_C2S:
                 sPanel.setText(_resBundDisplayMsgs.getString("c2sThroughput"));
                 if (test_c2s(protocolObj)) {
@@ -1720,10 +1704,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         catch (Exception ex) {
             _resultsTxtPane.append(_resBundDisplayMsgs.getString("resultsParseError") + "\n");
             _resultsTxtPane.append(ex + "\n");
-        }
-        // interpret middlebox test results
-        if (_sMidBoxTestResult != null && (_yTests & NDTConstants.TEST_MID) == NDTConstants.TEST_MID) {
-            middleboxResults(_sMidBoxTestResult);
         }
 
         pub_isReady = "yes";
@@ -1981,8 +1961,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             // C2S throughput test: Packet queuing
             if ((_yTests & NDTConstants.TEST_C2S) == NDTConstants.TEST_C2S) {
                 if (_dSc2sspd < (_dC2sspd * (1.0 - NDTConstants.VIEW_DIFF))) {
-                    // TODO: distinguish the host buffering from the middleboxes
-                    // buffering (older "todo" left as is)
                     JLabel info = new JLabel(_resBundDisplayMsgs.getString("information"));
                     info.setForeground(Color.BLUE);
                     info.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -1995,7 +1973,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             // S2C throughput test: Packet queuing
             if ((_yTests & NDTConstants.TEST_S2C) == NDTConstants.TEST_S2C) {
                 if (_dS2cspd < (_dSs2cspd * (1.0 - NDTConstants.VIEW_DIFF))) {
-                    // TODO: distinguish the host buffering from the middleboxes buffering (older "todo" left as is)
                     JLabel info = new JLabel(_resBundDisplayMsgs.getString("information"));
                     info.setForeground(Color.BLUE);
                     info.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -2006,26 +1983,13 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             } // end s2C test based packet queuing results
 
             // Add client information obtained earlier
-            _txtStatistics.append("\n\t------  "
-                    + _resBundDisplayMsgs.getString("clientInfo") + "------\n");
-            _txtStatistics.append(_resBundDisplayMsgs.getString("osData") + " "
-                    + _resBundDisplayMsgs.getString("name") + " = " + sOsName
-                    + ", " + _resBundDisplayMsgs.getString("architecture")
-                    + " = " + sOsArch);
-            _txtStatistics.append(", "
-                    + _resBundDisplayMsgs.getString("version") + " = " + sOsVer
-                    + "\n");
-            _txtStatistics.append(_resBundDisplayMsgs.getString("javaData")
-                    + ": " + _resBundDisplayMsgs.getString("vendor") + " = "
-                    + sJavaVendor + ", "
-                    + _resBundDisplayMsgs.getString("version") + " = "
-                    + sJavaVer + "\n");
-            // statistics.append(" java.class.version=" +
-            // System.getProperty("java.class.version") + "\n");
-
-            _txtStatistics.append("\n\t------  "
-                    + _resBundDisplayMsgs.getString(_sServerType + "Details")
-                    + "  ------\n");
+            _txtStatistics.append("\n\t------  " + _resBundDisplayMsgs.getString("clientInfo") + "------\n");
+            _txtStatistics.append(_resBundDisplayMsgs.getString("osData") + " " + _resBundDisplayMsgs.getString("name") + " = " + sOsName +
+                                  ", " + _resBundDisplayMsgs.getString("architecture") + " = " + sOsArch);
+            _txtStatistics.append(", " + _resBundDisplayMsgs.getString("version") + " = " + sOsVer + "\n");
+            _txtStatistics.append(_resBundDisplayMsgs.getString("javaData") + ": " + _resBundDisplayMsgs.getString("vendor") + " = " +
+                                  sJavaVendor + ", " + _resBundDisplayMsgs.getString("version") + " = " + sJavaVer + "\n");
+            _txtStatistics.append("\n\t------  " + _resBundDisplayMsgs.getString(_sServerType + "Details") + "  ------\n");
 
             // Now add data to the statistics pane about access speed/technology
             // Slightly different from the earlier switch (that added data about
@@ -2274,116 +2238,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     } // end testResults()
 
     /**
-     * This routine decodes the middlebox test results. The data is returned
-     * from the server is a specific order. This routine pulls the string apart
-     * and puts the values into the proper variable. It then compares the values
-     * to known values and writes out the specific results.
-     *
-     * server data is ordered as: Server IP; Client IP; CurrentMSS;
-     * WinScaleSent; WinScaleRcvd; SumRTT; CountRTT; MaxRwinRcvd; Client then adds Server IP; Client IP.
-     *
-     * @param sMidBoxTestResParam
-     *            String Middlebox results
-     */
-
-    public void middleboxResults(String sMidBoxTestResParam) {
-        String sServerIp;
-        String sClientIp;
-        int iMss;
-        // changing order for issue 61
-        int iWinsSent;
-        int iWinsRecv; // unused, but retaining
-        String sClientSideServerIp;
-        String sClientSideClientIp;
-
-        if (jsonSupport) {
-            sServerIp = JSONUtils.getValueFromJsonObj(sMidBoxTestResParam, "ServerAddress");
-            sClientIp = JSONUtils.getValueFromJsonObj(sMidBoxTestResParam, "ClientAddress");
-            iMss = Integer.parseInt(JSONUtils.getValueFromJsonObj(sMidBoxTestResParam, "CurMSS"));
-            iWinsSent = Integer.parseInt(JSONUtils.getValueFromJsonObj(sMidBoxTestResParam, "WinScaleSent"));
-            iWinsRecv = Integer.parseInt(JSONUtils.getValueFromJsonObj(sMidBoxTestResParam, "WinScaleRcvd"));
-            sClientSideServerIp = JSONUtils.getValueFromJsonObj(sMidBoxTestResParam, "ClientSideServerIp");
-            sClientSideClientIp = JSONUtils.getValueFromJsonObj(sMidBoxTestResParam, "ClientSideClientIp");
-            _iSumRTT = Integer.parseInt(JSONUtils.getValueFromJsonObj(sMidBoxTestResParam, "SumRTT"));
-            _iCountRTT = Integer.parseInt(JSONUtils.getValueFromJsonObj(sMidBoxTestResParam, "CountRTT"));
-            _iMaxRwinRcvd = Integer.parseInt(JSONUtils.getValueFromJsonObj(sMidBoxTestResParam, "MaxRwinRcvd"));
-
-            // calculate avgrtt and PC buffer imposed throughput limit
-            pub_avgrtt = (double) _iSumRTT / _iCountRTT;
-            rwin = _iMaxRwinRcvd * NDTConstants.EIGHT / NDTConstants.KILO_BITS / NDTConstants.KILO_BITS;
-            rttsec = pub_avgrtt / NDTConstants.KILO;
-        } else {
-            StringTokenizer tokens;
-            int k;
-
-            tokens = new StringTokenizer(sMidBoxTestResParam, ";");
-            sServerIp = tokens.nextToken();
-            sClientIp = tokens.nextToken();
-
-            iMss = Integer.parseInt(tokens.nextToken());
-            // changing order for issue 61
-            iWinsSent = Integer.parseInt(tokens.nextToken());
-            iWinsRecv = Integer.parseInt(tokens.nextToken()); // unused, but retaining
-
-            // Get Client reported server IP
-            sClientSideServerIp = tokens.nextToken();
-            k = sClientSideServerIp.indexOf("/");
-            sClientSideServerIp = sClientSideServerIp.substring(k + 1);
-
-            // get client side IP
-            sClientSideClientIp = tokens.nextToken();
-            k = sClientSideClientIp.indexOf("/");
-            sClientSideClientIp = sClientSideClientIp.substring(k + 1);
-        }
-
-        // MSS = 1456 = Ethernet MTU = 1500 - 24 -20 (bytes of IP header) =
-        // 1456, thus preserved
-        if (_iTimestampsEnabled == NDTConstants.RFC_1323_ENABLED) {iMss += 12;}
-
-        if (iMss == NDTConstants.ETHERNET_MTU_SIZE) {
-            _txtStatistics.append(_resBundDisplayMsgs.getString("packetSizePreserved") + "\n");
-        } else {
-            _txtStatistics.append(_resBundDisplayMsgs.getString("middleboxModifyingMss") + "\n");
-        }
-
-        // server IP has been preserved end-to-end without changes
-
-        boolean preserved = false;
-        try {
-            preserved = InetAddress.getByName(sServerIp).equals(InetAddress.getByName(sClientSideServerIp));
-        } catch (UnknownHostException e) {preserved = sServerIp.equals(sClientSideServerIp);}
-
-        if (preserved) {
-            _txtStatistics.append(_resBundDisplayMsgs.getString("serverIpPreserved") + "\n");
-            pub_natBox = "no";
-        } else {
-            pub_natBox = "yes";
-            _txtStatistics.append(_resBundDisplayMsgs.getString("serverIpModified") + "\n");
-            _txtStatistics.append("\t" + _resBundDisplayMsgs.getString("serverSays") + " [" +
-                                  sServerIp + "], " + _resBundDisplayMsgs.getString("clientSays") + " [" +
-                                  sClientSideServerIp + "]\n");
-        }
-
-        // Client side IP was never obtained
-        if (sClientSideClientIp.equals(NDTConstants.LOOPBACK_ADDRS_STRING)) {
-            _txtStatistics.append(_resBundDisplayMsgs.getString("clientIpNotFound") + "\n");
-        } else { // try to find if client IP was changed
-            try {preserved = InetAddress.getByName(sClientIp).equals(InetAddress.getByName(sClientSideClientIp));}
-            catch (UnknownHostException e) {preserved = sClientIp.equals(sClientSideClientIp);}
-            catch (SecurityException e) {preserved = sClientIp.equals(sClientSideClientIp);}
-
-            if (preserved) {_txtStatistics.append(_resBundDisplayMsgs.getString("clientIpPreserved") + "\n");}
-            else {
-                _txtStatistics.append(_resBundDisplayMsgs.getString("clientIpModified") + "\n");
-                _txtStatistics.append("\t" + _resBundDisplayMsgs.getString("serverSays") + " [" +
-                                      sClientIp + "], " + _resBundDisplayMsgs.getString("clientSays") + " [" +
-                                      sClientSideClientIp + "]\n");
-            }
-        }
-        pub_statistics = _txtStatistics.getText();
-    } // middleboxResults()
-
-    /**
      * Pop up a window to display some information about TCP packet queuing.
      */
     public void showBufferedBytesInfo() {
@@ -2392,7 +2246,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                 _resBundDisplayMsgs.getString("packetQueuing"),
                 JOptionPane.INFORMATION_MESSAGE);
     }
-
 
     /*
      * This routine saves the specific value into the variable of the same name.
