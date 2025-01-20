@@ -16,7 +16,8 @@ import java.net.Socket;
  *
  * <p>The result of the test is set back into the Tcpbw100._iS2cSFWResult variable
  * (using setter methods) for the test results to be interpreted later.</p>
- * */
+ *
+ */
 
 public class OsfwWorker implements Runnable {
 
@@ -55,7 +56,8 @@ public class OsfwWorker implements Runnable {
     /**
      * Make current thread sleep for 1000 ms
      *
-     * */
+     *
+     */
     public void finalize() {
         // If test is not already complete/terminated, then sleep
         while (!_iFinalized) {
@@ -69,22 +71,21 @@ public class OsfwWorker implements Runnable {
      * from the server for a given time period, and checks to see if the server
      * has sent a message that is valid and sufficient to determine if the S-&gt;C
      * direction has a fire-wall.
-     * */
+     *
+     */
     public void run() {
 
         Message msg = new Message();
         Socket socketObj = null;
 
         try {
-            // set timeout to given value in ms
+            // Set timeout to given value in ms
             _srvSocket.setSoTimeout(_iTestTime * 1000);
             try {
-                // Blocking call trying to create connection to socket and
-                // accept it
+                // Blocking call trying to create connection to socket and accept it
                 socketObj = _srvSocket.accept();
             } catch (Exception e) {
-                // The "accept" call has failed, and indicates a firewall
-                // possibility
+                // The "accept" call has failed, and indicates possible firewall
                 this._localTcpAppObj.setS2cSFWTestResults(NDTConstants.SFW_POSSIBLE);
                 _srvSocket.close();
                 _iFinalized = true;

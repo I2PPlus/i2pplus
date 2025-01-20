@@ -117,7 +117,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     JCheckBox _chkboxDefaultTest, _chkboxPreferIPv6;
     JSpinner _spinnerTestCount = new JSpinner();
     String[] _saDelays = { "immediate", "1min", "5mins", "10mins", "30mins", "2hours", "12hours", "1day" };
-    JComboBox _cmboboxDelay;
 
     boolean _bFailed;
     NewFrame _frameWeb100Vars, _frameDetailedStats, _frameOptions;
@@ -471,41 +470,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                     _txtStatistics.append("\n** " + _resBundDisplayMsgs.getString("test") + " " + testNo + " **\n");
                     _txtDiagnosis.append("\n** " + _resBundDisplayMsgs.getString("test") + " " + testNo + " **\n");
 
-                    // Now, sleep for some time based on user's choice before running the next iteration of the test suite
-                    try {
-                        switch (_cmboboxDelay.getSelectedIndex()) {
-                        case 1:
-                            _resultsTxtPane.append("\n** " + _resBundDisplayMsgs.getString("sleep1m")+ " **\n");
-                            Thread.sleep(1000 * 60);
-                            break;
-                        case 2:
-                            _resultsTxtPane.append("\n** " + _resBundDisplayMsgs.getString("sleep5m") + " **\n");
-                            Thread.sleep(1000 * 60 * 5);
-                            break;
-                        case 3:
-                            _resultsTxtPane.append("\n** " + _resBundDisplayMsgs.getString("sleep10m") + " **\n");
-                            Thread.sleep(1000 * 60 * 10);
-                            break;
-                        case 4:
-                            _resultsTxtPane.append("\n** " + _resBundDisplayMsgs.getString("sleep30m") + " **\n");
-                            Thread.sleep(1000 * 60 * 30);
-                            break;
-                        case 5:
-                            _resultsTxtPane.append("\n** " + _resBundDisplayMsgs.getString("sleep2h") + " **\n");
-                            Thread.sleep(1000 * 60 * 120);
-                            break;
-                        case 6:
-                            _resultsTxtPane.append("\n** " + _resBundDisplayMsgs.getString("sleep12h") + " **\n");
-                            Thread.sleep(1000 * 60 * 720);
-                            break;
-                        case 7:
-                            _resultsTxtPane.append("\n** " + _resBundDisplayMsgs.getString("sleep1d") + " **\n");
-                            Thread.sleep(1000 * 60 * 1440);
-                            break;
-                        }
-                    } catch (InterruptedException e) { // do nothing
-                        _log.warn("Thread was interrupted while sleeping before starting the next test.");
-                    }
                 }
             } catch (Exception e) {
                 String sMessage = NDTUtils.isEmpty(e.getMessage())
@@ -641,11 +605,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         model.setValue(Integer.valueOf(1));
         _spinnerTestCount.setModel(model);
         _spinnerTestCount.setPreferredSize(new Dimension(60, 20));
-        _cmboboxDelay = new JComboBox();
-        for (int i = 0; i < _saDelays.length; i++) {
-            _cmboboxDelay.addItem(_resBundDisplayMsgs.getString(_saDelays[i]));
-        }
-        _cmboboxDelay.setSelectedIndex(0);
 
     } // createDiagnoseWindow() ends
 
