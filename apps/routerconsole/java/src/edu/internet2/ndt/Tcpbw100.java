@@ -112,11 +112,8 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     ResultsTextPane _resultsTxtPane;
     String _sErrMsg;
     JButton _buttonStartTest;
-    // TODO: Could use just one button for dismiss and copy. For later release
-    JButton _buttonDetailsDismiss, _buttonStatsDismiss;
     JButton _buttonDetails;
     JButton _buttonStatistics;
-    JButton _buttonOptions;
     JCheckBox _chkboxDefaultTest, _chkboxPreferIPv6;
     JSpinner _spinnerTestCount = new JSpinner();
     String[] _saDelays = { "immediate", "1min", "5mins", "10mins", "30mins", "2hours", "12hours", "1day" };
@@ -426,7 +423,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             _buttonStartTest.setEnabled(false);
             _buttonDetails.setEnabled(false);
             _buttonStatistics.setEnabled(false);
-            _buttonOptions.setEnabled(false);
             _spinnerTestCount.setEnabled(false);
 
             // StatusPanel sPanel = new StatusPanel(testsNum);
@@ -472,7 +468,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                      */
                     _buttonDetails.setEnabled(true);
                     _buttonStatistics.setEnabled(true);
-                    _buttonOptions.setEnabled(true);
                     _txtStatistics.append("\n** " + _resBundDisplayMsgs.getString("test") + " " + testNo + " **\n");
                     _txtDiagnosis.append("\n** " + _resBundDisplayMsgs.getString("test") + " " + testNo + " **\n");
 
@@ -532,7 +527,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             // Enable all buttons. Continue activities to mark status as complete
             _buttonDetails.setEnabled(true);
             _buttonStatistics.setEnabled(true);
-            _buttonOptions.setEnabled(true);
             _spinnerTestCount.setEnabled(true);
             showStatus(_resBundDisplayMsgs.getString("done2"));
             _resultsTxtPane.append("\n" + _resBundDisplayMsgs.getString("clickStart2") + "\n");
@@ -622,11 +616,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         if (getParameter("disableStatistics") == null) {buttonsPanel.add(_buttonStatistics);}
         _buttonStatistics.setEnabled(false);
 
-        // Add "Options" button
-        _buttonOptions = new JButton(_resBundDisplayMsgs.getString("options") + "...");
-        // If disableOptions is not set, then add button
-        if (getParameter("disableOptions") == null) {buttonsPanel.add(_buttonOptions);}
-
         // Add "Details" button
         _buttonDetails = new JButton(_resBundDisplayMsgs.getString("moreDetails"));
         _buttonDetails.addActionListener(this);
@@ -672,17 +661,11 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         Panel buttons = new Panel();
         _frameWeb100Vars.getContentPane().add("South", buttons);
 
-        // Add "close" button
-        _buttonDetailsDismiss = new JButton(_resBundDisplayMsgs.getString("close"));
-        _buttonDetailsDismiss.addActionListener(this);
-
         // Create Text area for displaying results, add "Heading"
         _txtDiagnosis = new JTextArea(_resBundDisplayMsgs.getString(_sServerType + "KernelVar") + ":\n", 15, 70);
         _txtDiagnosis.setEditable(true);
-        _buttonDetailsDismiss.setEnabled(true);
 
         // Now place all the buttons
-        buttons.add("West", _buttonDetailsDismiss);
         _frameWeb100Vars.getContentPane().add(new JScrollPane(_txtDiagnosis));
         _frameWeb100Vars.pack();
     } // createDiagnoseWindow() ends
@@ -699,17 +682,11 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         Panel buttons = new Panel();
         _frameDetailedStats.getContentPane().add("South", buttons);
 
-        // Button for "close"
-        _buttonStatsDismiss = new JButton(_resBundDisplayMsgs.getString("close"));
-        _buttonStatsDismiss.addActionListener(this);
-
         // Text area for Statistics, add "heading"
         _txtStatistics = new JTextArea(_resBundDisplayMsgs.getString(_sServerType + "Stats") + ":\n", 25, 70);
         _txtStatistics.setEditable(false);
-        _buttonStatsDismiss.setEnabled(true);
 
         // Place all components
-        buttons.add("West", _buttonStatsDismiss);
         _frameDetailedStats.getContentPane().add(new JScrollPane(_txtStatistics));
         _frameDetailedStats.pack();
     } // createStatsWindow()
@@ -754,12 +731,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         } else if (source == _buttonDetails) { // show details of tests since that button was clicked
             _frameWeb100Vars.setResizable(true);
             _frameWeb100Vars.setVisible(true);
-        } else if (source == _buttonDetailsDismiss) { // "More Details" Web100 variables window to be closed
-            _frameWeb100Vars.toBack();
-            _frameWeb100Vars.dispose();
-        } else if (source == _buttonStatsDismiss) { // "statistics" window to be closed
-            _frameDetailedStats.toBack();
-            _frameDetailedStats.dispose();
         } else if (source == _buttonStatistics) { // Show "statistics" window
             _frameDetailedStats.setResizable(true);
             _frameDetailedStats.setVisible(true);
@@ -1923,30 +1894,27 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                                   sJavaVendor + ", " + _resBundDisplayMsgs.getString("version") + " = " + sJavaVer + "\n");
             _txtStatistics.append("\n\t------  " + _resBundDisplayMsgs.getString(_sServerType + "Details") + "  ------\n");
 
-            // Now add data to the statistics pane about access speed/technology
-            // Slightly different from the earlier switch (that added data about
-            // this to the Results pane) in that negative values are checked for
-            // too.
-
+            /*
+             * Now add data to the statistics pane about access speed/technology.
+             * Slightly different from the earlier switch (that added data about this to the Results pane)
+             * in that negative values are checked for too.
+             */
             switch (_iC2sData) {
             case NDTConstants.DATA_RATE_INSUFFICIENT_DATA:
                 _txtStatistics.append(_resBundDisplayMsgs.getString("insufficient") + "\n");
                 break;
             case NDTConstants.DATA_RATE_SYSTEM_FAULT:
-                _txtStatistics.append(_resBundDisplayMsgs.getString("ipcFail")
-                        + "\n");
+                _txtStatistics.append(_resBundDisplayMsgs.getString("ipcFail") + "\n");
                 break;
 
             case NDTConstants.DATA_RATE_RTT:
-                _txtStatistics.append(_resBundDisplayMsgs.getString("rttFail")
-                        + "\n");
+                _txtStatistics.append(_resBundDisplayMsgs.getString("rttFail") + "\n");
                 break;
             case NDTConstants.DATA_RATE_DIAL_UP:
                 _txtStatistics.append(_resBundDisplayMsgs.getString("foundDialup") + "\n");
                 break;
             case NDTConstants.DATA_RATE_T1:
-                _txtStatistics.append(_resBundDisplayMsgs.getString("foundDsl")
-                        + "\n");
+                _txtStatistics.append(_resBundDisplayMsgs.getString("foundDsl") + "\n");
                 break;
             case NDTConstants.DATA_RATE_ETHERNET:
                 _txtStatistics.append(_resBundDisplayMsgs.getString("found10mbps") + "\n");
