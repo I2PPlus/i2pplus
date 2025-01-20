@@ -122,11 +122,8 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     String[] _saDelays = { "immediate", "1min", "5mins", "10mins", "30mins", "2hours", "12hours", "1day" };
     JComboBox _cmboboxDelay;
 
-    boolean _bRandomize;
-    boolean _bFailed, _bCanCopy;
-    // URL location; //unused, hence commenting out
+    boolean _bFailed;
     NewFrame _frameWeb100Vars, _frameDetailedStats, _frameOptions;
-    // String s; Unused, commenting out
     double _dTime;
     int _s2cspdUpdateTime = 500, _c2sspdUpdateTime = 500; // ms
     int _iECNEnabled, _iNagleEnabled, MSSSent, MSSRcvd;
@@ -598,13 +595,11 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         // set content manager
         getContentPane().setLayout(new BorderLayout());
 
-        // start with status set to "Ready" to perform tests
+        // Start with status set to "Ready" to perform tests
         showStatus(_resBundDisplayMsgs.getString("ready"));
 
         // initialize
         _bFailed = false;
-        _bRandomize = false; // Seems unused after this. Retaining either way
-        _bCanCopy = false;
 
         // Results panel
         _resultsTxtPane = new ResultsTextPane();
@@ -646,7 +641,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         _chkboxPreferIPv6 = new JCheckBox(_resBundDisplayMsgs.getString("preferIPv6"));
         // I2P
         // IPv6 unreliable, only prefer if we don't have a IPv4 address
-        //_chkboxPreferIPv6.setSelected(Addresses.isConnectedIPv6());
         _chkboxPreferIPv6.setSelected(!Addresses.isConnected());
         _chkboxPreferIPv6.addActionListener(this);
         // 2. Conduct default tests?
@@ -773,25 +767,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     } // actionPerformed()
 
     /**
-     * Copy text from JTextarea to clipboard
-     *
-     * @param _txt Source copied text to clipboard
-     * */
-    private void copy (JTextArea _txt) {
-        try {
-            Clipboard clipbd = getToolkit().getSystemClipboard();
-            _bCanCopy = true;
-            String sTemp = _txt.getText();
-            StringSelection ssTemp = new StringSelection(sTemp);
-            clipbd.setContents(ssTemp, ssTemp);
-        } catch (SecurityException e) {
-            _bCanCopy = false;
-            // This Exception is only when the client cannot copy some data, and is acted on by disabling the copy button.
-            _log.warn(" You may not have some security Permissions. Please confirm", e);
-        }
-    }
-
-    /**
      * Display current status in Applet window.
      *
      * @param msg String value of status
@@ -915,18 +890,15 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             PeriodicTimer c2sspdUpdateTimer = new PeriodicTimer() {
                 @Override
                 public void timeReached() {
-                    pub_c2sspd = ((NDTConstants.EIGHT * _iPkts * _yabuff2Write.length) / NDTConstants.KILO)
-                            / (System.currentTimeMillis() - _dTime);
+                    pub_c2sspd = ((NDTConstants.EIGHT * _iPkts * _yabuff2Write.length) / NDTConstants.KILO) / (System.currentTimeMillis() - _dTime);
                     schedule(_c2sspdUpdateTime);
                 }
             };
 
-            // While the 10 s timer ticks, write buffer data into server socket
+            // While the 10s timer ticks, write buffer data into server socket
             while (true) {
-                try {
-                    outStream.write(_yabuff2Write, 0, _yabuff2Write.length);
-                } catch (SocketException e) {
-                    // normal after 10 seconds
+                try {outStream.write(_yabuff2Write, 0, _yabuff2Write.length);}
+                catch (SocketException e) { // normal after 10 seconds
                     _log.debug("SocketException while writing to server (normal)", e);
                     break;
                 }
@@ -945,11 +917,8 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
             c2sspdUpdateTimer.cancel();
             _dTime = System.currentTimeMillis() - _dTime;
-            _log.warn(_dTime + " millisec test completed" + ","
-                    + _yabuff2Write.length + ","+ _iPkts);
-            if (_dTime == 0) {
-                _dTime = 1;
-            }
+            _log.warn(_dTime + " millisec test completed" + "," + _yabuff2Write.length + ","+ _iPkts);
+            if (_dTime == 0) {_dTime = 1;}
 
             // Calculate C2S throughput in kbps
             _log.warn((NDTConstants.EIGHT * _iPkts * _yabuff2Write.length) / _dTime + " KB/s outbound"); //*8 for calculating bits
