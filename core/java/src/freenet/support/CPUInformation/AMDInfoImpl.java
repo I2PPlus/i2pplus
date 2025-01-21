@@ -472,14 +472,16 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
                 isExcavatorCompatible = true;
                 isBulldozerCompatible = true;
                 isZenCompatible = true;
-                // Family 25 is zen 3, so they are definitely zen2 compatible
-                // For now, we're only using zen2 binary for zen 3 processors.
-                // TODO test for one of these instructions:
-                // https://en.wikipedia.org/wiki/Zen_2
-                // Some new instruction set extensions: WBNOINVD, CLWB, RDPID, RDPRU, MCOMMIT.
-                // Each instruction uses its own CPUID bit.
-                // As of GMP 6.2.0, the difference is only some parameter tweaks,
-                // and zen2 is actually a little slower than zen.
+                /*
+                 * Family 25 is zen3, zen3+ or zen4, so they are definitely zen2 compatible
+                 * For now, we're only using zen2 binary for zen 3 or later processors.
+                 * TODO test for one of these instructions:
+                 * https: *en.wikipedia.org/wiki/Zen_2
+                 * Some new instruction set extensions: WBNOINVD, CLWB, RDPID, RDPRU, MCOMMIT.
+                 * Each instruction uses its own CPUID bit.
+                 * As of GMP 6.2.0, the difference is only some parameter tweaks,
+                 * and zen2 is actually a little slower than zen.
+                 */
                 isZen2Compatible = family == 25;
                 if (isZen2Compatible) {modelString = "Ryzen / Epyc Zen 3 model " + model;}
                 else if (model == 1) {modelString = "Ryzen 7";}
@@ -494,9 +496,8 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
             }
             break;
 
-            // Hygon Dhyana
+            // Hygon Dhyana (untested)
             // http://lkml.iu.edu/hypermail/linux/kernel/1806.1/00730.html
-            // untested
             case 24: {
                 isK6Compatible = true;
                 isK6_2_Compatible = true;
@@ -524,11 +525,13 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
                 isExcavatorCompatible = true;
                 isBulldozerCompatible = true;
                 isZenCompatible = true;
+                isZen2Compatible = true;
                 isZen5Compatible = true;
                 if (model <= 31) {modelString = "AMD Epyc 9005 Series (Zen5 / Turin)";}
                 else if (model == 32) {modelString = "AMD Ryzen 8000 Series (Zen5 / Strix Point)";}
                 else if (model == 36) {modelString = "AMD Ryzen AI 9 Series (Zen5)";}
-                else {modelString = "AMD Ryzen 9000 Series (Zen5 / Granite Ridge)";}
+                else if (model >= 64) {modelString = "AMD Ryzen 9000 Series (Zen5 / Granite Ridge)";}
+                else {modelString = "AMD Ryzen model " + model + " (Zen5)";}
             }
             break;
         }
