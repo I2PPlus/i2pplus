@@ -51,8 +51,8 @@ package edu.internet2.ndt;
     Laboratory (http://miranda.ctd.anl.gov:7123/).
  */
 
-import java.io.IOException;
 import java.io.InputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Inet6Address;
 import java.net.InetAddress;
@@ -60,15 +60,17 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.net.URL;
 import java.net.UnknownHostException;
+import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.vuze.plugins.mlab.tools.ndt.swingemu.*;
 
@@ -566,7 +568,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         getContentPane().add(new JScrollPane(_resultsTxtPane));
         _resultsTxtPane.append(_resBundDisplayMsgs.getString("clickStart") + "\n");
 
-        // Panel too add all buttons
+        // Panel to add all buttons
         Panel buttonsPanel = new Panel();
 
         // Add "start" button
@@ -703,7 +705,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
      * */
     public void showStatus(String msg) {
         synchronized(this) {_displayStatus = msg;}
-        if (_log.shouldWarn()) {_log.warn("NDT STATUS: " + msg);}
+        if (_log.shouldWarn()) {_log.warn("Bandwidth test status: " + msg);}
     }
 
     /**
@@ -836,9 +838,11 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                     _log.warn("Client socket timed out");
                     break;
                 }
-                // In both cases above, thread was interrupted while timing 10 seconds of the C->S test.
-                // So, streaming 10 seconds of data may not be complete.
-                // But, the throughput is correctly calculated based on the number of sent packets
+                /*
+                 * In both cases above, thread was interrupted while timing 10 seconds of the C->S test.
+                 * So, streaming 10 seconds of data may not be complete.
+                 * But, the throughput is correctly calculated based on the number of sent packets
+                 */
 
                 _iPkts++;
                 // number of bytes sent = (num of iterations) X (buffer size)
@@ -855,9 +859,8 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
             _dC2sspd = ((NDTConstants.EIGHT * _iPkts * _yabuff2Write.length) / NDTConstants.KILO) / _dTime;
 
-            // The client has stopped streaming data, and the server is now expected to send a
-            // TEST_MSG message with the throughout it calculated.
-            // So, it's now time to receive the throughput (c2sspd) from the server
+            // The client has stopped streaming data, and the server is now expected to send a TEST_MSG message with the throughout it calculated.
+            // So, it's now time to receive the throughput (c2sspd) from the server.
 
             if (paramProtoObj.recv_msg(msg) != NDTConstants.PROTOCOL_MSG_READ_SUCCESS) { // error reading/receiving data
                 _sErrMsg = _resBundDisplayMsgs.getString("protocolError") + parseMsgBodyToInt(new String(msg.getBody()), 16) + " instead\n";
@@ -1092,8 +1095,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                     if (msg.getType() == MessageType.TEST_FINALIZE) {break;} // All web100 variables have been sent
 
                     /*
-                     * Only a message of TEST_MSG type containing the Web100
-                     * variables is expected.
+                     * Only a message of TEST_MSG type containing the Web100 variables is expected.
                      * Every other type of message is indicative of errors
                      */
                     if (msg.getType() != MessageType.TEST_MSG) {
@@ -1651,10 +1653,9 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                         save_long_values(sSysvar, lSysval3);
                     }
                     else if (sStrval.indexOf(".") == -1) { // no decimal point, hence
-                        try {
-                            iSysval = Integer.parseInt(sStrval); // integer
-                            // If it fails as an int it's probably too big since the values are often unsigned
-                        } catch (Exception e) {
+                        // If it fails as an int it's probably too big since the values are often unsigned
+                        try {iSysval = Integer.parseInt(sStrval);} // integer
+                        catch (Exception e) {
                             _log.warn("Exception occured reading a web100 var " + sSysvar, e);
                             iSysval = -1;
                         }
@@ -1691,9 +1692,9 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
         if (_iCountRTT > 0) {
 
-            // Now write some _resBundDisplayMsgs to the screen
-            // Access speed/technology details added to the result main panel
-            // and mailing text. Link speed is also assigned.
+            // Now write some _resBundDisplayMsgs to the screen.
+            // Access speed/technology details added to the result main panel.
+            // Link speed is also assigned.
 
             // Try to determine bottleneck link type
 
@@ -1865,7 +1866,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             case NDTConstants.DATA_RATE_SYSTEM_FAULT:
                 _txtStatistics.append(_resBundDisplayMsgs.getString("ipcFail") + "\n");
                 break;
-
             case NDTConstants.DATA_RATE_RTT:
                 _txtStatistics.append(_resBundDisplayMsgs.getString("rttFail") + "\n");
                 break;
@@ -1951,9 +1951,8 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                                       _resBundDisplayMsgs.getString("pctOfTime") + ")\n");
             } else if (_iDupAcksIn > 0) { // No packet loss, but packets arrived out-of-order
                 _txtStatistics.append(_resBundDisplayMsgs.getString("noPktLoss1") + " - ");
-                _txtStatistics.append(_resBundDisplayMsgs.getString("ooOrder")
-                        + " " + NDTUtils.prtdbl(order * NDTConstants.PERCENTAGE)
-                        + _resBundDisplayMsgs.getString("pctOfTime") + "\n");
+                _txtStatistics.append(_resBundDisplayMsgs.getString("ooOrder") + " " + NDTUtils.prtdbl(order * NDTConstants.PERCENTAGE) +
+                                      _resBundDisplayMsgs.getString("pctOfTime") + "\n");
             } else { // No packets transmissions found
                 _txtStatistics.append(_resBundDisplayMsgs.getString("noPktLoss2") + ".\n");
             }
@@ -2001,7 +2000,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
                 // I think there is a bug here, it sometimes tells you to increase the buffer
                 // size, but the new size is smaller than the current - (older comment left as is)
-
                 if (((2 * rwin) / rttsec) < mylink) { //// multiply by 2 to counter round-trip
                     _txtStatistics.append("  " + _resBundDisplayMsgs.getString("incrRxBuf") + " (" +
                                           NDTUtils.prtdbl(_iMaxRwinRcvd / NDTConstants.KILO_BITS) + " KB) " +
@@ -2227,79 +2225,22 @@ public class Tcpbw100 extends JApplet implements ActionListener {
      * string is save by save_int_values(), save_dbl_values() or save_long_values()
      * after parse to int/double/long
      *
-     * @param sSysvarParam
-     *            String key name
-     * */
+     * @param sSysvarParam String key name
+     *
+     */
     private boolean isValueSave(String sSysvarParam) {
-        //is_save_int_values
-        if (sSysvarParam.equals("MSSSent:")) {return true;}
-        else if (sSysvarParam.equals("MSSRcvd:")) {return true;}
-        else if (sSysvarParam.equals("ECNEnabled:")) {return true;}
-        else if (sSysvarParam.equals("NagleEnabled:")) {return true;}
-        else if (sSysvarParam.equals("SACKEnabled:")) {return true;}
-        else if (sSysvarParam.equals("TimestampsEnabled:")) {return true;}
-        else if (sSysvarParam.equals("WinScaleRcvd:")) {return true;}
-        else if (sSysvarParam.equals("WinScaleSent:")) {return true;}
-        else if (sSysvarParam.equals("SumRTT:")) {return true;}
-        else if (sSysvarParam.equals("CountRTT:")) {return true;}
-        else if (sSysvarParam.equals("CurMSS:")) {return true;}
-        else if (sSysvarParam.equals("Timeouts:")) {return true;}
-        else if (sSysvarParam.equals("PktsRetrans:")) {return true;}
-        else if (sSysvarParam.equals("SACKsRcvd:")) {return true;}
-        else if (sSysvarParam.equals("DupAcksIn:")) {return true;}
-        else if (sSysvarParam.equals("MaxRwinRcvd:")) {return true;}
-        else if (sSysvarParam.equals("MaxRwinSent:")) {return true;}
-        else if (sSysvarParam.equals("Sndbuf:")) {return true;}
-        else if (sSysvarParam.equals("X_Rcvbuf:")) {return true;}
-        else if (sSysvarParam.equals("DataPktsOut:")) {return true;}
-        else if (sSysvarParam.equals("FastRetran:")) {return true;}
-        else if (sSysvarParam.equals("AckPktsOut:")) {return true;}
-        else if (sSysvarParam.equals("SmoothedRTT:")) {return true;}
-        else if (sSysvarParam.equals("CurCwnd:")) {return true;}
-        else if (sSysvarParam.equals("MaxCwnd:")) {return true;}
-        else if (sSysvarParam.equals("SndLimTimeRwin:")) {return true;}
-        else if (sSysvarParam.equals("SndLimTimeCwnd:")) {return true;}
-        else if (sSysvarParam.equals("SndLimTimeSender:")) {return true;}
-        else if (sSysvarParam.equals("AckPktsIn:")) {return true;}
-        else if (sSysvarParam.equals("SndLimTransRwin:")) {return true;}
-        else if (sSysvarParam.equals("SndLimTransCwnd:")) {return true;}
-        else if (sSysvarParam.equals("SndLimTransSender:")) {return true;}
-        else if (sSysvarParam.equals("MaxSsthresh:")) {return true;}
-        else if (sSysvarParam.equals("CurRTO:")) {return true;}
-        else if (sSysvarParam.equals("MaxRTO:")) {return true;}
-        else if (sSysvarParam.equals("MinRTO:")) {return true;}
-        else if (sSysvarParam.equals("MinRTT:")) {return true;}
-        else if (sSysvarParam.equals("MaxRTT:")) {return true;}
-        else if (sSysvarParam.equals("CurRwinRcvd:")) {return true;}
-        else if (sSysvarParam.equals("Timeouts:")) {return true;}
-        else if (sSysvarParam.equals("c2sData:")) {return true;}
-        else if (sSysvarParam.equals("c2sAck:")) {return true;}
-        else if (sSysvarParam.equals("s2cData:")) {return true;}
-        else if (sSysvarParam.equals("s2cAck:")) {return true;}
-        else if (sSysvarParam.equals("PktsOut:")) {return true;}
-        else if (sSysvarParam.equals("mismatch:")) {return true;}
-        else if (sSysvarParam.equals("congestion:")) {return true;}
-        else if (sSysvarParam.equals("bad_cable:")) {return true;}
-        else if (sSysvarParam.equals("half_duplex:")) {return true;}
-        else if (sSysvarParam.equals("CongestionSignals:")) {return true;}
-        else if (sSysvarParam.equals("RcvWinScale:")) {return true;}
-        else if (sSysvarParam.equals("DataBytesOut:")) {return true;} // is_save_long_values
-        else if (sSysvarParam.equals("bw:")) {return true;} // is_save_dbl_values
-        else if (sSysvarParam.equals("loss:")) {return true;}
-        else if (sSysvarParam.equals("avgrtt:")) {return true;}
-        else if (sSysvarParam.equals("waitsec:")) {return true;}
-        else if (sSysvarParam.equals("timesec:")) {return true;}
-        else if (sSysvarParam.equals("order:")) {return true;}
-        else if (sSysvarParam.equals("rwintime:")) {return true;}
-        else if (sSysvarParam.equals("sendtime:")) {return true;}
-        else if (sSysvarParam.equals("cwndtime:")) {return true;}
-        else if (sSysvarParam.equals("rttsec:")) {return true;}
-        else if (sSysvarParam.equals("rwin:")) {return true;}
-        else if (sSysvarParam.equals("swin:")) {return true;}
-        else if (sSysvarParam.equals("cwin:")) {return true;}
-        else if (sSysvarParam.equals("spd:")) {return true;}
-        else if (sSysvarParam.equals("aspd:")) {return true;}
-        return false;
+        Set<String> saveValues = new HashSet<>(Arrays.asList(
+            "AckPktsIn:", "AckPktsOut:", "Bad_cable:", "Congestion:", "CongestionSignals:", "CountRTT:", "CurCwnd:",
+            "CurMSS:", "CurRTO:", "CurRwinRcvd:", "DataBytesOut:", "DataPktsOut:", "DupAcksIn:", "ECNEnabled:",
+            "FastRetran:", "Half_duplex:", "MaxCwnd:", "MaxRTO:", "MaxRwinRcvd:", "MaxRwinSent:", "MaxSsthresh:",
+            "MaxRTT:", "MinRTO:", "MinRTT:", "MSSRcvd:", "MSSSent:", "NagleEnabled:", "Order:", "PktsOut:",
+            "PktsRetrans:", "RcvWinScale:", "Rwin:", "S2cAck:", "S2cData:", "SACKEnabled:", "SACKsRcvd:", "Sndbuf:",
+            "SndLimTimeCwnd:", "SndLimTimeRwin:", "SndLimTimeSender:", "SndLimTransCwnd:", "SndLimTransRwin:",
+            "SndLimTransSender:", "SmoothedRTT:", "Sndbuf:", "Swin:", "SumRTT:", "Swin:", "Timeouts:", "TimestampsEnabled:",
+            "Timesec:", "Waitsec:", "WinScaleRcvd:", "WinScaleSent:", "X_Rcvbuf:", "c2sAck:", "c2sData:", "bw:", "cwin:",
+            "loss:", "mismatch:", "rwintime:", "sendtime:", "cwndtime:", "rttsec:", "avgrtt:", "aspd:", "spd:"
+        ));
+        return saveValues.contains(sSysvarParam);
     }
 
     /**
@@ -2341,29 +2282,29 @@ public class Tcpbw100 extends JApplet implements ActionListener {
      * @return {String} The value of the desired parameter.
      */
     public String getNDTvar(String varName) {
-        if (varName.equals("ClientToServerSpeed")) {return get_c2sspd();}
-        else if (varName.equals("ServerToClientSpeed")) {return get_s2cspd();}
+        if (varName.equals("ACCESS_TECH")) {return get_AccessTech();}
+        else if (varName.equals("ClientToServerSpeed")) {return get_c2sspd();}
+        else if (varName.equals("CONGESTION")) {return get_congestion();}
+        else if (varName.equals("CURRTO")) {return get_CurRTO();}
+        else if (varName.equals("CURRWINRCVD")) {return get_CurRwinRcvd();}
+        else if (varName.equals("DUPACKSIN")) {return get_DupAcksIn();}
         else if (varName.equals("Jitter")) {return get_jitter();}
-        else if (varName.equals("OperatingSystem")) {return get_osName() + " " + get_osVer();}
-        else if (varName.equals("PluginVersion")) {return get_pluginVer();}
+        else if (varName.equals("LOSS")) {return get_loss();}
+        else if (varName.equals("MAXRWINRCVD")) {return get_MaxRwinRcvd();}
+        else if (varName.equals("MAXRTT")) {return get_MaxRTT();}
+        else if (varName.equals("MINRTT")) {return get_Ping();}
+        else if (varName.equals("MISMATCH")) {return get_mismatch();}
+        else if (varName.equals("OPTRCVRBUFF")) {return get_optimalRcvrBuffer();}
         else if (varName.equals("OsArchitecture")) {return get_osArch();}
+        else if (varName.equals("OperatingSystem")) {return get_osName() + " " + get_osVer();}
+        else if (varName.equals("PLUGINVERSION")) {return get_pluginVer();}
+        else if (varName.equals("RWINTIME")) {return get_rcvrLimiting();}
+        else if (varName.equals("SACKSRCVD")) {return get_SACKsRcvd();}
+        else if (varName.equals("SERVERTOCLIENTSPEED")) {return get_s2cspd();}
+        else if (varName.equals("WAITSEC")) {return get_WaitSec();}
         else if (varName.equals(NDTConstants.AVGRTT)) {return get_avgrtt();}
-        else if (varName.equals(NDTConstants.CURRWINRCVD)) {return get_CurRwinRcvd();}
-        else if (varName.equals(NDTConstants.MAXRWINRCVD)) {return get_MaxRwinRcvd();}
-        else if (varName.equals(NDTConstants.LOSS)) {return get_loss();}
-        else if (varName.equals(NDTConstants.MINRTT)) {return get_Ping();}
-        else if (varName.equals(NDTConstants.MAXRTT)) {return get_MaxRTT();}
-        else if (varName.equals(NDTConstants.WAITSEC)) {return get_WaitSec();}
-        else if (varName.equals(NDTConstants.CURRTO)) {return get_CurRTO();}
-        else if (varName.equals(NDTConstants.SACKSRCVD)) {return get_SACKsRcvd();}
-        else if (varName.equals(NDTConstants.MISMATCH)) {return get_mismatch();}
         else if (varName.equals(NDTConstants.BAD_CABLE)) {return get_Bad_cable();}
-        else if (varName.equals(NDTConstants.CONGESTION)) {return get_congestion();}
         else if (varName.equals(NDTConstants.CWNDTIME)) {return get_cwndtime();}
-        else if (varName.equals(NDTConstants.RWINTIME)) {return get_rcvrLimiting();}
-        else if (varName.equals(NDTConstants.OPTRCVRBUFF)) {return get_optimalRcvrBuffer();}
-        else if (varName.equals(NDTConstants.ACCESS_TECH)) {return get_AccessTech();}
-        else if (varName.equals(NDTConstants.DUPACKSIN)) {return get_DupAcksIn();}
         else {return null;}
     }
 
