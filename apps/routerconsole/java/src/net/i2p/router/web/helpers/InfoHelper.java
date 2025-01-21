@@ -144,6 +144,8 @@ public class InfoHelper extends HelperBase {
         float bwS = Integer.parseInt(bwShare());
         float shared = (bwO / 100 * bwS);
         int shareBW = (int) shared;
+        long maxMem = SystemVersion.getMaxMemory();
+        long maxMemMB = maxMem / 1024 / 1024;
         String slash = System.getProperty("file.separator");
         String appDir = _context.getProperty("i2p.dir.base") + slash;
         String configDir = _context.getProperty("i2p.dir.config") + slash;
@@ -185,7 +187,8 @@ public class InfoHelper extends HelperBase {
         }
         buf.append("&ensp;<a href=\"/config\">").append(_t("Configure")).append("</a></td></tr>\n")
            .append("<tr><td><b>").append(_t("Performance")).append(":</b></td><td><b>").append(_t("Available CPU Cores")).append(":</b> ")
-           .append(getCoreCount()).append("&ensp;<b>").append(_t("Classified as slow")).append(":</b>");
+           .append(getCoreCount()).append("&ensp;<b>").append(_t("Maximum available RAM")).append(":</b> ").append(maxMemMB + "MB")
+           .append("&ensp;<b>").append(_t("Classified as slow")).append(":</b>");
         if (isRouterSlow()) {buf.append(" <span class=\"yes\">").append(_t("Yes")).append("</span>");}
         else {buf.append(" <span class=\"no\">").append(_t("No")).append("</span>");}
         buf.append("</td></tr>\n");
@@ -196,7 +199,6 @@ public class InfoHelper extends HelperBase {
         }
         if (rdnsEnabled) {
             int rdnsCacheSize = CommSystemFacadeImpl.countRdnsCacheEntries();
-            long maxMem = SystemVersion.getMaxMemory();
             String rdnsFileSize = (_context.router().getUptime() > 5 * 1000 ? CommSystemFacadeImpl.rdnsCacheSize() : _t("initializing") + "&hellip;");
             buf.append("<tr><td><b>RDNS Cache:</b></td><td class=ajax>").append(rdnsCacheSize).append(" / ")
                .append((maxMem < 512*1024*1024 ? "16384" : "32768")).append(" ").append(_t("entries")).append("&ensp;<b>")
