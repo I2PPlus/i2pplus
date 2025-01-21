@@ -66,7 +66,7 @@
 <b>Server version:</b>&ensp;<jsp:getProperty name="logsHelper" property="jettyVersion" /><br>
 <b>Servlet version:</b>&ensp;<%=getServletInfo()%> (<%=getServletConfig().getServletContext().getMajorVersion()%>.<%=getServletConfig().getServletContext().getMinorVersion()%>)<br>
 <b>Platform:</b>&ensp;<%=System.getProperty("os.name")%>&ensp;<%=System.getProperty("os.arch")%>&ensp;<%=System.getProperty("os.version")%><br>
-<b>Processor:</b>&ensp;<%=net.i2p.util.NativeBigInteger.cpuModel()%>&ensp;(<%=net.i2p.util.NativeBigInteger.cpuType()%>)<br>
+<b>Processor:</b>&ensp;<%=net.i2p.util.NativeBigInteger.cpuModel()%>&ensp;(<%=net.i2p.util.NativeBigInteger.cpuType().replace("zen2", "zen3 or later")%>)<br>
 <b>JBigI:</b>&ensp;<%=net.i2p.util.NativeBigInteger.loadStatus()%><br>
 <b>Encoding:</b>&ensp;<%=System.getProperty("file.encoding")%><br>
 <b>Charset:</b>&ensp;<%=java.nio.charset.Charset.defaultCharset().name()%></p>
