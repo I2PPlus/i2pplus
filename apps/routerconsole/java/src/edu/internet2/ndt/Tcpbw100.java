@@ -1773,31 +1773,27 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
             // duplex mismatch
             switch (mismatch) {
-            case NDTConstants.DUPLEX_NOK_INDICATOR: //1
-                _resultsTxtPane.append(_resBundDisplayMsgs.getString("oldDuplexMismatch") + "\n");
-                break;
-            case NDTConstants.DUPLEX_SWITCH_FULL_HOST_HALF:
-                _resultsTxtPane.append(_resBundDisplayMsgs.getString("duplexFullHalf") + "\n");
-                break;
-            case NDTConstants.DUPLEX_SWITCH_HALF_HOST_FULL:
-                _resultsTxtPane.append(_resBundDisplayMsgs.getString("duplexHalfFull") + "\n");
-                break;
-            case NDTConstants.DUPLEX_SWITCH_FULL_HOST_HALF_POSS:
-                _resultsTxtPane.append(_resBundDisplayMsgs.getString("possibleDuplexFullHalf") + "\n");
-                break;
-            case NDTConstants.DUPLEX_SWITCH_HALF_HOST_FULL_POSS:
-                _resultsTxtPane.append(_resBundDisplayMsgs.getString("possibleDuplexHalfFull") + "\n");
-                break;
-            case NDTConstants.DUPLEX_SWITCH_HALF_HOST_FULL_WARN:
-                _resultsTxtPane.append(_resBundDisplayMsgs.getString("possibleDuplexHalfFullWarning") + "\n");
-                break;
-            case NDTConstants.DUPLEX_OK_INDICATOR:
-                if (bad_cable == 1) {
-                    _resultsTxtPane.append(_resBundDisplayMsgs.getString("excessiveErrors") + "\n");
-                }
-                if (congestion == 1) {
-                    _resultsTxtPane.append(_resBundDisplayMsgs.getString("otherTraffic") + "\n");
-                }
+                case NDTConstants.DUPLEX_NOK_INDICATOR: //1
+                    _resultsTxtPane.append(_resBundDisplayMsgs.getString("oldDuplexMismatch") + "\n");
+                    break;
+                case NDTConstants.DUPLEX_SWITCH_FULL_HOST_HALF:
+                    _resultsTxtPane.append(_resBundDisplayMsgs.getString("duplexFullHalf") + "\n");
+                    break;
+                case NDTConstants.DUPLEX_SWITCH_HALF_HOST_FULL:
+                    _resultsTxtPane.append(_resBundDisplayMsgs.getString("duplexHalfFull") + "\n");
+                    break;
+                case NDTConstants.DUPLEX_SWITCH_FULL_HOST_HALF_POSS:
+                    _resultsTxtPane.append(_resBundDisplayMsgs.getString("possibleDuplexFullHalf") + "\n");
+                    break;
+                case NDTConstants.DUPLEX_SWITCH_HALF_HOST_FULL_POSS:
+                    _resultsTxtPane.append(_resBundDisplayMsgs.getString("possibleDuplexHalfFull") + "\n");
+                    break;
+                case NDTConstants.DUPLEX_SWITCH_HALF_HOST_FULL_WARN:
+                    _resultsTxtPane.append(_resBundDisplayMsgs.getString("possibleDuplexHalfFullWarning") + "\n");
+                    break;
+                case NDTConstants.DUPLEX_OK_INDICATOR:
+                    if (bad_cable == 1) {_resultsTxtPane.append(_resBundDisplayMsgs.getString("excessiveErrors") + "\n");}
+                    if (congestion == 1) {_resultsTxtPane.append(_resBundDisplayMsgs.getString("otherTraffic") + "\n");}
 
                 /*
                  * We seem to be transmitting less than link speed possibly due a receiver window setting
@@ -1816,9 +1812,9 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                     }
                 }
                 break;
-            default: // default for indication of no match for mismatch variable
-                break;
 
+                default: // default for indication of no match for mismatch variable
+                break;
             }
 
             // C2S throughput test: Packet queuing
@@ -1901,21 +1897,15 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             // Add decisions about duplex mode, congestion, duplex mismatch to Statistics pane
             if (half_duplex == NDTConstants.DUPLEX_OK_INDICATOR) {
                 _txtStatistics.append(_resBundDisplayMsgs.getString("linkFullDpx") + "\n");
-            } else {
-                _txtStatistics.append(_resBundDisplayMsgs.getString("linkHalfDpx") + "\n");
-            }
+            } else {_txtStatistics.append(_resBundDisplayMsgs.getString("linkHalfDpx") + "\n");}
 
             if (congestion == NDTConstants.CONGESTION_NONE) {
                 _txtStatistics.append(_resBundDisplayMsgs.getString("congestNo") + "\n");
-            } else {
-                _txtStatistics.append(_resBundDisplayMsgs.getString("congestYes") + "\n");
-            }
+            } else {_txtStatistics.append(_resBundDisplayMsgs.getString("congestYes") + "\n");}
 
             if (bad_cable == NDTConstants.CABLE_STATUS_OK) {
                 _txtStatistics.append(_resBundDisplayMsgs.getString("cablesOk") + "\n");
-            } else {
-                _txtStatistics.append(_resBundDisplayMsgs.getString("cablesNok") + "\n");
-            }
+            } else {_txtStatistics.append(_resBundDisplayMsgs.getString("cablesNok") + "\n");}
 
             if (mismatch == NDTConstants.DUPLEX_OK_INDICATOR) {
                 _txtStatistics.append(_resBundDisplayMsgs.getString("duplexOk") + "\n");
@@ -2221,12 +2211,10 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     } // save_int_values()
 
     /**
-     * Method check, if values of various "keys" from the the test results
-     * string is save by save_int_values(), save_dbl_values() or save_long_values()
-     * after parse to int/double/long
+     * Method check, if values of various "keys" from the the test results string is saved by
+     * save_int_values(), save_dbl_values() or save_long_values() after parse to int/double/long
      *
      * @param sSysvarParam String key name
-     *
      */
     private boolean isValueSave(String sSysvarParam) {
         Set<String> saveValues = new HashSet<>(Arrays.asList(
@@ -2237,8 +2225,8 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             "PktsRetrans:", "RcvWinScale:", "Rwin:", "S2cAck:", "S2cData:", "SACKEnabled:", "SACKsRcvd:", "Sndbuf:",
             "SndLimTimeCwnd:", "SndLimTimeRwin:", "SndLimTimeSender:", "SndLimTransCwnd:", "SndLimTransRwin:",
             "SndLimTransSender:", "SmoothedRTT:", "Sndbuf:", "Swin:", "SumRTT:", "Swin:", "Timeouts:", "TimestampsEnabled:",
-            "Timesec:", "Waitsec:", "WinScaleRcvd:", "WinScaleSent:", "X_Rcvbuf:", "c2sAck:", "c2sData:", "bw:", "cwin:",
-            "loss:", "mismatch:", "rwintime:", "sendtime:", "cwndtime:", "rttsec:", "avgrtt:", "aspd:", "spd:"
+            "Timesec:", "Waitsec:", "WinScaleRcvd:", "WinScaleSent:", "X_Rcvbuf:", "aspd:", "avgrtt:", "bw:", "c2sAck:",
+            "c2sData:", "cwin:", "cwndtime:", "loss:", "mismatch:", "rttsec:", "rwintime:", "sendtime:", "spd:"
         ));
         return saveValues.contains(sSysvarParam);
     }
