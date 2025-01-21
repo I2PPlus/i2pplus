@@ -483,15 +483,16 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
                  * and zen2 is actually a little slower than zen.
                  */
                 isZen2Compatible = family == 25;
-                if (isZen2Compatible) {modelString = "Ryzen / Epyc Zen 3 model " + model;}
-                else if (model == 1) {modelString = "Ryzen 7";}
-                else if (model == 17) {modelString = "Ryzen 2000 APU series";}
-                else if (model == 24) {modelString = "Ryzen Zen+ 3000 APU series";}
-                else if (model == 32) {modelString = "Ryzen 3000 APU series";}
-                else if (model == 49) {modelString = "Ryzen Threadripper 3000 series / Epyc 7002 series";}
-                else if (model == 96) {modelString = "Ryzen 4000 APU series";}
-                else if (model == 104) {modelString = "Ryzen 5000 APU series";}
-                else if (model == 113) {modelString = "Ryzen 3000 series";}
+                if (isZen2Compatible) {modelString = "AMD Ryzen / Epyc Zen 3 model " + model;}
+                else if (model == 0) {modelString = "AMD Epyc (Summit Ridge/Naples)";}
+                else if (model == 1) {modelString = "AMD Ryzen 7";}
+                else if (model == 17) {modelString = "AMD Ryzen 2000 APU series";}
+                else if (model == 24) {modelString = "AMD Ryzen Zen+ 3000 APU series";}
+                else if (model == 32) {modelString = "AMD Ryzen 3000 APU series";}
+                else if (model == 49) {modelString = "AMD Ryzen Threadripper 3000 series / Epyc 7002 series";}
+                else if (model == 96) {modelString = "AMD Ryzen 4000 APU series";}
+                else if (model == 104) {modelString = "AMD Ryzen 5000 APU series";}
+                else if (model == 113) {modelString = "AMD Ryzen 3000 series";}
                 else {modelString = "Ryzen / Epyc model " + model;}
             }
             break;
