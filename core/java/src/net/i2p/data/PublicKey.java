@@ -127,6 +127,7 @@ public class PublicKey extends SimpleDataStructure {
      *  @since 0.9.42
      */
     public PublicKey toTypedKey(KeyCertificate kcert) {
+        if (_type == DEF_TYPE && (kcert.getPayload() == null || kcert.getPayload().length == 0)) {return this;}
         if (_data == null) {throw new IllegalStateException();}
         EncType newType = kcert.getEncType();
         if (_type == newType) {return this;}
