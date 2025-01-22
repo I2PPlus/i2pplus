@@ -32,7 +32,7 @@ label:not(.createFilterToggle){font-weight:600!important;font-variation-settings
 #torrents tfoot tr:first-child th{min-width:80px}
 #filterBar .badge{padding:0 3px!important;line-height:1.2!important}
 
-@media (min-width:1500px){body,code,input[type="file"]::file-selector-button,select,textarea,th,th code,tt,.confignav,.main,.main button,.main input,.main td,.main textarea,.main .messages,.statlist a[name],.statlist a[name]:hover,.statlist b,.statlist li b,#changelog pre,#configinfo th,#news,#news p,#sidebar button,#warning2 p{font-size:10.5pt!important}}
+@media (min-width:1500px){body,code,input[type="file"]::file-selector-button,select,textarea,th,th code,tt,.confignav,.main,.main button,.main input,.main td,.main textarea,.main .messages,.statlist a[name],.statlist a[name]:hover,.statlist b,.statlist li b,#changelog pre,#configinfo th,#news,#news p,#sidebar button,#warning2 p{font-size:10.5pt!important}#searchbar button{font-size:0!important}}
 @media (min-width:1600px){#clock{padding-bottom:10px!important}}
 
 @font-face{font-family:Open Sans;font-style:normal;font-weight:300,400,500,600,700,800;src:url(/themes/fonts/OpenSans/OpenSans.woff2);format("woff2");font-display:swap}
