@@ -4,12 +4,12 @@
 --monospaced:FiraCode,Noto Mono,DejaVu Sans Mono,Lucida Console,monospace;
 }
 
-html,body,.configtable td.infohelp, p.infohelp, td.infohelp, p.infowarn, td.infowarn, #debugmode, .sybilinfo{font-weight:500!important}
+html,body,.configtable td.infohelp,p.infohelp,td.infohelp,p.infowarn,td.infowarn,#debugmode,.sybilinfo{font-weight:500!important}
 a,a:link,a:visited,#logs li,#logs pre,.tab,.statvalue,select,input[type="submit"],input[type="reset"],button,.control,.fakebutton,.fakebutton:visited,#sidebar a,#sb_localtunnels a,#torrents tfoot tr:first-child th,#screenlog li,.txBarText,.torrentDownloaded{font-weight:650!important}
 b,h2,h3,h4,h5,strong{font-weight:700}
 button,input[type="reset"],input[type="submit"],select,.control,.fakebutton,.fakebutton:visited{font-weight:620;font-variation-settings:'wdth' 95}
 input[type=password],input[type=text],pre,select,textarea,.routerid tt,.routerid tt a,#statusMessages,#statusMessages:active,#statusMessages:focus{font-weight:500}
-label:not(.createFilterToggle){font-weight:500!important;font-variation-settings:'wdth' 90}
+label:not(.createFilterToggle){font-weight:600!important;font-variation-settings:'wdth' 90}
 .infohash{font-weight:500}
 .main b,.main td a,.main td b,.page td a,.panel td a,.panel td b,li b,.tunnelName a{font-weight:650}
 .main,#sidebar{contain:paint}
@@ -32,6 +32,7 @@ label:not(.createFilterToggle){font-weight:500!important;font-variation-settings
 #torrents tfoot tr:first-child th{min-width:80px}
 #filterBar .badge{padding:0 3px!important;line-height:1.2!important}
 
+@media (min-width:1500px){body,code,input[type="file"]::file-selector-button,select,textarea,th,th code,tt,.confignav,.main,.main button,.main input,.main td,.main textarea,.main .messages,.statlist a[name],.statlist a[name]:hover,.statlist b,.statlist li b,#changelog pre,#configinfo th,#news,#news p,#sidebar button,#warning2 p{font-size:10.5pt!important}}
 @media (min-width:1600px){#clock{padding-bottom:10px!important}}
 
 @font-face{font-family:Open Sans;font-style:normal;font-weight:300,400,500,600,700,800;src:url(/themes/fonts/OpenSans/OpenSans.woff2);format("woff2");font-display:swap}
