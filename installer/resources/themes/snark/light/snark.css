@@ -17,7 +17,7 @@
 --nav_hover:linear-gradient(180deg,#fcfaf7 50%,#ffe8bf 50%,#efd9b3 100%);
 --nav:linear-gradient(180deg,#fff 50%,#eef 51%,#eef 100%);
 --notify:var(--section);
---panel:linear-gradient(180deg,#fafaff,#f8f8ff,#fafaff);
+--panel:var(--bg),linear-gradient(180deg,#fafaff,#f8f8ff,#fafaff);
 --row_filtered:var(--row);
 --row:var(--bg) left top/4px,linear-gradient(180deg,#fff,#f0f0ff);
 --tabimg:linear-gradient(180deg,#f8f8ff 50%,#e2e2ff 50%,#bbf);
@@ -80,8 +80,8 @@ td{padding:3px 4px;color:var(--ink_light);opacity:1;font-size:9pt}
 #torrentsimg{display:inline-block;vertical-align:middle}
 
 /* top navigation */
-#navbar{margin:0 auto 10px;padding:8px 10px 7px;position:sticky;top:-1px;z-index:2001;width:auto;width:calc(100% - 22px);min-width:880px;text-align:center;border:var(--border_soft);border-radius:2px 2px 0 0;box-shadow:var(--highlight);background:var(--th)}
-.iframed #navbar{margin:-5px -1px;padding-top:6px;padding-bottom:6px;position:static;border-radius:0;border:0;border-bottom:var(--border_soft);box-shadow:none}
+#navbar{margin:0 auto 10px;padding:7px 10px;position:sticky;top:-1px;z-index:2001;width:auto;width:calc(100% - 22px);min-width:880px;text-align:center;border:var(--border_soft);border-radius:2px 2px 0 0;box-shadow:var(--highlight)!important;background:var(--th)}
+.iframed #navbar{margin:-5px auto;padding-top:8px;width:calc(100% - 20px);position:unset;border-radius:0;border:0;border-bottom:var(--border_soft);box-shadow:none}
 .snarkNav{margin-right:-5px;padding:2px 10px 2px 24px;display:inline-block;position:relative;outline:none;line-height:1.4;letter-spacing:.08em;text-decoration:none;text-transform:uppercase;font-size:9pt;font-weight:700;border:var(--border_soft);border-radius:0;box-shadow:var(--highlight);filter:drop-shadow(0 0 1px #bbd8);transition:ease-in box-shadow .1s}
 #navbar a,#navbar a:visited{color:#559;background-size:15px,100%;background-position:8px center;transition:ease-out box-shadow .1s}
 #navbar a:hover,#navbar a:focus{z-index:999;color:var(--hover);text-shadow:none;border:1px solid var(--hover);transition:ease border .1s}
@@ -701,7 +701,7 @@ th img{filter:none;opacity:.85}
 .peerinfo td>*{vertical-align:middle}
 .peerinfo code{margin:0;padding:0 5px;color:#282;text-shadow:var(--txt_shadow);border-radius:2px 0 0 2px;background:none}
 #ourDest,#ourDest code{display:inline-block;vertical-align:baseline;line-height:1.3!important}
-#ourDest{margin:1px -3px -1px;padding:1px 0 1px 4px;float:right;font-size:95%;border:1px solid #bbc;border-radius:2px;box-shadow:var(--highlight);background:var(--badge);opacity:.85}
+#ourDest{margin:0 -3px;padding:1px 0 1px 4px;float:right;font-size:95%;border:1px solid #bbc;border-radius:2px;box-shadow:var(--highlight);background:var(--badge);opacity:.85}
 #ourDest code{margin:0;padding:0 4px}
 .inactivity{margin-left:12px;min-width:5px;max-width:400px;height:8px;display:inline-block;border-radius:8px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.4);background:repeating-linear-gradient(90deg,#0000,#0000 15px,rgba(255,255,255,.5) 15px,rgba(255,255,255,.5) 16px,#0000 16px),linear-gradient(180deg,rgba(255,255,255,.4) 50%,rgba(0,0,0,.1) 50%),linear-gradient(90deg,#bb0 60px,#900 120px)}
 .inactivity[style="width:0px"],.inactivity[style="width:1px"],.inactivity[style="width:2px"],.inactivity[style="width:3px"],.inactivity[style="width:4px"],.inactivity[style="width:5px"]{display:none}
@@ -773,7 +773,7 @@ form[action^="/i2psnark/configure"]{display:block}
 .createFilterToggle.ends_with{border-right-width:5px}
 #contentFilter{margin:-3px 0;padding:0 0 6px;width:100%;display:flex;flex-wrap:wrap}
 #contentFilter input[type=checkbox]{display:none}
-#contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 6px 1px 20px;font-weight:600;font-style:normal;box-shadow:var(--btn_shadow_active);background:var(--delete) no-repeat 9px calc(50% + 1px)/10px,var(--btn_hover)}
+#contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 6px 1px 20px;font-weight:600;font-style:normal;color:#424486;box-shadow:var(--btn_shadow_active);background:var(--delete) no-repeat 9px calc(50% + 1px)/10px,var(--btn_hover)}
 #createTorrentFilters{display:table-row}
 #fileFilter{width:calc(100% - 20px);margin:-1px auto 0;display:block}
 #fileFilter table{margin-bottom:0}
@@ -1002,7 +1002,6 @@ input[type=submit]{min-width:100px}
 label b,.configOption b,#trackerconfig th{font-size:9pt}
 .debuginfo td{padding-top:4px;padding-bottom:4px;word-spacing:0;font-size:10pt}
 .details img[src$="rateme.svg"]{margin-top:-1px;margin-right:-1px;width:11px;height:11px}
-.iframed #navbar{padding-top:7px;padding-bottom:8px}
 .knownTracker a,.trackerannounce,.trackerhome{width:400px;max-width:400px}
 .magnetLabel{margin:0;padding:2px 6px;line-height:1;border-radius:1px;box-shadow:0 0 0 1px #bbc,inset 0 0 0 1px #fff;background:linear-gradient(180deg,#f2f2ff,#eef)}
 .magnetLabel::before{margin-left:-10px;position:absolute;top:calc(50% - 6px);left:-3px;border-width:6px;border-style:solid;border-color:#0000 #bbc #0000 #0000;content:"";display:inline-block}
