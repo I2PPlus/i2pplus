@@ -15,16 +15,33 @@ let refreshTimerActive = true;
 let response;
 let responseDoc;
 let responseText;
-
 const parser = new DOMParser();
 const sb = document.querySelector("#sidebar");
 const uri = location.pathname;
-const worker = new Worker("/js/fetchWorker.js");
-
+const worker = new SharedWorker("/js/fetchWorker.js");
 const elements = {
   badges: sb.querySelectorAll(".badge:not(#newHosts), #tunnelCount, #newsCount"),
   volatileElements: sb.querySelectorAll(".volatile:not(.badge)"),
 };
+
+// Initialize the port and set up message listeners
+worker.port.start();
+worker.port.addEventListener("message", async function(event) {
+  try {
+    const { responseText, isDown: workerIsDown, noResponse: workerNoResponse } = event.data;
+    if (responseText) {
+      responseDoc = parser.parseFromString(responseText, "text/html");
+      isDown = workerIsDown;
+      noResponse = workerNoResponse;
+      document.body.classList.remove("isDown");
+      checkIfDown();
+    } else {
+    }
+  } catch (error) {
+    noResponse++;
+    checkIfDown();
+  }
+});
 
 async function initSidebar() {
   sectionToggler();
@@ -38,6 +55,8 @@ async function checkIfDown() {
   if (noResponse > 5) {
     isDown = true;
     document.body.classList.add("isDown");
+  } else {
+    document.body.classList.remove("isDown");
   }
 }
 
@@ -45,14 +64,18 @@ async function checkTimer() {
   try {
     refreshTimerActive = await getRefreshTimerId();
     return refreshTimerActive.isActive;
-  } catch (error) {return false;}
+  } catch (error) {
+    return false;
+  }
 }
 
 async function doFetch(force = false) {
   checkTimer();
-  if (!refreshTimerActive.isActive) {return;}
+  if (!refreshTimerActive.isActive) {
+    return;
+  }
   try {
-    worker.postMessage({ url: `/xhr1.jsp?requestURI=${uri}` });
+    worker.port.postMessage({ url: `/xhr1.jsp?requestURI=${uri}`, force });
     if (refreshTimeout) {
       clearTimeout(refreshTimeout);
       refreshTimeout = setTimeout(doFetch, refreshInterval);
@@ -64,20 +87,6 @@ async function doFetch(force = false) {
   }
 }
 
-worker.addEventListener("message", async function(event) {
-  try {
-    const { responseText, isDown: workerIsDown, noResponse: workerNoResponse } = event.data;
-    responseDoc = parser.parseFromString(responseText, "text/html");
-    isDown = workerIsDown;
-    noResponse = workerNoResponse;
-    document.body.classList.remove("isDown");
-    checkIfDown();
-  } catch (error) {
-    noResponse++;
-    checkIfDown();
-  }
-});
-
 async function refreshSidebar() {
   const xhrContainer = document.getElementById("xhr");
   const updates = [];
@@ -87,24 +96,20 @@ async function refreshSidebar() {
     refreshTimeout = setTimeout(refreshSidebar, refreshInterval);
     if (responseDoc) {
       isDown = false;
-
       const responseElements = {
         volatileElements: responseDoc.querySelectorAll(".volatile:not(.badge)"),
         badges: responseDoc.querySelectorAll(".badge:not(#newHosts)"),
       };
-
       const updateElement = (elem, respElem, property = "innerHTML") => {
-        if (elem && respElem && elem.innerHTML !== respElem.innerHTML) {
-          elem.innerHTML = respElem.innerHTML;
+        if (elem && respElem && elem[property] !== respElem[property]) {
+          elem[property] = respElem[property];
         }
       };
-
       const updateIfStatusDown = (elem, respElem) => {
         if (elem && elem.classList.contains("statusDown") && respElem && elem.outerHTML !== respElem.outerHTML) {
           elem.outerHTML = respElem.outerHTML;
         }
       };
-
       (function checkSections() {
         const updating = xhrContainer.querySelectorAll(".volatile");
         const updatingResponse = responseDoc.querySelectorAll(".volatile");
@@ -114,7 +119,6 @@ async function refreshSidebar() {
           updateVolatile();
         }
       })();
-
       function updateVolatile() {
         Array.from(elements.volatileElements).forEach((elem, index) => {
           const respElem = responseElements.volatileElements[index];
@@ -126,7 +130,6 @@ async function refreshSidebar() {
             }
           }
         });
-
         if (elements.badges && responseElements.badges) {
           Array.from(elements.badges).forEach((elem, index) => {
             const respElem = responseElements.badges[index];
@@ -136,14 +139,12 @@ async function refreshSidebar() {
           });
         }
       }
-
       requestAnimationFrame(() => {
         updates.forEach(update => update());
         updates.length = 0;
         countNewsItems();
         newHosts();
       });
-
       function refreshAll() {
         if (sb && responseDoc) {
           const sbResponse = responseDoc.getElementById("sb");
@@ -173,10 +174,8 @@ function newHosts() {
     newHostsBadge.style.display = "none";
     return;
   }
-
   let newHostsInterval;
   const period = 300000; // Update every 5 minutes
-
   function fetchNewHosts() {
     fetch("/susidns/log.jsp").then(response => response.text()).then(html => {
       const parser = new DOMParser();
@@ -189,7 +188,6 @@ function newHosts() {
         const entryDate = new Date(dateText);
         return entryDate >= oneDayAgo;
       });
-
       const newHostnames = recentEntries.flatMap(entry => {
         const dateText = entry.querySelector(".date").textContent;
         const entryDate = new Date(dateText);
@@ -199,10 +197,8 @@ function newHosts() {
           timestamp: entryDate.getTime()
         }));
       });
-
       const storedData = JSON.parse(localStorage.getItem("newHostsData") || "{}");
       const storedHostnames = storedData.hostnames || [];
-
       // Combine new and stored hostnames
       const allHostnames = [...new Set([...newHostnames, ...storedHostnames].map(h => h.hostname))]
         .map(hostname => {
@@ -210,42 +206,33 @@ function newHosts() {
           const storedEntry = storedHostnames.find(h => h.hostname === hostname);
           return newEntry || storedEntry;
         });
-
       // Filter out old hostnames
       const recentHostnames = allHostnames.filter(hostname => {
         const timestamp = new Date(hostname.timestamp);
         return timestamp >= oneDayAgo;
       });
-
       // Sort by timestamp (newest first)
       recentHostnames.sort((a, b) => b.timestamp - a.timestamp);
-
       // Keep only the 10 most recent (added in last 24h)
       const limitedHostnames = recentHostnames.slice(0, 10);
-
       // Sort alphabetically
       const sortedHostnames = limitedHostnames.map(item => item.hostname).sort();
       const count = sortedHostnames.length;
-
       localStorage.setItem("newHostsData", JSON.stringify({ count, lastUpdated: Date.now(), hostnames: limitedHostnames }));
-
-      if (!newHostsBadge) { return; }
+      if (!newHostsBadge) {return;}
       if (count > 0) {
         if (count > 10) { newHostsBadge.textContent = "10+"; }
         else { newHostsBadge.textContent = count; }
         newHostsBadge.hidden = false;
       } else { newHostsBadge.hidden = true; }
-
       if (sortedHostnames !== null) { updateTooltip(sortedHostnames); }
     }).catch(() => {});
   }
-
   function getNewHosts() {
     if (!newHostsBadge) { return; }
     const now = Date.now();
     const storedData = JSON.parse(localStorage.getItem("newHostsData") || "{}");
     const { count, lastUpdated, hostnames } = storedData;
-
     if (lastUpdated && count && (now - lastUpdated < 60000)) {
       if (count > 0) {
         if (count > 10) { newHostsBadge.textContent = "10+"; }
@@ -255,7 +242,6 @@ function newHosts() {
       } else { newHostsBadge.hidden = true; }
     } else { fetchNewHosts(); }
   }
-
   function updateTooltip(hostnames) {
     if (!newHostsBadge) { return; }
     const services = document.getElementById("sb_services");
@@ -265,20 +251,17 @@ function newHosts() {
     const newHostsList = hostnames.map(hostname => `<a href="http://${hostname}" target=_blank>${hostname.replace(".i2p", "")}</a>`).join("");
     newHosts.hidden = true;
     if (hostnames.length > 0) { newHostsTd.innerHTML = newHostsList; }
-
     newHostsBadge?.addEventListener("mouseenter", () => {
       newHosts.hidden = false;
       services.classList.add("tooltipped");
       servicesTd.classList.remove("volatile");
     }, { passive: true });
-
     services?.addEventListener("mouseleave", () => {
       newHosts.hidden = true;
       services.classList.remove("tooltipped");
       servicesTd.classList.add("volatile");
     }, { passive: true });
   }
-
   if (newHostsInterval) { clearInterval(newHostsInterval); }
   getNewHosts();
   newHostsInterval = setInterval(fetchNewHosts, period);
@@ -288,18 +271,16 @@ async function handleFormSubmit() {
   document.addEventListener("submit", async (event) => {
     const form = event.target.closest("form");
     const clickTarget = event.submitter;
-    if (!form || !clickTarget) {return;}
+    if (!form || !clickTarget) { return; }
     await doFetch(true);
     const formId = form.getAttribute("id");
     const hiddenIframe = document.getElementById("processSidebarForm");
     hiddenIframe.removeEventListener("load", handleLoad);
     hiddenIframe.addEventListener("load", handleLoad);
     form.dispatchEvent(new Event("submit"));
-
     function handleLoad(event) {
       const formResponse = responseDoc.querySelector(`#${formId}`);
       if (!formResponse) return;
-
       if (form.id !== "form_sidebar") {
         form.innerHTML = formResponse.innerHTML;
         form.classList.add("activated");
@@ -308,7 +289,6 @@ async function handleFormSubmit() {
         const shutdownNoticeResponse = responseDoc.getElementById("sb_shutdownStatus");
         const updateForm = document.getElementById("sb_updateform");
         const updateFormResponse = responseDoc.getElementById("sb_updateform");
-
         if (shutdownNotice) {
           if (shutdownNoticeResponse && shutdownNoticeResponse.classList.contains("inactive")) {
             shutdownNotice.hidden = true;
@@ -324,7 +304,6 @@ async function handleFormSubmit() {
         } else if (updateForm && updateFormResponse && updateForm.innerHTML !== updateFormResponse.innerHTML) {
           updateForm.outerHTML = updateFormResponse.outerHTML;
         }
-
         if (form.id === "sb_routerControl") {
           const tunnelStatus = document.getElementById("sb_tunnelstatus");
           const tunnelStatusResponse = responseDoc.getElementById("sb_tunnelstatus");
@@ -332,7 +311,6 @@ async function handleFormSubmit() {
             tunnelStatus.outerHTML = tunnelStatusResponse.outerHTML;
           }
         }
-
         const buttons = form.querySelectorAll("button");
         if (buttons.length > 0) {
           buttons.forEach(button => {
@@ -340,8 +318,7 @@ async function handleFormSubmit() {
             button.style.pointerEvents = "none";
           });
         }
-
-      } else {refreshAll();}
+      } else { refreshAll(); }
     }
   });
 }

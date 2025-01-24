@@ -19,10 +19,75 @@ function start() {
   const refreshInput = document.getElementById("logRefreshInterval");
   const toggleRefresh = document.getElementById("toggleRefresh");
   const updates = [];
-  const worker = new Worker("/js/fetchWorker.js");
+  const worker = new SharedWorker("/js/fetchWorker.js");
   const xhrlogs = new XMLHttpRequest();
   let logsRefreshId;
   let intervalValue;
+
+  if ("SharedWorker" in window) {
+    worker.port.onmessage = (event) => {
+    const { responseText, isDown, noResponse } = event.data;
+      if (isDown) {return;}
+
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(responseText, "text/html");
+      const mainLogsResponse = doc.getElementById("logs");
+      const criticallogsResponse = criticallogs ? doc.getElementById("criticallogs") : null;
+
+      if (!criticallogs && criticallogsResponse) {
+        mainLogs.innerHTML = mainLogsResponse.innerHTML;
+      } else if (criticallogs && criticallogsResponse) {
+        if (criticallogsResponse.innerHTML !== criticallogs.innerHTML) {
+          updates.push(() => { criticallogs.innerHTML = criticallogsResponse.innerHTML; });
+        }
+      } else {
+        critLogsHead?.remove();
+        criticallogs?.remove();
+      }
+
+      if (routerlogsList) {
+        const routerlogsListResponse = doc.querySelector("#routerlogs td ul");
+        const routerlogsFileInfoResponse = doc.querySelector("#routerlogs tr:first-child td p");
+        const fragment = document.createDocumentFragment();
+        if (routerlogsListResponse) {
+          if (routerlogsList.innerHTML !== routerlogsListResponse.innerHTML) {
+            routerlogsList.innerHTML = '';
+            routerlogsListResponse.querySelectorAll('li').forEach(li => {
+              fragment.appendChild(li.cloneNode(true));
+            });
+            updates.push(() => {
+              routerlogsList.appendChild(fragment);
+            });
+          }
+
+          if (routerlogsFileInfo.innerHTML !== routerlogsFileInfoResponse.innerHTML) {
+            updates.push(() => {
+              routerlogsFileInfo.innerHTML = routerlogsFileInfoResponse.innerHTML;
+            });
+          }
+        }
+      }
+
+      if (servicelogs) {
+        const servicelogsResponse = doc.getElementById("wrapperlogs");
+        if (servicelogsResponse && servicelogsResponse.innerHTML !== servicelogs.innerHTML) {
+          updates.push(() => {
+            servicelogs.innerHTML = servicelogsResponse.innerHTML;
+          });
+        }
+      }
+
+      if (routerlogsList) {
+        const liElements = routerlogsList.querySelectorAll("li");
+        liElements.forEach(li => {
+          li.style.display = li.textContent.toLowerCase().includes(filterValue) ? "block" : "none";
+        });
+      }
+     doUpdates();
+    };
+    worker.port.start();
+    worker.port.postMessage({ url: "/logs" });
+  }
 
   function initRefresh() {
     if (!mainLogs || !routerlogs) {
@@ -38,77 +103,12 @@ function start() {
     clearInterval(logsRefreshId);
   }
 
-  worker.onmessage = (event) => {
-    const { responseText, isDown, noResponse } = event.data;
-
-    if (isDown) {return;}
-
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(responseText, "text/html");
-
-    const mainLogsResponse = doc.getElementById("logs");
-    const criticallogsResponse = criticallogs ? doc.getElementById("criticallogs") : null;
-
-    if (!criticallogs && criticallogsResponse) {
-      mainLogs.innerHTML = mainLogsResponse.innerHTML;
-    } else if (criticallogs && criticallogsResponse) {
-      if (criticallogsResponse.innerHTML !== criticallogs.innerHTML) {
-        updates.push(() => { criticallogs.innerHTML = criticallogsResponse.innerHTML; });
-      }
-    } else {
-      critLogsHead?.remove();
-      criticallogs?.remove();
-    }
-
-    if (routerlogsList) {
-      const routerlogsListResponse = doc.querySelector("#routerlogs td ul");
-      const routerlogsFileInfoResponse = doc.querySelector("#routerlogs tr:first-child td p");
-      const fragment = document.createDocumentFragment();
-
-      if (routerlogsListResponse) {
-        if (routerlogsList.innerHTML !== routerlogsListResponse.innerHTML) {
-          routerlogsList.innerHTML = '';
-          routerlogsListResponse.querySelectorAll('li').forEach(li => {
-            fragment.appendChild(li.cloneNode(true));
-          });
-          updates.push(() => {
-            routerlogsList.appendChild(fragment);
-          });
-        }
-
-        if (routerlogsFileInfo.innerHTML !== routerlogsFileInfoResponse.innerHTML) {
-          updates.push(() => {
-            routerlogsFileInfo.innerHTML = routerlogsFileInfoResponse.innerHTML;
-          });
-        }
-      }
-    }
-
-    if (servicelogs) {
-      const servicelogsResponse = doc.getElementById("wrapperlogs");
-      if (servicelogsResponse && servicelogsResponse.innerHTML !== servicelogs.innerHTML) {
-        updates.push(() => {
-          servicelogs.innerHTML = servicelogsResponse.innerHTML;
-        });
-      }
-    }
-
-    if (routerlogsList) {
-      const liElements = routerlogsList.querySelectorAll("li");
-      liElements.forEach(li => {
-        li.style.display = li.textContent.toLowerCase().includes(filterValue) ? "block" : "none";
-      });
-    }
-
-    doUpdates();
-  };
-
   function refreshLogs() {
     const filterInput = document.getElementById("logFilterInput");
     const storedFilterValue = localStorage.getItem("logFilter");
     let filterValue = encodeURIComponent(filterInput.value.trim().toLowerCase()).replace(/%20/g, " ");
     if (storedFilterValue) { filterValue = storedFilterValue; }
-    worker.postMessage({ url: "/logs" });
+    worker.port.postMessage({ url: "/logs" });
     updateInterval();
     addFilterInput();
   }
