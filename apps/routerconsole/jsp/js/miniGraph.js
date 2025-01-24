@@ -2,7 +2,7 @@
 /* Console sidebar minigraph renderer */
 /* License: AGPL3 or later */
 
-let refreshInterval = refresh !== null ? refresh * 1000 : 5000;
+let refreshInterval = refresh !== null ? Math.max(refresh * 1000, 1000) : 5000;
 let minigraphRefreshIntervalId, minigraphRefreshInterval = Math.min(((refreshInterval * 3) / 2) - 500, 9500);
 let lastRefreshTime = 0;
 const isDocumentVisible = !document.hidden;

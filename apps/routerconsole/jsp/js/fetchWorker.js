@@ -3,40 +3,57 @@
 /* License: AGPLv3 or later */
 
 const MAX_CONCURRENT_REQUESTS = 8;
+const MAX_QUEUE_SIZE = 16;
 const MIN_INTERVAL = 950;
 const DEBOUNCE_DELAY = 500;
+const responseCountMap = new Map();
+const clientId = Math.random().toString(36).substr(2, 9);
+
 let activeRequests = 0;
 let fetchQueue = [];
 let noResponse = 0;
-const responseCountMap = new Map();
 let debounceTimeouts = new Map();
 
 self.onconnect = function(e) {
   const port = e.ports[0];
-  const clientId = Math.random().toString(36).substr(2, 9);
   const clientData = { port, clientId };
 
   port.onmessage = function(event) {
-    const { url, force = false } = event.data;
-    const now = Date.now();
-    const lastRequestTime = responseCountMap.get(clientId)?.lastRequestTime || 0;
+    handleClientMessage(event, clientData);
+  };
 
-    if (!force && (now - lastRequestTime < MIN_INTERVAL)) {return;}
-
-    if (debounceTimeouts.has(url)) {
-      clearTimeout(debounceTimeouts.get(url));
-    }
-
-    debounceTimeouts.set(url, setTimeout(() => {
-      if (activeRequests < MAX_CONCURRENT_REQUESTS) {
-        activeRequests++;
-        processFetchRequest(url, now, clientData);
-      } else {
-        fetchQueue.push({ url, now, clientData });
-      }
-    }, DEBOUNCE_DELAY));
+  port.onclose = () => {
+    cleanupClient(clientId);
   };
 };
+
+function handleClientMessage(event, clientData) {
+  const { url, force = false } = event.data;
+  const now = Date.now();
+  const lastRequestTime = responseCountMap.get(clientId)?.lastRequestTime || 0;
+
+  if (!force && (now - lastRequestTime < MIN_INTERVAL)) return;
+
+  if (fetchQueue.length >= MAX_QUEUE_SIZE) {return;}
+
+  if (debounceTimeouts.has(url)) {
+    clearTimeout(debounceTimeouts.get(url));
+  }
+
+  debounceTimeouts.set(url, setTimeout(() => {
+    enqueueFetchRequest(url, now, clientData);
+    debounceTimeouts.delete(url);
+  }, DEBOUNCE_DELAY));
+}
+
+function enqueueFetchRequest(url, now, clientData) {
+  if (activeRequests < MAX_CONCURRENT_REQUESTS) {
+    activeRequests++;
+    processFetchRequest(url, now, clientData);
+  } else {
+    fetchQueue.push({ url, now, clientData });
+  }
+}
 
 async function processFetchRequest(url, now, clientData) {
   const { port, clientId } = clientData;
@@ -51,20 +68,31 @@ async function processFetchRequest(url, now, clientData) {
       } else {
         messagePayload.responseBlob = await response.blob();
       }
-      responseCountMap.set(clientId, { lastRequestTime: now });
+      updateLastRequestTime(clientId, now);
     } else {
       messagePayload.isDown = true;
-      noResponse++;
+      incrementNoResponse();
     }
 
     port.postMessage(messagePayload);
   } catch (error) {
-    port.postMessage({ responseBlob: null, isDown: true, noResponse: noResponse + 1 });
-    noResponse++;
+    port.postMessage({ responseBlob: null, isDown: true, noResponse: incrementNoResponse() });
   } finally {
-    activeRequests--;
+    decrementActiveRequests();
     processNextFetchRequest();
   }
+}
+
+function updateLastRequestTime(clientId, now) {
+  responseCountMap.set(clientId, { lastRequestTime: now });
+}
+
+function incrementNoResponse() {
+  return ++noResponse;
+}
+
+function decrementActiveRequests() {
+  activeRequests--;
 }
 
 function processNextFetchRequest() {
@@ -73,4 +101,9 @@ function processNextFetchRequest() {
     activeRequests++;
     processFetchRequest(url, now, clientData);
   }
+}
+
+function cleanupClient(clientId) {
+  responseCountMap.delete(clientId);
+  fetchQueue = fetchQueue.filter(item => item.clientData.clientId !== clientId);
 }

@@ -29,11 +29,9 @@ let refreshActive = true;
     if (refreshQueue.length > 0) {
       isRefreshing = true;
       const nextRefresh = refreshQueue.shift();
-      requestAnimationFrame(() => {
-        refreshSidebar();
-        isRefreshing = false;
-        processQueue();
-      });
+      refreshSidebar();
+      isRefreshing = false;
+      processQueue();
     }
   };
 
