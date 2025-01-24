@@ -318,8 +318,9 @@ async function handleFormSubmit() {
             button.style.pointerEvents = "none";
           });
         }
-      } else { refreshAll(); }
+      } else {refreshAll();}
     }
+    refreshSidebar();
   });
 }
 
