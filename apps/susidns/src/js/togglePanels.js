@@ -4,7 +4,9 @@
 
 (function () {
   document.addEventListener("DOMContentLoaded", function () {
-    if (!document.body.classList.contains("light") && !document.body.classList.contains("dark")) {return;}
+    const darkTheme = document.body.classList.contains("dark");
+    const lightTheme = document.body.classList.contains("light");
+    if (!darkTheme && !lightTheme) {return;}
 
     const addContainer = document.getElementById("add");
     const addReset = document.querySelector("#add input[type=reset]");
@@ -18,34 +20,44 @@
     const messages = document.querySelector("#messages p");
     const isIframed = document.documentElement.classList.contains("iframed") || window.top !== window.parent.top;
 
-    [addContainer, importContainer].forEach((container) => {container.hidden = true;});
+    [addContainer, importContainer].forEach((container) => {
+      if (container) {container.hidden = true;}
+    });
 
     addTextInputs.forEach(input => {input.value = "";});
 
     [addToggle, importToggle].forEach((button) => {
-      button.removeAttribute("href");
-      button.removeAttribute("style");
-      button.hidden = false;
+      if (button) {
+        button.removeAttribute("href");
+        button.removeAttribute("style");
+        button.hidden = false;
+      }
     });
 
     function toggleVisibility(showContainer, hideContainer) {
-      showContainer.hidden = false;
-      hideContainer.hidden = true;
+      if (showContainer) {showContainer.hidden = false;}
+      if (hideContainer) {hideContainer.hidden = true;}
       toggleBodyClass();
       if (!showContainer.hidden) {
         document.documentElement.classList.add("noscroll");
-        if (isIframed) {window.parent.document.documentElement.style.overflow = "hidden";}
+        const page = document.getElementById("page");
+        if (lightTheme) {page.style.minHeight = "230px";}
+        else {page.style.minHeight = "255px";}
+        if (isIframed) {
+          window.parent.document.documentElement.style.overflow = "hidden";
+        }
       }
     }
 
     function toggleBodyClass() {
-      const shouldHide = addContainer.classList.contains("isHidden") || importContainer.classList.contains("isHidden");
+      const shouldHide = addContainer?.classList.contains("isHidden") || importContainer?.classList.contains("isHidden");
       const hidden = addContainer.hidden && importContainer.hidden || shouldHide;
       if (!shouldHide) {document.body.classList.toggle("displayPanels", !hidden);}
       else {
         setTimeout(() => {
           document.body.classList.remove("displayPanels");
           document.documentElement.classList.remove("noscroll");
+          page.style.minHeight = null;
           if (isIframed) {window.parent.document.documentElement.style.overflow = null;}
         }, 240);
       }
@@ -64,17 +76,17 @@
       }, 240);
     }
 
-    addToggle.addEventListener("click", () =>
+    addToggle?.addEventListener("click", () =>
       toggleVisibility(addContainer, importContainer)
     );
 
-    importToggle.addEventListener("click", () =>
+    importToggle?.addEventListener("click", () =>
       toggleVisibility(importContainer, addContainer)
     );
 
-    addReset.addEventListener("click", resetAddInputs);
+    addReset?.addEventListener("click", resetAddInputs);
 
-    importReset.addEventListener("click", () => {
+    importReset?.addEventListener("click", () => {
       importContainer.classList.add("isHidden");
       toggleBodyClass();
       setTimeout(() => {
