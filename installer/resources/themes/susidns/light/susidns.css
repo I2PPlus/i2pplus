@@ -11,6 +11,7 @@
 --buttons_bg:linear-gradient(180deg,#fafaff 50%,rgba(220,220,255,.3)),repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fff 5px),#fff;
 --nav:linear-gradient(180deg,#fff 50%,#eef 50%,#ebebff);
 --nav_active:linear-gradient(180deg,#ebebff,#fff);
+--tablerow:linear-gradient(180deg,#fff,#eef);
 }
 
 body{margin:0 5px;background:var(--bodybg) url(/themes/console/light/images/tile2.png) center center}
@@ -123,7 +124,7 @@ tr:hover .destaddress{color:#333}
 #dtls form+#buttons{margin-top:-1px;border:var(--border_inner)}
 #dtls .headline h3{margin-bottom:3px}
 #emptybook{padding:20px 8px}
-#empty{margin:-1px 0 0;padding:5px 10px;border:var(--border_inner);border-bottom:0;background:#fafaff;position:relative;z-index:10;border-bottom:var(--border_inner)}
+#empty{margin:-1px 0 10px;padding:5px 10px;border:var(--border_inner);border-bottom:0;background:#fafaff;position:relative;z-index:10;border-bottom:var(--border_inner)}
 
 #export{padding-left:2px;height:40px;position:absolute;top:-2px;right:0;border-left:var(--border_inner)}
 #export a{margin:5px 0 2px 3px;padding:0;height:26px;width:26px;min-width:0;display:inline-block;vertical-align:middle;line-height:0;font-size:0}
@@ -131,9 +132,10 @@ tr:hover .destaddress{color:#333}
 #export #addNewDest:hover{background:var(--add_address_hover) no-repeat center center/12px,var(--th)}
 #export #importFromFile:hover{background-image:var(--download_hover)}
 #export #importFromFile{margin-right:-8px;background:var(--download) no-repeat center center/14px,var(--th)}
-#exporthosts{margin:4px 3px 2px 6px;padding:0;width:28px;height:28px;min-width:0;display:inline-block;font-size:0;background:var(--save) no-repeat center center/16px,linear-gradient(180deg,#fff,#eef)}
+#exporthosts{margin:4px 3px 2px 6px;padding:0;width:28px;height:28px;min-width:0;display:inline-block;font-size:0;background:var(--save) no-repeat center center/16px,var(--tablerow)}
 #exporthosts:hover,#exporthosts:active{background:var(--save_hover) no-repeat center center/16px,var(--th)}
 #exporthosts:disabled{margin:5px 3px 0 1px;opacity:.5;pointer-events:none}
+.fakebutton:not([hidden])+#exporthosts[disabled]{margin:5px 4px 2px 7px}
 #export input:hover,#export .fakebutton:hover{box-shadow:var(--btn_shadow_hover)}
 #export input:active,#export .fakebutton:active{box-shadow:var(--btn_shadow_active);background-color:#050}
 
@@ -143,6 +145,7 @@ tr:hover .destaddress{color:#333}
 .iframed .displayPanels #add,.iframed .displayPanels #import{margin:13px auto 10px;width:80%;min-width:600px;top:-25px;box-shadow:0 0 3px 3px #0002}
 
 #filter a,#filter a:visited,#activefilter{margin:2px 1px;padding:4px 8px;min-width:10px;display:inline-block;text-align:center;text-transform:capitalize;color:#3b6bbf;border:var(--border_input);box-shadow:var(--btn_shadow);background:var(--btn);filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
+#activefilter{box-shadow:var(--btn_shadow_active)}
 #filter a:hover{color:var(--hover);border:1px solid var(--hover)}
 #filter a:active{text-decoration:none;color:#fff;box-shadow:var(--highlight),inset 3px 3px 3px var(--ink);background:var(--hover)}
 #filter,#search{margin-bottom:-1px;padding:5px 15px;text-align:center;border:var(--border_inner);background:#fafaff}
@@ -182,8 +185,9 @@ tr:hover .destaddress{color:#333}
 #subsLog h3 span{margin:2px 4px 0 0;float:right;text-transform:none;letter-spacing:0;word-spacing:0;font-weight:500;font-size:80%;opacity:.9}
 #subsLog ul{margin:0 0 7px;padding:1px;width:calc(100% - 4px);display:inline-block}
 #subsLog.iframed ul{margin-bottom:10px}
-#subsLog li{padding:2px 8px 2px 0;list-style:none;font-family:var(--monospaced);font-weight:500;background:#eef}
-#subsLog li:nth-child(odd){background:#ddf}
+#subsLog li{padding:2px 8px 2px 0;list-style:none;font-family:var(--monospaced);font-weight:500;border-bottom:var(--border_soft);background:var(--tablerow)}
+#subsLog li:last-child{border-bottom:0}
+#subsLog li:hover{background:#ffe}
 #subsLog .date{margin:2px -8px 2px 4px;padding:1px 8px;display:inline-block}
 
 /* host list */
@@ -199,7 +203,7 @@ td.destinations textarea{height:28px;box-shadow:none}
 #host_list .destaddress:focus{margin-bottom:-2px;padding:1px 3px 3px;overflow:auto;text-overflow:clip;color:var(--ink);background:#ffd}
 #host_list .names{width:30%;white-space:nowrap;padding-left:5px}
 #host_list tr:hover td,#host_details tr:hover td{color:var(--ink);box-shadow:inset 0 0 0 1px #ffe}
-#host_list tr:nth-child(even),#host_details tr:nth-child(even),#host_list tr:nth-child(odd),#host_details tr:nth-child(odd){background:linear-gradient(180deg,#fff,#eef)}
+#host_list tr:nth-child(even),#host_details tr:nth-child(even),#host_list tr:nth-child(odd),#host_details tr:nth-child(odd){background:var(--tablerow)}
 #host_list td.b32link a,#host_list td.helper a{font-size:0}
 #host_list td.b32link a::after,#host_list td.helper a::after{width:16px;height:16px;display:inline-block;background-size:16px;content:"";cursor:pointer}
 #host_list td.b32link a::after{background:var(--link) no-repeat center center}
@@ -228,7 +232,7 @@ td.destinations textarea{height:28px;box-shadow:none}
 
 /* identicon + qr image */
 .identicon{margin:4px 1px;padding:1px;vertical-align:middle;border-radius:1px;box-shadow:0 0 0 1px #fff,0 0 0 2px #ddf;background:#fff;opacity:1}
-.identicon>path{transform-origin:center center;animation:scaledown .2s ease .15s both}
+.identicon>path{filter:brightness(.8);transform-origin:center center;animation:scaledown .2s ease .15s both}
 .info a:hover .identicon{box-shadow:var(--highlight),0 0 0 2px #f60}
 .info a:active .identicon{box-shadow:0 0 0 1px #fff,0 0 0 3px var(--hover),var(--btn_shadow_active);transform:scale(0.9)}
 #visualid{margin-top:-1px;padding-top:0;border:var(--border_inner);border-radius:2px;background:#fafaff}
