@@ -169,13 +169,19 @@ async function refreshSidebar() {
 
 function newHosts() {
   const newHostsBadge = document.getElementById("newHosts");
-  if (!newHostsBadge) { return; }
+  if (!newHostsBadge) {return;}
   if (theme !== "dark") {
     newHostsBadge.style.display = "none";
     return;
   }
+
+  let lastUpdated = JSON.parse(localStorage.getItem("newHostsData"))?.lastUpdated || 0;
+  const period = 300000;
+  let now = Date.now();
+
+  if (lastUpdated && (now - lastUpdated) < period) {return;}
+
   let newHostsInterval;
-  const period = 300000; // Update every 5 minutes
   function fetchNewHosts() {
     fetch("/susidns/log.jsp").then(response => response.text()).then(html => {
       const parser = new DOMParser();
@@ -188,6 +194,7 @@ function newHosts() {
         const entryDate = new Date(dateText);
         return entryDate >= oneDayAgo;
       });
+
       const newHostnames = recentEntries.flatMap(entry => {
         const dateText = entry.querySelector(".date").textContent;
         const entryDate = new Date(dateText);
@@ -197,8 +204,10 @@ function newHosts() {
           timestamp: entryDate.getTime()
         }));
       });
+
       const storedData = JSON.parse(localStorage.getItem("newHostsData") || "{}");
       const storedHostnames = storedData.hostnames || [];
+
       // Combine new and stored hostnames
       const allHostnames = [...new Set([...newHostnames, ...storedHostnames].map(h => h.hostname))]
         .map(hostname => {
@@ -206,20 +215,19 @@ function newHosts() {
           const storedEntry = storedHostnames.find(h => h.hostname === hostname);
           return newEntry || storedEntry;
         });
+
       // Filter out old hostnames
       const recentHostnames = allHostnames.filter(hostname => {
         const timestamp = new Date(hostname.timestamp);
         return timestamp >= oneDayAgo;
       });
-      // Sort by timestamp (newest first)
-      recentHostnames.sort((a, b) => b.timestamp - a.timestamp);
-      // Keep only the 10 most recent (added in last 24h)
-      const limitedHostnames = recentHostnames.slice(0, 10);
-      // Sort alphabetically
-      const sortedHostnames = limitedHostnames.map(item => item.hostname).sort();
+
+      recentHostnames.sort((a, b) => b.timestamp - a.timestamp); // Sort by timestamp (newest first)
+      const limitedHostnames = recentHostnames.slice(0, 10); // Keep only the 10 most recent (added in last 24h)
+      const sortedHostnames = limitedHostnames.map(item => item.hostname).sort(); // Sort alphabetically
       const count = sortedHostnames.length;
       localStorage.setItem("newHostsData", JSON.stringify({ count, lastUpdated: Date.now(), hostnames: limitedHostnames }));
-      if (!newHostsBadge) {return;}
+
       if (count > 0) {
         if (count > 10) { newHostsBadge.textContent = "10+"; }
         else { newHostsBadge.textContent = count; }
@@ -228,6 +236,7 @@ function newHosts() {
       if (sortedHostnames !== null) { updateTooltip(sortedHostnames); }
     }).catch(() => {});
   }
+
   function getNewHosts() {
     if (!newHostsBadge) { return; }
     const now = Date.now();
@@ -242,28 +251,30 @@ function newHosts() {
       } else { newHostsBadge.hidden = true; }
     } else { fetchNewHosts(); }
   }
+
   function updateTooltip(hostnames) {
-    if (!newHostsBadge) { return; }
+    if (!newHostsBadge) {return;}
     const services = document.getElementById("sb_services");
     const servicesTd = services?.querySelector("tr:first-child td");
     const newHosts = document.getElementById("newHostsList");
     const newHostsTd = newHosts?.querySelector("td");
     const newHostsList = hostnames.map(hostname => `<a href="http://${hostname}" target=_blank>${hostname.replace(".i2p", "")}</a>`).join("");
     newHosts.hidden = true;
+
     if (hostnames.length > 0) { newHostsTd.innerHTML = newHostsList; }
     newHostsBadge?.addEventListener("mouseenter", () => {
       newHosts.hidden = false;
       services.classList.add("tooltipped");
-      servicesTd.classList.remove("volatile");
-    }, { passive: true });
+    }, {passive: true});
     services?.addEventListener("mouseleave", () => {
       newHosts.hidden = true;
       services.classList.remove("tooltipped");
-      servicesTd.classList.add("volatile");
-    }, { passive: true });
+    }, {passive: true});
   }
+
   if (newHostsInterval) { clearInterval(newHostsInterval); }
   getNewHosts();
+  lastUpdated = now;
   newHostsInterval = setInterval(fetchNewHosts, period);
 }
 
@@ -337,4 +348,4 @@ onVisible(sb, ready);
 document.addEventListener("DOMContentLoaded", initSidebar);
 document.addEventListener("DOMContentLoaded", newHosts);
 
-export { refreshSidebar };
+export {refreshSidebar};

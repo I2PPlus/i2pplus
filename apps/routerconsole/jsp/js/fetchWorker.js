@@ -17,14 +17,8 @@ let debounceTimeouts = new Map();
 self.onconnect = function(e) {
   const port = e.ports[0];
   const clientData = { port, clientId };
-
-  port.onmessage = function(event) {
-    handleClientMessage(event, clientData);
-  };
-
-  port.onclose = () => {
-    cleanupClient(clientId);
-  };
+  port.onmessage = function(event) {handleClientMessage(event, clientData);};
+  port.onclose = () => {cleanupClient(clientId);};
 };
 
 function handleClientMessage(event, clientData) {
@@ -33,12 +27,8 @@ function handleClientMessage(event, clientData) {
   const lastRequestTime = responseCountMap.get(clientId)?.lastRequestTime || 0;
 
   if (!force && (now - lastRequestTime < MIN_INTERVAL)) return;
-
   if (fetchQueue.length >= MAX_QUEUE_SIZE) {return;}
-
-  if (debounceTimeouts.has(url)) {
-    clearTimeout(debounceTimeouts.get(url));
-  }
+  if (debounceTimeouts.has(url)) {clearTimeout(debounceTimeouts.get(url));}
 
   debounceTimeouts.set(url, setTimeout(() => {
     enqueueFetchRequest(url, now, clientData);
@@ -56,10 +46,10 @@ function enqueueFetchRequest(url, now, clientData) {
 }
 
 async function processFetchRequest(url, now, clientData) {
-  const { port, clientId } = clientData;
+  const {port, clientId} = clientData;
   try {
     const response = await fetch(url);
-    let messagePayload = { responseBlob: null, isDown: false, noResponse: 0 };
+    let messagePayload = {responseBlob: null, isDown: false, noResponse: 0};
 
     if (response.ok) {
       const contentType = response.headers.get("Content-Type");
@@ -87,13 +77,9 @@ function updateLastRequestTime(clientId, now) {
   responseCountMap.set(clientId, { lastRequestTime: now });
 }
 
-function incrementNoResponse() {
-  return ++noResponse;
-}
+function incrementNoResponse() {return ++noResponse;}
 
-function decrementActiveRequests() {
-  activeRequests--;
-}
+function decrementActiveRequests() {activeRequests--;}
 
 function processNextFetchRequest() {
   while (activeRequests < MAX_CONCURRENT_REQUESTS && fetchQueue.length > 0) {
