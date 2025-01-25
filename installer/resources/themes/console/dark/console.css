@@ -377,6 +377,7 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 #newHostsList a::before{margin:-1px 3px 0 0;width:10px;height:10px;display:inline-block;vertical-align:middle;background:var(--globe) no-repeat left center/10px;mix-blend-mode:luminosity;content:""}
 #newHostsList a:hover::before{mix-blend-mode:normal}
 #newHostsList td{padding:8px 5px!important;justify-content:center;align-items:center;flex-wrap:wrap}
+#newHostsList td:empty{display:none!important}
 #sb_services.tooltipped{margin-bottom:-11px}
 #sb_services.tooltipped tr:first-child td{margin-bottom:-3px}
 
