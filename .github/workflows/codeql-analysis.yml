@@ -64,7 +64,7 @@ jobs:
     #    uses a compiled language
 
     - name: Install dependencies
-      run: sudo apt-get install -yqq libc6-i386 ant gettext zip
+      run: sudo apt-get install -yqq libc6-i386 ant ant-contrib uglifyjs parallel gettext zip
 
     - name: Build pkg with ant
       run: ant pkg
