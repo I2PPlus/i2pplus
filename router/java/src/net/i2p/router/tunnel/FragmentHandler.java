@@ -544,10 +544,10 @@ class FragmentHandler {
             }
             _receiver.receiveComplete(m, msg.getTargetRouter(), msg.getTargetTunnel());
         } catch (I2NPMessageException ime) {
+            boolean infoLevel = _log.shouldInfo();
             if (_log.shouldWarn()) {
-                _log.warn("Error receiving fragmented message (corrupt?): " + msg + " (" + ime.getMessage() + ")");
-                _log.warn("DUMP:\n" + HexDump.dump(data));
-                _log.warn("RAW:\n" + Base64.encode(data));
+                _log.warn("Error receiving fragmented message (corrupt?): " + msg + " (" + ime.getMessage() + ")" +
+                (infoLevel ? "\nDUMP:\n" + HexDump.dump(data) + "RAW:\n" + Base64.encode(data) : ""));
             }
         }
     }

@@ -37,13 +37,14 @@ public class NewsManager implements ClientApp {
     private final ClientAppManager _cmgr;
     private volatile ClientAppState _state = UNINITIALIZED;
     private List<NewsEntry> _currentNews;
-    // TODO
-    // Metadata is persisted in the old news.xml format by
-    // NewsFetcher.outputOldNewsXML() and read in at startup by
-    // ConsoleUpdateManager.startup() and NewsFetcher.checkForUpdates().
-    // While running, the UpdateManager keeps the metadata.
-    // NewsHelper looks at the news.xml timestamp.
-    //private NewsMetadata _currentMetadata;
+
+    /*
+     * TODO:
+     * Metadata is persisted in the old news.xml format by NewsFetcher.outputOldNewsXML()
+     * and read in at startup by ConsoleUpdateManager.startup() and NewsFetcher.checkForUpdates().
+     * While running, the UpdateManager keeps the metadata. NewsHelper looks at the news.xml timestamp.
+     */
+     //private NewsMetadata _currentMetadata;
 
     public static final String APP_NAME = "news";
     private static final String BUNDLE_NAME = "net.i2p.router.news.messages";
@@ -63,21 +64,16 @@ public class NewsManager implements ClientApp {
      *  @return non-null, sorted by updated date, newest first
      */
     public synchronized List<NewsEntry> getEntries() {
-        if (!_currentNews.isEmpty())
-            return new ArrayList<NewsEntry>(_currentNews);
-        // load old news.xml
-        if (_log.shouldWarn())
-            _log.warn("no real XML, falling back to news.xml");
+        if (!_currentNews.isEmpty()) {return new ArrayList<NewsEntry>(_currentNews);}
+        if (_log.shouldWarn()) {_log.warn("No real XML, falling back to news.xml");} // load old news.xml
         List<NewsEntry> rv = parseOldNews();
         if (!rv.isEmpty()) {
             _currentNews = rv;
-            // don't save to disk as we don't have the UUIDs so they will be dups ??
+            // Don't save to disk as we don't have the UUIDs so they will be dups ??
             return rv;
         }
-        // load and translate initialnews
-        // We don't save it to _currentNews, as the language may change
-        if (_log.shouldWarn())
-            _log.warn("no news.xml, falling back to initialNews");
+        // Load and translate initialnews - we don't save it to _currentNews, as lang may change
+        if (_log.shouldWarn()) {_log.warn("No news.xml, falling back to initialNews");}
         return parseInitialNews();
     }
 
@@ -100,22 +96,19 @@ public class NewsManager implements ClientApp {
     public synchronized void addEntries(List<NewsEntry> entries) {
         for (NewsEntry e : entries) {
             String id = e.id;
-            if (id == null)
-                continue;
+            if (id == null) {continue;}
             String title = e.title;
             boolean found = false;
             for (int i = 0; i < _currentNews.size(); i++) {
                 NewsEntry old = _currentNews.get(i);
-                // try to prevent dups with those created from old news.xml,
-                // where the UUID is the title
+                // Try to prevent dups with those created from old news.xml, where the UUID is the title
                 if (id.equals(old.id) || (title != null && title.equals(old.id))) {
                     _currentNews.set(i, e);
                     found = true;
                     break;
                 }
             }
-            if (!found)
-                _currentNews.add(e);
+            if (!found) {_currentNews.add(e);}
         }
         Collections.sort(_currentNews);
     }
@@ -128,63 +121,46 @@ public class NewsManager implements ClientApp {
     public synchronized void startup() {
         changeState(STARTING);
         _currentNews = PersistNews.load(_context);
-        if (_log.shouldInfo())
-            _log.info("Initialized News Manager with " + _currentNews.size() + " entries");
+        if (_log.shouldInfo()) {_log.info("Initialized News Manager with " + _currentNews.size() + " entries");}
         changeState(RUNNING);
-        if (_cmgr != null)
-            _cmgr.register(this);
+        if (_cmgr != null) {_cmgr.register(this);}
     }
 
     /**
      *  ClientApp interface
      *  @param args ignored
      */
-    public synchronized void shutdown(String[] args) {
-        changeState(STOPPED);
-    }
-
-    public ClientAppState getState() {
-        return _state;
-    }
-
-    public String getName() {
-        return APP_NAME;
-    }
-
-    public String getDisplayName() {
-        return "News Manager";
-    }
+    public synchronized void shutdown(String[] args) {changeState(STOPPED);}
+    public ClientAppState getState() {return _state;}
+    public String getName() {return APP_NAME;}
+    public String getDisplayName() {return "News Manager";}
 
     /////// end ClientApp methods
 
     private synchronized void changeState(ClientAppState state) {
         _state = state;
-        if (_cmgr != null)
-            _cmgr.notify(this, state, null, null);
+        if (_cmgr != null) {_cmgr.notify(this, state, null, null);}
     }
 
     private List<NewsEntry> parseOldNews() {
         File file = new File(_context.getConfigDir(), "docs/news.xml");
         String newsContent = FileUtil.readTextFile(file.toString(), -1, true);
-        if (newsContent == null || newsContent.equals(""))
-            return Collections.emptyList();
+        if (newsContent == null || newsContent.equals("")) {return Collections.emptyList();}
         return parseNews(newsContent, false);
     }
 
     /**
-     *  The initial (welcome to i2p) news
+     *  The initial (Welcome to I2P) news
      *
      *  @return entry with first-installed date stamp, or null
      *  @since 0.9.28
      */
     public NewsEntry getInitialNews() {
         List<NewsEntry> list = parseInitialNews();
-        if (list.isEmpty())
-            return null;
+        if (list.isEmpty()) {return null;}
         NewsEntry rv = list.get(0);
         long installed = _context.getProperty("router.firstInstalled", 0L);
-        if (installed > 0)
-            rv.updated = installed;
+        if (installed > 0) {rv.updated = installed;}
         return rv;
     }
 
@@ -196,26 +172,17 @@ public class NewsManager implements ClientApp {
             StringBuilder out = new StringBuilder(2048);
             reader = new TranslateReader(_context, BUNDLE_NAME, new FileInputStream(file));
             int len;
-            while((len = reader.read(buf)) > 0) {
-                out.append(buf, 0, len);
-            }
+            while((len = reader.read(buf)) > 0) {out.append(buf, 0, len);}
             List<NewsEntry> rv = parseNews(out.toString(), true);
-            if (!rv.isEmpty()) {
-                //rv.get(0).updated = RFC3339Date.parse3339Date("2015-01-01");
-                rv.get(0).updated = _context.clock().now();
-            } else {
-                if (_log.shouldWarn())
-                    _log.warn("Failed to load " + file);
-            }
+            if (!rv.isEmpty()) {rv.get(0).updated = _context.clock().now();}
+            else if (_log.shouldWarn()) {_log.warn("Failed to load " + file);}
             return rv;
         } catch (IOException ioe) {
-            if (_log.shouldWarn())
-                _log.warn("Failed to load " + file, ioe);
+            if (_log.shouldWarn()) {_log.warn("Failed to load " + file, ioe);}
             return Collections.emptyList();
         } finally {
             try {
-                if (reader != null)
-                    reader.close();
+                if (reader != null) {reader.close();}
             } catch (IOException foo) {}
         }
     }
@@ -262,9 +229,7 @@ public class NewsManager implements ClientApp {
                             fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
                             Date date = fmt.parse(newsContent.substring(0, colon));
                             entry.updated = date.getTime();
-                        } catch (ParseException pe2) {
-                            // can't find date, will be zero
-                        }
+                        } catch (ParseException pe2) {} // can't find date, will be zero
                     }
                     newsContent = newsContent.substring(colon + 2);
                 }
@@ -277,14 +242,11 @@ public class NewsManager implements ClientApp {
                 entry.id = heading;
                 newsContent = newsContent.substring(end + 5);
                 end = newsContent.indexOf("<h3>");
-                if (end > 0)
-                    entry.content = newsContent.substring(0, end);
-                else
-                    entry.content = newsContent;
+                if (end > 0) {entry.content = newsContent.substring(0, end);}
+                else {entry.content = newsContent;}
                 // initialNews.xml has the <div> before the <h3>, not after, so we lose it...
                 // add it back.
-                if (addMissingDiv)
-                    entry.content = "<div>\n" + entry.content;
+                if (addMissingDiv) {entry.content = "<div>\n" + entry.content;}
                 rv.add(entry);
                 start = end;
             }
@@ -293,22 +255,4 @@ public class NewsManager implements ClientApp {
         return rv;
     }
 
-/****
-    public static void main(String[] args) {
-        if (args.length != 0) {
-            System.err.println("Usage: NewsManager");
-            System.exit(1);
-        }
-        I2PAppContext ctx = new I2PAppContext();
-        NewsManager mgr = new NewsManager(ctx, null, null);
-        mgr.startup();
-        List<NewsEntry> entries = mgr.getEntries();
-        System.out.println("Loaded " + entries.size() + " news entries");
-        for (int i = 0; i < entries.size(); i++) {
-            NewsEntry e = entries.get(i);
-            System.out.println("\n****** News #" + (i+1) + ": " + e.title + ' ' + new Date(e.updated) +
-                               "\nLink: " + e.link + '\n' + e.content);
-        }
-    }
-****/
 }
