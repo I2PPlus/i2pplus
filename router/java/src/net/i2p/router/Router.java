@@ -47,6 +47,7 @@ import net.i2p.router.message.GarlicMessageHandler;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.startup.CreateRouterInfoJob;
 import net.i2p.router.startup.PortableWorkingDir;
+import net.i2p.router.networkdb.PublishLocalRouterInfoJob;
 import net.i2p.router.startup.StartupJob;
 import net.i2p.router.startup.WorkingDir;
 import net.i2p.router.sybil.Analysis;
@@ -842,19 +843,24 @@ public class Router implements RouterClock.ClockShiftListener {
         }
         if (changed && _context.netDb().isInitialized()) {
             if (_log.shouldWarn()) {_log.warn("NetDb ready -> Publishing our RouterInfo...");}
-            // any previous calls to netdb().publish() did not
-            // actually publish, because netdb init was not complete
+
+            // Any previous calls to netdb().publish() did not actually publish, because netdb init was not complete
             Republish r = new Republish(_context);
-            // this is called from PersistentDataStore.ReadJob,
-            // so we probably don't need to throw it to the timer queue,
+
+            // This is called from PersistentDataStore.ReadJob, so we probably don't need to throw it to the timer queue,
             // but just to be safe
             _context.simpleTimer2().addEvent(r, 0);
+
+            // periodically update our RI and republish it to the flooodfills
+            PublishLocalRouterInfoJob plrij = new PublishLocalRouterInfoJob(_context);
+            plrij.getTiming().setStartAfter(_context.clock().now() + plrij.getDelay());
+            _context.jobQueue().addJob(plrij);
         }
         if (changed) {
             _context.commSystem().initGeoIP();
             if (!SystemVersion.isSlow() && !_context.getBooleanProperty("i2np.allowLocal") &&
                 _context.getProperty(Analysis.PROP_FREQUENCY, Analysis.DEFAULT_FREQUENCY) > 0) {
-                // registers and starts itself
+                // Registers and starts itself
                 Analysis.getInstance(_context);
             }
         }

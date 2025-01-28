@@ -427,13 +427,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _log.warn("Operating in QUIET MODE - not exploring or pushing data proactively, simply reactively " +
                       "\n* This should NOT be used in production!");
         }
-
-        if (!isClientDb()) {
-            // periodically update and resign the router's 'published date', which basically serves as a version
-            Job plrij = new PublishLocalRouterInfoJob(_context);
-            // do not delay this, as this creates the RI too, and we need a good local routerinfo right away
-            _context.jobQueue().addJob(plrij);
-        }
+        // PublishLocalRouterInfoJob is now started from Router.setNetDbReady()
     }
 
     /** unused, see override */
