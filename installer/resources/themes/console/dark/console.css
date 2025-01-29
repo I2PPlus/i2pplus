@@ -2484,6 +2484,7 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 .log_error.colorize::before,.log_error .log_level{background:#730}
 .log_info.colorize{color:#363}
 .log_info.colorize::before,.log_info.colorize .log_level{background:#363}
+.log_omitted.colorize{color:#252}
 .log_warn.colorize{color:#737}
 .log_warn.colorize::before,.log_warn .log_level{background:#971197}
 .logtable ul li{margin-left:15px;list-style:none}
