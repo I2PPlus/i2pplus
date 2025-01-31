@@ -31,6 +31,7 @@ import net.i2p.router.TunnelPoolSettings;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.util.ConcurrentHashSet;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
@@ -199,17 +200,49 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         // should this be after super? why not publish locally?
         if (_context.router().isHidden()) return; // DE-nied!
         super.publish(localRouterInfo);
-        // wait until we've read in the RI's so we can find the closest floodfill
+        // Wait until we've read in the RI's so we can find the closest floodfill
         if (!isInitialized()) {
             if (_log.shouldInfo()) {_log.info("Attempted to publish our RouterInfo before NetDb initialized, will retry shortly...");}
             return;
         }
-        // no use sending if we have no addresses
-        // (unless maybe we used to have addresses? not worth it
+        // No use sending if we have no addresses, unless maybe we used to have addresses? Not worth it...
         if (localRouterInfo.getAddresses().isEmpty()) {return;}
-        _log.info("Publishing our RouterInfo...");
         if (_context.router().getUptime() > PUBLISH_JOB_DELAY) {
+            _log.info("Publishing our RouterInfo...");
             sendStore(localRouterInfo.getIdentity().calculateHash(), localRouterInfo, null, null, PUBLISH_TIMEOUT, null);
+        } else {
+            // Transports may rapidly force republishes at startup as they collect addresses and reachability status from UPnP,
+            // peers, and peer testing so "debounce" them by delaying slightly
+            _log.info("Delaying slightly before publishing our RouterInfo...");
+            DelayedPublish dp = new DelayedPublish(localRouterInfo);
+            dp.schedule(3*1000);
+        }
+    }
+
+    /**
+     *  Don't actually publish unless the RI didn't change during the delay
+     *  @since 0.9.65
+     */
+    private class DelayedPublish extends SimpleTimer2.TimedEvent {
+        private final RouterInfo localRouterInfo;
+        public DelayedPublish(RouterInfo local) {
+            super(_context.simpleTimer2());
+            localRouterInfo = local;
+        }
+        public void timeReached() {
+            RouterInfo latest = _context.router().getRouterInfo();
+            // Clock may skew during startup so we do an exact == check, not <=
+            if (latest.getDate() == localRouterInfo.getDate()) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Publishing our RouterInfo after delay: " + localRouterInfo);
+                }
+                sendStore(localRouterInfo.getIdentity().calculateHash(), localRouterInfo, null, null, PUBLISH_TIMEOUT, null);
+            } else {
+                // Do nothing, there's another one of these right behind us
+                if (_log.shouldWarn()) {
+                    _log.warn("RouterInfo changed, not publishing old one: " + localRouterInfo);
+                }
+            }
         }
     }
 
