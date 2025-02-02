@@ -914,7 +914,7 @@ html:not(.iframed) #filterBar #stopped{border-radius:0 3px 3px 0}
 .clientid{margin-left:-3px;padding:5px;width:52px;display:inline-block;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;font-size:80%;color:rgba(240,240,240,.8);text-shadow:0 1px 1px #101;border-radius:0 3px 3px 0;background:var(--badge)}
 .peerclient{padding:1px;position:relative;border:var(--border_hard);border-radius:4px;background:#515;contain:paint}
 .peerclient code{margin:0;padding:2px 3px 2px 5px;border-radius:4px 0 0 4px}
-.peerdata{padding-left:0}
+.peerdata{padding-left:0;text-align:left}
 .peerinfo td[colspan="4"],.debuginfo td[colspan="10"]{padding-left:0;line-height:1.2}
 .peerinfo td,.debuginfo td{padding-top:5px;padding-bottom:5px;color:#eee}
 .peerinfo td{border-bottom:1px solid #202}
