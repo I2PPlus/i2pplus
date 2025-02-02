@@ -667,9 +667,9 @@ td.commentAuthor{padding-left:5px}
 .filter[hidden],.filter:not(.enabled) .badge,.filter:not(.enabled) #filtercount{display:none!important}
 
 /* peerid + client */
-.clientid{margin:0 0 0 -3px;padding:3px 1px;width:50px;display:inline-block;border-radius:0 1px 1px 0;overflow:hidden;text-overflow:ellipsis;font-size:90%;text-align:center;white-space:nowrap;background:var(--bg3);background:linear-gradient(180deg,var(--bg3),var(--bg4))}
+.clientid{margin:0 0 0 -3px;padding:4px 1px;width:50px;display:inline-block;border-radius:0 1px 1px 0;overflow:hidden;text-overflow:ellipsis;font-size:90%;text-align:center;white-space:nowrap;background:var(--bg3);background:linear-gradient(180deg,var(--bg3),var(--bg4))}
 .clientversion{display:none}
-.peerclient{padding:1px;box-sizing:border-box;border-radius:2px;background:#99f}
+.peerclient{padding:1px;box-sizing:border-box;border-radius:2px;background:#99f;contain:paint}
 .peerclient,.peerinfo code,.clientid{display:inline-block;vertical-align:middle;line-height:1.2;box-sizing:border-box;font-size:90%}
 .peerdata{padding-left:0}
 .peerinfo code{margin:-1px 0;border-radius:2px 0 0 2px;padding:0 5px;background:none}
