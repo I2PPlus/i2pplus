@@ -344,10 +344,29 @@ async function refreshScreenLog(callback, forceFetch = false) {
         return;
       }
       await updateElement(screenlog, screenlogResponse);
+      convertEncodedSpaces();
       if (callback) {callback();}
       resolve();
+      convertEncodedSpaces();
     } catch (error) {resolve();}
   });
+}
+
+function convertEncodedSpaces() {
+  if (!screenlog) {return;}
+  function replaceEncodedSpaces(node) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      node.nodeValue = node.nodeValue.replace(/%20/g, " ");
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      if (node.tagName.toLowerCase() === "a") {
+        Array.from(node.childNodes).forEach(replaceEncodedSpaces);
+      } else {
+        Array.from(node.childNodes).forEach(replaceEncodedSpaces);
+      }
+    }
+  }
+  const msgElements = screenlog.querySelectorAll("li.msg");
+  if (msgElements) { msgElements.forEach(element => replaceEncodedSpaces(element)); }
 }
 
 function refreshOnSubmit() {
@@ -369,6 +388,7 @@ function refreshOnSubmit() {
         await formSubmitted;
         await new Promise(resolve => setTimeout(resolve, 2000));
         await refreshScreenLog(undefined, true);
+        convertEncodedSpaces();
       };
     }
   });
@@ -399,6 +419,7 @@ async function initSnarkRefresh() {
           await doRefresh();
           await showBadge();
           await refreshScreenLog();
+          convertEncodedSpaces();
         }
       } catch (error) {
         if (debugging) console.error(error);
@@ -479,5 +500,7 @@ document.addEventListener("visibilitychange", () => {
   if (isDocumentVisible) {initSnarkRefresh();}
   else {stopSnarkRefresh();}
 });
+
+document.addEventListener("DOMContentLoaded", convertEncodedSpaces);
 
 export { doRefresh, getURL, initSnarkRefresh, refreshScreenLog, refreshTorrents, snarkRefreshIntervalId, isDocumentVisible };

@@ -543,9 +543,11 @@ public class I2PSnarkServlet extends BasicServlet {
         StringBuilder csp = new StringBuilder("default-src 'self'; base-uri 'self'; worker-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; ");
         csp.append("script-src 'self' 'nonce-").append(cspNonce).append("'; ");
         csp.append("object-src 'none'; media-src '").append(allowMedia ? "self" : "none").append("'");
-        headers.append("Content-Security-Policy\t: ").append(csp).append("\r\n");
-        headers.append("Permissions-Policy\t: fullscreen=(self)\r\n");
-        headers.append("Referrer-Policy\t: same-origin\r\n");
+        if (mimeType != null && (mimeType.equals("text/html") || mimeType.equals("text/javascript"))) {
+            headers.append("Content-Security-Policy\t: ").append(csp).append("\r\n");
+            headers.append("Permissions-Policy\t: fullscreen=(self)\r\n");
+            headers.append("Referrer-Policy\t: same-origin\r\n");
+        }
         headers.append("X-Content-Type-Options\t: nosniff\r\n");
         headers.append("X-XSS-Protection\t: 1; mode=block\r\n");
         resp.setCharacterEncoding("UTF-8");
@@ -2381,13 +2383,12 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("</td><td class=magnet>");
             if (isValid && meta != null) {
                 String announce = meta.getAnnounce();
-                buf.append("<a class=magnetlink href=\"" + MagnetURI.MAGNET_FULL + hex);
-                if (announce != null) {
-                    buf.append("&amp;tr=" + announce);
-                }
+                String magnetLink = MagnetURI.MAGNET_FULL + hex;
+                buf.append("<a class=magnetlink href=\"" + magnetLink);
+                if (announce != null) {buf.append("&amp;tr=" + announce);}
                 if (encodedBaseName != null) {
-                    buf.append("&amp;dn=" + encodedBaseName.replace(".torrent", "")
-                       .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"));
+                    buf.append("&amp;dn=" + encodedBaseName.replace(".torrent", ""));
+                       //.replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"));
                 }
                 buf.append("\">" + toSVG("magnet", "") + "<span class=copyMagnet></span></a>");
             }

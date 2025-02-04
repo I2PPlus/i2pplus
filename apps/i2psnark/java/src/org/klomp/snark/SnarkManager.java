@@ -508,7 +508,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         long currentTime = System.currentTimeMillis() / 1000;
         if (lastAddedMessageTimestamp != currentTime || !lastAddedMessage.equals(message)) {
             addMessageNoEscape(message.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-                                      .replace("&amp;nbsp", "&nbsp;"));
+                                      .replace("&amp;nbsp", "&nbsp;")
+                                      .replaceAll("(?<!href=[\"'][^>]*)(%20)(?![^<]*>|[^<>]*</a>)", " "));
         } else if (lastAddedMessage.startsWith(_t("Download already running: ")) &&
                    lastAddedMessage.contains(_t("Downloading"))) {
             lastAddedMessage = lastAddedMessage.replace(_t("Download already running: "), "");
@@ -526,7 +527,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public void addMessageNoEscape(String message) {
         long currentTime = System.currentTimeMillis() / 1000;
         if (lastAddedMessageTimestamp != currentTime || !lastAddedMessage.equals(message)) {
-            _messages.addMessageNoEscape(getTime() + "&nbsp; " + message.replace("%20", " "));
+            _messages.addMessageNoEscape(getTime() + "&nbsp; " +
+            message.replaceAll("(?<!href=[\"'][^>]*)(%20)(?![^<]*>|[^<>]*</a>)", " "));
         }
         lastAddedMessageTimestamp = currentTime;
         lastAddedMessage = message;
@@ -1831,8 +1833,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     if (_log.shouldInfo()) {
                         _log.info("New Snark loaded\n* Torrent: " + filename + "\n* Base: " + baseFile);
                     }
-                    torrent = new Snark(_util, filename, null, -1, null, null, this,
-                                        _peerCoordinatorSet, _connectionAcceptor,
+                    torrent = new Snark(_util, filename, null, -1, null, null, this, _peerCoordinatorSet, _connectionAcceptor,
                                         dataDir.getPath(), baseFile);
                     loadSavedFilePriorities(torrent);
                     synchronized (_snarks) {putSnark(filename, torrent);}
@@ -1875,7 +1876,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
 
         // Were we running last time?
-        String link = linkify(torrent).replace(" ", "%20").replace("a%20href", "a href");
+        String link = linkify(torrent);
+        String torrentLink = link.replace(" ", "%20").replace("a%20href", "a href");
         if (!dontAutoStart && shouldAutoStart() && running) {
             if (!_util.connected()) {
                 msg = _t("Initializing I2PSnark and opening tunnels") + "...";
@@ -1893,12 +1895,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 }
             }
             torrent.startTorrent();
-            addMessageNoEscape(_t("Torrent added and started: {0}", link));
+            addMessageNoEscape(_t("Torrent added and started: {0}", torrentLink));
             if (!_context.isRouterContext()) {
                 System.out.println(" • " + _t("Torrent added and started: {0}", torrent.getBaseName()));
             }
         } else {
-            addMessageNoEscape(_t("Torrent added: {0}", link));
+            addMessageNoEscape(_t("Torrent added: {0}", torrentLink));
             if (!_context.isRouterContext()) {
                 System.out.println(" • " + _t("Torrent added: {0}", torrent.getBaseName()));
             }
@@ -2899,9 +2901,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                          .replace("è", "&egrave;").replace("é", "&eacute;").replace("à", "&agrave;");
         buf.append("<a href=\"").append(_contextPath).append('/').append(enc);
         if (meta.getFiles() != null || !storage.complete()) {buf.append('/');}
-        buf.append("\">")
-           .append(base.replace("%20", " ").replace("&egrave;", "è").replace("&eacute;", "é")
-                       .replace("&agrave;", "à")).append("</a>");
+        buf.append("\">").append(base.replace("%20", " ").replace("&egrave;", "è")
+           .replace("&eacute;", "é").replace("&agrave;", "à")).append("</a>");
         return buf.toString();
     }
 
