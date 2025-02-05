@@ -76,7 +76,7 @@ public class Reseeder {
     // network ID cross-check, proposal 147, as of 0.9.42
     private static final String NETID_PARAM = "?netid=";
     /** Same as in TunnelPeerSelector */
-    private static final String MIN_VERSION = "0.9.60";
+    private static final String MIN_VERSION = "0.9.61";
 
     /**
      *  NOTE - URLs that are in both the standard and SSL groups must use the same hostname,
@@ -87,15 +87,7 @@ public class Reseeder {
      *         it can't end with 'index.html', for example. Both because of how individual file
      *         URLs are constructed, and because SSLEepGet doesn't follow redirects.
      */
-    public static final String DEFAULT_SEED_URL =
-              // Disable due to misconfiguation (ticket #1466)
-              //"http://us.reseed.i2p2.no/" + "," +
-
-              // Disabling everything, use SSL
-              //"http://i2p.mooo.com/netDb/" + "," +
-              //"http://uk.reseed.i2p2.no/" + "," +
-              //"http://netdb.i2p2.no/"; // Only SU3 (v3) support
-              "";
+    public static final String DEFAULT_SEED_URL = ""; // Disable due to misconfiguation (ticket #1466)
 
     /**
      *  The I2P reseed servers are managed by backup (backup@mail.i2p).
@@ -120,7 +112,6 @@ public class Reseeder {
         //
         // https url:port, ending with "/"                    certificates/reseed/                 certificates/ssl/                 notes
         // ----------------------------------                 ---------------------------------    ------------------------------    --------------------------
-        "https://banana.incognet.io/"               + ',' +   // rambler_at_mail.i2p.crt           CA
         "https://coconut.incognet.io/"              + ',' +   // rambler_at_mail.i2p.crt           CA
         "https://i2p.ghativega.in/"                 + ',' +   // arnavbhatt288_at_mail.i2p.crt     CA
         "https://i2p.novg.net/"                     + ',' +   // igor_at_novg.net.crt              CA                                Java 8+
@@ -135,10 +126,7 @@ public class Reseeder {
         "https://reseed.stormycloud.org/"           + ',' +   // admin_at_stormycloud.org.crt      CA
         "https://www2.mk16.de/";                              // i2p-reseed_at_mk16.de.crt         CA
 
-        //"https://lapras.bungee.systems/"            + ',' +   // su3-root_at_bungee.systems.crt    CA
-        //"https://reseed.is.prestium.org/"           + ',' +   // reheatedburger_at_protonmail.com.crt
-        //"https://reseed.us.prestium.org/"           + ',' +   // null_at_i2pmail.org.crt
-
+        //"https://banana.incognet.io/"               + ',' +   // rambler_at_mail.i2p.crt           CA
 
     private static final String SU3_FILENAME = "i2pseeds.su3";
 

@@ -301,7 +301,7 @@ public class PersistentDataStore extends TransientDataStore {
         File dbFile = null;
         String filename = null;
         String MIN_VERSION = "0.9.62";
-        String CURRENT_VERSION = "0.9.63";
+        String CURRENT_VERSION = "0.9.65";
         String v = MIN_VERSION;
         String bw = "K";
         String ip = null;
@@ -319,7 +319,7 @@ public class PersistentDataStore extends TransientDataStore {
         boolean shouldDisconnect = _context.getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
         v = ri.getVersion();
         String caps = ri.getCapabilities();
-        unreachable = caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
+        unreachable = caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || caps.indexOf(Router.CAPABILITY_REACHABLE) < 0;
         reachable = caps.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
         String country = "unknown";
         boolean noCountry = true;
@@ -328,15 +328,14 @@ public class PersistentDataStore extends TransientDataStore {
         bw = ri.getBandwidthTier();
         for (RouterAddress ra : ri.getAddresses()) {
             if (ra.getTransportStyle().contains("SSU")) {
-                    noSSU = false;
-                    break;
+                noSSU = false;
+                break;
             }
         }
 
         boolean isSlow = ri != null && (caps != null && caps != "unknown") && bw.equals("K") || bw.equals("L") || bw.equals("M");
         boolean isLTier = bw.equals("L");
-        boolean isBanned = ri != null && (_context.banlist().isBanlistedForever(key) ||
-                                          _context.banlist().isBanlisted(key) ||
+        boolean isBanned = ri != null && (_context.banlist().isBanlistedForever(key) || _context.banlist().isBanlisted(key) ||
                                           _context.banlist().isBanlistedHostile(key));
 
         String version = ri != null ? ri.getVersion() : "0.8.0";
@@ -344,11 +343,9 @@ public class PersistentDataStore extends TransientDataStore {
         boolean shouldDelete = false;
 
         try {
-            if (data.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
-                filename = getRouterInfoName(key);
-            } else {
-                throw new IOException("We don't know how to write objects of type " + data.getClass().getName());
-            }
+            if (data.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {filename = getRouterInfoName(key);}
+            else {throw new IOException("We don't know how to write objects of type " + data.getClass().getName());}
+
             dbFile = new File(_dbDir, filename);
             long dataPublishDate = getPublishDate(data);
             if (enableReverseLookups() && uptime > 30*1000 && hasIP) {
@@ -363,8 +360,7 @@ public class PersistentDataStore extends TransientDataStore {
                     data.writeBytes(fos);
                     fos.close();
                     dbFile.setLastModified(dataPublishDate);
-                    if (_log.shouldDebug())
-                        _log.debug("Writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
+                    if (_log.shouldDebug()) {_log.debug("Writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");}
                 } catch (DataFormatException dfe) {
                     _log.error("Error writing out malformed object as [" + key.toBase64().substring(0,6) + "]: " + data, dfe);
                     shouldDelete = true;
