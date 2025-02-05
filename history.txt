@@ -1,3 +1,5 @@
+2025-02-05 2.8.0+ (API 0.9.65) released
+
 2025-01-27 zzz
  * NetDB: RI publishing improvements
 2025-01-26 zzz
@@ -15,8 +17,8 @@
    - Use IP provided by test server
 
 2025-01-17 zzz
- * i2psnark: Require POST on forms
- * susidns: Require POST on forms
+ * I2PSnark: Require POST on forms
+ * SusiDNS: Require POST on forms
 
 2025-01-12 zzz
  * CLI: Improve selfsignedgenerator usage help
@@ -586,7 +588,7 @@
  * Transport: Remove SSU1 code from EstablishmentManager (Gitlab MR !179)
 
 2024-01-23 zzz
- * I2PTunnel, susidns: Fix IDN decoding for newer codepoints
+ * I2PTunnel, SusiDNS: Fix IDN decoding for newer codepoints
 
 2024-01-15 zzz
  * I2CP: Prevent loopback messages to same session
@@ -4068,7 +4070,7 @@
 
 2020-05-12 zzz
  * Console: Hide sensitive properties on /configadvanced
- * Console, susimail: Refactor js, stricter CSP
+ * Console, SusiMail: Refactor js, stricter CSP
  * I2PTunnel:
    - Fix data loss in forms
    - Encrypt keys in forms
@@ -6445,7 +6447,7 @@
    - Remove dupe "Loading messages.." notification and replace with fixed
      loading bar notification at top of page
    - Remove superfluous "local server error: user logged out" notification
-     when susimail is accessed for the first time during session
+     when SusiMail is accessed for the first time during session
    - Add formatting to filesize in mail list, truncate units to single
      character (K/M/G) to enhance alignment/presentation and legibility
    - Standardize I2PMail name; new footer text attributing Postman for
@@ -7277,7 +7279,7 @@
      - Add custom radio/checkbox icons for Chrome/Blink
  * Console:
    - Add JavaScript snippet to reset dest address scroll position onblur (fixes
-     Chrome/Blink disappearing text bugs in I2PTunnel and susidns)
+     Chrome/Blink disappearing text bugs in I2PTunnel and SusiDNS)
    - Fix reseed failure notice overlap when "check connection" message shown
    - Enhance presentation of console "error 500" messages
    - Cosmetic tweaks to welcome page presentation, arabic welcome page tidyup
@@ -8131,7 +8133,7 @@ Prop from i2p.i2p.zzz.test2:
  * Build: Fix jbigi build in Arch Linux and others for Java 8 (ticket #1863)
  * Console:
    - New Korean translation
-   - New Chinese (Taiwan) translations for susidns, susimail, debian
+   - New Chinese (Taiwan) translations for SusiDNS, SusiMail, debian
    - New initial news translations: Czech, Greek
  * Jetty 8.1.21.v20160908
 
@@ -9538,7 +9540,7 @@ Prop from i2p.i2p.zzz.test2:
 
 2015-03-20 zzz
  * Reseed:
-  - Move multipart form support from susimail to jetty-i2p.jar
+  - Move multipart form support from SusiMail to jetty-i2p.jar
     so console can use it
   - Finish manual reseed from local file
 
@@ -10274,7 +10276,7 @@ Prop from i2p.i2p.zzz.test2:
    - Disable /configadvanced
  * DataHelper: Disallow \r in storeProps() (thx joernchen of Phenoelit)
  * ExecNamingService: Disable (thx joernchen of Phenoelit)
- * Startup: Add susimail.config to migrated files
+ * Startup: Add SusiMail.config to migrated files
 
 2014-07-23 kytv
  * Updates to geoip.txt and geoipv6.dat.gz based on Maxmind GeoLite Country
@@ -10695,7 +10697,7 @@ Prop from i2p.i2p.zzz.test2:
 
 2014-03-05 str4d
  * Console: Updated website URLs in readme.html files
- * SusiMail: Removed remaining Jetty dependencies in susimail
+ * SusiMail: Removed remaining Jetty dependencies in SusiMail
    (patch from wockenfuss) (ticket #1165)
 
 2014-02-24 zzz
@@ -10744,7 +10746,7 @@ Prop from i2p.i2p.zzz.test2:
    - Fixup of sign/verify in streaming Packet
    - Add setting in I2PTunnel server edit page (hidden for now)
    - Comment out cert setting on I2PTunnel server edit page
-   - Show key type on susidns details page and LS debug page
+   - Show key type on SusiDNS details page and LS debug page
    - Hide setting in I2PTunnel edit pages unless advanced user
    - Only store LS with key certs to routers that support it
    - Only store LS with more than 6 leases to routers that support it
@@ -12814,7 +12816,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
    - Theme updates from dr|z3d
    - If universal theming is set and routerconsole theme is classic,
      use light theme explicitly
- * susidns: new midnight theme from dr|z3d
+ * SusiDNS: new midnight theme from dr|z3d
 
 2012-08-06 zzz
  * Clone System properties before iterating to avoid
@@ -12918,7 +12920,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
  * SSU: Remove exception creation (ticket #665)
 
 2012-07-21 str4d
- * Home page: unlinked the iframed pages for I2PSnark and susimail (the pages
+ * Home page: unlinked the iframed pages for I2PSnark and SusiMail (the pages
    /webmail and /torrents still exist, but the console links to the apps
    directly instead for now)
 
@@ -12942,16 +12944,16 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
      open the app in a new tab):
      - I2PTunnel
      - I2PSnark
-     - susimail
-     - susidns
+     - SusiMail
+     - SusiDNS
    - Theme improvements
-     - Added theme support to susimail and susidns
-       - "susimail.theme=foo" in susimail.config
-       - "theme=foo" on susidns config page
+     - Added theme support to SusiMail and SusiDNS
+       - "SusiMail.theme=foo" in SusiMail.config
+       - "theme=foo" on SusiDNS config page
      - Extensive work on dark console theme (dr|z3d)
        - Improved integration of I2PTunnel in iframe
        - General improvements
-     - New dark themes for I2PSnark, susimail and susidns which integrate well
+     - New dark themes for I2PSnark, SusiMail and SusiDNS which integrate well
        with dark console theme (dr|z3d)
      - Tweaks to other themes (console and I2PSnark) to work with the various
        structural changes (dr|z3d)
@@ -13449,7 +13451,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     This will break very old seedless plugins; updates have
     been available for months.
   * SusiMail: Copy MultiPartRequest and other required classes from Jetty 5.1.15
-    and add it to susimail, as the replacement MultiPartFilter in
+    and add it to SusiMail, as the replacement MultiPartFilter in
     Jetty 6 is difficult to migrate to, and does not support content-type
 
 2012-03-03 zzz
@@ -13493,7 +13495,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       checkin comments claim reenabled in 0.7.10 but didn't happen.
     - Synchronize StoreJob.sendNext() to avoid dups
   * NetDb.jsp: Fix debug leaseset count again
-  * susidns: Add b64 hash to details page
+  * SusiDNS: Add b64 hash to details page
 
 * 2012-02-27 0.8.13 released
 
@@ -13573,7 +13575,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
   * Addresses: Fix NPE if no interfaces found http://forum.i2p/viewtopic.php?t=6365
   * I2PTunnel: Fix white-on-white buttons on hover
   * Plugins: Add completion message after all-update check
-  * susidns, susimail: Add icons to buttons
+  * SusiDNS, SusiMail: Add icons to buttons
 
 2012-01-22 zzz
   * Transports: Bind only to a single interface if specified
@@ -15878,7 +15880,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2010-05-19 zzz
     * Data: Remove lots of unnecessary initializers
-    * susidns: More validatation when adding entry
+    * SusiDNS: More validatation when adding entry
 
 2010-05-15 zzz
     * Console:
@@ -16262,7 +16264,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       - Add method to extract without verifying
       - Add method to get key signer name
     * Webapps: Allow additions to a webapp classpath.
-      - Pull jstl.jar and standard.jar out of susidns.war
+      - Pull jstl.jar and standard.jar out of SusiDNS.war
       - Remove 100KB of duplicate classes from I2PSnark.war
 
     i2p.i2p.zzz.VTBM:
@@ -16618,8 +16620,8 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Disable InternalSockets until it's fixed
 
 2009-12-11 zzz
-    * Addressbook, susidns: Rework addressbook into a
-      HttpServlet, so susidns can kick it when the subscription
+    * Addressbook, SusiDNS: Rework addressbook into a
+      HttpServlet, so SusiDNS can kick it when the subscription
       list changes
     * Build: Truncate the history in the updater (-80KB)
     * Console:
@@ -17311,7 +17313,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2009-07-21 dr|z3d
     * First stage of overhaul of webapps ui.
-      susidns, susimail & I2PSnark now lightly themed.
+      SusiDNS, SusiMail & I2PSnark now lightly themed.
     * Proxy error messages now themed as per chosen theme.
     * Modest tweaks to the classic theme, et al.
 
@@ -18073,7 +18075,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2009-05-01 zzz
     * Build files:
-      - Fix up susidns build file so it will work with gcj
+      - Fix up SusiDNS build file so it will work with gcj
       - Add consoleDocs target
     * Client: Fix race NPE (thanks sponge)
     * Console: fix ERR-UDP Disabled and Inbound TCP host/port not set
@@ -18134,7 +18136,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       - Change pipeline to 5 (was 3)
     * logs.jsp: Move version info to the top
     * Jetty: Fix temp dir name handling on windows, which was
-      causing susidns not to start
+      causing SusiDNS not to start
       (http://forum.i2p/viewtopic.php?t=3364)
     * NTCP: Prevent IllegalStateException
     * PeerProfile:
@@ -18425,7 +18427,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * I2PSnark: Increase tunnels and pipeline to 3
     * NTCP: Use a java.util.concurrent execution queue instead of
       SimpleTimer for afterSend() to reduce lock contention
-    * Remove source from susimail.war, susidns.war, I2PTunnel.war (85KB)
+    * Remove source from SusiMail.war, SusiDNS.war, I2PTunnel.war (85KB)
     * Routerconsole:
       - Move common methods to new HelperBase class
       - Make reseed link a button
@@ -18733,10 +18735,10 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       - Don't distclean in the updaterRouter target
       - Don't make prepUpdate and prepupdateSmall depend
         on distclean
-      - Don't make susimail build always clean
+      - Don't make SusiMail build always clean
       - Make pkg depend on distclean to be sure
-      - Clean out more routerconsole and susidns files in 'ant clean'
-      - I2PTunnel, routerconsole, susidns:
+      - Clean out more routerconsole and SusiDNS files in 'ant clean'
+      - I2PTunnel, routerconsole, SusiDNS:
         Only build WEB-INF when necessary
       - systray: Only build jar when necessary
       - Don't build I2PSnark standalone for the updater target
@@ -19050,7 +19052,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * NTCP: Remove getIsInbound(), duplicate of isInbound()
     * PersistentDataStore: Don't try to remove nonexistent leaseSet files
     * Router console: add placeholder pages for I2PSnark, I2PTunnel,
-      susidns, and susimail for use when the .wars are not running
+      SusiDNS, and SusiMail for use when the .wars are not running
     * Streaming lib: Increase max window size to 128
 
 2008-06-22 welterde
@@ -19646,7 +19648,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2008-01-03 zzz
     * addressbook: Do basic validation of hostnames and destkeys
-    * susidns: Add support for the private addressbook,
+    * SusiDNS: Add support for the private addressbook,
       update the text and links somewhat
 
 2008-01-02 zzz
@@ -19655,7 +19657,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * eepsite_index.html: add stats.i2p services
     * addressbook: log source of new keys; disallow dests > 516 bytes
     * addressbook: convert hostnames to lower case to prevent duplicates
-    * susidns: generalize references to orion
+    * SusiDNS: generalize references to orion
 
 2007-12-29 zzz
     * Tweak IRC inbound PONG filtering to fix xchat/BitchX lagometers
@@ -20308,7 +20310,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Be more conservative in the proactive rejections
 
 2006-06-04  Complication
-    * Trim out sending a blank line before USER in susimail.
+    * Trim out sending a blank line before USER in SusiMail.
       Seemed to break in rare cases, thanks for reporting, Brachtus!
 
 * 2006-06-04  0.6.1.20 released
@@ -21788,10 +21790,10 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       more TCP-like.
 
 2005-09-21  redzara
-    * Use ISO-8859-1 for the susidns xml
+    * Use ISO-8859-1 for the SusiDNS xml
 
 2005-09-21  susi
-    * Bugfix in susidns for deleting entries
+    * Bugfix in SusiDNS for deleting entries
 
 2005-09-21  jrandom
     * Add support for HTTP POST to EepGet
@@ -21865,7 +21867,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Added the i2p.exe and i2pinstall.exe for windows users, using launch4j.
     * Added runplain.sh for *nix/osx users having problems using the java
       service wrapper (called from the install dir as: sh runplain.sh)
-    * Bundle susidns and syndie, with links on the top nav
+    * Bundle SusiDNS and syndie, with links on the top nav
     * Have I2PTunnelHTTPClient and I2PTunnelHTTPServer use the x-i2p-gzip
       content-encoding (if offered), reducing the payload size before it
       reaches the streaming lib.  The existing compression is at the i2cp
@@ -21873,8 +21875,8 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       compressing those messages, rather than compressing and then packetizing
       4KB of compressed data.  This should reduce the number of round trips
       to fetch web pages substantially.
-    * Adjust the startup and timing of the addressbook so that susidns always
-      has config to work off, and expose a method for susidns to tell it to
+    * Adjust the startup and timing of the addressbook so that SusiDNS always
+      has config to work off, and expose a method for SusiDNS to tell it to
       reload its config and rerun.
 
 2005-09-15  jrandom
@@ -22681,7 +22683,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Stop bundling the jetty 5.1.2 and updated wrapper.config in the update
       so that 0.4.* users will need to do a clean install, but we don't need
       to shove an additional 2MB in each update to those already on 0.5.
-    * Imported the susimail css (oops, thanks susi!)
+    * Imported the SusiMail css (oops, thanks susi!)
 
 * 2005-02-18  0.5 released
 
@@ -22690,7 +22692,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       negative time.
 
 2005-02-17  jrandom
-    * Included the GPL'ed susimail 0.13 by default (thanks susi23!)
+    * Included the GPL'ed SusiMail 0.13 by default (thanks susi23!)
 
 2005-02-17  jrandom
     * Fixed the braindead tunnel testing logic
