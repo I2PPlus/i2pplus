@@ -8,8 +8,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgid "Warning: Invalid Request URI"
-msgstr "警告：请求的 URI 无效"
+msgid "Website Unknown"
+msgstr "网站未知"
 
 msgid "Router Console"
 msgstr "路由控制台"
@@ -25,71 +25,6 @@ msgstr "配置"
 
 msgid "Help"
 msgstr "帮助"
-
-msgid "The request URI is invalid, and probably contains illegal characters."
-msgstr "请求的 URI 无效或包含非法字符。"
-
-msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
-msgstr "如果您点击的是链接，请检查 URI 结尾是否有浏览器错误添加的多余字符。"
-
-msgid "Connection Reset"
-msgstr "连接重置"
-
-msgid "The connection to the website was reset while the page was loading."
-msgstr "载入页面时到该网站的连接被重置。"
-
-msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "网站暂时不可用、太忙或者被屏蔽。"
-
-#, java-format
-msgid "You may want to {0}retry{1}."
-msgstr "您可能希望{0}重试{1}。"
-
-#, java-format
-msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
-msgstr "如果你打开这个页面，它将在连接失败后每隔 {0} 秒自动重新尝试连接到网站."
-
-msgid "Could not find the following destination:"
-msgstr "未能找到下列目的地："
-
-msgid "Warning: Non-HTTP Protocol"
-msgstr "警告：非 HTTP 协议"
-
-msgid "The request uses a bad protocol."
-msgstr "请求使用了无效协议。"
-
-msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
-msgstr "I2P HTTP 代理只支持 HTTP 和 HTTPS 请求。"
-
-msgid "Other protocols such as FTP are not allowed."
-msgstr "其他协议例如FTP不被支持。"
-
-msgid "Warning: No Outproxy Configured"
-msgstr "警告：没有配置出口代理"
-
-msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
-msgstr "请求的站点在 I2P 网络之外，但您没有配置 HTTP 出口代理。"
-
-msgid "Please configure an outproxy in I2PTunnel."
-msgstr "请到 I2PTunnel 中配置出口代理。"
-
-msgid "Error: Request Denied"
-msgstr "错误：请求被拒绝"
-
-msgid "Error: Cannot Access Router Console via I2P Proxy"
-msgstr "错误：无法通过I2P代理访问路由器控制台"
-
-msgid "Your browser is misconfigured."
-msgstr "您的浏览器配置有误。"
-
-msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
-msgstr "请不要使用代理访问路由控制台，localhost 或局域网地址。"
-
-msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
-msgstr "您需要防止127.0.0.1（或您要访问I2P控制台的地址）通过I2P的HTTP代理路由，通常是通过在浏览器的代理配置部分中排除地址。"
-
-msgid "Website Unknown"
-msgstr "网站未知"
 
 msgid "Website Not Found in Addressbook"
 msgstr "未在地址簿中找到网站"
@@ -111,99 +46,35 @@ msgstr "否则，请找到其对应的 Base32 地址或地址助手链接，或�
 msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
 msgstr "经常碰到此页面？请参见 {0}常见问题集 FAQ{1} 查看如何为您的地址簿 {2}添加订阅{3}。"
 
-msgid "Website Unreachable"
-msgstr "网站不可达"
+msgid "Could not find the following destination:"
+msgstr "未能找到下列目的地："
 
-msgid "The website was not reachable, because its lease set was not found."
-msgstr "该网站不可达，因为找不到其赁集。"
+msgid "Warning: Non-HTTP Protocol"
+msgstr "警告：非 HTTP 协议"
 
-msgid "The website is probably down, but there could also be network congestion."
-msgstr "该网站可能已下线，但也可能是由于网络拥堵。"
+msgid "The request uses a bad protocol."
+msgstr "请求使用了无效协议。"
 
-msgid "Outproxy Not Found"
-msgstr "出口代理未找到"
+msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
+msgstr "I2P HTTP 代理只支持 HTTP 和 HTTPS 请求。"
 
-msgid "The HTTP Outproxy was not found."
-msgstr "未找到 HTTP 出口代理。"
+msgid "Other protocols such as FTP are not allowed."
+msgstr "其他协议例如FTP不被支持。"
 
-msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "它已经下线，遇到网络拥堵，或您的路由尚未完全整合至 I2P 网络中。"
+msgid "Error: Request Denied"
+msgstr "错误：请求被拒绝"
 
-#, java-format
-msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
-msgstr "您可能想要{0}重试{1}因为这将从您在{2}此处{3}定义的出口代理列表中随机选择一个进行连接（如果您设置了多个出口代理）。"
+msgid "Error: Cannot Access Router Console via I2P Proxy"
+msgstr "错误：无法通过I2P代理访问路由器控制台"
 
-#, java-format
-msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
-msgstr "如果问题持续存在，您可能需要{0}在此{1}编辑出口代理列表。"
+msgid "Your browser is misconfigured."
+msgstr "您的浏览器配置有误。"
 
-msgid "Warning: Request Denied"
-msgstr "警告：请求被拒绝"
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
+msgstr "请不要使用代理访问路由控制台，localhost 或局域网地址。"
 
-msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
-msgstr "这个地址似乎是错误的。请确认你提供了一个有效的地址!"
-
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "您尝试连接的网站非 I2P 站点或位置。"
-
-msgid "Outproxy Unreachable"
-msgstr "出口代理不可达"
-
-msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
-msgstr "此 HTTP 出口代理不可达，因为您使用的 I2P 或者 Java 版本不支持它使用的加密选项。"
-
-msgid "Could not connect to the following destination:"
-msgstr "无法连接到以下目标："
-
-msgid "Proxy Authorization Required"
-msgstr "出口代理认证"
-
-msgid "I2P HTTP Proxy Authorization Required"
-msgstr "出口代理认证"
-
-msgid "This proxy is configured to require a username and password for access."
-msgstr "代理配置要求提供用户名和密码才能访问。"
-
-#, java-format
-msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
-msgstr "请输入您的用户名和密码，否则请检查您的 {0} 路由配置 {1} 或 {2} I2PTunnel 配置 {3}。"
-
-#, java-format
-msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
-msgstr "要禁用身份认证，请删除配置 {0}i2ptunnel.proxy.auth=basic{1}, 然后停止并重启 HTTP Proxy 隧道。"
-
-msgid "Warning: Invalid Destination"
-msgstr "警告：无效目标"
-
-msgid "The website destination specified was not valid, or was otherwise unreachable."
-msgstr "指定的网站目标无效，或者不可达。"
-
-msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
-msgstr "或许您粘贴的 Base64 字符串有误或您打开的链接有问题。"
-
-msgid "The I2P host could also be offline."
-msgstr "也可能是 I2P 站点目前已下线。"
-
-msgid "The connection to the proxy was reset."
-msgstr "到代理的连接被重置。"
-
-msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "代理暂时不可用、太忙或者被屏蔽。"
-
-msgid "The HTTP outproxy was not reachable, because its lease set was not found."
-msgstr "HTTP 出口代理不可达，因为找不到其租约集。"
-
-msgid "The outproxy is probably down, but there could also be network congestion."
-msgstr "出口代理可能已下线，但也可能是由于网络拥堵。"
-
-msgid "Warning: Authorization Required"
-msgstr "警告：需要授权"
-
-msgid "The website was not reachable."
-msgstr "该网站不可达。"
-
-msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "该网站已离线，可能由于网络拥堵，或者您的路由器未良好的与网络整合。"
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "您需要防止127.0.0.1（或您要访问I2P控制台的地址）通过I2P的HTTP代理路由，通常是通过在浏览器的代理配置部分中排除地址。"
 
 msgid "Warning: Destination Key Conflict"
 msgstr "警告：目标密钥冲突"
@@ -217,24 +88,81 @@ msgstr "有人可能在试图冒充另一个网站，或者人们给两个网站
 msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
 msgstr "决定您信任哪个密钥以解决地址冲突，然后要么忽略地址助手链接，要么在您的地址簿中删除该主机项，并再次点击该地址助手链接。"
 
-msgid "The Base32 address is invalid."
-msgstr "Base32 地址无效。"
+msgid "Connection Reset"
+msgstr "连接重置"
 
-msgid "Warning: Bad Address Helper"
-msgstr "警告：无效地址助手"
+msgid "The connection to the website was reset while the page was loading."
+msgstr "载入页面时到该网站的连接被重置。"
+
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "网站暂时不可用、太忙或者被屏蔽。"
 
 #, java-format
-msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
-msgstr "URL中的助手键值 ({0}i2paddresshelper={1}) 无法解析。"
+msgid "You may want to {0}retry{1}."
+msgstr "您可能希望{0}重试{1}。"
 
-msgid "It seems to be garbage data, or a mistyped Base 32 address."
-msgstr "它看起来可能是无效数据或输入有误的 Base32 地址。"
+#, java-format
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
+msgstr "如果你打开这个页面，它将在连接失败后每隔 {0} 秒自动重新尝试连接到网站."
 
-msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
-msgstr "请检查您的链接尝试修复助手密钥为有效的 Base32 地址或 Base64 密钥。"
+msgid "Website Unreachable"
+msgstr "网站不可达"
 
 msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
 msgstr "此网站不可达，因为您使用的 I2P 或者 Java 版本不支持它使用的加密选项。"
+
+msgid "Could not connect to the following destination:"
+msgstr "无法连接到以下目标："
+
+msgid "The website was not reachable, because its lease set was not found."
+msgstr "该网站不可达，因为找不到其赁集。"
+
+msgid "The website is probably down, but there could also be network congestion."
+msgstr "该网站可能已下线，但也可能是由于网络拥堵。"
+
+msgid "The connection to the proxy was reset."
+msgstr "到代理的连接被重置。"
+
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "代理暂时不可用、太忙或者被屏蔽。"
+
+#, java-format
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "您可能想要{0}重试{1}因为这将从您在{2}此处{3}定义的出口代理列表中随机选择一个进行连接（如果您设置了多个出口代理）。"
+
+#, java-format
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr "如果问题持续存在，您可能需要{0}在此{1}编辑出口代理列表。"
+
+msgid "Outproxy Unreachable"
+msgstr "出口代理不可达"
+
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "此 HTTP 出口代理不可达，因为您使用的 I2P 或者 Java 版本不支持它使用的加密选项。"
+
+msgid "The website was not reachable."
+msgstr "该网站不可达。"
+
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "该网站已离线，可能由于网络拥堵，或者您的路由器未良好的与网络整合。"
+
+msgid "Warning: No Outproxy Configured"
+msgstr "警告：没有配置出口代理"
+
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr "请求的站点在 I2P 网络之外，但您没有配置 HTTP 出口代理。"
+
+msgid "Please configure an outproxy in I2PTunnel."
+msgstr "请到 I2PTunnel 中配置出口代理。"
+
+msgid "Outproxy Not Found"
+msgstr "出口代理未找到"
+
+msgid "The HTTP Outproxy was not found."
+msgstr "未找到 HTTP 出口代理。"
+
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "它已经下线，遇到网络拥堵，或您的路由尚未完全整合至 I2P 网络中。"
 
 msgid "Information: New Host Name"
 msgstr "信息：新站点地址"
@@ -256,6 +184,78 @@ msgstr "如果不保存，路由重启后，此站点地址将被遗忘。"
 
 msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
 msgstr "如果您不像访问此站点，请点击浏览器的“后退”按钮。"
+
+msgid "Proxy Authorization Required"
+msgstr "出口代理认证"
+
+msgid "I2P HTTP Proxy Authorization Required"
+msgstr "出口代理认证"
+
+msgid "This proxy is configured to require a username and password for access."
+msgstr "代理配置要求提供用户名和密码才能访问。"
+
+#, java-format
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "请输入您的用户名和密码，否则请检查您的 {0} 路由配置 {1} 或 {2} I2PTunnel 配置 {3}。"
+
+#, java-format
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "要禁用身份认证，请删除配置 {0}i2ptunnel.proxy.auth=basic{1}, 然后停止并重启 HTTP Proxy 隧道。"
+
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr "HTTP 出口代理不可达，因为找不到其租约集。"
+
+msgid "The outproxy is probably down, but there could also be network congestion."
+msgstr "出口代理可能已下线，但也可能是由于网络拥堵。"
+
+msgid "Warning: Request Denied"
+msgstr "警告：请求被拒绝"
+
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr "这个地址似乎是错误的。请确认你提供了一个有效的地址!"
+
+msgid "You attempted to connect to a non-I2P website or location."
+msgstr "您尝试连接的网站非 I2P 站点或位置。"
+
+msgid "Warning: Bad Address Helper"
+msgstr "警告：无效地址助手"
+
+#, java-format
+msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgstr "URL中的助手键值 ({0}i2paddresshelper={1}) 无法解析。"
+
+msgid "It seems to be garbage data, or a mistyped Base 32 address."
+msgstr "它看起来可能是无效数据或输入有误的 Base32 地址。"
+
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr "请检查您的链接尝试修复助手密钥为有效的 Base32 地址或 Base64 密钥。"
+
+msgid "Warning: Invalid Destination"
+msgstr "警告：无效目标"
+
+msgid "The website destination specified was not valid, or was otherwise unreachable."
+msgstr "指定的网站目标无效，或者不可达。"
+
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr "或许您粘贴的 Base64 字符串有误或您打开的链接有问题。"
+
+msgid "The I2P host could also be offline."
+msgstr "也可能是 I2P 站点目前已下线。"
+
+msgid "Warning: Authorization Required"
+msgstr "警告：需要授权"
+
+msgid "Warning: Invalid Request URI"
+msgstr "警告：请求的 URI 无效"
+
+msgid "The request URI is invalid, and probably contains illegal characters."
+msgstr "请求的 URI 无效或包含非法字符。"
+
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr "如果您点击的是链接，请检查 URI 结尾是否有浏览器错误添加的多余字符。"
+
+msgid "The Base32 address is invalid."
+msgstr "Base32 地址无效。"
 
 msgid "This seems to be a bad destination:"
 msgstr "目标似乎无效："

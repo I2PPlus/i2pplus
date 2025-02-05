@@ -257,14 +257,14 @@ msgstr "ईमेल भेजने में त्रुटि"
 msgid "Mail sent."
 msgstr "ईमेल भेज दिया गया।"
 
-msgid "Send"
-msgstr "भेजें"
+msgid "Cancel"
+msgstr "रद्द करें"
 
 msgid "Save as Draft"
 msgstr "ड्राफ्ट के रूप में सहेजें"
 
-msgid "Cancel"
-msgstr "रद्द करें"
+msgid "Send"
+msgstr "भेजें"
 
 msgid "From"
 msgstr "से"

@@ -38,12 +38,6 @@ msgstr "larghezza di banda ed affidabilità standard"
 msgid "higher bandwidth and reliability"
 msgstr "larghezza di banda e affidabilità maggiori"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Invio modulo non valido, probabilmente perché hai utilizzato il pulsante 'Indietro' o 'Ricarica' ​​del tuo browser. Ripetere perfavore."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Se il problema persiste, verifica di avere i cookies abilitati nel tuo browser."
-
 msgid "Configuration reloaded for all tunnels"
 msgstr "Configurazione ricaricata per tutti i tunnel"
 
@@ -1227,6 +1221,12 @@ msgstr "Genera autenticazione"
 
 msgid "SSL Helper"
 msgstr "Assistente SSL"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Invio modulo non valido, probabilmente perché hai utilizzato il pulsante 'Indietro' o 'Ricarica' ​​del tuo browser. Ripetere perfavore."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Se il problema persiste, verifica di avere i cookies abilitati nel tuo browser."
 
 msgid "Experts only!"
 msgstr "Solo per esperti!"

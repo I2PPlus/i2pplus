@@ -130,17 +130,14 @@ msgid_plural "{0} destinations deleted."
 msgstr[0] "{0} गंतव्य हटा दिया गया।"
 msgstr[1] "{0} गंतव्य हटे गए।"
 
-msgid "No entries selected to delete."
-msgstr "हटाने के लिए कोई प्रविष्टि चुनी नहीं गई।"
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "विकल्प जोड़ें"
 
 msgid "Address book saved."
 msgstr "पत्रिका सहेजा गया।"
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "इस पत्रिका से दौरा करें और अपडेट देखने के लिए वापस आएं।"
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "त्रुटि: पत्रिका फ़ाइल लिखने में असमर्थ।"
@@ -321,6 +318,9 @@ msgstr "हटाने के लिए चिह्नित करें"
 msgid "Cancel"
 msgstr "रद्द करें"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "उदाहरण के लिए newdomain.i2p"
 
@@ -398,6 +398,9 @@ msgstr "गतिविधि को लॉग करने के लिए फ
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "उपयोग करने के लिए ओवरराइड थीम का नाम (डिफ़ॉल्ट के रूप में कंसोल-चुने गए थीम का होता है)"
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "पत्रिका"
@@ -593,3 +596,5 @@ msgstr "मास्टर पत्रिका में मानवीय �
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "सब्सक्रिप्शन से आपको मिले मेजबान आपकी राउटर पत्रिका में मिलेंगे।"
+
+

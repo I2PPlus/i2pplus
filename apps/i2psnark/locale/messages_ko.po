@@ -23,6 +23,12 @@ msgstr "I2P에 연결할 수 없습니다"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "에러: I2P에 연결할 수 없습니다. I2CP 설정을 확인하세요!"
 
+msgid "Download already running: "
+msgstr ""
+
+msgid "Downloading"
+msgstr "다운로드"
+
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "I2CP 옵션으로 I2PSnark 구성"
 
@@ -466,12 +472,23 @@ msgid "Anonymous BitTorrent Client"
 msgstr "익명 비트토렌트 클라이언트"
 
 #, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr ""
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr ""
+
+#, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "\\''{0}\\'' 파일을 삭제하시겠습니까(다운로드한 데이터는 삭제되지 않습니다)?\\''{0}\\'' 파일을 삭제하시겠습니까(다운로드한 데이터는 삭제되지 않습니다)?정말 \\''{0}\\'' 파일을 지우겠습니까? (다운로드된 데이터는 지워지지 않습니다) ?"
 
+msgid "Note: Downloaded data will not be deleted."
+msgstr ""
+
 #, java-format
-msgid "Are you sure you want to delete torrent file {0} and all downloaded data?"
-msgstr "정말 \\''{0}\\'' 토렌트와 다운로드된 파일도 지우겠습니까?"
+msgid "Deleting {0} and associated metadata only..."
+msgstr ""
 
 msgid "I2PSnark has stopped"
 msgstr "I2PSnark가 정지되었습니다"
@@ -484,6 +501,9 @@ msgstr "토렌트"
 
 msgid "Refresh page"
 msgstr "페이지 새로고침"
+
+msgid "Configure"
+msgstr "구성"
 
 msgid "Forum"
 msgstr "포럼"
@@ -524,36 +544,6 @@ msgstr "페이지 새로고침"
 
 msgid "Warning - No I2P"
 msgstr "경고 - I2P 없음"
-
-msgid "Search"
-msgstr "찾다"
-
-msgid "Show All"
-msgstr "모두 보기"
-
-msgid "Active"
-msgstr "액티브"
-
-msgid "Inactive"
-msgstr "비활성"
-
-msgid "Connected"
-msgstr "연결됨"
-
-msgid "Downloading"
-msgstr "다운로드"
-
-msgid "Seeding"
-msgstr "시딩중"
-
-msgid "Complete"
-msgstr "완료"
-
-msgid "Incomplete"
-msgstr "미완성"
-
-msgid "Stopped"
-msgstr "정지됨"
 
 msgid "Status"
 msgstr "상태"
@@ -634,35 +624,30 @@ msgstr "토렌트를 찾을 수 없습니다."
 msgid "No torrents loaded."
 msgstr "토렌트가 없습니다."
 
-msgid "Totals"
-msgstr "총"
-
 #, java-format
 msgid "1 torrent"
 msgid_plural "{0} torrents"
 msgstr[0] "토렌트: {0}"
 
-#, java-format
-msgid "1 connected peer"
-msgid_plural "{0} connected peers"
-msgstr[0] "연결된 피어: {0}"
+msgid "Total size of loaded torrents"
+msgstr ""
 
 #, java-format
 msgid "1 DHT peer"
 msgid_plural "{0} DHT peers"
 msgstr[0] "DHT 피어: {0}"
 
-msgid "Configured maximum (actual usage may be less)"
-msgstr "구성된 최대값(실제 사용량은 더 적을 수 있음)"
+msgid "Active downloads"
+msgstr ""
 
-msgid "Tunnels"
-msgstr "터널"
+msgid "Active uploads"
+msgstr ""
 
-msgid "in"
-msgstr "인"
+msgid "Active Inbound tunnels"
+msgstr ""
 
-msgid "out"
-msgstr "아웃"
+msgid "Active Outbound tunnels"
+msgstr ""
 
 msgid "Estimated download time for all torrents"
 msgstr "모든 토렌트의 예상 다운로드 시간"
@@ -679,17 +664,41 @@ msgstr "업로드된 총 데이터(나열된 토렌트의 경우)"
 msgid "Total upload speed"
 msgstr "총 업로드 속도"
 
-msgid "Enable Debug Mode"
-msgstr "디버그 모드 활성화"
-
-msgid "Disable Debug Mode"
-msgstr "디버그 모드 비활성화"
+msgid "Toggle Debug Mode"
+msgstr ""
 
 msgid "Normal Mode"
 msgstr "일반 모드"
 
 msgid "No DHT Peers"
 msgstr "DHT 피어 없음"
+
+msgid "Search"
+msgstr "찾다"
+
+msgid "Show All"
+msgstr "모두 보기"
+
+msgid "Active"
+msgstr "액티브"
+
+msgid "Inactive"
+msgstr "비활성"
+
+msgid "Connected"
+msgstr "연결됨"
+
+msgid "Seeding"
+msgstr "시딩중"
+
+msgid "Complete"
+msgstr "완료"
+
+msgid "Incomplete"
+msgstr "미완성"
+
+msgid "Stopped"
+msgstr "정지됨"
 
 msgid "First"
 msgstr "첫번째"
@@ -1044,9 +1053,6 @@ msgstr "테마를 수동으로 변경하려면 범용 테마를 비활성화하�
 msgid "Universal theming is enabled."
 msgstr "범용 테마가 활성화되었습니다."
 
-msgid "Configure"
-msgstr "구성"
-
 msgid "Refresh time"
 msgstr "갱신 시간"
 
@@ -1067,12 +1073,6 @@ msgstr "토렌트"
 
 msgid "Language"
 msgstr "언어"
-
-msgid "Smart torrent sorting"
-msgstr "스마트 토렌트 정렬"
-
-msgid "Ignore words such as 'a' and 'the' when sorting"
-msgstr "정렬 시 'a', 'the' 등의 단어를 무시합니다"
 
 msgid "Collapsible panels"
 msgstr "접이식 패널"
@@ -1304,6 +1304,15 @@ msgstr "연결된 피어 수에 따라 결정되는 열려는 최대 터널 수�
 msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
 msgstr "이 설정을 3홉 미만으로 변경하면 익명성이 희생되어 속도가 향상될 수 있으므로 권장되지 않습니다"
 
+msgid "Sequential piece or file order not saved - feature currently broken."
+msgstr ""
+
+msgid "Unknown command"
+msgstr ""
+
+msgid "Please retry form submission (bad nonce)"
+msgstr ""
+
 msgid "Info hash"
 msgstr "정보 해시"
 
@@ -1485,3 +1494,14 @@ msgstr "변경 사항 저장"
 
 msgid "Torrent must be stopped"
 msgstr "토렌트를 중지해야 합니다"
+
+#, java-format
+
+
+
+
+
+
+
+
+

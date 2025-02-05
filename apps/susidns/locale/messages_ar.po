@@ -150,17 +150,14 @@ msgstr[3] "{0} تم حذف الوجهات."
 msgstr[4] "{0} تم حذف الوجهات."
 msgstr[5] "{0} تم حذف الوجهات."
 
-msgid "No entries selected to delete."
-msgstr "لم يتم اختيار عنصر للحذف"
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "إضافة بديل"
 
 msgid "Address book saved."
 msgstr "تم حفظ دفتر العناوين"
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "تصفح بعيدًا عن دفتر العناوين هذا وارجع لرؤية التحديث."
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "خطأ: لم يتم حفظ دفتر العناوين"
@@ -349,6 +346,9 @@ msgstr "اختر للحذف"
 msgid "Cancel"
 msgstr "الغاء"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "على سبيل المثال. newdomain.i2"
 
@@ -426,6 +426,9 @@ msgstr "ملف لحفظ الأخطاء"
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "اسم سمة التجاوز المطلوب استخدامها (الإعداد الافتراضي للسمات المحددة بواسطة وحدة التحكم)"
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "دفتر العناوين"
@@ -621,3 +624,5 @@ msgstr "العناوين التي تمت إضافتها يدويًا إلى دف
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "سيتم دمج المضيفين الذين تستقبلهم من اشتراكاتك مع دفتر عناوين جهاز التوجيه الخاص بك."
+
+

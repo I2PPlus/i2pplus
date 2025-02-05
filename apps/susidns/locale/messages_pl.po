@@ -135,17 +135,14 @@ msgstr[0] "1 miejsce przeznaczenia usunięte."
 msgstr[1] "{0} miejsca przeznaczenia usunięte."
 msgstr[2] "{0} miejsc przeznaczenia usunięte."
 
-msgid "No entries selected to delete."
-msgstr "Brak wpisów wybranych do usunięcia."
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "Dodaj alternatywny"
 
 msgid "Address book saved."
 msgstr "Książka adresowa zapisana."
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "Wyjdź z tej książki adresowej i wróć, aby zobaczyć aktualizację."
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "BŁĄD: Nie można zapisać pliku książki adresowej."
@@ -328,6 +325,9 @@ msgstr "Zaznacz do usunięcia"
 msgid "Cancel"
 msgstr "Anuluj"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "np. newdomain.i2p"
 
@@ -405,6 +405,9 @@ msgstr "Plik do logowania działalności (zmień na /dev/null, jeśli chcesz)"
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Nazwa motywu zastępującego do użycia (domyślnie jest to motyw wybrany w konsoli)"
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "Ksiazka adresowa"
@@ -600,3 +603,5 @@ msgstr "Adresy ręcznie dodane do Twojej głównej książki adresowej zostaną 
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Adresy pobrane z subskrypcji zostaną scalone do Twojej książki adresowej węzła."
+
+

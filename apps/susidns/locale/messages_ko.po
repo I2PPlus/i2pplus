@@ -125,17 +125,14 @@ msgid "1 destination deleted."
 msgid_plural "{0} destinations deleted."
 msgstr[0] "{0} 목적지 삭제."
 
-msgid "No entries selected to delete."
-msgstr "삭제될 항목 없음."
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "대체 추가"
 
 msgid "Address book saved."
 msgstr "주소록 저장됨."
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "이 주소록에서 다른 곳을 찾아보고 돌아와서 업데이트를 확인하세요."
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "오류: 주소록 파일 쓰기 불가."
@@ -314,6 +311,9 @@ msgstr "삭제표시"
 msgid "Cancel"
 msgstr "취소"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "예: newdomain.i2p"
 
@@ -391,6 +391,9 @@ msgstr "로그 기록 파일 저장장소 (원한다면 /dev/null로 변경하�
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "사용할 재정의 테마 이름(기본값은 콘솔 선택 테마)"
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "주소록"
@@ -586,3 +589,5 @@ msgstr "마스터 주소록에 수동으로 추가된 주소는 라우터 주소
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "구독을 통해 받은 호스트는 라우터 주소록과 병합됩니다."
+
+

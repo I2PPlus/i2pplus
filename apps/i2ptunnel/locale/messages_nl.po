@@ -38,12 +38,6 @@ msgstr "standaard bandbreedte en betrouwbaarheid"
 msgid "higher bandwidth and reliability"
 msgstr "hogere bandbreedte en betrouwbaarheid"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Ongeldige formulierinzending, waarschijnlijk omdat u de 'terug'- of 'herlaad'-knop in uw browser heeft gebruikt. Ongeldige formulier verzonden, waarschijnlijk doordat je de 'back' of 'reload' button van je browser hebt gebruikt. Verzend opnieuw."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Als dit probleem blijft bestaan, kijk dan of je browser cookies toestaat."
-
 msgid "Configuration reloaded for all tunnels"
 msgstr "Configuratie van alle tunnels opnieuw geladen"
 
@@ -1227,6 +1221,12 @@ msgstr "Authenticatie genereren"
 
 msgid "SSL Helper"
 msgstr "SSL-helper"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Ongeldige formulierinzending, waarschijnlijk omdat u de 'terug'- of 'herlaad'-knop in uw browser heeft gebruikt. Ongeldige formulier verzonden, waarschijnlijk doordat je de 'back' of 'reload' button van je browser hebt gebruikt. Verzend opnieuw."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Als dit probleem blijft bestaan, kijk dan of je browser cookies toestaat."
 
 msgid "Experts only!"
 msgstr "Alleen experts!"

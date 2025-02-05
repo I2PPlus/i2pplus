@@ -130,17 +130,14 @@ msgid_plural "{0} destinations deleted."
 msgstr[0] "1 مقصد حذف شد."
 msgstr[1] "{0} مقصد حذف شده است."
 
-msgid "No entries selected to delete."
-msgstr "هیچ ورودی برای حذف انتخاب نشده است."
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "جایگزین اضافه کنید"
 
 msgid "Address book saved."
 msgstr "دفترچه آدرس ذخیره شد."
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "از این دفترچه آدرس دور شوید و برای مشاهده به‌روزرسانی برگردید."
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "خطا: فایل دفترچه آدرس را نمی توان نوشت."
@@ -321,6 +318,9 @@ msgstr "علامت دهی برای حذف"
 msgid "Cancel"
 msgstr "لغو کردن"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "به عنوان مثال "
 
@@ -398,6 +398,9 @@ msgstr "فایل برای ثبت فعالیت (در صورت تمایل به /de
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "نام طرح زمینه نادیده گرفته شده برای استفاده (پیش‌فرض به طرح زمینه انتخاب‌شده توسط کنسول)"
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "دفترچه آدرس"
@@ -593,3 +596,5 @@ msgstr "آدرس هایی که به صورت دستی به دفترچه آدرس
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "میزبان هایی که از اشتراک های خود دریافت می کنید با دفترچه آدرس روتر شما ادغام می شوند."
+
+

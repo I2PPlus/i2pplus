@@ -143,6 +143,9 @@ msgstr "No supporto per il nostro tipo di firma"
 msgid "Unreachable on any transport"
 msgstr "Irraggiungibile su ogni trasporto"
 
+msgid "Cannot enumerate UPnP devices on Android."
+msgstr ""
+
 msgid "UPnP is not enabled"
 msgstr "UPnP non è abilitato"
 
@@ -680,11 +683,39 @@ msgstr "Si prega di segnalare"
 msgid "After reporting, please restart your router"
 msgstr "Dopo la segnalazione, riavviare il router"
 
+msgid "Invalid form submission, requires POST"
+msgstr ""
+
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "Sottomissione di form non valida, probabilmente hai usato il pulsante 'indietro' o 'aggiorna' del tuo browser. Per favore rimandalo."
 
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Se il problema persiste, verificare di avere i cookies abilitati nel tuo browser."
+
+msgid "Bandwidth usage"
+msgstr "Utilizzo di larghezza di banda"
+
+#, java-format
+msgid "events in {0}"
+msgstr "eventi in {0}"
+
+msgid "Events per period"
+msgstr "Eventi per periodo"
+
+msgid "Min"
+msgstr "Min"
+
+msgid "Max"
+msgstr "Max"
+
+msgid "Avg"
+msgstr "Media"
+
+msgid "Now"
+msgstr "Ora"
+
+msgid "Router restarted"
+msgstr "Il router è stato riavviato"
 
 #, java-format
 msgid "News last updated {0} ago."
@@ -717,31 +748,6 @@ msgstr[1] "{0} plugin aggiornati"
 
 msgid "Plugin check complete"
 msgstr "Verifica del plugin completata"
-
-msgid "Bandwidth usage"
-msgstr "Utilizzo di larghezza di banda"
-
-#, java-format
-msgid "events in {0}"
-msgstr "eventi in {0}"
-
-msgid "Events per period"
-msgstr "Eventi per periodo"
-
-msgid "Min"
-msgstr "Min"
-
-msgid "Max"
-msgstr "Max"
-
-msgid "Avg"
-msgstr "Media"
-
-msgid "Now"
-msgstr "Ora"
-
-msgid "Router restarted"
-msgstr "Il router è stato riavviato"
 
 msgid "none"
 msgstr "nessuno"
@@ -811,8 +817,20 @@ msgstr "Console"
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "Per abilitare l'accesso SSL per la console del router, guarda il file commentato <code>clients.config</code> situato nella tua directory I2P per più informazioni. Avrai bisogno di modificare il file di configurazione RouterConsoleRunner situato nella directory: "
 
+msgid "Save disabled, edit the router.config file to make changes"
+msgstr ""
+
 msgid "Error updating the configuration - please see the error logs"
 msgstr "Errore nell'aggiornamento della configurazione - vedere i log di errore"
+
+msgid "No changes made to the configuration"
+msgstr ""
+
+msgid "Note"
+msgstr "NOTA"
+
+msgid "Some changes may require a restart to take effect."
+msgstr "Certi cambiamenti possono richiedere un riavvio per avere effetto."
 
 msgid "Save Client Configuration"
 msgstr "Salva configurazione del client"
@@ -826,6 +844,9 @@ msgstr "Salva la configurazione WebApp"
 msgid "Save Plugin Configuration"
 msgstr "Salva configurazione dei plugin"
 
+msgid "Plugins disabled"
+msgstr ""
+
 msgid "Install Plugin"
 msgstr "Installa plugin"
 
@@ -834,6 +855,9 @@ msgstr "Installa plugin da file"
 
 msgid "Update All Installed Plugins"
 msgstr "Aggiorna tutti i plugin installati"
+
+msgid "Delete client disabled"
+msgstr ""
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -916,9 +940,18 @@ msgstr "L'aggiornamento o lo scaricamento del plugin è già in corso."
 msgid "Updating all plugins"
 msgstr "Aggiornando tutti i plugin"
 
+msgid "Update manager not registered, cannot install"
+msgstr ""
+
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "Installazione in corso di plugin da {0}"
+
+msgid "Cannot install, check logs"
+msgstr ""
+
+msgid "Update manager not registered, cannot check"
+msgstr ""
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1017,6 +1050,19 @@ msgstr "La configurazione è stata salvata con successo."
 msgid "Join Family"
 msgstr "Entra in una famiglia"
 
+msgid "Bad certificate - No Subject CN"
+msgstr ""
+
+msgid "Bad characters in Family: "
+msgstr ""
+
+#, java-format
+msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
+msgstr ""
+
+msgid "Family key configured for router family: "
+msgstr ""
+
 msgid "Load from file failed"
 msgstr "È fallito il caricamento da file"
 
@@ -1032,8 +1078,8 @@ msgstr "Aggiungi oggetto"
 msgid "Restore defaults"
 msgstr "Ripristina"
 
-msgid "Home page changed"
-msgstr "Pagina principale modificata"
+msgid "Bad group detected, please retry"
+msgstr ""
 
 msgid "Restored default settings"
 msgstr "Ripristina impostazioni di default"
@@ -1065,6 +1111,9 @@ msgstr "Chiave non valida"
 msgid "Invalid destination"
 msgstr "Destinazione non valida"
 
+msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
+msgstr ""
+
 #, java-format
 msgid "Key for {0} added to keyring"
 msgstr "Chiave per {0} aggiunta al keyring"
@@ -1074,6 +1123,9 @@ msgstr "Password di ricerca richiesta"
 
 msgid "Requires hostname, destination, or blinded Base32"
 msgstr "Richiesti hostname, destinazione, o base32 nascosto"
+
+msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
+msgstr ""
 
 msgid "Destination requires lookup password"
 msgstr "Destinazione richiede password di ricerca"
@@ -1092,6 +1144,9 @@ msgstr "Invia la chiave all'operatore del server."
 
 msgid "Delete key"
 msgstr "Elimina chiave"
+
+msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
+msgstr ""
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1142,6 +1197,36 @@ msgstr "Nascosto"
 
 msgid "Log overrides updated"
 msgstr "Sovrascrittura dei log aggiornata"
+
+msgid "Error updating the log limits - levels not valid"
+msgstr ""
+
+msgid "Log limits cleared"
+msgstr ""
+
+#, java-format
+msgid "Default log level updated from {0} to {1}"
+msgstr ""
+
+msgid "Date format updated"
+msgstr ""
+
+#, java-format
+msgid "Specified date format is not valid ({0}) - not updated"
+msgstr ""
+
+msgid "File size updated"
+msgstr ""
+
+#, java-format
+msgid "Specified file size limit is not valid ({0}) - not updated"
+msgstr ""
+
+msgid "Compression setting updated"
+msgstr ""
+
+msgid "Log record format updated"
+msgstr ""
 
 msgid "Log configuration saved"
 msgstr "Configurazione eventi salvata"
@@ -1350,6 +1435,12 @@ msgstr "Valore di velocità scorretto"
 msgid "Bad capacity value"
 msgstr "Valore di capacità scorretto"
 
+msgid "Bonuses adjusted for: "
+msgstr ""
+
+msgid "No profile exists for: "
+msgstr ""
+
 msgid "Unsupported"
 msgstr "Non supportato"
 
@@ -1461,27 +1552,14 @@ msgstr[1] "Attendi che sia inviato il segnale di arresto per {0} tunnel"
 msgid "Restart in {0}"
 msgstr "Riavvio in {0}"
 
-msgid "Stat filter and location updated successfully to"
-msgstr "Statistiche di filtro e località aggiornate con successo a"
-
-msgid "Full statistics enabled"
-msgstr "Statistiche globali abilitate"
-
-msgid "Full statistics disabled"
-msgstr "Statistiche globali disabilitate"
-
-#, java-format
-msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
-msgstr "Grafo aggiornato, potrebbe impiegare fino a 60s per riflettersi sul Grafo{0} Pagina{1}"
-
 msgid "Save order"
 msgstr "Salva ordine"
 
-msgid "Refresh disabled"
-msgstr "Aggiornamento disabilitato"
+msgid "Sidebar refresh disabled"
+msgstr ""
 
-msgid "Refresh interval changed"
-msgstr "Intervallo di aggiornamento cambiato"
+msgid "Sidebar refresh interval changed"
+msgstr ""
 
 msgid "Refresh interval must be a number"
 msgstr "L'intervallo di aggiornamento deve essere un numero"
@@ -1489,17 +1567,17 @@ msgstr "L'intervallo di aggiornamento deve essere un numero"
 msgid "Restore full default"
 msgstr "Ripristina tutti i default"
 
-msgid "Full summary bar default restored."
-msgstr "Ripristino della barra di riepilogo completato."
+msgid "Full sidebar defaults restored."
+msgstr ""
 
-msgid "Summary bar will refresh shortly."
-msgstr "La barra di riepilogo si aggiornerà a breve."
+msgid "Sidebar will refresh shortly."
+msgstr ""
 
 msgid "Restore minimal default"
 msgstr "Ripristina impostazione di default minime"
 
-msgid "Minimal summary bar default restored."
-msgstr "Ripristinato il valore della barra di riepilogo minima."
+msgid "Minimal sidebar defaults restored."
+msgstr ""
 
 msgid "Order must be an integer"
 msgstr "Ordine deve essere un numero intero"
@@ -1515,6 +1593,27 @@ msgstr "Spostato"
 
 msgid "Saved order of sections."
 msgstr "Ordine delle sezioni salvato."
+
+msgid "Stat filter and location updated successfully to"
+msgstr "Statistiche di filtro e località aggiornate con successo a"
+
+msgid "Full statistics enabled"
+msgstr "Statistiche globali abilitate"
+
+msgid "Full statistics disabled"
+msgstr "Statistiche globali disabilitate"
+
+#, java-format
+msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
+msgstr "Grafo aggiornato, potrebbe impiegare fino a 60s per riflettersi sul Grafo{0} Pagina{1}"
+
+#, java-format
+msgid "Internal error: could not resolve pool name {0}."
+msgstr ""
+
+#, java-format
+msgid "Internal error: could not find pool settings for {0}."
+msgstr ""
 
 msgid "Updated settings for all pools."
 msgstr "Impostazioni aggiornate per tutti i pool."
@@ -1540,9 +1639,8 @@ msgstr[1] "{0} tunnel"
 msgid "Exploratory tunnels"
 msgstr "Tunnel d'esplorazione"
 
-#, java-format
-msgid "Client tunnels for {0}"
-msgstr "I tunnel client per {0}"
+msgid "I2PSnark"
+msgstr "I2PSnark"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "AVVISO ANONIMATO - Le impostazioni includono tunnel 0-hop."
@@ -1568,17 +1666,17 @@ msgstr "In ingresso"
 msgid "Outbound"
 msgstr "In uscita"
 
-msgid "Length"
-msgstr "Lunghezza"
-
-msgid "Randomization"
-msgstr "Randomizzazione"
-
 msgid "Quantity"
 msgstr "Quantità"
 
 msgid "Backup quantity"
 msgstr "Quantità di backup"
+
+msgid "Length"
+msgstr "Lunghezza"
+
+msgid "Randomization"
+msgstr "Randomizzazione"
 
 msgid "Inbound options"
 msgstr "Opzioni di ingresso"
@@ -1589,17 +1687,20 @@ msgstr "Opzioni di uscita"
 msgid "Add user"
 msgstr "Aggiungi utente"
 
+msgid "Cannot save theme choice, theme name has illegal characters"
+msgstr ""
+
 msgid "Theme change saved."
 msgstr "Modifica del tema salvata."
-
-msgid "Refresh the page to view."
-msgstr "Ricarica la pagina per vederla."
 
 msgid "Mobile console option saved."
 msgstr "Opzioni della console mobile salvate."
 
 msgid "No user name entered"
 msgstr "Nessuna username inserita"
+
+msgid "User name may not contain '='"
+msgstr ""
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "Attenzione: Usernames al di fuori del set di caratteri ISO-8859-1 non sono consigliati. Il supporto non è standardizzato e varia in base al browser."
@@ -1890,17 +1991,17 @@ msgstr "Prestazioni del router grafico"
 msgid "Graphs"
 msgstr "Grafici"
 
-msgid "Anonymous webmail client"
-msgstr "Client anonimo di posta elettronica"
-
-msgid "I2PMail"
-msgstr "I2PMail"
-
 msgid "Help"
 msgstr "Aiuto"
 
 msgid "I2P Router Help"
 msgstr "Aiuto per il router I2P"
+
+msgid "Anonymous webmail client"
+msgstr "Client anonimo di posta elettronica"
+
+msgid "I2PMail"
+msgstr "I2PMail"
 
 msgid "Install and configure I2P plugins"
 msgstr "Installa e configura plugin per I2P"
@@ -1919,6 +2020,12 @@ msgstr "Database della Rete"
 
 msgid "Show list of all known I2P routers"
 msgstr "Mostra la lista di tutti i router I2P conosciuti"
+
+msgid "List of recently connected peers with profiling info"
+msgstr ""
+
+msgid "Peer Profiles"
+msgstr "Profili dei pari"
 
 msgid "Router Info"
 msgstr "Info router"
@@ -1992,14 +2099,14 @@ msgstr "Configurazione avanzata"
 msgid "Advanced router configuration"
 msgstr "Configurazione avanzata del router"
 
-msgid "Start or stop Router clients"
-msgstr "Avvia o ferma i clients del router"
-
 msgid "Changelog"
 msgstr "Changelog"
 
 msgid "Recent changes"
 msgstr "Cambiamenti recenti"
+
+msgid "Start or stop Router clients"
+msgstr "Avvia o ferma i clients del router"
 
 msgid "Bug tracker"
 msgstr "Tracker dei bug"
@@ -2145,9 +2252,6 @@ msgstr "Motore di ricerca Clearnet BitTorrent DHT"
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "Motore di ricerca DuckDuckGo (no javascript)"
 
-msgid "Clearnet Search Engine"
-msgstr "Motore di ricerca Clearnet"
-
 msgid "Privacy-focused Clearnet Search Engine"
 msgstr "Motore di ricerca Clearnet incentrato sulla privacy"
 
@@ -2223,18 +2327,6 @@ msgstr "Giornalismo investigativo indipendente"
 msgid "Information Security Research &amp; Education"
 msgstr "Ricerca e istruzione sulla sicurezza delle informazioni"
 
-msgid "Cannabis-related magazine"
-msgstr "Rivista relativa alla cannabis"
-
-msgid "CultureMagazine"
-msgstr "Rivista Cultura"
-
-msgid "A magazine of Politics &amp; Culture"
-msgstr "Una rivista di politica e cultura"
-
-msgid "CurrentAffairs"
-msgstr "CurrentAffairs"
-
 msgid "Darknet related news site"
 msgstr "Sito di notizie relativo alla Darknet"
 
@@ -2289,15 +2381,6 @@ msgstr "Hong Kong Orologio"
 msgid "Monitors threats to freedoms and rights in Hong Kong"
 msgstr "Monitora le minacce alle libertà e ai diritti a Hong Kong"
 
-msgid "Politics &amp; Current Affairs Journal"
-msgstr "Politica e Giornale degli affari attuali"
-
-msgid "English language Japanese News"
-msgstr "Notizie giapponesi in lingua inglese"
-
-msgid "JapanToday"
-msgstr "GiapponeOggi"
-
 msgid "JStorDaily"
 msgstr "JStorDaily"
 
@@ -2340,9 +2423,6 @@ msgstr "News e feed di blog su I2P"
 msgid "Planeta"
 msgstr "Planeta"
 
-msgid "News &amp; Views on Tibet"
-msgstr "Notizie e opinioni sul Tibet"
-
 msgid "Lifestyle magazine"
 msgstr "Rivista sullo stile di vita"
 
@@ -2360,6 +2440,9 @@ msgstr "ScienceDaily"
 
 msgid "Community-driven tech news"
 msgstr "Notizie tecnologiche promosse dalla comunità"
+
+msgid "Various services"
+msgstr ""
 
 msgid "News for nerds"
 msgstr "Notizie per nerd"
@@ -2406,12 +2489,6 @@ msgstr "Notizie globali"
 msgid "TheGuardian"
 msgstr "Il Guardiano"
 
-msgid "TheHill"
-msgstr "La collina"
-
-msgid "US Political News"
-msgstr "Notizie politiche statunitensi"
-
 msgid "TheMarkup"
 msgstr "IlMarkup"
 
@@ -2426,12 +2503,6 @@ msgstr "TheMoscowTimes"
 
 msgid "TheNewRepublic"
 msgstr "La Nuova Repubblica"
-
-msgid "International News from Tibet"
-msgstr "Notizie internazionali dal Tibet"
-
-msgid "TheTibetPost"
-msgstr "TheTibetPost"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "Condivisione di file e notizie sul copyright"
@@ -2460,6 +2531,9 @@ msgstr "URL"
 
 msgid "Add"
 msgstr "Aggiungi"
+
+msgid "Error displaying the info page."
+msgstr ""
 
 msgid "Identity"
 msgstr "Identità"
@@ -2506,6 +2580,9 @@ msgstr "Core CPU disponibili"
 msgid "Performance"
 msgstr "Prestazioni"
 
+msgid "Maximum available RAM"
+msgstr ""
+
 msgid "Classified as slow"
 msgstr "Classificato come lento"
 
@@ -2514,6 +2591,9 @@ msgstr "Sì"
 
 msgid "No"
 msgstr "No"
+
+msgid "GeoIP Db"
+msgstr ""
 
 msgid "Target"
 msgstr "Bersaglio"
@@ -2651,6 +2731,9 @@ msgstr "Tutti i router (Db rete client)"
 msgid "Sybil Analysis"
 msgstr "Analisi Sybil"
 
+msgid "Bad value supplied, please check and try again."
+msgstr ""
+
 msgid "Router Map"
 msgstr "Mappa del router"
 
@@ -2725,9 +2808,6 @@ msgstr "è vietato"
 
 msgid "not found in network database"
 msgstr "non trovato nel database della rete"
-
-msgid "No results"
-msgstr "Nessun risultato"
 
 msgid "Bad Base64 Router hash"
 msgstr ""
@@ -2976,50 +3056,11 @@ msgstr "Mostra tutti i router con questo indirizzo nel NetDb"
 msgid "Show all routers with this port in the NetDb"
 msgstr "Mostra tutti i router con questa porta nel NetDb"
 
-msgid "Core version"
-msgstr "Versione principale"
-
 msgid "Network ID"
 msgstr "ID di rete"
 
 msgid "Routers"
 msgstr "Router"
-
-msgid "Family Key"
-msgstr "Chiave familiare"
-
-msgid "Family Sig"
-msgstr "Famiglia Sig"
-
-msgid "Exploratory tunnels expire (1h)"
-msgstr "I tunnel esplorativi scadono (1h)"
-
-msgid "Exploratory tunnels reject (1h)"
-msgstr "Rifiuto cunicoli esplorativi (1h)"
-
-msgid "Exploratory tunnels build success (1h)"
-msgstr "I tunnel esplorativi costruiscono il successo (1 ora)"
-
-msgid "Client tunnels expire (1h)"
-msgstr "I tunnel client scadono (1 ora)"
-
-msgid "Client tunnels reject (1h)"
-msgstr "Rifiuto tunnel client (1 ora)"
-
-msgid "Client tunnels build success (1h)"
-msgstr "Tunnel client costruiti con successo (1h)"
-
-msgid "Participating tunnels (1h)"
-msgstr "Tunnel partecipanti (1h)"
-
-msgid "Participating tunnels (60s)"
-msgstr "Tunnel partecipanti (anni '60)"
-
-msgid "Bandwidth send rate (1h)"
-msgstr "Velocità di invio larghezza di banda (1 ora)"
-
-msgid "Bandwidth receive rate (1h)"
-msgstr "Velocità di ricezione larghezza di banda (1 ora)"
 
 msgid "First heard about"
 msgstr "Per la prima volta sentito parlare"
@@ -3089,9 +3130,6 @@ msgstr "nel tuo file router.config."
 msgid "Peer Connections"
 msgstr "Connessioni tra pari"
 
-msgid "Auto-refresh"
-msgstr "Aggiornamento automatico"
-
 msgid "Active in the last minute"
 msgstr "Attivo nell'ultimo minuto"
 
@@ -3100,6 +3138,12 @@ msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
+
+msgid "Limit"
+msgstr ""
+
+msgid "Maximum permitted connections"
+msgstr ""
 
 msgid "Current / maximum permitted"
 msgstr "Corrente / massimo consentito"
@@ -3505,8 +3549,8 @@ msgid "{0} shared bandwidth"
 msgstr "{0} banda condivisa"
 
 #, java-format
-msgid "Over {0} shared bandwidth"
-msgstr "Oltre {0} banda condivisa"
+msgid "Over {0} KB/s shared bandwidth"
+msgstr ""
 
 msgid "status"
 msgstr "stato"
@@ -3578,84 +3622,151 @@ msgstr ""
 msgid "Select search engine"
 msgstr "Seleziona motore di ricerca"
 
-msgid "Statistics gathered during this router's uptime"
-msgstr "Statistiche raccolte durante il tempo di attività di questo ruoter"
+#, java-format
+msgid "Clock Skew of {0}"
+msgstr "Sfalsamento orologio di {0}"
 
-msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
-msgstr "I dati raccoli sono quantizzati su un intervallo di 1 minuto, quindi dovrebbero essere usati semplicemente come stima."
+msgid "Testing"
+msgstr "Verifica in corso"
 
-msgid "These statistics are primarily used for development and debugging."
-msgstr "Queste statistiche sono utilizzate prevalentemente per sviluppo e correzione errori."
+msgid "Private TCP Address"
+msgstr "Indirizzo TCP privato"
 
-msgid "No lifetime events"
-msgstr "Nessun evento durante l'arco di vita"
+msgid "SymmetricNAT"
+msgstr "NAT simmetrico"
 
-msgid "frequency"
-msgstr "frequenza"
+msgid "Firewalled with Inbound TCP Enabled"
+msgstr "Firewall con TCP in entrata abilitato"
 
-msgid "Rolling average events per period"
-msgstr "Eventi rotanti medi per periodo"
+msgid "Firewalled &amp; Floodfill"
+msgstr "Firewalled e Inondazione"
 
-msgid "Highest events per period"
-msgstr "Eventi più alti per periodo"
+msgid "Disconnected"
+msgstr "Disconnesso"
 
-msgid "Lifetime average events per period"
-msgstr "Eventi medi per periodo durante l'arco di vita"
+msgid "UDP Port In Use"
+msgstr "Porta UDP in uso"
 
-msgid "Lifetime average frequency"
-msgstr "Frequenza media dell'arco di vita"
+msgid "No Active Peers"
+msgstr "Nessun peer attivo"
+
+msgid "UDP Disabled &amp; Inbound TCP host/port not set"
+msgstr "UDP disabilitato e in entrata Host/porta TCP non impostata"
+
+msgid "Firewalled with UDP Disabled"
+msgstr "Firewall con UDP disabilitato"
+
+msgid "Add/remove/edit &amp; control your client and server tunnels"
+msgstr "Aggiungi/rimuovi/modifica &amp; controlla i tunnel dei tuoi client e server"
+
+msgid "Service Tunnels"
+msgstr "Tunnel di servizio"
+
+msgid "How many local service tunnels we're running"
+msgstr "Quanti tunnel di servizio locale stiamo utilizzando"
+
+msgid "Messenger"
+msgstr "Messaggero"
+
+msgid "i2pchat"
+msgstr "i2pchat"
+
+msgid "I2PChat"
+msgstr "I2PChat"
+
+msgid "Server"
+msgstr "Server"
+
+msgid "service may be available to peers"
+msgstr "il servizio potrebbe essere disponibile ai peer"
+
+msgid "service is only available locally"
+msgstr "il servizio è disponibile solo in locale"
+
+msgid "Show tunnels"
+msgstr "Mostra i tunnel"
+
+msgid "Leases expired"
+msgstr "Noleggi scaduti"
+
+msgid "Rebuilding"
+msgstr "Ricostruendo"
+
+msgid "ago"
+msgstr "fa"
+
+msgid "Ready"
+msgstr "Pronto"
+
+msgid "Building"
+msgstr "Costruendo"
+
+msgid "Building tunnels"
+msgstr "Costruendo i tunnel"
+
+msgid "Shared Clients"
+msgstr "Client condivisi"
+
+msgid "Click Restart to install"
+msgstr "Cliccare Riavvia per installare"
+
+msgid "Click Shutdown and restart to install"
+msgstr "Cliccare Spegni per riavviare e installare"
 
 #, java-format
-msgid "{0} event"
-msgid_plural "{0} events"
-msgstr[0] "{0} evento"
-msgstr[1] "{0} eventi"
+msgid "{0}"
+msgstr "{0}"
 
-msgid "rate"
-msgstr "tasso"
+msgid "Updating after restart"
+msgstr "Aggiornamento dopo il riavvio"
 
-msgid "Average"
-msgstr "Media"
+msgid "Signed development update available"
+msgstr "Aggiornamento di sviluppo firmato disponibile"
 
-msgid "Highest average"
-msgstr "Media maggiore"
+msgid "Download I2P Update"
+msgstr "Scarica aggiornamento I2P"
 
-msgid "Highest total in a period"
-msgstr "Totale più alto in un periodo"
+msgid "Unsigned update available"
+msgstr "Aggiornamento non firmato disponibile"
 
-msgid "Average event count"
-msgstr "Conteggio medio di eventi"
+msgid "Help with firewall configuration"
+msgstr "Aiuto con la configurazione del firewall"
 
-msgid "Events in peak period"
-msgstr "Eventi nel periodo di punta"
+msgid "Check network connection and NAT/firewall!"
+msgstr "Verifica connessione di rete e NAT/firewall!"
 
-msgid "Events in this period"
-msgstr "Eventi in questo periodo"
+msgid "Attempt to download router reference files (if automatic reseed has failed)"
+msgstr "Prova a scaricare i file di riferimento del router (se il reseed automatico ha fallito)"
 
-#, java-format
-msgid "ended {0} ago"
-msgstr "terminato {0} fa"
+msgid "Reseed"
+msgstr "Reseed"
 
-msgid "No events"
-msgstr "Nessun evento"
+msgid "Order"
+msgstr "Ordine"
 
-msgid "Graph Data"
-msgstr "Dati del grafico"
+msgid "Top"
+msgstr "Sopra"
 
-msgid "Graph Event Count"
-msgstr "Grafico conteggio eventi"
+msgid "Move to top"
+msgstr "Muovi in cima"
 
-msgid "Export Data as XML"
-msgstr "Esporta dati come XML"
+msgid "Move up"
+msgstr "Sposta in su"
 
-msgid "Lifetime average value"
-msgstr "Valore medio nell'arco di vita"
+msgid "Down"
+msgstr "Sotto"
 
-#, java-format
-msgid "1 event"
-msgid_plural "{0} events"
-msgstr[0] "1 evento"
-msgstr[1] "{0} eventi"
+msgid "Move down"
+msgstr "Sposta in giù"
+
+msgid "Bottom"
+msgstr "Basso"
+
+msgid "Move to bottom"
+msgstr "Muovi in fondo"
+
+msgid "Select a section to add"
+msgstr "Seleziona una sezione da aggiungere"
 
 msgid "Help &amp; FAQ"
 msgstr "Aiuto &amp; FAQ"
@@ -3698,9 +3809,6 @@ msgstr "Congestione"
 
 msgid "Tunnel Status"
 msgstr "Stato del tunnel"
-
-msgid "Service Tunnels"
-msgstr "Tunnel di servizio"
 
 msgid "News &amp; Updates"
 msgstr "News &amp; Aggiornamenti"
@@ -3755,6 +3863,9 @@ msgstr "Hosting Web"
 
 msgid "An introduction to hosting websites on the I2P network"
 msgstr "Un'introduzione all'hosting di siti web sulla rete I2P"
+
+msgid "New hosts in last 24 hours"
+msgstr ""
 
 msgid "I2PControl"
 msgstr "I2PControl"
@@ -4055,151 +4166,84 @@ msgstr "Nessun tunnel partecipante viene costruito quando la modalità nascosta 
 msgid "Router is configured to reject all transit tunnel requests"
 msgstr "Il router è configurato per rifiutare tutte le richieste di partecipazione ai tunnel"
 
-#, java-format
-msgid "Clock Skew of {0}"
-msgstr "Sfalsamento orologio di {0}"
+msgid "Statistics gathered during this router's uptime"
+msgstr "Statistiche raccolte durante il tempo di attività di questo ruoter"
 
-msgid "Testing"
-msgstr "Verifica in corso"
+msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
+msgstr "I dati raccoli sono quantizzati su un intervallo di 1 minuto, quindi dovrebbero essere usati semplicemente come stima."
 
-msgid "Private TCP Address"
-msgstr "Indirizzo TCP privato"
+msgid "These statistics are primarily used for development and debugging."
+msgstr "Queste statistiche sono utilizzate prevalentemente per sviluppo e correzione errori."
 
-msgid "SymmetricNAT"
-msgstr "NAT simmetrico"
+msgid "No lifetime events"
+msgstr "Nessun evento durante l'arco di vita"
 
-msgid "Firewalled with Inbound TCP Enabled"
-msgstr "Firewall con TCP in entrata abilitato"
+msgid "frequency"
+msgstr "frequenza"
 
-msgid "Firewalled &amp; Floodfill"
-msgstr "Firewalled e Inondazione"
+msgid "Rolling average events per period"
+msgstr "Eventi rotanti medi per periodo"
 
-msgid "Disconnected"
-msgstr "Disconnesso"
+msgid "Highest events per period"
+msgstr "Eventi più alti per periodo"
 
-msgid "UDP Port In Use"
-msgstr "Porta UDP in uso"
+msgid "Lifetime average events per period"
+msgstr "Eventi medi per periodo durante l'arco di vita"
 
-msgid "No Active Peers"
-msgstr "Nessun peer attivo"
-
-msgid "UDP Disabled &amp; Inbound TCP host/port not set"
-msgstr "UDP disabilitato e in entrata Host/porta TCP non impostata"
-
-msgid "Firewalled with UDP Disabled"
-msgstr "Firewall con UDP disabilitato"
-
-msgid "Add/remove/edit &amp; control your client and server tunnels"
-msgstr "Aggiungi/rimuovi/modifica &amp; controlla i tunnel dei tuoi client e server"
-
-msgid "How many local service tunnels we're running"
-msgstr "Quanti tunnel di servizio locale stiamo utilizzando"
-
-msgid "I2PSnark"
-msgstr "I2PSnark"
-
-msgid "Messenger"
-msgstr "Messaggero"
-
-msgid "i2pchat"
-msgstr "i2pchat"
-
-msgid "I2PChat"
-msgstr "I2PChat"
-
-msgid "Server"
-msgstr "Server"
-
-msgid "service may be available to peers"
-msgstr "il servizio potrebbe essere disponibile ai peer"
-
-msgid "service is only available locally"
-msgstr "il servizio è disponibile solo in locale"
-
-msgid "Show tunnels"
-msgstr "Mostra i tunnel"
-
-msgid "Leases expired"
-msgstr "Noleggi scaduti"
-
-msgid "Rebuilding"
-msgstr "Ricostruendo"
-
-msgid "ago"
-msgstr "fa"
-
-msgid "Ready"
-msgstr "Pronto"
-
-msgid "Building"
-msgstr "Costruendo"
-
-msgid "Building tunnels"
-msgstr "Costruendo i tunnel"
-
-msgid "Shared Clients"
-msgstr "Client condivisi"
-
-msgid "Click Restart to install"
-msgstr "Cliccare Riavvia per installare"
-
-msgid "Click Shutdown and restart to install"
-msgstr "Cliccare Spegni per riavviare e installare"
+msgid "Lifetime average frequency"
+msgstr "Frequenza media dell'arco di vita"
 
 #, java-format
-msgid "{0}"
-msgstr "{0}"
+msgid "{0} event"
+msgid_plural "{0} events"
+msgstr[0] "{0} evento"
+msgstr[1] "{0} eventi"
 
-msgid "Updating after restart"
-msgstr "Aggiornamento dopo il riavvio"
+msgid "rate"
+msgstr "tasso"
 
-msgid "Signed development update available"
-msgstr "Aggiornamento di sviluppo firmato disponibile"
+msgid "Average"
+msgstr "Media"
 
-msgid "Download I2P Update"
-msgstr "Scarica aggiornamento I2P"
+msgid "Highest average"
+msgstr "Media maggiore"
 
-msgid "Unsigned update available"
-msgstr "Aggiornamento non firmato disponibile"
+msgid "Highest total in a period"
+msgstr "Totale più alto in un periodo"
 
-msgid "Help with firewall configuration"
-msgstr "Aiuto con la configurazione del firewall"
+msgid "Average event count"
+msgstr "Conteggio medio di eventi"
 
-msgid "Check network connection and NAT/firewall!"
-msgstr "Verifica connessione di rete e NAT/firewall!"
+msgid "Events in peak period"
+msgstr "Eventi nel periodo di punta"
 
-msgid "Attempt to download router reference files (if automatic reseed has failed)"
-msgstr "Prova a scaricare i file di riferimento del router (se il reseed automatico ha fallito)"
+msgid "Events in this period"
+msgstr "Eventi in questo periodo"
 
-msgid "Reseed"
-msgstr "Reseed"
+#, java-format
+msgid "ended {0} ago"
+msgstr "terminato {0} fa"
 
-msgid "Order"
-msgstr "Ordine"
+msgid "No events"
+msgstr "Nessun evento"
 
-msgid "Top"
-msgstr "Sopra"
+msgid "Graph Data"
+msgstr "Dati del grafico"
 
-msgid "Move to top"
-msgstr "Muovi in cima"
+msgid "Graph Event Count"
+msgstr "Grafico conteggio eventi"
 
-msgid "Move up"
-msgstr "Sposta in su"
+msgid "Export Data as XML"
+msgstr "Esporta dati come XML"
 
-msgid "Down"
-msgstr "Sotto"
+msgid "Lifetime average value"
+msgstr "Valore medio nell'arco di vita"
 
-msgid "Move down"
-msgstr "Sposta in giù"
-
-msgid "Bottom"
-msgstr "Basso"
-
-msgid "Move to bottom"
-msgstr "Muovi in fondo"
-
-msgid "Select a section to add"
-msgstr "Seleziona una sezione da aggiungere"
+#, java-format
+msgid "1 event"
+msgid_plural "{0} events"
+msgstr[0] "1 evento"
+msgstr[1] "{0} eventi"
 
 msgid "No known routers"
 msgstr "Nessun router noto"
@@ -4539,6 +4583,10 @@ msgstr "Nessun tunnel locale o di transito attualmente attivo."
 msgid "Bandwidth Tiers"
 msgstr "Gradi di banda"
 
+#, java-format
+msgid "Over {0} shared bandwidth"
+msgstr "Oltre {0} banda condivisa"
+
 msgid "Inbound or outbound?"
 msgstr "In entrata o in uscita?"
 
@@ -4598,6 +4646,18 @@ msgstr "Test di banda cancellato"
 
 msgid "Bandwidth test was not running"
 msgstr "Il test di banda non era in esecuzione"
+
+msgid "ready"
+msgstr ""
+
+msgid "inbound test"
+msgstr ""
+
+msgid "outbound test"
+msgstr ""
+
+msgid "done"
+msgstr ""
 
 msgid "bits per second"
 msgstr "bit al secondo"
@@ -4771,8 +4831,8 @@ msgstr "Condivisione di rete"
 msgid "Share"
 msgstr "Condivisione"
 
-msgid "Note"
-msgstr "NOTA"
+msgid "NOTE"
+msgstr ""
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
@@ -4796,6 +4856,10 @@ msgstr "Più è alta la condivisione di banda, più aiuti la rete e la tua anoni
 
 msgid "config advanced"
 msgstr "configurazione avanzata"
+
+#, java-format
+msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
+msgstr ""
 
 msgid "Floodfill Configuration"
 msgstr "Configurazione Floodfill"
@@ -4824,8 +4888,8 @@ msgstr "Disabilita"
 msgid "Advanced I2P+ Configuration"
 msgstr "Configurazione avanzata I2P"
 
-msgid "Some changes may require a restart to take effect."
-msgstr "Certi cambiamenti possono richiedere un riavvio per avere effetto."
+msgid "Help with additional configuration settings"
+msgstr ""
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5691,23 +5755,50 @@ msgstr "Se impostato su \"true\", questo abilita l'installazione del plug -in su
 msgid "When set to true, this setting enables reverse DNS lookups for peers, triggered when displaying the country flag of a peer or when the hostname or domain is explicitly displayed in the console, or when the peer's RouterInfo is written to disk. In order to avoid repeat lookups, it's recommended to configure a generous caching policy for DNS lookups of 10 minutes or more, and to configure a privacy respecting DNS server in your operating system. [Disabled by default, restart required]"
 msgstr "Quando impostato su vero, questa impostazione abilita ricerche DNS inverse per i peer, innescate quando viene visualizzata la bandiera del paese di un peer o quando l'hostname o dominio viene esplicitamente visualizzato nella console, o quando le informazioni del router del peer vengono scritte su disco. Per evitare ricerche ripetute, si consiglia di configurare una politica di cache generosa per le ricerche DNS di 10 minuti o più e di configurare un server DNS che rispetti la privacy nel proprio sistema operativo. [Disabilitato per impostazione predefinita, riavvio richiesto]"
 
+msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
+msgstr "Questa impostazione consente di impostare un prefisso di testo personalizzato per il titolo della pagina nelle pagine della console del router, potenzialmente utile quando hai aperto più console su schede del browser e vuoi un metodo semplice per differenziarle."
+
 msgid "When set to true, accessing the router console via http:// when https:// is enabled will automatically redirect to https. To configure router console access, edit the settings in your <code>clients.config</code> file in your profile directory (<i>not</i> the application installation directory). [Enabled by default]"
 msgstr "Quando impostato su vero, l'accesso alla console del router tramite http:// quando è abilitato https:// verrà automaticamente reindirizzato a https. Per configurare l'accesso alla console del router, modificare le impostazioni nel file <code>clients.config</code> nella directory del profilo (non nella directory di installazione dell'applicazione). [Abilitato per impostazione predefinita]"
+
+msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
+msgstr "Quando impostata su true, questa impostazione visualizza una lettura Media dei Test dei Peer nella sezione Congestione della barra laterale, calcolata aggiungendo la media dei test dei peer riusciti e il tempo medio di eccesso richiesto dai test falliti. Il valore medio può essere utilizzato come guida per determinare il valore ottimale di <code>router.peerTestTimeout</code>. [Il valore predefinito è false]"
+
+msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
+msgstr "Questa impostazione, quando impostata su true, visualizzerà i link <i>Siti di interesse</ i> sulla <a href=/sitemap> mappa del sito </a>. [Il valore predefinito è false]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Questa impostazione determina se il router deve utilizzare il file <i>blocklist.txt</i> fornito e eventuali blocklist configurate dall'utente per consentire il divieto di accesso ai router tramite hash o indirizzo IP. Gli intervalli e le maschere di rete sono supportate per IPv4 ma non per IPv6. Consultare <i>blocklist.txt</i> nella directory dell'applicazione I2P+ per ulteriori informazioni. [Abilitato per impostazione predefinita, riavvio richiesto]"
 
-msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
-msgstr "Questa impostazione determina se il router deve utilizzare il file <i>blocklist_tor.txt</i> fornito nella directory dell'applicazione I2P+ per consentire il divieto di accesso ai router che operano dagli indirizzi IP dei nodi di uscita di Tor. [Abilitato per impostazione predefinita, riavvio richiesto]"
+msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
+msgstr "Questa impostazione consente di configurare un tempo di scadenza (in secondi) per i divieti applicati tramite elenchi di blocco. Per impostazione predefinita, i divieti persistono per la durata della sessione del router. [Necessaria riavviarlo]"
 
 msgid "This setting, when configured with a path pointing at a valid blocklist file, enables an additional, user-configured blocklist to be loaded at router startup. [Disabled by default, restart required]"
 msgstr "Questa impostazione, quando configurata con un percorso che punta a un file blocklist valido, consente di caricare una blocklist aggiuntiva configurata dall'utente all'avvio del router. [Disabilitato per impostazione predefinita, riavvio richiesto]"
 
-msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
-msgstr "Questa impostazione consente di configurare un tempo di scadenza (in secondi) per i divieti applicati tramite elenchi di blocco. Per impostazione predefinita, i divieti persistono per la durata della sessione del router. [Necessaria riavviarlo]"
+msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
+msgstr "Questa impostazione determina se il router deve utilizzare il file <i>blocklist_tor.txt</i> fornito nella directory dell'applicazione I2P+ per consentire il divieto di accesso ai router che operano dagli indirizzi IP dei nodi di uscita di Tor. [Abilitato per impostazione predefinita, riavvio richiesto]"
+
+msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
+msgstr ""
+
+msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
+msgstr "Quando impostato su falso, il router non blocca le richieste di creazione di tunnel da router più lenti o non raggiungibili che eseguono versioni precedenti. [Predefinito vero, richiede riavvio]"
 
 msgid "Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks."
 msgstr "Assegna il numero di thread del processore per la costruzione dei tunnel. Se il tuo processore supporta l'iper-threading o il multithreading simultaneo, puoi moltiplicare il numero di core del processore per 2 per ottenere il numero massimo di thread da allocare, altrimenti il numero di core del processore = massimo numero di thread disponibili. Nota che potresti desiderare di assegnare meno del massimo teorico per assicurarti di avere margine di manovra per altre attività."
+
+msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
+msgstr "Questa impostazione (in millisecondi) determina per quanto tempo un pacchetto può rimanere nella coda CoDel prima di essere eliminato. Il valore predefinito è 1000ms. [Richiesta la riavvio]"
+
+msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
+msgstr "Questa impostazione determina il numero massimo di messaggi nella coda di invio prima che sia marcata come piena. [Predefinito è 768]"
+
+msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
+msgstr "Questa impostazione determina il numero massimo di messaggi oltre il valore massimo della coda prima che siano eliminati ulteriori messaggi. [Predefinito è 128]"
+
+msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
+msgstr "Questa impostazione (in millisecondi) consente di configurare manualmente il valore obiettivo del ritardo della coda per il sistema di gestione delle code CoDel. Il valore predefinito è 50ms. [Richiesta la riavvio]"
 
 msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
 msgstr "Questa impostazione, in millisecondi, ridefinisce il limite di tempo di elaborazione dei messaggi predefinito (indicato come <i>Message Delay</i> nella sezione barra laterale Congestion) prima che il router sia determinato come congestionato e le richieste di tunnel di transito vengano respinte. [Default is 750ms or 1500ms if the router is flagged as slow]"
@@ -5718,8 +5809,32 @@ msgstr "Effettua test periodici sui tunnel per determinare il ritardo medio e vi
 msgid "When set to true, the router will change its identity and UDP port every time the router restarts. [Default is false]"
 msgstr "Quando impostato su true, il router cambierà la sua identità e la porta UDP ogni volta che viene riavviato. [Il valore predefinito è false]"
 
+msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
+msgstr "Quando impostato su falso, il router non limita le richieste di creazione di tunnel provenienti da altri router e dovrebbe essere utilizzato con cautela. [Predefinito vero, richiede riavvio]"
+
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
 msgstr "Questa impostazione determina quali <a href=/profiles#profile_defs>capacità dei peer</a> non verranno utilizzate per costruire i tunnel del tuo router. ad esempio <code>router.excludePeerCaps=LMN</code>"
+
+msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
+msgstr "Questa impostazione (in ore) determina da quanto tempo è vecchia una RouterInfo nel NetDb (la sua ultima data di pubblicazione nota) prima che venga definita obsoleta ed eliminata. [Il predefinito è di 28 ore a meno che il router sia un Floodfill, in tal caso il predefinito è di 8 ore]"
+
+msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
+msgstr "Questa impostazione determina il numero di peer da esplorare in parallelo quando viene eseguito il Jobs di esplorazione dei peer [il predefinito è 1 peer alla volta quando sono noti più di 3000 peer]. Nota che aumentare questo valore aumenterà i requisiti di larghezza di banda per l'esplorazione, e impostare questo valore troppo alto potrebbe causare ritardi eccessivi dei messaggi e interferire con altri servizi, quindi utilizzare con cautela!"
+
+msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
+msgstr "Questa impostazione determina il numero di bucket di NetDb DHT che il lavoro di esplorazione peer utilizzerà quando viene eseguito. Di default, il numero di bucket da esplorare varia a seconda se il router è in esecuzione da più di un'ora, se il router è nascosto o nella categoria 'K' di larghezza di banda e il numero di router conosciuti."
+
+msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
+msgstr "Questa impostazione (in secondi) ti consente di annullare il ritardo tra le esecuzioni del lavoro di esplorazione peer che tenta di individuare nuovi peer da aggiungere a NetDb. Di default, il lavoro viene eseguito ogni 80 secondi o, se il router sta riscontrando ritardi nei lavori o nei messaggi, ogni 3 minuti. Se la dimensione di NetDb raggiunge 4000 peer, la pausa aumenterà a 15 minuti. Puoi aumentare il ritardo se il tuo NetDb è ben popolato (oltre 2000 peer) o se desideri ridurre l'utilizzo complessivo della larghezza di banda. Nota: per i router Floodfill, questo lavoro non viene eseguito."
+
+msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
+msgstr "Questa impostazione determina il numero massimo di hash dei peer da mettere in coda per l'esplorazione. In I2P il massimo è 128 e in I2P+ il valore predefinito è 512."
+
+msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
+msgstr "Questa impostazione determina se un router che funge da floodfill esplorerà la NetDb per apprendere informazioni sui nuovi peer. [Il valore predefinito è false, necessita riavvio]"
+
+msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
+msgstr "Questa impostazione, quando impostata su true, impedisce a un router di comunicare direttamente con altri router, forzando l'utilizzo degli introduttori. [Il valore predefinito è false a meno che il router non sia in modalità nascosta]"
 
 msgid "When set to true, if your router is serving as a floodfill for the network, your <a href=/configadvanced#ffconf>floodfill participation</a> will be hidden from other routers."
 msgstr "Quando impostato su true, se il tuo router serve come floodfill per la rete, la tua partecipazione come floodfill verrà nascosta agli altri router."
@@ -5732,6 +5847,12 @@ msgstr "Determina il numero massimo di tunnel partecipanti che il router può co
 
 msgid "Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 10% in I2P+, 33% in I2P]"
 msgstr "Definisce la percentuale massima di tunnel locali attivi (client ed esploratori) che un peer utilizzerà. [Il valore predefinito è del 10% in I2P+, del 33% in I2P]"
+
+msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
+msgstr "Questa impostazione consente di configurare il numero minimo di tunnel partecipanti ospitati prima che il router inizi a respingere le richieste di tunnel in base ai requisiti di larghezza di banda previsti. [Il valore predefinito è 100 se il sistema è Android, 800 se il sistema è ARM e ha meno di 4 core disponibili, 1200 se il sistema è ARM e ha 4 o più core disponibili, altrimenti 2500]"
+
+msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
+msgstr "Questa impostazione consente di escludere router più vecchi dal tuo NetDb. I router più vecchi del valore predefinito o del valore che hai impostato verranno eliminati da NetDb e banditi per la durata della sessione del router. Di default, i router più vecchi di 0.9.20 sono esclusi. Nota: a partire dalla versione 0.9.46+ di I2P+, vengono utilizzate solo versioni molto recenti dei router per la creazione di tunnel locali. [Necessita riavvio]"
 
 msgid "When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]"
 msgstr "Quando impostato su true, i file info del router memorizzati nella directory netDB del tuo profilo non verranno divisi in 64 sotto-directory. [Il valore predefinito è falso]"
@@ -5757,84 +5878,6 @@ msgstr "Meno di 256 MB allocati alla JVM"
 msgid "Router running a non-native, software emulated version of the Java BigInteger library"
 msgstr "Router in esecuzione di una versione non nativa ed emulata dal software della libreria Java BigInteger"
 
-msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
-msgstr "Questa impostazione consente di configurare il numero minimo di tunnel partecipanti ospitati prima che il router inizi a respingere le richieste di tunnel in base ai requisiti di larghezza di banda previsti. [Il valore predefinito è 100 se il sistema è Android, 800 se il sistema è ARM e ha meno di 4 core disponibili, 1200 se il sistema è ARM e ha 4 o più core disponibili, altrimenti 2500]"
-
-msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
-msgstr "Quando impostato su true, il router cambierà la sua identità e la porta UDP quando il router si riavvia e quindi eliminerà la chiave da router.config per impedire ulteriori modifiche. [Il valore predefinito è false]"
-
-msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr "Quando impostato su falso, il router non limita le richieste di creazione di tunnel provenienti da altri router e dovrebbe essere utilizzato con cautela. [Predefinito vero, richiede riavvio]"
-
-msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr "Quando impostato su falso, il router non blocca le richieste di creazione di tunnel da router più lenti o non raggiungibili che eseguono versioni precedenti. [Predefinito vero, richiede riavvio]"
-
-msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
-msgstr "Quando configurato, questo imposta un limite rigido per il numero di tunnel che il router è autorizzato a costruire contemporaneamente. Per impostazione predefinita, il router utilizza il tempo medio di creazione e la larghezza di banda in uscita corrente per determinare il tasso di costruzione ottimale. [Richiede riavvio]"
-
-msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
-msgstr "Se desideri installare aggiornamenti I2P non firmati (.zip), ciò deve essere aggiunto al tuo file <code>router.config</code> a meno che tu non abbia già configurato <code>routerconsole.advanced=true</code>, nel qual caso questa opzione è già disponibile. Nota: a partire da I2P+ 0.9.48+, l'installazione di <a href=/configupdate#i2pupdates>aggiornamenti non firmati</a> è abilitata per impostazione predefinita."
-
-msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
-msgstr "Questa impostazione consente di configurare l'URL di aggiornamento per la funzionalità di aggiornamento non firmato, se abilitato. L'URL dovrebbe terminare con <code>/i2pupdate.zip</code>. Nota: non installare aggiornamenti non firmati a meno che tu non abbia fiducia nella fonte dell'aggiornamento!"
-
-msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
-msgstr "Questa impostazione consente di disabilitare i test SSU per determinare se il tuo router è protetto da firewall e può essere abilitata per i router che sicuramente non sono protetti da firewall ma che riscontrano problemi di protezione intermittent. Se i test sono disabilitati, sia SSU che NTCP dovrebbero riportare il tuo indirizzo IP pubblico corrente sulla <a href=/info>pagina delle informazioni del router</a>. [Richiede riavvio]"
-
-msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
-
-msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
-msgstr "Questa impostazione determina quale trasporto ha la priorità durante la comunicazione con gli altri utenti. Per impostazione predefinita, NTCP prevale su UDP (SSU). Impostando il valore su true, UDP avrà la priorità a meno che non esista una connessione NTCP preesistente; quando impostato su always, UDP verrà sempre utilizzato indipendentemente da eventuali connessioni NTCP preesistenti. [Il valore predefinito è false]"
-
-msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
-msgstr "Questa impostazione specifica per il tunnel consente di abilitare o disabilitare le risposte ai ping inviati ai server ospitati dal router. Per disabilitare i ping, è necessario aggiungere la riga <code>i2p.streaming.answerPings=false</code> alla sezione <i>Opzioni personalizzate</i> della configurazione del server nel Tunnel Manager."
-
-msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
-msgstr "Quando impostato su true, I2P viene eseguito senza connettività di rete, il che è utile se si riavvia costantemente il router per testare gli aggiornamenti del codice in quanto ciò impedisce l'interruzione della rete."
-
-msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr "Questa impostazione, quando abilitata, introduce un ritardo randomico di pong fino a 50ms per tutti i server abilitati al ping ospitati dal router. Disattivato di default. [Richiesta la riavvio]"
-
-msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr "Questa impostazione, quando abilitata, modifica il massimo ritardo casuale aggiuntivo per pong introdotto per i server abilitati al ping, se anche <code>i2p.streaming.enablePongDelay</code> è abilitato. Se non impostato esplicitamente, verrà utilizzato il valore predefinito di 50ms."
-
-msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
-msgstr "Questa impostazione (in millisecondi) determina per quanto tempo un pacchetto può rimanere nella coda CoDel prima di essere eliminato. Il valore predefinito è 1000ms. [Richiesta la riavvio]"
-
-msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
-msgstr "Questa impostazione determina il numero massimo di messaggi nella coda di invio prima che sia marcata come piena. [Predefinito è 768]"
-
-msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
-msgstr "Questa impostazione determina il numero massimo di messaggi oltre il valore massimo della coda prima che siano eliminati ulteriori messaggi. [Predefinito è 128]"
-
-msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
-msgstr "Questa impostazione (in millisecondi) consente di configurare manualmente il valore obiettivo del ritardo della coda per il sistema di gestione delle code CoDel. Il valore predefinito è 50ms. [Richiesta la riavvio]"
-
-msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
-msgstr "Questa impostazione (in ore) determina da quanto tempo è vecchia una RouterInfo nel NetDb (la sua ultima data di pubblicazione nota) prima che venga definita obsoleta ed eliminata. [Il predefinito è di 28 ore a meno che il router sia un Floodfill, in tal caso il predefinito è di 8 ore]"
-
-msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
-msgstr "Questa impostazione determina il numero di peer da esplorare in parallelo quando viene eseguito il Jobs di esplorazione dei peer [il predefinito è 1 peer alla volta quando sono noti più di 3000 peer]. Nota che aumentare questo valore aumenterà i requisiti di larghezza di banda per l'esplorazione, e impostare questo valore troppo alto potrebbe causare ritardi eccessivi dei messaggi e interferire con altri servizi, quindi utilizzare con cautela!"
-
-msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
-msgstr "Questa impostazione determina il numero di bucket di NetDb DHT che il lavoro di esplorazione peer utilizzerà quando viene eseguito. Di default, il numero di bucket da esplorare varia a seconda se il router è in esecuzione da più di un'ora, se il router è nascosto o nella categoria 'K' di larghezza di banda e il numero di router conosciuti."
-
-msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
-msgstr "Questa impostazione (in secondi) ti consente di annullare il ritardo tra le esecuzioni del lavoro di esplorazione peer che tenta di individuare nuovi peer da aggiungere a NetDb. Di default, il lavoro viene eseguito ogni 80 secondi o, se il router sta riscontrando ritardi nei lavori o nei messaggi, ogni 3 minuti. Se la dimensione di NetDb raggiunge 4000 peer, la pausa aumenterà a 15 minuti. Puoi aumentare il ritardo se il tuo NetDb è ben popolato (oltre 2000 peer) o se desideri ridurre l'utilizzo complessivo della larghezza di banda. Nota: per i router Floodfill, questo lavoro non viene eseguito."
-
-msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
-msgstr "Questa impostazione determina il numero massimo di hash dei peer da mettere in coda per l'esplorazione. In I2P il massimo è 128 e in I2P+ il valore predefinito è 512."
-
-msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
-msgstr "Questa impostazione determina se un router che funge da floodfill esplorerà la NetDb per apprendere informazioni sui nuovi peer. [Il valore predefinito è false, necessita riavvio]"
-
-msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
-msgstr "Questa impostazione, quando impostata su true, impedisce a un router di comunicare direttamente con altri router, forzando l'utilizzo degli introduttori. [Il valore predefinito è false a meno che il router non sia in modalità nascosta]"
-
-msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
-msgstr "Questa impostazione consente di escludere router più vecchi dal tuo NetDb. I router più vecchi del valore predefinito o del valore che hai impostato verranno eliminati da NetDb e banditi per la durata della sessione del router. Di default, i router più vecchi di 0.9.20 sono esclusi. Nota: a partire dalla versione 0.9.46+ di I2P+, vengono utilizzate solo versioni molto recenti dei router per la creazione di tunnel locali. [Necessita riavvio]"
-
 msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. [Default is 4]"
 msgstr "Questa impostazione determina il numero di test tra peer da eseguire contemporaneamente, utilizzato per determinare la latenza dei peer. [Il valore predefinito è 4]"
 
@@ -5850,14 +5893,17 @@ msgstr "Questa impostazione determina se le statistiche sul nostro router vengon
 msgid "This setting configures the initial size of the outbound message queue. [Default is 64]"
 msgstr "Questa impostazione configura la dimensione iniziale della coda dei messaggi in uscita. [Il valore predefinito è 64]"
 
-msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
-msgstr "Questa impostazione configura la dimensione massima della coda dei messaggi in entrata. [Il valore predefinito è 1024]"
-
 msgid "This setting configures the maximum number of inbound messages queued per cycle (pump). [Default is 24]"
 msgstr "Questa impostazione configura il numero massimo di messaggi in ingresso in coda per ciclo (pump). [Il valore predefinito è 24]"
 
+msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
+msgstr "Questa impostazione configura la dimensione massima della coda dei messaggi in entrata. [Il valore predefinito è 1024]"
+
 msgid "This setting configures the maximum number of outbound messages queued per cycle (pump). [Default is 64]"
 msgstr "Questa impostazione configura il numero massimo di messaggi in uscita in coda per ciclo (pump). [Il valore predefinito è 64]"
+
+msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
+msgstr "Quando impostato su true, il router cambierà la sua identità e la porta UDP quando il router si riavvia e quindi eliminerà la chiave da router.config per impedire ulteriori modifiche. [Il valore predefinito è false]"
 
 msgid "This setting (in milliseconds) allows you to manually configure the delay between router refresh updates run by the Refresh Routers Job. By default the pause between refreshes is determined by the size of the NetDb, and introduces some randomness in the timing to mitigate traffic analysis. For values lower than 2000 milliseconds, increasing the value of <code>router.refreshTimeout</code> is recommended. Note that setting this value below 2000 milliseconds will increase your network traffic and may introduce job lag, and is not recommended for sustained use."
 msgstr "Questa impostazione (in millisecondi) consente di configurare manualmente il ritardo tra gli aggiornamenti del router eseguiti dal job Refresh Routers. Per impostazione predefinita, la pausa tra gli aggiornamenti dipende dalla dimensione di NetDb e introduce una certa casualità nel timing per mitigare l'analisi del traffico. Per valori inferiori a 2000 millisecondi, si consiglia di aumentare il valore di <code>router.refreshTimeout</code>. Notare che impostare questo valore al di sotto di 2000 millisecondi aumenterà il traffico di rete e potrebbe causare ritardi nel job, pertanto non è consigliato per un utilizzo prolungato."
@@ -5871,26 +5917,56 @@ msgstr "Questa impostazione (in secondi) consente di configurare manualmente il 
 msgid "This setting determines whether routers classified as uninteresting (K or L tier, unreachable or older than 0.9.50) are checked during the refresh router process after 1 hour of uptime. [Default is false]"
 msgstr "Questa impostazione determina se i router classificati come non interessanti (tier K o L, irraggiungibili o più vecchi di 0.9.50) vengono controllati durante il processo di aggiornamento dei router dopo 1 ora di uptime. [Il valore predefinito è falso]"
 
+msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
+msgstr ""
+
+msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
+msgstr "Quando configurato, questo imposta un limite rigido per il numero di tunnel che il router è autorizzato a costruire contemporaneamente. Per impostazione predefinita, il router utilizza il tempo medio di creazione e la larghezza di banda in uscita corrente per determinare il tasso di costruzione ottimale. [Richiede riavvio]"
+
+msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
+msgstr "Se desideri installare aggiornamenti I2P non firmati (.zip), ciò deve essere aggiunto al tuo file <code>router.config</code> a meno che tu non abbia già configurato <code>routerconsole.advanced=true</code>, nel qual caso questa opzione è già disponibile. Nota: a partire da I2P+ 0.9.48+, l'installazione di <a href=/configupdate#i2pupdates>aggiornamenti non firmati</a> è abilitata per impostazione predefinita."
+
+msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
+msgstr "Questa impostazione consente di configurare l'URL di aggiornamento per la funzionalità di aggiornamento non firmato, se abilitato. L'URL dovrebbe terminare con <code>/i2pupdate.zip</code>. Nota: non installare aggiornamenti non firmati a meno che tu non abbia fiducia nella fonte dell'aggiornamento!"
+
 msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
 msgstr "Questa impostazione (in minuti) consente di configurare manualmente il tempo di attesa dopo l'avvio prima che venga verificata la validità degli RouterInfos nel NetDb, dopo il quale saranno accettati solo router validi per l'inclusione. Quando avviene la validazione, gli RouterInfos scaduti e i peer non responsivi accessibili solo tramite SSU verranno rimossi dal NetDb. [Il valore predefinito è di 60 minuti] Nota: questa impostazione non ha alcuna incidenza sui router più vecchi (più vecchi di 0,9,29 per impostazione predefinita) che vengono rimossi dal NetDb e banditi per la sessione del router non appena viene tentato uno store del NetDb"
 
-msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
-msgstr "Quando impostata su true, questa impostazione visualizza una lettura Media dei Test dei Peer nella sezione Congestione della barra laterale, calcolata aggiungendo la media dei test dei peer riusciti e il tempo medio di eccesso richiesto dai test falliti. Il valore medio può essere utilizzato come guida per determinare il valore ottimale di <code>router.peerTestTimeout</code>. [Il valore predefinito è false]"
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
+msgstr ""
 
-msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
-msgstr "Questa impostazione, quando impostata su true, visualizzerà i link <i>Siti di interesse</ i> sulla <a href=/sitemap> mappa del sito </a>. [Il valore predefinito è false]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
+msgstr ""
 
-msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr "Questa impostazione consente di impostare un prefisso di testo personalizzato per il titolo della pagina nelle pagine della console del router, potenzialmente utile quando hai aperto più console su schede del browser e vuoi un metodo semplice per differenziarle."
+msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
+msgstr "Questa impostazione consente di disabilitare i test SSU per determinare se il tuo router è protetto da firewall e può essere abilitata per i router che sicuramente non sono protetti da firewall ma che riscontrano problemi di protezione intermittent. Se i test sono disabilitati, sia SSU che NTCP dovrebbero riportare il tuo indirizzo IP pubblico corrente sulla <a href=/info>pagina delle informazioni del router</a>. [Richiede riavvio]"
 
-msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
-msgstr "Questa impostazione consente la configurazione di server NTP alternativi necessari per garantire che il router mantenga un orario preciso. [Il valore predefinito è 0.pool.ntp.org, 1.pool.ntp.org, 2.pool.ntp.org]"
+msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
+msgstr "Questa impostazione determina quale trasporto ha la priorità durante la comunicazione con gli altri utenti. Per impostazione predefinita, NTCP prevale su UDP (SSU). Impostando il valore su true, UDP avrà la priorità a meno che non esista una connessione NTCP preesistente; quando impostato su always, UDP verrà sempre utilizzato indipendentemente da eventuali connessioni NTCP preesistenti. [Il valore predefinito è false]"
+
+msgid "miscellaneous"
+msgstr ""
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "Se impostato su true, questa opzione inserirà un'icona nella tray bar del sistema / area di notifica, con le opzioni di controllo di base del servizio. [Disabilitato per impostazione predefinita]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
 msgstr "Questa impostazione consente di configurare il numero massimo di file per torrent che I2PSnark permetterà, durante il download o la creazione di un torrent. Si noti che l'aumento sostanziale di questo valore dai 2000 file predefiniti può richiedere una configurazione aggiuntiva sul sistema host per aumentare il numero massimo di file aperti che il sistema operativo permetterà (ad es. <code>limita -n</code> su Linux). Per effettuare modifiche, aggiungi al file di configurazione di I2PSnark <code>i2psnark.config</code>. [Riavvio di I2PSnark o del router richiesto]"
+
+msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
+msgstr "Questa impostazione specifica per il tunnel consente di abilitare o disabilitare le risposte ai ping inviati ai server ospitati dal router. Per disabilitare i ping, è necessario aggiungere la riga <code>i2p.streaming.answerPings=false</code> alla sezione <i>Opzioni personalizzate</i> della configurazione del server nel Tunnel Manager."
+
+msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
+msgstr "Questa impostazione, quando abilitata, introduce un ritardo randomico di pong fino a 50ms per tutti i server abilitati al ping ospitati dal router. Disattivato di default. [Richiesta la riavvio]"
+
+msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
+msgstr "Questa impostazione, quando abilitata, modifica il massimo ritardo casuale aggiuntivo per pong introdotto per i server abilitati al ping, se anche <code>i2p.streaming.enablePongDelay</code> è abilitato. Se non impostato esplicitamente, verrà utilizzato il valore predefinito di 50ms."
+
+msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
+msgstr "Quando impostato su true, I2P viene eseguito senza connettività di rete, il che è utile se si riavvia costantemente il router per testare gli aggiornamenti del codice in quanto ciò impedisce l'interruzione della rete."
+
+msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
+msgstr "Questa impostazione consente la configurazione di server NTP alternativi necessari per garantire che il router mantenga un orario preciso. [Il valore predefinito è 0.pool.ntp.org, 1.pool.ntp.org, 2.pool.ntp.org]"
 
 msgid "Recent I2P+ Changes"
 msgstr "Modifiche recenti di I2P+"
@@ -6107,6 +6183,18 @@ msgstr "Per entrambi non-SSL e SSL"
 
 msgid "For SSL only"
 msgstr "Solo per SSL"
+
+msgid "How can I configure the console and web services to be accessible on my local network?"
+msgstr ""
+
+msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
+msgstr ""
+
+msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
+msgstr ""
+
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager’s configuration section using the <i>reachable by</i> dropdown."
+msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Come mi connetto a IRC all'interno di I2P?"
@@ -7367,9 +7455,6 @@ msgstr "Coetanei di rete"
 msgid "peer profiles"
 msgstr "profili dei peer"
 
-msgid "Peer Profiles"
-msgstr "Profili dei pari"
-
 msgid "Session Banned Peers"
 msgstr "Sessione di peer bannati"
 
@@ -7586,6 +7671,9 @@ msgstr "Attiva/Disattiva tunnel"
 msgid "Peer Profile"
 msgstr "Profilo del peer"
 
+msgid "Profile View"
+msgstr ""
+
 msgid "Profile for peer"
 msgstr "Profilo per peer"
 
@@ -7723,6 +7811,35 @@ msgstr "Finito"
 
 
 
+
+
 #, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

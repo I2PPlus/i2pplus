@@ -23,6 +23,12 @@ msgstr "I2P'ye bağlanılamıyor"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "I2P bağlantısı kurulamadı - I2CP ayarlarınızı denetleyin!"
 
+msgid "Download already running: "
+msgstr ""
+
+msgid "Downloading"
+msgstr "İndiriliyor"
+
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "I2PSnark'ı I2CP seçenekleriyle yapılandırma"
 
@@ -466,12 +472,23 @@ msgid "Anonymous BitTorrent Client"
 msgstr "Anonim BitTorrent İstemcisi"
 
 #, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr ""
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr ""
+
+#, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "\\''{0}\\'' dosyasını silmek istediğinizden emin misiniz (indirilen veriler silinmeyecektir)?\\''{0}\\'' dosyasını silmek istediğinizden emin misiniz (indirilen veriler silinmeyecektir)?\\''{0}\\'' dosyasını silmek istediğinizden emin misiniz (indirilen veriler silinmeyecektir)?\\\"{0}\\\" dosyasını silmek istediğinize emin misiniz (indirilmiş veriler silinmez)?"
 
+msgid "Note: Downloaded data will not be deleted."
+msgstr ""
+
 #, java-format
-msgid "Are you sure you want to delete torrent file {0} and all downloaded data?"
-msgstr "\\''{0}\\'' torrentini ve indirilen tüm verileri silmek istediğinizden emin misiniz?\\''{0}\\'' torrentini ve indirilen tüm verileri silmek istediğinizden emin misiniz?\\\"{0}\\\" dosyasını ve indirilmiş tüm verileri silmek istediğinize emin misiniz?"
+msgid "Deleting {0} and associated metadata only..."
+msgstr ""
 
 msgid "I2PSnark has stopped"
 msgstr "I2PSnark durduruldu"
@@ -484,6 +501,9 @@ msgstr "Torrentler"
 
 msgid "Refresh page"
 msgstr "Sayfayı yenile"
+
+msgid "Configure"
+msgstr "Yapılandır"
 
 msgid "Forum"
 msgstr "Forum"
@@ -524,36 +544,6 @@ msgstr "sayfa yenileme"
 
 msgid "Warning - No I2P"
 msgstr "Uyarı - I2P Yok"
-
-msgid "Search"
-msgstr "Aramak"
-
-msgid "Show All"
-msgstr "Tümünü Göster"
-
-msgid "Active"
-msgstr "Aktif"
-
-msgid "Inactive"
-msgstr "Aktif Değil"
-
-msgid "Connected"
-msgstr "Bağlandı"
-
-msgid "Downloading"
-msgstr "İndiriliyor"
-
-msgid "Seeding"
-msgstr "Tohumlanıyor"
-
-msgid "Complete"
-msgstr "Tamam"
-
-msgid "Incomplete"
-msgstr "Eksik"
-
-msgid "Stopped"
-msgstr "Durduruldu"
 
 msgid "Status"
 msgstr "Durum"
@@ -634,20 +624,14 @@ msgstr "Torrent bulunamadı."
 msgid "No torrents loaded."
 msgstr "Henüz bir torrent yüklenmemiş."
 
-msgid "Totals"
-msgstr "Toplamlar"
-
 #, java-format
 msgid "1 torrent"
 msgid_plural "{0} torrents"
 msgstr[0] "{0} torrent"
 msgstr[1] "{0} torrent"
 
-#, java-format
-msgid "1 connected peer"
-msgid_plural "{0} connected peers"
-msgstr[0] "{0} eş bağlı"
-msgstr[1] "{0} eş bağlı"
+msgid "Total size of loaded torrents"
+msgstr ""
 
 #, java-format
 msgid "1 DHT peer"
@@ -655,17 +639,17 @@ msgid_plural "{0} DHT peers"
 msgstr[0] "{0} DHT eş"
 msgstr[1] "{0} DHT eş"
 
-msgid "Configured maximum (actual usage may be less)"
-msgstr "Yapılandırılan maksimum (gerçek kullanım daha az olabilir)"
+msgid "Active downloads"
+msgstr ""
 
-msgid "Tunnels"
-msgstr "Tüneller"
+msgid "Active uploads"
+msgstr ""
 
-msgid "in"
-msgstr "içinde"
+msgid "Active Inbound tunnels"
+msgstr ""
 
-msgid "out"
-msgstr "dışarı"
+msgid "Active Outbound tunnels"
+msgstr ""
 
 msgid "Estimated download time for all torrents"
 msgstr "Tüm torrentler için tahmini indirme süresi"
@@ -682,17 +666,41 @@ msgstr "Yüklenen toplam veri (listelenen torrentler için)"
 msgid "Total upload speed"
 msgstr "Toplam yükleme hızı"
 
-msgid "Enable Debug Mode"
-msgstr "Hata Ayıklama Modunu Etkinleştir"
-
-msgid "Disable Debug Mode"
-msgstr "Hata Ayıklama Modunu Devre Dışı Bırak"
+msgid "Toggle Debug Mode"
+msgstr ""
 
 msgid "Normal Mode"
 msgstr "Normal Mod"
 
 msgid "No DHT Peers"
 msgstr "DHT Eşi Yok"
+
+msgid "Search"
+msgstr "Aramak"
+
+msgid "Show All"
+msgstr "Tümünü Göster"
+
+msgid "Active"
+msgstr "Aktif"
+
+msgid "Inactive"
+msgstr "Aktif Değil"
+
+msgid "Connected"
+msgstr "Bağlandı"
+
+msgid "Seeding"
+msgstr "Tohumlanıyor"
+
+msgid "Complete"
+msgstr "Tamam"
+
+msgid "Incomplete"
+msgstr "Eksik"
+
+msgid "Stopped"
+msgstr "Durduruldu"
 
 msgid "First"
 msgstr "İlk"
@@ -1049,9 +1057,6 @@ msgstr "Temaları el ile değiştirmek için evrensel temayı devre dışı bır
 msgid "Universal theming is enabled."
 msgstr "Evrensel tema etkinleştirildi."
 
-msgid "Configure"
-msgstr "Yapılandır"
-
 msgid "Refresh time"
 msgstr "Yenileme sıklığı"
 
@@ -1072,12 +1077,6 @@ msgstr "torrentler"
 
 msgid "Language"
 msgstr "Dil"
-
-msgid "Smart torrent sorting"
-msgstr "Akıllı torrent sıralaması"
-
-msgid "Ignore words such as 'a' and 'the' when sorting"
-msgstr "Sıralama sırasında 'a' ve 'the' gibi sözcükler yok sayılır"
 
 msgid "Collapsible panels"
 msgstr "Daraltılabilir panolar"
@@ -1311,6 +1310,15 @@ msgstr "Bu, bağlı eşlerin sayısına göre belirlenen, açılacak maksimum t�
 msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
 msgstr "Bu ayarın 3 atlamadan daha düşük bir değere değiştirilmesi, anonimlik pahasına hızı artırabilir ve önerilmez"
 
+msgid "Sequential piece or file order not saved - feature currently broken."
+msgstr ""
+
+msgid "Unknown command"
+msgstr ""
+
+msgid "Please retry form submission (bad nonce)"
+msgstr ""
+
 msgid "Info hash"
 msgstr "Bilgi karması"
 
@@ -1493,3 +1501,14 @@ msgstr "Değişiklikleri Kaydet"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent durdurulmalı"
+
+#, java-format
+
+
+
+
+
+
+
+
+

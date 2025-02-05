@@ -257,14 +257,14 @@ msgstr "Fehler beim Sender der Email"
 msgid "Mail sent."
 msgstr "Mail versandt"
 
-msgid "Send"
-msgstr "Senden"
+msgid "Cancel"
+msgstr "Abbruch"
 
 msgid "Save as Draft"
 msgstr "Als Entwurf speichern"
 
-msgid "Cancel"
-msgstr "Abbruch"
+msgid "Send"
+msgstr "Senden"
 
 msgid "From"
 msgstr "Absender"

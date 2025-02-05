@@ -23,6 +23,12 @@ msgstr "Ühendamine I2P-ga ebaõnnestus"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Viga ühendamisel I2P-ga - kontrolli oma I2CP seadeid!"
 
+msgid "Download already running: "
+msgstr ""
+
+msgid "Downloading"
+msgstr "Allalaadimine"
+
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "I2PSnarki seadistamine I2CP valikute abil"
 
@@ -466,12 +472,23 @@ msgid "Anonymous BitTorrent Client"
 msgstr "Anonüümne BitTorrent klient"
 
 #, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr ""
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr ""
+
+#, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "Kas oled kindel, et soovid faili \\''{0}\\'' kustutada (allalaaditud andmed ei kustutata)?"
 
+msgid "Note: Downloaded data will not be deleted."
+msgstr ""
+
 #, java-format
-msgid "Are you sure you want to delete torrent file {0} and all downloaded data?"
-msgstr "Kas oled kindel, et soovid torrenti \\''{0}\\'' ja kõik allalaaditud andmed kustutada?"
+msgid "Deleting {0} and associated metadata only..."
+msgstr ""
 
 msgid "I2PSnark has stopped"
 msgstr "I2PSnark on peatatud"
@@ -484,6 +501,9 @@ msgstr "Torrentid"
 
 msgid "Refresh page"
 msgstr "Lehe värskendamine"
+
+msgid "Configure"
+msgstr "Seadista"
 
 msgid "Forum"
 msgstr "Foorum"
@@ -524,36 +544,6 @@ msgstr "lehe uuendamine"
 
 msgid "Warning - No I2P"
 msgstr "Hoiatus - Ei ole I2P"
-
-msgid "Search"
-msgstr "Otsi"
-
-msgid "Show All"
-msgstr "Näita kõike"
-
-msgid "Active"
-msgstr "Aktiivne"
-
-msgid "Inactive"
-msgstr "Mitteaktiivne"
-
-msgid "Connected"
-msgstr "Ühendatud"
-
-msgid "Downloading"
-msgstr "Allalaadimine"
-
-msgid "Seeding"
-msgstr "Seemimine"
-
-msgid "Complete"
-msgstr "Valmis"
-
-msgid "Incomplete"
-msgstr "Mittevalmis"
-
-msgid "Stopped"
-msgstr "Peatatud"
 
 msgid "Status"
 msgstr "Olek"
@@ -634,20 +624,14 @@ msgstr "Torrente ei leitud."
 msgid "No torrents loaded."
 msgstr "Torrente ei laetud."
 
-msgid "Totals"
-msgstr "Kokku"
-
 #, java-format
 msgid "1 torrent"
 msgid_plural "{0} torrents"
 msgstr[0] "1 torrent"
 msgstr[1] "{0} torrentit"
 
-#, java-format
-msgid "1 connected peer"
-msgid_plural "{0} connected peers"
-msgstr[0] "1 ühendatud peer"
-msgstr[1] "{0} ühendatud peerit"
+msgid "Total size of loaded torrents"
+msgstr ""
 
 #, java-format
 msgid "1 DHT peer"
@@ -655,17 +639,17 @@ msgid_plural "{0} DHT peers"
 msgstr[0] "1 DHT peer"
 msgstr[1] "{0} DHT peerit"
 
-msgid "Configured maximum (actual usage may be less)"
-msgstr "Seadistatud maksimum ( tegelik kasutus võib olla vähem)"
+msgid "Active downloads"
+msgstr ""
 
-msgid "Tunnels"
-msgstr "Tünnlid"
+msgid "Active uploads"
+msgstr ""
 
-msgid "in"
-msgstr "sisenev"
+msgid "Active Inbound tunnels"
+msgstr ""
 
-msgid "out"
-msgstr "väljas"
+msgid "Active Outbound tunnels"
+msgstr ""
 
 msgid "Estimated download time for all torrents"
 msgstr "Kõigi torrentide hinnatud allalaadimisaeg"
@@ -682,17 +666,41 @@ msgstr "Koguüleslaaditud andmed (nimekirjas olevate torrentide jaoks)"
 msgid "Total upload speed"
 msgstr "Kogüleslaadimise kiirus"
 
-msgid "Enable Debug Mode"
-msgstr "Luba silumisrežiim"
-
-msgid "Disable Debug Mode"
-msgstr "Keela silumisrežiim"
+msgid "Toggle Debug Mode"
+msgstr ""
 
 msgid "Normal Mode"
 msgstr "Tavaline režiim"
 
 msgid "No DHT Peers"
 msgstr "DHT partnerid puuduvad"
+
+msgid "Search"
+msgstr "Otsi"
+
+msgid "Show All"
+msgstr "Näita kõike"
+
+msgid "Active"
+msgstr "Aktiivne"
+
+msgid "Inactive"
+msgstr "Mitteaktiivne"
+
+msgid "Connected"
+msgstr "Ühendatud"
+
+msgid "Seeding"
+msgstr "Seemimine"
+
+msgid "Complete"
+msgstr "Valmis"
+
+msgid "Incomplete"
+msgstr "Mittevalmis"
+
+msgid "Stopped"
+msgstr "Peatatud"
 
 msgid "First"
 msgstr "Esimene"
@@ -1049,9 +1057,6 @@ msgstr "Et muuta teemeid käsitsi, keela üldteemad"
 msgid "Universal theming is enabled."
 msgstr "Üldteemad on lubatud."
 
-msgid "Configure"
-msgstr "Seadista"
-
 msgid "Refresh time"
 msgstr "Värskendamise aeg"
 
@@ -1072,12 +1077,6 @@ msgstr "torrentid"
 
 msgid "Language"
 msgstr "Keel"
-
-msgid "Smart torrent sorting"
-msgstr "Tark torrenti sorteerimine"
-
-msgid "Ignore words such as 'a' and 'the' when sorting"
-msgstr "Sorteerimisel eira sõnu nagu 'a' ja 'the'"
 
 msgid "Collapsible panels"
 msgstr "Lõigatavad paneelid"
@@ -1311,6 +1310,15 @@ msgstr "See määrab maksimaalse tunnelite arvu, mis avatakse, sõltuvalt ühend
 msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
 msgstr "Selle seadistuse muutmine vähem kui 3 hüppeni võib kiirust parandada anonüümsuse kulul ning seda ei soovita"
 
+msgid "Sequential piece or file order not saved - feature currently broken."
+msgstr ""
+
+msgid "Unknown command"
+msgstr ""
+
+msgid "Please retry form submission (bad nonce)"
+msgstr ""
+
 msgid "Info hash"
 msgstr "Info hash"
 
@@ -1493,3 +1501,14 @@ msgstr "Salvesta muudatused"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent peab olema peatatud"
+
+#, java-format
+
+
+
+
+
+
+
+
+

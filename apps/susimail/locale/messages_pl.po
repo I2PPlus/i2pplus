@@ -263,14 +263,14 @@ msgstr "Błąd przy wysyłaniu listu"
 msgid "Mail sent."
 msgstr "List wysłany."
 
-msgid "Send"
-msgstr "Wyślij"
+msgid "Cancel"
+msgstr "Anuluj"
 
 msgid "Save as Draft"
 msgstr "Zapisz jako szkic"
 
-msgid "Cancel"
-msgstr "Anuluj"
+msgid "Send"
+msgstr "Wyślij"
 
 msgid "From"
 msgstr "Od"

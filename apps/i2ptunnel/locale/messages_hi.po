@@ -38,12 +38,6 @@ msgstr "मानक बैंडविड्थ और विश्वसनी
 msgid "higher bandwidth and reliability"
 msgstr "अधिक बैंडविड्थ और विश्वसनीयता"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "अवैध फ़ॉर्म सबमिशन, शायद क्योंकि आपने अपने ब्राउज़र में 'वापस' या 'रीलोड' बटन का उपयोग किया है। कृपया पुनः प्रस्तुत करें।"
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "यदि समस्या जारी रहती है, तो यह सत्यापित करें कि आपके ब्राउज़र में कुकीज़ सक्रिय हैं।"
-
 msgid "Configuration reloaded for all tunnels"
 msgstr "सभी टनल के लिए पुनः लोड की गई सेटिंग"
 
@@ -1227,6 +1221,12 @@ msgstr "प्रमाणीकरण उत्पन्न करें"
 
 msgid "SSL Helper"
 msgstr "SSL सहायक"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "अवैध फ़ॉर्म सबमिशन, शायद क्योंकि आपने अपने ब्राउज़र में 'वापस' या 'रीलोड' बटन का उपयोग किया है। कृपया पुनः प्रस्तुत करें।"
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "यदि समस्या जारी रहती है, तो यह सत्यापित करें कि आपके ब्राउज़र में कुकीज़ सक्रिय हैं।"
 
 msgid "Experts only!"
 msgstr "केवल विशेषज्ञों के लिए!"

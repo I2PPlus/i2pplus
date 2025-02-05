@@ -260,14 +260,14 @@ msgstr "Eroare la trimiterea corespondenței"
 msgid "Mail sent."
 msgstr "Mail trimis."
 
-msgid "Send"
-msgstr "Trimite"
+msgid "Cancel"
+msgstr "Anulează"
 
 msgid "Save as Draft"
 msgstr "Salvează ca schiţa "
 
-msgid "Cancel"
-msgstr "Anulează"
+msgid "Send"
+msgstr "Trimite"
 
 msgid "From"
 msgstr "De la"

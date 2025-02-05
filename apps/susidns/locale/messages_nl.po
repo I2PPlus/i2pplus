@@ -130,17 +130,14 @@ msgid_plural "{0} destinations deleted."
 msgstr[0] "1 bestemming verwijderd."
 msgstr[1] "{0} bestemmingen verwijderd."
 
-msgid "No entries selected to delete."
-msgstr "Geen items geselecteerd om te verwijderen."
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "Voeg alternatief toe"
 
 msgid "Address book saved."
 msgstr "Adresboek opgeslagen."
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "Blader weg uit dit adresboek en keer terug om de update te zien."
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "ERROR: Kan het adresboek bestand niet wegschrijven."
@@ -321,6 +318,9 @@ msgstr "Markeer voor verwijdering"
 msgid "Cancel"
 msgstr "Annuleer"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "bijv. newdomain.i2p"
 
@@ -398,6 +398,9 @@ msgstr "Bestand om activiteit naar te loggen (wijzig naar /dev/null indien gewen
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Naam van het te gebruiken overschrijvingsthema (standaard ingesteld op het door de console geselecteerde thema)"
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "adresboek"
@@ -593,3 +596,5 @@ msgstr "Adressen die handmatig aan uw masteradresboek zijn toegevoegd, worden sa
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Hosts die u via uw abonnementen ontvangt, worden samengevoegd met het adresboek van uw router."
+
+

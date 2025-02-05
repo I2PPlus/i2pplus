@@ -257,14 +257,14 @@ msgstr "Erreur d’envoi du courriel"
 msgid "Mail sent."
 msgstr "Le courriel a été envoyé."
 
-msgid "Send"
-msgstr "Envoyer"
+msgid "Cancel"
+msgstr "Annuler"
 
 msgid "Save as Draft"
 msgstr "Enregistrer comme brouillon"
 
-msgid "Cancel"
-msgstr "Annuler"
+msgid "Send"
+msgstr "Envoyer"
 
 msgid "From"
 msgstr "De"

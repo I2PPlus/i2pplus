@@ -38,12 +38,6 @@ msgstr "vakio kaistanleveys ja luotettavuus"
 msgid "higher bandwidth and reliability"
 msgstr "korkeampi kaistanleveys ja luotettavuus"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Virheellinen lomakkeen lähetys, luultavasti siksi, että käytit selaimesi 'takaisin'- tai 'reload'-painiketta."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Jos pulma jatkuu, vahvista, että evästeet ovar käytössä selaimessasi."
-
 msgid "Configuration reloaded for all tunnels"
 msgstr "Asetukset ladattu uudelleen kaikille tunneleille"
 
@@ -1227,6 +1221,12 @@ msgstr "Luo todennus"
 
 msgid "SSL Helper"
 msgstr "SSL-apuohjelma"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Virheellinen lomakkeen lähetys, luultavasti siksi, että käytit selaimesi 'takaisin'- tai 'reload'-painiketta."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Jos pulma jatkuu, vahvista, että evästeet ovar käytössä selaimessasi."
 
 msgid "Experts only!"
 msgstr "Vain asiantuntijoille!"

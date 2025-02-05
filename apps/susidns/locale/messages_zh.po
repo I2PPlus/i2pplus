@@ -125,17 +125,14 @@ msgid "1 destination deleted."
 msgid_plural "{0} destinations deleted."
 msgstr[0] "{0} 个目标已删除。"
 
-msgid "No entries selected to delete."
-msgstr "未选择要删除的记录。"
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "添加备用"
 
 msgid "Address book saved."
 msgstr "地址簿已保存。"
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "浏览一下这个地址簿，回来看看更新。"
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "错误:无法写入地址簿文件"
@@ -314,6 +311,9 @@ msgstr "标记为删除"
 msgid "Cancel"
 msgstr "取消"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "例如"
 
@@ -391,6 +391,9 @@ msgstr "活动日志文件(关闭可设为/dev/null [Linux])"
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "要使用的覆盖主题的名称（默认为控制台选择的主题）"
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "地址簿"
@@ -586,3 +589,5 @@ msgstr "手动添加到您的主地址簿中的地址将与您的路由器地址
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "您从订阅中取得的主机将与路由器地址簿合并。"
+
+

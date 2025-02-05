@@ -23,6 +23,12 @@ msgstr "Không thể kết nối với I2P"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Lỗi kết nối với I2P - hãy kiểm tra cài đặt I2CP của bạn!"
 
+msgid "Download already running: "
+msgstr ""
+
+msgid "Downloading"
+msgstr "Đang tải xuống"
+
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "Định cấu hình I2PSnark với các tùy chọn I2CP"
 
@@ -466,12 +472,23 @@ msgid "Anonymous BitTorrent Client"
 msgstr "Ứng dụng khách BitTorrent ẩn danh"
 
 #, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr ""
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr ""
+
+#, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "Bạn có chắc chắn muốn xóa tệp \\''{0}\\'' (dữ liệu đã tải xuống sẽ không bị xóa) ?"
 
+msgid "Note: Downloaded data will not be deleted."
+msgstr ""
+
 #, java-format
-msgid "Are you sure you want to delete torrent file {0} and all downloaded data?"
-msgstr "Bạn có chắc chắn muốn xóa torrent \\''{0}\\'' và tất cả dữ liệu đã tải xuống không?"
+msgid "Deleting {0} and associated metadata only..."
+msgstr ""
 
 msgid "I2PSnark has stopped"
 msgstr "I2PSnark đã dừng"
@@ -484,6 +501,9 @@ msgstr "Torrent"
 
 msgid "Refresh page"
 msgstr "Nạp lại trang"
+
+msgid "Configure"
+msgstr "Cấu hình"
 
 msgid "Forum"
 msgstr "Diễn đàn"
@@ -524,36 +544,6 @@ msgstr "làm mới trang"
 
 msgid "Warning - No I2P"
 msgstr "Cảnh báo - Không có I2P"
-
-msgid "Search"
-msgstr "Tìm kiếm"
-
-msgid "Show All"
-msgstr "Hiển thị tất cả"
-
-msgid "Active"
-msgstr "Đang hoạt động"
-
-msgid "Inactive"
-msgstr "Không hoạt động"
-
-msgid "Connected"
-msgstr "Đã kết nối"
-
-msgid "Downloading"
-msgstr "Đang tải xuống"
-
-msgid "Seeding"
-msgstr "Gieo hạt"
-
-msgid "Complete"
-msgstr "Hoàn tất"
-
-msgid "Incomplete"
-msgstr "Chưa hoàn thành"
-
-msgid "Stopped"
-msgstr "Ngưng"
 
 msgid "Status"
 msgstr "Tình trạng"
@@ -634,35 +624,30 @@ msgstr "Không tìm thấy torrent."
 msgid "No torrents loaded."
 msgstr "Không tải được torrent."
 
-msgid "Totals"
-msgstr "Tổng cộng"
-
 #, java-format
 msgid "1 torrent"
 msgid_plural "{0} torrents"
 msgstr[0] "{0} torrent"
 
-#, java-format
-msgid "1 connected peer"
-msgid_plural "{0} connected peers"
-msgstr[0] "{0} Các đồng nghiệp đã kết nối"
+msgid "Total size of loaded torrents"
+msgstr ""
 
 #, java-format
 msgid "1 DHT peer"
 msgid_plural "{0} DHT peers"
 msgstr[0] "{0} DHT Peers"
 
-msgid "Configured maximum (actual usage may be less)"
-msgstr "Cấu hình tối đa (mức sử dụng thực tế có thể ít hơn)"
+msgid "Active downloads"
+msgstr ""
 
-msgid "Tunnels"
-msgstr "Đường hầm"
+msgid "Active uploads"
+msgstr ""
 
-msgid "in"
-msgstr "trong"
+msgid "Active Inbound tunnels"
+msgstr ""
 
-msgid "out"
-msgstr "ra ngoài"
+msgid "Active Outbound tunnels"
+msgstr ""
 
 msgid "Estimated download time for all torrents"
 msgstr "Thời gian tải xuống ước tính cho tất cả các torrent"
@@ -679,17 +664,41 @@ msgstr "Tổng dữ liệu được tải lên (đối với các torrent đư�
 msgid "Total upload speed"
 msgstr "Tổng tốc độ tải lên"
 
-msgid "Enable Debug Mode"
-msgstr "Kích hoạt chế độ gỡ lỗi"
-
-msgid "Disable Debug Mode"
-msgstr "Tắt chế độ gỡ lỗi"
+msgid "Toggle Debug Mode"
+msgstr ""
 
 msgid "Normal Mode"
 msgstr "Chế độ bình thường"
 
 msgid "No DHT Peers"
 msgstr "Không có đồng nghiệp DHT"
+
+msgid "Search"
+msgstr "Tìm kiếm"
+
+msgid "Show All"
+msgstr "Hiển thị tất cả"
+
+msgid "Active"
+msgstr "Đang hoạt động"
+
+msgid "Inactive"
+msgstr "Không hoạt động"
+
+msgid "Connected"
+msgstr "Đã kết nối"
+
+msgid "Seeding"
+msgstr "Gieo hạt"
+
+msgid "Complete"
+msgstr "Hoàn tất"
+
+msgid "Incomplete"
+msgstr "Chưa hoàn thành"
+
+msgid "Stopped"
+msgstr "Ngưng"
 
 msgid "First"
 msgstr "Đầu tiên"
@@ -1044,9 +1053,6 @@ msgstr "Để thay đổi chủ đề theo cách thủ công, hãy tắt chủ �
 msgid "Universal theming is enabled."
 msgstr "Chủ đề chung được bật."
 
-msgid "Configure"
-msgstr "Cấu hình"
-
 msgid "Refresh time"
 msgstr "Thời gian làm mới"
 
@@ -1067,12 +1073,6 @@ msgstr "torrent"
 
 msgid "Language"
 msgstr "Ngôn ngữ"
-
-msgid "Smart torrent sorting"
-msgstr "Phân loại torrent thông minh"
-
-msgid "Ignore words such as 'a' and 'the' when sorting"
-msgstr "Bỏ qua các từ như 'a' và 'the' khi sắp xếp"
 
 msgid "Collapsible panels"
 msgstr "Tấm có thể gập lại"
@@ -1304,6 +1304,15 @@ msgstr "Điều này định cấu hình số lượng đường hầm tối đa
 msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
 msgstr "Thay đổi cài đặt này thành ít hơn 3 bước nhảy có thể cải thiện tốc độ nhưng phải trả giá bằng tính ẩn danh và không được khuyến nghị"
 
+msgid "Sequential piece or file order not saved - feature currently broken."
+msgstr ""
+
+msgid "Unknown command"
+msgstr ""
+
+msgid "Please retry form submission (bad nonce)"
+msgstr ""
+
 msgid "Info hash"
 msgstr "Băm thông tin"
 
@@ -1485,3 +1494,14 @@ msgstr "Lưu thay đổi"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent phải dừng lại"
+
+#, java-format
+
+
+
+
+
+
+
+
+

@@ -135,17 +135,14 @@ msgstr[0] "1 destinație ștearsă."
 msgstr[1] "{0} destinații șterse."
 msgstr[2] "{0} de destinații șterse."
 
-msgid "No entries selected to delete."
-msgstr "Nici o intrare selectată pentru ștergere."
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "Adăugați o alternativă"
 
 msgid "Address book saved."
 msgstr "Agendă salvată."
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "Răsfoiți din această agendă de adrese și reveniți pentru a vedea actualizarea."
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "EROARE: Nu sa putut scrie fișierul agendă."
@@ -328,6 +325,9 @@ msgstr "Marcați pentru ștergere"
 msgid "Cancel"
 msgstr "Anulează"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "de ex. newdomain.i2p"
 
@@ -405,6 +405,9 @@ msgstr "Fișier la jurnalul de activitate pentru ( modifică cu /dev/null dacă 
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Numele temei de înlocuire de utilizat (implicit pentru tema selectată de consolă)"
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "agenda"
@@ -600,3 +603,5 @@ msgstr "Adresele adăugate manual în agenda dvs. de adrese Master se vor contop
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Gazdele pe care le primiți de la abonamentele dvs. se vor contopi cu agenda de adrese a routerului."
+
+

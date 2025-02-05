@@ -8,8 +8,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n%100<=4 ? 2 : 3);\n"
 
-msgid "Warning: Invalid Request URI"
-msgstr "Opozorilo: Neveljavna zahtevek URI"
+msgid "Website Unknown"
+msgstr "Stran neznana"
 
 msgid "Router Console"
 msgstr "Konzola dostavilnika"
@@ -25,71 +25,6 @@ msgstr "Nastavitev"
 
 msgid "Help"
 msgstr "Pomoč"
-
-msgid "The request URI is invalid, and probably contains illegal characters."
-msgstr "Zahtevek URI je neveljav, verjetno vsebuje nepravilne znake."
-
-msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
-msgstr "Kadar kliknete na povezavo, preverite konec URI za vsako znak, ki ga je brskalnik načrtoma dodal."
-
-msgid "Connection Reset"
-msgstr "Povezava ponovno vzpostavljena"
-
-msgid "The connection to the website was reset while the page was loading."
-msgstr "Povezava z spletnim mestom je bila ponovno vzpostavljena med obdobjem za loadiranje strani."
-
-msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Spletno mesto lahko ni sprejalo dostopa v trenutku, je lahko preveč zaposlenega ali je blokiral dostop."
-
-#, java-format
-msgid "You may want to {0}retry{1}."
-msgstr "Lahko želite {0}ponovno poskus{1}."
-
-#, java-format
-msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
-msgstr "Če si ostali stran odprto, bo avtomatsko poskušal povezave na spletni strani vsakega {0} sekund po neuspeli povezavi."
-
-msgid "Could not find the following destination:"
-msgstr "Ni mogoče najti naslednje destinacije:"
-
-msgid "Warning: Non-HTTP Protocol"
-msgstr "Opozorilo: Nesprejemljiv protokol"
-
-msgid "The request uses a bad protocol."
-msgstr "Zahtevek uporablja slab protokol."
-
-msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
-msgstr "I2P HTTP proxy podržava samo zahteve HTTP in HTTPS."
-
-msgid "Other protocols such as FTP are not allowed."
-msgstr "Drug protokoli, kot na primer FTP, niso dovoljeni."
-
-msgid "Warning: No Outproxy Configured"
-msgstr "Opozorilo: Ni nastavljen izhodni proxy"
-
-msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
-msgstr "Vaš zahtevek je bil za spletno mesto zunaj I2P, vendar ni nastavljen izhodni proxy."
-
-msgid "Please configure an outproxy in I2PTunnel."
-msgstr "Posečete izberite izhodni preklopilnik v I2PTunnelu."
-
-msgid "Error: Request Denied"
-msgstr "Napaka: Zadaja je bila zavrnjena"
-
-msgid "Error: Cannot Access Router Console via I2P Proxy"
-msgstr "Napaka: Nekaj dosega dostopati do konzole robota prek I2P proxyja"
-
-msgid "Your browser is misconfigured."
-msgstr "Vaš brskalnik je napačno konfiguriran."
-
-msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
-msgstr "Ne uporabite proxyja za dostop do konzole robota, localhost ali lokalnih LAN naslovov."
-
-msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
-msgstr "Morate preprečiti, da se naslov 127.0.0.1 (ali naslov, na katerem dostopate do I2P konzole), routeje skozi HTTP proxyja I2P, običajno tako, da izločite naslov v sekciji konfiguracije proxyja brskalnika."
-
-msgid "Website Unknown"
-msgstr "Stran neznana"
 
 msgid "Website Not Found in Addressbook"
 msgstr "Stran ni bila najdena v knjigi naslovov"
@@ -111,99 +46,35 @@ msgstr "V njenoč pa najdite povezavo pomagalka Base 32 ali uporabite povezavo j
 msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
 msgstr "Kadar pogosto vidite ta spletni strani? Glejte {0}FAQ{1} za pomoč pri {2}dodajanju nekaterih podpisov{3} v vaši knjigi naslovov."
 
-msgid "Website Unreachable"
-msgstr "Stran ni dosegljiva"
+msgid "Could not find the following destination:"
+msgstr "Ni mogoče najti naslednje destinacije:"
 
-msgid "The website was not reachable, because its lease set was not found."
-msgstr "Stran ni bila dosegljiva, ker ni bilo najdeno njeno zasedbo."
+msgid "Warning: Non-HTTP Protocol"
+msgstr "Opozorilo: Nesprejemljiv protokol"
 
-msgid "The website is probably down, but there could also be network congestion."
-msgstr "Stran je verjetno na prehodu, ampak lahko je tudi morda problem z omrežjem."
+msgid "The request uses a bad protocol."
+msgstr "Zahtevek uporablja slab protokol."
 
-msgid "Outproxy Not Found"
-msgstr "Izhodni preklopilnik ni bil najden"
+msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
+msgstr "I2P HTTP proxy podržava samo zahteve HTTP in HTTPS."
 
-msgid "The HTTP Outproxy was not found."
-msgstr "Izvedenega HTTP izhodnega preklopilnika ni bilo."
+msgid "Other protocols such as FTP are not allowed."
+msgstr "Drug protokoli, kot na primer FTP, niso dovoljeni."
 
-msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "Je offline, obstaja problem z omrežjem ali vaš rober še ni popolnoma integriran z kolegi."
+msgid "Error: Request Denied"
+msgstr "Napaka: Zadaja je bila zavrnjena"
 
-#, java-format
-msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
-msgstr "Morda bi radi {0}ponovno poskusili{1}, ker bo ta izvedel izhodni preklopilnik iz vam določenega {2}tukaj{3} (če imate več kot enega nastavljenega)."
+msgid "Error: Cannot Access Router Console via I2P Proxy"
+msgstr "Napaka: Nekaj dosega dostopati do konzole robota prek I2P proxyja"
 
-#, java-format
-msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
-msgstr "Kadar imate še težave, bi radi urejali seznam izhodnih preklopilk {0}tukaj{1}."
+msgid "Your browser is misconfigured."
+msgstr "Vaš brskalnik je napačno konfiguriran."
 
-msgid "Warning: Request Denied"
-msgstr "Opozorilo: Zadaja je bila zavrnjena"
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
+msgstr "Ne uporabite proxyja za dostop do konzole robota, localhost ali lokalnih LAN naslovov."
 
-msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
-msgstr "Ta naslov se zdi deformiran. Prosimo, potrdite, da ste vnesli veljaven naslov!"
-
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "Poskusili ste povezati se z spletnim mestom ali lokacijo, ki ni I2P."
-
-msgid "Outproxy Unreachable"
-msgstr "Izhodni preklopilnik ni dosegljiv"
-
-msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
-msgstr "Izvedenega HTTP izhodnega preklopilnika ni bilo, ker uporablja kriptne opcije, ki niso podporljive vašega I2P ali različice Jave."
-
-msgid "Could not connect to the following destination:"
-msgstr "Ni moglo povezati se na naslednje destinacijo:"
-
-msgid "Proxy Authorization Required"
-msgstr "Potreben je proxy za avtorizacijo"
-
-msgid "I2P HTTP Proxy Authorization Required"
-msgstr "Potreben je proxy za avtorizacijo I2P HTTP"
-
-msgid "This proxy is configured to require a username and password for access."
-msgstr "Ta proxy je nastavljen, da za dostop zahteva uporabniško ime in geslo."
-
-#, java-format
-msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
-msgstr "Prosimo, vnesite vašo uporabniško ime in geslo, ali preverite nastavitve {0}roberja{1} ali {2}nastavitve I2PTunnela{3}."
-
-#, java-format
-msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
-msgstr "Da bi zaprli avtorizacijo, odstranite nastavitev {0}i2ptunnel.proxy.auth=basic{1}, nato ustavite in ponovno začnite HTTP Proxy tunnel."
-
-msgid "Warning: Invalid Destination"
-msgstr "Opozorilo: Neveljavno naslovišče"
-
-msgid "The website destination specified was not valid, or was otherwise unreachable."
-msgstr "Naslovišče, ki ga ste specifikirali, ni veljalo ali pa ni bilo dostopno."
-
-msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
-msgstr "Morda ste napačno kopirali Base 64 vrstico ali povezano povezavo, ki jo sledite."
-
-msgid "The I2P host could also be offline."
-msgstr "I2P gostitelj lahko tudi ni dostopen."
-
-msgid "The connection to the proxy was reset."
-msgstr "Povezava do posrednika je bila ponovno nastavljena."
-
-msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Posrednik lahko bistveno ni dostopen, je preveč zaposlen ali pa je blokiral vaš dostop."
-
-msgid "The HTTP outproxy was not reachable, because its lease set was not found."
-msgstr "HTTP izhodni posrednik ni bil dostopen, ker ni bilo najdenega njegovega časovna lepega nastavljene postavitve."
-
-msgid "The outproxy is probably down, but there could also be network congestion."
-msgstr "Izhodni posrednik verjetno deluje ne ravno, a je tudi mogoče, da je mrežna kongestija."
-
-msgid "Warning: Authorization Required"
-msgstr "Opozorilo: Potrebno avtorizacija"
-
-msgid "The website was not reachable."
-msgstr "Spletne strani ni bilo dostopenega."
-
-msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "Spletne strani je offline, pridejo kongestija mreže ali pa vaš router še ni še tako integriran z raznimi."
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "Morate preprečiti, da se naslov 127.0.0.1 (ali naslov, na katerem dostopate do I2P konzole), routeje skozi HTTP proxyja I2P, običajno tako, da izločite naslov v sekciji konfiguracije proxyja brskalnika."
 
 msgid "Warning: Destination Key Conflict"
 msgstr "Opozorilo: Konflikt destinacijske ključne"
@@ -217,24 +88,81 @@ msgstr "Kdo koli lahko poskuša oblikovati za druge spletne strani ali pa ljudje
 msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
 msgstr "Rešitev konflika je odločitev o tem, katere ključ zaupate, in nato bodite igležati povezano pomagalsko naslove ali pa izbrisati gostiteljsko vstopnico iz vaše knjige naslovov in kliknite na povezano pomagalsko naslove ponovno."
 
-msgid "The Base32 address is invalid."
-msgstr "Base32 naslov ni veljaven."
+msgid "Connection Reset"
+msgstr "Povezava ponovno vzpostavljena"
 
-msgid "Warning: Bad Address Helper"
-msgstr "Opozorilo: Slabo pomagalsko naslove"
+msgid "The connection to the website was reset while the page was loading."
+msgstr "Povezava z spletnim mestom je bila ponovno vzpostavljena med obdobjem za loadiranje strani."
+
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Spletno mesto lahko ni sprejalo dostopa v trenutku, je lahko preveč zaposlenega ali je blokiral dostop."
 
 #, java-format
-msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
-msgstr "Pomagalska ključna v URL-u ({0}i2paddresshelper={1}) ni rešljiva."
+msgid "You may want to {0}retry{1}."
+msgstr "Lahko želite {0}ponovno poskus{1}."
 
-msgid "It seems to be garbage data, or a mistyped Base 32 address."
-msgstr "Izgleda, da je to odpadek podatkov ali napačno tipkano Base 32 naslove."
+#, java-format
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
+msgstr "Če si ostali stran odprto, bo avtomatsko poskušal povezave na spletni strani vsakega {0} sekund po neuspeli povezavi."
 
-msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
-msgstr "Preverite vaš URL, da bi si poskusili popraviti pomagalski ključ tako, da je veljavno Base 32 imenom domena ali ključ Base 64."
+msgid "Website Unreachable"
+msgstr "Stran ni dosegljiva"
 
 msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
 msgstr "Spletne strani ni bilo dostopenega, ker uporablja šifrirne opzioni, ki niso podporjave vašega I2P ali različice Java."
+
+msgid "Could not connect to the following destination:"
+msgstr "Ni moglo povezati se na naslednje destinacijo:"
+
+msgid "The website was not reachable, because its lease set was not found."
+msgstr "Stran ni bila dosegljiva, ker ni bilo najdeno njeno zasedbo."
+
+msgid "The website is probably down, but there could also be network congestion."
+msgstr "Stran je verjetno na prehodu, ampak lahko je tudi morda problem z omrežjem."
+
+msgid "The connection to the proxy was reset."
+msgstr "Povezava do posrednika je bila ponovno nastavljena."
+
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Posrednik lahko bistveno ni dostopen, je preveč zaposlen ali pa je blokiral vaš dostop."
+
+#, java-format
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "Morda bi radi {0}ponovno poskusili{1}, ker bo ta izvedel izhodni preklopilnik iz vam določenega {2}tukaj{3} (če imate več kot enega nastavljenega)."
+
+#, java-format
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr "Kadar imate še težave, bi radi urejali seznam izhodnih preklopilk {0}tukaj{1}."
+
+msgid "Outproxy Unreachable"
+msgstr "Izhodni preklopilnik ni dosegljiv"
+
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "Izvedenega HTTP izhodnega preklopilnika ni bilo, ker uporablja kriptne opcije, ki niso podporljive vašega I2P ali različice Jave."
+
+msgid "The website was not reachable."
+msgstr "Spletne strani ni bilo dostopenega."
+
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Spletne strani je offline, pridejo kongestija mreže ali pa vaš router še ni še tako integriran z raznimi."
+
+msgid "Warning: No Outproxy Configured"
+msgstr "Opozorilo: Ni nastavljen izhodni proxy"
+
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr "Vaš zahtevek je bil za spletno mesto zunaj I2P, vendar ni nastavljen izhodni proxy."
+
+msgid "Please configure an outproxy in I2PTunnel."
+msgstr "Posečete izberite izhodni preklopilnik v I2PTunnelu."
+
+msgid "Outproxy Not Found"
+msgstr "Izhodni preklopilnik ni bil najden"
+
+msgid "The HTTP Outproxy was not found."
+msgstr "Izvedenega HTTP izhodnega preklopilnika ni bilo."
+
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Je offline, obstaja problem z omrežjem ali vaš rober še ni popolnoma integriran z kolegi."
 
 msgid "Information: New Host Name"
 msgstr "Informacija: Novo imeno domena"
@@ -256,6 +184,78 @@ msgstr "Ko jo ne shranite, bo se imeno domeno izbrisalo po novem ponastavitvi ro
 
 msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
 msgstr "Ko ne želite obiskati te spletne strani, kliknite gumb \"nazaj\" v vašem brskalniku."
+
+msgid "Proxy Authorization Required"
+msgstr "Potreben je proxy za avtorizacijo"
+
+msgid "I2P HTTP Proxy Authorization Required"
+msgstr "Potreben je proxy za avtorizacijo I2P HTTP"
+
+msgid "This proxy is configured to require a username and password for access."
+msgstr "Ta proxy je nastavljen, da za dostop zahteva uporabniško ime in geslo."
+
+#, java-format
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "Prosimo, vnesite vašo uporabniško ime in geslo, ali preverite nastavitve {0}roberja{1} ali {2}nastavitve I2PTunnela{3}."
+
+#, java-format
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "Da bi zaprli avtorizacijo, odstranite nastavitev {0}i2ptunnel.proxy.auth=basic{1}, nato ustavite in ponovno začnite HTTP Proxy tunnel."
+
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr "HTTP izhodni posrednik ni bil dostopen, ker ni bilo najdenega njegovega časovna lepega nastavljene postavitve."
+
+msgid "The outproxy is probably down, but there could also be network congestion."
+msgstr "Izhodni posrednik verjetno deluje ne ravno, a je tudi mogoče, da je mrežna kongestija."
+
+msgid "Warning: Request Denied"
+msgstr "Opozorilo: Zadaja je bila zavrnjena"
+
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr "Ta naslov se zdi deformiran. Prosimo, potrdite, da ste vnesli veljaven naslov!"
+
+msgid "You attempted to connect to a non-I2P website or location."
+msgstr "Poskusili ste povezati se z spletnim mestom ali lokacijo, ki ni I2P."
+
+msgid "Warning: Bad Address Helper"
+msgstr "Opozorilo: Slabo pomagalsko naslove"
+
+#, java-format
+msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgstr "Pomagalska ključna v URL-u ({0}i2paddresshelper={1}) ni rešljiva."
+
+msgid "It seems to be garbage data, or a mistyped Base 32 address."
+msgstr "Izgleda, da je to odpadek podatkov ali napačno tipkano Base 32 naslove."
+
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr "Preverite vaš URL, da bi si poskusili popraviti pomagalski ključ tako, da je veljavno Base 32 imenom domena ali ključ Base 64."
+
+msgid "Warning: Invalid Destination"
+msgstr "Opozorilo: Neveljavno naslovišče"
+
+msgid "The website destination specified was not valid, or was otherwise unreachable."
+msgstr "Naslovišče, ki ga ste specifikirali, ni veljalo ali pa ni bilo dostopno."
+
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr "Morda ste napačno kopirali Base 64 vrstico ali povezano povezavo, ki jo sledite."
+
+msgid "The I2P host could also be offline."
+msgstr "I2P gostitelj lahko tudi ni dostopen."
+
+msgid "Warning: Authorization Required"
+msgstr "Opozorilo: Potrebno avtorizacija"
+
+msgid "Warning: Invalid Request URI"
+msgstr "Opozorilo: Neveljavna zahtevek URI"
+
+msgid "The request URI is invalid, and probably contains illegal characters."
+msgstr "Zahtevek URI je neveljav, verjetno vsebuje nepravilne znake."
+
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr "Kadar kliknete na povezavo, preverite konec URI za vsako znak, ki ga je brskalnik načrtoma dodal."
+
+msgid "The Base32 address is invalid."
+msgstr "Base32 naslov ni veljaven."
 
 msgid "This seems to be a bad destination:"
 msgstr "To zelo deluje kot slabo destinacijo:"

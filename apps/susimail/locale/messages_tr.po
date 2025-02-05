@@ -257,14 +257,14 @@ msgstr "Posta gönderilirken bir sorun çıktı"
 msgid "Mail sent."
 msgstr "E-posta gönderildi."
 
-msgid "Send"
-msgstr "Gönder"
+msgid "Cancel"
+msgstr "İptal"
 
 msgid "Save as Draft"
 msgstr "Taslak Olarak Kaydet"
 
-msgid "Cancel"
-msgstr "İptal"
+msgid "Send"
+msgstr "Gönder"
 
 msgid "From"
 msgstr "Kimden"

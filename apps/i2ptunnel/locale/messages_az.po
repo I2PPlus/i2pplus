@@ -38,12 +38,6 @@ msgstr "standart səbət və mənbə"
 msgid "higher bandwidth and reliability"
 msgstr "yüksək səbət və mənbə"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Formun düzgün göndərilməsi, ehtimal ki, sizin brauzerinizdəki 'geri' və ya 'yenilə' düyməsindən istifadə etməyiniz səbəbindir. Lütfən yenidən göndərin."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Sorğun davam edirsə, brauzerinizdə çerezlərin aktiv olduğunu yoxlayın."
-
 msgid "Configuration reloaded for all tunnels"
 msgstr "Bütün tünəllər üçün konfigurasiya yenidən yükləndi"
 
@@ -1227,6 +1221,12 @@ msgstr "Təsdiqləmə yarat"
 
 msgid "SSL Helper"
 msgstr "SSL köməkçisi"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Formun düzgün göndərilməsi, ehtimal ki, sizin brauzerinizdəki 'geri' və ya 'yenilə' düyməsindən istifadə etməyiniz səbəbindir. Lütfən yenidən göndərin."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Sorğun davam edirsə, brauzerinizdə çerezlərin aktiv olduğunu yoxlayın."
 
 msgid "Experts only!"
 msgstr "Fərqli sahələr üçün!"

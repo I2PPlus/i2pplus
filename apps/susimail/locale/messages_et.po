@@ -257,14 +257,14 @@ msgstr "Viga e-posti saatmisel"
 msgid "Mail sent."
 msgstr "E-post saadeti."
 
-msgid "Send"
-msgstr "Saada"
+msgid "Cancel"
+msgstr "Tühista"
 
 msgid "Save as Draft"
 msgstr "Salvesta klapploendina"
 
-msgid "Cancel"
-msgstr "Tühista"
+msgid "Send"
+msgstr "Saada"
 
 msgid "From"
 msgstr "Saatja"

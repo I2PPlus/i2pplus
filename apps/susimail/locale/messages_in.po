@@ -254,14 +254,14 @@ msgstr "Kesalahan saat mengirim surat"
 msgid "Mail sent."
 msgstr "Surat terikirm."
 
-msgid "Send"
-msgstr "Kirim"
+msgid "Cancel"
+msgstr "Batalkan"
 
 msgid "Save as Draft"
 msgstr "Simpan sebagai Draft"
 
-msgid "Cancel"
-msgstr "Batalkan"
+msgid "Send"
+msgstr "Kirim"
 
 msgid "From"
 msgstr "Dari"

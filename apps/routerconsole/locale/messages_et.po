@@ -143,6 +143,9 @@ msgstr "Meie allkirja tüübile pole tuge"
 msgid "Unreachable on any transport"
 msgstr "Pole ühelgi transpordil kättesaadav"
 
+msgid "Cannot enumerate UPnP devices on Android."
+msgstr ""
+
 msgid "UPnP is not enabled"
 msgstr "UPnP pole sisse lülitatud"
 
@@ -680,11 +683,39 @@ msgstr "Palun teatage"
 msgid "After reporting, please restart your router"
 msgstr "Pärast teatamist taaskäivitage ruuter"
 
+msgid "Invalid form submission, requires POST"
+msgstr ""
+
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "Kehtetu vormipostitus, kasutasid ehk brauseri 'back' või 'reload' nuppu. Saada vorm uuesti."
 
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "kui probleem püsib, veenduge, et teie brauseris on küpsised lubatud."
+
+msgid "Bandwidth usage"
+msgstr "Ribalaiuse kasutus"
+
+#, java-format
+msgid "events in {0}"
+msgstr "sundmusi {0} vältel"
+
+msgid "Events per period"
+msgstr "Sündmusi perioodi kohta"
+
+msgid "Min"
+msgstr "Min"
+
+msgid "Max"
+msgstr "Maks"
+
+msgid "Avg"
+msgstr "Kesk"
+
+msgid "Now"
+msgstr "Nüüd"
+
+msgid "Router restarted"
+msgstr "Routter taaskäivitati"
 
 #, java-format
 msgid "News last updated {0} ago."
@@ -717,31 +748,6 @@ msgstr[1] "{0} pluginaid värskendatud"
 
 msgid "Plugin check complete"
 msgstr "pistikprogrammi kontroll on lõpetatud"
-
-msgid "Bandwidth usage"
-msgstr "Ribalaiuse kasutus"
-
-#, java-format
-msgid "events in {0}"
-msgstr "sundmusi {0} vältel"
-
-msgid "Events per period"
-msgstr "Sündmusi perioodi kohta"
-
-msgid "Min"
-msgstr "Min"
-
-msgid "Max"
-msgstr "Maks"
-
-msgid "Avg"
-msgstr "Kesk"
-
-msgid "Now"
-msgstr "Nüüd"
-
-msgid "Router restarted"
-msgstr "Routter taaskäivitati"
 
 msgid "none"
 msgstr "puudub"
@@ -811,8 +817,20 @@ msgstr "konsool"
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "Ruuteri konsooli SSL -i juurdepääsu lubamiseks vaadake lisateabe saamiseks faili <code> clients.config </code> fail, mis asub teie I2P rakenduste kataloogis. Peate redigeerima kaustas asuvat RouterConsolerunneri konfiguratsioonifaili: "
 
+msgid "Save disabled, edit the router.config file to make changes"
+msgstr ""
+
 msgid "Error updating the configuration - please see the error logs"
 msgstr "Viga häälestuse uuendamisel - palun vaata vealogi"
+
+msgid "No changes made to the configuration"
+msgstr ""
+
+msgid "Note"
+msgstr "NB"
+
+msgid "Some changes may require a restart to take effect."
+msgstr "Mõned muutused vajavad jõustumiseks uuesti käivitamist."
 
 msgid "Save Client Configuration"
 msgstr "Salvesta kliendihäälestus"
@@ -826,6 +844,9 @@ msgstr "Salvesta veebirakenduste häälestus"
 msgid "Save Plugin Configuration"
 msgstr "Salvesta pluginate häälestus"
 
+msgid "Plugins disabled"
+msgstr ""
+
 msgid "Install Plugin"
 msgstr "Paigalda plugin"
 
@@ -834,6 +855,9 @@ msgstr "Installige failist plugin"
 
 msgid "Update All Installed Plugins"
 msgstr "Uuenda Kõik Installitud Pluginad"
+
+msgid "Delete client disabled"
+msgstr ""
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -916,9 +940,18 @@ msgstr "Plugina või uuenduse alla laadimine juba toimub."
 msgid "Updating all plugins"
 msgstr "Uuendatakse kõiki pluginaid"
 
+msgid "Update manager not registered, cannot install"
+msgstr ""
+
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "pistikprogrammi installimine saidilt {0}"
+
+msgid "Cannot install, check logs"
+msgstr ""
+
+msgid "Update manager not registered, cannot check"
+msgstr ""
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1017,6 +1050,19 @@ msgstr "Häälestus edukalt salvestatud."
 msgid "Join Family"
 msgstr "liituge perega"
 
+msgid "Bad certificate - No Subject CN"
+msgstr ""
+
+msgid "Bad characters in Family: "
+msgstr ""
+
+#, java-format
+msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
+msgstr ""
+
+msgid "Family key configured for router family: "
+msgstr ""
+
 msgid "Load from file failed"
 msgstr "failist laadimine ebaõnnestus"
 
@@ -1032,8 +1078,8 @@ msgstr "Lisa ese"
 msgid "Restore defaults"
 msgstr "Taasta vaikimisi"
 
-msgid "Home page changed"
-msgstr "Kodulehekülg muudetud"
+msgid "Bad group detected, please retry"
+msgstr ""
 
 msgid "Restored default settings"
 msgstr "Taastatud vaikimisi seaded"
@@ -1065,6 +1111,9 @@ msgstr "Kehtetu võti"
 msgid "Invalid destination"
 msgstr "Kehtetu sihtvõti"
 
+msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
+msgstr ""
+
 #, java-format
 msgid "Key for {0} added to keyring"
 msgstr "Võti {0} jaoks lisati võtmerõngasse"
@@ -1074,6 +1123,9 @@ msgstr "Nõutav on otsinguparool"
 
 msgid "Requires hostname, destination, or blinded Base32"
 msgstr "Nõuab hostinime, sihtkohta või pimendatud Base32"
+
+msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
+msgstr ""
 
 msgid "Destination requires lookup password"
 msgstr "Sihtkoht nõuab parooli otsimist"
@@ -1092,6 +1144,9 @@ msgstr "Saada võti serveri operaatorile."
 
 msgid "Delete key"
 msgstr "Kustuta võti"
+
+msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
+msgstr ""
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1142,6 +1197,36 @@ msgstr "Pimestatud"
 
 msgid "Log overrides updated"
 msgstr "Logimise erandkäsud uuendatud"
+
+msgid "Error updating the log limits - levels not valid"
+msgstr ""
+
+msgid "Log limits cleared"
+msgstr ""
+
+#, java-format
+msgid "Default log level updated from {0} to {1}"
+msgstr ""
+
+msgid "Date format updated"
+msgstr ""
+
+#, java-format
+msgid "Specified date format is not valid ({0}) - not updated"
+msgstr ""
+
+msgid "File size updated"
+msgstr ""
+
+#, java-format
+msgid "Specified file size limit is not valid ({0}) - not updated"
+msgstr ""
+
+msgid "Compression setting updated"
+msgstr ""
+
+msgid "Log record format updated"
+msgstr ""
 
 msgid "Log configuration saved"
 msgstr "Logimise häälestus salvestatud"
@@ -1350,6 +1435,12 @@ msgstr "Kehtetu kiiruse väärtus"
 msgid "Bad capacity value"
 msgstr "Kehtetu mahu väärtus"
 
+msgid "Bonuses adjusted for: "
+msgstr ""
+
+msgid "No profile exists for: "
+msgstr ""
+
 msgid "Unsupported"
 msgstr "Mitte toetatud"
 
@@ -1461,27 +1552,14 @@ msgstr[1] "Palun oodake, kuni {0} tunnelid aeguvad marsruutimisel"
 msgid "Restart in {0}"
 msgstr "Uuesti käivitumiseni {0}"
 
-msgid "Stat filter and location updated successfully to"
-msgstr "Statistikafilter ja asukoht uuendatud väärtusele"
-
-msgid "Full statistics enabled"
-msgstr "täielik statistika on lubatud"
-
-msgid "Full statistics disabled"
-msgstr "täielik statistika on keelatud"
-
-#, java-format
-msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
-msgstr "graafikute loend on värskendatud, võib kuluda kuni 60 sekundit, enne kui see kajastub {0}graafikute lehel{1}"
-
 msgid "Save order"
 msgstr "Salvesta tellimus"
 
-msgid "Refresh disabled"
-msgstr "Värskendamine on keelatud"
+msgid "Sidebar refresh disabled"
+msgstr ""
 
-msgid "Refresh interval changed"
-msgstr "Värskendusintervall muudetud"
+msgid "Sidebar refresh interval changed"
+msgstr ""
 
 msgid "Refresh interval must be a number"
 msgstr "Värskendusintervall peab olema arv"
@@ -1489,17 +1567,17 @@ msgstr "Värskendusintervall peab olema arv"
 msgid "Restore full default"
 msgstr "taastage täielik vaikeseade"
 
-msgid "Full summary bar default restored."
-msgstr "täielik kokkuvõtteriba vaikeväärtus on taastatud."
+msgid "Full sidebar defaults restored."
+msgstr ""
 
-msgid "Summary bar will refresh shortly."
-msgstr "Kokkuvõtte riba värskendatakse peagi."
+msgid "Sidebar will refresh shortly."
+msgstr ""
 
 msgid "Restore minimal default"
 msgstr "Taasta minimaalne vaikeväärtus"
 
-msgid "Minimal summary bar default restored."
-msgstr "minimaalne kokkuvõtteriba vaikeväärtus on taastatud."
+msgid "Minimal sidebar defaults restored."
+msgstr ""
 
 msgid "Order must be an integer"
 msgstr "Järjestus peab olema täisarv"
@@ -1515,6 +1593,27 @@ msgstr "liigutatud"
 
 msgid "Saved order of sections."
 msgstr "Sektsioonide järjekord on salvestatud."
+
+msgid "Stat filter and location updated successfully to"
+msgstr "Statistikafilter ja asukoht uuendatud väärtusele"
+
+msgid "Full statistics enabled"
+msgstr "täielik statistika on lubatud"
+
+msgid "Full statistics disabled"
+msgstr "täielik statistika on keelatud"
+
+#, java-format
+msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
+msgstr "graafikute loend on värskendatud, võib kuluda kuni 60 sekundit, enne kui see kajastub {0}graafikute lehel{1}"
+
+#, java-format
+msgid "Internal error: could not resolve pool name {0}."
+msgstr ""
+
+#, java-format
+msgid "Internal error: could not find pool settings for {0}."
+msgstr ""
 
 msgid "Updated settings for all pools."
 msgstr "Kõigi tunneligruppide seaded uuendatud."
@@ -1540,9 +1639,8 @@ msgstr[1] "{0} tunnelid"
 msgid "Exploratory tunnels"
 msgstr "Võrgu avastamise tunnelid"
 
-#, java-format
-msgid "Client tunnels for {0}"
-msgstr "Tunnelid kliendile {0}"
+msgid "I2PSnark"
+msgstr "I2PSnark"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "ANONÜÜMSUSE HOIATUS - Häälestus lubab 0-sammuseid tunneleid."
@@ -1568,17 +1666,17 @@ msgstr "Sisse"
 msgid "Outbound"
 msgstr "Välja"
 
-msgid "Length"
-msgstr "Pikkus"
-
-msgid "Randomization"
-msgstr "Juhuslikkus"
-
 msgid "Quantity"
 msgstr "Kogus"
 
 msgid "Backup quantity"
 msgstr "Varukogus"
+
+msgid "Length"
+msgstr "Pikkus"
+
+msgid "Randomization"
+msgstr "Juhuslikkus"
 
 msgid "Inbound options"
 msgstr "Valikud (sisenev)"
@@ -1589,17 +1687,20 @@ msgstr "Valikud (väljuv)"
 msgid "Add user"
 msgstr "Lisage kasutaja"
 
+msgid "Cannot save theme choice, theme name has illegal characters"
+msgstr ""
+
 msgid "Theme change saved."
 msgstr "Teema muutus salvestatud."
-
-msgid "Refresh the page to view."
-msgstr "Värskenda lehte, et vaadata."
 
 msgid "Mobile console option saved."
 msgstr "Mobiilikonsooli valik on salvestatud."
 
 msgid "No user name entered"
 msgstr "kasutajanime pole sisestatud"
+
+msgid "User name may not contain '='"
+msgstr ""
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "HOIATUS: Kasutajanimesid väljaspool ISO-8859-1 tähemärgikomplekti pole soovitatav. Tugi ei ole standardiseeritud ja see varieerub brauseri järgi."
@@ -1890,17 +1991,17 @@ msgstr "Graafiku ruuteri jõudlus"
 msgid "Graphs"
 msgstr "Graafikud"
 
-msgid "Anonymous webmail client"
-msgstr "Anonüümne veebimeili klient"
-
-msgid "I2PMail"
-msgstr "I2PMail"
-
 msgid "Help"
 msgstr "Abi"
 
 msgid "I2P Router Help"
 msgstr "I2P ruuteri abi"
+
+msgid "Anonymous webmail client"
+msgstr "Anonüümne veebimeili klient"
+
+msgid "I2PMail"
+msgstr "I2PMail"
 
 msgid "Install and configure I2P plugins"
 msgstr "installige ja konfigureerige I2P-pluginad"
@@ -1919,6 +2020,12 @@ msgstr "Võrguandmebaas"
 
 msgid "Show list of all known I2P routers"
 msgstr "Näita nimekirja kõigist tuntud I2P ruuteritest"
+
+msgid "List of recently connected peers with profiling info"
+msgstr ""
+
+msgid "Peer Profiles"
+msgstr "kaaslaste profiilid"
 
 msgid "Router Info"
 msgstr "ruuteri teave"
@@ -1992,14 +2099,14 @@ msgstr "täpsem konfiguratsioon"
 msgid "Advanced router configuration"
 msgstr "Ruuteri täpsem konfiguratsioon"
 
-msgid "Start or stop Router clients"
-msgstr "Käivitage või peatage ruuteri kliendid"
-
 msgid "Changelog"
 msgstr "Viimased värskendused"
 
 msgid "Recent changes"
 msgstr "hiljutised muudatused"
+
+msgid "Start or stop Router clients"
+msgstr "Käivitage või peatage ruuteri kliendid"
 
 msgid "Bug tracker"
 msgstr "veajälgija"
@@ -2145,9 +2252,6 @@ msgstr "Clearnet BitTorrent DHT otsingumootor"
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "DuckDuckGo otsingumootor (javascripti pole)"
 
-msgid "Clearnet Search Engine"
-msgstr "Clearneti otsingumootor"
-
 msgid "Privacy-focused Clearnet Search Engine"
 msgstr "privaatsusele keskendunud Clearneti otsingumootor"
 
@@ -2223,18 +2327,6 @@ msgstr "Sõltumatu uuriv ajakirjandus"
 msgid "Information Security Research &amp; Education"
 msgstr "Infoturbe uurimine ja haridus"
 
-msgid "Cannabis-related magazine"
-msgstr "Kanepiga seotud ajakiri"
-
-msgid "CultureMagazine"
-msgstr "Kultuuriajakiri"
-
-msgid "A magazine of Politics &amp; Culture"
-msgstr "Poliitika ja kultuuri ajakiri"
-
-msgid "CurrentAffairs"
-msgstr "Aktuaalne"
-
 msgid "Darknet related news site"
 msgstr "Darknetiga seotud uudiste sait"
 
@@ -2289,15 +2381,6 @@ msgstr "HongKongWatch"
 msgid "Monitors threats to freedoms and rights in Hong Kong"
 msgstr "Jälgib vabadusi ja õigusi ähvardavaid ohte Hongkongis"
 
-msgid "Politics &amp; Current Affairs Journal"
-msgstr "Poliitika- ja ajakirjade ajakiri"
-
-msgid "English language Japanese News"
-msgstr "ingliskeelsed jaapani uudised"
-
-msgid "JapanToday"
-msgstr "Jaapan täna"
-
 msgid "JStorDaily"
 msgstr "JStorDaily"
 
@@ -2340,9 +2423,6 @@ msgstr "I2P uudiste ja ajaveebi kanalid"
 msgid "Planeta"
 msgstr "Planeta"
 
-msgid "News &amp; Views on Tibet"
-msgstr "Uudised ja vaated Tiibeti kohta"
-
 msgid "Lifestyle magazine"
 msgstr "Elustiili ajakiri"
 
@@ -2360,6 +2440,9 @@ msgstr "ScienceDaily"
 
 msgid "Community-driven tech news"
 msgstr "kogukonnapõhised tehnikauudised"
+
+msgid "Various services"
+msgstr ""
 
 msgid "News for nerds"
 msgstr "Uudised nohikutele"
@@ -2406,12 +2489,6 @@ msgstr "ülemaailmsed uudised"
 msgid "TheGuardian"
 msgstr "TheGuardian"
 
-msgid "TheHill"
-msgstr "TheHill"
-
-msgid "US Political News"
-msgstr "USA poliitilised uudised"
-
 msgid "TheMarkup"
 msgstr "TheMarkup"
 
@@ -2426,12 +2503,6 @@ msgstr "TheMoscowTimes"
 
 msgid "TheNewRepublic"
 msgstr "Uus Vabariik"
-
-msgid "International News from Tibet"
-msgstr "Rahvusvahelised uudised Tiibetist"
-
-msgid "TheTibetPost"
-msgstr "Tetibetpost"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "Filesharimise ja autoriõiguse uudised"
@@ -2460,6 +2531,9 @@ msgstr "URL"
 
 msgid "Add"
 msgstr "Lisage"
+
+msgid "Error displaying the info page."
+msgstr ""
 
 msgid "Identity"
 msgstr "Identiteet"
@@ -2506,6 +2580,9 @@ msgstr "Saadaolevad protsessori tuumad"
 msgid "Performance"
 msgstr "jõudlus"
 
+msgid "Maximum available RAM"
+msgstr ""
+
 msgid "Classified as slow"
 msgstr "klassifitseeritud aeglaseks"
 
@@ -2514,6 +2591,9 @@ msgstr "jah"
 
 msgid "No"
 msgstr "Ei"
+
+msgid "GeoIP Db"
+msgstr ""
 
 msgid "Target"
 msgstr "Sihtmärk"
@@ -2651,6 +2731,9 @@ msgstr "Kõik ruuterid (Client NetDb)"
 msgid "Sybil Analysis"
 msgstr "Sybil -analüüs"
 
+msgid "Bad value supplied, please check and try again."
+msgstr ""
+
 msgid "Router Map"
 msgstr "Routteri kaart"
 
@@ -2725,9 +2808,6 @@ msgstr "on keelatud"
 
 msgid "not found in network database"
 msgstr "ei leitud võrguandmebaasist"
-
-msgid "No results"
-msgstr "Tulemusi pole"
 
 msgid "Bad Base64 Router hash"
 msgstr ""
@@ -2976,50 +3056,11 @@ msgstr "Kuva kõik selle aadressiga ruuterid NetDb-s"
 msgid "Show all routers with this port in the NetDb"
 msgstr "Kuva NetDb-s kõik selle pordiga ruuterid"
 
-msgid "Core version"
-msgstr "Põhiversioon"
-
 msgid "Network ID"
 msgstr "Võrgu ID"
 
 msgid "Routers"
 msgstr "ruuterid"
-
-msgid "Family Key"
-msgstr "Perevõti"
-
-msgid "Family Sig"
-msgstr "Perekond Sig"
-
-msgid "Exploratory tunnels expire (1h)"
-msgstr "Uurimistunnelid aeguvad (1 h)"
-
-msgid "Exploratory tunnels reject (1h)"
-msgstr "Uurimistunnelite tagasilükkamine (1 h)"
-
-msgid "Exploratory tunnels build success (1h)"
-msgstr "uurimuslikud tunnelid ehitavad edu (1 h)"
-
-msgid "Client tunnels expire (1h)"
-msgstr "Kliendi tunnelid aeguvad (1 h)"
-
-msgid "Client tunnels reject (1h)"
-msgstr "kliendi tunnelite tagasilükkamine (1 h)"
-
-msgid "Client tunnels build success (1h)"
-msgstr "klienditunnelid loovad edu (1 h)"
-
-msgid "Participating tunnels (1h)"
-msgstr "Osalevad tunnelid (1 h)"
-
-msgid "Participating tunnels (60s)"
-msgstr "Osalevad tunnelid (60s)"
-
-msgid "Bandwidth send rate (1h)"
-msgstr "Ribalaiuse saatmiskiirus (1 h)"
-
-msgid "Bandwidth receive rate (1h)"
-msgstr "Ribalaiuse vastuvõtukiirus (1 h)"
 
 msgid "First heard about"
 msgstr "esimest korda kuulsin"
@@ -3089,9 +3130,6 @@ msgstr "faili ruuter.config."
 msgid "Peer Connections"
 msgstr "Vastastikused ühendused"
 
-msgid "Auto-refresh"
-msgstr "Automaatne värskendamine"
-
 msgid "Active in the last minute"
 msgstr "Aktiivne viimasel minutil"
 
@@ -3100,6 +3138,12 @@ msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
+
+msgid "Limit"
+msgstr ""
+
+msgid "Maximum permitted connections"
+msgstr ""
 
 msgid "Current / maximum permitted"
 msgstr "vool / maksimaalne lubatud"
@@ -3505,8 +3549,8 @@ msgid "{0} shared bandwidth"
 msgstr "{0} jagatud ribalaius"
 
 #, java-format
-msgid "Over {0} shared bandwidth"
-msgstr "Üle {0} jagatud ribalaiuse"
+msgid "Over {0} KB/s shared bandwidth"
+msgstr ""
 
 msgid "status"
 msgstr "staatus"
@@ -3578,84 +3622,151 @@ msgstr ""
 msgid "Select search engine"
 msgstr "valige otsingumootor"
 
-msgid "Statistics gathered during this router's uptime"
-msgstr "Ruuteri töö vältel kogutud statistika"
+#, java-format
+msgid "Clock Skew of {0}"
+msgstr "Kella viltu {0}"
 
-msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
-msgstr "Kogutud andmed kvantiseeritakse 1 minuti kaupa, ning neid peaks lugema vaid hinnanguks."
+msgid "Testing"
+msgstr "Testin"
 
-msgid "These statistics are primarily used for development and debugging."
-msgstr "Seda statistikat kasutatakse peamiselt arenduseks ja veaotsinguks."
+msgid "Private TCP Address"
+msgstr "privaatne TCP-aadress"
 
-msgid "No lifetime events"
-msgstr "Pole sündmusi ruuteri töö vältel"
+msgid "SymmetricNAT"
+msgstr "SümmeetrilineNAT"
 
-msgid "frequency"
-msgstr "sagedus"
+msgid "Firewalled with Inbound TCP Enabled"
+msgstr "Tulemüür, sissetulev TCP on lubatud"
 
-msgid "Rolling average events per period"
-msgstr "Veerev keskmine, sündmusi perioodi kohta"
+msgid "Firewalled &amp; Floodfill"
+msgstr "Tulemüür ja üleujutus"
 
-msgid "Highest events per period"
-msgstr "Maksimum, sündmusi perioodi kohta"
+msgid "Disconnected"
+msgstr "Ühendus katkestatud"
 
-msgid "Lifetime average events per period"
-msgstr "Tööea keskmine, sündmusi perioodi kohta"
+msgid "UDP Port In Use"
+msgstr "UDP-port kasutusel"
 
-msgid "Lifetime average frequency"
-msgstr "Tööea keskmine sagedus"
+msgid "No Active Peers"
+msgstr "Aktiivseid kolleege pole"
+
+msgid "UDP Disabled &amp; Inbound TCP host/port not set"
+msgstr "UDP keelatud ja sissetulev TCP host/port pole seatud"
+
+msgid "Firewalled with UDP Disabled"
+msgstr "Tulemüüriga UDP keelatud"
+
+msgid "Add/remove/edit &amp; control your client and server tunnels"
+msgstr "Lisa/eemalda/muuda &amp; juhi oma kliendi- ja serveritunneleid"
+
+msgid "Service Tunnels"
+msgstr "teenindustunnelid"
+
+msgid "How many local service tunnels we're running"
+msgstr "kui palju kohalikke teenindustunneleid me kasutame"
+
+msgid "Messenger"
+msgstr "Messenger"
+
+msgid "i2pchat"
+msgstr "i2pchat"
+
+msgid "I2PChat"
+msgstr "I2PChat"
+
+msgid "Server"
+msgstr "server"
+
+msgid "service may be available to peers"
+msgstr "teenus võib olla kaaslastele kättesaadav"
+
+msgid "service is only available locally"
+msgstr "teenus on saadaval ainult kohapeal"
+
+msgid "Show tunnels"
+msgstr "Näita tunnelid"
+
+msgid "Leases expired"
+msgstr "Lüüsikirjed aegunud"
+
+msgid "Rebuilding"
+msgstr "Ehitan uuesti"
+
+msgid "ago"
+msgstr "tagasi"
+
+msgid "Ready"
+msgstr "Valmis"
+
+msgid "Building"
+msgstr "Ehitan"
+
+msgid "Building tunnels"
+msgstr "Ehitan tunneleid"
+
+msgid "Shared Clients"
+msgstr "jagatud kliendid"
+
+msgid "Click Restart to install"
+msgstr "Käivita uuesti et paigaldada"
+
+msgid "Click Shutdown and restart to install"
+msgstr "Lülita välja et uuesti käivitamisel paigaldada"
 
 #, java-format
-msgid "{0} event"
-msgid_plural "{0} events"
-msgstr[0] "{0} sündmus"
-msgstr[1] "{0} sündmused"
+msgid "{0}"
+msgstr "{0}"
 
-msgid "rate"
-msgstr "tase"
+msgid "Updating after restart"
+msgstr "Värskendatakse pärast taaskäivitamist"
 
-msgid "Average"
-msgstr "Keskmine"
+msgid "Signed development update available"
+msgstr "Allkirjastatud arendusvärskendus on saadaval"
 
-msgid "Highest average"
-msgstr "Kõrgeim keskmine"
+msgid "Download I2P Update"
+msgstr "Laadige alla I2P värskendus"
 
-msgid "Highest total in a period"
-msgstr "Kõrgeim kogusumma perioodi jooksul"
+msgid "Unsigned update available"
+msgstr "Saadaval on allkirjastamata värskendus"
 
-msgid "Average event count"
-msgstr "Keskmine sündmuste arv"
+msgid "Help with firewall configuration"
+msgstr "Abi tulemüüri häälestamisel"
 
-msgid "Events in peak period"
-msgstr "Enim sündmusi perioodis"
+msgid "Check network connection and NAT/firewall!"
+msgstr "Kontrollige võrguühendust ja NAT-i/tulemüüri!"
 
-msgid "Events in this period"
-msgstr "Sündmused sellel perioodil"
+msgid "Attempt to download router reference files (if automatic reseed has failed)"
+msgstr "Proovige alla laadida ruuteri viitefaile (kui automaatne uuesti esitamine ebaõnnestus)"
 
-#, java-format
-msgid "ended {0} ago"
-msgstr "lõpetatud {0} tagasi"
+msgid "Reseed"
+msgstr "Hangi ruuterite kontakte"
 
-msgid "No events"
-msgstr "Sündmusi pole"
+msgid "Order"
+msgstr "Tellimus"
 
-msgid "Graph Data"
-msgstr "Graafiku andmed"
+msgid "Top"
+msgstr "üleval"
 
-msgid "Graph Event Count"
-msgstr "Graafiku sündmuste arv"
+msgid "Move to top"
+msgstr "Liigu üles"
 
-msgid "Export Data as XML"
-msgstr "Ekspordi andmed XML-vormingus"
+msgid "Move up"
+msgstr "Liigu üles"
 
-msgid "Lifetime average value"
-msgstr "Ruuteri tööea keskmine väärtus"
+msgid "Down"
+msgstr "alla"
 
-#, java-format
-msgid "1 event"
-msgid_plural "{0} events"
-msgstr[0] "1 sündmus"
-msgstr[1] "{0} sündmust"
+msgid "Move down"
+msgstr "Liigu alla"
+
+msgid "Bottom"
+msgstr "alt"
+
+msgid "Move to bottom"
+msgstr "Liigu alla"
+
+msgid "Select a section to add"
+msgstr "valige lisamiseks jaotis"
 
 msgid "Help &amp; FAQ"
 msgstr "Abi &amp; KKK"
@@ -3698,9 +3809,6 @@ msgstr "Ummik"
 
 msgid "Tunnel Status"
 msgstr "Tunneli olek"
-
-msgid "Service Tunnels"
-msgstr "teenindustunnelid"
 
 msgid "News &amp; Updates"
 msgstr "Uudised ja värskendused"
@@ -3755,6 +3863,9 @@ msgstr "Veebimajutus"
 
 msgid "An introduction to hosting websites on the I2P network"
 msgstr "Sissejuhatus veebisaitide hostimisse I2P-võrgus"
+
+msgid "New hosts in last 24 hours"
+msgstr ""
 
 msgid "I2PControl"
 msgstr "I2PCkontroll"
@@ -4055,151 +4166,84 @@ msgstr "Kui varjatud režiim on aktiivne, osalevaid tunneleid ei ehitata"
 msgid "Router is configured to reject all transit tunnel requests"
 msgstr "ruuter on konfigureeritud tagasi lükkama kõik osalevad tunnelitaotlused"
 
-#, java-format
-msgid "Clock Skew of {0}"
-msgstr "Kella viltu {0}"
+msgid "Statistics gathered during this router's uptime"
+msgstr "Ruuteri töö vältel kogutud statistika"
 
-msgid "Testing"
-msgstr "Testin"
+msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
+msgstr "Kogutud andmed kvantiseeritakse 1 minuti kaupa, ning neid peaks lugema vaid hinnanguks."
 
-msgid "Private TCP Address"
-msgstr "privaatne TCP-aadress"
+msgid "These statistics are primarily used for development and debugging."
+msgstr "Seda statistikat kasutatakse peamiselt arenduseks ja veaotsinguks."
 
-msgid "SymmetricNAT"
-msgstr "SümmeetrilineNAT"
+msgid "No lifetime events"
+msgstr "Pole sündmusi ruuteri töö vältel"
 
-msgid "Firewalled with Inbound TCP Enabled"
-msgstr "Tulemüür, sissetulev TCP on lubatud"
+msgid "frequency"
+msgstr "sagedus"
 
-msgid "Firewalled &amp; Floodfill"
-msgstr "Tulemüür ja üleujutus"
+msgid "Rolling average events per period"
+msgstr "Veerev keskmine, sündmusi perioodi kohta"
 
-msgid "Disconnected"
-msgstr "Ühendus katkestatud"
+msgid "Highest events per period"
+msgstr "Maksimum, sündmusi perioodi kohta"
 
-msgid "UDP Port In Use"
-msgstr "UDP-port kasutusel"
+msgid "Lifetime average events per period"
+msgstr "Tööea keskmine, sündmusi perioodi kohta"
 
-msgid "No Active Peers"
-msgstr "Aktiivseid kolleege pole"
-
-msgid "UDP Disabled &amp; Inbound TCP host/port not set"
-msgstr "UDP keelatud ja sissetulev TCP host/port pole seatud"
-
-msgid "Firewalled with UDP Disabled"
-msgstr "Tulemüüriga UDP keelatud"
-
-msgid "Add/remove/edit &amp; control your client and server tunnels"
-msgstr "Lisa/eemalda/muuda &amp; juhi oma kliendi- ja serveritunneleid"
-
-msgid "How many local service tunnels we're running"
-msgstr "kui palju kohalikke teenindustunneleid me kasutame"
-
-msgid "I2PSnark"
-msgstr "I2PSnark"
-
-msgid "Messenger"
-msgstr "Messenger"
-
-msgid "i2pchat"
-msgstr "i2pchat"
-
-msgid "I2PChat"
-msgstr "I2PChat"
-
-msgid "Server"
-msgstr "server"
-
-msgid "service may be available to peers"
-msgstr "teenus võib olla kaaslastele kättesaadav"
-
-msgid "service is only available locally"
-msgstr "teenus on saadaval ainult kohapeal"
-
-msgid "Show tunnels"
-msgstr "Näita tunnelid"
-
-msgid "Leases expired"
-msgstr "Lüüsikirjed aegunud"
-
-msgid "Rebuilding"
-msgstr "Ehitan uuesti"
-
-msgid "ago"
-msgstr "tagasi"
-
-msgid "Ready"
-msgstr "Valmis"
-
-msgid "Building"
-msgstr "Ehitan"
-
-msgid "Building tunnels"
-msgstr "Ehitan tunneleid"
-
-msgid "Shared Clients"
-msgstr "jagatud kliendid"
-
-msgid "Click Restart to install"
-msgstr "Käivita uuesti et paigaldada"
-
-msgid "Click Shutdown and restart to install"
-msgstr "Lülita välja et uuesti käivitamisel paigaldada"
+msgid "Lifetime average frequency"
+msgstr "Tööea keskmine sagedus"
 
 #, java-format
-msgid "{0}"
-msgstr "{0}"
+msgid "{0} event"
+msgid_plural "{0} events"
+msgstr[0] "{0} sündmus"
+msgstr[1] "{0} sündmused"
 
-msgid "Updating after restart"
-msgstr "Värskendatakse pärast taaskäivitamist"
+msgid "rate"
+msgstr "tase"
 
-msgid "Signed development update available"
-msgstr "Allkirjastatud arendusvärskendus on saadaval"
+msgid "Average"
+msgstr "Keskmine"
 
-msgid "Download I2P Update"
-msgstr "Laadige alla I2P värskendus"
+msgid "Highest average"
+msgstr "Kõrgeim keskmine"
 
-msgid "Unsigned update available"
-msgstr "Saadaval on allkirjastamata värskendus"
+msgid "Highest total in a period"
+msgstr "Kõrgeim kogusumma perioodi jooksul"
 
-msgid "Help with firewall configuration"
-msgstr "Abi tulemüüri häälestamisel"
+msgid "Average event count"
+msgstr "Keskmine sündmuste arv"
 
-msgid "Check network connection and NAT/firewall!"
-msgstr "Kontrollige võrguühendust ja NAT-i/tulemüüri!"
+msgid "Events in peak period"
+msgstr "Enim sündmusi perioodis"
 
-msgid "Attempt to download router reference files (if automatic reseed has failed)"
-msgstr "Proovige alla laadida ruuteri viitefaile (kui automaatne uuesti esitamine ebaõnnestus)"
+msgid "Events in this period"
+msgstr "Sündmused sellel perioodil"
 
-msgid "Reseed"
-msgstr "Hangi ruuterite kontakte"
+#, java-format
+msgid "ended {0} ago"
+msgstr "lõpetatud {0} tagasi"
 
-msgid "Order"
-msgstr "Tellimus"
+msgid "No events"
+msgstr "Sündmusi pole"
 
-msgid "Top"
-msgstr "üleval"
+msgid "Graph Data"
+msgstr "Graafiku andmed"
 
-msgid "Move to top"
-msgstr "Liigu üles"
+msgid "Graph Event Count"
+msgstr "Graafiku sündmuste arv"
 
-msgid "Move up"
-msgstr "Liigu üles"
+msgid "Export Data as XML"
+msgstr "Ekspordi andmed XML-vormingus"
 
-msgid "Down"
-msgstr "alla"
+msgid "Lifetime average value"
+msgstr "Ruuteri tööea keskmine väärtus"
 
-msgid "Move down"
-msgstr "Liigu alla"
-
-msgid "Bottom"
-msgstr "alt"
-
-msgid "Move to bottom"
-msgstr "Liigu alla"
-
-msgid "Select a section to add"
-msgstr "valige lisamiseks jaotis"
+#, java-format
+msgid "1 event"
+msgid_plural "{0} events"
+msgstr[0] "1 sündmus"
+msgstr[1] "{0} sündmust"
 
 msgid "No known routers"
 msgstr "ruutereid pole teada"
@@ -4539,6 +4583,10 @@ msgstr "Hetkel ei ole aktiivseid kohalikke ega ühistransporditunneleid."
 msgid "Bandwidth Tiers"
 msgstr "Ribalaiuse tasemed"
 
+#, java-format
+msgid "Over {0} shared bandwidth"
+msgstr "Üle {0} jagatud ribalaiuse"
+
 msgid "Inbound or outbound?"
 msgstr "sissetulev või väljaminev?"
 
@@ -4598,6 +4646,18 @@ msgstr "Ribalaiuse test tühistati"
 
 msgid "Bandwidth test was not running"
 msgstr "Ribalaiuse test ei töötanud"
+
+msgid "ready"
+msgstr ""
+
+msgid "inbound test"
+msgstr ""
+
+msgid "outbound test"
+msgstr ""
+
+msgid "done"
+msgstr ""
 
 msgid "bits per second"
 msgstr "bitti sekundis"
@@ -4771,8 +4831,8 @@ msgstr "Võrgujagamine"
 msgid "Share"
 msgstr "jagamiseks"
 
-msgid "Note"
-msgstr "NB"
+msgid "NOTE"
+msgstr ""
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
@@ -4796,6 +4856,10 @@ msgstr "Mida rohkem ribalaiust teiste teenindamiseks jagate, seda enam paraneb t
 
 msgid "config advanced"
 msgstr "config arenenud"
+
+#, java-format
+msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
+msgstr ""
 
 msgid "Floodfill Configuration"
 msgstr "Floodfill konfiguratsioon"
@@ -4824,8 +4888,8 @@ msgstr "Keela"
 msgid "Advanced I2P+ Configuration"
 msgstr "I2P peenhäälestus"
 
-msgid "Some changes may require a restart to take effect."
-msgstr "Mõned muutused vajavad jõustumiseks uuesti käivitamist."
+msgid "Help with additional configuration settings"
+msgstr ""
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5691,23 +5755,50 @@ msgstr "Kui see on seatud väärtusele Tõene, lubab see pistikprogrammi install
 msgid "When set to true, this setting enables reverse DNS lookups for peers, triggered when displaying the country flag of a peer or when the hostname or domain is explicitly displayed in the console, or when the peer's RouterInfo is written to disk. In order to avoid repeat lookups, it's recommended to configure a generous caching policy for DNS lookups of 10 minutes or more, and to configure a privacy respecting DNS server in your operating system. [Disabled by default, restart required]"
 msgstr "Kui see on seadistatud tõeks, siis see seadistus võimaldab pöördotsinguid eakaaslaste jaoks, mis on käivitatud siis, kui eakaaslase lipu riik kuvatakse või kui võõrustaja nimi või domeen kuvatakse selgesõnaliselt konsoolis, või kui eakaaslase RouterInfo kirjutatakse kettale. Korduvate otsingute vältimiseks soovitatakse konfigureerida DNS-i otsingute jaoks helde puhvri poliitika 10 minutiks või kauemaks ja konfigureerida privaatsust austav DNS-i server operatsioonisüsteemis. [Vaikimisi on keelatud, taaskäivitamine on vajalik]"
 
+msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
+msgstr "See seade võimaldab määrata kohandatud tekstiprefixi lehe pealkirjale routteri konsolilehekülgedel, mis võib olla kasulik, kui sul on brauseri vahekaartidel mitu konsolit avatud ning soovid lihtsat viisi nende eristamiseks."
+
 msgid "When set to true, accessing the router console via http:// when https:// is enabled will automatically redirect to https. To configure router console access, edit the settings in your <code>clients.config</code> file in your profile directory (<i>not</i> the application installation directory). [Enabled by default]"
 msgstr "Kui see on seadistatud tõeks, viitab HTTP kliendi olek HTTPS-le ümbersuunamiseks, kui need on lubatud. Routeri kliendi juurdepääsu seadistamiseks muutke sätteid oma profiilikataloogis <code>kliendid.config</code> (mitte rakenduse installimiskataloogis). [Vaikimisi on lubatud]"
+
+msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
+msgstr "Selle seadistuse märkimisel tõeks kuvatakse kongestiooniosa kõrvalribal sõlgetestide keskmine, mis arvutatakse vastavaks edukate sõlgetestide keskmisele ja keskmisele lisaaegadele nurjunud testide korral. Keskmist väärtust saab kasutada juhendina optimaalse <code>router.peerTestTimeout</code> väärtuse kindlakstegemiseks. [Vaikimisi on väär]"
+
+msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
+msgstr "Selle seadistuse märkimisel tõeks kuvatakse <i>Huvipakkuva saidi</i> lingid <a href=/sitemap>saidikaardil</a>. [Vaikimisi on väär]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "See on seade, mis määrab, kas ruuter peaks kasutama pakutud <i>blocklist.txt</i> faili ja kasutajate poolt seadistatud blokeeringunimekirju või keelama marsruuterid vastavalt täissumma või IP-aadressi järgi. IPv4 jaoks toetatakse vahemikke ja netimaske, kuid seda ei tehta IPv6 jaoks. Rohkem teavet leiate I2P+ rakenduse kataloogi failist <i>blocklist.txt</i>. [Vaikimisi on lubatud, taaskäivitamine on vajalik]"
 
-msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
-msgstr "See seade määrab, kas ruuter kasutab kasutajate poolt pakutud <i>blocklist_tor.txt</i> faili I2P+ rakenduse kataloogis või mitte, et saaks keelata ruuterid, mis töötavad Tori väljumissõlme IP-aadressidest. [Vaikimisi on lubatud, taaskäivitamine on vajalik]"
+msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
+msgstr "See seadistus võimaldab seadistada keelamise kehtivusaja (sekundites), mis on blokeeringunimekirjade kaudu rakendatud. Vaikimisi keelamine kestab kogu ruuteri sessiooni ajal. [Taaskäivitamine on vajalik]"
 
 msgid "This setting, when configured with a path pointing at a valid blocklist file, enables an additional, user-configured blocklist to be loaded at router startup. [Disabled by default, restart required]"
 msgstr "See seadistus, kui see on seadistatud kehtiva blocklist-faili teega, võimaldab käivitamisel lisada veel ühe, kasutaja kohandatud blokeeringunimekirja. [Vaikimisi on keelatud, taaskäivitamine on vajalik]"
 
-msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
-msgstr "See seadistus võimaldab seadistada keelamise kehtivusaja (sekundites), mis on blokeeringunimekirjade kaudu rakendatud. Vaikimisi keelamine kestab kogu ruuteri sessiooni ajal. [Taaskäivitamine on vajalik]"
+msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
+msgstr "See seade määrab, kas ruuter kasutab kasutajate poolt pakutud <i>blocklist_tor.txt</i> faili I2P+ rakenduse kataloogis või mitte, et saaks keelata ruuterid, mis töötavad Tori väljumissõlme IP-aadressidest. [Vaikimisi on lubatud, taaskäivitamine on vajalik]"
+
+msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
+msgstr ""
+
+msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
+msgstr "Kui see on määratud valeks, ei blokeeri routter tunnelite loomise päringuid aeglasematest või kättesaadamatutest routteritest vanemates versioonides. [Vaikimisi on tõene, vajalik on taaskäivitamine]"
 
 msgid "Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks."
 msgstr "Eraldage torude loomiseks protsessori keermete arv. Kui teie protsessor toetab hüpertõrjekeermeid või samaaegset mitmekeermestamist, võite protsessori tuumade arvu korrutada 2-ga, et saada eraldatavate keermete maksimaalne arv; vastasel juhul = protsessori tuumade arv. Pange tähele, et võite soovida eraldada vähem kui teoreetiline maksimum, et tagada ruumi muudele ülesannetele."
+
+msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
+msgstr "Selle seadistuse (millisekundites) abil määratakse, kui kaua pakett võib jääda CoDel järjekorda enne, kui see kustutatakse. Vaikimisi on 1000 ms. [Nõuab taaskäivitamist]"
+
+msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
+msgstr "Selle seadistuse abil määratakse maksimaalne sõnumite arv väljaminevas järjekorras, enne kui see tähistatakse täisena. [Vaikimisi on 768]"
+
+msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
+msgstr "Selle seadistuse abil määratakse maksimaalne sõnumite arv maksimaalse järjekorra väärtusest kõrgemal, enne kui edasised sõnumid kustutatakse. [Vaikimisi on 128]"
+
+msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
+msgstr "See sättimine (millisekundites) võimaldab teil käsitsi määrata järjekorra viiteväärtuse CoDeli järjekorda juhtimissüsteemis. Vaikimisi on see 50 ms. [Nõuab taaskäivitamist]"
 
 msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
 msgstr "See sätte, millisekundites väljendatult, eirab vaikeväärtust teate töötlemise ajapiirina (nagu märgitud rubriigi <i>Teatesaate viivitus</i>ul). enne saatjate liikuvustunneli taotlust on tunnustatud ülekoormatud ja tagasilöödud. [Vaikeväärtus on 750 ms või 1500 ms, kui ruuter on aeglaseks märgitud]"
@@ -5718,8 +5809,32 @@ msgstr "Testige perioodiliselt tuneleid, et määrata keskmine viivitus ja kuvad
 msgid "When set to true, the router will change its identity and UDP port every time the router restarts. [Default is false]"
 msgstr "Kui see on määratud tõeväärtuseks, vahetab ruuter oma identiteedi ja UDP pordi iga kord, kui taaskäivitate ruuteri. [Vaikeväärtus on false]"
 
+msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
+msgstr "Kui see on määratud valeks, ei piirdu routter tunnelite loomise päringuid teistelt routteritelt ning selle kasutamisel tuleb olla ettevaatlik. [Vaikimisi on tõene, vajalik on taaskäivitamine]"
+
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
 msgstr "Selle sätte abil saate määrata, milliseid <a href=/profiles#profile_defs>saatja võimeid</a> ei kasutata teie ruuteri tunnelite loomiseks. nt <code>ruuter.excludePeerCaps=LMN</code>"
+
+msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
+msgstr "See sättimine (tundides) määrab, kui vana RouterInfo NetDb-s on (viimane teadaolev avaldamise kuupäev), enne kui see klassifitseeritakse aegunuks ja kustutatakse. [Vaikimisi on 28 tundi, kui ruuter pole üleujutuse täidis, siis vaikimisi on see 8 tundi]"
+
+msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
+msgstr "See sättimine määrab, mitu eakaaslast uuritakse paralleelselt, kui Peer Exploration Job töötab [vaikimisi uuritakse korraga 1 eakaaslast, kui rohkem kui 3000 eakaaslast on teada]. Olge teadlik, et selle väärtuse suurendamine suurendab uurimiseks vajalikku ribalaiust, liiga suure selle väärtuse seadistamine võib põhjustada ülemäärast sõnumi viivitust ja häirituda teist tüüpi teenustega, kasutage seda siis ettevaatusega!"
+
+msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
+msgstr "See sättimine määrab, mitu NetDb DHT ämbrikeskust Peer Exploration Job kasutab töötades. Vaikimisi varieerub uuritavate ämbrikeste arv, sõltuvalt sellest, kas võruja töötab üle ühe tunni, kas võruja on peidetud või kuulub „K“ ribalaiuse kihti, ja teadaolevate võrutajate arv."
+
+msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
+msgstr "See sättimine (sekundites) võimaldab teil ülekirjutada viivitust Peer Exploration Job töötuste vahel, mis üritab leida uusi eakaaslasi NetDb-sse lisamiseks. Vaikimisi töötab töö iga 80 sekundi järel või kui võtruja kogeb töö või sõnumite viivitust, siis iga 3 minuti järel. Kui NetDb suurus jõuab 4000 eakaaslasele, siis paus suureneb 15 minutini. Soovitav on suurendada viivitust, kui teie NetDb-s on palju eakaaslasi (rohkem kui 2000 eakaaslast) või kui soovite vähendada üldist ribalaiuse tarbimist. Märkus: Floodfill-võrutajate jaoks see töö ei käivitu."
+
+msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
+msgstr "See sättimine määrab uurimiseks järjekorda panekuks mõeldud eakaaslaste maksimaalse arvu. I2P-s on maksimum 128 ja I2P+ vaikimisi väärtus on 512."
+
+msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
+msgstr "See sättimine määrab, kas floodfill-võrutaja uurib NetDb-d uute eakaaslaste kohta õppimiseks. [Vaikimisi on väär, nõuab taaskäivitamist]"
+
+msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
+msgstr "Selle seade, kui see on määratud tõeks, takistab ruuterit otse suhtlemast teiste ruuteritega, sundides kasutama tutvustajaid. [Vaikimisi on vale, välja arvatud kui ruuter on peidetud režiimis]"
 
 msgid "When set to true, if your router is serving as a floodfill for the network, your <a href=/configadvanced#ffconf>floodfill participation</a> will be hidden from other routers."
 msgstr "Kui see on määratud tõeväärtuseks, peidetakse muu võrkude poolt nähtavust neilt ruuterilt, mis täidab üleujutuste laiendusfunktsiooni. [Vaikeväärtus on false]"
@@ -5732,6 +5847,12 @@ msgstr "Määrab maksimaalse osalevate tunnelite arvu, mille ruuter saab luua. T
 
 msgid "Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 10% in I2P+, 33% in I2P]"
 msgstr "Määrab maksimaalse protsendi aktiivsetest kohalikest tunnelitest (klient ja eksperimentaalne), mida ühe käigu juures kasutatakse. [Vaikenumber on 10% I2P+ puhul, 33% I2P puhul]"
+
+msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
+msgstr "See sätte võimaldab teil seadistada vajalike osalustunnelite miinimumarvu, enne kui ruuter hakkab tunnelipäringuid tõrjuma eeldatava ribalaiuse nõuete põhjal. [Kui süsteem töötab Androidil, on vaikeväärtus 100, kui süsteem töötab ARM-i peal ja tuumad on alla 4, on vaikeväärtus 800, kui süsteem töötab ARM-i peal ja tuumad on 4 või rohkem, on vaikeväärtus 1200 ning muidu 2500]"
+
+msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
+msgstr "Selle sätte abil saate oma NetDb-st välja jätta vanemad ruuterid. Vaikekäigust või määratud väärtusest vanemad ruuterid kustutatakse NetDb-st ja keelatakse ruuteri töös oleku ajaks. Vaikimisi on välja jäetud ruuterid, mis on vanemad kui 0.9.20. Märkus: alates I2P+ versioonist 0.9.46+ kasutatakse lokaalsete tunnelite loomiseks ainult hiljutisi versioone käitavaid ruutereid. [Taaskäivitamine on vajalik]"
 
 msgid "When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]"
 msgstr "Kui on seadistatud 'true'-ks, siis ruuteri infofailid, mis on salvestatud netDB kataloogi teie profiilis, ei jaotata 64 alamkataloogi. [Vaikenumber on 'false']"
@@ -5757,84 +5878,6 @@ msgstr "Vähem kui 256MB JVM-le eraldatud"
 msgid "Router running a non-native, software emulated version of the Java BigInteger library"
 msgstr "Ruuter, mis töötab Java BigInteger raamatukogu mitte-algstüüpsel, tarkvarapõhises emuleeritud versioonil"
 
-msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
-msgstr "See sätte võimaldab teil seadistada vajalike osalustunnelite miinimumarvu, enne kui ruuter hakkab tunnelipäringuid tõrjuma eeldatava ribalaiuse nõuete põhjal. [Kui süsteem töötab Androidil, on vaikeväärtus 100, kui süsteem töötab ARM-i peal ja tuumad on alla 4, on vaikeväärtus 800, kui süsteem töötab ARM-i peal ja tuumad on 4 või rohkem, on vaikeväärtus 1200 ning muidu 2500]"
-
-msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
-msgstr "Kui true, siis ruuter muudab oma identiteeti ja UDP pordi, kui ruuter taaskäivitatakse, ning seejärel kustutab võtme ruuter.config'ist edasiste muudatuste vältimiseks. [Vaikimisi on false]"
-
-msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr "Kui see on määratud valeks, ei piirdu routter tunnelite loomise päringuid teistelt routteritelt ning selle kasutamisel tuleb olla ettevaatlik. [Vaikimisi on tõene, vajalik on taaskäivitamine]"
-
-msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr "Kui see on määratud valeks, ei blokeeri routter tunnelite loomise päringuid aeglasematest või kättesaadamatutest routteritest vanemates versioonides. [Vaikimisi on tõene, vajalik on taaskäivitamine]"
-
-msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
-msgstr "Kui konfigureeritud, seab see kindla piirmäära, kui palju tunnelit ruuter võib samaaegselt luua. Vaikimisi kasutab ruuter keskmist ehitusaega ja praegust väljaminevat ribalaiust, et määrata optimaalne ehituskiirus. [Nõutav taaskäivitamine]"
-
-msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
-msgstr "Kui soovite paigaldada allkirjastamata (.zip) I2P värskendusi, tuleks see lisada oma <code>router.config</code> faili, kui te pole veel konfigureerinud <code>routerconsole.advanced=true</code>, milles see võimalus juba on. Märkus: I2P+ 0.9.48+ puhul on vaikimisi lubatud allkirjastamata värskenduste paigaldamine. "
-
-msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
-msgstr "Selle seadistuse abil saate konfigureerida allkirjastamata värskenduste URLi, kui see on lubatud funktsioon. URL peaks lõppema <code>/i2pupdate.zip</code>-ga. Märkus: ärge installige allkirjastamata värskendusi, kui te ei usalda värskenduse allikat!"
-
-msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
-msgstr "See seadistus lubab keelata SSU testid, et teha kindlaks, kas teie ruuter on tulemüüri taga ja see saab lubada ruuteritele, mis pole kindlasti tulemüüri taga, kuid kogevad katkendlikke tulemüüri probleeme. Testimise keelamise korral peaksid nii SSU kui ka NTCP teatama teie praeguse avaliku IP-aadressi aadressil <a href=/info>ruuteri teabekülg</a>. [Nõutav taaskäivitamine]"
-
-msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
-
-msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
-msgstr "Selle seade määrab, milline ühendusviis saab prioriteedi seosetute serveritega suhtlemisel. Vaikimisi eelistatakse NTCP-d UDP asemel (SSU). Kui seada väärtuseks true, eelistatakse UDP-d, välja arvatud juhul, kui juba on olemas NTCP-ühendus; kui seada väärtuseks always, kasutatakse alati UDP-d, hoolimata olemasolevast NTCP-ühendusest . [Vaikimisi on false]"
-
-msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
-msgstr "See tunnelispetsiifiline seade võimaldab teil lubada või keelata marsuuteri majutatud serveritele saadetud pingidele vastamist. Et pingeid keelata, peate lisama rea <code>i2p.streaming.answerPings=false</code> serveri konfiguratsiooni <i>Custom Options</i> sektsiooni Tunnelihalduris."
-
-msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
-msgstr "Kui see seadistus on true, töötab I2P ilma võrguühenduseta, mis on kasulik, kui teiste marsruuterite kodeerimisuuenduste testimiseks tuleb marsruuterit pidevalt taaskäivitada ja see takistab võrgu katkestusi."
-
-msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr "Kui see seadistus on sisse lülitatud, lisatakse marsuuteri majutatud kõigile pingiga ühenduse aktsepteerivatele serveritele juhuslik pongi viivitus kuni 50 ms. Vaikimisi on see välja lülitatud. [Nõuab taaskäivitamist]"
-
-msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr "Kui see seadistus on sisse lülitatud, muudetakse pingiga ühenduse aktsepteerivatele serveritele lisatava maksimaalse täiendava juhusliku pongi viivituse väärtust, kui on ka lubatud <code>i2p.streaming.enablePongDelay</code>. Kui seda eraldi määratletud ei ole, kasutatakse vaikeväärtust 50 ms."
-
-msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
-msgstr "Selle seadistuse (millisekundites) abil määratakse, kui kaua pakett võib jääda CoDel järjekorda enne, kui see kustutatakse. Vaikimisi on 1000 ms. [Nõuab taaskäivitamist]"
-
-msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
-msgstr "Selle seadistuse abil määratakse maksimaalne sõnumite arv väljaminevas järjekorras, enne kui see tähistatakse täisena. [Vaikimisi on 768]"
-
-msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
-msgstr "Selle seadistuse abil määratakse maksimaalne sõnumite arv maksimaalse järjekorra väärtusest kõrgemal, enne kui edasised sõnumid kustutatakse. [Vaikimisi on 128]"
-
-msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
-msgstr "See sättimine (millisekundites) võimaldab teil käsitsi määrata järjekorra viiteväärtuse CoDeli järjekorda juhtimissüsteemis. Vaikimisi on see 50 ms. [Nõuab taaskäivitamist]"
-
-msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
-msgstr "See sättimine (tundides) määrab, kui vana RouterInfo NetDb-s on (viimane teadaolev avaldamise kuupäev), enne kui see klassifitseeritakse aegunuks ja kustutatakse. [Vaikimisi on 28 tundi, kui ruuter pole üleujutuse täidis, siis vaikimisi on see 8 tundi]"
-
-msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
-msgstr "See sättimine määrab, mitu eakaaslast uuritakse paralleelselt, kui Peer Exploration Job töötab [vaikimisi uuritakse korraga 1 eakaaslast, kui rohkem kui 3000 eakaaslast on teada]. Olge teadlik, et selle väärtuse suurendamine suurendab uurimiseks vajalikku ribalaiust, liiga suure selle väärtuse seadistamine võib põhjustada ülemäärast sõnumi viivitust ja häirituda teist tüüpi teenustega, kasutage seda siis ettevaatusega!"
-
-msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
-msgstr "See sättimine määrab, mitu NetDb DHT ämbrikeskust Peer Exploration Job kasutab töötades. Vaikimisi varieerub uuritavate ämbrikeste arv, sõltuvalt sellest, kas võruja töötab üle ühe tunni, kas võruja on peidetud või kuulub „K“ ribalaiuse kihti, ja teadaolevate võrutajate arv."
-
-msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
-msgstr "See sättimine (sekundites) võimaldab teil ülekirjutada viivitust Peer Exploration Job töötuste vahel, mis üritab leida uusi eakaaslasi NetDb-sse lisamiseks. Vaikimisi töötab töö iga 80 sekundi järel või kui võtruja kogeb töö või sõnumite viivitust, siis iga 3 minuti järel. Kui NetDb suurus jõuab 4000 eakaaslasele, siis paus suureneb 15 minutini. Soovitav on suurendada viivitust, kui teie NetDb-s on palju eakaaslasi (rohkem kui 2000 eakaaslast) või kui soovite vähendada üldist ribalaiuse tarbimist. Märkus: Floodfill-võrutajate jaoks see töö ei käivitu."
-
-msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
-msgstr "See sättimine määrab uurimiseks järjekorda panekuks mõeldud eakaaslaste maksimaalse arvu. I2P-s on maksimum 128 ja I2P+ vaikimisi väärtus on 512."
-
-msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
-msgstr "See sättimine määrab, kas floodfill-võrutaja uurib NetDb-d uute eakaaslaste kohta õppimiseks. [Vaikimisi on väär, nõuab taaskäivitamist]"
-
-msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
-msgstr "Selle seade, kui see on määratud tõeks, takistab ruuterit otse suhtlemast teiste ruuteritega, sundides kasutama tutvustajaid. [Vaikimisi on vale, välja arvatud kui ruuter on peidetud režiimis]"
-
-msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
-msgstr "Selle sätte abil saate oma NetDb-st välja jätta vanemad ruuterid. Vaikekäigust või määratud väärtusest vanemad ruuterid kustutatakse NetDb-st ja keelatakse ruuteri töös oleku ajaks. Vaikimisi on välja jäetud ruuterid, mis on vanemad kui 0.9.20. Märkus: alates I2P+ versioonist 0.9.46+ kasutatakse lokaalsete tunnelite loomiseks ainult hiljutisi versioone käitavaid ruutereid. [Taaskäivitamine on vajalik]"
-
 msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. [Default is 4]"
 msgstr "Selle seade määrab samaaegselt käitatavate eakaaslaste testimiste arvu, mida kasutatakse eakaaslaste latentsuse kindlaksmääramiseks. [Vaikimisi on 4]"
 
@@ -5850,14 +5893,17 @@ msgstr "See seade määrab, kas statistika meie ruuteri kohta avaldatakse vaheld
 msgid "This setting configures the initial size of the outbound message queue. [Default is 64]"
 msgstr "Selle seade konfigureerib väljamineva sõnumijärjekorra algse suuruse. [Vaikimisi on 64]"
 
-msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
-msgstr "See seadistus määrab sissetuleva sõnumijärjekorra maksimaalse suuruse. [Vaikimisi on 1024]"
-
 msgid "This setting configures the maximum number of inbound messages queued per cycle (pump). [Default is 24]"
 msgstr "See seadistus määrab ühe töötlustsükli kohta (pump) ootele pandavate sissetulevate sõnumite maksimaalse arvu. [Vaikimisi on 24]"
 
+msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
+msgstr "See seadistus määrab sissetuleva sõnumijärjekorra maksimaalse suuruse. [Vaikimisi on 1024]"
+
 msgid "This setting configures the maximum number of outbound messages queued per cycle (pump). [Default is 64]"
 msgstr "See seadistus määrab ühe töötlustsükli kohta (pump) ootele pandavate väljaminevate sõnumite maksimaalse arvu. [Vaikimisi on 64]"
+
+msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
+msgstr "Kui true, siis ruuter muudab oma identiteeti ja UDP pordi, kui ruuter taaskäivitatakse, ning seejärel kustutab võtme ruuter.config'ist edasiste muudatuste vältimiseks. [Vaikimisi on false]"
 
 msgid "This setting (in milliseconds) allows you to manually configure the delay between router refresh updates run by the Refresh Routers Job. By default the pause between refreshes is determined by the size of the NetDb, and introduces some randomness in the timing to mitigate traffic analysis. For values lower than 2000 milliseconds, increasing the value of <code>router.refreshTimeout</code> is recommended. Note that setting this value below 2000 milliseconds will increase your network traffic and may introduce job lag, and is not recommended for sustained use."
 msgstr "See sättetus (millisekundites) võimaldab sul seadistada, kui sageli hoitakse üleval värskenduste tööülesannet. Vaikepaus värskenduste vahel sõltub NetDb suurusest ning juhuslikest viivitustest liiklusanalüüsi vähendamiseks. Väärtuste korral, mis on väiksemad kui 2000 millisekundit, soovitatakse suurendada router.refreshTimeout väärtust. Pange tähele, et selle väärtuse seadistamine alla 2000 millisekundi suurendab võrguliiklust ja võib põhjustada töülesannete mahajäämist ning ei ole pikaajaliseks kasutamiseks soovitatav."
@@ -5871,26 +5917,56 @@ msgstr "See sättetus (sekundites) võimaldab sul seadistada aja, kui kaua oodat
 msgid "This setting determines whether routers classified as uninteresting (K or L tier, unreachable or older than 0.9.50) are checked during the refresh router process after 1 hour of uptime. [Default is false]"
 msgstr "See sättetus otsustab, kas värskenduste tööülesande raames kontrollitakse ruutereid, mis on määratletud kui mittehuvipakkuvad (K- või L-taseme, kättesaamatud või vanemad kui 0.9.50) pärast 1 tunni möödumist pärast käivitamist. [Vaikeväärtus on vale]"
 
+msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
+msgstr ""
+
+msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
+msgstr "Kui konfigureeritud, seab see kindla piirmäära, kui palju tunnelit ruuter võib samaaegselt luua. Vaikimisi kasutab ruuter keskmist ehitusaega ja praegust väljaminevat ribalaiust, et määrata optimaalne ehituskiirus. [Nõutav taaskäivitamine]"
+
+msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
+msgstr "Kui soovite paigaldada allkirjastamata (.zip) I2P värskendusi, tuleks see lisada oma <code>router.config</code> faili, kui te pole veel konfigureerinud <code>routerconsole.advanced=true</code>, milles see võimalus juba on. Märkus: I2P+ 0.9.48+ puhul on vaikimisi lubatud allkirjastamata värskenduste paigaldamine. "
+
+msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
+msgstr "Selle seadistuse abil saate konfigureerida allkirjastamata värskenduste URLi, kui see on lubatud funktsioon. URL peaks lõppema <code>/i2pupdate.zip</code>-ga. Märkus: ärge installige allkirjastamata värskendusi, kui te ei usalda värskenduse allikat!"
+
 msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
 msgstr "See seadistus (minutites) võimaldab teil seadistada, kui kaua pärast käivitamist oodatakse enne kui kontrollitakse RouterInfos NetDb-s. Pärast seda aktsepteeritakse ainult kehtivad ruuterid. Edasilükatud RouterInfos ja SSU-ga kättesaamatud eakaaslased eemaldatakse NetDb-st validerimise ajal. [Vaikimisi on 60 minutit] Märkus: see seadistus ei mõjuta vanemaid ruutereid (vaikimisi vanemad kui 0.9.29), mis eemaldatakse NetDb-st ja keelatakse routeri seansi jaoks, niipea kui NetDb ladu on aset leidnud."
 
-msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
-msgstr "Selle seadistuse märkimisel tõeks kuvatakse kongestiooniosa kõrvalribal sõlgetestide keskmine, mis arvutatakse vastavaks edukate sõlgetestide keskmisele ja keskmisele lisaaegadele nurjunud testide korral. Keskmist väärtust saab kasutada juhendina optimaalse <code>router.peerTestTimeout</code> väärtuse kindlakstegemiseks. [Vaikimisi on väär]"
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
+msgstr ""
 
-msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
-msgstr "Selle seadistuse märkimisel tõeks kuvatakse <i>Huvipakkuva saidi</i> lingid <a href=/sitemap>saidikaardil</a>. [Vaikimisi on väär]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
+msgstr ""
 
-msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr "See seade võimaldab määrata kohandatud tekstiprefixi lehe pealkirjale routteri konsolilehekülgedel, mis võib olla kasulik, kui sul on brauseri vahekaartidel mitu konsolit avatud ning soovid lihtsat viisi nende eristamiseks."
+msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
+msgstr "See seadistus lubab keelata SSU testid, et teha kindlaks, kas teie ruuter on tulemüüri taga ja see saab lubada ruuteritele, mis pole kindlasti tulemüüri taga, kuid kogevad katkendlikke tulemüüri probleeme. Testimise keelamise korral peaksid nii SSU kui ka NTCP teatama teie praeguse avaliku IP-aadressi aadressil <a href=/info>ruuteri teabekülg</a>. [Nõutav taaskäivitamine]"
 
-msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
-msgstr "See seadistus võimaldab alternatiivsete NTP serverite seadistamist, mis on vajalikud selleks, et teie marsruuter hoiaks täpset kellaega. [Vaikimisi on 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
+msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
+msgstr "Selle seade määrab, milline ühendusviis saab prioriteedi seosetute serveritega suhtlemisel. Vaikimisi eelistatakse NTCP-d UDP asemel (SSU). Kui seada väärtuseks true, eelistatakse UDP-d, välja arvatud juhul, kui juba on olemas NTCP-ühendus; kui seada väärtuseks always, kasutatakse alati UDP-d, hoolimata olemasolevast NTCP-ühendusest . [Vaikimisi on false]"
+
+msgid "miscellaneous"
+msgstr ""
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "Kui see on määratud väärtuseks tõene, siis see seadistus lisab põhi teenuse juhtimise valikud süsteemi salve/teavitusalasse. [Vaikimisi on keelatud]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
 msgstr "Selle seadistuse abil saab konfigureerida suurimat lubatud failide arvu torrenti kohta, mida I2PSnark võimaldab, kui torrenti alla laaditakse või luuakse. Pange tähele, et selle väärtuse oluline suurendamine vaikimisi 2000 failist võib nõuda täiendavat konfiguratsiooni hostisüsteemis, et suurendada tööülesannete maksimaalset arvu, mida operatsioonisüsteem lubab (nt Linuxi puhul <code>ulimit -n</code>). Muutmiseks lisage see I2PSnarki konfiguratsioonifaili <code>i2psnark.config</code>. [I2PSnarki või marsruuteri taaskäivitamine on vajalik]"
+
+msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
+msgstr "See tunnelispetsiifiline seade võimaldab teil lubada või keelata marsuuteri majutatud serveritele saadetud pingidele vastamist. Et pingeid keelata, peate lisama rea <code>i2p.streaming.answerPings=false</code> serveri konfiguratsiooni <i>Custom Options</i> sektsiooni Tunnelihalduris."
+
+msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
+msgstr "Kui see seadistus on sisse lülitatud, lisatakse marsuuteri majutatud kõigile pingiga ühenduse aktsepteerivatele serveritele juhuslik pongi viivitus kuni 50 ms. Vaikimisi on see välja lülitatud. [Nõuab taaskäivitamist]"
+
+msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
+msgstr "Kui see seadistus on sisse lülitatud, muudetakse pingiga ühenduse aktsepteerivatele serveritele lisatava maksimaalse täiendava juhusliku pongi viivituse väärtust, kui on ka lubatud <code>i2p.streaming.enablePongDelay</code>. Kui seda eraldi määratletud ei ole, kasutatakse vaikeväärtust 50 ms."
+
+msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
+msgstr "Kui see seadistus on true, töötab I2P ilma võrguühenduseta, mis on kasulik, kui teiste marsruuterite kodeerimisuuenduste testimiseks tuleb marsruuterit pidevalt taaskäivitada ja see takistab võrgu katkestusi."
+
+msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
+msgstr "See seadistus võimaldab alternatiivsete NTP serverite seadistamist, mis on vajalikud selleks, et teie marsruuter hoiaks täpset kellaega. [Vaikimisi on 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 
 msgid "Recent I2P+ Changes"
 msgstr "Viimased I2P+ muudatused"
@@ -6107,6 +6183,18 @@ msgstr "Nii mittetuvastusliku kui ka SSL-i jaoks"
 
 msgid "For SSL only"
 msgstr "Ainult SSL-i jaoks"
+
+msgid "How can I configure the console and web services to be accessible on my local network?"
+msgstr ""
+
+msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
+msgstr ""
+
+msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
+msgstr ""
+
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager’s configuration section using the <i>reachable by</i> dropdown."
+msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Kuidas ma ühendun I2P-sisese IRC-ga?"
@@ -7367,9 +7455,6 @@ msgstr "Võrgukaaslased"
 msgid "peer profiles"
 msgstr "ruuterite profiilid"
 
-msgid "Peer Profiles"
-msgstr "kaaslaste profiilid"
-
 msgid "Session Banned Peers"
 msgstr "Seansi ajal keelatud kaaslased"
 
@@ -7586,6 +7671,9 @@ msgstr "Läbi- ja väljutunneleid"
 msgid "Peer Profile"
 msgstr "Ruuteri profiil"
 
+msgid "Profile View"
+msgstr ""
+
 msgid "Profile for peer"
 msgstr "Partneri profiil"
 
@@ -7723,6 +7811,35 @@ msgstr "Lõppenud"
 
 
 
+
+
 #, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

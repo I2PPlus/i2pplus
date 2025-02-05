@@ -38,12 +38,6 @@ msgstr "standardne bändlaius ja usaldusväärsus"
 msgid "higher bandwidth and reliability"
 msgstr "kõrgem bändlaius ja usaldusväärsus"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Vigane vormi saatmine, tõenäoliselt seetõttu, et kasutasite oma brauseris nuppu 'tagasi' või 'värskenda'. Palun saatke uuesti."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Kui probleem jätkub, kontrollige, et teie brauseris on küpsised lubatud."
-
 msgid "Configuration reloaded for all tunnels"
 msgstr "Kõigile tunnelitele uuesti laetud seaded"
 
@@ -1227,6 +1221,12 @@ msgstr "Genereeri Autentimine"
 
 msgid "SSL Helper"
 msgstr "SSL Abi"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Vigane vormi saatmine, tõenäoliselt seetõttu, et kasutasite oma brauseris nuppu 'tagasi' või 'värskenda'. Palun saatke uuesti."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Kui probleem jätkub, kontrollige, et teie brauseris on küpsised lubatud."
 
 msgid "Experts only!"
 msgstr "Vaid ekspertidele!"

@@ -260,14 +260,14 @@ msgstr "Chyba při odesílání emailu"
 msgid "Mail sent."
 msgstr "Zpráva odeslána."
 
-msgid "Send"
-msgstr "Odeslat"
+msgid "Cancel"
+msgstr "Zrušit"
 
 msgid "Save as Draft"
 msgstr "Uložit jako koncept"
 
-msgid "Cancel"
-msgstr "Zrušit"
+msgid "Send"
+msgstr "Odeslat"
 
 msgid "From"
 msgstr "Od"

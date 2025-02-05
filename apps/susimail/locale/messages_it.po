@@ -257,14 +257,14 @@ msgstr "Errore nell'invio della mail"
 msgid "Mail sent."
 msgstr "Mail inviata."
 
-msgid "Send"
-msgstr "Invia"
+msgid "Cancel"
+msgstr "Annulla"
 
 msgid "Save as Draft"
 msgstr "Salva come bozza"
 
-msgid "Cancel"
-msgstr "Annulla"
+msgid "Send"
+msgstr "Invia"
 
 msgid "From"
 msgstr "Da"

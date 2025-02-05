@@ -135,17 +135,14 @@ msgstr[0] "1 cíl smazán."
 msgstr[1] "Počet smazaných cílů: {0}."
 msgstr[2] "Počet smazaných cílů: {0}."
 
-msgid "No entries selected to delete."
-msgstr "Nejsou vybrány žádné položky k odstranění."
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "Přidat náhradníka"
 
 msgid "Address book saved."
 msgstr "Adresář uložen."
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "Vyhledejte tento adresář a vraťte se, abyste viděli aktualizaci."
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "ERROR: Nelze zapsat soubor adresáře.Chyba: nepodařilo se zapsat do souboru knihy kontaktů. Zkontrolujte přístupová práva k souboru a místo na disku."
@@ -328,6 +325,9 @@ msgstr "Označit pro smazání"
 msgid "Cancel"
 msgstr "Zrušit"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "např. newdomain.i2p"
 
@@ -405,6 +405,9 @@ msgstr "File, do kterého se má zaznamenávat aktivita (změňte na /dev/null, 
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Název přepsaného motivu, který se má použít (výchozí pro motiv vybraný v konzole)"
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "adresář"
@@ -600,3 +603,5 @@ msgstr "Adresy ručně přidané do hlavního adresáře se sloučí s adresář
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Hostitelé, které obdržíte z vašich předplatných, se sloučí s vaším adresářem routeru."
+
+

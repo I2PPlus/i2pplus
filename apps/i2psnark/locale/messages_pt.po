@@ -23,6 +23,12 @@ msgstr "Não é possível conectar-se ao I2P"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Erro ao se conectar com I2P - Verifique a sua configuração I2CP!"
 
+msgid "Download already running: "
+msgstr ""
+
+msgid "Downloading"
+msgstr "Baixando"
+
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "Configurando I2PSnark com opções I2CP"
 
@@ -466,12 +472,23 @@ msgid "Anonymous BitTorrent Client"
 msgstr "Cliente BitTorrent Anônimo"
 
 #, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr ""
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr ""
+
+#, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "Tem certeza que deseja excluir o arquivo \\''{0}\\'' (os dados baixados não serão excluídos) ?Tem a certeza que deseja apagar o ficheiro \\\"{0}\\\" (dados transferidos não serão apagados) ?"
 
+msgid "Note: Downloaded data will not be deleted."
+msgstr ""
+
 #, java-format
-msgid "Are you sure you want to delete torrent file {0} and all downloaded data?"
-msgstr "Tem certeza de que deseja excluir o torrent \\''{0}\\'' e todos os dados baixados?Está seguro de que quer apagar o arquivo torrente \\''{0}\\'' e todos os dados descarregados deste torrente?"
+msgid "Deleting {0} and associated metadata only..."
+msgstr ""
 
 msgid "I2PSnark has stopped"
 msgstr "I2PSnark parou"
@@ -484,6 +501,9 @@ msgstr "Torrentes"
 
 msgid "Refresh page"
 msgstr "Atualizar página"
+
+msgid "Configure"
+msgstr "Configurar"
 
 msgid "Forum"
 msgstr "Fórum"
@@ -524,36 +544,6 @@ msgstr "atualização de página"
 
 msgid "Warning - No I2P"
 msgstr "Aviso - Sem I2P"
-
-msgid "Search"
-msgstr "Procurar"
-
-msgid "Show All"
-msgstr "Mostrar tudo"
-
-msgid "Active"
-msgstr "Ativo"
-
-msgid "Inactive"
-msgstr "Inativo"
-
-msgid "Connected"
-msgstr "Conectado"
-
-msgid "Downloading"
-msgstr "Baixando"
-
-msgid "Seeding"
-msgstr "Semeando"
-
-msgid "Complete"
-msgstr "Completo"
-
-msgid "Incomplete"
-msgstr "Incompleto"
-
-msgid "Stopped"
-msgstr "Detenido"
 
 msgid "Status"
 msgstr "Estado"
@@ -634,20 +624,14 @@ msgstr "Nenhum torrent encontrado."
 msgid "No torrents loaded."
 msgstr "Não carregado nenhum torrente."
 
-msgid "Totals"
-msgstr "Total"
-
 #, java-format
 msgid "1 torrent"
 msgid_plural "{0} torrents"
 msgstr[0] "1 torrente"
 msgstr[1] "{0} torrentes"
 
-#, java-format
-msgid "1 connected peer"
-msgid_plural "{0} connected peers"
-msgstr[0] "1 parceiro conectado"
-msgstr[1] "{0} parceiros conectados"
+msgid "Total size of loaded torrents"
+msgstr ""
 
 #, java-format
 msgid "1 DHT peer"
@@ -655,17 +639,17 @@ msgid_plural "{0} DHT peers"
 msgstr[0] "1 parceiros DHT"
 msgstr[1] "{0} parceiros DHT"
 
-msgid "Configured maximum (actual usage may be less)"
-msgstr "Máximo configurado (o uso real pode ser menor)"
+msgid "Active downloads"
+msgstr ""
 
-msgid "Tunnels"
-msgstr "Túneis"
+msgid "Active uploads"
+msgstr ""
 
-msgid "in"
-msgstr "em"
+msgid "Active Inbound tunnels"
+msgstr ""
 
-msgid "out"
-msgstr "fora"
+msgid "Active Outbound tunnels"
+msgstr ""
 
 msgid "Estimated download time for all torrents"
 msgstr "Tempo estimado de download para todos os torrents"
@@ -682,17 +666,41 @@ msgstr "Total de dados carregados (para torrents listados)"
 msgid "Total upload speed"
 msgstr "Velocidade total de upload"
 
-msgid "Enable Debug Mode"
-msgstr "Habilitar Modo de Depuração"
-
-msgid "Disable Debug Mode"
-msgstr "Desativar modo de depuração"
+msgid "Toggle Debug Mode"
+msgstr ""
 
 msgid "Normal Mode"
 msgstr "Modo Normal"
 
 msgid "No DHT Peers"
 msgstr "Nenhum par DHT"
+
+msgid "Search"
+msgstr "Procurar"
+
+msgid "Show All"
+msgstr "Mostrar tudo"
+
+msgid "Active"
+msgstr "Ativo"
+
+msgid "Inactive"
+msgstr "Inativo"
+
+msgid "Connected"
+msgstr "Conectado"
+
+msgid "Seeding"
+msgstr "Semeando"
+
+msgid "Complete"
+msgstr "Completo"
+
+msgid "Incomplete"
+msgstr "Incompleto"
+
+msgid "Stopped"
+msgstr "Detenido"
 
 msgid "First"
 msgstr "Prim."
@@ -1049,9 +1057,6 @@ msgstr "Para alterar os temas manualmente, desative o tema universal"
 msgid "Universal theming is enabled."
 msgstr "O tema universal está ativado."
 
-msgid "Configure"
-msgstr "Configurar"
-
 msgid "Refresh time"
 msgstr "Tempo de actualização"
 
@@ -1072,12 +1077,6 @@ msgstr "torrents"
 
 msgid "Language"
 msgstr "Idioma"
-
-msgid "Smart torrent sorting"
-msgstr "Classificação inteligente de torrents"
-
-msgid "Ignore words such as 'a' and 'the' when sorting"
-msgstr "Ignore palavras como 'a' e 'the' ao classificar"
 
 msgid "Collapsible panels"
 msgstr "Painéis dobráveis"
@@ -1311,6 +1310,15 @@ msgstr "Isto configura o número máximo de túneis a serem abertos, determinado
 msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
 msgstr "Alterar esta configuração para menos de 3 saltos pode melhorar a velocidade às custas do anonimato e não é recomendado"
 
+msgid "Sequential piece or file order not saved - feature currently broken."
+msgstr ""
+
+msgid "Unknown command"
+msgstr ""
+
+msgid "Please retry form submission (bad nonce)"
+msgstr ""
+
 msgid "Info hash"
 msgstr "Hash de informações"
 
@@ -1493,3 +1501,14 @@ msgstr "Salvar alterações"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent deve ser interrompido"
+
+#, java-format
+
+
+
+
+
+
+
+
+

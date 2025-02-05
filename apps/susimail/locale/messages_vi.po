@@ -254,14 +254,14 @@ msgstr "Lỗi gửi thư"
 msgid "Mail sent."
 msgstr "Thư đã gửi."
 
-msgid "Send"
-msgstr "Gửi."
+msgid "Cancel"
+msgstr "Hủy"
 
 msgid "Save as Draft"
 msgstr "Lưu dưới dạng bản nháp"
 
-msgid "Cancel"
-msgstr "Hủy"
+msgid "Send"
+msgstr "Gửi."
 
 msgid "From"
 msgstr "Từ"

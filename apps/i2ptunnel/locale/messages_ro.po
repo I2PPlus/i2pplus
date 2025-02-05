@@ -41,12 +41,6 @@ msgstr "lățime de bandă și fiabilitate standarda"
 msgid "higher bandwidth and reliability"
 msgstr "lățime de bandă și fiabilitate inalta"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Transmiterea formularului invalid, probabil pentru că ați folosit butonul \"reload\" sau \"inapoi\" din browser-ul dumneavoastră. Vă rugăm retrimiteți."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Dacă problema persistă, verificați dacă aveți activate cookie-urile în browser-ul dumneavoastră."
-
 msgid "Configuration reloaded for all tunnels"
 msgstr "Configurare reîncărcata pentru toate tunelurile"
 
@@ -1232,6 +1226,12 @@ msgstr "Generați autentificare"
 
 msgid "SSL Helper"
 msgstr "SSL Helper"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Transmiterea formularului invalid, probabil pentru că ați folosit butonul \"reload\" sau \"inapoi\" din browser-ul dumneavoastră. Vă rugăm retrimiteți."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Dacă problema persistă, verificați dacă aveți activate cookie-urile în browser-ul dumneavoastră."
 
 msgid "Experts only!"
 msgstr "Numai experți!"

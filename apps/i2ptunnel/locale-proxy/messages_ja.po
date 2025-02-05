@@ -8,8 +8,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgid "Warning: Invalid Request URI"
-msgstr "警告: 無効な要求URl"
+msgid "Website Unknown"
+msgstr "ウェブサイトは未知です"
 
 msgid "Router Console"
 msgstr "ルータコンソール"
@@ -25,71 +25,6 @@ msgstr "設定"
 
 msgid "Help"
 msgstr "ヘルプ"
-
-msgid "The request URI is invalid, and probably contains illegal characters."
-msgstr "要求URlは無効で、おそらく不正な文字を含みます。"
-
-msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
-msgstr "リンクをクリックした場合は、ブラウザが誤って追加した文字がないか、URI の末尾を確認してください。リンクをクリックした場合は、ブラウザが誤って追加した文字がないか、URI の末尾を確認してください。もしリンクをクリックしたなら、ブラウザが誤って追加した文字がないか、URlの末尾を確認してください。"
-
-msgid "Connection Reset"
-msgstr "接続リセット"
-
-msgid "The connection to the website was reset while the page was loading."
-msgstr "ページの読み込み中にサイトへの接続がリセットされていました。"
-
-msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Web サイトが一時的に利用できなくなっているか、混雑しているか、アクセスがブロックされている可能性があります。Web サイトが一時的に利用できなくなっているか、混雑しているか、アクセスがブロックされている可能性があります。ウェブサイトが一時的に利用できなくなったり、忙しすぎたり、アクセスがブロックされている可能性があります。"
-
-#, java-format
-msgid "You may want to {0}retry{1}."
-msgstr "{0}リトライ{1}するとよいかもしれません。"
-
-#, java-format
-msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
-msgstr "このページを開いたままにすると、接続試行が失敗した後、{0} 秒ごとにウェブサイトへの接続が自動的に再試行されます。"
-
-msgid "Could not find the following destination:"
-msgstr "以下の宛先が見つかりませんでした:"
-
-msgid "Warning: Non-HTTP Protocol"
-msgstr "警告: 非HTTPなプロトコル"
-
-msgid "The request uses a bad protocol."
-msgstr "要求は悪いプロトコルを使用しています。"
-
-msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
-msgstr "I2PのHTTPプロキシはHTTPとHTTPSの要求のみをサポートします。"
-
-msgid "Other protocols such as FTP are not allowed."
-msgstr "FTPのような他のプロトコルは許可されていません。"
-
-msgid "Warning: No Outproxy Configured"
-msgstr "警告: アウトプロキシが設定されていません"
-
-msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
-msgstr "リクエストは I2P の外部のサイトに対するものでしたが、HTTP アウトプロキシが設定されていません。リクエストは I2P の外部のサイトに対するものでしたが、HTTP アウトプロキシが設定されていません。あなたの要求はI2Pの外側のサイトですが、HTTPアウトプロキシを設定していません。"
-
-msgid "Please configure an outproxy in I2PTunnel."
-msgstr "I2Pトンネルでアウトプロキシを設定してください。"
-
-msgid "Error: Request Denied"
-msgstr "エラー: 要求が拒否されました"
-
-msgid "Error: Cannot Access Router Console via I2P Proxy"
-msgstr "エラー: I2P プロキシ経由でルーター コンソールにアクセスできません"
-
-msgid "Your browser is misconfigured."
-msgstr "このブラウザの設定が悪いです。"
-
-msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
-msgstr "ルーターのコンソール、ローカルホスト、またはローカル LAN の宛先にアクセスするためにプロキシを使用しないでください。ルーターのコンソール、ローカルホスト、またはローカル LAN の宛先にアクセスするためにプロキシを使用しないでください。ルーターコンソール、ローカルホスト、またはローカルLANの宛先へアクセスするのにプロキシを使わないでください。"
-
-msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
-msgstr "127.0.0.1 (または I2P コンソールにアクセスしているアドレス) が I2P の http プロキシ経由でルーティングされないようにする必要があります。通常は、ブラウザのプロキシ設定セクションでアドレスを除外します。127.0.0.1 (または I2P コンソールにアクセスしているアドレス) が I2P の http プロキシ経由でルーティングされないようにする必要があります。通常は、ブラウザのプロキシ設定セクションでアドレスを除外します。"
-
-msgid "Website Unknown"
-msgstr "ウェブサイトは未知です"
 
 msgid "Website Not Found in Addressbook"
 msgstr "アドレス帳にウェブサイトが見つかりませんでした"
@@ -111,99 +46,35 @@ msgstr "それ以外の場合は、Base 32 またはアドレス ヘルパー �
 msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
 msgstr "このページをよく見ますか?このページを頻繁に見ていますか？ {0} FAQ {1}を参照して、{2}のヘルプをアドレスブックにいくつかのサブスクリプション{3}を追加します。"
 
-msgid "Website Unreachable"
-msgstr "到達できないウェブサイト"
+msgid "Could not find the following destination:"
+msgstr "以下の宛先が見つかりませんでした:"
 
-msgid "The website was not reachable, because its lease set was not found."
-msgstr "リースセットが見つからないため、ウェブサイトに到達できません。"
+msgid "Warning: Non-HTTP Protocol"
+msgstr "警告: 非HTTPなプロトコル"
 
-msgid "The website is probably down, but there could also be network congestion."
-msgstr "Web サイトがダウンしている可能性がありますが、ネットワークの混雑も考えられます。Web サイトがダウンしている可能性がありますが、ネットワークの混雑も考えられます。サイトがダウンしている可能性がありますが、ネットワークの混雑もあり得ます。"
+msgid "The request uses a bad protocol."
+msgstr "要求は悪いプロトコルを使用しています。"
 
-msgid "Outproxy Not Found"
-msgstr "アウトプロキシが見つからない"
+msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
+msgstr "I2PのHTTPプロキシはHTTPとHTTPSの要求のみをサポートします。"
 
-msgid "The HTTP Outproxy was not found."
-msgstr "HTTPアウトプロキシが見つかりませんでした。"
+msgid "Other protocols such as FTP are not allowed."
+msgstr "FTPのような他のプロトコルは許可されていません。"
 
-msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "オフラインであるか、ネットワークが混雑しているか、ルーターがまだピアと十分に統合されていません。オフラインであるか、ネットワークが混雑しているか、ルーターがまだピアと十分に統合されていません。オフラインであるか、ネットワークが混雑しているか、ルータがまだピアとうまく統合されていないかのいずれかです。"
+msgid "Error: Request Denied"
+msgstr "エラー: 要求が拒否されました"
 
-#, java-format
-msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
-msgstr "{2}ここ{3}で定義したプールからアウトプロキシがランダムに再選択されるため、{0}再試行{1}することをお勧めします (複数のアウトプロキシが構成されている場合)。{2}ここ{3}で定義したプールからアウトプロキシがランダムに再選択されるため、{0}再試行{1}することをお勧めします (複数のアウトプロキシが構成されている場合)。（複数のアウトプロキシが設定されている場合は）{2}ここ{3}で定義したプールから無作為にアウトプロキシが再選択されるので、{0}リトライ{1}することをお勧めします。"
+msgid "Error: Cannot Access Router Console via I2P Proxy"
+msgstr "エラー: I2P プロキシ経由でルーター コンソールにアクセスできません"
 
-#, java-format
-msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
-msgstr "引き続き問題が発生する場合は、{0}ここ{1}でアウトプロキシ リストを編集してください。引き続き問題が発生する場合は、{0}ここ{1}でアウトプロキシ リストを編集してください。問題が続く場合は、{0}ここ{1}のアウトプロキシの一覧を編集するとよいでしょう。"
+msgid "Your browser is misconfigured."
+msgstr "このブラウザの設定が悪いです。"
 
-msgid "Warning: Request Denied"
-msgstr "警告: 要求が拒否されました"
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
+msgstr "ルーターのコンソール、ローカルホスト、またはローカル LAN の宛先にアクセスするためにプロキシを使用しないでください。ルーターのコンソール、ローカルホスト、またはローカル LAN の宛先にアクセスするためにプロキシを使用しないでください。ルーターコンソール、ローカルホスト、またはローカルLANの宛先へアクセスするのにプロキシを使わないでください。"
 
-msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
-msgstr "このアドレスは奇形であるように見えます。 有効なアドレスが提供されていることを確認してください！"
-
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "非 I2P Web サイトまたは場所に接続しようとしました。"
-
-msgid "Outproxy Unreachable"
-msgstr "到達できないアウトプロキシ"
-
-msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
-msgstr "HTTP アウトプロキシは、I2P または Java バージョンでサポートされていない暗号化オプションを使用しているため、到達できませんでした。HTTP アウトプロキシは、I2P または Java バージョンでサポートされていない暗号化オプションを使用しているため、到達できませんでした。あなたの I2P の Java バージョンがサポートしない暗号化の選択を使用するため、HTTP アウトプロキシに到達できません。"
-
-msgid "Could not connect to the following destination:"
-msgstr "次の宛先に接続できませんでした:"
-
-msgid "Proxy Authorization Required"
-msgstr "プロキシが認証を要求"
-
-msgid "I2P HTTP Proxy Authorization Required"
-msgstr "I2PのHTTPプロキシが認証を要求しました"
-
-msgid "This proxy is configured to require a username and password for access."
-msgstr "このプロキシは、アクセスにユーザー名とパスワードを必要とするように構成されています。このプロキシは、アクセスにユーザー名とパスワードを必要とするように構成されています。このプロキシは、アクセスにユーザー名とパスワードを要求するように設定されています。"
-
-#, java-format
-msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
-msgstr "ユーザー名とパスワードを入力するか、{0}ルーター構成{1}または{2}I2PTunnel 構成{3}を確認してください。"
-
-#, java-format
-msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
-msgstr "認証を無効にするには、設定 {0}i2ptunnel.proxy.auth=basic{1} を削除し、HTTP プロキシ トンネルを停止して再起動します。認証を無効にするには、設定 {0}i2ptunnel.proxy.auth=basic{1} を削除し、HTTP プロキシ トンネルを停止して再起動します。"
-
-msgid "Warning: Invalid Destination"
-msgstr "警告: 無効な宛先"
-
-msgid "The website destination specified was not valid, or was otherwise unreachable."
-msgstr "指定された Web サイトの宛先が無効であるか、到達できませんでした。"
-
-msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
-msgstr "おそらく、間違った Base 64 文字列を貼り付けたか、たどっているリンクが間違っています。"
-
-msgid "The I2P host could also be offline."
-msgstr "I2Pホストがオフラインになっている可能性もあります。"
-
-msgid "The connection to the proxy was reset."
-msgstr "プロキシへの接続がリセットされました。"
-
-msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "プロキシが一時的に利用できなくなっているか、混雑しているか、アクセスがブロックされている可能性があります。プロキシが一時的に利用できなくなっているか、混雑しているか、アクセスがブロックされている可能性があります。プロキシが一時的に利用できないか、忙しいか、あなたのアクセスがブロックされている可能性があります。"
-
-msgid "The HTTP outproxy was not reachable, because its lease set was not found."
-msgstr "リース セットが見つからなかったため、HTTP アウトプロキシに到達できませんでした。リース セットが見つからなかったため、HTTP アウトプロキシに到達できませんでした。リースセットが見つからなかったため、HTTP アウトプロキシには到達できませんでした。"
-
-msgid "The outproxy is probably down, but there could also be network congestion."
-msgstr "アウトプロキシがダウンしている可能性がありますが、ネットワークの輻輳が発生している可能性もあります。アウトプロキシがダウンしている可能性がありますが、ネットワークの輻輳が発生している可能性もあります。アウトプロキシがダウンしている可能性がありますが、ネットワークの混雑もあり得ます。"
-
-msgid "Warning: Authorization Required"
-msgstr "警告: 認証が必要です"
-
-msgid "The website was not reachable."
-msgstr "ウェブサイトに到達できません."
-
-msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "Web サイトがオフラインであるか、ネットワークが混雑しているか、ルーターがまだピアと十分に統合されていません。Web サイトがオフラインであるか、ネットワークが混雑しているか、ルーターがまだピアと十分に統合されていません。ウェブサイトはオフラインか、ネットワークが混み合っているか、あるいはルータがまだきちんとピアに統合されていません。"
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "127.0.0.1 (または I2P コンソールにアクセスしているアドレス) が I2P の http プロキシ経由でルーティングされないようにする必要があります。通常は、ブラウザのプロキシ設定セクションでアドレスを除外します。127.0.0.1 (または I2P コンソールにアクセスしているアドレス) が I2P の http プロキシ経由でルーティングされないようにする必要があります。通常は、ブラウザのプロキシ設定セクションでアドレスを除外します。"
 
 msgid "Warning: Destination Key Conflict"
 msgstr "警告: 宛先キーの衝突"
@@ -217,24 +88,81 @@ msgstr "誰かが別の Web サイトになりすまそうとしているか、2
 msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
 msgstr "どのキーを信頼するかを決定して競合を解決し、アドレス ヘルパー リンクを無視するか、アドレス帳からホスト エントリを削除してアドレス ヘルパー リンクを再度クリックします。どのキーを信頼するかを決定して競合を解決し、アドレス ヘルパー リンクを無視するか、アドレス帳からホスト エントリを削除してアドレス ヘルパー リンクを再度クリックします。"
 
-msgid "The Base32 address is invalid."
-msgstr "そのBase32アドレスは無効です。"
+msgid "Connection Reset"
+msgstr "接続リセット"
 
-msgid "Warning: Bad Address Helper"
-msgstr "警告: 悪いアドレスヘルパー"
+msgid "The connection to the website was reset while the page was loading."
+msgstr "ページの読み込み中にサイトへの接続がリセットされていました。"
+
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Web サイトが一時的に利用できなくなっているか、混雑しているか、アクセスがブロックされている可能性があります。Web サイトが一時的に利用できなくなっているか、混雑しているか、アクセスがブロックされている可能性があります。ウェブサイトが一時的に利用できなくなったり、忙しすぎたり、アクセスがブロックされている可能性があります。"
 
 #, java-format
-msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
-msgstr "URL（{0}i2paddresshelper={1}）にあるヘルパーキーは解決不可能です。"
+msgid "You may want to {0}retry{1}."
+msgstr "{0}リトライ{1}するとよいかもしれません。"
 
-msgid "It seems to be garbage data, or a mistyped Base 32 address."
-msgstr "それはゴミデータ、または Base 32 アドレスの入力ミスと思われます。"
+#, java-format
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
+msgstr "このページを開いたままにすると、接続試行が失敗した後、{0} 秒ごとにウェブサイトへの接続が自動的に再試行されます。"
 
-msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
-msgstr "URL を確認して、有効な Base 32 ホスト名または Base 64 キーになるようにヘルパー キーを修正してください。"
+msgid "Website Unreachable"
+msgstr "到達できないウェブサイト"
 
 msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
 msgstr "I2P または Java バージョンでサポートされていない暗号化オプションが使用されているため、Web サイトにアクセスできませんでした。I2P または Java バージョンでサポートされていない暗号化オプションが使用されているため、Web サイトにアクセスできませんでした。あなたの I2P の Java バージョンがサポートしない暗号化の選択を使用するため、ウェブサイトに到達できません。"
+
+msgid "Could not connect to the following destination:"
+msgstr "次の宛先に接続できませんでした:"
+
+msgid "The website was not reachable, because its lease set was not found."
+msgstr "リースセットが見つからないため、ウェブサイトに到達できません。"
+
+msgid "The website is probably down, but there could also be network congestion."
+msgstr "Web サイトがダウンしている可能性がありますが、ネットワークの混雑も考えられます。Web サイトがダウンしている可能性がありますが、ネットワークの混雑も考えられます。サイトがダウンしている可能性がありますが、ネットワークの混雑もあり得ます。"
+
+msgid "The connection to the proxy was reset."
+msgstr "プロキシへの接続がリセットされました。"
+
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "プロキシが一時的に利用できなくなっているか、混雑しているか、アクセスがブロックされている可能性があります。プロキシが一時的に利用できなくなっているか、混雑しているか、アクセスがブロックされている可能性があります。プロキシが一時的に利用できないか、忙しいか、あなたのアクセスがブロックされている可能性があります。"
+
+#, java-format
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "{2}ここ{3}で定義したプールからアウトプロキシがランダムに再選択されるため、{0}再試行{1}することをお勧めします (複数のアウトプロキシが構成されている場合)。{2}ここ{3}で定義したプールからアウトプロキシがランダムに再選択されるため、{0}再試行{1}することをお勧めします (複数のアウトプロキシが構成されている場合)。（複数のアウトプロキシが設定されている場合は）{2}ここ{3}で定義したプールから無作為にアウトプロキシが再選択されるので、{0}リトライ{1}することをお勧めします。"
+
+#, java-format
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr "引き続き問題が発生する場合は、{0}ここ{1}でアウトプロキシ リストを編集してください。引き続き問題が発生する場合は、{0}ここ{1}でアウトプロキシ リストを編集してください。問題が続く場合は、{0}ここ{1}のアウトプロキシの一覧を編集するとよいでしょう。"
+
+msgid "Outproxy Unreachable"
+msgstr "到達できないアウトプロキシ"
+
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "HTTP アウトプロキシは、I2P または Java バージョンでサポートされていない暗号化オプションを使用しているため、到達できませんでした。HTTP アウトプロキシは、I2P または Java バージョンでサポートされていない暗号化オプションを使用しているため、到達できませんでした。あなたの I2P の Java バージョンがサポートしない暗号化の選択を使用するため、HTTP アウトプロキシに到達できません。"
+
+msgid "The website was not reachable."
+msgstr "ウェブサイトに到達できません."
+
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Web サイトがオフラインであるか、ネットワークが混雑しているか、ルーターがまだピアと十分に統合されていません。Web サイトがオフラインであるか、ネットワークが混雑しているか、ルーターがまだピアと十分に統合されていません。ウェブサイトはオフラインか、ネットワークが混み合っているか、あるいはルータがまだきちんとピアに統合されていません。"
+
+msgid "Warning: No Outproxy Configured"
+msgstr "警告: アウトプロキシが設定されていません"
+
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr "リクエストは I2P の外部のサイトに対するものでしたが、HTTP アウトプロキシが設定されていません。リクエストは I2P の外部のサイトに対するものでしたが、HTTP アウトプロキシが設定されていません。あなたの要求はI2Pの外側のサイトですが、HTTPアウトプロキシを設定していません。"
+
+msgid "Please configure an outproxy in I2PTunnel."
+msgstr "I2Pトンネルでアウトプロキシを設定してください。"
+
+msgid "Outproxy Not Found"
+msgstr "アウトプロキシが見つからない"
+
+msgid "The HTTP Outproxy was not found."
+msgstr "HTTPアウトプロキシが見つかりませんでした。"
+
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "オフラインであるか、ネットワークが混雑しているか、ルーターがまだピアと十分に統合されていません。オフラインであるか、ネットワークが混雑しているか、ルーターがまだピアと十分に統合されていません。オフラインであるか、ネットワークが混雑しているか、ルータがまだピアとうまく統合されていないかのいずれかです。"
 
 msgid "Information: New Host Name"
 msgstr "情報: 新しいホスト名"
@@ -256,6 +184,78 @@ msgstr "保存しなければ、ホスト名はルーターを再起動すると
 
 msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
 msgstr "このホストにアクセスしたくない場合は、ブラウザの「戻る」ボタンをクリックしてください。このホストにアクセスしたくない場合は、ブラウザの「戻る」ボタンをクリックしてください。このホストを訪問したくない場合は、ブラウザの\"戻る\"ボタンをクリックしてください。"
+
+msgid "Proxy Authorization Required"
+msgstr "プロキシが認証を要求"
+
+msgid "I2P HTTP Proxy Authorization Required"
+msgstr "I2PのHTTPプロキシが認証を要求しました"
+
+msgid "This proxy is configured to require a username and password for access."
+msgstr "このプロキシは、アクセスにユーザー名とパスワードを必要とするように構成されています。このプロキシは、アクセスにユーザー名とパスワードを必要とするように構成されています。このプロキシは、アクセスにユーザー名とパスワードを要求するように設定されています。"
+
+#, java-format
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "ユーザー名とパスワードを入力するか、{0}ルーター構成{1}または{2}I2PTunnel 構成{3}を確認してください。"
+
+#, java-format
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "認証を無効にするには、設定 {0}i2ptunnel.proxy.auth=basic{1} を削除し、HTTP プロキシ トンネルを停止して再起動します。認証を無効にするには、設定 {0}i2ptunnel.proxy.auth=basic{1} を削除し、HTTP プロキシ トンネルを停止して再起動します。"
+
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr "リース セットが見つからなかったため、HTTP アウトプロキシに到達できませんでした。リース セットが見つからなかったため、HTTP アウトプロキシに到達できませんでした。リースセットが見つからなかったため、HTTP アウトプロキシには到達できませんでした。"
+
+msgid "The outproxy is probably down, but there could also be network congestion."
+msgstr "アウトプロキシがダウンしている可能性がありますが、ネットワークの輻輳が発生している可能性もあります。アウトプロキシがダウンしている可能性がありますが、ネットワークの輻輳が発生している可能性もあります。アウトプロキシがダウンしている可能性がありますが、ネットワークの混雑もあり得ます。"
+
+msgid "Warning: Request Denied"
+msgstr "警告: 要求が拒否されました"
+
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr "このアドレスは奇形であるように見えます。 有効なアドレスが提供されていることを確認してください！"
+
+msgid "You attempted to connect to a non-I2P website or location."
+msgstr "非 I2P Web サイトまたは場所に接続しようとしました。"
+
+msgid "Warning: Bad Address Helper"
+msgstr "警告: 悪いアドレスヘルパー"
+
+#, java-format
+msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgstr "URL（{0}i2paddresshelper={1}）にあるヘルパーキーは解決不可能です。"
+
+msgid "It seems to be garbage data, or a mistyped Base 32 address."
+msgstr "それはゴミデータ、または Base 32 アドレスの入力ミスと思われます。"
+
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr "URL を確認して、有効な Base 32 ホスト名または Base 64 キーになるようにヘルパー キーを修正してください。"
+
+msgid "Warning: Invalid Destination"
+msgstr "警告: 無効な宛先"
+
+msgid "The website destination specified was not valid, or was otherwise unreachable."
+msgstr "指定された Web サイトの宛先が無効であるか、到達できませんでした。"
+
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr "おそらく、間違った Base 64 文字列を貼り付けたか、たどっているリンクが間違っています。"
+
+msgid "The I2P host could also be offline."
+msgstr "I2Pホストがオフラインになっている可能性もあります。"
+
+msgid "Warning: Authorization Required"
+msgstr "警告: 認証が必要です"
+
+msgid "Warning: Invalid Request URI"
+msgstr "警告: 無効な要求URl"
+
+msgid "The request URI is invalid, and probably contains illegal characters."
+msgstr "要求URlは無効で、おそらく不正な文字を含みます。"
+
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr "リンクをクリックした場合は、ブラウザが誤って追加した文字がないか、URI の末尾を確認してください。リンクをクリックした場合は、ブラウザが誤って追加した文字がないか、URI の末尾を確認してください。もしリンクをクリックしたなら、ブラウザが誤って追加した文字がないか、URlの末尾を確認してください。"
+
+msgid "The Base32 address is invalid."
+msgstr "そのBase32アドレスは無効です。"
 
 msgid "This seems to be a bad destination:"
 msgstr "これは間違った宛先のようです:"

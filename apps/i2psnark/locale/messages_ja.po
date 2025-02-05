@@ -23,6 +23,12 @@ msgstr "I2Pに接続できません"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "I2P接続でエラーが発生しました - I2CP設定を確認して下さい！"
 
+msgid "Download already running: "
+msgstr ""
+
+msgid "Downloading"
+msgstr "ダウンロード中"
+
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "I2CP オプションを使用した I2PSnark の構成"
 
@@ -466,12 +472,23 @@ msgid "Anonymous BitTorrent Client"
 msgstr "匿名の BitTorrent クライアント"
 
 #, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr ""
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr ""
+
+#, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "ファイル \\''{0}\\'' を削除してもよろしいですか (ダウンロードされたデータは削除されません)?"
 
+msgid "Note: Downloaded data will not be deleted."
+msgstr ""
+
 #, java-format
-msgid "Are you sure you want to delete torrent file {0} and all downloaded data?"
-msgstr "Torrent \\''{0}\\'' とダウンロードされたすべてのデータを削除してもよろしいですか?"
+msgid "Deleting {0} and associated metadata only..."
+msgstr ""
 
 msgid "I2PSnark has stopped"
 msgstr "I2PSnark が停止しました"
@@ -484,6 +501,9 @@ msgstr "Torrent"
 
 msgid "Refresh page"
 msgstr "ページを更新する"
+
+msgid "Configure"
+msgstr "設定"
 
 msgid "Forum"
 msgstr "フォーラム"
@@ -524,36 +544,6 @@ msgstr "ページ更新"
 
 msgid "Warning - No I2P"
 msgstr "警告 - I2P なし"
-
-msgid "Search"
-msgstr "検索"
-
-msgid "Show All"
-msgstr "すべて表示"
-
-msgid "Active"
-msgstr "アクティブ"
-
-msgid "Inactive"
-msgstr "活動休止中"
-
-msgid "Connected"
-msgstr "接続済み"
-
-msgid "Downloading"
-msgstr "ダウンロード中"
-
-msgid "Seeding"
-msgstr "シード"
-
-msgid "Complete"
-msgstr "完了"
-
-msgid "Incomplete"
-msgstr "不完全"
-
-msgid "Stopped"
-msgstr "停止しました"
 
 msgid "Status"
 msgstr "状態"
@@ -634,35 +624,30 @@ msgstr "トレントが見つかりませんでした。"
 msgid "No torrents loaded."
 msgstr "トレントがロードされていません。"
 
-msgid "Totals"
-msgstr "合計"
-
 #, java-format
 msgid "1 torrent"
 msgid_plural "{0} torrents"
 msgstr[0] "{0}急流"
 
-#, java-format
-msgid "1 connected peer"
-msgid_plural "{0} connected peers"
-msgstr[0] "{0}接続されたピア"
+msgid "Total size of loaded torrents"
+msgstr ""
 
 #, java-format
 msgid "1 DHT peer"
 msgid_plural "{0} DHT peers"
 msgstr[0] "{0} DHTピア"
 
-msgid "Configured maximum (actual usage may be less)"
-msgstr "設定された最大値 (実際の使用量はこれより少ない場合があります)"
+msgid "Active downloads"
+msgstr ""
 
-msgid "Tunnels"
-msgstr "トンネル"
+msgid "Active uploads"
+msgstr ""
 
-msgid "in"
-msgstr "で"
+msgid "Active Inbound tunnels"
+msgstr ""
 
-msgid "out"
-msgstr "アウト"
+msgid "Active Outbound tunnels"
+msgstr ""
 
 msgid "Estimated download time for all torrents"
 msgstr "すべてのトレントの推定ダウンロード時間"
@@ -679,17 +664,41 @@ msgstr "アップロードされた合計データ (リストされたトレン�
 msgid "Total upload speed"
 msgstr "総アップロード速度"
 
-msgid "Enable Debug Mode"
-msgstr "デバッグモードを有効にする"
-
-msgid "Disable Debug Mode"
-msgstr "デバッグモードを無効にする"
+msgid "Toggle Debug Mode"
+msgstr ""
 
 msgid "Normal Mode"
 msgstr "ノーマルモード"
 
 msgid "No DHT Peers"
 msgstr "DHT ピアがありません"
+
+msgid "Search"
+msgstr "検索"
+
+msgid "Show All"
+msgstr "すべて表示"
+
+msgid "Active"
+msgstr "アクティブ"
+
+msgid "Inactive"
+msgstr "活動休止中"
+
+msgid "Connected"
+msgstr "接続済み"
+
+msgid "Seeding"
+msgstr "シード"
+
+msgid "Complete"
+msgstr "完了"
+
+msgid "Incomplete"
+msgstr "不完全"
+
+msgid "Stopped"
+msgstr "停止しました"
 
 msgid "First"
 msgstr "最初"
@@ -1044,9 +1053,6 @@ msgstr "テーマを手動で変更するには、ユニバーサルテーマを
 msgid "Universal theming is enabled."
 msgstr "ユニバーサルテーマが有効になっています。"
 
-msgid "Configure"
-msgstr "設定"
-
 msgid "Refresh time"
 msgstr "リフレッシュタイム"
 
@@ -1067,12 +1073,6 @@ msgstr "激流"
 
 msgid "Language"
 msgstr "言語"
-
-msgid "Smart torrent sorting"
-msgstr "スマートトレントソート"
-
-msgid "Ignore words such as 'a' and 'the' when sorting"
-msgstr "並べ替え時に「a」や「the」などの単語を無視する"
 
 msgid "Collapsible panels"
 msgstr "折りたたみパネル"
@@ -1304,6 +1304,15 @@ msgstr "これは、接続されているピアの数によって決定される
 msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
 msgstr "この設定を 3 ホップ未満に変更すると、匿名性を犠牲にして速度が向上する可能性があるため、お勧めできません"
 
+msgid "Sequential piece or file order not saved - feature currently broken."
+msgstr ""
+
+msgid "Unknown command"
+msgstr ""
+
+msgid "Please retry form submission (bad nonce)"
+msgstr ""
+
 msgid "Info hash"
 msgstr "情報ハッシュ"
 
@@ -1485,3 +1494,14 @@ msgstr "変更を保存"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent を停止する必要があります"
+
+#, java-format
+
+
+
+
+
+
+
+
+

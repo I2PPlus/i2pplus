@@ -23,6 +23,12 @@ msgstr "Kan ikke koble til I2P"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Feil ved tilkobling til I2P - Sjekk dine I2CP-innstillinger!"
 
+msgid "Download already running: "
+msgstr ""
+
+msgid "Downloading"
+msgstr "Nedlasting"
+
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "Konfigurering av I2PSnark med I2CP-alternativer"
 
@@ -466,12 +472,23 @@ msgid "Anonymous BitTorrent Client"
 msgstr "Anonym BitTorrent-klient"
 
 #, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr ""
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr ""
+
+#, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "Er du sikker på at du vil slette filen \\''{0}\\'' (nedlastede data vil ikke bli slettet) ?"
 
+msgid "Note: Downloaded data will not be deleted."
+msgstr ""
+
 #, java-format
-msgid "Are you sure you want to delete torrent file {0} and all downloaded data?"
-msgstr "Er du sikker på at du vil slette torrenten \\''{0}\\'' og alle nedlastede data?Er du sikker på at du vil slette torrenten \\\"{0}\\\" og all nedlastet data?"
+msgid "Deleting {0} and associated metadata only..."
+msgstr ""
 
 msgid "I2PSnark has stopped"
 msgstr "I2PSnark har stoppet"
@@ -484,6 +501,9 @@ msgstr "Torrents"
 
 msgid "Refresh page"
 msgstr "Oppdater side"
+
+msgid "Configure"
+msgstr "Sett opp"
 
 msgid "Forum"
 msgstr "Forum"
@@ -524,36 +544,6 @@ msgstr "sideoppdatering"
 
 msgid "Warning - No I2P"
 msgstr "Advarsel - Ingen I2P"
-
-msgid "Search"
-msgstr "Søk"
-
-msgid "Show All"
-msgstr "Vis alle"
-
-msgid "Active"
-msgstr "Aktiv"
-
-msgid "Inactive"
-msgstr "Inaktiv"
-
-msgid "Connected"
-msgstr "Tilkoblet"
-
-msgid "Downloading"
-msgstr "Nedlasting"
-
-msgid "Seeding"
-msgstr "Deler"
-
-msgid "Complete"
-msgstr "Ferdig"
-
-msgid "Incomplete"
-msgstr "Ufullstendig"
-
-msgid "Stopped"
-msgstr "Stoppet"
 
 msgid "Status"
 msgstr "Status"
@@ -634,20 +624,14 @@ msgstr "Ingen torrenter funnet."
 msgid "No torrents loaded."
 msgstr "Ingen torrenter lastet."
 
-msgid "Totals"
-msgstr "Totaler"
-
 #, java-format
 msgid "1 torrent"
 msgid_plural "{0} torrents"
 msgstr[0] "1 torrent"
 msgstr[1] "{0} torrenter"
 
-#, java-format
-msgid "1 connected peer"
-msgid_plural "{0} connected peers"
-msgstr[0] "1 tilkoblet peer"
-msgstr[1] "{0} tilkoblet delere"
+msgid "Total size of loaded torrents"
+msgstr ""
 
 #, java-format
 msgid "1 DHT peer"
@@ -655,17 +639,17 @@ msgid_plural "{0} DHT peers"
 msgstr[0] "1 DHT peer"
 msgstr[1] "{0} DHT-delere"
 
-msgid "Configured maximum (actual usage may be less)"
-msgstr "Konfigurert maksimum (faktisk bruk kan være mindre)"
+msgid "Active downloads"
+msgstr ""
 
-msgid "Tunnels"
-msgstr "Tunneler"
+msgid "Active uploads"
+msgstr ""
 
-msgid "in"
-msgstr "i"
+msgid "Active Inbound tunnels"
+msgstr ""
 
-msgid "out"
-msgstr "ut"
+msgid "Active Outbound tunnels"
+msgstr ""
 
 msgid "Estimated download time for all torrents"
 msgstr "Estimert nedlastingstid for alle torrenter"
@@ -682,17 +666,41 @@ msgstr "Totalt lastet opp data (for oppførte torrenter)"
 msgid "Total upload speed"
 msgstr "Total opplastingshastighet"
 
-msgid "Enable Debug Mode"
-msgstr "Aktiver feilsøkingsmodus"
-
-msgid "Disable Debug Mode"
-msgstr "Deaktiver feilsøkingsmodus"
+msgid "Toggle Debug Mode"
+msgstr ""
 
 msgid "Normal Mode"
 msgstr "Normal modus"
 
 msgid "No DHT Peers"
 msgstr "Ingen DHT Peers"
+
+msgid "Search"
+msgstr "Søk"
+
+msgid "Show All"
+msgstr "Vis alle"
+
+msgid "Active"
+msgstr "Aktiv"
+
+msgid "Inactive"
+msgstr "Inaktiv"
+
+msgid "Connected"
+msgstr "Tilkoblet"
+
+msgid "Seeding"
+msgstr "Deler"
+
+msgid "Complete"
+msgstr "Ferdig"
+
+msgid "Incomplete"
+msgstr "Ufullstendig"
+
+msgid "Stopped"
+msgstr "Stoppet"
 
 msgid "First"
 msgstr "Først"
@@ -1049,9 +1057,6 @@ msgstr "For å endre temaer manuelt, deaktiver universelt tema"
 msgid "Universal theming is enabled."
 msgstr "Universell tema er aktivert."
 
-msgid "Configure"
-msgstr "Sett opp"
-
 msgid "Refresh time"
 msgstr "Oppdater tid"
 
@@ -1072,12 +1077,6 @@ msgstr "torrenter"
 
 msgid "Language"
 msgstr "Språk"
-
-msgid "Smart torrent sorting"
-msgstr "Smart torrentsortering"
-
-msgid "Ignore words such as 'a' and 'the' when sorting"
-msgstr "Ignorer ord som 'a' og 'the' når du sorterer"
 
 msgid "Collapsible panels"
 msgstr "Sammenleggbare paneler"
@@ -1311,6 +1310,15 @@ msgstr "Dette konfigurerer maksimalt antall tunneler som skal åpnes, bestemt av
 msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
 msgstr "Endring av denne innstillingen til mindre enn 3 hopp kan forbedre hastigheten på bekostning av anonymitet og anbefales ikke"
 
+msgid "Sequential piece or file order not saved - feature currently broken."
+msgstr ""
+
+msgid "Unknown command"
+msgstr ""
+
+msgid "Please retry form submission (bad nonce)"
+msgstr ""
+
 msgid "Info hash"
 msgstr "Infohash"
 
@@ -1493,3 +1501,14 @@ msgstr "Lagre endringer"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent må stoppes"
+
+#, java-format
+
+
+
+
+
+
+
+
+

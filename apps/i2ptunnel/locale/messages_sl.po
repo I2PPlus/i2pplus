@@ -44,12 +44,6 @@ msgstr "standardna širina pasma in pouzdanost"
 msgid "higher bandwidth and reliability"
 msgstr "višja širina pasma in pouzdanost"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Neveljavno pošiljanje obrazca, verjetno zaradi uporabe gumba 'nazaj' ali 'osveži' v brskalniku. Prosim poskusite znova."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Če težava obstaja, preverite, ali imate omogočene piškotke v brskalniku."
-
 msgid "Configuration reloaded for all tunnels"
 msgstr "Nastavitve ponovno naložene za vse tunelje"
 
@@ -1237,6 +1231,12 @@ msgstr "Ustvari avtentikacijo"
 
 msgid "SSL Helper"
 msgstr "Pomočnik SSL"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Neveljavno pošiljanje obrazca, verjetno zaradi uporabe gumba 'nazaj' ali 'osveži' v brskalniku. Prosim poskusite znova."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Če težava obstaja, preverite, ali imate omogočene piškotke v brskalniku."
 
 msgid "Experts only!"
 msgstr "Le za strokovnjake!"

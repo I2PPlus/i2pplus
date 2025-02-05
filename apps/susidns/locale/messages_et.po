@@ -130,17 +130,14 @@ msgid_plural "{0} destinations deleted."
 msgstr[0] "1 sihtkoha kustutati."
 msgstr[1] "{0} sihtkohta kustutati."
 
-msgid "No entries selected to delete."
-msgstr "Valitud kustutamiseks kirju ei ole."
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "Lisa alternatiiv"
 
 msgid "Address book saved."
 msgstr "Aadressiraamat salvestatud."
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "Sirvi välja sellest aadressiraamatust ja naasta tagasi uuenduse nägemiseks."
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "VIGA: Aadressiraamatu faili ei saa kirjutada."
@@ -321,6 +318,9 @@ msgstr "Märgi kustutamiseks"
 msgid "Cancel"
 msgstr "Katkesta"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "nt. newdomain.i2p"
 
@@ -398,6 +398,9 @@ msgstr "Fail, kuhu tegevust logida (muuda /dev/null, kui soovite)"
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Ülevalvava teema nimi, mida kasutada (vaikeväärtus on konsooli valitud teema)"
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "aadressiraamat"
@@ -593,3 +596,5 @@ msgstr "Käsitselt põhi aadressiraamatusse lisatud aadressid ühendatakse sinu 
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Tellimuste kaudu saadud hostid ühendatakse sinu Rooteri aadressiraamatusse."
+
+

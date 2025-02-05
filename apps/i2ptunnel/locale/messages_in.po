@@ -35,12 +35,6 @@ msgstr "bandwidth dan keandalan standar"
 msgid "higher bandwidth and reliability"
 msgstr "bandwidth dan kehandalan yang lebih tinggi"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Form submission tidak valid , mungkin karena anda menggunakan tombol 'back' atau 'reload' pada browser anda. Silakan mengirimkan kembali."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Jika masalah berlanjut, periksa jika anda telah mengaktifkan cookies di browser anda."
-
 msgid "Configuration reloaded for all tunnels"
 msgstr "Konfigurasi dimuat ulang untuk semua tunnel"
 
@@ -1222,6 +1216,12 @@ msgstr "Hasilkan Otentikasi"
 
 msgid "SSL Helper"
 msgstr "SSL Helper "
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Form submission tidak valid , mungkin karena anda menggunakan tombol 'back' atau 'reload' pada browser anda. Silakan mengirimkan kembali."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Jika masalah berlanjut, periksa jika anda telah mengaktifkan cookies di browser anda."
 
 msgid "Experts only!"
 msgstr "Hanya untuk pengguna ahli!"

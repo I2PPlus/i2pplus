@@ -254,14 +254,14 @@ msgstr "메일 보내기 오류"
 msgid "Mail sent."
 msgstr "메일 보냄."
 
-msgid "Send"
-msgstr "보내기"
+msgid "Cancel"
+msgstr "취소"
 
 msgid "Save as Draft"
 msgstr "임시 보관함에 저장"
 
-msgid "Cancel"
-msgstr "취소"
+msgid "Send"
+msgstr "보내기"
 
 msgid "From"
 msgstr "보낸이:"

@@ -23,6 +23,12 @@ msgstr "امکان اتصال به I2P وجود ندارد"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "خطا در اتصال به I2P - تنظیمات I2CP خود را بررسی کنید!"
 
+msgid "Download already running: "
+msgstr ""
+
+msgid "Downloading"
+msgstr "در حال دانلود"
+
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "پیکربندی I2PSnark با گزینه های I2CP"
 
@@ -466,12 +472,23 @@ msgid "Anonymous BitTorrent Client"
 msgstr "کلاینت بیت تورنت ناشناس"
 
 #, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr ""
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr ""
+
+#, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "آیا مطمئن هستید که می‌خواهید فایل \\''{0}\\'' را حذف کنید (داده‌های دانلود شده حذف نمی‌شوند)؟"
 
+msgid "Note: Downloaded data will not be deleted."
+msgstr ""
+
 #, java-format
-msgid "Are you sure you want to delete torrent file {0} and all downloaded data?"
-msgstr "آیا مطمئن هستید که می خواهید تورنت \\''{0}\\'' و همه داده های دانلود شده را حذف کنید؟"
+msgid "Deleting {0} and associated metadata only..."
+msgstr ""
 
 msgid "I2PSnark has stopped"
 msgstr "I2PSnark متوقف شد"
@@ -484,6 +501,9 @@ msgstr "تورنت ها"
 
 msgid "Refresh page"
 msgstr "صفحه تازه سازی"
+
+msgid "Configure"
+msgstr "پیکربندی"
 
 msgid "Forum"
 msgstr "انجمن"
@@ -524,36 +544,6 @@ msgstr "بازسازی صفحه"
 
 msgid "Warning - No I2P"
 msgstr "هشدار - I2P وجود ندارد"
-
-msgid "Search"
-msgstr "جستجو کردن"
-
-msgid "Show All"
-msgstr "نمایش همه"
-
-msgid "Active"
-msgstr "فعال"
-
-msgid "Inactive"
-msgstr "غیرفعال"
-
-msgid "Connected"
-msgstr "متصل"
-
-msgid "Downloading"
-msgstr "در حال دانلود"
-
-msgid "Seeding"
-msgstr "بذر"
-
-msgid "Complete"
-msgstr "کامل کنید"
-
-msgid "Incomplete"
-msgstr "ناقص"
-
-msgid "Stopped"
-msgstr "متوقف شد"
 
 msgid "Status"
 msgstr "وضعیت"
@@ -634,20 +624,14 @@ msgstr "هیچ تورنتی یافت نشد."
 msgid "No torrents loaded."
 msgstr "هیچ تورنتی بارگذاری نشد."
 
-msgid "Totals"
-msgstr "مجموع"
-
 #, java-format
 msgid "1 torrent"
 msgid_plural "{0} torrents"
 msgstr[0] "{0} تورنت"
 msgstr[1] "1 تورنت"
 
-#, java-format
-msgid "1 connected peer"
-msgid_plural "{0} connected peers"
-msgstr[0] "{0} همسالان متصل"
-msgstr[1] "1 همکار متصل"
+msgid "Total size of loaded torrents"
+msgstr ""
 
 #, java-format
 msgid "1 DHT peer"
@@ -655,17 +639,17 @@ msgid_plural "{0} DHT peers"
 msgstr[0] "{0} همسالان DHT"
 msgstr[1] "1 DHT Peer"
 
-msgid "Configured maximum (actual usage may be less)"
-msgstr "حداکثر پیکربندی شده (ممکن است استفاده واقعی کمتر باشد)"
+msgid "Active downloads"
+msgstr ""
 
-msgid "Tunnels"
-msgstr "تونل ها"
+msgid "Active uploads"
+msgstr ""
 
-msgid "in"
-msgstr "در"
+msgid "Active Inbound tunnels"
+msgstr ""
 
-msgid "out"
-msgstr "خارج"
+msgid "Active Outbound tunnels"
+msgstr ""
 
 msgid "Estimated download time for all torrents"
 msgstr "زمان تخمینی دانلود برای همه تورنت ها"
@@ -682,17 +666,41 @@ msgstr "کل داده های آپلود شده (برای تورنت های فه�
 msgid "Total upload speed"
 msgstr "سرعت آپلود کل"
 
-msgid "Enable Debug Mode"
-msgstr "حالت Debug را فعال کنید"
-
-msgid "Disable Debug Mode"
-msgstr "حالت Debug را غیرفعال کنید"
+msgid "Toggle Debug Mode"
+msgstr ""
 
 msgid "Normal Mode"
 msgstr "حالت عادی"
 
 msgid "No DHT Peers"
 msgstr "بدون همتایان DHT"
+
+msgid "Search"
+msgstr "جستجو کردن"
+
+msgid "Show All"
+msgstr "نمایش همه"
+
+msgid "Active"
+msgstr "فعال"
+
+msgid "Inactive"
+msgstr "غیرفعال"
+
+msgid "Connected"
+msgstr "متصل"
+
+msgid "Seeding"
+msgstr "بذر"
+
+msgid "Complete"
+msgstr "کامل کنید"
+
+msgid "Incomplete"
+msgstr "ناقص"
+
+msgid "Stopped"
+msgstr "متوقف شد"
 
 msgid "First"
 msgstr "اولین"
@@ -1049,9 +1057,6 @@ msgstr "برای تغییر تم ها به صورت دستی، طرح زمینه
 msgid "Universal theming is enabled."
 msgstr "طرح زمینه جهانی فعال است."
 
-msgid "Configure"
-msgstr "پیکربندی"
-
 msgid "Refresh time"
 msgstr "تازه سازی زمان"
 
@@ -1072,12 +1077,6 @@ msgstr "تورنت ها"
 
 msgid "Language"
 msgstr "زبان"
-
-msgid "Smart torrent sorting"
-msgstr "مرتب سازی هوشمند تورنت"
-
-msgid "Ignore words such as 'a' and 'the' when sorting"
-msgstr "هنگام مرتب سازی کلماتی مانند 'a' و 'the' را نادیده بگیرید"
 
 msgid "Collapsible panels"
 msgstr "پانل های انعطاف پذیر"
@@ -1311,6 +1310,15 @@ msgstr "این حداکثر تعداد تونل ها را برای باز کرد
 msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
 msgstr "تغییر این تنظیم به کمتر از 3 پرش ممکن است سرعت را به قیمت ناشناس بودن بهبود بخشد و توصیه نمی شود"
 
+msgid "Sequential piece or file order not saved - feature currently broken."
+msgstr ""
+
+msgid "Unknown command"
+msgstr ""
+
+msgid "Please retry form submission (bad nonce)"
+msgstr ""
+
 msgid "Info hash"
 msgstr "هش اطلاعات"
 
@@ -1493,3 +1501,14 @@ msgstr "ذخیره تغییرات"
 
 msgid "Torrent must be stopped"
 msgstr "تورنت باید متوقف شود"
+
+#, java-format
+
+
+
+
+
+
+
+
+

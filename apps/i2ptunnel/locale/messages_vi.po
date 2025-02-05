@@ -35,12 +35,6 @@ msgstr "băng thông tiêu chuẩn và độ tin cậy"
 msgid "higher bandwidth and reliability"
 msgstr "băng thông và độ tin cậy cao hơn"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Gửi biểu mẫu không hợp lệ, có thể do bạn đã sử dụng nút 'quay lại' hoặc 'tải lại' trên trình duyệt của mình. Mẫu đơn đệ nạp không đúng, có lẻ vì bạn dùng nút 'back' hay 'reload\" của trình duyệt. Xin vui lòng đệ nạp lại."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Nếu sự cố vẫn tiếp diễn, hãy xác minh rằng bạn đã bật cookie trong trình duyệt của mình."
-
 msgid "Configuration reloaded for all tunnels"
 msgstr "Nạp lại cấu hình cho mọi đường hầm"
 
@@ -1222,6 +1216,12 @@ msgstr "Tạo xác thực"
 
 msgid "SSL Helper"
 msgstr "Trình trợ giúp SSL"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Gửi biểu mẫu không hợp lệ, có thể do bạn đã sử dụng nút 'quay lại' hoặc 'tải lại' trên trình duyệt của mình. Mẫu đơn đệ nạp không đúng, có lẻ vì bạn dùng nút 'back' hay 'reload\" của trình duyệt. Xin vui lòng đệ nạp lại."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Nếu sự cố vẫn tiếp diễn, hãy xác minh rằng bạn đã bật cookie trong trình duyệt của mình."
 
 msgid "Experts only!"
 msgstr "Chỉ dành cho chuyên gia!"

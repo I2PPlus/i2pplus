@@ -257,14 +257,14 @@ msgstr "Virhe lähetettäessä postia"
 msgid "Mail sent."
 msgstr "Viesti lähetetty."
 
-msgid "Send"
-msgstr "Lähetä"
+msgid "Cancel"
+msgstr "Peruuta"
 
 msgid "Save as Draft"
 msgstr "Tallenna luonnoksena"
 
-msgid "Cancel"
-msgstr "Peruuta"
+msgid "Send"
+msgstr "Lähetä"
 
 msgid "From"
 msgstr "Lähettäjä"

@@ -38,12 +38,6 @@ msgstr "basse passante et fiabilité normales"
 msgid "higher bandwidth and reliability"
 msgstr "basse passante et fiabilité plus élevées"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "L’envoi du formulaire est invalide, car vous avez probablement utilisé le bouton « Retour » ou « Recharger » de votre navigateur. Veuillez le renvoyer."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Si le problème persiste, vérifiez que les témoins sont activés dans votre navigateur."
-
 msgid "Configuration reloaded for all tunnels"
 msgstr "La configuration a été rechargée pour tous les tunnels"
 
@@ -1227,6 +1221,12 @@ msgstr "Générer l’authentification"
 
 msgid "SSL Helper"
 msgstr "Aide SSL"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "L’envoi du formulaire est invalide, car vous avez probablement utilisé le bouton « Retour » ou « Recharger » de votre navigateur. Veuillez le renvoyer."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Si le problème persiste, vérifiez que les témoins sont activés dans votre navigateur."
 
 msgid "Experts only!"
 msgstr "Experts seulement !"

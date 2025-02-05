@@ -150,6 +150,9 @@ msgstr "لا يوجد دعم لنوع التوقيع لدينا"
 msgid "Unreachable on any transport"
 msgstr "صعب الوصول بأية وسيلة"
 
+msgid "Cannot enumerate UPnP devices on Android."
+msgstr ""
+
 msgid "UPnP is not enabled"
 msgstr "لم يتم تمكين UPnP"
 
@@ -687,11 +690,39 @@ msgstr "الرجاء الابلاغ"
 msgid "After reporting, please restart your router"
 msgstr "بعد الإبلاغ، يرجى إعادة تشغيل جهاز التوجيه الخاص بك"
 
+msgid "Invalid form submission, requires POST"
+msgstr ""
+
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "خطأ في الارسال، ربما لاستعمالك زر 'الرجوع' او 'انعش' في المتصفح. حاول اعادة الارسال."
 
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "إذا استمرت المشكلة، فتأكد من تمكين ملفات تعريف الارتباط في متصفحك."
+
+msgid "Bandwidth usage"
+msgstr "استعمال الشيكة"
+
+#, java-format
+msgid "events in {0}"
+msgstr "أعادة التشغيل في {0}"
+
+msgid "Events per period"
+msgstr "عدد الأحداث في المدة"
+
+msgid "Min"
+msgstr "دقيقة"
+
+msgid "Max"
+msgstr "ماكس"
+
+msgid "Avg"
+msgstr "متوسط"
+
+msgid "Now"
+msgstr "الآن"
+
+msgid "Router restarted"
+msgstr "تم إعادة تشغيل ال router"
 
 #, java-format
 msgid "News last updated {0} ago."
@@ -728,31 +759,6 @@ msgstr[5] "تم تحديث {0} مكون إضافي"
 
 msgid "Plugin check complete"
 msgstr "اكتمال فحص البرنامج المساعد"
-
-msgid "Bandwidth usage"
-msgstr "استعمال الشيكة"
-
-#, java-format
-msgid "events in {0}"
-msgstr "أعادة التشغيل في {0}"
-
-msgid "Events per period"
-msgstr "عدد الأحداث في المدة"
-
-msgid "Min"
-msgstr "دقيقة"
-
-msgid "Max"
-msgstr "ماكس"
-
-msgid "Avg"
-msgstr "متوسط"
-
-msgid "Now"
-msgstr "الآن"
-
-msgid "Router restarted"
-msgstr "تم إعادة تشغيل ال router"
 
 msgid "none"
 msgstr "لا شيء"
@@ -822,8 +828,20 @@ msgstr "وحدة التحكم"
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "لتمكين وصول SSL لوحدة التحكم في جهاز التوجيه ، راجع ملف <code>clients.config</code> المذكور في دليل تطبيق I2P لمزيد من المعلومات. ستحتاج إلى تحرير ملف تكوين RouterConsolerunner الموجود في الدليل: "
 
+msgid "Save disabled, edit the router.config file to make changes"
+msgstr ""
+
 msgid "Error updating the configuration - please see the error logs"
 msgstr "خطأ في ترقية الإعدادات - انظر التفاصيل"
+
+msgid "No changes made to the configuration"
+msgstr ""
+
+msgid "Note"
+msgstr "ملاحظة"
+
+msgid "Some changes may require a restart to take effect."
+msgstr "بعض التغييرات تحتاج اعادة التشغيل لتفعيلها"
 
 msgid "Save Client Configuration"
 msgstr "حفظ اعدادات المستخدم"
@@ -837,6 +855,9 @@ msgstr "حفظ اعدادات تطبيق الويب"
 msgid "Save Plugin Configuration"
 msgstr "حفظ اعدادات الملحق"
 
+msgid "Plugins disabled"
+msgstr ""
+
 msgid "Install Plugin"
 msgstr "تثبيت الملحق"
 
@@ -845,6 +866,9 @@ msgstr "تثبيت البرنامج المساعد من الملف"
 
 msgid "Update All Installed Plugins"
 msgstr "تحديث كافة الإضافات المثبتة"
+
+msgid "Delete client disabled"
+msgstr ""
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -927,9 +951,18 @@ msgstr "جارية تحميل التحديث"
 msgid "Updating all plugins"
 msgstr "تحديث جميع الإضافات"
 
+msgid "Update manager not registered, cannot install"
+msgstr ""
+
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "تثبيت البرنامج المساعد من {0}"
+
+msgid "Cannot install, check logs"
+msgstr ""
+
+msgid "Update manager not registered, cannot check"
+msgstr ""
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1028,6 +1061,19 @@ msgstr "تم حفظ الإعدادات بنجاح"
 msgid "Join Family"
 msgstr "انضم إلى العائلة"
 
+msgid "Bad certificate - No Subject CN"
+msgstr ""
+
+msgid "Bad characters in Family: "
+msgstr ""
+
+#, java-format
+msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
+msgstr ""
+
+msgid "Family key configured for router family: "
+msgstr ""
+
 msgid "Load from file failed"
 msgstr "فشل التحميل من الملف"
 
@@ -1043,8 +1089,8 @@ msgstr "اضافة عنصر"
 msgid "Restore defaults"
 msgstr "استعادة الضبط الافتراضي"
 
-msgid "Home page changed"
-msgstr "تم تغيير الصفحة الرئيسية"
+msgid "Bad group detected, please retry"
+msgstr ""
 
 msgid "Restored default settings"
 msgstr "استعادة الإعدادات الافتراضية"
@@ -1076,6 +1122,9 @@ msgstr "مفتاح غير صالح"
 msgid "Invalid destination"
 msgstr "عنوان غير موجود"
 
+msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
+msgstr ""
+
 #, java-format
 msgid "Key for {0} added to keyring"
 msgstr "تمت إضافة مفتاح {0} إلى حلقة المفاتيح"
@@ -1085,6 +1134,9 @@ msgstr "كلمة المرور للبحث مطلوبة"
 
 msgid "Requires hostname, destination, or blinded Base32"
 msgstr "يتطلب اسم المضيف أو الوجهة أو Base32 الأعمى"
+
+msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
+msgstr ""
 
 msgid "Destination requires lookup password"
 msgstr "الوجهة تتطلب كلمة مرور البحث"
@@ -1103,6 +1155,9 @@ msgstr "إرسال المفتاح إلى مشغل الخادم."
 
 msgid "Delete key"
 msgstr "حذف مفتاح"
+
+msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
+msgstr ""
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1153,6 +1208,36 @@ msgstr "أعمى"
 
 msgid "Log overrides updated"
 msgstr "اعدا كتابة السجلات"
+
+msgid "Error updating the log limits - levels not valid"
+msgstr ""
+
+msgid "Log limits cleared"
+msgstr ""
+
+#, java-format
+msgid "Default log level updated from {0} to {1}"
+msgstr ""
+
+msgid "Date format updated"
+msgstr ""
+
+#, java-format
+msgid "Specified date format is not valid ({0}) - not updated"
+msgstr ""
+
+msgid "File size updated"
+msgstr ""
+
+#, java-format
+msgid "Specified file size limit is not valid ({0}) - not updated"
+msgstr ""
+
+msgid "Compression setting updated"
+msgstr ""
+
+msgid "Log record format updated"
+msgstr ""
 
 msgid "Log configuration saved"
 msgstr "تم حفظ السجلات"
@@ -1361,6 +1446,12 @@ msgstr "سرعة غير جيدة"
 msgid "Bad capacity value"
 msgstr "قدرة غير جيدة"
 
+msgid "Bonuses adjusted for: "
+msgstr ""
+
+msgid "No profile exists for: "
+msgstr ""
+
 msgid "Unsupported"
 msgstr "غير مدعومة"
 
@@ -1484,27 +1575,14 @@ msgstr[5] "يرجى انتظار التزامات التوجيه لتنتهي ص
 msgid "Restart in {0}"
 msgstr "اعادة التشغيل في مدة {0}"
 
-msgid "Stat filter and location updated successfully to"
-msgstr "القانون الأساسي لتصفية وتحديث الموقع بنجاح"
-
-msgid "Full statistics enabled"
-msgstr "تم تمكين الإحصائيات الكاملة"
-
-msgid "Full statistics disabled"
-msgstr "تم تعطيل الإحصائيات الكاملة"
-
-#, java-format
-msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
-msgstr "تم تحديث قائمة الرسوم البيانية، وقد يستغرق ظهورها على {0}صفحة الرسوم البيانية{1} فترة تصل إلى 60 ثانية."
-
 msgid "Save order"
 msgstr "حفظ النظام"
 
-msgid "Refresh disabled"
-msgstr "التحديث معطل"
+msgid "Sidebar refresh disabled"
+msgstr ""
 
-msgid "Refresh interval changed"
-msgstr "تم تغيير الفاصل الزمني للتحديث"
+msgid "Sidebar refresh interval changed"
+msgstr ""
 
 msgid "Refresh interval must be a number"
 msgstr "يجب أن يكون الفاصل الزمني للتحديث رقمًا"
@@ -1512,17 +1590,17 @@ msgstr "يجب أن يكون الفاصل الزمني للتحديث رقمًا
 msgid "Restore full default"
 msgstr "استعادة الافتراضي الكامل"
 
-msgid "Full summary bar default restored."
-msgstr "تمت استعادة شريط الملخص الكامل الافتراضي."
+msgid "Full sidebar defaults restored."
+msgstr ""
 
-msgid "Summary bar will refresh shortly."
-msgstr "سيتم تحديث شريط الملخص قريبًا."
+msgid "Sidebar will refresh shortly."
+msgstr ""
 
 msgid "Restore minimal default"
 msgstr "استعادة الحد الأدنى من الافتراضي"
 
-msgid "Minimal summary bar default restored."
-msgstr "استعادة الحد الأدنى من شريط التلخيص الافتراضي."
+msgid "Minimal sidebar defaults restored."
+msgstr ""
 
 msgid "Order must be an integer"
 msgstr "الأمر يجب أن يكون عددا صحيحا"
@@ -1538,6 +1616,27 @@ msgstr "منقول"
 
 msgid "Saved order of sections."
 msgstr "ترتيب الأقسام المحفوظة."
+
+msgid "Stat filter and location updated successfully to"
+msgstr "القانون الأساسي لتصفية وتحديث الموقع بنجاح"
+
+msgid "Full statistics enabled"
+msgstr "تم تمكين الإحصائيات الكاملة"
+
+msgid "Full statistics disabled"
+msgstr "تم تعطيل الإحصائيات الكاملة"
+
+#, java-format
+msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
+msgstr "تم تحديث قائمة الرسوم البيانية، وقد يستغرق ظهورها على {0}صفحة الرسوم البيانية{1} فترة تصل إلى 60 ثانية."
+
+#, java-format
+msgid "Internal error: could not resolve pool name {0}."
+msgstr ""
+
+#, java-format
+msgid "Internal error: could not find pool settings for {0}."
+msgstr ""
 
 msgid "Updated settings for all pools."
 msgstr "تحديث إعدادات للجميع."
@@ -1571,9 +1670,8 @@ msgstr[5] "{0} أنفاق"
 msgid "Exploratory tunnels"
 msgstr "استكشاف الأنفاق"
 
-#, java-format
-msgid "Client tunnels for {0}"
-msgstr "أنفاق العميل لـ {0}"
+msgid "I2PSnark"
+msgstr "I2PSnark برنامج تورنت"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "تحذير حول درجة المجهولية: تتضمن إعدادات الأنفاق 0 - نظير."
@@ -1599,17 +1697,17 @@ msgstr "الداخل"
 msgid "Outbound"
 msgstr "الخارج"
 
-msgid "Length"
-msgstr "طول"
-
-msgid "Randomization"
-msgstr "عشوائي"
-
 msgid "Quantity"
 msgstr "الكمية"
 
 msgid "Backup quantity"
 msgstr "قدر نسخ الاحتياط"
+
+msgid "Length"
+msgstr "طول"
+
+msgid "Randomization"
+msgstr "عشوائي"
 
 msgid "Inbound options"
 msgstr "اتصال داخلي"
@@ -1620,17 +1718,20 @@ msgstr "اتصال خارجي"
 msgid "Add user"
 msgstr "أضِفْ المستخدم"
 
+msgid "Cannot save theme choice, theme name has illegal characters"
+msgstr ""
+
 msgid "Theme change saved."
 msgstr "تم حفظ تغيير التيمة."
-
-msgid "Refresh the page to view."
-msgstr "أنعش الصفحة"
 
 msgid "Mobile console option saved."
 msgstr "تم حفظ خيار وحدة التحكم المحمولة."
 
 msgid "No user name entered"
 msgstr "لم يتم إدخال اسم المستخدم"
+
+msgid "User name may not contain '='"
+msgstr ""
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "تحذير: لا يُنصح باستخدام أسماء المستخدمين خارج مجموعة الأحرف ISO-8859-1. الدعم غير موحد ويختلف حسب المتصفح."
@@ -1921,17 +2022,17 @@ msgstr "أداء جهاز التوجيه الرسم البياني"
 msgid "Graphs"
 msgstr "رسم بياني"
 
-msgid "Anonymous webmail client"
-msgstr "بريد الكتروني مجهول"
-
-msgid "I2PMail"
-msgstr "I2PMail"
-
 msgid "Help"
 msgstr "مساعدة"
 
 msgid "I2P Router Help"
 msgstr "مساعدة روتر I2P"
+
+msgid "Anonymous webmail client"
+msgstr "بريد الكتروني مجهول"
+
+msgid "I2PMail"
+msgstr "I2PMail"
 
 msgid "Install and configure I2P plugins"
 msgstr "تثبيت وتكوين ملحقات I2P"
@@ -1950,6 +2051,12 @@ msgstr "قاعدة بيانات الشبكة"
 
 msgid "Show list of all known I2P routers"
 msgstr "أظهر قائمة بكل I2P المعروفة"
+
+msgid "List of recently connected peers with profiling info"
+msgstr ""
+
+msgid "Peer Profiles"
+msgstr "ملفات تعريف الأقران"
 
 msgid "Router Info"
 msgstr "معلومات جهاز التوجيهمعلومات جهاز التوجيه"
@@ -2023,14 +2130,14 @@ msgstr "التكوين المتقدم"
 msgid "Advanced router configuration"
 msgstr "تكوين جهاز التوجيه المتقدم"
 
-msgid "Start or stop Router clients"
-msgstr "تشغيل أو إيقاف عملاء جهاز التوجيه"
-
 msgid "Changelog"
 msgstr "سجلّ التغييرات "
 
 msgid "Recent changes"
 msgstr "التغييرات الأخيرة"
+
+msgid "Start or stop Router clients"
+msgstr "تشغيل أو إيقاف عملاء جهاز التوجيه"
 
 msgid "Bug tracker"
 msgstr "تعقب الأخطاء"
@@ -2176,9 +2283,6 @@ msgstr "محرك بحث Clearnet BitTorrent DHT"
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "محرك بحث DuckDuckGo (بدون جافا سكريبت)"
 
-msgid "Clearnet Search Engine"
-msgstr "محرك بحث كلير نت"
-
 msgid "Privacy-focused Clearnet Search Engine"
 msgstr "محرك بحث Clearnet الذي يركز على الخصوصية"
 
@@ -2254,18 +2358,6 @@ msgstr "الصحافة الاستقصائية المستقلة"
 msgid "Information Security Research &amp; Education"
 msgstr "أبحاث وتعليم أمن المعلومات"
 
-msgid "Cannabis-related magazine"
-msgstr "المجلة المتعلقة بالقنب"
-
-msgid "CultureMagazine"
-msgstr "CultureMagazine"
-
-msgid "A magazine of Politics &amp; Culture"
-msgstr "مجلة من السياسة والثقافة"
-
-msgid "CurrentAffairs"
-msgstr "CurrentAffairs"
-
 msgid "Darknet related news site"
 msgstr "موقع الأخبار المتعلق بـ Darknet"
 
@@ -2320,15 +2412,6 @@ msgstr "ساعة هونج كونج"
 msgid "Monitors threats to freedoms and rights in Hong Kong"
 msgstr "يراقب تهديدات الحريات والحقوق في هونغ كونغ"
 
-msgid "Politics &amp; Current Affairs Journal"
-msgstr "مجلة السياسة والشؤون الحالية"
-
-msgid "English language Japanese News"
-msgstr "أخبار اللغة الإنجليزية اليابانية"
-
-msgid "JapanToday"
-msgstr "اليابان اليوم"
-
 msgid "JStorDaily"
 msgstr "جيستورديلي"
 
@@ -2371,9 +2454,6 @@ msgstr "موجزات الأخبار والمدونات على I2P"
 msgid "Planeta"
 msgstr "كوكب"
 
-msgid "News &amp; Views on Tibet"
-msgstr "الأخبار والآراء حول التبت"
-
 msgid "Lifestyle magazine"
 msgstr "مجلة لايف ستايل"
 
@@ -2391,6 +2471,9 @@ msgstr "ساينس ديلي"
 
 msgid "Community-driven tech news"
 msgstr "أخبار التكنولوجيا التي يحركها المجتمع"
+
+msgid "Various services"
+msgstr ""
 
 msgid "News for nerds"
 msgstr "أخبار للمهووسين"
@@ -2437,12 +2520,6 @@ msgstr "الأخبار العالمية"
 msgid "TheGuardian"
 msgstr "الجارديان"
 
-msgid "TheHill"
-msgstr "التل"
-
-msgid "US Political News"
-msgstr "أخبار سياسية أمريكية"
-
 msgid "TheMarkup"
 msgstr "العلامة"
 
@@ -2457,12 +2534,6 @@ msgstr "موسكو تايمز"
 
 msgid "TheNewRepublic"
 msgstr "الجمهورية الجديدة"
-
-msgid "International News from Tibet"
-msgstr "أخبار دولية من التبت"
-
-msgid "TheTibetPost"
-msgstr "التبت بوست"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "ترشيح أخبار حقوق الطبع والنشر"
@@ -2491,6 +2562,9 @@ msgstr "العنوان"
 
 msgid "Add"
 msgstr "إضافة"
+
+msgid "Error displaying the info page."
+msgstr ""
 
 msgid "Identity"
 msgstr "الهوية"
@@ -2537,6 +2611,9 @@ msgstr "نوى وحدة المعالجة المركزية المتاحة"
 msgid "Performance"
 msgstr "الأداء"
 
+msgid "Maximum available RAM"
+msgstr ""
+
 msgid "Classified as slow"
 msgstr "تصنف على أنها بطيئة"
 
@@ -2545,6 +2622,9 @@ msgstr "نعم"
 
 msgid "No"
 msgstr "لا"
+
+msgid "GeoIP Db"
+msgstr ""
 
 msgid "Target"
 msgstr "الهدف"
@@ -2682,6 +2762,9 @@ msgstr "جميع أجهزة التوجيه (عميل NetDb)"
 msgid "Sybil Analysis"
 msgstr "تحليل سيبيل"
 
+msgid "Bad value supplied, please check and try again."
+msgstr ""
+
 msgid "Router Map"
 msgstr "خريطة ال router"
 
@@ -2756,9 +2839,6 @@ msgstr "محظور"
 
 msgid "not found in network database"
 msgstr "غير موجود في قاعدة الشبكة"
-
-msgid "No results"
-msgstr "لا توجد نتائج"
 
 msgid "Bad Base64 Router hash"
 msgstr ""
@@ -3007,50 +3087,11 @@ msgstr "إظهار جميع أجهزة التوجيه بهذا العنوان ف
 msgid "Show all routers with this port in the NetDb"
 msgstr "إظهار كافة أجهزة التوجيه التي تحتوي على هذا المنفذ في NetDb"
 
-msgid "Core version"
-msgstr "النسخة الأساسية"
-
 msgid "Network ID"
 msgstr "معرف الشبكة"
 
 msgid "Routers"
 msgstr "الموجهات"
-
-msgid "Family Key"
-msgstr "مفتاح العائلة"
-
-msgid "Family Sig"
-msgstr "سيج العائلة"
-
-msgid "Exploratory tunnels expire (1h)"
-msgstr "انتهاء الأنفاق الاستكشافية (ساعة)"
-
-msgid "Exploratory tunnels reject (1h)"
-msgstr "رفض الأنفاق الاستكشافية (ساعة)"
-
-msgid "Exploratory tunnels build success (1h)"
-msgstr "الأنفاق الاستكشافية تبني النجاح (ساعة واحدة)"
-
-msgid "Client tunnels expire (1h)"
-msgstr "انتهاء صلاحية أنفاق العميل (ساعة واحدة)"
-
-msgid "Client tunnels reject (1h)"
-msgstr "رفض أنفاق العميل (ساعة واحدة)"
-
-msgid "Client tunnels build success (1h)"
-msgstr "أنفاق العميل تبني النجاح (ساعة واحدة)"
-
-msgid "Participating tunnels (1h)"
-msgstr "الأنفاق المشاركة (ساعة)"
-
-msgid "Participating tunnels (60s)"
-msgstr "الأنفاق المشاركة (60ث)"
-
-msgid "Bandwidth send rate (1h)"
-msgstr "معدل إرسال النطاق الترددي (1 ساعة)"
-
-msgid "Bandwidth receive rate (1h)"
-msgstr "معدل استقبال عرض النطاق الترددي (1 ساعة)"
 
 msgid "First heard about"
 msgstr "أول مرة سمعت عنها"
@@ -3120,9 +3161,6 @@ msgstr "إلى ملف router.config الخاص بك."
 msgid "Peer Connections"
 msgstr "اتصالات الأقران"
 
-msgid "Auto-refresh"
-msgstr "أنعشتحديث تلقائي"
-
 msgid "Active in the last minute"
 msgstr "نشط في اللحظة الأخيرة"
 
@@ -3131,6 +3169,12 @@ msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
+
+msgid "Limit"
+msgstr ""
+
+msgid "Maximum permitted connections"
+msgstr ""
 
 msgid "Current / maximum permitted"
 msgstr "الحالي/الحد الأقصى المسموح به"
@@ -3568,8 +3612,8 @@ msgid "{0} shared bandwidth"
 msgstr "{0} عرض النطاق الترددي المشترك"
 
 #, java-format
-msgid "Over {0} shared bandwidth"
-msgstr "أكثر من {0} عرض النطاق الترددي المشترك"
+msgid "Over {0} KB/s shared bandwidth"
+msgstr ""
 
 msgid "status"
 msgstr "الحالة"
@@ -3641,92 +3685,151 @@ msgstr ""
 msgid "Select search engine"
 msgstr "اختر محرك البحث"
 
-msgid "Statistics gathered during this router's uptime"
-msgstr "تجمع الاحصاءات العامة خلال خدمة الموجه"
+#, java-format
+msgid "Clock Skew of {0}"
+msgstr "انحراف الساعة {0}"
 
-msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
-msgstr "يتم تحديد كمية البيانات التي تم جمعها على مدى دقيقة واحدة، لذا يجب استخدامها كتقدير فقط."
+msgid "Testing"
+msgstr "جاري التجريب"
 
-msgid "These statistics are primarily used for development and debugging."
-msgstr "هذه الاحصائيات مستعملة في التطوير."
+msgid "Private TCP Address"
+msgstr "عنوان TCP خاص"
 
-msgid "No lifetime events"
-msgstr "لا توجد أحداث مدى الحياة"
+msgid "SymmetricNAT"
+msgstr "متماثل"
 
-msgid "frequency"
-msgstr "التردد"
+msgid "Firewalled with Inbound TCP Enabled"
+msgstr "جدار حماية مع تمكين TCP الوارد"
 
-msgid "Rolling average events per period"
-msgstr "متوسط ​​الأحداث المتداولة لكل فترة"
+msgid "Firewalled &amp; Floodfill"
+msgstr "جدار الحماية وموجه الفيضان"
 
-msgid "Highest events per period"
-msgstr "أعلى الأحداث لكل فترة"
+msgid "Disconnected"
+msgstr "منقطع"
 
-msgid "Lifetime average events per period"
-msgstr "متوسط ​​الأحداث مدى الحياة لكل فترة"
+msgid "UDP Port In Use"
+msgstr "منفذ UDP قيد الاستخدام"
 
-msgid "Lifetime average frequency"
-msgstr "متوسط مدى الحياة"
+msgid "No Active Peers"
+msgstr "لا يوجد أقران نشطون"
+
+msgid "UDP Disabled &amp; Inbound TCP host/port not set"
+msgstr "لم يتم تعيين UDP تعطيل مضيف/منفذ TCP الواردة"
+
+msgid "Firewalled with UDP Disabled"
+msgstr "جدار الحماية مع تعطيل UDP"
+
+msgid "Add/remove/edit &amp; control your client and server tunnels"
+msgstr "أضف/حذف/حرر  &amp; المستخدم والانفاق"
+
+msgid "Service Tunnels"
+msgstr "أنفاق الخدمة"
+
+msgid "How many local service tunnels we're running"
+msgstr "كم عدد أنفاق الخدمة المحلية التي نقوم بتشغيلها"
+
+msgid "Messenger"
+msgstr "محادثة"
+
+msgid "i2pchat"
+msgstr "i2pchat"
+
+msgid "I2PChat"
+msgstr "محادثة I2P"
+
+msgid "Server"
+msgstr "الخادم"
+
+msgid "service may be available to peers"
+msgstr "قد تكون الخدمة متاحة للأقران"
+
+msgid "service is only available locally"
+msgstr "الخدمة متاحة محليا فقط"
+
+msgid "Show tunnels"
+msgstr "أظهر الانفاق"
+
+msgid "Leases expired"
+msgstr "انتهت عقود الإيجار"
+
+msgid "Rebuilding"
+msgstr "اعادة بناية"
+
+msgid "ago"
+msgstr "منذ"
+
+msgid "Ready"
+msgstr "مستعد"
+
+msgid "Building"
+msgstr "بناء"
+
+msgid "Building tunnels"
+msgstr "جاري بناء النفق"
+
+msgid "Shared Clients"
+msgstr "العملاء المشتركون"
+
+msgid "Click Restart to install"
+msgstr "أنقر اعادة التشغبل للتثبيت"
+
+msgid "Click Shutdown and restart to install"
+msgstr "انقر زر التوقف وأعد التشغيل للتثبيت"
 
 #, java-format
-msgid "{0} event"
-msgid_plural "{0} events"
-msgstr[0] "{0} أحداث"
-msgstr[1] "{0} أحداث"
-msgstr[2] "{0} أحداث"
-msgstr[3] "{0} أحداث"
-msgstr[4] "{0} أحداث"
-msgstr[5] "{0} أحداث"
+msgid "{0}"
+msgstr "{0}"
 
-msgid "rate"
-msgstr "النسبة"
+msgid "Updating after restart"
+msgstr "التحديث بعد إعادة التشغيل"
 
-msgid "Average"
-msgstr "متوسط"
+msgid "Signed development update available"
+msgstr "تحديث التطوير الموقع متاح"
 
-msgid "Highest average"
-msgstr "أعلى متوسط"
+msgid "Download I2P Update"
+msgstr "تنزيل تحديث I2P"
 
-msgid "Highest total in a period"
-msgstr "أعلى إجمالي في الفترة"
+msgid "Unsigned update available"
+msgstr "التحديث غير الموقع متاح"
 
-msgid "Average event count"
-msgstr "متوسط عدد الأحداث"
+msgid "Help with firewall configuration"
+msgstr "مساعدة خول اعدادات الجدار الناري"
 
-msgid "Events in peak period"
-msgstr "الأحداث في فترة الذروة"
+msgid "Check network connection and NAT/firewall!"
+msgstr "تحقق من اتصال الشبكة وNAT/جدار الحماية!"
 
-msgid "Events in this period"
-msgstr "أحداث هذه الفترة"
+msgid "Attempt to download router reference files (if automatic reseed has failed)"
+msgstr "محاولة تنزيل الملفات المرجعية لجهاز التوجيه (في حالة فشل إعادة الزرع التلقائي)"
 
-#, java-format
-msgid "ended {0} ago"
-msgstr "انتهى قبل {0}."
+msgid "Reseed"
+msgstr "اعادة توزيع"
 
-msgid "No events"
-msgstr "لا حدث"
+msgid "Order"
+msgstr "النظام"
 
-msgid "Graph Data"
-msgstr "رسم بياني"
+msgid "Top"
+msgstr "أعلى"
 
-msgid "Graph Event Count"
-msgstr "الرسم البياني"
+msgid "Move to top"
+msgstr "انتقل إلى الأعلى"
 
-msgid "Export Data as XML"
-msgstr "تصدير البيانات بصيغة XML"
+msgid "Move up"
+msgstr "حرك الى الاعلى"
 
-msgid "Lifetime average value"
-msgstr "متوسط الحياة"
+msgid "Down"
+msgstr "أسفل"
 
-#, java-format
-msgid "1 event"
-msgid_plural "{0} events"
-msgstr[0] "{0} أحداث"
-msgstr[1] "{0} أحداث"
-msgstr[2] "{0} أحداث"
-msgstr[3] "{0} أحداث"
-msgstr[4] "{0} أحداث"
-msgstr[5] "{0} أحداث"
+msgid "Move down"
+msgstr "حرك الى الاسفل"
+
+msgid "Bottom"
+msgstr "الأسفل"
+
+msgid "Move to bottom"
+msgstr "انتقل إلى الأسفل"
+
+msgid "Select a section to add"
+msgstr "حدد قسمًا لإضافته"
 
 msgid "Help &amp; FAQ"
 msgstr "مساعدة"
@@ -3769,9 +3872,6 @@ msgstr "ازدحام"
 
 msgid "Tunnel Status"
 msgstr "حالة النفق"
-
-msgid "Service Tunnels"
-msgstr "أنفاق الخدمة"
 
 msgid "News &amp; Updates"
 msgstr "الأخبار والتحديثات"
@@ -3826,6 +3926,9 @@ msgstr "استضافة المواقع"
 
 msgid "An introduction to hosting websites on the I2P network"
 msgstr "مقدمة عن استضافة المواقع على شبكة I2P"
+
+msgid "New hosts in last 24 hours"
+msgstr ""
 
 msgid "I2PControl"
 msgstr "التحكم I2P"
@@ -4126,151 +4229,92 @@ msgstr "لا يتم إنشاء أنفاق مشاركة عندما يكون ال�
 msgid "Router is configured to reject all transit tunnel requests"
 msgstr "تم تكوين جهاز التوجيه لرفض كافة طلبات النفق المشاركة"
 
-#, java-format
-msgid "Clock Skew of {0}"
-msgstr "انحراف الساعة {0}"
+msgid "Statistics gathered during this router's uptime"
+msgstr "تجمع الاحصاءات العامة خلال خدمة الموجه"
 
-msgid "Testing"
-msgstr "جاري التجريب"
+msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
+msgstr "يتم تحديد كمية البيانات التي تم جمعها على مدى دقيقة واحدة، لذا يجب استخدامها كتقدير فقط."
 
-msgid "Private TCP Address"
-msgstr "عنوان TCP خاص"
+msgid "These statistics are primarily used for development and debugging."
+msgstr "هذه الاحصائيات مستعملة في التطوير."
 
-msgid "SymmetricNAT"
-msgstr "متماثل"
+msgid "No lifetime events"
+msgstr "لا توجد أحداث مدى الحياة"
 
-msgid "Firewalled with Inbound TCP Enabled"
-msgstr "جدار حماية مع تمكين TCP الوارد"
+msgid "frequency"
+msgstr "التردد"
 
-msgid "Firewalled &amp; Floodfill"
-msgstr "جدار الحماية وموجه الفيضان"
+msgid "Rolling average events per period"
+msgstr "متوسط ​​الأحداث المتداولة لكل فترة"
 
-msgid "Disconnected"
-msgstr "منقطع"
+msgid "Highest events per period"
+msgstr "أعلى الأحداث لكل فترة"
 
-msgid "UDP Port In Use"
-msgstr "منفذ UDP قيد الاستخدام"
+msgid "Lifetime average events per period"
+msgstr "متوسط ​​الأحداث مدى الحياة لكل فترة"
 
-msgid "No Active Peers"
-msgstr "لا يوجد أقران نشطون"
-
-msgid "UDP Disabled &amp; Inbound TCP host/port not set"
-msgstr "لم يتم تعيين UDP تعطيل مضيف/منفذ TCP الواردة"
-
-msgid "Firewalled with UDP Disabled"
-msgstr "جدار الحماية مع تعطيل UDP"
-
-msgid "Add/remove/edit &amp; control your client and server tunnels"
-msgstr "أضف/حذف/حرر  &amp; المستخدم والانفاق"
-
-msgid "How many local service tunnels we're running"
-msgstr "كم عدد أنفاق الخدمة المحلية التي نقوم بتشغيلها"
-
-msgid "I2PSnark"
-msgstr "I2PSnark برنامج تورنت"
-
-msgid "Messenger"
-msgstr "محادثة"
-
-msgid "i2pchat"
-msgstr "i2pchat"
-
-msgid "I2PChat"
-msgstr "محادثة I2P"
-
-msgid "Server"
-msgstr "الخادم"
-
-msgid "service may be available to peers"
-msgstr "قد تكون الخدمة متاحة للأقران"
-
-msgid "service is only available locally"
-msgstr "الخدمة متاحة محليا فقط"
-
-msgid "Show tunnels"
-msgstr "أظهر الانفاق"
-
-msgid "Leases expired"
-msgstr "انتهت عقود الإيجار"
-
-msgid "Rebuilding"
-msgstr "اعادة بناية"
-
-msgid "ago"
-msgstr "منذ"
-
-msgid "Ready"
-msgstr "مستعد"
-
-msgid "Building"
-msgstr "بناء"
-
-msgid "Building tunnels"
-msgstr "جاري بناء النفق"
-
-msgid "Shared Clients"
-msgstr "العملاء المشتركون"
-
-msgid "Click Restart to install"
-msgstr "أنقر اعادة التشغبل للتثبيت"
-
-msgid "Click Shutdown and restart to install"
-msgstr "انقر زر التوقف وأعد التشغيل للتثبيت"
+msgid "Lifetime average frequency"
+msgstr "متوسط مدى الحياة"
 
 #, java-format
-msgid "{0}"
-msgstr "{0}"
+msgid "{0} event"
+msgid_plural "{0} events"
+msgstr[0] "{0} أحداث"
+msgstr[1] "{0} أحداث"
+msgstr[2] "{0} أحداث"
+msgstr[3] "{0} أحداث"
+msgstr[4] "{0} أحداث"
+msgstr[5] "{0} أحداث"
 
-msgid "Updating after restart"
-msgstr "التحديث بعد إعادة التشغيل"
+msgid "rate"
+msgstr "النسبة"
 
-msgid "Signed development update available"
-msgstr "تحديث التطوير الموقع متاح"
+msgid "Average"
+msgstr "متوسط"
 
-msgid "Download I2P Update"
-msgstr "تنزيل تحديث I2P"
+msgid "Highest average"
+msgstr "أعلى متوسط"
 
-msgid "Unsigned update available"
-msgstr "التحديث غير الموقع متاح"
+msgid "Highest total in a period"
+msgstr "أعلى إجمالي في الفترة"
 
-msgid "Help with firewall configuration"
-msgstr "مساعدة خول اعدادات الجدار الناري"
+msgid "Average event count"
+msgstr "متوسط عدد الأحداث"
 
-msgid "Check network connection and NAT/firewall!"
-msgstr "تحقق من اتصال الشبكة وNAT/جدار الحماية!"
+msgid "Events in peak period"
+msgstr "الأحداث في فترة الذروة"
 
-msgid "Attempt to download router reference files (if automatic reseed has failed)"
-msgstr "محاولة تنزيل الملفات المرجعية لجهاز التوجيه (في حالة فشل إعادة الزرع التلقائي)"
+msgid "Events in this period"
+msgstr "أحداث هذه الفترة"
 
-msgid "Reseed"
-msgstr "اعادة توزيع"
+#, java-format
+msgid "ended {0} ago"
+msgstr "انتهى قبل {0}."
 
-msgid "Order"
-msgstr "النظام"
+msgid "No events"
+msgstr "لا حدث"
 
-msgid "Top"
-msgstr "أعلى"
+msgid "Graph Data"
+msgstr "رسم بياني"
 
-msgid "Move to top"
-msgstr "انتقل إلى الأعلى"
+msgid "Graph Event Count"
+msgstr "الرسم البياني"
 
-msgid "Move up"
-msgstr "حرك الى الاعلى"
+msgid "Export Data as XML"
+msgstr "تصدير البيانات بصيغة XML"
 
-msgid "Down"
-msgstr "أسفل"
+msgid "Lifetime average value"
+msgstr "متوسط الحياة"
 
-msgid "Move down"
-msgstr "حرك الى الاسفل"
-
-msgid "Bottom"
-msgstr "الأسفل"
-
-msgid "Move to bottom"
-msgstr "انتقل إلى الأسفل"
-
-msgid "Select a section to add"
-msgstr "حدد قسمًا لإضافته"
+#, java-format
+msgid "1 event"
+msgid_plural "{0} events"
+msgstr[0] "{0} أحداث"
+msgstr[1] "{0} أحداث"
+msgstr[2] "{0} أحداث"
+msgstr[3] "{0} أحداث"
+msgstr[4] "{0} أحداث"
+msgstr[5] "{0} أحداث"
 
 msgid "No known routers"
 msgstr "لا توجد أجهزة توجيه معروفة"
@@ -4610,6 +4654,10 @@ msgstr "لا يوجد أنفاق محلية أو أنفاق عابرة نشطة 
 msgid "Bandwidth Tiers"
 msgstr "طبقات عرض النطاق الترددي"
 
+#, java-format
+msgid "Over {0} shared bandwidth"
+msgstr "أكثر من {0} عرض النطاق الترددي المشترك"
+
 msgid "Inbound or outbound?"
 msgstr "الواردة أو الصادرة؟"
 
@@ -4669,6 +4717,18 @@ msgstr "تم إلغاء اختبار النطاق الترددي"
 
 msgid "Bandwidth test was not running"
 msgstr "اختبار النطاق الترددي لم يكن قيد التشغيل"
+
+msgid "ready"
+msgstr ""
+
+msgid "inbound test"
+msgstr ""
+
+msgid "outbound test"
+msgstr ""
+
+msgid "done"
+msgstr ""
 
 msgid "bits per second"
 msgstr "بايت في الثانية"
@@ -4842,8 +4902,8 @@ msgstr "حصة الشبكة"
 msgid "Share"
 msgstr "شارك"
 
-msgid "Note"
-msgstr "ملاحظة"
+msgid "NOTE"
+msgstr ""
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
@@ -4867,6 +4927,10 @@ msgstr "كلما ارتفر سرعة الشبكة التي تشاركها، كل
 
 msgid "config advanced"
 msgstr "اعدادات متقدمة"
+
+#, java-format
+msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
+msgstr ""
 
 msgid "Floodfill Configuration"
 msgstr "تكوين ملء الفيضان"
@@ -4895,8 +4959,8 @@ msgstr "ألغي"
 msgid "Advanced I2P+ Configuration"
 msgstr "اعدادات I2P متقدمة"
 
-msgid "Some changes may require a restart to take effect."
-msgstr "بعض التغييرات تحتاج اعادة التشغيل لتفعيلها"
+msgid "Help with additional configuration settings"
+msgstr ""
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5762,23 +5826,50 @@ msgstr "عند تعيينه على صحيح، هذا يمكّن تثبيت ال�
 msgid "When set to true, this setting enables reverse DNS lookups for peers, triggered when displaying the country flag of a peer or when the hostname or domain is explicitly displayed in the console, or when the peer's RouterInfo is written to disk. In order to avoid repeat lookups, it's recommended to configure a generous caching policy for DNS lookups of 10 minutes or more, and to configure a privacy respecting DNS server in your operating system. [Disabled by default, restart required]"
 msgstr "عند تعيينه على صحيح، هذا الإعداد يمكّن بحث العكسي لاسم النطاق للأقران، مشغّل عند عرض علم الدولة للأقران أو عند عرض اسم المضيف أو النطاق بشكل صريح في واجهة التحكم، أو عند كتابة معلومات الراوتر للأقران على القرص. من أجل تجنّب إعادة البحث، يوصى بتكويف سياسة جودوسة لمهل أكثر من 10 دقائق لبحث اسم النطاق، وتكويف خادوم اسم نطاق يحترم الخصوصية في نظام التشغيل. [غير ممكّن بالافتراض، يتطلب إعادة التشغيل]"
 
+msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
+msgstr "هذه الإعدادات تسمح بإدخال سطر نصي مخصص للعنوان على صفحات واجهة ال router، وهو مفيد عندما تكون لديك عدة واجهات مفتوحة في علامات التبويب في المتصفح وتريد طريقة سهلة للتعرف بينها."
+
 msgid "When set to true, accessing the router console via http:// when https:// is enabled will automatically redirect to https. To configure router console access, edit the settings in your <code>clients.config</code> file in your profile directory (<i>not</i> the application installation directory). [Enabled by default]"
 msgstr "عند التعيين على \"صحيح\"، فإن الوصول إلى وحدة تحكم جهاز التوجيه عبر http:// عند تمكين https:// سيؤدي إلى إعادة التوجيه تلقائيًا إلى https. "
+
+msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
+msgstr "هذا الإعداد، عند تهيئته على صحيح، سيعرض متوسط اختبار الأقران في قسم الازدحام من الشريط الجانبي، والذي يتم حسابه عن طريق جمع متوسط الاختبارات الناجحة للأقران والوقت الزائد المتوسط المستغرق في الاختبارات الفاشلة. قد يستخدم القيمة المتوسطة كدليل لتحديد القيمة المثلى لـ <code>router.peerTestTimeout</code>. [الافتراضي هو خطأ]"
+
+msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
+msgstr "هذا الإعداد عند تهيئته على صحيح، سيعرض روابط <i>المواقع ذات الاهتمام</i> على <a href=/sitemap>خريطة الموقع</a>. [الافتراضي هو خطأ]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "يحدد هذا الإعداد ما إذا كان يجب على جهاز التوجيه استخدام ملف <i>blocklist.txt</i> المتوفر وأي قوائم حظر قام المستخدم بتكوينها لتمكين حظر أجهزة التوجيه عن طريق التجزئة أو عنوان IP. "
 
-msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
-msgstr "يحدد هذا الإعداد ما إذا كان يجب على جهاز التوجيه استخدام ملف <i>blocklist_tor.txt</i> المتوفر في دليل تطبيق I2P الخاص بك أم لا لتمكين حظر أجهزة التوجيه التي تعمل من عناوين IP لعقدة خروج Tor. "
+msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
+msgstr "يسمح هذا الإعداد بتكوين وقت انتهاء الصلاحية (بالثواني) لعمليات الحظر المفروضة عبر قوائم الحظر. "
 
 msgid "This setting, when configured with a path pointing at a valid blocklist file, enables an additional, user-configured blocklist to be loaded at router startup. [Disabled by default, restart required]"
 msgstr "يعمل هذا الإعداد، عند تكوينه بمسار يشير إلى ملف قائمة حظر صالح، على تمكين تحميل قائمة حظر إضافية مكونة بواسطة المستخدم عند بدء تشغيل جهاز التوجيه. "
 
-msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
-msgstr "يسمح هذا الإعداد بتكوين وقت انتهاء الصلاحية (بالثواني) لعمليات الحظر المفروضة عبر قوائم الحظر. "
+msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
+msgstr "يحدد هذا الإعداد ما إذا كان يجب على جهاز التوجيه استخدام ملف <i>blocklist_tor.txt</i> المتوفر في دليل تطبيق I2P الخاص بك أم لا لتمكين حظر أجهزة التوجيه التي تعمل من عناوين IP لعقدة خروج Tor. "
+
+msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
+msgstr ""
+
+msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
+msgstr "عند وضعها على خاطئ، لن يمنع router طلبات بناء الأنفاق من الروترات البطيئة أو غير القابلة للوصول التي تعمل على إصدارات قديمة. [الافتراضي صحيح، يتطلب إعادة التشغيل]"
 
 msgid "Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks."
 msgstr "تخصيص عدد من خيوط المعالج لبناء الأنفاق. "
+
+msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
+msgstr "هذا الإعداد (بالملي ثوان) يحدد مدة احتفاظ حزمة البيانات في طابور CoDel قبل إسقاطها. الافتراضي هو 1000 ملي ثانية. [إعادة تشغيل مطلوبة]"
+
+msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
+msgstr "هذا الإعداد يحدد العدد الأقصى للرسائل في الطابور الخارجي قبل تعليمه أنه ممتلىء. [الافتراضي هو 768]"
+
+msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
+msgstr "هذا الإعداد يحدد العدد الأقصى للرسائل فوق القيمة الأقصى للطابور قبل إسقاط رسائل أخرى. [الافتراضي هو 128]"
+
+msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
+msgstr "هذا الإعداد (بالملي ثوان) يتيح لك تكويف قيمة هدف تأخير الطابور لنظام إدارة طابور CoDel يدوياً. الافتراضي هو 50 ملي ثانية. [إعادة تشغيل مطلوبة]"
 
 msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
 msgstr "يتجاوز هذا الإعداد، بالمللي ثانية، الحد الافتراضي لوقت معالجة الرسائل (المشار إليه باسم <i>تأخير الرسالة</i> في قسم الشريط الجانبي للازدحام) قبل تحديد أن جهاز التوجيه مزدحم ويتم رفض طلبات نفق النقل. "
@@ -5789,8 +5880,32 @@ msgstr "اختبر الأنفاق بشكل دوري لتحديد متوسط ​�
 msgid "When set to true, the router will change its identity and UDP port every time the router restarts. [Default is false]"
 msgstr "عند التعيين على \"صحيح\"، سيقوم جهاز التوجيه بتغيير هويته ومنفذ UDP في كل مرة يتم فيها إعادة تشغيل جهاز التوجيه. "
 
+msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
+msgstr "عند تحديده على خاطئ، لن يقيّد router طلبات بناء الأنفاق من الروترات الأخرى، ويجب استخدام هذا الإعداد بحذر. [الافتراضي صحيح، يتطلب إعادة التشغيل]"
+
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
 msgstr "يحدد هذا الإعداد <a href=/profiles"
+
+msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
+msgstr "هذا الإعداد (بالساعات) يحدد مدة تقادم معلومات الراوتر في قاعدة البيانات الشبكية (تاريخ النشر المعروف الأخير) قبل تصنيفها على أنها قديمة وحذفها. [الافتراضي 28 ساعة ما لم يكن الراوتر من ملئة الفيضان، وفي هذه الحالة يكون الافتراضي 8 ساعات]"
+
+msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
+msgstr "هذا الإعداد يحدد عدد الأقران المستكشفة على التوازي عند تشغيل مهمة استكشاف الأقران [الافتراضي هو قرين واحد كل مرة عندما يتجاوز عدد الأقران المعروفة 3000]. ملاحظة أن زيادة هذه القيمة ستزيد من متطلبات عرض النطاق للاستكشاف، وتعيين هذه القيمة عالية جداً قد يسبب تأخيراً مفرطاً للرسائل ويتداخل مع الخدمات الأخرى، لذا استخدمه بحذر!"
+
+msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
+msgstr "هذا الإعداد يحدد عدد سلال مقارنة قاعدة البيانات الشبكية التي ستستشهد بها مهمة استكشاف الأقران عند تشغيلها. بشكل افتراضي، سيختلف عدد السلال المستكشفة حسب ما إذا كان الراوتر قد تم تشغيله لأكثر من ساعة واحدة، وحسب ما إذا كان الراوتر مخفي أو ينتمي لفئة 'K' من حيث عرض النطاق، وحسب عدد الرواتر المعروفة."
+
+msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
+msgstr "هذا الإعداد (بالثواني) يتيح لك تجاوز التأخير بين تشغيلات مهمة استكشاف الأقران التي تحاول تحديد الأقران الجدد لإضافتهم إلى قاعدة البيانات الشبكية. بشكل افتراضي ستشتغل المهمة كل 80 ثانية، أو كل 3 دقائق إذا كان الراوتر يعاني من تأخير في المهام أو الرسائل. إذا بلغ حجم قاعدة البيانات الشبكية 4000 قرين، سيزداد التأخير إلى 15 دقيقة. قد ترغب بزيادة التأخير إذا كانت قاعدة البيانات الشبكية لديك مملوءة بشكل جيد (أكثر من 2000 قرين)، أو إذا كنت ترغب في خفض استهلاك عرض النطاق بشكل عام. ملاحظة: للرواتر التي تعمل كملئة فيضان، لا تشتغل هذه المهمة."
+
+msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
+msgstr "هذا الإعداد يحدد العدد الأقصى لبصمات الأقران التي يتم تأشيرها للاستكشاف. في بروتوكول I2P يكون الحد الأقصى 128، وفي I2P+ تكون القيمة الافتراضية 512."
+
+msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
+msgstr "هذا الإعداد يحدد ما إذا كان الراوتر الذي يعمل كملء فيضان سيستكشف قاعدة البيانات الشبكية لمعرفة الأقران الجدد. [الافتراضي هو خطأ، إعادة تشغيل مطلوبة]"
+
+msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
+msgstr "هذا الإعداد، عند تعيينه على صحيح، يمنع الراوتر من الاتصال مباشرة بالرواتر الأخرى، مما يجبر على استخدام المعرّفين. [الافتراضي هو خطأ ما لم يكن الراوتر في وضع الإخفاء]"
 
 msgid "When set to true, if your router is serving as a floodfill for the network, your <a href=/configadvanced#ffconf>floodfill participation</a> will be hidden from other routers."
 msgstr "عند تعيينه على الصحيح، إذا كان موجهك يخدم كدومة فيض للشبكة، سيتم إخفاء مشاركتك كـ <a href=/configadvanced#ffconf>دومة فيض</a> من الموجهات الأخرى."
@@ -5803,6 +5918,12 @@ msgstr "تحديد الحد الأقصى لعدد الأنفاق المشارك�
 
 msgid "Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 10% in I2P+, 33% in I2P]"
 msgstr "يحدد النسبة المئوية القصوى للأنفاق المحلية النشطة (العميل والاستكشافية) التي سيتم استخدام النظير لها. "
+
+msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
+msgstr "هذا الإعداد يسمح لك بتكويف العدد الأدنى للأنفاق المشاركة المضيفة قبل البدء برفض طلبات الانفاق من قبل الراوتر بناء على متطلبات عرض النطاق المتوقع. [الافتراضي هو 100 إذا كان النظام يعمل على أندرويد، 800 إذا كان النظام يعمل على ARM وتتوفر 4 نوى أقل، 1200 إذا كان النظام يعمل على ARM وتتوفر 4 نوى أو أكثر، وإلا 2500]"
+
+msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
+msgstr "هذا الإعداد يتيح لك استبعاد الرواتر الأكبر سناً من قاعدة بياناتك الشبكية. الرواتر التي تتجاوز عمرها الافتراضي أو القيمة التي حددتها ستُحذف من قاعدة البيانات الشبكية وسيتم حظرها لمدة جلسة الراوتر. بشكل افتراضي، يتم استبعاد الرواتر الأقدم من 0.9.20. ملاحظة: بدءًا من إصدار I2P+ 0.9.46+، يتم استخدام الرواتر ذات الإصدارات الحديثة جدًا لبناء الأنفاق المحلية فقط. [إعادة تشغيل مطلوبة]"
 
 msgid "When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]"
 msgstr "عند التعيين على \"صحيح\"، لن يتم تقسيم ملفات معلومات جهاز التوجيه المخزنة في دليل netDB الخاص بملفك الشخصي إلى 64 دليلًا فرعيًا. "
@@ -5828,84 +5949,6 @@ msgstr "أقل من 256 ميجابايت مخصصة لـ JVM"
 msgid "Router running a non-native, software emulated version of the Java BigInteger library"
 msgstr "جهاز توجيه يقوم بتشغيل نسخة غير أصلية من البرامج التي تمت محاكاتها من مكتبة Java BigInteger"
 
-msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
-msgstr "هذا الإعداد يسمح لك بتكويف العدد الأدنى للأنفاق المشاركة المضيفة قبل البدء برفض طلبات الانفاق من قبل الراوتر بناء على متطلبات عرض النطاق المتوقع. [الافتراضي هو 100 إذا كان النظام يعمل على أندرويد، 800 إذا كان النظام يعمل على ARM وتتوفر 4 نوى أقل، 1200 إذا كان النظام يعمل على ARM وتتوفر 4 نوى أو أكثر، وإلا 2500]"
-
-msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
-msgstr "عند تعيينه على صحيح، سيغير الراوتر هويته ومنفذ UDP عند إعادة تشغيله ثم حذف المفتاح من router.config لمنع أي تغييرات لاحقة. [الافتراضي هو خطأ]"
-
-msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr "عند تحديده على خاطئ، لن يقيّد router طلبات بناء الأنفاق من الروترات الأخرى، ويجب استخدام هذا الإعداد بحذر. [الافتراضي صحيح، يتطلب إعادة التشغيل]"
-
-msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr "عند وضعها على خاطئ، لن يمنع router طلبات بناء الأنفاق من الروترات البطيئة أو غير القابلة للوصول التي تعمل على إصدارات قديمة. [الافتراضي صحيح، يتطلب إعادة التشغيل]"
-
-msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
-msgstr "عند التكويف، هذا يضع حداً صلباً لعدد الأنفاق التي يُسمح للراوتر ببنائها بشكل متزامن. بشكل افتراضي، الراوتر يستخدم الوقت المتوسط للبناء وعرض النطاق الخارجي الحالي لتحديد معدل بناء مثالي. [إعادة تشغيل مطلوبة]"
-
-msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
-msgstr "إذا كنت ترغب بتثبيت التحديثات غير الموقّعة لـI2P (.zip)، يجب إضافة هذا إلى ملف <code>router.config</code> الخاص بك ما لم تكن قد كوّنت بالفعل <code>routerconsole.advanced=true</code>، وفي هذه الحالة فإن هذا الخيار مزوّد بالفعل. ملاحظة: ابتداءً من I2P+ 0.9.48+، يتم تمكين تثبيت <a href=/configupdate#i2pupdates>التحديثات غير الموقّعة</a> بشكل افتراضي."
-
-msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
-msgstr "هذا الإعداد يسمح لك بتكويف عنوان URL التحديث من أجل ميزة التحديثات غير الموقّعة، إن تم تمكينها. يجب أن ينتهي عنوان الURL بـ <code>/i2pupdate.zip</code>. ملاحظة: لا تقم بتثبيت التحديثات غير الموقّعة إلا إذا كنت تثق بمصدر التحديث!"
-
-msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
-msgstr "هذا الإعداد يسمح بتعطيل اختبارات SSU لتحديد ما إذا كان الراوتر الخاص بك محمي بجدار ناري ويمكن تمكينه للرواتر التي لا شك أنها غير محمية بجدار ناري ولكنها تعاني من قضايا فرض جدار ناري متقطعة. في حالة تعطيل الاختبار، كلا SSU وـ NTCP يجب أن يبلغ عن عنوان IP العام الحالي الخاص بك على <a href=/info>صفحة معلومات الراوتر</a>. [إعادة تشغيل مطلوبة]"
-
-msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
-
-msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
-msgstr "هذا الإعداد يحدد أي وسيلة نقل تحظى بالأولوية عند الاتصال مع الأقران. بشكل افتراضي، يحظى NTCP بالأولوية على UDP (SSU). بتعيين القيمة على صحيح، سيحظى UDP بالأولوية ما لم توجد اتصال موجود مسبقاً عبر NTCP؛ عند تعيينه على دائماً، سيتم استخدام UDP بشكل دائم بغض النظر عن أي اتصال موجود مسبقاً عبر NTCP. [الافتراضي هو خطأ]"
-
-msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
-msgstr "هذا الإعداد الخاص بالنفق يسمح لك بتمكين أو تعطيل الردود على الاستفسارات المرسلة إلى الخوادم المضيفة بواسطة الراوتر. لتعطيل الاستفسارات، يجب إضافة السطر <code>i2p.streaming.answerPings=false</code> إلى قسم <i>الخيارات المخصصة</i> لتكويف الخادم في مدير الأنفاق."
-
-msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
-msgstr "عند تعيينه على صحيح، يعمل I2P بدون اتصال بالشبكة، ما يكون مفيداً إذا كنت تعيد تشغيل الراوتر باستمرار لاختبار تحديثات الكود حيث أن ذلك يمنع اضطراب الشبكة."
-
-msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr "هذا الإعداد، عند تمكينه، يقدّم تأخيراً عشوائياً للاستجابة بحدّ أقصى 50 ميلي ثانية لجميع الخوادم التي تمكّن الاستفسارات المضيفة بواسطة الراوتر. الافتراضي هو التعطيل. [إعادة تشغيل مطلوبة]"
-
-msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr "هذا الإعداد، عند تمكينه، يعدل أقصى تأخير إضافي عشوائي للاستجابة المضاف للخوادم الممكّنة للاستفسارات، إذا تم تمكين <code>i2p.streaming.enablePongDelay</code> أيضاً. ما لم يتم تعيينه بشكل صريح، سيتم استخدام القيمة الافتراضية البالغة 50 ميلي ثانية."
-
-msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
-msgstr "هذا الإعداد (بالملي ثوان) يحدد مدة احتفاظ حزمة البيانات في طابور CoDel قبل إسقاطها. الافتراضي هو 1000 ملي ثانية. [إعادة تشغيل مطلوبة]"
-
-msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
-msgstr "هذا الإعداد يحدد العدد الأقصى للرسائل في الطابور الخارجي قبل تعليمه أنه ممتلىء. [الافتراضي هو 768]"
-
-msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
-msgstr "هذا الإعداد يحدد العدد الأقصى للرسائل فوق القيمة الأقصى للطابور قبل إسقاط رسائل أخرى. [الافتراضي هو 128]"
-
-msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
-msgstr "هذا الإعداد (بالملي ثوان) يتيح لك تكويف قيمة هدف تأخير الطابور لنظام إدارة طابور CoDel يدوياً. الافتراضي هو 50 ملي ثانية. [إعادة تشغيل مطلوبة]"
-
-msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
-msgstr "هذا الإعداد (بالساعات) يحدد مدة تقادم معلومات الراوتر في قاعدة البيانات الشبكية (تاريخ النشر المعروف الأخير) قبل تصنيفها على أنها قديمة وحذفها. [الافتراضي 28 ساعة ما لم يكن الراوتر من ملئة الفيضان، وفي هذه الحالة يكون الافتراضي 8 ساعات]"
-
-msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
-msgstr "هذا الإعداد يحدد عدد الأقران المستكشفة على التوازي عند تشغيل مهمة استكشاف الأقران [الافتراضي هو قرين واحد كل مرة عندما يتجاوز عدد الأقران المعروفة 3000]. ملاحظة أن زيادة هذه القيمة ستزيد من متطلبات عرض النطاق للاستكشاف، وتعيين هذه القيمة عالية جداً قد يسبب تأخيراً مفرطاً للرسائل ويتداخل مع الخدمات الأخرى، لذا استخدمه بحذر!"
-
-msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
-msgstr "هذا الإعداد يحدد عدد سلال مقارنة قاعدة البيانات الشبكية التي ستستشهد بها مهمة استكشاف الأقران عند تشغيلها. بشكل افتراضي، سيختلف عدد السلال المستكشفة حسب ما إذا كان الراوتر قد تم تشغيله لأكثر من ساعة واحدة، وحسب ما إذا كان الراوتر مخفي أو ينتمي لفئة 'K' من حيث عرض النطاق، وحسب عدد الرواتر المعروفة."
-
-msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
-msgstr "هذا الإعداد (بالثواني) يتيح لك تجاوز التأخير بين تشغيلات مهمة استكشاف الأقران التي تحاول تحديد الأقران الجدد لإضافتهم إلى قاعدة البيانات الشبكية. بشكل افتراضي ستشتغل المهمة كل 80 ثانية، أو كل 3 دقائق إذا كان الراوتر يعاني من تأخير في المهام أو الرسائل. إذا بلغ حجم قاعدة البيانات الشبكية 4000 قرين، سيزداد التأخير إلى 15 دقيقة. قد ترغب بزيادة التأخير إذا كانت قاعدة البيانات الشبكية لديك مملوءة بشكل جيد (أكثر من 2000 قرين)، أو إذا كنت ترغب في خفض استهلاك عرض النطاق بشكل عام. ملاحظة: للرواتر التي تعمل كملئة فيضان، لا تشتغل هذه المهمة."
-
-msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
-msgstr "هذا الإعداد يحدد العدد الأقصى لبصمات الأقران التي يتم تأشيرها للاستكشاف. في بروتوكول I2P يكون الحد الأقصى 128، وفي I2P+ تكون القيمة الافتراضية 512."
-
-msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
-msgstr "هذا الإعداد يحدد ما إذا كان الراوتر الذي يعمل كملء فيضان سيستكشف قاعدة البيانات الشبكية لمعرفة الأقران الجدد. [الافتراضي هو خطأ، إعادة تشغيل مطلوبة]"
-
-msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
-msgstr "هذا الإعداد، عند تعيينه على صحيح، يمنع الراوتر من الاتصال مباشرة بالرواتر الأخرى، مما يجبر على استخدام المعرّفين. [الافتراضي هو خطأ ما لم يكن الراوتر في وضع الإخفاء]"
-
-msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
-msgstr "هذا الإعداد يتيح لك استبعاد الرواتر الأكبر سناً من قاعدة بياناتك الشبكية. الرواتر التي تتجاوز عمرها الافتراضي أو القيمة التي حددتها ستُحذف من قاعدة البيانات الشبكية وسيتم حظرها لمدة جلسة الراوتر. بشكل افتراضي، يتم استبعاد الرواتر الأقدم من 0.9.20. ملاحظة: بدءًا من إصدار I2P+ 0.9.46+، يتم استخدام الرواتر ذات الإصدارات الحديثة جدًا لبناء الأنفاق المحلية فقط. [إعادة تشغيل مطلوبة]"
-
 msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. [Default is 4]"
 msgstr "هذا الإعداد يحدد عدد اختبارات الأقران التي ستشتغل بالتوازي، والمستخدمة لتحديد اختلاف التأخير بين الأقران. [الافتراضي هو 4]"
 
@@ -5921,14 +5964,17 @@ msgstr "هذا الإعداد يحدد ما إذا كانت الإحصائيات
 msgid "This setting configures the initial size of the outbound message queue. [Default is 64]"
 msgstr "هذا الإعداد يكوّن حجم الطابور المبدئي للرسائل المنبثقة. [الافتراضي هو 64]"
 
-msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
-msgstr "هذا الإعداد يكوّن الحجم الأقصى لطابور الرسائل الواردة. [الافتراضي هو 1024]"
-
 msgid "This setting configures the maximum number of inbound messages queued per cycle (pump). [Default is 24]"
 msgstr "هذا الإعداد يكوّن العدد الأقصى للرسائل الواردة المؤشّرة لكل دورة (مضخ). [الافتراضي هو 24]"
 
+msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
+msgstr "هذا الإعداد يكوّن الحجم الأقصى لطابور الرسائل الواردة. [الافتراضي هو 1024]"
+
 msgid "This setting configures the maximum number of outbound messages queued per cycle (pump). [Default is 64]"
 msgstr "هذا الإعداد يكوّن العدد الأقصى للرسائل المنبثقة المؤشّرة لكل دورة (مضخ). [الافتراضي هو 64]"
+
+msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
+msgstr "عند تعيينه على صحيح، سيغير الراوتر هويته ومنفذ UDP عند إعادة تشغيله ثم حذف المفتاح من router.config لمنع أي تغييرات لاحقة. [الافتراضي هو خطأ]"
 
 msgid "This setting (in milliseconds) allows you to manually configure the delay between router refresh updates run by the Refresh Routers Job. By default the pause between refreshes is determined by the size of the NetDb, and introduces some randomness in the timing to mitigate traffic analysis. For values lower than 2000 milliseconds, increasing the value of <code>router.refreshTimeout</code> is recommended. Note that setting this value below 2000 milliseconds will increase your network traffic and may introduce job lag, and is not recommended for sustained use."
 msgstr "هذا الإعداد (بالمللي ثواني) يتيح لك تكويف التأخير بين تحديثات تحديث الرواتر التي تشتغلها مهمة تحديث الرواتر. افتراضيًا، يتم تحديد التوقف بين التحديثات حسب حجم قاعدة البيانات الشبكية، ويقدّم بعض العشوائية في التوقيت للتخفيف من تحليل حركة الشبكة. للقيم الأقل من 2000 ملي ثانية، يوصى بزيادة قيمة <code>router.refreshTimeout</code>. ملاحظة أن تهيئة هذه القيمة أقل من 2000 ملي ثانية ستزيد حركة الشبكة لديك وقد تقدّم تأخير في الوظائف، ولا ينصح باستخدامها لفترات طويلة."
@@ -5942,26 +5988,56 @@ msgstr "هذا الإعداد (بالثواني) يتيح لك تكويف مدة
 msgid "This setting determines whether routers classified as uninteresting (K or L tier, unreachable or older than 0.9.50) are checked during the refresh router process after 1 hour of uptime. [Default is false]"
 msgstr "هذا الإعداد يحدد ما إذا كانت الرواتر المصنّفة غير ذات أهمية (فئة K أو L، غير قابلة للوصول أو أقدم من 0.9.50) سيتم فحصها أثناء عملية تحديث الرواتر بعد ساعة واحدة من تشغيل النظام. [الافتراضي هو خطأ]"
 
+msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
+msgstr ""
+
+msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
+msgstr "عند التكويف، هذا يضع حداً صلباً لعدد الأنفاق التي يُسمح للراوتر ببنائها بشكل متزامن. بشكل افتراضي، الراوتر يستخدم الوقت المتوسط للبناء وعرض النطاق الخارجي الحالي لتحديد معدل بناء مثالي. [إعادة تشغيل مطلوبة]"
+
+msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
+msgstr "إذا كنت ترغب بتثبيت التحديثات غير الموقّعة لـI2P (.zip)، يجب إضافة هذا إلى ملف <code>router.config</code> الخاص بك ما لم تكن قد كوّنت بالفعل <code>routerconsole.advanced=true</code>، وفي هذه الحالة فإن هذا الخيار مزوّد بالفعل. ملاحظة: ابتداءً من I2P+ 0.9.48+، يتم تمكين تثبيت <a href=/configupdate#i2pupdates>التحديثات غير الموقّعة</a> بشكل افتراضي."
+
+msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
+msgstr "هذا الإعداد يسمح لك بتكويف عنوان URL التحديث من أجل ميزة التحديثات غير الموقّعة، إن تم تمكينها. يجب أن ينتهي عنوان الURL بـ <code>/i2pupdate.zip</code>. ملاحظة: لا تقم بتثبيت التحديثات غير الموقّعة إلا إذا كنت تثق بمصدر التحديث!"
+
 msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
 msgstr "هذا الإعداد (بالدقائق) يتيح لك تكويف مدة الانتظار يدوياً بعد الإقلاع قبل فحص صحة معلومات الرواتر في قاعدة البيانات الشبكية، حيث سيتم قبول الرواتر الصالحة فقط للإدراج. عند التحقق من الصحة، سيتم إزالة معلومات الرواتر المنتهية الصلاحية والأقران غير المستجيبة المتاحة عبر بروتوكول SSU من قاعدة البيانات الشبكية. [الافتراضي هو 60 دقيقة] ملاحظة: لا تؤثر هذه الإعدادات على الرواتر الأقدم (أقدم من 0.9.29 افتراضيا) التي يتم إزالتها من قاعدة البيانات الشبكية وحظرها لمدة جلسة الراوتر عند محاولة تخزين قاعدة البيانات الشبكية."
 
-msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
-msgstr "هذا الإعداد، عند تهيئته على صحيح، سيعرض متوسط اختبار الأقران في قسم الازدحام من الشريط الجانبي، والذي يتم حسابه عن طريق جمع متوسط الاختبارات الناجحة للأقران والوقت الزائد المتوسط المستغرق في الاختبارات الفاشلة. قد يستخدم القيمة المتوسطة كدليل لتحديد القيمة المثلى لـ <code>router.peerTestTimeout</code>. [الافتراضي هو خطأ]"
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
+msgstr ""
 
-msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
-msgstr "هذا الإعداد عند تهيئته على صحيح، سيعرض روابط <i>المواقع ذات الاهتمام</i> على <a href=/sitemap>خريطة الموقع</a>. [الافتراضي هو خطأ]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
+msgstr ""
 
-msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr "هذه الإعدادات تسمح بإدخال سطر نصي مخصص للعنوان على صفحات واجهة ال router، وهو مفيد عندما تكون لديك عدة واجهات مفتوحة في علامات التبويب في المتصفح وتريد طريقة سهلة للتعرف بينها."
+msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
+msgstr "هذا الإعداد يسمح بتعطيل اختبارات SSU لتحديد ما إذا كان الراوتر الخاص بك محمي بجدار ناري ويمكن تمكينه للرواتر التي لا شك أنها غير محمية بجدار ناري ولكنها تعاني من قضايا فرض جدار ناري متقطعة. في حالة تعطيل الاختبار، كلا SSU وـ NTCP يجب أن يبلغ عن عنوان IP العام الحالي الخاص بك على <a href=/info>صفحة معلومات الراوتر</a>. [إعادة تشغيل مطلوبة]"
 
-msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
-msgstr "يسمح هذا الإعداد بتكويف خوادم NTP بديلة لضمان أن يحافظ راوترك على الوقت بدقة. [الافتراضي هو 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
+msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
+msgstr "هذا الإعداد يحدد أي وسيلة نقل تحظى بالأولوية عند الاتصال مع الأقران. بشكل افتراضي، يحظى NTCP بالأولوية على UDP (SSU). بتعيين القيمة على صحيح، سيحظى UDP بالأولوية ما لم توجد اتصال موجود مسبقاً عبر NTCP؛ عند تعيينه على دائماً، سيتم استخدام UDP بشكل دائم بغض النظر عن أي اتصال موجود مسبقاً عبر NTCP. [الافتراضي هو خطأ]"
+
+msgid "miscellaneous"
+msgstr ""
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "إذا تم تهيئتها على صحيح، ستضع هذه الخيارات أيقونة في منطقة إخطار النظام/صلصال النظام مع خيارات التحكّم الأساسية في الخدمة. [معطّلة افتراضيًا]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
 msgstr "يسمح هذا الإعداد بتكويف العدد الأقصى للملفات لكل تورنت يسمح به I2PSnark عند تنزيلها أو إنشائها. يجدر ملاحظة أن زيادة هذه القيمة بشكل ملحوظ عن 2000 ملف قد تتطلّب تكويفات إضافية على نظام الضيافة لزيادة العدد الأقصى للملفات المفتوحة التي سيسمح بها نظام التشغيل (مثل <code>ulimit -n</code> في لينكس). للتغيير، أضف إلى ملف التكويف <code>i2psnark.config</code> لـ I2PSnark. [إعادة تشغيل I2PSnark أو الراوتر ضروريّة]"
+
+msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
+msgstr "هذا الإعداد الخاص بالنفق يسمح لك بتمكين أو تعطيل الردود على الاستفسارات المرسلة إلى الخوادم المضيفة بواسطة الراوتر. لتعطيل الاستفسارات، يجب إضافة السطر <code>i2p.streaming.answerPings=false</code> إلى قسم <i>الخيارات المخصصة</i> لتكويف الخادم في مدير الأنفاق."
+
+msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
+msgstr "هذا الإعداد، عند تمكينه، يقدّم تأخيراً عشوائياً للاستجابة بحدّ أقصى 50 ميلي ثانية لجميع الخوادم التي تمكّن الاستفسارات المضيفة بواسطة الراوتر. الافتراضي هو التعطيل. [إعادة تشغيل مطلوبة]"
+
+msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
+msgstr "هذا الإعداد، عند تمكينه، يعدل أقصى تأخير إضافي عشوائي للاستجابة المضاف للخوادم الممكّنة للاستفسارات، إذا تم تمكين <code>i2p.streaming.enablePongDelay</code> أيضاً. ما لم يتم تعيينه بشكل صريح، سيتم استخدام القيمة الافتراضية البالغة 50 ميلي ثانية."
+
+msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
+msgstr "عند تعيينه على صحيح، يعمل I2P بدون اتصال بالشبكة، ما يكون مفيداً إذا كنت تعيد تشغيل الراوتر باستمرار لاختبار تحديثات الكود حيث أن ذلك يمنع اضطراب الشبكة."
+
+msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
+msgstr "يسمح هذا الإعداد بتكويف خوادم NTP بديلة لضمان أن يحافظ راوترك على الوقت بدقة. [الافتراضي هو 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 
 msgid "Recent I2P+ Changes"
 msgstr "آخر التغييرات على I2P+"
@@ -6178,6 +6254,18 @@ msgstr "لكل من غير SSL وSSL"
 
 msgid "For SSL only"
 msgstr "فقط لـ SSL"
+
+msgid "How can I configure the console and web services to be accessible on my local network?"
+msgstr ""
+
+msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
+msgstr ""
+
+msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
+msgstr ""
+
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager’s configuration section using the <i>reachable by</i> dropdown."
+msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "كيف أتصل بخادم IRC داخل I2P؟"
@@ -7438,9 +7526,6 @@ msgstr "الأقران على الشبكة"
 msgid "peer profiles"
 msgstr "بروفايل المستخدمين"
 
-msgid "Peer Profiles"
-msgstr "ملفات تعريف الأقران"
-
 msgid "Session Banned Peers"
 msgstr "جلسة المحظورة أقرانهم"
 
@@ -7657,6 +7742,9 @@ msgstr "تبديل الأنفاق"
 msgid "Peer Profile"
 msgstr "ملف تعريف الأقران"
 
+msgid "Profile View"
+msgstr ""
+
 msgid "Profile for peer"
 msgstr "الملف الشخصي للأقران"
 
@@ -7794,6 +7882,35 @@ msgstr "منتهي"
 
 
 
+
+
 #, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

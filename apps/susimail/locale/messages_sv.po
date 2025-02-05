@@ -257,14 +257,14 @@ msgstr "Fel vid sändning av e-post"
 msgid "Mail sent."
 msgstr "E-post skickat."
 
-msgid "Send"
-msgstr "Skicka"
+msgid "Cancel"
+msgstr "Avbryt"
 
 msgid "Save as Draft"
 msgstr "Spara som utkast"
 
-msgid "Cancel"
-msgstr "Avbryt"
+msgid "Send"
+msgstr "Skicka"
 
 msgid "From"
 msgstr "Från"

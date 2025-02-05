@@ -135,17 +135,14 @@ msgstr[0] "{0} призначення видалено."
 msgstr[1] "{0}  призначення видалено."
 msgstr[2] "{0} призначень видалено."
 
-msgid "No entries selected to delete."
-msgstr "Не виділено записів для видалення"
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "Додати альтернативу"
 
 msgid "Address book saved."
 msgstr "Адресна книга збережена"
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "Перегляньте цю адресну книгу та поверніться, щоб переглянути оновлення."
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "ПОМИЛКА: Не вдалось зберегти файл адресної книги."
@@ -328,6 +325,9 @@ msgstr "Позначити для видалення"
 msgid "Cancel"
 msgstr "Відмінити"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "наприклад newdomain.i2p"
 
@@ -405,6 +405,9 @@ msgstr "Файл для запису журналу дій (логів)"
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Назва перевизначеної теми для використання (за замовчуванням тема, вибрана на консолі)"
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "адресна книга"
@@ -600,3 +603,5 @@ msgstr "Адреси, додані вручну до головної адрес
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Хости, отримані від ваших підписок, будуть об’єднані з адресною книгою вашого маршрутизатора."
+
+

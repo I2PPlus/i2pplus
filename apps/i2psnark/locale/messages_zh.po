@@ -23,6 +23,12 @@ msgstr "无法连接I2P网络"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "连接I2P时发生错误 - 请检查I2CP设置!"
 
+msgid "Download already running: "
+msgstr ""
+
+msgid "Downloading"
+msgstr "正在下载"
+
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "用I2CP选项配置I2PSnark"
 
@@ -466,12 +472,23 @@ msgid "Anonymous BitTorrent Client"
 msgstr "匿名的 BitTorrent 客户端"
 
 #, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr ""
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr ""
+
+#, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "你确定你要删除文件 \\“{0} \\” (下载的数据不会被删除)？"
 
+msgid "Note: Downloaded data will not be deleted."
+msgstr ""
+
 #, java-format
-msgid "Are you sure you want to delete torrent file {0} and all downloaded data?"
-msgstr "您确定要删除种子“{0}”(下载的数据文件会一并被删除)?"
+msgid "Deleting {0} and associated metadata only..."
+msgstr ""
 
 msgid "I2PSnark has stopped"
 msgstr "I2PSnark 已停止运行"
@@ -484,6 +501,9 @@ msgstr "种子"
 
 msgid "Refresh page"
 msgstr "刷新页面"
+
+msgid "Configure"
+msgstr "配置"
 
 msgid "Forum"
 msgstr "论坛"
@@ -524,36 +544,6 @@ msgstr "页面刷新"
 
 msgid "Warning - No I2P"
 msgstr "正在连接到I2P"
-
-msgid "Search"
-msgstr "搜索"
-
-msgid "Show All"
-msgstr "显示全部"
-
-msgid "Active"
-msgstr "活跃"
-
-msgid "Inactive"
-msgstr "不活跃"
-
-msgid "Connected"
-msgstr "已连接"
-
-msgid "Downloading"
-msgstr "正在下载"
-
-msgid "Seeding"
-msgstr "正做种"
-
-msgid "Complete"
-msgstr "完成"
-
-msgid "Incomplete"
-msgstr "不完整"
-
-msgid "Stopped"
-msgstr "已停用"
 
 msgid "Status"
 msgstr "状态"
@@ -634,35 +624,30 @@ msgstr "未找到种子。"
 msgid "No torrents loaded."
 msgstr "未载入任何种子."
 
-msgid "Totals"
-msgstr "总计"
-
 #, java-format
 msgid "1 torrent"
 msgid_plural "{0} torrents"
 msgstr[0] "{0}个种子"
 
-#, java-format
-msgid "1 connected peer"
-msgid_plural "{0} connected peers"
-msgstr[0] "{0}个已连接用户"
+msgid "Total size of loaded torrents"
+msgstr ""
 
 #, java-format
 msgid "1 DHT peer"
 msgid_plural "{0} DHT peers"
 msgstr[0] "{0}个DHT节点"
 
-msgid "Configured maximum (actual usage may be less)"
-msgstr "配置的最大值（实际用量可能更少）"
+msgid "Active downloads"
+msgstr ""
 
-msgid "Tunnels"
-msgstr "隧道"
+msgid "Active uploads"
+msgstr ""
 
-msgid "in"
-msgstr "在"
+msgid "Active Inbound tunnels"
+msgstr ""
 
-msgid "out"
-msgstr "出"
+msgid "Active Outbound tunnels"
+msgstr ""
 
 msgid "Estimated download time for all torrents"
 msgstr "所有洪流的估计下载时间"
@@ -679,17 +664,41 @@ msgstr "上传的总数据（对于列出的种子）。"
 msgid "Total upload speed"
 msgstr "限制总上传速度为"
 
-msgid "Enable Debug Mode"
-msgstr "启用调试模式"
-
-msgid "Disable Debug Mode"
-msgstr "禁用调试模式"
+msgid "Toggle Debug Mode"
+msgstr ""
 
 msgid "Normal Mode"
 msgstr "正常模式"
 
 msgid "No DHT Peers"
 msgstr "没有DHT节点"
+
+msgid "Search"
+msgstr "搜索"
+
+msgid "Show All"
+msgstr "显示全部"
+
+msgid "Active"
+msgstr "活跃"
+
+msgid "Inactive"
+msgstr "不活跃"
+
+msgid "Connected"
+msgstr "已连接"
+
+msgid "Seeding"
+msgstr "正做种"
+
+msgid "Complete"
+msgstr "完成"
+
+msgid "Incomplete"
+msgstr "不完整"
+
+msgid "Stopped"
+msgstr "已停用"
 
 msgid "First"
 msgstr "首页"
@@ -1044,9 +1053,6 @@ msgstr "要手动更换主题，请禁用通用主题"
 msgid "Universal theming is enabled."
 msgstr "通用主题已禁用."
 
-msgid "Configure"
-msgstr "配置"
-
 msgid "Refresh time"
 msgstr "刷新时间"
 
@@ -1067,12 +1073,6 @@ msgstr "种子"
 
 msgid "Language"
 msgstr "语言"
-
-msgid "Smart torrent sorting"
-msgstr "智能种子排序"
-
-msgid "Ignore words such as 'a' and 'the' when sorting"
-msgstr "筛选时忽略a或the之类的词"
 
 msgid "Collapsible panels"
 msgstr "可折叠面板"
@@ -1304,6 +1304,15 @@ msgstr "这配置了打开的最大隧道数量，由连接的对等点数量决
 msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
 msgstr "将此设置更改为少于 3 跳可能会提高速度，但会牺牲匿名性，因此不建议将此设置改为小于3跳，可能会以牺牲匿名性为代价来提高速度，因此不建议这样做"
 
+msgid "Sequential piece or file order not saved - feature currently broken."
+msgstr ""
+
+msgid "Unknown command"
+msgstr ""
+
+msgid "Please retry form submission (bad nonce)"
+msgstr ""
+
 msgid "Info hash"
 msgstr "信息哈希"
 
@@ -1485,3 +1494,14 @@ msgstr "保存更改"
 
 msgid "Torrent must be stopped"
 msgstr "必须停止洪流"
+
+#, java-format
+
+
+
+
+
+
+
+
+

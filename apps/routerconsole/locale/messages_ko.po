@@ -140,6 +140,9 @@ msgstr "서명 타입 지원하지 않음"
 msgid "Unreachable on any transport"
 msgstr "어떤 트랜스포트에도 도달하지 못함"
 
+msgid "Cannot enumerate UPnP devices on Android."
+msgstr ""
+
 msgid "UPnP is not enabled"
 msgstr "UPnP가 활성화되지 않았습니다"
 
@@ -677,11 +680,39 @@ msgstr "신고해주세요"
 msgid "After reporting, please restart your router"
 msgstr "보고 후 라우터를 다시 시작하십시오"
 
+msgid "Invalid form submission, requires POST"
+msgstr ""
+
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "잘못된 폼 서브미션. 뒤로가기나 새로고침을 누르셨을 수 있습니다. 재시도해주세요."
 
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "문제가 지속되면 브라우저의 쿠키가 활성화되어 있는지 확인해주세요."
+
+msgid "Bandwidth usage"
+msgstr "대역폭 사용"
+
+#, java-format
+msgid "events in {0}"
+msgstr "{0} 의 이벤트"
+
+msgid "Events per period"
+msgstr "기간 당 이벤트"
+
+msgid "Min"
+msgstr "최소"
+
+msgid "Max"
+msgstr "최대"
+
+msgid "Avg"
+msgstr "평균"
+
+msgid "Now"
+msgstr "지금"
+
+msgid "Router restarted"
+msgstr "루터 재시작"
 
 #, java-format
 msgid "News last updated {0} ago."
@@ -713,31 +744,6 @@ msgstr[0] "{0} 플러그인이 업데이트되었습니다"
 
 msgid "Plugin check complete"
 msgstr "플러그인 체크 완료"
-
-msgid "Bandwidth usage"
-msgstr "대역폭 사용"
-
-#, java-format
-msgid "events in {0}"
-msgstr "{0} 의 이벤트"
-
-msgid "Events per period"
-msgstr "기간 당 이벤트"
-
-msgid "Min"
-msgstr "최소"
-
-msgid "Max"
-msgstr "최대"
-
-msgid "Avg"
-msgstr "평균"
-
-msgid "Now"
-msgstr "지금"
-
-msgid "Router restarted"
-msgstr "루터 재시작"
 
 msgid "none"
 msgstr "없음"
@@ -807,8 +813,20 @@ msgstr "콘솔"
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "SSL 액세스를 사용하려면 I2P 응용 프로그램 디렉토리에 위치한 주석 처리된 <code>clients.config</code> 파일을 참조하십시오. 자세한 내용은 <code>RouterConsoleRunner</code> 구성 파일이 있는 디렉토리에서 편집해야합니다. "
 
+msgid "Save disabled, edit the router.config file to make changes"
+msgstr ""
+
 msgid "Error updating the configuration - please see the error logs"
 msgstr "설정을 업뎃하는데 실패했습니다 - 에러 로그를 보세요"
+
+msgid "No changes made to the configuration"
+msgstr ""
+
+msgid "Note"
+msgstr "참고"
+
+msgid "Some changes may require a restart to take effect."
+msgstr "몇몇 변경사항은 재시작 이후 반영됩니다."
 
 msgid "Save Client Configuration"
 msgstr "클라이언트 설정 저장"
@@ -822,6 +840,9 @@ msgstr "웹앱 설정 저장"
 msgid "Save Plugin Configuration"
 msgstr "플러그인 설정 저장"
 
+msgid "Plugins disabled"
+msgstr ""
+
 msgid "Install Plugin"
 msgstr "플러그인 설치"
 
@@ -830,6 +851,9 @@ msgstr "파일에서 플러그인 설치"
 
 msgid "Update All Installed Plugins"
 msgstr "모든  설치된 플러그인 설치"
+
+msgid "Delete client disabled"
+msgstr ""
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -912,9 +936,18 @@ msgstr "플러그인이나 업데이트 다운로드가 이미 작동중입니�
 msgid "Updating all plugins"
 msgstr "모든 플러그인 업데이트 중"
 
+msgid "Update manager not registered, cannot install"
+msgstr ""
+
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "{0}에서 플러그인 설치중"
+
+msgid "Cannot install, check logs"
+msgstr ""
+
+msgid "Update manager not registered, cannot check"
+msgstr ""
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1013,6 +1046,19 @@ msgstr "설정 성공적으로 저장"
 msgid "Join Family"
 msgstr "가족과 함께하십시오"
 
+msgid "Bad certificate - No Subject CN"
+msgstr ""
+
+msgid "Bad characters in Family: "
+msgstr ""
+
+#, java-format
+msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
+msgstr ""
+
+msgid "Family key configured for router family: "
+msgstr ""
+
 msgid "Load from file failed"
 msgstr "파일 로드 실패"
 
@@ -1028,8 +1074,8 @@ msgstr "아이템 추가"
 msgid "Restore defaults"
 msgstr "기본설정으로"
 
-msgid "Home page changed"
-msgstr "홈페이지 변경됨"
+msgid "Bad group detected, please retry"
+msgstr ""
 
 msgid "Restored default settings"
 msgstr "기본 설정으로 되돌려짐"
@@ -1061,6 +1107,9 @@ msgstr "유효하지 않은 키"
 msgid "Invalid destination"
 msgstr "잘못된 목적지"
 
+msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
+msgstr ""
+
 #, java-format
 msgid "Key for {0} added to keyring"
 msgstr "{0}의 키가 키링에 추가되었습니다."
@@ -1070,6 +1119,9 @@ msgstr "조회 비밀번호 필요"
 
 msgid "Requires hostname, destination, or blinded Base32"
 msgstr "호스트 이름, 대상 또는 블라인드 Base32가 필요합니다."
+
+msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
+msgstr ""
 
 msgid "Destination requires lookup password"
 msgstr "대상에는 조회 비밀번호가 필요합니다."
@@ -1088,6 +1140,9 @@ msgstr "서버 운영자에게 키를 보냅니다."
 
 msgid "Delete key"
 msgstr "키 삭제"
+
+msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
+msgstr ""
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1138,6 +1193,36 @@ msgstr "맹인"
 
 msgid "Log overrides updated"
 msgstr "로그 오버라이드 업데이트됨"
+
+msgid "Error updating the log limits - levels not valid"
+msgstr ""
+
+msgid "Log limits cleared"
+msgstr ""
+
+#, java-format
+msgid "Default log level updated from {0} to {1}"
+msgstr ""
+
+msgid "Date format updated"
+msgstr ""
+
+#, java-format
+msgid "Specified date format is not valid ({0}) - not updated"
+msgstr ""
+
+msgid "File size updated"
+msgstr ""
+
+#, java-format
+msgid "Specified file size limit is not valid ({0}) - not updated"
+msgstr ""
+
+msgid "Compression setting updated"
+msgstr ""
+
+msgid "Log record format updated"
+msgstr ""
 
 msgid "Log configuration saved"
 msgstr "로그 설정 저장됨"
@@ -1346,6 +1431,12 @@ msgstr "나쁜 속도값"
 msgid "Bad capacity value"
 msgstr "나쁜 수용량"
 
+msgid "Bonuses adjusted for: "
+msgstr ""
+
+msgid "No profile exists for: "
+msgstr ""
+
 msgid "Unsupported"
 msgstr "지원 안됨"
 
@@ -1454,27 +1545,14 @@ msgstr[0] "라우터가 터널 만료 프로세싱을 완료하는 중입니다:
 msgid "Restart in {0}"
 msgstr "{0} 안에 재시작"
 
-msgid "Stat filter and location updated successfully to"
-msgstr "상태 필터와 위치가 성공적으로 업데이트됨:"
-
-msgid "Full statistics enabled"
-msgstr "완전판 상태 활성화"
-
-msgid "Full statistics disabled"
-msgstr "완전판 상태 비활성화"
-
-#, java-format
-msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
-msgstr "그래프 리스트가 업데이트 되었습니다. {0}그래프 페이지{1}에 반영되려면 60초정도 소요됩니다."
-
 msgid "Save order"
 msgstr "순서 저장"
 
-msgid "Refresh disabled"
-msgstr "갱신 비활성화"
+msgid "Sidebar refresh disabled"
+msgstr ""
 
-msgid "Refresh interval changed"
-msgstr "새로고침 간격 변경됨"
+msgid "Sidebar refresh interval changed"
+msgstr ""
 
 msgid "Refresh interval must be a number"
 msgstr "새로고침 간격은 반드시 숫자여야 합니다"
@@ -1482,17 +1560,17 @@ msgstr "새로고침 간격은 반드시 숫자여야 합니다"
 msgid "Restore full default"
 msgstr "완전판 기본값으로 복구"
 
-msgid "Full summary bar default restored."
-msgstr "전체 요약 막대 기본값이 복원되었습니다."
+msgid "Full sidebar defaults restored."
+msgstr ""
 
-msgid "Summary bar will refresh shortly."
-msgstr "요약 막대가 곧 새로 고침됩니다."
+msgid "Sidebar will refresh shortly."
+msgstr ""
 
 msgid "Restore minimal default"
 msgstr "최소 기본값 복원"
 
-msgid "Minimal summary bar default restored."
-msgstr "최소 요약 막대 기본값이 복원되었습니다."
+msgid "Minimal sidebar defaults restored."
+msgstr ""
 
 msgid "Order must be an integer"
 msgstr "순서는 반드시 정수값이여야 합니다"
@@ -1508,6 +1586,27 @@ msgstr "옮겨짐"
 
 msgid "Saved order of sections."
 msgstr "섹션 순서 저장됨."
+
+msgid "Stat filter and location updated successfully to"
+msgstr "상태 필터와 위치가 성공적으로 업데이트됨:"
+
+msgid "Full statistics enabled"
+msgstr "완전판 상태 활성화"
+
+msgid "Full statistics disabled"
+msgstr "완전판 상태 비활성화"
+
+#, java-format
+msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
+msgstr "그래프 리스트가 업데이트 되었습니다. {0}그래프 페이지{1}에 반영되려면 60초정도 소요됩니다."
+
+#, java-format
+msgid "Internal error: could not resolve pool name {0}."
+msgstr ""
+
+#, java-format
+msgid "Internal error: could not find pool settings for {0}."
+msgstr ""
 
 msgid "Updated settings for all pools."
 msgstr "모든 풀의 설정 저장됨."
@@ -1531,9 +1630,8 @@ msgstr[0] "{0} 터널"
 msgid "Exploratory tunnels"
 msgstr "예비 터널"
 
-#, java-format
-msgid "Client tunnels for {0}"
-msgstr "{0} 클라이언트 터널"
+msgid "I2PSnark"
+msgstr "I2PSnark"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "익명 경고 - 설정이 0단계 터널을 포함합니다."
@@ -1559,17 +1657,17 @@ msgstr "수신"
 msgid "Outbound"
 msgstr "송신"
 
-msgid "Length"
-msgstr "길이"
-
-msgid "Randomization"
-msgstr "랜덤화"
-
 msgid "Quantity"
 msgstr "양"
 
 msgid "Backup quantity"
 msgstr "백업 양"
+
+msgid "Length"
+msgstr "길이"
+
+msgid "Randomization"
+msgstr "랜덤화"
 
 msgid "Inbound options"
 msgstr "수신 옵션"
@@ -1580,17 +1678,20 @@ msgstr "송신 옵션"
 msgid "Add user"
 msgstr "유저 추가"
 
+msgid "Cannot save theme choice, theme name has illegal characters"
+msgstr ""
+
 msgid "Theme change saved."
 msgstr "테마 변경 저장됨."
-
-msgid "Refresh the page to view."
-msgstr "페이지 새로고침하고 보기"
 
 msgid "Mobile console option saved."
 msgstr "모바일 콘솔 옵션 저장됨."
 
 msgid "No user name entered"
 msgstr "유저네임이 입력되지 않았습니다"
+
+msgid "User name may not contain '='"
+msgstr ""
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "경고: ISO-8859-1 문자 이외를 유저네임에 사용하는것은 권장되지 않습니다. 지원되지 않는 브라우저가 있을 수 있습니다."
@@ -1881,17 +1982,17 @@ msgstr "라우터 성능 그래프"
 msgid "Graphs"
 msgstr "그래프"
 
-msgid "Anonymous webmail client"
-msgstr "익명 웹메일 클라이언트"
-
-msgid "I2PMail"
-msgstr "I2PMail"
-
 msgid "Help"
 msgstr "도움말"
 
 msgid "I2P Router Help"
 msgstr "I2P 라우터 도움말"
+
+msgid "Anonymous webmail client"
+msgstr "익명 웹메일 클라이언트"
+
+msgid "I2PMail"
+msgstr "I2PMail"
 
 msgid "Install and configure I2P plugins"
 msgstr "I2P 플러그인을 설치하고 구성하십시오"
@@ -1910,6 +2011,12 @@ msgstr "네트워크 데이터베이스"
 
 msgid "Show list of all known I2P routers"
 msgstr "모든 알려진 I2P 라우터 리스트 보이기"
+
+msgid "List of recently connected peers with profiling info"
+msgstr ""
+
+msgid "Peer Profiles"
+msgstr "동료 프로필"
 
 msgid "Router Info"
 msgstr "라우터 정보"
@@ -1983,14 +2090,14 @@ msgstr "고급 구성"
 msgid "Advanced router configuration"
 msgstr "고급 라우터 구성"
 
-msgid "Start or stop Router clients"
-msgstr "라우터 클라이언트를 시작하거나 중지하십시오"
-
 msgid "Changelog"
 msgstr "변경사항"
 
 msgid "Recent changes"
 msgstr "최근 변경 사항"
+
+msgid "Start or stop Router clients"
+msgstr "라우터 클라이언트를 시작하거나 중지하십시오"
 
 msgid "Bug tracker"
 msgstr "버그 트래커"
@@ -2136,9 +2243,6 @@ msgstr "Clearnet BitTorrent DHT 검색 엔진"
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "Duckduckgo 검색 엔진 (JavaScript 없음)"
 
-msgid "Clearnet Search Engine"
-msgstr "Clearnet Search Engine"
-
 msgid "Privacy-focused Clearnet Search Engine"
 msgstr "개인정보 보호에 초점을 맞춘 Clearnet 검색 엔진"
 
@@ -2214,18 +2318,6 @@ msgstr "독립탐사저널리즘"
 msgid "Information Security Research &amp; Education"
 msgstr "정보보호연구"
 
-msgid "Cannabis-related magazine"
-msgstr "대마초 관련 잡지"
-
-msgid "CultureMagazine"
-msgstr "문화잡지"
-
-msgid "A magazine of Politics &amp; Culture"
-msgstr "정치와 문화의 잡지"
-
-msgid "CurrentAffairs"
-msgstr "시사"
-
 msgid "Darknet related news site"
 msgstr "DarkNet 관련 뉴스 사이트"
 
@@ -2280,15 +2372,6 @@ msgstr "홍콩 시계"
 msgid "Monitors threats to freedoms and rights in Hong Kong"
 msgstr "홍콩의 자유와 권리에 대한 위협을 모니터링합니다"
 
-msgid "Politics &amp; Current Affairs Journal"
-msgstr "정치 및 시사 저널"
-
-msgid "English language Japanese News"
-msgstr "영어 일본어 뉴스"
-
-msgid "JapanToday"
-msgstr "오늘 일본"
-
 msgid "JStorDaily"
 msgstr "JStorDaily"
 
@@ -2331,9 +2414,6 @@ msgstr "뉴스 및 블로그는 I2P에 제공됩니다"
 msgid "Planeta"
 msgstr "행성 A"
 
-msgid "News &amp; Views on Tibet"
-msgstr "티베트에 대한 뉴스와 견해"
-
 msgid "Lifestyle magazine"
 msgstr "라이프스타일 매거진"
 
@@ -2351,6 +2431,9 @@ msgstr "사이언스데일리"
 
 msgid "Community-driven tech news"
 msgstr "커뮤니티 중심 기술 뉴스"
+
+msgid "Various services"
+msgstr ""
 
 msgid "News for nerds"
 msgstr "너드를 위한 뉴스"
@@ -2397,12 +2480,6 @@ msgstr "글로벌 뉴스"
 msgid "TheGuardian"
 msgstr "수호자"
 
-msgid "TheHill"
-msgstr "언덕"
-
-msgid "US Political News"
-msgstr "미국 정치 뉴스"
-
 msgid "TheMarkup"
 msgstr "TheMarkup"
 
@@ -2417,12 +2494,6 @@ msgstr "모스크바 타임즈"
 
 msgid "TheNewRepublic"
 msgstr "신공화국"
-
-msgid "International News from Tibet"
-msgstr "티베트의 국제 뉴스"
-
-msgid "TheTibetPost"
-msgstr "티베트 포스트"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "파일 공유 및 저작권 뉴스"
@@ -2451,6 +2522,9 @@ msgstr "URL"
 
 msgid "Add"
 msgstr "추가"
+
+msgid "Error displaying the info page."
+msgstr ""
 
 msgid "Identity"
 msgstr "신원"
@@ -2497,6 +2571,9 @@ msgstr "사용 가능한 CPU 코어"
 msgid "Performance"
 msgstr "성능"
 
+msgid "Maximum available RAM"
+msgstr ""
+
 msgid "Classified as slow"
 msgstr "느리게 분류됩니다"
 
@@ -2505,6 +2582,9 @@ msgstr "예"
 
 msgid "No"
 msgstr "아니오"
+
+msgid "GeoIP Db"
+msgstr ""
 
 msgid "Target"
 msgstr "대상"
@@ -2642,6 +2722,9 @@ msgstr "모든 라우터(클라이언트 NetDb)"
 msgid "Sybil Analysis"
 msgstr "시빌 분석"
 
+msgid "Bad value supplied, please check and try again."
+msgstr ""
+
 msgid "Router Map"
 msgstr "루터 지도"
 
@@ -2716,9 +2799,6 @@ msgstr "금지됨"
 
 msgid "not found in network database"
 msgstr "네트워크 DB에서 발견되지 않음"
-
-msgid "No results"
-msgstr "결과가 없습니다"
 
 msgid "Bad Base64 Router hash"
 msgstr ""
@@ -2967,50 +3047,11 @@ msgstr "NetDb에서 이 주소를 가진 모든 라우터를 표시합니다."
 msgid "Show all routers with this port in the NetDb"
 msgstr "NetDb에서 이 포트가 있는 모든 라우터를 표시합니다."
 
-msgid "Core version"
-msgstr "코어 버전"
-
 msgid "Network ID"
 msgstr "네트워크 ID"
 
 msgid "Routers"
 msgstr "라우터"
-
-msgid "Family Key"
-msgstr "패밀리 키"
-
-msgid "Family Sig"
-msgstr "패밀리 시그"
-
-msgid "Exploratory tunnels expire (1h)"
-msgstr "탐사 터널 만료(1시간)"
-
-msgid "Exploratory tunnels reject (1h)"
-msgstr "탐사 터널 거부(1h)"
-
-msgid "Exploratory tunnels build success (1h)"
-msgstr "탐사 터널 구축 성공(1h)"
-
-msgid "Client tunnels expire (1h)"
-msgstr "클라이언트 터널 만료(1시간)"
-
-msgid "Client tunnels reject (1h)"
-msgstr "클라이언트 터널 거부(1h)"
-
-msgid "Client tunnels build success (1h)"
-msgstr "클라이언트 터널 빌드 성공(1h)"
-
-msgid "Participating tunnels (1h)"
-msgstr "참여터널(1h)"
-
-msgid "Participating tunnels (60s)"
-msgstr "참여 터널(60s)"
-
-msgid "Bandwidth send rate (1h)"
-msgstr "대역폭 전송 속도(1h)"
-
-msgid "Bandwidth receive rate (1h)"
-msgstr "대역폭 수신 속도(1h)"
 
 msgid "First heard about"
 msgstr "처음 듣는 말"
@@ -3080,9 +3121,6 @@ msgstr "router.config 파일에."
 msgid "Peer Connections"
 msgstr "피어 연결"
 
-msgid "Auto-refresh"
-msgstr "자동 새로고침"
-
 msgid "Active in the last minute"
 msgstr "마지막 순간에 활성"
 
@@ -3091,6 +3129,12 @@ msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
+
+msgid "Limit"
+msgstr ""
+
+msgid "Maximum permitted connections"
+msgstr ""
 
 msgid "Current / maximum permitted"
 msgstr "현재/최대 허용"
@@ -3488,8 +3532,8 @@ msgid "{0} shared bandwidth"
 msgstr "{0} 공유 대역폭"
 
 #, java-format
-msgid "Over {0} shared bandwidth"
-msgstr "공유 대역폭이 {0} 이상입니다."
+msgid "Over {0} KB/s shared bandwidth"
+msgstr ""
 
 msgid "status"
 msgstr "상태"
@@ -3561,82 +3605,151 @@ msgstr ""
 msgid "Select search engine"
 msgstr "검색엔진 선택"
 
-msgid "Statistics gathered during this router's uptime"
-msgstr "라우터 동작시간 동안 수집한 통계"
+#, java-format
+msgid "Clock Skew of {0}"
+msgstr "{0}의 시계 오차"
 
-msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
-msgstr "수집한 데이터는 1분 동안을 수치화한 것입니다. 추정치로만 사용하십시오."
+msgid "Testing"
+msgstr "시험중"
 
-msgid "These statistics are primarily used for development and debugging."
-msgstr "해당 통계들은 주로 개발과 디버깅 용도로 사용됩니다."
+msgid "Private TCP Address"
+msgstr "개인 TCP 주소"
 
-msgid "No lifetime events"
-msgstr "전기간 이벤트 없음"
+msgid "SymmetricNAT"
+msgstr "대칭NAT"
 
-msgid "frequency"
-msgstr "빈도"
+msgid "Firewalled with Inbound TCP Enabled"
+msgstr "인바운드 TCP가 활성화된 방화벽"
 
-msgid "Rolling average events per period"
-msgstr "기간 당 완만한 평균 이벤트"
+msgid "Firewalled &amp; Floodfill"
+msgstr "방화 및 홍수 채소"
 
-msgid "Highest events per period"
-msgstr "기간 당 가장 높은 이벤트"
+msgid "Disconnected"
+msgstr "연결이 끊어졌습니다"
 
-msgid "Lifetime average events per period"
-msgstr "기간 당 전체 평균 이벤트"
+msgid "UDP Port In Use"
+msgstr "UDP 포트 사용 중"
 
-msgid "Lifetime average frequency"
-msgstr "전체 평균 빈도"
+msgid "No Active Peers"
+msgstr "활성 피어 없음"
+
+msgid "UDP Disabled &amp; Inbound TCP host/port not set"
+msgstr "UDP 비활성화 및 인바운드 TCP 호스트/포트가 설정되지 않음"
+
+msgid "Firewalled with UDP Disabled"
+msgstr "UDP가 비활성화된 방화벽"
+
+msgid "Add/remove/edit &amp; control your client and server tunnels"
+msgstr "클라이언트 및 서버 터널을 추가·삭제·편집·조작"
+
+msgid "Service Tunnels"
+msgstr "서비스 터널"
+
+msgid "How many local service tunnels we're running"
+msgstr "우리가 실행 중인 로컬 서비스 터널 수"
+
+msgid "Messenger"
+msgstr "メッセン저"
+
+msgid "i2pchat"
+msgstr "I2P채팅"
+
+msgid "I2PChat"
+msgstr "I2P채팅"
+
+msgid "Server"
+msgstr "서버"
+
+msgid "service may be available to peers"
+msgstr "동료에게 서비스가 제공될 수 있습니다."
+
+msgid "service is only available locally"
+msgstr "서비스는 현지에서만 이용 가능합니다."
+
+msgid "Show tunnels"
+msgstr "터널 보이기"
+
+msgid "Leases expired"
+msgstr "만료된 임대 계약"
+
+msgid "Rebuilding"
+msgstr "재구축"
+
+msgid "ago"
+msgstr "전"
+
+msgid "Ready"
+msgstr "준비"
+
+msgid "Building"
+msgstr "구축"
+
+msgid "Building tunnels"
+msgstr "터널 구축중"
+
+msgid "Shared Clients"
+msgstr "공유된 클라이언트"
+
+msgid "Click Restart to install"
+msgstr "설치하려면 재시작을 누르세요"
+
+msgid "Click Shutdown and restart to install"
+msgstr "설치하려면 종료 후 재시작하세요"
 
 #, java-format
-msgid "{0} event"
-msgid_plural "{0} events"
-msgstr[0] "{0} 이벤트"
+msgid "{0}"
+msgstr "{0}"
 
-msgid "rate"
-msgstr "비율"
+msgid "Updating after restart"
+msgstr "다시 시작한 후 업데이트 중"
 
-msgid "Average"
-msgstr "평균"
+msgid "Signed development update available"
+msgstr "서명된 개발 업데이트 사용 가능"
 
-msgid "Highest average"
-msgstr "가장 높은 평균"
+msgid "Download I2P Update"
+msgstr "I2P 업데이트 다운로드"
 
-msgid "Highest total in a period"
-msgstr "특정 기간 내 최고 총액"
+msgid "Unsigned update available"
+msgstr "서명되지 않은 업데이트 가능"
 
-msgid "Average event count"
-msgstr "평균 이벤트 횟수"
+msgid "Help with firewall configuration"
+msgstr "방화벽 설정 도움"
 
-msgid "Events in peak period"
-msgstr "정점 기간동안의 이벤트"
+msgid "Check network connection and NAT/firewall!"
+msgstr "네트워크 연결과 NAT/방화벽을 확인하세요!"
 
-msgid "Events in this period"
-msgstr "이 기간의 이벤트"
+msgid "Attempt to download router reference files (if automatic reseed has failed)"
+msgstr "라우터 참조 파일 다운로드 시도(자동 재시드에 실패한 경우)"
 
-#, java-format
-msgid "ended {0} ago"
-msgstr "{0} 전에 종료됨"
+msgid "Reseed"
+msgstr "재시드"
 
-msgid "No events"
-msgstr "이벤트 없음"
+msgid "Order"
+msgstr "정렬"
 
-msgid "Graph Data"
-msgstr "그래프 데이터"
+msgid "Top"
+msgstr "위"
 
-msgid "Graph Event Count"
-msgstr "그래프 이벤트 횟수"
+msgid "Move to top"
+msgstr "위로 이동"
 
-msgid "Export Data as XML"
-msgstr "데이터를 XML로 내보내기"
+msgid "Move up"
+msgstr "위로"
 
-msgid "Lifetime average value"
-msgstr "전기간 평균 값"
+msgid "Down"
+msgstr "아래"
 
-#, java-format
-msgid "1 event"
-msgid_plural "{0} events"
-msgstr[0] "{0} 이벤트"
+msgid "Move down"
+msgstr "아래로 이동"
+
+msgid "Bottom"
+msgstr "밑"
+
+msgid "Move to bottom"
+msgstr "밑으로 이동"
+
+msgid "Select a section to add"
+msgstr "추가할 섹션 선택"
 
 msgid "Help &amp; FAQ"
 msgstr "도움말 &amp; FAQ"
@@ -3679,9 +3792,6 @@ msgstr "혼잡"
 
 msgid "Tunnel Status"
 msgstr "터널 상태"
-
-msgid "Service Tunnels"
-msgstr "서비스 터널"
 
 msgid "News &amp; Updates"
 msgstr "뉴스 &amp; 업데이트"
@@ -3736,6 +3846,9 @@ msgstr "웹호스팅"
 
 msgid "An introduction to hosting websites on the I2P network"
 msgstr "I2P 네트워크에서 웹 사이트 호스팅 소개"
+
+msgid "New hosts in last 24 hours"
+msgstr ""
 
 msgid "I2PControl"
 msgstr "I2P제어"
@@ -4036,151 +4149,82 @@ msgstr "숨김 모드가 활성화되면 참여 터널이 건설되지 않습니
 msgid "Router is configured to reject all transit tunnel requests"
 msgstr "라우터는 참여하는 모든 터널 요청을 거부하도록 구성됩니다."
 
-#, java-format
-msgid "Clock Skew of {0}"
-msgstr "{0}의 시계 오차"
+msgid "Statistics gathered during this router's uptime"
+msgstr "라우터 동작시간 동안 수집한 통계"
 
-msgid "Testing"
-msgstr "시험중"
+msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
+msgstr "수집한 데이터는 1분 동안을 수치화한 것입니다. 추정치로만 사용하십시오."
 
-msgid "Private TCP Address"
-msgstr "개인 TCP 주소"
+msgid "These statistics are primarily used for development and debugging."
+msgstr "해당 통계들은 주로 개발과 디버깅 용도로 사용됩니다."
 
-msgid "SymmetricNAT"
-msgstr "대칭NAT"
+msgid "No lifetime events"
+msgstr "전기간 이벤트 없음"
 
-msgid "Firewalled with Inbound TCP Enabled"
-msgstr "인바운드 TCP가 활성화된 방화벽"
+msgid "frequency"
+msgstr "빈도"
 
-msgid "Firewalled &amp; Floodfill"
-msgstr "방화 및 홍수 채소"
+msgid "Rolling average events per period"
+msgstr "기간 당 완만한 평균 이벤트"
 
-msgid "Disconnected"
-msgstr "연결이 끊어졌습니다"
+msgid "Highest events per period"
+msgstr "기간 당 가장 높은 이벤트"
 
-msgid "UDP Port In Use"
-msgstr "UDP 포트 사용 중"
+msgid "Lifetime average events per period"
+msgstr "기간 당 전체 평균 이벤트"
 
-msgid "No Active Peers"
-msgstr "활성 피어 없음"
-
-msgid "UDP Disabled &amp; Inbound TCP host/port not set"
-msgstr "UDP 비활성화 및 인바운드 TCP 호스트/포트가 설정되지 않음"
-
-msgid "Firewalled with UDP Disabled"
-msgstr "UDP가 비활성화된 방화벽"
-
-msgid "Add/remove/edit &amp; control your client and server tunnels"
-msgstr "클라이언트 및 서버 터널을 추가·삭제·편집·조작"
-
-msgid "How many local service tunnels we're running"
-msgstr "우리가 실행 중인 로컬 서비스 터널 수"
-
-msgid "I2PSnark"
-msgstr "I2PSnark"
-
-msgid "Messenger"
-msgstr "メッセン저"
-
-msgid "i2pchat"
-msgstr "I2P채팅"
-
-msgid "I2PChat"
-msgstr "I2P채팅"
-
-msgid "Server"
-msgstr "서버"
-
-msgid "service may be available to peers"
-msgstr "동료에게 서비스가 제공될 수 있습니다."
-
-msgid "service is only available locally"
-msgstr "서비스는 현지에서만 이용 가능합니다."
-
-msgid "Show tunnels"
-msgstr "터널 보이기"
-
-msgid "Leases expired"
-msgstr "만료된 임대 계약"
-
-msgid "Rebuilding"
-msgstr "재구축"
-
-msgid "ago"
-msgstr "전"
-
-msgid "Ready"
-msgstr "준비"
-
-msgid "Building"
-msgstr "구축"
-
-msgid "Building tunnels"
-msgstr "터널 구축중"
-
-msgid "Shared Clients"
-msgstr "공유된 클라이언트"
-
-msgid "Click Restart to install"
-msgstr "설치하려면 재시작을 누르세요"
-
-msgid "Click Shutdown and restart to install"
-msgstr "설치하려면 종료 후 재시작하세요"
+msgid "Lifetime average frequency"
+msgstr "전체 평균 빈도"
 
 #, java-format
-msgid "{0}"
-msgstr "{0}"
+msgid "{0} event"
+msgid_plural "{0} events"
+msgstr[0] "{0} 이벤트"
 
-msgid "Updating after restart"
-msgstr "다시 시작한 후 업데이트 중"
+msgid "rate"
+msgstr "비율"
 
-msgid "Signed development update available"
-msgstr "서명된 개발 업데이트 사용 가능"
+msgid "Average"
+msgstr "평균"
 
-msgid "Download I2P Update"
-msgstr "I2P 업데이트 다운로드"
+msgid "Highest average"
+msgstr "가장 높은 평균"
 
-msgid "Unsigned update available"
-msgstr "서명되지 않은 업데이트 가능"
+msgid "Highest total in a period"
+msgstr "특정 기간 내 최고 총액"
 
-msgid "Help with firewall configuration"
-msgstr "방화벽 설정 도움"
+msgid "Average event count"
+msgstr "평균 이벤트 횟수"
 
-msgid "Check network connection and NAT/firewall!"
-msgstr "네트워크 연결과 NAT/방화벽을 확인하세요!"
+msgid "Events in peak period"
+msgstr "정점 기간동안의 이벤트"
 
-msgid "Attempt to download router reference files (if automatic reseed has failed)"
-msgstr "라우터 참조 파일 다운로드 시도(자동 재시드에 실패한 경우)"
+msgid "Events in this period"
+msgstr "이 기간의 이벤트"
 
-msgid "Reseed"
-msgstr "재시드"
+#, java-format
+msgid "ended {0} ago"
+msgstr "{0} 전에 종료됨"
 
-msgid "Order"
-msgstr "정렬"
+msgid "No events"
+msgstr "이벤트 없음"
 
-msgid "Top"
-msgstr "위"
+msgid "Graph Data"
+msgstr "그래프 데이터"
 
-msgid "Move to top"
-msgstr "위로 이동"
+msgid "Graph Event Count"
+msgstr "그래프 이벤트 횟수"
 
-msgid "Move up"
-msgstr "위로"
+msgid "Export Data as XML"
+msgstr "데이터를 XML로 내보내기"
 
-msgid "Down"
-msgstr "아래"
+msgid "Lifetime average value"
+msgstr "전기간 평균 값"
 
-msgid "Move down"
-msgstr "아래로 이동"
-
-msgid "Bottom"
-msgstr "밑"
-
-msgid "Move to bottom"
-msgstr "밑으로 이동"
-
-msgid "Select a section to add"
-msgstr "추가할 섹션 선택"
+#, java-format
+msgid "1 event"
+msgid_plural "{0} events"
+msgstr[0] "{0} 이벤트"
 
 msgid "No known routers"
 msgstr "알려진 라우터 없음"
@@ -4520,6 +4564,10 @@ msgstr "현재 활성화된 로컬 또는 통과 터널이 없습니다."
 msgid "Bandwidth Tiers"
 msgstr "대역폭 계층"
 
+#, java-format
+msgid "Over {0} shared bandwidth"
+msgstr "공유 대역폭이 {0} 이상입니다."
+
 msgid "Inbound or outbound?"
 msgstr "인바운드인가 아웃바운드인가?"
 
@@ -4579,6 +4627,18 @@ msgstr "대역폭 테스트 취소됨"
 
 msgid "Bandwidth test was not running"
 msgstr "대역폭 테스트가 실행되지 않았습니다."
+
+msgid "ready"
+msgstr ""
+
+msgid "inbound test"
+msgstr ""
+
+msgid "outbound test"
+msgstr ""
+
+msgid "done"
+msgstr ""
 
 msgid "bits per second"
 msgstr "초당 bits"
@@ -4752,8 +4812,8 @@ msgstr "네트워크 공유"
 msgid "Share"
 msgstr "공유"
 
-msgid "Note"
-msgstr "참고"
+msgid "NOTE"
+msgstr ""
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
@@ -4777,6 +4837,10 @@ msgstr "대역폭을 공유할수록, 더 많은 익명성과 네트워크 성�
 
 msgid "config advanced"
 msgstr "고급 설정"
+
+#, java-format
+msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
+msgstr ""
 
 msgid "Floodfill Configuration"
 msgstr "플러드 필 설정"
@@ -4805,8 +4869,8 @@ msgstr "비활성화"
 msgid "Advanced I2P+ Configuration"
 msgstr "고급 I2P  설정"
 
-msgid "Some changes may require a restart to take effect."
-msgstr "몇몇 변경사항은 재시작 이후 반영됩니다."
+msgid "Help with additional configuration settings"
+msgstr ""
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5672,23 +5736,50 @@ msgstr "true로 설정하면 <a href=/configplugins>플러그인 구성 페이�
 msgid "When set to true, this setting enables reverse DNS lookups for peers, triggered when displaying the country flag of a peer or when the hostname or domain is explicitly displayed in the console, or when the peer's RouterInfo is written to disk. In order to avoid repeat lookups, it's recommended to configure a generous caching policy for DNS lookups of 10 minutes or more, and to configure a privacy respecting DNS server in your operating system. [Disabled by default, restart required]"
 msgstr "참으로 설정되면 이 설정은 피어의 국기 표시 시에 반대 DNS 조회를 활성화하고, 콘솔에 호스트명이나 도메인이 명시적으로 표시되거나 피어의 RouterInfo가 디스크에 기록될 때 활성화됩니다. 반복 조회를 방지하기 위해 DNS 조회에 대한 10분 이상의 캐싱 정책을 구성하고 운영 체제에서 개인정보 보호를 위한 DNS 서버를 구성하는 것이 권장됩니다. [기본적으로 비활성화되어 있으며, 재시작이 필요합니다]"
 
+msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
+msgstr "이 설정은 라우터 콘솔 페이지의 페이지 제목에 사용자 지정 텍스트 접두사를 설정할 수 있도록 합니다. 여러 콘솔이 브라우저 탭에서 열려 있을 때 간편하게 구분하기 위해 유용할 수 있습니다."
+
 msgid "When set to true, accessing the router console via http:// when https:// is enabled will automatically redirect to https. To configure router console access, edit the settings in your <code>clients.config</code> file in your profile directory (<i>not</i> the application installation directory). [Enabled by default]"
 msgstr "참으로 설정되면 https://가 활성화된 경우 http://를 통해 라우터 콘솔에 액세스할 경우 자동으로 https로 리디렉션됩니다. 라우터 콘솔 액세스를 구성하려면 프로필 디렉터리의 <code>clients.config</code> 파일에서 설정을 편집하십시오 (응용 프로그램 설치 디렉터리가 아님). [기본적으로 활성화되어 있습니다]"
+
+msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
+msgstr "이 설정을 true로 설정할 경우, 사이드바의 혼잡 섹션에 피어 테스트 평균을 표시합니다. 이 값은 성공한 피어 테스트의 평균과 실패한 테스트의 평균적인 초과 시간을 더한 값으로 계산됩니다. 이 평균 값은 최적의 <code>router.peerTestTimeout</code> 값 결정을 위한 가이드로 사용될 수 있습니다. [기본값은 false]"
+
+msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
+msgstr "이 설정을 true로 설정할 경우, <a href=/sitemap>사이트맵</a>에 <i>관심 있는 사이트</i> 링크를 표시합니다. [기본값은 false]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "이 설정은 라우터가 제공된 <i>blocklist.txt</i> 파일과 사용자가 구성한 블록 목록을 사용하여 해시 또는 IP 주소에 따른 라우터 차단을 활성화할지 여부를 결정합니다. IPv4의 경우 범위와 넷 마스크를 지원하지만 IPv6는 지원하지 않습니다. 자세한 정보는 I2P+ 응용 프로그램 디렉터리에 있는 <i>blocklist.txt</i>를 참조하십시오. [기본적으로 활성화되어 있으며, 재시작이 필요합니다]"
 
-msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
-msgstr "이 설정은 라우터가 Tor 출구 노드 IP 주소에서 작동하는 라우터의 차단을 활성화하기 위해 I2P+ 응용 프로그램 디렉터리의 제공된 <i>blocklist_tor.txt</i> 파일을 사용할지 여부를 결정합니다. [기본적으로 활성화되어 있으며, 재시작이 필요합니다]"
+msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
+msgstr "이 설정은 블록 목록을 통해 강제되는 금지에 대한 만료 시간을 구성할 수 있습니다 (초 단위). 기본적으로 금지 사항은 라우터 세션의 기간 동안 유지됩니다. [재시작이 필요합니다]"
 
 msgid "This setting, when configured with a path pointing at a valid blocklist file, enables an additional, user-configured blocklist to be loaded at router startup. [Disabled by default, restart required]"
 msgstr "이 설정은 유효한 블록 목록 파일을 가리키는 경로와 함께 구성되면 추가로 사용자 구성된 블록 목록을 라우터 시작 시에 로드할 수 있습니다. [기본적으로 비활성화되어 있으며, 재시작이 필요합니다]"
 
-msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
-msgstr "이 설정은 블록 목록을 통해 강제되는 금지에 대한 만료 시간을 구성할 수 있습니다 (초 단위). 기본적으로 금지 사항은 라우터 세션의 기간 동안 유지됩니다. [재시작이 필요합니다]"
+msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
+msgstr "이 설정은 라우터가 Tor 출구 노드 IP 주소에서 작동하는 라우터의 차단을 활성화하기 위해 I2P+ 응용 프로그램 디렉터리의 제공된 <i>blocklist_tor.txt</i> 파일을 사용할지 여부를 결정합니다. [기본적으로 활성화되어 있으며, 재시작이 필요합니다]"
+
+msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
+msgstr ""
+
+msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
+msgstr "False로 설정되면, 더 느린 또는 도달할 수 없는 라우터에서 실행되는 오래된 버전의 터널 생성 요청이 차단되지 않습니다. [기본값은 True, 재시작 필요]"
 
 msgid "Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks."
 msgstr "터널 구축을 위한 프로세서 스레드 수 할당. 프로세서가 하이퍼스레딩 또는 동시 멀티스레딩을 지원하는 경우, 프로세서 코어 수를 2배로 곱하여 할당할 수 있는 최대 스레드 수를 얻을 수 있습니다. 그렇지 않으면 프로세서 코어 수 = 사용 가능한 최대 스레드 수입니다. 이론적인 최대값보다 적은 값을 할당하여 다른 작업에 대한 여유 공간을 확보하는 것이 좋습니다."
+
+msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
+msgstr "이 설정은 (밀리초 단위로) 패킷이 CoDel 큐에 머무를 수 있는 시간을 결정합니다. 기본값은 1000ms입니다. [재시작 필요]"
+
+msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
+msgstr "이 설정은 발신 큐에 포함될 수 있는 최대 메시지 수를 결정합니다. [기본값은 768입니다]"
+
+msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
+msgstr "이 설정은 추가 메시지가 삭제되기 전에 최대 큐 값보다 많을 수 있는 최대 메시지 수를 결정합니다. [기본값은 128입니다.]"
+
+msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
+msgstr "이 설정은 (밀리초 단위로) CoDel 큐 관리 시스템의 대기 시간 목표 값을 수동으로 구성할 수 있게 합니다. 기본값은 50ms입니다. [재시작 필요]"
 
 msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
 msgstr "이 설정은 라우터가 혼잡 상태로 판단되고 트랜지트 터널 요청이 거부되기 전에 기본 메시지 처리 시간 제한(혼잡 사이드바 섹션의 <i>메시지 지연</i>으로 표시됨)을 무시합니다. [기본값은 750ms이며, 라우터가 느린 것으로 표시된 경우 1500ms입니다]"
@@ -5699,8 +5790,32 @@ msgstr "평균적인 지연 시간을 결정하기 위해 주기적으로 터널
 msgid "When set to true, the router will change its identity and UDP port every time the router restarts. [Default is false]"
 msgstr "true로 설정하면 라우터가 재시작할 때마다 신원과 UDP 포트를 변경합니다. [기본값은 false]"
 
+msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
+msgstr "False로 설정되면, 다른 라우터에서의 터널 생성 요청이 제한되지 않으며, 주의해서 사용해야 합니다. [기본값은 True, 재시작 필요]"
+
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
 msgstr "이 설정은 라우터의 터널을 구축할 때 사용하지 않을 <a href=/profiles#profile_defs>피어 기능</a>을 결정합니다. 예: <code>router.excludePeerCaps=LMN</code>"
+
+msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
+msgstr "이 설정은 RouterInfo가 NetDb에 있는 경우 (마지막 알려진 게시 날짜) RouterInfo가 오래되었다고 분류되고 삭제되기 전까지의 기간을 결정합니다. [기본값은 28시간입니다. 자주 알림을 수행하는 경우 기본값은 8시간입니다.]"
+
+msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
+msgstr "이 설정은 피어 탐색 작업이 실행될 때 병렬로 탐색할 피어 수를 결정합니다. [기본값은 3000개 이상의 피어가 알려진 경우 한 번에 1개의 피어입니다]. 이 값을 높이면 탐색에 대한 대역폭 요구 사항이 증가하며, 이 값을 너무 높게 설정하면 과도한 메시지 지연과 다른 서비스에 간섭할 수 있으므로 신중히 사용하십시오!"
+
+msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
+msgstr "이 설정은 Peer Exploration Job이 실행될 때 참조할 NetDb DHT 버킷 수를 결정합니다. 기본적으로 탐색할 버킷 수는 라우터가 1시간 이상 실행 중인지 여부, 라우터가 숨겨진 상태인지 또는 'K' 대역폭 티어에 있는지 여부, 그리고 알려진 라우터의 수에 따라 다릅니다."
+
+msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
+msgstr "이 설정(초 단위)은 NetDb에 추가하려는 새로운 피어를 찾기 위해 Peer Exploration Job 실행 간의 지연을 무시할 수 있게 합니다. 기본적으로 작업은 80초마다 실행되거나, 라우터가 작업이나 메시지 지연을 겪고있을 경우 매 3분마다 실행됩니다. NetDb의 크기가 4000개의 피어에 이르면 일시정지가 15분으로 증가합니다. NetDb가 적당히 채워져 있거나 (2000개 이상의 피어), 전체 대역폭 사용량을 줄이려는 경우 지연 시간을 늘리고 싶을 수 있습니다. 주의: Floodfill 라우터의 경우이 작업은 실행되지 않습니다."
+
+msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
+msgstr "이 설정은 탐색을 위해 대기열에 추가 할 최대 피어 해시 수를 결정합니다. I2P의 최대 값은 128이고 I2P+의 기본 값은 512입니다."
+
+msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
+msgstr "이 설정은 플러드필 기능을 하는 라우터가 NetDb를 탐색하여 새로운 피어에 대해 알아보도록 할지 여부를 결정합니다. [기본값은 false이며, 재시작이 필요합니다]"
+
+msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
+msgstr "이 설정을 true로 설정하면 라우터가 직접 다른 라우터와 통신하는 것을 방지하여 소개자의 사용을 강제화합니다. [기본값은 false이며, 숨김 모드에 있는 경우를 제외하고 재시작이 필요합니다]"
 
 msgid "When set to true, if your router is serving as a floodfill for the network, your <a href=/configadvanced#ffconf>floodfill participation</a> will be hidden from other routers."
 msgstr "true로 설정하면 라우터가 네트워크의 플러드필 역할을 할 경우 <a href=/configadvanced#ffconf>플러드필 참여</a>가 다른 라우터에 숨겨집니다."
@@ -5713,6 +5828,12 @@ msgstr "라우터가 구축할 수 있는 최대 참여 터널 수를 결정합�
 
 msgid "Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 10% in I2P+, 33% in I2P]"
 msgstr "동료가 사용될 수 있는 활성 로컬 터널(클라이언트 및 스카우터)의 최대 비율을 정의합니다. [기본값은 I2P+에서 10%, I2P에서 33%입니다]"
+
+msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
+msgstr "이 설정은 라우터가 예상 대역폭 요구 사항에 따라 터널 요청을 거부하기 시작하기 전에 호스팅 참가 터널의 최소 수를 구성할 수 있게 합니다. [기본값은 안드로이드 운영체제에서 실행 중인 경우 100, ARM 운영체제에서 실행 중이고 4개 미만의 코어가 있는 경우 800, ARM 운영체제에서 실행 중이고 4개 이상의 코어가 있는 경우 1200, 그렇지 않으면 2500입니다]"
+
+msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
+msgstr "이 설정을 사용하면 NetDb에서 오래된 라우터를 제외할 수 있습니다. 기본값보다 오래된 라우터 또는 설정한 값보다 오래된 라우터는 NetDb에서 삭제되고 라우터 세션 동안 금지됩니다. 기본적으로 0.9.20보다 오래된 라우터는 제외됩니다. 참고: I2P+ 버전 0.9.46+부터는 최신 버전을 실행하는 라우터만 로컬 터널을 구축하는 데 사용됩니다. [재시작 필요]"
 
 msgid "When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]"
 msgstr "true로 설정하면 프로필의 netDB 디렉토리에 저장된 라우터 정보 파일이 64개 하위 디렉토리로 분할되지 않습니다. [기본값은 false입니다]"
@@ -5738,84 +5859,6 @@ msgstr "JVM에 할당된 256MB 미만"
 msgid "Router running a non-native, software emulated version of the Java BigInteger library"
 msgstr "Java BigInteger 라이브러리의 기본이 아닌 소프트웨어 에뮬레이트 버전을 실행하는 라우터"
 
-msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
-msgstr "이 설정은 라우터가 예상 대역폭 요구 사항에 따라 터널 요청을 거부하기 시작하기 전에 호스팅 참가 터널의 최소 수를 구성할 수 있게 합니다. [기본값은 안드로이드 운영체제에서 실행 중인 경우 100, ARM 운영체제에서 실행 중이고 4개 미만의 코어가 있는 경우 800, ARM 운영체제에서 실행 중이고 4개 이상의 코어가 있는 경우 1200, 그렇지 않으면 2500입니다]"
-
-msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
-msgstr "true로 설정하면, 라우터는 다음에 라우터가 다시 시작될 때 신원과 UDP 포트를 변경하고, 그런 다음 router.config에서 키를 삭제하여 추가 변경을 방지합니다. [기본값은 false입니다]"
-
-msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr "False로 설정되면, 다른 라우터에서의 터널 생성 요청이 제한되지 않으며, 주의해서 사용해야 합니다. [기본값은 True, 재시작 필요]"
-
-msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr "False로 설정되면, 더 느린 또는 도달할 수 없는 라우터에서 실행되는 오래된 버전의 터널 생성 요청이 차단되지 않습니다. [기본값은 True, 재시작 필요]"
-
-msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
-msgstr "구성되면 이 설정은 라우터가 동시에 구축할 수 있는 터널 수에 대한 엄격한 제한을 설정합니다. 기본적으로 라우터는 평균 구축 시간과 현재 나가는 대역폭을 사용하여 최적의 구축률을 결정합니다. [다시 시작이 필요함]"
-
-msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
-msgstr "만약 서명되지 않은 (.zip) I2P 업데이트를 설치하길 원한다면, 이를 <code>router.config</code> 파일에 추가해야 합니다. 이미 <code>routerconsole.advanced=true</code>를 구성한 경우 이미 이 옵션이 준비되어 있습니다. 참고: I2P+ 0.9.48+부터, <a href=/configupdate#i2pupdates>서명되지 않은 업데이트</a>의 설치가 기본적으로 활성화되었습니다."
-
-msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
-msgstr "이 설정을 통해, 사용 가능한 경우 서명되지 않은 업데이트 기능의 업데이트 URL을 구성할 수 있습니다. URL은 <code>/i2pupdate.zip</code>로 끝나야 합니다. 참고: 업데이트 지원 출처를 신뢰하지 않을 경우 서명되지 않은 업데이트를 설치하지 마십시오!"
-
-msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
-msgstr "이 설정은 라우터가 방화벽으로 막히고 있는지 여부를 확인하는 SSU 테스트를 비활성화하는 것을 허용하며, 분명히 방화벽으로 막히지 않았지만 간헐적인 방화벽 문제가 있는 라우터에 대해서만 활성화할 수 있습니다. 테스트가 비활성화된 경우, SSU 및 NTCP 모두 <a href=/info>라우터 정보 페이지</a>에서 현재 공인 IP 주소를 보고해야 합니다. [재부팅이 필요함]"
-
-msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
-
-msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
-msgstr "이 설정은 동료들과 통신할 때 어떤 전송 방식을 우선시할지를 결정합니다. 기본적으로 NTCP가 UDP(SSU)보다 우선합니다. 값을 true로 설정하면, 기존의 NTCP 연결이 없으면 UDP를 우선시하며, always로 설정하면 기존의 NTCP 연결과 상관없이 항상 UDP를 사용합니다. [기본값은 false]"
-
-msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
-msgstr "이 터널별 설정을 사용하면 라우터에서 호스팅되는 서버로 보내진 핑에 대한 응답을 활성화 또는 비활성화할 수 있습니다. 핑을 비활성화하려면 터널 관리자에서 서버 구성의 <i>사용자 정의 옵션</i> 섹션에 <code>i2p.streaming.answerPings=false</code> 라인을 추가해야 합니다."
-
-msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
-msgstr "true로 설정하면 I2P는 네트워크 연결 없이 실행되며, 이는 코드 업데이트를 테스트하기 위해 라우터를 계속해서 재시작하는 경우에 유용합니다. 이로 인해 네트워크 중단을 방지할 수 있습니다."
-
-msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr "이 설정을 활성화하면, 라우터에서 호스팅되는 모든 핑이 가능한 서버에 대해 최대 50ms까지의 임의의 pong 지연을 도입합니다. 기본적으로 비활성화되어 있습니다. [재부팅이 필요함]"
-
-msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr "이 설정은 활성화되었을 때, <code>i2p.streaming.enablePongDelay</code>가 활성화된 경우 ping 가능한 서버에 추가되는 최대 무작위 pong 지연을 수정합니다. 명시적으로 설정하지 않은 경우 50ms의 기본값을 사용합니다."
-
-msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
-msgstr "이 설정은 (밀리초 단위로) 패킷이 CoDel 큐에 머무를 수 있는 시간을 결정합니다. 기본값은 1000ms입니다. [재시작 필요]"
-
-msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
-msgstr "이 설정은 발신 큐에 포함될 수 있는 최대 메시지 수를 결정합니다. [기본값은 768입니다]"
-
-msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
-msgstr "이 설정은 추가 메시지가 삭제되기 전에 최대 큐 값보다 많을 수 있는 최대 메시지 수를 결정합니다. [기본값은 128입니다.]"
-
-msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
-msgstr "이 설정은 (밀리초 단위로) CoDel 큐 관리 시스템의 대기 시간 목표 값을 수동으로 구성할 수 있게 합니다. 기본값은 50ms입니다. [재시작 필요]"
-
-msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
-msgstr "이 설정은 RouterInfo가 NetDb에 있는 경우 (마지막 알려진 게시 날짜) RouterInfo가 오래되었다고 분류되고 삭제되기 전까지의 기간을 결정합니다. [기본값은 28시간입니다. 자주 알림을 수행하는 경우 기본값은 8시간입니다.]"
-
-msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
-msgstr "이 설정은 피어 탐색 작업이 실행될 때 병렬로 탐색할 피어 수를 결정합니다. [기본값은 3000개 이상의 피어가 알려진 경우 한 번에 1개의 피어입니다]. 이 값을 높이면 탐색에 대한 대역폭 요구 사항이 증가하며, 이 값을 너무 높게 설정하면 과도한 메시지 지연과 다른 서비스에 간섭할 수 있으므로 신중히 사용하십시오!"
-
-msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
-msgstr "이 설정은 Peer Exploration Job이 실행될 때 참조할 NetDb DHT 버킷 수를 결정합니다. 기본적으로 탐색할 버킷 수는 라우터가 1시간 이상 실행 중인지 여부, 라우터가 숨겨진 상태인지 또는 'K' 대역폭 티어에 있는지 여부, 그리고 알려진 라우터의 수에 따라 다릅니다."
-
-msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
-msgstr "이 설정(초 단위)은 NetDb에 추가하려는 새로운 피어를 찾기 위해 Peer Exploration Job 실행 간의 지연을 무시할 수 있게 합니다. 기본적으로 작업은 80초마다 실행되거나, 라우터가 작업이나 메시지 지연을 겪고있을 경우 매 3분마다 실행됩니다. NetDb의 크기가 4000개의 피어에 이르면 일시정지가 15분으로 증가합니다. NetDb가 적당히 채워져 있거나 (2000개 이상의 피어), 전체 대역폭 사용량을 줄이려는 경우 지연 시간을 늘리고 싶을 수 있습니다. 주의: Floodfill 라우터의 경우이 작업은 실행되지 않습니다."
-
-msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
-msgstr "이 설정은 탐색을 위해 대기열에 추가 할 최대 피어 해시 수를 결정합니다. I2P의 최대 값은 128이고 I2P+의 기본 값은 512입니다."
-
-msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
-msgstr "이 설정은 플러드필 기능을 하는 라우터가 NetDb를 탐색하여 새로운 피어에 대해 알아보도록 할지 여부를 결정합니다. [기본값은 false이며, 재시작이 필요합니다]"
-
-msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
-msgstr "이 설정을 true로 설정하면 라우터가 직접 다른 라우터와 통신하는 것을 방지하여 소개자의 사용을 강제화합니다. [기본값은 false이며, 숨김 모드에 있는 경우를 제외하고 재시작이 필요합니다]"
-
-msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
-msgstr "이 설정을 사용하면 NetDb에서 오래된 라우터를 제외할 수 있습니다. 기본값보다 오래된 라우터 또는 설정한 값보다 오래된 라우터는 NetDb에서 삭제되고 라우터 세션 동안 금지됩니다. 기본적으로 0.9.20보다 오래된 라우터는 제외됩니다. 참고: I2P+ 버전 0.9.46+부터는 최신 버전을 실행하는 라우터만 로컬 터널을 구축하는 데 사용됩니다. [재시작 필요]"
-
 msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. [Default is 4]"
 msgstr "이 설정은 동시에 실행할 피어 테스트의 수를 결정하며, 피어 지연 시간을 결정하는 데 사용됩니다. [기본값은 4입니다]"
 
@@ -5831,14 +5874,17 @@ msgstr "이 설정은 온전히 작동하는 라우터에 대한 통계를 NetDb
 msgid "This setting configures the initial size of the outbound message queue. [Default is 64]"
 msgstr "이 설정은 아웃바운드 메시지 큐의 초기 크기를 구성합니다. [기본값은 64입니다]"
 
-msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
-msgstr "이 설정은 인바운드 메시지 큐의 최대 크기를 구성합니다. [기본값은 1024입니다]"
-
 msgid "This setting configures the maximum number of inbound messages queued per cycle (pump). [Default is 24]"
 msgstr "이 설정은 사이클(펌프)당 대기 중인 인바운드 메시지의 최대 수를 구성합니다. [기본값은 24입니다]"
 
+msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
+msgstr "이 설정은 인바운드 메시지 큐의 최대 크기를 구성합니다. [기본값은 1024입니다]"
+
 msgid "This setting configures the maximum number of outbound messages queued per cycle (pump). [Default is 64]"
 msgstr "이 설정은 한 주기(pump)당 대기 중인 최대 아웃바운드 메시지 수를 구성합니다. [기본값은 64입니다]"
+
+msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
+msgstr "true로 설정하면, 라우터는 다음에 라우터가 다시 시작될 때 신원과 UDP 포트를 변경하고, 그런 다음 router.config에서 키를 삭제하여 추가 변경을 방지합니다. [기본값은 false입니다]"
 
 msgid "This setting (in milliseconds) allows you to manually configure the delay between router refresh updates run by the Refresh Routers Job. By default the pause between refreshes is determined by the size of the NetDb, and introduces some randomness in the timing to mitigate traffic analysis. For values lower than 2000 milliseconds, increasing the value of <code>router.refreshTimeout</code> is recommended. Note that setting this value below 2000 milliseconds will increase your network traffic and may introduce job lag, and is not recommended for sustained use."
 msgstr "이 설정 (밀리초 단위)은 Refresh Routers Job에 의해 실행되는 라우터 갱신 업데이트 사이의 딜레이를 수동으로 구성할 수 있게 해줍니다. 기본적으로 갱신 사이의 일시정지는 NetDb의 크기에 따라 결정되며, 일부 무작위성을 도입하여 트래픽 분석을 완화합니다. 2000밀리초 미만의 값인 경우, <code>router.refreshTimeout</code>의 값을 증가시키는 것이 권장됩니다. 이 값을 2000밀리초 미만으로 설정하면 네트워크 트래픽이 증가하고 작업 지연이 발생할 수 있으며, 지속적인 사용에는 권장되지 않습니다."
@@ -5852,26 +5898,56 @@ msgstr "이 설정 (초 단위)은 라우터 갱신 시도가 실패로 판단�
 msgid "This setting determines whether routers classified as uninteresting (K or L tier, unreachable or older than 0.9.50) are checked during the refresh router process after 1 hour of uptime. [Default is false]"
 msgstr "이 설정은 라우터 갱신 프로세스에서 1시간 동안 운영 시간이 지난 후에도 흥미로운 요소로 분류되지 않은(K 또는 L 계층, 도달할 수 없거나 0.9.50 이전 버전) 라우터를 확인할지 여부를 결정합니다. [기본값은 false입니다]"
 
+msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
+msgstr ""
+
+msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
+msgstr "구성되면 이 설정은 라우터가 동시에 구축할 수 있는 터널 수에 대한 엄격한 제한을 설정합니다. 기본적으로 라우터는 평균 구축 시간과 현재 나가는 대역폭을 사용하여 최적의 구축률을 결정합니다. [다시 시작이 필요함]"
+
+msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
+msgstr "만약 서명되지 않은 (.zip) I2P 업데이트를 설치하길 원한다면, 이를 <code>router.config</code> 파일에 추가해야 합니다. 이미 <code>routerconsole.advanced=true</code>를 구성한 경우 이미 이 옵션이 준비되어 있습니다. 참고: I2P+ 0.9.48+부터, <a href=/configupdate#i2pupdates>서명되지 않은 업데이트</a>의 설치가 기본적으로 활성화되었습니다."
+
+msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
+msgstr "이 설정을 통해, 사용 가능한 경우 서명되지 않은 업데이트 기능의 업데이트 URL을 구성할 수 있습니다. URL은 <code>/i2pupdate.zip</code>로 끝나야 합니다. 참고: 업데이트 지원 출처를 신뢰하지 않을 경우 서명되지 않은 업데이트를 설치하지 마십시오!"
+
 msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
 msgstr "이 설정(분 단위)은 시작 후 NetDb의 RouterInfos의 유효성을 확인하기 전까지의 대기 시간을 수동으로 구성할 수 있게 합니다. 이 시점 이후에는 유효한 라우터만 포함됩니다. 유효성 확인 시, 만료된 RouterInfos 및 SSU로만 접속 가능한 응답이 없는 동료는 NetDb에서 제거됩니다. [기본값은 60분] 참고: 이 설정은 NetDb 저장이 시도되자마자 NetDb에서 삭제되고 라우터 세션에 금지되는 기본값인 0.9.29보다 오래된 라우터에 영향을 주지 않습니다."
 
-msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
-msgstr "이 설정을 true로 설정할 경우, 사이드바의 혼잡 섹션에 피어 테스트 평균을 표시합니다. 이 값은 성공한 피어 테스트의 평균과 실패한 테스트의 평균적인 초과 시간을 더한 값으로 계산됩니다. 이 평균 값은 최적의 <code>router.peerTestTimeout</code> 값 결정을 위한 가이드로 사용될 수 있습니다. [기본값은 false]"
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
+msgstr ""
 
-msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
-msgstr "이 설정을 true로 설정할 경우, <a href=/sitemap>사이트맵</a>에 <i>관심 있는 사이트</i> 링크를 표시합니다. [기본값은 false]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
+msgstr ""
 
-msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr "이 설정은 라우터 콘솔 페이지의 페이지 제목에 사용자 지정 텍스트 접두사를 설정할 수 있도록 합니다. 여러 콘솔이 브라우저 탭에서 열려 있을 때 간편하게 구분하기 위해 유용할 수 있습니다."
+msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
+msgstr "이 설정은 라우터가 방화벽으로 막히고 있는지 여부를 확인하는 SSU 테스트를 비활성화하는 것을 허용하며, 분명히 방화벽으로 막히지 않았지만 간헐적인 방화벽 문제가 있는 라우터에 대해서만 활성화할 수 있습니다. 테스트가 비활성화된 경우, SSU 및 NTCP 모두 <a href=/info>라우터 정보 페이지</a>에서 현재 공인 IP 주소를 보고해야 합니다. [재부팅이 필요함]"
 
-msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
-msgstr "이 설정은 라우터가 정확한 시간을 유지하기 위해 필요한 대체 NTP 서버의 구성을 허용합니다. [기본값은 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
+msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
+msgstr "이 설정은 동료들과 통신할 때 어떤 전송 방식을 우선시할지를 결정합니다. 기본적으로 NTCP가 UDP(SSU)보다 우선합니다. 값을 true로 설정하면, 기존의 NTCP 연결이 없으면 UDP를 우선시하며, always로 설정하면 기존의 NTCP 연결과 상관없이 항상 UDP를 사용합니다. [기본값은 false]"
+
+msgid "miscellaneous"
+msgstr ""
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "true로 설정한 경우,이 옵션은 기본 서비스 제어 옵션이 있는 시스템 트레이 / 알림 영역에 아이콘을 배치합니다. [기본적으로 비활성화됨]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
 msgstr "이 설정은 토렌트를 다운로드하거나 생성할 때 I2PSnark가 허용할 수 있는 최대 파일 수를 구성합니다. 기본값인 2000 파일에서 크게 증가시키면 호스트 시스템에서 추가 구성이 필요할 수 있습니다. 운영 체제가 허용하는 최대 열린 파일 수를 늘리려면 (예: Linux의 <code>ulimit -n</code>) 필요합니다. 변경하려면 I2PSnark의 구성 파일 <code>i2psnark.config</ code>에 추가하십시오. [I2PSnark 또는 라우터의 재시작이 필요합니다]"
+
+msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
+msgstr "이 터널별 설정을 사용하면 라우터에서 호스팅되는 서버로 보내진 핑에 대한 응답을 활성화 또는 비활성화할 수 있습니다. 핑을 비활성화하려면 터널 관리자에서 서버 구성의 <i>사용자 정의 옵션</i> 섹션에 <code>i2p.streaming.answerPings=false</code> 라인을 추가해야 합니다."
+
+msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
+msgstr "이 설정을 활성화하면, 라우터에서 호스팅되는 모든 핑이 가능한 서버에 대해 최대 50ms까지의 임의의 pong 지연을 도입합니다. 기본적으로 비활성화되어 있습니다. [재부팅이 필요함]"
+
+msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
+msgstr "이 설정은 활성화되었을 때, <code>i2p.streaming.enablePongDelay</code>가 활성화된 경우 ping 가능한 서버에 추가되는 최대 무작위 pong 지연을 수정합니다. 명시적으로 설정하지 않은 경우 50ms의 기본값을 사용합니다."
+
+msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
+msgstr "true로 설정하면 I2P는 네트워크 연결 없이 실행되며, 이는 코드 업데이트를 테스트하기 위해 라우터를 계속해서 재시작하는 경우에 유용합니다. 이로 인해 네트워크 중단을 방지할 수 있습니다."
+
+msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
+msgstr "이 설정은 라우터가 정확한 시간을 유지하기 위해 필요한 대체 NTP 서버의 구성을 허용합니다. [기본값은 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 
 msgid "Recent I2P+ Changes"
 msgstr "최근 I2P 변경 사항"
@@ -6088,6 +6164,18 @@ msgstr "비SSL 및 SSL 모두에 해당"
 
 msgid "For SSL only"
 msgstr "SSL 전용"
+
+msgid "How can I configure the console and web services to be accessible on my local network?"
+msgstr ""
+
+msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
+msgstr ""
+
+msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
+msgstr ""
+
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager’s configuration section using the <i>reachable by</i> dropdown."
+msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "I2P 내부에서 IRC 접속은 어떻게 하나요?"
@@ -7348,9 +7436,6 @@ msgstr "네트워크 피어"
 msgid "peer profiles"
 msgstr "피어 프로필"
 
-msgid "Peer Profiles"
-msgstr "동료 프로필"
-
 msgid "Session Banned Peers"
 msgstr "세션 금지 피어"
 
@@ -7567,6 +7652,9 @@ msgstr "터널 전환"
 msgid "Peer Profile"
 msgstr "피어 프로필"
 
+msgid "Profile View"
+msgstr ""
+
 msgid "Profile for peer"
 msgstr "피어에 대한 프로필"
 
@@ -7704,6 +7792,35 @@ msgstr "완료됨"
 
 
 
+
+
 #, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

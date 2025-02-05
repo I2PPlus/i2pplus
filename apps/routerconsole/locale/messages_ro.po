@@ -144,6 +144,9 @@ msgstr "Nu există suport pentru tipul nostru de semnătură"
 msgid "Unreachable on any transport"
 msgstr "Inaccesibil pe orice transport"
 
+msgid "Cannot enumerate UPnP devices on Android."
+msgstr ""
+
 msgid "UPnP is not enabled"
 msgstr "UPnP nu este activat"
 
@@ -681,11 +684,39 @@ msgstr "Vă rugăm să raportați"
 msgid "After reporting, please restart your router"
 msgstr "După raportare, vă rugăm să reporniți routerul"
 
+msgid "Invalid form submission, requires POST"
+msgstr ""
+
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "Transmitere formular invalid, probabil pentru că ați folosit butonul \"reload\" sau \"back\" de pe browser-ul dumneavoastră. Vă rugăm retrimiteți."
 
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Dacă problema persistă, verificați dacă aveți activate cookie-urile în browser-ul dumneavoastră."
+
+msgid "Bandwidth usage"
+msgstr "Utilizarea lățimii de bandă"
+
+#, java-format
+msgid "events in {0}"
+msgstr "evenimente in {0}"
+
+msgid "Events per period"
+msgstr "Evenimente pe perioada"
+
+msgid "Min"
+msgstr "Min"
+
+msgid "Max"
+msgstr "Max"
+
+msgid "Avg"
+msgstr "Avg"
+
+msgid "Now"
+msgstr "Acum"
+
+msgid "Router restarted"
+msgstr "Routerul a fost repornit"
 
 #, java-format
 msgid "News last updated {0} ago."
@@ -719,31 +750,6 @@ msgstr[2] "{0} pluginuri actualizate"
 
 msgid "Plugin check complete"
 msgstr "Verificarea pluginului s-a încheiat"
-
-msgid "Bandwidth usage"
-msgstr "Utilizarea lățimii de bandă"
-
-#, java-format
-msgid "events in {0}"
-msgstr "evenimente in {0}"
-
-msgid "Events per period"
-msgstr "Evenimente pe perioada"
-
-msgid "Min"
-msgstr "Min"
-
-msgid "Max"
-msgstr "Max"
-
-msgid "Avg"
-msgstr "Avg"
-
-msgid "Now"
-msgstr "Acum"
-
-msgid "Router restarted"
-msgstr "Routerul a fost repornit"
 
 msgid "none"
 msgstr "nici unul"
@@ -813,8 +819,20 @@ msgstr "Consola"
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "Pentru a activa accesul SSL pentru consola routerului, consultați fișierul Comentat <code>client.config</code> situat în directorul dvs. de aplicații I2P pentru mai multe informații. Va trebui să editați fișierul de configurare a routerconsolerunner localizat în director:"
 
+msgid "Save disabled, edit the router.config file to make changes"
+msgstr ""
+
 msgid "Error updating the configuration - please see the error logs"
 msgstr "Eroare la actualizarea de configurare - vă rugăm să consultați jurnalele de eroare"
+
+msgid "No changes made to the configuration"
+msgstr ""
+
+msgid "Note"
+msgstr "NOTĂ"
+
+msgid "Some changes may require a restart to take effect."
+msgstr "Unele modificări pot necesita o repornire pentru a avea efect"
 
 msgid "Save Client Configuration"
 msgstr "Salvează configurația clientului"
@@ -828,6 +846,9 @@ msgstr "Salvează configurația WebApp"
 msgid "Save Plugin Configuration"
 msgstr "Salvează configurația plugin"
 
+msgid "Plugins disabled"
+msgstr ""
+
 msgid "Install Plugin"
 msgstr "Instalează plugin"
 
@@ -836,6 +857,9 @@ msgstr "Instalează plugin din fișier"
 
 msgid "Update All Installed Plugins"
 msgstr "Actualizează  toate plugin-urile instalate"
+
+msgid "Delete client disabled"
+msgstr ""
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -918,9 +942,18 @@ msgstr "Plugin sau actualizare pentru descărcare deja în curs de desfășurare
 msgid "Updating all plugins"
 msgstr "Actualizez toate plugin-urile"
 
+msgid "Update manager not registered, cannot install"
+msgstr ""
+
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "Se instalează plugin de la {0}"
+
+msgid "Cannot install, check logs"
+msgstr ""
+
+msgid "Update manager not registered, cannot check"
+msgstr ""
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1019,6 +1052,19 @@ msgstr "Configurație salvată cu succes."
 msgid "Join Family"
 msgstr "Alăturați-vă familiei"
 
+msgid "Bad certificate - No Subject CN"
+msgstr ""
+
+msgid "Bad characters in Family: "
+msgstr ""
+
+#, java-format
+msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
+msgstr ""
+
+msgid "Family key configured for router family: "
+msgstr ""
+
 msgid "Load from file failed"
 msgstr "Încarcă din fișierele eșuate."
 
@@ -1034,8 +1080,8 @@ msgstr "Adaugă un element"
 msgid "Restore defaults"
 msgstr "Restabileşte implicitele"
 
-msgid "Home page changed"
-msgstr "Pagina de start s-a schimbat"
+msgid "Bad group detected, please retry"
+msgstr ""
 
 msgid "Restored default settings"
 msgstr "Setările implicite restaurate"
@@ -1067,6 +1113,9 @@ msgstr "Cheie invalida"
 msgid "Invalid destination"
 msgstr "Destinație nevalidă"
 
+msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
+msgstr ""
+
 #, java-format
 msgid "Key for {0} added to keyring"
 msgstr "Tasta pentru {0} adăugată la breloc"
@@ -1076,6 +1125,9 @@ msgstr "Parola de căutare este necesară"
 
 msgid "Requires hostname, destination, or blinded Base32"
 msgstr "Necesită nume host, destinație sau Base32 orbit"
+
+msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
+msgstr ""
 
 msgid "Destination requires lookup password"
 msgstr "Destinația necesită parola de căutare"
@@ -1094,6 +1146,9 @@ msgstr "Trimite cheie operatorului de server."
 
 msgid "Delete key"
 msgstr "Șterge cheie"
+
+msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
+msgstr ""
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1144,6 +1199,36 @@ msgstr "Orbit"
 
 msgid "Log overrides updated"
 msgstr "Suprascrie jurnal actualizat"
+
+msgid "Error updating the log limits - levels not valid"
+msgstr ""
+
+msgid "Log limits cleared"
+msgstr ""
+
+#, java-format
+msgid "Default log level updated from {0} to {1}"
+msgstr ""
+
+msgid "Date format updated"
+msgstr ""
+
+#, java-format
+msgid "Specified date format is not valid ({0}) - not updated"
+msgstr ""
+
+msgid "File size updated"
+msgstr ""
+
+#, java-format
+msgid "Specified file size limit is not valid ({0}) - not updated"
+msgstr ""
+
+msgid "Compression setting updated"
+msgstr ""
+
+msgid "Log record format updated"
+msgstr ""
 
 msgid "Log configuration saved"
 msgstr "Jurnalul de configurare salvat"
@@ -1352,6 +1437,12 @@ msgstr "Valoare viteză rea"
 msgid "Bad capacity value"
 msgstr "Valoare capacitate rea"
 
+msgid "Bonuses adjusted for: "
+msgstr ""
+
+msgid "No profile exists for: "
+msgstr ""
+
 msgid "Unsupported"
 msgstr "Nesuportat"
 
@@ -1466,27 +1557,14 @@ msgstr[2] "Așteaptă ca toate angajamentele de rutare să expire pentru {0} tun
 msgid "Restart in {0}"
 msgstr "Repornire în {0}"
 
-msgid "Stat filter and location updated successfully to"
-msgstr "Statistica filtru și locația actualizată cu succes a"
-
-msgid "Full statistics enabled"
-msgstr "Statistici complete activate"
-
-msgid "Full statistics disabled"
-msgstr "Statistici complete dezactivate"
-
-#, java-format
-msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
-msgstr "Listă grafic actualizată, poate dura până la 60 secunde să se reflecte pe {0}Pagina Graficelor{1}"
-
 msgid "Save order"
 msgstr "Ordinea salvarii"
 
-msgid "Refresh disabled"
-msgstr "Reîmprospătare dezactivată"
+msgid "Sidebar refresh disabled"
+msgstr ""
 
-msgid "Refresh interval changed"
-msgstr "Interval reînnoirii schimbat"
+msgid "Sidebar refresh interval changed"
+msgstr ""
 
 msgid "Refresh interval must be a number"
 msgstr "Intervalul reinnoirii trebuie sa fie un număr"
@@ -1494,17 +1572,17 @@ msgstr "Intervalul reinnoirii trebuie sa fie un număr"
 msgid "Restore full default"
 msgstr "Restabiliți la setările de bază"
 
-msgid "Full summary bar default restored."
-msgstr "Bara de rezumat completă a fost restaurată implicit."
+msgid "Full sidebar defaults restored."
+msgstr ""
 
-msgid "Summary bar will refresh shortly."
-msgstr "Bara de rezumat se va reîmprospăta în scurt timp."
+msgid "Sidebar will refresh shortly."
+msgstr ""
 
 msgid "Restore minimal default"
 msgstr "Restabileşte implicitele minimale"
 
-msgid "Minimal summary bar default restored."
-msgstr "Bara de rezumat minimă a fost restaurată implicit."
+msgid "Minimal sidebar defaults restored."
+msgstr ""
 
 msgid "Order must be an integer"
 msgstr "Ordinea trebuie să fie un număr întreg"
@@ -1520,6 +1598,27 @@ msgstr "Mutat"
 
 msgid "Saved order of sections."
 msgstr "Ordinea sectiunilor este salvata"
+
+msgid "Stat filter and location updated successfully to"
+msgstr "Statistica filtru și locația actualizată cu succes a"
+
+msgid "Full statistics enabled"
+msgstr "Statistici complete activate"
+
+msgid "Full statistics disabled"
+msgstr "Statistici complete dezactivate"
+
+#, java-format
+msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
+msgstr "Listă grafic actualizată, poate dura până la 60 secunde să se reflecte pe {0}Pagina Graficelor{1}"
+
+#, java-format
+msgid "Internal error: could not resolve pool name {0}."
+msgstr ""
+
+#, java-format
+msgid "Internal error: could not find pool settings for {0}."
+msgstr ""
 
 msgid "Updated settings for all pools."
 msgstr "Configurări actualizate pentru toate pools."
@@ -1547,9 +1646,8 @@ msgstr[2] "{0} tuneluri"
 msgid "Exploratory tunnels"
 msgstr "Tunele de exploatare"
 
-#, java-format
-msgid "Client tunnels for {0}"
-msgstr "Tuneluri client pentru {0}"
+msgid "I2PSnark"
+msgstr "I2PSnark"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "AVERTIZARE ANONIMITATE - Setările includ tunele 0-hop."
@@ -1575,17 +1673,17 @@ msgstr "Intrare"
 msgid "Outbound"
 msgstr "Ieșire"
 
-msgid "Length"
-msgstr "Lungime"
-
-msgid "Randomization"
-msgstr "Randomizare"
-
 msgid "Quantity"
 msgstr "Cantitate"
 
 msgid "Backup quantity"
 msgstr "Cantitatea de rezervă"
+
+msgid "Length"
+msgstr "Lungime"
+
+msgid "Randomization"
+msgstr "Randomizare"
 
 msgid "Inbound options"
 msgstr "Opțiuni intrare"
@@ -1596,17 +1694,20 @@ msgstr "Optiuni ieșire"
 msgid "Add user"
 msgstr "Adaugă utilizator"
 
+msgid "Cannot save theme choice, theme name has illegal characters"
+msgstr ""
+
 msgid "Theme change saved."
 msgstr "Tema schimbată salvată."
-
-msgid "Refresh the page to view."
-msgstr "Reîncărcați pagina pentru a vedea."
 
 msgid "Mobile console option saved."
 msgstr "Opțiune consola mobilă salvată."
 
 msgid "No user name entered"
 msgstr "Nu a fost introdus niciun nume de utilizator "
+
+msgid "User name may not contain '='"
+msgstr ""
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "Atenție: Numele de utilizatori în afara setului de caractere ISO-8859-1 nu sunt recomandate. Sprijinul nu este standardizat și variază în funcție de browser."
@@ -1897,17 +1998,17 @@ msgstr "Performanța Routerului Grafic"
 msgid "Graphs"
 msgstr "Grafice"
 
-msgid "Anonymous webmail client"
-msgstr "Client webmail anonim"
-
-msgid "I2PMail"
-msgstr "I2PMail"
-
 msgid "Help"
 msgstr "Ajutor"
 
 msgid "I2P Router Help"
 msgstr "I2P router ajutor "
+
+msgid "Anonymous webmail client"
+msgstr "Client webmail anonim"
+
+msgid "I2PMail"
+msgstr "I2PMail"
 
 msgid "Install and configure I2P plugins"
 msgstr "Instalați și configurați modulele I2P"
@@ -1926,6 +2027,12 @@ msgstr "Baza de date de rețea"
 
 msgid "Show list of all known I2P routers"
 msgstr "Afișează lista tuturor router-urilor I2P cunoscute"
+
+msgid "List of recently connected peers with profiling info"
+msgstr ""
+
+msgid "Peer Profiles"
+msgstr "Profiluri de la egal la egal"
 
 msgid "Router Info"
 msgstr "Informații despre router"
@@ -1999,14 +2106,14 @@ msgstr "Configurare avansată"
 msgid "Advanced router configuration"
 msgstr "Configurare avansată a routerului"
 
-msgid "Start or stop Router clients"
-msgstr "Porniți sau opriți clienții Router"
-
 msgid "Changelog"
 msgstr "Istoria schimbărilor"
 
 msgid "Recent changes"
 msgstr "Modificări recente"
+
+msgid "Start or stop Router clients"
+msgstr "Porniți sau opriți clienții Router"
 
 msgid "Bug tracker"
 msgstr "Bug tracker"
@@ -2152,9 +2259,6 @@ msgstr "Motorul de căutare Clearnet BitTorrent DHT"
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "Motor de căutare DuckDuckGo (fără javascript)"
 
-msgid "Clearnet Search Engine"
-msgstr "Motorul de căutare Clearnet"
-
 msgid "Privacy-focused Clearnet Search Engine"
 msgstr "Motorul de căutare Clearnet axat pe confidențialitate"
 
@@ -2230,18 +2334,6 @@ msgstr "Jurnalism de investigație independent"
 msgid "Information Security Research &amp; Education"
 msgstr "Cercetare privind securitatea informațiilor"
 
-msgid "Cannabis-related magazine"
-msgstr "Revista legată de canabis"
-
-msgid "CultureMagazine"
-msgstr "CultureMagazine"
-
-msgid "A magazine of Politics &amp; Culture"
-msgstr "O revistă de politică și cultură"
-
-msgid "CurrentAffairs"
-msgstr "CurrentAffairs"
-
 msgid "Darknet related news site"
 msgstr "Site de știri legate de Darknet"
 
@@ -2296,15 +2388,6 @@ msgstr "HongKongWatch"
 msgid "Monitors threats to freedoms and rights in Hong Kong"
 msgstr "Monitorizează amenințările la adresa libertăților și drepturilor din Hong Kong"
 
-msgid "Politics &amp; Current Affairs Journal"
-msgstr "Jurnal de politică și actualitate"
-
-msgid "English language Japanese News"
-msgstr "Știri japoneze în limba engleză"
-
-msgid "JapanToday"
-msgstr "JapanToday"
-
 msgid "JStorDaily"
 msgstr "JStorDaily"
 
@@ -2347,9 +2430,6 @@ msgstr "Știri și bloguri pe I2P"
 msgid "Planeta"
 msgstr "Planeta"
 
-msgid "News &amp; Views on Tibet"
-msgstr "Știri și opinii despre Tibet"
-
 msgid "Lifestyle magazine"
 msgstr "Revista Lifestyle"
 
@@ -2367,6 +2447,9 @@ msgstr "ScienceDaily"
 
 msgid "Community-driven tech news"
 msgstr "Știri despre tehnologie conduse de comunitate"
+
+msgid "Various services"
+msgstr ""
 
 msgid "News for nerds"
 msgstr "Știri pentru tocilari"
@@ -2413,12 +2496,6 @@ msgstr "Știri globale"
 msgid "TheGuardian"
 msgstr "TheGuardian"
 
-msgid "TheHill"
-msgstr "TheHill"
-
-msgid "US Political News"
-msgstr "Știri politice din SUA"
-
 msgid "TheMarkup"
 msgstr "TheMarkup"
 
@@ -2433,12 +2510,6 @@ msgstr "TheMoscowTimes"
 
 msgid "TheNewRepublic"
 msgstr "TheNewRepublic"
-
-msgid "International News from Tibet"
-msgstr "Știri internaționale din Tibet"
-
-msgid "TheTibetPost"
-msgstr "TheTibetPost"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "Partajarea fișierelor și știri privind drepturile de autor"
@@ -2467,6 +2538,9 @@ msgstr "URL"
 
 msgid "Add"
 msgstr "Adaugă"
+
+msgid "Error displaying the info page."
+msgstr ""
 
 msgid "Identity"
 msgstr "Identitate"
@@ -2513,6 +2587,9 @@ msgstr "Nuclee CPU disponibile"
 msgid "Performance"
 msgstr "Performanță"
 
+msgid "Maximum available RAM"
+msgstr ""
+
 msgid "Classified as slow"
 msgstr "Clasificat ca lent"
 
@@ -2521,6 +2598,9 @@ msgstr "Da"
 
 msgid "No"
 msgstr "Nu"
+
+msgid "GeoIP Db"
+msgstr ""
 
 msgid "Target"
 msgstr "țintă"
@@ -2658,6 +2738,9 @@ msgstr "Toate routerele (Client NetDb)"
 msgid "Sybil Analysis"
 msgstr "Analiza Sybil"
 
+msgid "Bad value supplied, please check and try again."
+msgstr ""
+
 msgid "Router Map"
 msgstr "Harta routerului"
 
@@ -2732,9 +2815,6 @@ msgstr "este interzis"
 
 msgid "not found in network database"
 msgstr "nu a fost găsit în rețeaua bazei de date"
-
-msgid "No results"
-msgstr "Niciun rezultat"
 
 msgid "Bad Base64 Router hash"
 msgstr ""
@@ -2983,50 +3063,11 @@ msgstr "Afișați toate routerele cu această adresă în NetDb"
 msgid "Show all routers with this port in the NetDb"
 msgstr "Afișați toate routerele cu acest port în NetDb"
 
-msgid "Core version"
-msgstr "Versiune de bază"
-
 msgid "Network ID"
 msgstr "ID rețea"
 
 msgid "Routers"
 msgstr "Routere"
-
-msgid "Family Key"
-msgstr "Cheia de familie"
-
-msgid "Family Sig"
-msgstr "Sig. familie"
-
-msgid "Exploratory tunnels expire (1h)"
-msgstr "Tunelurile de explorare expiră (1 oră)"
-
-msgid "Exploratory tunnels reject (1h)"
-msgstr "Respingerea tunelurilor exploratorii (1h)"
-
-msgid "Exploratory tunnels build success (1h)"
-msgstr "Tunelurile exploratorii au succes (1h)"
-
-msgid "Client tunnels expire (1h)"
-msgstr "Tunelurile client expiră (1 oră)"
-
-msgid "Client tunnels reject (1h)"
-msgstr "Tunelurile client resping (1 oră)"
-
-msgid "Client tunnels build success (1h)"
-msgstr "Tunelurile client au succes (1h)"
-
-msgid "Participating tunnels (1h)"
-msgstr "Tuneluri participante (1h)"
-
-msgid "Participating tunnels (60s)"
-msgstr "Tuneluri participante (anii 60)"
-
-msgid "Bandwidth send rate (1h)"
-msgstr "Rata de trimitere a lățimii de bandă (1h)"
-
-msgid "Bandwidth receive rate (1h)"
-msgstr "Rata de primire a lățimii de bandă (1h)"
 
 msgid "First heard about"
 msgstr "Am auzit prima dată despre"
@@ -3096,9 +3137,6 @@ msgstr "în fișierul router.config."
 msgid "Peer Connections"
 msgstr "Conexiuni de la egal la egal"
 
-msgid "Auto-refresh"
-msgstr "Reîmprospătare automată"
-
 msgid "Active in the last minute"
 msgstr "Activ în ultimul minut"
 
@@ -3107,6 +3145,12 @@ msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
+
+msgid "Limit"
+msgstr ""
+
+msgid "Maximum permitted connections"
+msgstr ""
 
 msgid "Current / maximum permitted"
 msgstr "Curent / maxim permis"
@@ -3520,8 +3564,8 @@ msgid "{0} shared bandwidth"
 msgstr "{0} lățime de bandă partajată"
 
 #, java-format
-msgid "Over {0} shared bandwidth"
-msgstr "Peste {0} lățime de bandă partajată"
+msgid "Over {0} KB/s shared bandwidth"
+msgstr ""
 
 msgid "status"
 msgstr "stare"
@@ -3593,86 +3637,151 @@ msgstr ""
 msgid "Select search engine"
 msgstr "Selectează motor de căutare..."
 
-msgid "Statistics gathered during this router's uptime"
-msgstr "Statisticile colectate în timpul uptime al acestui router"
+#, java-format
+msgid "Clock Skew of {0}"
+msgstr "Clock Skew de {0}"
 
-msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
-msgstr "Datele colectate sunt cuantificate pe o perioadă de 1 minut, deci trebuie folosite doar ca o estimare."
+msgid "Testing"
+msgstr "Testare"
 
-msgid "These statistics are primarily used for development and debugging."
-msgstr "Aceste statistici sunt utilizate în principal pentru dezvoltare și depanare."
+msgid "Private TCP Address"
+msgstr "Adresă TCP privată"
 
-msgid "No lifetime events"
-msgstr "Nu au fost evenimente"
+msgid "SymmetricNAT"
+msgstr "NAT simetric"
 
-msgid "frequency"
-msgstr "frecvență"
+msgid "Firewalled with Inbound TCP Enabled"
+msgstr "Firewall cu TCP de intrare activat"
 
-msgid "Rolling average events per period"
-msgstr "Evenimente medii rulate pe perioada"
+msgid "Firewalled &amp; Floodfill"
+msgstr "Firewalled și Floodfill"
 
-msgid "Highest events per period"
-msgstr "Cele mai mari evenimente pe perioada"
+msgid "Disconnected"
+msgstr "Deconectat"
 
-msgid "Lifetime average events per period"
-msgstr "Evenimente medii rulate pe perioada"
+msgid "UDP Port In Use"
+msgstr "Port UDP în uz"
 
-msgid "Lifetime average frequency"
-msgstr "Frecvență medie pe durata de pornire"
+msgid "No Active Peers"
+msgstr "Fără colegi activi"
+
+msgid "UDP Disabled &amp; Inbound TCP host/port not set"
+msgstr "UDP dezactivat și Inbound TCP gazdă/port care nu este setat"
+
+msgid "Firewalled with UDP Disabled"
+msgstr "Firewall cu UDP dezactivat"
+
+msgid "Add/remove/edit &amp; control your client and server tunnels"
+msgstr "Adaugă/șterge/editează &amp; controlați clientul și tunelurile server-ului dvs."
+
+msgid "Service Tunnels"
+msgstr "Tuneluri de serviciu"
+
+msgid "How many local service tunnels we're running"
+msgstr "Câte tuneluri de serviciu local rulăm"
+
+msgid "Messenger"
+msgstr "Mesager"
+
+msgid "i2pchat"
+msgstr "i2pchat"
+
+msgid "I2PChat"
+msgstr "I2PChat"
+
+msgid "Server"
+msgstr "Server"
+
+msgid "service may be available to peers"
+msgstr "serviciul poate fi disponibil colegilor"
+
+msgid "service is only available locally"
+msgstr "serviciul este disponibil doar local"
+
+msgid "Show tunnels"
+msgstr "Arată tunelurile"
+
+msgid "Leases expired"
+msgstr "Arende expirate"
+
+msgid "Rebuilding"
+msgstr "Reconstruire"
+
+msgid "ago"
+msgstr "în urmă"
+
+msgid "Ready"
+msgstr "Gata"
+
+msgid "Building"
+msgstr "Construire"
+
+msgid "Building tunnels"
+msgstr "Construiesc tunelele"
+
+msgid "Shared Clients"
+msgstr "Clienți partajați"
+
+msgid "Click Restart to install"
+msgstr "Apăsați restart pentru a instala"
+
+msgid "Click Shutdown and restart to install"
+msgstr "Apăsați oprire și reporniți pentru a instala"
 
 #, java-format
-msgid "{0} event"
-msgid_plural "{0} events"
-msgstr[0] "{0} eveniment"
-msgstr[1] "{0} evenimente"
-msgstr[2] "{0} evenimente"
+msgid "{0}"
+msgstr "{0}"
 
-msgid "rate"
-msgstr "rată"
+msgid "Updating after restart"
+msgstr "Actualizare după repornire"
 
-msgid "Average"
-msgstr "Medie"
+msgid "Signed development update available"
+msgstr "Actualizare de dezvoltare semnată disponibilă"
 
-msgid "Highest average"
-msgstr "Cea mai mare medie"
+msgid "Download I2P Update"
+msgstr "Descărcați actualizarea I2P"
 
-msgid "Highest total in a period"
-msgstr "Cel mai mare total dintr-o perioadă"
+msgid "Unsigned update available"
+msgstr "Actualizare nesemnată disponibilă"
 
-msgid "Average event count"
-msgstr "Numărul mediu de evenimente calculate"
+msgid "Help with firewall configuration"
+msgstr "Ajutor cu configurarea firewall-ului"
 
-msgid "Events in peak period"
-msgstr "Evenimente în perioada de vârf"
+msgid "Check network connection and NAT/firewall!"
+msgstr "Verificați conexiunea la rețea și NAT/firewall!"
 
-msgid "Events in this period"
-msgstr "Evenimente din această perioadă"
+msgid "Attempt to download router reference files (if automatic reseed has failed)"
+msgstr "Încercare de a descărca fișierele de referință ale ruterului (dacă reținerea automată a eșuat)"
 
-#, java-format
-msgid "ended {0} ago"
-msgstr "s-a încheiat acum {0}"
+msgid "Reseed"
+msgstr "Reseed"
 
-msgid "No events"
-msgstr "Nu sunt evenimente"
+msgid "Order"
+msgstr "Comandă"
 
-msgid "Graph Data"
-msgstr "Grafic de date"
+msgid "Top"
+msgstr "Sus"
 
-msgid "Graph Event Count"
-msgstr "Graficul evenimentelor calculate"
+msgid "Move to top"
+msgstr "Mută în vârf"
 
-msgid "Export Data as XML"
-msgstr "Exportați datele ca XML"
+msgid "Move up"
+msgstr "Mută în sus"
 
-msgid "Lifetime average value"
-msgstr "Valoarea medie de viața pe durata de pornire"
+msgid "Down"
+msgstr "Jos"
 
-#, java-format
-msgid "1 event"
-msgid_plural "{0} events"
-msgstr[0] "1 eveniment"
-msgstr[1] "{0} evenimente"
-msgstr[2] "{0} evenimente"
+msgid "Move down"
+msgstr "Mută în jos"
+
+msgid "Bottom"
+msgstr "Jos"
+
+msgid "Move to bottom"
+msgstr "Mută dedesubt"
+
+msgid "Select a section to add"
+msgstr "Selectați o secțiune pentru adăugare"
 
 msgid "Help &amp; FAQ"
 msgstr "Ajutor &amp; FAQ"
@@ -3715,9 +3824,6 @@ msgstr "Congestie"
 
 msgid "Tunnel Status"
 msgstr "Starea tunelului"
-
-msgid "Service Tunnels"
-msgstr "Tuneluri de serviciu"
 
 msgid "News &amp; Updates"
 msgstr "Noutăți &amp; Actualizări "
@@ -3772,6 +3878,9 @@ msgstr "Gazduire web"
 
 msgid "An introduction to hosting websites on the I2P network"
 msgstr "O introducere în găzduirea site-urilor web în rețeaua I2P"
+
+msgid "New hosts in last 24 hours"
+msgstr ""
 
 msgid "I2PControl"
 msgstr "I2PControl"
@@ -4072,151 +4181,86 @@ msgstr "Nu sunt construite tuneluri participante când modul Ascuns este activ"
 msgid "Router is configured to reject all transit tunnel requests"
 msgstr "Routerul este configurat să respingă toate solicitările de tunel participante"
 
-#, java-format
-msgid "Clock Skew of {0}"
-msgstr "Clock Skew de {0}"
+msgid "Statistics gathered during this router's uptime"
+msgstr "Statisticile colectate în timpul uptime al acestui router"
 
-msgid "Testing"
-msgstr "Testare"
+msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
+msgstr "Datele colectate sunt cuantificate pe o perioadă de 1 minut, deci trebuie folosite doar ca o estimare."
 
-msgid "Private TCP Address"
-msgstr "Adresă TCP privată"
+msgid "These statistics are primarily used for development and debugging."
+msgstr "Aceste statistici sunt utilizate în principal pentru dezvoltare și depanare."
 
-msgid "SymmetricNAT"
-msgstr "NAT simetric"
+msgid "No lifetime events"
+msgstr "Nu au fost evenimente"
 
-msgid "Firewalled with Inbound TCP Enabled"
-msgstr "Firewall cu TCP de intrare activat"
+msgid "frequency"
+msgstr "frecvență"
 
-msgid "Firewalled &amp; Floodfill"
-msgstr "Firewalled și Floodfill"
+msgid "Rolling average events per period"
+msgstr "Evenimente medii rulate pe perioada"
 
-msgid "Disconnected"
-msgstr "Deconectat"
+msgid "Highest events per period"
+msgstr "Cele mai mari evenimente pe perioada"
 
-msgid "UDP Port In Use"
-msgstr "Port UDP în uz"
+msgid "Lifetime average events per period"
+msgstr "Evenimente medii rulate pe perioada"
 
-msgid "No Active Peers"
-msgstr "Fără colegi activi"
-
-msgid "UDP Disabled &amp; Inbound TCP host/port not set"
-msgstr "UDP dezactivat și Inbound TCP gazdă/port care nu este setat"
-
-msgid "Firewalled with UDP Disabled"
-msgstr "Firewall cu UDP dezactivat"
-
-msgid "Add/remove/edit &amp; control your client and server tunnels"
-msgstr "Adaugă/șterge/editează &amp; controlați clientul și tunelurile server-ului dvs."
-
-msgid "How many local service tunnels we're running"
-msgstr "Câte tuneluri de serviciu local rulăm"
-
-msgid "I2PSnark"
-msgstr "I2PSnark"
-
-msgid "Messenger"
-msgstr "Mesager"
-
-msgid "i2pchat"
-msgstr "i2pchat"
-
-msgid "I2PChat"
-msgstr "I2PChat"
-
-msgid "Server"
-msgstr "Server"
-
-msgid "service may be available to peers"
-msgstr "serviciul poate fi disponibil colegilor"
-
-msgid "service is only available locally"
-msgstr "serviciul este disponibil doar local"
-
-msgid "Show tunnels"
-msgstr "Arată tunelurile"
-
-msgid "Leases expired"
-msgstr "Arende expirate"
-
-msgid "Rebuilding"
-msgstr "Reconstruire"
-
-msgid "ago"
-msgstr "în urmă"
-
-msgid "Ready"
-msgstr "Gata"
-
-msgid "Building"
-msgstr "Construire"
-
-msgid "Building tunnels"
-msgstr "Construiesc tunelele"
-
-msgid "Shared Clients"
-msgstr "Clienți partajați"
-
-msgid "Click Restart to install"
-msgstr "Apăsați restart pentru a instala"
-
-msgid "Click Shutdown and restart to install"
-msgstr "Apăsați oprire și reporniți pentru a instala"
+msgid "Lifetime average frequency"
+msgstr "Frecvență medie pe durata de pornire"
 
 #, java-format
-msgid "{0}"
-msgstr "{0}"
+msgid "{0} event"
+msgid_plural "{0} events"
+msgstr[0] "{0} eveniment"
+msgstr[1] "{0} evenimente"
+msgstr[2] "{0} evenimente"
 
-msgid "Updating after restart"
-msgstr "Actualizare după repornire"
+msgid "rate"
+msgstr "rată"
 
-msgid "Signed development update available"
-msgstr "Actualizare de dezvoltare semnată disponibilă"
+msgid "Average"
+msgstr "Medie"
 
-msgid "Download I2P Update"
-msgstr "Descărcați actualizarea I2P"
+msgid "Highest average"
+msgstr "Cea mai mare medie"
 
-msgid "Unsigned update available"
-msgstr "Actualizare nesemnată disponibilă"
+msgid "Highest total in a period"
+msgstr "Cel mai mare total dintr-o perioadă"
 
-msgid "Help with firewall configuration"
-msgstr "Ajutor cu configurarea firewall-ului"
+msgid "Average event count"
+msgstr "Numărul mediu de evenimente calculate"
 
-msgid "Check network connection and NAT/firewall!"
-msgstr "Verificați conexiunea la rețea și NAT/firewall!"
+msgid "Events in peak period"
+msgstr "Evenimente în perioada de vârf"
 
-msgid "Attempt to download router reference files (if automatic reseed has failed)"
-msgstr "Încercare de a descărca fișierele de referință ale ruterului (dacă reținerea automată a eșuat)"
+msgid "Events in this period"
+msgstr "Evenimente din această perioadă"
 
-msgid "Reseed"
-msgstr "Reseed"
+#, java-format
+msgid "ended {0} ago"
+msgstr "s-a încheiat acum {0}"
 
-msgid "Order"
-msgstr "Comandă"
+msgid "No events"
+msgstr "Nu sunt evenimente"
 
-msgid "Top"
-msgstr "Sus"
+msgid "Graph Data"
+msgstr "Grafic de date"
 
-msgid "Move to top"
-msgstr "Mută în vârf"
+msgid "Graph Event Count"
+msgstr "Graficul evenimentelor calculate"
 
-msgid "Move up"
-msgstr "Mută în sus"
+msgid "Export Data as XML"
+msgstr "Exportați datele ca XML"
 
-msgid "Down"
-msgstr "Jos"
+msgid "Lifetime average value"
+msgstr "Valoarea medie de viața pe durata de pornire"
 
-msgid "Move down"
-msgstr "Mută în jos"
-
-msgid "Bottom"
-msgstr "Jos"
-
-msgid "Move to bottom"
-msgstr "Mută dedesubt"
-
-msgid "Select a section to add"
-msgstr "Selectați o secțiune pentru adăugare"
+#, java-format
+msgid "1 event"
+msgid_plural "{0} events"
+msgstr[0] "1 eveniment"
+msgstr[1] "{0} evenimente"
+msgstr[2] "{0} evenimente"
 
 msgid "No known routers"
 msgstr "Fără routere cunoscute"
@@ -4556,6 +4600,10 @@ msgstr "Niciun tunel local sau de tranzit activ în prezent."
 msgid "Bandwidth Tiers"
 msgstr "Nivele de lățime de bandă"
 
+#, java-format
+msgid "Over {0} shared bandwidth"
+msgstr "Peste {0} lățime de bandă partajată"
+
 msgid "Inbound or outbound?"
 msgstr "De intrare sau de iesire?"
 
@@ -4615,6 +4663,18 @@ msgstr "Testul lățimii de bandă a fost anulat"
 
 msgid "Bandwidth test was not running"
 msgstr "Testul de lățime de bandă nu a fost difuzat"
+
+msgid "ready"
+msgstr ""
+
+msgid "inbound test"
+msgstr ""
+
+msgid "outbound test"
+msgstr ""
+
+msgid "done"
+msgstr ""
 
 msgid "bits per second"
 msgstr "biți pe secundă"
@@ -4788,8 +4848,8 @@ msgstr "Partajare în rețea"
 msgid "Share"
 msgstr "Partajare"
 
-msgid "Note"
-msgstr "NOTĂ"
+msgid "NOTE"
+msgstr ""
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
@@ -4813,6 +4873,10 @@ msgstr "Cu cît este mai mare lățimea de bandă cu atât vi se îmbunătățe�
 
 msgid "config advanced"
 msgstr "configurare avansata"
+
+#, java-format
+msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
+msgstr ""
 
 msgid "Floodfill Configuration"
 msgstr "Configurație Floodfill"
@@ -4841,8 +4905,8 @@ msgstr "Dezactivează"
 msgid "Advanced I2P+ Configuration"
 msgstr "Configurare avansată I2P"
 
-msgid "Some changes may require a restart to take effect."
-msgstr "Unele modificări pot necesita o repornire pentru a avea efect"
+msgid "Help with additional configuration settings"
+msgstr ""
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5708,23 +5772,50 @@ msgstr "Atunci când este setat pe true, activează instalarea de plugin-uri în
 msgid "When set to true, this setting enables reverse DNS lookups for peers, triggered when displaying the country flag of a peer or when the hostname or domain is explicitly displayed in the console, or when the peer's RouterInfo is written to disk. In order to avoid repeat lookups, it's recommended to configure a generous caching policy for DNS lookups of 10 minutes or more, and to configure a privacy respecting DNS server in your operating system. [Disabled by default, restart required]"
 msgstr "Atunci când este setat pe true, această setare activează căutarea inversă DNS pentru peerii, declanșată la afișarea drapelului țării unui peer sau când numele de gazdă sau domeniul este afișat în mod explicit în consolă, sau când RouterInfo al peer-ului este scris pe disc. Pentru a evita căutările repetitive, se recomandă configurarea unei politici generoase de cache pentru căutările DNS de 10 minute sau mai mult și configurarea unui server DNS care respectă confidențialitatea în sistemul de operare. [Dezactivat din oficiu, este necesar repornirea]"
 
+msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
+msgstr "Această setare permite stabilirea unui prefix de text personalizat pentru titlul paginii pe paginile consolei routerului, potrivit în cazul în care aveți mai multe consolide deschise pe taburile browserului și doriți o metodă simplă de a le diferenția."
+
 msgid "When set to true, accessing the router console via http:// when https:// is enabled will automatically redirect to https. To configure router console access, edit the settings in your <code>clients.config</code> file in your profile directory (<i>not</i> the application installation directory). [Enabled by default]"
 msgstr "Atunci când este setat la adevărat, accesarea consolei routerului prin http:// când https:// este activat va redirecționa automat către https://. Pentru a configura accesul la consola routerului, editați setările în fișierul <code>clients.config</code> din directorul profilului dumneavoastră (<i>nu</i> dosarul de instalare al aplicației). [Activat în mod implicit]"
+
+msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
+msgstr "Această setare, când este setată la adevărat, va afișa un rezumat al testului de vârf mediu în secțiunea Congestion a barei laterale, calculat prin adăugarea mediei testului de vârf reușit și a timpului mediu excesiv petrecut de testele eșuate. Valoarea medie poate fi utilizată ca ghid pentru determinarea valorii optime a <code>router.peerTestTimeout</code>. [Implicit este fals]"
+
+msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
+msgstr "Această setare, când este setată la adevărat, va afișa linkurile <i>Sites of Interest</i> în <a href=/sitemap>harta site-ului</a>. [Implicit este fals]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Această setare determină dacă routerul ar trebui să utilizeze fișierul <i>blocklist.txt</i> furnizat și orice listă de blocare configurată de utilizator pentru a permite interzicerea routerelor după hash sau adresă IP. Gama de adrese și măștile de rețea sunt acceptate pentru IPv4, dar nu pentru IPv6. Consultați fișierul <i>blocklist.txt</i> din directorul aplicației I2P+ pentru mai multe informații. [Activat în mod implicit, necesită repornire]"
 
-msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
-msgstr "Această setare determină dacă routerul ar trebui să utilizeze fișierul <i>blocklist_tor.txt</i> furnizat în directorul aplicației dumneavoastră I2P+ pentru a permite interzicerea routerelor care funcționează din adresele IP ale nodurilor de ieșire Tor. [Activat în mod implicit, necesită repornire]"
+msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
+msgstr "Această setare permite configurarea unui timp de expirare (în secunde) pentru interdicțiile impuse prin intermediul listelor de blocare. În mod implicit, interdicțiile persistă pe durata sesiunii ruterului. [Este necesară repornirea]"
 
 msgid "This setting, when configured with a path pointing at a valid blocklist file, enables an additional, user-configured blocklist to be loaded at router startup. [Disabled by default, restart required]"
 msgstr "Această setare, când este configurată cu o cale care arată către un fișier de listă de blocare valid, permite încărcarea unei liste suplimentare de blocare, configurată de utilizator, la pornirea routerului. [Dezactivată în mod implicit, necesită repornire]"
 
-msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
-msgstr "Această setare permite configurarea unui timp de expirare (în secunde) pentru interdicțiile impuse prin intermediul listelor de blocare. În mod implicit, interdicțiile persistă pe durata sesiunii ruterului. [Este necesară repornirea]"
+msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
+msgstr "Această setare determină dacă routerul ar trebui să utilizeze fișierul <i>blocklist_tor.txt</i> furnizat în directorul aplicației dumneavoastră I2P+ pentru a permite interzicerea routerelor care funcționează din adresele IP ale nodurilor de ieșire Tor. [Activat în mod implicit, necesită repornire]"
+
+msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
+msgstr ""
+
+msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
+msgstr "Când este setat pe fals, routerul nu va bloca cererile de construire de tuneluri de la routeri mai lente sau necapabile care rulează versiuni mai vechi. [Valoarea implicită este adevărat, este necesară o restartare]"
 
 msgid "Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks."
 msgstr "Alocați numărul de thread-uri de procesor pentru construirea tunelurilor. Dacă procesorul dvs. suportă hyperthreading sau multitasking simultan, puteți înmulți numărul de nuclee ale procesorului cu 2 pentru a obține numărul maxim de thread-uri pe care să le alocați, altfel numărul de nuclee ale procesorului = numărul maxim de thread-uri disponibile. Rețineți că este posibil să doriți să alocați mai puțin decât maximul teoretic pentru a vă asigura că aveți spațiu liber pentru alte sarcini."
+
+msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
+msgstr "Această setare (în milisecunde) determină cât timp poate rămâne un pachet în coada CoDel înainte ca acesta să fie eliminat. Implicit, este de 1000ms. [Este necesară repornirea]"
+
+msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
+msgstr "Această setare determină numărul maxim de mesaje din coada de ieșire înainte ca aceasta să fie marcată ca fiind plină. [Implicit este 768]"
+
+msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
+msgstr "Această setare determină numărul maxim de mesaje peste valoarea maximă permisă a cozii înainte ca mesajele ulterioare să fie eliminate. [Implicit este 128]"
+
+msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
+msgstr "Această setare (în milisecunde) vă permite să configurați manual valoarea țintă a întârzierii cozii pentru sistemul de gestionare a cozii CoDel. Valoarea implicită este de 50 ms. [Este necesar repornirea]"
 
 msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
 msgstr "Această setare, în milisecunde, anulează limita implicită de timp de procesare a mesajelor (indicată ca <i> Message Delay </i> în secțiunea laterală a Congestion) înainte ca routerul să fie considerat congestionat și cererile de tunelare de tranzit să fie respinse. [Implicit este de 750ms sau de 1500ms dacă routerul este marcat ca fiind lent]"
@@ -5735,8 +5826,32 @@ msgstr "Testați periodic tunelurile pentru a determina întârzierea medie și 
 msgid "When set to true, the router will change its identity and UDP port every time the router restarts. [Default is false]"
 msgstr "Dacă este setat la adevărat, routerul își va schimba identitatea și portul UDP de fiecare dată când se repornește. [Implicit este fals]"
 
+msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
+msgstr "Când este setat pe fals, routerul nu va limita cererile de construire de tuneluri de la alte routeri și ar trebui să fie folosit cu precauție. [Valoarea implicită este adevărat, este necesară o restartare]"
+
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
 msgstr "Această setare determină ce <a href=/profiles#profile_defs>abilități ale colegului</a> nu vor fi utilizate pentru construirea tunelurilor routerului dvs. de date. de exemplu <code>router.excludePeerCaps=LMN</code>"
+
+msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
+msgstr "Această setare (în ore) determină cât de veche este o RouterInfo din NetDb (ultima dată cunoscută de publicare) înainte de a fi clasificată ca învechită și ștearsă. [Valoarea implicită este de 28 ore, cu excepția cazului în care routerul este un Floodfill, în acest caz valoarea implicită este de 8 ore]"
+
+msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
+msgstr "Această setare determină numărul de peer-uri de explorat în paralel atunci când rulează Job pentru explorarea peer-ului [valoarea implicită este de 1 peer la nivel de timp când sunt cunoscuți mai mult de 3000 de peer-i]. Rețineți că mărirea acestei valori va crește cerințele de bandă pentru explorare și setarea acestei valori prea mari poate provoca o întârziere excesivă a mesajelor și poate interfera cu alte servicii, așa că utilizați cu atenție!"
+
+msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
+msgstr "Această setare determină numărul de bălți NetDb DHT pe care le va utiliza Jobul pentru explorarea peer-ului atunci când rulează. În mod implicit, numărul de bălți de explorat va varia în funcție dacă routerul a rulat mai mult de o oră, dacă routerul este ascuns sau se află în grupa de bandă a K și numărul de routere cunoscute."
+
+msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
+msgstr "Această setare (în secunde) vă permite să anulați întârzierea între rulările Jobului de explorare a perechilor care încearcă să găsească noi colegi pentru a adăuga la NetDb. Jobul rulează la fiecare 80 de secunde în mod implicit sau, dacă routerul experimentează o întârziere a jobului sau a mesajelor, la fiecare 3 minute. Dacă dimensiunea NetDb atinge 4000 de colegi, pauza va crește la 15 minute. Puteți dori să măriți întârzierea dacă NetDb este bine populat (peste 2000 de colegi) sau dacă doriți să reduceți utilizarea globală a lățimii de bandă. Notă: Pentru ruterele Floodfill, acest job nu rulează."
+
+msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
+msgstr "Această setare determină numărul maxim de hash-uri de collegiu care să fie puse în coadă pentru explorare. În I2P, maximul este de 128, iar în I2P+ valoarea implicită este de 512."
+
+msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
+msgstr "Această setare determină dacă un router care acționează ca floodfill va explora NetDb pentru a afla despre noi colegi. [Valoarea implicită este falsă, este necesară repornirea]"
+
+msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
+msgstr "Această setare, atunci când este setată pe adevărat, împiedică un router să comunice direct cu alte routere, forțând utilizarea introducerilor. [Valoarea implicită este falsă, cu excepția cazului în care routerul se află în mod ascuns]"
 
 msgid "When set to true, if your router is serving as a floodfill for the network, your <a href=/configadvanced#ffconf>floodfill participation</a> will be hidden from other routers."
 msgstr "Când setat la adevărat, dacă routerul dvs. servește ca un floodfill pentru rețea, participarea dvs. la floodfill va fi ascunsă de la alți routeri."
@@ -5749,6 +5864,12 @@ msgstr "Determină numărul maxim de tunele participante pe care le poate constr
 
 msgid "Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 10% in I2P+, 33% in I2P]"
 msgstr "Definește procentul maxim de tunele locale active (client și exploratorii) pentru care va fi utilizat un peer. [Mod implicit este 10% în I2P+, 33% în I2P]"
+
+msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
+msgstr "Această setare vă permite să configurați numărul minim de tuneluri participante găzduite înainte ca routerul să înceapă să respingă cererile de tuneluri pe baza necesităților anticipate de lățime de bandă. [Valoarea implicită este 100 dacă sistemul rulează Android, 800 dacă sistemul rulează pe platformă ARM și are mai puțin de 4 nuclee disponibile, 1200 dacă sistemul rulează pe platformă ARM și are 4 sau mai multe nuclee disponibile, în caz contrar 2500]"
+
+msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
+msgstr "Această setare vă permite să excludeți ruterele mai vechi din NetDb. Ruterele mai vechi de valoarea implicită sau cea setată vor fi șterse din NetDb și interzise pe durata sesiunii ruterului. În mod implicit, sunt excluse ruterele mai vechi de 0.9.20. Notă: începând cu versiunea I2P+ 0.9.46+, sunt folosite numai rutere care rulează versiunile recente pentru construirea tunelurilor locale. [Este necesară repornirea]"
 
 msgid "When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]"
 msgstr "Când este setat la adevărat, fișierele info ale routerului stocate în directorul netDB al profilului dvs. nu vor fi divizate în 64 de subdirectoare. [Mod implicit este fals]"
@@ -5774,84 +5895,6 @@ msgstr "Mai puțin de 256MB alocate JVM-ului"
 msgid "Router running a non-native, software emulated version of the Java BigInteger library"
 msgstr "Routerul rulează o versiune necompatibilă, emulată software, a librariei Java BigInteger"
 
-msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
-msgstr "Această setare vă permite să configurați numărul minim de tuneluri participante găzduite înainte ca routerul să înceapă să respingă cererile de tuneluri pe baza necesităților anticipate de lățime de bandă. [Valoarea implicită este 100 dacă sistemul rulează Android, 800 dacă sistemul rulează pe platformă ARM și are mai puțin de 4 nuclee disponibile, 1200 dacă sistemul rulează pe platformă ARM și are 4 sau mai multe nuclee disponibile, în caz contrar 2500]"
-
-msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
-msgstr "Dacă este setat pe true, routerul își va schimba identitatea și portul UDP când acesta repornește, apoi va șterge cheia din router.config pentru a preveni alte modificări. [Valoarea implicită este false]"
-
-msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr "Când este setat pe fals, routerul nu va limita cererile de construire de tuneluri de la alte routeri și ar trebui să fie folosit cu precauție. [Valoarea implicită este adevărat, este necesară o restartare]"
-
-msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr "Când este setat pe fals, routerul nu va bloca cererile de construire de tuneluri de la routeri mai lente sau necapabile care rulează versiuni mai vechi. [Valoarea implicită este adevărat, este necesară o restartare]"
-
-msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
-msgstr "Când este configurat, stabilește o limită strictă pentru numărul de tuneluri pe care routerul are voie să le construiască în mod concomitent. În mod implicit, routerul utilizează timpul mediu de construire și lățimea de bandă de ieșire curentă pentru a determina rata de construire optimă. [Este necesară repornirea]"
-
-msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
-msgstr "Dacă doriți să instalați actualizări I2P nesemnate (.zip), aceasta trebuie adăugată în fișierul dvs. <code>router.config</code> cu excepția cazului în care ați configurat deja <code>routerconsole.advanced=true</code>, caz în care această opțiune este deja preconfigurată. Notă: începând cu I2P+ 0.9.48+, instalarea <a href=/configupdate#i2pupdates>actualizărilor nesemnate</a> este activată în mod implicit."
-
-msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
-msgstr "Această setare vă permite să configurați URL-ul de actualizare pentru funcția de actualizare nesemnată, dacă este activată. URL-ul trebuie să se încheie cu <code>/i2pupdate.zip</code>. Notă: nu instalați actualizări nesemnate decât dacă aveți încredere în sursa actualizării!"
-
-msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
-msgstr "Această setare permite dezactivarea testelor SSU pentru a determina dacă router-ul dvs. are firewall și poate fi activat pentru ruterele care cu siguranță nu sunt firewall, dar întâmpină probleme de firewall intermitente. În cazul în care testarea este dezactivată, atât SSU, cât și NTCP ar trebui să raporteze adresa IP publică curentă pe pagina <a href=/info>informațiilor despre router</a>. [Necesită repornire]"
-
-msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
-
-msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
-msgstr "Această setare determină care transport are prioritate în comunicarea cu colegii de rețea. În mod implicit, NTCP este preferat în defavoarea UDP (SSU). Setând valoarea pe true, UDP va fi preferat astfel dacă există deja o conexiune NTCP preexistentă; când este setat întotdeauna, UDP va fi utilizat întotdeauna indiferent dacă există o conexiune NTCP preexistentă. [Implicit este false]"
-
-msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
-msgstr "Această setare specifică tunelului vă permite să activați sau dezactivați răspunsuri la ping-urile trimise la serverele găzduite de router. Pentru a dezactiva ping-urile, trebuie să adăugați linia <code>i2p.streaming.answerPings=false</code> în secțiunea <i>Opțiuni personalizate</i> pentru configurația serverului în Managerul de Tunel."
-
-msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
-msgstr "Când este setat pe true, I2P rulează fără conectivitate la rețea, ceea ce este util dacă reporniți constant router-ul pentru a testa actualizări de cod, deoarece acest lucru previne întreruperea rețelei."
-
-msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr "Această setare, când este activată, introduce un întârziere aleatoare de pong de până la 50ms pentru toate serverele activate pentru ping găzduite de router. Implicit, este dezactivată. [Este necesară repornirea]"
-
-msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr "Această setare, atunci când este activată, modifică întârzierea de pong aleatoare maximă adițională introdusă pentru serverele activate pentru ping, dacă <code>i2p.streaming.enablePongDelay</code> este, de asemenea, activat. Dacă nu este setată în mod explicit, se va folosi valoarea implicită de 50ms."
-
-msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
-msgstr "Această setare (în milisecunde) determină cât timp poate rămâne un pachet în coada CoDel înainte ca acesta să fie eliminat. Implicit, este de 1000ms. [Este necesară repornirea]"
-
-msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
-msgstr "Această setare determină numărul maxim de mesaje din coada de ieșire înainte ca aceasta să fie marcată ca fiind plină. [Implicit este 768]"
-
-msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
-msgstr "Această setare determină numărul maxim de mesaje peste valoarea maximă permisă a cozii înainte ca mesajele ulterioare să fie eliminate. [Implicit este 128]"
-
-msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
-msgstr "Această setare (în milisecunde) vă permite să configurați manual valoarea țintă a întârzierii cozii pentru sistemul de gestionare a cozii CoDel. Valoarea implicită este de 50 ms. [Este necesar repornirea]"
-
-msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
-msgstr "Această setare (în ore) determină cât de veche este o RouterInfo din NetDb (ultima dată cunoscută de publicare) înainte de a fi clasificată ca învechită și ștearsă. [Valoarea implicită este de 28 ore, cu excepția cazului în care routerul este un Floodfill, în acest caz valoarea implicită este de 8 ore]"
-
-msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
-msgstr "Această setare determină numărul de peer-uri de explorat în paralel atunci când rulează Job pentru explorarea peer-ului [valoarea implicită este de 1 peer la nivel de timp când sunt cunoscuți mai mult de 3000 de peer-i]. Rețineți că mărirea acestei valori va crește cerințele de bandă pentru explorare și setarea acestei valori prea mari poate provoca o întârziere excesivă a mesajelor și poate interfera cu alte servicii, așa că utilizați cu atenție!"
-
-msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
-msgstr "Această setare determină numărul de bălți NetDb DHT pe care le va utiliza Jobul pentru explorarea peer-ului atunci când rulează. În mod implicit, numărul de bălți de explorat va varia în funcție dacă routerul a rulat mai mult de o oră, dacă routerul este ascuns sau se află în grupa de bandă a K și numărul de routere cunoscute."
-
-msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
-msgstr "Această setare (în secunde) vă permite să anulați întârzierea între rulările Jobului de explorare a perechilor care încearcă să găsească noi colegi pentru a adăuga la NetDb. Jobul rulează la fiecare 80 de secunde în mod implicit sau, dacă routerul experimentează o întârziere a jobului sau a mesajelor, la fiecare 3 minute. Dacă dimensiunea NetDb atinge 4000 de colegi, pauza va crește la 15 minute. Puteți dori să măriți întârzierea dacă NetDb este bine populat (peste 2000 de colegi) sau dacă doriți să reduceți utilizarea globală a lățimii de bandă. Notă: Pentru ruterele Floodfill, acest job nu rulează."
-
-msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
-msgstr "Această setare determină numărul maxim de hash-uri de collegiu care să fie puse în coadă pentru explorare. În I2P, maximul este de 128, iar în I2P+ valoarea implicită este de 512."
-
-msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
-msgstr "Această setare determină dacă un router care acționează ca floodfill va explora NetDb pentru a afla despre noi colegi. [Valoarea implicită este falsă, este necesară repornirea]"
-
-msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
-msgstr "Această setare, atunci când este setată pe adevărat, împiedică un router să comunice direct cu alte routere, forțând utilizarea introducerilor. [Valoarea implicită este falsă, cu excepția cazului în care routerul se află în mod ascuns]"
-
-msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
-msgstr "Această setare vă permite să excludeți ruterele mai vechi din NetDb. Ruterele mai vechi de valoarea implicită sau cea setată vor fi șterse din NetDb și interzise pe durata sesiunii ruterului. În mod implicit, sunt excluse ruterele mai vechi de 0.9.20. Notă: începând cu versiunea I2P+ 0.9.46+, sunt folosite numai rutere care rulează versiunile recente pentru construirea tunelurilor locale. [Este necesară repornirea]"
-
 msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. [Default is 4]"
 msgstr "Această setare determină numărul de teste peer care vor rula simultan, folosite pentru determinarea latentei peer-ului. [Valoarea implicită este 4]"
 
@@ -5867,14 +5910,17 @@ msgstr "Această setare determină dacă statisticile despre routerul nostru sun
 msgid "This setting configures the initial size of the outbound message queue. [Default is 64]"
 msgstr "Această setare configurează dimensiunea inițială a cozii de mesaje de ieșire. [Valoarea implicită este 64]"
 
-msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
-msgstr "Această setare configurează dimensiunea maximă a cozii de mesaje de intrare. [Valoarea implicită este 1024]"
-
 msgid "This setting configures the maximum number of inbound messages queued per cycle (pump). [Default is 24]"
 msgstr "Această setare configurează numărul maxim de mesaje de intrare aflate în așteptare per ciclu (pompa). [Valoarea implicită este 24]"
 
+msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
+msgstr "Această setare configurează dimensiunea maximă a cozii de mesaje de intrare. [Valoarea implicită este 1024]"
+
 msgid "This setting configures the maximum number of outbound messages queued per cycle (pump). [Default is 64]"
 msgstr "Această setare configurează numărul maxim de mesaje de ieșire aflate în așteptare per ciclu (pompa). [Valoarea implicită este 64]"
+
+msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
+msgstr "Dacă este setat pe true, routerul își va schimba identitatea și portul UDP când acesta repornește, apoi va șterge cheia din router.config pentru a preveni alte modificări. [Valoarea implicită este false]"
 
 msgid "This setting (in milliseconds) allows you to manually configure the delay between router refresh updates run by the Refresh Routers Job. By default the pause between refreshes is determined by the size of the NetDb, and introduces some randomness in the timing to mitigate traffic analysis. For values lower than 2000 milliseconds, increasing the value of <code>router.refreshTimeout</code> is recommended. Note that setting this value below 2000 milliseconds will increase your network traffic and may introduce job lag, and is not recommended for sustained use."
 msgstr "Această setare (în milisecunde) vă permite să configurați manual intervalul dintre actualizările de reîmprospătare a rutereului executate de jobul Refresh Routers. În mod implicit, pauza dintre reîmprospătări este determinată de dimensiunea NetDb și introduce o anumită aleatorietate în programare pentru a atenua analiza traficului. Pentru valori mai mici de 2000 milisecunde, se recomandă creșterea valorii <code>router.refreshTimeout</code>. Rețineți că setarea acestei valori sub 2000 milisecunde va crește traficul rețelei și poate introduce întârzieri în job, fiind, prin urmare, nerecomandată pentru o utilizare susținută."
@@ -5888,26 +5934,56 @@ msgstr "Această setare (în secunde) vă permite să configurați manual timpul
 msgid "This setting determines whether routers classified as uninteresting (K or L tier, unreachable or older than 0.9.50) are checked during the refresh router process after 1 hour of uptime. [Default is false]"
 msgstr "Această setare determină dacă ruterele clasificate ca fiind neinteresante (nivel K sau L, inaccesibile sau mai vechi de 0.9.50) sunt verificate în timpul procesului de reîmprospătare a rutereului după 1 oră de uptime. [Valoarea implicită este falsă]"
 
+msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
+msgstr ""
+
+msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
+msgstr "Când este configurat, stabilește o limită strictă pentru numărul de tuneluri pe care routerul are voie să le construiască în mod concomitent. În mod implicit, routerul utilizează timpul mediu de construire și lățimea de bandă de ieșire curentă pentru a determina rata de construire optimă. [Este necesară repornirea]"
+
+msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
+msgstr "Dacă doriți să instalați actualizări I2P nesemnate (.zip), aceasta trebuie adăugată în fișierul dvs. <code>router.config</code> cu excepția cazului în care ați configurat deja <code>routerconsole.advanced=true</code>, caz în care această opțiune este deja preconfigurată. Notă: începând cu I2P+ 0.9.48+, instalarea <a href=/configupdate#i2pupdates>actualizărilor nesemnate</a> este activată în mod implicit."
+
+msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
+msgstr "Această setare vă permite să configurați URL-ul de actualizare pentru funcția de actualizare nesemnată, dacă este activată. URL-ul trebuie să se încheie cu <code>/i2pupdate.zip</code>. Notă: nu instalați actualizări nesemnate decât dacă aveți încredere în sursa actualizării!"
+
 msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
 msgstr "Această setare (în minute) vă permite să configurați manual cât timp să se aștepte după pornirea routerelor RouterInfos în NetDb până când numai ruterele valide vor fi acceptate pentru includere. În momentul în care are loc validarea, RouterInfos expirate și peerii neaccesibili doar prin SSU vor fi eliminate din NetDb. [Implicit este de 60 de minute] Notă: Această setare nu are nicio influență asupra routerelor mai vechi (mai vechi de 0.9.29 implicit) care sunt eliminate din NetDb și interzise pentru sesiunea routerului din momentul în care se încearcă stocarea în NetDb."
 
-msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
-msgstr "Această setare, când este setată la adevărat, va afișa un rezumat al testului de vârf mediu în secțiunea Congestion a barei laterale, calculat prin adăugarea mediei testului de vârf reușit și a timpului mediu excesiv petrecut de testele eșuate. Valoarea medie poate fi utilizată ca ghid pentru determinarea valorii optime a <code>router.peerTestTimeout</code>. [Implicit este fals]"
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
+msgstr ""
 
-msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
-msgstr "Această setare, când este setată la adevărat, va afișa linkurile <i>Sites of Interest</i> în <a href=/sitemap>harta site-ului</a>. [Implicit este fals]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
+msgstr ""
 
-msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr "Această setare permite stabilirea unui prefix de text personalizat pentru titlul paginii pe paginile consolei routerului, potrivit în cazul în care aveți mai multe consolide deschise pe taburile browserului și doriți o metodă simplă de a le diferenția."
+msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
+msgstr "Această setare permite dezactivarea testelor SSU pentru a determina dacă router-ul dvs. are firewall și poate fi activat pentru ruterele care cu siguranță nu sunt firewall, dar întâmpină probleme de firewall intermitente. În cazul în care testarea este dezactivată, atât SSU, cât și NTCP ar trebui să raporteze adresa IP publică curentă pe pagina <a href=/info>informațiilor despre router</a>. [Necesită repornire]"
 
-msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
-msgstr "Această setare permite configurarea serverelor alternative NTP necesare pentru a asigura că routerul dvs. menține ora exactă. [Implicit este 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
+msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
+msgstr "Această setare determină care transport are prioritate în comunicarea cu colegii de rețea. În mod implicit, NTCP este preferat în defavoarea UDP (SSU). Setând valoarea pe true, UDP va fi preferat astfel dacă există deja o conexiune NTCP preexistentă; când este setat întotdeauna, UDP va fi utilizat întotdeauna indiferent dacă există o conexiune NTCP preexistentă. [Implicit este false]"
+
+msgid "miscellaneous"
+msgstr ""
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "Dacă este setat la adevărat, această opțiune va plasa un icon în bara de sistem / zona de notificare, cu opțiuni de control ale serviciului de bază. [Dezactivat în mod implicit]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
 msgstr "Această setare permite configurarea numărului maxim de fișiere pe torrent pe care I2PSnark îl va permite, în momentul descărcării sau creării unui torrent. Rețineți că creșterea semnificativă a acestei valori față de valoarea implicită de 2000 de fișiere poate necesita o configurare suplimentară pe sistemul gazdă pentru a crește numărul maxim de fișiere deschise pe care sistemul de operare îl va permite (de exemplu, <code>ulimit -n</code> pe Linux). Pentru a efectua modificarea, adăugați în fișierul de configurare a I2PSnark <code>i2psnark.config</code>. [Este necesară repornirea I2PSnark sau a routerului]"
+
+msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
+msgstr "Această setare specifică tunelului vă permite să activați sau dezactivați răspunsuri la ping-urile trimise la serverele găzduite de router. Pentru a dezactiva ping-urile, trebuie să adăugați linia <code>i2p.streaming.answerPings=false</code> în secțiunea <i>Opțiuni personalizate</i> pentru configurația serverului în Managerul de Tunel."
+
+msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
+msgstr "Această setare, când este activată, introduce un întârziere aleatoare de pong de până la 50ms pentru toate serverele activate pentru ping găzduite de router. Implicit, este dezactivată. [Este necesară repornirea]"
+
+msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
+msgstr "Această setare, atunci când este activată, modifică întârzierea de pong aleatoare maximă adițională introdusă pentru serverele activate pentru ping, dacă <code>i2p.streaming.enablePongDelay</code> este, de asemenea, activat. Dacă nu este setată în mod explicit, se va folosi valoarea implicită de 50ms."
+
+msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
+msgstr "Când este setat pe true, I2P rulează fără conectivitate la rețea, ceea ce este util dacă reporniți constant router-ul pentru a testa actualizări de cod, deoarece acest lucru previne întreruperea rețelei."
+
+msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
+msgstr "Această setare permite configurarea serverelor alternative NTP necesare pentru a asigura că routerul dvs. menține ora exactă. [Implicit este 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 
 msgid "Recent I2P+ Changes"
 msgstr "Modificări recente ale I2P+"
@@ -6124,6 +6200,18 @@ msgstr "Pentru atât non-SSL, cât și SSL"
 
 msgid "For SSL only"
 msgstr "Doar pentru SSL"
+
+msgid "How can I configure the console and web services to be accessible on my local network?"
+msgstr ""
+
+msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
+msgstr ""
+
+msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
+msgstr ""
+
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager’s configuration section using the <i>reachable by</i> dropdown."
+msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Cum mă pot conecta la IRC în I2P?"
@@ -7384,9 +7472,6 @@ msgstr "Peers de rețea"
 msgid "peer profiles"
 msgstr "profiluri parteneri"
 
-msgid "Peer Profiles"
-msgstr "Profiluri de la egal la egal"
-
 msgid "Session Banned Peers"
 msgstr "Sesiunea de colegii interzise"
 
@@ -7603,6 +7688,9 @@ msgstr "Comută tunelurile"
 msgid "Peer Profile"
 msgstr "Profil partener"
 
+msgid "Profile View"
+msgstr ""
+
 msgid "Profile for peer"
 msgstr "Profil pentru egal"
 
@@ -7740,6 +7828,35 @@ msgstr "Finalizat"
 
 
 
+
+
 #, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

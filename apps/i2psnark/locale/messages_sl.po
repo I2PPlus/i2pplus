@@ -23,6 +23,12 @@ msgstr "Povezava z I2P ni mogoča"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Napaka pri povezovanju z I2P - preverite nastavitve I2CP!"
 
+msgid "Download already running: "
+msgstr ""
+
+msgid "Downloading"
+msgstr "Prenos"
+
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "Nastavitev I2PSnark z možnostmi I2CP"
 
@@ -466,12 +472,23 @@ msgid "Anonymous BitTorrent Client"
 msgstr "Nepoznat BitTorrent odjemalnik"
 
 #, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr ""
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr ""
+
+#, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "Ali ste prepričani, da želite izbrisati datoteko \\''{0}\\'' (preneseni podatki ne bodo izbrisani)?"
 
+msgid "Note: Downloaded data will not be deleted."
+msgstr ""
+
 #, java-format
-msgid "Are you sure you want to delete torrent file {0} and all downloaded data?"
-msgstr "Ali ste prepričani, da želite izbrisati torrent \\''{0}\\'' in vse prenesene podatke?"
+msgid "Deleting {0} and associated metadata only..."
+msgstr ""
 
 msgid "I2PSnark has stopped"
 msgstr "I2PSnark je ustal"
@@ -484,6 +501,9 @@ msgstr "Torrenti"
 
 msgid "Refresh page"
 msgstr "Osveži stran"
+
+msgid "Configure"
+msgstr "Nastavi"
 
 msgid "Forum"
 msgstr "Foruma"
@@ -524,36 +544,6 @@ msgstr "osveževanje strani"
 
 msgid "Warning - No I2P"
 msgstr "Opozorilo - Ni I2P"
-
-msgid "Search"
-msgstr "Iskanje"
-
-msgid "Show All"
-msgstr "Pokaži vse"
-
-msgid "Active"
-msgstr "Aktivni"
-
-msgid "Inactive"
-msgstr "Neaktivni"
-
-msgid "Connected"
-msgstr "Povezan"
-
-msgid "Downloading"
-msgstr "Prenos"
-
-msgid "Seeding"
-msgstr "Sejanje"
-
-msgid "Complete"
-msgstr "Končano"
-
-msgid "Incomplete"
-msgstr "Nekončano"
-
-msgid "Stopped"
-msgstr "Ustavljeno"
 
 msgid "Status"
 msgstr "Stanje"
@@ -634,9 +624,6 @@ msgstr "Torrentov ni najdenih."
 msgid "No torrents loaded."
 msgstr "Ni naloženih torrentov."
 
-msgid "Totals"
-msgstr "Vsota"
-
 #, java-format
 msgid "1 torrent"
 msgid_plural "{0} torrents"
@@ -645,13 +632,8 @@ msgstr[1] "{0} torrenti"
 msgstr[2] "{0} torrentov"
 msgstr[3] "{0} torrentov"
 
-#, java-format
-msgid "1 connected peer"
-msgid_plural "{0} connected peers"
-msgstr[0] "{0} povezan sosed"
-msgstr[1] "{0} povezani sosedovi"
-msgstr[2] "{0} povezanih sosedov"
-msgstr[3] "{0} povezanih sosedov"
+msgid "Total size of loaded torrents"
+msgstr ""
 
 #, java-format
 msgid "1 DHT peer"
@@ -661,17 +643,17 @@ msgstr[1] "{0} DHT sosedovi"
 msgstr[2] "{0} DHT sosedov"
 msgstr[3] "{0} DHT sosedov"
 
-msgid "Configured maximum (actual usage may be less)"
-msgstr "Nastavljen maksimum (resnično uporaba lahko ni manj)"
+msgid "Active downloads"
+msgstr ""
 
-msgid "Tunnels"
-msgstr "Tuneli"
+msgid "Active uploads"
+msgstr ""
 
-msgid "in"
-msgstr "v"
+msgid "Active Inbound tunnels"
+msgstr ""
 
-msgid "out"
-msgstr "iz"
+msgid "Active Outbound tunnels"
+msgstr ""
 
 msgid "Estimated download time for all torrents"
 msgstr "Ocena časa za prenos vseh torrentov"
@@ -688,17 +670,41 @@ msgstr "Skupni podatki, ki so bili pošiljani (za navedene torrente)"
 msgid "Total upload speed"
 msgstr "Skupna hitrost pošiljanja"
 
-msgid "Enable Debug Mode"
-msgstr "Omogoči način razhroščanja"
-
-msgid "Disable Debug Mode"
-msgstr "Onemogoči način razhroščanja"
+msgid "Toggle Debug Mode"
+msgstr ""
 
 msgid "Normal Mode"
 msgstr "Normalni način"
 
 msgid "No DHT Peers"
 msgstr "Ni DHT sosedov"
+
+msgid "Search"
+msgstr "Iskanje"
+
+msgid "Show All"
+msgstr "Pokaži vse"
+
+msgid "Active"
+msgstr "Aktivni"
+
+msgid "Inactive"
+msgstr "Neaktivni"
+
+msgid "Connected"
+msgstr "Povezan"
+
+msgid "Seeding"
+msgstr "Sejanje"
+
+msgid "Complete"
+msgstr "Končano"
+
+msgid "Incomplete"
+msgstr "Nekončano"
+
+msgid "Stopped"
+msgstr "Ustavljeno"
 
 msgid "First"
 msgstr "Prvi"
@@ -1059,9 +1065,6 @@ msgstr "Da boste ročno spreminjali teme, onemogočite univerzalno tematizacijo"
 msgid "Universal theming is enabled."
 msgstr "Univerzalna tematizacija je omogočena."
 
-msgid "Configure"
-msgstr "Nastavi"
-
 msgid "Refresh time"
 msgstr "Čas osveževanja"
 
@@ -1082,12 +1085,6 @@ msgstr "torrenti"
 
 msgid "Language"
 msgstr "Jezik"
-
-msgid "Smart torrent sorting"
-msgstr "Pametno ureditev torrentov"
-
-msgid "Ignore words such as 'a' and 'the' when sorting"
-msgstr "Pri ureditvi prezrite besede kot so 'a' in 'the'"
 
 msgid "Collapsible panels"
 msgstr "Strisnevi paneli"
@@ -1325,6 +1322,15 @@ msgstr "Ta nastavitev določa maksimalno število odprtnih tunelov, ki je določ
 msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
 msgstr "Sprememba nastavitve na manj kot 3 skoka lahko izboljša hitrost, vendar na strošek anonimnosti, kar ni priporočljivo"
 
+msgid "Sequential piece or file order not saved - feature currently broken."
+msgstr ""
+
+msgid "Unknown command"
+msgstr ""
+
+msgid "Please retry form submission (bad nonce)"
+msgstr ""
+
 msgid "Info hash"
 msgstr "Informacijski hash"
 
@@ -1509,3 +1515,14 @@ msgstr "Shrani spremembe"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent mora biti ustavljen"
+
+#, java-format
+
+
+
+
+
+
+
+
+

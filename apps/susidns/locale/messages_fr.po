@@ -130,17 +130,14 @@ msgid_plural "{0} destinations deleted."
 msgstr[0] "1 destination a été supprimée."
 msgstr[1] "{0} destinations ont été supprimées."
 
-msgid "No entries selected to delete."
-msgstr "Aucune entrée n’a été sélectionnée pour suppression."
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "Ajouter un substitut"
 
 msgid "Address book saved."
 msgstr "Le carnet d’adresses a été enregistré."
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "Quittez ce carnet d'adresses et revenez pour voir la mise à jour."
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "ERREUR : Impossible d’écrire dans le fichier du carnet d’adresses."
@@ -321,6 +318,9 @@ msgstr "Marquer pour suppression"
 msgid "Cancel"
 msgstr "Annuler"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "par ex. newdomain.i2p"
 
@@ -398,6 +398,9 @@ msgstr "Fichier dans lequel enregistrer l'activité (remplacez par /dev/null si 
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Nom du thème de remplacement à utiliser (par défaut, thème sélectionné par la console)"
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "carnet d’adresses"
@@ -593,3 +596,5 @@ msgstr "les adresses ajoutées manuellement à votre carnet d'adresses principal
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Les hôtes que vous recevez de vos abonnements seront fusionnés avec le carnet d'adresses de votre routeur.Les hôtes que vous recevez de vos abonnements seront fusionnés avec votre Carnet d'adresses du routeur"
+
+

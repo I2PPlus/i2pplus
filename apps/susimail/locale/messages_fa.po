@@ -257,14 +257,14 @@ msgstr "خطا در ارسال ایمیل"
 msgid "Mail sent."
 msgstr "ایمیل ارسال شد."
 
-msgid "Send"
-msgstr "ارسال"
+msgid "Cancel"
+msgstr "لغو کردن"
 
 msgid "Save as Draft"
 msgstr "ذخیره سازی به صورت پیشنویس"
 
-msgid "Cancel"
-msgstr "لغو کردن"
+msgid "Send"
+msgstr "ارسال"
 
 msgid "From"
 msgstr "از"

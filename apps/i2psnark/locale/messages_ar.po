@@ -23,6 +23,12 @@ msgstr "غير قادر على الاتصال بـ I2P"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "فشل في الاتصال ب I2P - تخقق من اعدادات I2CP !"
 
+msgid "Download already running: "
+msgstr ""
+
+msgid "Downloading"
+msgstr "جارى التحميل"
+
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "تكوين I2PSnark مع خيارات I2CP"
 
@@ -466,12 +472,23 @@ msgid "Anonymous BitTorrent Client"
 msgstr "عميل تورنت مجهول"
 
 #, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr ""
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr ""
+
+#, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "هل أنت متأكد أنك تريد حذف الملف \\''{0}\\'' (لن يتم حذف البيانات التي تم تنزيلها)؟"
 
+msgid "Note: Downloaded data will not be deleted."
+msgstr ""
+
 #, java-format
-msgid "Are you sure you want to delete torrent file {0} and all downloaded data?"
-msgstr "هل أنت متأكد من حذف التورنت \\''{0}\\'' وجمبع البيانات المحملة؟"
+msgid "Deleting {0} and associated metadata only..."
+msgstr ""
 
 msgid "I2PSnark has stopped"
 msgstr "توقف I2PSnark"
@@ -484,6 +501,9 @@ msgstr "تورنت"
 
 msgid "Refresh page"
 msgstr "أنعش الصفحة"
+
+msgid "Configure"
+msgstr "الضبط"
 
 msgid "Forum"
 msgstr "المنتدى"
@@ -524,36 +544,6 @@ msgstr "تحديث الصفحة"
 
 msgid "Warning - No I2P"
 msgstr "تحذير - لا I2P"
-
-msgid "Search"
-msgstr "يبحث"
-
-msgid "Show All"
-msgstr "عرض الكل"
-
-msgid "Active"
-msgstr "نشط"
-
-msgid "Inactive"
-msgstr "غير نشط"
-
-msgid "Connected"
-msgstr "متصل"
-
-msgid "Downloading"
-msgstr "جارى التحميل"
-
-msgid "Seeding"
-msgstr "بشارك"
-
-msgid "Complete"
-msgstr "اكتمل"
-
-msgid "Incomplete"
-msgstr "غير مكتمل"
-
-msgid "Stopped"
-msgstr "متوقف"
 
 msgid "Status"
 msgstr "الحالة"
@@ -634,9 +624,6 @@ msgstr "لم يتم العثور على السيول."
 msgid "No torrents loaded."
 msgstr "لم يحمل تورنت."
 
-msgid "Totals"
-msgstr "مجموع"
-
 #, java-format
 msgid "1 torrent"
 msgid_plural "{0} torrents"
@@ -647,15 +634,8 @@ msgstr[3] "{0} السيول"
 msgstr[4] "{0} السيول"
 msgstr[5] "{0} السيول"
 
-#, java-format
-msgid "1 connected peer"
-msgid_plural "{0} connected peers"
-msgstr[0] "0 أقران متصلون"
-msgstr[1] "1 نظير متصل"
-msgstr[2] "{0} أقران متصلون"
-msgstr[3] "{0} أقران متصلون"
-msgstr[4] "{0} أقران متصلون"
-msgstr[5] "{0} أقران متصلون"
+msgid "Total size of loaded torrents"
+msgstr ""
 
 #, java-format
 msgid "1 DHT peer"
@@ -667,17 +647,17 @@ msgstr[3] "{0} أقران DHT"
 msgstr[4] "{0} أقران DHT"
 msgstr[5] "{0} أقران DHT"
 
-msgid "Configured maximum (actual usage may be less)"
-msgstr "الحد الأقصى الذي تم تكوينه (قد يكون الاستخدام الفعلي أقل)"
+msgid "Active downloads"
+msgstr ""
 
-msgid "Tunnels"
-msgstr "الأنفاق"
+msgid "Active uploads"
+msgstr ""
 
-msgid "in"
-msgstr "في"
+msgid "Active Inbound tunnels"
+msgstr ""
 
-msgid "out"
-msgstr "خارج"
+msgid "Active Outbound tunnels"
+msgstr ""
 
 msgid "Estimated download time for all torrents"
 msgstr "وقت التنزيل المقدر لجميع السيول"
@@ -694,17 +674,41 @@ msgstr "إجمالي البيانات التي تم تحميلها (للسيول
 msgid "Total upload speed"
 msgstr "سرعة التحميل الكلية"
 
-msgid "Enable Debug Mode"
-msgstr "تمكين وضع التصحيح"
-
-msgid "Disable Debug Mode"
-msgstr "تعطيل وضع التصحيح"
+msgid "Toggle Debug Mode"
+msgstr ""
 
 msgid "Normal Mode"
 msgstr "الوضع العادي"
 
 msgid "No DHT Peers"
 msgstr "لا يوجد أقران DHT"
+
+msgid "Search"
+msgstr "يبحث"
+
+msgid "Show All"
+msgstr "عرض الكل"
+
+msgid "Active"
+msgstr "نشط"
+
+msgid "Inactive"
+msgstr "غير نشط"
+
+msgid "Connected"
+msgstr "متصل"
+
+msgid "Seeding"
+msgstr "بشارك"
+
+msgid "Complete"
+msgstr "اكتمل"
+
+msgid "Incomplete"
+msgstr "غير مكتمل"
+
+msgid "Stopped"
+msgstr "متوقف"
 
 msgid "First"
 msgstr "اﻷول"
@@ -1069,9 +1073,6 @@ msgstr "لتغيير السمات يدويًا، قم بتعطيل السمات 
 msgid "Universal theming is enabled."
 msgstr "تم تمكين السمات العالمية."
 
-msgid "Configure"
-msgstr "الضبط"
-
 msgid "Refresh time"
 msgstr "وقت التحديث"
 
@@ -1092,12 +1093,6 @@ msgstr "السيول"
 
 msgid "Language"
 msgstr "اللغة"
-
-msgid "Smart torrent sorting"
-msgstr "الفرز الذكي للسيل"
-
-msgid "Ignore words such as 'a' and 'the' when sorting"
-msgstr "تجاهل الكلمات مثل \"a\" و\"the\" عند الفرز"
 
 msgid "Collapsible panels"
 msgstr "ألواح قابلة للطي"
@@ -1339,6 +1334,15 @@ msgstr "يقوم هذا بتكوين الحد الأقصى لعدد الأنفا
 msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
 msgstr "تغيير هذا الإعداد إلى أقل من 3 قفزات قد يؤدي إلى تحسين السرعة على حساب عدم الكشف عن هويته ولا ينصح به"
 
+msgid "Sequential piece or file order not saved - feature currently broken."
+msgstr ""
+
+msgid "Unknown command"
+msgstr ""
+
+msgid "Please retry form submission (bad nonce)"
+msgstr ""
+
 msgid "Info hash"
 msgstr "تجزئة المعلومات"
 
@@ -1525,3 +1529,14 @@ msgstr "حفظ التغييرات"
 
 msgid "Torrent must be stopped"
 msgstr "يجب إيقاف السيل"
+
+#, java-format
+
+
+
+
+
+
+
+
+

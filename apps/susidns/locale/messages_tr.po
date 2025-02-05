@@ -130,17 +130,14 @@ msgid_plural "{0} destinations deleted."
 msgstr[0] "1 hedef silindi."
 msgstr[1] "{0} hedef silindi."
 
-msgid "No entries selected to delete."
-msgstr "Silinmek için seçilmiş bir kayıt yok."
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "Alternatif Ekle"
 
 msgid "Address book saved."
 msgstr "Adres defteri kaydedildi."
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "Bu adres defterinden göz atın ve güncellemeyi görmek için geri dönün."
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "HATA: Adres defteri dosyasına yazılamadı."
@@ -321,6 +318,9 @@ msgstr "Silmek üzere işaretleyin"
 msgid "Cancel"
 msgstr "İptal"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "ör. newdomain.i2p"
 
@@ -398,6 +398,9 @@ msgstr "Etkinliğin kaydedileceği dosya (isterseniz /dev/null olarak değiştir
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Kullanılacak geçersiz kılma temasının adı (varsayılan olarak konsol tarafından seçilen temadır)"
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "adres defteri"
@@ -593,3 +596,5 @@ msgstr "Ana adres defterinize manuel olarak eklenen adresler, Yönlendirici adre
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Aboneliklerinizden aldığınız ana bilgisayarlar Yönlendiricinizin adres defteriyle birleşecek.Aboneliklerden gelen sunucular Yöneltici adres defteriniz ile birleştirilir."
+
+

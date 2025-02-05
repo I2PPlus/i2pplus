@@ -257,14 +257,14 @@ msgstr "Fejl ved afsendelse af mail"
 msgid "Mail sent."
 msgstr "Mail sendt."
 
-msgid "Send"
-msgstr "Send"
+msgid "Cancel"
+msgstr "Annuller"
 
 msgid "Save as Draft"
 msgstr "Gem som kladde"
 
-msgid "Cancel"
-msgstr "Annuller"
+msgid "Send"
+msgstr "Send"
 
 msgid "From"
 msgstr "Fra"

@@ -257,13 +257,13 @@ msgstr ""
 msgid "Mail sent."
 msgstr ""
 
-msgid "Send"
+msgid "Cancel"
 msgstr ""
 
 msgid "Save as Draft"
 msgstr ""
 
-msgid "Cancel"
+msgid "Send"
 msgstr ""
 
 msgid "From"

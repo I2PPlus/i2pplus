@@ -23,6 +23,12 @@ msgstr "I2P के साथ कनेक्शन नहीं सकता।"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "I2P कनेक्शन में त्रुटि - अपने I2CP सेटिंग की जाँच करें!"
 
+msgid "Download already running: "
+msgstr ""
+
+msgid "Downloading"
+msgstr " डाउनलोड कर रहा है"
+
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "I2CP विकल्पों के साथ I2PSnark की संरचना करना"
 
@@ -466,12 +472,23 @@ msgid "Anonymous BitTorrent Client"
 msgstr "अनाम बिटटॉरेंट क्लाइंट"
 
 #, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr ""
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr ""
+
+#, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "क्या आप सुनिश्चित हैं कि आप फ़ाइल {0} को हटाना चाहते हैं? (डाउनलोड की डेटा नहीं हटाई जाएगी)"
 
+msgid "Note: Downloaded data will not be deleted."
+msgstr ""
+
 #, java-format
-msgid "Are you sure you want to delete torrent file {0} and all downloaded data?"
-msgstr "{0} टॉरेंट और सभी डाउनलोड की डेटा को हटाने की यकीन है?"
+msgid "Deleting {0} and associated metadata only..."
+msgstr ""
 
 msgid "I2PSnark has stopped"
 msgstr "I2PSnark रोक दिया गया है"
@@ -484,6 +501,9 @@ msgstr "टॉरेंट्स"
 
 msgid "Refresh page"
 msgstr "पेज ताज़ा करें"
+
+msgid "Configure"
+msgstr "सेटिंग करें"
 
 msgid "Forum"
 msgstr "फ़ॉरम"
@@ -524,36 +544,6 @@ msgstr " पेज ताजा करें"
 
 msgid "Warning - No I2P"
 msgstr "सचेतना - कोई I2P नहीं"
-
-msgid "Search"
-msgstr " खोजें"
-
-msgid "Show All"
-msgstr " सभी दिखाएं"
-
-msgid "Active"
-msgstr " सक्रिय"
-
-msgid "Inactive"
-msgstr " निष्क्रिय"
-
-msgid "Connected"
-msgstr " जुड़ा हुआ"
-
-msgid "Downloading"
-msgstr " डाउनलोड कर रहा है"
-
-msgid "Seeding"
-msgstr " सीडिंग"
-
-msgid "Complete"
-msgstr " पूर्ण"
-
-msgid "Incomplete"
-msgstr "अपूर्ण"
-
-msgid "Stopped"
-msgstr " रुका"
 
 msgid "Status"
 msgstr " स्थिति"
@@ -634,20 +624,14 @@ msgstr "कोई टॉरेंट नहीं मिला।"
 msgid "No torrents loaded."
 msgstr "कोई टॉरेंट लोड नहीं किया गया।"
 
-msgid "Totals"
-msgstr "कुल"
-
 #, java-format
 msgid "1 torrent"
 msgid_plural "{0} torrents"
 msgstr[0] "{0} टॉरेंट"
 msgstr[1] "{0} टॉरेंट"
 
-#, java-format
-msgid "1 connected peer"
-msgid_plural "{0} connected peers"
-msgstr[0] "{0} जुड़ा पीयर"
-msgstr[1] "{0} जुड़े पीयर"
+msgid "Total size of loaded torrents"
+msgstr ""
 
 #, java-format
 msgid "1 DHT peer"
@@ -655,17 +639,17 @@ msgid_plural "{0} DHT peers"
 msgstr[0] "{0} DHT पीयर"
 msgstr[1] "{0} DHT पीयर"
 
-msgid "Configured maximum (actual usage may be less)"
-msgstr "निर्धारित मैक्सिमम (वास्तविक उपयोग कम हो सकता है)"
+msgid "Active downloads"
+msgstr ""
 
-msgid "Tunnels"
-msgstr "टंनल"
+msgid "Active uploads"
+msgstr ""
 
-msgid "in"
-msgstr "अंदर"
+msgid "Active Inbound tunnels"
+msgstr ""
 
-msgid "out"
-msgstr "बाहर"
+msgid "Active Outbound tunnels"
+msgstr ""
 
 msgid "Estimated download time for all torrents"
 msgstr "सभी टॉरेंट के लिए अनुमानित डाउनलोड समय"
@@ -682,17 +666,41 @@ msgstr "कुल डेटा अपलोड किया गया (सूच
 msgid "Total upload speed"
 msgstr "कुल अपलोड गति"
 
-msgid "Enable Debug Mode"
-msgstr "डिबग मोड सक्षम करें"
-
-msgid "Disable Debug Mode"
-msgstr "डिबग मोड अक्षम करें"
+msgid "Toggle Debug Mode"
+msgstr ""
 
 msgid "Normal Mode"
 msgstr "नॉर्मल मोड"
 
 msgid "No DHT Peers"
 msgstr "कोई DHT पीयर नहीं"
+
+msgid "Search"
+msgstr " खोजें"
+
+msgid "Show All"
+msgstr " सभी दिखाएं"
+
+msgid "Active"
+msgstr " सक्रिय"
+
+msgid "Inactive"
+msgstr " निष्क्रिय"
+
+msgid "Connected"
+msgstr " जुड़ा हुआ"
+
+msgid "Seeding"
+msgstr " सीडिंग"
+
+msgid "Complete"
+msgstr " पूर्ण"
+
+msgid "Incomplete"
+msgstr "अपूर्ण"
+
+msgid "Stopped"
+msgstr " रुका"
 
 msgid "First"
 msgstr "पहला"
@@ -1049,9 +1057,6 @@ msgstr "थीम मैनुअल रूप से बदलने के ल
 msgid "Universal theming is enabled."
 msgstr "व्यापक थीमिंग सक्रिय है।"
 
-msgid "Configure"
-msgstr "सेटिंग करें"
-
 msgid "Refresh time"
 msgstr "ताजा करने का समय"
 
@@ -1072,12 +1077,6 @@ msgstr "टॉरेंट"
 
 msgid "Language"
 msgstr "भाषा"
-
-msgid "Smart torrent sorting"
-msgstr "कुशल टॉरेंट सॉर्टिंग"
-
-msgid "Ignore words such as 'a' and 'the' when sorting"
-msgstr "सॉर्ट करते समय 'a', 'the' जैसे शब्दों को अनदेखा करें"
 
 msgid "Collapsible panels"
 msgstr "संकुचित पैनल"
@@ -1311,6 +1310,15 @@ msgstr "यह सेटिंग संबंधित पीयर की स�
 msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
 msgstr "इस सेटिंग को 3 हॉप से कम करने से गुप्तता के खाते में गति में सुधार हो सकता है, लेकिन यह सुझावित नहीं है"
 
+msgid "Sequential piece or file order not saved - feature currently broken."
+msgstr ""
+
+msgid "Unknown command"
+msgstr ""
+
+msgid "Please retry form submission (bad nonce)"
+msgstr ""
+
 msgid "Info hash"
 msgstr "जानकारी हैश"
 
@@ -1493,3 +1501,14 @@ msgstr "बदलाव सहेजें"
 
 msgid "Torrent must be stopped"
 msgstr "टॉरेंट को रोकना होगा"
+
+#, java-format
+
+
+
+
+
+
+
+
+

@@ -142,6 +142,9 @@ msgstr "İmza tipimiz üçün dəstək yoxdur"
 msgid "Unreachable on any transport"
 msgstr "Hər hansı bir nəqliyyatda əlçatmazdır"
 
+msgid "Cannot enumerate UPnP devices on Android."
+msgstr ""
+
 msgid "UPnP is not enabled"
 msgstr "UPnP aktiv deyil"
 
@@ -679,11 +682,39 @@ msgstr "Zəhmət olmasa xəbər verin"
 msgid "After reporting, please restart your router"
 msgstr "Məlumat verdikdən sonra ruterinizi yenidən başladın"
 
+msgid "Invalid form submission, requires POST"
+msgstr ""
+
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "Yanlış formanın təqdim edilməsi, ehtimal ki, brauzerinizdə 'geri' və ya 'yenidən yüklə' düyməsindən istifadə etdiyinizə görədir. Zəhmət olmasa, yenidən təqdim edin."
 
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Problem davam edərsə, brauzerinizdə kukilərin aktiv olduğunu yoxlayın."
+
+msgid "Bandwidth usage"
+msgstr "Bant genişliyi istifadəsi"
+
+#, java-format
+msgid "events in {0}"
+msgstr "{0} -da hadisələr"
+
+msgid "Events per period"
+msgstr "Hər dövr üzrə tədbirlər"
+
+msgid "Min"
+msgstr "Min"
+
+msgid "Max"
+msgstr "Maks"
+
+msgid "Avg"
+msgstr "Orta"
+
+msgid "Now"
+msgstr "İndi"
+
+msgid "Router restarted"
+msgstr "Ruter yenidən başlatıldı"
 
 #, java-format
 msgid "News last updated {0} ago."
@@ -716,31 +747,6 @@ msgstr[1] "{0} pluginlər yeniləndi"
 
 msgid "Plugin check complete"
 msgstr "Qoşmanın yoxlanması tamamlandı"
-
-msgid "Bandwidth usage"
-msgstr "Bant genişliyi istifadəsi"
-
-#, java-format
-msgid "events in {0}"
-msgstr "{0} -da hadisələr"
-
-msgid "Events per period"
-msgstr "Hər dövr üzrə tədbirlər"
-
-msgid "Min"
-msgstr "Min"
-
-msgid "Max"
-msgstr "Maks"
-
-msgid "Avg"
-msgstr "Orta"
-
-msgid "Now"
-msgstr "İndi"
-
-msgid "Router restarted"
-msgstr "Ruter yenidən başlatıldı"
 
 msgid "none"
 msgstr "heç biri"
@@ -810,8 +816,20 @@ msgstr "Konsol"
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "Router Konsolu üçün SSL-ə girişi aktivləşdirmək üçün ətraflı məlumat üçün <code></code> I2P tətbiq kataloqunuzda yerləşən şərh edilmiş clients.config faylına baxın. Kataloqda yerləşən RouterConsoleRunner konfiqurasiya faylını redaktə etməlisiniz: "
 
+msgid "Save disabled, edit the router.config file to make changes"
+msgstr ""
+
 msgid "Error updating the configuration - please see the error logs"
 msgstr "Konfiqurasiyanı yeniləməkdə xəta - xəta jurnallarına baxın"
+
+msgid "No changes made to the configuration"
+msgstr ""
+
+msgid "Note"
+msgstr "QEYD"
+
+msgid "Some changes may require a restart to take effect."
+msgstr "Bəzi dəyişikliklərin qüvvəyə minməsi üçün yenidən başlama tələb oluna bilər."
 
 msgid "Save Client Configuration"
 msgstr "Müştərinin Konfiqurasiyasını Saxla"
@@ -825,6 +843,9 @@ msgstr "Veb-tətbiqKonfiqurasiyasını Yaddaşda Saxla"
 msgid "Save Plugin Configuration"
 msgstr "Qoşma Konfiqurasiyasını Saxla"
 
+msgid "Plugins disabled"
+msgstr ""
+
 msgid "Install Plugin"
 msgstr "Qoşmanı quraşdırın"
 
@@ -833,6 +854,9 @@ msgstr "Fayldan Qoşmanı quraşdırın"
 
 msgid "Update All Installed Plugins"
 msgstr "Bütün Quraşdırılmış Qoşmaları Yeniləyin"
+
+msgid "Delete client disabled"
+msgstr ""
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -915,9 +939,18 @@ msgstr "Qoşma və ya yeniləmə endirimi artıq davam edir."
 msgid "Updating all plugins"
 msgstr "Bütün qoşmaların yenilənməsi"
 
+msgid "Update manager not registered, cannot install"
+msgstr ""
+
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "{0} -dan plagin quraşdırılır"
+
+msgid "Cannot install, check logs"
+msgstr ""
+
+msgid "Update manager not registered, cannot check"
+msgstr ""
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1016,6 +1049,19 @@ msgstr "Konfiqurasiya uğurla yadda saxlanıldı."
 msgid "Join Family"
 msgstr "Ailəyə qoşulun"
 
+msgid "Bad certificate - No Subject CN"
+msgstr ""
+
+msgid "Bad characters in Family: "
+msgstr ""
+
+#, java-format
+msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
+msgstr ""
+
+msgid "Family key configured for router family: "
+msgstr ""
+
 msgid "Load from file failed"
 msgstr "Fayldan yükləmə alınmadı"
 
@@ -1031,8 +1077,8 @@ msgstr "Element əlavə edin"
 msgid "Restore defaults"
 msgstr "Defoltları bərpa edin"
 
-msgid "Home page changed"
-msgstr "Əsas səhifə dəyişdirildi"
+msgid "Bad group detected, please retry"
+msgstr ""
 
 msgid "Restored default settings"
 msgstr "Defolt parametrlər bərpa edildi"
@@ -1064,6 +1110,9 @@ msgstr "Yanlış açar"
 msgid "Invalid destination"
 msgstr "Yanlış hədəf"
 
+msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
+msgstr ""
+
 #, java-format
 msgid "Key for {0} added to keyring"
 msgstr "{0} üçün açar açarlığa əlavə edildi"
@@ -1073,6 +1122,9 @@ msgstr "Axtarış parolu tələb olunur"
 
 msgid "Requires hostname, destination, or blinded Base32"
 msgstr "Host adı, təyinat yeri və ya korlanmış Base32 tələb olunur"
+
+msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
+msgstr ""
 
 msgid "Destination requires lookup password"
 msgstr "Təyinat üçün axtarış parolu tələb olunur"
@@ -1091,6 +1143,9 @@ msgstr "Açarı server operatoruna göndərin."
 
 msgid "Delete key"
 msgstr "Düyməni sil"
+
+msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
+msgstr ""
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1141,6 +1196,36 @@ msgstr "Kor"
 
 msgid "Log overrides updated"
 msgstr "Gündəlik qeydlər yeniləndi"
+
+msgid "Error updating the log limits - levels not valid"
+msgstr ""
+
+msgid "Log limits cleared"
+msgstr ""
+
+#, java-format
+msgid "Default log level updated from {0} to {1}"
+msgstr ""
+
+msgid "Date format updated"
+msgstr ""
+
+#, java-format
+msgid "Specified date format is not valid ({0}) - not updated"
+msgstr ""
+
+msgid "File size updated"
+msgstr ""
+
+#, java-format
+msgid "Specified file size limit is not valid ({0}) - not updated"
+msgstr ""
+
+msgid "Compression setting updated"
+msgstr ""
+
+msgid "Log record format updated"
+msgstr ""
 
 msgid "Log configuration saved"
 msgstr "Giriş konfiqurasiyası saxlanıldı"
@@ -1349,6 +1434,12 @@ msgstr "Pis sürət dəyəri"
 msgid "Bad capacity value"
 msgstr "Pis tutum dəyəri"
 
+msgid "Bonuses adjusted for: "
+msgstr ""
+
+msgid "No profile exists for: "
+msgstr ""
+
 msgid "Unsupported"
 msgstr "Dəstəklənmir"
 
@@ -1460,27 +1551,14 @@ msgstr[1] "Zəhmət olmasa, {0} tunel üçün sona çatmağın öhdəliyini göz
 msgid "Restart in {0}"
 msgstr "{0} sonra yenidən başladın"
 
-msgid "Stat filter and location updated successfully to"
-msgstr "Stat filtri və yeri uğurla yeniləndi"
-
-msgid "Full statistics enabled"
-msgstr "Tam statistika aktivləşdirildi"
-
-msgid "Full statistics disabled"
-msgstr "Tam statistika deaktiv edilib"
-
-#, java-format
-msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
-msgstr "Qrafik siyahısı yeniləndi, {0}Qrafiklər Səhifəsində{1} əks olunması 60 saniyəyə qədər çəkə bilər"
-
 msgid "Save order"
 msgstr "Sifarişi yadda saxla"
 
-msgid "Refresh disabled"
-msgstr "Yeniləmə qeyri-aktivdir"
+msgid "Sidebar refresh disabled"
+msgstr ""
 
-msgid "Refresh interval changed"
-msgstr "Yeniləmə intervalı dəyişdirildi"
+msgid "Sidebar refresh interval changed"
+msgstr ""
 
 msgid "Refresh interval must be a number"
 msgstr "Təzələmə intervalı rəqəm olmalıdır"
@@ -1488,17 +1566,17 @@ msgstr "Təzələmə intervalı rəqəm olmalıdır"
 msgid "Restore full default"
 msgstr "Tam standartı bərpa edin"
 
-msgid "Full summary bar default restored."
-msgstr "Tam xülasə paneli default bərpa edildi."
+msgid "Full sidebar defaults restored."
+msgstr ""
 
-msgid "Summary bar will refresh shortly."
-msgstr "Xülasə paneli tezliklə yenilənəcək."
+msgid "Sidebar will refresh shortly."
+msgstr ""
 
 msgid "Restore minimal default"
 msgstr "Minimal defolt bərpa edin"
 
-msgid "Minimal summary bar default restored."
-msgstr "Minimal xülasə çubuğu defolt bərpa edildi."
+msgid "Minimal sidebar defaults restored."
+msgstr ""
 
 msgid "Order must be an integer"
 msgstr "Sıra tam ədəd olmalıdır"
@@ -1514,6 +1592,27 @@ msgstr "köçürüldü"
 
 msgid "Saved order of sections."
 msgstr "Bölmələrin saxlanmış sırası."
+
+msgid "Stat filter and location updated successfully to"
+msgstr "Stat filtri və yeri uğurla yeniləndi"
+
+msgid "Full statistics enabled"
+msgstr "Tam statistika aktivləşdirildi"
+
+msgid "Full statistics disabled"
+msgstr "Tam statistika deaktiv edilib"
+
+#, java-format
+msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
+msgstr "Qrafik siyahısı yeniləndi, {0}Qrafiklər Səhifəsində{1} əks olunması 60 saniyəyə qədər çəkə bilər"
+
+#, java-format
+msgid "Internal error: could not resolve pool name {0}."
+msgstr ""
+
+#, java-format
+msgid "Internal error: could not find pool settings for {0}."
+msgstr ""
 
 msgid "Updated settings for all pools."
 msgstr "Bütün hovuzlar üçün yenilənmiş parametrlər."
@@ -1539,9 +1638,8 @@ msgstr[1] "{0} tunellər"
 msgid "Exploratory tunnels"
 msgstr "Kəşfiyyat tunelləri"
 
-#, java-format
-msgid "Client tunnels for {0}"
-msgstr "{0} üçün müştəri tunelləri"
+msgid "I2PSnark"
+msgstr "I2PSnark"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "ANONİMLİK XƏBƏRDARLIĞI - Parametrlərə 0-hop tunelləri daxildir."
@@ -1567,17 +1665,17 @@ msgstr "Gələn"
 msgid "Outbound"
 msgstr "gedən"
 
-msgid "Length"
-msgstr "Uzunluq"
-
-msgid "Randomization"
-msgstr "Təsadüfiləşdirmə"
-
 msgid "Quantity"
 msgstr "Miqdar"
 
 msgid "Backup quantity"
 msgstr "Yedək miqdarı"
+
+msgid "Length"
+msgstr "Uzunluq"
+
+msgid "Randomization"
+msgstr "Təsadüfiləşdirmə"
 
 msgid "Inbound options"
 msgstr "Gələn seçimlər"
@@ -1588,17 +1686,20 @@ msgstr "Gidən seçimləri"
 msgid "Add user"
 msgstr "İstifadəçi əlavə et"
 
+msgid "Cannot save theme choice, theme name has illegal characters"
+msgstr ""
+
 msgid "Theme change saved."
 msgstr "Mövzu dəyişikliyi saxlanıldı."
-
-msgid "Refresh the page to view."
-msgstr "Baxmaq üçün səhifəni yeniləyin."
 
 msgid "Mobile console option saved."
 msgstr "Mobil konsol seçimi yadda saxlanıldı."
 
 msgid "No user name entered"
 msgstr "İstifadəçi adı daxil edilməyib"
+
+msgid "User name may not contain '='"
+msgstr ""
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "Xəbərdarlıq: ISO-8859-1 simvol dəstindən kənar istifadəçi adları tövsiyə edilmir. "
@@ -1889,17 +1990,17 @@ msgstr "Qrafik Router Performansı"
 msgid "Graphs"
 msgstr "Qrafiklər"
 
-msgid "Anonymous webmail client"
-msgstr "Anonim veb poçt müştərisi"
-
-msgid "I2PMail"
-msgstr "I2PMail"
-
 msgid "Help"
 msgstr "Kömək"
 
 msgid "I2P Router Help"
 msgstr "I2P Router Yardımı"
+
+msgid "Anonymous webmail client"
+msgstr "Anonim veb poçt müştərisi"
+
+msgid "I2PMail"
+msgstr "I2PMail"
 
 msgid "Install and configure I2P plugins"
 msgstr "I2P plaginlərini quraşdırın və konfiqurasiya edin"
@@ -1918,6 +2019,12 @@ msgstr "Şəbəkə verilənlər bazası"
 
 msgid "Show list of all known I2P routers"
 msgstr "Bütün məlum I2P marşrutlaşdırıcılarının siyahısını göstərin"
+
+msgid "List of recently connected peers with profiling info"
+msgstr ""
+
+msgid "Peer Profiles"
+msgstr "Həmyaşıd profilləri"
 
 msgid "Router Info"
 msgstr "Router məlumatı"
@@ -1991,14 +2098,14 @@ msgstr "Qabaqcıl Konfiqurasiya"
 msgid "Advanced router configuration"
 msgstr "Qabaqcıl marşrutlaşdırıcının konfiqurasiyası"
 
-msgid "Start or stop Router clients"
-msgstr "Router müştərilərini işə salın və ya dayandırın"
-
 msgid "Changelog"
 msgstr "Dəyişikliklər"
 
 msgid "Recent changes"
 msgstr "Son dəyişikliklər"
+
+msgid "Start or stop Router clients"
+msgstr "Router müştərilərini işə salın və ya dayandırın"
 
 msgid "Bug tracker"
 msgstr "Xəta indikatoru"
@@ -2144,9 +2251,6 @@ msgstr "Clearnet BitTorrent DHT axtarış motoru"
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "DuckDuckGo Axtarış Sistemi (javascript yoxdur)"
 
-msgid "Clearnet Search Engine"
-msgstr "Clearnet Axtarış Mühərriki"
-
 msgid "Privacy-focused Clearnet Search Engine"
 msgstr "Məxfiliyə yönəlmiş Clearnet Axtarış Mühərriki"
 
@@ -2222,18 +2326,6 @@ msgstr "Müstəqil araşdırma jurnalistikası"
 msgid "Information Security Research &amp; Education"
 msgstr "İnformasiya Təhlükəsizliyi Araşdırması"
 
-msgid "Cannabis-related magazine"
-msgstr "Esrarla əlaqəli jurnal"
-
-msgid "CultureMagazine"
-msgstr "Mədəniyyət jurnalı"
-
-msgid "A magazine of Politics &amp; Culture"
-msgstr "Siyasət jurnalı"
-
-msgid "CurrentAffairs"
-msgstr "CurrentAffairs"
-
 msgid "Darknet related news site"
 msgstr "DarkNet ilə əlaqəli xəbər saytında"
 
@@ -2288,15 +2380,6 @@ msgstr "HongKongWatch"
 msgid "Monitors threats to freedoms and rights in Hong Kong"
 msgstr "Honq-Konqda azadlıqlara və hüquqlara olan təhdidləri izləyir"
 
-msgid "Politics &amp; Current Affairs Journal"
-msgstr "Siyasət və Cari İşlər Jurnalı"
-
-msgid "English language Japanese News"
-msgstr "İngilis dili Yapon Xəbərləri"
-
-msgid "JapanToday"
-msgstr "Yaponiya bu gün"
-
 msgid "JStorDaily"
 msgstr "JStorDaily"
 
@@ -2339,9 +2422,6 @@ msgstr "I2P-də xəbərlər və blog lentləri"
 msgid "Planeta"
 msgstr "Planeta"
 
-msgid "News &amp; Views on Tibet"
-msgstr "Tibet haqqında xəbərlər və fikirlər"
-
 msgid "Lifestyle magazine"
 msgstr "Həyat tərzi jurnalı"
 
@@ -2359,6 +2439,9 @@ msgstr "ScienceDaily"
 
 msgid "Community-driven tech news"
 msgstr "İcma tərəfindən idarə olunan texnoloji xəbərlər"
+
+msgid "Various services"
+msgstr ""
 
 msgid "News for nerds"
 msgstr "Nerdlər üçün xəbərlər"
@@ -2405,12 +2488,6 @@ msgstr "Qlobal Xəbərlər"
 msgid "TheGuardian"
 msgstr "TheGuardian"
 
-msgid "TheHill"
-msgstr "TheHill"
-
-msgid "US Political News"
-msgstr "ABŞ Siyasi Xəbərləri"
-
 msgid "TheMarkup"
 msgstr "İşarələmə"
 
@@ -2425,12 +2502,6 @@ msgstr "TheMoscowTimes"
 
 msgid "TheNewRepublic"
 msgstr "TheNewRepublic"
-
-msgid "International News from Tibet"
-msgstr "Tibetdən Beynəlxalq Xəbərlər"
-
-msgid "TheTibetPost"
-msgstr "TheTibetPost"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "FileSharing və müəllif hüquqları xəbərləri"
@@ -2459,6 +2530,9 @@ msgstr "URL"
 
 msgid "Add"
 msgstr "Əlavə et"
+
+msgid "Error displaying the info page."
+msgstr ""
 
 msgid "Identity"
 msgstr "Şəxsiyyət"
@@ -2505,6 +2579,9 @@ msgstr "Mövcud CPU nüvələri"
 msgid "Performance"
 msgstr "Performans"
 
+msgid "Maximum available RAM"
+msgstr ""
+
 msgid "Classified as slow"
 msgstr "Yavaş olaraq təsnif edilir"
 
@@ -2513,6 +2590,9 @@ msgstr "Bəli"
 
 msgid "No"
 msgstr "Xeyr"
+
+msgid "GeoIP Db"
+msgstr ""
 
 msgid "Target"
 msgstr "Hədəf"
@@ -2650,6 +2730,9 @@ msgstr "Bütün marşrutlaşdırıcılar (Client NetDb)"
 msgid "Sybil Analysis"
 msgstr "Sibil təhlili"
 
+msgid "Bad value supplied, please check and try again."
+msgstr ""
+
 msgid "Router Map"
 msgstr "Ruter Xəritəsi"
 
@@ -2724,9 +2807,6 @@ msgstr "qadağandır"
 
 msgid "not found in network database"
 msgstr "şəbəkə verilənlər bazasında tapılmadı"
-
-msgid "No results"
-msgstr "Nəticə yoxdur"
 
 msgid "Bad Base64 Router hash"
 msgstr ""
@@ -2975,50 +3055,11 @@ msgstr "NetDb-də bu ünvana malik bütün marşrutlaşdırıcıları göstərin
 msgid "Show all routers with this port in the NetDb"
 msgstr "NetDb-də bu portu olan bütün marşrutlaşdırıcıları göstərin"
 
-msgid "Core version"
-msgstr "Əsas versiya"
-
 msgid "Network ID"
 msgstr "Şəbəkə ID"
 
 msgid "Routers"
 msgstr "Routerlər"
-
-msgid "Family Key"
-msgstr "Ailə açarı"
-
-msgid "Family Sig"
-msgstr "Ailə Sig"
-
-msgid "Exploratory tunnels expire (1h)"
-msgstr "Kəşfiyyat tunellərinin müddəti başa çatır (1 saat)"
-
-msgid "Exploratory tunnels reject (1h)"
-msgstr "Kəşfiyyat tunelləri rədd edilir (1 saat)"
-
-msgid "Exploratory tunnels build success (1h)"
-msgstr "Kəşfiyyat tunelləri uğur qazanır (1 saat)"
-
-msgid "Client tunnels expire (1h)"
-msgstr "Müştəri tunellərinin müddəti başa çatır (1 saat)"
-
-msgid "Client tunnels reject (1h)"
-msgstr "Müştəri tunelləri rədd edilir (1 saat)"
-
-msgid "Client tunnels build success (1h)"
-msgstr "Müştəri tunelləri uğur qazanır (1 saat)"
-
-msgid "Participating tunnels (1h)"
-msgstr "İştirakçı tunellər (1 saat)"
-
-msgid "Participating tunnels (60s)"
-msgstr "İştirakçı tunellər (60s)"
-
-msgid "Bandwidth send rate (1h)"
-msgstr "Bant genişliyi göndərmə sürəti (1 saat)"
-
-msgid "Bandwidth receive rate (1h)"
-msgstr "Bant genişliyi qəbul sürəti (1 saat)"
 
 msgid "First heard about"
 msgstr "İlk dəfə eşitdim"
@@ -3088,9 +3129,6 @@ msgstr "router.config faylınıza."
 msgid "Peer Connections"
 msgstr "Peer Əlaqələri"
 
-msgid "Auto-refresh"
-msgstr "Avtomatik yeniləmə"
-
 msgid "Active in the last minute"
 msgstr "Son dəqiqədə aktivdir"
 
@@ -3099,6 +3137,12 @@ msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
+
+msgid "Limit"
+msgstr ""
+
+msgid "Maximum permitted connections"
+msgstr ""
 
 msgid "Current / maximum permitted"
 msgstr "Cari / maksimum icazə verilir"
@@ -3504,8 +3548,8 @@ msgid "{0} shared bandwidth"
 msgstr "{0} paylaşılan bant genişliyi"
 
 #, java-format
-msgid "Over {0} shared bandwidth"
-msgstr "{0}-dən çox paylaşılan bant genişliyi"
+msgid "Over {0} KB/s shared bandwidth"
+msgstr ""
 
 msgid "status"
 msgstr "vəziyyət"
@@ -3577,84 +3621,151 @@ msgstr ""
 msgid "Select search engine"
 msgstr "Axtarış motorunu seçin"
 
-msgid "Statistics gathered during this router's uptime"
-msgstr "Bu marşrutlaşdırıcının işləmə vaxtı ərzində toplanmış statistika"
+#, java-format
+msgid "Clock Skew of {0}"
+msgstr "{0} saatının əyilməsi"
 
-msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
-msgstr "Toplanmış məlumatlar 1 dəqiqəlik müddət ərzində kvantlaşdırılır, ona görə də sadəcə təxmin kimi istifadə edilməlidir."
+msgid "Testing"
+msgstr "Test etmək"
 
-msgid "These statistics are primarily used for development and debugging."
-msgstr "Bu statistikalar ilk növbədə inkişaf və sazlama üçün istifadə olunur."
+msgid "Private TCP Address"
+msgstr "Şəxsi TCP Ünvanı"
 
-msgid "No lifetime events"
-msgstr "Ömür boyu hadisələr yoxdur"
+msgid "SymmetricNAT"
+msgstr "Simmetrik NAT"
 
-msgid "frequency"
-msgstr "tezlik"
+msgid "Firewalled with Inbound TCP Enabled"
+msgstr "Gələn TCP Aktivləşdirilmiş Firewalled"
 
-msgid "Rolling average events per period"
-msgstr "Dövr başına yuvarlanan orta hadisələr"
+msgid "Firewalled &amp; Floodfill"
+msgstr "Firewalled və Daşqınlıq"
 
-msgid "Highest events per period"
-msgstr "Dövr üzrə ən yüksək hadisələr"
+msgid "Disconnected"
+msgstr "Bağlantısı"
 
-msgid "Lifetime average events per period"
-msgstr "Hər dövr üçün ömür boyu orta hadisələr"
+msgid "UDP Port In Use"
+msgstr "İstifadədə UDP portu"
 
-msgid "Lifetime average frequency"
-msgstr "Ömür boyu orta tezlik"
+msgid "No Active Peers"
+msgstr "Aktiv həmkar yoxdur"
+
+msgid "UDP Disabled &amp; Inbound TCP host/port not set"
+msgstr "UDP Əlildir"
+
+msgid "Firewalled with UDP Disabled"
+msgstr "UDP əlilləri ilə firewalled"
+
+msgid "Add/remove/edit &amp; control your client and server tunnels"
+msgstr "Müştəri və server tunellərinizi əlavə et / silmək / redaktə etmək və idarə etmək"
+
+msgid "Service Tunnels"
+msgstr "Xidmət Tunelləri"
+
+msgid "How many local service tunnels we're running"
+msgstr "Neçə yerli xidmət tunelini çalışırıq"
+
+msgid "Messenger"
+msgstr "Xəbərdar"
+
+msgid "i2pchat"
+msgstr "i2pchat"
+
+msgid "I2PChat"
+msgstr "I2P Xəbərdarlığı"
+
+msgid "Server"
+msgstr "Server"
+
+msgid "service may be available to peers"
+msgstr "xidmət həmyaşıdları üçün mövcud ola bilər"
+
+msgid "service is only available locally"
+msgstr "xidmət yalnız yerli səviyyədə mövcuddur"
+
+msgid "Show tunnels"
+msgstr "Tunelləri göstər"
+
+msgid "Leases expired"
+msgstr "İcarələr müddəti bitdi"
+
+msgid "Rebuilding"
+msgstr "Yenidən qurma"
+
+msgid "ago"
+msgstr "əvvəl"
+
+msgid "Ready"
+msgstr "Hazır"
+
+msgid "Building"
+msgstr "Bina"
+
+msgid "Building tunnels"
+msgstr "Bina tunelləri"
+
+msgid "Shared Clients"
+msgstr "Paylaşılan Müştərilər"
+
+msgid "Click Restart to install"
+msgstr "Quraşdırmaq üçün Yenidən Başla üzərinə klikləyin"
+
+msgid "Click Shutdown and restart to install"
+msgstr "Quraşdırmaq üçün Bağlama üzərinə klikləyin və yenidən başladın"
 
 #, java-format
-msgid "{0} event"
-msgid_plural "{0} events"
-msgstr[0] "{0} hadisə"
-msgstr[1] "{0} hadisələr"
+msgid "{0}"
+msgstr "{0}"
 
-msgid "rate"
-msgstr "dərəcə"
+msgid "Updating after restart"
+msgstr "Yenidən başladıqdan sonra yenilənmə"
 
-msgid "Average"
-msgstr "Orta"
+msgid "Signed development update available"
+msgstr "İmzalı inkişaf yeniləməsi mövcuddur"
 
-msgid "Highest average"
-msgstr "Ən yüksək orta"
+msgid "Download I2P Update"
+msgstr "I2P Yeniləmə Download"
 
-msgid "Highest total in a period"
-msgstr "Bir dövrdə ən yüksək cəmi"
+msgid "Unsigned update available"
+msgstr "İcazəsiz yeniləmə mövcuddur"
 
-msgid "Average event count"
-msgstr "Orta hadisə sayı"
+msgid "Help with firewall configuration"
+msgstr "Qoruyucu divar konfiqurasiyası ilə bağlı yardım"
 
-msgid "Events in peak period"
-msgstr "Pik dövrdəki hadisələr"
+msgid "Check network connection and NAT/firewall!"
+msgstr "Şəbəkə bağlantısını və NAT/qoruyucu divarını yoxlayın!"
 
-msgid "Events in this period"
-msgstr "Bu dövrdəki hadisələr"
+msgid "Attempt to download router reference files (if automatic reseed has failed)"
+msgstr "Ruter istinad fayllarını endirməyə cəhd edin (avtomatik rezidensiya uğursuz olubsa)"
 
-#, java-format
-msgid "ended {0} ago"
-msgstr "{0} əvvəl bitdi"
+msgid "Reseed"
+msgstr "Reseed"
 
-msgid "No events"
-msgstr "Hadisə yoxdur"
+msgid "Order"
+msgstr "Sifariş"
 
-msgid "Graph Data"
-msgstr "Qrafik Məlumat"
+msgid "Top"
+msgstr "Yuxarı"
 
-msgid "Graph Event Count"
-msgstr "Qrafik hadisələrin sayı"
+msgid "Move to top"
+msgstr "Yuxarıya doğru hərəkət edin"
 
-msgid "Export Data as XML"
-msgstr "Məlumatları XML kimi ixrac edin"
+msgid "Move up"
+msgstr "Yuxarı get"
 
-msgid "Lifetime average value"
-msgstr "Ömür boyu orta dəyər"
+msgid "Down"
+msgstr "Aşağı"
 
-#, java-format
-msgid "1 event"
-msgid_plural "{0} events"
-msgstr[0] "1 hadisə"
-msgstr[1] "{0} hadisələr"
+msgid "Move down"
+msgstr "Aşağı get"
+
+msgid "Bottom"
+msgstr "Dibli"
+
+msgid "Move to bottom"
+msgstr "Aşağıya doğru hərəkət edin"
+
+msgid "Select a section to add"
+msgstr "Əlavə etmək üçün bölmə seçin"
 
 msgid "Help &amp; FAQ"
 msgstr "Yardım və FAQ"
@@ -3697,9 +3808,6 @@ msgstr "Tıxanma"
 
 msgid "Tunnel Status"
 msgstr "Tunel Vəziyyəti"
-
-msgid "Service Tunnels"
-msgstr "Xidmət Tunelləri"
 
 msgid "News &amp; Updates"
 msgstr "Xəbərlər"
@@ -3754,6 +3862,9 @@ msgstr "Veb hostinq"
 
 msgid "An introduction to hosting websites on the I2P network"
 msgstr "I2P şəbəkəsində veb saytların yerləşdirilməsinə giriş"
+
+msgid "New hosts in last 24 hours"
+msgstr ""
 
 msgid "I2PControl"
 msgstr "I2Pnəzarət"
@@ -4054,151 +4165,84 @@ msgstr "Gizli rejim aktiv olduqda heç bir iştirakçı tunel tikilmir"
 msgid "Router is configured to reject all transit tunnel requests"
 msgstr "Router bütün iştirakçı tunel sorğularını rədd etmək üçün konfiqurasiya edilib"
 
-#, java-format
-msgid "Clock Skew of {0}"
-msgstr "{0} saatının əyilməsi"
+msgid "Statistics gathered during this router's uptime"
+msgstr "Bu marşrutlaşdırıcının işləmə vaxtı ərzində toplanmış statistika"
 
-msgid "Testing"
-msgstr "Test etmək"
+msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
+msgstr "Toplanmış məlumatlar 1 dəqiqəlik müddət ərzində kvantlaşdırılır, ona görə də sadəcə təxmin kimi istifadə edilməlidir."
 
-msgid "Private TCP Address"
-msgstr "Şəxsi TCP Ünvanı"
+msgid "These statistics are primarily used for development and debugging."
+msgstr "Bu statistikalar ilk növbədə inkişaf və sazlama üçün istifadə olunur."
 
-msgid "SymmetricNAT"
-msgstr "Simmetrik NAT"
+msgid "No lifetime events"
+msgstr "Ömür boyu hadisələr yoxdur"
 
-msgid "Firewalled with Inbound TCP Enabled"
-msgstr "Gələn TCP Aktivləşdirilmiş Firewalled"
+msgid "frequency"
+msgstr "tezlik"
 
-msgid "Firewalled &amp; Floodfill"
-msgstr "Firewalled və Daşqınlıq"
+msgid "Rolling average events per period"
+msgstr "Dövr başına yuvarlanan orta hadisələr"
 
-msgid "Disconnected"
-msgstr "Bağlantısı"
+msgid "Highest events per period"
+msgstr "Dövr üzrə ən yüksək hadisələr"
 
-msgid "UDP Port In Use"
-msgstr "İstifadədə UDP portu"
+msgid "Lifetime average events per period"
+msgstr "Hər dövr üçün ömür boyu orta hadisələr"
 
-msgid "No Active Peers"
-msgstr "Aktiv həmkar yoxdur"
-
-msgid "UDP Disabled &amp; Inbound TCP host/port not set"
-msgstr "UDP Əlildir"
-
-msgid "Firewalled with UDP Disabled"
-msgstr "UDP əlilləri ilə firewalled"
-
-msgid "Add/remove/edit &amp; control your client and server tunnels"
-msgstr "Müştəri və server tunellərinizi əlavə et / silmək / redaktə etmək və idarə etmək"
-
-msgid "How many local service tunnels we're running"
-msgstr "Neçə yerli xidmət tunelini çalışırıq"
-
-msgid "I2PSnark"
-msgstr "I2PSnark"
-
-msgid "Messenger"
-msgstr "Xəbərdar"
-
-msgid "i2pchat"
-msgstr "i2pchat"
-
-msgid "I2PChat"
-msgstr "I2P Xəbərdarlığı"
-
-msgid "Server"
-msgstr "Server"
-
-msgid "service may be available to peers"
-msgstr "xidmət həmyaşıdları üçün mövcud ola bilər"
-
-msgid "service is only available locally"
-msgstr "xidmət yalnız yerli səviyyədə mövcuddur"
-
-msgid "Show tunnels"
-msgstr "Tunelləri göstər"
-
-msgid "Leases expired"
-msgstr "İcarələr müddəti bitdi"
-
-msgid "Rebuilding"
-msgstr "Yenidən qurma"
-
-msgid "ago"
-msgstr "əvvəl"
-
-msgid "Ready"
-msgstr "Hazır"
-
-msgid "Building"
-msgstr "Bina"
-
-msgid "Building tunnels"
-msgstr "Bina tunelləri"
-
-msgid "Shared Clients"
-msgstr "Paylaşılan Müştərilər"
-
-msgid "Click Restart to install"
-msgstr "Quraşdırmaq üçün Yenidən Başla üzərinə klikləyin"
-
-msgid "Click Shutdown and restart to install"
-msgstr "Quraşdırmaq üçün Bağlama üzərinə klikləyin və yenidən başladın"
+msgid "Lifetime average frequency"
+msgstr "Ömür boyu orta tezlik"
 
 #, java-format
-msgid "{0}"
-msgstr "{0}"
+msgid "{0} event"
+msgid_plural "{0} events"
+msgstr[0] "{0} hadisə"
+msgstr[1] "{0} hadisələr"
 
-msgid "Updating after restart"
-msgstr "Yenidən başladıqdan sonra yenilənmə"
+msgid "rate"
+msgstr "dərəcə"
 
-msgid "Signed development update available"
-msgstr "İmzalı inkişaf yeniləməsi mövcuddur"
+msgid "Average"
+msgstr "Orta"
 
-msgid "Download I2P Update"
-msgstr "I2P Yeniləmə Download"
+msgid "Highest average"
+msgstr "Ən yüksək orta"
 
-msgid "Unsigned update available"
-msgstr "İcazəsiz yeniləmə mövcuddur"
+msgid "Highest total in a period"
+msgstr "Bir dövrdə ən yüksək cəmi"
 
-msgid "Help with firewall configuration"
-msgstr "Qoruyucu divar konfiqurasiyası ilə bağlı yardım"
+msgid "Average event count"
+msgstr "Orta hadisə sayı"
 
-msgid "Check network connection and NAT/firewall!"
-msgstr "Şəbəkə bağlantısını və NAT/qoruyucu divarını yoxlayın!"
+msgid "Events in peak period"
+msgstr "Pik dövrdəki hadisələr"
 
-msgid "Attempt to download router reference files (if automatic reseed has failed)"
-msgstr "Ruter istinad fayllarını endirməyə cəhd edin (avtomatik rezidensiya uğursuz olubsa)"
+msgid "Events in this period"
+msgstr "Bu dövrdəki hadisələr"
 
-msgid "Reseed"
-msgstr "Reseed"
+#, java-format
+msgid "ended {0} ago"
+msgstr "{0} əvvəl bitdi"
 
-msgid "Order"
-msgstr "Sifariş"
+msgid "No events"
+msgstr "Hadisə yoxdur"
 
-msgid "Top"
-msgstr "Yuxarı"
+msgid "Graph Data"
+msgstr "Qrafik Məlumat"
 
-msgid "Move to top"
-msgstr "Yuxarıya doğru hərəkət edin"
+msgid "Graph Event Count"
+msgstr "Qrafik hadisələrin sayı"
 
-msgid "Move up"
-msgstr "Yuxarı get"
+msgid "Export Data as XML"
+msgstr "Məlumatları XML kimi ixrac edin"
 
-msgid "Down"
-msgstr "Aşağı"
+msgid "Lifetime average value"
+msgstr "Ömür boyu orta dəyər"
 
-msgid "Move down"
-msgstr "Aşağı get"
-
-msgid "Bottom"
-msgstr "Dibli"
-
-msgid "Move to bottom"
-msgstr "Aşağıya doğru hərəkət edin"
-
-msgid "Select a section to add"
-msgstr "Əlavə etmək üçün bölmə seçin"
+#, java-format
+msgid "1 event"
+msgid_plural "{0} events"
+msgstr[0] "1 hadisə"
+msgstr[1] "{0} hadisələr"
 
 msgid "No known routers"
 msgstr "Məlum marşrutlaşdırıcı yoxdur"
@@ -4538,6 +4582,10 @@ msgstr "Hal-hazırda aktiv olan yerli və ya tranzit tunel yoxdur."
 msgid "Bandwidth Tiers"
 msgstr "Bant genişliyi səviyyələri"
 
+#, java-format
+msgid "Over {0} shared bandwidth"
+msgstr "{0}-dən çox paylaşılan bant genişliyi"
+
 msgid "Inbound or outbound?"
 msgstr "Gələn və ya gedən?"
 
@@ -4597,6 +4645,18 @@ msgstr "Bant genişliyi testi ləğv edildi"
 
 msgid "Bandwidth test was not running"
 msgstr "Bant genişliyi testi işləmirdi"
+
+msgid "ready"
+msgstr ""
+
+msgid "inbound test"
+msgstr ""
+
+msgid "outbound test"
+msgstr ""
+
+msgid "done"
+msgstr ""
 
 msgid "bits per second"
 msgstr "saniyədə bit"
@@ -4770,8 +4830,8 @@ msgstr "Şəbəkə Paylaşımı"
 msgid "Share"
 msgstr "Paylaş"
 
-msgid "Note"
-msgstr "QEYD"
+msgid "NOTE"
+msgstr ""
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
@@ -4795,6 +4855,10 @@ msgstr "Paylaşmanın genişliyi nə qədər yüksək olarsa, anonimliyinizi bir
 
 msgid "config advanced"
 msgstr "inkişaf etmiş konfiqurasiya"
+
+#, java-format
+msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
+msgstr ""
 
 msgid "Floodfill Configuration"
 msgstr "Daşqın Konfiqurasiyası"
@@ -4823,8 +4887,8 @@ msgstr "Söndür"
 msgid "Advanced I2P+ Configuration"
 msgstr "Qabaqcıl I2P Konfiqurasiyası"
 
-msgid "Some changes may require a restart to take effect."
-msgstr "Bəzi dəyişikliklərin qüvvəyə minməsi üçün yenidən başlama tələb oluna bilər."
+msgid "Help with additional configuration settings"
+msgstr ""
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5690,23 +5754,50 @@ msgstr "Əslinə qaldıqda, bu, <a href=/configplugins>Qoşma Konfiqurasiyası s
 msgid "When set to true, this setting enables reverse DNS lookups for peers, triggered when displaying the country flag of a peer or when the hostname or domain is explicitly displayed in the console, or when the peer's RouterInfo is written to disk. In order to avoid repeat lookups, it's recommended to configure a generous caching policy for DNS lookups of 10 minutes or more, and to configure a privacy respecting DNS server in your operating system. [Disabled by default, restart required]"
 msgstr "Əslinə qaldıqda, bu parametr həmfikirin ölkə bayrağını göstərərkən və ya host adı və ya domen konsolda açıq şəkildə göstərildikdə və ya həmfikirin RouterInfo diskinə yazıldıqda işə salınan həmyaşıdları üçün DNS görünüşlərini tərsinə çevirməyə imkan verir. Təkrar axtarışların qarşısını almaq üçün 10 dəqiqə və ya daha çox müddətdə DNS axtarışları üçün səxavətli keşləmə siyasətini konfiqurasiya etmək və əməliyyat sisteminizdə DNS serverinə hörmət edən məxfiliyi konfiqurasiya etmək tövsiyə olunur. [Standart olaraq deaktiv edin, yenidən başladın tələb olunur]"
 
+msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
+msgstr "Bu ayar, ruter konsol səhifələrinin başlığı üçün özgün mətn ön əlavəsinin qoyulmasına icazə verir, birdən çox konsolun brauzer qutularında açılırsa və onları asanlıqla fərqləndirmək istəndikdə faydalıdır."
+
 msgid "When set to true, accessing the router console via http:// when https:// is enabled will automatically redirect to https. To configure router console access, edit the settings in your <code>clients.config</code> file in your profile directory (<i>not</i> the application installation directory). [Enabled by default]"
 msgstr "Doğruya təyin edildikdə, http://vasitəsilə router konsoluna daxil olmaq üçün https://aktiv olduqda avtomatik olaraq https ünvanına yönləndiriləcək. Ruter konsoluna girişi konfiqurasiya etmək üçün clients.config faylındakı parametrləri <code></code> profil kataloqunuzda (tətbiqin quraşdırılması kataloqu<i> deyil</i>) redaktə edin. [Standart olaraq aktivdir]"
+
+msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
+msgstr "Bu parametr doğru olaraq təyin edildikdə, yan panelin Konqress bölməsindəki Həmkar Testinin Orta oxunuşu göstəriləcək, müvəffəqiyyətli həmkar testinin ortalamasını və uğursuz testlərin aldığı orta artıq vaxtı əlavə etməklə hesablanır. Orta dəyər optimal router.peerTestTimeout dəyərini müəyyən etmək üçün bələdçi kimi istifadə <code></code> edilə bilər. [Standart yanlışdır]"
+
+msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
+msgstr "Bu parametr doğrulandıqda, <i>faiz linkləri sayt</i> xəritəsində <a href=/sitemap>göstəriləcək</a>. [Standart yanlışdır]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Bu parametr marşrutlaşdırıcının təmin edilmiş blocklist.txt faylından və istənilən istifadəçi tərəfindən konfiqurasiya edilmiş blok <i></i> siyahılarından istifadə edib-etməməsini müəyyən edir ki, bu da marşrutlaşdırıcıların hash və ya ip ünvanı ilə qadağan edilməsinə imkan verir. Diapazonlar və xalis maskalar IPv4 üçün dəstəklənir, lakin IPv6 deyil. Ətraflı məlumat <i></i> üçün I2P  tətbiq kataloqunuzda blocklist.txt-ə baxın. [Standart olaraq aktivdir, yenidən başladın tələb olunur]"
 
-msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
-msgstr "Bu parametr marşrutlaşdırıcının Tor çıxış qovşağı ip ünvanlarından işləyən marşrutlaşdırıcıların <i></i> qadağan edilməsini təmin etmək üçün I2P  tətbiq kataloqunuzdakı təmin edilmiş blok siyahısından_tor.txt faylından istifadə edib-etməməsini müəyyən edir. [Standart olaraq aktivdir, yenidən başladın tələb olunur]"
+msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
+msgstr "Bu parametr blok siyahıları vasitəsilə tətbiq edilən qadağalar üçün konfiqurasiya edilmə müddətinin (saniyə ərzində) bitməsinə icazə verir. Ruter seansının müddəti ərzində standart qadağalar davam edir. [Yenidən başladın tələb olunur]"
 
 msgid "This setting, when configured with a path pointing at a valid blocklist file, enables an additional, user-configured blocklist to be loaded at router startup. [Disabled by default, restart required]"
 msgstr "Bu parametr, etibarlı blok siyahısı faylına işarə edən bir yol ilə konfiqurasiya edildikdə, əlavə, istifadəçi tərəfindən konfiqurasiya edilmiş blok siyahısının router başlanğıcında yüklənməsinə imkan verir. [Standart olaraq deaktiv edin, yenidən başladın tələb olunur]"
 
-msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
-msgstr "Bu parametr blok siyahıları vasitəsilə tətbiq edilən qadağalar üçün konfiqurasiya edilmə müddətinin (saniyə ərzində) bitməsinə icazə verir. Ruter seansının müddəti ərzində standart qadağalar davam edir. [Yenidən başladın tələb olunur]"
+msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
+msgstr "Bu parametr marşrutlaşdırıcının Tor çıxış qovşağı ip ünvanlarından işləyən marşrutlaşdırıcıların <i></i> qadağan edilməsini təmin etmək üçün I2P  tətbiq kataloqunuzdakı təmin edilmiş blok siyahısından_tor.txt faylından istifadə edib-etməməsini müəyyən edir. [Standart olaraq aktivdir, yenidən başladın tələb olunur]"
+
+msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
+msgstr ""
+
+msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
+msgstr "Yanlış kimi qoyulsa, ruter yavaş və ya çatışmaz olan daha qədim versiyalarda çalışan ruterlərdən tonnel qurma tələblərini bloklamaqdan imtina edəcək. [Standart dəyər doğrudur, yenidən başlama lazımdır]"
 
 msgid "Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks."
 msgstr "Tunellərin tikilməsi üçün prosessor saplarının sayını ayırın. Prosessorunuz hiperthreading və ya eyni zamanda multithreading-i dəstəkləyirsə, ayırmaq üçün maksimum sayda iplik əldə etmək üçün prosessor nüvələrinin sayını 2-yə vura bilərsiniz, əks halda prosessor nüvələrinin sayı = maksimum sayda mövzu mövcuddur. Nəzərə alın ki, digər tapşırıqlar üçün baş otağınızın olmasını təmin etmək üçün nəzəri maksimumdan daha az ayırmaq istəyə bilərsiniz."
+
+msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
+msgstr "Bu parametr (millisaniyə ərzində) bir paketin düşməzdən əvvəl CoDel növbəsində nə qədər qala biləcəyini müəyyən edir. Standart 1000 m-dir. [Yenidən başladın tələb olunur]"
+
+msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
+msgstr "Bu parametr tam olaraq qeyd edilməzdən əvvəl giriş növbəsində maksimum mesaj sayını müəyyən edir. [Standart 768-dir]"
+
+msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
+msgstr "Bu parametr növbəti mesajlar düşməzdən əvvəl maksimum növbə dəyərindən yuxarı mesajların maksimum sayını müəyyən edir. [Standart 128]"
+
+msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
+msgstr "Bu parametr (millisaniyə ərzində) CoDel növbə idarəetmə sistemi üçün növbə gecikmə hədəfinin dəyərini əl ilə konfiqurasiya etməyə imkan verir. Standart 50 m-dir. [Yenidən başladın tələb olunur]"
 
 msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
 msgstr "Bu parametr, ruterin sıxışdırılması və tranzit tunel sorğuları rədd edilməzdən əvvəl standart mesaj emalı vaxtı limitini (Konqress yan çubuğu bölməsində <i>Mesaj</i> Gecikməsi kimi göstərilir) ləğv edir. [Router yavaş kimi işarələnibsə, standart 750 m və ya 1500 m-dir]"
@@ -5717,8 +5808,32 @@ msgstr "Orta geriləməni müəyyən etmək üçün tunelləri vaxtaşırı sın
 msgid "When set to true, the router will change its identity and UDP port every time the router restarts. [Default is false]"
 msgstr "Əslinə qaldıqda, router hər dəfə router yenidən başladıqda kimliyini və UDP portunu dəyişəcək. [Standart yanlışdır]"
 
+msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
+msgstr "Yanlış kimi qoyulsa, ruter digər ruterlərdən tonnel qurma tələblərinə dayanmaqdan imtina edəcək. Qəribə halda istifadə etmək lazımdır. [Standart dəyər doğrudur, yenidən başlama lazımdır]"
+
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
 msgstr "Bu parametr hansı < href=/profillər olduğunu təyin edir"
+
+msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
+msgstr "Bu parametr (saatlarla) NetDb-də RouterInfo-nun bayat kimi təsnif edilməzdən və silinməzdən əvvəl neçə yaşı olduğunu (onun son məlum nəşr tarixini) müəyyən edir. [Router Daşqın Doldurmasa, standart 28 saatdır, bu halda standart 8 saatdır]"
+
+msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
+msgstr "Bu parametr, Həmkar kəşfiyyatı İşi icra edərkən paralel olaraq araşdıracaq həmyaşıdların sayını müəyyən edir [3000-dən çox həmyaşıdın məlum olduğu bir vaxtda standart 1 həmyaşıddır]. Nəzərə alın ki, bu dəyərin artırılması araşdırma üçün genişlik tələblərini artıracaq və bu dəyərin çox yüksək olması artıq mesaj gecikməsinə və digər xidmətlərə müdaxilə edilməsinə səbəb ola bilər, odur ki, ehtiyatla istifadə edin!"
+
+msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
+msgstr "Bu parametr NetDb DHT vedrələrinin sayını müəyyən edir Həmkar kəşfiyyatı İşi icra edərkən istinad edəcək. Standart olaraq, araşdırmaq üçün vedrələrin sayı marşrutlaşdırıcının bir saatdan artıq işləməsindən, routerin gizli və ya 'K' bant genişliyi pilləsində olub-olmamasından və məlum marşrutlaşdırıcıların sayından asılı olaraq dəyişəcək."
+
+msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
+msgstr "Bu ayarlama (saniyələrlə) yeni hərəkət səbrini (hədəfləmə üzrə qonşuları tapmaq üçün) dəyişməyə imkan verir. Bu iş ədədi by default 80 saniyədə bir, və ya router iş və ya işdarlıq gecikməsi yaşanırsa, 3 dəqiqə interval ilə işləyir. Əgər NetDb ölçüsü 4000 qonşudan çoxa çatdıqda, interval 15 dəqiqəyə çatır. Xahiş edirik, NetDb'nin çox qonşulu olması (2000 qonşudan çox) və ya ümumi bant genişliyi istifadəsini azaltmaq istəndiyi təqdirdə gecikməni artırmaq istəyə bilərsiniz. Qeyd: Bu iş Floodfill routerları üçün işləmir."
+
+msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
+msgstr "Bu parametr, araşdırma üçün növbə üçün maksimum həmkar hashes sayını müəyyən edir. I2P-də maksimum 128, I2P-də isə standart dəyər 512-dir."
+
+msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
+msgstr "Bu parametr daşqın yeri kimi fəaliyyət göstərən routerin yeni həmyaşıdları haqqında məlumat əldə etmək üçün NetDb-ni araşdırıb-araşdırmayacağını müəyyən edir. [Standart yanlışdır, yenidən başladın tələb olunur]"
+
+msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
+msgstr "Bu parametr doğru olaraq təyin edildikdə, routerin digər routerlərlə birbaşa ünsiyyət qurmasının qarşısını alır və introducerlərin istifadəsinə məcbur edir. [Router gizli rejimdə olmadığı təqdirdə standart yalandır]"
 
 msgid "When set to true, if your router is serving as a floodfill for the network, your <a href=/configadvanced#ffconf>floodfill participation</a> will be hidden from other routers."
 msgstr "Doğru olaraq təyin edildikdə, marşrutlaşdırıcı şəbəkə üçün sel sel kimi xidmət edirsə, <a href=/configadvencanced#ffconf wrotfconf> iştirakı</a> digər marşrutlaşdırıcılardan gizlənəcəkdir."
@@ -5731,6 +5846,12 @@ msgstr "Ruterin yarada biləcəyi maksimum iştirakçı tunel sayını müəyyə
 
 msgid "Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 10% in I2P+, 33% in I2P]"
 msgstr "Yerli tunnel istifadə edildiyi zamanin maksimum faizini tanımlar (müştəri və keşfiyyat). [İzah 10% -i I2P+, 33% -i I2P-dədir]"
+
+msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
+msgstr "Bu parametrlər router gözlənilən bant genişliyi tələblərinə əsasən tunel sorğularını rədd etməyə başlamazdan əvvəl ev sahibliyi edilən iştirakçı tunellərinin minimal sayını konfiqurasiya etməyə imkan verir. [Sistem Android ilə işləyirsə standart 100, QOL ilə işləyirsə 800 və 4-dən az nüvə mövcuddursa 1200, QOL və 4 və ya daha çox nüvə ilə işləyirsə əks halda 2500]"
+
+msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
+msgstr "Bu parametr NetDb-dən köhnə marşrutlaşdırıcıları xaric etməyə imkan verir. Standart və ya təyin etdiyiniz dəyərdən daha böyük marşrutlaşdırıcılar NetDb-dən silinəcək və router sessiyasının müddəti ərzində qadağan ediləcək. Standart olaraq 0.9.20 -dən yuxarı olan marşrutlaşdırıcılar istisna edilir. Qeyd: 0.9.46 I2P  versiyasından başlayaraq, yerli tunellərin qurulması üçün yalnız çox son versiyalarla işləyən marşrutlaşdırıcılardan istifadə olunur. [Yenidən başladın tələb olunur]"
 
 msgid "When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]"
 msgstr "Doğru set olunarsa, profilinizin netDB qovluğunda saxlanılan router info faylları 64 altqovluğa bölünməyəcək. [İzah yanlışdır]"
@@ -5756,84 +5877,6 @@ msgstr "YVM-yə ayrılmış 256MB-dən az"
 msgid "Router running a non-native, software emulated version of the Java BigInteger library"
 msgstr "Ruter Java BigInteger kitabxanasının yerli olmayan, proqram təminatı ilə işlənmiş versiyasını işlədir"
 
-msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
-msgstr "Bu parametrlər router gözlənilən bant genişliyi tələblərinə əsasən tunel sorğularını rədd etməyə başlamazdan əvvəl ev sahibliyi edilən iştirakçı tunellərinin minimal sayını konfiqurasiya etməyə imkan verir. [Sistem Android ilə işləyirsə standart 100, QOL ilə işləyirsə 800 və 4-dən az nüvə mövcuddursa 1200, QOL və 4 və ya daha çox nüvə ilə işləyirsə əks halda 2500]"
-
-msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
-msgstr "Əslinə qaldıqda, router router yenidən başladıqda kimliyini və UDP portunu dəyişəcək və sonrakı dəyişikliklərin qarşısını almaq üçün router.config düyməsini siləcək. [Standart yanlışdır]"
-
-msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr "Yanlış kimi qoyulsa, ruter digər ruterlərdən tonnel qurma tələblərinə dayanmaqdan imtina edəcək. Qəribə halda istifadə etmək lazımdır. [Standart dəyər doğrudur, yenidən başlama lazımdır]"
-
-msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr "Yanlış kimi qoyulsa, ruter yavaş və ya çatışmaz olan daha qədim versiyalarda çalışan ruterlərdən tonnel qurma tələblərini bloklamaqdan imtina edəcək. [Standart dəyər doğrudur, yenidən başlama lazımdır]"
-
-msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
-msgstr "Konfiqurasiya edildikdə, bu, routerin eyni vaxtda qurulmasına icazə verilən tunel sayı üçün çətin bir limit təyin edir. Standart olaraq router optimal qurma dərəcəsini müəyyən etmək üçün orta qurma müddəti və cari kənar bant genişliyindən istifadə edir. [Yenidən başladın tələb olunur]"
-
-msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
-msgstr "İmzasız (.zip) i2P yeniləmələrini quraşdırmaq istəyirsinizsə, bu, <kod> routerconsole.advenconsole.advanced = həqiqi </ kod> Bu seçim artıq təminatdır. Qeyd: i2P + 0.9.48+, quraşdırılması <a href=/configupdate#i2pupdates> imzasız yeniləmələri dəyişdirin</a> standart olaraq aktivdir."
-
-msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
-msgstr "Bu parametr, effektiv olduqda, imzalanmamış yeniləmə xüsusiyyəti üçün yeniləmə URL-ni konfiqurasiya etməyə imkan verir. URL <kod> /i2pupdate.zip </ code> ilə bitməlidir. Qeyd: Yeniləmənin mənbəyinə etibar etməyincə imzalanmamış yeniləmələri quraşdırmayın!"
-
-msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
-msgstr "Bu parametr, ruterinizin möhkəm olub-olmadığını müəyyən etmək üçün SSU testlərini deaktiv etməyə icazə verir və mütləq firewalled olmayan, lakin aralıq yanğına qarşı problemlər yaşayan marşrutlaşdırıcılar üçün aktivləşdirilə bilər. Test qeyri-aktiv edildikdə, həm SDU, həm də NTCP <a href=/info>marşrutlaşdırıcı məlumat səhifəsində cari ictimai ip ünvanınızı bildirməlidir</a>. [Yenidən başladın tələb olunur]"
-
-msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
-
-msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
-msgstr "Bu parametr həmkarlar ilə ünsiyyət zamanı hansı nəqliyyatın üstünlük təşkil etdiyini müəyyən edir. Standart olaraq, MTCP UDP-dən (SDU) üstün tutulur. Dəyəri doğru təyin etməklə əvvəlcədən mövcud NTCP bağlantısı mövcud olmayana qədər ÜPİ-yə üstünlük veriləcək; hər zaman təyin edildikdə, hər hansı əvvəlcədən mövcud NTCP bağlantısından asılı olmayaraq ÜPİ həmişə istifadə ediləcək. [Standart yanlışdır]"
-
-msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
-msgstr "Bu tunelə xas parametr routerin ev sahibliyi etdiyi serverlərə göndərilən pinqlərə cavabları aktiv və ya deaktiv etməyə imkan verir. Pinqləri deaktiv etmək üçün Tunel Menecerində serverin konfiqurasiyası üçün <i>Xüsusi Seçimlər</i> bölməsinə i2p.streaming.answerPings <code>=false</code> sətrini əlavə etməlisiniz."
-
-msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
-msgstr "Əslinə qaldıqda, I2P şəbəkə bağlantısı olmadan işləyir. Bu, şəbəkənin pozulmasının qarşısını aldığı üçün routeri kod yeniləmələrini yoxlamaq üçün daim yenidən başlatsanız, faydalıdır."
-
-msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr "Bu parametr, aktiv olduqda, routerin ev sahibliyi etdiyi bütün ping effektiv serverlər üçün 50m-ə qədər təsadüfi pong gecikməsini təqdim edir. Standart deaktivdir. [Yenidən başladın tələb olunur]"
-
-msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr "Bu parametr aktiv edildikdə, i2p.streaming.enablePongDelay də aktivdirsə, ping effektiv serverlər üçün təqdim edilən maksimum əlavə <code></code> təsadüfi pong gecikməsini dəyişdirir. Açıq şəkildə təyin edilmədiyi təqdirdə, 50 milyon standart dəyərdən istifadə ediləcək."
-
-msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
-msgstr "Bu parametr (millisaniyə ərzində) bir paketin düşməzdən əvvəl CoDel növbəsində nə qədər qala biləcəyini müəyyən edir. Standart 1000 m-dir. [Yenidən başladın tələb olunur]"
-
-msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
-msgstr "Bu parametr tam olaraq qeyd edilməzdən əvvəl giriş növbəsində maksimum mesaj sayını müəyyən edir. [Standart 768-dir]"
-
-msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
-msgstr "Bu parametr növbəti mesajlar düşməzdən əvvəl maksimum növbə dəyərindən yuxarı mesajların maksimum sayını müəyyən edir. [Standart 128]"
-
-msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
-msgstr "Bu parametr (millisaniyə ərzində) CoDel növbə idarəetmə sistemi üçün növbə gecikmə hədəfinin dəyərini əl ilə konfiqurasiya etməyə imkan verir. Standart 50 m-dir. [Yenidən başladın tələb olunur]"
-
-msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
-msgstr "Bu parametr (saatlarla) NetDb-də RouterInfo-nun bayat kimi təsnif edilməzdən və silinməzdən əvvəl neçə yaşı olduğunu (onun son məlum nəşr tarixini) müəyyən edir. [Router Daşqın Doldurmasa, standart 28 saatdır, bu halda standart 8 saatdır]"
-
-msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
-msgstr "Bu parametr, Həmkar kəşfiyyatı İşi icra edərkən paralel olaraq araşdıracaq həmyaşıdların sayını müəyyən edir [3000-dən çox həmyaşıdın məlum olduğu bir vaxtda standart 1 həmyaşıddır]. Nəzərə alın ki, bu dəyərin artırılması araşdırma üçün genişlik tələblərini artıracaq və bu dəyərin çox yüksək olması artıq mesaj gecikməsinə və digər xidmətlərə müdaxilə edilməsinə səbəb ola bilər, odur ki, ehtiyatla istifadə edin!"
-
-msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
-msgstr "Bu parametr NetDb DHT vedrələrinin sayını müəyyən edir Həmkar kəşfiyyatı İşi icra edərkən istinad edəcək. Standart olaraq, araşdırmaq üçün vedrələrin sayı marşrutlaşdırıcının bir saatdan artıq işləməsindən, routerin gizli və ya 'K' bant genişliyi pilləsində olub-olmamasından və məlum marşrutlaşdırıcıların sayından asılı olaraq dəyişəcək."
-
-msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
-msgstr "Bu ayarlama (saniyələrlə) yeni hərəkət səbrini (hədəfləmə üzrə qonşuları tapmaq üçün) dəyişməyə imkan verir. Bu iş ədədi by default 80 saniyədə bir, və ya router iş və ya işdarlıq gecikməsi yaşanırsa, 3 dəqiqə interval ilə işləyir. Əgər NetDb ölçüsü 4000 qonşudan çoxa çatdıqda, interval 15 dəqiqəyə çatır. Xahiş edirik, NetDb'nin çox qonşulu olması (2000 qonşudan çox) və ya ümumi bant genişliyi istifadəsini azaltmaq istəndiyi təqdirdə gecikməni artırmaq istəyə bilərsiniz. Qeyd: Bu iş Floodfill routerları üçün işləmir."
-
-msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
-msgstr "Bu parametr, araşdırma üçün növbə üçün maksimum həmkar hashes sayını müəyyən edir. I2P-də maksimum 128, I2P-də isə standart dəyər 512-dir."
-
-msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
-msgstr "Bu parametr daşqın yeri kimi fəaliyyət göstərən routerin yeni həmyaşıdları haqqında məlumat əldə etmək üçün NetDb-ni araşdırıb-araşdırmayacağını müəyyən edir. [Standart yanlışdır, yenidən başladın tələb olunur]"
-
-msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
-msgstr "Bu parametr doğru olaraq təyin edildikdə, routerin digər routerlərlə birbaşa ünsiyyət qurmasının qarşısını alır və introducerlərin istifadəsinə məcbur edir. [Router gizli rejimdə olmadığı təqdirdə standart yalandır]"
-
-msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
-msgstr "Bu parametr NetDb-dən köhnə marşrutlaşdırıcıları xaric etməyə imkan verir. Standart və ya təyin etdiyiniz dəyərdən daha böyük marşrutlaşdırıcılar NetDb-dən silinəcək və router sessiyasının müddəti ərzində qadağan ediləcək. Standart olaraq 0.9.20 -dən yuxarı olan marşrutlaşdırıcılar istisna edilir. Qeyd: 0.9.46 I2P  versiyasından başlayaraq, yerli tunellərin qurulması üçün yalnız çox son versiyalarla işləyən marşrutlaşdırıcılardan istifadə olunur. [Yenidən başladın tələb olunur]"
-
 msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. [Default is 4]"
 msgstr "Bu parametr həmkar gecikməsini təyin etmək üçün istifadə olunan eyni vaxtda icra ediləcək həmkar testlərinin sayını müəyyən edir. [Standart 4]"
 
@@ -5849,14 +5892,17 @@ msgstr "Bu parametr ruterimiz haqqında statistik məlumatların NetDb-yə spora
 msgid "This setting configures the initial size of the outbound message queue. [Default is 64]"
 msgstr "Bu parametr kənar mesaj növbəsinin ilkin ölçüsünü konfiqurasiya edir. [Standart 64]"
 
-msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
-msgstr "Bu parametr gələn mesaj növbəsinin maksimum ölçüsünü konfiqurasiya edir. [Standart 1024-dür]"
-
 msgid "This setting configures the maximum number of inbound messages queued per cycle (pump). [Default is 24]"
 msgstr "Bu parametr dövr (nasos) üzrə növbə ilə gələn mesajların maksimum sayını konfiqurasiya edir. [Standart 24]"
 
+msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
+msgstr "Bu parametr gələn mesaj növbəsinin maksimum ölçüsünü konfiqurasiya edir. [Standart 1024-dür]"
+
 msgid "This setting configures the maximum number of outbound messages queued per cycle (pump). [Default is 64]"
 msgstr "Bu parametr dövr (nasos) üzrə növbələşən maksimum kənar mesaj sayını konfiqurasiya edir. [Standart 64-dür]"
+
+msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
+msgstr "Əslinə qaldıqda, router router yenidən başladıqda kimliyini və UDP portunu dəyişəcək və sonrakı dəyişikliklərin qarşısını almaq üçün router.config düyməsini siləcək. [Standart yanlışdır]"
 
 msgid "This setting (in milliseconds) allows you to manually configure the delay between router refresh updates run by the Refresh Routers Job. By default the pause between refreshes is determined by the size of the NetDb, and introduces some randomness in the timing to mitigate traffic analysis. For values lower than 2000 milliseconds, increasing the value of <code>router.refreshTimeout</code> is recommended. Note that setting this value below 2000 milliseconds will increase your network traffic and may introduce job lag, and is not recommended for sustained use."
 msgstr "Bu ayar (milisaniye cinsinden), Yenileme Yönlendiricileri İşini çalıştıran Router Yenileyici Güncellemeleri arasındaki gecikmeyi elle yapılandırmanıza olanak tanır. Varsayılan olarak, yenilemeler arasındaki duraklama NetDb'nin boyutu tarafından belirlenir ve zamanlama da bir miktar rastlantılılık eklenir. 2000 milisaniyeden düşük değerler için <code>router.refreshTimeout</code> değerini artırmak önerilir. Bu değeri 2000 milisaniyenin altına ayarlamanız ağ trafiğinizi artırır ve iş gecikmesine neden olabilir. Uzun süreli kullanım için önerilmez."
@@ -5870,26 +5916,56 @@ msgstr "Bu parametr (saniyə ərzində) ruterin yenilənməsi cəhdinin uğursuz
 msgid "This setting determines whether routers classified as uninteresting (K or L tier, unreachable or older than 0.9.50) are checked during the refresh router process after 1 hour of uptime. [Default is false]"
 msgstr "Bu parametr maraqsız olaraq təsnif edilən marşrutlaşdırıcıların (K və ya L dərəcəli, 0.9.50 -dən yuxarı və ya daha yuxarı) yenilənmə marşrutlaşdırıcısı prosesində 1 saatlıq iş vaxtından sonra yoxlanılıb-tapılmadığını müəyyən edir. [Standart yanlışdır]"
 
+msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
+msgstr ""
+
+msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
+msgstr "Konfiqurasiya edildikdə, bu, routerin eyni vaxtda qurulmasına icazə verilən tunel sayı üçün çətin bir limit təyin edir. Standart olaraq router optimal qurma dərəcəsini müəyyən etmək üçün orta qurma müddəti və cari kənar bant genişliyindən istifadə edir. [Yenidən başladın tələb olunur]"
+
+msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
+msgstr "İmzasız (.zip) i2P yeniləmələrini quraşdırmaq istəyirsinizsə, bu, <kod> routerconsole.advenconsole.advanced = həqiqi </ kod> Bu seçim artıq təminatdır. Qeyd: i2P + 0.9.48+, quraşdırılması <a href=/configupdate#i2pupdates> imzasız yeniləmələri dəyişdirin</a> standart olaraq aktivdir."
+
+msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
+msgstr "Bu parametr, effektiv olduqda, imzalanmamış yeniləmə xüsusiyyəti üçün yeniləmə URL-ni konfiqurasiya etməyə imkan verir. URL <kod> /i2pupdate.zip </ code> ilə bitməlidir. Qeyd: Yeniləmənin mənbəyinə etibar etməyincə imzalanmamış yeniləmələri quraşdırmayın!"
+
 msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
 msgstr "Bu ayar (dəqiqələrlə) sizin istəyinizə əsasən yönləndirici məlumatlarının İnformasiya İqliminin vaxtından sonra neçə dəqiqə gözlənilməsi haqqında əlavə tənzimləmə imkanı verir. Bu vaxtdan sonra, yalnız düzgün yönləndiricilər qəbul ediləcəkdir. Bu doğrulama zamanı, sona çatmış yönləndirici məlumatları və SSU vasitəsilə yalnız lazımsız müşahidəçilər qeyb olurlar, İnformasiya İqlimindən çıxarılacaq. [Default olaraq 60 dəqiqə] Qeyd edin: Bu ayar, İnformasiya İqlimimdən çıxarılaraq doruş tərəfdən qovulan köhnə yönləndiricilərin (default olaraq 0.9.29-dan köhnələri) İnformasiya İqlimidən kənarlaşdırmaq və qadağan etmək üçün nəzarətə çəkmir."
 
-msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
-msgstr "Bu parametr doğru olaraq təyin edildikdə, yan panelin Konqress bölməsindəki Həmkar Testinin Orta oxunuşu göstəriləcək, müvəffəqiyyətli həmkar testinin ortalamasını və uğursuz testlərin aldığı orta artıq vaxtı əlavə etməklə hesablanır. Orta dəyər optimal router.peerTestTimeout dəyərini müəyyən etmək üçün bələdçi kimi istifadə <code></code> edilə bilər. [Standart yanlışdır]"
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
+msgstr ""
 
-msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
-msgstr "Bu parametr doğrulandıqda, <i>faiz linkləri sayt</i> xəritəsində <a href=/sitemap>göstəriləcək</a>. [Standart yanlışdır]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
+msgstr ""
 
-msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr "Bu ayar, ruter konsol səhifələrinin başlığı üçün özgün mətn ön əlavəsinin qoyulmasına icazə verir, birdən çox konsolun brauzer qutularında açılırsa və onları asanlıqla fərqləndirmək istəndikdə faydalıdır."
+msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
+msgstr "Bu parametr, ruterinizin möhkəm olub-olmadığını müəyyən etmək üçün SSU testlərini deaktiv etməyə icazə verir və mütləq firewalled olmayan, lakin aralıq yanğına qarşı problemlər yaşayan marşrutlaşdırıcılar üçün aktivləşdirilə bilər. Test qeyri-aktiv edildikdə, həm SDU, həm də NTCP <a href=/info>marşrutlaşdırıcı məlumat səhifəsində cari ictimai ip ünvanınızı bildirməlidir</a>. [Yenidən başladın tələb olunur]"
 
-msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
-msgstr "Bu parametr ruterinizin dəqiq saat vaxtını qoruduğuna əmin olmaq üçün tələb olunan alternativ NTP serverlərinin konfiqurasiyasına icazə verir. [Standart 0.pool.ntp.org ,1.pool.ntp.org,2.pool.ntp.org]"
+msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
+msgstr "Bu parametr həmkarlar ilə ünsiyyət zamanı hansı nəqliyyatın üstünlük təşkil etdiyini müəyyən edir. Standart olaraq, MTCP UDP-dən (SDU) üstün tutulur. Dəyəri doğru təyin etməklə əvvəlcədən mövcud NTCP bağlantısı mövcud olmayana qədər ÜPİ-yə üstünlük veriləcək; hər zaman təyin edildikdə, hər hansı əvvəlcədən mövcud NTCP bağlantısından asılı olmayaraq ÜPİ həmişə istifadə ediləcək. [Standart yanlışdır]"
+
+msgid "miscellaneous"
+msgstr ""
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "Əslinə qalsa, bu seçim sistem lövhəsində/ bildiriş sahəsində əsas xidmətə nəzarət seçimləri olan piktoqram yerləşdirəcək. [Standart olaraq deaktiv edilib]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
 msgstr "Bu ayar, bir torrent indirilirken veya bir torrent oluşturulurken I2PSnark'ın izin vereceği maksimum dosya sayısının yapılandırılmasına olanak sağlar. Bu değeri, varsayılan 2000 dosyadan önemli ölçüde artırmak, işletim sisteminde açık dosya sayısını artırmak için ana sistemde ek yapılandırma gerektirebilir (örneğin Linux'ta <code>ulimit -n</code>). Değiştirmek için, I2PSnark'ın yapılandırma dosyasına <code>i2psnark.config</code> ekleme yapın. [I2PSnark veya yönlendiriciyi yeniden başlatmak gerekiyor]"
+
+msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
+msgstr "Bu tunelə xas parametr routerin ev sahibliyi etdiyi serverlərə göndərilən pinqlərə cavabları aktiv və ya deaktiv etməyə imkan verir. Pinqləri deaktiv etmək üçün Tunel Menecerində serverin konfiqurasiyası üçün <i>Xüsusi Seçimlər</i> bölməsinə i2p.streaming.answerPings <code>=false</code> sətrini əlavə etməlisiniz."
+
+msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
+msgstr "Bu parametr, aktiv olduqda, routerin ev sahibliyi etdiyi bütün ping effektiv serverlər üçün 50m-ə qədər təsadüfi pong gecikməsini təqdim edir. Standart deaktivdir. [Yenidən başladın tələb olunur]"
+
+msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
+msgstr "Bu parametr aktiv edildikdə, i2p.streaming.enablePongDelay də aktivdirsə, ping effektiv serverlər üçün təqdim edilən maksimum əlavə <code></code> təsadüfi pong gecikməsini dəyişdirir. Açıq şəkildə təyin edilmədiyi təqdirdə, 50 milyon standart dəyərdən istifadə ediləcək."
+
+msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
+msgstr "Əslinə qaldıqda, I2P şəbəkə bağlantısı olmadan işləyir. Bu, şəbəkənin pozulmasının qarşısını aldığı üçün routeri kod yeniləmələrini yoxlamaq üçün daim yenidən başlatsanız, faydalıdır."
+
+msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
+msgstr "Bu parametr ruterinizin dəqiq saat vaxtını qoruduğuna əmin olmaq üçün tələb olunan alternativ NTP serverlərinin konfiqurasiyasına icazə verir. [Standart 0.pool.ntp.org ,1.pool.ntp.org,2.pool.ntp.org]"
 
 msgid "Recent I2P+ Changes"
 msgstr "Son I2P  dəyişiklikləri"
@@ -6106,6 +6182,18 @@ msgstr "Həm qeyri-SSL, həm də SSL üçün"
 
 msgid "For SSL only"
 msgstr "Yalnız SSL üçün"
+
+msgid "How can I configure the console and web services to be accessible on my local network?"
+msgstr ""
+
+msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
+msgstr ""
+
+msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
+msgstr ""
+
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager’s configuration section using the <i>reachable by</i> dropdown."
+msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "I2P daxilində IRC-yə necə qoşula bilərəm?"
@@ -7366,9 +7454,6 @@ msgstr "Şəbəkə həmyaşıdları"
 msgid "peer profiles"
 msgstr "həmyaşıd profilləri"
 
-msgid "Peer Profiles"
-msgstr "Həmyaşıd profilləri"
-
 msgid "Session Banned Peers"
 msgstr "Sessiya Qadağan Edilən Həmyaşıdlar"
 
@@ -7585,6 +7670,9 @@ msgstr "Tonnelleri aktiv-passiv döndür"
 msgid "Peer Profile"
 msgstr "Həmyaşıd profili"
 
+msgid "Profile View"
+msgstr ""
+
 msgid "Profile for peer"
 msgstr "Həmyaşıd üçün profil"
 
@@ -7722,6 +7810,35 @@ msgstr "Bitdi"
 
 
 
+
+
 #, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

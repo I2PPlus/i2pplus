@@ -23,6 +23,12 @@ msgstr ""
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr ""
 
+msgid "Download already running: "
+msgstr ""
+
+msgid "Downloading"
+msgstr ""
+
 msgid "Configuring I2PSnark with I2CP options"
 msgstr ""
 
@@ -466,11 +472,22 @@ msgid "Anonymous BitTorrent Client"
 msgstr ""
 
 #, java-format
-msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
+msgid "Are you sure you want to delete {0} and all downloaded data?"
 msgstr ""
 
 #, java-format
-msgid "Are you sure you want to delete torrent file {0} and all downloaded data?"
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr ""
+
+#, java-format
+msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
+msgstr ""
+
+msgid "Note: Downloaded data will not be deleted."
+msgstr ""
+
+#, java-format
+msgid "Deleting {0} and associated metadata only..."
 msgstr ""
 
 msgid "I2PSnark has stopped"
@@ -483,6 +500,9 @@ msgid "Torrents"
 msgstr ""
 
 msgid "Refresh page"
+msgstr ""
+
+msgid "Configure"
 msgstr ""
 
 msgid "Forum"
@@ -523,36 +543,6 @@ msgid "page refresh"
 msgstr ""
 
 msgid "Warning - No I2P"
-msgstr ""
-
-msgid "Search"
-msgstr ""
-
-msgid "Show All"
-msgstr ""
-
-msgid "Active"
-msgstr ""
-
-msgid "Inactive"
-msgstr ""
-
-msgid "Connected"
-msgstr ""
-
-msgid "Downloading"
-msgstr ""
-
-msgid "Seeding"
-msgstr ""
-
-msgid "Complete"
-msgstr ""
-
-msgid "Incomplete"
-msgstr ""
-
-msgid "Stopped"
 msgstr ""
 
 msgid "Status"
@@ -634,18 +624,18 @@ msgstr ""
 msgid "No torrents loaded."
 msgstr ""
 
-msgid "Totals"
-msgstr ""
-
 #, java-format
 msgid "1 torrent"
 msgid_plural "{0} torrents"
 msgstr[0] ""
 msgstr[1] ""
 
+msgid "Total size of loaded torrents"
+msgstr ""
+
 #, java-format
 msgid "1 connected peer"
-msgid_plural "{0} connected peers"
+msgid_plural "{0} peer connections"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -655,16 +645,16 @@ msgid_plural "{0} DHT peers"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Configured maximum (actual usage may be less)"
+msgid "Active downloads"
 msgstr ""
 
-msgid "Tunnels"
+msgid "Active uploads"
 msgstr ""
 
-msgid "in"
+msgid "Active Inbound tunnels"
 msgstr ""
 
-msgid "out"
+msgid "Active Outbound tunnels"
 msgstr ""
 
 msgid "Estimated download time for all torrents"
@@ -682,16 +672,40 @@ msgstr ""
 msgid "Total upload speed"
 msgstr ""
 
-msgid "Enable Debug Mode"
-msgstr ""
-
-msgid "Disable Debug Mode"
+msgid "Toggle Debug Mode"
 msgstr ""
 
 msgid "Normal Mode"
 msgstr ""
 
 msgid "No DHT Peers"
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "Show All"
+msgstr ""
+
+msgid "Active"
+msgstr ""
+
+msgid "Inactive"
+msgstr ""
+
+msgid "Connected"
+msgstr ""
+
+msgid "Seeding"
+msgstr ""
+
+msgid "Complete"
+msgstr ""
+
+msgid "Incomplete"
+msgstr ""
+
+msgid "Stopped"
 msgstr ""
 
 msgid "First"
@@ -1049,9 +1063,6 @@ msgstr ""
 msgid "Universal theming is enabled."
 msgstr ""
 
-msgid "Configure"
-msgstr ""
-
 msgid "Refresh time"
 msgstr ""
 
@@ -1071,12 +1082,6 @@ msgid "torrents"
 msgstr ""
 
 msgid "Language"
-msgstr ""
-
-msgid "Smart torrent sorting"
-msgstr ""
-
-msgid "Ignore words such as 'a' and 'the' when sorting"
 msgstr ""
 
 msgid "Collapsible panels"
@@ -1309,6 +1314,15 @@ msgid "This configures the maximum number of tunnels to open, determined by the 
 msgstr ""
 
 msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
+msgstr ""
+
+msgid "Sequential piece or file order not saved - feature currently broken."
+msgstr ""
+
+msgid "Unknown command"
+msgstr ""
+
+msgid "Please retry form submission (bad nonce)"
 msgstr ""
 
 msgid "Info hash"

@@ -130,17 +130,14 @@ msgid_plural "{0} destinations deleted."
 msgstr[0] "1 célállomás törölve."
 msgstr[1] "{0} célállomás törölve."
 
-msgid "No entries selected to delete."
-msgstr "Nincs kiválasztva bejegyzés a törléshez."
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "Alternatív hozzáadása"
 
 msgid "Address book saved."
 msgstr "Címjegyzés elmentve."
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "Tallózzon ki ebből a címjegyzékből, és térjen vissza a frissítés megtekintéséhez."
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "HIBA: Nem sikerült a címjegyzék-fálj írása."
@@ -321,6 +318,9 @@ msgstr "Törlésre kijelöl"
 msgid "Cancel"
 msgstr "Mégse"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "pl. newdomain.i2p"
 
@@ -398,6 +398,9 @@ msgstr "Fájl, ami a működést naplózza (megváltoztathatod /dev/null -ra, ha
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "A használandó felülbíráló téma neve (alapértelmezett a konzol által kiválasztott téma)"
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "címjegyzék"
@@ -593,3 +596,5 @@ msgstr "A fő címjegyzékbe kézzel hozzáadott címek egyesülnek az útválas
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Az előfizetésekből kapott gazdagépek egyesülnek az útválasztó címjegyzékével."
+
+

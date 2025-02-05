@@ -130,17 +130,14 @@ msgid_plural "{0} destinations deleted."
 msgstr[0] "1 προορισμός διαγράφηκε."
 msgstr[1] "{0} Οι προορισμοί διαγράφηκαν."
 
-msgid "No entries selected to delete."
-msgstr "Δεν έχουν επιλεγεί καταχωρήσεις για διαγραφή."
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "Προσθήκη εναλλακτικού"
 
 msgid "Address book saved."
 msgstr "Το βιβλίο διευθύνσεων αποθηκεύτηκε."
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "Ξεκινήστε από αυτό το βιβλίο διευθύνσεων και επιστρέψτε για να δείτε την ενημέρωση."
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "ΣΦΑΛΜΑ: Δεν μπόρεσε να εγγραφεί το αρχείο βιβλίου διευθύνσεων."
@@ -321,6 +318,9 @@ msgstr "Επιλογή προς διαγραφή"
 msgid "Cancel"
 msgstr "Ακύρωση"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "π.χ. newdomain.i2p"
 
@@ -398,6 +398,9 @@ msgstr "Αρχείο για καταγραφή της δραστηριότητα
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Όνομα του θέματος παράκαμψης προς χρήση (προεπιλογή σε θέμα που έχει επιλεγεί από την κονσόλα)"
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "διευθυνσιογράφος"
@@ -593,3 +596,5 @@ msgstr "Οι διευθύνσεις που προστέθηκαν χειροκί
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Οι κεντρικοί υπολογιστές που λαμβάνετε από τις συνδρομές σας θα συγχωνευθούν με το βιβλίο διευθύνσεων του δρομολογητή σας."
+
+

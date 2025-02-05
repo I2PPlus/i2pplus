@@ -144,6 +144,9 @@ msgstr "Žádná podpora pro náš typ podpisu"
 msgid "Unreachable on any transport"
 msgstr "Nedostupné na každém transportu"
 
+msgid "Cannot enumerate UPnP devices on Android."
+msgstr ""
+
 msgid "UPnP is not enabled"
 msgstr "UPnP není povolen"
 
@@ -681,11 +684,39 @@ msgstr "Prosím, hlaste se"
 msgid "After reporting, please restart your router"
 msgstr "Po nahlášení restartujte router"
 
+msgid "Invalid form submission, requires POST"
+msgstr ""
+
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "Neplatně odeslaný formulář, nejspíše jste použili tlačítka 'Zpět' nebo 'Znovu načíst' ve vašem prohlížeči. Prosím odešlete formulář znovu."
 
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Pokud problém přetrvává, ověřte, zda máte ve svém prohlížeči povoleny soubory cookie."
+
+msgid "Bandwidth usage"
+msgstr "Využití šířky pásma"
+
+#, java-format
+msgid "events in {0}"
+msgstr "události v {0}"
+
+msgid "Events per period"
+msgstr "Události za období"
+
+msgid "Min"
+msgstr "Min"
+
+msgid "Max"
+msgstr "Max"
+
+msgid "Avg"
+msgstr "Prům"
+
+msgid "Now"
+msgstr "Teď"
+
+msgid "Router restarted"
+msgstr "Router byl restartován"
 
 #, java-format
 msgid "News last updated {0} ago."
@@ -719,31 +750,6 @@ msgstr[2] "{0} pluginy aktualizován"
 
 msgid "Plugin check complete"
 msgstr "Kontrola pluginu dokončena"
-
-msgid "Bandwidth usage"
-msgstr "Využití šířky pásma"
-
-#, java-format
-msgid "events in {0}"
-msgstr "události v {0}"
-
-msgid "Events per period"
-msgstr "Události za období"
-
-msgid "Min"
-msgstr "Min"
-
-msgid "Max"
-msgstr "Max"
-
-msgid "Avg"
-msgstr "Prům"
-
-msgid "Now"
-msgstr "Teď"
-
-msgid "Router restarted"
-msgstr "Router byl restartován"
 
 msgid "none"
 msgstr "žádný"
@@ -813,8 +819,20 @@ msgstr "Konzole"
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "Chcete-li povolit SSL přístup pro Router Console, podívejte se do komentovaného souboru <code>clients.config</code> umístěného v adresáři vaší aplikace I2P, kde najdete další informace. "
 
+msgid "Save disabled, edit the router.config file to make changes"
+msgstr ""
+
 msgid "Error updating the configuration - please see the error logs"
 msgstr "Chyba při aktualizaci konfigurace – prohlédněte si prosím protokoly chyb"
+
+msgid "No changes made to the configuration"
+msgstr ""
+
+msgid "Note"
+msgstr "POZNÁMKA"
+
+msgid "Some changes may require a restart to take effect."
+msgstr "Některé změny mohou vyžadovat restart, aby se projevily."
 
 msgid "Save Client Configuration"
 msgstr "Uložte konfiguraci klienta"
@@ -828,6 +846,9 @@ msgstr "Uložte konfiguraci WebApp"
 msgid "Save Plugin Configuration"
 msgstr "Uložit konfiguraci pluginu"
 
+msgid "Plugins disabled"
+msgstr ""
+
 msgid "Install Plugin"
 msgstr "Nainstalujte plugin"
 
@@ -836,6 +857,9 @@ msgstr "Nainstalujte plugin ze souboru"
 
 msgid "Update All Installed Plugins"
 msgstr "Aktualizujte všechny nainstalované pluginy"
+
+msgid "Delete client disabled"
+msgstr ""
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -918,9 +942,18 @@ msgstr "Stahování pluginu nebo aktualizace již probíhá."
 msgid "Updating all plugins"
 msgstr "Aktualizace všech pluginů"
 
+msgid "Update manager not registered, cannot install"
+msgstr ""
+
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "Instalace pluginu z {0}"
+
+msgid "Cannot install, check logs"
+msgstr ""
+
+msgid "Update manager not registered, cannot check"
+msgstr ""
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1019,6 +1052,19 @@ msgstr "Konfigurace byla úspěšně uložena."
 msgid "Join Family"
 msgstr "Připojte se k rodině"
 
+msgid "Bad certificate - No Subject CN"
+msgstr ""
+
+msgid "Bad characters in Family: "
+msgstr ""
+
+#, java-format
+msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
+msgstr ""
+
+msgid "Family key configured for router family: "
+msgstr ""
+
 msgid "Load from file failed"
 msgstr "Načtení ze souboru se nezdařilo"
 
@@ -1034,8 +1080,8 @@ msgstr "Přidat položku"
 msgid "Restore defaults"
 msgstr "Obnovte výchozí nastavení"
 
-msgid "Home page changed"
-msgstr "Změněna domovská stránka"
+msgid "Bad group detected, please retry"
+msgstr ""
 
 msgid "Restored default settings"
 msgstr "Obnoveno výchozí nastavení"
@@ -1067,6 +1113,9 @@ msgstr "Neplatný klíč"
 msgid "Invalid destination"
 msgstr "Neplatný cíl"
 
+msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
+msgstr ""
+
 #, java-format
 msgid "Key for {0} added to keyring"
 msgstr "Klíč pro {0} byl přidán do svazku klíčů"
@@ -1076,6 +1125,9 @@ msgstr "Vyžadováno heslo pro vyhledávání"
 
 msgid "Requires hostname, destination, or blinded Base32"
 msgstr "Vyžaduje název hostitele, cíl nebo zaslepenou Base32"
+
+msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
+msgstr ""
 
 msgid "Destination requires lookup password"
 msgstr "Cíl vyžaduje vyhledávací heslo"
@@ -1094,6 +1146,9 @@ msgstr "Pošlete klíč operátorovi serveru."
 
 msgid "Delete key"
 msgstr "Smazat klíč"
+
+msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
+msgstr ""
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1144,6 +1199,36 @@ msgstr "Slepý"
 
 msgid "Log overrides updated"
 msgstr "Přepisy protokolu byly aktualizovány"
+
+msgid "Error updating the log limits - levels not valid"
+msgstr ""
+
+msgid "Log limits cleared"
+msgstr ""
+
+#, java-format
+msgid "Default log level updated from {0} to {1}"
+msgstr ""
+
+msgid "Date format updated"
+msgstr ""
+
+#, java-format
+msgid "Specified date format is not valid ({0}) - not updated"
+msgstr ""
+
+msgid "File size updated"
+msgstr ""
+
+#, java-format
+msgid "Specified file size limit is not valid ({0}) - not updated"
+msgstr ""
+
+msgid "Compression setting updated"
+msgstr ""
+
+msgid "Log record format updated"
+msgstr ""
 
 msgid "Log configuration saved"
 msgstr "Konfigurace protokolu uložena"
@@ -1352,6 +1437,12 @@ msgstr "Špatná hodnota rychlosti"
 msgid "Bad capacity value"
 msgstr "Špatná hodnota kapacity"
 
+msgid "Bonuses adjusted for: "
+msgstr ""
+
+msgid "No profile exists for: "
+msgstr ""
+
 msgid "Unsupported"
 msgstr "Nepodporováno"
 
@@ -1466,27 +1557,14 @@ msgstr[2] "Prosím, počkejte, až vyprší směrovací závazky pro tunely {0}.
 msgid "Restart in {0}"
 msgstr "Restartujte za {0}"
 
-msgid "Stat filter and location updated successfully to"
-msgstr "Statistický filtr a umístění byly úspěšně aktualizovány na"
-
-msgid "Full statistics enabled"
-msgstr "Úplná statistika povolena"
-
-msgid "Full statistics disabled"
-msgstr "Úplná statistika zakázána"
-
-#, java-format
-msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
-msgstr "Seznam grafů aktualizován, může trvat až 60 s, než se projeví na {0}stránce grafů{1}"
-
 msgid "Save order"
 msgstr "Uložte objednávku"
 
-msgid "Refresh disabled"
-msgstr "Aktualizace stavu vypnuta"
+msgid "Sidebar refresh disabled"
+msgstr ""
 
-msgid "Refresh interval changed"
-msgstr "Interval obnovy změněn"
+msgid "Sidebar refresh interval changed"
+msgstr ""
 
 msgid "Refresh interval must be a number"
 msgstr "Interval obnovy musí být číslo"
@@ -1494,17 +1572,17 @@ msgstr "Interval obnovy musí být číslo"
 msgid "Restore full default"
 msgstr "Obnovit úplné výchozí nastavení"
 
-msgid "Full summary bar default restored."
-msgstr "Obnoveno výchozí nastavení úplného souhrnu."
+msgid "Full sidebar defaults restored."
+msgstr ""
 
-msgid "Summary bar will refresh shortly."
-msgstr "Souhrnný pruh se brzy obnoví."
+msgid "Sidebar will refresh shortly."
+msgstr ""
 
 msgid "Restore minimal default"
 msgstr "Obnovte minimální výchozí nastavení"
 
-msgid "Minimal summary bar default restored."
-msgstr "Obnoveno výchozí nastavení lišty minimálního souhrnu."
+msgid "Minimal sidebar defaults restored."
+msgstr ""
 
 msgid "Order must be an integer"
 msgstr "Pořadí musí být celé číslo"
@@ -1520,6 +1598,27 @@ msgstr "Přesunuto"
 
 msgid "Saved order of sections."
 msgstr "Uložené pořadí sekcí."
+
+msgid "Stat filter and location updated successfully to"
+msgstr "Statistický filtr a umístění byly úspěšně aktualizovány na"
+
+msgid "Full statistics enabled"
+msgstr "Úplná statistika povolena"
+
+msgid "Full statistics disabled"
+msgstr "Úplná statistika zakázána"
+
+#, java-format
+msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
+msgstr "Seznam grafů aktualizován, může trvat až 60 s, než se projeví na {0}stránce grafů{1}"
+
+#, java-format
+msgid "Internal error: could not resolve pool name {0}."
+msgstr ""
+
+#, java-format
+msgid "Internal error: could not find pool settings for {0}."
+msgstr ""
 
 msgid "Updated settings for all pools."
 msgstr "Aktualizováno nastavení pro všechny bazény."
@@ -1547,9 +1646,8 @@ msgstr[2] "{0} tunely"
 msgid "Exploratory tunnels"
 msgstr "Průzkumné tunely"
 
-#, java-format
-msgid "Client tunnels for {0}"
-msgstr "Klientské tunely pro {0}"
+msgid "I2PSnark"
+msgstr "I2PSnark"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "ANONYMITY WARNING - Nastavení zahrnuje 0-hop tunely."
@@ -1575,17 +1673,17 @@ msgstr "Příchozí"
 msgid "Outbound"
 msgstr "Odchozí"
 
-msgid "Length"
-msgstr "Délka"
-
-msgid "Randomization"
-msgstr "Randomizace"
-
 msgid "Quantity"
 msgstr "Množství"
 
 msgid "Backup quantity"
 msgstr "Záložní množství"
+
+msgid "Length"
+msgstr "Délka"
+
+msgid "Randomization"
+msgstr "Randomizace"
 
 msgid "Inbound options"
 msgstr "Příchozí možnosti"
@@ -1596,17 +1694,20 @@ msgstr "Odchozí možnosti"
 msgid "Add user"
 msgstr "Přidat uživatele"
 
+msgid "Cannot save theme choice, theme name has illegal characters"
+msgstr ""
+
 msgid "Theme change saved."
 msgstr "Změna motivu uložena."
-
-msgid "Refresh the page to view."
-msgstr "Pro zobrazení obnovte stránku."
 
 msgid "Mobile console option saved."
 msgstr "Možnost mobilní konzole uložena."
 
 msgid "No user name entered"
 msgstr "Nebylo zadáno žádné uživatelské jméno"
+
+msgid "User name may not contain '='"
+msgstr ""
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "Warning: Uživatelská jména mimo znakovou sadu ISO-8859-1 se nedoporučují. "
@@ -1897,17 +1998,17 @@ msgstr "Výkon směrovače grafů"
 msgid "Graphs"
 msgstr "Grafy"
 
-msgid "Anonymous webmail client"
-msgstr "Anonymní webmailový klient"
-
-msgid "I2PMail"
-msgstr "I2PMmail"
-
 msgid "Help"
 msgstr "Nápověda"
 
 msgid "I2P Router Help"
 msgstr "Nápověda k routeru I2P"
+
+msgid "Anonymous webmail client"
+msgstr "Anonymní webmailový klient"
+
+msgid "I2PMail"
+msgstr "I2PMmail"
 
 msgid "Install and configure I2P plugins"
 msgstr "Nainstalujte a nakonfigurujte I2P pluginy"
@@ -1926,6 +2027,12 @@ msgstr "Databáze sítě"
 
 msgid "Show list of all known I2P routers"
 msgstr "Zobrazit seznam všech známých I2P routerů"
+
+msgid "List of recently connected peers with profiling info"
+msgstr ""
+
+msgid "Peer Profiles"
+msgstr "Profily vrstevníků"
 
 msgid "Router Info"
 msgstr "Informace o směrovači"
@@ -1999,14 +2106,14 @@ msgstr "Pokročilá Konfigurace"
 msgid "Advanced router configuration"
 msgstr "Pokročilá konfigurace routeru"
 
-msgid "Start or stop Router clients"
-msgstr "Spusťte nebo zastavte klienty směrovače"
-
 msgid "Changelog"
 msgstr "Seznam změn"
 
 msgid "Recent changes"
 msgstr "Poslední změny"
+
+msgid "Start or stop Router clients"
+msgstr "Spusťte nebo zastavte klienty směrovače"
 
 msgid "Bug tracker"
 msgstr "Sledování chyb"
@@ -2152,9 +2259,6 @@ msgstr "Vyhledávač Clearnet BitTorrent DHT"
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "Vyhledávač DuckDuckGo (bez javascriptu)"
 
-msgid "Clearnet Search Engine"
-msgstr "Vyhledávač Clearnet"
-
 msgid "Privacy-focused Clearnet Search Engine"
 msgstr "Vyhledávač Clearnet zaměřený na soukromí"
 
@@ -2230,18 +2334,6 @@ msgstr "Nezávislá investigativní žurnalistika"
 msgid "Information Security Research &amp; Education"
 msgstr "Výzkum a vzdělávání v oblasti informační bezpečnosti"
 
-msgid "Cannabis-related magazine"
-msgstr "Časopis související s konopím"
-
-msgid "CultureMagazine"
-msgstr "CultureMagazine"
-
-msgid "A magazine of Politics &amp; Culture"
-msgstr "Časopis o politice a kultuře"
-
-msgid "CurrentAffairs"
-msgstr "CurrentAffairs"
-
 msgid "Darknet related news site"
 msgstr "Zpravodajské stránky související s Darknetem"
 
@@ -2296,15 +2388,6 @@ msgstr "HongKongWatch"
 msgid "Monitors threats to freedoms and rights in Hong Kong"
 msgstr "Monitoruje ohrožení svobod a práv v Hongkongu"
 
-msgid "Politics &amp; Current Affairs Journal"
-msgstr "Politický a aktuální žurnál"
-
-msgid "English language Japanese News"
-msgstr "Anglický jazyk Japonské zprávy"
-
-msgid "JapanToday"
-msgstr "Japonsko dnes"
-
 msgid "JStorDaily"
 msgstr "JStorDaily"
 
@@ -2347,9 +2430,6 @@ msgstr "Zprávy a blogy na I2P"
 msgid "Planeta"
 msgstr "Planeta"
 
-msgid "News &amp; Views on Tibet"
-msgstr "Zprávy a pohledy na Tibet"
-
 msgid "Lifestyle magazine"
 msgstr "Časopis o životním stylu"
 
@@ -2367,6 +2447,9 @@ msgstr "ScienceDaily"
 
 msgid "Community-driven tech news"
 msgstr "Technické novinky řízené komunitou"
+
+msgid "Various services"
+msgstr ""
 
 msgid "News for nerds"
 msgstr "Novinky pro nerdy"
@@ -2413,12 +2496,6 @@ msgstr "Globální zprávy"
 msgid "TheGuardian"
 msgstr "TheGuardian"
 
-msgid "TheHill"
-msgstr "TheHill"
-
-msgid "US Political News"
-msgstr "Politické zprávy USA"
-
 msgid "TheMarkup"
 msgstr "TheMarkup"
 
@@ -2433,12 +2510,6 @@ msgstr "TheMoscowTimes"
 
 msgid "TheNewRepublic"
 msgstr "Nová republika"
-
-msgid "International News from Tibet"
-msgstr "Mezinárodní zprávy z Tibetu"
-
-msgid "TheTibetPost"
-msgstr "TheTibetPost"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "Sdílení souborů a novinky o autorských právech"
@@ -2467,6 +2538,9 @@ msgstr "URL"
 
 msgid "Add"
 msgstr "Přidat"
+
+msgid "Error displaying the info page."
+msgstr ""
 
 msgid "Identity"
 msgstr "Identita"
@@ -2513,6 +2587,9 @@ msgstr "Dostupná jádra CPU"
 msgid "Performance"
 msgstr "Výkon"
 
+msgid "Maximum available RAM"
+msgstr ""
+
 msgid "Classified as slow"
 msgstr "Klasifikováno jako pomalé"
 
@@ -2521,6 +2598,9 @@ msgstr "Ano"
 
 msgid "No"
 msgstr "Ne"
+
+msgid "GeoIP Db"
+msgstr ""
 
 msgid "Target"
 msgstr "Cíl"
@@ -2658,6 +2738,9 @@ msgstr "Všechny směrovače (klient NetDb)"
 msgid "Sybil Analysis"
 msgstr "Analýza sybil"
 
+msgid "Bad value supplied, please check and try again."
+msgstr ""
+
 msgid "Router Map"
 msgstr "Mapa Routeru"
 
@@ -2732,9 +2815,6 @@ msgstr "je zakázáno"
 
 msgid "not found in network database"
 msgstr "nenalezeno v síťové databázi"
-
-msgid "No results"
-msgstr "Žádné výsledky"
 
 msgid "Bad Base64 Router hash"
 msgstr ""
@@ -2983,50 +3063,11 @@ msgstr "Zobrazit všechny routery s touto adresou v NetDb"
 msgid "Show all routers with this port in the NetDb"
 msgstr "Zobrazit všechny routery s tímto portem v NetDb"
 
-msgid "Core version"
-msgstr "Základní verze"
-
 msgid "Network ID"
 msgstr "ID sítě"
 
 msgid "Routers"
 msgstr "Směrovače"
-
-msgid "Family Key"
-msgstr "Rodinný klíč"
-
-msgid "Family Sig"
-msgstr "Rodina Sig"
-
-msgid "Exploratory tunnels expire (1h)"
-msgstr "Platnost průzkumných tunelů vyprší (1h)"
-
-msgid "Exploratory tunnels reject (1h)"
-msgstr "Vyřazení průzkumných tunelů (1h)"
-
-msgid "Exploratory tunnels build success (1h)"
-msgstr "Úspěšné budování průzkumných tunelů (1h)"
-
-msgid "Client tunnels expire (1h)"
-msgstr "Platnost klientských tunelů vyprší (1 h)"
-
-msgid "Client tunnels reject (1h)"
-msgstr "Odmítnutí tunelů klienta (1h)"
-
-msgid "Client tunnels build success (1h)"
-msgstr "Úspěšné budování klientských tunelů (1h)"
-
-msgid "Participating tunnels (1h)"
-msgstr "Participační tunely (1h)"
-
-msgid "Participating tunnels (60s)"
-msgstr "Participační tunely (60. léta)"
-
-msgid "Bandwidth send rate (1h)"
-msgstr "Rychlost odesílání šířky pásma (1h)"
-
-msgid "Bandwidth receive rate (1h)"
-msgstr "Rychlost příjmu šířky pásma (1 h)"
 
 msgid "First heard about"
 msgstr "Poprvé slyšel o"
@@ -3096,9 +3137,6 @@ msgstr "do souboru router.config."
 msgid "Peer Connections"
 msgstr "Peer Connections"
 
-msgid "Auto-refresh"
-msgstr "Automatické obnovení"
-
 msgid "Active in the last minute"
 msgstr "Aktivní v poslední minutě"
 
@@ -3107,6 +3145,12 @@ msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
+
+msgid "Limit"
+msgstr ""
+
+msgid "Maximum permitted connections"
+msgstr ""
 
 msgid "Current / maximum permitted"
 msgstr "Aktuální / maximální povolený"
@@ -3520,8 +3564,8 @@ msgid "{0} shared bandwidth"
 msgstr "{0} sdílená šířka pásma"
 
 #, java-format
-msgid "Over {0} shared bandwidth"
-msgstr "Více než {0} sdílená šířka pásma"
+msgid "Over {0} KB/s shared bandwidth"
+msgstr ""
 
 msgid "status"
 msgstr "stav"
@@ -3593,86 +3637,151 @@ msgstr ""
 msgid "Select search engine"
 msgstr "Vyberte vyhledávač"
 
-msgid "Statistics gathered during this router's uptime"
-msgstr "Statistiky shromážděné během provozu tohoto routeru"
+#, java-format
+msgid "Clock Skew of {0}"
+msgstr "Zkosení hodin o {0}"
 
-msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
-msgstr "Shromážděná data jsou kvantována po dobu 1 minuty, takže by měla být použita pouze jako odhad."
+msgid "Testing"
+msgstr "Testování"
 
-msgid "These statistics are primarily used for development and debugging."
-msgstr "Tyto statistiky se primárně používají pro vývoj a ladění."
+msgid "Private TCP Address"
+msgstr "Soukromá adresa TCP"
 
-msgid "No lifetime events"
-msgstr "Žádné celoživotní události"
+msgid "SymmetricNAT"
+msgstr "Symetrický NAT"
 
-msgid "frequency"
-msgstr "frekvence"
+msgid "Firewalled with Inbound TCP Enabled"
+msgstr "Firewalled s povoleným příchozím TCP"
 
-msgid "Rolling average events per period"
-msgstr "Klouzavý průměr událostí za období"
+msgid "Firewalled &amp; Floodfill"
+msgstr "Firewalled"
 
-msgid "Highest events per period"
-msgstr "Nejvyšší počet událostí za období"
+msgid "Disconnected"
+msgstr "Odpojeno"
 
-msgid "Lifetime average events per period"
-msgstr "Celoživotní průměrné události za období"
+msgid "UDP Port In Use"
+msgstr "Port UDP se používá"
 
-msgid "Lifetime average frequency"
-msgstr "Celoživotní průměrná frekvence"
+msgid "No Active Peers"
+msgstr "Žádní aktivní kolegové"
+
+msgid "UDP Disabled &amp; Inbound TCP host/port not set"
+msgstr "UDP zakázáno a příchozí TCP hostitel/port není nastaven"
+
+msgid "Firewalled with UDP Disabled"
+msgstr "Firewall s vypnutým UDP"
+
+msgid "Add/remove/edit &amp; control your client and server tunnels"
+msgstr "Přidat/odebrat/upravit a ovládat své klientské a serverové tunely"
+
+msgid "Service Tunnels"
+msgstr "Servisní tunely"
+
+msgid "How many local service tunnels we're running"
+msgstr "Kolik místních servisních tunelů provozujeme"
+
+msgid "Messenger"
+msgstr "Zprávy"
+
+msgid "i2pchat"
+msgstr "i2pchat"
+
+msgid "I2PChat"
+msgstr "I2PChat"
+
+msgid "Server"
+msgstr "Server"
+
+msgid "service may be available to peers"
+msgstr "Služba může být dostupná kolegům"
+
+msgid "service is only available locally"
+msgstr "Služba je dostupná pouze lokálně"
+
+msgid "Show tunnels"
+msgstr "Zobrazit tunely"
+
+msgid "Leases expired"
+msgstr "Nájemní smlouvy vypršely"
+
+msgid "Rebuilding"
+msgstr "Přestavba"
+
+msgid "ago"
+msgstr "před"
+
+msgid "Ready"
+msgstr "Připraveno"
+
+msgid "Building"
+msgstr "Sestavení"
+
+msgid "Building tunnels"
+msgstr "Stavení tunelů"
+
+msgid "Shared Clients"
+msgstr "Sdílení klienti"
+
+msgid "Click Restart to install"
+msgstr "Klikněte na Restartovat pro instalaci"
+
+msgid "Click Shutdown and restart to install"
+msgstr "Pro instalaci klikněte na Vypnout a restartovat"
 
 #, java-format
-msgid "{0} event"
-msgid_plural "{0} events"
-msgstr[0] "{0} událost"
-msgstr[1] "{0} události"
-msgstr[2] "{0} události"
+msgid "{0}"
+msgstr "{0}"
 
-msgid "rate"
-msgstr "sazba"
+msgid "Updating after restart"
+msgstr "Aktualizace po restartu"
 
-msgid "Average"
-msgstr "Průměr"
+msgid "Signed development update available"
+msgstr "K dispozici podepsaná vývojová aktualizace"
 
-msgid "Highest average"
-msgstr "Nejvyšší průměr"
+msgid "Download I2P Update"
+msgstr "Stáhněte si aktualizaci I2P"
 
-msgid "Highest total in a period"
-msgstr "Nejvyšší součet za období"
+msgid "Unsigned update available"
+msgstr "K dispozici nepodepsaná aktualizace"
 
-msgid "Average event count"
-msgstr "Průměrný počet událostí"
+msgid "Help with firewall configuration"
+msgstr "Pomoc s konfigurací firewallu"
 
-msgid "Events in peak period"
-msgstr "Události ve špičce"
+msgid "Check network connection and NAT/firewall!"
+msgstr "Zkontrolujte síťové připojení a NAT/firewall!"
 
-msgid "Events in this period"
-msgstr "Události v tomto období"
+msgid "Attempt to download router reference files (if automatic reseed has failed)"
+msgstr "Pokus o stažení referenčních souborů routeru (pokud selhal automatický reseed)"
 
-#, java-format
-msgid "ended {0} ago"
-msgstr "skončilo před {0}"
+msgid "Reseed"
+msgstr "Reseed"
 
-msgid "No events"
-msgstr "Žádné události"
+msgid "Order"
+msgstr "Objednávka"
 
-msgid "Graph Data"
-msgstr "Data grafu"
+msgid "Top"
+msgstr "Nahoře"
 
-msgid "Graph Event Count"
-msgstr "Graf Počet událostí"
+msgid "Move to top"
+msgstr "Přesunout nahoru"
 
-msgid "Export Data as XML"
-msgstr "Export dat jako XML"
+msgid "Move up"
+msgstr "Přesun nahoru"
 
-msgid "Lifetime average value"
-msgstr "Doživotní průměrná hodnota"
+msgid "Down"
+msgstr "Dolů"
 
-#, java-format
-msgid "1 event"
-msgid_plural "{0} events"
-msgstr[0] "1 událost"
-msgstr[1] "{0} události"
-msgstr[2] "{0} události"
+msgid "Move down"
+msgstr "Přesun dolů"
+
+msgid "Bottom"
+msgstr "Dno"
+
+msgid "Move to bottom"
+msgstr "Přesuňte se dolů"
+
+msgid "Select a section to add"
+msgstr "Vyberte sekci, kterou chcete přidat"
 
 msgid "Help &amp; FAQ"
 msgstr "Nápověda a časté dotazy"
@@ -3715,9 +3824,6 @@ msgstr "Přetížení"
 
 msgid "Tunnel Status"
 msgstr "Stav tunelu"
-
-msgid "Service Tunnels"
-msgstr "Servisní tunely"
 
 msgid "News &amp; Updates"
 msgstr "Novinky a Aktualizace"
@@ -3772,6 +3878,9 @@ msgstr "Webhosting"
 
 msgid "An introduction to hosting websites on the I2P network"
 msgstr "Úvod do hostingu webových stránek v I2P síti"
+
+msgid "New hosts in last 24 hours"
+msgstr ""
 
 msgid "I2PControl"
 msgstr "I2PControl"
@@ -4072,151 +4181,86 @@ msgstr "Když je aktivní skrytý režim, nevybudují se žádné zúčastněné
 msgid "Router is configured to reject all transit tunnel requests"
 msgstr "Směrovač je nakonfigurován tak, aby odmítal všechny zúčastněné požadavky na tunel"
 
-#, java-format
-msgid "Clock Skew of {0}"
-msgstr "Zkosení hodin o {0}"
+msgid "Statistics gathered during this router's uptime"
+msgstr "Statistiky shromážděné během provozu tohoto routeru"
 
-msgid "Testing"
-msgstr "Testování"
+msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
+msgstr "Shromážděná data jsou kvantována po dobu 1 minuty, takže by měla být použita pouze jako odhad."
 
-msgid "Private TCP Address"
-msgstr "Soukromá adresa TCP"
+msgid "These statistics are primarily used for development and debugging."
+msgstr "Tyto statistiky se primárně používají pro vývoj a ladění."
 
-msgid "SymmetricNAT"
-msgstr "Symetrický NAT"
+msgid "No lifetime events"
+msgstr "Žádné celoživotní události"
 
-msgid "Firewalled with Inbound TCP Enabled"
-msgstr "Firewalled s povoleným příchozím TCP"
+msgid "frequency"
+msgstr "frekvence"
 
-msgid "Firewalled &amp; Floodfill"
-msgstr "Firewalled"
+msgid "Rolling average events per period"
+msgstr "Klouzavý průměr událostí za období"
 
-msgid "Disconnected"
-msgstr "Odpojeno"
+msgid "Highest events per period"
+msgstr "Nejvyšší počet událostí za období"
 
-msgid "UDP Port In Use"
-msgstr "Port UDP se používá"
+msgid "Lifetime average events per period"
+msgstr "Celoživotní průměrné události za období"
 
-msgid "No Active Peers"
-msgstr "Žádní aktivní kolegové"
-
-msgid "UDP Disabled &amp; Inbound TCP host/port not set"
-msgstr "UDP zakázáno a příchozí TCP hostitel/port není nastaven"
-
-msgid "Firewalled with UDP Disabled"
-msgstr "Firewall s vypnutým UDP"
-
-msgid "Add/remove/edit &amp; control your client and server tunnels"
-msgstr "Přidat/odebrat/upravit a ovládat své klientské a serverové tunely"
-
-msgid "How many local service tunnels we're running"
-msgstr "Kolik místních servisních tunelů provozujeme"
-
-msgid "I2PSnark"
-msgstr "I2PSnark"
-
-msgid "Messenger"
-msgstr "Zprávy"
-
-msgid "i2pchat"
-msgstr "i2pchat"
-
-msgid "I2PChat"
-msgstr "I2PChat"
-
-msgid "Server"
-msgstr "Server"
-
-msgid "service may be available to peers"
-msgstr "Služba může být dostupná kolegům"
-
-msgid "service is only available locally"
-msgstr "Služba je dostupná pouze lokálně"
-
-msgid "Show tunnels"
-msgstr "Zobrazit tunely"
-
-msgid "Leases expired"
-msgstr "Nájemní smlouvy vypršely"
-
-msgid "Rebuilding"
-msgstr "Přestavba"
-
-msgid "ago"
-msgstr "před"
-
-msgid "Ready"
-msgstr "Připraveno"
-
-msgid "Building"
-msgstr "Sestavení"
-
-msgid "Building tunnels"
-msgstr "Stavení tunelů"
-
-msgid "Shared Clients"
-msgstr "Sdílení klienti"
-
-msgid "Click Restart to install"
-msgstr "Klikněte na Restartovat pro instalaci"
-
-msgid "Click Shutdown and restart to install"
-msgstr "Pro instalaci klikněte na Vypnout a restartovat"
+msgid "Lifetime average frequency"
+msgstr "Celoživotní průměrná frekvence"
 
 #, java-format
-msgid "{0}"
-msgstr "{0}"
+msgid "{0} event"
+msgid_plural "{0} events"
+msgstr[0] "{0} událost"
+msgstr[1] "{0} události"
+msgstr[2] "{0} události"
 
-msgid "Updating after restart"
-msgstr "Aktualizace po restartu"
+msgid "rate"
+msgstr "sazba"
 
-msgid "Signed development update available"
-msgstr "K dispozici podepsaná vývojová aktualizace"
+msgid "Average"
+msgstr "Průměr"
 
-msgid "Download I2P Update"
-msgstr "Stáhněte si aktualizaci I2P"
+msgid "Highest average"
+msgstr "Nejvyšší průměr"
 
-msgid "Unsigned update available"
-msgstr "K dispozici nepodepsaná aktualizace"
+msgid "Highest total in a period"
+msgstr "Nejvyšší součet za období"
 
-msgid "Help with firewall configuration"
-msgstr "Pomoc s konfigurací firewallu"
+msgid "Average event count"
+msgstr "Průměrný počet událostí"
 
-msgid "Check network connection and NAT/firewall!"
-msgstr "Zkontrolujte síťové připojení a NAT/firewall!"
+msgid "Events in peak period"
+msgstr "Události ve špičce"
 
-msgid "Attempt to download router reference files (if automatic reseed has failed)"
-msgstr "Pokus o stažení referenčních souborů routeru (pokud selhal automatický reseed)"
+msgid "Events in this period"
+msgstr "Události v tomto období"
 
-msgid "Reseed"
-msgstr "Reseed"
+#, java-format
+msgid "ended {0} ago"
+msgstr "skončilo před {0}"
 
-msgid "Order"
-msgstr "Objednávka"
+msgid "No events"
+msgstr "Žádné události"
 
-msgid "Top"
-msgstr "Nahoře"
+msgid "Graph Data"
+msgstr "Data grafu"
 
-msgid "Move to top"
-msgstr "Přesunout nahoru"
+msgid "Graph Event Count"
+msgstr "Graf Počet událostí"
 
-msgid "Move up"
-msgstr "Přesun nahoru"
+msgid "Export Data as XML"
+msgstr "Export dat jako XML"
 
-msgid "Down"
-msgstr "Dolů"
+msgid "Lifetime average value"
+msgstr "Doživotní průměrná hodnota"
 
-msgid "Move down"
-msgstr "Přesun dolů"
-
-msgid "Bottom"
-msgstr "Dno"
-
-msgid "Move to bottom"
-msgstr "Přesuňte se dolů"
-
-msgid "Select a section to add"
-msgstr "Vyberte sekci, kterou chcete přidat"
+#, java-format
+msgid "1 event"
+msgid_plural "{0} events"
+msgstr[0] "1 událost"
+msgstr[1] "{0} události"
+msgstr[2] "{0} události"
 
 msgid "No known routers"
 msgstr "Žádné známé směrovače"
@@ -4556,6 +4600,10 @@ msgstr "Momentálně nejsou aktivní žádné místní ani tranzitní tunely."
 msgid "Bandwidth Tiers"
 msgstr "Vrstvy šířky pásma"
 
+#, java-format
+msgid "Over {0} shared bandwidth"
+msgstr "Více než {0} sdílená šířka pásma"
+
 msgid "Inbound or outbound?"
 msgstr "Příchozí nebo odchozí?"
 
@@ -4615,6 +4663,18 @@ msgstr "Test šířky pásma zrušen"
 
 msgid "Bandwidth test was not running"
 msgstr "Test šířky pásma neproběhl"
+
+msgid "ready"
+msgstr ""
+
+msgid "inbound test"
+msgstr ""
+
+msgid "outbound test"
+msgstr ""
+
+msgid "done"
+msgstr ""
 
 msgid "bits per second"
 msgstr "bitů za sekundu"
@@ -4788,8 +4848,8 @@ msgstr "Podíl v síti"
 msgid "Share"
 msgstr "Sdílet"
 
-msgid "Note"
-msgstr "POZNÁMKA"
+msgid "NOTE"
+msgstr ""
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
@@ -4813,6 +4873,10 @@ msgstr "Čím vyšší je sdílená šířka pásma, tím více zlepšíte svou 
 
 msgid "config advanced"
 msgstr "Pokročilá konfigurace"
+
+#, java-format
+msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
+msgstr ""
 
 msgid "Floodfill Configuration"
 msgstr "Konfigurace Floodfill"
@@ -4841,8 +4905,8 @@ msgstr "Zakázat"
 msgid "Advanced I2P+ Configuration"
 msgstr "Pokročilá konfigurace I2P"
 
-msgid "Some changes may require a restart to take effect."
-msgstr "Některé změny mohou vyžadovat restart, aby se projevily."
+msgid "Help with additional configuration settings"
+msgstr ""
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5708,23 +5772,50 @@ msgstr "Pokud je nastaveno na true, povoluje instalaci zásuvného modulu na str
 msgid "When set to true, this setting enables reverse DNS lookups for peers, triggered when displaying the country flag of a peer or when the hostname or domain is explicitly displayed in the console, or when the peer's RouterInfo is written to disk. In order to avoid repeat lookups, it's recommended to configure a generous caching policy for DNS lookups of 10 minutes or more, and to configure a privacy respecting DNS server in your operating system. [Disabled by default, restart required]"
 msgstr "Když je nastaveno na true, tato volba umožňuje zpětné DNS vyhledávání pro vrstevníky, které je vyvoláno při zobrazení vlajky země vrstevníka nebo když je hostname nebo doména explicitně zobrazena v konzoli, nebo když je RouterInfo vrstevníka zapsán na disk. Aby se zabránilo opakovaným vyhledáváním, doporučuje se nastavit velkorysou politiku kešování DNS vyhledávání na 10 minut nebo déle a nastavit DNS server, který respektuje soukromí, v operačním systému. [Výchozí hodnota je vypnuta, je potřeba restartovat]"
 
+msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
+msgstr "Tato nastavení umožňuje nastavit vlastní prefix textu pro název stránky na stránkách konzoly routeru, což může být užitečné, pokud máte více konzolí otevřených na záložkách prohlížeče a chcete snadný způsob, jak je rozlišit."
+
 msgid "When set to true, accessing the router console via http:// when https:// is enabled will automatically redirect to https. To configure router console access, edit the settings in your <code>clients.config</code> file in your profile directory (<i>not</i> the application installation directory). [Enabled by default]"
 msgstr "Když je nastaveno na true, přístup k routerové konzoli pomocí protokolu http://, když je povoleno https://, bude automaticky přesměrován na https. Pro konfiguraci přístupu ke konzoli routeru upravte nastavení ve svém souboru <code>clients.config</code> ve vašem profilovém adresáři (<i>nikoliv</i> adresář instalace aplikace). [Výchozí hodnota je zapnuta]"
+
+msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
+msgstr "Toto nastavení, když je nastaveno na true, zobrazí průměrnou hodnotu Peer Test v sekci Congestion postranního panelu, která je vypočítána přičtením průměrné hodnoty úspěšných peer testů a průměrného času, který je překročen u neúspěšných testů. Průměrná hodnota může sloužit k určení optimální hodnoty <code>router.peerTestTimeout</code>. [Výchozí hodnota je false]"
+
+msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
+msgstr "Toto nastavení, když je nastaveno na true, zobrazí odkazy na <i>Sites of Interest</i> na <a href=/sitemap>mapě stránek</a>. [Výchozí hodnota je false]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Toto nastavení určuje, zda router používá poskytnutý soubor <i>blocklist.txt</i> a jakékoli uživatelsky nastavené blokovací seznamy, aby umožnil zákazy routerů podle hash nebo IP adresy. Rozsahy a síťové masky jsou podporovány pro IPv4, ale ne pro IPv6. Další informace naleznete v souboru <i>blocklist.txt</i> ve vašem adresáři aplikace I2P+. [Výchozí hodnota je zapnuta, je potřeba restartovat]"
 
-msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
-msgstr "Toto nastavení určuje, zda router používá poskytnutý soubor <i>blocklist_tor.txt</i> ve vašem adresáři aplikace I2P+, aby umožnil zákazy routerů, které fungují z Tor výstupních IP adres. [Výchozí hodnota je zapnuta, je potřeba restartovat]"
+msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
+msgstr "Toto nastavení umožňuje nastavit čas vypršení (v sekundách) pro bans prosazené pomocí blocklistů. Ve výchozím nastavení bans trvají po celou dobu trvání relace směrovače. [Vyžadován restart]"
 
 msgid "This setting, when configured with a path pointing at a valid blocklist file, enables an additional, user-configured blocklist to be loaded at router startup. [Disabled by default, restart required]"
 msgstr "Toto nastavení, je-li nakonfigurováno s cestou ukazující na platný blokovaný soubor seznamu, umožňuje při spuštění směrovače načíst další uživatelsky konfigurovaný seznam blokovaných prvků. [Výchozí hodnota je zakázána, je vyžadováno restartování]"
 
-msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
-msgstr "Toto nastavení umožňuje nastavit čas vypršení (v sekundách) pro bans prosazené pomocí blocklistů. Ve výchozím nastavení bans trvají po celou dobu trvání relace směrovače. [Vyžadován restart]"
+msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
+msgstr "Toto nastavení určuje, zda router používá poskytnutý soubor <i>blocklist_tor.txt</i> ve vašem adresáři aplikace I2P+, aby umožnil zákazy routerů, které fungují z Tor výstupních IP adres. [Výchozí hodnota je zapnuta, je potřeba restartovat]"
+
+msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
+msgstr ""
+
+msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
+msgstr "Pokud je nastaveno na Nepravda, router nebude blokovat žádosti o vytváření tunelů od pomalejších nebo nedosažitelných routerů s staršími verzemi. [Výchozí hodnota je Pravda, vyžaduje se restart]"
 
 msgid "Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks."
 msgstr "Přidělte počet vláken procesoru pro vytváření tunelů. Pokud váš procesor podporuje hyperthreading nebo simultánní vícenásobné vlákno, můžete násobit počet jader procesoru dvěma a získat tak maximální počet přidělovaných vláken, jinak počet jader procesoru = maximální počet dostupných vláken. Všimněte si, že můžete přidělit méně než teoretické maximum, aby bylo zajištěno, že máte rezervu pro ostatní úlohy."
+
+msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
+msgstr "Toto nastavení (v milisekundách) určuje, jak dlouho může paket zůstat ve frontě CoDel, než je zahozen. Výchozí hodnota je 1000 ms. [Vyžaduje restart]"
+
+msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
+msgstr "Toto nastavení určuje maximální počet zpráv ve frontě odchozích zpráv, než je označena jako plná. [Výchozí hodnota je 768]"
+
+msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
+msgstr "Toto nastavení určuje maximální počet zpráv nad maximální hodnotou fronty, než jsou další zprávy upuštěny. [Výchozí hodnota je 128]"
+
+msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
+msgstr "Toto nastavení (v milisekundách) vám umožňuje ručně nastavit cílovou hodnotu zpoždění fronty pro systém správy fronty CoDel. Výchozí hodnota je 50 ms. [Vyžaduje restart]"
 
 msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
 msgstr "Toto nastavení v milisekundách přepisuje výchozí časový limit zpracování zpráv (uváděn jako <i>Prodleva zpráv</i> v bočním panelu přetížení), než je směrovač stanoven jako přeplněn a požadavky na tranzitní tunel jsou odmítnuty. [Výchozí hodnota je 750 ms nebo 1500 ms, pokud je směrovač označen jako pomalý]"
@@ -5735,8 +5826,32 @@ msgstr "Průběžné testování tunelů pro stanovení průměrného zpožděn�
 msgid "When set to true, the router will change its identity and UDP port every time the router restarts. [Default is false]"
 msgstr "Pokud je nastaveno na hodnotu true. vezme router pokaždé, když se restartuje, novou identitu a UDP port. [Výchozí je false]"
 
+msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
+msgstr "Pokud je nastaveno na Nepravda, router nebude omezovat žádosti o vytváření tunelů od ostatních routerů a má se používat s opatrností. [Výchozí hodnota je Pravda, vyžaduje se restart]"
+
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
 msgstr "Tento parametr určuje, které schopnosti kolegů se používat nebudou k vytváření tunelů vašeho routeru. Např. <code>router.excludePeerCaps=LMN</code>"
+
+msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
+msgstr "Toto nastavení (v hodinách) určuje, jak stará je RouterInfo v NetDb (jeho poslední známé datum publikace) před tím, než bude označena jako zastaralá a smazána. [Výchozí hodnota je 28 hodin, pokud není smyčkový směrovač, v takovém případě je výchozí hodnota 8 hodin]"
+
+msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
+msgstr "Toto nastavení určuje počet uzlů k průzkumu paralelně, když je spuštěna úloha prozkoumávání uzlů [výchozí hodnota je 1 uzel najednou, když je známo více než 3000 uzlů]. Upozorňujeme, že zvýšení této hodnoty zvýší požadavky na šířku pásma pro průzkum, a nastavení této hodnoty příliš vysoko může způsobit nadměrné zpoždění zpráv a překážet jiným službám, používejte proto s opatrností!"
+
+msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
+msgstr "Toto nastavení určuje počet kýblů sítě NetDb DHT, na které bude odkazovat úloha prozkoumávání vrstvy Peer při jejím spuštění. Výchozí nastavení počtu kýblů ke zkoumání se bude lišit v závislosti na tom, zda router běží déle než hodinu, zda je router skrytý nebo v 'K' šířkové vrstvě a na počtu známých routerů."
+
+msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
+msgstr "Toto nastavení (ve vteřinách) umožňuje přepsat zpoždění mezi spuštěními úlohy prozkoumávání vrstvy Peer, která se snaží najít nové peery ke přidání do sítě NetDb. Úloha běží výchozí hodnoty každých 80 sekund nebo, jestliže router má zpoždění úloh nebo zpráv, každé 3 minuty. Pokud dosáhne velikost sítě NetDb 4 000 peerů, přestávka se zvýší na 15 minut. Pokud je vaše síť NetDb dobře obsazená (více než 2 000 peerů) nebo pokud chcete snížit celkovou šířku pásma, můžete zvýšit pauzu. Poznámka: Tato úloha se neprovede u routerů pro zaplavení."
+
+msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
+msgstr "Toto nastavení určuje maximální počet hashů peerů k zařazení do fronty pro prozkoumání. V I2P je maximum 128 a v I2P+ je výchozí hodnota 512."
+
+msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
+msgstr "Toto nastavení určuje, zda se router, který funguje jako plnění zaplavení, bude prozkoumávat síť NetDb, aby se dozvěděl o nových peerech. [Výchozí hodnota je nepravda, je vyžadován restart]"
+
+msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
+msgstr "Toto nastavení, pokud je nastaveno na hodnotu true, zabrání routeru v přímé komunikaci s ostatními routery a umožňuje pouze použití introduktorů. [Výchozí hodnota je false, pokud není router v skrytém režimu]"
 
 msgid "When set to true, if your router is serving as a floodfill for the network, your <a href=/configadvanced#ffconf>floodfill participation</a> will be hidden from other routers."
 msgstr "Pokud je nastavena hodnota true, bude vaše účast na převodové stanici v síti (floodfill) skrytá před ostatními routery."
@@ -5749,6 +5864,12 @@ msgstr "Určuje maximální počet tunelů, které může router vytvořit a udr
 
 msgid "Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 10% in I2P+, 33% in I2P]"
 msgstr "Určuje maximální procentuální podíl aktivních lokálních tunelů (klient a objevující) pro každého kolegu. [Výchozí hodnota je 10 % v I2P+, 33 % v I2P]"
+
+msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
+msgstr "Toto nastavení vám umožňuje nakonfigurovat minimální počet hostovaných participativních tunelů, než směrovač začne odmítat žádosti o tunel na základě předpokládaných požadavků na přenosovou rychlost. [Výchozí hodnota je 100, pokud systém běží na Androidu, 800, pokud systém běží na ARM a je k dispozici méně než 4 jádra, 1200, pokud systém běží na ARM a k dispozici je 4 nebo více jader, jinak 2500]"
+
+msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
+msgstr "Tento parametr vám umožňuje vyloučit starší routery ze souboru NetDb. Routery starší než výchozí hodnota nebo hodnota, kterou nastavíte, budou smazány ze souboru NetDb a budou zakázány po celou dobu běhu routeru. Standardně jsou vyloučeny routery starší než 0.9.20. Poznámka: od verze I2P+ 0.9.46+ jsou používány pouze routery, které běží na velmi nových verzích pro budování lokálních tunelů. [Vyžaduje restart]"
 
 msgid "When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]"
 msgstr "Pokud je nastaveno na hodnotu true, soubory s informacemi o routeru uložené v adresáři netDB vašeho profilu nebudou rozděleny do 64 podsložek. [Výchozí je false]"
@@ -5774,84 +5895,6 @@ msgstr "Méně než 256 MB přidělených JVM"
 msgid "Router running a non-native, software emulated version of the Java BigInteger library"
 msgstr "Směrovač s nenativní verzí knihovny Java BigInteger s emulací softwaru"
 
-msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
-msgstr "Toto nastavení vám umožňuje nakonfigurovat minimální počet hostovaných participativních tunelů, než směrovač začne odmítat žádosti o tunel na základě předpokládaných požadavků na přenosovou rychlost. [Výchozí hodnota je 100, pokud systém běží na Androidu, 800, pokud systém běží na ARM a je k dispozici méně než 4 jádra, 1200, pokud systém běží na ARM a k dispozici je 4 nebo více jader, jinak 2500]"
-
-msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
-msgstr "Pokud je nastaveno na hodnotu true, směrovač změní svou identitu a UDP port, když směrovač restartuje, a poté odstraní klíč z router.config, aby zabránil dalším změnám. [Výchozí hodnota je false]"
-
-msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr "Pokud je nastaveno na Nepravda, router nebude omezovat žádosti o vytváření tunelů od ostatních routerů a má se používat s opatrností. [Výchozí hodnota je Pravda, vyžaduje se restart]"
-
-msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr "Pokud je nastaveno na Nepravda, router nebude blokovat žádosti o vytváření tunelů od pomalejších nebo nedosažitelných routerů s staršími verzemi. [Výchozí hodnota je Pravda, vyžaduje se restart]"
-
-msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
-msgstr "Pokud je nakonfigurováno, nastaví pevný limit pro počet tunelů, které je směrovač povolen stavět souběžně. Výchozí hodnota je průměrný čas stavby a současná odchozí šířka pásma, které směrovač používá k určení optimální rychlosti stavby. [Je vyžadován restart]"
-
-msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
-msgstr "Pokud si přejete instalovat nepodepsané (.zip) aktualizace I2P, měla by být tato možnost přidána do souboru <code>router.config</code>, pokud již nemáte nakonfigurováno <code>routerconsole.advanced=true</code>, v takovém případě je tato možnost již zajištěna. Poznámka: od I2P+ verze 0.9.48+ je instalace <a href=/configupdate#i2pupdates>nepodepsaných aktualizací</a> implicitně povolena."
-
-msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
-msgstr "Toto nastavení vám umožňuje nakonfigurovat URL adresu aktualizace pro funkcionalitu nepodepsané aktualizace, pokud je povolena. Adresa URL by měla končit na <code>/i2pupdate.zip</code>. Poznámka: Nepřijímejte nepodepsané aktualizace, pokud nevěříte zdroji aktualizace!"
-
-msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
-msgstr "Toto nastavení umožňuje deaktivovat testy SSU, aby se zjistilo, zda je váš směrovač chráněn firewallem, a může být povoleno pro směrovače, které jsou určitě bez firewalu, ale mají problémy s přerušovaným blokováním firewallu. Pokud jsou testy zakázány, měly by oba protokoly SSU a NTCP hlásit vaši aktuální veřejnou IP adresu na <a href=/info>stránce s informacemi o směrovači</a>. [Je vyžadován restart]"
-
-msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
-
-msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
-msgstr "Toto nastavení určuje, který přenos má přednost při komunikaci s vrstevníky. Výchozí nastavení upřednostňuje NTCP před UDP (SSU). Pokud hodnota bude nastavena na true, UDP bude upřednostňováno, pokud již existuje předem zavedené spojení NTCP; pokud bude nastaveno na always, bude vždy použito UDP bez ohledu na předem zavedené spojení NTCP. [Výchozí hodnota je false]"
-
-msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
-msgstr "Toto specifické nastavení tunelu vám umožňuje povolit nebo zakázat odpovědi na odesílané pingy do serverů hostovaných směrovačem. Pokud chcete pingy zakázat, musíte do konfigurace serveru v Tunelovém správci přidat řádek <code>i2p.streaming.answerPings=false</code> do sekce <i>Vlastní možnosti</i>."
-
-msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
-msgstr "Pokud je nastaveno na true, I2P běží bez síťové konektivity, což je užitečné, pokud neustále restartujete směrovač, abyste otestovali aktualizace kódu, protože to zabrání přerušení sítě."
-
-msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr "Toto nastavení, pokud je povoleno, zavádí náhodný odklad pongu až 50 ms pro všechny servery povolené pro odpovídání na pingy hostované směrovačem. Výchozí nastavení je zakázáno. [Vyžaduje restart]"
-
-msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr "Toto nastavení, pokud je povoleno, upravuje maximální další náhodný zpožděný pong zavedený pro servery povolené pro odpovídání na pingy, pokud je také povoleno <code>i2p.streaming.enablePongDelay</code>. Pokud není explicitně nastaveno, bude použita výchozí hodnota 50 ms."
-
-msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
-msgstr "Toto nastavení (v milisekundách) určuje, jak dlouho může paket zůstat ve frontě CoDel, než je zahozen. Výchozí hodnota je 1000 ms. [Vyžaduje restart]"
-
-msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
-msgstr "Toto nastavení určuje maximální počet zpráv ve frontě odchozích zpráv, než je označena jako plná. [Výchozí hodnota je 768]"
-
-msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
-msgstr "Toto nastavení určuje maximální počet zpráv nad maximální hodnotou fronty, než jsou další zprávy upuštěny. [Výchozí hodnota je 128]"
-
-msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
-msgstr "Toto nastavení (v milisekundách) vám umožňuje ručně nastavit cílovou hodnotu zpoždění fronty pro systém správy fronty CoDel. Výchozí hodnota je 50 ms. [Vyžaduje restart]"
-
-msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
-msgstr "Toto nastavení (v hodinách) určuje, jak stará je RouterInfo v NetDb (jeho poslední známé datum publikace) před tím, než bude označena jako zastaralá a smazána. [Výchozí hodnota je 28 hodin, pokud není smyčkový směrovač, v takovém případě je výchozí hodnota 8 hodin]"
-
-msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
-msgstr "Toto nastavení určuje počet uzlů k průzkumu paralelně, když je spuštěna úloha prozkoumávání uzlů [výchozí hodnota je 1 uzel najednou, když je známo více než 3000 uzlů]. Upozorňujeme, že zvýšení této hodnoty zvýší požadavky na šířku pásma pro průzkum, a nastavení této hodnoty příliš vysoko může způsobit nadměrné zpoždění zpráv a překážet jiným službám, používejte proto s opatrností!"
-
-msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
-msgstr "Toto nastavení určuje počet kýblů sítě NetDb DHT, na které bude odkazovat úloha prozkoumávání vrstvy Peer při jejím spuštění. Výchozí nastavení počtu kýblů ke zkoumání se bude lišit v závislosti na tom, zda router běží déle než hodinu, zda je router skrytý nebo v 'K' šířkové vrstvě a na počtu známých routerů."
-
-msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
-msgstr "Toto nastavení (ve vteřinách) umožňuje přepsat zpoždění mezi spuštěními úlohy prozkoumávání vrstvy Peer, která se snaží najít nové peery ke přidání do sítě NetDb. Úloha běží výchozí hodnoty každých 80 sekund nebo, jestliže router má zpoždění úloh nebo zpráv, každé 3 minuty. Pokud dosáhne velikost sítě NetDb 4 000 peerů, přestávka se zvýší na 15 minut. Pokud je vaše síť NetDb dobře obsazená (více než 2 000 peerů) nebo pokud chcete snížit celkovou šířku pásma, můžete zvýšit pauzu. Poznámka: Tato úloha se neprovede u routerů pro zaplavení."
-
-msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
-msgstr "Toto nastavení určuje maximální počet hashů peerů k zařazení do fronty pro prozkoumání. V I2P je maximum 128 a v I2P+ je výchozí hodnota 512."
-
-msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
-msgstr "Toto nastavení určuje, zda se router, který funguje jako plnění zaplavení, bude prozkoumávat síť NetDb, aby se dozvěděl o nových peerech. [Výchozí hodnota je nepravda, je vyžadován restart]"
-
-msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
-msgstr "Toto nastavení, pokud je nastaveno na hodnotu true, zabrání routeru v přímé komunikaci s ostatními routery a umožňuje pouze použití introduktorů. [Výchozí hodnota je false, pokud není router v skrytém režimu]"
-
-msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
-msgstr "Tento parametr vám umožňuje vyloučit starší routery ze souboru NetDb. Routery starší než výchozí hodnota nebo hodnota, kterou nastavíte, budou smazány ze souboru NetDb a budou zakázány po celou dobu běhu routeru. Standardně jsou vyloučeny routery starší než 0.9.20. Poznámka: od verze I2P+ 0.9.46+ jsou používány pouze routery, které běží na velmi nových verzích pro budování lokálních tunelů. [Vyžaduje restart]"
-
 msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. [Default is 4]"
 msgstr "Toto nastavení určuje počet souběžně prováděných testů uzel-uzel, které slouží k určení zpoždění mezi uzly. [Výchozí hodnota je 4]"
 
@@ -5867,14 +5910,17 @@ msgstr "Tato nastavení určují, zda jsou statistiky o našem směrovači náho
 msgid "This setting configures the initial size of the outbound message queue. [Default is 64]"
 msgstr "Tato nastavení konfigurují počáteční velikost output fronty zpráv. [Výchozí hodnota je 64]"
 
-msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
-msgstr "Toto nastavení konfiguruje maximální velikost vstupní output fronty zpráv. [Výchozí hodnota je 1024]"
-
 msgid "This setting configures the maximum number of inbound messages queued per cycle (pump). [Default is 24]"
 msgstr "Toto nastavení konfiguruje maximální počet vstupních zpráv ve frontě na cyklus. [Výchozí hodnota je 24]"
 
+msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
+msgstr "Toto nastavení konfiguruje maximální velikost vstupní output fronty zpráv. [Výchozí hodnota je 1024]"
+
 msgid "This setting configures the maximum number of outbound messages queued per cycle (pump). [Default is 64]"
 msgstr "Toto nastavení konfiguruje maximální počet výstupních zpráv ve frontě na cyklus. [Výchozí hodnota je 64]"
+
+msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
+msgstr "Pokud je nastaveno na hodnotu true, směrovač změní svou identitu a UDP port, když směrovač restartuje, a poté odstraní klíč z router.config, aby zabránil dalším změnám. [Výchozí hodnota je false]"
 
 msgid "This setting (in milliseconds) allows you to manually configure the delay between router refresh updates run by the Refresh Routers Job. By default the pause between refreshes is determined by the size of the NetDb, and introduces some randomness in the timing to mitigate traffic analysis. For values lower than 2000 milliseconds, increasing the value of <code>router.refreshTimeout</code> is recommended. Note that setting this value below 2000 milliseconds will increase your network traffic and may introduce job lag, and is not recommended for sustained use."
 msgstr "Toto nastavení (v milisekundách) vám umožňuje manuálně konfigurovat prodlevu mezi aktualizacemi routerů prováděnými Refresh Routers Job. Ve výchozím nastavení je prodleva mezi aktualizacemi určena velikostí NetDb a zavádí určitou náhodnost v časování, aby se minimalizovala analýza provozu. Pro hodnoty nižší než 2000 milisekund se doporučuje zvýšení hodnoty <code>router.refreshTimeout</code>. Upozorňujeme, že nastavení této hodnoty pod 2000 milisekund zvýší váš síťový provoz a může způsobit zpoždění úloh, proto se nedoporučuje pro trvalé použití."
@@ -5888,26 +5934,56 @@ msgstr "Toto nastavení (ve vteřinách) vám umožňuje ručně nastavit časov
 msgid "This setting determines whether routers classified as uninteresting (K or L tier, unreachable or older than 0.9.50) are checked during the refresh router process after 1 hour of uptime. [Default is false]"
 msgstr "Toto nastavení určuje, zda se routerům klasifikovaným jako nezajímavým (K nebo L vrstva, nedosažitelný nebo starší než 0.9.50) ověří se během procesu obnovy routeru po dobu 1 hodiny provozu. [Standartní hodnota je false]"
 
+msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
+msgstr ""
+
+msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
+msgstr "Pokud je nakonfigurováno, nastaví pevný limit pro počet tunelů, které je směrovač povolen stavět souběžně. Výchozí hodnota je průměrný čas stavby a současná odchozí šířka pásma, které směrovač používá k určení optimální rychlosti stavby. [Je vyžadován restart]"
+
+msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
+msgstr "Pokud si přejete instalovat nepodepsané (.zip) aktualizace I2P, měla by být tato možnost přidána do souboru <code>router.config</code>, pokud již nemáte nakonfigurováno <code>routerconsole.advanced=true</code>, v takovém případě je tato možnost již zajištěna. Poznámka: od I2P+ verze 0.9.48+ je instalace <a href=/configupdate#i2pupdates>nepodepsaných aktualizací</a> implicitně povolena."
+
+msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
+msgstr "Toto nastavení vám umožňuje nakonfigurovat URL adresu aktualizace pro funkcionalitu nepodepsané aktualizace, pokud je povolena. Adresa URL by měla končit na <code>/i2pupdate.zip</code>. Poznámka: Nepřijímejte nepodepsané aktualizace, pokud nevěříte zdroji aktualizace!"
+
 msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
 msgstr "Toto nastavení (v minutách) vám umožňuje manuálně nastavit, jak dlouho po spuštění počkáte, než se kontrolují RouterInfos v NetDb z hlediska platnosti, po kterém budou do příjmu přijaty pouze platné routery. Při validaci jsou z NetDb odebrány neplatné RouterInfos a nepřístupné servery, které jsou přístupné pouze prostřednictvím SSU. [Výchozí hodnota je 60 minut] Poznámka: Toto nastavení nemá vliv na starší routery (starší než ve výchozím nastavení 0.9.29), které jsou z NetDb odebrány a banovány pro aktuální sezení routování hned, jakmile je pokus o uložení do NetDb."
 
-msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
-msgstr "Toto nastavení, když je nastaveno na true, zobrazí průměrnou hodnotu Peer Test v sekci Congestion postranního panelu, která je vypočítána přičtením průměrné hodnoty úspěšných peer testů a průměrného času, který je překročen u neúspěšných testů. Průměrná hodnota může sloužit k určení optimální hodnoty <code>router.peerTestTimeout</code>. [Výchozí hodnota je false]"
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
+msgstr ""
 
-msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
-msgstr "Toto nastavení, když je nastaveno na true, zobrazí odkazy na <i>Sites of Interest</i> na <a href=/sitemap>mapě stránek</a>. [Výchozí hodnota je false]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
+msgstr ""
 
-msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr "Tato nastavení umožňuje nastavit vlastní prefix textu pro název stránky na stránkách konzoly routeru, což může být užitečné, pokud máte více konzolí otevřených na záložkách prohlížeče a chcete snadný způsob, jak je rozlišit."
+msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
+msgstr "Toto nastavení umožňuje deaktivovat testy SSU, aby se zjistilo, zda je váš směrovač chráněn firewallem, a může být povoleno pro směrovače, které jsou určitě bez firewalu, ale mají problémy s přerušovaným blokováním firewallu. Pokud jsou testy zakázány, měly by oba protokoly SSU a NTCP hlásit vaši aktuální veřejnou IP adresu na <a href=/info>stránce s informacemi o směrovači</a>. [Je vyžadován restart]"
 
-msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
-msgstr "Toto nastavení umožňuje konfiguraci alternativních NTP serverů, které jsou potřebné pro zajištění přesného času ve vašem směrovači. [Výchozí hodnota je 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
+msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
+msgstr "Toto nastavení určuje, který přenos má přednost při komunikaci s vrstevníky. Výchozí nastavení upřednostňuje NTCP před UDP (SSU). Pokud hodnota bude nastavena na true, UDP bude upřednostňováno, pokud již existuje předem zavedené spojení NTCP; pokud bude nastaveno na always, bude vždy použito UDP bez ohledu na předem zavedené spojení NTCP. [Výchozí hodnota je false]"
+
+msgid "miscellaneous"
+msgstr ""
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "Pokud je nastaveno na true, tato možnost umístí ikonu do systémového panelu / oznámení s jednoduchými ovládacími prvky služby. [Výchozí hodnota je deaktivována]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
 msgstr "Toto nastavení umožňuje konfiguraci maximálního počtu souborů na torrent, který I2PSnark povolí při stahování nebo vytváření torrentu. Je třeba poznamenat, že výrazné zvýšení této hodnoty z výchozí hodnoty 2000 souborů může vyžadovat další konfiguraci v hostitelském systému, aby bylo možné zvýšit maximální počet otevřených souborů, který povoluje operační systém (např. <code>ulimit -n</code> na Linuxu). Abyste jej změnili, přidejte do konfiguračního souboru I2PSnarku <code>i2psnark.config</code>. [Je nutné restartovat I2PSnark nebo router]"
+
+msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
+msgstr "Toto specifické nastavení tunelu vám umožňuje povolit nebo zakázat odpovědi na odesílané pingy do serverů hostovaných směrovačem. Pokud chcete pingy zakázat, musíte do konfigurace serveru v Tunelovém správci přidat řádek <code>i2p.streaming.answerPings=false</code> do sekce <i>Vlastní možnosti</i>."
+
+msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
+msgstr "Toto nastavení, pokud je povoleno, zavádí náhodný odklad pongu až 50 ms pro všechny servery povolené pro odpovídání na pingy hostované směrovačem. Výchozí nastavení je zakázáno. [Vyžaduje restart]"
+
+msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
+msgstr "Toto nastavení, pokud je povoleno, upravuje maximální další náhodný zpožděný pong zavedený pro servery povolené pro odpovídání na pingy, pokud je také povoleno <code>i2p.streaming.enablePongDelay</code>. Pokud není explicitně nastaveno, bude použita výchozí hodnota 50 ms."
+
+msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
+msgstr "Pokud je nastaveno na true, I2P běží bez síťové konektivity, což je užitečné, pokud neustále restartujete směrovač, abyste otestovali aktualizace kódu, protože to zabrání přerušení sítě."
+
+msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
+msgstr "Toto nastavení umožňuje konfiguraci alternativních NTP serverů, které jsou potřebné pro zajištění přesného času ve vašem směrovači. [Výchozí hodnota je 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 
 msgid "Recent I2P+ Changes"
 msgstr "Nedávné změny I2P+"
@@ -6124,6 +6200,18 @@ msgstr "Pro non-SSL a SSL"
 
 msgid "For SSL only"
 msgstr "Pouze pro SSL"
+
+msgid "How can I configure the console and web services to be accessible on my local network?"
+msgstr ""
+
+msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
+msgstr ""
+
+msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
+msgstr ""
+
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager’s configuration section using the <i>reachable by</i> dropdown."
+msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Jak se připojit na IRC v I2P?"
@@ -7390,9 +7478,6 @@ msgstr "Síťoví kolegové"
 msgid "peer profiles"
 msgstr "profily vrstevníků"
 
-msgid "Peer Profiles"
-msgstr "Profily vrstevníků"
-
 msgid "Session Banned Peers"
 msgstr "Sousedé zakázáni ve spuštěné relaci"
 
@@ -7609,6 +7694,9 @@ msgstr "Přepnout tunely"
 msgid "Peer Profile"
 msgstr "Profil peeru"
 
+msgid "Profile View"
+msgstr ""
+
 msgid "Profile for peer"
 msgstr "Profil pro peer"
 
@@ -7746,6 +7834,35 @@ msgstr "Hotové"
 
 
 
+
+
 #, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

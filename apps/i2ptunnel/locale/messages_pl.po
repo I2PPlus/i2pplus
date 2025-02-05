@@ -41,12 +41,6 @@ msgstr "standardowa przepustowość i niezawodność"
 msgid "higher bandwidth and reliability"
 msgstr "wyższa przepustowość i niezawodność"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Błąd formularza, prawdopodobnie dlatego, że użyłeś przycisku 'wstecz' lub 'odśwież' w swojej przeglądarce. Proszę wyślij ponownie."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Jeśli problem występuje nadal, sprawdź, czy obsługa ciasteczek jest włączona w Twojej przeglądarce."
-
 msgid "Configuration reloaded for all tunnels"
 msgstr "Konfiguracja przeładowana dla wszystkich tunelii"
 
@@ -1232,6 +1226,12 @@ msgstr "Utwórz uwierzytelnianie"
 
 msgid "SSL Helper"
 msgstr "Pomocnik SSL"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Błąd formularza, prawdopodobnie dlatego, że użyłeś przycisku 'wstecz' lub 'odśwież' w swojej przeglądarce. Proszę wyślij ponownie."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Jeśli problem występuje nadal, sprawdź, czy obsługa ciasteczek jest włączona w Twojej przeglądarce."
 
 msgid "Experts only!"
 msgstr "Tylko dla zaawansowanych!"

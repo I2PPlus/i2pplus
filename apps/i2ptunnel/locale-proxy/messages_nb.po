@@ -8,8 +8,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Warning: Invalid Request URI"
-msgstr "Advarsel: Ugyldig forespørsels-URI"
+msgid "Website Unknown"
+msgstr "Nettsted ukjent"
 
 msgid "Router Console"
 msgstr "Ruter Konsoll"
@@ -25,71 +25,6 @@ msgstr "Konfigurasjon"
 
 msgid "Help"
 msgstr "Hjelp"
-
-msgid "The request URI is invalid, and probably contains illegal characters."
-msgstr "Forespørsels-URI er ugyldig, og inneholder sannsynligvis ulovlige tegn."
-
-msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
-msgstr "Hvis du klikket på en lenke, sjekk slutten av URI-en for tegn som nettleseren ved en feiltakelse har lagt til."
-
-msgid "Connection Reset"
-msgstr "Tilbakestilling av tilkobling"
-
-msgid "The connection to the website was reset while the page was loading."
-msgstr "Tilkoblingen til nettsiden ble tilbakestilt mens siden lastet."
-
-msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Nettstedet kan være midlertidig utilgjengelig, for opptatt, eller det har blokkert tilgangen din."
-
-#, java-format
-msgid "You may want to {0}retry{1}."
-msgstr "Det kan være lurt å {0}prøve på nytt{1}."
-
-#, java-format
-msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
-msgstr "Hvis du lar denne siden være åpen, vil den automatisk prøve å koble til nettstedet på nytt hvert {0} sekund etter et mislykket tilkoblingsforsøk."
-
-msgid "Could not find the following destination:"
-msgstr "Kunne ikke finne følgende destinasjon:"
-
-msgid "Warning: Non-HTTP Protocol"
-msgstr "Advarsel: Ikke-HTTP-protokoll"
-
-msgid "The request uses a bad protocol."
-msgstr "Forespørselen bruker en dårlig protokoll."
-
-msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
-msgstr "I2P HTTP Proxy støtter bare HTTP- og HTTPS-forespørsler."
-
-msgid "Other protocols such as FTP are not allowed."
-msgstr "Andre protokoller som FTP er ikke tillatt."
-
-msgid "Warning: No Outproxy Configured"
-msgstr "Advarsel: Ingen Outproxy konfigurert"
-
-msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
-msgstr "Forespørselen din var for et nettsted utenfor I2P, men du har ingen HTTP-outproxy konfigurert."
-
-msgid "Please configure an outproxy in I2PTunnel."
-msgstr "Konfigurer en outproxy i I2PTunnel."
-
-msgid "Error: Request Denied"
-msgstr "Feil: Forespørsel avslått"
-
-msgid "Error: Cannot Access Router Console via I2P Proxy"
-msgstr "Feil: Får ikke tilgang til ruterkonsollen via I2P-proxy"
-
-msgid "Your browser is misconfigured."
-msgstr "Nettleseren din er feilkonfigurert."
-
-msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
-msgstr "Ikke bruk proxyen for å få tilgang til ruterkonsollen, localhost eller lokale LAN-destinasjoner."
-
-msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
-msgstr "Du må forhindre at 127.0.0.1 (eller adressen du får tilgang til I2P-konsollen på) blir rutet via I2Ps http-proxy, vanligvis ved å ekskludere adressen i nettleserens proxy-konfigurasjonsdel."
-
-msgid "Website Unknown"
-msgstr "Nettsted ukjent"
 
 msgid "Website Not Found in Addressbook"
 msgstr "Nettsted ikke funnet i adresseboken"
@@ -111,99 +46,35 @@ msgstr "Ellers, finn en base 32 eller adressehjelperlenke, eller bruk en hopptje
 msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
 msgstr "Ser du denne siden ofte? Se {0}vanlige spørsmål{1} for å få hjelp til å {2}legge til noen abonnementer{3} i adresseboken."
 
-msgid "Website Unreachable"
-msgstr "Nettsiden kan ikke nås"
+msgid "Could not find the following destination:"
+msgstr "Kunne ikke finne følgende destinasjon:"
 
-msgid "The website was not reachable, because its lease set was not found."
-msgstr "Nettstedet var ikke tilgjengelig, fordi leiesettet ikke ble funnet."
+msgid "Warning: Non-HTTP Protocol"
+msgstr "Advarsel: Ikke-HTTP-protokoll"
 
-msgid "The website is probably down, but there could also be network congestion."
-msgstr "Nettsiden er sannsynligvis nede, men det kan også være overbelastning av nettverket."
+msgid "The request uses a bad protocol."
+msgstr "Forespørselen bruker en dårlig protokoll."
 
-msgid "Outproxy Not Found"
-msgstr "Outproxy ikke funnet"
+msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
+msgstr "I2P HTTP Proxy støtter bare HTTP- og HTTPS-forespørsler."
 
-msgid "The HTTP Outproxy was not found."
-msgstr "HTTP Outproxy ble ikke funnet."
+msgid "Other protocols such as FTP are not allowed."
+msgstr "Andre protokoller som FTP er ikke tillatt."
 
-msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "Den er offline, det er overbelastning på nettverket, eller ruteren din er ennå ikke godt integrert med jevnaldrende."
+msgid "Error: Request Denied"
+msgstr "Feil: Forespørsel avslått"
 
-#, java-format
-msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
-msgstr "Det kan være lurt å {0}prøve på nytt{1}, da dette vil tilfeldig velge en outproxy fra bassenget du har definert {2}her{3} (hvis du har mer enn én konfigurert)."
+msgid "Error: Cannot Access Router Console via I2P Proxy"
+msgstr "Feil: Får ikke tilgang til ruterkonsollen via I2P-proxy"
 
-#, java-format
-msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
-msgstr "Hvis du fortsetter å ha problemer, kan det være lurt å redigere outproxy-listen din {0}her{1}."
+msgid "Your browser is misconfigured."
+msgstr "Nettleseren din er feilkonfigurert."
 
-msgid "Warning: Request Denied"
-msgstr "Advarsel: Forespørsel avslått"
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
+msgstr "Ikke bruk proxyen for å få tilgang til ruterkonsollen, localhost eller lokale LAN-destinasjoner."
 
-msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
-msgstr "Denne adressen ser ut til å være feil utformet. Vennligst bekreft at du har oppgitt en gyldig adresse!"
-
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "Du forsøkte å koble til et ikke-I2P-nettsted eller sted."
-
-msgid "Outproxy Unreachable"
-msgstr "Outproxy utilgjengelig"
-
-msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
-msgstr "HTTP-outproxyen var ikke tilgjengelig, fordi den bruker krypteringsalternativer som ikke støttes av din I2P- eller Java-versjon."
-
-msgid "Could not connect to the following destination:"
-msgstr "Kunne ikke koble til følgende destinasjon:"
-
-msgid "Proxy Authorization Required"
-msgstr "Utproxy autorisasjon"
-
-msgid "I2P HTTP Proxy Authorization Required"
-msgstr "utproxy autorisasjon"
-
-msgid "This proxy is configured to require a username and password for access."
-msgstr "Denne proxyen er konfigurert til å kreve et brukernavn og passord for tilgang."
-
-#, java-format
-msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
-msgstr "Skriv inn brukernavnet og passordet ditt, eller sjekk {0}ruterkonfigurasjonen{1} eller {2}I2PTunnel-konfigurasjonen{3}."
-
-#, java-format
-msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
-msgstr "For å deaktivere autorisasjon, fjern konfigurasjonen {0}i2ptunnel.proxy.auth=basic{1}, og stopp og start HTTP Proxy-tunnelen på nytt."
-
-msgid "Warning: Invalid Destination"
-msgstr "Lokal destinasjon"
-
-msgid "The website destination specified was not valid, or was otherwise unreachable."
-msgstr "Nettstedets destinasjon var ikke gyldig, eller var på annen måte ikke tilgjengelig."
-
-msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
-msgstr "Kanskje du limte inn feil Base 64-streng eller lenken du følger er dårlig."
-
-msgid "The I2P host could also be offline."
-msgstr "I2P-verten kan også være frakoblet."
-
-msgid "The connection to the proxy was reset."
-msgstr "Forbindelsen til proxyen ble tilbakestilt."
-
-msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Proxyen kan være midlertidig utilgjengelig, for opptatt, eller den har blokkert tilgangen din."
-
-msgid "The HTTP outproxy was not reachable, because its lease set was not found."
-msgstr "HTTP-outproxyen var ikke tilgjengelig fordi leiesettet ikke ble funnet."
-
-msgid "The outproxy is probably down, but there could also be network congestion."
-msgstr "Outproxyen er sannsynligvis nede, men det kan også være overbelastning av nettverket."
-
-msgid "Warning: Authorization Required"
-msgstr "Advarsel: Autorisasjon kreves"
-
-msgid "The website was not reachable."
-msgstr "Nettsiden kan ikke nås."
-
-msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "Nettstedet er offline, det er overbelastning i nettverket, eller ruteren din er ennå ikke godt integrert med jevnaldrende."
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "Du må forhindre at 127.0.0.1 (eller adressen du får tilgang til I2P-konsollen på) blir rutet via I2Ps http-proxy, vanligvis ved å ekskludere adressen i nettleserens proxy-konfigurasjonsdel."
 
 msgid "Warning: Destination Key Conflict"
 msgstr "Advarsel: Destinasjonsnøkkelkonflikt"
@@ -217,24 +88,81 @@ msgstr "Noen kan prøve å utgi seg for en annen nettside, eller folk har gitt t
 msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
 msgstr "Løs konflikten ved å bestemme hvilken nøkkel du stoler på, og ignorer deretter adressehjelpekoblingen, eller slett vertsoppføringen fra adresseboken og klikk på adressehjelpekoblingen igjen."
 
-msgid "The Base32 address is invalid."
-msgstr "Base32-adressen er ugyldig."
+msgid "Connection Reset"
+msgstr "Tilbakestilling av tilkobling"
 
-msgid "Warning: Bad Address Helper"
-msgstr "Advarsel: Dårlig adressehjelper"
+msgid "The connection to the website was reset while the page was loading."
+msgstr "Tilkoblingen til nettsiden ble tilbakestilt mens siden lastet."
+
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Nettstedet kan være midlertidig utilgjengelig, for opptatt, eller det har blokkert tilgangen din."
 
 #, java-format
-msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
-msgstr "Hjelpernøkkelen i URL-en ({0}i2paddresshelper={1}) kan ikke løses."
+msgid "You may want to {0}retry{1}."
+msgstr "Det kan være lurt å {0}prøve på nytt{1}."
 
-msgid "It seems to be garbage data, or a mistyped Base 32 address."
-msgstr "Det ser ut til å være søppeldata, eller en feiltastet Base 32-adresse."
+#, java-format
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
+msgstr "Hvis du lar denne siden være åpen, vil den automatisk prøve å koble til nettstedet på nytt hvert {0} sekund etter et mislykket tilkoblingsforsøk."
 
-msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
-msgstr "Sjekk URL-en din for å prøve å fikse hjelpenøkkelen til å være et gyldig Base 32-vertsnavn eller Base 64-nøkkel."
+msgid "Website Unreachable"
+msgstr "Nettsiden kan ikke nås"
 
 msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
 msgstr "Nettstedet var ikke tilgjengelig fordi det bruker krypteringsalternativer som ikke støttes av din I2P- eller Java-versjon."
+
+msgid "Could not connect to the following destination:"
+msgstr "Kunne ikke koble til følgende destinasjon:"
+
+msgid "The website was not reachable, because its lease set was not found."
+msgstr "Nettstedet var ikke tilgjengelig, fordi leiesettet ikke ble funnet."
+
+msgid "The website is probably down, but there could also be network congestion."
+msgstr "Nettsiden er sannsynligvis nede, men det kan også være overbelastning av nettverket."
+
+msgid "The connection to the proxy was reset."
+msgstr "Forbindelsen til proxyen ble tilbakestilt."
+
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Proxyen kan være midlertidig utilgjengelig, for opptatt, eller den har blokkert tilgangen din."
+
+#, java-format
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "Det kan være lurt å {0}prøve på nytt{1}, da dette vil tilfeldig velge en outproxy fra bassenget du har definert {2}her{3} (hvis du har mer enn én konfigurert)."
+
+#, java-format
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr "Hvis du fortsetter å ha problemer, kan det være lurt å redigere outproxy-listen din {0}her{1}."
+
+msgid "Outproxy Unreachable"
+msgstr "Outproxy utilgjengelig"
+
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "HTTP-outproxyen var ikke tilgjengelig, fordi den bruker krypteringsalternativer som ikke støttes av din I2P- eller Java-versjon."
+
+msgid "The website was not reachable."
+msgstr "Nettsiden kan ikke nås."
+
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Nettstedet er offline, det er overbelastning i nettverket, eller ruteren din er ennå ikke godt integrert med jevnaldrende."
+
+msgid "Warning: No Outproxy Configured"
+msgstr "Advarsel: Ingen Outproxy konfigurert"
+
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr "Forespørselen din var for et nettsted utenfor I2P, men du har ingen HTTP-outproxy konfigurert."
+
+msgid "Please configure an outproxy in I2PTunnel."
+msgstr "Konfigurer en outproxy i I2PTunnel."
+
+msgid "Outproxy Not Found"
+msgstr "Outproxy ikke funnet"
+
+msgid "The HTTP Outproxy was not found."
+msgstr "HTTP Outproxy ble ikke funnet."
+
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Den er offline, det er overbelastning på nettverket, eller ruteren din er ennå ikke godt integrert med jevnaldrende."
 
 msgid "Information: New Host Name"
 msgstr "Informasjon: Nytt vertsnavn"
@@ -256,6 +184,78 @@ msgstr "Hvis du ikke lagrer det, vil vertsnavnet bli glemt etter neste omstart a
 
 msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
 msgstr "Hvis du ikke ønsker å besøke denne verten, klikk på \"tilbake\"-knappen i nettleseren din."
+
+msgid "Proxy Authorization Required"
+msgstr "Utproxy autorisasjon"
+
+msgid "I2P HTTP Proxy Authorization Required"
+msgstr "utproxy autorisasjon"
+
+msgid "This proxy is configured to require a username and password for access."
+msgstr "Denne proxyen er konfigurert til å kreve et brukernavn og passord for tilgang."
+
+#, java-format
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "Skriv inn brukernavnet og passordet ditt, eller sjekk {0}ruterkonfigurasjonen{1} eller {2}I2PTunnel-konfigurasjonen{3}."
+
+#, java-format
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "For å deaktivere autorisasjon, fjern konfigurasjonen {0}i2ptunnel.proxy.auth=basic{1}, og stopp og start HTTP Proxy-tunnelen på nytt."
+
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr "HTTP-outproxyen var ikke tilgjengelig fordi leiesettet ikke ble funnet."
+
+msgid "The outproxy is probably down, but there could also be network congestion."
+msgstr "Outproxyen er sannsynligvis nede, men det kan også være overbelastning av nettverket."
+
+msgid "Warning: Request Denied"
+msgstr "Advarsel: Forespørsel avslått"
+
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr "Denne adressen ser ut til å være feil utformet. Vennligst bekreft at du har oppgitt en gyldig adresse!"
+
+msgid "You attempted to connect to a non-I2P website or location."
+msgstr "Du forsøkte å koble til et ikke-I2P-nettsted eller sted."
+
+msgid "Warning: Bad Address Helper"
+msgstr "Advarsel: Dårlig adressehjelper"
+
+#, java-format
+msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgstr "Hjelpernøkkelen i URL-en ({0}i2paddresshelper={1}) kan ikke løses."
+
+msgid "It seems to be garbage data, or a mistyped Base 32 address."
+msgstr "Det ser ut til å være søppeldata, eller en feiltastet Base 32-adresse."
+
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr "Sjekk URL-en din for å prøve å fikse hjelpenøkkelen til å være et gyldig Base 32-vertsnavn eller Base 64-nøkkel."
+
+msgid "Warning: Invalid Destination"
+msgstr "Lokal destinasjon"
+
+msgid "The website destination specified was not valid, or was otherwise unreachable."
+msgstr "Nettstedets destinasjon var ikke gyldig, eller var på annen måte ikke tilgjengelig."
+
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr "Kanskje du limte inn feil Base 64-streng eller lenken du følger er dårlig."
+
+msgid "The I2P host could also be offline."
+msgstr "I2P-verten kan også være frakoblet."
+
+msgid "Warning: Authorization Required"
+msgstr "Advarsel: Autorisasjon kreves"
+
+msgid "Warning: Invalid Request URI"
+msgstr "Advarsel: Ugyldig forespørsels-URI"
+
+msgid "The request URI is invalid, and probably contains illegal characters."
+msgstr "Forespørsels-URI er ugyldig, og inneholder sannsynligvis ulovlige tegn."
+
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr "Hvis du klikket på en lenke, sjekk slutten av URI-en for tegn som nettleseren ved en feiltakelse har lagt til."
+
+msgid "The Base32 address is invalid."
+msgstr "Base32-adressen er ugyldig."
 
 msgid "This seems to be a bad destination:"
 msgstr "Dette synes å være en dårlig destinasjon:"

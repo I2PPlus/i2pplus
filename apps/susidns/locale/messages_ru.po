@@ -135,17 +135,14 @@ msgstr[0] "{0} адрес назначения удалён."
 msgstr[1] "{0} адреса назначения удалёны."
 msgstr[2] "{0} адресов назначения удалёны."
 
-msgid "No entries selected to delete."
-msgstr "Записи для удаления не выбраны."
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "Добавить альтернативу"
 
 msgid "Address book saved."
 msgstr "Адресная книга сохранена."
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "Выйдите из этой адресной книги и вернитесь, чтобы просмотреть обновления."
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "ОШИБКА: Не удалось сохранить файл адресной книги."
@@ -328,6 +325,9 @@ msgstr "Пометить для удаления"
 msgid "Cancel"
 msgstr "Отмена"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "например. newdomain.i2p"
 
@@ -405,6 +405,9 @@ msgstr "Файл для записи журнала действий"
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Имя используемой переопределяемой темы (по умолчанию выбрана тема, выбранная с консоли)."
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "адресная книга"
@@ -600,3 +603,5 @@ msgstr "Адреса, добавленные в основную адресну�
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Узлы из подписок будут объединены с адресной книгой маршрутизатора."
+
+

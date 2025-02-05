@@ -35,12 +35,6 @@ msgstr "보통 대역폭과 신뢰도"
 msgid "higher bandwidth and reliability"
 msgstr "높은 대역폭과 신뢰도"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "잘못된 폼 서브미션. 뒤로가기나 새로고침을 누르셨을 수 있습니다. 재시도해주세요."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "문제가 지속되면 브라우저의 쿠키가 활성화되어 있는지 확인해주세요."
-
 msgid "Configuration reloaded for all tunnels"
 msgstr "모든 터널에 설정 다시 로드함"
 
@@ -1222,6 +1216,12 @@ msgstr "인증 생성"
 
 msgid "SSL Helper"
 msgstr "SSL 도우미"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "잘못된 폼 서브미션. 뒤로가기나 새로고침을 누르셨을 수 있습니다. 재시도해주세요."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "문제가 지속되면 브라우저의 쿠키가 활성화되어 있는지 확인해주세요."
 
 msgid "Experts only!"
 msgstr "전문가 전용!"

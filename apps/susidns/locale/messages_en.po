@@ -130,16 +130,13 @@ msgid_plural "{0} destinations deleted."
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "No entries selected to delete."
+msgid "No valid entries selected to delete."
 msgstr ""
 
 msgid "Add Alternate"
 msgstr ""
 
 msgid "Address book saved."
-msgstr ""
-
-msgid "Browse away from this addressbook and return to see update."
 msgstr ""
 
 msgid "ERROR: Could not write addressbook file."
@@ -321,6 +318,9 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr ""
 
@@ -397,6 +397,9 @@ msgid "File to log activity to (change to /dev/null if you like)"
 msgstr ""
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr ""
+
+msgid "delete hosts"
 msgstr ""
 
 msgid "addressbook"

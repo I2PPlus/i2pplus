@@ -38,12 +38,6 @@ msgstr "standard Bandbreite und Zuverlässlichkeit"
 msgid "higher bandwidth and reliability"
 msgstr "hohe Bandbreite und Zuverlässlichkeit"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Ungültige Formulareingabe - wahrscheinlich haben Sie den \"Zurück\"-Knopf Ihres Browsers betätigt. Bitte neuladen!"
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Falls dieses Problem weiterhin besteht: Stellen Sie sicher, dass in Ihrem Browser Cookies aktiviert sind."
-
 msgid "Configuration reloaded for all tunnels"
 msgstr "Einstellungen für alle Tunnel neugeladen"
 
@@ -1227,6 +1221,12 @@ msgstr "Erzeuge Authentifizierung"
 
 msgid "SSL Helper"
 msgstr "SSL Helfer"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Ungültige Formulareingabe - wahrscheinlich haben Sie den \"Zurück\"-Knopf Ihres Browsers betätigt. Bitte neuladen!"
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Falls dieses Problem weiterhin besteht: Stellen Sie sicher, dass in Ihrem Browser Cookies aktiviert sind."
 
 msgid "Experts only!"
 msgstr "Nur Experten!"

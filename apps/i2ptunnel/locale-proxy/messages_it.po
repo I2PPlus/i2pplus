@@ -8,8 +8,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Warning: Invalid Request URI"
-msgstr "Avviso: URI richiesta non valida"
+msgid "Website Unknown"
+msgstr "Sito web sconosciuto"
 
 msgid "Router Console"
 msgstr "Console del router"
@@ -25,71 +25,6 @@ msgstr "Configurazione"
 
 msgid "Help"
 msgstr "Aiuto"
-
-msgid "The request URI is invalid, and probably contains illegal characters."
-msgstr "L'URI della richiesta non è valido e probabilmente contiene caratteri non validi."
-
-msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
-msgstr "Se hai fatto clic su un collegamento, controlla alla fine dell'URI eventuali caratteri aggiunti erroneamente dal browser."
-
-msgid "Connection Reset"
-msgstr "Reimpostazione connessione"
-
-msgid "The connection to the website was reset while the page was loading."
-msgstr "La connessione al sito web è stata reimpostata durante il caricamento della pagina."
-
-msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Il sito web potrebbe essere temporaneamente non disponibile, troppo occupato o ha bloccato il tuo accesso."
-
-#, java-format
-msgid "You may want to {0}retry{1}."
-msgstr "Dovresti {0}riprovare{1}."
-
-#, java-format
-msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
-msgstr "Se lasci questa pagina aperta, riproverà automaticamente a connettersi al sito web ogni {0} secondi dopo un tentativo di connessione fallito."
-
-msgid "Could not find the following destination:"
-msgstr "Impossibile raggiungere le seguenti destinazioni:"
-
-msgid "Warning: Non-HTTP Protocol"
-msgstr "Attenzione: Il protocollo non è HTTP"
-
-msgid "The request uses a bad protocol."
-msgstr "La richiesta utilizza un protocollo erroneo."
-
-msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
-msgstr "Il proxy I2P supporta solamente richieste in HTTP e HTTPS."
-
-msgid "Other protocols such as FTP are not allowed."
-msgstr "Altri protocolli come ad esempio FTP non sono supportati."
-
-msgid "Warning: No Outproxy Configured"
-msgstr "Attenzione: Nessun Proxy di uscita configurato"
-
-msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
-msgstr "La tua richiesta riguardava un sito esterno a I2P, ma non hai configurato alcun proxy di uscita HTTP.La tua era una richiesta per un sito esterno a I2P, ma non hai configurato alcun HTTP outproxy."
-
-msgid "Please configure an outproxy in I2PTunnel."
-msgstr "Si prega di configurare un outproxy in I2PTunnel."
-
-msgid "Error: Request Denied"
-msgstr "Errore: Richiesta negata"
-
-msgid "Error: Cannot Access Router Console via I2P Proxy"
-msgstr "Errore: impossibile accedere alla console del router tramite proxy I2P"
-
-msgid "Your browser is misconfigured."
-msgstr "Il tuo browse non supporta gli iFrames."
-
-msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
-msgstr "Non utilizzare il proxy per accedere alla console del router, all'host locale o alle destinazioni LAN locale.Non utilizzare il proxy per accedere alla console del router, al localhost, o a destinazioni della LAN locale."
-
-msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
-msgstr "Devi impedire che 127.0.0.1 (o l'indirizzo da cui stai accedendo alla console I2P) venga instradato tramite il proxy http di I2P, solitamente escludendo l'indirizzo nella sezione di configurazione del proxy del tuo browser."
-
-msgid "Website Unknown"
-msgstr "Sito web sconosciuto"
 
 msgid "Website Not Found in Addressbook"
 msgstr "Sito web non trovato nella Rubrica"
@@ -111,99 +46,35 @@ msgstr "Altrimenti, trova un collegamento Base 32 o un supporto per l'indirizzo,
 msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
 msgstr "Vedere spesso questa pagina? Vedi {0} The FAQ {1} per l'aiuto in {2} aggiungendo alcuni abbonamenti {3} alla tua rubrica."
 
-msgid "Website Unreachable"
-msgstr "Sito web irraggiungibile"
+msgid "Could not find the following destination:"
+msgstr "Impossibile raggiungere le seguenti destinazioni:"
 
-msgid "The website was not reachable, because its lease set was not found."
-msgstr "Il sito web non è raggiungibile perché il relativo set di lease non è stato trovato."
+msgid "Warning: Non-HTTP Protocol"
+msgstr "Attenzione: Il protocollo non è HTTP"
 
-msgid "The website is probably down, but there could also be network congestion."
-msgstr "Probabilmente il sito web non è disponibile, ma potrebbe anche esserci una congestione della rete."
+msgid "The request uses a bad protocol."
+msgstr "La richiesta utilizza un protocollo erroneo."
 
-msgid "Outproxy Not Found"
-msgstr "Outproxy non trovato"
+msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
+msgstr "Il proxy I2P supporta solamente richieste in HTTP e HTTPS."
 
-msgid "The HTTP Outproxy was not found."
-msgstr "Il proxy HTTP non è avviato."
+msgid "Other protocols such as FTP are not allowed."
+msgstr "Altri protocolli come ad esempio FTP non sono supportati."
 
-msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "È offline, c'è congestione della rete o il tuo router non è ancora ben integrato con i peer."
-
-#, java-format
-msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
-msgstr "Potresti voler {0}riprovare{1} poiché questo selezionerà in modo casuale un proxy di uscita dal pool che hai definito {2}qui{3} (se ne hai più di uno configurato)."
-
-#, java-format
-msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
-msgstr "Se continui ad avere problemi, potresti voler modificare il tuo elenco di outproxy {0} qui {1}."
-
-msgid "Warning: Request Denied"
+msgid "Error: Request Denied"
 msgstr "Errore: Richiesta negata"
 
-msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
-msgstr "Questo indirizzo sembra essere malformato. Verifica di aver fornito un indirizzo valido!"
+msgid "Error: Cannot Access Router Console via I2P Proxy"
+msgstr "Errore: impossibile accedere alla console del router tramite proxy I2P"
 
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "Hai tentato di connetterti a un sito Web o a una posizione non I2P."
+msgid "Your browser is misconfigured."
+msgstr "Il tuo browse non supporta gli iFrames."
 
-msgid "Outproxy Unreachable"
-msgstr "Proxy d'uscita non raggiungibile"
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
+msgstr "Non utilizzare il proxy per accedere alla console del router, all'host locale o alle destinazioni LAN locale.Non utilizzare il proxy per accedere alla console del router, al localhost, o a destinazioni della LAN locale."
 
-msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
-msgstr "Il proxy di uscita HTTP non era raggiungibile perché utilizza opzioni di crittografia non supportate dalla versione I2P o Java."
-
-msgid "Could not connect to the following destination:"
-msgstr "Non è stato possibile connettersi alla seguente destinazione:"
-
-msgid "Proxy Authorization Required"
-msgstr "Richiesta autorizzazione proxy d'uscita"
-
-msgid "I2P HTTP Proxy Authorization Required"
-msgstr "Autorizzazione Outproxy"
-
-msgid "This proxy is configured to require a username and password for access."
-msgstr "Questo proxy necessita username e password per l'accesso."
-
-#, java-format
-msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
-msgstr "Inserisci nome utente e password oppure controlla la {0}configurazione del router{1} o la {2}configurazione I2PTunnel{3}."
-
-#, java-format
-msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
-msgstr "Per disabilitare l'autorizzazione, rimuovere la configurazione {0} i2ptunnel.proxy.auth = base {1}, quindi arrestare e riavviare il tunnel proxy HTTP."
-
-msgid "Warning: Invalid Destination"
-msgstr "Destinazione locale"
-
-msgid "The website destination specified was not valid, or was otherwise unreachable."
-msgstr "La destinazione del sito web specificata non era valida o non era altrimenti raggiungibile.La destinazione del sito web specificata non era valida, o altrimenti irraggiungibile."
-
-msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
-msgstr "Forse hai incollato la stringa Base 64 sbagliata o il collegamento che stai seguendo non è valido."
-
-msgid "The I2P host could also be offline."
-msgstr "Il nodo I2P potrebbe essere disconnesso."
-
-msgid "The connection to the proxy was reset."
-msgstr "La connessione verso il proxy è stata resettata."
-
-msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Il proxy potrebbe essere temporaneamente non disponibile, troppo occupato o ha bloccato il tuo accesso.Il proxy potrebbe essere momentaneamente non disponibile, troppo occupato, oppure ti ha bloccato l'accesso."
-
-msgid "The HTTP outproxy was not reachable, because its lease set was not found."
-msgstr "Il proxy out HTTP non era raggiungibile perché il relativo set di lease non è stato trovato."
-
-msgid "The outproxy is probably down, but there could also be network congestion."
-msgstr "Probabilmente il proxy di uscita è inattivo, ma potrebbe anche esserci una congestione della rete."
-
-msgid "Warning: Authorization Required"
-msgstr "Avviso: autorizzazione richiesta"
-
-msgid "The website was not reachable."
-msgstr "Il sito web non era raggiungibile."
-
-msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "Il sito web è offline, c'è congestione della rete o il tuo router non è ancora ben integrato con i peer.Il sito web non è in linea, vi è una congestione della rete, oppure il tuo router non è ancora ben integrato con i peer."
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "Devi impedire che 127.0.0.1 (o l'indirizzo da cui stai accedendo alla console I2P) venga instradato tramite il proxy http di I2P, solitamente escludendo l'indirizzo nella sezione di configurazione del proxy del tuo browser."
 
 msgid "Warning: Destination Key Conflict"
 msgstr "Avviso: conflitto chiave di destinazione"
@@ -217,24 +88,81 @@ msgstr "Qualcuno potrebbe tentare di impersonare un altro sito web oppure le per
 msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
 msgstr "Risolvi il conflitto decidendo di quale chiave ti fidi, quindi ignora il collegamento dell'assistente per gli indirizzi oppure elimina la voce dell'host dalla tua rubrica e fai nuovamente clic sul collegamento dell'assistente per gli indirizzi."
 
-msgid "The Base32 address is invalid."
-msgstr "L'indirizzo Base32 non è valido."
+msgid "Connection Reset"
+msgstr "Reimpostazione connessione"
 
-msgid "Warning: Bad Address Helper"
-msgstr "Avviso: Helper indirizzo errato"
+msgid "The connection to the website was reset while the page was loading."
+msgstr "La connessione al sito web è stata reimpostata durante il caricamento della pagina."
+
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Il sito web potrebbe essere temporaneamente non disponibile, troppo occupato o ha bloccato il tuo accesso."
 
 #, java-format
-msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
-msgstr "Il tasto Helper nell'URL ({0} i2paddressHelper = {1}) non è risolvibile."
+msgid "You may want to {0}retry{1}."
+msgstr "Dovresti {0}riprovare{1}."
 
-msgid "It seems to be garbage data, or a mistyped Base 32 address."
-msgstr "Sembra che si tratti di dati spazzatura o di un indirizzo Base 32 digitato in modo errato."
+#, java-format
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
+msgstr "Se lasci questa pagina aperta, riproverà automaticamente a connettersi al sito web ogni {0} secondi dopo un tentativo di connessione fallito."
 
-msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
-msgstr "Controlla il tuo URL per provare a correggere la chiave helper in modo che sia un nome host Base 32 o una chiave Base 64 valida."
+msgid "Website Unreachable"
+msgstr "Sito web irraggiungibile"
 
 msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
 msgstr "Il sito web non era raggiungibile perché utilizza opzioni di crittografia non supportate dalla tua versione I2P o Java."
+
+msgid "Could not connect to the following destination:"
+msgstr "Non è stato possibile connettersi alla seguente destinazione:"
+
+msgid "The website was not reachable, because its lease set was not found."
+msgstr "Il sito web non è raggiungibile perché il relativo set di lease non è stato trovato."
+
+msgid "The website is probably down, but there could also be network congestion."
+msgstr "Probabilmente il sito web non è disponibile, ma potrebbe anche esserci una congestione della rete."
+
+msgid "The connection to the proxy was reset."
+msgstr "La connessione verso il proxy è stata resettata."
+
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Il proxy potrebbe essere temporaneamente non disponibile, troppo occupato o ha bloccato il tuo accesso.Il proxy potrebbe essere momentaneamente non disponibile, troppo occupato, oppure ti ha bloccato l'accesso."
+
+#, java-format
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "Potresti voler {0}riprovare{1} poiché questo selezionerà in modo casuale un proxy di uscita dal pool che hai definito {2}qui{3} (se ne hai più di uno configurato)."
+
+#, java-format
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr "Se continui ad avere problemi, potresti voler modificare il tuo elenco di outproxy {0} qui {1}."
+
+msgid "Outproxy Unreachable"
+msgstr "Proxy d'uscita non raggiungibile"
+
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "Il proxy di uscita HTTP non era raggiungibile perché utilizza opzioni di crittografia non supportate dalla versione I2P o Java."
+
+msgid "The website was not reachable."
+msgstr "Il sito web non era raggiungibile."
+
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Il sito web è offline, c'è congestione della rete o il tuo router non è ancora ben integrato con i peer.Il sito web non è in linea, vi è una congestione della rete, oppure il tuo router non è ancora ben integrato con i peer."
+
+msgid "Warning: No Outproxy Configured"
+msgstr "Attenzione: Nessun Proxy di uscita configurato"
+
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr "La tua richiesta riguardava un sito esterno a I2P, ma non hai configurato alcun proxy di uscita HTTP.La tua era una richiesta per un sito esterno a I2P, ma non hai configurato alcun HTTP outproxy."
+
+msgid "Please configure an outproxy in I2PTunnel."
+msgstr "Si prega di configurare un outproxy in I2PTunnel."
+
+msgid "Outproxy Not Found"
+msgstr "Outproxy non trovato"
+
+msgid "The HTTP Outproxy was not found."
+msgstr "Il proxy HTTP non è avviato."
+
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "È offline, c'è congestione della rete o il tuo router non è ancora ben integrato con i peer."
 
 msgid "Information: New Host Name"
 msgstr "Informazioni: Nuovo nome host"
@@ -256,6 +184,78 @@ msgstr "Se non lo salvi, il nome host verrà dimenticato al successivo riavvio d
 
 msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
 msgstr "Se non desideri visitare questo host, fai clic sul pulsante \"indietro\" del tuo browser."
+
+msgid "Proxy Authorization Required"
+msgstr "Richiesta autorizzazione proxy d'uscita"
+
+msgid "I2P HTTP Proxy Authorization Required"
+msgstr "Autorizzazione Outproxy"
+
+msgid "This proxy is configured to require a username and password for access."
+msgstr "Questo proxy necessita username e password per l'accesso."
+
+#, java-format
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "Inserisci nome utente e password oppure controlla la {0}configurazione del router{1} o la {2}configurazione I2PTunnel{3}."
+
+#, java-format
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "Per disabilitare l'autorizzazione, rimuovere la configurazione {0} i2ptunnel.proxy.auth = base {1}, quindi arrestare e riavviare il tunnel proxy HTTP."
+
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr "Il proxy out HTTP non era raggiungibile perché il relativo set di lease non è stato trovato."
+
+msgid "The outproxy is probably down, but there could also be network congestion."
+msgstr "Probabilmente il proxy di uscita è inattivo, ma potrebbe anche esserci una congestione della rete."
+
+msgid "Warning: Request Denied"
+msgstr "Errore: Richiesta negata"
+
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr "Questo indirizzo sembra essere malformato. Verifica di aver fornito un indirizzo valido!"
+
+msgid "You attempted to connect to a non-I2P website or location."
+msgstr "Hai tentato di connetterti a un sito Web o a una posizione non I2P."
+
+msgid "Warning: Bad Address Helper"
+msgstr "Avviso: Helper indirizzo errato"
+
+#, java-format
+msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgstr "Il tasto Helper nell'URL ({0} i2paddressHelper = {1}) non è risolvibile."
+
+msgid "It seems to be garbage data, or a mistyped Base 32 address."
+msgstr "Sembra che si tratti di dati spazzatura o di un indirizzo Base 32 digitato in modo errato."
+
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr "Controlla il tuo URL per provare a correggere la chiave helper in modo che sia un nome host Base 32 o una chiave Base 64 valida."
+
+msgid "Warning: Invalid Destination"
+msgstr "Destinazione locale"
+
+msgid "The website destination specified was not valid, or was otherwise unreachable."
+msgstr "La destinazione del sito web specificata non era valida o non era altrimenti raggiungibile.La destinazione del sito web specificata non era valida, o altrimenti irraggiungibile."
+
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr "Forse hai incollato la stringa Base 64 sbagliata o il collegamento che stai seguendo non è valido."
+
+msgid "The I2P host could also be offline."
+msgstr "Il nodo I2P potrebbe essere disconnesso."
+
+msgid "Warning: Authorization Required"
+msgstr "Avviso: autorizzazione richiesta"
+
+msgid "Warning: Invalid Request URI"
+msgstr "Avviso: URI richiesta non valida"
+
+msgid "The request URI is invalid, and probably contains illegal characters."
+msgstr "L'URI della richiesta non è valido e probabilmente contiene caratteri non validi."
+
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr "Se hai fatto clic su un collegamento, controlla alla fine dell'URI eventuali caratteri aggiunti erroneamente dal browser."
+
+msgid "The Base32 address is invalid."
+msgstr "L'indirizzo Base32 non è valido."
 
 msgid "This seems to be a bad destination:"
 msgstr "Questa non sembra essere una buona destinazione:"

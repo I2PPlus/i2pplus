@@ -125,17 +125,14 @@ msgid "1 destination deleted."
 msgid_plural "{0} destinations deleted."
 msgstr[0] "{0} 件の宛先が削除されました。"
 
-msgid "No entries selected to delete."
-msgstr "削除すると選択されたエントリなし。"
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "代替の追加"
 
 msgid "Address book saved."
 msgstr "アドレスブックは保存されました。"
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "このアドレス帳から離れて参照し、戻って更新を確認します。"
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "エラー: アドレスブックファイルに書き込めません。"
@@ -314,6 +311,9 @@ msgstr "削除にマーク"
 msgid "Cancel"
 msgstr "キャンセル"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "例"
 
@@ -391,6 +391,9 @@ msgstr "アクティビティを記録するファイル (お好みで /dev/null
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "使用するオーバーライドテーマの名前 (デフォルトはコンソールで選択したテーマ)"
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "アドレスブック"
@@ -586,3 +589,5 @@ msgstr "マスター アドレス帳に手動で追加されたアドレスは�
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "サブスクリプションから受け取ったホストは、ルーターのアドレス帳と統合されます。"
+
+

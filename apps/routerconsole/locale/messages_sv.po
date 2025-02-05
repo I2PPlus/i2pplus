@@ -142,6 +142,9 @@ msgstr "Inget stöd för vår signeringstyp"
 msgid "Unreachable on any transport"
 msgstr "Onåbar på varje transport"
 
+msgid "Cannot enumerate UPnP devices on Android."
+msgstr ""
+
 msgid "UPnP is not enabled"
 msgstr "UPnP är inte aktiverat"
 
@@ -679,11 +682,39 @@ msgstr "Vänligen rapportera"
 msgid "After reporting, please restart your router"
 msgstr "Efter rapportering, starta om din router"
 
+msgid "Invalid form submission, requires POST"
+msgstr ""
+
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "Ogiltigt formulärdata, förmodligen för att du använde \"back\" eller \"reload\" knappen i din webbläsare. Vänligen skicka om."
 
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Om problemet kvarstår, bekräfta att cookies är påslaget i din browser."
+
+msgid "Bandwidth usage"
+msgstr "Bandbreddsanvändning"
+
+#, java-format
+msgid "events in {0}"
+msgstr "händelser i {0}"
+
+msgid "Events per period"
+msgstr "Händelser per period"
+
+msgid "Min"
+msgstr "Min"
+
+msgid "Max"
+msgstr "Max"
+
+msgid "Avg"
+msgstr "Genomsnitt"
+
+msgid "Now"
+msgstr "Nu"
+
+msgid "Router restarted"
+msgstr "Routern startades om"
 
 #, java-format
 msgid "News last updated {0} ago."
@@ -716,31 +747,6 @@ msgstr[1] "{0} plugins har uppdaterats"
 
 msgid "Plugin check complete"
 msgstr "Kontroll av plugin är klar"
-
-msgid "Bandwidth usage"
-msgstr "Bandbreddsanvändning"
-
-#, java-format
-msgid "events in {0}"
-msgstr "händelser i {0}"
-
-msgid "Events per period"
-msgstr "Händelser per period"
-
-msgid "Min"
-msgstr "Min"
-
-msgid "Max"
-msgstr "Max"
-
-msgid "Avg"
-msgstr "Genomsnitt"
-
-msgid "Now"
-msgstr "Nu"
-
-msgid "Router restarted"
-msgstr "Routern startades om"
 
 msgid "none"
 msgstr "inga"
@@ -810,8 +816,20 @@ msgstr "Konsol"
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "För att aktivera SSL -åtkomst för routerkonsolen, se den kommenterade <code>clients.config</code> -filen som finns i din i2p -applikationskatalog för mer information. Du måste redigera routerconsolerunner -konfigurationsfilen i katalogen: "
 
+msgid "Save disabled, edit the router.config file to make changes"
+msgstr ""
+
 msgid "Error updating the configuration - please see the error logs"
 msgstr "Fel vid uppdatering av konfiguration - se felloggar"
+
+msgid "No changes made to the configuration"
+msgstr ""
+
+msgid "Note"
+msgstr "OBSERVERA"
+
+msgid "Some changes may require a restart to take effect."
+msgstr "Vissa ändringar kan kräva en omstart för att träda i kraft."
 
 msgid "Save Client Configuration"
 msgstr "Spara klientkonfiguration"
@@ -825,6 +843,9 @@ msgstr "Spara webbapp konfiguration"
 msgid "Save Plugin Configuration"
 msgstr "Spara insticksmodulskonfiguration"
 
+msgid "Plugins disabled"
+msgstr ""
+
 msgid "Install Plugin"
 msgstr "Installera insticksmodul"
 
@@ -833,6 +854,9 @@ msgstr "Installera insticksmodul från fil"
 
 msgid "Update All Installed Plugins"
 msgstr "Uppdatera alla installerade insticksmodul"
+
+msgid "Delete client disabled"
+msgstr ""
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -915,9 +939,18 @@ msgstr "Insticksmodul- eller uppdateringshämtning pågår redan"
 msgid "Updating all plugins"
 msgstr "Alla insticksmodul uppdateras"
 
+msgid "Update manager not registered, cannot install"
+msgstr ""
+
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "Installerar insticksmodul från {0}"
+
+msgid "Cannot install, check logs"
+msgstr ""
+
+msgid "Update manager not registered, cannot check"
+msgstr ""
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1016,6 +1049,19 @@ msgstr "Konfiguration sparad utan fel."
 msgid "Join Family"
 msgstr "Anslut familj"
 
+msgid "Bad certificate - No Subject CN"
+msgstr ""
+
+msgid "Bad characters in Family: "
+msgstr ""
+
+#, java-format
+msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
+msgstr ""
+
+msgid "Family key configured for router family: "
+msgstr ""
+
 msgid "Load from file failed"
 msgstr "Inläsning av fil misslyckades"
 
@@ -1031,8 +1077,8 @@ msgstr "Lägg till"
 msgid "Restore defaults"
 msgstr "Återställ standardvärden"
 
-msgid "Home page changed"
-msgstr "Startsida ändrad"
+msgid "Bad group detected, please retry"
+msgstr ""
 
 msgid "Restored default settings"
 msgstr "Återställt standardinställningarna"
@@ -1064,6 +1110,9 @@ msgstr "Ogiltlig nyckel"
 msgid "Invalid destination"
 msgstr "Ogiltig destination"
 
+msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
+msgstr ""
+
 #, java-format
 msgid "Key for {0} added to keyring"
 msgstr "Nyckel för {0} tillagd i nyckelring"
@@ -1073,6 +1122,9 @@ msgstr "Lösenord krävs"
 
 msgid "Requires hostname, destination, or blinded Base32"
 msgstr "Kräver värdnamn, destination eller blind Base32"
+
+msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
+msgstr ""
 
 msgid "Destination requires lookup password"
 msgstr "Destinationen kräver uppslagslösenord"
@@ -1091,6 +1143,9 @@ msgstr "Skicka nyckel till serveroperatör."
 
 msgid "Delete key"
 msgstr "Tog bort nyckel"
+
+msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
+msgstr ""
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1141,6 +1196,36 @@ msgstr "Förblindad"
 
 msgid "Log overrides updated"
 msgstr "Loggöverskridningar uppdaterad"
+
+msgid "Error updating the log limits - levels not valid"
+msgstr ""
+
+msgid "Log limits cleared"
+msgstr ""
+
+#, java-format
+msgid "Default log level updated from {0} to {1}"
+msgstr ""
+
+msgid "Date format updated"
+msgstr ""
+
+#, java-format
+msgid "Specified date format is not valid ({0}) - not updated"
+msgstr ""
+
+msgid "File size updated"
+msgstr ""
+
+#, java-format
+msgid "Specified file size limit is not valid ({0}) - not updated"
+msgstr ""
+
+msgid "Compression setting updated"
+msgstr ""
+
+msgid "Log record format updated"
+msgstr ""
 
 msgid "Log configuration saved"
 msgstr "Loggkonfiguration sparades"
@@ -1349,6 +1434,12 @@ msgstr "Ogiltigt hastighetsvärde"
 msgid "Bad capacity value"
 msgstr "Ogiltigt kapacitetsvärde"
 
+msgid "Bonuses adjusted for: "
+msgstr ""
+
+msgid "No profile exists for: "
+msgstr ""
+
 msgid "Unsupported"
 msgstr "Stöds inte"
 
@@ -1460,27 +1551,14 @@ msgstr[1] "Vänta medan routingåtagandet upphör för {0} tunnlar"
 msgid "Restart in {0}"
 msgstr "Omstart om {0}"
 
-msgid "Stat filter and location updated successfully to"
-msgstr "Statistikfilter och plats har uppdaterats till"
-
-msgid "Full statistics enabled"
-msgstr "Fullständig statistik aktiverat"
-
-msgid "Full statistics disabled"
-msgstr "Fullständig statistik avaktiverat"
-
-#, java-format
-msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
-msgstr "Diagramlista uppdaterad, det kan ta upp till 60s innan {0}Diagramsidan{1} uppdateras"
-
 msgid "Save order"
 msgstr "Spara ordning"
 
-msgid "Refresh disabled"
-msgstr "Uppdatering inaktiverad"
+msgid "Sidebar refresh disabled"
+msgstr ""
 
-msgid "Refresh interval changed"
-msgstr "Uppdateringsintervall ändrat"
+msgid "Sidebar refresh interval changed"
+msgstr ""
 
 msgid "Refresh interval must be a number"
 msgstr "Uppdateringsintervallet måste vara siffror"
@@ -1488,17 +1566,17 @@ msgstr "Uppdateringsintervallet måste vara siffror"
 msgid "Restore full default"
 msgstr "Återställ till grundinställningar"
 
-msgid "Full summary bar default restored."
-msgstr "Fullständig sammanfattningsfälts standard återställd."
+msgid "Full sidebar defaults restored."
+msgstr ""
 
-msgid "Summary bar will refresh shortly."
-msgstr "Sammanfattningsfältet kommer att uppdateras inom kort."
+msgid "Sidebar will refresh shortly."
+msgstr ""
 
 msgid "Restore minimal default"
 msgstr "Återställ till minimala grundinställningar"
 
-msgid "Minimal summary bar default restored."
-msgstr "Minimal översiktsfältets standard återställd."
+msgid "Minimal sidebar defaults restored."
+msgstr ""
 
 msgid "Order must be an integer"
 msgstr "Ordningen måste vara ett heltal"
@@ -1514,6 +1592,27 @@ msgstr "Flyttad"
 
 msgid "Saved order of sections."
 msgstr "Sparar ordningen på valen."
+
+msgid "Stat filter and location updated successfully to"
+msgstr "Statistikfilter och plats har uppdaterats till"
+
+msgid "Full statistics enabled"
+msgstr "Fullständig statistik aktiverat"
+
+msgid "Full statistics disabled"
+msgstr "Fullständig statistik avaktiverat"
+
+#, java-format
+msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
+msgstr "Diagramlista uppdaterad, det kan ta upp till 60s innan {0}Diagramsidan{1} uppdateras"
+
+#, java-format
+msgid "Internal error: could not resolve pool name {0}."
+msgstr ""
+
+#, java-format
+msgid "Internal error: could not find pool settings for {0}."
+msgstr ""
 
 msgid "Updated settings for all pools."
 msgstr "Uppdaterad inställningar för alla pooler"
@@ -1539,9 +1638,8 @@ msgstr[1] "{0} tunnlar"
 msgid "Exploratory tunnels"
 msgstr "Utforskande tunnlar"
 
-#, java-format
-msgid "Client tunnels for {0}"
-msgstr "Klienttunnlar för {0}"
+msgid "I2PSnark"
+msgstr "I2PSnark"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "Anonymitetsvarning - Inställningar inkluderar tunnlar med 0-hopp."
@@ -1567,17 +1665,17 @@ msgstr "Inkommande"
 msgid "Outbound"
 msgstr "Utgående"
 
-msgid "Length"
-msgstr "Längd"
-
-msgid "Randomization"
-msgstr "Randomisering"
-
 msgid "Quantity"
 msgstr "Kvantitet"
 
 msgid "Backup quantity"
 msgstr "Backup kvantitet"
+
+msgid "Length"
+msgstr "Längd"
+
+msgid "Randomization"
+msgstr "Randomisering"
 
 msgid "Inbound options"
 msgstr "Inkommande alternativ"
@@ -1588,17 +1686,20 @@ msgstr "Utgående alternativ"
 msgid "Add user"
 msgstr "Lägg till användare"
 
+msgid "Cannot save theme choice, theme name has illegal characters"
+msgstr ""
+
 msgid "Theme change saved."
 msgstr "Temaförändring sparad."
-
-msgid "Refresh the page to view."
-msgstr "Uppdatera sidan för att se."
 
 msgid "Mobile console option saved."
 msgstr "Mobila konsol-alternativ sparade."
 
 msgid "No user name entered"
 msgstr "Inget användarnamn angivet"
+
+msgid "User name may not contain '='"
+msgstr ""
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "Varning: Användarnamn som använder tecken utanför teckentabellen ISO-8859-1 rekommenderas inte. Det finns inget standardstöd och är olika i olika webbläsare."
@@ -1889,17 +1990,17 @@ msgstr "Grafrouterprestanda"
 msgid "Graphs"
 msgstr "Diagram"
 
-msgid "Anonymous webmail client"
-msgstr "Anonym webbmejlklient"
-
-msgid "I2PMail"
-msgstr "I2PMail"
-
 msgid "Help"
 msgstr "Hjälp"
 
 msgid "I2P Router Help"
 msgstr "I2P Router Hjälp"
+
+msgid "Anonymous webmail client"
+msgstr "Anonym webbmejlklient"
+
+msgid "I2PMail"
+msgstr "I2PMail"
 
 msgid "Install and configure I2P plugins"
 msgstr "Installera och konfigurera I2P-plugins"
@@ -1918,6 +2019,12 @@ msgstr "Nätverksdatabas"
 
 msgid "Show list of all known I2P routers"
 msgstr "Visa lista över alla kända I2P routrar"
+
+msgid "List of recently connected peers with profiling info"
+msgstr ""
+
+msgid "Peer Profiles"
+msgstr "Peer-profiler"
 
 msgid "Router Info"
 msgstr "Routerinfo"
@@ -1991,14 +2098,14 @@ msgstr "Avancerad konfiguration"
 msgid "Advanced router configuration"
 msgstr "Avancerad routerkonfiguration"
 
-msgid "Start or stop Router clients"
-msgstr "Starta eller stoppa routerklienter"
-
 msgid "Changelog"
 msgstr "Ändringslogg"
 
 msgid "Recent changes"
 msgstr "Senaste ändringarna"
+
+msgid "Start or stop Router clients"
+msgstr "Starta eller stoppa routerklienter"
 
 msgid "Bug tracker"
 msgstr "Fel bevakare"
@@ -2144,9 +2251,6 @@ msgstr "Clearnet BitTorrent DHT sökmotor"
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "DuckDuckGo sökmotor (inget javascript)"
 
-msgid "Clearnet Search Engine"
-msgstr "Clearnet-sökmotor"
-
 msgid "Privacy-focused Clearnet Search Engine"
 msgstr "Sekretessfokuserad Clearnet-sökmotor"
 
@@ -2222,18 +2326,6 @@ msgstr "Oberoende undersökande journalistik"
 msgid "Information Security Research &amp; Education"
 msgstr "Informationssäkerhetsforskning"
 
-msgid "Cannabis-related magazine"
-msgstr "Cannabisrelaterad tidning"
-
-msgid "CultureMagazine"
-msgstr "Kulturtidskrift"
-
-msgid "A magazine of Politics &amp; Culture"
-msgstr "En tidskrift för politik"
-
-msgid "CurrentAffairs"
-msgstr "Aktuellt"
-
 msgid "Darknet related news site"
 msgstr "Darknet-relaterad nyhetssajt"
 
@@ -2288,15 +2380,6 @@ msgstr "HongKongWatch"
 msgid "Monitors threats to freedoms and rights in Hong Kong"
 msgstr "Övervakar hot mot friheter och rättigheter i Hongkong"
 
-msgid "Politics &amp; Current Affairs Journal"
-msgstr "Politik och aktualitetstidning"
-
-msgid "English language Japanese News"
-msgstr "Engelska japanska nyheter"
-
-msgid "JapanToday"
-msgstr "Japan idag"
-
 msgid "JStorDaily"
 msgstr "JStorDaily"
 
@@ -2339,9 +2422,6 @@ msgstr "Nyheter och bloggflöden på I2P"
 msgid "Planeta"
 msgstr "Planeta"
 
-msgid "News &amp; Views on Tibet"
-msgstr "Nyheter"
-
 msgid "Lifestyle magazine"
 msgstr "Livsstilsmagasin"
 
@@ -2359,6 +2439,9 @@ msgstr "ScienceDaily"
 
 msgid "Community-driven tech news"
 msgstr "Gemenskapsdrivna tekniska nyheter"
+
+msgid "Various services"
+msgstr ""
 
 msgid "News for nerds"
 msgstr "Nyheter för nördar"
@@ -2405,12 +2488,6 @@ msgstr "Globala Nyheter"
 msgid "TheGuardian"
 msgstr "TheGuardian"
 
-msgid "TheHill"
-msgstr "Kullen"
-
-msgid "US Political News"
-msgstr "US Politiska nyheter"
-
 msgid "TheMarkup"
 msgstr "TheMarkup"
 
@@ -2425,12 +2502,6 @@ msgstr "TheMoscowTimes"
 
 msgid "TheNewRepublic"
 msgstr "Den Nya Republiken"
-
-msgid "International News from Tibet"
-msgstr "Internationella nyheter från Tibet"
-
-msgid "TheTibetPost"
-msgstr "TheTibetPost"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "Fildelning"
@@ -2459,6 +2530,9 @@ msgstr "URL"
 
 msgid "Add"
 msgstr "Lägg till"
+
+msgid "Error displaying the info page."
+msgstr ""
 
 msgid "Identity"
 msgstr "Identitet"
@@ -2505,6 +2579,9 @@ msgstr "Tillgängliga CPU-kärnor"
 msgid "Performance"
 msgstr "Föreställning"
 
+msgid "Maximum available RAM"
+msgstr ""
+
 msgid "Classified as slow"
 msgstr "Klassad som långsam"
 
@@ -2513,6 +2590,9 @@ msgstr "Ja"
 
 msgid "No"
 msgstr "Nej"
+
+msgid "GeoIP Db"
+msgstr ""
 
 msgid "Target"
 msgstr "Mål"
@@ -2650,6 +2730,9 @@ msgstr "Alla routrar (Client NetDb)"
 msgid "Sybil Analysis"
 msgstr "Sybilanalys"
 
+msgid "Bad value supplied, please check and try again."
+msgstr ""
+
 msgid "Router Map"
 msgstr "Routernyktert"
 
@@ -2724,9 +2807,6 @@ msgstr "är förbjuden"
 
 msgid "not found in network database"
 msgstr "hittades inte i nätverksdatabasen"
-
-msgid "No results"
-msgstr "Inga resultat"
 
 msgid "Bad Base64 Router hash"
 msgstr ""
@@ -2975,50 +3055,11 @@ msgstr "Visa alla routrar med denna adress i NetDb"
 msgid "Show all routers with this port in the NetDb"
 msgstr "Visa alla routrar med denna port i NetDb"
 
-msgid "Core version"
-msgstr "Kärnversion"
-
 msgid "Network ID"
 msgstr "Nätverks-ID"
 
 msgid "Routers"
 msgstr "Routrar"
-
-msgid "Family Key"
-msgstr "Familjenyckel"
-
-msgid "Family Sig"
-msgstr "Familjen Sig"
-
-msgid "Exploratory tunnels expire (1h)"
-msgstr "Utforskningstunnlar upphör (1h)"
-
-msgid "Exploratory tunnels reject (1h)"
-msgstr "Undersökande tunnlar avvisas (1h)"
-
-msgid "Exploratory tunnels build success (1h)"
-msgstr "Utforskande tunnlar bygger framgång (1h)"
-
-msgid "Client tunnels expire (1h)"
-msgstr "Kundtunnlar löper ut (1h)"
-
-msgid "Client tunnels reject (1h)"
-msgstr "Kundtunnlar avvisas (1h)"
-
-msgid "Client tunnels build success (1h)"
-msgstr "Kundtunnlar bygger framgång (1h)"
-
-msgid "Participating tunnels (1h)"
-msgstr "Deltagande tunnlar (1h)"
-
-msgid "Participating tunnels (60s)"
-msgstr "Deltagande tunnlar (60-tal)"
-
-msgid "Bandwidth send rate (1h)"
-msgstr "Sändningshastighet för bandbredd (1h)"
-
-msgid "Bandwidth receive rate (1h)"
-msgstr "Bandbreddsmottagningshastighet (1h)"
 
 msgid "First heard about"
 msgstr "Först hörde talas om"
@@ -3088,9 +3129,6 @@ msgstr "till din router.config-fil."
 msgid "Peer Connections"
 msgstr "Peer-anslutningar"
 
-msgid "Auto-refresh"
-msgstr "Automatisk uppdatering"
-
 msgid "Active in the last minute"
 msgstr "Aktiv i sista minuten"
 
@@ -3099,6 +3137,12 @@ msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
+
+msgid "Limit"
+msgstr ""
+
+msgid "Maximum permitted connections"
+msgstr ""
 
 msgid "Current / maximum permitted"
 msgstr "Ström / max tillåten"
@@ -3504,8 +3548,8 @@ msgid "{0} shared bandwidth"
 msgstr "{0} delad bandbredd"
 
 #, java-format
-msgid "Over {0} shared bandwidth"
-msgstr "Över {0} delad bandbredd"
+msgid "Over {0} KB/s shared bandwidth"
+msgstr ""
 
 msgid "status"
 msgstr "status"
@@ -3577,84 +3621,151 @@ msgstr ""
 msgid "Select search engine"
 msgstr "Välj sökmotor"
 
-msgid "Statistics gathered during this router's uptime"
-msgstr "Statistik som samlats in under routerns driftstid"
+#, java-format
+msgid "Clock Skew of {0}"
+msgstr "Clock Skew av {0}"
 
-msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
-msgstr "De uppgifter som samlats in är kvantiserade över en 1 minuts period, så de skall bara användas som en uppskattning."
+msgid "Testing"
+msgstr "Testar"
 
-msgid "These statistics are primarily used for development and debugging."
-msgstr "Statistiken används främst för utveckling och felsökning."
+msgid "Private TCP Address"
+msgstr "Privat TCP-adress"
 
-msgid "No lifetime events"
-msgstr "Inga livstidshändelser"
+msgid "SymmetricNAT"
+msgstr "SymmetriskNAT"
 
-msgid "frequency"
-msgstr "frekvens"
+msgid "Firewalled with Inbound TCP Enabled"
+msgstr "Brandvägg med inkommande TCP aktiverat"
 
-msgid "Rolling average events per period"
-msgstr "Glidande medelvärde, händelser per period"
+msgid "Firewalled &amp; Floodfill"
+msgstr "Firewalled och Floodfill"
 
-msgid "Highest events per period"
-msgstr "Högsta händelser per period"
+msgid "Disconnected"
+msgstr "Frånkopplad"
 
-msgid "Lifetime average events per period"
-msgstr "Genomsnittliga livstids händelser per period"
+msgid "UDP Port In Use"
+msgstr "UDP-port används"
 
-msgid "Lifetime average frequency"
-msgstr "Genomsnittlig livstids frekvens"
+msgid "No Active Peers"
+msgstr "Inga aktiva kamrater"
+
+msgid "UDP Disabled &amp; Inbound TCP host/port not set"
+msgstr "UDP funktionshindrad och inkommande TCP -värd/port inte inställd"
+
+msgid "Firewalled with UDP Disabled"
+msgstr "Brandvägg med UDP inaktiverat"
+
+msgid "Add/remove/edit &amp; control your client and server tunnels"
+msgstr "Lägg till/ta bort/ ändra &amp; ställ in dina klient och server tunnlar"
+
+msgid "Service Tunnels"
+msgstr "Servicetunnlar"
+
+msgid "How many local service tunnels we're running"
+msgstr "Hur många lokala servicetunnlar vi kör"
+
+msgid "Messenger"
+msgstr "Messenger"
+
+msgid "i2pchat"
+msgstr "i2pchat"
+
+msgid "I2PChat"
+msgstr "I2PChat"
+
+msgid "Server"
+msgstr "Server"
+
+msgid "service may be available to peers"
+msgstr "tjänst kan vara tillgänglig för kamrater"
+
+msgid "service is only available locally"
+msgstr "tjänsten är endast tillgänglig lokalt"
+
+msgid "Show tunnels"
+msgstr "Visa tunnlar"
+
+msgid "Leases expired"
+msgstr "Leasning utgången"
+
+msgid "Rebuilding"
+msgstr "Bygger om"
+
+msgid "ago"
+msgstr "sedan"
+
+msgid "Ready"
+msgstr "Redo"
+
+msgid "Building"
+msgstr "Bygger"
+
+msgid "Building tunnels"
+msgstr "Bygger tunnlar"
+
+msgid "Shared Clients"
+msgstr "Delade Kunder"
+
+msgid "Click Restart to install"
+msgstr "Klicka på Omstart för att installera"
+
+msgid "Click Shutdown and restart to install"
+msgstr "Klicka Stäng av och starta om för att installera"
 
 #, java-format
-msgid "{0} event"
-msgid_plural "{0} events"
-msgstr[0] "{0} händelse"
-msgstr[1] "{0} händelser"
+msgid "{0}"
+msgstr "{0}"
 
-msgid "rate"
-msgstr "hastighet"
+msgid "Updating after restart"
+msgstr "Uppdatering efter omstart"
 
-msgid "Average"
-msgstr "Genomsnitt"
+msgid "Signed development update available"
+msgstr "Signerad utvecklingsuppdatering tillgänglig"
 
-msgid "Highest average"
-msgstr "Högsta genomsnitt"
+msgid "Download I2P Update"
+msgstr "Ladda ner I2P Update"
 
-msgid "Highest total in a period"
-msgstr "Högsta totalsumman på en period"
+msgid "Unsigned update available"
+msgstr "Osignerad uppdatering tillgänglig"
 
-msgid "Average event count"
-msgstr "Genomsnittlig händelse antal"
+msgid "Help with firewall configuration"
+msgstr "Hjälp med brandväggskonfigurationen"
 
-msgid "Events in peak period"
-msgstr "Händelser under högtrafik"
+msgid "Check network connection and NAT/firewall!"
+msgstr "Kontrollera nätverksanslutning och NAT/brandvägg!"
 
-msgid "Events in this period"
-msgstr "Händelser under denna period"
+msgid "Attempt to download router reference files (if automatic reseed has failed)"
+msgstr "Försök att ladda ner routerreferensfiler (om automatisk återinställning har misslyckats)"
 
-#, java-format
-msgid "ended {0} ago"
-msgstr "slutade för {0} sedan"
+msgid "Reseed"
+msgstr "Återdistribuering"
 
-msgid "No events"
-msgstr "Inga händelser"
+msgid "Order"
+msgstr "Ordning"
 
-msgid "Graph Data"
-msgstr "Diagramdata"
+msgid "Top"
+msgstr "Top"
 
-msgid "Graph Event Count"
-msgstr "Diagram över antal händelser"
+msgid "Move to top"
+msgstr "Flytta högst upp"
 
-msgid "Export Data as XML"
-msgstr "Exportera data som XML"
+msgid "Move up"
+msgstr "Flytta upp"
 
-msgid "Lifetime average value"
-msgstr "Livstids medelvärde"
+msgid "Down"
+msgstr "Ner"
 
-#, java-format
-msgid "1 event"
-msgid_plural "{0} events"
-msgstr[0] "1 händelse"
-msgstr[1] "{0} händelser"
+msgid "Move down"
+msgstr "Flytta ner"
+
+msgid "Bottom"
+msgstr "Botten"
+
+msgid "Move to bottom"
+msgstr "Flytta längst ner"
+
+msgid "Select a section to add"
+msgstr "Välj ett avsnitt för att lägga till det"
 
 msgid "Help &amp; FAQ"
 msgstr "Hjälp &amp; vanliga frågor"
@@ -3697,9 +3808,6 @@ msgstr "Trängsel"
 
 msgid "Tunnel Status"
 msgstr "Tunnelstatus"
-
-msgid "Service Tunnels"
-msgstr "Servicetunnlar"
 
 msgid "News &amp; Updates"
 msgstr "Nyheter &amp; uppdateringar"
@@ -3754,6 +3862,9 @@ msgstr "Webbhotell"
 
 msgid "An introduction to hosting websites on the I2P network"
 msgstr "En introduktion till att vara värd för webbplatser i I2P-nätverket"
+
+msgid "New hosts in last 24 hours"
+msgstr ""
 
 msgid "I2PControl"
 msgstr "I2PKontroll"
@@ -4054,151 +4165,84 @@ msgstr "Inga deltagande tunnlar byggs när Dolt läge är aktivt"
 msgid "Router is configured to reject all transit tunnel requests"
 msgstr "Router är konfigurerad att avvisa alla deltagande tunnelförfrågningar"
 
-#, java-format
-msgid "Clock Skew of {0}"
-msgstr "Clock Skew av {0}"
+msgid "Statistics gathered during this router's uptime"
+msgstr "Statistik som samlats in under routerns driftstid"
 
-msgid "Testing"
-msgstr "Testar"
+msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
+msgstr "De uppgifter som samlats in är kvantiserade över en 1 minuts period, så de skall bara användas som en uppskattning."
 
-msgid "Private TCP Address"
-msgstr "Privat TCP-adress"
+msgid "These statistics are primarily used for development and debugging."
+msgstr "Statistiken används främst för utveckling och felsökning."
 
-msgid "SymmetricNAT"
-msgstr "SymmetriskNAT"
+msgid "No lifetime events"
+msgstr "Inga livstidshändelser"
 
-msgid "Firewalled with Inbound TCP Enabled"
-msgstr "Brandvägg med inkommande TCP aktiverat"
+msgid "frequency"
+msgstr "frekvens"
 
-msgid "Firewalled &amp; Floodfill"
-msgstr "Firewalled och Floodfill"
+msgid "Rolling average events per period"
+msgstr "Glidande medelvärde, händelser per period"
 
-msgid "Disconnected"
-msgstr "Frånkopplad"
+msgid "Highest events per period"
+msgstr "Högsta händelser per period"
 
-msgid "UDP Port In Use"
-msgstr "UDP-port används"
+msgid "Lifetime average events per period"
+msgstr "Genomsnittliga livstids händelser per period"
 
-msgid "No Active Peers"
-msgstr "Inga aktiva kamrater"
-
-msgid "UDP Disabled &amp; Inbound TCP host/port not set"
-msgstr "UDP funktionshindrad och inkommande TCP -värd/port inte inställd"
-
-msgid "Firewalled with UDP Disabled"
-msgstr "Brandvägg med UDP inaktiverat"
-
-msgid "Add/remove/edit &amp; control your client and server tunnels"
-msgstr "Lägg till/ta bort/ ändra &amp; ställ in dina klient och server tunnlar"
-
-msgid "How many local service tunnels we're running"
-msgstr "Hur många lokala servicetunnlar vi kör"
-
-msgid "I2PSnark"
-msgstr "I2PSnark"
-
-msgid "Messenger"
-msgstr "Messenger"
-
-msgid "i2pchat"
-msgstr "i2pchat"
-
-msgid "I2PChat"
-msgstr "I2PChat"
-
-msgid "Server"
-msgstr "Server"
-
-msgid "service may be available to peers"
-msgstr "tjänst kan vara tillgänglig för kamrater"
-
-msgid "service is only available locally"
-msgstr "tjänsten är endast tillgänglig lokalt"
-
-msgid "Show tunnels"
-msgstr "Visa tunnlar"
-
-msgid "Leases expired"
-msgstr "Leasning utgången"
-
-msgid "Rebuilding"
-msgstr "Bygger om"
-
-msgid "ago"
-msgstr "sedan"
-
-msgid "Ready"
-msgstr "Redo"
-
-msgid "Building"
-msgstr "Bygger"
-
-msgid "Building tunnels"
-msgstr "Bygger tunnlar"
-
-msgid "Shared Clients"
-msgstr "Delade Kunder"
-
-msgid "Click Restart to install"
-msgstr "Klicka på Omstart för att installera"
-
-msgid "Click Shutdown and restart to install"
-msgstr "Klicka Stäng av och starta om för att installera"
+msgid "Lifetime average frequency"
+msgstr "Genomsnittlig livstids frekvens"
 
 #, java-format
-msgid "{0}"
-msgstr "{0}"
+msgid "{0} event"
+msgid_plural "{0} events"
+msgstr[0] "{0} händelse"
+msgstr[1] "{0} händelser"
 
-msgid "Updating after restart"
-msgstr "Uppdatering efter omstart"
+msgid "rate"
+msgstr "hastighet"
 
-msgid "Signed development update available"
-msgstr "Signerad utvecklingsuppdatering tillgänglig"
+msgid "Average"
+msgstr "Genomsnitt"
 
-msgid "Download I2P Update"
-msgstr "Ladda ner I2P Update"
+msgid "Highest average"
+msgstr "Högsta genomsnitt"
 
-msgid "Unsigned update available"
-msgstr "Osignerad uppdatering tillgänglig"
+msgid "Highest total in a period"
+msgstr "Högsta totalsumman på en period"
 
-msgid "Help with firewall configuration"
-msgstr "Hjälp med brandväggskonfigurationen"
+msgid "Average event count"
+msgstr "Genomsnittlig händelse antal"
 
-msgid "Check network connection and NAT/firewall!"
-msgstr "Kontrollera nätverksanslutning och NAT/brandvägg!"
+msgid "Events in peak period"
+msgstr "Händelser under högtrafik"
 
-msgid "Attempt to download router reference files (if automatic reseed has failed)"
-msgstr "Försök att ladda ner routerreferensfiler (om automatisk återinställning har misslyckats)"
+msgid "Events in this period"
+msgstr "Händelser under denna period"
 
-msgid "Reseed"
-msgstr "Återdistribuering"
+#, java-format
+msgid "ended {0} ago"
+msgstr "slutade för {0} sedan"
 
-msgid "Order"
-msgstr "Ordning"
+msgid "No events"
+msgstr "Inga händelser"
 
-msgid "Top"
-msgstr "Top"
+msgid "Graph Data"
+msgstr "Diagramdata"
 
-msgid "Move to top"
-msgstr "Flytta högst upp"
+msgid "Graph Event Count"
+msgstr "Diagram över antal händelser"
 
-msgid "Move up"
-msgstr "Flytta upp"
+msgid "Export Data as XML"
+msgstr "Exportera data som XML"
 
-msgid "Down"
-msgstr "Ner"
+msgid "Lifetime average value"
+msgstr "Livstids medelvärde"
 
-msgid "Move down"
-msgstr "Flytta ner"
-
-msgid "Bottom"
-msgstr "Botten"
-
-msgid "Move to bottom"
-msgstr "Flytta längst ner"
-
-msgid "Select a section to add"
-msgstr "Välj ett avsnitt för att lägga till det"
+#, java-format
+msgid "1 event"
+msgid_plural "{0} events"
+msgstr[0] "1 händelse"
+msgstr[1] "{0} händelser"
 
 msgid "No known routers"
 msgstr "Inga kända routrar"
@@ -4538,6 +4582,10 @@ msgstr "Inga lokala eller transittunnlar är aktiva för närvarande."
 msgid "Bandwidth Tiers"
 msgstr "Bandbreddsnivåer"
 
+#, java-format
+msgid "Over {0} shared bandwidth"
+msgstr "Över {0} delad bandbredd"
+
 msgid "Inbound or outbound?"
 msgstr "Inkommande eller utgående?"
 
@@ -4597,6 +4645,18 @@ msgstr "Bandbreddstest avbröts"
 
 msgid "Bandwidth test was not running"
 msgstr "Bandbreddstest kördes inte"
+
+msgid "ready"
+msgstr ""
+
+msgid "inbound test"
+msgstr ""
+
+msgid "outbound test"
+msgstr ""
+
+msgid "done"
+msgstr ""
 
 msgid "bits per second"
 msgstr "bitar per sekund"
@@ -4770,8 +4830,8 @@ msgstr "Nätverksdelning"
 msgid "Share"
 msgstr "Dela"
 
-msgid "Note"
-msgstr "OBSERVERA"
+msgid "NOTE"
+msgstr ""
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
@@ -4795,6 +4855,10 @@ msgstr "Desto högre bandbredd som delas ju mer du förbättras din anonymitet o
 
 msgid "config advanced"
 msgstr "avancerad konfiguration"
+
+#, java-format
+msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
+msgstr ""
 
 msgid "Floodfill Configuration"
 msgstr "Floodfillkonfiguration"
@@ -4823,8 +4887,8 @@ msgstr "Avaktivera"
 msgid "Advanced I2P+ Configuration"
 msgstr "Avancerad I2P-konfiguration"
 
-msgid "Some changes may require a restart to take effect."
-msgstr "Vissa ändringar kan kräva en omstart för att träda i kraft."
+msgid "Help with additional configuration settings"
+msgstr ""
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5690,23 +5754,50 @@ msgstr "När inställd på sann, aktiverar detta installation av tillägg på <a
 msgid "When set to true, this setting enables reverse DNS lookups for peers, triggered when displaying the country flag of a peer or when the hostname or domain is explicitly displayed in the console, or when the peer's RouterInfo is written to disk. In order to avoid repeat lookups, it's recommended to configure a generous caching policy for DNS lookups of 10 minutes or more, and to configure a privacy respecting DNS server in your operating system. [Disabled by default, restart required]"
 msgstr "När inställd på sann, aktiverar denna inställning omvänd DNS-uppslagning för peers, vilket utlöses när landets flagga för en peer visas eller när värdnamn eller domän visas på konsolen, eller när routerinfo för en peer skrivs till disk. För att undvika upprepade uppslagningar rekommenderas du att konfigurera en generös cachepolicy för DNS-uppslagningar på 10 minuter eller mer, och att konfigurera en DNS-server som respekterar din integritet i ditt operativsystem. [Inaktiverad som standard, omstart krävs]"
 
+msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
+msgstr "Denna inställning tillåter en anpassad textprefix för sidotiteln på routerkonsolssidor, vilket kan vara användbart när du har flera konsoler öppna i webbläsartabbar och vill ha ett enkelt sätt att skilja dem åt."
+
 msgid "When set to true, accessing the router console via http:// when https:// is enabled will automatically redirect to https. To configure router console access, edit the settings in your <code>clients.config</code> file in your profile directory (<i>not</i> the application installation directory). [Enabled by default]"
 msgstr "När detta är satt till sant kommer åtkomst till routerkonsolen via http:// automatiskt omdirigeras till https:// när detta aktiveras. För att konfigurera åtkomst till routerkonsolen, redigera inställningarna i din <code>clients.config</code>-fil i din profil mapp (<i>inte</i> installationsmappen för programmet). [Aktiverad som standard]"
+
+msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
+msgstr "Denna inställning, när den är satt till true, visar en Peer Test Average-readout i blocket Congestion i sidopanelen, som beräknas genom att lägga till den genomsnittliga lyckade peer testen och genomsnittlig överskottstid tillbakalagd av misslyckade test. Det genomsnittliga värdet kan användas som en guide för att bestämma det optimala <code>router.peerTestTimeout</code>. [Standardvärdet är false]"
+
+msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
+msgstr "Denna inställning, när den är inställd på true, visar länkar för <i>Sidor av intresse</i> på <a href=/sitemap>kartsidan</a>. [Standardvärdet är false]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Denna inställning avgör om routern ska använda den medföljande <i>blocklist.txt</i>-filen och eventuella användar-konfigurerade blocklistor för att möjliggöra förbjudande av routrar via hash eller ip-adress. Intervall och nätmasker stöds för IPv4 men inte för IPv6. Se <i>blocklist.txt</i> i din I2P+ programkatalog för mer information. [Aktiverad som standard, omstart krävs]"
 
-msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
-msgstr "Denna inställning avgör om routern ska använda den medföljande <i>blocklist_tor.txt</i>-filen i din I2P+ programkatalog för att möjliggöra förbjudande av routrar som är i drift från Tor-utgångsnoders ip-adresser. [Aktiverad som standard, omstart krävs]"
+msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
+msgstr "Denna inställning tillåter att en utgångstid konfigureras (i sekunder) för förbud som genomdrivs via blocklistor. Som standard fortlever förbud under hela router-sessionen. [Omstart krävs]"
 
 msgid "This setting, when configured with a path pointing at a valid blocklist file, enables an additional, user-configured blocklist to be loaded at router startup. [Disabled by default, restart required]"
 msgstr "Denna inställning, när den konfigureras med en sökväg som pekar på en giltig blocklist-fil, gör det möjligt att ladda en ytterligare, användarkonfigurerad blocklista vid routerstart. [Inaktiverad som standard, omstart krävs]"
 
-msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
-msgstr "Denna inställning tillåter att en utgångstid konfigureras (i sekunder) för förbud som genomdrivs via blocklistor. Som standard fortlever förbud under hela router-sessionen. [Omstart krävs]"
+msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
+msgstr "Denna inställning avgör om routern ska använda den medföljande <i>blocklist_tor.txt</i>-filen i din I2P+ programkatalog för att möjliggöra förbjudande av routrar som är i drift från Tor-utgångsnoders ip-adresser. [Aktiverad som standard, omstart krävs]"
+
+msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
+msgstr ""
+
+msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
+msgstr "När inställt på falskt kommer routern inte att blockera tunnelbyggnadsförfrågningar från långsammare eller otillgängliga routrar med äldre versioner. [Standard är sant, omstart krävs]"
 
 msgid "Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks."
 msgstr "Tilldela antalet processortrådar för att bygga tunnlar. Om din processor stödjer hypertrådning eller samtidig multitrådning kan du multiplicera antalet processorkärnor med 2 för att få det maximala antalet trådar att tilldela, annars antal processorkärnor = maximalt antal tillgängliga trådar. Observera att du kanske vill tilldela mindre än den teoretiska max för att se till att du har utrymme för andra uppgifter."
+
+msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
+msgstr "Denna inställning (i millisekunder) avgör hur länge en paket får stanna i CoDel-kö innan det släpps. Standardvärdet är 1000 ms. [Omstart krävs]"
+
+msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
+msgstr "Denna inställning avgör det maximala antalet meddelanden i den utåtgående kön innan den markeras som full. [Standardvärdet är 768]"
+
+msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
+msgstr "Denna inställning avgör det maximala antalet meddelanden över det maximala kövärdet innan ytterligare meddelanden släpps. [Standardvärdet är 128]"
+
+msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
+msgstr "Denna inställning (i millisekunder) gör att du manuellt kan konfigurera målvärdet för köfördröjning för CoDel-köhanteringssystemet. Standardvärdet är 50 ms. [Omstart krävs]"
 
 msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
 msgstr "Denna inställning, i millisekunder, åsidosätter standardtidsgränsen för meddelandebearbetning (anges som <i>Meddelandefördröjning</i> i avsnittet om överbelastning på sidopanelen) innan routern anses vara överbelastad och pendlingstunnelbegäranden avvisas. [Standardvärde är 750 ms eller 1500 ms om routern flaggas som långsam]"
@@ -5717,8 +5808,32 @@ msgstr "Testa regelbundet att tunnlar för att avgöra den genomsnittliga fördr
 msgid "When set to true, the router will change its identity and UDP port every time the router restarts. [Default is false]"
 msgstr "När det är inställt på sant kommer routern att byta identitet och UDP-port varje gång routern startas om. [Standardvärde är falskt]"
 
+msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
+msgstr "När inställt på falskt kommer routern inte att begränsa tunnelbyggnadsförfrågningar från andra routrar och bör användas med försiktighet. [Standard är sant, omstart krävs]"
+
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
 msgstr "Denna inställning avgör vilka <a href=/profiles#profile_defs>peer-förmågor</a> som inte kommer att användas för att bygga din routers tunnlar. t.ex. <code>router.excludePeerCaps=LMN</code>"
+
+msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
+msgstr "Denna inställning (i timmar) bestämmer hur gammal en RouterInfo i NetDb är (dess senaste kända publiceringsdatum) innan den klassificeras som föråldrad och raderas. [Standard är 28 timmar om inte routern är en Floodfill, i vilket fall standard är 8 timmar]"
+
+msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
+msgstr "Denna inställning bestämmer antalet noder att utforska samtidigt när motsvarande Peer Exploration Job körs [standrad är 1 nod i taget när fler än 3000 noder är kända]. Observera att att öka detta värde kommer att öka bandbreddsbehovet för utforskningen och att sätta detta värde för högt kan orsaka överdriven meddelandefördröjning och påverka andra tjänster, så använd med försiktighet!"
+
+msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
+msgstr "Denna inställning bestämmer antalet NetDb DHT bucketar som Peer Exploration Job kommer att referera till vid körning. Som standard kommer antalet bucketar att variera beroende på om routern har kört i över en timme, om routern är dold eller i 'K' bandbreddsnivån, och antalet kända noder."
+
+msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
+msgstr "Denna inställning (i sekunder) gör det möjligt att åsidosätta fördröjningen mellan körningar av Peer Exploration Jobb som försöker hitta nya noder att lägga till i NetDb. Jobbet körs var 80:e sekund som standard, eller om routern upplever fördröjningar i behandling av jobb eller meddelanden, var 3:e minut. Om storleken på NetDb når 4000 noder, kommer pausen att ökas till 15 minuter. Du kan öka fördröjningen om din NetDb är välfylld (över 2000 noder), eller om du vill minska den totala bandbreddsanvändningen. Observera: För Floodfill-routers körs inte detta jobb."
+
+msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
+msgstr "Denna inställning bestämmer det maximala antalet peer-hashes som ska ställas i kö för utforskning. I I2P är det maximala värdet 128, och för I2P+ är standardvärdet 512."
+
+msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
+msgstr "Denna inställning bestämmer om en router som agerar som floodfill kommer att utforska NetDb för att lära sig om nya noder. [Standard är falskt, omstart krävs]"
+
+msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
+msgstr "Denna inställning, när den är inställd på sant, förhindrar en router från direkt kommunikation med andra routrar och tvingar användningen av introducerar. [Standard är falskt ej mindre routern är i dolt läge]"
 
 msgid "When set to true, if your router is serving as a floodfill for the network, your <a href=/configadvanced#ffconf>floodfill participation</a> will be hidden from other routers."
 msgstr "När det är inställt på sant kommer din routers deltagande i flödesmatning för nätverket att vara dolt för andra routrar."
@@ -5731,6 +5846,12 @@ msgstr "Bestämmer det maximala antalet deltagande tunnlar routern kan bygga. F�
 
 msgid "Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 10% in I2P+, 33% in I2P]"
 msgstr "Definierar den maximala procentandelen av aktiva lokala tunnlar (klient och utforskande) som en peer kommer att användas för. [Standardvärdet är 10% i I2P+, 33% i I2P]"
+
+msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
+msgstr "Denna inställning gör det möjligt att konfigurera det minsta antalet värdade deltagartunnlar innan routern börjar avvisa tunnelbegäranden baserade på förväntad bandbreddsbehov. [Standard är 100 om systemet körs på Android, 800 om systemet körs på ARM och mindre än 4 kärnor är tillgängliga, 1200 om systemet körs på ARM och 4 eller fler kärnor är tillgängliga, annars 2500]"
+
+msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
+msgstr "Denna inställning gör det möjligt att utesluta äldre routrar från din NetDb. Routrar äldre än standardvärdet eller det värde du ställer in kommer att tas bort från NetDb och bli förbjudna under routerns session. Som standard undantas routrar som är äldre än 0.9.20. Obs: från och med I2P+ version 0.9.46+ används endast routrar som kör mycket senare versioner för att bygga lokala tunnlar. [Omstart krävs]"
 
 msgid "When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]"
 msgstr "Om inställd på true kommer routerinfo- filerna som lagras i din profil's netDB-katalog inte att delas upp i 64 underkataloger. [Standardvärdet är false]"
@@ -5756,84 +5877,6 @@ msgstr "Mindre än 256MB tilldelat JVM:en"
 msgid "Router running a non-native, software emulated version of the Java BigInteger library"
 msgstr "Router som kör en icke-nativ, mjukvaruemulerad version av Java BigInteger-biblioteket"
 
-msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
-msgstr "Denna inställning gör det möjligt att konfigurera det minsta antalet värdade deltagartunnlar innan routern börjar avvisa tunnelbegäranden baserade på förväntad bandbreddsbehov. [Standard är 100 om systemet körs på Android, 800 om systemet körs på ARM och mindre än 4 kärnor är tillgängliga, 1200 om systemet körs på ARM och 4 eller fler kärnor är tillgängliga, annars 2500]"
-
-msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
-msgstr "När inställningen är satt till true kommer routern att ändra sin identitet och UDP-port när routern startas om och sedan radera nyckeln från router.config för att förhindra ytterligare ändringar. [Standard är false]"
-
-msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr "När inställt på falskt kommer routern inte att begränsa tunnelbyggnadsförfrågningar från andra routrar och bör användas med försiktighet. [Standard är sant, omstart krävs]"
-
-msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr "När inställt på falskt kommer routern inte att blockera tunnelbyggnadsförfrågningar från långsammare eller otillgängliga routrar med äldre versioner. [Standard är sant, omstart krävs]"
-
-msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
-msgstr "När konfigurerad, sätter detta en hård begränsning för antalet tunnlar som routern får bygga samtidigt. Som standard använder routern genomsnittlig byggtid och nuvarande utgående bandbredd för att bestämma den optimala bygghastigheten. [Omstart krävs]"
-
-msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
-msgstr "Om du vill installera osignerade (.zip) I2P-uppdateringar bör detta läggas till i din <code>router.config</code>-fil om du inte redan har konfigurerat <code>routerconsole.advanced=true</code>, i vilket fall detta alternativ redan är levererat. Notera: Från och med I2P+ 0.9.48+ är installation av <a href=/configupdate#i2pupdates>osignerade uppdateringar</a> aktiverat som standard."
-
-msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
-msgstr "Denna inställning gör det möjligt att konfigurera uppdaterings-URL:en för funktionen osignerad uppdatering, om det är aktiverat. URL:en bör sluta med <code>/i2pupdate.zip</code>. Notera: installera inte osignerade uppdateringar om du inte litar på källan till uppdateringen!"
-
-msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
-msgstr "Denna inställning tillåter inaktivering av SSU-tester för att avgöra om din router är brandväggad och kan aktiveras för routrar som definitivt inte är brandväggade men upplever intermittent brandväggningsproblem. Om testningen är inaktiverad ska både SSU och NTCP rapportera din nuvarande publika IP-adress på <a href=/info>routers informationsida</a>. [Omstart krävs]"
-
-msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
-
-msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
-msgstr "Denna inställning avgör vilket transportmedel som får företräde vid kommunikation med peers. Som standard föredras NTCP framför UDP (SSU). Genom att sätta värdet till true kommer UDP att få företräde om ingen befintlig NTCP-anslutning finns; när värdet är satt till always kommer UDP alltid att användas oavsett eventuell befintlig NTCP-anslutning. [Standard är false]"
-
-msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
-msgstr "Denna inställning för en specifik tunnel gör att du kan aktivera eller inaktivera svar på pingar som skickas till servrar som värd av routern. För att inaktivera pingar måste du lägga till raden <code>i2p.streaming.answerPings=false</code> i sektionen <i>Anpassade alternativ</i> för serverns konfiguration i Tunnelhanteraren."
-
-msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
-msgstr "När det är inställt på true, körs I2P utan nätverksanslutning, vilket är hjälpsamt om du ständigt startar om routern för att testa koduppdateringar då detta förhindrar nätverksavbrott."
-
-msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr "Denna inställning, när den är aktiverad, gör att det införs en slumpmässig pongfördröjning i upp till 50 ms för alla ping-aktiverade servrar som hostas av routern. Standardinställningen är inaktiverad. [Omstart krävs]"
-
-msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr "Denna inställning gör att maxvärdet för den extra slumpmässiga pongfördröjningen som införs för ping-aktiverade servrar ändras om <code>i2p.streaming.enablePongDelay</code> också är aktiverad. Om den inte ställs in kommer standardvärdet på 50 ms att användas."
-
-msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
-msgstr "Denna inställning (i millisekunder) avgör hur länge en paket får stanna i CoDel-kö innan det släpps. Standardvärdet är 1000 ms. [Omstart krävs]"
-
-msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
-msgstr "Denna inställning avgör det maximala antalet meddelanden i den utåtgående kön innan den markeras som full. [Standardvärdet är 768]"
-
-msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
-msgstr "Denna inställning avgör det maximala antalet meddelanden över det maximala kövärdet innan ytterligare meddelanden släpps. [Standardvärdet är 128]"
-
-msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
-msgstr "Denna inställning (i millisekunder) gör att du manuellt kan konfigurera målvärdet för köfördröjning för CoDel-köhanteringssystemet. Standardvärdet är 50 ms. [Omstart krävs]"
-
-msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
-msgstr "Denna inställning (i timmar) bestämmer hur gammal en RouterInfo i NetDb är (dess senaste kända publiceringsdatum) innan den klassificeras som föråldrad och raderas. [Standard är 28 timmar om inte routern är en Floodfill, i vilket fall standard är 8 timmar]"
-
-msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
-msgstr "Denna inställning bestämmer antalet noder att utforska samtidigt när motsvarande Peer Exploration Job körs [standrad är 1 nod i taget när fler än 3000 noder är kända]. Observera att att öka detta värde kommer att öka bandbreddsbehovet för utforskningen och att sätta detta värde för högt kan orsaka överdriven meddelandefördröjning och påverka andra tjänster, så använd med försiktighet!"
-
-msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
-msgstr "Denna inställning bestämmer antalet NetDb DHT bucketar som Peer Exploration Job kommer att referera till vid körning. Som standard kommer antalet bucketar att variera beroende på om routern har kört i över en timme, om routern är dold eller i 'K' bandbreddsnivån, och antalet kända noder."
-
-msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
-msgstr "Denna inställning (i sekunder) gör det möjligt att åsidosätta fördröjningen mellan körningar av Peer Exploration Jobb som försöker hitta nya noder att lägga till i NetDb. Jobbet körs var 80:e sekund som standard, eller om routern upplever fördröjningar i behandling av jobb eller meddelanden, var 3:e minut. Om storleken på NetDb når 4000 noder, kommer pausen att ökas till 15 minuter. Du kan öka fördröjningen om din NetDb är välfylld (över 2000 noder), eller om du vill minska den totala bandbreddsanvändningen. Observera: För Floodfill-routers körs inte detta jobb."
-
-msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
-msgstr "Denna inställning bestämmer det maximala antalet peer-hashes som ska ställas i kö för utforskning. I I2P är det maximala värdet 128, och för I2P+ är standardvärdet 512."
-
-msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
-msgstr "Denna inställning bestämmer om en router som agerar som floodfill kommer att utforska NetDb för att lära sig om nya noder. [Standard är falskt, omstart krävs]"
-
-msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
-msgstr "Denna inställning, när den är inställd på sant, förhindrar en router från direkt kommunikation med andra routrar och tvingar användningen av introducerar. [Standard är falskt ej mindre routern är i dolt läge]"
-
-msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
-msgstr "Denna inställning gör det möjligt att utesluta äldre routrar från din NetDb. Routrar äldre än standardvärdet eller det värde du ställer in kommer att tas bort från NetDb och bli förbjudna under routerns session. Som standard undantas routrar som är äldre än 0.9.20. Obs: från och med I2P+ version 0.9.46+ används endast routrar som kör mycket senare versioner för att bygga lokala tunnlar. [Omstart krävs]"
-
 msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. [Default is 4]"
 msgstr "Denna inställning bestämmer antalet samtidiga peer-tester som körs, vilket används för att bestämma peer-fördröjning. [Standard är 4]"
 
@@ -5849,14 +5892,17 @@ msgstr "Denna inställning avgör om statistik om vår router sporadiskt publice
 msgid "This setting configures the initial size of the outbound message queue. [Default is 64]"
 msgstr "Denna inställning konfigurerar den inledande storleken på den utgående meddelandekön. [Standard är 64]"
 
-msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
-msgstr "Denna inställning konfigurerar den maximala storleken på den inkommande meddelandekön. [Standard är 1024]"
-
 msgid "This setting configures the maximum number of inbound messages queued per cycle (pump). [Default is 24]"
 msgstr "Denna inställning konfigurerar det maximala antalet inkommande meddelanden i kö per cykel (pump). [Standard är 24]"
 
+msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
+msgstr "Denna inställning konfigurerar den maximala storleken på den inkommande meddelandekön. [Standard är 1024]"
+
 msgid "This setting configures the maximum number of outbound messages queued per cycle (pump). [Default is 64]"
 msgstr "Denna inställning konfigurerar det maximala antalet utgående meddelanden i kö per cykel (pump). [Standard är 64]"
+
+msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
+msgstr "När inställningen är satt till true kommer routern att ändra sin identitet och UDP-port när routern startas om och sedan radera nyckeln från router.config för att förhindra ytterligare ändringar. [Standard är false]"
 
 msgid "This setting (in milliseconds) allows you to manually configure the delay between router refresh updates run by the Refresh Routers Job. By default the pause between refreshes is determined by the size of the NetDb, and introduces some randomness in the timing to mitigate traffic analysis. For values lower than 2000 milliseconds, increasing the value of <code>router.refreshTimeout</code> is recommended. Note that setting this value below 2000 milliseconds will increase your network traffic and may introduce job lag, and is not recommended for sustained use."
 msgstr "Den här inställningen (i millisekunder) gör det möjligt att manuellt konfigurera pausen mellan uppdateringarna av routern som körs av Refresh Routers Job. Som standard avgörs pausen mellan uppdateringarna av storleken på NetDb och introducerar viss slumpmässighet i tidpunkterna för att motverka trafikanalys. För värden lägre än 2000 millisekunder rekommenderas det att öka värdet på <code>router.refreshTimeout</code>. Observera att att sätta värdet under 2000 millisekunder kommer att öka nätverkstrafiken och kan leda till försenader i jobbet, och rekommenderas inte för kontinuerlig användning."
@@ -5870,26 +5916,56 @@ msgstr "Den här inställningen (i sekunder) gör det möjligt att manuellt konf
 msgid "This setting determines whether routers classified as uninteresting (K or L tier, unreachable or older than 0.9.50) are checked during the refresh router process after 1 hour of uptime. [Default is false]"
 msgstr "Den här inställningen avgör om routerns som kategoriseras som ointressanta (K eller L tier, oåtkomliga eller äldre än 0.9.50) kontrolleras under uppdateringsprocessen efter 1 timmes drifttid. [Standard är false]"
 
+msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
+msgstr ""
+
+msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
+msgstr "När konfigurerad, sätter detta en hård begränsning för antalet tunnlar som routern får bygga samtidigt. Som standard använder routern genomsnittlig byggtid och nuvarande utgående bandbredd för att bestämma den optimala bygghastigheten. [Omstart krävs]"
+
+msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
+msgstr "Om du vill installera osignerade (.zip) I2P-uppdateringar bör detta läggas till i din <code>router.config</code>-fil om du inte redan har konfigurerat <code>routerconsole.advanced=true</code>, i vilket fall detta alternativ redan är levererat. Notera: Från och med I2P+ 0.9.48+ är installation av <a href=/configupdate#i2pupdates>osignerade uppdateringar</a> aktiverat som standard."
+
+msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
+msgstr "Denna inställning gör det möjligt att konfigurera uppdaterings-URL:en för funktionen osignerad uppdatering, om det är aktiverat. URL:en bör sluta med <code>/i2pupdate.zip</code>. Notera: installera inte osignerade uppdateringar om du inte litar på källan till uppdateringen!"
+
 msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
 msgstr "Den här inställningen (i minuter) gör det möjligt att manuellt konfigurera hur länge du ska vänta efter start innan RouterInfos i NetDb kontrolleras för att vara giltiga, efter vilket endast giltiga routrar accepteras för inkludering. När valideringen sker kommer utgångna RouterInfos och oresponsiva peers som bara är tillgängliga via SSU att tas bort från NetDb. [Standard är 60 minuter] Observera: Den här inställningen har ingen inverkan på äldre routar (som är äldre än 0.9.29 som standard) som tas bort från NetDb och blir förbjudna för router-sessionen så snart en NetDb-lagring försöks att göras."
 
-msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
-msgstr "Denna inställning, när den är satt till true, visar en Peer Test Average-readout i blocket Congestion i sidopanelen, som beräknas genom att lägga till den genomsnittliga lyckade peer testen och genomsnittlig överskottstid tillbakalagd av misslyckade test. Det genomsnittliga värdet kan användas som en guide för att bestämma det optimala <code>router.peerTestTimeout</code>. [Standardvärdet är false]"
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
+msgstr ""
 
-msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
-msgstr "Denna inställning, när den är inställd på true, visar länkar för <i>Sidor av intresse</i> på <a href=/sitemap>kartsidan</a>. [Standardvärdet är false]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
+msgstr ""
 
-msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr "Denna inställning tillåter en anpassad textprefix för sidotiteln på routerkonsolssidor, vilket kan vara användbart när du har flera konsoler öppna i webbläsartabbar och vill ha ett enkelt sätt att skilja dem åt."
+msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
+msgstr "Denna inställning tillåter inaktivering av SSU-tester för att avgöra om din router är brandväggad och kan aktiveras för routrar som definitivt inte är brandväggade men upplever intermittent brandväggningsproblem. Om testningen är inaktiverad ska både SSU och NTCP rapportera din nuvarande publika IP-adress på <a href=/info>routers informationsida</a>. [Omstart krävs]"
 
-msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
-msgstr "Denna inställning tillåter konfiguration av alternativa NTP-servrar som krävs för att se till att din router behåller korrekt klocktid. [Standardvärden är 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
+msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
+msgstr "Denna inställning avgör vilket transportmedel som får företräde vid kommunikation med peers. Som standard föredras NTCP framför UDP (SSU). Genom att sätta värdet till true kommer UDP att få företräde om ingen befintlig NTCP-anslutning finns; när värdet är satt till always kommer UDP alltid att användas oavsett eventuell befintlig NTCP-anslutning. [Standard är false]"
+
+msgid "miscellaneous"
+msgstr ""
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "Om inställd på true kommer denna inställning att placera en ikon i systemfacket / meddelandeområdet, med grundläggande servicekontrollalternativ. [Inaktiverat som standard]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
 msgstr "Denna inställning tillåter konfiguration av det maximala antalet filer per torrent som I2PSnark kommer att tillåta vid nedladdning eller skapande av en torrent. Observera att en betydande ökning av detta värde från standardvärdet på 2000 filer kan kräva ytterligare konfiguration på värdsystemet för att öka det maximala antalet öppna filer som operativsystemet tillåter (t.ex. <code> ulimit -n </code> på Linux). För att ändra detta lägger du till i I2PSnarks konfigurationsfil <code> i2psnark.config </code>. [Omplacering av I2PSnark eller router krävs]"
+
+msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
+msgstr "Denna inställning för en specifik tunnel gör att du kan aktivera eller inaktivera svar på pingar som skickas till servrar som värd av routern. För att inaktivera pingar måste du lägga till raden <code>i2p.streaming.answerPings=false</code> i sektionen <i>Anpassade alternativ</i> för serverns konfiguration i Tunnelhanteraren."
+
+msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
+msgstr "Denna inställning, när den är aktiverad, gör att det införs en slumpmässig pongfördröjning i upp till 50 ms för alla ping-aktiverade servrar som hostas av routern. Standardinställningen är inaktiverad. [Omstart krävs]"
+
+msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
+msgstr "Denna inställning gör att maxvärdet för den extra slumpmässiga pongfördröjningen som införs för ping-aktiverade servrar ändras om <code>i2p.streaming.enablePongDelay</code> också är aktiverad. Om den inte ställs in kommer standardvärdet på 50 ms att användas."
+
+msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
+msgstr "När det är inställt på true, körs I2P utan nätverksanslutning, vilket är hjälpsamt om du ständigt startar om routern för att testa koduppdateringar då detta förhindrar nätverksavbrott."
+
+msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
+msgstr "Denna inställning tillåter konfiguration av alternativa NTP-servrar som krävs för att se till att din router behåller korrekt klocktid. [Standardvärden är 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 
 msgid "Recent I2P+ Changes"
 msgstr "Senaste I2P+ ändringar"
@@ -6106,6 +6182,18 @@ msgstr "För både non-SSL och SSL"
 
 msgid "For SSL only"
 msgstr "Endast för SSL"
+
+msgid "How can I configure the console and web services to be accessible on my local network?"
+msgstr ""
+
+msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
+msgstr ""
+
+msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
+msgstr ""
+
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager’s configuration section using the <i>reachable by</i> dropdown."
+msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Hur ansluter jag till IRC inom I2P?"
@@ -7366,9 +7454,6 @@ msgstr "Nätverkskollegor"
 msgid "peer profiles"
 msgstr "nodprofiler"
 
-msgid "Peer Profiles"
-msgstr "Peer-profiler"
-
 msgid "Session Banned Peers"
 msgstr "Session förbjudna kamrater"
 
@@ -7585,6 +7670,9 @@ msgstr "Växla Tunnlar"
 msgid "Peer Profile"
 msgstr "Nodprofil"
 
+msgid "Profile View"
+msgstr ""
+
 msgid "Profile for peer"
 msgstr "Profil för jämnåriga"
 
@@ -7722,6 +7810,35 @@ msgstr "Avslutad"
 
 
 
+
+
 #, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

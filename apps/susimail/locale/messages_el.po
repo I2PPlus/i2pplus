@@ -257,14 +257,14 @@ msgstr "Σφάλμα κατά την αποστολή αλληλογραφίας
 msgid "Mail sent."
 msgstr "Η αλληλογραφία εστάλη."
 
-msgid "Send"
-msgstr "Αποστολή"
+msgid "Cancel"
+msgstr "Ακύρωση"
 
 msgid "Save as Draft"
 msgstr "Αποθήκευση ως πρόχειρο"
 
-msgid "Cancel"
-msgstr "Ακύρωση"
+msgid "Send"
+msgstr "Αποστολή"
 
 msgid "From"
 msgstr "Από"

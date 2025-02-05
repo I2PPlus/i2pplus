@@ -38,12 +38,6 @@ msgstr "largura de banda e confiabilidade padrão"
 msgid "higher bandwidth and reliability"
 msgstr "aumentar largura de banda e confiabilidade"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Envio de formulário inválido, provavelmente porque você usou o botão 'voltar' ou 'recarregar' no seu navegador. Envio de formulário inválido, provavelmente porque você usou o 'voltar' ou 'recarregar' no seu navegador. Por favor reenvie."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Se o problema persistir, verifique se os cookies estão ativados no seu navegador.Se o problema persistir, verificar se o seu navegador está aceitando cookies."
-
 msgid "Configuration reloaded for all tunnels"
 msgstr "Configuração recarregada em todos os túneis"
 
@@ -1227,6 +1221,12 @@ msgstr "Gerar autenticação"
 
 msgid "SSL Helper"
 msgstr "Ajudante SSL"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Envio de formulário inválido, provavelmente porque você usou o botão 'voltar' ou 'recarregar' no seu navegador. Envio de formulário inválido, provavelmente porque você usou o 'voltar' ou 'recarregar' no seu navegador. Por favor reenvie."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Se o problema persistir, verifique se os cookies estão ativados no seu navegador.Se o problema persistir, verificar se o seu navegador está aceitando cookies."
 
 msgid "Experts only!"
 msgstr "Apenas técnicos!"

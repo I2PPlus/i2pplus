@@ -8,8 +8,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-msgid "Warning: Invalid Request URI"
-msgstr "Uyarı: İstek Adresi Geçersiz"
+msgid "Website Unknown"
+msgstr "Web Sitesi Bilinmiyor"
 
 msgid "Router Console"
 msgstr "Yöneltici Konsolu"
@@ -25,71 +25,6 @@ msgstr "Yapılandırma"
 
 msgid "Help"
 msgstr "Yardım"
-
-msgid "The request URI is invalid, and probably contains illegal characters."
-msgstr "İstek URI'si geçersiz ve muhtemelen geçersiz karakterler içeriyor.İstek adresi geçersiz ve büyük olasılıkla uygun olmayan karakterler içeriyor."
-
-msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
-msgstr "Bir bağlantıya tıkladıysanız, tarayıcının yanlışlıkla eklediği karakterler için URI'nin sonunu kontrol edin.Bir bağlantıya tıkladıysanız, adresin sonuna bakarak hatalı eklenmiş karakterler olup olmadığını denetleyin."
-
-msgid "Connection Reset"
-msgstr "Bağlantı Sıfırlandı"
-
-msgid "The connection to the website was reset while the page was loading."
-msgstr "Sayfa yüklenirken web sitesi balantısı sıfırlandı."
-
-msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Web sitesi geçici olarak kullanılamıyor olabilir, çok meşgul olabilir veya erişiminizi engellemiş olabilir.Web sitesi geçici olarak kullanılamıyor, çok meşgul ya da erişiminizi engellemiş olabilir."
-
-#, java-format
-msgid "You may want to {0}retry{1}."
-msgstr "{0}Yeniden denemek{1} isteyebilirsiniz."
-
-#, java-format
-msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
-msgstr "Bu sayfayı açık bırakırsanız, başarısız bir bağlantı denemesinden sonra her {0} saniyede bir web sitesine bağlanmayı otomatik olarak yeniden deneyecektir."
-
-msgid "Could not find the following destination:"
-msgstr "Şu hedef bulunamadı:"
-
-msgid "Warning: Non-HTTP Protocol"
-msgstr "Uyarı: HTTP Olmayan İletişim Kuralı"
-
-msgid "The request uses a bad protocol."
-msgstr "İstek kötü bir iletişim kuralı kullanıyor."
-
-msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
-msgstr "I2P HTTP Vekil Sunucusu yalnız HTTP ve HTTPS isteklerini destekler."
-
-msgid "Other protocols such as FTP are not allowed."
-msgstr "FTP gibi diğer iletişim kuralları desteklenmez."
-
-msgid "Warning: No Outproxy Configured"
-msgstr "Uyarı: Herhangi Bir Çıkış Vekil Sunucusu Ayarlanmamış"
-
-msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
-msgstr "İsteğiniz I2P dışındaki bir site içindi, ancak yapılandırılmış bir HTTP outproxy'niz yok.İsteğiniz I2P dışındaki bir site için ancak ayarlanmış bir HTTP çıkış vekil sunucunuz yok."
-
-msgid "Please configure an outproxy in I2PTunnel."
-msgstr "Lütfen I2PTunnel içinden bir çıkış vekil sunucusu ayarlayın."
-
-msgid "Error: Request Denied"
-msgstr "Hata: İstek Reddedildi"
-
-msgid "Error: Cannot Access Router Console via I2P Proxy"
-msgstr "Hata: I2P Proxy Üzerinden Yönlendirici Konsoluna Erişilemiyor"
-
-msgid "Your browser is misconfigured."
-msgstr "Web tarayıcınızın ayarları hatalı."
-
-msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
-msgstr "Yönlendirici konsoluna, localhost'a veya yerel LAN hedeflerine erişmek için proxy'yi kullanmayın.Yöneltici konsolu, yerel sunucu ya da yerel ağ hedeflerine erişmek için vekil sunucu kullanmayın."
-
-msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
-msgstr "127.0.0.1'in (veya I2P konsoluna eriştiğiniz adresin), genellikle tarayıcınızın proxy yapılandırma bölümündeki adresi hariç tutarak I2P'nin http proxy'si aracılığıyla yönlendirilmesini önlemeniz gerekir."
-
-msgid "Website Unknown"
-msgstr "Web Sitesi Bilinmiyor"
 
 msgid "Website Not Found in Addressbook"
 msgstr "Web Sitesi Adres Defterinde Bulunamadı"
@@ -111,99 +46,35 @@ msgstr "Aksi takdirde, Base 32'yi veya adres yardımcı bağlantısını bulun v
 msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
 msgstr "Bu sayfayı sık sık mı görüyorsunuz? Sık sık bu sayfayı görüyorsanız adres defterinize {2}bazı abonelikler eklemek{3} için {0}SSS{1} bölümüne bakın."
 
-msgid "Website Unreachable"
-msgstr "Web Sitesine Erişilemiyor"
+msgid "Could not find the following destination:"
+msgstr "Şu hedef bulunamadı:"
 
-msgid "The website was not reachable, because its lease set was not found."
-msgstr "Kiralama kümesi bulunamadığından HTTP web sitesine erişilemiyor."
+msgid "Warning: Non-HTTP Protocol"
+msgstr "Uyarı: HTTP Olmayan İletişim Kuralı"
 
-msgid "The website is probably down, but there could also be network congestion."
-msgstr "Web sitesi muhtemelen kapalı, ancak ağ tıkanıklığı da olabilir.Web sitesi büyük olasılıkla çalışmıyor ancak bir ağ tıkanıklığı da olabilir."
+msgid "The request uses a bad protocol."
+msgstr "İstek kötü bir iletişim kuralı kullanıyor."
 
-msgid "Outproxy Not Found"
-msgstr "Çıkış Vekil Sunucusu Bulunamadı"
+msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
+msgstr "I2P HTTP Vekil Sunucusu yalnız HTTP ve HTTPS isteklerini destekler."
 
-msgid "The HTTP Outproxy was not found."
-msgstr "HTTP çıkış vekil sunucusu bulunamadı."
+msgid "Other protocols such as FTP are not allowed."
+msgstr "FTP gibi diğer iletişim kuralları desteklenmez."
 
-msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "Çevrimdışı, ağ tıkanıklığı var veya yönlendiriciniz henüz eşlerle iyi bir şekilde entegre değil.Çevrimdışı, bir ağ tıkanıklığı var ya da yönelticiniz henüz eşler ile iyi bütünleşmemiş."
+msgid "Error: Request Denied"
+msgstr "Hata: İstek Reddedildi"
 
-#, java-format
-msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
-msgstr "{0} yeniden denemek isteyebilirsiniz {1}, bu {2} burada {3} tanımladığınız havuzdan rastgele bir şekilde yeniden seçecektir (birden fazla yapılandırılmışsa)."
+msgid "Error: Cannot Access Router Console via I2P Proxy"
+msgstr "Hata: I2P Proxy Üzerinden Yönlendirici Konsoluna Erişilemiyor"
 
-#, java-format
-msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
-msgstr "Sorun yaşamaya devam ederseniz, outproxy listenizi {0}buradan{1} düzenlemek isteyebilirsiniz.Sorun sürerse {0}buradan{1} çıkış vekil sunucu listenizi düzenleyebilirsiniz."
+msgid "Your browser is misconfigured."
+msgstr "Web tarayıcınızın ayarları hatalı."
 
-msgid "Warning: Request Denied"
-msgstr "Uyarı: İstek Reddedildi"
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
+msgstr "Yönlendirici konsoluna, localhost'a veya yerel LAN hedeflerine erişmek için proxy'yi kullanmayın.Yöneltici konsolu, yerel sunucu ya da yerel ağ hedeflerine erişmek için vekil sunucu kullanmayın."
 
-msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
-msgstr "Bu adres hatalı görünmektedir. Lütfen geçerli bir adres sağladığınızı doğrulayın!"
-
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "I2P dışındaki bir web sitesi ya da konuma bağlanmayı denediniz."
-
-msgid "Outproxy Unreachable"
-msgstr "Çıkış Vekil Sunucusuna Erişilemiyor"
-
-msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
-msgstr "HTTP proxy'sine ulaşılamadı çünkü I2P veya Java sürümünüz tarafından desteklenmeyen şifreleme seçeneklerini kullanıyor.Kullanılan şifreleme seçenekleri I2P ya da Java sürümünüz tarafından desteklenmediğinden HTTP çıkış vekil sunucusuna erişilemiyor."
-
-msgid "Could not connect to the following destination:"
-msgstr "Şu hedefe bağlanılamadı:"
-
-msgid "Proxy Authorization Required"
-msgstr "Vekil Sunucu Kimlik Doğrulaması Gerekiyor"
-
-msgid "I2P HTTP Proxy Authorization Required"
-msgstr "I2P HTTP Vekil Sunucu Kimlik Doğrulaması Gerekiyor"
-
-msgid "This proxy is configured to require a username and password for access."
-msgstr "Bu proxy erişim için kullanıcı adı ve şifre gerektirecek şekilde yapılandırılmış.Vekil sunucu erişim için bir kullanıcı adı ve parola isteyecek şekilde ayarlanmış."
-
-#, java-format
-msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
-msgstr "Lütfen kullanıcı adınızı ve şifrenizi girin veya {0}yönlendirici yapılandırmanızı{1} ya da {2}I2PTunnel yapılandırmanızı{3} kontrol edin.Lütfen kullanıcı adı ve parolayı yazın ya da {0}yöneltici yapılandırmasını{1} ya da {2}I2PTunnel Yapılandırmasını{3} denetleyin."
-
-#, java-format
-msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
-msgstr "Yetkilendirmeyi devre dışı bırakmak için, {0}i2ptunnel.proxy.auth=basic{1} yapılandırmasını kaldırın, ardından HTTP Proxy tünelini durdurup yeniden başlatın.Kimlik doğrulamasını devre dışı bırakmak için {0}i2ptunnel.proxy.auth=basic{1} yapılandırmasını silin ve HTTP vekil sunucu tünelini durdurup yeniden başlatın."
-
-msgid "Warning: Invalid Destination"
-msgstr "Uyarı: Hedef Geçersiz"
-
-msgid "The website destination specified was not valid, or was otherwise unreachable."
-msgstr "Belirtilen web sitesi hedefi geçersiz ya da bir nedenle erişilemiyor."
-
-msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
-msgstr "Belki de yanlış Base 64 dizesini yapıştırdınız veya takip ettiğiniz bağlantı hatalı.Yanlış Base 64 dizgesi yapıştırmış olabilirsiniz ya da izlediğiniz bağlantı sorunlu."
-
-msgid "The I2P host could also be offline."
-msgstr "I2P sunucusu da çevrimdışı olabilir."
-
-msgid "The connection to the proxy was reset."
-msgstr "Vekil sunucu bağlantısı sıfırlandı."
-
-msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Proxy geçici olarak kullanılamıyor, çok meşgul olabilir veya erişiminizi engellemiş olabilir.Vekil sunucu geçici olarak kullanılamıyor, çok meşgul ya da erişiminizi engellemiş olabilir."
-
-msgid "The HTTP outproxy was not reachable, because its lease set was not found."
-msgstr "Kira kümesi bulunamadığından HTTP outproxy'ye ulaşılamadı.Kiralama kümesi bulunamadığından HTTP çıkış vekil sunucusuna erişilemiyor."
-
-msgid "The outproxy is probably down, but there could also be network congestion."
-msgstr "Outproxy muhtemelen kapalı, ancak ağ tıkanıklığı da olabilir.Çıkış vekil sunucusu büyük çalışmıyor ancak bir ağ tıkanıklığı da olabilir."
-
-msgid "Warning: Authorization Required"
-msgstr "Uyarı: Kimlik Doğrulaması Gerekli"
-
-msgid "The website was not reachable."
-msgstr "Web sitesine erişilemiyor."
-
-msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "Web sitesi çevrimdışı, ağ tıkanıklığı var veya yönlendiriciniz henüz eşdüzeylerle iyi bir şekilde entegre edilmemiş.Web sitesi çevrimdışı, bir ağ tıkanıklığı var ya da yönelticiniz henüz eşler ile iyi bütünleşmemiş."
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "127.0.0.1'in (veya I2P konsoluna eriştiğiniz adresin), genellikle tarayıcınızın proxy yapılandırma bölümündeki adresi hariç tutarak I2P'nin http proxy'si aracılığıyla yönlendirilmesini önlemeniz gerekir."
 
 msgid "Warning: Destination Key Conflict"
 msgstr "Uyarı: Hedef Anahtarı Çakışması"
@@ -217,24 +88,81 @@ msgstr "Birisi başka bir web sitesini taklit etmeye çalışıyor olabilir veya
 msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
 msgstr "Hangi anahtara güveneceğinize karar vererek çakışmayı çözün ve ardından adres yardımcı bağlantısını yok sayın veya ana bilgisayar girişini adres defterinizden silin ve adres yardımcı bağlantısına yeniden tıklayın.Bu çakışmayı çözmek için hangi anahtara güveneceğinize karar verin ve diğer adres yardımcısı bağlantısını yok sayın ya da adres defterinizden sunucu kaydını silerek adres yardımcısı bağlantısına yeniden tıklayın."
 
-msgid "The Base32 address is invalid."
-msgstr "Base32 adresi geçersiz."
+msgid "Connection Reset"
+msgstr "Bağlantı Sıfırlandı"
 
-msgid "Warning: Bad Address Helper"
-msgstr "Uyarı: Kötü Adres Yardımcısı"
+msgid "The connection to the website was reset while the page was loading."
+msgstr "Sayfa yüklenirken web sitesi balantısı sıfırlandı."
+
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Web sitesi geçici olarak kullanılamıyor olabilir, çok meşgul olabilir veya erişiminizi engellemiş olabilir.Web sitesi geçici olarak kullanılamıyor, çok meşgul ya da erişiminizi engellemiş olabilir."
 
 #, java-format
-msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
-msgstr "Adresteki ({0}i2paddresshelper={1}) çözümlenemedi."
+msgid "You may want to {0}retry{1}."
+msgstr "{0}Yeniden denemek{1} isteyebilirsiniz."
 
-msgid "It seems to be garbage data, or a mistyped Base 32 address."
-msgstr "Çöp verisi veya yanlış yazılmış Base 32 adresi gibi görünüyor.Anlamsız bir veri ya da hatalı yazılmış bir Base 32 adresi gibi görünüyor."
+#, java-format
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
+msgstr "Bu sayfayı açık bırakırsanız, başarısız bir bağlantı denemesinden sonra her {0} saniyede bir web sitesine bağlanmayı otomatik olarak yeniden deneyecektir."
 
-msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
-msgstr "Yardımcı anahtarın geçerli bir Base 32 ana bilgisayar adı veya Base 64 anahtarı olmasını sağlamak için URL'nizi kontrol edin.Adresi denetleyip, yardımcı anahtarı geçerli bir Base 32 sunucu adı ya da Base 64 anahtarı olacak şekilde düzeltmeyi deneyin."
+msgid "Website Unreachable"
+msgstr "Web Sitesine Erişilemiyor"
 
 msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
 msgstr "I2P veya Java sürümünüz tarafından desteklenmeyen şifreleme seçeneklerini kullandığından web sitesine erişilemedi.Kullanılan şifreleme seçenekleri I2P ya da Java sürümünüz tarafından desteklenmediğinden web sitesine erişilemiyor."
+
+msgid "Could not connect to the following destination:"
+msgstr "Şu hedefe bağlanılamadı:"
+
+msgid "The website was not reachable, because its lease set was not found."
+msgstr "Kiralama kümesi bulunamadığından HTTP web sitesine erişilemiyor."
+
+msgid "The website is probably down, but there could also be network congestion."
+msgstr "Web sitesi muhtemelen kapalı, ancak ağ tıkanıklığı da olabilir.Web sitesi büyük olasılıkla çalışmıyor ancak bir ağ tıkanıklığı da olabilir."
+
+msgid "The connection to the proxy was reset."
+msgstr "Vekil sunucu bağlantısı sıfırlandı."
+
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Proxy geçici olarak kullanılamıyor, çok meşgul olabilir veya erişiminizi engellemiş olabilir.Vekil sunucu geçici olarak kullanılamıyor, çok meşgul ya da erişiminizi engellemiş olabilir."
+
+#, java-format
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "{0} yeniden denemek isteyebilirsiniz {1}, bu {2} burada {3} tanımladığınız havuzdan rastgele bir şekilde yeniden seçecektir (birden fazla yapılandırılmışsa)."
+
+#, java-format
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr "Sorun yaşamaya devam ederseniz, outproxy listenizi {0}buradan{1} düzenlemek isteyebilirsiniz.Sorun sürerse {0}buradan{1} çıkış vekil sunucu listenizi düzenleyebilirsiniz."
+
+msgid "Outproxy Unreachable"
+msgstr "Çıkış Vekil Sunucusuna Erişilemiyor"
+
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "HTTP proxy'sine ulaşılamadı çünkü I2P veya Java sürümünüz tarafından desteklenmeyen şifreleme seçeneklerini kullanıyor.Kullanılan şifreleme seçenekleri I2P ya da Java sürümünüz tarafından desteklenmediğinden HTTP çıkış vekil sunucusuna erişilemiyor."
+
+msgid "The website was not reachable."
+msgstr "Web sitesine erişilemiyor."
+
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Web sitesi çevrimdışı, ağ tıkanıklığı var veya yönlendiriciniz henüz eşdüzeylerle iyi bir şekilde entegre edilmemiş.Web sitesi çevrimdışı, bir ağ tıkanıklığı var ya da yönelticiniz henüz eşler ile iyi bütünleşmemiş."
+
+msgid "Warning: No Outproxy Configured"
+msgstr "Uyarı: Herhangi Bir Çıkış Vekil Sunucusu Ayarlanmamış"
+
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr "İsteğiniz I2P dışındaki bir site içindi, ancak yapılandırılmış bir HTTP outproxy'niz yok.İsteğiniz I2P dışındaki bir site için ancak ayarlanmış bir HTTP çıkış vekil sunucunuz yok."
+
+msgid "Please configure an outproxy in I2PTunnel."
+msgstr "Lütfen I2PTunnel içinden bir çıkış vekil sunucusu ayarlayın."
+
+msgid "Outproxy Not Found"
+msgstr "Çıkış Vekil Sunucusu Bulunamadı"
+
+msgid "The HTTP Outproxy was not found."
+msgstr "HTTP çıkış vekil sunucusu bulunamadı."
+
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Çevrimdışı, ağ tıkanıklığı var veya yönlendiriciniz henüz eşlerle iyi bir şekilde entegre değil.Çevrimdışı, bir ağ tıkanıklığı var ya da yönelticiniz henüz eşler ile iyi bütünleşmemiş."
 
 msgid "Information: New Host Name"
 msgstr "Bilgi: Yeni Sunucu Adı"
@@ -256,6 +184,78 @@ msgstr "Kaydetmezseniz, yönlendiricinin bir sonraki yeniden başlatılmasından
 
 msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
 msgstr "Bu ana bilgisayarı ziyaret etmek istemiyorsanız tarayıcınızdaki \"geri\" düğmesini tıklayın.Bu sunucuyu ziyaret etmek istemiyorsanız web tarayıcınızın \"geri\" düğmesine tıklayın."
+
+msgid "Proxy Authorization Required"
+msgstr "Vekil Sunucu Kimlik Doğrulaması Gerekiyor"
+
+msgid "I2P HTTP Proxy Authorization Required"
+msgstr "I2P HTTP Vekil Sunucu Kimlik Doğrulaması Gerekiyor"
+
+msgid "This proxy is configured to require a username and password for access."
+msgstr "Bu proxy erişim için kullanıcı adı ve şifre gerektirecek şekilde yapılandırılmış.Vekil sunucu erişim için bir kullanıcı adı ve parola isteyecek şekilde ayarlanmış."
+
+#, java-format
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "Lütfen kullanıcı adınızı ve şifrenizi girin veya {0}yönlendirici yapılandırmanızı{1} ya da {2}I2PTunnel yapılandırmanızı{3} kontrol edin.Lütfen kullanıcı adı ve parolayı yazın ya da {0}yöneltici yapılandırmasını{1} ya da {2}I2PTunnel Yapılandırmasını{3} denetleyin."
+
+#, java-format
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "Yetkilendirmeyi devre dışı bırakmak için, {0}i2ptunnel.proxy.auth=basic{1} yapılandırmasını kaldırın, ardından HTTP Proxy tünelini durdurup yeniden başlatın.Kimlik doğrulamasını devre dışı bırakmak için {0}i2ptunnel.proxy.auth=basic{1} yapılandırmasını silin ve HTTP vekil sunucu tünelini durdurup yeniden başlatın."
+
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr "Kira kümesi bulunamadığından HTTP outproxy'ye ulaşılamadı.Kiralama kümesi bulunamadığından HTTP çıkış vekil sunucusuna erişilemiyor."
+
+msgid "The outproxy is probably down, but there could also be network congestion."
+msgstr "Outproxy muhtemelen kapalı, ancak ağ tıkanıklığı da olabilir.Çıkış vekil sunucusu büyük çalışmıyor ancak bir ağ tıkanıklığı da olabilir."
+
+msgid "Warning: Request Denied"
+msgstr "Uyarı: İstek Reddedildi"
+
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr "Bu adres hatalı görünmektedir. Lütfen geçerli bir adres sağladığınızı doğrulayın!"
+
+msgid "You attempted to connect to a non-I2P website or location."
+msgstr "I2P dışındaki bir web sitesi ya da konuma bağlanmayı denediniz."
+
+msgid "Warning: Bad Address Helper"
+msgstr "Uyarı: Kötü Adres Yardımcısı"
+
+#, java-format
+msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgstr "Adresteki ({0}i2paddresshelper={1}) çözümlenemedi."
+
+msgid "It seems to be garbage data, or a mistyped Base 32 address."
+msgstr "Çöp verisi veya yanlış yazılmış Base 32 adresi gibi görünüyor.Anlamsız bir veri ya da hatalı yazılmış bir Base 32 adresi gibi görünüyor."
+
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr "Yardımcı anahtarın geçerli bir Base 32 ana bilgisayar adı veya Base 64 anahtarı olmasını sağlamak için URL'nizi kontrol edin.Adresi denetleyip, yardımcı anahtarı geçerli bir Base 32 sunucu adı ya da Base 64 anahtarı olacak şekilde düzeltmeyi deneyin."
+
+msgid "Warning: Invalid Destination"
+msgstr "Uyarı: Hedef Geçersiz"
+
+msgid "The website destination specified was not valid, or was otherwise unreachable."
+msgstr "Belirtilen web sitesi hedefi geçersiz ya da bir nedenle erişilemiyor."
+
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr "Belki de yanlış Base 64 dizesini yapıştırdınız veya takip ettiğiniz bağlantı hatalı.Yanlış Base 64 dizgesi yapıştırmış olabilirsiniz ya da izlediğiniz bağlantı sorunlu."
+
+msgid "The I2P host could also be offline."
+msgstr "I2P sunucusu da çevrimdışı olabilir."
+
+msgid "Warning: Authorization Required"
+msgstr "Uyarı: Kimlik Doğrulaması Gerekli"
+
+msgid "Warning: Invalid Request URI"
+msgstr "Uyarı: İstek Adresi Geçersiz"
+
+msgid "The request URI is invalid, and probably contains illegal characters."
+msgstr "İstek URI'si geçersiz ve muhtemelen geçersiz karakterler içeriyor.İstek adresi geçersiz ve büyük olasılıkla uygun olmayan karakterler içeriyor."
+
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr "Bir bağlantıya tıkladıysanız, tarayıcının yanlışlıkla eklediği karakterler için URI'nin sonunu kontrol edin.Bir bağlantıya tıkladıysanız, adresin sonuna bakarak hatalı eklenmiş karakterler olup olmadığını denetleyin."
+
+msgid "The Base32 address is invalid."
+msgstr "Base32 adresi geçersiz."
 
 msgid "This seems to be a bad destination:"
 msgstr "Hedef kötü görünüyor:"

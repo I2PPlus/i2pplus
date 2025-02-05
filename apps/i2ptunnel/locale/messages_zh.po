@@ -35,12 +35,6 @@ msgstr "标准带宽和稳定性"
 msgid "higher bandwidth and reliability"
 msgstr "较高的带宽和稳定性"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "网页提交无效，可能的原因是您使用了浏览器的“后退”和“刷新”按钮，导致表单过期，请重新提交。"
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "如果问题持续，请确认您的浏览器支持Cookie。"
-
 msgid "Configuration reloaded for all tunnels"
 msgstr "所有隧道都已根据当前配置重启"
 
@@ -1222,6 +1216,12 @@ msgstr "生成验证"
 
 msgid "SSL Helper"
 msgstr "SSL 助手"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "网页提交无效，可能的原因是您使用了浏览器的“后退”和“刷新”按钮，导致表单过期，请重新提交。"
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "如果问题持续，请确认您的浏览器支持Cookie。"
 
 msgid "Experts only!"
 msgstr "仅供专家！"

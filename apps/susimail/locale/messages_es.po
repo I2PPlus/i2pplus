@@ -257,14 +257,14 @@ msgstr "Error enviando correo"
 msgid "Mail sent."
 msgstr "Correo enviado."
 
-msgid "Send"
-msgstr "Enviar"
+msgid "Cancel"
+msgstr "Cancelar"
 
 msgid "Save as Draft"
 msgstr "Guardar como borrador"
 
-msgid "Cancel"
-msgstr "Cancelar"
+msgid "Send"
+msgstr "Enviar"
 
 msgid "From"
 msgstr "De"

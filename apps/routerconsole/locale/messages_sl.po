@@ -146,6 +146,9 @@ msgstr "Nobena podpora za našo vrsto podpisa"
 msgid "Unreachable on any transport"
 msgstr "Ne dosegljivo z nobenim prevoznikom"
 
+msgid "Cannot enumerate UPnP devices on Android."
+msgstr ""
+
 msgid "UPnP is not enabled"
 msgstr "UPnP ni omogočen"
 
@@ -683,11 +686,39 @@ msgstr "Prosimo, poročite"
 msgid "After reporting, please restart your router"
 msgstr "Po poročanju, prosimo ponovno zagnite svoj usmerjevalnik"
 
+msgid "Invalid form submission, requires POST"
+msgstr ""
+
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "Neveljavno oddajo obrazca, verjetno zaradi uporabe gumbev 'nazaj' ali 'osveži' v brskalniku. Prosimo, ponovno oddajte."
 
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Če težava obstaja, preverite, ali imate omogočene piškotke v brskalniku."
+
+msgid "Bandwidth usage"
+msgstr "Uporaba širine pasma"
+
+#, java-format
+msgid "events in {0}"
+msgstr "dogodki v {0}"
+
+msgid "Events per period"
+msgstr "Dogodki na obdobje"
+
+msgid "Min"
+msgstr "Min"
+
+msgid "Max"
+msgstr "Max"
+
+msgid "Avg"
+msgstr "Povp."
+
+msgid "Now"
+msgstr "Zdaj"
+
+msgid "Router restarted"
+msgstr "Usmerjevalnik je bil znova zagnan"
 
 #, java-format
 msgid "News last updated {0} ago."
@@ -722,31 +753,6 @@ msgstr[3] "{0} vstavki so posodobljeni"
 
 msgid "Plugin check complete"
 msgstr "Preverjanje vstavka je končano"
-
-msgid "Bandwidth usage"
-msgstr "Uporaba širine pasma"
-
-#, java-format
-msgid "events in {0}"
-msgstr "dogodki v {0}"
-
-msgid "Events per period"
-msgstr "Dogodki na obdobje"
-
-msgid "Min"
-msgstr "Min"
-
-msgid "Max"
-msgstr "Max"
-
-msgid "Avg"
-msgstr "Povp."
-
-msgid "Now"
-msgstr "Zdaj"
-
-msgid "Router restarted"
-msgstr "Usmerjevalnik je bil znova zagnan"
 
 msgid "none"
 msgstr "nič"
@@ -816,8 +822,20 @@ msgstr "Konzola"
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "Da omogočite dostop SSL za konzolo usmerjevalnika, glejte komentiran datoteko <code>clients.config</code>, ki se nahaja v imeniku aplikacije I2P za dodatne informacije. Boste morali urejati datoteko konfiguracije RouterConsoleRunner, ki se nahaja v imeniku: "
 
+msgid "Save disabled, edit the router.config file to make changes"
+msgstr ""
+
 msgid "Error updating the configuration - please see the error logs"
 msgstr "Napaka pri posodabljanju konfiguracije - glejte dnevnike napak"
+
+msgid "No changes made to the configuration"
+msgstr ""
+
+msgid "Note"
+msgstr "OPOMBA"
+
+msgid "Some changes may require a restart to take effect."
+msgstr "Nekatere spremembe morda zahtevajo ponovni zagon za učinkovanje."
 
 msgid "Save Client Configuration"
 msgstr "Shrani konfiguracijo klienta"
@@ -831,6 +849,9 @@ msgstr "Shrani konfiguracijo WebApp"
 msgid "Save Plugin Configuration"
 msgstr "Shrani konfiguracijo vstavka"
 
+msgid "Plugins disabled"
+msgstr ""
+
 msgid "Install Plugin"
 msgstr "Namesti vstavek"
 
@@ -839,6 +860,9 @@ msgstr "Namesti vstavek iz datoteke"
 
 msgid "Update All Installed Plugins"
 msgstr "Posodobi vse nameščene vstavke"
+
+msgid "Delete client disabled"
+msgstr ""
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -921,9 +945,18 @@ msgstr "Prenos vstavka ali posodobljanja je že v teku."
 msgid "Updating all plugins"
 msgstr "Posodabljanje vseh vstavkov"
 
+msgid "Update manager not registered, cannot install"
+msgstr ""
+
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "Namestitev vstavka iz {0}"
+
+msgid "Cannot install, check logs"
+msgstr ""
+
+msgid "Update manager not registered, cannot check"
+msgstr ""
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1022,6 +1055,19 @@ msgstr "Konfiguracija je uspešno shranjena."
 msgid "Join Family"
 msgstr "Pridruži družini"
 
+msgid "Bad certificate - No Subject CN"
+msgstr ""
+
+msgid "Bad characters in Family: "
+msgstr ""
+
+#, java-format
+msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
+msgstr ""
+
+msgid "Family key configured for router family: "
+msgstr ""
+
 msgid "Load from file failed"
 msgstr "Naložitev iz datoteke je spodletela"
 
@@ -1037,8 +1083,8 @@ msgstr "Dodaj predmet"
 msgid "Restore defaults"
 msgstr "Obnovi privzeto"
 
-msgid "Home page changed"
-msgstr "Domovska stran je spremenjena"
+msgid "Bad group detected, please retry"
+msgstr ""
 
 msgid "Restored default settings"
 msgstr "Obnovljene so privzete nastavitve"
@@ -1070,6 +1116,9 @@ msgstr "Neveljavni ključ"
 msgid "Invalid destination"
 msgstr "Neveljavna destinacija"
 
+msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
+msgstr ""
+
 #, java-format
 msgid "Key for {0} added to keyring"
 msgstr "Ključ za {0} je dodan v krožnico ključev"
@@ -1079,6 +1128,9 @@ msgstr "Zahtevan je geslo za iskanje"
 
 msgid "Requires hostname, destination, or blinded Base32"
 msgstr "Zahteva domensko ime, destinacijo ali oslepil Base32"
+
+msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
+msgstr ""
 
 msgid "Destination requires lookup password"
 msgstr "Destinacija zahteva geslo za iskanje"
@@ -1097,6 +1149,9 @@ msgstr "Pošlji ključ operaterju strežnika."
 
 msgid "Delete key"
 msgstr "Izbriši ključ"
+
+msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
+msgstr ""
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1147,6 +1202,36 @@ msgstr "Oslepljeno"
 
 msgid "Log overrides updated"
 msgstr "Prepiši log"
+
+msgid "Error updating the log limits - levels not valid"
+msgstr ""
+
+msgid "Log limits cleared"
+msgstr ""
+
+#, java-format
+msgid "Default log level updated from {0} to {1}"
+msgstr ""
+
+msgid "Date format updated"
+msgstr ""
+
+#, java-format
+msgid "Specified date format is not valid ({0}) - not updated"
+msgstr ""
+
+msgid "File size updated"
+msgstr ""
+
+#, java-format
+msgid "Specified file size limit is not valid ({0}) - not updated"
+msgstr ""
+
+msgid "Compression setting updated"
+msgstr ""
+
+msgid "Log record format updated"
+msgstr ""
 
 msgid "Log configuration saved"
 msgstr "Konfiguracija loga je shranjena"
@@ -1355,6 +1440,12 @@ msgstr "Slabo vrednost hitrosti"
 msgid "Bad capacity value"
 msgstr "Slabo vrednost kapacitete"
 
+msgid "Bonuses adjusted for: "
+msgstr ""
+
+msgid "No profile exists for: "
+msgstr ""
+
 msgid "Unsupported"
 msgstr "Nepodprto"
 
@@ -1472,27 +1563,14 @@ msgstr[3] "Prosimo, počakajte, da potekajo veljavnosti usmerjanja za {0} tuneli
 msgid "Restart in {0}"
 msgstr "Ponovni zagon v {0}"
 
-msgid "Stat filter and location updated successfully to"
-msgstr "Filter statistike in lokacija uspešno posodobljena na"
-
-msgid "Full statistics enabled"
-msgstr "Polna statistika je omogočena"
-
-msgid "Full statistics disabled"
-msgstr "Polna statistika je onemogočena"
-
-#, java-format
-msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
-msgstr "Seznam grafov je posodobljen, lahko potrebuje do 60 sekund, da se odbije na strani {0}Grafi{1}"
-
 msgid "Save order"
 msgstr "Shrani vrstni red"
 
-msgid "Refresh disabled"
-msgstr "Osveži je onemogočeno"
+msgid "Sidebar refresh disabled"
+msgstr ""
 
-msgid "Refresh interval changed"
-msgstr "Interval osveževanja je spremenjen"
+msgid "Sidebar refresh interval changed"
+msgstr ""
 
 msgid "Refresh interval must be a number"
 msgstr "Interval osveževanja mora biti število"
@@ -1500,17 +1578,17 @@ msgstr "Interval osveževanja mora biti število"
 msgid "Restore full default"
 msgstr "Obnovi celoten privzeto"
 
-msgid "Full summary bar default restored."
-msgstr "Celoten pregledni vrstici je obnovljena."
+msgid "Full sidebar defaults restored."
+msgstr ""
 
-msgid "Summary bar will refresh shortly."
-msgstr "Pregledna vrstica bo kmalu osvežena."
+msgid "Sidebar will refresh shortly."
+msgstr ""
 
 msgid "Restore minimal default"
 msgstr "Obnovi minimalno privzeto"
 
-msgid "Minimal summary bar default restored."
-msgstr "Minimalna pregledna vrstica je obnovljena."
+msgid "Minimal sidebar defaults restored."
+msgstr ""
 
 msgid "Order must be an integer"
 msgstr "Red mora biti celo število"
@@ -1526,6 +1604,27 @@ msgstr "Premik"
 
 msgid "Saved order of sections."
 msgstr "Shrani vrstni red sekcij."
+
+msgid "Stat filter and location updated successfully to"
+msgstr "Filter statistike in lokacija uspešno posodobljena na"
+
+msgid "Full statistics enabled"
+msgstr "Polna statistika je omogočena"
+
+msgid "Full statistics disabled"
+msgstr "Polna statistika je onemogočena"
+
+#, java-format
+msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
+msgstr "Seznam grafov je posodobljen, lahko potrebuje do 60 sekund, da se odbije na strani {0}Grafi{1}"
+
+#, java-format
+msgid "Internal error: could not resolve pool name {0}."
+msgstr ""
+
+#, java-format
+msgid "Internal error: could not find pool settings for {0}."
+msgstr ""
 
 msgid "Updated settings for all pools."
 msgstr "Nastavitve za vse bazene so posodobljene."
@@ -1555,9 +1654,8 @@ msgstr[3] "{0} tunelov"
 msgid "Exploratory tunnels"
 msgstr "Raziskovalni tuneli"
 
-#, java-format
-msgid "Client tunnels for {0}"
-msgstr "Klientovi tuneli za {0}"
+msgid "I2PSnark"
+msgstr "I2PSnark"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "OPOMBA O ANONIMNOSTI - Nastavitve vključujejo 0-skokov tunele."
@@ -1583,17 +1681,17 @@ msgstr "Vhodni"
 msgid "Outbound"
 msgstr "Izhodni"
 
-msgid "Length"
-msgstr "Dolžina"
-
-msgid "Randomization"
-msgstr "Naključnost"
-
 msgid "Quantity"
 msgstr "Količina"
 
 msgid "Backup quantity"
 msgstr "Rezervna količina"
+
+msgid "Length"
+msgstr "Dolžina"
+
+msgid "Randomization"
+msgstr "Naključnost"
 
 msgid "Inbound options"
 msgstr "Možnosti vhodnih"
@@ -1604,17 +1702,20 @@ msgstr "Možnosti izhodnih"
 msgid "Add user"
 msgstr "Dodaj uporabnika"
 
+msgid "Cannot save theme choice, theme name has illegal characters"
+msgstr ""
+
 msgid "Theme change saved."
 msgstr "Sprememba teme je shranjena."
-
-msgid "Refresh the page to view."
-msgstr "Osveži stran za ogled."
 
 msgid "Mobile console option saved."
 msgstr "Možnost mobilne konzole je shranjena."
 
 msgid "No user name entered"
 msgstr "Ni vneseno uporabniškega imena"
+
+msgid "User name may not contain '='"
+msgstr ""
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "Opozorilo: Uporabniška imena zunaj znakovnega množiča ISO-8859-1 niso priporočena. Podpora ni standardizirana in se razlikuje glede na brskalnik."
@@ -1905,17 +2006,17 @@ msgstr "Graf za zmogljivost usmerjevalnika"
 msgid "Graphs"
 msgstr "Grafi"
 
-msgid "Anonymous webmail client"
-msgstr "Anonimni klient za spletne pošte"
-
-msgid "I2PMail"
-msgstr "I2PMail"
-
 msgid "Help"
 msgstr "Pomoč"
 
 msgid "I2P Router Help"
 msgstr "Pomoč za usmerjevalnik I2P"
+
+msgid "Anonymous webmail client"
+msgstr "Anonimni klient za spletne pošte"
+
+msgid "I2PMail"
+msgstr "I2PMail"
 
 msgid "Install and configure I2P plugins"
 msgstr "Namestitev in konfiguracija vstavkov I2P"
@@ -1934,6 +2035,12 @@ msgstr "Omrežna baza"
 
 msgid "Show list of all known I2P routers"
 msgstr "Prikaži seznam vseh znanih usmerjevalnikov I2P"
+
+msgid "List of recently connected peers with profiling info"
+msgstr ""
+
+msgid "Peer Profiles"
+msgstr "Profili sosednjih strežnikov"
 
 msgid "Router Info"
 msgstr "Info o usmerj."
@@ -2007,14 +2114,14 @@ msgstr "Napredne nastavitve"
 msgid "Advanced router configuration"
 msgstr "Napredna konfiguracija usmerjevalnika"
 
-msgid "Start or stop Router clients"
-msgstr "Zaženi ali ustavi kliente usmerjevalnika"
-
 msgid "Changelog"
 msgstr "Dnevnik sprememb"
 
 msgid "Recent changes"
 msgstr "Nedavne spremembe"
+
+msgid "Start or stop Router clients"
+msgstr "Zaženi ali ustavi kliente usmerjevalnika"
 
 msgid "Bug tracker"
 msgstr "Prašiček za sledenje napakam"
@@ -2160,9 +2267,6 @@ msgstr "Iskalnik Clearnet BitTorrent DHT"
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "Iskalnik DuckDuckGo (brez javascript)"
 
-msgid "Clearnet Search Engine"
-msgstr "Iskalnik Clearnet"
-
 msgid "Privacy-focused Clearnet Search Engine"
 msgstr "Iskalnik Clearnet usmerjen na zasebnost"
 
@@ -2238,18 +2342,6 @@ msgstr "Neodvisno istrževalno novinarstvo"
 msgid "Information Security Research &amp; Education"
 msgstr "Istrževanje in izobraževanje v področju varnosti informacij"
 
-msgid "Cannabis-related magazine"
-msgstr "Časopis o cannabisu"
-
-msgid "CultureMagazine"
-msgstr "Časopis o kulturi"
-
-msgid "A magazine of Politics &amp; Culture"
-msgstr "Časopis o politiki in kulturi"
-
-msgid "CurrentAffairs"
-msgstr "Trenutna zadeva"
-
 msgid "Darknet related news site"
 msgstr "Spletna stran z novicami, povezanimi z temnim omrežjem"
 
@@ -2304,15 +2396,6 @@ msgstr "HongKongWatch"
 msgid "Monitors threats to freedoms and rights in Hong Kong"
 msgstr "Ogleda grožnje svobodam in pravicam v Hong Kongu"
 
-msgid "Politics &amp; Current Affairs Journal"
-msgstr "Politika in časopis o trenutnih zadevah"
-
-msgid "English language Japanese News"
-msgstr "Angleščina Japonske vesti"
-
-msgid "JapanToday"
-msgstr "JapanToday"
-
 msgid "JStorDaily"
 msgstr "JStorDaily"
 
@@ -2355,9 +2438,6 @@ msgstr "Novice in vire blogov na I2P"
 msgid "Planeta"
 msgstr "Planeta"
 
-msgid "News &amp; Views on Tibet"
-msgstr "Vesti in mnenja o Tibetu"
-
 msgid "Lifestyle magazine"
 msgstr "Časopis o življenjskem slogu"
 
@@ -2375,6 +2455,9 @@ msgstr "ScienceDaily"
 
 msgid "Community-driven tech news"
 msgstr "Novice o tehnologiji, pogonske skupnosti"
+
+msgid "Various services"
+msgstr ""
 
 msgid "News for nerds"
 msgstr "Vesti za nerde"
@@ -2421,12 +2504,6 @@ msgstr "Globalne novice"
 msgid "TheGuardian"
 msgstr "TheGuardian"
 
-msgid "TheHill"
-msgstr "TheHill"
-
-msgid "US Political News"
-msgstr "Politične novice ZDA"
-
 msgid "TheMarkup"
 msgstr "TheMarkup"
 
@@ -2441,12 +2518,6 @@ msgstr "TheMoscowTimes"
 
 msgid "TheNewRepublic"
 msgstr "TheNewRepublic"
-
-msgid "International News from Tibet"
-msgstr "Mednarodne novice iz Tibeta"
-
-msgid "TheTibetPost"
-msgstr "TheTibetPost"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "Deljenje datotek &amp; novice o avtorskih pravicah"
@@ -2475,6 +2546,9 @@ msgstr "URL"
 
 msgid "Add"
 msgstr "Dodaj"
+
+msgid "Error displaying the info page."
+msgstr ""
 
 msgid "Identity"
 msgstr "Identiteta"
@@ -2521,6 +2595,9 @@ msgstr "Dostopni jezgra CPU"
 msgid "Performance"
 msgstr "Zmožnost"
 
+msgid "Maximum available RAM"
+msgstr ""
+
 msgid "Classified as slow"
 msgstr "Klasificiran kot počasen"
 
@@ -2529,6 +2606,9 @@ msgstr "Da"
 
 msgid "No"
 msgstr "Ne"
+
+msgid "GeoIP Db"
+msgstr ""
 
 msgid "Target"
 msgstr "Cilj"
@@ -2666,6 +2746,9 @@ msgstr "Vsi usmerjevalniki (Klien NetDb)"
 msgid "Sybil Analysis"
 msgstr "Analiza Sybil"
 
+msgid "Bad value supplied, please check and try again."
+msgstr ""
+
 msgid "Router Map"
 msgstr "Karta usmerjevalnika"
 
@@ -2740,9 +2823,6 @@ msgstr "je prepovedan"
 
 msgid "not found in network database"
 msgstr "ni najden v omrežni bazi"
-
-msgid "No results"
-msgstr "Brez rezultatov"
 
 msgid "Bad Base64 Router hash"
 msgstr ""
@@ -2991,50 +3071,11 @@ msgstr "Prikaži vse usmerjevalnike z tem naslovom v NetDb"
 msgid "Show all routers with this port in the NetDb"
 msgstr "Prikaži vse usmerjevalnike z tem vratom v NetDb"
 
-msgid "Core version"
-msgstr "Različica središča"
-
 msgid "Network ID"
 msgstr "ID omrežja"
 
 msgid "Routers"
 msgstr "Usmerjevalniki"
-
-msgid "Family Key"
-msgstr "Družinski ključ"
-
-msgid "Family Sig"
-msgstr "Družinsko podpis"
-
-msgid "Exploratory tunnels expire (1h)"
-msgstr "Raziskovalni tuneli potekajo (1h)"
-
-msgid "Exploratory tunnels reject (1h)"
-msgstr "Raziskovalni tuneli zavrnejo (1h)"
-
-msgid "Exploratory tunnels build success (1h)"
-msgstr "Raziskovalni tuneli gradnja uspeh (1h)"
-
-msgid "Client tunnels expire (1h)"
-msgstr "Klientovi tuneli potekajo (1h)"
-
-msgid "Client tunnels reject (1h)"
-msgstr "Klientovi tuneli zavrnejo (1h)"
-
-msgid "Client tunnels build success (1h)"
-msgstr "Klientovi tuneli gradnja uspeh (1h)"
-
-msgid "Participating tunnels (1h)"
-msgstr "Udeleženi tuneli (1h)"
-
-msgid "Participating tunnels (60s)"
-msgstr "Udeleženi tuneli (60s)"
-
-msgid "Bandwidth send rate (1h)"
-msgstr "Hitrost pošiljanja širine pasma (1h)"
-
-msgid "Bandwidth receive rate (1h)"
-msgstr "Hitrost prejema širine pasma (1h)"
 
 msgid "First heard about"
 msgstr "Prvič sem slišal o"
@@ -3104,9 +3145,6 @@ msgstr "v datoteko router.config."
 msgid "Peer Connections"
 msgstr "Povezave partnerja"
 
-msgid "Auto-refresh"
-msgstr "Samodejno osveži"
-
 msgid "Active in the last minute"
 msgstr "Aktiven v zadnjem minutu"
 
@@ -3115,6 +3153,12 @@ msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
+
+msgid "Limit"
+msgstr ""
+
+msgid "Maximum permitted connections"
+msgstr ""
 
 msgid "Current / maximum permitted"
 msgstr "Trenutno / največja dovoljena"
@@ -3536,8 +3580,8 @@ msgid "{0} shared bandwidth"
 msgstr "{0} deljena širina pasma"
 
 #, java-format
-msgid "Over {0} shared bandwidth"
-msgstr "Preko {0} deljene širine pasma"
+msgid "Over {0} KB/s shared bandwidth"
+msgstr ""
 
 msgid "status"
 msgstr "stanje"
@@ -3609,88 +3653,151 @@ msgstr ""
 msgid "Select search engine"
 msgstr "Izberi motor iskanja"
 
-msgid "Statistics gathered during this router's uptime"
-msgstr "Statistika, zbrana med časom delovanja tega usmerjevalnika"
+#, java-format
+msgid "Clock Skew of {0}"
+msgstr "Skosen časovnik {0}"
 
-msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
-msgstr "Zbrana podatka je kvantizirana v 1-minutnem obdobju, zato bi jo moral uporabiti samo kot oceno."
+msgid "Testing"
+msgstr "Testiranje"
 
-msgid "These statistics are primarily used for development and debugging."
-msgstr "Te statistike se glavno uporabljajo za razvoj in odpravljanje napak."
+msgid "Private TCP Address"
+msgstr "Zasebni TCP naslov"
 
-msgid "No lifetime events"
-msgstr "Nobeni dogodki v življenjskem ciklu"
+msgid "SymmetricNAT"
+msgstr "SimetričniNAT"
 
-msgid "frequency"
-msgstr "frekvenca"
+msgid "Firewalled with Inbound TCP Enabled"
+msgstr "Zaščiten s firewallom z omogočenim vhodnim TCP"
 
-msgid "Rolling average events per period"
-msgstr "Potečna povprečna dogodka na obdobje"
+msgid "Firewalled &amp; Floodfill"
+msgstr "Zaščiten s firewallom &amp; Zalivni"
 
-msgid "Highest events per period"
-msgstr "Najvišji dogodki na obdobje"
+msgid "Disconnected"
+msgstr "Razklopljen"
 
-msgid "Lifetime average events per period"
-msgstr "Povprečni dogodki v življenjskem ciklu na obdobje"
+msgid "UDP Port In Use"
+msgstr "UDP vrata v uporabi"
 
-msgid "Lifetime average frequency"
-msgstr "Povprečna frekvenca v življenjskem ciklu"
+msgid "No Active Peers"
+msgstr "Nobeni aktivni partnerji"
+
+msgid "UDP Disabled &amp; Inbound TCP host/port not set"
+msgstr "UDP je onemogočen &amp; Gostitelj/vrata vhodnega TCP ni nastavljen"
+
+msgid "Firewalled with UDP Disabled"
+msgstr "Zaščiten s firewallom z onemogočenim UDP"
+
+msgid "Add/remove/edit &amp; control your client and server tunnels"
+msgstr "Dodaj/odstrani/uredi &amp; nadzoruj svoje klientove in strežniške tunele"
+
+msgid "Service Tunnels"
+msgstr "Tuneli storitve"
+
+msgid "How many local service tunnels we're running"
+msgstr "Koliko lokalnih tuneljev storitve, ki jih izvajamo"
+
+msgid "Messenger"
+msgstr "Pošiljalnik"
+
+msgid "i2pchat"
+msgstr "i2pchat"
+
+msgid "I2PChat"
+msgstr "I2PChat"
+
+msgid "Server"
+msgstr "Strežnik"
+
+msgid "service may be available to peers"
+msgstr "storitev morda na voljo partnerjam"
+
+msgid "service is only available locally"
+msgstr "storitev je na voljo le lokalno"
+
+msgid "Show tunnels"
+msgstr "Prikaži tunele"
+
+msgid "Leases expired"
+msgstr "Najemi so potekli"
+
+msgid "Rebuilding"
+msgstr "Ponovna izgradnja"
+
+msgid "ago"
+msgstr "pred"
+
+msgid "Ready"
+msgstr "Pripravljen"
+
+msgid "Building"
+msgstr "Izgradnja"
+
+msgid "Building tunnels"
+msgstr "Izgradnja tuneljev"
+
+msgid "Shared Clients"
+msgstr "Deleni klienti"
+
+msgid "Click Restart to install"
+msgstr "Kliknite Ponovni zagon za namestitev"
+
+msgid "Click Shutdown and restart to install"
+msgstr "Kliknite Zapri in ponovno zagni za namestitev"
 
 #, java-format
-msgid "{0} event"
-msgid_plural "{0} events"
-msgstr[0] "{0} dogodek"
-msgstr[1] "{0} dogodka"
-msgstr[2] "{0} dogodki"
-msgstr[3] "{0} dogodki"
+msgid "{0}"
+msgstr "{0}"
 
-msgid "rate"
-msgstr "mera"
+msgid "Updating after restart"
+msgstr "Posodabljanje po ponovnem zagonu"
 
-msgid "Average"
-msgstr "Povprečje"
+msgid "Signed development update available"
+msgstr "Na voljo je podpisana posodobitev razvoja"
 
-msgid "Highest average"
-msgstr "Najvišje povprečje"
+msgid "Download I2P Update"
+msgstr "Prenesi posodobitev I2P"
 
-msgid "Highest total in a period"
-msgstr "Najvišja skupaj v obdobju"
+msgid "Unsigned update available"
+msgstr "Na voljo je neoznačena posodobitev"
 
-msgid "Average event count"
-msgstr "Povprečno število dogodkov"
+msgid "Help with firewall configuration"
+msgstr "Pomoč pri konfiguraciji firewalla"
 
-msgid "Events in peak period"
-msgstr "Dogodki v vrhu obdobja"
+msgid "Check network connection and NAT/firewall!"
+msgstr "Preverite omrežno povezavo in NAT/firewall!"
 
-msgid "Events in this period"
-msgstr "Dogodki v tem obdobju"
+msgid "Attempt to download router reference files (if automatic reseed has failed)"
+msgstr "Poskus prenosa datotek za referenco usmerjevalnika (če je avtomatsko ponovno semenjenje spodletelo)"
 
-#, java-format
-msgid "ended {0} ago"
-msgstr "končalo {0} nazaj"
+msgid "Reseed"
+msgstr "Ponovno semenjenje"
 
-msgid "No events"
-msgstr "Brez dogodkov"
+msgid "Order"
+msgstr "Naročilo"
 
-msgid "Graph Data"
-msgstr "Podatki grafa"
+msgid "Top"
+msgstr "Vrh"
 
-msgid "Graph Event Count"
-msgstr "Število dogodkov grafa"
+msgid "Move to top"
+msgstr "Premakni na vrh"
 
-msgid "Export Data as XML"
-msgstr "Izvozi podatke kot XML"
+msgid "Move up"
+msgstr "Premakni gor"
 
-msgid "Lifetime average value"
-msgstr "Povprečna vrednost življenjskega cikla"
+msgid "Down"
+msgstr "Dol"
 
-#, java-format
-msgid "1 event"
-msgid_plural "{0} events"
-msgstr[0] "{0} dogodek"
-msgstr[1] "{0} dogodki"
-msgstr[2] "{0} dogodki"
-msgstr[3] "{0} dogodki"
+msgid "Move down"
+msgstr "Premakni dol"
+
+msgid "Bottom"
+msgstr "Dno"
+
+msgid "Move to bottom"
+msgstr "Premakni na dno"
+
+msgid "Select a section to add"
+msgstr "Izberite sekcijo za dodajanje"
 
 msgid "Help &amp; FAQ"
 msgstr "Pomoč &amp; ČPP"
@@ -3733,9 +3840,6 @@ msgstr "Zastoj"
 
 msgid "Tunnel Status"
 msgstr "Stanje tunelja"
-
-msgid "Service Tunnels"
-msgstr "Tuneli storitve"
 
 msgid "News &amp; Updates"
 msgstr "Novice &amp; posodobitve"
@@ -3790,6 +3894,9 @@ msgstr "Gostiteljstvo spletnih strani"
 
 msgid "An introduction to hosting websites on the I2P network"
 msgstr "Uvod v gostiteljstvo spletnih strani na omrežju I2P"
+
+msgid "New hosts in last 24 hours"
+msgstr ""
 
 msgid "I2PControl"
 msgstr "I2PControl"
@@ -4090,151 +4197,88 @@ msgstr "Nobeni prenosni tuneli se ne izgrajajo, ko je aktiviran skriti način"
 msgid "Router is configured to reject all transit tunnel requests"
 msgstr "Usmerjevalnik je konfiguriran za zavrnitev vseh zahtev za prenosne tunelje"
 
-#, java-format
-msgid "Clock Skew of {0}"
-msgstr "Skosen časovnik {0}"
+msgid "Statistics gathered during this router's uptime"
+msgstr "Statistika, zbrana med časom delovanja tega usmerjevalnika"
 
-msgid "Testing"
-msgstr "Testiranje"
+msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
+msgstr "Zbrana podatka je kvantizirana v 1-minutnem obdobju, zato bi jo moral uporabiti samo kot oceno."
 
-msgid "Private TCP Address"
-msgstr "Zasebni TCP naslov"
+msgid "These statistics are primarily used for development and debugging."
+msgstr "Te statistike se glavno uporabljajo za razvoj in odpravljanje napak."
 
-msgid "SymmetricNAT"
-msgstr "SimetričniNAT"
+msgid "No lifetime events"
+msgstr "Nobeni dogodki v življenjskem ciklu"
 
-msgid "Firewalled with Inbound TCP Enabled"
-msgstr "Zaščiten s firewallom z omogočenim vhodnim TCP"
+msgid "frequency"
+msgstr "frekvenca"
 
-msgid "Firewalled &amp; Floodfill"
-msgstr "Zaščiten s firewallom &amp; Zalivni"
+msgid "Rolling average events per period"
+msgstr "Potečna povprečna dogodka na obdobje"
 
-msgid "Disconnected"
-msgstr "Razklopljen"
+msgid "Highest events per period"
+msgstr "Najvišji dogodki na obdobje"
 
-msgid "UDP Port In Use"
-msgstr "UDP vrata v uporabi"
+msgid "Lifetime average events per period"
+msgstr "Povprečni dogodki v življenjskem ciklu na obdobje"
 
-msgid "No Active Peers"
-msgstr "Nobeni aktivni partnerji"
-
-msgid "UDP Disabled &amp; Inbound TCP host/port not set"
-msgstr "UDP je onemogočen &amp; Gostitelj/vrata vhodnega TCP ni nastavljen"
-
-msgid "Firewalled with UDP Disabled"
-msgstr "Zaščiten s firewallom z onemogočenim UDP"
-
-msgid "Add/remove/edit &amp; control your client and server tunnels"
-msgstr "Dodaj/odstrani/uredi &amp; nadzoruj svoje klientove in strežniške tunele"
-
-msgid "How many local service tunnels we're running"
-msgstr "Koliko lokalnih tuneljev storitve, ki jih izvajamo"
-
-msgid "I2PSnark"
-msgstr "I2PSnark"
-
-msgid "Messenger"
-msgstr "Pošiljalnik"
-
-msgid "i2pchat"
-msgstr "i2pchat"
-
-msgid "I2PChat"
-msgstr "I2PChat"
-
-msgid "Server"
-msgstr "Strežnik"
-
-msgid "service may be available to peers"
-msgstr "storitev morda na voljo partnerjam"
-
-msgid "service is only available locally"
-msgstr "storitev je na voljo le lokalno"
-
-msgid "Show tunnels"
-msgstr "Prikaži tunele"
-
-msgid "Leases expired"
-msgstr "Najemi so potekli"
-
-msgid "Rebuilding"
-msgstr "Ponovna izgradnja"
-
-msgid "ago"
-msgstr "pred"
-
-msgid "Ready"
-msgstr "Pripravljen"
-
-msgid "Building"
-msgstr "Izgradnja"
-
-msgid "Building tunnels"
-msgstr "Izgradnja tuneljev"
-
-msgid "Shared Clients"
-msgstr "Deleni klienti"
-
-msgid "Click Restart to install"
-msgstr "Kliknite Ponovni zagon za namestitev"
-
-msgid "Click Shutdown and restart to install"
-msgstr "Kliknite Zapri in ponovno zagni za namestitev"
+msgid "Lifetime average frequency"
+msgstr "Povprečna frekvenca v življenjskem ciklu"
 
 #, java-format
-msgid "{0}"
-msgstr "{0}"
+msgid "{0} event"
+msgid_plural "{0} events"
+msgstr[0] "{0} dogodek"
+msgstr[1] "{0} dogodka"
+msgstr[2] "{0} dogodki"
+msgstr[3] "{0} dogodki"
 
-msgid "Updating after restart"
-msgstr "Posodabljanje po ponovnem zagonu"
+msgid "rate"
+msgstr "mera"
 
-msgid "Signed development update available"
-msgstr "Na voljo je podpisana posodobitev razvoja"
+msgid "Average"
+msgstr "Povprečje"
 
-msgid "Download I2P Update"
-msgstr "Prenesi posodobitev I2P"
+msgid "Highest average"
+msgstr "Najvišje povprečje"
 
-msgid "Unsigned update available"
-msgstr "Na voljo je neoznačena posodobitev"
+msgid "Highest total in a period"
+msgstr "Najvišja skupaj v obdobju"
 
-msgid "Help with firewall configuration"
-msgstr "Pomoč pri konfiguraciji firewalla"
+msgid "Average event count"
+msgstr "Povprečno število dogodkov"
 
-msgid "Check network connection and NAT/firewall!"
-msgstr "Preverite omrežno povezavo in NAT/firewall!"
+msgid "Events in peak period"
+msgstr "Dogodki v vrhu obdobja"
 
-msgid "Attempt to download router reference files (if automatic reseed has failed)"
-msgstr "Poskus prenosa datotek za referenco usmerjevalnika (če je avtomatsko ponovno semenjenje spodletelo)"
+msgid "Events in this period"
+msgstr "Dogodki v tem obdobju"
 
-msgid "Reseed"
-msgstr "Ponovno semenjenje"
+#, java-format
+msgid "ended {0} ago"
+msgstr "končalo {0} nazaj"
 
-msgid "Order"
-msgstr "Naročilo"
+msgid "No events"
+msgstr "Brez dogodkov"
 
-msgid "Top"
-msgstr "Vrh"
+msgid "Graph Data"
+msgstr "Podatki grafa"
 
-msgid "Move to top"
-msgstr "Premakni na vrh"
+msgid "Graph Event Count"
+msgstr "Število dogodkov grafa"
 
-msgid "Move up"
-msgstr "Premakni gor"
+msgid "Export Data as XML"
+msgstr "Izvozi podatke kot XML"
 
-msgid "Down"
-msgstr "Dol"
+msgid "Lifetime average value"
+msgstr "Povprečna vrednost življenjskega cikla"
 
-msgid "Move down"
-msgstr "Premakni dol"
-
-msgid "Bottom"
-msgstr "Dno"
-
-msgid "Move to bottom"
-msgstr "Premakni na dno"
-
-msgid "Select a section to add"
-msgstr "Izberite sekcijo za dodajanje"
+#, java-format
+msgid "1 event"
+msgid_plural "{0} events"
+msgstr[0] "{0} dogodek"
+msgstr[1] "{0} dogodki"
+msgstr[2] "{0} dogodki"
+msgstr[3] "{0} dogodki"
 
 msgid "No known routers"
 msgstr "Noben znani usmerjevalnik"
@@ -4574,6 +4618,10 @@ msgstr "Trenutno ni aktivnih lokalnih ali prenosnih tuneljev."
 msgid "Bandwidth Tiers"
 msgstr "Raven širine pasma"
 
+#, java-format
+msgid "Over {0} shared bandwidth"
+msgstr "Preko {0} deljene širine pasma"
+
 msgid "Inbound or outbound?"
 msgstr "Vhodno ali izhodno?"
 
@@ -4633,6 +4681,18 @@ msgstr "Test širine pasma je prekinjen"
 
 msgid "Bandwidth test was not running"
 msgstr "Test širine pasma ni bil v teku"
+
+msgid "ready"
+msgstr ""
+
+msgid "inbound test"
+msgstr ""
+
+msgid "outbound test"
+msgstr ""
+
+msgid "done"
+msgstr ""
 
 msgid "bits per second"
 msgstr "biti na sekundo"
@@ -4806,8 +4866,8 @@ msgstr "Delenje omrežja"
 msgid "Share"
 msgstr "Deli"
 
-msgid "Note"
-msgstr "OPOMBA"
+msgid "NOTE"
+msgstr ""
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
@@ -4831,6 +4891,10 @@ msgstr "Če je delena širina pasma višja, izboljšate anonimnost in pomagate o
 
 msgid "config advanced"
 msgstr "konfig napredno"
+
+#, java-format
+msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
+msgstr ""
 
 msgid "Floodfill Configuration"
 msgstr "Konfiguracija zalivne"
@@ -4859,8 +4923,8 @@ msgstr "Onemogoči"
 msgid "Advanced I2P+ Configuration"
 msgstr "Napredna konfiguracija I2P"
 
-msgid "Some changes may require a restart to take effect."
-msgstr "Nekatere spremembe morda zahtevajo ponovni zagon za učinkovanje."
+msgid "Help with additional configuration settings"
+msgstr ""
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5726,23 +5790,50 @@ msgstr "Ko je nastavljeno na true, omogoča namestitev vstavka na <a href=/confi
 msgid "When set to true, this setting enables reverse DNS lookups for peers, triggered when displaying the country flag of a peer or when the hostname or domain is explicitly displayed in the console, or when the peer's RouterInfo is written to disk. In order to avoid repeat lookups, it's recommended to configure a generous caching policy for DNS lookups of 10 minutes or more, and to configure a privacy respecting DNS server in your operating system. [Disabled by default, restart required]"
 msgstr "Če je nastavljeno na true, ta nastavitev omogoča obratne iskanje DNS za parterje, sproženo pri prikazu zastave države parterja ali ko je ime gostitelja ali domena jasno prikazana v konzoli, ali ko je RouterInfo parterja zapisan na disk. Da bi se izognili ponovnim iskanjem, je priporočljivo konfigurirati nenehno politiko predpomnilnika za iskanje DNS, ki traja 10 minut ali več, in konfigurirati DNS strežnik, ki spoštuje zasebnost, v vašem operacijskem sistemu. [Onemogočeno privzeto, potreben je ponovni zagon]"
 
+msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
+msgstr "Ta nastavitev dovoli, da nastavite prilagojeno tekstovni predpon za naslov strani na straneh konzole usmerjevalnika, potencialno uporaben za razlikovanje med več konzolami, odprte na zavihkih brskalnika."
+
 msgid "When set to true, accessing the router console via http:// when https:// is enabled will automatically redirect to https. To configure router console access, edit the settings in your <code>clients.config</code> file in your profile directory (<i>not</i> the application installation directory). [Enabled by default]"
 msgstr "Če je nastavljeno na true, dostop do konzole usmerjevalnika prek http://, ko je https:// omogočen, bo samodejno preusmerjen na https. Za konfiguriranje dostopa do konzole usmerjevalnika, uredite nastavitve v svoji datoteki <code>clients.config</code> v imeniku profila (<i>ne</i> v imeniku namestitve aplikacije). [Omogočeno privzeto]"
+
+msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
+msgstr "Ta nastavitev, ko je nastavljeno na true, bo prikazala povprečje testa parterja v sekciji Zastoja stranice, izračunano z dodajanjem povprečja uspešnih testov parterja in povprečja presežka časa, vzeta od neuspešnih testov. Povprečna vrednost se lahko uporablja kot vodenje za določanje optimalne <code>router.peerTestTimeout</code> vrednosti. [Privzeto je false]"
+
+msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
+msgstr "Ta nastavitev, ko je nastavljeno na true, bo prikazala povezave <i>Spletne strani, ki vam zanimajo</i> na <a href=/sitemap>spletne mapi</a>. [Privzeto je false]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Ta nastavitev določa, ali naj usmerjevalnik uporablja podano datoteko <i>blocklist.txt</i> in kakršne koli konfigurirane črne listice uporabnika za omogočanje prepovedi usmerjevalnikov po diju ali IP naslovu. Omrežni razponi in maski so podprti za IPv4, vendar ne za IPv6. Za dodatne informacije glejte <i>blocklist.txt</i> v imeniku aplikacije I2P+. [Omogočeno privzeto, potreben je ponovni zagon]"
 
-msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
-msgstr "Ta nastavitev določa, ali naj usmerjevalnik uporablja datoteko <i>blocklist_tor.txt</i> v imeniku aplikacije I2P+, da omogoči prepoved delovanja usmerjevalnikov iz Tor izhodnih vozlišč IP naslovov. [Omogočeno privzeto, potreben je ponovni zagon]"
+msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
+msgstr "Ta nastavitev omogoča konfiguracijo trajanja (v sekundah) za prepovedi, izvedene prek črnih listic. Privzeto prepovedi trajajo dolžino sejansa usmerjevalnika. [Potreben je ponovni zagon]"
 
 msgid "This setting, when configured with a path pointing at a valid blocklist file, enables an additional, user-configured blocklist to be loaded at router startup. [Disabled by default, restart required]"
 msgstr "Ta nastavitev, ko je konfigurirana z poti, ki pokazuje na veljaven blokiranje datoteko, omogoča dodatno, konfigurirano črno listo, ki se naloži pri zagonu usmerjevalnika. [Onemogočeno privzeto, potreben je ponovni zagon]"
 
-msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
-msgstr "Ta nastavitev omogoča konfiguracijo trajanja (v sekundah) za prepovedi, izvedene prek črnih listic. Privzeto prepovedi trajajo dolžino sejansa usmerjevalnika. [Potreben je ponovni zagon]"
+msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
+msgstr "Ta nastavitev določa, ali naj usmerjevalnik uporablja datoteko <i>blocklist_tor.txt</i> v imeniku aplikacije I2P+, da omogoči prepoved delovanja usmerjevalnikov iz Tor izhodnih vozlišč IP naslovov. [Omogočeno privzeto, potreben je ponovni zagon]"
+
+msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
+msgstr ""
+
+msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
+msgstr "Če je nastavljeno na false, usmerjevalnik ne bo blokiriral zahtev za izgradnjo tuneljev iz počasnejših ali nedosegljivih usmerjevalnikov, ki delujejo starejše različice. [Privzeto je true, potreben je ponovni zagon]"
 
 msgid "Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks."
 msgstr "Dodelite število nitij procesorja za izgradnjo tuneljev. Če vaš procesor podpira hiper-niti ali hkratno večnitje, lahko pomnožite število jezgr procesorja z 2, da dobite maksimalno število nitij za dodelitev, v nasprotnem primeru število jezgr procesorja = maksimalno število na voljo nitij. Opomba: morda želite dodeliti manj kot teoreticno maksimum, da se prepričate, da imate preprosto razpoložljivo za druge naloge."
+
+msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
+msgstr "Ta nastavitev (v milisekundah) določa, koliko časa paket lahko ostane v CoDel vrsti preden ga izbrišemo. Privzeto je 1000 ms. [Potrebna ponovna zagona]"
+
+msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
+msgstr "Ta nastavitev določa maksimalno število sporočil v izhodnem redu preden je označen kot poln. [Privzeto je 768]"
+
+msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
+msgstr "Ta nastavitev določa maksimalno število sporočil nad maksimalno vrednostjo vrste preden so nadaljnja sporočila zavržena. [Privzeto je 128]"
+
+msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
+msgstr "Ta nastavitev (v milisekundah) vam omogoča ročno konfiguracijo ciljne vrednosti zamika vrste za sistem upravljanja vrste CoDel. Privzeto je 50ms. [Ponovni zagon zahtoven]"
 
 msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
 msgstr "Ta nastavitev, v milisekundah, nadomesti privzeto omejitev obdelave sporočil (prikazano kot <i>Zamik sporočil</i> v sekciji vrstnice Zasnemljenost) preden se usmerjevalnik določi kot prenatljen in zahteve za tranzitne tunele se zavrnejo. [Privzeto je 750ms ali 1500ms, če je usmerjevalnik označen kot počasen]"
@@ -5753,8 +5844,32 @@ msgstr "Redno preverite tunele, da določite povprečen zamik, in prikažite rez
 msgid "When set to true, the router will change its identity and UDP port every time the router restarts. [Default is false]"
 msgstr "Ko je nastavljeno na true, bo usmerjevalnik vsakič, ko se usmerjevalnik ponovno zagni, spremenil svojo identiteto in UDP vrata. [Privzeto je false]"
 
+msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
+msgstr "Če je nastavljeno na false, usmerjevalnik ne bo omejil zahtev za izgradnjo tuneljev iz drugih usmerjevalnikov, in bi se moralo uporabljati z previdom. [Privzeto je true, potreben je ponovni zagon]"
+
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
 msgstr "Ta nastavitev določa, katere <a href=/profiles#profile_defs>možnosti sosednjega strežnika</a> ne bodo uporabljene za izgradnjo tunelov vašega usmerjevalnika. npr. <code>router.excludePeerCaps=LMN</code>"
+
+msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
+msgstr "Ta nastavitev (v urah) določa, kako star je RouterInfo v NetDb (njegova zadnja znana datum izdaje) preden je razvrščen kot zastarel in izbrisan. [Privzeto je 28 ur, razen če je usmerjevalnik Floodfill, v katerem primeru je privzeto 8 ur]"
+
+msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
+msgstr "Ta nastavitev določa število sosednjih strežnikov, ki jih je treba preiskati hkrasno, ko se izvede delo Peer Exploration [privzeto je 1 sosednji strežnik začasno, ko je znanih več kot 3000 sosednjih strežnikov]. Opomba: povečanje te vrednosti poveča zahteve po širini pasma za preiskavo, in nastavljanje te vrednosti previsoko lahko povzroči prevelik zamik sporočil in vpliva na druge storitve, zato uporabljajte s skrbi!"
+
+msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
+msgstr "Ta nastavitev določa število vедерov DHT NetDb, ki jih bo delo Peer Exploration upoštevalo pri izvedbi. Po privzemu se število vедерov, ki jih je treba preiskati, bo razlikovalo glede na to, ali je usmerjevalnik delal več kot uro, ali je usmerjevalnik skrit ali v vrstici širine pasma 'K', in število znanih usmerjevalnikov."
+
+msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
+msgstr "Ta nastavitev (v sekundah) vam omogoča nadomestiti zamik med poskusami delo Peer Exploration, ki poskuša najti nove sosednje strežnike za dodajanje v NetDb. Delo se bo izvedlo vsake 80 sekund po privzemu, ali pa, če usmerjevalnik doživlja zamik nalog ali sporočil, vsake 3 minute. Če je velikost NetDb dosegle 4000 sosednjih strežnikov, počitnice se bo povečala na 15 minut. Morda bi želeli povečati zamik, če je vaš NetDb dobro naseljen (več kot 2000 sosednjih strežnikov), ali pa če želite zmanjšati skupno uporabo širine pasma. Opomba: Za usmerjevalnike Floodfill, to delo ne deluje."
+
+msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
+msgstr "Ta nastavitev določa maksimalno število dijev parterjev za vrstico za raziskavo. V I2P je maksimum 128, in v I2P+ je privzeta vrednost 512."
+
+msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
+msgstr "Ta nastavitev določa, ali bo usmerjevalnik, ki deluje kot zalivni, raziskoval NetDb, da se nauči o novih parterjev. [Privzeto je false, potreben je ponovni zagon]"
+
+msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
+msgstr "Ta nastavitev, ko je nastavljeno na true, prepreči usmerjevalnik, da direktno komunicira z drugimi usmerjevalniki, prisiljeva pa uporabo predstavljencev. [Privzeto je false, razen če je usmerjevalnik v skritem načinu]"
 
 msgid "When set to true, if your router is serving as a floodfill for the network, your <a href=/configadvanced#ffconf>floodfill participation</a> will be hidden from other routers."
 msgstr "Ko je nastavljeno na true, če služi vaš usmerjevalnik kot floodfill za omrežje, bo vaše <a href=/configadvanced#ffconf>učestvo floodfill</a> skrito pred drugimi usmerjevalniki."
@@ -5767,6 +5882,12 @@ msgstr "Določi maksimalno število sodelujocih tunelov, ki jih lahko usmerjeval
 
 msgid "Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 10% in I2P+, 33% in I2P]"
 msgstr "Določi maksimalni odstotek aktivnih lokalnih tunelov (klient in raziskovalni), ki jih bo sosednji strežnik uporabil. [Privzeto je 10% v I2P+, 33% v I2P]"
+
+msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
+msgstr "Ta nastavitev vam omogoča konfiguracijo minimalnega števila gostiteljstva sodelujočih tuneljev preden usmerjevalnik začne zavrniti zahteve za tunelj na podlagi očakovanja zahtev po širini pasma. [Privzeto je 100, če sistem deluje Android, 800, če sistem deluje na ARM in je na voljo manj kot 4 jezgre, 1200, če sistem deluje na ARM in je na voljo 4 ali več jezgre, v nasprotnem primeru 2500]"
+
+msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
+msgstr "Ta nastavitev vam omogoča izključiti starejše usmerjevalnike iz vaše NetDb. Usmerjevalniki, starejši od privzetega ali vrednosti, ki jo nastavite, bodo izbrisani iz NetDb in prepovedani za trajanje sejansa usmerjevalnika. Privzeto so izključeni usmerjevalniki, starški od 0.9.20. Opomba: začne z različico I2P+ 0.9.46+, se uporabljajo le usmerjevalniki, ki delujejo zelo nedavne različice, za izgradnjo lokalnih tuneljev. [Potreben je ponovni zagon]"
 
 msgid "When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]"
 msgstr "Ko je nastavljeno na true, datoteke informacij o usmerjevalniku, shranjene v mapi netDB vašega profila, ne bodo razdeljene na 64 podmapi. [Privzeto je false]"
@@ -5792,84 +5913,6 @@ msgstr "Manj kot 256MB dodeljeno JVM"
 msgid "Router running a non-native, software emulated version of the Java BigInteger library"
 msgstr "Usmerjevalnik delajo neautohtona, verzija programske opreme Java BigInteger knjižnice"
 
-msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
-msgstr "Ta nastavitev vam omogoča konfiguracijo minimalnega števila gostiteljstva sodelujočih tuneljev preden usmerjevalnik začne zavrniti zahteve za tunelj na podlagi očakovanja zahtev po širini pasma. [Privzeto je 100, če sistem deluje Android, 800, če sistem deluje na ARM in je na voljo manj kot 4 jezgre, 1200, če sistem deluje na ARM in je na voljo 4 ali več jezgre, v nasprotnem primeru 2500]"
-
-msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
-msgstr "Če je nastavljeno na true, usmerjevalnik bo spremenil svojo identiteto in vrata UDP, ko se usmerjevalnik ponovno zagni, nato pa izbriše ključ iz router.config, da prepreči dodatne spremembe. [Privzeto je false]"
-
-msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr "Če je nastavljeno na false, usmerjevalnik ne bo omejil zahtev za izgradnjo tuneljev iz drugih usmerjevalnikov, in bi se moralo uporabljati z previdom. [Privzeto je true, potreben je ponovni zagon]"
-
-msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr "Če je nastavljeno na false, usmerjevalnik ne bo blokiriral zahtev za izgradnjo tuneljev iz počasnejših ali nedosegljivih usmerjevalnikov, ki delujejo starejše različice. [Privzeto je true, potreben je ponovni zagon]"
-
-msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
-msgstr "Ko je nastavljeno, določi tvrdi omejitev števila tunelov, ki jih lahko usmerjevalnik izgradi hkrasno. Po privzemu uporablja usmerjevalnik povprečno obdobje izgradnje in trenutno izhodno širino pasma za določanje optimalne hitrosti izgradnje. [Ponovni zagon zahtoven]"
-
-msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
-msgstr "Če želite namestiti nepodpisane (.zip) posodobitve I2P, to mora biti dodano v vaš <code>router.config</code> datoteko, razen če ste že nastavili <code>routerconsole.advanced=true</code>, v katerem primeru je ta možnost že zagotovljena. Opomba: od I2P+ 0.9.48+, namestitev <a href=/configupdate#i2pupdates>nepodpisanih posodobitev</a> je omogočena privzeto."
-
-msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
-msgstr "Ta nastavitev vam omogoča konfiguracijo URL-ja za posodobitve nepodpisanih posodobitev, če je omogočeno. URL mora končati z <code>/i2pupdate.zip</code>. Opomba: nepodpisane posodobitve ne namestite, razen če zaupate v vir posodobitve!"
-
-msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
-msgstr "Ta nastavitev dovoljuje onemogočanje SSU preizkusov za določanje, ali je vaš usmerjevalnik omejen, in se lahko omogoči za usmerjevalnike, ki so zanesljivo neomejeni, vendar doživljajo nepredvidljive težave z omejevalcem. Če je testiranje onemogočeno, bi morala SSU in NTCP poročata o vašem trenutnem javnem ip naslovu na <a href=/info>strani za informacije o usmerjevalniku</a>. [Ponovni zagon zahtoven]"
-
-msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
-
-msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
-msgstr "Ta nastavitev določa, kateri prenos ima prednost pri komunikaciji z sosednjimi strežniki. Po privzemu je NTCP izbran pred UDP (SSU). Če nastavite vrednost na true, bo UDP izbran, razen če obstaja predhodno vzpostavljena povezava NTCP; ko je nastavljeno na vedno, bo UDP vedno uporabljen, ne glede na katero koli predhodno vzpostavljeno povezavo NTCP. [Privzeto je false]"
-
-msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
-msgstr "Ta nastavitev specifična za tunel vam omogoča omogočanje ali onemogočanje odgovorov na pings, poslane na strežnike gostiteljene s strani usmerjevalnika. Da onemogočite pings, morate dodati vrstico <code>i2p.streaming.answerPings=false</code> v sekcijo <i>Prilagojene možnosti</i> za konfiguracijo strežnika v Menedžer tunela."
-
-msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
-msgstr "Ko je nastavljeno na true, deluje I2P brez omrežne povezanosti, kar je uporabno, če neprestano ponovno zagnate usmerjevalnik za preizpito posodobitve kode, saj to prepreči prekinitev omrežja."
-
-msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr "Ta nastavitev, ko je omogočena, vnesi naključen pong zamik do 50ms za vse ping-omogočene strežnike gostiteljene s strani usmerjevalnika. Privzeto je onemogočeno. [Ponovni zagon zahtoven]"
-
-msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr "Ta nastavitev, ko je omogočena, spremeni maksimalno naključno zamudo pong odgovora za strežnike, ki podpirajo ping, če je tudi omogočena i2p.streaming.enablePongDelay. Če ni jasno določeno, se uporabi privzeto vrednost 50 ms."
-
-msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
-msgstr "Ta nastavitev (v milisekundah) določa, koliko časa paket lahko ostane v CoDel vrsti preden ga izbrišemo. Privzeto je 1000 ms. [Potrebna ponovna zagona]"
-
-msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
-msgstr "Ta nastavitev določa maksimalno število sporočil v izhodnem redu preden je označen kot poln. [Privzeto je 768]"
-
-msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
-msgstr "Ta nastavitev določa maksimalno število sporočil nad maksimalno vrednostjo vrste preden so nadaljnja sporočila zavržena. [Privzeto je 128]"
-
-msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
-msgstr "Ta nastavitev (v milisekundah) vam omogoča ročno konfiguracijo ciljne vrednosti zamika vrste za sistem upravljanja vrste CoDel. Privzeto je 50ms. [Ponovni zagon zahtoven]"
-
-msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
-msgstr "Ta nastavitev (v urah) določa, kako star je RouterInfo v NetDb (njegova zadnja znana datum izdaje) preden je razvrščen kot zastarel in izbrisan. [Privzeto je 28 ur, razen če je usmerjevalnik Floodfill, v katerem primeru je privzeto 8 ur]"
-
-msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
-msgstr "Ta nastavitev določa število sosednjih strežnikov, ki jih je treba preiskati hkrasno, ko se izvede delo Peer Exploration [privzeto je 1 sosednji strežnik začasno, ko je znanih več kot 3000 sosednjih strežnikov]. Opomba: povečanje te vrednosti poveča zahteve po širini pasma za preiskavo, in nastavljanje te vrednosti previsoko lahko povzroči prevelik zamik sporočil in vpliva na druge storitve, zato uporabljajte s skrbi!"
-
-msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
-msgstr "Ta nastavitev določa število vедерov DHT NetDb, ki jih bo delo Peer Exploration upoštevalo pri izvedbi. Po privzemu se število vедерov, ki jih je treba preiskati, bo razlikovalo glede na to, ali je usmerjevalnik delal več kot uro, ali je usmerjevalnik skrit ali v vrstici širine pasma 'K', in število znanih usmerjevalnikov."
-
-msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
-msgstr "Ta nastavitev (v sekundah) vam omogoča nadomestiti zamik med poskusami delo Peer Exploration, ki poskuša najti nove sosednje strežnike za dodajanje v NetDb. Delo se bo izvedlo vsake 80 sekund po privzemu, ali pa, če usmerjevalnik doživlja zamik nalog ali sporočil, vsake 3 minute. Če je velikost NetDb dosegle 4000 sosednjih strežnikov, počitnice se bo povečala na 15 minut. Morda bi želeli povečati zamik, če je vaš NetDb dobro naseljen (več kot 2000 sosednjih strežnikov), ali pa če želite zmanjšati skupno uporabo širine pasma. Opomba: Za usmerjevalnike Floodfill, to delo ne deluje."
-
-msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
-msgstr "Ta nastavitev določa maksimalno število dijev parterjev za vrstico za raziskavo. V I2P je maksimum 128, in v I2P+ je privzeta vrednost 512."
-
-msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
-msgstr "Ta nastavitev določa, ali bo usmerjevalnik, ki deluje kot zalivni, raziskoval NetDb, da se nauči o novih parterjev. [Privzeto je false, potreben je ponovni zagon]"
-
-msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
-msgstr "Ta nastavitev, ko je nastavljeno na true, prepreči usmerjevalnik, da direktno komunicira z drugimi usmerjevalniki, prisiljeva pa uporabo predstavljencev. [Privzeto je false, razen če je usmerjevalnik v skritem načinu]"
-
-msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
-msgstr "Ta nastavitev vam omogoča izključiti starejše usmerjevalnike iz vaše NetDb. Usmerjevalniki, starejši od privzetega ali vrednosti, ki jo nastavite, bodo izbrisani iz NetDb in prepovedani za trajanje sejansa usmerjevalnika. Privzeto so izključeni usmerjevalniki, starški od 0.9.20. Opomba: začne z različico I2P+ 0.9.46+, se uporabljajo le usmerjevalniki, ki delujejo zelo nedavne različice, za izgradnjo lokalnih tuneljev. [Potreben je ponovni zagon]"
-
 msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. [Default is 4]"
 msgstr "Ta nastavitev določa število testov parterja, ki se izvajajo istočasno, uporabljenih za določanje zavzete parterja. [Privzeto je 4]"
 
@@ -5885,14 +5928,17 @@ msgstr "Ta nastavitev določa, ali se statistike o našem usmerjevalniku nesiste
 msgid "This setting configures the initial size of the outbound message queue. [Default is 64]"
 msgstr "Ta nastavitev konfigurira začetno velikost vrste izhodnih sporočil. [Privzeto je 64]"
 
-msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
-msgstr "Ta nastavitev konfigurira maksimalno velikost vrste vhodnih sporočil. [Privzeto je 1024]"
-
 msgid "This setting configures the maximum number of inbound messages queued per cycle (pump). [Default is 24]"
 msgstr "Ta nastavitev konfigurira maksimalno število vhodnih sporočil, vrstico na ciklus (pomp). [Privzeto je 24]"
 
+msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
+msgstr "Ta nastavitev konfigurira maksimalno velikost vrste vhodnih sporočil. [Privzeto je 1024]"
+
 msgid "This setting configures the maximum number of outbound messages queued per cycle (pump). [Default is 64]"
 msgstr "Ta nastavitev konfigurira maksimalno število izhodnih sporočil, vrstico na ciklus (pomp). [Privzeto je 64]"
+
+msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
+msgstr "Če je nastavljeno na true, usmerjevalnik bo spremenil svojo identiteto in vrata UDP, ko se usmerjevalnik ponovno zagni, nato pa izbriše ključ iz router.config, da prepreči dodatne spremembe. [Privzeto je false]"
 
 msgid "This setting (in milliseconds) allows you to manually configure the delay between router refresh updates run by the Refresh Routers Job. By default the pause between refreshes is determined by the size of the NetDb, and introduces some randomness in the timing to mitigate traffic analysis. For values lower than 2000 milliseconds, increasing the value of <code>router.refreshTimeout</code> is recommended. Note that setting this value below 2000 milliseconds will increase your network traffic and may introduce job lag, and is not recommended for sustained use."
 msgstr "Ta nastavitev (v milisekundah) vam omogoča ročno konfiguriranje zamika med posveževanjem usmerjevalnika, izvedenim posluge osveževanja usmerjevalnika. Privzeto je pauza med osveževanjem določena glede na velikost NetDb, in v časovni razpored vstavlja nekaj naključnosti, da olajša analizo prometa. Za vrednosti manjše od 2000 milisekund, je priporočljivo povečati vrednost <code>router.refreshTimeout</code>. Opomba: nastavitev te vrednosti pod 2000 milisekund bo povečala vaš omrežni promet in lahko vnesla zamik posluge, in za stalno uporabo ni priporočljivo."
@@ -5906,26 +5952,56 @@ msgstr "Ta nastavitev (v sekundah) vam omogoča ročno konfiguriranje časa, kol
 msgid "This setting determines whether routers classified as uninteresting (K or L tier, unreachable or older than 0.9.50) are checked during the refresh router process after 1 hour of uptime. [Default is false]"
 msgstr "Ta nastavitev določa, ali se usmerjevalniki, kategorizirani kot neinteresni (raven K ali L, nedosegljivi ali starški od 0.9.50) preverjajo med postopkom osvežitve usmerjevalnika po 1 uri časa delovanja. [Privzeto je false]"
 
+msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
+msgstr ""
+
+msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
+msgstr "Ko je nastavljeno, določi tvrdi omejitev števila tunelov, ki jih lahko usmerjevalnik izgradi hkrasno. Po privzemu uporablja usmerjevalnik povprečno obdobje izgradnje in trenutno izhodno širino pasma za določanje optimalne hitrosti izgradnje. [Ponovni zagon zahtoven]"
+
+msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
+msgstr "Če želite namestiti nepodpisane (.zip) posodobitve I2P, to mora biti dodano v vaš <code>router.config</code> datoteko, razen če ste že nastavili <code>routerconsole.advanced=true</code>, v katerem primeru je ta možnost že zagotovljena. Opomba: od I2P+ 0.9.48+, namestitev <a href=/configupdate#i2pupdates>nepodpisanih posodobitev</a> je omogočena privzeto."
+
+msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
+msgstr "Ta nastavitev vam omogoča konfiguracijo URL-ja za posodobitve nepodpisanih posodobitev, če je omogočeno. URL mora končati z <code>/i2pupdate.zip</code>. Opomba: nepodpisane posodobitve ne namestite, razen če zaupate v vir posodobitve!"
+
 msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
 msgstr "Ta nastavitev (v minutah) vam omogoča ročno konfiguriranje, koliko počakati po zagonu, preden se RouterInfos v NetDb preverjajo glede na veljavnost, po kateri se bodo le veljavni usmerjevalniki sprejeli za vključitev. Ko se preverjanje izvede, bodo izbrisane potekle RouterInfos in nedelovanje parterjev, dostopni le preko SSU, odstranjeni iz NetDb. [Privzeto je 60 minut] Opomba: Ta nastavitev ni povezana z starškimi usmerjevalniki (privzeto starški od 0.9.29), ki jih NetDb odstranijo in prepove za sejansko usmerjevalnika takoj po poskusu shranjevanja NetDb."
 
-msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
-msgstr "Ta nastavitev, ko je nastavljeno na true, bo prikazala povprečje testa parterja v sekciji Zastoja stranice, izračunano z dodajanjem povprečja uspešnih testov parterja in povprečja presežka časa, vzeta od neuspešnih testov. Povprečna vrednost se lahko uporablja kot vodenje za določanje optimalne <code>router.peerTestTimeout</code> vrednosti. [Privzeto je false]"
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
+msgstr ""
 
-msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
-msgstr "Ta nastavitev, ko je nastavljeno na true, bo prikazala povezave <i>Spletne strani, ki vam zanimajo</i> na <a href=/sitemap>spletne mapi</a>. [Privzeto je false]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
+msgstr ""
 
-msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr "Ta nastavitev dovoli, da nastavite prilagojeno tekstovni predpon za naslov strani na straneh konzole usmerjevalnika, potencialno uporaben za razlikovanje med več konzolami, odprte na zavihkih brskalnika."
+msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
+msgstr "Ta nastavitev dovoljuje onemogočanje SSU preizkusov za določanje, ali je vaš usmerjevalnik omejen, in se lahko omogoči za usmerjevalnike, ki so zanesljivo neomejeni, vendar doživljajo nepredvidljive težave z omejevalcem. Če je testiranje onemogočeno, bi morala SSU in NTCP poročata o vašem trenutnem javnem ip naslovu na <a href=/info>strani za informacije o usmerjevalniku</a>. [Ponovni zagon zahtoven]"
 
-msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
-msgstr "Ta nastavitev dovoli konfiguracijo alternativnih strežnikov NTP, potrebnih za zagotavljanje, da vaš usmerjevalnik vzdržuje točen čas na uro. [Privzeto je 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
+msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
+msgstr "Ta nastavitev določa, kateri prenos ima prednost pri komunikaciji z sosednjimi strežniki. Po privzemu je NTCP izbran pred UDP (SSU). Če nastavite vrednost na true, bo UDP izbran, razen če obstaja predhodno vzpostavljena povezava NTCP; ko je nastavljeno na vedno, bo UDP vedno uporabljen, ne glede na katero koli predhodno vzpostavljeno povezavo NTCP. [Privzeto je false]"
+
+msgid "miscellaneous"
+msgstr ""
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "Če je nastavljeno na true, ta možnost bo postavila ikono v sistemske vrstice / območje obvestil, z osnovnimi možnostmi kontrole storitve. [Onemogočeno privzeto]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
 msgstr "Ta nastavitev omogoča konfiguracijo maksimalnega števila datotek na torrent, ki ga bo dovolil I2PSnark, ko prenaša ali ustvari torrent. Opomba: značajno povečanje vrednosti iz privzeta 2000 datotek morda zahteva dodatno konfiguracijo na gostiteljskem sistemu, da poveča maksimalno število odprtyh datotek, ki jih operacijski sistem dovoli (npr. <code>ulimit -n</code> na Linuxu). Da spremeniš, dodaj v konfiguracijsko datoteko I2PSnark <code>i2psnark.config</code>. [Ponovni zagon I2PSnark ali usmerjevalnika zahtoven]"
+
+msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
+msgstr "Ta nastavitev specifična za tunel vam omogoča omogočanje ali onemogočanje odgovorov na pings, poslane na strežnike gostiteljene s strani usmerjevalnika. Da onemogočite pings, morate dodati vrstico <code>i2p.streaming.answerPings=false</code> v sekcijo <i>Prilagojene možnosti</i> za konfiguracijo strežnika v Menedžer tunela."
+
+msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
+msgstr "Ta nastavitev, ko je omogočena, vnesi naključen pong zamik do 50ms za vse ping-omogočene strežnike gostiteljene s strani usmerjevalnika. Privzeto je onemogočeno. [Ponovni zagon zahtoven]"
+
+msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
+msgstr "Ta nastavitev, ko je omogočena, spremeni maksimalno naključno zamudo pong odgovora za strežnike, ki podpirajo ping, če je tudi omogočena i2p.streaming.enablePongDelay. Če ni jasno določeno, se uporabi privzeto vrednost 50 ms."
+
+msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
+msgstr "Ko je nastavljeno na true, deluje I2P brez omrežne povezanosti, kar je uporabno, če neprestano ponovno zagnate usmerjevalnik za preizpito posodobitve kode, saj to prepreči prekinitev omrežja."
+
+msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
+msgstr "Ta nastavitev dovoli konfiguracijo alternativnih strežnikov NTP, potrebnih za zagotavljanje, da vaš usmerjevalnik vzdržuje točen čas na uro. [Privzeto je 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 
 msgid "Recent I2P+ Changes"
 msgstr "Nedavne spremembe I2P+"
@@ -6142,6 +6218,18 @@ msgstr "Za obe ne-SSL in SSL"
 
 msgid "For SSL only"
 msgstr "Sam za SSL"
+
+msgid "How can I configure the console and web services to be accessible on my local network?"
+msgstr ""
+
+msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
+msgstr ""
+
+msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
+msgstr ""
+
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager’s configuration section using the <i>reachable by</i> dropdown."
+msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Kako se povežem na IRC znotraj I2P?"
@@ -7402,9 +7490,6 @@ msgstr "Sosednji strežniki omrežja"
 msgid "peer profiles"
 msgstr "profili sosednjih strežnikov"
 
-msgid "Peer Profiles"
-msgstr "Profili sosednjih strežnikov"
-
 msgid "Session Banned Peers"
 msgstr "Sosednji strežniki, prepovedani v seji"
 
@@ -7621,6 +7706,9 @@ msgstr "Preklopi tunele"
 msgid "Peer Profile"
 msgstr "Profil sosednjega strežnika"
 
+msgid "Profile View"
+msgstr ""
+
 msgid "Profile for peer"
 msgstr "Profil za sosednje strežnike"
 
@@ -7758,6 +7846,35 @@ msgstr "Končano"
 
 
 
+
+
 #, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

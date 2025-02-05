@@ -38,12 +38,6 @@ msgstr "standard bredbånd og pålitelighet"
 msgid "higher bandwidth and reliability"
 msgstr "høyere bredbånd og pålitelighet"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Ugyldig innsending av skjema, sannsynligvis fordi du brukte 'tilbake' eller \"last på nytt\"-knappen i nettleseren din. Ugyldig skjemainnsendelse, sannsynligvis fordi du brukte 'tilbake' eller 'oppdater'-knappen i nettleseren. Send inn på nytt."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Hvis problemet vedvarer, kontroller at du har aktivert informasjonskapsler i nettleseren din.Hvis problemet vedvarer, må du kontrollere at du har aktivert informasjonskapsler i nettleseren din."
-
 msgid "Configuration reloaded for all tunnels"
 msgstr "Oppsett oppdatert for alle tunneler"
 
@@ -1227,6 +1221,12 @@ msgstr "Generer autentisering"
 
 msgid "SSL Helper"
 msgstr "SSL-hjelper"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Ugyldig innsending av skjema, sannsynligvis fordi du brukte 'tilbake' eller \"last på nytt\"-knappen i nettleseren din. Ugyldig skjemainnsendelse, sannsynligvis fordi du brukte 'tilbake' eller 'oppdater'-knappen i nettleseren. Send inn på nytt."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Hvis problemet vedvarer, kontroller at du har aktivert informasjonskapsler i nettleseren din.Hvis problemet vedvarer, må du kontrollere at du har aktivert informasjonskapsler i nettleseren din."
 
 msgid "Experts only!"
 msgstr "For eksperter!"

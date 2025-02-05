@@ -8,8 +8,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Warning: Invalid Request URI"
-msgstr "Varoitus: virheellinen pyyntöinternetverkkoresurssi"
+msgid "Website Unknown"
+msgstr "Verkkosivusto tuntematon"
 
 msgid "Router Console"
 msgstr "Reititinpääteikkuna"
@@ -25,71 +25,6 @@ msgstr "Asetukset"
 
 msgid "Help"
 msgstr "Opaste"
-
-msgid "The request URI is invalid, and probably contains illegal characters."
-msgstr "Pyynnön URI on virheellinen ja sisältää todennäköisesti laittomia merkkejä."
-
-msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
-msgstr "Jos napsautit linkkiä, tarkista URI:n lopusta merkit, jotka selain on vahingossa lisännyt."
-
-msgid "Connection Reset"
-msgstr "Yhteyden nollaus"
-
-msgid "The connection to the website was reset while the page was loading."
-msgstr "Yhteys verkkosivustoon nollattiin sivun latautuessa."
-
-msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Sivusto saattaa olla tilapäisesti poissa käytöstä, liian varattu tai se on estänyt pääsysi."
-
-#, java-format
-msgid "You may want to {0}retry{1}."
-msgstr "Haluat ehkä {0}yrittää uudelleen{1}."
-
-#, java-format
-msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
-msgstr "Jos jätät tämän sivun auki, se yrittää automaattisesti muodostaa yhteyden verkkosivustoon {0} sekunnin välein epäonnistuneen yhteysyrityksen jälkeen."
-
-msgid "Could not find the following destination:"
-msgstr "Seuraavaa kohdetta ei löytynyt:"
-
-msgid "Warning: Non-HTTP Protocol"
-msgstr "Varoitus: ei-HTTP-yhteyskäytäntö"
-
-msgid "The request uses a bad protocol."
-msgstr "Pyyntö käyttää väärää yhteyskäytäntöä."
-
-msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
-msgstr "I2P HTTP-välityspalvelin tukee vain HTTP- ja HTTPS-pyyntöjä."
-
-msgid "Other protocols such as FTP are not allowed."
-msgstr "Muut yhteyskäytännöt, kuten FTP, eivät ole sallittuja."
-
-msgid "Warning: No Outproxy Configured"
-msgstr "Varoitus: Outproxya ei ole määritetty"
-
-msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
-msgstr "Pyyntösi koski I2P:n ulkopuolista sivustoa, mutta HTTP-välityspalvelinta ei ole määritetty."
-
-msgid "Please configure an outproxy in I2PTunnel."
-msgstr "Määritä välityspalvelin I2PTunnelissa."
-
-msgid "Error: Request Denied"
-msgstr "Virhe: Pyyntö hylätty"
-
-msgid "Error: Cannot Access Router Console via I2P Proxy"
-msgstr "Virhe: Reititinkonsoliin ei pääse I2P-välityspalvelimen kautta"
-
-msgid "Your browser is misconfigured."
-msgstr "Selaimesi asetukset on määritetty väärin."
-
-msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
-msgstr "Älä käytä välityspalvelinta päästäksesi reititinkonsoliin, paikalliseen isäntään tai paikalliseen LAN-kohteisiin."
-
-msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
-msgstr "Sinun on estettävä 127.0.0.1:n (tai osoitteen, jolla käytät I2P-konsolia) reitittäminen I2P:n http-välityspalvelimen kautta, yleensä jättämällä osoite pois selaimen välityspalvelimen määritysosiosta."
-
-msgid "Website Unknown"
-msgstr "Verkkosivusto tuntematon"
 
 msgid "Website Not Found in Addressbook"
 msgstr "Verkkosivustoa ei löydy osoitekirjasta"
@@ -111,99 +46,35 @@ msgstr "Muuten etsi Base 32- tai osoiteapulinkki tai käytä alla olevaa hyppypa
 msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
 msgstr "Näetkö tämän sivun usein? Katso {0} UKK {1} apua {2} Joidenkin tilausten {3} lisääminen osoitekirjaasi."
 
-msgid "Website Unreachable"
-msgstr "Verkkosivustoon ei saada yhteyttä"
+msgid "Could not find the following destination:"
+msgstr "Seuraavaa kohdetta ei löytynyt:"
 
-msgid "The website was not reachable, because its lease set was not found."
-msgstr "Sivusto ei ollut tavoitettavissa, koska sen vuokrasopimusta ei löytynyt."
+msgid "Warning: Non-HTTP Protocol"
+msgstr "Varoitus: ei-HTTP-yhteyskäytäntö"
 
-msgid "The website is probably down, but there could also be network congestion."
-msgstr "Verkkosivusto on todennäköisesti poissa käytöstä, mutta verkko voi myös olla ruuhkautunut."
+msgid "The request uses a bad protocol."
+msgstr "Pyyntö käyttää väärää yhteyskäytäntöä."
 
-msgid "Outproxy Not Found"
-msgstr "Välityspalvelinta ei löydy"
+msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
+msgstr "I2P HTTP-välityspalvelin tukee vain HTTP- ja HTTPS-pyyntöjä."
 
-msgid "The HTTP Outproxy was not found."
-msgstr "HTTP-välityspalvelinta ei löytynyt."
+msgid "Other protocols such as FTP are not allowed."
+msgstr "Muut yhteyskäytännöt, kuten FTP, eivät ole sallittuja."
 
-msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "Se on offline-tilassa, verkossa on ruuhkaa tai reitittimesi ei ole vielä hyvin integroitu kumppanien kanssa."
+msgid "Error: Request Denied"
+msgstr "Virhe: Pyyntö hylätty"
 
-#, java-format
-msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
-msgstr "Haluat ehkä {0}yrittää uudelleen{1}, koska tämä valitsee satunnaisesti uudelleen välityspalvelimen {2}täällä{3} määrittämästäsi poolista (jos sinulla on useampi kuin yksi määritetty)."
+msgid "Error: Cannot Access Router Console via I2P Proxy"
+msgstr "Virhe: Reititinkonsoliin ei pääse I2P-välityspalvelimen kautta"
 
-#, java-format
-msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
-msgstr "Jos ongelmat jatkuvat, voit muokata välityspalvelinluetteloasi {0}täällä{1}."
+msgid "Your browser is misconfigured."
+msgstr "Selaimesi asetukset on määritetty väärin."
 
-msgid "Warning: Request Denied"
-msgstr "Varoitus: Pyyntö hylätty"
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
+msgstr "Älä käytä välityspalvelinta päästäksesi reititinkonsoliin, paikalliseen isäntään tai paikalliseen LAN-kohteisiin."
 
-msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
-msgstr "Tämä osoite näyttää olevan epämuodostunut. Varmista, että olet toimittanut kelvollisen osoitteen!"
-
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "Yritit muodostaa yhteyden muuhun kuin I2P-verkkosivustoon tai -paikkaan."
-
-msgid "Outproxy Unreachable"
-msgstr "Outproxy ei tavoitettavissa"
-
-msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
-msgstr "HTTP-välityspalvelin ei ollut tavoitettavissa, koska se käyttää salausvaihtoehtoja, joita I2P- tai Java-versiosi ei tue."
-
-msgid "Could not connect to the following destination:"
-msgstr "Yhteyttä ei voitu muodostaa seuraavaan kohteeseen:"
-
-msgid "Proxy Authorization Required"
-msgstr "Välityspalvelimen valtuutus vaaditaan"
-
-msgid "I2P HTTP Proxy Authorization Required"
-msgstr "I2P HTTP-välityspalvelimen valtuutus vaaditaan"
-
-msgid "This proxy is configured to require a username and password for access."
-msgstr "Tämä välityspalvelin on määritetty vaatimaan pääsyä varten käyttäjänimen ja salasanan."
-
-#, java-format
-msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
-msgstr "Anna käyttäjänimesi ja salasanasi tai tarkista {0}reitittimen asetukset{1} tai {2}I2PTunnel-määritykset{3}."
-
-#, java-format
-msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
-msgstr "Voit poistaa valtuutuksen käytöstä poistamalla määritykset {0}i2ptunnel.proxy.auth=basic{1}, pysäyttämällä ja käynnistämällä sitten HTTP-välityspalvelintunnelin uudelleen."
-
-msgid "Warning: Invalid Destination"
-msgstr "Varoitus: virheellinen kohde"
-
-msgid "The website destination specified was not valid, or was otherwise unreachable."
-msgstr "Määritetty verkkosivuston kohde ei ollut kelvollinen tai siihen ei muuten ollut tavoitetta."
-
-msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
-msgstr "Ehkä liitit väärään Base 64 -merkkijonoon tai linkki, jota seuraat, on huono."
-
-msgid "The I2P host could also be offline."
-msgstr "I2P-isäntä voi olla myös offline-tilassa."
-
-msgid "The connection to the proxy was reset."
-msgstr "Yhteys välityspalvelimeen nollattiin."
-
-msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Välityspalvelin voi olla tilapäisesti poissa käytöstä, liian varattu tai se on estänyt pääsysi."
-
-msgid "The HTTP outproxy was not reachable, because its lease set was not found."
-msgstr "HTTP-välityspalvelin ei ollut tavoitettavissa, koska sen vuokrasopimusta ei löytynyt."
-
-msgid "The outproxy is probably down, but there could also be network congestion."
-msgstr "Välityspalvelin on todennäköisesti poissa käytöstä, mutta verkko voi myös olla ruuhkautunut."
-
-msgid "Warning: Authorization Required"
-msgstr "Varoitus: Vaaditaan lupa"
-
-msgid "The website was not reachable."
-msgstr "Sivusto ei ollut tavoitettavissa."
-
-msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "Verkkosivusto on offline-tilassa, verkossa on ruuhkaa tai reitittimesi ei ole vielä hyvin integroitu kumppanien kanssa."
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "Sinun on estettävä 127.0.0.1:n (tai osoitteen, jolla käytät I2P-konsolia) reitittäminen I2P:n http-välityspalvelimen kautta, yleensä jättämällä osoite pois selaimen välityspalvelimen määritysosiosta."
 
 msgid "Warning: Destination Key Conflict"
 msgstr "Varoitus: kohdeavainristiriita"
@@ -217,24 +88,81 @@ msgstr "Joku saattaa yrittää esiintyä toisena verkkosivustona tai ihmiset ova
 msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
 msgstr "Ratkaise ristiriita päättämällä, mihin avaimeen luotat, ja joko ohita osoiteapulinkki tai poista isäntämerkintä osoitekirjasta ja napsauta osoiteapulinkkiä uudelleen."
 
-msgid "The Base32 address is invalid."
-msgstr "Base32-osoite on virheellinen."
+msgid "Connection Reset"
+msgstr "Yhteyden nollaus"
 
-msgid "Warning: Bad Address Helper"
-msgstr "Varoitus: Huono osoiteapuohjelma"
+msgid "The connection to the website was reset while the page was loading."
+msgstr "Yhteys verkkosivustoon nollattiin sivun latautuessa."
+
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Sivusto saattaa olla tilapäisesti poissa käytöstä, liian varattu tai se on estänyt pääsysi."
 
 #, java-format
-msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
-msgstr "URL-osoitteen apuavainta ({0}i2paddresshelper={1}) ei voida ratkaista."
+msgid "You may want to {0}retry{1}."
+msgstr "Haluat ehkä {0}yrittää uudelleen{1}."
 
-msgid "It seems to be garbage data, or a mistyped Base 32 address."
-msgstr "Se näyttää olevan roskatietoa tai väärin kirjoitettu Base 32 -osoite."
+#, java-format
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
+msgstr "Jos jätät tämän sivun auki, se yrittää automaattisesti muodostaa yhteyden verkkosivustoon {0} sekunnin välein epäonnistuneen yhteysyrityksen jälkeen."
 
-msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
-msgstr "Tarkista URL-osoitteesi yrittääksesi korjata apuavaimen kelvolliseksi Base 32 -isäntänimeksi tai Base 64 -avaimeksi."
+msgid "Website Unreachable"
+msgstr "Verkkosivustoon ei saada yhteyttä"
 
 msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
 msgstr "Verkkosivusto ei ollut tavoitettavissa, koska se käyttää salausvaihtoehtoja, joita I2P- tai Java-versiosi ei tue."
+
+msgid "Could not connect to the following destination:"
+msgstr "Yhteyttä ei voitu muodostaa seuraavaan kohteeseen:"
+
+msgid "The website was not reachable, because its lease set was not found."
+msgstr "Sivusto ei ollut tavoitettavissa, koska sen vuokrasopimusta ei löytynyt."
+
+msgid "The website is probably down, but there could also be network congestion."
+msgstr "Verkkosivusto on todennäköisesti poissa käytöstä, mutta verkko voi myös olla ruuhkautunut."
+
+msgid "The connection to the proxy was reset."
+msgstr "Yhteys välityspalvelimeen nollattiin."
+
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Välityspalvelin voi olla tilapäisesti poissa käytöstä, liian varattu tai se on estänyt pääsysi."
+
+#, java-format
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "Haluat ehkä {0}yrittää uudelleen{1}, koska tämä valitsee satunnaisesti uudelleen välityspalvelimen {2}täällä{3} määrittämästäsi poolista (jos sinulla on useampi kuin yksi määritetty)."
+
+#, java-format
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr "Jos ongelmat jatkuvat, voit muokata välityspalvelinluetteloasi {0}täällä{1}."
+
+msgid "Outproxy Unreachable"
+msgstr "Outproxy ei tavoitettavissa"
+
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "HTTP-välityspalvelin ei ollut tavoitettavissa, koska se käyttää salausvaihtoehtoja, joita I2P- tai Java-versiosi ei tue."
+
+msgid "The website was not reachable."
+msgstr "Sivusto ei ollut tavoitettavissa."
+
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Verkkosivusto on offline-tilassa, verkossa on ruuhkaa tai reitittimesi ei ole vielä hyvin integroitu kumppanien kanssa."
+
+msgid "Warning: No Outproxy Configured"
+msgstr "Varoitus: Outproxya ei ole määritetty"
+
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr "Pyyntösi koski I2P:n ulkopuolista sivustoa, mutta HTTP-välityspalvelinta ei ole määritetty."
+
+msgid "Please configure an outproxy in I2PTunnel."
+msgstr "Määritä välityspalvelin I2PTunnelissa."
+
+msgid "Outproxy Not Found"
+msgstr "Välityspalvelinta ei löydy"
+
+msgid "The HTTP Outproxy was not found."
+msgstr "HTTP-välityspalvelinta ei löytynyt."
+
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Se on offline-tilassa, verkossa on ruuhkaa tai reitittimesi ei ole vielä hyvin integroitu kumppanien kanssa."
 
 msgid "Information: New Host Name"
 msgstr "Tiedot: Uusi isäntänimi"
@@ -256,6 +184,78 @@ msgstr "Jos et tallenna sitä, isäntänimi unohtuu seuraavan reitittimen uudell
 
 msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
 msgstr "Jos et halua vierailla tällä isännällä, napsauta selaimesi \"takaisin\"-painiketta."
+
+msgid "Proxy Authorization Required"
+msgstr "Välityspalvelimen valtuutus vaaditaan"
+
+msgid "I2P HTTP Proxy Authorization Required"
+msgstr "I2P HTTP-välityspalvelimen valtuutus vaaditaan"
+
+msgid "This proxy is configured to require a username and password for access."
+msgstr "Tämä välityspalvelin on määritetty vaatimaan pääsyä varten käyttäjänimen ja salasanan."
+
+#, java-format
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "Anna käyttäjänimesi ja salasanasi tai tarkista {0}reitittimen asetukset{1} tai {2}I2PTunnel-määritykset{3}."
+
+#, java-format
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "Voit poistaa valtuutuksen käytöstä poistamalla määritykset {0}i2ptunnel.proxy.auth=basic{1}, pysäyttämällä ja käynnistämällä sitten HTTP-välityspalvelintunnelin uudelleen."
+
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr "HTTP-välityspalvelin ei ollut tavoitettavissa, koska sen vuokrasopimusta ei löytynyt."
+
+msgid "The outproxy is probably down, but there could also be network congestion."
+msgstr "Välityspalvelin on todennäköisesti poissa käytöstä, mutta verkko voi myös olla ruuhkautunut."
+
+msgid "Warning: Request Denied"
+msgstr "Varoitus: Pyyntö hylätty"
+
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr "Tämä osoite näyttää olevan epämuodostunut. Varmista, että olet toimittanut kelvollisen osoitteen!"
+
+msgid "You attempted to connect to a non-I2P website or location."
+msgstr "Yritit muodostaa yhteyden muuhun kuin I2P-verkkosivustoon tai -paikkaan."
+
+msgid "Warning: Bad Address Helper"
+msgstr "Varoitus: Huono osoiteapuohjelma"
+
+#, java-format
+msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgstr "URL-osoitteen apuavainta ({0}i2paddresshelper={1}) ei voida ratkaista."
+
+msgid "It seems to be garbage data, or a mistyped Base 32 address."
+msgstr "Se näyttää olevan roskatietoa tai väärin kirjoitettu Base 32 -osoite."
+
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr "Tarkista URL-osoitteesi yrittääksesi korjata apuavaimen kelvolliseksi Base 32 -isäntänimeksi tai Base 64 -avaimeksi."
+
+msgid "Warning: Invalid Destination"
+msgstr "Varoitus: virheellinen kohde"
+
+msgid "The website destination specified was not valid, or was otherwise unreachable."
+msgstr "Määritetty verkkosivuston kohde ei ollut kelvollinen tai siihen ei muuten ollut tavoitetta."
+
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr "Ehkä liitit väärään Base 64 -merkkijonoon tai linkki, jota seuraat, on huono."
+
+msgid "The I2P host could also be offline."
+msgstr "I2P-isäntä voi olla myös offline-tilassa."
+
+msgid "Warning: Authorization Required"
+msgstr "Varoitus: Vaaditaan lupa"
+
+msgid "Warning: Invalid Request URI"
+msgstr "Varoitus: virheellinen pyyntöinternetverkkoresurssi"
+
+msgid "The request URI is invalid, and probably contains illegal characters."
+msgstr "Pyynnön URI on virheellinen ja sisältää todennäköisesti laittomia merkkejä."
+
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr "Jos napsautit linkkiä, tarkista URI:n lopusta merkit, jotka selain on vahingossa lisännyt."
+
+msgid "The Base32 address is invalid."
+msgstr "Base32-osoite on virheellinen."
 
 msgid "This seems to be a bad destination:"
 msgstr "Tämä näyttää olevan huono kohde:"

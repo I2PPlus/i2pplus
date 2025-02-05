@@ -140,6 +140,9 @@ msgstr "署名タイプに非対応"
 msgid "Unreachable on any transport"
 msgstr "すべてのトランスポートに到達不可"
 
+msgid "Cannot enumerate UPnP devices on Android."
+msgstr ""
+
 msgid "UPnP is not enabled"
 msgstr "UPnP は有効ではありません"
 
@@ -677,11 +680,39 @@ msgstr "報告してください"
 msgid "After reporting, please restart your router"
 msgstr "報告後、ルーターを再起動してください"
 
+msgid "Invalid form submission, requires POST"
+msgstr ""
+
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "無効なフォームからの送信、おそらくブラウザで「戻る」か「リロード」ボタンを使用したためです。再送信してください。"
 
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "問題が続く場合、クッキーがブラウザで有効になっているか確認してください。"
+
+msgid "Bandwidth usage"
+msgstr "帯域幅使用率"
+
+#, java-format
+msgid "events in {0}"
+msgstr "{0} のイベント"
+
+msgid "Events per period"
+msgstr "イベントと期間"
+
+msgid "Min"
+msgstr "最小"
+
+msgid "Max"
+msgstr "最大"
+
+msgid "Avg"
+msgstr "平均"
+
+msgid "Now"
+msgstr "現在"
+
+msgid "Router restarted"
+msgstr "ルーターが再起動しました"
 
 #, java-format
 msgid "News last updated {0} ago."
@@ -713,31 +744,6 @@ msgstr[0] "{0}プラグインが更新されました"
 
 msgid "Plugin check complete"
 msgstr "プラグインチェック完了"
-
-msgid "Bandwidth usage"
-msgstr "帯域幅使用率"
-
-#, java-format
-msgid "events in {0}"
-msgstr "{0} のイベント"
-
-msgid "Events per period"
-msgstr "イベントと期間"
-
-msgid "Min"
-msgstr "最小"
-
-msgid "Max"
-msgstr "最大"
-
-msgid "Avg"
-msgstr "平均"
-
-msgid "Now"
-msgstr "現在"
-
-msgid "Router restarted"
-msgstr "ルーターが再起動しました"
 
 msgid "none"
 msgstr "なし"
@@ -807,8 +813,20 @@ msgstr "コンソール"
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "RouterコンソールのSSLアクセスを有効にするには、詳細についてはi2pアプリケーションディレクトリにある<code>clients.config</code>ファイルを参照してください。 ディレクトリにあるRouterConsolerunner構成ファイルを編集する必要があります。"
 
+msgid "Save disabled, edit the router.config file to make changes"
+msgstr ""
+
 msgid "Error updating the configuration - please see the error logs"
 msgstr "設定を更新する際にエラー - エラーログを確認してください"
+
+msgid "No changes made to the configuration"
+msgstr ""
+
+msgid "Note"
+msgstr "注意"
+
+msgid "Some changes may require a restart to take effect."
+msgstr "一部の変更を有効にするには再起動が必要な場合があります。"
 
 msgid "Save Client Configuration"
 msgstr "クライアント設定を保存"
@@ -822,6 +840,9 @@ msgstr "WebApp 設定を保存"
 msgid "Save Plugin Configuration"
 msgstr "プラグイン設定を保存"
 
+msgid "Plugins disabled"
+msgstr ""
+
 msgid "Install Plugin"
 msgstr "プラグインをインストール"
 
@@ -830,6 +851,9 @@ msgstr "ファイルからプラグインをインストール"
 
 msgid "Update All Installed Plugins"
 msgstr "全てのインストール済みプラグインをアップデート"
+
+msgid "Delete client disabled"
+msgstr ""
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -912,9 +936,18 @@ msgstr "プラグインまたはアップデートのダウンロードはすで
 msgid "Updating all plugins"
 msgstr "全てのプラグインをアップデート中"
 
+msgid "Update manager not registered, cannot install"
+msgstr ""
+
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "{0} からプラグインをインストール中"
+
+msgid "Cannot install, check logs"
+msgstr ""
+
+msgid "Update manager not registered, cannot check"
+msgstr ""
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1013,6 +1046,19 @@ msgstr "設定は正常に保存されました。"
 msgid "Join Family"
 msgstr "ファミリーに参加"
 
+msgid "Bad certificate - No Subject CN"
+msgstr ""
+
+msgid "Bad characters in Family: "
+msgstr ""
+
+#, java-format
+msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
+msgstr ""
+
+msgid "Family key configured for router family: "
+msgstr ""
+
 msgid "Load from file failed"
 msgstr "ファイルからの読み込みに失敗"
 
@@ -1028,8 +1074,8 @@ msgstr "アイテムを追加"
 msgid "Restore defaults"
 msgstr "デフォルトに戻す"
 
-msgid "Home page changed"
-msgstr "ホームページが変更されました"
+msgid "Bad group detected, please retry"
+msgstr ""
 
 msgid "Restored default settings"
 msgstr "デフォルトの設定に戻されました"
@@ -1061,6 +1107,9 @@ msgstr "無効なキー"
 msgid "Invalid destination"
 msgstr "無効な宛先"
 
+msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
+msgstr ""
+
 #, java-format
 msgid "Key for {0} added to keyring"
 msgstr "{0}のキーがキーリングに追加されました"
@@ -1070,6 +1119,9 @@ msgstr "検索パスワードが必要です"
 
 msgid "Requires hostname, destination, or blinded Base32"
 msgstr "ホスト名、宛先、またはブラインドBase32が必要です"
+
+msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
+msgstr ""
 
 msgid "Destination requires lookup password"
 msgstr "宛先には検索パスワードが必要です"
@@ -1088,6 +1140,9 @@ msgstr "サーバーオペレーターにキーを送信します。"
 
 msgid "Delete key"
 msgstr "キーを削除"
+
+msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
+msgstr ""
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1138,6 +1193,36 @@ msgstr "目隠し"
 
 msgid "Log overrides updated"
 msgstr "ログオーバーライドが更新されました"
+
+msgid "Error updating the log limits - levels not valid"
+msgstr ""
+
+msgid "Log limits cleared"
+msgstr ""
+
+#, java-format
+msgid "Default log level updated from {0} to {1}"
+msgstr ""
+
+msgid "Date format updated"
+msgstr ""
+
+#, java-format
+msgid "Specified date format is not valid ({0}) - not updated"
+msgstr ""
+
+msgid "File size updated"
+msgstr ""
+
+#, java-format
+msgid "Specified file size limit is not valid ({0}) - not updated"
+msgstr ""
+
+msgid "Compression setting updated"
+msgstr ""
+
+msgid "Log record format updated"
+msgstr ""
 
 msgid "Log configuration saved"
 msgstr "ログ設定が保存されました"
@@ -1346,6 +1431,12 @@ msgstr "不良な速度値"
 msgid "Bad capacity value"
 msgstr "不良な許容値"
 
+msgid "Bonuses adjusted for: "
+msgstr ""
+
+msgid "No profile exists for: "
+msgstr ""
+
 msgid "Unsupported"
 msgstr "非サポート"
 
@@ -1454,27 +1545,14 @@ msgstr[0] "ルーティングコミットメントが {0} 個のトンネル に
 msgid "Restart in {0}"
 msgstr "{0} で再起動"
 
-msgid "Stat filter and location updated successfully to"
-msgstr "統計フィルタとロケーションが正常に更新されました:"
-
-msgid "Full statistics enabled"
-msgstr "完全な統計が有効になりました"
-
-msgid "Full statistics disabled"
-msgstr "完全な統計が無効になりました"
-
-#, java-format
-msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
-msgstr "グラフリストが更新されましたが、 {0}グラフページ{1} に反映されるまで最大60秒ほどかかる場合があります。"
-
 msgid "Save order"
 msgstr "順番を保存"
 
-msgid "Refresh disabled"
-msgstr "更新は無効です"
+msgid "Sidebar refresh disabled"
+msgstr ""
 
-msgid "Refresh interval changed"
-msgstr "更新間隔が変更されました"
+msgid "Sidebar refresh interval changed"
+msgstr ""
 
 msgid "Refresh interval must be a number"
 msgstr "更新間隔は数字でなければなりません"
@@ -1482,17 +1560,17 @@ msgstr "更新間隔は数字でなければなりません"
 msgid "Restore full default"
 msgstr "完全なデフォルトに戻す"
 
-msgid "Full summary bar default restored."
-msgstr "Full sidebar default restored."
+msgid "Full sidebar defaults restored."
+msgstr ""
 
-msgid "Summary bar will refresh shortly."
-msgstr "サイドバーはすぐに更新されます。"
+msgid "Sidebar will refresh shortly."
+msgstr ""
 
 msgid "Restore minimal default"
 msgstr "最小のデフォルトに戻す"
 
-msgid "Minimal summary bar default restored."
-msgstr "最小限のサイドバーのデフォルトが復元されました。"
+msgid "Minimal sidebar defaults restored."
+msgstr ""
 
 msgid "Order must be an integer"
 msgstr "順番は整数値でなければなりません"
@@ -1508,6 +1586,27 @@ msgstr "移動しました"
 
 msgid "Saved order of sections."
 msgstr "セクションの順番が保存されました。"
+
+msgid "Stat filter and location updated successfully to"
+msgstr "統計フィルタとロケーションが正常に更新されました:"
+
+msgid "Full statistics enabled"
+msgstr "完全な統計が有効になりました"
+
+msgid "Full statistics disabled"
+msgstr "完全な統計が無効になりました"
+
+#, java-format
+msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
+msgstr "グラフリストが更新されましたが、 {0}グラフページ{1} に反映されるまで最大60秒ほどかかる場合があります。"
+
+#, java-format
+msgid "Internal error: could not resolve pool name {0}."
+msgstr ""
+
+#, java-format
+msgid "Internal error: could not find pool settings for {0}."
+msgstr ""
 
 msgid "Updated settings for all pools."
 msgstr "全プールで設定が更新されました。"
@@ -1531,9 +1630,8 @@ msgstr[0] "{0} 個のトンネル"
 msgid "Exploratory tunnels"
 msgstr "予備トンネル"
 
-#, java-format
-msgid "Client tunnels for {0}"
-msgstr "{0} に対するクライアントトンネル"
+msgid "I2PSnark"
+msgstr "I2PSnark"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "匿名性警告 - 設定に0ホップのトンネルが含まれています。"
@@ -1559,17 +1657,17 @@ msgstr "着信"
 msgid "Outbound"
 msgstr "送信"
 
-msgid "Length"
-msgstr "長さ"
-
-msgid "Randomization"
-msgstr "ランダム化"
-
 msgid "Quantity"
 msgstr "数量"
 
 msgid "Backup quantity"
 msgstr "バックアップ量"
+
+msgid "Length"
+msgstr "長さ"
+
+msgid "Randomization"
+msgstr "ランダム化"
 
 msgid "Inbound options"
 msgstr "受信オプション"
@@ -1580,17 +1678,20 @@ msgstr "送信オプション"
 msgid "Add user"
 msgstr "ユーザーを追加"
 
+msgid "Cannot save theme choice, theme name has illegal characters"
+msgstr ""
+
 msgid "Theme change saved."
 msgstr "テーマの変更が保存されました。"
-
-msgid "Refresh the page to view."
-msgstr "ページを更新表示。"
 
 msgid "Mobile console option saved."
 msgstr "モバイルコンソールオプションが保存されました。"
 
 msgid "No user name entered"
 msgstr "ユーザー名が入力されていません"
+
+msgid "User name may not contain '='"
+msgstr ""
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "警告: ISO-8859-1 文字セットの範囲外のユーザ名は推奨されません。サポートは標準化されておらず、ブラウザに依存します。"
@@ -1881,17 +1982,17 @@ msgstr "グラフルーターのパフォーマンス"
 msgid "Graphs"
 msgstr "グラフ"
 
-msgid "Anonymous webmail client"
-msgstr "匿名ウェブメールクライアント"
-
-msgid "I2PMail"
-msgstr "Webメール"
-
 msgid "Help"
 msgstr "ヘルプ"
 
 msgid "I2P Router Help"
 msgstr "I2P ルーターヘルプ"
+
+msgid "Anonymous webmail client"
+msgstr "匿名ウェブメールクライアント"
+
+msgid "I2PMail"
+msgstr "Webメール"
 
 msgid "Install and configure I2P plugins"
 msgstr "I2Pプラグインのインストールと設定"
@@ -1910,6 +2011,12 @@ msgstr "ネットワークデータベース"
 
 msgid "Show list of all known I2P routers"
 msgstr "既存の全 I2P ルーターの一覧を表示"
+
+msgid "List of recently connected peers with profiling info"
+msgstr ""
+
+msgid "Peer Profiles"
+msgstr "ピアプロファイル"
 
 msgid "Router Info"
 msgstr "ルーター情報"
@@ -1983,14 +2090,14 @@ msgstr "高度な設定"
 msgid "Advanced router configuration"
 msgstr "高度なルーター設定"
 
-msgid "Start or stop Router clients"
-msgstr "ルータークライアントの起動または停止"
-
 msgid "Changelog"
 msgstr "変更履歴"
 
 msgid "Recent changes"
 msgstr "最近の変化"
+
+msgid "Start or stop Router clients"
+msgstr "ルータークライアントの起動または停止"
 
 msgid "Bug tracker"
 msgstr "バグトラッカー"
@@ -2136,9 +2243,6 @@ msgstr "Clearnet BitTorrent DHT検索エンジン"
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "DuckDuckGo検索エンジン(JavaScriptなし)"
 
-msgid "Clearnet Search Engine"
-msgstr "クリアネット検索エンジン"
-
 msgid "Privacy-focused Clearnet Search Engine"
 msgstr "プライバシー重視のクリアネット検索エンジン"
 
@@ -2214,18 +2318,6 @@ msgstr "独立系調査報道"
 msgid "Information Security Research &amp; Education"
 msgstr "情報セキュリティ調査と教育"
 
-msgid "Cannabis-related magazine"
-msgstr "大麻関連雑誌"
-
-msgid "CultureMagazine"
-msgstr "カルチャーマガジン"
-
-msgid "A magazine of Politics &amp; Culture"
-msgstr "政治と文化の雑誌"
-
-msgid "CurrentAffairs"
-msgstr "時事問題"
-
 msgid "Darknet related news site"
 msgstr "Darknet関連ニュースサイト"
 
@@ -2280,15 +2372,6 @@ msgstr "香港の時計"
 msgid "Monitors threats to freedoms and rights in Hong Kong"
 msgstr "香港の自由と権利に対する脅威を監視します"
 
-msgid "Politics &amp; Current Affairs Journal"
-msgstr "政治と時事ジャーナル"
-
-msgid "English language Japanese News"
-msgstr "英語日本語ニュース"
-
-msgid "JapanToday"
-msgstr "今日の日本"
-
 msgid "JStorDaily"
 msgstr "JSTOR毎日"
 
@@ -2331,9 +2414,6 @@ msgstr "I2Pのニュースやブログのフィード"
 msgid "Planeta"
 msgstr "惑星a"
 
-msgid "News &amp; Views on Tibet"
-msgstr "チベットに関するニュースと見解"
-
 msgid "Lifestyle magazine"
 msgstr "ライフスタイルマガジン"
 
@@ -2351,6 +2431,9 @@ msgstr "サイエンスデイリー"
 
 msgid "Community-driven tech news"
 msgstr "コミュニティ主導のテクノロジーニュース"
+
+msgid "Various services"
+msgstr ""
 
 msgid "News for nerds"
 msgstr "オタク向けニュース"
@@ -2397,12 +2480,6 @@ msgstr "グローバルニュース"
 msgid "TheGuardian"
 msgstr "保護者"
 
-msgid "TheHill"
-msgstr "丘"
-
-msgid "US Political News"
-msgstr "米国の政治ニュース"
-
 msgid "TheMarkup"
 msgstr "マークアップ"
 
@@ -2417,12 +2494,6 @@ msgstr "モスクワタイムズ"
 
 msgid "TheNewRepublic"
 msgstr "新しい共和国"
-
-msgid "International News from Tibet"
-msgstr "チベットからの国際ニュース"
-
-msgid "TheTibetPost"
-msgstr "チベットポスト"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "ファイル共有と著作権ニュース"
@@ -2451,6 +2522,9 @@ msgstr "URL"
 
 msgid "Add"
 msgstr "追加"
+
+msgid "Error displaying the info page."
+msgstr ""
 
 msgid "Identity"
 msgstr "アイデンティティ"
@@ -2497,6 +2571,9 @@ msgstr "利用可能なCPUコア"
 msgid "Performance"
 msgstr "パフォーマンス"
 
+msgid "Maximum available RAM"
+msgstr ""
+
 msgid "Classified as slow"
 msgstr "低速として分類"
 
@@ -2505,6 +2582,9 @@ msgstr "はい"
 
 msgid "No"
 msgstr "いいえ"
+
+msgid "GeoIP Db"
+msgstr ""
 
 msgid "Target"
 msgstr "ターゲット"
@@ -2642,6 +2722,9 @@ msgstr "すべてのルーター (クライアント NetDb)"
 msgid "Sybil Analysis"
 msgstr "シビル分析"
 
+msgid "Bad value supplied, please check and try again."
+msgstr ""
+
 msgid "Router Map"
 msgstr "ルーター地図"
 
@@ -2716,9 +2799,6 @@ msgstr "禁止されています"
 
 msgid "not found in network database"
 msgstr "ネットワークデータベース内に見つかりませんでした"
-
-msgid "No results"
-msgstr "結果なし"
 
 msgid "Bad Base64 Router hash"
 msgstr ""
@@ -2967,50 +3047,11 @@ msgstr "NetDb 内のこのアドレスを持つすべてのルーターを表示
 msgid "Show all routers with this port in the NetDb"
 msgstr "NetDb 内のこのポートを持つすべてのルーターを表示します"
 
-msgid "Core version"
-msgstr "コアバージョン"
-
 msgid "Network ID"
 msgstr "ネットワークID"
 
 msgid "Routers"
 msgstr "ルーター"
-
-msgid "Family Key"
-msgstr "ファミリーキー"
-
-msgid "Family Sig"
-msgstr "ファミリーシグ"
-
-msgid "Exploratory tunnels expire (1h)"
-msgstr "探索トンネルの有効期限が切れる(1時間)"
-
-msgid "Exploratory tunnels reject (1h)"
-msgstr "試掘トンネル拒否(1h)"
-
-msgid "Exploratory tunnels build success (1h)"
-msgstr "探査トンネル構築成功(1時間)"
-
-msgid "Client tunnels expire (1h)"
-msgstr "クライアントトンネルの有効期限が切れます(1時間)"
-
-msgid "Client tunnels reject (1h)"
-msgstr "クライアントトンネル拒否(1h)"
-
-msgid "Client tunnels build success (1h)"
-msgstr "クライアントトンネルの構築成功(1時間)"
-
-msgid "Participating tunnels (1h)"
-msgstr "参加トンネル(1h)"
-
-msgid "Participating tunnels (60s)"
-msgstr "参加トンネル(60代)"
-
-msgid "Bandwidth send rate (1h)"
-msgstr "帯域幅送信速度(1h)"
-
-msgid "Bandwidth receive rate (1h)"
-msgstr "帯域幅受信速度(1h)"
 
 msgid "First heard about"
 msgstr "初めて聞いた"
@@ -3080,9 +3121,6 @@ msgstr "router.config ファイルに追加します。"
 msgid "Peer Connections"
 msgstr "ピア接続"
 
-msgid "Auto-refresh"
-msgstr "自動更新"
-
 msgid "Active in the last minute"
 msgstr "最後の瞬間にアクティブ"
 
@@ -3091,6 +3129,12 @@ msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
+
+msgid "Limit"
+msgstr ""
+
+msgid "Maximum permitted connections"
+msgstr ""
 
 msgid "Current / maximum permitted"
 msgstr "現在 / 最大許可"
@@ -3488,8 +3532,8 @@ msgid "{0} shared bandwidth"
 msgstr "{0} 共有帯域幅"
 
 #, java-format
-msgid "Over {0} shared bandwidth"
-msgstr "{0} の共有帯域幅を超えています"
+msgid "Over {0} KB/s shared bandwidth"
+msgstr ""
 
 msgid "status"
 msgstr "ステータス"
@@ -3561,82 +3605,151 @@ msgstr ""
 msgid "Select search engine"
 msgstr "検索エンジンを選択"
 
-msgid "Statistics gathered during this router's uptime"
-msgstr "ルーターの稼働時間中に収集された統計"
+#, java-format
+msgid "Clock Skew of {0}"
+msgstr "{0}のクロックスキュー"
 
-msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
-msgstr "収集されたデータは1分を基準に量子化されるため、推定としてだけに使用されるべきです。"
+msgid "Testing"
+msgstr "テスト中"
 
-msgid "These statistics are primarily used for development and debugging."
-msgstr "これらの統計は主に開発とデバッグ用に使用されます。"
+msgid "Private TCP Address"
+msgstr "プライベートTCPアドレス"
 
-msgid "No lifetime events"
-msgstr "ライフタイムイベント無し"
+msgid "SymmetricNAT"
+msgstr "対称NAT"
 
-msgid "frequency"
-msgstr "頻度"
+msgid "Firewalled with Inbound TCP Enabled"
+msgstr "インバウンド TCP が有効になっているファイアウォール"
 
-msgid "Rolling average events per period"
-msgstr "期間当たりの平均イベント発生数"
+msgid "Firewalled &amp; Floodfill"
+msgstr "ファイアウォール"
 
-msgid "Highest events per period"
-msgstr "期間あたりの次第イベント数"
+msgid "Disconnected"
+msgstr "切断されました"
 
-msgid "Lifetime average events per period"
-msgstr "期間あたりの生涯平均イベント数"
+msgid "UDP Port In Use"
+msgstr "UDPポートが使用中です"
 
-msgid "Lifetime average frequency"
-msgstr "生涯平均頻度"
+msgid "No Active Peers"
+msgstr "アクティブなピアがありません"
+
+msgid "UDP Disabled &amp; Inbound TCP host/port not set"
+msgstr "UDP無効およびインバウンドTCPホスト/ポートが設定されていない"
+
+msgid "Firewalled with UDP Disabled"
+msgstr "UDP無効でファイアウォール"
+
+msgid "Add/remove/edit &amp; control your client and server tunnels"
+msgstr "クライアント及びサーバートンネルを追加・削除・編集・操作"
+
+msgid "Service Tunnels"
+msgstr "サービストンネル"
+
+msgid "How many local service tunnels we're running"
+msgstr "私たちが実行している地元のサービストンネルの数"
+
+msgid "Messenger"
+msgstr "メッセンジャー"
+
+msgid "i2pchat"
+msgstr "i2pchat"
+
+msgid "I2PChat"
+msgstr "I2PChat"
+
+msgid "Server"
+msgstr "サーバー"
+
+msgid "service may be available to peers"
+msgstr "ピアがサービスを利用できる場合があります"
+
+msgid "service is only available locally"
+msgstr "サービスはローカルでのみ利用可能です"
+
+msgid "Show tunnels"
+msgstr "トンネルを表示"
+
+msgid "Leases expired"
+msgstr "リースが期限切れ"
+
+msgid "Rebuilding"
+msgstr "再構成中"
+
+msgid "ago"
+msgstr "前"
+
+msgid "Ready"
+msgstr "準備完了"
+
+msgid "Building"
+msgstr "構成中"
+
+msgid "Building tunnels"
+msgstr "トンネルを構成中"
+
+msgid "Shared Clients"
+msgstr "共有クライアント"
+
+msgid "Click Restart to install"
+msgstr "インストールするには再起動をクリック"
+
+msgid "Click Shutdown and restart to install"
+msgstr "インストールするにはシャットダウンをクリックして再起動"
 
 #, java-format
-msgid "{0} event"
-msgid_plural "{0} events"
-msgstr[0] "{0}イベント"
+msgid "{0}"
+msgstr "{0}"
 
-msgid "rate"
-msgstr "割合"
+msgid "Updating after restart"
+msgstr "再起動後のアップデート"
 
-msgid "Average"
-msgstr "平均"
+msgid "Signed development update available"
+msgstr "署名付き開発アップデートが利用可能"
 
-msgid "Highest average"
-msgstr "最大平均"
+msgid "Download I2P Update"
+msgstr "I2Pアップデートをダウンロード"
 
-msgid "Highest total in a period"
-msgstr "期間で最高の合計"
+msgid "Unsigned update available"
+msgstr "無署名のアップデートが利用可能"
 
-msgid "Average event count"
-msgstr "平均イベントカウント"
+msgid "Help with firewall configuration"
+msgstr "ファイアーウォールの構成に役立ちます"
 
-msgid "Events in peak period"
-msgstr "ピーク期間中のイベント"
+msgid "Check network connection and NAT/firewall!"
+msgstr "ネットワーク接続とNAT/ファイアウォールを確認してください!"
 
-msgid "Events in this period"
-msgstr "この時期の出来事"
+msgid "Attempt to download router reference files (if automatic reseed has failed)"
+msgstr "ルーター参照ファイルのダウンロードを試みます(自動再シードが失敗した場合)"
 
-#, java-format
-msgid "ended {0} ago"
-msgstr "{0}前に終了"
+msgid "Reseed"
+msgstr "リシード"
 
-msgid "No events"
-msgstr "イベント無し"
+msgid "Order"
+msgstr "順序"
 
-msgid "Graph Data"
-msgstr "グラフデータ"
+msgid "Top"
+msgstr "上部"
 
-msgid "Graph Event Count"
-msgstr "グラフイベントカウント"
+msgid "Move to top"
+msgstr "上部に移動"
 
-msgid "Export Data as XML"
-msgstr "XMLとしてデータをエクスポートします"
+msgid "Move up"
+msgstr "上に移動"
 
-msgid "Lifetime average value"
-msgstr "生涯平均値"
+msgid "Down"
+msgstr "下"
 
-#, java-format
-msgid "1 event"
-msgid_plural "{0} events"
-msgstr[0] "{0}件のイベント"
+msgid "Move down"
+msgstr "下に移動"
+
+msgid "Bottom"
+msgstr "下部"
+
+msgid "Move to bottom"
+msgstr "下部に移動"
+
+msgid "Select a section to add"
+msgstr "追加するセクションを選択"
 
 msgid "Help &amp; FAQ"
 msgstr "ヘルプと FAQ"
@@ -3679,9 +3792,6 @@ msgstr "混雑状態"
 
 msgid "Tunnel Status"
 msgstr "トンネルステータス"
-
-msgid "Service Tunnels"
-msgstr "サービストンネル"
 
 msgid "News &amp; Updates"
 msgstr "ニュースとアップデート"
@@ -3736,6 +3846,9 @@ msgstr "ウェブホスティング"
 
 msgid "An introduction to hosting websites on the I2P network"
 msgstr "I2P ネットワーク上で Web サイトをホスティングする方法の概要"
+
+msgid "New hosts in last 24 hours"
+msgstr ""
 
 msgid "I2PControl"
 msgstr "I2Pコントロール"
@@ -4036,151 +4149,82 @@ msgstr "隠しモードがアクティブな場合、参加するトンネルは
 msgid "Router is configured to reject all transit tunnel requests"
 msgstr "ルーターは、参加しているすべてのトンネル要求を拒否するように構成されています"
 
-#, java-format
-msgid "Clock Skew of {0}"
-msgstr "{0}のクロックスキュー"
+msgid "Statistics gathered during this router's uptime"
+msgstr "ルーターの稼働時間中に収集された統計"
 
-msgid "Testing"
-msgstr "テスト中"
+msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
+msgstr "収集されたデータは1分を基準に量子化されるため、推定としてだけに使用されるべきです。"
 
-msgid "Private TCP Address"
-msgstr "プライベートTCPアドレス"
+msgid "These statistics are primarily used for development and debugging."
+msgstr "これらの統計は主に開発とデバッグ用に使用されます。"
 
-msgid "SymmetricNAT"
-msgstr "対称NAT"
+msgid "No lifetime events"
+msgstr "ライフタイムイベント無し"
 
-msgid "Firewalled with Inbound TCP Enabled"
-msgstr "インバウンド TCP が有効になっているファイアウォール"
+msgid "frequency"
+msgstr "頻度"
 
-msgid "Firewalled &amp; Floodfill"
-msgstr "ファイアウォール"
+msgid "Rolling average events per period"
+msgstr "期間当たりの平均イベント発生数"
 
-msgid "Disconnected"
-msgstr "切断されました"
+msgid "Highest events per period"
+msgstr "期間あたりの次第イベント数"
 
-msgid "UDP Port In Use"
-msgstr "UDPポートが使用中です"
+msgid "Lifetime average events per period"
+msgstr "期間あたりの生涯平均イベント数"
 
-msgid "No Active Peers"
-msgstr "アクティブなピアがありません"
-
-msgid "UDP Disabled &amp; Inbound TCP host/port not set"
-msgstr "UDP無効およびインバウンドTCPホスト/ポートが設定されていない"
-
-msgid "Firewalled with UDP Disabled"
-msgstr "UDP無効でファイアウォール"
-
-msgid "Add/remove/edit &amp; control your client and server tunnels"
-msgstr "クライアント及びサーバートンネルを追加・削除・編集・操作"
-
-msgid "How many local service tunnels we're running"
-msgstr "私たちが実行している地元のサービストンネルの数"
-
-msgid "I2PSnark"
-msgstr "I2PSnark"
-
-msgid "Messenger"
-msgstr "メッセンジャー"
-
-msgid "i2pchat"
-msgstr "i2pchat"
-
-msgid "I2PChat"
-msgstr "I2PChat"
-
-msgid "Server"
-msgstr "サーバー"
-
-msgid "service may be available to peers"
-msgstr "ピアがサービスを利用できる場合があります"
-
-msgid "service is only available locally"
-msgstr "サービスはローカルでのみ利用可能です"
-
-msgid "Show tunnels"
-msgstr "トンネルを表示"
-
-msgid "Leases expired"
-msgstr "リースが期限切れ"
-
-msgid "Rebuilding"
-msgstr "再構成中"
-
-msgid "ago"
-msgstr "前"
-
-msgid "Ready"
-msgstr "準備完了"
-
-msgid "Building"
-msgstr "構成中"
-
-msgid "Building tunnels"
-msgstr "トンネルを構成中"
-
-msgid "Shared Clients"
-msgstr "共有クライアント"
-
-msgid "Click Restart to install"
-msgstr "インストールするには再起動をクリック"
-
-msgid "Click Shutdown and restart to install"
-msgstr "インストールするにはシャットダウンをクリックして再起動"
+msgid "Lifetime average frequency"
+msgstr "生涯平均頻度"
 
 #, java-format
-msgid "{0}"
-msgstr "{0}"
+msgid "{0} event"
+msgid_plural "{0} events"
+msgstr[0] "{0}イベント"
 
-msgid "Updating after restart"
-msgstr "再起動後のアップデート"
+msgid "rate"
+msgstr "割合"
 
-msgid "Signed development update available"
-msgstr "署名付き開発アップデートが利用可能"
+msgid "Average"
+msgstr "平均"
 
-msgid "Download I2P Update"
-msgstr "I2Pアップデートをダウンロード"
+msgid "Highest average"
+msgstr "最大平均"
 
-msgid "Unsigned update available"
-msgstr "無署名のアップデートが利用可能"
+msgid "Highest total in a period"
+msgstr "期間で最高の合計"
 
-msgid "Help with firewall configuration"
-msgstr "ファイアーウォールの構成に役立ちます"
+msgid "Average event count"
+msgstr "平均イベントカウント"
 
-msgid "Check network connection and NAT/firewall!"
-msgstr "ネットワーク接続とNAT/ファイアウォールを確認してください!"
+msgid "Events in peak period"
+msgstr "ピーク期間中のイベント"
 
-msgid "Attempt to download router reference files (if automatic reseed has failed)"
-msgstr "ルーター参照ファイルのダウンロードを試みます(自動再シードが失敗した場合)"
+msgid "Events in this period"
+msgstr "この時期の出来事"
 
-msgid "Reseed"
-msgstr "リシード"
+#, java-format
+msgid "ended {0} ago"
+msgstr "{0}前に終了"
 
-msgid "Order"
-msgstr "順序"
+msgid "No events"
+msgstr "イベント無し"
 
-msgid "Top"
-msgstr "上部"
+msgid "Graph Data"
+msgstr "グラフデータ"
 
-msgid "Move to top"
-msgstr "上部に移動"
+msgid "Graph Event Count"
+msgstr "グラフイベントカウント"
 
-msgid "Move up"
-msgstr "上に移動"
+msgid "Export Data as XML"
+msgstr "XMLとしてデータをエクスポートします"
 
-msgid "Down"
-msgstr "下"
+msgid "Lifetime average value"
+msgstr "生涯平均値"
 
-msgid "Move down"
-msgstr "下に移動"
-
-msgid "Bottom"
-msgstr "下部"
-
-msgid "Move to bottom"
-msgstr "下部に移動"
-
-msgid "Select a section to add"
-msgstr "追加するセクションを選択"
+#, java-format
+msgid "1 event"
+msgid_plural "{0} events"
+msgstr[0] "{0}件のイベント"
 
 msgid "No known routers"
 msgstr "既知のルーターなし"
@@ -4520,6 +4564,10 @@ msgstr "現在アクティブなローカル トンネルまたはトランジ�
 msgid "Bandwidth Tiers"
 msgstr "帯域幅階層"
 
+#, java-format
+msgid "Over {0} shared bandwidth"
+msgstr "{0} の共有帯域幅を超えています"
+
 msgid "Inbound or outbound?"
 msgstr "インバウンドかアウトバウンドか？"
 
@@ -4579,6 +4627,18 @@ msgstr "帯域幅テストがキャンセルされました"
 
 msgid "Bandwidth test was not running"
 msgstr "帯域幅テストが実行されていませんでした"
+
+msgid "ready"
+msgstr ""
+
+msgid "inbound test"
+msgstr ""
+
+msgid "outbound test"
+msgstr ""
+
+msgid "done"
+msgstr ""
 
 msgid "bits per second"
 msgstr "毎秒ビット"
@@ -4752,8 +4812,8 @@ msgstr "ネットワーク共有"
 msgid "Share"
 msgstr "共有"
 
-msgid "Note"
-msgstr "注意"
+msgid "NOTE"
+msgstr ""
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
@@ -4777,6 +4837,10 @@ msgstr "共有帯域幅が大きいほど、匿名性が向上し、ネットワ
 
 msgid "config advanced"
 msgstr "詳細設定"
+
+#, java-format
+msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
+msgstr ""
 
 msgid "Floodfill Configuration"
 msgstr "フラッドフィル構成"
@@ -4805,8 +4869,8 @@ msgstr "無効"
 msgid "Advanced I2P+ Configuration"
 msgstr "高度な I2P 構成"
 
-msgid "Some changes may require a restart to take effect."
-msgstr "一部の変更を有効にするには再起動が必要な場合があります。"
+msgid "Help with additional configuration settings"
+msgstr ""
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5672,23 +5736,50 @@ msgstr "trueに設定すると、<a href=/configplugins>プラグイン設定ペ
 msgid "When set to true, this setting enables reverse DNS lookups for peers, triggered when displaying the country flag of a peer or when the hostname or domain is explicitly displayed in the console, or when the peer's RouterInfo is written to disk. In order to avoid repeat lookups, it's recommended to configure a generous caching policy for DNS lookups of 10 minutes or more, and to configure a privacy respecting DNS server in your operating system. [Disabled by default, restart required]"
 msgstr "trueに設定すると、ピアの国旗を表示する際やホスト名やドメインがコンソールに明示的に表示される場合、またはピアのRouterInfoがディスクに書き込まれる際に、逆DNSルックアップが有効になります。繰り返しのルックアップを避けるために、DNSルックアップのための寛大なキャッシュポリシー（10分以上）を設定し、オペレーティングシステムにプライバシーを尊重するDNSサーバーを設定することをお勧めします。[デフォルトでは無効、再起動が必要]"
 
+msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
+msgstr "この設定により、ルーターのコンソールページのページタイトルにカスタムテキストプレフィックスを設定することができます。ブラウザのタブで複数のコンソールを開いている場合、それらを簡単に区別するために役立ちます。"
+
 msgid "When set to true, accessing the router console via http:// when https:// is enabled will automatically redirect to https. To configure router console access, edit the settings in your <code>clients.config</code> file in your profile directory (<i>not</i> the application installation directory). [Enabled by default]"
 msgstr "trueに設定すると、https://が有効な場合にhttp://経由でルーターコンソールにアクセスすると自動的にhttpsにリダイレクトされます。ルーターコンソールへのアクセスを構成するには、プロファイルディレクトリの<code>clients.config</code>ファイルの設定を編集します（アプリケーションのインストールディレクトリでは<i>ありません</i>）。[デフォルダで有効]"
+
+msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
+msgstr "この設定をtrueにすると、サイドバーの混雑セクションにピアテスト平均の読み取りが表示されます。これは、成功したピアテストの平均と失敗したテストによる平均超過時間を合計して計算されます。平均値は、最適な<code>router.peerTestTimeout</code>値を決定するためのガイドとして使用できます。[デフォルトはfalse]"
+
+msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
+msgstr "この設定をtrueにすると、<a href=/sitemap>サイトマップ</a>に<i>興味のあるサイト</i>のリンクが表示されます。[デフォルトはfalse]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "この設定は、ルーターが提供された<i>blocklist.txt</i>ファイルとユーザーが設定したブロックリストを使用して、ハッシュまたはIPアドレスによるルーターの禁止を有効にするかどうかを決定します。IPv4では範囲やネットマスクがサポートされていますが、IPv6ではサポートされていません。詳細については、I2P+アプリケーションディレクトリの<i>blocklist.txt</i>を参照してください。[デフォルトで有効、再起動が必要]"
 
-msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
-msgstr "この設定は、TorエグジットノードのIPアドレスから運営されているルーターを禁止するために、I2P+アプリケーションディレクトリ内の提供された<i>blocklist_tor.txt</i>ファイルを使用するかどうかを決定します。[デフォルトで有効になっていますが、再起動が必要です]"
+msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
+msgstr "この設定により、ブロックリストを介して実施された禁止のために（秒単位で）有効期限を設定できます。 デフォルトでは、バンはルーターセッションの期間中続きます。 [再起動が必要]"
 
 msgid "This setting, when configured with a path pointing at a valid blocklist file, enables an additional, user-configured blocklist to be loaded at router startup. [Disabled by default, restart required]"
 msgstr "この設定は、有効なブロックリストファイルを指すパスで構成された場合、追加のユーザー設定ブロックリストをルーターの起動時に読み込むことを可能にします。[デフォルトでは無効ですが、再起動が必要です]"
 
-msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
-msgstr "この設定により、ブロックリストを介して実施された禁止のために（秒単位で）有効期限を設定できます。 デフォルトでは、バンはルーターセッションの期間中続きます。 [再起動が必要]"
+msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
+msgstr "この設定は、TorエグジットノードのIPアドレスから運営されているルーターを禁止するために、I2P+アプリケーションディレクトリ内の提供された<i>blocklist_tor.txt</i>ファイルを使用するかどうかを決定します。[デフォルトで有効になっていますが、再起動が必要です]"
+
+msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
+msgstr ""
+
+msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
+msgstr "falseに設定すると、古いバージョンを実行している遅いまたは到達できないルーターからのトンネル構築リクエストはブロックされません。[デフォルトはtrue、再起動が必要]"
 
 msgid "Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks."
 msgstr "トンネルを構築するためのプロセッサスレッドの数を割り当てます。 プロセッサがハイパースレッドまたは同時マルチスレッドをサポートしている場合、プロセッサコアの数に2を掛けて、割り当てるスレッドの最大数を取得できます。 他のタスクのヘッドルームがあることを確認するために、理論上の最大値よりも少ない割り当てを希望する場合があることに注意してください。"
+
+msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
+msgstr "この設定（ミリ秒単位）は、パケットがCoDelキューに滞在することができる時間を決定します。基本設定は1000msです。[再起動が必要です]"
+
+msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
+msgstr "この設定は、アウトバウンドキューがフルとマークされる前のメッセージの最大数を決定します。[デフォルトは768です]"
+
+msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
+msgstr "この設定は、さらなるメッセージが削除される前の最大キュー値を超えるメッセージの最大数を決定します。[デフォルトは128です]"
+
+msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
+msgstr "この設定（ミリ秒単位）を使用すると、CoDelキュー管理システムのキュー遅延ターゲット値を手動で設定できます。デフォルトは50msです。[再起動が必要です]"
 
 msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
 msgstr "この設定は、ルーターが混雑していると判断され、トランジットトンネルのリクエストが拒否される前に、デフォルトのメッセージ処理時間制限（混雑サイドバーセクションの<i>メッセージ遅延</i>として表示されます）をミリ秒単位で上書きします。[デフォルトは750ms、もしくはルーターが低速としてフラグが立っている場合は1500msです]"
@@ -5699,8 +5790,32 @@ msgstr "平均ラグを決定するためにトンネルを定期的にテスト
 msgid "When set to true, the router will change its identity and UDP port every time the router restarts. [Default is false]"
 msgstr "Trueに設定すると、ルーターはルーターが再起動するたびにIDとUDPポートを変更します。 [デフォルトは偽です]"
 
+msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
+msgstr "falseに設定すると、ルーターは他のルーターからのトンネル構築リクエストを制限しません。注意して使用してください。[デフォルトはtrue、再起動が必要]"
+
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
 msgstr "この設定は、あなたのルータのトンネル構築に使用されない<a href=/profiles#profile_defs>ピアの機能</a>を決定します。例： <code>router.excludePeerCaps=LMN</code>"
+
+msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
+msgstr "この設定（時間単位）は、NetDb内のRouterInfoの古さ（最終公開日）がどれくらいであるかを決定し、古くなった場合には区別されて削除されます。[デフォルトは28時間で、ただしFloodfillである場合はデフォルトが8時間です]"
+
+msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
+msgstr "この設定は、ピア探索ジョブが実行される際に並行して探索するピアの数を決定します[デフォルトは3000以上のピアが存在する場合は1つのピアを同時に探索します]。この値を増やすと、探索に必要な帯域幅が増加するため、値を高く設定しすぎるとメッセージの遅延が発生し、他のサービスに干渉する可能性があるため、注意して使用してください！"
+
+msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
+msgstr "この設定は、Peer Exploration Jobが実行される際に参照するNetDb DHTバケットの数を決定します。デフォルトでは、探索するバケットの数は、ルーターの稼働時間が1時間以上であるか、ルーターが隠れているか、'K'バンド幅ティアであるか、既知のルーターの数によって異なります。"
+
+msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
+msgstr "この設定（秒単位）では、Peer Exploration Jobの実行間隔をオーバーライドすることができます。このジョブは新しいピアをNetDbに追加するために実行され、デフォルトでは80秒ごとに実行されます。また、ルーターのジョブやメッセージの遅延が発生している場合は、3分ごとに実行されます。NetDbのサイズが4000のピアに達した場合、一時停止時間は15分に増加します。NetDbが充実している状態（2000以上のピア）である場合や、全体的な帯域幅使用量を減らしたい場合は、遅延時間を増やすことができます。注意：Floodfillルーターでは、このジョブは実行されません。"
+
+msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
+msgstr "この設定は、探索のためにキューに格納するピアハッシュの最大数を決定します。I2Pでは最大数は128、I2P+ではデフォルト値は512です。"
+
+msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
+msgstr "この設定は、Floodfillとして動作しているルーターが新しいピアについて学ぶためにNetDbを探索するかどうかを決定します。[デフォルトはfalseで、再起動が必要です]"
+
+msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
+msgstr "この設定がtrueに設定されている場合、ルーターは他のルーターと直接通信することができず、イントロダクターの使用を強制します。[デフォルトはfalseですが、ルーターが隠れたモードである場合にはtrueになります]"
 
 msgid "When set to true, if your router is serving as a floodfill for the network, your <a href=/configadvanced#ffconf>floodfill participation</a> will be hidden from other routers."
 msgstr "trueに設定されている場合、あなたのルータがネットワークのフラッドフィルとして機能している場合、他のルータからあなたの<a href=/configadvanced#ffconf>floodfill参加</a>は隠されます。"
@@ -5713,6 +5828,12 @@ msgstr "ルータが構築できる参加中トンネルの最大数を決定し
 
 msgid "Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 10% in I2P+, 33% in I2P]"
 msgstr "ピアが使用されるアクティブなローカルトンネル（クライアントと探索的）の最大割合を定義します。[デフォルトはI2P+で10％、I2Pで33％]"
+
+msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
+msgstr "この設定は、ルータが予想される帯域幅の要件に基づいてトンネルリクエストを拒否し始める前にホストされる参加トンネルの最小数を設定することができます。[デフォルトは、システムがAndroidで実行されている場合は100、システムがARM上で実行され、4つ未満のコアが利用可能な場合は800、システムがARM上で実行され、4つ以上のコアが利用可能な場合は1200、それ以外の場合は2500]"
+
+msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
+msgstr "この設定では、NetDbから古いルーターを除外することができます。デフォルトまたは設定した値よりも古いルーターは、NetDbから削除され、ルーターセッションの間は禁止されます。デフォルトでは0.9.20よりも古いルーターは除外されます。注意: I2P+バージョン0.9.46+以降、ローカルトンネルの構築には非常に最新のバージョンのルーターのみが使用されます。[再起動が必要です]"
 
 msgid "When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]"
 msgstr "Trueに設定すると、プロファイルのNetDBディレクトリに保存されているルーター情報ファイルは、64のサブディレクトリに分割されません。 [デフォルトは偽です]"
@@ -5738,84 +5859,6 @@ msgstr "JVM に割り当てられたのは 256MB 未満"
 msgid "Router running a non-native, software emulated version of the Java BigInteger library"
 msgstr "Java BigInteger ライブラリの非ネイティブのソフトウェア エミュレート バージョンを実行するルーター"
 
-msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
-msgstr "この設定は、ルータが予想される帯域幅の要件に基づいてトンネルリクエストを拒否し始める前にホストされる参加トンネルの最小数を設定することができます。[デフォルトは、システムがAndroidで実行されている場合は100、システムがARM上で実行され、4つ未満のコアが利用可能な場合は800、システムがARM上で実行され、4つ以上のコアが利用可能な場合は1200、それ以外の場合は2500]"
-
-msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
-msgstr "trueに設定すると、ルータが再起動するときにそのアイデンティティとUDPポートを変更し、その後、router.configからキーを削除して追加の変更を防止します。[デフォルトはfalse]"
-
-msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr "falseに設定すると、ルーターは他のルーターからのトンネル構築リクエストを制限しません。注意して使用してください。[デフォルトはtrue、再起動が必要]"
-
-msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr "falseに設定すると、古いバージョンを実行している遅いまたは到達できないルーターからのトンネル構築リクエストはブロックされません。[デフォルトはtrue、再起動が必要]"
-
-msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
-msgstr "設定すると、これにより、ルータが同時に構築を許可されるトンネルの数に対する厳しい制限が設定されます。デフォルトでは、ルータは平均構築時間と現在の送信帯域幅を使用して最適な構築速度を決定します。[再起動が必要です]"
-
-msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
-msgstr "署名されていない(.zip) I2Pアップデートをインストールする場合、<code>router.config</code> ファイルにこれを追加する必要があります。ただし、すでに<code>routerconsole.advanced=true</code>を設定している場合は、このオプションは既に提供されています。注意：I2P+ 0.9.48+以降、<a href=/configupdate#i2pupdates>署名されていないアップデート</a>のインストールはデフォルトで有効になっています。"
-
-msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
-msgstr "この設定を使用すると、有効になっている場合、署名されていない更新機能のための更新URLを設定できます。URLは<code>/i2pupdate.zip</code>で終わる必要があります。注意：更新のソースを信頼していない限り、署名されていない更新をインストールしないでください！"
-
-msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
-msgstr "この設定により、ルータがファイアウォールであるかどうかを判断するためのSSUテストを無効にすることができます。ファイアウォールでないことが確認されているが、一時的なファイアウォールの問題が発生しているルータに対して有効にすることもできます。テストが無効にされている場合、SSUとNTCPの両方が<a href=/info>ルータ情報ページ</a>で現在の公開IPアドレスを報告するはずです。[再起動が必要です]"
-
-msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
-
-msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
-msgstr "この設定により、ピアとの通信時に優先されるトランスポートを決定します。デフォルトでは、UDP (SSU) よりもNTCPが優先されています。値をtrueに設定すると、事前のNTCP接続が存在しない限り、UDPが優先されます。alwaysに設定すると、事前のNTCP接続の有無に関係なく常にUDPが使用されます。[デフォルトはfalse]"
-
-msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
-msgstr "このトンネル固有の設定では、ルーターにホストされるサーバーへのpingへの返信を有効化または無効化することができます。ピンの無効化には、Tunnel Managerのサーバーの設定の<i>Custom Options</i>セクションに<code>i2p.streaming.answerPings=false</code>の行を追加する必要があります。"
-
-msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
-msgstr "trueに設定すると、I2Pはネットワーク接続なしで実行されます。これは、コードの更新をテストするためにルーターを頻繁に再起動する場合に便利であり、ネットワークの中断を防ぎます。"
-
-msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr "この設定は、有効にすると、ルーターにホストされるすべてのping-enabledサーバーに対して、最大50msのランダムなpongの遅延を導入します。デフォルトは無効です。[再起動が必要です]"
-
-msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr "この設定を有効にすると、<code>i2p.streaming.enablePongDelay</code>も有効になっている場合、ping-enabledサーバーに導入されるランダムなpong遅延の最大追加値が変更されます。明示的に設定されていない場合、デフォルト値の50msが使用されます。"
-
-msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
-msgstr "この設定（ミリ秒単位）は、パケットがCoDelキューに滞在することができる時間を決定します。基本設定は1000msです。[再起動が必要です]"
-
-msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
-msgstr "この設定は、アウトバウンドキューがフルとマークされる前のメッセージの最大数を決定します。[デフォルトは768です]"
-
-msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
-msgstr "この設定は、さらなるメッセージが削除される前の最大キュー値を超えるメッセージの最大数を決定します。[デフォルトは128です]"
-
-msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
-msgstr "この設定（ミリ秒単位）を使用すると、CoDelキュー管理システムのキュー遅延ターゲット値を手動で設定できます。デフォルトは50msです。[再起動が必要です]"
-
-msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
-msgstr "この設定（時間単位）は、NetDb内のRouterInfoの古さ（最終公開日）がどれくらいであるかを決定し、古くなった場合には区別されて削除されます。[デフォルトは28時間で、ただしFloodfillである場合はデフォルトが8時間です]"
-
-msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
-msgstr "この設定は、ピア探索ジョブが実行される際に並行して探索するピアの数を決定します[デフォルトは3000以上のピアが存在する場合は1つのピアを同時に探索します]。この値を増やすと、探索に必要な帯域幅が増加するため、値を高く設定しすぎるとメッセージの遅延が発生し、他のサービスに干渉する可能性があるため、注意して使用してください！"
-
-msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
-msgstr "この設定は、Peer Exploration Jobが実行される際に参照するNetDb DHTバケットの数を決定します。デフォルトでは、探索するバケットの数は、ルーターの稼働時間が1時間以上であるか、ルーターが隠れているか、'K'バンド幅ティアであるか、既知のルーターの数によって異なります。"
-
-msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
-msgstr "この設定（秒単位）では、Peer Exploration Jobの実行間隔をオーバーライドすることができます。このジョブは新しいピアをNetDbに追加するために実行され、デフォルトでは80秒ごとに実行されます。また、ルーターのジョブやメッセージの遅延が発生している場合は、3分ごとに実行されます。NetDbのサイズが4000のピアに達した場合、一時停止時間は15分に増加します。NetDbが充実している状態（2000以上のピア）である場合や、全体的な帯域幅使用量を減らしたい場合は、遅延時間を増やすことができます。注意：Floodfillルーターでは、このジョブは実行されません。"
-
-msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
-msgstr "この設定は、探索のためにキューに格納するピアハッシュの最大数を決定します。I2Pでは最大数は128、I2P+ではデフォルト値は512です。"
-
-msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
-msgstr "この設定は、Floodfillとして動作しているルーターが新しいピアについて学ぶためにNetDbを探索するかどうかを決定します。[デフォルトはfalseで、再起動が必要です]"
-
-msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
-msgstr "この設定がtrueに設定されている場合、ルーターは他のルーターと直接通信することができず、イントロダクターの使用を強制します。[デフォルトはfalseですが、ルーターが隠れたモードである場合にはtrueになります]"
-
-msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
-msgstr "この設定では、NetDbから古いルーターを除外することができます。デフォルトまたは設定した値よりも古いルーターは、NetDbから削除され、ルーターセッションの間は禁止されます。デフォルトでは0.9.20よりも古いルーターは除外されます。注意: I2P+バージョン0.9.46+以降、ローカルトンネルの構築には非常に最新のバージョンのルーターのみが使用されます。[再起動が必要です]"
-
 msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. [Default is 4]"
 msgstr "この設定は、ピアのレイテンシを決定するために並行して実行するピアテストの数を決定します。[デフォルトは4です]"
 
@@ -5831,14 +5874,17 @@ msgstr "この設定は、ルーターの統計情報が不定期にNetDbに公�
 msgid "This setting configures the initial size of the outbound message queue. [Default is 64]"
 msgstr "この設定は、送信メッセージキューの初期サイズを設定します。[デフォルトは64です]"
 
-msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
-msgstr "この設定は、受信メッセージキューの最大サイズを設定します。[デフォルトは1024です]"
-
 msgid "This setting configures the maximum number of inbound messages queued per cycle (pump). [Default is 24]"
 msgstr "この設定では、サイクルごとにキューに入っている受信メッセージの最大数を設定します。(デフォルトは24です)"
 
+msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
+msgstr "この設定は、受信メッセージキューの最大サイズを設定します。[デフォルトは1024です]"
+
 msgid "This setting configures the maximum number of outbound messages queued per cycle (pump). [Default is 64]"
 msgstr "この設定では、サイクルごとにキューに入っている送信メッセージの最大数を設定します。(デフォルトは64です)"
+
+msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
+msgstr "trueに設定すると、ルータが再起動するときにそのアイデンティティとUDPポートを変更し、その後、router.configからキーを削除して追加の変更を防止します。[デフォルトはfalse]"
 
 msgid "This setting (in milliseconds) allows you to manually configure the delay between router refresh updates run by the Refresh Routers Job. By default the pause between refreshes is determined by the size of the NetDb, and introduces some randomness in the timing to mitigate traffic analysis. For values lower than 2000 milliseconds, increasing the value of <code>router.refreshTimeout</code> is recommended. Note that setting this value below 2000 milliseconds will increase your network traffic and may introduce job lag, and is not recommended for sustained use."
 msgstr "この設定 (ミリ秒単位) は、Refresh Routers ジョブによって実行されるルーターリフレッシュの更新間隔を手動で設定できます。デフォルトでは、リフレッシュ間の一時停止は NetDb のサイズによって決まり、タイミングにいくらかのランダム性を導入してトラフィック解析を軽減します。2000 ミリ秒未満の値では、<code>router.refreshTimeout</code> の値を増やすことをお勧めします。ただし、この値を2000 ミリ秒未満に設定するとネットワークトラフィックが増加し、ジョブの遅延が発生する可能性があり、持続的な使用にはお勧めできません。"
@@ -5852,26 +5898,56 @@ msgstr "この設定 (秒単位) は、ルーターのリフレッシュの試�
 msgid "This setting determines whether routers classified as uninteresting (K or L tier, unreachable or older than 0.9.50) are checked during the refresh router process after 1 hour of uptime. [Default is false]"
 msgstr "この設定は、興味のない (K または L ティア、到達不能または0.9.50より古い) と分類されたルーターが、稼働時間1時間後にリフレッシュルータープロセス中にチェックされるかどうかを決定します。[デフォルトはfalse]"
 
+msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
+msgstr ""
+
+msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
+msgstr "設定すると、これにより、ルータが同時に構築を許可されるトンネルの数に対する厳しい制限が設定されます。デフォルトでは、ルータは平均構築時間と現在の送信帯域幅を使用して最適な構築速度を決定します。[再起動が必要です]"
+
+msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
+msgstr "署名されていない(.zip) I2Pアップデートをインストールする場合、<code>router.config</code> ファイルにこれを追加する必要があります。ただし、すでに<code>routerconsole.advanced=true</code>を設定している場合は、このオプションは既に提供されています。注意：I2P+ 0.9.48+以降、<a href=/configupdate#i2pupdates>署名されていないアップデート</a>のインストールはデフォルトで有効になっています。"
+
+msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
+msgstr "この設定を使用すると、有効になっている場合、署名されていない更新機能のための更新URLを設定できます。URLは<code>/i2pupdate.zip</code>で終わる必要があります。注意：更新のソースを信頼していない限り、署名されていない更新をインストールしないでください！"
+
 msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
 msgstr "この設定（分単位）は、起動後にNetDb内のRouterInfoの有効性を確認するまでの待機時間を手動で設定することを可能にします。その後、有効なルーターのみが組み込まれます。検証が行われると、期限切れのRouterInfoとSSUでのみアクセス可能な応答のないピアがNetDbから削除されます。[デフォルトは60分] 注：この設定は、古いルーター（デフォルトでは0.9.29より古い）には影響しません。古いルーターはNetDbから削除され、NetDbストアの試行時にルーターセッションから禁止されます。"
 
-msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
-msgstr "この設定をtrueにすると、サイドバーの混雑セクションにピアテスト平均の読み取りが表示されます。これは、成功したピアテストの平均と失敗したテストによる平均超過時間を合計して計算されます。平均値は、最適な<code>router.peerTestTimeout</code>値を決定するためのガイドとして使用できます。[デフォルトはfalse]"
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
+msgstr ""
 
-msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
-msgstr "この設定をtrueにすると、<a href=/sitemap>サイトマップ</a>に<i>興味のあるサイト</i>のリンクが表示されます。[デフォルトはfalse]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
+msgstr ""
 
-msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr "この設定により、ルーターのコンソールページのページタイトルにカスタムテキストプレフィックスを設定することができます。ブラウザのタブで複数のコンソールを開いている場合、それらを簡単に区別するために役立ちます。"
+msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
+msgstr "この設定により、ルータがファイアウォールであるかどうかを判断するためのSSUテストを無効にすることができます。ファイアウォールでないことが確認されているが、一時的なファイアウォールの問題が発生しているルータに対して有効にすることもできます。テストが無効にされている場合、SSUとNTCPの両方が<a href=/info>ルータ情報ページ</a>で現在の公開IPアドレスを報告するはずです。[再起動が必要です]"
 
-msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
-msgstr "この設定は、ルーターが正確な時刻を維持するために必要な代替NTPサーバーの設定を許可します。[デフォルトは0.pool.ntp.org、1.pool.ntp.org、2.pool.ntp.org]"
+msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
+msgstr "この設定により、ピアとの通信時に優先されるトランスポートを決定します。デフォルトでは、UDP (SSU) よりもNTCPが優先されています。値をtrueに設定すると、事前のNTCP接続が存在しない限り、UDPが優先されます。alwaysに設定すると、事前のNTCP接続の有無に関係なく常にUDPが使用されます。[デフォルトはfalse]"
+
+msgid "miscellaneous"
+msgstr ""
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "trueに設定すると、このオプションに基本的なサービス制御オプションを備えたアイコンがシステムトレイ/通知エリアに配置されます。[デフォルトでは無効]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
 msgstr "この設定は、トレントをダウンロードまたは作成する際にI2PSnarkが許可する最大ファイル数の構成を可能にします。デフォルトの2000ファイルからこの値を大幅に増やす場合、ホストシステムの追加の設定が必要になる場合があります。オペレーティングシステムが許可するオープンファイルの最大数を増やすために、例えばLinuxの場合は<code>ulimit -n</code>を追加設定する必要があります。変更するには、I2PSnarkの設定ファイル<code>i2psnark.config</code>に追加します。[I2PSnarkまたはルーターの再起動が必要です]"
+
+msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
+msgstr "このトンネル固有の設定では、ルーターにホストされるサーバーへのpingへの返信を有効化または無効化することができます。ピンの無効化には、Tunnel Managerのサーバーの設定の<i>Custom Options</i>セクションに<code>i2p.streaming.answerPings=false</code>の行を追加する必要があります。"
+
+msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
+msgstr "この設定は、有効にすると、ルーターにホストされるすべてのping-enabledサーバーに対して、最大50msのランダムなpongの遅延を導入します。デフォルトは無効です。[再起動が必要です]"
+
+msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
+msgstr "この設定を有効にすると、<code>i2p.streaming.enablePongDelay</code>も有効になっている場合、ping-enabledサーバーに導入されるランダムなpong遅延の最大追加値が変更されます。明示的に設定されていない場合、デフォルト値の50msが使用されます。"
+
+msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
+msgstr "trueに設定すると、I2Pはネットワーク接続なしで実行されます。これは、コードの更新をテストするためにルーターを頻繁に再起動する場合に便利であり、ネットワークの中断を防ぎます。"
+
+msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
+msgstr "この設定は、ルーターが正確な時刻を維持するために必要な代替NTPサーバーの設定を許可します。[デフォルトは0.pool.ntp.org、1.pool.ntp.org、2.pool.ntp.org]"
 
 msgid "Recent I2P+ Changes"
 msgstr "最近の I2P の変更"
@@ -6088,6 +6164,18 @@ msgstr "SSLおよび非SSLの両方に対して"
 
 msgid "For SSL only"
 msgstr "SSLのみの場合"
+
+msgid "How can I configure the console and web services to be accessible on my local network?"
+msgstr ""
+
+msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
+msgstr ""
+
+msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
+msgstr ""
+
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager’s configuration section using the <i>reachable by</i> dropdown."
+msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "I2P 内の IRC につなぐには？"
@@ -7348,9 +7436,6 @@ msgstr "ネットワークピア"
 msgid "peer profiles"
 msgstr "ピアプロファイル"
 
-msgid "Peer Profiles"
-msgstr "ピアプロファイル"
-
 msgid "Session Banned Peers"
 msgstr "セッション禁止ピア"
 
@@ -7567,6 +7652,9 @@ msgstr "トンネルを切り替え"
 msgid "Peer Profile"
 msgstr "ピアプロフィール"
 
+msgid "Profile View"
+msgstr ""
+
 msgid "Profile for peer"
 msgstr "ピアのプロファイル"
 
@@ -7704,6 +7792,35 @@ msgstr "完了"
 
 
 
+
+
 #, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

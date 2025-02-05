@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Warning: Invalid Request URI"
+msgid "Website Unknown"
 msgstr ""
 
 msgid "Router Console"
@@ -24,71 +24,6 @@ msgid "Configuration"
 msgstr ""
 
 msgid "Help"
-msgstr ""
-
-msgid "The request URI is invalid, and probably contains illegal characters."
-msgstr ""
-
-msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
-msgstr ""
-
-msgid "Connection Reset"
-msgstr ""
-
-msgid "The connection to the website was reset while the page was loading."
-msgstr ""
-
-msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr ""
-
-#, java-format
-msgid "You may want to {0}retry{1}."
-msgstr ""
-
-#, java-format
-msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
-msgstr ""
-
-msgid "Could not find the following destination:"
-msgstr ""
-
-msgid "Warning: Non-HTTP Protocol"
-msgstr ""
-
-msgid "The request uses a bad protocol."
-msgstr ""
-
-msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
-msgstr ""
-
-msgid "Other protocols such as FTP are not allowed."
-msgstr ""
-
-msgid "Warning: No Outproxy Configured"
-msgstr ""
-
-msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
-msgstr ""
-
-msgid "Please configure an outproxy in I2PTunnel."
-msgstr ""
-
-msgid "Error: Request Denied"
-msgstr ""
-
-msgid "Error: Cannot Access Router Console via I2P Proxy"
-msgstr ""
-
-msgid "Your browser is misconfigured."
-msgstr ""
-
-msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
-msgstr ""
-
-msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
-msgstr ""
-
-msgid "Website Unknown"
 msgstr ""
 
 msgid "Website Not Found in Addressbook"
@@ -111,98 +46,34 @@ msgstr ""
 msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
 msgstr ""
 
-msgid "Website Unreachable"
+msgid "Could not find the following destination:"
 msgstr ""
 
-msgid "The website was not reachable, because its lease set was not found."
+msgid "Warning: Non-HTTP Protocol"
 msgstr ""
 
-msgid "The website is probably down, but there could also be network congestion."
+msgid "The request uses a bad protocol."
 msgstr ""
 
-msgid "Outproxy Not Found"
+msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
 msgstr ""
 
-msgid "The HTTP Outproxy was not found."
+msgid "Other protocols such as FTP are not allowed."
 msgstr ""
 
-msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgid "Error: Request Denied"
 msgstr ""
 
-#, java-format
-msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgid "Error: Cannot Access Router Console via I2P Proxy"
 msgstr ""
 
-#, java-format
-msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgid "Your browser is misconfigured."
 msgstr ""
 
-msgid "Warning: Request Denied"
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
 msgstr ""
 
-msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
-msgstr ""
-
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr ""
-
-msgid "Outproxy Unreachable"
-msgstr ""
-
-msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
-msgstr ""
-
-msgid "Could not connect to the following destination:"
-msgstr ""
-
-msgid "Proxy Authorization Required"
-msgstr ""
-
-msgid "I2P HTTP Proxy Authorization Required"
-msgstr ""
-
-msgid "This proxy is configured to require a username and password for access."
-msgstr ""
-
-#, java-format
-msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
-msgstr ""
-
-#, java-format
-msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
-msgstr ""
-
-msgid "Warning: Invalid Destination"
-msgstr ""
-
-msgid "The website destination specified was not valid, or was otherwise unreachable."
-msgstr ""
-
-msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
-msgstr ""
-
-msgid "The I2P host could also be offline."
-msgstr ""
-
-msgid "The connection to the proxy was reset."
-msgstr ""
-
-msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr ""
-
-msgid "The HTTP outproxy was not reachable, because its lease set was not found."
-msgstr ""
-
-msgid "The outproxy is probably down, but there could also be network congestion."
-msgstr ""
-
-msgid "Warning: Authorization Required"
-msgstr ""
-
-msgid "The website was not reachable."
-msgstr ""
-
-msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
 msgstr ""
 
 msgid "Warning: Destination Key Conflict"
@@ -217,23 +88,80 @@ msgstr ""
 msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
 msgstr ""
 
-msgid "The Base32 address is invalid."
+msgid "Connection Reset"
 msgstr ""
 
-msgid "Warning: Bad Address Helper"
+msgid "The connection to the website was reset while the page was loading."
+msgstr ""
+
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
 msgstr ""
 
 #, java-format
-msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgid "You may want to {0}retry{1}."
 msgstr ""
 
-msgid "It seems to be garbage data, or a mistyped Base 32 address."
+#, java-format
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
 msgstr ""
 
-msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgid "Website Unreachable"
 msgstr ""
 
 msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr ""
+
+msgid "Could not connect to the following destination:"
+msgstr ""
+
+msgid "The website was not reachable, because its lease set was not found."
+msgstr ""
+
+msgid "The website is probably down, but there could also be network congestion."
+msgstr ""
+
+msgid "The connection to the proxy was reset."
+msgstr ""
+
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr ""
+
+#, java-format
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr ""
+
+#, java-format
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr ""
+
+msgid "Outproxy Unreachable"
+msgstr ""
+
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr ""
+
+msgid "The website was not reachable."
+msgstr ""
+
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr ""
+
+msgid "Warning: No Outproxy Configured"
+msgstr ""
+
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr ""
+
+msgid "Please configure an outproxy in I2PTunnel."
+msgstr ""
+
+msgid "Outproxy Not Found"
+msgstr ""
+
+msgid "The HTTP Outproxy was not found."
+msgstr ""
+
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
 msgstr ""
 
 msgid "Information: New Host Name"
@@ -255,6 +183,78 @@ msgid "If you do not save it, the host name will be forgotten after the next rou
 msgstr ""
 
 msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
+msgstr ""
+
+msgid "Proxy Authorization Required"
+msgstr ""
+
+msgid "I2P HTTP Proxy Authorization Required"
+msgstr ""
+
+msgid "This proxy is configured to require a username and password for access."
+msgstr ""
+
+#, java-format
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr ""
+
+#, java-format
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr ""
+
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr ""
+
+msgid "The outproxy is probably down, but there could also be network congestion."
+msgstr ""
+
+msgid "Warning: Request Denied"
+msgstr ""
+
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr ""
+
+msgid "You attempted to connect to a non-I2P website or location."
+msgstr ""
+
+msgid "Warning: Bad Address Helper"
+msgstr ""
+
+#, java-format
+msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgstr ""
+
+msgid "It seems to be garbage data, or a mistyped Base 32 address."
+msgstr ""
+
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr ""
+
+msgid "Warning: Invalid Destination"
+msgstr ""
+
+msgid "The website destination specified was not valid, or was otherwise unreachable."
+msgstr ""
+
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr ""
+
+msgid "The I2P host could also be offline."
+msgstr ""
+
+msgid "Warning: Authorization Required"
+msgstr ""
+
+msgid "Warning: Invalid Request URI"
+msgstr ""
+
+msgid "The request URI is invalid, and probably contains illegal characters."
+msgstr ""
+
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr ""
+
+msgid "The Base32 address is invalid."
 msgstr ""
 
 msgid "This seems to be a bad destination:"

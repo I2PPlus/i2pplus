@@ -142,6 +142,9 @@ msgstr "Az aláírástípusunk nem támogatott"
 msgid "Unreachable on any transport"
 msgstr "Egyik átvitelen sem érhető el"
 
+msgid "Cannot enumerate UPnP devices on Android."
+msgstr ""
+
 msgid "UPnP is not enabled"
 msgstr "UPnP nincs engedélyezve"
 
@@ -679,11 +682,39 @@ msgstr "Kérem jelentse"
 msgid "After reporting, please restart your router"
 msgstr "A bejelentés után indítsa újra az útválasztót"
 
+msgid "Invalid form submission, requires POST"
+msgstr ""
+
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "Úrlap küldése sikertelen, valószínűleg a \"vissza\" vagy az \"újratöltés\" gombokat használtad a böngészőben. Kérlek, hogy küldd újra."
 
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Ha a probléma fennáll, ellenőrizd, hogy a sütik engedélyezve vannak-e a böngésződben."
+
+msgid "Bandwidth usage"
+msgstr "Sávszélesség felhasználás"
+
+#, java-format
+msgid "events in {0}"
+msgstr "Események a következőben: {0}"
+
+msgid "Events per period"
+msgstr "Események időszakonként"
+
+msgid "Min"
+msgstr "Min"
+
+msgid "Max"
+msgstr "Max"
+
+msgid "Avg"
+msgstr "Átlag"
+
+msgid "Now"
+msgstr "Most"
+
+msgid "Router restarted"
+msgstr "Router újraindítva"
 
 #, java-format
 msgid "News last updated {0} ago."
@@ -716,31 +747,6 @@ msgstr[1] "{0} a plugins frissítve"
 
 msgid "Plugin check complete"
 msgstr "A beépülő modul ellenőrzése befejeződött"
-
-msgid "Bandwidth usage"
-msgstr "Sávszélesség felhasználás"
-
-#, java-format
-msgid "events in {0}"
-msgstr "Események a következőben: {0}"
-
-msgid "Events per period"
-msgstr "Események időszakonként"
-
-msgid "Min"
-msgstr "Min"
-
-msgid "Max"
-msgstr "Max"
-
-msgid "Avg"
-msgstr "Átlag"
-
-msgid "Now"
-msgstr "Most"
-
-msgid "Router restarted"
-msgstr "Router újraindítva"
 
 msgid "none"
 msgstr "semmi"
@@ -810,8 +816,20 @@ msgstr "Konzol"
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "További információkért lásd a kommentált <code>clients.config</code> fájl az SSL -hozzáférés engedélyezéséhez az I2P Alkalmazáskönyvtárban található megjegyzéseket. Szerkesztenie kell a RouterConsolerunner konfigurációs fájlt, amely a könyvtárban található: "
 
+msgid "Save disabled, edit the router.config file to make changes"
+msgstr ""
+
 msgid "Error updating the configuration - please see the error logs"
 msgstr "Hiba a beállítások frissítésekor - kérlek, nézd át a hibanaplót"
+
+msgid "No changes made to the configuration"
+msgstr ""
+
+msgid "Note"
+msgstr "MEGJEGYZÉS"
+
+msgid "Some changes may require a restart to take effect."
+msgstr "Némely változtatás érvénybe lépéséhez újraindítás szükséges."
 
 msgid "Save Client Configuration"
 msgstr "Kliens Beállítások Mentése"
@@ -825,6 +843,9 @@ msgstr "WebAlkalmazás Beállítások Mentése"
 msgid "Save Plugin Configuration"
 msgstr "Kiegészítők Beállításainak Mentése"
 
+msgid "Plugins disabled"
+msgstr ""
+
 msgid "Install Plugin"
 msgstr "Kiegészítő Telepítése"
 
@@ -833,6 +854,9 @@ msgstr "Beépülő Telepítése Fájlból"
 
 msgid "Update All Installed Plugins"
 msgstr "Összes Telepített Kiegészítő Frissítése"
+
+msgid "Delete client disabled"
+msgstr ""
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -915,9 +939,18 @@ msgstr "A kiegészítő frissítés letöltése már folyamatban van."
 msgid "Updating all plugins"
 msgstr "Az összes kiegészítő frissítése folyamatban"
 
+msgid "Update manager not registered, cannot install"
+msgstr ""
+
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "Beépülő telepítése innen: {0}"
+
+msgid "Cannot install, check logs"
+msgstr ""
+
+msgid "Update manager not registered, cannot check"
+msgstr ""
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1016,6 +1049,19 @@ msgstr "Beállítások mentése sikeres."
 msgid "Join Family"
 msgstr "Csatlakozz a családhoz"
 
+msgid "Bad certificate - No Subject CN"
+msgstr ""
+
+msgid "Bad characters in Family: "
+msgstr ""
+
+#, java-format
+msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
+msgstr ""
+
+msgid "Family key configured for router family: "
+msgstr ""
+
 msgid "Load from file failed"
 msgstr "A fájlból való betöltés nem sikerült"
 
@@ -1031,8 +1077,8 @@ msgstr "Egység Hozzáadása"
 msgid "Restore defaults"
 msgstr "Alapértelmezett Beállítások Visszaállítása"
 
-msgid "Home page changed"
-msgstr "Honlap megváltozott"
+msgid "Bad group detected, please retry"
+msgstr ""
 
 msgid "Restored default settings"
 msgstr "Alapértelmezett Beállítások Visszaállítva"
@@ -1064,6 +1110,9 @@ msgstr "Érvénytelen kulcs"
 msgid "Invalid destination"
 msgstr "Érvénytelen célállomás"
 
+msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
+msgstr ""
+
 #, java-format
 msgid "Key for {0} added to keyring"
 msgstr "A(z) {0} kulcsa hozzáadva a kulcstartóhoz"
@@ -1073,6 +1122,9 @@ msgstr "Keresési jelszó szükséges"
 
 msgid "Requires hostname, destination, or blinded Base32"
 msgstr "Hosztnév, célhely vagy letiltott Base32 szükséges"
+
+msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
+msgstr ""
 
 msgid "Destination requires lookup password"
 msgstr "A cél keresési jelszót igényel"
@@ -1091,6 +1143,9 @@ msgstr "Kulcs küldése a szerver üzemeltetőjének."
 
 msgid "Delete key"
 msgstr "Kulcs Törlése"
+
+msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
+msgstr ""
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1141,6 +1196,36 @@ msgstr "Elvakult"
 
 msgid "Log overrides updated"
 msgstr "Napló felülbírálás frissítve"
+
+msgid "Error updating the log limits - levels not valid"
+msgstr ""
+
+msgid "Log limits cleared"
+msgstr ""
+
+#, java-format
+msgid "Default log level updated from {0} to {1}"
+msgstr ""
+
+msgid "Date format updated"
+msgstr ""
+
+#, java-format
+msgid "Specified date format is not valid ({0}) - not updated"
+msgstr ""
+
+msgid "File size updated"
+msgstr ""
+
+#, java-format
+msgid "Specified file size limit is not valid ({0}) - not updated"
+msgstr ""
+
+msgid "Compression setting updated"
+msgstr ""
+
+msgid "Log record format updated"
+msgstr ""
 
 msgid "Log configuration saved"
 msgstr "Napló beállítások elmentve"
@@ -1349,6 +1434,12 @@ msgstr "Sebesség értéke helytelen"
 msgid "Bad capacity value"
 msgstr "Helytelen kapacitás érték"
 
+msgid "Bonuses adjusted for: "
+msgstr ""
+
+msgid "No profile exists for: "
+msgstr ""
+
 msgid "Unsupported"
 msgstr "Nem támogatott"
 
@@ -1460,27 +1551,14 @@ msgstr[1] "Kérjük, várja meg az útválasztási kötelezettségvállalást a 
 msgid "Restart in {0}"
 msgstr "Újraindítás: {0}"
 
-msgid "Stat filter and location updated successfully to"
-msgstr "Állapot szűrő és hely sikeresen frissítve a következőre"
-
-msgid "Full statistics enabled"
-msgstr "Teljes statisztika engedélyezve"
-
-msgid "Full statistics disabled"
-msgstr "A teljes statisztika letiltva"
-
-#, java-format
-msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
-msgstr "A grafikonok listája frissítve, akár 60 másodpercbe is telhet, mire megjelenik a {0}Grafikonok oldalon{1}"
-
 msgid "Save order"
 msgstr "Megrendelés mentése"
 
-msgid "Refresh disabled"
-msgstr "Frissítés kikapcsolva"
+msgid "Sidebar refresh disabled"
+msgstr ""
 
-msgid "Refresh interval changed"
-msgstr "A frissítési időköz megváltozott"
+msgid "Sidebar refresh interval changed"
+msgstr ""
 
 msgid "Refresh interval must be a number"
 msgstr "A frissítési időköz csak szám lehet"
@@ -1488,17 +1566,17 @@ msgstr "A frissítési időköz csak szám lehet"
 msgid "Restore full default"
 msgstr "Alapértelmezett értékek visszaállítása"
 
-msgid "Full summary bar default restored."
-msgstr "A teljes összegző sáv alapértelmezett beállítása visszaállítva."
+msgid "Full sidebar defaults restored."
+msgstr ""
 
-msgid "Summary bar will refresh shortly."
-msgstr "Az összefoglaló sáv hamarosan frissül."
+msgid "Sidebar will refresh shortly."
+msgstr ""
 
 msgid "Restore minimal default"
 msgstr "Minimális alapértelmezés visszaállítása"
 
-msgid "Minimal summary bar default restored."
-msgstr "A minimális összegző sáv alapértelmezett értéke visszaállítva."
+msgid "Minimal sidebar defaults restored."
+msgstr ""
 
 msgid "Order must be an integer"
 msgstr "A sorrendnek egész számnak kell lennie"
@@ -1514,6 +1592,27 @@ msgstr "Áthelyezve"
 
 msgid "Saved order of sections."
 msgstr "A szakaszok elmentett sorrendje."
+
+msgid "Stat filter and location updated successfully to"
+msgstr "Állapot szűrő és hely sikeresen frissítve a következőre"
+
+msgid "Full statistics enabled"
+msgstr "Teljes statisztika engedélyezve"
+
+msgid "Full statistics disabled"
+msgstr "A teljes statisztika letiltva"
+
+#, java-format
+msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
+msgstr "A grafikonok listája frissítve, akár 60 másodpercbe is telhet, mire megjelenik a {0}Grafikonok oldalon{1}"
+
+#, java-format
+msgid "Internal error: could not resolve pool name {0}."
+msgstr ""
+
+#, java-format
+msgid "Internal error: could not find pool settings for {0}."
+msgstr ""
 
 msgid "Updated settings for all pools."
 msgstr "Minden készlet beállításai frissítve."
@@ -1539,9 +1638,8 @@ msgstr[1] "{0} alagutak"
 msgid "Exploratory tunnels"
 msgstr "Felfedező alagút"
 
-#, java-format
-msgid "Client tunnels for {0}"
-msgstr "Kliens alagút a következőnek: {0}"
+msgid "I2PSnark"
+msgstr "I2PSnark"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "ANONIMITÁSI FIGYELMEZTETÉS - a beállítások 0-ugrású alagutat tartalmaznak."
@@ -1567,17 +1665,17 @@ msgstr "Bejövő"
 msgid "Outbound"
 msgstr "Kimenő"
 
-msgid "Length"
-msgstr "Hossz"
-
-msgid "Randomization"
-msgstr "Véletlenszerűség"
-
 msgid "Quantity"
 msgstr "Mennyiség"
 
 msgid "Backup quantity"
 msgstr "Mentési mennyiség"
+
+msgid "Length"
+msgstr "Hossz"
+
+msgid "Randomization"
+msgstr "Véletlenszerűség"
 
 msgid "Inbound options"
 msgstr "Bejövő opciók"
@@ -1588,17 +1686,20 @@ msgstr "Kimenő opciók"
 msgid "Add user"
 msgstr "Felhasználó hozzáadása"
 
+msgid "Cannot save theme choice, theme name has illegal characters"
+msgstr ""
+
 msgid "Theme change saved."
 msgstr "A témaváltoztatás mentve."
-
-msgid "Refresh the page to view."
-msgstr "Megtenkintéshez az oldal frissítése szükséges."
 
 msgid "Mobile console option saved."
 msgstr "A mobilkonzol opció mentve."
 
 msgid "No user name entered"
 msgstr "Nincs megadva felhasználónév"
+
+msgid "User name may not contain '='"
+msgstr ""
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "Figyelem: Az ISO-8859-1 karakterkészleten kívüli felhasználói nevek használata nem javasolt. "
@@ -1889,17 +1990,17 @@ msgstr "Grafikon útválasztó teljesítménye"
 msgid "Graphs"
 msgstr "Ábra"
 
-msgid "Anonymous webmail client"
-msgstr "Anoním webes e-mail kliens"
-
-msgid "I2PMail"
-msgstr "I2PMail"
-
 msgid "Help"
 msgstr "Segítség"
 
 msgid "I2P Router Help"
 msgstr "I2P Router Segítség"
+
+msgid "Anonymous webmail client"
+msgstr "Anoním webes e-mail kliens"
+
+msgid "I2PMail"
+msgstr "I2PMail"
 
 msgid "Install and configure I2P plugins"
 msgstr "Telepítse és konfigurálja az I2P bővítményeket"
@@ -1918,6 +2019,12 @@ msgstr "Hálózati adatbázis"
 
 msgid "Show list of all known I2P routers"
 msgstr "Minden ismert I2P router listájának megjelenítése"
+
+msgid "List of recently connected peers with profiling info"
+msgstr ""
+
+msgid "Peer Profiles"
+msgstr "Peer Profilok"
 
 msgid "Router Info"
 msgstr "Router Információ"
@@ -1991,14 +2098,14 @@ msgstr "Speciális konfiguráció"
 msgid "Advanced router configuration"
 msgstr "Speciális útválasztó konfiguráció"
 
-msgid "Start or stop Router clients"
-msgstr "Router kliensek elindítása vagy leállítása"
-
 msgid "Changelog"
 msgstr "Változások"
 
 msgid "Recent changes"
 msgstr "Legutóbbi változások"
+
+msgid "Start or stop Router clients"
+msgstr "Router kliensek elindítása vagy leállítása"
 
 msgid "Bug tracker"
 msgstr "Hibakövető"
@@ -2144,9 +2251,6 @@ msgstr "Clearnet BitTorrent DHT kereső"
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "DuckDuckGo keresőmotor (javascript nélkül)"
 
-msgid "Clearnet Search Engine"
-msgstr "Clearnet keresőmotor"
-
 msgid "Privacy-focused Clearnet Search Engine"
 msgstr "Adatvédelemre összpontosító Clearnet keresőmotor"
 
@@ -2222,18 +2326,6 @@ msgstr "Független oknyomozó újságírás"
 msgid "Information Security Research &amp; Education"
 msgstr "Információbiztonsági kutatás és oktatás"
 
-msgid "Cannabis-related magazine"
-msgstr "Kannabisszal kapcsolatos magazin"
-
-msgid "CultureMagazine"
-msgstr "Kultúra Magazin"
-
-msgid "A magazine of Politics &amp; Culture"
-msgstr "A politika és a kultúra magazinja"
-
-msgid "CurrentAffairs"
-msgstr "CurrentAffairs"
-
 msgid "Darknet related news site"
 msgstr "Darknet kapcsolódó híroldal"
 
@@ -2288,15 +2380,6 @@ msgstr "HongKongWatch"
 msgid "Monitors threats to freedoms and rights in Hong Kong"
 msgstr "Figyelemmel kíséri a szabadságjogokat és jogokat fenyegető veszélyeket Hongkongban"
 
-msgid "Politics &amp; Current Affairs Journal"
-msgstr "Politika és Aktualitás folyóirat"
-
-msgid "English language Japanese News"
-msgstr "angol nyelvű japán hírek"
-
-msgid "JapanToday"
-msgstr "JapanToday"
-
 msgid "JStorDaily"
 msgstr "JStorDaily"
 
@@ -2339,9 +2422,6 @@ msgstr "Hírek és blogok az I2P-ről"
 msgid "Planeta"
 msgstr "Planeta"
 
-msgid "News &amp; Views on Tibet"
-msgstr "Hírek és nézetek Tibetről"
-
 msgid "Lifestyle magazine"
 msgstr "Életmód magazin"
 
@@ -2359,6 +2439,9 @@ msgstr "ScienceDaily"
 
 msgid "Community-driven tech news"
 msgstr "Közösségvezérelt technológiai hírek"
+
+msgid "Various services"
+msgstr ""
 
 msgid "News for nerds"
 msgstr "Hírek nebulóknak"
@@ -2405,12 +2488,6 @@ msgstr "Globális hírek"
 msgid "TheGuardian"
 msgstr "TheGuardian"
 
-msgid "TheHill"
-msgstr "The Hill"
-
-msgid "US Political News"
-msgstr "US Politikai Hírek"
-
 msgid "TheMarkup"
 msgstr "TheMarkup"
 
@@ -2425,12 +2502,6 @@ msgstr "TheMoscowTimes"
 
 msgid "TheNewRepublic"
 msgstr "Az Új Köztársaság"
-
-msgid "International News from Tibet"
-msgstr "Nemzetközi hírek Tibetből"
-
-msgid "TheTibetPost"
-msgstr "TheTibetPost"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "Fájlmegosztás és szerzői jogi hírek"
@@ -2459,6 +2530,9 @@ msgstr "URL"
 
 msgid "Add"
 msgstr "Hozzáadás"
+
+msgid "Error displaying the info page."
+msgstr ""
 
 msgid "Identity"
 msgstr "Identitás"
@@ -2505,6 +2579,9 @@ msgstr "Rendelkezésre álló CPU magok"
 msgid "Performance"
 msgstr "Teljesítmény"
 
+msgid "Maximum available RAM"
+msgstr ""
+
 msgid "Classified as slow"
 msgstr "Lassúnak minősítve"
 
@@ -2513,6 +2590,9 @@ msgstr "Igen"
 
 msgid "No"
 msgstr "Nem"
+
+msgid "GeoIP Db"
+msgstr ""
 
 msgid "Target"
 msgstr "Cél"
@@ -2650,6 +2730,9 @@ msgstr "Minden útválasztó (Client NetDb)"
 msgid "Sybil Analysis"
 msgstr "Sybil Elemzés"
 
+msgid "Bad value supplied, please check and try again."
+msgstr ""
+
 msgid "Router Map"
 msgstr "Router térkép"
 
@@ -2724,9 +2807,6 @@ msgstr "be van tiltva"
 
 msgid "not found in network database"
 msgstr "nem található a hálózati adatbázisban"
-
-msgid "No results"
-msgstr "Nincs találat"
 
 msgid "Bad Base64 Router hash"
 msgstr ""
@@ -2975,50 +3055,11 @@ msgstr "Az összes ezzel a címmel rendelkező útválasztó megjelenítése a N
 msgid "Show all routers with this port in the NetDb"
 msgstr "Az ezzel a porttal rendelkező összes útválasztó megjelenítése a NetDb-ben"
 
-msgid "Core version"
-msgstr "Core verzió"
-
 msgid "Network ID"
 msgstr "Hálózati azonosító"
 
 msgid "Routers"
 msgstr "Routerek"
-
-msgid "Family Key"
-msgstr "Családi kulcs"
-
-msgid "Family Sig"
-msgstr "Családi aláírás"
-
-msgid "Exploratory tunnels expire (1h)"
-msgstr "A feltáró alagutak lejárnak (1 óra)"
-
-msgid "Exploratory tunnels reject (1h)"
-msgstr "Kutató alagutak elutasítása (1 óra)"
-
-msgid "Exploratory tunnels build success (1h)"
-msgstr "Kutató alagutak építenek sikert (1 óra)"
-
-msgid "Client tunnels expire (1h)"
-msgstr "Az ügyfélalagutak lejárnak (1 óra)"
-
-msgid "Client tunnels reject (1h)"
-msgstr "Ügyfélalagutak elutasítása (1 óra)"
-
-msgid "Client tunnels build success (1h)"
-msgstr "Ügyfélalagutak sikeresek (1 óra)"
-
-msgid "Participating tunnels (1h)"
-msgstr "Résztvevő alagutak (1 óra)"
-
-msgid "Participating tunnels (60s)"
-msgstr "Résztvevő alagutak (60 mp)"
-
-msgid "Bandwidth send rate (1h)"
-msgstr "Sávszélesség küldési sebesség (1 óra)"
-
-msgid "Bandwidth receive rate (1h)"
-msgstr "Sávszélesség vételi sebesség (1 óra)"
 
 msgid "First heard about"
 msgstr "Először hallottam róla"
@@ -3088,9 +3129,6 @@ msgstr "a router.config fájlba."
 msgid "Peer Connections"
 msgstr "Távoli csatlakozások"
 
-msgid "Auto-refresh"
-msgstr "Automatikus frissítés"
-
 msgid "Active in the last minute"
 msgstr "Aktív az utolsó pillanatban"
 
@@ -3099,6 +3137,12 @@ msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
+
+msgid "Limit"
+msgstr ""
+
+msgid "Maximum permitted connections"
+msgstr ""
 
 msgid "Current / maximum permitted"
 msgstr "Áram / maximálisan megengedett"
@@ -3504,8 +3548,8 @@ msgid "{0} shared bandwidth"
 msgstr "{0} megosztott sávszélesség"
 
 #, java-format
-msgid "Over {0} shared bandwidth"
-msgstr "Több mint {0} megosztott sávszélesség"
+msgid "Over {0} KB/s shared bandwidth"
+msgstr ""
 
 msgid "status"
 msgstr "állapot"
@@ -3577,84 +3621,151 @@ msgstr ""
 msgid "Select search engine"
 msgstr "Válassz keresőmotort"
 
-msgid "Statistics gathered during this router's uptime"
-msgstr "E router indítása óta gyűjtött statisztika"
+#, java-format
+msgid "Clock Skew of {0}"
+msgstr "Óra ferde {0}"
 
-msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
-msgstr "Az összegyűjtött adat 1 perces időtartamra van korlátozva, ezért becslésként használandó."
+msgid "Testing"
+msgstr "Tesztelés"
 
-msgid "These statistics are primarily used for development and debugging."
-msgstr "Ezek a staisztikák főleg fejlesztéshez és hibaelhárításhoz használatosak."
+msgid "Private TCP Address"
+msgstr "Privát TCP-cím"
 
-msgid "No lifetime events"
-msgstr "Nincsenek élethossz események."
+msgid "SymmetricNAT"
+msgstr "Szimmetrikus NAT"
 
-msgid "frequency"
-msgstr "gyakoriság"
+msgid "Firewalled with Inbound TCP Enabled"
+msgstr "Bejövő TCP-vel tűzfalazva"
 
-msgid "Rolling average events per period"
-msgstr "Időszakonkénti mozgó átlag események"
+msgid "Firewalled &amp; Floodfill"
+msgstr "Firewalled és Floodfill"
 
-msgid "Highest events per period"
-msgstr "Időszakonkénti legmagasabb események."
+msgid "Disconnected"
+msgstr "Leválasztva"
 
-msgid "Lifetime average events per period"
-msgstr "Időszakonkénti átlag élethossz események"
+msgid "UDP Port In Use"
+msgstr "UDP port használatban"
 
-msgid "Lifetime average frequency"
-msgstr "Élethossz átlag gyakorisága"
+msgid "No Active Peers"
+msgstr "Nincsenek aktív társak"
+
+msgid "UDP Disabled &amp; Inbound TCP host/port not set"
+msgstr "UDP letiltva és bejövő TCP gazdagép/port nincs beállítva"
+
+msgid "Firewalled with UDP Disabled"
+msgstr "Tűzfal, UDP tiltva"
+
+msgid "Add/remove/edit &amp; control your client and server tunnels"
+msgstr "Hozzáadás/Eltávolítás/Szerkesztés, valamint saját kliens és szerver alagutak vezérlése"
+
+msgid "Service Tunnels"
+msgstr "Service alagutak"
+
+msgid "How many local service tunnels we're running"
+msgstr "Hány helyi szolgáltatási alagutat futtatunk"
+
+msgid "Messenger"
+msgstr "Üzenetküldő"
+
+msgid "i2pchat"
+msgstr "i2pchat"
+
+msgid "I2PChat"
+msgstr "I2PChat"
+
+msgid "Server"
+msgstr "Szerver"
+
+msgid "service may be available to peers"
+msgstr "a szolgáltatás elérhető lehet társaik számára"
+
+msgid "service is only available locally"
+msgstr "a szolgáltatás csak helyben érhető el"
+
+msgid "Show tunnels"
+msgstr "Alagutakat mutat"
+
+msgid "Leases expired"
+msgstr "Kiadás lejárt"
+
+msgid "Rebuilding"
+msgstr "Újraépítés"
+
+msgid "ago"
+msgstr "ezelőtt"
+
+msgid "Ready"
+msgstr "Kész"
+
+msgid "Building"
+msgstr "Építés alatt"
+
+msgid "Building tunnels"
+msgstr "Alagutak építés alatt"
+
+msgid "Shared Clients"
+msgstr "Megosztott Ügyfelek"
+
+msgid "Click Restart to install"
+msgstr "Telepítéshez kattints az újraindításra"
+
+msgid "Click Shutdown and restart to install"
+msgstr "Telepítéshez kattints a lekapcsolás és újraindítás -ra"
 
 #, java-format
-msgid "{0} event"
-msgid_plural "{0} events"
-msgstr[0] "{0} esemény"
-msgstr[1] "{0} események"
+msgid "{0}"
+msgstr "{0}"
 
-msgid "rate"
-msgstr "ráta"
+msgid "Updating after restart"
+msgstr "Frissítés újraindítás után"
 
-msgid "Average"
-msgstr "Átlag"
+msgid "Signed development update available"
+msgstr "Aláírt fejlesztési frissítés elérhető"
 
-msgid "Highest average"
-msgstr "Legmagasabb átlag"
+msgid "Download I2P Update"
+msgstr "I2P frissítés letöltése"
 
-msgid "Highest total in a period"
-msgstr "A legmagasabb összeg egy időszakban"
+msgid "Unsigned update available"
+msgstr "Aláíratlan frissítés elérhető"
 
-msgid "Average event count"
-msgstr "Átlag események száma"
+msgid "Help with firewall configuration"
+msgstr "Segítség a tűzfal beállításához"
 
-msgid "Events in peak period"
-msgstr "Események csúcsidőben"
+msgid "Check network connection and NAT/firewall!"
+msgstr "Ellenőrizze a hálózati kapcsolatot és a NAT/tűzfalat!"
 
-msgid "Events in this period"
-msgstr "Események ebben az időszakban"
+msgid "Attempt to download router reference files (if automatic reseed has failed)"
+msgstr "Kísérlet az útválasztó referenciafájljainak letöltésére (ha az automatikus újraküldés sikertelen)"
 
-#, java-format
-msgid "ended {0} ago"
-msgstr "{0} ezelőtt ért véget"
+msgid "Reseed"
+msgstr "Újratáplálás (reseed)"
 
-msgid "No events"
-msgstr "Nincs esemény"
+msgid "Order"
+msgstr "Rendelés"
 
-msgid "Graph Data"
-msgstr "Ábra Adat"
+msgid "Top"
+msgstr "Top"
 
-msgid "Graph Event Count"
-msgstr "Ábra Események Száma"
+msgid "Move to top"
+msgstr "Ugrás a tetejére"
 
-msgid "Export Data as XML"
-msgstr "Adatok exportálása XML-ként"
+msgid "Move up"
+msgstr "Mozgatás felfelé"
 
-msgid "Lifetime average value"
-msgstr "Élethossz átlag érték"
+msgid "Down"
+msgstr "Le"
 
-#, java-format
-msgid "1 event"
-msgid_plural "{0} events"
-msgstr[0] "1 esemény"
-msgstr[1] "{0} esemény"
+msgid "Move down"
+msgstr "Mozgatás lefelé"
+
+msgid "Bottom"
+msgstr "Alul"
+
+msgid "Move to bottom"
+msgstr "Mozgatás alulra"
+
+msgid "Select a section to add"
+msgstr "Válassza ki a hozzáadni kívánt szakaszt"
 
 msgid "Help &amp; FAQ"
 msgstr "Segítség és GYIK"
@@ -3697,9 +3808,6 @@ msgstr "Torlódás"
 
 msgid "Tunnel Status"
 msgstr "Alagút állapota"
-
-msgid "Service Tunnels"
-msgstr "Service alagutak"
 
 msgid "News &amp; Updates"
 msgstr "Hírek &amp; Frissítések"
@@ -3754,6 +3862,9 @@ msgstr "Webtárhely"
 
 msgid "An introduction to hosting websites on the I2P network"
 msgstr "Bevezetés az I2P-hálózat webhelyeinek üzemeltetésébe"
+
+msgid "New hosts in last 24 hours"
+msgstr ""
 
 msgid "I2PControl"
 msgstr "I2PControl"
@@ -4054,151 +4165,84 @@ msgstr "Nem épülnek részt vevő alagutak, ha a Rejtett üzemmód aktív"
 msgid "Router is configured to reject all transit tunnel requests"
 msgstr "Az útválasztó úgy van konfigurálva, hogy elutasítsa az összes részt vevő alagútkérést"
 
-#, java-format
-msgid "Clock Skew of {0}"
-msgstr "Óra ferde {0}"
+msgid "Statistics gathered during this router's uptime"
+msgstr "E router indítása óta gyűjtött statisztika"
 
-msgid "Testing"
-msgstr "Tesztelés"
+msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
+msgstr "Az összegyűjtött adat 1 perces időtartamra van korlátozva, ezért becslésként használandó."
 
-msgid "Private TCP Address"
-msgstr "Privát TCP-cím"
+msgid "These statistics are primarily used for development and debugging."
+msgstr "Ezek a staisztikák főleg fejlesztéshez és hibaelhárításhoz használatosak."
 
-msgid "SymmetricNAT"
-msgstr "Szimmetrikus NAT"
+msgid "No lifetime events"
+msgstr "Nincsenek élethossz események."
 
-msgid "Firewalled with Inbound TCP Enabled"
-msgstr "Bejövő TCP-vel tűzfalazva"
+msgid "frequency"
+msgstr "gyakoriság"
 
-msgid "Firewalled &amp; Floodfill"
-msgstr "Firewalled és Floodfill"
+msgid "Rolling average events per period"
+msgstr "Időszakonkénti mozgó átlag események"
 
-msgid "Disconnected"
-msgstr "Leválasztva"
+msgid "Highest events per period"
+msgstr "Időszakonkénti legmagasabb események."
 
-msgid "UDP Port In Use"
-msgstr "UDP port használatban"
+msgid "Lifetime average events per period"
+msgstr "Időszakonkénti átlag élethossz események"
 
-msgid "No Active Peers"
-msgstr "Nincsenek aktív társak"
-
-msgid "UDP Disabled &amp; Inbound TCP host/port not set"
-msgstr "UDP letiltva és bejövő TCP gazdagép/port nincs beállítva"
-
-msgid "Firewalled with UDP Disabled"
-msgstr "Tűzfal, UDP tiltva"
-
-msgid "Add/remove/edit &amp; control your client and server tunnels"
-msgstr "Hozzáadás/Eltávolítás/Szerkesztés, valamint saját kliens és szerver alagutak vezérlése"
-
-msgid "How many local service tunnels we're running"
-msgstr "Hány helyi szolgáltatási alagutat futtatunk"
-
-msgid "I2PSnark"
-msgstr "I2PSnark"
-
-msgid "Messenger"
-msgstr "Üzenetküldő"
-
-msgid "i2pchat"
-msgstr "i2pchat"
-
-msgid "I2PChat"
-msgstr "I2PChat"
-
-msgid "Server"
-msgstr "Szerver"
-
-msgid "service may be available to peers"
-msgstr "a szolgáltatás elérhető lehet társaik számára"
-
-msgid "service is only available locally"
-msgstr "a szolgáltatás csak helyben érhető el"
-
-msgid "Show tunnels"
-msgstr "Alagutakat mutat"
-
-msgid "Leases expired"
-msgstr "Kiadás lejárt"
-
-msgid "Rebuilding"
-msgstr "Újraépítés"
-
-msgid "ago"
-msgstr "ezelőtt"
-
-msgid "Ready"
-msgstr "Kész"
-
-msgid "Building"
-msgstr "Építés alatt"
-
-msgid "Building tunnels"
-msgstr "Alagutak építés alatt"
-
-msgid "Shared Clients"
-msgstr "Megosztott Ügyfelek"
-
-msgid "Click Restart to install"
-msgstr "Telepítéshez kattints az újraindításra"
-
-msgid "Click Shutdown and restart to install"
-msgstr "Telepítéshez kattints a lekapcsolás és újraindítás -ra"
+msgid "Lifetime average frequency"
+msgstr "Élethossz átlag gyakorisága"
 
 #, java-format
-msgid "{0}"
-msgstr "{0}"
+msgid "{0} event"
+msgid_plural "{0} events"
+msgstr[0] "{0} esemény"
+msgstr[1] "{0} események"
 
-msgid "Updating after restart"
-msgstr "Frissítés újraindítás után"
+msgid "rate"
+msgstr "ráta"
 
-msgid "Signed development update available"
-msgstr "Aláírt fejlesztési frissítés elérhető"
+msgid "Average"
+msgstr "Átlag"
 
-msgid "Download I2P Update"
-msgstr "I2P frissítés letöltése"
+msgid "Highest average"
+msgstr "Legmagasabb átlag"
 
-msgid "Unsigned update available"
-msgstr "Aláíratlan frissítés elérhető"
+msgid "Highest total in a period"
+msgstr "A legmagasabb összeg egy időszakban"
 
-msgid "Help with firewall configuration"
-msgstr "Segítség a tűzfal beállításához"
+msgid "Average event count"
+msgstr "Átlag események száma"
 
-msgid "Check network connection and NAT/firewall!"
-msgstr "Ellenőrizze a hálózati kapcsolatot és a NAT/tűzfalat!"
+msgid "Events in peak period"
+msgstr "Események csúcsidőben"
 
-msgid "Attempt to download router reference files (if automatic reseed has failed)"
-msgstr "Kísérlet az útválasztó referenciafájljainak letöltésére (ha az automatikus újraküldés sikertelen)"
+msgid "Events in this period"
+msgstr "Események ebben az időszakban"
 
-msgid "Reseed"
-msgstr "Újratáplálás (reseed)"
+#, java-format
+msgid "ended {0} ago"
+msgstr "{0} ezelőtt ért véget"
 
-msgid "Order"
-msgstr "Rendelés"
+msgid "No events"
+msgstr "Nincs esemény"
 
-msgid "Top"
-msgstr "Top"
+msgid "Graph Data"
+msgstr "Ábra Adat"
 
-msgid "Move to top"
-msgstr "Ugrás a tetejére"
+msgid "Graph Event Count"
+msgstr "Ábra Események Száma"
 
-msgid "Move up"
-msgstr "Mozgatás felfelé"
+msgid "Export Data as XML"
+msgstr "Adatok exportálása XML-ként"
 
-msgid "Down"
-msgstr "Le"
+msgid "Lifetime average value"
+msgstr "Élethossz átlag érték"
 
-msgid "Move down"
-msgstr "Mozgatás lefelé"
-
-msgid "Bottom"
-msgstr "Alul"
-
-msgid "Move to bottom"
-msgstr "Mozgatás alulra"
-
-msgid "Select a section to add"
-msgstr "Válassza ki a hozzáadni kívánt szakaszt"
+#, java-format
+msgid "1 event"
+msgid_plural "{0} events"
+msgstr[0] "1 esemény"
+msgstr[1] "{0} esemény"
 
 msgid "No known routers"
 msgstr "Nincs ismert router"
@@ -4538,6 +4582,10 @@ msgstr "Jelenleg nincs aktív helyi vagy tranzitalagút."
 msgid "Bandwidth Tiers"
 msgstr "Sávszélességszintek"
 
+#, java-format
+msgid "Over {0} shared bandwidth"
+msgstr "Több mint {0} megosztott sávszélesség"
+
 msgid "Inbound or outbound?"
 msgstr "Bejövő vagy kimenő?"
 
@@ -4597,6 +4645,18 @@ msgstr "Sávszélesség teszt megszakítva"
 
 msgid "Bandwidth test was not running"
 msgstr "A sávszélesség teszt nem futott"
+
+msgid "ready"
+msgstr ""
+
+msgid "inbound test"
+msgstr ""
+
+msgid "outbound test"
+msgstr ""
+
+msgid "done"
+msgstr ""
 
 msgid "bits per second"
 msgstr "bit másodpercenként"
@@ -4770,8 +4830,8 @@ msgstr "Hálózati megosztás"
 msgid "Share"
 msgstr "Megoszt"
 
-msgid "Note"
-msgstr "MEGJEGYZÉS"
+msgid "NOTE"
+msgstr ""
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
@@ -4795,6 +4855,10 @@ msgstr "Minél magasabb a megosztási sávszélesség, annál jobban elősegíte
 
 msgid "config advanced"
 msgstr "haladó beállítások"
+
+#, java-format
+msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
+msgstr ""
 
 msgid "Floodfill Configuration"
 msgstr "Árvízi kitöltés konfiguráció"
@@ -4823,8 +4887,8 @@ msgstr "Kikapcsol"
 msgid "Advanced I2P+ Configuration"
 msgstr "Haladó I2P Beállítások"
 
-msgid "Some changes may require a restart to take effect."
-msgstr "Némely változtatás érvénybe lépéséhez újraindítás szükséges."
+msgid "Help with additional configuration settings"
+msgstr ""
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5690,23 +5754,50 @@ msgstr "Ha igazra van állítva, ez engedélyezi a bővítmények telepítését
 msgid "When set to true, this setting enables reverse DNS lookups for peers, triggered when displaying the country flag of a peer or when the hostname or domain is explicitly displayed in the console, or when the peer's RouterInfo is written to disk. In order to avoid repeat lookups, it's recommended to configure a generous caching policy for DNS lookups of 10 minutes or more, and to configure a privacy respecting DNS server in your operating system. [Disabled by default, restart required]"
 msgstr "Amikor igazra van állítva, ez a beállítás lehetővé teszi a peers visszafelé DNS nézeteit, amelyek akkor aktiválódnak, amikor egy peer országának zászlaja jelenik meg, vagy amikor a gépnevet vagy a domainnevet az eredményfüggönyön jeleníti meg, vagy akkor is, amikor a peer RouterInfo-ja lemezre kerül. Ahhoz, hogy elkerülje a többszörös keresést, javasolt, hogy állítsa be a DNS keresések bőséges gyorsítótárazási politikáját 10 percnél hosszabb időre, és állítsa be a magánszférát tiszteletben tartó DNS kiszolgáló beállításait a működési rendszerben. [Elsődlegesen kikapcsolt, újraindítás szükséges]"
 
+msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
+msgstr "Ez a beállítás lehetővé teszi egyéni szövegprefix beállítását a router konzol lapjainak címéhez, ami akkor hasznos lehet, ha több konzolt is nyitottál böngészőfülekben, és egyszerű módot szeretnél találni a különbségek jelölésére."
+
 msgid "When set to true, accessing the router console via http:// when https:// is enabled will automatically redirect to https. To configure router console access, edit the settings in your <code>clients.config</code> file in your profile directory (<i>not</i> the application installation directory). [Enabled by default]"
 msgstr "Amikor az igazra van állítva, automatikus átirányítást hoz létre a https-be, amikor a https:// engedélyezve van, hozzáférés a router: konzolhoz http:// -n keresztül. A router konzolhoz való hozzáférés konfigurálásához szerkesztse a beállításokat <code>clients.config</code> fájlban a profil könyvtárában (<i> nem </i> a program telepítési könyvtárában). [Elsődlegesen engedélyezve]"
+
+msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
+msgstr "Ez a beállítás, ha igazra van állítva, megjelenít egy Peer Test átlagot a Congesion részben az oldalsávban, amit úgy állapítanak meg, hogy a sikeres peer teszt átlagot hozzáadják a sikertelen tesztek során felhasznált átlagos túraátlépési időhöz. Az átlag értéket útmutatóként lehet használni a legjobb <code>router.peerTesztTimeout</code> érték meghatározásához. [Az alapértelmezés hamis]"
+
+msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
+msgstr "Ez a beállítás, amikor igazra van állítva, megjeleníti az érdekes oldalak linkeit a <a href=/sitemap>webhelytérképen</a>. [Az alapértelmezett érték hamis]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Ezt a beállítástól függ, használja-e a router a rendelkezésre bocsátott <i>blocklist.txt</i> fájlt és a felhasználó által konfigurált tilalmi listákat a routerek tiltásához hash vagy IP cím alapján. Az IPv4 esetében tartományok és hálózati maszkok támogatottak, de az IPv6 esetében nem. További információkért tekintse meg az I2P+ alkalmazás könyvtárában található <i>blocklist.txt</i> fájlt. [Elsődlegesen engedélyezve, újraindítás szükséges]"
 
-msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
-msgstr "Ezt a beállítástól függ, hogy a router használja-e a rendelkezésre bocsátott <i>blocklist_tor.txt</i> fájlt az I2P+ alkalmazás könyvtárában annak érdekében, hogy a Tor exit node IP címéről működő routereket tiltsa. [Elsődlegesen engedélyezve, újraindítás szükséges]"
+msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
+msgstr "Ennek a beállításnak a segítségével konfigurálhatók a blokklistákon keresztül alkalmazott kitiltások lejárati ideje (másodpercben). Alapértelmezetten a kitiltások a router működésének idejére tartanak. [Újraindítás szükséges]"
 
 msgid "This setting, when configured with a path pointing at a valid blocklist file, enables an additional, user-configured blocklist to be loaded at router startup. [Disabled by default, restart required]"
 msgstr "Ennek a beállításnak a bekapcsolása esetén használható egy további, felhasználó által konfigurálható blokklista a router indításakor. [Alapértelmezett beállításban le van tiltva, újraindítás szükséges]"
 
-msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
-msgstr "Ennek a beállításnak a segítségével konfigurálhatók a blokklistákon keresztül alkalmazott kitiltások lejárati ideje (másodpercben). Alapértelmezetten a kitiltások a router működésének idejére tartanak. [Újraindítás szükséges]"
+msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
+msgstr "Ezt a beállítástól függ, hogy a router használja-e a rendelkezésre bocsátott <i>blocklist_tor.txt</i> fájlt az I2P+ alkalmazás könyvtárában annak érdekében, hogy a Tor exit node IP címéről működő routereket tiltsa. [Elsődlegesen engedélyezve, újraindítás szükséges]"
+
+msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
+msgstr ""
+
+msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
+msgstr "Amikor hamisra van állítva, a router nem blokkolja az alacsonyabb sebességű vagy elérhetetlen, régebbi verziójú routerektől érkező alagút létrehozási kérelmeket. [Alapértelmezés szerint igaz, újraindítás szükséges]"
 
 msgid "Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks."
 msgstr "Kiosztja a processzorszálonkénti több szál létrehozásához a processzormagok számát. Ha a processzor támogatja a hiperszálhúzást vagy a párhuzamos többszálasítást, akkor a processzormagok számát 2-vel kell szorozni, hogy megtudja a kiosztható szálak maximális számát, egyébként a processzormagok száma = a rendelkezésre álló szálak maximális száma. Vegye figyelembe, hogy kevesebbet szeretne kiosztani a teoretikus maximális mennyiségnél, hogy biztosítson helyet más feladatoknak."
+
+msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
+msgstr "Ez a beállítás (ezredmásodpercben) meghatározza, hogy egy csomag mennyi ideig maradhat a CoDel várakozási sorban, mielőtt eldobódna. Az alapértelmezett érték 1000 ms. [Újraindítás szükséges]"
+
+msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
+msgstr "Ez a beállítás meghatározza a kimenő várakozási sor maximális üzenetszámát, mielőtt az megtelne. [Az alapértelmezett érték 768]"
+
+msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
+msgstr "Ez a beállítás meghatározza a maximum várakozási soron felüli üzenetszámot, mielőtt a további üzenetek eldobódnának. [Az alapértelmezett érték 128]"
+
+msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
+msgstr "Ez a beállítás (ezredmásodpercben) lehetővé teszi, hogy manuálisan beállítsa a várakozási sor késleltetés cértéket a CoDel várakozási sorkezelő rendszeréhez. Az alapértelmezett érték 50 ms. [Újraindítás szükséges]"
 
 msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
 msgstr "Ez a beállítás milliszekundumban felülírja a router torlódás észlelését megelőző alapértelmezett üzenetfeldolgozási időkorlátot (jelölve mint <i>Üzenet Késleltetés</i> a Torlódás oldalsáv szakaszában), mielőtt a router tömöttnek és átmeneti alagútigényeket visszautasítaná. [Az alapértelmezett 750 ms, vagy 1500 ms, ha a router lassúnak jelölt.]"
@@ -5717,8 +5808,32 @@ msgstr "Az átlagos késleltetés meghatározása érdekében időről időre te
 msgid "When set to true, the router will change its identity and UDP port every time the router restarts. [Default is false]"
 msgstr "Ha igazra van állítva, a router minden újraindításkor megváltoztatja az azonosságát és UDP portját. [Az alapérték hamis]"
 
+msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
+msgstr "Amikor hamisra van állítva, a router nem korlátozza a többi router által küldött alagút létrehozási kérelmeket, és óvatosan kell használni. [Alapértelmezés szerint igaz, újraindítás szükséges]"
+
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
 msgstr "Ez a beállítás meghatározza, melyik <a href=/profiles#profile_defs>peer képességek</a> nem lesznek használva a router alagútjainak létrehozásához. pl. <code>router.excludePeerCaps=LMN</code>"
+
+msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
+msgstr "Ez a beállítás (órákat) meghatározza, hogy mennyi idős egy RouterInfo az NetDb-ban (utolsó ismert közzétételi dátuma) mielőtt elavultnak és törlendőnek minősül. [Az alapértelmezett érték 28 óra, hacsak a router nem Floodfill, ebben az esetben az alapértelmezett érték 8 óra]"
+
+msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
+msgstr "Ez a beállítás meghatározza, hogy párhuzamosan hány peert vizsgáljon meg a Peer Exploration Job futásakor [az alapértelmezett érték az, hogy egyszerre 1 peer-t vizsgál, amikor több mint 3000 peer ismert]. Vegye figyelembe, hogy ez az érték növeli a sávszélességigényeket a felderítéshez, és ha túl magasra állítja ezt az értéket, ez túlzott üzenetkésleltetést okozhat és akadályozhatja más szolgáltatások működését, ezért legyen óvatos!"
+
+msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
+msgstr "Ez a beállítás meghatározza, hogy hány NetDb DHT vödröt fog hivatkozni a Peer Exploration Job futásakor. Alapértelmezés szerint a vizsgálandó vödrök száma attól függ, hogy a router több mint egy órája fut-e, a router el van-e rejtve vagy az „K” sávszélességi kategóriában van-e, valamint az ismert routerek számától."
+
+msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
+msgstr "Ez a beállítás (másodpercekben) lehetővé teszi a Peer Exploration Job futásai közötti késleltetés felülírását, amely megpróbálja megtalálni az új megbízható partnereket a NetDbhez való hozzáadáshoz. A feladat alapértelmezés szerint 80 másodpercenként fut le, vagy ha a router munka- vagy üzenetkésleltetéssel küzd, akkor 3 percenként. Ha a NetDb mérete eléri a 4000 megbízható partnert, akkor a feladat szünetel 15 percig. Ha a NetDb jól megszállott (több mint 2000 megbízható partnerrel rendelkezik), vagy ha az összes sávszélesség használatát csökkenteni szeretné, akkor növelheti a késleltetést. Megjegyzés: A Floodfill routerekre ez a feladat nem fut."
+
+msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
+msgstr "Ez a beállítás meghatározza a tárolóba állítandó maximális peer-hash mennyiséget a felderítéshez. Az I2P-ben a maximum 128, és az I2P+-ban az alapértéke 512."
+
+msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
+msgstr "Ez a beállítás meghatározza, hogy egy fluxustöltőként működő útválasztó felderíti-e a NetDb-t az új közvetítők megismeréséhez. [Az alapérték hamis, újraindítás szükséges]"
+
+msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
+msgstr "Ez a beállítás, ha igazra állítva, megakadályozza az útválasztó közvetlen kommunikációját más útválasztókkal, és az beajánlók használatát erőlteti. [Az alapérték hamis, kivéve, ha az útválasztó rejtett módban van]"
 
 msgid "When set to true, if your router is serving as a floodfill for the network, your <a href=/configadvanced#ffconf>floodfill participation</a> will be hidden from other routers."
 msgstr "Ha igazra van állítva, és a router a hálózat központi szervereként működik, a <a href=/configadvanced#ffconf>flódfill részvétele</a> más routerek elől el lesz rejtve."
@@ -5731,6 +5846,12 @@ msgstr "Meghatározza, hogy a routernak legfeljebb hány résztvevő alagútat l
 
 msgid "Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 10% in I2P+, 33% in I2P]"
 msgstr "Meghatározza az aktív helyi alagutak (kliens és felfedező) maximális százalékát, amelyet egy kapcsolódó felhasználhat. [Az alapértelmezett érték 10% I2P+-ban, 33% I2P-ben]"
+
+msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
+msgstr "Ezzel a beállítással konfigurálhatja a minimális tárolt résztvevő alagutak számát, mielőtt a router elutasítja az alagtúra vonatkozó kérelmeket az előre várható sávszélesség alapján. [Alapértelmezett érték: 100, ha az rendszer Androidot futtat, 800, ha az rendszer ARM-en fut és kevesebb, mint 4 mag áll rendelkezésre, 1200, ha az rendszer ARM-en fut és 4 vagy több mag áll rendelkezésre, különben 2500]"
+
+msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
+msgstr "Ez a beállítás lehetővé teszi a Régi útválasztók kizárását a NetDb-dől. A közvetítőknél régebbiek az alapértéknél vagy az általad beállított értéknél, a NetDb-ből törlődnek és az útválasztó működése során kitiltásra kerülnek. Alapértelmezés szerint a 0.9.20-nál régebbi útválasztók vannak kizárva. Megjegyzés: Az I2P+ 0.9.46+ verziótól kezdve csak az új verziókat futtató közvetítők használatosak helyi alagutak létrehozásához. [Újraindítás szükséges]"
 
 msgid "When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]"
 msgstr "Amikor engedélyezve van, a router információs fájljai nem lesznek felosztva 64 almappába a profil netDB könyvtárában. [Az alapértelmezett érték hamis]"
@@ -5756,84 +5877,6 @@ msgstr "Kevesebb, mint 256MB JVM-nek kiosztott memória"
 msgid "Router running a non-native, software emulated version of the Java BigInteger library"
 msgstr "A router egy nem natív, szoftver emulált Java BigInteger könyvtárat futtat"
 
-msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
-msgstr "Ezzel a beállítással konfigurálhatja a minimális tárolt résztvevő alagutak számát, mielőtt a router elutasítja az alagtúra vonatkozó kérelmeket az előre várható sávszélesség alapján. [Alapértelmezett érték: 100, ha az rendszer Androidot futtat, 800, ha az rendszer ARM-en fut és kevesebb, mint 4 mag áll rendelkezésre, 1200, ha az rendszer ARM-en fut és 4 vagy több mag áll rendelkezésre, különben 2500]"
-
-msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
-msgstr "Ha az érték igazra van állítva, a router az újraindítás során megváltoztatja az azonosítását és az UDP portját, majd törli a kulcsot a router.config fájlból, hogy további változtatásokat megakadályozzon. [Alapértelmezett érték: hamis]"
-
-msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr "Amikor hamisra van állítva, a router nem korlátozza a többi router által küldött alagút létrehozási kérelmeket, és óvatosan kell használni. [Alapértelmezés szerint igaz, újraindítás szükséges]"
-
-msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr "Amikor hamisra van állítva, a router nem blokkolja az alacsonyabb sebességű vagy elérhetetlen, régebbi verziójú routerektől érkező alagút létrehozási kérelmeket. [Alapértelmezés szerint igaz, újraindítás szükséges]"
-
-msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
-msgstr "Amikor konfigurálva van, ez meghatározza a router által egyszerre felépíthető alagutak általános korlátát. Alapértelmezés szerint a router az átlagos felépítési időt és a jelenlegi kimenő sávszélességet használja az optimális felépítési sebesség meghatározásához. [Újraindítás szükséges]"
-
-msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
-msgstr "Amennyiben telepíteni kíván honosítatlan (.zip) I2P frissítéseket, akkor hozzá kell adni a <code>router.config</code> fájlhoz, hacsak már nincs konfigurálva <code>routerconsole.advanced=true</code>, mivel ebben az esetben ez a beállítás már kész. Megjegyzés: I2P+ 0.9.48+ verziótól kezdve az <a href=/configupdate#i2pupdates>aláíratlan frissítések</a> telepítése az alapértelmezés szerint engedélyezett."
-
-msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
-msgstr "Ezzel a beállítással konfigurálhatja a honosítatlan frissítési funkcióhoz tartozó frissítési URL-t, amennyiben engedélyezve van. Az URL-nek <code>/i2pupdate.zip</code>-re kell végződnie. Megjegyzés: ne telepítsen honosítatlan frissítéseket, hacsak nem bízik az frissítés forrásában!"
-
-msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
-msgstr "Ez a beállítás lehetővé teszi az SSU tesztek letiltását a router tűzfalállapotának meghatározásához, és engedélyezhető azokon a routerekre, amelyek határozottan nincsenek tűzfalon kívül, de időszakos tűzfalozási problémákkal küzdenek. Abban az esetben, ha a tesztelés le van tiltva, mind az SSU, mind az NTCP jelentenie kell a jelenlegi nyilvános IP-címet a <a href=/info>tűzfal információ oldal</a>on. [Újraindítás szükséges]"
-
-msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
-
-msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
-msgstr "Ez a beállítás meghatározza, hogy melyik átviteli mód kap előnyt a többi résztvevővel való kommunikáció során. Alapértelmezés szerint az NTCP kedvez a UDP (SSU) előtt. Az érték true-ra állításával az UDP lesz az elsődleges, hacsak nem létezik előre meghatározott NTCP kapcsolat; ha mindigre van állítva, mindig az UDP-t használja, függetlenül az előre meghatározott NTCP kapcsolattól. [Az alapérték false]"
-
-msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
-msgstr "Ez a specifikus beállítás lehetővé teszi, hogy engedélyezze vagy letiltsa a a routernél hostolt szerverekre küldött ping válaszait. A pingek letiltásához hozzá kell adnia a <code>i2p.streaming.answerPings=false</code> sorat a szerver konfigurációja <i>Egyedi beállítások</i> szakaszához a Tunnel Managerben."
-
-msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
-msgstr "Ha az érték igaz-ra van állítva, az I2P hálózati kapcsolat nélkül fut, ami hasznos lehet, ha folyamatosan újraindítja a routert a kódfrissítések teszteléséhez, mivel ez megakadályozza a hálózat megszakadását."
-
-msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr "Ez a beállítás, ha engedélyezve van, akkor az összes ping engedélyezett szerveréhez véletlenszerű pong késleltetést vezet be, akár 50 ms-ig. Az alapértelmezett érték letiltva. [Újraindítás szükséges]"
-
-msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr "Ez a beállítás akkor módosítja a maximális további véletlenszerű \"pong\" késleltetést, ha engedélyezve van a ping-kapcsolatú szerverekre a beállítás (i2p.streaming.enablePongDelay). Hacsak nincs kifejezetten beállítva, akkor az alapértelmezett értéket, 50 ms-t veszi figyelembe."
-
-msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
-msgstr "Ez a beállítás (ezredmásodpercben) meghatározza, hogy egy csomag mennyi ideig maradhat a CoDel várakozási sorban, mielőtt eldobódna. Az alapértelmezett érték 1000 ms. [Újraindítás szükséges]"
-
-msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
-msgstr "Ez a beállítás meghatározza a kimenő várakozási sor maximális üzenetszámát, mielőtt az megtelne. [Az alapértelmezett érték 768]"
-
-msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
-msgstr "Ez a beállítás meghatározza a maximum várakozási soron felüli üzenetszámot, mielőtt a további üzenetek eldobódnának. [Az alapértelmezett érték 128]"
-
-msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
-msgstr "Ez a beállítás (ezredmásodpercben) lehetővé teszi, hogy manuálisan beállítsa a várakozási sor késleltetés cértéket a CoDel várakozási sorkezelő rendszeréhez. Az alapértelmezett érték 50 ms. [Újraindítás szükséges]"
-
-msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
-msgstr "Ez a beállítás (órákat) meghatározza, hogy mennyi idős egy RouterInfo az NetDb-ban (utolsó ismert közzétételi dátuma) mielőtt elavultnak és törlendőnek minősül. [Az alapértelmezett érték 28 óra, hacsak a router nem Floodfill, ebben az esetben az alapértelmezett érték 8 óra]"
-
-msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
-msgstr "Ez a beállítás meghatározza, hogy párhuzamosan hány peert vizsgáljon meg a Peer Exploration Job futásakor [az alapértelmezett érték az, hogy egyszerre 1 peer-t vizsgál, amikor több mint 3000 peer ismert]. Vegye figyelembe, hogy ez az érték növeli a sávszélességigényeket a felderítéshez, és ha túl magasra állítja ezt az értéket, ez túlzott üzenetkésleltetést okozhat és akadályozhatja más szolgáltatások működését, ezért legyen óvatos!"
-
-msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
-msgstr "Ez a beállítás meghatározza, hogy hány NetDb DHT vödröt fog hivatkozni a Peer Exploration Job futásakor. Alapértelmezés szerint a vizsgálandó vödrök száma attól függ, hogy a router több mint egy órája fut-e, a router el van-e rejtve vagy az „K” sávszélességi kategóriában van-e, valamint az ismert routerek számától."
-
-msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
-msgstr "Ez a beállítás (másodpercekben) lehetővé teszi a Peer Exploration Job futásai közötti késleltetés felülírását, amely megpróbálja megtalálni az új megbízható partnereket a NetDbhez való hozzáadáshoz. A feladat alapértelmezés szerint 80 másodpercenként fut le, vagy ha a router munka- vagy üzenetkésleltetéssel küzd, akkor 3 percenként. Ha a NetDb mérete eléri a 4000 megbízható partnert, akkor a feladat szünetel 15 percig. Ha a NetDb jól megszállott (több mint 2000 megbízható partnerrel rendelkezik), vagy ha az összes sávszélesség használatát csökkenteni szeretné, akkor növelheti a késleltetést. Megjegyzés: A Floodfill routerekre ez a feladat nem fut."
-
-msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
-msgstr "Ez a beállítás meghatározza a tárolóba állítandó maximális peer-hash mennyiséget a felderítéshez. Az I2P-ben a maximum 128, és az I2P+-ban az alapértéke 512."
-
-msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
-msgstr "Ez a beállítás meghatározza, hogy egy fluxustöltőként működő útválasztó felderíti-e a NetDb-t az új közvetítők megismeréséhez. [Az alapérték hamis, újraindítás szükséges]"
-
-msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
-msgstr "Ez a beállítás, ha igazra állítva, megakadályozza az útválasztó közvetlen kommunikációját más útválasztókkal, és az beajánlók használatát erőlteti. [Az alapérték hamis, kivéve, ha az útválasztó rejtett módban van]"
-
-msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
-msgstr "Ez a beállítás lehetővé teszi a Régi útválasztók kizárását a NetDb-dől. A közvetítőknél régebbiek az alapértéknél vagy az általad beállított értéknél, a NetDb-ből törlődnek és az útválasztó működése során kitiltásra kerülnek. Alapértelmezés szerint a 0.9.20-nál régebbi útválasztók vannak kizárva. Megjegyzés: Az I2P+ 0.9.46+ verziótól kezdve csak az új verziókat futtató közvetítők használatosak helyi alagutak létrehozásához. [Újraindítás szükséges]"
-
 msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. [Default is 4]"
 msgstr "Ez a beállítás meghatározza a közvetítő tesztek számát egyidejűleg, ami a peer lassúságának meghatározásához használatos. [Az alapérték 4]"
 
@@ -5849,14 +5892,17 @@ msgstr "Ez a beállítás meghatározza, hogy a mi Útválasztónk adatai közve
 msgid "This setting configures the initial size of the outbound message queue. [Default is 64]"
 msgstr "Ez a beállítás kiállítja az elsődleges méretet a kimenő adatközvetítő üzenet sorbanak. [Az alapérték 64]"
 
-msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
-msgstr "Ez a beállítás konfigurálja a bejövő üzenetek sorának maximális méretét. [Az alapértelmezett érték 1024]"
-
 msgid "This setting configures the maximum number of inbound messages queued per cycle (pump). [Default is 24]"
 msgstr "Ez a beállítás konfigurálja a ciklusonkénti (pump) maximálisan megengedett bejövő üzenetek számát. [Az alapértelmezett érték 24]"
 
+msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
+msgstr "Ez a beállítás konfigurálja a bejövő üzenetek sorának maximális méretét. [Az alapértelmezett érték 1024]"
+
 msgid "This setting configures the maximum number of outbound messages queued per cycle (pump). [Default is 64]"
 msgstr "Ez a beállítás konfigurálja a ciklusonkénti (pump) maximálisan megengedett kimenő üzenetek számát. [Az alapértelmezett érték 64]"
+
+msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
+msgstr "Ha az érték igazra van állítva, a router az újraindítás során megváltoztatja az azonosítását és az UDP portját, majd törli a kulcsot a router.config fájlból, hogy további változtatásokat megakadályozzon. [Alapértelmezett érték: hamis]"
 
 msgid "This setting (in milliseconds) allows you to manually configure the delay between router refresh updates run by the Refresh Routers Job. By default the pause between refreshes is determined by the size of the NetDb, and introduces some randomness in the timing to mitigate traffic analysis. For values lower than 2000 milliseconds, increasing the value of <code>router.refreshTimeout</code> is recommended. Note that setting this value below 2000 milliseconds will increase your network traffic and may introduce job lag, and is not recommended for sustained use."
 msgstr "Ez a beállítás (milliszekundumban) lehetővé teszi, hogy kézzel állítsa be a Refresh Routers Job által végzett router-frissítések közötti késleltetést. Az alapértelmezett beállítás szerint a frissítések közötti szünetet a NetDb mérete határozza meg, és a véletlenszerűséget bevezeti az időzítésben a forgalom elemzésének csökkentése érdekében. Az alábbi 2000 milliszekundumnál alacsonyabb értékekhez javasolt a <code>router.refreshTimeout</code> értékének növelése. Fontos megjegyezni, hogy az 2000 milliszekundumnál alacsonyabb érték beállítása növeli a hálózati forgalmat és késést okozhat a munkavégzésben, ezért nem ajánlott folyamatos használatra."
@@ -5870,26 +5916,56 @@ msgstr "Ez a beállítás (másodpercben) lehetővé teszi, hogy kézzel állít
 msgid "This setting determines whether routers classified as uninteresting (K or L tier, unreachable or older than 0.9.50) are checked during the refresh router process after 1 hour of uptime. [Default is false]"
 msgstr "Ez a beállítás meghatározza, hogy az érdektelennek minősített routerek (K vagy L szint, elérhetetlen vagy 0.9.50-nél régebbiek) ellenőrizve lesznek-e a router frissítési folyamata után 1 óra üzemidő után. [Az alapértelmezés hamis]"
 
+msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
+msgstr ""
+
+msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
+msgstr "Amikor konfigurálva van, ez meghatározza a router által egyszerre felépíthető alagutak általános korlátát. Alapértelmezés szerint a router az átlagos felépítési időt és a jelenlegi kimenő sávszélességet használja az optimális felépítési sebesség meghatározásához. [Újraindítás szükséges]"
+
+msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
+msgstr "Amennyiben telepíteni kíván honosítatlan (.zip) I2P frissítéseket, akkor hozzá kell adni a <code>router.config</code> fájlhoz, hacsak már nincs konfigurálva <code>routerconsole.advanced=true</code>, mivel ebben az esetben ez a beállítás már kész. Megjegyzés: I2P+ 0.9.48+ verziótól kezdve az <a href=/configupdate#i2pupdates>aláíratlan frissítések</a> telepítése az alapértelmezés szerint engedélyezett."
+
+msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
+msgstr "Ezzel a beállítással konfigurálhatja a honosítatlan frissítési funkcióhoz tartozó frissítési URL-t, amennyiben engedélyezve van. Az URL-nek <code>/i2pupdate.zip</code>-re kell végződnie. Megjegyzés: ne telepítsen honosítatlan frissítéseket, hacsak nem bízik az frissítés forrásában!"
+
 msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
 msgstr "Ez a beállítás (percben) lehetővé teszi, hogy kézzel állítsa be, mennyi ideig kell várni a rendszerindítás után, mielőtt a RouterInfo-kat a NetDb-ben ellenőriznék. Ezt követően csak érvényes routerek lesznek elfogadva a felvételre. Amikor a ellenőrzés megtörténik, a lejárt RouterInfo-k és az SSU-n keresztül elérhetetlen társak eltávolításra kerülnek a NetDb-ből. [Az alapértelmezés 60 perc] Megjegyzés: Ez a beállítás nem érinti a régebbi routereket (alapértelmezetten 0.9.29-nél régebbiek), amelyek eltávolításra kerülnek a NetDb-ből, és az útválasztói munkamenetet követően tiltásra kerülnek, amint egy NetDb tárolás megkísérelve lesz."
 
-msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
-msgstr "Ez a beállítás, ha igazra van állítva, megjelenít egy Peer Test átlagot a Congesion részben az oldalsávban, amit úgy állapítanak meg, hogy a sikeres peer teszt átlagot hozzáadják a sikertelen tesztek során felhasznált átlagos túraátlépési időhöz. Az átlag értéket útmutatóként lehet használni a legjobb <code>router.peerTesztTimeout</code> érték meghatározásához. [Az alapértelmezés hamis]"
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
+msgstr ""
 
-msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
-msgstr "Ez a beállítás, amikor igazra van állítva, megjeleníti az érdekes oldalak linkeit a <a href=/sitemap>webhelytérképen</a>. [Az alapértelmezett érték hamis]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
+msgstr ""
 
-msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr "Ez a beállítás lehetővé teszi egyéni szövegprefix beállítását a router konzol lapjainak címéhez, ami akkor hasznos lehet, ha több konzolt is nyitottál böngészőfülekben, és egyszerű módot szeretnél találni a különbségek jelölésére."
+msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
+msgstr "Ez a beállítás lehetővé teszi az SSU tesztek letiltását a router tűzfalállapotának meghatározásához, és engedélyezhető azokon a routerekre, amelyek határozottan nincsenek tűzfalon kívül, de időszakos tűzfalozási problémákkal küzdenek. Abban az esetben, ha a tesztelés le van tiltva, mind az SSU, mind az NTCP jelentenie kell a jelenlegi nyilvános IP-címet a <a href=/info>tűzfal információ oldal</a>on. [Újraindítás szükséges]"
 
-msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
-msgstr "Ez a beállítás lehetővé teszi alternatív NTP szerverek beállítását, amelyek szükségesek ahhoz, hogy a router pontos időtartamot tartsa. [Az alapértelmezett érték: 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
+msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
+msgstr "Ez a beállítás meghatározza, hogy melyik átviteli mód kap előnyt a többi résztvevővel való kommunikáció során. Alapértelmezés szerint az NTCP kedvez a UDP (SSU) előtt. Az érték true-ra állításával az UDP lesz az elsődleges, hacsak nem létezik előre meghatározott NTCP kapcsolat; ha mindigre van állítva, mindig az UDP-t használja, függetlenül az előre meghatározott NTCP kapcsolattól. [Az alapérték false]"
+
+msgid "miscellaneous"
+msgstr ""
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "Ha igazra van állítva, ez az opció ikont helyez el a rendszer tálca / értesítési területén alapvető szolgáltatás-vezérlő lehetőségekkel. [Alapértelmezés szerint letiltva]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
 msgstr "Ez a beállítás lehetővé teszi a torrentek letöltése vagy létrehozása során az I2PSnark által engedélyezett fájlok maximális számának beállítását. Megjegyzés: Ezen érték jelentős növelése az alapértelmezett 2000 fájltól további beállításokat igényelhet a gépház rendszeren a fájlok maximális számának növeléséhez, amit az operációs rendszer engedélyez (pl. <code>ulimit -n</code> Linuxon). A módosításhoz adja hozzá az I2PSnark konfigurációs fájlhoz <code>i2psnark.config</code>. [Az I2PSnark vagy a router újraindítása szükséges]"
+
+msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
+msgstr "Ez a specifikus beállítás lehetővé teszi, hogy engedélyezze vagy letiltsa a a routernél hostolt szerverekre küldött ping válaszait. A pingek letiltásához hozzá kell adnia a <code>i2p.streaming.answerPings=false</code> sorat a szerver konfigurációja <i>Egyedi beállítások</i> szakaszához a Tunnel Managerben."
+
+msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
+msgstr "Ez a beállítás, ha engedélyezve van, akkor az összes ping engedélyezett szerveréhez véletlenszerű pong késleltetést vezet be, akár 50 ms-ig. Az alapértelmezett érték letiltva. [Újraindítás szükséges]"
+
+msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
+msgstr "Ez a beállítás akkor módosítja a maximális további véletlenszerű \"pong\" késleltetést, ha engedélyezve van a ping-kapcsolatú szerverekre a beállítás (i2p.streaming.enablePongDelay). Hacsak nincs kifejezetten beállítva, akkor az alapértelmezett értéket, 50 ms-t veszi figyelembe."
+
+msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
+msgstr "Ha az érték igaz-ra van állítva, az I2P hálózati kapcsolat nélkül fut, ami hasznos lehet, ha folyamatosan újraindítja a routert a kódfrissítések teszteléséhez, mivel ez megakadályozza a hálózat megszakadását."
+
+msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
+msgstr "Ez a beállítás lehetővé teszi alternatív NTP szerverek beállítását, amelyek szükségesek ahhoz, hogy a router pontos időtartamot tartsa. [Az alapértelmezett érték: 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 
 msgid "Recent I2P+ Changes"
 msgstr "Legutóbbi I2P+ változások"
@@ -6106,6 +6182,18 @@ msgstr "Nem SSL és SSL esetén egyaránt"
 
 msgid "For SSL only"
 msgstr "Csak SSL esetén"
+
+msgid "How can I configure the console and web services to be accessible on my local network?"
+msgstr ""
+
+msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
+msgstr ""
+
+msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
+msgstr ""
+
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager’s configuration section using the <i>reachable by</i> dropdown."
+msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Hogyan csatlakozhatok IRC-hez I2P-n belül?"
@@ -7366,9 +7454,6 @@ msgstr "Hálózati Partnerek"
 msgid "peer profiles"
 msgstr "társ profilok"
 
-msgid "Peer Profiles"
-msgstr "Peer Profilok"
-
 msgid "Session Banned Peers"
 msgstr "Munkamenet tiltott társak"
 
@@ -7585,6 +7670,9 @@ msgstr "Alagutak váltása"
 msgid "Peer Profile"
 msgstr "Társ Profil"
 
+msgid "Profile View"
+msgstr ""
+
 msgid "Profile for peer"
 msgstr "Profil a társ számára"
 
@@ -7722,6 +7810,35 @@ msgstr "Befejeződött"
 
 
 
+
+
 #, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -140,17 +140,14 @@ msgstr[1] "{0} destinacij izbrisanih."
 msgstr[2] "{0} destinacij izbrisanih."
 msgstr[3] "{0} destinacij izbrisanih."
 
-msgid "No entries selected to delete."
-msgstr "Nobenega vnosa ni izbrano za izbris."
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "Dodaj alternativo"
 
 msgid "Address book saved."
 msgstr "Imenik naslovov shranjen."
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "Brskanje stran od tega imenika naslovov in vrnite se, da vidite posodobitev."
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "NAPAKA: Datoteko imenika naslovov ni mogoče zapisati."
@@ -335,6 +332,9 @@ msgstr "Označi za izbris"
 msgid "Cancel"
 msgstr "Prekliči"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "npr. newdomain.i2p"
 
@@ -412,6 +412,9 @@ msgstr "Datoteka za dnevnik dejavnosti (premenite na /dev/null, če želite)"
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Ime nadomestnega teme za uporabo (privzeto je teme izbrano v konzoli)"
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "imenik naslovov"
@@ -607,3 +610,5 @@ msgstr "Naslovi, ki jih ročno dodate v svoj glavni imenik naslovov, se bodo zdr
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Gostitelji, ki jih prejmete iz svojih prijav, se bodo združili z vašim imenikom naslovov maršrutnika."
+
+

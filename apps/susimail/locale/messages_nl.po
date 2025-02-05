@@ -257,14 +257,14 @@ msgstr "Fout bij versturen van bericht"
 msgid "Mail sent."
 msgstr "Bericht verzonden."
 
-msgid "Send"
-msgstr "Verzenden"
+msgid "Cancel"
+msgstr "Annuleren"
 
 msgid "Save as Draft"
 msgstr "Opslaan als concept"
 
-msgid "Cancel"
-msgstr "Annuleren"
+msgid "Send"
+msgstr "Verzenden"
 
 msgid "From"
 msgstr "Van"

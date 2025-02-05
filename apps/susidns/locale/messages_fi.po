@@ -130,17 +130,14 @@ msgid_plural "{0} destinations deleted."
 msgstr[0] "1 kohde poistettu."
 msgstr[1] "{0} kohdetta poistettu."
 
-msgid "No entries selected to delete."
-msgstr "Poistettavia merkintöjä ei ole valittu."
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "Lisää vaihtoehtoinen"
 
 msgid "Address book saved."
 msgstr "Osoitekirja tallennettu."
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "Selaa pois tästä osoitekirjasta ja palaa nähdäksesi päivityksen."
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "VIRHE: Osoitekirjatiedostoa ei voitu kirjoittaa."
@@ -321,6 +318,9 @@ msgstr "Merkitse poistettavaksi"
 msgid "Cancel"
 msgstr "Peru"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "esim. newdomain.i2p"
 
@@ -398,6 +398,9 @@ msgstr "Tiedosto, johon toiminta kirjataan (vaihda tiedostoon /dev/null, jos hal
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Käytettävän ohitusteeman nimi (oletusarvo konsolissa valittu teema)"
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "osoitekirja"
@@ -593,3 +596,5 @@ msgstr "Pääosoitekirjaasi manuaalisesti lisätyt osoitteet yhdistetään reiti
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Tilauksistasi saamasi isännät yhdistetään reitittimen osoitekirjaasi."
+
+

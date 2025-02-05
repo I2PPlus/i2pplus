@@ -254,14 +254,14 @@ msgstr "发送邮件错误"
 msgid "Mail sent."
 msgstr "邮件已发送。"
 
-msgid "Send"
-msgstr "发送"
+msgid "Cancel"
+msgstr "取消"
 
 msgid "Save as Draft"
 msgstr "保存为草稿"
 
-msgid "Cancel"
-msgstr "取消"
+msgid "Send"
+msgstr "发送"
 
 msgid "From"
 msgstr "发件人"

@@ -8,8 +8,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 
-msgid "Warning: Invalid Request URI"
-msgstr "Попередження: недійсний URI запиту"
+msgid "Website Unknown"
+msgstr "Веб-сайт невідомий"
 
 msgid "Router Console"
 msgstr "Консоль роутера"
@@ -25,71 +25,6 @@ msgstr "Настройки"
 
 msgid "Help"
 msgstr "Допомога"
-
-msgid "The request URI is invalid, and probably contains illegal characters."
-msgstr "URI запиту недійсний і, ймовірно, містить недопустимі символи."
-
-msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
-msgstr "Якщо ви клацнули посилання, перевірте кінець URI на наявність символів, які браузер помилково додав."
-
-msgid "Connection Reset"
-msgstr "Скидання з'єднання"
-
-msgid "The connection to the website was reset while the page was loading."
-msgstr "Під час завантаження сторінки з'єднання з сайтом було обірвано."
-
-msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Веб-сайт може бути тимчасово недоступним, занадто зайнятим або він заблокував ваш доступ.Веб-сайт може бути тимчасово недоступний, занадто зайнятий або заблокований."
-
-#, java-format
-msgid "You may want to {0}retry{1}."
-msgstr "Ви можете {0} повторно {1}."
-
-#, java-format
-msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
-msgstr "Якщо ви залишите цю сторінку відкритою, вона автоматично повторюватиме підключення до веб-сайту кожні {0} секунд після невдалої спроби підключення."
-
-msgid "Could not find the following destination:"
-msgstr "Не вдалося знайти наступне місце призначення:"
-
-msgid "Warning: Non-HTTP Protocol"
-msgstr "Попередження: протокол не HTTP"
-
-msgid "The request uses a bad protocol."
-msgstr "Запит використовує неправильний протокол."
-
-msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
-msgstr "I2P HTTP Proxy підтримує лише запити HTTP і HTTPS."
-
-msgid "Other protocols such as FTP are not allowed."
-msgstr "Інші протоколи, такі як FTP, заборонені."
-
-msgid "Warning: No Outproxy Configured"
-msgstr "Попередження: вихідний проксі не налаштовано"
-
-msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
-msgstr "Ваш запит стосувався сайту за межами I2P, але у вас не налаштовано вихідний проксі HTTP."
-
-msgid "Please configure an outproxy in I2PTunnel."
-msgstr "Будь ласка, налаштуйте вихідний проксі у I2PTunnel."
-
-msgid "Error: Request Denied"
-msgstr "Помилка: запит відхилено"
-
-msgid "Error: Cannot Access Router Console via I2P Proxy"
-msgstr "Помилка: неможливо отримати доступ до консолі маршрутизатора через проксі-сервер I2P"
-
-msgid "Your browser is misconfigured."
-msgstr "Ваш браузер неправильно налаштований."
-
-msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
-msgstr "Не використовуйте проксі для доступу до консолі маршрутизатора, локального хосту або місць призначення локальної локальної мережі.Не використовуйте проксі для доступу до консолі роутеру, localhost чи будь-якого хосту у локальній мережі."
-
-msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
-msgstr "Вам потрібно запобігти маршрутизації 127.0.0.1 (або адреси, з якої ви отримуєте доступ до консолі I2P) через http-проксі I2P, як правило, шляхом виключення адреси в розділі налаштування проксі-сервера вашого браузера."
-
-msgid "Website Unknown"
-msgstr "Веб-сайт невідомий"
 
 msgid "Website Not Found in Addressbook"
 msgstr "Сайт не знайдено в адресній книзі"
@@ -111,99 +46,35 @@ msgstr "Інакше знайдіть посилання Base 32 або допо
 msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
 msgstr "Бачити цю сторінку часто? Див. {0} FAQ {1} для довідки в {2} Додавання деяких підписки {3} до вашої адресної книги."
 
-msgid "Website Unreachable"
-msgstr "Сайт недоступний"
+msgid "Could not find the following destination:"
+msgstr "Не вдалося знайти наступне місце призначення:"
 
-msgid "The website was not reachable, because its lease set was not found."
-msgstr "Веб-сайт недоступний, оскільки його набір оренди не знайдено."
+msgid "Warning: Non-HTTP Protocol"
+msgstr "Попередження: протокол не HTTP"
 
-msgid "The website is probably down, but there could also be network congestion."
-msgstr "Веб-сайт, ймовірно, не працює, але також може бути перевантаження мережі."
+msgid "The request uses a bad protocol."
+msgstr "Запит використовує неправильний протокол."
 
-msgid "Outproxy Not Found"
-msgstr "Outproxy не знайдено"
+msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
+msgstr "I2P HTTP Proxy підтримує лише запити HTTP і HTTPS."
 
-msgid "The HTTP Outproxy was not found."
-msgstr "Вихідний проксі для HTTP не знайдено."
+msgid "Other protocols such as FTP are not allowed."
+msgstr "Інші протоколи, такі як FTP, заборонені."
 
-msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "Він офлайн, мережа перевантажена, або ваш маршрутизатор ще не добре інтегрований з одноранговими вузлами.Він знаходиться в автономному режимі, є перевантаження мережі або ваш маршрутизатор ще не інтегрований з одноранговими пристроями."
+msgid "Error: Request Denied"
+msgstr "Помилка: запит відхилено"
 
-#, java-format
-msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
-msgstr "Ви можете {0}повторити спробу{1}, оскільки це призведе до випадкового повторного вибору вихідного проксі-сервера з пулу, який ви визначили {2}тут{3} (якщо у вас налаштовано більше одного)."
+msgid "Error: Cannot Access Router Console via I2P Proxy"
+msgstr "Помилка: неможливо отримати доступ до консолі маршрутизатора через проксі-сервер I2P"
 
-#, java-format
-msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
-msgstr "Якщо проблеми не зникають, ви можете відредагувати свій список проксі-серверів {0}тут{1}."
+msgid "Your browser is misconfigured."
+msgstr "Ваш браузер неправильно налаштований."
 
-msgid "Warning: Request Denied"
-msgstr "Попередження: запит відхилено"
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
+msgstr "Не використовуйте проксі для доступу до консолі маршрутизатора, локального хосту або місць призначення локальної локальної мережі.Не використовуйте проксі для доступу до консолі роутеру, localhost чи будь-якого хосту у локальній мережі."
 
-msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
-msgstr "Ця адреса, здається, є неправильною. Будь ласка, переконайтеся, що ви постачали дійсну адресу!"
-
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "Ви намагалися підключитися до веб-сайту чи місця, що не є I2P."
-
-msgid "Outproxy Unreachable"
-msgstr "Outproxy Недоступний"
-
-msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
-msgstr "HTTP-проксі-сервер недоступний, оскільки він використовує параметри шифрування, які не підтримуються вашою версією I2P або Java.Вихідний проксі HTTP недоступний, бо використовує опції шифрування, які не підтримуються вашим I2P або версією Java."
-
-msgid "Could not connect to the following destination:"
-msgstr "Не вдалося з'єднатися з наступним пунктом призначення:"
-
-msgid "Proxy Authorization Required"
-msgstr "Авторизація outproxy"
-
-msgid "I2P HTTP Proxy Authorization Required"
-msgstr "Авторизація outproxy"
-
-msgid "This proxy is configured to require a username and password for access."
-msgstr "Цей проксі-сервер налаштовано на вимогу імені користувача та пароля для доступу.Цей проксі налаштований конечно вимагати ім'я користувача і пароль для доступу."
-
-#, java-format
-msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
-msgstr "Будь ласка, введіть своє ім’я користувача та пароль або перевірте {0}конфігурацію маршрутизатора{1} або {2}конфігурацію I2PTunnel{3}.Будь ласка, ввести ваш логін і пароль, або перевірити {0}router configuration{1} або {2}I2PTunnel configuration{3}."
-
-#, java-format
-msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
-msgstr "Щоб вимкнути авторизацію, видаліть конфігурацію {0}i2ptunnel.proxy.auth=basic{1}, а потім зупиніть і перезапустіть тунель HTTP-проксі."
-
-msgid "Warning: Invalid Destination"
-msgstr "Локальний адрес призначення"
-
-msgid "The website destination specified was not valid, or was otherwise unreachable."
-msgstr "Вказаний цільовий веб-сайт недійсний або недосяжний з інших причин."
-
-msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
-msgstr "Можливо, ви вставили неправильний рядок Base 64 або посилання, за яким ви переходите, неправильне."
-
-msgid "The I2P host could also be offline."
-msgstr "Хост I2P також може бути офлайн."
-
-msgid "The connection to the proxy was reset."
-msgstr "З’єднання з проксі скинуто."
-
-msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Проксі може бути тимчасово недоступним, занадто зайнятим або заблокував ваш доступ."
-
-msgid "The HTTP outproxy was not reachable, because its lease set was not found."
-msgstr "Вихідний проксі-сервер HTTP недоступний, оскільки його набір оренди не знайдено."
-
-msgid "The outproxy is probably down, but there could also be network congestion."
-msgstr "Можливо, вихідний проксі не працює, або мережа перенавантажена."
-
-msgid "Warning: Authorization Required"
-msgstr "Попередження: потрібна авторизація"
-
-msgid "The website was not reachable."
-msgstr "Веб-сайт був недоступний."
-
-msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "Веб-сайт офлайн, мережа перевантажена, або ваш маршрутизатор ще не добре інтегрований з одноранговими вузлами."
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "Вам потрібно запобігти маршрутизації 127.0.0.1 (або адреси, з якої ви отримуєте доступ до консолі I2P) через http-проксі I2P, як правило, шляхом виключення адреси в розділі налаштування проксі-сервера вашого браузера."
 
 msgid "Warning: Destination Key Conflict"
 msgstr "Попередження: конфлікт ключа призначення"
@@ -217,24 +88,81 @@ msgstr "Хтось може намагатися видати себе за ін
 msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
 msgstr "Вирішіть конфлікт, вирішивши, якому ключу ви довіряєте, а потім або проігноруйте посилання допоміжної адреси, або видаліть запис хоста з вашої адресної книги та знову клацніть посилання допоміжної адреси."
 
-msgid "The Base32 address is invalid."
-msgstr "Адреса Base32 недійсна."
+msgid "Connection Reset"
+msgstr "Скидання з'єднання"
 
-msgid "Warning: Bad Address Helper"
-msgstr "Попередження: Помічник неправильної адреси"
+msgid "The connection to the website was reset while the page was loading."
+msgstr "Під час завантаження сторінки з'єднання з сайтом було обірвано."
+
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Веб-сайт може бути тимчасово недоступним, занадто зайнятим або він заблокував ваш доступ.Веб-сайт може бути тимчасово недоступний, занадто зайнятий або заблокований."
 
 #, java-format
-msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
-msgstr "Допоміжний ключ в URL-адресі ({0}i2paddresshelper={1}) не розпізнається."
+msgid "You may want to {0}retry{1}."
+msgstr "Ви можете {0} повторно {1}."
 
-msgid "It seems to be garbage data, or a mistyped Base 32 address."
-msgstr "Здається, це сміттєві дані або неправильно введена адреса Base 32."
+#, java-format
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
+msgstr "Якщо ви залишите цю сторінку відкритою, вона автоматично повторюватиме підключення до веб-сайту кожні {0} секунд після невдалої спроби підключення."
 
-msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
-msgstr "Перевірте свою URL-адресу, щоб спробувати виправити допоміжний ключ на дійсне ім’я хосту Base 32 або ключ Base 64."
+msgid "Website Unreachable"
+msgstr "Сайт недоступний"
 
 msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
 msgstr "Веб-сайт недоступний, оскільки він використовує параметри шифрування, які не підтримуються вашою версією I2P або Java."
+
+msgid "Could not connect to the following destination:"
+msgstr "Не вдалося з'єднатися з наступним пунктом призначення:"
+
+msgid "The website was not reachable, because its lease set was not found."
+msgstr "Веб-сайт недоступний, оскільки його набір оренди не знайдено."
+
+msgid "The website is probably down, but there could also be network congestion."
+msgstr "Веб-сайт, ймовірно, не працює, але також може бути перевантаження мережі."
+
+msgid "The connection to the proxy was reset."
+msgstr "З’єднання з проксі скинуто."
+
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Проксі може бути тимчасово недоступним, занадто зайнятим або заблокував ваш доступ."
+
+#, java-format
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "Ви можете {0}повторити спробу{1}, оскільки це призведе до випадкового повторного вибору вихідного проксі-сервера з пулу, який ви визначили {2}тут{3} (якщо у вас налаштовано більше одного)."
+
+#, java-format
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr "Якщо проблеми не зникають, ви можете відредагувати свій список проксі-серверів {0}тут{1}."
+
+msgid "Outproxy Unreachable"
+msgstr "Outproxy Недоступний"
+
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "HTTP-проксі-сервер недоступний, оскільки він використовує параметри шифрування, які не підтримуються вашою версією I2P або Java.Вихідний проксі HTTP недоступний, бо використовує опції шифрування, які не підтримуються вашим I2P або версією Java."
+
+msgid "The website was not reachable."
+msgstr "Веб-сайт був недоступний."
+
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Веб-сайт офлайн, мережа перевантажена, або ваш маршрутизатор ще не добре інтегрований з одноранговими вузлами."
+
+msgid "Warning: No Outproxy Configured"
+msgstr "Попередження: вихідний проксі не налаштовано"
+
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr "Ваш запит стосувався сайту за межами I2P, але у вас не налаштовано вихідний проксі HTTP."
+
+msgid "Please configure an outproxy in I2PTunnel."
+msgstr "Будь ласка, налаштуйте вихідний проксі у I2PTunnel."
+
+msgid "Outproxy Not Found"
+msgstr "Outproxy не знайдено"
+
+msgid "The HTTP Outproxy was not found."
+msgstr "Вихідний проксі для HTTP не знайдено."
+
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Він офлайн, мережа перевантажена, або ваш маршрутизатор ще не добре інтегрований з одноранговими вузлами.Він знаходиться в автономному режимі, є перевантаження мережі або ваш маршрутизатор ще не інтегрований з одноранговими пристроями."
 
 msgid "Information: New Host Name"
 msgstr "Інформація: нове ім'я хоста"
@@ -256,6 +184,78 @@ msgstr "Якщо ви не збережете його, ім’я хоста б�
 
 msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
 msgstr "Якщо ви не бажаєте відвідувати цей хост, натисніть кнопку \"назад\" у вашому браузері."
+
+msgid "Proxy Authorization Required"
+msgstr "Авторизація outproxy"
+
+msgid "I2P HTTP Proxy Authorization Required"
+msgstr "Авторизація outproxy"
+
+msgid "This proxy is configured to require a username and password for access."
+msgstr "Цей проксі-сервер налаштовано на вимогу імені користувача та пароля для доступу.Цей проксі налаштований конечно вимагати ім'я користувача і пароль для доступу."
+
+#, java-format
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "Будь ласка, введіть своє ім’я користувача та пароль або перевірте {0}конфігурацію маршрутизатора{1} або {2}конфігурацію I2PTunnel{3}.Будь ласка, ввести ваш логін і пароль, або перевірити {0}router configuration{1} або {2}I2PTunnel configuration{3}."
+
+#, java-format
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "Щоб вимкнути авторизацію, видаліть конфігурацію {0}i2ptunnel.proxy.auth=basic{1}, а потім зупиніть і перезапустіть тунель HTTP-проксі."
+
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr "Вихідний проксі-сервер HTTP недоступний, оскільки його набір оренди не знайдено."
+
+msgid "The outproxy is probably down, but there could also be network congestion."
+msgstr "Можливо, вихідний проксі не працює, або мережа перенавантажена."
+
+msgid "Warning: Request Denied"
+msgstr "Попередження: запит відхилено"
+
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr "Ця адреса, здається, є неправильною. Будь ласка, переконайтеся, що ви постачали дійсну адресу!"
+
+msgid "You attempted to connect to a non-I2P website or location."
+msgstr "Ви намагалися підключитися до веб-сайту чи місця, що не є I2P."
+
+msgid "Warning: Bad Address Helper"
+msgstr "Попередження: Помічник неправильної адреси"
+
+#, java-format
+msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgstr "Допоміжний ключ в URL-адресі ({0}i2paddresshelper={1}) не розпізнається."
+
+msgid "It seems to be garbage data, or a mistyped Base 32 address."
+msgstr "Здається, це сміттєві дані або неправильно введена адреса Base 32."
+
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr "Перевірте свою URL-адресу, щоб спробувати виправити допоміжний ключ на дійсне ім’я хосту Base 32 або ключ Base 64."
+
+msgid "Warning: Invalid Destination"
+msgstr "Локальний адрес призначення"
+
+msgid "The website destination specified was not valid, or was otherwise unreachable."
+msgstr "Вказаний цільовий веб-сайт недійсний або недосяжний з інших причин."
+
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr "Можливо, ви вставили неправильний рядок Base 64 або посилання, за яким ви переходите, неправильне."
+
+msgid "The I2P host could also be offline."
+msgstr "Хост I2P також може бути офлайн."
+
+msgid "Warning: Authorization Required"
+msgstr "Попередження: потрібна авторизація"
+
+msgid "Warning: Invalid Request URI"
+msgstr "Попередження: недійсний URI запиту"
+
+msgid "The request URI is invalid, and probably contains illegal characters."
+msgstr "URI запиту недійсний і, ймовірно, містить недопустимі символи."
+
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr "Якщо ви клацнули посилання, перевірте кінець URI на наявність символів, які браузер помилково додав."
+
+msgid "The Base32 address is invalid."
+msgstr "Адреса Base32 недійсна."
 
 msgid "This seems to be a bad destination:"
 msgstr "Скоріше всього це поганий адрес призначення:"

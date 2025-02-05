@@ -257,14 +257,14 @@ msgstr "Erro ao enviar e-mail"
 msgid "Mail sent."
 msgstr "E-mail enviado."
 
-msgid "Send"
-msgstr "Enviar"
+msgid "Cancel"
+msgstr "Cancelar"
 
 msgid "Save as Draft"
 msgstr "Salvar como rascunho"
 
-msgid "Cancel"
-msgstr "Cancelar"
+msgid "Send"
+msgstr "Enviar"
 
 msgid "From"
 msgstr "De"

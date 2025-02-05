@@ -41,12 +41,6 @@ msgstr "звичайна пропускна здатність і надійні
 msgid "higher bandwidth and reliability"
 msgstr "більш висока пропускна здатність і надійність"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Неправильно передана форма, можливо ви використовуєте дію браузера \"назад\" або \"оновити\". Будь-ласка повторіть спробу."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Якщо проблема не усунута, переконайтеся, що cookies увімкнені у вашому браузері."
-
 msgid "Configuration reloaded for all tunnels"
 msgstr "Конфігурація для всіх тунелів перечитана"
 
@@ -1232,6 +1226,12 @@ msgstr "Створити автентифікацію"
 
 msgid "SSL Helper"
 msgstr "Помічник SSL"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Неправильно передана форма, можливо ви використовуєте дію браузера \"назад\" або \"оновити\". Будь-ласка повторіть спробу."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Якщо проблема не усунута, переконайтеся, що cookies увімкнені у вашому браузері."
 
 msgid "Experts only!"
 msgstr "Тільки досвідчені користувачі!"

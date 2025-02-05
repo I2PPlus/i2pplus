@@ -8,8 +8,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Warning: Invalid Request URI"
-msgstr "Figyelmeztetés: Érvénytelen kérés-URI"
+msgid "Website Unknown"
+msgstr "Ismeretlen webhely"
 
 msgid "Router Console"
 msgstr "Router Konzol"
@@ -25,71 +25,6 @@ msgstr "Beállítások"
 
 msgid "Help"
 msgstr "Segítség"
-
-msgid "The request URI is invalid, and probably contains illegal characters."
-msgstr "A kérés URI érvénytelen, és valószínűleg illegális karaktereket tartalmaz."
-
-msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
-msgstr "Ha rákattintott egy hivatkozásra, ellenőrizze az URI végén a böngésző által tévesen hozzáadott karaktereket."
-
-msgid "Connection Reset"
-msgstr "Kapcsolat visszaállítása"
-
-msgid "The connection to the website was reset while the page was loading."
-msgstr "A webhelyhez való kapcsolat visszaállításra került az oldal betöltése közben."
-
-msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Előfordulhat, hogy a webhely átmenetileg nem elérhető, túl elfoglalt, vagy letiltotta a hozzáférését."
-
-#, java-format
-msgid "You may want to {0}retry{1}."
-msgstr "Érdemes lehet {0}újrapróbálni{1}."
-
-#, java-format
-msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
-msgstr "Ha nyitva hagyja ezt az oldalt, a sikertelen csatlakozási kísérlet után {0} másodpercenként automatikusan újra megpróbál csatlakozni a webhelyhez."
-
-msgid "Could not find the following destination:"
-msgstr "Nem találta meg a következő rendeltetési helyet:"
-
-msgid "Warning: Non-HTTP Protocol"
-msgstr "Figyelmeztetés: Nem HTTP-protokoll"
-
-msgid "The request uses a bad protocol."
-msgstr "A kérés rossz protokollt használ."
-
-msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
-msgstr "Az I2P HTTP-proxy csak a HTTP és HTTPS kéréseket támogatja."
-
-msgid "Other protocols such as FTP are not allowed."
-msgstr "Más protokollok, például az FTP nem engedélyezettek."
-
-msgid "Warning: No Outproxy Configured"
-msgstr "Figyelmeztetés: Nincs beállítva outproxy"
-
-msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
-msgstr "A kérése egy I2P-n kívüli webhelyre vonatkozott, de nincs beállítva HTTP outproxy."
-
-msgid "Please configure an outproxy in I2PTunnel."
-msgstr "Kérem, állítson be egy outproxyt az I2PTunnelben."
-
-msgid "Error: Request Denied"
-msgstr "Hiba: Kérelem elutasítva"
-
-msgid "Error: Cannot Access Router Console via I2P Proxy"
-msgstr "Hiba: Nem lehet elérni a Router Console-t I2P-proxyn keresztül"
-
-msgid "Your browser is misconfigured."
-msgstr "A böngészője rosszul van beállítva."
-
-msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
-msgstr "Ne használja a proxyt az útválasztókonzol, a helyi gazdagép vagy a helyi LAN-célok eléréséhez."
-
-msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
-msgstr "Meg kell akadályoznia, hogy a 127.0.0.1 (vagy az a cím, amelyen az I2P-konzolt eléri) az I2P http-proxyján keresztül irányítsák, általában úgy, hogy kizárja a címet a böngésző proxykonfigurációs szakaszában."
-
-msgid "Website Unknown"
-msgstr "Ismeretlen webhely"
 
 msgid "Website Not Found in Addressbook"
 msgstr "A webhely nem található a címjegyzékben"
@@ -111,99 +46,35 @@ msgstr "Ellenkező esetben keressen egy Base 32 vagy címsegéd hivatkozást, va
 msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
 msgstr "Gyakran látja ezt az oldalt? Lásd: {0} A {1} GYIK segítségével a {2} segítségével néhány előfizetés hozzáadása {3} a címkönyvéhez."
 
-msgid "Website Unreachable"
-msgstr "A webhely nem érhető el"
+msgid "Could not find the following destination:"
+msgstr "Nem találta meg a következő rendeltetési helyet:"
 
-msgid "The website was not reachable, because its lease set was not found."
-msgstr "A webhely nem volt elérhető, mert a bérleti csomagja nem található."
+msgid "Warning: Non-HTTP Protocol"
+msgstr "Figyelmeztetés: Nem HTTP-protokoll"
 
-msgid "The website is probably down, but there could also be network congestion."
-msgstr "A webhely valószínűleg nem működik, de hálózati torlódások is előfordulhatnak."
+msgid "The request uses a bad protocol."
+msgstr "A kérés rossz protokollt használ."
 
-msgid "Outproxy Not Found"
-msgstr "Outproxy nem található"
+msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
+msgstr "Az I2P HTTP-proxy csak a HTTP és HTTPS kéréseket támogatja."
 
-msgid "The HTTP Outproxy was not found."
-msgstr "A HTTP outproxy -t nem találták meg."
+msgid "Other protocols such as FTP are not allowed."
+msgstr "Más protokollok, például az FTP nem engedélyezettek."
 
-msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "Offline állapotban van, hálózati torlódások vannak, vagy az útválasztó még nincs megfelelően integrálva a társakkal."
+msgid "Error: Request Denied"
+msgstr "Hiba: Kérelem elutasítva"
 
-#, java-format
-msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
-msgstr "Érdemes lehet {0}újrapróbálnia{1}, mivel ez véletlenszerűen újra kiválaszt egy outproxyt az {2}itt{3} meghatározott készletből (ha egynél több van beállítva)."
+msgid "Error: Cannot Access Router Console via I2P Proxy"
+msgstr "Hiba: Nem lehet elérni a Router Console-t I2P-proxyn keresztül"
 
-#, java-format
-msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
-msgstr "Ha továbbra is problémái vannak, érdemes lehet {0}itt{1} szerkeszteni a kihelyezett proxylistát."
+msgid "Your browser is misconfigured."
+msgstr "A böngészője rosszul van beállítva."
 
-msgid "Warning: Request Denied"
-msgstr "Figyelmeztetés: Kérelem elutasítva"
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
+msgstr "Ne használja a proxyt az útválasztókonzol, a helyi gazdagép vagy a helyi LAN-célok eléréséhez."
 
-msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
-msgstr "Úgy tűnik, hogy ez a cím hibás. Kérjük, ellenőrizze, hogy adott -e érvényes címet!"
-
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "Nem I2P webhelyhez vagy helyhez próbált csatlakozni."
-
-msgid "Outproxy Unreachable"
-msgstr "Outproxy nem érhető el"
-
-msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
-msgstr "A HTTP outproxy nem volt elérhető, mert olyan titkosítási beállításokat használ, amelyeket az Ön I2P vagy Java verziója nem támogat."
-
-msgid "Could not connect to the following destination:"
-msgstr "Nem sikerült csatlakozni a következő célhoz:"
-
-msgid "Proxy Authorization Required"
-msgstr "Kimenő proxy Hitelesítés"
-
-msgid "I2P HTTP Proxy Authorization Required"
-msgstr "Kimenő proxy Hitelesítés"
-
-msgid "This proxy is configured to require a username and password for access."
-msgstr "Ez a proxy úgy van konfigurálva, hogy a hozzáféréshez felhasználónév és jelszó szükséges."
-
-#, java-format
-msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
-msgstr "Kérjük, adja meg felhasználónevét és jelszavát, vagy ellenőrizze az {0}útválasztó konfigurációját{1} vagy az {2}I2PTunnel konfigurációját{3}."
-
-#, java-format
-msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
-msgstr "Az engedélyezés letiltásához távolítsa el az {0}i2ptunnel.proxy.auth=basic{1} konfigurációt, majd állítsa le és indítsa újra a HTTP-proxy alagutat."
-
-msgid "Warning: Invalid Destination"
-msgstr "Helyi célállomást"
-
-msgid "The website destination specified was not valid, or was otherwise unreachable."
-msgstr "A megadott webhely célhelye érvénytelen, vagy más okból elérhetetlen."
-
-msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
-msgstr "Talán rossz Base 64 karakterláncot illesztett be, vagy a követett hivatkozás rossz."
-
-msgid "The I2P host could also be offline."
-msgstr "Az I2P gazdagép offline is lehet."
-
-msgid "The connection to the proxy was reset."
-msgstr "A proxyhoz való kapcsolat visszaállításra került."
-
-msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Előfordulhat, hogy a proxy átmenetileg nem elérhető, túl foglalt, vagy blokkolta a hozzáférést."
-
-msgid "The HTTP outproxy was not reachable, because its lease set was not found."
-msgstr "A HTTP outproxy nem volt elérhető, mert a bérleti készlete nem található."
-
-msgid "The outproxy is probably down, but there could also be network congestion."
-msgstr "Az outproxy valószínűleg nem működik, de hálózati torlódás is előfordulhat."
-
-msgid "Warning: Authorization Required"
-msgstr "Figyelmeztetés: Engedély szükséges"
-
-msgid "The website was not reachable."
-msgstr "A webhely nem volt elérhető."
-
-msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "A webhely offline állapotban van, hálózati torlódások vannak, vagy az útválasztó még nincs megfelelően integrálva a többiekkel."
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "Meg kell akadályoznia, hogy a 127.0.0.1 (vagy az a cím, amelyen az I2P-konzolt eléri) az I2P http-proxyján keresztül irányítsák, általában úgy, hogy kizárja a címet a böngésző proxykonfigurációs szakaszában."
 
 msgid "Warning: Destination Key Conflict"
 msgstr "Figyelmeztetés: A célkulcs ütközése"
@@ -217,24 +88,81 @@ msgstr "Valaki megpróbálhat kiadni egy másik webhelyet, vagy két webhelynek 
 msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
 msgstr "Oldja fel az ütközést úgy, hogy eldönti, melyik kulcsban bízik meg, majd hagyja figyelmen kívül a címsegéd hivatkozást, vagy törölje a gazdagép bejegyzést a címjegyzékből, és kattintson ismét a címsegéd hivatkozásra."
 
-msgid "The Base32 address is invalid."
-msgstr "A Base32 cím érvénytelen."
+msgid "Connection Reset"
+msgstr "Kapcsolat visszaállítása"
 
-msgid "Warning: Bad Address Helper"
-msgstr "Figyelmeztetés: Hibás cím segítő"
+msgid "The connection to the website was reset while the page was loading."
+msgstr "A webhelyhez való kapcsolat visszaállításra került az oldal betöltése közben."
+
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Előfordulhat, hogy a webhely átmenetileg nem elérhető, túl elfoglalt, vagy letiltotta a hozzáférését."
 
 #, java-format
-msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
-msgstr "Az URL-ben található segítő kulcs ({0}i2paddresshelper={1}) nem oldható fel."
+msgid "You may want to {0}retry{1}."
+msgstr "Érdemes lehet {0}újrapróbálni{1}."
 
-msgid "It seems to be garbage data, or a mistyped Base 32 address."
-msgstr "Úgy tűnik, hogy szemét adatról van szó, vagy rosszul írta be a Base 32 címet."
+#, java-format
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
+msgstr "Ha nyitva hagyja ezt az oldalt, a sikertelen csatlakozási kísérlet után {0} másodpercenként automatikusan újra megpróbál csatlakozni a webhelyhez."
 
-msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
-msgstr "Ellenőrizze az URL-címét, és próbálja meg kijavítani a segítőkulcsot érvényes Base 32 gazdagépnévre vagy Base 64 kulcsra."
+msgid "Website Unreachable"
+msgstr "A webhely nem érhető el"
 
 msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
 msgstr "A webhely nem volt elérhető, mert olyan titkosítási lehetőségeket használ, amelyeket az Ön I2P vagy Java verziója nem támogat."
+
+msgid "Could not connect to the following destination:"
+msgstr "Nem sikerült csatlakozni a következő célhoz:"
+
+msgid "The website was not reachable, because its lease set was not found."
+msgstr "A webhely nem volt elérhető, mert a bérleti csomagja nem található."
+
+msgid "The website is probably down, but there could also be network congestion."
+msgstr "A webhely valószínűleg nem működik, de hálózati torlódások is előfordulhatnak."
+
+msgid "The connection to the proxy was reset."
+msgstr "A proxyhoz való kapcsolat visszaállításra került."
+
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Előfordulhat, hogy a proxy átmenetileg nem elérhető, túl foglalt, vagy blokkolta a hozzáférést."
+
+#, java-format
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "Érdemes lehet {0}újrapróbálnia{1}, mivel ez véletlenszerűen újra kiválaszt egy outproxyt az {2}itt{3} meghatározott készletből (ha egynél több van beállítva)."
+
+#, java-format
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr "Ha továbbra is problémái vannak, érdemes lehet {0}itt{1} szerkeszteni a kihelyezett proxylistát."
+
+msgid "Outproxy Unreachable"
+msgstr "Outproxy nem érhető el"
+
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "A HTTP outproxy nem volt elérhető, mert olyan titkosítási beállításokat használ, amelyeket az Ön I2P vagy Java verziója nem támogat."
+
+msgid "The website was not reachable."
+msgstr "A webhely nem volt elérhető."
+
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "A webhely offline állapotban van, hálózati torlódások vannak, vagy az útválasztó még nincs megfelelően integrálva a többiekkel."
+
+msgid "Warning: No Outproxy Configured"
+msgstr "Figyelmeztetés: Nincs beállítva outproxy"
+
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr "A kérése egy I2P-n kívüli webhelyre vonatkozott, de nincs beállítva HTTP outproxy."
+
+msgid "Please configure an outproxy in I2PTunnel."
+msgstr "Kérem, állítson be egy outproxyt az I2PTunnelben."
+
+msgid "Outproxy Not Found"
+msgstr "Outproxy nem található"
+
+msgid "The HTTP Outproxy was not found."
+msgstr "A HTTP outproxy -t nem találták meg."
+
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Offline állapotban van, hálózati torlódások vannak, vagy az útválasztó még nincs megfelelően integrálva a társakkal."
 
 msgid "Information: New Host Name"
 msgstr "Információ: Új gazdagépnév"
@@ -256,6 +184,78 @@ msgstr "Ha nem menti el, a gazdagépnév a következő útválasztó újraindít
 
 msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
 msgstr "Ha nem szeretné meglátogatni ezt a gazdagépet, kattintson a \"vissza\" gombra a böngészőjében."
+
+msgid "Proxy Authorization Required"
+msgstr "Kimenő proxy Hitelesítés"
+
+msgid "I2P HTTP Proxy Authorization Required"
+msgstr "Kimenő proxy Hitelesítés"
+
+msgid "This proxy is configured to require a username and password for access."
+msgstr "Ez a proxy úgy van konfigurálva, hogy a hozzáféréshez felhasználónév és jelszó szükséges."
+
+#, java-format
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "Kérjük, adja meg felhasználónevét és jelszavát, vagy ellenőrizze az {0}útválasztó konfigurációját{1} vagy az {2}I2PTunnel konfigurációját{3}."
+
+#, java-format
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "Az engedélyezés letiltásához távolítsa el az {0}i2ptunnel.proxy.auth=basic{1} konfigurációt, majd állítsa le és indítsa újra a HTTP-proxy alagutat."
+
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr "A HTTP outproxy nem volt elérhető, mert a bérleti készlete nem található."
+
+msgid "The outproxy is probably down, but there could also be network congestion."
+msgstr "Az outproxy valószínűleg nem működik, de hálózati torlódás is előfordulhat."
+
+msgid "Warning: Request Denied"
+msgstr "Figyelmeztetés: Kérelem elutasítva"
+
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr "Úgy tűnik, hogy ez a cím hibás. Kérjük, ellenőrizze, hogy adott -e érvényes címet!"
+
+msgid "You attempted to connect to a non-I2P website or location."
+msgstr "Nem I2P webhelyhez vagy helyhez próbált csatlakozni."
+
+msgid "Warning: Bad Address Helper"
+msgstr "Figyelmeztetés: Hibás cím segítő"
+
+#, java-format
+msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgstr "Az URL-ben található segítő kulcs ({0}i2paddresshelper={1}) nem oldható fel."
+
+msgid "It seems to be garbage data, or a mistyped Base 32 address."
+msgstr "Úgy tűnik, hogy szemét adatról van szó, vagy rosszul írta be a Base 32 címet."
+
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr "Ellenőrizze az URL-címét, és próbálja meg kijavítani a segítőkulcsot érvényes Base 32 gazdagépnévre vagy Base 64 kulcsra."
+
+msgid "Warning: Invalid Destination"
+msgstr "Helyi célállomást"
+
+msgid "The website destination specified was not valid, or was otherwise unreachable."
+msgstr "A megadott webhely célhelye érvénytelen, vagy más okból elérhetetlen."
+
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr "Talán rossz Base 64 karakterláncot illesztett be, vagy a követett hivatkozás rossz."
+
+msgid "The I2P host could also be offline."
+msgstr "Az I2P gazdagép offline is lehet."
+
+msgid "Warning: Authorization Required"
+msgstr "Figyelmeztetés: Engedély szükséges"
+
+msgid "Warning: Invalid Request URI"
+msgstr "Figyelmeztetés: Érvénytelen kérés-URI"
+
+msgid "The request URI is invalid, and probably contains illegal characters."
+msgstr "A kérés URI érvénytelen, és valószínűleg illegális karaktereket tartalmaz."
+
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr "Ha rákattintott egy hivatkozásra, ellenőrizze az URI végén a böngésző által tévesen hozzáadott karaktereket."
+
+msgid "The Base32 address is invalid."
+msgstr "A Base32 cím érvénytelen."
 
 msgid "This seems to be a bad destination:"
 msgstr "Ez rossz célállomásnak tűnik:"

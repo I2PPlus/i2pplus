@@ -130,17 +130,14 @@ msgid_plural "{0} destinations deleted."
 msgstr[0] "1 destinazione eliminata."
 msgstr[1] "{0} destinazioni eliminate."
 
-msgid "No entries selected to delete."
-msgstr "Non è stata selezionata nessuna voce per l'eliminazione."
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "Aggiungi alternativo"
 
 msgid "Address book saved."
 msgstr "Rubrica salvata."
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "Esci da questa rubrica e ritorna per vedere l'aggiornamento."
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "ERRORE: impossibile scrivere sul file della rubrica."
@@ -321,6 +318,9 @@ msgstr "Marca per la rimozione"
 msgid "Cancel"
 msgstr "Annulla"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "ad esempio, nuovodominio.i2p"
 
@@ -398,6 +398,9 @@ msgstr "File di log dell'attività (puoi cambiare in /dev/null se preferisci)"
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Nome del tema di sostituzione da utilizzare (il valore predefinito è il tema selezionato dalla console)"
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "rubrica"
@@ -593,3 +596,5 @@ msgstr "Gli indirizzi aggiunti manualmente alla rubrica principale verranno unit
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Gli host che ricevi dai tuoi abbonamenti verranno uniti alla rubrica del tuo router."
+
+

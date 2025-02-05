@@ -35,12 +35,6 @@ msgstr "標準的な転送量と信頼性"
 msgid "higher bandwidth and reliability"
 msgstr "高い転送量だが高い信頼性"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "フォームの送信が無効です。おそらくブラウザの「戻る」ボタンまたは「再読み込み」ボタンを使用したためです。無効な送信フォーム。おそらくブラウザで「戻る」か「再読込」を使用したためです。再送信してください。"
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "問題が解決しない場合は、ブラウザで Cookie が有効になっていることを確認してください。問題が残る場合、ブラウザでクッキーが有効になっているかを確かめてください。"
-
 msgid "Configuration reloaded for all tunnels"
 msgstr "すべてのトンネルの設定が再読込されました"
 
@@ -1222,6 +1216,12 @@ msgstr "認証の生成"
 
 msgid "SSL Helper"
 msgstr "SSL ヘルパー"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "フォームの送信が無効です。おそらくブラウザの「戻る」ボタンまたは「再読み込み」ボタンを使用したためです。無効な送信フォーム。おそらくブラウザで「戻る」か「再読込」を使用したためです。再送信してください。"
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "問題が解決しない場合は、ブラウザで Cookie が有効になっていることを確認してください。問題が残る場合、ブラウザでクッキーが有効になっているかを確かめてください。"
 
 msgid "Experts only!"
 msgstr "上級者向け!"

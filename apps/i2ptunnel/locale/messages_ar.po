@@ -50,12 +50,6 @@ msgstr "عرض النطاق الترددي القياسي والموثوقية"
 msgid "higher bandwidth and reliability"
 msgstr "عرض النطاق الترددي العالي والموثوقية"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "إرسال النموذج غير صالح، ربما لأنك استخدمت زر 'الرجوع' أو 'إعادة التحميل' في متصفحك. خطأ في الارسال، ربما لاستعمالك زر 'الرجوع' او 'انعش' في المتصفح. حاول اعادة الارسال."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "إذا استمرت المشكلة، فتأكد من تمكين ملفات تعريف الارتباط في متصفحك."
-
 msgid "Configuration reloaded for all tunnels"
 msgstr "تم اعادة تحميل تغيرات الاعدادات"
 
@@ -1247,6 +1241,12 @@ msgstr "إنشاء المصادقة"
 
 msgid "SSL Helper"
 msgstr "مساعد SSL"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "إرسال النموذج غير صالح، ربما لأنك استخدمت زر 'الرجوع' أو 'إعادة التحميل' في متصفحك. خطأ في الارسال، ربما لاستعمالك زر 'الرجوع' او 'انعش' في المتصفح. حاول اعادة الارسال."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "إذا استمرت المشكلة، فتأكد من تمكين ملفات تعريف الارتباط في متصفحك."
 
 msgid "Experts only!"
 msgstr "الخبراء فقط!"

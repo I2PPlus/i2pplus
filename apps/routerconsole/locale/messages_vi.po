@@ -140,6 +140,9 @@ msgstr "Không hỗ trợ loại chữ ký của chúng tôi"
 msgid "Unreachable on any transport"
 msgstr "Không thể kết bằng bất kỳ phương thức truyền tải nào"
 
+msgid "Cannot enumerate UPnP devices on Android."
+msgstr ""
+
 msgid "UPnP is not enabled"
 msgstr "UPnP hiện bị vô hiệu hóa"
 
@@ -677,11 +680,39 @@ msgstr "Vui lòng báo cáo"
 msgid "After reporting, please restart your router"
 msgstr "Sau khi báo cáo, vui lòng khởi động lại bộ định tuyến của bạn"
 
+msgid "Invalid form submission, requires POST"
+msgstr ""
+
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "Mẫu đơn đệ nạp không đúng, có lẻ vì bạn dùng nút 'back' hay 'reload\" của trình duyệt. Xin vui lòng đệ nạp lại."
 
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Nếu sự cố vẫn tiếp diễn, hãy xác minh rằng bạn đã bật cookie trong trình duyệt của mình."
+
+msgid "Bandwidth usage"
+msgstr "Sử dụng băng thông"
+
+#, java-format
+msgid "events in {0}"
+msgstr "sự kiện ở {0}"
+
+msgid "Events per period"
+msgstr "Sự kiện mỗi kỳ"
+
+msgid "Min"
+msgstr "Tối thiểu"
+
+msgid "Max"
+msgstr "Tối đa"
+
+msgid "Avg"
+msgstr "Trung bình"
+
+msgid "Now"
+msgstr "Bây giờ"
+
+msgid "Router restarted"
+msgstr "Router đã khởi động lại"
 
 #, java-format
 msgid "News last updated {0} ago."
@@ -713,31 +744,6 @@ msgstr[0] "Đã cập nhật {0} plugin"
 
 msgid "Plugin check complete"
 msgstr "Kiểm tra plugin hoàn tất"
-
-msgid "Bandwidth usage"
-msgstr "Sử dụng băng thông"
-
-#, java-format
-msgid "events in {0}"
-msgstr "sự kiện ở {0}"
-
-msgid "Events per period"
-msgstr "Sự kiện mỗi kỳ"
-
-msgid "Min"
-msgstr "Tối thiểu"
-
-msgid "Max"
-msgstr "Tối đa"
-
-msgid "Avg"
-msgstr "Trung bình"
-
-msgid "Now"
-msgstr "Bây giờ"
-
-msgid "Router restarted"
-msgstr "Router đã khởi động lại"
 
 msgid "none"
 msgstr "không có"
@@ -807,8 +813,20 @@ msgstr "Bảng điều khiển"
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "Để cho phép truy cập SSL cho bảng điều khiển bộ định tuyến, hãy xem tệp được nhận xét <code>client.config</code> nằm trong thư mục ứng dụng I2P của bạn để biết thêm thông tin. Bạn sẽ cần chỉnh sửa tệp cấu hình RouterConsolerunner nằm trong thư mục: "
 
+msgid "Save disabled, edit the router.config file to make changes"
+msgstr ""
+
 msgid "Error updating the configuration - please see the error logs"
 msgstr "Lỗi cập nhật cấu hình - vui lòng xem nhật ký lỗi"
+
+msgid "No changes made to the configuration"
+msgstr ""
+
+msgid "Note"
+msgstr "GHI CHÚ"
+
+msgid "Some changes may require a restart to take effect."
+msgstr "Một số thay đổi có thể yêu cầu khởi động lại để có hiệu lực."
 
 msgid "Save Client Configuration"
 msgstr "Lưu cấu hình máy khách"
@@ -822,6 +840,9 @@ msgstr "Lưu cấu hình ứng dụng web"
 msgid "Save Plugin Configuration"
 msgstr "Lưu cấu hình plugin"
 
+msgid "Plugins disabled"
+msgstr ""
+
 msgid "Install Plugin"
 msgstr "Cài đặt plugin"
 
@@ -830,6 +851,9 @@ msgstr "Cài đặt Plugin từ tệp"
 
 msgid "Update All Installed Plugins"
 msgstr "Cập nhật tất cả các plugin đã cài đặt"
+
+msgid "Delete client disabled"
+msgstr ""
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -912,9 +936,18 @@ msgstr "Đang tải xuống plugin hoặc bản cập nhật."
 msgid "Updating all plugins"
 msgstr "Cập nhật tất cả các plugin"
 
+msgid "Update manager not registered, cannot install"
+msgstr ""
+
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "Cài đặt plugin từ {0}"
+
+msgid "Cannot install, check logs"
+msgstr ""
+
+msgid "Update manager not registered, cannot check"
+msgstr ""
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1013,6 +1046,19 @@ msgstr "Đã lưu cấu hình thành công."
 msgid "Join Family"
 msgstr "Gia nhập gia đình"
 
+msgid "Bad certificate - No Subject CN"
+msgstr ""
+
+msgid "Bad characters in Family: "
+msgstr ""
+
+#, java-format
+msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
+msgstr ""
+
+msgid "Family key configured for router family: "
+msgstr ""
+
 msgid "Load from file failed"
 msgstr "Tải từ tệp không thành công"
 
@@ -1028,8 +1074,8 @@ msgstr "Thêm mục"
 msgid "Restore defaults"
 msgstr "Khôi phục mặc định"
 
-msgid "Home page changed"
-msgstr "Trang chủ đã thay đổi"
+msgid "Bad group detected, please retry"
+msgstr ""
 
 msgid "Restored default settings"
 msgstr "Đã khôi phục cài đặt mặc định"
@@ -1061,6 +1107,9 @@ msgstr "Khóa không hợp lệ"
 msgid "Invalid destination"
 msgstr "Đích đến không hợp lệ"
 
+msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
+msgstr ""
+
 #, java-format
 msgid "Key for {0} added to keyring"
 msgstr "Khóa cho {0} được thêm vào chuỗi khóa"
@@ -1070,6 +1119,9 @@ msgstr "Yêu cầu tra cứu mật khẩu"
 
 msgid "Requires hostname, destination, or blinded Base32"
 msgstr "Yêu cầu tên máy chủ, đích đến hoặc Base32 bị ẩn"
+
+msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
+msgstr ""
 
 msgid "Destination requires lookup password"
 msgstr "Đích yêu cầu tra cứu mật khẩu"
@@ -1088,6 +1140,9 @@ msgstr "Gửi key cho nhà điều hành máy chủ."
 
 msgid "Delete key"
 msgstr "Xóa khóa"
+
+msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
+msgstr ""
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1138,6 +1193,36 @@ msgstr "Bị mù"
 
 msgid "Log overrides updated"
 msgstr "Đã cập nhật ghi đè nhật ký"
+
+msgid "Error updating the log limits - levels not valid"
+msgstr ""
+
+msgid "Log limits cleared"
+msgstr ""
+
+#, java-format
+msgid "Default log level updated from {0} to {1}"
+msgstr ""
+
+msgid "Date format updated"
+msgstr ""
+
+#, java-format
+msgid "Specified date format is not valid ({0}) - not updated"
+msgstr ""
+
+msgid "File size updated"
+msgstr ""
+
+#, java-format
+msgid "Specified file size limit is not valid ({0}) - not updated"
+msgstr ""
+
+msgid "Compression setting updated"
+msgstr ""
+
+msgid "Log record format updated"
+msgstr ""
 
 msgid "Log configuration saved"
 msgstr "Đã lưu cấu hình nhật ký"
@@ -1346,6 +1431,12 @@ msgstr "Giá trị tốc độ xấu"
 msgid "Bad capacity value"
 msgstr "Giá trị dung lượng kém"
 
+msgid "Bonuses adjusted for: "
+msgstr ""
+
+msgid "No profile exists for: "
+msgstr ""
+
 msgid "Unsupported"
 msgstr "Không được hỗ trợ"
 
@@ -1454,27 +1545,14 @@ msgstr[0] "Vui lòng đợi các cam kết định tuyến hết hạn cho các 
 msgid "Restart in {0}"
 msgstr "Khởi động lại sau {0}"
 
-msgid "Stat filter and location updated successfully to"
-msgstr "Bộ lọc thống kê và vị trí được cập nhật thành công vào"
-
-msgid "Full statistics enabled"
-msgstr "Đã bật thống kê đầy đủ"
-
-msgid "Full statistics disabled"
-msgstr "Thống kê đầy đủ bị vô hiệu hóa"
-
-#, java-format
-msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
-msgstr "Danh sách biểu đồ được cập nhật, có thể mất tới 60 giây để hiển thị trên {0}Trang biểu đồ{1}"
-
 msgid "Save order"
 msgstr "Lưu đơn hàng"
 
-msgid "Refresh disabled"
-msgstr "Làm mới bị vô hiệu hóa"
+msgid "Sidebar refresh disabled"
+msgstr ""
 
-msgid "Refresh interval changed"
-msgstr "Khoảng thời gian làm mới đã thay đổi"
+msgid "Sidebar refresh interval changed"
+msgstr ""
 
 msgid "Refresh interval must be a number"
 msgstr "Khoảng thời gian làm mới phải là một số"
@@ -1482,17 +1560,17 @@ msgstr "Khoảng thời gian làm mới phải là một số"
 msgid "Restore full default"
 msgstr "Khôi phục mặc định đầy đủ"
 
-msgid "Full summary bar default restored."
-msgstr "Khôi phục mặc định thanh tóm tắt đầy đủ."
+msgid "Full sidebar defaults restored."
+msgstr ""
 
-msgid "Summary bar will refresh shortly."
-msgstr "Thanh tóm tắt sẽ sớm được làm mới."
+msgid "Sidebar will refresh shortly."
+msgstr ""
 
 msgid "Restore minimal default"
 msgstr "Khôi phục mặc định tối thiểu"
 
-msgid "Minimal summary bar default restored."
-msgstr "Khôi phục mặc định thanh tóm tắt tối thiểu."
+msgid "Minimal sidebar defaults restored."
+msgstr ""
 
 msgid "Order must be an integer"
 msgstr "Thứ tự phải là số nguyên"
@@ -1508,6 +1586,27 @@ msgstr "Đã di chuyển"
 
 msgid "Saved order of sections."
 msgstr "Đã lưu thứ tự các phần."
+
+msgid "Stat filter and location updated successfully to"
+msgstr "Bộ lọc thống kê và vị trí được cập nhật thành công vào"
+
+msgid "Full statistics enabled"
+msgstr "Đã bật thống kê đầy đủ"
+
+msgid "Full statistics disabled"
+msgstr "Thống kê đầy đủ bị vô hiệu hóa"
+
+#, java-format
+msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
+msgstr "Danh sách biểu đồ được cập nhật, có thể mất tới 60 giây để hiển thị trên {0}Trang biểu đồ{1}"
+
+#, java-format
+msgid "Internal error: could not resolve pool name {0}."
+msgstr ""
+
+#, java-format
+msgid "Internal error: could not find pool settings for {0}."
+msgstr ""
 
 msgid "Updated settings for all pools."
 msgstr "Cập nhật cài đặt cho tất cả các nhóm."
@@ -1531,9 +1630,8 @@ msgstr[0] "{0} đường hầm"
 msgid "Exploratory tunnels"
 msgstr "Đường hầm khám phá"
 
-#, java-format
-msgid "Client tunnels for {0}"
-msgstr "Đường hầm máy khách cho {0}"
+msgid "I2PSnark"
+msgstr "I2PSnark"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "CẢNH BÁO ẨN DANH - Cài đặt bao gồm đường hầm 0 bước."
@@ -1559,17 +1657,17 @@ msgstr "Luồng dữ liệu vào"
 msgid "Outbound"
 msgstr "Luồng dữ liệu ra"
 
-msgid "Length"
-msgstr "Độ dài"
-
-msgid "Randomization"
-msgstr "Ngẫu nhiên"
-
 msgid "Quantity"
 msgstr "Số lượng"
 
 msgid "Backup quantity"
 msgstr "Đường hầm dự trữ"
+
+msgid "Length"
+msgstr "Độ dài"
+
+msgid "Randomization"
+msgstr "Ngẫu nhiên"
 
 msgid "Inbound options"
 msgstr "Tùy chọn gửi đến"
@@ -1580,17 +1678,20 @@ msgstr "Tùy chọn gửi đi"
 msgid "Add user"
 msgstr "Thêm người dùng"
 
+msgid "Cannot save theme choice, theme name has illegal characters"
+msgstr ""
+
 msgid "Theme change saved."
 msgstr "Đã lưu thay đổi chủ đề."
-
-msgid "Refresh the page to view."
-msgstr "Làm mới trang để xem."
 
 msgid "Mobile console option saved."
 msgstr "Đã lưu tùy chọn bảng điều khiển di động."
 
 msgid "No user name entered"
 msgstr "Không nhập tên người dùng"
+
+msgid "User name may not contain '='"
+msgstr ""
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "Cảnh báo: Không nên sử dụng tên người dùng bên ngoài bộ ký tự ISO-8859-1. Hỗ trợ không được chuẩn hóa và thay đổi theo trình duyệt."
@@ -1881,17 +1982,17 @@ msgstr "Hiệu suất của bộ định tuyến đồ thị"
 msgid "Graphs"
 msgstr "Đồ thị"
 
-msgid "Anonymous webmail client"
-msgstr "Ứng dụng email trực tuyến ẩn danh"
-
-msgid "I2PMail"
-msgstr "Thư I2P"
-
 msgid "Help"
 msgstr "Giúp đỡ"
 
 msgid "I2P Router Help"
 msgstr "Trợ giúp về bộ định tuyến I2P"
+
+msgid "Anonymous webmail client"
+msgstr "Ứng dụng email trực tuyến ẩn danh"
+
+msgid "I2PMail"
+msgstr "Thư I2P"
 
 msgid "Install and configure I2P plugins"
 msgstr "Cài đặt và cấu hình plugin I2P"
@@ -1910,6 +2011,12 @@ msgstr "Cơ sở dữ liệu mạng"
 
 msgid "Show list of all known I2P routers"
 msgstr "Hiển thị danh sách tất cả các bộ định tuyến I2P đã biết"
+
+msgid "List of recently connected peers with profiling info"
+msgstr ""
+
+msgid "Peer Profiles"
+msgstr "Hồ sơ ngang hàng"
 
 msgid "Router Info"
 msgstr "Thông tin bộ định tuyến"
@@ -1983,14 +2090,14 @@ msgstr "Cấu hình nâng cao"
 msgid "Advanced router configuration"
 msgstr "Cấu hình bộ định tuyến nâng cao"
 
-msgid "Start or stop Router clients"
-msgstr "Bắt đầu hoặc dừng ứng dụng khách Bộ định tuyến"
-
 msgid "Changelog"
 msgstr "Ký sự thay đổi"
 
 msgid "Recent changes"
 msgstr "Những thay đổi gần đây"
+
+msgid "Start or stop Router clients"
+msgstr "Bắt đầu hoặc dừng ứng dụng khách Bộ định tuyến"
 
 msgid "Bug tracker"
 msgstr "Trình theo dõi lỗi"
@@ -2136,9 +2243,6 @@ msgstr "Công cụ tìm kiếm Clearnet BitTorrent DHT"
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "Công cụ tìm kiếm DuckDuckGo (không có javascript)"
 
-msgid "Clearnet Search Engine"
-msgstr "Công cụ tìm kiếm Clearnet"
-
 msgid "Privacy-focused Clearnet Search Engine"
 msgstr "Công cụ tìm kiếm Clearnet tập trung vào quyền riêng tư"
 
@@ -2214,18 +2318,6 @@ msgstr "Báo chí điều tra độc lập"
 msgid "Information Security Research &amp; Education"
 msgstr "Nghiên cứu và giáo dục bảo mật thông tin"
 
-msgid "Cannabis-related magazine"
-msgstr "Tạp chí liên quan đến cần sa"
-
-msgid "CultureMagazine"
-msgstr "Tạp chí Văn hóa"
-
-msgid "A magazine of Politics &amp; Culture"
-msgstr "Một tạp chí về chính trị và văn hóa"
-
-msgid "CurrentAffairs"
-msgstr "Chuyện hiện tại"
-
 msgid "Darknet related news site"
 msgstr "Trang tin tức liên quan đến Darknet"
 
@@ -2280,15 +2372,6 @@ msgstr "Theo dõi Hồng Kông"
 msgid "Monitors threats to freedoms and rights in Hong Kong"
 msgstr "Giám sát các mối đe dọa đối với quyền tự do và quyền ở Hồng Kông"
 
-msgid "Politics &amp; Current Affairs Journal"
-msgstr "Tạp chí chính trị và các vấn đề hiện tại"
-
-msgid "English language Japanese News"
-msgstr "Tiếng Anh Tin tức tiếng Nhật"
-
-msgid "JapanToday"
-msgstr "Nhật Bản hôm nay"
-
 msgid "JStorDaily"
 msgstr "JStorDaily"
 
@@ -2331,9 +2414,6 @@ msgstr "Tin tức và nguồn cấp dữ liệu blog trên I2P"
 msgid "Planeta"
 msgstr "Hành tinh"
 
-msgid "News &amp; Views on Tibet"
-msgstr "Tin tức"
-
 msgid "Lifestyle magazine"
 msgstr "Tạp chí phong cách sống"
 
@@ -2351,6 +2431,9 @@ msgstr "Khoa họcHàng ngày"
 
 msgid "Community-driven tech news"
 msgstr "Tin tức công nghệ hướng tới cộng đồng"
+
+msgid "Various services"
+msgstr ""
 
 msgid "News for nerds"
 msgstr "Tin tức dành cho người mọt sách"
@@ -2397,12 +2480,6 @@ msgstr "Tin tức toàn cầu"
 msgid "TheGuardian"
 msgstr "Người giám hộ"
 
-msgid "TheHill"
-msgstr "TheHill"
-
-msgid "US Political News"
-msgstr "Tin tức chính trị Hoa Kỳ"
-
 msgid "TheMarkup"
 msgstr "TheMarkup"
 
@@ -2417,12 +2494,6 @@ msgstr "TheMoscowTimes"
 
 msgid "TheNewRepublic"
 msgstr "TheNewRepublic"
-
-msgid "International News from Tibet"
-msgstr "Tin tức quốc tế từ Tây Tạng"
-
-msgid "TheTibetPost"
-msgstr "TheTibetPost"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "Chia sẻ tập tin"
@@ -2451,6 +2522,9 @@ msgstr "Đường dẫn"
 
 msgid "Add"
 msgstr "Thêm vào"
+
+msgid "Error displaying the info page."
+msgstr ""
 
 msgid "Identity"
 msgstr "Danh tính"
@@ -2497,6 +2571,9 @@ msgstr "Lõi CPU có sẵn"
 msgid "Performance"
 msgstr "Hiệu suất"
 
+msgid "Maximum available RAM"
+msgstr ""
+
 msgid "Classified as slow"
 msgstr "Được phân loại là chậm"
 
@@ -2505,6 +2582,9 @@ msgstr "Có"
 
 msgid "No"
 msgstr "Không"
+
+msgid "GeoIP Db"
+msgstr ""
 
 msgid "Target"
 msgstr "Mục tiêu"
@@ -2642,6 +2722,9 @@ msgstr "Tất cả các bộ định tuyến (Client NetDb)"
 msgid "Sybil Analysis"
 msgstr "Phân tích âm tiết"
 
+msgid "Bad value supplied, please check and try again."
+msgstr ""
+
 msgid "Router Map"
 msgstr "Bản đồ Router"
 
@@ -2716,9 +2799,6 @@ msgstr "bị cấm"
 
 msgid "not found in network database"
 msgstr "không tìm thấy trong cơ sở dữ liệu mạng"
-
-msgid "No results"
-msgstr "Không có kết quả"
 
 msgid "Bad Base64 Router hash"
 msgstr ""
@@ -2967,50 +3047,11 @@ msgstr "Hiển thị tất cả các bộ định tuyến có địa chỉ này 
 msgid "Show all routers with this port in the NetDb"
 msgstr "Hiển thị tất cả các bộ định tuyến có cổng này trong NetDb"
 
-msgid "Core version"
-msgstr "Phiên bản cốt lõi"
-
 msgid "Network ID"
 msgstr "ID mạng"
 
 msgid "Routers"
 msgstr "Bộ định tuyến"
-
-msgid "Family Key"
-msgstr "Chìa khóa gia đình"
-
-msgid "Family Sig"
-msgstr "Dấu hiệu gia đình"
-
-msgid "Exploratory tunnels expire (1h)"
-msgstr "Hầm thăm dò hết hạn (1h)"
-
-msgid "Exploratory tunnels reject (1h)"
-msgstr "Từ chối hầm thăm dò (1h)"
-
-msgid "Exploratory tunnels build success (1h)"
-msgstr "Xây dựng hầm thăm dò thành công (1h)"
-
-msgid "Client tunnels expire (1h)"
-msgstr "Đường hầm khách hàng hết hạn (1h)"
-
-msgid "Client tunnels reject (1h)"
-msgstr "Đường hầm máy khách từ chối (1h)"
-
-msgid "Client tunnels build success (1h)"
-msgstr "Xây dựng đường hầm khách hàng thành công (1h)"
-
-msgid "Participating tunnels (1h)"
-msgstr "Đường hầm tham gia (1h)"
-
-msgid "Participating tunnels (60s)"
-msgstr "Tham gia đường hầm (60s)"
-
-msgid "Bandwidth send rate (1h)"
-msgstr "Tốc độ gửi băng thông (1h)"
-
-msgid "Bandwidth receive rate (1h)"
-msgstr "Tốc độ nhận băng thông (1h)"
 
 msgid "First heard about"
 msgstr "Lần đầu tiên nghe nói về"
@@ -3080,9 +3121,6 @@ msgstr "vào tệp router.config của bạn."
 msgid "Peer Connections"
 msgstr "Kết nối ngang hàng"
 
-msgid "Auto-refresh"
-msgstr "Tự động làm mới"
-
 msgid "Active in the last minute"
 msgstr "Hoạt động vào phút cuối"
 
@@ -3091,6 +3129,12 @@ msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
+
+msgid "Limit"
+msgstr ""
+
+msgid "Maximum permitted connections"
+msgstr ""
 
 msgid "Current / maximum permitted"
 msgstr "Hiện tại / tối đa được phép"
@@ -3488,8 +3532,8 @@ msgid "{0} shared bandwidth"
 msgstr "{0} băng thông chia sẻ"
 
 #, java-format
-msgid "Over {0} shared bandwidth"
-msgstr "Trên {0} băng thông chia sẻ"
+msgid "Over {0} KB/s shared bandwidth"
+msgstr ""
 
 msgid "status"
 msgstr "trạng thái"
@@ -3561,82 +3605,151 @@ msgstr ""
 msgid "Select search engine"
 msgstr "Chọn công cụ tìm kiếm"
 
-msgid "Statistics gathered during this router's uptime"
-msgstr "Số liệu thống kê được thu thập trong thời gian hoạt động của bộ định tuyến này"
+#, java-format
+msgid "Clock Skew of {0}"
+msgstr "Đồng hồ sai lệch của {0}"
 
-msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
-msgstr "Dữ liệu thu thập được lượng tử hóa trong khoảng thời gian 1 phút, do đó chỉ nên sử dụng làm dữ liệu ước tính."
+msgid "Testing"
+msgstr "Kiểm tra"
 
-msgid "These statistics are primarily used for development and debugging."
-msgstr "Những thống kê này chủ yếu được sử dụng để phát triển và gỡ lỗi."
+msgid "Private TCP Address"
+msgstr "Địa chỉ TCP riêng"
 
-msgid "No lifetime events"
-msgstr "Không có sự kiện trọn đời"
+msgid "SymmetricNAT"
+msgstr "NAT đối xứng"
 
-msgid "frequency"
-msgstr "tần số"
+msgid "Firewalled with Inbound TCP Enabled"
+msgstr "Tường lửa với TCP trong nước được bật"
 
-msgid "Rolling average events per period"
-msgstr "Các sự kiện trung bình luân phiên mỗi kỳ"
+msgid "Firewalled &amp; Floodfill"
+msgstr "Tường lửa và lũ lụt"
 
-msgid "Highest events per period"
-msgstr "Số sự kiện cao nhất mỗi kỳ"
+msgid "Disconnected"
+msgstr "Mất kết nối"
 
-msgid "Lifetime average events per period"
-msgstr "Số sự kiện trung bình trong suốt cuộc đời mỗi giai đoạn"
+msgid "UDP Port In Use"
+msgstr "Cổng UDP đang được sử dụng"
 
-msgid "Lifetime average frequency"
-msgstr "Tần số trung bình trọn đời"
+msgid "No Active Peers"
+msgstr "Không có bạn đồng trang lứa đang hoạt động"
+
+msgid "UDP Disabled &amp; Inbound TCP host/port not set"
+msgstr "Vô hiệu hóa UDP"
+
+msgid "Firewalled with UDP Disabled"
+msgstr "Tường lửa với UDP bị vô hiệu hóa"
+
+msgid "Add/remove/edit &amp; control your client and server tunnels"
+msgstr "Thêm/xóa/chỉnh sửa"
+
+msgid "Service Tunnels"
+msgstr "Đường hầm dịch vụ"
+
+msgid "How many local service tunnels we're running"
+msgstr "Chúng tôi đang chạy bao nhiêu đường hầm dịch vụ địa phương"
+
+msgid "Messenger"
+msgstr "Tin nhắn"
+
+msgid "i2pchat"
+msgstr "i2pchat"
+
+msgid "I2PChat"
+msgstr "I2PChat"
+
+msgid "Server"
+msgstr "Máy chủ"
+
+msgid "service may be available to peers"
+msgstr "dịch vụ có thể có sẵn cho các đồng nghiệp"
+
+msgid "service is only available locally"
+msgstr "dịch vụ chỉ khả dụng tại địa phương"
+
+msgid "Show tunnels"
+msgstr "Hiển thị đường hầm"
+
+msgid "Leases expired"
+msgstr "Hợp đồng thuê đã hết hạn"
+
+msgid "Rebuilding"
+msgstr "Xây dựng lại"
+
+msgid "ago"
+msgstr "trước"
+
+msgid "Ready"
+msgstr "Sẵn sàng"
+
+msgid "Building"
+msgstr "Xây dựng"
+
+msgid "Building tunnels"
+msgstr "Xây dựng hầm"
+
+msgid "Shared Clients"
+msgstr "Khách hàng được chia sẻ"
+
+msgid "Click Restart to install"
+msgstr "Nhấp vào Khởi động lại để cài đặt"
+
+msgid "Click Shutdown and restart to install"
+msgstr "Nhấp vào Shutdown và khởi động lại để cài đặt"
 
 #, java-format
-msgid "{0} event"
-msgid_plural "{0} events"
-msgstr[0] "{0} sự kiện"
+msgid "{0}"
+msgstr "{0}"
 
-msgid "rate"
-msgstr "tỷ lệ"
+msgid "Updating after restart"
+msgstr "Cập nhật sau khi khởi động lại"
 
-msgid "Average"
-msgstr "Trung bình"
+msgid "Signed development update available"
+msgstr "Cập nhật phát triển đã ký có sẵn"
 
-msgid "Highest average"
-msgstr "Trung bình cao nhất"
+msgid "Download I2P Update"
+msgstr "Tải xuống bản cập nhật I2P"
 
-msgid "Highest total in a period"
-msgstr "Tổng số cao nhất trong một khoảng thời gian"
+msgid "Unsigned update available"
+msgstr "Cập nhật không dấu có sẵn"
 
-msgid "Average event count"
-msgstr "Số sự kiện trung bình"
+msgid "Help with firewall configuration"
+msgstr "Trợ giúp về cấu hình tường lửa"
 
-msgid "Events in peak period"
-msgstr "Sự kiện trong thời kỳ cao điểm"
+msgid "Check network connection and NAT/firewall!"
+msgstr "Kiểm tra kết nối mạng và Nat/tường lửa!"
 
-msgid "Events in this period"
-msgstr "Sự kiện trong giai đoạn này"
+msgid "Attempt to download router reference files (if automatic reseed has failed)"
+msgstr "Cố gắng tải xuống các tệp tham chiếu bộ định tuyến (nếu tự động reseed không thành công)"
 
-#, java-format
-msgid "ended {0} ago"
-msgstr "đã kết thúc {0} trước"
+msgid "Reseed"
+msgstr "Reseed"
 
-msgid "No events"
-msgstr "Không có sự kiện"
+msgid "Order"
+msgstr "Thứ tự"
 
-msgid "Graph Data"
-msgstr "Dữ liệu đồ thị"
+msgid "Top"
+msgstr "Hàng đầu"
 
-msgid "Graph Event Count"
-msgstr "Số sự kiện đồ thị"
+msgid "Move to top"
+msgstr "Chuyển lên trên cùng"
 
-msgid "Export Data as XML"
-msgstr "Xuất dữ liệu dưới dạng XML"
+msgid "Move up"
+msgstr "Di chuyển lên"
 
-msgid "Lifetime average value"
-msgstr "Giá trị trung bình trọn đời"
+msgid "Down"
+msgstr "Xuống"
 
-#, java-format
-msgid "1 event"
-msgid_plural "{0} events"
-msgstr[0] "{0} sự kiện"
+msgid "Move down"
+msgstr "Di chuyển xuống"
+
+msgid "Bottom"
+msgstr "Dưới cùng"
+
+msgid "Move to bottom"
+msgstr "Di chuyển xuống dưới cùng"
+
+msgid "Select a section to add"
+msgstr "Chọn phần cần thêm"
 
 msgid "Help &amp; FAQ"
 msgstr "Phần trợ giúp"
@@ -3679,9 +3792,6 @@ msgstr "Sự tắc nghẽn"
 
 msgid "Tunnel Status"
 msgstr "Tình trạng đường hầm"
-
-msgid "Service Tunnels"
-msgstr "Đường hầm dịch vụ"
 
 msgid "News &amp; Updates"
 msgstr "Tin tức và cập nhật"
@@ -3736,6 +3846,9 @@ msgstr "Web hosting"
 
 msgid "An introduction to hosting websites on the I2P network"
 msgstr "Giới thiệu về lưu trữ trang web trên mạng I2P"
+
+msgid "New hosts in last 24 hours"
+msgstr ""
 
 msgid "I2PControl"
 msgstr "I2PCĐiềukhiển"
@@ -4036,151 +4149,82 @@ msgstr "Không có đường hầm tham gia nào được xây dựng khi Chế 
 msgid "Router is configured to reject all transit tunnel requests"
 msgstr "Bộ định tuyến được cấu hình để từ chối tất cả các yêu cầu đường hầm tham gia"
 
-#, java-format
-msgid "Clock Skew of {0}"
-msgstr "Đồng hồ sai lệch của {0}"
+msgid "Statistics gathered during this router's uptime"
+msgstr "Số liệu thống kê được thu thập trong thời gian hoạt động của bộ định tuyến này"
 
-msgid "Testing"
-msgstr "Kiểm tra"
+msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
+msgstr "Dữ liệu thu thập được lượng tử hóa trong khoảng thời gian 1 phút, do đó chỉ nên sử dụng làm dữ liệu ước tính."
 
-msgid "Private TCP Address"
-msgstr "Địa chỉ TCP riêng"
+msgid "These statistics are primarily used for development and debugging."
+msgstr "Những thống kê này chủ yếu được sử dụng để phát triển và gỡ lỗi."
 
-msgid "SymmetricNAT"
-msgstr "NAT đối xứng"
+msgid "No lifetime events"
+msgstr "Không có sự kiện trọn đời"
 
-msgid "Firewalled with Inbound TCP Enabled"
-msgstr "Tường lửa với TCP trong nước được bật"
+msgid "frequency"
+msgstr "tần số"
 
-msgid "Firewalled &amp; Floodfill"
-msgstr "Tường lửa và lũ lụt"
+msgid "Rolling average events per period"
+msgstr "Các sự kiện trung bình luân phiên mỗi kỳ"
 
-msgid "Disconnected"
-msgstr "Mất kết nối"
+msgid "Highest events per period"
+msgstr "Số sự kiện cao nhất mỗi kỳ"
 
-msgid "UDP Port In Use"
-msgstr "Cổng UDP đang được sử dụng"
+msgid "Lifetime average events per period"
+msgstr "Số sự kiện trung bình trong suốt cuộc đời mỗi giai đoạn"
 
-msgid "No Active Peers"
-msgstr "Không có bạn đồng trang lứa đang hoạt động"
-
-msgid "UDP Disabled &amp; Inbound TCP host/port not set"
-msgstr "Vô hiệu hóa UDP"
-
-msgid "Firewalled with UDP Disabled"
-msgstr "Tường lửa với UDP bị vô hiệu hóa"
-
-msgid "Add/remove/edit &amp; control your client and server tunnels"
-msgstr "Thêm/xóa/chỉnh sửa"
-
-msgid "How many local service tunnels we're running"
-msgstr "Chúng tôi đang chạy bao nhiêu đường hầm dịch vụ địa phương"
-
-msgid "I2PSnark"
-msgstr "I2PSnark"
-
-msgid "Messenger"
-msgstr "Tin nhắn"
-
-msgid "i2pchat"
-msgstr "i2pchat"
-
-msgid "I2PChat"
-msgstr "I2PChat"
-
-msgid "Server"
-msgstr "Máy chủ"
-
-msgid "service may be available to peers"
-msgstr "dịch vụ có thể có sẵn cho các đồng nghiệp"
-
-msgid "service is only available locally"
-msgstr "dịch vụ chỉ khả dụng tại địa phương"
-
-msgid "Show tunnels"
-msgstr "Hiển thị đường hầm"
-
-msgid "Leases expired"
-msgstr "Hợp đồng thuê đã hết hạn"
-
-msgid "Rebuilding"
-msgstr "Xây dựng lại"
-
-msgid "ago"
-msgstr "trước"
-
-msgid "Ready"
-msgstr "Sẵn sàng"
-
-msgid "Building"
-msgstr "Xây dựng"
-
-msgid "Building tunnels"
-msgstr "Xây dựng hầm"
-
-msgid "Shared Clients"
-msgstr "Khách hàng được chia sẻ"
-
-msgid "Click Restart to install"
-msgstr "Nhấp vào Khởi động lại để cài đặt"
-
-msgid "Click Shutdown and restart to install"
-msgstr "Nhấp vào Shutdown và khởi động lại để cài đặt"
+msgid "Lifetime average frequency"
+msgstr "Tần số trung bình trọn đời"
 
 #, java-format
-msgid "{0}"
-msgstr "{0}"
+msgid "{0} event"
+msgid_plural "{0} events"
+msgstr[0] "{0} sự kiện"
 
-msgid "Updating after restart"
-msgstr "Cập nhật sau khi khởi động lại"
+msgid "rate"
+msgstr "tỷ lệ"
 
-msgid "Signed development update available"
-msgstr "Cập nhật phát triển đã ký có sẵn"
+msgid "Average"
+msgstr "Trung bình"
 
-msgid "Download I2P Update"
-msgstr "Tải xuống bản cập nhật I2P"
+msgid "Highest average"
+msgstr "Trung bình cao nhất"
 
-msgid "Unsigned update available"
-msgstr "Cập nhật không dấu có sẵn"
+msgid "Highest total in a period"
+msgstr "Tổng số cao nhất trong một khoảng thời gian"
 
-msgid "Help with firewall configuration"
-msgstr "Trợ giúp về cấu hình tường lửa"
+msgid "Average event count"
+msgstr "Số sự kiện trung bình"
 
-msgid "Check network connection and NAT/firewall!"
-msgstr "Kiểm tra kết nối mạng và Nat/tường lửa!"
+msgid "Events in peak period"
+msgstr "Sự kiện trong thời kỳ cao điểm"
 
-msgid "Attempt to download router reference files (if automatic reseed has failed)"
-msgstr "Cố gắng tải xuống các tệp tham chiếu bộ định tuyến (nếu tự động reseed không thành công)"
+msgid "Events in this period"
+msgstr "Sự kiện trong giai đoạn này"
 
-msgid "Reseed"
-msgstr "Reseed"
+#, java-format
+msgid "ended {0} ago"
+msgstr "đã kết thúc {0} trước"
 
-msgid "Order"
-msgstr "Thứ tự"
+msgid "No events"
+msgstr "Không có sự kiện"
 
-msgid "Top"
-msgstr "Hàng đầu"
+msgid "Graph Data"
+msgstr "Dữ liệu đồ thị"
 
-msgid "Move to top"
-msgstr "Chuyển lên trên cùng"
+msgid "Graph Event Count"
+msgstr "Số sự kiện đồ thị"
 
-msgid "Move up"
-msgstr "Di chuyển lên"
+msgid "Export Data as XML"
+msgstr "Xuất dữ liệu dưới dạng XML"
 
-msgid "Down"
-msgstr "Xuống"
+msgid "Lifetime average value"
+msgstr "Giá trị trung bình trọn đời"
 
-msgid "Move down"
-msgstr "Di chuyển xuống"
-
-msgid "Bottom"
-msgstr "Dưới cùng"
-
-msgid "Move to bottom"
-msgstr "Di chuyển xuống dưới cùng"
-
-msgid "Select a section to add"
-msgstr "Chọn phần cần thêm"
+#, java-format
+msgid "1 event"
+msgid_plural "{0} events"
+msgstr[0] "{0} sự kiện"
 
 msgid "No known routers"
 msgstr "Không có bộ định tuyến nào được biết đến"
@@ -4520,6 +4564,10 @@ msgstr "Hiện không có đường hầm cục bộ hoặc chuyển tuyến nà
 msgid "Bandwidth Tiers"
 msgstr "Tầng băng thông"
 
+#, java-format
+msgid "Over {0} shared bandwidth"
+msgstr "Trên {0} băng thông chia sẻ"
+
 msgid "Inbound or outbound?"
 msgstr "Vào hay ra?"
 
@@ -4579,6 +4627,18 @@ msgstr "Đã hủy kiểm tra băng thông"
 
 msgid "Bandwidth test was not running"
 msgstr "Kiểm tra băng thông không chạy"
+
+msgid "ready"
+msgstr ""
+
+msgid "inbound test"
+msgstr ""
+
+msgid "outbound test"
+msgstr ""
+
+msgid "done"
+msgstr ""
 
 msgid "bits per second"
 msgstr "bit/giây"
@@ -4752,8 +4812,8 @@ msgstr "Chia sẻ mạng"
 msgid "Share"
 msgstr "Chia sẻ"
 
-msgid "Note"
-msgstr "GHI CHÚ"
+msgid "NOTE"
+msgstr ""
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
@@ -4777,6 +4837,10 @@ msgstr "Băng thông chia sẻ càng cao, bạn càng cải thiện tính ẩn d
 
 msgid "config advanced"
 msgstr "Cấu hình nâng cao"
+
+#, java-format
+msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
+msgstr ""
 
 msgid "Floodfill Configuration"
 msgstr "Cấu hình lũ lụt"
@@ -4805,8 +4869,8 @@ msgstr "Tắt"
 msgid "Advanced I2P+ Configuration"
 msgstr "Cấu hình I2P nâng cao"
 
-msgid "Some changes may require a restart to take effect."
-msgstr "Một số thay đổi có thể yêu cầu khởi động lại để có hiệu lực."
+msgid "Help with additional configuration settings"
+msgstr ""
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5672,23 +5736,50 @@ msgstr "Khi được đặt thành TRUE, điều này cho phép cài đặt plug
 msgid "When set to true, this setting enables reverse DNS lookups for peers, triggered when displaying the country flag of a peer or when the hostname or domain is explicitly displayed in the console, or when the peer's RouterInfo is written to disk. In order to avoid repeat lookups, it's recommended to configure a generous caching policy for DNS lookups of 10 minutes or more, and to configure a privacy respecting DNS server in your operating system. [Disabled by default, restart required]"
 msgstr "Khi được đặt thành TRUE, cài đặt này cho phép tra cứu DNS ngược cho các đồng nghiệp, được kích hoạt khi hiển thị cờ quốc gia của một người ngang hàng hoặc khi tên máy chủ hoặc tên miền được hiển thị rõ ràng trong bảng điều khiển hoặc khi RouterInfo của ngang hàng được ghi vào đĩa. Để tránh tra cứu lặp lại, bạn nên định cấu hình chính sách bộ đệm hào phóng cho tra cứu DNS từ 10 phút trở lên và để định cấu hình quyền riêng tư tôn trọng máy chủ DNS trong hệ điều hành của bạn. [Bị vô hiệu hóa theo mặc định, bắt đầu khởi động lại]"
 
+msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
+msgstr "Cài đặt này cho phép đặt một tiền tố văn bản tùy chỉnh cho tiêu đề trang trên các trang console máy chủ, có thể hữu ích khi bạn mở nhiều console trên các tab trình duyệt và muốn có phương pháp dễ dàng để phân biệt giữa chúng."
+
 msgid "When set to true, accessing the router console via http:// when https:// is enabled will automatically redirect to https. To configure router console access, edit the settings in your <code>clients.config</code> file in your profile directory (<i>not</i> the application installation directory). [Enabled by default]"
 msgstr "Khi được đặt thành TRUE, truy cập bảng điều khiển bộ định tuyến qua http:// khi https:// được bật sẽ tự động chuyển hướng sang https. Để cấu hình truy cập bảng điều khiển bộ định tuyến, chỉnh sửa các thiết lập trong tệp <code>clients.config</code> của bạn trong thư mục hồ sơ (<i>không</i> là thư mục cài đặt ứng dụng). [Được bật theo mặc định]"
+
+msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
+msgstr "Cài đặt này, khi được đặt thành True, sẽ hiển thị đọc giá trị trung bình Kiểm tra Ngang hàng trong mục Congestion của thanh bên, tính bằng cách cộng trung bình kiểm tra ngang hàng thành công và trung bình thời gian quá dài của các bài kiểm tra thất bại. Giá trị trung bình có thể được sử dụng làm hướng dẫn để xác định giá trị tối ưu của <code>router.peerTestTimeout</code>. [Mặc định là sai]"
+
+msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
+msgstr "Cài đặt này, khi được đặt thành True, sẽ hiển thị các liên kết <i>Các trang quan tâm</i> trên <a href=/sitemap>bản đồ trang</a>. [Mặc định là sai]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Cài đặt này xác định liệu bộ định tuyến có nên sử dụng tệp <i>blocklist.txt</i> được cung cấp và bất kỳ danh sách chặn được cấu hình bởi người dùng hay không để cho phép cấm các bộ định tuyến bằng hàm định danh hoặc địa chỉ IP. Phạm vi và mặt nạ mạng được hỗ trợ cho IPv4 nhưng không phải IPv6. Xem tệp <i>blocklist.txt</i> trong thư mục ứng dụng I2P+ của bạn để biết thêm thông tin. [Được bật theo mặc định, bắt buộc khởi động lại]"
 
-msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
-msgstr "Cài đặt này xác định liệu bộ định tuyến có nên sử dụng tệp <i>blocklist_tor.txt</i> được cung cấp trong thư mục ứng dụng I2P+ của bạn để cho phép cấm các bộ định tuyến hoạt động từ địa chỉ IP của nút thoát Tor hay không. [Được bật theo mặc định, bắt buộc khởi động lại]"
+msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
+msgstr "Cài đặt này cho phép thời gian hết hạn được cấu hình (tính bằng giây) cho các lệnh cấm được thực thi thông qua danh sách khối. Theo mặc định các lệnh cấm vẫn tồn tại trong suốt thời gian của phiên định tuyến. [Khởi động lại yêu cầu]"
 
 msgid "This setting, when configured with a path pointing at a valid blocklist file, enables an additional, user-configured blocklist to be loaded at router startup. [Disabled by default, restart required]"
 msgstr "Cài đặt này, khi được định cấu hình với đường dẫn trỏ vào tệp danh sách chặn hợp lệ, cho phép danh sách chặn khối được cấu hình bổ sung, được định cấu hình người dùng được tải khi khởi động bộ định tuyến. [Bị vô hiệu hóa theo mặc định, bắt đầu khởi động lại]"
 
-msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
-msgstr "Cài đặt này cho phép thời gian hết hạn được cấu hình (tính bằng giây) cho các lệnh cấm được thực thi thông qua danh sách khối. Theo mặc định các lệnh cấm vẫn tồn tại trong suốt thời gian của phiên định tuyến. [Khởi động lại yêu cầu]"
+msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
+msgstr "Cài đặt này xác định liệu bộ định tuyến có nên sử dụng tệp <i>blocklist_tor.txt</i> được cung cấp trong thư mục ứng dụng I2P+ của bạn để cho phép cấm các bộ định tuyến hoạt động từ địa chỉ IP của nút thoát Tor hay không. [Được bật theo mặc định, bắt buộc khởi động lại]"
+
+msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
+msgstr ""
+
+msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
+msgstr "Khi đặt thành false, máy chủ sẽ không chặn yêu cầu xây dựng đường hầm từ các máy chủ chạy chậm hơn hoặc không thể truy cập được chạy phiên bản cũ hơn. [Mặc định là true, yêu cầu khởi động lại]"
 
 msgid "Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks."
 msgstr "Phân bổ số luồng xử lý cho xây dựng các đường hầm. Nếu bộ xử lý của bạn hỗ trợ hyperthreading hoặc song song đa luồng đồng thời, bạn có thể nhân số lõi bộ xử lý lên 2 để lấy số luồng tối đa có thể phân bổ, nếu không thì số lõi bộ xử lý bằng với số luồng tối đa khả dụng. Lưu ý rằng bạn có thể muốn phân bổ ít hơn mức tối đa lý thuyết để đảm bảo dành sẵn headroom cho các tác vụ khác."
+
+msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
+msgstr "Cài đặt này (tính bằng mili giây) xác định thời gian một gói có thể ở trong hàng đợi codel trước khi nó bị loại bỏ. Mặc định là 1000ms. [Khởi động lại yêu cầu]"
+
+msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
+msgstr "Cài đặt này xác định số lượng tin nhắn tối đa trong hàng đợi bên ngoài trước khi nó được đánh dấu là đầy đủ. [Mặc định là 768]"
+
+msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
+msgstr "Cài đặt này xác định số lượng tin nhắn tối đa trên giá trị hàng đợi tối đa trước khi bỏ các tin nhắn tiếp theo. [Mặc định là 128]"
+
+msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
+msgstr "Cài đặt này (tính bằng mili giây) cho phép bạn định cấu hình thủ công giá trị mục tiêu của hàng đợi cho hệ thống quản lý hàng đợi codel. Mặc định là 50ms. [Khởi động lại yêu cầu]"
 
 msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
 msgstr "Cài đặt này, tính bằng miligiây, ghi đè giới hạn thời gian xử lý thông điệp mặc định (được hiển thị là <i>Trễ Thông Điệp</i> trong mục phần phụ Congestion) trước khi bộ định tuyến được xác định là quá tải và các yêu cầu đường hầm quá cảnh bị từ chối. [Mặc định là 750ms hoặc 1500ms nếu bộ định tuyến bị gắn nhãn là chậm chạp]"
@@ -5699,8 +5790,32 @@ msgstr "Định kỳ kiểm tra các đường hầm để xác định độ tr
 msgid "When set to true, the router will change its identity and UDP port every time the router restarts. [Default is false]"
 msgstr "Khi được đặt thành True, bộ định tuyến sẽ thay đổi danh tính và cổng UDP mỗi khi bộ định tuyến khởi động lại. [Mặc định là sai]"
 
+msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
+msgstr "Khi đặt thành false, máy chủ sẽ không giới hạn yêu cầu xây dựng đường hầm từ các máy chủ khác, và nên được sử dụng với sự thận trọng. [Mặc định là true, yêu cầu khởi động lại]"
+
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
 msgstr "Cài đặt này xác định các <a href=/profiles#profile_defs>khả năng ngang hàng</a> nào sẽ không được sử dụng để xây dựng các đường hầm trên bộ định tuyến của bạn. Ví dụ: <code>router.excludePeerCaps=LMN</code>"
+
+msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
+msgstr "Cài đặt này (tính bằng giờ) xác định một bộ định tuyến trong NETDB bao nhiêu tuổi (ngày xuất bản cuối cùng của nó) trước khi nó được phân loại là cũ và bị xóa. [Mặc định là 28 giờ trừ khi bộ định tuyến là lũ lụt, trong trường hợp đó mặc định là 8 giờ]"
+
+msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
+msgstr "Thiết lập này xác định số lượng người cùng khám phá song song khi công việc Khám phá Đồng ngũ chạy [mặc định là 1 người một lượt khi biết hơn 3000 người]. Lưu ý là tăng giá trị này sẽ tăng yêu cầu băng thông cho quá trình khám phá, và đặt giá trị quá cao có thể gây ra độ trễ tin nhắn quá mức và can thiệp vào các dịch vụ khác, do đó hãy sử dụng cẩn thận!"
+
+msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
+msgstr "Cài đặt này xác định số lượng thùng NETDB DHT Công việc khám phá ngang hàng sẽ tham chiếu khi chạy. Theo mặc định, số lượng thùng để khám phá sẽ thay đổi tùy thuộc vào việc bộ định tuyến đã chạy trong hơn một giờ, nếu bộ định tuyến bị ẩn hay trong tầng băng thông 'K' và số lượng bộ định tuyến đã biết."
+
+msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
+msgstr "Cài đặt này (tính bằng giây) cho phép bạn ghi đè sự chậm trễ giữa các lần chạy của công việc khám phá ngang hàng, cố gắng xác định vị trí các đồng nghiệp mới để thêm vào NETDB. Công việc sẽ chạy cứ sau 80 giây theo mặc định hoặc nếu bộ định tuyến đang trải qua độ trễ công việc hoặc tin nhắn, cứ sau 3 phút. Nếu kích thước của NETDB đạt 4000 đồng nghiệp, tạm dừng sẽ tăng lên 15 phút. Bạn có thể muốn tăng độ trễ nếu NETDB của bạn được đông dân cư (hơn 2000 đồng nghiệp) hoặc nếu bạn muốn giảm sử dụng băng thông tổng thể. Lưu ý: Đối với các bộ định tuyến lũ lụt, công việc này không chạy."
+
+msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
+msgstr "Cài đặt này xác định số lượng băm ngang hàng tối đa để xếp hàng để khám phá. Trong i2p tối đa là 128 và trong i2p+ giá trị mặc định là 512."
+
+msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
+msgstr "Cài đặt này xác định xem một bộ định tuyến hoạt động như một floodfill có khám phá NetDb để tìm hiểu về các người đồng hành mới hay không. [Mặc định là sai, yêu cầu khởi động lại]"
+
+msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
+msgstr "Cài đặt này, khi được đặt thành True, ngăn một bộ định tuyến trực tiếp giao tiếp với các bộ định tuyến khác, buộc việc sử dụng các node giới thiệu. [Mặc định là sai trừ khi bộ định tuyến ở chế độ Ẩn]"
 
 msgid "When set to true, if your router is serving as a floodfill for the network, your <a href=/configadvanced#ffconf>floodfill participation</a> will be hidden from other routers."
 msgstr "Khi được đặt thành True, nếu bộ định tuyến của bạn đang hoạt động như một floodfill cho mạng, sự tham gia của bạn với tư cách <a href=/configadvanced#ffconf>floodfill</a> sẽ bị ẩn đối với các bộ định tuyến khác."
@@ -5713,6 +5828,12 @@ msgstr "Xác định số đường hầm tham gia tối đa mà bộ định tu
 
 msgid "Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 10% in I2P+, 33% in I2P]"
 msgstr "Xác định phần trăm tối đa các đường hầm cục bộ hoạt động (khách hàng và thám hiểm) có thể sử dụng một người đồng hành. [Mặc định là 10% trong I2P+, 33% trong I2P]"
+
+msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
+msgstr "Cài đặt này cho phép bạn định cấu hình số lượng đường hầm tham gia được lưu trữ tối thiểu trước khi bộ định tuyến bắt đầu từ chối các yêu cầu đường hầm dựa trên các yêu cầu băng thông dự kiến. ."
+
+msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
+msgstr "Cài đặt này cho phép bạn loại trừ các bộ định tuyến cũ hơn khỏi NETDB của bạn. Bộ định tuyến cũ hơn mặc định hoặc giá trị bạn đặt sẽ bị xóa khỏi NETDB và bị cấm trong suốt thời gian của phiên định tuyến. Theo mặc định, các bộ định tuyến cũ hơn 0.9.20 được loại trừ. Lưu ý: Bắt đầu với i2p+ phiên bản 0.9.46+, chỉ các bộ định tuyến chạy các phiên bản rất gần đây được sử dụng để xây dựng các đường hầm cục bộ. [Khởi động lại yêu cầu]"
 
 msgid "When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]"
 msgstr "Khi được đặt thành TRUE, các tệp thông tin bộ định tuyến được lưu trữ trong thư mục NETDB của hồ sơ của bạn sẽ không được chia thành 64 hướng phụ. [Mặc định là sai]"
@@ -5738,84 +5859,6 @@ msgstr "Dưới 256MB được phân bổ cho JVM"
 msgid "Router running a non-native, software emulated version of the Java BigInteger library"
 msgstr "Bộ định tuyến chạy phiên bản thư viện Java BigInteger không bản địa, được mô phỏng bởi phần mềm"
 
-msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
-msgstr "Cài đặt này cho phép bạn định cấu hình số lượng đường hầm tham gia được lưu trữ tối thiểu trước khi bộ định tuyến bắt đầu từ chối các yêu cầu đường hầm dựa trên các yêu cầu băng thông dự kiến. ."
-
-msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
-msgstr "Khi được đặt thành True, bộ định tuyến sẽ thay đổi danh tính và cổng UDP khi bộ định tuyến khởi động lại và sau đó xóa khóa khỏi Router.config để ngăn chặn các thay đổi tiếp theo. [Mặc định là sai]"
-
-msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr "Khi đặt thành false, máy chủ sẽ không giới hạn yêu cầu xây dựng đường hầm từ các máy chủ khác, và nên được sử dụng với sự thận trọng. [Mặc định là true, yêu cầu khởi động lại]"
-
-msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr "Khi đặt thành false, máy chủ sẽ không chặn yêu cầu xây dựng đường hầm từ các máy chủ chạy chậm hơn hoặc không thể truy cập được chạy phiên bản cũ hơn. [Mặc định là true, yêu cầu khởi động lại]"
-
-msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
-msgstr "Khi được cấu hình, điều này đặt ra một giới hạn cứng cho số lượng đường hầm, bộ định tuyến được phép xây dựng đồng thời. Theo mặc định, bộ định tuyến sử dụng thời gian xây dựng trung bình và băng thông ra ngoài hiện tại để xác định tốc độ xây dựng tối ưu. [Khởi động lại yêu cầu]"
-
-msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
-msgstr "Nếu bạn muốn cài đặt các bản cập nhật I2P chưa kí (.zip), thì điều này nên được thêm vào tệp <code>router.config</code> của bạn trừ khi bạn đã cấu hình <code>routerconsole.advanced=true</code>, trong trường hợp này tùy chọn này đã được cung cấp trước. Lưu ý: kể từ I2P+ 0.9.48+, việc cài đặt <a href=/configupdate#i2pupdates>các bản cập nhật chưa kí</a> đã được kích hoạt mặc định."
-
-msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
-msgstr "Cài đặt này cho phép bạn cấu hình url cập nhật cho tính năng cập nhật chưa ký, nếu được kích hoạt. Url nên kết thúc bằng <code>/i2pupdate.zip</code>. Lưu ý: Đừng cài đặt các bản cập nhật chưa ký trừ khi bạn tin tưởng nguồn của bản cập nhật!"
-
-msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
-msgstr "Cài đặt này cho phép vô hiệu hóa các bài kiểm tra SSU để xác định xem bộ định tuyến của bạn có bị tường lửa hay không, và có thể được kích hoạt cho các bộ định tuyến rõ ràng không bị tường lửa nhưng đang gặp vấn đề tường lửa không ổn định. Trong trường hợp kiểm tra bị vô hiệu hóa, cả SSU và NTCP nên báo cáo địa chỉ công khai hiện tại của bạn trên trang thông tin về <a href=/info>bộ định tuyến</a>. [Yêu cầu khởi động lại]"
-
-msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
-
-msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
-msgstr "Cài đặt này xác định vận chuyển nào được ưu tiên khi giao tiếp với các đồng nghiệp. Theo mặc định, NTCP được ưa chuộng hơn UDP (SSU). Bằng cách đặt giá trị thành TRUE, UDP sẽ được ưa chuộng trừ khi kết nối NTCP có sẵn; Khi được đặt thành luôn luôn, UDP sẽ luôn được sử dụng bất kể kết nối NTCP trước đó. [Mặc định là sai]"
-
-msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
-msgstr "Cài đặt này cho phép bạn bật hoặc tắt phản hồi đối với ping gửi đến các máy chủ do bộ định tuyến lưu trữ. Để vô hiệu hóa ping, bạn phải thêm dòng <code>i2p.streaming.answerPings=false</code> vào phần <i>Tuỳ chọn tùy biến</i> cho cấu hình máy chủ trong Trình quản lý đường ống."
-
-msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
-msgstr "Khi được đặt thành True, I2P chạy mà không có kết nối mạng, điều này rất hữu ích nếu bạn liên tục khởi động lại bộ định tuyến để kiểm tra cập nhật mã vì điều này ngăn chặn sự gián đoạn mạng."
-
-msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr "Cài đặt này, khi được bật, giới thiệu độ trễ pong ngẫu nhiên lên tới 50ms cho tất cả các máy chủ hỗ trợ ping được lưu trữ bởi bộ định tuyến. Mặc định bị vô hiệu hóa. [Khởi động lại yêu cầu]"
-
-msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr "Thiết lập này, khi được bật, sẽ sửa đổi độ trễ phản hồi ngẫu nhiên tối đa được giới thiệu cho các máy chủ cho phép ping, nếu <code>i2p.streaming.enablePongDelay</code> cũng được bật. Trừ khi rõ ràng đặt, giá trị mặc định là 50ms sẽ được sử dụng."
-
-msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
-msgstr "Cài đặt này (tính bằng mili giây) xác định thời gian một gói có thể ở trong hàng đợi codel trước khi nó bị loại bỏ. Mặc định là 1000ms. [Khởi động lại yêu cầu]"
-
-msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
-msgstr "Cài đặt này xác định số lượng tin nhắn tối đa trong hàng đợi bên ngoài trước khi nó được đánh dấu là đầy đủ. [Mặc định là 768]"
-
-msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
-msgstr "Cài đặt này xác định số lượng tin nhắn tối đa trên giá trị hàng đợi tối đa trước khi bỏ các tin nhắn tiếp theo. [Mặc định là 128]"
-
-msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
-msgstr "Cài đặt này (tính bằng mili giây) cho phép bạn định cấu hình thủ công giá trị mục tiêu của hàng đợi cho hệ thống quản lý hàng đợi codel. Mặc định là 50ms. [Khởi động lại yêu cầu]"
-
-msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
-msgstr "Cài đặt này (tính bằng giờ) xác định một bộ định tuyến trong NETDB bao nhiêu tuổi (ngày xuất bản cuối cùng của nó) trước khi nó được phân loại là cũ và bị xóa. [Mặc định là 28 giờ trừ khi bộ định tuyến là lũ lụt, trong trường hợp đó mặc định là 8 giờ]"
-
-msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
-msgstr "Thiết lập này xác định số lượng người cùng khám phá song song khi công việc Khám phá Đồng ngũ chạy [mặc định là 1 người một lượt khi biết hơn 3000 người]. Lưu ý là tăng giá trị này sẽ tăng yêu cầu băng thông cho quá trình khám phá, và đặt giá trị quá cao có thể gây ra độ trễ tin nhắn quá mức và can thiệp vào các dịch vụ khác, do đó hãy sử dụng cẩn thận!"
-
-msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
-msgstr "Cài đặt này xác định số lượng thùng NETDB DHT Công việc khám phá ngang hàng sẽ tham chiếu khi chạy. Theo mặc định, số lượng thùng để khám phá sẽ thay đổi tùy thuộc vào việc bộ định tuyến đã chạy trong hơn một giờ, nếu bộ định tuyến bị ẩn hay trong tầng băng thông 'K' và số lượng bộ định tuyến đã biết."
-
-msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
-msgstr "Cài đặt này (tính bằng giây) cho phép bạn ghi đè sự chậm trễ giữa các lần chạy của công việc khám phá ngang hàng, cố gắng xác định vị trí các đồng nghiệp mới để thêm vào NETDB. Công việc sẽ chạy cứ sau 80 giây theo mặc định hoặc nếu bộ định tuyến đang trải qua độ trễ công việc hoặc tin nhắn, cứ sau 3 phút. Nếu kích thước của NETDB đạt 4000 đồng nghiệp, tạm dừng sẽ tăng lên 15 phút. Bạn có thể muốn tăng độ trễ nếu NETDB của bạn được đông dân cư (hơn 2000 đồng nghiệp) hoặc nếu bạn muốn giảm sử dụng băng thông tổng thể. Lưu ý: Đối với các bộ định tuyến lũ lụt, công việc này không chạy."
-
-msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
-msgstr "Cài đặt này xác định số lượng băm ngang hàng tối đa để xếp hàng để khám phá. Trong i2p tối đa là 128 và trong i2p+ giá trị mặc định là 512."
-
-msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
-msgstr "Cài đặt này xác định xem một bộ định tuyến hoạt động như một floodfill có khám phá NetDb để tìm hiểu về các người đồng hành mới hay không. [Mặc định là sai, yêu cầu khởi động lại]"
-
-msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
-msgstr "Cài đặt này, khi được đặt thành True, ngăn một bộ định tuyến trực tiếp giao tiếp với các bộ định tuyến khác, buộc việc sử dụng các node giới thiệu. [Mặc định là sai trừ khi bộ định tuyến ở chế độ Ẩn]"
-
-msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
-msgstr "Cài đặt này cho phép bạn loại trừ các bộ định tuyến cũ hơn khỏi NETDB của bạn. Bộ định tuyến cũ hơn mặc định hoặc giá trị bạn đặt sẽ bị xóa khỏi NETDB và bị cấm trong suốt thời gian của phiên định tuyến. Theo mặc định, các bộ định tuyến cũ hơn 0.9.20 được loại trừ. Lưu ý: Bắt đầu với i2p+ phiên bản 0.9.46+, chỉ các bộ định tuyến chạy các phiên bản rất gần đây được sử dụng để xây dựng các đường hầm cục bộ. [Khởi động lại yêu cầu]"
-
 msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. [Default is 4]"
 msgstr "Cài đặt này xác định số lượng kiểm tra ngang hàng để chạy đồng thời, được sử dụng để xác định độ trễ ngang hàng. [Mặc định là 4]"
 
@@ -5831,14 +5874,17 @@ msgstr "Cài đặt này xác định xem các số liệu thống kê về bộ
 msgid "This setting configures the initial size of the outbound message queue. [Default is 64]"
 msgstr "Cài đặt này cấu hình kích thước ban đầu của hàng đợi tin nhắn bên ngoài. [Mặc định là 64]"
 
-msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
-msgstr "Cài đặt này cấu hình kích thước tối đa của hàng đợi tin nhắn gửi đến. [Mặc định là 1024]"
-
 msgid "This setting configures the maximum number of inbound messages queued per cycle (pump). [Default is 24]"
 msgstr "Cài đặt này cấu hình số lượng tin nhắn gửi đến tối đa được xếp hàng trên mỗi chu kỳ (bơm). [Mặc định là 24]"
 
+msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
+msgstr "Cài đặt này cấu hình kích thước tối đa của hàng đợi tin nhắn gửi đến. [Mặc định là 1024]"
+
 msgid "This setting configures the maximum number of outbound messages queued per cycle (pump). [Default is 64]"
 msgstr "Cài đặt này cấu hình số lượng tin nhắn bên ngoài được xếp hàng mỗi chu kỳ (bơm) tối đa. [Mặc định là 64]"
+
+msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
+msgstr "Khi được đặt thành True, bộ định tuyến sẽ thay đổi danh tính và cổng UDP khi bộ định tuyến khởi động lại và sau đó xóa khóa khỏi Router.config để ngăn chặn các thay đổi tiếp theo. [Mặc định là sai]"
 
 msgid "This setting (in milliseconds) allows you to manually configure the delay between router refresh updates run by the Refresh Routers Job. By default the pause between refreshes is determined by the size of the NetDb, and introduces some randomness in the timing to mitigate traffic analysis. For values lower than 2000 milliseconds, increasing the value of <code>router.refreshTimeout</code> is recommended. Note that setting this value below 2000 milliseconds will increase your network traffic and may introduce job lag, and is not recommended for sustained use."
 msgstr "Thiết lập này (tính bằng miligiây) cho phép bạn cấu hình thủ công độ trễ giữa các bản cập nhật làm mới bộ định tuyến do công việc Làm mới Bộ định tuyến chạy. Mặc định sự ngừng lại giữa các lần làm mới được xác định bởi kích thước của NetDb, và giới thiệu một số ngẫu nhiên trong thời gian để giảm thiểu phân tích giao thông. Đối với các giá trị thấp hơn 2000 miligiây, khuyến nghị tăng giá trị của <code>router.refreshTimeout</code>. Lưu ý rằng đặt giá trị này dưới 2000 miligiây sẽ tăng lưu lượng mạng của bạn và có thể giới thiệu sự trì hoãn công việc, và không khuyến nghị sử dụng lâu dài."
@@ -5852,26 +5898,56 @@ msgstr "Cài đặt này (tính bằng giây) cho phép bạn định cấu hìn
 msgid "This setting determines whether routers classified as uninteresting (K or L tier, unreachable or older than 0.9.50) are checked during the refresh router process after 1 hour of uptime. [Default is false]"
 msgstr "Cài đặt này xác định xem các bộ định tuyến được phân loại là không thú vị (K hoặc L, không thể truy cập hoặc cũ hơn 0.9,50) được kiểm tra trong quá trình bộ định tuyến làm mới sau 1 giờ thời gian hoạt động. [Mặc định là sai]"
 
+msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
+msgstr ""
+
+msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
+msgstr "Khi được cấu hình, điều này đặt ra một giới hạn cứng cho số lượng đường hầm, bộ định tuyến được phép xây dựng đồng thời. Theo mặc định, bộ định tuyến sử dụng thời gian xây dựng trung bình và băng thông ra ngoài hiện tại để xác định tốc độ xây dựng tối ưu. [Khởi động lại yêu cầu]"
+
+msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
+msgstr "Nếu bạn muốn cài đặt các bản cập nhật I2P chưa kí (.zip), thì điều này nên được thêm vào tệp <code>router.config</code> của bạn trừ khi bạn đã cấu hình <code>routerconsole.advanced=true</code>, trong trường hợp này tùy chọn này đã được cung cấp trước. Lưu ý: kể từ I2P+ 0.9.48+, việc cài đặt <a href=/configupdate#i2pupdates>các bản cập nhật chưa kí</a> đã được kích hoạt mặc định."
+
+msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
+msgstr "Cài đặt này cho phép bạn cấu hình url cập nhật cho tính năng cập nhật chưa ký, nếu được kích hoạt. Url nên kết thúc bằng <code>/i2pupdate.zip</code>. Lưu ý: Đừng cài đặt các bản cập nhật chưa ký trừ khi bạn tin tưởng nguồn của bản cập nhật!"
+
 msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
 msgstr "Cài đặt này (tính bằng vài phút) cho phép bạn định cấu hình thủ công thời gian chờ đợi sau khi khởi động trước khi RouterInfos trong NETDB được kiểm tra tính hợp lệ, sau đó chỉ có các bộ định tuyến hợp lệ sẽ được chấp nhận để đưa vào. Khi xác nhận xảy ra, RouterInfos đã hết hạn và các đồng nghiệp không phản hồi chỉ có thể truy cập thông qua SSU sẽ bị xóa khỏi NETDB. ."
 
-msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
-msgstr "Cài đặt này, khi được đặt thành True, sẽ hiển thị đọc giá trị trung bình Kiểm tra Ngang hàng trong mục Congestion của thanh bên, tính bằng cách cộng trung bình kiểm tra ngang hàng thành công và trung bình thời gian quá dài của các bài kiểm tra thất bại. Giá trị trung bình có thể được sử dụng làm hướng dẫn để xác định giá trị tối ưu của <code>router.peerTestTimeout</code>. [Mặc định là sai]"
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
+msgstr ""
 
-msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
-msgstr "Cài đặt này, khi được đặt thành True, sẽ hiển thị các liên kết <i>Các trang quan tâm</i> trên <a href=/sitemap>bản đồ trang</a>. [Mặc định là sai]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
+msgstr ""
 
-msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr "Cài đặt này cho phép đặt một tiền tố văn bản tùy chỉnh cho tiêu đề trang trên các trang console máy chủ, có thể hữu ích khi bạn mở nhiều console trên các tab trình duyệt và muốn có phương pháp dễ dàng để phân biệt giữa chúng."
+msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
+msgstr "Cài đặt này cho phép vô hiệu hóa các bài kiểm tra SSU để xác định xem bộ định tuyến của bạn có bị tường lửa hay không, và có thể được kích hoạt cho các bộ định tuyến rõ ràng không bị tường lửa nhưng đang gặp vấn đề tường lửa không ổn định. Trong trường hợp kiểm tra bị vô hiệu hóa, cả SSU và NTCP nên báo cáo địa chỉ công khai hiện tại của bạn trên trang thông tin về <a href=/info>bộ định tuyến</a>. [Yêu cầu khởi động lại]"
 
-msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
-msgstr "Cài đặt này cho phép cấu hình của các máy chủ NTP thay thế cần thiết để đảm bảo rằng bộ định tuyến của bạn duy trì thời gian đồng hồ chính xác. [Mặc định là 0.pool.ntp.org, 1.pool.ntp.org, 2.pool.ntp.org]"
+msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
+msgstr "Cài đặt này xác định vận chuyển nào được ưu tiên khi giao tiếp với các đồng nghiệp. Theo mặc định, NTCP được ưa chuộng hơn UDP (SSU). Bằng cách đặt giá trị thành TRUE, UDP sẽ được ưa chuộng trừ khi kết nối NTCP có sẵn; Khi được đặt thành luôn luôn, UDP sẽ luôn được sử dụng bất kể kết nối NTCP trước đó. [Mặc định là sai]"
+
+msgid "miscellaneous"
+msgstr ""
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "Nếu được đặt thành True, tùy chọn này sẽ đặt biểu tượng trên khay hệ thống/khu vực thông báo, với các tùy chọn điều khiển dịch vụ cơ bản. [Mặc định bị vô hiệu hóa]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
 msgstr "Cài đặt này cho phép cấu hình số tệp tối đa mỗi torrent mà I2PSnark sẽ cho phép khi tải xuống hoặc tạo torrent. Lưu ý rằng việc tăng đáng kể giá trị này so với mặc định là 2000 tệp có thể yêu cầu cấu hình bổ sung trên hệ thống máy chủ để tăng số tệp mở tối đa hệ điều hành cho phép (ví dụ <code>ulimit -n</code> trên Linux). Để thay đổi, hãy thêm vào tệp cấu hình <code>i2psnark.config</code> của I2PSnark. [Yêu cầu khởi động lại I2PSnark hoặc bộ định tuyến]"
+
+msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
+msgstr "Cài đặt này cho phép bạn bật hoặc tắt phản hồi đối với ping gửi đến các máy chủ do bộ định tuyến lưu trữ. Để vô hiệu hóa ping, bạn phải thêm dòng <code>i2p.streaming.answerPings=false</code> vào phần <i>Tuỳ chọn tùy biến</i> cho cấu hình máy chủ trong Trình quản lý đường ống."
+
+msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
+msgstr "Cài đặt này, khi được bật, giới thiệu độ trễ pong ngẫu nhiên lên tới 50ms cho tất cả các máy chủ hỗ trợ ping được lưu trữ bởi bộ định tuyến. Mặc định bị vô hiệu hóa. [Khởi động lại yêu cầu]"
+
+msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
+msgstr "Thiết lập này, khi được bật, sẽ sửa đổi độ trễ phản hồi ngẫu nhiên tối đa được giới thiệu cho các máy chủ cho phép ping, nếu <code>i2p.streaming.enablePongDelay</code> cũng được bật. Trừ khi rõ ràng đặt, giá trị mặc định là 50ms sẽ được sử dụng."
+
+msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
+msgstr "Khi được đặt thành True, I2P chạy mà không có kết nối mạng, điều này rất hữu ích nếu bạn liên tục khởi động lại bộ định tuyến để kiểm tra cập nhật mã vì điều này ngăn chặn sự gián đoạn mạng."
+
+msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
+msgstr "Cài đặt này cho phép cấu hình của các máy chủ NTP thay thế cần thiết để đảm bảo rằng bộ định tuyến của bạn duy trì thời gian đồng hồ chính xác. [Mặc định là 0.pool.ntp.org, 1.pool.ntp.org, 2.pool.ntp.org]"
 
 msgid "Recent I2P+ Changes"
 msgstr "Những thay đổi gần đây của I2P+"
@@ -6088,6 +6164,18 @@ msgstr "Áp dụng cho cả SSL và non-SSL"
 
 msgid "For SSL only"
 msgstr "Chỉ áp dụng cho SSL"
+
+msgid "How can I configure the console and web services to be accessible on my local network?"
+msgstr ""
+
+msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
+msgstr ""
+
+msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
+msgstr ""
+
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager’s configuration section using the <i>reachable by</i> dropdown."
+msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Tôi có thể kết nối đến IRC trong I2P như thế nào?"
@@ -7348,9 +7436,6 @@ msgstr "Đồng nghiệp Mạng"
 msgid "peer profiles"
 msgstr "Hồ sơ ngang hàng"
 
-msgid "Peer Profiles"
-msgstr "Hồ sơ ngang hàng"
-
 msgid "Session Banned Peers"
 msgstr "Đồng đẳng bị cấm trong phiên"
 
@@ -7567,6 +7652,9 @@ msgstr "Bật/Tắt Đường đào"
 msgid "Peer Profile"
 msgstr "Hồ sơ ngang hàng"
 
+msgid "Profile View"
+msgstr ""
+
 msgid "Profile for peer"
 msgstr "Hồ sơ dành cho đồng nghiệp"
 
@@ -7704,6 +7792,35 @@ msgstr "Đã kết thúc"
 
 
 
+
+
 #, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

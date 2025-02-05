@@ -130,17 +130,14 @@ msgid_plural "{0} destinations deleted."
 msgstr[0] "1 mål raderat."
 msgstr[1] "{0} mål raderade."
 
-msgid "No entries selected to delete."
-msgstr "Inga poster valda för radering."
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "Lägg till alternativ"
 
 msgid "Address book saved."
 msgstr "Adressbok sparad."
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "Bläddra bort från den här adressboken och gå tillbaka för att se uppdateringen."
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "FEL: Kunde inte skriva till adressboks filen."
@@ -321,6 +318,9 @@ msgstr "Markera för borttagning"
 msgid "Cancel"
 msgstr "Avbryt"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "t.ex. newdomain.i2p"
 
@@ -398,6 +398,9 @@ msgstr "Fil där loggaktivitet sparas till (ändra till / dev / null om du vill)
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Namn på åsidosättningstema som ska användas (standard för konsolvalt tema)"
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "adressbok"
@@ -593,3 +596,5 @@ msgstr "Adresser som läggs till manuellt i din masteradressbok kommer att slås
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Värdar du får från dina prenumerationer kommer att slås samman med din routeradressbok."
+
+

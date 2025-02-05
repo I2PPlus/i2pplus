@@ -23,6 +23,12 @@ msgstr "Nelze se připojit k I2P"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Chyba při připojování k I2P – zkontrolujte nastavení I2CP!Při připojování k I2P nastala chyba, zkontrolujte prosím nastavení I2CP!"
 
+msgid "Download already running: "
+msgstr ""
+
+msgid "Downloading"
+msgstr "Stahování"
+
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "Konfigurace I2PSnark s možnostmi I2CP"
 
@@ -466,12 +472,23 @@ msgid "Anonymous BitTorrent Client"
 msgstr "Anonymní klient BitTorrent"
 
 #, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr ""
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr ""
+
+#, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "Opravdu chcete smazat soubor \\''{0}\\'' (stažená data nebudou smazána)?"
 
+msgid "Note: Downloaded data will not be deleted."
+msgstr ""
+
 #, java-format
-msgid "Are you sure you want to delete torrent file {0} and all downloaded data?"
-msgstr "Opravdu chcete smazat torrent \\''{0}\\'' a všechna stažená data?"
+msgid "Deleting {0} and associated metadata only..."
+msgstr ""
 
 msgid "I2PSnark has stopped"
 msgstr "I2PSnark se zastavil"
@@ -484,6 +501,9 @@ msgstr "Torrenty"
 
 msgid "Refresh page"
 msgstr "Obnovit stránku"
+
+msgid "Configure"
+msgstr "Konfigurovat"
 
 msgid "Forum"
 msgstr "Fórum"
@@ -524,36 +544,6 @@ msgstr "obnovení stránky"
 
 msgid "Warning - No I2P"
 msgstr "Varování - Bez I2P"
-
-msgid "Search"
-msgstr "Vyhledávání"
-
-msgid "Show All"
-msgstr "Zobrazit vše"
-
-msgid "Active"
-msgstr "Aktivní"
-
-msgid "Inactive"
-msgstr "Neaktivní"
-
-msgid "Connected"
-msgstr "Připojeno"
-
-msgid "Downloading"
-msgstr "Stahování"
-
-msgid "Seeding"
-msgstr "Sezení"
-
-msgid "Complete"
-msgstr "Dokončit"
-
-msgid "Incomplete"
-msgstr "Neúplné"
-
-msgid "Stopped"
-msgstr "Zastaveno"
 
 msgid "Status"
 msgstr "Status"
@@ -634,9 +624,6 @@ msgstr "Nebyly nalezeny žádné torrenty."
 msgid "No torrents loaded."
 msgstr "Žádné torrenty načteny."
 
-msgid "Totals"
-msgstr "Celkem"
-
 #, java-format
 msgid "1 torrent"
 msgid_plural "{0} torrents"
@@ -644,12 +631,8 @@ msgstr[0] "1 torrent"
 msgstr[1] "{0} torrents"
 msgstr[2] "{0} torrents"
 
-#, java-format
-msgid "1 connected peer"
-msgid_plural "{0} connected peers"
-msgstr[0] "1 připojený peer"
-msgstr[1] "{0} připojení vrstevníků"
-msgstr[2] "{0} připojení vrstevníků"
+msgid "Total size of loaded torrents"
+msgstr ""
 
 #, java-format
 msgid "1 DHT peer"
@@ -658,17 +641,17 @@ msgstr[0] "1 DHT peer"
 msgstr[1] "{0} DHT Peers"
 msgstr[2] "{0} DHT Peers"
 
-msgid "Configured maximum (actual usage may be less)"
-msgstr "Nakonfigurováno maximum (skutečné využití může být menší)"
+msgid "Active downloads"
+msgstr ""
 
-msgid "Tunnels"
-msgstr "Tunely"
+msgid "Active uploads"
+msgstr ""
 
-msgid "in"
-msgstr "v"
+msgid "Active Inbound tunnels"
+msgstr ""
 
-msgid "out"
-msgstr "ven"
+msgid "Active Outbound tunnels"
+msgstr ""
 
 msgid "Estimated download time for all torrents"
 msgstr "Odhadovaná doba stahování pro všechny torrenty"
@@ -685,17 +668,41 @@ msgstr "Celková nahraná data (pro uvedené torrenty)"
 msgid "Total upload speed"
 msgstr "Celková rychlost odesílání"
 
-msgid "Enable Debug Mode"
-msgstr "Povolte režim ladění"
-
-msgid "Disable Debug Mode"
-msgstr "Zakázat režim ladění"
+msgid "Toggle Debug Mode"
+msgstr ""
 
 msgid "Normal Mode"
 msgstr "Normální režim"
 
 msgid "No DHT Peers"
 msgstr "Žádní DHT Peers"
+
+msgid "Search"
+msgstr "Vyhledávání"
+
+msgid "Show All"
+msgstr "Zobrazit vše"
+
+msgid "Active"
+msgstr "Aktivní"
+
+msgid "Inactive"
+msgstr "Neaktivní"
+
+msgid "Connected"
+msgstr "Připojeno"
+
+msgid "Seeding"
+msgstr "Sezení"
+
+msgid "Complete"
+msgstr "Dokončit"
+
+msgid "Incomplete"
+msgstr "Neúplné"
+
+msgid "Stopped"
+msgstr "Zastaveno"
 
 msgid "First"
 msgstr "První"
@@ -1054,9 +1061,6 @@ msgstr "Chcete-li změnit motivy ručně, vypněte univerzální motivy"
 msgid "Universal theming is enabled."
 msgstr "Univerzální motivování je povoleno."
 
-msgid "Configure"
-msgstr "Konfigurovat"
-
 msgid "Refresh time"
 msgstr "Čas obnovení"
 
@@ -1077,12 +1081,6 @@ msgstr "torrenty"
 
 msgid "Language"
 msgstr "Jazyk"
-
-msgid "Smart torrent sorting"
-msgstr "Inteligentní třídění torrentů"
-
-msgid "Ignore words such as 'a' and 'the' when sorting"
-msgstr "Při řazení ignorujte slova jako 'a' a 'the'"
 
 msgid "Collapsible panels"
 msgstr "Skládací panely"
@@ -1318,6 +1316,15 @@ msgstr "Toto konfiguruje maximální počet tunelů k otevření, určený počt
 msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
 msgstr "Změna tohoto nastavení na méně než 3 skoky může zvýšit rychlost na úkor anonymity a nedoporučuje se"
 
+msgid "Sequential piece or file order not saved - feature currently broken."
+msgstr ""
+
+msgid "Unknown command"
+msgstr ""
+
+msgid "Please retry form submission (bad nonce)"
+msgstr ""
+
 msgid "Info hash"
 msgstr "Informační hash"
 
@@ -1501,3 +1508,14 @@ msgstr "Uložit změny"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent musí být zastaven"
+
+#, java-format
+
+
+
+
+
+
+
+
+

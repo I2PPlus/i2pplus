@@ -23,6 +23,12 @@ msgstr "Nem lehet csatlakozni az I2P-hez"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Hiba az I2P-hez való csatlakozáskor - ellenőrizd az I2CP beállításait!"
 
+msgid "Download already running: "
+msgstr ""
+
+msgid "Downloading"
+msgstr "Letöltés"
+
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "Az I2PSnark konfigurálása I2CP opciókkal"
 
@@ -466,12 +472,23 @@ msgid "Anonymous BitTorrent Client"
 msgstr "Anonymous BitTorrent kliens"
 
 #, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr ""
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr ""
+
+#, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "Biztosan törli a \\''{0}\\'' fájlt (a letöltött adatok nem törlődnek)?"
 
+msgid "Note: Downloaded data will not be deleted."
+msgstr ""
+
 #, java-format
-msgid "Are you sure you want to delete torrent file {0} and all downloaded data?"
-msgstr "Biztosan törli a \\''{0}\\'' torrentet és az összes letöltött adatot?Biztos, hogy törlöd a következő torrentet és az összes letöltött adatot: \\''{0}\\'' ?"
+msgid "Deleting {0} and associated metadata only..."
+msgstr ""
 
 msgid "I2PSnark has stopped"
 msgstr "I2PSnark leállt"
@@ -484,6 +501,9 @@ msgstr "Torrentek"
 
 msgid "Refresh page"
 msgstr "Lap újratöltése"
+
+msgid "Configure"
+msgstr "Beállít"
 
 msgid "Forum"
 msgstr "Fórum"
@@ -524,36 +544,6 @@ msgstr "oldalfrissítés"
 
 msgid "Warning - No I2P"
 msgstr "Figyelem – nincs I2P"
-
-msgid "Search"
-msgstr "Keresés"
-
-msgid "Show All"
-msgstr "Minden megjelenítése"
-
-msgid "Active"
-msgstr "Aktív"
-
-msgid "Inactive"
-msgstr "Inaktív"
-
-msgid "Connected"
-msgstr "Csatlakoztatva"
-
-msgid "Downloading"
-msgstr "Letöltés"
-
-msgid "Seeding"
-msgstr "Táplálás (seeding)"
-
-msgid "Complete"
-msgstr "Kész"
-
-msgid "Incomplete"
-msgstr "Hiányos"
-
-msgid "Stopped"
-msgstr "Leállítva"
 
 msgid "Status"
 msgstr "Állapot"
@@ -634,20 +624,14 @@ msgstr "Nem található torrent."
 msgid "No torrents loaded."
 msgstr "Egy torrent sem került betöltésre."
 
-msgid "Totals"
-msgstr "Összesen"
-
 #, java-format
 msgid "1 torrent"
 msgid_plural "{0} torrents"
 msgstr[0] "1 torrent"
 msgstr[1] "{0} torrent"
 
-#, java-format
-msgid "1 connected peer"
-msgid_plural "{0} connected peers"
-msgstr[0] "1 csatlakozott társ"
-msgstr[1] "{0} csatlakzott társ"
+msgid "Total size of loaded torrents"
+msgstr ""
 
 #, java-format
 msgid "1 DHT peer"
@@ -655,17 +639,17 @@ msgid_plural "{0} DHT peers"
 msgstr[0] "1 DHT peer"
 msgstr[1] "{0} DHT társaik"
 
-msgid "Configured maximum (actual usage may be less)"
-msgstr "Konfigurált maximum (a tényleges használat kevesebb is lehet)"
+msgid "Active downloads"
+msgstr ""
 
-msgid "Tunnels"
-msgstr "Alagutak"
+msgid "Active uploads"
+msgstr ""
 
-msgid "in"
-msgstr "ban ben"
+msgid "Active Inbound tunnels"
+msgstr ""
 
-msgid "out"
-msgstr "ki"
+msgid "Active Outbound tunnels"
+msgstr ""
 
 msgid "Estimated download time for all torrents"
 msgstr "Az összes torrent letöltésének becsült ideje"
@@ -682,17 +666,41 @@ msgstr "Összes feltöltött adat (a listázott torrentekhez)"
 msgid "Total upload speed"
 msgstr "Teljes feltöltési sebesség"
 
-msgid "Enable Debug Mode"
-msgstr "Hibakeresési mód engedélyezése"
-
-msgid "Disable Debug Mode"
-msgstr "A hibakeresési mód letiltása"
+msgid "Toggle Debug Mode"
+msgstr ""
 
 msgid "Normal Mode"
 msgstr "Normál mód"
 
 msgid "No DHT Peers"
 msgstr "Nincs DHT-társ"
+
+msgid "Search"
+msgstr "Keresés"
+
+msgid "Show All"
+msgstr "Minden megjelenítése"
+
+msgid "Active"
+msgstr "Aktív"
+
+msgid "Inactive"
+msgstr "Inaktív"
+
+msgid "Connected"
+msgstr "Csatlakoztatva"
+
+msgid "Seeding"
+msgstr "Táplálás (seeding)"
+
+msgid "Complete"
+msgstr "Kész"
+
+msgid "Incomplete"
+msgstr "Hiányos"
+
+msgid "Stopped"
+msgstr "Leállítva"
 
 msgid "First"
 msgstr "Első"
@@ -1049,9 +1057,6 @@ msgstr "A témák manuális módosításához kapcsolja ki az univerzális tém�
 msgid "Universal theming is enabled."
 msgstr "Az univerzális témaválasztás engedélyezve van."
 
-msgid "Configure"
-msgstr "Beállít"
-
 msgid "Refresh time"
 msgstr "Idő frissítése"
 
@@ -1072,12 +1077,6 @@ msgstr "torrentek"
 
 msgid "Language"
 msgstr "Nyelv"
-
-msgid "Smart torrent sorting"
-msgstr "Intelligens torrent rendezés"
-
-msgid "Ignore words such as 'a' and 'the' when sorting"
-msgstr "A rendezés során hagyja figyelmen kívül az olyan szavakat, mint az „a” és a „the”"
 
 msgid "Collapsible panels"
 msgstr "Összecsukható panelek"
@@ -1311,6 +1310,15 @@ msgstr "Ez beállítja a megnyitandó alagutak maximális számát, amelyet a cs
 msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
 msgstr "Ha ezt a beállítást 3 ugrásnál kevesebbre módosítja, az a névtelenség rovására javíthatja a sebességet, és nem ajánlott"
 
+msgid "Sequential piece or file order not saved - feature currently broken."
+msgstr ""
+
+msgid "Unknown command"
+msgstr ""
+
+msgid "Please retry form submission (bad nonce)"
+msgstr ""
+
 msgid "Info hash"
 msgstr "Infó hash"
 
@@ -1493,3 +1501,14 @@ msgstr "Módosítások mentése"
 
 msgid "Torrent must be stopped"
 msgstr "A torrentet le kell állítani"
+
+#, java-format
+
+
+
+
+
+
+
+
+

@@ -125,17 +125,14 @@ msgid "1 destination deleted."
 msgid_plural "{0} destinations deleted."
 msgstr[0] "{0} điểm đến đã xóa."
 
-msgid "No entries selected to delete."
-msgstr "Không có mục nào được chọn để xóa."
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "Thêm thay thế"
 
 msgid "Address book saved."
 msgstr "Đã lưu sổ địa chỉ."
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "Duyệt khỏi sổ địa chỉ này và quay lại để xem cập nhật."
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "LỖI: không thể lưu trữ sổ địa chỉ."
@@ -314,6 +311,9 @@ msgstr "Đánh dấu xóa"
 msgid "Cancel"
 msgstr "Hủy"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "ví dụ. newdomain.i2p"
 
@@ -391,6 +391,9 @@ msgstr "Tệp để ghi nhật ký hoạt động (đổi thành /dev/null nếu
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Tên của chủ đề ghi đè sẽ sử dụng (mặc định là chủ đề do bảng điều khiển chọn)"
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "Sổ địa chỉ"
@@ -586,3 +589,5 @@ msgstr "Các địa chỉ được thêm thủ công vào sổ địa chỉ Chí
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Máy chủ bạn nhận được từ đăng ký của mình sẽ hợp nhất với sổ địa chỉ Bộ định tuyến của bạn."
+
+

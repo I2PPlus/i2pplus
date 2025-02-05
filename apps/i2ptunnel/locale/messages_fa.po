@@ -38,12 +38,6 @@ msgstr "قابلیت اطمینان و پهنای باند استاندارد"
 msgid "higher bandwidth and reliability"
 msgstr "قابلیت اطمینان و پهنای باند بالا"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "ارسال فرم نامعتبر است، احتمالاً به این دلیل که از دکمه \"بازگشت\" یا \"بارگذاری مجدد\"در مرورگر خود استفاده کرده اید. فرمِ اشتباهی ارسال شده است. احتمالا شما از کلیدهای 'back' و یا 'reload' در مرورگر خود استفاده کردید. لطفا دوباره تلاش کنید."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "اگر مشکل ادامه داشت، بررسی کنید که کوکی ها را در مرورگر خود فعال کرده اید.اگر همچنان مشکل پابرجاست، مطمئن شوید که در مرورگر شما Cookie ها فعال هستند."
-
 msgid "Configuration reloaded for all tunnels"
 msgstr "پیکربندی برای تمامی تونل ها مجددا بارگذاری شد"
 
@@ -1227,6 +1221,12 @@ msgstr "تولید احراز هویت"
 
 msgid "SSL Helper"
 msgstr "یاور SSL"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "ارسال فرم نامعتبر است، احتمالاً به این دلیل که از دکمه \"بازگشت\" یا \"بارگذاری مجدد\"در مرورگر خود استفاده کرده اید. فرمِ اشتباهی ارسال شده است. احتمالا شما از کلیدهای 'back' و یا 'reload' در مرورگر خود استفاده کردید. لطفا دوباره تلاش کنید."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "اگر مشکل ادامه داشت، بررسی کنید که کوکی ها را در مرورگر خود فعال کرده اید.اگر همچنان مشکل پابرجاست، مطمئن شوید که در مرورگر شما Cookie ها فعال هستند."
 
 msgid "Experts only!"
 msgstr "فقط متخصصان!"

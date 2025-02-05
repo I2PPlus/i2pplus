@@ -263,14 +263,14 @@ msgstr "Napaka pri pošiljanju e-pošte"
 msgid "Mail sent."
 msgstr "E-pošta je bila poslana."
 
-msgid "Send"
-msgstr "Pošlji"
+msgid "Cancel"
+msgstr "Prekliči"
 
 msgid "Save as Draft"
 msgstr "Shrani kot osnovo"
 
-msgid "Cancel"
-msgstr "Prekliči"
+msgid "Send"
+msgstr "Pošlji"
 
 msgid "From"
 msgstr "Od"

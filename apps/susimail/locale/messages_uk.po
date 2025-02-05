@@ -260,14 +260,14 @@ msgstr "Помилка відправки пошти"
 msgid "Mail sent."
 msgstr "Лист надісланий."
 
-msgid "Send"
-msgstr "Відправити"
+msgid "Cancel"
+msgstr "Відмінити"
 
 msgid "Save as Draft"
 msgstr "Зберегти як чернетку"
 
-msgid "Cancel"
-msgstr "Відмінити"
+msgid "Send"
+msgstr "Відправити"
 
 msgid "From"
 msgstr "Від"

@@ -130,17 +130,14 @@ msgid_plural "{0} destinations deleted."
 msgstr[0] "1 destination slettet."
 msgstr[1] "{0} destinationer slettet."
 
-msgid "No entries selected to delete."
-msgstr "Ingen poster valgt at slette."
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "Tilføj suppleant"
 
 msgid "Address book saved."
 msgstr "Adressebog gemt."
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "Søg væk fra denne adressebog og vend tilbage for at se opdateringen."
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "FEJL: Kunne ikke skrive adressebog filen."
@@ -321,6 +318,9 @@ msgstr "Marker for sletning"
 msgid "Cancel"
 msgstr "Annuller"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "f.eks. newdomain.i2p"
 
@@ -398,6 +398,9 @@ msgstr "Fil at logge aktivitet til (skift til /dev/null, hvis du vil)"
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Navn på tilsidesættelsestema, der skal bruges (standard til konsolvalgt tema)"
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "adressebog"
@@ -593,3 +596,5 @@ msgstr "Adresser, der manuelt tilføjes til din masteradressebog, vil fusionere 
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Værter, du modtager fra dine abonnementer, fusionerer med din routeradressebog."
+
+

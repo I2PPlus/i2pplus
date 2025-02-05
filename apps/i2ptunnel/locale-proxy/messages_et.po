@@ -8,8 +8,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Warning: Invalid Request URI"
-msgstr "Hoiatus: Kehtetu päringu URI"
+msgid "Website Unknown"
+msgstr "Tundmatu veebisait"
 
 msgid "Router Console"
 msgstr "Routeri konsool"
@@ -25,71 +25,6 @@ msgstr "Seadistused"
 
 msgid "Help"
 msgstr "Abi"
-
-msgid "The request URI is invalid, and probably contains illegal characters."
-msgstr "Päringu URI on kehtetu ja tõenäoliselt sisaldab ebaseaduslikke märke."
-
-msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
-msgstr "Kui vajutasid lingi, kontrolli URI lõppu, kas brauser on ootamatult midagi lisatud."
-
-msgid "Connection Reset"
-msgstr "Ühenduse taaskäivitamine"
-
-msgid "The connection to the website was reset while the page was loading."
-msgstr "Veebisaidmega ühendus taaskäiviti lehe laadimise ajal."
-
-msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Veebisait võib olla ajutiselt saadaval, liiga koormatud või see on blokeerinud sinu ligipääsu."
-
-#, java-format
-msgid "You may want to {0}retry{1}."
-msgstr "Võid soovida {0}proovida uuesti{1}."
-
-#, java-format
-msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
-msgstr "Kui jätad lehe avatuks, siis pärast katkete ühenduse loomise katkestamist proovib see automaatselt ühendust veebisaidmega luua igal {0} sekundil."
-
-msgid "Could not find the following destination:"
-msgstr "Järgmist sihtkohta ei leitud:"
-
-msgid "Warning: Non-HTTP Protocol"
-msgstr "Hoiatus: Mitte-HTTP protokoll"
-
-msgid "The request uses a bad protocol."
-msgstr "Päring kasutab vigast protokolli."
-
-msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
-msgstr "I2P HTTP proxy toetab ainult HTTP ja HTTPS päringuid."
-
-msgid "Other protocols such as FTP are not allowed."
-msgstr "Teisi protokolle nagu FTP ei lubata."
-
-msgid "Warning: No Outproxy Configured"
-msgstr "Hoiatus: Välisproxy ei ole seadistatud"
-
-msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
-msgstr "Sinu päring oli I2P välistele veebisaitidele, kuid sul pole seadistatud ühtegi välisproxyd."
-
-msgid "Please configure an outproxy in I2PTunnel."
-msgstr "Palun seadista välisproxy I2PTunnelis."
-
-msgid "Error: Request Denied"
-msgstr "Viga: Päring tagasi lükatud"
-
-msgid "Error: Cannot Access Router Console via I2P Proxy"
-msgstr "Viga: Ei saa ligi routeri konsoolile I2P proxy kaudu"
-
-msgid "Your browser is misconfigured."
-msgstr "Sinu brauser on valesti seadistatud."
-
-msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
-msgstr "Ära kasuta proxyd, et ligi saada routeri konsooli, localhostile või kohalikele LAN sihtkohtadele."
-
-msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
-msgstr "Pead takistama 127.0.0.1 aadressi (või muu aadressi, mille kaudu saad ligi I2P konsoolile) suunamist läbi I2P HTTP proxy, tavaliselt brauseri proxy seadistuste alamseadistuses."
-
-msgid "Website Unknown"
-msgstr "Tundmatu veebisait"
 
 msgid "Website Not Found in Addressbook"
 msgstr "Veebisaiti ei leitud aadressiraamatus"
@@ -111,99 +46,35 @@ msgstr "Muidu, leia Base 32 või aadressiabi link või kasuta allpool olevat hü
 msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
 msgstr "Vaadates seda lehte sageli? Vaata {0}FAQ{1} abi saamiseks {2}uute tellimuste lisamisel{3} sinu aadressiraamatusse."
 
-msgid "Website Unreachable"
-msgstr "Veebisait on saadmata"
+msgid "Could not find the following destination:"
+msgstr "Järgmist sihtkohta ei leitud:"
 
-msgid "The website was not reachable, because its lease set was not found."
-msgstr "Veebisaiti ei saanud ulatuda, sest tema lease komplekti ei leitud."
+msgid "Warning: Non-HTTP Protocol"
+msgstr "Hoiatus: Mitte-HTTP protokoll"
 
-msgid "The website is probably down, but there could also be network congestion."
-msgstr "Veebisait on tõenäoliselt maha, kuid võib-olla on ka võrgukoormus."
+msgid "The request uses a bad protocol."
+msgstr "Päring kasutab vigast protokolli."
 
-msgid "Outproxy Not Found"
-msgstr "Välisproxyd ei leitud"
+msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
+msgstr "I2P HTTP proxy toetab ainult HTTP ja HTTPS päringuid."
 
-msgid "The HTTP Outproxy was not found."
-msgstr "HTTP välisproxyd ei leitud."
+msgid "Other protocols such as FTP are not allowed."
+msgstr "Teisi protokolle nagu FTP ei lubata."
 
-msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "See on vabanduses, võrgukoormus või sinu ruter pole veel hästi integreeritud teiste kasutajatega."
+msgid "Error: Request Denied"
+msgstr "Viga: Päring tagasi lükatud"
 
-#, java-format
-msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
-msgstr "Võid soovida {0}proovida uuesti{1}, sest see valib juhuslikult välisproxyd sinu määratletud {2}poolist{3} (kui sul on rohkem kui üks seadistatud)."
+msgid "Error: Cannot Access Router Console via I2P Proxy"
+msgstr "Viga: Ei saa ligi routeri konsoolile I2P proxy kaudu"
 
-#, java-format
-msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
-msgstr "Kui sul jätkub probleem, võid soovida oma välisproxy nimekirja {0}muuta{1}."
+msgid "Your browser is misconfigured."
+msgstr "Sinu brauser on valesti seadistatud."
 
-msgid "Warning: Request Denied"
-msgstr "Hoiatus: Päring tagasi lükatud"
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
+msgstr "Ära kasuta proxyd, et ligi saada routeri konsooli, localhostile või kohalikele LAN sihtkohtadele."
 
-msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
-msgstr "Selles aadressil tundub midagi valesti olevat. Palun kontrolli, et sisestasid korrektse aadressi!"
-
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "Sa püüdsid ühendust luua mitte I2P veebisaidiga või asukohaga."
-
-msgid "Outproxy Unreachable"
-msgstr "Välisproxy saadmata"
-
-msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
-msgstr "HTTP välisproxy oli saadmata, sest see kasutab krüpteerimisvõimalusi, mida ei toeta sinu I2P või Java versioon."
-
-msgid "Could not connect to the following destination:"
-msgstr "Ei suutnud ühendust luua järgmise sihtkoha kaudu:"
-
-msgid "Proxy Authorization Required"
-msgstr "Proxyd lubamiseks on vaja luba"
-
-msgid "I2P HTTP Proxy Authorization Required"
-msgstr "I2P HTTP Proxyd lubamiseks on vaja luba"
-
-msgid "This proxy is configured to require a username and password for access."
-msgstr "See proxy on seadistatud nii, et juurdepääs vajab kasutajanime ja parooli."
-
-#, java-format
-msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
-msgstr "Palun sisesta oma kasutajanimi ja parool või kontrolli {0}routeri seadistusi{1} või {2}I2PTunnel seadistusi{3}."
-
-#, java-format
-msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
-msgstr "Autoriseerimise keelamiseks eemalda seadistus {0}i2ptunnel.proxy.auth=basic{1}, seejärel peata ja käivita HTTP Proxy tunneld uuesti."
-
-msgid "Warning: Invalid Destination"
-msgstr "Hoiatus: Kehtetu sihtkoht"
-
-msgid "The website destination specified was not valid, or was otherwise unreachable."
-msgstr "Määratud veebisaiti sihtkoht ei olnud kehtiv või muul viisil saadmata."
-
-msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
-msgstr "Võib-olla sisestasid vale Base 64 jada või järgitasid valesti linki."
-
-msgid "The I2P host could also be offline."
-msgstr "I2P host võib olla ka vabanduses."
-
-msgid "The connection to the proxy was reset."
-msgstr "Ühendus proxyga on taaskäivitatud."
-
-msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Proxy võib olla ajutiselt saadaval, liiga koormatud või see on blokeerinud sinu ligipääsu."
-
-msgid "The HTTP outproxy was not reachable, because its lease set was not found."
-msgstr "HTTP välisproxy oli saadmata, sest tema lease komplekti ei leitud."
-
-msgid "The outproxy is probably down, but there could also be network congestion."
-msgstr "Välisproxy on tõenäoliselt maha, kuid võib-olla on ka võrgukoormus."
-
-msgid "Warning: Authorization Required"
-msgstr "Hoiatus: Lubamiseks on vaja luba"
-
-msgid "The website was not reachable."
-msgstr "Veebisait oli saadmata."
-
-msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "Veebisait on vabanduses, võrgukoormus või sinu ruter pole veel hästi integreeritud teiste kasutajatega."
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "Pead takistama 127.0.0.1 aadressi (või muu aadressi, mille kaudu saad ligi I2P konsoolile) suunamist läbi I2P HTTP proxy, tavaliselt brauseri proxy seadistuste alamseadistuses."
 
 msgid "Warning: Destination Key Conflict"
 msgstr "Hoiatus: Sihtkoht vaidlus"
@@ -217,24 +88,81 @@ msgstr "Kellelgi võib olla üritatud teist veebisaiti imiteerida või inimesed 
 msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
 msgstr "Lahenda vaidlus otsustades, millist võtit usaldad, ja seejärel ignoreeri aadressiabi linki või kustuta hosti kirje oma aadressiraamatust ja klõpsa aadressiabi linki uuesti."
 
-msgid "The Base32 address is invalid."
-msgstr "Base32 aadress on kehtetu."
+msgid "Connection Reset"
+msgstr "Ühenduse taaskäivitamine"
 
-msgid "Warning: Bad Address Helper"
-msgstr "Hoiatus: Vale aadressiabi"
+msgid "The connection to the website was reset while the page was loading."
+msgstr "Veebisaidmega ühendus taaskäiviti lehe laadimise ajal."
+
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Veebisait võib olla ajutiselt saadaval, liiga koormatud või see on blokeerinud sinu ligipääsu."
 
 #, java-format
-msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
-msgstr "URL-i abi võti ({0}i2paddresshelper={1}) ei lahendu."
+msgid "You may want to {0}retry{1}."
+msgstr "Võid soovida {0}proovida uuesti{1}."
 
-msgid "It seems to be garbage data, or a mistyped Base 32 address."
-msgstr "See tundub olla prügisisand või valesti kirjutatud Base 32 aadress."
+#, java-format
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
+msgstr "Kui jätad lehe avatuks, siis pärast katkete ühenduse loomise katkestamist proovib see automaatselt ühendust veebisaidmega luua igal {0} sekundil."
 
-msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
-msgstr "Kontrolli oma URL-i, et püüda abi võitu muuta kehtivaks Base 32 hosti nimeks või Base 64 võtmeks."
+msgid "Website Unreachable"
+msgstr "Veebisait on saadmata"
 
 msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
 msgstr "Veebisait oli saadmata, sest see kasutab krüpteerimisvõimalusi, mida ei toeta sinu I2P või Java versioon."
+
+msgid "Could not connect to the following destination:"
+msgstr "Ei suutnud ühendust luua järgmise sihtkoha kaudu:"
+
+msgid "The website was not reachable, because its lease set was not found."
+msgstr "Veebisaiti ei saanud ulatuda, sest tema lease komplekti ei leitud."
+
+msgid "The website is probably down, but there could also be network congestion."
+msgstr "Veebisait on tõenäoliselt maha, kuid võib-olla on ka võrgukoormus."
+
+msgid "The connection to the proxy was reset."
+msgstr "Ühendus proxyga on taaskäivitatud."
+
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Proxy võib olla ajutiselt saadaval, liiga koormatud või see on blokeerinud sinu ligipääsu."
+
+#, java-format
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "Võid soovida {0}proovida uuesti{1}, sest see valib juhuslikult välisproxyd sinu määratletud {2}poolist{3} (kui sul on rohkem kui üks seadistatud)."
+
+#, java-format
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr "Kui sul jätkub probleem, võid soovida oma välisproxy nimekirja {0}muuta{1}."
+
+msgid "Outproxy Unreachable"
+msgstr "Välisproxy saadmata"
+
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "HTTP välisproxy oli saadmata, sest see kasutab krüpteerimisvõimalusi, mida ei toeta sinu I2P või Java versioon."
+
+msgid "The website was not reachable."
+msgstr "Veebisait oli saadmata."
+
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Veebisait on vabanduses, võrgukoormus või sinu ruter pole veel hästi integreeritud teiste kasutajatega."
+
+msgid "Warning: No Outproxy Configured"
+msgstr "Hoiatus: Välisproxy ei ole seadistatud"
+
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr "Sinu päring oli I2P välistele veebisaitidele, kuid sul pole seadistatud ühtegi välisproxyd."
+
+msgid "Please configure an outproxy in I2PTunnel."
+msgstr "Palun seadista välisproxy I2PTunnelis."
+
+msgid "Outproxy Not Found"
+msgstr "Välisproxyd ei leitud"
+
+msgid "The HTTP Outproxy was not found."
+msgstr "HTTP välisproxyd ei leitud."
+
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "See on vabanduses, võrgukoormus või sinu ruter pole veel hästi integreeritud teiste kasutajatega."
 
 msgid "Information: New Host Name"
 msgstr "Informatsioon: Uus Hosti Nimi"
@@ -256,6 +184,78 @@ msgstr "Kui sa seda ei salvesta, siis hosti nimi unustatakse järgmise routeri t
 
 msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
 msgstr "Kui sa ei soovi külastada seda hosti, siis klõpsa oma brauseris \"tagasi\" nuppu."
+
+msgid "Proxy Authorization Required"
+msgstr "Proxyd lubamiseks on vaja luba"
+
+msgid "I2P HTTP Proxy Authorization Required"
+msgstr "I2P HTTP Proxyd lubamiseks on vaja luba"
+
+msgid "This proxy is configured to require a username and password for access."
+msgstr "See proxy on seadistatud nii, et juurdepääs vajab kasutajanime ja parooli."
+
+#, java-format
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "Palun sisesta oma kasutajanimi ja parool või kontrolli {0}routeri seadistusi{1} või {2}I2PTunnel seadistusi{3}."
+
+#, java-format
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "Autoriseerimise keelamiseks eemalda seadistus {0}i2ptunnel.proxy.auth=basic{1}, seejärel peata ja käivita HTTP Proxy tunneld uuesti."
+
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr "HTTP välisproxy oli saadmata, sest tema lease komplekti ei leitud."
+
+msgid "The outproxy is probably down, but there could also be network congestion."
+msgstr "Välisproxy on tõenäoliselt maha, kuid võib-olla on ka võrgukoormus."
+
+msgid "Warning: Request Denied"
+msgstr "Hoiatus: Päring tagasi lükatud"
+
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr "Selles aadressil tundub midagi valesti olevat. Palun kontrolli, et sisestasid korrektse aadressi!"
+
+msgid "You attempted to connect to a non-I2P website or location."
+msgstr "Sa püüdsid ühendust luua mitte I2P veebisaidiga või asukohaga."
+
+msgid "Warning: Bad Address Helper"
+msgstr "Hoiatus: Vale aadressiabi"
+
+#, java-format
+msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgstr "URL-i abi võti ({0}i2paddresshelper={1}) ei lahendu."
+
+msgid "It seems to be garbage data, or a mistyped Base 32 address."
+msgstr "See tundub olla prügisisand või valesti kirjutatud Base 32 aadress."
+
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr "Kontrolli oma URL-i, et püüda abi võitu muuta kehtivaks Base 32 hosti nimeks või Base 64 võtmeks."
+
+msgid "Warning: Invalid Destination"
+msgstr "Hoiatus: Kehtetu sihtkoht"
+
+msgid "The website destination specified was not valid, or was otherwise unreachable."
+msgstr "Määratud veebisaiti sihtkoht ei olnud kehtiv või muul viisil saadmata."
+
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr "Võib-olla sisestasid vale Base 64 jada või järgitasid valesti linki."
+
+msgid "The I2P host could also be offline."
+msgstr "I2P host võib olla ka vabanduses."
+
+msgid "Warning: Authorization Required"
+msgstr "Hoiatus: Lubamiseks on vaja luba"
+
+msgid "Warning: Invalid Request URI"
+msgstr "Hoiatus: Kehtetu päringu URI"
+
+msgid "The request URI is invalid, and probably contains illegal characters."
+msgstr "Päringu URI on kehtetu ja tõenäoliselt sisaldab ebaseaduslikke märke."
+
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr "Kui vajutasid lingi, kontrolli URI lõppu, kas brauser on ootamatult midagi lisatud."
+
+msgid "The Base32 address is invalid."
+msgstr "Base32 aadress on kehtetu."
 
 msgid "This seems to be a bad destination:"
 msgstr "See tundub olevat halb sihtkoht:"

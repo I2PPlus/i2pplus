@@ -8,8 +8,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgid "Warning: Invalid Request URI"
-msgstr "Peringatan: Permintaan URI Tidak Valid"
+msgid "Website Unknown"
+msgstr "Situs ini tidak diketahui"
 
 msgid "Router Console"
 msgstr "Konsol Router"
@@ -25,71 +25,6 @@ msgstr "Konfigurasi"
 
 msgid "Help"
 msgstr "Bantuan"
-
-msgid "The request URI is invalid, and probably contains illegal characters."
-msgstr "Permintaan URI tidak valid, dan mungkin mengandung karakter ilegal."
-
-msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
-msgstr "Jika Anda mengeklik tautan, periksa bagian akhir URI apakah ada karakter yang salah ditambahkan oleh browser.Jika Anda mengklik sebuah tautan, periksa akhiran URI atas segala karakter yang secara keliru ditambahkan oleh peramban."
-
-msgid "Connection Reset"
-msgstr "Sambungan terputus lalu tersambung lagi"
-
-msgid "The connection to the website was reset while the page was loading."
-msgstr "Koneksi ke situs web disetel ulang saat halaman sedang dimuat.Sambungan ke situs ini terputus lalu tersambung lagi waktu halaman ini sedang memuat."
-
-msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Situs web mungkin tidak tersedia untuk sementara, terlalu sibuk, atau akses Anda diblokir.Situs ini mungkin sedang tidak bisa dibuka, terlalu sibuk, atau memblokir anda."
-
-#, java-format
-msgid "You may want to {0}retry{1}."
-msgstr "Anda mungkin ingin {0}mengulang{1}."
-
-#, java-format
-msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
-msgstr "Jika Anda membiarkan laman ini terbuka, laman ini akan otomatis mencoba menyambung kembali ke situs web setiap {0} detik setelah upaya sambungan gagal."
-
-msgid "Could not find the following destination:"
-msgstr "Tidak dapat menemukan tujuan berikut:"
-
-msgid "Warning: Non-HTTP Protocol"
-msgstr "Peringatan: Protokol Non-HTTP"
-
-msgid "The request uses a bad protocol."
-msgstr "Permintaan menggunakan protokol yang buruk."
-
-msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
-msgstr "Proxy HTTP I2P mendukung hanya permintaan HTTP dan HTTPS."
-
-msgid "Other protocols such as FTP are not allowed."
-msgstr "Protokol lainnya seperti FTP tidak diizinkan."
-
-msgid "Warning: No Outproxy Configured"
-msgstr "Peringatan: Tidak Ada Outproxy yang Dikonfigurasikan"
-
-msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
-msgstr "Permintaan Anda adalah untuk situs di luar I2P, namun Anda tidak memiliki proxy keluar HTTP yang dikonfigurasi.Permintaan Anda adalah untuk situs diluar I2P, tetapi Anda belum memiliki outproxy HTTP yang dikonfigurasikan."
-
-msgid "Please configure an outproxy in I2PTunnel."
-msgstr "Silahkan mengkonfigurasikan outproxy dalam I2PTunnel."
-
-msgid "Error: Request Denied"
-msgstr "Kesalahan: Permintaan Ditolak"
-
-msgid "Error: Cannot Access Router Console via I2P Proxy"
-msgstr "Kesalahan: Tidak Dapat Mengakses Konsol Router melalui Proksi I2P"
-
-msgid "Your browser is misconfigured."
-msgstr "Peramban Anda terkonfigurasi dengan buruk."
-
-msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
-msgstr "Jangan gunakan proxy untuk mengakses konsol router, localhost, atau tujuan LAN lokal.Jangan menggunakan proxy untuk mengakses konsol router, localhost, atau tujuan LAN lokal."
-
-msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
-msgstr "Anda harus mencegah 127.0.0.1 (atau alamat tempat Anda mengakses konsol I2P) dirutekan melalui proksi http I2P, biasanya dengan mengecualikan alamat di bagian konfigurasi proksi browser Anda."
-
-msgid "Website Unknown"
-msgstr "Situs ini tidak diketahui"
 
 msgid "Website Not Found in Addressbook"
 msgstr "Situs ini tidak ada di buku alamat"
@@ -111,99 +46,35 @@ msgstr "Jika tidak, cari tautan Base 32 atau alamat pembantu, atau gunakan tauta
 msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
 msgstr "Sering melihat halaman ini? Sering melihat laman ini? Lihat {0}FAQ{1} untuk bantuan dalam {2}menambahkan beberapa langganan{3} ke buku alamat Anda."
 
-msgid "Website Unreachable"
-msgstr "Situs tidak dapat dibuka"
+msgid "Could not find the following destination:"
+msgstr "Tidak dapat menemukan tujuan berikut:"
 
-msgid "The website was not reachable, because its lease set was not found."
-msgstr "Situs ini tidak bisa dibuka karena lease set-nya tidak ditemukan."
+msgid "Warning: Non-HTTP Protocol"
+msgstr "Peringatan: Protokol Non-HTTP"
 
-msgid "The website is probably down, but there could also be network congestion."
-msgstr "Situs web mungkin sedang down, tetapi mungkin juga terjadi kemacetan jaringan.Situs ini mungkin tidak aktif, namun mungkin ada kemacetan di jaringan."
+msgid "The request uses a bad protocol."
+msgstr "Permintaan menggunakan protokol yang buruk."
 
-msgid "Outproxy Not Found"
-msgstr "Outproxy tidak ditemukan"
+msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
+msgstr "Proxy HTTP I2P mendukung hanya permintaan HTTP dan HTTPS."
 
-msgid "The HTTP Outproxy was not found."
-msgstr "Outproxy HTTP tidak ditemukan."
+msgid "Other protocols such as FTP are not allowed."
+msgstr "Protokol lainnya seperti FTP tidak diizinkan."
 
-msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "Sedang offline, ada kemacetan jaringan, atau router Anda belum terintegrasi dengan baik dengan rekan-rekan.Sedang offline, ada kemacetan pada jaringan, atau router Anda belum terintegrasi dengan baik dengan peer."
+msgid "Error: Request Denied"
+msgstr "Kesalahan: Permintaan Ditolak"
 
-#, java-format
-msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
-msgstr "Anda mungkin ingin {0}mencoba lagi{1} karena tindakan ini akan secara acak memilih ulang proksi keluar dari kumpulan yang telah Anda tetapkan {2}di sini{3} (jika Anda memiliki lebih dari satu konfigurasi).Anda mungkin ingin {0}mengulang{1} karena ini akan secara acak memilih ulang sebuah outproxy dari pool yang telah Anda tetapkan {2}disini{3} (jika Anda memiliki lebih dari satu yang dikonfigurasikan)."
+msgid "Error: Cannot Access Router Console via I2P Proxy"
+msgstr "Kesalahan: Tidak Dapat Mengakses Konsol Router melalui Proksi I2P"
 
-#, java-format
-msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
-msgstr "Jika Anda terus mengalami masalah, Anda mungkin ingin mengedit daftar outproxy Anda {0}di sini{1}.Jika Anda terus mengalami kesulitan Anda mungkin ingin mengedit daftar outproxy Anda {0}disini{1}."
+msgid "Your browser is misconfigured."
+msgstr "Peramban Anda terkonfigurasi dengan buruk."
 
-msgid "Warning: Request Denied"
-msgstr "Peringatan: Permintaan Ditolak"
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
+msgstr "Jangan gunakan proxy untuk mengakses konsol router, localhost, atau tujuan LAN lokal.Jangan menggunakan proxy untuk mengakses konsol router, localhost, atau tujuan LAN lokal."
 
-msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
-msgstr "Alamat ini tampaknya salah format. "
-
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "Anda mencoba untuk terhubung ke website atau lokasi non-I2P."
-
-msgid "Outproxy Unreachable"
-msgstr "Outproxy tidak bisa tersambung"
-
-msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
-msgstr "Outproxy HTTP tidak dapat dijangkau, karena menggunakan opsi enkripsi yang tidak didukung oleh versi I2P atau Java Anda.HTTP outproxy tidak bisa tersambung karena menggunakan enkripsi yang tidak didukung I2P atau versi Java anda."
-
-msgid "Could not connect to the following destination:"
-msgstr "Tidak bisa tersambung ke tujuan berikut:"
-
-msgid "Proxy Authorization Required"
-msgstr "Otorisasi Proxy Diperlukan"
-
-msgid "I2P HTTP Proxy Authorization Required"
-msgstr "Otorisasi Proxy HTTP I2P Diperlukan"
-
-msgid "This proxy is configured to require a username and password for access."
-msgstr "Proksi ini dikonfigurasi untuk memerlukan nama pengguna dan kata sandi untuk akses.Proxy ini dikonfigurasikan untuk memerlukan nama pengguna dan kata sandi ketika mengakses."
-
-#, java-format
-msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
-msgstr "Masukkan nama pengguna dan sandi Anda, atau periksa {0}konfigurasi router{1} atau {2}konfigurasi I2PTunnel{3} Anda.Silahkan masukkan nama pengguna dan kata sandi Anda, atau periksa {0}konfigurasi router{1} atau {2}konfigurasi I2PTunnel{3} Anda."
-
-#, java-format
-msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
-msgstr "Untuk menonaktifkan otorisasi, hapus konfigurasi {0}i2ptunnel.proxy.auth=basic{1}, lalu hentikan dan mulai ulang terowongan Proxy HTTP.Untuk menonaktifkan otorisasi, hapus konfigurasi {0}i2ptunnel.proxy.auth=basic{1}, kemudian hentikan dan mulai ulang saluran Proxy HTTP."
-
-msgid "Warning: Invalid Destination"
-msgstr "Peringatan: Tujuan Tidak Valid"
-
-msgid "The website destination specified was not valid, or was otherwise unreachable."
-msgstr "Situs yang anda masukkan tidak valid atau tidak bisa dibuka."
-
-msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
-msgstr "Mungkin Anda menempelkan string Base 64 yang salah atau tautan yang Anda ikuti buruk.Mungkin Anda menempelkan string Base 64 yang salah atau tautan yang Anda ikuti buruk."
-
-msgid "The I2P host could also be offline."
-msgstr "Host I2P mungkin juga sedang offline."
-
-msgid "The connection to the proxy was reset."
-msgstr "Koneksi terhadap proxy tersambung ulang."
-
-msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Proxy mungkin tidak tersedia untuk sementara, terlalu sibuk, atau telah memblokir akses Anda.Proxy yang anda tuju mungkin sedang tidak bisa digunakan atau memblokir anda."
-
-msgid "The HTTP outproxy was not reachable, because its lease set was not found."
-msgstr "Proksi HTTP tidak dapat dijangkau, karena rangkaian sewanya tidak ditemukan.HTTP outproxy tidak bisa ditemukan karena lease set-nya tidak ditemukan."
-
-msgid "The outproxy is probably down, but there could also be network congestion."
-msgstr "Outproxynya mungkin tidak aktif, tapi mungkin juga terjadi kemacetan jaringan.Outproxynya mungkin tidak aktif, namun mungkin ada kemacetan di jaringan."
-
-msgid "Warning: Authorization Required"
-msgstr "Peringatan: Diperlukan Otorisasi"
-
-msgid "The website was not reachable."
-msgstr "Situs ini tidak dapat dibuka."
-
-msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "Situs web sedang offline, ada kemacetan jaringan, atau router Anda belum terintegrasi dengan baik dengan rekan-rekannya.Situsnya offline, ada kemacetan di jaringan, atau router anda belum terintegrasi dengan baik dengan peers."
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "Anda harus mencegah 127.0.0.1 (atau alamat tempat Anda mengakses konsol I2P) dirutekan melalui proksi http I2P, biasanya dengan mengecualikan alamat di bagian konfigurasi proksi browser Anda."
 
 msgid "Warning: Destination Key Conflict"
 msgstr "Peringatan: Kunci Tujuan Bermasalah"
@@ -217,24 +88,81 @@ msgstr "Seseorang mungkin mencoba meniru situs web lain, atau orang memberikan n
 msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
 msgstr "Selesaikan konflik dengan memutuskan kunci mana yang Anda percayai, lalu abaikan tautan pembantu alamat, atau hapus entri host dari buku alamat Anda dan klik lagi tautan pembantu alamat.Selesaikan konflik ini dengan memutuskan kunci yang anda percaya, lalu 1) abaikan tautan di bantuan alamat atau 2) hapus entry host yang ada di buku alamat anda lalu klik lagi tautan di bantuan alamat."
 
-msgid "The Base32 address is invalid."
-msgstr "Alamat Base32 tidak valid."
+msgid "Connection Reset"
+msgstr "Sambungan terputus lalu tersambung lagi"
 
-msgid "Warning: Bad Address Helper"
-msgstr "Peringatan: Alamat Pembantu Buruk"
+msgid "The connection to the website was reset while the page was loading."
+msgstr "Koneksi ke situs web disetel ulang saat halaman sedang dimuat.Sambungan ke situs ini terputus lalu tersambung lagi waktu halaman ini sedang memuat."
+
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Situs web mungkin tidak tersedia untuk sementara, terlalu sibuk, atau akses Anda diblokir.Situs ini mungkin sedang tidak bisa dibuka, terlalu sibuk, atau memblokir anda."
 
 #, java-format
-msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
-msgstr "Kunci pembantu di URL ({0}i2paddresshelper={1}) tidak dapat diselesaikan.Kunci pembantu dalam URL ({0}i2paddresshelper={1}) tidak dapat diatasi."
+msgid "You may want to {0}retry{1}."
+msgstr "Anda mungkin ingin {0}mengulang{1}."
 
-msgid "It seems to be garbage data, or a mistyped Base 32 address."
-msgstr "Sepertinya datanya sampah, atau alamat Base 32 salah ketik.Sepertinya data tidak berguna, atau kesalahan pengetikan alamat Base 32."
+#, java-format
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
+msgstr "Jika Anda membiarkan laman ini terbuka, laman ini akan otomatis mencoba menyambung kembali ke situs web setiap {0} detik setelah upaya sambungan gagal."
 
-msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
-msgstr "Periksa URL Anda untuk mencoba dan memperbaiki kunci pembantu menjadi nama host Base 32 atau kunci Base 64 yang valid.Periksa URL Anda untuk mencoba dan memperbaiki kunci pembantu untuk menjadi hostname Base 32 valid atau kunci Base 64."
+msgid "Website Unreachable"
+msgstr "Situs tidak dapat dibuka"
 
 msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
 msgstr "Situs web tidak dapat dijangkau karena menggunakan opsi enkripsi yang tidak didukung oleh versi I2P atau Java Anda.Situs ini tidak bisa dibuka karena enkripsinya tidak didukung I2P atau versi Java yang anda gunakan."
+
+msgid "Could not connect to the following destination:"
+msgstr "Tidak bisa tersambung ke tujuan berikut:"
+
+msgid "The website was not reachable, because its lease set was not found."
+msgstr "Situs ini tidak bisa dibuka karena lease set-nya tidak ditemukan."
+
+msgid "The website is probably down, but there could also be network congestion."
+msgstr "Situs web mungkin sedang down, tetapi mungkin juga terjadi kemacetan jaringan.Situs ini mungkin tidak aktif, namun mungkin ada kemacetan di jaringan."
+
+msgid "The connection to the proxy was reset."
+msgstr "Koneksi terhadap proxy tersambung ulang."
+
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Proxy mungkin tidak tersedia untuk sementara, terlalu sibuk, atau telah memblokir akses Anda.Proxy yang anda tuju mungkin sedang tidak bisa digunakan atau memblokir anda."
+
+#, java-format
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "Anda mungkin ingin {0}mencoba lagi{1} karena tindakan ini akan secara acak memilih ulang proksi keluar dari kumpulan yang telah Anda tetapkan {2}di sini{3} (jika Anda memiliki lebih dari satu konfigurasi).Anda mungkin ingin {0}mengulang{1} karena ini akan secara acak memilih ulang sebuah outproxy dari pool yang telah Anda tetapkan {2}disini{3} (jika Anda memiliki lebih dari satu yang dikonfigurasikan)."
+
+#, java-format
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr "Jika Anda terus mengalami masalah, Anda mungkin ingin mengedit daftar outproxy Anda {0}di sini{1}.Jika Anda terus mengalami kesulitan Anda mungkin ingin mengedit daftar outproxy Anda {0}disini{1}."
+
+msgid "Outproxy Unreachable"
+msgstr "Outproxy tidak bisa tersambung"
+
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "Outproxy HTTP tidak dapat dijangkau, karena menggunakan opsi enkripsi yang tidak didukung oleh versi I2P atau Java Anda.HTTP outproxy tidak bisa tersambung karena menggunakan enkripsi yang tidak didukung I2P atau versi Java anda."
+
+msgid "The website was not reachable."
+msgstr "Situs ini tidak dapat dibuka."
+
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Situs web sedang offline, ada kemacetan jaringan, atau router Anda belum terintegrasi dengan baik dengan rekan-rekannya.Situsnya offline, ada kemacetan di jaringan, atau router anda belum terintegrasi dengan baik dengan peers."
+
+msgid "Warning: No Outproxy Configured"
+msgstr "Peringatan: Tidak Ada Outproxy yang Dikonfigurasikan"
+
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr "Permintaan Anda adalah untuk situs di luar I2P, namun Anda tidak memiliki proxy keluar HTTP yang dikonfigurasi.Permintaan Anda adalah untuk situs diluar I2P, tetapi Anda belum memiliki outproxy HTTP yang dikonfigurasikan."
+
+msgid "Please configure an outproxy in I2PTunnel."
+msgstr "Silahkan mengkonfigurasikan outproxy dalam I2PTunnel."
+
+msgid "Outproxy Not Found"
+msgstr "Outproxy tidak ditemukan"
+
+msgid "The HTTP Outproxy was not found."
+msgstr "Outproxy HTTP tidak ditemukan."
+
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Sedang offline, ada kemacetan jaringan, atau router Anda belum terintegrasi dengan baik dengan rekan-rekan.Sedang offline, ada kemacetan pada jaringan, atau router Anda belum terintegrasi dengan baik dengan peer."
 
 msgid "Information: New Host Name"
 msgstr "Informasi: Nama Host Baru"
@@ -256,6 +184,78 @@ msgstr "Jika Anda tidak menyimpannya, nama host akan dilupakan setelah router di
 
 msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
 msgstr "Jika Anda tidak ingin mengunjungi host ini, klik tombol \"kembali\" pada browser Anda.Jika Anda tidak ingin mengunjungi host ini, klik tombol \"kembali\" pada peramban Anda."
+
+msgid "Proxy Authorization Required"
+msgstr "Otorisasi Proxy Diperlukan"
+
+msgid "I2P HTTP Proxy Authorization Required"
+msgstr "Otorisasi Proxy HTTP I2P Diperlukan"
+
+msgid "This proxy is configured to require a username and password for access."
+msgstr "Proksi ini dikonfigurasi untuk memerlukan nama pengguna dan kata sandi untuk akses.Proxy ini dikonfigurasikan untuk memerlukan nama pengguna dan kata sandi ketika mengakses."
+
+#, java-format
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "Masukkan nama pengguna dan sandi Anda, atau periksa {0}konfigurasi router{1} atau {2}konfigurasi I2PTunnel{3} Anda.Silahkan masukkan nama pengguna dan kata sandi Anda, atau periksa {0}konfigurasi router{1} atau {2}konfigurasi I2PTunnel{3} Anda."
+
+#, java-format
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "Untuk menonaktifkan otorisasi, hapus konfigurasi {0}i2ptunnel.proxy.auth=basic{1}, lalu hentikan dan mulai ulang terowongan Proxy HTTP.Untuk menonaktifkan otorisasi, hapus konfigurasi {0}i2ptunnel.proxy.auth=basic{1}, kemudian hentikan dan mulai ulang saluran Proxy HTTP."
+
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr "Proksi HTTP tidak dapat dijangkau, karena rangkaian sewanya tidak ditemukan.HTTP outproxy tidak bisa ditemukan karena lease set-nya tidak ditemukan."
+
+msgid "The outproxy is probably down, but there could also be network congestion."
+msgstr "Outproxynya mungkin tidak aktif, tapi mungkin juga terjadi kemacetan jaringan.Outproxynya mungkin tidak aktif, namun mungkin ada kemacetan di jaringan."
+
+msgid "Warning: Request Denied"
+msgstr "Peringatan: Permintaan Ditolak"
+
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr "Alamat ini tampaknya salah format. "
+
+msgid "You attempted to connect to a non-I2P website or location."
+msgstr "Anda mencoba untuk terhubung ke website atau lokasi non-I2P."
+
+msgid "Warning: Bad Address Helper"
+msgstr "Peringatan: Alamat Pembantu Buruk"
+
+#, java-format
+msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgstr "Kunci pembantu di URL ({0}i2paddresshelper={1}) tidak dapat diselesaikan.Kunci pembantu dalam URL ({0}i2paddresshelper={1}) tidak dapat diatasi."
+
+msgid "It seems to be garbage data, or a mistyped Base 32 address."
+msgstr "Sepertinya datanya sampah, atau alamat Base 32 salah ketik.Sepertinya data tidak berguna, atau kesalahan pengetikan alamat Base 32."
+
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr "Periksa URL Anda untuk mencoba dan memperbaiki kunci pembantu menjadi nama host Base 32 atau kunci Base 64 yang valid.Periksa URL Anda untuk mencoba dan memperbaiki kunci pembantu untuk menjadi hostname Base 32 valid atau kunci Base 64."
+
+msgid "Warning: Invalid Destination"
+msgstr "Peringatan: Tujuan Tidak Valid"
+
+msgid "The website destination specified was not valid, or was otherwise unreachable."
+msgstr "Situs yang anda masukkan tidak valid atau tidak bisa dibuka."
+
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr "Mungkin Anda menempelkan string Base 64 yang salah atau tautan yang Anda ikuti buruk.Mungkin Anda menempelkan string Base 64 yang salah atau tautan yang Anda ikuti buruk."
+
+msgid "The I2P host could also be offline."
+msgstr "Host I2P mungkin juga sedang offline."
+
+msgid "Warning: Authorization Required"
+msgstr "Peringatan: Diperlukan Otorisasi"
+
+msgid "Warning: Invalid Request URI"
+msgstr "Peringatan: Permintaan URI Tidak Valid"
+
+msgid "The request URI is invalid, and probably contains illegal characters."
+msgstr "Permintaan URI tidak valid, dan mungkin mengandung karakter ilegal."
+
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr "Jika Anda mengeklik tautan, periksa bagian akhir URI apakah ada karakter yang salah ditambahkan oleh browser.Jika Anda mengklik sebuah tautan, periksa akhiran URI atas segala karakter yang secara keliru ditambahkan oleh peramban."
+
+msgid "The Base32 address is invalid."
+msgstr "Alamat Base32 tidak valid."
 
 msgid "This seems to be a bad destination:"
 msgstr "Ini sepertinya menjadi tujuan yang buruk:"

@@ -257,14 +257,14 @@ msgstr "Hiba az e-mail küldésekor"
 msgid "Mail sent."
 msgstr "Levél elküldve."
 
-msgid "Send"
-msgstr "Küldés"
+msgid "Cancel"
+msgstr "Mégse"
 
 msgid "Save as Draft"
 msgstr "Mentés piszkozatként"
 
-msgid "Cancel"
-msgstr "Mégse"
+msgid "Send"
+msgstr "Küldés"
 
 msgid "From"
 msgstr "Innen"

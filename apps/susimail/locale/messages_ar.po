@@ -269,14 +269,14 @@ msgstr "خطأ في إرسال البريد"
 msgid "Mail sent."
 msgstr "تم إرسال البريد."
 
-msgid "Send"
-msgstr "أرسل"
+msgid "Cancel"
+msgstr "الغاء"
 
 msgid "Save as Draft"
 msgstr "حفظ كمسودة"
 
-msgid "Cancel"
-msgstr "الغاء"
+msgid "Send"
+msgstr "أرسل"
 
 msgid "From"
 msgstr "من"

@@ -23,6 +23,12 @@ msgstr "Tidak dapat terhubung ke I2P"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Kesalahan menghubungkan ke I2P - periksa pengaturan I2CP Anda!"
 
+msgid "Download already running: "
+msgstr ""
+
+msgid "Downloading"
+msgstr "Mengunduh"
+
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "Mengonfigurasi I2PSnark dengan opsi I2CP"
 
@@ -466,12 +472,23 @@ msgid "Anonymous BitTorrent Client"
 msgstr "Anonymous BitTorrent Client"
 
 #, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr ""
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr ""
+
+#, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "Apakah Anda yakin ingin menghapus file \\''{0}\\'' (data yang diunduh tidak akan dihapus)?Apakah anda yakin anda ingin menghapus file \\'' {0} \\'' (data yang sudah di download tidak akan dihapus)?"
 
+msgid "Note: Downloaded data will not be deleted."
+msgstr ""
+
 #, java-format
-msgid "Are you sure you want to delete torrent file {0} and all downloaded data?"
-msgstr "Apakah Anda yakin ingin menghapus torrent \\''{0}\\'' dan semua data yang diunduh?Apakah anda yakin anda ingin menghapus torrent \\'' {0} \\'' dan semua data yang telah didownload?"
+msgid "Deleting {0} and associated metadata only..."
+msgstr ""
 
 msgid "I2PSnark has stopped"
 msgstr "I2PSnark sudah berhenti"
@@ -484,6 +501,9 @@ msgstr "Torrent"
 
 msgid "Refresh page"
 msgstr "Halaman Refresh"
+
+msgid "Configure"
+msgstr "Konfigurasi"
 
 msgid "Forum"
 msgstr "Forum"
@@ -524,36 +544,6 @@ msgstr "penyegaran halaman"
 
 msgid "Warning - No I2P"
 msgstr "Peringatan - Tidak ada I2P"
-
-msgid "Search"
-msgstr "Mencari"
-
-msgid "Show All"
-msgstr "Tampilkan Semua"
-
-msgid "Active"
-msgstr "Aktif"
-
-msgid "Inactive"
-msgstr "Tidak aktif"
-
-msgid "Connected"
-msgstr "Terhubung"
-
-msgid "Downloading"
-msgstr "Mengunduh"
-
-msgid "Seeding"
-msgstr "Seeding"
-
-msgid "Complete"
-msgstr "Selesai"
-
-msgid "Incomplete"
-msgstr "Tidak lengkap"
-
-msgid "Stopped"
-msgstr "Dihentikan"
 
 msgid "Status"
 msgstr "Status"
@@ -634,35 +624,30 @@ msgstr "Tidak ditemukan torrent."
 msgid "No torrents loaded."
 msgstr "Tidak ada torrent dimuat."
 
-msgid "Totals"
-msgstr "Total"
-
 #, java-format
 msgid "1 torrent"
 msgid_plural "{0} torrents"
 msgstr[0] "{0} torrent"
 
-#, java-format
-msgid "1 connected peer"
-msgid_plural "{0} connected peers"
-msgstr[0] "{0} peer yang terhubung"
+msgid "Total size of loaded torrents"
+msgstr ""
 
 #, java-format
 msgid "1 DHT peer"
 msgid_plural "{0} DHT peers"
 msgstr[0] "{0} peer DHT"
 
-msgid "Configured maximum (actual usage may be less)"
-msgstr "Maksimum yang dikonfigurasi (penggunaan sebenarnya mungkin lebih sedikit)"
+msgid "Active downloads"
+msgstr ""
 
-msgid "Tunnels"
-msgstr "Terowongan"
+msgid "Active uploads"
+msgstr ""
 
-msgid "in"
-msgstr "masuk"
+msgid "Active Inbound tunnels"
+msgstr ""
 
-msgid "out"
-msgstr "keluar"
+msgid "Active Outbound tunnels"
+msgstr ""
 
 msgid "Estimated download time for all torrents"
 msgstr "Perkiraan waktu pengunduhan untuk semua torrent"
@@ -679,17 +664,41 @@ msgstr "Total data yang diunggah (untuk torrent yang terdaftar)"
 msgid "Total upload speed"
 msgstr "Total kecepatan unggah"
 
-msgid "Enable Debug Mode"
-msgstr "Aktifkan Mode Debug"
-
-msgid "Disable Debug Mode"
-msgstr "Nonaktifkan Mode Debug"
+msgid "Toggle Debug Mode"
+msgstr ""
 
 msgid "Normal Mode"
 msgstr "Modus Biasa"
 
 msgid "No DHT Peers"
 msgstr "Tidak Ada Rekan DHT"
+
+msgid "Search"
+msgstr "Mencari"
+
+msgid "Show All"
+msgstr "Tampilkan Semua"
+
+msgid "Active"
+msgstr "Aktif"
+
+msgid "Inactive"
+msgstr "Tidak aktif"
+
+msgid "Connected"
+msgstr "Terhubung"
+
+msgid "Seeding"
+msgstr "Seeding"
+
+msgid "Complete"
+msgstr "Selesai"
+
+msgid "Incomplete"
+msgstr "Tidak lengkap"
+
+msgid "Stopped"
+msgstr "Dihentikan"
 
 msgid "First"
 msgstr "Pertama"
@@ -1044,9 +1053,6 @@ msgstr "Untuk mengubah theme secara manual, nonaktifkan universal theming"
 msgid "Universal theming is enabled."
 msgstr "Universal theming diaktifkan."
 
-msgid "Configure"
-msgstr "Konfigurasi"
-
 msgid "Refresh time"
 msgstr "Waktu refresh"
 
@@ -1067,12 +1073,6 @@ msgstr "torrent"
 
 msgid "Language"
 msgstr "Bahasa"
-
-msgid "Smart torrent sorting"
-msgstr "Smart torrent sorting"
-
-msgid "Ignore words such as 'a' and 'the' when sorting"
-msgstr "Abaikan kata-kata seperti 'a' dan 'the' ketika menyortir"
 
 msgid "Collapsible panels"
 msgstr "Collapsible panels"
@@ -1304,6 +1304,15 @@ msgstr "Ini mengonfigurasi jumlah maksimum terowongan yang akan dibuka, ditentuk
 msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
 msgstr "Mengubah pengaturan ini menjadi kurang dari 3 lompatan dapat meningkatkan kecepatan dengan mengorbankan anonimitas dan tidak disarankan"
 
+msgid "Sequential piece or file order not saved - feature currently broken."
+msgstr ""
+
+msgid "Unknown command"
+msgstr ""
+
+msgid "Please retry form submission (bad nonce)"
+msgstr ""
+
 msgid "Info hash"
 msgstr "Info hash"
 
@@ -1485,3 +1494,14 @@ msgstr "Simpan Perubahan"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent harus dihentikan"
+
+#, java-format
+
+
+
+
+
+
+
+
+

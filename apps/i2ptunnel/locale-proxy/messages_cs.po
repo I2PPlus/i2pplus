@@ -8,8 +8,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
 
-msgid "Warning: Invalid Request URI"
-msgstr "Varování: Neplatný identifikátor URI požadavku"
+msgid "Website Unknown"
+msgstr "Webová stránka neznámá"
 
 msgid "Router Console"
 msgstr "Konzole routeru"
@@ -25,71 +25,6 @@ msgstr "Konfigurace"
 
 msgid "Help"
 msgstr "Pomoc"
-
-msgid "The request URI is invalid, and probably contains illegal characters."
-msgstr "Identifikátor URI požadavku je neplatný a pravděpodobně obsahuje nepovolené znaky."
-
-msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
-msgstr "Pokud jste klikli na odkaz, zkontrolujte na konci URI znaky, které prohlížeč omylem přidal."
-
-msgid "Connection Reset"
-msgstr "Reset připojení"
-
-msgid "The connection to the website was reset while the page was loading."
-msgstr "Při načítání stránky bylo resetováno připojení k webu."
-
-msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Webová stránka může být dočasně nedostupná, příliš zaneprázdněná nebo vám zablokovala přístup."
-
-#, java-format
-msgid "You may want to {0}retry{1}."
-msgstr "Můžete to {0}zkusit znovu{1}."
-
-#, java-format
-msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
-msgstr "Pokud necháte tuto stránku otevřenou, pokusí se automaticky znovu připojit k webu každých {0} sekund po neúspěšném pokusu o připojení."
-
-msgid "Could not find the following destination:"
-msgstr "Nelze najít následující cíl:"
-
-msgid "Warning: Non-HTTP Protocol"
-msgstr "VAROVÁNÍ: Protokol non-HTTP"
-
-msgid "The request uses a bad protocol."
-msgstr "Požadavek používá špatný protokol."
-
-msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
-msgstr "I2P HTTP Proxy podporuje pouze požadavky HTTP a HTTPS."
-
-msgid "Other protocols such as FTP are not allowed."
-msgstr "Jiné protokoly jako FTP nejsou povoleny."
-
-msgid "Warning: No Outproxy Configured"
-msgstr "VAROVÁNÍ: Žádná nakonfigurovaná outproxy"
-
-msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
-msgstr "Váš požadavek byl pro web mimo I2P, ale nemáte nakonfigurovaný žádný HTTP outproxy."
-
-msgid "Please configure an outproxy in I2PTunnel."
-msgstr "Nakonfigurujte prosím outproxy v I2PTunnel."
-
-msgid "Error: Request Denied"
-msgstr "Chyba: Požadavek odmítnut"
-
-msgid "Error: Cannot Access Router Console via I2P Proxy"
-msgstr "Chyba: Nelze získat přístup ke konzole směrovače přes I2P proxy"
-
-msgid "Your browser is misconfigured."
-msgstr "Váš prohlížeč je špatně nakonfigurován."
-
-msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
-msgstr "Nepoužívejte proxy pro přístup ke konzole routeru, localhost nebo místním cílům LAN."
-
-msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
-msgstr "Musíte zabránit tomu, aby 127.0.0.1 (nebo adresa, na které přistupujete ke konzole I2P) byla směrována přes http proxy I2P, obvykle vyloučením adresy v sekci konfigurace proxy vašeho prohlížeče."
-
-msgid "Website Unknown"
-msgstr "Webová stránka neznámá"
 
 msgid "Website Not Found in Addressbook"
 msgstr "Webová stránka nebyla nalezena v adresáři"
@@ -111,99 +46,35 @@ msgstr "V opačném případě najděte Base 32 nebo odkaz na pomocnou adresu ne
 msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
 msgstr "Vidíte tuto stránku často? Viz {0} FAQ {1} pro pomoc při {2} přidání některých předplatných {3} do vaší adresy."
 
-msgid "Website Unreachable"
-msgstr "Web je nedostupný"
+msgid "Could not find the following destination:"
+msgstr "Nelze najít následující cíl:"
 
-msgid "The website was not reachable, because its lease set was not found."
-msgstr "Webová stránka nebyla dostupná, protože nebyla nalezena její sada pro pronájem."
+msgid "Warning: Non-HTTP Protocol"
+msgstr "VAROVÁNÍ: Protokol non-HTTP"
 
-msgid "The website is probably down, but there could also be network congestion."
-msgstr "Webové stránky pravděpodobně nefungují, ale také může docházet k přetížení sítě."
+msgid "The request uses a bad protocol."
+msgstr "Požadavek používá špatný protokol."
 
-msgid "Outproxy Not Found"
-msgstr "Outproxy nenalezen"
+msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
+msgstr "I2P HTTP Proxy podporuje pouze požadavky HTTP a HTTPS."
 
-msgid "The HTTP Outproxy was not found."
-msgstr "HTTP Outproxy nebyl nalezen."
+msgid "Other protocols such as FTP are not allowed."
+msgstr "Jiné protokoly jako FTP nejsou povoleny."
 
-msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "Je offline, dochází k přetížení sítě nebo váš router ještě není dobře integrován s partnery."
+msgid "Error: Request Denied"
+msgstr "Chyba: Požadavek odmítnut"
 
-#, java-format
-msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
-msgstr "Můžete to {0}zkusit znovu{1}, protože to náhodně znovu vybere outproxy z fondu, který jste definovali {2}zde{3} (pokud jich máte nakonfigurováno více)."
+msgid "Error: Cannot Access Router Console via I2P Proxy"
+msgstr "Chyba: Nelze získat přístup ke konzole směrovače přes I2P proxy"
 
-#, java-format
-msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
-msgstr "Pokud budete mít i nadále potíže, možná budete chtít upravit svůj seznam outproxy {0}zde{1}."
+msgid "Your browser is misconfigured."
+msgstr "Váš prohlížeč je špatně nakonfigurován."
 
-msgid "Warning: Request Denied"
-msgstr "Varování: Požadavek zamítnut"
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
+msgstr "Nepoužívejte proxy pro přístup ke konzole routeru, localhost nebo místním cílům LAN."
 
-msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
-msgstr "Tato adresa se zdá být malformovaná. Ověřte prosím, že jste dodali platnou adresu!"
-
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "Pokusili jste se připojit k webu nebo umístění bez I2P."
-
-msgid "Outproxy Unreachable"
-msgstr "Outproxy nedosažitelný"
-
-msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
-msgstr "HTTP outproxy nebyl dosažitelný, protože používá možnosti šifrování, které vaše verze I2P nebo Java nepodporuje."
-
-msgid "Could not connect to the following destination:"
-msgstr "Nelze se připojit k následujícímu cíli:"
-
-msgid "Proxy Authorization Required"
-msgstr "Vyžaduje se oprávnění proxy"
-
-msgid "I2P HTTP Proxy Authorization Required"
-msgstr "Vyžaduje se autorizace I2P HTTP proxy"
-
-msgid "This proxy is configured to require a username and password for access."
-msgstr "Tento proxy je nakonfigurován tak, aby pro přístup vyžadoval uživatelské jméno a heslo."
-
-#, java-format
-msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
-msgstr "Zadejte své uživatelské jméno a heslo nebo zkontrolujte {0}konfiguraci routeru{1} nebo {2}konfiguraci I2PTunnel{3}."
-
-#, java-format
-msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
-msgstr "Chcete-li autorizaci deaktivovat, odeberte konfiguraci {0}i2ptunnel.proxy.auth=basic{1}, poté zastavte a restartujte tunel HTTP proxy."
-
-msgid "Warning: Invalid Destination"
-msgstr "Cíl tunelu"
-
-msgid "The website destination specified was not valid, or was otherwise unreachable."
-msgstr "Zadaný cíl webu nebyl platný nebo byl jinak nedostupný."
-
-msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
-msgstr "Možná jste vložili nesprávný řetězec Base 64 nebo odkaz, který sledujete, je špatný."
-
-msgid "The I2P host could also be offline."
-msgstr "Hostitel I2P může být také offline."
-
-msgid "The connection to the proxy was reset."
-msgstr "Spojení s proxy bylo resetováno."
-
-msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Proxy může být dočasně nedostupný, příliš zaneprázdněný nebo vám zablokoval přístup."
-
-msgid "The HTTP outproxy was not reachable, because its lease set was not found."
-msgstr "Outproxy HTTP nebyl dosažitelný, protože nebyla nalezena jeho sada zapůjčení."
-
-msgid "The outproxy is probably down, but there could also be network congestion."
-msgstr "Outproxy je pravděpodobně mimo provoz, ale také může docházet k přetížení sítě."
-
-msgid "Warning: Authorization Required"
-msgstr "Varování: Vyžaduje se autorizace"
-
-msgid "The website was not reachable."
-msgstr "Webová stránka nebyla dostupná."
-
-msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "Webové stránky jsou offline, dochází k přetížení sítě nebo váš router ještě není dobře integrován s partnery."
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "Musíte zabránit tomu, aby 127.0.0.1 (nebo adresa, na které přistupujete ke konzole I2P) byla směrována přes http proxy I2P, obvykle vyloučením adresy v sekci konfigurace proxy vašeho prohlížeče."
 
 msgid "Warning: Destination Key Conflict"
 msgstr "VAROVÁNÍ: Konflikt cílového klíče"
@@ -217,24 +88,81 @@ msgstr "Někdo se možná pokouší vydávat za jinou webovou stránku nebo lid�
 msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
 msgstr "Vyřešte konflikt tím, že se rozhodnete, kterému klíči důvěřujete, a potom buď ignorujte odkaz na pomocnou adresu adresy, nebo odstraňte položku hostitele z adresáře a znovu klepněte na odkaz pomocné adresy adresy."
 
-msgid "The Base32 address is invalid."
-msgstr "Adresa Base32 je neplatná."
+msgid "Connection Reset"
+msgstr "Reset připojení"
 
-msgid "Warning: Bad Address Helper"
-msgstr "Varování: Špatná adresa pomocník"
+msgid "The connection to the website was reset while the page was loading."
+msgstr "Při načítání stránky bylo resetováno připojení k webu."
+
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Webová stránka může být dočasně nedostupná, příliš zaneprázdněná nebo vám zablokovala přístup."
 
 #, java-format
-msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
-msgstr "Pomocný klíč v adrese URL ({0}i2paddresshelper={1}) nelze vyřešit."
+msgid "You may want to {0}retry{1}."
+msgstr "Můžete to {0}zkusit znovu{1}."
 
-msgid "It seems to be garbage data, or a mistyped Base 32 address."
-msgstr "Zdá se, že jsou to nesmyslná data nebo chybně zadaná adresa Base 32."
+#, java-format
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
+msgstr "Pokud necháte tuto stránku otevřenou, pokusí se automaticky znovu připojit k webu každých {0} sekund po neúspěšném pokusu o připojení."
 
-msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
-msgstr "Zkontrolujte svou adresu URL a pokuste se opravit pomocný klíč tak, aby byl platným názvem hostitele Base 32 nebo klíčem Base 64."
+msgid "Website Unreachable"
+msgstr "Web je nedostupný"
 
 msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
 msgstr "Webové stránky nebyly dostupné, protože používají možnosti šifrování, které vaše verze I2P nebo Java nepodporuje."
+
+msgid "Could not connect to the following destination:"
+msgstr "Nelze se připojit k následujícímu cíli:"
+
+msgid "The website was not reachable, because its lease set was not found."
+msgstr "Webová stránka nebyla dostupná, protože nebyla nalezena její sada pro pronájem."
+
+msgid "The website is probably down, but there could also be network congestion."
+msgstr "Webové stránky pravděpodobně nefungují, ale také může docházet k přetížení sítě."
+
+msgid "The connection to the proxy was reset."
+msgstr "Spojení s proxy bylo resetováno."
+
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Proxy může být dočasně nedostupný, příliš zaneprázdněný nebo vám zablokoval přístup."
+
+#, java-format
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "Můžete to {0}zkusit znovu{1}, protože to náhodně znovu vybere outproxy z fondu, který jste definovali {2}zde{3} (pokud jich máte nakonfigurováno více)."
+
+#, java-format
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr "Pokud budete mít i nadále potíže, možná budete chtít upravit svůj seznam outproxy {0}zde{1}."
+
+msgid "Outproxy Unreachable"
+msgstr "Outproxy nedosažitelný"
+
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "HTTP outproxy nebyl dosažitelný, protože používá možnosti šifrování, které vaše verze I2P nebo Java nepodporuje."
+
+msgid "The website was not reachable."
+msgstr "Webová stránka nebyla dostupná."
+
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Webové stránky jsou offline, dochází k přetížení sítě nebo váš router ještě není dobře integrován s partnery."
+
+msgid "Warning: No Outproxy Configured"
+msgstr "VAROVÁNÍ: Žádná nakonfigurovaná outproxy"
+
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr "Váš požadavek byl pro web mimo I2P, ale nemáte nakonfigurovaný žádný HTTP outproxy."
+
+msgid "Please configure an outproxy in I2PTunnel."
+msgstr "Nakonfigurujte prosím outproxy v I2PTunnel."
+
+msgid "Outproxy Not Found"
+msgstr "Outproxy nenalezen"
+
+msgid "The HTTP Outproxy was not found."
+msgstr "HTTP Outproxy nebyl nalezen."
+
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Je offline, dochází k přetížení sítě nebo váš router ještě není dobře integrován s partnery."
 
 msgid "Information: New Host Name"
 msgstr "Informace: Nové jméno hostitele"
@@ -256,6 +184,78 @@ msgstr "Pokud jej neuložíte, název hostitele bude po příštím restartu rou
 
 msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
 msgstr "Pokud si nepřejete navštívit tohoto hostitele, klikněte ve svém prohlížeči na tlačítko \"zpět\"."
+
+msgid "Proxy Authorization Required"
+msgstr "Vyžaduje se oprávnění proxy"
+
+msgid "I2P HTTP Proxy Authorization Required"
+msgstr "Vyžaduje se autorizace I2P HTTP proxy"
+
+msgid "This proxy is configured to require a username and password for access."
+msgstr "Tento proxy je nakonfigurován tak, aby pro přístup vyžadoval uživatelské jméno a heslo."
+
+#, java-format
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "Zadejte své uživatelské jméno a heslo nebo zkontrolujte {0}konfiguraci routeru{1} nebo {2}konfiguraci I2PTunnel{3}."
+
+#, java-format
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "Chcete-li autorizaci deaktivovat, odeberte konfiguraci {0}i2ptunnel.proxy.auth=basic{1}, poté zastavte a restartujte tunel HTTP proxy."
+
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr "Outproxy HTTP nebyl dosažitelný, protože nebyla nalezena jeho sada zapůjčení."
+
+msgid "The outproxy is probably down, but there could also be network congestion."
+msgstr "Outproxy je pravděpodobně mimo provoz, ale také může docházet k přetížení sítě."
+
+msgid "Warning: Request Denied"
+msgstr "Varování: Požadavek zamítnut"
+
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr "Tato adresa se zdá být malformovaná. Ověřte prosím, že jste dodali platnou adresu!"
+
+msgid "You attempted to connect to a non-I2P website or location."
+msgstr "Pokusili jste se připojit k webu nebo umístění bez I2P."
+
+msgid "Warning: Bad Address Helper"
+msgstr "Varování: Špatná adresa pomocník"
+
+#, java-format
+msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgstr "Pomocný klíč v adrese URL ({0}i2paddresshelper={1}) nelze vyřešit."
+
+msgid "It seems to be garbage data, or a mistyped Base 32 address."
+msgstr "Zdá se, že jsou to nesmyslná data nebo chybně zadaná adresa Base 32."
+
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr "Zkontrolujte svou adresu URL a pokuste se opravit pomocný klíč tak, aby byl platným názvem hostitele Base 32 nebo klíčem Base 64."
+
+msgid "Warning: Invalid Destination"
+msgstr "Cíl tunelu"
+
+msgid "The website destination specified was not valid, or was otherwise unreachable."
+msgstr "Zadaný cíl webu nebyl platný nebo byl jinak nedostupný."
+
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr "Možná jste vložili nesprávný řetězec Base 64 nebo odkaz, který sledujete, je špatný."
+
+msgid "The I2P host could also be offline."
+msgstr "Hostitel I2P může být také offline."
+
+msgid "Warning: Authorization Required"
+msgstr "Varování: Vyžaduje se autorizace"
+
+msgid "Warning: Invalid Request URI"
+msgstr "Varování: Neplatný identifikátor URI požadavku"
+
+msgid "The request URI is invalid, and probably contains illegal characters."
+msgstr "Identifikátor URI požadavku je neplatný a pravděpodobně obsahuje nepovolené znaky."
+
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr "Pokud jste klikli na odkaz, zkontrolujte na konci URI znaky, které prohlížeč omylem přidal."
+
+msgid "The Base32 address is invalid."
+msgstr "Adresa Base32 je neplatná."
 
 msgid "This seems to be a bad destination:"
 msgstr "Zdá se, že je to špatný cíl:"

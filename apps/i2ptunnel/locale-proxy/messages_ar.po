@@ -8,8 +8,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-msgid "Warning: Invalid Request URI"
-msgstr "تحذير: URI للطلب غير صالح"
+msgid "Website Unknown"
+msgstr "الموقع غير معروف"
 
 msgid "Router Console"
 msgstr "مركز تحكم I2P"
@@ -25,71 +25,6 @@ msgstr "تم حفظ تغيرات الاعدادات"
 
 msgid "Help"
 msgstr "المساعدة"
-
-msgid "The request URI is invalid, and probably contains illegal characters."
-msgstr "معرف URI للطلب غير صالح، ومن المحتمل أن يحتوي على أحرف غير قانونية."
-
-msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
-msgstr "إذا قمت بالنقر فوق رابط، فتحقق من نهاية URI بحثًا عن أي أحرف أضافها المتصفح عن طريق الخطأ."
-
-msgid "Connection Reset"
-msgstr "إعادة ضبط الاتصال"
-
-msgid "The connection to the website was reset while the page was loading."
-msgstr "تم إعادة ضبط الاتصال بالموقع أثناء تحميل الصفحة."
-
-msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "قد يكون موقع الويب غير متاح مؤقتًا، أو مشغولًا جدًا، أو أنه قام بحظر وصولك."
-
-#, java-format
-msgid "You may want to {0}retry{1}."
-msgstr "قد ترغب في {0}إعادة المحاولة{1}."
-
-#, java-format
-msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
-msgstr "إذا تركت هذه الصفحة مفتوحة، فسوف تقوم تلقائيًا بإعادة محاولة الاتصال بموقع الويب كل {0} ثانية بعد محاولة اتصال فاشلة."
-
-msgid "Could not find the following destination:"
-msgstr "لا يمكن العثور على الوجهة التالية:"
-
-msgid "Warning: Non-HTTP Protocol"
-msgstr "تحذير: بروتوكول غير HTTP"
-
-msgid "The request uses a bad protocol."
-msgstr "الطلب يستخدم بروتوكولًا سيئًا."
-
-msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
-msgstr "يدعم وكيل I2P HTTP طلبات HTTP وHTTPS فقط."
-
-msgid "Other protocols such as FTP are not allowed."
-msgstr "البروتوكولات الأخرى مثل FTP غير مسموح بها."
-
-msgid "Warning: No Outproxy Configured"
-msgstr "تحذير: لم يتم تكوين وكيل خارجي"
-
-msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
-msgstr "كان طلبك يتعلق بموقع خارج I2P، ولكن لم يتم تكوين وكيل خارجي لـ HTTP."
-
-msgid "Please configure an outproxy in I2PTunnel."
-msgstr "الرجاء تكوين وكيل خارجي في I2PTunnel."
-
-msgid "Error: Request Denied"
-msgstr "خطأ: تم رفض الطلب"
-
-msgid "Error: Cannot Access Router Console via I2P Proxy"
-msgstr "خطأ: لا يمكن الوصول إلى وحدة تحكم جهاز التوجيه عبر وكيل I2P"
-
-msgid "Your browser is misconfigured."
-msgstr "تم تكوين متصفحك بشكل خاطئ."
-
-msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
-msgstr "لا تستخدم الوكيل للوصول إلى وحدة تحكم جهاز التوجيه أو المضيف المحلي أو وجهات الشبكة المحلية المحلية."
-
-msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
-msgstr "تحتاج إلى منع توجيه 127.0.0.1 (أو العنوان الذي تدخل إلى وحدة تحكم I2P عليه) عبر وكيل http الخاص بـ I2P، عادةً عن طريق استبعاد العنوان الموجود في قسم تكوين الوكيل في متصفحك."
-
-msgid "Website Unknown"
-msgstr "الموقع غير معروف"
 
 msgid "Website Not Found in Addressbook"
 msgstr "لم يتم العثور على موقع الويب في دفتر العناوين"
@@ -111,99 +46,35 @@ msgstr "بخلاف ذلك، ابحث عن رابط مساعد Base 32 أو ال�
 msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
 msgstr "رؤية هذه الصفحة في كثير من الأحيان؟ رؤية هذه الصفحة في كثير من الأحيان؟ راجع {0} الأسئلة الشائعة {1} للمساعدة في {2} إضافة بعض الاشتراكات {3} إلى دفتر العناوين الخاص بك."
 
-msgid "Website Unreachable"
-msgstr "موقع الويب غير قابل للوصول"
+msgid "Could not find the following destination:"
+msgstr "لا يمكن العثور على الوجهة التالية:"
 
-msgid "The website was not reachable, because its lease set was not found."
-msgstr "تعذر الوصول إلى الموقع، لأنه لم يتم العثور على مجموعة الإيجار الخاصة به."
+msgid "Warning: Non-HTTP Protocol"
+msgstr "تحذير: بروتوكول غير HTTP"
 
-msgid "The website is probably down, but there could also be network congestion."
-msgstr "من المحتمل أن يكون موقع الويب معطلاً، ولكن قد يكون هناك أيضًا ازدحام في الشبكة."
+msgid "The request uses a bad protocol."
+msgstr "الطلب يستخدم بروتوكولًا سيئًا."
 
-msgid "Outproxy Not Found"
-msgstr "الوكيل الخارجي غير موجود"
+msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
+msgstr "يدعم وكيل I2P HTTP طلبات HTTP وHTTPS فقط."
 
-msgid "The HTTP Outproxy was not found."
-msgstr "لم يتم العثور على HTTP Outproxy."
+msgid "Other protocols such as FTP are not allowed."
+msgstr "البروتوكولات الأخرى مثل FTP غير مسموح بها."
 
-msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "إنه غير متصل بالإنترنت، أو يوجد ازدحام في الشبكة، أو أن جهاز التوجيه الخاص بك لم يتكامل بعد بشكل جيد مع أقرانه."
+msgid "Error: Request Denied"
+msgstr "خطأ: تم رفض الطلب"
 
-#, java-format
-msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
-msgstr "قد ترغب في {0}إعادة المحاولة{1} لأن هذا سيؤدي بشكل عشوائي إلى إعادة تحديد وكيل خارجي من المجموعة التي حددتها {2}هنا{3} (إذا كان لديك أكثر من وكيل تم تكوينه)."
+msgid "Error: Cannot Access Router Console via I2P Proxy"
+msgstr "خطأ: لا يمكن الوصول إلى وحدة تحكم جهاز التوجيه عبر وكيل I2P"
 
-#, java-format
-msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
-msgstr "إذا كنت لا تزال تواجه مشكلة، فقد ترغب في تعديل قائمة الوكيل الخارجي لديك {0}هنا{1}."
+msgid "Your browser is misconfigured."
+msgstr "تم تكوين متصفحك بشكل خاطئ."
 
-msgid "Warning: Request Denied"
-msgstr "تحذير: تم رفض الطلب"
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
+msgstr "لا تستخدم الوكيل للوصول إلى وحدة تحكم جهاز التوجيه أو المضيف المحلي أو وجهات الشبكة المحلية المحلية."
 
-msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
-msgstr "يبدو أن هذا العنوان مشوه. يرجى التحقق من أنك قد قدمت عنوانًا صالحًا!"
-
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "لقد حاولت الاتصال بموقع أو موقع غير تابع لـ I2P."
-
-msgid "Outproxy Unreachable"
-msgstr "الوكيل الخارجي غير قابل للوصول"
-
-msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
-msgstr "لم يكن من الممكن الوصول إلى وكيل HTTP الخارجي، لأنه يستخدم خيارات التشفير التي لا يدعمها إصدار I2P أو Java الخاص بك."
-
-msgid "Could not connect to the following destination:"
-msgstr "تعذر الاتصال بالوجهة التالية:"
-
-msgid "Proxy Authorization Required"
-msgstr "اعدادات البروكسي الخارجي"
-
-msgid "I2P HTTP Proxy Authorization Required"
-msgstr "اعدادات البروكسي الخارجي"
-
-msgid "This proxy is configured to require a username and password for access."
-msgstr "تم تكوين هذا الوكيل ليطلب اسم مستخدم وكلمة مرور للوصول."
-
-#, java-format
-msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
-msgstr "الرجاء إدخال اسم المستخدم وكلمة المرور، أو التحقق من {0}تكوين جهاز التوجيه{1} أو {2}تكوين I2PTunnel{3}."
-
-#, java-format
-msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
-msgstr "لتعطيل التفويض، قم بإزالة التكوين {0}i2ptunnel.proxy.auth=basic{1}، ثم أوقف نفق وكيل HTTP وأعد تشغيله."
-
-msgid "Warning: Invalid Destination"
-msgstr "وجهة محلية"
-
-msgid "The website destination specified was not valid, or was otherwise unreachable."
-msgstr "وجهة موقع الويب المحددة لم تكن صالحة، أو لم يكن بالإمكان الوصول إليها."
-
-msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
-msgstr "ربما قمت بلصق سلسلة Base 64 الخاطئة أو أن الرابط الذي تتبعه سيء."
-
-msgid "The I2P host could also be offline."
-msgstr "قد يكون مضيف I2P غير متصل أيضًا."
-
-msgid "The connection to the proxy was reset."
-msgstr "تم إعادة تعيين الاتصال بالوكيل."
-
-msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "قد يكون الوكيل غير متاح مؤقتًا، أو مشغولًا جدًا، أو أنه قام بحظر وصولك."
-
-msgid "The HTTP outproxy was not reachable, because its lease set was not found."
-msgstr "لم يكن من الممكن الوصول إلى وكيل HTTP الخارجي، لأنه لم يتم العثور على مجموعة الإيجار الخاصة به."
-
-msgid "The outproxy is probably down, but there could also be network congestion."
-msgstr "من المحتمل أن يكون الوكيل الخارجي معطلاً، ولكن قد يكون هناك أيضًا ازدحام في الشبكة."
-
-msgid "Warning: Authorization Required"
-msgstr "تحذير: التفويض مطلوب"
-
-msgid "The website was not reachable."
-msgstr "لم يكن من الممكن الوصول إلى الموقع."
-
-msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "موقع الويب غير متصل بالإنترنت، أو يوجد ازدحام في الشبكة، أو أن جهاز التوجيه الخاص بك لم يتكامل بعد بشكل جيد مع أقرانه."
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "تحتاج إلى منع توجيه 127.0.0.1 (أو العنوان الذي تدخل إلى وحدة تحكم I2P عليه) عبر وكيل http الخاص بـ I2P، عادةً عن طريق استبعاد العنوان الموجود في قسم تكوين الوكيل في متصفحك."
 
 msgid "Warning: Destination Key Conflict"
 msgstr "تحذير: تعارض مفتاح الوجهة"
@@ -217,24 +88,81 @@ msgstr "قد يحاول شخص ما انتحال شخصية موقع ويب آخ
 msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
 msgstr "قم بحل التعارض عن طريق تحديد المفتاح الذي تثق به، ثم قم بتجاهل الرابط المساعد للعنوان، أو قم بحذف إدخال المضيف من دفتر العناوين الخاص بك وانقر فوق الرابط المساعد للعنوان مرة أخرى."
 
-msgid "The Base32 address is invalid."
-msgstr "عنوان Base32 غير صالح."
+msgid "Connection Reset"
+msgstr "إعادة ضبط الاتصال"
 
-msgid "Warning: Bad Address Helper"
-msgstr "تحذير: مساعد عنوان غير صحيح"
+msgid "The connection to the website was reset while the page was loading."
+msgstr "تم إعادة ضبط الاتصال بالموقع أثناء تحميل الصفحة."
+
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "قد يكون موقع الويب غير متاح مؤقتًا، أو مشغولًا جدًا، أو أنه قام بحظر وصولك."
 
 #, java-format
-msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
-msgstr "المفتاح المساعد في عنوان URL ({0}i2paddresshelper={1}) غير قابل للحل."
+msgid "You may want to {0}retry{1}."
+msgstr "قد ترغب في {0}إعادة المحاولة{1}."
 
-msgid "It seems to be garbage data, or a mistyped Base 32 address."
-msgstr "يبدو أنها بيانات غير صحيحة، أو عنوان Base 32 مكتوب بشكل خاطئ."
+#, java-format
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
+msgstr "إذا تركت هذه الصفحة مفتوحة، فسوف تقوم تلقائيًا بإعادة محاولة الاتصال بموقع الويب كل {0} ثانية بعد محاولة اتصال فاشلة."
 
-msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
-msgstr "تحقق من عنوان URL الخاص بك لمحاولة إصلاح المفتاح المساعد ليكون اسم مضيف Base 32 أو مفتاح Base 64 صالحًا."
+msgid "Website Unreachable"
+msgstr "موقع الويب غير قابل للوصول"
 
 msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
 msgstr "لم يكن من الممكن الوصول إلى موقع الويب، لأنه يستخدم خيارات التشفير التي لا يدعمها إصدار I2P أو Java الخاص بك."
+
+msgid "Could not connect to the following destination:"
+msgstr "تعذر الاتصال بالوجهة التالية:"
+
+msgid "The website was not reachable, because its lease set was not found."
+msgstr "تعذر الوصول إلى الموقع، لأنه لم يتم العثور على مجموعة الإيجار الخاصة به."
+
+msgid "The website is probably down, but there could also be network congestion."
+msgstr "من المحتمل أن يكون موقع الويب معطلاً، ولكن قد يكون هناك أيضًا ازدحام في الشبكة."
+
+msgid "The connection to the proxy was reset."
+msgstr "تم إعادة تعيين الاتصال بالوكيل."
+
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "قد يكون الوكيل غير متاح مؤقتًا، أو مشغولًا جدًا، أو أنه قام بحظر وصولك."
+
+#, java-format
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "قد ترغب في {0}إعادة المحاولة{1} لأن هذا سيؤدي بشكل عشوائي إلى إعادة تحديد وكيل خارجي من المجموعة التي حددتها {2}هنا{3} (إذا كان لديك أكثر من وكيل تم تكوينه)."
+
+#, java-format
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr "إذا كنت لا تزال تواجه مشكلة، فقد ترغب في تعديل قائمة الوكيل الخارجي لديك {0}هنا{1}."
+
+msgid "Outproxy Unreachable"
+msgstr "الوكيل الخارجي غير قابل للوصول"
+
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "لم يكن من الممكن الوصول إلى وكيل HTTP الخارجي، لأنه يستخدم خيارات التشفير التي لا يدعمها إصدار I2P أو Java الخاص بك."
+
+msgid "The website was not reachable."
+msgstr "لم يكن من الممكن الوصول إلى الموقع."
+
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "موقع الويب غير متصل بالإنترنت، أو يوجد ازدحام في الشبكة، أو أن جهاز التوجيه الخاص بك لم يتكامل بعد بشكل جيد مع أقرانه."
+
+msgid "Warning: No Outproxy Configured"
+msgstr "تحذير: لم يتم تكوين وكيل خارجي"
+
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr "كان طلبك يتعلق بموقع خارج I2P، ولكن لم يتم تكوين وكيل خارجي لـ HTTP."
+
+msgid "Please configure an outproxy in I2PTunnel."
+msgstr "الرجاء تكوين وكيل خارجي في I2PTunnel."
+
+msgid "Outproxy Not Found"
+msgstr "الوكيل الخارجي غير موجود"
+
+msgid "The HTTP Outproxy was not found."
+msgstr "لم يتم العثور على HTTP Outproxy."
+
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "إنه غير متصل بالإنترنت، أو يوجد ازدحام في الشبكة، أو أن جهاز التوجيه الخاص بك لم يتكامل بعد بشكل جيد مع أقرانه."
 
 msgid "Information: New Host Name"
 msgstr "المعلومات: اسم المضيف الجديد"
@@ -256,6 +184,78 @@ msgstr "إذا لم تقم بحفظه، فسيتم نسيان اسم المضي�
 
 msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
 msgstr "إذا كنت لا ترغب في زيارة هذا المضيف، انقر فوق الزر \"رجوع\" في متصفحك."
+
+msgid "Proxy Authorization Required"
+msgstr "اعدادات البروكسي الخارجي"
+
+msgid "I2P HTTP Proxy Authorization Required"
+msgstr "اعدادات البروكسي الخارجي"
+
+msgid "This proxy is configured to require a username and password for access."
+msgstr "تم تكوين هذا الوكيل ليطلب اسم مستخدم وكلمة مرور للوصول."
+
+#, java-format
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "الرجاء إدخال اسم المستخدم وكلمة المرور، أو التحقق من {0}تكوين جهاز التوجيه{1} أو {2}تكوين I2PTunnel{3}."
+
+#, java-format
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "لتعطيل التفويض، قم بإزالة التكوين {0}i2ptunnel.proxy.auth=basic{1}، ثم أوقف نفق وكيل HTTP وأعد تشغيله."
+
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr "لم يكن من الممكن الوصول إلى وكيل HTTP الخارجي، لأنه لم يتم العثور على مجموعة الإيجار الخاصة به."
+
+msgid "The outproxy is probably down, but there could also be network congestion."
+msgstr "من المحتمل أن يكون الوكيل الخارجي معطلاً، ولكن قد يكون هناك أيضًا ازدحام في الشبكة."
+
+msgid "Warning: Request Denied"
+msgstr "تحذير: تم رفض الطلب"
+
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr "يبدو أن هذا العنوان مشوه. يرجى التحقق من أنك قد قدمت عنوانًا صالحًا!"
+
+msgid "You attempted to connect to a non-I2P website or location."
+msgstr "لقد حاولت الاتصال بموقع أو موقع غير تابع لـ I2P."
+
+msgid "Warning: Bad Address Helper"
+msgstr "تحذير: مساعد عنوان غير صحيح"
+
+#, java-format
+msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgstr "المفتاح المساعد في عنوان URL ({0}i2paddresshelper={1}) غير قابل للحل."
+
+msgid "It seems to be garbage data, or a mistyped Base 32 address."
+msgstr "يبدو أنها بيانات غير صحيحة، أو عنوان Base 32 مكتوب بشكل خاطئ."
+
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr "تحقق من عنوان URL الخاص بك لمحاولة إصلاح المفتاح المساعد ليكون اسم مضيف Base 32 أو مفتاح Base 64 صالحًا."
+
+msgid "Warning: Invalid Destination"
+msgstr "وجهة محلية"
+
+msgid "The website destination specified was not valid, or was otherwise unreachable."
+msgstr "وجهة موقع الويب المحددة لم تكن صالحة، أو لم يكن بالإمكان الوصول إليها."
+
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr "ربما قمت بلصق سلسلة Base 64 الخاطئة أو أن الرابط الذي تتبعه سيء."
+
+msgid "The I2P host could also be offline."
+msgstr "قد يكون مضيف I2P غير متصل أيضًا."
+
+msgid "Warning: Authorization Required"
+msgstr "تحذير: التفويض مطلوب"
+
+msgid "Warning: Invalid Request URI"
+msgstr "تحذير: URI للطلب غير صالح"
+
+msgid "The request URI is invalid, and probably contains illegal characters."
+msgstr "معرف URI للطلب غير صالح، ومن المحتمل أن يحتوي على أحرف غير قانونية."
+
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr "إذا قمت بالنقر فوق رابط، فتحقق من نهاية URI بحثًا عن أي أحرف أضافها المتصفح عن طريق الخطأ."
+
+msgid "The Base32 address is invalid."
+msgstr "عنوان Base32 غير صالح."
 
 msgid "This seems to be a bad destination:"
 msgstr "يبدو أن هذه وجهة سيئة:"

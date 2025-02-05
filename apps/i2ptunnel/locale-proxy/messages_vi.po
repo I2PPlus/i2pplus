@@ -8,8 +8,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgid "Warning: Invalid Request URI"
-msgstr "Cảnh báo: URI yêu cầu không hợp lệ"
+msgid "Website Unknown"
+msgstr "Trang web không xác định"
 
 msgid "Router Console"
 msgstr "Bảng điều khiển bộ định tuyến"
@@ -25,71 +25,6 @@ msgstr "Cấu hình"
 
 msgid "Help"
 msgstr "Giúp đỡ"
-
-msgid "The request URI is invalid, and probably contains illegal characters."
-msgstr "URI yêu cầu không hợp lệ và có thể chứa các ký tự không hợp lệ."
-
-msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
-msgstr "Nếu bạn nhấp vào một liên kết, hãy kiểm tra phần cuối của URI xem có bất kỳ ký tự nào mà trình duyệt đã thêm nhầm vào không."
-
-msgid "Connection Reset"
-msgstr "Thiết lập lại kết nối"
-
-msgid "The connection to the website was reset while the page was loading."
-msgstr "Kết nối tới trang web được đặt lại trong khi trang đang tải."
-
-msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Trang web có thể tạm thời không khả dụng, quá bận hoặc đã chặn quyền truy cập của bạn."
-
-#, java-format
-msgid "You may want to {0}retry{1}."
-msgstr "Bạn có thể muốn {0}thử lại{1}."
-
-#, java-format
-msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
-msgstr "Nếu bạn để trang này mở, nó sẽ tự động thử kết nối lại với trang web mỗi {0} giây sau lần thử kết nối không thành công."
-
-msgid "Could not find the following destination:"
-msgstr "Không thể tìm thấy điểm đến sau:"
-
-msgid "Warning: Non-HTTP Protocol"
-msgstr "Cảnh báo: Giao thức không phải HTTP"
-
-msgid "The request uses a bad protocol."
-msgstr "Yêu cầu sử dụng giao thức không hợp lệ."
-
-msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
-msgstr "Proxy HTTP I2P chỉ hỗ trợ các yêu cầu HTTP và HTTPS."
-
-msgid "Other protocols such as FTP are not allowed."
-msgstr "Các giao thức khác như FTP không được phép."
-
-msgid "Warning: No Outproxy Configured"
-msgstr "Cảnh báo: Không có cấu hình Outproxy"
-
-msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
-msgstr "Yêu cầu của bạn dành cho một trang web bên ngoài I2P nhưng bạn chưa định cấu hình proxy ngoài HTTP."
-
-msgid "Please configure an outproxy in I2PTunnel."
-msgstr "Vui lòng định cấu hình proxy ngoài trong I2PTunnel."
-
-msgid "Error: Request Denied"
-msgstr "Lỗi: Yêu cầu bị từ chối"
-
-msgid "Error: Cannot Access Router Console via I2P Proxy"
-msgstr "Lỗi: Không thể truy cập Bảng điều khiển Bộ định tuyến qua Proxy I2P"
-
-msgid "Your browser is misconfigured."
-msgstr "Trình duyệt của bạn bị định cấu hình sai."
-
-msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
-msgstr "Không sử dụng proxy để truy cập bảng điều khiển bộ định tuyến, máy chủ cục bộ hoặc đích mạng LAN cục bộ."
-
-msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
-msgstr "Bạn cần ngăn không cho 127.0.0.1 (hoặc địa chỉ bạn đang truy cập vào bảng điều khiển I2P) được định tuyến qua proxy http của I2P, thường bằng cách loại trừ địa chỉ đó trong phần cấu hình proxy của trình duyệt của bạn."
-
-msgid "Website Unknown"
-msgstr "Trang web không xác định"
 
 msgid "Website Not Found in Addressbook"
 msgstr "Không tìm thấy trang web trong sổ địa chỉ"
@@ -111,99 +46,35 @@ msgstr "Nếu không, hãy tìm liên kết trợ giúp Địa chỉ hoặc Cơ 
 msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
 msgstr "Nhìn thấy trang này thường xuyên? Xem {0} Câu hỏi thường gặp {1} để được trợ giúp trong {2} Thêm một số đăng ký {3} vào sổ địa chỉ của bạn."
 
-msgid "Website Unreachable"
-msgstr "Trang web không thể truy cập được"
+msgid "Could not find the following destination:"
+msgstr "Không thể tìm thấy điểm đến sau:"
 
-msgid "The website was not reachable, because its lease set was not found."
-msgstr "Không thể truy cập trang web vì không tìm thấy tập hợp hợp đồng thuê của nó."
+msgid "Warning: Non-HTTP Protocol"
+msgstr "Cảnh báo: Giao thức không phải HTTP"
 
-msgid "The website is probably down, but there could also be network congestion."
-msgstr "Trang web có thể không hoạt động nhưng cũng có thể do tắc nghẽn mạng."
+msgid "The request uses a bad protocol."
+msgstr "Yêu cầu sử dụng giao thức không hợp lệ."
 
-msgid "Outproxy Not Found"
-msgstr "Không tìm thấy proxy bên ngoài"
+msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
+msgstr "Proxy HTTP I2P chỉ hỗ trợ các yêu cầu HTTP và HTTPS."
 
-msgid "The HTTP Outproxy was not found."
-msgstr "Không tìm thấy HTTP Outproxy."
+msgid "Other protocols such as FTP are not allowed."
+msgstr "Các giao thức khác như FTP không được phép."
 
-msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "Nó ngoại tuyến, tắc nghẽn mạng hoặc bộ định tuyến của bạn chưa tích hợp tốt với các thiết bị ngang hàng."
+msgid "Error: Request Denied"
+msgstr "Lỗi: Yêu cầu bị từ chối"
 
-#, java-format
-msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
-msgstr "Bạn có thể muốn {0}thử lại{1} vì thao tác này sẽ ngẫu nhiên chọn lại một đại diện bên ngoài từ nhóm bạn đã xác định {2}tại đây{3} (nếu bạn có nhiều hơn một đại diện được định cấu hình)."
+msgid "Error: Cannot Access Router Console via I2P Proxy"
+msgstr "Lỗi: Không thể truy cập Bảng điều khiển Bộ định tuyến qua Proxy I2P"
 
-#, java-format
-msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
-msgstr "Nếu tiếp tục gặp sự cố, bạn có thể chỉnh sửa danh sách ủy quyền bên ngoài của mình {0}tại đây{1}."
+msgid "Your browser is misconfigured."
+msgstr "Trình duyệt của bạn bị định cấu hình sai."
 
-msgid "Warning: Request Denied"
-msgstr "Cảnh báo: Yêu cầu bị từ chối"
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
+msgstr "Không sử dụng proxy để truy cập bảng điều khiển bộ định tuyến, máy chủ cục bộ hoặc đích mạng LAN cục bộ."
 
-msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
-msgstr "Địa chỉ này dường như bị dị tật. Vui lòng xác minh bạn đã cung cấp một địa chỉ hợp lệ!"
-
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "Bạn đã cố gắng kết nối với một trang web hoặc vị trí không phải I2P."
-
-msgid "Outproxy Unreachable"
-msgstr "Không thể truy cập được Outproxy"
-
-msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
-msgstr "Không thể truy cập HTTP outproxy vì nó sử dụng các tùy chọn mã hóa không được phiên bản I2P hoặc Java của bạn hỗ trợ."
-
-msgid "Could not connect to the following destination:"
-msgstr "Không thể kết nối với đích sau:"
-
-msgid "Proxy Authorization Required"
-msgstr "Cho phép Outproxy"
-
-msgid "I2P HTTP Proxy Authorization Required"
-msgstr "Cho phép Outproxy"
-
-msgid "This proxy is configured to require a username and password for access."
-msgstr "Proxy này được cấu hình để yêu cầu tên người dùng và mật khẩu để truy cập."
-
-#, java-format
-msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
-msgstr "Vui lòng nhập tên người dùng và mật khẩu của bạn hoặc kiểm tra {0}cấu hình bộ định tuyến{1} hoặc {2}cấu hình I2PTunnel{3} của bạn."
-
-#, java-format
-msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
-msgstr "Để tắt ủy quyền, hãy xóa cấu hình {0}i2ptunnel.proxy.auth=basic{1}, sau đó dừng và khởi động lại đường hầm HTTP Proxy."
-
-msgid "Warning: Invalid Destination"
-msgstr "Điểm đến nội bộ"
-
-msgid "The website destination specified was not valid, or was otherwise unreachable."
-msgstr "Đích trang web được chỉ định không hợp lệ hoặc không thể truy cập được."
-
-msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
-msgstr "Có lẽ bạn đã dán sai chuỗi Base 64 hoặc liên kết bạn đang theo dõi không tốt."
-
-msgid "The I2P host could also be offline."
-msgstr "Máy chủ I2P cũng có thể ngoại tuyến."
-
-msgid "The connection to the proxy was reset."
-msgstr "Kết nối tới proxy đã được đặt lại."
-
-msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Proxy có thể tạm thời không khả dụng, quá bận hoặc đã chặn quyền truy cập của bạn."
-
-msgid "The HTTP outproxy was not reachable, because its lease set was not found."
-msgstr "Không thể truy cập được HTTP outproxy vì không tìm thấy tập hợp thuê của nó."
-
-msgid "The outproxy is probably down, but there could also be network congestion."
-msgstr "Outproxy có thể không hoạt động nhưng cũng có thể xảy ra tắc nghẽn mạng."
-
-msgid "Warning: Authorization Required"
-msgstr "Cảnh báo: Cần có sự cho phép"
-
-msgid "The website was not reachable."
-msgstr "Trang web không thể truy cập được."
-
-msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "Trang web đang ngoại tuyến, tắc nghẽn mạng hoặc bộ định tuyến của bạn chưa tích hợp tốt với các thiết bị ngang hàng."
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "Bạn cần ngăn không cho 127.0.0.1 (hoặc địa chỉ bạn đang truy cập vào bảng điều khiển I2P) được định tuyến qua proxy http của I2P, thường bằng cách loại trừ địa chỉ đó trong phần cấu hình proxy của trình duyệt của bạn."
 
 msgid "Warning: Destination Key Conflict"
 msgstr "Cảnh báo: Xung đột khóa đích"
@@ -217,24 +88,81 @@ msgstr "Ai đó có thể đang cố mạo danh một trang web khác hoặc m�
 msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
 msgstr "Giải quyết xung đột bằng cách quyết định khóa nào bạn tin cậy, sau đó bỏ qua liên kết trợ giúp địa chỉ hoặc xóa mục nhập máy chủ khỏi sổ địa chỉ của bạn và nhấp lại vào liên kết trợ giúp địa chỉ."
 
-msgid "The Base32 address is invalid."
-msgstr "Địa chỉ Base32 không hợp lệ."
+msgid "Connection Reset"
+msgstr "Thiết lập lại kết nối"
 
-msgid "Warning: Bad Address Helper"
-msgstr "Cảnh báo: Trình trợ giúp địa chỉ sai"
+msgid "The connection to the website was reset while the page was loading."
+msgstr "Kết nối tới trang web được đặt lại trong khi trang đang tải."
+
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Trang web có thể tạm thời không khả dụng, quá bận hoặc đã chặn quyền truy cập của bạn."
 
 #, java-format
-msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
-msgstr "Khóa trợ giúp trong URL ({0}i2paddresshelper={1}) không thể phân giải được."
+msgid "You may want to {0}retry{1}."
+msgstr "Bạn có thể muốn {0}thử lại{1}."
 
-msgid "It seems to be garbage data, or a mistyped Base 32 address."
-msgstr "Có vẻ như đó là dữ liệu rác hoặc địa chỉ Base 32 bị nhập sai."
+#, java-format
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
+msgstr "Nếu bạn để trang này mở, nó sẽ tự động thử kết nối lại với trang web mỗi {0} giây sau lần thử kết nối không thành công."
 
-msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
-msgstr "Kiểm tra URL của bạn để thử và sửa khóa trợ giúp thành tên máy chủ Base 32 hoặc khóa Base 64 hợp lệ."
+msgid "Website Unreachable"
+msgstr "Trang web không thể truy cập được"
 
 msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
 msgstr "Không thể truy cập trang web vì nó sử dụng các tùy chọn mã hóa không được phiên bản I2P hoặc Java của bạn hỗ trợ."
+
+msgid "Could not connect to the following destination:"
+msgstr "Không thể kết nối với đích sau:"
+
+msgid "The website was not reachable, because its lease set was not found."
+msgstr "Không thể truy cập trang web vì không tìm thấy tập hợp hợp đồng thuê của nó."
+
+msgid "The website is probably down, but there could also be network congestion."
+msgstr "Trang web có thể không hoạt động nhưng cũng có thể do tắc nghẽn mạng."
+
+msgid "The connection to the proxy was reset."
+msgstr "Kết nối tới proxy đã được đặt lại."
+
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Proxy có thể tạm thời không khả dụng, quá bận hoặc đã chặn quyền truy cập của bạn."
+
+#, java-format
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "Bạn có thể muốn {0}thử lại{1} vì thao tác này sẽ ngẫu nhiên chọn lại một đại diện bên ngoài từ nhóm bạn đã xác định {2}tại đây{3} (nếu bạn có nhiều hơn một đại diện được định cấu hình)."
+
+#, java-format
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr "Nếu tiếp tục gặp sự cố, bạn có thể chỉnh sửa danh sách ủy quyền bên ngoài của mình {0}tại đây{1}."
+
+msgid "Outproxy Unreachable"
+msgstr "Không thể truy cập được Outproxy"
+
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "Không thể truy cập HTTP outproxy vì nó sử dụng các tùy chọn mã hóa không được phiên bản I2P hoặc Java của bạn hỗ trợ."
+
+msgid "The website was not reachable."
+msgstr "Trang web không thể truy cập được."
+
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Trang web đang ngoại tuyến, tắc nghẽn mạng hoặc bộ định tuyến của bạn chưa tích hợp tốt với các thiết bị ngang hàng."
+
+msgid "Warning: No Outproxy Configured"
+msgstr "Cảnh báo: Không có cấu hình Outproxy"
+
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr "Yêu cầu của bạn dành cho một trang web bên ngoài I2P nhưng bạn chưa định cấu hình proxy ngoài HTTP."
+
+msgid "Please configure an outproxy in I2PTunnel."
+msgstr "Vui lòng định cấu hình proxy ngoài trong I2PTunnel."
+
+msgid "Outproxy Not Found"
+msgstr "Không tìm thấy proxy bên ngoài"
+
+msgid "The HTTP Outproxy was not found."
+msgstr "Không tìm thấy HTTP Outproxy."
+
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Nó ngoại tuyến, tắc nghẽn mạng hoặc bộ định tuyến của bạn chưa tích hợp tốt với các thiết bị ngang hàng."
 
 msgid "Information: New Host Name"
 msgstr "Thông tin: Tên máy chủ mới"
@@ -256,6 +184,78 @@ msgstr "Nếu bạn không lưu nó, tên máy chủ sẽ bị quên sau khi kh�
 
 msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
 msgstr "Nếu bạn không muốn truy cập máy chủ này, hãy nhấp vào nút \"quay lại\" trên trình duyệt của bạn."
+
+msgid "Proxy Authorization Required"
+msgstr "Cho phép Outproxy"
+
+msgid "I2P HTTP Proxy Authorization Required"
+msgstr "Cho phép Outproxy"
+
+msgid "This proxy is configured to require a username and password for access."
+msgstr "Proxy này được cấu hình để yêu cầu tên người dùng và mật khẩu để truy cập."
+
+#, java-format
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "Vui lòng nhập tên người dùng và mật khẩu của bạn hoặc kiểm tra {0}cấu hình bộ định tuyến{1} hoặc {2}cấu hình I2PTunnel{3} của bạn."
+
+#, java-format
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "Để tắt ủy quyền, hãy xóa cấu hình {0}i2ptunnel.proxy.auth=basic{1}, sau đó dừng và khởi động lại đường hầm HTTP Proxy."
+
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr "Không thể truy cập được HTTP outproxy vì không tìm thấy tập hợp thuê của nó."
+
+msgid "The outproxy is probably down, but there could also be network congestion."
+msgstr "Outproxy có thể không hoạt động nhưng cũng có thể xảy ra tắc nghẽn mạng."
+
+msgid "Warning: Request Denied"
+msgstr "Cảnh báo: Yêu cầu bị từ chối"
+
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr "Địa chỉ này dường như bị dị tật. Vui lòng xác minh bạn đã cung cấp một địa chỉ hợp lệ!"
+
+msgid "You attempted to connect to a non-I2P website or location."
+msgstr "Bạn đã cố gắng kết nối với một trang web hoặc vị trí không phải I2P."
+
+msgid "Warning: Bad Address Helper"
+msgstr "Cảnh báo: Trình trợ giúp địa chỉ sai"
+
+#, java-format
+msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgstr "Khóa trợ giúp trong URL ({0}i2paddresshelper={1}) không thể phân giải được."
+
+msgid "It seems to be garbage data, or a mistyped Base 32 address."
+msgstr "Có vẻ như đó là dữ liệu rác hoặc địa chỉ Base 32 bị nhập sai."
+
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr "Kiểm tra URL của bạn để thử và sửa khóa trợ giúp thành tên máy chủ Base 32 hoặc khóa Base 64 hợp lệ."
+
+msgid "Warning: Invalid Destination"
+msgstr "Điểm đến nội bộ"
+
+msgid "The website destination specified was not valid, or was otherwise unreachable."
+msgstr "Đích trang web được chỉ định không hợp lệ hoặc không thể truy cập được."
+
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr "Có lẽ bạn đã dán sai chuỗi Base 64 hoặc liên kết bạn đang theo dõi không tốt."
+
+msgid "The I2P host could also be offline."
+msgstr "Máy chủ I2P cũng có thể ngoại tuyến."
+
+msgid "Warning: Authorization Required"
+msgstr "Cảnh báo: Cần có sự cho phép"
+
+msgid "Warning: Invalid Request URI"
+msgstr "Cảnh báo: URI yêu cầu không hợp lệ"
+
+msgid "The request URI is invalid, and probably contains illegal characters."
+msgstr "URI yêu cầu không hợp lệ và có thể chứa các ký tự không hợp lệ."
+
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr "Nếu bạn nhấp vào một liên kết, hãy kiểm tra phần cuối của URI xem có bất kỳ ký tự nào mà trình duyệt đã thêm nhầm vào không."
+
+msgid "The Base32 address is invalid."
+msgstr "Địa chỉ Base32 không hợp lệ."
 
 msgid "This seems to be a bad destination:"
 msgstr "Đây có vẻ là một điểm đến tồi tệ:"

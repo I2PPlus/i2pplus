@@ -130,17 +130,14 @@ msgid_plural "{0} destinations deleted."
 msgstr[0] "Ein Ziel gelöscht"
 msgstr[1] "{0} Ziele gelöscht"
 
-msgid "No entries selected to delete."
-msgstr "Es wurden keine Einträge zum Löschen ausgewählt."
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "Alternative hinzufügen"
 
 msgid "Address book saved."
 msgstr "Adressbuch gespeichert"
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "Navigieren Sie von diesem Adressbuch weg und kehren Sie zurück, um die Aktualisierung anzuzeigen."
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "FEHLER: Konnte Adressbuchdatei nicht schreiben."
@@ -321,6 +318,9 @@ msgstr "zum Löschen markieren"
 msgid "Cancel"
 msgstr "Abbruch"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "z.B. newdomain.i2p"
 
@@ -398,6 +398,9 @@ msgstr "Berichte zu Aktivitäten werden in dieser Datei gespeichert. (Ändern Si
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Name des zu verwendenden Override-Designs (standardmäßig das von der Konsole ausgewählte Design)"
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "Adressbuch"
@@ -593,3 +596,5 @@ msgstr "Manuell ins Master Adressbuch hinzugefügte Einträge werden mit ins Rou
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Einträge aus den Subskriptionen werden mit ins Router Adressbuch eingetragen."
+
+

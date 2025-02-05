@@ -130,17 +130,14 @@ msgid_plural "{0} destinations deleted."
 msgstr[0] "Una dirección de destino ha sido eliminada."
 msgstr[1] "{0} direcciones de destino han sido eliminadas."
 
-msgid "No entries selected to delete."
-msgstr "No hay entradas seleccionadas para eliminar."
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "Añadir alternativa"
 
 msgid "Address book saved."
 msgstr "La libreta de direcciones ha sido guardada."
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "Salga de esta libreta de direcciones y regrese para ver la actualización."
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "ERROR: No se pudo escribir el archivo de libreta de direcciones."
@@ -321,6 +318,9 @@ msgstr "Marcar para eliminar"
 msgid "Cancel"
 msgstr "Cancelar"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "p.ej. newdomain.i2p"
 
@@ -398,6 +398,9 @@ msgstr "El archivo en el que se guarda el registro de actividad (Cámbialo a /de
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Nombre del tema de anulación a usar (el valor predeterminado es el tema seleccionado por la consola)"
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "libreta de direcciones"
@@ -593,3 +596,5 @@ msgstr "Las direcciones añadidas manualmente a su libreta de direcciones Master
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Los equipos que recibe desde sus suscripciones se combinarán con su libreta de direcciones Router."
+
+

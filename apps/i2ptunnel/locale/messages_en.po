@@ -38,12 +38,6 @@ msgstr ""
 msgid "higher bandwidth and reliability"
 msgstr ""
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr ""
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr ""
-
 msgid "Configuration reloaded for all tunnels"
 msgstr ""
 
@@ -1226,6 +1220,12 @@ msgid "Generate Authentication"
 msgstr ""
 
 msgid "SSL Helper"
+msgstr ""
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr ""
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr ""
 
 msgid "Experts only!"

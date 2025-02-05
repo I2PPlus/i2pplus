@@ -125,17 +125,14 @@ msgid "1 destination deleted."
 msgid_plural "{0} destinations deleted."
 msgstr[0] "{0} destinasi dihapus"
 
-msgid "No entries selected to delete."
-msgstr "Tidak ada entri dipilih untuk dihapus"
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "Tambahkan Alternate"
 
 msgid "Address book saved."
 msgstr "Address book disimpan."
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "Telusuri dari buku alamat ini dan kembali untuk melihat pembaruan."
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "ERROR: Tidak dapat menulis ke dalam file address book."
@@ -314,6 +311,9 @@ msgstr "Tandai untuk dihapus"
 msgid "Cancel"
 msgstr "Batalkan"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "mis. newdomain.i2p"
 
@@ -391,6 +391,9 @@ msgstr "File log untuk mencatat aktivitas ke (ubah ke /dev/null jika anda suka)"
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Nama tema pengganti yang akan digunakan (default pada tema yang dipilih konsol)"
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "address book"
@@ -586,3 +589,5 @@ msgstr "Addressbook yang ditambahkan secara manual ke addressbook master akan be
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Host yang Anda dapatkan dari langganan akan bergabung dengan addressbook router."
+
+

@@ -38,12 +38,6 @@ msgstr "standard båndbredde og pålidelighed"
 msgid "higher bandwidth and reliability"
 msgstr "højere båndbredde og pålidelighed"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Ugyldig formularindsendelse, sandsynligvis fordi du brugte knappen 'tilbage' eller 'genindlæs' i din browser. Ugyldig formularindsendelse, sandsynligvis fordi du brugte knappen 'tilbage' eller 'genindlæs' i din browser. Ugyldig formularafsendelse, sandsynligvis fordi du brugte 'tilbage' eller 'reload' knappen i din browser. Prøv venligst at sende igen."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Hvis problemet fortsætter, skal du kontrollere, at du har aktiveret cookies i din browser.Hvis problemet fortsætter, kontrollere, at du har slået cookies til i din browser."
-
 msgid "Configuration reloaded for all tunnels"
 msgstr "Konfiguration er genindlæst for alle tunneler"
 
@@ -1227,6 +1221,12 @@ msgstr "Generer godkendelse"
 
 msgid "SSL Helper"
 msgstr "SSL-hjælper"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Ugyldig formularindsendelse, sandsynligvis fordi du brugte knappen 'tilbage' eller 'genindlæs' i din browser. Ugyldig formularindsendelse, sandsynligvis fordi du brugte knappen 'tilbage' eller 'genindlæs' i din browser. Ugyldig formularafsendelse, sandsynligvis fordi du brugte 'tilbage' eller 'reload' knappen i din browser. Prøv venligst at sende igen."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Hvis problemet fortsætter, skal du kontrollere, at du har aktiveret cookies i din browser.Hvis problemet fortsætter, kontrollere, at du har slået cookies til i din browser."
 
 msgid "Experts only!"
 msgstr "Kun eksperter!"

@@ -257,14 +257,14 @@ msgstr "Email göndərilərkən xəta "
 msgid "Mail sent."
 msgstr "Məktub göndərildi."
 
-msgid "Send"
-msgstr "Göndər"
+msgid "Cancel"
+msgstr "Ləğv et"
 
 msgid "Save as Draft"
 msgstr "Layihə kimi saxla"
 
-msgid "Cancel"
-msgstr "Ləğv et"
+msgid "Send"
+msgstr "Göndər"
 
 msgid "From"
 msgstr "Etibarən"

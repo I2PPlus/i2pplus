@@ -130,17 +130,14 @@ msgid_plural "{0} destinations deleted."
 msgstr[0] "1 nöqtə silindi."
 msgstr[1] "{0} nöqtə silindi."
 
-msgid "No entries selected to delete."
-msgstr "Silinmək üçün heç bir qeyd seçilməyib."
+msgid "No valid entries selected to delete."
+msgstr ""
 
 msgid "Add Alternate"
 msgstr "Alternativ əlavə et"
 
 msgid "Address book saved."
 msgstr "Adres kitabı saxlandı."
-
-msgid "Browse away from this addressbook and return to see update."
-msgstr "Bu adres kitabından uzaqlaşın və yeniləməni görmək üçün qayıdın."
 
 msgid "ERROR: Could not write addressbook file."
 msgstr "XƏTA: Adres kitabını yazıla bilmədi."
@@ -321,6 +318,9 @@ msgstr "Silinməyə işarələ"
 msgid "Cancel"
 msgstr "Ləğv et"
 
+msgid "This book currently contains no entries."
+msgstr ""
+
 msgid "e.g. newdomain.i2p"
 msgstr "məsələn, newdomain.i2p"
 
@@ -398,6 +398,9 @@ msgstr "Fəaliyyəti qeyd etmək üçün fayl (istəyə bağlı /dev/null dəyi�
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Tətbiq etmək üçün əvəzləmə mövzusunun adı (standart olaraq konsoldan seçilmiş mövzu olur)"
+
+msgid "delete hosts"
+msgstr ""
 
 msgid "addressbook"
 msgstr "adres kitabı"
@@ -593,3 +596,5 @@ msgstr "Sizin Üst adres kitabınıza manuel olaraq əlavə etdiyiniz ünvandıl
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Abunələrinizdən ala biləcəyiniz mənzillər Ruternin adres kitabınıza birləşdiriləcəkdir."
+
+

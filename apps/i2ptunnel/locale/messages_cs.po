@@ -41,12 +41,6 @@ msgstr "standartní šířka pásma a spolehlivost"
 msgid "higher bandwidth and reliability"
 msgstr "vyšší šířka pásma a spolehlivost"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Neplatné odeslání formuláře, pravděpodobně proto, že jste ve svém prohlížeči použili tlačítko 'zpět' nebo 'znovu načíst'. Neplatně odeslaný formulář, nejspíše jste použili tlačítka 'Zpět' nebo 'Znovu načíst' ve vašem prohlížeči. Prosím odešlete formulář znovu."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Pokud problém přetrvává, ověřte, zda máte ve svém prohlížeči povoleny soubory cookie."
-
 msgid "Configuration reloaded for all tunnels"
 msgstr "Nastavení pro všechny tunely bylo opětovně nahráno"
 
@@ -1232,6 +1226,12 @@ msgstr "Generovat autentizaci"
 
 msgid "SSL Helper"
 msgstr "Pomocník SSL"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Neplatné odeslání formuláře, pravděpodobně proto, že jste ve svém prohlížeči použili tlačítko 'zpět' nebo 'znovu načíst'. Neplatně odeslaný formulář, nejspíše jste použili tlačítka 'Zpět' nebo 'Znovu načíst' ve vašem prohlížeči. Prosím odešlete formulář znovu."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Pokud problém přetrvává, ověřte, zda máte ve svém prohlížeči povoleny soubory cookie."
 
 msgid "Experts only!"
 msgstr "Pouze odborníci!"

@@ -38,12 +38,6 @@ msgstr "standart bant genişliği ve tutarlılık"
 msgid "higher bandwidth and reliability"
 msgstr "daha yüksek bant genişliği ve tutarlılık"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Form gönderimi geçersiz. Tarayıcınızın \"geri\" ya da \"yenile\" düğmelerini kullandığınızdan olabilir. Lütfen formu yeniden gönderin."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Sorun sürerse, web tarayıcınızda çerezlerin etkinleştirilmiş olduğundan emin olun."
-
 msgid "Configuration reloaded for all tunnels"
 msgstr "Tüm tüneller için yapılandırma yeniden yüklendi"
 
@@ -1227,6 +1221,12 @@ msgstr "Kimlik Doğrulaması Üret"
 
 msgid "SSL Helper"
 msgstr "SSL Yardımcısı"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Form gönderimi geçersiz. Tarayıcınızın \"geri\" ya da \"yenile\" düğmelerini kullandığınızdan olabilir. Lütfen formu yeniden gönderin."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Sorun sürerse, web tarayıcınızda çerezlerin etkinleştirilmiş olduğundan emin olun."
 
 msgid "Experts only!"
 msgstr "Yalnız deneyimli kullanıcılar!"

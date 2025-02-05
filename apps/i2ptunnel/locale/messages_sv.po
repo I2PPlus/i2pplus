@@ -38,12 +38,6 @@ msgstr "standard bandbredd och pålitlighet"
 msgid "higher bandwidth and reliability"
 msgstr "högre bandbredd och pålitlighet"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Ogiltig formulärinlämning, förmodligen för att du använde 'tillbaka' eller 'reload'-knappen i din webbläsare. Ogiltig formulärinlämning, förmodligen för att du använde 'tillbaka' eller 'reload'-knappen i din webbläsare. Ogiltig formulärinlämning, förmodligen för att du använde 'tillbaka' eller 'reload'-knappen i din webbläsare. Ogiltigt formulärbegäran, beror troligtvis på att du använde knappen \"tillbaka\" eller \"uppdatera\". Försök att skicka igen."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Om problemet kvarstår, kontrollera att du har aktiverat cookies i din webbläsare.Om problem kvartstår, bekräfta att du har cookies påslaget i din browser."
-
 msgid "Configuration reloaded for all tunnels"
 msgstr "Konfigurationen uppdaterad för alla tunnlar"
 
@@ -1227,6 +1221,12 @@ msgstr "Generera autentisering"
 
 msgid "SSL Helper"
 msgstr "SSL Hjälpare"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Ogiltig formulärinlämning, förmodligen för att du använde 'tillbaka' eller 'reload'-knappen i din webbläsare. Ogiltig formulärinlämning, förmodligen för att du använde 'tillbaka' eller 'reload'-knappen i din webbläsare. Ogiltig formulärinlämning, förmodligen för att du använde 'tillbaka' eller 'reload'-knappen i din webbläsare. Ogiltigt formulärbegäran, beror troligtvis på att du använde knappen \"tillbaka\" eller \"uppdatera\". Försök att skicka igen."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Om problemet kvarstår, kontrollera att du har aktiverat cookies i din webbläsare.Om problem kvartstår, bekräfta att du har cookies påslaget i din browser."
 
 msgid "Experts only!"
 msgstr "Endast Experter!"

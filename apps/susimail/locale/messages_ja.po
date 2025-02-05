@@ -254,14 +254,14 @@ msgstr "メールを送信できませんでした"
 msgid "Mail sent."
 msgstr "メールが送信されました。"
 
-msgid "Send"
-msgstr "送信"
+msgid "Cancel"
+msgstr "キャンセル"
 
 msgid "Save as Draft"
 msgstr "下書きとして保存"
 
-msgid "Cancel"
-msgstr "キャンセル"
+msgid "Send"
+msgstr "送信"
 
 msgid "From"
 msgstr "差出人"

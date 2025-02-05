@@ -23,6 +23,12 @@ msgstr "I2P-yhteyttä ei voi muodostaa"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Virhe yhdistettäessä I2P:hen - tarkista I2CP-asetuksesi!"
 
+msgid "Download already running: "
+msgstr ""
+
+msgid "Downloading"
+msgstr "Ladataan"
+
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "I2PSnarkin määrittäminen I2CP-vaihtoehdoilla"
 
@@ -466,12 +472,23 @@ msgid "Anonymous BitTorrent Client"
 msgstr "Anonyymi BitTorrent-asiakas"
 
 #, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr ""
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr ""
+
+#, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "Haluatko varmasti poistaa tiedoston \\''{0}\\'' (ladattuja tietoja ei poisteta)?"
 
+msgid "Note: Downloaded data will not be deleted."
+msgstr ""
+
 #, java-format
-msgid "Are you sure you want to delete torrent file {0} and all downloaded data?"
-msgstr "Oletko varma, että haluat poistaa torrentin \\''{0}\\'' ja kaikki ladatut tiedot?"
+msgid "Deleting {0} and associated metadata only..."
+msgstr ""
 
 msgid "I2PSnark has stopped"
 msgstr "I2PSnark on lopettanut"
@@ -484,6 +501,9 @@ msgstr "Vertaisverkot"
 
 msgid "Refresh page"
 msgstr "Päivitä sivua"
+
+msgid "Configure"
+msgstr "Aseta"
 
 msgid "Forum"
 msgstr "Foorumi"
@@ -524,36 +544,6 @@ msgstr "sivun päivitys"
 
 msgid "Warning - No I2P"
 msgstr "Varoitus - Ei I2P:tä"
-
-msgid "Search"
-msgstr "Hae"
-
-msgid "Show All"
-msgstr "Näytä kaikki"
-
-msgid "Active"
-msgstr "Aktiivinen"
-
-msgid "Inactive"
-msgstr "Ei aktiivinen"
-
-msgid "Connected"
-msgstr "Yhdistetty"
-
-msgid "Downloading"
-msgstr "Ladataan"
-
-msgid "Seeding"
-msgstr "Kylvö"
-
-msgid "Complete"
-msgstr "Valmis"
-
-msgid "Incomplete"
-msgstr "Epätäydellinen"
-
-msgid "Stopped"
-msgstr "Pysäytetty"
 
 msgid "Status"
 msgstr "Tila"
@@ -634,20 +624,14 @@ msgstr "Torrenteja ei löytynyt."
 msgid "No torrents loaded."
 msgstr "Yhtään vertaisverkkoa ei ole ladattu."
 
-msgid "Totals"
-msgstr "Yhteensä"
-
 #, java-format
 msgid "1 torrent"
 msgid_plural "{0} torrents"
 msgstr[0] "1 vertaisverkko"
 msgstr[1] "{0} vertaisverkkoa"
 
-#, java-format
-msgid "1 connected peer"
-msgid_plural "{0} connected peers"
-msgstr[0] "1 yhdistetty vertainen"
-msgstr[1] "{0} yhdistettyä vertaista"
+msgid "Total size of loaded torrents"
+msgstr ""
 
 #, java-format
 msgid "1 DHT peer"
@@ -655,17 +639,17 @@ msgid_plural "{0} DHT peers"
 msgstr[0] "1 DHT-vertainen"
 msgstr[1] "{0} DHT-vertaista"
 
-msgid "Configured maximum (actual usage may be less)"
-msgstr "Määritetty enimmäismäärä (todellinen käyttö voi olla pienempi)"
+msgid "Active downloads"
+msgstr ""
 
-msgid "Tunnels"
-msgstr "Tunnelit"
+msgid "Active uploads"
+msgstr ""
 
-msgid "in"
-msgstr "sisään"
+msgid "Active Inbound tunnels"
+msgstr ""
 
-msgid "out"
-msgstr "ulkona"
+msgid "Active Outbound tunnels"
+msgstr ""
 
 msgid "Estimated download time for all torrents"
 msgstr "Arvioitu latausaika kaikille torrenteille"
@@ -682,17 +666,41 @@ msgstr "Lähetetyt tiedot yhteensä (luetteloiduille torrenteille)"
 msgid "Total upload speed"
 msgstr "Kokonaislatausnopeus"
 
-msgid "Enable Debug Mode"
-msgstr "Ota virheenkorjaustila käyttöön"
-
-msgid "Disable Debug Mode"
-msgstr "Poista virheenkorjaustila käytöstä"
+msgid "Toggle Debug Mode"
+msgstr ""
 
 msgid "Normal Mode"
 msgstr "Normaali tila"
 
 msgid "No DHT Peers"
 msgstr "Ei DHT-vertaisia"
+
+msgid "Search"
+msgstr "Hae"
+
+msgid "Show All"
+msgstr "Näytä kaikki"
+
+msgid "Active"
+msgstr "Aktiivinen"
+
+msgid "Inactive"
+msgstr "Ei aktiivinen"
+
+msgid "Connected"
+msgstr "Yhdistetty"
+
+msgid "Seeding"
+msgstr "Kylvö"
+
+msgid "Complete"
+msgstr "Valmis"
+
+msgid "Incomplete"
+msgstr "Epätäydellinen"
+
+msgid "Stopped"
+msgstr "Pysäytetty"
 
 msgid "First"
 msgstr "Ensimmäinen"
@@ -1049,9 +1057,6 @@ msgstr "Jos haluat vaihtaa teemoja manuaalisesti, poista yleinen teemoitus käyt
 msgid "Universal theming is enabled."
 msgstr "Yleinen teema on käytössä."
 
-msgid "Configure"
-msgstr "Aseta"
-
 msgid "Refresh time"
 msgstr "Päivitysaika"
 
@@ -1072,12 +1077,6 @@ msgstr "torrentit"
 
 msgid "Language"
 msgstr "Kieli"
-
-msgid "Smart torrent sorting"
-msgstr "Älykäs torrent-lajittelu"
-
-msgid "Ignore words such as 'a' and 'the' when sorting"
-msgstr "Ohita sanat, kuten 'a' ja 'the', kun lajittelet"
 
 msgid "Collapsible panels"
 msgstr "Kokoontaitettavat paneelit"
@@ -1311,6 +1310,15 @@ msgstr "Tämä määrittää avattavien tunneleiden enimmäismäärän, joka mä
 msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
 msgstr "Tämän asetuksen muuttaminen alle 3 hyppyyn voi parantaa nopeutta anonymiteetin kustannuksella, eikä sitä suositella"
 
+msgid "Sequential piece or file order not saved - feature currently broken."
+msgstr ""
+
+msgid "Unknown command"
+msgstr ""
+
+msgid "Please retry form submission (bad nonce)"
+msgstr ""
+
 msgid "Info hash"
 msgstr "Info Hash"
 
@@ -1493,3 +1501,14 @@ msgstr "Tallenna muutokset"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent on pysäytettävä"
+
+#, java-format
+
+
+
+
+
+
+
+
+

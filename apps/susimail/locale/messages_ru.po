@@ -263,14 +263,14 @@ msgstr "Ошибка при отправке письма"
 msgid "Mail sent."
 msgstr "Сообщение отправлено."
 
-msgid "Send"
-msgstr "Отправить"
+msgid "Cancel"
+msgstr "Отмена"
 
 msgid "Save as Draft"
 msgstr "Сохранить как черновик"
 
-msgid "Cancel"
-msgstr "Отмена"
+msgid "Send"
+msgstr "Отправить"
 
 msgid "From"
 msgstr "От"

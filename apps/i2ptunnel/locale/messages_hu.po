@@ -38,12 +38,6 @@ msgstr "szabványos sávszélesség és megbízhatóság"
 msgid "higher bandwidth and reliability"
 msgstr "nagyobb sávszélesség és megbízhatóság"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Űrlap küldése sikertelen, valószínűleg a 'vissza' vagy 'újratöltés' gombokat használtad a böngésződben. Kérlek, hogy küldd újra."
-
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Ha a probléma fennáll, ellenőrizd, hogy a sütik engedélyezve vannak-e a böngésződben."
-
 msgid "Configuration reloaded for all tunnels"
 msgstr "Az összes alagútra vonatkozó beállítás újratöltve"
 
@@ -1227,6 +1221,12 @@ msgstr "Hitelesítés generálása"
 
 msgid "SSL Helper"
 msgstr "SSL segítő"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Űrlap küldése sikertelen, valószínűleg a 'vissza' vagy 'újratöltés' gombokat használtad a böngésződben. Kérlek, hogy küldd újra."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Ha a probléma fennáll, ellenőrizd, hogy a sütik engedélyezve vannak-e a böngésződben."
 
 msgid "Experts only!"
 msgstr "Csak szakértők!"

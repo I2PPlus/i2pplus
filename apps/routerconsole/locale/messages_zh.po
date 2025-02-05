@@ -140,6 +140,9 @@ msgstr "不支持我们的签名类型"
 msgid "Unreachable on any transport"
 msgstr "各传输方式均不可达"
 
+msgid "Cannot enumerate UPnP devices on Android."
+msgstr ""
+
 msgid "UPnP is not enabled"
 msgstr "UPnP 未启用"
 
@@ -677,11 +680,39 @@ msgstr "请报告"
 msgid "After reporting, please restart your router"
 msgstr "更改这些设置需要重启您的路由器"
 
+msgid "Invalid form submission, requires POST"
+msgstr ""
+
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "表单提交无效，可能的原因是您使用了“后退”或“刷新”按钮。请重新提交。"
 
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "如果问题持续出现，请检查您的浏览器是否已启用 cookie。"
+
+msgid "Bandwidth usage"
+msgstr "带宽占用"
+
+#, java-format
+msgid "events in {0}"
+msgstr "事件/{0}"
+
+msgid "Events per period"
+msgstr "事件/周期"
+
+msgid "Min"
+msgstr "最小"
+
+msgid "Max"
+msgstr "最大"
+
+msgid "Avg"
+msgstr "平均"
+
+msgid "Now"
+msgstr "现在"
+
+msgid "Router restarted"
+msgstr "路由器已重启"
 
 #, java-format
 msgid "News last updated {0} ago."
@@ -713,31 +744,6 @@ msgstr[0] "{0} 个插件已更新"
 
 msgid "Plugin check complete"
 msgstr "插件更新检查完成"
-
-msgid "Bandwidth usage"
-msgstr "带宽占用"
-
-#, java-format
-msgid "events in {0}"
-msgstr "事件/{0}"
-
-msgid "Events per period"
-msgstr "事件/周期"
-
-msgid "Min"
-msgstr "最小"
-
-msgid "Max"
-msgstr "最大"
-
-msgid "Avg"
-msgstr "平均"
-
-msgid "Now"
-msgstr "现在"
-
-msgid "Router restarted"
-msgstr "路由器已重启"
 
 msgid "none"
 msgstr "无"
@@ -807,8 +813,20 @@ msgstr "控制台"
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "要启用Router Console的SSL访问，请参阅位于您的I2P应用程序目录中的<code>client.config</code>文件以了解更多信息。您需要编辑位于该目录中的RouterConsoleRunner配置文件。 "
 
+msgid "Save disabled, edit the router.config file to make changes"
+msgstr ""
+
 msgid "Error updating the configuration - please see the error logs"
 msgstr "更新配置出错 - 请查看错误日志"
+
+msgid "No changes made to the configuration"
+msgstr ""
+
+msgid "Note"
+msgstr "注意"
+
+msgid "Some changes may require a restart to take effect."
+msgstr "某些设置需要程序重启后生效。"
 
 msgid "Save Client Configuration"
 msgstr "保存客户端设置"
@@ -822,6 +840,9 @@ msgstr "保存 WebApp 设置"
 msgid "Save Plugin Configuration"
 msgstr "保存插件配置"
 
+msgid "Plugins disabled"
+msgstr ""
+
 msgid "Install Plugin"
 msgstr "安装插件"
 
@@ -830,6 +851,9 @@ msgstr "从文件安装插件"
 
 msgid "Update All Installed Plugins"
 msgstr "更新全部已安装的插件"
+
+msgid "Delete client disabled"
+msgstr ""
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -912,9 +936,18 @@ msgstr "正在下载插件或更新包。"
 msgid "Updating all plugins"
 msgstr "正在更新全部插件"
 
+msgid "Update manager not registered, cannot install"
+msgstr ""
+
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "正在从 {0} 安装插件"
+
+msgid "Cannot install, check logs"
+msgstr ""
+
+msgid "Update manager not registered, cannot check"
+msgstr ""
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1013,6 +1046,19 @@ msgstr "设置保存成功。"
 msgid "Join Family"
 msgstr "加入家族"
 
+msgid "Bad certificate - No Subject CN"
+msgstr ""
+
+msgid "Bad characters in Family: "
+msgstr ""
+
+#, java-format
+msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
+msgstr ""
+
+msgid "Family key configured for router family: "
+msgstr ""
+
 msgid "Load from file failed"
 msgstr "从文件加载失败"
 
@@ -1028,8 +1074,8 @@ msgstr "添加项目"
 msgid "Restore defaults"
 msgstr "恢复默认值"
 
-msgid "Home page changed"
-msgstr "主页已更改"
+msgid "Bad group detected, please retry"
+msgstr ""
 
 msgid "Restored default settings"
 msgstr "默认设置已恢复"
@@ -1061,6 +1107,9 @@ msgstr "密钥无效"
 msgid "Invalid destination"
 msgstr "目标址无效"
 
+msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
+msgstr ""
+
 #, java-format
 msgid "Key for {0} added to keyring"
 msgstr "{0} 的密钥已添加到密钥环"
@@ -1070,6 +1119,9 @@ msgstr "要求查找密码"
 
 msgid "Requires hostname, destination, or blinded Base32"
 msgstr "请求主机名，目标址，或已混淆的 Base32"
+
+msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
+msgstr ""
 
 msgid "Destination requires lookup password"
 msgstr "目标址要求查找密码"
@@ -1088,6 +1140,9 @@ msgstr "向服务器操作者发送密钥。"
 
 msgid "Delete key"
 msgstr "删除密钥"
+
+msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
+msgstr ""
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1138,6 +1193,36 @@ msgstr "已混淆"
 
 msgid "Log overrides updated"
 msgstr "日志参数已更新"
+
+msgid "Error updating the log limits - levels not valid"
+msgstr ""
+
+msgid "Log limits cleared"
+msgstr ""
+
+#, java-format
+msgid "Default log level updated from {0} to {1}"
+msgstr ""
+
+msgid "Date format updated"
+msgstr ""
+
+#, java-format
+msgid "Specified date format is not valid ({0}) - not updated"
+msgstr ""
+
+msgid "File size updated"
+msgstr ""
+
+#, java-format
+msgid "Specified file size limit is not valid ({0}) - not updated"
+msgstr ""
+
+msgid "Compression setting updated"
+msgstr ""
+
+msgid "Log record format updated"
+msgstr ""
 
 msgid "Log configuration saved"
 msgstr "日志设置已保存"
@@ -1346,6 +1431,12 @@ msgstr "速度值无效"
 msgid "Bad capacity value"
 msgstr "容量值无效"
 
+msgid "Bonuses adjusted for: "
+msgstr ""
+
+msgid "No profile exists for: "
+msgstr ""
+
 msgid "Unsupported"
 msgstr "不支持"
 
@@ -1454,27 +1545,14 @@ msgstr[0] "请等待 {0} 个路由隧道过期"
 msgid "Restart in {0}"
 msgstr "{0} 后重启"
 
-msgid "Stat filter and location updated successfully to"
-msgstr "统计数据过滤器及位置成功更新至"
-
-msgid "Full statistics enabled"
-msgstr "统计已全部启用"
-
-msgid "Full statistics disabled"
-msgstr "统计已全部禁用"
-
-#, java-format
-msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
-msgstr "图形列表已更新，可能需要长达 60 秒才能反应在{0}图形页{1}上"
-
 msgid "Save order"
 msgstr "保存顺序"
 
-msgid "Refresh disabled"
-msgstr "刷新已禁用"
+msgid "Sidebar refresh disabled"
+msgstr ""
 
-msgid "Refresh interval changed"
-msgstr "刷新间隔已改变"
+msgid "Sidebar refresh interval changed"
+msgstr ""
 
 msgid "Refresh interval must be a number"
 msgstr "刷新间隔必须为数字"
@@ -1482,17 +1560,17 @@ msgstr "刷新间隔必须为数字"
 msgid "Restore full default"
 msgstr "恢复完整默认值"
 
-msgid "Full summary bar default restored."
-msgstr "恢复完整侧栏默认值。"
+msgid "Full sidebar defaults restored."
+msgstr ""
 
-msgid "Summary bar will refresh shortly."
-msgstr "侧栏即将刷新。"
+msgid "Sidebar will refresh shortly."
+msgstr ""
 
 msgid "Restore minimal default"
 msgstr "恢复迷你默认值"
 
-msgid "Minimal summary bar default restored."
-msgstr "恢复了迷你侧栏的默认值。"
+msgid "Minimal sidebar defaults restored."
+msgstr ""
 
 msgid "Order must be an integer"
 msgstr "顺序必须是整数"
@@ -1508,6 +1586,27 @@ msgstr "已移动"
 
 msgid "Saved order of sections."
 msgstr "已保存的各部分顺序。"
+
+msgid "Stat filter and location updated successfully to"
+msgstr "统计数据过滤器及位置成功更新至"
+
+msgid "Full statistics enabled"
+msgstr "统计已全部启用"
+
+msgid "Full statistics disabled"
+msgstr "统计已全部禁用"
+
+#, java-format
+msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
+msgstr "图形列表已更新，可能需要长达 60 秒才能反应在{0}图形页{1}上"
+
+#, java-format
+msgid "Internal error: could not resolve pool name {0}."
+msgstr ""
+
+#, java-format
+msgid "Internal error: could not find pool settings for {0}."
+msgstr ""
 
 msgid "Updated settings for all pools."
 msgstr "所有隧道池设置更新完毕。"
@@ -1531,9 +1630,8 @@ msgstr[0] "{0} 个隧道"
 msgid "Exploratory tunnels"
 msgstr "探测隧道"
 
-#, java-format
-msgid "Client tunnels for {0}"
-msgstr "{0} 的客户端隧道"
+msgid "I2PSnark"
+msgstr "I2PSnark"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "匿名性警告 - 设置中包括 0 跳点 隧道。"
@@ -1559,17 +1657,17 @@ msgstr "入站"
 msgid "Outbound"
 msgstr "出站"
 
-msgid "Length"
-msgstr "长度"
-
-msgid "Randomization"
-msgstr "随机"
-
 msgid "Quantity"
 msgstr "数量"
 
 msgid "Backup quantity"
 msgstr "备用数量"
+
+msgid "Length"
+msgstr "长度"
+
+msgid "Randomization"
+msgstr "随机"
 
 msgid "Inbound options"
 msgstr "入站选项"
@@ -1580,17 +1678,20 @@ msgstr "出站选项"
 msgid "Add user"
 msgstr "添加用户"
 
+msgid "Cannot save theme choice, theme name has illegal characters"
+msgstr ""
+
 msgid "Theme change saved."
 msgstr "主题设置已保存"
-
-msgid "Refresh the page to view."
-msgstr "刷新页面后查看。"
 
 msgid "Mobile console option saved."
 msgstr "移动控制台选项已保存。"
 
 msgid "No user name entered"
 msgstr "未输入用户名"
+
+msgid "User name may not contain '='"
+msgstr ""
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "警告：不推荐用户名包含 ISO-8859-1 字符集以外的字符。浏览器支持是非标准且各异的。"
@@ -1881,17 +1982,17 @@ msgstr "路由性能统计图"
 msgid "Graphs"
 msgstr "图表"
 
-msgid "Anonymous webmail client"
-msgstr "匿名 Web 邮件客户端"
-
-msgid "I2PMail"
-msgstr "I2PMail"
-
 msgid "Help"
 msgstr "帮助"
 
 msgid "I2P Router Help"
 msgstr "I2P 路由帮助"
+
+msgid "Anonymous webmail client"
+msgstr "匿名 Web 邮件客户端"
+
+msgid "I2PMail"
+msgstr "I2PMail"
 
 msgid "Install and configure I2P plugins"
 msgstr "安装和配置 I2P 插件"
@@ -1910,6 +2011,12 @@ msgstr "网络数据库"
 
 msgid "Show list of all known I2P routers"
 msgstr "包含所有已知 I2P 路由的列表"
+
+msgid "List of recently connected peers with profiling info"
+msgstr ""
+
+msgid "Peer Profiles"
+msgstr "对等节点摘要"
 
 msgid "Router Info"
 msgstr "路由信息"
@@ -1983,14 +2090,14 @@ msgstr "高级设置"
 msgid "Advanced router configuration"
 msgstr "高级设置"
 
-msgid "Start or stop Router clients"
-msgstr "启动或停止路由器客户端"
-
 msgid "Changelog"
 msgstr "更新日志"
 
 msgid "Recent changes"
 msgstr "最近的变化"
+
+msgid "Start or stop Router clients"
+msgstr "启动或停止路由器客户端"
 
 msgid "Bug tracker"
 msgstr "错误跟踪器"
@@ -2136,9 +2243,6 @@ msgstr "表网种子搜索引擎"
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "DuckDuckGo搜索引擎（无JavaScript）"
 
-msgid "Clearnet Search Engine"
-msgstr "明网搜索引擎"
-
 msgid "Privacy-focused Clearnet Search Engine"
 msgstr "注重隐私的表网搜索引擎"
 
@@ -2214,18 +2318,6 @@ msgstr "独立调查性新闻"
 msgid "Information Security Research &amp; Education"
 msgstr "信息安全研究与教育"
 
-msgid "Cannabis-related magazine"
-msgstr "大麻相关杂志"
-
-msgid "CultureMagazine"
-msgstr "文化杂志"
-
-msgid "A magazine of Politics &amp; Culture"
-msgstr "政治&amp; 时事杂志"
-
-msgid "CurrentAffairs"
-msgstr "时事政治"
-
 msgid "Darknet related news site"
 msgstr "暗网相关新闻网站"
 
@@ -2280,15 +2372,6 @@ msgstr "香港观察"
 msgid "Monitors threats to freedoms and rights in Hong Kong"
 msgstr "监察香港的自由和权利受到的威胁"
 
-msgid "Politics &amp; Current Affairs Journal"
-msgstr "政治和 时事杂志"
-
-msgid "English language Japanese News"
-msgstr "英语 日语 新闻"
-
-msgid "JapanToday"
-msgstr "今天的日本"
-
 msgid "JStorDaily"
 msgstr "JStorDaily"
 
@@ -2331,9 +2414,6 @@ msgstr "I2P的新闻和博客订阅"
 msgid "Planeta"
 msgstr "Planeta I2P"
 
-msgid "News &amp; Views on Tibet"
-msgstr "西藏新闻和观察"
-
 msgid "Lifestyle magazine"
 msgstr "生活方式杂志"
 
@@ -2351,6 +2431,9 @@ msgstr "科学日报"
 
 msgid "Community-driven tech news"
 msgstr "社区驱动的技术新闻"
+
+msgid "Various services"
+msgstr ""
 
 msgid "News for nerds"
 msgstr "书呆子新闻"
@@ -2397,12 +2480,6 @@ msgstr "全球新闻"
 msgid "TheGuardian"
 msgstr "卫报"
 
-msgid "TheHill"
-msgstr "TheHill"
-
-msgid "US Political News"
-msgstr "美国政治新闻"
-
 msgid "TheMarkup"
 msgstr "TheMarkup"
 
@@ -2417,12 +2494,6 @@ msgstr "莫斯科时报"
 
 msgid "TheNewRepublic"
 msgstr "TheNewRepublic"
-
-msgid "International News from Tibet"
-msgstr "来自西藏的国际新闻"
-
-msgid "TheTibetPost"
-msgstr "西藏哨所"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "文件共享和 著作权新闻"
@@ -2451,6 +2522,9 @@ msgstr "URL"
 
 msgid "Add"
 msgstr "添加"
+
+msgid "Error displaying the info page."
+msgstr ""
 
 msgid "Identity"
 msgstr "路由身份"
@@ -2497,6 +2571,9 @@ msgstr "可用的CPU核心"
 msgid "Performance"
 msgstr "路由器性能"
 
+msgid "Maximum available RAM"
+msgstr ""
+
 msgid "Classified as slow"
 msgstr "归类为慢速"
 
@@ -2505,6 +2582,9 @@ msgstr "是的"
 
 msgid "No"
 msgstr "不"
+
+msgid "GeoIP Db"
+msgstr ""
 
 msgid "Target"
 msgstr "目标"
@@ -2642,6 +2722,9 @@ msgstr "所有路由器（客户端NETDB）"
 msgid "Sybil Analysis"
 msgstr "Sybil分析"
 
+msgid "Bad value supplied, please check and try again."
+msgstr ""
+
 msgid "Router Map"
 msgstr "路由器地图"
 
@@ -2716,9 +2799,6 @@ msgstr "已封禁"
 
 msgid "not found in network database"
 msgstr "在网络数据库中未找到"
-
-msgid "No results"
-msgstr "没有结果"
 
 msgid "Bad Base64 Router hash"
 msgstr ""
@@ -2967,50 +3047,11 @@ msgstr "在NetDb中显示有此地址的所有路由器"
 msgid "Show all routers with this port in the NetDb"
 msgstr "显示NetDb中具有此端口的所有路由器"
 
-msgid "Core version"
-msgstr "版本"
-
 msgid "Network ID"
 msgstr "网络ID"
 
 msgid "Routers"
 msgstr "包括非泛洪路由器"
-
-msgid "Family Key"
-msgstr "导出家族密钥"
-
-msgid "Family Sig"
-msgstr "路由器家族"
-
-msgid "Exploratory tunnels expire (1h)"
-msgstr "探测隧道到期(1小时)"
-
-msgid "Exploratory tunnels reject (1h)"
-msgstr "拒绝探测隧道（1 小时）"
-
-msgid "Exploratory tunnels build success (1h)"
-msgstr "探测隧道建立成功（1小时）"
-
-msgid "Client tunnels expire (1h)"
-msgstr "客户端隧道过期（1 小时）"
-
-msgid "Client tunnels reject (1h)"
-msgstr "客户端隧道拒绝（1 小时）"
-
-msgid "Client tunnels build success (1h)"
-msgstr "客户隧道建设成功（1小时）"
-
-msgid "Participating tunnels (1h)"
-msgstr "参与的隧道(1小时)"
-
-msgid "Participating tunnels (60s)"
-msgstr "参与的隧道(60s)"
-
-msgid "Bandwidth send rate (1h)"
-msgstr "带宽发送率（1h）"
-
-msgid "Bandwidth receive rate (1h)"
-msgstr "带宽接收率（1h）"
 
 msgid "First heard about"
 msgstr "初次接收"
@@ -3080,9 +3121,6 @@ msgstr "到您的路由器.config 文件。"
 msgid "Peer Connections"
 msgstr "对等节点连接"
 
-msgid "Auto-refresh"
-msgstr "自动刷新"
-
 msgid "Active in the last minute"
 msgstr "在最后一刻活跃"
 
@@ -3091,6 +3129,12 @@ msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
+
+msgid "Limit"
+msgstr ""
+
+msgid "Maximum permitted connections"
+msgstr ""
 
 msgid "Current / maximum permitted"
 msgstr "当前/最大允许传输单元"
@@ -3488,8 +3532,8 @@ msgid "{0} shared bandwidth"
 msgstr "{0} 共享带宽"
 
 #, java-format
-msgid "Over {0} shared bandwidth"
-msgstr "共享带宽超过 {0}"
+msgid "Over {0} KB/s shared bandwidth"
+msgstr ""
 
 msgid "status"
 msgstr "状态"
@@ -3561,82 +3605,151 @@ msgstr ""
 msgid "Select search engine"
 msgstr "选择搜索引擎"
 
-msgid "Statistics gathered during this router's uptime"
-msgstr "路由运行时收集的统计数据"
+#, java-format
+msgid "Clock Skew of {0}"
+msgstr "{0}的时钟偏移"
 
-msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
-msgstr "所采集数据量化周期为 1 分钟，仅供参考。"
+msgid "Testing"
+msgstr "测试中"
 
-msgid "These statistics are primarily used for development and debugging."
-msgstr "统计主要用于 I2P 的开发和调试。"
+msgid "Private TCP Address"
+msgstr "错误 - 私有 TCP 地址"
 
-msgid "No lifetime events"
-msgstr "全程无事件"
+msgid "SymmetricNAT"
+msgstr "错误 - 对称 NAT"
 
-msgid "frequency"
-msgstr "更新频率"
+msgid "Firewalled with Inbound TCP Enabled"
+msgstr "警告 - 入站 TCP 已启用，但受到防火墙限制"
 
-msgid "Rolling average events per period"
-msgstr "每周期事件滚动均值"
+msgid "Firewalled &amp; Floodfill"
+msgstr "警告 - 受到防火墙限制，无法洪泛"
 
-msgid "Highest events per period"
-msgstr "每周期事件峰值"
+msgid "Disconnected"
+msgstr "断开"
 
-msgid "Lifetime average events per period"
-msgstr "全程每周期事件均值"
+msgid "UDP Port In Use"
+msgstr "错误 - UDP 端口已占用 - 在高级设置中设置 i2np.udp.internalPort=xxxx 并重启程序"
 
-msgid "Lifetime average frequency"
-msgstr "全程平均频率"
+msgid "No Active Peers"
+msgstr "没有活跃的对等节点"
+
+msgid "UDP Disabled &amp; Inbound TCP host/port not set"
+msgstr "错误 - UDP 已禁用，且 TCP 入站主机与端口未设置"
+
+msgid "Firewalled with UDP Disabled"
+msgstr "警告 - UDP 已禁用且受到防火墙限制"
+
+msgid "Add/remove/edit &amp; control your client and server tunnels"
+msgstr "添加、删除、编辑或控制客户端隧道和服务器隧道"
+
+msgid "Service Tunnels"
+msgstr "运行中隧道"
+
+msgid "How many local service tunnels we're running"
+msgstr "我们正在运行多少个本地服务隧道"
+
+msgid "Messenger"
+msgstr "信使"
+
+msgid "i2pchat"
+msgstr "i2pchat"
+
+msgid "I2PChat"
+msgstr "I2PChat"
+
+msgid "Server"
+msgstr "服务"
+
+msgid "service may be available to peers"
+msgstr "其他节点可以使用的服务"
+
+msgid "service is only available locally"
+msgstr "服务仅在本地提供"
+
+msgid "Show tunnels"
+msgstr "显示隧道"
+
+msgid "Leases expired"
+msgstr "租约已过期"
+
+msgid "Rebuilding"
+msgstr "正在重建"
+
+msgid "ago"
+msgstr "结束"
+
+msgid "Ready"
+msgstr "就绪"
+
+msgid "Building"
+msgstr "创建中"
+
+msgid "Building tunnels"
+msgstr "隧道创建中"
+
+msgid "Shared Clients"
+msgstr "共享隧道客户端"
+
+msgid "Click Restart to install"
+msgstr "点击重启完成安装"
+
+msgid "Click Shutdown and restart to install"
+msgstr "点击关闭并重新启动I2P即可完成安装"
 
 #, java-format
-msgid "{0} event"
-msgid_plural "{0} events"
-msgstr[0] "{0} 个事件"
+msgid "{0}"
+msgstr "{0}"
 
-msgid "rate"
-msgstr "速度"
+msgid "Updating after restart"
+msgstr "更新并重启"
 
-msgid "Average"
-msgstr "均值"
+msgid "Signed development update available"
+msgstr "已签署的开发更新已就绪"
 
-msgid "Highest average"
-msgstr "最高均值"
+msgid "Download I2P Update"
+msgstr "有更新可用，正在尝试下载"
 
-msgid "Highest total in a period"
-msgstr "某个时间段内最高总数"
+msgid "Unsigned update available"
+msgstr "未签署的开发版本更新已就绪"
 
-msgid "Average event count"
-msgstr "平均事件计数"
+msgid "Help with firewall configuration"
+msgstr "如何配置防火墙"
 
-msgid "Events in peak period"
-msgstr "事件峰值"
+msgid "Check network connection and NAT/firewall!"
+msgstr "检查网络连接和 NAT/防火墙！"
 
-msgid "Events in this period"
-msgstr "事件峰值"
+msgid "Attempt to download router reference files (if automatic reseed has failed)"
+msgstr "尝试下载补种文件（如果自动补种失败）"
 
-#, java-format
-msgid "ended {0} ago"
-msgstr "{0} 前结束"
+msgid "Reseed"
+msgstr "补种"
 
-msgid "No events"
-msgstr "无事件"
+msgid "Order"
+msgstr "顺序"
 
-msgid "Graph Data"
-msgstr "图表数据"
+msgid "Top"
+msgstr "顶部"
 
-msgid "Graph Event Count"
-msgstr "图表事件计数"
+msgid "Move to top"
+msgstr "移动到顶部"
 
-msgid "Export Data as XML"
-msgstr "将数据导出为XML"
+msgid "Move up"
+msgstr "上移"
 
-msgid "Lifetime average value"
-msgstr "全程均值"
+msgid "Down"
+msgstr "向下"
 
-#, java-format
-msgid "1 event"
-msgid_plural "{0} events"
-msgstr[0] "{0} 个事件"
+msgid "Move down"
+msgstr "下移"
+
+msgid "Bottom"
+msgstr "底部"
+
+msgid "Move to bottom"
+msgstr "移动到底部"
+
+msgid "Select a section to add"
+msgstr "选择要添加的部分"
 
 msgid "Help &amp; FAQ"
 msgstr "帮助与常见问答"
@@ -3679,9 +3792,6 @@ msgstr "拥堵"
 
 msgid "Tunnel Status"
 msgstr "隧道状态"
-
-msgid "Service Tunnels"
-msgstr "运行中隧道"
 
 msgid "News &amp; Updates"
 msgstr "新闻和更新"
@@ -3736,6 +3846,9 @@ msgstr "网站托管"
 
 msgid "An introduction to hosting websites on the I2P network"
 msgstr "在I2P网络上托管网站的简单指南"
+
+msgid "New hosts in last 24 hours"
+msgstr ""
 
 msgid "I2PControl"
 msgstr "I2P 控制"
@@ -4036,151 +4149,82 @@ msgstr "隐藏模式处于活动状态时，不会构建任何参与隧道"
 msgid "Router is configured to reject all transit tunnel requests"
 msgstr "路由器配置为拒绝所有参与的隧道请求"
 
-#, java-format
-msgid "Clock Skew of {0}"
-msgstr "{0}的时钟偏移"
+msgid "Statistics gathered during this router's uptime"
+msgstr "路由运行时收集的统计数据"
 
-msgid "Testing"
-msgstr "测试中"
+msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
+msgstr "所采集数据量化周期为 1 分钟，仅供参考。"
 
-msgid "Private TCP Address"
-msgstr "错误 - 私有 TCP 地址"
+msgid "These statistics are primarily used for development and debugging."
+msgstr "统计主要用于 I2P 的开发和调试。"
 
-msgid "SymmetricNAT"
-msgstr "错误 - 对称 NAT"
+msgid "No lifetime events"
+msgstr "全程无事件"
 
-msgid "Firewalled with Inbound TCP Enabled"
-msgstr "警告 - 入站 TCP 已启用，但受到防火墙限制"
+msgid "frequency"
+msgstr "更新频率"
 
-msgid "Firewalled &amp; Floodfill"
-msgstr "警告 - 受到防火墙限制，无法洪泛"
+msgid "Rolling average events per period"
+msgstr "每周期事件滚动均值"
 
-msgid "Disconnected"
-msgstr "断开"
+msgid "Highest events per period"
+msgstr "每周期事件峰值"
 
-msgid "UDP Port In Use"
-msgstr "错误 - UDP 端口已占用 - 在高级设置中设置 i2np.udp.internalPort=xxxx 并重启程序"
+msgid "Lifetime average events per period"
+msgstr "全程每周期事件均值"
 
-msgid "No Active Peers"
-msgstr "没有活跃的对等节点"
-
-msgid "UDP Disabled &amp; Inbound TCP host/port not set"
-msgstr "错误 - UDP 已禁用，且 TCP 入站主机与端口未设置"
-
-msgid "Firewalled with UDP Disabled"
-msgstr "警告 - UDP 已禁用且受到防火墙限制"
-
-msgid "Add/remove/edit &amp; control your client and server tunnels"
-msgstr "添加、删除、编辑或控制客户端隧道和服务器隧道"
-
-msgid "How many local service tunnels we're running"
-msgstr "我们正在运行多少个本地服务隧道"
-
-msgid "I2PSnark"
-msgstr "I2PSnark"
-
-msgid "Messenger"
-msgstr "信使"
-
-msgid "i2pchat"
-msgstr "i2pchat"
-
-msgid "I2PChat"
-msgstr "I2PChat"
-
-msgid "Server"
-msgstr "服务"
-
-msgid "service may be available to peers"
-msgstr "其他节点可以使用的服务"
-
-msgid "service is only available locally"
-msgstr "服务仅在本地提供"
-
-msgid "Show tunnels"
-msgstr "显示隧道"
-
-msgid "Leases expired"
-msgstr "租约已过期"
-
-msgid "Rebuilding"
-msgstr "正在重建"
-
-msgid "ago"
-msgstr "结束"
-
-msgid "Ready"
-msgstr "就绪"
-
-msgid "Building"
-msgstr "创建中"
-
-msgid "Building tunnels"
-msgstr "隧道创建中"
-
-msgid "Shared Clients"
-msgstr "共享隧道客户端"
-
-msgid "Click Restart to install"
-msgstr "点击重启完成安装"
-
-msgid "Click Shutdown and restart to install"
-msgstr "点击关闭并重新启动I2P即可完成安装"
+msgid "Lifetime average frequency"
+msgstr "全程平均频率"
 
 #, java-format
-msgid "{0}"
-msgstr "{0}"
+msgid "{0} event"
+msgid_plural "{0} events"
+msgstr[0] "{0} 个事件"
 
-msgid "Updating after restart"
-msgstr "更新并重启"
+msgid "rate"
+msgstr "速度"
 
-msgid "Signed development update available"
-msgstr "已签署的开发更新已就绪"
+msgid "Average"
+msgstr "均值"
 
-msgid "Download I2P Update"
-msgstr "有更新可用，正在尝试下载"
+msgid "Highest average"
+msgstr "最高均值"
 
-msgid "Unsigned update available"
-msgstr "未签署的开发版本更新已就绪"
+msgid "Highest total in a period"
+msgstr "某个时间段内最高总数"
 
-msgid "Help with firewall configuration"
-msgstr "如何配置防火墙"
+msgid "Average event count"
+msgstr "平均事件计数"
 
-msgid "Check network connection and NAT/firewall!"
-msgstr "检查网络连接和 NAT/防火墙！"
+msgid "Events in peak period"
+msgstr "事件峰值"
 
-msgid "Attempt to download router reference files (if automatic reseed has failed)"
-msgstr "尝试下载补种文件（如果自动补种失败）"
+msgid "Events in this period"
+msgstr "事件峰值"
 
-msgid "Reseed"
-msgstr "补种"
+#, java-format
+msgid "ended {0} ago"
+msgstr "{0} 前结束"
 
-msgid "Order"
-msgstr "顺序"
+msgid "No events"
+msgstr "无事件"
 
-msgid "Top"
-msgstr "顶部"
+msgid "Graph Data"
+msgstr "图表数据"
 
-msgid "Move to top"
-msgstr "移动到顶部"
+msgid "Graph Event Count"
+msgstr "图表事件计数"
 
-msgid "Move up"
-msgstr "上移"
+msgid "Export Data as XML"
+msgstr "将数据导出为XML"
 
-msgid "Down"
-msgstr "向下"
+msgid "Lifetime average value"
+msgstr "全程均值"
 
-msgid "Move down"
-msgstr "下移"
-
-msgid "Bottom"
-msgstr "底部"
-
-msgid "Move to bottom"
-msgstr "移动到底部"
-
-msgid "Select a section to add"
-msgstr "选择要添加的部分"
+#, java-format
+msgid "1 event"
+msgid_plural "{0} events"
+msgstr[0] "{0} 个事件"
 
 msgid "No known routers"
 msgstr "没有已知的路由器"
@@ -4520,6 +4564,10 @@ msgstr "目前没有本地或过境隧道。"
 msgid "Bandwidth Tiers"
 msgstr "带宽等级"
 
+#, java-format
+msgid "Over {0} shared bandwidth"
+msgstr "共享带宽超过 {0}"
+
 msgid "Inbound or outbound?"
 msgstr "入站或出站？"
 
@@ -4579,6 +4627,18 @@ msgstr "带宽测试已取消"
 
 msgid "Bandwidth test was not running"
 msgstr "带宽测试未运行"
+
+msgid "ready"
+msgstr ""
+
+msgid "inbound test"
+msgstr ""
+
+msgid "outbound test"
+msgstr ""
+
+msgid "done"
+msgstr ""
 
 msgid "bits per second"
 msgstr "比特每秒"
@@ -4752,8 +4812,8 @@ msgstr "网络共享"
 msgid "Share"
 msgstr "共享"
 
-msgid "Note"
-msgstr "注意"
+msgid "NOTE"
+msgstr ""
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
@@ -4777,6 +4837,10 @@ msgstr "共享的带宽越多，您的匿名性就越强，同时能帮助网络
 
 msgid "config advanced"
 msgstr "高级设置"
+
+#, java-format
+msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
+msgstr ""
 
 msgid "Floodfill Configuration"
 msgstr "洪泛配置"
@@ -4805,8 +4869,8 @@ msgstr "禁用"
 msgid "Advanced I2P+ Configuration"
 msgstr "I2P 高级设置"
 
-msgid "Some changes may require a restart to take effect."
-msgstr "某些设置需要程序重启后生效。"
+msgid "Help with additional configuration settings"
+msgstr ""
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5672,23 +5736,50 @@ msgstr "设置为 true 时，这将在 < a href=/configplugins>Plugin Configurat
 msgid "When set to true, this setting enables reverse DNS lookups for peers, triggered when displaying the country flag of a peer or when the hostname or domain is explicitly displayed in the console, or when the peer's RouterInfo is written to disk. In order to avoid repeat lookups, it's recommended to configure a generous caching policy for DNS lookups of 10 minutes or more, and to configure a privacy respecting DNS server in your operating system. [Disabled by default, restart required]"
 msgstr "设置为 true 时,此设置为对等点启用反向 DNS 查询,会在显示对等点的国家旗帜,或者控制台明确显示主机名或域名,或将对等点的 RouterInfo 写入磁盘时触发。为避免重复查询,建议为 DNS 查询配置较慷慨的缓存策略,如10分钟或更长,并在操作系统中配置尊重隐私的 DNS 服务器。[默认禁用,需要重启]"
 
+msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
+msgstr "此设置允许为路由器控制台页面的页面标题设置自定义文本前缀，当你在浏览器标签上打开了多个控制台并希望有一种简单的方法来区分它们时，这可能非常有用。"
+
 msgid "When set to true, accessing the router console via http:// when https:// is enabled will automatically redirect to https. To configure router console access, edit the settings in your <code>clients.config</code> file in your profile directory (<i>not</i> the application installation directory). [Enabled by default]"
 msgstr "设置为 true 时,在启用 https:// 时,通过 http:// 访问路由器控制台将自动重定向到 https。要配置路由器控制台访问,请在配置文件目录(<i>而不是</i>应用程序安装目录)的 <code>client.config</code> 文件中编辑设置。[默认启用]"
+
+msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
+msgstr "此设置设置为 true 时，将为图形页面上的图形启用 hiDPI 模式< href=/图形>。</a>启用后，您可能需要刷新页面才能看到应用的设置，并且图形显示可能需要几个刷新周期才能稳定。请注意，应该在浏览器中启用 Javascript。[实验]"
+
+msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
+msgstr "此设置设置为 true 时，将在边栏的“拥塞”部分显示“对等测试平均值”读数，该读数的计算方法是将成功的对等测试平均值和失败的测试所花费的平均超额时间相加。平均值可以用作确定最佳<code>路由器.peerTestTimeout</code> 值的指南。[默认值为假]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "此设置决定路由器是否应使用提供的 <i>blocklist.txt</i> 文件和任何用户配置的封禁清单,以通过哈希或 IP 地址禁止路由器。对 IPv4 支持范围和网络掩码,但不支持 IPv6。有关更多信息,请参阅您的 I2P+ 应用程序目录中的 <i>blocklist.txt</i> 文件。[默认启用,需要重启]"
 
-msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
-msgstr "此设置决定路由器是否应使用您的 I2P+ 应用程序目录中的提供的 <i>blocklist_tor.txt</i> 文件,以启用封禁通过 Tor 退出节点 IP 地址运行的路由器。[默认启用,需要重启]"
+msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
+msgstr "此设置允许为通过封禁清单强制实施的禁令配置过期时间(以秒为单位)。默认情况下,禁令将持续路由器会话期间。[需要重启]"
 
 msgid "This setting, when configured with a path pointing at a valid blocklist file, enables an additional, user-configured blocklist to be loaded at router startup. [Disabled by default, restart required]"
 msgstr "配置有指向有效封禁清单文件的路径时,此设置将启用额外的、用户配置的封禁清单在路由器启动时加载。[默认禁用,需要重启]"
 
-msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
-msgstr "此设置允许为通过封禁清单强制实施的禁令配置过期时间(以秒为单位)。默认情况下,禁令将持续路由器会话期间。[需要重启]"
+msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
+msgstr "此设置决定路由器是否应使用您的 I2P+ 应用程序目录中的提供的 <i>blocklist_tor.txt</i> 文件,以启用封禁通过 Tor 退出节点 IP 地址运行的路由器。[默认启用,需要重启]"
+
+msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
+msgstr ""
+
+msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
+msgstr "当设置为false时，路由器将不会阻止来自运行旧版本的较慢或不可达路由器的隧道构建请求。[默认为true，需要重启]"
 
 msgid "Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks."
 msgstr "分配用于构建隧道的处理器线程数。如果您的处理器支持超线程或并发多线程，则可以将处理器内核数乘以 2 以获得要分配的最大线程数，否则处理器内核数 = 最大可用线程数。请注意，您可能希望分配小于理论最大值的分配，以确保您有余量执行其他任务。"
+
+msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
+msgstr "此设置（以毫秒为单位）确定数据包在丢弃之前可以在 CoDel 队列中保留多长时间。默认值为 1000 毫秒。 [需要重新启动]"
+
+msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
+msgstr "此设置确定出站队列中在标记为已满之前的最大邮件数。[默认值为 768]"
+
+msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
+msgstr "此设置确定在丢弃更多邮件之前，超出最大队列值的最大邮件数。[默认值为 128]"
+
+msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
+msgstr "此设置（以毫秒为单位）允许您手动配置 CoDel 队列管理系统的队列延迟目标值。默认值为 50 毫秒。[需要重新启动]"
 
 msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
 msgstr "此设置(以毫秒为单位)覆盖默认消息处理时间限制(伦敦区域部分中的<i>消息延迟</i>指示),在确定路由器拥塞和拒绝通行隧道请求之前。[默认值为750毫秒或1500毫秒(如果路由器被标记为较慢)]"
@@ -5699,8 +5790,32 @@ msgstr "定期测试隧道以确定平均滞后，并在拥塞侧面板部分中
 msgid "When set to true, the router will change its identity and UDP port every time the router restarts. [Default is false]"
 msgstr "设置为 true 时，路由器将在每次路由器重新启动时更改其标识和 UDP 端口。[默认值为假]"
 
+msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
+msgstr "设置为false时，路由器将不会限制来自其他路由器的隧道构建请求，使用时应谨慎。[默认为true，需要重启]"
+
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
 msgstr "此设置确定哪些< href=/profiles#profile_defs>peer 功能</a>将不用于构建路由器的隧道。例如<code>：router.excludePeerCaps=LMN</code>"
+
+msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
+msgstr "此设置（以小时为单位）确定 NetDb 中的 RouterInfo 在分类为过时并被删除之前（其最后一次已知的发布日期）的年龄。[默认值为 28 小时，除非路由器是 洪泛，在这种情况下，默认值为 8 小时]"
+
+msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
+msgstr "该设置决定当同伴探索作业运行时要并行探索的同伴数量[默认情况下,当已知同伴超过3000个时每个同伴]。请注意,增加这个值将增加探索的带宽需求,设置这个值过高可能会导致消息延迟过度和干扰其他服务,所以请慎重使用!"
+
+msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
+msgstr "此设置确定对等探索作业在运行时将引用的 NetDb DHT 存储桶数。默认情况下，要浏览的存储桶数量会有所不同，具体取决于路由器是否已运行超过一小时、路由器是否处于隐藏状态或处于“K”带宽层中，以及已知路由器的数量。"
+
+msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
+msgstr "此设置（以秒为单位）允许您覆写对等探索作业运行之间的延迟，该作业尝试查找要添加到 NetDb 的新对等节点。默认情况下，作业将每 80 秒运行一次，如果路由器遇到作业或消息滞后，则每 3 分钟运行一次。如果 NetDb 的大小达到 4000 个对等节点，则暂停时间将增加到 15 分钟。如果您的 NetDb 填充良好（超过 2000 个对等节点），或者如果您希望减少总体带宽使用量，则可能希望增加延迟。注意： 对于 洪泛 路由器，此作业不会运行。"
+
+msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
+msgstr "此设置确定要排队进行浏览的最大对等哈希数。在 I2P 中，最大值为 128，在 I2P+ 中，默认值为 512。"
+
+msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
+msgstr "此设置确定充当 floodfill 的路由器是否会浏览 NetDb 以了解新的对等节点。[默认值为假，需要重新启动]"
+
+msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
+msgstr "此设置设置为 true 时，将阻止路由器直接与其他路由器通信，从而强制使用引入器。[默认值为假，除非路由器处于隐藏模式]"
 
 msgid "When set to true, if your router is serving as a floodfill for the network, your <a href=/configadvanced#ffconf>floodfill participation</a> will be hidden from other routers."
 msgstr "设置为 true 时，如果您的路由器用作网络的 floodfill，则您的 < a href=/configadvanced#ffconf>floodfill 参与</a>将对其他路由器隐藏。"
@@ -5713,6 +5828,12 @@ msgstr "确定路由器可以构建的参与隧道的最大数量。要完全禁
 
 msgid "Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 10% in I2P+, 33% in I2P]"
 msgstr "定义将对一个对等点最大使用百分比的活动本机隧道(客户端和探索隧道)。[在I2P+中默认为10%,在I2P中默认为33%。]"
+
+msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
+msgstr "该设置允许您配置主机参与隧道的最小数量,在此数量达到前,路由器会基于预期的带宽需求拒绝隧道请求。[默认值为100(如果系统运行安卓),800(如果系统运行ARM且CPU核心小于4个),1200(如果系统运行ARM且CPU核心大于或等于4个),否则为2500]"
+
+msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
+msgstr "此设置允许您从 NetDb 中排除较旧的路由器。早于默认值或您设置的值的路由器将从 NetDb 中删除，并在路由器会话期间被禁止。默认情况下，将排除早于 0.9.20 的路由器。注意： 从 I2P+ 版本 0.9.46+ 开始，只有运行最新版本的路由器才用于构建本地隧道。[需要重新启动]"
 
 msgid "When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]"
 msgstr "设置为 true 时，存储在配置文件的 netDB 目录中的路由器信息文件将不会拆分为 64 个子目录。[默认值为假]"
@@ -5738,84 +5859,6 @@ msgstr "分配给 JVM 的内存小于 256MB"
 msgid "Router running a non-native, software emulated version of the Java BigInteger library"
 msgstr "运行 Java BigInteger 库的非本机软件模拟版本的路由器"
 
-msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
-msgstr "该设置允许您配置主机参与隧道的最小数量,在此数量达到前,路由器会基于预期的带宽需求拒绝隧道请求。[默认值为100(如果系统运行安卓),800(如果系统运行ARM且CPU核心小于4个),1200(如果系统运行ARM且CPU核心大于或等于4个),否则为2500]"
-
-msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
-msgstr "设置为 true 时，路由器将在路由器重新启动时更改其标识和 UDP 端口，然后从 router.config 中删除密钥以防止进一步更改。[默认值为假]"
-
-msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr "设置为false时，路由器将不会限制来自其他路由器的隧道构建请求，使用时应谨慎。[默认为true，需要重启]"
-
-msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr "当设置为false时，路由器将不会阻止来自运行旧版本的较慢或不可达路由器的隧道构建请求。[默认为true，需要重启]"
-
-msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
-msgstr "配置后，这将为允许路由器同时构建的隧道数设置硬限制。默认情况下，路由器使用平均构建时间和当前出站带宽来确定最佳构建速率。[需要重新启动]"
-
-msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
-msgstr "如果要安装未签名 （.zip） 的 I2P 更新，则应将其添加到 <code>router.config</code> 文件中，除非您已配置 <code>routerconsole.advanced=true</code>，在这种情况下，已设置此选项。注意：从 I2P+ 0.9.48+ 开始，默认情况下启用<a href=/configupdate#i2pupdates>未签名更新的安装</a>。"
-
-msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
-msgstr "此设置允许您为未签名的更新功能配置更新 URL（如果已启用）。url 应以 <code>/i2pupdate 结尾.zip</code>。注意：除非您信任更新的来源，否则不要安装未签名的更新！"
-
-msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
-msgstr "此设置允许禁用 SSU 测试，以确定您的路由器是否已设置防火墙，是否可以为肯定没有防火墙但遇到间歇性防火墙问题的路由器启用。如果禁用测试，SSU 和 NTCP 都应在路由器信息页面上报告< a href=/info>的当前公共 IP 地址</a>。[需要重新启动]"
-
-msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
-
-msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
-msgstr "这个设置决定了在与其他节点进行通信时，哪种传输方式具有优先权。默认情况下，NTCP比UDP（SSU）更受青睐。将该值设置为 \"true\"，除非存在预先存在的NTCP连接，否则UDP将被优先考虑；当设置为 \"always \"时，无论是否存在预先存在的NTCP连接，UDP将始终被使用。[默认值是false]"
-
-msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
-msgstr "此特定于隧道的设置允许您启用或禁用对发送到路由器托管的服务器的 ping 的回复。要禁用 ping，必须将 <code>i2p.streaming.answerPings=false</code> 行添加到隧道管理器中服务器配置的<i>“自定义选项”</i>部分。"
-
-msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
-msgstr "设置为 true 时，I2P 在没有网络连接的情况下运行，如果您不断重新启动路由器以测试代码更新，这将非常有用，因为这可以防止网络中断。"
-
-msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr "启用此设置后，将为路由器托管的所有启用了 ping 的服务器引入长达 50 毫秒的随机 ping 延迟。默认值处于禁用状态。[需要重新启动]"
-
-msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr "如果还启用了 <code>i2p.streaming.enablePongDelay</code>，则此设置将修改为启用 ping 的服务器引入的最大额外随机 pong 延迟。除非显式设置，否则将使用默认值 50ms。"
-
-msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
-msgstr "此设置（以毫秒为单位）确定数据包在丢弃之前可以在 CoDel 队列中保留多长时间。默认值为 1000 毫秒。 [需要重新启动]"
-
-msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
-msgstr "此设置确定出站队列中在标记为已满之前的最大邮件数。[默认值为 768]"
-
-msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
-msgstr "此设置确定在丢弃更多邮件之前，超出最大队列值的最大邮件数。[默认值为 128]"
-
-msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
-msgstr "此设置（以毫秒为单位）允许您手动配置 CoDel 队列管理系统的队列延迟目标值。默认值为 50 毫秒。[需要重新启动]"
-
-msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
-msgstr "此设置（以小时为单位）确定 NetDb 中的 RouterInfo 在分类为过时并被删除之前（其最后一次已知的发布日期）的年龄。[默认值为 28 小时，除非路由器是 洪泛，在这种情况下，默认值为 8 小时]"
-
-msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
-msgstr "该设置决定当同伴探索作业运行时要并行探索的同伴数量[默认情况下,当已知同伴超过3000个时每个同伴]。请注意,增加这个值将增加探索的带宽需求,设置这个值过高可能会导致消息延迟过度和干扰其他服务,所以请慎重使用!"
-
-msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
-msgstr "此设置确定对等探索作业在运行时将引用的 NetDb DHT 存储桶数。默认情况下，要浏览的存储桶数量会有所不同，具体取决于路由器是否已运行超过一小时、路由器是否处于隐藏状态或处于“K”带宽层中，以及已知路由器的数量。"
-
-msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
-msgstr "此设置（以秒为单位）允许您覆写对等探索作业运行之间的延迟，该作业尝试查找要添加到 NetDb 的新对等节点。默认情况下，作业将每 80 秒运行一次，如果路由器遇到作业或消息滞后，则每 3 分钟运行一次。如果 NetDb 的大小达到 4000 个对等节点，则暂停时间将增加到 15 分钟。如果您的 NetDb 填充良好（超过 2000 个对等节点），或者如果您希望减少总体带宽使用量，则可能希望增加延迟。注意： 对于 洪泛 路由器，此作业不会运行。"
-
-msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
-msgstr "此设置确定要排队进行浏览的最大对等哈希数。在 I2P 中，最大值为 128，在 I2P+ 中，默认值为 512。"
-
-msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
-msgstr "此设置确定充当 floodfill 的路由器是否会浏览 NetDb 以了解新的对等节点。[默认值为假，需要重新启动]"
-
-msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
-msgstr "此设置设置为 true 时，将阻止路由器直接与其他路由器通信，从而强制使用引入器。[默认值为假，除非路由器处于隐藏模式]"
-
-msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
-msgstr "此设置允许您从 NetDb 中排除较旧的路由器。早于默认值或您设置的值的路由器将从 NetDb 中删除，并在路由器会话期间被禁止。默认情况下，将排除早于 0.9.20 的路由器。注意： 从 I2P+ 版本 0.9.46+ 开始，只有运行最新版本的路由器才用于构建本地隧道。[需要重新启动]"
-
 msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. [Default is 4]"
 msgstr "此设置确定要并发运行的对等测试数，用于确定对等延迟。[默认值为 4]"
 
@@ -5831,14 +5874,17 @@ msgstr "此设置确定有关路由器的统计信息是否偶尔发布到 NetDb
 msgid "This setting configures the initial size of the outbound message queue. [Default is 64]"
 msgstr "此设置配置出站消息队列的初始大小。[默认值为 64]"
 
-msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
-msgstr "此设置配置入站邮件队列的最大大小。[默认值为 1024]"
-
 msgid "This setting configures the maximum number of inbound messages queued per cycle (pump). [Default is 24]"
 msgstr "此设置配置每个周期（泵）排队的最大入站邮件数。[默认值为 24]"
 
+msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
+msgstr "此设置配置入站邮件队列的最大大小。[默认值为 1024]"
+
 msgid "This setting configures the maximum number of outbound messages queued per cycle (pump). [Default is 64]"
 msgstr "此设置配置每个周期（泵）排队的最大入站邮件数。[默认值为 24]"
+
+msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
+msgstr "设置为 true 时，路由器将在路由器重新启动时更改其标识和 UDP 端口，然后从 router.config 中删除密钥以防止进一步更改。[默认值为假]"
 
 msgid "This setting (in milliseconds) allows you to manually configure the delay between router refresh updates run by the Refresh Routers Job. By default the pause between refreshes is determined by the size of the NetDb, and introduces some randomness in the timing to mitigate traffic analysis. For values lower than 2000 milliseconds, increasing the value of <code>router.refreshTimeout</code> is recommended. Note that setting this value below 2000 milliseconds will increase your network traffic and may introduce job lag, and is not recommended for sustained use."
 msgstr "此设置配置每个周期（泵）排队的最大出站邮件数。[默认值为 64]"
@@ -5852,26 +5898,56 @@ msgstr "此设置（以小时为单位）允许您手动配置路由器信息的
 msgid "This setting determines whether routers classified as uninteresting (K or L tier, unreachable or older than 0.9.50) are checked during the refresh router process after 1 hour of uptime. [Default is false]"
 msgstr "此设置（以秒为单位）允许您手动配置在确定刷新路由器的尝试失败之前等待的时间量。[默认值为 20 秒]"
 
+msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
+msgstr ""
+
+msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
+msgstr "配置后，这将为允许路由器同时构建的隧道数设置硬限制。默认情况下，路由器使用平均构建时间和当前出站带宽来确定最佳构建速率。[需要重新启动]"
+
+msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
+msgstr "如果要安装未签名 （.zip） 的 I2P 更新，则应将其添加到 <code>router.config</code> 文件中，除非您已配置 <code>routerconsole.advanced=true</code>，在这种情况下，已设置此选项。注意：从 I2P+ 0.9.48+ 开始，默认情况下启用<a href=/configupdate#i2pupdates>未签名更新的安装</a>。"
+
+msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
+msgstr "此设置允许您为未签名的更新功能配置更新 URL（如果已启用）。url 应以 <code>/i2pupdate 结尾.zip</code>。注意：除非您信任更新的来源，否则不要安装未签名的更新！"
+
 msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
 msgstr "此设置确定在运行 1 小时后刷新路由器过程中是否检查分类为无趣的路由器（K 层或 L 层、无法访问或早于 0.9.50）。[默认值为假]"
 
-msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
-msgstr "此设置设置为 true 时，将为图形页面上的图形启用 hiDPI 模式< href=/图形>。</a>启用后，您可能需要刷新页面才能看到应用的设置，并且图形显示可能需要几个刷新周期才能稳定。请注意，应该在浏览器中启用 Javascript。[实验]"
+msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
+msgstr ""
 
-msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
-msgstr "此设置设置为 true 时，将在边栏的“拥塞”部分显示“对等测试平均值”读数，该读数的计算方法是将成功的对等测试平均值和失败的测试所花费的平均超额时间相加。平均值可以用作确定最佳<code>路由器.peerTestTimeout</code> 值的指南。[默认值为假]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
+msgstr ""
 
-msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr "此设置允许为路由器控制台页面的页面标题设置自定义文本前缀，当你在浏览器标签上打开了多个控制台并希望有一种简单的方法来区分它们时，这可能非常有用。"
+msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
+msgstr "此设置允许禁用 SSU 测试，以确定您的路由器是否已设置防火墙，是否可以为肯定没有防火墙但遇到间歇性防火墙问题的路由器启用。如果禁用测试，SSU 和 NTCP 都应在路由器信息页面上报告< a href=/info>的当前公共 IP 地址</a>。[需要重新启动]"
 
-msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
-msgstr "此设置设置为 true 时，将在站点地图上显示“<i>感兴趣的网站</i>< href=/sitemap>。</a>[默认值为假]"
+msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
+msgstr "这个设置决定了在与其他节点进行通信时，哪种传输方式具有优先权。默认情况下，NTCP比UDP（SSU）更受青睐。将该值设置为 \"true\"，除非存在预先存在的NTCP连接，否则UDP将被优先考虑；当设置为 \"always \"时，无论是否存在预先存在的NTCP连接，UDP将始终被使用。[默认值是false]"
+
+msgid "miscellaneous"
+msgstr ""
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "此设置允许配置所需的备用 NTP 服务器，以确保您的路由器保持准确的时钟时间。[默认值为 0.pool.ntp.org，1.pool.ntp.org，2.pool.ntp.org]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
 msgstr "如果设置为 true，此选项将在系统托盘/通知区域中放置一个图标，其中包含基本服务控制选项。[默认禁用]"
+
+msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
+msgstr "此特定于隧道的设置允许您启用或禁用对发送到路由器托管的服务器的 ping 的回复。要禁用 ping，必须将 <code>i2p.streaming.answerPings=false</code> 行添加到隧道管理器中服务器配置的<i>“自定义选项”</i>部分。"
+
+msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
+msgstr "启用此设置后，将为路由器托管的所有启用了 ping 的服务器引入长达 50 毫秒的随机 ping 延迟。默认值处于禁用状态。[需要重新启动]"
+
+msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
+msgstr "如果还启用了 <code>i2p.streaming.enablePongDelay</code>，则此设置将修改为启用 ping 的服务器引入的最大额外随机 pong 延迟。除非显式设置，否则将使用默认值 50ms。"
+
+msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
+msgstr "设置为 true 时，I2P 在没有网络连接的情况下运行，如果您不断重新启动路由器以测试代码更新，这将非常有用，因为这可以防止网络中断。"
+
+msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
+msgstr "此设置设置为 true 时，将在站点地图上显示“<i>感兴趣的网站</i>< href=/sitemap>。</a>[默认值为假]"
 
 msgid "Recent I2P+ Changes"
 msgstr "最近的I2P+更改"
@@ -6088,6 +6164,18 @@ msgstr "同时使用无SSL和SSL"
 
 msgid "For SSL only"
 msgstr "仅使用 SSL"
+
+msgid "How can I configure the console and web services to be accessible on my local network?"
+msgstr ""
+
+msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
+msgstr ""
+
+msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
+msgstr ""
+
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager’s configuration section using the <i>reachable by</i> dropdown."
+msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "如何使用 I2P 连接至 IRC?"
@@ -7348,9 +7436,6 @@ msgstr "节点"
 msgid "peer profiles"
 msgstr "对等节点摘要"
 
-msgid "Peer Profiles"
-msgstr "对等节点摘要"
-
 msgid "Session Banned Peers"
 msgstr "会话被禁止的对等点"
 
@@ -7567,6 +7652,9 @@ msgstr "切换隧道"
 msgid "Peer Profile"
 msgstr "对等节点摘要"
 
+msgid "Profile View"
+msgstr ""
+
 msgid "Profile for peer"
 msgstr "对等节点信息"
 
@@ -7704,6 +7792,35 @@ msgstr "完成"
 
 
 
+
+
 #, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
