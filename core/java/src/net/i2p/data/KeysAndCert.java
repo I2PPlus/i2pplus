@@ -87,7 +87,11 @@ public class KeysAndCert extends DataStructureImpl {
         if (_certificate.getCertificateType() == Certificate.CERTIFICATE_TYPE_KEY) {
             try {
                 KeyCertificate kcert = _certificate.toKeyCertificate();
-                return kcert.getEncType();
+                if (kcert.getPayload() == null || kcert.getPayload().length == 0) {
+                    return EncType.ELGAMAL_2048;
+                } else {
+                    return kcert.getEncType();
+                }
             } catch (DataFormatException dfe) {}
         }
         return EncType.ELGAMAL_2048;

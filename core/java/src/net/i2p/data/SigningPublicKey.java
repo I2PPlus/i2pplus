@@ -105,6 +105,7 @@ public class SigningPublicKey extends SimpleDataStructure {
      *  @since 0.9.12
      */
     public SigningPublicKey toTypedKey(KeyCertificate kcert) {
+        if (_type == DEF_TYPE && (kcert.getPayload() == null || kcert.getPayload().length == 0)) {return this;}
         if (_data == null) {throw new IllegalStateException();}
         SigType newType = kcert.getSigType();
         if (_type == newType) {return this;}
