@@ -66,10 +66,8 @@ public class RouterThrottleImpl implements RouterThrottle {
         _context.statManager().createRateStat("router.throttleTunnelBytesAllowed", "Bytes permitted to be sent when we get a tunnel request", "Router [Throttle]", RATES);
         _context.statManager().createRateStat("router.throttleTunnelBytesUsed", "Used B/s at request (period = max KB/s)", "Router [Throttle]", RATES);
         _context.statManager().createRateStat("router.throttleTunnelCause", "JobQueue lag when a tunnel request was throttled", "Router [Throttle]", RATES);
-        _context.statManager().createRateStat("router.throttleTunnelFailCount1m", "Average message send fails in last 2 minutes (failure spike throttle)", "Router [Throttle]", RATES);
         _context.statManager().createRateStat("router.throttleTunnelMaxExceeded", "Transit tunnels when max limit reached", "Router [Throttle]", RATES);
         _context.statManager().createRateStat("router.throttleTunnelProbTooFast", "Transit tunnels beyond previous 1h average when we throttle", "Router [Throttle]", RATES);
-        _context.statManager().createRateStat("router.throttleTunnelProcessingTime1m", "Message processing time when we throttle a tunnel", "Router [Throttle]", RATES);
         _context.statManager().createRateStat("tunnel.bytesAllocatedAtAccept", "Allocated bytes for transit tunnels when we accepted a request", "Tunnels [Participating]", RATES);
     }
 
