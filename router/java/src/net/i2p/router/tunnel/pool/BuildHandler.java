@@ -118,10 +118,7 @@ class BuildHandler implements Runnable {
         ctx.statManager().createRateStat("tunnel.receiveRejectionCritical", "Received tunnel build rejection (critical failure)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRateStat("tunnel.receiveRejectionProbabalistic", "Received tunnel build rejection probabalistically", "Tunnels [Participating]", RATES);
         ctx.statManager().createRateStat("tunnel.receiveRejectionTransient", "Received tunnel build rejection (transient overload)", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRateStat("tunnel.reject.10", "Rejected a tunnel probabalistically", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRateStat("tunnel.reject.20", "Rejected a tunnel (transient overload)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRateStat("tunnel.reject.30", "Rejected a tunnel (bandwidth overload)", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRateStat("tunnel.reject.50", "Rejected a tunnel (critical issue)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRateStat("tunnel.rejectConnLimits", "Rejected tunnel build (connection limits)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRateStat("tunnel.rejectFuture", "Rejected tunnel build (time in future)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRateStat("tunnel.rejectTimeout2", "Rejected tunnel build (can't contact next hop)", "Tunnels [Participating]", RATES);

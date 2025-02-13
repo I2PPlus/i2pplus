@@ -80,10 +80,6 @@ class BuildExecutor implements Runnable {
             statMgr.createRateStat("tunnel.tierReject" + bwTier, "Rejected joins from bandwidth tier " + bwTier, "Tunnels [Participating]", RATES);
             statMgr.createRateStat("tunnel.tierExpire" + bwTier, "Expired joins from bandwidth tier " + bwTier, "Tunnels [Participating]", RATES);
         }
-        // For caution, also create stats for unknown
-        statMgr.createRateStat("tunnel.tierAgreeUnknown", "Agreed joins from unknown bandwidth tier", "Tunnels [Participating]", RATES);
-        statMgr.createRateStat("tunnel.tierRejectUnknown", "Rejected joins from unknown bandwidth tier", "Tunnels [Participating]", RATES);
-        statMgr.createRateStat("tunnel.tierExpireUnknown", "Expired joins from unknown bandwidth tier", "Tunnels [Participating]", RATES);
     }
 
     /**
