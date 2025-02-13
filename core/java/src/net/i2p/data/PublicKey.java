@@ -126,7 +126,7 @@ public class PublicKey extends SimpleDataStructure {
      *  @throws IllegalArgumentException if this is already typed to a different type
      *  @since 0.9.42
      */
-    public PublicKey toTypedKey(KeyCertificate kcert) {
+    PublicKey toTypedKey(KeyCertificate kcert) {
         if (_data == null) {throw new IllegalStateException();}
         EncType newType = kcert.getEncType();
         if (_type == newType) {return this;}
