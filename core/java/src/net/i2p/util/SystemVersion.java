@@ -526,17 +526,7 @@ public abstract class SystemVersion {
         else if (isJava9()) {System.out.println("Java 9 " + jvm);}
         else if (isJava10()) {System.out.println("Java 10 " + jvm);}
         else if (isJava11()) {System.out.println("Java 11 " + jvm);}
-        else if (isJava12()) {System.out.println("Java 12 " + jvm);}
-        else if (isJava13()) {System.out.println("Java 13 " + jvm);}
-        else if (isJava14()) {System.out.println("Java 14 " + jvm);}
-        else if (isJava15()) {System.out.println("Java 15 " + jvm);}
-        else if (isJava16()) {System.out.println("Java 16 " + jvm);}
-        else if (isJava17()) {System.out.println("Java 17 " + jvm);}
-        else if (isJava18()) {System.out.println("Java 18 " + jvm);}
-        else if (isJava19()) {System.out.println("Java 19 " + jvm);}
-        else if (isJava20()) {System.out.println("Java 20 " + jvm);}
-        else if (isJava21()) {System.out.println("Java 21 " + jvm);}
-        else if (isJava22()) {System.out.println("Java 22 " + jvm);}
+        for (int i = 12; i <= 25; i++) {System.out.println("Java " + i + ' ' + jvm);}
         System.out.println("Platform: " + getOS() + (is64Bit() ? " (64Bit)" : " (32Bit)"));
         System.out.println("Cores / Max memory: " + getCores() + " / " + (getMaxMemory() / 1024 / 1024) + "KB");
         System.out.println("");
