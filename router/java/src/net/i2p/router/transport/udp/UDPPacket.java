@@ -22,23 +22,13 @@ class UDPPacket implements CDPQEntry {
     private final DatagramPacket _packet;
     private int _priority;
     private volatile long _initializeTime;
-    //private volatile long _expiration;
     private final byte[] _data;
-    private final byte[] _validateBuf;
-    private final byte[] _ivBuf;
     private volatile int _markedType;
     private RemoteHostId _remoteHost;
     private boolean _released;
-    //private volatile Exception _releasedBy;
-    //private volatile Exception _acquiredBy;
     private long _enqueueTime;
     private long _receivedTime;
-    //private long _beforeValidate;
-    //private long _afterValidate;
-    //private long _beforeReceiveFragments;
-    //private long _afterHandlingTime;
     private int _validateCount;
-    // private boolean _isInbound;
     private FIFOBandwidthLimiter.Request _bandwidthRequest;
     private long _seqNum;
 
@@ -54,7 +44,6 @@ class UDPPacket implements CDPQEntry {
     private static final TryCache.ObjectFactory<UDPPacket> _packetFactory;
     private static final boolean CACHE = true;
     private static final int MIN_CACHE_SIZE = 64;
-//    private static final int MAX_CACHE_SIZE = 256;
     private static final int MAX_CACHE_SIZE = 512;
     static {
         if (CACHE) {
@@ -62,10 +51,8 @@ class UDPPacket implements CDPQEntry {
             boolean isSlow = SystemVersion.isSlow();
             int cores = SystemVersion.getCores();
             int csize = (int) Math.max(MIN_CACHE_SIZE, Math.min(MAX_CACHE_SIZE, maxMemory / (1024*1024)));
-            if (maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow)
-                csize = 1024;
-            else if (maxMemory >= 768*1024*1024 && cores >= 4 && !isSlow)
-                csize = 512;
+            if (maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow) {csize = 1024;}
+            else if (maxMemory >= 768*1024*1024 && cores >= 4 && !isSlow) {csize = 512;}
             _packetFactory = new PacketFactory();
             _packetCache = new TryCache<>(_packetFactory, csize);
         } else {
@@ -103,62 +90,21 @@ class UDPPacket implements CDPQEntry {
     public static final int PAYLOAD_TYPE_SESSION_DESTROY = 8;
     public static final int MAX_PAYLOAD_TYPE = PAYLOAD_TYPE_SESSION_DESTROY;
 
-    // various flag fields for use in the header
-    /**
-     *  Defined in the spec from the beginning, Unused
-     *  @since 0.9.24
-     */
-    public static final byte HEADER_FLAG_REKEY = (1 << 3);
-    /**
-     *  Defined in the spec from the beginning, Used starting in 0.9.24
-     *  @since 0.9.24
-     */
-    public static final byte HEADER_FLAG_EXTENDED_OPTIONS = (1 << 2);
-
-    // Extended options for session request
-    public static final int SESS_REQ_MIN_EXT_OPTIONS_LENGTH = 2;
-    // bytes 0-1 are flags
-    /**
-     * set to 1 to request a session tag, i.e. we want him to be an introducer for us
-     */
-    public static final int SESS_REQ_EXT_FLAG_REQUEST_RELAY_TAG = 0x01;
-
-    // various flag fields for use in the data packets
-    public static final byte DATA_FLAG_EXPLICIT_ACK = (byte)(1 << 7);
-    public static final byte DATA_FLAG_ACK_BITFIELDS = (1 << 6);
-    /** unused */
-    public static final byte DATA_FLAG_ECN = (1 << 4);
-    public static final byte DATA_FLAG_WANT_ACKS = (1 << 3);
-    public static final byte DATA_FLAG_WANT_REPLY = (1 << 2);
-    /** unused */
-    public static final byte DATA_FLAG_EXTENDED = (1 << 1);
-
-    public static final byte BITFIELD_CONTINUATION = (byte)(1 << 7);
-
-    private static final int MAX_VALIDATE_SIZE = MAX_PACKET_SIZE;
-
     private UDPPacket(RouterContext ctx) {
-        //ctx.statManager().createRateStat("udp.fetchRemoteSlow", "Time to grab the remote ip info", "Transport [UDP]", UDPTransport.RATES);
-        // the data buffer is clobbered on init(..), but we need it to bootstrap
+        // The data buffer is clobbered on init(..), but we need it to bootstrap
         _data = new byte[MAX_PACKET_SIZE];
         _packet = new DatagramPacket(_data, MAX_PACKET_SIZE);
-        _validateBuf = new byte[MAX_VALIDATE_SIZE];
-        _ivBuf = new byte[IV_SIZE];
         init(ctx);
     }
 
     private synchronized void init(RouterContext ctx) {
         _context = ctx;
-        //_dataBuf = _dataCache.acquire();
         Arrays.fill(_data, (byte)0);
-        //_packet = new DatagramPacket(_data, MAX_PACKET_SIZE);
-        //
-        // WARNING -
-        // Doesn't seem like we should have to do this every time,
-        // from reading the DatagramPacket javadocs,
-        // but we get massive corruption without it.
+        /* 
+         * WARNING - Doesn't seem like we should have to do this every time,
+         * from reading the DatagramPacket javadocs, but we get massive corruption without it.
+         */
         _packet.setData(_data);
-        // _isInbound = inbound;
         _initializeTime = _context.clock().now();
         _markedType = -1;
         _validateCount = 0;
