@@ -39,6 +39,7 @@ import net.i2p.data.LeaseSet;
 import net.i2p.data.LeaseSet2;
 import net.i2p.data.PublicKey;
 import net.i2p.data.router.RouterAddress;
+import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.data.router.RouterKeyGenerator;
 import net.i2p.router.crypto.FamilyKeyCrypto;
@@ -1303,11 +1304,12 @@ class NetDbRenderer {
     }
 
     /**
-     *  Be careful to use stripHTML for any displayed routerInfo data
-     *  to prevent vulnerabilities
+     *  Be careful to use stripHTML for any displayed routerInfo data to prevent vulnerabilities
      */
     private void renderRouterInfo(StringBuilder buf, RouterInfo info, boolean isUs, boolean full) {
-        String hash = info.getIdentity().getHash().toBase64();
+        RouterIdentity ident = info.getIdentity();
+        Hash h = info.getHash();
+        String hash = h.toBase64();
         String family = info.getOption("family");
         buf.append("<table class=\"netdbentry lazy\">").append("<tr><th>");
         if (isUs) {
@@ -1316,7 +1318,6 @@ class NetDbRenderer {
         } else {
             buf.append("<b>").append(_t("Router")).append(":</b></th><th><code>").append(hash).append("</code></th><th>");
         }
-        Hash h = info.getHash();
         if (_context.banlist().isBanlisted(h)) {
             buf.append("<a class=banlisted href=\"/profiles?f=3\" title=\"").append(_t("Router is banlisted")).append("\">Banned</a> ");
         }
@@ -1338,11 +1339,8 @@ class NetDbRenderer {
         }
         if (isJavaI2P) {buf.append("<span class=javai2p title=\"").append(_t("Java I2P variant")).append("\"></span> ");}
         else if (isI2PD) {buf.append("<span class=i2pd title=\"").append(_t("I2Pd variant")).append("\"></span> ");}
-        byte[] padding = info.getIdentity().getPadding();
-        if (padding != null && padding.length >= 64) {
-            if (DataHelper.eq(padding, 0, padding, 32, 32)) {
-                buf.append("<span class=compressible title=\"").append(_t("RouterInfo is compressible")).append("\"></span> ");
-            }
+        if (ident.isCompressible()) {
+            buf.append("<span class=compressible title=\"").append(_t("RouterInfo is compressible")).append("\"></span> ");
         }
         String tooltip = "\" title=\"" + _t("Show all routers with this capability in the NetDb") + "\"><span";
         boolean hasD = DataHelper.stripHTML(info.getCapabilities()).contains("D");
