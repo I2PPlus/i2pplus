@@ -77,9 +77,6 @@ class IntroductionManager {
         _inbound = new ConcurrentHashMap<Long, PeerState>(MAX_INBOUND);
         _nonceToAlice = new ConcurrentHashMap<Long, PeerState2>(MAX_INBOUND);
         _recentRelaysAsBob = new LHMCache<Long, Object>(8);
-        ctx.statManager().createRateStat("udp.receiveRelayIntro", "Received a relayed request from introducer", "Transport [UDP]", UDPTransport.RATES);
-        ctx.statManager().createRateStat("udp.receiveRelayRequest", "Received a good request to relay to someone else", "Transport [UDP]", UDPTransport.RATES);
-        ctx.statManager().createRateStat("udp.receiveRelayRequestBadTag", "Received relay requests with bad/expired tag", "Transport [UDP]", UDPTransport.RATES);
         ctx.statManager().createRateStat("udp.relayBadIP", "Received IP or port was bad", "Transport [UDP]", UDPTransport.RATES);
     }
 

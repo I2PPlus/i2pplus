@@ -44,7 +44,6 @@ class UDPReceiver {
         _handler = transport.getPacketHandler();
         if (_handler == null) {throw new IllegalStateException();}
         _runner = new Runner();
-        _context.statManager().createRateStat("udp.receiveHolePunch", "How often we receive a NAT hole punch", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.ignorePacketFromDroplist", "Packet lifetime for those dropped on the drop list", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.receiveFailsafe", "How often we failed to receive a UDP packet", "Transport [UDP]", UDPTransport.RATES);
     }

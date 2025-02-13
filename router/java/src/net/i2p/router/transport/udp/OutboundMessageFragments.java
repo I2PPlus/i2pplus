@@ -59,8 +59,6 @@ class OutboundMessageFragments {
         _activePeers = new ConcurrentHashSet<PeerState>(256);
         _builder2 = transport.getBuilder2();
         _alive = true;
-        _context.statManager().createRateStat("udp.blockedRetransmissions", "Packets sent to peer (retransmission blocked)", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.outboundActiveCount", "Number of messages in the peer's active pool", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.outboundActivePeers", "Number of peers we are actively sending to", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.packetsRetransmitted", "Lifetime (ms) of packets during retransmission", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.partialACKReceived", "Number of partially ACKed fragments", "Transport [UDP]", UDPTransport.RATES);
@@ -69,12 +67,8 @@ class OutboundMessageFragments {
         _context.statManager().createRateStat("udp.sendConfirmFragments", "Fragments included in a fully ACKed message", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.sendConfirmTime", "Time (ms) to send a message and get the ACK", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.sendConfirmVolley", "Number of times fragments need to be sent before ACK", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendCycleTimeSlow", "Time to cycle through all active messages when slow", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendCycleTime", "Time to cycle through all active messages", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.sendFailed", "Number of times a failed message was pushed", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.sendFragmentsPerPacket", "Fragments sent in a data packet", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendPiggyback", "ACKs piggybacked on a data packet (time = msg lifetime)", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendPiggybackPartial", "Partial ACKs piggybacked on a data packet (time = message lifetime)", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.sendRejected", "What volley we were on when peer was throttled", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.sendVolleyTime", "Time (ms) to send a full volley", "Transport [UDP]", UDPTransport.RATES);
     }

@@ -414,23 +414,15 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         _min_peers = _context.getProperty("i2np.udp.minpeers", MIN_PEERS);
         _min_v6_peers = _context.getProperty("i2np.udp.minv6peers", MIN_PEERS_IF_HAVE_V6);
 
-        _context.statManager().createRateStat("udp.alreadyConnected", "Lifetime of a reestablished session", "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.droppedPeer", "How long ago dropped peer sent us a message (duration = session lifetime", "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.droppedPeerInactive", "How long ago inactive dropped peer sent us a message (duration = session lifetime)", "Transport [UDP]", RATES);
-        //_context.statManager().createRateStat("udp.statusOK", "How many times the peer test returned OK", "Transport [UDP]", RATES);
-        //_context.statManager().createRateStat("udp.statusDifferent", "How many times the peer test returned different IP/ports", "Transport [UDP]", RATES);
-        //_context.statManager().createRateStat("udp.statusReject", "How many times the peer test returned reject unsolicited", "Transport [UDP]", RATES);
-        //_context.statManager().createRateStat("udp.statusUnknown", "How many times the peer test returned an unknown result", "Transport [UDP]", RATES);
         _context.statManager().createRateStat("udp.addressTestInsteadOfUpdate", "Number of times we fire off a peer test of ourselves instead of adjusting our own reachable address", "Transport [UDP]", RATES);
         _context.statManager().createRateStat("udp.addressUpdated", "How often we adjust our own reachable IP address", "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.proactiveReestablish", "Time session was idle for when we proactively reestablished it", "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.dropPeerDroplist", "Number of current peers experiencing dropped packets when new peer is added to list", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.alreadyConnected", "Lifetime of a reestablished session", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.droppedPeer", "How long ago dropped peer sent us a message (duration = session lifetime", "Transport [UDP]", RATES);
         _context.statManager().createRateStat("udp.dropPeerConsecutiveFailures", "Consecutive failed sends to a peer before establishing new session (lifetime is inactivity period)", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.dropPeerDroplist", "Number of current peers experiencing dropped packets when new peer is added to list", "Transport [UDP]", RATES);
         _context.statManager().createRateStat("udp.inboundIPv4Conn", "Inbound IPv4 UDP Connection", "Transport [UDP]", RATES);
         _context.statManager().createRateStat("udp.inboundIPv6Conn", "Inbound IPv6 UDP Connection", "Transport [UDP]", RATES);
-        // following are for PacketBuider
-        //_context.statManager().createRateStat("udp.packetAuthTime", "Time to encrypt and MAC a packet for sending", "Transport [UDP]", RATES);
-        //_context.statManager().createRateStat("udp.packetAuthTimeSlow", "Time to encrypt and MAC a packet for sending (when its slow)", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.proactiveReestablish", "Time session was idle for when we proactively reestablished it", "Transport [UDP]", RATES);
 
         _context.simpleTimer2().addPeriodicEvent(new PingIntroducers(), MIN_EXPIRE_TIMEOUT * 3 / 4);
 
