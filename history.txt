@@ -2,6 +2,7 @@
 
 2025-01-27 zzz
  * NetDB: RI publishing improvements
+
 2025-01-26 zzz
  * Transport: Increase min peer test version
 

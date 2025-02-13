@@ -20,8 +20,7 @@ import net.i2p.crypto.SigType;
 import net.i2p.util.ByteArrayStream;
 
 /**
- * KeysAndCert has a public key, a signing key, and a certificate.
- * In that order.
+ * KeysAndCert has a public key, a signing key, and a certificate, in that order.
  * We also store a cached Hash.
  *
  * Implemented in 0.8.2 and retrofitted over Destination and RouterIdentity.
@@ -146,6 +145,14 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
+     * Is there compressible padding?
+     * @since 0.9.66
+     */
+    public boolean isCompressible() {
+        return _paddingBlocks > 1;
+    }
+
+    /**
      * @throws IllegalStateException if data already set
      */
     public void readBytes(InputStream in) throws DataFormatException, IOException {
@@ -162,6 +169,7 @@ public class KeysAndCert extends DataStructureImpl {
             byte[] pad1 = pk.getPadding(kcert);
             byte[] pad2 = spk.getPadding(kcert);
             _padding = combinePadding(pad1, pad2);
+            compressPadding();
             _certificate = kcert;
         } else {
             _publicKey = pk;
