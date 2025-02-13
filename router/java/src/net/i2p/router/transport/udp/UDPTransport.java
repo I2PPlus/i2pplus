@@ -689,8 +689,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             _establisher = new EstablishmentManager(_context, this);
 
         if (_handler == null)
-            _handler = new PacketHandler(_context, this, false, true, _establisher,
-                                         _inboundFragments, _testManager, _introManager);
+            _handler = new PacketHandler(_context, this, _establisher, _inboundFragments, _testManager, _introManager);
 
         // See comments in DummyThrottle.java
         if (USE_PRIORITY && _refiller == null)
