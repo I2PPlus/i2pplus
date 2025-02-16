@@ -284,7 +284,7 @@ td.tAction input{margin-top:1px}
 #actionStartAll:active{background:var(--startall_hover) no-repeat center center/auto 14px,var(--btnAction_active)}
 #actionStopAll:active{background:var(--stopall_hover) no-repeat center center/auto 14px,var(--btnAction_active)}
 #torrents .tAction input{margin:0 2px;padding:12px;min-width:0;min-height:0;float:none;vertical-align:middle;font-size:0;border:1px solid #1e2462;border-radius:1px;box-shadow:var(--highlight),inset 0 0 1px 0 #446;background-position:center center;cursor:pointer;will-change:transform}
-#torrents .tAction input:active{box-shadow:var(--btn_shadow_active);background-blend-mode:luminosity,normal;filter:none}
+#torrents .tAction input:active,#torrents .tAction input.depress{box-shadow:var(--btn_shadow_active);background-blend-mode:luminosity,normal;filter:none}
 
 /* download bars */
 tr:hover .barText{opacity:.9}
@@ -402,15 +402,12 @@ video::-webkit-media-controls-timeline{padding:0 16px 16px}
 .snarkNewTorrent{font-size:9pt}
 .configTitle,.toggleview{margin:-1px 0 -5px 0;padding:4px 1px;min-width:300px;display:inline-block;letter-spacing:.15em;font-size:10pt;font-weight:700;text-align:center;text-shadow:0 0 1px #000;border:var(--border);border-radius:0 0 2px 2px;box-shadow:var(--highlight),inset 0 0 1px 1px #224;background:var(--tab)}
 .toggleview{font-size:0}
-.configTitle:hover,.toggleview:hover,input.toggle_input:focus+.toggleview{box-shadow:inset 0 0 0 1px #101;background:var(--tab_hover)}
-.configTitle:active,.toggleview:active{box-shadow:var(--highlight),inset 0 0 0 1px #000,inset 3px 3px 3px 3px #000;background:var(--tab_active);transition:ease all .01s}
-.configPanel .configTitle{box-shadow:var(--highlight);background:var(--title);background-size:4px 100%,100%;pointer-events:none}
-.configTitle{margin-bottom:-7px}
-.configPanel .configTitle{padding-bottom:4px}
-.configPanel .configTitle{margin:-1px -1px -17px;padding:8px;display:block;text-align:left;text-transform:uppercase;font-variant:normal;font-size:11pt}
+.toggleview:hover,input.toggle_input:focus+.toggleview{box-shadow:inset 0 0 0 1px #101;background:var(--tab_hover);transition:ease all .15s}
+.toggleview:active,.toggleview.depress{box-shadow:var(--highlight),inset 0 0 0 1px #000,inset 3px 3px 3px 3px #000;background:var(--tab_active);transition:ease all .15s}
+.configPanel .configTitle{margin:-1px -1px -17px;padding:8px;display:block;text-align:left;text-transform:uppercase;font-variant:normal;font-size:11pt;box-shadow:var(--highlight);background:var(--title);background-size:4px 100%,100%;pointer-events:none}
 .iframed .configPanel .configTitle{margin:-1px 0 -17px;border-left:0;border-right:0}
-.tab_label::after{margin:1px;padding:2px;width:18px;height:18px;display:inline-block;vertical-align:middle;background:#f00;content:"";border:2px solid #000;border-radius:50%;box-shadow:0 0 1px 1px rgba(32,0,48,.5);background-size:16px,100%;filter:drop-shadow(0 0 1px #652787);mix-blend-mode:luminosity;pointer-events:none;will-change:transform}
-input:checked+.toggleview:active .tab_label::after{transform:rotate(-90deg);transition:linear transform .01s}
+.tab_label::after{margin:1px;padding:2px;width:18px;height:18px;display:inline-block;vertical-align:middle;background:#f00;content:"";border:2px solid #000;border-radius:50%;box-shadow:0 0 1px 1px rgba(32,0,48,.5);background-size:16px,100%;filter:drop-shadow(0 0 1px #652787);mix-blend-mode:luminosity;pointer-events:none;will-change:transform;transition:linear transform .15s}
+input:checked+.toggleview:active .tab_label::after{transform:rotate(-90deg);transition:linear transform .15s}
 #tab_addtorrent .tab_label::after{background:var(--add) no-repeat scroll center center/16px,linear-gradient(180deg,#002,#000 50%,#1f1e32 50%,#191729)}
 #tab_newtorrent .tab_label::after{background:var(--create) no-repeat scroll right 2px top 2px/16px,linear-gradient(180deg,#002,#000 50%,#1f1e32 50%,#191729)}
 #tab_files .tab_label::after{background:var(--folder) no-repeat scroll center center/16px,linear-gradient(180deg,#002,#000 50%,#1f1e32 50%,#191729)}
@@ -433,7 +430,7 @@ a.control,a.controld,a.control:hover,a.controld:hover,a.control:focus,a.controld
 a.control img,a.controld img{padding:0;max-height:16px;max-width:16px;display:inline-block}
 #configs input[type=submit],#trackerconfig input[type=submit],input[name="savepri"]{text-transform:capitalize}
 input[type=submit]:hover,input[type=submit]:focus,input[type="reset"]:hover,input[type="reset"]:focus,a.control:hover,a.control:focus{color:#652787;border:var(--border_input_hover);box-shadow:var(--highlight),inset 0 0 2px 1px #757;background:var(--btn_hover);cursor:pointer}
-input[type=submit]:active,input[type="reset"]:active,a.control:active{color:#83529f;text-shadow:0 1px 1px #3c1751;border:var(--border_input_hover);box-shadow:var(--btn_shadow_active);background:#652787}
+input[type=submit]:active,input[type=submit].depress,input[type="reset"]:active,input[type="reset"].depress,a.control:active,a.control.depress{color:#83529f;text-shadow:0 1px 1px #3c1751;border:var(--border_input_hover);box-shadow:var(--btn_shadow_active);background:#652787}
 a.controld{display:none}
 input[type=text]:hover,input.r:hover{cursor:text}
 input[type=text]:focus,textarea:focus,input.r:focus,input[name="nofilter_dataDir"]:focus{transition:ease all .3s}
