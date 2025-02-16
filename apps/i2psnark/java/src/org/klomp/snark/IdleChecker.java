@@ -107,10 +107,10 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
         _isIdle = true;
         int ibtunnels = Integer.parseInt(_util.getI2CPOptions().get("inbound.quantity"));
         int obtunnels = Integer.parseInt(_util.getI2CPOptions().get("outbound.quantity"));
-        boolean isStandalone = _util.getContext().isRouterContext();
+        boolean isStandalone = !_util.getContext().isRouterContext();
         int minTunnels = isStandalone ? 2 : 1;
         if (ibtunnels > minTunnels || obtunnels > minTunnels) {
-            String msg = "Connection is idle -> Reducing tunnel count to " + minTunnels + "...";
+            String msg = "Connection is idle -> Reducing inbound/outbound tunnel count to " + minTunnels + "...";
             if (_log.shouldInfo()) {_log.info("[I2PSnark] " + msg);}
             if (isStandalone) {
                 System.out.println(" • " + msg);
