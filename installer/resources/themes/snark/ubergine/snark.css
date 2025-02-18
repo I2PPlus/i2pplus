@@ -37,7 +37,6 @@
 --select:linear-gradient(180deg,rgba(96,0,96,.2) 50%,rgba(16,0,16,.3) 50%),var(--tile);
 --shadow_inset:inset 3px 3px 3px #0009;
 --shadow_table:0 0 0 1px rgba(119,102,119,.9),0 0 0 2px #212,0 0 2px 2px rgba(8,0,8,.3);
---snarkGraph:url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true");
 --snarkGraph:url();
 --tabicon:linear-gradient(180deg,#767 50%,#323 50%,#212);
 --txtInputBevel:inset 0 0 0 1px #280028,inset 2px 2px 2px 1px #101;
@@ -513,7 +512,8 @@ input,a.control,select{font-weight:700}
 input{margin:2px 4px;padding:3px 3px;text-align:left;font-size:8.5pt;color:var(--hover);border:var(--border_hard);border-radius:2px;will-change:transform}
 input[type=submit],input[type=reset],a.control{box-shadow:0 0 1px 1px rgba(48,16,48,.7),inset 0 0 2px 2px rgba(192,160,192,.3);will-change:transform}
 input[type=submit]:hover,input[type=reset]:hover,a.control:hover,input[disabled]{text-shadow:none}
-input[type=text],textarea,select{box-sizing:border-box}
+input[type=text],select,textarea{box-sizing:border-box}
+input[type=text]:focus,textarea:focus{text-shadow:var(--txt_shadow)}
 input.r{text-align:right;background:#101 var(--tile)}
 input[type=submit]:disabled:active,a.control:disabled:active{filter:drop-shadow(0 0 1px #101)}
 input,input[type=submit] textarea,select,input[type=text],input.r,input[name="nofilter_dataDir"]{font-weight:700}
