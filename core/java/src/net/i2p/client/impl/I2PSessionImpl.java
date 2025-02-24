@@ -342,8 +342,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             }
             sub = new SubSession(this, privateKeyStream, opts);
             for (SubSession ss : _subsessions) {
-                 if (ss.getDecryptionKey().equals(sub.getDecryptionKey()) &&
-                     ss.getPrivateKey().equals(sub.getPrivateKey())) {
+                 if (ss.getPrivateKey().equals(sub.getPrivateKey())) {
                     throw new I2PSessionException("Duplicate sub-session");
                 }
             }
@@ -1026,7 +1025,9 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
 
     /**
      * Retrieve the decryption PrivateKey
+     * @deprecated this key is unused
      */
+    @Deprecated
     public PrivateKey getDecryptionKey() {return _privateKey;}
 
     /**

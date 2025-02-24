@@ -41,8 +41,6 @@ class SubSession extends I2PSessionMuxedImpl {
     public SubSession(I2PSession primary, InputStream destKeyStream, Properties options) throws I2PSessionException {
         super((I2PSessionMuxedImpl)primary, destKeyStream, options);
         _primary = (I2PSessionMuxedImpl) primary;
-        if (!getDecryptionKey().equals(_primary.getDecryptionKey()))
-            throw new I2PSessionException("Encryption Key mismatch");
         if (getPrivateKey().equals(_primary.getPrivateKey()))
             throw new I2PSessionException("Signing Key must differ");
         // state management
