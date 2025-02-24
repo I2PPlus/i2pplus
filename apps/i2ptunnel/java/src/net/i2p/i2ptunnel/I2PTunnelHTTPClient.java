@@ -23,6 +23,7 @@ import net.i2p.app.ClientAppManager;
 import net.i2p.app.Outproxy;
 import net.i2p.client.I2PSession;
 import net.i2p.client.LookupResult;
+import net.i2p.client.naming.NamingService;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.client.streaming.I2PSocketOptions;
@@ -648,34 +649,14 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             host = null;
                             break;
                         }
-                    } else if (hostLowerCase.endsWith(".i2p")) {
-                        // Destination gets the host name
-                        destination = host;
-                        // Host becomes the destination's "{b32}.b32.i2p" string, or "i2p" on lookup failure
-                        host = getHostName(destination);
+                    } else if (NamingService.isI2PHost(hostLowerCase)) {
+                        destination = host; // Destination gets the host name
+                        host = getHostName(destination); // Host becomes the destination's "{b32}.b32.i2p" string, or "i2p" on lookup failure
 
                         int rPort = requestURI.getPort();
-                        if (rPort > 0) {
-                            // Save it to put in the I2PSocketOptions,
-                            remotePort = rPort;
-                         /********
-                            // but strip it from the URL
-                            if (_log.shouldWarn()) {
-                                _log.warn(getPrefix(requestId) + "Removing port from [" + request + "]");
-                            }
-                            try {
-                                requestURI = changeURI(requestURI, null, -1, null);
-                            } catch(URISyntaxException use) {
-                                _log.warn(request, use);
-                                method = null;
-                                break;
-                            }
-                          ******/
-                        } else if ("https".equals(protocol) || isConnect) {
-                            remotePort = 443;
-                        } else {
-                            remotePort = 80;
-                        }
+                        if (rPort > 0) {remotePort = rPort;} // Save it to put in the I2PSocketOptions
+                        else if ("https".equals(protocol) || isConnect) {remotePort = 443;}
+                        else {remotePort = 80;}
 
                         String query = requestURI.getRawQuery();
                         if (query != null) {
@@ -1273,19 +1254,17 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     } catch (IOException ioe) {} // ignore
                     return;
                 }
-            } else if ("i2p".equals(host)) {
-                clientDest = null;
-            } else if (destination.toLowerCase(Locale.US).endsWith(".b32.i2p")) {
+            } else if ("i2p".equals(host)) {clientDest = null;}
+            else if (NamingService.isB32Host(destination)) {
                 int len = destination.length();
                 if (len < 60 || (len >= 61 && len <= 63)) {
                     // 8-59 or 61-63 chars, this won't work
                     String header = getErrorPage("b32", ERR_DESTINATION_UNKNOWN);
-                    try {
-                        writeErrorMessage(header, _t("Corrupt Base32 address"), out, targetRequest, false, destination);
-                    } catch (IOException ioe) {} // ignore
+                    try {writeErrorMessage(header, _t("Corrupt Base32 address"), out, targetRequest, false, destination);}
+                    catch (IOException ioe) {} // ignore
                     return;
                 }
-                if (len >= 64) {
+                if (NamingService.isBlindedHost(destination)) {
                     // catch b33 errors before session lookup
                     try {
                         BlindData bd = Blinding.decode(_context, destination);
@@ -1365,7 +1344,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 String extraMessage = null;
                 if (usingWWWProxy) {header = getErrorPage("dnfp", ERR_DESTINATION_UNKNOWN);}
                 else if (ahelperPresent) {header = getErrorPage("dnfb", ERR_DESTINATION_UNKNOWN);}
-                else if (destination.length() >= 60 && destination.toLowerCase(Locale.US).endsWith(".b32.i2p")) {
+                else if (NamingService.isB32Host(destination)) {
                     header = getErrorPage("nols", ERR_DESTINATION_UNKNOWN);
                     extraMessage = _t("Destination LeaseSet not found");
                 } else {
@@ -1700,22 +1679,16 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      *  Prior to 0.7.12, returned b64 key
      */
     private final String getHostName(String host) {
-        if (host == null) {
-            return null;
-        }
-        if (host.toLowerCase(Locale.US).endsWith(".b32.i2p")) {
-            return host;
-        }
+        if (host == null) {return null;}
+        if (NamingService.isB32Host(host)) {return host;}
         Destination dest = _context.namingService().lookup(host);
-        if (dest == null)
-            return "i2p";
+        if (dest == null) {return "i2p";}
         return dest.toBase32();
     }
 
     public static final String DEFAULT_JUMP_SERVERS =
             "http://notbob.i2p/cgi-bin/jump.cgi?q=," +
             "http://reg.i2p/jump/," +
-            //"http://scanner.linuxfarm.i2p/cgi-bin/jump.cgi?q=," +
             "http://stats.i2p/cgi-bin/jump.cgi?a=";
 
     /** @param host ignored */

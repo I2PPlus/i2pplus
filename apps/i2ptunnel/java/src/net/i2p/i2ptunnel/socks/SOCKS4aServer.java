@@ -1,6 +1,5 @@
-/* I2PSOCKSTunnel is released under the terms of the GNU GPL,
- * with an additional exception.  For further details, see the
- * licensing terms in I2PTunnel.java.
+/* I2PSOCKSTunnel is released under the terms of the GNU GPL, with an additional exception.
+ * For further details, see the licensing terms in I2PTunnel.java.
  *
  * Copyright (c) 2004 by human
  */
@@ -19,6 +18,7 @@ import java.util.Properties;
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.app.Outproxy;
+import net.i2p.client.naming.NamingService;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketOptions;
 import net.i2p.data.DataFormatException;
@@ -208,7 +208,7 @@ class SOCKS4aServer extends SOCKSServer {
 
         try {
             String hostLowerCase = connHostName.toLowerCase(Locale.US);
-            if (hostLowerCase.endsWith(".i2p")) {
+            if (NamingService.isI2PHost(hostLowerCase)) {
                 Destination dest = _context.namingService().lookup(connHostName);
                 if (dest == null) {
                     try {

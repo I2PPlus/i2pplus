@@ -24,6 +24,7 @@ import java.util.Properties;
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.app.Outproxy;
+import net.i2p.client.naming.NamingService;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketOptions;
 import net.i2p.data.DataFormatException;
@@ -456,7 +457,7 @@ class SOCKS5Server extends SOCKSServer {
 
         try {
             String hostLowerCase = connHostName.toLowerCase(Locale.US);
-            if (hostLowerCase.endsWith(".i2p")) {
+            if (NamingService.isI2PHost(hostLowerCase)) {
                 // Let's not do a new Dest for every request, huh?
                 //I2PSocketManager sm = I2PSocketManagerFactory.createManager();
                 //destSock = sm.connect(I2PTunnel.destFromName(connHostName), null);

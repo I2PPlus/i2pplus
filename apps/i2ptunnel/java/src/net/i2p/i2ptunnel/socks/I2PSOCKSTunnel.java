@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import net.i2p.client.naming.NamingService;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketOptions;
 import net.i2p.i2ptunnel.I2PTunnel;
@@ -127,11 +128,9 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
                String proxy = tok.nextToken().trim();
                String host = proxy;
                int colon = proxy.indexOf(':');
-               if (colon > 0)
-                   host = host.substring(0, colon);
-               if (host.endsWith(".i2p")) {
-                   proxyList.add(proxy);
-               } else {
+               if (colon > 0) {host = host.substring(0, colon);}
+               if (NamingService.isI2PHost(host)) {proxyList.add(proxy);}
+               else {
                    String m = "Non-i2p SOCKS outproxy: " + proxy;
                    l.log(m);
                    _log.error(m);
@@ -141,20 +140,15 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
         }
     }
 
-    public HashMap<String, List<String>> getProxyMap() {
-        return proxies;
-    }
+    public HashMap<String, List<String>> getProxyMap() {return proxies;}
 
     public List<String> getProxies(int port) {
         List<String> rv = proxies.get(Integer.toString(port));
-        if (rv == null)
-            rv = getDefaultProxies();
+        if (rv == null) {rv = getDefaultProxies();}
         return rv;
     }
 
-    public List<String> getDefaultProxies() {
-        return proxies.get(DEFAULT);
-    }
+    public List<String> getDefaultProxies() {return proxies.get(DEFAULT);}
 
     /**
      * Because getDefaultOptions() in super() is protected
