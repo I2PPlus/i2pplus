@@ -6,6 +6,7 @@ import java.util.List;
 
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SessionKeyManager;
+import net.i2p.data.EmptyProperties;
 import net.i2p.data.Hash;
 import net.i2p.data.PublicKey;
 import net.i2p.data.TunnelId;
@@ -71,6 +72,12 @@ abstract class BuildRequestor {
     private static final int BUILD_MSG_TIMEOUT = 40*1000;
 
     private static final int MAX_CONSECUTIVE_CLIENT_BUILD_FAILS = 8;
+
+    // following for proposal 168
+    static final String PROP_MIN_BW = "m";
+    static final String PROP_REQ_BW = "r";
+    static final String PROP_MAX_BW = "l";
+    static final String PROP_AVAIL_BW = "b";
 
     /**
      *  "paired tunnels" means using a client's own inbound tunnel to receive the
@@ -420,7 +427,9 @@ abstract class BuildRequestor {
                     log.debug("[ReplyMsgID " + cfg.getReplyMessageId() + "] Record " + i + "/" + hop + " is empty");
                 }
             }
-            BuildMessageGenerator.createRecord(i, hop, msg, cfg, replyRouter, replyTunnel, ctx, key);
+            // BW properties TODO
+            BuildMessageGenerator.createRecord(i, hop, msg, cfg, replyRouter, replyTunnel,
+                                               ctx, key, EmptyProperties.INSTANCE);
         }
         BuildMessageGenerator.layeredEncrypt(ctx, msg, cfg, order);
         return msg;
