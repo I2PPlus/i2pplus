@@ -1139,6 +1139,13 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     _bwManager.setDownBWLimit(limit * 1000L);
                     changed = true;
                     _config.setProperty(PROP_DOWNBW_MAX, Integer.toString(limit));
+                    String msg = _t("Maximum download speed changed to {0}KB/s", limit);
+                    addMessage(msg);
+                    if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
+                } else {
+                    String msg = _t("Download speed limit is {0}KB/s", MIN_DOWN_BW);
+                    addMessage(msg);
+                    if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                 }
             }
         }
