@@ -95,7 +95,7 @@ public class AddressbookBean extends BaseBean {
                 String name = (String) entry.getKey();
                 String destination = (String) entry.getValue();
                 if (filter != null && filter.length() > 0) {
-                    if (filter.compareTo("0-9") == 0) {
+                    if (filter.equals("0-9")) {
                         char first = name.charAt(0);
                         if (first < '0' || first > '9') {continue;}
                     } else if (! name.toLowerCase(Locale.US).startsWith(filter.toLowerCase(Locale.US))) {

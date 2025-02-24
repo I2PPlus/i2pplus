@@ -131,16 +131,15 @@ public class NamingServiceBean extends AddressbookBean {
         try {
             LinkedList<AddressBean> list = new LinkedList<AddressBean>();
             Map<String, Destination> results;
+            boolean sortByDate = "latest".equals(filter);
             Properties searchProps = new Properties();
-            // only blockfile needs this
-            searchProps.setProperty("list", getFileName());
-            if (filter != null) {
+            searchProps.setProperty("list", getFileName()); // only blockfile needs this
+            if (filter != null && !sortByDate) {
                 String startsAt = filter.equals("0-9") ? "[0-9]" : filter;
                 searchProps.setProperty("startsWith", startsAt);
             }
             if (isPrefiltered()) {
-                // Only limit if we not searching or filtering, so we will
-                // know the total number of results
+                // Only limit if we not searching or filtering, so we will know the total number of results
                 if (beginIndex > 0) {searchProps.setProperty("skip", Integer.toString(beginIndex));}
                 int limit = 1 + endIndex - beginIndex;
                 if (limit > 0) {searchProps.setProperty("limit", Integer.toString(limit));}
@@ -151,7 +150,7 @@ public class NamingServiceBean extends AddressbookBean {
             debug("Results returned by search: " + results.size());
             for (Map.Entry<String, Destination> entry : results.entrySet()) {
                 String name = entry.getKey();
-                if (filter != null && filter.length() > 0) {
+                if (filter != null && filter.length() > 0 && !sortByDate) {
                     if (filter.equals("0-9")) {
                         char first = name.charAt(0);
                         if (first < '0' || first > '9') {continue;}
@@ -164,13 +163,21 @@ public class NamingServiceBean extends AddressbookBean {
                     if (name.indexOf(search) == -1) {continue;}
                 }
                 String destination = entry.getValue().toBase64();
-                if (destination != null) {list.addLast(new AddressBean(name, destination));}
-                else {
+                if (destination != null) {
+                    AddressBean bean = new AddressBean(name, destination);
+                    if (sortByDate) {
+                        Properties p = new Properties();
+                        Destination d = service.lookup(name, searchProps, p);
+                        if (d != null && !p.isEmpty()) {bean.setProperties(p);}
+                    }
+                    list.addLast(bean);
+                } else {
                     System.err.println("Bad entry " + name + " in database " + service.getName()); // delete it too?
                 }
             }
             AddressBean array[] = list.toArray(new AddressBean[list.size()]);
-            if (!(results instanceof SortedMap)) {Arrays.sort(array, sorter);}
+            if (sortByDate) {Arrays.sort(array, new AddressByDateSorter());}
+            else if (!(results instanceof SortedMap)) {Arrays.sort(array, sorter);}
             entries = array;
             message = generateLoadMessage();
         } catch (RuntimeException e) {warn(e);}

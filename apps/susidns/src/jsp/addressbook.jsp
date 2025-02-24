@@ -72,7 +72,14 @@
 %>
 <input form="exportlist" type=hidden name="book" value="${book.book}">
 <c:if test="${book.search} != null && ${book.search}.length() > 0"><input form="exportlist" type=hidden name="search" value="${book.search}"></c:if>
-<c:if test="${book.hasFilter}"><input form="exportlist" type=hidden name="filter" value="${book.filter}"></c:if>
+<c:if test="${book.hasFilter}">
+<input form="exportlist" type=hidden name="filter" value="${book.filter}">
+<%
+    String filter = book.getFilter();
+    if ("latest".equals(filter)) {filter = intl._t(filter);}
+    else if ("xn--".equals(filter)) {filter = intl._t("other");}
+%>
+</c:if>
 <%
         if (book.isHasFilter() || book.getSearch() != null) {
 %>
@@ -85,10 +92,7 @@
         }
 %>
 <%
-    } else { /* book.getEntries().length() > 0 */
-%>
-<%
-    }
+    } else { /* book.getEntries().length() > 0 */ }
 %>
 </span></h3></div>
 <% /* need this whether book is empty or not to display the form messages */ %>
@@ -117,7 +121,8 @@
         {"m", "M"}, {"n", "N"}, {"o", "O"}, {"p", "P"},
         {"q", "Q"}, {"r", "R"}, {"s", "S"}, {"t", "T"},
         {"u", "U"}, {"v", "V"}, {"w", "W"}, {"x", "X"},
-        {"y", "Y"}, {"z", "Z"}, {"0-9", "0-9"}, {"xn--", intl._t("other")},
+        {"y", "Y"}, {"z", "Z"}, {"0-9", "0-9"},
+        {"xn--", intl._t("other")}, {"latest", intl._t("latest")},
         {"none", intl._t("all")}
     };
 
@@ -129,10 +134,10 @@
 
         if (notActive) {
 %>
-<a href="/susidns/addressbook?book=${book.book}&amp;filter=<%= filterValue %>&amp;begin=0"><%= displayText %></a>
+<a href="/susidns/addressbook?book=${book.book}&amp;filter=<%=filterValue %>&amp;begin=0"><%=displayText%></a>
 <%      } else { %>
-<span id="activefilter"><%= displayText %></span>
-<%     }
+<span id="activefilter"><%=displayText%></span>
+<%      }
     }
 %>
 </div>
@@ -160,7 +165,7 @@
         if (haveImagegen) {
 %>
 <a href="details?h=${addr.name}&amp;book=${book.book}" title="<%=intl._t("More information on this entry")%>"><svg width="24" height="24" class=identicon data-jdenticon-value="${addr.b32}" xmlns="http://www.w3.org/2000/svg"></svg><noscript><img src="/imagegen/id?s=24&amp;c=${addr.b32}" loading=lazy><style>.identicon{display:none!important}</style></noscript></a>
-<%      }  else { // haveImagegen %>
+<%      }  else { /* haveImagegen */ %>
 <a href="details?h=${addr.name}&amp;book=${book.book}" title="<%=intl._t("More information on this entry")%>"><img width=20 height=20 src="/themes/console/images/info.svg"></a>
 <%      } %>
 </td>
