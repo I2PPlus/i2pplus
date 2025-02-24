@@ -23,6 +23,7 @@ import java.util.StringTokenizer;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.SU3File;
 import net.i2p.data.Base64;
+import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
@@ -1293,20 +1294,25 @@ public class Reseeder {
                             throw new IOException("su3 file too old");
                         java.util.zip.ZipFile zipf = new java.util.zip.ZipFile(zip);
                         java.util.Enumeration<? extends java.util.zip.ZipEntry> entries = zipf.entries();
-                        int ri = 0, old = 0;
+                        int ri = 0, old = 0, bad = 0;
                         int oldver = 0, unreach = 0;
                         while (entries.hasMoreElements()) {
                             java.util.zip.ZipEntry entry = (java.util.zip.ZipEntry) entries.nextElement();
                             net.i2p.data.router.RouterInfo r = new net.i2p.data.router.RouterInfo();
                             InputStream in = zipf.getInputStream(entry);
-                            r.readBytes(in);
-                            in.close();
+                            try {r.readBytes(in);}
+                            catch (DataFormatException dfe) {
+                                System.out.println("Bad entry " + entry.getName() + ": " + dfe);
+                                bad++;
+                                continue;
+                            } finally {in.close();}
                             if (r.getPublished() > cutoff) {ri++;}
                             else {old++;}
                             if (VersionComparator.comp(r.getVersion(), MIN_VERSION) < 0) {oldver++;}
                             if (r.getCapabilities().indexOf('U') >= 0) {unreach++;}
                         }
                         zipf.close();
+                        if (bad > 0) {System.out.println(bad + " bad entries");}
                         if (old > 0) {
                             System.out.println("Failure:  " + old + " old RouterInfos returned");
                             fail++;
