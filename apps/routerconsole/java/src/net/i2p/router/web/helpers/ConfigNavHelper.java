@@ -83,7 +83,7 @@ public class ConfigNavHelper extends HelperBase {
             }
             buf.append("</span>\n");
         }
-        _out.write(buf.toString());
+        _out.append(buf);
     }
 
 }

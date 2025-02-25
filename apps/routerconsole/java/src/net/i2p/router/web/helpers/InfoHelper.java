@@ -235,7 +235,7 @@ public class InfoHelper extends HelperBase {
             }
         } else {buf.append(_t("none"));}
         buf.append("</pre>\n");
-        out.write(buf.toString());
+        out.append(buf);
         // UPnP Status
         _context.commSystem().renderStatusHTML(_out);
         out.flush();

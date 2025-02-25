@@ -267,14 +267,14 @@ class NetDbRenderer {
                     renderRouterInfo(buf, ri, false, true);
                     if (sybil != null) {sybils.add(ri.getIdentity().getHash());}
                     if ((i & 0x07) == 0) {
-                        out.write(buf.toString());
+                        out.append(buf);
                         buf.setLength(0);
                     }
                 }
                 paginate(buf, ubuf, page, pageSize, morePages, sz);
             }
         }
-        out.write(buf.toString());
+        out.append(buf);
         out.flush();
         if (sybil != null)
         SybilRenderer.renderSybilHTML(out, _context, sybils, sybil);
@@ -660,7 +660,7 @@ class NetDbRenderer {
         StringBuilder buf = new StringBuilder(4*1024);
         if (!_context.netDb().isInitialized()) {
             buf.append("<div id=notinitialized>").append(_t("Not initialized")).append("</div>");
-            out.write(buf.toString());
+            out.append(buf);
             return;
         }
         boolean noLeasesets = _context.netDb().getLeases().size() <= 0;
@@ -749,7 +749,7 @@ class NetDbRenderer {
                     distance = fmt.format(biLog2(dist));
                 } else {distance = null;}
                 renderLeaseSet(buf, ls, debug, now, linkSusi, distance);
-                out.write(buf.toString());
+                out.append(buf);
                 buf.setLength(0);
               } // for each
               if (debug && isFloodfill()) {
@@ -770,7 +770,7 @@ class NetDbRenderer {
                   buf.append("</td></tr>\n</table>\n");
               } // median table
         } // !empty
-        out.write(buf.toString());
+        out.append(buf);
         out.flush();
     }
 
@@ -779,7 +779,7 @@ class NetDbRenderer {
         StringBuilder buf = new StringBuilder(3*1024);
         if (!_context.netDb().isInitialized()) {
             buf.append("<div id=notinitialized>").append(_t("Not initialized")).append("</div>");
-            out.write(buf.toString());
+            out.append(buf);
             return;
         }
         NetworkDatabaseFacade netdb = _context.netDb();
@@ -809,7 +809,7 @@ class NetDbRenderer {
                    .append("</div>");
             }
         }
-        out.write(buf.toString());
+        out.append(buf);
         out.flush();
     }
 
@@ -838,7 +838,7 @@ class NetDbRenderer {
         StringBuilder buf = new StringBuilder(3*1024);
         if (!_context.netDb().isInitialized()) {
             buf.append("<div id=notinitialized>").append(_t("Not initialized")).append("</div>");
-            out.write(buf.toString());
+            out.append(buf);
             return;
         }
         Hash hash = ConvertToHash.getHash(hostname);
@@ -871,7 +871,7 @@ class NetDbRenderer {
                 buf.append("<div class=netdbnotfound>").append(_t("LeaseSet for {0} not found in network database", hostname)).append("</div>");
             }
         }
-        out.write(buf.toString());
+        out.append(buf);
         out.flush();
     }
 
@@ -1069,7 +1069,7 @@ class NetDbRenderer {
         if (showStats && page == 0) {
             RouterInfo ourInfo = _context.router().getRouterInfo();
             renderRouterInfo(buf, ourInfo, true, true);
-            out.write(buf.toString());
+            out.append(buf);
             buf.setLength(0);
         }
 
@@ -1094,7 +1094,7 @@ class NetDbRenderer {
                         break;
                     }
                     renderRouterInfo(buf, ri, false, full);
-                    out.write(buf.toString());
+                    out.append(buf);
                     buf.setLength(0);
                 }
                 String routerVersion = ri.getOption("router.version");
@@ -1132,7 +1132,7 @@ class NetDbRenderer {
                 buf.append("</table>\n");
             }
             buf.append("</td><td style=vertical-align:top>\n");
-            out.write(buf.toString());
+            out.append(buf);
             buf.setLength(0);
 
             String showAll = _t("Show all routers with this capability in the NetDb");
@@ -1162,7 +1162,7 @@ class NetDbRenderer {
                .append("<tr><td><a href=\"/netdb?caps=X\" title=\"").append(showAll).append("\"><b>X</b></a>Over 2048&#8239;KB/s</td><td>")
                .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW_UNLIMITED).size()).append("</td></tr>\n")
                .append("</table>\n");
-            out.write(buf.toString());
+            out.append(buf);
             buf.setLength(0);
 
             if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_CONGESTION_MODERATE).size() > 0 ||
@@ -1187,7 +1187,7 @@ class NetDbRenderer {
                        .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_NO_TUNNELS).size()).append("</td></tr>\n");
                 }
                 buf.append("</table>\n");
-                out.write(buf.toString());
+                out.append(buf);
                 buf.setLength(0);
             }
 
@@ -1230,7 +1230,7 @@ class NetDbRenderer {
             }
             buf.append("</td></tr>\n</table>\n");
         } // if !showStats
-        out.write(buf.toString());
+        out.append(buf);
         out.flush();
     }
 

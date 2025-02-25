@@ -380,7 +380,7 @@ public class NetDbHelper extends FormHandler {
             buf.append("</span>\n");
         }
         buf.append("</div>\n");
-        _out.write(buf.toString());
+        _out.append(buf);
     }
 
     /**
@@ -439,6 +439,6 @@ public class NetDbHelper extends FormHandler {
            .append("<tr><td colspan=4 class=optionsave><button type=submit class=search value=\"Lookup\">")
            .append(_t("Lookup")).append("</button></td></tr>\n")
            .append("</table>\n</form>\n");
-        _out.write(buf.toString());
+        _out.append(buf);
     }
 }

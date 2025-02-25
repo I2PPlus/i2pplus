@@ -75,7 +75,7 @@ public class ProfilesHelper extends HelperBase {
                    .append("&nbsp;").append(_t("To view, see {0}Session Bans{1}.", "<a href=\"/profiles?f=4\">", "</a>"));
             }
             buf.append("</p>\n");
-            _out.write(buf.toString());
+            _out.append(buf);
             rend.renderStatusHTML(_out);
         } catch (IOException ioe) {ioe.printStackTrace();}
         return "";
@@ -117,7 +117,7 @@ public class ProfilesHelper extends HelperBase {
             buf.append("</span>\n");
         }
         buf.append("</div>\n");
-        _out.write(buf.toString());
+        _out.append(buf);
     }
 
 }

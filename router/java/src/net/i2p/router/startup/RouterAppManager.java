@@ -237,7 +237,7 @@ public class RouterAppManager extends ClientAppManagerImpl {
         buf.append("<div class=debug_container>");
         toString2(buf);
         buf.append("</div>");
-        out.write(buf.toString());
+        out.append(buf);
     }
 
     /**

@@ -566,7 +566,7 @@ class TunnelRenderer {
            .append("<td>").append(_t("Over {0} shared bandwidth", Math.round(Router.MIN_BW_X * 1.024f))).append("KBps").append("</td>")
            .append("<td>&nbsp;</td></tr>")
            .append("</tbody></table>");
-        out.write(buf.toString());
+        out.append(buf);
         out.flush();
         buf.setLength(0);
     }
@@ -796,7 +796,7 @@ class TunnelRenderer {
            .append(DataHelper.formatSize2(processedOut*1024, true).replace("i", ""))
            .append("B ").append(_t("out")).append("</b></div>\n");
         }
-        out.write(buf.toString());
+        out.append(buf);
         out.flush();
         buf.setLength(0);
     }
@@ -840,7 +840,7 @@ class TunnelRenderer {
                .append(DataHelper.formatSize2(lifetimeOut, true)).append("</td></tr>\n");
         }
         buf.append("</table>\n");
-        out.write(buf.toString());
+        out.append(buf);
         out.flush();
         buf.setLength(0);
     }

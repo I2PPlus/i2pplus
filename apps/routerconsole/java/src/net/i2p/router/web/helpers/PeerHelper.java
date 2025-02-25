@@ -133,7 +133,7 @@ public class PeerHelper extends HelperBase {
                 buf.append(_t("on the {0}Advanced Configuration page{1}.", "<a href=\"/configadvanced\">", "</a>"));
             } else {buf.append(_t("to your router.config file."));}
             buf.append("</p>\n");
-            out.write(buf.toString());
+            out.append(buf);
             renderSummary(out);
         }
         out.flush();
@@ -224,7 +224,7 @@ public class PeerHelper extends HelperBase {
             buf.append("<td>").append(combinedLimit).append("</td></tr></tfoot>\n");
         }
         buf.append("</table>\n");
-        out.write(buf.toString());
+        out.append(buf);
     }
 
     /**
@@ -249,7 +249,7 @@ public class PeerHelper extends HelperBase {
             buf.append("</span>\n");
         }
         buf.append("</div>");
-        out.write(buf.toString());
+        out.append(buf);
     }
 
     /// begin NTCP
@@ -298,7 +298,7 @@ public class PeerHelper extends HelperBase {
                .append("<th class=edit></th>")
                .append("</tr></thead>\n<tbody id=peersNTCP>\n");
         }
-        out.write(buf.toString());
+        out.append(buf);
         buf.setLength(0);
         long now = _context.clock().now();
         int inactive = 0;
@@ -379,7 +379,7 @@ public class PeerHelper extends HelperBase {
                .append("<a class=configpeer href=\"/configpeer?peer=").append(h.toBase64()).append("\" title=\"").append(_t("Configure peer"))
                .append("\" alt=\"[").append(_t("Configure peer")).append("]\">").append(_t("Edit")).append("</a>")
                .append("</td></tr>\n");
-            out.write(buf.toString());
+            out.append(buf);
             buf.setLength(0);
         }
         buf.append("</tbody>");
@@ -399,7 +399,7 @@ public class PeerHelper extends HelperBase {
                .append("<td colspan=2></td></tr>\n");
         }
         buf.append("</tfoot></table>\n</div></div>\n");
-        out.write(buf.toString());
+        out.append(buf);
         buf.setLength(0);
     }
 
@@ -554,7 +554,7 @@ public class PeerHelper extends HelperBase {
             buf.append("<th class=edit data-sort-method=none></th>");
             buf.append("</tr></thead>\n<tbody id=peersSSU>\n");
         }
-        out.write(buf.toString());
+        out.append(buf);
         buf.setLength(0);
         long now = _context.clock().now();
         for (PeerState peer : peers) {
@@ -671,7 +671,7 @@ public class PeerHelper extends HelperBase {
                .append("\" alt=\"[").append(_t("Configure peer")).append("]\">").append(_t("Edit")).append("</a>");
 
             buf.append("</td></tr>\n");
-            out.write(buf.toString());
+            out.append(buf);
             buf.setLength(0);
             bpsIn += recvBps;
             bpsOut += sendBps;
@@ -720,7 +720,7 @@ public class PeerHelper extends HelperBase {
             buf.append("<td class=edit></td>").append("</tr></tfoot>\n");
         }  // numPeers > 0
         buf.append("</table>\n</div>\n</div>\n");
-        out.write(buf.toString());
+        out.append(buf);
         buf.setLength(0);
     }
 

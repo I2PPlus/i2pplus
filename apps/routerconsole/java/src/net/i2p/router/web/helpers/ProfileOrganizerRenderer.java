@@ -309,7 +309,7 @@ class ProfileOrganizerRenderer {
                    .append("</td></tr>\n");
                 // let's not build the whole page in memory (~500 bytes per peer)
                 // let's try rendering to ram and seeing if page load times are less janky
-                //out.write(buf.toString());
+                //out.append(buf);
                 //buf.setLength(0);
             }
             buf.append("</tbody>\n</table>\n");
@@ -495,7 +495,7 @@ class ProfileOrganizerRenderer {
                .append("</td></tr>\n")
                .append("</tbody>\n</table>\n");
         }  // mode < 2
-        out.write(buf.toString());
+        out.append(buf);
         out.flush();
         buf.setLength(0);
     }

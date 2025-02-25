@@ -819,7 +819,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                 }
             }
             buf.append("</ul>\n</td>\n</tr>\n");
-            out.write(buf.toString());
+            out.append(buf);
             buf.setLength(0);
         }
         buf.append("<tr><th colspan=2>Total inbound tags: ").append(total).append(" (")
@@ -873,14 +873,14 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                 buf.append("</li>\n");
             }
             buf.append("</ul>\n</td>\n</tr>\n");
-            out.write(buf.toString());
+            out.append(buf);
             buf.setLength(0);
         }
         buf.append("<tr><th colspan=2>Total sets: ").append(totalSets)
            .append("; sessions: ").append(outbound.size())
            .append("</th></tr>\n</table>\n");
 
-        out.write(buf.toString());
+        out.append(buf);
     }
 
     /**

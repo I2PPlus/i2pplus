@@ -47,7 +47,7 @@ public class StatsGenerator {
             buf.append("\">");
             buf.append(_t(group));
             buf.append("</label>");
-            out.write(buf.toString());
+            out.append(buf);
             buf.setLength(0);
         }
         buf.append("</div>");
@@ -60,7 +60,7 @@ public class StatsGenerator {
         buf.append(' ').append("<a href=\"/configstats\">[").append(_t("Configure")).append("]</a>");
         buf.append("</p>");
         buf.append("<div id=statsWrap>\n");
-        out.write(buf.toString());
+        out.append(buf);
         buf.setLength(0);
 
         for (Map.Entry<String, Set<String>> entry : groups.entrySet()) {
@@ -72,14 +72,14 @@ public class StatsGenerator {
             buf.append(" hidden>\n");
             buf.append("<h3>").append(group).append("</h3>\n");
             buf.append("<ul class=statlist>");
-            out.write(buf.toString());
+            out.append(buf);
             buf.setLength(0);
             for (String stat : stats) {
                 buf.append("<li class=statsName id=\"").append(stat.replace(" ", "_").replace("[", "").replace("]", ""))
                    .append("\"><b>").append(stat).append("</b> ");
                 if (_context.statManager().isFrequency(stat)) {renderFrequency(stat, buf);}
                 else {renderRate(stat, buf, showAll);}
-                out.write(buf.toString());
+                out.append(buf);
                 buf.setLength(0);
             }
             out.write("</ul><br>\n");

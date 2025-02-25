@@ -810,7 +810,7 @@ public class FIFOBandwidthLimiter {
             }
         }
         buf.append("</ol></li></ul><hr>\n");
-        out.write(buf.toString());
+        out.append(buf);
         out.flush();
 ******/
     }

@@ -38,7 +38,7 @@ class BanlistRenderer {
         entries.putAll(_context.banlist().getEntries());
         if (entries.isEmpty()) {
             buf.append("<i>").append(_t("none").replace("none", "No bans currently active")).append("</i>");
-            out.write(buf.toString());
+            out.append(buf);
             return;
         }
 
@@ -76,7 +76,7 @@ class BanlistRenderer {
             buf.append("</li>\n");
         }
         buf.append("</ul>\n");
-        out.write(buf.toString());
+        out.append(buf);
         out.flush();
     }
 
@@ -88,7 +88,7 @@ class BanlistRenderer {
         entries.putAll(_context.banlist().getEntries());
         if (entries.isEmpty()) {
             buf.append("<i>").append(_t("No bans currently active")).append("</i>");
-            out.write(buf.toString());
+            out.append(buf);
             return;
         }
 
@@ -129,7 +129,7 @@ class BanlistRenderer {
            .append(_t("Total session-only bans"))
            .append(": ").append(tempBanned)
            .append("</th></tr></tfoot>\n</table>\n");
-        out.write(buf.toString());
+        out.append(buf);
         out.flush();
     }
 

@@ -485,7 +485,7 @@ public class I2PSnarkServlet extends BasicServlet {
             _manager.addMessage(_t("Click \"Add torrent\" button to fetch torrent"));
         }
         buf.append("<div id=page>\n<div id=mainsection class=mainsection>\n");
-        out.write(buf.toString());
+        out.append(buf);
         buf.setLength(0);
         out.flush();
 
@@ -692,7 +692,7 @@ public class I2PSnarkServlet extends BasicServlet {
             else {
                 StringBuilder buf = new StringBuilder(1280);
                 buf.append("<form id=torrentlist action=\"_post\" method=POST target=processForm>\n");
-                out.write(buf.toString());
+                out.append(buf);
                 buf.setLength(0);
             }
             writeHiddenInputs(out, req, null);
@@ -1243,7 +1243,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (!reqURL.contains("/.ajax")) {
             buf.append("<script src=/i2psnark/.res/js/filterBar.js type=module></script>\n");
         }
-        out.write(buf.toString());
+        out.append(buf);
         buf.setLength(0);
     }
 
@@ -1291,7 +1291,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private void writeHiddenInputs(PrintWriter out, HttpServletRequest req, String action) {
         StringBuilder buf = new StringBuilder(256);
         writeHiddenInputs(buf, req, action);
-        out.write(buf.toString());
+        out.append(buf);
     }
 
     /**
@@ -1420,7 +1420,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(start + pageSize < total ? "" : " class=disabled").append("><span id=last>")
            .append(toThemeSVG("last", _t("Last"), _t("Last page"))).append("</span></a>");
 
-        out.write(buf.toString());
+        out.append(buf);
         buf.setLength(0);
         out.flush();
     }
@@ -2741,7 +2741,7 @@ public class I2PSnarkServlet extends BasicServlet {
 **/
             }
         }
-        out.write(buf.toString());
+        out.append(buf);
         out.flush();
         buf.setLength(0);
         }
@@ -2978,7 +2978,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<div id=addNotify class=notify hidden><table><tr><td></td></tr></table></div>\n")
            .append("</div>\n</form>\n</div>\n");
 
-        out.write(buf.toString());
+        out.append(buf);
         out.flush();
         buf.setLength(0);
     }
@@ -3051,7 +3051,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<div id=createNotify class=notify hidden><table><tr><td></td></tr></table></div>\n")
            .append("</div>\n");
 
-        out.write(buf.toString());
+        out.append(buf);
         out.flush();
         buf.setLength(0);
     }
@@ -3446,7 +3446,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("\" name=foo></td></tr>\n")
            .append("<tr class=spacer><td>&nbsp;</td></tr>\n")  // spacer
            .append("</table></div></div></form>");
-        out.write(buf.toString());
+        out.append(buf);
         out.flush();
         buf.setLength(0);
     }
@@ -3510,7 +3510,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("</td></tr>\n")
            .append("<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n") // spacer
            .append("</table>\n</div>\n</div>\n</form>\n");
-        out.write(buf.toString());
+        out.append(buf);
         out.flush();
         buf.setLength(0);
     }
@@ -3607,7 +3607,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("#fileFilter .configTitle::after,#trackers .configTitle::after{display:none!important}")
            .append("</style></noscript>\n")
            .append("<script src=\"" + _resourcePath + "js/toggleConfigs.js?" + CoreVersion.VERSION + "\"></script>\n");
-        out.write(buf.toString());
+        out.append(buf);
         out.flush();
         buf.setLength(0);
     }

@@ -148,7 +148,7 @@ class SidebarRenderer {
                 buf.append(renderClockHTML());
 
             // Only output section if there's more than the <hr> to print
-            if (buf.length() > 5) {out.write(buf.toString());}
+            if (buf.length() > 5) {out.append(buf);}
         }
     }
 

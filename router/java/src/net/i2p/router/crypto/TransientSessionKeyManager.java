@@ -767,7 +767,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                 buf.append(size).append('/').append(ts.getOriginalSize()).append(" tags remaining</li>");
             }
             buf.append("\n</ul>\n</td>\n</tr>\n");
-            out.write(buf.toString());
+            out.append(buf);
             buf.setLength(0);
         }
         buf.append("<tr>\n<th colspan=2>Total inbound tags: ").append(total).append(" (")
@@ -802,7 +802,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                 buf.append(size).append('/').append(ts.getOriginalSize()).append(" tags remaining; ACKed? ").append(ts.getAcked()).append("</li>");
             }
             buf.append("\n</ul>\n</td>\n</tr>\n");
-            out.write(buf.toString());
+            out.append(buf);
             buf.setLength(0);
         }
         buf.append("<tr>\n<th colspan=2>Total Outbound tags: ").append(total).append(" (")
@@ -810,7 +810,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
            .append("; sessions: ").append(outbound.size())
            .append("</th>\n</tr>\n</table>\n");
 
-        out.write(buf.toString());
+        out.append(buf);
     }
 
     /**

@@ -119,7 +119,7 @@ public class JobQueueHelper extends HelperBase {
             }
             buf.append("</ol>\n");
             getJobCounts(buf, counter);
-            out.write(buf.toString());
+            out.append(buf);
             buf.setLength(0);
         }
 
@@ -129,7 +129,7 @@ public class JobQueueHelper extends HelperBase {
 
         ObjectCounterUnsafe<String> counter = new ObjectCounterUnsafe<String>();
         getJobCounts(buf, counter);
-        out.write(buf.toString());
+        out.append(buf);
         buf.setLength(0);
 
         long prev = Long.MIN_VALUE;
@@ -152,16 +152,16 @@ public class JobQueueHelper extends HelperBase {
         }
         buf.append("</ol>\n</div>\n");
         getJobCounts(buf, counter);
-        out.write(buf.toString());
+        out.append(buf);
         buf.setLength(0);
         //getJobStats(buf);
-        out.write(buf.toString());
+        out.append(buf);
     }
 
     private void renderJobStatsHTML(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(32*1024);
         getJobStats(buf);
-        out.write(buf.toString());
+        out.append(buf);
     }
 
     /** @since 0.9.5 */

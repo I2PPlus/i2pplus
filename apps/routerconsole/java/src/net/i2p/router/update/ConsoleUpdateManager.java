@@ -1643,7 +1643,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             toString(buf, _downloaders);
             buf.append("</div>\n");
         }
-        out.write(buf.toString());
+        out.append(buf);
     }
 
     /** debug */

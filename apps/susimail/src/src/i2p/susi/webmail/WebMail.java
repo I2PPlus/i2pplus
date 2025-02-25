@@ -446,7 +446,7 @@ public class WebMail extends HttpServlet {
             }
             buf.append("</table></td></tr>\n");
         }
-        out.write(buf.toString());
+        out.append(buf);
         out.flush();
         buf.setLength(0);
 
@@ -496,7 +496,7 @@ public class WebMail extends HttpServlet {
                             // show as attachment - if image is loaded as a CID in the iframe, we will still show it as an attachment
                             } else {showPart(out, subPart, level + 1, html, allowHtml);}
                         }
-                        out.write(buf.toString());
+                        out.append(buf);
                         out.flush();
                         buf.setLength(0);
                     }
