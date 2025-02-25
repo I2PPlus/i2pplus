@@ -163,17 +163,13 @@ public class NamingServiceBean extends AddressbookBean {
                     if (name.indexOf(search) == -1) {continue;}
                 }
                 String destination = entry.getValue().toBase64();
-                if (destination != null) {
-                    AddressBean bean = new AddressBean(name, destination);
-                    if (sortByDate) {
-                        Properties p = new Properties();
-                        Destination d = service.lookup(name, searchProps, p);
-                        if (d != null && !p.isEmpty()) {bean.setProperties(p);}
-                    }
-                    list.addLast(bean);
-                } else {
-                    System.err.println("Bad entry " + name + " in database " + service.getName()); // delete it too?
+                AddressBean bean = new AddressBean(name, entry.getValue());
+                if (sortByDate) {
+                    Properties p = new Properties();
+                    Destination d = service.lookup(name, searchProps, p);
+                    if (d != null && !p.isEmpty()) {bean.setProperties(p);}
                 }
+                list.addLast(bean);
             }
             AddressBean array[] = list.toArray(new AddressBean[list.size()]);
             if (sortByDate) {Arrays.sort(array, new AddressByDateSorter());}
@@ -413,7 +409,7 @@ public class NamingServiceBean extends AddressbookBean {
         nsOptions.setProperty("list", getFileName());
         Destination dest = getNamingService().lookup(this.detail, nsOptions, outProps);
         if (dest == null) {return null;}
-        AddressBean rv = new AddressBean(this.detail, dest.toBase64());
+        AddressBean rv = new AddressBean(this.detail, dest);
         rv.setProperties(outProps);
         return rv;
     }
@@ -435,7 +431,7 @@ public class NamingServiceBean extends AddressbookBean {
         if (dests == null) {return null;}
         List<AddressBean> rv = new ArrayList<AddressBean>(dests.size());
         for (int i = 0; i < dests.size(); i++) {
-            AddressBean ab = new AddressBean(this.detail, dests.get(i).toBase64());
+            AddressBean ab = new AddressBean(this.detail, dests.get(i));
             ab.setProperties(propsList.get(i));
             rv.add(ab);
         }
