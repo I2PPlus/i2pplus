@@ -1,3 +1,7 @@
+2025-02-23 zzz
+ * SusiDNS: Reduce memory usage in AddressBean
+ * Tests: Fix build
+
 2025-02-21 zzz
  * Client: Deprecate getters for unused encryption private key
  * i2psnark: Set bulk profile
