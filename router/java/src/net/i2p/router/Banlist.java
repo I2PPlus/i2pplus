@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.time.BuildTime;
@@ -34,6 +35,12 @@ public class Banlist {
     private final Log _log;
     private final RouterContext _context;
     private final Map<Hash, Entry> _entries;
+
+    /**
+     *  hash of 387 zeros
+     *  @since 0.9.66
+     */
+    public static final Hash HASH_ZERORI = new Hash(Base64.decode("MRn86w6tHQgE25D7DIejOBCJ-dImSjdsQaOaBuUypkE="));
 
     public static class Entry {
         /** when it should expire, per the i2p clock */
@@ -68,6 +75,7 @@ public class Banlist {
         _context.jobQueue().addJob(new Cleanup(_context));
         // i2pd bug?
         banlistRouterForever(Hash.FAKE_HASH, " <b>➜</b> " + "Invalid Hash");
+        banlistRouterForever(HASH_ZERORI, " <b>➜</b> " + "Invalid Hash (All zeros)");
     }
 
     private class Cleanup extends JobImpl {

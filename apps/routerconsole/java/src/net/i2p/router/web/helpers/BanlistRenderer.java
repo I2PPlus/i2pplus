@@ -56,22 +56,18 @@ class BanlistRenderer {
             buf.append("<li class=lazy>").append(_context.commSystem().renderPeerHTML(key, false));
             buf.append(' ').append("<span class=banperiod>");
             String expireString = DataHelper.formatDuration2(expires);
-            if (key.equals(Hash.FAKE_HASH))
-                buf.append(_t("Permanently banned"));
-            else if (expires < 5l*24*60*60*1000)
-                buf.append(_t("Temporary ban expiring in {0}", expireString));
-            else
-                buf.append(_t("Banned for {0} / until restart", expireString));
+            if (key.equals(Hash.FAKE_HASH) || key.equals(Banlist.HASH_ZERORI)) {buf.append(_t("Permanently banned"));}
+            else if (expires < 5l*24*60*60*1000) {buf.append(_t("Temporary ban expiring in {0}", expireString));}
+            else {buf.append(_t("Banned for {0} / until restart", expireString));}
             buf.append("</span>");
             Set<String> transports = entry.transports;
-            if ( (transports != null) && (!transports.isEmpty()) )
+            if ((transports != null) && (!transports.isEmpty())) {
                 buf.append(" on the following transport: ").append(transports);
+            }
             if (entry.cause != null) {
                 buf.append("<hr>\n");
-                if (entry.causeCode != null)
-                    buf.append(_t(entry.cause, entry.causeCode));
-                else
-                    buf.append(_t(entry.cause));
+                if (entry.causeCode != null) {buf.append(_t(entry.cause, entry.causeCode));}
+                else {buf.append(_t(entry.cause));}
             }
             if (!key.equals(Hash.FAKE_HASH)) {
                 buf.append(" <a href=\"configpeer?peer=").append(key.toBase64())
