@@ -746,7 +746,7 @@ class Packet {
 
         int size = writtenSize();
 
-        if (buffer == null) {buffer = new byte[size];}
+        if (buffer == null || size > buffer.length) {buffer = new byte[size];}
         if (isFlagSet(FLAG_SIGNATURE_OFFLINE)) {
             if (_transientExpires < ctx.clock().now()) {
                 Log l = ctx.logManager().getLog(Packet.class);
