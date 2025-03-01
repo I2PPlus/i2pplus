@@ -615,6 +615,10 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         if (_log.shouldDebug()) {
             _log.debug("Received RouterInfo in data phase " + ri + "\non: " + this);
         }
+        if (ri.getPublished() < 0) {
+            throw new DataFormatException("Invalid RouterInfo publication date [" +
+                                           ri.getIdentity().calculateHash().toBase64().substring(0,6) + "]");
+        }
         try {
             Hash h = ri.getHash();
             if (h.equals(_context.routerHash())) {return;}

@@ -233,6 +233,13 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (isHandshake) {throw new DataFormatException("RouterInfo in Session Request");}
         if (_receivedUnconfirmedIdentity != null) {throw new DataFormatException("Duplicate RouterInfo in SessionConfirmed");}
         _receivedUnconfirmedIdentity = ri.getIdentity();
+        if (ri.getPublished() < 0) {
+            // see SSU2Payload: RI format error, signature was verified there, so we can take action
+            _context.blocklist().add(_aliceIP);
+            Hash h = _receivedUnconfirmedIdentity.calculateHash();
+            _context.banlist().banlistRouter(h, " <b>➜</b> Invalid publication date", null, null, _context.clock().now() + 4*24*60*60*1000);
+            throw new RIException("Invalid publication date in RouterInfo " + h.toBase64(), REASON_BANNED);
+        }
 
         // try to find the right address, because we need the MTU
         boolean isIPv6 = _aliceIP.length == 16;

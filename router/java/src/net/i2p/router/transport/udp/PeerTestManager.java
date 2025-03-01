@@ -1913,6 +1913,13 @@ class PeerTestManager {
         public void gotOptions(byte[] options, boolean isHandshake) {}
 
         public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) {
+            if (ri.getPublished() < 0) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Invalid publication date in RouterInfo [" +
+                              ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] -> Banning...");
+                }
+                return;
+            }
             try {
                 Hash h = ri.getHash();
                 if (h.equals(_context.routerHash()))

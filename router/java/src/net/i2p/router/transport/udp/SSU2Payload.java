@@ -1,18 +1,24 @@
 package net.i2p.router.transport.udp;
 
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import net.i2p.I2PAppContext;
+import net.i2p.crypto.DSAEngine;
+import net.i2p.crypto.SigType;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.i2np.I2NPMessageException;
 import net.i2p.data.i2np.I2NPMessageImpl;
+import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.data.Signature;
+import net.i2p.data.SigningPublicKey;
+import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 
 /**
@@ -23,29 +29,28 @@ import net.i2p.util.Log;
  */
 class SSU2Payload {
 
-    public static final int BLOCK_HEADER_SIZE = 3;
-
-    private static final int BLOCK_DATETIME = 0;
-    private static final int BLOCK_OPTIONS = 1;
-    private static final int BLOCK_ROUTERINFO = 2;
-    private static final int BLOCK_I2NP = 3;
-    private static final int BLOCK_FIRSTFRAG = 4;
-    private static final int BLOCK_FOLLOWONFRAG = 5;
-    public static final int BLOCK_TERMINATION = 6;
-    private static final int BLOCK_RELAYREQ = 7;
-    private static final int BLOCK_RELAYRESP = 8;
-    private static final int BLOCK_RELAYINTRO = 9;
-    private static final int BLOCK_PEERTEST = 10;
-    private static final int BLOCK_NEXTNONCE = 11;
     private static final int BLOCK_ACK = 12;
     private static final int BLOCK_ADDRESS = 13;
-    private static final int BLOCK_RELAYTAGREQ = 15;
-    private static final int BLOCK_RELAYTAG = 16;
+    private static final int BLOCK_CONGESTION = 21;
+    private static final int BLOCK_DATETIME = 0;
+    private static final int BLOCK_FIRSTFRAG = 4;
+    private static final int BLOCK_FOLLOWONFRAG = 5;
+    private static final int BLOCK_I2NP = 3;
     private static final int BLOCK_NEWTOKEN = 17;
+    private static final int BLOCK_NEXTNONCE = 11;
+    private static final int BLOCK_OPTIONS = 1;
+    private static final int BLOCK_PADDING = 254;
     private static final int BLOCK_PATHCHALLENGE = 18;
     private static final int BLOCK_PATHRESP = 19;
-    private static final int BLOCK_CONGESTION = 21;
-    private static final int BLOCK_PADDING = 254;
+    private static final int BLOCK_PEERTEST = 10;
+    private static final int BLOCK_RELAYINTRO = 9;
+    private static final int BLOCK_RELAYREQ = 7;
+    private static final int BLOCK_RELAYRESP = 8;
+    private static final int BLOCK_RELAYTAG = 16;
+    private static final int BLOCK_RELAYTAGREQ = 15;
+    private static final int BLOCK_ROUTERINFO = 2;
+    public static final int BLOCK_HEADER_SIZE = 3;
+    public static final int BLOCK_TERMINATION = 6;
 
     /**
      *  For all callbacks, recommend throwing exceptions only from the handshake.
@@ -211,7 +216,30 @@ class SSU2Payload {
                         if (bais.available() >= 3*1024)
                             flood = false;
                         RouterInfo alice = new RouterInfo();
-                        alice.readBytes(bais, true);
+                        try {alice.readBytes(bais, true);}
+                        catch (DataFormatException dfe) {
+                            // alternate verify of signature.
+                            // if a badly formatted RI was correctly signed, we do a special callback
+                            bais.reset();
+                            RouterIdentity ident = new RouterIdentity();
+                            ident.readBytes(bais);
+                            SigningPublicKey pub = ident.getSigningPublicKey();
+                            SigType st = pub.getType();
+                            if (st == null) {throw dfe;}
+                            bais.reset();
+                            byte[] data = new byte[bais.available() - st.getSigLen()];
+                            bais.read(data);
+                            Signature sig = new Signature(st);
+                            sig.readBytes(bais);
+                            if (DSAEngine.getInstance().verifySignature(sig, data, pub)) {
+                                Log log = ctx.logManager().getLog(SSU2Payload.class);
+                                if (log.shouldWarn()) {log.warn("Error reading RouterInfo", dfe);}
+                                // partially filled-in RI, -1 is signal to IES2.gotRI()
+                                alice = new RouterInfo();
+                                alice.setIdentity(ident);
+                                alice.setPublished(-1);
+                            } else {throw dfe;} // bad sig, just throw dfe
+                        }
                         cb.gotRI(alice, isHandshake, flood);
                     } else {
                         byte[] data = new byte[len - 2];
