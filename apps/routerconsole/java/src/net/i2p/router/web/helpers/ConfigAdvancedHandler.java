@@ -18,7 +18,6 @@ import net.i2p.router.web.FormHandler;
  *
  */
 public class ConfigAdvancedHandler extends FormHandler {
-    //private boolean _forceRestart;
     private boolean _shouldSave;
     private String _oldConfig, _config;
     private String _ff;
@@ -29,11 +28,10 @@ public class ConfigAdvancedHandler extends FormHandler {
             if ("ff".equals(_action) && _ff != null) {saveFF();}
             else if (isAdvanced()) {saveChanges();}
             else {addFormError(_t("Save disabled, edit the router.config file to make changes"), true);}
-        } else {} // no-op
+        }
     }
 
     public void setShouldsave(String moo) { _shouldSave = true; }
-    //public void setRestart(String moo) { _forceRestart = true; }
 
     /** @since 0.9.20 */
     public void setFf(String ff) {_ff = ff;}
@@ -97,13 +95,6 @@ public class ConfigAdvancedHandler extends FormHandler {
             } else {
                 addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"), true);
             }
-
-            // Optionally, perform a soft restart if required
-            // if (_forceRestart) {
-            //     addFormNotice("Performing a soft restart");
-            //     _context.router().restart();
-            //     addFormNotice("Soft restart complete");
-            // }
         }
     }
 

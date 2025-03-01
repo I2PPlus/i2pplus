@@ -55,9 +55,9 @@
     boolean isAdvanced = advancedhelper.isAdvanced();
     if (isAdvanced) {
 %>
-<form method=POST>
+<form id=advConfigForm method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>">
-<input type=hidden name=action value="blah">
+<input type=hidden name="action" value="blah">
 <input type=hidden name="nofilter_oldConfig" value="<%=advConfig%>">
 <div id=advconfwrapper>
 <table class=configtable id=advconf>

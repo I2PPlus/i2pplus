@@ -19,8 +19,8 @@ const advConfigInit = () => {
     table: query("#advconf"),
     infohelp: query("#advconf thead td.infohelp"),
     header: query("h3#advancedconfig"),
-    advForm: query("#advancedconfig+form"),
-    saveButton: query("#saveConfig input[type=submit]"),
+    advForm: query("#advConfigForm"),
+    saveButton: query("#saveConfig input.accept"),
     cancelButton: query("#saveConfig input.cancel"),
   };
 
@@ -206,7 +206,11 @@ const advConfigInit = () => {
     if (event.key === "Enter") {
       event.preventDefault();
       saveButton.click();
-    } else {advForm.requestSubmit(saveButton);}
+    } else {
+      event.preventDefault();
+      //console.log("Form submitted with data:", new FormData(advForm));
+      advForm.requestSubmit(saveButton);
+    }
   };
 
   d.addEventListener("keydown", event => {
