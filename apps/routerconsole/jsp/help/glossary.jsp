@@ -29,7 +29,7 @@
 <span class=tab><a href="/help/webhosting" title="<%=intl._t("Web Hosting")%>"><%=intl._t("Web Hosting")%></a></span>
 <span class=tab><a href="/help/hostnameregistration" title="<%=intl._t("Hostname Registration")%>"><%=intl._t("Hostname Registration")%></a></span>
 <span class=tab><a href="/help/troubleshoot" title="<%=intl._t("Troubleshoot")%>"><%=intl._t("Troubleshoot")%></a></span>
-<span class=tab2 id=terms><span><%=intl._t("Glossary")%></span></span>
+<span class=tab2 id=gloss><span><%=intl._t("Glossary")%></span></span>
 <span class=tab><a href="/help/legal" title="<%=intl._t("Legal")%>"><%=intl._t("Legal")%></a></span>
 <span class=tab><a href="/help/changelog"><%=intl._t("Change Log")%></a></span>
 </div>
