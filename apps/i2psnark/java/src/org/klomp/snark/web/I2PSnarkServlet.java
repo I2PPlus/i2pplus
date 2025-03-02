@@ -52,7 +52,7 @@ import net.i2p.util.Translate;
 import net.i2p.util.UIMessages;
 
 import org.klomp.snark.I2PSnarkUtil;
-import org.klomp.snark.IdleChecker;
+//import org.klomp.snark.IdleChecker;
 import org.klomp.snark.MagnetURI;
 import org.klomp.snark.MetaInfo;
 import org.klomp.snark.Peer;
