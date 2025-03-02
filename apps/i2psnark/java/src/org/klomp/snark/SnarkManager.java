@@ -507,9 +507,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public void addMessage(String message) {
         long currentTime = System.currentTimeMillis() / 1000;
         if (lastAddedMessageTimestamp != currentTime || !lastAddedMessage.equals(message)) {
-            addMessageNoEscape(message.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-                                      .replace("&amp;nbsp", "&nbsp;")
-                                      .replaceAll("(?<!href=[\"'][^>]*)(%20)(?![^<]*>|[^<>]*</a>)", " "));
+            addMessageNoEscape(message.replace("&", "&amp;").replace("<", "<").replace(">", ">")
+                                      .replace("&amp;nbsp", "&nbsp;"));
+                                      //.replaceAll("(?<!href=[\"'][^>\"]{0,1024})(%20)(?![^<]*>|[^<>]*</a>)", " "));
         } else if (lastAddedMessage.startsWith(_t("Download already running: ")) &&
                    lastAddedMessage.contains(_t("Downloading"))) {
             lastAddedMessage = lastAddedMessage.replace(_t("Download already running: "), "");
@@ -519,7 +519,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (_log.shouldInfo()) {_log.info(message);}
     }
 
-    /**
+        /**
      * Use if it includes a link.
      * Does not escape '&lt;' and '&gt;' before queueing
      * @since 0.9.14.1
@@ -527,8 +527,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public void addMessageNoEscape(String message) {
         long currentTime = System.currentTimeMillis() / 1000;
         if (lastAddedMessageTimestamp != currentTime || !lastAddedMessage.equals(message)) {
-            _messages.addMessageNoEscape(getTime() + "&nbsp; " +
-            message.replaceAll("(?<!href=[\"'][^>]*)(%20)(?![^<]*>|[^<>]*</a>)", " "));
+            _messages.addMessageNoEscape(getTime() + "&nbsp; " + message);
+            //message.replaceAll("(?<!href=[\"'][^>]*)(%20)(?![^<]*>|[^<>]*</a>)", " "));
         }
         lastAddedMessageTimestamp = currentTime;
         lastAddedMessage = message;

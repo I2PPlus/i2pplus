@@ -66,12 +66,10 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
                 }
             }
 
-            if (torrentRunning) {
-                _consecNotRunning = 0;
-            } else {
+            if (torrentRunning) {_consecNotRunning = 0;}
+            else {
                 if (_consecNotRunning++ >= MAX_CONSEC_NOT_RUNNING) {
-                    if (_log.shouldWarn())
-                        _log.warn("Closing tunnels on idle");
+                    if (_log.shouldWarn()) {_log.warn("[I2PSnark] Closing tunnels on idle...");}
                     _util.disconnect();
                     _mgr.addMessage(_util.getString("No more torrents running.") + ' ' +
                                     _util.getString("I2P tunnel closed."));
@@ -80,14 +78,11 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
                 }
             }
 
-            if (peerCount > 0) {
-                restoreTunnels(peerCount);
-            } else {
+            if (peerCount > 0) {restoreTunnels(peerCount);}
+            else {
                 if (!_isIdle) {
-                    if (_consec++ >= MAX_CONSEC_IDLE)
-                        reduceTunnels();
-                    else
-                        restoreTunnels(1);  // pretend we have one peer for now
+                    if (_consec++ >= MAX_CONSEC_IDLE) {reduceTunnels();}
+                    else {restoreTunnels(1);} // pretend we have one peer for now
                 }
             }
         } else {
@@ -188,4 +183,17 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
             }
         }
     }
+
+    /**
+     * Return the current inbound tunnel count
+     * @since 0.9.66+
+     */
+    public int getActiveInboundCount() {return Integer.parseInt(_lastIn);}
+
+    /**
+     * Return the current outbound tunnel count
+     * @since 0.9.66+
+     */
+    public int getActiveOutboundCount() {return Integer.parseInt(_lastOut);}
+
 }

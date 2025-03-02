@@ -52,6 +52,7 @@ import net.i2p.util.Translate;
 import net.i2p.util.UIMessages;
 
 import org.klomp.snark.I2PSnarkUtil;
+import org.klomp.snark.IdleChecker;
 import org.klomp.snark.MagnetURI;
 import org.klomp.snark.MetaInfo;
 import org.klomp.snark.Peer;
@@ -1101,7 +1102,15 @@ public class I2PSnarkServlet extends BasicServlet {
                 toThemeSVG(ftr, "outbound", "", "");
                 ftr.append("<span class=badge>").append("</span></span>");
             }
-
+/*
+            _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
+            ftr.append("<span id=tnlInCount class=counter title=\"").append(_t("Active Inbound tunnels")).append("\" hidden>");
+            toThemeSVG(ftr, "inbound", "", "");
+            ftr.append("<span class=badge>").append(getActiveInboundCount()).append("</span></span>")
+               .append("<span id=tnlOutCount class=counter title=\"").append(_t("Active Outbound tunnels")).append("\" hidden>");
+            toThemeSVG(ftr, "outbound", "", "");
+            ftr.append("<span class=badge>").append(getActiveOutboundCount()).append("</span></span>");
+*/
             ftr.append("</span></th>");
 
             if (_manager.util().connected() && total > 0) {
@@ -2132,19 +2141,14 @@ public class I2PSnarkServlet extends BasicServlet {
                 Map<String, TorrentCreateFilter> torrentCreateFilters = _manager.getTorrentCreateFilterMap();
                 torrentCreateFilters.put(name, new TorrentCreateFilter(name, filterPattern, filterType, isDefault));
                 _manager.saveTorrentCreateFilterMap();
-            } else {
-                _manager.addMessage(_t("Enter valid name and filter pattern"));
-            }
+            } else {_manager.addMessage(_t("Enter valid name and filter pattern"));}
         } else if (action.equals(_t("Restore defaults"))) {
             _manager.setDefaultTorrentCreateFilterMap();
             _manager.addMessage(_t("Restored default torrent create filters"));
-        } else {
-            _manager.addMessage("Unknown POST action: \"" + action + '\"');
-        }
+        } else {_manager.addMessage("Unknown POST action: \"" + action + '\"');}
     }
 
-    private static final String iopts[] = {"inbound.length", "inbound.quantity",
-                                           "outbound.length", "outbound.quantity" };
+    private static final String iopts[] = {"inbound.length", "inbound.quantity", "outbound.length", "outbound.quantity" };
 
     /** put the individual i2cp selections into the option string */
     private static String buildI2CPOpts(HttpServletRequest req) {
@@ -2402,8 +2406,9 @@ public class I2PSnarkServlet extends BasicServlet {
                 CommentSet comments = snark.getComments();
                 // Link to local details page - note that trailing slash on a single-file torrent
                 // gets us to the details page instead of the file.
-                buf.append("<span class=filetype><a href=\"").append(encodedBaseName)
-                   .append("/\" title=\"").append(_t("Torrent details")).append("\">");
+                String torrentPath = "/i2psnark/" + encodedBaseName + "/";
+                buf.append("<span class=filetype><a href=\"").append(torrentPath)
+                   .append("\" title=\"").append(_t("Torrent details")).append("\">");
                 if (comments != null && !comments.isEmpty()) {
                     buf.append("<span class=commented title=\"").append(_t("Torrent has comments")).append("\">");
                     toSVG(buf, "rateme", "", "");
@@ -2876,10 +2881,8 @@ public class I2PSnarkServlet extends BasicServlet {
     private String getShortTrackerLink(String announce, byte[] infohash) {
         StringBuilder buf = new StringBuilder(128);
         String trackerLinkUrl = getTrackerLinkUrl(announce, infohash);
-        if (announce.startsWith("http://"))
-            announce = announce.substring(7);
-        else if (announce.startsWith("https://"))
-            announce = announce.substring(8);
+        if (announce.startsWith("http://")) {announce = announce.substring(7);}
+        else if (announce.startsWith("https://")) {announce = announce.substring(8);}
         else if (announce.startsWith("udp://tracker.")) {
             announce = announce.substring(14) + " [ext]";
             int colon = announce.indexOf(':');
@@ -2899,11 +2902,9 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         // strip path
         int slsh = announce.indexOf('/');
-        if (slsh > 0)
-            announce = announce.substring(0, slsh);
-        if (trackerLinkUrl != null) {
-            buf.append(trackerLinkUrl);
-        } else {
+        if (slsh > 0) {announce = announce.substring(0, slsh);}
+        if (trackerLinkUrl != null) {buf.append(trackerLinkUrl);}
+        else {
             // browsers don't like a full b64 dest, so convert it to b32
             String host = announce;
             if (host.length() >= 516) {
@@ -2913,8 +2914,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     port = host.substring(colon);
                     host = host.substring(0, colon);
                 }
-                if (host.endsWith(".i2p"))
-                    host = host.substring(0, host.length() - 4);
+                if (host.endsWith(".i2p")) {host = host.substring(0, host.length() - 4);}
                 byte[] b = Base64.decode(host);
                 if (b != null) {
                     Hash h = _context.sha().calculateHash(b);
@@ -2923,26 +2923,22 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
             }
             int space = host.indexOf(" ");
-            if (!host.endsWith("[ext]") || host.contains(".i2p"))
+            if (!host.endsWith("[ext]") || host.contains(".i2p")) {
                 buf.append("<a href=\"http://").append(urlEncode(host)).append("/\" target=_blank>");
-            else
-                host = host.substring(0, space);
+             } else {host = host.substring(0, space);}
         }
         // strip port
         int colon = announce.indexOf(':');
-        if (colon > 0)
-            announce = announce.substring(0, colon);
-        if (announce.length() > 67)
+        if (colon > 0) {announce = announce.substring(0, colon);}
+        if (announce.length() > 67) {
             announce = DataHelper.escapeHTML(announce.substring(0, 40)) + "&hellip;" +
                        DataHelper.escapeHTML(announce.substring(announce.length() - 8));
+        }
         if (announce.endsWith(".i2p") && !announce.endsWith(".b32.i2p")) {
             announce = announce.replace(".i2p", "");
-            if (announce.equals("tracker2.postman"))
-                announce = "postman";
-            if (announce.startsWith("tracker."))
-                announce = announce.substring(8, announce.length());
-            if (announce.startsWith("opentracker."))
-                announce = announce.substring(12, announce.length());
+            if (announce.equals("tracker2.postman")) {announce = "postman";}
+            if (announce.startsWith("tracker.")) {announce = announce.substring(8, announce.length());}
+            if (announce.startsWith("opentracker.")) {announce = announce.substring(12, announce.length());}
         }
         buf.append(announce);
         buf.append("</a>");
@@ -3167,11 +3163,10 @@ public class I2PSnarkServlet extends BasicServlet {
                 // If we get to here, we have the language settings
                 buf.append("<span class=configOption><b>").append(_t("Language")).append("</b> ")
                    .append(langSettings).append("</span><br>\n");
-            } catch (ClassNotFoundException e) {
-            } catch (NoSuchMethodException e) {
-            } catch (IllegalAccessException e) {
-            } catch (InvocationTargetException e) {
-            }
+            } catch (ClassNotFoundException e) {}
+            catch (NoSuchMethodException e) {}
+            catch (IllegalAccessException e) {}
+            catch (InvocationTargetException e) {}
         } else {
             buf.append("<span class=configOption><b>").append(_t("Language")).append("</b> ")
                .append("<span id=snarkLang>").append(lang).append("</span> ")
@@ -3681,41 +3676,28 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /** translate */
-    private String _t(String s) {
-        return _manager.util().getString(s);
-    }
+    private String _t(String s) {return _manager.util().getString(s);}
 
     /** translate */
-    private String _t(String s, Object o) {
-        return _manager.util().getString(s, o);
-    }
+    private String _t(String s, Object o) {return _manager.util().getString(s, o);}
 
     /** translate */
-    private String _t(String s, Object o, Object o2) {
-        return _manager.util().getString(s, o, o2);
-    }
+    private String _t(String s, Object o, Object o2) {return _manager.util().getString(s, o, o2);}
 
     /** translate (ngettext) @since 0.7.14 */
-    private String ngettext(String s, String p, int n) {
-        return _manager.util().getString(n, s, p);
-    }
+    private String ngettext(String s, String p, int n) {return _manager.util().getString(n, s, p);}
 
     /** dummy for tagging */
-    private static String ngettext(String s, String p) {
-        return null;
-    }
+    private static String ngettext(String s, String p) {return null;}
 
-    private static String formatSize(long bytes) {
-        return DataHelper.formatSize2(bytes) + 'B';
-    }
+    /** format filesize */
+    private static String formatSize(long bytes) {return DataHelper.formatSize2(bytes) + 'B';}
 
     /**
      * This is for a full URL. For a path only, use encodePath().
      * @since 0.7.14
      */
-    static String urlify(String s) {
-        return urlify(s, 100);
-    }
+    static String urlify(String s) {return urlify(s, 100);}
 
     /**
      * This is for a full URL. For a path only, use encodePath().
@@ -3727,12 +3709,9 @@ public class I2PSnarkServlet extends BasicServlet {
         String link = urlEncode(s);
         String display;
         if (s.length() <= max) {
-            if (link.startsWith("https"))
-                display = DataHelper.escapeHTML(link);
-            else
-                display = DataHelper.escapeHTML(link.replace("http://", ""));
-        } else
-            display = DataHelper.escapeHTML(s.substring(0, max)) + "&hellip;";
+            if (link.startsWith("https")) {display = DataHelper.escapeHTML(link);}
+            else {display = DataHelper.escapeHTML(link.replace("http://", ""));}
+        } else {display = DataHelper.escapeHTML(s.substring(0, max)) + "&hellip;";}
         buf.append("<a href=\"").append(link).append("\" target=_blank>").append(display).append("</a>");
         return buf.toString();
     }
@@ -3867,7 +3846,7 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean showPriority = storage != null && !storage.complete() && r.isDirectory();
 
         StringBuilder buf=new StringBuilder(6*1024);
-        buf.append(DOCTYPE).append("<html").append(isStandalone() ? " class=\"standalone\"" : "").append(">\n")
+        buf.append(DOCTYPE).append("<html").append(isStandalone() ? " class=standalone" : "").append(">\n")
            .append("<head>\n<meta charset=utf-8>\n").append("<title>");
         if (title.endsWith("/")) {title = title.substring(0, title.length() - 1);}
         final String directory = title;
@@ -4215,7 +4194,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         buf.append("\" class=reload title=\"").append(_t("Check integrity of the downloaded files")).append("\">");
                     }
                 }
-/**
+/*
 // TODO: fix feature so checkbox status is saved
                 boolean showInOrder = storage != null && !storage.complete() && meta != null;
                 if (showInOrder && meta != null) {
@@ -4232,7 +4211,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append(_t("Save Preference"));
                     buf.append("\" class=accept></span>");
                 }
-**/
+*/
                 buf.append("</td></tr>\n");
             }
         } else {
@@ -4309,7 +4288,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         List<Sorters.FileAndIndex> fileList = new ArrayList<Sorters.FileAndIndex>(ls.length);
-        // precompute remaining for all files for efficiency
+        // Precompute remaining for all files for efficiency
         long[][] arrays = (storage != null) ? storage.remaining2() : null;
         long[] remainingArray = (arrays != null) ? arrays[0] : null;
         long[] previewArray = (arrays != null) ? arrays[1] : null;
@@ -4317,8 +4296,7 @@ public class I2PSnarkServlet extends BasicServlet {
             File f = ls[i];
             if (isTopLevel) {
                 // Hide (assumed) padding directory if it's in the filesystem.
-                // Storage now will not create padding files, but
-                // may have been created by an old version or other client.
+                // Storage now will not create padding files, but may have been created by an old version or other client.
                 String n = f.getName();
                 if ((n.equals(".pad") || n.equals("_pad")) && f.isDirectory()) {continue;}
             }
