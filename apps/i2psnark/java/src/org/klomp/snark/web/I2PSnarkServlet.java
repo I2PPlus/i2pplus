@@ -2383,6 +2383,9 @@ public class I2PSnarkServlet extends BasicServlet {
 
             String encodedBaseName = encodePath(fullBasename);
             String hex = I2PSnarkUtil.toHex(snark.getInfoHash());
+            String torrentPath = "";
+            if (encodedBaseName != null) {torrentPath = "/i2psnark/" + encodedBaseName + "/";}
+
             // magnet column
             buf.append("</td><td class=magnet>");
             if (isValid && meta != null) {
@@ -2406,7 +2409,6 @@ public class I2PSnarkServlet extends BasicServlet {
                 CommentSet comments = snark.getComments();
                 // Link to local details page - note that trailing slash on a single-file torrent
                 // gets us to the details page instead of the file.
-                String torrentPath = "/i2psnark/" + encodedBaseName + "/";
                 buf.append("<span class=filetype><a href=\"").append(torrentPath)
                    .append("\" title=\"").append(_t("Torrent details")).append("\">");
                 if (comments != null && !comments.isEmpty()) {
@@ -2426,7 +2428,7 @@ public class I2PSnarkServlet extends BasicServlet {
             // Torrent name column
             buf.append("</td><td class=tName>");
             if (remaining == 0 || isMultiFile) {
-                buf.append("<a href=\"").append(encodedBaseName);
+                buf.append("<a href=\"").append(torrentPath);
                 if (isMultiFile) {buf.append('/');}
                 buf.append("\" title=\"");
                 if (isMultiFile) {buf.append(_t("View files"));}
