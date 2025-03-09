@@ -175,7 +175,7 @@ tr:hover .destaddress{color:#333}
 .iframed #content h3{margin-top:3px}
 .iframed #content{padding:0;overflow:hidden;border:0;background:none}
 .iframed #content textarea{margin:0;border:var(--border_inner)}
-.iframed #helpconfig,.iframed #helpsubs{margin-top:10px;margin-bottom:8px;border-radius:0;box-shadow:var(--highlight)}
+.iframed #helpconfig,.iframed #helpsubs{margin:10px auto 12px;border-radius:0;box-shadow:var(--highlight)}
 .iframed #empty{margin-bottom:20px;border:0;border-top:var(--border_inner);border-bottom:var(--border_inner)}
 .iframed #messages{border:0}
 #bk.iframed #page{padding-bottom:18px}

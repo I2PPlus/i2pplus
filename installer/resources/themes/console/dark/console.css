@@ -288,7 +288,7 @@ p:empty+.sb_notice{margin-top:9px}
 
 /* section toggler */
 .sidebarlogo{text-align:center}
-.toggleSection{position:absolute;top:-4px;right:-4px;bottom:-4px;height:calc(100% + 8px);min-height:28px;width:32px;background:rgba(0,0,0,.3) var(--collapse_hover) no-repeat center calc(50% - 2px)/10px;appearance:none;box-shadow:0 0 0 1px #000 inset;border-left:var(--border);display:none}
+.toggleSection{position:absolute;top:-4px;right:-4px;bottom:-4px;height:calc(100% + 8px);min-height:28px;width:32px;background:rgba(0,0,0,.3) var(--collapse_hover) no-repeat center calc(50% - 2px)/10px;appearance:none;box-shadow:0 0 0 1px #000 inset;border-left:var(--border);display:none;cursor:pointer}
 .toggleSection:not(:checked){background-image:var(--expand_hover)}
 .toggleSection:active{box-shadow:var(--btn_shadow_active);background:var(--hover) var(--expand_active) no-repeat center center/10px}
 .toggleSection:checked:active{background:var(--hover) var(--collapse_active) no-repeat center center/10px}

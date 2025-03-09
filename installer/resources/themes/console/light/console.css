@@ -230,7 +230,7 @@ p:empty+.sb_notice{margin-top:9px}
 /* sidebar toggler */
 h3:active .badge{display:none}
 #sidebar h3,#sidebar h3 a{position:relative;z-index:10}
-input[type=checkbox].toggleSection{position:absolute;top:-4px;right:-6px;bottom:-4px;height:calc(100% + 8px);min-height:32px;width:32px;display:none;background:#fff var(--dropdown) no-repeat center calc(50% - 2px)/10px;appearance:none;box-shadow:none;border-left:1px solid #afafcf;display:none;z-index:999}
+input[type=checkbox].toggleSection{position:absolute;top:-4px;right:-6px;bottom:-4px;height:calc(100% + 8px);min-height:32px;width:32px;display:none;background:#fff var(--dropdown) no-repeat center calc(50% - 2px)/10px;appearance:none;box-shadow:none;border-left:1px solid #afafcf;display:none;z-index:999;cursor:pointer}
 input[type=checkbox].toggleSection:active{box-shadow:var(--btn_shadow_active)}
 input[type=checkbox].toggleSection:checked:active{box-shadow:var(--highlight),inset 3px -3px 3px 1px rgba(32,32,64,.3)}
 input[type=checkbox].toggleSection:checked{transform:scaleY(-1);background-position:center calc(50% + 2px)}
