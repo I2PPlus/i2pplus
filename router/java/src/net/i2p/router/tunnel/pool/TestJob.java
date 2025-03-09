@@ -70,10 +70,10 @@ public class TestJob extends JobImpl {
         }
         if (ctx.router().gracefulShutdownInProgress()) {return;} // don't reschedule
         _found = false;
-        // NOTE:
-        // We now only support client-to-client and expl-to-expl testing.
-        // To support "mixed" testing, fix sendTest() to use the SKM
-        // of the inbound tunnel.
+        /*
+         * NOTE: We now only support client-to-client and expl-to-expl testing.
+         * To support "mixed" testing, fix sendTest() to use the SKM of the inbound tunnel.
+         */
         boolean isExpl = _pool.getSettings().isExploratory();
         if (_cfg.isInbound()) {
             _replyTunnel = _cfg;
@@ -200,19 +200,21 @@ public class TestJob extends JobImpl {
         }
     }
 
-    /** randomized time we should wait before testing */
+    /** Randomized time we should wait before testing */
     private int getDelay() {return TEST_DELAY + getContext().random().nextInt(TEST_DELAY / 3);}
 
-    /** how long we allow tests to run for before failing them */
+    /** How long we allow tests to run for before failing them */
     private int getTestPeriod() {
         if (_outTunnel == null || _replyTunnel == null) {return 20*1000;}
-        // Give it 2.5s per hop + 5s (2 hop tunnel = length 3, so this will be 15s for two 2-hop tunnels)
-        // Minimum is 7.5s (since a 0-hop could be the expl. tunnel, but only >= 1-hop client tunnels are tested)
-        // Network average for success is about 1.5s.
-        // Another possibility - make configurable via pool options
-        //
-        // Try to prevent congestion collapse (failing all our tunnels and then clogging our outbound
-        // with new tunnel build requests) by adding in three times the average outbound delay.
+        /*
+         * Give it 2.5s per hop + 5s (2 hop tunnel = length 3, so this will be 15s for two 2-hop tunnels)
+         * Minimum is 7.5s (since a 0-hop could be the expl. tunnel, but only >= 1-hop client tunnels are tested)
+         * Network average for success is about 1.5s.
+         * Another possibility - make configurable via pool options
+         *
+         * Try to prevent congestion collapse (failing all our tunnels and then clogging our outbound
+         * with new tunnel build requests) by adding in three times the average outbound delay.
+         */
         RateStat tspt = getContext().statManager().getRate("transport.sendProcessingTime");
         if (tspt != null) {
             Rate r = tspt.getRate(60*1000);
@@ -318,12 +320,13 @@ public class TestJob extends JobImpl {
         public String getName() {return "Timeout Tunnel Test";}
 
         public void runJob() {
-            if (_log.shouldDebug())
+            if (_log.shouldDebug()) {
                 _log.debug("Tunnel Test [#" + _id + "] timeout -> Found? " + _found);
+            }
             if (!_found && (_encryptTag != null || _ratchetEncryptTag != null)) {
                 // don't clog up the SKM with old one-tag tagsets
                 SessionKeyManager skm;
-                if (_cfg.isInbound() && !_pool.getSettings().isExploratory()) {
+                if (!_pool.getSettings().isExploratory()) {
                     skm = getContext().clientManager().getClientSessionKeyManager(_pool.getSettings().getDestination());
                 } else {skm = getContext().sessionKeyManager();}
                 if (skm != null) {
