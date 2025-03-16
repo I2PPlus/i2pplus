@@ -35,9 +35,8 @@ Public domain with exceptions:
  * Maxmind-DB-Reader-java: LICENSE-Apache2.0.txt
  * Noise library: LICENSE-Noise.txt
  * SparseArray: LICENSE-Apache2.0.txt
- * SSU HMAC: LICENSE-SHA256.txt
  * Installer
- * Launch4j included in upstream source package and Windows binaries: LICENSE-Launch4j.txt
+ * Launch4j (in upstream source package and Windows binaries): LICENSE-Launch4j.txt
 
 GeoIP Data
  * Includes GeoLite2 data by MaxMind: LICENSE-GeoIP.txt
