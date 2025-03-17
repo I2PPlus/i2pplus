@@ -1135,7 +1135,7 @@ td.status img{width:auto;height:23px}
 #torrentInfo .infohash{padding:2px 0 2px 22px;max-width:140px;background:#fff5ef var(--hash) no-repeat 6px center/14px}
 #torrentInfo th:first-child img,#torrentinfostats img,#trackers img{margin:-3px 5px 0;max-height:18px}
 #torrentlist.filterbarActive #pagenavtop.pagenavcontrols{top:30px}
-#torrentlist #pagenavtop.pagenavcontrols{top:6px}
+#torrentlist #pagenavtop.pagenavcontrols{top:30px}
 #torrentInfoStats td{padding-top:5px;padding-bottom:5px}
 #torrentInfoStats .nowrap{margin-right:6px}
 }
