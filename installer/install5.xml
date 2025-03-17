@@ -6,7 +6,7 @@
   xsi:schemaLocation="http://izpack.org/schema/installation http://izpack.org/schema/5.0/izpack-installation-5.0.xsd">
   <info>
     <appname>i2p</appname>
-    <appversion>2.8.0+</appversion>
+    <appversion>2.8.5+</appversion>
     <javaversion>1.8</javaversion>
     <!-- adding this element will make the installer attempt to launch itself with administrator permissions -->
     <run-privileged condition="izpack.windowsinstall"/>
@@ -101,7 +101,11 @@
   <!-- defaults to these files when no explicitly referenced -->
   <natives>
     <native type="izpack" name="ShellLink.dll"/>
-        <native type="izpack" name="ShellLink_x64.dll"/> https://izpack.atlassian.net/wiki/spaces/IZPACK/pages/491532/Advanced+Features <native type="izpack" name="WinSetupAPI.dll"/><native type="izpack" name="WinSetupAPI_x64.dll"/> https://izpack.atlassian.net/wiki/spaces/IZPACK/pages/491676/RegistryInstallerListener+RegistryUninstallerListener <native type="3rdparty" name="COIOSHelper.dll"/><native type="3rdparty" name="COIOSHelper_x64.dll"/>
+    <native type="izpack" name="ShellLink_x64.dll"/> <!-- https://izpack.atlassian.net/wiki/spaces/IZPACK/pages/491532/Advanced+Features -->
+    <native type="izpack" name="WinSetupAPI.dll"/>
+    <native type="izpack" name="WinSetupAPI_x64.dll"/> <!-- https://izpack.atlassian.net/wiki/spaces/IZPACK/pages/491676/RegistryInstallerListener+RegistryUninstallerListener -->
+    <native type="3rdparty" name="COIOSHelper.dll"/>
+    <native type="3rdparty" name="COIOSHelper_x64.dll"/>
   </natives>
 
   <resources>
@@ -137,8 +141,8 @@
     </panel>
     <panel classname="InstallPanel"/>
     <!-- In 5.1.2, ShortcutPanel must be after InstallPanel, so the .ico files will be there,
-             unless <lateShortcutInstall/> is set in shorcutSpec.xml.
-             If you don't do this right, the shortcuts won't have our icons.
+         unless <lateShortcutInstall/> is set in shorcutSpec.xml.
+         If you don't do this right, the shortcuts won't have our icons.
     -->
     <panel classname="ShortcutPanel">
       <os family="windows"/>
