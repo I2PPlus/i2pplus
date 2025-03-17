@@ -65,7 +65,7 @@ class ConnectionAcceptor implements Runnable {
      */
     public synchronized void startAccepting() {
         stop = false;
-        if (_log.shouldWarn()) {_log.warn("ConnectionAcceptor: Start accepting new thread? " + (thread == null));}
+        if (_log.shouldWarn()) {_log.warn("[I2PSnark] ConnectionAcceptor: Start accepting new thread? " + (thread == null));}
         if (thread == null) {
             thread = new I2PAppThread(this, "I2PSnark acceptor");
             thread.setDaemon(true);
@@ -133,14 +133,15 @@ class ConnectionAcceptor implements Runnable {
     }
 
     private void run2() {
-        while(!stop) {
+        while (!stop) {
             I2PServerSocket serverSocket = _util.getServerSocket();
             while ((serverSocket == null) && (!stop)) {
                 if (!(_util.isConnecting() || _util.connected())) {
                     stop = true;
                     break;
                 }
-                try { Thread.sleep(10*1000); } catch (InterruptedException ie) {}
+                try {Thread.sleep(10*1000);}
+                catch (InterruptedException ie) {}
                 serverSocket = _util.getServerSocket();
             }
             if (stop) {break;}
@@ -149,15 +150,16 @@ class ConnectionAcceptor implements Runnable {
                 if (socket == null) {continue;}
                 else {
                     if (socket.getPeerDestination().equals(_util.getMyDestination())) {
-                        _log.error("Incoming connection from myself");
-                        try { socket.close(); } catch (IOException ioe) {}
+                        _log.error("[I2PSnark] Dropping incoming connection from our own router");
+                        try {socket.close();}
+                        catch (IOException ioe) {}
                         continue;
                     }
                     Hash h = socket.getPeerDestination().calculateHash();
                     if (socket.getLocalPort() == 80) {
                          _badCounter.increment(h);
                         if (_log.shouldWarn()) {
-                            _log.error("Dropping incoming HTTP connection from client [" + h.toBase32().substring(0,8) + "]");
+                            _log.warn("[I2PSnark] Dropping incoming HTTP connection from client [" + h.toBase32().substring(0,8) + "]");
                         }
                         try {socket.close();}
                         catch (IOException ioe) {}
@@ -166,17 +168,21 @@ class ConnectionAcceptor implements Runnable {
                     int bad = _badCounter.count(h);
                     if (bad >= MAX_BAD) {
                         if (_log.shouldWarn()) {
-                            _log.warn("Rejecting incoming connection from client [" + h.toBase32().substring(0,8) +
+                            _log.warn("[I2PSnark] Rejecting incoming connection from client [" + h.toBase32().substring(0,8) +
                                       "] after " + bad + " failures (Max is " + MAX_BAD + ")");
                         }
-                        try { socket.close(); } catch (IOException ioe) {}
+                        try {socket.close();}
+                        catch (IOException ioe) {}
                         continue;
                     }
                     Thread t = new I2PAppThread(new Handler(socket), "I2PSnark incoming connection");
                     t.start();
                 }
             } catch (RouterRestartException rre) {
-                if (_log.shouldWarn()) {_log.warn("Waiting for router restart", rre);}
+                I2PAppContext ctx = I2PAppContext.getGlobalContext();
+                String msg = "Waiting for I2P router restart...";
+                if (_log.shouldWarn()) {_log.warn("[I2PSnark] " + msg, rre);}
+                if (!ctx.isRouterContext()) {System.out.println(" • " + msg);}
                 try {Thread.sleep(2*60*1000);}
                 catch (InterruptedException ie) {}
                 while (true) {
@@ -184,10 +190,12 @@ class ConnectionAcceptor implements Runnable {
                     try {Thread.sleep(60*1000);}
                     catch (InterruptedException ie) {break;}
                 }
-                if (_log.shouldWarn()) {_log.warn("Router restarted");}
+                msg = "Router restarted";
+                if (_log.shouldWarn()) {_log.warn("[I2PSnark] " + msg);}
+                if (!ctx.isRouterContext()) {System.out.println(" • " + msg);}
             } catch (I2PException ioe) {
                 int level = stop ? Log.WARN : Log.ERROR;
-                if (_log.shouldLog(level)) {_log.log(level, "Error while accepting", ioe);}
+                if (_log.shouldLog(level)) {_log.log(level, "[I2PSnark] Error while accepting", ioe);}
                 synchronized(this) {
                     if (!stop) {
                         locked_halt();
@@ -196,9 +204,11 @@ class ConnectionAcceptor implements Runnable {
                     }
                 }
             } catch (ConnectException ioe) {
-                // This is presumed to be due to socket closing by I2PSnarkUtil.disconnect(),
-                // which does not currently call our halt(), although it should
-                if (_log.shouldWarn()) {_log.warn("Error while accepting", ioe);}
+                /*
+                 * This is presumed to be due to socket closing by I2PSnarkUtil.disconnect(),
+                 * which does not currently call our halt(), although it should
+                 */
+                if (_log.shouldWarn()) {_log.warn("[I2PSnark] Error while accepting", ioe);}
                 synchronized(this) {
                     if (!stop) {
                         locked_halt();
@@ -208,7 +218,7 @@ class ConnectionAcceptor implements Runnable {
                 }
             } catch (IOException ioe) {
                 int level = stop ? Log.WARN : Log.ERROR;
-                if (_log.shouldLog(level)) {_log.log(level, "Error while accepting", ioe);}
+                if (_log.shouldLog(level)) {_log.log(level, "[I2PSnark] Error while accepting", ioe);}
                 synchronized(this) {
                     if (!stop) {
                         locked_halt();
@@ -219,7 +229,7 @@ class ConnectionAcceptor implements Runnable {
             }
             // catch oom?
         }
-        if (_log.shouldWarn()) {_log.warn("ConnectionAcceptor closed");}
+        if (_log.shouldWarn()) {_log.warn("[I2PSnark] ConnectionAcceptor closed");}
     }
 
     private class Handler implements Runnable {
@@ -234,19 +244,19 @@ class ConnectionAcceptor implements Runnable {
                 // this is for the readahead in PeerAcceptor.connection()
                 in = new BufferedInputStream(in);
                 if (_log.shouldDebug()) {
-                    _log.debug("Handling socket from [" + _socket.getPeerDestination().calculateHash() + "]");
+                    _log.debug("[I2PSnark] Handling socket from [" + _socket.getPeerDestination().calculateHash() + "]");
                 }
                 peeracceptor.connection(_socket, in, out);
             } catch (PeerAcceptor.ProtocolException ihe) {
                 _badCounter.increment(_socket.getPeerDestination().calculateHash());
                 if (_log.shouldInfo()) {
-                    _log.info("Protocol error from [" + _socket.getPeerDestination().calculateHash() + "]", ihe);
+                    _log.info("[I2PSnark] Protocol error from [" + _socket.getPeerDestination().calculateHash() + "]", ihe);
                 }
                 try {_socket.close();}
                 catch (IOException ignored) {}
             } catch (IOException ioe) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Error handling connection from [" + _socket.getPeerDestination().calculateHash() + "]", ioe);
+                    _log.debug("[I2PSnark] Error handling connection from [" + _socket.getPeerDestination().calculateHash() + "]", ioe);
                 }
                 try {_socket.close();}
                 catch (IOException ignored) {}
