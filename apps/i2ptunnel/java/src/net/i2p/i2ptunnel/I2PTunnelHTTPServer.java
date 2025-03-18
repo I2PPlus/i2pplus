@@ -192,7 +192,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Connection: close\r\n" +
          "\r\n" +
          "<html>\n" +
-         "<head><title>404 Not Found</title></head>\n" +
+         "<head><title>404 Not Found</title><meta name=color-scheme content=\"light dark\"></head>\n" +
          "<body>\n" +
          "<center><h1>404 Not Found</h1></center>\n" +
          "<hr>\n" +
@@ -206,7 +206,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Connection: close\r\n" +
          "\r\n" +
          "<html>\n" +
-         "<head><title>503 Service Temporarily Unavailable</title></head>\n" +
+         "<head><title>503 Service Temporarily Unavailable</title><meta name=color-scheme content=\"light dark\"></head>\n" +
          "<body>\n" +
          "<center><h1>503 Service Temporarily Unavailable</h1></center>\n" +
          "<hr>\n" +
@@ -221,7 +221,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Connection: close\r\n" +
          "\r\n" +
          "<html>\n" +
-         "<head><title>429 Too Many Requests</title></head>\n" +
+         "<head><title>429 Too Many Requests</title><meta name=color-scheme content=\"light dark\"></head>\n" +
          "<body>\n" +
          "<center><h1>429 Too Many Requests</h1></center>\n" +
          "<hr>\n" +
@@ -237,7 +237,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Connection: close\r\n" +
          "\r\n" +
          "<html>\n" +
-         "<head><title>403 Forbidden</title></head>\n" +
+         "<head><title>403 Forbidden</title><meta name=color-scheme content=\"light dark\"></head>\n" +
          "<body>\n" +
          "<center><h1>403 Forbidden</h1></center>\n" +
          "<hr>\n" +
@@ -264,7 +264,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Cache-Control: no-cache\r\n" +
          "Connection: close\r\n" +
          "\r\n" +
-         "<html>\n<head><title>414 Request URI Too Long</title></head>\n" +
+         "<html>\n<head><title>414 Request URI Too Long</title><meta name=color-scheme content=\"light dark\"></head>\n" +
          "<center><h1>414 Request URI too long</h1></center>\n" +
          "<hr>\n" +
          //"<p>The requested URL contains too many characters and cannot be processed.</p>\n" +
@@ -277,7 +277,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Cache-Control: no-cache\r\n" +
          "Connection: close\r\n" +
          "\r\n" +
-         "<html>\n<head><title>431 Request Header Fields Too Large</title></head>\n" +
+         "<html>\n<head><title>431 Request Header Fields Too Large</title><meta name=color-scheme content=\"light dark\"></head>\n" +
          "<center><h1>431 Request header fields too large</h1></center>\n" +
          "<hr>\n" +
          //"<p>The request headers submitted by your client are too large and cannot be processed.</p>\n" +
@@ -301,7 +301,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Cache-Control: no-cache\r\n" +
          "Connection: close\r\n" +
          "\r\n" +
-         "<html>\n<head><title>400 Bad Request</title></head>\n" +
+         "<html>\n<head><title>400 Bad Request</title><meta name=color-scheme content=\"light dark\"></head>\n" +
          "<center><h1>400 Bad request (malformed datastream)</h1></center>\n" +
          "<hr>\n" +
          "</body>\n" +
