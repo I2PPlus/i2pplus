@@ -589,8 +589,7 @@
     </condition>
   </target>
 
-  <!-- If both present, only mtn will run -->
-  <target name="checkoutFromGit" depends="checkForGit" if="git.available" unless="mtn.available">
+  <target name="checkoutFromGit" depends="checkForGit" if="git.available">
     <echo message="Checking out fresh copy into ${checkoutDir}"/>
     <delete dir="${checkoutDir}"/>
     <exec executable="git" failonerror="true">
@@ -601,7 +600,7 @@
     </exec>
   </target>
 
-  <target name="revisionsGit" depends="checkForGit, getReleaseNumber, getBuildNumber" if="git.available" unless="mtn.available">
+  <target name="revisionsGit" depends="checkForGit, getReleaseNumber, getBuildNumber" if="git.available">
     <!-- git log i2p-0.9.xx | grep '^Author:' | cut -d ' ' -f 2- | sort | uniq -c | sort -rn -->
     <exec executable="git" outputproperty="getrevisions1" errorproperty="reverror1" failifexecutionfails="true">
       <arg value="log"/>
@@ -627,8 +626,6 @@
     <echo message="${getrevisions6}"/>
   </target>
   <!-- end git targets -->
-
-  <!-- combined mtn/git targets -->
 
   <target name="checkForVCS" depends="checkForGit"/>
 
@@ -684,13 +681,10 @@
       match='(^\s+private\s+static\s+final\s+long\s+EARLIEST_LONG\s+=\s+)[0-9]+ \* 1000L;' replace='\1${new.today.secs} * 1000L;'/>
   </target>
 
-  <!-- If both present, only mtn will run -->
   <target name="checkoutFromVCS" depends="failIfNoVCS, checkoutFromGit"/>
 
-  <!-- If both present, only mtn will run -->
   <target name="revisions" depends="failIfNoVCS, revisionsGit"/>
-
-  <!-- end combined mtn/git targets -->
+  <!-- end git targets -->
 
   <!-- launch4j targets -->
 
@@ -3299,13 +3293,16 @@
       <fileset dir="../i2p-${Extended.Version}/installer/resources/portable/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources/small/"/>
       <fileset dir="../i2p-${Extended.Version}/Slackware"/>
-      <fileset dir="../i2p-${Extended.Version}/_MTN"/>
       <fileset dir="../i2p-${Extended.Version}/.git"/>
       <fileset dir="../i2p-${Extended.Version}/.idea"/>
       <fileset dir="../i2p-${Extended.Version}/.tx"/>
-      <file name="../i2p-${Extended.Version}/.mtn-ignore"/>
+      <fileset dir="../i2p-${Extended.Version}/reproducible"/>
+      <fileset dir="../i2p-${Extended.Version}/.github"/>
+      <file name="../i2p-${Extended.Version}/.editorconfig"/>
+      <file name="../i2p-${Extended.Version}/.gitlab-ci.yml"/>
+      <file name="../i2p-${Extended.Version}/.dockerignore"/>
       <fileset dir="../i2p-${Extended.Version}/" includes="Docker*"/>
-      <file name="../i2p-${Extended.Version}/Makefile.gcj"/>
+      <fileset dir="../i2p-${Extended.Version}/docker"/>
       <fileset dir="../i2p-${Extended.Version}/docs"/>
       <fileset dir="../i2p-${Extended.Version}/launchers"/>
       <file name="../i2p-${Extended.Version}/.travis.yml"/>
@@ -3374,13 +3371,16 @@
       <fileset dir="../i2p-${Extended.Version}/installer/resources/portable/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources/small/"/>
       <fileset dir="../i2p-${Extended.Version}/Slackware"/>
-      <fileset dir="../i2p-${Extended.Version}/_MTN"/>
       <fileset dir="../i2p-${Extended.Version}/.git"/>
       <fileset dir="../i2p-${Extended.Version}/.idea"/>
       <fileset dir="../i2p-${Extended.Version}/.tx"/>
-      <file name="../i2p-${Extended.Version}/.mtn-ignore"/>
+      <fileset dir="../i2p-${Extended.Version}/reproducible"/>
+      <fileset dir="../i2p-${Extended.Version}/.github"/>
+      <file name="../i2p-${Extended.Version}/.editorconfig"/>
+      <file name="../i2p-${Extended.Version}/.gitlab-ci.yml"/>
+      <file name="../i2p-${Extended.Version}/.dockerignore"/>
       <fileset dir="../i2p-${Extended.Version}/" includes="Docker*"/>
-      <file name="../i2p-${Extended.Version}/Makefile.gcj"/>
+      <fileset dir="../i2p-${Extended.Version}/docker"/>
       <fileset dir="../i2p-${Extended.Version}/docs"/>
       <fileset dir="../i2p-${Extended.Version}/launchers"/>
       <file name="../i2p-${Extended.Version}/.travis.yml"/>
@@ -3455,13 +3455,16 @@
       <fileset dir="../i2p-${Extended.Version}/installer/resources/portable/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources/small/"/>
       <fileset dir="../i2p-${Extended.Version}/Slackware"/>
-      <fileset dir="../i2p-${Extended.Version}/_MTN"/>
       <fileset dir="../i2p-${Extended.Version}/.git"/>
       <fileset dir="../i2p-${Extended.Version}/.idea"/>
       <fileset dir="../i2p-${Extended.Version}/.tx"/>
-      <file name="../i2p-${Extended.Version}/.mtn-ignore"/>
+      <fileset dir="../i2p-${Extended.Version}/reproducible"/>
+      <fileset dir="../i2p-${Extended.Version}/.github"/>
+      <file name="../i2p-${Extended.Version}/.editorconfig"/>
+      <file name="../i2p-${Extended.Version}/.gitlab-ci.yml"/>
+      <file name="../i2p-${Extended.Version}/.dockerignore"/>
       <fileset dir="../i2p-${Extended.Version}/" includes="Docker*"/>
-      <file name="../i2p-${Extended.Version}/Makefile.gcj"/>
+      <fileset dir="../i2p-${Extended.Version}/docker"/>
       <fileset dir="../i2p-${Extended.Version}/docs"/>
       <fileset dir="../i2p-${Extended.Version}/launchers"/>
       <file name="../i2p-${Extended.Version}/.travis.yml"/>
@@ -3476,21 +3479,21 @@
       <fileset dir="../i2p-${Extended.Version}/core/java/src/gnu/gettext"/>
       <fileset dir="../i2p-${Extended.Version}/core/java/src/gnu/getopt"/>
       <!--
-            <fileset dir="../i2p-${Extended.Version}/core/java/src/org/json"/>
-            <fileset dir="../i2p-${Extended.Version}/core/java/src/org/apache/http"/>
-            -->
+      <fileset dir="../i2p-${Extended.Version}/core/java/src/org/json"/>
+      <fileset dir="../i2p-${Extended.Version}/core/java/src/org/apache/http"/>
+      -->
       <file name="../i2p-${Extended.Version}/installer/resources/geoip.txt"/>
       <file name="../i2p-${Extended.Version}/installer/resources/geoipv6.dat.gz"/>
       <file name="../i2p-${Extended.Version}/installer/resources/GeoLite2-Country.mmdb.gz"/>
       <fileset dir="../i2p-${Extended.Version}/apps/jetty/jetty-distribution-${jetty.ver}"/>
       <fileset dir="../i2p-${Extended.Version}/apps/jetty/apache-tomcat-${tomcat.ver}"/>
       <!--
-            <file name="../i2p-${Extended.Version}/apps/susidns/src/lib/jstl.jar"/>
-            -->
+      <file name="../i2p-${Extended.Version}/apps/susidns/src/lib/jstl.jar"/>
+      -->
       <file name="../i2p-${Extended.Version}/apps/susidns/src/lib/standard.jar"/>
       <!--
-            <fileset dir="../i2p-${Extended.Version}/installer/resources/icons/flags"/>
-            -->
+      <fileset dir="../i2p-${Extended.Version}/installer/resources/icons/flags"/>
+      -->
       <!-- Anything added above, add in debian-tarball also -->
     </delete>
     <tar longfile="gnu" destfile="../${debian.tarball.name}" compression="bzip2">
@@ -3524,13 +3527,16 @@
       <fileset dir="../i2p-${Extended.Version}/installer/resources/portable/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources/small/"/>
       <fileset dir="../i2p-${Extended.Version}/Slackware"/>
-      <fileset dir="../i2p-${Extended.Version}/_MTN"/>
       <fileset dir="../i2p-${Extended.Version}/.git"/>
       <fileset dir="../i2p-${Extended.Version}/.idea"/>
       <fileset dir="../i2p-${Extended.Version}/.tx"/>
-      <file name="../i2p-${Extended.Version}/.mtn-ignore"/>
       <fileset dir="../i2p-${Extended.Version}/" includes="Docker*"/>
-      <file name="../i2p-${Extended.Version}/Makefile.gcj"/>
+      <fileset dir="../i2p-${Extended.Version}/reproducible"/>
+      <fileset dir="../i2p-${Extended.Version}/.github"/>
+      <file name="../i2p-${Extended.Version}/.editorconfig"/>
+      <file name="../i2p-${Extended.Version}/.gitlab-ci.yml"/>
+      <file name="../i2p-${Extended.Version}/.dockerignore"/>
+      <fileset dir="../i2p-${Extended.Version}/docker"/>
       <fileset dir="../i2p-${Extended.Version}/docs"/>
       <fileset dir="../i2p-${Extended.Version}/launchers"/>
       <file name="../i2p-${Extended.Version}/.travis.yml"/>
@@ -3546,8 +3552,8 @@
       <fileset dir="../i2p-${Extended.Version}/core/java/src/gnu/getopt"/>
       <fileset dir="../i2p-${Extended.Version}/core/java/src/org/json"/>
       <!--
-            <fileset dir="../i2p-${Extended.Version}/core/java/src/org/apache/http"/>
-            -->
+      <fileset dir="../i2p-${Extended.Version}/core/java/src/org/apache/http"/>
+      -->
       <file name="../i2p-${Extended.Version}/installer/resources/geoip.txt"/>
       <file name="../i2p-${Extended.Version}/installer/resources/geoipv6.dat.gz"/>
       <file name="../i2p-${Extended.Version}/installer/resources/GeoLite2-Country.mmdb.gz"/>
@@ -3556,8 +3562,8 @@
       <file name="../i2p-${Extended.Version}/apps/susidns/src/lib/jstl.jar"/>
       <file name="../i2p-${Extended.Version}/apps/susidns/src/lib/standard.jar"/>
       <!--
-            <fileset dir="../i2p-${Extended.Version}/installer/resources/icons/flags"/>
-            -->
+      <fileset dir="../i2p-${Extended.Version}/installer/resources/icons/flags"/>
+      -->
       <!-- Anything added above, add in debian-tarball also -->
     </delete>
     <tar longfile="gnu" destfile="../${debian.tarball.name}" compression="bzip2">
