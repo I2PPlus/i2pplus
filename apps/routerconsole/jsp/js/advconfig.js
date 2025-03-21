@@ -203,13 +203,8 @@ const advConfigInit = () => {
       submitNewKeyValue();
     }
 
-    if (event.key === "Enter") {
-      event.preventDefault();
+    if (event.key === "Enter" || event.type === "click") {
       saveButton.click();
-    } else {
-      event.preventDefault();
-      //console.log("Form submitted with data:", new FormData(advForm));
-      advForm.requestSubmit(saveButton);
     }
   };
 
@@ -231,7 +226,7 @@ const advConfigInit = () => {
 
   cancelButton.addEventListener("click", resetForm);
   saveButton.addEventListener("click", event => {
-    event.preventDefault();
+    //event.preventDefault();
     doSave(event);
   });
 
