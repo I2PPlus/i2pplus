@@ -1,25 +1,29 @@
+2025-03-21 dr|z3d
+ * Console: Fix form submission when clicking submit button on
+   /configadvanced when advanced mode is enabled
+
 2025-02-23 zzz
  * SusiDNS: Reduce memory usage in AddressBean
  * Tests: Fix build
 
 2025-02-21 zzz
  * Client: Deprecate getters for unused encryption private key
- * i2psnark: Set bulk profile
- * i2ptunnel: Set bulk profile for servers
+ * I2PSnark: Set bulk profile
+ * I2PTunnel: Set bulk profile for servers
  * Tunnels: Prep for bw params (prop. 168)
 
 2025-02-20 zzz
  * Tunnels: Fix tunnel test for OB client tunnels
 
 2025-02-17 zzz
- * i2ptunnel: Add .i2p.alt support to HTTP and SOCKS client tunnels (MR 222)
+ * I2PTunnel: Add .i2p.alt support to HTTP and SOCKS client tunnels (MR 222)
  * SusiDNS: Implement sort-by-added-date (MR 231)
 
 2025-02-14 zzz
  * SusiDNS: Navbar CSS fixes/tweaks
 
 2025-02-11 zzz
- * i2ptunnel: Proxy error page improvements
+ * I2PTunnel: Proxy error page improvements
 
 2025-02-10 zzz
  * Router: Unused stats removal
@@ -36,7 +40,7 @@
  * Data:
    - Fix compression of RouterIdentities
    - Check key order when parsing RI mappings and fail-fast if out-of-order
- * i2psnark: Reduce PeerCoordinator CHECK_PERIOD interval
+ * I2PSnark: Reduce PeerCoordinator CHECK_PERIOD interval
  * Transport:
    - Remove old NTCP 1 stats
    - SSU 1 removal part 10/n (UDPPacket)
