@@ -1,24 +1,17 @@
 #!/bin/sh
 
+# Copyright Tanuki Software, Ltd.
+# License GPL2 or later.
+# https://wrapper.tanukisoftware.com/doc/english/licenseCommunity.html
 #
-# Copyright (c) 1999, 2011 Tanuki Software, Ltd.
-# http://www.tanukisoftware.com
-# All rights reserved.
-#
-# Make sure that PIDFILE points to the correct location,
-# if you have changed the default location set in the
-# wrapper configuration file.
+# Make sure that PIDFILE points to the correct location if you have changed
+# the default location set in the wrapper configuration file.
 #
 # If this script fails to successfully invoke i2psvc on your platform,
 # try the runplain.sh script instead.
 #
-# This software is the proprietary information of Tanuki Software.
-# You shall use it only in accordance with the terms of the
-# license agreement you entered into with Tanuki Software.
-# http://wrapper.tanukisoftware.com/doc/english/licenseOverview.html
-#
 # Java Service Wrapper sh script.  Suitable for starting and stopping
-#  wrapped Java applications on UNIX platforms.
+# wrapped Java applications on UNIX platforms.
 #
 #-----------------------------------------------------------------------------
 # These settings can be modified to fit the needs of your application
@@ -28,6 +21,7 @@
 # Note that (percent)INSTALL_PATH, (percent)USER_HOME,  and (percent)SYSTEM_java_io_tmpdir
 # should have been replaced by the izpack installer.
 # If you did not run the installer, replace them with the appropriate paths.
+
 I2P="%INSTALL_PATH"
 if [ "`uname -s`" = "Darwin" ]; then
    if [ -d "%USER_HOME/Library/Application Support" ]; then
@@ -39,8 +33,7 @@ else
     I2P_CONFIG_DIR="%USER_HOME/.i2p"
 fi
 I2PTEMP="%SYSTEM_java_io_tmpdir"
-# PORTABLE installation:
-# Use the following instead.
+# PORTABLE installation: Use the following instead:
 #I2PTEMP="%INSTALL_PATH"
 
 # Application
@@ -59,13 +52,13 @@ fi
 
 # If specified, the Wrapper will be run as the specified user.
 # IMPORTANT - Make sure that the user has the required privileges to write
-#  the PID file and wrapper.log files and that the directories exist.
-#  Failure to write the pid file will cause the Wrapper to exit.
-#  Failure to write the log file will cause the Wrapper to use CWD for the log file location.
+# the PID file and wrapper.log files and that the directories exist.
+# Failure to write the pid file will cause the Wrapper to exit.
+# Failure to write the log file will cause the Wrapper to use CWD for the log file location.
 #
 # NOTE - This will set the user which is used to run the Wrapper as well as
-#  the JVM and is not useful in situations where a privileged resource or
-#  port needs to be allocated prior to the user being changed.
+# the JVM and is not useful in situations where a privileged resource or
+# port needs to be allocated prior to the user being changed.
 #RUN_AS_USER=
 
 # Wrapper
@@ -73,7 +66,7 @@ WRAPPER_CMD="$I2P/i2psvc"
 WRAPPER_CONF="$I2P/wrapper.config"
 
 # Priority at which to run the wrapper.  See "man nice" for valid priorities.
-#  nice is only used if a priority is specified.
+# nice is only used if a priority is specified.
 PRIORITY=
 
 # Location of the pid and status files.
@@ -88,27 +81,24 @@ LOGFILE="$LOGDIR/wrapper.log"
 # If you'd like to run I2P as root (not recommended), uncomment below
 #ALLOW_ROOT=true
 
-# FIXED_COMMAND tells the script to use a hard coded action rather than
-# expecting the first parameter of the command line to be the command.
+# FIXED_COMMAND tells the script to use a hard coded action rather than expecting
+# the first parameter of the command line to be the command.
 # By default the command will will be expected to be the first parameter.
 #FIXED_COMMAND=console
 
-# PASS_THROUGH tells the script to pass all arguments through to the JVM
-#  as is.  If FIXED_COMMAND is specified then all arguments will be passed.
-#  If not set then all arguments starting with the second will be passed.
+# PASS_THROUGH tells the script to pass all arguments through to the JVM as is.
+# If FIXED_COMMAND is specified then all arguments will be passed.
+# If not set then all arguments starting with the second will be passed.
 #PASS_THROUGH=true
 
 # If uncommented, causes the Wrapper to be shutdown using an anchor file.
-#  When launched with the 'start' command, it will also ignore all INT and
-#  TERM signals.
+# When launched with the 'start' command, it will also ignore all INT and TERM signals.
 #IGNORE_SIGNALS=true
 
-# Wrapper will start the JVM asynchronously. Your application may have some
-#  initialization tasks and it may be desirable to wait a few seconds
-#  before returning.  For example, to delay the invocation of following
-#  startup scripts.  Setting WAIT_AFTER_STARTUP to a positive number will
-#  cause the start command to delay for the indicated period of time
-#  (in seconds).
+# Wrapper will start the JVM asynchronously.
+# Your application may have some initialization tasks and it may be desirable to wait a few seconds before returning.
+# For example, to delay the invocation of following startup scripts, setting WAIT_AFTER_STARTUP to a positive number will
+# cause the start command to delay for the indicated period of time (in seconds).
 #
 WAIT_AFTER_STARTUP=0
 
@@ -116,11 +106,10 @@ WAIT_AFTER_STARTUP=0
 WAIT_FOR_STARTED_STATUS=true
 WAIT_FOR_STARTED_TIMEOUT=120
 
-# If set, the status, start_msg and stop_msg commands will print out detailed
-#   state information on the Wrapper and Java processes.
+# If set, the status, start_msg and stop_msg commands will print out detailed state information on the Wrapper and Java processes.
 #DETAIL_STATUS=true
 
-# By default we show a detailed usage block.  Uncomment to show brief usage.
+# By default we show a detailed usage block. Uncomment to show brief usage.
 #BRIEF_USAGE=true
 
 # flag for using upstart when installing (rather than init.d rc.d)
@@ -130,8 +119,7 @@ USE_UPSTART=
 OPEN_FILES_ULIMIT=16384
 
 # Source the environment variables for the locale if $LANG isn't set
-# If you want to set custom locale variables for I2P,
-# you may comment out this block and set them yourself here.
+# If you want to set custom locale variables for I2P, you may comment out this block and set them yourself here.
 
 if [ ! -n $LANG ]; then
         for ENV_FILE in /etc/environment /etc/default/locale /etc/locale.conf; do
@@ -150,17 +138,16 @@ if [ "`uname -s`" = "Darwin" ]; then
     export JAVA_TOOL_OPTIONS="-Djava.awt.headless=true"
 fi
 
-# When installing on On Mac OSX platforms, the following domain will be used to
-#  prefix the plist file name.
+# When installing on On Mac OSX platforms, the following domain will be used to prefix the plist file name.
 PLIST_DOMAIN=org.tanukisoftware.wrapper
 
-# The following two lines are used by the chkconfig command. Change as is
-#  appropriate for your application.  They should remain commented.
+# The following two lines are used by the chkconfig command.
+# Change as is appropriate for your application.
+# They should remain commented.
 # chkconfig: 2345 20 80
 # description: I2P Service
 
-# Initialization block for the install_initd and remove_initd scripts used by
-#  SUSE linux distributions.
+# Initialization block for the install_initd and remove_initd scripts used by SUSE linux distributions.
 ### BEGIN INIT INFO
 # Provides: i2p
 # Required-Start: $local_fs $network $syslog
@@ -204,29 +191,25 @@ fi
 
 WRAPPER_URL="https://geti2p.net/en/misc/manual-wrapper"
 unsupported() {
-    echo "The most likely reason is that a supported version of the java"
-    echo "wrapper is not available in the I2P installation package for your"
-    echo "platform. It may be possible to manually download and install"
-    echo "a compatible wrapper for your system."
+    echo "The most likely reason is that a supported version of the java wrapper is not available"
+    echo "in the I2P installation package for your platform."
+    echo "It may be possible to manually download and install a compatible wrapper for your system."
     echo "See ${WRAPPER_URL} for hints."
     echo
-    echo "In the meantime, you may start I2P by running the script"
-    echo "${I2P}/runplain.sh"
+    echo "In the meantime, you may start I2P by running the script: ${I2P}/runplain.sh"
     echo
 }
 
 freebsd10() {
     echo
-    echo "The current version of the Tanuki wrapper that is bundled"
-    echo "with I2P does not support FreeBSD 10."
+    echo "The current version of the Tanuki wrapper that is bundled with I2P does not support FreeBSD 10."
     echo
     echo "See http://trac.i2p2.de/ticket/1118#comment:13 for a work-around."
     echo "After applying the work-around, as a normal user or a dedicated"
     echo "i2p user, you can then run:"
     echo "$ ./i2prouter start"
     echo
-    echo "Or, you may also start I2P by running the script:"
-    echo "${I2P}/runplain.sh"
+    echo "Or, you may also start I2P by running the script: ${I2P}/runplain.sh"
     echo
 }
 
@@ -327,7 +310,7 @@ REALDIR=`dirname "$REALPATH"`
 REALDIR=`cd "${REALDIR}"; pwd`
 
 # If the PIDDIR is relative, set its value relative to the full REALPATH to avoid problems if
-#  the working directory is later changed.
+# the working directory is later changed.
 FIRST_CHAR=`echo $PIDDIR | cut -c1,1`
 if [ "$FIRST_CHAR" != "/" ]
 then
@@ -596,9 +579,9 @@ fi
 
 # Decide on the wrapper binary to use.
 # If the bits of the OS could be detected, we will try to look for the
-#  binary with the correct bits value.  If it doesn't exist, fall back
-#  and look for the 32-bit binary.  If that doesn't exist either then
-#  look for the default.
+# binary with the correct bits value.  If it doesn't exist, fall back
+# and look for the 32-bit binary.  If that doesn't exist either then
+# look for the default.
 WRAPPER_TEST_CMD=""
 if [ -f "$WRAPPER_CMD-$DIST_OS-$DIST_ARCH-$DIST_BITS" ]
 then
@@ -849,11 +832,10 @@ getpid() {
             pid=`cat "$PIDFILE"`
             if [ "X$pid" != "X" ]
             then
-                # It is possible that 'a' process with the pid exists but that it is not the
-                #  correct process.  This can happen in a number of cases, but the most
-                #  common is during system startup after an unclean shutdown.
-                # The ps statement below looks for the specific wrapper command running as
-                #  the pid.  If it is not found then the pid file is considered to be stale.
+                # It is possible that 'a' process with the pid exists but that it is not the correct process.
+                # This can happen in a number of cases, but the most common is during system startup after an unclean shutdown.
+                # The ps statement below looks for the specific wrapper command running as the pid.
+                # If it is not found then the pid file is considered to be stale.
                 case "$DIST_OS" in
                     'freebsd')
                         pidtest=`$PSEXE -p $pid -o args | tail -1`
@@ -1939,13 +1921,13 @@ raiseopenfilesulimit() {
 }
 
 graceful_helper() {
-	echo "Starting graceful restart helper, $APP_NAME will restart once $APP_NAME has stopped."
-	echo 'This may take 11 minutes or more complete the graceful restart.'
+    echo "Starting graceful restart helper, $APP_NAME will restart once $APP_NAME has stopped."
+    echo 'This may take 11 minutes or more complete the graceful restart.'
 
     GPIDFILE="$I2P/gracefule_helper.pid"
 
     rm_pid() {
-    	test ! -f $GPIDFILE || rm $GPIDFILE
+        test ! -f $GPIDFILE || rm $GPIDFILE
     }
 
     if [ -f "$GPIDFILE" ] && [ -z "$(ps -p $(cat $GPIDFILE) | grep -v 'PID TTY')" ]; then
@@ -1960,7 +1942,7 @@ graceful_helper() {
       GPID=$(cat $GPIDFILE)
       ps -p $GPID > /dev/null 2>&1
       if [ $? -eq 0 ]; then
-        echo "gracefulrestart already in progress..."
+        echo "Graceful restart already in progress..."
         exit 1
       else
         echo $$ > $GPIDFILE
@@ -1977,7 +1959,7 @@ graceful_helper() {
 
 
     until [ $($I2P/i2prouter status > /dev/null ; echo $?) -eq 1 ]; do
-    	sleep 1
+        sleep 1
     done
 
     sleep 5
@@ -2072,12 +2054,10 @@ docommand() {
                  showsetusermesg
             fi
             echo
-            echo "You may want to disable the browser from launching at startup at"
-            echo "http://127.0.0.1:7657/configclients"
+            echo "You may want to disable the browser from launching at startup at http://127.0.0.1:7657/configclients"
             echo
             echo "I2P_CONFIG_DIR is currently set to $I2P_CONFIG_DIR."
-            echo "Change the value in $0 if this is not"
-            echo "appropriate for your configuration."
+            echo "Change the value in $0 if this is not appropriate for your configuration."
             ;;
 
         'remove' | 'uninstall')
@@ -2103,7 +2083,8 @@ docommand() {
 
         'launchdinternal')
             # Internal command called by launchd on Max OSX.
-            # We do not want to call checkUser here as it is handled in the launchd plist file.  Doing it here would confuse launchd.
+            # We do not want to call checkUser here as it is handled in the launchd plist file.
+            # Doing it here would confuse launchd.
             if [ ! -n "$FIXED_COMMAND" ] ; then
                 shift
             fi
