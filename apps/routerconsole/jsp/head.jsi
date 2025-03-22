@@ -43,5 +43,6 @@ else if (lang.equals("ar") || lang.equals("fa")) { %> <link rel=stylesheet href=
   const theme = "<%=theme%>";
 </script>
 <script src=/js/progressx.js></script>
+<script src=/js/detectPageZoom.js></script>
 <% if (!isWizardPage) { %> <script src=/js/initSidebar.js type=module></script> <% } %>
 <noscript><style>.script{display:none!important}</style></noscript>

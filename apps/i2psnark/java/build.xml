@@ -335,6 +335,7 @@
       </copy>
       <mkdir dir="build/standalone-resources/.res/js"/>
       <copy file="../../routerconsole/jsp/js/onVisible.js" todir="build/standalone-resources/.res/js"/>
+      <copy file="../../routerconsole/jsp/js/detectPageZoom.js" todir="build/standalone-resources/.res/js"/>
       <copy file="../../i2psnark/res/js/refreshTorrents.js" todir="build/standalone-resources/.res/js"/>
     </parallel>
     <parallel>

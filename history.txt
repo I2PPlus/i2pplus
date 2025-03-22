@@ -1,3 +1,7 @@
+2025-03-25 dr|z3d
+ * Console / Webapps: Implement page zoom aware theme overrides
+   (dark theme only, other themes to follow)
+
 2025-03-22 zzz
  * Router: Prevent double-free of SHA256 instances from Noise
 
@@ -21,12 +25,6 @@
 2025-02-17 zzz
  * I2PTunnel: Add .i2p.alt support to HTTP and SOCKS client tunnels (MR 222)
  * SusiDNS: Implement sort-by-added-date (MR 231)
-
-2025-02-14 zzz
- * SusiDNS: Navbar CSS fixes/tweaks
-
-2025-02-11 zzz
- * I2PTunnel: Proxy error page improvements
 
 2025-02-10 zzz
  * Router: Unused stats removal

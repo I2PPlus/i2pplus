@@ -2240,6 +2240,8 @@ public class WebMail extends HttpServlet {
                .append("<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js\"></script>\n")
                .append("<script src=\"/js/iframeResizer/updatedEvent.js?").append(CoreVersion.VERSION).append("\"></script>\n")
                .append("<script src=\"/susimail/js/notifications.js?").append(CoreVersion.VERSION).append("\"></script>\n")
+               .append("<script nonce=").append(cspNonce).append(">const theme = \"" + theme + "\";</script>\n")
+               .append("<script src=/js/detectPageZoom.js type=module></script>\n")
                .append("<style>body{display:none;pointer-events:none}</style>\n")
                .append("</head>\n");
 

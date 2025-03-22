@@ -315,7 +315,8 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append(DOCTYPE).append("<html").append(isStandalone() ? " class=\"standalone\"" : "")
            .append(" style=\"background:").append(pageBackground).append("\">\n")
            .append("<head>\n").append("<meta charset=utf-8>\n")
-           .append("<meta name=viewport content=\"width=device-width, initial-scale=1\">\n");
+           .append("<meta name=viewport content=\"width=device-width, initial-scale=1\">\n")
+           .append("<script nonce=" + cspNonce + ">const theme = \"" + theme + "\";</script>");
 
         if (!isConfigure && !isStandalone()) {
             buf.append("<link rel=modulepreload href=/js/iframeResizer/updatedEvent.js>")
@@ -404,7 +405,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append(HEADER_A).append(_themePath).append(HEADER_I).append("\n"); // load css image assets
         String slash = String.valueOf(java.io.File.separatorChar);
         String themeBase = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() + slash + "docs" + slash + "themes" +
-                           slash + "snark" + slash + _manager.getTheme() + slash;
+                           slash + "snark" + slash + theme + slash;
         File override = new File(themeBase + "override.css");
         int rnd = _context.random().nextInt(3);
         if (!isStandalone() && rnd == 0 && _manager.getTheme().equals("light")) {
@@ -434,7 +435,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160")
                .append("&hideLegend=true&hideTitle=true&hideGrid=true&t=").append(now).append("\')}\"</style>\n");
         }
-        buf.append("</head>\n<body style=display:none;pointer-events:none id=snarkxhr class=\"").append(_manager.getTheme())
+        buf.append("</head>\n<body style=display:none;pointer-events:none id=snarkxhr class=\"").append(theme)
            .append(" lang_").append(lang).append("\">\n")
            .append("<span id=toast hidden></span>\n").append(IFRAME_FORM);
         List<Tracker> sortedTrackers = null;
@@ -3760,10 +3761,12 @@ public class I2PSnarkServlet extends BasicServlet {
         "<script src=/js/setupIframe.js type=module></script>\n" +
         "<script src=/i2psnark/.res/js/click.js type=module></script>\n" +
         "<script src=/i2psnark/.res/js/snarkAlert.js type=module></script>\n" +
+        "<script src=/js/detectPageZoom.js type=module></script>\n" +
         "<link rel=stylesheet href=/i2psnark/.res/snarkAlert.css>\n" +
         "</body>\n</html>";
     private static final String FOOTER_STANDALONE = "</div>\n<script src=/i2psnark/.res/js/click.js type=module></script>\n" +
         "<script src=/i2psnark/.res/js/snarkAlert.js type=module></script>\n" +
+        "<script src=/i2psnark/.res/js/detectPageZoom.js type=module></script>\n" +
         "<link rel=stylesheet href=/i2psnark/.res/snarkAlert.css>\n" + "</body>\n</html>";
     private static final String IFRAME_FORM = "<iframe name=processForm id=processForm hidden></iframe>\n";
 
@@ -3880,6 +3883,8 @@ public class I2PSnarkServlet extends BasicServlet {
         if (!isStandalone() && override.exists()) {
             buf.append(HEADER_A).append(_themePath).append(HEADER_Z).append("\n"); // optional override.css for version-persistent user edits
         }
+        String theme = _manager.getTheme();
+        buf.append("<script nonce=" + cspNonce + ">const theme = \"" + theme + "\";</script>");
         // hide javascript-dependent buttons when js is unavailable
         buf.append("<noscript><style>.script{display:none}</style></noscript>\n")
            .append("<link rel=\"shortcut icon\" href=\"").append(_contextPath).append(WARBASE).append("icons/favicon.svg\">\n");
@@ -3891,7 +3896,7 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<script src=\"/themes/setPriority.js?" + CoreVersion.VERSION + "\"></script>\n"); // debugging
         */
 
-        buf.append("</head>\n<body style=display:none;pointer-events:none class=\"").append(_manager.getTheme())
+        buf.append("</head>\n<body style=display:none;pointer-events:none class=\"").append(theme)
            .append(" lang_").append(lang).append("\">\n")
            .append("<div id=navbar><a href=\"").append(_contextPath).append("/\" title=").append(_t("Torrents"))
            .append(" class=\"snarkNav nav_main\">").append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName).append("</a>\n")

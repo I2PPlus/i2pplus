@@ -1,0 +1,24 @@
+@import url(/themes/console/dark/global.css);
+@import url(/themes/console/dark/images/images.css);
+
+:root{
+--h1:var(--title);
+--h2:var(--title);
+--h3:var(--title);
+--h4:var(--title);
+--mainbg:#000400;
+--panel:linear-gradient(180deg,#010,#000);
+--title:linear-gradient(180deg,#020,#000);
+--topnav:var(--title);
+}
+
+body{background:#000}
+.percentBarOuter{background:linear-gradient(to right,#000,#200)}
+.sb_netstatus,.tunnelBuildStatus,#sb_graphcontainer{background:#000!important}
+#sidebar h3{background:var(--title)}
+#sb_graphcontainer::after{background:#0000!important}
+
+
+/* i2psnark */
+#createSection,#addSection,.configPanel,#snarkFiles,#commentSection,#editSection,#navbar{background:var(--panel)}
+#screenlog{background:linear-gradient(180deg,#001000b2,#00200099),url(/themes/snark/midnight/images/chimp.webp) no-repeat scroll right bottom,var(--th),var(--snarkGraph) no-repeat,linear-gradient(180deg,#000000e5,#00100099),#001000;background-size:100%,96px auto,100%,100% auto,100%;background-position:center center,right 4px bottom -10px,center center,right 72px bottom -4px}
