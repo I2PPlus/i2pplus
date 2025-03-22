@@ -1,3 +1,6 @@
+2025-03-22 zzz
+ * Router: Prevent double-free of SHA256 instances from Noise
+
 2025-03-21 dr|z3d
  * Console: Fix form submission when clicking submit button on
    /configadvanced when advanced mode is enabled
