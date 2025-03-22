@@ -24,7 +24,7 @@ boolean isWizardPage = uri.endsWith("wizard") || uri.endsWith("wizard.jsp");
 <link rel=preload href=<%=themePath%>images/i2plogo.png as=image>
 <link rel=preload href=/themes/console/images/images.css as=style>
 <link rel=preload href=<%=themePath%>images/images.css as=style>
-<link rel=stylesheet href="<%=themePath%>global.css?version=<%=v%>">
+<link rel=stylesheet href=<%=themePath%>global.css>
 <link rel=stylesheet href=<%=fontStyle%>>
 <% if (isConfigPage) { %> <link rel=preload href=/themes/console/confignav.css as=style> <% } %>
 <% if (isHelpPage) { %> <link rel=stylesheet href=/themes/console/helpnav.css> <% } %>

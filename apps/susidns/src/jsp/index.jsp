@@ -11,7 +11,11 @@
 <jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application" />
 <jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session" />
 <jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application" />
-<% boolean overrideCssActive = base.isOverrideCssActive(); %>
+<%
+    boolean overrideCssActive = base.isOverrideCssActive();
+    String theme = base.getTheme().replace("/themes/susidns/", "").replace("/", "");
+    theme = "\"" + theme + "\"";
+%>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -23,10 +27,11 @@
 <link rel=stylesheet href="<%=base.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
 <%  if (base.useSoraFont()) { %><link href="<%=base.getTheme()%>../../fonts/Sora.css" rel=stylesheet><% } else { %>
 <link href="<%=base.getTheme()%>../../fonts/OpenSans.css" rel=stylesheet><% } %>
-<% if (overrideCssActive) { %><link rel=stylesheet href="<%=base.getTheme()%>override.css"><% } %>
+<%  if (overrideCssActive) { %><link rel=stylesheet href="<%=base.getTheme()%>override.css"><% } %>
 <script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <style>body{display:none;pointer-events:none}</style>
+<script nonce="<%=cspNonce%>">const theme = <%=theme%>;</script>
 </head>
 <body id=ovrvw>
 <div id=page>
@@ -68,8 +73,7 @@
   document.getElementById("svg").appendChild(xhrdns.responseXML.documentElement);
 </script>
 <noscript>
-<%  String theme = base.getTheme();
-    if (theme.contains("midnight")) { %>
+<%  if (theme.contains("midnight")) { %>
 <style>.illustrate{border:1px solid #010011!important;background:#fff!important;filter:sepia(100%) invert(100%)}</style>
 <%  } else if (theme.contains("dark")) { %>
 <style>.illustrate{border:1px solid #111!important;box-shadow:none!important;background:#fff!important;background:rgba(255,255,255,0.3)!important;filter:invert(1) sepia(100%) hue-rotate(30deg)}</style>

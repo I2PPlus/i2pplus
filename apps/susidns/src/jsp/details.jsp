@@ -12,9 +12,13 @@
 <jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application" />
 <jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application" />
 <jsp:setProperty name="book" property="*" />
-<% book.storeMethod(request.getMethod()); %>
 <jsp:setProperty name="book" property="resetDeletionMarks" value="1"/>
-<% boolean overrideCssActive = base.isOverrideCssActive(); %>
+<%
+    book.storeMethod(request.getMethod());
+    boolean overrideCssActive = base.isOverrideCssActive();
+    String theme = base.getTheme().replace("/themes/susidns/", "").replace("/", "");
+    theme = "\"" + theme + "\"";
+%>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -27,6 +31,7 @@
 <link href="<%=base.getTheme()%>../../fonts/OpenSans.css" rel=stylesheet><% } %>
 <% if (overrideCssActive) { %><link rel=stylesheet href="<%=base.getTheme()%>override.css"><% } %>
 <%  String query = request.getQueryString(); %>
+<script nonce="<%=cspNonce%>">const theme = <%=theme%>;</script>
 </head>
 <body id=dtls style=display:none;pointer-events:none>
 <div id=page>

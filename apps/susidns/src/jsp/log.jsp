@@ -14,7 +14,11 @@
 <jsp:useBean id="log" class="i2p.susi.dns.LogBean" scope="session" />
 <jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application" />
 <jsp:setProperty name="log" property="*" />
-<% boolean overrideCssActive = base.isOverrideCssActive(); %>
+<%
+    boolean overrideCssActive = base.isOverrideCssActive();
+    String theme = base.getTheme().replace("/themes/susidns/", "").replace("/", "");
+    theme = "\"" + theme + "\"";
+%>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -26,6 +30,7 @@
 <%  if (base.useSoraFont()) { %><link href="<%=base.getTheme()%>../../fonts/Sora.css" rel=stylesheet><% } else { %>
 <link href="<%=base.getTheme()%>../../fonts/OpenSans.css" rel=stylesheet><% } %>
 <% if (overrideCssActive) { %><link rel=stylesheet href="<%=base.getTheme()%>override.css"><% } %>
+<script nonce="<%=cspNonce%>">const theme = <%=theme%>;</script>
 </head>
 <body id=subsLog style=display:none;pointer-events:none>
 <div id=page>

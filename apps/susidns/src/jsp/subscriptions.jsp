@@ -13,8 +13,12 @@
 <jsp:useBean id="subs" class="i2p.susi.dns.SubscriptionsBean" scope="session" />
 <jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application" />
 <jsp:setProperty name="subs" property="*" />
-<% subs.storeMethod(request.getMethod()); %>
-<% boolean overrideCssActive = base.isOverrideCssActive(); %>
+<%
+    subs.storeMethod(request.getMethod());
+    boolean overrideCssActive = base.isOverrideCssActive();
+    String theme = base.getTheme().replace("/themes/susidns/", "").replace("/", "");
+    theme = "\"" + theme + "\"";
+%>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -27,6 +31,7 @@
 <link href="<%=base.getTheme()%>../../fonts/OpenSans.css" rel=stylesheet><% } %>
 <% if (overrideCssActive) { %><link rel=stylesheet href="<%=base.getTheme()%>override.css"><% } %>
 <style>body{display:none;pointer-events:none}</style>
+<script nonce="<%=cspNonce%>">const theme = <%=theme%>;</script>
 </head>
 <body id=sbs>
 <div id=page>

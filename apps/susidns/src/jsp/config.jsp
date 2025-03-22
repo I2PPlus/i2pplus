@@ -13,8 +13,12 @@
 <jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session" />
 <jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application" />
 <jsp:setProperty name="cfg" property="*" />
-<% cfg.storeMethod(request.getMethod()); %>
-<% boolean overrideCssActive = base.isOverrideCssActive(); %>
+<%
+    cfg.storeMethod(request.getMethod());
+    boolean overrideCssActive = base.isOverrideCssActive();
+    String theme = base.getTheme().replace("/themes/susidns/", "").replace("/", "");
+    theme = "\"" + theme + "\"";
+%>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -26,6 +30,7 @@
 <%  if (base.useSoraFont()) { %><link href="<%=base.getTheme()%>../../fonts/Sora.css" rel=stylesheet><% } else { %>
 <link href="<%=base.getTheme()%>../../fonts/OpenSans.css" rel=stylesheet><% } %>
 <% if (overrideCssActive) { %><link rel=stylesheet href="<%=base.getTheme()%>override.css"><% } %>
+<script nonce="<%=cspNonce%>">const theme = <%=theme%>;</script>
 </head>
 <body id=cfg style=display:none;pointer-events:none>
 <div id=page>

@@ -32,6 +32,8 @@
         importMessages = book.importFile(wrequest);
     }
     boolean overrideCssActive = base.isOverrideCssActive();
+    String theme = base.getTheme().replace("/themes/susidns/", "").replace("/", "");
+    theme = "\"" + theme + "\"";
 %>
 <!DOCTYPE HTML>
 <html<c:if test="${book.isEmpty}"> class=emptybook</c:if>>
@@ -46,6 +48,7 @@
 <% if (base.useSoraFont()) { %><link href="<%=base.getTheme()%>../../fonts/Sora.css" rel=stylesheet><% } else { %>
 <link href="<%=base.getTheme()%>../../fonts/OpenSans.css" rel=stylesheet><% } %>
 <% if (overrideCssActive) { %><link rel=stylesheet href="<%=base.getTheme()%>override.css"><% } %>
+<script nonce="<%=cspNonce%>">const theme = <%=theme%>;</script>
 </head>
 <body id=bk class="<%=book.getThemeName()%>" style=display:none;pointer-events:none>
 <div id=page>

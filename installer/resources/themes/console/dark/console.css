@@ -2542,10 +2542,10 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #routerlogs td p,#wrapperlogs td p{margin:0;width:fit-content}
 #routerlogs ul,#criticallogs ul{margin:-4px 0;border:0}
 #servicelogs{color:var(--ink)}
-#service_logs{margin:0;padding:4px 6px;width:calc(100% - 12px);max-height:600px;white-space:pre-wrap;resize:none;font-weight:500;color:#8f935c;background:url(images/tank.webp) no-repeat right 12px bottom 12px/14% auto}
+#service_logs{margin:0;padding:4px 6px;width:calc(100% - 12px);max-height:600px;white-space:pre-wrap;resize:none;font-weight:500;color:#8f935c;text-shadow:var(--textshadow)}
 #wrapperlogs{margin-bottom:10px;width:100%;table-layout:fixed}
 #wrapperlogs tr:nth-child(2){background:rgba(0,16,0,.3)}
-#wrapperlogs tr:last-child td{padding:0}
+#wrapperlogs tr:last-child td{padding:0;position:relative}
 #toggleRefresh{margin:-6px 0 -10px;width:26px;height:32px;float:right;padding-left:10px;border-left:var(--border);background:var(--pause) no-repeat center center/14px}
 #toggleRefresh:hover{background:var(--pause_hover) no-repeat center center/14px;cursor:pointer}
 #toggleRefresh.disabled{background:var(--start) no-repeat center center/14px}
@@ -2599,8 +2599,11 @@ p+.twocol{margin:10px 25px}
 .twocol li{break-inside:avoid}
 ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 #advancedsettings,#browserconfig,#configurationhelp,#faq,#filterlist,#glossary,#legal,#newuserguide,#reachabilityhelp,#reseedhelp,#sidebarhelp,#themeoverride,#troubleshoot,#tunnman,#volunteer,#webhosting{border:var(--border);padding:0 20px;margin:9px 0;background:#000}
+#changelog{position:relative}
+#changelog::after,#service_logs::after{height:228px;width:180px;display:inline-block;position:absolute;z-index:0;bottom:10px;right:16px;background:var(--tank) no-repeat center center/180px auto;opacity:.4;content:""}
+#service_logs::after{height:274px;width:258px;bottom:-45px;right:8px;z-index:-1;background-size:256px auto}
 #changelog h2{margin:0 0 -11px;padding:10px;word-spacing:.1em;letter-spacing:.08em;text-align:left;text-transform:uppercase;font-size:11pt;border-radius:0}
-#changelog pre{margin-top:11px;padding:10px 10px 10px 20px;width:calc(100% - 32px);max-height:600px;overflow-y:scroll;font-size:10pt;text-shadow:1px 1px 1px rgba(0,0,0,.9);border-left:var(--border);border-right:var(--border);background:#000 url(images/tank.webp) no-repeat right 18px bottom 10px/180px auto;will-change:transform}
+#changelog pre{margin-top:11px;padding:10px 10px 10px 20px;width:calc(100% - 32px);max-height:600px;position:relative;z-index:10;overflow-y:scroll;font-size:10pt;text-shadow:1px 1px 1px rgba(0,0,0,.9);border-left:var(--border);border-right:var(--border);will-change:transform}
 #changelog pre span{margin-bottom:-10px;padding:0 10px 10px;width:calc(100% - 34px);display:inline-block;position:relative;font-weight:500;border-bottom:1px dotted #252}
 #changelog pre span:last-of-type{display:none}
 #changelog pre span::first-line{padding-left:12px;line-height:1.75;font-weight:700}
