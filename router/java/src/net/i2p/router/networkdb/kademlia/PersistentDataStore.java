@@ -341,6 +341,7 @@ public class PersistentDataStore extends TransientDataStore {
         String version = ri != null ? ri.getVersion() : "0.8.0";
         boolean isInvalidVersion = VersionComparator.comp(version, "2.5.0") >= 0;
         boolean shouldDelete = false;
+        boolean shouldStore = !isBanned && !isLTier && !isSlow && !isInvalidVersion && !isOld && hasIP && !unreachable && !noSSU;
 
         try {
             if (data.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {filename = getRouterInfoName(key);}
@@ -352,7 +353,7 @@ public class PersistentDataStore extends TransientDataStore {
                 ip = (ri != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri)) : null;
                 String rl = ip != null ? _context.commSystem().getCanonicalHostName(ip) : null;
             }
-            if (dbFile.lastModified() < dataPublishDate) {
+            if (dbFile.lastModified() < dataPublishDate && (shouldStore || isUs)) {
                 // our filesystem is out of date, let's replace it
                 fos = new SecureFileOutputStream(dbFile);
                 fos = new BufferedOutputStream(fos);
@@ -375,40 +376,46 @@ public class PersistentDataStore extends TransientDataStore {
                         _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
                         shouldDelete = true;
                     } else if (isInvalidVersion) {
-                        if (_log.shouldDebug() && dbFile == null) {
+                        if (_log.shouldDebug()) {
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Invalid version in RouterInfo (" + version + ")");
                         }
-                        if (_log.shouldWarn() && !isBanned)
+                        if (_log.shouldWarn() && !isBanned) {
                             _log.warn("Banning for 24h and disconnecting from Router [" + key.toBase64().substring(0,6) + "]" +
                                       " -> Invalid version " + version + " / " + bw + (unreachable ? "U" : ""));
-                        _context.banlist().banlistRouter(key, " <b>➜</b> Invalid Router version (" + version + " / " + bw +
-                                                         (unreachable ? "U" : reachable ? "R" : "") + ")", null,
-                                                          null, _context.clock().now() + 24*60*60*1000);
+                            _context.banlist().banlistRouter(key, " <b>➜</b> Invalid Router version (" + version + " / " + bw +
+                                                             (unreachable ? "U" : reachable ? "R" : "") + ")", null,
+                                                              null, _context.clock().now() + 24*60*60*1000);
+                        }
                         _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
                         shouldDelete = true;
-                    } else if (isLTier && unreachable && isOlderThanCurrent) {
-                        if (_log.shouldDebug() && dbFile == null) {
-                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> LU and older than " + CURRENT_VERSION);
+                    } else if (isLTier && unreachable && isOld) {
+                        if (_log.shouldDebug()) {
+                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> LU and older than " + MIN_VERSION);
                         }
-                        if (_log.shouldWarn()) {
-                            _log.warn("Banning [" + key.toBase64().substring(0,6) + "] for 8h -> LU and older than current version");
+                        if (_log.shouldWarn() && !isBanned) {
+                            _log.warn("Banning [" + key.toBase64().substring(0,6) + "] for 8h -> LU and older than " + MIN_VERSION);
+                            _context.banlist().banlistRouter(key, " <b>➜</b> LU and older than " + MIN_VERSION, null, null, _context.clock().now() + 8*60*60*1000);
                         }
-                        _context.banlist().banlistRouter(key, " <b>➜</b> LU and older than 0.9.59", null, null, _context.clock().now() + 8*60*60*1000);
                         _context.simpleTimer2().addEvent(new Disconnector(key), 11*60*1000);
                         shouldDelete = true;
                     } else if (unreachable) {
-                        if (_log.shouldDebug() && dbFile == null) {
+                        if (_log.shouldDebug()) {
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Unreachable");
                         }
                         shouldDelete = true;
                     } else if (isSlow) {
-                        if (_log.shouldDebug() && dbFile == null) {
+                        if (_log.shouldDebug()) {
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> K, L, M or N tier");
                         }
                         shouldDelete = true;
                     } else if (isOld) {
-                        if (_log.shouldDebug() && dbFile == null) {
+                        if (_log.shouldDebug()) {
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Older than " + MIN_VERSION);
+                        }
+                        shouldDelete = true;
+                    } else if (noSSU) {
+                        if (_log.shouldDebug()) {
+                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> No SSU transport");
                         }
                         shouldDelete = true;
                     } else {
