@@ -660,7 +660,7 @@ td.tAction input[type=submit]{margin-top:1px}
 .iframed #addSection,.iframed #createSection{padding-bottom:3px}
 .iframed #addSection table{animation:fade .2s linear both}
 .iframed #commentSection,.iframed #editSection{margin:-1px 0 0}
-.iframed #createSection{margin-bottom:-3px}
+.iframed #createSection{margin-bottom:1px;border-radius:0 0 2px 2px}
 .iframed #createSection table:not(#trackerselect){animation:fade .2s linear both}
 .iframed #editSection+#commentSection{margin-top:-1px}
 .iframed .mainsection#commentSection,.iframed #editSection{margin-bottom:0}

@@ -756,7 +756,7 @@ input.trackerhome,input.trackerannounce{width:210px}
 .iframed .page #snarkInfo~#snarkFiles,.iframed .page #snarkInfo~#commentSection{margin:-11px 0 10px;border-bottom:var(--border)}
 .iframed #trackers,.iframed .mainsection#snarkInfo{margin-bottom:-9px}
 .iframed .page #snarkInfo~#commentSection{margin-bottom:-10px}
-.iframed #createSection{margin-bottom:-9px;border-radius:0 0 4px 4px}
+.iframed #createSection{margin-bottom:-6px;border-radius:0 0 4px 4px}
 .iframed #mainsection+#lowersection{margin-top:-11px}
 #navbar,#createSection,#addSection,.configPanel,.optionlist{box-shadow:var(--highlight),0 0 2px 1px #252 inset}
 
