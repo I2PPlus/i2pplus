@@ -95,299 +95,191 @@ import net.i2p.crypto.SHA256Generator;
  *
  * NOTE: As of 0.8.8, uses the java.security.MessageDigest instead of GNU Sha256Standalone
  */
-public class FortunaStandalone extends BasePRNGStandalone implements Serializable
-{
+public class FortunaStandalone extends BasePRNGStandalone implements Serializable {
+    private static final long serialVersionUID = 0xFACADE;
+    private static final int SEED_FILE_SIZE = 64;
+    static final int NUM_POOLS = 32;
+    static final int MIN_POOL_SIZE = 64;
+    protected final IRandomStandalone generator;
+    /** null if using DevRandom */
+    protected final MessageDigest[] pools;
+    protected long lastReseed;
+    private int pool;
+    protected int pool0Count;
+    protected int reseedCount;
+    public static final String SEED = "gnu.crypto.prng.fortuna.seed";
+    public FortunaStandalone() {this(false);}
 
-  private static final long serialVersionUID = 0xFACADE;
-
-  private static final int SEED_FILE_SIZE = 64;
-  static final int NUM_POOLS = 32;
-  static final int MIN_POOL_SIZE = 64;
-  protected final IRandomStandalone generator;
-  protected final MessageDigest[] pools;
-  protected long lastReseed;
-  private int pool;
-  protected int pool0Count;
-  protected int reseedCount;
-
-  public static final String SEED = "gnu.crypto.prng.fortuna.seed";
-
-  public FortunaStandalone() {
-      this(false);
-  }
-
-  /**
-   *  @since 0.9.58
-   */
-  public FortunaStandalone(boolean useDevRandom) {
-    super("Fortuna i2p");
-    generator = useDevRandom ? new DevRandom() : new Generator();
-    pools = new MessageDigest[NUM_POOLS];
-    for (int i = 0; i < NUM_POOLS; i++)
-      pools[i] = SHA256Generator.getDigestInstance();
-    allocBuffer();
-  }
-
-  /** Unused, see AsyncFortunaStandalone */
-  protected void allocBuffer() {
-    buffer = new byte[64*1024];
-  }
-
-  /** Unused, see AsyncFortunaStandalone */
-  public void seed(byte val[]) {
-      Map<String, byte[]> props = Collections.singletonMap(SEED, val);
-      init(props);
-      fillBlock();
-  }
-
-  public void setup(Map<String, byte[]> attributes)
-  {
-    lastReseed = 0;
-    reseedCount = 0;
-    pool = 0;
-    pool0Count = 0;
-    generator.init(attributes);
-  }
-
-  /** Unused, see AsyncFortunaStandalone */
-  public void fillBlock()
-  {
-    //long start = System.currentTimeMillis();
-    if (pool0Count >= MIN_POOL_SIZE
-        && System.currentTimeMillis() - lastReseed > 100)
-      {
-        reseedCount++;
-        //byte[] seed = new byte[0];
-        for (int i = 0; i < NUM_POOLS; i++)
-          {
-            if (reseedCount % (1 << i) == 0) {
-              generator.addRandomBytes(pools[i].digest());
+    /**
+     *  @since 0.9.58
+     */
+    public FortunaStandalone(boolean useDevRandom) {
+        super("Fortuna i2p");
+        generator = useDevRandom ? new DevRandom() : new Generator();
+        if (useDevRandom) {pools = null;}
+        else {
+            pools = new MessageDigest[NUM_POOLS];
+            for (int i = 0; i < NUM_POOLS; i++) {
+                pools[i] = SHA256Generator.getDigestInstance();
             }
-          }
-        lastReseed = System.currentTimeMillis();
-      }
-    generator.nextBytes(buffer);
-    //long now = System.currentTimeMillis();
-    //long diff = now-lastRefill;
-    //lastRefill = now;
-    //long refillTime = now-start;
-    //System.out.println("Refilling " + (++refillCount) + " after " + diff + " for the PRNG took " + refillTime);
-  }
-
-    @Override
-  public void addRandomByte(byte b)
-  {
-    pools[pool].update(b);
-    if (pool == 0)
-      pool0Count++;
-    pool = (pool + 1) % NUM_POOLS;
-  }
-
-    @Override
-  public void addRandomBytes(byte[] buf, int offset, int length)
-  {
-    pools[pool].update(buf, offset, length);
-    if (pool == 0)
-      pool0Count += length;
-    pool = (pool + 1) % NUM_POOLS;
-  }
-
-  // Reading and writing this object is equivalent to storing and retrieving
-  // the seed.
-
-  private void writeObject(ObjectOutputStream out) throws IOException
-  {
-    byte[] seed = new byte[SEED_FILE_SIZE];
-    generator.nextBytes(seed);
-    out.write(seed);
-  }
-
-  private void readObject(ObjectInputStream in) throws IOException
-  {
-    byte[] seed = new byte[SEED_FILE_SIZE];
-    in.readFully(seed);
-    generator.addRandomBytes(seed);
-  }
-
-  /**
-   * The Fortuna generator function. The generator is a PRNG in its own
-   * right; Fortuna itself is basically a wrapper around this generator
-   * that manages reseeding in a secure way.
-   */
-  private static class Generator extends BasePRNGStandalone implements Cloneable
-  {
-
-    private static final int LIMIT = 1 << 20;
-
-    private final MessageDigest hash;
-    private final byte[] counter;
-    private final byte[] key;
-    /** current encryption key built from the keying material */
-    private Object cryptixKey;
-    private CryptixAESKeyCache.KeyCacheEntry cryptixKeyBuf;
-    private boolean seeded;
-
-    public Generator ()
-    {
-      super("Fortuna.generator.i2p");
-      this.hash = SHA256Generator.getDigestInstance();
-      counter = new byte[16]; //cipher.defaultBlockSize()];
-      buffer = new byte[16]; //cipher.defaultBlockSize()];
-      int keysize = 32;
-      key = new byte[keysize];
-      cryptixKeyBuf = CryptixAESKeyCache.createNew();
-    }
-
-        @Override
-    public final byte nextByte()
-    {
-      byte[] b = new byte[1];
-      nextBytes(b, 0, 1);
-      return b[0];
-    }
-
-        @Override
-    public final void nextBytes(byte[] out, int offset, int length)
-    {
-      if (!seeded)
-        throw new IllegalStateException("generator not seeded");
-
-      int count = 0;
-      do
-        {
-          int amount = Math.min(LIMIT, length - count);
-          super.nextBytes(out, offset+count, amount);
-          count += amount;
-
-          for (int i = 0; i < key.length; i += counter.length)
-            {
-              //fillBlock(); // inlined
-              CryptixRijndael_Algorithm.blockEncrypt(counter, buffer, 0, 0, cryptixKey);
-              incrementCounter();
-              int l = Math.min(key.length - i, 16);//cipher.currentBlockSize());
-              System.arraycopy(buffer, 0, key, i, l);
-            }
-          resetKey();
         }
-      while (count < length);
-      //fillBlock(); // inlined
-      CryptixRijndael_Algorithm.blockEncrypt(counter, buffer, 0, 0, cryptixKey);
-      incrementCounter();
-      ndx = 0;
     }
 
-        @Override
-    public final void addRandomByte(byte b)
-    {
-      addRandomBytes(new byte[] { b });
+  /** Unused, see AsyncFortunaStandalone */
+    public void seed(byte val[]) {
+        throw new UnsupportedOperationException("use override");
     }
 
-        @Override
-    public final void addRandomBytes(byte[] seed, int offset, int length)
-    {
-      hash.update(key, 0, key.length);
-      hash.update(seed, offset, length);
-      byte[] newkey = hash.digest();
-      System.arraycopy(newkey, 0, key, 0, Math.min(key.length, newkey.length));
-      //hash.doFinal(key, 0);
-      resetKey();
-      incrementCounter();
-      seeded = true;
+    public void setup(Map<String, byte[]> attributes) {
+        lastReseed = 0;
+        reseedCount = 0;
+        pool = 0;
+        pool0Count = 0;
+        generator.init(attributes);
     }
 
-    public final void fillBlock()
-    {
-      ////i2p: this is not being checked as a microoptimization
-      //if (!seeded)
-      //  throw new IllegalStateException("generator not seeded");
-      CryptixRijndael_Algorithm.blockEncrypt(counter, buffer, 0, 0, cryptixKey);
-      incrementCounter();
+    /** Unused, see AsyncFortunaStandalone */
+    public void fillBlock() {
+        throw new UnsupportedOperationException("use override");
     }
 
-    public void setup(Map<String, byte[]> attributes)
-    {
-      seeded = false;
-      Arrays.fill(key, (byte) 0);
-      Arrays.fill(counter, (byte) 0);
-      byte[] seed = attributes.get(SEED);
-      if (seed != null)
-        addRandomBytes(seed);
+    @Override
+    public void addRandomByte(byte b) {
+        if (pools == null) {return;}
+        pools[pool].update(b);
+        if (pool == 0) {pool0Count++;}
+        pool = (pool + 1) % NUM_POOLS;
+    }
+
+    @Override
+    public void addRandomBytes(byte[] buf, int offset, int length) {
+        pools[pool].update(buf, offset, length);
+        if (pool == 0) {pool0Count += length;}
+        pool = (pool + 1) % NUM_POOLS;
+    }
+
+    // Reading and writing this object is equivalent to storing and retrieving the seed.
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        byte[] seed = new byte[SEED_FILE_SIZE];
+        generator.nextBytes(seed);
+        out.write(seed);
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException {
+        byte[] seed = new byte[SEED_FILE_SIZE];
+        in.readFully(seed);
+        generator.addRandomBytes(seed);
     }
 
     /**
-     * Resets the cipher's key. This is done after every reseed, which
-     * combines the old key and the seed, and processes that throigh the
-     * hash function.
+     * The Fortuna generator function. The generator is a PRNG in its own
+     * right; Fortuna itself is basically a wrapper around this generator
+     * that manages reseeding in a secure way.
      */
-    private final void resetKey()
-    {
-      try {
-          cryptixKey = CryptixRijndael_Algorithm.makeKey(key, 16, cryptixKeyBuf);
-      } catch (InvalidKeyException ike) {
-          throw new Error("hrmf", ike);
-      }
-    }
+    private static class Generator extends BasePRNGStandalone implements Cloneable {
+        private static final int LIMIT = 1 << 20;
+        private final MessageDigest hash;
+        private final byte[] counter;
+        private final byte[] key;
+        /** current encryption key built from the keying material */
+        private Object cryptixKey;
+        private CryptixAESKeyCache.KeyCacheEntry cryptixKeyBuf;
+        private boolean seeded;
 
-    /**
-     * Increment `counter' as a sixteen-byte little-endian unsigned integer
-     * by one.
-     */
-    private final void incrementCounter()
-    {
-      for (int i = 0; i < counter.length; i++)
-        {
-          counter[i]++;
-          if (counter[i] != 0)
-            break;
+        public Generator () {
+            super("Fortuna.generator.i2p");
+            this.hash = SHA256Generator.getDigestInstance();
+            counter = new byte[16]; //cipher.defaultBlockSize()];
+            buffer = new byte[16]; //cipher.defaultBlockSize()];
+            int keysize = 32;
+            key = new byte[keysize];
+            cryptixKeyBuf = CryptixAESKeyCache.createNew();
+        }
+
+        @Override
+        public final byte nextByte() {
+            byte[] b = new byte[1];
+            nextBytes(b, 0, 1);
+            return b[0];
+        }
+
+        @Override
+        public final void nextBytes(byte[] out, int offset, int length) {
+            if (!seeded) {
+                throw new IllegalStateException("generator not seeded");
+            }
+
+            int count = 0;
+            do {
+                int amount = Math.min(LIMIT, length - count);
+                super.nextBytes(out, offset+count, amount);
+                count += amount;
+
+                for (int i = 0; i < key.length; i += counter.length) {
+                    //fillBlock(); // inlined
+                    CryptixRijndael_Algorithm.blockEncrypt(counter, buffer, 0, 0, cryptixKey);
+                    incrementCounter();
+                    int l = Math.min(key.length - i, 16); //cipher.currentBlockSize());
+                    System.arraycopy(buffer, 0, key, i, l);
+                }
+                resetKey();
+            }
+            while (count < length);
+            //fillBlock(); // inlined
+            CryptixRijndael_Algorithm.blockEncrypt(counter, buffer, 0, 0, cryptixKey);
+            incrementCounter();
+            ndx = 0;
+          }
+
+        @Override
+        public final void addRandomByte(byte b) {
+            addRandomBytes(new byte[] { b });
+        }
+
+        @Override
+        public final void addRandomBytes(byte[] seed, int offset, int length) {
+            hash.update(key, 0, key.length);
+            hash.update(seed, offset, length);
+            byte[] newkey = hash.digest();
+            System.arraycopy(newkey, 0, key, 0, Math.min(key.length, newkey.length));
+            //hash.doFinal(key, 0);
+            resetKey();
+            incrementCounter();
+            seeded = true;
+        }
+
+        public final void fillBlock() {
+            CryptixRijndael_Algorithm.blockEncrypt(counter, buffer, 0, 0, cryptixKey);
+            incrementCounter();
+        }
+
+        public void setup(Map<String, byte[]> attributes) {
+            seeded = false;
+            Arrays.fill(key, (byte) 0);
+            Arrays.fill(counter, (byte) 0);
+            byte[] seed = attributes.get(SEED);
+            if (seed != null) {addRandomBytes(seed);}
+        }
+
+        /**
+         * Resets the cipher's key. This is done after every reseed, which
+         * combines the old key and the seed, and processes that throigh the
+         * hash function.
+         */
+        private final void resetKey() {
+            try {cryptixKey = CryptixRijndael_Algorithm.makeKey(key, 16, cryptixKeyBuf);}
+            catch (InvalidKeyException ike) {throw new Error("hrmf", ike);}
+        }
+
+        /**
+         * Increment `counter' as a sixteen-byte little-endian unsigned integer
+         * by one.
+         */
+        private final void incrementCounter() {
+            for (int i = 0; i < counter.length; i++) {
+                counter[i]++;
+                if (counter[i] != 0) {break;}
+            }
         }
     }
-  }
-
-/*****
-  public static void main(String args[]) {
-      byte in[] = new byte[16];
-      byte out[] = new byte[16];
-      byte key[] = new byte[32];
-      try {
-          CryptixAESKeyCache.KeyCacheEntry buf = CryptixAESKeyCache.createNew();
-          Object cryptixKey = CryptixRijndael_Algorithm.makeKey(key, 16, buf);
-          long beforeAll = System.currentTimeMillis();
-          for (int i = 0; i < 256; i++) {
-              //long before =System.currentTimeMillis();
-              for (int j = 0; j < 1024; j++)
-                CryptixRijndael_Algorithm.blockEncrypt(in, out, 0, 0, cryptixKey);
-              //long after = System.currentTimeMillis();
-              //System.out.println("encrypting 16KB took " + (after-before));
-          }
-          long after = System.currentTimeMillis();
-          System.out.println("encrypting 4MB took " + (after-beforeAll));
-      } catch (Exception e) { e.printStackTrace(); }
-
-      try {
-        CryptixAESKeyCache.KeyCacheEntry buf = CryptixAESKeyCache.createNew();
-        Object cryptixKey = CryptixRijndael_Algorithm.makeKey(key, 16, buf);
-        byte data[] = new byte[4*1024*1024];
-        long beforeAll = System.currentTimeMillis();
-        //CryptixRijndael_Algorithm.ecbBulkEncrypt(data, data, cryptixKey);
-          long after = System.currentTimeMillis();
-          System.out.println("encrypting 4MB took " + (after-beforeAll));
-      } catch (Exception e) { e.printStackTrace(); }
-****/ /*
-      FortunaStandalone f = new FortunaStandalone();
-      java.util.HashMap props = new java.util.HashMap();
-      byte initSeed[] = new byte[1234];
-      new java.util.Random().nextBytes(initSeed);
-      long before = System.currentTimeMillis();
-      props.put(SEED, (byte[])initSeed);
-      f.init(props);
-      byte buf[] = new byte[8*1024];
-      for (int i = 0; i < 64*1024; i++) {
-        f.nextBytes(buf);
-      }
-      long time = System.currentTimeMillis() - before;
-      System.out.println("512MB took " + time + ", or " + (8*64d)/((double)time/1000d) +"MBps");
-       */
-/*****
-  }
-*****/
 }

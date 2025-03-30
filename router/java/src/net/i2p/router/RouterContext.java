@@ -161,7 +161,7 @@ public class RouterContext extends I2PAppContext {
         if (envProps == null) {envProps = new Properties();}
         envProps.computeIfAbsent("time.disabled", key -> "false");
         envProps.computeIfAbsent("prng.buffers", key -> {
-            long maxBuffs = (SystemVersion.isAndroid() || SystemVersion.isARM()) ? 4 : 10;
+            long maxBuffs = 10;
             return Long.toString(maxBuffs / 2);
         });
         return envProps;
