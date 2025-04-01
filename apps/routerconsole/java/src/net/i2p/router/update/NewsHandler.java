@@ -33,12 +33,6 @@ public class NewsHandler extends UpdateHandler implements Checker {
      *
      *  @since 0.7.14, configurable since 0.9.51
      */
-    // psi.i2p
-    //private static final String BACKUP_NEWS_URL = "http://avviiexdngd32ccoy4kuckvc3mkf53ycvzbz6vz75vzhv4tbpk5a.b32.i2p/news.xml";
-    //private static final String BACKUP_NEWS_URL_SU3 = "http://avviiexdngd32ccoy4kuckvc3mkf53ycvzbz6vz75vzhv4tbpk5a.b32.i2p/news.su3";
-    // str4d
-    //private static final String BACKUP_NEWS_URL = "http://ivk5a6wfjar6hjucjmnbcea5inwmwg5b3hsv72x77xwyhbeaajja.b32.i2p/news/news.xml";
-    //private static final String BACKUP_NEWS_URL_SU3 = "http://ivk5a6wfjar6hjucjmnbcea5inwmwg5b3hsv72x77xwyhbeaajja.b32.i2p/news/news.su3";
     // idk
     private static final String BACKUP_NEWS_URL = "http://dn3tvalnjz432qkqsvpfdqrwpqkw3ye4n4i2uyfr4jexvo3sp5ka.b32.i2p/news/news.atom.xml";
     private static final String DEFAULT_BACKUP_NEWS_URL_SU3 = "http://dn3tvalnjz432qkqsvpfdqrwpqkw3ye4n4i2uyfr4jexvo3sp5ka.b32.i2p/news/news.su3";
@@ -55,18 +49,12 @@ public class NewsHandler extends UpdateHandler implements Checker {
      */
     public UpdateTask check(UpdateType type, UpdateMethod method,
                             String id, String currentVersion, long maxTime) {
-        if ((type != ROUTER_SIGNED && type != NEWS && type != NEWS_SU3) ||
-            method != HTTP)
-            return null;
+        if ((type != ROUTER_SIGNED && type != NEWS && type != NEWS_SU3) ||method != HTTP) {return null;}
         List<URI> updateSources = new ArrayList<URI>(2);
-        try {
-            // This may be su3 or xml
-            updateSources.add(new URI(ConfigUpdateHelper.getNewsURL(_context)));
-        } catch (URISyntaxException use) {}
-        try {
-            //updateSources.add(new URI(BACKUP_NEWS_URL));
-            updateSources.add(new URI(_context.getProperty(PROP_BACKUP_NEWS_URL_SU3, DEFAULT_BACKUP_NEWS_URL_SU3)));
-        } catch (URISyntaxException use) {}
+        try {updateSources.add(new URI(ConfigUpdateHelper.getNewsURL(_context)));} // This may be su3 or xml
+        catch (URISyntaxException use) {}
+        try {updateSources.add(new URI(_context.getProperty(PROP_BACKUP_NEWS_URL_SU3, DEFAULT_BACKUP_NEWS_URL_SU3)));}
+        catch (URISyntaxException use) {}
         UpdateRunner update = new NewsFetcher(_context, _mgr, updateSources, maxTime);
         return update;
     }
@@ -93,13 +81,10 @@ public class NewsHandler extends UpdateHandler implements Checker {
                 String s = g.getOptarg();
                 int colon = s.indexOf(':');
                 if (colon >= 0) {
-                    if (colon > 0)
-                        proxyHost = s.substring(0, colon);
+                    if (colon > 0) {proxyHost = s.substring(0, colon);}
                     String port = s.substring(colon + 1);
                     proxyPort = Integer.parseInt(port);
-                } else {
-                    proxyHost = s;
-                }
+                } else {proxyHost = s;}
                 break;
 
             case 'l':
@@ -121,15 +106,16 @@ public class NewsHandler extends UpdateHandler implements Checker {
             System.exit(1);
         }
 
-        if (lang != null)
+        if (lang != null) {
             url = url + "?lang=" + lang;
+            System.out.println("Fetching news for language " + lang);
+        } else {System.out.println("Fetching news for English; use -l xx to fetch a different language");}
         File file = new File("news-primary.su3");
         System.out.println("Fetching news from primary server at " + url);
         test(ctx, proxyHost, proxyPort, url, file);
         if (!custom) {
             url = DEFAULT_BACKUP_NEWS_URL_SU3;
-            if (lang != null)
-                url = url + "?lang=" + lang;
+            if (lang != null) {url = url + "?lang=" + lang;}
             file = new File("news-backup.su3");
             System.out.println("Fetching news from backup server at " + url);
             test(ctx, proxyHost, proxyPort, url, file);
@@ -150,11 +136,7 @@ public class NewsHandler extends UpdateHandler implements Checker {
             if (status == 200) {
                 SU3File.main(new String[] {"showversion", path} );
                 SU3File.main(new String[] {"extract", "-x", path} );
-            } else {
-                System.out.println("Failed to fetch, status " + status + " for " + url);
-            }
-        } else {
-            System.out.println("Failed to fetch " + url);
-        }
+            } else {System.out.println("Failed to fetch, status " + status + " for " + url);}
+        } else {System.out.println("Failed to fetch " + url);}
     }
 }
