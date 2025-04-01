@@ -444,13 +444,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
 
                 /**
-                 *  We don't know if this is GET or POST or what,
-                 *  set a huge timeout and rely on the server to do the actual timeout
+                 * We don't know if this is GET or POST or what, so set a huge timeout
+                 * and rely on the server to do the actual timeout
                  */
                 socket.setReadTimeout(SERVER_READ_TIMEOUT_POST);
                 Socket s = getSocket(socket.getPeerDestination().calculateHash(), 443);
                 Runnable t = new I2PTunnelRunner(s, socket, slock, null, null, null, (I2PTunnelRunner.FailCallback) null);
-                _clientExecutor.execute(t);
+                executeInPool(t); // Run in the server pool
                 return;
             }
 
@@ -463,14 +463,15 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     if (_log.shouldDebug()) {_log.debug("[HTTPServer] KeepAlive, awaiting request [#" + requestCount + "]");}
                 }
 
-                // The headers _should_ be in the first packet, but
-                // may not be, depending on the client-side options
+                // The headers _should_ be in the first packet, but may not be, depending on the client-side options
 
                 StringBuilder command = new StringBuilder(128);
                 Map<String, List<String>> headers;
                 try {
-                    // catch specific exceptions thrown, to return a good error to the client
-                    // Add 10s to client-side timeout so the client will timeout first and minimize races
+                    /*
+                     * Catch specific exceptions thrown, to return a good error to the client.
+                     * Add 10s to client-side timeout so the client will timeout first and minimize races.
+                     */
                     long timeout = requestCount > 0 ? I2PTunnelHTTPClient.BROWSER_KEEPALIVE_TIMEOUT + 10*1000 : HEADER_TIMEOUT;
                     headers = readHeaders(socket, null, command, CLIENT_SKIPHEADERS, getTunnel().getContext(), timeout);
                 } catch (SocketTimeoutException ste) {
@@ -783,9 +784,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                  * We do NOT support keepalive on the server socket.
                  */
                 String cmd = command.toString().trim();
-                if (!cmd.endsWith(" HTTP/1.1") || !(cmd.startsWith("GET ") || cmd.startsWith("HEAD "))) {
-                    keepalive = false;
-                }
+                boolean isGetOrHead = cmd.startsWith("GET ") || cmd.startsWith("HEAD ");
+                if (!cmd.endsWith(" HTTP/1.1") || !isGetOrHead) {keepalive = false;}
 
                 // we keep the enc sent by the browser before clobbering it, since it may have been x-i2p-gzip
                 String enc = getEntryOrNull(headers, "Accept-Encoding");
@@ -827,13 +827,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
                 boolean compress = allowGZIP && useGZIP;
                 //boolean addHeaders = shouldAddResponseHeaders();
-                // waiter is notified when the thread is done
+                // waiter is set to the return value when the CompressedRequestor is done
                 AtomicInteger waiter = keepalive ? new AtomicInteger() : null;
                 Runnable t = new CompressedRequestor(s, socket, modifiedHeader, getTunnel().getContext(),
                                                      _log, compress, upgrade, _clientExecutor, keepalive, waiter);
-                // run in the unlimited client pool
-                //t.start();
-                _clientExecutor.execute(t);
+                if (keepalive || isGetOrHead) {t.run();} // run inline
+                else {executeInPool(t);} // run in the server pool
+
 
                 long afterHandle = getTunnel().getContext().clock().now();
                 if (requestCount == 0) {
@@ -847,21 +847,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                   "Start runners: " + (afterHandle-afterSocket) + "ms");
                      }
                 }
-                if (keepalive) {
-                    // wait for the response to finish, then determine
-                    // if we can receive another request on this socket
-                    if (_log.shouldDebug())
-                        _log.debug("[HTTPServer] Waiting for response [#" + requestCount + "] to finish...");
-                    try {
-                        synchronized(waiter) {
-                            if (waiter.get() == 0)
-                                waiter.wait(30*1000);
-                        }
-                    } catch (InterruptedException ie) {
-                        if (_log.shouldInfo())
-                            _log.warn("[HTTPServer] Interrupted waiting for response to finish");
-                        break;
-                    }
+                if (keepalive) { // Since we are now running the CompressedRequestor inline, if keepalive is true, we don't need to wait.
                     if (_log.shouldDebug()) {
                         long timeToWait = getTunnel().getContext().clock().now() - afterAccept;
                         // 0: not done; 1: not keepalive-able response; 2: keepalive
@@ -950,6 +936,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
         /**
          *  @param shouldCompress if false, don't compress, just filter server headers
+         *  @param waiter to notify when done, if non-null; will set value to 1: not keepalive-able response, or 2: keepalive
          */
         public CompressedRequestor(Socket webserver, I2PSocket browser, String headers,
                                    I2PAppContext ctx, Log log, boolean shouldCompress, boolean upgrade,
@@ -967,6 +954,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             //_addHeaders = addHeaders;
         }
 
+        /**
+         * This thread handles the response from the server back to the browser.
+         * If the request was not GET or HEAD, (typically POST or CONNECT), it spawns another thread
+         * "Sender" to push the remaining request data from the browser to the server.
+         */
         public void run() {
             OutputStream serverout = null;
             OutputStream browserout = null;
@@ -1259,22 +1251,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         }
                     }
                 }
-                if (_waiter != null) {
-                    synchronized(_waiter) {
-                        _waiter.set(_keepalive ? 2 : 1);
-                        _waiter.notify();
-                    }
-                }
+                if (_waiter != null) {_waiter.set(_keepalive ? 2 : 1);} // We are now run inline, no need to notify()
                 if (browserout != null) {
                     try {
                         if (_keepalive) {
-                            if (compressedout != null)
-                                compressedout.finish();
-                            else
-                                browserout.flush();
-                        } else {
-                            browserout.close();
-                        }
+                            if (compressedout != null) {compressedout.finish();}
+                            else {browserout.flush();}
+                        } else {browserout.close();}
                     } catch (IOException ioe) {}
                 }
                 if (serverout != null) try { serverout.close(); } catch (IOException ioe) {}

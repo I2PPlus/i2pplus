@@ -619,9 +619,17 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         if (cnt != null) {
             try {
                 rv = Integer.parseInt(cnt);
-                if (rv <= 0)
-                    rv = DEFAULT_HANDLER_COUNT;
+                if (rv <= 0) {rv = DEFAULT_HANDLER_COUNT;}
             } catch (NumberFormatException nfe) {}
+        } else {
+            // if PROP_MAX_STREAMS is higher, use it
+            cnt = getTunnel().getClientOptions().getProperty(TunnelController.PROP_MAX_STREAMS);
+            if (cnt != null) {
+                try {
+                    int rv2 = Integer.parseInt(cnt) + 10; // add some extra
+                    if (rv2 > rv) {rv = rv2;}
+                } catch (NumberFormatException nfe) {}
+            }
         }
         return rv;
     }
@@ -762,22 +770,28 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
     public boolean shouldUsePool() { return _usePool; }
 
+
+    /**
+     * Run in the server pool, unless not configured for that, then in the client pool.
+     *
+     * @since 0.9.66
+     */
+    protected void executeInPool(Runnable r) {
+        if (_usePool && _executor != null) {_executor.execute(r);}
+        else {_clientExecutor.execute(r);}
+    }
+
     /**
      * Run the blockingHandler.
      */
     private class Handler implements Runnable {
         private final I2PSocket _i2ps;
 
-        public Handler(I2PSocket socket) {
-            _i2ps = socket;
-        }
+        public Handler(I2PSocket socket) {_i2ps = socket;}
 
         public void run() {
-            try {
-                blockingHandle(_i2ps);
-            } catch (Throwable t) {
-                _log.error("Uncaught error in I2PTunnel server", t);
-            }
+            try {blockingHandle(_i2ps);}
+            catch (Throwable t) {_log.error("Uncaught error in I2PTunnel server", t);}
         }
     }
 
