@@ -15,10 +15,15 @@
 body{background:#000}
 .percentBarOuter{background:linear-gradient(to right,#000,#200)}
 .sb_netstatus,.tunnelBuildStatus,#sb_graphcontainer{background:#000!important}
-#sidebar h3{background:var(--title)}
+#sidebar h3{box-shadow:var(--highlight),inset 0 0 0 2px #1914;background:var(--title)}
+#sidebar .error,.tunnelBuildStatus.rejecting,#sb_warning{color:#900;box-shadow:var(--highlight),inset 0 0 0 2px #700}
+#sidebar .firewalled{box-shadow:0 0 0 1px rgba(64,0,0,.6) inset,var(--bevel)}
+#sidebar .firewalled,.tunnelBuildStatus{color:#bb7;box-shadow:var(--bevel)}
+#sidebar .hidden,#sidebar .vmcomm,.tunnelBuildStatus.hidden{color:#999;box-shadow:var(--highlight),inset 0 0 0 2px #777}
+#sidebar .running,.tunnelBuildStatus.active{box-shadow:var(--highlight),inset 0 0 0 2px #3738}
+#sidebar .testing,.tunnelBuildStatus.starting,#sb_localtunnels td[colspan="3"],#sidebar #routerdown td{box-shadow:var(--highlight),inset 0 0 0 2px #bb0}
 #sb_graphcontainer::after{background:#0000!important}
 
-
 /* i2psnark */
-#createSection,#addSection,.configPanel,#snarkFiles,#commentSection,#editSection,#navbar{background:var(--panel)}
+#createSection,#addSection,.configPanel,#snarkFiles,#commentSection,#editSection,#filterBar,#navbar{background:var(--panel)}
 #screenlog{background:linear-gradient(180deg,#001000b2,#00200099),url(/themes/snark/midnight/images/chimp.webp) no-repeat scroll right bottom,var(--th),var(--snarkGraph) no-repeat,linear-gradient(180deg,#000000e5,#00100099),#001000;background-size:100%,96px auto,100%,100% auto,100%;background-position:center center,right 4px bottom -10px,center center,right 72px bottom -4px}
