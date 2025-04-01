@@ -56,7 +56,6 @@ import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
-
 /**
  * Kademlia based version of the network database.
  * Never instantiated directly; see FloodfillNetworkDatabaseFacade.
@@ -92,10 +91,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     public static final String PROP_BLOCK_XG = "i2np.blockXG";
 
     /**
-     * Map of Hash to RepublishLeaseSetJob for leases we'realready managing.
+     * Map of Hash to RepublishLeaseSetJob for leases we're already managing.
      * This is added to when we create a new RepublishLeaseSetJob, and the values are
      * removed when the job decides to stop running.
-     *
      */
     private final Map<Hash, RepublishLeaseSetJob> _publishingLeaseSets;
 
@@ -103,13 +101,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * Hash of the key currently being searched for, pointing the SearchJob that
      * is currently operating.  Subsequent requests for that same key are simply
      * added on to the list of jobs fired on success/failure
-     *
      */
     private final Map<Hash, SearchJob> _activeRequests;
 
     /**
      * The search for the given key is no longer active
-     *
      */
     void searchComplete(Hash key) {
         if (_log.shouldDebug()) {_log.debug("Search for key [" + key.toBase64().substring(0,6) + "] finished");}
@@ -129,15 +125,17 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     public final static String PROP_DB_DIR = "router.networkDatabase.dbDir";
     public final static String DEFAULT_DB_DIR = "netDb";
 
-    /** Reseed if below this.
-     *  @since 0.9.4
+    /**
+     * Reseed if below this.
+     * @since 0.9.4
      */
     static final int MIN_RESEED = ReseedChecker.MINIMUM;
 
-    /** If we have less than this many routers left, don't drop any more,
-     *  even if they're failing or doing bad stuff.
-     *  As of 0.9.4, we make this LOWER than the min for reseeding, so
-     *  a reseed will be forced if necessary.
+    /**
+     * If we have less than this many routers left, don't drop any more,
+     * even if they're failing or doing bad stuff.
+     * As of 0.9.4, we make this LOWER than the min for reseeding, so
+     * a reseed will be forced if necessary.
      */
     protected final static int MIN_REMAINING_ROUTERS = MIN_RESEED ;
 
@@ -159,7 +157,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      */
     private static final long MAX_LEASE_FUTURE = 15*60*1000;
     private static final long MAX_META_LEASE_FUTURE = 65535*1000;
-
 
     /** This needs to be long enough to give us time to start up,
         but less than 20m (when we start accepting tunnels and could be a IBGW)
@@ -193,6 +190,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _networkID = context.router().getNetworkID();
         _publishingLeaseSets = new HashMap<Hash, RepublishLeaseSetJob>(8);
         _activeRequests = new HashMap<Hash, SearchJob>(8);
+
         if (isClientDb()) {
             _reseedChecker = null;
             _blindCache = null;
@@ -208,6 +206,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _erj = new ExpireRoutersJob(_context, this);
             _peerSelector = createPeerSelector();
         }
+
         _elj = new ExpireLeasesJob(_context, this);
         if (_log.shouldLog(Log.DEBUG)) {_log.debug("Created KademliaNetworkDatabaseFacade for DbId: " + _dbid);}
 
@@ -215,7 +214,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         context.statManager().createRateStat("netDb.exploreKeySet", "NetDb keys queued for exploration", "NetworkDatabase", RATES);
         context.statManager().createRateStat("netDb.lookupDeferred", "Deferred NetDb lookups", "NetworkDatabase", RATES);
         context.statManager().createRateStat("netDb.negativeCache", "Aborted NetDb lookups (already cached)", "NetworkDatabase", RATES);
-        // following are for StoreJob
+        /* the following are for StoreJob */
         context.statManager().createRateStat("netDb.ackTime", "Time peer takes to ACK a DbStore", "NetworkDatabase", RATES);
         context.statManager().createRateStat("netDb.DLMAllZeros", "Message lookups in NetDb with zero key ", "NetworkDatabase", RATES); // HandleDatabaseLookupMessageJob
         context.statManager().createRateStat("netDb.DSMAllZeros", "Messages stored in NetDb with zero key", "NetworkDatabase", RATES); // DatabaseStoreMessage
@@ -372,7 +371,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             }
         }
         if (_log.shouldInfo() && _context.router().getUptime() < 60*1000 && !initMessage) {
-            _log.info("Starting up the Kademlia Network Database...\n" +
+            _log.info("Initializing the Kademlia Network Database...\n" +
                       "BucketSize: " + BUCKET_SIZE + "; B Value: " + KAD_B);
             initMessage = true;
         }
@@ -1565,8 +1564,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *   Final remove for a leaseset.
-     *   For a router info, will look up in the network before dropping.
+     *  Final remove for a leaseset.
+     *  For a router info, will look up in the network before dropping.
      */
     public void fail(Hash dbEntry) {
         if (!_initialized) {return;}
@@ -1582,22 +1581,26 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             return;
         }
 
-        // we always drop leaseSets that are failed [timed out], regardless of how many routers we have.
-        // this is called on a lease if it has expired *or* its tunnels are failing and we want to see if there
-        // are any updates
+        /*
+         * We always drop failed leaseSets (timed out), regardless of how many routers we have.
+         * This is called on a lease if it has expired *or* its tunnels are failing and we want
+         * to see if there are any updates.
+         */
         if (_log.shouldInfo()) {
             _log.info("Dropping LeaseSet [" + dbEntry.toBase32().substring(0,8) + "] -> Lookup / tunnel failure");
          }
         if (!isClientDb()) {_ds.remove(dbEntry, false);}
         else {
-            // if this happens it's because we're a TransientDataStore instead,
-            // so just call remove without the persist option.
+            /*
+             * If this happens, it's because we're a TransientDataStore instead,
+             * so just call remove without the persist option.
+             */
             _ds.remove(dbEntry);
         }
     }
 
-    /** don't use directly - see F.N.D.F. override */
-    protected void lookupBeforeDropping(Hash peer, RouterInfo info) {dropAfterLookupFailed(peer);} //bah, humbug.
+    /** Don't use directly - see F.N.D.F. override */
+    protected void lookupBeforeDropping(Hash peer, RouterInfo info) {dropAfterLookupFailed(peer);} // bah, humbug.
 
     /**
      *  Final remove for a router info.
@@ -1724,8 +1727,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return leases;
     }
 
-    /** public for NetDbRenderer in routerconsole */
-    /* @since 0.9.64+ */
+    /**
+     * Public for NetDbRenderer in routerconsole
+     * @since 0.9.64+
+     */
     @Override
     public Set<LeaseSet> getFloodfillLeases() {
         if (!_initialized) {return null;}
@@ -1738,7 +1743,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     /**
      *  Public for NetDbRenderer in routerconsole
-     *
      *  @return empty set if this is a client DB
      */
     @Override
