@@ -9,15 +9,14 @@ import static net.i2p.update.UpdateType.*;
 import net.i2p.util.Log;
 
 /**
- * <p>Handles the request to update the router by firing one or more
- * {@link net.i2p.util.EepGet} calls to download the latest signed update file
- * and displaying the status to anyone who asks.</p>
- * <p>After the download completes the signed update file is verified with
- * {@link net.i2p.crypto.TrustedUpdate}, and if it's authentic the payload
- * of the signed update file is unpacked and the router is restarted to complete
- * the update process.</p>
+ * <p>Handles the request to update the router by firing one or more {@link net.i2p.util.EepGet} calls
+ * to download the latest signed update file and display the status to anyone who asks.</p>
  *
- * This is like a FormHandler but we don't extend it, as we don't have the message area, etc.
+ * <p>After the download completes the signed update file is verified with {@link net.i2p.crypto.TrustedUpdate},
+ * and if it's authentic the payload of the signed update file is unpacked and the router is restarted to
+ * complete the update process.</p>
+ *
+ * <p>This is like a FormHandler but we don't extend it, as we don't have the message area, etc.</p>
  */
 public class UpdateHandler {
     protected RouterContext _context;
@@ -78,7 +77,7 @@ public class UpdateHandler {
         if (mgr == null) {return;}
         if (mgr.isUpdateInProgress(ROUTER_SIGNED) || mgr.isUpdateInProgress(ROUTER_UNSIGNED) ||
             mgr.isUpdateInProgress(ROUTER_SIGNED_SU3) || mgr.isUpdateInProgress(ROUTER_DEV_SU3)) {
-            _log.error("Update already running");
+            _log.warn("Router update is already running...");
             return;
         }
         mgr.update(type);
