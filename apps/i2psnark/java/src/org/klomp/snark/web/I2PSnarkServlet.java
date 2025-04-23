@@ -3932,9 +3932,8 @@ public class I2PSnarkServlet extends BasicServlet {
 
             if (meta != null) {
                 announce = meta.getAnnounce();
-                if (announce == null)
-                    announce = snark.getTrackerURL();
-                if (announce != null) {
+                if (announce == null) {announce = snark.getTrackerURL();}
+                else {
                     announce = DataHelper.stripHTML(announce)
                        .replace(postmanb64, "tracker2.postman.i2p")
                        .replace(postmanb64_new, "tracker2.postman.i2p")
@@ -3975,6 +3974,7 @@ public class I2PSnarkServlet extends BasicServlet {
                    .append(baseName).append("\" title=\"").append(DataHelper.escapeHTML(baseName)
                    .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"))
                    .append("\">").append(toSVG("torrent", "")).append("</a>").append("</th></tr>\n");
+
                 long dat = meta.getCreationDate();
                 // needs locale configured for automatic translation
                 SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMMM yyyy");
@@ -4006,10 +4006,35 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append("<b>").append(_t("Pieces")).append(":</b> ").append(pieces)
                    .append(" @ ").append(formatSize(snark.getPieceLength(0)).replace("iB", ""));
 
+                // avg download speed
+                if (dates[0] > 0) {
+                    String date = DataHelper.formatTime(dates[0]);
+                    long sz = snark.getTotalLength();
+                    long time;
+                    if (storage.complete()) {
+                        time = dates[1] - dates[0];
+                    } else {
+                        sz -= snark.getRemainingLength();
+                        time = _context.clock().now() - dates[0];
+                    }
+                    time /= 1000;
+
+                    if (time >= 30) {
+                        long rate = sz / time;
+                        if (rate >= 100) {
+                            buf.append("</span>&nbsp;<span class=nowrap title=\"")
+                               .append(_t("Average download speed for torrent")).append("\">");
+                            toThemeImg(buf, "head_rxspeed");
+                            buf.append("<b>").append(_t("Download speed")).append(":</b> ")
+                               .append(rate / 1024).append("K/s");
+                       }
+                   }
+                }
+
                 // up ratio
                 buf.append("</span>&nbsp;<span class=nowrap>");
                 toThemeImg(buf, "head_tx");
-                buf.append("<b>").append(_t("Upload ratio").replace("Upload", "Share")).append(":</b> ");
+                buf.append("<b>").append(_t("Share ratio")).append(":</b> ");
                 long uploaded = snark.getUploaded();
                 if (uploaded > 0) {
                     double ratio = uploaded / ((double) snark.getTotalLength());
