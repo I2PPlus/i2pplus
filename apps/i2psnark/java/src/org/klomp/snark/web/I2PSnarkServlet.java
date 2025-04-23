@@ -380,7 +380,7 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<script nonce=").append(cspNonce).append(" type=module>\n")
                .append("  import {initSnarkRefresh} from \"").append(resourcePath).append("js/refreshTorrents.js").append("\";\n")
                .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n")
-               .append("<script src=\"").append(resourcePath).append("js/confirm.js?").append(CoreVersion.VERSION).append("\"></script>\n")
+               .append("<script src=\"").append(resourcePath).append("js/confirm.js?").append(CoreVersion.VERSION).append("\" type=module></script>\n")
                .append("<script src=").append(resourcePath).append("js/snarkAlert.js type=module></script>\n")
                .append("<link rel=stylesheet href=").append(resourcePath).append("snarkAlert.css>\n");
 
@@ -3606,10 +3606,10 @@ public class I2PSnarkServlet extends BasicServlet {
     /** modded from ConfigTunnelsHelper @since 0.7.14 */
     private String renderOptions(int min, int max, int dflt, String strNow, String selName, String name) {
         int now = dflt;
-        try {
-            now = Integer.parseInt(strNow);
-        } catch (Throwable t) {}
+        try {now = Integer.parseInt(strNow);}
+        catch (Throwable t) {}
         StringBuilder buf = new StringBuilder(128);
+        boolean found = false;
         buf.append("<select name=\"").append(selName);
         if (selName.contains("quantity")) {
             buf.append("\" title=\"")
@@ -3622,11 +3622,16 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("\">\n");
         for (int i = min; i <= max; i++) {
             buf.append("<option value=\"").append(i).append("\" ");
-            if (i == now)
+            if (i == now) {
                 buf.append("selected=selected ");
+                found = true;
+            }
             // constants to prevent tagging
-            buf.append(">").append(ngettext(DUMMY1 + name, DUMMY0 + name + 's', i))
-               .append("</option>\n");
+            buf.append(">").append(ngettext(DUMMY1 + name, DUMMY0 + name + 's', i)).append("</option>\n");
+        }
+        if (!found) {
+            buf.append("<option value=\"").append(now).append("\" ").append("selected=selected").append(">")
+               .append(ngettext(DUMMY1 + name, DUMMY0 + name + 's', now)).append("</option>\n");
         }
         buf.append("</select>\n");
         return buf.toString();
