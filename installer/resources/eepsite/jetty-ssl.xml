@@ -253,14 +253,14 @@
   <Call name="addConnector">
     <Arg>
       <New class="org.eclipse.jetty.server.ServerConnector">
-        <Arg><Ref id="Server" /></Arg>
+        <Arg><Ref refid="Server" /></Arg>
         <Arg type="int">1</Arg>     <!-- number of acceptors -->
         <Arg type="int">0</Arg>     <!-- default number of selectors -->
         <Arg>
            <Array type="org.eclipse.jetty.server.ConnectionFactory">    <!-- varargs so we need an array -->
               <Item>
                 <New class="org.eclipse.jetty.server.SslConnectionFactory">
-                  <Arg><Ref id="sslContextFactory" /></Arg>
+                  <Arg><Ref refid="sslContextFactory" /></Arg>
                   <Arg>http/1.1</Arg>
                 </New>
               </Item>
