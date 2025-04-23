@@ -2,6 +2,7 @@ package net.i2p.router.tunnel.pool;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.List;
 import java.util.Properties;
 
@@ -9,9 +10,6 @@ import net.i2p.crypto.EncType;
 import net.i2p.data.DataHelper;
 import net.i2p.data.EmptyProperties;
 import net.i2p.data.Hash;
-import net.i2p.data.router.RouterIdentity;
-import net.i2p.data.router.RouterInfo;
-import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.BuildRequestRecord;
 import net.i2p.data.i2np.BuildResponseRecord;
 import net.i2p.data.i2np.EncryptedBuildRecord;
@@ -24,21 +22,28 @@ import net.i2p.data.i2np.TunnelBuildReplyMessage;
 import net.i2p.data.i2np.TunnelGatewayMessage;
 import net.i2p.data.i2np.VariableTunnelBuildMessage;
 import net.i2p.data.i2np.VariableTunnelBuildReplyMessage;
+import net.i2p.data.router.RouterIdentity;
+import net.i2p.data.router.RouterInfo;
+import net.i2p.data.TunnelId;
 import net.i2p.router.HandlerJobBuilder;
 import net.i2p.router.Job;
 import net.i2p.router.JobImpl;
+import net.i2p.router.networkdb.kademlia.MessageWrapper;
 import net.i2p.router.OutNetMessage;
+import net.i2p.router.peermanager.TunnelHistory;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
-import net.i2p.router.networkdb.kademlia.MessageWrapper;
-import net.i2p.router.peermanager.TunnelHistory;
+import net.i2p.router.RouterThrottleImpl;
 import net.i2p.router.tunnel.HopConfig;
-import static net.i2p.router.tunnel.pool.BuildExecutor.Result.*;
+import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.router.util.CDQEntry;
 import net.i2p.router.util.CoDelBlockingQueue;
 import net.i2p.util.Log;
+import net.i2p.stat.Rate;
+import net.i2p.stat.RateStat;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
+import static net.i2p.router.tunnel.pool.BuildExecutor.Result.*;
 
 /**
  * Handle the received tunnel build message requests and replies,
@@ -102,6 +107,14 @@ class BuildHandler implements Runnable {
     private static final long JOB_LAG_LIMIT_TUNNEL = SystemVersion.isSlow() ? 1000 : 500;
     private static final long[] RATES = {60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000};
 
+    /**
+     * This is the baseline minimum for estimating tunnel bandwidth, if accepted.
+     * We use an estimate of 40 messages (1 KB each) in 10 minutes.
+     *
+     * 40 KB in 10 minutes equals 67 Bps.
+     */
+    private static final int DEFAULT_BW_PER_TUNNEL_ESTIMATE = RouterThrottleImpl.DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE * 1024 / (10*60);
+
     public BuildHandler(RouterContext ctx, TunnelPoolManager manager, BuildExecutor exec) {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
@@ -110,7 +123,7 @@ class BuildHandler implements Runnable {
         // Queue size = 12 * share BW / 48K
         //int sz = Math.min(MAX_QUEUE, Math.max(MIN_QUEUE, TunnelDispatcher.getShareBandwidth(ctx) * MIN_QUEUE / 48));
         int sz = ctx.getProperty(PROP_MAX_QUEUE, MAX_QUEUE);
-        _inboundBuildMessages = new CoDelBlockingQueue(ctx, "BuildHandler", sz);
+        _inboundBuildMessages = new LinkedBlockingQueue<BuildMessageState>(sz);
         ctx.statManager().createRateStat("tunnel.buildLookupSuccess", "Confirmation of successful deferred lookup", "Tunnels", RATES);
         ctx.statManager().createRateStat("tunnel.buildReplyTooSlow", "Received a tunnel build reply after timeout", "Tunnels", RATES);
         ctx.statManager().createRateStat("tunnel.corruptBuildReply", "Corrupt tunnel build replies received", "Tunnels", RATES);
@@ -305,7 +318,7 @@ class BuildHandler implements Runnable {
         }
 
         List<Integer> order = cfg.getReplyOrder();
-        int statuses[] = _buildReplyHandler.decrypt(msg, cfg, order);
+        BuildReplyHandler.Result statuses[] = _buildReplyHandler.decrypt(msg, cfg, order);
         if (statuses != null) {
             boolean allAgree = true;
             for (int i = 0; i < cfg.getLength(); i++) { // For each peer in the tunnel
@@ -321,7 +334,7 @@ class BuildHandler implements Runnable {
                     return;
                 }
 
-                int howBad = statuses[record];
+                int howBad = statuses[record].code;
 
                 RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer); // Look up routerInfo
                 String bwTier = "Unknown"; // Default and detect bandwidth tier
@@ -341,6 +354,15 @@ class BuildHandler implements Runnable {
                     // Record that a peer of the given tier agreed or rejected
                     _context.statManager().addRateData("tunnel.tierAgree" + bwTier, 1);
                     _context.profileManager().tunnelJoined(peer, rtt);
+                    Properties props = statuses[record].props;
+                    if (props != null) {
+                        String avail = props.getProperty(BuildRequestor.PROP_AVAIL_BW);
+                        if (avail != null) {
+                            if (_log.shouldWarn())
+                                _log.warn(msg.getUniqueId() + ": peer replied available: " + avail + "KBps");
+                            // TODO
+                        }
+                    }
                 } else {
                     _context.statManager().addRateData("tunnel.tierReject" + bwTier, 1);
                     allAgree = false;
@@ -894,6 +916,60 @@ class BuildHandler implements Runnable {
             }
         }
 
+        // BW params
+        int avail = 0;
+        if (response == 0) {
+            Properties props = req.readOptions();
+            if (props != null) {
+                int min = 0;
+                int rqu = 0;
+                String smin = props.getProperty(BuildRequestor.PROP_MIN_BW);
+                if (smin != null) {
+                    try {
+                        min = 1000 * Integer.parseInt(smin);
+                    } catch (NumberFormatException nfe) {
+                        response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
+                    }
+                }
+                String sreq = props.getProperty(BuildRequestor.PROP_REQ_BW);
+                if (sreq != null) {
+                    try {
+                        rqu = 1000 * Integer.parseInt(sreq);
+                    } catch (NumberFormatException nfe) {
+                        response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
+                    }
+                }
+                if ((min > 0 || rqu > 0) && response == 0) {
+                    int share = 1000 * TunnelDispatcher.getShareBandwidth(_context);
+                    int max = share / 20;
+                    if (min > max) {
+                        response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
+                    } else {
+                        RateStat stat = _context.statManager().getRate("tunnel.participatingBandwidth");
+                        if (stat != null) {
+                            Rate rate = stat.getRate(10*60*1000);
+                            if (rate != null) {
+                                int used = (int) rate.getAvgOrLifetimeAvg();
+                                avail = Math.min(max, (share - used) / 4);
+                                if (min > avail) {
+                                    if (_log.shouldWarn())
+                                        _log.warn("REJECT Part tunnel: min: " + min + " req: " + rqu + " avail: " + avail);
+                                    response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
+                                } else {
+                                    if (_log.shouldWarn())
+                                        _log.warn("ACCEPT Part tunnel: min: " + min + " req: " + rqu + " avail: " + avail);
+                                    if (min > 0 && rqu > 4 * min)
+                                        rqu = 4 * min;
+                                    if (rqu > 0 && rqu < avail)
+                                        avail = rqu;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         HopConfig cfg = null;
         if (response == 0) {
             cfg = new HopConfig();
@@ -917,6 +993,10 @@ class BuildHandler implements Runnable {
                 cfg.setSendTo(nextPeer);
                 cfg.setSendTunnelId(nextId);
             }
+            if (avail > 0)
+                cfg.setAllocatedBW(avail);
+            else
+                cfg.setAllocatedBW(DEFAULT_BW_PER_TUNNEL_ESTIMATE);
 
             // now "actually" join
             boolean success;
@@ -968,8 +1048,13 @@ class BuildHandler implements Runnable {
         }
         EncryptedBuildRecord reply;
         if (isEC) {
-            // TODO options
-            Properties props = EmptyProperties.INSTANCE;
+            Properties props;
+            if (avail > 0) {
+                props = new Properties();
+                props.setProperty(BuildRequestor.PROP_AVAIL_BW, Integer.toString(avail / 1000));
+            } else {
+                props = EmptyProperties.INSTANCE;
+            }
             if (state.msg.getType() == ShortTunnelBuildMessage.MESSAGE_TYPE) {
                 reply = BuildResponseRecord.createShort(_context, response, req.getChaChaReplyKey(), req.getChaChaReplyAD(), props, ourSlot);
             } else {

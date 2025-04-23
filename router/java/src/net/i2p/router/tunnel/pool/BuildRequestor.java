@@ -6,6 +6,7 @@ import java.util.List;
 
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SessionKeyManager;
+import net.i2p.data.EmptyProperties;
 import net.i2p.data.Hash;
 import net.i2p.data.PublicKey;
 import net.i2p.data.TunnelId;
@@ -29,6 +30,7 @@ import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
 import static net.i2p.router.tunnel.pool.BuildExecutor.Result.*;
 import net.i2p.util.Log;
+import java.util.Properties;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
@@ -71,6 +73,12 @@ abstract class BuildRequestor {
     private static final int BUILD_MSG_TIMEOUT = 40*1000;
 
     private static final int MAX_CONSECUTIVE_CLIENT_BUILD_FAILS = 8;
+
+    // following for proposal 168
+    static final String PROP_MIN_BW = "m";
+    static final String PROP_REQ_BW = "r";
+    static final String PROP_MAX_BW = "l";
+    static final String PROP_AVAIL_BW = "b";
 
     /**
      *  "paired tunnels" means using a client's own inbound tunnel to receive the
@@ -397,6 +405,22 @@ abstract class BuildRequestor {
         if (log.shouldDebug())
             log.debug("Build order: " + order + " for " + cfg);
 
+        // BW properties
+        Properties props;
+        int bw = 0;
+        int variance = 0;
+        if (!useShortTBM || pool.getSettings().isExploratory()) {
+            props = EmptyProperties.INSTANCE;
+        } else {
+            bw = pool.getAvgBWPerTunnel();
+            if (bw > 7000) {
+                props = new Properties();
+                variance = 4 * bw / 10;
+            } else {
+                props = EmptyProperties.INSTANCE;
+            }
+        }
+
         for (int i = 0; i < msg.getRecordCount(); i++) {
             int hop = order.get(i).intValue();
             PublicKey key = null;
@@ -420,7 +444,18 @@ abstract class BuildRequestor {
                     log.debug("[ReplyMsgID " + cfg.getReplyMessageId() + "] Record " + i + "/" + hop + " is empty");
                 }
             }
-            BuildMessageGenerator.createRecord(i, hop, msg, cfg, replyRouter, replyTunnel, ctx, key);
+            if (key != null && variance > 0) {
+                // BW properties, randomize per-hop
+                int min = bw - ctx.random().nextInt(variance);
+                int req = bw + variance + ctx.random().nextInt(variance);
+                if (log.shouldWarn())
+                    log.warn("Pool: " + pool + " min: " + min + " avg: " + bw + " req: " + req);
+                props.setProperty(PROP_MIN_BW, Integer.toString(min / 1000));
+                props.setProperty(PROP_REQ_BW, Integer.toString(req / 1000));
+                // TOOO if (i == 0 && pool.getSettings().isExploratory()) set PROP_MAX_BW
+            }
+            Properties p = key != null ? props : EmptyProperties.INSTANCE;
+            BuildMessageGenerator.createRecord(i, hop, msg, cfg, replyRouter, replyTunnel, ctx, key, p);
         }
         BuildMessageGenerator.layeredEncrypt(ctx, msg, cfg, order);
         return msg;

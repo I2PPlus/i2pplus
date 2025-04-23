@@ -1,6 +1,7 @@
 package net.i2p.router.tunnel.pool;
 
 import java.util.List;
+import java.util.Properties;
 
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.ChaCha20;
@@ -34,11 +35,12 @@ abstract class BuildMessageGenerator {
      * @param peerKey Encrypt using this key.
      *                If null, replyRouter and replyTunnel are ignored,
      *                and the entire record is filled with random data
+     * @param props to go in the build record, non-null
      * @throws IllegalArgumentException if hop bigger than config
      */
     public static void createRecord(int recordNum, int hop, TunnelBuildMessage msg,
                                     TunnelCreatorConfig cfg, Hash replyRouter,
-                                    long replyTunnel, RouterContext ctx, PublicKey peerKey) {
+                                    long replyTunnel, RouterContext ctx, PublicKey peerKey, Properties props) {
         int mtype = msg.getType();
         boolean isShort = mtype == ShortTunnelBuildMessage.MESSAGE_TYPE;
         EncryptedBuildRecord erec;
