@@ -30,6 +30,7 @@ import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
 import static net.i2p.router.tunnel.pool.BuildExecutor.Result.*;
 import net.i2p.util.Log;
+import java.util.Properties;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
@@ -404,6 +405,22 @@ abstract class BuildRequestor {
         if (log.shouldDebug())
             log.debug("Build order: " + order + " for " + cfg);
 
+        // BW properties
+        Properties props;
+        int bw = 0;
+        int variance = 0;
+        if (!useShortTBM || pool.getSettings().isExploratory()) {
+            props = EmptyProperties.INSTANCE;
+        } else {
+            bw = pool.getAvgBWPerTunnel();
+            if (bw > 7000) {
+                props = new Properties();
+                variance = 4 * bw / 10;
+            } else {
+                props = EmptyProperties.INSTANCE;
+            }
+        }
+
         for (int i = 0; i < msg.getRecordCount(); i++) {
             int hop = order.get(i).intValue();
             PublicKey key = null;
@@ -427,9 +444,18 @@ abstract class BuildRequestor {
                     log.debug("[ReplyMsgID " + cfg.getReplyMessageId() + "] Record " + i + "/" + hop + " is empty");
                 }
             }
-            // BW properties TODO
-            BuildMessageGenerator.createRecord(i, hop, msg, cfg, replyRouter, replyTunnel,
-                                               ctx, key, EmptyProperties.INSTANCE);
+            if (key != null && variance > 0) {
+                // BW properties, randomize per-hop
+                int min = bw - ctx.random().nextInt(variance);
+                int req = bw + variance + ctx.random().nextInt(variance);
+                if (log.shouldWarn())
+                    log.warn("Pool: " + pool + " min: " + min + " avg: " + bw + " req: " + req);
+                props.setProperty(PROP_MIN_BW, Integer.toString(min / 1000));
+                props.setProperty(PROP_REQ_BW, Integer.toString(req / 1000));
+                // TOOO if (i == 0 && pool.getSettings().isExploratory()) set PROP_MAX_BW
+            }
+            Properties p = key != null ? props : EmptyProperties.INSTANCE;
+            BuildMessageGenerator.createRecord(i, hop, msg, cfg, replyRouter, replyTunnel, ctx, key, p);
         }
         BuildMessageGenerator.layeredEncrypt(ctx, msg, cfg, order);
         return msg;

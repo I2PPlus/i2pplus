@@ -21,15 +21,15 @@ public class HopConfig {
     private SessionKey _ivKey;
     private long _creation;
     private long _expiration;
-    //private Map _options;
 
-    // these 4 were longs, let's save some space
-    // 2 billion * 1KB / 10 minutes = 3 GBps in a single tunnel
-    // we use synchronization instead of an AtomicInteger here to save space
+    /*
+     * These 4 were longs, let's save some space
+     * 2 billion * 1KB / 10 minutes = 3 GBps in a single tunnel
+     * we use synchronization instead of an AtomicInteger here to save space
+     */
     private int _messagesProcessed;
     private int _oldMessagesProcessed;
-    //private int _messagesSent;
-    //private int _oldMessagesSent;
+    private int _allocatedBW;
 
     public HopConfig() {
         _creation = -1;
@@ -116,14 +116,19 @@ public class HopConfig {
     public void setCreation(long when) { _creation = when; }
 
     /**
-     * what are the configuration options for this tunnel (if any).  keys to
-     * this map should be strings and values should be Objects of an
-     * option-specific type (e.g. "maxMessages" would be an Integer, "shouldPad"
-     * would be a Boolean, etc).
-     *
+     *  @return Bps
+     *  @since 0.9.66
      */
-    //public Map getOptions() { return _options; }
-    //public void setOptions(Map options) { _options = options; }
+    public int getAllocatedBW() {
+        return _allocatedBW;
+    }
+    /**
+     *  @param bw Bps
+     *  @since 0.9.66
+     */
+    public void setAllocatedBW(int bw) {
+        _allocatedBW = bw;
+    }
 
     /**
      *  Take note of a message being pumped through this tunnel.
@@ -156,39 +161,9 @@ public class HopConfig {
         return rv;
     }
 
-    /**
-     *  Take note of a message being pumped through this tunnel.
-     *  "processed" is for incoming and "sent" is for outgoing (could be dropped in between)
-     */
-  /****
-    public void incrementSentMessages() { _messagesSent++; }
-
-    public int getSentMessagesCount() { return _messagesSent; }
-
-    public int getRecentSentMessagesCount() {
-        int rv = _messagesSent - _oldMessagesSent;
-        _oldMessagesSent = _messagesSent;
-        return rv;
-    }
-  ****/
-
-    /** */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
-        /**
-        if (_receiveTunnel != null) {
-            buf.append("\n* Receive on: [TunnelID ");
-            buf.append(_receiveTunnel.getTunnelId());
-            buf.append("]");
-        }
-        if (_sendTo != null) {
-            buf.append("\n* Send to: [").append(_sendTo.toBase64().substring(0,6)).append("]");
-            if (_sendTunnel != null) {buf.append(":").append(_sendTunnel.getTunnelId());}
-        }
-        buf.append("\n* Layer key: ").append(_layerKey);
-        buf.append("\n* IV key: ").append(_ivKey);
-        **/
         buf.append(_sendTo != null ? " to: [" + _sendTo.toBase64().substring(0,6) + "]" : "");
         buf.append("\n* Expires: ").append(DataHelper.formatTime(_expiration));
         int messagesProcessed = getProcessedMessagesCount();

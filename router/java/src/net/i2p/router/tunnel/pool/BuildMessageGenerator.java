@@ -34,6 +34,7 @@ abstract class BuildMessageGenerator {
      * @param peerKey Encrypt using this key.
      *                If null, replyRouter and replyTunnel are ignored,
      *                and the entire record is filled with random data
+     * @param props to go in the build record, non-null
      * @throws IllegalArgumentException if hop bigger than config
      */
     public static void createRecord(int recordNum, int hop, TunnelBuildMessage msg,

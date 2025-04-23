@@ -36,7 +36,15 @@ public class AddressbookBean extends BaseBean {
     private static final int DISPLAY_SIZE = 100;
     static {sorter = new AddressByNameSorter();}
     public String getSearch() {return search;}
-    public void setSearch(String search) {this.search = DataHelper.stripHTML(search).trim();} // XSS;
+
+    public void setSearch(String s) {
+        search = DataHelper.stripHTML(s).trim(); // XSS
+        if (search.startsWith("http://")) {search = search.substring(7);}
+        else if (search.startsWith("https://")) {search = search.substring(8);}
+        int slash = search.indexOf('/');
+        if (slash > 0) {search = search.substring(0, slash);}
+    }
+
     public boolean isHasFilter() {return filter != null && filter.length() > 0;}
     public void setTrClass(int trClass) {this.trClass = trClass;}
     public int getTrClass() {trClass = 1 - trClass; return trClass;}
