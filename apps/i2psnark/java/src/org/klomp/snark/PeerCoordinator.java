@@ -647,8 +647,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener
 
     while (!removed.isEmpty()) {
         Peer peer = removed.remove(0);
+        // disconnect() calls disconnected() calls removePeerFromPieces()
         peer.disconnect();
-        removePeerFromPieces(peer);
     }
     // delete any saved orphan partial piece
     synchronized (partialPieces) {
@@ -747,7 +747,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener
           }
       }
     if (toDisconnect != null) {
-        toDisconnect.disconnect(false);
+        toDisconnect.disconnect(true); // ensure partial pieces are returned
+        // disconnect() calls disconnected() but will not call removePeerFromPieces()
+        // because it was removed from peers above
         removePeerFromPieces(toDisconnect);
     }
   }
