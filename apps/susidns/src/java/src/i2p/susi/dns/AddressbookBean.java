@@ -55,7 +55,13 @@ public class AddressbookBean extends BaseBean {
 
     public String getSearch() {return search;}
 
-    public void setSearch(String search) {this.search = DataHelper.stripHTML(search).trim();} // XSS;
+    public void setSearch(String s) {
+        search = DataHelper.stripHTML(s).trim(); // XSS
+        if (search.startsWith("http://")) {search = search.substring(7);}
+        else if (search.startsWith("https://")) {search = search.substring(8);}
+        int slash = search.indexOf('/');
+        if (slash > 0) {search = search.substring(0, slash);}
+    }
 
     public boolean isHasFilter() {return filter != null && filter.length() > 0;}
 
