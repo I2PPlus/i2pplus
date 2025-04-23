@@ -79,7 +79,7 @@ textarea[name="config"],textarea[name="content"],#subsLog ul{margin:auto;padding
 textarea[name="destination"]{width:calc(100% + 10px)}
 textarea[name="config"]:focus,textarea[name="content"]:focus{background:#fff}
 tr:hover .destaddress{color:#333}
-.active{color:#393;text-decoration:underline}
+.active{max-width:400px;display:inline-block;overflow:hidden;vertical-align:bottom;white-space:nowrap;text-overflow:ellipsis;color:#393;text-decoration:underline}
 .book textarea{padding:0;margin:0;resize:none;border:0;border-left:1px solid #ccccf0;border-right:1px solid #ccccf0;background:none}
 .book th{padding-left:3px;text-align:left;font-size:90%;border-bottom:var(--border_inner)}
 .book td{padding:3px;border-top:var(--border_soft)}
@@ -126,7 +126,7 @@ tr:hover .destaddress{color:#333}
 #emptybook{padding:20px 8px}
 #empty{margin:-1px 0 10px;padding:5px 10px;border:var(--border_inner);border-bottom:0;background:#fafaff;position:relative;z-index:10;border-bottom:var(--border_inner)}
 
-#export{padding-left:2px;height:40px;position:absolute;top:-2px;right:0;border-left:var(--border_inner)}
+#export{padding:0 1px;height:40px;position:absolute;top:-2px;right:0;border-left:var(--border_inner)}
 #export a{margin:5px 0 2px 3px;padding:0;height:26px;width:26px;min-width:0;display:inline-block;vertical-align:middle;line-height:0;font-size:0}
 #export #addNewDest{background:var(--add_address) no-repeat center center/12px,var(--th)}
 #export #addNewDest:hover{background:var(--add_address_hover) no-repeat center center/12px,var(--th)}
@@ -161,7 +161,7 @@ tr:hover .destaddress{color:#333}
 #messages+p,.headline+p{margin:1px 0 -1px;padding:10px;border:var(--border_inner)}
 #ovrvw #page{margin:0}
 #paginate,#showing{display:inline-block}
-#paginate{margin:-5px 70px -2px 0;position:relative;overflow:hidden;font-size:0;text-align:center;border:var(--border_inner);border-radius:2px;background:var(--row)}
+#paginate{margin:-5px 67px -2px 0;position:relative;overflow:hidden;font-size:0;text-align:center;border:var(--border_inner);border-radius:2px;background:var(--row)}
 #search{margin:1px 0 -2px;padding-top:4px;position:sticky;top:40px;z-index:999}
 #showing{margin-left:5px}
 #subscriptions a{margin:2px 2px 0 0;float:right;font-size:80%}
@@ -350,6 +350,7 @@ input[type=submit],input[type=reset],.fakebutton{font-size:10pt}
 td.destinations textarea{height:32px}
 .headline h4{background:var(--files) no-repeat 10px 8px/16px}
 #content p{font-size:120%}
+#filtered,#results{margin-top:-9px}
 #filter span,#filter a{font-size:11pt}
 #host_list .b32link,#host_list .helper{padding:0 20px;width:6%}
 #host_list td.b32link a::after,#host_list td.helper a::after{width:18px;height:18px}
