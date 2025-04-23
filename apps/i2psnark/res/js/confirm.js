@@ -2,6 +2,8 @@
 /* Custom confirm dialogs for I2PSnark */
 /* License: AGPL3 or later */
 
+import { refreshTorrents } from "./refreshTorrents.js";
+
 document.addEventListener("DOMContentLoaded", () => {
   const head = document.head;
   const htmlTag = document.documentElement;
@@ -50,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
     dialog.style.top = `${topPosition}px`;
   }
 
-  const customConfirm = ({ message, yesLabel, noLabel, inputName, action }) => {
+  const customConfirm = ({ message, yesLabel, noLabel, inputName, action, options }) => {
     return new Promise(resolve => {
       htmlTag.classList.add("modal");
       const dialog = document.createElement("div");
@@ -98,8 +100,8 @@ document.addEventListener("DOMContentLoaded", () => {
       htmlTag.addEventListener("keydown", captureKeyDown);
 
       function scrollToTop() {
-        window.scrollTo(0,0);
-        if (htmlTag.classList.contains("iframed")) parent.window.scrollTo(0,0);
+        window.scrollTo(0, 0);
+        if (htmlTag.classList.contains("iframed")) parent.window.scrollTo(0, 0);
       }
 
       function captureKeyDown(event) {
@@ -118,6 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("confirmDialog")?.remove();
         document.getElementById("confirmOverlay")?.remove();
         htmlTag.classList.remove("modal");
+        setTimeout(refreshTorrents, 1000);
       }
     });
   }
@@ -144,6 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
         noLabel: "Cancel",
         inputName: name,
         action: action,
+        options: { className, torrent }
       }).then(confirmed => {
         if (confirmed) {
           const hiddenInput = document.createElement("input");
