@@ -207,7 +207,7 @@ class BuildReplyHandler {
             else
                 ok = BuildResponseRecord.decrypt(rec, replyKey, replyIV);
             if (!ok) {
-                if (log.shoulDebug))
+                if (log.shouldDebug())
                     log.debug(reply.getUniqueId() + ": chacha reply decryption failure on " + recordNum + "/" + hop);
                 return RESULT_NG;
             }

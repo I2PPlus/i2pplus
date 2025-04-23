@@ -3,7 +3,7 @@
 /* - Add custom confirm dialogs for remove and delete torrent events */
 /* License: AGPL3 or later */
 
-import {refreshScreenLog} from "./refreshTorrents.js";
+import {refreshScreenLog, refreshTorrents} from "./refreshTorrents.js";
 
 let eventListenerActive = false;
 
@@ -195,6 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
           document.getElementById("confirmDialog")?.remove();
           document.getElementById("confirmOverlay")?.remove();
           htmlTag.classList.remove("modal");
+          setTimeout(refreshTorrents, 1000);
       }
 
       function handleResize() {
