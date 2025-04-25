@@ -78,7 +78,7 @@ textarea[name="config"],textarea[name="content"],#subsLog ul{margin:auto;padding
 textarea[name="destination"]{width:calc(100% + 10px)}
 textarea[name="config"]:focus,textarea[name="content"]:focus{background:#fff}
 tr:hover .destaddress{color:#333}
-.active{color:#393;text-decoration:underline}
+.active{max-width:400px;display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle;color:#393}
 .book textarea{padding:0;margin:0;resize:none;border:0;border-left:1px solid #ccccf0;border-right:1px solid #ccccf0;background:none}
 .book th{padding-left:3px;text-align:left;font-size:90%;border-bottom:var(--border_inner)}
 .book td{padding:3px;border-top:var(--border_soft)}

@@ -274,7 +274,7 @@ tr:hover td.destinations{color:#aa0}
 #addressbook.headline h3{margin-bottom:0;padding-right:44px;position:relative}
 #activefilter,.selected{font-weight:700;color:#999;box-shadow:var(--highlight),inset 2px 2px 2px rgba(0,0,0,.9)}
 #activefilter{padding:2px 8px;color:#000;background:var(--a)}
-.active{color:#ff6}
+.active{max-width:400px;display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle;color:#ff6}
 #showing{margin-left:6px}
 #filtered,#results{padding:4px 8px;font-size:10pt;float:none;background:#113}
 #filtered:empty,#results:empty{display:none}

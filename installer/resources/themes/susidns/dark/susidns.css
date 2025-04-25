@@ -45,7 +45,7 @@ textarea[cols="70"]{width:100%;height:40px}
 textarea[name="config"]{height:250px;overflow-y:scroll;resize:none}
 textarea:focus{filter:none}
 th{padding:5px 10px;text-align:left;color:var(--ink);font-size:8.5pt}
-.active{color:#ff6}
+.active{max-width:400px;display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle;color:#ff6}
 .fakebutton,.fakebutton:visited{color:#494}
 .fakebutton:hover,.fakebutton:focus{color:#f60}
 .fakebutton{margin-right:3px}
