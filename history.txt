@@ -1,3 +1,38 @@
+2025-04-24 zzz
+ * Blockfile: Catch unchecked exceptions thrown from value deserializers
+ * CLI: Add -6 flag to force IPv6 reseed test
+ * NetDB: Add new reseed
+
+2025-04-23 zzz
+ * I2PSnark standalone: Change Ref id to refid in Jetty config file
+
+2025-04-20 zzz
+ * Build: Change Ref id to refid in Jetty config files
+ * I2PSnark:
+   - Remove outstanding requests from pieces when connection is replaced
+   - Show lifetime download rate since added on details page
+   - Show current tunnel config in dropdowns even if outside normal range
+ * SusiDNS: Add b32 and dest reverse lookups
+
+2025-04-16 zzz
+ * Tunnels: Implement proposal 168 (part 1)
+   - Add bw params to build requests
+   - Add bw param to build reply
+   - Reject build request if cannot allocate min bw
+   - Track allocated bw in HopConfig
+   - Track total allocated bw in TunnelDispatcher
+
+2025-04-10 zzz
+ * I2PTunnel: Reduce HTTP server thread usage
+   - Increase performance and properly enforce limits.
+   - Handle all GET and HEAD requests in the handler thread
+   - Handle POST and CONNECT in threads from the server pool, to not bypass server thread limits
+   - For POST and CONNECT, the opposite-direction (Sender) thread is still run in the client pool
+   - Ensure the server thread limit is at least the streaming max connections limit so we don't run out
+
+2025-04-04 zzz
+ * Crypto: Use /dev/random PRNG by default
+
 2025-03-25 dr|z3d
  * Console / Webapps: Implement page zoom aware theme overrides
    (dark theme only, other themes to follow)
