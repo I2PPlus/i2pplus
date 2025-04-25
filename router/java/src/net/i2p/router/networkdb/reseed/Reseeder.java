@@ -114,6 +114,7 @@ public class Reseeder {
         // https url:port, ending with "/"                    certificates/reseed/                 certificates/ssl/                 notes
         // ----------------------------------                 ---------------------------------    ------------------------------    --------------------------
         "https://coconut.incognet.io/"              + ',' +   // rambler_at_mail.i2p.crt           CA
+        "https://cubicchaos.net:8443/"              + ',' +   // unixeno_at_cubicchaos.net.crt     cubicchaos.net.crt
         "https://i2p.ghativega.in/"                 + ',' +   // arnavbhatt288_at_mail.i2p.crt     CA
         "https://i2p.novg.net/"                     + ',' +   // igor_at_novg.net.crt              CA                                Java 8+
         "https://i2pseed.creativecowpat.net:8443/"  + ',' +   // creativecowpat_at_mail.i2p.crt    i2pseed.creativecowpat.net.crt    Java 7+
@@ -1216,13 +1217,19 @@ public class Reseeder {
      */
     public static void main(String args[]) throws Exception {
         if (args.length == 1 && args[0].equals("help")) {
-            System.out.println("Usage: reseeder [https://hostname/ ...]");
-            System.exit(1);
+            //System.out.println("Usage: reseeder [https://hostname/ ...]");
+            System.out.println("Usage: reseeder [-6] [https://hostname/ ...]");
+            System.exit(0);
+        }
+        boolean ipV6 = false;
+        if (args.length > 0 && args[0].equals("-6")) {
+            ipV6 = true;
+            args = Arrays.copyOfRange(args, 1, args.length);
         }
         File f = new File("certificates");
         if (!f.exists()) {
             System.out.println("Must be run from $I2P or have symlink to $I2P/certificates in this directory");
-            System.exit(1);
+            System.exit(0);
         }
         String[] urls = (args.length > 0) ? args : DataHelper.split(DEFAULT_SSL_SEED_URL, ",");
         if (args.length == 0) {Arrays.sort(urls);}
@@ -1242,9 +1249,8 @@ public class Reseeder {
                 if (sslState == null) {
                     get = new SSLEepGet(ctx, su3.getPath(), url);
                     sslState = get.getSSLState();
-                } else {
-                    get = new SSLEepGet(ctx, su3.getPath(), url, sslState);
-                }
+                } else {get = new SSLEepGet(ctx, su3.getPath(), url, sslState);}
+                if (ipV6) {get.forceDNSOverHTTPS(true);}
                 long start = System.currentTimeMillis();
                 if (get.fetch()) {
                     int rc = get.getStatusCode();
@@ -1321,7 +1327,6 @@ public class Reseeder {
             System.out.println();
         }
         System.out.println("Test complete: " + (pass + fail) + " reseed hosts tested - " + pass + " passed, " + warn + " slow, " + fail + " failed");
-        if (fail > 0)
-            System.exit(1);
+        if (fail > 0) {System.exit(0);}
     }
 }
