@@ -1588,30 +1588,20 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     throw new LineTooLongException("Request + headers too big");
                 String name = buf.substring(0, split).trim();
                 String value = null;
-                if (buf.length() > split + 1)
-                    value = buf.substring(split+1).trim(); // ":"
-                else
-                    value = "";
+                if (buf.length() > split + 1) {value = buf.substring(split+1).trim();} // ":"
+                else {value = "";}
 
                 String lcName = name.toLowerCase(Locale.US);
-                if ("accept-encoding".equals(lcName))
-                    name = "Accept-Encoding";
-                else if ("x-accept-encoding".equals(lcName))
-                    name = "X-Accept-Encoding";
-                else if ("x-forwarded-for".equals(lcName))
-                    name = "X-Forwarded-For";
-                else if ("x-forwarded-server".equals(lcName))
-                    name = "X-Forwarded-Server";
-                else if ("x-forwarded-host".equals(lcName))
-                    name = "X-Forwarded-Host";
-                else if ("forwarded".equals(lcName))
-                    name = "Forwarded";
-                else if ("user-agent".equals(lcName))
-                    name = "User-Agent";
-                else if ("referer".equals(lcName))
-                    name = "Referer";
-                else if ("connection".equals(lcName))
-                    name = "Connection";
+                if ("accept-encoding".equals(lcName)) {name = "Accept-Encoding";}
+                else if ("x-accept-encoding".equals(lcName)) {name = "X-Accept-Encoding";}
+                else if ("x-forwarded-for".equals(lcName)) {name = "X-Forwarded-For";}
+                else if ("x-forwarded-server".equals(lcName)) {name = "X-Forwarded-Server";}
+                else if ("x-forwarded-host".equals(lcName)) {name = "X-Forwarded-Host";}
+                else if ("forwarded".equals(lcName)) {name = "Forwarded";}
+                else if ("user-agent".equals(lcName)) {name = "User-Agent";}
+                else if ("referer".equals(lcName)) {name = "Referer";}
+                else if ("connection".equals(lcName)) {name = "Connection";}
+                else if ("host".equals(lcName)) {name = "Host";}
                 else if (lcName.contains("-encoding") && !lcName.contains("accept")) {
                     if (socket != null) {
                         try {socket.close();}
