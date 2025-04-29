@@ -90,8 +90,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (_rcvConnID == _sendConnID) {throw new GeneralSecurityException("Identical Connection IDs");}
         int type = data[off + TYPE_OFFSET] & 0xff;
         long token = DataHelper.fromLong8(data, off + TOKEN_OFFSET);
+        String aliceIP = _aliceSocketAddress.toString().replace("/", "");
         if (type == TOKEN_REQUEST_FLAG_BYTE) {
-            if (_log.shouldDebug()) {_log.debug("[SSU2] Received Token Request from: " + _aliceSocketAddress);}
+            if (_log.shouldDebug()) {_log.debug("[SSU2] Received Token Request from: " + aliceIP);}
             _currentState = InboundState.IB_STATE_TOKEN_REQUEST_RECEIVED;
             // decrypt in-place
             ChaChaPolyCipherState chacha = new ChaChaPolyCipherState();
@@ -110,10 +111,10 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                     (ENFORCE_TOKEN && !_transport.getEstablisher().isInboundTokenValid(_remoteHostId, token)))) {
             // i2pd thru 0.9.55 ignores zero token + termination in retry
             if (_log.shouldInfo()) {
-                _log.info("[SSU2] Invalid token [" + token + "] in Session Request from: " + _aliceSocketAddress);
+                _log.info("[SSU2] Invalid token [" + token + "] in Session Request from: " + aliceIP);
             }
             if (token == 0) {
-                throw new GeneralSecurityException("Zero token in Session Request from: " + _aliceSocketAddress);
+                throw new GeneralSecurityException("Zero token in Session Request from: " + aliceIP);
             }
             _currentState = InboundState.IB_STATE_REQUEST_BAD_TOKEN_RECEIVED;
             _sendHeaderEncryptKey2 = introKey;
