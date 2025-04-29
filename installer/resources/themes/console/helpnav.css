@@ -8,7 +8,7 @@
 .confignav a[href="/help/webhosting"],.tab2#webh span{background:var(--webserver)}
 .confignav a[href="/help/hostnameregistration"],.tab2#hreg span{background:url(images/eepsites/registrar.svg)}
 .confignav a[href="/help/troubleshoot"],.tab2#tshoot span{background:url(images/troubleshoot.svg)}
-.confignav a[href="/help/glossary"],.tab2#gloss span{background:var(--ask)}
+.confignav a[href="/help/glossary"],.tab2#gloss span{background:var(--question)}
 .confignav a[href="/help/legal"],.tab2#leg span{background:var(--legal)}
 .confignav a[href="/help/changelog"],.tab2#hist span{background:var(--changelog)}
 .confignav a[href],.tab2 span{display:inline-block;width:26px;height:28px;vertical-align:middle;line-height:0;font-size:0;background-size:20px;background-repeat:no-repeat!important;background-position:center center}
