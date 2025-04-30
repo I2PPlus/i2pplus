@@ -153,8 +153,10 @@ public class ClientAppConfig {
         try {
             List<ClientAppConfig> cacs = getClientApps(cf);
             if (!cacs.isEmpty()) {
+                // Jetty 5/6/7/8 to 9 migration
                 if (!SystemVersion.isAndroid())
                     MigrateJetty.migrate(ctx, cacs);
+                // clients.config to clients.config.d migration
                 boolean ok = migrate(ctx, cacs, cf, dir);
                 if (!ok)
                     rv.addAll(cacs);
@@ -186,6 +188,10 @@ public class ClientAppConfig {
                         ctx.logManager().getLog(ClientAppConfig.class).error("Error loading the client app properties from " + f, ioe);
                         System.out.println("Error loading the client app properties from " + f + ' ' + ioe);
                     }
+                }
+                // Jetty id to refid migration
+                if (!rv.isEmpty() && !SystemVersion.isAndroid()) {
+                    MigrateJetty.migrate(ctx, rv);
                 }
             }
         }
