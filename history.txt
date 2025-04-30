@@ -1,3 +1,14 @@
+2025-04-30 zzz
+ * I2CP: Datagram 2/3 preliminary support (Proposal163)
+ * Jetty: Migrate jetty.xml files at startup to fix id and
+   DTD issues for existing installs
+
+2025-04-26 zzz
+ * I2PTunnel: Canonicalize Host header at the server proxy
+
+2025-04-25 zzz
+ * Util: Add ability to force IPv6 for SSLEepGet
+
 2025-04-24 zzz
  * Blockfile: Catch unchecked exceptions thrown from value deserializers
  * CLI: Add -6 flag to force IPv6 reseed test

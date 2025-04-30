@@ -1216,7 +1216,8 @@ public class Router implements RouterClock.ClockShiftListener {
         KeyManager.DEFAULT_KEYDIR + '/' + KeyManager.KEYFILE_PUBLIC_ENC,
         KeyManager.DEFAULT_KEYDIR + '/' + KeyManager.KEYFILE_PRIVATE_SIGNING,
         KeyManager.DEFAULT_KEYDIR + '/' + KeyManager.KEYFILE_PUBLIC_SIGNING,
-        "sessionKeys.dat"     // no longer used
+        "sessionKeys.dat",     // no longer used
+        "ssu2tokens.txt"
     };
 
     /**
@@ -1229,7 +1230,7 @@ public class Router implements RouterClock.ClockShiftListener {
             if (f.exists()) {
                 boolean removed = f.delete();
                 if (removed) {
-                    System.out.println("INFO:  Removing old identity file: " + _rebuildFiles[i]);
+                    System.out.println("INFO: Removing old identity file: " + _rebuildFiles[i]);
                 } else {
                     System.out.println("ERROR: Could not remove old identity file: " + _rebuildFiles[i]);
                 }
