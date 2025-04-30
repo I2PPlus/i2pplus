@@ -447,8 +447,11 @@ public class GeoIP {
                     }
                     out.close();
                     out = null;
-                    RouterContext ctx = (RouterContext) _context;
-                    ctx.blocklist().addCountryFile();
+                    // App context for unit tests / CLI
+                    if (_context.isRouterContext()) {
+                        RouterContext ctx = (RouterContext) _context;
+                        ctx.blocklist().addCountryFile();
+                    }
                 } catch (IOException ioe) {
                     _log.error("GeoIP2 failure", ioe);
                 }
@@ -922,10 +925,18 @@ public class GeoIP {
 
     public static void main(String args[]) {
         if (args.length <= 0) {
-            System.out.println("Usage: GeoIP {IP ADDRESS}...");
+            System.out.print("Usage: GeoIP {IP ADDRESS}...\n" +
+                              "      GeoIP -c {2 letter country code} Dump all subnets for a country to " +
+                              Blocklist.BLOCKLIST_COUNTRY_FILE);
             System.exit(1);
         }
         GeoIP g = new GeoIP(I2PAppContext.getGlobalContext());
+        if (args[0].equals("-c") && args.length == 2) {
+            g.countryToIP(args[1]);
+            System.out.println("Subnets for country " + args[1] + " dumped to " +
+                               Blocklist.BLOCKLIST_COUNTRY_FILE);
+            return;
+        }
         for (int i = 0; i < args.length; i++) {g.add(args[i]);}
         long start = System.currentTimeMillis();
         g.blockingLookup();
