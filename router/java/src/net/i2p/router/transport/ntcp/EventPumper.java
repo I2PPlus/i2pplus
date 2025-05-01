@@ -88,7 +88,7 @@ class EventPumper implements Runnable {
     private static final int FAILSAFE_ITERATION_FREQ = 30*1000;
     private static final int FAILSAFE_LOOP_COUNT = SystemVersion.isSlow() ? 512 : 1024;
     private static final long SELECTOR_LOOP_DELAY = SystemVersion.isSlow() ? 300 : 150;
-    private static final long BLOCKED_IP_FREQ = 12*60*1000;
+    private static final long BLOCKED_IP_FREQ = 43*60*1000;
 
     /** tunnel test now disabled, but this should be long enough to allow an active tunnel to get started */
     private static final long MIN_EXPIRE_IDLE_TIME = 120*1000l;
