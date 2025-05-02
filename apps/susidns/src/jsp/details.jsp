@@ -96,7 +96,7 @@
 </tr>
 <tr>
 <td><%=intl._t("Public Key")%></td>
-<td><%=intl._t("ElGamal 2048 bit")%>&nbsp;<wbr><b><%=intl._t("Signing Key")%></b>&nbsp;<%=addr.getSigType()%>&nbsp;<wbr><b><%=intl._t("Certificate")%></b>&nbsp;<%=addr.getCert()%>
+<td><%=addr.getEncType()%>&nbsp;<wbr><b><%=intl._t("Signing Key")%></b>&nbsp;<%=addr.getSigType()%>&nbsp;<wbr><b><%=intl._t("Certificate")%></b>&nbsp;<%=addr.getCert()%>
 &nbsp;<wbr><b><%=intl._t("Validated")%></b>&nbsp;<%=addr.isValidated() ? intl._t("yes") : intl._t("no")%></td>
 </tr>
 <tr>
