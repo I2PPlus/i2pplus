@@ -320,7 +320,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 }
                 _transport.getPumper().blockIP(_con.getRemoteIP());
                 if (_log.shouldWarn()) {
-                    _log.warn("Temp banning IP address " + _con.getRemoteIP() + " for 2 hours -> Sending corrupt handshake...");
+                    _log.warn("Temp banning IP address " + Addresses.toString(_con.getRemoteIP()) + " for 2 hours -> Sending corrupt handshake...");
                 }
                 return;
             }
@@ -359,7 +359,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 }
                 _transport.getPumper().blockIP(_con.getRemoteIP());
                 if (_log.shouldWarn()) {
-                    _log.warn("Temp banning IP address " + _con.getRemoteIP() + " for 2 hours -> Sending corrupt handshake...");
+                    _log.warn("Temp banning IP address " + Addresses.toString(_con.getRemoteIP()) + " for 2 hours -> Sending corrupt handshake...");
                 }
                 return;
             } catch (RuntimeException re) {
