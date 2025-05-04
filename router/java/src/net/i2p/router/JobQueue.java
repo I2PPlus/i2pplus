@@ -68,7 +68,7 @@ public class JobQueue {
         int cores = SystemVersion.getCores();
         int maxRunners = 24;
         int minRunners = 12;
-        RUNNERS = SystemVersion.isSlow() ? 4 : Math.max(cores / 2, 8);
+        RUNNERS = SystemVersion.isSlow() ? 6 : Math.max(cores / 2, 10);
     }
 
     /** default max # job queue runners operating */
@@ -76,7 +76,7 @@ public class JobQueue {
     /** router.config parameter to override the max runners */
     private final static String PROP_MAX_RUNNERS = "router.maxJobRunners";
     /** how frequently should we check and update the max runners */
-    private final static long MAX_LIMIT_UPDATE_DELAY = 3*60*1000;
+    private final static long MAX_LIMIT_UPDATE_DELAY = 90*1000;
     /** if a job is this lagged, spit out a warning, but keep going */
     private long _lagWarning = DEFAULT_LAG_WARNING;
     private final static long DEFAULT_LAG_WARNING = 5*1000;
@@ -185,7 +185,7 @@ public class JobQueue {
         if (dropped) {
             _context.statManager().addRateData("jobQueue.droppedJobs", 1);
             if (_log.shouldWarn()) {
-                _log.warn(job + " dropped due to backlog: " + numReady + " jobs already queued");
+                _log.warn(job + " dropped due to backlog -> " + numReady + " jobs already queued");
             }
             String key = job.getName();
             JobStats stats = _jobStats.get(key);
