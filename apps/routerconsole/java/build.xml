@@ -116,10 +116,10 @@
     </javac>
   </target>
 
-  <!-- the jar with the latest message classes from the jsps, and the war too -->
+  <!-- The jar with the latest message classes from the jsps, and the war too -->
   <target name="jar" depends="jar1, war, bundle"/>
 
-  <!-- the jar without the latest message classes from the jsps -->
+  <!-- The jar without the latest message classes from the jsps -->
   <target name="listChangedFiles" depends="jarUpToDate" if="shouldListChanges">
     <exec executable="mtn" outputproperty="workspace.changes.j" errorproperty="mtn.error2"
       failifexecutionfails="false">
@@ -141,7 +141,7 @@
   <target name="jar1"
     depends="compile, bundle-news, bundle-countries, jarUpToDate, listChangedFiles"
     unless="jar.uptodate">
-    <!-- set if unset -->
+    <!-- Set if unset -->
     <property name="workspace.changes.j.tr" value=""/>
     <!-- copy the NDT translations, strip the countries -->
     <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_en_US.properties" tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs.properties"/>
@@ -179,11 +179,11 @@
     </jar>
   </target>
 
-  <!-- this is tricky because the message classes go in the jar, not in the war -->
+  <!-- This is tricky because the message classes go in the jar, not in the war -->
   <target name="bundle" depends="jar1, precompilejsp" unless="no.bundle">
     <mkdir dir="build/messages-src"/>
     <!-- Update the messages_*.po files.
-             We need to supply the bat file for windows, and then change the fail property to true -->
+         We need to supply the bat file for windows, and then change the fail property to true -->
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="${require.gettext}">
       <env key="JAVA_HOME" value="${java.home}"/>
       <arg value="./bundle-messages.sh"/>
@@ -222,8 +222,8 @@
 
   <target name="poupdate" depends="precompilejsp">
     <!-- Update the messages_*.po files.
-             We need to supply the bat file for windows, and then change the fail property to true -->
-    <!-- set if unset -->
+         We need to supply the bat file for windows, and then change the fail property to true -->
+    <!-- Set if unset -->
     <property name="lg2" value=""/>
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
@@ -296,7 +296,7 @@
   </target>
 
   <target name="poupdate-news" depends="extractProxyTags">
-    <!-- set if unset -->
+    <!-- Set if unset -->
     <property name="lg2" value=""/>
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
@@ -316,7 +316,7 @@
   </target>
 
   <target name="poupdate-countries" depends="extractProxyTags">
-    <!-- set if unset -->
+    <!-- Set if unset -->
     <property name="lg2" value=""/>
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
@@ -351,9 +351,9 @@
     </exec>
   </target>
 
-  <!-- does NOT update the message classes, as those go in the jar -->
+  <!-- Does NOT update the message classes, as those go in the jar -->
   <target name="war" depends="precompilejsp, warUpToDate, listChangedFiles2" unless="war.uptodate">
-    <!-- set if unset -->
+    <!-- Set if unset -->
     <property name="workspace.changes.w.tr" value=""/>
     <!-- Don't include the css in the war, the main build.xml will copy it to docs/themes/console/ -->
     <mkdir dir="build/obj/net/i2p/router/web/resources"/>
@@ -469,10 +469,10 @@
            **  We could set fork=false in build.xml, but then the paths are all wrong.
         -->
     <java classname="net.i2p.servlet.util.JspC" fork="true" failonerror="true">
-      <!-- this prevents tomcat from complaining in debian builds -->
+      <!-- This prevents tomcat from complaining in debian builds -->
       <jvmarg
         value="-Dtomcat.util.scan.StandardJarScanFilter.jarsToSkip=commons-collections.jar,junit.jar,junit4.jar"/>
-      <!-- these are to detect tomcat version and reproducible build setting -->
+      <!-- These are to detect tomcat version and reproducible build setting -->
       <jvmarg value="-Dbuild.reproducible=${build.reproducible}"/>
       <jvmarg value="-Dwith-libtomcat8-java=${with-libtomcat8-java}"/>
       <jvmarg value="-Dwith-libtomcat9-java=${with-libtomcat9-java}"/>
@@ -543,12 +543,6 @@
       </classpath>
     </javac>
 
-    <!-- save these so we can run gettext on the generated java files later
-        <delete>
-            <fileset dir="../jsp/WEB-INF/" includes="**/*.java"/>
-            <fileset dir="../jsp/WEB-INF/" includes="**/*.jsp"/>
-        </delete>
-        -->
     <copy file="../jsp/web.xml" tofile="../jsp/web-out.xml"/>
     <loadfile property="jspc.web.fragment" srcfile="../jsp/web-fragment.xml"/>
     <replace file="../jsp/web-out.xml">
@@ -576,7 +570,7 @@
 
   <uptodate property="precompilejsp.uptodate" targetfile="../jsp/web-out.xml">
     <srcfiles dir="../jsp" includes="**/*.jsp, help/*.jsp, *.jsi, **/*.html, *.css, susimail/susimail, web.xml"/>
-    <!-- so the version is right on logs.jsp -->
+    <!-- So the version is right on logs.jsp -->
     <srcfiles dir="../../../router/java/src/net/i2p/router" includes="RouterVersion.java"/>
   </uptodate>
 
@@ -631,7 +625,7 @@
     </scalac>
   </target>
 
-  <!-- preparation of code coverage tool of choice -->
+  <!-- Preparation of code coverage tool of choice -->
   <target name="prepareClover" depends="compile" if="with.clover">
     <taskdef resource="clovertasks"/>
     <mkdir dir="../../../reports/apps/routerconsole/clover"/>
@@ -679,17 +673,17 @@
       <reporter type="stdout"/>
       <reporter type="junitxml" directory="../../../reports/apps/routerconsole/scalatest/"/>
     </scalatest>
-    <!-- fetch the real hostname of this machine -->
+    <!-- Fetch the real hostname of this machine -->
     <exec executable="hostname" outputproperty="host.name"/>
-    <!-- set if unset -->
+    <!-- Set if unset -->
     <property name="host.fakename" value="i2ptester"/>
-    <!-- replace hostname that junit inserts into reports with fake one -->
+    <!-- Replace hostname that junit inserts into reports with fake one -->
     <replace dir="../../../reports/apps/routerconsole/scalatest/" token="${host.name}" value="${host.fakename}"/>
   </target>
 
   <target name="test" depends="scalatest.test"/>
 
-  <!-- test reports -->
+  <!-- Test reports -->
   <target name="scalatest.report">
     <junitreport todir="../../../reports/apps/routerconsole/scalatest">
       <fileset dir="../../../reports/apps/routerconsole/scalatest">
