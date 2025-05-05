@@ -1147,7 +1147,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (stats[1] > 0) {ftr.append(formatSize(stats[1]).replaceAll("iB", ""));}
                 ftr.append("</th>").append("<th class=rateUp title=\"").append(_t("Total upload speed") + "\">");
                 boolean isUploading = false;
-                int end = Math.min(start + pageSize, snarks.size());
+                //int end = Math.min(start + pageSize, snarks.size());
+                int end = snarks.size(); // show total upload speed for all torrents, displayed or otherwise
                 for (int i = start; i < end; i++) {
                     if ((snarks.get(i).getPeerList().size() >= 1) && (snarks.get(i).getUploadRate() > 0)) {
                         isUploading = true;
