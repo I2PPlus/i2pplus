@@ -639,8 +639,6 @@ input.trackerhome,input.trackerannounce{width:210px}
 .snarkConfig tr{border:0}
 .snarkConfig tr:nth-last-child(2),.snarkConfig tr:hover:nth-last-child(2){background:none}
 .snarkConfig tr:nth-last-child(2) td,#configs td[colspan="5"]{text-align:right;padding:11px 15px 0;border-top:var(--border)}
-.toggleview:hover,input.toggle_input:focus+.toggleview{background:linear-gradient(180deg,#030,#010 50%,#000);transition:ease all .1s}
-.configTitle:active,.toggleview:active,.configTitle.depress,.toggleview.depress{background:linear-gradient(180deg,#000,#020);box-shadow:var(--btn_shadow_active);transition:linear box-shadow .1s}
 .configPanel .configTitle{margin:-2px -1px -16px;padding:8px;display:block;letter-spacing:0.2em;text-align:left;text-transform:uppercase;font-variant:normal;font-size:10.5pt;font-weight:700;border-top:var(--border);box-shadow:var(--highlight);background:linear-gradient(135deg,#000,#000800);mix-blend-mode:normal;filter:none;pointer-events:none}
 .iframed .configPanel .configTitle{margin:-2px 0 -16px;border-left:0;border-right:0}
 #configs input[type=submit],#trackerconfig input[type=submit],input[name="savepri"]{text-transform:capitalize}
@@ -780,6 +778,9 @@ input.trackerhome,input.trackerannounce{width:210px}
 /* toggle panels */
 .configTitle,.toggleview{margin:0 0 -3px;min-width:300px;display:inline-block;font-size:0;border:var(--border);border-radius:0 0 3px 3px;border-top:0;box-shadow:var(--highlight),inset 0 0 0 2px rgba(0,0,0,.1),0 1px 1px #000;background:linear-gradient(180deg,#001800,#000800 50%,#000);contain:paint}
 .toggleview{background:radial-gradient(circle at center -200%,#1514,#0000 55%),linear-gradient(180deg,#001800,#000800 50%,#000)}
+.toggleview,.toggleview.depress{transition:ease all .2s}
+.toggleview:hover,input.toggle_input:focus+.toggleview{background:linear-gradient(180deg,#030,#010 50%,#000);transition:ease all .1s}
+.toggleview:active,.toggleview.depress{background:linear-gradient(180deg,#000,#020);box-shadow:var(--btn_shadow_active);transition:ease all .2s}
 .configTitle{margin-bottom:-2px}
 .iframed .configTitle,.iframed .toggleview{border-radius:0}
 .toggleview{color:#7c7}
@@ -789,12 +790,12 @@ input:not(:checked)+.toggleview+hr+table,input:not(:checked)+.toggleview+hr+tabl
 .toggleview:hover,input.toggle_input:focus+.toggleview{color:var(--hover);cursor:pointer}
 
 /* tabs */
-.tab_label::after{margin:3px;padding:3px;width:18px;height:18px;display:inline-block;vertical-align:middle;border:2px solid #000;border-radius:50%;box-shadow:0 0 1px 1px rgba(32,0,48,.5);background-size:16px,100%;content:"";mix-blend-mode:luminosity;pointer-events:none;will-change:transform;transition:all ease .1s}
-.toggleview .tab_label::after,.toggleview.depress .tab_label::after{transition:all ease .1s}
+.tab_label::after{margin:3px;padding:3px;width:18px;height:18px;display:inline-block;vertical-align:middle;border:2px solid #000;border-radius:50%;box-shadow:0 0 1px 1px rgba(32,0,48,.5);background-size:16px,100%;content:"";mix-blend-mode:luminosity;pointer-events:none;will-change:transform}
+.toggleview .tab_label::after,.toggleview.depress .tab_label::after{transition:all .2s ease .05s}
 input:checked+.toggleview:active .tab_label::after,input:checked+.toggleview.depress .tab_label::after{box-shadow:0 0 0 2px rgb(153,51,0,.7);filter:drop-shadow(0 0 1px #930);transform:rotate(-90deg) scale(.9)}
 .toggleview{min-width:340px;text-align:center;font-size:0;will-change:transform}
 .toggleview:hover .tab_label::after{mix-blend-mode:normal;filter:drop-shadow(0 0 1px #f30)}
-.toggleview:active .tab_label::after{transform:rotate(90deg) scale(.9);transition:ease transform .01s}
+.toggleview:active .tab_label::after{transform:rotate(90deg) scale(.9)}
 #dhtDebugPanel .toggleview:hover{mix-blend-mode:normal}
 #dhtDebugPanel .toggleview:active{border-top:var(--border);margin-top:-1px}
 #tab_addtorrent .tab_label::after{background:var(--add) no-repeat scroll center center/16px,var(--tabIcon)}
