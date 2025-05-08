@@ -1097,9 +1097,9 @@ public class RouterConsoleRunner implements RouterApp {
         @Override
         public UserIdentity login(String username, Object credentials, ServletRequest request) {
             UserIdentity rv = super.login(username, credentials, request);
-            if (rv == null)
-                //_log.logAlways(net.i2p.util.Log.WARN, "Console authentication failed, webapp: " + _webapp + ", user: " + username);
-                _log.logAlways(net.i2p.util.Log.WARN, "Router Console authentication failed for user: " + username);
+            if (rv == null) {
+                _log.logAlways(net.i2p.util.Log.WARN, "Router Console authentication failed for user: " + username + " on " + request.getRemoteAddr());
+            }
             return rv;
         }
     }
