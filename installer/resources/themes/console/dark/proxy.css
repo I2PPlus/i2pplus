@@ -76,7 +76,7 @@ hr:last-child{margin-top:20px;margin-bottom:20px}
 #warning h3+p{margin-top:30px}
 #warning h4{margin:12px 15px 15px;padding:0 0 10px;text-align:left;font-size:11pt;box-shadow:none}
 #warning h4::after{margin:15px -15px -15px;width:calc(100% + 30px);height:1px;display:inline-block;background:#131;content:""}
-#warning hr{margin:40px 0}
+#warning hr{margin:40px 0 30px}
 #warning h4+p,#warning br+b{padding-left:20px;padding-right:20px}
 #warning br+b{margin-top:10px}
 #warning #jumplinks h4::after{margin:0 -15px -5px}
