@@ -136,8 +136,8 @@ msgstr "B<eepget> iesiri cu status zero la transferul reușit și non-zero dacă
 msgid "REPORTING BUGS"
 msgstr "Raportarea erorilor"
 
-msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker E<.UE .>"
-msgstr "Vă rugăm să introduceți un bilet pe E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> pagina I2P trac E<.UE.>"
+msgid "Please enter a ticket on E<.UR https://github.com/I2PPlus/i2pplus/issues> the I2P Bug Tracker E<.UE .>"
+msgstr "Vă rugăm să introduceți un bilet pe E<.UR https://github.com/I2PPlus/i2pplus/issues> pagina I2P trac E<.UE.>"
 
 #, no-wrap
 msgid "SEE ALSO"

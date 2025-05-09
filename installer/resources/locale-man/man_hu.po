@@ -136,8 +136,8 @@ msgstr "B<eepget> kilép 0 állapottal sikeres átvitel esetén és nem 0 állap
 msgid "REPORTING BUGS"
 msgstr "HIBAJELENTÉS"
 
-msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker E<.UE .>"
-msgstr "Kérünk, adj le jelentést itt: E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> az I2P trac oldalon E<.UE .>"
+msgid "Please enter a ticket on E<.UR https://github.com/I2PPlus/i2pplus/issues> the I2P Bug Tracker E<.UE .>"
+msgstr "Kérünk, adj le jelentést itt: E<.UR https://github.com/I2PPlus/i2pplus/issues> az I2P trac oldalon E<.UE .>"
 
 #, no-wrap
 msgid "SEE ALSO"

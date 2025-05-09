@@ -67,10 +67,10 @@
 <%=intl._t("Open <a href=/confignet#udpconfig>I2P+'s port</a> on your modem, router and/or firewall(s) for better connectivity (ideally both UDP and TCP). More information on how to go about port forwarding can be found at <a href=http://portforward.com/ target=_blank rel=noreferrer class='sitelink external'>portforward.com</a>, in addition to our forums and IRC channels listed below. Note that I2P does not support connecting to the internet via an http or socks proxy [patches welcome!], though you can connect to proxies via I2P itself once connected to the network.")%></li>
 
 <li><b><%=intl._t("Getting Support Online")%></b><br>
-<%=intl._t("You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> on I2P's internal IRC network.")%></li>
+<%=intl._t("You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network.")%></li>
 
 <li><b><%=intl._t("Reporting Bugs")%></b><br>
-<%=intl._t("If you'd like to report a bug, please file a ticket on <a href=http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues target=_blank rel=noreferrer class=sitelink>trac.i2p2.i2p</a>. For developer-related discussions, please visit <a href=http://zzz.i2p/ target=_blank rel=noreferrer class=sitelink>zzz's developer forums</a> or come and visit the <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>developer channel</a> on I2P's IRC network.")%></li>
+<%=intl._t("If you'd like to report a bug, please file a ticket on <a href=https://github.com/I2PPlus/i2pplus/issues target=_blank rel=noreferrer class=sitelink>github.com/I2PPlus/i2pplus/issues</a>. For developer-related discussions, please visit <a href=http://zzz.i2p/ target=_blank rel=noreferrer class=sitelink>zzz's developer forums</a> or come and visit the <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>developer channel</a> on I2P's IRC network.")%></li>
 </ul>
 
 <hr>
@@ -82,7 +82,7 @@
 <li><a href=http://wiki.i2p-projekt.i2p/wiki/index.php/Eepsite/Services target=_blank rel=noreferrer><%=intl._t("I2P Wiki")%></a></li>
 <li><%=intl._t("The FAQ on <a href=http://i2p-projekt.i2p/en/faq target=_blank rel=noreferrer>i2p-projekt.i2p</a> or <a href=https://geti2p.net/en/faq target=_blank rel=noreferrer>geti2p.net</a>")%></li>
 </ul>
-<p><%=intl._t("You may also try <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> on I2P's IRC network.")%></p>
+<p><%=intl._t("You may also try <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> on I2P's IRC network.")%></p>
 </div>
 </div>
 </body>

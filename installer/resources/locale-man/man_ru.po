@@ -136,8 +136,8 @@ msgstr "B<eepget> завершается с нулевым статусом пр
 msgid "REPORTING BUGS"
 msgstr "СООБЩИТЬ ОБ ОШИБКАХ"
 
-msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker E<.UE .>"
-msgstr "Пожалуйста, заведите тикет на E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> странице трекера I2P E<.UE .>."
+msgid "Please enter a ticket on E<.UR https://github.com/I2PPlus/i2pplus/issues> the I2P Bug Tracker E<.UE .>"
+msgstr "Пожалуйста, заведите тикет на E<.UR https://github.com/I2PPlus/i2pplus/issues> странице трекера I2P E<.UE .>."
 
 #, no-wrap
 msgid "SEE ALSO"

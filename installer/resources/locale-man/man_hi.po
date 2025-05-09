@@ -137,8 +137,8 @@ msgstr "सफल स्थानांतरण पर B<eepget> स्टे�
 msgid "REPORTING BUGS"
 msgstr "बग रिपोर्टिंग"
 
-msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues/> the I2P Bug Tracker  E<.UE .>"
-msgstr "कृपया I2P बग ट्रैकयर E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues/> पर टिकट दर्ज करें E<.UE .>"
+msgid "Please enter a ticket on E<.UR https://github.com/I2PPlus/i2pplus/issues/> the I2P Bug Tracker  E<.UE .>"
+msgstr "कृपया I2P बग ट्रैकयर E<.UR https://github.com/I2PPlus/i2pplus/issues/> पर टिकट दर्ज करें E<.UE .>"
 
 #, no-wrap
 msgid "SEE ALSO"

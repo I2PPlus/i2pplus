@@ -136,8 +136,8 @@ msgstr "B<eepget> quitte avec un état zéro si le transfert est réussi et diff
 msgid "REPORTING BUGS"
 msgstr "SIGNALER DES BOGUES"
 
-msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker E<.UE .>"
-msgstr "Veuillez créer un billet sur E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> la page Trac d’I2P E<.UE .>"
+msgid "Please enter a ticket on E<.UR https://github.com/I2PPlus/i2pplus/issues> the I2P Bug Tracker E<.UE .>"
+msgstr "Veuillez créer un billet sur E<.UR https://github.com/I2PPlus/i2pplus/issues> la page Trac d’I2P E<.UE .>"
 
 #, no-wrap
 msgid "SEE ALSO"

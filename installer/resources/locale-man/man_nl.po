@@ -136,8 +136,8 @@ msgstr "B<eepget> gaat uit met status zero na succesvolle overdracht en niet-nul
 msgid "REPORTING BUGS"
 msgstr "PROBLEMEN MELDEN"
 
-msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker E<.UE .>"
-msgstr "Voer een ticket in op E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> de i2p bug tracker E<.UE.>"
+msgid "Please enter a ticket on E<.UR https://github.com/I2PPlus/i2pplus/issues> the I2P Bug Tracker E<.UE .>"
+msgstr "Voer een ticket in op E<.UR https://github.com/I2PPlus/i2pplus/issues> de i2p bug tracker E<.UE.>"
 
 #, no-wrap
 msgid "SEE ALSO"

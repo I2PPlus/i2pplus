@@ -136,8 +136,8 @@ msgstr "B завершує роботу з кодом статусу 0 післ�
 msgid "REPORTING BUGS"
 msgstr "ЗВІТЛЕННЯ ПРО БАГИ"
 
-msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues/> the I2P Bug Tracker E<.UE .>"
-msgstr "Будь ласка, створіть заявку на E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues/> трекер багів I2P E<.UE .>"
+msgid "Please enter a ticket on E<.UR https://github.com/I2PPlus/i2pplus/issues/> the I2P Bug Tracker E<.UE .>"
+msgstr "Будь ласка, створіть заявку на E<.UR https://github.com/I2PPlus/i2pplus/issues/> трекер багів I2P E<.UE .>"
 
 #, no-wrap
 msgid "SEE ALSO"

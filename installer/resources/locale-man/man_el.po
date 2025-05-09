@@ -136,8 +136,8 @@ msgstr "Το B<eepget> τερματίζει με κατάσταση μηδενι
 msgid "REPORTING BUGS"
 msgstr "ΑΝΑΦΟΡΑ ΠΡΟΒΛΗΜΑΤΩΝ"
 
-msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues/> the I2P Bug Tracker  E<.UE .>"
-msgstr "Παρακαλούμε εισάγετε ένα εισιτήριο στο E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues/> τον Επαγγελματιστή Βασάνισμα I2P E<.UE .>"
+msgid "Please enter a ticket on E<.UR https://github.com/I2PPlus/i2pplus/issues/> the I2P Bug Tracker  E<.UE .>"
+msgstr "Παρακαλούμε εισάγετε ένα εισιτήριο στο E<.UR https://github.com/I2PPlus/i2pplus/issues/> τον Επαγγελματιστή Βασάνισμα I2P E<.UE .>"
 
 #, no-wrap
 msgid "SEE ALSO"

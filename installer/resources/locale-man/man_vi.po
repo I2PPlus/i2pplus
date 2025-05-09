@@ -136,8 +136,8 @@ msgstr "B<eepget> thoát với trạng thái không khi chuyển tiếp thành c
 msgid "REPORTING BUGS"
 msgstr "BÁO CÁO LỖI"
 
-msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues/> the I2P Bug Tracker  E<.UE .>"
-msgstr "Vui lòng nhập một vé trên E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues/> trình theo dõi lỗi I2P  E<.UE .>"
+msgid "Please enter a ticket on E<.UR https://github.com/I2PPlus/i2pplus/issues/> the I2P Bug Tracker  E<.UE .>"
+msgstr "Vui lòng nhập một vé trên E<.UR https://github.com/I2PPlus/i2pplus/issues/> trình theo dõi lỗi I2P  E<.UE .>"
 
 #, no-wrap
 msgid "SEE ALSO"

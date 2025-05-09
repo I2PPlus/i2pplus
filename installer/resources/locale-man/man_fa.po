@@ -136,8 +136,8 @@ msgstr "B<eepget> در صورت انتقال موفق با وضعیت صفر خ�
 msgid "REPORTING BUGS"
 msgstr "گزارش خطا ها"
 
-msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues/> the I2P Bug Tracker  E<.UE .>"
-msgstr "لطفا یک بلیط در E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues/> دنبال کننده خطا I2P E<.UE .> وارد کنید"
+msgid "Please enter a ticket on E<.UR https://github.com/I2PPlus/i2pplus/issues/> the I2P Bug Tracker  E<.UE .>"
+msgstr "لطفا یک بلیط در E<.UR https://github.com/I2PPlus/i2pplus/issues/> دنبال کننده خطا I2P E<.UE .> وارد کنید"
 
 #, no-wrap
 msgid "SEE ALSO"

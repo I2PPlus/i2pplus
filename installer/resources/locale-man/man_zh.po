@@ -136,8 +136,8 @@ msgstr "B<eepget> 退出状态为 0 表示传输成功。如果下载遇到问�
 msgid "REPORTING BUGS"
 msgstr "报告漏洞"
 
-msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker E<.UE .>"
-msgstr "请在 E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> I2P Bug Tracker E<.UE .> 上输入票证"
+msgid "Please enter a ticket on E<.UR https://github.com/I2PPlus/i2pplus/issues> the I2P Bug Tracker E<.UE .>"
+msgstr "请在 E<.UR https://github.com/I2PPlus/i2pplus/issues> I2P Bug Tracker E<.UE .> 上输入票证"
 
 #, no-wrap
 msgid "SEE ALSO"

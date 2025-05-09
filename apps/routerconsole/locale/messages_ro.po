@@ -2118,8 +2118,8 @@ msgstr "Porniți sau opriți clienții Router"
 msgid "Bug tracker"
 msgstr "Bug tracker"
 
-msgid "I2P Bug Reports"
-msgstr "I2P Bug Reports"
+msgid "I2P+ Bug Reports"
+msgstr "I2P+ Bug Reports"
 
 msgid "Frequently Asked Questions"
 msgstr "Întrebări frecvente"
@@ -6834,14 +6834,14 @@ msgstr "Deschideți <a href=/confignet#udpconfig>portul I2P+</a> pe modemul, rou
 msgid "Getting Support Online"
 msgstr "Obținerea suportului online"
 
-msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr "Poate doriți să revizuiți informațiile de pe <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>site-ul I2P</a>, să postați mesaje pe <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>forumul de discuții I2P</a> sau să treceți pe la canalul <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> sau <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> din rețeaua IRC internă a I2P-ului."
+msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> on I2P's internal IRC network."
+msgstr "Poate doriți să revizuiți informațiile de pe <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>site-ul I2P</a>, să postați mesaje pe <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>forumul de discuții I2P</a> sau să treceți pe la canalul <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> sau <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> din rețeaua IRC internă a I2P-ului."
 
 msgid "Reporting Bugs"
 msgstr "Raportarea erorilor"
 
-msgid "If you'd like to report a bug, please file a ticket on <a href=http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues target=_blank rel=noreferrer class=sitelink>trac.i2p2.i2p</a>. For developer-related discussions, please visit <a href=http://zzz.i2p/ target=_blank rel=noreferrer class=sitelink>zzz's developer forums</a> or come and visit the <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>developer channel</a> on I2P's IRC network."
-msgstr "Dacă doriți să raportați o eroare, vă rugăm să deschideți un tichet pe <a href=http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues target=_blank rel=noreferrer class=sitelink>trac.i2p2.i2p</a>. Pentru discuții legate de dezvoltatori, vă rugăm să vizitați <a href=http://zzz.i2p/ target=_blank rel=noreferrer class=sitelink>forumurile dezvoltatorilor lui zzz</a> sau să veniți și să vizitați <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>canalul dezvoltatorilor</a> pe rețeaua IRC I2P."
+msgid "If you'd like to report a bug, please file a ticket on <a href=https://github.com/I2PPlus/i2pplus/issues target=_blank rel=noreferrer class=sitelink>github.com/I2PPlus/i2pplus/issues</a>. For developer-related discussions, please visit <a href=http://zzz.i2p/ target=_blank rel=noreferrer class=sitelink>zzz's developer forums</a> or come and visit the <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>developer channel</a> on I2P's IRC network."
+msgstr "Dacă doriți să raportați o eroare, vă rugăm să deschideți un tichet pe <a href=https://github.com/I2PPlus/i2pplus/issues target=_blank rel=noreferrer class=sitelink>github.com/I2PPlus/i2pplus/issues</a>. Pentru discuții legate de dezvoltatori, vă rugăm să vizitați <a href=http://zzz.i2p/ target=_blank rel=noreferrer class=sitelink>forumurile dezvoltatorilor lui zzz</a> sau să veniți și să vizitați <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>canalul dezvoltatorilor</a> pe rețeaua IRC I2P."
 
 msgid "Further assistance is available here:"
 msgstr "Asistență suplimentară este disponibilă aici:"
@@ -6858,8 +6858,8 @@ msgstr "I2P Wiki"
 msgid "The FAQ on <a href=http://i2p-projekt.i2p/en/faq target=_blank rel=noreferrer>i2p-projekt.i2p</a> or <a href=https://geti2p.net/en/faq target=_blank rel=noreferrer>geti2p.net</a>"
 msgstr "Secțiunea Întrebări frecvente de pe <a href=http://i2p-projekt.i2p/en/faq target=_blank rel=noreferrer>i2p-projekt.i2p</a> sau <a href=https://geti2p.net/en/faq target=_blank rel=noreferrer>geti2p.net</a>"
 
-msgid "You may also try <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> on I2P's IRC network."
-msgstr "Puteți încerca și <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> sau <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> pe rețeaua IRC a I2P."
+msgid "You may also try <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> on I2P's IRC network."
+msgstr "Puteți încerca și <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> sau <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> pe rețeaua IRC a I2P."
 
 msgid "Introduction to Tunnel Filtering"
 msgstr "Introducere în filtrarea tunelului"

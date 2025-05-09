@@ -100,7 +100,7 @@ public class HomeHelper extends HelperBase {
     static final String DEFAULT_FAVORITES =
 
 // I2P specific
-        _x("I2P Bug Reports") + S + _x("Bug tracker") + S + "http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues" + S + I + "bug.svg" + S +
+        _x("I2P+ Bug Reports") + S + _x("Bug tracker") + S + "https://github.com/I2PPlus/i2pplus/issues" + S + I + "bug.svg" + S +
         _x("I2P FAQ") + S + _x("Frequently Asked Questions") + S + "http://i2p-projekt.i2p/faq" + S + I + "faq.svg" + S +
         _x("I2P Plugins") + S + _x("zzz's plugin repository") + S + "http://stats.i2p/i2p/plugins/" + S + I + "plugin.svg" + S +
         "i2pmetrics.i2p" + S + _x("Historical infrastructure data from the I2P network") + S + "http://i2pmetrics.i2p/" + S + I + "stats.svg" + S +

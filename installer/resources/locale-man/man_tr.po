@@ -136,8 +136,8 @@ msgstr "B<eepget> aktarım sorunsuz tamamlandığında çıkış durumu sıfır 
 msgid "REPORTING BUGS"
 msgstr "HATA BİLDİRİMİ"
 
-msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker E<.UE .>"
-msgstr "Lütfen E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues>I2P trac sayfasından E<.UE .> bir destek çağrısı gönderin"
+msgid "Please enter a ticket on E<.UR https://github.com/I2PPlus/i2pplus/issues> the I2P Bug Tracker E<.UE .>"
+msgstr "Lütfen E<.UR https://github.com/I2PPlus/i2pplus/issues>I2P trac sayfasından E<.UE .> bir destek çağrısı gönderin"
 
 #, no-wrap
 msgid "SEE ALSO"

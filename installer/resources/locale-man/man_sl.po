@@ -137,8 +137,8 @@ msgstr "B<eepget> zapusti program s statusom nič, če prenos uspe, s nenulnim s
 msgid "REPORTING BUGS"
 msgstr "PREDSTAVLJANJE PRAŠKOV"
 
-msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues/> the I2P Bug Tracker  E<.UE .>"
-msgstr "Prosimo, vpišite zadevo na E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues/> sledilnik napak I2P E<.UE>."
+msgid "Please enter a ticket on E<.UR https://github.com/I2PPlus/i2pplus/issues/> the I2P Bug Tracker  E<.UE .>"
+msgstr "Prosimo, vpišite zadevo na E<.UR https://github.com/I2PPlus/i2pplus/issues/> sledilnik napak I2P E<.UE>."
 
 #, no-wrap
 msgid "SEE ALSO"

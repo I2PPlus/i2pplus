@@ -136,7 +136,7 @@ msgstr "B<eepget> utgångar med status noll vid framgångsrik överföring och i
 msgid "REPORTING BUGS"
 msgstr "RAPPORTERINGSBUGGAR"
 
-msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker E<.UE .>"
+msgid "Please enter a ticket on E<.UR https://github.com/I2PPlus/i2pplus/issues> the I2P Bug Tracker E<.UE .>"
 msgstr "Ange en biljett på E<.UR http: //git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> i2p bug tracker E<.UE.>"
 
 #, no-wrap

@@ -136,8 +136,8 @@ msgstr "B<eepget> päättyy tilan nolla, kun siirto onnistuu, ja muuten ei nolla
 msgid "REPORTING BUGS"
 msgstr "ILMOITETAAN VIRHEISTÄ"
 
-msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker E<.UE .>"
-msgstr "Ole hyvä ja lisää vikailmoitus I2P Bug Trackeriin osoitteessa http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues E<.UE .>"
+msgid "Please enter a ticket on E<.UR https://github.com/I2PPlus/i2pplus/issues> the I2P Bug Tracker E<.UE .>"
+msgstr "Ole hyvä ja lisää vikailmoitus I2P Bug Trackeriin osoitteessa https://github.com/I2PPlus/i2pplus/issues E<.UE .>"
 
 #, no-wrap
 msgid "SEE ALSO"

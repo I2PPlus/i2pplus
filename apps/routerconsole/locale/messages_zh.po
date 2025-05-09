@@ -2102,7 +2102,7 @@ msgstr "启动或停止路由器客户端"
 msgid "Bug tracker"
 msgstr "错误跟踪器"
 
-msgid "I2P Bug Reports"
+msgid "I2P+ Bug Reports"
 msgstr "I2P 错误报告"
 
 msgid "Frequently Asked Questions"
@@ -6798,14 +6798,14 @@ msgstr "在调制解调器、路由器和/或防火墙上打开<a href=/configne
 msgid "Getting Support Online"
 msgstr "寻找在线帮助"
 
-msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr "您也可以查看<a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P 官网</a>上的信息，在<a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P 论坛</a>上发帖，或在I2P的内部IRC网络上浏览<a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> 和 <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a>。"
+msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> on I2P's internal IRC network."
+msgstr "您也可以查看<a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P 官网</a>上的信息，在<a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P 论坛</a>上发帖，或在I2P的内部IRC网络上浏览<a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> 和 <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a>。"
 
 msgid "Reporting Bugs"
 msgstr "报告Bugs"
 
-msgid "If you'd like to report a bug, please file a ticket on <a href=http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues target=_blank rel=noreferrer class=sitelink>trac.i2p2.i2p</a>. For developer-related discussions, please visit <a href=http://zzz.i2p/ target=_blank rel=noreferrer class=sitelink>zzz's developer forums</a> or come and visit the <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>developer channel</a> on I2P's IRC network."
-msgstr "如果您想报告一个bug，请在a href=http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues target=_blank rel=noreferrer class=sitelink>trac.i2p2.i2p</a>上提交。有关开发的讨论，请访问<a href=http://zzz.i2p/ target=_blank rel=noreferrer class=sitelink>zzz的开发者论坛</a>或访问I2P的IRC网络上的<a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>开发者频道</a>。"
+msgid "If you'd like to report a bug, please file a ticket on <a href=https://github.com/I2PPlus/i2pplus/issues target=_blank rel=noreferrer class=sitelink>github.com/I2PPlus/i2pplus/issues</a>. For developer-related discussions, please visit <a href=http://zzz.i2p/ target=_blank rel=noreferrer class=sitelink>zzz's developer forums</a> or come and visit the <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>developer channel</a> on I2P's IRC network."
+msgstr "如果您想报告一个bug，请在a href=https://github.com/I2PPlus/i2pplus/issues target=_blank rel=noreferrer class=sitelink>github.com/I2PPlus/i2pplus/issues</a>上提交。有关开发的讨论，请访问<a href=http://zzz.i2p/ target=_blank rel=noreferrer class=sitelink>zzz的开发者论坛</a>或访问I2P的IRC网络上的<a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>开发者频道</a>。"
 
 msgid "Further assistance is available here:"
 msgstr "更多帮助可在此获取："
@@ -6822,8 +6822,8 @@ msgstr "I2P 维基"
 msgid "The FAQ on <a href=http://i2p-projekt.i2p/en/faq target=_blank rel=noreferrer>i2p-projekt.i2p</a> or <a href=https://geti2p.net/en/faq target=_blank rel=noreferrer>geti2p.net</a>"
 msgstr "有一份FAQ位于<a href=http://i2p-projekt.i2p/en/faq target=_blank rel=noreferrer>i2p-projekt.i2p</a>或<a href=https://geti2p.net/en/faq target=_blank rel=noreferrer>geti2p.net</a>"
 
-msgid "You may also try <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> on I2P's IRC network."
-msgstr "您也可以试试在IRC2P网络上的<a href=irc:/127.0.0.1:6668/saltR class=chatlink>#saltR</a>或<a href=irc:/127.0.0.1:6668/i2p class=chatlink>#i2p</a>提问。"
+msgid "You may also try <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> on I2P's IRC network."
+msgstr "您也可以试试在IRC2P网络上的<a href=irc:/127.0.0.1:6668/saltR class=chatlink>#saltR</a>或<a href=irc:/127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a>提问。"
 
 msgid "Introduction to Tunnel Filtering"
 msgstr "隧道过滤简介"

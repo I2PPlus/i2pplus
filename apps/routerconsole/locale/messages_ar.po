@@ -2142,7 +2142,7 @@ msgstr "تشغيل أو إيقاف عملاء جهاز التوجيه"
 msgid "Bug tracker"
 msgstr "تعقب الأخطاء"
 
-msgid "I2P Bug Reports"
+msgid "I2P+ Bug Reports"
 msgstr "تقارير أخطاء I2P"
 
 msgid "Frequently Asked Questions"
@@ -6888,14 +6888,14 @@ msgstr "افتح <a href=/confignet#udpconfig>منفذ I2P+</a> على المو�
 msgid "Getting Support Online"
 msgstr "الحصول على دعم عبر الإنترنت"
 
-msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr "قد ترغب أيضًا في مراجعة المعلومات على <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>موقع I2P</a>، أو مراسلة <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>منتدى مناقشة I2P</a> أو زيارة <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> أو <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> على شبكة IRC الداخلية لـ I2P."
+msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> on I2P's internal IRC network."
+msgstr "قد ترغب أيضًا في مراجعة المعلومات على <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>موقع I2P</a>، أو مراسلة <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>منتدى مناقشة I2P</a> أو زيارة <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> أو <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> على شبكة IRC الداخلية لـ I2P."
 
 msgid "Reporting Bugs"
 msgstr "إبلاغ عن الأخطاء"
 
-msgid "If you'd like to report a bug, please file a ticket on <a href=http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues target=_blank rel=noreferrer class=sitelink>trac.i2p2.i2p</a>. For developer-related discussions, please visit <a href=http://zzz.i2p/ target=_blank rel=noreferrer class=sitelink>zzz's developer forums</a> or come and visit the <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>developer channel</a> on I2P's IRC network."
-msgstr "إذا كنت ترغب في الإبلاغ عن خطأ، يرجى تقديم طلب تذكرة على <a href=http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues target=_blank rel=noreferrer class=sitelink>trac.i2p2.i2p</a>. بالنسبة للمناقشات ذات الصلة بالمطورين، يرجى زيارة <a href=http://zzz.i2p/ target=_blank rel=noreferrer class=sitelink>منتديات المطورين الخاصة بـ zzz</a> أو تابعوا قناة <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>المطورين</a> على شبكة IRC لـ I2P."
+msgid "If you'd like to report a bug, please file a ticket on <a href=https://github.com/I2PPlus/i2pplus/issues target=_blank rel=noreferrer class=sitelink>github.com/I2PPlus/i2pplus/issues</a>. For developer-related discussions, please visit <a href=http://zzz.i2p/ target=_blank rel=noreferrer class=sitelink>zzz's developer forums</a> or come and visit the <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>developer channel</a> on I2P's IRC network."
+msgstr "إذا كنت ترغب في الإبلاغ عن خطأ، يرجى تقديم طلب تذكرة على <a href=https://github.com/I2PPlus/i2pplus/issues target=_blank rel=noreferrer class=sitelink>github.com/I2PPlus/i2pplus/issues</a>. بالنسبة للمناقشات ذات الصلة بالمطورين، يرجى زيارة <a href=http://zzz.i2p/ target=_blank rel=noreferrer class=sitelink>منتديات المطورين الخاصة بـ zzz</a> أو تابعوا قناة <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>المطورين</a> على شبكة IRC لـ I2P."
 
 msgid "Further assistance is available here:"
 msgstr "يتوفر المزيد من الدعم هنا:"
@@ -6912,8 +6912,8 @@ msgstr "ويكي I2P"
 msgid "The FAQ on <a href=http://i2p-projekt.i2p/en/faq target=_blank rel=noreferrer>i2p-projekt.i2p</a> or <a href=https://geti2p.net/en/faq target=_blank rel=noreferrer>geti2p.net</a>"
 msgstr "قسم الأسئلة الشائعة على <a href=http://i2p-projekt.i2p/en/faq target=_blank rel=noreferrer>i2p-projekt.i2p</a> أو <a href=https://geti2p.net/en/faq target=_blank rel=noreferrer>geti2p.net</a>"
 
-msgid "You may also try <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> on I2P's IRC network."
-msgstr "يمكنك المحاولة أيضًا <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> أو <a href=irc://127.0.0.1:6668/i2p class=chatlink>على شبكة IRC لـ I2P</a>."
+msgid "You may also try <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> on I2P's IRC network."
+msgstr "يمكنك المحاولة أيضًا <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> أو <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>على شبكة IRC لـ I2P</a>."
 
 msgid "Introduction to Tunnel Filtering"
 msgstr "مقدمة حول تصفية الأنفاق"

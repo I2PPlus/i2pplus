@@ -136,8 +136,8 @@ msgstr "B<eepget> müvəffəqiyyətli köçürmə zamanı sıfır statusu ilə v
 msgid "REPORTING BUGS"
 msgstr "XATLAR HESABATI"
 
-msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker E<.UE .>"
-msgstr "Lütfən, E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> I2P Bug Tracker E<.UE .>-də bilet daxil edin."
+msgid "Please enter a ticket on E<.UR https://github.com/I2PPlus/i2pplus/issues> the I2P Bug Tracker E<.UE .>"
+msgstr "Lütfən, E<.UR https://github.com/I2PPlus/i2pplus/issues> I2P Bug Tracker E<.UE .>-də bilet daxil edin."
 
 #, no-wrap
 msgid "SEE ALSO"

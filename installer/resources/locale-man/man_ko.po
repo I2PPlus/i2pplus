@@ -136,8 +136,8 @@ msgstr "B<eepget>은 정상적인 전송때에는 0 상태로 종료되며 다�
 msgid "REPORTING BUGS"
 msgstr "REPORTING BUGS"
 
-msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker E<.UE .>"
-msgstr "E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> I2P trac 페이지 E<.UE .>에 티켓을 남겨 주세요"
+msgid "Please enter a ticket on E<.UR https://github.com/I2PPlus/i2pplus/issues> the I2P Bug Tracker E<.UE .>"
+msgstr "E<.UR https://github.com/I2PPlus/i2pplus/issues> I2P trac 페이지 E<.UE .>에 티켓을 남겨 주세요"
 
 #, no-wrap
 msgid "SEE ALSO"

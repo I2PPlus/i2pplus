@@ -136,8 +136,8 @@ msgstr "B avslutter med status null ved vellykket overføring og ikke-null hvis 
 msgid "REPORTING BUGS"
 msgstr "RAPPORTE FEIL"
 
-msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues/> the I2P Bug Tracker E<.UE .>"
-msgstr "Vennligst oppgi et saksnummer på E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues/> I2P Feilregistreringssystem E<.UE .>"
+msgid "Please enter a ticket on E<.UR https://github.com/I2PPlus/i2pplus/issues/> the I2P Bug Tracker E<.UE .>"
+msgstr "Vennligst oppgi et saksnummer på E<.UR https://github.com/I2PPlus/i2pplus/issues/> I2P Feilregistreringssystem E<.UE .>"
 
 #, no-wrap
 msgid "SEE ALSO"
