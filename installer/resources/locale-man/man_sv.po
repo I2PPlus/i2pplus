@@ -137,7 +137,7 @@ msgid "REPORTING BUGS"
 msgstr "RAPPORTERINGSBUGGAR"
 
 msgid "Please enter a ticket on E<.UR https://github.com/I2PPlus/i2pplus/issues> the I2P Bug Tracker E<.UE .>"
-msgstr "Ange en biljett på E<.UR http: //git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> i2p bug tracker E<.UE.>"
+msgstr "Ange en biljett på E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> i2p bug tracker E<.UE.>"
 
 #, no-wrap
 msgid "SEE ALSO"
@@ -246,7 +246,7 @@ msgid "Start the I2P router, without the service wrapper.  This means the router
 msgstr "Starta I2P -routern utan serviceomslaget. Detta betyder att routern inte kommer att starta om om den kraschar. Dessutom kommer den att använda standardminnestorleken, som kanske inte räcker för I2P."
 
 msgid "You should really use the B<i2prouter>(1)  script instead.  There are no options.  To stop the router, use your browser to access E<.UR http://localhost:7657/> the router console E<.UE .>"
-msgstr "Du bör verkligen använda B <i2prouter> (1)  skriptet istället.  Det finns inga alternativ.  För att stoppa routern använder du din webbläsare för att komma åt E<.UR http: // localhost:7657/> The Router Console E<.UE.>"
+msgstr "Du bör verkligen använda B <i2prouter> (1)  skriptet istället.  Det finns inga alternativ.  För att stoppa routern använder du din webbläsare för att komma åt E<.UR http:// localhost:7657/> The Router Console E<.UE.>"
 
 msgid "B<i2prouter>(1)"
 msgstr "B<i2prouter>(1)"

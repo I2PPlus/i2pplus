@@ -5577,7 +5577,7 @@ msgid "Update URL"
 msgstr "Cập nhật URL"
 
 msgid "To update with unsigned I2P+ release builds: <code>http://skank.i2p/i2pupdate.zip</code> or for the latest unsigned development builds: <code>http://skank.i2p/dev/i2pupdate.zip</code>"
-msgstr "Để cập nhật với các bản dựng i2p+ phát hành không dấu: <code> http: //skank.i2p/i2pupdate.zip </code> hoặc cho các bản dựng phát triển chưa được ký mới nhất: <code> http: //skank.i2p/dev/i2pupdate.zip </code>"
+msgstr "Để cập nhật với các bản dựng i2p+ phát hành không dấu: <code> http://skank.i2p/i2pupdate.zip </code> hoặc cho các bản dựng phát triển chưa được ký mới nhất: <code> http://skank.i2p/dev/i2pupdate.zip </code>"
 
 msgid "Update with unsigned development builds"
 msgstr "Cập nhật với các bản dựng phát triển chưa được ký"
@@ -6469,7 +6469,7 @@ msgid "Orchid (plugin)"
 msgstr "Orchid (plugin)"
 
 msgid "A java implementation of a Tor client, available as an I2P plugin. Can be used as the default <i>outproxy</i> if configured in the relevant SOCKS or HTTP client tunnel in the <i>Tunnel Manager</i>. Available from <a href=http://stats.i2p/i2p/plugins class=sitelink>http://stats.i2p/i2p/plugins</a>. Source code is available on <a href=https://github.com/i2p/i2p.plugins.orchid class='sitelink external' target=_blank rel=noreferrer>github</a>."
-msgstr "Việc triển khai Java của máy khách TOR, có sẵn dưới dạng plugin i2p. Có thể được sử dụng làm mặc định <i> outproxy </i> nếu được định cấu hình trong các khóa có liên quan hoặc đường hầm máy khách HTTP trong trình quản lý đường hầm <i> </i>. Có sẵn từ <a href=http://stats.i2p/i2p/plugins Class=Sitelink> http: //stats.i2p/i2p/plugins </a>. Mã nguồn có sẵn trên <a href=https://github.com/i2p/i2p.plugins.orchid class='Sitelink bên ngoài' Target=_Blank rel=noreferrer> GitHub </a>."
+msgstr "Việc triển khai Java của máy khách TOR, có sẵn dưới dạng plugin i2p. Có thể được sử dụng làm mặc định <i> outproxy </i> nếu được định cấu hình trong các khóa có liên quan hoặc đường hầm máy khách HTTP trong trình quản lý đường hầm <i> </i>. Có sẵn từ <a href=http://stats.i2p/i2p/plugins Class=Sitelink> http://stats.i2p/i2p/plugins </a>. Mã nguồn có sẵn trên <a href=https://github.com/i2p/i2p.plugins.orchid class='Sitelink bên ngoài' Target=_Blank rel=noreferrer> GitHub </a>."
 
 msgid "Outproxy"
 msgstr "Outproxy"
@@ -6544,7 +6544,7 @@ msgid "ZzzOT (plugin)"
 msgstr "ZzzOT (plugin)"
 
 msgid "A Java I2P plugin implementation of a BitTorrent <a href=https://en.wikipedia.org/wiki/Opentracker class='sitelink external' target=_blank rel=noreferrer>Open Tracker</a>. Available from <a href=http://stats.i2p/i2p/plugins class=sitelink>http://stats.i2p/i2p/plugins</a>. Source code is available on <a href=https://github.com/i2p/i2p.plugins.zzzot class='sitelink external' target=_blank rel=noreferrer>github</a>."
-msgstr "Việc triển khai plugin Java I2P của BitTorrent <a href=https://en.wikipedia.org/wiki/opentracker Class='Sitelink bên ngoài' Target=_Blank rel=noreFerrer> Trình theo dõi mở </a>. Có sẵn từ <a href=http://stats.i2p/i2p/plugins Class=Sitelink> http: //stats.i2p/i2p/plugins </a>. Mã nguồn có sẵn trên <a href=https://github.com/i2p/i2p.plugins.zzzot class='Sitelink bên ngoài' Target=_Blank rel=noreferrer> GitHub </a>."
+msgstr "Việc triển khai plugin Java I2P của BitTorrent <a href=https://en.wikipedia.org/wiki/opentracker Class='Sitelink bên ngoài' Target=_Blank rel=noreFerrer> Trình theo dõi mở </a>. Có sẵn từ <a href=http://stats.i2p/i2p/plugins Class=Sitelink> http://stats.i2p/i2p/plugins </a>. Mã nguồn có sẵn trên <a href=https://github.com/i2p/i2p.plugins.zzzot class='Sitelink bên ngoài' Target=_Blank rel=noreferrer> GitHub </a>."
 
 msgid "Web Hosting - I2P+"
 msgstr "Web Hosting - I2P+"

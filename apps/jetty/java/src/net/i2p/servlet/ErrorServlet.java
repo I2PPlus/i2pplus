@@ -181,8 +181,8 @@ public class ErrorServlet extends HttpServlet {
             out.println("<hr>");
             out.println("<p>");
             out.println(_t("Please report bugs on {0} or {1}",
-                           "<a href=\"https://github.com/I2PPlus/i2pplus/issues\">git.idk.i2p</a>",
-                           "<a href=\"https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues\">i2pgit.org</a>"));
+                           "<a href=\"https://github.com/I2PPlus/i2pplus/issues\">github.com</a>",
+                           "<a href=\"http://git.idk.i2p/I2P_Developers/i2p.i2p/issues\">git.idk.i2p</a>"));
             out.print(".</p>");
             out.println("<p>" + _t("Please include this information in bug reports") + ":</p>\n");
             out.print("</div>\n<div class=sorry id=warning2>\n<h3>");

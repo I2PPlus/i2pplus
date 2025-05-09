@@ -246,7 +246,7 @@ msgid "Start the I2P router, without the service wrapper.  This means the router
 msgstr "Menjalankan router I2P, tanpa service wrapper. Ini berarti router tidak akan restart jika macet. Selain itu, router akan menggunakan ukuran memori default, yang mungkin tidak cukup untuk I2P."
 
 msgid "You should really use the B<i2prouter>(1)  script instead.  There are no options.  To stop the router, use your browser to access E<.UR http://localhost:7657/> the router console E<.UE .>"
-msgstr "Anda sebaiknya hanya menggunakan B (1) script sebagai gantinya. Tidak ada pilihan lain. Untuk menghentikan router, gunakan browser Anda untuk mengakses E<.UR http: // localhost: 7657 /> router console E<.UE.>"
+msgstr "Anda sebaiknya hanya menggunakan B (1) script sebagai gantinya. Tidak ada pilihan lain. Untuk menghentikan router, gunakan browser Anda untuk mengakses E<.UR http:// localhost: 7657 /> router console E<.UE.>"
 
 msgid "B<i2prouter>(1)"
 msgstr "B<i2prouter> (1)"
